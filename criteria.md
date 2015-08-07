@@ -62,23 +62,24 @@ if the project happens to be hosted on GitHub.
 
 *   OSS project basics
     -   Project website (AUTO).  The project has a public website.
-    -   Project website content.  The project website has information on what the project is trying to do, as well as how to get the software, send feedback (as bug reports or feature requests), and contribute.
+    -   Project website basic content.  The project website succinctly describes what the software does (what problem does it solve), in language that potential users could understand (e.g., it uses a minimum of jargon). It also describes how to get the software, send feedback (as bug reports or feature requests), and contribute.
     -   OSS license (AUTO).  An OSS license is posted in a standard place, e.g., LICENSE or COPYING optionally followed by .txt or .md.  It should be OSI-approved; it must be approved by at least one of OSI, FSF, Debian, or Fedora.  We intend for the automated tool to focus on standard, common licenses such as MIT, 2-clause BSD, 3-clause revised BSD, MIT, Apache 2.0, LGPL, or GPL; unusual licenses cause long-term problems for OSS projects.  We expect that that "higher-level" criteria would set a higher bar, e.g., that it *must* be an OSI-approved license.
-    -   Public version-controlled source repository (AUTO).  It doesn't need to be git, though that is a common implementation.  We are aware that some projects do not do this, but the lack of a public repository makes it unnecessarily difficult to contribute and track progress (e.g., to see who is contributing what and what has changed over time).
-    -   Issue (bug) reporting process (e.g., issue tracker or mailing list) where developers respond (AUTO); must be archived for later searching.  Can be automated by looking at response rate for (bug) issues.  It's okay if enhancements aren't responded to the same degree.
+    -   Public version-controlled source repository (AUTO) that shows intermediate results.  This enables easy tracking and public review. It doesn't need to use git, though that is a common implementation.  We are aware that some projects do not do this, but the lack of a public repository makes it unnecessarily difficult to contribute and track progress (e.g., to see who is contributing what and what has changed over time).
+    -   Issue/bug tracking and reporting process (e.g., issue tracker or mailing list) that users can directly submit to and where developers respond (AUTO). It must be archived for later searching.  This can be automated by looking at response rate for (bug) issues.  It's okay if enhancements aren't responded to the same degree.
     -   Unique version number for releases (AUTO).  We recommend Semantic Versioning (SemVer) for releases.
-    -   Documentation.  This should include how to install, get started, and some reference documentation.
+    -   Documentation.  This should include how to install, get started, and some reference documentation, including examples.
     -   ChangeLog (could be separate ChangeLog file, or the GitHub ChangeLog comments) - provides summary of major changes between released versions (a ChangeLog is *not* just "git log" output).  It's okay to use GitHub releases, per https://github.com/blog/1547-release-your-software
 *   Quality
-    -   Working build system (Maven, Ant, cmake, autoconf, etc.) *or* it never needs to be built (AUTO in many cases) 
-    -   Includes automated test suite.
-    -   Compiler warning flags enabled (or a linter used) and few warnings reported (ideally none, want < 1/1000 lines).
+    -   Working build system (Maven, Ant, cmake, autoconf, etc.) *or* it never needs to be built (AUTO in many cases).  If the software must be built, it must be buildable, and it is recommended that it use common tools for this purpose.  It *should* be buildable by using only OSS tools.
+    -   Includes automated test suite.  It *should* be invocable in a standard way for that language (e.g., "make check", "mvn test", and so on), though that is not required.
+    -   Compiler warning flags enabled (or a linter used) and few warnings reported (ideally none, want either less than 1 per 1000 lines or less than 10 warnings).
 *   Security
     -   Secured delivery against man-in-the-middle attacks (AUTO).   Using https or ssh+scp is acceptable. Ideally the software is released with digitally signed packages, since that mitigates attacks on the distribution system.  A sha1sum that is only retrieved over http (and not separately signed) is *not* acceptable, since these can be modified in transit.
-    -   Vulnerability report process (e.g., mailing address).  If private reports are supported, include how to send encrypted messages & keep change private.
+    -   Vulnerability report process (e.g., mailing address, often security@SOMEWHERE).  If private reports are supported, include how to send the information in a way that is kept private (e.g., a private defect report submitted on the web using TLS, or an email encrypted using PGP).
+    -   The documentation specifically discusses how to use the software securely (e.g., what to do and what not to do).  This need not be long, since the software *should* be designed to be secure by default.
 *   Security analysis
     -   At least one static analysis tool applied to source code to look for vulnerabilities & fixed (e.g., Coverity, Fortify, clang static analyzer, etc.).
-    -   At least one dynamic tool applied & vulnerabilities fixed (e.g., fuzzing, web application scanner).
+    -   At least one dynamic tool applied & vulnerabilities fixed (e.g., fuzzing, web application scanner).  If programmed using an memory-unsafe language such as C or C++, at least one tool to detect memory safety problems should be used during at least one dynamic tool use (e.g., ASAN/Address Sanitizer).
 
 
 These are not the final criteria, but hopefully these give a flavor of
@@ -102,7 +103,7 @@ be part of some future "higher-level" badge.
     -   Roadmap exists.  There should be some information on where the project is going or not going, e.g., 
     -   Posted list of small tasks for new users
     -   Multiple contributors from more than one organization
-    -   License statement in each file
+    -   License statement in each file (aka "per-file licensing")
     -   (Ideal) Copyright notice in each file, e.g., "Copyright [year project started] - [current year], [project founder] and the [project name] contributors."
 *   Issue tracking (TODO: This must be different for big projects like the Linux kernel; it's not clear how to capture that.)
     -   Issue tracking for defects
@@ -121,12 +122,15 @@ be part of some future "higher-level" badge.
     -   All inputs checked against whitelist
     -   Privileges limited/minimized
     -   Attack surface documented & minimized
-    -   "Automated regression test suite includes at least one check for rejection of invalid data for each input field"
+    -   Automated regression test suite includes at least one check for rejection of invalid data for each input field.  Rationale: Many regression test suites only check for perfect data; attackers will instead provide invalid data, and programs need to protect themselves against it.
+    -   If passwords are stored to allow users to log into the software, the passwords must be stored as interated per-user salted cryptographic hashes (at least).
     -   Developers contributing a majority of the software (over 50%) have learned how to develop secure software.
     -   Standard security advisory template and a pre-notification process (useful for big projects; see Xen project as an example).
+    -   All inputs from potentially-untrusted sources are checked to ensure they are valid (a “whitelist”).  Invalid inputs are rejected.  Note that comparing against a list of “bad formats” (a “blacklist”) is not enough.  In particular, numbers are converted and checked if they are between their minimum and maximum (inclusive), and text strings are checked to ensure that they are valid text patterns.
 *   Security analysis
     -   Current/past security review of code.
-    -   Dependencies checked for known vulnerabilities (using an origin analyzer, e.g., Sonatype, Black Duck, Codenomicon AppScan, OWASP Dependency-Check)
+    -   Dependencies (including embedded dependencies) are periodically checked for known vulnerabilities (using an origin analyzer, e.g., Sonatype, Black Duck, Codenomicon AppScan, OWASP Dependency-Check), and if they have known vulnerabilities, they are updated or verified as unexploitable.  It is acceptable if the components’ vulnerability cannot be exploited, but this analysis is difficult and it is sometimes easier to simply update or fix the part.  Developers must periodically re-scan to look for newly-found publicly-known vulnerabilities in the components they use, since new vulnerabilities are continuously being discovered.
+
 
 In the future we might add some criteria where a project has to meet
 some subset of them (e.g., meet at least 3 of 5 criteria).

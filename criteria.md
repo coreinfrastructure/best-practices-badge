@@ -145,9 +145,9 @@ We plan to *not* require any specific products or services.
 In particular, we plan to *not* require
 proprietary tools or services,
 since many Free software developers would reject such criteria.
-That means, for example, that we will
+For example, that we will
 intentionally *not* require git or GitHub.
-That means that as new tools and capabilities become available,
+Thus, as new tools and capabilities become available,
 projects can quickly switch to them.
 On the other hand, we may sometimes identify
 common methods or ways of doing something

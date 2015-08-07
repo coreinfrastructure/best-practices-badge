@@ -108,7 +108,8 @@ be part of some future "higher-level" badge.
     -   "Bug/vulnerability report responsiveness, e.g., commitment to respond to any vulnerability report within (say) 14 days.  "
 *   Quality
     -   Continuous integration: Automated test suite applied on each check-in, preferably across many platforms
-    -   Automated test suite covers >=X% of source code (80% considered good, 100% ideal)
+    -   Automated test suite covers >=X% branches of source code (80% considered good)
+    -   Automated test suite covers 100% of branches in source code.  We will *not* add 100% branch coverage to the *basic* set of criteria.  Some projects (like SQLite) do achieve this, but for some projects (such as the Linux kernel) this would exceptionally difficult to achieve.  Some higher/different related badge *might* add 100% branch coverage.
     -   When a bug is fixed, a regression test is normally added to the automated test suite to prevent its reoccurrence (ideally all)
     -   Documented test plan
     -   Coding standards (typically by pointing to something)
@@ -134,16 +135,21 @@ Continuous integration, in particular, might move up.
 Non-criteria
 ============
 
-We will intentionally *not* require git or GitHub.
+We plan to *not* require any specific products or services.
+In particular, we plan to *not* require
+proprietary tools or services,
+since many Free software developers would reject such criteria.
+That means, for example, that we will
+intentionally *not* require git or GitHub.
+That means that as new tools and capabilities become available,
+projects can quickly switch to them.
+On the other hand, we may sometimes identify
+common methods or ways of doing something
+(especially if they are OSS) since that can help help people meet the criteria.
 We do plan to create an "easy on-ramp" for projects using git on GitHub.
 
-We will *not* add 100% branch coverage to the *basic* set of criteria.
-Some projects (like SQLite) do achieve this, but for some projects
-(such as the Linux kernel) this would exceptionally difficult to achieve.
-Some higher/different related badge *might* add 100% branch coverage.
-
 We do not plan to require an active user discussion; some highly mature
-projects may have little activity.
+projects rarely change and thus may have little activity.
 
 
 Future plans

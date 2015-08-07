@@ -17,6 +17,8 @@ This version of the criteria is *NOT* endorsed by anyone;
 we are releasing this early version so we can get feedback.
 Feedback is welcome via the GitHub site as issues or pull requests:
 https://github.com/linuxfoundation/cii-best-practices-badge
+There is also a mailing list for general discussion:
+https://lists.coreinfrastructure.org/mailman/listinfo/cii-badges
 
 You can see the [criteria](./criteria.md) and more
 [background](./background.md).

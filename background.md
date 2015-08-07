@@ -613,6 +613,16 @@ it includes components that have known vulnerabilities. Such tools
 include OWASP Dependency-check, as well as tools from Sonatype, Black
 Duck, and Codenomicon.
 
+## Madrid 2015 meeting
+
+The Core Infrastructure Initiative (CII) 2015 meeting in Madrid, Spain,
+discussed best practices.
+Issues raised included the following:
+
+
+*   There is a need for a community of practice to develop and iterate its own definition of “best”
+*   Bring in cognitive/behavioral scientists to discuss the implementation of incentive models that can raise the state of the ecosystem and avoiding incentives that produce perverse outcomes. (This is not to *trick* people, but to increase the chance of it working.)
+*   Match resources with best practice requirements (so projects won't have the problem of being unable to meet the standard due to under-resourcing).
 
 # Examing Existing OSS Project Practices
 
@@ -667,7 +677,8 @@ https://www.sqlite.org/testing.html
 We intend to implement a simple web application
 to quickly capture self-assertion data, evaluate what it can automatically,
 and provide badge information.
-That application will itself be OSS, of course.
+That application will itself be OSS, of course, and
+we intend for the application to meet its own criteria.
 We&#8217;ll probably implement it using Ruby on Rails
 (since Rails is good for very simple web applications like this one).
 We&#8217;re currently thinking of using Rails version 4.2,
@@ -677,7 +688,7 @@ Our emphasis will be on keeping the program *simple*.
 
 How handle authentication?
 For GitHub projects, can hook into GitHub OAuth... if they can administer
-a project, then they can report on that project.
+a GitHub project, then they can report on that project.
 Probably use &#8220;divise&#8221; module for authentication in Rails, that
 works with GitHub.
 
@@ -685,6 +696,16 @@ We intend to make the *username* public of who entered data for each project
 (generally that would be the GitHub username).
 Also have our own login system, and support that, for those who don&#8217;t
 want to use GitHub.
+
+Once someone enters data on a project, normally only that person
+(or a co-administator on GitHub) can edit the data of that project.
+The Linux Foundation can override.
+In the longer term we'll need to support transition, but that is
+relatively uncommon so there's no need for it initially.
+
+Naming is a challenge. The *real* name, for our purposes, is the
+project URL.
+Multiple projects may have the same human-readable name.
 
 
 ## GitHub-related badges
@@ -696,7 +717,7 @@ http://nicbell.net/blog/github-flair
 
 We want GitHub users to think of this as &#8220;just another badge to get&#8221;.
 
-We should sign up for a few badges to try out their onboarding process,
+We intend to sign up for a few badges to evalute their onboarding process,
 e.g., Travis (CI automation), Code Climate (code quality checker including
 BrakeMan), Coveralls (code coverage), Hound (code style),
 Gymnasium (checks dependencies), HCI (looks at your documentation).

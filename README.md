@@ -22,3 +22,8 @@ https://lists.coreinfrastructure.org/mailman/listinfo/cii-badges
 
 You can see the [criteria](./criteria.md) and more
 [background](./background.md).
+
+All of material is released under both the [MIT license](./LICENSE)
+and the
+[Creative Commons Attribution 4.0 International (CC BY 4.0) license](https://creativecommons.org/licenses/by/4.0/).
+In Software Package Data Exchange (SPDX) notation, this is (MIT OR CC-BY-4.0).

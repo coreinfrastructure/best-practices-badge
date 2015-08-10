@@ -7,12 +7,37 @@ Introduction
 This *early* *draft* document identifies proposed best practices
 for open source software (OSS), including those that are likely to lead
 to secure software.
-The goal is to eventually create a "badging" program where OSS projects
+The goal is to create a "badging" program where OSS projects
 that meet the criteria can voluntarily self-certify that they meet the
 criteria and then be able to show a badge.
 A tool will be used to automatically evaluate some criteria where that
 is relatively easy to evaluate (e.g., to determine if the project uses an
 OSS license and identifies it in a standard way).
+
+No single practice guarantees that software will have absolutely
+no vulnerabilities;
+even formal methods can fail if the specification is wrong.
+However, some "best practices" can help.
+For example, many practices can encourage the multi-person review
+that can help find otherwise hard-to-find vulnerabilities.
+These criteria were created to help encourage OSS projects to
+take positive steps, and to help users know which projects are taking
+these positive steps.
+
+We are currently focused on identifying *basic* best practices
+that well-run OSS projects typically already do.
+We are tracking other criteria so we can create more advanced badges later.
+Currently the criteria includes general best practices combined
+with best practices specific to security;
+these could be separated if desired.
+The criteria are inspired by a variety of sources;
+see the separate "background" page for more.
+
+We expect that the criteria will be updated, even after badges are released.
+Thus, criteria will probably have a year identifier and age out after
+a year or two. 
+We expect it to be trivial for a well-run OSS project to update, though,
+so that should not be a barrier.
 
 This is a very early version of this document;
 we expect a number of changes.
@@ -22,32 +47,6 @@ Feedback is welcome via the GitHub site as issues or pull requests:
 https://github.com/linuxfoundation/cii-best-practices-badge
 There is also a mailing list for general discussion:
 https://lists.coreinfrastructure.org/mailman/listinfo/cii-badges
-
-Many people today depend on OSS projects; that means that security
-vulnerabilities in some OSS projects can cause trouble for many.
-No single measure guarantees that software will have absolutely
-no vulnerabilities
-(even formal methods will fail if the specification is wrong).
-However, there are some "best practices" that can help.
-For example, many practices can encourage the multi-person review
-that can help find otherwise hard-to-find vulnerabilities.
-These criteria were created to help encourage OSS projects to
-take positive steps, and to help users know which projects are taking
-these positive steps.
-By creating a "badge" we create a simple way to know whether or not
-these criteria have been met.
-
-Currently the criteria includes general best practices combined
-with best practices specific to security.
-These could be separated if desired.
-The criteria are inspired by a variety of sources;
-see the separate "background" page for more.
-
-We expect that the criteria will be updated, even after badges are released.
-Thus, criteria will probably have a year identifier and age out after
-a year or two. 
-We expect it to be trivial for a well-run OSS project to update, though,
-so that should not be a barrier.
 
 Below are the current (draft) criteria, potential criteria,
 non-criteria, future plans, and where to get more information.
@@ -131,10 +130,10 @@ be part of some future "higher-level" badge.
     -   Developers contributing a majority of the software (over 50%) have learned how to develop secure software.
     -   Standard security advisory template and a pre-notification process (useful for big projects; see Xen project as an example).
     -   All inputs from potentially-untrusted sources are checked to ensure they are valid (a “whitelist”).  Invalid inputs are rejected.  Note that comparing against a list of “bad formats” (a “blacklist”) is not enough.  In particular, numbers are converted and checked if they are between their minimum and maximum (inclusive), and text strings are checked to ensure that they are valid text patterns.
+    -   SANS Securing Web Application Technologies (SWAT) criteria
 *   Security analysis
     -   Current/past security review of code.
     -   Dependencies (including embedded dependencies) are periodically checked for known vulnerabilities (using an origin analyzer, e.g., Sonatype, Black Duck, Codenomicon AppScan, OWASP Dependency-Check), and if they have known vulnerabilities, they are updated or verified as unexploitable.  It is acceptable if the components’ vulnerability cannot be exploited, but this analysis is difficult and it is sometimes easier to simply update or fix the part.  Developers must periodically re-scan to look for newly-found publicly-known vulnerabilities in the components they use, since new vulnerabilities are continuously being discovered.
-
 
 In the future we might add some criteria where a project has to meet
 some subset of them (e.g., meet at least 3 of 5 criteria).

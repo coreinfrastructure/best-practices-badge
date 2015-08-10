@@ -10,10 +10,11 @@ The intent is to create a "badging" program where OSS projects
 that follow these best practices can voluntarily self-certify and show a badge.
 A tool will automatically evaluate criteria in some cases.
 
-No practice or set of practices guarantees that software will have absolutely
-no defects or no vulnerabilities;
-even formal methods can fail if the specification is wrong.
-However, following best practices can help.
+There is no set of practices that can guarantee that software
+will never have defects or vulnerabilities;
+even formal methods can fail if the specification or assumptions are wrong.
+However, following best practices can help improve the results
+of OSS projects.
 For example, some practices enable multi-person review before release
 that can help find otherwise hard-to-find vulnerabilities.
 These best practices were created to encourage OSS projects to
@@ -64,7 +65,7 @@ if the project is hosted on GitHub and follows standard conventions.
 *   **OSS project basics**
     -   *Project website* (AUTO).  The project MUST have a public website with a stable URL. It is RECOMMENDED that projects use https, not http; future versions of these criteria may make https a requirement.
     -   *Project website has basic content*.  The project website MUST succinctly describe what the software does (what problem does it solve), in language that potential users can understand (e.g., it uses a minimum of jargon). It MUST also provides information on how to get the software, how to send feedback (as bug reports or feature requests), and how to contribute.  The information on how to contribute MUST explain the contribution process (e.g., are pull requests used?) and SHOULD include the basic criteria for acceptable contributions (e.g., a reference to any required coding standard).
-    -   *OSS license* (AUTO).  The license MUST be posted in a standard place, e.g., as a top-level file named LICENSE or COPYING optionally followed by .txt or .md.  The required license(s) MUST be approved by at least one of OSI, FSF, Debian, or Fedora.  The required license(s) SHOULD be OSI-approved.  The software *may* also be licensed other ways (e.g., "GPLv2 or proprietary" is acceptable).  We intend for the automated tool to focus on standard, common licenses such as MIT, 2-clause BSD, 3-clause revised BSD, MIT, Apache 2.0, LGPL, or GPL; unusual licenses can cause long-term problems for OSS projects and are more difficult for tools to handle.  We expect that that "higher-level" criteria would set a higher bar, e.g., that it *must* be an OSI-approved license.
+    -   *OSS license* (AUTO).  The license(s) MUST be posted in a standard place, e.g., as a top-level file named LICENSE or COPYING optionally followed by .txt or .md.  The software MUST be released as OSS; this means that the required licenses MUST be at least one of the following: [an approved license by the Open Source Initiative (OSI)](http://opensource.org/licenses), a [free license as approved by the Free Software Foundation (FSF)](http://www.gnu.org/licenses/license-list.html), [a free license acceptable to Debian main](https://www.debian.org/legal/licenses/), or [a "good" license according to Fedora](https://fedoraproject.org/wiki/Licensing:Main?rd=Licensing).  The required license(s) SHOULD be OSI-approved.  The software *may* also be licensed other ways (e.g., "GPLv2 or proprietary" is acceptable).  We intend for the automated tool to focus on identifying common OSS licenses such as the following: [CC0](http://creativecommons.org/publicdomain/zero/1.0/), [MIT](http://opensource.org/licenses/MIT), [BSD 2-clause](http://opensource.org/licenses/BSD-2-Clause), [BSD 3-clause revised](http://opensource.org/licenses/BSD-3-Clause), [Apache 2.0](http://opensource.org/licenses/Apache-2.0), [Lesser GNU General Public License (LGPL)](http://opensource.org/licenses/lgpl-license), and the [GNU General Public License (GPL)](http://opensource.org/licenses/gpl-license). Unusual licenses can cause long-term problems for OSS projects and are more difficult for tools to handle.  We expect that that "higher-level" criteria would set a higher bar, e.g., that it *must* be an OSI-approved license.
     -   *Basic Documentation*.  The project MUST include or refer to basic documentation on how to install it, start it, and use it (possibly with a tutorial using examples).  It MUST also include reference documentation that describes its interface.  The documentation MUST discuss how to use the software securely (e.g., what to do and what not to do) if that is an appropriate topic for the software.  The security discussion (if any) need not be long, since the software SHOULD be designed to be secure by default.  Hypertext links to non-project material is fine, as long as it is available.
 *   **Change control**
     -   *Public version-controlled source repository* (AUTO). The project MUST have a version-controlled source repository that is publicly readable.  This repository MUST track what changes were made, who made the changes, and when the changes were made.  The public repository MUST NOT include only final releases; it MUST release interim versions for review before release.  This enables easy tracking and public review. The project doesn't need to use git, though that is a common implementation, and it is RECOMMENDED that projects use common distributed version control software such as git.  Some OSS projects do not use a version control system, or do not provide public access to it, but the lack of a public version control repository makes it unnecessarily difficult to contribute to a project and to track its progress in detail.  Projects MAY use private (non-public) branches while the change is not publicly released, e.g., for fixing vulnerabilities before the vulnerability is revealed to the public.
@@ -109,7 +110,7 @@ be part of some future "higher-level" badge.
     -   Multiple contributors from more than one organization
     -   License statement in each file (aka per-file licensing)
     -   (Ideal) Copyright notice in each file, e.g., "Copyright [year project started] - [current year], [project founder] and the [project name] contributors."
-*   Issue tracking (TODO: This must be different for big projects like the Linux kernel; it's not clear how to capture that.)
+*   Issue tracking (This must be different for big projects like the Linux kernel; it's not clear how to capture that.)
     -   Issue tracking for defects
     -   Issue tracking for requirements/enhancement requests
     -   Bug/vulnerability report responsiveness, e.g., commitment to respond to any vulnerability report within (say) 14 days.
@@ -150,7 +151,8 @@ Non-criteria
 We plan to *not* require any specific products or services.
 In particular, we plan to *not* require
 proprietary tools or services,
-since many Free software developers would reject such criteria.
+since many [free software](http://www.gnu.org/philosophy/free-sw.en.html)
+developers would reject such criteria.
 Therefore, we will intentionally *not* require git or GitHub.
 This also means that as new tools and capabilities become available,
 projects can quickly switch to them without failing to meet any criteria.

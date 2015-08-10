@@ -8,7 +8,7 @@ This *early* *draft* identifies proposed basic best practices criteria
 for open source software (OSS).
 The intent is to create a "badging" program where OSS projects
 that follow these best practices can voluntarily self-certify and show a badge.
-A tool will automatically evaluate some criteria in some cases.
+A tool will automatically evaluate criteria in some cases.
 
 No practice or set of practices guarantees that software will have absolutely
 no defects or no vulnerabilities;
@@ -47,6 +47,11 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
 "SHOULD", "SHOULD NOT", "RECOMMENDED",  "MAY", and
 "OPTIONAL" in this document are to be interpreted as described in
 [RFC 2119](https://tools.ietf.org/html/rfc2119).
+We assume you are already familiar with
+software development and running an OSS project;
+if that's not true, see introductory materials like
+[*Producing Open Source Software* by Karl Fogel](http://producingoss.com/).
+
 
 Current criteria: Basic Best Practices for OSS
 ==============================================

@@ -122,7 +122,7 @@ be part of some future "higher-level" badge.
     -   When a bug is fixed, a regression test is normally added to the automated test suite to prevent its reoccurrence (ideally all).
     -   Reproduceable build.  On rebuilding, the result should be bit-for-bit identical.
     -   Documented test plan.
-    -   Coding standards (typically by pointing to something).
+    -   Coding standards / coding style guide (typically by pointing to something).  There are a number of coding standards that can be recommended for specific languages.  Widely-used coding standards that include ways to reduce the likelihood of defects (including vulnerabilities) might be especially helpful.  Projects can create their own coding standard by referring to an existing one and then adding their own additions or exceptions.
     -   Program can use the local version of system library/applications (so vulnerable ones easily replaced).  Many OSS programs are distributed with "convenience libraries" that are local copies of standard libraries (possibly forked).  However, if the program *must* use these local (forked) copies, then updating the "standard" libraries as a security update will leaved these additional copies still vulnerable. This is especially an issue for cloud-based systems (e.g., Heroku); if the cloud provider updates their "standard" libaries but the program won't use them, then the updates don't actually help.  In some cases it's important to use the "other" version; the goal here is to make it *possible* to easily use the standard version. See, e.g., http://spot.livejournal.com/312320.html .
 *   Security:
     -   "Announcement" mailing list for new versions (at least for security updates).
@@ -157,6 +157,9 @@ proprietary tools or services,
 since many [free software](http://www.gnu.org/philosophy/free-sw.en.html)
 developers would reject such criteria.
 Therefore, we will intentionally *not* require git or GitHub.
+We will also not require or forbid any particular programming language
+(though for some programming languages we may be able to make
+some recommendations).
 This also means that as new tools and capabilities become available,
 projects can quickly switch to them without failing to meet any criteria.
 However, the criteria will sometimes identify
@@ -170,6 +173,18 @@ We do not plan to require active user discussion within a project.
 Some highly mature projects rarely change and thus may have little activity.
 We *do*, however, require that the project be responsive
 if vulnerabilities are reported to the project (see above).
+
+Uniquely identifying a project
+==============================
+
+The *real* name of a project, for our purposes, is the project URL.
+This may be a project "front page" URL and/or the front URL for its repository.
+Most projects have a human-readable name, but these names are not enough.
+The same human-readable name can be used for many different projects
+(including project forks), and the same project may go by many different names.
+In many cases it will be useful to point to other names for the project
+(e.g., the source package name in Debian, the package name in some
+language-specific repository, or its name in OpenHub).
 
 
 Future plans

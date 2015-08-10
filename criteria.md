@@ -1,87 +1,85 @@
-Open Source Software Best Practices Criteria (version 0.0.1)
-============================================================
+Open Source Software (OSS) Basic Best Practices Criteria (version 0.0.2)
+========================================================================
 
 Introduction
 ============
 
-This *early* *draft* document identifies proposed best practices
-for open source software (OSS), including those that are likely to lead
-to secure software.
-The goal is to create a "badging" program where OSS projects
-that meet the criteria can voluntarily self-certify that they meet the
-criteria and then be able to show a badge.
-A tool will be used to automatically evaluate some criteria where that
-is relatively easy to evaluate (e.g., to determine if the project uses an
-OSS license and identifies it in a standard way).
+This *early* *draft* identifies proposed basic best practices criteria
+for open source software (OSS).
+The intent is to create a "badging" program where OSS projects
+that follow these best practices can voluntarily self-certify and show a badge.
+A tool will automatically evaluate some criteria in some cases.
 
-No single practice guarantees that software will have absolutely
-no vulnerabilities;
+No practice or set of practices guarantees that software will have absolutely
+no defects or no vulnerabilities;
 even formal methods can fail if the specification is wrong.
-However, some "best practices" can help.
-For example, many practices can encourage the multi-person review
+However, following best practices can help.
+For example, some practices enable multi-person review before release
 that can help find otherwise hard-to-find vulnerabilities.
-These criteria were created to help encourage OSS projects to
-take positive steps, and to help users know which projects are taking
-these positive steps.
+These best practices were created to encourage OSS projects to
+follow best practices, and to help users know which projects
+are following best practices.
 
 We are currently focused on identifying *basic* best practices
 that well-run OSS projects typically already do.
-We are tracking other criteria so we can create more advanced badges later.
-Currently the criteria includes general best practices combined
-with best practices specific to security;
-these could be separated if desired.
-The criteria are inspired by a variety of sources;
+We are tracking other practices so we can create more advanced badges later.
+The basic best practices, and the more detailed criteria
+defining them, are inspired by a variety of sources;
 see the separate "background" page for more.
 
-We expect that the criteria will be updated, even after badges are released.
-Thus, criteria will probably have a year identifier and age out after
-a year or two. 
-We expect it to be trivial for a well-run OSS project to update, though,
-so that should not be a barrier.
+We expect that the practices and detailed criteria will be updated,
+even after badges are released.
+Thus, criteria (and badges) will probably have a year identifier
+and age out after a year or two. 
+We expect well-run OSS projects to trivially update,
+so this short badge life should not be a barrier.
 
 This is a very early version of this document;
 we expect a number of changes.
 This version of the criteria is *NOT* endorsed by anyone;
 we are releasing this early version so we can get feedback.
-Feedback is welcome via the GitHub site as issues or pull requests:
-https://github.com/linuxfoundation/cii-best-practices-badge
-There is also a mailing list for general discussion:
-https://lists.coreinfrastructure.org/mailman/listinfo/cii-badges
+Feedback is welcome via the
+[GitHub site as issues or pull requests](https://github.com/linuxfoundation/cii-best-practices-badge).
+There is also a
+[mailing list for general discussion](https://lists.coreinfrastructure.org/mailman/listinfo/cii-badges).
 
 Below are the current (draft) criteria, potential criteria,
 non-criteria, future plans, and where to get more information.
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+"SHOULD", "SHOULD NOT", "RECOMMENDED",  "MAY", and
+"OPTIONAL" in this document are to be interpreted as described in
+[RFC 2119](https://tools.ietf.org/html/rfc2119).
 
-Current criteria
-================
+Current criteria for OSS Basic Best Practices
+=============================================
 
 Here is the current (draft) criteria; it is certain to change.
 The ones with (AUTO) are intended to be automatically testable
-if the project happens to be hosted on GitHub.
+if the project is hosted on GitHub and follows standard conventions.
 
 
-*   OSS project basics
-    -   Project website (AUTO).  The project has a public website.
-    -   Project website has basic content.  The project website succinctly describes what the software does (what problem does it solve), in language that potential users could understand (e.g., it uses a minimum of jargon). It also describes how to get the software, send feedback (as bug reports or feature requests), and contribute.
-    -   OSS license (AUTO).  An OSS license is posted in a standard place, e.g., LICENSE or COPYING optionally followed by .txt or .md.  The required license(s) must be approved by at least one of OSI, FSF, Debian, or Fedora.  The required license(s) *should* be OSI-approved.  The software *may* also be licensed other ways (e.g., "GPLv2 or proprietary" is okay).  We intend for the automated tool to focus on standard, common licenses such as MIT, 2-clause BSD, 3-clause revised BSD, MIT, Apache 2.0, LGPL, or GPL; unusual licenses cause long-term problems for OSS projects.  We expect that that "higher-level" criteria would set a higher bar, e.g., that it *must* be an OSI-approved license.
-    -   Documentation.  The project includes at basic documentation on how to install it, start it, and use it (possibly with a tutorial using examples).  It must also include reference documentation that describes its interface.
-*   Change control
-    -   Public version-controlled source repository (AUTO) that shows intermediate results.  This enables easy tracking and public review. The project doesn't need to use git, though that is a common implementation.  We are aware that some projects do not use a version control system, or do not provide public access to it, but the lack of a public repository makes it unnecessarily difficult to contribute and track progress (e.g., to see who is contributing what and what has changed over time).
-    -   Issue/bug tracking and reporting process (e.g., issue tracker or mailing list) that users can directly submit to and where developers respond (AUTO). It must be archived for later searching.  This can be automated by looking at response rate for (bug) issues.  It's okay if enhancements aren't responded to the same degree.  We *recommend* that an issue tracker be used for tracking individual issues.
-    -   Unique version number for releases (AUTO).  We recommend Semantic Versioning (SemVer) for releases; see http://semver.org/
-    -   A ChangeLog (AUTO). This provides a summary of major changes between releases, so that users can decide whether or not they should update (and what the impact would be).  This can be separate ChangeLog file, or use GitHub releases per (see https://github.com/blog/1547-release-your-software for more).  Note that a ChangeLog is *not* just "git log" output.
-*   Quality
-    -   Working build system that can rebuild the software *or* it never needs to be built (AUTO in many cases).  Co-developers cannot easily contribute, and many security analysis tools will not work, if the software cannot be rebuilt.  It is strongly *recommended* that common tools be used for this purpose (e.g., Maven, Ant, cmake, autotools, make).  It *should* be buildable by using only OSS tools.
-    -   Automated test suite.  The test suite *should* be invocable in a standard way for that language (e.g., "make check", "mvn test", and so on), though that is not required.  It *should* cover most (or ideally all) the code branches and functionality, but even a small test suite can detect basic problems.
-    -   Compiler warning flags enabled (or a linter used) and few warnings reported (ideally none, want either less than 1 per 1000 lines or less than 10 warnings).
-*   Security
-    -   Secured delivery against man-in-the-middle attacks (AUTO).   Using https or ssh+scp is acceptable. Ideally the software is released with digitally signed packages, since that mitigates attacks on the distribution system.  A sha1sum that is only retrieved over http (and not separately signed) is *not* acceptable, since these can be modified in transit.
-    -   Vulnerability report process (e.g., mailing address, often security@SOMEWHERE).  If private reports are supported, include how to send the information in a way that is kept private (e.g., a private defect report submitted on the web using TLS, or an email encrypted using PGP).
-    -   The documentation specifically discusses how to use the software securely (e.g., what to do and what not to do).  This need not be long, since the software *should* be designed to be secure by default. (TODO: Should this be merged into the documentation requirements?)
-    -   Responses (initial replies) to security vulnerability reports sent to the project should on average be less than 7 days within the last 6 months.
-    -   There are no unpatched vulnerabilities of medium or high severity that have been publicly known for more than 60 days.  The length of time here is somewhat arbitrary and is considered extremely long (users will be left vulnerable to attackers worldwide for 60 days).  A vulnerability becomes publicly known (for this purpose) once it has a CVE with publicly-released information (reported in, for example, the National Vulnerability Database) or when the project has been informed *and* the information has been released to the public (possibly by the project).  Note that projects *should* fix all critical vulnerabilities rapidly after they are reported; Google suggests that the upper bound should be 60 days from report until repair *even* when the report is private per  http://googleonlinesecurity.blogspot.com/2010/07/rebooting-responsible-disclosure-focus.html .  Note that this criteria only measures the time known to the public, not from the time that the project is informed, and thus in many cases our criteria should be even easier to meet than Google's criteria.  We intentionally chose this metric because it is much easier to measure and verify by those *outside* the project.  For "medium to high severity" use https://nvd.nist.gov/cvss.cfm ; a CVSS 2.0 score of 4 or higher is medium to high severity (you can use just the CVSS base score for this purpose).
-*   Security analysis
-    -   At least one static analysis tool applied to source code to look for vulnerabilities & any discovered exploitable vulnerabilites fixed (e.g., Coverity, Fortify, clang static analyzer, etc.).
-    -   At least one dynamic analysis tool applied & any discovered exploitable vulnerabilities fixed (e.g., fuzzing, web application scanner).  If programmed using an memory-unsafe language such as C or C++, at least one tool to detect memory safety problems *should* be used during at least one dynamic tool use (e.g., ASAN/Address Sanitizer).
+*   **OSS project basics**
+    -   *Project website* (AUTO).  The project MUST have a public website with a stable URL. It is RECOMMENDED that projects use https, not http; future versions of these criteria may make https a requirement.
+    -   *Project website has basic content*.  The project website MUST succinctly describe what the software does (what problem does it solve), in language that potential users could understand (e.g., it uses a minimum of jargon). It MUST also provides information on how to get the software, send feedback (as bug reports or feature requests), and contribute.
+    -   *OSS license* (AUTO).  The license MUST posted in a standard place, e.g., as a top-level file named LICENSE or COPYING optionally followed by .txt or .md.  The required license(s) MUST be approved by at least one of OSI, FSF, Debian, or Fedora.  The required license(s) SHOULD be OSI-approved.  The software *may* also be licensed other ways (e.g., "GPLv2 or proprietary" is okay).  We intend for the automated tool to focus on standard, common licenses such as MIT, 2-clause BSD, 3-clause revised BSD, MIT, Apache 2.0, LGPL, or GPL; unusual licenses cause long-term problems for OSS projects.  We expect that that "higher-level" criteria would set a higher bar, e.g., that it *must* be an OSI-approved license.
+    -   *Basic Documentation*.  The project MUST include or refer to basic documentation on how to install it, start it, and use it (possibly with a tutorial using examples).  It MUST also include reference documentation that describes its interface.  The documentation discusses how to use the software securely where appropriate (e.g., what to do and what not to do).  The security discussion (if any) need not be long, since the software SHOULD be designed to be secure by default.  Hypertext links to non-project material is fine, as long as it is available.
+*   **Change control**
+    -   *Public version-controlled source repository* (AUTO). The project MUST have a public version-controlled source repository, it MUST include intermediate results for review (not only final releases).  This enables easy tracking and public review. The project doesn't need to use git, though that is a common implementation, and it is RECOMMENDED that projects use common version control software such as git.  We are aware that some projects do not use a version control system, or do not provide public access to it, but the lack of a public repository makes it unnecessarily difficult to contribute to a project and to track its progress (e.g., to see who is contributing what and what has changed over time).
+    -   *Issue/bug tracking and reporting process* (AUTO).  There MUST be a process (e.g., using an issue tracker or mailing list) where users can directly submit issues/bugs and developers will respond. It MUST be archived for later searching.  There MUST be responses to bug reports, connected to them in some way; it's okay if enhancements aren't responded to.  It is RECOMMENDED that an issue tracker be used for tracking individual issues.
+    -   *Unique version numbering* (AUTO).  The project MUST have a unique version number for each release intended to be used by users.  The [Semantic Versioning (SemVer) format](http://semver.org) is RECOMMENDED for releases.  Commit id's (or similar) MAY be used as as version numbers, since they are unique, but note that these can cause problems for users (since users cannot determine if they're up-to-date as easily).
+    -   *ChangeLog* (AUTO). The project MUST provide a "ChangeLog" with a summary of major changes for each release.  ChangeLogs are important because they help users decide whether or not they will want to update (and what the impact would be).  This MAY be a separate ChangeLog file (typically "ChangeLog" or "changelog" optionally appended by ".txt", ".md", or ".html") or it MAY use the [GitHub "Releases" workflow](https://github.com/blog/1547-release-your-software).  Note that a ChangeLog MUST NOT be simply the output of the version control log (e.g., "git log"); it MUST be a human-readable *summary*.
+*   **Quality**
+    -   *Working build system* (AUTO).  Either the project MUST never need to be built, or the project MUST provide working build system that can automatically rebuild the software.  A build system determines what actions MUST occur to rebuild the software (and in what order), and then perform those steps.  It is strongly *recommended* that common tools be used for this purpose (e.g., Maven, Ant, cmake, the autotools, make, rake).  The project SHOULD be buildable using only OSS tools.   If a project needs to be built, but there is no working build system, then potential co-developers will not be able to easily contribute and many security analysis tools will be ineffective.
+    -   *Automated test suite* (AUTO).  There MUST be at least a small automated test suite.  The test suite SHOULD be invocable in a standard way for that language (e.g., "make check", "mvn test", and so on).  The test suite SHOULD cover most (or ideally all) the code branches, input fields, and functionality, but even a small test suite can detect problems, and a small test suite provides a framework to build on.
+    -   *Warning flags*.  The project MUST enable some compiler warnings, a "safe" language mode, or using a separate "linter" to look for common simple mistakes if they are available as OSS.  Ideally there would be no warnings, but it is acceptable if there are less than 1 per 1000 lines or less than 10 warnings.
+*   **Security**
+    -   *Secured delivery against man-in-the-middle (MITM) attacks* (AUTO).   The project MUST use a delivery mechanism that counters MITM attacks. Using https or ssh+scp is acceptable.  An even stronger mechanism is releasing the software with digitally signed packages, since that mitigates attacks on the distribution system, but this only works if the users can be confident that the public keys for signature are correct *and* if the users will actually check the signature.  A sha1sum that is only retrieved over http (and not separately signed) is *not* acceptable, since these can be modified in transit.
+    -   *Vulnerability report process*.   The project MUST have some process for reporting vulnerabilities (e.g., a clearly designated mailing address on the project site, often security@SOMEWHERE).  If private vulnerability reports are supported, the project MUST include how to send the information in a way that is kept private (e.g., a private defect report submitted on the web using TLS, or an email encrypted using PGP).
+    -   *Initial vulnerability report responsiveness*.  The project MUST provide an initial reply to a security vulnerability report sent to the project, on average, less than 7 days within the last 6 months.  (If a project is being spammed on its vulnerability report channel, it's okay to only count non-spam messages.)
+    -   *Patches up-to-date*.  There MUST be no unpatched vulnerabilities of medium or high severity that have been publicly known for more than 60 days.  The length of time here is somewhat arbitrary and is considered extremely long; it means that users will be left vulnerable to attackers worldwide for up to 60 days.  A vulnerability becomes publicly known (for this purpose) once it has a CVE with publicly-released information (reported in, for example, the National Vulnerability Database) or when the project has been informed *and* the information has been released to the public (possibly by the project).  Note that projects SHOULD fix all critical vulnerabilities rapidly after they are reported; Google suggests that the upper bound should be 60 days from report until repair *even* when the report is private per  http://googleonlinesecurity.blogspot.com/2010/07/rebooting-responsible-disclosure-focus.html .  Note that this criteria only measures the time known to the public, not from the time that the project is informed, and thus in many cases this criteria is much easier to meet than Google's criteria.  We intentionally chose to start measurement from the time of public knowneldge, and not from the time reported to the project, because this is much easier to measure and verify by those *outside* the project.  For "medium to high severity" use https://nvd.nist.gov/cvss.cfm ; a CVSS 2.0 score of 4 or higher is medium to high severity (you can use just the CVSS base score for this purpose).
+*   **Security analysis**
+    -   *Static analysis*.  At least one static analysis tool MUST be applied to the source code to look for defects, including vulnerabilities, & any discovered exploitable vulnerabilites MUST be fixed (e.g., Coverity, Fortify, clang static analyzer, etc.).  A static analysis tool examines the software without executing it with specific inputs.
+    -   *Dynamic analysis*.  At least one dynamic analysis tool MUST be applied & any discovered exploitable vulnerabilities fixed (e.g., fuzzing, web application scanner).  A dynamic analysis tool examines the software by executing it with specific inputs.  For purposes of this criteria the dynamic analysis tool MUST vary the inputs in some way to look for various kinds of problems *or* be an automated test suite with at least 80% branch coverage.  If programmed using an memory-unsafe language such as C or C++, at least one tool to detect memory safety problems SHOULD be used during at least one dynamic tool use (e.g., ASAN/Address Sanitizer).  We *recommend* including a number of rigorous "can't happen" assertions in the code that are checked during dynamic analysis.
 
 
 These are not the final criteria, but hopefully these give a flavor of

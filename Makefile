@@ -4,8 +4,10 @@
 # (though they are proposed). For now, GNU Make works, as do many other
 # make systems in practice.
 
-# The program for processing markdown; takes filename, generates to stdout.
-MARKDOWN=markdown2.py
+# A program for processing markdown; takes a filename, generates to stdout.
+MARKDOWNFLAGS=-x link-patterns --link-patterns-file markdown-urls \
+              -x smarty-pants
+MARKDOWN=markdown2.py $(MARKDOWNFLAGS)
 
 %.html : %.md
 	$(MARKDOWN) $< > $@

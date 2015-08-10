@@ -166,8 +166,10 @@ can help people understand and meet the criteria.
 We do plan to create an "easy on-ramp" for projects using git on GitHub,
 since that is a common case.
 
-We do not plan to require active user discussion; some highly mature
-projects rarely change and thus may have little activity.
+We do not plan to require active user discussion within a project.
+Some highly mature projects rarely change and thus may have little activity.
+We *do*, however, require that the project be responsive
+if vulnerabilities are reported to the project (see above).
 
 
 Future plans

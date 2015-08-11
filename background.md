@@ -1,14 +1,27 @@
-# Background on the criteria
+# Background on Basic Best Practices Criteria for Open Source Software (OSS)
 
-This document includes material related to selecting criteria.
+This document gives background on the
+Basic Best Practices Criteria for Open Source Software (OSS).
 This includes potential sources of criteria,
-existing project processes,
-and implementation notes for a tool to help determine if a project
-meets the criteria (and if so, help it display a badge).
+identifying processes used by existing OSS project,
+and capturing implementation notes for the tool that will
+help determine if a project meets the criteria (and if so display a badge).
+See the [criteria](./criteria.md) for current version of the criteria.
+
+There is no time or need to record *everything* that is related.
+The goal here is to identify enough to reduce the risk that an important
+relevant idea was overlooked.
+The *primary* way we are avoiding that risk is through public
+review and discussion of the criteria;
+looking at other related information (documented here) is simply
+a supplement.
 
 In some cases this material is very rough.
-The goal here is to ensure that the background material is
-recorded, even roughly, and then clean it up over time.
+We believed it was more important to capture background information,
+even if it is rough,
+and then clean it up over time if that cleanup is important.
+Creating good criteria is our real objective, so please focus on the
+[criteria](./criteria.md) list.
 
 
 # Potential sources of criteria
@@ -16,8 +29,10 @@ recorded, even roughly, and then clean it up over time.
 This section basically provides a literature search of related materials.
 These include
 guidelines for OSS projects,
-methods for evaluating OSS projects,
-methods developing secure software, or evaluating software for its security.
+general methods for evaluating OSS projects,
+security-related materials (e.g., guidelines or evaluation processes),
+security-related metrics,
+and miscellaneous.
 Some of these approaches may be useful for the badging system as well.
 
 ## Guidelines for OSS projects
@@ -30,7 +45,7 @@ Some guidelines include:
 
 *   &#8220;Starting an Open Source project&#8221; http://www.smashingmagazine.com/2013/01/starting-an-open-source-project/
 
-*   &#8220;Software Release Practice HOWTO&#8221; by Eric Raymond, 2000 (so somewhat dated), http://en.tldp.org/HOWTO/Software-Release-Practice-HOWTO/
+*   &#8220;Software Release Practice HOWTO&#8221; by Eric Raymond, 2000 (somewhat dated), http://en.tldp.org/HOWTO/Software-Release-Practice-HOWTO/
 
 *   &#8220;Releasing Free/Libre/Open Source Software (FLOSS) for Source Installation&#8221;, David A. Wheeler, http://www.dwheeler.com/essays/releasing-floss-software.html
 
@@ -79,8 +94,7 @@ a simple metric to point out potential issues in an OSS project. It is
 intentionally designed to produce a numerical score, making it
 relatively easy to report.
 
-A updated discussion is here:
-http://opensource.com/life/15/7/why-your-open-source-project-failing
+A updated discussion is here: http://opensource.com/life/15/7/why-your-open-source-project-failing
 
 ### Internet Success
 
@@ -148,7 +162,8 @@ complexity than one that does not, simply because user needs can
 sometimes require some complexity.
 
 Similarly, they had guidance for growth projects, in order of
-importance, and these may suggest some metrics:
+importance, and these may suggest some metrics
+(comments by David A. Wheeler are in parentheses):
 
 1.  &#8220;Your goal should be to create a virtuous circle where others help
     to improve the software, thereby attracting more users and other
@@ -158,7 +173,7 @@ importance, and these may suggest some metrics:
     a high-quality project web site.&#8221; The user community should actively
     interacting with the development team.
 > (Wheeler notes that possible related metrics include:
-> Actively-maintained website (e.g., date of last page change on
+> Actively maintained website (e.g., date of last page change on
 > website), messages/month (e.g., email, bug tracker, etc.), number of
 > commits/month, number of committers, etc.)
 
@@ -169,11 +184,11 @@ importance, and these may suggest some metrics:
 > developers that have been added (post initial release or within a
 > year).)
 
-3.  Have some small tasks available for contributors with limited time.
+3. "Have some small tasks available for contributors with limited time."
 > (Wheeler notes that a possible metric is a posted list of small tasks
 > for new/limited contributors.)
 
-4.  Welcome competition. The authors were surprised, but noted that
+4.  "Welcome competition." The authors were surprised, but noted that
     &#8220;competition seems to favor success&#8221;. Personally, I do not find this
     surprising at all. Competition often encourages others to do better;
     we have an entire economic system based on that premise.
@@ -199,7 +214,7 @@ sign, too.
 ### Stol and Babar
 
 There are so many processes for evaluating OSS that Stol and Babar have
-published a framework comparing them.
+published a framework comparing them here:
 <http://staff.lero.ie/stol/files/2011/12/OSS2010.pdf>. One complication
 is that there are several methods all named &#8220;Open Source Maturity
 Model&#8221;.
@@ -331,7 +346,7 @@ Its section on reliability notes metrics that may be useful are:
 
 -   Presence of an automated (regression) test suite
 
-## Gratis-Security
+### Gratis-Security
 
 In 2003 David A. Wheeler developed an unpublished list of techniques
 that might be useful in an inexpensive evaluation approach he called
@@ -370,7 +385,7 @@ Require active peer review:
 
 5.  Evidence that there are a number of users (&#8220;safety in numbers&#8221;). E.G., for level 4, at least 100 users.
 
-6.  Require that at least some developers learn how to write secure programs, including what to look for. There are freely-available materials, such as <http://www.dwheeler.com/secure-programs> that teach how to do this. E.G., at level 2, at least 2 developers (including one trusted developer) has asserted that they&#8217;ve read at least one book on how to write secure programs. Level 5: all trusted developers have read at least one book.
+6.  Require that at least some developers learn how to write secure programs, including what to look for. There are freely available materials, such as <http://www.dwheeler.com/secure-programs> that teach how to do this. E.G., at level 2, at least 2 developers (including one trusted developer) has asserted that they&#8217;ve read at least one book on how to write secure programs. Level 5: all trusted developers have read at least one book.
 
 Good Practices:
 
@@ -386,8 +401,8 @@ Good Practices:
 
 6.  Upper levels: Start to connect with the CC. e.g., creating an ST to at least document the threats and security requirements.
 
-The &#8220;good practices&#8221; list probably needs to be divided further. Where
-possible, it might be possible to base the grouping on the CC:
+The &#8220;good practices&#8221; list probably needs to be divided further.
+Where possible, it might be possible to base the grouping on the CC:
 Configuration Management, Delivery and Operation, Development, Guidance
 Documents, Life cycle support, Tests, Vulnerability Assessment. Here&#8217;s
 an alternative grouping, based on the TSDM: Configuration management
@@ -397,7 +412,19 @@ documentation (document what the product should and should not do - see
 the CC for more details about this), personnel (are they all identified?
 At higher levels, citizenship issues?).
 
-## OWASP Application Security Verification Standard (ASVS)
+### TODO
+
+Talk Openly Develop Openly (TODO)
+is "an open group of companies who want to collaborate on practices, tools, and other ways to run successful and effective open source projects and programs."
+Their "about" page states that " We will be sharing experiences, developing best practices, and working on common tooling."
+At this time they have not publicly released a best practices list.
+
+More information: http://todogroup.org
+
+
+## Security-related
+
+### OWASP Application Security Verification Standard (ASVS)
 
 The OWASP Application Security Verification Standard (ASVS) Project
 provides &#8220;a basis for testing web application technical security
@@ -420,11 +447,11 @@ defines &#8220;security requirements that must be verified for an application
 to achieve a certain level. How those requirements are verified is left
 up to the verifier.&#8221;
 
-## OWASP OpenSAMM
+### OWASP OpenSAMM
 
 OpenSAMM is documented here: <http://www.opensamm.org/>
 
-## SANS&#8217; Securing Web Application Technologies (SWAT)
+### SANS&#8217; Securing Web Application Technologies (SWAT)
 
 SANS has released the &#8220;Security Web Application Technologies&#8221; (SWAT)
 checklist, available at:
@@ -451,7 +478,34 @@ automate. As the name implies, this is focused on web applications. The
 checklist items are cross-referenced to the relevant CWE entries - a
 nice touch.
 
-## Heartbleed Lessons Learned
+### Build Security In
+
+The US DHS "Build Security In" website
+"provides practices, tools, guidelines, rules, principles, and
+other resources that software developers, architects, and security
+practitioners can use to build security into software in every phase of
+its development."
+See: https://buildsecurityin.us-cert.gov/
+
+### OWASP CLASP
+
+CLASP (Comprehensive, Lightweight Application Security Process)
+"provides a well-organized and structured approach for moving security
+concerns into the early stages of the software development lifecycle,
+whenever possible.  CLASP is actually a set of process pieces that can
+be integrated into any software development process."
+
+See: https://www.owasp.org/index.php/Category:OWASP_CLASP_Project
+
+
+### BSIMM
+
+Building Security In Maturity Model (BSIMM)
+provides information about organizational software security initiatives,
+and lets people compare their initiatives with others'.
+https://www.bsimm.com/
+
+### Heartbleed Lessons Learned
 
 The Heartbleed vulnerability in OpenSSL could not be found by many of
 the techniques used to counter vulnerabilities. However, a number of
@@ -484,20 +538,7 @@ SAFECode publications are available at:
 http://www.safecode.org/publications/
 
 
-## Checklist Manifesto
-
-The *Checklist Manifesto* by Dr. Atul Gawande is not a specific set of
-criteria for software, but instead is general non-fiction book
-advocating the use of checklists and emphasizing how to make effective
-checklists.
-
-The &#8220;badges&#8221; contemplated here do not need to be simple checklists; it
-may be fine to have a more thorough list, or if some requirements take
-time to do. Nevertheless, the checklist manifesto is noted here because
-it clearly shows that simple &#8220;to do&#8221; lists, if carefully written, can
-have dramatically positive effects.
-
-## Specific potentially-useful security metrics
+## Specific potentially useful security metrics
 
 Many metrics have been proposed for evaluating software that are more
 security-focused. Some are focused on security.
@@ -547,9 +588,9 @@ splint has not been maintained recently.)
 Note that these tools use heuristics to determine what is a
 vulnerability, thus, different tools will report different values.
 
-### Lexically-scanning static analysis security tools (e.g., flawfinder and RATS)
+### Lexically scanning static analysis security tools (e.g., flawfinder and RATS)
 
-A variant is to use lexically-scanning tools to report constructs
+A variant is to use lexically scanning tools to report constructs
 (&#8220;hits&#8221;) in software that are of special concern. Again, counts or
 densities could be reported. OSS tools such as flawfinder and RATS can
 do this. (Note: David A. Wheeler is the author of flawfinder.)
@@ -613,7 +654,9 @@ it includes components that have known vulnerabilities. Such tools
 include OWASP Dependency-check, as well as tools from Sonatype, Black
 Duck, and Codenomicon.
 
-## Madrid 2015 meeting
+## Miscellaneous
+
+### Madrid 2015 meeting
 
 The Core Infrastructure Initiative (CII) 2015 meeting in Madrid, Spain,
 discussed best practices.
@@ -623,6 +666,20 @@ Issues raised included the following:
 *   There is a need for a community of practice to develop and iterate its own definition of “best”
 *   Bring in cognitive/behavioral scientists to discuss the implementation of incentive models that can raise the state of the ecosystem and avoiding incentives that produce perverse outcomes. (This is not to *trick* people, but to increase the chance of it working.)
 *   Match resources with best practice requirements (so projects won't have the problem of being unable to meet the standard due to under-resourcing).
+
+### Checklist Manifesto
+
+The *Checklist Manifesto* by Dr. Atul Gawande is not a specific set of
+criteria for software, but instead is general non-fiction book
+advocating the use of checklists and emphasizing how to make effective
+checklists.
+
+The &#8220;badges&#8221; contemplated here do not need to be simple checklists; it
+may be fine to have a more thorough list, or if some requirements take
+time to do. Nevertheless, the checklist manifesto is noted here because
+it clearly shows that simple &#8220;to do&#8221; lists, if carefully written, can
+have dramatically positive effects.
+
 
 # Examing Existing OSS Project Practices
 
@@ -640,13 +697,130 @@ Of course, projects that follow best practices can still
 have vulnerabilities, other bugs, and other kinds of problems...
 but they should be a better position to prevent, detect, and fix them.
 
-We'd like to survey various OSS projects.
+We hope to survey several OSS projects.
 Some that might be surveyed include
 the Linux kernel, Apache web server, SQLite, OpenBSD,
-OpenSSH, Firefox, Chromium, MySQL, git, node.js, and jquery.
+OpenSSH, Firefox, Chromium, MySQL, LibreOffice, git, node.js, and jquery.
 
 Here are some pages describing the processes used by some OSS projects
 to produce high-quality and/or high-security software.
+Note that these all tend to be large projects that are difficult to
+summarize; the text below is necessarily a broad brush.
+
+## Linux kernel
+
+The Linux kernel is an operating system kernel.
+
+Some pages that describe the Linux kernel development process include:
+[Linux kernel documentation on its development](https://www.kernel.org/doc/Documentation/development-process/),
+especially
+[its file on the development process](https://www.kernel.org/doc/Documentation/development-process/2.Process),
+the
+[Linux Foundation page on how its development process works](http://www.linuxfoundation.org/content/2-how-development-process-works),
+["The changing kernel development process" presentation by Jon Corbet (LWN.NET) given in 2014](https://www.youtube.com/watch?v=GQiik7X7-u8), and
+["Greg Kroah Hartman on the Linux Kernel" (2008)](https://www.youtube.com/watch?feature=player_detailpage&v=L2SED6sewRw#t=867s)
+
+More generally, http://lwn.net reports on
+Linux kernel development processes and results.
+The Linux kernel archives provides various versions at https://www.kernel.org/ .
+
+The Linux kernel is released under the
+GPL version 2 (only) license.
+Its license is clearly stated in its top-level COPYING file
+(this file contains more than just the GPLv2 license).
+
+The Linux kernel developers emphasize human code review and trust in
+a smaller group of developers who are extremely experienced with Linux.
+Once patches are posted, working with reviewers is a crucial part
+of the development process.
+There is strong continuity; many of its developers are the same people
+who have lengthy experience with the software.
+Most Linux kernel developers are paid to develop it, and
+most contributions are from people paid to develop it;
+both percentages have increased over time.
+
+Currently Linux kernel releases occur every 2-3 months.
+This makes it easy to refuse adding a new feature before it
+is ready, because if it not clearly ready, it can be simply
+deferred to the next release.
+The Linux kernel's development process documentation explains,
+"at the beginning of each development
+cycle, the 'merge window' is said to be open.  At that time, code which is
+deemed to be sufficiently stable (and which is accepted by the development
+community) is merged into the mainline kernel.  The bulk of changes for a
+new development cycle (and all of the major changes) will be merged during
+this time, at a rate approaching 1,000 changes ("patches," or "changesets")
+per day.
+(As an aside, it is worth noting that the changes integrated during the
+merge window do not come out of thin air; they have been collected, tested,
+and staged ahead of time...)...
+The merge window lasts for approximately two weeks.  At the end of this
+time, Linus Torvalds will declare that the window is closed and release the
+first of the "rc" kernels...
+[and] the time to stabilize the next kernel has begun.
+Over the next six to ten weeks, only patches which fix problems should be
+submitted to the mainline.  On occasion a more significant change will be
+allowed, but such occasions are rare..."
+Patches generally go through early review and a wider review;
+if they pass muster, it will be accepted by the subsystem maintainer,
+and (hopefully) will eventually be merged into the mainline
+repository managed by Linus Torvalds.
+
+The Linux kernel development is managed as a distributed
+development process.
+Most developers use the tool git (git was originally
+developed to support Linux kernel development).
+Group communication primarily takes place via mailing lists.
+Most subsystems have a designated maintainer, who is the gatekeeper
+for that portion of the kernel.
+
+The Linux kernel developers intentionally do not use an issue tracker
+(there is one, but it is not generally used); many
+key developers do not believe
+that issue trackers are helpful for the very large scale of their project.
+
+The Linux kernel has a standard coding style (though not all of the
+code meets it).
+The guidelines for code submission recommend that new code
+not produce any compiler warnings and that the full set of warnings
+be enabled (they are not enabled by default).
+The "checkpatch.pl" program is a simple perl program
+that does a simple static analysis of proposed patches for
+common problems.
+The Linux kernel provides several (runtime) debugging features,
+such as "lockdep" for tracking lock acquisition and release.
+
+There are automated test processes, including the
+[Linux test project](http://linux-test-project.github.io/)
+and
+[Autotest](http://autotest.github.io/)
+Many major GNU/Linux distributions also include some additional
+certification systems to check a Linux kernel.
+That said, [Greg Kroah-Hartman](https://www.youtube.com/watch?feature=player_detailpage&v=L2SED6sewRw#t=867s) notes that it is very difficult
+to create true test suites for a kernel, so the Linux kernel
+strongly depends on community testing.
+
+A variety of static analysis tools are used to analyze the Linux kernel.
+The "sparse" static analysis tool was initially developed by
+Linus Torvalds and can be used to find certain kernel code problems.
+The "Coccinelle" tool (http://coccinelle.lip6.fr/) can also find
+many problems and sometimes propose fixes.
+[Eduard Bachmakov worked on the clang static analyzer in 2013 to improve its ability to detect Linux kernel defects](http://www.linux.com/news/featured-blogs/200-libby-clark/749649-a-summer-spent-on-the-llvm-clang-static-analyzer-for-the-linux-kernel).
+["Linux Kernel Developer Responses to Static Analysis Bug Reports" by Philip J. Guo and Dawson Engler](https://www.usenix.org/legacy/event/usenix09/tech/full_papers/guo/guo_html/)
+examined "how Linux kernel developers respond to bug reports issued by a static analysis tool" (in particular how they triaged reports),
+using Coverity Scan results.
+
+The Linux kernel has been fuzzed using the Trinity fuzz tester.
+The future of the Trinity fuzzer is in doubt, however; see
+https://lwn.net/Articles/650824/ .
+There is also a specialized fuzzer for fuzzing perf_events
+https://lwn.net/Articles/653182/ .
+
+Note that running static analysis and fuzzing tools is typically not
+required of initial contributors.
+Instead, they are typically applied
+by others who then report on any issues they find.
+
 
 ## LibreOffice
 
@@ -665,11 +839,66 @@ Jenkins / CI integration with gerrit to test across 3 platforms,
 and coding guidelines.
 https://people.gnome.org/~michael/blog/2015-08-05-under-the-hood-5-0.html
 
+The primary LibreOffice license is the Mozilla Public License version 2.0
+(MPL-2.0), and they ask that all contributions
+be dual-licensed under the MPL-2.0 and the Lesser GPL (LGPL) version 3+.
+This is explained in its
+[Licenses page](https://www.libreoffice.org/about-us/licenses/),
+including a link to individual developer statements.
+The top-level files of libreoffice/core
+contain the files COPYING (contains GPLv3), COPYING.LGPL
+(contains LGPLv3),
+and COPYING.MPL (contains the Mozilla Public License Version 2.0),
+but it might not be obvious where each license applies just from
+those files.
+
 
 ## SQLite
 
+The SQLite developers emphasize extremely thorough (dynamic) testing.
+As of version 3.8.10, the SQLite library consists of approximately 94.2
+KSLOC of C code. (lines of code excluding blank lines and comments).
+"By comparison, the project has 971 times as much test code and test
+scripts - 91515.5 KSLOC."
+
+Their approach to testing can be summarized as follows (per their website):
+
+*   Three independently developed test harnesses
+*   100% branch test coverage in an as-deployed configuration
+*   Millions and millions of test cases
+*   Out-of-memory tests
+*   I/O error tests
+*   Crash and power loss tests
+*   Fuzz tests
+*   Boundary value tests
+*   Disabled optimization tests
+*   Regression tests
+*   Malformed database tests
+*   Extensive use of assert() and run-time checks
+*   Valgrind analysis
+*   Undefined behavior checks
+*   Checklists 
+
+Here are a few interesting quotes:
+
+*   "Whenever a bug is reported against SQLite, that bug is not considered fixed until new test cases that would exhibit the bug have been added to either the TCL or TH3 test suites."
+*   "Another popular [coverage] metric is 'Modified Condition/Decision Coverage' or MC/DC...  [SQLite] achieves 100% MC/DC in addition to 100% branch coverage."
+*   "The developers of SQLite have found that full coverage testing is an extremely effective method for locating and preventing bugs. Because every single branch instruction in SQLite core code is covered by test cases, the developers can be confident that changes made in one part of the code do not have unintended consequences in other parts of the code. The many new features and performance improvements that have been added to SQLite in recent years would not have been possible without the availability full-coverage testing.  Maintaining 100% MC/DC is laborious and time-consuming. The level of effort needed to maintain full-coverage testing is probably not cost effective for a typical application. However, we think that full-coverage testing is justified for a very widely deployed infrastructure library like SQLite, and especially for a database library which by its very nature 'remembers' past mistakes."
+*   "To help ensure that SQLite does not make use of undefined or implementation defined behavior, the test suites are rerun using instrumented builds that try to detect undefined behavior. For example, test suites are run using the "-ftrapv" option of GCC. And they are run again using the "-fsanitize=undefined" option on Clang. And again using the "/RTC1" option in MSVC. Then the test suites are rerun using options like "-funsigned-char" and "-fsigned-char" to make sure that implementation differences do not matter either. Tests are then repeated on 32-bit and 64-bit systems and on big-endian and little-endian systems, using a variety of CPU architectures. Furthermore, the test suites are augmented with many test cases that are deliberately designed to provoke undefined behavior. For example: "SELECT -1*(-9223372036854775808);".
+*   "The SQLite core contains 4197 assert() statements that verify function preconditions and postconditions and loop invariants."
+*   "SQLite compiles without warnings on GCC and Clang using the -Wall and -Wextra flags on Linux and Mac and on MSVC on Windows. No valid warnings are generated by the Clang Static Analyzer tool 'scan-build' either (though recent versions of clang seem to generate many false-positives.)...  Static analysis has not proven to be especially helpful in finding bugs in SQLite. Static analysis has found a few bugs in SQLite, but those are the exceptions."
+
 For more information on how SQLite is tested, see:
 https://www.sqlite.org/testing.html
+
+All of the code and documentation in SQLite has been dedicated
+to the public domain, as
+[stated on its website](https://www.sqlite.org/copyright.html).
+One of the three test harnesses, the TH3 test harness,
+is a set of proprietary tests (this is the suite that gives 100%
+branch coverage and 100% MC/DC test coverage).
+There is no COPYING or LICENSE file at the top level of the source
+distribution, and its README.md file does not clearly state the license.
 
 
 # Implementation
@@ -715,7 +944,8 @@ http://shields.io/
 https://github.com/badges/shields
 http://nicbell.net/blog/github-flair
 
-We want GitHub users to think of this as &#8220;just another badge to get&#8221;.
+We want GitHub users to think of this
+as &#8220;just another badge to get&#8221;.
 
 We intend to sign up for a few badges to evalute their onboarding process,
 e.g., Travis (CI automation), Code Climate (code quality checker including
@@ -735,6 +965,9 @@ https://speakerdeck.com/benbalter/open-source-licensing-by-the-numbers
 
 
 # Bibliography
+
+Not all of these items are referenced directly, but they may still
+be useful.
 
 \[Callaway\] Callaway, Tom. &#8220;How to tell if a FLOSS project is doomed to
 FAIL.&#8221; *The Open Source Way*.

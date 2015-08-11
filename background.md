@@ -23,6 +23,8 @@ and then clean it up over time if that cleanup is important.
 Creating good criteria is our real objective, so please focus on the
 [criteria](./criteria.md) list.
 
+Please note that these are completely unrelated to the
+[Construction Industry Institute (CII) best practices](https://www.construction-institute.org/Store/CII/Publication_Pages/bp.cfm?section=orders).
 
 # Potential sources of criteria
 
@@ -700,7 +702,7 @@ but they should be a better position to prevent, detect, and fix them.
 We hope to survey several OSS projects.
 Some that might be surveyed include
 the Linux kernel, Apache web server, SQLite, OpenBSD,
-OpenSSH, Firefox, Chromium, MySQL, LibreOffice, git, node.js, and jquery.
+OpenSSH, Firefox, Chromium, MySQL, LibreOffice, git, gpsd, node.js, and jquery.
 
 Here are some pages describing the processes used by some OSS projects
 to produce high-quality and/or high-security software.
@@ -822,6 +824,41 @@ Instead, they are typically applied
 by others who then report on any issues they find.
 
 
+## OpenSSH
+
+OpenSSH implements SSH connectivity tools (e.g., ssh and scp)
+for encrypted connections.
+The [OpenBSD security page](http://www.openbsd.org/security.html)
+describes their general development approach.
+
+Their primary approach is comprehensive file-by-file analysis,
+"not so much looking for security holes,
+as we are looking for basic software bugs...
+Entire new classes of security problems have been found during our audit,
+and often source code which had been audited earlier
+needs re-auditing with these new flaws in mind.
+Code often gets audited multiple times,
+and by multiple people with different auditing skills...
+During our ongoing auditing process we find many bugs,
+and endeavor to fix them even though exploitability is not proven."
+
+They use a variety of ways to help solve problems, for example:
+
+*   strlcpy() and strlcat() (these help counter buffer overflows)
+*   Memory protection purify
+*   Privilege separation
+*   Privilege revocation
+*   Chroot jailing
+
+One unusual aspect is that they
+[split their core development efforts from portability developments](http://www.openssh.com/history.html#portable).
+
+Its top-level LICENSE file contains licensing information;
+this is complex in detail.
+The file notes that "we will summarize and say that all components
+are under a BSD licence, or a licence more free than that."
+
+
 ## LibreOffice
 
 LibreOffice 5.0 uses variety of tools to detect defects to fix.
@@ -877,7 +914,7 @@ Their approach to testing can be summarized as follows (per their website):
 *   Extensive use of assert() and run-time checks
 *   Valgrind analysis
 *   Undefined behavior checks
-*   Checklists 
+*   Checklists
 
 Here are a few interesting quotes:
 

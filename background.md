@@ -6,7 +6,7 @@ This includes potential sources of criteria,
 identifying processes used by existing OSS project,
 and capturing implementation notes for the tool that will
 help determine if a project meets the criteria (and if so display a badge).
-See the [criteria](./criteria.md) for current version of the criteria.
+See [criteria](./criteria.md) for the current version of the criteria.
 
 There is no time or need to record *everything* that is related.
 The goal here is to identify enough to reduce the risk that an important
@@ -683,10 +683,15 @@ it clearly shows that simple &#8220;to do&#8221; lists, if carefully written, ca
 have dramatically positive effects.
 
 
-# Examing Existing OSS Project Practices
+# Practices of some existing OSS Projects
 
-Examining well-run OSS projects helps identify important practical
-activities. Indeed, if many well-run projects do *not* perform a
+This section describes the practices of some existing OSS projects,
+particularly a few that are popular, apply practices we might want
+to consider adding to the best practices, and/or reputed by someone
+to be well-run.
+Examining some existing OSS projects
+can help us identify important practical activities.
+Indeed, if many well-run projects do *not* perform a
 specific practice, it may not be a good practice.
 We believe that well-run OSS projects
 shouldn&#8217;t need to make many
@@ -699,19 +704,24 @@ Of course, projects that follow best practices can still
 have vulnerabilities, other bugs, and other kinds of problems...
 but they should be a better position to prevent, detect, and fix them.
 
-We hope to survey several OSS projects.
-Some that might be surveyed include
-the Linux kernel, Apache web server, SQLite, OpenBSD,
-OpenSSH, Firefox, Chromium, MySQL, LibreOffice, git, gpsd, node.js, and jquery.
+We hope to survey a number of OSS projects.
+Below is a summary of some information about the
+Linux kernel, OpenBSD, OpenSSH, LibreOffice, SQLite,
+the Global Positioning System Service Daemon (GPSD), and Postfix.
+Some others OSS projects that might be surveyed include
+the Apache web server, Firefox, Chromium, MySQL, git, node.js, and jquery.
 
 Here are some pages describing the processes used by some OSS projects
 to produce high-quality and/or high-security software.
-Note that these all tend to be large projects that are difficult to
-summarize; the text below is necessarily a broad brush.
+Some of this material is derived from
+[*How to Prevent the next Heartbleed*](http://www.dwheeler.com/essays/heartbleed.html#exemplars).
+Note that any substantive project is difficult to summarize;
+the text below is necessarily a broad brush.
 
 ## Linux kernel
 
 The Linux kernel is an operating system kernel.
+Its primary project page is https://www.kernel.org/ .
 
 Some pages that describe the Linux kernel development process include:
 [Linux kernel documentation on its development](https://www.kernel.org/doc/Documentation/development-process/),
@@ -721,10 +731,8 @@ the
 [Linux Foundation page on how its development process works](http://www.linuxfoundation.org/content/2-how-development-process-works),
 ["The changing kernel development process" presentation by Jon Corbet (LWN.NET) given in 2014](https://www.youtube.com/watch?v=GQiik7X7-u8), and
 ["Greg Kroah Hartman on the Linux Kernel" (2008)](https://www.youtube.com/watch?feature=player_detailpage&v=L2SED6sewRw#t=867s)
-
 More generally, http://lwn.net reports on
 Linux kernel development processes and results.
-The Linux kernel archives provides various versions at https://www.kernel.org/ .
 
 The Linux kernel is released under the
 GPL version 2 (only) license.
@@ -823,13 +831,15 @@ required of initial contributors.
 Instead, they are typically applied
 by others who then report on any issues they find.
 
+## OpenBSD
 
-## OpenSSH
+OpenBSD is an operating system (including a kernel).
+Its main web page is http://www.openbsd.org .
+They aspire to be #1 in security.
 
-OpenSSH implements SSH connectivity tools (e.g., ssh and scp)
-for encrypted connections.
 The [OpenBSD security page](http://www.openbsd.org/security.html)
-describes their general development approach.
+describes the general development approach for OpenBSD
+(this is also the approach taken by OpenSSH).
 
 Their primary approach is comprehensive file-by-file analysis,
 "not so much looking for security holes,
@@ -850,14 +860,40 @@ They use a variety of ways to help solve problems, for example:
 *   Privilege revocation
 *   Chroot jailing
 
+
+## OpenSSH
+
+OpenSSH implements SSH connectivity tools (e.g., ssh and scp)
+for encrypted connections.
+Its primary website is http://www.openssh.com/ .
+
+The [OpenBSD security page](http://www.openbsd.org/security.html)
+describes the general development approach for OpenBSD;
+this is also the development approach taken by OpenSSH.
+
 One unusual aspect is that they
 [split their core development efforts from portability developments](http://www.openssh.com/history.html#portable).
+One team does strictly OpenBSD-based development (to be as simple as possible),
+and the other team takes that version and makes it portable
+to run on many operating systems.
 
 Its top-level LICENSE file contains licensing information;
 this is complex in detail.
 The file notes that "we will summarize and say that all components
 are under a BSD licence, or a licence more free than that."
 
+The OpenSSH developers have worked to
+reduce OpenSSH&#8217;s attack surface; their approaches include
+defensive programming (preventing errors by
+inserting additional checks),
+avoiding complexity in dependent libraries,
+mildly changing the protocol to reduce attack surface,
+privilege separation,
+and changing the program to maximize the benefit
+of attack mitigation measures in the operating system (OS)
+[<a href="http://www.openbsd.org/papers/openssh-measures-asiabsdcon2007.pdf">Miller2007</a>].
+For more on how OpenSSH implements privilege separation, see
+[<a href="https://www.usenix.org/events/sec03/tech/full_papers/provos_et_al/provos_et_al.pdf">Provos2003</a>].
 
 ## LibreOffice
 
@@ -925,8 +961,7 @@ Here are a few interesting quotes:
 *   "The SQLite core contains 4197 assert() statements that verify function preconditions and postconditions and loop invariants."
 *   "SQLite compiles without warnings on GCC and Clang using the -Wall and -Wextra flags on Linux and Mac and on MSVC on Windows. No valid warnings are generated by the Clang Static Analyzer tool 'scan-build' either (though recent versions of clang seem to generate many false-positives.)...  Static analysis has not proven to be especially helpful in finding bugs in SQLite. Static analysis has found a few bugs in SQLite, but those are the exceptions."
 
-For more information on how SQLite is tested, see:
-https://www.sqlite.org/testing.html
+For more information on how SQLite is tested, see: https://www.sqlite.org/testing.html
 
 All of the code and documentation in SQLite has been dedicated
 to the public domain, as
@@ -936,6 +971,70 @@ is a set of proprietary tests (this is the suite that gives 100%
 branch coverage and 100% MC/DC test coverage).
 There is no COPYING or LICENSE file at the top level of the source
 distribution, and its README.md file does not clearly state the license.
+
+## Global Positioning System Service Daemon (GPSD)
+
+Global Positioning System Service Daemon (GPSD) is a daemon
+that monitors one or more GPSes or AIS receivers attached
+to a host computer and makes all data on the
+location/course/velocity of the sensors available
+to be queried on TCP port 2947 of the host computer.
+It is widely used, e.g.,
+it underlies the map service on Android phones, and is in many other
+devices that need location information (e.g., drones).
+Its main website is http://www.catb.org/gpsd .
+
+It is released under the BSD-new license, aka Revised BSD or 3-clause license.
+
+GPSD uses git and has a public repository, visible at:
+http://git.savannah.gnu.org/cgit/gpsd.git
+
+The GPSD project uses
+<a href="http://www.aosabook.org/en/gpsd.html">extensive regression testing,
+rigorous static checking with multiple tools
+and an architectural approach that reduces risks
+(e.g., they forbid the use of malloc in the core)</a>.
+They use a custom framework for an extensive regression testing suite,
+including the use of tools like valgrind.
+Their static analysis tools include splint, cppcheck, and Coverity.
+Its lead developer reports that,
+&#8220;we do not know of any program suite larger than GPSD that
+is fully splint-annotated, and strongly suspect that none such yet exist...
+GPSD is notable as the basis for my assertion that conventional good
+practice with C can get you very close to never-break. I got fanatical
+about regression testing and routinely applying four static analyzers;
+it paid off.&#8221;
+The [lead developer has provided other comments about GPSD development processes](http://esr.ibiblio.org/?p=4340).
+
+## Postfix
+
+Postfix is a mail server.
+Its primary website is http://www.postfix.org .
+Elaine R. Palmer and Bill Cheswick have reported that htey
+thought that Postfix did an overall
+good job on security and reliability.
+
+The
+<a href="http://www.360is.com/06-postfix.htm">Postfix approach
+for developing secure software</a>
+emphasizes using
+a very experienced team of just a few security conscious individuals,
+writing it from scratch to be secure (and in particular resistant to
+buffer overflows), and an architecture that involves
+running as a set of daemons each performing a different set of tasks
+(facilitating a &#8220;least privilege&#8221; approach
+that can be easily contained further using chroot or virtual containers).
+Postfix is implemented using a safe subset of C and POSIX, combined with an
+<a href="https://en.wikipedia.org/wiki/Postfix_%28software%29#Implementation">abstraction layer that creates safe alternatives</a>.
+For example, it has a &#8220;vstring&#8221; primitive to help resist
+buffer overflow attacks and a
+&#8220;safe open&#8221; primitive to resist race conditions.
+
+It is released under the
+<a href="http://mirrors-usa.go-parts.com/postfix/source/index.html">IBM Public License</a>.
+
+Source is released as a .tar.gz tarball.
+No official public version control repository has been identified.
 
 
 # Implementation

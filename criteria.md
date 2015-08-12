@@ -117,6 +117,7 @@ be part of some future "higher-level" badge.
     -   Bug/vulnerability report responsiveness, e.g., commitment to respond to any vulnerability report within (say) 14 days.
 *   Quality:
     -   Continuous integration: Automated test suite applied on each check-in, preferably across many platforms.
+    -   Whenever major new functionality is added to the program, tests of it are added to the automated test suite.  This needs to be *documented* in the instructions for change proposals, and there needs to be past evidence that such tests are being added in the most recent major changes.
     -   Automated test suite covers >=X% branches of source code (80% considered good).
     -   Automated test suite covers 100% of branches in source code.  We will *not* add 100% branch coverage to the *basic* set of criteria.  Some projects (like SQLite) do achieve this, but for some projects (such as the Linux kernel) this would be exceptionally difficult to achieve.  Some higher/different related badge *might* add 100% branch coverage.
     -   When a bug is fixed, a regression test is normally added to the automated test suite to prevent its reoccurrence (ideally all).

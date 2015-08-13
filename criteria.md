@@ -194,8 +194,21 @@ Future plans
 ============
 
 We currently plan to launch with a single badge level.
-There may be multiple levels (bronze, silver, gold, platinum) or
+There may be multiple levels (bronze, silver, gold) or
 other badges (with a prerequisite) later.
+We are currently leaning towards using the Olympic system naming
+(bronze, silver, gold) since these are widely known; the LEED naming
+(with platinum at the top) is less well-known, and using the Olympic
+naming would provide room for another (platinum) level if needed.
+
+We would like to have feedback from cognitive experts or studies
+to make the badges effective.
+Paper like
+(Open badges for education: what are the implications at the intersection of open systems and badging?)[http://www.researchinlearningtechnology.net/index.php/rlt/article/view/23563] and their citations may help refine this.
+We are especially interested in using badges as a motivator
+for behavior, but we are also interested
+in the value of a badge as a credential.
+
 
 For more information
 ====================

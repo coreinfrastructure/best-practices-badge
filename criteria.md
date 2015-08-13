@@ -206,6 +206,9 @@ In many cases it will be useful to point to other names for the project
 (e.g., the source package name in Debian, the package name in some
 language-specific repository, or its name in OpenHub).
 
+Thus, a badge would have its URL as its name, year range, and level/name
+(once there is more than one).
+
 
 Future plans
 ============
@@ -220,8 +223,7 @@ naming would provide room for another (platinum) level if needed.
 
 We would like to have feedback from cognitive experts or studies
 to make the badges effective.
-Paper like
-(Open badges for education: what are the implications at the intersection of open systems and badging?)[http://www.researchinlearningtechnology.net/index.php/rlt/article/view/23563] and their citations may help refine this.
+Papers like (Open badges for education: what are the implications at the intersection of open systems and badging?)[http://www.researchinlearningtechnology.net/index.php/rlt/article/view/23563] and their citations may help refine this.
 We are especially interested in using badges as a motivator
 for behavior, but we are also interested
 in the value of a badge as a credential.

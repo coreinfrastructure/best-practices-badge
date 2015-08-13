@@ -5,11 +5,13 @@ Basic Best Practices Criteria for Open Source Software (OSS).
 This includes potential sources of criteria,
 identifying processes used by existing OSS project,
 and capturing implementation notes for the tool that will
-help determine if a project meets the criteria (and if so display a badge).
+help projects determine (and demonstrate) that they meet these criteria.
 See [criteria](./criteria.md) for the current version of the criteria.
 
-There is no time or need to record *everything* that is related.
-The goal here is to identify enough to reduce the risk that an important
+There is no time or need to record *everything* that is related
+in this document.
+The goal of this document
+is to identify enough material to reduce the risk that an important
 relevant idea was overlooked.
 The *primary* way we are avoiding that risk is through public
 review and discussion of the criteria;
@@ -34,22 +36,22 @@ guidelines for OSS projects,
 general methods for evaluating OSS projects,
 security-related materials (e.g., guidelines or evaluation processes),
 security-related metrics,
-and miscellaneous.
+and miscellanea.
 Some of these approaches may be useful for the badging system as well.
 
 ## Guidelines for OSS projects
 
 Some guidelines include:
 
-*   Karl Fogel&#8217;s book &#8220;Producing Open Source Software&#8221;.  http://producingoss.com/
+*   Karl Fogel&#8217;s book *Producing Open Source Software*.  http://producingoss.com/
 
 *   [Civic Commons&#8217; wiki page](http://wiki.civiccommons.org/Open_Source_Development_Guidelines/)
 
-*   &#8220;Starting an Open Source project&#8221; http://www.smashingmagazine.com/2013/01/starting-an-open-source-project/
+*   &#8220;Starting an Open Source project.&#8221; http://www.smashingmagazine.com/2013/01/starting-an-open-source-project/
 
-*   &#8220;Software Release Practice HOWTO&#8221; by Eric Raymond, 2000 (somewhat dated), http://en.tldp.org/HOWTO/Software-Release-Practice-HOWTO/
+*   &#8220;Software Release Practice HOWTO.&#8221; Eric Raymond, 2000 (somewhat dated). http://en.tldp.org/HOWTO/Software-Release-Practice-HOWTO/
 
-*   &#8220;Releasing Free/Libre/Open Source Software (FLOSS) for Source Installation&#8221;, David A. Wheeler, http://www.dwheeler.com/essays/releasing-floss-software.html
+*   &#8220;Releasing Free/Libre/Open Source Software (FLOSS) for Source Installation.&#8221; David A. Wheeler. http://www.dwheeler.com/essays/releasing-floss-software.html
 
 
 ## Methods for evaluating OSS projects
@@ -708,8 +710,10 @@ We hope to survey a number of OSS projects.
 Below is a summary of some information about the
 Linux kernel, OpenBSD, OpenSSH, LibreOffice, SQLite,
 the Global Positioning System Service Daemon (GPSD), and Postfix.
-Some others OSS projects that might be surveyed include
-the Apache web server, Firefox, Chromium, MySQL, git, node.js, and jquery.
+Some other OSS projects that might be surveyed include
+the Apache web server, Firefox, Chromium, MySQL or MariaDB, git,
+Bouncy Castle, SAMBA, Spamassassin, Smoothwall, KeePass, VLC,
+pidgin, dovecot, gcc, busybox, node.js, and jquery.
 
 Here are some pages describing the processes used by some OSS projects
 to produce high-quality and/or high-security software.

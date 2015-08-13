@@ -800,10 +800,23 @@ common problems.
 The Linux kernel provides several (runtime) debugging features,
 such as "lockdep" for tracking lock acquisition and release.
 
+In 2014 a new make target called "kselftest" was added to the
+kernel build system
+(see https://lwn.net/Articles/608959/ for more).
+The xfstests suite also performs tests and is actively maintained at
+http://oss.sgi.com/cgi-bin/gitweb.cgi?p=xfs/cmds/xfstests.git;a=summary
 There are automated test processes, including the
 [Linux test project](http://linux-test-project.github.io/)
 and
 [Autotest](http://autotest.github.io/)
+https://lwn.net/Articles/654071/
+In 2015 the libnvdimm subsystem was added to the kernel's
+driver infrastructure (it provides services over persistent memory
+to make access to that memory safer and more reliable);
+it appears to be the first device-driver subsystem to integrate
+in-kernel interface mocking techniques in support of unit testing,
+as further discussed in
+https://lwn.net/Articles/654071/ .
 Many major GNU/Linux distributions also include some additional
 certification systems to check a Linux kernel.
 That said, [Greg Kroah-Hartman](https://www.youtube.com/watch?feature=player_detailpage&v=L2SED6sewRw#t=867s) notes that it is very difficult

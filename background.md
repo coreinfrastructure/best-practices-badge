@@ -57,21 +57,21 @@ Some guidelines include:
 ## Methods for evaluating OSS projects
 
 There are a number of complete processes specifically for evaluating OSS
-(as software, a project, or both). These are typically evaluating OSS
+(as software, a project, or both). These typically evaluate OSS
 for a particular purpose, not their security per se, but they may have
-useful approaches to mine.
+useful approaches that can be reused in criteria for a best practices badge.
 
 ### Callaway&#8217;s FAIL index
 
 Tom &#8220;spot&#8221; Callaway, Fedora Engineering Manager at Red Hat, posted a
 blog post titled &#8220;How to tell if a FLOSS project is doomed to FAIL (or
-at least, held back...)&#8221; in 2009. The book &#8220;The Open Source Way&#8221;
+at least, held back...)&#8221; in 2009. The book *The Open Source Way*
 includes a chapter with an updated version of this index and is
 available online \[Callaway\]. This index is intended to be a quick
 measure of how well a FLOSS project follows common practices,
 particularly those that impede packaging or co-development by others. It
-measures &#8220;FAIL&#8221; points, so *low* scores are better; 0 is perfect, 5-25
-is &#8220;You&#8217;re probably doing okay, but you could be better,&#8221; and beyond 25
+measures &#8220;FAIL&#8221; points, so *low* scores are better; 0 is perfect,
+5 through 25 are &#8220;You&#8217;re probably doing okay, but you could be better,&#8221; and beyond 25
 is an indicator of serious problems.
 
 The measures are grouped into categories: size, source (version)
@@ -79,7 +79,7 @@ control, building from source, bundling, libraries, system install, code
 oddities, communication, releases, history, licensing, and
 documentation. Examples of causes for fail points are:
 
--   Source Control: There is no publicly available source control (e.g.
+-   Source Control: There is no publicly available source control (e.g.,
     cvs, svn, bzr, git) \[ +10 points of FAIL \]
 
 -   Building from source: There is no documentation on how to build from
@@ -90,28 +90,30 @@ documentation. Examples of causes for fail points are:
     points of FAIL\]
 
 -   Licensing: Your code does not have per-file licensing \[ +10 points
-    of FAIL \]
+    of FAIL \].
 
 Obviously a high score does not always doom a project to fail, nor does
-a low score guarantee success. However, like any metric, it can provide
-a simple metric to point out potential issues in an OSS project. It is
-intentionally designed to produce a numerical score, making it
+a low score guarantee success.
+However, it can provide
+a simple metric to point out potential issues in an OSS project.
+It is intentionally designed to produce a numerical score, making it
 relatively easy to report.
 
-A updated discussion is here: <http://opensource.com/life/15/7/why-your-open-source-project-failing>
+A updated discussion is here: <http://opensource.com/life/15/7/why-your-open-source-project-failing>.
 
 ### Internet Success
 
 The book *Internet Success* by Schweik and English reports a detailed
-quantitative analysis to determine &#8220;what factors lead some OSS commons
+quantitative analysis to answer the question,
+&#8220;what factors lead some OSS commons
 to success and others to abandonment?&#8221; \[Schweik2012\]
 
 Schweik and English examined over 100,000 projects on SourceForge, using
-data from SourceForge and developer surveys, using quantitative analysis
+data from SourceForge and developer surveys, and using quantitative analysis
 instead of guesswork. They use a very simple project lifecycle model:
 projects begin in initiation, and once the project has made its first
 software release, it switches to growth. They also categorized projects
-as success, abandonment, or indeterminate. Combining these produces 6
+as success, abandonment, or indeterminate. Combining these produces six
 categories of project: success initiation (SI); abandonment initiation
 (AI); success growth (SG); abandonment growth (AG); indeterminant
 initiation (II); and indeterminant growth (IG). Their operational
@@ -159,9 +161,9 @@ success in an OSS project according to this quantitative data:
 Some items that people have claimed are important, such as keeping
 complexity low, were not really supported as important. In fact,
 successful projects tended to have a little more complexity. I suspect
-both successful and abandoned projects often strive to reduce complexity
-- so it not really something that distinguishes them - and that
-sometimes a project that focuses on user needs has to have more
+both successful and abandoned projects often strive to reduce complexity,
+so it not really something that distinguishes them.
+Also, sometimes a project that focuses on user needs has to have more
 complexity than one that does not, simply because user needs can
 sometimes require some complexity.
 
@@ -174,10 +176,11 @@ importance, and these may suggest some metrics
     developers, which in turn leads to more improvements in the
     software... Do this the same way it is done in initiation: spending
     time, maintain goals and plans, communicate the plans, and maintain
-    a high-quality project web site.&#8221; The user community should actively
+    a high-quality project web site.&#8221; The user community should be
+    actively
     interacting with the development team.
 > (Wheeler notes that possible related metrics include:
-> Actively maintained website (e.g., date of last page change on
+> actively maintained website (e.g., date of last page change on
 > website), messages/month (e.g., email, bug tracker, etc.), number of
 > commits/month, number of committers, etc.)
 
@@ -193,11 +196,12 @@ importance, and these may suggest some metrics
 > for new/limited contributors.)
 
 4.  "Welcome competition." The authors were surprised, but noted that
-    &#8220;competition seems to favor success&#8221;. Personally, I do not find this
+    &#8220;competition seems to favor success.&#8221;
+    Personally, I do not find this
     surprising at all. Competition often encourages others to do better;
     we have an entire economic system based on that premise.
 
-5.  Consider accepting offers of financing or paid developers (they can
+5.  Consider accepting offers to finance or pay developers (they can
     greatly increase success rates). This one, in particular, should
     surprise no one; if you want to increase success, pay someone to do it.
 
@@ -207,7 +211,7 @@ importance, and these may suggest some metrics
 
 The book has more detailed lists of metrics.
 
-They also have some hints of how potential OSS users (consumers) can
+They also have some hints for how potential OSS users (consumers) can
 choose OSS that is more likely to endure. Successful OSS projects have
 characteristics like more than 1000 downloads, users participating in
 bug tracker and email lists, goals/plans listed, a development team that
@@ -220,8 +224,8 @@ sign, too.
 There are so many processes for evaluating OSS that Stol and Babar have
 published a framework comparing them here:
 <http://staff.lero.ie/stol/files/2011/12/OSS2010.pdf>. One complication
-is that there are several methods all named &#8220;Open Source Maturity
-Model&#8221;.
+is that there are several methods named
+&#8220;Open Source Maturity Model.&#8221;
 
 ### QualiPSo OpenSource Maturity Model (OMM)
 
@@ -317,53 +321,57 @@ Its section on security mentions some metrics that might be useful:
 -   Fortify scan results (similar)
 
 -   Common criteria evaluation. These typically evaluate entire systems
-    (e.g., entire operating systems), instead of focusing on specific
-    projects that support a particular portion of an operating system,
-    and thus do not provide the kinds of measures desired for this task.
+    (e.g., entire operating systems) instead of focusing on specific
+    projects that support a particular portion of an operating system.
+    Thus they do not provide the kinds of measures desired for this task.
 
--   Reports of (many) vulnerabilities that are &#8220;unforgiveable&#8221; (MITRE
+-   Reports of (many) vulnerabilities that are
+    &#8220;unforgiveable&#8221; (MITRE
     identifies criteria for identifying vulnerabilities that are
-    especially easy to find, and thus &#8220;unforgiveable&#8221;) \[Christey2007\].
+    especially easy to find, and thus are
+    &#8220;unforgiveable&#8221;) \[Christey2007\].
 
 -   It is *known* that external organizations have or are reviewing the
     software, e.g., OpenBSD. However, some organizations (like OpenBSD)
-    only fix *their* version; that version may not be the version all
+    fix only *their* version, which may not be the version all
     other systems use.
 
-It also notes that experts can be hired to determine if the developers
+It also notes that experts can be hired to determine whether the developers
 follow good security practices. Examples include:
 
--   it minimizes privileges (e.g., only small portions of the program
+-   It minimizes privileges (e.g., only small portions of the program
     have special privilege, or the program only has special privileges
-    at certain times)
+    at certain times).
 
--   it strives for simplicity (simpler designs are often more secure)
+-   It strives for simplicity (simpler designs are often more secure).
 
--   it carefully checks inputs
+-   It carefully checks inputs.
 
--   source code scanning tools such as RATS and Flawfinder report
+-   Source code scanning tools such as RATS and Flawfinder report
     few problems.
 
 Its section on reliability notes metrics that may be useful are:
 
 -   Self-reported status (e.g., &#8220;mature&#8221;)
 
--   Presence of an automated (regression) test suite
+-   Presence of an automated (regression) test suite.
 
 ### Gratis-Security
 
 In 2003 David A. Wheeler developed an unpublished list of techniques
 that might be useful in an inexpensive evaluation approach he called
-&#8220;gratis security.&#8221; This was intended to be a process for self-evaluation
+&#8220;gratis security.&#8221;
+This was intended to be a process for self-evaluation
 that could be performed with zero or little cost by developers.
 It also tried to connect, in some cases, with the Common Criteria
 as it existed at the time.
+It had several different levels, with higher levels requiring more.
 
 The following might be relevant.
 
 Use Automated Tools:
 
-1.  Use source code security scanning packages, such as flawfinder and RATS. E.G., for level 1, must not have top risk warnings from RATS and flawfinder (inserting comments to disable them is fine, as long as the person asserts that they checked the warnings to ensure that they weren&#8217;t really problems). For level 3, must not have warnings from the top 2 risk levels.
+1.  Use source code security scanning packages, such as flawfinder and RATS. E.G., for level 1, the software must not have top risk warnings from RATS and flawfinder (inserting comments to disable them is fine as long as the person asserts that they checked the warnings to ensure that they weren&#8217;t really problems). For level 3, the software must not have warnings from the top 2 risk levels.
 
 2.  Use execution testing tools, such as Brute Force Binary Tester and Whisker (for web-accessible programs) to send data in an attempt to break the program.
 
@@ -379,23 +387,23 @@ Use Automated Tools:
 
 Require active peer review:
 
-1.  Evidence of multiple developers (e.g., in ChangeLog). E.G., for level 2, must have at least 2 developers; list them, and show where they appear.
+1.  Evidence of multiple developers (e.g., in a ChangeLog). E.G., for level 2, the project must have at least 2 developers.
 
-2.  Evidence of people reviewing code (e.g., bug reports/patches)
+2.  Evidence of people reviewing code (e.g., bug reports/patches).
 
 3.  Public disclosure of source code, for some time.
 
-4.  (For level 5): Evidence that &#8220;all code has been reviewed by someone else&#8221;; e.g., Apache and Netscape have such processes. This would be good for higher levels.
+4.  (For level 5): Evidence that all code has been reviewed by someone else.
 
-5.  Evidence that there are a number of users (&#8220;safety in numbers&#8221;). E.G., for level 4, at least 100 users.
+5.  Evidence that there are a number of users (e.g., for level 4, at least 100 users).
 
-6.  Require that at least some developers learn how to write secure programs, including what to look for. There are freely available materials, such as <http://www.dwheeler.com/secure-programs> that teach how to do this. E.G., at level 2, at least 2 developers (including one trusted developer) has asserted that they&#8217;ve read at least one book on how to write secure programs. Level 5: all trusted developers have read at least one book.
+6.  Require that at least some developers learn how to write secure programs, including what to look for. There are freely available materials, such as <http://www.dwheeler.com/secure-programs> that teach how to do this. E.g., at level 2, at least 2 developers (including one trusted developer) has asserted that they&#8217;ve read at least one book on how to write secure programs. Level 5: all trusted developers have read at least one book.
 
 Good Practices:
 
-1.  Products must have a different version number for each public release (CC ACM\_CAP.1)
+1.  Products must have a different version number for each public release (CC ACM\_CAP.1).
 
-2.  Level 1: Products (source & binary) must be signed, the public key must be publicly posted (so it can be verified over time) and have an MD5 posted. This provides a simple way to check the product signature (keep signature from a while back - that way, if website broken, can tell there&#8217;s a change).
+2.  Level 1: Products (source and binary) must be signed, the public key must be publicly posted (so it can be verified over time) and have an MD5 posted. This provides a simple way to check the product signature (keep signature from a while back - that way, if the website is broken, others can tell there&#8217;s a change).
 
 3.  Trusted repository configured so that only trusted developers can change code, and passwords not sent in clear (at least, must be setup so don&#8217;t need to & developers know not to do so).
 

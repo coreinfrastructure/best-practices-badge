@@ -43,15 +43,15 @@ Some of these approaches may be useful for the badging system as well.
 
 Some guidelines include:
 
-*   Karl Fogel&#8217;s book *Producing Open Source Software*.  <http://producingoss.com/>.
+*   [Karl Fogel&#8217;s book *Producing Open Source Software*](<http://producingoss.com/)
 
 *   [Civic Commons&#8217; wiki page](http://wiki.civiccommons.org/Open_Source_Development_Guidelines/)
 
-*   &#8220;Starting an Open Source project.&#8221; http://www.smashingmagazine.com/2013/01/starting-an-open-source-project/
+*   [&#8220;Starting an Open Source project.&#8221;](http://www.smashingmagazine.com/2013/01/starting-an-open-source-project/)
 
-*   &#8220;Software Release Practice HOWTO.&#8221; Eric Raymond, 2000 (somewhat dated). http://en.tldp.org/HOWTO/Software-Release-Practice-HOWTO/
+*   [&#8220;Software Release Practice HOWTO.&#8221; Eric Raymond, 2000 (somewhat dated)](http://en.tldp.org/HOWTO/Software-Release-Practice-HOWTO/)
 
-*   &#8220;Releasing Free/Libre/Open Source Software (FLOSS) for Source Installation.&#8221; David A. Wheeler. http://www.dwheeler.com/essays/releasing-floss-software.html
+*   [&#8220;Releasing Free/Libre/Open Source Software (FLOSS) for Source Installation.&#8221; David A. Wheeler](http://www.dwheeler.com/essays/releasing-floss-software.html)
 
 
 ## Methods for evaluating OSS projects
@@ -98,7 +98,7 @@ a simple metric to point out potential issues in an OSS project. It is
 intentionally designed to produce a numerical score, making it
 relatively easy to report.
 
-A updated discussion is here: http://opensource.com/life/15/7/why-your-open-source-project-failing
+A updated discussion is here: <http://opensource.com/life/15/7/why-your-open-source-project-failing>
 
 ### Internet Success
 
@@ -416,14 +416,14 @@ documentation (document what the product should and should not do - see
 the CC for more details about this), personnel (are they all identified?
 At higher levels, citizenship issues?).
 
-### TODO
+### Talk Openly Develop Openly (TODO)
 
 Talk Openly Develop Openly (TODO)
 is "an open group of companies who want to collaborate on practices, tools, and other ways to run successful and effective open source projects and programs."
 Their "about" page states that " We will be sharing experiences, developing best practices, and working on common tooling."
 At this time they have not publicly released a best practices list.
 
-More information: http://todogroup.org
+More information: <http://todogroup.org>
 
 
 ## Security-related
@@ -489,7 +489,7 @@ The US DHS "Build Security In" website
 other resources that software developers, architects, and security
 practitioners can use to build security into software in every phase of
 its development."
-See: https://buildsecurityin.us-cert.gov/
+See <https://buildsecurityin.us-cert.gov/>.
 
 ### OWASP CLASP
 
@@ -499,7 +499,7 @@ concerns into the early stages of the software development lifecycle,
 whenever possible.  CLASP is actually a set of process pieces that can
 be integrated into any software development process."
 
-See: https://www.owasp.org/index.php/Category:OWASP_CLASP_Project
+See: <https://www.owasp.org/index.php/Category:OWASP_CLASP_Project>.
 
 
 ### BSIMM
@@ -533,13 +533,13 @@ That is radically different than the approach taken here.
 
 The Software Assurance Forum for Excellence in Code (SAFECode)
 organization at
-http://www.safecode.org/
+<http://www.safecode.org/>
 has a variety of materials.
 They have a variety of training materials that developers might find useful.
 Some of their publications might include points that could
 strengthen the criteria.
 SAFECode publications are available at:
-http://www.safecode.org/publications/
+<http://www.safecode.org/publications/>.
 
 
 ## Specific potentially useful security metrics
@@ -725,7 +725,7 @@ the text below is necessarily a broad brush.
 ## Linux kernel
 
 The Linux kernel is an operating system kernel.
-Its primary project page is https://www.kernel.org/ .
+Its primary project page is <https://www.kernel.org/>.
 
 Some pages that describe the Linux kernel development process include:
 [Linux kernel documentation on its development](https://www.kernel.org/doc/Documentation/development-process/),
@@ -735,7 +735,7 @@ the
 [Linux Foundation page on how its development process works](http://www.linuxfoundation.org/content/2-how-development-process-works),
 ["The changing kernel development process" presentation by Jon Corbet (LWN.NET) given in 2014](https://www.youtube.com/watch?v=GQiik7X7-u8), and
 ["Greg Kroah Hartman on the Linux Kernel" (2008)](https://www.youtube.com/watch?feature=player_detailpage&v=L2SED6sewRw#t=867s)
-More generally, http://lwn.net reports on
+More generally, <http://lwn.net> reports on
 Linux kernel development processes and results.
 
 The Linux kernel is released under the
@@ -806,7 +806,7 @@ such as "lockdep" for tracking lock acquisition and release.
 
 In 2014 a new make target called "kselftest" was added to the
 kernel build system
-(see https://lwn.net/Articles/608959/ for more).
+(see <https://lwn.net/Articles/608959/> for more).
 The xfstests suite also performs tests and is actively maintained at
 http://oss.sgi.com/cgi-bin/gitweb.cgi?p=xfs/cmds/xfstests.git;a=summary
 There are automated test processes, including the
@@ -851,7 +851,7 @@ by others who then report on any issues they find.
 ## OpenBSD
 
 OpenBSD is an operating system (including a kernel).
-Its main web page is http://www.openbsd.org .
+Its main web page is <http://www.openbsd.org>.
 They aspire to be #1 in security.
 
 The [OpenBSD security page](http://www.openbsd.org/security.html)
@@ -882,7 +882,7 @@ They use a variety of ways to help solve problems, for example:
 
 OpenSSH implements SSH connectivity tools (e.g., ssh and scp)
 for encrypted connections.
-Its primary website is http://www.openssh.com/ .
+Its primary website is <http://www.openssh.com/>.
 
 The [OpenBSD security page](http://www.openbsd.org/security.html)
 describes the general development approach for OpenBSD;
@@ -978,7 +978,7 @@ Here are a few interesting quotes:
 *   "The SQLite core contains 4197 assert() statements that verify function preconditions and postconditions and loop invariants."
 *   "SQLite compiles without warnings on GCC and Clang using the -Wall and -Wextra flags on Linux and Mac and on MSVC on Windows. No valid warnings are generated by the Clang Static Analyzer tool 'scan-build' either (though recent versions of clang seem to generate many false-positives.)...  Static analysis has not proven to be especially helpful in finding bugs in SQLite. Static analysis has found a few bugs in SQLite, but those are the exceptions."
 
-For more information on how SQLite is tested, see: https://www.sqlite.org/testing.html
+For more information on how SQLite is tested, see: <https://www.sqlite.org/testing.html>.
 
 All of the code and documentation in SQLite has been dedicated
 to the public domain, as
@@ -999,7 +999,7 @@ to be queried on TCP port 2947 of the host computer.
 It is widely used, e.g.,
 it underlies the map service on Android phones, and is in many other
 devices that need location information (e.g., drones).
-Its main website is http://www.catb.org/gpsd .
+Its main website is <http://www.catb.org/gpsd>.
 
 It is released under the BSD-new license, aka Revised BSD or 3-clause license.
 
@@ -1026,7 +1026,7 @@ The [lead developer has provided other comments about GPSD development processes
 ## Postfix
 
 Postfix is a mail server.
-Its primary website is http://www.postfix.org .
+Its primary website is <http://www.postfix.org>.
 Elaine R. Palmer and Bill Cheswick have reported that htey
 thought that Postfix did an overall
 good job on security and reliability.

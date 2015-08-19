@@ -18,8 +18,8 @@ https://github.com/linuxfoundation/cii-best-practices-badge
 There is also a mailing list for general discussion:
 https://lists.coreinfrastructure.org/mailman/listinfo/cii-badges
 
-* Draft Badging [Criteria](./criteria.md)
-* Draft [Background](./background.md) on badging
+* Draft Badging **[Criteria]**(./criteria.md)
+* Draft **[Background]**(./background.md) on Badging
 
 All material is released under both the [MIT license](./LICENSE)
 and the

@@ -1,14 +1,12 @@
-# cii-best-practices-badge
-Core Infrastructure Initiative Best Practices Badge
+# Core Infrastructure Initiative Best Practices Badge
 
 This *early* *draft* material identifies proposed best practices
 for open source software (OSS), including those that are likely to lead
 to secure software.
-The goal is to eventually create a "badging" program where OSS projects
+The goal is to create a "badging" program where OSS projects
 that meet the criteria can voluntarily self-certify that they meet the
 criteria and then be able to show a badge.
-A tool will be used to automatically evaluate some criteria where that
-is relatively easy to evaluate (e.g., to determine if the project uses an
+A tool will be used to automatically evaluate some criteria (e.g., to determine if the project uses an
 OSS license and identifies it in a standard way).
 
 This is a very early version of this document;
@@ -20,10 +18,10 @@ https://github.com/linuxfoundation/cii-best-practices-badge
 There is also a mailing list for general discussion:
 https://lists.coreinfrastructure.org/mailman/listinfo/cii-badges
 
-You can see the [criteria](./criteria.md) and more
-[background](./background.md).
+* Draft Badging [Criteria](./criteria.md)
+* Draft [Background](./background.md) on badging
 
-All of material is released under both the [MIT license](./LICENSE)
+All material is released under both the [MIT license](./LICENSE)
 and the
 [Creative Commons Attribution 4.0 International (CC BY 4.0) license](https://creativecommons.org/licenses/by/4.0/).
 In Software Package Data Exchange (SPDX) notation, this is (MIT OR CC-BY-4.0).

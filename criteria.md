@@ -146,6 +146,7 @@ be part of some future "higher-level" badge.
     -   Program can use the local version of system library/applications (so vulnerable ones easily replaced).  Many OSS programs are distributed with "convenience libraries" that are local copies of standard libraries (possibly forked).  However, if the program *must* use these local (forked) copies, then updating the "standard" libraries as a security update will leaved these additional copies still vulnerable. This is especially an issue for cloud-based systems (e.g., Heroku); if the cloud provider updates their "standard" libaries but the program won't use them, then the updates don't actually help.  In some cases it's important to use the "other" version; the goal here is to make it *possible* to easily use the standard version. See, e.g., http://spot.livejournal.com/312320.html .
 *   Security:
     -   "Announcement" mailing list for new versions (at least for security updates).
+    -   Releases MUST be cryptographically signed.  These may be implemented as signed git tags (using cryptographic digital signatures).  There MUST be a way for users to obtain the public keys used for signing so that they can verify the signature, and there MUST be a documented process explaining to users how they can verify the signature.
     -   All inputs checked against whitelist (not a blacklist).
     -   Privileges limited/minimized.
     -   Attack surface documented and minimized.

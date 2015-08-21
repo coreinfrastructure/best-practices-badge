@@ -6,7 +6,7 @@
 
 # A program for processing markdown; takes a filename, generates to stdout.
 MARKDOWNFLAGS=-x link-patterns --link-patterns-file markdown-urls \
-              -x smarty-pants
+              -x smarty-pants -x code-friendly
 MARKDOWN=markdown2.py $(MARKDOWNFLAGS)
 
 %.html : %.md

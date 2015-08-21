@@ -395,7 +395,7 @@ Require active peer review:
 
 4.  (For level 5): Evidence that all code has been reviewed by someone else.
 
-5.  Evidence that there are a number of users (e.g., for level 4, at least 100 users).
+5.  Evidence that there are a number of users (e.g., for level 4, at least 100 users).  If there are many users, this suggests the project is producing useful software and that there are a number of potential future reviewers.
 
 6.  Require that at least some developers learn how to write secure programs, including what to look for. There are freely available materials, such as <http://www.dwheeler.com/secure-programs> that teach how to do this. E.g., at level 2, at least 2 developers (including one trusted developer) has asserted that they&#8217;ve read at least one book on how to write secure programs. Level 5: all trusted developers have read at least one book.
 
@@ -405,30 +405,30 @@ Good Practices:
 
 2.  Level 1: Products (source and binary) must be signed, the public key must be publicly posted (so it can be verified over time) and have an MD5 posted. This provides a simple way to check the product signature (keep signature from a while back - that way, if the website is broken, others can tell there&#8217;s a change).
 
-3.  Trusted repository configured so that only trusted developers can change code, and passwords not sent in clear (at least, must be setup so don&#8217;t need to & developers know not to do so).
+3.  The trusted repository must be configured so that only trusted developers can change code and passwords (if sent) cannot be sent in the clear.
 
-4.  Upper level: require CM system so can see what each developer changed and when. CVS and subversion are fine. (see CC ACM).
+4.  Upper level: require the CM system to record who performed each change, what the change was, and when the change was made. Git and subversion are fine. (see CC ACM).
 
-5.  Installation procedures discuss how to install securely & security issues (like CC ADO\_IGS.1, AGD\_ADM.1, AGD\_USR.1)
+5.  Installation procedures must discuss how to install the software securely and security issues when using the software (like CC ADO\_IGS.1, AGD\_ADM.1, AGD\_USR.1)
 
-6.  Upper levels: Start to connect with the CC. e.g., creating an ST to at least document the threats and security requirements.
+6.  Upper levels: Start to connect with the CC.
 
 The &#8220;good practices&#8221; list probably needs to be divided further.
 Where possible, it might be possible to base the grouping on the CC:
 Configuration Management, Delivery and Operation, Development, Guidance
 Documents, Life cycle support, Tests, Vulnerability Assessment. Here&#8217;s
-an alternative grouping, based on the TSDM: Configuration management
-(CM), identification & authentication (I&A), auditing, access control,
+an alternative grouping, based on the Trusted Software Development Methodology (TSDM):
+Configuration management (CM),
+identification and authentication (I&A), auditing, access control,
 development environment administration, trusted distribution,
 documentation (document what the product should and should not do - see
-the CC for more details about this), personnel (are they all identified?
-At higher levels, citizenship issues?).
+the CC for more details about this), and personnel.
 
 ### Talk Openly Develop Openly (TODO)
 
 Talk Openly Develop Openly (TODO)
 is "an open group of companies who want to collaborate on practices, tools, and other ways to run successful and effective open source projects and programs."
-Their "about" page states that " We will be sharing experiences, developing best practices, and working on common tooling."
+Their "about" page states that "We will be sharing experiences, developing best practices, and working on common tooling."
 At this time they have not publicly released a best practices list.
 
 More information: <http://todogroup.org>
@@ -440,14 +440,14 @@ More information: <http://todogroup.org>
 
 The OWASP Application Security Verification Standard (ASVS) Project
 provides &#8220;a basis for testing web application technical security
-controls.&#8221; In particular, the publish the OWASP Application Security
+controls.&#8221; In particular, they publish the OWASP Application Security
 Verification Standard (ASVS); all is available here:
 
 <https://www.owasp.org/index.php/Category:OWASP_Application_Security_Verification_Standard_Project>
 
 The following comments are about the 2014 edition (the version available
 at the time of this writing). This document is focused *solely* on web
-applications; it has much useful information for that case, but it&#8217;s not
+applications; it has much useful information for that case, but it is not
 obvious how to apply this document to many other kinds of programs.
 
 The 2014 edition has some major changes from the 2009 version. In
@@ -461,7 +461,7 @@ up to the verifier.&#8221;
 
 ### OWASP OpenSAMM
 
-OpenSAMM is documented here: <http://www.opensamm.org/>
+OpenSAMM is documented here: <http://www.opensamm.org/>.
 
 ### SANS&#8217; Securing Web Application Technologies (SWAT)
 
@@ -475,7 +475,7 @@ This checklist is grouped into the following categories:
 
 -   Data Protection
 
--   Configuration and operations
+-   Configuration and Operations
 
 -   Authentication
 
@@ -485,9 +485,10 @@ This checklist is grouped into the following categories:
 
 -   Access Control
 
-Many of these require human responses, and are not easy to (completely)
-automate. As the name implies, this is focused on web applications. The
-checklist items are cross-referenced to the relevant CWE entries - a
+Many of these require human responses and are not easy to (completely)
+automate.
+As the name implies, this is focused on web applications.
+The checklist items are cross-referenced to the relevant CWE entries - a
 nice touch.
 
 ### Build Security In
@@ -513,7 +514,7 @@ See: <https://www.owasp.org/index.php/Category:OWASP_CLASP_Project>.
 ### BSIMM
 
 Building Security In Maturity Model (BSIMM)
-provides information about organizational software security initiatives,
+provides information about organizational software security initiatives
 and lets people compare their initiatives with others'.
 https://www.bsimm.com/
 
@@ -521,8 +522,8 @@ https://www.bsimm.com/
 
 The Heartbleed vulnerability in OpenSSL could not be found by many of
 the techniques used to counter vulnerabilities. However, a number of
-techniques *could* have found Heartbleed ahead-of-time. OSS projects
-that have significant security concerns should determine if they could
+techniques *could* have found Heartbleed ahead of time. OSS projects
+that have significant security concerns should determine whether they could
 have similar vulnerabilities, and if so, should include at least one
 technique that could counter it. A list of techniques that could have
 countered Heartbleed is given in \[Wheeler2014h\].
@@ -531,9 +532,9 @@ countered Heartbleed is given in \[Wheeler2014h\].
 
 The Common Criteria for Information Technology Security Evaluation (abbreviated as Common Criteria or CC) is an international standard (ISO/IEC 15408) for computer security certification.
 
-Common Criteria is a framework where security functional and assurance requirements (SFRs and SARs respectively) can be specified in Protection Profiles (PPs).  Suppliers can then claim what requirements they meet in a Security Target (which could cover 0 or more Protection Profile requirements).  Typically testing labs evaluate products to determine if they meet the claims.
+Common Criteria is a framework within which security functional and assurance requirements (SFRs and SARs respectively) can be specified in Protection Profiles (PPs).  Suppliers can then claim what requirements they meet in a Security Target (which could cover 0 or more Protection Profile requirements).  Typically testing labs evaluate products to determine whether they meet the claims.
 
-The Common Criteria typically focuses on the use of independent labs,
+Users of the Common Criteria typically focuses on the use of independent labs,
 who spend time evaluating a large set of documentatary evidence.
 That is radically different than the approach taken here.
 
@@ -542,10 +543,10 @@ That is radically different than the approach taken here.
 The Software Assurance Forum for Excellence in Code (SAFECode)
 organization at
 <http://www.safecode.org/>
-has a variety of materials.
-They have a variety of training materials that developers might find useful.
-Some of their publications might include points that could
-strengthen the criteria.
+has a variety of materials, including
+a variety of training materials that developers might find useful.
+Some of their publications include points that might
+strengthen the criteria used for badges.
 SAFECode publications are available at:
 <http://www.safecode.org/publications/>.
 
@@ -572,7 +573,7 @@ project to participate; results are then sent to the project developers.
 
 The Coverity Scan project was initially launched under a contract with
 the Department of Homeland Security (DHS) to harden open source software
-which provides critical infrastructure for the Internet. Coverity Scan
+that provides critical infrastructure for the Internet. Coverity Scan
 began in collaboration with Stanford University on March 6, 2006. During
 the first year of operation, over 6,000 software defects were fixed
 across 50 C and C++ projects by open source developers using the
@@ -582,9 +583,10 @@ analysis results from the Coverity Scan service. DHS support ended in
 A list of projects covered by Coverity scan is at
 <https://scan.coverity.com/projects>; over 3200 participate. Even though
 the exact results are not posted publicly, the fact that *a project is
-on the list* maintained by Coverity is public, and that may by itself
-indicate that a project is interested in detecting and fixing
-vulnerabilities. A few projects have achieved &#8220;rung 2&#8221; which is a higher
+on the list* maintained by Coverity is public.
+Simply being on that (or similar) list may be a positive indicator
+that a project is interested in detecting and fixing vulnerabilities.
+A few projects have achieved &#8220;rung 2&#8221; which is a higher
 achievement.
 
 A similar argument could apply to other tool makers who make tools that
@@ -594,7 +596,7 @@ use in examining open source software, in partnership with Sonatype;
 details are here: <https://www.hpfod.com/open-source-review-project>.
 
 There are some OSS tools that look for vulnerabilities, e.g., splint
-(for C only), that might perform such a role. (Note, however, that
+(for C only) might perform such a role. (Note, however, that
 splint has not been maintained recently.)
 
 Note that these tools use heuristics to determine what is a
@@ -602,9 +604,11 @@ vulnerability, thus, different tools will report different values.
 
 ### Lexically scanning static analysis security tools (e.g., flawfinder and RATS)
 
-A variant is to use lexically scanning tools to report constructs
-(&#8220;hits&#8221;) in software that are of special concern. Again, counts or
-densities could be reported. OSS tools such as flawfinder and RATS can
+A slightly different approach is to use lexical scanning tools
+to report constructs
+(&#8220;hits&#8221;) in software that are of special concern.
+Again, counts or densities could be reported.
+OSS tools such as flawfinder and RATS can
 do this. (Note: David A. Wheeler is the author of flawfinder.)
 
 IDA has previously done in-house work measuring hit density, where hits
@@ -653,7 +657,7 @@ Metrics they mention include:
 
     -   5 Stars: Passed independent security review.&#8221;
 
--   Coverity (see discussion on Coverity)
+-   Coverity (see discussion on Coverity).
 
 ### Origin analysis for known vulnerabilities
 
@@ -661,7 +665,7 @@ Today software is often composed from other systems, transitively.
 Unfortunately, these transcluded components may have known
 vulnerabilities.
 
-Various tools, both OSS and proprietary, can examine software to see if
+Various tools, both OSS and proprietary, can examine software to see whether
 it includes components that have known vulnerabilities. Such tools
 include OWASP Dependency-check, as well as tools from Sonatype, Black
 Duck, and Codenomicon.
@@ -675,29 +679,30 @@ discussed best practices.
 Issues raised included the following:
 
 
-*   There is a need for a community of practice to develop and iterate its own definition of “best”
+*   There is a need for a community of practice to develop and iterate its own definition of "best"
 *   Bring in cognitive/behavioral scientists to discuss the implementation of incentive models that can raise the state of the ecosystem and avoiding incentives that produce perverse outcomes. (This is not to *trick* people, but to increase the chance of it working.)
 *   Match resources with best practice requirements (so projects won't have the problem of being unable to meet the standard due to under-resourcing).
 
 ### Checklist Manifesto
 
-The *Checklist Manifesto* by Dr. Atul Gawande is not a specific set of
-criteria for software, but instead is general non-fiction book
-advocating the use of checklists and emphasizing how to make effective
+The *Checklist Manifesto* by Dr. Atul Gawande is not focused on software,
+but it advocates the use of checklists and emphasizes how to make effective
 checklists.
 
-The &#8220;badges&#8221; contemplated here do not need to be simple checklists; it
+The &#8220;badges&#8221; contemplated here
+do not need to be simple checklists; it
 may be fine to have a more thorough list, or if some requirements take
 time to do. Nevertheless, the checklist manifesto is noted here because
-it clearly shows that simple &#8220;to do&#8221; lists, if carefully written, can
-have dramatically positive effects.
+it clearly shows that simple &#8220;to do&#8221; lists,
+if carefully written, can have dramatically positive effects.
 
 
 # Practices of some existing OSS Projects
 
-This section describes the practices of some existing OSS projects,
-particularly a few that are popular, apply practices we might want
-to consider adding to the best practices, and/or reputed by someone
+This section describes the practices of some existing OSS projects.
+We have selected a few projects that are popular,
+that apply practices we might want
+to consider adding to the best practices, or are reputed by someone
 to be well-run.
 Examining some existing OSS projects
 can help us identify important practical activities.
@@ -709,9 +714,9 @@ changes to meet the basic best practices.
 
 Many OSS projects *do* a number of things well.
 Indeed, we intend for there to be many &#8220;0-day badge recipients&#8221; -
-that is, OSS projects that are already meet the criteria.
+that is, OSS projects that already meet the criteria.
 Of course, projects that follow best practices can still
-have vulnerabilities, other bugs, and other kinds of problems...
+have vulnerabilities, other bugs, and other kinds of problems,
 but they should be a better position to prevent, detect, and fix them.
 
 We hope to survey a number of OSS projects.
@@ -722,6 +727,8 @@ Some other OSS projects that might be surveyed include
 the Apache web server, Firefox, Chromium, MySQL or MariaDB, git,
 Bouncy Castle, SAMBA, Spamassassin, Smoothwall, KeePass, VLC,
 pidgin, dovecot, gcc, busybox, node.js, and jquery.
+It is simply not possible to list all projects that might be evaluated,
+so assume nothing about projects *not* on these lists.
 
 Here are some pages describing the processes used by some OSS projects
 to produce high-quality and/or high-security software.
@@ -741,8 +748,8 @@ especially
 [its file on the development process](https://www.kernel.org/doc/Documentation/development-process/2.Process),
 the
 [Linux Foundation page on how its development process works](http://www.linuxfoundation.org/content/2-how-development-process-works),
-["The changing kernel development process" presentation by Jon Corbet (LWN.NET) given in 2014](https://www.youtube.com/watch?v=GQiik7X7-u8), and
-["Greg Kroah Hartman on the Linux Kernel" (2008)](https://www.youtube.com/watch?feature=player_detailpage&v=L2SED6sewRw#t=867s)
+[The changing kernel development process presentation by Jon Corbet (LWN.NET) given in 2014](https://www.youtube.com/watch?v=GQiik7X7-u8), and
+[Greg Kroah Hartman on the Linux Kernel (2008)](https://www.youtube.com/watch?feature=player_detailpage&v=L2SED6sewRw#t=867s)
 More generally, <http://lwn.net> reports on
 Linux kernel development processes and results.
 
@@ -759,7 +766,7 @@ There is strong continuity; many of its developers are the same people
 who have lengthy experience with the software.
 Most Linux kernel developers are paid to develop it, and
 most contributions are from people paid to develop it;
-both percentages have increased over time.
+both of these percentages have increased over time.
 
 Currently Linux kernel releases occur every 2-3 months.
 This makes it easy to refuse adding a new feature before it
@@ -771,7 +778,7 @@ cycle, the 'merge window' is said to be open.  At that time, code which is
 deemed to be sufficiently stable (and which is accepted by the development
 community) is merged into the mainline kernel.  The bulk of changes for a
 new development cycle (and all of the major changes) will be merged during
-this time, at a rate approaching 1,000 changes ("patches," or "changesets")
+this time, at a rate approaching 1,000 changes (patches or changesets)
 per day.
 (As an aside, it is worth noting that the changes integrated during the
 merge window do not come out of thin air; they have been collected, tested,
@@ -820,7 +827,7 @@ http://oss.sgi.com/cgi-bin/gitweb.cgi?p=xfs/cmds/xfstests.git;a=summary
 There are automated test processes, including the
 [Linux test project](http://linux-test-project.github.io/)
 and
-[Autotest](http://autotest.github.io/)
+[Autotest](http://autotest.github.io/).
 https://lwn.net/Articles/654071/
 In 2015 the libnvdimm subsystem was added to the kernel's
 driver infrastructure (it provides services over persistent memory
@@ -841,7 +848,7 @@ Linus Torvalds and can be used to find certain kernel code problems.
 The "Coccinelle" tool (http://coccinelle.lip6.fr/) can also find
 many problems and sometimes propose fixes.
 [Eduard Bachmakov worked on the clang static analyzer in 2013 to improve its ability to detect Linux kernel defects](http://www.linux.com/news/featured-blogs/200-libby-clark/749649-a-summer-spent-on-the-llvm-clang-static-analyzer-for-the-linux-kernel).
-["Linux Kernel Developer Responses to Static Analysis Bug Reports" by Philip J. Guo and Dawson Engler](https://www.usenix.org/legacy/event/usenix09/tech/full_papers/guo/guo_html/)
+[Linux Kernel Developer Responses to Static Analysis Bug Reports by Philip J. Guo and Dawson Engler](https://www.usenix.org/legacy/event/usenix09/tech/full_papers/guo/guo_html/)
 examined "how Linux kernel developers respond to bug reports issued by a static analysis tool" (in particular how they triaged reports),
 using Coverity Scan results.
 
@@ -872,7 +879,7 @@ as we are looking for basic software bugs...
 Entire new classes of security problems have been found during our audit,
 and often source code which had been audited earlier
 needs re-auditing with these new flaws in mind.
-Code often gets audited multiple times,
+Code is often audited multiple times,
 and by multiple people with different auditing skills...
 During our ongoing auditing process we find many bugs,
 and endeavor to fix them even though exploitability is not proven."
@@ -883,7 +890,7 @@ They use a variety of ways to help solve problems, for example:
 *   Memory protection purify
 *   Privilege separation
 *   Privilege revocation
-*   Chroot jailing
+*   Chroot jailing.
 
 
 ## OpenSSH
@@ -947,8 +954,8 @@ The top-level files of libreoffice/core
 contain the files COPYING (contains GPLv3), COPYING.LGPL
 (contains LGPLv3),
 and COPYING.MPL (contains the Mozilla Public License Version 2.0),
-but it might not be obvious where each license applies just from
-those files.
+but it might not be obvious from those files
+to what each license applies.
 
 
 ## SQLite
@@ -975,7 +982,7 @@ Their approach to testing can be summarized as follows (per their website):
 *   Extensive use of assert() and run-time checks
 *   Valgrind analysis
 *   Undefined behavior checks
-*   Checklists
+*   Checklists.
 
 Here are a few interesting quotes:
 
@@ -1012,11 +1019,11 @@ Its main website is <http://www.catb.org/gpsd>.
 It is released under the BSD-new license, aka Revised BSD or 3-clause license.
 
 GPSD uses git and has a public repository, visible at:
-http://git.savannah.gnu.org/cgit/gpsd.git
+<http://git.savannah.gnu.org/cgit/gpsd.git>.
 
 The GPSD project uses
 <a href="http://www.aosabook.org/en/gpsd.html">extensive regression testing,
-rigorous static checking with multiple tools
+rigorous static checking with multiple tools,
 and an architectural approach that reduces risks
 (e.g., they forbid the use of malloc in the core)</a>.
 They use a custom framework for an extensive regression testing suite,
@@ -1035,7 +1042,7 @@ The [lead developer has provided other comments about GPSD development processes
 
 Postfix is a mail server.
 Its primary website is <http://www.postfix.org>.
-Elaine R. Palmer and Bill Cheswick have reported that htey
+Elaine R. Palmer and Bill Cheswick have reported that they
 thought that Postfix did an overall
 good job on security and reliability.
 
@@ -1045,10 +1052,10 @@ for developing secure software</a>
 emphasizes using
 a very experienced team of just a few security conscious individuals,
 writing it from scratch to be secure (and in particular resistant to
-buffer overflows), and an architecture that involves
-running as a set of daemons each performing a different set of tasks
+buffer overflows), and developing an architecture that
+runs a set of daemons each performing a different set of tasks
 (facilitating a &#8220;least privilege&#8221; approach
-that can be easily contained further using chroot or virtual containers).
+that can be easily further contained by using chroot or virtual containers).
 Postfix is implemented using a safe subset of C and POSIX, combined with an
 <a href="https://en.wikipedia.org/wiki/Postfix_%28software%29#Implementation">abstraction layer that creates safe alternatives</a>.
 For example, it has a &#8220;vstring&#8221; primitive to help resist
@@ -1065,36 +1072,41 @@ No official public version control repository has been identified.
 # Implementation
 
 We intend to implement a simple web application
-to quickly capture self-assertion data, evaluate what it can automatically,
-and provide badge information.
+to quickly capture self-assertion data, evaluate criteria automatically
+when it can, and provide badge information.
 That application will itself be OSS, of course, and
 we intend for the application to meet its own criteria.
-We&#8217;ll probably implement it using Ruby on Rails
+We will probably implement it using Ruby on Rails
 (since Rails is good for very simple web applications like this one).
-We&#8217;re currently thinking of using Rails version 4.2,
+We are currently thinking of using Rails version 4.2,
 storing the data in Postgres or MySQL/MariaDB, and using
 RSpec, Cucumber, and FactoryGirl.
 Our emphasis will be on keeping the program *simple*.
 
-How handle authentication?
-For GitHub projects, can hook into GitHub OAuth... if they can administer
-a GitHub project, then they can report on that project.
-Probably use &#8220;divise&#8221; module for authentication in Rails, that
-works with GitHub.
+An important issue is how to handle authentication.
+In general, we want to ensure that only trusted developers of a project
+can modify information about that project.
+For GitHub projects, can hook into GitHub OAuth; if someone can administer
+a GitHub project, then we will presume that they can report on that project.
+We will probably use the &#8220;divise&#8221; module
+for authentication in Rails (since it works with GitHub).
 
-We intend to make the *username* public of who entered data for each project
+We intend to make public the *username* of who entered data for each project
 (generally that would be the GitHub username).
-Also have our own login system, and support that, for those who don&#8217;t
+We will also need to have our
+own login system, and support that, for those who don&#8217;t
 want to use GitHub.
 
 Once someone enters data on a project, normally only that person
 (or a co-administator on GitHub) can edit the data of that project.
-The Linux Foundation can override.
-In the longer term we'll need to support transition, but that is
-relatively uncommon so there's no need for it initially.
+The Linux Foundation can override any data if there is a problem.
+In the longer term we'll need to support transition, but since we
+expect problems to be relatively uncommon, there is no need for it initially.
 
 Naming is a challenge. The *real* name, for our purposes, is the
 project URL.
+We will probably need to prevent people from editing the project name
+(they can always create another table entry with a different URL).
 Multiple projects may have the same human-readable name.
 
 
@@ -1106,9 +1118,10 @@ https://github.com/badges/shields
 http://nicbell.net/blog/github-flair
 
 We want GitHub users to think of this
-as &#8220;just another badge to get&#8221;.
+as &#8220;just another badge to get.&#8221;
 
-We intend to sign up for a few badges to evalute their onboarding process,
+We intend to sign up for a few badges so we can
+evalute their onboarding process,
 e.g., Travis (CI automation), Code Climate (code quality checker including
 BrakeMan), Coveralls (code coverage), Hound (code style),
 Gymnasium (checks dependencies), HCI (looks at your documentation).
@@ -1121,8 +1134,7 @@ provide useful examples.
 ## License detection
 
 Some information on how to detect licenses can be found in
-&#8220;Open Source Licensing by the Numbers&#8221; (Ben Balter)
-https://speakerdeck.com/benbalter/open-source-licensing-by-the-numbers
+[&#8220;Open Source Licensing by the Numbers&#8221; by Ben Balter](https://speakerdeck.com/benbalter/open-source-licensing-by-the-numbers).
 
 
 # Bibliography
@@ -1144,7 +1156,7 @@ Internatinoal Conference on Information Systems* (Seattle, WA). 2003.
 \[Fenton1997\] Fenton, N.E. and S.L. Pfleeger. Software metrics: a
 Rigorous & Practical Approach. International Thompson Press. 1997.
 
-\[Ghapanchi2011\] Ghapanchi, Amir Hossein , Aybuke Aurum, and Graham
+\[Ghapanchi2011\] Ghapanchi, Amir Hossein, Aybuke Aurum, and Graham
 Low. &#8220;A taxonomy for measuring the success of open source software
 projects.&#8221; *First Monday*. 2011.
 <http://firstmonday.org/ojs/index.php/fm/article/view/3558/3033>
@@ -1161,15 +1173,15 @@ Measuring Relative Attack Surfaces. 2003.
 http://www.cs.cmu.edu/\~wing/publications/Howard-Wing03.pdf
 
 \[Manadhata2004\] Manadhata, Pratyusa, and Jeannette M. Wing. &#8220;Measuring
-a System&#8217;s Attack Surface&#8221;. January 2004. CMU-CS-04-102.
+a System&#8217;s Attack Surface.&#8221; January 2004. CMU-CS-04-102.
 <http://www.cs.cmu.edu/~wing/publications/tr04-102.pdf>
 
 \[Manadhata2007\] Manadhata, Pratyusa K., Kymie M. C. Tan, Roy A.
 Maxion, Jeannette M. Wing. &#8220;An Approach to Measuring A System&#8217;s Attack
-Surface&#8221;. August 2007. CMU-CS-07-146.
+Surface.&#8221; August 2007. CMU-CS-07-146.
 <http://www.cs.cmu.edu/~wing/publications/CMU-CS-07-146.pdf>
 
-\[McCabe1976\] McCabe, T.J. &#8220;A Complexity Measure&#8221;. IEEE Transactions on
+\[McCabe1976\] McCabe, T.J. &#8220;A Complexity Measure.&#8221; IEEE Transactions on
 Software Engineering. 1976-12. Volume 2, number 4. Pp. 308-320.
 
 \[Punitha2013\] Punitha, K. and S. Chitra. Software defect prediction
@@ -1178,8 +1190,8 @@ Information Communication and Embedded Systems (ICICES). 2013.
 2013-02-21 and -22.
 http://ieeexplore.ieee.org/xpls/abs\_all.jsp?arnumber=6508369
 
-\[Rodriguez2012\] Rodriguez, Daniel, Israel Herraiz, and Rachel
-Harrison. &#8220;On Software Engineering Repositories and their Open Problems&#8221;
+\[Rodriguez2012\] Rodriguez, Daniel, Israel Herraiz, and Rachel Harrison.
+&#8220;On Software Engineering Repositories and their Open Problems.&#8221;
 <http://promisedata.org/raise/2012/slides/RAISE12_Rguez.pdf>
 
 \[Samoladas2004\] Samoladas, Ioannis, Ioannis Stamelos, Lefteris
@@ -1209,7 +1221,7 @@ Open Source Software Quality. ECEASST 2009. Volume 20.
 \[Spinellis2009\] Spinellis, Diomidis, Georgios Gousios, Vassilios
 Karakoidas, Panagiotis Louridas, Paul J. Adams, Ioannis Samoladas, and
 Ioannis Stamelos. Evaluating the Quality of Open Source Software.
-Electronic Notes in Theoretical Computer Science 233 (2009).
+Electronic Notes in Theoretical Computer Science, 233 (2009).
 
 \[Wang2011\] Wang, Huanjing, Taghi M. Khoshgoftaar, and Naeem Seliya.
 &#8220;How Many Software Metrics Should be Selected for Defect Prediction?&#8221;

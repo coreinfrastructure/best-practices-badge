@@ -1136,6 +1136,23 @@ provide useful examples.
 Some information on how to detect licenses can be found in
 [&#8220;Open Source Licensing by the Numbers&#8221; by Ben Balter](https://speakerdeck.com/benbalter/open-source-licensing-by-the-numbers).
 
+# Public responses
+
+We are grateful to the many news organizations (including blogging sites)
+who noticed and reported on the badging proposal.
+Some people have already sent in comments (e.g., as issues) because
+they learned about it, and we're grateful.
+We also intend to review some of the user comments on those articles,
+in the hope that the user comments will yield some gems.
+
+Some of the organizations who reported on the badging program included:
+
+*   [Threatpost](https://threatpost.com/core-infrastructure-initiative-launches-open-source-security-badge-program/114326)
+*   [ZDNet](http://www.zdnet.com/article/linux-core-infrastructure-initiative-launches-security-badge-scheme/)
+*   [Slashdot](http://news.slashdot.org/story/15/08/21/1332205/linux-foundation-project-will-evaluate-security-of-open-source-software).
+
+See <https://www.coreinfrastructure.org/programs/badge-program>
+for a high-level introduction to the badging program.
 
 # Bibliography
 

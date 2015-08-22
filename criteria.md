@@ -1,4 +1,4 @@
-Basic Best Practices Criteria for Open Source Software (OSS) (version 0.0.3)
+Basic Best Practices Criteria for Open Source Software (OSS) (version 0.0.4)
 ========================================================================
 
 Introduction
@@ -29,6 +29,8 @@ The basic best practices, and the more detailed criteria
 specifically defining them, are inspired by a variety of sources.
 See the separate "[background](./background.md)" page for more information.
 
+This version of the criteria is *NOT* endorsed by anyone;
+we are releasing this very early version so that we can get feedback.
 We expect that these practices and their detailed criteria will be updated,
 even after badges are released.
 Thus, criteria (and badges) probably will have a year identifier
@@ -36,9 +38,7 @@ and will age out after a year or two.
 We expect well-run OSS projects to trivially update,
 so this short badge life should not be a barrier.
 
-This version of the criteria is *NOT* endorsed by anyone;
-we are releasing this very early version so that we can get feedback.
-Feedback is welcome via the
+Feedback is *very* welcome via the
 [GitHub site as issues or pull requests](https://github.com/linuxfoundation/cii-best-practices-badge).
 There is also a
 [mailing list for general discussion](https://lists.coreinfrastructure.org/mailman/listinfo/cii-badges).
@@ -101,10 +101,9 @@ if the project is hosted on GitHub and follows standard conventions.
         There MUST be no unpatched vulnerabilities of medium or high severity that have been *publicly* known for more than 60 days.  The vulnerability must be patched and released by the project itself (patches may be developed elsewhere). The length of time here is somewhat arbitrary and is considered extremely long; it means that users will be left vulnerable to attackers worldwide for up to 60 days.  A vulnerability becomes publicly known (for this purpose) once it has a CVE with publicly released information (reported in, for example, the National Vulnerability Database) or when the project has been informed *and* the information has been released to the public (possibly by the project).  Note that projects SHOULD fix all critical vulnerabilities rapidly after they are reported; Google suggests that the upper bound should be 60 days from report until repair *even* when the report is private per http://googleonlinesecurity.blogspot.com/2010/07/rebooting-responsible-disclosure-focus.html .  Note that this criterion only measures the time known to the public, *not* from the time that the project is informed, and thus in many cases this criterion is much easier to meet than Google's criterion.  We intentionally chose to start measurement from the time of public knowledge, and not from the time reported to the project, because this is much easier to measure and verify by those *outside* the project.  To determine if a vulnerability is medium to high severity, use https://nvd.nist.gov/cvss.cfm ; a CVSS 2.0 score of 4 or higher is considered medium to high severity (you can just use the CVSS base score for this purpose).
 *   **Security analysis:**
     -   *Static analysis*.  
-        At least one static analysis tool MUST be applied to the source code to look for defects, including vulnerabilities, and any discovered exploitable vulnerabilites MUST be fixed.  A static analysis tool examines the software without executing it with specific inputs.  For purposes of this criterion compiler warnings and "safe" language modes do not count as a static analysis tool (compilers are typically designed to avoid deep vulnerability analysis during compilation so that they can be focused on rapidly generating code).  Examples of such tools include [Coverity Quality Analyzer](https://scan.coverity.com/), HP Fortify Static Code Analyzer, the clang static analyzer, FindBugs, and PMD.  The analysis tool(s) MAY be focused on looking for security vulnerabilities, but this is not required.  This criterion is not required if there is no OSS tool that can implement this criterion in the selected language.
+        At least one static analysis tool MUST be applied to the source code to look for defects, including vulnerabilities, and any discovered exploitable vulnerabilites MUST be fixed.  A static analysis tool examines the software without executing it with specific inputs.  For purposes of this criterion compiler warnings and "safe" language modes do not count as a static analysis tool (compilers are typically designed to avoid deep defect or vulnerability analysis during compilation so that they can be focused on rapidly generating code).  Examples of such tools include [Coverity Quality Analyzer](https://scan.coverity.com/), HP Fortify Static Code Analyzer, the clang static analyzer, FindBugs, and PMD.  The analysis tool(s) MAY be focused on looking for security vulnerabilities, but this is not required.  This criterion is not required if there is no OSS tool that can implement this criterion in the selected language.
     -   *Dynamic analysis*.  
-        At least one dynamic analysis tool MUST be applied and any discovered exploitable vulnerabilities fixed.  A dynamic analysis tool examines the software by executing it with specific inputs.   Examples include fuzzing tools (e.g., American Fuzzy Lop) and web application scanner (e.g., [OWASP ZAP](https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project) and [w3af](http://w3af.org/)). For purposes of this criterion the dynamic analysis tool MUST vary the inputs in some way to look for various kinds of problems *or* be an automated test suite with at least 80% branch coverage.   It is RECOMMENDED that if the software is application-level software written using an memory-unsafe language (such as C or C++) then at least one tool to detect memory safety problems MUST be used during at least one dynamic tool use, e.g., Address Sanitizer (ASAN) or valgrind.  It is RECOMMENDED that the software include many run-time assertions that are checked during dynamic analysis.  The analysis tool(s) MAY be focused on looking for security vulnerabilities, but this is not required.
-
+        At least one dynamic analysis tool MUST be applied and any discovered exploitable vulnerabilities fixed.  A dynamic analysis tool examines the software by executing it with specific inputs.   For example, the project may use a fuzzing tool (e.g., American Fuzzy Lop) or a web application scanner (e.g., [OWASP ZAP](https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project) or [w3af](http://w3af.org/)). For purposes of this criterion the dynamic analysis tool MUST vary the inputs in some way to look for various kinds of problems *or* be an automated test suite with at least 80% branch coverage (the goal is to cover a significant portion of the program).   It is RECOMMENDED that if the software is application-level software written using a memory-unsafe language (such as C or C++) then at least one tool to detect memory safety problems MUST be used during at least one dynamic tool use, e.g., Address Sanitizer (ASAN) or valgrind.  It is RECOMMENDED that the software include many run-time assertions that are checked during dynamic analysis.  The analysis tool(s) MAY be focused on looking for security vulnerabilities, but this is not required.
 
 These are not the final criteria, but hopefully these give a flavor of
 what we are considering.  Suggestions are welcome.
@@ -113,41 +112,81 @@ We expect to routinely check these (e.g., with a webhook) to
 ensure the badge stays current.
 
 
-Potential criteria
-==================
+Potential future criteria
+=========================
 
 Here are some other potential criteria.
 As the criteria become more mature, we expect some criteria to move between
-the "current" and "potential" list (in both directions).
-In some cases, these won't be in the "basic" criteria but could instead
-be part of some future "higher-level" badge.
+the current criteria and these potential future criteria (in both directions).
 
+We currently plan to launch with a single badge level (once it is ready).
+There may eventually be multiple levels (bronze, silver, gold) or
+other badges (with a prerequisite) later.
+We are currently leaning towards using the Olympic system naming
+(bronze, silver, gold) since these are widely known; the LEED naming
+(with platinum at the top) is less well-known, and using the Olympic
+naming would provide room for another (platinum) level if needed.
+Then the "basic" level would be the same as a "bronze" level.
+
+To help organize these potential criteria, they are currently grouped
+in terms of a potential future silver, potential future gold, and
+other potential criteria.
+There is no guarantee that the final criteria will be the same,
+or even grouped the same way.
+This list of potential future criteria is even less mature than the
+list of basic best practices; recommendations welcome.
+
+Eventually these criteria will be worded per
+[RFC 2119](https://tools.ietf.org/html/rfc2119).
+
+
+Potential silver criteria
+-------------------------
+
+*   Achieve the lower (basic/bronze) badge.
+*   Build and test:
+    -   Continuous integration: Automated test suite applied on each check-in, preferably across many platforms.
+    -   Whenever major new functionality is added to the program, tests of it are added to the automated test suite.  This needs to be *documented* in the instructions for change proposals, and there needs to be past evidence that such tests are being added in the most recent major changes.
+    -   When a bug is fixed, a regression test is normally added to the automated test suite to prevent its reoccurrence (ideally all).
+    -   Reproduceable build.  On rebuilding, the result should be bit-for-bit identical.
+*   Code/build requirements:
+    -   Coding standards / coding style guide (typically by pointing to something).  There are a number of coding standards that can be recommended for specific languages.  Widely-used coding standards that include ways to reduce the likelihood of defects (including vulnerabilities) might be especially helpful.  Projects can create their own coding standard by referring to an existing one and then adding their own additions or exceptions.  There are a number of secure coding standards, e.g., the SEI CERT's at https://www.securecoding.cert.org/
+    -   Program can use the local version of system library/applications (so vulnerable ones easily replaced).  Many OSS programs are distributed with "convenience libraries" that are local copies of standard libraries (possibly forked).  However, if the program *must* use these local (forked) copies, then updating the "standard" libraries as a security update will leaved these additional copies still vulnerable. This is especially an issue for cloud-based systems (e.g., Heroku); if the cloud provider updates their "standard" libaries but the program won't use them, then the updates don't actually help.  In some cases it's important to use the "other" version; the goal here is to make it *possible* to easily use the standard version. See, e.g., http://spot.livejournal.com/312320.html .
+*   Security analysis:
+    -   Dependencies (including embedded dependencies) are periodically checked for known vulnerabilities (using an origin analyzer, e.g., Sonatype, Black Duck, Codenomicon AppScan, OWASP Dependency-Check), and if they have known vulnerabilities, they are updated or verified as unexploitable.  It is acceptable if the components' vulnerability cannot be exploited, but this analysis is difficult and it is sometimes easier to simply update or fix the part.  Developers must periodically re-scan to look for newly found publicly known vulnerabilities in the components they use, since new vulnerabilities are continuously being discovered.
+*   Release:
+    -   Releases MUST be cryptographically signed.  These may be implemented as signed git tags (using cryptographic digital signatures).  There MUST be a way for users to obtain the public keys used for signing so that they can verify the signature, and there MUST be a documented process explaining to users how they can verify the signature.
+
+
+Potential gold criteria
+-----------------------
+
+*   Achieve the lower (silver) badge.
 *   General criteria:
-    -   Commits reviewed.  There should be evidence that at least one other person (other than the committer) are normally reviewing commits.
     -   Roadmap exists.  There should be some information on where the project is going or not going.
     -   Posted list of small tasks for new users.
     -   Multiple contributors from more than one organization.
     -   License statement in each file (aka per-file licensing).
     -   (Ideal) Copyright notice in each file, e.g., "Copyright [year project started] - [current year], [project founder] and the [project name] contributors."
+*   Quality:
+    -   Commits reviewed.  There should be evidence that at least one other person (other than the committer) are normally reviewing commits.
+    -   Automated test suite covers 100% of branches in source code.  We will *not* add 100% branch coverage to the *basic* set of criteria.  Some projects (like SQLite) do achieve this, but for some projects (such as the Linux kernel) this would be exceptionally difficult to achieve.  Some higher/different related badge *might* add 100% branch coverage.
+
+
+Potential other criteria
+------------------------
+
 *   Issue tracking (This must be different for big projects like the Linux kernel; it is not clear how to capture that.):
     -   Issue tracking for defects.
     -   Issue tracking for requirements/enhancement requests.
     -   Bug/vulnerability report responsiveness, e.g., commitment to respond to any vulnerability report within (say) 14 days.
     -   If this is a project fork, actively working to become sustainable by either growing its community *or* working to heal the fork (e.g., contribute to the mainline).
 *   Quality:
-    -   Continuous integration: Automated test suite applied on each check-in, preferably across many platforms.
-    -   Whenever major new functionality is added to the program, tests of it are added to the automated test suite.  This needs to be *documented* in the instructions for change proposals, and there needs to be past evidence that such tests are being added in the most recent major changes.
     -   Automated test suite covers >=X% branches of source code (80% considered good).
-    -   Automated test suite covers 100% of branches in source code.  We will *not* add 100% branch coverage to the *basic* set of criteria.  Some projects (like SQLite) do achieve this, but for some projects (such as the Linux kernel) this would be exceptionally difficult to achieve.  Some higher/different related badge *might* add 100% branch coverage.
-    -   When a bug is fixed, a regression test is normally added to the automated test suite to prevent its reoccurrence (ideally all).
-    -   Reproduceable build.  On rebuilding, the result should be bit-for-bit identical.
     -   Documented test plan.
-    -   Coding standards / coding style guide (typically by pointing to something).  There are a number of coding standards that can be recommended for specific languages.  Widely-used coding standards that include ways to reduce the likelihood of defects (including vulnerabilities) might be especially helpful.  Projects can create their own coding standard by referring to an existing one and then adding their own additions or exceptions.  There are a number of secure coding standards, e.g., the SEI CERT's at https://www.securecoding.cert.org/
-    -   Program can use the local version of system library/applications (so vulnerable ones easily replaced).  Many OSS programs are distributed with "convenience libraries" that are local copies of standard libraries (possibly forked).  However, if the program *must* use these local (forked) copies, then updating the "standard" libraries as a security update will leaved these additional copies still vulnerable. This is especially an issue for cloud-based systems (e.g., Heroku); if the cloud provider updates their "standard" libaries but the program won't use them, then the updates don't actually help.  In some cases it's important to use the "other" version; the goal here is to make it *possible* to easily use the standard version. See, e.g., http://spot.livejournal.com/312320.html .
 *   Security:
     -   "Announcement" mailing list for new versions (at least for security updates).
-    -   Releases MUST be cryptographically signed.  These may be implemented as signed git tags (using cryptographic digital signatures).  There MUST be a way for users to obtain the public keys used for signing so that they can verify the signature, and there MUST be a documented process explaining to users how they can verify the signature.
-    -   All inputs checked against whitelist (not a blacklist).
+    -   All inputs from untrusted sources checked against whitelist (not a blacklist) and/or escaped before being transmitted to other users.
     -   Privileges limited/minimized.
     -   Attack surface documented and minimized.
     -   Automated regression test suite includes at least one check for rejection of invalid data for each input field.  Rationale: Many regression test suites check only for perfect data; attackers will instead provide invalid data, and programs need to protect themselves against it.
@@ -160,7 +199,6 @@ be part of some future "higher-level" badge.
     -   Privacy requirements.  The distribution system does not reveal to third parties what software or version number is being distributed, or to who.  The distribution system does not require users to identify themselves nor does it perform passive machine fingerprinting.
 *   Security analysis:
     -   Current/past security review of the code.
-    -   Dependencies (including embedded dependencies) are periodically checked for known vulnerabilities (using an origin analyzer, e.g., Sonatype, Black Duck, Codenomicon AppScan, OWASP Dependency-Check), and if they have known vulnerabilities, they are updated or verified as unexploitable.  It is acceptable if the components' vulnerability cannot be exploited, but this analysis is difficult and it is sometimes easier to simply update or fix the part.  Developers must periodically re-scan to look for newly found publicly known vulnerabilities in the components they use, since new vulnerabilities are continuously being discovered.
     -   Must have a process for rapidly fixing vulnerabilities and releasing the updated software.  Note that having a good test suite makes it easier to make changes and be confident the system still works.  Also note that OSS projects are often embedded in larger systems and projects cannot control the larger projects they are in.
 
 We are considering moving the criteria continuous integration
@@ -208,6 +246,9 @@ The same human-readable name can be used for many different projects
 In many cases it will be useful to point to other names for the project
 (e.g., the source package name in Debian, the package name in some
 language-specific repository, or its name in OpenHub).
+We expect that users will *not* be able to edit the URL in most cases,
+since if they could, they might fool people into thinking they controlled
+a project that they did not.
 
 Thus, a badge would have its URL as its name, year range, and level/name
 (once there is more than one).
@@ -216,20 +257,16 @@ Thus, a badge would have its URL as its name, year range, and level/name
 Future plans
 ============
 
-We currently plan to launch with a single badge level.
-There may be multiple levels (bronze, silver, gold) or
-other badges (with a prerequisite) later.
-We are currently leaning towards using the Olympic system naming
-(bronze, silver, gold) since these are widely known; the LEED naming
-(with platinum at the top) is less well-known, and using the Olympic
-naming would provide room for another (platinum) level if needed.
-
 We would like to have feedback from cognitive experts or studies
 to make the badges effective.
-Papers like (Open badges for education: what are the implications at the intersection of open systems and badging?)[http://www.researchinlearningtechnology.net/index.php/rlt/article/view/23563] and their citations may help refine this.
+Papers like [Open badges for education: what are the implications at the intersection of open systems and badging?](http://www.researchinlearningtechnology.net/index.php/rlt/article/view/23563) and their citations may help refine this.
 We are especially interested in using badges as a motivator
 for behavior, but we are also interested
 in the value of a badge as a credential.
+
+We are hoping to get good suggestions and feedback from the public.
+We also intend to look at other materials for good ideas; see the
+[background](./background.md) document.
 
 
 For more information

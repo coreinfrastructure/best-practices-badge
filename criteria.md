@@ -157,6 +157,7 @@ be part of some future "higher-level" badge.
     -   All inputs from potentially untrusted sources are checked to ensure they are valid (a *whitelist*).  Invalid inputs are rejected.  Note that comparing against a list of "bad formats" (a *blacklist*) is not enough.  In particular, numbers are converted and checked if they are between their minimum and maximum (inclusive), and text strings are checked to ensure that they are valid text patterns.
     -   OWASP Application Security Verification Standard (ASVS).
     -   SANS' Securing Web Application Technologies (SWAT) criteria.
+    -   Privacy requirements.  The distribution system does not reveal to third parties what software or version number is being distributed, or to who.  The distribution system does not require users to identify themselves nor does it perform passive machine fingerprinting.
 *   Security analysis:
     -   Current/past security review of the code.
     -   Dependencies (including embedded dependencies) are periodically checked for known vulnerabilities (using an origin analyzer, e.g., Sonatype, Black Duck, Codenomicon AppScan, OWASP Dependency-Check), and if they have known vulnerabilities, they are updated or verified as unexploitable.  It is acceptable if the components' vulnerability cannot be exploited, but this analysis is difficult and it is sometimes easier to simply update or fix the part.  Developers must periodically re-scan to look for newly found publicly known vulnerabilities in the components they use, since new vulnerabilities are continuously being discovered.

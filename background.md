@@ -528,7 +528,7 @@ have similar vulnerabilities, and if so, should include at least one
 technique that could counter it. A list of techniques that could have
 countered Heartbleed is given in \[Wheeler2014h\].
 
-## Common Criteria
+### Common Criteria
 
 The Common Criteria for Information Technology Security Evaluation (abbreviated as Common Criteria or CC) is an international standard (ISO/IEC 15408) for computer security certification.
 
@@ -538,7 +538,7 @@ Users of the Common Criteria typically focuses on the use of independent labs,
 who spend time evaluating a large set of documentatary evidence.
 That is radically different than the approach taken here.
 
-## SAFECode
+### SAFECode
 
 The Software Assurance Forum for Excellence in Code (SAFECode)
 organization at
@@ -549,6 +549,21 @@ Some of their publications include points that might
 strengthen the criteria used for badges.
 SAFECode publications are available at:
 <http://www.safecode.org/publications/>.
+
+### "How we secure our phones"
+
+[How we secure our phones (SSL, cert pinning, PFS & more)](http://resetthenet.tumblr.com/post/84327981750/how-we-secure-our-phones-ssl-cert-pinning-pfs)
+on "Reset the Net" has set of specific recommendations on how to
+secure mobile applications.
+They are:
+
+1.  Make security & privacy a priority.  (This is true, but difficult to measure directly for our purposes.)
+2.  Don't send data unprotected. Use SSL.
+3.  Apps can be more secure than websites, with "cert pinning".
+4.  High standards for third party code (like ads & analytics).
+5.  Don't forget Perfect Forward Secrecy (PFS).
+6.  Bring out the big guns: end-to-end encryption.
+
 
 
 ## Specific potentially useful security metrics

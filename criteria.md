@@ -166,6 +166,7 @@ Potential silver criteria
     -   Dependencies (including embedded dependencies) are periodically checked for known vulnerabilities (using an origin analyzer, e.g., Sonatype, Black Duck, Codenomicon AppScan, OWASP Dependency-Check), and if they have known vulnerabilities, they are updated or verified as unexploitable.  It is acceptable if the components' vulnerability cannot be exploited, but this analysis is difficult and it is sometimes easier to simply update or fix the part.  Developers must periodically re-scan to look for newly found publicly known vulnerabilities in the components they use, since new vulnerabilities are continuously being discovered.
 *   Release:
     -   Releases MUST be cryptographically signed.  These may be implemented as signed git tags (using cryptographic digital signatures).  There MUST be a way for users to obtain the public keys used for signing so that they can verify the signature, and there MUST be a documented process explaining to users how they can verify the signature.
+    -   Releases MUST be downloadable through a channel that both encrypts and authenticates (e.g., TLS).  That way, third parties will not be able to determine exactly what version is being downloaded, and this also provides some verification that the correct software is being downloaded from the site.
 
 
 Potential gold criteria

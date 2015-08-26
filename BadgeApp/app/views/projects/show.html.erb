@@ -1,0 +1,34 @@
+<div class="jumbotron">
+
+<p>
+  <strong>Name:</strong>
+  <%= @project.name %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @project.description %>
+</p>
+
+<p>
+  <strong>Website:</strong>
+  <%= @project.website %>
+</p>
+
+<p>
+  <strong>License(s):</strong>
+  <%= @project.license %>
+</p>
+
+<p>
+  <strong>Repo:</strong>
+  <%= @project.repo %>
+</p>
+
+<p>
+<%= link_to 'Back', projects_path %>
+<%= link_to 'Edit', edit_project_path(@project) %>
+<%= link_to 'Remove', @project, method: :delete, data: { confirm: 'Are you sure?' } %>
+</p>
+
+</div>

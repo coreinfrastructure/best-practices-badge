@@ -1,0 +1,113 @@
+// Place all the styles related to the StaticPages controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+@import "bootstrap-sprockets";
+@import "bootstrap";
+
+body {
+  padding-top: 60px;
+}
+
+section {
+  overflow: auto;
+}
+
+textarea {
+  resize: vertical;
+}
+
+.center {
+  text-align: center;
+}
+
+.center h1 {
+  margin-bottom: 10px;
+}
+
+table, th, td {
+ border: 1px solid black;
+ border-collapse: collapse;
+ padding: 5px 5px 5px 5px;
+ text-align: center;
+ align: center;
+ margin-left:auto;
+ margin-right:auto;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  line-height: 1;
+}
+
+p {
+  font-size: 1.1em;
+  line-height: 1.7em;
+  padding-left: 100px;
+  padding-right: 100px;
+}
+
+#logo {
+  float: left;
+  margin-right: 10px;
+  font-size: 1.7em;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: -1px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  font-weight: bold;
+}
+
+/* header */
+.nav-color {
+  background-color: black;
+}
+
+.nav.navbar-nav.navbar-right li a {
+  color: white;
+  font-size: 1.2em;
+  &:hover {
+  color: #4791FF;
+  }
+}
+
+/* footer */
+
+footer {
+  margin-top: 50px;
+  padding-top: 5px;
+  border-top: 1px solid #eaeaea;
+  padding-left: 20px;
+  padding-right: 100px;
+}
+
+footer a {
+  color: #555;
+}
+
+
+footer small {
+  float: left;
+}
+
+footer ul {
+  float: right;
+  list-style: none;
+}
+
+footer ul li {
+  float: left;
+  margin-left: 25px;
+}
+
+/* forms */
+
+input, textarea, select, .uneditable-input {
+  border: 1px solid #bbb;
+  width: 100%;
+  margin-bottom: 15px;
+
+}
+
+input {
+  height: auto !important;
+}

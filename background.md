@@ -564,6 +564,10 @@ They are:
 5.  Don't forget Perfect Forward Secrecy (PFS).
 6.  Bring out the big guns: end-to-end encryption.
 
+### Encryption of data at-rest
+
+[Encryption of Data At-Rest: Step-by-step checklist (SNIA)](http://www.snia.org/sites/default/files/Encryption-Checklist-2.0.090909.pdf)
+has a checklist that may be useful.
 
 
 ## Specific potentially useful security metrics

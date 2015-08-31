@@ -1192,10 +1192,11 @@ for authentication in Rails (since it works with GitHub).
 
 We will next implement an override system so that users can report on
 other projects as well.
-We add a simple table of users and what project URLs they can *also*
-control (with "*" meaning "any project").
-A user who can control any user would presumably also be able to modify
-entries of this override table (e.g., to add other users).
+We will add a simple table of users and the URLs of the projects
+whose data they can *also* edit (with "*" meaning "any project").
+A user who can edit information for
+any project would presumably also be able to modify
+entries of this override table (e.g., to add other users or project values).
 This will enable the Linux Foundation to easily
 override data if there is a problem.
 At the beginnning the users would still be GitHub users, but the project URL

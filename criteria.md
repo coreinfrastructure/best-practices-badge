@@ -265,24 +265,13 @@ Thus, a badge would have its URL as its name, year range, and level/name
 (once there is more than one).
 
 
-Future plans
-============
+Improving the criteria
+======================
 
-We would like to have feedback from cognitive experts or studies
-to make the badges effective.
-Papers like [Open badges for education: what are the implications at the intersection of open systems and badging?](http://www.researchinlearningtechnology.net/index.php/rlt/article/view/23563) and their citations may help refine this.
-We are especially interested in using badges as a motivator
-for behavior, but we are also interested
-in the value of a badge as a credential.
-
-We are hoping to get good suggestions and feedback from the public.
-We also intend to look at other materials for good ideas; see the
-[background](./background.md) document.
-
-
-For more information
-====================
+We are hoping to get good suggestions and feedback from the public;
+please contribute!
 
 See the "[background](./background.md)" file
-for more information about these criteria and the supporting tool.
+for more information about these criteria and the supporting tool,
+including sources we've considered.
 

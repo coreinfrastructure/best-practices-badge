@@ -697,10 +697,65 @@ The Core Infrastructure Initiative (CII) 2015 meeting in Madrid, Spain,
 discussed best practices.
 Issues raised included the following:
 
-
 *   There is a need for a community of practice to develop and iterate its own definition of "best"
 *   Bring in cognitive/behavioral scientists to discuss the implementation of incentive models that can raise the state of the ecosystem and avoiding incentives that produce perverse outcomes. (This is not to *trick* people, but to increase the chance of it working.)
 *   Match resources with best practice requirements (so projects won't have the problem of being unable to meet the standard due to under-resourcing).
+
+### Cognitive/behavioral
+
+We would like to have feedback from cognitive experts or studies
+to make the badges effective.
+
+The paper [Open badges for education: what are the implications at the intersection of open systems and badging?](http://www.researchinlearningtechnology.net/index.php/rlt/article/view/23563)
+and its citations may help.  This paper includes a survey of literature
+on open badges for education, and
+organizes this literature into three general themes that emerge:
+
+1.  Badges as a motivator of behaviour,
+2.  Badges as a pedagogical tool, and
+3.  Badges as a signifier or credential, which link to economic and social opportunity.
+
+Below is a summary of each theme.
+
+Badges can be a motivator of behavior; one way is to use badges as
+a method of gamification.  Studies generally link the presence of
+badges and other incentive mechanisms to increased user participation
+in a variety of online communities.
+However, research on badges in education platforms
+also suggests that "there are complex interactions between
+learners, prior motivation and knowledge level, and the types of badges
+people pursue... badges had differential relationships
+to the motivation of low-performing and high-performing students."
+
+Researchers have also examined the ways in which
+"software interfaces and learning tools
+could be designed to guide or scaffold learners through a process...
+In systems where badges are visible to the learner they can serve as
+a way to visualize the learning path of content and activities. The
+traditional use of analogue badges in scouting programs gives an example
+of badges used in this way as a roadmap of available activities and
+achievements. Badges in American scouting often serve as a single part
+in a larger ecosystem, working as a way of making scouts aware of what
+activities are available for them to pursue, while still allowing for
+the freedom of choice associated with informal learning (Jarman 2005).
+Badges can also be designed to value specific, positive learning
+behaviours and serve as a series of guideposts towards understanding
+(Joseph 2012)."
+
+Badge systems can also create an alternative or
+supplement to traditional credentials such as diplomas.
+Indeed, if the term "badge" is defined broadly, traditional credentials
+like diplomas are a kind of badge.
+"One potential for open badges is to award credentials for alternative forms
+of learning experiences...
+another interesting aspect of badges is the potential to signal
+finer-grained skills, knowledge or dispositions."
+
+The Mozilla OpenBadges effort at http://openbadges.org/ is focused on
+giving badges to individuals.
+This is a different focus than ours, which is focused on giving
+badges to *projects*, but there may be useful lessons or code to glean.
+
 
 ### Checklist Manifesto
 
@@ -1149,6 +1204,12 @@ See ActiveAdmin for an example, take a few screenshots.
 Many of these badges try to represent real-time status.
 We might not include these badges in our system, but they
 provide useful examples.
+
+## Other badging systems
+
+Mozilla's Open Badges project at http://openbadges.org/
+is interesting, however, it is focused on giving badges to
+individuals not projects.
 
 ## License detection
 

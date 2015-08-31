@@ -1187,9 +1187,10 @@ Multiple projects may have the same human-readable name.
 ## GitHub-related badges
 
 Pages related to GitHub-related badges include:
-http://shields.io/
-https://github.com/badges/shields
-http://nicbell.net/blog/github-flair
+
+*   http://shields.io/ - serves files that display a badge (as good-looking scalable SVG files)
+*   https://github.com/badges/shields -  Shields badge specification, website and default API server (connected to shields.io)
+*   http://nicbell.net/blog/github-flair - a blog post that identifies and discusses popular GitHub flair (badges)
 
 We want GitHub users to think of this
 as &#8220;just another badge to get.&#8221;

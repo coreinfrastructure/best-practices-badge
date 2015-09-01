@@ -25,6 +25,20 @@ and then clean it up over time if that cleanup is important.
 Creating good criteria is our real objective, so please focus on the
 [criteria](./criteria.md) list.
 
+The criteria are focused on best practices for OSS, particularly
+those that are more likely to produce secure software,
+and not on proprietary software.
+Clearly developers of proprietary software should also strive to
+develop secure software.
+That said, OSS software is sufficiently different that it's appropriate
+to have a set of criteria specific to OSS.
+For example, a key approach for developing secure OSS is to enable
+and encourage widespread review of the software.
+Many of the criteria focus on how to best enable and encourage this review.
+This kind of information availability and worldwide detailed review would be
+unacceptable to most businesses that develop proprietary software.
+As a result, there's a need for criteria that focus specifically on OSS.
+
 Please note that these are completely unrelated to the
 [Construction Industry Institute (CII) best practices](https://www.construction-institute.org/Store/CII/Publication_Pages/bp.cfm?section=orders).
 

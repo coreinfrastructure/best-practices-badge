@@ -1126,6 +1126,26 @@ about regression testing and routinely applying four static analyzers;
 it paid off.&#8221;
 The [lead developer has provided other comments about GPSD development processes](http://esr.ibiblio.org/?p=4340).
 
+## OSSEC
+
+OSSEC is "an Open Source Host-based Intrusion Detection System that performs log analysis, file integrity checking, policy monitoring, rootkit detection, real-time alerting and active response."
+Its project website is <http://www.ossec.net/>.
+
+From its [downloads](http://www.ossec.net/?page_id=19) page you can find its development snapshots, which are publicly version-controlled on GitHub.
+[OSSEC is released under the GPLv2 license with OpenSSL exception](http://www.ossec.net/?page_id=52).
+[OSSSEC-HIDS' license is in its LICENSE file](https://github.com/ossec/ossec-hids/blob/master/LICENSE).
+
+[OSSEC has documentation that identifies its coding style guide](http://ossec-docs.readthedocs.org/en/latest/development/oRFC/orfc-2.html).
+[OSSEC includes a facility to test rules in bulk](http://ossec-docs.readthedocs.org/en/latest/development/build/test-rules.html).
+
+They use [Coverity](https://scan.coverity.com/projects/1847)
+and flawfinder to look for vulnerabilities.
+The use a continuous integration server.
+
+<!-- Scott R. Shinn is willing to be a guinea pig for entering criteria info.-->
+
+
+
 ## Postfix
 
 Postfix is a mail server.

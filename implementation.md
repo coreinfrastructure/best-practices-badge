@@ -112,7 +112,7 @@ provide useful examples.
 
 ## Other badging systems
 
-Mozilla's Open Badges project at http://openbadges.org/
+Mozilla's Open Badges project at <http://openbadges.org/>
 is interesting, however, it is focused on giving badges to
 individuals not projects.
 

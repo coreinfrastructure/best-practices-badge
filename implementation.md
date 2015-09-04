@@ -136,3 +136,8 @@ This lets us fulfill the "dynamic analysis" criterion.
 
 We are considering the use of RSpec, Cucumber, and FactoryGirl.
 
+# See also
+
+See the separate "[background](./background.md)" and
+"[criteria](./criteria.md)" pages for more information.
+

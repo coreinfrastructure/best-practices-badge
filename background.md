@@ -1308,3 +1308,8 @@ December 2014. CMU/SEI-2014-TN-026.
 <http://resources.sei.cmu.edu/library/asset-view.cfm?assetid=428589>
 
 
+See [criteria](./criteria.md) for the current version of the criteria.
+See [implementation](./implementation.md)
+about the implementation of the BadgeApp web application that helps
+projects determine (and demonstrate) that they meet these criteria.
+

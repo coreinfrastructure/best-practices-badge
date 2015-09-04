@@ -294,7 +294,8 @@ Improving the criteria
 We are hoping to get good suggestions and feedback from the public;
 please contribute!
 
-See the "[background](./background.md)" file
-for more information about these criteria and the supporting tool,
-including sources we've considered.
+You may also want to see the "[background](./background.md)" file
+for more information about these criteria,
+and the "[implementation](./implementation.md)" notes
+about the BadgeApp application.
 

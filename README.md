@@ -19,6 +19,7 @@ There is also a [mailing list](https://lists.coreinfrastructure.org/mailman/list
 * Draft Badging **[Criteria](./criteria.md)**
 * Draft **[Background](./background.md)** on Badging
 * Draft **[BadgeApp](./BadgeApp/)** application (very early - e.g., no logins!)
+* **[implementation](./implementation.md)** - detailed information about the implementation of BadgeApp
 
 All material is released under both the [MIT license](./LICENSE)
 and the

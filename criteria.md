@@ -1,4 +1,4 @@
-Basic Best Practices Criteria for Open Source Software (OSS) (version 0.0.4)
+Basic Best Practices Criteria for Open Source Software (OSS) (version 0.1.0)
 ========================================================================
 
 Introduction

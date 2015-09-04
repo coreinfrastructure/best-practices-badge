@@ -4,11 +4,14 @@ Basic Best Practices Criteria for Open Source Software (OSS) (version 0.0.4)
 Introduction
 ============
 
-This *early* *draft* identifies proposed basic best practices criteria
-for open source software (OSS).
-The intent is to create a "badging" program in which OSS projects
-that follow these best practices can voluntarily self-certify and show a badge.
-A tool will automatically evaluate criteria in some cases.
+This is an *early* *draft* of proposed basic best practices
+for open source software (OSS) projects.
+OSS projects that follow these best practices
+will be able to voluntarily self-certify and show that they've
+achieved a CII badge.
+Projects can do this, at no cost,
+by using a web application (BadgeApp)
+to explain how they meet each best practice.
 
 There is no set of practices that can guarantee that software
 will never have defects or vulnerabilities;
@@ -35,8 +38,8 @@ We expect that these practices and their detailed criteria will be updated,
 even after badges are released.
 Thus, criteria (and badges) probably will have a year identifier
 and will age out after a year or two. 
-We expect well-run OSS projects to trivially update,
-so this short badge life should not be a barrier.
+We expect it will be easy to update the information,
+so this relatively short badge life should not be a barrier.
 
 Feedback is *very* welcome via the
 [GitHub site as issues or pull requests](https://github.com/linuxfoundation/cii-best-practices-badge).
@@ -249,6 +252,12 @@ if vulnerabilities are reported to the project (see above).
 Uniquely identifying a project
 ==============================
 
+One challenge is uniquely identifying a project.
+Our rails application gives a unique id to each new project, so
+we can certainly use that id to identify projects.
+However, that doesn't help people who searching for the project
+and do not already know that id.
+
 The *real* name of a project, for our purposes, is the project URL.
 This may be a project "front page" URL and/or the front URL for its repository.
 Most projects have a human-readable name, but these names are not enough.
@@ -263,6 +272,9 @@ a project that they did not.
 
 Thus, a badge would have its URL as its name, year range, and level/name
 (once there is more than one).
+
+We will probably implement some search mechanisms so that people can
+enter common names and find projects.
 
 
 Improving the criteria

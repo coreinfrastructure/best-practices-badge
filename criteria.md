@@ -214,6 +214,7 @@ Potential other criteria
 *   Security analysis:
     -   Current/past security review of the code.
     -   Must have a process for rapidly fixing vulnerabilities and releasing the updated software.  Note that having a good test suite makes it easier to make changes and be confident the system still works.  Also note that OSS projects are often embedded in larger systems and projects cannot control the larger projects they are in.
+    -   An automated test suite must achieve at least an aggregate 80% branch coverage (the goal is to cover a significant portion of the program; this can be a combination of unit tests and larger integration tests).
 
 We are considering moving the criteria continuous integration
 and reproduceable builds into the basic best practices criteria.

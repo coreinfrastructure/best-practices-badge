@@ -277,6 +277,19 @@ We will probably implement some search mechanisms so that people can
 enter common names and find projects.
 
 
+Why have criteria?
+==================
+
+The paper [Open badges for education: what are the implications at the intersection of open systems and badging?](http://www.researchinlearningtechnology.net/index.php/rlt/article/view/23563)
+identifies three general reasons for badging systems (all are valid for this):
+
+1.  Badges as a motivator of behaviour.  We hope that by identifying best practices, we'll encourage projects to implement those best practices if they do not do them already.
+2.  Badges as a pedagogical tool.  Some projects may not be aware of some of the best practices applied by others, or how they can be practically applied.  The badge will help them become aware of them and ways to implement them.
+3.  Badges as a signifier or credential.  Potential users want to use projects that are applying best practices to consistently produce good results; badges make it easy for projects to signify that they are following best practices, and make it easy for users to see which projects are doing so.
+
+We have chosen to use self-certification, because this makes it possible for a large number of projects (even small ones) to participate.  There's a risk that projects may make false claims, but we think the risk is small, and in any case we require that projects document *why* they think they meet the criteria (so users can quickly see the project's rationale).
+
+
 Improving the criteria
 ======================
 

@@ -21,8 +21,9 @@ of OSS projects.
 For example, some practices enable multi-person review before release
 that can help find otherwise hard-to-find vulnerabilities.
 These best practices were created to (1) encourage OSS projects to
-follow best practices and (2) help users know which projects
-are following best practices.
+follow best practices, (2) help new OSS projects discover what those
+practices are, and (3) help users know which projects
+are following best practices (so users can prefer such projects).
 
 We are currently focused on identifying *basic* best practices
 that well-run OSS projects typically already follow.

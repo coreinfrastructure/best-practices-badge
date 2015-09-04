@@ -4,11 +4,14 @@ Basic Best Practices Criteria for Open Source Software (OSS) (version 0.0.4)
 Introduction
 ============
 
-This *early* *draft* identifies proposed basic best practices criteria
-for open source software (OSS).
-The intent is to create a "badging" program in which OSS projects
-that follow these best practices can voluntarily self-certify and show a badge.
-A tool will automatically evaluate criteria in some cases.
+This is an *early* *draft* of proposed basic best practices
+for open source software (OSS) projects.
+OSS projects that follow these best practices
+will be able to voluntarily self-certify and show that they've
+achieved a CII badge.
+Projects can do this, at no cost,
+by using a web application (BadgeApp)
+to explain how they meet each best practice.
 
 There is no set of practices that can guarantee that software
 will never have defects or vulnerabilities;
@@ -18,8 +21,9 @@ of OSS projects.
 For example, some practices enable multi-person review before release
 that can help find otherwise hard-to-find vulnerabilities.
 These best practices were created to (1) encourage OSS projects to
-follow best practices and (2) help users know which projects
-are following best practices.
+follow best practices, (2) help new OSS projects discover what those
+practices are, and (3) help users know which projects
+are following best practices (so users can prefer such projects).
 
 We are currently focused on identifying *basic* best practices
 that well-run OSS projects typically already follow.
@@ -35,8 +39,8 @@ We expect that these practices and their detailed criteria will be updated,
 even after badges are released.
 Thus, criteria (and badges) probably will have a year identifier
 and will age out after a year or two. 
-We expect well-run OSS projects to trivially update,
-so this short badge life should not be a barrier.
+We expect it will be easy to update the information,
+so this relatively short badge life should not be a barrier.
 
 Feedback is *very* welcome via the
 [GitHub site as issues or pull requests](https://github.com/linuxfoundation/cii-best-practices-badge).
@@ -69,7 +73,7 @@ if the project is hosted on GitHub and follows standard conventions.
     -   *Project website has basic content*.  
         The project website MUST succinctly describe what the software does (what problem does it solve?), in language that potential users can understand (e.g., it uses a minimum of jargon). It MUST also provide information on (1) how to get the software, (2) how to send feedback (as bug reports or feature requests), and (3) how to contribute.  The information on how to contribute MUST explain the contribution process (e.g., are pull requests used?) and SHOULD include the basic criteria for acceptable contributions (e.g., a reference to any required coding standard).
     -   *OSS license*.&#8224;  
-        The license(s) MUST be posted in a standard place, e.g., as a top-level file named LICENSE or COPYING optionally followed by an extension such as ".txt" or ".md".  The software MUST be released as OSS; this means that the required licenses MUST be at least one of the following: [an approved license by the Open Source Initiative (OSI)](http://opensource.org/licenses), a [free license as approved by the Free Software Foundation (FSF)](http://www.gnu.org/licenses/license-list.html), [a free license acceptable to Debian main](https://www.debian.org/legal/licenses/), or [a "good" license according to Fedora](https://fedoraproject.org/wiki/Licensing:Main?rd=Licensing).  The required license(s) SHOULD be OSI-approved.  The software *may* also be licensed other ways (e.g., "GPLv2 or proprietary" is acceptable).  We intend for the automated tool to focus on identifying common OSS licenses such as the following: [CC0](http://creativecommons.org/publicdomain/zero/1.0/), [MIT](http://opensource.org/licenses/MIT), [BSD 2-clause](http://opensource.org/licenses/BSD-2-Clause), [BSD 3-clause revised](http://opensource.org/licenses/BSD-3-Clause), [Apache 2.0](http://opensource.org/licenses/Apache-2.0), [Lesser GNU General Public License (LGPL)](http://opensource.org/licenses/lgpl-license), and the [GNU General Public License (GPL)](http://opensource.org/licenses/gpl-license). Unusual licenses can cause long-term problems for OSS projects and are more difficult for tools to handle.  We expect that that "higher-level" criteria would set a higher bar, e.g., that it *must* be an OSI-approved license.
+        The license(s) MUST be posted in a standard place, e.g., as a top-level file named LICENSE or COPYING optionally followed by an extension such as ".txt" or ".md".  The software MUST be released as OSS; this means that the required licenses MUST be at least one of the following: [an approved license by the Open Source Initiative (OSI)](http://opensource.org/licenses), a [free license as approved by the Free Software Foundation (FSF)](http://www.gnu.org/licenses/license-list.html), [a free license acceptable to Debian main](https://www.debian.org/legal/licenses/), or [a "good" license according to Fedora](https://fedoraproject.org/wiki/Licensing:Main?rd=Licensing).  The required license(s) SHOULD be OSI-approved.  The software MAY also be licensed other ways (e.g., "GPLv2 or proprietary" is acceptable).  We intend for the automated tool to focus on identifying common OSS licenses such as the following: [CC0](http://creativecommons.org/publicdomain/zero/1.0/), [MIT](http://opensource.org/licenses/MIT), [BSD 2-clause](http://opensource.org/licenses/BSD-2-Clause), [BSD 3-clause revised](http://opensource.org/licenses/BSD-3-Clause), [Apache 2.0](http://opensource.org/licenses/Apache-2.0), [Lesser GNU General Public License (LGPL)](http://opensource.org/licenses/lgpl-license), and the [GNU General Public License (GPL)](http://opensource.org/licenses/gpl-license). Unusual licenses can cause long-term problems for OSS projects and are more difficult for tools to handle.  We expect that that "higher-level" criteria would set a higher bar, e.g., that it *must* be an OSI-approved license.
     -   *Basic Documentation*.  
         The project MUST include or refer to basic documentation on how to install it, start it, and use it (possibly with a tutorial using examples).  It MUST also include reference documentation that describes its interface.  The documentation MUST discuss how to use the software securely (e.g., what to do and what not to do) if that is an appropriate topic for the software.  The security discussion (if any) need not be long, since the software SHOULD be designed to be secure by default.  Hypertext links to non-project material is fine, as long as it is available.
 *   **Change control:**
@@ -87,9 +91,9 @@ if the project is hosted on GitHub and follows standard conventions.
     -   *Automated test suite*.&#8224;  
         There MUST be at least one automated test suite.  A test suite SHOULD be invocable in a standard way for that language (e.g., "make check", "mvn test", and so on).  Only a small test suite is required.  A test suite SHOULD cover most (or ideally all) the code branches, input fields, and functionality, but even a small test suite can detect problems and provide a framework to build on.  Some larger systems MAY have multiple automated test suites (e.g., one that runs quickly, vs. another that is more thorough but requires special equipment).
     -   *Tests are added for new functionality*.  
-        There MUST be a general policy (formal or not) that when major new functionality is added, tests of that functionality SHOULD be added to an automated test suite.  There MUST be evidence that such tests are being added in the most recent major changes to the project.  This SHOULD be *documented* in the instructions for change proposals, but even an informal rule is acceptable as long as the tests are being added in practice.  Major functionality would typically be mentioned in the ChangeLog.  Perfection is not required, merely evidence that tests are being added in practice.  See [issue #2 for a discussion about this criterion](https://github.com/linuxfoundation/cii-best-practices-badge/issues/2).
+        There MUST be a general policy (formal or not) that when major new functionality is added, tests of that functionality SHOULD be added to an automated test suite.  There MUST be evidence that such tests are being added in the most recent major changes to the project.  This SHOULD be *documented* in the instructions for change proposals, but even an informal rule is acceptable as long as the tests are being added in practice.  Major functionality would typically be mentioned in the ChangeLog.  Perfection is not required, merely evidence that tests are typically being added in practice.
     -   *Warning flags*.  
-        The project MUST enable some compiler warnings (e.g. "-Wall"), a "safe" language mode (e.g., "use strict", "use warnings", or similar), and/or use a separate "linter" tool to look for code quality errors or common simple mistakes.  The project MUST address the issues that are found (by fixing them or marking them in the source code as false positives).  Ideally there would be no warnings, but a project MAY accept less than 1 warning per 1000 lines or less than 10 warnings.  It is RECOMMENDED that projects be maximally strict, but this is not always practical.  This criterion is not required if there is no OSS tool that can implement this criterion in the selected language.
+        The project MUST enable some compiler warnings (e.g. "-Wall"), a "safe" language mode (e.g., "use strict", "use warnings", or similar), and/or use a separate "linter" tool to look for code quality errors or common simple mistakes.  The project MUST address the issues that are found (by fixing them or marking them in the source code as false positives).  Ideally there would be no warnings, but a project MAY accept some warnings (typically less than 1 warning per 100 lines or less than 10 warnings).  It is RECOMMENDED that projects be maximally strict, but this is not always practical.  This criterion is not required if there is no OSS tool that can implement this criterion in the selected language.
 *   **Security:**
     -   *Uses basic good cryptographic practices*.  
         The cryptographic mechanisms used by the software, and its delivery mechanisms, implement the following basic good practices:  
@@ -98,8 +102,8 @@ if the project is hosted on GitHub and follows standard conventions.
             3.  All functionality that depends on cryptography MUST be implementable using OSS because its specification meets the [*Open Standards Requirement for Software* by the Open Source Initiative](http://opensource.org/osr)  
             4.  The default keylengths MUST meet NIST requirements through the year 2030. For example, symmetric keys must be at least 112 bits, factoring modulus must be at least 2048 bits, and elliptic curve must be at least 224 bits.  See <http://www.keylength.com> for a comparison of keylength recommendations from various organizations.  The software MUST be configurable so that it will reject smaller keylengths.  The software MAY allow smaller keylengths in some configurations (ideally it would not, since this allows downgrade attacks, but shorter keylengths may be necessary for interoperability.)  
             5.  Any key agreement protocol MUST implement perfect forward secrecy where practical so a session key derived from a set of long-term keys cannot be compromised if one of the long-term keys is compromised in the future.  
-            6.  Security mechanisms MUST NOT depend on MD4, MD5, or single DES, as these algorithms are broken or have overly short key lengths.  It is RECOMMENDED that SHA-1 not be used (we are well aware that git uses SHA-1).  Recommended algorithms include AES and SHA-256 (or higher).  Implementations SHOULD support multiple cryptographic algorithms, so users can quickly switch if one is broken.  
-            7.  If passwords for later authentication are stored, they must be stored as iterated hashes with per-user salt.  
+            6.  Security mechanisms MUST NOT depend on MD4, MD5, single DES, or RC4, as these algorithms are broken or have overly short key lengths.  It is RECOMMENDED that SHA-1 not be used (we are well aware that git uses SHA-1).  Currently-recommended algorithms include AES and SHA-256/SHA-512.  Implementations SHOULD support multiple cryptographic algorithms, so users can quickly switch if one is broken.  
+            7.  If passwords for later authentication are stored, they MUST be stored as iterated hashes with per-user salt.  
             8.  All keys and nonces MUST be generated using cryptographically random functions, and *not* through non-cryptographically random functions.
     -   *Secured delivery against man-in-the-middle (MITM) attacks*.&#8224;  
         The project MUST use a delivery mechanism that counters MITM attacks. Using https or ssh+scp is acceptable.  An even stronger mechanism is releasing the software with digitally signed packages, since that mitigates attacks on the distribution system, but this only works if the users can be confident that the public keys for signatures are correct *and* if the users will actually check the signature.  A cryptographic hash (e.g., a sha1sum) that is only retrieved over http and not separately signed is *not* acceptable, since this can be modified in transit.
@@ -108,12 +112,13 @@ if the project is hosted on GitHub and follows standard conventions.
     -   *Initial vulnerability report responsiveness*.  
         The project MUST provide an initial reply to a security vulnerability report sent to the project, on average, less than 7 days within the last 6 months.  (If a project is being spammed on its vulnerability report channel, it is okay to only count non-spam messages.)
     -   *Patches up-to-date*.&#8224;  
-        There MUST be no unpatched vulnerabilities of medium or high severity that have been *publicly* known for more than 60 days.  The vulnerability must be patched and released by the project itself (patches may be developed elsewhere). The length of time here is somewhat arbitrary and is considered extremely long; it means that users will be left vulnerable to attackers worldwide for up to 60 days.  A vulnerability becomes publicly known (for this purpose) once it has a CVE with publicly released information (reported in, for example, the National Vulnerability Database) or when the project has been informed *and* the information has been released to the public (possibly by the project).  Note that projects SHOULD fix all critical vulnerabilities rapidly after they are reported; Google suggests that the upper bound should be 60 days from report until repair *even* when the report is private per http://googleonlinesecurity.blogspot.com/2010/07/rebooting-responsible-disclosure-focus.html .  Note that this criterion only measures the time known to the public, *not* from the time that the project is informed, and thus in many cases this criterion is much easier to meet than Google's criterion.  We intentionally chose to start measurement from the time of public knowledge, and not from the time reported to the project, because this is much easier to measure and verify by those *outside* the project.  To determine if a vulnerability is medium to high severity, use https://nvd.nist.gov/cvss.cfm ; a CVSS 2.0 score of 4 or higher is considered medium to high severity (you can just use the CVSS base score for this purpose).
+        There MUST be no unpatched vulnerabilities of medium or high severity that have been *publicly* known for more than 60 days.  The vulnerability must be patched and released by the project itself (patches may be developed elsewhere). Note that this means that users will be left vulnerable to all attackers worldwide for up to 60 days.  A vulnerability becomes publicly known (for this purpose) once it has a CVE with publicly released non-paywalled information (reported, for example, in the [National Vulnerability Database](https://nvd.nist.gov/)) or when the project has been informed *and* the information has been released to the public (possibly by the project).  Note that projects SHOULD fix all critical vulnerabilities rapidly after they are reported. This criterion is often much easier to meet than what Google recommends in [Rebooting responsible disclosure](http://googleonlinesecurity.blogspot.com/2010/07/rebooting-responsible-disclosure-focus.html), because Google recommends that the 60-day period start when the project is notified *even* if the report is not public. We intentionally chose to start measurement from the time of public knowledge, and not from the time reported to the project, because this is much easier to measure and verify by those *outside* the project.  A vulnerability is medium to high severity if its [CVSS 2.0](https://nvd.nist.gov/cvss.cfm) base score is 4 or higher.
 *   **Security analysis:**
-    -   *Static analysis*.  
-        At least one static analysis tool MUST be applied to the source code to look for defects, including vulnerabilities, and any discovered exploitable vulnerabilites MUST be fixed.  A static analysis tool examines the software without executing it with specific inputs.  For purposes of this criterion compiler warnings and "safe" language modes do not count as a static analysis tool (compilers are typically designed to avoid deep defect or vulnerability analysis during compilation so that they can be focused on rapidly generating code).  Examples of such tools include [Coverity Quality Analyzer](https://scan.coverity.com/), HP Fortify Static Code Analyzer, the clang static analyzer, FindBugs, and PMD.  The analysis tool(s) MAY be focused on looking for security vulnerabilities, but this is not required.  This criterion is not required if there is no OSS tool that can implement this criterion in the selected language.
+    -   *Static source code analysis*.  
+        At least one static source code analysis tool MUST be applied to any proposed major production release of the software before its release.  All discovered medium and high severity exploitable vulnerabilities MUST be fixed.
+A vulnerability is medium to high severity if its [CVSS 2.0](https://nvd.nist.gov/cvss.cfm) is 4 or higher.  A static source code analysis tool examines the software source code without executing it with specific inputs.  For purposes of this criterion compiler warnings and "safe" language modes do not count as a static source code analysis tool (these typically avoid deep analysis because speed is vital).  Examples of such static source code analysis tools include cppcheck, the clang static analyzer, FindBugs (including FindSecurityBugs), PMD, Brakeman, [Coverity Quality Analyzer](https://scan.coverity.com/), and the HP Fortify Static Code Analyzer.   The analysis tool(s) MAY be focused on looking for security vulnerabilities, but this is not required.  It is RECOMMENDED that static source code analysis occur on every commit, or at least daily.  This criterion is not required if there is no OSS tool that can implement this criterion in the selected language.  A vulnerability is medium to high severity if its [CVSS 2.0](https://nvd.nist.gov/cvss.cfm) base score is 4 or higher.
     -   *Dynamic analysis*.  
-        At least one dynamic analysis tool MUST be applied and any discovered exploitable vulnerabilities fixed.  A dynamic analysis tool examines the software by executing it with specific inputs.   For example, the project may use a fuzzing tool (e.g., American Fuzzy Lop) or a web application scanner (e.g., [OWASP ZAP](https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project) or [w3af](http://w3af.org/)). For purposes of this criterion the dynamic analysis tool MUST vary the inputs in some way to look for various kinds of problems *or* be an automated test suite with at least 80% branch coverage (the goal is to cover a significant portion of the program).   It is RECOMMENDED that if the software is application-level software written using a memory-unsafe language (such as C or C++) then at least one tool to detect memory safety problems MUST be used during at least one dynamic tool use, e.g., Address Sanitizer (ASAN) or valgrind.  It is RECOMMENDED that the software include many run-time assertions that are checked during dynamic analysis.  The analysis tool(s) MAY be focused on looking for security vulnerabilities, but this is not required.
+        At least one dynamic analysis tool MUST be applied to any proposed major production release of the software before its release. All discovered medium and high severity exploitable vulnerabilities MUST be fixed.  A dynamic analysis tool examines the software by executing it with specific inputs.  For example, the project may use a fuzzing tool (e.g., [American Fuzzy Lop](http://lcamtuf.coredump.cx/afl/)) or a web application scanner (e.g., [OWASP ZAP](https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project) or [w3af](http://w3af.org/)). For purposes of this criterion the dynamic analysis tool MUST vary the inputs in some way to look for various kinds of problems *or* be an automated test suite with at least 80% branch coverage.   It is RECOMMENDED that if the software is application-level software written using a memory-unsafe language (such as C or C++) then at least one tool to detect memory safety problems MUST be used during at least one dynamic tool use, e.g., Address Sanitizer (ASAN) or valgrind.  It is RECOMMENDED that the software include many run-time assertions that are checked during dynamic analysis.  The analysis tool(s) MAY be focused on looking for security vulnerabilities, but this is not required.  A vulnerability is medium to high severity if its [CVSS 2.0](https://nvd.nist.gov/cvss.cfm) base score is 4 or higher.
 
 These are not the final criteria, but hopefully these give a flavor of
 what we are considering.  Suggestions are welcome.
@@ -211,6 +216,7 @@ Potential other criteria
 *   Security analysis:
     -   Current/past security review of the code.
     -   Must have a process for rapidly fixing vulnerabilities and releasing the updated software.  Note that having a good test suite makes it easier to make changes and be confident the system still works.  Also note that OSS projects are often embedded in larger systems and projects cannot control the larger projects they are in.
+    -   An automated test suite must achieve at least an aggregate 80% branch coverage (the goal is to cover a significant portion of the program; this can be a combination of unit tests and larger integration tests).
 
 We are considering moving the criteria continuous integration
 and reproduceable builds into the basic best practices criteria.
@@ -249,6 +255,12 @@ if vulnerabilities are reported to the project (see above).
 Uniquely identifying a project
 ==============================
 
+One challenge is uniquely identifying a project.
+Our rails application gives a unique id to each new project, so
+we can certainly use that id to identify projects.
+However, that doesn't help people who searching for the project
+and do not already know that id.
+
 The *real* name of a project, for our purposes, is the project URL.
 This may be a project "front page" URL and/or the front URL for its repository.
 Most projects have a human-readable name, but these names are not enough.
@@ -263,6 +275,22 @@ a project that they did not.
 
 Thus, a badge would have its URL as its name, year range, and level/name
 (once there is more than one).
+
+We will probably implement some search mechanisms so that people can
+enter common names and find projects.
+
+
+Why have criteria?
+==================
+
+The paper [Open badges for education: what are the implications at the intersection of open systems and badging?](http://www.researchinlearningtechnology.net/index.php/rlt/article/view/23563)
+identifies three general reasons for badging systems (all are valid for this):
+
+1.  Badges as a motivator of behaviour.  We hope that by identifying best practices, we'll encourage projects to implement those best practices if they do not do them already.
+2.  Badges as a pedagogical tool.  Some projects may not be aware of some of the best practices applied by others, or how they can be practically applied.  The badge will help them become aware of them and ways to implement them.
+3.  Badges as a signifier or credential.  Potential users want to use projects that are applying best practices to consistently produce good results; badges make it easy for projects to signify that they are following best practices, and make it easy for users to see which projects are doing so.
+
+We have chosen to use self-certification, because this makes it possible for a large number of projects (even small ones) to participate.  There's a risk that projects may make false claims, but we think the risk is small, and in any case we require that projects document *why* they think they meet the criteria (so users can quickly see the project's rationale).
 
 
 Improving the criteria

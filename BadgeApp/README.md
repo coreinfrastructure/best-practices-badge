@@ -1,1 +1,1 @@
-# Ruby on Rails web application for OSS Best Practices Badged
+# Ruby on Rails web application for OSS Best Practices Badges

@@ -126,8 +126,6 @@ Potential future criteria
 =========================
 
 Here are some other potential criteria.
-As the criteria become more mature, we expect some criteria to move between
-the current criteria and these potential future criteria (in both directions).
 
 We currently plan to launch with a single badge level (once it is ready).
 There may eventually be multiple levels (bronze, silver, gold) or
@@ -145,6 +143,10 @@ There is no guarantee that the final criteria will be the same,
 or even grouped the same way.
 This list of potential future criteria is even less mature than the
 list of basic best practices; recommendations welcome.
+As the criteria become more mature, we expect some criteria to move between
+the current criteria and these potential future criteria (in both directions).
+In particular, we expect a number of the SHOULD or RECOMMENDED criteria
+at lower levels to become MUST in higher/later badges.
 
 Eventually these criteria will be worded per
 [RFC 2119](https://tools.ietf.org/html/rfc2119).
@@ -153,12 +155,16 @@ Eventually these criteria will be worded per
 Potential silver criteria
 -------------------------
 
-*   Achieve the lower (basic/bronze) badge.
-*   Build and test:
-    -   Continuous integration: Automated test suite applied on each check-in, preferably across many platforms.
-    -   Whenever major new functionality is added to the program, tests of it are added to the automated test suite.  This needs to be *documented* in the instructions for change proposals, and there needs to be past evidence that such tests are being added in the most recent major changes.
-    -   When a bug is fixed, a regression test is normally added to the automated test suite to prevent its reoccurrence (ideally all).
-    -   Reproduceable build.  On rebuilding, the result should be bit-for-bit identical.
+*   **Achieve the lower (basic/bronze) badge**.
+*   **Build and test:**
+    -   **Continuous integration**.   
+        An automated test suite MUST applied on each check-in to a shared repository, at least for some branches, with a generated report available to at least project members on success or failure of the tests.  This test suite SHOULD be applied across many platforms where appropriate.  *Rationale*:  Continuous integration provides much more rapid feedback on whether or not changes will cause test failures, including regressions.
+    -   *Tests are rigorously added for new functionality*.  
+        There MUST be a stated policy that when major new functionality is added, tests of that functionality MUST be added to an automated test suite, at least in the documentation for creating change proposals.  There MUST be evidence that such tests are being added in the most recent major changes to the project.
+    -   *Regression tests*.  
+        When a bug is fixed, a regression test MUST normally be added to the automated test suite to prevent its reoccurrence.
+    -   *Reproduceable build*.
+         It MUST be possible to rebuild executables that are bit-for-bit identical, given the same executables of the tools used for building.  This criterion is automatically met if there is no process for creating a separate executable or package.  *Rationale*:  Reproduceable builds make it much easier to verify that the executable and source code of a program correspond, countering certain kinds of malicious attacks.
 *   Code/build requirements:
     -   Coding standards / coding style guide (typically by pointing to something).  There are a number of coding standards that can be recommended for specific languages.  Widely-used coding standards that include ways to reduce the likelihood of defects (including vulnerabilities) might be especially helpful.  Projects can create their own coding standard by referring to an existing one and then adding their own additions or exceptions.  There are a number of secure coding standards, e.g., the SEI CERT's at https://www.securecoding.cert.org/
     -   Program can use the local version of system library/applications (so vulnerable ones easily replaced).  Many OSS programs are distributed with "convenience libraries" that are local copies of standard libraries (possibly forked).  However, if the program *must* use these local (forked) copies, then updating the "standard" libraries as a security update will leaved these additional copies still vulnerable. This is especially an issue for cloud-based systems (e.g., Heroku); if the cloud provider updates their "standard" libaries but the program won't use them, then the updates don't actually help.  In some cases it's important to use the "other" version; the goal here is to make it *possible* to easily use the standard version. See, e.g., http://spot.livejournal.com/312320.html .
@@ -175,7 +181,7 @@ Potential gold criteria
 *   Achieve the lower (silver) badge.
 *   General criteria:
     -   Roadmap exists.  There should be some information on where the project is going or not going.
-    -   Posted list of small tasks for new users.
+    -   Posted list of small project tasks for new users.  These new tasks need not be adding functionality; they can be improving documentation, adding test cases, or anything else that aids the project and helps the contributor understand more about the project.  There SHOULD be at least 3 small tasks made available over a one-year period that have been accepted by a relatively new contributor (those who started contributing less than a year ago) or left available (unimplemented by experienced developers) for at least 3 weeks.  *Rationale*:  Identified small tasks make it easier for new potential contributors to become involved in a project, and projects with more contributors have an increased likelihood of continuing.
     -   Multiple contributors from more than one organization.
     -   License statement in each file (aka per-file licensing).
     -   (Ideal) Copyright notice in each file, e.g., "Copyright [year project started] - [current year], [project founder] and the [project name] contributors."

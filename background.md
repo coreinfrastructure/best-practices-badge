@@ -40,6 +40,13 @@ This kind of information availability and worldwide detailed review would be
 unacceptable to most businesses that develop proprietary software.
 As a result, there's a need for criteria that focus specifically on OSS.
 
+The criteria are intended to apply to all kinds of software.
+This includes firmware, operating system kernels, client software,
+and server software.
+It should apply to all different kinds of application software,
+including web application software, mobile software,
+traditional desktop GUI software, and command line programs.
+
 Please note that these are completely unrelated to the
 [Construction Industry Institute (CII) best practices](https://www.construction-institute.org/Store/CII/Publication_Pages/bp.cfm?section=orders).
 

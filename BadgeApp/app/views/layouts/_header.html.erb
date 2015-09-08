@@ -6,7 +6,26 @@
         <li><%= link_to 'BACKGROUND', background_path  %></li>
         <li><%= link_to 'CRITERIA', criteria_path %></li>
         <li><%= link_to 'PROJECTS', projects_path %></li>
-        <li><%= link_to 'LOG IN', '#' %></li>
+
+        <% if logged_in? %>
+          <li><%= link_to "USERS", '#' %></li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              ACCOUNT <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu nav-color">
+              <li><%= link_to "Profile", current_user %></li>
+              <li><%= link_to "Settings", '#' %></li>
+              <li class="divider"></li>
+              <li>
+                <%= link_to "Log out", logout_path, method: "delete" %>
+              </li>
+            </ul>
+          </li>
+        <% else %>
+          <li><%= link_to "LOG IN", login_path %></li>
+        <% end %>
+
       </ul>
     </nav>
   <div>

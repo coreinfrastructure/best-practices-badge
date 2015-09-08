@@ -87,6 +87,15 @@ In the longer term we may need to support transition of a project
 from one URL to another, but since we expect problems
 to be relatively uncommon, there is no need for that capability initially.
 
+## Who can edit project P?
+
+(This is a summary of the previous section.)
+
+A user can edit project P if one of the following is true:
+
+1.  If the user has "superuser" permission then the user can edit the badge information about any project.  This will let the Linux Foundation fix problems.
+2.  If project P is on GitHub AND the user is authorized via GitHub to edit project P, then that user can edit the badge information about project P.  In the future we might add repos other than GitHub, with the same kind of rule.
+3.  If the user's cryptographically randomly assigned "project edit validation code" is on the project's main web site (typically in an HTML comment), then the user can edit the badge information about project P.  Note that if the user is a local account (not GitHub), then the user also has to have their email address validated first.
 
 ## GitHub-related badges
 

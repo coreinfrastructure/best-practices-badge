@@ -4,67 +4,38 @@ Basic Best Practices Criteria for Open Source Software (OSS) (version 0.1.1)
 Introduction
 ============
 
-This is an *early* *draft* of proposed basic best practices
-for open source software (OSS) projects.
-OSS projects that follow these best practices
-will be able to voluntarily self-certify and show that they've
-achieved a CII badge.
-Projects can do this, at no cost,
-by using a web application (BadgeApp)
-to explain how they meet each best practice.
+This is an *early* *draft* of proposed basic best practices for open source software (OSS) projects.
+OSS projects that follow these best practices will be able to voluntarily self-certify and show that they've achieved a CII badge.
+Projects can do this, at no cost, by using a web application (BadgeApp) to explain how they meet each best practice.
 
-There is no set of practices that can guarantee that software
-will never have defects or vulnerabilities;
-even formal methods can fail if the specifications or assumptions are wrong.
-However, following best practices can help improve the results
-of OSS projects.
-For example, some practices enable multi-person review before release
-that can help find otherwise hard-to-find vulnerabilities.
-These best practices were created to (1) encourage OSS projects to
-follow best practices, (2) help new OSS projects discover what those
-practices are, and (3) help users know which projects
-are following best practices (so users can prefer such projects).
+There is no set of practices that can guarantee that software will never have defects or vulnerabilities; even formal methods can fail if the specifications or assumptions are wrong.
+However, following best practices can help improve the results of OSS projects.
+For example, some practices enable multi-person review before release that can help find otherwise hard-to-find vulnerabilities.
+These best practices were created to (1) encourage OSS projects to follow best practices, (2) help new OSS projects discover what those practices are, and (3) help users know which projects are following best practices (so users can prefer such projects).
 
-We are currently focused on identifying *basic* best practices
-that well-run OSS projects typically already follow.
-We are capturing other practices so that we can create
-more advanced badges later.
-The basic best practices, and the more detailed criteria
-specifically defining them, are inspired by a variety of sources.
+We are currently focused on identifying *basic* best practices that well-run OSS projects typically already follow.
+We are capturing other practices so that we can create more advanced badges later.
+The basic best practices, and the more detailed criteria specifically defining them, are inspired by a variety of sources.
 See the separate "[background](./background.md)" page for more information.
 
-This version of the criteria is *NOT* endorsed by anyone;
-we are releasing this very early version so that we can get feedback.
-We expect that these practices and their detailed criteria will be updated,
-even after badges are released.
-Thus, criteria (and badges) probably will have a year identifier
-and will age out after a year or two. 
-We expect it will be easy to update the information,
-so this relatively short badge life should not be a barrier.
+This version of the criteria is *NOT* endorsed by anyone; we are releasing this very early version so that we can get feedback.
+We expect that these practices and their detailed criteria will be updated, even after badges are released.
+Thus, criteria (and badges) probably will have a year identifier and will age out after a year or two. 
+We expect it will be easy to update the information, so this relatively short badge life should not be a barrier.
 
-Feedback is *very* welcome via the
-[GitHub site as issues or pull requests](https://github.com/linuxfoundation/cii-best-practices-badge).
-There is also a
-[mailing list for general discussion](https://lists.coreinfrastructure.org/mailman/listinfo/cii-badges).
+Feedback is *very* welcome via the [GitHub site as issues or pull requests](https://github.com/linuxfoundation/cii-best-practices-badge).
+There is also a [mailing list for general discussion](https://lists.coreinfrastructure.org/mailman/listinfo/cii-badges).
 
-Below are the current (draft) criteria, potential criteria,
-non-criteria, future plans, and where to get more information.
-The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-"SHOULD", "SHOULD NOT", "RECOMMENDED",  "MAY", and
-"OPTIONAL" in this document are to be interpreted as described in
-[RFC 2119](https://tools.ietf.org/html/rfc2119).
-We assume that you are already familiar with
-software development and running an OSS project;
-if not, see introductory materials like
-[*Producing Open Source Software* by Karl Fogel](http://producingoss.com/).
+Below are the current (draft) criteria, potential criteria, non-criteria, future plans, and where to get more information.
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED",  "MAY", and "OPTIONAL" in this document are to be interpreted as described in [RFC 2119](https://tools.ietf.org/html/rfc2119).
+We assume that you are already familiar with software development and running an OSS project; if not, see introductory materials like [*Producing Open Source Software* by Karl Fogel](http://producingoss.com/).
 
 
 Current criteria: Basic Best Practices for OSS
 ==============================================
 
 Here is the current (draft) criteria; it is certain to change.
-The criteria marked with &#8224; are intended to be automatically testable
-if the project is hosted on GitHub and follows standard conventions.
+The criteria marked with &#8224; are intended to be automatically testable if the project is hosted on GitHub and follows standard conventions.
 In a few cases rationale is also included.
 
 
@@ -128,28 +99,17 @@ Potential future criteria
 Here are some other potential criteria.
 
 We currently plan to launch with a single badge level (once it is ready).
-There may eventually be multiple levels (bronze, silver, gold) or
-other badges (with a prerequisite) later.
-We are currently leaning towards using the Olympic system naming
-(bronze, silver, gold) since these are widely known; the LEED naming
-(with platinum at the top) is less well-known, and using the Olympic
-naming would provide room for another (platinum) level if needed.
+There may eventually be multiple levels (bronze, silver, gold) or other badges (with a prerequisite) later.
+We are currently leaning towards using the Olympic system naming (bronze, silver, gold) since these are widely known; the LEED naming (with platinum at the top) is less well-known, and using the Olympic naming would provide room for another (platinum) level if needed.
 Then the "basic" level would be the same as a "bronze" level.
 
-To help organize these potential criteria, they are currently grouped
-in terms of a potential future silver, potential future gold, and
-other potential criteria.
-There is no guarantee that the final criteria will be the same,
-or even grouped the same way.
-This list of potential future criteria is even less mature than the
-list of basic best practices; recommendations welcome.
-As the criteria become more mature, we expect some criteria to move between
-the current criteria and these potential future criteria (in both directions).
-In particular, we expect a number of the SHOULD or RECOMMENDED criteria
-at lower levels to become MUST in higher/later badges.
+To help organize these potential criteria, they are currently grouped in terms of a potential future silver, potential future gold, and other potential criteria.
+There is no guarantee that the final criteria will be the same, or even grouped the same way.
+This list of potential future criteria is even less mature than the list of basic best practices; recommendations welcome.
+As the criteria become more mature, we expect some criteria to move between the current criteria and these potential future criteria (in both directions).
+In particular, we expect a number of the SHOULD or RECOMMENDED criteria at lower levels to become MUST in higher/later badges.
 
-Eventually these criteria will be worded per
-[RFC 2119](https://tools.ietf.org/html/rfc2119).
+Eventually these criteria will be worded per [RFC 2119](https://tools.ietf.org/html/rfc2119).
 
 
 Potential silver criteria
@@ -219,89 +179,61 @@ Potential other criteria
     -   Must have a process for rapidly fixing vulnerabilities and releasing the updated software.  Note that having a good test suite makes it easier to make changes and be confident the system still works.  Also note that OSS projects are often embedded in larger systems and projects cannot control the larger projects they are in.
     -   An automated test suite must achieve at least an aggregate 80% branch coverage (the goal is to cover a significant portion of the program; this can be a combination of unit tests and larger integration tests).
 
-We are considering moving the criteria continuous integration
-and reproduceable builds into the basic best practices criteria.
+We are considering moving the criteria continuous integration and reproduceable builds into the basic best practices criteria.
 
-In the future we might add some criteria that a project has to meet
-some subset of (e.g., it must meet at least 3 of 5 criteria).
-
+In the future we might add some criteria that a project has to meet some subset of (e.g., it must meet at least 3 of 5 criteria).
 
 
 Non-criteria
 ============
 
 We plan to *not* require any specific products or services.
-In particular, we plan to *not* require
-proprietary tools or services,
-since many [free software](http://www.gnu.org/philosophy/free-sw.en.html)
-developers would reject such criteria.
+In particular, we plan to *not* require proprietary tools or services, since many [free software](http://www.gnu.org/philosophy/free-sw.en.html) developers would reject such criteria.
 Therefore, we will intentionally *not* require git or GitHub.
-We will also not require or forbid any particular programming language
-(though for some programming languages we may be able to make
-some recommendations).
-This also means that as new tools and capabilities become available,
-projects can quickly switch to them without failing to meet any criteria.
-However, the criteria will sometimes identify
-common methods or ways of doing something
-(especially if they are OSS) since that information
-can help people understand and meet the criteria.
-We do plan to create an "easy on-ramp" for projects using git on GitHub,
-since that is a common case.
+We will also not require or forbid any particular programming language (though for some programming languages we may be able to make some recommendations).
+This also means that as new tools and capabilities become available, projects can quickly switch to them without failing to meet any criteria.
+However, the criteria will sometimes identify common methods or ways of doing something (especially if they are OSS) since that information can help people understand and meet the criteria.
+We do plan to create an "easy on-ramp" for projects using git on GitHub, since that is a common case.
 
 We do not plan to require active user discussion within a project.
 Some highly mature projects rarely change and thus may have little activity.
-We *do*, however, require that the project be responsive
-if vulnerabilities are reported to the project (see above).
+We *do*, however, require that the project be responsive if vulnerabilities are reported to the project (see above).
 
 Uniquely identifying a project
 ==============================
 
 One challenge is uniquely identifying a project.
-Our rails application gives a unique id to each new project, so
-we can certainly use that id to identify projects.
-However, that doesn't help people who searching for the project
-and do not already know that id.
+Our rails application gives a unique id to each new project, so we can certainly use that id to identify projects.
+However, that doesn't help people who searching for the project and do not already know that id.
 
 The *real* name of a project, for our purposes, is the project URL.
 This may be a project "front page" URL and/or the front URL for its repository.
 Most projects have a human-readable name, but these names are not enough.
-The same human-readable name can be used for many different projects
-(including project forks), and the same project may go by many different names.
-In many cases it will be useful to point to other names for the project
-(e.g., the source package name in Debian, the package name in some
-language-specific repository, or its name in OpenHub).
-We expect that users will *not* be able to edit the URL in most cases,
-since if they could, they might fool people into thinking they controlled
-a project that they did not.
+The same human-readable name can be used for many different projects (including project forks), and the same project may go by many different names.
+In many cases it will be useful to point to other names for the project (e.g., the source package name in Debian, the package name in some language-specific repository, or its name in OpenHub).
+We expect that users will *not* be able to edit the URL in most cases, since if they could, they might fool people into thinking they controlled a project that they did not.
 
-Thus, a badge would have its URL as its name, year range, and level/name
-(once there is more than one).
+Thus, a badge would have its URL as its name, year range, and level/name (once there is more than one).
 
-We will probably implement some search mechanisms so that people can
-enter common names and find projects.
+We will probably implement some search mechanisms so that people can enter common names and find projects.
 
 
 Why have criteria?
 ==================
 
-The paper [Open badges for education: what are the implications at the intersection of open systems and badging?](http://www.researchinlearningtechnology.net/index.php/rlt/article/view/23563)
-identifies three general reasons for badging systems (all are valid for this):
+The paper [Open badges for education: what are the implications at the intersection of open systems and badging?](http://www.researchinlearningtechnology.net/index.php/rlt/article/view/23563) identifies three general reasons for badging systems (all are valid for this):
 
 1.  Badges as a motivator of behaviour.  We hope that by identifying best practices, we'll encourage projects to implement those best practices if they do not do them already.
 2.  Badges as a pedagogical tool.  Some projects may not be aware of some of the best practices applied by others, or how they can be practically applied.  The badge will help them become aware of them and ways to implement them.
 3.  Badges as a signifier or credential.  Potential users want to use projects that are applying best practices to consistently produce good results; badges make it easy for projects to signify that they are following best practices, and make it easy for users to see which projects are doing so.
 
-We have chosen to use self-certification, because this makes it possible for a large number of projects (even small ones) to participate.  There's a risk that projects may make false claims, but we think the risk is small, and in any case we require that projects document *why* they think they meet the criteria (so users can quickly see the project's rationale).
+We have chosen to use self-certification, because this makes it possible for a large number of projects (even small ones) to participate.
+There's a risk that projects may make false claims, but we think the risk is small, and in any case we require that projects document *why* they think they meet the criteria (so users can quickly see the project's rationale).
 
 
 Improving the criteria
 ======================
 
-We are hoping to get good suggestions and feedback from the public;
-please contribute!
+We are hoping to get good suggestions and feedback from the public; please contribute!
 
-You may also want to see the "[background](./background.md)" file
-for more information about these criteria,
-and the "[implementation](./implementation.md)" notes
-about the BadgeApp application.
-
+You may also want to see the "[background](./background.md)" file for more information about these criteria, and the "[implementation](./implementation.md)" notes about the BadgeApp application.

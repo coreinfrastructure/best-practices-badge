@@ -62,21 +62,55 @@ if not, see introductory materials like
 Current criteria: Basic Best Practices for OSS
 ==============================================
 
-Here is the current (draft) criteria; it is certain to change.
+Here are the current (draft) criteria; it is certain to change.
 The criteria marked with &#8224; are intended to be automatically testable
 if the project is hosted on GitHub and follows standard conventions.
 In a few cases rationale is also included.
 
 
-*   **OSS project basics:**
-    -   *Project website*.&#8224;  
-        The project MUST have a public website with a stable URL. It is RECOMMENDED that projects use https, not http; future versions of these criteria may make https a requirement.
-    -   *Project website has basic content*.  
-        The project website MUST succinctly describe what the software does (what problem does it solve?), in language that potential users can understand (e.g., it uses a minimum of jargon). It MUST also provide information on (1) how to get the software, (2) how to send feedback (as bug reports or feature requests), and (3) how to contribute.  The information on how to contribute MUST explain the contribution process (e.g., are pull requests used?) and SHOULD include the basic criteria for acceptable contributions (e.g., a reference to any required coding standard).
-    -   *OSS license*.&#8224;  
-        The license(s) MUST be posted in a standard place, e.g., as a top-level file named LICENSE or COPYING optionally followed by an extension such as ".txt" or ".md".  The software MUST be released as OSS; this means that the required licenses MUST be at least one of the following: [an approved license by the Open Source Initiative (OSI)](http://opensource.org/licenses), a [free license as approved by the Free Software Foundation (FSF)](http://www.gnu.org/licenses/license-list.html), [a free license acceptable to Debian main](https://www.debian.org/legal/licenses/), or [a "good" license according to Fedora](https://fedoraproject.org/wiki/Licensing:Main?rd=Licensing).  It is RECOMMENDED that any required license(s) be OSI-approved.  The software MAY also be licensed other ways (e.g., "GPLv2 or proprietary" is acceptable).  We intend for the automated tool to focus on identifying common OSS licenses such as the following: [CC0](http://creativecommons.org/publicdomain/zero/1.0/), [MIT](http://opensource.org/licenses/MIT), [BSD 2-clause](http://opensource.org/licenses/BSD-2-Clause), [BSD 3-clause revised](http://opensource.org/licenses/BSD-3-Clause), [Apache 2.0](http://opensource.org/licenses/Apache-2.0), [Lesser GNU General Public License (LGPL)](http://opensource.org/licenses/lgpl-license), and the [GNU General Public License (GPL)](http://opensource.org/licenses/gpl-license).  *Rationale*: These criteria are designed for OSS projects, so we need to ensure that they're only used where they apply.  Some projects are thought of as OSS yet are not actually released as OSS (e.g., they might not have any license, in which case the defaults of the country's legal system apply, or they might use a non-OSS license).  Unusual licenses can cause long-term problems for OSS projects and are more difficult for tools to handle.  We expect that that "higher-level" criteria would set a higher bar, e.g., that it *must* be released under an OSI-approved license.  
-    -   *Basic Documentation*.  
-        The project MUST include or refer to basic documentation on how to install it, start it, and use it (possibly with a tutorial using examples).  It MUST also include reference documentation that describes its interface.  The documentation MUST discuss how to use the software securely (e.g., what to do and what not to do) if that is an appropriate topic for the software.  The security discussion (if any) need not be long, since the software SHOULD be designed to be secure by default.  Hypertext links to non-project material are fine, as long as the linked-to information is available.
+### OSS project basics:
+*Project website*.&#8224;
+- The project MUST have a public website with a stable URL.
+- It is RECOMMENDED that project websites use HTTPS, not HTTP.
+
+Future versions of these criteria may make HTTPS a requirement.
+
+*Basic project website content*.
+- The project website MUST succinctly describe what the software does (what problem does it solve?), in language that potential users can understand (e.g., it uses a minimum of jargon).
+- The project website MUST provide information on how to:
+  - obtain,
+  - provide feedback (as bug reports or feature requests),
+  - and contribute to the sofware.
+- The information on how to contribute:
+  - MUST explain the contribution process (e.g., are pull requests used?)
+  - SHOULD include the basic criteria for acceptable contributions (e.g., a reference to any required coding standard)
+
+*OSS license*.&#8224;
+- License(s) MUST be posted in a standard location (e.g., as a top-level file named LICENSE or COPYING)
+- License files MAY be followed by an extension such as ".txt" or ".md"
+- The software MUST be released as OSS; meaning licenses MUST be at least one of the following:
+  - [an approved license by the Open Source Initiative (OSI)](http://opensource.org/licenses)
+  - [a free license as approved by the Free Software Foundation (FSF)](http://www.gnu.org/licenses/license-list.html)
+  - [a free license acceptable to Debian main](https://www.debian.org/legal/licenses/)
+  - [a "good" license according to Fedora](https://fedoraproject.org/wiki/Licensing:Main?rd=Licensing).
+- It is RECOMMENDED that any required license(s) be OSI-approved.
+- The software MAY also be licensed other ways (e.g., "GPLv2 or proprietary" is acceptable).
+
+We intend for the automated tool to focus on identifying common OSS licenses such as:     [CC0](http://creativecommons.org/publicdomain/zero/1.0/), [MIT](http://opensource.org/licenses/MIT), [BSD 2-clause](http://opensource.org/licenses/BSD-2-Clause), [BSD 3-clause revised](http://opensource.org/licenses/BSD-3-Clause), [Apache 2.0](http://opensource.org/licenses/Apache-2.0), [Lesser GNU General Public License (LGPL)](http://opensource.org/licenses/lgpl-license), and the [GNU General Public License (GPL)](http://opensource.org/licenses/gpl-license).
+
+*Rationale*: These criteria are designed for OSS projects, so we need to ensure that they're only used where they apply.  Some projects are thought of as OSS yet are not actually released as OSS (e.g., they might not have any license, in which case the defaults of the country's legal system apply, or they might use a non-OSS license).  Unusual licenses can cause long-term problems for OSS projects and are more difficult for tools to handle.  We expect that that "higher-level" criteria would set a higher bar, e.g., that it *must* be released under an OSI-approved license.  
+
+*Documentation*.
+
+- The project MUST include basic documentation for the software that covers:
+  - how to install it
+  - how to start it
+  - how to use it (possibly with a tutorial using examples)
+  - how to use it securely (e.g., what to do and what not to do) if that is an appropriate topic for the software.
+- The project MUST include reference documentation that describes its interface.
+- If required security documentation need not be long, since the software SHOULD be designed to be secure by default.
+- Hypertext links to non-project material MAY be used, as long as the linked-to information is available.
+
 *   **Change control:**
     -   *Public version-controlled source repository*.&#8224;  
         The project MUST have a version-controlled source repository that is publicly readable.  This repository MUST track what changes were made, who made the changes, and when the changes were made.  The public repository MUST NOT include only final releases; it MUST release interim versions for review before release.  The project doesn't need to use git, although that is a common implementation, and it is RECOMMENDED that projects use common distributed version control software such as git.  Projects MAY use private (non-public) branches in specific cases while the change is not publicly released, e.g., for fixing vulnerabilities before the vulnerability is revealed to the public.  *Rationale*:  This enables easy tracking and public review.  Some OSS projects do not use a version control system or do not provide public access to it, but the lack of a public version control repository makes it unnecessarily difficult to contribute to a project and to track its progress in detail.
@@ -291,7 +325,12 @@ identifies three general reasons for badging systems (all are valid for this):
 2.  Badges as a pedagogical tool.  Some projects may not be aware of some of the best practices applied by others, or how they can be practically applied.  The badge will help them become aware of them and ways to implement them.
 3.  Badges as a signifier or credential.  Potential users want to use projects that are applying best practices to consistently produce good results; badges make it easy for projects to signify that they are following best practices, and make it easy for users to see which projects are doing so.
 
-We have chosen to use self-certification, because this makes it possible for a large number of projects (even small ones) to participate.  There's a risk that projects may make false claims, but we think the risk is small, and in any case we require that projects document *why* they think they meet the criteria (so users can quickly see the project's rationale).
+We have chosen to use self-certification, because this makes it
+possible for a large number of projects (even small ones) to
+participate.  There's a risk that projects may make false claims,
+but we think the risk is small, and in any case we require that
+projects document *why* they think they meet the criteria
+(so users can quickly see the project's rationale).
 
 
 Improving the criteria

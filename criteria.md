@@ -187,7 +187,7 @@ In a few cases rationale is also included.
 *Secured delivery against man-in-the-middle (MITM) attacks*&#8224;
 
 - The project MUST use a delivery mechanism that counters MITM attacks. Using https or ssh+scp is acceptable.  An even stronger mechanism is releasing the software with digitally signed packages, since that mitigates attacks on the distribution system, but this only works if the users can be confident that the public keys for signatures are correct *and* if the users will actually check the signature.
-- A cryptographic hash (e.g., a sha1sum) that is only retrieved over http and not separately signed is *not* acceptable, since this can be modified in transit.
+- A cryptographic hash (e.g., a sha1sum) MUST NOT be retrieved over http and used without checking for a cryptographic signature, since these hashes can be modified in transit.
 
 *Vulnerability report process*
 

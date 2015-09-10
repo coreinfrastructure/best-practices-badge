@@ -175,15 +175,14 @@ In a few cases rationale is also included.
 
 *Uses basic good cryptographic practices*
 
-- The cryptographic mechanisms used by the software, and its delivery mechanisms, implement the following basic good practices:  
-            1.  Cryptographic protocols and algorithms used by default MUST be publicly published and reviewed by experts.  
-            2.  Application software that is not itself a cryptographic system/library MUST NOT implement its own cryptographic functions, but MUST instead call on software specifically designed for the purpose.  
-            3.  All functionality that depends on cryptography MUST be implementable using OSS because its specification meets the [*Open Standards Requirement for Software* by the Open Source Initiative](http://opensource.org/osr)  
-            4.  The default keylengths MUST meet NIST requirements through the year 2030. For example, symmetric keys must be at least 112 bits, factoring modulus must be at least 2048 bits, and elliptic curve must be at least 224 bits.  See <http://www.keylength.com> for a comparison of keylength recommendations from various organizations.  The software MUST be configurable so that it will reject smaller keylengths.  The software MAY allow smaller keylengths in some configurations (ideally it would not, since this allows downgrade attacks, but shorter keylengths may be necessary for interoperability.)  
-            5.  Any key agreement protocol MUST implement perfect forward secrecy where practical so a session key derived from a set of long-term keys cannot be compromised if one of the long-term keys is compromised in the future.  
-            6.  Security mechanisms MUST NOT on depend cryptographic algorithms that are broken or have too-short key lengths (e.g., MD4, MD5, single DES, or RC4).  It is RECOMMENDED that SHA-1 not be used (we are well aware that git uses SHA-1).  Currently-recommended algorithms include AES and SHA-256/SHA-512.  Implementations SHOULD support multiple cryptographic algorithms, so users can quickly switch if one is broken.  
-            7.  If passwords for later authentication are stored, they MUST be stored as iterated hashes with per-user salt.  
-            8.  All keys and nonces MUST be generated using cryptographically random functions, and *not* through non-cryptographically random functions.
+1.  Cryptographic protocols and algorithms used by default in the software AND the delivery mechanisms MUST be publicly published and reviewed by experts.  
+2.  Application software that is not itself a cryptographic system/library MUST NOT implement its own cryptographic functions, but MUST instead call on software specifically designed for the purpose.  
+3.  All functionality that depends on cryptography MUST be implementable using OSS because its specification meets the [*Open Standards Requirement for Software* by the Open Source Initiative](http://opensource.org/osr)  
+4.  The default keylengths MUST meet NIST requirements through the year 2030. For example, symmetric keys must be at least 112 bits, factoring modulus must be at least 2048 bits, and elliptic curve must be at least 224 bits.  See <http://www.keylength.com> for a comparison of keylength recommendations from various organizations.  The software MUST be configurable so that it will reject smaller keylengths.  The software MAY allow smaller keylengths in some configurations (ideally it would not, since this allows downgrade attacks, but shorter keylengths may be necessary for interoperability.)  
+5.  Security mechanisms MUST NOT on depend cryptographic algorithms that are broken or have too-short key lengths (e.g., MD4, MD5, single DES, or RC4).  It is RECOMMENDED that SHA-1 not be used (we are well aware that git uses SHA-1).  Currently-recommended algorithms include AES and SHA-256/SHA-512.  Implementations SHOULD support multiple cryptographic algorithms, so users can quickly switch if one is broken.  
+6.  Any key agreement protocol MUST implement perfect forward secrecy where practical so a session key derived from a set of long-term keys cannot be compromised if one of the long-term keys is compromised in the future.  
+7.  If passwords for later authentication are stored, they MUST be stored as iterated hashes with per-user salt.  
+8.  All keys and nonces MUST be generated using cryptographically random functions, and *not* through non-cryptographically random functions.
 
 *Secured delivery against man-in-the-middle (MITM) attacks*&#8224;
 

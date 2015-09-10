@@ -261,6 +261,9 @@ Potential silver criteria
 -------------------------
 
 *   **Achieve the lower (basic/bronze) badge**.
+*   Education/training.  At least one of the primary developers MUST know:
+    -  how to design secure software, in particular, the value of limiting the attack surface, input input validation, the advantages of whitelists over blacklists in input validation, and least privilege
+    -  the most common types of vulnerabilities in this kind of software and how to counter/mitigate them
 *   **Build and test:**
     -   **Continuous integration**.   
         An automated test suite MUST applied on each check-in to a shared repository, at least for some branches, with a generated report available to at least project members on success or failure of the tests.  This test suite SHOULD be applied across many platforms where appropriate.  *Rationale*:  Continuous integration provides much more rapid feedback on whether or not changes will cause test failures, including regressions.

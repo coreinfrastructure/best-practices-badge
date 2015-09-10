@@ -65,6 +65,7 @@ Current criteria: Basic Best Practices for OSS
 Here are the current (draft) criteria; it is certain to change.
 The criteria marked with &#8224; are intended to be automatically testable
 if the project is hosted on GitHub and follows standard conventions.
+The [name] markings is the short name of each required criterion.
 In a few cases rationale is also included.
 
 
@@ -72,29 +73,28 @@ In a few cases rationale is also included.
 
 *Project website*&#8224;
 
-- The project MUST have a public website with a stable URL.
+- The project MUST have a public website with a stable URL. [url]
 - It is RECOMMENDED that project websites use HTTPS, not HTTP.  Future versions of these criteria may make HTTPS a requirement.
 
 *Basic project website content*
 
-- The project website MUST succinctly describe what the software does (what problem does it solve?), in language that potential users can understand (e.g., it uses a minimum of jargon).
+- The project website MUST succinctly describe what the software does (what problem does it solve?), in language that potential users can understand (e.g., it uses a minimum of jargon). [description]
 - The project website MUST provide information on how to:
   - obtain,
   - provide feedback (as bug reports or feature requests),
-  - and contribute to the sofware.
+  - and contribute to the sofware. [interact]
 - The information on how to contribute:
   - MUST explain the contribution process (e.g., are pull requests used?)
-  - SHOULD include the basic criteria for acceptable contributions (e.g., a reference to any required coding standard)
+  - SHOULD include the basic criteria for acceptable contributions (e.g., a reference to any required coding standard). [contribution]
 
 *OSS license*&#8224;
 
-- License(s) MUST be posted in a standard location (e.g., as a top-level file named LICENSE or COPYING)
-- License files MAY be followed by an extension such as ".txt" or ".md"
+- License(s) MUST be posted in a standard location (e.g., as a top-level file named LICENSE or COPYING).  License filenames MAY be followed by an extension such as ".txt" or ".md" [license-location]
 - The software MUST be released as OSS; meaning licenses MUST be at least one of the following:
   - [an approved license by the Open Source Initiative (OSI)](http://opensource.org/licenses)
   - [a free license as approved by the Free Software Foundation (FSF)](http://www.gnu.org/licenses/license-list.html)
   - [a free license acceptable to Debian main](https://www.debian.org/legal/licenses/)
-  - [a "good" license according to Fedora](https://fedoraproject.org/wiki/Licensing:Main?rd=Licensing).
+  - [a "good" license according to Fedora](https://fedoraproject.org/wiki/Licensing:Main?rd=Licensing). [oss-license]
 - It is RECOMMENDED that any required license(s) be OSI-approved.
 - The software MAY also be licensed other ways (e.g., "GPLv2 or proprietary" is acceptable).
 - *Note*: We intend for the automated tool to focus on identifying common OSS licenses such as:     [CC0](http://creativecommons.org/publicdomain/zero/1.0/), [MIT](http://opensource.org/licenses/MIT), [BSD 2-clause](http://opensource.org/licenses/BSD-2-Clause), [BSD 3-clause revised](http://opensource.org/licenses/BSD-3-Clause), [Apache 2.0](http://opensource.org/licenses/Apache-2.0), [Lesser GNU General Public License (LGPL)](http://opensource.org/licenses/lgpl-license), and the [GNU General Public License (GPL)](http://opensource.org/licenses/gpl-license).
@@ -106,32 +106,31 @@ In a few cases rationale is also included.
   - how to install it
   - how to start it
   - how to use it (possibly with a tutorial using examples)
-  - how to use it securely (e.g., what to do and what not to do) if that is an appropriate topic for the software.
-- The project MUST include reference documentation that describes its interface.
-- If required security documentation need not be long, since the software SHOULD be designed to be secure by default.
+  - how to use it securely (e.g., what to do and what not to do) if that is an appropriate topic for the software.  The security documentation need not be long, since the software SHOULD be designed to be secure by default.  [documentation-basics]
+- The project MUST include reference documentation that describes its interface. [documentation-interface]
 - Hypertext links to non-project material MAY be used, as long as the linked-to information is available.
 
 ### Change control
 
 *Public version-controlled source repository*&#8224;
 
-- The project MUST have a version-controlled source repository that is publicly readable.
-- This source repository MUST track what changes were made, who made the changes, and when the changes were made.
-- The public repository MUST NOT include only final releases; it MUST release interim versions for review before release.
+- The project MUST have a version-controlled source repository that is publicly readable. [repo]
+- This source repository MUST track what changes were made, who made the changes, and when the changes were made. [repo-track]
+- The public repository MUST NOT include only final releases; it MUST release interim versions for review before release. [repo-interim]
 - It is RECOMMENDED that projects use common distributed version control software such as git, though git is not specifically required.
 - Projects MAY use private (non-public) branches in specific cases while the change is not publicly released, e.g., for fixing vulnerabilities before the vulnerability is revealed to the public.
 - *Rationale*:  This enables easy tracking and public review.  Some OSS projects do not use a version control system or do not provide public access to it, but the lack of a public version control repository makes it unnecessarily difficult to contribute to a project and to track its progress in detail.
 
 *Bug reporting process*&#8224;
 
-- There MUST be a process (e.g., using an issue tracker or a mailing list) for users to submit bug reports where developers will respond.
-- There MUST be responses to bug reports; it is acceptable if enhancements aren't responded to.  Ideally all bugs would get a response, but that is not required.
-- Reports and responses MUST be archived for later searching.
+- There MUST be a process (e.g., using an issue tracker or a mailing list) for users to submit bug reports where developers will respond. [report-process]
+- There MUST be responses to bug reports; it is acceptable if enhancements aren't responded to.  Ideally all bugs would get a response, but that is not required. [report-responses]
+- Reports and responses MUST be archived for later searching. [report-archive]
 - It is RECOMMENDED that an issue tracker be used for tracking individual issues.
 
 *Unique version numbering*&#8224;
 
-- The project MUST have a unique version number for each release intended to be used by users.
+- The project MUST have a unique version number for each release intended to be used by users. [version-unique]
 - The [Semantic Versioning (SemVer) format](http://semver.org) is RECOMMENDED for releases.
 - Commit id's (or similar) MAY be used as as version numbers, since they are unique, but note that these can cause problems for users (since users cannot determine as easily whether or not they're up-to-date).
 - It is RECOMMENDED that git users apply tags to releases.

@@ -196,6 +196,11 @@ In a few cases rationale is also included.
 
 ### Security
 
+*Secure development knowledge*
+
+- At least one of the primary developers MUST know how to design secure software.  In particular, the developer must know the value of limiting the attack surface, why and how to do input input validation, the advantages of whitelists over blacklists in input validation, and the meaning of least privilege. [know-secure-design]
+- At least one of the primary developers MUST know of common kinds of errors that lead to vulnerabilities in this kind of software, as well as at least one method to counter or mitigate each of them.  Examples (depending on the type of software) include SQL injection, OS injection, classic buffer overflow, cross-site scripting, missing authentication, and missing authorization.  See the [CWE/SANS top 25](http://cwe.mitre.org/top25/) or [OWASP Top 10](https://www.owasp.org/index.php/Category:OWASP_Top_Ten_Project) for commonly-used lists. [know-common-errors]
+
 *Uses basic good cryptographic practices*
 
 1.  Cryptographic protocols and algorithms used by default in the software AND the delivery mechanisms MUST be publicly published and reviewed by experts.  [crypto-published]
@@ -274,9 +279,6 @@ Potential silver criteria
 -------------------------
 
 *   **Achieve the lower (basic/bronze) badge**.
-*   Education/training.  At least one of the primary developers MUST know:
-    -  how to design secure software, in particular, the value of limiting the attack surface, input input validation, the advantages of whitelists over blacklists in input validation, and least privilege
-    -  the most common types of vulnerabilities in this kind of software and how to counter/mitigate them
 *   **Build and test:**
     -   **Continuous integration**.   
         An automated test suite MUST applied on each check-in to a shared repository, at least for some branches, with a generated report available to at least project members on success or failure of the tests.  This test suite SHOULD be applied across many platforms where appropriate.  *Rationale*:  Continuous integration provides much more rapid feedback on whether or not changes will cause test failures, including regressions.

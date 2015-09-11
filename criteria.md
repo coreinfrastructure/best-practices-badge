@@ -159,8 +159,8 @@ In a few cases rationale is also included.
 
 *Working build system*.&#8224;
 
-- Either the project MUST never need to be built or the project MUST provide a working build system that can automatically rebuild the software.  A build system determines what actions MUST occur to rebuild the software (and in what order), and then perform those steps. [build]&8224;
-- It is RECOMMENDED that common tools be used for this purpose (e.g., Maven, Ant, cmake, the autotools, make, or rake), in which case only the instructions to the build system are required (there's no requirement to teach people how to use common tools). [build-common-tools]&8224;
+- Either the project MUST never need to be built or the project MUST provide a working build system that can automatically rebuild the software.  A build system determines what actions MUST occur to rebuild the software (and in what order), and then perform those steps. [build]&#8224;
+- It is RECOMMENDED that common tools be used for this purpose (e.g., Maven, Ant, cmake, the autotools, make, or rake), in which case only the instructions to the build system are required (there's no requirement to teach people how to use common tools). [build-common-tools]&#8224;
 - The project SHOULD be buildable using only OSS tools. [build-oss-tools]
 - *Rationale*: If a project needs to be built but there is no working build system, then potential co-developers will not be able to easily contribute and many security analysis tools will be ineffective.
 

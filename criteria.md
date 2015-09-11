@@ -71,10 +71,10 @@ In a few cases rationale is also included.
 
 ### OSS project basics
 
-*Project website*&#8224;
+*Project website*
 
-- The project MUST have a public website with a stable URL. [url]
-- It is RECOMMENDED that project websites use HTTPS, not HTTP.  Future versions of these criteria may make HTTPS a requirement.
+- The project MUST have a public website with a stable URL. [project-url]&#8224;
+- It is RECOMMENDED that project websites use HTTPS, not HTTP.  Future versions of these criteria may make HTTPS a requirement. [project-https]&#8224;
 
 *Basic project website content*
 
@@ -124,8 +124,8 @@ In a few cases rationale is also included.
 *Bug-reporting process*&#8224;
 
 - The project MUST provide a process for users to submit bug reports (e.g., using an issue tracker or a mailing list). [report-process]
-- Developers MUST respond to bug reports. [report-responses]
-- Developers SHOULD respond to enhancment requests. Developers MAY choose not to respond. 
+- Developers MUST respond to most bug reports submitted in the last 2-12 months (inclusive); the response need not include a fix. [report-responses]
+- Developers SHOULD respond to enhancement requests. Developers MAY choose not to respond.
 - Reports and responses MUST be archived for later searching. [report-archive]
 - It is RECOMMENDED that an issue tracker be used for tracking individual issues.
 
@@ -133,7 +133,7 @@ In a few cases rationale is also included.
 
 - The project MUST have a unique version number for each release intended to be used by users. [version-unique]
 - The [Semantic Versioning (SemVer) format](http://semver.org) is RECOMMENDED for releases.
-- Commit ID's (or similar) MAY be used as as version numbers. They are unique, but note that these can cause problems for users as they may not be able to determine  whether or not they're up-to-date.
+- Commit IDs (or similar) MAY be used as as version numbers. They are unique, but note that these can cause problems for users as they may not be able to determine  whether or not they're up-to-date.
 - It is RECOMMENDED that git users apply tags to releases.
 
 *ChangeLog*&#8224;  

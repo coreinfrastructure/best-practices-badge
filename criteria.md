@@ -157,63 +157,62 @@ In a few cases rationale is also included.
 
 ### Quality
 
-*Working build system*.&#8224;
+*Working build system*
 
 - Either the project MUST never need to be built or the project MUST provide a working build system that can automatically rebuild the software.  A build system determines what actions MUST occur to rebuild the software (and in what order), and then perform those steps. [build]&#8224;
 - It is RECOMMENDED that common tools be used for this purpose (e.g., Maven, Ant, cmake, the autotools, make, or rake), in which case only the instructions to the build system are required (there's no requirement to teach people how to use common tools). [build-common-tools]&#8224;
 - The project SHOULD be buildable using only OSS tools. [build-oss-tools]
 - *Rationale*: If a project needs to be built but there is no working build system, then potential co-developers will not be able to easily contribute and many security analysis tools will be ineffective.
 
-*Automated test suite*.&#8224;
+*Automated test suite*
 
-- There MUST be at least one automated test suite.
-- A test suite SHOULD be invocable in a standard way for that language (e.g., "make check", "mvn test", and so on).
--  Only a small test suite is required.  It is RECOMMENDED that the test suite cover most (or ideally all) the code branches, input fields, and functionality, but even a small test suite can detect problems and provide a framework to build on.
+- There MUST be at least one automated test suite. [test]
+- A test suite SHOULD be invocable in a standard way for that language (e.g., "make check", "mvn test", and so on). [test-invocation]
+-  It is RECOMMENDED that the test suite cover most (or ideally all) the code branches, input fields, and functionality [test-most]
 - Systems MAY have multiple automated test suites (e.g., one that runs quickly, vs. another that is more thorough but requires special equipment).
+- *Rationale*: Automated test suites immediately help detect a variety of problems.  A large test suite can find more problems, but even a small test suite can detect problems and provide a framework to build on.
 
 *Tests are added for new functionality*
 
-- There MUST be a general policy (formal or not) that when major new functionality is added, tests of that functionality SHOULD be added to an automated test suite.
-- There MUST be evidence that such tests are being added in the most recent major changes to the project.  Major functionality would typically be mentioned in the ChangeLog.  Perfection is not required, merely evidence that tests are typically being added in practice.
-- It is RECOMMENDED that this be *documented* in the instructions for change proposals, but even an informal rule is acceptable as long as the tests are being added in practice.
+- There MUST be a general policy (formal or not) that when major new functionality is added, tests of that functionality SHOULD be added to an automated test suite. [tests-should-added]
+- There MUST be evidence that such tests are being added in the most recent major changes to the project.  Major functionality would typically be mentioned in the ChangeLog.  Perfection is not required, merely evidence that tests are typically being added in practice. [tests-are-added]
+- It is RECOMMENDED that this be *documented* in the instructions for change proposals, but even an informal rule is acceptable as long as the tests are being added in practice. [tests-documentated-added]
 
 *Warning flags*
 
-- The project MUST enable some compiler warnings (e.g. "-Wall"), a "safe" language mode (e.g., "use strict", "use warnings", or similar), and/or use a separate "linter" tool to look for code quality errors or common simple mistakes.
-- The project MUST address the issues that are found (by fixing them or marking them in the source code as false positives).  Ideally there would be no warnings, but a project MAY accept some warnings (typically less than 1 warning per 100 lines or less than 10 warnings).
-- It is RECOMMENDED that projects be maximally strict, but this is not always practical.  This criterion is not required if there is no OSS tool that can implement this criterion in the selected language.
+- The project MUST enable some compiler warnings (e.g. "-Wall"), a "safe" language mode (e.g., "use strict", "use warnings", or similar), and/or use a separate "linter" tool to look for code quality errors or common simple mistakes. [warnings]
+- The project MUST address the issues that are found (by fixing them or marking them in the source code as false positives).  Ideally there would be no warnings, but a project MAY accept some warnings (typically less than 1 warning per 100 lines or less than 10 warnings). [warnings-fixed]
+- It is RECOMMENDED that projects be maximally strict, but this is not always practical. [warnings-strict]
+- This criterion is not required if there is no OSS tool that can implement this criterion in the selected language. [warnings-irrelevant]
 
 ### Security
 
 *Uses basic good cryptographic practices*
 
-1.  Cryptographic protocols and algorithms used by default in the software AND the delivery mechanisms MUST be publicly published and reviewed by experts.  
-2.  Application software that is not itself a cryptographic system/library MUST NOT implement its own cryptographic functions, but MUST instead call on software specifically designed for the purpose.  
-3.  All functionality that depends on cryptography MUST be implementable using OSS because its specification meets the [*Open Standards Requirement for Software* by the Open Source Initiative](http://opensource.org/osr)  
-4.  The default keylengths MUST meet NIST requirements through the year 2030. For example, symmetric keys must be at least 112 bits, factoring modulus must be at least 2048 bits, and elliptic curve must be at least 224 bits.  See <http://www.keylength.com> for a comparison of keylength recommendations from various organizations.  The software MUST be configurable so that it will reject smaller keylengths.  The software MAY allow smaller keylengths in some configurations (ideally it would not, since this allows downgrade attacks, but shorter keylengths may be necessary for interoperability.)  
-5.  Security mechanisms MUST NOT on depend cryptographic algorithms that are broken or have too-short key lengths (e.g., MD4, MD5, single DES, or RC4).  It is RECOMMENDED that SHA-1 not be used (we are well aware that git uses SHA-1).  Currently-recommended algorithms include AES and SHA-256/SHA-512.  Implementations SHOULD support multiple cryptographic algorithms, so users can quickly switch if one is broken.  
-6.  Any key agreement protocol MUST implement perfect forward secrecy where practical so a session key derived from a set of long-term keys cannot be compromised if one of the long-term keys is compromised in the future.  
-7.  If passwords for later authentication are stored, they MUST be stored as iterated hashes with per-user salt.  
-8.  All keys and nonces MUST be generated using cryptographically random functions, and *not* through non-cryptographically random functions.
+1.  Cryptographic protocols and algorithms used by default in the software AND the delivery mechanisms MUST be publicly published and reviewed by experts.  [crypto-published]
+2.  Application software that is not itself a cryptographic system/library MUST NOT implement its own cryptographic functions, but MUST instead call on software specifically designed for the purpose.  [crypto-call]
+3.  All functionality that depends on cryptography MUST be implementable using OSS because its specification meets the [*Open Standards Requirement for Software* by the Open Source Initiative](http://opensource.org/osr)  [crypto-oss]
+4.  The default keylengths MUST meet NIST requirements through the year 2030. For example, symmetric keys must be at least 112 bits, factoring modulus must be at least 2048 bits, and elliptic curve must be at least 224 bits.  See <http://www.keylength.com> for a comparison of keylength recommendations from various organizations.  The software MUST be configurable so that it will reject smaller keylengths.  The software MAY allow smaller keylengths in some configurations (ideally it would not, since this allows downgrade attacks, but shorter keylengths may be necessary for interoperability.)  [crypto-keylength]
+5.  Security mechanisms MUST NOT on depend cryptographic algorithms that are broken or have too-short key lengths (e.g., MD4, MD5, single DES, or RC4).  It is RECOMMENDED that SHA-1 not be used (we are well aware that git uses SHA-1).  Currently-recommended algorithms include AES and SHA-256/SHA-512.  Implementations SHOULD support multiple cryptographic algorithms, so users can quickly switch if one is broken.  [crypto-working]
+6.  Any key agreement protocol SHOULD implement perfect forward secrecy so a session key derived from a set of long-term keys cannot be compromised if one of the long-term keys is compromised in the future.  [crypto-pfs]
+7.  If passwords for later authentication are stored, they MUST be stored as iterated hashes with per-user salt.  [crypto-password-storage]
+8.  All keys and nonces MUST be generated using cryptographically random functions, and *not* through non-cryptographically random functions. [crypto-random]
 
-*Secured delivery against man-in-the-middle (MITM) attacks*&#8224;
+*Secured delivery against man-in-the-middle (MITM) attacks*
 
-- The project MUST use a delivery mechanism that counters MITM attacks. Using https or ssh+scp is acceptable.  An even stronger mechanism is releasing the software with digitally signed packages, since that mitigates attacks on the distribution system, but this only works if the users can be confident that the public keys for signatures are correct *and* if the users will actually check the signature.
-- A cryptographic hash (e.g., a sha1sum) MUST NOT be retrieved over http and used without checking for a cryptographic signature, since these hashes can be modified in transit.
+- The project MUST use a delivery mechanism that counters MITM attacks. Using https or ssh+scp is acceptable.  An even stronger mechanism is releasing the software with digitally signed packages, since that mitigates attacks on the distribution system, but this only works if the users can be confident that the public keys for signatures are correct *and* if the users will actually check the signature. [delivery-mitm]&#8224;
+- A cryptographic hash (e.g., a sha1sum) MUST NOT be retrieved over http and used without checking for a cryptographic signature, since these hashes can be modified in transit. [delivery-unsigned]
 
 *Vulnerability report process*
 
-- The project MUST publish the process for reporting vulnerabilities on the project site (e.g., a clearly designated mailing address on https://PROJECTSITE/security, often security@SOMEWHERE).
-- If private vulnerability reports are supported, the project MUST include how to send the information in a way that is kept private (e.g., a private defect report submitted on the web using TLS or an email encrypted using PGP).
+- The project MUST publish the process for reporting vulnerabilities on the project site (e.g., a clearly designated mailing address on https://PROJECTSITE/security, often security@SOMEWHERE). [vulnerability-report-process]
+- If private vulnerability reports are supported, the project MUST include how to send the information in a way that is kept private (e.g., a private defect report submitted on the web using TLS or an email encrypted using PGP). If private vulnerability reports are not supported this criterion is automatically met. [vulnerability-report-private]
+- The project MUST provide an initial reply to a security vulnerability report sent to the project, on average, less than 7 days within the last 6 months.  (If a project is being spammed on its vulnerability report channel, it is okay to only count non-spam messages.) [vulnerability-report-response]
 
-*Initial vulnerability report responsiveness*
+*Patches up-to-date*
 
-- The project MUST provide an initial reply to a security vulnerability report sent to the project, on average, less than 7 days within the last 6 months.  (If a project is being spammed on its vulnerability report channel, it is okay to only count non-spam messages.)
-
-*Patches up-to-date*&#8224;
-
-- There MUST be no unpatched vulnerabilities of medium or high severity that have been *publicly* known for more than 60 days.  The vulnerability must be patched and released by the project itself (patches may be developed elsewhere).  A vulnerability becomes publicly known (for this purpose) once it has a CVE with publicly released non-paywalled information (reported, for example, in the [National Vulnerability Database](https://nvd.nist.gov/)) or when the project has been informed *and* the information has been released to the public (possibly by the project).  A vulnerability is medium to high severity if its [CVSS 2.0](https://nvd.nist.gov/cvss.cfm) base score is 4 or higher.
-- Projects SHOULD fix all critical vulnerabilities rapidly after they are reported.
+- There MUST be no unpatched vulnerabilities of medium or high severity that have been *publicly* known for more than 60 days.  The vulnerability must be patched and released by the project itself (patches may be developed elsewhere).  A vulnerability becomes publicly known (for this purpose) once it has a CVE with publicly released non-paywalled information (reported, for example, in the [National Vulnerability Database](https://nvd.nist.gov/)) or when the project has been informed *and* the information has been released to the public (possibly by the project).  A vulnerability is medium to high severity if its [CVSS 2.0](https://nvd.nist.gov/cvss.cfm) base score is 4 or higher. [patches-current]&#8224;
+- Projects SHOULD fix all critical vulnerabilities rapidly after they are reported. [vulnerabilities-critical-fixed]
 - *Note*: this means that users might be left vulnerable to all attackers worldwide for up to 60 days.  This criterion is often much easier to meet than what Google recommends in [Rebooting responsible disclosure](http://googleonlinesecurity.blogspot.com/2010/07/rebooting-responsible-disclosure-focus.html), because Google recommends that the 60-day period start when the project is notified *even* if the report is not public.
 - *Rationale*: We intentionally chose to start measurement from the time of public knowledge, and not from the time reported to the project, because this is much easier to measure and verify by those *outside* the project.
 
@@ -221,20 +220,20 @@ In a few cases rationale is also included.
 
 *Static code analysis*
 
-- At least one static code analysis tool MUST be applied to any proposed major production release of the software before its release.  A static code analysis tool examines the software code (as source code, intermediate code, or executable) without executing it with specific inputs.  For purposes of this criterion compiler warnings and "safe" language modes do not count as a static code analysis tool (these typically avoid deep analysis because speed is vital).  Examples of such static code analysis tools include cppcheck, the clang static analyzer, FindBugs (including FindSecurityBugs), PMD, Brakeman, [Coverity Quality Analyzer](https://scan.coverity.com/), and the HP Fortify Static Code Analyzer.
+- At least one static code analysis tool MUST be applied to any proposed major production release of the software before its release.  A static code analysis tool examines the software code (as source code, intermediate code, or executable) without executing it with specific inputs.  For purposes of this criterion compiler warnings and "safe" language modes do not count as a static code analysis tool (these typically avoid deep analysis because speed is vital).  Examples of such static code analysis tools include cppcheck, the clang static analyzer, FindBugs (including FindSecurityBugs), PMD, Brakeman, [Coverity Quality Analyzer](https://scan.coverity.com/), and the HP Fortify Static Code Analyzer. [static-analysis]
 - The analysis tool(s) MAY be focused on looking for security vulnerabilities, but this is not required.
-- It is RECOMMENDED that the tool include rules or approaches to look for common vulnerabilities in the analyzed language or environment.
-- All discovered medium and high severity exploitable vulnerabilities MUST be fixed.  A vulnerability is medium to high severity if its [CVSS 2.0](https://nvd.nist.gov/cvss.cfm) is 4 or higher.
-- It is RECOMMENDED that static source code analysis occur on every commit or at least daily.
-- This criterion is not required if there is no OSS tool that can implement this criterion in the selected language.
+- It is RECOMMENDED that the tool include rules or approaches to look for common vulnerabilities in the analyzed language or environment. [static-analysis-common-vulnerabilities]
+- All confirmed medium and high severity exploitable vulnerabilities discovered with static code analysis MUST be fixed.  A vulnerability is medium to high severity if its [CVSS 2.0](https://nvd.nist.gov/cvss.cfm) is 4 or higher. [static-analysis-fixed]
+- It is RECOMMENDED that static source code analysis occur on every commit or at least daily. [static-analysis-often]
+- This criterion is not required if there is no OSS tool that can implement this criterion in the selected language. [static-analysis-irrelevant]
 
 *Dynamic analysis*
 
-- At least one dynamic analysis tool MUST be applied to any proposed major production release of the software before its release.  A dynamic analysis tool examines the software by executing it with specific inputs.  For example, the project may use a fuzzing tool (e.g., [American Fuzzy Lop](http://lcamtuf.coredump.cx/afl/)) or a web application scanner (e.g., [OWASP ZAP](https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project) or [w3af](http://w3af.org/)). For purposes of this criterion the dynamic analysis tool MUST vary the inputs in some way to look for various kinds of problems *or* be an automated test suite with at least 80% branch coverage.
-- It is RECOMMENDED that if the software is application-level software written using a memory-unsafe language (such as C or C++) then at least one tool to detect memory safety problems MUST be used during at least one dynamic tool use, e.g., Address Sanitizer (ASAN) or valgrind.
-- It is RECOMMENDED that the software include many run-time assertions that are checked during dynamic analysis.
+- At least one dynamic analysis tool MUST be applied to any proposed major production release of the software before its release.  A dynamic analysis tool examines the software by executing it with specific inputs.  For example, the project may use a fuzzing tool (e.g., [American Fuzzy Lop](http://lcamtuf.coredump.cx/afl/)) or a web application scanner (e.g., [OWASP ZAP](https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project) or [w3af](http://w3af.org/)). For purposes of this criterion the dynamic analysis tool MUST vary the inputs in some way to look for various kinds of problems *or* be an automated test suite with at least 80% branch coverage. [dynamic-analysis]
+- It is RECOMMENDED that if the software is application-level software written using a memory-unsafe language (such as C or C++) then at least one tool to detect memory safety problems MUST be used during at least one dynamic tool use, e.g., Address Sanitizer (ASAN) or valgrind. If the software is not application-level, or is not in a memory-unsafe language, then this criterion is automatically met.  [dynamic-analysis-unsafe]
+- It is RECOMMENDED that the software include many run-time assertions that are checked during dynamic analysis. [dynamic-analysis-enable-assertions]
 - The analysis tool(s) MAY be focused on looking for security vulnerabilities, but this is not required.
-- All discovered medium and high severity exploitable vulnerabilities MUST be fixed.  A vulnerability is medium to high severity if its [CVSS 2.0](https://nvd.nist.gov/cvss.cfm) base score is 4 or higher.
+- All confirmed medium and high severity exploitable vulnerabilities discovered with dynamic code analysis MUST be fixed.  A vulnerability is medium to high severity if its [CVSS 2.0](https://nvd.nist.gov/cvss.cfm) base score is 4 or higher. [dynamic-analysis-fixed]
 - *Rationale*: Static source code analysis and dynamic analysis tend to find different kinds of defects (including defects that lead to vulnerabilities), so combining them is more likely to be effective.
 
 

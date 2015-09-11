@@ -74,9 +74,9 @@ Current criteria: Basic Best Practices for OSS
 Here are the current (draft) criteria; it is certain to change.
 The criteria marked with &#8224; are intended to be automatically testable
 if the project is hosted on GitHub and follows standard conventions.
-The [name] markings is the short name of each required criterion,
-and is also the database field name for the cpaturing the justification
-that the criterion is met.
+The [name] markings is the short name of each required criterion;
+it is also the basis of the database table field name
+(chaging "-" to "_") with the results.
 In a few cases rationale is also included.
 
 
@@ -85,7 +85,7 @@ In a few cases rationale is also included.
 *Project website*
 
 - The project MUST have a public website with a stable URL. [project-url]&#8224;
-- It is RECOMMENDED that project websites use HTTPS, not HTTP.  Future versions of these criteria may make HTTPS a requirement. [project-https]&#8224;
+- It is RECOMMENDED that project websites use HTTPS, not HTTP.  Future versions of these criteria may make HTTPS a requirement. [project-url-https]&#8224;
 
 *Basic project website content*
 

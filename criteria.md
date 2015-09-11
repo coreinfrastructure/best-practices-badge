@@ -113,7 +113,7 @@ In a few cases rationale is also included.
 
 *Documentation*
 
-- The project MUST include basic documentation for the software that covers:
+- The project MUST provide basic documentation for the software in some media (such as text or video) that in aggregate covers:
   - how to install it
   - how to start it
   - how to use it (possibly with a tutorial using examples)

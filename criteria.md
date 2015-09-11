@@ -132,15 +132,6 @@ In a few cases rationale is also included.
 - Projects MAY use private (non-public) branches in specific cases while the change is not publicly released (e.g., for fixing vulnerabilities before the vulnerability is revealed to the public).
 - *Rationale*:  This enables easy tracking and public review.  Some OSS projects do not use a version control system or do not provide public access to it. The lack of a public version control repository makes it unnecessarily difficult to contribute to a project and to track its progress in detail.
 
-*Bug-reporting process*&#8224;
-
-- If an issue tracker is used, please provide its URL. [report-url]
-- It is RECOMMENDED that an issue tracker be used for tracking individual issues. [report-tracker]&#8224;
-- The project MUST provide a process for users to submit bug reports (e.g., using an issue tracker or a mailing list). [report-process]&#8224;
-- Developers MUST respond to most bug reports submitted in the last 2-12 months (inclusive); the response need not include a fix. [report-responses]&#8224;
-- Developers SHOULD respond to most enhancement requests in the last 2-12 months (inclusive). Developers MAY choose not to respond. [enhancement-responses]&#8224;
-- Reports and responses MUST be archived for later searching. [report-archive]&#8224;
-
 *Unique version numbering*
 
 - The project MUST have a unique version number for each release intended to be used by users. [version-unique]
@@ -154,6 +145,24 @@ In a few cases rationale is also included.
 - The ChangeLog MUST include whether the new release fixes any known vulnerabilities. [changelog-vulns]
 - The ChangeLog MAY be a separate file (e.g., "ChangeLog" or "changelog" optionally appended by ".txt", ".md", or ".html" extensions), or it MAY use version control system mechanisms such as the [GitHub Releases workflow](https://github.com/blog/1547-release-your-software).
 - *Rationale*: ChangeLogs are important because they help users decide whether or not they will want to update (and what the impact would be), e.g., if the new release fixes vulnerabilities.
+
+### Reporting
+
+*Bug-reporting process*&#8224;
+
+- If an issue tracker is used, please provide its URL. [report-url]
+- It is RECOMMENDED that an issue tracker be used for tracking individual issues. [report-tracker]&#8224;
+- The project MUST provide a process for users to submit bug reports (e.g., using an issue tracker or a mailing list). [report-process]&#8224;
+- Developers MUST respond to most bug reports submitted in the last 2-12 months (inclusive); the response need not include a fix. [report-responses]&#8224;
+- Developers SHOULD respond to most enhancement requests in the last 2-12 months (inclusive). Developers MAY choose not to respond. [enhancement-responses]&#8224;
+- Reports and responses MUST be archived for later searching. [report-archive]&#8224;
+
+*Vulnerability report process*
+
+- The project MUST publish the process for reporting vulnerabilities on the project site (e.g., a clearly designated mailing address on https://PROJECTSITE/security, often security@SOMEWHERE); this MAY be the same as its bug reporting process. [vulnerability-report-process]&#8224;
+- If private vulnerability reports are supported, the project MUST include how to send the information in a way that is kept private (e.g., a private defect report submitted on the web using TLS or an email encrypted using PGP). If private vulnerability reports are not supported this criterion is automatically met. [vulnerability-report-private]
+- The project MUST provide an initial reply to a security vulnerability report sent to the project, on average, less than 7 days within the last 6 months.  (If a project is being spammed on its vulnerability report channel, it is okay to only count non-spam messages.) [vulnerability-report-response]
+
 
 ### Quality
 
@@ -202,12 +211,6 @@ In a few cases rationale is also included.
 
 - The project MUST use a delivery mechanism that counters MITM attacks. Using https or ssh+scp is acceptable.  An even stronger mechanism is releasing the software with digitally signed packages, since that mitigates attacks on the distribution system, but this only works if the users can be confident that the public keys for signatures are correct *and* if the users will actually check the signature. [delivery-mitm]&#8224;
 - A cryptographic hash (e.g., a sha1sum) MUST NOT be retrieved over http and used without checking for a cryptographic signature, since these hashes can be modified in transit. [delivery-unsigned]
-
-*Vulnerability report process*
-
-- The project MUST publish the process for reporting vulnerabilities on the project site (e.g., a clearly designated mailing address on https://PROJECTSITE/security, often security@SOMEWHERE). [vulnerability-report-process]
-- If private vulnerability reports are supported, the project MUST include how to send the information in a way that is kept private (e.g., a private defect report submitted on the web using TLS or an email encrypted using PGP). If private vulnerability reports are not supported this criterion is automatically met. [vulnerability-report-private]
-- The project MUST provide an initial reply to a security vulnerability report sent to the project, on average, less than 7 days within the last 6 months.  (If a project is being spammed on its vulnerability report channel, it is okay to only count non-spam messages.) [vulnerability-report-response]
 
 *Patches up-to-date*
 

@@ -81,7 +81,7 @@ In a few cases rationale is also included.
 - The project website MUST succinctly describe what the software does (what problem does it solve?), in language that potential users can understand (e.g., it uses a minimum of jargon). [description]
 - The project website MUST provide information on how to:
   - obtain,
-  - provide feedback (as bug reports or feature requests),
+  - provide feedback (as bug reports or enhancements),
   - and contribute to the sofware. [interact]
 - The information on how to contribute:
   - MUST explain the contribution process (e.g., are pull requests used?)
@@ -116,15 +116,16 @@ In a few cases rationale is also included.
 
 - The project MUST have a version-controlled source repository that is publicly readable. [repo]
 - This source repository MUST track what changes were made, who made the changes, and when the changes were made. [repo-track]
-- The public repository MUST NOT include only final releases; it MUST release interim versions for review before release. [repo-interim]
-- It is RECOMMENDED that projects use common distributed version control software such as git, though git is not specifically required.
-- Projects MAY use private (non-public) branches in specific cases while the change is not publicly released, e.g., for fixing vulnerabilities before the vulnerability is revealed to the public.
-- *Rationale*:  This enables easy tracking and public review.  Some OSS projects do not use a version control system or do not provide public access to it, but the lack of a public version control repository makes it unnecessarily difficult to contribute to a project and to track its progress in detail.
+- The public repository MUST include interim versions for review before release; it MUST NOT include only final releases. [repo-interim]
+- It is RECOMMENDED that projects use common distributed version control software (e.g., git, though git is not specifically required).
+- Projects MAY use private (non-public) branches in specific cases while the change is not publicly released (e.g., for fixing vulnerabilities before the vulnerability is revealed to the public).
+- *Rationale*:  This enables easy tracking and public review.  Some OSS projects do not use a version control system or do not provide public access to it. The lack of a public version control repository makes it unnecessarily difficult to contribute to a project and to track its progress in detail.
 
-*Bug reporting process*&#8224;
+*Bug-reporting process*&#8224;
 
-- There MUST be a process (e.g., using an issue tracker or a mailing list) for users to submit bug reports where developers will respond. [report-process]
-- There MUST be responses to bug reports; it is acceptable if enhancements aren't responded to.  Ideally all bugs would get a response, but that is not required. [report-responses]
+- The project MUST provide a process for users to submit bug reports (e.g., using an issue tracker or a mailing list). [report-process]
+- Developers MUST respond to bug reports. [report-responses]
+- Developers SHOULD respond to enhancment requests. Developers MAY choose not to respond. 
 - Reports and responses MUST be archived for later searching. [report-archive]
 - It is RECOMMENDED that an issue tracker be used for tracking individual issues.
 
@@ -132,14 +133,15 @@ In a few cases rationale is also included.
 
 - The project MUST have a unique version number for each release intended to be used by users. [version-unique]
 - The [Semantic Versioning (SemVer) format](http://semver.org) is RECOMMENDED for releases.
-- Commit id's (or similar) MAY be used as as version numbers, since they are unique, but note that these can cause problems for users (since users cannot determine as easily whether or not they're up-to-date).
+- Commit ID's (or similar) MAY be used as as version numbers. They are unique, but note that these can cause problems for users as they may not be able to determine  whether or not they're up-to-date.
 - It is RECOMMENDED that git users apply tags to releases.
 
 *ChangeLog*&#8224;  
 
-- The project MUST provide a "ChangeLog" with a human-readable summary of major changes for each release, including if the new release fixes any known vulnerabilities.
-- This MAY be a separate ChangeLog file (typically "ChangeLog" or "changelog" optionally appended by ".txt", ".md", or ".html" extensions), or it MAY use version control system mechanisms such as the [GitHub Releases workflow](https://github.com/blog/1547-release-your-software).
-- A ChangeLog MUST NOT be simply the output of the version control log of every change (e.g., the "git log" command is not a ChangeLog); it MUST be a human-readable summary.
+- The project MUST provide a "ChangeLog" with a human-readable summary of major changes for each release. [changelog]
+- The ChangeLog MUST NOT be the output of the version control log of every change (e.g., the "git log" command is not a ChangeLog).
+- The ChangeLog MUST include whether the new release fixes any known vulnerabilities. [changelog-vulns]
+- The ChangeLog MAY be a separate file (e.g., "ChangeLog" or "changelog" optionally appended by ".txt", ".md", or ".html" extensions), or it MAY use version control system mechanisms such as the [GitHub Releases workflow](https://github.com/blog/1547-release-your-software).
 - *Rationale*: ChangeLogs are important because they help users decide whether or not they will want to update (and what the impact would be), e.g., if the new release fixes vulnerabilities.
 
 ### Quality

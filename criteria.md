@@ -125,8 +125,7 @@ In a few cases rationale is also included.
 
 *Public version-controlled source repository*
 
-- Please provide the URL of the public version-controlled source repository. [repo-url]
-- The project MUST have a version-controlled source repository that is publicly readable. [repo]&#8224;
+- The project MUST have a version-controlled source repository that is publicly readable. [repo-url]&#8224;
 - This source repository MUST track what changes were made, who made the changes, and when the changes were made. [repo-track]&#8224;
 - The public repository MUST include interim versions for review before release; it MUST NOT include only final releases. [repo-interim]
 - It is RECOMMENDED that projects use common distributed version control software (e.g., git, though git is not specifically required).&#8224;

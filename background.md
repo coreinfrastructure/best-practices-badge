@@ -798,7 +798,9 @@ We need to capture the criteria, and we're doing this in markdown.
 
 [Markdown style guide](http://www.cirosantilli.com/markdown-style-guide/)
 is one style guide for markdown (including CommonMark).
-If we use it, we'd probably use "Option space-sentence:2".
+If we use it, we'd probably use "Option space-sentence:2",
+"Option wrap:no" for bulleted text
+and "Option wrap:inner-sentence" for non-bulleted text.
 
 
 # Practices of some existing OSS Projects

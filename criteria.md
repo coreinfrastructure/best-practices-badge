@@ -49,10 +49,19 @@ There is also a
 
 Below are the current (draft) criteria, potential criteria,
 non-criteria, future plans, and where to get more information.
-The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+The key words "MUST", "MUST NOT",
 "SHOULD", "SHOULD NOT", "RECOMMENDED",  "MAY", and
 "OPTIONAL" in this document are to be interpreted as described in
 [RFC 2119](https://tools.ietf.org/html/rfc2119).
+MUST is an absolute requirement, and MUST NOT is an absolute prohibition.
+The terms SHOULD and RECOMMENDED acknowledge that there
+may exist valid reasons in particular circumstances to ignore a
+particular criterion, but the full implications must be understood and
+carefully weighed before choosing a different course, and that rationale
+MUST be documented to acquire a badge.
+Often a criterion is stated as something that SHOULD be done, or is
+RECOMMENDED, because the costs or difficulties of doing so can sometimes
+circumstances be high.
 We assume that you are already familiar with
 software development and running an OSS project;
 if not, see introductory materials like
@@ -65,7 +74,9 @@ Current criteria: Basic Best Practices for OSS
 Here are the current (draft) criteria; it is certain to change.
 The criteria marked with &#8224; are intended to be automatically testable
 if the project is hosted on GitHub and follows standard conventions.
-The [name] markings is the short name of each required criterion.
+The [name] markings is the short name of each required criterion,
+and is also the database field name for the cpaturing the justification
+that the criterion is met.
 In a few cases rationale is also included.
 
 
@@ -87,15 +98,15 @@ In a few cases rationale is also included.
   - MUST explain the contribution process (e.g., are pull requests used?)
   - SHOULD include the basic criteria for acceptable contributions (e.g., a reference to any required coding standard). [contribution]
 
-*OSS license*&#8224;
+*OSS license*
 
-- License(s) MUST be posted in a standard location (e.g., as a top-level file named LICENSE or COPYING).  License filenames MAY be followed by an extension such as ".txt" or ".md" [license-location]
+- License(s) MUST be posted in a standard location (e.g., as a top-level file named LICENSE or COPYING).  License filenames MAY be followed by an extension such as ".txt" or ".md" [license-location]&#8224;
 - The software MUST be released as OSS; meaning licenses MUST be at least one of the following:
   - [an approved license by the Open Source Initiative (OSI)](http://opensource.org/licenses)
   - [a free license as approved by the Free Software Foundation (FSF)](http://www.gnu.org/licenses/license-list.html)
   - [a free license acceptable to Debian main](https://www.debian.org/legal/licenses/)
-  - [a "good" license according to Fedora](https://fedoraproject.org/wiki/Licensing:Main?rd=Licensing). [oss-license]
-- It is RECOMMENDED that any required license(s) be OSI-approved.
+  - [a "good" license according to Fedora](https://fedoraproject.org/wiki/Licensing:Main?rd=Licensing). [oss-license]&#8224;
+- It is RECOMMENDED that any required license(s) be OSI-approved. [oss-license-osi]&#8224;
 - The software MAY also be licensed other ways (e.g., "GPLv2 or proprietary" is acceptable).
 - *Note*: We intend for the automated tool to focus on identifying common OSS licenses such as:     [CC0](http://creativecommons.org/publicdomain/zero/1.0/), [MIT](http://opensource.org/licenses/MIT), [BSD 2-clause](http://opensource.org/licenses/BSD-2-Clause), [BSD 3-clause revised](http://opensource.org/licenses/BSD-3-Clause), [Apache 2.0](http://opensource.org/licenses/Apache-2.0), [Lesser GNU General Public License (LGPL)](http://opensource.org/licenses/lgpl-license), and the [GNU General Public License (GPL)](http://opensource.org/licenses/gpl-license).
 - *Rationale*: These criteria are designed for OSS projects, so we need to ensure that they're only used where they apply.  Some projects are thought of as OSS yet are not actually released as OSS (e.g., they might not have any license, in which case the defaults of the country's legal system apply, or they might use a non-OSS license).  Unusual licenses can cause long-term problems for OSS projects and are more difficult for tools to handle.  We expect that that "higher-level" criteria would set a higher bar, e.g., that it *must* be released under an OSI-approved license.  
@@ -112,34 +123,35 @@ In a few cases rationale is also included.
 
 ### Change control
 
-*Public version-controlled source repository*&#8224;
+*Public version-controlled source repository*
 
-- The project MUST have a version-controlled source repository that is publicly readable. [repo]
-- This source repository MUST track what changes were made, who made the changes, and when the changes were made. [repo-track]
+- Please provide the URL of the public version-controlled source repository. [repo-url]
+- The project MUST have a version-controlled source repository that is publicly readable. [repo]&#8224;
+- This source repository MUST track what changes were made, who made the changes, and when the changes were made. [repo-track]&#8224;
 - The public repository MUST include interim versions for review before release; it MUST NOT include only final releases. [repo-interim]
-- It is RECOMMENDED that projects use common distributed version control software (e.g., git, though git is not specifically required).
+- It is RECOMMENDED that projects use common distributed version control software (e.g., git, though git is not specifically required).&#8224;
 - Projects MAY use private (non-public) branches in specific cases while the change is not publicly released (e.g., for fixing vulnerabilities before the vulnerability is revealed to the public).
 - *Rationale*:  This enables easy tracking and public review.  Some OSS projects do not use a version control system or do not provide public access to it. The lack of a public version control repository makes it unnecessarily difficult to contribute to a project and to track its progress in detail.
 
 *Bug-reporting process*&#8224;
 
-- The project MUST provide a process for users to submit bug reports (e.g., using an issue tracker or a mailing list). [report-process]
-- Developers MUST respond to most bug reports submitted in the last 2-12 months (inclusive); the response need not include a fix. [report-responses]
-- Developers SHOULD respond to enhancement requests. Developers MAY choose not to respond.
-- Reports and responses MUST be archived for later searching. [report-archive]
-- It is RECOMMENDED that an issue tracker be used for tracking individual issues.
+- If an issue tracker is used, please provide its URL. [report-url]
+- It is RECOMMENDED that an issue tracker be used for tracking individual issues. [report-tracker]&#8224;
+- The project MUST provide a process for users to submit bug reports (e.g., using an issue tracker or a mailing list). [report-process]&#8224;
+- Developers MUST respond to most bug reports submitted in the last 2-12 months (inclusive); the response need not include a fix. [report-responses]&#8224;
+- Developers SHOULD respond to most enhancement requests in the last 2-12 months (inclusive). Developers MAY choose not to respond. [enhancement-responses]&#8224;
+- Reports and responses MUST be archived for later searching. [report-archive]&#8224;
 
-*Unique version numbering*&#8224;
+*Unique version numbering*
 
 - The project MUST have a unique version number for each release intended to be used by users. [version-unique]
-- The [Semantic Versioning (SemVer) format](http://semver.org) is RECOMMENDED for releases.
+- The [Semantic Versioning (SemVer) format](http://semver.org) is RECOMMENDED for releases. [version-semver]
 - Commit IDs (or similar) MAY be used as as version numbers. They are unique, but note that these can cause problems for users as they may not be able to determine  whether or not they're up-to-date.
-- It is RECOMMENDED that git users apply tags to releases.
+- It is RECOMMENDED that git users apply tags to releases. [version-tags]&#8224;
 
-*ChangeLog*&#8224;  
+*ChangeLog*
 
-- The project MUST provide a "ChangeLog" with a human-readable summary of major changes for each release. [changelog]
-- The ChangeLog MUST NOT be the output of the version control log of every change (e.g., the "git log" command is not a ChangeLog).
+- The project MUST provide a "ChangeLog" with a human-readable summary of major changes for each release.  The ChangeLog MUST NOT be the output of the version control log of every change (e.g., the "git log" command is not a ChangeLog). [changelog]&#8224;
 - The ChangeLog MUST include whether the new release fixes any known vulnerabilities. [changelog-vulns]
 - The ChangeLog MAY be a separate file (e.g., "ChangeLog" or "changelog" optionally appended by ".txt", ".md", or ".html" extensions), or it MAY use version control system mechanisms such as the [GitHub Releases workflow](https://github.com/blog/1547-release-your-software).
 - *Rationale*: ChangeLogs are important because they help users decide whether or not they will want to update (and what the impact would be), e.g., if the new release fixes vulnerabilities.
@@ -148,9 +160,9 @@ In a few cases rationale is also included.
 
 *Working build system*.&#8224;
 
-- Either the project MUST never need to be built or the project MUST provide a working build system that can automatically rebuild the software.  A build system determines what actions MUST occur to rebuild the software (and in what order), and then perform those steps.
-- It is RECOMMENDED that common tools be used for this purpose (e.g., Maven, Ant, cmake, the autotools, make, or rake), in which case only the instructions to the build system are required (there's no requirement to teach people how to use common tools).
-- The project SHOULD be buildable using only OSS tools.
+- Either the project MUST never need to be built or the project MUST provide a working build system that can automatically rebuild the software.  A build system determines what actions MUST occur to rebuild the software (and in what order), and then perform those steps. [build]&8224;
+- It is RECOMMENDED that common tools be used for this purpose (e.g., Maven, Ant, cmake, the autotools, make, or rake), in which case only the instructions to the build system are required (there's no requirement to teach people how to use common tools). [build-common-tools]&8224;
+- The project SHOULD be buildable using only OSS tools. [build-oss-tools]
 - *Rationale*: If a project needs to be built but there is no working build system, then potential co-developers will not be able to easily contribute and many security analysis tools will be ineffective.
 
 *Automated test suite*.&#8224;

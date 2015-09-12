@@ -17,7 +17,7 @@
 
        <%= f.label :password_confirmation, "Confirm Password" %>
        <%= f.password_field :password_confirmation, class:"form-control" %>
-
+       <%= hidden_field_tag :provider, "local" %>
        <%= f.submit "Create my account", class: "btn btn-primary" %>
      <% end %>
    </div>

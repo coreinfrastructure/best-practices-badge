@@ -10,10 +10,15 @@
 
       <%= f.label :password %>
       <%= f.password_field :password, class: 'form-control' %>
-
+      <%= hidden_field_tag :provider, "local" %>
       <%= f.submit "Log in", class: "btn btn-primary" %>
     <% end %>
 
-    <p>New user? <%= link_to "Sign up now!", signup_path %></p>
+    <%= link_to "Sign up now!", signup_path %>
+    <br>
+    <br>
+    <%= link_to "Sign in with Github", "/auth/github", class: "btn btn-social btn-github" %>
+
+
   </div>
 </div>

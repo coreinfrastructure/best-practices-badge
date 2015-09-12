@@ -2,6 +2,10 @@
 <br>
 <h2>New Project</h2>
 <br>
+<% if logged_in? %>
   <%= render 'form' %>
+<% else %>
+  <% flash.now[:danger] = "Please log in to add a project!"%>
+<% end %>
 
 </div>

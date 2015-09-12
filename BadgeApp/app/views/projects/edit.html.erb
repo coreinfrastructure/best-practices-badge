@@ -1,8 +1,11 @@
 <div class="center">
 <br>
 <h2>Edit <%= @project.name %></h2>
-<br>
-<%= render 'form' %>
 
+<% if logged_in? %>
+  <%= render 'form' %>
+<% else %>
+  <% flash.now[:danger] = "Please log in to edit a project!"%>
+<% end %>
 
 </div>

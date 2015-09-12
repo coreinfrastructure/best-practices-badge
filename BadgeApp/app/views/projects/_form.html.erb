@@ -3,32 +3,35 @@
   <div class="col-md-6 col-md-offset-3">
 
 <%= form_for(@project) do |f| %>
+<%= render 'shared/error_messages', object: f.object %>
 
-  <% if @project.errors.any? %>
-    <div id="error_explanation">
-      <div class="alert alert-danger">
-        The form contains <%= pluralize(@project.errors.count, "error") %>.
-      </div>
-      <ul>
-      <% @project.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
-    </div>
+  <h4>Project Basics</h4>
+  <%= f.text_field :name, class:"form-control", placeholder:'OSS Project Name' %>
+  <%= f.text_area :description, class:"form-control",  placeholder:'Project Description' %>
+  <%= f.text_field :website, class:"form-control",  placeholder:'Project Website URL' %>
+  <%= f.text_field :license, class:"form-control",  placeholder:'OSS License' %>
+  <br>
+  <h4>Change Control</h4>
+  <%= f.text_field :repo, class:"form-control",  placeholder:'Repository URL' %>
+
+  <%= f.label :changelog, class: "checkbox" do %>
+    <%= f.check_box :changelog %>
+    <span id="project_checkbox">Changelog</span>
   <% end %>
 
-    <%= f.text_field :name, class:"form-control", placeholder:'OSS Project Name' %>
+  <%= f.label :version_numbering, class: "checkbox" do %>
+    <%= f.check_box :version_numbering%>
+    <span id="project_checkbox">Version Numbering</span>
+  <% end %>
 
-    <%= f.text_area :description, class:"form-control",  placeholder:'Project Description' %>
-
-    <%= f.text_field :website, class:"form-control",  placeholder:'Project Website URL' %>
-
-    <%= f.text_field :license, class:"form-control",  placeholder:'OSS License' %>
-
-    <%= f.text_field :repo, class:"form-control",  placeholder:'Repository URL' %>
-
-    <%= f.submit 'Submit', class:"btn btn-primary" %>
-
+  <br>
+  <h4>Reporting</h4>
+  <%= f.text_field :issue_tracker_url, class:"form-control",  placeholder:'Issue Tracker URL' %>
+  <br>
+  <hr>
+  <%= f.text_area :general_comments, class:"form-control",  placeholder:'Additional Comments' %>
+  <br>
+  <%= f.submit 'Submit', class:"btn btn-primary" %>
 <% end %>
 
   </div>

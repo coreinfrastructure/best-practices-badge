@@ -1,5 +1,6 @@
 <div class="jumbotron">
 
+<h4>Project Basics</h4>
 <p>
   <strong>Name:</strong>
   <%= @project.name %>
@@ -20,15 +21,40 @@
   <%= @project.license %>
 </p>
 
+<h4>Change Control</h4>
 <p>
   <strong>Repo:</strong>
   <%= @project.repo %>
 </p>
 
 <p>
-<%= link_to 'Back', projects_path %>
-<%= link_to 'Edit', edit_project_path(@project) %>
-<%= link_to 'Remove', @project, method: :delete, data: { confirm: 'Are you sure?' } %>
+  <strong>Changelog:</strong>
+  <%= @project.changelog %>
 </p>
+
+<p>
+  <strong>Version Numbering:</strong>
+  <%= @project.version_numbering %>
+</p>
+
+<h4>Reporting</h4>
+<p>
+  <strong>Issue Tracker:</strong>
+  <%= @project.issue_tracker_url %>
+</p>
+<hr>
+<p>
+  <strong>Comments:</strong>
+  <%= @project.general_comments %>
+</p>
+
+<p>
+<%= link_to 'Back', projects_path %>
+<% if logged_in? %>
+  <%= link_to 'Edit', edit_project_path(@project) %>
+  <%= link_to 'Remove', @project, method: :delete, data: { confirm: 'Are you sure?' } %>
+<% end %>
+</p>
+
 
 </div>

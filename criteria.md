@@ -115,7 +115,7 @@ In a few cases rationale is also included.
   - how to install it
   - how to start it
   - how to use it (possibly with a tutorial using examples)
-  - how to use it securely (e.g., what to do and what not to do) if that is an appropriate topic for the software.  The security documentation need not be long, since the software SHOULD be designed to be secure by default.  [documentation-basics]
+  - how to use it securely (e.g., what to do and what not to do) if that is an appropriate topic for the software.  The security documentation need not be long (it is better for the software to be designed to be secure by default).  [documentation-basics]
 - The project MUST include reference documentation that describes its interface. [documentation-interface]
 - Hypertext links to non-project material MAY be used, as long as the linked-to information is available.
 

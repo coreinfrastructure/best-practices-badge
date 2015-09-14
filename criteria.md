@@ -83,6 +83,8 @@ Current criteria: Basic Best Practices for OSS
 Here are the current (draft) criteria; it is certain to change.
 The criteria marked with &#8224; are intended to be automatically testable
 if the project is hosted on GitHub and follows standard conventions.
+The criteria marked with * at the end may be not applicable or not required;
+see their text for more information.
 The [name] marking is the short name of the criterion.
 In a few cases rationale is also included.
 
@@ -173,10 +175,10 @@ In a few cases rationale is also included.
 
 *Working build system*
 
-- Either the project MUST never need to be built or the project MUST provide a working build system that can automatically rebuild the software from source code.  A build system determines what actions need to occur to rebuild the software (and in what order), and then performs those steps. [build]&#8224;
-- It is RECOMMENDED that common tools be used for this purpose (e.g., Maven, Ant, cmake, the autotools, make, or rake), in which case only the instructions to the build system are required (there's no requirement to teach people how to use common tools). [build-common-tools]&#8224;
-- The project SHOULD be buildable using only OSS tools. [build-oss-tools]
-- *Rationale*: If a project needs to be built but there is no working build system, then potential co-developers will not be able to easily contribute and many security analysis tools will be ineffective.
+- If the software requires building for use, the project MUST provide a working build system that can automatically rebuild the software from source code.  A build system determines what actions need to occur to rebuild the software (and in what order), and then performs those steps. [build]*&#8224;
+- It is RECOMMENDED that common tools be used for building the software (e.g., Maven, Ant, cmake, the autotools, make, or rake), in which case only the instructions to the build system are required (there's no requirement to teach people how to use common tools). [build-common-tools]*&#8224;
+- The project SHOULD be buildable using only OSS tools. [build-oss-tools]*
+- *Rationale*: If a project needs to be built but there is no working build system, then potential co-developers will not be able to easily contribute and many security analysis tools will be ineffective.  Criteria for a working build system are not applicable if there is no need to build anything for use.
 
 *Automated test suite*
 
@@ -194,10 +196,10 @@ In a few cases rationale is also included.
 
 *Warning flags*
 
-- The project MUST enable some compiler warnings (e.g. "-Wall"), a "safe" language mode (e.g., "use strict", "use warnings", or similar), and/or use a separate "linter" tool to look for code quality errors or common simple mistakes. [warnings]
-- The project MUST address the issues that are found (by fixing them or marking them in the source code as false positives).  Ideally there would be no warnings, but a project MAY accept some warnings (typically less than 1 warning per 100 lines or less than 10 warnings). [warnings-fixed]
-- It is RECOMMENDED that projects be maximally strict, but this is not always practical. [warnings-strict]
-- This criterion is not required if there is no OSS tool that can implement this criterion in the selected language. [warnings-irrelevant]
+- The project MUST enable some compiler warning flagss (e.g. "-Wall"), a "safe" language mode (e.g., "use strict", "use warnings", or similar), and/or use a separate "linter" tool to look for code quality errors or common simple mistakes, if there is at least one OSS tool that can implement this criterion in the selected language. [warnings]*
+- The project MUST address the issues that are found (by fixing them or marking them in the source code as false positives).  Ideally there would be no warnings, but a project MAY accept some warnings (typically less than 1 warning per 100 lines or less than 10 warnings). [warnings-fixed]*
+- It is RECOMMENDED that projects be maximally strict, but this is not always practical. [warnings-strict]*
+- Criteria for warning flags, safe language mode, or a separate linter are not required if there is no OSS tool that can implement this in the selected language.
 
 ### Security
 
@@ -217,14 +219,15 @@ In a few cases rationale is also included.
 
 *Uses basic good cryptographic practices*
 
-1.  Cryptographic protocols and algorithms used by default in the software AND the delivery mechanisms MUST be publicly published and reviewed by experts.  [crypto-published]
-2.  Application software that is not itself a cryptographic system/library MUST NOT implement its own cryptographic functions, but MUST instead call on software specifically designed for the purpose.  [crypto-call]
-3.  All functionality that depends on cryptography MUST be implementable using OSS because its specification meets the [*Open Standards Requirement for Software* by the Open Source Initiative](http://opensource.org/osr)  [crypto-oss]
-4.  The default keylengths MUST meet the NIST minimum requirements at least through the year 2030 (as stated in 2012).  These minimum bitlengths are: symmetric key 112, factoring modulus 2048, discrete logarithm key 224, discrete logarithmic group 2048, elliptic curve 224, and hash 224.  See <http://www.keylength.com> for a comparison of keylength recommendations from various organizations.  The software MUST be configurable so that it will reject smaller keylengths.  The software MAY allow smaller keylengths in some configurations (ideally it would not, since this allows downgrade attacks, but shorter keylengths are sometimes necessary for interoperability.)  [crypto-keylength]
-5.  Security mechanisms MUST NOT on depend cryptographic algorithms that are broken or have too-short key lengths (e.g., MD4, MD5, single DES, or RC4).  It is RECOMMENDED that SHA-1 not be used (we are well aware that git uses SHA-1).  Currently-recommended algorithms include AES and SHA-256/SHA-512.  Implementations SHOULD support multiple cryptographic algorithms, so users can quickly switch if one is broken.  [crypto-working]
-6.  Any key agreement protocol SHOULD implement perfect forward secrecy so a session key derived from a set of long-term keys cannot be compromised if one of the long-term keys is compromised in the future.  [crypto-pfs]
-7.  If passwords for later authentication are stored, they MUST be stored as iterated hashes with per-user salt.  [crypto-password-storage]
-8.  All keys and nonces MUST be generated using cryptographically random functions, and *not* through non-cryptographically random functions. [crypto-random]
+- Cryptographic protocols and algorithms used by default in the software AND the delivery mechanisms MUST be publicly published and reviewed by experts.  [crypto-published]*
+- Application software that is not itself a cryptographic system/library MUST NOT implement its own cryptographic functions, but MUST instead call on software specifically designed for the purpose.  [crypto-call]*
+- All functionality that depends on cryptography MUST be implementable using OSS because its specification meets the [*Open Standards Requirement for Software* by the Open Source Initiative](http://opensource.org/osr)  [crypto-oss]*
+- The default keylengths MUST meet the NIST minimum requirements at least through the year 2030 (as stated in 2012).  These minimum bitlengths are: symmetric key 112, factoring modulus 2048, discrete logarithm key 224, discrete logarithmic group 2048, elliptic curve 224, and hash 224.  See <http://www.keylength.com> for a comparison of keylength recommendations from various organizations.  The software MUST be configurable so that it will reject smaller keylengths.  The software MAY allow smaller keylengths in some configurations (ideally it would not, since this allows downgrade attacks, but shorter keylengths are sometimes necessary for interoperability.)  [crypto-keylength]*
+- Security mechanisms MUST NOT on depend cryptographic algorithms that are broken or have too-short key lengths (e.g., MD4, MD5, single DES, or RC4).  It is RECOMMENDED that SHA-1 not be used (we are well aware that git uses SHA-1).  Currently-recommended algorithms include AES and SHA-256/SHA-512.  Implementations SHOULD support multiple cryptographic algorithms, so users can quickly switch if one is broken.  [crypto-working]*
+- Any key agreement protocol SHOULD implement perfect forward secrecy so a session key derived from a set of long-term keys cannot be compromised if one of the long-term keys is compromised in the future.  [crypto-pfs]*
+- If passwords for later authentication are stored, they MUST be stored as iterated hashes with per-user salt.  [crypto-password-storage]*
+- All keys and nonces MUST be generated using cryptographically random functions, and *not* through non-cryptographically random functions. [crypto-random]*
+- *Note*: These criteria do not always apply because some software has no need to directly use cryptographic capabilities.
 
 *Secured delivery against man-in-the-middle (MITM) attacks*
 
@@ -242,12 +245,11 @@ In a few cases rationale is also included.
 
 *Static code analysis*
 
-- At least one static code analysis tool MUST be applied to any proposed major production release of the software before its release.  A static code analysis tool examines the software code (as source code, intermediate code, or executable) without executing it with specific inputs.  For purposes of this criterion compiler warnings and "safe" language modes do not count as a static code analysis tool (these typically avoid deep analysis because speed is vital).  Examples of such static code analysis tools include cppcheck, the clang static analyzer, FindBugs (including FindSecurityBugs), PMD, Brakeman, [Coverity Quality Analyzer](https://scan.coverity.com/), and the HP Fortify Static Code Analyzer. [static-analysis]
+- At least one static code analysis tool MUST be applied to any proposed major production release of the software before its release, if there is at least one OSS tool that implement this criterion in the selected language.  A static code analysis tool examines the software code (as source code, intermediate code, or executable) without executing it with specific inputs.  For purposes of this criterion compiler warnings and "safe" language modes do not count as a static code analysis tool (these typically avoid deep analysis because speed is vital).  Examples of such static code analysis tools include cppcheck, the clang static analyzer, FindBugs (including FindSecurityBugs), PMD, Brakeman, [Coverity Quality Analyzer](https://scan.coverity.com/), and the HP Fortify Static Code Analyzer. [static-analysis]*
 - The analysis tool(s) MAY be focused on looking for security vulnerabilities, but this is not required.
-- It is RECOMMENDED that the tool include rules or approaches to look for common vulnerabilities in the analyzed language or environment. [static-analysis-common-vulnerabilities]
-- All confirmed medium and high severity exploitable vulnerabilities discovered with static code analysis MUST be fixed.  A vulnerability is medium to high severity if its [CVSS 2.0](https://nvd.nist.gov/cvss.cfm) is 4 or higher. [static-analysis-fixed]
-- It is RECOMMENDED that static source code analysis occur on every commit or at least daily. [static-analysis-often]
-- This criterion is not required if there is no OSS tool that can implement this criterion in the selected language. [static-analysis-irrelevant]
+- It is RECOMMENDED that the tool include rules or approaches to look for common vulnerabilities in the analyzed language or environment. [static-analysis-common-vulnerabilities]*
+- All confirmed medium and high severity exploitable vulnerabilities discovered with static code analysis MUST be fixed.  A vulnerability is medium to high severity if its [CVSS 2.0](https://nvd.nist.gov/cvss.cfm) is 4 or higher. [static-analysis-fixed]*
+- It is RECOMMENDED that static source code analysis occur on every commit or at least daily. [static-analysis-often]*
 
 *Dynamic analysis*
 

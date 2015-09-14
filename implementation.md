@@ -97,6 +97,19 @@ A user can edit project P if one of the following is true:
 2.  If project P is on GitHub AND the user is authorized via GitHub to edit project P, then that user can edit the badge information about project P.  In the future we might add repos other than GitHub, with the same kind of rule.
 3.  If the user's cryptographically randomly assigned "project edit validation code" is on the project's main web site (typically in an HTML comment), then the user can edit the badge information about project P.  Note that if the user is a local account (not GitHub), then the user also has to have their email address validated first.
 
+## Filling in the form
+
+The application should be able to generate the form directly from the markdown of the criteria text.  Extract the portion about the criteria (e.g., starting with "Basic best practices").  Every bullet with a MUST, MUST NOT, SHOULD, or RECOMMENDED will have a matching [fieldname] entry (note that [fieldname] may have a dagger after it).  Change "fieldname" by converting all "-" to "_".
+
+If the fieldname ends in "_url", it records a URL, and there are no other fields.  To get credit for such a URL, it needs to begin with "https?://", NOT include a "?" (that will counter some attempts to use BadgeApp to attack other systems), and that URL needs to be readable.  Empty URLs for MUST requirements should be highlighted somehow.
+
+Otherwise, the fieldname records Yes/No/Considered/(blank) that users must directly assert, and there is at least one other field that users can enter text into: fieldname + "_justification".  *If* we have automated that field, then there is a field named fieldname + "_auto" that records an automated result justifying that it meets the criteria.  Any criteria with a MUST, MUST NOT, SHOULD, or RECOMMENDED gets credit if the fieldname is "Yes" (if SHOULD/RECOMMENDED, then "Considered" is the same as "Yes") and (1) fieldname_auto justifies it, OR (2) filename_justification is nonblank and includes at least one URL (which is supposed to be a pointer to supporting information).
+
+To get the badge, you need a URL or "Yes" ("Considered" is the same as "Yes" in some cases) in every MUST/MUST NOT/SHOULD/RECOMMENDED bullet for the (one) badge.  I recommend that we show % progress as people fill them in the information; it'll give people a sense of progress (increasing the likelihood they'll finish).
+
+We should try to occasionally save the form (perhaps every time they leave a field), so that people won't lose data partway through.
+
+
 ## GitHub-related badges
 
 Pages related to GitHub-related badges include:

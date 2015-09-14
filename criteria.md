@@ -109,12 +109,12 @@ In a few cases rationale is also included.
 *OSS license*
 
 - License(s) MUST be posted in a standard location (e.g., as a top-level file named LICENSE or COPYING).  License filenames MAY be followed by an extension such as ".txt" or ".md" [license-location]&#8224;
-- The software MUST be released as OSS; meaning licenses MUST be at least one of the following:
+- The software MUST be released as OSS.  For our purposes, this means that the license MUST be at least one of the following:
   - [an approved license by the Open Source Initiative (OSI)](http://opensource.org/licenses)
   - [a free license as approved by the Free Software Foundation (FSF)](http://www.gnu.org/licenses/license-list.html)
   - [a free license acceptable to Debian main](https://www.debian.org/legal/licenses/)
   - [a "good" license according to Fedora](https://fedoraproject.org/wiki/Licensing:Main?rd=Licensing). [oss-license]&#8224;
-- It is RECOMMENDED that any required license(s) be OSI-approved. [oss-license-osi]&#8224;
+- It is RECOMMENDED that any required license(s) be [OSI-approved](http://opensource.org/licenses). [oss-license-osi]&#8224;
 - The software MAY also be licensed other ways (e.g., "GPLv2 or proprietary" is acceptable).
 - *Note*: We intend for the automated tool to focus on identifying common OSS licenses such as:     [CC0](http://creativecommons.org/publicdomain/zero/1.0/), [MIT](http://opensource.org/licenses/MIT), [BSD 2-clause](http://opensource.org/licenses/BSD-2-Clause), [BSD 3-clause revised](http://opensource.org/licenses/BSD-3-Clause), [Apache 2.0](http://opensource.org/licenses/Apache-2.0), [Lesser GNU General Public License (LGPL)](http://opensource.org/licenses/lgpl-license), and the [GNU General Public License (GPL)](http://opensource.org/licenses/gpl-license).
 - *Rationale*: These criteria are designed for OSS projects, so we need to ensure that they're only used where they apply.  Some projects are thought of as OSS yet are not actually released as OSS (e.g., they might not have any license, in which case the defaults of the country's legal system apply, or they might use a non-OSS license).  Unusual licenses can cause long-term problems for OSS projects and are more difficult for tools to handle.  We expect that that "higher-level" criteria would set a higher bar, e.g., that it *must* be released under an OSI-approved license.  

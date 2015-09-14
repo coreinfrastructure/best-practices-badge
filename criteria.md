@@ -297,6 +297,14 @@ Potential silver criteria
     -   Releases MUST be cryptographically signed.  These may be implemented as signed git tags (using cryptographic digital signatures).  There MUST be a way for users to obtain the public keys used for signing so that they can verify the signature, and there MUST be a documented process explaining to users how they can verify the signature.
     -   Releases MUST be downloadable through a channel that both encrypts and authenticates (e.g., TLS).  That way, third parties will not be able to determine exactly what version is being downloaded, and this also provides some verification that the correct software is being downloaded from the site.
 
+It would be quite plausible to add many requirements specific to security.
+For example, it would be plausible to require that a system meet the
+requirements (or a specified subset) of the
+[OWASP Application Security Verification Standard Project](https://www.owasp.org/index.php/Category:OWASP_Application_Security_Verification_Standard_Project)
+or the
+[Securing Web Application Technologies (SWAT) Checklist](https://software-security.sans.org/resources/swat).
+Note that both of these focus only on web applications.
+
 
 Potential gold criteria
 -----------------------

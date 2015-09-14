@@ -12,7 +12,7 @@ MARKDOWN=markdown2.py $(MARKDOWNFLAGS)
 %.html : %.md
 	$(MARKDOWN) $< > $@
 
-HTML_FILES = criteria.html background.html implementation.html
+HTML_FILES = criteria.html background.html implementation.html other.html
 
 all: $(HTML_FILES)
 

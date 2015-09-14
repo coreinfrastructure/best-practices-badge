@@ -136,7 +136,7 @@ In a few cases rationale is also included.
 - The project MUST have a version-controlled source repository that is publicly readable. [repo-url]&#8224;
 - This source repository MUST track what changes were made, who made the changes, and when the changes were made. [repo-track]&#8224;
 - The public repository MUST include interim versions for review before release; it MUST NOT include only final releases. [repo-interim]
-- It is RECOMMENDED that projects use common distributed version control software (e.g., git).  Note that git is not specifically required, and that projects can use centralized version control software (such as subversion) with justification.&#8224;
+- It is RECOMMENDED that projects use common distributed version control software (e.g., git).  Note that git is not specifically required, and that projects can use centralized version control software (such as subversion) with justification. [repo-distributed]&#8224;
 - Projects MAY use private (non-public) branches in specific cases while the change is not publicly released (e.g., for fixing vulnerabilities before the vulnerability is revealed to the public).
 - *Rationale*:  This enables easy tracking and public review.  Some OSS projects do not use a version control system or do not provide public access to it. The lack of a public version control repository makes it unnecessarily difficult to contribute to a project and to track its progress in detail.
 

@@ -52,7 +52,7 @@ non-criteria, future plans, and where to get more information.
 The key words "MUST", "MUST NOT",
 "SHOULD", "SHOULD NOT", "RECOMMENDED",  and "MAY"
 in this document are to be interpreted as described in
-[RFC 2119](https://tools.ietf.org/html/rfc2119), with a distinction
+[RFC 2119](https://tools.ietf.org/html/rfc2119), with a slight distinction
 between SHOULD and RECOMMENDED:
 
 - The term MUST is an absolute requirement, and MUST NOT
@@ -64,13 +64,12 @@ between SHOULD and RECOMMENDED:
   The rationale for considering but not implementing the criterion
   MUST be documented to acquire a badge.
 - The term RECOMMENDED is used instead of SHOULD when the criterion must
-  be considered, but we expect that the the valid reasons
-  to not implement a criterion are even more common than for SHOULD.
-  Often a criterion is stated as something that SHOULD be done, or is
-  RECOMMENDED, because its costs or difficulties can sometimes be high.
+  be considered, but valid reasons
+  to not do it are even more common than for SHOULD.
 - The term MAY mentions one way something can be done, e.g.,
   to make it clear that the described approach is acceptable.
-- The phrase "we suggest" is a suggestion, but not a requirement.
+- Often a criterion is stated as something that SHOULD be done, or is
+  RECOMMENDED, because its costs or difficulties can sometimes be high.
 
 We assume that you are already familiar with
 software development and running an OSS project;

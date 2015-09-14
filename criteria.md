@@ -93,9 +93,8 @@ In a few cases rationale is also included.
   - obtain,
   - provide feedback (as bug reports or enhancements),
   - and contribute to the sofware. [interact]
-- The information on how to contribute:
-  - MUST explain the contribution process (e.g., are pull requests used?)
-  - SHOULD include the basic criteria for acceptable contributions (e.g., a reference to any required coding standard). [contribution]
+- The information on how to contribute MUST explain the contribution process (e.g., are pull requests used?) [contribution]
+- The information on how to contribute SHOULD include the basic criteria for acceptable contributions (e.g., a reference to any required coding standard). [contribution-criteria]
 
 *OSS license*
 

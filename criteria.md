@@ -334,6 +334,9 @@ please contribute!
 We currently plan to launch with a single badge level (once it is ready).
 There may eventually be multiple levels (bronze, silver, gold) or
 other badges (with a prerequisite) later.
+One area we have often discussed is whether or not to require
+continuous integration in this set of criteria;
+if it is not, it is expected to be required at higher levels.
 See [other](./other.md) for more information.
 
 You may also want to see the "[background](./background.md)" file

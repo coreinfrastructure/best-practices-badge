@@ -64,14 +64,12 @@ between SHOULD and RECOMMENDED:
   The rationale for considering but not implementing the criterion
   MUST be documented to acquire a badge.
 - The term RECOMMENDED is used instead of SHOULD when the criterion must
-  be considered, but we expect that the
-  the valid reasons to ignore a criterion are even more common than for SHOULD.
+  be considered, but we expect that the the valid reasons
+  to not implement a criterion are even more common than for SHOULD.
   Often a criterion is stated as something that SHOULD be done, or is
-  RECOMMENDED, because the costs or difficulties of doing so can sometimes
-  circumstances be high.
+  RECOMMENDED, because its costs or difficulties can sometimes be high.
 - The term MAY mentions one way something can be done, e.g.,
-  as an example to help implementers or to make it clear what the
-  requirement means.
+  to make it clear that the described approach is acceptable.
 - The phrase "we suggest" is a suggestion, but not a requirement.
 
 We assume that you are already familiar with

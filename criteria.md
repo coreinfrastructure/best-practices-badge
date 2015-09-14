@@ -127,7 +127,7 @@ In a few cases rationale is also included.
   - how to use it (possibly with a tutorial using examples)
   - how to use it securely (e.g., what to do and what not to do) if that is an appropriate topic for the software.  The security documentation need not be long (it is better for the software to be designed to be secure by default).  [documentation-basics]
 - The project MUST include reference documentation that describes its interface. [documentation-interface]
-- Hypertext links to non-project material MAY be used, as long as the linked-to information is available.
+- Hypertext links to non-project material MAY be used as documentation, as long as the linked-to information is available and meets the requirements.
 
 ### Change control
 
@@ -151,7 +151,7 @@ In a few cases rationale is also included.
 
 - The project MUST provide a "ChangeLog" with a human-readable summary of major changes for each release.  The ChangeLog MUST NOT be the output of the version control log of every change (e.g., the "git log" command is not a ChangeLog). [changelog]&#8224;
 - The ChangeLog MUST include whether the new release fixes any known vulnerabilities. [changelog-vulns]
-- The ChangeLog MAY be a separate file (e.g., "ChangeLog" or "changelog" optionally appended by ".txt", ".md", or ".html" extensions), or it MAY use version control system mechanisms such as the [GitHub Releases workflow](https://github.com/blog/1547-release-your-software).
+- The ChangeLog MAY be a separate file (e.g., "ChangeLog" or "changelog" optionally appended by ".txt", ".md", or ".html" extensions).  The ChangeLog MAY use version control system mechanisms such as the [GitHub Releases workflow](https://github.com/blog/1547-release-your-software).
 - *Rationale*: ChangeLogs are important because they help users decide whether or not they will want to update (and what the impact would be), e.g., if the new release fixes vulnerabilities.
 
 ### Reporting

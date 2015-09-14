@@ -153,7 +153,7 @@ In a few cases rationale is also included.
 
 ### Reporting
 
-*Bug-reporting process*&#8224;
+*Bug-reporting process*
 
 - If an issue tracker is used, please provide its URL. [report-url]
 - It is RECOMMENDED that an issue tracker be used for tracking individual issues. [report-tracker]&#8224;

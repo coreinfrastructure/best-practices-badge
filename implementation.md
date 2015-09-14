@@ -99,7 +99,7 @@ A user can edit project P if one of the following is true:
 
 ## Filling in the form
 
-The application should be able to generate the form directly from the markdown of the criteria text.  Extract the portion about the criteria (e.g., starting with "Basic best practices").  Every bullet with a MUST, MUST NOT, SHOULD, or RECOMMENDED will have a matching [fieldname] entry (note that [fieldname] may have a dagger after it).  Change "fieldname" by converting all "-" to "_".
+The application should be able to generate the form directly from the markdown of the criteria text.  Extract the portion about the criteria (e.g., starting with "Basic best practices").  Every bullet with a MUST, MUST NOT, SHOULD, or RECOMMENDED will have a matching [criteria-name] entry (note that [criteria-name] may have a dagger after it).  Change a criteria-name into a "fieldname" by converting all "-" to "_"; this generates the database field name.  (The SQL specifications do not include "-" in simple field names).
 
 If the fieldname ends in "_url", it records a URL, and there are no other fields.  To get credit for such a URL, it needs to begin with "https?://", NOT include a "?" (that will counter some attempts to use BadgeApp to attack other systems), and that URL needs to be readable.  Empty URLs for MUST requirements should be highlighted somehow.
 

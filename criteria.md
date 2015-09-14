@@ -83,9 +83,7 @@ Current criteria: Basic Best Practices for OSS
 Here are the current (draft) criteria; it is certain to change.
 The criteria marked with &#8224; are intended to be automatically testable
 if the project is hosted on GitHub and follows standard conventions.
-The [name] markings is the short name of each required criterion;
-it is also the basis of the database table field name
-(chaging "-" to "_") with the results.
+The [name] marking is the short name of the criterion.
 In a few cases rationale is also included.
 
 ### OSS project basics

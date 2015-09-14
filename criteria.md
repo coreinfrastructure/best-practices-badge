@@ -70,6 +70,8 @@ between SHOULD and RECOMMENDED:
   to make it clear that the described approach is acceptable.
 - Often a criterion is stated as something that SHOULD be done, or is
   RECOMMENDED, because its costs or difficulties can sometimes be high.
+- To get a badge, all MUST and MUST NOTs must be met, and all
+  SHOULD entries are met OR have some textual justification.
 
 We assume that you are already familiar with
 software development and running an OSS project;

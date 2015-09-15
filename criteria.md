@@ -92,6 +92,13 @@ In a few cases rationale is also included.
 
 ### OSS project basics
 
+*Identification*
+- What is the human-readable name of the project (note that other projects may use the same name)? [name]
+- What is a *brief* description of the project, including key comments about it (for use when displaying badge information)? [description]
+- What is the URL for the project (as a whole)? [project-url]
+- What is the URL for the version control repository (it may the same as the project URL) [repo-url]
+- What license(s) is the project released under? [license]
+
 *Project website*
 
 - The project MUST have a public website with a stable URL. [project-url]&#8224;

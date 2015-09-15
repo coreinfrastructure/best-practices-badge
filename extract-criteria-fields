@@ -1,0 +1,26 @@
+#!/bin/perl -w
+
+# Extract the named fields from criteria.md (provided as standard input)
+# for use in files such as BadgeApp/app/controllers/projects_controller.rb
+# Usage:
+#  ./extract-criteria-fields < criteria.md
+# This is a quick hack; we may remove this file in the future.
+
+while (<>) {
+ if (/^- /)              {$category="";}
+ if (/^- .*RECOMMENDED/) {$category="RECOMMENDED";}
+ if (/^- .*SHOULD/)      {$category="SHOULD";}
+ if (/^- .*MUST/)        {$category="MUST";}
+ # match, e.g., [delivery-mitm]&#8224;
+ if (/.* \[([a-z0-9-]+)\]\*?(&#8224;)?\*? *$/) {
+   $field = "$1";
+   $field =~ s/-/_/g;
+   print ":${field}";
+   if ($category eq "" ) {
+     print "\n";
+   } else {
+     print " # ${category}\n";
+     print ":${field}_justification\n";
+   }
+ }
+}

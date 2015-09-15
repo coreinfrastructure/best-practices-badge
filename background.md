@@ -792,6 +792,22 @@ time to do. Nevertheless, the checklist manifesto is noted here because
 it clearly shows that simple &#8220;to do&#8221; lists,
 if carefully written, can have dramatically positive effects.
 
+### Secure design principles
+
+The criteria reference the well-known design principles of
+[Saltzer and Schroeder](http://web.mit.edu/Saltzer/www/publications/protection/).
+The text
+["Principles of Computer System Design: An Introduction" by Saltzer and Kaashoek](http://ocw.mit.edu/resources/res-6-004-principles-of-computer-system-design-an-introduction-spring-2009/online-textbook/principles_open_5_0.pdf)
+mentions "adopt sweeping simplifications", which is mentioned also.
+
+There are certainly other texts we could point to for secure design
+principles, and we could add more from Saltzer and Kaashoek.
+
+Simply reading a list of principles does not automatically make a
+program secure, but ensuring that developers know them increases the
+likelihood that the developers will follow those practices.
+
+
 ### Markdown style
 
 We need to capture the criteria, and we're doing this in markdown.

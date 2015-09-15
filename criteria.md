@@ -87,7 +87,7 @@ The criteria marked with &#8224; are intended to be automatically testable
 if the project is hosted on GitHub and follows standard conventions.
 The criteria marked with * at the end may be not applicable or not required;
 see their text for more information.
-The [name] marking is the short name of the criterion.
+Text inside square brackets is the short name of the criterion.
 In a few cases rationale is also included.
 
 ### OSS project basics

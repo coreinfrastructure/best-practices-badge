@@ -93,6 +93,7 @@ In a few cases rationale is also included.
 ### OSS project basics
 
 *Identification*
+
 - What is the human-readable name of the project (note that other projects may use the same name)? [name]
 - What is a *brief* description of the project, including key comments about it (for use when displaying badge information)? [description]
 - What is the URL for the project (as a whole)? [project-url]
@@ -106,7 +107,7 @@ In a few cases rationale is also included.
 
 *Basic project website content*
 
-- The project website MUST succinctly describe what the software does (what problem does it solve?), in language that potential users can understand (e.g., it uses a minimum of jargon). [description]
+- The project website MUST succinctly describe what the software does (what problem does it solve?), in language that potential users can understand (e.g., it uses a minimum of jargon). [description-sufficient]
 - The project website MUST provide information on how to:
   - obtain,
   - provide feedback (as bug reports or enhancements),

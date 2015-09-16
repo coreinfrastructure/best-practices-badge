@@ -12,10 +12,10 @@ while (<>) {
  if (/^- .*SHOULD/)      {$category="SHOULD";}
  if (/^- .*MUST/)        {$category="MUST";}
  # match, e.g., [delivery-mitm]&#8224;
- if (/.* \[([a-z0-9-]+)\]\*?(&#8224;)?\*? *$/) {
-   $field = "$1";
+ if (/.* (<sup>)?\[([a-z0-9-]+)\](<\/sup>)?\*?(&#8224;)?\*? *$/) {
+   $field = "$2";
    $field =~ s/-/_/g;
-   print ":${field}";
+   print ":${field}_status";
    if ($category eq "" ) {
      print "\n";
    } else {

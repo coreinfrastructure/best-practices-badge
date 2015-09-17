@@ -1,32 +1,113 @@
-
 <div class="row">
+
   <div class="col-md-6 col-md-offset-3">
 
 <%= form_for(@project) do |f| %>
-<%= render 'shared/error_messages', object: f.object %>
+  <%= render 'shared/error_messages', object: f.object %>
 
-  <h4>Project Basics</h4>
-  <%= f.text_field :name, class:"form-control", placeholder:'OSS Project Name' %>
-  <%= f.text_area :description, class:"form-control",  placeholder:'Project Description' %>
-  <%= f.text_field :website, class:"form-control",  placeholder:'Project Website URL' %>
-  <%= f.text_field :license, class:"form-control",  placeholder:'OSS License' %>
-  <br>
-  <h4>Change Control</h4>
-  <%= f.text_field :repo, class:"form-control",  placeholder:'Repository URL' %>
+  <h2 class="center">OSS Project Basics</h2>
+    <br>
+    <h4>Identification</h4>
 
-  <%= f.label :changelog, class: "checkbox" do %>
-    <%= f.check_box :changelog %>
-    <span id="project_checkbox">Changelog</span>
-  <% end %>
+    <span>What is the human-readable name of the project (note that other
+          projects may use the same name)?</span>
+    <%= f.text_field :name, class:"form-control", placeholder:'OSS Project Name' %>
 
-  <%= f.label :version_numbering, class: "checkbox" do %>
-    <%= f.check_box :version_numbering%>
-    <span id="project_checkbox">Version Numbering</span>
-  <% end %>
+    <span>What is a brief description of the project, including key comments
+          about it (for use when displaying badge information)?</span>
+    <%= f.text_area :description, class:"form-control",  placeholder:'Project Description' %>
 
-  <br>
-  <h4>Reporting</h4>
-  <%= f.text_field :issue_tracker_url, class:"form-control",  placeholder:'Issue Tracker URL' %>
+    <span>What is the URL for the project (as a whole)?</span>
+    <%= f.text_field :project_url, class:"form-control",  placeholder:'Project Website URL' %>
+
+    <span>What is the URL for the version control repository
+          (it may the same as the project URL)?</span>
+    <%= f.text_field :repo_url, class:"form-control",  placeholder:'Project Repo URL' %>
+
+    <span>What license(s) is the project released under?</span>
+    <%= f.text_field :license, class:"form-control",  placeholder:'OSS License' %>
+
+    <br>
+    <h4>Project Website</h4>
+
+    <span>The project MUST have a public website with a stable URL.</span>
+    <%= f.select :project_url_status, Project::STATUS_CHOICE, class:"col-xs-6" %>
+    <%= f.text_field :project_url_status_justification, class:"form-control",  placeholder:'Justification' %>
+
+    <span>It is RECOMMENDED that project websites use HTTPS, not HTTP.
+          Future versions of these criteria may make HTTPS a requirement.</span>
+    <%= f.select :project_url_https_status, Project::STATUS_CHOICE, class:"col-xs-6" %>
+    <%= f.text_field :project_url_https_status_justification, class:"form-control",  placeholder:'Justification' %>
+
+    <br>
+    <h4>Basic project website content</h4>
+
+    <span>The project website MUST succinctly describe what the software does (what problem does it solve?),
+          in language that potential users can understand (e.g., it uses a minimum of jargon).</span>
+    <%= f.select :description_sufficient_status, Project::STATUS_CHOICE, class:"col-xs-6" %>
+    <%= f.text_field :description_sufficient_status_justification, class:"form-control",  placeholder:'Justification' %>
+
+    <span>The project website MUST provide information on how to: obtain,
+          provide feedback (as bug reports or enhancements), and contribute to the sofware.</span>
+    <%= f.select :interact_status, ['','Met', 'Not Met', 'Considered'] %>
+    <%= f.text_field :interact_status_justification, class:"form-control", placeholder:'Justification',
+          style:"#{'display:none' if f.object.interact_status == '' }" %>
+
+    <span>The information on how to contribute MUST explain the contribution process
+          (e.g., are pull requests used?)</span>
+    <%= f.select :contribution_status, ['','Met', 'Not Met', 'Considered'] %>
+    <%= f.text_field :contribution_status_justification, class:"form-control", placeholder:'Justification' %>
+
+    <span>The information on how to contribute MUST explain the contribution process
+          (e.g., are pull requests used?)</span>
+    <%= f.select :contribution_criteria_status, ['','Met', 'Not Met', 'Considered'] %>
+    <%= f.text_field :contribution_criteria_status_justification, class:"form-control", placeholder:'Justification' %>
+
+    <br>
+    <h4>OSS License</h4>
+
+    <span>License(s) MUST be posted in a standard location (e.g., as a top-level file named LICENSE or COPYING).
+          License filenames MAY be followed by an extension such as ".txt" or ".md")</span>
+    <%= f.select :license_location, ['','Met', 'Not Met', 'Considered'] %>
+    <%= f.text_field :license_location_justification, class:"form-control", placeholder:'Justification' %>
+
+    <span>The software MUST be released as OSS. For our purposes, this means that the license MUST be at least one of the following:
+          an approved license by the Open Source Initiative (OSI)
+          a free license as approved by the Free Software Foundation (FSF)
+          a free license acceptable to Debian main
+          a "good" license according to Fedora.</span>
+    <%= f.select :oss_license, ['','Met', 'Not Met', 'Considered'] %>
+    <%= f.text_field :oss_license_justification, class:"form-control", placeholder:'Justification' %>
+
+    <span>It is RECOMMENDED that any required license(s) be OSI-approved. </span>
+    <%= f.select :oss_license_osi, ['','Met', 'Not Met', 'Considered'] %>
+    <%= f.text_field :oss_license_osi_justification, class:"form-control", placeholder:'Justification' %>
+
+  <span><b>Note</b>: We intend for the automated tool to focus on identifying common OSS licenses such as:
+        CC0, MIT, BSD 2-clause, BSD 3-clause revised, Apache 2.0, Lesser GNU General Public License (LGPL),
+        and the GNU General Public License (GPL).</span><br>
+  <span><b>Rationale</b>: These criteria are designed for OSS projects, so we need to ensure
+        that they're only used where they apply. Some projects are thought of as OSS
+        yet are not actually released as OSS (e.g., they might not have any license,
+        in which case the defaults of the country's legal system apply, or they might use a non-OSS license).
+        Unusual licenses can cause long-term problems for OSS projects and are more difficult for tools to handle.
+        We expect that that "higher-level" criteria would set a higher bar, e.g., that it must be released under an OSI-approved license.</span>
+
+   <br>
+   <br>
+   <h4>Documentation</h4>
+   <span>The project MUST provide basic documentation for the software in some media
+         (such as text or video) that in aggregate covers: how to install it, how to start it, how to use it
+         (possibly with a tutorial using examples), how to use it securely (e.g., what to do and what not to do)
+          if that is an appropriate topic for the software.
+          The security documentation need not be long (it is better for the software to be designed to be secure by default). </span>
+   <%= f.select :documentation_basics_status, ['','Met', 'Not Met', 'Considered'] %>
+   <%= f.text_field :documentation_basics_status_justification, class:"form-control", placeholder:'Justification' %>
+
+   <span>The project MUST include reference documentation that describes its interface. </span>
+   <%= f.select :documentation_interface_status, ['','Met', 'Not Met', 'Considered'] %>
+   <%= f.text_field :documentation_interface_status_justification, class:"form-control", placeholder:'Justification' %>
+
   <br>
   <hr>
   <%= f.text_area :general_comments, class:"form-control",  placeholder:'Additional Comments' %>
@@ -35,4 +116,5 @@
 <% end %>
 
   </div>
+
 </div>

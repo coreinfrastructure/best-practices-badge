@@ -15,73 +15,73 @@
 
     <span>What is a brief description of the project, including key comments
           about it (for use when displaying badge information)?</span>
-    <%= f.text_area :description, class:"form-control",  placeholder:'Project Description' %>
+    <%= f.text_area :description, class:"form-control", hide_label: true, placeholder:'Project Description' %>
 
     <span>What is the URL for the project (as a whole)?</span>
-    <%= f.text_field :project_url, class:"form-control",  placeholder:'Project Website URL' %>
+    <%= f.text_field :project_url, class:"form-control", hide_label: true, placeholder:'Project Website URL' %>
 
     <span>What is the URL for the version control repository
           (it may the same as the project URL)?</span>
-    <%= f.text_field :repo_url, class:"form-control",  placeholder:'Project Repo URL' %>
+    <%= f.text_field :repo_url, class:"form-control", hide_label: true, placeholder:'Project Repo URL' %>
 
     <span>What license(s) is the project released under?</span>
-    <%= f.text_field :license, class:"form-control",  placeholder:'OSS License' %>
+    <%= f.text_field :license, class:"form-control", hide_label: true, placeholder:'OSS License' %>
 
     <br>
     <h4>Project Website</h4>
 
     <span>The project MUST have a public website with a stable URL.</span>
     <%= f.select :project_url_status, Project::STATUS_CHOICE, class:"col-xs-6" %>
-    <%= f.text_field :project_url_status_justification, class:"form-control",  placeholder:'Justification' %>
+    <%= f.text_field :project_url_status_justification, class:"form-control", hide_label: true, placeholder:'Justification' %>
 
     <span>It is RECOMMENDED that project websites use HTTPS, not HTTP.
           Future versions of these criteria may make HTTPS a requirement.</span>
-    <%= f.select :project_url_https_status, Project::STATUS_CHOICE, class:"col-xs-6" %>
-    <%= f.text_field :project_url_https_status_justification, class:"form-control",  placeholder:'Justification' %>
+    <%= f.select :project_url_https_status, Project::STATUS_CHOICE,hide_label: true %>
+    <%= f.text_field :project_url_https_status_justification, class:"form-control", hide_label: true, placeholder:'Justification' %>
 
     <br>
     <h4>Basic project website content</h4>
 
     <span>The project website MUST succinctly describe what the software does (what problem does it solve?),
           in language that potential users can understand (e.g., it uses a minimum of jargon).</span>
-    <%= f.select :description_sufficient_status, Project::STATUS_CHOICE, class:"col-xs-6" %>
-    <%= f.text_field :description_sufficient_status_justification, class:"form-control",  placeholder:'Justification' %>
+    <%= f.select :description_sufficient_status, Project::STATUS_CHOICE, hide_label: true %>
+    <%= f.text_field :description_sufficient_status_justification, class:"form-control", hide_label: true, placeholder:'Justification' %>
 
     <span>The project website MUST provide information on how to: obtain,
           provide feedback (as bug reports or enhancements), and contribute to the sofware.</span>
-    <%= f.select :interact_status, ['','Met', 'Not Met', 'Considered'] %>
-    <%= f.text_field :interact_status_justification, class:"form-control", placeholder:'Justification',
+    <%= f.select :interact_status, Project::STATUS_CHOICE, hide_label: true %>
+    <%= f.text_field :interact_status_justification, class:"form-control", hide_label: true, placeholder:'Justification',
           style:"#{'display:none' if f.object.interact_status == '' }" %>
 
     <span>The information on how to contribute MUST explain the contribution process
           (e.g., are pull requests used?)</span>
-    <%= f.select :contribution_status, ['','Met', 'Not Met', 'Considered'] %>
-    <%= f.text_field :contribution_status_justification, class:"form-control", placeholder:'Justification' %>
+    <%= f.select :contribution_status, Project::STATUS_CHOICE, hide_label: true %>
+    <%= f.text_field :contribution_status_justification, class:"form-control", hide_label: true, placeholder:'Justification' %>
 
     <span>The information on how to contribute MUST explain the contribution process
           (e.g., are pull requests used?)</span>
-    <%= f.select :contribution_criteria_status, ['','Met', 'Not Met', 'Considered'] %>
-    <%= f.text_field :contribution_criteria_status_justification, class:"form-control", placeholder:'Justification' %>
+    <%= f.select :contribution_criteria_status, Project::STATUS_CHOICE, hide_label: true %>
+    <%= f.text_field :contribution_criteria_status_justification, class:"form-control", hide_label: true, placeholder:'Justification' %>
 
     <br>
     <h4>OSS License</h4>
 
     <span>License(s) MUST be posted in a standard location (e.g., as a top-level file named LICENSE or COPYING).
           License filenames MAY be followed by an extension such as ".txt" or ".md")</span>
-    <%= f.select :license_location, ['','Met', 'Not Met', 'Considered'] %>
-    <%= f.text_field :license_location_justification, class:"form-control", placeholder:'Justification' %>
+    <%= f.select :license_location, Project::STATUS_CHOICE, hide_label: true %>
+    <%= f.text_field :license_location_justification, class:"form-control", hide_label: true, placeholder:'Justification' %>
 
     <span>The software MUST be released as OSS. For our purposes, this means that the license MUST be at least one of the following:
           an approved license by the Open Source Initiative (OSI)
           a free license as approved by the Free Software Foundation (FSF)
           a free license acceptable to Debian main
           a "good" license according to Fedora.</span>
-    <%= f.select :oss_license, ['','Met', 'Not Met', 'Considered'] %>
-    <%= f.text_field :oss_license_justification, class:"form-control", placeholder:'Justification' %>
+    <%= f.select :oss_license, Project::STATUS_CHOICE, hide_label: true %>
+    <%= f.text_field :oss_license_justification, class:"form-control", hide_label: true, placeholder:'Justification' %>
 
     <span>It is RECOMMENDED that any required license(s) be OSI-approved. </span>
-    <%= f.select :oss_license_osi, ['','Met', 'Not Met', 'Considered'] %>
-    <%= f.text_field :oss_license_osi_justification, class:"form-control", placeholder:'Justification' %>
+    <%= f.select :oss_license_osi, Project::STATUS_CHOICE, hide_label: true %>
+    <%= f.text_field :oss_license_osi_justification, class:"form-control", hide_label: true, placeholder:'Justification' %>
 
   <span><b>Note</b>: We intend for the automated tool to focus on identifying common OSS licenses such as:
         CC0, MIT, BSD 2-clause, BSD 3-clause revised, Apache 2.0, Lesser GNU General Public License (LGPL),
@@ -101,16 +101,16 @@
          (possibly with a tutorial using examples), how to use it securely (e.g., what to do and what not to do)
           if that is an appropriate topic for the software.
           The security documentation need not be long (it is better for the software to be designed to be secure by default). </span>
-   <%= f.select :documentation_basics_status, ['','Met', 'Not Met', 'Considered'] %>
-   <%= f.text_field :documentation_basics_status_justification, class:"form-control", placeholder:'Justification' %>
+   <%= f.select :documentation_basics_status, Project::STATUS_CHOICE, hide_label: true %>
+   <%= f.text_field :documentation_basics_status_justification, class:"form-control", hide_label: true, placeholder:'Justification' %>
 
    <span>The project MUST include reference documentation that describes its interface. </span>
-   <%= f.select :documentation_interface_status, ['','Met', 'Not Met', 'Considered'] %>
-   <%= f.text_field :documentation_interface_status_justification, class:"form-control", placeholder:'Justification' %>
+   <%= f.select :documentation_interface_status, Project::STATUS_CHOICE, hide_label: true %>
+   <%= f.text_field :documentation_interface_status_justification, class:"form-control", hide_label: true, placeholder:'Justification' %>
 
   <br>
   <hr>
-  <%= f.text_area :general_comments, class:"form-control",  placeholder:'Additional Comments' %>
+  <%= f.text_area :general_comments, class:"form-control",  hide_label: true, placeholder:'Additional Comments' %>
   <br>
   <%= f.submit 'Submit', class:"btn btn-primary" %>
 <% end %>

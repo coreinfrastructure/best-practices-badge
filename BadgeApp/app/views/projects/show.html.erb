@@ -1,6 +1,7 @@
 <div class="jumbotron">
 
-<h4>Project Basics</h4>
+<h2 class="left">OSS Project Basics</h4>
+<br>
 <p>
   <strong>Name:</strong>
   <%= @project.name %>
@@ -13,7 +14,7 @@
 
 <p>
   <strong>Website:</strong>
-  <%= @project.website %>
+  <%= @project.project_url %>
 </p>
 
 <p>
@@ -21,27 +22,11 @@
   <%= @project.license %>
 </p>
 
-<h4>Change Control</h4>
 <p>
   <strong>Repo:</strong>
-  <%= @project.repo %>
+  <%= @project.repo_url %>
 </p>
 
-<p>
-  <strong>Changelog:</strong>
-  <%= @project.changelog %>
-</p>
-
-<p>
-  <strong>Version Numbering:</strong>
-  <%= @project.version_numbering %>
-</p>
-
-<h4>Reporting</h4>
-<p>
-  <strong>Issue Tracker:</strong>
-  <%= @project.issue_tracker_url %>
-</p>
 <hr>
 <p>
   <strong>Comments:</strong>

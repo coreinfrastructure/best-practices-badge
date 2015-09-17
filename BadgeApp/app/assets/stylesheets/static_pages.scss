@@ -26,6 +26,12 @@ textarea {
   text-align: center;
 }
 
+.left {
+  padding-left: 100px;
+  padding-right: 100px;
+}
+
+
 .center h1 {
   margin-bottom: 10px;
 }
@@ -136,6 +142,10 @@ input {
 .display-none{
   display:none;
 }
+
+label.required:after {
+  content:" *";
+}
 /* sidebar */
 
 aside {
@@ -180,4 +190,16 @@ aside {
   width: 100%;
   margin-top: 45px;
   @include box_sizing;
+}
+
+/* Users index */
+
+.users {
+  list-style: none;
+  margin: 0;
+  li {
+    overflow: auto;
+    padding: 10px 0;
+    border-bottom: 1px solid $gray-lighter;
+  }
 }

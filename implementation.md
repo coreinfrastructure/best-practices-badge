@@ -99,13 +99,17 @@ A user can edit project P if one of the following is true:
 
 ## Filling in the form
 
-The application should be able to generate the form directly from the markdown of the criteria text.  Extract the portion about the criteria (e.g., starting with "Basic best practices").  Every bullet with a MUST, MUST NOT, SHOULD, or RECOMMENDED will have a matching [criteria-name] entry (note that [criteria-name] may have a dagger after it).  Change a criteria-name into a "fieldname" by converting all "-" to "_"; this generates the database field name.  (The SQL specifications do not include "-" in simple field names).
+Previously we hoped to auto-generate the form, but it's difficult to create a good UI experience that way.  So for the moment, we're not doing that.
+
+Every bullet with a MUST, MUST NOT, SHOULD, or RECOMMENDED will have a matching [criteria-name] entry (note that [criteria-name] may have a dagger and/or asterisk after it).  Change a criteria-name into a "fieldname" by converting all "-" to "_"; this generates the database field name.  (The SQL specifications do not include "-" in simple field names).
 
 If the fieldname ends in "_url", it records a URL, and there are no other fields.  To get credit for such a URL, it needs to begin with "https?://", NOT include a "?" (that will counter some attempts to use BadgeApp to attack other systems), and that URL needs to be readable.  Empty URLs for MUST requirements should be highlighted somehow.
 
-Otherwise, the fieldname records Met/Not met/Considered/(blank) that users must directly assert, and there is at least one other field that users can enter text into: fieldname + "_justification".  *If* we have automated that field, then there is a field named fieldname + "_auto" that records an automated result justifying that it meets the criteria.  Any criteria with a MUST, MUST NOT, SHOULD, or RECOMMENDED gets credit if the fieldname is "Met" (if SHOULD/RECOMMENDED, then "Considered" is the same as "Met") and (1) fieldname_auto justifies it, OR (2) filename_justification is nonblank and includes at least one URL (which is supposed to be a pointer to supporting information).
+Otherwise, the fieldname records Met/Not met/blank that users must directly assert, and there is at least one other field that users can enter text into: fieldname + "_justification".  *If* we have automated that field, then there is a field named fieldname + "_auto" that records an automated result justifying that it meets the criteria.  Any criteria with a MUST, MUST NOT, SHOULD, or RECOMMENDED gets credit if the fieldname is "Met" (if SHOULD/RECOMMENDED, then "Not Met" is also allowed) and (1) fieldname_auto justifies it, OR (2) filename_justification is nonblank and includes at least one URL (which is supposed to be a pointer to supporting information).
 
-To get the badge, you need a URL or "Met" ("Considered" is the same as "Met" in some cases) in every MUST/MUST NOT/SHOULD/RECOMMENDED bullet for the (one) badge.  I recommend that we show % progress as people fill them in the information; it'll give people a sense of progress (increasing the likelihood they'll finish).
+To get the badge, you need a URL or "Met" in every MUST/MUST NOT, and non-blank in all SHOULD/RECOMMENDED bullets, for the (one) badge.  I recommend that we show % progress as people fill them in the information; it'll give people a sense of progress (increasing the likelihood they'll finish).
+
+We previously proposed a "Considered" value (separate from "blank"), but that makes the user interface excessively complex for little gain.  If it's marked "not met" and has a justification, then clearly it's been considered.
 
 We should try to occasionally save the form (perhaps every time they leave a field), so that people won't lose data partway through.
 

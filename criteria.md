@@ -90,15 +90,11 @@ see their text for more information.
 Text inside square brackets is the short name of the criterion.
 In a few cases rationale is also included.
 
+We expect that there will be a few other fields for the
+project name, description, project URL, repository URL (which may be the
+same as the project URL), and license(s).
+
 ### OSS project basics
-
-*Identification*
-
-- <a name="name"></a>What is the human-readable name of the project (note that other projects may use the same name)? <sup>[<a href="#name">name</a>]</sup>
-- <a name="description"></a>What is a *brief* description of the project, including key comments about it (for use when displaying badge information)? <sup>[<a href="#description">description</a>]</sup>
-- <a name="project-url"></a>What is the URL for the project (as a whole)? <sup>[<a href="#project-url">project-url</a>]</sup>
-- <a name="repo-url"></a>What is the URL for the version control repository (it may the same as the project URL) <sup>[<a href="#repo-url">repo-url</a>]</sup>
-- <a name="license"></a>What license(s) is the project released under? <sup>[<a href="#license">license</a>]</sup>
 
 *Project website*
 

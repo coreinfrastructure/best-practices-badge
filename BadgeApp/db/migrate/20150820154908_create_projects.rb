@@ -8,6 +8,7 @@ class CreateProjects < ActiveRecord::Migration
       t.string :project_url
       t.string :repo_url
       t.string :license
+=begin
       # Project Website
       t.string :project_url_status
       t.text :project_url_status_justification
@@ -22,19 +23,20 @@ class CreateProjects < ActiveRecord::Migration
       t.text :contribution_status_justification
       t.string :contribution_criteria_status
       t.text :contribution_criteria_status_justification
+=end
       # OSS License
-      t.string :license_location
+      t.string :license_location_status
       t.text :license_location_justification
-      t.string :oss_license
+      t.string :oss_license_status
       t.text :oss_license_justification
-      t.string :oss_license_osi
+      t.string :oss_license_osi_status
       t.text :oss_license_osi_justification
-      # Documentation
+=begin
+# Documentation
       t.string :documentation_basics_status
       t.text :documentation_basics_status_justification
       t.string :documentation_interface_status
       t.text :documentation_interface_status_justification
-
     # CHANGE CONTROL
       # Public version-controlled source repository
       t.string :repo_url_status
@@ -57,7 +59,7 @@ class CreateProjects < ActiveRecord::Migration
       t.text :changelog_status_justification
       t.string :changelog_vulns_status
       t.text :changelog_vulns_status_justification
-
+=end
     # COMMENTS ABOUT THE PROJECT
       t.text :general_comments
 

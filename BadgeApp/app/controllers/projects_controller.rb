@@ -70,7 +70,9 @@ class ProjectsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def project_params
       params.require(:project).permit(:name, :description, :project_url, :repo_url,
-                                      :license, :project_url_status,
+                                      :license,
+=begin
+                                      :project_url_status,
                                       :project_url_status_justification,
                                       :project_url_https_status,
                                       :project_url_https_status_justification,
@@ -82,12 +84,14 @@ class ProjectsController < ApplicationController
                                       :contribution_status_justification,
                                       :contribution_criteria_status,
                                       :contribution_criteria_status_justification,
-                                      :license_location,
+=end
+                                      :license_location_status,
                                       :license_location_justification,
-                                      :oss_license,
+                                      :oss_license_status,
                                       :oss_license_justification,
-                                      :oss_license_osi,
-                                      :oss_license_osi_justification,
+                                      :oss_license_osi_status,
+                                      :oss_license_osi_justification)
+=begin
                                       :documentation_basics_status,
                                       :documentation_basics_status_justification,
                                       :documentation_interface_status,
@@ -111,5 +115,6 @@ class ProjectsController < ApplicationController
                                       :changelog_vulns_status,
                                       :changelog_vulns_status_justification,
                                       :general_comments)
+=end
     end
 end

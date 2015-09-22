@@ -146,6 +146,20 @@ input {
 label.required:after {
   content:" *";
 }
+
+
+.criteria-desc {
+  padding-left: 0px;
+}
+
+.btn-group {
+  padding-left: 0px;
+  padding-bottom: 5px;
+  padding-top: 5px;
+  padding-right: 0px;
+  text-align: right;
+}
+
 /* sidebar */
 
 aside {

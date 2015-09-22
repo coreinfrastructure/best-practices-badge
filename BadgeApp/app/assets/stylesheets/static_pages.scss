@@ -160,6 +160,27 @@ label.required:after {
   text-align: right;
 }
 
+.btn-met {
+  &:hover {
+  background-color: #5cb85c;
+  color:#eee;
+  }
+  &:active {
+  background-color: #5cb85c;
+  color:#eee;
+  }
+}
+
+.btn-unmet {
+  &:hover {
+  background-color: #d9534f;
+  color:#eee;
+  }
+  &:active {
+  background-color: #d9534f;
+  color:#eee;
+  }
+}
 /* sidebar */
 
 aside {

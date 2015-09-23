@@ -82,7 +82,7 @@ if not, see introductory materials like
 Current criteria: Basic Best Practices for OSS
 ==============================================
 
-Here are the current (draft) criteria; it is certain to change.
+Here are the current *draft* criteria; it is certain to change.
 The criteria marked with &#8224; are intended to be automatically testable
 if the project is hosted on GitHub and follows standard conventions.
 The criteria marked with * at the end may be not applicable or not required;
@@ -103,7 +103,7 @@ same as the project URL), and license(s).
 
 *Basic project website content*
 
-- <a name="description-sufficient"></a>The project website MUST succinctly describe what the software does (what problem does it solve?), in language that potential users can understand (e.g., it uses a minimum of jargon). <sup>[<a href="#description-sufficient">description-sufficient</a>]</sup>
+- <a name="description-sufficient"></a>The project website MUST succinctly describe what the software does (what problem does it solve?), in language that potential users can understand (e.g., it uses minimal jargon). <sup>[<a href="#description-sufficient">description-sufficient</a>]</sup>
 - The project website MUST provide information on how to:
   - obtain,
   - provide feedback (as bug reports or enhancements),
@@ -113,8 +113,8 @@ same as the project URL), and license(s).
 
 *OSS license*
 
-- <a name="license-location"></a>License(s) MUST be posted in a standard location (e.g., as a top-level file named LICENSE or COPYING).  License filenames MAY be followed by an extension such as ".txt" or ".md" <sup>[<a href="#license-location">license-location</a>]&#8224;</sup>
-- The software MUST be released as OSS.  For our purposes, this means that the license MUST be at least one of the following:
+- <a name="license-location"></a>The project MUST post licence(s) in a standard location (e.g., as a top-level file named LICENSE or COPYING).  License filenames MAY be followed by an extension such as ".txt" or ".md" <sup>[<a href="#license-location">license-location</a>]&#8224;</sup>
+- The software MUST be licensed as OSS.  For our purposes, this means that the license MUST be at least one of the following:
   - [an approved license by the Open Source Initiative (OSI)](http://opensource.org/licenses)
   - [a free license as approved by the Free Software Foundation (FSF)](http://www.gnu.org/licenses/license-list.html)
   - [a free license acceptable to Debian main](https://www.debian.org/legal/licenses/)
@@ -122,17 +122,17 @@ same as the project URL), and license(s).
 - <a name="oss-license-osi"></a>It is RECOMMENDED that any required license(s) be [OSI-approved](http://opensource.org/licenses). <sup>[<a href="#oss-license-osi">oss-license-osi</a>]&#8224;</sup>
 - The software MAY also be licensed other ways (e.g., "GPLv2 or proprietary" is acceptable).
 - *Note*: We intend for the automated tool to focus on identifying common OSS licenses such as:     [CC0](http://creativecommons.org/publicdomain/zero/1.0/), [MIT](http://opensource.org/licenses/MIT), [BSD 2-clause](http://opensource.org/licenses/BSD-2-Clause), [BSD 3-clause revised](http://opensource.org/licenses/BSD-3-Clause), [Apache 2.0](http://opensource.org/licenses/Apache-2.0), [Lesser GNU General Public License (LGPL)](http://opensource.org/licenses/lgpl-license), and the [GNU General Public License (GPL)](http://opensource.org/licenses/gpl-license).
-- *Rationale*: These criteria are designed for OSS projects, so we need to ensure that they're only used where they apply.  Some projects are thought of as OSS yet are not actually released as OSS (e.g., they might not have any license, in which case the defaults of the country's legal system apply, or they might use a non-OSS license).  Unusual licenses can cause long-term problems for OSS projects and are more difficult for tools to handle.  We expect that that "higher-level" criteria would set a higher bar, e.g., that it *must* be released under an OSI-approved license.  
+- *Rationale*: These criteria are designed for OSS projects, so we need to ensure that they're only used where they apply.  Some projects are thought of as OSS yet are not actually released as OSS (e.g., they might not have any license, in which case the defaults of the country's legal system apply, or they might use a non-OSS license).  Unusual licenses can cause long-term problems for OSS projects and are more difficult for tools to handle.  We expect that [more advanced badges](./other.md) would set a higher bar (e.g., that it *must* be released under an OSI-approved license).
 
 *Documentation*
 
-- The project MUST provide basic documentation for the software in some media (such as text or video) that in aggregate covers:
-  - how to install it
-  - how to start it
-  - how to use it (possibly with a tutorial using examples)
+- The project MUST provide basic documentation for the software in some media (such as text or video) that includes:
+  - how to install it,
+  - how to start it,
+  - how to use it (possibly with a tutorial using examples), and 
   - <a name="documentation-basics"></a>how to use it securely (e.g., what to do and what not to do) if that is an appropriate topic for the software.  The security documentation need not be long (it is better for the software to be designed to be secure by default).  <sup>[<a href="#documentation-basics">documentation-basics</a>]</sup>
 - <a name="documentation-interface"></a>The project MUST include reference documentation that describes its interface. <sup>[<a href="#documentation-interface">documentation-interface</a>]</sup>
-- Hypertext links to non-project material MAY be used as documentation, as long as the linked-to information is available and meets the requirements.
+- The project MAY use hypertext links to non-project material as documentation, as long as the linked-to information is available and meets the requirements.
 
 ### Change control
 

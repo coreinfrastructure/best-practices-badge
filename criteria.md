@@ -75,6 +75,10 @@ between SHOULD and RECOMMENDED:
   SHOULD and RECOMMENDED criteria must be met OR the rationale for
   not implementing the criterion must be documented.
 
+We're experimenting with when justifications are required;
+since the badge is self-asserted, it might be wise to require justifications
+for all claims, so that others can review the truth of those claims.
+
 We assume that you are already familiar with
 software development and running an OSS project;
 if not, see introductory materials such as

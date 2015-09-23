@@ -145,25 +145,26 @@ same as the project URL), and license(s).
 *Public version-controlled source repository*
 
 - <a name="repo-url"></a>The project MUST have a version-controlled source repository that is publicly readable and has a URL (the URL MAY be the same as the project URL). <sup>[<a href="#repo-url">repo-url</a>]&#8224;</sup>
-- <a name="repo-track"></a>This source repository MUST track what changes were made, who made the changes, and when the changes were made. <sup>[<a href="#repo-track">repo-track</a>]&#8224;</sup>
-- <a name="repo-interim"></a>The public repository MUST include interim versions for review before release; it MUST NOT include only final releases. <sup>[<a href="#repo-interim">repo-interim</a>]</sup>
-- <a name="repo-distributed"></a>It is RECOMMENDED that projects use common distributed version control software (e.g., git).  Note that git is not specifically required, and that projects can use centralized version control software (such as subversion) with justification. <sup>[<a href="#repo-distributed">repo-distributed</a>]&#8224;</sup>
-- Projects MAY use private (non-public) branches in specific cases while the change is not publicly released (e.g., for fixing vulnerabilities before the vulnerability is revealed to the public).
+- <a name="repo-track"></a>The source repository MUST track what changes were made, who made the changes, and when the changes were made. <sup>[<a href="#repo-track">repo-track</a>]&#8224;</sup>
+- <a name="repo-interim"></a>The source repository MUST include interim versions for review between releases; it MUST NOT include only final releases. <sup>[<a href="#repo-interim">repo-interim</a>]</sup>
+- <a name="repo-distributed"></a>It is RECOMMENDED that common distributed version control software is used (e.g., git).  Git is not specifically required and projects can use centralized version control software (such as subversion) with justification. <sup>[<a href="#repo-distributed">repo-distributed</a>]&#8224;</sup>
+- The project MAY use private (non-public) branches in specific cases while the change is not publicly released (e.g., for fixing a vulnerability before it is revealed to the public).
 - *Rationale*:  This enables easy tracking and public review.  Some OSS projects do not use a version control system or do not provide public access to it. The lack of a public version control repository makes it unnecessarily difficult to contribute to a project and to track its progress in detail.
 
-*Unique version numbering*
+*Version numbering*
 
 - <a name="version-unique"></a>The project MUST have a unique version number for each release intended to be used by users. <sup>[<a href="#version-unique">version-unique</a>]</sup>
-- <a name="version-semver"></a>The [Semantic Versioning (SemVer) format](http://semver.org) is RECOMMENDED for releases. <sup>[<a href="#version-semver">version-semver</a>]</sup>
+- <a name="version-semver"></a>It is RECOMMENDED that the [Semantic Versioning (SemVer) format](http://semver.org) is used for releases. <sup>[<a href="#version-semver">version-semver</a>]</sup>
 - Commit IDs (or similar) MAY be used as as version numbers. They are unique, but note that these can cause problems for users as they may not be able to determine  whether or not they're up-to-date.
-- <a name="version-tags"></a>It is RECOMMENDED that git users apply tags to releases. <sup>[<a href="#version-tags">version-tags</a>]&#8224;</sup>
+- <a name="version-tags"></a>It is RECOMMENDED that projects using git apply tags to releases. <sup>[<a href="#version-tags">version-tags</a>]&#8224;</sup>
 
 *ChangeLog*
 
 - <a name="changelog"></a>The project MUST provide a "ChangeLog" with a human-readable summary of major changes for each release.  The ChangeLog MUST NOT be the output of the version control log of every change (e.g., the "git log" command is not a ChangeLog). <sup>[<a href="#changelog">changelog</a>]&#8224;</sup>
-- <a name="changelog-vulns"></a>The ChangeLog MUST include whether the new release fixes any known vulnerabilities. <sup>[<a href="#changelog-vulns">changelog-vulns</a>]</sup>
-- The ChangeLog MAY be a separate file (e.g., "ChangeLog" or "changelog" optionally appended by ".txt", ".md", or ".html" extensions).  The ChangeLog MAY use version control system mechanisms such as the [GitHub Releases workflow](https://github.com/blog/1547-release-your-software).
-- *Rationale*: ChangeLogs are important because they help users decide whether or not they will want to update (and what the impact would be), e.g., if the new release fixes vulnerabilities.
+- <a name="changelog-vulns"></a>The ChangeLog MUST identify whether the new release fixes any known vulnerabilities. <sup>[<a href="#changelog-vulns">changelog-vulns</a>]</sup>
+- The ChangeLog MAY be a separate file (e.g., "ChangeLog" or "changelog") and MAY be followed by an extension such as ".txt", ".md", or ".html".
+- The ChangeLog MAY use version control system mechanisms such as the [GitHub Releases workflow](https://github.com/blog/1547-release-your-software).
+- *Rationale*: ChangeLogs are important because they help users decide whether or not they will want to update, and what the impact would be (e.g., if the new release fixes vulnerabilities).
 
 ### Reporting
 

@@ -160,10 +160,9 @@ same as the project URL), and license(s).
 
 *ChangeLog*
 
-- <a name="changelog"></a>The project MUST provide a "ChangeLog" with a human-readable summary of major changes for each release.  The ChangeLog MUST NOT be the output of the version control log of every change (e.g., the "git log" command is not a ChangeLog). <sup>[<a href="#changelog">changelog</a>]&#8224;</sup>
-- <a name="changelog-vulns"></a>The ChangeLog MUST identify whether the new release fixes any known vulnerabilities. <sup>[<a href="#changelog-vulns">changelog-vulns</a>]</sup>
-- The ChangeLog MAY be a separate file (e.g., "ChangeLog" or "changelog") and MAY be followed by an extension such as ".txt", ".md", or ".html".
-- The ChangeLog MAY use version control system mechanisms such as the [GitHub Releases workflow](https://github.com/blog/1547-release-your-software).
+- <a name="changelog"></a>The project MUST provide a "ChangeLog" (a human-readable summary of major changes in each release).  The ChangeLog MUST NOT be the output of the version control log of every change (e.g., the "git log" command is not a ChangeLog). <sup>[<a href="#changelog">changelog</a>]&#8224;</sup>
+- <a name="changelog-vulns"></a>The ChangeLog MUST identify whether the new release fixes any publicly known vulnerabilities. <sup>[<a href="#changelog-vulns">changelog-vulns</a>]</sup>
+- The ChangeLog MAY implmented in a variety of ways.  The ChangeLog MAY be a separate file (e.g., "ChangeLog" or "changelog") and the filename MAY be followed by an extension such as ".txt", ".md", or ".html".  The ChangeLog MAY instead use version control system mechanisms such as the [GitHub Releases workflow](https://github.com/blog/1547-release-your-software).
 - *Rationale*: ChangeLogs are important because they help users decide whether or not they will want to update, and what the impact would be (e.g., if the new release fixes vulnerabilities).
 
 ### Reporting

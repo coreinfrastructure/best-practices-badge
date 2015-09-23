@@ -8,10 +8,10 @@ This is a *draft* of proposed basic best practices
 for open source software (OSS) projects.
 OSS projects that follow these best practices
 will be able to voluntarily self-certify and show that they've
-achieved a CII badge.
+achieved a Core Infrastructure Initiative (CII) badge.
 Projects can do this, at no cost,
 by using a web application (BadgeApp)
-to explain how they meet each best practice.
+to explain how they meet these practices and their detailed criteria.
 
 There is no set of practices that can guarantee that software
 will never have defects or vulnerabilities;
@@ -20,10 +20,12 @@ However, following best practices can help improve the results
 of OSS projects.
 For example, some practices enable multi-person review before release
 that can help find otherwise hard-to-find vulnerabilities.
-These best practices were created to (1) encourage OSS projects to
-follow best practices, (2) help new OSS projects discover what those
-practices are, and (3) help users know which projects
-are following best practices (so users can prefer such projects).
+
+These best practices have been created to:
+
+1. encourage OSS projects to follow best practices,
+1. help new OSS projects discover what those practices are, and
+1. help users know which projects are following best practices (so users can prefer such projects).
 
 We are currently focused on identifying *basic* best practices
 that well-run OSS projects typically already follow.
@@ -38,7 +40,7 @@ we are releasing this very early version so that we can get feedback.
 We expect that these practices and their detailed criteria will be updated,
 even after badges are released.
 Thus, criteria (and badges) probably will have a year identifier
-and will age out after a year or two. 
+and will phase out after a year or two. 
 We expect it will be easy to update the information,
 so this relatively short badge life should not be a barrier.
 
@@ -47,7 +49,7 @@ Feedback is *very* welcome via the
 There is also a
 [mailing list for general discussion](https://lists.coreinfrastructure.org/mailman/listinfo/cii-badges).
 
-Below are the current (draft) criteria, potential criteria,
+Below are the current *draft* criteria, potential criteria,
 non-criteria, future plans, and where to get more information.
 The key words "MUST", "MUST NOT",
 "SHOULD", "SHOULD NOT", "RECOMMENDED",  and "MAY"
@@ -58,24 +60,24 @@ between SHOULD and RECOMMENDED:
 - The term MUST is an absolute requirement, and MUST NOT
   is an absolute prohibition.
 - The term SHOULD indicates a criterion that should be implemented, but
-  there may exist valid reasons in particular circumstances to not do it.
+  valid reasons may exist to not do so in particular circumstances.
   The full implications must be considered,
   understood, and carefully weighed before choosing a different course.
-  The rationale for considering but not implementing the criterion
-  MUST be documented to acquire a badge.
 - The term RECOMMENDED is used instead of SHOULD when the criterion must
   be considered, but valid reasons
-  to not do it are even more common than for SHOULD.
-- The term MAY mentions one way something can be done, e.g.,
-  to make it clear that the described approach is acceptable.
+  to not do so are even more common than for SHOULD.
 - Often a criterion is stated as something that SHOULD be done, or is
-  RECOMMENDED, because its costs or difficulties can sometimes be high.
-- To get a badge, all MUST and MUST NOTs must be met, and all SHOULD
-  and RECOMMENDED entries must be met OR be considered.
+  RECOMMENDED, because it may be difficult to implement or the costs
+  to do so may be high.
+- The term MAY provides one way something can be done, e.g.,
+  to make it clear that the described implementation is acceptable.
+- To obtain a badge, all MUST and MUST NOT criteria must be met, and all
+  SHOULD and RECOMMENDED criteria must be met OR the rationale for
+  not implementing the criterion must be documented.
 
 We assume that you are already familiar with
 software development and running an OSS project;
-if not, see introductory materials like
+if not, see introductory materials such as
 [*Producing Open Source Software* by Karl Fogel](http://producingoss.com/).
 
 

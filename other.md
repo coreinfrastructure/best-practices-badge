@@ -86,7 +86,7 @@ Potential other criteria
     -   Automated test suite covers >=X% branches of source code (80% considered good).
     -   Documented test plan.
 *   Security:
-    -   "Announcement" mailing list for new versions (at least for security updates).
+    -   Public advisories issued for vulnerabilities, this could include advisories on the https://SOMEWHERE/security page and/or an "Announcement" mailing list for new versions (at least for security updates).
     -   All inputs from untrusted sources checked against whitelist (not a blacklist) and/or escaped before being transmitted to other users.
     -   Privileges limited/minimized.
     -   Attack surface documented and minimized.
@@ -102,7 +102,9 @@ Potential other criteria
     -   Current/past security review of the code.
     -   Must have a process for rapidly fixing vulnerabilities and releasing the updated software.  Note that having a good test suite makes it easier to make changes and be confident the system still works.  Also note that OSS projects are often embedded in larger systems and projects cannot control the larger projects they are in.
     -   An automated test suite must achieve at least an aggregate 80% branch coverage (the goal is to cover a significant portion of the program; this can be a combination of unit tests and larger integration tests).
-
+*   Release:
+    -   Executable binaries that are released (both DLL and EXE's on Windows) MUST be cryptographically signed (the goal is to allow application whitelisting systems to use the signature to allow applications to run rather then relying on path or hash based rules - this might be at odds with some users requirement to be able to build from source but I thought I'd raise it anyways).
+    -   
 We are considering moving the criteria continuous integration
 and reproduceable builds into the basic best practices criteria.
 

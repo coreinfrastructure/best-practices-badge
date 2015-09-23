@@ -818,6 +818,19 @@ If we use it, we'd probably use "Option space-sentence:2",
 "Option wrap:no" for bulleted text
 and "Option wrap:inner-sentence" for non-bulleted text.
 
+### Criteria style
+
+Here is a guide for how criteria should be written.
+
+1. Criteria may include multiple sentences.  Each criterion should be front-focused so that the most important information is in the first sentence.  Further information can be included in following sentences.
+2. The use of e.g.'s should be within parenthesis (e.g., (e.g., such as this)).
+1. MUST, MUST NOT, SHOULD, and MAY criteria should begin with 'The *object*' followed by the term (e.g., The Project MUST, The Software MAY , The ChangeLog SHOULD).
+1. If a criterion require an IF clause, this should be included at the very start of the criteria (e.g., IF *a* then the *object* MUST *do x,y,z*).
+1. RECOMMENDED criteria should begin with 'It is RECOMMENDED...'
+1. If required, a rationale should be included as the last bullet in subsection.
+1. Criteria should be ordered from most restrictive and prohibitive to least restrictive and prohibitive (e.g., MUST and MUST NOT > SHOULD > RECOMMENDED > MAY).
+1. **Bold** or *italics* should not be used.
+1. Notes within critiria or subsections should be kept to minimum.
 
 # Practices of some existing OSS Projects
 

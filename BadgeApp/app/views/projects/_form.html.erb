@@ -9,82 +9,87 @@
 
     <h3 class='h3'>Identification</h3>
 
-    <span>What is the human-readable name of the project (note that other
-          projects may use the same name)?</span>
-    <%= f.text_field :name, class:"form-control", placeholder:'OSS Project Name' %>
+      <span>What is the human-readable name of the project (note that other
+            projects may use the same name)?</span>
+      <%= f.text_field :name, class:"form-control", placeholder:'OSS Project Name' %>
 
-    <span>What is a brief description of the project, including key comments
-          about it (for use when displaying badge information)?</span>
-    <%= f.text_area :description, class:"form-control", hide_label: true, placeholder:'Project Description' %>
+      <span>What is a brief description of the project, including key comments
+            about it (for use when displaying badge information)?</span>
+      <%= f.text_area :description, class:"form-control", hide_label: true, placeholder:'Project Description' %>
 
-    <span>What is the URL for the project (as a whole)?</span>
-    <%= f.text_field :project_url, class:"form-control", hide_label: true, placeholder:'Project Website URL' %>
+      <span>What is the URL for the project (as a whole)?</span>
+      <%= f.text_field :project_url, class:"form-control", hide_label: true, placeholder:'Project Website URL' %>
 
-    <span>What is the URL for the version control repository
-          (it may the same as the project URL)?</span>
-    <%= f.text_field :repo_url, class:"form-control", hide_label: true, placeholder:'Project Repo URL' %>
+      <span>What is the URL for the version control repository
+            (it may the same as the project URL)?</span>
+      <%= f.text_field :repo_url, class:"form-control", hide_label: true, placeholder:'Project Repo URL' %>
 
-    <span>What license(s) is the project released under?</span>
-    <%= f.text_field :license, class:"form-control", hide_label: true, placeholder:'OSS License' %>
-  <br>
+      <span>What license(s) is the project released under?</span>
+      <%= f.text_field :license, class:"form-control", hide_label: true, placeholder:'OSS License' %>
+      <br>
 
-  <h3 class='h3'>OSS License</h3>
+    <h3 class='h3'>OSS License</h3>
 
-   <div class="btn-group col-md-3" data-toggle="buttons">
-     <%= f.label :license_location_status, class: "btn btn-default" do %>
-       <%= f.radio_button :license_location_status, '?' %>?
-     <% end %>
-     <%= f.label :license_location_status, class: "btn btn-default btn-met" do %>
-       <%= f.radio_button :license_location_status, 'Met' %> Met
-     <% end %>
-     <%= f.label :license_location_status, class: "btn btn-default btn-unmet" do %>
-       <%= f.radio_button :license_location_status, 'Unmet' %> Unmet
-     <% end %>
-   </div>
-   <span class="col-md-9 criteria-desc">License(s) MUST be posted in a standard location (e.g., as a top-level file named LICENSE or COPYING).
+     <div class="col-md-3 criteria-radio">
+       <%= f.label :license_location_status do %>
+         <%= f.radio_button :license_location_status, '?' %> &nbsp;?&nbsp;
+       <% end %>
+       <%= f.label :license_location_status do %>
+         <%= f.radio_button :license_location_status, 'Met'%> Met
+       <% end %>
+       <%= f.label :license_location_status do %>
+         <%= f.radio_button :license_location_status, 'Unmet' %> Unmet
+       <% end %>
+     </div>
+     <div class='col-md-9 criteria-desc'>
+        <span>License(s) MUST be posted in a standard location (e.g., as a top-level file named LICENSE or COPYING).
            License filenames MAY be followed by an extension such as ".txt" or ".md")</span>
-   <%= f.text_field :license_location_justification, class:"form-control", hide_label: true, placeholder:'Justification' %>
+        <%= f.text_field :license_location_justification, class:"form-control", hide_label: true, placeholder:'Please explain' %>
+     </div>
+     <hr class='col-md-11'>
 
-  <hr class='col-md-11'>
-
-   <div class="btn-group col-md-3" data-toggle="buttons">
-    <%= f.label :oss_license_status, class: "btn btn-default" do %>
-      <%= f.radio_button :oss_license_status, '?' %>?
-    <% end %>
-    <%= f.label :oss_license_status, class: "btn btn-default btn-met" do %>
-      <%= f.radio_button :oss_license_status, 'Met' %> Met
-    <% end %>
-    <%= f.label :oss_license_status, class: "btn btn-default btn-unmet" do %>
-      <%= f.radio_button :oss_license_status, 'Unmet' %> Unmet
-    <% end %>
-   </div>
-   <span class='col-md-9 criteria-desc'>The software MUST be released as OSS. For our purposes, this means that the license MUST be at least one of the following:
-      an approved license by the Open Source Initiative (OSI)
-      a free license as approved by the Free Software Foundation (FSF)
-      a free license acceptable to Debian main
-      a "good" license according to Fedora.</span>
-   <%= f.text_field :oss_license_justification, class:"form-control", hide_label: true, placeholder:'Justification' %>
+     <div class="col-md-3 criteria-radio">
+      <%= f.label :oss_license_status do %>
+        <%= f.radio_button :oss_license_status, '?' %> &nbsp;?&nbsp;
+      <% end %>
+      <%= f.label :oss_license_status do %>
+        <%= f.radio_button :oss_license_status, 'Met' %> Met
+      <% end %>
+      <%= f.label :oss_license_status do %>
+        <%= f.radio_button :oss_license_status, 'Unmet' %> Unmet
+      <% end %>
+     </div>
+     <div class='col-md-9 criteria-desc'>
+     <span>The software MUST be released as OSS. For our purposes, this means that the license MUST be at least one of the following:
+        an approved license by the Open Source Initiative (OSI)
+        a free license as approved by the Free Software Foundation (FSF)
+        a free license acceptable to Debian main
+        a "good" license according to Fedora.</span>
+     <%= f.text_field :oss_license_justification, class:"form-control", hide_label: true, placeholder:'Justification' %>
+    </div>
    <hr class='col-md-11'>
 
-   <div class="btn-group col-md-3" data-toggle="buttons">
-    <%= f.label :oss_license_osi_status, class: "btn btn-default" do %>
-      <%= f.radio_button :oss_license_osi_status, '?' %>?
+   <div class="col-md-3 criteria-radio">
+    <%= f.label :oss_license_osi_status do %>
+      <%= f.radio_button :oss_license_osi_status, '?' %> &nbsp;?&nbsp;
     <% end %>
-    <%= f.label :oss_license_osi_status, class: "btn btn-default btn-met" do %>
-      <%= f.radio_button :oss_license_osi_status, 'Met' %> Met
+    <%= f.label :oss_license_osi_status do %>
+      <%= f.radio_button :oss_license_osi_status, 'Met'%> Met
     <% end %>
-    <%= f.label :oss_license_osi_status, class: "btn btn-default btn-unmet" do %>
-      <%= f.radio_button :oss_license_osi_status, 'Unmet' %> Unmet
+    <%= f.label :oss_license_osi_status do %>
+      <%= f.radio_button :oss_license_osi_status, 'Unmet'%> Unmet
     <% end %>
   </div>
-  <span  class='col-md-9 criteria-desc'>It is RECOMMENDED that any required license(s) be OSI-approved. </span>
+  <div class='col-md-9 criteria-desc'>
+  <span>It is RECOMMENDED that any required license(s) be OSI-approved. </span>
   <%= f.text_field :oss_license_osi_justification, class:"form-control", hide_label: true, placeholder:'Justification' %>
+  </div>
 
   <hr class='col-md-11'>
   <span class='col-md-12 criteria-desc'><b>Note</b>: We intend for the automated tool to focus on identifying common OSS licenses such as:
     CC0, MIT, BSD 2-clause, BSD 3-clause revised, Apache 2.0, Lesser GNU General Public License (LGPL),
-    and the GNU General Public License (GPL).</span><br>
-  <span class='col-md-12 criteria-desc'><b>Rationale</b>: These criteria are designed for OSS projects, so we need to ensure
+    and the GNU General Public License (GPL).<br>
+    <b>Rationale</b>: These criteria are designed for OSS projects, so we need to ensure
     that they're only used where they apply. Some projects are thought of as OSS
     yet are not actually released as OSS (e.g., they might not have any license,
     in which case the defaults of the country's legal system apply, or they might use a non-OSS license).
@@ -98,79 +103,38 @@
   <%= f.submit 'Submit', class:"btn btn-primary" %>
 <% end %>
 
-<!--script type="text/javascript">
-$(function() {
-  $('input.checkbox-inline').click(function() {
-    me = $(this);
-    if (me.prop('checked')) {
-      if (me.prop('tristate')) {
-        // me.parent().css('background-color', 'red');
-        me.prop('checked', false);
-        me.prop('tristate', false);
-        // me.attr('value', '0');
-      } else {
-        // me.parent().css('background-color', 'green');
-        // me.attr('value', '1');
-      }
-    } else {
-      if (!me.prop('tristate')) {
-        // me.parent().css('background-color', 'yellow');
-        me.prop('tristate', true);
-        me.prop('indeterminate', true);
-        me.prop('checked', true);
-        me.attr('value', 'NULL');
-      } else {
-        me.prop('tristate', false);
-        me.prop('indeterminate', false);
-        me.prop('checked', false);
-        me.attr('value', false);
-      }
-    }
-  });
-});
 
-</script-->
+
+
+
+
+
+
+
+
+
+
 
 <script>
+function justification_field(criteria) {
+  var criteria_just = "#project_" + criteria + "_justification";
+  var criteria_status = "#project_" + criteria + "_status";
+  $(criteria_just).hide();
 
-$("#project_license_location_justification").hide();
-$("#project_oss_license_justification").hide();
-$("#project_oss_license_osi_justification").hide();
-
-$('input[name="project[license_location_status]"]').click(function()
-    {
-        if ( $("#project_license_location_status_met").is(':checked'))
-              $("#project_license_location_justification").show('fast');
-        if ( $("#project_license_location_status_unmet").is(':checked'))
-            $("#project_license_location_justification").show('fast');
-        if ( $("#project_license_location_status_").is(':checked'))
-            $("#project_license_location_justification").hide('fast');
-    });
-
-$('input[name="project[oss_license_status]"]').click(function()
-    {
-        if ( $("#project_oss_license_status_met").is(':checked'))
-              $("#project_oss_license_justification").show('fast');
-        if ( $("#project_oss_license_status_unmet").is(':checked'))
-            $("#project_oss_license_justification").show('fast');
-        if ( $("#project_oss_license_status_").is(':checked'))
-            $("#project_oss_license_justification").hide('fast');
-    });
-
-
-  $('input[name="project[oss_license_osi_status]"]').click(function()
+  $('input[name="project['+criteria+'_status]"]').click(function()
       {
-          if ( $("#project_oss_license_osi_status_met").is(':checked'))
-                $("#project_oss_license_osi_justification").show('fast');
-          if ( $("#project_oss_license_osi_status_unmet").is(':checked'))
-              $("#project_oss_license_osi_justification").show('fast');
-          if ( $("#project_oss_license_osi_status_").is(':checked'))
-              $("#project_oss_license_osi_justification").hide('fast');
+        if ( $(criteria_status + "_met").is(':checked'))
+             $(criteria_just).show('fast');
+        if ( $(criteria_status+"_unmet").is(':checked'))
+             $(criteria_just).show('fast');
+        if ( $(criteria_status+"_").is(':checked'))
+             $(criteria_just).hide('fast');
       });
+}
 
-
-
-
+justification_field("license_location");
+justification_field("oss_license");
+justification_field("oss_license_osi");
 </script>
 
   </div>

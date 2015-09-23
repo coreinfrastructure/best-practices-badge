@@ -147,39 +147,20 @@ label.required:after {
   content:" *";
 }
 
-
 .criteria-desc {
   padding-left: 0px;
 }
 
-.btn-group {
-  padding-left: 0px;
-  padding-bottom: 5px;
+.criteria-radio {
+  padding-left: 5px;
   padding-top: 5px;
-  padding-right: 0px;
-  text-align: right;
 }
 
-.btn-met {
-  &:hover {
-  background-color: #5cb85c;
-  color:#eee;
-  }
-  &:active {
-  background-color: #5cb85c;
-  color:#eee;
-  }
-}
-
-.btn-unmet {
-  &:hover {
-  background-color: #d9534f;
-  color:#eee;
-  }
-  &:active {
-  background-color: #d9534f;
-  color:#eee;
-  }
+.criteria-radio label {
+  padding:5px 5px;
+  font-family:Arial;
+  font-size:14px;
+  font-weight: normal;
 }
 /* sidebar */
 

@@ -202,8 +202,8 @@ same as the project URL), and license(s).
 
 *Warning flags*
 
-- <a name="warnings"></a>If there is an OSS tool for the selected language that can check for compiler warning flags (e.g. "-Wall"), a "safe" language mode (e.g., "use strict", "use warnings", or similar), and/or use a separate "linter" tool to look for code quality errors or common simple mistakes, it  MUST be enabled. <sup>[<a href="#warnings">warnings</a>]*</sup>
-- <a name="warnings-fixed"></a>The project MUST address warnings that are found (by fixing them or marking them in the source code as false positives).  Ideally there would be no warnings, but a project MAY accept some warnings (typically less than 1 warning per 100 lines or less than 10 warnings). <sup>[<a href="#warnings-fixed">warnings-fixed</a>]*</sup>
+- <a name="warnings"></a>The project MUST enable some compiler warning flagss (e.g. "-Wall"), a "safe" language mode (e.g., "use strict", "use warnings", or similar), and/or use a separate "linter" tool to look for code quality errors or common simple mistakes, if there is at least one OSS tool that can implement this criterion in the selected language. <sup>[<a href="#warnings">warnings</a>]*</sup>
+- <a name="warnings-fixed"></a>The project MUST address the issues that are found (by fixing them or marking them in the source code as false positives).  Ideally there would be no warnings, but a project MAY accept some warnings (typically less than 1 warning per 100 lines or less than 10 warnings). <sup>[<a href="#warnings-fixed">warnings-fixed</a>]*</sup>
 - <a name="warnings-strict"></a>It is RECOMMENDED that projects be maximally strict, but this is not always practical. <sup>[<a href="#warnings-strict">warnings-strict</a>]*</sup>
 
 ### Security

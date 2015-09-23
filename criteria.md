@@ -188,24 +188,23 @@ same as the project URL), and license(s).
 
 *Automated test suite*
 
-- <a name="test"></a>There MUST be at least one automated test suite. <sup>[<a href="#test">test</a>]</sup>
+- <a name="test"></a>The project MUST have at least one automated test suite. <sup>[<a href="#test">test</a>]</sup>
 - <a name="test-invocation"></a>A test suite SHOULD be invocable in a standard way for that language (e.g., "make check", "mvn test", and so on). <sup>[<a href="#test-invocation">test-invocation</a>]</sup>
-- <a name="test-most"></a> It is RECOMMENDED that the test suite cover most (or ideally all) the code branches, input fields, and functionality <sup>[<a href="#test-most">test-most</a>]</sup>
-- Systems MAY have multiple automated test suites (e.g., one that runs quickly, vs. another that is more thorough but requires special equipment).
+- <a name="test-most"></a> It is RECOMMENDED that the test suite cover most (or ideally all) the code branches, input fields, and functionality. <sup>[<a href="#test-most">test-most</a>]</sup>
+- The project MAY have multiple automated test suites (e.g., one that runs quickly, vs. another that is more thorough but requires special equipment).
 - *Rationale*: Automated test suites immediately help detect a variety of problems.  A large test suite can find more problems, but even a small test suite can detect problems and provide a framework to build on.
 
-*Tests are added for new functionality*
+*New functionality testing*
 
-- <a name="tests-should-added"></a>There MUST be a general policy (formal or not) that when major new functionality is added, tests of that functionality SHOULD be added to an automated test suite. <sup>[<a href="#tests-should-added">tests-should-added</a>]</sup>
-- <a name="tests-are-added"></a>There MUST be evidence that such tests are being added in the most recent major changes to the project.  Major functionality would typically be mentioned in the ChangeLog.  Perfection is not required, merely evidence that tests are typically being added in practice. <sup>[<a href="#tests-are-added">tests-are-added</a>]</sup>
+- <a name="tests-policy"></a>The project MUST have a general policy (formal or not) that as major new functionality is added, tests of that functionality SHOULD be added to an automated test suite. <sup>[<a href="#tests-policy">tests-policy</a>]</sup>
+- <a name="tests-are-added"></a>The project MUST have evidence that such tests are being added in the most recent major changes to the project.  Major functionality would typically be mentioned in the ChangeLog.  (Perfection is not required, merely evidence that tests are typically being added in practice.) <sup>[<a href="#tests-are-added">tests-are-added</a>]</sup>
 - <a name="tests-documentated-added"></a>It is RECOMMENDED that this be *documented* in the instructions for change proposals, but even an informal rule is acceptable as long as the tests are being added in practice. <sup>[<a href="#tests-documentated-added">tests-documentated-added</a>]</sup>
 
 *Warning flags*
 
-- <a name="warnings"></a>The project MUST enable some compiler warning flagss (e.g. "-Wall"), a "safe" language mode (e.g., "use strict", "use warnings", or similar), and/or use a separate "linter" tool to look for code quality errors or common simple mistakes, if there is at least one OSS tool that can implement this criterion in the selected language. <sup>[<a href="#warnings">warnings</a>]*</sup>
-- <a name="warnings-fixed"></a>The project MUST address the issues that are found (by fixing them or marking them in the source code as false positives).  Ideally there would be no warnings, but a project MAY accept some warnings (typically less than 1 warning per 100 lines or less than 10 warnings). <sup>[<a href="#warnings-fixed">warnings-fixed</a>]*</sup>
+- <a name="warnings"></a>If there is an OSS tool for the selected language that can check for compiler warning flags (e.g. "-Wall"), a "safe" language mode (e.g., "use strict", "use warnings", or similar), and/or use a separate "linter" tool to look for code quality errors or common simple mistakes, it  MUST be enabled. <sup>[<a href="#warnings">warnings</a>]*</sup>
+- <a name="warnings-fixed"></a>The project MUST address warnings that are found (by fixing them or marking them in the source code as false positives).  Ideally there would be no warnings, but a project MAY accept some warnings (typically less than 1 warning per 100 lines or less than 10 warnings). <sup>[<a href="#warnings-fixed">warnings-fixed</a>]*</sup>
 - <a name="warnings-strict"></a>It is RECOMMENDED that projects be maximally strict, but this is not always practical. <sup>[<a href="#warnings-strict">warnings-strict</a>]*</sup>
-- Criteria for warning flags, safe language mode, or a separate linter are not required if there is no OSS tool that can implement this in the selected language.
 
 ### Security
 

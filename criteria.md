@@ -275,7 +275,7 @@ same as the project URL), and license(s).
 
 ### Glossary
 
-<a name="glossary-med-high-vuln"></a>[1]  A vulnerability is medium to high severity if its [CVSS 2.0](https://nvd.nist.gov/cvss.cfm) base score is 4 or higher.
+<a name="glossary-med-high-vuln"></a>[1] A vulnerability is medium to high severity if its [CVSS 2.0](https://nvd.nist.gov/cvss.cfm) base score is 4 or higher.
 
 <a name="glossary-critical-vuln"></a>[2] A vulnerability is critical severity if its [CVSS 2.0](https://nvd.nist.gov/cvss.cfm) base score is 7 or higher.
 

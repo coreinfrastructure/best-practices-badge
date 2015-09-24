@@ -97,8 +97,8 @@ class CreateProjects < ActiveRecord::Migration
       t.text :test_policy_justification
       t.string :tests_are_added_status
       t.text :tests_are_added_justification
-      t.string :tests_documentated_added_status
-      t.text :tests_documentated_added_justification
+      t.string :tests_documented_added_status
+      t.text :tests_documented_added_justification
       # Warning flags
       t.string :warnings_status
       t.text :warnings_justification
@@ -140,6 +140,24 @@ class CreateProjects < ActiveRecord::Migration
       t.string :vulnerabilities_critical_fixed_status
       t.text :vulnerabilities_critical_fixed_justification
     # SECURITY ANALYSIS
+      # Static Code Analysis
+      t.string :static_analysis_status
+      t.text :static_analysis_justification
+      t.string :static_analysis_common_vulnerabilities_status
+      t.text :static_analysis_common_vulnerabilities_justification
+      t.string :static_analysis_fixed_status
+      t.text :static_analysis_fixed_justification
+      t.string :static_analysis_often_status
+      t.text :static_analysis_often_justification
+      # Dynamic Analysis
+      t.string :dynamic_analysis_status
+      t.text :dynamic_analysis_justification
+      t.string :dynamic_analysis_unsafe_status
+      t.text :dynamic_analysis_unsafe_justification
+      t.string :dynamic_analysis_enable_assertions_status
+      t.text :dynamic_analysis_enable_assertions_justification
+      t.string :dynamic_analysis_fixed_status
+      t.text :dynamic_analysis_fixed_justification
 
 
 

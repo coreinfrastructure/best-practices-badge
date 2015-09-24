@@ -71,7 +71,7 @@ p {
 
 /* header */
 .nav-color {
-  background-color: #00001F;
+  background-color: #000066;
   padding-top: 5px;
 }
 
@@ -81,6 +81,11 @@ p {
   &:hover {
   color: #4791FF;
   }
+}
+
+h3 {
+color:#000066;
+text-decoration: underline;
 }
 
 /* footer */

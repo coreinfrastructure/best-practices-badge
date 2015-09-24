@@ -4,9 +4,9 @@
   <%= form_for(@project) do |f| %>
     <%= render 'shared/error_messages', object: f.object %>
 
-    <h2 class="center h2">OSS Project Basics</h2>
+    <h2 class="center">OSS Project Basics</h2>
 
-    <h3 class='h3'><i>Identification</i></h3>
+    <h3><i>Identification</i></h3>
       <span>What is the human-readable name of the project (note that other
             projects may use the same name)?</span>
       <%= f.text_field :name, class:"form-control", placeholder:'OSS Project Name' %>
@@ -26,7 +26,7 @@
       <%= f.text_field :license, class:"form-control", hide_label: true, placeholder:'OSS License' %>
       <br>
 
-    <h3 class='h3'><i>Basic Project Website Content</i></h3>
+    <h3><i>Basic Project Website Content</i></h3>
     <div class="row">
       <div class="col-md-3 criteria-radio">
         <%= f.label :description_sufficient_status do %>
@@ -107,7 +107,7 @@
       </div>
       <br><br>
 
-      <h3 class='h3'><i>OSS License</i></h3>
+      <h3><i>OSS License</i></h3>
        <div class="row">
        <div class="col-md-3 criteria-radio">
          <%= f.label :license_location_status do %>
@@ -180,7 +180,7 @@
         We expect that that "higher-level" criteria would set a higher bar, e.g., that it must be released under an OSI-approved license.</span>
 
       <br><br>
-      <h3 class='h3'><i>Documentation</i></h3>
+      <h3><i>Documentation</i></h3>
 
       <div class="row">
       <div class="col-md-3 criteria-radio">
@@ -226,7 +226,7 @@
 
       <br><br><br>
       <h2 class="center h2">Change Control</h2>
-      <h3 class='h3'><i>Public version-controlled source repository</i></h3>
+      <h3><i>Public version-controlled source repository</i></h3>
 
        <div class="row">
        <div class="col-md-3 criteria-radio">
@@ -317,7 +317,7 @@
             and to track its progress in detail.</span>
 
       <br><br>
-      <h3 class='h3'><i>Version numbering</i></h3>
+      <h3><i>Version numbering</i></h3>
 
       <div class="row">
       <div class="col-md-3 criteria-radio">
@@ -379,7 +379,7 @@
       </div>
 
       <br><br>
-      <h3 class='h3'><i>ChangeLog</i></h3>
+      <h3><i>ChangeLog</i></h3>
       <div class="row">
       <div class="col-md-3 criteria-radio">
        <%= f.label :changelog_status do %>
@@ -429,7 +429,7 @@
 
       <br><br><br>
       <h2 class="center h2">Reporting</h2>
-      <h3 class='h3'><i>Bug-reporting process</i></h3>
+      <h3><i>Bug-reporting process</i></h3>
 
       <div class="row">
       <div class="col-md-3 criteria-radio">
@@ -549,7 +549,7 @@
 
       <br><br>
 
-      <h3 class='h3'><i>Vulnerability report process</i></h3>
+      <h3><i>Vulnerability report process</i></h3>
       <div class="row">
       <div class="col-md-3 criteria-radio">
        <%= f.label :vulnerability_report_process_status do %>
@@ -613,12 +613,787 @@
       </div>
       </div>
 
-      <br><br>
+      <br><br><br>
      <h2 class="center h2">Quality</h2>
-      <h3 class='h3'><i>Working build system</i></h3>
+      <h3><i>Working build system</i></h3>
+      <div class="row">
+      <div class="col-md-3 criteria-radio">
+       <%= f.label :build_status do %>
+         <%= f.radio_button :build_status, '?', :checked => true %> &nbsp;?&nbsp;
+       <% end %>
+       <%= f.label :build_status do %>
+         <%= f.radio_button :build_status, 'Met'%> Met
+       <% end %>
+       <%= f.label :build_status do %>
+         <%= f.radio_button :build_status, 'Unmet'%> Unmet
+       <% end %>
+      </div>
+      <div class='col-md-9 criteria-desc'>
+      <span>If the software requires building for use, the project MUST provide a working
+            build system that can automatically rebuild the software from source code.
+            A build system determines what actions need to occur to rebuild the software (and in what order),
+            and then performs those steps.  </span>
+      <%= f.text_field :build_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
+      </div>
+      </div>
 
+      <hr>
+      <div class="row">
+      <div class="col-md-3 criteria-radio">
+       <%= f.label :build_common_tools_status do %>
+         <%= f.radio_button :build_common_tools_status, '?', :checked => true %> &nbsp;?&nbsp;
+       <% end %>
+       <%= f.label :build_common_tools_status do %>
+         <%= f.radio_button :build_common_tools_status, 'Met'%> Met
+       <% end %>
+       <%= f.label :build_common_tools_status do %>
+         <%= f.radio_button :build_common_tools_status, 'Unmet'%> Unmet
+       <% end %>
+      </div>
+      <div class='col-md-9 criteria-desc'>
+      <span>It is RECOMMENDED that common tools be used for building the software
+            (e.g., Maven, Ant, cmake, the autotools, make, or rake), in which case
+            only the instructions to the build system are required (there's no requirement
+            to teach people how to use common tools).</span>
+      <%= f.text_field :build_common_tools_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
+      </div>
+      </div>
 
+      <hr>
+      <div class="row">
+      <div class="col-md-3 criteria-radio">
+       <%= f.label :build_oss_tools_status do %>
+         <%= f.radio_button :build_oss_tools_status, '?', :checked => true %> &nbsp;?&nbsp;
+       <% end %>
+       <%= f.label :build_oss_tools_status do %>
+         <%= f.radio_button :build_oss_tools_status, 'Met'%> Met
+       <% end %>
+       <%= f.label :build_oss_tools_status do %>
+         <%= f.radio_button :build_oss_tools_status, 'Unmet'%> Unmet
+       <% end %>
+      </div>
+      <div class='col-md-9 criteria-desc'>
+      <span>The project SHOULD be buildable using only OSS tools.</span>
+      <%= f.text_field :build_oss_tools_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
+      </div>
+      </div>
 
+      <span class='criteria-desc'><b>Rationale</b>: If a project needs to be built but there is no working build system,
+            then potential co-developers will not be able to easily contribute and many security analysis
+            tools will be ineffective. Criteria for a working build system are not applicable if there is
+            no need to build anything for use.</span>
+      <br><br>
+      <h3><i>Automated test suite</i></h3>
+      <div class="row">
+      <div class="col-md-3 criteria-radio">
+       <%= f.label :test_status do %>
+         <%= f.radio_button :test_status, '?', :checked => true %> &nbsp;?&nbsp;
+       <% end %>
+       <%= f.label :test_status do %>
+         <%= f.radio_button :test_status, 'Met'%> Met
+       <% end %>
+       <%= f.label :test_status do %>
+         <%= f.radio_button :test_status, 'Unmet'%> Unmet
+       <% end %>
+      </div>
+      <div class='col-md-9 criteria-desc'>
+      <span>The project MUST have at least one automated test suite.</span>
+      <%= f.text_field :test_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
+      </div>
+      </div>
+
+      <hr>
+      <div class="row">
+      <div class="col-md-3 criteria-radio">
+       <%= f.label :test_invocation_status do %>
+         <%= f.radio_button :test_invocation_status, '?', :checked => true %> &nbsp;?&nbsp;
+       <% end %>
+       <%= f.label :test_invocation_status do %>
+         <%= f.radio_button :test_invocation_status, 'Met'%> Met
+       <% end %>
+       <%= f.label :test_invocation_status do %>
+         <%= f.radio_button :test_invocation_status, 'Unmet'%> Unmet
+       <% end %>
+      </div>
+      <div class='col-md-9 criteria-desc'>
+      <span>A test suite SHOULD be invocable in a standard way for that language
+            (e.g., "make check", "mvn test", and so on).</span>
+      <%= f.text_field :test_invocation_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
+      </div>
+      </div>
+
+      <hr>
+      <div class="row">
+      <div class="col-md-3 criteria-radio">
+       <%= f.label :test_most_status do %>
+         <%= f.radio_button :test_most_status, '?', :checked => true %> &nbsp;?&nbsp;
+       <% end %>
+       <%= f.label :test_most_status do %>
+         <%= f.radio_button :test_most_status, 'Met'%> Met
+       <% end %>
+       <%= f.label :test_most_status do %>
+         <%= f.radio_button :test_most_status, 'Unmet'%> Unmet
+       <% end %>
+      </div>
+      <div class='col-md-9 criteria-desc'>
+      <span>It is RECOMMENDED that the test suite cover most (or ideally all) the code branches,
+            input fields, and functionality. </span>
+      <%= f.text_field :test_most_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
+      </div>
+      </div>
+      <br>
+      <span class='criteria-desc'>The project MAY have multiple automated test suites
+            (e.g., one that runs quickly, vs. another that is more thorough but requires special equipment).<br>
+            <b>Rationale</b>: If a project needs to be built but there is no working build system,
+            then potential co-developers will not be able to easily contribute and many security analysis
+            tools will be ineffective. Criteria for a working build system are not applicable if there is
+            no need to build anything for use.</span>
+
+    <br><br>
+    <h3><i>New functionality testing</i></h3>
+      <div class="row">
+      <div class="col-md-3 criteria-radio">
+       <%= f.label :test_policy_status do %>
+         <%= f.radio_button :test_policy_status, '?', :checked => true %> &nbsp;?&nbsp;
+       <% end %>
+       <%= f.label :test_policy_status do %>
+         <%= f.radio_button :test_policy_status, 'Met'%> Met
+       <% end %>
+       <%= f.label :test_policy_status do %>
+         <%= f.radio_button :test_policy_status, 'Unmet'%> Unmet
+       <% end %>
+      </div>
+      <div class='col-md-9 criteria-desc'>
+      <span>The project MUST have a general policy (formal or not) that as major
+            new functionality is added, tests of that functionality SHOULD
+            be added to an automated test suite. </span>
+      <%= f.text_field :test_policy_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
+      </div>
+      </div>
+
+      <hr>
+      <div class="row">
+      <div class="col-md-3 criteria-radio">
+       <%= f.label :tests_are_added_status do %>
+         <%= f.radio_button :tests_are_added_status, '?', :checked => true %> &nbsp;?&nbsp;
+       <% end %>
+       <%= f.label :tests_are_added_status do %>
+         <%= f.radio_button :tests_are_added_status, 'Met'%> Met
+       <% end %>
+       <%= f.label :tests_are_added_status do %>
+         <%= f.radio_button :tests_are_added_status, 'Unmet'%> Unmet
+       <% end %>
+      </div>
+      <div class='col-md-9 criteria-desc'>
+      <span>The project MUST have evidence that such tests are being added in
+            the most recent major changes to the project. Major functionality would typically
+            be mentioned in the ChangeLog. (Perfection is not required, merely evidence
+            that tests are typically being added in practice.)</span>
+      <%= f.text_field :tests_are_added_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
+      </div>
+      </div>
+
+      <hr>
+      <div class="row">
+      <div class="col-md-3 criteria-radio">
+       <%= f.label :tests_documented_added_status do %>
+         <%= f.radio_button :tests_documented_added_status, '?', :checked => true %> &nbsp;?&nbsp;
+       <% end %>
+       <%= f.label :tests_documented_added_status do %>
+         <%= f.radio_button :tests_documented_added_status, 'Met'%> Met
+       <% end %>
+       <%= f.label :tests_documented_added_status do %>
+         <%= f.radio_button :tests_documented_added_status, 'Unmet'%> Unmet
+       <% end %>
+      </div>
+      <div class='col-md-9 criteria-desc'>
+      <span>It is RECOMMENDED that this be documented in the instructions for change proposals,
+            but even an informal rule is acceptable as long as the tests are being added in practice.</span>
+      <%= f.text_field :tests_documented_added_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
+      </div>
+      </div>
+
+    <br><br>
+    <h3><i>Warning flags</i></h3>
+      <div class="row">
+      <div class="col-md-3 criteria-radio">
+       <%= f.label :warnings_status do %>
+         <%= f.radio_button :warnings_status, '?', :checked => true %> &nbsp;?&nbsp;
+       <% end %>
+       <%= f.label :warnings_status do %>
+         <%= f.radio_button :warnings_status, 'Met'%> Met
+       <% end %>
+       <%= f.label :warnings_status do %>
+         <%= f.radio_button :warnings_status, 'Unmet'%> Unmet
+       <% end %>
+      </div>
+      <div class='col-md-9 criteria-desc'>
+      <span>The project MUST enable some compiler warning flagss (e.g. "-Wall"),
+            a "safe" language mode (e.g., "use strict", "use warnings", or similar),
+            and/or use a separate "linter" tool to look for code quality errors or
+            common simple mistakes, if there is at least one OSS tool that can implement
+            this criterion in the selected language. </span>
+      <%= f.text_field :warnings_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
+      </div>
+      </div>
+
+      <hr>
+      <div class="row">
+      <div class="col-md-3 criteria-radio">
+       <%= f.label :warnings_fixed_status do %>
+         <%= f.radio_button :warnings_fixed_status, '?', :checked => true %> &nbsp;?&nbsp;
+       <% end %>
+       <%= f.label :warnings_fixed_status do %>
+         <%= f.radio_button :warnings_fixed_status, 'Met'%> Met
+       <% end %>
+       <%= f.label :warnings_fixed_status do %>
+         <%= f.radio_button :warnings_fixed_status, 'Unmet'%> Unmet
+       <% end %>
+      </div>
+      <div class='col-md-9 criteria-desc'>
+      <span>The project MUST address the issues that are found (by fixing them or
+            marking them in the source code as false positives). Ideally there would be no warnings,
+            but a project MAY accept some warnings (typically less than 1 warning per 100 lines or less than 10 warnings). </span>
+      <%= f.text_field :warnings_fixed_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
+      </div>
+      </div>
+
+      <hr>
+      <div class="row">
+      <div class="col-md-3 criteria-radio">
+       <%= f.label :warnings_strict_status do %>
+         <%= f.radio_button :warnings_strict_status, '?', :checked => true %> &nbsp;?&nbsp;
+       <% end %>
+       <%= f.label :warnings_strict_status do %>
+         <%= f.radio_button :warnings_strict_status, 'Met'%> Met
+       <% end %>
+       <%= f.label :warnings_strict_status do %>
+         <%= f.radio_button :warnings_strict_status, 'Unmet'%> Unmet
+       <% end %>
+      </div>
+      <div class='col-md-9 criteria-desc'>
+      <span>It is RECOMMENDED that projects be maximally strict, but this is not always practical. </span>
+      <%= f.text_field :warnings_strict_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
+      </div>
+      </div>
+
+    <br><br><br>
+    <h2 class="center h2">Security</h2>
+    <h3><i>Secure development knowledge</i></h3>
+    <div class="row">
+    <div class="col-md-3 criteria-radio">
+     <%= f.label :know_secure_design_status do %>
+       <%= f.radio_button :know_secure_design_status, '?', :checked => true %> &nbsp;?&nbsp;
+     <% end %>
+     <%= f.label :know_secure_design_status do %>
+       <%= f.radio_button :know_secure_design_status, 'Met'%> Met
+     <% end %>
+     <%= f.label :know_secure_design_status do %>
+       <%= f.radio_button :know_secure_design_status, 'Unmet'%> Unmet
+     <% end %>
+    </div>
+    <div class='col-md-9 criteria-desc'>
+    <span>At least one of the primary developers MUST know how to design secure software.
+          This requires understanding the following design principles, including the 8 principles from Saltzer and Schroeder:
+          economy of mechanism (keep the design as simple and small as practical, e.g., by adopting sweeping simplifications)
+          fail-safe defaults (access decisions should deny by default)
+          complete mediation (every access that might be limited must be checked for authority and be non-bypassable)
+          open design (security mechanisms should not depend on attacker ignorance of its design, but instead on more easily protected and changed information like keys and passwords)
+          separation of privilege (multi-factor authentication, such as requiring both a password and a hardware token, is stronger than single-factor authentication)
+          least privilege (processes should operate with the least privilege necesssary)
+          least common mechanism (the design should minimize the mechanisms common to more than one user and depended on by all users, e.g., directories for temporary files)
+          psychological acceptability (the human interface must be designed for ease of use - designing for "least astonishment" can help)
+          limited attack surface (the attack surface - the set of the different points where an attacker can try to enter or extract data - should be limited)
+          input validation with whitelists (inputs should typically be checked to determine if they are valid before they are accepted;
+          this validation should use whitelists (which only accept known-good values), not blacklists (which attempt to list known-bad values))</span>
+    <%= f.text_field :know_secure_design_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
+    </div>
+    </div>
+
+    <hr>
+    <div class="row">
+    <div class="col-md-3 criteria-radio">
+     <%= f.label :know_common_errors_status do %>
+       <%= f.radio_button :know_common_errors_status, '?', :checked => true %> &nbsp;?&nbsp;
+     <% end %>
+     <%= f.label :know_common_errors_status do %>
+       <%= f.radio_button :know_common_errors_status, 'Met'%> Met
+     <% end %>
+     <%= f.label :know_common_errors_status do %>
+       <%= f.radio_button :know_common_errors_status, 'Unmet'%> Unmet
+     <% end %>
+    </div>
+    <div class='col-md-9 criteria-desc'>
+    <span>At least one of the primary developers MUST know of common kinds of errors that
+          lead to vulnerabilities in this kind of software, as well as at least one method
+          to counter or mitigate each of them. Examples (depending on the type of software)
+          include SQL injection, OS injection, classic buffer overflow, cross-site scripting,
+          missing authentication, and missing authorization. See the CWE/SANS top 25 or OWASP
+          Top 10 for commonly-used lists. </span>
+    <%= f.text_field :know_common_errors_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
+    </div>
+    </div>
+    <br>
+    <span class='criteria-desc'><b>Note: </b>If there is only one developer, by definition that individual is the primary developer.</span>
+
+    <br><br>
+    <h3><i>Uses basic good cryptographic practices</i></h3>
+    <div class="row">
+    <div class="col-md-3 criteria-radio">
+     <%= f.label :crypto_published_status do %>
+       <%= f.radio_button :crypto_published_status, '?', :checked => true %> &nbsp;?&nbsp;
+     <% end %>
+     <%= f.label :crypto_published_status do %>
+       <%= f.radio_button :crypto_published_status, 'Met'%> Met
+     <% end %>
+     <%= f.label :crypto_published_status do %>
+       <%= f.radio_button :crypto_published_status, 'Unmet'%> Unmet
+     <% end %>
+    </div>
+    <div class='col-md-9 criteria-desc'>
+    <span>Cryptographic protocols and algorithms used by default in the software AND
+          the delivery mechanisms MUST be publicly published and reviewed by experts.</span>
+    <%= f.text_field :crypto_published_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
+    </div>
+    </div>
+
+    <hr>
+    <div class="row">
+    <div class="col-md-3 criteria-radio">
+     <%= f.label :crypto_call_status do %>
+       <%= f.radio_button :crypto_call_status, '?', :checked => true %> &nbsp;?&nbsp;
+     <% end %>
+     <%= f.label :crypto_call_status do %>
+       <%= f.radio_button :crypto_call_status, 'Met'%> Met
+     <% end %>
+     <%= f.label :crypto_call_status do %>
+       <%= f.radio_button :crypto_call_status, 'Unmet'%> Unmet
+     <% end %>
+    </div>
+    <div class='col-md-9 criteria-desc'>
+    <span>Application software that is not itself a cryptographic system/library MUST NOT
+          implement its own cryptographic functions, but MUST instead call on software specifically designed for the purpose.</span>
+    <%= f.text_field :crypto_call_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
+    </div>
+    </div>
+
+    <hr>
+    <div class="row">
+    <div class="col-md-3 criteria-radio">
+     <%= f.label :crypto_oss_status do %>
+       <%= f.radio_button :crypto_oss_status, '?', :checked => true %> &nbsp;?&nbsp;
+     <% end %>
+     <%= f.label :crypto_oss_status do %>
+       <%= f.radio_button :crypto_oss_status, 'Met'%> Met
+     <% end %>
+     <%= f.label :crypto_oss_status do %>
+       <%= f.radio_button :crypto_oss_status, 'Unmet'%> Unmet
+     <% end %>
+    </div>
+    <div class='col-md-9 criteria-desc'>
+    <span>All functionality that depends on cryptography MUST be implementable using
+          OSS because its specification meets the Open Standards Requirement for Software by the Open Source Initiative.</span>
+    <%= f.text_field :crypto_oss_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
+    </div>
+    </div>
+
+    <hr>
+    <div class="row">
+    <div class="col-md-3 criteria-radio">
+     <%= f.label :crypto_keylength_status do %>
+       <%= f.radio_button :crypto_keylength_status, '?', :checked => true %> &nbsp;?&nbsp;
+     <% end %>
+     <%= f.label :crypto_keylength_status do %>
+       <%= f.radio_button :crypto_keylength_status, 'Met'%> Met
+     <% end %>
+     <%= f.label :crypto_keylength_status do %>
+       <%= f.radio_button :crypto_keylength_status, 'Unmet'%> Unmet
+     <% end %>
+    </div>
+    <div class='col-md-9 criteria-desc'>
+    <span>The default keylengths MUST meet the NIST minimum requirements at least through the year 2030 (as stated in 2012).
+          These minimum bitlengths are: symmetric key 112, factoring modulus 2048, discrete logarithm key 224,
+          discrete logarithmic group 2048, elliptic curve 224, and hash 224. See http://www.keylength.com
+          for a comparison of keylength recommendations from various organizations.
+          The software MUST be configurable so that it will reject smaller keylengths.
+          The software MAY allow smaller keylengths in some configurations (ideally it would not, since this allows
+          downgrade attacks, but shorter keylengths are sometimes necessary for interoperability.) </span>
+    <%= f.text_field :crypto_keylength_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
+    </div>
+    </div>
+
+    <hr>
+    <div class="row">
+    <div class="col-md-3 criteria-radio">
+     <%= f.label :crypto_working_status do %>
+       <%= f.radio_button :crypto_working_status, '?', :checked => true %> &nbsp;?&nbsp;
+     <% end %>
+     <%= f.label :crypto_working_status do %>
+       <%= f.radio_button :crypto_working_status, 'Met'%> Met
+     <% end %>
+     <%= f.label :crypto_working_status do %>
+       <%= f.radio_button :crypto_working_status, 'Unmet'%> Unmet
+     <% end %>
+    </div>
+    <div class='col-md-9 criteria-desc'>
+    <span>Security mechanisms MUST NOT on depend cryptographic algorithms that are broken
+          or have too-short key lengths (e.g., MD4, MD5, single DES, or RC4).
+          It is RECOMMENDED that SHA-1 not be used (we are well aware that git uses SHA-1).
+          Currently-recommended algorithms include AES and SHA-256/SHA-512. Implementations SHOULD
+          support multiple cryptographic algorithms, so users can quickly switch if one is broken.  </span>
+    <%= f.text_field :crypto_working_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
+    </div>
+    </div>
+
+    <hr>
+    <div class="row">
+    <div class="col-md-3 criteria-radio">
+     <%= f.label :crypto_pfs_status do %>
+       <%= f.radio_button :crypto_pfs_status, '?', :checked => true %> &nbsp;?&nbsp;
+     <% end %>
+     <%= f.label :crypto_pfs_status do %>
+       <%= f.radio_button :crypto_pfs_status, 'Met'%> Met
+     <% end %>
+     <%= f.label :crypto_pfs_status do %>
+       <%= f.radio_button :crypto_pfs_status, 'Unmet'%> Unmet
+     <% end %>
+    </div>
+    <div class='col-md-9 criteria-desc'>
+    <span>Any key agreement protocol SHOULD implement perfect forward secrecy so a session key
+          derived from a set of long-term keys cannot be compromised if one of the long-term keys
+          is compromised in the future. </span>
+    <%= f.text_field :crypto_pfs_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
+    </div>
+    </div>
+
+    <hr>
+    <div class="row">
+    <div class="col-md-3 criteria-radio">
+     <%= f.label :crypto_password_storage_status do %>
+       <%= f.radio_button :crypto_password_storage_status, '?', :checked => true %> &nbsp;?&nbsp;
+     <% end %>
+     <%= f.label :crypto_password_storage_status do %>
+       <%= f.radio_button :crypto_password_storage_status, 'Met'%> Met
+     <% end %>
+     <%= f.label :crypto_password_storage_status do %>
+       <%= f.radio_button :crypto_password_storage_status, 'Unmet'%> Unmet
+     <% end %>
+    </div>
+    <div class='col-md-9 criteria-desc'>
+    <span>If passwords for later authentication are stored, they MUST be stored as
+          iterated hashes with per-user salt.</span>
+    <%= f.text_field :crypto_password_storage_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
+    </div>
+    </div>
+
+    <hr>
+    <div class="row">
+    <div class="col-md-3 criteria-radio">
+     <%= f.label :crypto_random_status do %>
+       <%= f.radio_button :crypto_random_status, '?', :checked => true %> &nbsp;?&nbsp;
+     <% end %>
+     <%= f.label :crypto_random_status do %>
+       <%= f.radio_button :crypto_random_status, 'Met'%> Met
+     <% end %>
+     <%= f.label :crypto_random_status do %>
+       <%= f.radio_button :crypto_random_status, 'Unmet'%> Unmet
+     <% end %>
+    </div>
+    <div class='col-md-9 criteria-desc'>
+    <span>All keys and nonces MUST be generated using cryptographically random functions,
+          and not through non-cryptographically random functions. </span>
+    <%= f.text_field :crypto_random_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
+    </div>
+    </div>
+
+    <br>
+    <span class="criteria-desc"><b>Note:</b> These criteria do not always apply because some software
+                                has no need to directly use cryptographic capabilities.</span>
+
+    <br><br>
+    <h3><i>Secured delivery against man-in-the-middle (MITM) attacks</i></h3>
+    <div class="row">
+    <div class="col-md-3 criteria-radio">
+     <%= f.label :delivery_mitm_status do %>
+       <%= f.radio_button :delivery_mitm_status, '?', :checked => true %> &nbsp;?&nbsp;
+     <% end %>
+     <%= f.label :delivery_mitm_status do %>
+       <%= f.radio_button :delivery_mitm_status, 'Met'%> Met
+     <% end %>
+     <%= f.label :delivery_mitm_status do %>
+       <%= f.radio_button :delivery_mitm_status, 'Unmet'%> Unmet
+     <% end %>
+    </div>
+    <div class='col-md-9 criteria-desc'>
+    <span>The project MUST use a delivery mechanism that counters MITM attacks.
+          Using https or ssh+scp is acceptable. An even stronger mechanism is releasing
+          the software with digitally signed packages, since that mitigates attacks on the distribution system,
+          but this only works if the users can be confident that the public keys for signatures are correct
+          and if the users will actually check the signature. </span>
+    <%= f.text_field :delivery_mitm_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
+    </div>
+    </div>
+
+    <hr>
+    <div class="row">
+    <div class="col-md-3 criteria-radio">
+     <%= f.label :delivery_unsigned_status do %>
+       <%= f.radio_button :delivery_unsigned_status, '?', :checked => true %> &nbsp;?&nbsp;
+     <% end %>
+     <%= f.label :delivery_unsigned_status do %>
+       <%= f.radio_button :delivery_unsigned_status, 'Met'%> Met
+     <% end %>
+     <%= f.label :delivery_unsigned_status do %>
+       <%= f.radio_button :delivery_unsigned_status, 'Unmet'%> Unmet
+     <% end %>
+    </div>
+    <div class='col-md-9 criteria-desc'>
+    <span>A cryptographic hash (e.g., a sha1sum) MUST NOT be retrieved over http and
+          used without checking for a cryptographic signature, since these hashes can be modified in transit. </span>
+    <%= f.text_field :delivery_unsigned_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
+    </div>
+    </div>
+    <br><br>
+
+    <h3><i>Publicly-known vulnerabilities fixed</i></h3>
+    <div class="row">
+    <div class="col-md-3 criteria-radio">
+     <%= f.label :vulnerabilities_fixed_60_days_status do %>
+       <%= f.radio_button :vulnerabilities_fixed_60_days_status, '?', :checked => true %> &nbsp;?&nbsp;
+     <% end %>
+     <%= f.label :vulnerabilities_fixed_60_days_status do %>
+       <%= f.radio_button :vulnerabilities_fixed_60_days_status, 'Met'%> Met
+     <% end %>
+     <%= f.label :vulnerabilities_fixed_60_days_status do %>
+       <%= f.radio_button :vulnerabilities_fixed_60_days_status, 'Unmet'%> Unmet
+     <% end %>
+    </div>
+    <div class='col-md-9 criteria-desc'>
+    <span>There MUST be no unpatched vulnerabilities of medium or high severity that
+          have been publicly known for more than 60 days. The vulnerability must be patched and
+          released by the project itself (patches may be developed elsewhere).
+          A vulnerability becomes publicly known (for this purpose) once it has a CVE with
+          publicly released non-paywalled information (reported, for example,
+          in the National Vulnerability Database) or when the project has been informed and the
+          information has been released to the public (possibly by the project). A vulnerability is medium
+          to high severity if its CVSS 2.0 base score is 4 or higher. </span>
+    <%= f.text_field :vulnerabilities_fixed_60_days_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
+    </div>
+    </div>
+
+    <hr>
+    <div class="row">
+    <div class="col-md-3 criteria-radio">
+     <%= f.label :vulnerabilities_critical_fixed_status do %>
+       <%= f.radio_button :vulnerabilities_critical_fixed_status, '?', :checked => true %> &nbsp;?&nbsp;
+     <% end %>
+     <%= f.label :vulnerabilities_critical_fixed_status do %>
+       <%= f.radio_button :vulnerabilities_critical_fixed_status, 'Met'%> Met
+     <% end %>
+     <%= f.label :vulnerabilities_critical_fixed_status do %>
+       <%= f.radio_button :vulnerabilities_critical_fixed_status, 'Unmet'%> Unmet
+     <% end %>
+    </div>
+    <div class='col-md-9 criteria-desc'>
+    <span>Projects SHOULD fix all critical vulnerabilities rapidly after they are reported. </span>
+    <%= f.text_field :vulnerabilities_critical_fixed_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
+    </div>
+    </div>
+    <br>
+
+    <span class='criteria-desc'><b>Note</b>: this means that users might be left vulnerable to all attackers
+      worldwide for up to 60 days. This criterion is often much easier to meet than what Google
+      recommends in Rebooting responsible disclosure, because Google recommends that the 60-day
+      period start when the project is notified even if the report is not public.<br>
+      <b>Rationale</b>: We intentionally chose to start measurement from the time of public knowledge,
+      and not from the time reported to the project, because this is much easier to measure and
+      verify by those outside the project.</span>
+
+    <br><br><br>
+    <h2 class="center h2">Security Analysis</h2>
+    <h3><i>Static code analysis</i></h3>
+
+     <div class="row">
+     <div class="col-md-3 criteria-radio">
+      <%= f.label :static_analysis_status do %>
+        <%= f.radio_button :static_analysis_status, '?', :checked => true %> &nbsp;?&nbsp;
+      <% end %>
+      <%= f.label :static_analysis_status do %>
+        <%= f.radio_button :static_analysis_status, 'Met'%> Met
+      <% end %>
+      <%= f.label :static_analysis_status do %>
+        <%= f.radio_button :static_analysis_status, 'Unmet'%> Unmet
+      <% end %>
+     </div>
+     <div class='col-md-9 criteria-desc'>
+     <span>At least one static code analysis tool MUST be applied to any proposed major production
+           release of the software before its release, if there is at least one OSS tool that
+           implement this criterion in the selected language. A static code analysis tool examines
+           the software code (as source code, intermediate code, or executable) without executing it
+           with specific inputs. For purposes of this criterion compiler warnings and "safe" language
+           modes do not count as a static code analysis tool (these typically avoid deep analysis because
+           speed is vital). Examples of such static code analysis tools include cppcheck, the clang static analyzer,
+           FindBugs (including FindSecurityBugs), PMD, Brakeman, Coverity Quality Analyzer, and the HP Fortify Static Code Analyzer.  </span>
+     <%= f.text_field :static_analysis_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
+     </div>
+     </div>
+     <br>
+     <span class='criteria-desc'><b>Note: </b>The analysis tool(s) MAY be focused on looking
+                 for security vulnerabilities, but this is not required.</span>
+
+     <hr>
+     <div class="row">
+     <div class="col-md-3 criteria-radio">
+      <%= f.label :static_analysis_common_vulnerabilities_status do %>
+        <%= f.radio_button :static_analysis_common_vulnerabilities_status, '?', :checked => true %> &nbsp;?&nbsp;
+      <% end %>
+      <%= f.label :static_analysis_common_vulnerabilities_status do %>
+        <%= f.radio_button :static_analysis_common_vulnerabilities_status, 'Met'%> Met
+      <% end %>
+      <%= f.label :static_analysis_common_vulnerabilities_status do %>
+        <%= f.radio_button :static_analysis_common_vulnerabilities_status, 'Unmet'%> Unmet
+      <% end %>
+     </div>
+     <div class='col-md-9 criteria-desc'>
+     <span>It is RECOMMENDED that the tool include rules or approaches to look for
+           common vulnerabilities in the analyzed language or environment.  </span>
+     <%= f.text_field :static_analysis_common_vulnerabilities_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
+     </div>
+     </div>
+
+     <hr>
+     <div class="row">
+     <div class="col-md-3 criteria-radio">
+      <%= f.label :static_analysis_fixed_status do %>
+        <%= f.radio_button :static_analysis_fixed_status, '?', :checked => true %> &nbsp;?&nbsp;
+      <% end %>
+      <%= f.label :static_analysis_fixed_status do %>
+        <%= f.radio_button :static_analysis_fixed_status, 'Met'%> Met
+      <% end %>
+      <%= f.label :static_analysis_fixed_status do %>
+        <%= f.radio_button :static_analysis_fixed_status, 'Unmet'%> Unmet
+      <% end %>
+     </div>
+     <div class='col-md-9 criteria-desc'>
+     <span>All confirmed medium and high severity exploitable vulnerabilities discovered with static code analysis MUST be fixed.
+           A vulnerability is medium to high severity if its CVSS 2.0 is 4 or higher. </span>
+     <%= f.text_field :static_analysis_fixed_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
+     </div>
+     </div>
+
+     <hr>
+     <div class="row">
+     <div class="col-md-3 criteria-radio">
+      <%= f.label :static_analysis_often_status do %>
+        <%= f.radio_button :static_analysis_often_status, '?', :checked => true %> &nbsp;?&nbsp;
+      <% end %>
+      <%= f.label :static_analysis_often_status do %>
+        <%= f.radio_button :static_analysis_often_status, 'Met'%> Met
+      <% end %>
+      <%= f.label :static_analysis_often_status do %>
+        <%= f.radio_button :static_analysis_often_status, 'Unmet'%> Unmet
+      <% end %>
+     </div>
+     <div class='col-md-9 criteria-desc'>
+     <span>It is RECOMMENDED that static source code analysis occur on every commit or at least daily. </span>
+     <%= f.text_field :static_analysis_often_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
+     </div>
+     </div>
+      <br><br>
+
+     <h3><i>Dynamic analysis</i></h3>
+
+      <div class="row">
+      <div class="col-md-3 criteria-radio">
+       <%= f.label :dynamic_analysis_status do %>
+         <%= f.radio_button :dynamic_analysis_status, '?', :checked => true %> &nbsp;?&nbsp;
+       <% end %>
+       <%= f.label :dynamic_analysis_status do %>
+         <%= f.radio_button :dynamic_analysis_status, 'Met'%> Met
+       <% end %>
+       <%= f.label :dynamic_analysis_status do %>
+         <%= f.radio_button :dynamic_analysis_status, 'Unmet'%> Unmet
+       <% end %>
+      </div>
+      <div class='col-md-9 criteria-desc'>
+      <span>At least one dynamic analysis tool MUST be applied to any proposed major production
+            release of the software before its release. A dynamic analysis tool examines the software
+            by executing it with specific inputs. For example, the project MAY use a fuzzing tool
+            (e.g., American Fuzzy Lop) or a web application scanner (e.g., OWASP ZAP or w3af).
+            For purposes of this criterion the dynamic analysis tool MUST vary the inputs in some way to
+            look for various kinds of problems or be an automated test suite with at least 80% branch coverage. </span>
+      <%= f.text_field :dynamic_analysis_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
+      </div>
+      </div>
+
+      <hr>
+      <div class="row">
+      <div class="col-md-3 criteria-radio">
+       <%= f.label :dynamic_analysis_unsafe_status do %>
+         <%= f.radio_button :dynamic_analysis_unsafe_status, '?', :checked => true %> &nbsp;?&nbsp;
+       <% end %>
+       <%= f.label :dynamic_analysis_unsafe_status do %>
+         <%= f.radio_button :dynamic_analysis_unsafe_status, 'Met'%> Met
+       <% end %>
+       <%= f.label :dynamic_analysis_unsafe_status do %>
+         <%= f.radio_button :dynamic_analysis_unsafe_status, 'Unmet'%> Unmet
+       <% end %>
+      </div>
+      <div class='col-md-9 criteria-desc'>
+      <span>It is RECOMMENDED that if the software is application-level software written
+            using a memory-unsafe language (such as C or C++) then at least one tool to
+            detect memory safety problems MUST be used during at least one dynamic tool use,
+            e.g., Address Sanitizer (ASAN) or valgrind. If the software is not application-level,
+            or is not in a memory-unsafe language, then this criterion is automatically met. </span>
+      <%= f.text_field :dynamic_analysis_unsafe_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
+      </div>
+      </div>
+
+      <hr>
+      <div class="row">
+      <div class="col-md-3 criteria-radio">
+       <%= f.label :dynamic_analysis_enable_assertions_status do %>
+         <%= f.radio_button :dynamic_analysis_enable_assertions_status, '?', :checked => true %> &nbsp;?&nbsp;
+       <% end %>
+       <%= f.label :dynamic_analysis_enable_assertions_status do %>
+         <%= f.radio_button :dynamic_analysis_enable_assertions_status, 'Met'%> Met
+       <% end %>
+       <%= f.label :dynamic_analysis_enable_assertions_status do %>
+         <%= f.radio_button :dynamic_analysis_enable_assertions_status, 'Unmet'%> Unmet
+       <% end %>
+      </div>
+      <div class='col-md-9 criteria-desc'>
+      <span>It is RECOMMENDED that the software include many run-time assertions
+            that are checked during dynamic analysis. </span>
+      <%= f.text_field :dynamic_analysis_enable_assertions_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
+      </div>
+      </div>
+
+      <hr>
+      <div class="row">
+      <div class="col-md-3 criteria-radio">
+       <%= f.label :dynamic_analysis_fixed_status do %>
+         <%= f.radio_button :dynamic_analysis_fixed_status, '?', :checked => true %> &nbsp;?&nbsp;
+       <% end %>
+       <%= f.label :dynamic_analysis_fixed_status do %>
+         <%= f.radio_button :dynamic_analysis_fixed_status, 'Met'%> Met
+       <% end %>
+       <%= f.label :dynamic_analysis_fixed_status do %>
+         <%= f.radio_button :dynamic_analysis_fixed_status, 'Unmet'%> Unmet
+       <% end %>
+      </div>
+      <div class='col-md-9 criteria-desc'>
+      <span>The analysis tool(s) MAY be focused on looking for security vulnerabilities, but this is not required.<br>
+            All confirmed medium and high severity exploitable vulnerabilities discovered
+            with dynamic code analysis MUST be fixed. A vulnerability is medium to high
+            severity if its CVSS 2.0 base score is 4 or higher. </span>
+      <%= f.text_field :dynamic_analysis_fixed_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
+      </div>
+      </div>
+      <br>
+      <span class="criteria-desc"><b>Rationale: </b>Static source code analysis and dynamic analysis tend
+                  to find different kinds of defects (including defects that lead to vulnerabilities),
+                  so combining them is more likely to be effective.</span>
 
 
       <br>
@@ -697,6 +1472,57 @@
       justification_field("vulnerability_report_process");
       justification_field("vulnerability_report_private");
       justification_field("vulnerability_report_response");
+
+      //QUALITY CONTROL
+      //Working build system
+      justification_field("build");
+      justification_field("build_common_tools");
+      justification_field("build_oss_tools");
+      //Automated test suite
+      justification_field("test");
+      justification_field("test_invocation");
+      justification_field("test_most");
+      //New functionality testing
+      justification_field("test_policy");
+      justification_field("tests_are_added");
+      justification_field("tests_documented_added");
+      justification_field("warnings");
+      justification_field("warnings_fixed");
+      justification_field("warnings_strict");
+
+      //SECURITY
+      //Secure development knowledge
+      justification_field("know_secure_design");
+      justification_field("know_common_errors");
+      //Uses basic good cryptographic practices
+      justification_field("crypto_published");
+      justification_field("crypto_call");
+      justification_field("crypto_oss");
+      justification_field("crypto_keylength");
+      justification_field("crypto_working");
+      justification_field("crypto_pfs");
+      justification_field("crypto_password_storage");
+      justification_field("crypto_random");
+      justification_field("delivery_mitm");
+      justification_field("delivery_unsigned");
+      justification_field("vulnerabilities_fixed_60_days");
+      justification_field("vulnerabilities_critical_fixed");
+
+      //SECURITY ANALYSIS
+      //Static code analysis
+      justification_field("static_analysis");
+      justification_field("static_analysis_common_vulnerabilities");
+      justification_field("static_analysis_fixed");
+      justification_field("static_analysis_often");
+      //Dynamic Analysis
+      justification_field("dynamic_analysis");
+      justification_field("dynamic_analysis_unsafe");
+      justification_field("dynamic_analysis_enable_assertions");
+      justification_field("dynamic_analysis_fixed");
+
+
+
+
 
     </script>
 

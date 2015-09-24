@@ -160,8 +160,8 @@ class ProjectsController < ApplicationController
                                       :test_policy_justification,
                                       :tests_are_added_status,
                                       :tests_are_added_justification,
-                                      :tests_documentated_added_status,
-                                      :tests_documentated_added_justification,
+                                      :tests_documented_added_status,
+                                      :tests_documented_added_justification,
                                       # Warning flags
                                       :warnings_status,
                                       :warnings_justification,
@@ -203,9 +203,24 @@ class ProjectsController < ApplicationController
                                       :vulnerabilities_critical_fixed_status,
                                       :vulnerabilities_critical_fixed_justification,
                                     # SECURITY ANALYSIS
-
-
-
+                                      # Static Code Analysis
+                                      :static_analysis_status,
+                                      :static_analysis_justification,
+                                      :static_analysis_common_vulnerabilities_status,
+                                      :static_analysis_common_vulnerabilities_justification,
+                                      :static_analysis_fixed_status,
+                                      :static_analysis_fixed_justification,
+                                      :static_analysis_often_status,
+                                      :static_analysis_often_justification,
+                                      # Dynamic Analysis
+                                      :dynamic_analysis_status,
+                                      :dynamic_analysis_justification,
+                                      :dynamic_analysis_unsafe_status,
+                                      :dynamic_analysis_unsafe_justification,
+                                      :dynamic_analysis_enable_assertions_status,
+                                      :dynamic_analysis_enable_assertions_justification,
+                                      :dynamic_analysis_fixed_status,
+                                      :dynamic_analysis_fixed_justification,
 
 
                                       :general_comments)

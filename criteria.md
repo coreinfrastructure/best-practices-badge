@@ -249,8 +249,8 @@ same as the project URL), and license(s).
 
 *Publicly-known vulnerabilities fixed*
 
-- <a name="vulnerabilities-fixed-60-days"></a>There MUST be no unpatched vulnerabilities of medium or high severity that have been *publicly* known for more than 60 days.  The vulnerability must be patched and released by the project itself (patches may be developed elsewhere).  A vulnerability becomes publicly known (for this purpose) once it has a CVE with publicly released non-paywalled information (reported, for example, in the [National Vulnerability Database](https://nvd.nist.gov/)) or when the project has been informed *and* the information has been released to the public (possibly by the project).  A vulnerability is medium to high severity if its [CVSS 2.0](https://nvd.nist.gov/cvss.cfm) base score is 4 or higher. <sup>[<a href="#vulnerabilities-fixed-60-days">vulnerabilities-fixed-60-days</a>]&#8224;</sup>
-- <a name="vulnerabilities-critical-fixed"></a>Projects SHOULD fix all critical vulnerabilities rapidly after they are reported. <sup>[<a href="#vulnerabilities-critical-fixed">vulnerabilities-critical-fixed</a>]</sup>
+- <a name="vulnerabilities-fixed-60-days"></a>There MUST be no unpatched vulnerabilities of medium or high severity<sup>[<a href="#footnote-1">1</a>]</sup> that have been *publicly* known for more than 60 days.  The vulnerability must be patched and released by the project itself (patches may be developed elsewhere).  A vulnerability becomes publicly known (for this purpose) once it has a CVE with publicly released non-paywalled information (reported, for example, in the [National Vulnerability Database](https://nvd.nist.gov/)) or when the project has been informed *and* the information has been released to the public (possibly by the project). <sup>[<a href="#vulnerabilities-fixed-60-days">vulnerabilities-fixed-60-days</a>]&#8224;</sup>
+- <a name="vulnerabilities-critical-fixed"></a>Projects SHOULD fix all critical vulnerabilities<sup>[<a href="#footnote-2">2</a>]</sup> rapidly after they are reported. <sup>[<a href="#vulnerabilities-critical-fixed">vulnerabilities-critical-fixed</a>]</sup>
 - *Note*: this means that users might be left vulnerable to all attackers worldwide for up to 60 days.  This criterion is often much easier to meet than what Google recommends in [Rebooting responsible disclosure](http://googleonlinesecurity.blogspot.com/2010/07/rebooting-responsible-disclosure-focus.html), because Google recommends that the 60-day period start when the project is notified *even* if the report is not public.
 - *Rationale*: We intentionally chose to start measurement from the time of public knowledge, and not from the time reported to the project, because this is much easier to measure and verify by those *outside* the project.
 
@@ -261,7 +261,7 @@ same as the project URL), and license(s).
 - <a name="static-analysis"></a>At least one static code analysis tool MUST be applied to any proposed major production release of the software before its release, if there is at least one OSS tool that implement this criterion in the selected language.  A static code analysis tool examines the software code (as source code, intermediate code, or executable) without executing it with specific inputs.  For purposes of this criterion compiler warnings and "safe" language modes do not count as a static code analysis tool (these typically avoid deep analysis because speed is vital).  Examples of such static code analysis tools include cppcheck, the clang static analyzer, FindBugs (including FindSecurityBugs), PMD, Brakeman, [Coverity Quality Analyzer](https://scan.coverity.com/), and the HP Fortify Static Code Analyzer. <sup>[<a href="#static-analysis">static-analysis</a>]*</sup>
 - The analysis tool(s) MAY be focused on looking for security vulnerabilities, but this is not required.
 - <a name="static-analysis-common-vulnerabilities"></a>It is RECOMMENDED that the tool include rules or approaches to look for common vulnerabilities in the analyzed language or environment. <sup>[<a href="#static-analysis-common-vulnerabilities">static-analysis-common-vulnerabilities</a>]*</sup>
-- <a name="static-analysis-fixed"></a>All confirmed medium and high severity exploitable vulnerabilities discovered with static code analysis MUST be fixed.  A vulnerability is medium to high severity if its [CVSS 2.0](https://nvd.nist.gov/cvss.cfm) is 4 or higher. <sup>[<a href="#static-analysis-fixed">static-analysis-fixed</a>]*</sup>
+- <a name="static-analysis-fixed"></a>All confirmed medium and high severity exploitable vulnerabilities<sup>[<a href="#footnote-1">1</a>]</sup> discovered with static code analysis MUST be fixed. <sup>[<a href="#static-analysis-fixed">static-analysis-fixed</a>]*</sup>
 - <a name="static-analysis-often"></a>It is RECOMMENDED that static source code analysis occur on every commit or at least daily. <sup>[<a href="#static-analysis-often">static-analysis-often</a>]*</sup>
 
 *Dynamic analysis*
@@ -270,9 +270,14 @@ same as the project URL), and license(s).
 - <a name="dynamic-analysis-unsafe"></a>It is RECOMMENDED that if the software is application-level software written using a memory-unsafe language (such as C or C++) then at least one tool to detect memory safety problems MUST be used during at least one dynamic tool use, e.g., Address Sanitizer (ASAN) or valgrind. If the software is not application-level, or is not in a memory-unsafe language, then this criterion is automatically met.  <sup>[<a href="#dynamic-analysis-unsafe">dynamic-analysis-unsafe</a>]</sup>
 - <a name="dynamic-analysis-enable-assertions"></a>It is RECOMMENDED that the software include many run-time assertions that are checked during dynamic analysis. <sup>[<a href="#dynamic-analysis-enable-assertions">dynamic-analysis-enable-assertions</a>]</sup>
 - The analysis tool(s) MAY be focused on looking for security vulnerabilities, but this is not required.
-- <a name="dynamic-analysis-fixed"></a>All confirmed medium and high severity exploitable vulnerabilities discovered with dynamic code analysis MUST be fixed.  A vulnerability is medium to high severity if its [CVSS 2.0](https://nvd.nist.gov/cvss.cfm) base score is 4 or higher. <sup>[<a href="#dynamic-analysis-fixed">dynamic-analysis-fixed</a>]</sup>
+- <a name="dynamic-analysis-fixed"></a>All confirmed medium and high severity exploitable vulnerabilities<sup>[<a href="#footnote-1">1</a>]</sup> discovered with dynamic code analysis MUST be fixed. <sup>[<a href="#dynamic-analysis-fixed">dynamic-analysis-fixed</a>]</sup>
 - *Rationale*: Static source code analysis and dynamic analysis tend to find different kinds of defects (including defects that lead to vulnerabilities), so combining them is more likely to be effective.
 
+### Footnotes
+
+<a name="footnote-1"></a>[1]  A vulnerability is medium to high severity if its [CVSS 2.0](https://nvd.nist.gov/cvss.cfm) base score is 4 or higher.
+
+<a name="footnote-2"></a>[2] A vulnerability is critical severity if its [CVSS 2.0](https://nvd.nist.gov/cvss.cfm) base score is 7 or higher.
 
 Non-criteria
 ============

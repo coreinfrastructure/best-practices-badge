@@ -1,14 +1,12 @@
 <div class="row">
+  <div class="col-md-7 col-md-offset-1">
 
-  <div class="col-md-6 col-md-offset-1">
+  <%= form_for(@project) do |f| %>
+    <%= render 'shared/error_messages', object: f.object %>
 
-<%= form_for(@project) do |f| %>
-  <%= render 'shared/error_messages', object: f.object %>
+    <h2 class="center h2">OSS Project Basics</h2>
 
-  <h2 class="center h2">OSS Project Basics</h2>
-
-    <h3 class='h3'>Identification</h3>
-
+    <h3 class='h3'><i>Identification</i></h3>
       <span>What is the human-readable name of the project (note that other
             projects may use the same name)?</span>
       <%= f.text_field :name, class:"form-control", placeholder:'OSS Project Name' %>
@@ -28,115 +26,679 @@
       <%= f.text_field :license, class:"form-control", hide_label: true, placeholder:'OSS License' %>
       <br>
 
-    <h3 class='h3'>OSS License</h3>
+    <h3 class='h3'><i>Basic Project Website Content</i></h3>
+    <div class="row">
+      <div class="col-md-3 criteria-radio">
+        <%= f.label :description_sufficient_status do %>
+          <%= f.radio_button :description_sufficient_status, '?', :checked => true %> &nbsp;?&nbsp;
+        <% end %>
+        <%= f.label :description_sufficient_status do %>
+          <%= f.radio_button :description_sufficient_status, 'Met'%> Met
+        <% end %>
+        <%= f.label :description_sufficient_status do %>
+          <%= f.radio_button :description_sufficient_status, 'Unmet' %> Unmet
+        <% end %>
+      </div>
+      <div class='col-md-9 criteria-desc'>
+         <span>The project website MUST succinctly describe what the software does
+               (what problem does it solve?), in language that potential users can understand (e.g., it uses minimal jargon).</span>
+         <%= f.text_field :description_sufficient_justification, class:"form-control", hide_label: true, placeholder:'Please explain' %>
+      </div>
+      </div>
 
-     <div class="col-md-3 criteria-radio">
-       <%= f.label :license_location_status do %>
-         <%= f.radio_button :license_location_status, '?' %> &nbsp;?&nbsp;
+      <hr>
+      <div class="row">
+      <div class="col-md-3 criteria-radio">
+        <%= f.label :interact_status do %>
+          <%= f.radio_button :interact_status, '?', :checked => true %> &nbsp;?&nbsp;
+        <% end %>
+        <%= f.label :interact_status do %>
+          <%= f.radio_button :interact_status, 'Met'%> Met
+        <% end %>
+        <%= f.label :interact_status do %>
+          <%= f.radio_button :interact_status, 'Unmet' %> Unmet
+        <% end %>
+      </div>
+      <div class="col-md-9 criteria-desc">
+         <span>The project website MUST provide information on how to: obtain,provide feedback
+              (as bug reports or enhancements), and contribute to the sofware..</span>
+         <%= f.text_field :interact_justification, class:"form-control", hide_label: true, placeholder:'Please explain' %>
+      </div>
+      </div>
+      <hr>
+
+      <div class="row">
+      <div class="col-md-3 criteria-radio">
+        <%= f.label :contribution_status do %>
+          <%= f.radio_button :contribution_status, '?', :checked => true %> &nbsp;?&nbsp;
+        <% end %>
+        <%= f.label :contribution_status do %>
+          <%= f.radio_button :contribution_status, 'Met'%> Met
+        <% end %>
+        <%= f.label :contribution_status do %>
+          <%= f.radio_button :contribution_status, 'Unmet' %> Unmet
+        <% end %>
+      </div>
+      <div class='col-md-9 criteria-desc'>
+         <span>The project website MUST provide information on how to: obtain,provide feedback
+              (as bug reports or enhancements), and contribute to the sofware..</span>
+         <%= f.text_field :contribution_justification, class:"form-control", hide_label: true, placeholder:'Please explain' %>
+      </div>
+      </div>
+      <hr>
+
+      <div class="row">
+      <div class="col-md-3 criteria-radio">
+        <%= f.label :contribution_criteria_status do %>
+          <%= f.radio_button :contribution_criteria_status, '?', :checked => true %> &nbsp;?&nbsp;
+        <% end %>
+        <%= f.label :contribution_criteria_status do %>
+          <%= f.radio_button :contribution_criteria_status, 'Met'%> Met
+        <% end %>
+        <%= f.label :contribution_criteria_status do %>
+          <%= f.radio_button :contribution_criteria_status, 'Unmet' %> Unmet
+        <% end %>
+      </div>
+      <div class='col-md-9 criteria-desc'>
+         <span>The project website MUST provide information on how to: obtain,provide feedback
+              (as bug reports or enhancements), and contribute to the sofware..</span>
+         <%= f.text_field :contribution_criteria_justification, class:"form-control", hide_label: true, placeholder:'Please explain' %>
+      </div>
+      </div>
+      <br><br>
+
+      <h3 class='h3'><i>OSS License</i></h3>
+       <div class="row">
+       <div class="col-md-3 criteria-radio">
+         <%= f.label :license_location_status do %>
+           <%= f.radio_button :license_location_status, '?', :checked => true %> &nbsp;?&nbsp;
+         <% end %>
+         <%= f.label :license_location_status do %>
+           <%= f.radio_button :license_location_status, 'Met'%> Met
+         <% end %>
+         <%= f.label :license_location_status do %>
+           <%= f.radio_button :license_location_status, 'Unmet' %> Unmet
+         <% end %>
+       </div>
+       <div class='col-md-9 criteria-desc'>
+          <span>License(s) MUST be posted in a standard location (e.g., as a top-level file named LICENSE or COPYING).
+             License filenames MAY be followed by an extension such as ".txt" or ".md")</span>
+          <%= f.text_field :license_location_justification, class:"form-control", hide_label: true, placeholder:'Please explain' %>
+       </div>
+       </div>
+
+       <hr>
+       <div class="row">
+       <div class="col-md-3 criteria-radio">
+        <%= f.label :oss_license_status do %>
+          <%= f.radio_button :oss_license_status, '?', :checked => true %> &nbsp;?&nbsp;
+        <% end %>
+        <%= f.label :oss_license_status do %>
+          <%= f.radio_button :oss_license_status, 'Met' %> Met
+        <% end %>
+        <%= f.label :oss_license_status do %>
+          <%= f.radio_button :oss_license_status, 'Unmet' %> Unmet
+        <% end %>
+       </div>
+       <div class='col-md-9 criteria-desc'>
+       <span>The software MUST be released as OSS. For our purposes, this means that the license MUST be at least one of the following:
+          an approved license by the Open Source Initiative (OSI)
+          a free license as approved by the Free Software Foundation (FSF)
+          a free license acceptable to Debian main
+          a "good" license according to Fedora.</span>
+       <%= f.text_field :oss_license_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
+      </div>
+      </div>
+       <hr>
+
+       <div class="row">
+       <div class="col-md-3 criteria-radio">
+        <%= f.label :oss_license_osi_status do %>
+          <%= f.radio_button :oss_license_osi_status, '?', :checked => true %> &nbsp;?&nbsp;
+        <% end %>
+        <%= f.label :oss_license_osi_status do %>
+          <%= f.radio_button :oss_license_osi_status, 'Met'%> Met
+        <% end %>
+        <%= f.label :oss_license_osi_status do %>
+          <%= f.radio_button :oss_license_osi_status, 'Unmet'%> Unmet
+        <% end %>
+      </div>
+      <div class='col-md-9 criteria-desc'>
+      <span>It is RECOMMENDED that any required license(s) be OSI-approved. </span>
+      <%= f.text_field :oss_license_osi_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
+      </div>
+      </div>
+      <br>
+      <span class='criteria-desc'><b>Note</b>: We intend for the automated tool to focus on identifying common OSS licenses such as:
+        CC0, MIT, BSD 2-clause, BSD 3-clause revised, Apache 2.0, Lesser GNU General Public License (LGPL),
+        and the GNU General Public License (GPL).<br>
+        <b>Rationale</b>: These criteria are designed for OSS projects, so we need to ensure
+        that they're only used where they apply. Some projects are thought of as OSS
+        yet are not actually released as OSS (e.g., they might not have any license,
+        in which case the defaults of the country's legal system apply, or they might use a non-OSS license).
+        Unusual licenses can cause long-term problems for OSS projects and are more difficult for tools to handle.
+        We expect that that "higher-level" criteria would set a higher bar, e.g., that it must be released under an OSI-approved license.</span>
+
+      <br><br>
+      <h3 class='h3'><i>Documentation</i></h3>
+
+      <div class="row">
+      <div class="col-md-3 criteria-radio">
+       <%= f.label :documentation_basics_status do %>
+         <%= f.radio_button :documentation_basics_status, '?', :checked => true %> &nbsp;?&nbsp;
        <% end %>
-       <%= f.label :license_location_status do %>
-         <%= f.radio_button :license_location_status, 'Met'%> Met
+       <%= f.label :documentation_basics_status do %>
+         <%= f.radio_button :documentation_basics_status, 'Met'%> Met
        <% end %>
-       <%= f.label :license_location_status do %>
-         <%= f.radio_button :license_location_status, 'Unmet' %> Unmet
+       <%= f.label :documentation_basics_status do %>
+         <%= f.radio_button :documentation_basics_status, 'Unmet'%> Unmet
+       <% end %>
+      </div>
+      <div class='col-md-9 criteria-desc'>
+      <span>The project MUST provide basic documentation for the software in some media (such as text or video) that includes:
+            how to install it, how to start it, how to use it (possibly with a tutorial using examples), and
+            how to use it securely (e.g., what to do and what not to do) if that is an appropriate topic for the software.
+            The security documentation need not be long (it is better for the software to be designed to be secure by default). </span>
+      <%= f.text_field :documentation_basics_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
+      </div>
+      </div>
+
+      <hr>
+      <div class="row">
+      <div class="col-md-3 criteria-radio">
+       <%= f.label :documentation_interface_status do %>
+         <%= f.radio_button :documentation_interface_status, '?', :checked => true %> &nbsp;?&nbsp;
+       <% end %>
+       <%= f.label :documentation_interface_status do %>
+         <%= f.radio_button :documentation_interface_status, 'Met'%> Met
+       <% end %>
+       <%= f.label :documentation_interface_status do %>
+         <%= f.radio_button :documentation_interface_status, 'Unmet'%> Unmet
        <% end %>
      </div>
      <div class='col-md-9 criteria-desc'>
-        <span>License(s) MUST be posted in a standard location (e.g., as a top-level file named LICENSE or COPYING).
-           License filenames MAY be followed by an extension such as ".txt" or ".md")</span>
-        <%= f.text_field :license_location_justification, class:"form-control", hide_label: true, placeholder:'Please explain' %>
+     <span>The project MUST include reference documentation that describes its interface. </span>
+     <%= f.text_field :documentation_interface_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
+     <span>The project MAY use hypertext links to non-project material as documentation,
+           as long as the linked-to information is available and meets the requirements.</span>
      </div>
-     <hr class='col-md-11'>
-
-     <div class="col-md-3 criteria-radio">
-      <%= f.label :oss_license_status do %>
-        <%= f.radio_button :oss_license_status, '?' %> &nbsp;?&nbsp;
-      <% end %>
-      <%= f.label :oss_license_status do %>
-        <%= f.radio_button :oss_license_status, 'Met' %> Met
-      <% end %>
-      <%= f.label :oss_license_status do %>
-        <%= f.radio_button :oss_license_status, 'Unmet' %> Unmet
-      <% end %>
      </div>
-     <div class='col-md-9 criteria-desc'>
-     <span>The software MUST be released as OSS. For our purposes, this means that the license MUST be at least one of the following:
-        an approved license by the Open Source Initiative (OSI)
-        a free license as approved by the Free Software Foundation (FSF)
-        a free license acceptable to Debian main
-        a "good" license according to Fedora.</span>
-     <%= f.text_field :oss_license_justification, class:"form-control", hide_label: true, placeholder:'Justification' %>
-    </div>
-   <hr class='col-md-11'>
 
-   <div class="col-md-3 criteria-radio">
-    <%= f.label :oss_license_osi_status do %>
-      <%= f.radio_button :oss_license_osi_status, '?' %> &nbsp;?&nbsp;
+      <br><br><br>
+      <h2 class="center h2">Change Control</h2>
+      <h3 class='h3'><i>Public version-controlled source repository</i></h3>
+
+       <div class="row">
+       <div class="col-md-3 criteria-radio">
+        <%= f.label :repo_url_status do %>
+          <%= f.radio_button :repo_url_status, '?', :checked => true %> &nbsp;?&nbsp;
+        <% end %>
+        <%= f.label :repo_url_status do %>
+          <%= f.radio_button :repo_url_status, 'Met'%> Met
+        <% end %>
+        <%= f.label :repo_url_status do %>
+          <%= f.radio_button :repo_url_status, 'Unmet'%> Unmet
+        <% end %>
+       </div>
+       <div class='col-md-9 criteria-desc'>
+       <span>The project MUST have a version-controlled source repository that is publicly readable and has
+             a URL (the URL MAY be the same as the project URL). </span>
+       <%= f.text_field :repo_url_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
+       </div>
+       </div>
+
+      <hr>
+      <div class="row">
+      <div class="col-md-3 criteria-radio">
+       <%= f.label :repo_track_status do %>
+         <%= f.radio_button :repo_track_status, '?', :checked => true %> &nbsp;?&nbsp;
+       <% end %>
+       <%= f.label :repo_track_status do %>
+         <%= f.radio_button :repo_track_status, 'Met'%> Met
+       <% end %>
+       <%= f.label :repo_track_status do %>
+         <%= f.radio_button :repo_track_status, 'Unmet'%> Unmet
+       <% end %>
+      </div>
+      <div class='col-md-9 criteria-desc'>
+      <span>The source repository MUST track what changes were made, who made the changes,
+            and when the changes were made </span>
+      <%= f.text_field :repo_track_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
+      </div>
+      </div>
+
+      <hr>
+      <div class="row">
+      <div class="col-md-3 criteria-radio">
+       <%= f.label :repo_interim_status do %>
+         <%= f.radio_button :repo_interim_status, '?', :checked => true %> &nbsp;?&nbsp;
+       <% end %>
+       <%= f.label :repo_interim_status do %>
+         <%= f.radio_button :repo_interim_status, 'Met'%> Met
+       <% end %>
+       <%= f.label :repo_interim_status do %>
+         <%= f.radio_button :repo_interim_status, 'Unmet'%> Unmet
+       <% end %>
+      </div>
+      <div class='col-md-9 criteria-desc'>
+      <span>The source repository MUST include interim versions for review between releases;
+            it MUST NOT include only final releases. </span>
+      <%= f.text_field :repo_interim_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
+      </div>
+      </div>
+
+      <hr>
+      <div class="row">
+      <div class="col-md-3 criteria-radio">
+       <%= f.label :repo_distributed_status do %>
+         <%= f.radio_button :repo_distributed_status, '?', :checked => true %> &nbsp;?&nbsp;
+       <% end %>
+       <%= f.label :repo_distributed_status do %>
+         <%= f.radio_button :repo_distributed_status, 'Met'%> Met
+       <% end %>
+       <%= f.label :repo_distributed_status do %>
+         <%= f.radio_button :repo_distributed_status, 'Unmet'%> Unmet
+       <% end %>
+      </div>
+      <div class='col-md-9 criteria-desc'>
+        <span>It is RECOMMENDED that common distributed version control software is used (e.g., git).
+            Git is not specifically required and projects can use centralized version control software
+            (such as subversion) with justification.  </span>
+        <%= f.text_field :repo_distributed_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
+      </div>
+      </div>
+      <br>
+      <span class='criteria-desc'>The project MAY use private (non-public)
+            branches in specific cases while the change is not publicly released
+            (e.g., for fixing a vulnerability before it is revealed to the public).<br>
+            <b>Rationale</b>: This enables easy tracking
+            and public review. Some OSS projects do not use a version control system or do not provide public access to it.
+            The lack of a public version control repository makes it unnecessarily difficult to contribute to a project
+            and to track its progress in detail.</span>
+
+      <br><br>
+      <h3 class='h3'><i>Version numbering</i></h3>
+
+      <div class="row">
+      <div class="col-md-3 criteria-radio">
+       <%= f.label :version_unique_status do %>
+         <%= f.radio_button :version_unique_status, '?', :checked => true %> &nbsp;?&nbsp;
+       <% end %>
+       <%= f.label :version_unique_status do %>
+         <%= f.radio_button :version_unique_status, 'Met'%> Met
+       <% end %>
+       <%= f.label :version_unique_status do %>
+         <%= f.radio_button :version_unique_status, 'Unmet'%> Unmet
+       <% end %>
+      </div>
+      <div class='col-md-9 criteria-desc'>
+      <span>The project MUST have a unique version number for each release intended to be used by users. </span>
+      <%= f.text_field :version_unique_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
+      </div>
+      </div>
+
+      <div class="row">
+      <hr class='col-md-11'>
+      <div class="col-md-3 criteria-radio">
+       <%= f.label :version_semver_status do %>
+         <%= f.radio_button :version_semver_status, '?', :checked => true %> &nbsp;?&nbsp;
+       <% end %>
+       <%= f.label :version_semver_status do %>
+         <%= f.radio_button :version_semver_status, 'Met'%> Met
+       <% end %>
+       <%= f.label :version_semver_status do %>
+         <%= f.radio_button :version_semver_status, 'Unmet'%> Unmet
+       <% end %>
+      </div>
+      <div class='col-md-9 criteria-desc'>
+      <span>It is RECOMMENDED that the Semantic Versioning (SemVer) format is used for releases. </span>
+      <%= f.text_field :version_semver_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
+      <span>Commit IDs (or similar) MAY be used as as version numbers. They are unique, but note that these can
+            cause problems for users as they may not be able to determine whether or not they're up-to-date.</span>
+      </div>
+      </div>
+
+      <hr>
+      <div class="row">
+      <div class="col-md-3 criteria-radio">
+       <%= f.label :version_tags_status do %>
+         <%= f.radio_button :version_tags_status, '?', :checked => true %> &nbsp;?&nbsp;
+       <% end %>
+       <%= f.label :version_tags_status do %>
+         <%= f.radio_button :version_tags_status, 'Met'%> Met
+       <% end %>
+       <%= f.label :version_tags_status do %>
+         <%= f.radio_button :version_tags_status, 'Unmet'%> Unmet
+       <% end %>
+      </div>
+      <div class='col-md-9 criteria-desc'>
+      <span>It is RECOMMENDED that projects identify each release within their version control system.
+            For example, it is RECOMMENDED that those using git identify each release using git tags.</span>
+      <%= f.text_field :version_tags_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
+      </div>
+      </div>
+
+      <br><br>
+      <h3 class='h3'><i>ChangeLog</i></h3>
+      <div class="row">
+      <div class="col-md-3 criteria-radio">
+       <%= f.label :changelog_status do %>
+         <%= f.radio_button :changelog_status, '?', :checked => true %> &nbsp;?&nbsp;
+       <% end %>
+       <%= f.label :changelog_status do %>
+         <%= f.radio_button :changelog_status, 'Met'%> Met
+       <% end %>
+       <%= f.label :changelog_status do %>
+         <%= f.radio_button :changelog_status, 'Unmet'%> Unmet
+       <% end %>
+      </div>
+      <div class='col-md-9 criteria-desc'>
+      <span>The project MUST provide a "ChangeLog" (a human-readable summary of major changes in each release).
+            The ChangeLog MUST NOT be the output of the version control log of every change
+            (e.g., the "git log" command is not a ChangeLog).</span>
+      <%= f.text_field :changelog_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
+      </div>
+      </div>
+
+      <hr>
+      <div class="row">
+      <div class="col-md-3 criteria-radio">
+       <%= f.label :changelog_vulns_status do %>
+         <%= f.radio_button :changelog_vulns_status, '?', :checked => true %> &nbsp;?&nbsp;
+       <% end %>
+       <%= f.label :changelog_vulns_status do %>
+         <%= f.radio_button :changelog_vulns_status, 'Met'%> Met
+       <% end %>
+       <%= f.label :changelog_vulns_status do %>
+         <%= f.radio_button :changelog_vulns_status, 'Unmet'%> Unmet
+       <% end %>
+      </div>
+      <div class='col-md-9 criteria-desc'>
+        <span>The ChangeLog MUST identify whether the new release fixes any publicly known vulnerabilities.</span>
+        <%= f.text_field :changelog_vulns_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
+      </div>
+      </div>
+      <br>
+
+      <span class='criteria-desc'>The ChangeLog MAY implmented in a variety of ways. The ChangeLog MAY be a separate file
+            (e.g., "ChangeLog" or "changelog") and the filename MAY be followed by an extension such as
+            ".txt", ".md", or ".html". The ChangeLog MAY instead use version control system mechanisms
+            such as the GitHub Releases workflow.<br>
+            <b>Rationale</b>: ChangeLogs are important because they help users decide whether or not they
+            will want to update, and what the impact would be (e.g., if the new release fixes vulnerabilities).</span>
+
+      <br><br><br>
+      <h2 class="center h2">Reporting</h2>
+      <h3 class='h3'><i>Bug-reporting process</i></h3>
+
+      <div class="row">
+      <div class="col-md-3 criteria-radio">
+       <%= f.label :report_url_status do %>
+         <%= f.radio_button :report_url_status, '?', :checked => true %> &nbsp;?&nbsp;
+       <% end %>
+       <%= f.label :report_url_status do %>
+         <%= f.radio_button :report_url_status, 'Met'%> Met
+       <% end %>
+       <%= f.label :report_url_status do %>
+         <%= f.radio_button :report_url_status, 'Unmet'%> Unmet
+       <% end %>
+      </div>
+      <div class='col-md-9 criteria-desc'>
+      <span>If an issue tracker is used, please provide its URL.</span>
+      <%= f.text_field :report_url_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
+      </div>
+      </div>
+
+      <hr>
+      <div class="row">
+      <div class="col-md-3 criteria-radio">
+       <%= f.label :report_tracker_status do %>
+         <%= f.radio_button :report_tracker_status, '?', :checked => true %> &nbsp;?&nbsp;
+       <% end %>
+       <%= f.label :report_tracker_status do %>
+         <%= f.radio_button :report_tracker_status, 'Met'%> Met
+       <% end %>
+       <%= f.label :report_tracker_status do %>
+         <%= f.radio_button :report_tracker_status, 'Unmet'%> Unmet
+       <% end %>
+      </div>
+      <div class='col-md-9 criteria-desc'>
+      <span>It is RECOMMENDED that an issue tracker be used for tracking individual issues.</span>
+      <%= f.text_field :report_tracker_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
+      </div>
+      </div>
+
+      <hr>
+      <div class="row">
+      <div class="col-md-3 criteria-radio">
+       <%= f.label :report_process_status do %>
+         <%= f.radio_button :report_process_status, '?', :checked => true %> &nbsp;?&nbsp;
+       <% end %>
+       <%= f.label :report_process_status do %>
+         <%= f.radio_button :report_process_status, 'Met'%> Met
+       <% end %>
+       <%= f.label :report_process_status do %>
+         <%= f.radio_button :report_process_status, 'Unmet'%> Unmet
+       <% end %>
+      </div>
+      <div class='col-md-9 criteria-desc'>
+      <span>The project MUST provide a process for users to submit bug reports
+            (e.g., using an issue tracker or a mailing list).</span>
+      <%= f.text_field :report_process_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
+      </div>
+      </div>
+
+      <hr>
+      <div class="row">
+      <div class="col-md-3 criteria-radio">
+       <%= f.label :report_responses_status do %>
+         <%= f.radio_button :report_responses_status, '?', :checked => true %> &nbsp;?&nbsp;
+       <% end %>
+       <%= f.label :report_responses_status do %>
+         <%= f.radio_button :report_responses_status, 'Met'%> Met
+       <% end %>
+       <%= f.label :report_responses_status do %>
+         <%= f.radio_button :report_responses_status, 'Unmet'%> Unmet
+       <% end %>
+      </div>
+      <div class='col-md-9 criteria-desc'>
+      <span>Developers MUST respond to most bug reports submitted in the last
+            2-12 months (inclusive); the response need not include a fix. </span>
+      <%= f.text_field :report_responses_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
+      </div>
+      </div>
+
+      <hr>
+      <div class="row">
+      <div class="col-md-3 criteria-radio">
+       <%= f.label :enhancement_responses_status do %>
+         <%= f.radio_button :enhancement_responses_status, '?', :checked => true %> &nbsp;?&nbsp;
+       <% end %>
+       <%= f.label :enhancement_responses_status do %>
+         <%= f.radio_button :enhancement_responses_status, 'Met'%> Met
+       <% end %>
+       <%= f.label :enhancement_responses_status do %>
+         <%= f.radio_button :enhancement_responses_status, 'Unmet'%> Unmet
+       <% end %>
+      </div>
+      <div class='col-md-9 criteria-desc'>
+      <span>Developers SHOULD respond to most enhancement requests in the last 2-12 months
+            (inclusive). Developers MAY choose not to respond. </span>
+      <%= f.text_field :enhancement_responses_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
+      </div>
+      </div>
+
+      <hr>
+      <div class="row">
+      <div class="col-md-3 criteria-radio">
+       <%= f.label :report_archive_status do %>
+         <%= f.radio_button :report_archive_status, '?', :checked => true %> &nbsp;?&nbsp;
+       <% end %>
+       <%= f.label :report_archive_status do %>
+         <%= f.radio_button :report_archive_status, 'Met'%> Met
+       <% end %>
+       <%= f.label :report_archive_status do %>
+         <%= f.radio_button :report_archive_status, 'Unmet'%> Unmet
+       <% end %>
+      </div>
+      <div class='col-md-9 criteria-desc'>
+      <span>Reports and responses MUST be archived for later searching.</span>
+      <%= f.text_field :report_archive_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
+      </div>
+      </div>
+
+      <br><br>
+
+      <h3 class='h3'><i>Vulnerability report process</i></h3>
+      <div class="row">
+      <div class="col-md-3 criteria-radio">
+       <%= f.label :vulnerability_report_process_status do %>
+         <%= f.radio_button :vulnerability_report_process_status, '?', :checked => true %> &nbsp;?&nbsp;
+       <% end %>
+       <%= f.label :vulnerability_report_process_status do %>
+         <%= f.radio_button :vulnerability_report_process_status, 'Met'%> Met
+       <% end %>
+       <%= f.label :vulnerability_report_process_status do %>
+         <%= f.radio_button :vulnerability_report_process_status, 'Unmet'%> Unmet
+       <% end %>
+      </div>
+      <div class='col-md-9 criteria-desc'>
+      <span>The project MUST publish the process for reporting vulnerabilities on the project site
+            (e.g., a clearly designated mailing address on https://PROJECTSITE/security, often security@SOMEWHERE);
+            this MAY be the same as its bug reporting process.</span>
+      <%= f.text_field :vulnerability_report_process_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
+      </div>
+      </div>
+
+      <hr>
+      <div class="row">
+      <div class="col-md-3 criteria-radio">
+       <%= f.label :vulnerability_report_private_status do %>
+         <%= f.radio_button :vulnerability_report_private_status, '?', :checked => true %> &nbsp;?&nbsp;
+       <% end %>
+       <%= f.label :vulnerability_report_private_status do %>
+         <%= f.radio_button :vulnerability_report_private_status, 'Met'%> Met
+       <% end %>
+       <%= f.label :vulnerability_report_private_status do %>
+         <%= f.radio_button :vulnerability_report_private_status, 'Unmet'%> Unmet
+       <% end %>
+      </div>
+      <div class='col-md-9 criteria-desc'>
+      <span>If private vulnerability reports are supported, the project MUST include how
+            to send the information in a way that is kept private (e.g., a private defect
+            report submitted on the web using TLS or an email encrypted using PGP).
+            If private vulnerability reports are not supported this criterion is automatically met.</span>
+      <%= f.text_field :vulnerability_report_private_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
+      </div>
+      </div>
+
+      <hr>
+      <div class="row">
+      <div class="col-md-3 criteria-radio">
+       <%= f.label :vulnerability_report_response_status do %>
+         <%= f.radio_button :vulnerability_report_response_status, '?', :checked => true %> &nbsp;?&nbsp;
+       <% end %>
+       <%= f.label :vulnerability_report_response_status do %>
+         <%= f.radio_button :vulnerability_report_response_status, 'Met'%> Met
+       <% end %>
+       <%= f.label :vulnerability_report_response_status do %>
+         <%= f.radio_button :vulnerability_report_response_status, 'Unmet'%> Unmet
+       <% end %>
+      </div>
+      <div class='col-md-9 criteria-desc'>
+      <span>The project MUST provide an initial reply to a security vulnerability report
+            sent to the project, on average, less than 7 days within the last 6 months.
+            (If a project is being spammed on its vulnerability report channel, it is okay to only count non-spam messages.) </span>
+      <%= f.text_field :vulnerability_report_response_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
+      </div>
+      </div>
+
+      <br><br>
+     <h2 class="center h2">Quality</h2>
+      <h3 class='h3'><i>Working build system</i></h3>
+
+
+
+
+
+      <br>
+      <hr class='col-md-11'>
+      <%= f.text_area :general_comments, class:"form-control",  hide_label: true, placeholder:'Additional Comments' %>
+      <br>
+      <%= f.submit 'Submit', class:"btn btn-primary" %>
     <% end %>
-    <%= f.label :oss_license_osi_status do %>
-      <%= f.radio_button :oss_license_osi_status, 'Met'%> Met
-    <% end %>
-    <%= f.label :oss_license_osi_status do %>
-      <%= f.radio_button :oss_license_osi_status, 'Unmet'%> Unmet
-    <% end %>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <script>
+      function justification_field(criteria) {
+        var criteria_just = "#project_" + criteria + "_justification";
+        var criteria_status = "#project_" + criteria + "_status";
+        $(criteria_just).hide();
+
+        $('input[name="project['+criteria+'_status]"]').click(function()
+            {
+              if ( $(criteria_status + "_met").is(':checked'))
+                   $(criteria_just).show('fast');
+              if ( $(criteria_status+"_unmet").is(':checked'))
+                   $(criteria_just).show('fast');
+              if ( $(criteria_status+"_").is(':checked'))
+                   $(criteria_just).hide('fast');
+            });
+      }
+      // OSS PROJECT BASICS
+      // Basic project website content
+      justification_field("description_sufficient");
+      justification_field("interact");
+      justification_field("contribution")
+      justification_field("contribution_criteria")
+      // OSS license
+      justification_field("license_location");
+      justification_field("oss_license");
+      justification_field("oss_license_osi");
+      // Documentation
+      justification_field("documentation_basics");
+      justification_field("documentation_interface");
+      justification_field("oss_license_osi");
+
+      // CHANGE CONTROL
+      // Public version-controlled source repository
+      justification_field("repo_url");
+      justification_field("repo_track");
+      justification_field("repo_interim");
+      justification_field("repo_distributed");
+      // Version Numbering
+      justification_field("version_unique");
+      justification_field("version_semver");
+      justification_field("version_tags");
+      // ChangeLog
+      justification_field("changelog");
+      justification_field("changelog_vulns");
+
+      //REPORTING
+      // Bug-reporting process
+      justification_field("report_url");
+      justification_field("report_tracker");
+      justification_field("report_process");
+      justification_field("report_responses");
+      justification_field("enhancement_responses");
+      justification_field("report_archive");
+      // Vulnerability report process
+      justification_field("vulnerability_report_process");
+      justification_field("vulnerability_report_private");
+      justification_field("vulnerability_report_response");
+
+    </script>
+
   </div>
-  <div class='col-md-9 criteria-desc'>
-  <span>It is RECOMMENDED that any required license(s) be OSI-approved. </span>
-  <%= f.text_field :oss_license_osi_justification, class:"form-control", hide_label: true, placeholder:'Justification' %>
-  </div>
-
-  <hr class='col-md-11'>
-  <span class='col-md-12 criteria-desc'><b>Note</b>: We intend for the automated tool to focus on identifying common OSS licenses such as:
-    CC0, MIT, BSD 2-clause, BSD 3-clause revised, Apache 2.0, Lesser GNU General Public License (LGPL),
-    and the GNU General Public License (GPL).<br>
-    <b>Rationale</b>: These criteria are designed for OSS projects, so we need to ensure
-    that they're only used where they apply. Some projects are thought of as OSS
-    yet are not actually released as OSS (e.g., they might not have any license,
-    in which case the defaults of the country's legal system apply, or they might use a non-OSS license).
-    Unusual licenses can cause long-term problems for OSS projects and are more difficult for tools to handle.
-    We expect that that "higher-level" criteria would set a higher bar, e.g., that it must be released under an OSI-approved license.</span>
-
-  <br>
-  <hr class='col-md-11'>
-  <%= f.text_area :general_comments, class:"form-control",  hide_label: true, placeholder:'Additional Comments' %>
-  <br>
-  <%= f.submit 'Submit', class:"btn btn-primary" %>
-<% end %>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<script>
-function justification_field(criteria) {
-  var criteria_just = "#project_" + criteria + "_justification";
-  var criteria_status = "#project_" + criteria + "_status";
-  $(criteria_just).hide();
-
-  $('input[name="project['+criteria+'_status]"]').click(function()
-      {
-        if ( $(criteria_status + "_met").is(':checked'))
-             $(criteria_just).show('fast');
-        if ( $(criteria_status+"_unmet").is(':checked'))
-             $(criteria_just).show('fast');
-        if ( $(criteria_status+"_").is(':checked'))
-             $(criteria_just).hide('fast');
-      });
-}
-
-justification_field("license_location");
-justification_field("oss_license");
-justification_field("oss_license_osi");
-</script>
-
-  </div>
-
 </div>

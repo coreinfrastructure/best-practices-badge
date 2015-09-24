@@ -11,7 +11,7 @@
 }
 
 body {
-  padding-top: 60px;
+  padding-top: 70px;
 }
 
 section {
@@ -64,14 +64,15 @@ p {
   color: #fff;
   text-transform: uppercase;
   letter-spacing: -1px;
-  padding-top: 2px;
-  padding-bottom: 2px;
+  padding-top: 5px;
+  padding-bottom: 5px;
   font-weight: bold;
 }
 
 /* header */
 .nav-color {
-  background-color: black;
+  background-color: #00001F;
+  padding-top: 5px;
 }
 
 .nav.navbar-nav.navbar-right li a {
@@ -148,18 +149,16 @@ label.required:after {
 }
 
 .criteria-desc {
-  padding-left: 0px;
 }
 
 .criteria-radio {
-  padding-left: 5px;
   padding-top: 5px;
+  padding-left: 20px;
 }
 
 .criteria-radio label {
-  padding:5px 5px;
   font-family:Arial;
-  font-size:14px;
+  font-size:1em;
   font-weight: normal;
 }
 /* sidebar */

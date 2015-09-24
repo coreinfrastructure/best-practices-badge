@@ -1,5 +1,10 @@
 class Project < ActiveRecord::Base
+  STATUS_CHOICE = ['?', 'Met', 'Unmet']
   validates :license, length: {minimum: 2}
 
-  STATUS_CHOICE = ['', 'Met', 'Not Met']
+  validates_inclusion_of :license_location_status, :in => STATUS_CHOICE, :allow_nil => true
+  validates_inclusion_of :oss_license_status, :in => STATUS_CHOICE, :allow_nil => true
+  validates_inclusion_of :oss_license_osi_status, :in => STATUS_CHOICE, :allow_nil => true
+
+
 end

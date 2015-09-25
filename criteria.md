@@ -232,7 +232,7 @@ same as the project URL), and license(s).
 
 *Good cryptographic practices*
 
-- <a name="crypto-published"></a>The project MUST use cryptographic protocols and algorithms that are publicly published and reviewed by experts within the software. <sup>[<a href="#crypto-published">crypto-published</a>]*</sup>
+- <a name="crypto-published"></a>The project MUST use cryptographic protocols and algorithms, within the software, that are publicly published and reviewed by experts. <sup>[<a href="#crypto-published">crypto-published</a>]*</sup>
 - <a name="crypto-call"></a>If the software is not itself a cryptographic system/library, it MUST call on software specifically designed for cryptographic functions, and MUST NOT implement its own. <sup>[<a href="#crypto-call">crypto-call</a>]*</sup>
 - <a name="crypto-oss"></a>The project MUST implement all functionality that depends on cryptography using OSS (this is to meet the [*Open Standards Requirement for Software* by the Open Source Initiative](https://opensource.org/osr). <sup>[<a href="#crypto-oss">crypto-oss</a>]*</sup>
 - <a name="crypto-keylength"></a>The project MUST use default keylengths that meet the NIST minimum requirements at least through the year 2030 (as stated in 2012).  These minimum bitlengths are: symmetric key 112, factoring modulus 2048, discrete logarithm key 224, discrete logarithmic group 2048, elliptic curve 224, and hash 224.  See <http://www.keylength.com> for a comparison of keylength recommendations from various organizations. <sup>[<a href="#crypto-keylength">crypto-keylength</a>]*</sup>
@@ -245,7 +245,7 @@ same as the project URL), and license(s).
 
 *Secured delivery mechanism*
 
-- <a name="delivery-crypto"></a>The project MUST use cryptographic protocols and algorithms that are publicly published and reviewed by experts for any delivery mechanisms. <sup>[<a href="#delivery-crypto">delivery-crypto</a>]*</sup>
+- <a name="delivery-crypto"></a>The project MUST use cryptographic protocols and algorithms, for any delivery mechanisms, that are publicly published and reviewed by experts. <sup>[<a href="#delivery-crypto">delivery-crypto</a>]*</sup>
 - <a name="delivery-mitm"></a>The project MUST use a delivery mechanism that counters MITM attacks.  HTTPS or SSH+SCP MAY be used.  An even stronger mechanism would be releasing the software with digitally signed packages as this mitigates attacks on the distribution system. This only works if users can be confident that the public keys for signatures are correct *and* if the user actually checks the signature. <sup>[<a href="#delivery-mitm">delivery-mitm</a>]&#8224;</sup>
 - <a name="delivery-unsigned"></a>The project MUST NOT deliver a cryptographic hash (e.g., a sha1sum) over HTTP since these hashes can be modified in transit. <sup>[<a href="#delivery-unsigned">delivery-unsigned</a>]</sup>
 

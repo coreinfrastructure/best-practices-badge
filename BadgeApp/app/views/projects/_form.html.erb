@@ -1419,7 +1419,10 @@
       function justification_field(criteria) {
         var criteria_just = "#project_" + criteria + "_justification";
         var criteria_status = "#project_" + criteria + "_status";
-        $(criteria_just).hide();
+        var justification_value = document.getElementById("project_"+criteria+"_justification").value;
+
+        if ( $(criteria_status+"_").is(':checked') && justification_value.length == 0 )
+            $(criteria_just).hide();
 
         $('input[name="project['+criteria+'_status]"]').click(function()
             {
@@ -1427,10 +1430,12 @@
                    $(criteria_just).show('fast');
               if ( $(criteria_status+"_unmet").is(':checked'))
                    $(criteria_just).show('fast');
-              if ( $(criteria_status+"_").is(':checked'))
+              if ( $(criteria_status+"_").is(':checked') && justification_value.length == 0)
                    $(criteria_just).hide('fast');
             });
       }
+
+
       // OSS PROJECT BASICS
       // Basic project website content
       justification_field("description_sufficient");
@@ -1519,8 +1524,6 @@
       justification_field("dynamic_analysis_unsafe");
       justification_field("dynamic_analysis_enable_assertions");
       justification_field("dynamic_analysis_fixed");
-
-
 
 
 

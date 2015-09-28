@@ -1,7 +1,9 @@
 <div class="jumbotron">
 
-<h2 class="left">OSS Project Basics</h4>
+<h2 class="center">OSS Project Basics</h2>
 <br>
+<h3 class="center"><i>Identification</i></h3>
+
 <p>
   <strong>Name:</strong>
   <%= @project.name %>
@@ -27,20 +29,440 @@
   <%= @project.repo_url %>
 </p>
 
+<br>
+ <h3 class="center"><i>Basic Project Website Content</i></h3>
 <p>
-  <strong>license_location_status:</strong>
-  <%= @project.license_location_status %>
+  <strong><%= @project.description_sufficient_status %>:</strong>
+  The project website MUST succinctly describe what the software does
+  (what problem does it solve?), in language that potential users can understand (e.g., it uses minimal jargon).
+  <!-- description_sufficient_justification -->
 </p>
 
 <p>
-  <strong>oss_license_status:</strong>
-  <%= @project.oss_license_status %>
+  <strong><%= @project.interact_status %>:</strong>
+  The project website MUST provide information on how to: obtain, provide feedback
+  (as bug reports or enhancements), and contribute to the sofware.
+  <!-- interact_justification -->
 </p>
 
 <p>
-  <strong>oss_license_osi_status:</strong>
-  <%= @project.oss_license_osi_status %>
+  <strong><%= @project.contribution_status %>:</strong>
+  The information on how to contribute MUST explain the contribution process (e.g., are pull requests used?)
+  <!-- contribution_justification -->
 </p>
+
+<p>
+  <strong><%= @project.contribution_criteria_status %>:</strong>
+  The information on how to contribute SHOULD include the basic criteria for
+  acceptable contributions (e.g., a reference to any required coding standard).
+  <!-- contribution_criteria_justification -->
+</p>
+
+<br>
+<h3 class="center"><i>License Location</i></h3>
+<p>
+  <strong><%= @project.license_location_status %>:</strong>
+  The project MUST post licence(s) in a standard location (e.g., as a top-level file named LICENSE or COPYING).
+  License filenames MAY be followed by an extension such as ".txt" or ".md"
+  <!-- license_location_justification -->
+</p>
+
+<p>
+  <strong><%= @project.oss_license_status %>:</strong>
+  The software MUST be licensed as OSS. For our purposes, this means that the license MUST be at least one of the following:
+  an approved license by the Open Source Initiative (OSI),
+  a free license as approved by the Free Software Foundation (FSF),
+  a free license acceptable to Debian main,
+  a "good" license according to Fedora.
+  <!-- oss_license_justification -->
+</p>
+
+<p>
+  <strong><%= @project.oss_license_osi_status %>:</strong>
+  It is RECOMMENDED that any required license(s) be OSI-approved.
+  <!-- oss_license_osi_justification -->
+</p>
+
+<br>
+<h3 class="center"><i>Documentation</i></h3>
+<p>
+  <strong><%= @project.documentation_basics_status %>:</strong>
+  The project MUST provide basic documentation for the software in some media (such as text or video) that includes:
+  how to install it, how to start it, how to use it (possibly with a tutorial using examples), and
+  how to use it securely (e.g., what to do and what not to do) if that is an appropriate topic for the software.
+  The security documentation need not be long (it is better for the software to be designed to be secure by default).
+  <!-- documentation_basics_justification -->
+</p>
+
+<p>
+  <strong><%= @project.documentation_interface_status %>:</strong>
+  The project MUST include reference documentation that describes its interface.
+  <!-- documentation_interface_justification -->
+</p>
+
+<br><br>
+<h2 class="center">Change Control</h2>
+<h3 class="center"><i>Public version-controlled source repository</i></h3>
+<p>
+  <strong><%= @project.repo_url_status %>:</strong>
+  The project MUST have a version-controlled source repository that is publicly
+  readable and has a URL (the URL MAY be the same as the project URL).
+  <!-- repo_url_justification -->
+</p>
+
+<p>
+  <strong><%= @project.repo_track_status %>:</strong>
+  The source repository MUST track what changes were made, who made the changes,
+  and when the changes were made.
+  <!-- repo_track_justification -->
+</p>
+
+<p>
+  <strong><%= @project.repo_interim_status %>:</strong>
+  The source repository MUST include interim versions for review between releases;
+  it MUST NOT include only final releases.
+  <!-- repo_interim_justification -->
+</p>
+
+<p>
+  <strong>Repo Distributed:</strong>
+  <%= @project.repo_distributed_status %>
+  <!-- repo_distributed_justification -->
+</p>
+
+<h3 class="center"><i>Unique version numbering</i></h3>
+<p>
+  <strong>Version Unique:</strong>
+  <%= @project.version_unique_status %>
+  <!-- version_unique_justification -->
+</p>
+
+<p>
+  <strong>Repo Distributed:</strong>
+  <%= @project.version_semver_status %>
+  <!-- version_semver_justification -->
+</p>
+
+<p>
+  <strong>Version Tags:</strong>
+  <%= @project.version_tags_status %>
+  <!-- version_tags_justification -->
+</p>
+
+<h3 class="center"><i>ChangeLog</i></h3>
+<p>
+  <strong>ChangeLog:</strong>
+  <%= @project.changelog_status %>
+  <!-- changelog_justification -->
+</p>
+
+<p>
+  <strong>ChangeLog vulnerabilities:</strong>
+  <%= @project.changelog_vulns_status %>
+  <!-- changelog_vulns_justification -->
+</p>
+
+
+<br><br>
+<h2 class="center">Reporting</h2>
+<h3 class="center"><i>Bug-reporting process</i></h3>
+
+
+<p>
+  <strong>Report Url:</strong>
+  <%= @project.report_url_status %>
+  <!-- report_url_justification -->
+</p>
+
+<p>
+  <strong>Report Tracker:</strong>
+  <%= @project.report_tracker_status %>
+  <!-- report_tracker_justification -->
+</p>
+
+<p>
+  <strong>Report Process:</strong>
+  <%= @project.report_process_status %>
+  <!-- report_process_justification -->
+</p>
+
+<p>
+  <strong>Report Responses:</strong>
+  <%= @project.report_responses_status %>
+  <!-- report_responses_justification -->
+</p>
+
+<p>
+  <strong>Enhancement Responses:</strong>
+  <%= @project.enhancement_responses_status %>
+  <!-- enhancement_responses_justification -->
+</p>
+
+<p>
+  <strong>Report Archive:</strong>
+  <%= @project.report_archive_status %>
+  <!-- report_archive_justification -->
+</p>
+
+
+<h3 class="center"><i>Vulnerability report process</i></h3>
+<p>
+  <strong>Vulnerability Report:</strong>
+  <%= @project.vulnerability_report_process_status %>
+  <!-- vulnerability_report_process_justification -->
+</p>
+
+<p>
+  <strong>Vulnerability Report Private:</strong>
+  <%= @project.vulnerability_report_private_status %>
+  <!-- vulnerability_report_private_justification -->
+</p>
+
+<p>
+  <strong>Vulnerability Report Response:</strong>
+  <%= @project.vulnerability_report_response_status %>
+  <!-- vulnerability_report_response_justification -->
+</p>
+
+
+<br><br>
+<h2 class="center">Quality</h2>
+<h3 class="center"><i>Working build system</i></h3>
+<p>
+  <strong>Build:</strong>
+  <%= @project.build_status %>
+  <!-- build_justification -->
+</p>
+
+<p>
+  <strong>Build Common Tools:</strong>
+  <%= @project.build_common_tools_status %>
+  <!-- build_common_tools_justification -->
+</p>
+
+<p>
+  <strong>Build OSS Tools:</strong>
+  <%= @project.build_oss_tools_status %>
+  <!-- build_oss_tools_justification -->
+</p>
+
+<h3 class="center"><i>Automated test suite</i></h3>
+<p>
+  <strong>Test:</strong>
+  <%= @project.test_status %>
+  <!-- test_justification -->
+</p>
+
+<p>
+  <strong>Test Invocation:</strong>
+  <%= @project.test_invocation_status %>
+  <!-- test_invocation_justification -->
+</p>
+
+<p>
+  <strong>Test Most:</strong>
+  <%= @project.test_most_status %>
+  <!-- test_most_justification -->
+</p>
+
+<h3 class="center"><i>New functionality testing</i></h3>
+<p>
+  <strong>Test:</strong>
+  <%= @project.test_policy_status %>
+  <!-- test_policy_justification -->
+</p>
+
+<p>
+  <strong>Tests are added:</strong>
+  <%= @project.tests_are_added_status %>
+  <!-- tests_are_added_justification -->
+</p>
+
+<p>
+  <strong>Tests Documented Added:</strong>
+  <%= @project.tests_documented_added_status %>
+  <!-- tests_documented_added_justification -->
+</p>
+
+<h3 class="center"><i>Warning flags</i></h3>
+<p>
+  <strong>Warnings:</strong>
+  <%= @project.warnings_status %>
+  <!-- warnings_justification -->
+</p>
+
+<p>
+  <strong>Warnings Fixed:</strong>
+  <%= @project.warnings_fixed_status %>
+  <!-- warnings_fixed_justification -->
+</p>
+
+<p>
+  <strong>Warnings Strict:</strong>
+  <%= @project.warnings_strict_status %>
+  <!-- warnings_strict_justification -->
+</p>
+
+<br><br>
+<h2 class="center">Security</h2>
+<h3 class="center"><i>Secure development knowledge</i></h3>
+
+<p>
+  <strong>Know Secure Design:</strong>
+  <%= @project.know_secure_design_status %>
+  <!-- know_secure_design_justification -->
+</p>
+
+<p>
+  <strong>Know Common Errors:</strong>
+  <%= @project.know_common_errors_status %>
+  <!-- know_common_errors_justification -->
+</p>
+
+<h3 class="center"><i>Use basic good cryptographic practices</i></h3>
+
+<p>
+  <strong>Crypto Published:</strong>
+  <%= @project.crypto_published_status %>
+  <!-- crypto_published_justification -->
+</p>
+
+<p>
+  <strong>Crypto Call:</strong>
+  <%= @project.crypto_call_status %>
+  <!-- crypto_call_justification -->
+</p>
+
+<p>
+  <strong>Crypto OSS:</strong>
+  <%= @project.crypto_oss_status %>
+  <!-- crypto_oss_justification -->
+</p>
+
+<p>
+  <strong>Crypto Keylength:</strong>
+  <%= @project.crypto_keylength_status %>
+  <!-- crypto_keylength_justification -->
+</p>
+
+<p>
+  <strong>Crypto Working:</strong>
+  <%= @project.crypto_working_status %>
+  <!-- crypto_working_justification -->
+</p>
+
+<p>
+  <strong>Crypto PFS:</strong>
+  <%= @project.crypto_pfs_status %>
+  <!-- crypto_pfs_justification -->
+</p>
+
+<p>
+  <strong>Crypto Password Storage:</strong>
+  <%= @project.crypto_password_storage_status %>
+  <!-- crypto_password_storage_justification -->
+</p>
+
+<p>
+  <strong>Crypto Random:</strong>
+  <%= @project.crypto_random_status %>
+  <!-- crypto_random_justification -->
+</p>
+
+<p>
+  <strong>Crypto Random:</strong>
+  <%= @project.crypto_random_status %>
+  <!-- crypto_random_justification -->
+</p>
+
+<h3 class="center"><i>Secured delivery against man-in-the-middle (MITM) attacks</i></h3>
+<p>
+  <strong>Delivery MITM:</strong>
+  <%= @project.delivery_mitm_status %>
+  <!-- delivery_mitm_justification -->
+</p>
+
+<p>
+  <strong>Delivery Unsigned:</strong>
+  <%= @project.delivery_unsigned_status %>
+  <!-- delivery_unsigned_justification -->
+</p>
+
+<h3 class="center"><i>Publicly-known Vulnerabilities fixed</i></h3>
+<p>
+  <strong>Vulenrabilities fixed 60 days:</strong>
+  <%= @project.vulnerabilities_fixed_60_days_status %>
+  <!-- vulnerabilities_fixed_60_days_justification -->
+</p>
+
+<p>
+  <strong>Vulenrabilities critical fixed:</strong>
+  <%= @project.vulnerabilities_critical_fixed_status %>
+  <!-- vulnerabilities_critical_fixed_justification -->
+</p>
+
+<br><br>
+<h2 class="center">Security Analysis</h2>
+<h3 class="center"><i>Static Code Analysis</i></h3>
+<p>
+  <strong>Vulenrabilities critical fixed:</strong>
+  <%= @project.vulnerabilities_critical_fixed_status %>
+  <!-- vulnerabilities_critical_fixed_justification -->
+</p>
+
+<p>
+  <strong>Static Analysis:</strong>
+  <%= @project.static_analysis_status %>
+  <!-- static_analysis_justification -->
+</p>
+
+<p>
+  <strong>Static Analysis Common Vulnerabilities:</strong>
+  <%= @project.static_analysis_common_vulnerabilities_status %>
+  <!-- static_analysis_common_vulnerabilities_justification -->
+</p>
+
+<p>
+  <strong>Static Analysis Fixed:</strong>
+  <%= @project.static_analysis_fixed_status %>
+  <!-- static_analysis_fixed_justification -->
+</p>
+
+<p>
+  <strong>Static Analysis Often:</strong>
+  <%= @project.static_analysis_often_status %>
+  <!-- static_analysis_often_justification -->
+</p>
+
+<h3 class="center"><i>Dynamic Analysis</i></h3>
+
+<p>
+  <strong>Dynamic Analysis:</strong>
+  <%= @project.dynamic_analysis_status %>
+  <!-- dynamic_analysis_justification -->
+</p>
+
+<p>
+  <strong>Dynamic Analysis Unsafe:</strong>
+  <%= @project.dynamic_analysis_unsafe_status %>
+  <!-- dynamic_analysis_unsafe_justification -->
+</p>
+
+<p>
+  <strong>Dynamic Analysis Enable Assertions:</strong>
+  <%= @project.dynamic_analysis_enable_assertions_status %>
+  <!-- dynamic_analysis_enable_assertions_justification -->
+</p>
+
+<p>
+  <strong>Dynamic Analysis Fixed:</strong>
+  <%= @project.dynamic_analysis_fixed_status %>
+  <!-- dynamic_analysis_fixed_justification -->
+</p>
+
+
+
+
 
 
 

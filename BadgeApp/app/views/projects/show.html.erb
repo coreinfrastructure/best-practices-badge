@@ -102,7 +102,7 @@
 
 <br><br>
 <h2 class="center">Change Control</h2>
-<h3 class="center"><i>Public version-controlled source repository</i></h3>
+<h3 class="center"><i>Public Version-Controlled Source Repository</i></h3>
 <p>
   <strong><%= @project.repo_url_status %>:</strong>
   The project MUST have a version-controlled source repository that is publicly
@@ -125,279 +125,342 @@
 </p>
 
 <p>
-  <strong>Repo Distributed:</strong>
-  <%= @project.repo_distributed_status %>
+  <strong><%= @project.repo_distributed_status %>:</strong>
+  It is RECOMMENDED that common distributed version control software is used
+  (e.g., git). Git is not specifically required and projects can use centralized
+  version control software (such as subversion) with justification.
   <!-- repo_distributed_justification -->
 </p>
 
-<h3 class="center"><i>Unique version numbering</i></h3>
+<h3 class="center"><i>Version Numbering</i></h3>
 <p>
-  <strong>Version Unique:</strong>
-  <%= @project.version_unique_status %>
+  <strong><%= @project.version_unique_status %>:</strong>
+  The project MUST have a unique version number for each release intended
+  to be used by users.
   <!-- version_unique_justification -->
 </p>
 
 <p>
-  <strong>Repo Distributed:</strong>
-  <%= @project.version_semver_status %>
+  <strong><%= @project.version_semver_status %>:</strong>
+  It is RECOMMENDED that the Semantic Versioning (SemVer) format is used for releases.
   <!-- version_semver_justification -->
 </p>
 
 <p>
-  <strong>Version Tags:</strong>
-  <%= @project.version_tags_status %>
+  <strong><%= @project.version_tags_status %>:</strong>
+  It is RECOMMENDED that projects identify each release within their version
+  control system. For example, it is RECOMMENDED that those using git identify each release using git tags.
   <!-- version_tags_justification -->
 </p>
 
 <h3 class="center"><i>ChangeLog</i></h3>
 <p>
-  <strong>ChangeLog:</strong>
-  <%= @project.changelog_status %>
+  <strong><%= @project.changelog_status %>:</strong>
+  The project MUST provide a "ChangeLog" (a human-readable summary of major changes
+  in each release). The ChangeLog MUST NOT be the output of the version control
+  log of every change (e.g., the "git log" command is not a ChangeLog).
   <!-- changelog_justification -->
 </p>
 
 <p>
-  <strong>ChangeLog vulnerabilities:</strong>
-  <%= @project.changelog_vulns_status %>
+  <strong><%= @project.changelog_vulns_status %>:</strong>
+  The ChangeLog MUST identify whether the new release fixes any publicly known vulnerabilities.
   <!-- changelog_vulns_justification -->
 </p>
 
 
 <br><br>
 <h2 class="center">Reporting</h2>
-<h3 class="center"><i>Bug-reporting process</i></h3>
-
+<h3 class="center"><i>Bug-Reporting Process</i></h3>
 
 <p>
-  <strong>Report Url:</strong>
-  <%= @project.report_url_status %>
+  <strong><%= @project.report_url_status %>:</strong>
+  If an issue tracker is used, please provide its URL.
   <!-- report_url_justification -->
 </p>
 
 <p>
-  <strong>Report Tracker:</strong>
-  <%= @project.report_tracker_status %>
+  <strong><%= @project.report_tracker_status %>:</strong>
+  It is RECOMMENDED that an issue tracker be used for tracking individual issues.
   <!-- report_tracker_justification -->
 </p>
 
 <p>
-  <strong>Report Process:</strong>
-  <%= @project.report_process_status %>
+  <strong><%= @project.report_process_status %>:</strong>
+  The project MUST provide a process for users to submit bug reports (e.g., using an issue tracker or a mailing list).
   <!-- report_process_justification -->
 </p>
 
 <p>
-  <strong>Report Responses:</strong>
-  <%= @project.report_responses_status %>
+  <strong><%= @project.report_responses_status %>:</strong>
+  Developers MUST respond to most bug reports submitted in the last 2-12 months
+  (inclusive); the response need not include a fix.
   <!-- report_responses_justification -->
 </p>
 
 <p>
-  <strong>Enhancement Responses:</strong>
-  <%= @project.enhancement_responses_status %>
+  <strong><%= @project.enhancement_responses_status %>:</strong>
+  Developers SHOULD respond to most enhancement requests in the last
+  2-12 months (inclusive). Developers MAY choose not to respond.
   <!-- enhancement_responses_justification -->
 </p>
 
 <p>
-  <strong>Report Archive:</strong>
-  <%= @project.report_archive_status %>
+  <strong><%= @project.report_archive_status %>:</strong>
+  Reports and responses MUST be archived for later searching.
   <!-- report_archive_justification -->
 </p>
 
 
-<h3 class="center"><i>Vulnerability report process</i></h3>
+<h3 class="center"><i>Vulnerability Report Process</i></h3>
 <p>
-  <strong>Vulnerability Report:</strong>
-  <%= @project.vulnerability_report_process_status %>
+  <strong><%= @project.vulnerability_report_process_status %>:</strong>
+  The project MUST publish the process for reporting vulnerabilities on the
+  project site (e.g., a clearly designated mailing address on https://PROJECTSITE/security,
+  often security@SOMEWHERE); this MAY be the same as its bug reporting process.
   <!-- vulnerability_report_process_justification -->
 </p>
 
 <p>
-  <strong>Vulnerability Report Private:</strong>
-  <%= @project.vulnerability_report_private_status %>
+  <strong><%= @project.vulnerability_report_private_status %>:</strong>
+  If private vulnerability reports are supported, the project MUST include how
+  to send the information in a way that is kept private (e.g., a private defect
+  report submitted on the web using TLS or an email encrypted using PGP).
+  If private vulnerability reports are not supported this criterion is automatically met.
   <!-- vulnerability_report_private_justification -->
 </p>
 
 <p>
-  <strong>Vulnerability Report Response:</strong>
-  <%= @project.vulnerability_report_response_status %>
+  <strong><%= @project.vulnerability_report_response_status %>:</strong>
+  The project MUST provide an initial reply to a security vulnerability report sent
+  to the project, on average, less than 7 days within the last 6 months.
+  (If a project is being spammed on its vulnerability report channel, it is okay to only count non-spam messages.)
   <!-- vulnerability_report_response_justification -->
 </p>
 
 
 <br><br>
 <h2 class="center">Quality</h2>
-<h3 class="center"><i>Working build system</i></h3>
+<h3 class="center"><i>Working Build System</i></h3>
 <p>
-  <strong>Build:</strong>
-  <%= @project.build_status %>
+  <strong><%= @project.build_status %>:</strong>
+  If the software requires building for use, the project MUST provide a working
+  build system that can automatically rebuild the software from source code.
+  A build system determines what actions need to occur to rebuild the software
+  (and in what order), and then performs those steps.
   <!-- build_justification -->
 </p>
 
 <p>
-  <strong>Build Common Tools:</strong>
-  <%= @project.build_common_tools_status %>
+  <strong><%= @project.build_common_tools_status %>:</strong>
+  It is RECOMMENDED that common tools be used for building the software
+  (e.g., Maven, Ant, cmake, the autotools, make, or rake), in which case only
+  the instructions to the build system are required (there's no requirement to
+  teach people how to use common tools).
   <!-- build_common_tools_justification -->
 </p>
 
 <p>
-  <strong>Build OSS Tools:</strong>
-  <%= @project.build_oss_tools_status %>
+  <strong><%= @project.build_oss_tools_status %>:</strong>
+  The project SHOULD be buildable using only OSS tools.
   <!-- build_oss_tools_justification -->
 </p>
 
-<h3 class="center"><i>Automated test suite</i></h3>
+<h3 class="center"><i>Automated Test Suite</i></h3>
 <p>
-  <strong>Test:</strong>
-  <%= @project.test_status %>
+  <strong><%= @project.test_status %>:</strong>
+  The project MUST have at least one automated test suite.
   <!-- test_justification -->
 </p>
 
 <p>
-  <strong>Test Invocation:</strong>
-  <%= @project.test_invocation_status %>
+  <strong><%= @project.test_invocation_status %>:</strong>
+  A test suite SHOULD be invocable in a standard way for that language
+  (e.g., "make check", "mvn test", and so on).
   <!-- test_invocation_justification -->
 </p>
 
 <p>
-  <strong>Test Most:</strong>
-  <%= @project.test_most_status %>
+  <strong><%= @project.test_most_status %>:</strong>
+   It is RECOMMENDED that the test suite cover most (or ideally all)
+  the code branches, input fields, and functionality.
   <!-- test_most_justification -->
 </p>
 
-<h3 class="center"><i>New functionality testing</i></h3>
+<h3 class="center"><i>New Functionality Testing</i></h3>
 <p>
-  <strong>Test:</strong>
-  <%= @project.test_policy_status %>
+  <strong><%= @project.test_policy_status %>:</strong>
+  The project MUST have a general policy (formal or not) that as major new
+  functionality is added, tests of that functionality SHOULD be added to an automated test suite.
   <!-- test_policy_justification -->
 </p>
 
 <p>
-  <strong>Tests are added:</strong>
-  <%= @project.tests_are_added_status %>
+  <strong><%= @project.tests_are_added_status %>:</strong>
+  The project MUST have evidence that such tests are being added in the most
+  recent major changes to the project. Major functionality would typically be
+  mentioned in the ChangeLog. (Perfection is not required, merely evidence that
+  tests are typically being added in practice.)
   <!-- tests_are_added_justification -->
 </p>
 
 <p>
-  <strong>Tests Documented Added:</strong>
-  <%= @project.tests_documented_added_status %>
+  <strong><%= @project.tests_documented_added_status %>:</strong>
+  It is RECOMMENDED that this be documented in the instructions for change
+  proposals, but even an informal rule is acceptable as long as the tests are being added in practice.
   <!-- tests_documented_added_justification -->
 </p>
 
-<h3 class="center"><i>Warning flags</i></h3>
+<h3 class="center"><i>Warning Flags</i></h3>
 <p>
-  <strong>Warnings:</strong>
-  <%= @project.warnings_status %>
+  <strong><%= @project.warnings_status %>:</strong>
+  The project MUST enable some compiler warning flagss (e.g. "-Wall"), a "safe"
+  language mode (e.g., "use strict", "use warnings", or similar), and/or use a
+  separate "linter" tool to look for code quality errors or common simple mistakes,
+  if there is at least one OSS tool that can implement this criterion in the selected language.
   <!-- warnings_justification -->
 </p>
 
 <p>
-  <strong>Warnings Fixed:</strong>
-  <%= @project.warnings_fixed_status %>
+  <strong><%= @project.warnings_fixed_status %>:</strong>
+  The project MUST address the issues that are found (by fixing them or marking
+  them in the source code as false positives). Ideally there would be no warnings,
+  but a project MAY accept some warnings (typically less than 1 warning per 100 lines or less than 10 warnings).
+
   <!-- warnings_fixed_justification -->
 </p>
 
 <p>
-  <strong>Warnings Strict:</strong>
-  <%= @project.warnings_strict_status %>
+  <strong><%= @project.warnings_strict_status %>:</strong>
+  It is RECOMMENDED that projects be maximally strict, but this is not always practical.
   <!-- warnings_strict_justification -->
 </p>
 
 <br><br>
 <h2 class="center">Security</h2>
-<h3 class="center"><i>Secure development knowledge</i></h3>
+<h3 class="center"><i>Secure Development Knowledge</i></h3>
 
 <p>
-  <strong>Know Secure Design:</strong>
-  <%= @project.know_secure_design_status %>
+  <strong><%= @project.know_secure_design_status %>:</strong>
+  At least one of the primary developers MUST know how to design secure software.
   <!-- know_secure_design_justification -->
 </p>
 
 <p>
-  <strong>Know Common Errors:</strong>
-  <%= @project.know_common_errors_status %>
+  <strong><%= @project.know_common_errors_status %>:</strong>
+  At least one of the primary developers MUST know of common kinds of errors
+  that lead to vulnerabilities in this kind of software, as well as at least
+  one method to counter or mitigate each of them. Examples
+  (depending on the type of software) include SQL injection, OS injection,
+  classic buffer overflow, cross-site scripting, missing authentication, and missing authorization.
   <!-- know_common_errors_justification -->
 </p>
 
-<h3 class="center"><i>Use basic good cryptographic practices</i></h3>
+<h3 class="center"><i>Use Basic Good Cryptographic Practices</i></h3>
 
 <p>
-  <strong>Crypto Published:</strong>
-  <%= @project.crypto_published_status %>
+  <strong><%= @project.crypto_published_status %>:</strong>
+  Cryptographic protocols and algorithms used by default in the software AND
+  the delivery mechanisms MUST be publicly published and reviewed by experts.
   <!-- crypto_published_justification -->
 </p>
 
 <p>
-  <strong>Crypto Call:</strong>
-  <%= @project.crypto_call_status %>
+  <strong><%= @project.crypto_call_status %>:</strong>
+  Application software that is not itself a cryptographic system/library MUST
+  NOT implement its own cryptographic functions, but MUST instead call on
+  software specifically designed for the purpose.
   <!-- crypto_call_justification -->
 </p>
 
 <p>
-  <strong>Crypto OSS:</strong>
-  <%= @project.crypto_oss_status %>
+  <strong><%= @project.crypto_oss_status %>:</strong>
+  All functionality that depends on cryptography MUST be implementable using
+  OSS because its specification meets the Open Standards Requirement for
+  Software by the Open Source Initiative
   <!-- crypto_oss_justification -->
 </p>
 
 <p>
-  <strong>Crypto Keylength:</strong>
-  <%= @project.crypto_keylength_status %>
+  <strong><%= @project.crypto_keylength_status %>:</strong>
+  The default keylengths MUST meet the NIST minimum requirements at least
+  through the year 2030 (as stated in 2012). These minimum bitlengths are:
+  symmetric key 112, factoring modulus 2048, discrete logarithm key 224,
+  discrete logarithmic group 2048, elliptic curve 224, and hash 224.
+  See http://www.keylength.com for a comparison of keylength recommendations
+  from various organizations. The software MUST be configurable so that it will
+  reject smaller keylengths. The software MAY allow smaller keylengths in some
+  configurations (ideally it would not, since this allows downgrade attacks, but
+  shorter keylengths are sometimes necessary for interoperability.)
   <!-- crypto_keylength_justification -->
 </p>
 
 <p>
-  <strong>Crypto Working:</strong>
-  <%= @project.crypto_working_status %>
+  <strong><%= @project.crypto_working_status %>:</strong>
+  Security mechanisms MUST NOT on depend cryptographic algorithms that are broken
+  or have too-short key lengths (e.g., MD4, MD5, single DES, or RC4).
+  It is RECOMMENDED that SHA-1 not be used (we are well aware that git uses SHA-1).
+  Currently-recommended algorithms include AES and SHA-256/SHA-512.
+  Implementations SHOULD support multiple cryptographic algorithms, so users can quickly switch if one is broken.
   <!-- crypto_working_justification -->
 </p>
 
 <p>
-  <strong>Crypto PFS:</strong>
-  <%= @project.crypto_pfs_status %>
+  <strong><%= @project.crypto_pfs_status %>:</strong>
+  Any key agreement protocol SHOULD implement perfect forward secrecy so a session
+  key derived from a set of long-term keys cannot be compromised if one of the
+  ong-term keys is compromised in the future.
   <!-- crypto_pfs_justification -->
 </p>
 
 <p>
-  <strong>Crypto Password Storage:</strong>
-  <%= @project.crypto_password_storage_status %>
+  <strong><%= @project.crypto_password_storage_status %>:</strong>
+  If passwords for later authentication are stored, they MUST be stored as iterated hashes with per-user salt.
   <!-- crypto_password_storage_justification -->
 </p>
 
 <p>
-  <strong>Crypto Random:</strong>
-  <%= @project.crypto_random_status %>
+  <strong><%= @project.crypto_random_status %>:</strong>
+  All keys and nonces MUST be generated using cryptographically random functions,
+  and not through non-cryptographically random functions.
   <!-- crypto_random_justification -->
 </p>
 
+<h3 class="center"><i>Secured Delivery Against Man-in-the-Middle (MITM) Attacks</i></h3>
 <p>
-  <strong>Crypto Random:</strong>
-  <%= @project.crypto_random_status %>
-  <!-- crypto_random_justification -->
-</p>
-
-<h3 class="center"><i>Secured delivery against man-in-the-middle (MITM) attacks</i></h3>
-<p>
-  <strong>Delivery MITM:</strong>
-  <%= @project.delivery_mitm_status %>
+  <strong><%= @project.delivery_mitm_status %>:</strong>
+  The project MUST use a delivery mechanism that counters MITM attacks.
+  Using https or ssh+scp is acceptable. An even stronger mechanism is releasing
+  the software with digitally signed packages, since that mitigates attacks on
+  the distribution system, but this only works if the users can be confident
+  that the public keys for signatures are correct and if the users will actually check the signature.
   <!-- delivery_mitm_justification -->
 </p>
 
 <p>
-  <strong>Delivery Unsigned:</strong>
-  <%= @project.delivery_unsigned_status %>
+  <strong><%= @project.delivery_unsigned_status %>:</strong>
+  A cryptographic hash (e.g., a sha1sum) MUST NOT be retrieved over http and
+  used without checking for a cryptographic signature, since these hashes can be modified in transit.
   <!-- delivery_unsigned_justification -->
 </p>
 
-<h3 class="center"><i>Publicly-known Vulnerabilities fixed</i></h3>
+<h3 class="center"><i>Publicly-known Vulnerabilities Fixed</i></h3>
 <p>
-  <strong>Vulenrabilities fixed 60 days:</strong>
-  <%= @project.vulnerabilities_fixed_60_days_status %>
+  <strong><%= @project.vulnerabilities_fixed_60_days_status %>:</strong>
+  There MUST be no unpatched vulnerabilities of medium or high severity that
+  have been publicly known for more than 60 days. The vulnerability must be
+  patched and released by the project itself (patches may be developed elsewhere).
+  A vulnerability becomes publicly known (for this purpose) once it has a CVE
+  with publicly released non-paywalled information (reported, for example,
+  in the National Vulnerability Database) or when the project has been informed
+  and the information has been released to the public (possibly by the project).
+  A vulnerability is medium to high severity if its CVSS 2.0 base score is 4 or higher.
   <!-- vulnerabilities_fixed_60_days_justification -->
 </p>
 
 <p>
-  <strong>Vulenrabilities critical fixed:</strong>
-  <%= @project.vulnerabilities_critical_fixed_status %>
+  <strong><%= @project.vulnerabilities_critical_fixed_status %>:</strong>
+  Projects SHOULD fix all critical vulnerabilities rapidly after they are reported.
   <!-- vulnerabilities_critical_fixed_justification -->
 </p>
 
@@ -405,58 +468,75 @@
 <h2 class="center">Security Analysis</h2>
 <h3 class="center"><i>Static Code Analysis</i></h3>
 <p>
-  <strong>Vulenrabilities critical fixed:</strong>
-  <%= @project.vulnerabilities_critical_fixed_status %>
-  <!-- vulnerabilities_critical_fixed_justification -->
-</p>
-
-<p>
-  <strong>Static Analysis:</strong>
-  <%= @project.static_analysis_status %>
+  <strong><%= @project.static_analysis_status %>:</strong>
+  At least one static code analysis tool MUST be applied to any proposed major
+  production release of the software before its release, if there is at least
+  one OSS tool that implement this criterion in the selected language.
+  A static code analysis tool examines the software code (as source code,
+  intermediate code, or executable) without executing it with specific inputs.
+  For purposes of this criterion compiler warnings and "safe" language modes do
+  not count as a static code analysis tool (these typically avoid deep analysis
+  because speed is vital). Examples of such static code analysis tools include cppcheck,
+  the clang static analyzer, FindBugs (including FindSecurityBugs), PMD, Brakeman,
+  Coverity Quality Analyzer, and the HP Fortify Static Code Analyzer.
   <!-- static_analysis_justification -->
 </p>
 
 <p>
-  <strong>Static Analysis Common Vulnerabilities:</strong>
-  <%= @project.static_analysis_common_vulnerabilities_status %>
+  <strong><%= @project.static_analysis_common_vulnerabilities_status %>:</strong>
+  It is RECOMMENDED that the tool include rules or approaches to look for
+  common vulnerabilities in the analyzed language or environment.
   <!-- static_analysis_common_vulnerabilities_justification -->
 </p>
 
 <p>
-  <strong>Static Analysis Fixed:</strong>
-  <%= @project.static_analysis_fixed_status %>
+  <strong><%= @project.static_analysis_fixed_status %>:</strong>
+  All confirmed medium and high severity exploitable vulnerabilities discovered
+  with static code analysis MUST be fixed. A vulnerability is medium to high
+  severity if its CVSS 2.0 is 4 or higher.
   <!-- static_analysis_fixed_justification -->
 </p>
 
 <p>
-  <strong>Static Analysis Often:</strong>
-  <%= @project.static_analysis_often_status %>
+  <strong><%= @project.static_analysis_often_status %>:</strong>
+  It is RECOMMENDED that static source code analysis occur on every commit or at least daily.
   <!-- static_analysis_often_justification -->
 </p>
 
 <h3 class="center"><i>Dynamic Analysis</i></h3>
 
 <p>
-  <strong>Dynamic Analysis:</strong>
-  <%= @project.dynamic_analysis_status %>
+  <strong><%= @project.dynamic_analysis_status %>:</strong>
+  At least one dynamic analysis tool MUST be applied to any proposed major production
+  release of the software before its release. A dynamic analysis tool examines the software
+  by executing it with specific inputs. For example, the project MAY use a fuzzing tool
+  (e.g., American Fuzzy Lop) or a web application scanner (e.g., OWASP ZAP or w3af).
+  For purposes of this criterion the dynamic analysis tool MUST vary the inputs in some
+  way to look for various kinds of problems or be an automated test suite with at least 80% branch coverage.
   <!-- dynamic_analysis_justification -->
 </p>
 
 <p>
-  <strong>Dynamic Analysis Unsafe:</strong>
-  <%= @project.dynamic_analysis_unsafe_status %>
+  <strong><%= @project.dynamic_analysis_unsafe_status %>:</strong>
+  It is RECOMMENDED that if the software is application-level software written
+  using a memory-unsafe language (such as C or C++) then at least one tool to
+  detect memory safety problems MUST be used during at least one dynamic tool use,
+  e.g., Address Sanitizer (ASAN) or valgrind. If the software is not application-level,
+  or is not in a memory-unsafe language, then this criterion is automatically met.
   <!-- dynamic_analysis_unsafe_justification -->
 </p>
 
 <p>
-  <strong>Dynamic Analysis Enable Assertions:</strong>
-  <%= @project.dynamic_analysis_enable_assertions_status %>
+  <strong><%= @project.dynamic_analysis_enable_assertions_status %>:</strong>
+  It is RECOMMENDED that the software include many run-time assertions that are checked during dynamic analysis.
   <!-- dynamic_analysis_enable_assertions_justification -->
 </p>
 
 <p>
-  <strong>Dynamic Analysis Fixed:</strong>
-  <%= @project.dynamic_analysis_fixed_status %>
+  <strong><%= @project.dynamic_analysis_fixed_status %>:</strong>
+  All confirmed medium and high severity exploitable vulnerabilities discovered
+  with dynamic code analysis MUST be fixed. A vulnerability is medium to high
+  severity if its CVSS 2.0 base score is 4 or higher.
   <!-- dynamic_analysis_fixed_justification -->
 </p>
 

@@ -44,7 +44,7 @@ class CreateProjects < ActiveRecord::Migration
       t.text :repo_interim_justification
       t.string :repo_distributed_status
       t.text :repo_distributed_justification
-      # Unique version numbering
+      # Version numbering
       t.string :version_unique_status
       t.text :version_unique_justification
       t.string :version_semver_status

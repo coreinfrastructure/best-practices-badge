@@ -52,10 +52,10 @@ There is also a
 Below are the current *draft* criteria, potential criteria,
 non-criteria, future plans, and where to get more information.
 The key words "MUST", "MUST NOT",
-"SHOULD", "SHOULD NOT", "RECOMMENDED",  and "MAY"
+"SHOULD", "SHOULD NOT", and "MAY"
 in this document are to be interpreted as described in
-[RFC 2119](https://tools.ietf.org/html/rfc2119), with a slight distinction
-between SHOULD and RECOMMENDED:
+[RFC 2119](https://tools.ietf.org/html/rfc2119).
+The additional term SUGGESTED is added, as follows:
 
 - The term MUST is an absolute requirement, and MUST NOT
   is an absolute prohibition.
@@ -63,16 +63,16 @@ between SHOULD and RECOMMENDED:
   valid reasons may exist to not do so in particular circumstances.
   The full implications must be considered,
   understood, and carefully weighed before choosing a different course.
-- The term RECOMMENDED is used instead of SHOULD when the criterion must
+- The term SUGGESTED is used instead of SHOULD when the criterion must
   be considered, but valid reasons
   to not do so are even more common than for SHOULD.
 - Often a criterion is stated as something that SHOULD be done, or is
-  RECOMMENDED, because it may be difficult to implement or the costs
+  SUGGESTED, because it may be difficult to implement or the costs
   to do so may be high.
 - The term MAY provides one way something can be done, e.g.,
   to make it clear that the described implementation is acceptable.
 - To obtain a badge, all MUST and MUST NOT criteria must be met, and all
-  SHOULD and RECOMMENDED criteria must be met OR the rationale for
+  SHOULD and SUGGESTED criteria must be met OR the rationale for
   not implementing the criterion must be documented.
 
 We're experimenting with when justifications are required;
@@ -105,7 +105,7 @@ same as the project URL), and license(s).
 *Project website*
 
 - <a name="project-url"></a>The project MUST have a public website with a stable URL. <sup>[<a href="#project-url">project-url</a>]&#8224;</sup>
-- <a name="project-url-https"></a>It is RECOMMENDED that project websites use HTTPS, not HTTP.  Future versions of these criteria may make HTTPS a requirement. <sup>[<a href="#project-url-https">project-url-https</a>]&#8224;</sup>
+- <a name="project-url-https"></a>It is SUGGESTED that project websites use HTTPS, not HTTP.  Future versions of these criteria may make HTTPS a requirement. <sup>[<a href="#project-url-https">project-url-https</a>]&#8224;</sup>
 
 *Basic project website content*
 
@@ -125,7 +125,7 @@ same as the project URL), and license(s).
   - [a free license as approved by the Free Software Foundation (FSF)](http://www.gnu.org/licenses/license-list.html)
   - [a free license acceptable to Debian main](https://www.debian.org/legal/licenses/)
   - <a name="oss-license"></a>[a "good" license according to Fedora](https://fedoraproject.org/wiki/Licensing:Main?rd=Licensing). <sup>[<a href="#oss-license">oss-license</a>]&#8224;</sup>
-- <a name="oss-license-osi"></a>It is RECOMMENDED that any required license(s) be [OSI-approved](http://opensource.org/licenses). <sup>[<a href="#oss-license-osi">oss-license-osi</a>]&#8224;</sup>
+- <a name="oss-license-osi"></a>It is SUGGESTED that any required license(s) be [OSI-approved](http://opensource.org/licenses). <sup>[<a href="#oss-license-osi">oss-license-osi</a>]&#8224;</sup>
 - The software MAY also be licensed other ways (e.g., "GPLv2 or proprietary" is acceptable).
 - *Note*: We intend for the automated tool to focus on identifying common OSS licenses such as:     [CC0](http://creativecommons.org/publicdomain/zero/1.0/), [MIT](http://opensource.org/licenses/MIT), [BSD 2-clause](http://opensource.org/licenses/BSD-2-Clause), [BSD 3-clause revised](http://opensource.org/licenses/BSD-3-Clause), [Apache 2.0](http://opensource.org/licenses/Apache-2.0), [Lesser GNU General Public License (LGPL)](http://opensource.org/licenses/lgpl-license), and the [GNU General Public License (GPL)](http://opensource.org/licenses/gpl-license).
 - *Rationale*: These criteria are designed for OSS projects, so we need to ensure that they're only used where they apply.  Some projects are thought of as OSS yet are not actually released as OSS (e.g., they might not have any license, in which case the defaults of the country's legal system apply, or they might use a non-OSS license).  Unusual licenses can cause long-term problems for OSS projects and are more difficult for tools to handle.  We expect that [more advanced badges](./other.md) would set a higher bar (e.g., that it *must* be released under an OSI-approved license).
@@ -147,16 +147,16 @@ same as the project URL), and license(s).
 - <a name="repo-url"></a>The project MUST have a version-controlled source repository that is publicly readable and has a URL (the URL MAY be the same as the project URL). <sup>[<a href="#repo-url">repo-url</a>]&#8224;</sup>
 - <a name="repo-track"></a>The source repository MUST track what changes were made, who made the changes, and when the changes were made. <sup>[<a href="#repo-track">repo-track</a>]&#8224;</sup>
 - <a name="repo-interim"></a>The source repository MUST include interim versions for review between releases; it MUST NOT include only final releases. <sup>[<a href="#repo-interim">repo-interim</a>]</sup>
-- <a name="repo-distributed"></a>It is RECOMMENDED that common distributed version control software is used (e.g., git).  Git is not specifically required and projects can use centralized version control software (such as subversion) with justification. <sup>[<a href="#repo-distributed">repo-distributed</a>]&#8224;</sup>
+- <a name="repo-distributed"></a>It is SUGGESTED that common distributed version control software is used (e.g., git).  Git is not specifically required and projects can use centralized version control software (such as subversion) with justification. <sup>[<a href="#repo-distributed">repo-distributed</a>]&#8224;</sup>
 - The project MAY use private (non-public) branches in specific cases while the change is not publicly released (e.g., for fixing a vulnerability before it is revealed to the public).
 - *Rationale*:  This enables easy tracking and public review.  Some OSS projects do not use a version control system or do not provide public access to it. The lack of a public version control repository makes it unnecessarily difficult to contribute to a project and to track its progress in detail.
 
 *Version numbering*
 
 - <a name="version-unique"></a>The project MUST have a unique version number for each release intended to be used by users. <sup>[<a href="#version-unique">version-unique</a>]</sup>
-- <a name="version-semver"></a>It is RECOMMENDED that the [Semantic Versioning (SemVer) format](http://semver.org) is used for releases. <sup>[<a href="#version-semver">version-semver</a>]</sup>
+- <a name="version-semver"></a>It is SUGGESTED that the [Semantic Versioning (SemVer) format](http://semver.org) is used for releases. <sup>[<a href="#version-semver">version-semver</a>]</sup>
 - Commit IDs (or similar) MAY be used as as version numbers. They are unique, but note that these can cause problems for users as they may not be able to determine  whether or not they're up-to-date.
-- <a name="version-tags"></a>It is RECOMMENDED that projects identify each release within their version control system. For example, it is RECOMMENDED that those using git identify each release using git tags. <sup>[<a href="#version-tags">version-tags</a>]&#8224;</sup>
+- <a name="version-tags"></a>It is SUGGESTED that projects identify each release within their version control system. For example, it is SUGGESTED that those using git identify each release using git tags. <sup>[<a href="#version-tags">version-tags</a>]&#8224;</sup>
 
 *ChangeLog*
 
@@ -170,7 +170,7 @@ same as the project URL), and license(s).
 *Bug-reporting process*
 
 - <a name="report-url"></a>If an issue tracker is used, please provide its URL. <sup>[<a href="#report-url">report-url</a>]</sup>
-- <a name="report-tracker"></a>It is RECOMMENDED that an issue tracker be used for tracking individual issues. <sup>[<a href="#report-tracker">report-tracker</a>]&#8224;</sup>
+- <a name="report-tracker"></a>It is SUGGESTED that an issue tracker be used for tracking individual issues. <sup>[<a href="#report-tracker">report-tracker</a>]&#8224;</sup>
 - <a name="report-process"></a>The project MUST provide a process for users to submit bug reports (e.g., using an issue tracker or a mailing list). <sup>[<a href="#report-process">report-process</a>]&#8224;</sup>
 - <a name="report-responses"></a>Developers MUST respond to most bug reports submitted in the last 2-12 months (inclusive); the response need not include a fix. <sup>[<a href="#report-responses">report-responses</a>]&#8224;</sup>
 - <a name="enhancement-responses"></a>Developers SHOULD respond to most enhancement requests in the last 2-12 months (inclusive). Developers MAY choose not to respond. <sup>[<a href="#enhancement-responses">enhancement-responses</a>]&#8224;</sup>
@@ -188,7 +188,7 @@ same as the project URL), and license(s).
 *Working build system*
 
 - <a name="build"></a>If the software requires building for use, the project MUST provide a working build system that can automatically rebuild the software from source code.  A build system determines what actions need to occur to rebuild the software (and in what order), and then performs those steps. <sup>[<a href="#build">build</a>]*&#8224;</sup>
-- <a name="build-common-tools"></a>It is RECOMMENDED that common tools be used for building the software (e.g., Maven, Ant, cmake, the autotools, make, or rake), in which case only the instructions to the build system are required (there's no requirement to teach people how to use common tools). <sup>[<a href="#build-common-tools">build-common-tools</a>]*&#8224;</sup>
+- <a name="build-common-tools"></a>It is SUGGESTED that common tools be used for building the software (e.g., Maven, Ant, cmake, the autotools, make, or rake), in which case only the instructions to the build system are required (there's no requirement to teach people how to use common tools). <sup>[<a href="#build-common-tools">build-common-tools</a>]*&#8224;</sup>
 - <a name="build-oss-tools"></a>The project SHOULD be buildable using only OSS tools. <sup>[<a href="#build-oss-tools">build-oss-tools</a>]*</sup>
 - *Rationale*: If a project needs to be built but there is no working build system, then potential co-developers will not be able to easily contribute and many security analysis tools will be ineffective.  Criteria for a working build system are not applicable if there is no need to build anything for use.
 
@@ -196,7 +196,7 @@ same as the project URL), and license(s).
 
 - <a name="test"></a>The project MUST have at least one automated test suite. <sup>[<a href="#test">test</a>]</sup>
 - <a name="test-invocation"></a>A test suite SHOULD be invocable in a standard way for that language (e.g., "make check", "mvn test", and so on). <sup>[<a href="#test-invocation">test-invocation</a>]</sup>
-- <a name="test-most"></a> It is RECOMMENDED that the test suite cover most (or ideally all) the code branches, input fields, and functionality. <sup>[<a href="#test-most">test-most</a>]</sup>
+- <a name="test-most"></a> It is SUGGESTED that the test suite cover most (or ideally all) the code branches, input fields, and functionality. <sup>[<a href="#test-most">test-most</a>]</sup>
 - The project MAY have multiple automated test suites (e.g., one that runs quickly, vs. another that is more thorough but requires special equipment).
 - *Rationale*: Automated test suites immediately help detect a variety of problems.  A large test suite can find more problems, but even a small test suite can detect problems and provide a framework to build on.
 
@@ -204,13 +204,13 @@ same as the project URL), and license(s).
 
 - <a name="tests-policy"></a>The project MUST have a general policy (formal or not) that as major new functionality is added, tests of that functionality SHOULD be added to an automated test suite. <sup>[<a href="#tests-policy">tests-policy</a>]</sup>
 - <a name="tests-are-added"></a>The project MUST have evidence that such tests are being added in the most recent major changes to the project.  Major functionality would typically be mentioned in the ChangeLog.  (Perfection is not required, merely evidence that tests are typically being added in practice.) <sup>[<a href="#tests-are-added">tests-are-added</a>]</sup>
-- <a name="tests-documented-added"></a>It is RECOMMENDED that this be *documented* in the instructions for change proposals, but even an informal rule is acceptable as long as the tests are being added in practice. <sup>[<a href="#tests-documented-added">tests-documented-added</a>]</sup>
+- <a name="tests-documented-added"></a>It is SUGGESTED that this be *documented* in the instructions for change proposals, but even an informal rule is acceptable as long as the tests are being added in practice. <sup>[<a href="#tests-documented-added">tests-documented-added</a>]</sup>
 
 *Warning flags*
 
 - <a name="warnings"></a>The project MUST enable some compiler warning flagss (e.g. "-Wall"), a "safe" language mode (e.g., "use strict", "use warnings", or similar), and/or use a separate "linter" tool to look for code quality errors or common simple mistakes, if there is at least one OSS tool that can implement this criterion in the selected language. <sup>[<a href="#warnings">warnings</a>]*</sup>
 - <a name="warnings-fixed"></a>The project MUST address the issues that are found (by fixing them or marking them in the source code as false positives).  Ideally there would be no warnings, but a project MAY accept some warnings (typically less than 1 warning per 100 lines or less than 10 warnings). <sup>[<a href="#warnings-fixed">warnings-fixed</a>]*</sup>
-- <a name="warnings-strict"></a>It is RECOMMENDED that projects be maximally strict, but this is not always practical. <sup>[<a href="#warnings-strict">warnings-strict</a>]*</sup>
+- <a name="warnings-strict"></a>It is SUGGESTED that projects be maximally strict, but this is not always practical. <sup>[<a href="#warnings-strict">warnings-strict</a>]*</sup>
 
 ### Security
 
@@ -236,7 +236,7 @@ same as the project URL), and license(s).
 - <a name="crypto-call"></a>Application software that is not itself a cryptographic system/library MUST NOT implement its own cryptographic functions, but MUST instead call on software specifically designed for the purpose.  <sup>[<a href="#crypto-call">crypto-call</a>]*</sup>
 - <a name="crypto-oss"></a>All functionality that depends on cryptography MUST be implementable using OSS because its specification meets the [*Open Standards Requirement for Software* by the Open Source Initiative](http://opensource.org/osr)  <sup>[<a href="#crypto-oss">crypto-oss</a>]*</sup>
 - <a name="crypto-keylength"></a>The default keylengths MUST meet the NIST minimum requirements at least through the year 2030 (as stated in 2012).  These minimum bitlengths are: symmetric key 112, factoring modulus 2048, discrete logarithm key 224, discrete logarithmic group 2048, elliptic curve 224, and hash 224.  See <http://www.keylength.com> for a comparison of keylength recommendations from various organizations.  The software MUST be configurable so that it will reject smaller keylengths.  The software MAY allow smaller keylengths in some configurations (ideally it would not, since this allows downgrade attacks, but shorter keylengths are sometimes necessary for interoperability.)  <sup>[<a href="#crypto-keylength">crypto-keylength</a>]*</sup>
-- <a name="crypto-working"></a>Security mechanisms MUST NOT on depend cryptographic algorithms that are broken or have too-short key lengths (e.g., MD4, MD5, single DES, or RC4).  It is RECOMMENDED that SHA-1 not be used (we are well aware that git uses SHA-1).  Currently-recommended algorithms include AES and SHA-256/SHA-512.  Implementations SHOULD support multiple cryptographic algorithms, so users can quickly switch if one is broken.  <sup>[<a href="#crypto-working">crypto-working</a>]*</sup>
+- <a name="crypto-working"></a>Security mechanisms MUST NOT on depend cryptographic algorithms that are broken or have too-short key lengths (e.g., MD4, MD5, single DES, or RC4).  It is SUGGESTED that SHA-1 not be used (we are well aware that git uses SHA-1).  Currently-recommended algorithms include AES and SHA-256/SHA-512.  Implementations SHOULD support multiple cryptographic algorithms, so users can quickly switch if one is broken.  <sup>[<a href="#crypto-working">crypto-working</a>]*</sup>
 - <a name="crypto-pfs"></a>Any key agreement protocol SHOULD implement perfect forward secrecy so a session key derived from a set of long-term keys cannot be compromised if one of the long-term keys is compromised in the future.  <sup>[<a href="#crypto-pfs">crypto-pfs</a>]*</sup>
 - <a name="crypto-password-storage"></a>If passwords for later authentication are stored, they MUST be stored as iterated hashes with per-user salt.  <sup>[<a href="#crypto-password-storage">crypto-password-storage</a>]*</sup>
 - <a name="crypto-random"></a>All keys and nonces MUST be generated using cryptographically random functions, and *not* through non-cryptographically random functions. <sup>[<a href="#crypto-random">crypto-random</a>]*</sup>
@@ -260,15 +260,15 @@ same as the project URL), and license(s).
 
 - <a name="static-analysis"></a>At least one static code analysis tool MUST be applied to any proposed major production release of the software before its release, if there is at least one OSS tool that implement this criterion in the selected language.  A static code analysis tool examines the software code (as source code, intermediate code, or executable) without executing it with specific inputs.  For purposes of this criterion compiler warnings and "safe" language modes do not count as a static code analysis tool (these typically avoid deep analysis because speed is vital).  Examples of such static code analysis tools include cppcheck, the clang static analyzer, FindBugs (including FindSecurityBugs), PMD, Brakeman, [Coverity Quality Analyzer](https://scan.coverity.com/), and the HP Fortify Static Code Analyzer. <sup>[<a href="#static-analysis">static-analysis</a>]*</sup>
 - The analysis tool(s) MAY be focused on looking for security vulnerabilities, but this is not required.
-- <a name="static-analysis-common-vulnerabilities"></a>It is RECOMMENDED that the tool include rules or approaches to look for common vulnerabilities in the analyzed language or environment. <sup>[<a href="#static-analysis-common-vulnerabilities">static-analysis-common-vulnerabilities</a>]*</sup>
+- <a name="static-analysis-common-vulnerabilities"></a>It is SUGGESTED that the tool include rules or approaches to look for common vulnerabilities in the analyzed language or environment. <sup>[<a href="#static-analysis-common-vulnerabilities">static-analysis-common-vulnerabilities</a>]*</sup>
 - <a name="static-analysis-fixed"></a>All confirmed medium and high severity exploitable vulnerabilities discovered with static code analysis MUST be fixed.  A vulnerability is medium to high severity if its [CVSS 2.0](https://nvd.nist.gov/cvss.cfm) is 4 or higher. <sup>[<a href="#static-analysis-fixed">static-analysis-fixed</a>]*</sup>
-- <a name="static-analysis-often"></a>It is RECOMMENDED that static source code analysis occur on every commit or at least daily. <sup>[<a href="#static-analysis-often">static-analysis-often</a>]*</sup>
+- <a name="static-analysis-often"></a>It is SUGGESTED that static source code analysis occur on every commit or at least daily. <sup>[<a href="#static-analysis-often">static-analysis-often</a>]*</sup>
 
 *Dynamic analysis*
 
 - <a name="dynamic-analysis"></a>At least one dynamic analysis tool MUST be applied to any proposed major production release of the software before its release.  A dynamic analysis tool examines the software by executing it with specific inputs.  For example, the project MAY use a fuzzing tool (e.g., [American Fuzzy Lop](http://lcamtuf.coredump.cx/afl/)) or a web application scanner (e.g., [OWASP ZAP](https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project) or [<a href="#w3af">w3af</a>](http://w3af.org/)). For purposes of this criterion the dynamic analysis tool MUST vary the inputs in some way to look for various kinds of problems *or* be an automated test suite with at least 80% branch coverage. <sup>[dynamic-analysis]</sup>
-- <a name="dynamic-analysis-unsafe"></a>It is RECOMMENDED that if the software is application-level software written using a memory-unsafe language (such as C or C++) then at least one tool to detect memory safety problems MUST be used during at least one dynamic tool use, e.g., Address Sanitizer (ASAN) or valgrind. If the software is not application-level, or is not in a memory-unsafe language, then this criterion is automatically met.  <sup>[<a href="#dynamic-analysis-unsafe">dynamic-analysis-unsafe</a>]</sup>
-- <a name="dynamic-analysis-enable-assertions"></a>It is RECOMMENDED that the software include many run-time assertions that are checked during dynamic analysis. <sup>[<a href="#dynamic-analysis-enable-assertions">dynamic-analysis-enable-assertions</a>]</sup>
+- <a name="dynamic-analysis-unsafe"></a>It is SUGGESTED that if the software is application-level software written using a memory-unsafe language (such as C or C++) then at least one tool to detect memory safety problems MUST be used during at least one dynamic tool use, e.g., Address Sanitizer (ASAN) or valgrind. If the software is not application-level, or is not in a memory-unsafe language, then this criterion is automatically met.  <sup>[<a href="#dynamic-analysis-unsafe">dynamic-analysis-unsafe</a>]</sup>
+- <a name="dynamic-analysis-enable-assertions"></a>It is SUGGESTED that the software include many run-time assertions that are checked during dynamic analysis. <sup>[<a href="#dynamic-analysis-enable-assertions">dynamic-analysis-enable-assertions</a>]</sup>
 - The analysis tool(s) MAY be focused on looking for security vulnerabilities, but this is not required.
 - <a name="dynamic-analysis-fixed"></a>All confirmed medium and high severity exploitable vulnerabilities discovered with dynamic code analysis MUST be fixed.  A vulnerability is medium to high severity if its [CVSS 2.0](https://nvd.nist.gov/cvss.cfm) base score is 4 or higher. <sup>[<a href="#dynamic-analysis-fixed">dynamic-analysis-fixed</a>]</sup>
 - *Rationale*: Static source code analysis and dynamic analysis tend to find different kinds of defects (including defects that lead to vulnerabilities), so combining them is more likely to be effective.

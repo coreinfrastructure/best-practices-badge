@@ -53,14 +53,15 @@
       <div class="row">
       <div class="col-md-3 criteria-radio">
         <%= f.label :interact_status do %>
-          <%= f.radio_button :interact_status, '?', :checked => true %> &nbsp;?&nbsp;
-        <% end %>
-        <%= f.label :interact_status do %>
           <%= f.radio_button :interact_status, 'Met'%> Met
         <% end %>
         <%= f.label :interact_status do %>
           <%= f.radio_button :interact_status, 'Unmet' %> Unmet
         <% end %>
+        <%= f.label :interact_status do %>
+          <%= f.radio_button :interact_status, '?', :checked => true %> &nbsp;?&nbsp;
+        <% end %>
+        <%= image_tag("/assets/Thumbs_down_font_awesome.svg", size: "20x20", alt: "Thumbs down", id: "interact_enough") %>
       </div>
       <div class="col-md-9 criteria-desc">
          <span>The project website MUST provide information on how to: obtain,provide feedback
@@ -73,14 +74,15 @@
       <div class="row">
       <div class="col-md-3 criteria-radio">
         <%= f.label :contribution_status do %>
-          <%= f.radio_button :contribution_status, '?', :checked => true %> &nbsp;?&nbsp;
-        <% end %>
-        <%= f.label :contribution_status do %>
           <%= f.radio_button :contribution_status, 'Met'%> Met
         <% end %>
         <%= f.label :contribution_status do %>
           <%= f.radio_button :contribution_status, 'Unmet' %> Unmet
         <% end %>
+        <%= f.label :contribution_status do %>
+          <%= f.radio_button :contribution_status, '?', :checked => true %> &nbsp;?&nbsp;
+        <% end %>
+        <%= image_tag("/assets/Thumbs_down_font_awesome.svg", size: "20x20", alt: "Thumbs down", id: "contribution_enough") %>
       </div>
       <div class='col-md-9 criteria-desc'>
          <span>The project website MUST provide information on how to: obtain,provide feedback
@@ -93,14 +95,15 @@
       <div class="row">
       <div class="col-md-3 criteria-radio">
         <%= f.label :contribution_criteria_status do %>
-          <%= f.radio_button :contribution_criteria_status, '?', :checked => true %> &nbsp;?&nbsp;
-        <% end %>
-        <%= f.label :contribution_criteria_status do %>
           <%= f.radio_button :contribution_criteria_status, 'Met'%> Met
         <% end %>
         <%= f.label :contribution_criteria_status do %>
           <%= f.radio_button :contribution_criteria_status, 'Unmet' %> Unmet
         <% end %>
+        <%= f.label :contribution_criteria_status do %>
+          <%= f.radio_button :contribution_criteria_status, '?', :checked => true %> &nbsp;?&nbsp;
+        <% end %>
+        <%= image_tag("/assets/Thumbs_down_font_awesome.svg", size: "20x20", alt: "Thumbs down", id: "contribution_criteria_enough") %>
       </div>
       <div class='col-md-9 criteria-desc'>
          <span>The project website MUST provide information on how to: obtain, provide feedback
@@ -114,14 +117,15 @@
        <div class="row">
        <div class="col-md-3 criteria-radio">
          <%= f.label :license_location_status do %>
-           <%= f.radio_button :license_location_status, '?', :checked => true %> &nbsp;?&nbsp;
-         <% end %>
-         <%= f.label :license_location_status do %>
            <%= f.radio_button :license_location_status, 'Met'%> Met
          <% end %>
          <%= f.label :license_location_status do %>
            <%= f.radio_button :license_location_status, 'Unmet' %> Unmet
          <% end %>
+         <%= f.label :license_location_status do %>
+           <%= f.radio_button :license_location_status, '?', :checked => true %> &nbsp;?&nbsp;
+         <% end %>
+        <%= image_tag("/assets/Thumbs_down_font_awesome.svg", size: "20x20", alt: "Thumbs down", id: "license_location_enough") %>
        </div>
        <div class='col-md-9 criteria-desc'>
           <span>License(s) MUST be posted in a standard location (e.g., as a top-level file named LICENSE or COPYING).
@@ -134,14 +138,15 @@
        <div class="row">
        <div class="col-md-3 criteria-radio">
         <%= f.label :oss_license_status do %>
-          <%= f.radio_button :oss_license_status, '?', :checked => true %> &nbsp;?&nbsp;
-        <% end %>
-        <%= f.label :oss_license_status do %>
           <%= f.radio_button :oss_license_status, 'Met' %> Met
         <% end %>
         <%= f.label :oss_license_status do %>
           <%= f.radio_button :oss_license_status, 'Unmet' %> Unmet
         <% end %>
+        <%= f.label :oss_license_status do %>
+          <%= f.radio_button :oss_license_status, '?', :checked => true %> &nbsp;?&nbsp;
+        <% end %>
+        <%= image_tag("/assets/Thumbs_down_font_awesome.svg", size: "20x20", alt: "Thumbs down", id: "oss_license_enough") %>
        </div>
        <div class='col-md-9 criteria-desc'>
        <span>The software MUST be released as OSS. For our purposes, this means that the license MUST be at least one of the following:
@@ -157,14 +162,15 @@
        <div class="row">
        <div class="col-md-3 criteria-radio">
         <%= f.label :oss_license_osi_status do %>
-          <%= f.radio_button :oss_license_osi_status, '?', :checked => true %> &nbsp;?&nbsp;
-        <% end %>
-        <%= f.label :oss_license_osi_status do %>
           <%= f.radio_button :oss_license_osi_status, 'Met'%> Met
         <% end %>
         <%= f.label :oss_license_osi_status do %>
           <%= f.radio_button :oss_license_osi_status, 'Unmet'%> Unmet
         <% end %>
+        <%= f.label :oss_license_osi_status do %>
+          <%= f.radio_button :oss_license_osi_status, '?', :checked => true %> &nbsp;?&nbsp;
+        <% end %>
+        <%= image_tag("/assets/Thumbs_down_font_awesome.svg", size: "20x20", alt: "Thumbs down", id: "oss_license_osi_enough") %>
       </div>
       <div class='col-md-9 criteria-desc'>
       <span>It is SUGGESTED that any required license(s) be OSI-approved. <sup>[oss-license-osi]</sup> </span>
@@ -188,14 +194,15 @@
       <div class="row">
       <div class="col-md-3 criteria-radio">
        <%= f.label :documentation_basics_status do %>
-         <%= f.radio_button :documentation_basics_status, '?', :checked => true %> &nbsp;?&nbsp;
-       <% end %>
-       <%= f.label :documentation_basics_status do %>
          <%= f.radio_button :documentation_basics_status, 'Met'%> Met
        <% end %>
        <%= f.label :documentation_basics_status do %>
          <%= f.radio_button :documentation_basics_status, 'Unmet'%> Unmet
        <% end %>
+       <%= f.label :documentation_basics_status do %>
+         <%= f.radio_button :documentation_basics_status, '?', :checked => true %> &nbsp;?&nbsp;
+       <% end %>
+       <%= image_tag("/assets/Thumbs_down_font_awesome.svg", size: "20x20", alt: "Thumbs down", id: "documentation_basics_enough") %>
       </div>
       <div class='col-md-9 criteria-desc'>
       <span>The project MUST provide basic documentation for the software in some media (such as text or video) that includes:
@@ -211,13 +218,13 @@
       <div class="row">
       <div class="col-md-3 criteria-radio">
        <%= f.label :documentation_interface_status do %>
-         <%= f.radio_button :documentation_interface_status, '?', :checked => true %> &nbsp;?&nbsp;
-       <% end %>
-       <%= f.label :documentation_interface_status do %>
          <%= f.radio_button :documentation_interface_status, 'Met'%> Met
        <% end %>
        <%= f.label :documentation_interface_status do %>
          <%= f.radio_button :documentation_interface_status, 'Unmet'%> Unmet
+       <% end %>
+       <%= f.label :documentation_interface_status do %>
+         <%= f.radio_button :documentation_interface_status, '?', :checked => true %> &nbsp;?&nbsp;
        <% end %>
      </div>
      <div class='col-md-9 criteria-desc'>
@@ -237,13 +244,13 @@
        <div class="row">
        <div class="col-md-3 criteria-radio">
         <%= f.label :repo_url_status do %>
-          <%= f.radio_button :repo_url_status, '?', :checked => true %> &nbsp;?&nbsp;
-        <% end %>
-        <%= f.label :repo_url_status do %>
           <%= f.radio_button :repo_url_status, 'Met'%> Met
         <% end %>
         <%= f.label :repo_url_status do %>
           <%= f.radio_button :repo_url_status, 'Unmet'%> Unmet
+        <% end %>
+        <%= f.label :repo_url_status do %>
+          <%= f.radio_button :repo_url_status, '?', :checked => true %> &nbsp;?&nbsp;
         <% end %>
        </div>
        <div class='col-md-9 criteria-desc'>
@@ -257,13 +264,13 @@
       <div class="row">
       <div class="col-md-3 criteria-radio">
        <%= f.label :repo_track_status do %>
-         <%= f.radio_button :repo_track_status, '?', :checked => true %> &nbsp;?&nbsp;
-       <% end %>
-       <%= f.label :repo_track_status do %>
          <%= f.radio_button :repo_track_status, 'Met'%> Met
        <% end %>
        <%= f.label :repo_track_status do %>
          <%= f.radio_button :repo_track_status, 'Unmet'%> Unmet
+       <% end %>
+       <%= f.label :repo_track_status do %>
+         <%= f.radio_button :repo_track_status, '?', :checked => true %> &nbsp;?&nbsp;
        <% end %>
       </div>
       <div class='col-md-9 criteria-desc'>
@@ -277,13 +284,13 @@
       <div class="row">
       <div class="col-md-3 criteria-radio">
        <%= f.label :repo_interim_status do %>
-         <%= f.radio_button :repo_interim_status, '?', :checked => true %> &nbsp;?&nbsp;
-       <% end %>
-       <%= f.label :repo_interim_status do %>
          <%= f.radio_button :repo_interim_status, 'Met'%> Met
        <% end %>
        <%= f.label :repo_interim_status do %>
          <%= f.radio_button :repo_interim_status, 'Unmet'%> Unmet
+       <% end %>
+       <%= f.label :repo_interim_status do %>
+         <%= f.radio_button :repo_interim_status, '?', :checked => true %> &nbsp;?&nbsp;
        <% end %>
       </div>
       <div class='col-md-9 criteria-desc'>
@@ -297,13 +304,13 @@
       <div class="row">
       <div class="col-md-3 criteria-radio">
        <%= f.label :repo_distributed_status do %>
-         <%= f.radio_button :repo_distributed_status, '?', :checked => true %> &nbsp;?&nbsp;
-       <% end %>
-       <%= f.label :repo_distributed_status do %>
          <%= f.radio_button :repo_distributed_status, 'Met'%> Met
        <% end %>
        <%= f.label :repo_distributed_status do %>
          <%= f.radio_button :repo_distributed_status, 'Unmet'%> Unmet
+       <% end %>
+       <%= f.label :repo_distributed_status do %>
+         <%= f.radio_button :repo_distributed_status, '?', :checked => true %> &nbsp;?&nbsp;
        <% end %>
       </div>
       <div class='col-md-9 criteria-desc'>
@@ -328,13 +335,13 @@
       <div class="row">
       <div class="col-md-3 criteria-radio">
        <%= f.label :version_unique_status do %>
-         <%= f.radio_button :version_unique_status, '?', :checked => true %> &nbsp;?&nbsp;
-       <% end %>
-       <%= f.label :version_unique_status do %>
          <%= f.radio_button :version_unique_status, 'Met'%> Met
        <% end %>
        <%= f.label :version_unique_status do %>
          <%= f.radio_button :version_unique_status, 'Unmet'%> Unmet
+       <% end %>
+       <%= f.label :version_unique_status do %>
+         <%= f.radio_button :version_unique_status, '?', :checked => true %> &nbsp;?&nbsp;
        <% end %>
       </div>
       <div class='col-md-9 criteria-desc'>
@@ -348,13 +355,13 @@
       <hr class='col-md-11'>
       <div class="col-md-3 criteria-radio">
        <%= f.label :version_semver_status do %>
-         <%= f.radio_button :version_semver_status, '?', :checked => true %> &nbsp;?&nbsp;
-       <% end %>
-       <%= f.label :version_semver_status do %>
          <%= f.radio_button :version_semver_status, 'Met'%> Met
        <% end %>
        <%= f.label :version_semver_status do %>
          <%= f.radio_button :version_semver_status, 'Unmet'%> Unmet
+       <% end %>
+       <%= f.label :version_semver_status do %>
+         <%= f.radio_button :version_semver_status, '?', :checked => true %> &nbsp;?&nbsp;
        <% end %>
       </div>
       <div class='col-md-9 criteria-desc'>
@@ -370,13 +377,13 @@
       <div class="row">
       <div class="col-md-3 criteria-radio">
        <%= f.label :version_tags_status do %>
-         <%= f.radio_button :version_tags_status, '?', :checked => true %> &nbsp;?&nbsp;
-       <% end %>
-       <%= f.label :version_tags_status do %>
          <%= f.radio_button :version_tags_status, 'Met'%> Met
        <% end %>
        <%= f.label :version_tags_status do %>
          <%= f.radio_button :version_tags_status, 'Unmet'%> Unmet
+       <% end %>
+       <%= f.label :version_tags_status do %>
+         <%= f.radio_button :version_tags_status, '?', :checked => true %> &nbsp;?&nbsp;
        <% end %>
       </div>
       <div class='col-md-9 criteria-desc'>
@@ -392,13 +399,13 @@
       <div class="row">
       <div class="col-md-3 criteria-radio">
        <%= f.label :changelog_status do %>
-         <%= f.radio_button :changelog_status, '?', :checked => true %> &nbsp;?&nbsp;
-       <% end %>
-       <%= f.label :changelog_status do %>
          <%= f.radio_button :changelog_status, 'Met'%> Met
        <% end %>
        <%= f.label :changelog_status do %>
          <%= f.radio_button :changelog_status, 'Unmet'%> Unmet
+       <% end %>
+       <%= f.label :changelog_status do %>
+         <%= f.radio_button :changelog_status, '?', :checked => true %> &nbsp;?&nbsp;
        <% end %>
       </div>
       <div class='col-md-9 criteria-desc'>
@@ -413,13 +420,13 @@
       <div class="row">
       <div class="col-md-3 criteria-radio">
        <%= f.label :changelog_vulns_status do %>
-         <%= f.radio_button :changelog_vulns_status, '?', :checked => true %> &nbsp;?&nbsp;
-       <% end %>
-       <%= f.label :changelog_vulns_status do %>
          <%= f.radio_button :changelog_vulns_status, 'Met'%> Met
        <% end %>
        <%= f.label :changelog_vulns_status do %>
          <%= f.radio_button :changelog_vulns_status, 'Unmet'%> Unmet
+       <% end %>
+       <%= f.label :changelog_vulns_status do %>
+         <%= f.radio_button :changelog_vulns_status, '?', :checked => true %> &nbsp;?&nbsp;
        <% end %>
       </div>
       <div class='col-md-9 criteria-desc'>
@@ -444,13 +451,13 @@
       <div class="row">
       <div class="col-md-3 criteria-radio">
        <%= f.label :report_url_status do %>
-         <%= f.radio_button :report_url_status, '?', :checked => true %> &nbsp;?&nbsp;
-       <% end %>
-       <%= f.label :report_url_status do %>
          <%= f.radio_button :report_url_status, 'Met'%> Met
        <% end %>
        <%= f.label :report_url_status do %>
          <%= f.radio_button :report_url_status, 'Unmet'%> Unmet
+       <% end %>
+       <%= f.label :report_url_status do %>
+         <%= f.radio_button :report_url_status, '?', :checked => true %> &nbsp;?&nbsp;
        <% end %>
       </div>
       <div class='col-md-9 criteria-desc'>
@@ -463,13 +470,13 @@
       <div class="row">
       <div class="col-md-3 criteria-radio">
        <%= f.label :report_tracker_status do %>
-         <%= f.radio_button :report_tracker_status, '?', :checked => true %> &nbsp;?&nbsp;
-       <% end %>
-       <%= f.label :report_tracker_status do %>
          <%= f.radio_button :report_tracker_status, 'Met'%> Met
        <% end %>
        <%= f.label :report_tracker_status do %>
          <%= f.radio_button :report_tracker_status, 'Unmet'%> Unmet
+       <% end %>
+       <%= f.label :report_tracker_status do %>
+         <%= f.radio_button :report_tracker_status, '?', :checked => true %> &nbsp;?&nbsp;
        <% end %>
       </div>
       <div class='col-md-9 criteria-desc'>
@@ -483,13 +490,13 @@
       <div class="row">
       <div class="col-md-3 criteria-radio">
        <%= f.label :report_process_status do %>
-         <%= f.radio_button :report_process_status, '?', :checked => true %> &nbsp;?&nbsp;
-       <% end %>
-       <%= f.label :report_process_status do %>
          <%= f.radio_button :report_process_status, 'Met'%> Met
        <% end %>
        <%= f.label :report_process_status do %>
          <%= f.radio_button :report_process_status, 'Unmet'%> Unmet
+       <% end %>
+       <%= f.label :report_process_status do %>
+         <%= f.radio_button :report_process_status, '?', :checked => true %> &nbsp;?&nbsp;
        <% end %>
       </div>
       <div class='col-md-9 criteria-desc'>
@@ -503,13 +510,13 @@
       <div class="row">
       <div class="col-md-3 criteria-radio">
        <%= f.label :report_responses_status do %>
-         <%= f.radio_button :report_responses_status, '?', :checked => true %> &nbsp;?&nbsp;
-       <% end %>
-       <%= f.label :report_responses_status do %>
          <%= f.radio_button :report_responses_status, 'Met'%> Met
        <% end %>
        <%= f.label :report_responses_status do %>
          <%= f.radio_button :report_responses_status, 'Unmet'%> Unmet
+       <% end %>
+       <%= f.label :report_responses_status do %>
+         <%= f.radio_button :report_responses_status, '?', :checked => true %> &nbsp;?&nbsp;
        <% end %>
       </div>
       <div class='col-md-9 criteria-desc'>
@@ -523,13 +530,13 @@
       <div class="row">
       <div class="col-md-3 criteria-radio">
        <%= f.label :enhancement_responses_status do %>
-         <%= f.radio_button :enhancement_responses_status, '?', :checked => true %> &nbsp;?&nbsp;
-       <% end %>
-       <%= f.label :enhancement_responses_status do %>
          <%= f.radio_button :enhancement_responses_status, 'Met'%> Met
        <% end %>
        <%= f.label :enhancement_responses_status do %>
          <%= f.radio_button :enhancement_responses_status, 'Unmet'%> Unmet
+       <% end %>
+       <%= f.label :enhancement_responses_status do %>
+         <%= f.radio_button :enhancement_responses_status, '?', :checked => true %> &nbsp;?&nbsp;
        <% end %>
       </div>
       <div class='col-md-9 criteria-desc'>
@@ -543,13 +550,13 @@
       <div class="row">
       <div class="col-md-3 criteria-radio">
        <%= f.label :report_archive_status do %>
-         <%= f.radio_button :report_archive_status, '?', :checked => true %> &nbsp;?&nbsp;
-       <% end %>
-       <%= f.label :report_archive_status do %>
          <%= f.radio_button :report_archive_status, 'Met'%> Met
        <% end %>
        <%= f.label :report_archive_status do %>
          <%= f.radio_button :report_archive_status, 'Unmet'%> Unmet
+       <% end %>
+       <%= f.label :report_archive_status do %>
+         <%= f.radio_button :report_archive_status, '?', :checked => true %> &nbsp;?&nbsp;
        <% end %>
       </div>
       <div class='col-md-9 criteria-desc'>
@@ -564,13 +571,13 @@
       <div class="row">
       <div class="col-md-3 criteria-radio">
        <%= f.label :vulnerability_report_process_status do %>
-         <%= f.radio_button :vulnerability_report_process_status, '?', :checked => true %> &nbsp;?&nbsp;
-       <% end %>
-       <%= f.label :vulnerability_report_process_status do %>
          <%= f.radio_button :vulnerability_report_process_status, 'Met'%> Met
        <% end %>
        <%= f.label :vulnerability_report_process_status do %>
          <%= f.radio_button :vulnerability_report_process_status, 'Unmet'%> Unmet
+       <% end %>
+       <%= f.label :vulnerability_report_process_status do %>
+         <%= f.radio_button :vulnerability_report_process_status, '?', :checked => true %> &nbsp;?&nbsp;
        <% end %>
       </div>
       <div class='col-md-9 criteria-desc'>
@@ -585,13 +592,13 @@
       <div class="row">
       <div class="col-md-3 criteria-radio">
        <%= f.label :vulnerability_report_private_status do %>
-         <%= f.radio_button :vulnerability_report_private_status, '?', :checked => true %> &nbsp;?&nbsp;
-       <% end %>
-       <%= f.label :vulnerability_report_private_status do %>
          <%= f.radio_button :vulnerability_report_private_status, 'Met'%> Met
        <% end %>
        <%= f.label :vulnerability_report_private_status do %>
          <%= f.radio_button :vulnerability_report_private_status, 'Unmet'%> Unmet
+       <% end %>
+       <%= f.label :vulnerability_report_private_status do %>
+         <%= f.radio_button :vulnerability_report_private_status, '?', :checked => true %> &nbsp;?&nbsp;
        <% end %>
       </div>
       <div class='col-md-9 criteria-desc'>
@@ -608,13 +615,13 @@
       <div class="row">
       <div class="col-md-3 criteria-radio">
        <%= f.label :vulnerability_report_response_status do %>
-         <%= f.radio_button :vulnerability_report_response_status, '?', :checked => true %> &nbsp;?&nbsp;
-       <% end %>
-       <%= f.label :vulnerability_report_response_status do %>
          <%= f.radio_button :vulnerability_report_response_status, 'Met'%> Met
        <% end %>
        <%= f.label :vulnerability_report_response_status do %>
          <%= f.radio_button :vulnerability_report_response_status, 'Unmet'%> Unmet
+       <% end %>
+       <%= f.label :vulnerability_report_response_status do %>
+         <%= f.radio_button :vulnerability_report_response_status, '?', :checked => true %> &nbsp;?&nbsp;
        <% end %>
       </div>
       <div class='col-md-9 criteria-desc'>
@@ -632,13 +639,13 @@
       <div class="row">
       <div class="col-md-3 criteria-radio">
        <%= f.label :build_status do %>
-         <%= f.radio_button :build_status, '?', :checked => true %> &nbsp;?&nbsp;
-       <% end %>
-       <%= f.label :build_status do %>
          <%= f.radio_button :build_status, 'Met'%> Met
        <% end %>
        <%= f.label :build_status do %>
          <%= f.radio_button :build_status, 'Unmet'%> Unmet
+       <% end %>
+       <%= f.label :build_status do %>
+         <%= f.radio_button :build_status, '?', :checked => true %> &nbsp;?&nbsp;
        <% end %>
       </div>
       <div class='col-md-9 criteria-desc'>
@@ -654,13 +661,13 @@
       <div class="row">
       <div class="col-md-3 criteria-radio">
        <%= f.label :build_common_tools_status do %>
-         <%= f.radio_button :build_common_tools_status, '?', :checked => true %> &nbsp;?&nbsp;
-       <% end %>
-       <%= f.label :build_common_tools_status do %>
          <%= f.radio_button :build_common_tools_status, 'Met'%> Met
        <% end %>
        <%= f.label :build_common_tools_status do %>
          <%= f.radio_button :build_common_tools_status, 'Unmet'%> Unmet
+       <% end %>
+       <%= f.label :build_common_tools_status do %>
+         <%= f.radio_button :build_common_tools_status, '?', :checked => true %> &nbsp;?&nbsp;
        <% end %>
       </div>
       <div class='col-md-9 criteria-desc'>
@@ -676,13 +683,13 @@
       <div class="row">
       <div class="col-md-3 criteria-radio">
        <%= f.label :build_oss_tools_status do %>
-         <%= f.radio_button :build_oss_tools_status, '?', :checked => true %> &nbsp;?&nbsp;
-       <% end %>
-       <%= f.label :build_oss_tools_status do %>
          <%= f.radio_button :build_oss_tools_status, 'Met'%> Met
        <% end %>
        <%= f.label :build_oss_tools_status do %>
          <%= f.radio_button :build_oss_tools_status, 'Unmet'%> Unmet
+       <% end %>
+       <%= f.label :build_oss_tools_status do %>
+         <%= f.radio_button :build_oss_tools_status, '?', :checked => true %> &nbsp;?&nbsp;
        <% end %>
       </div>
       <div class='col-md-9 criteria-desc'>
@@ -700,13 +707,13 @@
       <div class="row">
       <div class="col-md-3 criteria-radio">
        <%= f.label :test_status do %>
-         <%= f.radio_button :test_status, '?', :checked => true %> &nbsp;?&nbsp;
-       <% end %>
-       <%= f.label :test_status do %>
          <%= f.radio_button :test_status, 'Met'%> Met
        <% end %>
        <%= f.label :test_status do %>
          <%= f.radio_button :test_status, 'Unmet'%> Unmet
+       <% end %>
+       <%= f.label :test_status do %>
+         <%= f.radio_button :test_status, '?', :checked => true %> &nbsp;?&nbsp;
        <% end %>
       </div>
       <div class='col-md-9 criteria-desc'>
@@ -719,13 +726,13 @@
       <div class="row">
       <div class="col-md-3 criteria-radio">
        <%= f.label :test_invocation_status do %>
-         <%= f.radio_button :test_invocation_status, '?', :checked => true %> &nbsp;?&nbsp;
-       <% end %>
-       <%= f.label :test_invocation_status do %>
          <%= f.radio_button :test_invocation_status, 'Met'%> Met
        <% end %>
        <%= f.label :test_invocation_status do %>
          <%= f.radio_button :test_invocation_status, 'Unmet'%> Unmet
+       <% end %>
+       <%= f.label :test_invocation_status do %>
+         <%= f.radio_button :test_invocation_status, '?', :checked => true %> &nbsp;?&nbsp;
        <% end %>
       </div>
       <div class='col-md-9 criteria-desc'>
@@ -739,13 +746,13 @@
       <div class="row">
       <div class="col-md-3 criteria-radio">
        <%= f.label :test_most_status do %>
-         <%= f.radio_button :test_most_status, '?', :checked => true %> &nbsp;?&nbsp;
-       <% end %>
-       <%= f.label :test_most_status do %>
          <%= f.radio_button :test_most_status, 'Met'%> Met
        <% end %>
        <%= f.label :test_most_status do %>
          <%= f.radio_button :test_most_status, 'Unmet'%> Unmet
+       <% end %>
+       <%= f.label :test_most_status do %>
+         <%= f.radio_button :test_most_status, '?', :checked => true %> &nbsp;?&nbsp;
        <% end %>
       </div>
       <div class='col-md-9 criteria-desc'>
@@ -767,13 +774,13 @@
       <div class="row">
       <div class="col-md-3 criteria-radio">
        <%= f.label :test_policy_status do %>
-         <%= f.radio_button :test_policy_status, '?', :checked => true %> &nbsp;?&nbsp;
-       <% end %>
-       <%= f.label :test_policy_status do %>
          <%= f.radio_button :test_policy_status, 'Met'%> Met
        <% end %>
        <%= f.label :test_policy_status do %>
          <%= f.radio_button :test_policy_status, 'Unmet'%> Unmet
+       <% end %>
+       <%= f.label :test_policy_status do %>
+         <%= f.radio_button :test_policy_status, '?', :checked => true %> &nbsp;?&nbsp;
        <% end %>
       </div>
       <div class='col-md-9 criteria-desc'>
@@ -788,13 +795,13 @@
       <div class="row">
       <div class="col-md-3 criteria-radio">
        <%= f.label :tests_are_added_status do %>
-         <%= f.radio_button :tests_are_added_status, '?', :checked => true %> &nbsp;?&nbsp;
-       <% end %>
-       <%= f.label :tests_are_added_status do %>
          <%= f.radio_button :tests_are_added_status, 'Met'%> Met
        <% end %>
        <%= f.label :tests_are_added_status do %>
          <%= f.radio_button :tests_are_added_status, 'Unmet'%> Unmet
+       <% end %>
+       <%= f.label :tests_are_added_status do %>
+         <%= f.radio_button :tests_are_added_status, '?', :checked => true %> &nbsp;?&nbsp;
        <% end %>
       </div>
       <div class='col-md-9 criteria-desc'>
@@ -810,13 +817,13 @@
       <div class="row">
       <div class="col-md-3 criteria-radio">
        <%= f.label :tests_documented_added_status do %>
-         <%= f.radio_button :tests_documented_added_status, '?', :checked => true %> &nbsp;?&nbsp;
-       <% end %>
-       <%= f.label :tests_documented_added_status do %>
          <%= f.radio_button :tests_documented_added_status, 'Met'%> Met
        <% end %>
        <%= f.label :tests_documented_added_status do %>
          <%= f.radio_button :tests_documented_added_status, 'Unmet'%> Unmet
+       <% end %>
+       <%= f.label :tests_documented_added_status do %>
+         <%= f.radio_button :tests_documented_added_status, '?', :checked => true %> &nbsp;?&nbsp;
        <% end %>
       </div>
       <div class='col-md-9 criteria-desc'>
@@ -832,13 +839,13 @@
       <div class="row">
       <div class="col-md-3 criteria-radio">
        <%= f.label :warnings_status do %>
-         <%= f.radio_button :warnings_status, '?', :checked => true %> &nbsp;?&nbsp;
-       <% end %>
-       <%= f.label :warnings_status do %>
          <%= f.radio_button :warnings_status, 'Met'%> Met
        <% end %>
        <%= f.label :warnings_status do %>
          <%= f.radio_button :warnings_status, 'Unmet'%> Unmet
+       <% end %>
+       <%= f.label :warnings_status do %>
+         <%= f.radio_button :warnings_status, '?', :checked => true %> &nbsp;?&nbsp;
        <% end %>
       </div>
       <div class='col-md-9 criteria-desc'>
@@ -855,13 +862,13 @@
       <div class="row">
       <div class="col-md-3 criteria-radio">
        <%= f.label :warnings_fixed_status do %>
-         <%= f.radio_button :warnings_fixed_status, '?', :checked => true %> &nbsp;?&nbsp;
-       <% end %>
-       <%= f.label :warnings_fixed_status do %>
          <%= f.radio_button :warnings_fixed_status, 'Met'%> Met
        <% end %>
        <%= f.label :warnings_fixed_status do %>
          <%= f.radio_button :warnings_fixed_status, 'Unmet'%> Unmet
+       <% end %>
+       <%= f.label :warnings_fixed_status do %>
+         <%= f.radio_button :warnings_fixed_status, '?', :checked => true %> &nbsp;?&nbsp;
        <% end %>
       </div>
       <div class='col-md-9 criteria-desc'>
@@ -877,15 +884,15 @@
       <div class="row">
       <div class="col-md-3 criteria-radio">
        <%= f.label :warnings_strict_status do %>
-         <%= f.radio_button :warnings_strict_status, '?', :checked => true %> &nbsp;?&nbsp;
-       <% end %>
-       <%= f.label :warnings_strict_status do %>
          <%= f.radio_button :warnings_strict_status, 'Met'%> Met
        <% end %>
        <%= f.label :warnings_strict_status do %>
          <%= f.radio_button :warnings_strict_status, 'Unmet'%> Unmet
        <% end %>
       </div>
+       <%= f.label :warnings_strict_status do %>
+         <%= f.radio_button :warnings_strict_status, '?', :checked => true %> &nbsp;?&nbsp;
+       <% end %>
       <div class='col-md-9 criteria-desc'>
       <span>It is SUGGESTED that projects be maximally strict, but this is not
             always practical. <sup>[warnings-strict]</sup></span>
@@ -899,13 +906,13 @@
     <div class="row">
     <div class="col-md-3 criteria-radio">
      <%= f.label :know_secure_design_status do %>
-       <%= f.radio_button :know_secure_design_status, '?', :checked => true %> &nbsp;?&nbsp;
-     <% end %>
-     <%= f.label :know_secure_design_status do %>
        <%= f.radio_button :know_secure_design_status, 'Met'%> Met
      <% end %>
      <%= f.label :know_secure_design_status do %>
        <%= f.radio_button :know_secure_design_status, 'Unmet'%> Unmet
+     <% end %>
+     <%= f.label :know_secure_design_status do %>
+       <%= f.radio_button :know_secure_design_status, '?', :checked => true %> &nbsp;?&nbsp;
      <% end %>
     </div>
     <div class='col-md-9 criteria-desc'>
@@ -931,13 +938,13 @@
     <div class="row">
     <div class="col-md-3 criteria-radio">
      <%= f.label :know_common_errors_status do %>
-       <%= f.radio_button :know_common_errors_status, '?', :checked => true %> &nbsp;?&nbsp;
-     <% end %>
-     <%= f.label :know_common_errors_status do %>
        <%= f.radio_button :know_common_errors_status, 'Met'%> Met
      <% end %>
      <%= f.label :know_common_errors_status do %>
        <%= f.radio_button :know_common_errors_status, 'Unmet'%> Unmet
+     <% end %>
+     <%= f.label :know_common_errors_status do %>
+       <%= f.radio_button :know_common_errors_status, '?', :checked => true %> &nbsp;?&nbsp;
      <% end %>
     </div>
     <div class='col-md-9 criteria-desc'>
@@ -958,13 +965,13 @@
     <div class="row">
     <div class="col-md-3 criteria-radio">
      <%= f.label :crypto_published_status do %>
-       <%= f.radio_button :crypto_published_status, '?', :checked => true %> &nbsp;?&nbsp;
-     <% end %>
-     <%= f.label :crypto_published_status do %>
        <%= f.radio_button :crypto_published_status, 'Met'%> Met
      <% end %>
      <%= f.label :crypto_published_status do %>
        <%= f.radio_button :crypto_published_status, 'Unmet'%> Unmet
+     <% end %>
+     <%= f.label :crypto_published_status do %>
+       <%= f.radio_button :crypto_published_status, '?', :checked => true %> &nbsp;?&nbsp;
      <% end %>
     </div>
     <div class='col-md-9 criteria-desc'>
@@ -979,13 +986,13 @@
     <div class="row">
     <div class="col-md-3 criteria-radio">
      <%= f.label :crypto_call_status do %>
-       <%= f.radio_button :crypto_call_status, '?', :checked => true %> &nbsp;?&nbsp;
-     <% end %>
-     <%= f.label :crypto_call_status do %>
        <%= f.radio_button :crypto_call_status, 'Met'%> Met
      <% end %>
      <%= f.label :crypto_call_status do %>
        <%= f.radio_button :crypto_call_status, 'Unmet'%> Unmet
+     <% end %>
+     <%= f.label :crypto_call_status do %>
+       <%= f.radio_button :crypto_call_status, '?', :checked => true %> &nbsp;?&nbsp;
      <% end %>
     </div>
     <div class='col-md-9 criteria-desc'>
@@ -1000,13 +1007,13 @@
     <div class="row">
     <div class="col-md-3 criteria-radio">
      <%= f.label :crypto_oss_status do %>
-       <%= f.radio_button :crypto_oss_status, '?', :checked => true %> &nbsp;?&nbsp;
-     <% end %>
-     <%= f.label :crypto_oss_status do %>
        <%= f.radio_button :crypto_oss_status, 'Met'%> Met
      <% end %>
      <%= f.label :crypto_oss_status do %>
        <%= f.radio_button :crypto_oss_status, 'Unmet'%> Unmet
+     <% end %>
+     <%= f.label :crypto_oss_status do %>
+       <%= f.radio_button :crypto_oss_status, '?', :checked => true %> &nbsp;?&nbsp;
      <% end %>
     </div>
     <div class='col-md-9 criteria-desc'>
@@ -1021,13 +1028,13 @@
     <div class="row">
     <div class="col-md-3 criteria-radio">
      <%= f.label :crypto_keylength_status do %>
-       <%= f.radio_button :crypto_keylength_status, '?', :checked => true %> &nbsp;?&nbsp;
-     <% end %>
-     <%= f.label :crypto_keylength_status do %>
        <%= f.radio_button :crypto_keylength_status, 'Met'%> Met
      <% end %>
      <%= f.label :crypto_keylength_status do %>
        <%= f.radio_button :crypto_keylength_status, 'Unmet'%> Unmet
+     <% end %>
+     <%= f.label :crypto_keylength_status do %>
+       <%= f.radio_button :crypto_keylength_status, '?', :checked => true %> &nbsp;?&nbsp;
      <% end %>
     </div>
     <div class='col-md-9 criteria-desc'>
@@ -1047,13 +1054,13 @@
     <div class="row">
     <div class="col-md-3 criteria-radio">
      <%= f.label :crypto_working_status do %>
-       <%= f.radio_button :crypto_working_status, '?', :checked => true %> &nbsp;?&nbsp;
-     <% end %>
-     <%= f.label :crypto_working_status do %>
        <%= f.radio_button :crypto_working_status, 'Met'%> Met
      <% end %>
      <%= f.label :crypto_working_status do %>
        <%= f.radio_button :crypto_working_status, 'Unmet'%> Unmet
+     <% end %>
+     <%= f.label :crypto_working_status do %>
+       <%= f.radio_button :crypto_working_status, '?', :checked => true %> &nbsp;?&nbsp;
      <% end %>
     </div>
     <div class='col-md-9 criteria-desc'>
@@ -1071,13 +1078,13 @@
     <div class="row">
     <div class="col-md-3 criteria-radio">
      <%= f.label :crypto_pfs_status do %>
-       <%= f.radio_button :crypto_pfs_status, '?', :checked => true %> &nbsp;?&nbsp;
-     <% end %>
-     <%= f.label :crypto_pfs_status do %>
        <%= f.radio_button :crypto_pfs_status, 'Met'%> Met
      <% end %>
      <%= f.label :crypto_pfs_status do %>
        <%= f.radio_button :crypto_pfs_status, 'Unmet'%> Unmet
+     <% end %>
+     <%= f.label :crypto_pfs_status do %>
+       <%= f.radio_button :crypto_pfs_status, '?', :checked => true %> &nbsp;?&nbsp;
      <% end %>
     </div>
     <div class='col-md-9 criteria-desc'>
@@ -1092,13 +1099,13 @@
     <div class="row">
     <div class="col-md-3 criteria-radio">
      <%= f.label :crypto_password_storage_status do %>
-       <%= f.radio_button :crypto_password_storage_status, '?', :checked => true %> &nbsp;?&nbsp;
-     <% end %>
-     <%= f.label :crypto_password_storage_status do %>
        <%= f.radio_button :crypto_password_storage_status, 'Met'%> Met
      <% end %>
      <%= f.label :crypto_password_storage_status do %>
        <%= f.radio_button :crypto_password_storage_status, 'Unmet'%> Unmet
+     <% end %>
+     <%= f.label :crypto_password_storage_status do %>
+       <%= f.radio_button :crypto_password_storage_status, '?', :checked => true %> &nbsp;?&nbsp;
      <% end %>
     </div>
     <div class='col-md-9 criteria-desc'>
@@ -1112,13 +1119,13 @@
     <div class="row">
     <div class="col-md-3 criteria-radio">
      <%= f.label :crypto_random_status do %>
-       <%= f.radio_button :crypto_random_status, '?', :checked => true %> &nbsp;?&nbsp;
-     <% end %>
-     <%= f.label :crypto_random_status do %>
        <%= f.radio_button :crypto_random_status, 'Met'%> Met
      <% end %>
      <%= f.label :crypto_random_status do %>
        <%= f.radio_button :crypto_random_status, 'Unmet'%> Unmet
+     <% end %>
+     <%= f.label :crypto_random_status do %>
+       <%= f.radio_button :crypto_random_status, '?', :checked => true %> &nbsp;?&nbsp;
      <% end %>
     </div>
     <div class='col-md-9 criteria-desc'>
@@ -1137,13 +1144,13 @@
     <div class="row">
     <div class="col-md-3 criteria-radio">
      <%= f.label :delivery_mitm_status do %>
-       <%= f.radio_button :delivery_mitm_status, '?', :checked => true %> &nbsp;?&nbsp;
-     <% end %>
-     <%= f.label :delivery_mitm_status do %>
        <%= f.radio_button :delivery_mitm_status, 'Met'%> Met
      <% end %>
      <%= f.label :delivery_mitm_status do %>
        <%= f.radio_button :delivery_mitm_status, 'Unmet'%> Unmet
+     <% end %>
+     <%= f.label :delivery_mitm_status do %>
+       <%= f.radio_button :delivery_mitm_status, '?', :checked => true %> &nbsp;?&nbsp;
      <% end %>
     </div>
     <div class='col-md-9 criteria-desc'>
@@ -1160,13 +1167,13 @@
     <div class="row">
     <div class="col-md-3 criteria-radio">
      <%= f.label :delivery_unsigned_status do %>
-       <%= f.radio_button :delivery_unsigned_status, '?', :checked => true %> &nbsp;?&nbsp;
-     <% end %>
-     <%= f.label :delivery_unsigned_status do %>
        <%= f.radio_button :delivery_unsigned_status, 'Met'%> Met
      <% end %>
      <%= f.label :delivery_unsigned_status do %>
        <%= f.radio_button :delivery_unsigned_status, 'Unmet'%> Unmet
+     <% end %>
+     <%= f.label :delivery_unsigned_status do %>
+       <%= f.radio_button :delivery_unsigned_status, '?', :checked => true %> &nbsp;?&nbsp;
      <% end %>
     </div>
     <div class='col-md-9 criteria-desc'>
@@ -1182,13 +1189,13 @@
     <div class="row">
     <div class="col-md-3 criteria-radio">
      <%= f.label :vulnerabilities_fixed_60_days_status do %>
-       <%= f.radio_button :vulnerabilities_fixed_60_days_status, '?', :checked => true %> &nbsp;?&nbsp;
-     <% end %>
-     <%= f.label :vulnerabilities_fixed_60_days_status do %>
        <%= f.radio_button :vulnerabilities_fixed_60_days_status, 'Met'%> Met
      <% end %>
      <%= f.label :vulnerabilities_fixed_60_days_status do %>
        <%= f.radio_button :vulnerabilities_fixed_60_days_status, 'Unmet'%> Unmet
+     <% end %>
+     <%= f.label :vulnerabilities_fixed_60_days_status do %>
+       <%= f.radio_button :vulnerabilities_fixed_60_days_status, '?', :checked => true %> &nbsp;?&nbsp;
      <% end %>
     </div>
     <div class='col-md-9 criteria-desc'>
@@ -1209,13 +1216,13 @@
     <div class="row">
     <div class="col-md-3 criteria-radio">
      <%= f.label :vulnerabilities_critical_fixed_status do %>
-       <%= f.radio_button :vulnerabilities_critical_fixed_status, '?', :checked => true %> &nbsp;?&nbsp;
-     <% end %>
-     <%= f.label :vulnerabilities_critical_fixed_status do %>
        <%= f.radio_button :vulnerabilities_critical_fixed_status, 'Met'%> Met
      <% end %>
      <%= f.label :vulnerabilities_critical_fixed_status do %>
        <%= f.radio_button :vulnerabilities_critical_fixed_status, 'Unmet'%> Unmet
+     <% end %>
+     <%= f.label :vulnerabilities_critical_fixed_status do %>
+       <%= f.radio_button :vulnerabilities_critical_fixed_status, '?', :checked => true %> &nbsp;?&nbsp;
      <% end %>
     </div>
     <div class='col-md-9 criteria-desc'>
@@ -1241,13 +1248,13 @@
      <div class="row">
      <div class="col-md-3 criteria-radio">
       <%= f.label :static_analysis_status do %>
-        <%= f.radio_button :static_analysis_status, '?', :checked => true %> &nbsp;?&nbsp;
-      <% end %>
-      <%= f.label :static_analysis_status do %>
         <%= f.radio_button :static_analysis_status, 'Met'%> Met
       <% end %>
       <%= f.label :static_analysis_status do %>
         <%= f.radio_button :static_analysis_status, 'Unmet'%> Unmet
+      <% end %>
+      <%= f.label :static_analysis_status do %>
+        <%= f.radio_button :static_analysis_status, '?', :checked => true %> &nbsp;?&nbsp;
       <% end %>
      </div>
      <div class='col-md-9 criteria-desc'>
@@ -1271,13 +1278,13 @@
      <div class="row">
      <div class="col-md-3 criteria-radio">
       <%= f.label :static_analysis_common_vulnerabilities_status do %>
-        <%= f.radio_button :static_analysis_common_vulnerabilities_status, '?', :checked => true %> &nbsp;?&nbsp;
-      <% end %>
-      <%= f.label :static_analysis_common_vulnerabilities_status do %>
         <%= f.radio_button :static_analysis_common_vulnerabilities_status, 'Met'%> Met
       <% end %>
       <%= f.label :static_analysis_common_vulnerabilities_status do %>
         <%= f.radio_button :static_analysis_common_vulnerabilities_status, 'Unmet'%> Unmet
+      <% end %>
+      <%= f.label :static_analysis_common_vulnerabilities_status do %>
+        <%= f.radio_button :static_analysis_common_vulnerabilities_status, '?', :checked => true %> &nbsp;?&nbsp;
       <% end %>
      </div>
      <div class='col-md-9 criteria-desc'>
@@ -1292,13 +1299,13 @@
      <div class="row">
      <div class="col-md-3 criteria-radio">
       <%= f.label :static_analysis_fixed_status do %>
-        <%= f.radio_button :static_analysis_fixed_status, '?', :checked => true %> &nbsp;?&nbsp;
-      <% end %>
-      <%= f.label :static_analysis_fixed_status do %>
         <%= f.radio_button :static_analysis_fixed_status, 'Met'%> Met
       <% end %>
       <%= f.label :static_analysis_fixed_status do %>
         <%= f.radio_button :static_analysis_fixed_status, 'Unmet'%> Unmet
+      <% end %>
+      <%= f.label :static_analysis_fixed_status do %>
+        <%= f.radio_button :static_analysis_fixed_status, '?', :checked => true %> &nbsp;?&nbsp;
       <% end %>
      </div>
      <div class='col-md-9 criteria-desc'>
@@ -1313,13 +1320,13 @@
      <div class="row">
      <div class="col-md-3 criteria-radio">
       <%= f.label :static_analysis_often_status do %>
-        <%= f.radio_button :static_analysis_often_status, '?', :checked => true %> &nbsp;?&nbsp;
-      <% end %>
-      <%= f.label :static_analysis_often_status do %>
         <%= f.radio_button :static_analysis_often_status, 'Met'%> Met
       <% end %>
       <%= f.label :static_analysis_often_status do %>
         <%= f.radio_button :static_analysis_often_status, 'Unmet'%> Unmet
+      <% end %>
+      <%= f.label :static_analysis_often_status do %>
+        <%= f.radio_button :static_analysis_often_status, '?', :checked => true %> &nbsp;?&nbsp;
       <% end %>
      </div>
      <div class='col-md-9 criteria-desc'>
@@ -1335,13 +1342,13 @@
       <div class="row">
       <div class="col-md-3 criteria-radio">
        <%= f.label :dynamic_analysis_status do %>
-         <%= f.radio_button :dynamic_analysis_status, '?', :checked => true %> &nbsp;?&nbsp;
-       <% end %>
-       <%= f.label :dynamic_analysis_status do %>
          <%= f.radio_button :dynamic_analysis_status, 'Met'%> Met
        <% end %>
        <%= f.label :dynamic_analysis_status do %>
          <%= f.radio_button :dynamic_analysis_status, 'Unmet'%> Unmet
+       <% end %>
+       <%= f.label :dynamic_analysis_status do %>
+         <%= f.radio_button :dynamic_analysis_status, '?', :checked => true %> &nbsp;?&nbsp;
        <% end %>
       </div>
       <div class='col-md-9 criteria-desc'>
@@ -1360,13 +1367,13 @@
       <div class="row">
       <div class="col-md-3 criteria-radio">
        <%= f.label :dynamic_analysis_unsafe_status do %>
-         <%= f.radio_button :dynamic_analysis_unsafe_status, '?', :checked => true %> &nbsp;?&nbsp;
-       <% end %>
-       <%= f.label :dynamic_analysis_unsafe_status do %>
          <%= f.radio_button :dynamic_analysis_unsafe_status, 'Met'%> Met
        <% end %>
        <%= f.label :dynamic_analysis_unsafe_status do %>
          <%= f.radio_button :dynamic_analysis_unsafe_status, 'Unmet'%> Unmet
+       <% end %>
+       <%= f.label :dynamic_analysis_unsafe_status do %>
+         <%= f.radio_button :dynamic_analysis_unsafe_status, '?', :checked => true %> &nbsp;?&nbsp;
        <% end %>
       </div>
       <div class='col-md-9 criteria-desc'>
@@ -1384,13 +1391,13 @@
       <div class="row">
       <div class="col-md-3 criteria-radio">
        <%= f.label :dynamic_analysis_enable_assertions_status do %>
-         <%= f.radio_button :dynamic_analysis_enable_assertions_status, '?', :checked => true %> &nbsp;?&nbsp;
-       <% end %>
-       <%= f.label :dynamic_analysis_enable_assertions_status do %>
          <%= f.radio_button :dynamic_analysis_enable_assertions_status, 'Met'%> Met
        <% end %>
        <%= f.label :dynamic_analysis_enable_assertions_status do %>
          <%= f.radio_button :dynamic_analysis_enable_assertions_status, 'Unmet'%> Unmet
+       <% end %>
+       <%= f.label :dynamic_analysis_enable_assertions_status do %>
+         <%= f.radio_button :dynamic_analysis_enable_assertions_status, '?', :checked => true %> &nbsp;?&nbsp;
        <% end %>
       </div>
       <div class='col-md-9 criteria-desc'>
@@ -1405,13 +1412,13 @@
       <div class="row">
       <div class="col-md-3 criteria-radio">
        <%= f.label :dynamic_analysis_fixed_status do %>
-         <%= f.radio_button :dynamic_analysis_fixed_status, '?', :checked => true %> &nbsp;?&nbsp;
-       <% end %>
-       <%= f.label :dynamic_analysis_fixed_status do %>
          <%= f.radio_button :dynamic_analysis_fixed_status, 'Met'%> Met
        <% end %>
        <%= f.label :dynamic_analysis_fixed_status do %>
          <%= f.radio_button :dynamic_analysis_fixed_status, 'Unmet'%> Unmet
+       <% end %>
+       <%= f.label :dynamic_analysis_fixed_status do %>
+         <%= f.radio_button :dynamic_analysis_fixed_status, '?', :checked => true %> &nbsp;?&nbsp;
        <% end %>
       </div>
       <div class='col-md-9 criteria-desc'>

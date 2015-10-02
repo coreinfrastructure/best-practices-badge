@@ -121,13 +121,13 @@ same as the project URL), and license(s).
 
 - <a name="license-location"></a>The project MUST post licence(s) in a standard location (e.g., as a top-level file named LICENSE or COPYING).  License filenames MAY be followed by an extension such as ".txt" or ".md" <sup>[<a href="#license-location">license-location</a>]&#8224;</sup>
 - The software MUST be licensed as OSS.  For our purposes, this means that the license MUST be at least one of the following:
-  - [an approved license by the Open Source Initiative (OSI)](http://opensource.org/licenses)
-  - [a free license as approved by the Free Software Foundation (FSF)](http://www.gnu.org/licenses/license-list.html)
+  - [an approved license by the Open Source Initiative (OSI)](https://opensource.org/licenses)
+  - [a free license as approved by the Free Software Foundation (FSF)](https://www.gnu.org/licenses/license-list.html)
   - [a free license acceptable to Debian main](https://www.debian.org/legal/licenses/)
   - <a name="oss-license"></a>[a "good" license according to Fedora](https://fedoraproject.org/wiki/Licensing:Main?rd=Licensing). <sup>[<a href="#oss-license">oss-license</a>]&#8224;</sup>
-- <a name="oss-license-osi"></a>It is RECOMMENDED that any required license(s) be [OSI-approved](http://opensource.org/licenses). <sup>[<a href="#oss-license-osi">oss-license-osi</a>]&#8224;</sup>
+- <a name="oss-license-osi"></a>It is RECOMMENDED that any required license(s) be [OSI-approved](https://opensource.org/licenses). <sup>[<a href="#oss-license-osi">oss-license-osi</a>]&#8224;</sup>
 - The software MAY also be licensed other ways (e.g., "GPLv2 or proprietary" is acceptable).
-- *Note*: We intend for the automated tool to focus on identifying common OSS licenses such as:     [CC0](http://creativecommons.org/publicdomain/zero/1.0/), [MIT](http://opensource.org/licenses/MIT), [BSD 2-clause](http://opensource.org/licenses/BSD-2-Clause), [BSD 3-clause revised](http://opensource.org/licenses/BSD-3-Clause), [Apache 2.0](http://opensource.org/licenses/Apache-2.0), [Lesser GNU General Public License (LGPL)](http://opensource.org/licenses/lgpl-license), and the [GNU General Public License (GPL)](http://opensource.org/licenses/gpl-license).
+- *Note*: We intend for the automated tool to focus on identifying common OSS licenses such as:     [CC0](https://creativecommons.org/publicdomain/zero/1.0/), [MIT](https://opensource.org/licenses/MIT), [BSD 2-clause](https://opensource.org/licenses/BSD-2-Clause), [BSD 3-clause revised](https://opensource.org/licenses/BSD-3-Clause), [Apache 2.0](https://opensource.org/licenses/Apache-2.0), [Lesser GNU General Public License (LGPL)](https://opensource.org/licenses/lgpl-license), and the [GNU General Public License (GPL)](https://opensource.org/licenses/gpl-license).
 - *Rationale*: These criteria are designed for OSS projects, so we need to ensure that they're only used where they apply.  Some projects are thought of as OSS yet are not actually released as OSS (e.g., they might not have any license, in which case the defaults of the country's legal system apply, or they might use a non-OSS license).  Unusual licenses can cause long-term problems for OSS projects and are more difficult for tools to handle.  We expect that [more advanced badges](./other.md) would set a higher bar (e.g., that it *must* be released under an OSI-approved license).
 
 *Documentation*
@@ -280,7 +280,7 @@ Non-criteria
 We plan to *not* require any specific products or services.
 In particular, we plan to *not* require
 proprietary tools or services,
-since many [free software](http://www.gnu.org/philosophy/free-sw.en.html)
+since many [free software](https://www.gnu.org/philosophy/free-sw.en.html)
 developers would reject such criteria.
 Therefore, we will intentionally *not* require git or GitHub.
 We will also not require or forbid any particular programming language

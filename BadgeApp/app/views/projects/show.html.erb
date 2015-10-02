@@ -82,7 +82,7 @@
 
 <p>
   <strong><%= @project.oss_license_osi_status %>:</strong>
-  It is RECOMMENDED that any required license(s) be OSI-approved. [oss-license-osi]
+  It is SUGGESTED that any required license(s) be OSI-approved. [oss-license-osi]
   <!-- oss_license_osi_justification -->
 </p>
 
@@ -132,7 +132,7 @@
 
 <p>
   <strong><%= @project.repo_distributed_status %>:</strong>
-  It is RECOMMENDED that common distributed version control software is used
+  It is SUGGESTED that common distributed version control software is used
   (e.g., git). Git is not specifically required and projects can use centralized
   version control software (such as subversion) with justification.
   [repo-distributed]
@@ -149,15 +149,15 @@
 
 <p>
   <strong><%= @project.version_semver_status %>:</strong>
-  It is RECOMMENDED that the Semantic Versioning (SemVer) format is used for releases.
+  It is SUGGESTED that the Semantic Versioning (SemVer) format is used for releases.
   [version-semver]
   <!-- version_semver_justification -->
 </p>
 
 <p>
   <strong><%= @project.version_tags_status %>:</strong>
-  It is RECOMMENDED that projects identify each release within their version
-  control system. For example, it is RECOMMENDED that those using git identify each release using git tags.
+  It is SUGGESTED that projects identify each release within their version
+  control system. For example, it is SUGGESTED that those using git identify each release using git tags.
   [version-tags]
   <!-- version_tags_justification -->
 </p>
@@ -191,7 +191,7 @@
 
 <p>
   <strong><%= @project.report_tracker_status %>:</strong>
-  It is RECOMMENDED that an issue tracker be used for tracking individual issues. [report-tracker]
+  It is SUGGESTED that an issue tracker be used for tracking individual issues. [report-tracker]
   <!-- report_tracker_justification -->
 </p>
 
@@ -268,7 +268,7 @@
 
 <p>
   <strong><%= @project.build_common_tools_status %>:</strong>
-  It is RECOMMENDED that common tools be used for building the software
+  It is SUGGESTED that common tools be used for building the software
   (e.g., Maven, Ant, cmake, the autotools, make, or rake), in which case only
   the instructions to the build system are required (there's no requirement to
   teach people how to use common tools). [build-common-tools]
@@ -297,7 +297,7 @@
 
 <p>
   <strong><%= @project.test_most_status %>:</strong>
-   It is RECOMMENDED that the test suite cover most (or ideally all)
+   It is SUGGESTED that the test suite cover most (or ideally all)
   the code branches, input fields, and functionality. [test-most]
   <!-- test_most_justification -->
 </p>
@@ -322,7 +322,7 @@
 
 <p>
   <strong><%= @project.tests_documented_added_status %>:</strong>
-  It is RECOMMENDED that this be documented in the instructions for change
+  It is SUGGESTED that this be documented in the instructions for change
   proposals, but even an informal rule is acceptable as long as the tests are being added in practice.
   [tests-documented-added]
   <!-- tests_documented_added_justification -->
@@ -351,7 +351,7 @@
 
 <p>
   <strong><%= @project.warnings_strict_status %>:</strong>
-  It is RECOMMENDED that projects be maximally strict, but this is not always practical. [warnings-strict]
+  It is SUGGESTED that projects be maximally strict, but this is not always practical. [warnings-strict]
   <!-- warnings_strict_justification -->
 </p>
 
@@ -422,7 +422,7 @@
   <strong><%= @project.crypto_working_status %>:</strong>
   Security mechanisms MUST NOT on depend cryptographic algorithms that are broken
   or have too-short key lengths (e.g., MD4, MD5, single DES, or RC4).
-  It is RECOMMENDED that SHA-1 not be used (we are well aware that git uses SHA-1).
+  It is SUGGESTED that SHA-1 not be used (we are well aware that git uses SHA-1).
   Currently-recommended algorithms include AES and SHA-256/SHA-512.
   Implementations SHOULD support multiple cryptographic algorithms, so users can quickly switch if one is broken.
   [crypto-working]
@@ -514,7 +514,7 @@
 
 <p>
   <strong><%= @project.static_analysis_common_vulnerabilities_status %>:</strong>
-  It is RECOMMENDED that the tool include rules or approaches to look for
+  It is SUGGESTED that the tool include rules or approaches to look for
   common vulnerabilities in the analyzed language or environment.
   [static-analysis-common-vulnerabilities]
   <!-- static_analysis_common_vulnerabilities_justification -->
@@ -530,7 +530,7 @@
 
 <p>
   <strong><%= @project.static_analysis_often_status %>:</strong>
-  It is RECOMMENDED that static source code analysis occur on every commit or at least daily.
+  It is SUGGESTED that static source code analysis occur on every commit or at least daily.
   [static-analysis-often]
   <!-- static_analysis_often_justification -->
 </p>
@@ -551,7 +551,7 @@
 
 <p>
   <strong><%= @project.dynamic_analysis_unsafe_status %>:</strong>
-  It is RECOMMENDED that if the software is application-level software written
+  It is SUGGESTED that if the software is application-level software written
   using a memory-unsafe language (such as C or C++) then at least one tool to
   detect memory safety problems MUST be used during at least one dynamic tool use,
   e.g., Address Sanitizer (ASAN) or valgrind. If the software is not application-level,
@@ -562,7 +562,7 @@
 
 <p>
   <strong><%= @project.dynamic_analysis_enable_assertions_status %>:</strong>
-  It is RECOMMENDED that the software include many run-time assertions that are checked during dynamic analysis.
+  It is SUGGESTED that the software include many run-time assertions that are checked during dynamic analysis.
   [dynamic-analysis-enable-assertions]
   <!-- dynamic_analysis_enable_assertions_justification -->
 </p>

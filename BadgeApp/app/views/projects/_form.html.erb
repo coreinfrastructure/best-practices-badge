@@ -167,7 +167,7 @@
         <% end %>
       </div>
       <div class='col-md-9 criteria-desc'>
-      <span>It is RECOMMENDED that any required license(s) be OSI-approved. <strong>[oss-license-osi]</strong> </span>
+      <span>It is SUGGESTED that any required license(s) be OSI-approved. <strong>[oss-license-osi]</strong> </span>
       <%= f.text_field :oss_license_osi_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
       </div>
       </div>
@@ -307,7 +307,7 @@
        <% end %>
       </div>
       <div class='col-md-9 criteria-desc'>
-        <span>It is RECOMMENDED that common distributed version control software is used (e.g., git).
+        <span>It is SUGGESTED that common distributed version control software is used (e.g., git).
             Git is not specifically required and projects can use centralized version control software
             (such as subversion) with justification. <strong>[repo-distributed]</strong> </span>
         <%= f.text_field :repo_distributed_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
@@ -358,7 +358,7 @@
        <% end %>
       </div>
       <div class='col-md-9 criteria-desc'>
-      <span>It is RECOMMENDED that the Semantic Versioning (SemVer) format is
+      <span>It is SUGGESTED that the Semantic Versioning (SemVer) format is
             used for releases. <strong>[version-semver]</strong></span><br>
       <%= f.text_field :version_semver_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
       <span>Commit IDs (or similar) MAY be used as as version numbers. They are unique, but note that these can
@@ -380,8 +380,8 @@
        <% end %>
       </div>
       <div class='col-md-9 criteria-desc'>
-      <span>It is RECOMMENDED that projects identify each release within their version control system.
-            For example, it is RECOMMENDED that those using git identify each
+      <span>It is SUGGESTED that projects identify each release within their version control system.
+            For example, it is SUGGESTED that those using git identify each
             release using git tags. <strong>[version-tags]</strong></span>
       <%= f.text_field :version_tags_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
       </div>
@@ -473,7 +473,7 @@
        <% end %>
       </div>
       <div class='col-md-9 criteria-desc'>
-      <span>It is RECOMMENDED that an issue tracker be used for tracking
+      <span>It is SUGGESTED that an issue tracker be used for tracking
             individual issues. <strong>[report-tracker]</strong></span>
       <%= f.text_field :report_tracker_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
       </div>
@@ -664,7 +664,7 @@
        <% end %>
       </div>
       <div class='col-md-9 criteria-desc'>
-      <span>It is RECOMMENDED that common tools be used for building the software
+      <span>It is SUGGESTED that common tools be used for building the software
             (e.g., Maven, Ant, cmake, the autotools, make, or rake), in which case
             only the instructions to the build system are required (there's no requirement
             to teach people how to use common tools). <strong>[build-common-tools]</strong></span>
@@ -749,7 +749,7 @@
        <% end %>
       </div>
       <div class='col-md-9 criteria-desc'>
-      <span>It is RECOMMENDED that the test suite cover most (or ideally all) the code branches,
+      <span>It is SUGGESTED that the test suite cover most (or ideally all) the code branches,
             input fields, and functionality. <strong>[test-most]</strong></span>
       <%= f.text_field :test_most_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
       </div>
@@ -820,7 +820,7 @@
        <% end %>
       </div>
       <div class='col-md-9 criteria-desc'>
-      <span>It is RECOMMENDED that this be documented in the instructions for change proposals,
+      <span>It is SUGGESTED that this be documented in the instructions for change proposals,
             but even an informal rule is acceptable as long as the tests are being
             added in practice. <strong>[tests-documented-added]</strong></span>
       <%= f.text_field :tests_documented_added_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
@@ -887,7 +887,7 @@
        <% end %>
       </div>
       <div class='col-md-9 criteria-desc'>
-      <span>It is RECOMMENDED that projects be maximally strict, but this is not
+      <span>It is SUGGESTED that projects be maximally strict, but this is not
             always practical. <strong>[warnings-strict]</strong></span>
       <%= f.text_field :warnings_strict_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
       </div>
@@ -1059,7 +1059,7 @@
     <div class='col-md-9 criteria-desc'>
     <span>Security mechanisms MUST NOT on depend cryptographic algorithms that are broken
           or have too-short key lengths (e.g., MD4, MD5, single DES, or RC4).
-          It is RECOMMENDED that SHA-1 not be used (we are well aware that git uses SHA-1).
+          It is SUGGESTED that SHA-1 not be used (we are well aware that git uses SHA-1).
           Currently-recommended algorithms include AES and SHA-256/SHA-512. Implementations SHOULD
           support multiple cryptographic algorithms, so users can quickly switch
           if one is broken.  <strong>[crypto-working]</strong></span>
@@ -1281,7 +1281,7 @@
       <% end %>
      </div>
      <div class='col-md-9 criteria-desc'>
-     <span>It is RECOMMENDED that the tool include rules or approaches to look for
+     <span>It is SUGGESTED that the tool include rules or approaches to look for
            common vulnerabilities in the analyzed language or environment.
            <strong>[static-analysis-common-vulnerabilities]</strong></span>
      <%= f.text_field :static_analysis_common_vulnerabilities_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
@@ -1323,7 +1323,7 @@
       <% end %>
      </div>
      <div class='col-md-9 criteria-desc'>
-     <span>It is RECOMMENDED that static source code analysis occur on every commit or at least daily.
+     <span>It is SUGGESTED that static source code analysis occur on every commit or at least daily.
            <strong>[static-analysis-often]</strong></span>
      <%= f.text_field :static_analysis_often_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
      </div>
@@ -1370,7 +1370,7 @@
        <% end %>
       </div>
       <div class='col-md-9 criteria-desc'>
-      <span>It is RECOMMENDED that if the software is application-level software written
+      <span>It is SUGGESTED that if the software is application-level software written
             using a memory-unsafe language (such as C or C++) then at least one tool to
             detect memory safety problems MUST be used during at least one dynamic tool use,
             e.g., Address Sanitizer (ASAN) or valgrind. If the software is not application-level,
@@ -1394,7 +1394,7 @@
        <% end %>
       </div>
       <div class='col-md-9 criteria-desc'>
-      <span>It is RECOMMENDED that the software include many run-time assertions
+      <span>It is SUGGESTED that the software include many run-time assertions
             that are checked during dynamic analysis.
             <strong>[dynamic-analysis-enable-assertiions]</strong></span>
       <%= f.text_field :dynamic_analysis_enable_assertions_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>

@@ -1572,6 +1572,17 @@
         "dynamic_analysis_fixed" : "MUST"
       }
 
+      function is_enough(criteria) {
+        var criteria_status = "#project_" + criteria + "_status";
+        if (field_categories[criteria] === "MUST") {
+            return ($(criteria_status + "_met").is(':checked'));
+        } else {
+            return ($(criteria_status + "_met").is(':checked') ||
+                    ( $(criteria_status + "_unmet").is(':checked') &&
+                      document.getElementById("project_"+criteria+"_justification").value.length > 0));
+        }
+      }
+
       function update_criteria_display(criteria) {
           var criteria_just = "#project_" + criteria + "_justification";
           var criteria_status = "#project_" + criteria + "_status";
@@ -1582,18 +1593,14 @@
                $(criteria_just).show('fast');
           if ( $(criteria_status+"_").is(':checked') && justification_value.length == 0)
                $(criteria_just).hide('fast');
-          // TODO: Handle all (not just description_sufficient) and change alt.
-          if (criteria === "description_sufficient") {
-              // <%= image_tag("/assets/Thumbs_down_font_awesome.svg", size: "20x20", alt: "Thumbs down", id: "description_sufficient_enough") %>
-              if ($(criteria_status + "_met").is(':checked')) {
-                  $("#description_sufficient_enough").
-                      attr("src", "/assets/Thumbs_up_font_awesome.svg").
-                      attr("alt", "Enough for a badge!");
-              } else {
-                  $("#description_sufficient_enough").
-                      attr("src", "/assets/Thumbs_down_font_awesome.svg").
-                      attr("alt", "Not enough for a badge.");
-              }
+          if (is_enough(criteria)) {
+              $("#" + criteria + "_enough").
+                  attr("src", "/assets/Thumbs_up_font_awesome.svg").
+                  attr("alt", "Enough for a badge!");
+          } else {
+              $("#" + criteria + "_enough").
+                  attr("src", "/assets/Thumbs_down_font_awesome.svg").
+                  attr("alt", "Not enough for a badge.");
           }
       }
 

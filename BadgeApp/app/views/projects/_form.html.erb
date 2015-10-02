@@ -29,7 +29,6 @@
     <h3><i>Basic Project Website Content</i></h3>
     <div class="row">
       <div class="col-md-3 criteria-radio">
-        <%= image_tag("/assets/Thumbs_down_font_awesome.svg", size: "20x20", alt: "Thumbs down", id: "description_sufficient_enough") %>
         <%= f.label :description_sufficient_status do %>
           <%= f.radio_button :description_sufficient_status, 'Met'%> Met
         <% end %>
@@ -39,6 +38,7 @@
         <%= f.label :description_sufficient_status do %>
           <%= f.radio_button :description_sufficient_status, '?', :checked => true %> &nbsp;?&nbsp;
         <% end %>
+        <%= image_tag("/assets/Thumbs_down_font_awesome.svg", size: "20x20", alt: "Thumbs down", id: "description_sufficient_enough") %>
       </div>
       <div class='col-md-9 criteria-desc'>
          <span>The project website MUST succinctly describe what the software does
@@ -1512,114 +1512,119 @@
         "dynamic_analysis_fixed" : "MUST"
       }
 
-      function justification_field(criteria) {
-        var criteria_just = "#project_" + criteria + "_justification";
-        var criteria_status = "#project_" + criteria + "_status";
-        var justification_value = document.getElementById("project_"+criteria+"_justification").value;
-
-        if ( $(criteria_status+"_").is(':checked') && justification_value.length == 0 )
-            $(criteria_just).hide();
-
-        $('input[name="project['+criteria+'_status]"]').click(function()
-            {
-              if ( $(criteria_status + "_met").is(':checked'))
-                   $(criteria_just).show('fast');
-              if ( $(criteria_status+"_unmet").is(':checked'))
-                   $(criteria_just).show('fast');
-              if ( $(criteria_status+"_").is(':checked') && justification_value.length == 0)
-                   $(criteria_just).hide('fast');
-            });
+      function update_criteria_display(criteria) {
+          var criteria_just = "#project_" + criteria + "_justification";
+          var criteria_status = "#project_" + criteria + "_status";
+          var justification_value = document.getElementById("project_"+criteria+"_justification").value;
+          if ( $(criteria_status + "_met").is(':checked'))
+               $(criteria_just).show('fast');
+          if ( $(criteria_status+"_unmet").is(':checked'))
+               $(criteria_just).show('fast');
+          if ( $(criteria_status+"_").is(':checked') && justification_value.length == 0)
+               $(criteria_just).hide('fast');
       }
 
+      function setup_field(criteria) {
+        update_criteria_display(criteria);
+        $('input[name="project['+criteria+'_status]"]').click(
+            function() {update_criteria_display(criteria);});
+        $('input[name="project['+criteria+'_justification]"]').blur(
+            function() {update_criteria_display(criteria);});
+      }
+
+      // Setup display as soon as page is ready
+      // TODO: Turn into loop over hash.
+      $(document).ready(function() {
 
       // OSS PROJECT BASICS
       // Basic project website content
-      justification_field("description_sufficient");
-      justification_field("interact");
-      justification_field("contribution")
-      justification_field("contribution_criteria")
+      setup_field("description_sufficient");
+      setup_field("interact");
+      setup_field("contribution")
+      setup_field("contribution_criteria")
       // OSS license
-      justification_field("license_location");
-      justification_field("oss_license");
-      justification_field("oss_license_osi");
+      setup_field("license_location");
+      setup_field("oss_license");
+      setup_field("oss_license_osi");
       // Documentation
-      justification_field("documentation_basics");
-      justification_field("documentation_interface");
-      justification_field("oss_license_osi");
+      setup_field("documentation_basics");
+      setup_field("documentation_interface");
+      setup_field("oss_license_osi");
 
       // CHANGE CONTROL
       // Public version-controlled source repository
-      justification_field("repo_url");
-      justification_field("repo_track");
-      justification_field("repo_interim");
-      justification_field("repo_distributed");
+      setup_field("repo_url");
+      setup_field("repo_track");
+      setup_field("repo_interim");
+      setup_field("repo_distributed");
       // Version Numbering
-      justification_field("version_unique");
-      justification_field("version_semver");
-      justification_field("version_tags");
+      setup_field("version_unique");
+      setup_field("version_semver");
+      setup_field("version_tags");
       // ChangeLog
-      justification_field("changelog");
-      justification_field("changelog_vulns");
+      setup_field("changelog");
+      setup_field("changelog_vulns");
 
       //REPORTING
       // Bug-reporting process
-      justification_field("report_url");
-      justification_field("report_tracker");
-      justification_field("report_process");
-      justification_field("report_responses");
-      justification_field("enhancement_responses");
-      justification_field("report_archive");
+      setup_field("report_url");
+      setup_field("report_tracker");
+      setup_field("report_process");
+      setup_field("report_responses");
+      setup_field("enhancement_responses");
+      setup_field("report_archive");
       // Vulnerability report process
-      justification_field("vulnerability_report_process");
-      justification_field("vulnerability_report_private");
-      justification_field("vulnerability_report_response");
+      setup_field("vulnerability_report_process");
+      setup_field("vulnerability_report_private");
+      setup_field("vulnerability_report_response");
 
       //QUALITY CONTROL
       //Working build system
-      justification_field("build");
-      justification_field("build_common_tools");
-      justification_field("build_oss_tools");
+      setup_field("build");
+      setup_field("build_common_tools");
+      setup_field("build_oss_tools");
       //Automated test suite
-      justification_field("test");
-      justification_field("test_invocation");
-      justification_field("test_most");
+      setup_field("test");
+      setup_field("test_invocation");
+      setup_field("test_most");
       //New functionality testing
-      justification_field("test_policy");
-      justification_field("tests_are_added");
-      justification_field("tests_documented_added");
-      justification_field("warnings");
-      justification_field("warnings_fixed");
-      justification_field("warnings_strict");
+      setup_field("test_policy");
+      setup_field("tests_are_added");
+      setup_field("tests_documented_added");
+      setup_field("warnings");
+      setup_field("warnings_fixed");
+      setup_field("warnings_strict");
 
       //SECURITY
       //Secure development knowledge
-      justification_field("know_secure_design");
-      justification_field("know_common_errors");
+      setup_field("know_secure_design");
+      setup_field("know_common_errors");
       //Uses basic good cryptographic practices
-      justification_field("crypto_published");
-      justification_field("crypto_call");
-      justification_field("crypto_oss");
-      justification_field("crypto_keylength");
-      justification_field("crypto_working");
-      justification_field("crypto_pfs");
-      justification_field("crypto_password_storage");
-      justification_field("crypto_random");
-      justification_field("delivery_mitm");
-      justification_field("delivery_unsigned");
-      justification_field("vulnerabilities_fixed_60_days");
-      justification_field("vulnerabilities_critical_fixed");
+      setup_field("crypto_published");
+      setup_field("crypto_call");
+      setup_field("crypto_oss");
+      setup_field("crypto_keylength");
+      setup_field("crypto_working");
+      setup_field("crypto_pfs");
+      setup_field("crypto_password_storage");
+      setup_field("crypto_random");
+      setup_field("delivery_mitm");
+      setup_field("delivery_unsigned");
+      setup_field("vulnerabilities_fixed_60_days");
+      setup_field("vulnerabilities_critical_fixed");
 
       //SECURITY ANALYSIS
       //Static code analysis
-      justification_field("static_analysis");
-      justification_field("static_analysis_common_vulnerabilities");
-      justification_field("static_analysis_fixed");
-      justification_field("static_analysis_often");
+      setup_field("static_analysis");
+      setup_field("static_analysis_common_vulnerabilities");
+      setup_field("static_analysis_fixed");
+      setup_field("static_analysis_often");
       //Dynamic Analysis
-      justification_field("dynamic_analysis");
-      justification_field("dynamic_analysis_unsafe");
-      justification_field("dynamic_analysis_enable_assertions");
-      justification_field("dynamic_analysis_fixed");
+      setup_field("dynamic_analysis");
+      setup_field("dynamic_analysis_unsafe");
+      setup_field("dynamic_analysis_enable_assertions");
+      setup_field("dynamic_analysis_fixed");
+      });
 
 
 

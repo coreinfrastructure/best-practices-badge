@@ -33,7 +33,7 @@
   "test" : "MUST",
   "test_invocation" : "SHOULD",
   "test_most" : "SUGGESTED",
-  "tests_policy" : "MUST",
+  "test_policy" : "MUST",
   "tests_are_added" : "MUST",
   "tests_documented_added" : "SUGGESTED",
   "warnings" : "MUST",

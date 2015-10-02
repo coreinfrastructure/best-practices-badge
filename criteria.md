@@ -202,7 +202,7 @@ same as the project URL), and license(s).
 
 *New functionality testing*
 
-- <a name="tests-policy"></a>The project MUST have a general policy (formal or not) that as major new functionality is added, tests of that functionality SHOULD be added to an automated test suite. <sup>[<a href="#tests-policy">tests-policy</a>]</sup>
+- <a name="test-policy"></a>The project MUST have a general policy (formal or not) that as major new functionality is added, tests of that functionality SHOULD be added to an automated test suite. <sup>[<a href="#tests-policy">tests-policy</a>]</sup>
 - <a name="tests-are-added"></a>The project MUST have evidence that such tests are being added in the most recent major changes to the project.  Major functionality would typically be mentioned in the ChangeLog.  (Perfection is not required, merely evidence that tests are typically being added in practice.) <sup>[<a href="#tests-are-added">tests-are-added</a>]</sup>
 - <a name="tests-documented-added"></a>It is SUGGESTED that this be *documented* in the instructions for change proposals, but even an informal rule is acceptable as long as the tests are being added in practice. <sup>[<a href="#tests-documented-added">tests-documented-added</a>]</sup>
 

@@ -1449,8 +1449,8 @@
 
     <script>
       field_categories = {
-        "project_url" : "MUST",
-        "project_url_https" : "SUGGESTED",
+        // "project_url" : "MUST",
+        // "project_url_https" : "SUGGESTED",
         "description_sufficient" : "MUST",
         "interact" : "MUST",
         "contribution" : "MUST",
@@ -1483,7 +1483,7 @@
         "test" : "MUST",
         "test_invocation" : "SHOULD",
         "test_most" : "SUGGESTED",
-        "tests_policy" : "MUST",
+        "test_policy" : "MUST",
         "tests_are_added" : "MUST",
         "tests_documented_added" : "SUGGESTED",
         "warnings" : "MUST",
@@ -1533,101 +1533,11 @@
       }
 
       // Setup display as soon as page is ready
-      // TODO: Turn into loop over hash.
       $(document).ready(function() {
-
-      // OSS PROJECT BASICS
-      // Basic project website content
-      setup_field("description_sufficient");
-      setup_field("interact");
-      setup_field("contribution")
-      setup_field("contribution_criteria")
-      // OSS license
-      setup_field("license_location");
-      setup_field("oss_license");
-      setup_field("oss_license_osi");
-      // Documentation
-      setup_field("documentation_basics");
-      setup_field("documentation_interface");
-      setup_field("oss_license_osi");
-
-      // CHANGE CONTROL
-      // Public version-controlled source repository
-      setup_field("repo_url");
-      setup_field("repo_track");
-      setup_field("repo_interim");
-      setup_field("repo_distributed");
-      // Version Numbering
-      setup_field("version_unique");
-      setup_field("version_semver");
-      setup_field("version_tags");
-      // ChangeLog
-      setup_field("changelog");
-      setup_field("changelog_vulns");
-
-      //REPORTING
-      // Bug-reporting process
-      setup_field("report_url");
-      setup_field("report_tracker");
-      setup_field("report_process");
-      setup_field("report_responses");
-      setup_field("enhancement_responses");
-      setup_field("report_archive");
-      // Vulnerability report process
-      setup_field("vulnerability_report_process");
-      setup_field("vulnerability_report_private");
-      setup_field("vulnerability_report_response");
-
-      //QUALITY CONTROL
-      //Working build system
-      setup_field("build");
-      setup_field("build_common_tools");
-      setup_field("build_oss_tools");
-      //Automated test suite
-      setup_field("test");
-      setup_field("test_invocation");
-      setup_field("test_most");
-      //New functionality testing
-      setup_field("test_policy");
-      setup_field("tests_are_added");
-      setup_field("tests_documented_added");
-      setup_field("warnings");
-      setup_field("warnings_fixed");
-      setup_field("warnings_strict");
-
-      //SECURITY
-      //Secure development knowledge
-      setup_field("know_secure_design");
-      setup_field("know_common_errors");
-      //Uses basic good cryptographic practices
-      setup_field("crypto_published");
-      setup_field("crypto_call");
-      setup_field("crypto_oss");
-      setup_field("crypto_keylength");
-      setup_field("crypto_working");
-      setup_field("crypto_pfs");
-      setup_field("crypto_password_storage");
-      setup_field("crypto_random");
-      setup_field("delivery_mitm");
-      setup_field("delivery_unsigned");
-      setup_field("vulnerabilities_fixed_60_days");
-      setup_field("vulnerabilities_critical_fixed");
-
-      //SECURITY ANALYSIS
-      //Static code analysis
-      setup_field("static_analysis");
-      setup_field("static_analysis_common_vulnerabilities");
-      setup_field("static_analysis_fixed");
-      setup_field("static_analysis_often");
-      //Dynamic Analysis
-      setup_field("dynamic_analysis");
-      setup_field("dynamic_analysis_unsafe");
-      setup_field("dynamic_analysis_enable_assertions");
-      setup_field("dynamic_analysis_fixed");
+          $.each(field_categories, function(key, value) {
+              setup_field(key);
+          })
       });
-
-
-
     </script>
 
   </div>

@@ -29,6 +29,7 @@
     <h3><i>Basic Project Website Content</i></h3>
     <div class="row">
       <div class="col-md-3 criteria-radio">
+        <%= image_tag("/assets/Thumbs_down_font_awesome.svg", size: "20x20", alt: "Thumbs down", id: "description_sufficient_enough") %>
         <%= f.label :description_sufficient_status do %>
           <%= f.radio_button :description_sufficient_status, '?', :checked => true %> &nbsp;?&nbsp;
         <% end %>

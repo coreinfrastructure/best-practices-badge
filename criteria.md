@@ -24,8 +24,8 @@ that can help find otherwise hard-to-find vulnerabilities.
 These best practices have been created to:
 
 1. encourage OSS projects to follow best practices,
-1. help new OSS projects discover what those practices are, and
-1. help users know which projects are following best practices (so users can prefer such projects).
+2. help new OSS projects discover what those practices are, and
+3. help users know which projects are following best practices (so users can prefer such projects).
 
 We are currently focused on identifying *basic* best practices
 that well-run OSS projects typically already follow.

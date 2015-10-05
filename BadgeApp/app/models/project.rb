@@ -1,6 +1,17 @@
 class Project < ActiveRecord::Base
+  # Currently no validation rules for:
+  #  name, description, license, *_justification
+  # We'll rely on Rails' HTML escaping system to counter XSS.
+  # The URL validation rules are somewhat overly strict, but should serve;
+  # the idea is to prevent attackers from inserting redirecting URLs
+  # that can sometimes be used to attack (e.g., "?...", or ones with <).
+  validates :project_url, format: {
+    with: /\A(|https?:\/\/[A-Za-z0-9][-A-Za-z0-9_.\/]*(\/[-A-Za-z0-9_.\/\+,#]*)?)\z/,
+    message: "URL must begin with http: or https: and use a limited charset" }
+  validates :repo_url, format: {
+    with: /\A(|https?:\/\/[A-Za-z0-9][-A-Za-z0-9_.\/]*(\/[-A-Za-z0-9_.\/\+,#]*)?)\z/,
+    message: "URL must begin with http: or https: and use a limited charset" }
   STATUS_CHOICE = ['?', 'Met', 'Unmet']
-
   validates_inclusion_of :project_url_status, :in => STATUS_CHOICE
   validates_inclusion_of :project_url_https_status, :in => STATUS_CHOICE
   validates_inclusion_of :description_sufficient_status, :in => STATUS_CHOICE

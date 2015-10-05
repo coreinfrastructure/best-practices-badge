@@ -28,18 +28,8 @@
 
     <h3><i>Basic Project Website Content</i></h3>
     <div class="row">
-      <div class="col-md-3 criteria-radio">
-        <%= f.label :description_sufficient_status do %>
-          <%= f.radio_button :description_sufficient_status, 'Met'%> Met
-        <% end %>
-        <%= f.label :description_sufficient_status do %>
-          <%= f.radio_button :description_sufficient_status, 'Unmet' %> Unmet
-        <% end %>
-        <%= f.label :description_sufficient_status do %>
-          <%= f.radio_button :description_sufficient_status, '?', :checked => true %> &nbsp;?&nbsp;
-        <% end %>
-        <%= image_tag("/assets/Thumbs_down_font_awesome.svg", size: "20x20", alt: "Thumbs down", id: "description_sufficient_enough") %>
-      </div>
+      <%= render(partial: "status_chooser",
+                 locals: {criteria: "description_sufficient"}.merge({f: f}) ) %>
       <div class='col-md-9 criteria-desc'>
          <span>The project website MUST succinctly describe what the software does
                (what problem does it solve?), in language that potential users can
@@ -51,18 +41,8 @@
 
       <hr>
       <div class="row">
-      <div class="col-md-3 criteria-radio">
-        <%= f.label :interact_status do %>
-          <%= f.radio_button :interact_status, 'Met'%> Met
-        <% end %>
-        <%= f.label :interact_status do %>
-          <%= f.radio_button :interact_status, 'Unmet' %> Unmet
-        <% end %>
-        <%= f.label :interact_status do %>
-          <%= f.radio_button :interact_status, '?', :checked => true %> &nbsp;?&nbsp;
-        <% end %>
-        <%= image_tag("/assets/Thumbs_down_font_awesome.svg", size: "20x20", alt: "Thumbs down", id: "interact_enough") %>
-      </div>
+      <%= render(partial: "status_chooser",
+                 locals: {criteria: "interact"}.merge({f: f}) ) %>
       <div class="col-md-9 criteria-desc">
          <span>The project website MUST provide information on how to: obtain,provide feedback
               (as bug reports or enhancements), and contribute to the sofware. <sup>[interact]</sup></span>
@@ -72,18 +52,8 @@
       <hr>
 
       <div class="row">
-      <div class="col-md-3 criteria-radio">
-        <%= f.label :contribution_status do %>
-          <%= f.radio_button :contribution_status, 'Met'%> Met
-        <% end %>
-        <%= f.label :contribution_status do %>
-          <%= f.radio_button :contribution_status, 'Unmet' %> Unmet
-        <% end %>
-        <%= f.label :contribution_status do %>
-          <%= f.radio_button :contribution_status, '?', :checked => true %> &nbsp;?&nbsp;
-        <% end %>
-        <%= image_tag("/assets/Thumbs_down_font_awesome.svg", size: "20x20", alt: "Thumbs down", id: "contribution_enough") %>
-      </div>
+      <%= render(partial: "status_chooser",
+                 locals: {criteria: "contribution"}.merge({f: f}) ) %>
       <div class='col-md-9 criteria-desc'>
          <span>The project website MUST provide information on how to: obtain,provide feedback
               (as bug reports or enhancements), and contribute to the sofware. <sup>[contribution]</sup></span>
@@ -93,18 +63,8 @@
       <hr>
 
       <div class="row">
-      <div class="col-md-3 criteria-radio">
-        <%= f.label :contribution_criteria_status do %>
-          <%= f.radio_button :contribution_criteria_status, 'Met'%> Met
-        <% end %>
-        <%= f.label :contribution_criteria_status do %>
-          <%= f.radio_button :contribution_criteria_status, 'Unmet' %> Unmet
-        <% end %>
-        <%= f.label :contribution_criteria_status do %>
-          <%= f.radio_button :contribution_criteria_status, '?', :checked => true %> &nbsp;?&nbsp;
-        <% end %>
-        <%= image_tag("/assets/Thumbs_down_font_awesome.svg", size: "20x20", alt: "Thumbs down", id: "contribution_criteria_enough") %>
-      </div>
+      <%= render(partial: "status_chooser",
+                 locals: {criteria: "contribution_criteria"}.merge({f: f}) ) %>
       <div class='col-md-9 criteria-desc'>
          <span>The project website MUST provide information on how to: obtain, provide feedback
               (as bug reports or enhancements), and contribute to the sofware. <sup>[contribution-criteria]</sup></span>
@@ -115,18 +75,8 @@
 
       <h3><i>OSS License</i></h3>
        <div class="row">
-       <div class="col-md-3 criteria-radio">
-         <%= f.label :license_location_status do %>
-           <%= f.radio_button :license_location_status, 'Met'%> Met
-         <% end %>
-         <%= f.label :license_location_status do %>
-           <%= f.radio_button :license_location_status, 'Unmet' %> Unmet
-         <% end %>
-         <%= f.label :license_location_status do %>
-           <%= f.radio_button :license_location_status, '?', :checked => true %> &nbsp;?&nbsp;
-         <% end %>
-        <%= image_tag("/assets/Thumbs_down_font_awesome.svg", size: "20x20", alt: "Thumbs down", id: "license_location_enough") %>
-       </div>
+       <%= render(partial: "status_chooser",
+                  locals: {criteria: "license_location"}.merge({f: f}) ) %>
        <div class='col-md-9 criteria-desc'>
           <span>License(s) MUST be posted in a standard location (e.g., as a top-level file named LICENSE or COPYING).
              License filenames MAY be followed by an extension such as ".txt" or ".md") <sup>[license-location]</sup></span>
@@ -136,18 +86,8 @@
 
        <hr>
        <div class="row">
-       <div class="col-md-3 criteria-radio">
-        <%= f.label :oss_license_status do %>
-          <%= f.radio_button :oss_license_status, 'Met' %> Met
-        <% end %>
-        <%= f.label :oss_license_status do %>
-          <%= f.radio_button :oss_license_status, 'Unmet' %> Unmet
-        <% end %>
-        <%= f.label :oss_license_status do %>
-          <%= f.radio_button :oss_license_status, '?', :checked => true %> &nbsp;?&nbsp;
-        <% end %>
-        <%= image_tag("/assets/Thumbs_down_font_awesome.svg", size: "20x20", alt: "Thumbs down", id: "oss_license_enough") %>
-       </div>
+       <%= render(partial: "status_chooser",
+                  locals: {criteria: "oss_license"}.merge({f: f}) ) %>
        <div class='col-md-9 criteria-desc'>
        <span>The software MUST be released as OSS. For our purposes, this means that the license MUST be at least one of the following:
           an approved license by the Open Source Initiative (OSI)
@@ -160,18 +100,8 @@
        <hr>
 
        <div class="row">
-       <div class="col-md-3 criteria-radio">
-        <%= f.label :oss_license_osi_status do %>
-          <%= f.radio_button :oss_license_osi_status, 'Met'%> Met
-        <% end %>
-        <%= f.label :oss_license_osi_status do %>
-          <%= f.radio_button :oss_license_osi_status, 'Unmet'%> Unmet
-        <% end %>
-        <%= f.label :oss_license_osi_status do %>
-          <%= f.radio_button :oss_license_osi_status, '?', :checked => true %> &nbsp;?&nbsp;
-        <% end %>
-        <%= image_tag("/assets/Thumbs_down_font_awesome.svg", size: "20x20", alt: "Thumbs down", id: "oss_license_osi_enough") %>
-      </div>
+       <%= render(partial: "status_chooser",
+                  locals: {criteria: "oss_license_osi"}.merge({f: f}) ) %>
       <div class='col-md-9 criteria-desc'>
       <span>It is SUGGESTED that any required license(s) be OSI-approved. <sup>[oss-license-osi]</sup> </span>
       <%= f.text_field :oss_license_osi_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
@@ -192,18 +122,8 @@
       <h3><i>Documentation</i></h3>
 
       <div class="row">
-      <div class="col-md-3 criteria-radio">
-       <%= f.label :documentation_basics_status do %>
-         <%= f.radio_button :documentation_basics_status, 'Met'%> Met
-       <% end %>
-       <%= f.label :documentation_basics_status do %>
-         <%= f.radio_button :documentation_basics_status, 'Unmet'%> Unmet
-       <% end %>
-       <%= f.label :documentation_basics_status do %>
-         <%= f.radio_button :documentation_basics_status, '?', :checked => true %> &nbsp;?&nbsp;
-       <% end %>
-       <%= image_tag("/assets/Thumbs_down_font_awesome.svg", size: "20x20", alt: "Thumbs down", id: "documentation_basics_enough") %>
-      </div>
+      <%= render(partial: "status_chooser",
+                 locals: {criteria: "documentation_basics"}.merge({f: f}) ) %>
       <div class='col-md-9 criteria-desc'>
       <span>The project MUST provide basic documentation for the software in some media (such as text or video) that includes:
             how to install it, how to start it, how to use it (possibly with a tutorial using examples), and
@@ -216,18 +136,8 @@
 
       <hr>
       <div class="row">
-      <div class="col-md-3 criteria-radio">
-       <%= f.label :documentation_interface_status do %>
-         <%= f.radio_button :documentation_interface_status, 'Met'%> Met
-       <% end %>
-       <%= f.label :documentation_interface_status do %>
-         <%= f.radio_button :documentation_interface_status, 'Unmet'%> Unmet
-       <% end %>
-       <%= f.label :documentation_interface_status do %>
-         <%= f.radio_button :documentation_interface_status, '?', :checked => true %> &nbsp;?&nbsp;
-       <% end %>
-       <%= image_tag("/assets/Thumbs_down_font_awesome.svg", size: "20x20", alt: "Thumbs down", id: "documentation_interface_enough") %>
-     </div>
+      <%= render(partial: "status_chooser",
+                 locals: {criteria: "documentation_interface"}.merge({f: f}) ) %>
      <div class='col-md-9 criteria-desc'>
      <span>The project MUST include reference documentation that describes its interface.
            <sup>[documentation-interface]</sup></span>
@@ -243,18 +153,8 @@
       <h3><i>Public version-controlled source repository</i></h3>
 
        <div class="row">
-       <div class="col-md-3 criteria-radio">
-        <%= f.label :repo_url_status do %>
-          <%= f.radio_button :repo_url_status, 'Met'%> Met
-        <% end %>
-        <%= f.label :repo_url_status do %>
-          <%= f.radio_button :repo_url_status, 'Unmet'%> Unmet
-        <% end %>
-        <%= f.label :repo_url_status do %>
-          <%= f.radio_button :repo_url_status, '?', :checked => true %> &nbsp;?&nbsp;
-        <% end %>
-       <%= image_tag("/assets/Thumbs_down_font_awesome.svg", size: "20x20", alt: "Thumbs down", id: "repo_url_enough") %>
-       </div>
+       <%= render(partial: "status_chooser",
+                  locals: {criteria: "repo_url"}.merge({f: f}) ) %>
        <div class='col-md-9 criteria-desc'>
        <span>The project MUST have a version-controlled source repository that is publicly readable and has
              a URL (the URL MAY be the same as the project URL). <sup>[repo-url]</sup></span>
@@ -264,18 +164,8 @@
 
       <hr>
       <div class="row">
-      <div class="col-md-3 criteria-radio">
-       <%= f.label :repo_track_status do %>
-         <%= f.radio_button :repo_track_status, 'Met'%> Met
-       <% end %>
-       <%= f.label :repo_track_status do %>
-         <%= f.radio_button :repo_track_status, 'Unmet'%> Unmet
-       <% end %>
-       <%= f.label :repo_track_status do %>
-         <%= f.radio_button :repo_track_status, '?', :checked => true %> &nbsp;?&nbsp;
-       <% end %>
-       <%= image_tag("/assets/Thumbs_down_font_awesome.svg", size: "20x20", alt: "Thumbs down", id: "repo_track_enough") %>
-      </div>
+      <%= render(partial: "status_chooser",
+                  locals: {criteria: "repo_track"}.merge({f: f}) ) %>
       <div class='col-md-9 criteria-desc'>
       <span>The source repository MUST track what changes were made, who made the changes,
             and when the changes were made. <sup>[repo-track]</sup></span>
@@ -285,18 +175,8 @@
 
       <hr>
       <div class="row">
-      <div class="col-md-3 criteria-radio">
-       <%= f.label :repo_interim_status do %>
-         <%= f.radio_button :repo_interim_status, 'Met'%> Met
-       <% end %>
-       <%= f.label :repo_interim_status do %>
-         <%= f.radio_button :repo_interim_status, 'Unmet'%> Unmet
-       <% end %>
-       <%= f.label :repo_interim_status do %>
-         <%= f.radio_button :repo_interim_status, '?', :checked => true %> &nbsp;?&nbsp;
-       <% end %>
-       <%= image_tag("/assets/Thumbs_down_font_awesome.svg", size: "20x20", alt: "Thumbs down", id: "repo_interim_enough") %>
-      </div>
+      <%= render(partial: "status_chooser",
+                  locals: {criteria: "repo_interim"}.merge({f: f}) ) %>
       <div class='col-md-9 criteria-desc'>
       <span>The source repository MUST include interim versions for review between releases;
             it MUST NOT include only final releases. <sup>[repo-interim]</sup> </span>
@@ -306,18 +186,8 @@
 
       <hr>
       <div class="row">
-      <div class="col-md-3 criteria-radio">
-       <%= f.label :repo_distributed_status do %>
-         <%= f.radio_button :repo_distributed_status, 'Met'%> Met
-       <% end %>
-       <%= f.label :repo_distributed_status do %>
-         <%= f.radio_button :repo_distributed_status, 'Unmet'%> Unmet
-       <% end %>
-       <%= f.label :repo_distributed_status do %>
-         <%= f.radio_button :repo_distributed_status, '?', :checked => true %> &nbsp;?&nbsp;
-       <% end %>
-       <%= image_tag("/assets/Thumbs_down_font_awesome.svg", size: "20x20", alt: "Thumbs down", id: "repo_distributed_enough") %>
-      </div>
+      <%= render(partial: "status_chooser",
+                  locals: {criteria: "repo_distributed"}.merge({f: f}) ) %>
       <div class='col-md-9 criteria-desc'>
         <span>It is SUGGESTED that common distributed version control software is used (e.g., git).
             Git is not specifically required and projects can use centralized version control software
@@ -325,6 +195,8 @@
         <%= f.text_field :repo_distributed_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
       </div>
       </div>
+      <br>
+      TODO: ??? Add radio buttons here.
       <br>
       <span class='criteria-desc'>The project MAY use private (non-public)
             branches in specific cases while the change is not publicly released
@@ -338,18 +210,8 @@
       <h3><i>Version numbering</i></h3>
 
       <div class="row">
-      <div class="col-md-3 criteria-radio">
-       <%= f.label :version_unique_status do %>
-         <%= f.radio_button :version_unique_status, 'Met'%> Met
-       <% end %>
-       <%= f.label :version_unique_status do %>
-         <%= f.radio_button :version_unique_status, 'Unmet'%> Unmet
-       <% end %>
-       <%= f.label :version_unique_status do %>
-         <%= f.radio_button :version_unique_status, '?', :checked => true %> &nbsp;?&nbsp;
-       <% end %>
-       <%= image_tag("/assets/Thumbs_down_font_awesome.svg", size: "20x20", alt: "Thumbs down", id: "version_unique_enough") %>
-      </div>
+      <%= render(partial: "status_chooser",
+                  locals: {criteria: "version_unique"}.merge({f: f}) ) %>
       <div class='col-md-9 criteria-desc'>
       <span>The project MUST have a unique version number for each release intended
             to be used by users. <sup>[version-unique]</sup></span>
@@ -358,19 +220,8 @@
       </div>
 
       <div class="row">
-      <hr class='col-md-11'>
-      <div class="col-md-3 criteria-radio">
-       <%= f.label :version_semver_status do %>
-         <%= f.radio_button :version_semver_status, 'Met'%> Met
-       <% end %>
-       <%= f.label :version_semver_status do %>
-         <%= f.radio_button :version_semver_status, 'Unmet'%> Unmet
-       <% end %>
-       <%= f.label :version_semver_status do %>
-         <%= f.radio_button :version_semver_status, '?', :checked => true %> &nbsp;?&nbsp;
-       <% end %>
-       <%= image_tag("/assets/Thumbs_down_font_awesome.svg", size: "20x20", alt: "Thumbs down", id: "version_semver_enough") %>
-      </div>
+      <%= render(partial: "status_chooser",
+                  locals: {criteria: "version_semver"}.merge({f: f}) ) %>
       <div class='col-md-9 criteria-desc'>
       <span>It is SUGGESTED that the Semantic Versioning (SemVer) format is
             used for releases. <sup>[version-semver]</sup></span><br>
@@ -382,18 +233,8 @@
 
       <hr>
       <div class="row">
-      <div class="col-md-3 criteria-radio">
-       <%= f.label :version_tags_status do %>
-         <%= f.radio_button :version_tags_status, 'Met'%> Met
-       <% end %>
-       <%= f.label :version_tags_status do %>
-         <%= f.radio_button :version_tags_status, 'Unmet'%> Unmet
-       <% end %>
-       <%= f.label :version_tags_status do %>
-         <%= f.radio_button :version_tags_status, '?', :checked => true %> &nbsp;?&nbsp;
-       <% end %>
-       <%= image_tag("/assets/Thumbs_down_font_awesome.svg", size: "20x20", alt: "Thumbs down", id: "version_tags_enough") %>
-      </div>
+      <%= render(partial: "status_chooser",
+                  locals: {criteria: "version_tags"}.merge({f: f}) ) %>
       <div class='col-md-9 criteria-desc'>
       <span>It is SUGGESTED that projects identify each release within their version control system.
             For example, it is SUGGESTED that those using git identify each
@@ -405,18 +246,8 @@
       <br><br>
       <h3><i>ChangeLog</i></h3>
       <div class="row">
-      <div class="col-md-3 criteria-radio">
-       <%= f.label :changelog_status do %>
-         <%= f.radio_button :changelog_status, 'Met'%> Met
-       <% end %>
-       <%= f.label :changelog_status do %>
-         <%= f.radio_button :changelog_status, 'Unmet'%> Unmet
-       <% end %>
-       <%= f.label :changelog_status do %>
-         <%= f.radio_button :changelog_status, '?', :checked => true %> &nbsp;?&nbsp;
-       <% end %>
-       <%= image_tag("/assets/Thumbs_down_font_awesome.svg", size: "20x20", alt: "Thumbs down", id: "changelog_enough") %>
-      </div>
+      <%= render(partial: "status_chooser",
+                  locals: {criteria: "changelog"}.merge({f: f}) ) %>
       <div class='col-md-9 criteria-desc'>
       <span>The project MUST provide a "ChangeLog" (a human-readable summary of major changes in each release).
             The ChangeLog MUST NOT be the output of the version control log of every change
@@ -427,18 +258,8 @@
 
       <hr>
       <div class="row">
-      <div class="col-md-3 criteria-radio">
-       <%= f.label :changelog_vulns_status do %>
-         <%= f.radio_button :changelog_vulns_status, 'Met'%> Met
-       <% end %>
-       <%= f.label :changelog_vulns_status do %>
-         <%= f.radio_button :changelog_vulns_status, 'Unmet'%> Unmet
-       <% end %>
-       <%= f.label :changelog_vulns_status do %>
-         <%= f.radio_button :changelog_vulns_status, '?', :checked => true %> &nbsp;?&nbsp;
-       <% end %>
-       <%= image_tag("/assets/Thumbs_down_font_awesome.svg", size: "20x20", alt: "Thumbs down", id: "changelog_vulns_enough") %>
-      </div>
+      <%= render(partial: "status_chooser",
+                  locals: {criteria: "changelog_vulns"}.merge({f: f}) ) %>
       <div class='col-md-9 criteria-desc'>
         <span>The ChangeLog MUST identify whether the new release fixes any publicly
               known vulnerabilities. <sup>[changelog-vulns]</sup></span>
@@ -459,18 +280,8 @@
       <h3><i>Bug-reporting process</i></h3>
 
       <div class="row">
-      <div class="col-md-3 criteria-radio">
-       <%= f.label :report_url_status do %>
-         <%= f.radio_button :report_url_status, 'Met'%> Met
-       <% end %>
-       <%= f.label :report_url_status do %>
-         <%= f.radio_button :report_url_status, 'Unmet'%> Unmet
-       <% end %>
-       <%= f.label :report_url_status do %>
-         <%= f.radio_button :report_url_status, '?', :checked => true %> &nbsp;?&nbsp;
-       <% end %>
-       <%= image_tag("/assets/Thumbs_down_font_awesome.svg", size: "20x20", alt: "Thumbs down", id: "report_url_enough") %>
-      </div>
+      <%= render(partial: "status_chooser",
+                  locals: {criteria: "report_url"}.merge({f: f}) ) %>
       <div class='col-md-9 criteria-desc'>
       <span>If an issue tracker is used, please provide its URL. <sup>[report-url]</sup></span>
       <%= f.text_field :report_url_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
@@ -479,18 +290,8 @@
 
       <hr>
       <div class="row">
-      <div class="col-md-3 criteria-radio">
-       <%= f.label :report_tracker_status do %>
-         <%= f.radio_button :report_tracker_status, 'Met'%> Met
-       <% end %>
-       <%= f.label :report_tracker_status do %>
-         <%= f.radio_button :report_tracker_status, 'Unmet'%> Unmet
-       <% end %>
-       <%= f.label :report_tracker_status do %>
-         <%= f.radio_button :report_tracker_status, '?', :checked => true %> &nbsp;?&nbsp;
-       <% end %>
-       <%= image_tag("/assets/Thumbs_down_font_awesome.svg", size: "20x20", alt: "Thumbs down", id: "report_tracker_enough") %>
-      </div>
+      <%= render(partial: "status_chooser",
+                  locals: {criteria: "report_tracker"}.merge({f: f}) ) %>
       <div class='col-md-9 criteria-desc'>
       <span>It is SUGGESTED that an issue tracker be used for tracking
             individual issues. <sup>[report-tracker]</sup></span>
@@ -500,18 +301,8 @@
 
       <hr>
       <div class="row">
-      <div class="col-md-3 criteria-radio">
-       <%= f.label :report_process_status do %>
-         <%= f.radio_button :report_process_status, 'Met'%> Met
-       <% end %>
-       <%= f.label :report_process_status do %>
-         <%= f.radio_button :report_process_status, 'Unmet'%> Unmet
-       <% end %>
-       <%= f.label :report_process_status do %>
-         <%= f.radio_button :report_process_status, '?', :checked => true %> &nbsp;?&nbsp;
-       <% end %>
-       <%= image_tag("/assets/Thumbs_down_font_awesome.svg", size: "20x20", alt: "Thumbs down", id: "report_process_enough") %>
-      </div>
+      <%= render(partial: "status_chooser",
+                  locals: {criteria: "report_process"}.merge({f: f}) ) %>
       <div class='col-md-9 criteria-desc'>
       <span>The project MUST provide a process for users to submit bug reports
             (e.g., using an issue tracker or a mailing list). <sup>[report-process]</sup></span>
@@ -521,18 +312,8 @@
 
       <hr>
       <div class="row">
-      <div class="col-md-3 criteria-radio">
-       <%= f.label :report_responses_status do %>
-         <%= f.radio_button :report_responses_status, 'Met'%> Met
-       <% end %>
-       <%= f.label :report_responses_status do %>
-         <%= f.radio_button :report_responses_status, 'Unmet'%> Unmet
-       <% end %>
-       <%= f.label :report_responses_status do %>
-         <%= f.radio_button :report_responses_status, '?', :checked => true %> &nbsp;?&nbsp;
-       <% end %>
-       <%= image_tag("/assets/Thumbs_down_font_awesome.svg", size: "20x20", alt: "Thumbs down", id: "report_responses_enough") %>
-      </div>
+      <%= render(partial: "status_chooser",
+                  locals: {criteria: "report_responses"}.merge({f: f}) ) %>
       <div class='col-md-9 criteria-desc'>
       <span>Developers MUST respond to most bug reports submitted in the last
             2-12 months (inclusive); the response need not include a fix. <sup>[report-responses]</sup></span>
@@ -542,18 +323,8 @@
 
       <hr>
       <div class="row">
-      <div class="col-md-3 criteria-radio">
-       <%= f.label :enhancement_responses_status do %>
-         <%= f.radio_button :enhancement_responses_status, 'Met'%> Met
-       <% end %>
-       <%= f.label :enhancement_responses_status do %>
-         <%= f.radio_button :enhancement_responses_status, 'Unmet'%> Unmet
-       <% end %>
-       <%= f.label :enhancement_responses_status do %>
-         <%= f.radio_button :enhancement_responses_status, '?', :checked => true %> &nbsp;?&nbsp;
-       <% end %>
-       <%= image_tag("/assets/Thumbs_down_font_awesome.svg", size: "20x20", alt: "Thumbs down", id: "enhancement_responses_enough") %>
-      </div>
+      <%= render(partial: "status_chooser",
+                  locals: {criteria: "enhancement_responses"}.merge({f: f}) ) %>
       <div class='col-md-9 criteria-desc'>
       <span>Developers SHOULD respond to most enhancement requests in the last 2-12 months
             (inclusive). Developers MAY choose not to respond. <sup>[enhancement-responses]</sup></span>
@@ -563,18 +334,8 @@
 
       <hr>
       <div class="row">
-      <div class="col-md-3 criteria-radio">
-       <%= f.label :report_archive_status do %>
-         <%= f.radio_button :report_archive_status, 'Met'%> Met
-       <% end %>
-       <%= f.label :report_archive_status do %>
-         <%= f.radio_button :report_archive_status, 'Unmet'%> Unmet
-       <% end %>
-       <%= f.label :report_archive_status do %>
-         <%= f.radio_button :report_archive_status, '?', :checked => true %> &nbsp;?&nbsp;
-       <% end %>
-       <%= image_tag("/assets/Thumbs_down_font_awesome.svg", size: "20x20", alt: "Thumbs down", id: "report_archive_enough") %>
-      </div>
+      <%= render(partial: "status_chooser",
+                  locals: {criteria: "report_archive"}.merge({f: f}) ) %>
       <div class='col-md-9 criteria-desc'>
       <span>Reports and responses MUST be archived for later searching. <sup>[report-archive]</sup></span>
       <%= f.text_field :report_archive_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
@@ -585,18 +346,8 @@
 
       <h3><i>Vulnerability report process</i></h3>
       <div class="row">
-      <div class="col-md-3 criteria-radio">
-       <%= f.label :vulnerability_report_process_status do %>
-         <%= f.radio_button :vulnerability_report_process_status, 'Met'%> Met
-       <% end %>
-       <%= f.label :vulnerability_report_process_status do %>
-         <%= f.radio_button :vulnerability_report_process_status, 'Unmet'%> Unmet
-       <% end %>
-       <%= f.label :vulnerability_report_process_status do %>
-         <%= f.radio_button :vulnerability_report_process_status, '?', :checked => true %> &nbsp;?&nbsp;
-       <% end %>
-       <%= image_tag("/assets/Thumbs_down_font_awesome.svg", size: "20x20", alt: "Thumbs down", id: "vulnerability_report_process_enough") %>
-      </div>
+      <%= render(partial: "status_chooser",
+                  locals: {criteria: "vulnerability_report_process"}.merge({f: f}) ) %>
       <div class='col-md-9 criteria-desc'>
       <span>The project MUST publish the process for reporting vulnerabilities on the project site
             (e.g., a clearly designated mailing address on https://PROJECTSITE/security, often security@SOMEWHERE);
@@ -607,18 +358,8 @@
 
       <hr>
       <div class="row">
-      <div class="col-md-3 criteria-radio">
-       <%= f.label :vulnerability_report_private_status do %>
-         <%= f.radio_button :vulnerability_report_private_status, 'Met'%> Met
-       <% end %>
-       <%= f.label :vulnerability_report_private_status do %>
-         <%= f.radio_button :vulnerability_report_private_status, 'Unmet'%> Unmet
-       <% end %>
-       <%= f.label :vulnerability_report_private_status do %>
-         <%= f.radio_button :vulnerability_report_private_status, '?', :checked => true %> &nbsp;?&nbsp;
-       <% end %>
-       <%= image_tag("/assets/Thumbs_down_font_awesome.svg", size: "20x20", alt: "Thumbs down", id: "vulnerability_report_private_enough") %>
-      </div>
+      <%= render(partial: "status_chooser",
+                  locals: {criteria: "vulnerability_report_private"}.merge({f: f}) ) %>
       <div class='col-md-9 criteria-desc'>
       <span>If private vulnerability reports are supported, the project MUST include how
             to send the information in a way that is kept private (e.g., a private defect
@@ -631,18 +372,8 @@
 
       <hr>
       <div class="row">
-      <div class="col-md-3 criteria-radio">
-       <%= f.label :vulnerability_report_response_status do %>
-         <%= f.radio_button :vulnerability_report_response_status, 'Met'%> Met
-       <% end %>
-       <%= f.label :vulnerability_report_response_status do %>
-         <%= f.radio_button :vulnerability_report_response_status, 'Unmet'%> Unmet
-       <% end %>
-       <%= f.label :vulnerability_report_response_status do %>
-         <%= f.radio_button :vulnerability_report_response_status, '?', :checked => true %> &nbsp;?&nbsp;
-       <% end %>
-       <%= image_tag("/assets/Thumbs_down_font_awesome.svg", size: "20x20", alt: "Thumbs down", id: "vulnerability_report_response_enough") %>
-      </div>
+      <%= render(partial: "status_chooser",
+                  locals: {criteria: "vulnerability_report_response"}.merge({f: f}) ) %>
       <div class='col-md-9 criteria-desc'>
       <span>The project MUST provide an initial reply to a security vulnerability report
             sent to the project, on average, less than 7 days within the last 6 months.
@@ -656,18 +387,8 @@
      <h2 class="center h2">Quality</h2>
       <h3><i>Working build system</i></h3>
       <div class="row">
-      <div class="col-md-3 criteria-radio">
-       <%= f.label :build_status do %>
-         <%= f.radio_button :build_status, 'Met'%> Met
-       <% end %>
-       <%= f.label :build_status do %>
-         <%= f.radio_button :build_status, 'Unmet'%> Unmet
-       <% end %>
-       <%= f.label :build_status do %>
-         <%= f.radio_button :build_status, '?', :checked => true %> &nbsp;?&nbsp;
-       <% end %>
-       <%= image_tag("/assets/Thumbs_down_font_awesome.svg", size: "20x20", alt: "Thumbs down", id: "build_status_enough") %>
-      </div>
+      <%= render(partial: "status_chooser",
+                  locals: {criteria: "build"}.merge({f: f}) ) %>
       <div class='col-md-9 criteria-desc'>
       <span>If the software requires building for use, the project MUST provide a working
             build system that can automatically rebuild the software from source code.
@@ -679,18 +400,8 @@
 
       <hr>
       <div class="row">
-      <div class="col-md-3 criteria-radio">
-       <%= f.label :build_common_tools_status do %>
-         <%= f.radio_button :build_common_tools_status, 'Met'%> Met
-       <% end %>
-       <%= f.label :build_common_tools_status do %>
-         <%= f.radio_button :build_common_tools_status, 'Unmet'%> Unmet
-       <% end %>
-       <%= f.label :build_common_tools_status do %>
-         <%= f.radio_button :build_common_tools_status, '?', :checked => true %> &nbsp;?&nbsp;
-       <% end %>
-       <%= image_tag("/assets/Thumbs_down_font_awesome.svg", size: "20x20", alt: "Thumbs down", id: "build_common_tools_enough") %>
-      </div>
+      <%= render(partial: "status_chooser",
+                  locals: {criteria: "build_common_tools"}.merge({f: f}) ) %>
       <div class='col-md-9 criteria-desc'>
       <span>It is SUGGESTED that common tools be used for building the software
             (e.g., Maven, Ant, cmake, the autotools, make, or rake), in which case
@@ -702,18 +413,8 @@
 
       <hr>
       <div class="row">
-      <div class="col-md-3 criteria-radio">
-       <%= f.label :build_oss_tools_status do %>
-         <%= f.radio_button :build_oss_tools_status, 'Met'%> Met
-       <% end %>
-       <%= f.label :build_oss_tools_status do %>
-         <%= f.radio_button :build_oss_tools_status, 'Unmet'%> Unmet
-       <% end %>
-       <%= f.label :build_oss_tools_status do %>
-         <%= f.radio_button :build_oss_tools_status, '?', :checked => true %> &nbsp;?&nbsp;
-       <% end %>
-       <%= image_tag("/assets/Thumbs_down_font_awesome.svg", size: "20x20", alt: "Thumbs down", id: "build_oss_tools_enough") %>
-      </div>
+      <%= render(partial: "status_chooser",
+                  locals: {criteria: "build_oss_tools"}.merge({f: f}) ) %>
       <div class='col-md-9 criteria-desc'>
       <span>The project SHOULD be buildable using only OSS tools. <sup>[build-oss-tools]</sup></span>
       <%= f.text_field :build_oss_tools_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
@@ -727,18 +428,8 @@
       <br><br>
       <h3><i>Automated test suite</i></h3>
       <div class="row">
-      <div class="col-md-3 criteria-radio">
-       <%= f.label :test_status do %>
-         <%= f.radio_button :test_status, 'Met'%> Met
-       <% end %>
-       <%= f.label :test_status do %>
-         <%= f.radio_button :test_status, 'Unmet'%> Unmet
-       <% end %>
-       <%= f.label :test_status do %>
-         <%= f.radio_button :test_status, '?', :checked => true %> &nbsp;?&nbsp;
-       <% end %>
-       <%= image_tag("/assets/Thumbs_down_font_awesome.svg", size: "20x20", alt: "Thumbs down", id: "test_enough") %>
-      </div>
+      <%= render(partial: "status_chooser",
+                  locals: {criteria: "test"}.merge({f: f}) ) %>
       <div class='col-md-9 criteria-desc'>
       <span>The project MUST have at least one automated test suite. <sup>[test]</sup></span>
       <%= f.text_field :test_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
@@ -747,18 +438,8 @@
 
       <hr>
       <div class="row">
-      <div class="col-md-3 criteria-radio">
-       <%= f.label :test_invocation_status do %>
-         <%= f.radio_button :test_invocation_status, 'Met'%> Met
-       <% end %>
-       <%= f.label :test_invocation_status do %>
-         <%= f.radio_button :test_invocation_status, 'Unmet'%> Unmet
-       <% end %>
-       <%= f.label :test_invocation_status do %>
-         <%= f.radio_button :test_invocation_status, '?', :checked => true %> &nbsp;?&nbsp;
-       <% end %>
-       <%= image_tag("/assets/Thumbs_down_font_awesome.svg", size: "20x20", alt: "Thumbs down", id: "test_invocation_enough") %>
-      </div>
+      <%= render(partial: "status_chooser",
+                  locals: {criteria: "test_invocation"}.merge({f: f}) ) %>
       <div class='col-md-9 criteria-desc'>
       <span>A test suite SHOULD be invocable in a standard way for that language
             (e.g., "make check", "mvn test", and so on). <sup>[test-invocation]</sup></span>
@@ -768,18 +449,8 @@
 
       <hr>
       <div class="row">
-      <div class="col-md-3 criteria-radio">
-       <%= f.label :test_most_status do %>
-         <%= f.radio_button :test_most_status, 'Met'%> Met
-       <% end %>
-       <%= f.label :test_most_status do %>
-         <%= f.radio_button :test_most_status, 'Unmet'%> Unmet
-       <% end %>
-       <%= f.label :test_most_status do %>
-         <%= f.radio_button :test_most_status, '?', :checked => true %> &nbsp;?&nbsp;
-       <% end %>
-       <%= image_tag("/assets/Thumbs_down_font_awesome.svg", size: "20x20", alt: "Thumbs down", id: "test_most_enough") %>
-      </div>
+      <%= render(partial: "status_chooser",
+                  locals: {criteria: "test_most"}.merge({f: f}) ) %>
       <div class='col-md-9 criteria-desc'>
       <span>It is SUGGESTED that the test suite cover most (or ideally all) the code branches,
             input fields, and functionality. <sup>[test-most]</sup></span>
@@ -797,18 +468,8 @@
     <br><br>
     <h3><i>New functionality testing</i></h3>
       <div class="row">
-      <div class="col-md-3 criteria-radio">
-       <%= f.label :test_policy_status do %>
-         <%= f.radio_button :test_policy_status, 'Met'%> Met
-       <% end %>
-       <%= f.label :test_policy_status do %>
-         <%= f.radio_button :test_policy_status, 'Unmet'%> Unmet
-       <% end %>
-       <%= f.label :test_policy_status do %>
-         <%= f.radio_button :test_policy_status, '?', :checked => true %> &nbsp;?&nbsp;
-       <% end %>
-       <%= image_tag("/assets/Thumbs_down_font_awesome.svg", size: "20x20", alt: "Thumbs down", id: "test_policy_enough") %>
-      </div>
+      <%= render(partial: "status_chooser",
+                  locals: {criteria: "test_policy"}.merge({f: f}) ) %>
       <div class='col-md-9 criteria-desc'>
       <span>The project MUST have a general policy (formal or not) that as major
             new functionality is added, tests of that functionality SHOULD
@@ -819,18 +480,8 @@
 
       <hr>
       <div class="row">
-      <div class="col-md-3 criteria-radio">
-       <%= f.label :tests_are_added_status do %>
-         <%= f.radio_button :tests_are_added_status, 'Met'%> Met
-       <% end %>
-       <%= f.label :tests_are_added_status do %>
-         <%= f.radio_button :tests_are_added_status, 'Unmet'%> Unmet
-       <% end %>
-       <%= f.label :tests_are_added_status do %>
-         <%= f.radio_button :tests_are_added_status, '?', :checked => true %> &nbsp;?&nbsp;
-       <% end %>
-       <%= image_tag("/assets/Thumbs_down_font_awesome.svg", size: "20x20", alt: "Thumbs down", id: "tests_are_added_enough") %>
-      </div>
+      <%= render(partial: "status_chooser",
+                  locals: {criteria: "tests_are_added"}.merge({f: f}) ) %>
       <div class='col-md-9 criteria-desc'>
       <span>The project MUST have evidence that such tests are being added in
             the most recent major changes to the project. Major functionality would typically
@@ -842,18 +493,8 @@
 
       <hr>
       <div class="row">
-      <div class="col-md-3 criteria-radio">
-       <%= f.label :tests_documented_added_status do %>
-         <%= f.radio_button :tests_documented_added_status, 'Met'%> Met
-       <% end %>
-       <%= f.label :tests_documented_added_status do %>
-         <%= f.radio_button :tests_documented_added_status, 'Unmet'%> Unmet
-       <% end %>
-       <%= f.label :tests_documented_added_status do %>
-         <%= f.radio_button :tests_documented_added_status, '?', :checked => true %> &nbsp;?&nbsp;
-       <% end %>
-       <%= image_tag("/assets/Thumbs_down_font_awesome.svg", size: "20x20", alt: "Thumbs down", id: "tests_documented_added_enough") %>
-      </div>
+      <%= render(partial: "status_chooser",
+                  locals: {criteria: "tests_documented_added"}.merge({f: f}) ) %>
       <div class='col-md-9 criteria-desc'>
       <span>It is SUGGESTED that this be documented in the instructions for change proposals,
             but even an informal rule is acceptable as long as the tests are being
@@ -865,18 +506,8 @@
     <br><br>
     <h3><i>Warning flags</i></h3>
       <div class="row">
-      <div class="col-md-3 criteria-radio">
-       <%= f.label :warnings_status do %>
-         <%= f.radio_button :warnings_status, 'Met'%> Met
-       <% end %>
-       <%= f.label :warnings_status do %>
-         <%= f.radio_button :warnings_status, 'Unmet'%> Unmet
-       <% end %>
-       <%= f.label :warnings_status do %>
-         <%= f.radio_button :warnings_status, '?', :checked => true %> &nbsp;?&nbsp;
-       <% end %>
-       <%= image_tag("/assets/Thumbs_down_font_awesome.svg", size: "20x20", alt: "Thumbs down", id: "warnings_enough") %>
-      </div>
+      <%= render(partial: "status_chooser",
+                  locals: {criteria: "warnings"}.merge({f: f}) ) %>
       <div class='col-md-9 criteria-desc'>
       <span>The project MUST enable some compiler warning flagss (e.g. "-Wall"),
             a "safe" language mode (e.g., "use strict", "use warnings", or similar),
@@ -889,18 +520,8 @@
 
       <hr>
       <div class="row">
-      <div class="col-md-3 criteria-radio">
-       <%= f.label :warnings_fixed_status do %>
-         <%= f.radio_button :warnings_fixed_status, 'Met'%> Met
-       <% end %>
-       <%= f.label :warnings_fixed_status do %>
-         <%= f.radio_button :warnings_fixed_status, 'Unmet'%> Unmet
-       <% end %>
-       <%= f.label :warnings_fixed_status do %>
-         <%= f.radio_button :warnings_fixed_status, '?', :checked => true %> &nbsp;?&nbsp;
-       <% end %>
-       <%= image_tag("/assets/Thumbs_down_font_awesome.svg", size: "20x20", alt: "Thumbs down", id: "warnings_fixed_enough") %>
-      </div>
+      <%= render(partial: "status_chooser",
+                  locals: {criteria: "warnings_fixed"}.merge({f: f}) ) %>
       <div class='col-md-9 criteria-desc'>
       <span>The project MUST address the issues that are found (by fixing them or
             marking them in the source code as false positives). Ideally there would be no warnings,
@@ -912,18 +533,8 @@
 
       <hr>
       <div class="row">
-      <div class="col-md-3 criteria-radio">
-       <%= f.label :warnings_strict_status do %>
-         <%= f.radio_button :warnings_strict_status, 'Met'%> Met
-       <% end %>
-       <%= f.label :warnings_strict_status do %>
-         <%= f.radio_button :warnings_strict_status, 'Unmet'%> Unmet
-       <% end %>
-      </div>
-       <%= f.label :warnings_strict_status do %>
-         <%= f.radio_button :warnings_strict_status, '?', :checked => true %> &nbsp;?&nbsp;
-       <% end %>
-       <%= image_tag("/assets/Thumbs_down_font_awesome.svg", size: "20x20", alt: "Thumbs down", id: "warnings_strict_enough") %>
+      <%= render(partial: "status_chooser",
+                  locals: {criteria: "warnings_strict"}.merge({f: f}) ) %>
       <div class='col-md-9 criteria-desc'>
       <span>It is SUGGESTED that projects be maximally strict, but this is not
             always practical. <sup>[warnings-strict]</sup></span>
@@ -935,18 +546,8 @@
     <h2 class="center h2">Security</h2>
     <h3><i>Secure development knowledge</i></h3>
     <div class="row">
-    <div class="col-md-3 criteria-radio">
-     <%= f.label :know_secure_design_status do %>
-       <%= f.radio_button :know_secure_design_status, 'Met'%> Met
-     <% end %>
-     <%= f.label :know_secure_design_status do %>
-       <%= f.radio_button :know_secure_design_status, 'Unmet'%> Unmet
-     <% end %>
-     <%= f.label :know_secure_design_status do %>
-       <%= f.radio_button :know_secure_design_status, '?', :checked => true %> &nbsp;?&nbsp;
-     <% end %>
-     <%= image_tag("/assets/Thumbs_down_font_awesome.svg", size: "20x20", alt: "Thumbs down", id: "know_secure_design_enough") %>
-    </div>
+    <%= render(partial: "status_chooser",
+                locals: {criteria: "know_secure_design"}.merge({f: f}) ) %>
     <div class='col-md-9 criteria-desc'>
     <span>At least one of the primary developers MUST know how to design secure software.
           This requires understanding the following design principles, including the 8 principles from Saltzer and Schroeder:
@@ -968,18 +569,8 @@
 
     <hr>
     <div class="row">
-    <div class="col-md-3 criteria-radio">
-     <%= f.label :know_common_errors_status do %>
-       <%= f.radio_button :know_common_errors_status, 'Met'%> Met
-     <% end %>
-     <%= f.label :know_common_errors_status do %>
-       <%= f.radio_button :know_common_errors_status, 'Unmet'%> Unmet
-     <% end %>
-     <%= f.label :know_common_errors_status do %>
-       <%= f.radio_button :know_common_errors_status, '?', :checked => true %> &nbsp;?&nbsp;
-     <% end %>
-     <%= image_tag("/assets/Thumbs_down_font_awesome.svg", size: "20x20", alt: "Thumbs down", id: "know_common_errors_enough") %>
-    </div>
+    <%= render(partial: "status_chooser",
+                locals: {criteria: "know_common_errors"}.merge({f: f}) ) %>
     <div class='col-md-9 criteria-desc'>
     <span>At least one of the primary developers MUST know of common kinds of errors that
           lead to vulnerabilities in this kind of software, as well as at least one method
@@ -996,18 +587,8 @@
     <br><br>
     <h3><i>Uses basic good cryptographic practices</i></h3>
     <div class="row">
-    <div class="col-md-3 criteria-radio">
-     <%= f.label :crypto_published_status do %>
-       <%= f.radio_button :crypto_published_status, 'Met'%> Met
-     <% end %>
-     <%= f.label :crypto_published_status do %>
-       <%= f.radio_button :crypto_published_status, 'Unmet'%> Unmet
-     <% end %>
-     <%= f.label :crypto_published_status do %>
-       <%= f.radio_button :crypto_published_status, '?', :checked => true %> &nbsp;?&nbsp;
-     <% end %>
-     <%= image_tag("/assets/Thumbs_down_font_awesome.svg", size: "20x20", alt: "Thumbs down", id: "crypto_published_status_enough") %>
-    </div>
+    <%= render(partial: "status_chooser",
+                locals: {criteria: "crypto_published"}.merge({f: f}) ) %>
     <div class='col-md-9 criteria-desc'>
     <span>Cryptographic protocols and algorithms used by default in the software AND
           the delivery mechanisms MUST be publicly published and reviewed
@@ -1018,18 +599,8 @@
 
     <hr>
     <div class="row">
-    <div class="col-md-3 criteria-radio">
-     <%= f.label :crypto_call_status do %>
-       <%= f.radio_button :crypto_call_status, 'Met'%> Met
-     <% end %>
-     <%= f.label :crypto_call_status do %>
-       <%= f.radio_button :crypto_call_status, 'Unmet'%> Unmet
-     <% end %>
-     <%= f.label :crypto_call_status do %>
-       <%= f.radio_button :crypto_call_status, '?', :checked => true %> &nbsp;?&nbsp;
-     <% end %>
-     <%= image_tag("/assets/Thumbs_down_font_awesome.svg", size: "20x20", alt: "Thumbs down", id: "crypto_call_enough") %>
-    </div>
+    <%= render(partial: "status_chooser",
+                locals: {criteria: "crypto_call"}.merge({f: f}) ) %>
     <div class='col-md-9 criteria-desc'>
     <span>Application software that is not itself a cryptographic system/library MUST NOT
           implement its own cryptographic functions, but MUST instead call on software
@@ -1040,18 +611,8 @@
 
     <hr>
     <div class="row">
-    <div class="col-md-3 criteria-radio">
-     <%= f.label :crypto_oss_status do %>
-       <%= f.radio_button :crypto_oss_status, 'Met'%> Met
-     <% end %>
-     <%= f.label :crypto_oss_status do %>
-       <%= f.radio_button :crypto_oss_status, 'Unmet'%> Unmet
-     <% end %>
-     <%= f.label :crypto_oss_status do %>
-       <%= f.radio_button :crypto_oss_status, '?', :checked => true %> &nbsp;?&nbsp;
-     <% end %>
-     <%= image_tag("/assets/Thumbs_down_font_awesome.svg", size: "20x20", alt: "Thumbs down", id: "crypto_oss_enough") %>
-    </div>
+    <%= render(partial: "status_chooser",
+                locals: {criteria: "crypto_oss"}.merge({f: f}) ) %>
     <div class='col-md-9 criteria-desc'>
     <span>All functionality that depends on cryptography MUST be implementable using
           OSS because its specification meets the Open Standards Requirement for Software
@@ -1062,18 +623,8 @@
 
     <hr>
     <div class="row">
-    <div class="col-md-3 criteria-radio">
-     <%= f.label :crypto_keylength_status do %>
-       <%= f.radio_button :crypto_keylength_status, 'Met'%> Met
-     <% end %>
-     <%= f.label :crypto_keylength_status do %>
-       <%= f.radio_button :crypto_keylength_status, 'Unmet'%> Unmet
-     <% end %>
-     <%= f.label :crypto_keylength_status do %>
-       <%= f.radio_button :crypto_keylength_status, '?', :checked => true %> &nbsp;?&nbsp;
-     <% end %>
-     <%= image_tag("/assets/Thumbs_down_font_awesome.svg", size: "20x20", alt: "Thumbs down", id: "crypto_keylength_enough") %>
-    </div>
+    <%= render(partial: "status_chooser",
+                locals: {criteria: "crypto_keylength"}.merge({f: f}) ) %>
     <div class='col-md-9 criteria-desc'>
     <span>The default keylengths MUST meet the NIST minimum requirements at least through the year 2030 (as stated in 2012).
           These minimum bitlengths are: symmetric key 112, factoring modulus 2048, discrete logarithm key 224,
@@ -1089,18 +640,8 @@
 
     <hr>
     <div class="row">
-    <div class="col-md-3 criteria-radio">
-     <%= f.label :crypto_working_status do %>
-       <%= f.radio_button :crypto_working_status, 'Met'%> Met
-     <% end %>
-     <%= f.label :crypto_working_status do %>
-       <%= f.radio_button :crypto_working_status, 'Unmet'%> Unmet
-     <% end %>
-     <%= f.label :crypto_working_status do %>
-       <%= f.radio_button :crypto_working_status, '?', :checked => true %> &nbsp;?&nbsp;
-     <% end %>
-     <%= image_tag("/assets/Thumbs_down_font_awesome.svg", size: "20x20", alt: "Thumbs down", id: "crypto_working_enough") %>
-    </div>
+    <%= render(partial: "status_chooser",
+                locals: {criteria: "crypto_working"}.merge({f: f}) ) %>
     <div class='col-md-9 criteria-desc'>
     <span>Security mechanisms MUST NOT on depend cryptographic algorithms that are broken
           or have too-short key lengths (e.g., MD4, MD5, single DES, or RC4).
@@ -1114,18 +655,8 @@
 
     <hr>
     <div class="row">
-    <div class="col-md-3 criteria-radio">
-     <%= f.label :crypto_pfs_status do %>
-       <%= f.radio_button :crypto_pfs_status, 'Met'%> Met
-     <% end %>
-     <%= f.label :crypto_pfs_status do %>
-       <%= f.radio_button :crypto_pfs_status, 'Unmet'%> Unmet
-     <% end %>
-     <%= f.label :crypto_pfs_status do %>
-       <%= f.radio_button :crypto_pfs_status, '?', :checked => true %> &nbsp;?&nbsp;
-     <% end %>
-     <%= image_tag("/assets/Thumbs_down_font_awesome.svg", size: "20x20", alt: "Thumbs down", id: "crypto_pfs_enough") %>
-    </div>
+    <%= render(partial: "status_chooser",
+                locals: {criteria: "crypto_pfs"}.merge({f: f}) ) %>
     <div class='col-md-9 criteria-desc'>
     <span>Any key agreement protocol SHOULD implement perfect forward secrecy so a session key
           derived from a set of long-term keys cannot be compromised if one of the long-term keys
@@ -1136,18 +667,8 @@
 
     <hr>
     <div class="row">
-    <div class="col-md-3 criteria-radio">
-     <%= f.label :crypto_password_storage_status do %>
-       <%= f.radio_button :crypto_password_storage_status, 'Met'%> Met
-     <% end %>
-     <%= f.label :crypto_password_storage_status do %>
-       <%= f.radio_button :crypto_password_storage_status, 'Unmet'%> Unmet
-     <% end %>
-     <%= f.label :crypto_password_storage_status do %>
-       <%= f.radio_button :crypto_password_storage_status, '?', :checked => true %> &nbsp;?&nbsp;
-     <% end %>
-     <%= image_tag("/assets/Thumbs_down_font_awesome.svg", size: "20x20", alt: "Thumbs down", id: "crypto_password_storage_enough") %>
-    </div>
+    <%= render(partial: "status_chooser",
+                locals: {criteria: "crypto_password_storage"}.merge({f: f}) ) %>
     <div class='col-md-9 criteria-desc'>
     <span>If passwords for later authentication are stored, they MUST be stored as
           iterated hashes with per-user salt. <sup>[crypto-password-storage]</sup></span>
@@ -1157,18 +678,8 @@
 
     <hr>
     <div class="row">
-    <div class="col-md-3 criteria-radio">
-     <%= f.label :crypto_random_status do %>
-       <%= f.radio_button :crypto_random_status, 'Met'%> Met
-     <% end %>
-     <%= f.label :crypto_random_status do %>
-       <%= f.radio_button :crypto_random_status, 'Unmet'%> Unmet
-     <% end %>
-     <%= f.label :crypto_random_status do %>
-       <%= f.radio_button :crypto_random_status, '?', :checked => true %> &nbsp;?&nbsp;
-     <% end %>
-     <%= image_tag("/assets/Thumbs_down_font_awesome.svg", size: "20x20", alt: "Thumbs down", id: "crypto_random_enough") %>
-    </div>
+    <%= render(partial: "status_chooser",
+                locals: {criteria: "crypto_random"}.merge({f: f}) ) %>
     <div class='col-md-9 criteria-desc'>
     <span>All keys and nonces MUST be generated using cryptographically random functions,
           and not through non-cryptographically random functions. <sup>[crypto-random]</sup></span>
@@ -1183,18 +694,8 @@
     <br><br>
     <h3><i>Secured delivery against man-in-the-middle (MITM) attacks</i></h3>
     <div class="row">
-    <div class="col-md-3 criteria-radio">
-     <%= f.label :delivery_mitm_status do %>
-       <%= f.radio_button :delivery_mitm_status, 'Met'%> Met
-     <% end %>
-     <%= f.label :delivery_mitm_status do %>
-       <%= f.radio_button :delivery_mitm_status, 'Unmet'%> Unmet
-     <% end %>
-     <%= f.label :delivery_mitm_status do %>
-       <%= f.radio_button :delivery_mitm_status, '?', :checked => true %> &nbsp;?&nbsp;
-     <% end %>
-     <%= image_tag("/assets/Thumbs_down_font_awesome.svg", size: "20x20", alt: "Thumbs down", id: "delivery_mitm_enough") %>
-    </div>
+    <%= render(partial: "status_chooser",
+                locals: {criteria: "delivery_mitm"}.merge({f: f}) ) %>
     <div class='col-md-9 criteria-desc'>
     <span>The project MUST use a delivery mechanism that counters MITM attacks.
           Using https or ssh+scp is acceptable. An even stronger mechanism is releasing
@@ -1207,18 +708,8 @@
 
     <hr>
     <div class="row">
-    <div class="col-md-3 criteria-radio">
-     <%= f.label :delivery_unsigned_status do %>
-       <%= f.radio_button :delivery_unsigned_status, 'Met'%> Met
-     <% end %>
-     <%= f.label :delivery_unsigned_status do %>
-       <%= f.radio_button :delivery_unsigned_status, 'Unmet'%> Unmet
-     <% end %>
-     <%= f.label :delivery_unsigned_status do %>
-       <%= f.radio_button :delivery_unsigned_status, '?', :checked => true %> &nbsp;?&nbsp;
-     <% end %>
-     <%= image_tag("/assets/Thumbs_down_font_awesome.svg", size: "20x20", alt: "Thumbs down", id: "delivery_unsigned_enough") %>
-    </div>
+    <%= render(partial: "status_chooser",
+                locals: {criteria: "delivery_unsigned"}.merge({f: f}) ) %>
     <div class='col-md-9 criteria-desc'>
     <span>A cryptographic hash (e.g., a sha1sum) MUST NOT be retrieved over http and
           used without checking for a cryptographic signature, since these hashes
@@ -1230,18 +721,8 @@
 
     <h3><i>Publicly-known vulnerabilities fixed</i></h3>
     <div class="row">
-    <div class="col-md-3 criteria-radio">
-     <%= f.label :vulnerabilities_fixed_60_days_status do %>
-       <%= f.radio_button :vulnerabilities_fixed_60_days_status, 'Met'%> Met
-     <% end %>
-     <%= f.label :vulnerabilities_fixed_60_days_status do %>
-       <%= f.radio_button :vulnerabilities_fixed_60_days_status, 'Unmet'%> Unmet
-     <% end %>
-     <%= f.label :vulnerabilities_fixed_60_days_status do %>
-       <%= f.radio_button :vulnerabilities_fixed_60_days_status, '?', :checked => true %> &nbsp;?&nbsp;
-     <% end %>
-     <%= image_tag("/assets/Thumbs_down_font_awesome.svg", size: "20x20", alt: "Thumbs down", id: "vulnerabilities_fixed_60_days_enough") %>
-    </div>
+    <%= render(partial: "status_chooser",
+                locals: {criteria: "vulnerabilities_fixed_60_days"}.merge({f: f}) ) %>
     <div class='col-md-9 criteria-desc'>
     <span>There MUST be no unpatched vulnerabilities of medium or high severity that
           have been publicly known for more than 60 days. The vulnerability must be patched and
@@ -1258,18 +739,8 @@
 
     <hr>
     <div class="row">
-    <div class="col-md-3 criteria-radio">
-     <%= f.label :vulnerabilities_critical_fixed_status do %>
-       <%= f.radio_button :vulnerabilities_critical_fixed_status, 'Met'%> Met
-     <% end %>
-     <%= f.label :vulnerabilities_critical_fixed_status do %>
-       <%= f.radio_button :vulnerabilities_critical_fixed_status, 'Unmet'%> Unmet
-     <% end %>
-     <%= f.label :vulnerabilities_critical_fixed_status do %>
-       <%= f.radio_button :vulnerabilities_critical_fixed_status, '?', :checked => true %> &nbsp;?&nbsp;
-     <% end %>
-     <%= image_tag("/assets/Thumbs_down_font_awesome.svg", size: "20x20", alt: "Thumbs down", id: "vulnerabilities_critical_fixed_enough") %>
-    </div>
+    <%= render(partial: "status_chooser",
+                locals: {criteria: "vulnerabilities_critical_fixed"}.merge({f: f}) ) %>
     <div class='col-md-9 criteria-desc'>
     <span>Projects SHOULD fix all critical vulnerabilities rapidly after they
           are reported. <sup>[vulnerabilities-critical-fixed]</sup></span>
@@ -1291,18 +762,8 @@
     <h3><i>Static code analysis</i></h3>
 
      <div class="row">
-     <div class="col-md-3 criteria-radio">
-      <%= f.label :static_analysis_status do %>
-        <%= f.radio_button :static_analysis_status, 'Met'%> Met
-      <% end %>
-      <%= f.label :static_analysis_status do %>
-        <%= f.radio_button :static_analysis_status, 'Unmet'%> Unmet
-      <% end %>
-      <%= f.label :static_analysis_status do %>
-        <%= f.radio_button :static_analysis_status, '?', :checked => true %> &nbsp;?&nbsp;
-      <% end %>
-      <%= image_tag("/assets/Thumbs_down_font_awesome.svg", size: "20x20", alt: "Thumbs down", id: "static_analysis_enough") %>
-     </div>
+     <%= render(partial: "status_chooser",
+                locals: {criteria: "static_analysis"}.merge({f: f}) ) %>
      <div class='col-md-9 criteria-desc'>
      <span>At least one static code analysis tool MUST be applied to any proposed major production
            release of the software before its release, if there is at least one OSS tool that
@@ -1322,18 +783,8 @@
 
      <hr>
      <div class="row">
-     <div class="col-md-3 criteria-radio">
-      <%= f.label :static_analysis_common_vulnerabilities_status do %>
-        <%= f.radio_button :static_analysis_common_vulnerabilities_status, 'Met'%> Met
-      <% end %>
-      <%= f.label :static_analysis_common_vulnerabilities_status do %>
-        <%= f.radio_button :static_analysis_common_vulnerabilities_status, 'Unmet'%> Unmet
-      <% end %>
-      <%= f.label :static_analysis_common_vulnerabilities_status do %>
-        <%= f.radio_button :static_analysis_common_vulnerabilities_status, '?', :checked => true %> &nbsp;?&nbsp;
-      <% end %>
-     <%= image_tag("/assets/Thumbs_down_font_awesome.svg", size: "20x20", alt: "Thumbs down", id: "static_analysis_common_vulnerabilities_enough") %>
-     </div>
+     <%= render(partial: "status_chooser",
+                locals: {criteria: "static_analysis_common_vulnerabilities"}.merge({f: f}) ) %>
      <div class='col-md-9 criteria-desc'>
      <span>It is SUGGESTED that the tool include rules or approaches to look for
            common vulnerabilities in the analyzed language or environment.
@@ -1344,18 +795,8 @@
 
      <hr>
      <div class="row">
-     <div class="col-md-3 criteria-radio">
-      <%= f.label :static_analysis_fixed_status do %>
-        <%= f.radio_button :static_analysis_fixed_status, 'Met'%> Met
-      <% end %>
-      <%= f.label :static_analysis_fixed_status do %>
-        <%= f.radio_button :static_analysis_fixed_status, 'Unmet'%> Unmet
-      <% end %>
-      <%= f.label :static_analysis_fixed_status do %>
-        <%= f.radio_button :static_analysis_fixed_status, '?', :checked => true %> &nbsp;?&nbsp;
-      <% end %>
-      <%= image_tag("/assets/Thumbs_down_font_awesome.svg", size: "20x20", alt: "Thumbs down", id: "static_analysis_fixed_enough") %>
-     </div>
+     <%= render(partial: "status_chooser",
+                locals: {criteria: "static_analysis_fixed"}.merge({f: f}) ) %>
      <div class='col-md-9 criteria-desc'>
      <span>All confirmed medium and high severity exploitable vulnerabilities discovered with static code analysis MUST be fixed.
            A vulnerability is medium to high severity if its CVSS 2.0 is 4 or higher.
@@ -1366,18 +807,8 @@
 
      <hr>
      <div class="row">
-     <div class="col-md-3 criteria-radio">
-      <%= f.label :static_analysis_often_status do %>
-        <%= f.radio_button :static_analysis_often_status, 'Met'%> Met
-      <% end %>
-      <%= f.label :static_analysis_often_status do %>
-        <%= f.radio_button :static_analysis_often_status, 'Unmet'%> Unmet
-      <% end %>
-      <%= f.label :static_analysis_often_status do %>
-        <%= f.radio_button :static_analysis_often_status, '?', :checked => true %> &nbsp;?&nbsp;
-      <% end %>
-      <%= image_tag("/assets/Thumbs_down_font_awesome.svg", size: "20x20", alt: "Thumbs down", id: "static_analysis_often_enough") %>
-     </div>
+     <%= render(partial: "status_chooser",
+                locals: {criteria: "static_analysis_often"}.merge({f: f}) ) %>
      <div class='col-md-9 criteria-desc'>
      <span>It is SUGGESTED that static source code analysis occur on every commit or at least daily.
            <sup>[static-analysis-often]</sup></span>
@@ -1389,18 +820,8 @@
      <h3><i>Dynamic analysis</i></h3>
 
       <div class="row">
-      <div class="col-md-3 criteria-radio">
-       <%= f.label :dynamic_analysis_status do %>
-         <%= f.radio_button :dynamic_analysis_status, 'Met'%> Met
-       <% end %>
-       <%= f.label :dynamic_analysis_status do %>
-         <%= f.radio_button :dynamic_analysis_status, 'Unmet'%> Unmet
-       <% end %>
-       <%= f.label :dynamic_analysis_status do %>
-         <%= f.radio_button :dynamic_analysis_status, '?', :checked => true %> &nbsp;?&nbsp;
-       <% end %>
-      <%= image_tag("/assets/Thumbs_down_font_awesome.svg", size: "20x20", alt: "Thumbs down", id: "dynamic_analysis_enough") %>
-      </div>
+      <%= render(partial: "status_chooser",
+                 locals: {criteria: "dynamic_analysis"}.merge({f: f}) ) %>
       <div class='col-md-9 criteria-desc'>
       <span>At least one dynamic analysis tool MUST be applied to any proposed major production
             release of the software before its release. A dynamic analysis tool examines the software
@@ -1415,18 +836,8 @@
 
       <hr>
       <div class="row">
-      <div class="col-md-3 criteria-radio">
-       <%= f.label :dynamic_analysis_unsafe_status do %>
-         <%= f.radio_button :dynamic_analysis_unsafe_status, 'Met'%> Met
-       <% end %>
-       <%= f.label :dynamic_analysis_unsafe_status do %>
-         <%= f.radio_button :dynamic_analysis_unsafe_status, 'Unmet'%> Unmet
-       <% end %>
-       <%= f.label :dynamic_analysis_unsafe_status do %>
-         <%= f.radio_button :dynamic_analysis_unsafe_status, '?', :checked => true %> &nbsp;?&nbsp;
-       <% end %>
-      <%= image_tag("/assets/Thumbs_down_font_awesome.svg", size: "20x20", alt: "Thumbs down", id: "dynamic_analysis_unsafe_enough") %>
-      </div>
+      <%= render(partial: "status_chooser",
+                 locals: {criteria: "dynamic_analysis_unsafe"}.merge({f: f}) ) %>
       <div class='col-md-9 criteria-desc'>
       <span>It is SUGGESTED that if the software is application-level software written
             using a memory-unsafe language (such as C or C++) then at least one tool to
@@ -1440,18 +851,8 @@
 
       <hr>
       <div class="row">
-      <div class="col-md-3 criteria-radio">
-       <%= f.label :dynamic_analysis_enable_assertions_status do %>
-         <%= f.radio_button :dynamic_analysis_enable_assertions_status, 'Met'%> Met
-       <% end %>
-       <%= f.label :dynamic_analysis_enable_assertions_status do %>
-         <%= f.radio_button :dynamic_analysis_enable_assertions_status, 'Unmet'%> Unmet
-       <% end %>
-       <%= f.label :dynamic_analysis_enable_assertions_status do %>
-         <%= f.radio_button :dynamic_analysis_enable_assertions_status, '?', :checked => true %> &nbsp;?&nbsp;
-       <% end %>
-      <%= image_tag("/assets/Thumbs_down_font_awesome.svg", size: "20x20", alt: "Thumbs down", id: "dynamic_analysis_enable_assertions_enough") %>
-      </div>
+      <%= render(partial: "status_chooser",
+                 locals: {criteria: "dynamic_analysis_enable_assertions"}.merge({f: f}) ) %>
       <div class='col-md-9 criteria-desc'>
       <span>It is SUGGESTED that the software include many run-time assertions
             that are checked during dynamic analysis.
@@ -1462,18 +863,8 @@
 
       <hr>
       <div class="row">
-      <div class="col-md-3 criteria-radio">
-       <%= f.label :dynamic_analysis_fixed_status do %>
-         <%= f.radio_button :dynamic_analysis_fixed_status, 'Met'%> Met
-       <% end %>
-       <%= f.label :dynamic_analysis_fixed_status do %>
-         <%= f.radio_button :dynamic_analysis_fixed_status, 'Unmet'%> Unmet
-       <% end %>
-       <%= f.label :dynamic_analysis_fixed_status do %>
-         <%= f.radio_button :dynamic_analysis_fixed_status, '?', :checked => true %> &nbsp;?&nbsp;
-       <% end %>
-      <%= image_tag("/assets/Thumbs_down_font_awesome.svg", size: "20x20", alt: "Thumbs down", id: "dynamic_analysis_fixed_enough") %>
-      </div>
+      <%= render(partial: "status_chooser",
+                 locals: {criteria: "dynamic_analysis_fixed"}.merge({f: f}) ) %>
       <div class='col-md-9 criteria-desc'>
       <span>The analysis tool(s) MAY be focused on looking for security vulnerabilities, but this is not required.<br>
             All confirmed medium and high severity exploitable vulnerabilities discovered

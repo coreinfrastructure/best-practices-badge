@@ -23,90 +23,64 @@
       <%= f.text_field :repo_url, class:"form-control", hide_label: true, placeholder:'Project Repo URL' %>
 
     <h3><i>Basic Project Website Content</i></h3>
-    <div class="row">
-      <%= render(partial: "status_chooser",
-                 locals: {criteria: "description_sufficient", f: f}) %>
-      <div class='col-md-9 criteria-desc'>
-         <span>The project website MUST succinctly describe what the software does
-               (what problem does it solve?), in language that potential users can
-               understand (e.g., it uses minimal jargon). <sup>[description-sufficient]</sup></span>
-
-         <%= f.text_field :description_sufficient_justification, class:"form-control", hide_label: true, placeholder:'Please explain' %>
-      </div>
-      </div>
-
-      <hr>
-      <div class="row">
-      <%= render(partial: "status_chooser",
-                 locals: {criteria: "interact", f: f}) %>
-      <div class="col-md-9 criteria-desc">
-         <span>The project website MUST provide information on how to: obtain,provide feedback
-              (as bug reports or enhancements), and contribute to the sofware. <sup>[interact]</sup></span>
-         <%= f.text_field :interact_justification, class:"form-control", hide_label: true, placeholder:'Please explain' %>
-      </div>
-      </div>
+      <%= render(partial: "status_chooser", locals: {f: f,
+              criteria: "description_sufficient", desc: %{
+The project website MUST succinctly describe what the software does
+(what problem does it solve?), in language that potential users can
+understand (e.g., it uses minimal jargon).
+}}) %>
       <hr>
 
-      <div class="row">
-      <%= render(partial: "status_chooser",
-                 locals: {criteria: "contribution", f: f}) %>
-      <div class='col-md-9 criteria-desc'>
-         <span>The project website MUST provide information on how to: obtain,provide feedback
-              (as bug reports or enhancements), and contribute to the sofware. <sup>[contribution]</sup></span>
-         <%= f.text_field :contribution_justification, class:"form-control", hide_label: true, placeholder:'Please explain' %>
-      </div>
-      </div>
+      <%= render(partial: "status_chooser", locals: {f: f,
+              criteria: "interact", desc: %{
+The project website MUST provide information on how to: obtain,provide feedback
+(as bug reports or enhancements), and contribute to the sofware.
+}}) %>
       <hr>
 
-      <div class="row">
-      <%= render(partial: "status_chooser",
-                 locals: {criteria: "contribution_criteria", f: f}) %>
-      <div class='col-md-9 criteria-desc'>
-         <span>The project website MUST provide information on how to: obtain, provide feedback
-              (as bug reports or enhancements), and contribute to the sofware. <sup>[contribution-criteria]</sup></span>
-         <%= f.text_field :contribution_criteria_justification, class:"form-control", hide_label: true, placeholder:'Please explain' %>
-      </div>
-      </div>
+      <%= render(partial: "status_chooser", locals: {f: f,
+              criteria: "contribution", desc: %{
+The project website MUST provide information on how to: obtain,provide feedback
+(as bug reports or enhancements), and contribute to the sofware.
+}}) %>
+      <hr>
+
+      <%= render(partial: "status_chooser", locals: {f: f,
+              criteria: "contribution_criteria", desc: %{
+The project website MUST provide information on how to: obtain, provide feedback
+(as bug reports or enhancements), and contribute to the sofware. <sup>[contribution-criteria]
+}}) %>
       <br><br>
 
       <h3><i>OSS License</i></h3>
       <span>What license(s) is the project released under?</span>
       <%= f.text_field :license, class:"form-control", hide_label: true, placeholder:'OSS License' %>
       <br>
-
-       <hr>
-       <div class="row">
-       <%= render(partial: "status_chooser",
-                  locals: {criteria: "oss_license", f: f}) %>
-       <div class='col-md-9 criteria-desc'>
-       <span>The software MUST be released as OSS. For our purposes, this means that the license MUST be at least one of the following:
-          an approved license by the Open Source Initiative (OSI)
-          a free license as approved by the Free Software Foundation (FSF)
-          a free license acceptable to Debian main
-          a "good" license according to Fedora. <sup>[oss-license]</sup></span>
-       <%= f.text_field :oss_license_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
-      </div>
-      </div>
        <hr>
 
-       <div class="row">
-       <%= render(partial: "status_chooser",
-                  locals: {criteria: "oss_license_osi", f: f}) %>
-      <div class='col-md-9 criteria-desc'>
-      <span>It is SUGGESTED that any required license(s) be OSI-approved. <sup>[oss-license-osi]</sup> </span>
-      <%= f.text_field :oss_license_osi_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
-      </div>
-      </div>
-      <br>
-       <div class="row">
-       <%= render(partial: "status_chooser",
-                  locals: {criteria: "license_location", f: f}) %>
-       <div class='col-md-9 criteria-desc'>
-          <span>License(s) MUST be posted in a standard location (e.g., as a top-level file named LICENSE or COPYING).
-             License filenames MAY be followed by an extension such as ".txt" or ".md") <sup>[license-location]</sup></span>
-          <%= f.text_field :license_location_justification, class:"form-control", hide_label: true, placeholder:'Please explain' %>
-       </div>
-       </div>
+       <%= render(partial: "status_chooser", locals: {f: f,
+               criteria: "oss_license", desc: %{
+The software MUST be released as OSS. For our purposes, this means that the license MUST be at least one of the following:
+an approved license by the Open Source Initiative (OSI)
+a free license as approved by the Free Software Foundation (FSF)
+a free license acceptable to Debian main
+a "good" license according to Fedora. <sup>[oss-license]
+}}) %>
+       <hr>
+
+       <%= render(partial: "status_chooser", locals: {f: f,
+               criteria: "oss_license_osi", desc: %{
+It is SUGGESTED that any required license(s) be OSI-approved.
+}}) %>
+       <hr>
+
+
+       <%= render(partial: "status_chooser", locals: {f: f,
+               criteria: "license_location", desc: %{
+License(s) MUST be posted in a standard location (e.g., as a top-level file named LICENSE or COPYING).
+License filenames MAY be followed by an extension such as ".txt" or ".md")
+}}) %>
+
       <br>
       <span class='criteria-desc'><b>Note</b>: We intend for the automated tool to focus on identifying common OSS licenses such as:
         CC0, MIT, BSD 2-clause, BSD 3-clause revised, Apache 2.0, Lesser GNU General Public License (LGPL),
@@ -121,80 +95,55 @@
       <br><br>
       <h3><i>Documentation</i></h3>
 
-      <div class="row">
-      <%= render(partial: "status_chooser",
-                 locals: {criteria: "documentation_basics", f: f}) %>
-      <div class='col-md-9 criteria-desc'>
-      <span>The project MUST provide basic documentation for the software in some media (such as text or video) that includes:
-            how to install it, how to start it, how to use it (possibly with a tutorial using examples), and
-            how to use it securely (e.g., what to do and what not to do) if that is an appropriate topic for the software.
-            The security documentation need not be long (it is better for the software to be designed to be secure by default).
-            <sup>[documentation-basics]</sup></span>
-      <%= f.text_field :documentation_basics_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
-      </div>
-      </div>
-
+      <%= render(partial: "status_chooser", locals: {f: f,
+              criteria: "documentation_basics", desc: %{
+The project MUST provide basic documentation for the software in some media (such as text or video) that includes:
+how to install it, how to start it, how to use it (possibly with a tutorial using examples), and
+how to use it securely (e.g., what to do and what not to do) if that is an appropriate topic for the software.
+The security documentation need not be long (it is better for the software to be designed to be secure by default).
+}}) %>
       <hr>
-      <div class="row">
-      <%= render(partial: "status_chooser",
-                 locals: {criteria: "documentation_interface", f: f}) %>
-     <div class='col-md-9 criteria-desc'>
-     <span>The project MUST include reference documentation that describes its interface.
-           <sup>[documentation-interface]</sup></span>
-     <%= f.text_field :documentation_interface_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
-     <br>
-     <!--span>The project MAY use hypertext links to non-project material as documentation,
-           as long as the linked-to information is available and meets the requirements.</span-->
-     </div>
-     </div>
+
+      <%= render(partial: "status_chooser", locals: {f: f,
+              criteria: "documentation_interface", desc: %{
+The project MUST include reference documentation that describes its interface.
+(The project MAY use hypertext links to non-project material as the included
+documentation,
+as long as the linked-to information is available and meets the requirements.)
+}}) %>
 
       <br><br><br>
+
       <h2 class="center h2">Change Control</h2>
       <h3><i>Public version-controlled source repository</i></h3>
 
-       <div class="row">
-       <%= render(partial: "status_chooser",
-                  locals: {criteria: "repo_url", f: f}) %>
-       <div class='col-md-9 criteria-desc'>
-       <span>The project MUST have a version-controlled source repository that is publicly readable and has
-             a URL (the URL MAY be the same as the project URL). <sup>[repo-url]</sup></span>
-       <%= f.text_field :repo_url_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
-       </div>
-       </div>
-
+       <%= render(partial: "status_chooser", locals: {f: f,
+               criteria: "repo_url", desc: %{
+The project MUST have a version-controlled source repository that is publicly readable and has a URL (the URL MAY be the same as the project URL).
+}}) %>
       <hr>
-      <div class="row">
-      <%= render(partial: "status_chooser",
-                  locals: {criteria: "repo_track", f: f}) %>
-      <div class='col-md-9 criteria-desc'>
-      <span>The source repository MUST track what changes were made, who made the changes,
-            and when the changes were made. <sup>[repo-track]</sup></span>
-      <%= f.text_field :repo_track_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
-      </div>
-      </div>
 
+      <%= render(partial: "status_chooser", locals: {f: f,
+               criteria: "repo_track", desc: %{
+The source repository MUST track what changes were made, who made the changes,
+and when the changes were made.
+}}) %>
       <hr>
-      <div class="row">
-      <%= render(partial: "status_chooser",
-                  locals: {criteria: "repo_interim", f: f}) %>
-      <div class='col-md-9 criteria-desc'>
-      <span>The source repository MUST include interim versions for review between releases;
-            it MUST NOT include only final releases. <sup>[repo-interim]</sup> </span>
-      <%= f.text_field :repo_interim_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
-      </div>
-      </div>
 
+      <%= render(partial: "status_chooser", locals: {f: f,
+               criteria: "repo_interim", desc: %{
+The source repository MUST include interim versions for review between releases;
+it MUST NOT include only final releases.
+}}) %>
       <hr>
-      <div class="row">
-      <%= render(partial: "status_chooser",
-                  locals: {criteria: "repo_distributed", f: f}) %>
-      <div class='col-md-9 criteria-desc'>
-        <span>It is SUGGESTED that common distributed version control software is used (e.g., git).
-            Git is not specifically required and projects can use centralized version control software
-            (such as subversion) with justification. <sup>[repo-distributed]</sup> </span>
-        <%= f.text_field :repo_distributed_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
-      </div>
-      </div>
+
+      <%= render(partial: "status_chooser", locals: {f: f,
+               criteria: "repo_distributed", desc: %{
+It is SUGGESTED that common distributed version control software is used (e.g., git).
+Git is not specifically required and projects can use centralized version control software
+(such as subversion) with justification.
+}}) %>
+
       <br>
       TODO: ??? Add radio buttons here.
       <br>
@@ -209,66 +158,47 @@
       <br><br>
       <h3><i>Version numbering</i></h3>
 
-      <div class="row">
-      <%= render(partial: "status_chooser",
-                  locals: {criteria: "version_unique", f: f}) %>
-      <div class='col-md-9 criteria-desc'>
-      <span>The project MUST have a unique version number for each release intended
-            to be used by users. <sup>[version-unique]</sup></span>
-      <%= f.text_field :version_unique_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
-      </div>
-      </div>
+      <%= render(partial: "status_chooser", locals: {f: f,
+               criteria: "version_unique", desc: %{
+The project MUST have a unique version number for each release intended
+to be used by users.
+}}) %>
 
-      <div class="row">
-      <%= render(partial: "status_chooser",
-                  locals: {criteria: "version_semver", f: f}) %>
-      <div class='col-md-9 criteria-desc'>
-      <span>It is SUGGESTED that the Semantic Versioning (SemVer) format is
-            used for releases. <sup>[version-semver]</sup></span><br>
-      <%= f.text_field :version_semver_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
-      <span>Commit IDs (or similar) MAY be used as as version numbers. They are unique, but note that these can
-            cause problems for users as they may not be able to determine whether or not they're up-to-date.</span>
-      </div>
-      </div>
-
+      <%= render(partial: "status_chooser", locals: {f: f,
+               criteria: "version_semver", desc: %{
+It is SUGGESTED that the Semantic Versioning (SemVer) format is
+used for releases.
+Commit IDs (or similar) MAY be used as as version numbers. They are unique, but note that these can
+cause problems for users as they may not be able to determine whether or not they're up-to-date.
+}}) %>
       <hr>
-      <div class="row">
-      <%= render(partial: "status_chooser",
-                  locals: {criteria: "version_tags", f: f}) %>
-      <div class='col-md-9 criteria-desc'>
-      <span>It is SUGGESTED that projects identify each release within their version control system.
-            For example, it is SUGGESTED that those using git identify each
-            release using git tags. <sup>[version-tags]</sup></span>
-      <%= f.text_field :version_tags_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
-      </div>
-      </div>
+
+      <%= render(partial: "status_chooser", locals: {f: f,
+               criteria: "version_tags", desc: %{
+It is SUGGESTED that projects identify each release within their version control system.
+For example, it is SUGGESTED that those using git identify each
+release using git tags.
+}}) %>
 
       <br><br>
       <h3><i>ChangeLog</i></h3>
-      <div class="row">
-      <%= render(partial: "status_chooser",
-                  locals: {criteria: "changelog", f: f}) %>
-      <div class='col-md-9 criteria-desc'>
-      <span>The project MUST provide a "ChangeLog" (a human-readable summary of major changes in each release).
-            The ChangeLog MUST NOT be the output of the version control log of every change
-            (e.g., the "git log" command is not a ChangeLog). <sup>[changelog]</sup></span>
-      <%= f.text_field :changelog_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
-      </div>
-      </div>
 
+      <%= render(partial: "status_chooser", locals: {f: f,
+               criteria: "changelog", desc: %{
+The project MUST provide a "ChangeLog" (a human-readable summary of major changes in each release).
+The ChangeLog MUST NOT be the output of the version control log of every change
+(e.g., the "git log" command is not a ChangeLog).
+}}) %>
       <hr>
-      <div class="row">
-      <%= render(partial: "status_chooser",
-                  locals: {criteria: "changelog_vulns", f: f}) %>
-      <div class='col-md-9 criteria-desc'>
-        <span>The ChangeLog MUST identify whether the new release fixes any publicly
-              known vulnerabilities. <sup>[changelog-vulns]</sup></span>
-        <%= f.text_field :changelog_vulns_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
-      </div>
-      </div>
-      <br>
 
-      <span class='criteria-desc'>The ChangeLog MAY implmented in a variety of ways. The ChangeLog MAY be a separate file
+      <%= render(partial: "status_chooser", locals: {f: f,
+               criteria: "changelog_vulns", desc: %{
+The ChangeLog MUST identify whether the new release fixes any publicly
+known vulnerabilities.
+}}) %>
+      <hr>
+
+      <span class='criteria-desc'>The ChangeLog MAY be implemented in a variety of ways. The ChangeLog MAY be a separate file
             (e.g., "ChangeLog" or "changelog") and the filename MAY be followed by an extension such as
             ".txt", ".md", or ".html". The ChangeLog MAY instead use version control system mechanisms
             such as the GitHub Releases workflow.<br>
@@ -279,184 +209,127 @@
       <h2 class="center h2">Reporting</h2>
       <h3><i>Bug-reporting process</i></h3>
 
-      <div class="row">
-      <%= render(partial: "status_chooser",
-                  locals: {criteria: "report_url", f: f}) %>
-      <div class='col-md-9 criteria-desc'>
-      <span>If an issue tracker is used, please provide its URL. <sup>[report-url]</sup></span>
-      <%= f.text_field :report_url_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
-      </div>
-      </div>
-
+      <%= render(partial: "status_chooser", locals: {f: f,
+               criteria: "report_url", desc: %{
+If an issue tracker is used, please provide its URL.
+}}) %>
       <hr>
-      <div class="row">
-      <%= render(partial: "status_chooser",
-                  locals: {criteria: "report_tracker", f: f}) %>
-      <div class='col-md-9 criteria-desc'>
-      <span>It is SUGGESTED that an issue tracker be used for tracking
-            individual issues. <sup>[report-tracker]</sup></span>
-      <%= f.text_field :report_tracker_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
-      </div>
-      </div>
 
+      <%= render(partial: "status_chooser", locals: {f: f,
+               criteria: "report_tracker", desc: %{
+It is SUGGESTED that an issue tracker be used for tracking individual issues.
+}}) %>
       <hr>
-      <div class="row">
-      <%= render(partial: "status_chooser",
-                  locals: {criteria: "report_process", f: f}) %>
-      <div class='col-md-9 criteria-desc'>
-      <span>The project MUST provide a process for users to submit bug reports
-            (e.g., using an issue tracker or a mailing list). <sup>[report-process]</sup></span>
-      <%= f.text_field :report_process_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
-      </div>
-      </div>
 
+      <%= render(partial: "status_chooser", locals: {f: f,
+               criteria: "report_process", desc: %{
+The project MUST provide a process for users to submit bug reports
+(e.g., using an issue tracker or a mailing list).
+}}) %>
       <hr>
-      <div class="row">
-      <%= render(partial: "status_chooser",
-                  locals: {criteria: "report_responses", f: f}) %>
-      <div class='col-md-9 criteria-desc'>
-      <span>Developers MUST respond to most bug reports submitted in the last
-            2-12 months (inclusive); the response need not include a fix. <sup>[report-responses]</sup></span>
-      <%= f.text_field :report_responses_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
-      </div>
-      </div>
 
+      <%= render(partial: "status_chooser", locals: {f: f,
+               criteria: "report_responses", desc: %{
+Developers MUST respond to most bug reports submitted in the last
+2-12 months (inclusive); the response need not include a fix.
+}}) %>
       <hr>
-      <div class="row">
-      <%= render(partial: "status_chooser",
-                  locals: {criteria: "enhancement_responses", f: f}) %>
-      <div class='col-md-9 criteria-desc'>
-      <span>Developers SHOULD respond to most enhancement requests in the last 2-12 months
-            (inclusive). Developers MAY choose not to respond. <sup>[enhancement-responses]</sup></span>
-      <%= f.text_field :enhancement_responses_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
-      </div>
-      </div>
 
+      <%= render(partial: "status_chooser", locals: {f: f,
+               criteria: "enhancement_responses", desc: %{
+Developers SHOULD respond to most enhancement requests in the last 2-12 months
+(inclusive). Developers MAY choose not to respond.
+}}) %>
       <hr>
-      <div class="row">
-      <%= render(partial: "status_chooser",
-                  locals: {criteria: "report_archive", f: f}) %>
-      <div class='col-md-9 criteria-desc'>
-      <span>Reports and responses MUST be archived for later searching. <sup>[report-archive]</sup></span>
-      <%= f.text_field :report_archive_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
-      </div>
-      </div>
+
+      <%= render(partial: "status_chooser", locals: {f: f,
+               criteria: "report_archive", desc: %{
+Reports and responses MUST be archived for later searching.
+}}) %>
 
       <br><br>
 
       <h3><i>Vulnerability report process</i></h3>
-      <div class="row">
-      <%= render(partial: "status_chooser",
-                  locals: {criteria: "vulnerability_report_process", f: f}) %>
-      <div class='col-md-9 criteria-desc'>
-      <span>The project MUST publish the process for reporting vulnerabilities on the project site
-            (e.g., a clearly designated mailing address on https://PROJECTSITE/security, often security@SOMEWHERE);
-            this MAY be the same as its bug reporting process. <sup>[vulnerability-report-process]</sup></span>
-      <%= f.text_field :vulnerability_report_process_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
-      </div>
-      </div>
-
+      <%= render(partial: "status_chooser", locals: {f: f,
+               criteria: "vulnerability_report_process", desc: %{
+The project MUST publish the process for reporting vulnerabilities on the project site
+(e.g., a clearly designated mailing address on https://PROJECTSITE/security, often security@SOMEWHERE);
+this MAY be the same as its bug reporting process.
+}}) %>
       <hr>
-      <div class="row">
-      <%= render(partial: "status_chooser",
-                  locals: {criteria: "vulnerability_report_private", f: f}) %>
-      <div class='col-md-9 criteria-desc'>
-      <span>If private vulnerability reports are supported, the project MUST include how
-            to send the information in a way that is kept private (e.g., a private defect
-            report submitted on the web using TLS or an email encrypted using PGP).
-            If private vulnerability reports are not supported this criterion is
-            automatically met. <sup>[vulnerability-report-private]</sup></span>
-      <%= f.text_field :vulnerability_report_private_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
-      </div>
-      </div>
 
+      <%= render(partial: "status_chooser", locals: {f: f,
+               criteria: "vulnerability_report_private", desc: %{
+If private vulnerability reports are supported, the project MUST include how
+to send the information in a way that is kept private (e.g., a private defect
+report submitted on the web using TLS or an email encrypted using PGP).
+If private vulnerability reports are not supported this criterion is
+automatically met.
+}}) %>
       <hr>
-      <div class="row">
-      <%= render(partial: "status_chooser",
-                  locals: {criteria: "vulnerability_report_response", f: f}) %>
-      <div class='col-md-9 criteria-desc'>
-      <span>The project MUST provide an initial reply to a security vulnerability report
-            sent to the project, on average, less than 7 days within the last 6 months.
-            (If a project is being spammed on its vulnerability report channel,
-            it is okay to only count non-spam messages.) <sup>[vulnerability-report-response]</sup></span>
-      <%= f.text_field :vulnerability_report_response_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
-      </div>
-      </div>
 
-      <br><br><br>
+      <%= render(partial: "status_chooser", locals: {f: f,
+               criteria: "vulnerability_report_response", desc: %{
+The project MUST provide an initial reply to a security vulnerability report
+sent to the project, on average, less than 7 days within the last 6 months.
+(If a project is being spammed on its vulnerability report channel,
+it is okay to only count non-spam messages.)
+}}) %>
+
+     <br><br><br>
      <h2 class="center h2">Quality</h2>
-      <h3><i>Working build system</i></h3>
-      <div class="row">
-      <%= render(partial: "status_chooser",
-                  locals: {criteria: "build", f: f}) %>
-      <div class='col-md-9 criteria-desc'>
-      <span>If the software requires building for use, the project MUST provide a working
-            build system that can automatically rebuild the software from source code.
-            A build system determines what actions need to occur to rebuild the software (and in what order),
-            and then performs those steps.  <sup>[build-status]</sup></span>
-      <%= f.text_field :build_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
-      </div>
-      </div>
+     <h3><i>Working build system</i></h3>
 
+      <%= render(partial: "status_chooser", locals: {f: f,
+               criteria: "build", desc: %{
+If the software requires building for use, the project MUST provide a working
+build system that can automatically rebuild the software from source code.
+A build system determines what actions need to occur to rebuild the software (and in what order), and then performs those steps.
+}}) %>
       <hr>
-      <div class="row">
-      <%= render(partial: "status_chooser",
-                  locals: {criteria: "build_common_tools", f: f}) %>
-      <div class='col-md-9 criteria-desc'>
-      <span>It is SUGGESTED that common tools be used for building the software
-            (e.g., Maven, Ant, cmake, the autotools, make, or rake), in which case
-            only the instructions to the build system are required (there's no requirement
-            to teach people how to use common tools). <sup>[build-common-tools]</sup></span>
-      <%= f.text_field :build_common_tools_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
-      </div>
-      </div>
 
+      <%= render(partial: "status_chooser", locals: {f: f,
+               criteria: "build_common_tools", desc: %{
+It is SUGGESTED that common tools be used for building the software
+(e.g., Maven, Ant, cmake, the autotools, make, or rake), in which case
+only the instructions to the build system are required (there's no requirement
+to teach people how to use common tools).
+}}) %>
       <hr>
-      <div class="row">
-      <%= render(partial: "status_chooser",
-                  locals: {criteria: "build_oss_tools", f: f}) %>
-      <div class='col-md-9 criteria-desc'>
-      <span>The project SHOULD be buildable using only OSS tools. <sup>[build-oss-tools]</sup></span>
-      <%= f.text_field :build_oss_tools_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
-      </div>
-      </div>
+
+      <%= render(partial: "status_chooser", locals: {f: f,
+               criteria: "build_oss_tools", desc: %{
+The project SHOULD be buildable using only OSS tools.
+}}) %>
 
       <span class='criteria-desc'><b>Rationale</b>: If a project needs to be built but there is no working build system,
             then potential co-developers will not be able to easily contribute and many security analysis
             tools will be ineffective. Criteria for a working build system are not applicable if there is
             no need to build anything for use.</span>
+
       <br><br>
+
       <h3><i>Automated test suite</i></h3>
-      <div class="row">
-      <%= render(partial: "status_chooser",
-                  locals: {criteria: "test", f: f}) %>
-      <div class='col-md-9 criteria-desc'>
-      <span>The project MUST have at least one automated test suite. <sup>[test]</sup></span>
-      <%= f.text_field :test_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
-      </div>
-      </div>
 
+      <%= render(partial: "status_chooser", locals: {f: f,
+               criteria: "test", desc: %{
+The project MUST have at least one automated test suite.
+}}) %>
       <hr>
-      <div class="row">
-      <%= render(partial: "status_chooser",
-                  locals: {criteria: "test_invocation", f: f}) %>
-      <div class='col-md-9 criteria-desc'>
-      <span>A test suite SHOULD be invocable in a standard way for that language
-            (e.g., "make check", "mvn test", and so on). <sup>[test-invocation]</sup></span>
-      <%= f.text_field :test_invocation_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
-      </div>
-      </div>
 
+      <%= render(partial: "status_chooser", locals: {f: f,
+               criteria: "test_invocation", desc: %{
+A test suite SHOULD be invocable in a standard way for that language
+(e.g., "make check", "mvn test", and so on).
+}}) %>
       <hr>
-      <div class="row">
-      <%= render(partial: "status_chooser",
-                  locals: {criteria: "test_most", f: f}) %>
-      <div class='col-md-9 criteria-desc'>
-      <span>It is SUGGESTED that the test suite cover most (or ideally all) the code branches,
-            input fields, and functionality. <sup>[test-most]</sup></span>
-      <%= f.text_field :test_most_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
-      </div>
-      </div>
+
+      <%= render(partial: "status_chooser", locals: {f: f,
+               criteria: "test_most", desc: %{
+It is SUGGESTED that the test suite cover most (or ideally all)
+the code branches, input fields, and functionality.
+}}) %>
+
       <br>
       <span class='criteria-desc'>The project MAY have multiple automated test suites
             (e.g., one that runs quickly, vs. another that is more thorough but requires special equipment).<br>
@@ -467,225 +340,167 @@
 
     <br><br>
     <h3><i>New functionality testing</i></h3>
-      <div class="row">
-      <%= render(partial: "status_chooser",
-                  locals: {criteria: "test_policy", f: f}) %>
-      <div class='col-md-9 criteria-desc'>
-      <span>The project MUST have a general policy (formal or not) that as major
-            new functionality is added, tests of that functionality SHOULD
-            be added to an automated test suite. <sup>[test-policy]</sup></span>
-      <%= f.text_field :test_policy_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
-      </div>
-      </div>
 
+      <%= render(partial: "status_chooser", locals: {f: f,
+               criteria: "test_policy", desc: %{
+The project MUST have a general policy (formal or not) that as major
+new functionality is added, tests of that functionality SHOULD
+be added to an automated test suite.
+}}) %>
       <hr>
-      <div class="row">
-      <%= render(partial: "status_chooser",
-                  locals: {criteria: "tests_are_added", f: f}) %>
-      <div class='col-md-9 criteria-desc'>
-      <span>The project MUST have evidence that such tests are being added in
-            the most recent major changes to the project. Major functionality would typically
-            be mentioned in the ChangeLog. (Perfection is not required, merely evidence
-            that tests are typically being added in practice.) <sup>[tests-are-added]</sup></span>
-      <%= f.text_field :tests_are_added_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
-      </div>
-      </div>
 
+      <%= render(partial: "status_chooser", locals: {f: f,
+               criteria: "tests_are_added", desc: %{
+The project MUST have evidence that such tests are being added in
+the most recent major changes to the project. Major functionality would typically
+be mentioned in the ChangeLog. (Perfection is not required, merely evidence
+that tests are typically being added in practice.)
+}}) %>
       <hr>
-      <div class="row">
-      <%= render(partial: "status_chooser",
-                  locals: {criteria: "tests_documented_added", f: f}) %>
-      <div class='col-md-9 criteria-desc'>
-      <span>It is SUGGESTED that this be documented in the instructions for change proposals,
-            but even an informal rule is acceptable as long as the tests are being
-            added in practice. <sup>[tests-documented-added]</sup></span>
-      <%= f.text_field :tests_documented_added_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
-      </div>
-      </div>
+
+      <%= render(partial: "status_chooser", locals: {f: f,
+               criteria: "tests_documented_added", desc: %{
+It is SUGGESTED that this be documented in the instructions for change proposals,
+but even an informal rule is acceptable as long as the tests are being
+added in practice.
+}}) %>
 
     <br><br>
     <h3><i>Warning flags</i></h3>
-      <div class="row">
-      <%= render(partial: "status_chooser",
-                  locals: {criteria: "warnings", f: f}) %>
-      <div class='col-md-9 criteria-desc'>
-      <span>The project MUST enable some compiler warning flagss (e.g. "-Wall"),
-            a "safe" language mode (e.g., "use strict", "use warnings", or similar),
-            and/or use a separate "linter" tool to look for code quality errors or
-            common simple mistakes, if there is at least one OSS tool that can implement
-            this criterion in the selected language. <sup>[warnings]</sup></span>
-      <%= f.text_field :warnings_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
-      </div>
-      </div>
+
+      <%= render(partial: "status_chooser", locals: {f: f,
+               criteria: "warnings", desc: %{
+The project MUST enable some compiler warning flags (e.g. "-Wall"),
+a "safe" language mode (e.g., "use strict", "use warnings", or similar),
+and/or use a separate "linter" tool to look for code quality errors or
+common simple mistakes, if there is at least one OSS tool that can implement
+this criterion in the selected language.
+}}) %>
 
       <hr>
-      <div class="row">
-      <%= render(partial: "status_chooser",
-                  locals: {criteria: "warnings_fixed", f: f}) %>
-      <div class='col-md-9 criteria-desc'>
-      <span>The project MUST address the issues that are found (by fixing them or
-            marking them in the source code as false positives). Ideally there would be no warnings,
-            but a project MAY accept some warnings (typically less than 1 warning
-            per 100 lines or less than 10 warnings). <sup>[warnings-fixed]</sup></span>
-      <%= f.text_field :warnings_fixed_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
-      </div>
-      </div>
-
+      <%= render(partial: "status_chooser", locals: {f: f,
+               criteria: "warnings_fixed", desc: %{
+The project MUST address the issues that are found (by fixing them or
+marking them in the source code as false positives). Ideally there would be no warnings,
+but a project MAY accept some warnings (typically less than 1 warning
+per 100 lines or less than 10 warnings).
+}}) %>
       <hr>
-      <div class="row">
-      <%= render(partial: "status_chooser",
-                  locals: {criteria: "warnings_strict", f: f}) %>
-      <div class='col-md-9 criteria-desc'>
-      <span>It is SUGGESTED that projects be maximally strict, but this is not
-            always practical. <sup>[warnings-strict]</sup></span>
-      <%= f.text_field :warnings_strict_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
-      </div>
-      </div>
+
+      <%= render(partial: "status_chooser", locals: {f: f,
+               criteria: "warnings_strict", desc: %{
+It is SUGGESTED that projects be maximally strict, but this is not
+always practical.
+}}) %>
 
     <br><br><br>
     <h2 class="center h2">Security</h2>
     <h3><i>Secure development knowledge</i></h3>
-    <div class="row">
-    <%= render(partial: "status_chooser",
-                locals: {criteria: "know_secure_design", f: f}) %>
-    <div class='col-md-9 criteria-desc'>
-    <span>At least one of the primary developers MUST know how to design secure software.
-          This requires understanding the following design principles, including the 8 principles from Saltzer and Schroeder:
-          economy of mechanism (keep the design as simple and small as practical, e.g., by adopting sweeping simplifications)
-          fail-safe defaults (access decisions should deny by default)
-          complete mediation (every access that might be limited must be checked for authority and be non-bypassable)
-          open design (security mechanisms should not depend on attacker ignorance of its design, but instead on more easily protected and changed information like keys and passwords)
-          separation of privilege (multi-factor authentication, such as requiring both a password and a hardware token, is stronger than single-factor authentication)
-          least privilege (processes should operate with the least privilege necesssary)
-          least common mechanism (the design should minimize the mechanisms common to more than one user and depended on by all users, e.g., directories for temporary files)
-          psychological acceptability (the human interface must be designed for ease of use - designing for "least astonishment" can help)
-          limited attack surface (the attack surface - the set of the different points where an attacker can try to enter or extract data - should be limited)
-          input validation with whitelists (inputs should typically be checked to determine if they are valid before they are accepted;
-          this validation should use whitelists (which only accept known-good values),
-          not blacklists (which attempt to list known-bad values)) <sup>[know-secure-design]</sup></span>
-    <%= f.text_field :know_secure_design_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
-    </div>
-    </div>
+
+    <%= render(partial: "status_chooser", locals: {f: f,
+             criteria: "know_secure_design", desc: %{
+At least one of the primary developers MUST know how to design secure software.
+This requires understanding the following design principles, including the 8 principles from Saltzer and Schroeder:
+<ul>
+<li>economy of mechanism (keep the design as simple and small as practical, e.g., by adopting sweeping simplifications)
+<li>fail-safe defaults (access decisions should deny by default)
+<li>complete mediation (every access that might be limited must be checked for authority and be non-bypassable)
+<li>open design (security mechanisms should not depend on attacker ignorance of its design, but instead on more easily protected and changed information like keys and passwords)
+<li>separation of privilege (multi-factor authentication, such as requiring both a password and a hardware token, is stronger than single-factor authentication)
+<li>least privilege (processes should operate with the least privilege necesssary)
+<li>least common mechanism (the design should minimize the mechanisms common to more than one user and depended on by all users, e.g., directories for temporary files)
+<li>psychological acceptability (the human interface must be designed for ease of use - designing for "least astonishment" can help)
+<li>limited attack surface (the attack surface - the set of the different points where an attacker can try to enter or extract data - should be limited)
+<li>input validation with whitelists (inputs should typically be checked to determine if they are valid before they are accepted;
+<li>this validation should use whitelists (which only accept known-good values),
+not blacklists (which attempt to list known-bad values))
+</ul>
+}}) %>
 
     <hr>
-    <div class="row">
-    <%= render(partial: "status_chooser",
-                locals: {criteria: "know_common_errors", f: f}) %>
-    <div class='col-md-9 criteria-desc'>
-    <span>At least one of the primary developers MUST know of common kinds of errors that
-          lead to vulnerabilities in this kind of software, as well as at least one method
-          to counter or mitigate each of them. Examples (depending on the type of software)
-          include SQL injection, OS injection, classic buffer overflow, cross-site scripting,
-          missing authentication, and missing authorization. See the CWE/SANS top 25 or OWASP
-          Top 10 for commonly-used lists. <sup>[know-common-errors]</sup></span>
-    <%= f.text_field :know_common_errors_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
-    </div>
-    </div>
-    <br>
-    <span class='criteria-desc'><b>Note: </b>If there is only one developer, by definition that individual is the primary developer.</span>
+    <%= render(partial: "status_chooser", locals: {f: f,
+             criteria: "know_common_errors", desc: %{
+At least one of the primary developers MUST know of common kinds of errors that
+lead to vulnerabilities in this kind of software, as well as at least one method
+to counter or mitigate each of them. Examples (depending on the type of software)
+include SQL injection, OS injection, classic buffer overflow, cross-site scripting,
+missing authentication, and missing authorization. See the CWE/SANS top 25 or OWASP
+Top 10 for commonly-used lists.
+<b>Note: </b>If there is only one developer, by definition that individual is the primary developer.</span>
+}}) %>
 
-    <br><br>
+    <br><br><br>
     <h3><i>Uses basic good cryptographic practices</i></h3>
-    <div class="row">
-    <%= render(partial: "status_chooser",
-                locals: {criteria: "crypto_published", f: f}) %>
-    <div class='col-md-9 criteria-desc'>
-    <span>Cryptographic protocols and algorithms used by default in the software AND
-          the delivery mechanisms MUST be publicly published and reviewed
-          by experts. <sup>[crypto-published]</sup></span>
-    <%= f.text_field :crypto_published_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
-    </div>
-    </div>
 
+    <%= render(partial: "status_chooser", locals: {f: f,
+             criteria: "crypto_published", desc: %{
+Cryptographic protocols and algorithms used by default in the software AND
+the delivery mechanisms MUST be publicly published and reviewed
+by experts.
+}}) %>
     <hr>
-    <div class="row">
-    <%= render(partial: "status_chooser",
-                locals: {criteria: "crypto_call", f: f}) %>
-    <div class='col-md-9 criteria-desc'>
-    <span>Application software that is not itself a cryptographic system/library MUST NOT
-          implement its own cryptographic functions, but MUST instead call on software
-          specifically designed for the purpose. <sup>[crypto-call]</sup></span>
-    <%= f.text_field :crypto_call_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
-    </div>
-    </div>
 
+    <%= render(partial: "status_chooser", locals: {f: f,
+             criteria: "crypto_call", desc: %{
+Application software that is not itself a cryptographic system/library MUST NOT
+implement its own cryptographic functions, but MUST instead call on software
+specifically designed for the purpose.
+}}) %>
     <hr>
-    <div class="row">
-    <%= render(partial: "status_chooser",
-                locals: {criteria: "crypto_oss", f: f}) %>
-    <div class='col-md-9 criteria-desc'>
-    <span>All functionality that depends on cryptography MUST be implementable using
-          OSS because its specification meets the Open Standards Requirement for Software
-          by the Open Source Initiative. <sup>[crypto-oss]</sup></span>
-    <%= f.text_field :crypto_oss_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
-    </div>
-    </div>
 
+    <%= render(partial: "status_chooser", locals: {f: f,
+             criteria: "crypto_oss", desc: %{
+All functionality that depends on cryptography MUST be implementable using
+OSS because its specification meets the Open Standards Requirement for Software
+by the Open Source Initiative.
+}}) %>
     <hr>
-    <div class="row">
-    <%= render(partial: "status_chooser",
-                locals: {criteria: "crypto_keylength", f: f}) %>
-    <div class='col-md-9 criteria-desc'>
-    <span>The default keylengths MUST meet the NIST minimum requirements at least through the year 2030 (as stated in 2012).
-          These minimum bitlengths are: symmetric key 112, factoring modulus 2048, discrete logarithm key 224,
-          discrete logarithmic group 2048, elliptic curve 224, and hash 224. See http://www.keylength.com
-          for a comparison of keylength recommendations from various organizations.
-          The software MUST be configurable so that it will reject smaller keylengths.
-          The software MAY allow smaller keylengths in some configurations (ideally it would not, since this allows
-          downgrade attacks, but shorter keylengths are sometimes necessary for
-          interoperability.) <sup>[crypto-keylength]</sup></span>
-    <%= f.text_field :crypto_keylength_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
-    </div>
-    </div>
 
+    <%= render(partial: "status_chooser", locals: {f: f,
+             criteria: "crypto_keylength", desc: %{
+The default keylengths MUST meet the NIST minimum requirements at least through the year 2030 (as stated in 2012).
+These minimum bitlengths are: symmetric key 112, factoring modulus 2048, discrete logarithm key 224,
+discrete logarithmic group 2048, elliptic curve 224, and hash 224. See http://www.keylength.com
+for a comparison of keylength recommendations from various organizations.
+The software MUST be configurable so that it will reject smaller keylengths.
+The software MAY allow smaller keylengths in some configurations (ideally it would not, since this allows
+downgrade attacks, but shorter keylengths are sometimes necessary for
+interoperability.)
+}}) %>
     <hr>
-    <div class="row">
-    <%= render(partial: "status_chooser",
-                locals: {criteria: "crypto_working", f: f}) %>
-    <div class='col-md-9 criteria-desc'>
-    <span>Security mechanisms MUST NOT on depend cryptographic algorithms that are broken
-          or have too-short key lengths (e.g., MD4, MD5, single DES, or RC4).
-          It is SUGGESTED that SHA-1 not be used (we are well aware that git uses SHA-1).
-          Currently-recommended algorithms include AES and SHA-256/SHA-512. Implementations SHOULD
-          support multiple cryptographic algorithms, so users can quickly switch
-          if one is broken.  <sup>[crypto-working]</sup></span>
-    <%= f.text_field :crypto_working_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
-    </div>
-    </div>
 
+<!-- TODO: Mixed MUST NOT and SUGGESTED and SHOULD -->
+    <%= render(partial: "status_chooser", locals: {f: f,
+             criteria: "crypto_working", desc: %{
+Security mechanisms MUST NOT on depend cryptographic algorithms that are broken
+or have too-short key lengths (e.g., MD4, MD5, single DES, or RC4).
+It is SUGGESTED that SHA-1 not be used (we are well aware that git uses SHA-1).
+Currently-recommended algorithms include AES and SHA-256/SHA-512. Implementations SHOULD
+support multiple cryptographic algorithms, so users can quickly switch
+if one is broken.
+}}) %>
     <hr>
-    <div class="row">
-    <%= render(partial: "status_chooser",
-                locals: {criteria: "crypto_pfs", f: f}) %>
-    <div class='col-md-9 criteria-desc'>
-    <span>Any key agreement protocol SHOULD implement perfect forward secrecy so a session key
-          derived from a set of long-term keys cannot be compromised if one of the long-term keys
-          is compromised in the future. <sup>[crypto-pfs]</sup></span>
-    <%= f.text_field :crypto_pfs_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
-    </div>
-    </div>
 
+    <%= render(partial: "status_chooser", locals: {f: f,
+             criteria: "crypto_pfs", desc: %{
+Any key agreement protocol SHOULD implement perfect forward secrecy so a session key
+derived from a set of long-term keys cannot be compromised if one of the long-term keys
+is compromised in the future.
+}}) %>
     <hr>
-    <div class="row">
-    <%= render(partial: "status_chooser",
-                locals: {criteria: "crypto_password_storage", f: f}) %>
-    <div class='col-md-9 criteria-desc'>
-    <span>If passwords for later authentication are stored, they MUST be stored as
-          iterated hashes with per-user salt. <sup>[crypto-password-storage]</sup></span>
-    <%= f.text_field :crypto_password_storage_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
-    </div>
-    </div>
 
+    <%= render(partial: "status_chooser", locals: {f: f,
+             criteria: "crypto_password_storage", desc: %{
+If passwords for later authentication are stored, they MUST be stored as
+iterated hashes with per-user salt.
+}}) %>
     <hr>
-    <div class="row">
-    <%= render(partial: "status_chooser",
-                locals: {criteria: "crypto_random", f: f}) %>
-    <div class='col-md-9 criteria-desc'>
-    <span>All keys and nonces MUST be generated using cryptographically random functions,
-          and not through non-cryptographically random functions. <sup>[crypto-random]</sup></span>
-    <%= f.text_field :crypto_random_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
-    </div>
-    </div>
+
+    <%= render(partial: "status_chooser", locals: {f: f,
+             criteria: "crypto_random", desc: %{
+All keys and nonces MUST be generated using cryptographically random functions,
+and not through non-cryptographically random functions.
+}}) %>
 
     <br>
     <span class="criteria-desc"><b>Note:</b> These criteria do not always apply because some software
@@ -693,60 +508,44 @@
 
     <br><br>
     <h3><i>Secured delivery against man-in-the-middle (MITM) attacks</i></h3>
-    <div class="row">
-    <%= render(partial: "status_chooser",
-                locals: {criteria: "delivery_mitm", f: f}) %>
-    <div class='col-md-9 criteria-desc'>
-    <span>The project MUST use a delivery mechanism that counters MITM attacks.
-          Using https or ssh+scp is acceptable. An even stronger mechanism is releasing
-          the software with digitally signed packages, since that mitigates attacks on the distribution system,
-          but this only works if the users can be confident that the public keys for signatures are correct
-          and if the users will actually check the signature. <sup>[delivery-mitm]</sup></span>
-    <%= f.text_field :delivery_mitm_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
-    </div>
-    </div>
 
+    <%= render(partial: "status_chooser", locals: {f: f,
+             criteria: "delivery_mitm", desc: %{
+The project MUST use a delivery mechanism that counters MITM attacks.
+Using https or ssh+scp is acceptable. An even stronger mechanism is releasing
+the software with digitally signed packages, since that mitigates attacks on the distribution system,
+but this only works if the users can be confident that the public keys for signatures are correct
+and if the users will actually check the signature.
+}}) %>
     <hr>
-    <div class="row">
-    <%= render(partial: "status_chooser",
-                locals: {criteria: "delivery_unsigned", f: f}) %>
-    <div class='col-md-9 criteria-desc'>
-    <span>A cryptographic hash (e.g., a sha1sum) MUST NOT be retrieved over http and
-          used without checking for a cryptographic signature, since these hashes
-          can be modified in transit. <sup>[delivery-unsigned]</sup></span>
-    <%= f.text_field :delivery_unsigned_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
-    </div>
-    </div>
-    <br><br>
+
+    <%= render(partial: "status_chooser", locals: {f: f,
+             criteria: "delivery_unsigned", desc: %{
+A cryptographic hash (e.g., a sha1sum) MUST NOT be retrieved over http and
+used without checking for a cryptographic signature, since these hashes
+can be modified in transit.
+}}) %>
 
     <h3><i>Publicly-known vulnerabilities fixed</i></h3>
-    <div class="row">
-    <%= render(partial: "status_chooser",
-                locals: {criteria: "vulnerabilities_fixed_60_days", f: f}) %>
-    <div class='col-md-9 criteria-desc'>
-    <span>There MUST be no unpatched vulnerabilities of medium or high severity that
-          have been publicly known for more than 60 days. The vulnerability must be patched and
-          released by the project itself (patches may be developed elsewhere).
-          A vulnerability becomes publicly known (for this purpose) once it has a CVE with
-          publicly released non-paywalled information (reported, for example,
-          in the National Vulnerability Database) or when the project has been informed and the
-          information has been released to the public (possibly by the project). A vulnerability is medium
-          to high severity if its CVSS 2.0 base score is 4 or higher.
-          <sup>[vulnerabilities-fixed-60-days]</sup></span>
-    <%= f.text_field :vulnerabilities_fixed_60_days_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
-    </div>
-    </div>
 
+    <%= render(partial: "status_chooser", locals: {f: f,
+             criteria: "vulnerabilities_fixed_60_days", desc: %{
+There MUST be no unpatched vulnerabilities of medium or high severity that
+have been publicly known for more than 60 days. The vulnerability must be patched and
+released by the project itself (patches may be developed elsewhere).
+A vulnerability becomes publicly known (for this purpose) once it has a CVE with
+publicly released non-paywalled information (reported, for example,
+in the National Vulnerability Database) or when the project has been informed and the
+information has been released to the public (possibly by the project). A vulnerability is medium
+to high severity if its CVSS 2.0 base score is 4 or higher.
+}}) %>
     <hr>
-    <div class="row">
-    <%= render(partial: "status_chooser",
-                locals: {criteria: "vulnerabilities_critical_fixed", f: f}) %>
-    <div class='col-md-9 criteria-desc'>
-    <span>Projects SHOULD fix all critical vulnerabilities rapidly after they
-          are reported. <sup>[vulnerabilities-critical-fixed]</sup></span>
-    <%= f.text_field :vulnerabilities_critical_fixed_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
-    </div>
-    </div>
+
+    <%= render(partial: "status_chooser", locals: {f: f,
+             criteria: "vulnerabilities_critical_fixed", desc: %{
+Projects SHOULD fix all critical vulnerabilities rapidly after they
+are reported.
+}}) %>
     <br>
 
     <span class='criteria-desc'><b>Note</b>: this means that users might be left vulnerable to all attackers
@@ -761,118 +560,85 @@
     <h2 class="center h2">Security Analysis</h2>
     <h3><i>Static code analysis</i></h3>
 
-     <div class="row">
-     <%= render(partial: "status_chooser",
-                locals: {criteria: "static_analysis", f: f}) %>
-     <div class='col-md-9 criteria-desc'>
-     <span>At least one static code analysis tool MUST be applied to any proposed major production
-           release of the software before its release, if there is at least one OSS tool that
-           implement this criterion in the selected language. A static code analysis tool examines
-           the software code (as source code, intermediate code, or executable) without executing it
-           with specific inputs. For purposes of this criterion compiler warnings and "safe" language
-           modes do not count as a static code analysis tool (these typically avoid deep analysis because
-           speed is vital). Examples of such static code analysis tools include cppcheck, the clang static analyzer,
-           FindBugs (including FindSecurityBugs), PMD, Brakeman, Coverity Quality Analyzer,
-           and the HP Fortify Static Code Analyzer.  <sup>[static-analysis]</sup></span>
-     <%= f.text_field :static_analysis_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
-     </div>
-     </div>
+     <%= render(partial: "status_chooser", locals: {f: f,
+             criteria: "static_analysis", desc: %{
+At least one static code analysis tool MUST be applied to any proposed major production
+release of the software before its release, if there is at least one OSS tool that
+implement this criterion in the selected language. A static code analysis tool examines
+the software code (as source code, intermediate code, or executable) without executing it
+with specific inputs. For purposes of this criterion compiler warnings and "safe" language
+modes do not count as a static code analysis tool (these typically avoid deep analysis because
+speed is vital). Examples of such static code analysis tools include cppcheck, the clang static analyzer,
+FindBugs (including FindSecurityBugs), PMD, Brakeman, Coverity Quality Analyzer,
+and the HP Fortify Static Code Analyzer.
+}}) %>
      <br>
+
      <span class='criteria-desc'><b>Note: </b>The analysis tool(s) MAY be focused on looking
                  for security vulnerabilities, but this is not required.</span>
-
      <hr>
-     <div class="row">
-     <%= render(partial: "status_chooser",
-                locals: {criteria: "static_analysis_common_vulnerabilities", f: f}) %>
-     <div class='col-md-9 criteria-desc'>
-     <span>It is SUGGESTED that the tool include rules or approaches to look for
-           common vulnerabilities in the analyzed language or environment.
-           <sup>[static-analysis-common-vulnerabilities]</sup></span>
-     <%= f.text_field :static_analysis_common_vulnerabilities_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
-     </div>
-     </div>
 
+     <%= render(partial: "status_chooser", locals: {f: f,
+             criteria: "static_analysis_common_vulnerabilities", desc: %{
+It is SUGGESTED that the tool include rules or approaches to look for
+common vulnerabilities in the analyzed language or environment.
+}}) %>
      <hr>
-     <div class="row">
-     <%= render(partial: "status_chooser",
-                locals: {criteria: "static_analysis_fixed", f: f}) %>
-     <div class='col-md-9 criteria-desc'>
-     <span>All confirmed medium and high severity exploitable vulnerabilities discovered with static code analysis MUST be fixed.
-           A vulnerability is medium to high severity if its CVSS 2.0 is 4 or higher.
-           <sup>[static-analysis-fixed]</sup></span>
-     <%= f.text_field :static_analysis_fixed_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
-     </div>
-     </div>
 
+     <%= render(partial: "status_chooser", locals: {f: f,
+             criteria: "static_analysis_fixed", desc: %{
+All confirmed medium and high severity exploitable vulnerabilities discovered with static code analysis MUST be fixed.
+A vulnerability is medium to high severity if its CVSS 2.0 is 4 or higher.
+}}) %>
      <hr>
-     <div class="row">
-     <%= render(partial: "status_chooser",
-                locals: {criteria: "static_analysis_often", f: f}) %>
-     <div class='col-md-9 criteria-desc'>
-     <span>It is SUGGESTED that static source code analysis occur on every commit or at least daily.
-           <sup>[static-analysis-often]</sup></span>
-     <%= f.text_field :static_analysis_often_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
-     </div>
-     </div>
-      <br><br>
+
+     <%= render(partial: "status_chooser", locals: {f: f,
+             criteria: "static_analysis_often", desc: %{
+It is SUGGESTED that static source code analysis occur on every commit or at least daily.
+}}) %>
+
+     <br><br>
 
      <h3><i>Dynamic analysis</i></h3>
 
-      <div class="row">
-      <%= render(partial: "status_chooser",
-                 locals: {criteria: "dynamic_analysis", f: f}) %>
-      <div class='col-md-9 criteria-desc'>
-      <span>At least one dynamic analysis tool MUST be applied to any proposed major production
-            release of the software before its release. A dynamic analysis tool examines the software
-            by executing it with specific inputs. For example, the project MAY use a fuzzing tool
-            (e.g., American Fuzzy Lop) or a web application scanner (e.g., OWASP ZAP or w3af).
-            For purposes of this criterion the dynamic analysis tool MUST vary the inputs in some way to
-            look for various kinds of problems or be an automated test suite with at
-            least 80% branch coverage. <sup>[dynamic-analysis]</sup></span>
-      <%= f.text_field :dynamic_analysis_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
-      </div>
-      </div>
-
+      <%= render(partial: "status_chooser", locals: {f: f,
+              criteria: "dynamic_analysis", desc: %{
+At least one dynamic analysis tool MUST be applied to any proposed major production
+release of the software before its release. A dynamic analysis tool examines the software
+by executing it with specific inputs. For example, the project MAY use a fuzzing tool
+(e.g., American Fuzzy Lop) or a web application scanner (e.g., OWASP ZAP or w3af).
+For purposes of this criterion the dynamic analysis tool MUST vary the inputs in some way to
+look for various kinds of problems or be an automated test suite with at
+least 80% branch coverage.
+}}) %>
       <hr>
-      <div class="row">
-      <%= render(partial: "status_chooser",
-                 locals: {criteria: "dynamic_analysis_unsafe", f: f}) %>
-      <div class='col-md-9 criteria-desc'>
-      <span>It is SUGGESTED that if the software is application-level software written
-            using a memory-unsafe language (such as C or C++) then at least one tool to
-            detect memory safety problems MUST be used during at least one dynamic tool use,
-            e.g., Address Sanitizer (ASAN) or valgrind. If the software is not application-level,
-            or is not in a memory-unsafe language, then this criterion is
-            automatically met. <sup>[dynamic-analysis-unsafe]</sup></span>
-      <%= f.text_field :dynamic_analysis_unsafe_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
-      </div>
-      </div>
 
+      <%= render(partial: "status_chooser", locals: {f: f,
+              criteria: "dynamic_analysis_unsafe", desc: %{
+It is SUGGESTED that if the software is application-level software written
+using a memory-unsafe language (such as C or C++) then at least one tool to
+detect memory safety problems MUST be used during at least one dynamic tool use,
+e.g., Address Sanitizer (ASAN) or valgrind. If the software is not application-level,
+or is not in a memory-unsafe language, then this criterion is
+automatically met.
+}}) %>
       <hr>
-      <div class="row">
-      <%= render(partial: "status_chooser",
-                 locals: {criteria: "dynamic_analysis_enable_assertions", f: f}) %>
-      <div class='col-md-9 criteria-desc'>
-      <span>It is SUGGESTED that the software include many run-time assertions
-            that are checked during dynamic analysis.
-            <sup>[dynamic-analysis-enable-assertiions]</sup></span>
-      <%= f.text_field :dynamic_analysis_enable_assertions_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
-      </div>
-      </div>
 
+      <%= render(partial: "status_chooser", locals: {f: f,
+              criteria: "dynamic_analysis_enable_assertions", desc: %{
+It is SUGGESTED that the software include many run-time assertions
+that are checked during dynamic analysis.
+}}) %>
       <hr>
-      <div class="row">
-      <%= render(partial: "status_chooser",
-                 locals: {criteria: "dynamic_analysis_fixed", f: f}) %>
-      <div class='col-md-9 criteria-desc'>
-      <span>The analysis tool(s) MAY be focused on looking for security vulnerabilities, but this is not required.<br>
-            All confirmed medium and high severity exploitable vulnerabilities discovered
-            with dynamic code analysis MUST be fixed. A vulnerability is medium to high
-            severity if its CVSS 2.0 base score is 4 or higher. <sup>[dynamic-analysis-fixed]</sup></span>
-      <%= f.text_field :dynamic_analysis_fixed_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
-      </div>
-      </div>
+
+      <%= render(partial: "status_chooser", locals: {f: f,
+              criteria: "dynamic_analysis_fixed", desc: %{
+The analysis tool(s) MAY be focused on looking for security vulnerabilities, but this is not required.<br>
+All confirmed medium and high severity exploitable vulnerabilities discovered
+with dynamic code analysis MUST be fixed. A vulnerability is medium to high
+severity if its CVSS 2.0 base score is 4 or higher.
+}}) %>
+
       <br>
       <span class="criteria-desc"><b>Rationale: </b>Static source code analysis and dynamic analysis tend
                   to find different kinds of defects (including defects that lead to vulnerabilities),

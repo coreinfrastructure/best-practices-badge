@@ -22,10 +22,6 @@
             (it may the same as the project URL)?</span>
       <%= f.text_field :repo_url, class:"form-control", hide_label: true, placeholder:'Project Repo URL' %>
 
-      <span>What license(s) is the project released under?</span>
-      <%= f.text_field :license, class:"form-control", hide_label: true, placeholder:'OSS License' %>
-      <br>
-
     <h3><i>Basic Project Website Content</i></h3>
     <div class="row">
       <%= render(partial: "status_chooser",
@@ -74,15 +70,9 @@
       <br><br>
 
       <h3><i>OSS License</i></h3>
-       <div class="row">
-       <%= render(partial: "status_chooser",
-                  locals: {criteria: "license_location"}.merge({f: f}) ) %>
-       <div class='col-md-9 criteria-desc'>
-          <span>License(s) MUST be posted in a standard location (e.g., as a top-level file named LICENSE or COPYING).
-             License filenames MAY be followed by an extension such as ".txt" or ".md") <sup>[license-location]</sup></span>
-          <%= f.text_field :license_location_justification, class:"form-control", hide_label: true, placeholder:'Please explain' %>
-       </div>
-       </div>
+      <span>What license(s) is the project released under?</span>
+      <%= f.text_field :license, class:"form-control", hide_label: true, placeholder:'OSS License' %>
+      <br>
 
        <hr>
        <div class="row">
@@ -107,6 +97,16 @@
       <%= f.text_field :oss_license_osi_justification, class:"form-control", hide_label: true, placeholder:'Please Explain' %>
       </div>
       </div>
+      <br>
+       <div class="row">
+       <%= render(partial: "status_chooser",
+                  locals: {criteria: "license_location"}.merge({f: f}) ) %>
+       <div class='col-md-9 criteria-desc'>
+          <span>License(s) MUST be posted in a standard location (e.g., as a top-level file named LICENSE or COPYING).
+             License filenames MAY be followed by an extension such as ".txt" or ".md") <sup>[license-location]</sup></span>
+          <%= f.text_field :license_location_justification, class:"form-control", hide_label: true, placeholder:'Please explain' %>
+       </div>
+       </div>
       <br>
       <span class='criteria-desc'><b>Note</b>: We intend for the automated tool to focus on identifying common OSS licenses such as:
         CC0, MIT, BSD 2-clause, BSD 3-clause revised, Apache 2.0, Lesser GNU General Public License (LGPL),

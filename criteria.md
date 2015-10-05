@@ -121,13 +121,13 @@ same as the project URL), and license(s).
 
 - <a name="license-location"></a>The project MUST post licence(s) in a standard location (e.g., as a top-level file named LICENSE or COPYING).  License filenames MAY be followed by an extension such as ".txt" or ".md" <sup>[<a href="#license-location">license-location</a>]&#8224;</sup>
 - The software MUST be licensed as OSS.  For our purposes, this means that the license MUST be at least one of the following:
-  - [an approved license by the Open Source Initiative (OSI)](http://opensource.org/licenses)
-  - [a free license as approved by the Free Software Foundation (FSF)](http://www.gnu.org/licenses/license-list.html)
+  - [an approved license by the Open Source Initiative (OSI)](https://opensource.org/licenses)
+  - [a free license as approved by the Free Software Foundation (FSF)](https://www.gnu.org/licenses/license-list.html)
   - [a free license acceptable to Debian main](https://www.debian.org/legal/licenses/)
   - <a name="oss-license"></a>[a "good" license according to Fedora](https://fedoraproject.org/wiki/Licensing:Main?rd=Licensing). <sup>[<a href="#oss-license">oss-license</a>]&#8224;</sup>
-- <a name="oss-license-osi"></a>It is SUGGESTED that any required license(s) be [OSI-approved](http://opensource.org/licenses). <sup>[<a href="#oss-license-osi">oss-license-osi</a>]&#8224;</sup>
+- <a name="oss-license-osi"></a>It is SUGGESTED that any required license(s) be [OSI-approved](https://opensource.org/licenses). <sup>[<a href="#oss-license-osi">oss-license-osi</a>]&#8224;</sup>
 - The software MAY also be licensed other ways (e.g., "GPLv2 or proprietary" is acceptable).
-- *Note*: We intend for the automated tool to focus on identifying common OSS licenses such as:     [CC0](http://creativecommons.org/publicdomain/zero/1.0/), [MIT](http://opensource.org/licenses/MIT), [BSD 2-clause](http://opensource.org/licenses/BSD-2-Clause), [BSD 3-clause revised](http://opensource.org/licenses/BSD-3-Clause), [Apache 2.0](http://opensource.org/licenses/Apache-2.0), [Lesser GNU General Public License (LGPL)](http://opensource.org/licenses/lgpl-license), and the [GNU General Public License (GPL)](http://opensource.org/licenses/gpl-license).
+- *Note*: We intend for the automated tool to focus on identifying common OSS licenses such as:     [CC0](http://creativecommons.org/publicdomain/zero/1.0/), [MIT](https://opensource.org/licenses/MIT), [BSD 2-clause](https://opensource.org/licenses/BSD-2-Clause), [BSD 3-clause revised](https://opensource.org/licenses/BSD-3-Clause), [Apache 2.0](https://opensource.org/licenses/Apache-2.0), [Lesser GNU General Public License (LGPL)](https://opensource.org/licenses/lgpl-license), and the [GNU General Public License (GPL)](https://opensource.org/licenses/gpl-license).
 - *Rationale*: These criteria are designed for OSS projects, so we need to ensure that they're only used where they apply.  Some projects are thought of as OSS yet are not actually released as OSS (e.g., they might not have any license, in which case the defaults of the country's legal system apply, or they might use a non-OSS license).  Unusual licenses can cause long-term problems for OSS projects and are more difficult for tools to handle.  We expect that [more advanced badges](./other.md) would set a higher bar (e.g., that it *must* be released under an OSI-approved license).
 
 *Documentation*
@@ -234,7 +234,7 @@ same as the project URL), and license(s).
 
 - <a name="crypto-published"></a>Cryptographic protocols and algorithms used by default in the software AND the delivery mechanisms MUST be publicly published and reviewed by experts.  <sup>[<a href="#crypto-published">crypto-published</a>]*</sup>
 - <a name="crypto-call"></a>Application software that is not itself a cryptographic system/library MUST NOT implement its own cryptographic functions, but MUST instead call on software specifically designed for the purpose.  <sup>[<a href="#crypto-call">crypto-call</a>]*</sup>
-- <a name="crypto-oss"></a>All functionality that depends on cryptography MUST be implementable using OSS because its specification meets the [*Open Standards Requirement for Software* by the Open Source Initiative](http://opensource.org/osr)  <sup>[<a href="#crypto-oss">crypto-oss</a>]*</sup>
+- <a name="crypto-oss"></a>All functionality that depends on cryptography MUST be implementable using OSS because its specification meets the [*Open Standards Requirement for Software* by the Open Source Initiative](https://opensource.org/osr)  <sup>[<a href="#crypto-oss">crypto-oss</a>]*</sup>
 - <a name="crypto-keylength"></a>The default keylengths MUST meet the NIST minimum requirements at least through the year 2030 (as stated in 2012).  These minimum bitlengths are: symmetric key 112, factoring modulus 2048, discrete logarithm key 224, discrete logarithmic group 2048, elliptic curve 224, and hash 224.  See <http://www.keylength.com> for a comparison of keylength recommendations from various organizations.  The software MUST be configurable so that it will reject smaller keylengths.  The software MAY allow smaller keylengths in some configurations (ideally it would not, since this allows downgrade attacks, but shorter keylengths are sometimes necessary for interoperability.)  <sup>[<a href="#crypto-keylength">crypto-keylength</a>]*</sup>
 - <a name="crypto-working"></a>Security mechanisms MUST NOT on depend cryptographic algorithms that are broken or have too-short key lengths (e.g., MD4, MD5, single DES, or RC4).  It is SUGGESTED that SHA-1 not be used (we are well aware that git uses SHA-1).  Currently-recommended algorithms include AES and SHA-256/SHA-512.  Implementations SHOULD support multiple cryptographic algorithms, so users can quickly switch if one is broken.  <sup>[<a href="#crypto-working">crypto-working</a>]*</sup>
 - <a name="crypto-pfs"></a>Any key agreement protocol SHOULD implement perfect forward secrecy so a session key derived from a set of long-term keys cannot be compromised if one of the long-term keys is compromised in the future.  <sup>[<a href="#crypto-pfs">crypto-pfs</a>]*</sup>
@@ -280,7 +280,7 @@ Non-criteria
 We plan to *not* require any specific products or services.
 In particular, we plan to *not* require
 proprietary tools or services,
-since many [free software](http://www.gnu.org/philosophy/free-sw.en.html)
+since many [free software](https://www.gnu.org/philosophy/free-sw.en.html)
 developers would reject such criteria.
 Therefore, we will intentionally *not* require git or GitHub.
 We will also not require or forbid any particular programming language

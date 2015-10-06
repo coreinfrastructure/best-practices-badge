@@ -687,6 +687,24 @@ severity if its CVSS 2.0 base score is 4 or higher.
 
 
     <script>
+
+      // Do a polyfill for datalist if it's not already supported
+      // (e.g., Safari fails to support polyfill at the time of this writing).
+      // See https://github.com/thgreasi/datalist-polyfill/blob/master/README.md
+      function polyfill_datalist() {
+        var nativedatalist = !!('list' in document.createElement('input')) && 
+            !!(document.createElement('datalist') && window.HTMLDataListElement);
+        if (!nativedatalist) {
+            $('input[list]').each(function () {
+                var availableTags = $('#' + $(this).attr("list")).find('option').map(function () {
+                    return this.value;
+                }).get();
+                $(this).autocomplete({ source: availableTags });
+            });
+        }
+      };
+
+
       field_categories = {
         // "project_url" : "MUST",
         // "project_url_https" : "SUGGESTED",
@@ -796,6 +814,7 @@ severity if its CVSS 2.0 base score is 4 or higher.
           $.each(field_categories, function(key, value) {
               setup_field(key);
           })
+          polyfill_datalist();
       });
     </script>
 

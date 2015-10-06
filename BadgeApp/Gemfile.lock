@@ -73,6 +73,8 @@ GEM
       rails-dom-testing (~> 1.0)
       railties (>= 4.2.0)
       thor (>= 0.14, < 2.0)
+    jquery-ui-rails (5.0.5)
+      railties (>= 3.2.16)
     json (1.8.3)
     jwt (1.5.1)
     loofah (2.0.3)
@@ -187,6 +189,7 @@ DEPENDENCIES
   faker
   jbuilder (~> 2.0)
   jquery-rails
+  jquery-ui-rails
   omniauth-github (= 1.1.1)
   pg (= 0.18.2)
   rails (= 4.2.1)

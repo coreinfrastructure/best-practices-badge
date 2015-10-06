@@ -10,7 +10,7 @@ User.create!(name:  "Test User",
              password:              "password",
              password_confirmation: "password")
 
-          
+
 
 20.times do |n|
   name  = Faker::Name.name
@@ -96,8 +96,8 @@ dynamic_analysis_fixed_status: "?"
 20.times do |n|
  name  = "test-name-#{n+1}"
  description = "test-description#{n+1}"
- project_url = "test-project-url-#{n+1}.org"
- repo_url = "test-repo-url-#{n+1}.org"
+ project_url = "https://" + "test-project-url-#{n+1}.org"
+ repo_url = "https://" + "test-repo-url-#{n+1}.org"
  license = ["MIT","Apache-2.0", "GPL-2.0", "GPL-2.0+", "GPL-3.0+", "MPL-2.0", "BSD-3-Clause", "BSD-2-Clause", "(Apache-2.0 OR GPL-2.0+)" ].sample
  Project.create!(name: name,
                  description: description,

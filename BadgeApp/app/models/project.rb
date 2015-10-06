@@ -76,4 +76,6 @@ class Project < ActiveRecord::Base
   validates_inclusion_of :dynamic_analysis_enable_assertions_status, :in => STATUS_CHOICE
   validates_inclusion_of :dynamic_analysis_fixed_status, :in => STATUS_CHOICE
 
+  
+
 end

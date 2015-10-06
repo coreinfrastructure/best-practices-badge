@@ -64,15 +64,17 @@ module ProjectsHelper
 
     def badge?(project)
       FIELD_CATEGORIES.each do |key, value|
-        if value == "MUST"
-          criteria = (key + "_status")
-          unless project[criteria] == "Met"
-            return false
-          end
+        criteria_status = (key + "_status")
+        criteria_just = (key + "_justification")
+        if value == "MUST" and project[criteria_status] != "Met"
+          return false
+        elsif ["SHOULD", "SUGGESTED"].include? value and
+              project[criteria_status] != "Met" and
+              project[criteria_just].length == 0
+          return false
+        else next
         end
-        return true
       end
+      return true
     end
-
-
 end

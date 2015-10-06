@@ -16,7 +16,12 @@
         <%= image_tag("/assets/Clear.gif", size: "20x20", id: criteria + "_enough") %>
       </div>
       <div class='col-md-9 criteria-desc'>
-         <span><%= desc %><sup>[<%= criteria_shortname %>]</sup></span>
+         <span><%= desc %>
+         <%= if !defined?(more).nil? then
+              render(partial: "more", locals: {f: f,
+                       criteria: criteria, more: more})
+             end %>
+         <sup>[<%= criteria_shortname %>]</sup></span>
          <%= f.text_field justification_symbol, class:"form-control", hide_label: true, placeholder:'Please explain' %>
       </div>
     </div>

@@ -104,7 +104,8 @@ It is SUGGESTED that any required license(s) be OSI-approved.
 
        <%= render(partial: "status_chooser", locals: {f: f,
                criteria: "license_location", desc: %{
-License(s) MUST be posted in a standard location (e.g., as a top-level file named LICENSE or COPYING).
+License(s) MUST be posted in a standard location (e.g., as a top-level file named LICENSE or COPYING).},
+                details: %{
 License filenames MAY be followed by an extension such as ".txt" or ".md")
 }}) %>
 
@@ -195,7 +196,8 @@ to be used by users.
       <%= render(partial: "status_chooser", locals: {f: f,
                criteria: "version_semver", desc: %{
 It is SUGGESTED that the Semantic Versioning (SemVer) format is
-used for releases.
+used for releases.},
+               details: %{
 Commit IDs (or similar) MAY be used as as version numbers. They are unique, but note that these can
 cause problems for users as they may not be able to determine whether or not they're up-to-date.
 }}) %>
@@ -817,9 +819,15 @@ severity if its CVSS 2.0 base score is 4 or higher.
 
       // Setup display as soon as page is ready
       $(document).ready(function() {
+          // By default, hide details.  We do the hiding in Javascript, so
+          // those who disable Javascript will still see the text
+          // (they'll have no way to later reveal it).
+          $('.details_text').hide('fast');
+          // Set up the interactive displays of "enough".
           $.each(field_categories, function(key, value) {
               setup_field(key);
           })
+          // Polyfill datalist (for Safari users)
           polyfill_datalist();
       });
     </script>

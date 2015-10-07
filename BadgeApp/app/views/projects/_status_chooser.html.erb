@@ -17,9 +17,9 @@
       </div>
       <div class='col-md-9 criteria-desc'>
          <span><%= desc %>
-         <%= if !defined?(more).nil? then
-              render(partial: "more", locals: {f: f,
-                       criteria: criteria, more: more})
+         <%= if !defined?(details).nil? then
+              render(partial: "details", locals: {f: f,
+                       criteria: criteria, details: details})
              end %>
          <sup>[<%= criteria_shortname %>]</sup></span>
          <%= f.text_field justification_symbol, class:"form-control", hide_label: true, placeholder:'Please explain' %>

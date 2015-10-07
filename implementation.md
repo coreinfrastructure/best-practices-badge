@@ -62,6 +62,9 @@ project results - perhaps create an "audit" button on
 as a flash on another
 display of the "show project form" (that way, nothing would CHANGE).
 
+Note: For the automation, instead of creating a "flash" for each one,
+it would probably be better to show the rationale for the entry
+right next to each specific criteria.
 
 
 ## Authentication

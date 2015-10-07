@@ -1,9 +1,9 @@
 <div class="row">
   <div class="col-md-7 col-md-offset-1">
 
-    <button title="Show more text" type="button" onclick="$('.more_text').show('fast');">Show more text</button>
+    <button title="Show all detailed text" type="button" onclick="$('.details_text').show('fast');">Show all detailed text</button>
     |
-    <button title="Show more text" type="button" onclick="$('.more_text').hide('fast');">Show less text</button>
+    <button title="Hide all detailed text" type="button" onclick="$('.details_text').hide('fast');">Hide all detailed text</button>
 
 
   <%= form_for(@project) do |f| %>
@@ -134,7 +134,7 @@ The security documentation need not be long (it is better for the software to be
       <%= render(partial: "status_chooser", locals: {f: f,
               criteria: "documentation_interface", desc: %{
 The project MUST include reference documentation that describes its interface.},
-              more: %{
+              details: %{
 The project MAY use hypertext links to non-project material as the included
 documentation,
 as long as the linked-to information is available and meets the requirements.

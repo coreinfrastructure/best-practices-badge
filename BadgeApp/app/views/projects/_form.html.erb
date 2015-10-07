@@ -1,6 +1,11 @@
 <div class="row">
   <div class="col-md-7 col-md-offset-1">
 
+    <button title="Show more text" type="button" onclick="$('.more_text').show('fast');">Show more text</button>
+    |
+    <button title="Show more text" type="button" onclick="$('.more_text').hide('fast');">Show less text</button>
+
+
   <%= form_for(@project) do |f| %>
     <%= render 'shared/error_messages', object: f.object %>
 

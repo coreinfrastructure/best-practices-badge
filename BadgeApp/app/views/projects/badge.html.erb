@@ -1,5 +1,5 @@
 <% if badge? @project %>
-  <%= link_to image_tag('badge-silver.svg'), @project %>
+  <%=  inline_svg 'badge-pass.svg'%>
 <% else %>
-  <%= link_to image_tag('badge-fail-red.svg'), @project %>
+  <%= inline_svg 'badge-fail.svg' %>
 <% end %>

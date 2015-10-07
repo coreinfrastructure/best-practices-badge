@@ -1,5 +1,12 @@
 module ProjectsHelper
 
+  def inline_svg(path)
+      File.open("app/assets/images/#{path}", "rb") do |file|
+      raw file.read
+    end
+  end
+
+
   FIELD_CATEGORIES = {
     "description_sufficient" => "MUST",
     "interact" => "MUST",

@@ -32,7 +32,7 @@ Here's how we expect the form flow to go:
     project name, project URL, and repo URL.
     Once they identify the project and provide that back to us,
     we run AUTO-FILL, then use "edit project form".
-*   "Edit project form" - note that flash entry will show anything
+*   "Edit project form" - note that flash entries will show anything
     added by auto-fill.  On "submit", it'll go to...
 *   "Show project form" (a variant of the edit project, but all editable
     items cannot be selected).  Here it'll show if you got the badge,
@@ -43,14 +43,14 @@ Here's how we expect the form flow to go:
     *   "JSON" - provide project info in JSON format.
     *   "Audit"- (Maybe) - run AUTO-FILL *without* editing the results,
                  and then show the project form with any differences
-                 between auto answers and project answers as a flash.
+                 between auto answers and project answers as flash entries.
 
 AUTO-FILL:
 This function tries to read from the project URL and repo URLs
 and determine project answers.  A few rules:
 
 1.  Auto-fill will *ONLY* change values currently marked as "?".
-2.  Anything automatically filled will be noted on the next "flash"
+2.  Anything automatically filled will be noted on the next "flash" entries
     on the edit form, so that people can check what was done (and why)
     if they want to.  Perhaps those details should be toggleable.
 
@@ -59,12 +59,13 @@ even if they didn't.  This is the fundamental risk of self-assertion.
 We could identify *differences* between automation results and the
 project results - perhaps create an "audit" button on
 "show project form" that provided information on differences
-as a flash on another
+as flash entries on another
 display of the "show project form" (that way, nothing would CHANGE).
 
-Note: For the automation, instead of creating a "flash" for each one,
-it would probably be better to show the rationale for the entry
-right next to each specific criteria.
+Note: The "flash" entries for specific criteria should be shown next
+to that specific criteria.  E.G., if the user asserts that their license
+is "MIT" but the automation determines otherwise, then the "Audit"
+report should note the difference.
 
 
 ## Authentication

@@ -2,7 +2,7 @@
 
 <h2 class="center">OSS Project Basics</h2>
 <br>
-<h3 class="center"><i>Identification</i></h3>
+<h3 class="center">Identification</h3>
 
 <p>
   <strong>Name:</strong>
@@ -30,7 +30,7 @@
 </p>
 
 <br>
- <h3 class="center"><i>Basic Project Website Content</i></h3>
+ <h3 class="center">Basic Project Website Content</h3>
 <p>
   <strong><%= @project.description_sufficient_status %>:</strong>
   The project website MUST succinctly describe what the software does
@@ -62,7 +62,7 @@
 </p>
 
 <br>
-<h3 class="center"><i>License Location</i></h3>
+<h3 class="center">License Location</h3>
 <p>
   <strong><%= @project.license_location_status %>:</strong>
   The project MUST post licence(s) in a standard location (e.g., as a top-level file named LICENSE or COPYING).
@@ -87,7 +87,7 @@
 </p>
 
 <br>
-<h3 class="center"><i>Documentation</i></h3>
+<h3 class="center">Documentation</h3>
 <p>
   <strong><%= @project.documentation_basics_status %>:</strong>
   The project MUST provide basic documentation for the software in some media (such as text or video) that includes:
@@ -107,7 +107,7 @@
 
 <br><br>
 <h2 class="center">Change Control</h2>
-<h3 class="center"><i>Public Version-Controlled Source Repository</i></h3>
+<h3 class="center">Public Version-Controlled Source Repository</h3>
 <p>
   <strong><%= @project.repo_url_status %>:</strong>
   The project MUST have a version-controlled source repository that is publicly
@@ -139,7 +139,7 @@
   <!-- repo_distributed_justification -->
 </p>
 
-<h3 class="center"><i>Version Numbering</i></h3>
+<h3 class="center">Version Numbering</h3>
 <p>
   <strong><%= @project.version_unique_status %>:</strong>
   The project MUST have a unique version number for each release intended
@@ -162,7 +162,7 @@
   <!-- version_tags_justification -->
 </p>
 
-<h3 class="center"><i>ChangeLog</i></h3>
+<h3 class="center">ChangeLog</h3>
 <p>
   <strong><%= @project.changelog_status %>:</strong>
   The project MUST provide a "ChangeLog" (a human-readable summary of major changes
@@ -181,7 +181,7 @@
 
 <br><br>
 <h2 class="center">Reporting</h2>
-<h3 class="center"><i>Bug-Reporting Process</i></h3>
+<h3 class="center">Bug-Reporting Process</h3>
 
 <p>
   <strong><%= @project.report_url_status %>:</strong>
@@ -224,7 +224,7 @@
 </p>
 
 
-<h3 class="center"><i>Vulnerability Report Process</i></h3>
+<h3 class="center">Vulnerability Report Process</h3>
 <p>
   <strong><%= @project.vulnerability_report_process_status %>:</strong>
   The project MUST publish the process for reporting vulnerabilities on the
@@ -256,7 +256,7 @@
 
 <br><br>
 <h2 class="center">Quality</h2>
-<h3 class="center"><i>Working Build System</i></h3>
+<h3 class="center">Working Build System</h3>
 <p>
   <strong><%= @project.build_status %>:</strong>
   If the software requires building for use, the project MUST provide a working
@@ -281,7 +281,7 @@
   <!-- build_oss_tools_justification -->
 </p>
 
-<h3 class="center"><i>Automated Test Suite</i></h3>
+<h3 class="center">Automated Test Suite</h3>
 <p>
   <strong><%= @project.test_status %>:</strong>
   The project MUST have at least one automated test suite. <sup>[test]</sup>
@@ -302,7 +302,7 @@
   <!-- test_most_justification -->
 </p>
 
-<h3 class="center"><i>New Functionality Testing</i></h3>
+<h3 class="center">New Functionality Testing</h3>
 <p>
   <strong><%= @project.test_policy_status %>:</strong>
   The project MUST have a general policy (formal or not) that as major new
@@ -328,7 +328,7 @@
   <!-- tests_documented_added_justification -->
 </p>
 
-<h3 class="center"><i>Warning Flags</i></h3>
+<h3 class="center">Warning Flags</h3>
 <p>
   <strong><%= @project.warnings_status %>:</strong>
   The project MUST enable some compiler warning flagss (e.g. "-Wall"), a "safe"
@@ -357,7 +357,7 @@
 
 <br><br>
 <h2 class="center">Security</h2>
-<h3 class="center"><i>Secure Development Knowledge</i></h3>
+<h3 class="center">Secure Development Knowledge</h3>
 
 <p>
   <strong><%= @project.know_secure_design_status %>:</strong>
@@ -377,7 +377,7 @@
   <!-- know_common_errors_justification -->
 </p>
 
-<h3 class="center"><i>Use Basic Good Cryptographic Practices</i></h3>
+<h3 class="center">Use Basic Good Cryptographic Practices</h3>
 
 <p>
   <strong><%= @project.crypto_published_status %>:</strong>
@@ -451,7 +451,7 @@
   <!-- crypto_random_justification -->
 </p>
 
-<h3 class="center"><i>Secured Delivery Against Man-in-the-Middle (MITM) Attacks</i></h3>
+<h3 class="center">Secured Delivery Against Man-in-the-Middle (MITM) Attacks</h3>
 <p>
   <strong><%= @project.delivery_mitm_status %>:</strong>
   The project MUST use a delivery mechanism that counters MITM attacks.
@@ -471,7 +471,7 @@
   <!-- delivery_unsigned_justification -->
 </p>
 
-<h3 class="center"><i>Publicly-known Vulnerabilities Fixed</i></h3>
+<h3 class="center">Publicly-known Vulnerabilities Fixed</h3>
 <p>
   <strong><%= @project.vulnerabilities_fixed_60_days_status %>:</strong>
   There MUST be no unpatched vulnerabilities of medium or high severity that
@@ -495,7 +495,7 @@
 
 <br><br>
 <h2 class="center">Security Analysis</h2>
-<h3 class="center"><i>Static Code Analysis</i></h3>
+<h3 class="center">Static Code Analysis</h3>
 <p>
   <strong><%= @project.static_analysis_status %>:</strong>
   At least one static code analysis tool MUST be applied to any proposed major
@@ -535,7 +535,7 @@
   <!-- static_analysis_often_justification -->
 </p>
 
-<h3 class="center"><i>Dynamic Analysis</i></h3>
+<h3 class="center">Dynamic Analysis</h3>
 
 <p>
   <strong><%= @project.dynamic_analysis_status %>:</strong>

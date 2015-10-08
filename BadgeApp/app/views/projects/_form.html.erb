@@ -11,7 +11,7 @@
 
     <h2 class="center">OSS Project Basics</h2>
 
-    <h3><i>Identification</i></h3>
+    <h3>Identification</h3>
       <span>What is the human-readable name of the project (note that other
             projects may use the same name)?</span>
       <%= f.text_field :name, class:"form-control", placeholder:'OSS Project Name' %>
@@ -27,7 +27,7 @@
             (it may the same as the project URL)?</span>
       <%= f.text_field :repo_url, class:"form-control", hide_label: true, placeholder:'Project Repo URL' %>
 
-    <h3><i>Basic Project Website Content</i></h3>
+    <h3>Basic Project Website Content</h3>
       <%= render(partial: "status_chooser", locals: {f: f,
               criteria: "description_sufficient", desc: %{
 The project website MUST succinctly describe what the software does
@@ -57,7 +57,7 @@ The project website MUST provide information on how to: obtain, provide feedback
 }}) %>
       <br><br>
 
-      <h3><i>OSS License</i></h3>
+      <h3>OSS License</h3>
       <span>What license(s) is the project released under? Please use <a href="https://spdx.org/licenses/">SPDX format</a> (examples include "Apache-2.0", "BSD-2-Clause", "BSD-3-Clause", "GPL-2.0+", "LGPL-3.0+", and "MIT")</span>
       <%= f.text_field :license, class:"form-control", hide_label: true, placeholder:'OSS License', list: "license_list" %>
      <!-- Some examples from http://wiki.spdx.org/view/FileNoticeExamples -->
@@ -121,7 +121,7 @@ License filenames MAY be followed by an extension such as ".txt" or ".md")
         We expect that that "higher-level" criteria would set a higher bar, e.g., that it must be released under an OSI-approved license.</span>
 
       <br><br>
-      <h3><i>Documentation</i></h3>
+      <h3>Documentation</h3>
 
       <%= render(partial: "status_chooser", locals: {f: f,
               criteria: "documentation_basics", desc: %{
@@ -144,7 +144,7 @@ as long as the linked-to information is available and meets the requirements.
       <br><br><br>
 
       <h2 class="center h2">Change Control</h2>
-      <h3><i>Public version-controlled source repository</i></h3>
+      <h3>Public version-controlled source repository</h3>
 
        <%= render(partial: "status_chooser", locals: {f: f,
                criteria: "repo_url", desc: %{
@@ -185,7 +185,7 @@ Git is not specifically required and projects can use centralized version contro
             and to track its progress in detail.</span>
 
       <br><br>
-      <h3><i>Version numbering</i></h3>
+      <h3>Version numbering</h3>
 
       <%= render(partial: "status_chooser", locals: {f: f,
                criteria: "version_unique", desc: %{
@@ -211,7 +211,7 @@ release using git tags.
 }}) %>
 
       <br><br>
-      <h3><i>ChangeLog</i></h3>
+      <h3>ChangeLog</h3>
 
       <%= render(partial: "status_chooser", locals: {f: f,
                criteria: "changelog", desc: %{
@@ -237,7 +237,7 @@ known vulnerabilities.
 
       <br><br><br>
       <h2 class="center h2">Reporting</h2>
-      <h3><i>Bug-reporting process</i></h3>
+      <h3>Bug-reporting process</h3>
 
       <%= render(partial: "status_chooser", locals: {f: f,
                criteria: "report_url", desc: %{
@@ -279,7 +279,7 @@ Reports and responses MUST be archived for later searching.
 
       <br><br>
 
-      <h3><i>Vulnerability report process</i></h3>
+      <h3>Vulnerability report process</h3>
       <%= render(partial: "status_chooser", locals: {f: f,
                criteria: "vulnerability_report_process", desc: %{
 The project MUST publish the process for reporting vulnerabilities on the project site
@@ -308,7 +308,7 @@ it is okay to only count non-spam messages.)
 
      <br><br><br>
      <h2 class="center h2">Quality</h2>
-     <h3><i>Working build system</i></h3>
+     <h3>Working build system</h3>
 
       <%= render(partial: "status_chooser", locals: {f: f,
                criteria: "build", desc: %{
@@ -339,7 +339,7 @@ The project SHOULD be buildable using only OSS tools.
 
       <br><br>
 
-      <h3><i>Automated test suite</i></h3>
+      <h3>Automated test suite</h3>
 
       <%= render(partial: "status_chooser", locals: {f: f,
                criteria: "test", desc: %{
@@ -369,7 +369,7 @@ the code branches, input fields, and functionality.
             no need to build anything for use.</span>
 
     <br><br>
-    <h3><i>New functionality testing</i></h3>
+    <h3>New functionality testing</h3>
 
       <%= render(partial: "status_chooser", locals: {f: f,
                criteria: "test_policy", desc: %{
@@ -396,7 +396,7 @@ added in practice.
 }}) %>
 
     <br><br>
-    <h3><i>Warning flags</i></h3>
+    <h3>Warning flags</h3>
 
       <%= render(partial: "status_chooser", locals: {f: f,
                criteria: "warnings", desc: %{
@@ -425,7 +425,7 @@ always practical.
 
     <br><br><br>
     <h2 class="center h2">Security</h2>
-    <h3><i>Secure development knowledge</i></h3>
+    <h3>Secure development knowledge</h3>
 
     <%= render(partial: "status_chooser", locals: {f: f,
              criteria: "know_secure_design", desc: %{
@@ -460,7 +460,7 @@ Top 10 for commonly-used lists.
 }}) %>
 
     <br><br><br>
-    <h3><i>Uses basic good cryptographic practices</i></h3>
+    <h3>Uses basic good cryptographic practices</h3>
 
     <%= render(partial: "status_chooser", locals: {f: f,
              criteria: "crypto_published", desc: %{
@@ -537,7 +537,7 @@ and not through non-cryptographically random functions.
                                 has no need to directly use cryptographic capabilities.</span>
 
     <br><br>
-    <h3><i>Secured delivery against man-in-the-middle (MITM) attacks</i></h3>
+    <h3>Secured delivery against man-in-the-middle (MITM) attacks</h3>
 
     <%= render(partial: "status_chooser", locals: {f: f,
              criteria: "delivery_mitm", desc: %{
@@ -556,7 +556,7 @@ used without checking for a cryptographic signature, since these hashes
 can be modified in transit.
 }}) %>
 
-    <h3><i>Publicly-known vulnerabilities fixed</i></h3>
+    <h3>Publicly-known vulnerabilities fixed</h3>
 
     <%= render(partial: "status_chooser", locals: {f: f,
              criteria: "vulnerabilities_fixed_60_days", desc: %{
@@ -588,7 +588,7 @@ are reported.
 
     <br><br><br>
     <h2 class="center h2">Security Analysis</h2>
-    <h3><i>Static code analysis</i></h3>
+    <h3>Static code analysis</h3>
 
      <%= render(partial: "status_chooser", locals: {f: f,
              criteria: "static_analysis", desc: %{
@@ -629,7 +629,7 @@ It is SUGGESTED that static source code analysis occur on every commit or at lea
 
      <br><br>
 
-     <h3><i>Dynamic analysis</i></h3>
+     <h3>Dynamic analysis</h3>
 
       <%= render(partial: "status_chooser", locals: {f: f,
               criteria: "dynamic_analysis", desc: %{
@@ -700,7 +700,7 @@ severity if its CVSS 2.0 base score is 4 or higher.
       // (e.g., Safari fails to support polyfill at the time of this writing).
       // See https://github.com/thgreasi/datalist-polyfill/blob/master/README.md
       function polyfill_datalist() {
-        var nativedatalist = !!('list' in document.createElement('input')) && 
+        var nativedatalist = !!('list' in document.createElement('input')) &&
             !!(document.createElement('datalist') && window.HTMLDataListElement);
         if (!nativedatalist) {
             $('input[list]').each(function () {

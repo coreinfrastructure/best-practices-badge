@@ -10,6 +10,17 @@
   box-sizing:         border-box;
 }
 
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: "Lato","Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-weight: 450;
+}
+
 body {
   padding-top: 70px;
 }
@@ -95,7 +106,9 @@ footer {
   border-top: 1px solid #eaeaea;
   padding-left: 20px;
   padding-right: 100px;
+  background-color: #f8f8f8;
 }
+
 
 footer a {
   color: #555;

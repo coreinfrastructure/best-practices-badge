@@ -7,7 +7,7 @@ Rails.application.routes.draw do
   get 'criteria' => 'static_pages#criteria'
   resources :projects  do
     member do
-      get 'badge'
+      get 'badge', :defaults => { :format => 'svg' }
     end
   end
 

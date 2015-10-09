@@ -216,7 +216,7 @@ same as the project URL), and license(s).
 
 *Secure development knowledge*
 
-- At least one of the primary developers MUST know how to design secure software.  This requires understanding the following design principles, including the 8 principles from [Saltzer and Schroeder](http://web.mit.edu/Saltzer/www/publications/protection/):
+- <a name="know-secure-design"></a>The project MUST have at least one primary developer who knows how to design secure software.  This requires understanding the following design principles, including the 8 principles from [Saltzer and Schroeder](http://web.mit.edu/Saltzer/www/publications/protection/):
     - economy of mechanism (keep the design as simple and small as practical, e.g., by adopting sweeping simplifications)
     - fail-safe defaults (access decisions should deny by default)
     - complete mediation (every access that might be limited must be checked for authority and be non-bypassable)
@@ -226,9 +226,9 @@ same as the project URL), and license(s).
     - least common mechanism (the design should minimize the mechanisms common to more than one user and depended on by all users, e.g., directories for temporary files)
     - psychological acceptability (the human interface must be designed for ease of use - designing for "least astonishment" can help)
     - limited attack surface (the attack surface - the set of the different points where an attacker can try to enter or extract data - should be limited)
-    - <a name="know-secure-design"></a>input validation with whitelists (inputs should typically be checked to determine if they are valid before they are accepted; this validation should use whitelists (which only accept known-good values), not blacklists (which attempt to list known-bad values)) <sup>[<a href="#know-secure-design">know-secure-design</a>]</sup>
-- <a name="know-common-errors"></a>At least one of the primary developers MUST know of common kinds of errors that lead to vulnerabilities in this kind of software, as well as at least one method to counter or mitigate each of them.  Examples (depending on the type of software) include SQL injection, OS injection, classic buffer overflow, cross-site scripting, missing authentication, and missing authorization.  See the [CWE/SANS top 25](http://cwe.mitre.org/top25/) or [OWASP Top 10](https://www.owasp.org/index.php/Category:OWASP_Top_Ten_Project) for commonly-used lists. <sup>[<a href="#know-common-errors">know-common-errors</a>]</sup>
-- If there is only one developer, by definition that individual is the primary developer.
+    - input validation with whitelists (inputs should typically be checked to determine if they are valid before they are accepted; this validation should use whitelists (which only accept known-good values), not blacklists (which attempt to list known-bad values)) <sup>[<a href="#know-secure-design">know-secure-design</a>]</sup>
+- <a name="know-common-errors"></a>The project MUST have at least one primary developer who knows the common kinds of errors that lead to vulnerabilities in the project, as well as at least one method to counter or mitigate each of them.  Examples include SQL injection, OS injection, classic buffer overflow, cross-site scripting, missing authentication, and missing authorization.  See the [CWE/SANS top 25](https://cwe.mitre.org/top25/) or [OWASP Top 10](https://www.owasp.org/index.php/Category:OWASP_Top_Ten_Project) for commonly-used lists. <sup>[<a href="#know-common-errors">know-common-errors</a>]</sup>
+- *Note*: If there is only one developer, by definition that individual is the primary developer.
 
 *Uses basic good cryptographic practices*
 

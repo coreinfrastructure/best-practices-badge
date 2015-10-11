@@ -2,7 +2,7 @@
 <br>
 <br>
 <% if logged_in? %>
-  <%= render 'form' %>
+  <%= render partial: 'form', locals: {is_disabled: false} %>
 <% else %>
   <% flash.now[:danger] = "Please sign in to add a project!"%>
   <%= render :template => "sessions/new" %>

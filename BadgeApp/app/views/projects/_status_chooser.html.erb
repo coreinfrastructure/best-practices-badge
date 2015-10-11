@@ -4,13 +4,13 @@
       <% criteria_shortname = criteria.gsub("_", "-") %>
       <div class="col-md-3 criteria-radio">
         <%= f.label status_symbol do %>
-          <%= f.radio_button status_symbol, 'Met'%> Met
+          <%= f.radio_button status_symbol, 'Met', disabled: is_disabled %> Met
         <% end %>
         <%= f.label status_symbol do %>
-          <%= f.radio_button status_symbol, 'Unmet' %> Unmet
+          <%= f.radio_button status_symbol, 'Unmet', disabled: is_disabled  %> Unmet
         <% end %>
         <%= f.label status_symbol do %>
-          <%= f.radio_button status_symbol, '?' %> &nbsp;?&nbsp;
+          <%= f.radio_button status_symbol, '?', disabled: is_disabled  %> &nbsp;?&nbsp;
         <% end %>
         <%= image_tag("/assets/Clear.gif", size: "20x20", id: criteria + "_enough") %>
       </div>
@@ -21,6 +21,6 @@
                        criteria: criteria, details: details})
              end %>
          <sup>[<%= criteria_shortname %>]</sup></span>
-         <%= f.text_field justification_symbol, class:"form-control", hide_label: true, placeholder:'Please explain' %>
+         <%= f.text_field justification_symbol, class:"form-control", hide_label: true, placeholder:'Please explain', disabled: is_disabled  %>
       </div>
     </div>

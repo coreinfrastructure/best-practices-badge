@@ -1,4 +1,3 @@
-    <!-- From _status_chooser -->
     <div class="row">
       <% status_symbol = (criteria + "_status").to_sym %>
       <% justification_symbol = (criteria + "_justification").to_sym %>
@@ -16,7 +15,7 @@
         <%= image_tag("/assets/Clear.gif", size: "20x20", id: criteria + "_enough") %>
       </div>
       <div class='col-md-9 criteria-desc'>
-         <span><%= desc %>
+         <span><%= raw desc %>
          <%= if !defined?(details).nil? then
               render(partial: "details", locals: {f: f,
                        criteria: criteria, details: details})

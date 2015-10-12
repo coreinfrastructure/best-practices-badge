@@ -361,6 +361,10 @@ If the software requires building for use, the project MUST provide a working
 build system that can automatically rebuild the software from source code.},
                details: %{
 A build system determines what actions need to occur to rebuild the software (and in what order), and then performs those steps.
+<b>Rationale</b>: If a project needs to be built but there is no working build system,
+            then potential co-developers will not be able to easily contribute and many security analysis
+            tools will be ineffective. Criteria for a working build system are not applicable if there is
+            no need to build anything for use.
 }}) %>
       <hr>
 
@@ -376,11 +380,6 @@ For example, Maven, Ant, cmake, the autotools, make, or rake.
                criteria: "build_oss_tools", desc: %{
 The project SHOULD be buildable using only OSS tools.
 }}) %>
-
-      <span class='criteria-desc'><b>Rationale</b>: If a project needs to be built but there is no working build system,
-            then potential co-developers will not be able to easily contribute and many security analysis
-            tools will be ineffective. Criteria for a working build system are not applicable if there is
-            no need to build anything for use.</span>
 
       <br><br>
 

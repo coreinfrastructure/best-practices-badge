@@ -469,7 +469,9 @@ always practical.
 
     <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
              criteria: "know_secure_design", desc: %{
-At least one of the primary developers MUST know how to design secure software.
+At least one of the primary developers
+MUST know how to design secure software.},
+             details: %{
 This requires understanding the following design principles, including the 8 principles from Saltzer and Schroeder:
 <ul>
 <li>economy of mechanism (keep the design as simple and small as practical, e.g., by adopting sweeping simplifications)
@@ -492,7 +494,9 @@ not blacklists (which attempt to list known-bad values))
              criteria: "know_common_errors", desc: %{
 At least one of the primary developers MUST know of common kinds of errors that
 lead to vulnerabilities in this kind of software, as well as at least one method
-to counter or mitigate each of them. Examples (depending on the type of software)
+to counter or mitigate each of them.},
+             details: %{
+Examples (depending on the type of software)
 include SQL injection, OS injection, classic buffer overflow, cross-site scripting,
 missing authentication, and missing authorization. See the CWE/SANS top 25 or OWASP
 Top 10 for commonly-used lists.
@@ -528,7 +532,8 @@ by the Open Source Initiative.
 
     <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
              criteria: "crypto_keylength", desc: %{
-The default keylengths MUST meet the NIST minimum requirements at least through the year 2030 (as stated in 2012).
+The default keylengths MUST meet the NIST minimum requirements at least through the year 2030 (as stated in 2012).},
+             details: %{
 These minimum bitlengths are: symmetric key 112, factoring modulus 2048, discrete logarithm key 224,
 discrete logarithmic group 2048, elliptic curve 224, and hash 224. See http://www.keylength.com
 for a comparison of keylength recommendations from various organizations.
@@ -543,7 +548,8 @@ interoperability.)
     <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
              criteria: "crypto_working", desc: %{
 Security mechanisms MUST NOT on depend cryptographic algorithms that are broken
-or have too-short key lengths (e.g., MD4, MD5, single DES, or RC4).
+or have too-short key lengths (e.g., MD4, MD5, single DES, or RC4).},
+             details: %{
 It is SUGGESTED that SHA-1 not be used (we are well aware that git uses SHA-1).
 Currently-recommended algorithms include AES and SHA-256/SHA-512. Implementations SHOULD
 support multiple cryptographic algorithms, so users can quickly switch
@@ -582,7 +588,9 @@ and not through non-cryptographically random functions.
     <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
              criteria: "delivery_mitm", desc: %{
 The project MUST use a delivery mechanism that counters MITM attacks.
-Using https or ssh+scp is acceptable. An even stronger mechanism is releasing
+Using https or ssh+scp is acceptable.},
+             details: %{
+An even stronger mechanism is releasing
 the software with digitally signed packages, since that mitigates attacks on the distribution system,
 but this only works if the users can be confident that the public keys for signatures are correct
 and if the users will actually check the signature.
@@ -601,7 +609,9 @@ can be modified in transit.
     <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
              criteria: "vulnerabilities_fixed_60_days", desc: %{
 There MUST be no unpatched vulnerabilities of medium or high severity that
-have been publicly known for more than 60 days. The vulnerability must be patched and
+have been publicly known for more than 60 days.},
+             details: %{
+The vulnerability must be patched and
 released by the project itself (patches may be developed elsewhere).
 A vulnerability becomes publicly known (for this purpose) once it has a CVE with
 publicly released non-paywalled information (reported, for example,

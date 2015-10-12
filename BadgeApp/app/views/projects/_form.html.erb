@@ -1,10 +1,40 @@
 <div class="row">
+<div class="col-md-7 col-md-offset-1">
+<button title="Show all detailed text" type="button" onclick="$('.details_text').show('fast');">Show all detailed text</button>
+|
+<button title="Hide all detailed text" type="button" onclick="$('.details_text').hide('fast');">Hide all detailed text</button>
+|
+<%= render(partial: "details", locals: {is_disabled: false,
+           criteria: "badge_intro", details: %{
+<p>
+This is a draft of proposed basic best practices
+for open source software (OSS) projects.
+OSS projects that follow these best practices
+will be able to voluntarily self-certify and show that they've
+achieved a Core Infrastructure Initiative (CII) badge.
+There is no set of practices that can guarantee that software
+will never have defects or vulnerabilities.
+However, following best practices can help improve the results
+of OSS projects.
+</p>
+<p>
+To earn a badge the current rules are that
+aLl MUST and MUST NOT criteria must be met, and
+all SHOULD and SUGGESTED criteria must be either met OR must be unmet
+with a justification.
+</ul>
+</p>
+<p>
+Feedback is welcome via the
+<a href="https://github.com/linuxfoundation/cii-best-practices-badge">GitHub site as issues or pull requests</a>
+There is also a
+<a href="https://lists.coreinfrastructure.org/mailman/listinfo/cii-badges">mailing list for general discussion</a>.
+</p>
+}}) %>
+</div>
+</div>
+<div class="row">
   <div class="col-md-7 col-md-offset-1">
-
-    <button title="Show all detailed text" type="button" onclick="$('.details_text').show('fast');">Show all detailed text</button>
-    |
-    <button title="Hide all detailed text" type="button" onclick="$('.details_text').hide('fast');">Hide all detailed text</button>
-
 
   <%= form_for(@project) do |f| %>
     <%= render 'shared/error_messages', object: f.object %>

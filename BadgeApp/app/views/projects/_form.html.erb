@@ -358,17 +358,17 @@ it is okay to only count non-spam messages.
       <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
                criteria: "build", desc: %{
 If the software requires building for use, the project MUST provide a working
-build system that can automatically rebuild the software from source code.
+build system that can automatically rebuild the software from source code.},
+               details: %{
 A build system determines what actions need to occur to rebuild the software (and in what order), and then performs those steps.
 }}) %>
       <hr>
 
       <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
                criteria: "build_common_tools", desc: %{
-It is SUGGESTED that common tools be used for building the software
-(e.g., Maven, Ant, cmake, the autotools, make, or rake), in which case
-only the instructions to the build system are required (there's no requirement
-to teach people how to use common tools).
+It is SUGGESTED that common tools be used for building the software.},
+               details: %{
+For example, Maven, Ant, cmake, the autotools, make, or rake.
 }}) %>
       <hr>
 

@@ -187,7 +187,9 @@ same as the project URL), and license(s).
 *Working build system*
 
 - <a name="build"></a>If the software requires building for use, the project MUST provide a working build system that can automatically rebuild the software from source code.  A build system determines what actions need to occur to rebuild the software (and in what order), and then performs those steps. <sup>[<a href="#build">build</a>]*&#8224;</sup>
-- <a name="build-common-tools"></a>It is SUGGESTED that common tools be used for building the software (e.g., Maven, Ant, cmake, the autotools, make, or rake), in which case only the instructions to the build system are required (there's no requirement to teach people how to use common tools). <sup>[<a href="#build-common-tools">build-common-tools</a>]*&#8224;</sup>
+- <a name="build-common-tools"></a>It is SUGGESTED that common tools be used for building the software.
+For example, Maven, Ant, cmake, the autotools, make, or rake.
+<sup>[<a href="#build-common-tools">build-common-tools</a>]*&#8224;</sup>
 - <a name="build-oss-tools"></a>The project SHOULD be buildable using only OSS tools. <sup>[<a href="#build-oss-tools">build-oss-tools</a>]*</sup>
 - *Rationale*: If a project needs to be built but there is no working build system, then potential co-developers will not be able to easily contribute and many security analysis tools will be ineffective.  Criteria for a working build system are not applicable if there is no need to build anything for use.
 

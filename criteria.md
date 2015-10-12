@@ -120,11 +120,11 @@ same as the project URL), and license(s).
 *OSS license*
 
 - <a name="license-location"></a>The project MUST post licence(s) in a standard location (e.g., as a top-level file named LICENSE or COPYING).  License filenames MAY be followed by an extension such as ".txt" or ".md" <sup>[<a href="#license-location">license-location</a>]&#8224;</sup>
-- The software MUST be licensed as OSS.  For our purposes, this means that the license MUST be at least one of the following:
+- <a name="oss-license"></a> The software MUST be licensed as OSS.  For our purposes, this means that the license MUST be at least one of the following:
   - [an approved license by the Open Source Initiative (OSI)](https://opensource.org/licenses)
   - [a free license as approved by the Free Software Foundation (FSF)](https://www.gnu.org/licenses/license-list.html)
   - [a free license acceptable to Debian main](https://www.debian.org/legal/licenses/)
-  - <a name="oss-license"></a>[a "good" license according to Fedora](https://fedoraproject.org/wiki/Licensing:Main?rd=Licensing). <sup>[<a href="#oss-license">oss-license</a>]&#8224;</sup>
+  - [a "good" license according to Fedora](https://fedoraproject.org/wiki/Licensing:Main?rd=Licensing). <sup>[<a href="#oss-license">oss-license</a>]&#8224;</sup>
 - <a name="oss-license-osi"></a>It is SUGGESTED that any required license(s) be [OSI-approved](https://opensource.org/licenses). <sup>[<a href="#oss-license-osi">oss-license-osi</a>]&#8224;</sup>
 - The software MAY also be licensed other ways (e.g., "GPLv2 or proprietary" is acceptable).
 - *Note*: We intend for the automated tool to focus on identifying common OSS licenses such as:     [CC0](http://creativecommons.org/publicdomain/zero/1.0/), [MIT](https://opensource.org/licenses/MIT), [BSD 2-clause](https://opensource.org/licenses/BSD-2-Clause), [BSD 3-clause revised](https://opensource.org/licenses/BSD-3-Clause), [Apache 2.0](https://opensource.org/licenses/Apache-2.0), [Lesser GNU General Public License (LGPL)](https://opensource.org/licenses/lgpl-license), and the [GNU General Public License (GPL)](https://opensource.org/licenses/gpl-license).

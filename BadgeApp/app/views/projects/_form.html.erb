@@ -98,7 +98,12 @@ The information on how to contribute SHOULD include the basic criteria for accep
       <br><br>
 
       <h3>OSS License</h3>
-      <span>What license(s) is the project released under? Please use <a href="https://spdx.org/licenses/">SPDX format</a> (examples include "Apache-2.0", "BSD-2-Clause", "BSD-3-Clause", "GPL-2.0+", "LGPL-3.0+", and "MIT")</span>
+      <span>What license(s) is the project released under?
+      <%= render(partial: "details", locals: {is_disabled: false,
+           criteria: "license", details: %{
+Please use <a href="https://spdx.org/licenses/">SPDX format</a> (examples include "Apache-2.0", "BSD-2-Clause", "BSD-3-Clause", "GPL-2.0+", "LGPL-3.0+", and "MIT")
+}}) %>
+</span>
       <%= f.text_field :license, class:"form-control", hide_label: true, placeholder:'OSS License', list: "license_list", disabled: is_disabled %>
      <!-- Some examples from http://wiki.spdx.org/view/FileNoticeExamples -->
      <datalist id="license_list">
@@ -127,38 +132,36 @@ The information on how to contribute SHOULD include the basic criteria for accep
 
        <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
                criteria: "oss_license", desc: %{
-The software MUST be released as OSS. For our purposes, this means that the license MUST be at least one of the following:
-an approved license by the Open Source Initiative (OSI)
-a free license as approved by the Free Software Foundation (FSF)
-a free license acceptable to Debian main
-a "good" license according to Fedora. <sup>[oss-license]
+The software MUST be released as OSS.},
+               details: {
+<p>
+For our purposes, this means that the license MUST be at least one of the following:
+</p>
+<ul>
+<li><a href="https://opensource.org/licenses">an approved license by the Open Source Initiative (OSI)</a></li>
+<li><a href="https://www.gnu.org/licenses/license-list.html">a free license as approved by the Free Software Foundation (FSF)</a></li>
+<li><a href="https://www.debian.org/legal/licenses/">a free license acceptable to Debian main</a></li>
+<li><a href="https://fedoraproject.org/wiki/Licensing:Main?rd=Licensing">a "good" license according to Fedora</a></li> 
+</ul>
+<p>The software MAY also be licensed other ways (e.g., "GPLv2 or proprietary" is acceptable).</p>
 }}) %>
        <hr>
 
        <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
                criteria: "oss_license_osi", desc: %{
-It is SUGGESTED that any required license(s) be OSI-approved.
+It is SUGGESTED that any required license(s) be
+<a href="https://opensource.org/licenses">OSI-approved</a>.
 }}) %>
        <hr>
 
 
        <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
                criteria: "license_location", desc: %{
-License(s) MUST be posted in a standard location (e.g., as a top-level file named LICENSE or COPYING).},
+The project MUST post licence(s) in a standard location.
                 details: %{
-License filenames MAY be followed by an extension such as ".txt" or ".md")
+E.g., as a top-level file named LICENSE or COPYING.
+License filenames MAY be followed by an extension such as ".txt" or ".md".
 }}) %>
-
-      <br>
-      <span class='criteria-desc'><b>Note</b>: We intend for the automated tool to focus on identifying common OSS licenses such as:
-        CC0, MIT, BSD 2-clause, BSD 3-clause revised, Apache 2.0, Lesser GNU General Public License (LGPL),
-        and the GNU General Public License (GPL).<br>
-        <b>Rationale</b>: These criteria are designed for OSS projects, so we need to ensure
-        that they're only used where they apply. Some projects are thought of as OSS
-        yet are not actually released as OSS (e.g., they might not have any license,
-        in which case the defaults of the country's legal system apply, or they might use a non-OSS license).
-        Unusual licenses can cause long-term problems for OSS projects and are more difficult for tools to handle.
-        We expect that that "higher-level" criteria would set a higher bar, e.g., that it must be released under an OSI-approved license.</span>
 
       <br><br>
       <h3>Documentation</h3>

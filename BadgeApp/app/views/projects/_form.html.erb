@@ -42,12 +42,21 @@ There is also a
     <h2 class="center">OSS Project Basics</h2>
 
     <h3>Identification</h3>
-      <span>What is the human-readable name of the project (note that other
-            projects may use the same name)?</span>
+      <span>What is the human-readable name of the project?
+<%= render(partial: "details", locals: {is_disabled: false,
+           criteria: "badge_intro", details: %{
+Note that other projects may use the same name.
+}}) %>
+</span>
       <%= f.text_field :name, class:"form-control", placeholder:'OSS Project Name', disabled: is_disabled %>
 
-      <span>What is a brief description of the project, including key comments
-            about it (for use when displaying badge information)?</span>
+      <span>What is a brief description of the project?
+<%= render(partial: "details", locals: {is_disabled: false,
+           criteria: "badge_intro", details: %{
+Include key comments about the project.
+This information is used when displaying badge information.
+}}) %>
+</span>
       <%= f.text_area :description, class:"form-control", hide_label: true, placeholder:'Project Description', disabled: is_disabled %>
 
       <span>What is the URL for the project (as a whole)?</span>
@@ -57,33 +66,34 @@ There is also a
             (it may the same as the project URL)?</span>
       <%= f.text_field :repo_url, class:"form-control", hide_label: true, placeholder:'Project Repo URL', disabled: is_disabled %>
 
+<!-- TODO: MUST have a project or repo URL, SUGGESTED to use HTTPS -->
+
     <h3>Basic Project Website Content</h3>
       <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
               criteria: "description_sufficient", desc: %{
 The project website MUST succinctly describe what the software does
-(what problem does it solve?), in language that potential users can
-understand (e.g., it uses minimal jargon).
+(what problem does it solve?).}, 
+              details: {
+This MUST be in language that potential users can understand (e.g., it uses minimal jargon).
 }}) %>
       <hr>
 
       <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
               criteria: "interact", desc: %{
-The project website MUST provide information on how to: obtain,provide feedback
+The project website MUST provide information on how to: obtain, provide feedback
 (as bug reports or enhancements), and contribute to the sofware.
 }}) %>
       <hr>
 
       <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
               criteria: "contribution", desc: %{
-The project website MUST provide information on how to: obtain,provide feedback
-(as bug reports or enhancements), and contribute to the sofware.
+The information on how to contribute MUST explain the contribution process (e.g., are pull requests used?)
 }}) %>
       <hr>
 
       <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
               criteria: "contribution_criteria", desc: %{
-The project website MUST provide information on how to: obtain, provide feedback
-(as bug reports or enhancements), and contribute to the sofware. <sup>[contribution-criteria]
+The information on how to contribute SHOULD include the basic criteria for acceptable contributions (e.g., a reference to any required coding standard).
 }}) %>
       <br><br>
 

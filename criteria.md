@@ -109,11 +109,11 @@ same as the project URL), and license(s).
 
 *Basic project website content*
 
-- <a name="description-sufficient"></a>The project website MUST succinctly describe what the software does (what problem does it solve?), in language that potential users can understand (e.g., it uses minimal jargon). <sup>[<a href="#description-sufficient">description-sufficient</a>]</sup>
-- The project website MUST provide information on how to:
+- <a name="description-sufficient"></a>The project website MUST succinctly describe what the software does (what problem does it solve?). This MUST be in language that potential users can understand (e.g., it uses minimal jargon). <sup>[<a href="#description-sufficient">description-sufficient</a>]</sup>
+- <a name="interact"></a>The project website MUST provide information on how to:
   - obtain,
   - provide feedback (as bug reports or enhancements),
-  - <a name="interact"></a>and contribute to the sofware. <sup>[<a href="#interact">interact</a>]</sup>
+  - and contribute to the sofware. <sup>[<a href="#interact">interact</a>]</sup>
 - <a name="contribution"></a>The information on how to contribute MUST explain the contribution process (e.g., are pull requests used?) <sup>[<a href="#contribution">contribution</a>]</sup>
 - <a name="contribution-criteria"></a>The information on how to contribute SHOULD include the basic criteria for acceptable contributions (e.g., a reference to any required coding standard). <sup>[<a href="#contribution-criteria">contribution-criteria</a>]</sup>
 

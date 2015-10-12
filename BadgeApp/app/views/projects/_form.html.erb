@@ -168,7 +168,9 @@ License filenames MAY be followed by an extension such as ".txt" or ".md".
 
       <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
               criteria: "documentation_basics", desc: %{
-The project MUST provide basic documentation for the software in some media (such as text or video) that includes:
+The project MUST provide basic documentation for the software.},
+              details: %{
+This documentation must be  in some media (such as text or video) that includes:
 how to install it, how to start it, how to use it (possibly with a tutorial using examples), and
 how to use it securely (e.g., what to do and what not to do) if that is an appropriate topic for the software.
 The security documentation need not be long (it is better for the software to be designed to be secure by default).

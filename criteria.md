@@ -144,12 +144,11 @@ same as the project URL), and license(s).
 
 *Public version-controlled source repository*
 
-- <a name="repo-url"></a>The project MUST have a version-controlled source repository that is publicly readable and has a URL (the URL MAY be the same as the project URL). <sup>[<a href="#repo-url">repo-url</a>]&#8224;</sup>
+- <a name="repo-url"></a>The project MUST have a version-controlled source repository that is publicly readable and has a URL (the URL MAY be the same as the project URL).  The project MAY use private (non-public) branches in specific cases while the change is not publicly released (e.g., for fixing a vulnerability before it is revealed to the public).
+ <sup>[<a href="#repo-url">repo-url</a>]&#8224;</sup>
 - <a name="repo-track"></a>The source repository MUST track what changes were made, who made the changes, and when the changes were made. <sup>[<a href="#repo-track">repo-track</a>]&#8224;</sup>
-- <a name="repo-interim"></a>The source repository MUST include interim versions for review between releases; it MUST NOT include only final releases. <sup>[<a href="#repo-interim">repo-interim</a>]</sup>
-- <a name="repo-distributed"></a>It is SUGGESTED that common distributed version control software is used (e.g., git).  Git is not specifically required and projects can use centralized version control software (such as subversion) with justification. <sup>[<a href="#repo-distributed">repo-distributed</a>]&#8224;</sup>
-- The project MAY use private (non-public) branches in specific cases while the change is not publicly released (e.g., for fixing a vulnerability before it is revealed to the public).
-- *Rationale*:  This enables easy tracking and public review.  Some OSS projects do not use a version control system or do not provide public access to it. The lack of a public version control repository makes it unnecessarily difficult to contribute to a project and to track its progress in detail.
+- <a name="repo-interim"></a>The source repository MUST include interim versions for review between releases; it MUST NOT include only final releases.  *Rationale*:  This enables easy tracking and public review.  Some OSS projects do not use a version control system or do not provide public access to it. The lack of a public version control repository makes it unnecessarily difficult to contribute to a project and to track its progress in detail.  <sup>[<a href="#repo-interim">repo-interim</a>]</sup>
+- <a name="repo-distributed"></a>It is SUGGESTED that common distributed version control software is used (e.g., git).  Git is not specifically required and projects can use centralized version control software (such as subversion). <sup>[<a href="#repo-distributed">repo-distributed</a>]&#8224;</sup>
 
 *Version numbering*
 

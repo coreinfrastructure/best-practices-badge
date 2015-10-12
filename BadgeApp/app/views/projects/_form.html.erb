@@ -193,7 +193,9 @@ as long as the linked-to information is available and meets the requirements.
 
        <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
                criteria: "repo_url", desc: %{
-The project MUST have a version-controlled source repository that is publicly readable and has a URL (the URL MAY be the same as the project URL).
+The project MUST have a version-controlled source repository that is publicly readable and has a URL (the URL MAY be the same as the project URL).},
+               details: %{
+The project MAY use private (non-public) branches in specific cases while the change is not publicly released (e.g., for fixing a vulnerability before it is revealed to the public).
 }}) %>
       <hr>
 
@@ -207,14 +209,18 @@ and when the changes were made.
       <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
                criteria: "repo_interim", desc: %{
 The source repository MUST include interim versions for review between releases;
-it MUST NOT include only final releases.
+it MUST NOT include only final releases.},
+               details: %{
+This enables easy tracking and public review.  Some OSS projects do not use a version control system or do not provide public access to it. The lack of a public version control repository makes it unnecessarily difficult to contribute to a project and to track its progress in detail.
 }}) %>
       <hr>
 
       <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
                criteria: "repo_distributed", desc: %{
-It is SUGGESTED that common distributed version control software is used (e.g., git).
-Git is not specifically required and projects can use centralized version control software
+It is SUGGESTED that common distributed version control software is used (e.g., git).},
+               details: %{
+Git is not specifically required and projects
+can use centralized version control software
 (such as subversion) with justification.
 }}) %>
 

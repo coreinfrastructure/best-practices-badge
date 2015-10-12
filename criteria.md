@@ -154,7 +154,7 @@ same as the project URL), and license(s).
 
 - <a name="version-unique"></a>The project MUST have a unique version number for each release intended to be used by users. <sup>[<a href="#version-unique">version-unique</a>]</sup>
 - <a name="version-semver"></a>It is SUGGESTED that the [Semantic Versioning (SemVer) format](http://semver.org) is used for releases. <sup>[<a href="#version-semver">version-semver</a>]</sup>
-- Commit IDs (or similar) MAY be used as as version numbers. They are unique, but note that these can cause problems for users as they may not be able to determine  whether or not they're up-to-date.
+- Commit IDs (or similar) MAY be used as version numbers. They are unique, but note that these can cause problems for users as they may not be able to determine  whether or not they're up-to-date.
 - <a name="version-tags"></a>It is SUGGESTED that projects identify each release within their version control system. For example, it is SUGGESTED that those using git identify each release using git tags. <sup>[<a href="#version-tags">version-tags</a>]&#8224;</sup>
 
 *ChangeLog*

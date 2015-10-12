@@ -73,7 +73,7 @@ This information is used when displaying badge information.
               criteria: "description_sufficient", desc: %{
 The project website MUST succinctly describe what the software does
 (what problem does it solve?).}, 
-              details: {
+              details: %{
 This MUST be in language that potential users can understand (e.g., it uses minimal jargon).
 }}) %>
       <hr>
@@ -133,7 +133,7 @@ Please use <a href="https://spdx.org/licenses/">SPDX format</a> (examples includ
        <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
                criteria: "oss_license", desc: %{
 The software MUST be released as OSS.},
-               details: {
+               details: %{
 <p>
 For our purposes, this means that the license MUST be at least one of the following:
 </p>
@@ -157,7 +157,7 @@ It is SUGGESTED that any required license(s) be
 
        <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
                criteria: "license_location", desc: %{
-The project MUST post licence(s) in a standard location.
+The project MUST post licence(s) in a standard location.},
                 details: %{
 E.g., as a top-level file named LICENSE or COPYING.
 License filenames MAY be followed by an extension such as ".txt" or ".md".

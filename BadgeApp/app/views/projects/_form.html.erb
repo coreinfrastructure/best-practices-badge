@@ -279,6 +279,7 @@ known vulnerabilities.
       <h2 class="center h2">Reporting</h2>
       <h3>Bug-reporting process</h3>
 
+      <!-- TODO: Need to handle URLs of issue tracker better. -->
       <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
                criteria: "report_url", desc: %{
 If an issue tracker is used, please provide its URL.
@@ -322,17 +323,20 @@ Reports and responses MUST be archived for later searching.
       <h3>Vulnerability report process</h3>
       <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
                criteria: "vulnerability_report_process", desc: %{
-The project MUST publish the process for reporting vulnerabilities on the project site
-(e.g., a clearly designated mailing address on https://PROJECTSITE/security, often security@SOMEWHERE);
-this MAY be the same as its bug reporting process.
+The project MUST publish the process for reporting vulnerabilities on the project site.},
+               details: %{
+E.g., a clearly designated mailing address on https://PROJECTSITE/security, often security@SOMEWHERE.
+This MAY be the same as its bug reporting process.
 }}) %>
       <hr>
 
       <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
                criteria: "vulnerability_report_private", desc: %{
 If private vulnerability reports are supported, the project MUST include how
-to send the information in a way that is kept private (e.g., a private defect
-report submitted on the web using TLS or an email encrypted using PGP).
+to send the information in a way that is kept private.},
+               details: %{
+E.g., a private defect
+report submitted on the web using TLS or an email encrypted using OpenPGP.
 If private vulnerability reports are not supported this criterion is
 automatically met.
 }}) %>
@@ -341,9 +345,10 @@ automatically met.
       <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
                criteria: "vulnerability_report_response", desc: %{
 The project MUST provide an initial reply to a security vulnerability report
-sent to the project, on average, less than 7 days within the last 6 months.
-(If a project is being spammed on its vulnerability report channel,
-it is okay to only count non-spam messages.)
+sent to the project, on average, less than 7 days within the last 6 months.},
+               details: %{
+If a project is being spammed on its vulnerability report channel,
+it is okay to only count non-spam messages.
 }}) %>
 
      <br><br><br>

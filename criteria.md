@@ -177,8 +177,8 @@ same as the project URL), and license(s).
 
 *Vulnerability report process*
 
-- <a name="vulnerability-report-process"></a>The project MUST publish the process for reporting vulnerabilities on the project site (e.g., a clearly designated mailing address on https://PROJECTSITE/security, often security@SOMEWHERE); this MAY be the same as its bug reporting process. <sup>[<a href="#vulnerability-report-process">vulnerability-report-process</a>]&#8224;</sup>
-- <a name="vulnerability-report-private"></a>If private vulnerability reports are supported, the project MUST include how to send the information in a way that is kept private (e.g., a private defect report submitted on the web using TLS or an email encrypted using PGP). If private vulnerability reports are not supported this criterion is automatically met. <sup>[<a href="#vulnerability-report-private">vulnerability-report-private</a>]</sup>
+- <a name="vulnerability-report-process"></a>The project MUST publish the process for reporting vulnerabilities on the project site.  E.g., a clearly designated mailing address on https://PROJECTSITE/security, often security@SOMEWHERE.  This MAY be the same as its bug reporting process. <sup>[<a href="#vulnerability-report-process">vulnerability-report-process</a>]&#8224;</sup>
+- <a name="vulnerability-report-private"></a>If private vulnerability reports are supported, the project MUST include how to send the information in a way that is kept private.  E.g., a private defect report submitted on the web using TLS or an email encrypted using OpenPGP. If private vulnerability reports are not supported this criterion is automatically met. <sup>[<a href="#vulnerability-report-private">vulnerability-report-private</a>]</sup>
 - <a name="vulnerability-report-response"></a>The project MUST provide an initial reply to a security vulnerability report sent to the project, on average, less than 7 days within the last 6 months.  (If a project is being spammed on its vulnerability report channel, it is okay to only count non-spam messages.) <sup>[<a href="#vulnerability-report-response">vulnerability-report-response</a>]</sup>
 
 

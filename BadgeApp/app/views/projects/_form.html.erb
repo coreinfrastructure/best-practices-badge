@@ -393,8 +393,9 @@ The project MUST have at least one automated test suite.
 
       <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
                criteria: "test_invocation", desc: %{
-A test suite SHOULD be invocable in a standard way for that language
-(e.g., "make check", "mvn test", and so on).
+A test suite SHOULD be invocable in a standard way for that language.},
+               details: %{
+For example, "make check", "mvn test", or "rake test".
 }}) %>
       <hr>
 

@@ -196,7 +196,8 @@ For example, Maven, Ant, cmake, the autotools, make, or rake.
 *Automated test suite*
 
 - <a name="test"></a>The project MUST have at least one automated test suite. <sup>[<a href="#test">test</a>]</sup>
-- <a name="test-invocation"></a>A test suite SHOULD be invocable in a standard way for that language (e.g., "make check", "mvn test", and so on). <sup>[<a href="#test-invocation">test-invocation</a>]</sup>
+- <a name="test-invocation"></a>A test suite SHOULD be invocable in a standard way for that language.
+For example,  "make check", "mvn test", or "rake test". <sup>[<a href="#test-invocation">test-invocation</a>]</sup>
 - <a name="test-most"></a> It is SUGGESTED that the test suite cover most (or ideally all) the code branches, input fields, and functionality. <sup>[<a href="#test-most">test-most</a>]</sup>
 - The project MAY have multiple automated test suites (e.g., one that runs quickly, vs. another that is more thorough but requires special equipment).
 - *Rationale*: Automated test suites immediately help detect a variety of problems.  A large test suite can find more problems, but even a small test suite can detect problems and provide a framework to build on.

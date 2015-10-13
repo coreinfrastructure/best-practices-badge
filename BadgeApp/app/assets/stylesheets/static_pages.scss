@@ -236,11 +236,13 @@ aside {
   }
 }
 
-.borderless tbody tr td, .borderless tbody tr th, .borderless thead tr th {
+.borderless tbody tr td, .borderless tbody tr td label, .borderless tbody tr th, .borderless thead tr th {
     border: none;
+    padding-top: 0px;
 }
 .borderless {
    border: none;
+   padding-top: 0px;
 }
 
 

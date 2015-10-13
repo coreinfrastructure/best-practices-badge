@@ -36,6 +36,7 @@ GEM
       minitest (~> 5.1)
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
+    addressable (2.3.8)
     arel (6.0.3)
     bcrypt (3.1.10)
     binding_of_caller (0.7.2)
@@ -56,12 +57,22 @@ GEM
       execjs
     coffee-script-source (1.9.1.1)
     debug_inspector (0.0.2)
+    descendants_tracker (0.0.4)
+      thread_safe (~> 0.3, >= 0.3.1)
     erubis (2.7.0)
     execjs (2.6.0)
     faker (1.5.0)
       i18n (~> 0.5)
     faraday (0.9.1)
       multipart-post (>= 1.2, < 3)
+    github_api (0.12.4)
+      addressable (~> 2.3)
+      descendants_tracker (~> 0.0.4)
+      faraday (~> 0.8, < 0.10)
+      hashie (>= 3.4)
+      multi_json (>= 1.7.5, < 2.0)
+      nokogiri (~> 1.6.6)
+      oauth2
     globalid (0.3.6)
       activesupport (>= 4.1.0)
     hashie (3.4.2)
@@ -192,6 +203,7 @@ DEPENDENCIES
   byebug
   coffee-rails (~> 4.1.0)
   faker
+  github_api
   jbuilder (~> 2.0)
   jquery-rails
   jquery-ui-rails

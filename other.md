@@ -104,7 +104,7 @@ Potential other criteria
     -   An automated test suite must achieve at least an aggregate 80% branch coverage (the goal is to cover a significant portion of the program; this can be a combination of unit tests and larger integration tests).
 *   Release:
     -   Executable binaries that are released (both DLL and EXE's on Windows) MUST be cryptographically signed (the goal is to allow application whitelisting systems to use the signature to allow applications to run rather then relying on path or hash based rules - this might be at odds with some users requirement to be able to build from source but I thought I'd raise it anyways).
-    -   
+
 We are considering moving the criteria continuous integration
 and reproduceable builds into the basic best practices criteria.
 

@@ -751,11 +751,10 @@ severity if its <a href="https://nvd.nist.gov/cvss.cfm">CVSS 2.0</a> base score 
       <hr class='col-md-11'>
       <%= f.text_area :general_comments, class:"form-control",  hide_label: true, placeholder:'Additional Comments', disabled: is_disabled %>
       <br>
-      <%= f.submit 'Submit', class:"btn btn-primary" %>
+      <% if ! is_disabled %>
+        <%= f.submit 'Submit', class:"btn btn-primary" %>
+      <% end %>
     <% end %>
-
-
-
 
 
 

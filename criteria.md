@@ -204,7 +204,7 @@ For example,  "make check", "mvn test", or "rake test". <sup>[<a href="#test-inv
 
 *New functionality testing*
 
-- <a name="test-policy"></a>The project MUST have a general policy (formal or not) that as major new functionality is added, tests of that functionality SHOULD be added to an automated test suite. <sup>[<a href="#tests-policy">tests-policy</a>]</sup>
+- <a name="test-policy"></a>The project MUST have a general policy (formal or not) that as major new functionality is added, tests of that functionality SHOULD be added to an automated test suite. <sup>[<a href="#test-policy">test-policy</a>]</sup>
 - <a name="tests-are-added"></a>The project MUST have evidence that such tests are being added in the most recent major changes to the project.  Major functionality would typically be mentioned in the ChangeLog.  (Perfection is not required, merely evidence that tests are typically being added in practice.) <sup>[<a href="#tests-are-added">tests-are-added</a>]</sup>
 - <a name="tests-documented-added"></a>It is SUGGESTED that this policy on adding tests be *documented* in the instructions for change proposals. However, even an informal rule is acceptable as long as the tests are being added in practice. <sup>[<a href="#tests-documented-added">tests-documented-added</a>]</sup>
 

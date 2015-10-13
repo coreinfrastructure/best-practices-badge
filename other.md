@@ -91,7 +91,6 @@ Potential other criteria
     -   Privileges limited/minimized.
     -   Attack surface documented and minimized.
     -   Automated regression test suite includes at least one check for rejection of invalid data for each input field.  Rationale: Many regression test suites check only for perfect data; attackers will instead provide invalid data, and programs need to protect themselves against it.
-    -   If passwords are stored to allow users to log into the software, the passwords must be stored as iterated per-user salted cryptographic hashes (at least) and *not* in the clear or as simple hashes.
     -   Developers contributing a majority of the software (over 50%) have learned how to develop secure software.
     -   Standard security advisory template and a pre-notification process (useful for big projects; see Xen project as an example).
     -   All inputs from potentially untrusted sources are checked to ensure they are valid (a *whitelist*).  Invalid inputs are rejected.  Note that comparing against a list of "bad formats" (a *blacklist*) is not enough.  In particular, numbers are converted and checked if they are between their minimum and maximum (inclusive), and text strings are checked to ensure that they are valid text patterns.

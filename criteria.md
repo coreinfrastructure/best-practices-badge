@@ -206,13 +206,13 @@ For example,  "make check", "mvn test", or "rake test". <sup>[<a href="#test-inv
 
 - <a name="test-policy"></a>The project MUST have a general policy (formal or not) that as major new functionality is added, tests of that functionality SHOULD be added to an automated test suite. <sup>[<a href="#tests-policy">tests-policy</a>]</sup>
 - <a name="tests-are-added"></a>The project MUST have evidence that such tests are being added in the most recent major changes to the project.  Major functionality would typically be mentioned in the ChangeLog.  (Perfection is not required, merely evidence that tests are typically being added in practice.) <sup>[<a href="#tests-are-added">tests-are-added</a>]</sup>
-- <a name="tests-documented-added"></a>It is SUGGESTED that this be *documented* in the instructions for change proposals, but even an informal rule is acceptable as long as the tests are being added in practice. <sup>[<a href="#tests-documented-added">tests-documented-added</a>]</sup>
+- <a name="tests-documented-added"></a>It is SUGGESTED that this policy on adding tests be *documented* in the instructions for change proposals. However, even an informal rule is acceptable as long as the tests are being added in practice. <sup>[<a href="#tests-documented-added">tests-documented-added</a>]</sup>
 
 *Warning flags*
 
-- <a name="warnings"></a>The project MUST enable some compiler warning flagss (e.g. "-Wall"), a "safe" language mode (e.g., "use strict", "use warnings", or similar), and/or use a separate "linter" tool to look for code quality errors or common simple mistakes, if there is at least one OSS tool that can implement this criterion in the selected language. <sup>[<a href="#warnings">warnings</a>]\*</sup>
-- <a name="warnings-fixed"></a>The project MUST address the issues that are found (by fixing them or marking them in the source code as false positives).  Ideally there would be no warnings, but a project MAY accept some warnings (typically less than 1 warning per 100 lines or less than 10 warnings). <sup>[<a href="#warnings-fixed">warnings-fixed</a>]\*</sup>
-- <a name="warnings-strict"></a>It is SUGGESTED that projects be maximally strict, but this is not always practical. <sup>[<a href="#warnings-strict">warnings-strict</a>]\*</sup>
+- <a name="warnings"></a>The project MUST enable one or more compiler warning flags, a "safe" language mode, or use a separate "linter" tool to look for code quality errors or common simple mistakes, if there is at least one OSS tool that can implement this criterion in the selected language.  Examples of compiler warning flagss include gcc/clang "-Wall".  Examples of a "safe" language mode include Javascript "use strict" and perl5's "use warnings".  A separate "linter" tool is simply a tool that examines the source code to look for code quality errors or common simple mistakes.  <sup>[<a href="#warnings">warnings</a>]\*</sup>
+- <a name="warnings-fixed"></a>The project MUST address warnings.  The project should fix warnings or mark them in the source code as false positives.  Ideally there would be no warnings, but a project MAY accept some warnings (typically less than 1 warning per 100 lines or less than 10 warnings). <sup>[<a href="#warnings-fixed">warnings-fixed</a>]\*</sup>
+- <a name="warnings-strict"></a>It is SUGGESTED that projects be maximally strict with warnings, but this is not always practical. <sup>[<a href="#warnings-strict">warnings-strict</a>]\*</sup>
 
 ### Security
 

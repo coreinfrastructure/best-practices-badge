@@ -387,7 +387,10 @@ The project SHOULD be buildable using only OSS tools.
 
       <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
                criteria: "test", desc: %{
-The project MUST have at least one automated test suite.
+The project MUST have at least one automated test suite.},
+               details: %{
+The project MAY have multiple automated test suites (e.g., one that runs quickly, vs. another that is more thorough but requires special equipment).
+<b>Rationale</b>: Automated test suites immediately help detect a variety of problems.  A large test suite can find more problems, but even a small test suite can detect problems and provide a framework to build on.
 }}) %>
       <hr>
 
@@ -405,14 +408,6 @@ It is SUGGESTED that the test suite cover most (or ideally all)
 the code branches, input fields, and functionality.
 }}) %>
 
-      <br>
-      <span class='criteria-desc'>The project MAY have multiple automated test suites
-            (e.g., one that runs quickly, vs. another that is more thorough but requires special equipment).<br>
-            <b>Rationale</b>: If a project needs to be built but there is no working build system,
-            then potential co-developers will not be able to easily contribute and many security analysis
-            tools will be ineffective. Criteria for a working build system are not applicable if there is
-            no need to build anything for use.</span>
-
     <br><br>
     <h3>New functionality testing</h3>
 
@@ -427,16 +422,20 @@ be added to an automated test suite.
       <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
                criteria: "tests_are_added", desc: %{
 The project MUST have evidence that such tests are being added in
-the most recent major changes to the project. Major functionality would typically
-be mentioned in the ChangeLog. (Perfection is not required, merely evidence
+the most recent major changes to the project.
+Major functionality would typically be mentioned in the ChangeLog.},
+               details: %{
+(Perfection is not required, merely evidence
 that tests are typically being added in practice.)
 }}) %>
       <hr>
 
       <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
                criteria: "tests_documented_added", desc: %{
-It is SUGGESTED that this be documented in the instructions for change proposals,
-but even an informal rule is acceptable as long as the tests are being
+It is SUGGESTED that this policy on adding tests be
+<i>documented</i> in the instructions for change proposals.}
+               details: %{
+However, even an informal rule is acceptable as long as the tests are being
 added in practice.
 }}) %>
 
@@ -445,26 +444,29 @@ added in practice.
 
       <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
                criteria: "warnings", desc: %{
-The project MUST enable some compiler warning flags (e.g. "-Wall"),
-a "safe" language mode (e.g., "use strict", "use warnings", or similar),
-and/or use a separate "linter" tool to look for code quality errors or
-common simple mistakes, if there is at least one OSS tool that can implement
-this criterion in the selected language.
+The project MUST enable one or more compiler warning flags, a "safe"
+language mode, or use a separate "linter" tool to look for code quality
+errors or common simple mistakes, if there is at least one OSS tool that
+can implement this criterion in the selected language.}
+               details: %{
+Examples of compiler warning flagss include gcc/clang "-Wall".
+Examples of a "safe" language mode include Javascript "use strict" 
+and perl5's "use warnings". 
+A separate "linter" tool is simply a tool that examines the
+source code to look for code quality errors or common simple mistakes.
 }}) %>
 
       <hr>
       <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
                criteria: "warnings_fixed", desc: %{
-The project MUST address the issues that are found (by fixing them or
-marking them in the source code as false positives). Ideally there would be no warnings,
-but a project MAY accept some warnings (typically less than 1 warning
-per 100 lines or less than 10 warnings).
+The project MUST address warnings.},
+               details: %{The project should fix warnings or mark them in the source code as false positives.  Ideally there would be no warnings, but a project MAY accept some warnings (typically less than 1 warning per 100 lines or less than 10 warnings).
 }}) %>
       <hr>
 
       <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
                criteria: "warnings_strict", desc: %{
-It is SUGGESTED that projects be maximally strict, but this is not
+It is SUGGESTED that projects be maximally strict with warnings, but this is not
 always practical.
 }}) %>
 

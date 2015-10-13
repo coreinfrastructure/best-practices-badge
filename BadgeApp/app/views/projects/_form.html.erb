@@ -483,8 +483,8 @@ always practical.
 
     <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
              criteria: "know_secure_design", desc: %{
-At least one of the primary developers
-MUST know how to design secure software.},
+The project MUST have at least one primary developer who knows
+how to design secure software.},
              details: %{
 This requires understanding the following design principles, including the 8 principles from <a href="http://web.mit.edu/Saltzer/www/publications/protection/">Saltzer and Schroeder</a>:
 <ul>
@@ -515,7 +515,7 @@ cross-site scripting, missing authentication, and missing authorization.
 See the <a href="http://cwe.mitre.org/top25/">CWE/SANS top 25</a> or
 <a href="https://www.owasp.org/index.php/Category:OWASP_Top_Ten_Project">OWASP Top 10</a>
 for commonly-used lists. 
-<b>Note: </b>If there is only one developer, by definition that individual is the primary developer.</span>
+<b>Note:</b> If there is only one developer, by definition that individual is the primary developer.
 }}) %>
 
     <br><br><br>

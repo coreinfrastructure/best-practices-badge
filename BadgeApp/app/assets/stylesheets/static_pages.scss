@@ -235,3 +235,12 @@ aside {
     border-bottom: 1px solid $gray-lighter;
   }
 }
+
+.borderless tbody tr td, .borderless tbody tr th, .borderless thead tr th {
+    border: none;
+}
+.borderless {
+   border: none;
+}
+
+

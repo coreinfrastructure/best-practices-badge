@@ -1,4 +1,4 @@
-<div class="center jumbotron">
+<div class="jumbotron">
 
  <% provide(:title, @user.name) %>
  <div class="row">
@@ -8,6 +8,16 @@
          <%= gravatar_for @user %>
          <%= @user.name %>
        </h3>
+       <br><br><br><br>
+       <% if @user.provider == 'github'%>
+          <h4>Public Github Repos:</h4>
+          <ul>
+          <% repo_data = Github.repos.list user: @user.nickname %>
+          <% repo_data.each do |repo| %>
+              <li><%= link_to repo['name'], repo['html_url']%></li>
+          <% end %>
+          </ul>
+       <% end %>
      </section>
    </aside>
  </div>

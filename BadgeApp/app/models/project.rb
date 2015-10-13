@@ -1,4 +1,8 @@
 class Project < ActiveRecord::Base
+  # Record information about a project.
+  # We'll also record previous versions of information:
+  has_paper_trail
+
   # Currently no validation rules for:
   #  name, description, license, *_justification
   # We'll rely on Rails' HTML escaping system to counter XSS.
@@ -11,6 +15,7 @@ class Project < ActiveRecord::Base
   validates :repo_url, format: {
     with: /\A(|https?:\/\/[A-Za-z0-9][-A-Za-z0-9_.\/]*(\/[-A-Za-z0-9_.\/\+,#]*)?)\z/,
     message: "URL must begin with http: or https: and use a limited charset" }
+
   STATUS_CHOICE = ['?', 'Met', 'Unmet']
   validates_inclusion_of :project_url_status, :in => STATUS_CHOICE
   validates_inclusion_of :project_url_https_status, :in => STATUS_CHOICE
@@ -75,7 +80,5 @@ class Project < ActiveRecord::Base
   validates_inclusion_of :dynamic_analysis_unsafe_status, :in => STATUS_CHOICE
   validates_inclusion_of :dynamic_analysis_enable_assertions_status, :in => STATUS_CHOICE
   validates_inclusion_of :dynamic_analysis_fixed_status, :in => STATUS_CHOICE
-
-  
 
 end

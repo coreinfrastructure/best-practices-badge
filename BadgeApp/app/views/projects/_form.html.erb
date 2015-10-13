@@ -144,6 +144,10 @@ For our purposes, this means that the license MUST be at least one of the follow
 <li><a href="https://fedoraproject.org/wiki/Licensing:Main?rd=Licensing">a "good" license according to Fedora</a></li> 
 </ul>
 <p>The software MAY also be licensed other ways (e.g., "GPLv2 or proprietary" is acceptable).</p>
+<p><em>Note</em>: We intend for the automated tool to focus on identifying common OSS licenses such as:     <a href="http://creativecommons.org/publicdomain/zero/1.0/">CC0</a>, <a href="https://opensource.org/licenses/MIT">MIT</a>, <a href="https://opensource.org/licenses/BSD-2-Clause">BSD 2-clause</a>, <a href="https://opensource.org/licenses/BSD-3-Clause">BSD 3-clause revised</a>, <a href="https://opensource.org/licenses/Apache-2.0">Apache 2.0</a>, <a href="https://opensource.org/licenses/lgpl-license">Lesser GNU General Public License (LGPL)</a>, and the <a href="https://opensource.org/licenses/gpl-license">GNU General Public License (GPL)</a>.</p>
+<p><em>Rationale</em>: These criteria are designed for OSS projects, so we need to ensure that they're only used where they apply.  Some projects are thought of as OSS yet are not actually released as OSS (e.g., they might not have any license, in which case the defaults of the country's legal system apply, or they might use a non-OSS license).  Unusual licenses can cause long-term problems for OSS projects and are more difficult for tools to handle.  We expect that more advanced badges would set a higher bar (e.g., that it <em>must</em> be released under an OSI-approved license).</p>
+</ul>
+
 }}) %>
        <hr>
 
@@ -235,8 +239,9 @@ to be used by users.
 
       <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
                criteria: "version_semver", desc: %{
-It is SUGGESTED that the Semantic Versioning (SemVer) format is
-used for releases.},
+It is SUGGESTED that the
+<a href="http://semver.org">Semantic Versioning (SemVer) format</a> 
+is used for releases.},
                details: %{
 Commit IDs (or similar) MAY be used as version numbers. They are unique, but note that these can
 cause problems for users as they may not be able to determine whether or not they're up-to-date.
@@ -262,7 +267,8 @@ The ChangeLog MUST NOT be the output of the version control log of every change
 The ChangeLog MAY be implemented in a variety of ways. The ChangeLog MAY be a separate file
 (e.g., "ChangeLog" or "changelog") and the filename MAY be followed by an extension such as
 ".txt", ".md", or ".html". The ChangeLog MAY instead use version control system mechanisms
-such as the GitHub Releases workflow.<br>
+such as the
+<a href="https://github.com/blog/1547-release-your-software">GitHub Releases workflow</a>.<br>
 <b>Rationale</b>: ChangeLogs are important because they help users decide whether or not they
 will want to update, and what the impact would be (e.g., if the new release fixes vulnerabilities).
 }}) %>
@@ -279,11 +285,12 @@ known vulnerabilities.
       <h2 class="center h2">Reporting</h2>
       <h3>Bug-reporting process</h3>
 
-      <!-- TODO: Need to handle URLs of issue tracker better. -->
-      <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
-               criteria: "report_url", desc: %{
-If an issue tracker is used, please provide its URL.
-}}) %>
+      <!-- TODO: Add report_url to model and database.
+      <span>If an issue tracker is used, please provide its URL.
+      </span>
+      \<\% = f.text_field :report_url , class:"form-control", placeholder:'Issue tracker URL (if any)', disabled: is_disabled % >
+      -->
+
       <hr>
 
       <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
@@ -387,7 +394,10 @@ The project SHOULD be buildable using only OSS tools.
 
       <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
                criteria: "test", desc: %{
-The project MUST have at least one automated test suite.
+The project MUST have at least one automated test suite.},
+               details: %{
+The project MAY have multiple automated test suites (e.g., one that runs quickly, vs. another that is more thorough but requires special equipment).
+<b>Rationale</b>: Automated test suites immediately help detect a variety of problems.  A large test suite can find more problems, but even a small test suite can detect problems and provide a framework to build on.
 }}) %>
       <hr>
 
@@ -405,14 +415,6 @@ It is SUGGESTED that the test suite cover most (or ideally all)
 the code branches, input fields, and functionality.
 }}) %>
 
-      <br>
-      <span class='criteria-desc'>The project MAY have multiple automated test suites
-            (e.g., one that runs quickly, vs. another that is more thorough but requires special equipment).<br>
-            <b>Rationale</b>: If a project needs to be built but there is no working build system,
-            then potential co-developers will not be able to easily contribute and many security analysis
-            tools will be ineffective. Criteria for a working build system are not applicable if there is
-            no need to build anything for use.</span>
-
     <br><br>
     <h3>New functionality testing</h3>
 
@@ -427,16 +429,20 @@ be added to an automated test suite.
       <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
                criteria: "tests_are_added", desc: %{
 The project MUST have evidence that such tests are being added in
-the most recent major changes to the project. Major functionality would typically
-be mentioned in the ChangeLog. (Perfection is not required, merely evidence
+the most recent major changes to the project.},
+               details: %{
+Major functionality would typically be mentioned in the ChangeLog.
+(Perfection is not required, merely evidence
 that tests are typically being added in practice.)
 }}) %>
       <hr>
 
       <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
                criteria: "tests_documented_added", desc: %{
-It is SUGGESTED that this be documented in the instructions for change proposals,
-but even an informal rule is acceptable as long as the tests are being
+It is SUGGESTED that this policy on adding tests be
+<i>documented</i> in the instructions for change proposals.},
+               details: %{
+However, even an informal rule is acceptable as long as the tests are being
 added in practice.
 }}) %>
 
@@ -445,26 +451,29 @@ added in practice.
 
       <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
                criteria: "warnings", desc: %{
-The project MUST enable some compiler warning flags (e.g. "-Wall"),
-a "safe" language mode (e.g., "use strict", "use warnings", or similar),
-and/or use a separate "linter" tool to look for code quality errors or
-common simple mistakes, if there is at least one OSS tool that can implement
-this criterion in the selected language.
+The project MUST enable one or more compiler warning flags, a "safe"
+language mode, or use a separate "linter" tool to look for code quality
+errors or common simple mistakes, if there is at least one OSS tool that
+can implement this criterion in the selected language.},
+               details: %{
+Examples of compiler warning flagss include gcc/clang "-Wall".
+Examples of a "safe" language mode include Javascript "use strict" 
+and perl5's "use warnings". 
+A separate "linter" tool is simply a tool that examines the
+source code to look for code quality errors or common simple mistakes.
 }}) %>
 
       <hr>
       <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
                criteria: "warnings_fixed", desc: %{
-The project MUST address the issues that are found (by fixing them or
-marking them in the source code as false positives). Ideally there would be no warnings,
-but a project MAY accept some warnings (typically less than 1 warning
-per 100 lines or less than 10 warnings).
+The project MUST address warnings.},
+               details: %{The project should fix warnings or mark them in the source code as false positives.  Ideally there would be no warnings, but a project MAY accept some warnings (typically less than 1 warning per 100 lines or less than 10 warnings).
 }}) %>
       <hr>
 
       <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
                criteria: "warnings_strict", desc: %{
-It is SUGGESTED that projects be maximally strict, but this is not
+It is SUGGESTED that projects be maximally strict with warnings, but this is not
 always practical.
 }}) %>
 
@@ -477,7 +486,7 @@ always practical.
 At least one of the primary developers
 MUST know how to design secure software.},
              details: %{
-This requires understanding the following design principles, including the 8 principles from Saltzer and Schroeder:
+This requires understanding the following design principles, including the 8 principles from <a href="http://web.mit.edu/Saltzer/www/publications/protection/">Saltzer and Schroeder</a>:
 <ul>
 <li>economy of mechanism (keep the design as simple and small as practical, e.g., by adopting sweeping simplifications)
 <li>fail-safe defaults (access decisions should deny by default)
@@ -488,8 +497,7 @@ This requires understanding the following design principles, including the 8 pri
 <li>least common mechanism (the design should minimize the mechanisms common to more than one user and depended on by all users, e.g., directories for temporary files)
 <li>psychological acceptability (the human interface must be designed for ease of use - designing for "least astonishment" can help)
 <li>limited attack surface (the attack surface - the set of the different points where an attacker can try to enter or extract data - should be limited)
-<li>input validation with whitelists (inputs should typically be checked to determine if they are valid before they are accepted;
-<li>this validation should use whitelists (which only accept known-good values),
+<li>input validation with whitelists (inputs should typically be checked to determine if they are valid before they are accepted; this validation should use whitelists (which only accept known-good values),
 not blacklists (which attempt to list known-bad values))
 </ul>
 }}) %>
@@ -502,14 +510,22 @@ lead to vulnerabilities in this kind of software, as well as at least one method
 to counter or mitigate each of them.},
              details: %{
 Examples (depending on the type of software)
-include SQL injection, OS injection, classic buffer overflow, cross-site scripting,
-missing authentication, and missing authorization. See the CWE/SANS top 25 or OWASP
-Top 10 for commonly-used lists.
+include SQL injection, OS injection, classic buffer overflow,
+cross-site scripting, missing authentication, and missing authorization.
+See the <a href="http://cwe.mitre.org/top25/">CWE/SANS top 25</a> or
+<a href="https://www.owasp.org/index.php/Category:OWASP_Top_Ten_Project">OWASP Top 10</a>
+for commonly-used lists. 
 <b>Note: </b>If there is only one developer, by definition that individual is the primary developer.</span>
 }}) %>
 
     <br><br><br>
     <h3>Uses basic good cryptographic practices</h3>
+
+    <!-- TODO: Need make it easy to N/A many of these criteria. -->
+    <span class="criteria-desc"><b>Note:</b> These criteria do not always apply because some software
+                                has no need to directly use cryptographic capabilities.</span>
+
+    <br>
 
     <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
              criteria: "crypto_published", desc: %{
@@ -530,8 +546,9 @@ specifically designed for the purpose.
     <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
              criteria: "crypto_oss", desc: %{
 All functionality that depends on cryptography MUST be implementable using
-OSS because its specification meets the Open Standards Requirement for Software
-by the Open Source Initiative.
+OSS because its specification meets the
+<a href="https://opensource.org/osr">Open Standards Requirement for Software
+by the Open Source Initiative</a>.
 }}) %>
     <hr>
 
@@ -539,8 +556,10 @@ by the Open Source Initiative.
              criteria: "crypto_keylength", desc: %{
 The default keylengths MUST meet the NIST minimum requirements at least through the year 2030 (as stated in 2012).},
              details: %{
-These minimum bitlengths are: symmetric key 112, factoring modulus 2048, discrete logarithm key 224,
-discrete logarithmic group 2048, elliptic curve 224, and hash 224. See http://www.keylength.com
+These minimum bitlengths are: symmetric key 112, factoring modulus 2048,
+discrete logarithm key 224,
+discrete logarithmic group 2048, elliptic curve 224, and hash 224.
+See <a href="http://www.keylength.com">http://www.keylength.com</a>
 for a comparison of keylength recommendations from various organizations.
 The software MUST be configurable so that it will reject smaller keylengths.
 The software MAY allow smaller keylengths in some configurations (ideally it would not, since this allows
@@ -556,7 +575,8 @@ Security mechanisms MUST NOT on depend cryptographic algorithms that are broken
 or have too-short key lengths (e.g., MD4, MD5, single DES, or RC4).},
              details: %{
 It is SUGGESTED that SHA-1 not be used (we are well aware that git uses SHA-1).
-Currently-recommended algorithms include AES and SHA-256/SHA-512. Implementations SHOULD
+Currently-recommended algorithms include AES and SHA-256/SHA-512.
+Implementations SHOULD
 support multiple cryptographic algorithms, so users can quickly switch
 if one is broken.
 }}) %>
@@ -583,10 +603,6 @@ All keys and nonces MUST be generated using cryptographically random functions,
 and not through non-cryptographically random functions.
 }}) %>
 
-    <br>
-    <span class="criteria-desc"><b>Note:</b> These criteria do not always apply because some software
-                                has no need to directly use cryptographic capabilities.</span>
-
     <br><br>
     <h3>Secured delivery against man-in-the-middle (MITM) attacks</h3>
 
@@ -598,15 +614,16 @@ Using https or ssh+scp is acceptable.},
 An even stronger mechanism is releasing
 the software with digitally signed packages, since that mitigates attacks on the distribution system,
 but this only works if the users can be confident that the public keys for signatures are correct
-and if the users will actually check the signature.
+<i>and</i> if the users will actually check the signature.
 }}) %>
     <hr>
 
     <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
              criteria: "delivery_unsigned", desc: %{
 A cryptographic hash (e.g., a sha1sum) MUST NOT be retrieved over http and
-used without checking for a cryptographic signature, since these hashes
-can be modified in transit.
+used without checking for a cryptographic signature.},
+             details: %{
+These hashes can be modified in transit.
 }}) %>
 
     <h3>Publicly-known vulnerabilities fixed</h3>
@@ -620,9 +637,16 @@ The vulnerability must be patched and
 released by the project itself (patches may be developed elsewhere).
 A vulnerability becomes publicly known (for this purpose) once it has a CVE with
 publicly released non-paywalled information (reported, for example,
-in the National Vulnerability Database) or when the project has been informed and the
+in the <a href="https://nvd.nist.gov/)">National Vulnerability Database</a>) or when the project has been informed and the
 information has been released to the public (possibly by the project). A vulnerability is medium
-to high severity if its CVSS 2.0 base score is 4 or higher.
+to high severity if its <a href="https://nvd.nist.gov/cvss.cfm">CVSS 2.0</a> base score is 4 or higher.
+<br><br>
+<b>Note</b>: this means that users might be left vulnerable to all attackers
+worldwide for up to 60 days. This criterion is often much easier to meet than what Google recommends in
+<a href="http://googleonlinesecurity.blogspot.com/2010/07/rebooting-responsible-disclosure-focus.html">Rebooting responsible disclosure</a>, because Google recommends that the 60-day period start when the project is notified <em>even</em> if the report is not public.<br>
+<b>Rationale</b>: We intentionally chose to start measurement from the time of public knowledge,
+and not from the time reported to the project, because this is much easier to measure and
+verify by those outside the project.
 }}) %>
     <hr>
 
@@ -633,13 +657,6 @@ are reported.
 }}) %>
     <br>
 
-    <span class='criteria-desc'><b>Note</b>: this means that users might be left vulnerable to all attackers
-      worldwide for up to 60 days. This criterion is often much easier to meet than what Google
-      recommends in Rebooting responsible disclosure, because Google recommends that the 60-day
-      period start when the project is notified even if the report is not public.<br>
-      <b>Rationale</b>: We intentionally chose to start measurement from the time of public knowledge,
-      and not from the time reported to the project, because this is much easier to measure and
-      verify by those outside the project.</span>
 
     <br><br><br>
     <h2 class="center h2">Security Analysis</h2>
@@ -649,18 +666,19 @@ are reported.
              criteria: "static_analysis", desc: %{
 At least one static code analysis tool MUST be applied to any proposed major production
 release of the software before its release, if there is at least one OSS tool that
-implement this criterion in the selected language. A static code analysis tool examines
+implement this criterion in the selected language.},
+             details: %{
+A static code analysis tool examines
 the software code (as source code, intermediate code, or executable) without executing it
 with specific inputs. For purposes of this criterion compiler warnings and "safe" language
 modes do not count as a static code analysis tool (these typically avoid deep analysis because
 speed is vital). Examples of such static code analysis tools include cppcheck, the clang static analyzer,
-FindBugs (including FindSecurityBugs), PMD, Brakeman, Coverity Quality Analyzer,
+FindBugs (including FindSecurityBugs), PMD, Brakeman,
+<a href="https://scan.coverity.com/">Coverity Quality Analyzer</a>,
 and the HP Fortify Static Code Analyzer.
 }}) %>
      <br>
 
-     <span class='criteria-desc'><b>Note: </b>The analysis tool(s) MAY be focused on looking
-                 for security vulnerabilities, but this is not required.</span>
      <hr>
 
      <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
@@ -672,8 +690,9 @@ common vulnerabilities in the analyzed language or environment.
 
      <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
              criteria: "static_analysis_fixed", desc: %{
-All confirmed medium and high severity exploitable vulnerabilities discovered with static code analysis MUST be fixed.
-A vulnerability is medium to high severity if its CVSS 2.0 is 4 or higher.
+All confirmed medium and high severity exploitable vulnerabilities discovered with static code analysis MUST be fixed.},
+             details: %{
+A vulnerability is medium to high severity if its <a href="https://nvd.nist.gov/cvss.cfm">CVSS 2.0</a> is 4 or higher.
 }}) %>
      <hr>
 
@@ -689,12 +708,21 @@ It is SUGGESTED that static source code analysis occur on every commit or at lea
       <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
               criteria: "dynamic_analysis", desc: %{
 At least one dynamic analysis tool MUST be applied to any proposed major production
-release of the software before its release. A dynamic analysis tool examines the software
+release of the software before its release.},
+              details: %{
+A dynamic analysis tool examines the software
 by executing it with specific inputs. For example, the project MAY use a fuzzing tool
 (e.g., American Fuzzy Lop) or a web application scanner (e.g., OWASP ZAP or w3af).
+
+(e.g., <a href="http://lcamtuf.coredump.cx/afl/">American Fuzzy Lop</a>)
+or a web application scanner (e.g.,
+<a href="https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project">OWASP ZAP</a> or <a href="http://w3af.org/">w3af</a>). 
 For purposes of this criterion the dynamic analysis tool MUST vary the inputs in some way to
 look for various kinds of problems or be an automated test suite with at
 least 80% branch coverage.
+The analysis tool(s) MAY be focused on looking for security vulnerabilities, but this is not required.
+<b>Rationale:</b> Static source code analysis and dynamic analysis tend
+to find different kinds of defects (including defects that lead to vulnerabilities), so combining them is more likely to be effective.
 }}) %>
       <hr>
 
@@ -702,8 +730,11 @@ least 80% branch coverage.
               criteria: "dynamic_analysis_unsafe", desc: %{
 It is SUGGESTED that if the software is application-level software written
 using a memory-unsafe language (such as C or C++) then at least one tool to
-detect memory safety problems MUST be used during at least one dynamic tool use,
-e.g., Address Sanitizer (ASAN) or valgrind. If the software is not application-level,
+detect memory safety problems MUST be used during at least one dynamic tool use.
+},
+              details: %{
+Examples of memory safety tools include Address Sanitizer (ASAN) and valgrind.
+If the software is not application-level,
 or is not in a memory-unsafe language, then this criterion is
 automatically met.
 }}) %>
@@ -718,17 +749,10 @@ that are checked during dynamic analysis.
 
       <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
               criteria: "dynamic_analysis_fixed", desc: %{
-The analysis tool(s) MAY be focused on looking for security vulnerabilities, but this is not required.<br>
 All confirmed medium and high severity exploitable vulnerabilities discovered
 with dynamic code analysis MUST be fixed. A vulnerability is medium to high
-severity if its CVSS 2.0 base score is 4 or higher.
+severity if its <a href="https://nvd.nist.gov/cvss.cfm">CVSS 2.0</a> base score is 4 or higher.
 }}) %>
-
-      <br>
-      <span class="criteria-desc"><b>Rationale: </b>Static source code analysis and dynamic analysis tend
-                  to find different kinds of defects (including defects that lead to vulnerabilities),
-                  so combining them is more likely to be effective.</span>
-
 
       <br>
       <hr class='col-md-11'>
@@ -827,6 +851,7 @@ severity if its CVSS 2.0 base score is 4 or higher.
         "static_analysis_common_vulnerabilities" : "SUGGESTED",
         "static_analysis_fixed" : "MUST",
         "static_analysis_often" : "SUGGESTED",
+        "dynamic_analysis"      : "MUST",
         "dynamic_analysis_unsafe" : "MUST",
         "dynamic_analysis_enable_assertions" : "SUGGESTED",
         "dynamic_analysis_fixed" : "MUST"

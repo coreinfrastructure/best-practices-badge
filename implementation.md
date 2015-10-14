@@ -16,6 +16,20 @@ The production version may also be deployed to Heroku.
 
 Our emphasis will be on keeping the program *simple*.
 
+## App authentication via Github
+The BadgeApp needs to authenticate itself through OAuth2 on Github if users are logging 
+in with their Github accounts.  It also needs to authenticate itself to get repo details from Github if a 
+project is being hosted there. The app needs to be registered with Github[1] and its
+OAuth2 credentials stored as environment variables.  The variable names of Oauth2 credentials are 
+"GITHUB_KEY" and "GITHUB_SECRET".
+If running on heroku, set config variables by following instructions on [2].
+If running locally, one way to start up the application is: 
+GITHUB_KEY='client id' GITHUB_SECRET='client secret' rails s 
+where *client id* and *client secret* are registered OAuth2 credentials of the app.
+
+[1] https://github.com/settings/applications/new
+[2] https://devcenter.heroku.com/articles/config-vars
+
 ## Automation
 
 We want to automate what we can, but since automation is imperfect,

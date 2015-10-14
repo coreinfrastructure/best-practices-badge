@@ -1,3 +1,4 @@
+         <% details_toggler_id = criteria + "_details_toggler" %>
          <% details_text_id = criteria + "_details_text" %>
-         <button title="Toggle details text" type="button" onclick="$('#<%= details_text_id %>').toggle('slow');">&gt;&gt;</button>
-         <span class="details_text" id="<%= details_text_id %>"><%= raw details %></span>
+         <button class="details-toggler" title="Toggle details text" type="button" id='<%= details_toggler_id %>'>Details</button>
+         <span class="details-text" id="<%= details_text_id %>"><%= raw details %></span>

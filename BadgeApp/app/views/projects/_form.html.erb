@@ -889,12 +889,29 @@ severity if its <a href="https://nvd.nist.gov/cvss.cfm">CVSS 2.0</a> base score 
             function() {update_criteria_display(criteria);});
       }
 
+      function toggle_details(e) {
+        var details_text_id = e.target.id.
+                              replace("_details_toggler", "_details_text");
+        $("#" + details_text_id).toggle('slow',
+          function () {
+            if ($("#" + details_text_id).is(':hidden')) {
+              var button_text = "Show details";
+            } else {
+              var button_text = "Hide details";
+            }
+            $('#' + e.target.id).html(button_text);
+          });
+      }
+
       // Setup display as soon as page is ready
       $(document).ready(function() {
           // By default, hide details.  We do the hiding in Javascript, so
           // those who disable Javascript will still see the text
           // (they'll have no way to later reveal it).
-          $('.details_text').hide('fast');
+          $('.details-text').hide('fast');
+          $('.details-toggler').html('Show details');
+          $('.details-toggler').click(toggle_details);
+
           // Set up the interactive displays of "enough".
           $.each(field_categories, function(key, value) {
               setup_field(key);

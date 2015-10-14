@@ -309,8 +309,9 @@ class ProjectsController < ApplicationController
       if value == "MUST" and project[criteria_status] != "Met"
         return false
       elsif ["SHOULD", "SUGGESTED"].include? value and
-            project[criteria_status] != "Met" and
-            project[criteria_just].length == 0
+            (project[criteria_status] == "?" or
+              (project[criteria_status] == "Unmet" and
+               project[criteria_just].length == 0))
         return false
       else next
       end

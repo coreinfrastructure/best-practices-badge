@@ -1,11 +1,38 @@
-<div>
-<br>
+<div class="container">
 <br>
 <% if logged_in? %>
-  <%= render partial: 'form', locals: {is_disabled: false} %>
+
+  <!-- TODO: Finish this for GitHub.  Need to pass in @user. -->
+  <!-- if @user.provider == 'github'%>  -->
+  <% if false %>
+     <span>You may select from one of your GitHub repositories <i>or</i>
+           provide information about some other project.</span>
+     <br><br>
+     <h4>New Badge: Public Github Repository</h4>
+     <% repo_data = Github.repos.list user: @user.nickname %>
+     <%= form_for(@project) do |f| %>
+       <span>Please select one of your GitHub repositories:</span>
+       <%= f.select(:repo_url) do %>
+         <% repo_data.each do |repo| %>
+           <%= content_tag(:option, repo['name'], value: repo['html_url']) %>
+         <% end %>
+         <%= f.submit 'Submit GitHub Repository', class:"btn btn-primary" %>
+       <% end %>
+     <% end %>
+     <br><br><span>OR</span>
+  <% end %>
+
+  <h4>New Badge: Project URLs</h4>
+  <%= form_for(@project) do |f| %>
+      <span>What is the URL for the project (as a whole)?</span>
+      <%= f.text_field :project_url, class:"form-control", hide_label: true, placeholder:'Project Website URL' %>
+      <span>What is the URL for the version control repository
+            (it may the same as the project URL)?</span>
+      <%= f.text_field :repo_url, class:"form-control", hide_label: true, placeholder:'Project Repo URL' %>
+     <%= f.submit 'Submit URL', class:"btn btn-primary" %>
+  <% end %>
 <% else %>
   <% flash.now[:danger] = "Please sign in to add a project!"%>
   <%= render :template => "sessions/new" %>
 <% end %>
-
 </div>

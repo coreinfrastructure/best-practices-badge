@@ -37,9 +37,12 @@ class ProjectsController < ApplicationController
   def create
     @project = Project.new(project_params)
 
+    # TODO: Error out if project_url and repo_url are both empty... don't
+    # do a save yet.
+
     respond_to do |format|
       if @project.save
-        format.html { redirect_to @project, success: 'Project was successfully Added!' }
+        format.html { redirect_to edit_project_path(@project) }
         format.json { render :show, status: :created, location: @project }
       else
         format.html { render :new }

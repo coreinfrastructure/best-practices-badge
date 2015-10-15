@@ -906,6 +906,14 @@ severity if its <a href="https://nvd.nist.gov/cvss.cfm">CVSS 2.0</a> base score 
                $(criteria_just).show('fast');
           }
 
+          if ( $(criteria_status+"_unmet").is(':checked') &&
+               (field_categories[criteria] === "SHOULD" ||
+               (field_categories[criteria] === "SUGGESTED"))) {
+            $(criteria_just).addClass('required-data');
+          } else {
+            $(criteria_just).removeClass('required-data');
+          }
+
           if (is_enough(criteria)) {
               $("#" + criteria + "_enough").
                   attr("src", "/assets/Thumbs_up_font_awesome.svg").

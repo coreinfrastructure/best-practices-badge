@@ -5,13 +5,13 @@ gem 'will_paginate',           '3.0.7'
 gem 'bootstrap-will_paginate', '0.0.10'
 gem 'faker'
 
-gem "bootstrap-switch-rails"
+gem 'bootstrap-switch-rails'
 gem 'bootstrap_form'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.1'
 
-gem "omniauth-github", '1.1.1'
-gem "github_api"
+gem 'omniauth-github', '1.1.1'
+gem 'github_api'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
@@ -46,6 +46,11 @@ gem 'bcrypt', '~> 3.1.7'
 gem 'paper_trail', '~> 4.0.0'
 
 group :development, :test do
+  gem 'pronto', '0.4.3'
+  gem 'pronto-brakeman', '0.4.3'
+  gem 'pronto-rails_best_practices', '0.4.0'
+  gem 'pronto-rubocop', '0.4.6'
+
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
   # Use sqlite3 as the database for Active Record
@@ -56,10 +61,8 @@ group :development, :test do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
 
- group :production do
+  group :production do
     gem 'rails_12factor', '0.0.2'
     gem 'pg', '0.18.2'
   end
-
-
 end

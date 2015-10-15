@@ -5,20 +5,20 @@ Rails.application.routes.draw do
   get 'home' => 'static_pages#home'
   get 'background' => 'static_pages#background'
   get 'criteria' => 'static_pages#criteria'
-  resources :projects  do
+  resources :projects do
     member do
-      get 'badge', :defaults => { :format => 'svg' }
+      get 'badge', defaults: { format: 'svg' }
     end
   end
 
   resources :users
 
-  get 'login'  => 'sessions#new'
-  post  'login'  => 'sessions#create'
-  delete 'logout'  => 'sessions#destroy'
+  get 'login' => 'sessions#new'
+  post 'login' => 'sessions#create'
+  delete 'logout' => 'sessions#destroy'
 
-  get "auth/:provider/callback" => "sessions#create"
-  get "/signout" => "sessions#destroy", :as => :signout
+  get 'auth/:provider/callback' => 'sessions#create'
+  get '/signout' => 'sessions#destroy', :as => :signout
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

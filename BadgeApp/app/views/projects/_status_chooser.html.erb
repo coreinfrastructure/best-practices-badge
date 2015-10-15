@@ -18,25 +18,31 @@
       </div>
       <div class='col-md-9 criteria-desc'>
           <%= raw desc %>
-          <%= if !defined?(details).nil? then
+          <%= if defined?(details)
               render(partial: "details", locals: {f: f,
                        criteria: criteria, details: details})
              end %>
          <sup>[<%= criteria_shortname %>]</sup>
          <div id="<%= criteria + '_met_placeholder' %>" class="hidden">
-          <%= if defined?(met_placeholder).nil?
+          <%= if !defined?(met_placeholder)
                  raw "(Optional) Please explain how this is met, including 1+ key URLs."
                else
                  raw "(Optional)" + met_placeholder
                end %>
          </div>
          <div id="<%= criteria + '_unmet_placeholder' %>" class="hidden">
-          <%= if defined?(unmet_placeholder).nil?
+          <%= if !defined?(unmet_placeholder)
                  raw "Please explain why it's okay this is unmet, including 1+ key URLs."
                else
                  raw unmet_placeholder
                end %>
          </div>
+         <% if defined?(met_suppress) %>
+           <div id="<%= criteria + '_met_suppress' %>" class="hidden"></div>
+         <% end %>
+         <% if defined?(unmet_suppress) %>
+           <div id="<%= criteria + '_unmet_suppress' %>" class="hidden"></div>
+         <% end %>
          <%= f.text_field justification_symbol, class:"form-control", hide_label: true, placeholder:'Please explain', disabled: is_disabled  %>
       </div>
     </div>

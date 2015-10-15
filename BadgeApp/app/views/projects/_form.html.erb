@@ -161,7 +161,10 @@ For our purposes, this means that the license MUST be at least one of the follow
        <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
                criteria: "oss_license_osi", desc: %{
 It is SUGGESTED that any required license(s) be
-<a href="https://opensource.org/licenses">OSI-approved</a>.
+<a href="https://opensource.org/licenses">OSI-approved</a>},
+               met_suppress: true,
+               unmet_placeholder: %{
+What URL justifies that this is an OSS license?
 }}) %>
        <hr>
 
@@ -877,13 +880,18 @@ severity if its <a href="https://nvd.nist.gov/cvss.cfm">CVSS 2.0</a> base score 
                $(criteria_just).
                   attr("placeholder",
                     $("#" + criteria_met_placeholder).html().trim());
-               $(criteria_just).show('fast');
+               if (document.getElementById(criteria + "_met_suppress")) {
+                 $(criteria_just).hide('fast');
+               } else {
+                 $(criteria_just).show('fast');
+               }
           } else if ( $(criteria_status+"_unmet").is(':checked')) {
                var criteria_unmet_placeholder = criteria + '_unmet_placeholder';
                $(criteria_just).
                   attr("placeholder",
                     $("#" + criteria_unmet_placeholder).html().trim());
-               if (field_categories[criteria] === "MUST") {
+               if ((field_categories[criteria] === "MUST") ||
+                    (document.getElementById("criteria" + "_unmet_suppress"))) {
                  $(criteria_just).hide('fast');
                } else {
                  $(criteria_just).show('fast');

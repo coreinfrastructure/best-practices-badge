@@ -303,19 +303,25 @@ class ProjectsController < ApplicationController
 
 
   def badge?(project)
-    FIELD_CATEGORIES.each do |key, value|
+    min_should_length = 5
+    FIELD_CATEGORIES.all? do |key, value|
       criteria_status = (key + "_status")
       criteria_just = (key + "_justification")
-      if value == "MUST" and project[criteria_status] != "Met"
-        return false
-      elsif ["SHOULD", "SUGGESTED"].include? value and
-            (project[criteria_status] == "?" or
-              (project[criteria_status] == "Unmet" and
-               project[criteria_just].length == 0))
-        return false
-      else next
+      case value
+      when "MUST"
+        project[criteria_status] == "Met"
+      when "SHOULD"
+        if project[criteria_status] == "Met"
+          true
+        elsif (project[criteria_status] == "Unmet" &&
+               (project[criteria_just].length >= min_should_length))
+          true
+        else
+          false
+        end
+      when "SUGGESTED"
+        ["Met", "Unmet"].include? project[criteria_status]
       end
     end
-    return true
   end
 end

@@ -23,6 +23,7 @@ There is also a [mailing list](https://lists.coreinfrastructure.org/mailman/list
 * Draft **[Background](./background.md)** on Badging
 * Draft **[BadgeApp](./BadgeApp/)** application (very early - e.g., no logins!)
 * Current **[implementation](./implementation.md)**  - notes about the BadgeApp implementation
+* Current **[Burndown](https://burndown.io/#linuxfoundation/cii-best-practices-badge/1)** and **[Kanban Board](https://waffle.io/linuxfoundation/cii-best-practices-badge)** of this project.
 
 All material is released under both the [MIT license](./LICENSE)
 and the

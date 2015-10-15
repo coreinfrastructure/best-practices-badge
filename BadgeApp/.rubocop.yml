@@ -1,0 +1,21 @@
+require: rubocop-rspec
+AllCops:
+  DisplayCopNames: true
+  DisplayStyleGuide: true
+  RunRailsCops: true
+  Include:
+    - '**/*.pryrc'
+    - '**/*.rake'
+    - '.simplecov'
+    - '**/config.ru'
+    - '**/Gemfile'
+    - '**/Guardfile'
+    - '**/Rakefile'
+  Exclude:
+    - 'db/schema.rb'
+    - 'features/support/_circleci_formatter.rb'
+Documentation:
+  Enabled: false
+Style/TrivialAccessors:
+  Enabled: true
+  ExactNameMatch: true

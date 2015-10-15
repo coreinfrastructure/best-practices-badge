@@ -23,6 +23,20 @@
                        criteria: criteria, details: details})
              end %>
          <sup>[<%= criteria_shortname %>]</sup>
+         <div id="<%= criteria + '_met_placeholder' %>" class="hidden">
+          <%= if defined?(met_placeholder).nil?
+                 raw "(Optional) Please explain how this is met."
+               else
+                 raw "(Optional)" + met_placeholder
+               end %>
+         </div>
+         <div id="<%= criteria + '_unmet_placeholder' %>" class="hidden">
+          <%= if defined?(unmet_placeholder).nil?
+                 raw "Please explain why it's okay that this is unmet."
+               else
+                 raw unmet_placeholder
+               end %>
+         </div>
          <%= f.text_field justification_symbol, class:"form-control", hide_label: true, placeholder:'Please explain', disabled: is_disabled  %>
       </div>
     </div>

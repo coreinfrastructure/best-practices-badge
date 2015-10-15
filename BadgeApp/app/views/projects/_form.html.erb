@@ -871,12 +871,26 @@ severity if its <a href="https://nvd.nist.gov/cvss.cfm">CVSS 2.0</a> base score 
           var criteria_just = "#project_" + criteria + "_justification";
           var criteria_status = "#project_" + criteria + "_status";
           var justification_value = document.getElementById("project_"+criteria+"_justification").value;
-          if ( $(criteria_status + "_met").is(':checked'))
+          if ( $(criteria_status + "_met").is(':checked')) {
+               var criteria_met_placeholder = criteria + '_met_placeholder';
+               $(criteria_just).
+                  attr("placeholder",
+                    $("#" + criteria_met_placeholder).html().trim());
                $(criteria_just).show('fast');
-          if ( $(criteria_status+"_unmet").is(':checked'))
+          } else if ( $(criteria_status+"_unmet").is(':checked')) {
+               var criteria_unmet_placeholder = criteria + '_unmet_placeholder';
+               $(criteria_just).
+                  attr("placeholder",
+                    $("#" + criteria_unmet_placeholder).html().trim());
                $(criteria_just).show('fast');
-          if ( $(criteria_status+"_").is(':checked') && justification_value.length == 0)
+          } else if ( $(criteria_status+"_").is(':checked') && justification_value.length == 0) {
                $(criteria_just).hide('fast');
+          } else  {
+               var criteria_placeholder = criteria + '_unmet_placeholder';
+               $(criteria_just).attr("placeholder", "Please explain");
+               $(criteria_just).show('fast');
+          }
+
           if (is_enough(criteria)) {
               $("#" + criteria + "_enough").
                   attr("src", "/assets/Thumbs_up_font_awesome.svg").

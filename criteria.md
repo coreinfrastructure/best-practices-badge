@@ -71,9 +71,10 @@ The additional term SUGGESTED is added, as follows:
   to do so may be high.
 - The term MAY provides one way something can be done, e.g.,
   to make it clear that the described implementation is acceptable.
-- To obtain a badge, all MUST and MUST NOT criteria must be met, and all
-  SHOULD and SUGGESTED criteria must be met OR the rationale for
-  not implementing the criterion must be documented.
+- To obtain a badge, all MUST and MUST NOT criteria must be met, all
+  SHOULD criteria must be met OR the rationale for
+  not implementing the criterion must be documented, and
+  all SUGGESTED criteria have to be considered (rated as met or unmet).
 
 We're experimenting with when justifications are required;
 since the badge is self-asserted, it might be wise to require justifications

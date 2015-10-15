@@ -871,6 +871,7 @@ severity if its <a href="https://nvd.nist.gov/cvss.cfm">CVSS 2.0</a> base score 
           var criteria_just = "#project_" + criteria + "_justification";
           var criteria_status = "#project_" + criteria + "_status";
           var justification_value = document.getElementById("project_"+criteria+"_justification").value;
+          var placeholder = "";
           if ( $(criteria_status + "_met").is(':checked')) {
                var criteria_met_placeholder = criteria + '_met_placeholder';
                $(criteria_just).
@@ -882,12 +883,18 @@ severity if its <a href="https://nvd.nist.gov/cvss.cfm">CVSS 2.0</a> base score 
                $(criteria_just).
                   attr("placeholder",
                     $("#" + criteria_unmet_placeholder).html().trim());
-               $(criteria_just).show('fast');
-          } else if ( $(criteria_status+"_").is(':checked') && justification_value.length == 0) {
-               $(criteria_just).hide('fast');
-          } else  {
-               var criteria_placeholder = criteria + '_unmet_placeholder';
+               if (field_categories[criteria] === "MUST") {
+                 $(criteria_just).hide('fast');
+               } else {
+                 $(criteria_just).show('fast');
+               }
+          } else if ( $(criteria_status+"_").is(':checked')) {
                $(criteria_just).attr("placeholder", "Please explain");
+               $(criteria_just).hide('fast');
+          }
+          // If there's old justification text, force showing it even if it
+          // no longer makes sense (so they can fix it or change their mind).
+          if ( justification_value.length > 0) {
                $(criteria_just).show('fast');
           }
 

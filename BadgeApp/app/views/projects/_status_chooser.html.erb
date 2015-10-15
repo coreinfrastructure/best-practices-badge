@@ -25,14 +25,14 @@
          <sup>[<%= criteria_shortname %>]</sup>
          <div id="<%= criteria + '_met_placeholder' %>" class="hidden">
           <%= if defined?(met_placeholder).nil?
-                 raw "(Optional) Please explain how this is met."
+                 raw "(Optional) Please explain how this is met, including 1+ key URLs."
                else
                  raw "(Optional)" + met_placeholder
                end %>
          </div>
          <div id="<%= criteria + '_unmet_placeholder' %>" class="hidden">
           <%= if defined?(unmet_placeholder).nil?
-                 raw "Please explain why it's okay that this is unmet."
+                 raw "Please explain why it's okay this is unmet, including 1+ key URLs."
                else
                  raw unmet_placeholder
                end %>

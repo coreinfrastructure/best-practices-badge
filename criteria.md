@@ -170,8 +170,8 @@ same as the project URL), and license(s).
 *Bug reporting process*
 
 - <a name="report-process"></a>The project MUST provide a process for users to submit bug reports (e.g., using an issue tracker or a mailing list). <sup>[<a href="#report-process">report-process</a>]&#8224;</sup>
-- <a name="report-tracker"></a>It is SUGGESTED that an issue tracker be used for tracking individual issues. <sup>[<a href="#report-tracker">report-tracker</a>]&#8224;</sup>
-- <a name="report-responses"></a>Developers MUST acknowledge a majority of most bug reports submitted in the last 2-12 months (inclusive); the response need not include a fix. <sup>[<a href="#report-responses">report-responses</a>]&#8224;</sup>
+- <a name="report-tracker"></a>It is SUGGESTED that the project use an issue tracker for tracking individual issues. <sup>[<a href="#report-tracker">report-tracker</a>]&#8224;</sup>
+- <a name="report-responses"></a>The project MUST acknowledge a majority of bug reports submitted in the last 2-12 months (inclusive); the response need not include a fix. <sup>[<a href="#report-responses">report-responses</a>]&#8224;</sup>
 - <a name="enhancement-responses"></a>The project SHOULD respond to most enhancement requests in the last 2-12 months (inclusive). The project MAY choose not to respond. <sup>[<a href="#enhancement-responses">enhancement-responses</a>]&#8224;</sup>
 - <a name="report-archive"></a>The project MUST have a publicly available archive for reports and responses for later searching. <sup>[<a href="#report-archive">report-archive</a>]&#8224;</sup>
 

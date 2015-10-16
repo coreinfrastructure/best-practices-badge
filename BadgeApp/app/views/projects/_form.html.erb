@@ -297,21 +297,13 @@ known vulnerabilities.
 
       <br><br><br>
       <h2 class="center h2">Reporting</h2>
-      <h3>Bug-reporting process</h3>
+      <h3>Bug reporting process</h3>
 
       <!-- TODO: Add report_url to model and database.
       <span>If an issue tracker is used, please provide its URL.
       </span>
       \<\% = f.text_field :report_url , class:"form-control", placeholder:'Issue tracker URL (if any)', disabled: is_disabled % >
       -->
-
-      <hr>
-
-      <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
-               criteria: "report_tracker", desc: %{
-It is SUGGESTED that an issue tracker be used for tracking individual issues.
-}}) %>
-      <hr>
 
       <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
                criteria: "report_process", desc: %{
@@ -321,27 +313,31 @@ The project MUST provide a process for users to submit bug reports
       <hr>
 
       <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
+               criteria: "report_tracker", desc: %{
+It is SUGGESTED that an issue tracker be used for tracking individual issues.
+}}) %>
+      <hr>
+
+      <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
                criteria: "report_responses", desc: %{
-Developers MUST acknowledge a majority of bug reports submitted in the last
-2-12 months (inclusive); the response need not include a fix.
+The project MUST acknowledge a majority of bug reports submitted in the last 2-12 months (inclusive); the response need not include a fix.
 }}) %>
       <hr>
 
       <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
                criteria: "enhancement_responses", desc: %{
-Developers SHOULD respond to most enhancement requests in the last 2-12 months
-(inclusive). Developers MAY choose not to respond.
+The project SHOULD respond to most enhancement requests in the last 2-12 months (inclusive). The project MAY choose not to respond.
 }}) %>
       <hr>
 
       <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
                criteria: "report_archive", desc: %{
-Reports and responses MUST be archived for later searching.
+The project MUST have a publicly available archive for reports and responses for later searching.
 }}) %>
 
       <br><br>
 
-      <h3>Vulnerability report process</h3>
+      <h3>Vulnerability reporting process</h3>
       <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
                criteria: "vulnerability_report_process", desc: %{
 The project MUST publish the process for reporting vulnerabilities on the project site.},

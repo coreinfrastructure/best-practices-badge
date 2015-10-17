@@ -18,8 +18,8 @@ class SessionsController < ApplicationController
 
   # rubocop:disable Metrics/AbcSize
   def local_login
-    user = User.where(provider: 'local',
-                      email: params[:session][:email].downcase)
+    user = User.find_by provider: 'local',
+                        email: params[:session][:email].downcase
     if user && user.authenticate(params[:session][:password])
       log_in user
       redirect_to root_url
@@ -34,7 +34,7 @@ class SessionsController < ApplicationController
   # rubocop:disable Metrics/AbcSize
   def omniauth_login
     auth = request.env['omniauth.auth']
-    user = User.where(provider: auth['provider'], uid: auth['uid']) ||
+    user = User.find_by(provider: auth['provider'], uid: auth['uid']) ||
            User.create_with_omniauth(auth)
     session[:user_token] = auth['credentials']['token']
     log_in user

@@ -4,7 +4,7 @@ class User < ActiveRecord::Base
 
   validates :name, presence: true, length: { maximum: 50 }
   validates :email, presence: true, length: { maximum: 255 },
-                    email: true, uniqueness: { case_sensitive: false }
+                    uniqueness: { case_sensitive: false }#, email: true
   validates :password, presence: true, length: { minimum: 7 }
 
   # Returns the hash digest of the given string.

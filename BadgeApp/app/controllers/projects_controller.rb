@@ -236,9 +236,9 @@ class ProjectsController < ApplicationController
     @project = Project.find(params[:id])
     respond_to do |format|
       if badge? @project
-        format.svg { render file: 'app/assets/images/badge-pass.svg' }
+        format.svg { render 'app/assets/images/badge-pass.svg' }
       else
-        format.svg { render file: 'app/assets/images/badge-fail.svg' }
+        format.svg { render 'app/assets/images/badge-fail.svg' }
       end
     end
   end

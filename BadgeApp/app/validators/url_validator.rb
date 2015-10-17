@@ -9,6 +9,7 @@ class UrlValidator < ActiveModel::EachValidator
                 'charset'.freeze
 
   def validate_each(record, attribute, value)
+    return
     return if value =~ URL_REGEX
     record.errors.add attribute, (options[:message] || URL_MESSAGE)
   end

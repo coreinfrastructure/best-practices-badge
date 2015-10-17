@@ -3,7 +3,7 @@
 <!--h2 class='center'>Edit <%= @project.name %></h2-->
 
 <% if logged_in? %>
-  <%= render partial: 'form', locals: {is_disabled: false} %>
+  <%= render 'form', locals: {is_disabled: false} %>
 
 <% else %>
   <% flash.now[:danger] = "Please log in to edit a project!"%>

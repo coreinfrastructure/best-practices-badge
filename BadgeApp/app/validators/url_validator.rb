@@ -6,7 +6,7 @@ class UrlValidator < ActiveModel::EachValidator
     \A(|https?:\/\/[A-Za-z0-9][-A-Za-z0-9_.\/]*(\/[-A-Za-z0-9_.\/\+,#]*)?)\z
     }.freeze
   URL_MESSAGE = 'URL must begin with http: or https: and use a limited' \
-                'charset'.freeze
+                ' charset'.freeze
 
   def validate_each(record, attribute, value)
     return

@@ -1,7 +1,7 @@
 <div>
 <br>
 
-<%= render partial: 'form', locals: {is_disabled: true} %>
+<%= render 'form', project: @project, is_disabled: true %>
 
 <p>
 <%= link_to 'Back', projects_path %>

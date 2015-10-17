@@ -11,7 +11,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :users
+  resources :users, except: [:destroy]
 
   get 'login' => 'sessions#new'
   post 'login' => 'sessions#create'

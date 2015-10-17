@@ -46,7 +46,7 @@ There is also a
 <div class="row">
   <div class="col-md-7 col-md-offset-1">
 
-  <%= form_for(@project) do |f| %>
+  <%= form_for(project) do |f| %>
     <%= render 'shared/error_messages', object: f.object %>
 
     <h2 class="center">OSS Project Basics</h2>
@@ -82,7 +82,7 @@ This information is used when displaying badge information.
       <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
               criteria: "description_sufficient", desc: %{
 The project website MUST succinctly describe what the software does
-(what problem does it solve?).}, 
+(what problem does it solve?).},
               details: %{
 This MUST be in language that potential users can understand (e.g., it uses minimal jargon).
 }}) %>
@@ -151,7 +151,7 @@ For our purposes, this means that the license MUST be at least one of the follow
 <li><a href="https://opensource.org/licenses">an approved license by the Open Source Initiative (OSI)</a></li>
 <li><a href="https://www.gnu.org/licenses/license-list.html">a free license as approved by the Free Software Foundation (FSF)</a></li>
 <li><a href="https://www.debian.org/legal/licenses/">a free license acceptable to Debian main</a></li>
-<li><a href="https://fedoraproject.org/wiki/Licensing:Main?rd=Licensing">a "good" license according to Fedora</a></li> 
+<li><a href="https://fedoraproject.org/wiki/Licensing:Main?rd=Licensing">a "good" license according to Fedora</a></li>
 </ul>
 <p>The software MAY also be licensed other ways (e.g., "GPLv2 or proprietary" is acceptable).</p>
 <p><em>Note</em>: We intend for the automated tool to focus on identifying common OSS licenses such as:     <a href="http://creativecommons.org/publicdomain/zero/1.0/">CC0</a>, <a href="https://opensource.org/licenses/MIT">MIT</a>, <a href="https://opensource.org/licenses/BSD-2-Clause">BSD 2-clause</a>, <a href="https://opensource.org/licenses/BSD-3-Clause">BSD 3-clause revised</a>, <a href="https://opensource.org/licenses/Apache-2.0">Apache 2.0</a>, <a href="https://opensource.org/licenses/lgpl-license">Lesser GNU General Public License (LGPL)</a>, and the <a href="https://opensource.org/licenses/gpl-license">GNU General Public License (GPL)</a>.</p>
@@ -253,7 +253,7 @@ to be used by users.
       <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
                criteria: "version_semver", desc: %{
 It is SUGGESTED that the
-<a href="http://semver.org">Semantic Versioning (SemVer) format</a> 
+<a href="http://semver.org">Semantic Versioning (SemVer) format</a>
 is used for releases.},
                met_suppress: true,
                details: %{
@@ -467,8 +467,8 @@ errors or common simple mistakes, if there is at least one OSS tool that
 can implement this criterion in the selected language.},
                details: %{
 Examples of compiler warning flagss include gcc/clang "-Wall".
-Examples of a "safe" language mode include Javascript "use strict" 
-and perl5's "use warnings". 
+Examples of a "safe" language mode include Javascript "use strict"
+and perl5's "use warnings".
 A separate "linter" tool is simply a tool that examines the
 source code to look for code quality errors or common simple mistakes.
 }}) %>
@@ -524,7 +524,7 @@ include SQL injection, OS injection, classic buffer overflow,
 cross-site scripting, missing authentication, and missing authorization.
 See the <a href="http://cwe.mitre.org/top25/">CWE/SANS top 25</a> or
 <a href="https://www.owasp.org/index.php/Category:OWASP_Top_Ten_Project">OWASP Top 10</a>
-for commonly-used lists. 
+for commonly-used lists.
 <b>Note:</b> If there is only one developer, by definition that individual is the primary developer.
 }}) %>
 

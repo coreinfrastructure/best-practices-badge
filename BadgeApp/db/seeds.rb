@@ -8,18 +8,20 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 User.create!(name:  'Test User',
-             email: 'test@mail.org',
+             email: 'test@example.org',
              password:              'password',
-             password_confirmation: 'password')
+             password_confirmation: 'password',
+             provider: 'local')
 
 20.times do |n|
   name  = Faker::Name.name
-  email = "test-#{n + 1}@mail.org"
+  email = "test-#{n + 1}@example.org"
   password = 'password'
   User.create!(name:  name,
                email: email,
                password:              password,
-               password_confirmation: password)
+               password_confirmation: password,
+               provider: 'local')
 end
 
 # Projects for testing

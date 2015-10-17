@@ -1,4 +1,6 @@
 class Project < ActiveRecord::Base
+  STATUS_CHOICE = ['?', 'Met', 'Unmet']
+
   # Record information about a project.
   # We'll also record previous versions of information:
   has_paper_trail
@@ -6,17 +8,8 @@ class Project < ActiveRecord::Base
   # Currently no validation rules for:
   #  name, description, license, *_justification
   # We'll rely on Rails' HTML escaping system to counter XSS.
-  # The URL validation rules are somewhat overly strict, but should serve;
-  # the idea is to prevent attackers from inserting redirecting URLs
-  # that can sometimes be used to attack (e.g., "?...", or ones with <).
-  validates :project_url, format: { with:
-    /\A(|https?:\/\/[A-Za-z0-9][-A-Za-z0-9_.\/]*(\/[-A-Za-z0-9_.\/\+,#]*)?)\z/,
-                                    message: 'URL must begin with http: or https: and use a limited charset' }
-  validates :repo_url, format: { with:
-    /\A(|https?:\/\/[A-Za-z0-9][-A-Za-z0-9_.\/]*(\/[-A-Za-z0-9_.\/\+,#]*)?)\z/,
-                                 message: 'URL must begin with http: or https: and use a limited charset' }
+  validates :project_url, :repo_url, url: true
 
-  STATUS_CHOICE = ['?', 'Met', 'Unmet']
   validates :project_url_status, inclusion: { in: STATUS_CHOICE }
   validates :project_url_https_status, inclusion: { in: STATUS_CHOICE }
   validates :description_sufficient_status, inclusion: { in: STATUS_CHOICE }

@@ -1,5 +1,7 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rake db:seed (or created alongside the db with db:setup).
+# This file should contain all the record creation needed to seed the database
+# with its default values.
+# The data can then be loaded with the rake db:seed (or created alongside the db
+# with db:setup).
 #
 # Examples:
 #
@@ -23,8 +25,10 @@ end
 # Projects for testing
 Project.create!(name:  'BadgeApp',
                 description: 'Badge Application',
-                project_url: 'https://github.com/linuxfoundation/cii-best-practices-badge',
-                repo_url: 'https://github.com/linuxfoundation/cii-best-practices-badge',
+                project_url:
+                  'https://github.com/linuxfoundation/cii-best-practices-badge',
+                repo_url:
+                  'https://github.com/linuxfoundation/cii-best-practices-badge',
                 license: 'MIT',
                 project_url_status: '?',
                 project_url_https_status: '?',
@@ -96,7 +100,8 @@ Project.create!(name:  'BadgeApp',
   description = "test-description#{n + 1}"
   project_url = 'https://' + "test-project-url-#{n + 1}.org"
   repo_url = 'https://' + "test-repo-url-#{n + 1}.org"
-  license = ['MIT', 'Apache-2.0', 'GPL-2.0', 'GPL-2.0+', 'GPL-3.0+', 'MPL-2.0', 'BSD-3-Clause', 'BSD-2-Clause', '(Apache-2.0 OR GPL-2.0+)'].sample
+  license = ['MIT', 'Apache-2.0', 'GPL-2.0', 'GPL-2.0+', 'GPL-3.0+', 'MPL-2.0',
+             'BSD-3-Clause', 'BSD-2-Clause', '(Apache-2.0 OR GPL-2.0+)'].sample
   Project.create!(name: name,
                   description: description,
                   project_url: project_url,

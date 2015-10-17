@@ -71,9 +71,10 @@ The additional term SUGGESTED is added, as follows:
   to do so may be high.
 - The term MAY provides one way something can be done, e.g.,
   to make it clear that the described implementation is acceptable.
-- To obtain a badge, all MUST and MUST NOT criteria must be met, and all
-  SHOULD and SUGGESTED criteria must be met OR the rationale for
-  not implementing the criterion must be documented.
+- To obtain a badge, all MUST and MUST NOT criteria must be met, all
+  SHOULD criteria must be met OR the rationale for
+  not implementing the criterion must be documented, and
+  all SUGGESTED criteria have to be considered (rated as met or unmet).
 
 We're experimenting with when justifications are required;
 since the badge is self-asserted, it might be wise to require justifications
@@ -166,21 +167,19 @@ same as the project URL), and license(s).
 
 ### Reporting
 
-*Bug-reporting process*
+*Bug reporting process*
 
-- <a name="report-url"></a>If an issue tracker is used, please provide its URL. <sup>[<a href="#report-url">report-url</a>]</sup>
-- <a name="report-tracker"></a>It is SUGGESTED that an issue tracker be used for tracking individual issues. <sup>[<a href="#report-tracker">report-tracker</a>]&#8224;</sup>
 - <a name="report-process"></a>The project MUST provide a process for users to submit bug reports (e.g., using an issue tracker or a mailing list). <sup>[<a href="#report-process">report-process</a>]&#8224;</sup>
-- <a name="report-responses"></a>Developers MUST respond to most bug reports submitted in the last 2-12 months (inclusive); the response need not include a fix. <sup>[<a href="#report-responses">report-responses</a>]&#8224;</sup>
-- <a name="enhancement-responses"></a>Developers SHOULD respond to most enhancement requests in the last 2-12 months (inclusive). Developers MAY choose not to respond. <sup>[<a href="#enhancement-responses">enhancement-responses</a>]&#8224;</sup>
-- <a name="report-archive"></a>Reports and responses MUST be archived for later searching. <sup>[<a href="#report-archive">report-archive</a>]&#8224;</sup>
+- <a name="report-tracker"></a>It is SUGGESTED that the project use an issue tracker for tracking individual issues. <sup>[<a href="#report-tracker">report-tracker</a>]&#8224;</sup>
+- <a name="report-responses"></a>The project MUST acknowledge a majority of bug reports submitted in the last 2-12 months (inclusive); the response need not include a fix. <sup>[<a href="#report-responses">report-responses</a>]&#8224;</sup>
+- <a name="enhancement-responses"></a>The project SHOULD respond to most enhancement requests in the last 2-12 months (inclusive). The project MAY choose not to respond. <sup>[<a href="#enhancement-responses">enhancement-responses</a>]&#8224;</sup>
+- <a name="report-archive"></a>The project MUST have a publicly available archive for reports and responses for later searching. <sup>[<a href="#report-archive">report-archive</a>]&#8224;</sup>
 
-*Vulnerability report process*
+*Vulnerability reporting process*
 
 - <a name="vulnerability-report-process"></a>The project MUST publish the process for reporting vulnerabilities on the project site.  E.g., a clearly designated mailing address on https://PROJECTSITE/security, often security@SOMEWHERE.  This MAY be the same as its bug reporting process. <sup>[<a href="#vulnerability-report-process">vulnerability-report-process</a>]&#8224;</sup>
 - <a name="vulnerability-report-private"></a>If private vulnerability reports are supported, the project MUST include how to send the information in a way that is kept private.  E.g., a private defect report submitted on the web using TLS or an email encrypted using OpenPGP. If private vulnerability reports are not supported this criterion is automatically met. <sup>[<a href="#vulnerability-report-private">vulnerability-report-private</a>]</sup>
-- <a name="vulnerability-report-response"></a>The project MUST provide an initial reply to a security vulnerability report sent to the project, on average, less than 7 days within the last 6 months.  (If a project is being spammed on its vulnerability report channel, it is okay to only count non-spam messages.) <sup>[<a href="#vulnerability-report-response">vulnerability-report-response</a>]</sup>
-
+- <a name="vulnerability-report-response"></a>The project MUST provide an initial response to a vulnerability report, on average, less than 7 days within the last 6 months.  (If a project is being spammed on its vulnerability report channel, it is okay to only count non-spam messages.) <sup>[<a href="#vulnerability-report-response">vulnerability-report-response</a>]</sup>
 
 ### Quality
 

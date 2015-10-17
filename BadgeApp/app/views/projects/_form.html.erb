@@ -15,6 +15,8 @@ for open source software (OSS) projects.
 OSS projects that follow these best practices
 will be able to voluntarily self-certify and show that they've
 achieved a Core Infrastructure Initiative (CII) badge.
+We plan to improve the page design later; for now, please focus on
+the criteria and how they're combined.
 </p>
 <%= render(partial: "details", locals: {is_disabled: false,
            criteria: "badge_intro", details: %{
@@ -25,10 +27,11 @@ However, following best practices can help improve the results
 of OSS projects.
 </p>
 <p>
-To earn a badge the current rules are that
-aLl MUST and MUST NOT criteria must be met, and
-all SHOULD and SUGGESTED criteria must be either met OR must be unmet
-with a justification.
+To earn a badge the current rules are:
+<ul>
+<li>all MUST and MUST NOT criteria must be met,
+<li>all SHOULD criteria must be met OR be unmet with justification, <i>and</i>
+<li>all SUGGESTED criteria must be met OR unmet (we want them considered at least)
 </ul>
 </p>
 <p>
@@ -252,6 +255,7 @@ to be used by users.
 It is SUGGESTED that the
 <a href="http://semver.org">Semantic Versioning (SemVer) format</a> 
 is used for releases.},
+               met_suppress: true,
                details: %{
 Commit IDs (or similar) MAY be used as version numbers. They are unique, but note that these can
 cause problems for users as they may not be able to determine whether or not they're up-to-date.
@@ -293,21 +297,13 @@ known vulnerabilities.
 
       <br><br><br>
       <h2 class="center h2">Reporting</h2>
-      <h3>Bug-reporting process</h3>
+      <h3>Bug reporting process</h3>
 
       <!-- TODO: Add report_url to model and database.
       <span>If an issue tracker is used, please provide its URL.
       </span>
       \<\% = f.text_field :report_url , class:"form-control", placeholder:'Issue tracker URL (if any)', disabled: is_disabled % >
       -->
-
-      <hr>
-
-      <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
-               criteria: "report_tracker", desc: %{
-It is SUGGESTED that an issue tracker be used for tracking individual issues.
-}}) %>
-      <hr>
 
       <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
                criteria: "report_process", desc: %{
@@ -317,27 +313,31 @@ The project MUST provide a process for users to submit bug reports
       <hr>
 
       <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
+               criteria: "report_tracker", desc: %{
+It is SUGGESTED that an issue tracker be used for tracking individual issues.
+}}) %>
+      <hr>
+
+      <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
                criteria: "report_responses", desc: %{
-Developers MUST respond to most bug reports submitted in the last
-2-12 months (inclusive); the response need not include a fix.
+The project MUST acknowledge a majority of bug reports submitted in the last 2-12 months (inclusive); the response need not include a fix.
 }}) %>
       <hr>
 
       <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
                criteria: "enhancement_responses", desc: %{
-Developers SHOULD respond to most enhancement requests in the last 2-12 months
-(inclusive). Developers MAY choose not to respond.
+The project SHOULD respond to most enhancement requests in the last 2-12 months (inclusive). The project MAY choose not to respond.
 }}) %>
       <hr>
 
       <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
                criteria: "report_archive", desc: %{
-Reports and responses MUST be archived for later searching.
+The project MUST have a publicly available archive for reports and responses for later searching.
 }}) %>
 
       <br><br>
 
-      <h3>Vulnerability report process</h3>
+      <h3>Vulnerability reporting process</h3>
       <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
                criteria: "vulnerability_report_process", desc: %{
 The project MUST publish the process for reporting vulnerabilities on the project site.},
@@ -859,15 +859,42 @@ severity if its <a href="https://nvd.nist.gov/cvss.cfm">CVSS 2.0</a> base score 
         "dynamic_analysis_fixed" : "MUST"
       }
 
+      min_should_length = 5;
+
       function is_enough(criteria) {
         var criteria_status = "#project_" + criteria + "_status";
         if (field_categories[criteria] === "MUST") {
             return ($(criteria_status + "_met").is(':checked'));
+        } else if (field_categories[criteria] === "SHOULD") {
+            return ($(criteria_status + "_met").is(':checked') ||
+                   ( $(criteria_status + "_unmet").is(':checked') &&
+                      $("#project_"+criteria+"_justification").val().length >= min_should_length));
         } else {
             return ($(criteria_status + "_met").is(':checked') ||
-                    ( $(criteria_status + "_unmet").is(':checked') &&
-                      document.getElementById("project_"+criteria+"_justification").value.length > 0));
+                   $(criteria_status + "_unmet").is(':checked') );
         }
+      }
+
+      function changed_justification_text(criteria) {
+          var criteria_just = "#project_" + criteria + "_justification";
+          var criteria_status = "#project_" + criteria + "_status";
+          if ( $(criteria_status+"_unmet").is(':checked') &&
+               (field_categories[criteria] === "SHOULD") &&
+               ($(criteria_just).val().length < min_should_length)) {
+            $(criteria_just).addClass('required-data');
+          } else {
+            $(criteria_just).removeClass('required-data');
+          }
+
+          if (is_enough(criteria)) {
+              $("#" + criteria + "_enough").
+                  attr("src", "/assets/Thumbs_up_font_awesome.svg").
+                  attr("alt", "Enough for a badge!");
+          } else {
+              $("#" + criteria + "_enough").
+                  attr("src", "/assets/Thumbs_down_font_awesome.svg").
+                  attr("alt", "Not enough for a badge.");
+          }
       }
 
       function update_criteria_display(criteria) {
@@ -905,24 +932,7 @@ severity if its <a href="https://nvd.nist.gov/cvss.cfm">CVSS 2.0</a> base score 
           if ( justification_value.length > 0) {
                $(criteria_just).show('fast');
           }
-
-          if ( $(criteria_status+"_unmet").is(':checked') &&
-               (field_categories[criteria] === "SHOULD" ||
-               (field_categories[criteria] === "SUGGESTED"))) {
-            $(criteria_just).addClass('required-data');
-          } else {
-            $(criteria_just).removeClass('required-data');
-          }
-
-          if (is_enough(criteria)) {
-              $("#" + criteria + "_enough").
-                  attr("src", "/assets/Thumbs_up_font_awesome.svg").
-                  attr("alt", "Enough for a badge!");
-          } else {
-              $("#" + criteria + "_enough").
-                  attr("src", "/assets/Thumbs_down_font_awesome.svg").
-                  attr("alt", "Not enough for a badge.");
-          }
+          changed_justification_text(criteria);
       }
 
       function setup_field(criteria) {
@@ -931,6 +941,8 @@ severity if its <a href="https://nvd.nist.gov/cvss.cfm">CVSS 2.0</a> base score 
             function() {update_criteria_display(criteria);});
         $('input[name="project['+criteria+'_justification]"]').blur(
             function() {update_criteria_display(criteria);});
+        $('input[name="project['+criteria+'_justification]"]').on("input",
+            function() {changed_justification_text(criteria);});
       }
 
       function toggle_details(e) {

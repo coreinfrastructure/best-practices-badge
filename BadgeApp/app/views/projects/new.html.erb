@@ -9,8 +9,8 @@
      <h4>You may select from one of your GitHub repos <i>OR</i>
            provide information about some other project.</h4>
      <br>
-     <% github = Github.new client_id: ENV['GITHUB_KEY'], client_secret: ENV['GITHUB_SECRET'] %>
-     <% repo_data = github.repos.list user: current_user.nickname %>
+      <% github = Github.new oauth_token: session[:user_token] %>
+      <% repo_data = github.repos.list %>
      <%= form_for(@project) do |f| %>
        <span>Please select one of your GitHub repositories:</span>
        <%= f.select(:repo_url) do %>

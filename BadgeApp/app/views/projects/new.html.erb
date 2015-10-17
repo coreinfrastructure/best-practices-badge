@@ -13,11 +13,8 @@
       <% repo_data = github.repos.list %>
      <%= form_for(@project) do |f| %>
        <span>Please select one of your GitHub repositories:</span>
-       <%= f.select(:repo_url) do %>
-         <% repo_data.each do |repo| %>
-           <%= content_tag(:option, repo['name'], value: repo['html_url']) %>
-         <% end %>
-         <%= f.submit 'Submit GitHub Repository', class:"btn btn-primary" %>
+       <%= f.collection_select(:repo_url, repo_data, :html_url, :full_name)) %>
+       <%= f.submit 'Submit GitHub Repository', class:"btn btn-primary" %>
        <% end %>
      <% end %>
 

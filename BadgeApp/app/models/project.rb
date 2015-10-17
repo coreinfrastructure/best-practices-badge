@@ -11,10 +11,10 @@ class Project < ActiveRecord::Base
   # that can sometimes be used to attack (e.g., "?...", or ones with <).
   validates :project_url, format: { with:
     /\A(|https?:\/\/[A-Za-z0-9][-A-Za-z0-9_.\/]*(\/[-A-Za-z0-9_.\/\+,#]*)?)\z/,
-    message: 'URL must begin with http: or https: and use a limited charset' }
+                                    message: 'URL must begin with http: or https: and use a limited charset' }
   validates :repo_url, format: { with:
     /\A(|https?:\/\/[A-Za-z0-9][-A-Za-z0-9_.\/]*(\/[-A-Za-z0-9_.\/\+,#]*)?)\z/,
-    message: 'URL must begin with http: or https: and use a limited charset' }
+                                 message: 'URL must begin with http: or https: and use a limited charset' }
 
   STATUS_CHOICE = ['?', 'Met', 'Unmet']
   validates :project_url_status, inclusion: { in: STATUS_CHOICE }

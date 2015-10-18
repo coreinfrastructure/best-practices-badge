@@ -15,3 +15,6 @@
 /log/*
 !/log/.keep
 /tmp
+
+# Don't include precompiled assets
+/public/assets

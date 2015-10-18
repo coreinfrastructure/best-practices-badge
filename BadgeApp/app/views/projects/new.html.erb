@@ -12,9 +12,9 @@
 <!--       <% github = Github.new oauth_token: session[:user_token] %>
       <% repo_data = github.repos.list %> -->
      <%= form_for(@project) do |f| %>
-       <span>Please select one of your GitHub repositories:</span>
-       <%= f.collection_select :repo_url, github_select, :first, :last, { include_blank: true } %>
-       <!-- , disabled: ['Original Github Repos', 'Forked Github Repos'] -->
+       <%= f.collection_select :repo_url, github_select, :last, :first, { prompt: 'Select one of your Github repos', disabled: lambda{ |repo| repo[1].blank? }} %>
+<!--        <%= f.collection_select :repo_url, github_select, :last, :first, { disabled: ['Original Github Repos', 'Forked Github Repos'], include_blank: true } %>
+ -->       <!-- ,  -->
        <%= f.submit 'Submit GitHub Repository', class:"btn btn-primary" %>
      <% end %>
 

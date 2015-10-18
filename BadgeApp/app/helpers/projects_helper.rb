@@ -1,27 +1,24 @@
 module ProjectsHelper
   def github_select
+    fork_repos, original_repos = fork_and_original
+    original_header(original_repos) + text_and_value(original_repos) +
+      fork_header(fork_repos) + text_and_value(fork_repos)
+  end
+
+  def fork_and_original
     github = Github.new oauth_token: session[:user_token]
     repo_data = github.repos.list.map do |repo|
-      { full_name: repo.full_name, fork: repo.fork, html_url: repo.html_url }
+      { full_name: repo.full_name, html_url: repo.html_url, fork: repo.fork }
     end
-    fork_repos, original_repos = repo_data.partition { |repo| repo[:fork] }
-    # f.collection_select :repo_url, repo_data, :html_url, :full_name, { include_blank: true }
-    ordered_repos = []
-    ordered_repos.push original_header unless original_repos.blank?
-    ordered_repos.push text_and_value(original_repos)
-    ordered_repos.push fork_header unless fork_repos.blank?
-    ordered_repos.push text_and_value(fork_repos)
-    # byebug
-    ordered_repos
-    # byebug
+    repo_data.partition { |repo| repo[:fork] }
   end
 
-  def original_header
-    ['Original Github Repos', '']
+  def original_header(original_repos)
+    original_repos.blank? ? [] : [['=> Original Github Repos', '']]
   end
 
-  def fork_header
-    ['Forked Github Repos', '']
+  def fork_header(fork_repos)
+    fork_repos.blank? ? [] : [['=> Forked Github Repos', '']]
   end
 
   def text_and_value(repos)

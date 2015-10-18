@@ -15,10 +15,10 @@ module ProjectsHelper
   end
 
   def original_header(original_repos)
-    original_repos.blank? ? [] : [['=> Original Github Repos', '', '']]
+    original_repos.blank? ? [] : [['=> Original Github Repos', '', 'none']]
   end
 
   def fork_header(fork_repos)
-    fork_repos.blank? ? [] : [['=> Forked Github Repos', '', '']]
+    fork_repos.blank? ? [] : [['=> Forked Github Repos', '', 'none']]
   end
 end

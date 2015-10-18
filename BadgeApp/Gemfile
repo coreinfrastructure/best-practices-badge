@@ -2,7 +2,6 @@ source 'https://rubygems.org'
 
 gem 'bcrypt', '3.1.10'
 gem 'bootstrap-sass', '3.3.5.1'
-gem 'bootstrap-switch-rails', '3.3.3'
 gem 'bootstrap-will_paginate', '0.0.10'
 gem 'bootstrap_form', '2.3.0'
 gem 'faker', '1.5.0'

@@ -21,8 +21,8 @@ class ProjectsControllerTest < ActionController::TestCase
       post :create, project: { description: @project.description,
                                license: @project.license,
                                name: @project.name,
-                               repo: @project.repo,
-                               website: @project.website }
+                               repo_url: @project.repo_url,
+                               project_url: @project.project_url }
     end
 
     assert_redirected_to project_path(assigns(:project))
@@ -42,8 +42,8 @@ class ProjectsControllerTest < ActionController::TestCase
     patch :update, id: @project, project: { description: @project.description,
                                             license: @project.license,
                                             name: @project.name,
-                                            repo: @project.repo,
-                                            website: @project.website }
+                                            repo_url: @project.repo_url,
+                                            project_url: @project.project_url }
     assert_redirected_to project_path(assigns(:project))
   end
 

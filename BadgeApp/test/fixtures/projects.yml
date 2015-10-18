@@ -3,13 +3,13 @@
 one:
   name: MyString
   description: MyString
-  website: MyString
+  project_url: MyString
   license: MyString
-  repo: MyString
+  repo_url: MyString
 
 two:
   name: MyString
   description: MyString
-  website: MyString
+  project_url: MyString
   license: MyString
-  repo: MyString
+  repo_url: MyString

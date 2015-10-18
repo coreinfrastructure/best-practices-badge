@@ -51,7 +51,6 @@ GEM
     bootstrap-sass (3.3.5.1)
       autoprefixer-rails (>= 5.0.0.1)
       sass (>= 3.3.0)
-    bootstrap-switch-rails (3.3.3)
     bootstrap-will_paginate (0.0.10)
       will_paginate
     bootstrap_form (2.3.0)
@@ -300,7 +299,6 @@ DEPENDENCIES
   awesome_print (= 1.6.1)
   bcrypt (= 3.1.10)
   bootstrap-sass (= 3.3.5.1)
-  bootstrap-switch-rails (= 3.3.3)
   bootstrap-will_paginate (= 0.0.10)
   bootstrap_form (= 2.3.0)
   bullet (= 4.14.9)

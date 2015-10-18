@@ -18,7 +18,4 @@
  *= require_self
  *= require jquery-ui/autocomplete
  *= require rails_bootstrap_forms
- *= require bootstrap3-switch
  */
-
-*= require bootstrap-switch

@@ -14,7 +14,6 @@
 //= require jquery_ujs
 //= require turbolinks
 //= require bootstrap
-//= require bootstrap-switch
 // This is for a polyfill for Safari:
 //= require jquery-ui/autocomplete
 //= require_tree .

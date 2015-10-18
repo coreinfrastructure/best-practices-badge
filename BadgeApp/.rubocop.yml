@@ -1,0 +1,36 @@
+require: rubocop-rspec
+AllCops:
+  DisplayCopNames: true
+  DisplayStyleGuide: true
+  RunRailsCops: true
+  Include:
+    - '**/*.pryrc'
+    - '**/*.rake'
+    - '.simplecov'
+    - '**/config.ru'
+    - '**/Gemfile'
+    - '**/Guardfile'
+    - '**/Rakefile'
+  Exclude:
+    - 'db/schema.rb'
+    - 'features/support/_circleci_formatter.rb'
+Documentation:
+  Enabled: false
+Lint/HandleExceptions:
+  Exclude:
+    - 'bin/*'
+Metrics/AbcSize:
+  Exclude:
+    - 'db/migrate/*'
+Metrics/ClassLength:
+  Exclude:
+    - 'db/migrate/*'
+Metrics/LineLength:
+  Exclude:
+    - 'db/migrate/*'
+Metrics/MethodLength:
+  Exclude:
+    - 'db/migrate/*'
+Style/TrivialAccessors:
+  Enabled: true
+  ExactNameMatch: true

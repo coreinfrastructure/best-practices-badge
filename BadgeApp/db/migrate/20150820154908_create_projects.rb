@@ -1,7 +1,7 @@
 class CreateProjects < ActiveRecord::Migration
   def change
     create_table :projects do |t|
-    # OSS PROJECT BASICS
+      # OSS PROJECT BASICS
       # Identification
       t.string :name
       t.text :description
@@ -34,7 +34,7 @@ class CreateProjects < ActiveRecord::Migration
       t.text :documentation_basics_justification
       t.string :documentation_interface_status
       t.text :documentation_interface_justification
-    # CHANGE CONTROL
+      # CHANGE CONTROL
       # Public version-controlled source repository
       t.string :repo_url_status
       t.text :repo_url_justification
@@ -56,7 +56,7 @@ class CreateProjects < ActiveRecord::Migration
       t.text :changelog_justification
       t.string :changelog_vulns_status
       t.text :changelog_vulns_justification
-    # REPORTING
+      # REPORTING
       # Bug-reporting process
       t.string :report_url_status
       t.text :report_url_justification
@@ -77,7 +77,7 @@ class CreateProjects < ActiveRecord::Migration
       t.text :vulnerability_report_private_justification
       t.string :vulnerability_report_response_status
       t.text :vulnerability_report_response_justification
-    # QUALITY
+      # QUALITY
       # Working build system
       t.string :build_status
       t.text :build_justification
@@ -106,7 +106,7 @@ class CreateProjects < ActiveRecord::Migration
       t.text :warnings_fixed_justification
       t.string :warnings_strict_status
       t.text :warnings_strict_justification
-    # SECURITY
+      # SECURITY
       # Secure development knowledge
       t.string :know_secure_design_status
       t.text :know_secure_design_justification
@@ -139,7 +139,7 @@ class CreateProjects < ActiveRecord::Migration
       t.text :vulnerabilities_fixed_60_days_justification
       t.string :vulnerabilities_critical_fixed_status
       t.text :vulnerabilities_critical_fixed_justification
-    # SECURITY ANALYSIS
+      # SECURITY ANALYSIS
       # Static Code Analysis
       t.string :static_analysis_status
       t.text :static_analysis_justification
@@ -159,13 +159,7 @@ class CreateProjects < ActiveRecord::Migration
       t.string :dynamic_analysis_fixed_status
       t.text :dynamic_analysis_fixed_justification
 
-
-
-
-
-
-
-    # COMMENTS ABOUT THE PROJECT
+      # COMMENTS ABOUT THE PROJECT
       t.text :general_comments
 
       t.timestamps null: false

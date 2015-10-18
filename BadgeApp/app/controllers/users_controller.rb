@@ -15,21 +15,20 @@ class UsersController < ApplicationController
 
   def create
     @user = User.new(user_params)
-    @user.provider = "local"
+    @user.provider = 'local'
     if @user.save
       log_in @user
-      flash[:success] = "Welcome to the Open Source Software Badging Program!"
+      flash[:success] = 'Welcome to the Open Source Software Badging Program!'
       redirect_to @user
     else
-     render 'new'
+      render 'new'
     end
   end
 
   private
 
-    def user_params
-      params.require(:user).permit(:provider, :uid, :name, :email, :password,
-                                   :password_confirmation)
-    end
-
+  def user_params
+    params.require(:user).permit(:provider, :uid, :name, :email, :password,
+                                 :password_confirmation)
+  end
 end

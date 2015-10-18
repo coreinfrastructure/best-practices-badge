@@ -9,16 +9,9 @@
      <h4>You may select from one of your GitHub repos <i>OR</i>
            provide information about some other project.</h4>
      <br>
-      <% github = Github.new oauth_token: session[:user_token] %>
-      <% repo_data = github.repos.list %>
      <%= form_for(@project) do |f| %>
-       <span>Please select one of your GitHub repositories:</span>
-       <%= f.select(:repo_url) do %>
-         <% repo_data.each do |repo| %>
-           <%= content_tag(:option, repo['name'], value: repo['html_url']) %>
-         <% end %>
-         <%= f.submit 'Submit GitHub Repository', class:"btn btn-primary" %>
-       <% end %>
+       <%= f.collection_select :repo_url, github_select, :last, :first, { prompt: 'Select one of your Github repos', disabled: lambda{ |repo| repo.last.blank? }} %>
+       <%= f.submit 'Submit GitHub Repository', class:"btn btn-primary" %>
      <% end %>
 
      <br><h2 class='center'>OR</h2>

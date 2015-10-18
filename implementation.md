@@ -25,7 +25,7 @@ OAuth2 credentials stored as environment variables.  The variable names of Oauth
 If running on heroku, set config variables by following instructions on [2].
 If running locally, one way to start up the application is: 
 GITHUB_KEY='client id' GITHUB_SECRET='client secret' rails s 
-where *client id* and *client secret* are registered OAuth2 credentials of the app.
+where *client id* and *client secret* are registered OAuth2 credentials of the app. The authorization callback URL in Github is: http://localhost:3000/auth/github
 
 [1] https://github.com/settings/applications/new
 [2] https://devcenter.heroku.com/articles/config-vars

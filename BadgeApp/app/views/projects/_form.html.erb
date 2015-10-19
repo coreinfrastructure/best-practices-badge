@@ -46,7 +46,7 @@ There is also a
 <div class="row">
   <div class="col-md-7 col-md-offset-1">
 
-  <%= form_for(project) do |f| %>
+  <%= bootstrap_form_for(project) do |f| %>
     <%= render 'shared/error_messages', object: f.object %>
 
     <h2 class="center">OSS Project Basics</h2>
@@ -58,7 +58,7 @@ There is also a
 Note that other projects may use the same name.
 }}) %>
 </span>
-      <%= f.text_field :name, class:"form-control", placeholder:'OSS Project Name', disabled: is_disabled %>
+      <%= f.text_field :name, hide_label: true, class:"form-control", placeholder:'OSS Project Name', disabled: is_disabled %>
 
       <span>What is a brief description of the project?
 <%= render(partial: "details", locals: {is_disabled: false,
@@ -70,7 +70,7 @@ This information is used when displaying badge information.
       <%= f.text_area :description, class:"form-control", hide_label: true, placeholder:'Project Description', disabled: is_disabled %>
 
       <span>What is the URL for the project (as a whole)?</span>
-      <%= f.text_field :project_url, class:"form-control", hide_label: true, placeholder:'Project Website URL', disabled: is_disabled %>
+      <%= f.text_field :project_url, hide_label: true, class: "form-control", placeholder:'Project Website URL', label: "Project URL", disabled: is_disabled %>
 
       <span>What is the URL for the version control repository
             (it may the same as the project URL)?</span>

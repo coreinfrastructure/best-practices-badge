@@ -752,10 +752,14 @@ All confirmed medium and high severity exploitable vulnerabilities discovered
 with dynamic code analysis MUST be fixed. A vulnerability is medium to high
 severity if its <a href="https://nvd.nist.gov/cvss.cfm">CVSS 2.0</a> base score is 4 or higher.
 }}) %>
+      <hr>
 
       <br>
-      <hr class='col-md-11'>
-      <%= f.text_area :general_comments, class:"form-control",  hide_label: true, placeholder:'Additional Comments', disabled: is_disabled %>
+      <div class="row">
+        <div class="col-md-7 col-md-offset-1">
+          <%= f.text_area :general_comments, class:"form-control",  hide_label: true, placeholder:'Additional Comments', disabled: is_disabled %>
+        </div>
+      </div>
       <br>
       <% if ! is_disabled %>
         <%= f.submit 'Submit', class:"btn btn-primary" %>

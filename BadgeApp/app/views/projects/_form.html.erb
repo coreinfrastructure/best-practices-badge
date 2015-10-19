@@ -52,21 +52,19 @@ There is also a
     <h2 class="center">OSS Project Basics</h2>
 
     <h3>Identification</h3>
-      <span>What is the human-readable name of the project?
+      <span>What is the human-readable name of the project?</span>
 <%= render(partial: "details", locals: {is_disabled: false,
            criteria: "project_name", details: %{
 Note that other projects may use the same name.
 }}) %>
-</span>
       <%= f.text_field :name, hide_label: true, class:"form-control", placeholder:'OSS Project Name', disabled: is_disabled %>
 
-      <span>What is a brief description of the project?
+      <span>What is a brief description of the project?</span>
 <%= render(partial: "details", locals: {is_disabled: false,
            criteria: "description", details: %{
 Include key comments about the project.
 This information is used when displaying badge information.
 }}) %>
-</span>
       <%= f.text_area :description, class:"form-control", hide_label: true, placeholder:'Project Description', disabled: is_disabled %>
 
       <span>What is the URL for the project (as a whole)?</span>
@@ -108,12 +106,11 @@ The information on how to contribute SHOULD include the basic criteria for accep
       <br><br>
 
       <h3>OSS License</h3>
-      <span>What license(s) is the project released under?
+      <span>What license(s) is the project released under?</span>
       <%= render(partial: "details", locals: {is_disabled: false,
            criteria: "license", details: %{
 Please use <a href="https://spdx.org/licenses/">SPDX format</a> (examples include "Apache-2.0", "BSD-2-Clause", "BSD-3-Clause", "GPL-2.0+", "LGPL-3.0+", and "MIT")
 }}) %>
-</span>
       <%= f.text_field :license, class:"form-control", hide_label: true, placeholder:'OSS License', list: "license_list", disabled: is_disabled %>
      <!-- Some examples from http://wiki.spdx.org/view/FileNoticeExamples -->
      <datalist id="license_list">

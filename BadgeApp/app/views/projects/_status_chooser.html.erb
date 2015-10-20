@@ -5,16 +5,13 @@
       <div class="col-md-3 criteria-radio">
        <%= f.form_group status_symbol do %>
          <table class='borderless'><tbody><tr>
-           <td><%= f.label status_symbol do %>
+           <td class="text-center">
              <%= f.radio_button status_symbol, 'Met', disabled: is_disabled %> Met
-           <% end %>
-           <td><%= f.label status_symbol do %>
+           <td class="text-center">
              <%= f.radio_button status_symbol, 'Unmet', disabled: is_disabled  %> Unmet
-           <% end %>
-           <td><%= f.label status_symbol do %>
+           <td class="text-center">
              <%= f.radio_button status_symbol, '?', disabled: is_disabled  %> &nbsp;?&nbsp;
-           <% end %>
-           <td><%= image_tag("/assets/Clear.gif", size: "20x20", id: criteria + "_enough") %>
+           <td class="text-center"><%= image_tag("/assets/Clear.gif", size: "20x20", id: criteria + "_enough") %>
           </tr></tbody></table>
         <% end %>
       </div>

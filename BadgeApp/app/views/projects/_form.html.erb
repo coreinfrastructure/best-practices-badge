@@ -80,7 +80,11 @@ This information is used when displaying badge information.
             (it may the same as the project URL)?</span>
       <%= f.text_field :repo_url, class:"form-control", hide_label: true, placeholder:'Project Repo URL', disabled: is_disabled %>
 
-<!-- TODO: MUST have a project or repo URL, SUGGESTED to use HTTPS -->
+<!-- TODO: MUST have a project or repo URL, SUGGESTED to use HTTPS.
+     However, first is implied by "description_sufficient",
+     and the MITM stuff notes https as a way to implement it. -->
+
+   <% "Note: render() accepts met_suppress: ..., unmet_placeholder:  ..." %>
 
     <h3>Basic Project Website Content</h3>
       <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
@@ -88,26 +92,32 @@ This information is used when displaying badge information.
 The project website MUST succinctly describe what the software does
 (what problem does it solve?).},
               details: %{
-This MUST be in language that potential users can understand (e.g., it uses minimal jargon).
+This MUST be in language that potential users can understand (e.g., it uses minimal jargon).},
+              met_placeholder: %{Where is the succinct description?  Consider providing a URL.
 }}) %>
       <hr>
 
       <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
               criteria: "interact", desc: %{
 The project website MUST provide information on how to: obtain, provide feedback
-(as bug reports or enhancements), and contribute to the sofware.
+(as bug reports or enhancements), and contribute to the sofware.},
+              met_placeholder: %{Where is this information?  Consider providing URL(s).
 }}) %>
       <hr>
 
       <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
               criteria: "contribution", desc: %{
-The information on how to contribute MUST explain the contribution process (e.g., are pull requests used?)
+The information on how to contribute MUST explain the contribution process (e.g., are pull requests used?)},
+              details: %{
+This can be short, e.g., stating that the project uses pull requests, an issue tracker, or posts to a mailing list (which one?).},
+              met_placeholder: %{What is the process? What URL explains it?
 }}) %>
       <hr>
 
       <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
               criteria: "contribution_criteria", desc: %{
-The information on how to contribute SHOULD include the basic criteria for acceptable contributions (e.g., a reference to any required coding standard).
+The information on how to contribute SHOULD include the basic criteria for acceptable contributions (e.g., a reference to any required coding standard).},
+              unmet_placeholder: %{Why are the criteria so obvious that this information isn't needed?
 }}) %>
       <br><br>
 
@@ -168,9 +178,9 @@ For our purposes, this means that the license MUST be at least one of the follow
 It is SUGGESTED that any required license(s) be
 <a href="https://opensource.org/licenses">OSI-approved</a>},
                met_suppress: true,
-               unmet_placeholder: %{
-What URL justifies that this is an OSS license?
-}}) %>
+               unmet_suppress: true
+}) %>
+
        <hr>
 
 
@@ -179,8 +189,9 @@ What URL justifies that this is an OSS license?
 The project MUST post licence(s) in a standard location.},
                 details: %{
 E.g., as a top-level file named LICENSE or COPYING.
-License filenames MAY be followed by an extension such as ".txt" or ".md".
-}}) %>
+License filenames MAY be followed by an extension such as ".txt" or ".md".},
+               met_suppress: true
+}) %>
 
       <br><br>
       <h3>Documentation</h3>
@@ -189,10 +200,11 @@ License filenames MAY be followed by an extension such as ".txt" or ".md".
               criteria: "documentation_basics", desc: %{
 The project MUST provide basic documentation for the software.},
               details: %{
-This documentation must be  in some media (such as text or video) that includes:
+This documentation must be in some media (such as text or video) that includes:
 how to install it, how to start it, how to use it (possibly with a tutorial using examples), and
 how to use it securely (e.g., what to do and what not to do) if that is an appropriate topic for the software.
-The security documentation need not be long (it is better for the software to be designed to be secure by default).
+The security documentation need not be long (it is better for the software to be designed to be secure by default).},
+              met_placeholder: %{What URL(s) are the starting points to for documentation?
 }}) %>
       <hr>
 
@@ -924,7 +936,7 @@ severity if its <a href="https://nvd.nist.gov/cvss.cfm">CVSS 2.0</a> base score 
                   attr("placeholder",
                     $("#" + criteria_unmet_placeholder).html().trim());
                if ((field_categories[criteria] === "MUST") ||
-                    (document.getElementById("criteria" + "_unmet_suppress"))) {
+                    (document.getElementById(criteria + "_unmet_suppress"))) {
                  $(criteria_just).hide('fast');
                } else {
                  $(criteria_just).show('fast');

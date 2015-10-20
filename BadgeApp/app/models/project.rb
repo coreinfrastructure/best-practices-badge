@@ -1,5 +1,6 @@
 class Project < ActiveRecord::Base
   STATUS_CHOICE = ['?', 'Met', 'Unmet']
+  MIN_SHOULD_LENGTH = 5
 
   FIELD_CATEGORIES = {
     'description_sufficient' => 'MUST',
@@ -145,7 +146,6 @@ class Project < ActiveRecord::Base
   # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
   # rubocop:disable Metrics/MethodLength
   def self.valid_badge?(project)
-    min_should_length = 5
     FIELD_CATEGORIES.all? do |key, value|
       criteria_status = (key + '_status')
       criteria_just = (key + '_justification')
@@ -156,7 +156,7 @@ class Project < ActiveRecord::Base
         if project[criteria_status] == 'Met'
           true
         elsif project[criteria_status] == 'Unmet' &&
-              (project[criteria_just].length >= min_should_length)
+              (project[criteria_just].length >= MIN_SHOULD_LENGTH)
           true
         else
           false

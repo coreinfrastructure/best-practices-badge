@@ -160,67 +160,6 @@ class ProjectsController < ApplicationController
     :general_comments
   ].freeze
 
-  FIELD_CATEGORIES = {
-    'description_sufficient' => 'MUST',
-    'interact' => 'MUST',
-    'contribution' => 'MUST',
-    'contribution_criteria' => 'SHOULD',
-    'license_location' => 'MUST',
-    'oss_license' => 'MUST',
-    'oss_license_osi' => 'SUGGESTED',
-    'documentation_basics' => 'MUST',
-    'documentation_interface' => 'MUST',
-    'repo_url' => 'MUST',
-    'repo_track' => 'MUST',
-    'repo_interim' => 'MUST',
-    'repo_distributed' => 'SUGGESTED',
-    'version_unique' => 'MUST',
-    'version_semver' => 'SUGGESTED',
-    'version_tags' => 'SUGGESTED',
-    'changelog' => 'MUST',
-    'changelog_vulns' => 'MUST',
-    'report_tracker' => 'SUGGESTED',
-    'report_process' => 'MUST',
-    'report_responses' => 'MUST',
-    'enhancement_responses' => 'SHOULD',
-    'report_archive' => 'MUST',
-    'vulnerability_report_process' => 'MUST',
-    'vulnerability_report_private' => 'MUST',
-    'vulnerability_report_response' => 'MUST',
-    'build' => 'MUST',
-    'build_common_tools' => 'SUGGESTED',
-    'build_oss_tools' => 'SHOULD',
-    'test' => 'MUST',
-    'test_invocation' => 'SHOULD',
-    'test_most' => 'SUGGESTED',
-    'test_policy' => 'MUST',
-    'tests_are_added' => 'MUST',
-    'tests_documented_added' => 'SUGGESTED',
-    'warnings' => 'MUST',
-    'warnings_fixed' => 'MUST',
-    'warnings_strict' => 'SUGGESTED',
-    'know_secure_design' => 'MUST',
-    'know_common_errors' => 'MUST',
-    'crypto_published' => 'MUST',
-    'crypto_call' => 'MUST',
-    'crypto_oss' => 'MUST',
-    'crypto_keylength' => 'MUST',
-    'crypto_working' => 'MUST',
-    'crypto_pfs' => 'SHOULD',
-    'crypto_password_storage' => 'MUST',
-    'crypto_random' => 'MUST',
-    'delivery_mitm' => 'MUST',
-    'delivery_unsigned' => 'MUST',
-    'vulnerabilities_fixed_60_days' => 'MUST',
-    'vulnerabilities_critical_fixed' => 'SHOULD',
-    'static_analysis' => 'MUST',
-    'static_analysis_common_vulnerabilities' => 'SUGGESTED',
-    'static_analysis_fixed' => 'MUST',
-    'static_analysis_often' => 'SUGGESTED',
-    'dynamic_analysis_unsafe' => 'MUST',
-    'dynamic_analysis_enable_assertions' => 'SUGGESTED',
-    'dynamic_analysis_fixed' => 'MUST' }.freeze
-
   # GET /projects
   # GET /projects.json
   def index
@@ -235,10 +174,10 @@ class ProjectsController < ApplicationController
   def badge
     @project = Project.find(params[:id])
     respond_to do |format|
-      if badge? @project
-        format.svg {render Rails.application.assets['badge-pass.svg'].pathname}
+      if Project.valid_badge?(@project)
+        format.svg {render file: Rails.application.assets['badge-pass.svg'].pathname}
       else
-        format.svg {render Rails.application.assets['badge-fail.svg'].pathname}
+        format.svg {render file: Rails.application.assets['badge-fail.svg'].pathname}
       end
     end
   end
@@ -319,31 +258,4 @@ class ProjectsController < ApplicationController
   def project_params
     params.require(:project).permit(PERMITTED_PARAMS)
   end
-
-  # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
-  # rubocop:disable Metrics/MethodLength
-  def badge?(project)
-    min_should_length = 5
-    FIELD_CATEGORIES.all? do |key, value|
-      criteria_status = (key + '_status')
-      criteria_just = (key + '_justification')
-      case value
-      when 'MUST'
-        project[criteria_status] == 'Met'
-      when 'SHOULD'
-        if project[criteria_status] == 'Met'
-          true
-        elsif project[criteria_status] == 'Unmet' &&
-              (project[criteria_just].length >= min_should_length)
-          true
-        else
-          false
-        end
-      when 'SUGGESTED'
-        %w(Met Unmet).include? project[criteria_status]
-      end
-    end
-  end
-  # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity
-  # rubocop:enable Metrics/MethodLength
 end

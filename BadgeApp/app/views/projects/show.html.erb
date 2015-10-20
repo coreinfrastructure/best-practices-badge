@@ -1,6 +1,14 @@
 <div>
 <br>
 
+<% if defined?(@project.name) && !@project.name.blank?
+     display_name = @project.name
+   else
+     display_name = "(Name Unknown)"
+   end %>
+
+<h1>Project Badge Status for <%= display_name %></h1>
+
 <%= render 'form', project: @project, is_disabled: true %>
 
 <p>

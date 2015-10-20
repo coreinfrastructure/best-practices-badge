@@ -1,4 +1,15 @@
 <div class="row">
+<div class="col-md-7 col-md-offset-1">
+<p>
+Open source software (OSS) projects
+that follow the best practices below
+will be able to voluntarily self-certify and show that they've
+achieved a Core Infrastructure Initiative (CII) badge.
+</div>
+</div>
+<br><br>
+
+<div class="row">
 <div class="col-md-7 col-md-offset-1 text-center">
 <button title="Show all detailed text" type="button" onclick="$('.details-text').show('fast'); $('.details-toggler').html('Hide details');">Show all detailed text</button>
 |
@@ -10,21 +21,16 @@
 <div class="row">
 <div class="col-md-7 col-md-offset-1">
 <p>
-This is a draft of proposed basic best practices
-for open source software (OSS) projects.
-OSS projects that follow these best practices
-will be able to voluntarily self-certify and show that they've
-achieved a Core Infrastructure Initiative (CII) badge.
-We plan to improve the page design later; for now, please focus on
-the criteria and how they're combined.
-</p>
-<%= render(partial: "details", locals: {is_disabled: false,
-           criteria: "badge_intro", details: %{
-<p>
 There is no set of practices that can guarantee that software
 will never have defects or vulnerabilities.
 However, following best practices can help improve the results
 of OSS projects.
+</p>
+<%= render(partial: "details", locals: {is_disabled: false,
+           criteria: "badge_intro", details: %{
+<p>
+We plan to improve the page design later; for now, please focus on
+the criteria and how they're combined.
 </p>
 <p>
 To earn a badge the current rules are:

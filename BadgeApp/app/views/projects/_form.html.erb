@@ -962,7 +962,7 @@ severity if its <a href="https://nvd.nist.gov/cvss.cfm">CVSS 2.0</a> base score 
       function toggle_details(e) {
         var details_text_id = e.target.id.
                               replace("_details_toggler", "_details_text");
-        $("#" + details_text_id).toggle('slow',
+        $("#" + details_text_id).toggle('fast',
           function () {
             if ($("#" + details_text_id).is(':hidden')) {
               var button_text = "Show details";

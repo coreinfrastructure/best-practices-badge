@@ -15,30 +15,22 @@ will be able to voluntarily self-certify and show that they've
 achieved a Core Infrastructure Initiative (CII) badge.
 <%= render(partial: "details", locals: {is_disabled: false,
            criteria: "badge_intro", details: %{
-<p>
 There is no set of practices that can guarantee that software
 will never have defects or vulnerabilities.
 However, following best practices can help improve the results
 of OSS projects.
-</p>
-<p>
 We plan to improve the page design later; for now, please focus on
 the criteria and how they're combined.
-</p>
-<p>
 To earn a badge the current rules are:
-</p>
 <ul>
 <li>all MUST and MUST NOT criteria must be met,
 <li>all SHOULD criteria must be met OR be unmet with justification, <i>and</i>
 <li>all SUGGESTED criteria must be met OR unmet (we want them considered at least)
 </ul>
-<p>
 Feedback is welcome via the
 <a href="https://github.com/linuxfoundation/cii-best-practices-badge">GitHub site as issues or pull requests</a>
 There is also a
 <a href="https://lists.coreinfrastructure.org/mailman/listinfo/cii-badges">mailing list for general discussion</a>.
-</p>
 }}) %>
 </div>
 </div>
@@ -153,19 +145,18 @@ Please use <a href="https://spdx.org/licenses/">SPDX format</a> (examples includ
                criteria: "oss_license", desc: %{
 The software MUST be released as OSS.},
                details: %{
-<p>
 For our purposes, this means that the license MUST be at least one of the following:
-</p>
 <ul>
 <li><a href="https://opensource.org/licenses">an approved license by the Open Source Initiative (OSI)</a></li>
 <li><a href="https://www.gnu.org/licenses/license-list.html">a free license as approved by the Free Software Foundation (FSF)</a></li>
 <li><a href="https://www.debian.org/legal/licenses/">a free license acceptable to Debian main</a></li>
 <li><a href="https://fedoraproject.org/wiki/Licensing:Main?rd=Licensing">a "good" license according to Fedora</a></li>
 </ul>
-<p>The software MAY also be licensed other ways (e.g., "GPLv2 or proprietary" is acceptable).</p>
-<p><em>Note</em>: We intend for the automated tool to focus on identifying common OSS licenses such as:     <a href="http://creativecommons.org/publicdomain/zero/1.0/">CC0</a>, <a href="https://opensource.org/licenses/MIT">MIT</a>, <a href="https://opensource.org/licenses/BSD-2-Clause">BSD 2-clause</a>, <a href="https://opensource.org/licenses/BSD-3-Clause">BSD 3-clause revised</a>, <a href="https://opensource.org/licenses/Apache-2.0">Apache 2.0</a>, <a href="https://opensource.org/licenses/lgpl-license">Lesser GNU General Public License (LGPL)</a>, and the <a href="https://opensource.org/licenses/gpl-license">GNU General Public License (GPL)</a>.</p>
-<p><em>Rationale</em>: These criteria are designed for OSS projects, so we need to ensure that they're only used where they apply.  Some projects are thought of as OSS yet are not actually released as OSS (e.g., they might not have any license, in which case the defaults of the country's legal system apply, or they might use a non-OSS license).  Unusual licenses can cause long-term problems for OSS projects and are more difficult for tools to handle.  We expect that more advanced badges would set a higher bar (e.g., that it <em>must</em> be released under an OSI-approved license).</p>
-
+The software MAY also be licensed other ways (e.g., "GPLv2 or proprietary" is acceptable).
+<br>
+<em>Note</em>: We intend for the automated tool to focus on identifying common OSS licenses such as:     <a href="http://creativecommons.org/publicdomain/zero/1.0/">CC0</a>, <a href="https://opensource.org/licenses/MIT">MIT</a>, <a href="https://opensource.org/licenses/BSD-2-Clause">BSD 2-clause</a>, <a href="https://opensource.org/licenses/BSD-3-Clause">BSD 3-clause revised</a>, <a href="https://opensource.org/licenses/Apache-2.0">Apache 2.0</a>, <a href="https://opensource.org/licenses/lgpl-license">Lesser GNU General Public License (LGPL)</a>, and the <a href="https://opensource.org/licenses/gpl-license">GNU General Public License (GPL)</a>.
+<br>
+<em>Rationale</em>: These criteria are designed for OSS projects, so we need to ensure that they're only used where they apply.  Some projects are thought of as OSS yet are not actually released as OSS (e.g., they might not have any license, in which case the defaults of the country's legal system apply, or they might use a non-OSS license).  Unusual licenses can cause long-term problems for OSS projects and are more difficult for tools to handle.  We expect that more advanced badges would set a higher bar (e.g., that it <em>must</em> be released under an OSI-approved license).
 }}) %>
        <hr>
 

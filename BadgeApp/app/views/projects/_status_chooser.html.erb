@@ -2,20 +2,29 @@
       <% status_symbol = (criteria + "_status").to_sym %>
       <% justification_symbol = (criteria + "_justification").to_sym %>
       <% criteria_shortname = criteria.gsub("_", "-") %>
-      <div class="col-md-3 criteria-radio">
+
+      <div class="col-md-2 criteria-radio">
+       <div class="row">
        <%= f.form_group status_symbol do %>
-         <table class='borderless'><tbody><tr>
-           <td class="text-center">
+         <div class="col-sm-3 text-center block-center">
              <%= f.radio_button status_symbol, 'Met', inline: true, disabled: is_disabled %><br><br>Met
-           <td class="text-center">
-             <%= f.radio_button status_symbol, 'Unmet', inline: true, disabled: is_disabled  %><br><br><span class="text-center">Unmet</span>
-           <td class="text-center">
+         </div>
+         <div class="col-sm-3 text-center block-center">
+             <%= f.radio_button status_symbol, 'Unmet', inline: true, disabled: is_disabled  %><br><br>Unmet
+         </div>
+         <div class="col-sm-3 text-center block-center">
              <%= f.radio_button status_symbol, '?', inline: true, disabled: is_disabled  %><br><br>&nbsp;?&nbsp;
-           <td class="text-center"><%= image_tag("/assets/Clear.gif", size: "20x20", id: criteria + "_enough") %>
-          </tr></tbody></table>
+         </div>
+         <br>
+         <div class="col-sm-3 text-center block-center">
+             <%= image_tag("/assets/Clear.gif", size: "20x20", id: criteria + "_enough") %>
+         </div>
         <% end %>
+       </div>
       </div>
-      <div class='col-md-9 criteria-desc'>
+
+      <div class='col-md-10 criteria-desc'>
+          <br>
           <%= raw desc %> <sup>[<%= criteria_shortname %>]</sup>
           <%= if defined?(details)
               render(partial: "details", locals: {f: f,

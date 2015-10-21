@@ -77,6 +77,7 @@ class Project < ActiveRecord::Base
   # and http://something/?arbitrary_parameters
 
   validates :repo_url, url:true
+  validates :project_url, url:true
   validate :need_a_url
 
   validates :project_url_status, inclusion: { in: STATUS_CHOICE }

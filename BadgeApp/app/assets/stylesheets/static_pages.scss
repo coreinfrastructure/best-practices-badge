@@ -47,16 +47,6 @@ textarea {
   margin-bottom: 10px;
 }
 
-table, th, td {
- border: 1px solid black;
- border-collapse: collapse;
- padding: 5px 5px 5px 5px;
- text-align: center;
- align: center;
- margin-left:auto;
- margin-right:auto;
-}
-
 h1, h2, h3, h4, h5, h6 {
   line-height: 1;
 }
@@ -79,6 +69,16 @@ p {
   padding-bottom: 5px;
   font-weight: bold;
 }
+
+/* Project Display*/
+.project_index thead tr th,.project_index tbody tr td {
+ border: 1px solid black;
+ border-collapse: collapse;
+ padding: 5px 5px 5px 5px;
+ text-align: center;
+ align: center;
+}
+
 
 /* header */
 .nav-color {
@@ -235,7 +235,7 @@ aside {
     border-bottom: 1px solid $gray-lighter;
   }
 }
-
+/* Status chooser table*/
 .borderless tbody tr td, .borderless tbody tr td label, .borderless tbody tr th, .borderless thead tr th {
     border: none;
     padding-top: 0px;

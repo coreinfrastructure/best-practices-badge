@@ -85,6 +85,7 @@ class Project < ActiveRecord::Base
     message: 'URL must use a limited charset' }
   validates :repo_url, format: { with: RESTRICTED_URL,
     message: 'URL must use a limited charset' }
+  validate :need_a_url
 
   validates :project_url_status, inclusion: { in: STATUS_CHOICE }
   validates :project_url_https_status, inclusion: { in: STATUS_CHOICE }
@@ -182,4 +183,13 @@ class Project < ActiveRecord::Base
   end
   # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity
   # rubocop:enable Metrics/MethodLength
+
+  private
+
+  def need_a_url
+    if repo_url.blank? && project_url.blank?
+      errors.add :base, "Need at least a project or repository URL" 
+    end
+  end
+
 end

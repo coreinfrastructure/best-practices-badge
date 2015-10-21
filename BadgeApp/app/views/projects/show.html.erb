@@ -1,11 +1,14 @@
-<div>
-<br>
-
+<div class="row">
+<div class="col-md-7 col-md-offset-1">
 <h1>Project Badge Status for <%=
     @project.try(:name).presence || '(Name Unknown)' %></h1>
+</div>
+</div>
 
 <%= render 'form', project: @project, is_disabled: true %>
 
+<div class="row">
+<div class="col-md-7 col-md-offset-1">
 <p>
 <%= link_to 'Back', projects_path %>
 <% if logged_in? %>
@@ -13,5 +16,5 @@
   <%= link_to 'Remove', @project, method: :delete, data: { confirm: 'Are you sure?' } %>
 <% end %>
 </p>
-
+</div>
 </div>

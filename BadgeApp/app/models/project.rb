@@ -75,7 +75,7 @@ class Project < ActiveRecord::Base
   # from URLs provided by untrusted users.  Thus we'll add additional
   # URL restrictions to counter tricks like http://ACCOUNT:PASSWORD@host...
   # and http://something/?arbitrary_parameters
-  validates :project_url, url:true
+
   validates :repo_url, url:true
   validate :need_a_url
 

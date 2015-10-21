@@ -1,5 +1,5 @@
 <div class="row">
-<div class="col-md-7 col-md-offset-1">
+<div class="col-md-12">
 
 <div class="text-center hidden-print">
 <button class="btn btn-info" title="Show all detailed text" type="button" onclick="$('.details-text').show('fast'); $('.details-toggler').html('Hide details');">Show all detailed text</button>
@@ -46,7 +46,7 @@ There is also a
 
 
 <div class="row">
-  <div class="col-md-7 col-md-offset-1">
+  <div class="col-md-12">
 
   <%= bootstrap_form_for(project) do |f| %>
     <%= render 'shared/error_messages', object: f.object %>
@@ -770,7 +770,7 @@ severity if its <a href="https://nvd.nist.gov/cvss.cfm">CVSS 2.0</a> base score 
 
       <br>
       <div class="row">
-        <div class="col-md-7 col-md-offset-1">
+        <div class="col-md-12">
           <%= f.text_area :general_comments, class:"form-control",  hide_label: true, placeholder:'Additional Comments', disabled: is_disabled %>
         </div>
       </div>

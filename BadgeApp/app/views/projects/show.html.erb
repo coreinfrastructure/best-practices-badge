@@ -1,5 +1,5 @@
 <div class="row">
-<div class="col-md-7 col-md-offset-1">
+<div class="col-md-12">
 <h1 class="center">Badge Status for <%=
     @project.try(:name).presence || '(Name Unknown)' %></h1>
 </div>
@@ -8,7 +8,7 @@
 <%= render 'form', project: @project, is_disabled: true %>
 
 <div class="row">
-<div class="col-md-7 col-md-offset-1">
+<div class="col-md-12">
 <p>
 <%= link_to 'Back', projects_path %>
 <% if logged_in? %>

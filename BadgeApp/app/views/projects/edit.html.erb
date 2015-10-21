@@ -2,7 +2,7 @@
 <br>
 
 <% if logged_in? %>
-  <h1>Edit Project Badge Status</h1>
+  <h1 class="center">Edit Project Badge Status</h1>
   <%= render 'form', project: @project, is_disabled: false %>
 <% else %>
   <% flash.now[:danger] = "Please log in to edit a project!"%>

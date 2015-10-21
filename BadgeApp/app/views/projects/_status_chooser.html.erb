@@ -16,12 +16,11 @@
         <% end %>
       </div>
       <div class='col-md-9 criteria-desc'>
-          <%= raw desc %>
+          <%= raw desc %> <sup>[<%= criteria_shortname %>]</sup>
           <%= if defined?(details)
               render(partial: "details", locals: {f: f,
                        criteria: criteria, details: details})
              end %>
-         <sup>[<%= criteria_shortname %>]</sup>
          <div id="<%= criteria + '_met_placeholder' %>" class="hidden">
           <%= if !defined?(met_placeholder)
                  raw "(Optional) Please explain how this is met, including 1+ key URLs."

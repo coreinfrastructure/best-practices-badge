@@ -2,6 +2,10 @@ class Project < ActiveRecord::Base
   STATUS_CHOICE = ['?', 'Met', 'Unmet']
   MIN_SHOULD_LENGTH = 5
 
+  # Restricted URL; allows blank.
+  RESTRICTED_URL =
+    /\A(|https?:\/\/[A-Za-z0-9][-A-Za-z0-9_.\/]*(\/[-A-Za-z0-9_.\/\+,#]*)?)\z/
+
   FIELD_CATEGORIES = {
     'description_sufficient' => 'MUST',
     'interact' => 'MUST',
@@ -70,7 +74,17 @@ class Project < ActiveRecord::Base
   # Currently no validation rules for:
   #  name, description, license, *_justification
   # We'll rely on Rails' HTML escaping system to counter XSS.
+  validates :project_url, url: true
   validates :repo_url, url: true
+
+  # We'll do automated analysis on these URLs, which means we will *download*
+  # from URLs provided by untrusted users.  Thus we'll add additional
+  # URL restrictions to counter tricks like http://ACCOUNT:PASSWORD@host...
+  # and http://something/?arbitrary_parameters
+  validates :project_url, format: { with: RESTRICTED_URL,
+    message: 'URL must use a limited charset' }
+  validates :repo_url, format: { with: RESTRICTED_URL,
+    message: 'URL must use a limited charset' }
 
   validates :project_url_status, inclusion: { in: STATUS_CHOICE }
   validates :project_url_https_status, inclusion: { in: STATUS_CHOICE }

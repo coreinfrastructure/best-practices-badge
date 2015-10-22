@@ -1,3 +1,11 @@
+<% content_for :nav_extras do %>
+  <li>
+    <% if logged_in? %>
+      <%= link_to 'ADD', new_project_path %>
+    <% end %>
+  </li>
+<% end %>
+
 <div class="row">
 <div class="col-xs-12">
 <div class="center jumbotron">

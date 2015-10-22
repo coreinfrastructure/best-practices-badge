@@ -3,7 +3,7 @@
     <%= link_to image_tag('badge.png', {height: 70, width: 100}), root_path, id: 'logo' %>
     <nav>
       <ul class='nav navbar-nav navbar-right'>
-        <li><%= link_to 'HOME', home_path %></li>
+        <%= yield :nav_extras %>
         <li><%= link_to 'PROJECTS', projects_path %></li>
         <% if logged_in? %>
           <!--li><%= link_to "USERS", users_path %></li-->
@@ -16,12 +16,12 @@
               <li><%= link_to "Settings", '#' %></li>
               <li class="divider"></li>
               <li>
-                <%= link_to "Log out", logout_path, method: "delete" %>
+                <%= link_to "Logout", logout_path, method: "delete" %>
               </li>
             </ul>
           </li>
         <% else %>
-          <li><%= link_to "LOG IN", login_path %></li>
+          <li><%= link_to "LOGIN", login_path %></li>
         <% end %>
 
       </ul>

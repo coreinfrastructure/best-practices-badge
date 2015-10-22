@@ -1,3 +1,10 @@
+<% content_for :nav_extras do %>
+    <% if logged_in? %>
+      <li><%= link_to 'EDIT', edit_project_path(@project) %></li>
+      <li><%= link_to 'DELETE', @project, method: :delete, data: { confirm: 'Are you sure?' } %></li>
+    <% end %>
+<% end %>
+
 <div class="row">
 <div class="col-md-12">
 <h1 class="center">Badge Status for <%=
@@ -13,7 +20,7 @@
 <%= link_to 'Back', projects_path %>
 <% if logged_in? %>
   <%= link_to 'Edit', edit_project_path(@project) %>
-  <%= link_to 'Remove', @project, method: :delete, data: { confirm: 'Are you sure?' } %>
+  <%= link_to 'Delete', @project, method: :delete, data: { confirm: 'Are you sure?' } %>
 <% end %>
 </p>
 </div>

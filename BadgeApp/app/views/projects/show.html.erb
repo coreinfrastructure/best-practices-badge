@@ -1,5 +1,5 @@
 <% content_for :nav_extras do %>
-    <% if logged_in? %>
+    <% if can_make_changes? %>
       <li><%= link_to 'Edit', edit_project_path(@project) %></li>
       <li><%= link_to 'Delete', @project, method: :delete, data: { confirm: 'Are you sure?' } %></li>
     <% end %>
@@ -16,9 +16,11 @@
 
 <div class="row">
 <div class="col-md-12">
+<b>Project Created by:</b> <%= link_to @project.user.name, @project.user%>
+<br><br>
 <p>
 <%= link_to 'Back', projects_path %>
-<% if logged_in? %>
+<% if can_make_changes? %>
   <%= link_to 'Edit', edit_project_path(@project) %>
   <%= link_to 'Delete', @project, method: :delete, data: { confirm: 'Are you sure?' } %>
 <% end %>

@@ -21,6 +21,7 @@
       <th>Description</th>
       <th>Website</th>
       <th>License</th>
+      <th>Added By</th>
     </tr>
   </thead>
 
@@ -40,6 +41,7 @@
           <% end %>
         </td>
         <td><%= project.license %></td>
+        <td><%= project.user.name %></td>
       </tr>
     <% end %>
   </tbody>

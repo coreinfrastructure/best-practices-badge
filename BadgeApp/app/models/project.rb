@@ -63,6 +63,11 @@ class Project < ActiveRecord::Base
     'dynamic_analysis_enable_assertions' => 'SUGGESTED',
     'dynamic_analysis_fixed' => 'MUST' }.freeze
 
+  # Peojects are associated with users
+  belongs_to :user
+
+  default_scope -> { order(:created_at)} 
+
   # Record information about a project.
   # We'll also record previous versions of information:
   has_paper_trail
@@ -79,6 +84,8 @@ class Project < ActiveRecord::Base
   validates :repo_url, url:true
   validates :project_url, url:true
   validate :need_a_url
+
+  validates :user_id, presence: true
 
   validates :project_url_status, inclusion: { in: STATUS_CHOICE }
   validates :project_url_https_status, inclusion: { in: STATUS_CHOICE }

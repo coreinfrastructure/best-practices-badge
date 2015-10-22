@@ -25,7 +25,9 @@ User.create!(name:  'Test User',
 end
 
 # Projects for testing
-Project.create!(name:  'BadgeApp',
+user = User.find_by(email: 'test@example.org')
+user.projects.create!(user_id: user.id,
+                name:  'BadgeApp',
                 description: 'Badge Application',
                 project_url:
                   'https://github.com/linuxfoundation/cii-best-practices-badge',
@@ -104,7 +106,8 @@ Project.create!(name:  'BadgeApp',
   repo_url = 'https://' + "test-repo-url-#{n + 1}.org"
   license = ['MIT', 'Apache-2.0', 'GPL-2.0', 'GPL-2.0+', 'GPL-3.0+', 'MPL-2.0',
              'BSD-3-Clause', 'BSD-2-Clause', '(Apache-2.0 OR GPL-2.0+)'].sample
-  Project.create!(name: name,
+  user.projects.create!(user_id: user.id,
+                  name: name,
                   description: description,
                   project_url: project_url,
                   repo_url: repo_url,

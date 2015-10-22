@@ -163,7 +163,13 @@ The software MAY also be licensed other ways (e.g., "GPLv2 or proprietary" is ac
        <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
                criteria: "oss_license_osi", desc: %{
 It is SUGGESTED that any required license(s) be
-<a href="https://opensource.org/licenses">OSI-approved</a>},
+<a href="https://opensource.org/licenses">approved by the
+Open Source Initiative (OSI).</a>},
+               details: %{
+The OSI uses a rigorous approval process to determine
+which licenses are OSS.
+Licenses not approved by OSI might not be OSS licenses.
+},
                met_suppress: true,
                unmet_suppress: true
 }) %>

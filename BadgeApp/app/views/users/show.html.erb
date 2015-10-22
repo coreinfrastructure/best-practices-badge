@@ -2,7 +2,7 @@
 
  <% provide(:title, @user.name) %>
  <div class="row">
-   <aside class="col-md-4">
+   <aside class="col-md-12">
      <section class="user_info">
        <h3>
          <%= gravatar_for @user %>
@@ -10,6 +10,35 @@
        </h3>
      </section>
    </aside>
+  <div class="col-md-12">
+  <% if @user.projects.any? %>
+  <h3 class ="center">Projects (<%= @user.projects.count %>)</h3>
+   <table class="project_index" style="margin-left:auto; margin-right:auto">
+     <thead>
+       <tr>
+         <th>Name</th>
+         <th>Description</th>
+         <th>Website</th>
+         <th>License</th>
+         <th>Added</th>
+       </tr>
+     </thead>
+
+     <tbody>
+       <% @projects.each do |project| %>
+         <tr>
+           <td><%= link_to project.name, project %></td>
+           <td><%= project.description %></td>
+           <td><%= project.project_url %></td>
+           <td><%= project.license %></td>
+           <td><%= time_ago_in_words(project.created_at) %></td>
+         </tr>
+       <% end %>
+     </tbody>
+   </table>
+  <% end %>
  </div>
+
+</div>
 
 </div>

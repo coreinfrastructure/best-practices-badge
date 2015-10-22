@@ -19,4 +19,13 @@ module SessionsHelper
     session.delete(:user_id)
     @current_user = nil
   end
+
+  def can_make_changes?
+    if logged_in?
+      project = current_user.projects.find_by(id: params[:id])
+      !project.nil?
+    else
+      false
+    end
+  end
 end

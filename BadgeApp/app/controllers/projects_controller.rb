@@ -1,9 +1,12 @@
 # rubocop:disable Metrics/ClassLength
 class ProjectsController < ApplicationController
-  before_action :set_project, only: [:show, :edit, :update, :destroy, :badge]
+  before_action :set_project, only: [:show, :badge]
+  before_action :logged_in?, only: :create
+  before_action :correct_user, only: [:destroy, :edit, :update]
 
   PERMITTED_PARAMS =
   [
+    :user_id,
     :name, :description, :project_url, :repo_url,
     :license,
     # Project Website (auto-populated, currently not in the form)
@@ -195,13 +198,15 @@ class ProjectsController < ApplicationController
   # POST /projects.json
   # rubocop:disable Metrics/MethodLength
   def create
-    @project = Project.new(project_params)
+    @project = current_user.projects.build(project_params)
 
     # TODO: Error out if project_url and repo_url are both empty... don't
     # do a save yet.
 
     respond_to do |format|
       if @project.save
+        flash[:success] = "Thanks for adding the Project!   Please fill out
+                           the rest of the information to get the Badge."
         format.html { redirect_to edit_project_path(@project) }
         format.json { render :show, status: :created, location: @project }
       else
@@ -240,7 +245,8 @@ class ProjectsController < ApplicationController
     @project.destroy
     respond_to do |format|
       format.html do
-        redirect_to projects_url, notice: 'Project was successfully deleted.'
+        redirect_to projects_url
+        flash[:success] ='Project was successfully deleted.'
       end
       format.json { head :no_content }
     end
@@ -257,5 +263,10 @@ class ProjectsController < ApplicationController
   # only allow the white list through.
   def project_params
     params.require(:project).permit(PERMITTED_PARAMS)
+  end
+
+  def correct_user
+    @project = current_user.projects.find_by(id: params[:id])
+    redirect_to root_url if @project.nil?
   end
 end

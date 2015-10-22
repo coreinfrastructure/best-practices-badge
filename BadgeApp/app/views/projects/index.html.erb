@@ -19,7 +19,8 @@
   <tbody>
     <% @projects.each do |project| %>
       <tr>
-        <td><%= link_to project.name, project %></td>
+        <td><%= link_to (project.name.presence || "(Name Unknown)"),
+                project %></td>
         <td><%= project.description %></td>
         <td><%= project.project_url %></td>
         <td><%= project.license %></td>

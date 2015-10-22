@@ -255,7 +255,7 @@ For example,  "make check", "mvn test", or "rake test". <sup>[<a href="#test-inv
 - *Note*: this means that users might be left vulnerable to all attackers worldwide for up to 60 days.  This criterion is often much easier to meet than what Google recommends in [Rebooting responsible disclosure](http://googleonlinesecurity.blogspot.com/2010/07/rebooting-responsible-disclosure-focus.html), because Google recommends that the 60-day period start when the project is notified *even* if the report is not public.
 - *Rationale*: We intentionally chose to start measurement from the time of public knowledge, and not from the time reported to the project, because this is much easier to measure and verify by those *outside* the project.
 
-### Security analysis
+### Analysis
 
 *Static code analysis*
 

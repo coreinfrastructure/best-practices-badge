@@ -30,7 +30,15 @@
         <td><%= link_to (project.name.presence || "(Name Unknown)"),
                 project %></td>
         <td><%= project.description %></td>
-        <td><%= project.project_url %></td>
+        <td>
+          <%# Defend against bad data - link only if plausible URL. %>
+          <% if project.project_url.presence &&
+                project.project_url.match(/\Ahttps?:\/\//) %>
+            <a href="<%= project.project_url %>"><%= project.project_url %></a>
+          <% else %>
+            <%= project.project_url %>
+          <% end %>
+        </td>
         <td><%= project.license %></td>
       </tr>
     <% end %>

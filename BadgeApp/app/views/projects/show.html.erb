@@ -1,7 +1,7 @@
 <% content_for :nav_extras do %>
     <% if logged_in? %>
-      <li><%= link_to 'EDIT', edit_project_path(@project) %></li>
-      <li><%= link_to 'DELETE', @project, method: :delete, data: { confirm: 'Are you sure?' } %></li>
+      <li><%= link_to 'Edit', edit_project_path(@project) %></li>
+      <li><%= link_to 'Delete', @project, method: :delete, data: { confirm: 'Are you sure?' } %></li>
     <% end %>
 <% end %>
 

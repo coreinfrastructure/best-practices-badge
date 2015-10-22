@@ -8,24 +8,25 @@
       </div>
       <ul class='nav navbar-nav navbar-right'>
         <%= yield :nav_extras %>
-        <li><%= link_to 'PROJECTS', projects_path %></li>
+        <li><%= link_to 'Projects', projects_path %></li>
         <% if logged_in? %>
-          <!--li><%= link_to "USERS", users_path %></li-->
+          <!--li><%= link_to "Users", users_path %></li-->
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              ACCOUNT <b class="caret"></b>
+              Account <b class="caret"></b>
             </a>
             <ul class="dropdown-menu nav-color">
               <li><%= link_to "Profile", current_user %></li>
               <li><%= link_to "Settings", '#' %></li>
               <li class="divider"></li>
               <li>
-                <%= link_to "Logout", logout_path, method: "delete" %>
+                <%= link_to '<span class="glyphicon glyphicon-log-in"></span> Logout'.html_safe, logout_path, method: "delete" %>
               </li>
             </ul>
           </li>
         <% else %>
-          <li><%= link_to "LOGIN", login_path %></li>
+          <li><%= link_to '<span class="glyphicon glyphicon-user"></span> Sign Up</a></li>'.html_safe, signup_path %></li>
+          <li><%= link_to '<span class="glyphicon glyphicon-log-in"></span> Login</a></li>'.html_safe, login_path %></li>
         <% end %>
 
       </ul>

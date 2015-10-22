@@ -1,3 +1,9 @@
+<% content_for :nav_progress do %>
+<div class="progress">
+  <div id="badge-progress" class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%; min-width: 2em;">0%</div>
+</div>
+<% end %>
+
 <div class="row">
 <div class="col-md-12">
 
@@ -886,6 +892,19 @@ severity if its <a href="https://nvd.nist.gov/cvss.cfm">CVSS 2.0</a> base score 
         }
       }
 
+      function reset_progress_bar() {
+          var total = 0;
+          var enough = 0;
+          $.each(field_categories, function(key, value) {
+              total++;
+              if (is_enough(key)) {enough++;};
+          })
+          var percentage = enough / total;
+          var percent_s =  Math.round(percentage * 100).toString() + "%"
+          $("#badge-progress").attr("aria-valuenow", percentage).
+                              text(percent_s).css("width", percent_s);
+      }
+
       function changed_justification_text(criteria) {
           var criteria_just = "#project_" + criteria + "_justification";
           var criteria_status = "#project_" + criteria + "_status";
@@ -906,6 +925,7 @@ severity if its <a href="https://nvd.nist.gov/cvss.cfm">CVSS 2.0</a> base score 
                   attr("src", "/assets/Thumbs_down_font_awesome.svg").
                   attr("alt", "Not enough for a badge.");
           }
+          reset_progress_bar();
       }
 
       function update_criteria_display(criteria) {
@@ -983,6 +1003,7 @@ severity if its <a href="https://nvd.nist.gov/cvss.cfm">CVSS 2.0</a> base score 
           $.each(field_categories, function(key, value) {
               setup_field(key);
           })
+          reset_progress_bar();
           // Polyfill datalist (for Safari users)
           polyfill_datalist();
       });

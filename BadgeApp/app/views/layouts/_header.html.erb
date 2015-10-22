@@ -2,6 +2,10 @@
   <div class='container'>
     <%= link_to image_tag('badge.png', {height: 70, width: 100}), root_path, id: 'logo' %>
     <nav>
+      <div class='nav navbar-nav navbar-left' style="min-width: 15em;">
+        <br>
+        <%= yield :nav_progress %>
+      </div>
       <ul class='nav navbar-nav navbar-right'>
         <%= yield :nav_extras %>
         <li><%= link_to 'PROJECTS', projects_path %></li>

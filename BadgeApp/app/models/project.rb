@@ -158,6 +158,10 @@ class Project < ActiveRecord::Base
                                                         { in: STATUS_CHOICE }
   validates :dynamic_analysis_fixed_status, inclusion: { in: STATUS_CHOICE }
 
+  def self.field_category(field)
+    FIELD_CATEGORIES[field]
+  end
+
   # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
   # rubocop:disable Metrics/MethodLength
   def self.valid_badge?(project)

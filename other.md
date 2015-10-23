@@ -4,13 +4,14 @@ Other potential future criteria
 Here are some other potential criteria.
 
 We currently plan to launch with a single badge level (once it is ready).
-There may eventually be multiple levels (bronze, silver, gold) or
+There may eventually be multiple levels or
 other badges (with a prerequisite) later.
-We are currently leaning towards using the Olympic system naming
-(bronze, silver, gold) since these are widely known; the LEED naming
-(with platinum at the top) is less well-known, and using the Olympic
-naming would provide room for another (platinum) level if needed.
-Then the "basic" level would be the same as a "bronze" level.
+We are currently leaning towards using the silver/gold/platinum naming system,
+which is similar to the
+[LEED certification naming system of certified, silver, gold, platinum](http://www.usgbc.org/certification)
+and how the
+[Linux Foundation ranks membership (silver, gold, platinum)](http://www.linuxfoundation.org/about/members)
+An alternative is the the Olympic system naming (bronze, silver, gold).
 
 To help organize these potential criteria, they are currently grouped
 in terms of a potential future silver, potential future gold, and
@@ -32,6 +33,7 @@ Potential silver criteria
 -------------------------
 
 *   **Achieve the lower (basic/bronze) badge**.
+*   **Turn many should/suggested into MUST**
 *   **Build and test:**
     -   **Continuous integration**.   
         An automated test suite MUST applied on each check-in to a shared repository, at least for some branches, with a generated report available to at least project members on success or failure of the tests.  This test suite SHOULD be applied across many platforms where appropriate.  *Rationale*:  Continuous integration provides much more rapid feedback on whether or not changes will cause test failures, including regressions.

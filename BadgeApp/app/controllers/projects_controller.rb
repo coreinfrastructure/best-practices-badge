@@ -1,8 +1,8 @@
 # rubocop:disable Metrics/ClassLength
 class ProjectsController < ApplicationController
-  before_action :set_project, only: [:show, :badge]
+  before_action :set_project, only: [:edit, :update, :destroy, :show]
   before_action :logged_in?, only: :create
-  before_action :correct_user, only: [:destroy, :edit, :update]
+  before_action :authorized, only: [:destroy, :edit, :update]
 
   PERMITTED_PARAMS =
   [
@@ -189,7 +189,7 @@ class ProjectsController < ApplicationController
     @project = Project.new
   end
 
-  # GET /projects/1/edit
+  # GET /projects/1/
   def edit
   end
 
@@ -264,8 +264,14 @@ class ProjectsController < ApplicationController
     params.require(:project).permit(PERMITTED_PARAMS)
   end
 
-  def correct_user
-    @project = current_user.projects.find_by(id: params[:id])
-    redirect_to root_url if @project.nil?
+  def authorized
+    if !current_user
+      redirect_to root_url
+    elsif current_user.admin?
+      true
+    else
+      @project = current_user.projects.find_by(id: params[:id])
+      redirect_to root_url if @project.nil?
+    end
   end
 end

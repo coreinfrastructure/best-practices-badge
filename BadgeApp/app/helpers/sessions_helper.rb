@@ -21,7 +21,9 @@ module SessionsHelper
   end
 
   def can_make_changes?
-    if logged_in?
+    if current_user && current_user.admin?
+      true
+    elsif logged_in?
       project = current_user.projects.find_by(id: params[:id])
       !project.nil?
     else

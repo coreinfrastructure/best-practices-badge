@@ -25,4 +25,8 @@ class User < ActiveRecord::Base
     @user.save(validate: false)
     @user
   end
+
+  def admin?
+    self.role == 'admin'
+  end
 end

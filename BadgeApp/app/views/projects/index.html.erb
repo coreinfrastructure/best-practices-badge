@@ -41,7 +41,7 @@
           <% end %>
         </td>
         <td><%= project.license %></td>
-        <td><%= project.user.name %></td>
+        <td><%= link_to project.user.name, project.user %></td>
       </tr>
     <% end %>
   </tbody>

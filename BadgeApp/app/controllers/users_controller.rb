@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+  before_action :require_admin, only: :index
   include SessionsHelper
 
   def new
@@ -31,5 +32,9 @@ class UsersController < ApplicationController
   def user_params
     params.require(:user).permit(:provider, :uid, :name, :email, :password,
                                  :password_confirmation)
+  end
+
+  def require_admin
+    redirect_to root_url unless current_user && current_user.admin?
   end
 end

@@ -21,6 +21,7 @@ group :development, :test do
   gem 'awesome_print', '1.6.1'
   gem 'bullet', '4.14.9'
   gem 'dotenv-rails', '2.0.2'
+  gem 'm', '1.4.0'
   gem 'pronto', '0.4.3'
   gem 'pronto-brakeman', '0.4.3'
   gem 'pronto-rails_best_practices', '0.4.0'

@@ -177,10 +177,9 @@ class ProjectsController < ApplicationController
   def badge
     @project = Project.find(params[:id])
     respond_to do |format|
-      if Project.valid_badge?(@project)
-        format.svg {render file: Rails.application.assets['badge-pass.svg'].pathname}
-      else
-        format.svg {render file: Rails.application.assets['badge-fail.svg'].pathname}
+      status = Project.valid_badge?(@project) ? 'pass' : 'fail'
+      format.svg do
+        render file: Rails.application.assets["badge-#{status}.svg"].pathname
       end
     end
   end
@@ -196,7 +195,7 @@ class ProjectsController < ApplicationController
 
   # POST /projects
   # POST /projects.json
-  # rubocop:disable Metrics/MethodLength
+  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   def create
     @project = current_user.projects.build(project_params)
 
@@ -217,7 +216,7 @@ class ProjectsController < ApplicationController
       end
     end
   end
-  # rubocop:enable Metrics/MethodLength
+  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
   # PATCH/PUT /projects/1
   # PATCH/PUT /projects/1.json
@@ -246,7 +245,7 @@ class ProjectsController < ApplicationController
     respond_to do |format|
       format.html do
         redirect_to projects_url
-        flash[:success] ='Project was successfully deleted.'
+        flash[:success] = 'Project was successfully deleted.'
       end
       format.json { head :no_content }
     end

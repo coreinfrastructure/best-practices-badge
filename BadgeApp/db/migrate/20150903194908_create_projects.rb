@@ -1,7 +1,6 @@
 class CreateProjects < ActiveRecord::Migration
   def change
     create_table :projects do |t|
-
       t.references :user, index: true, foreign_key: true
       # OSS PROJECT BASICS
       # Identification

@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/ClassLength
 class Project < ActiveRecord::Base
   STATUS_CHOICE = ['?', 'Met', 'Unmet']
   MIN_SHOULD_LENGTH = 5
@@ -66,7 +67,7 @@ class Project < ActiveRecord::Base
   # Peojects are associated with users
   belongs_to :user
 
-  default_scope -> { order(:created_at)} 
+  default_scope { order(:created_at) }
 
   # Record information about a project.
   # We'll also record previous versions of information:
@@ -81,8 +82,8 @@ class Project < ActiveRecord::Base
   # URL restrictions to counter tricks like http://ACCOUNT:PASSWORD@host...
   # and http://something/?arbitrary_parameters
 
-  validates :repo_url, url:true
-  validates :project_url, url:true
+  validates :repo_url, url: true
+  validates :project_url, url: true
   validate :need_a_url
 
   validates :user_id, presence: true
@@ -191,9 +192,7 @@ class Project < ActiveRecord::Base
   private
 
   def need_a_url
-    if repo_url.blank? && project_url.blank?
-      errors.add :base, "Need at least a project or repository URL"
-    end
+    return unless repo_url.blank? && project_url.blank?
+    errors.add :base, 'Need at least a project or repository URL'
   end
-
 end

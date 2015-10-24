@@ -16,7 +16,8 @@ MoveModelLogicIntoModelCheck: { use_count: 4 }
 NeedlessDeepNestingCheck: { nested_count: 2 }
 NotRescueExceptionCheck: { }
 NotUseDefaultRouteCheck: { }
-NotUseTimeAgoInWordsCheck: { }
+NotUseTimeAgoInWordsCheck: { ignored_files: [
+  'app/views/users/show.html.erb' ] }
 OveruseRouteCustomizationsCheck: { customize_count: 3 }
 ProtectMassAssignmentCheck: { }
 RemoveEmptyHelpersCheck: { }

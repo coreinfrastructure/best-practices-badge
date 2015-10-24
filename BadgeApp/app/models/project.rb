@@ -66,6 +66,7 @@ class Project < ActiveRecord::Base
 
   # Peojects are associated with users
   belongs_to :user
+  delegate :name, to: :user, prefix: true
 
   default_scope { order(:created_at) }
 

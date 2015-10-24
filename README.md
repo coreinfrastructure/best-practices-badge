@@ -19,10 +19,10 @@ we are releasing this early version so we can get feedback.
 Feedback is welcome via the [GitHub site](https://github.com/linuxfoundation/cii-best-practices-badge) as issues or pull requests.
 There is also a [mailing list](https://lists.coreinfrastructure.org/mailman/listinfo/cii-badges) for general discussion.
 
-* Draft Badging **[Criteria](./criteria.md)**
-* Draft **[Background](./background.md)** on Badging
-* Draft **[BadgeApp](./BadgeApp/)** application (very early - e.g., no logins!)
-* Current **[implementation](./implementation.md)**  - notes about the BadgeApp implementation
+* Draft Badging **[Criteria](./doc/criteria.md)**
+* Draft **[Background](./doc/background.md)** on Badging
+* Draft **BadgeApp** application (this repo)
+* Current **[implementation](./doc/implementation.md)**  - notes about the BadgeApp implementation
 * Current **[Burndown](https://burndown.io/#linuxfoundation/cii-best-practices-badge/1)** and **[Kanban Board](https://waffle.io/linuxfoundation/cii-best-practices-badge)** of this project.
 
 All material is released under both the [MIT license](./LICENSE)

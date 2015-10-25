@@ -1,0 +1,16 @@
+test:
+  post:
+    - bundle exec pronto run -f text -c origin/master --exit-code
+    # - COVERALLS_PARALLEL=true bundle exec rake coveralls:push:
+    #     parallel: true
+    # - case $CIRCLE_NODE_INDEX in 0) bundle exec pronto run -f text -c origin/master --exit-code ;; 1) bundle exec pronto run -f github -c origin/master ;; esac:
+    #     parallel: true
+    # - case $CIRCLE_NODE_INDEX in 0) bundle exec brakeman --exit-on-warn ;; 1) bundle exec rubocop -D --format offenses --format progress ;; 2) bundle exec rails_best_practices --features --spec ;; esac:
+    #     parallel: true
+# deployment:
+#   master:
+general:
+  artifacts:
+    - 'coverage'
+    - 'log/test.log'
+    - 'tmp/capybara'

@@ -1,4 +1,6 @@
 test:
+  pre:
+    - "[[ ! -s \"$(git rev-parse --git-dir)/shallow\" ]] || git fetch --unshallow"
   post:
     - bundle exec pronto run -f github -c=$(git log --pretty=format:%H | tail -1) --exit-code
     # - COVERALLS_PARALLEL=true bundle exec rake coveralls:push:

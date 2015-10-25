@@ -2,7 +2,7 @@
 
 [![CII Badge](https://secret-retreat-6638.herokuapp.com/projects/1/badge)](https://secret-retreat-6638.herokuapp.com/projects/1)
 [![License](http://img.shields.io/:license-mit-blue.svg?style=flat-square)](http://badges.mit-license.org)
-[![CircleCI Build Status(https://circleci.com/gh/linuxfoundation/cii-best-practices-badge.svg?&style=shield&circle-token=ca450ac150523030464677a1aa7f3cacfb8b3472)]](https://circleci.com/gh/linuxfoundation/cii-best-practices-badge)
+[![CircleCI Build Status](https://circleci.com/gh/linuxfoundation/cii-best-practices-badge.svg?&style=shield&circle-token=ca450ac150523030464677a1aa7f3cacfb8b3472)](https://circleci.com/gh/linuxfoundation/cii-best-practices-badge)
 
 This *early* *draft* material identifies proposed best practices
 for open source software (OSS), including those that are likely to lead

@@ -13,14 +13,14 @@ class ProjectsControllerTest < ActionController::TestCase
   end
 
   test 'should get new' do
-     get :new
+    get :new
     assert_response :success
   end
 
   test 'should create project' do
     skip('Needs debugging')
     assert_difference('Project.count') do
-      post :create, project: {   description: @project.description,
+      post :create, project: { description: @project.description,
                                license: @project.license,
                                name: @project.name,
                                repo_url: @project.repo_url,

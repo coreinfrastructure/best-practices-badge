@@ -1,26 +1,31 @@
 # Implementation
 
+If you just want to discuss changes to the criteria, the
+first step is proposing changes to the criteria text,
+whch is in the file doc/criteria.md.
+But to really implement a change in the criteria, you want to
+modify the implementing web application.
+
 We have implemented a simple web application called "BadgeApp"
 that quickly captures self-assertion data, evaluates criteria automatically
 when it can, and provides badge information.
+Our emphasis is on keeping the program relatively *simple*.
 
 The web application is itself OSS, and
 we intend for the web application to meet its own criteria.
-We are implementing it using Ruby on Rails
-(since Rails is good for very simple web applications like this one).
+We have implemented it with Ruby on Rails;
+Rails is good for very simple web applications like this one.
 We are currently using Rails version 4.2,
-and storing the data in Postgres.
+and the production system stores the data in Postgres.
 We deploy a test implementation to Heroku so that people can try it out
 for limited testing.
 The production version may also be deployed to Heroku.
 
-Our emphasis will be on keeping the program *simple*.
 
 ## Setting up a development environment
 
 First, install a Ruby on Rails development environment;
 there are many docs on how to do this.
-
 
 We currently fix the version of Ruby at exactly 2.2.2.
 That creates stability, but probably isn't the version you are using.
@@ -52,6 +57,20 @@ bin/rails s
 
 Then point your web browser at "localhost:3000".
 
+
+## Contributing in general
+
+If you are contributing changes to *code*, the following rules apply.
+
+1.  Code contributions should have a clean style.  In particular, Ruby code should be clean per Rubocop; check this using:
+    bin/rake rubocop
+2.  Contributions must be secure.  At the least, ensure that there are no warnings from Brakeman (this does some static analysis for security issues):
+    bin/rake brakeman
+3.  Contributions must be tested.  If you're adding new functionality, please add tests for it.  Before submitting, run the test suite to ensure check for errors:
+    bin/rake test
+
+Please contribute in the form of a "git pull" request on the
+GitHub repository if possible.
 
 ## Adding criteria
 
@@ -99,6 +118,7 @@ If it fails, use the rake target db:rollback .
 
 
 ## App authentication via Github
+
 The BadgeApp needs to authenticate itself through OAuth2 on Github if users are logging 
 in with their Github accounts.  It also needs to authenticate itself to get repo details from Github if a 
 project is being hosted there. The app needs to be registered with Github[1] and its

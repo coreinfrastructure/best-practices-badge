@@ -15,8 +15,9 @@ The web application is itself OSS, and
 we intend for the web application to meet its own criteria.
 We have implemented it with Ruby on Rails;
 Rails is good for very simple web applications like this one.
-We are currently using Rails version 4.2,
-and the production system stores the data in Postgres.
+We are currently using Rails version 4.2.
+The production system stores the data in Postgres; in development
+we use SQLite3 instead.
 We deploy a test implementation to Heroku so that people can try it out
 for limited testing.
 The production version may also be deployed to Heroku.
@@ -24,27 +25,46 @@ The production version may also be deployed to Heroku.
 
 ## Setting up a development environment
 
-First, install a Ruby on Rails development environment;
-there are many docs on how to do this.
+You need to have git, Ruby (version 1.9.3 or newer), and
+the SQLite3 database to set up a development environment.
 
-We currently fix the version of Ruby at exactly 2.2.2.
+Use 'git' to download the current version you wish to use.
+You can do this at the command line (assuming git is installed) with:
+
+~~~~
+git clone https://github.com/linuxfoundation/cii-best-practices-badge.git
+cd cii-best-practices-badge
+~~~~
+
+Now install a Ruby on Rails development environment.
+There are many docs on how to do this.
+The Ruby on Rails website download information at
+<http://rubyonrails.org/download/> has a quick summary.
+Ruby is a programming language; packaged downloadable libraries are
+called "gems".
+Rails is a widely-used web application development framework, implemented
+as a pre-selected set of gems.
+
+For development we currently fix the version of Ruby at exactly 2.2.2.
 That creates stability, but probably isn't the version you are using.
-Here's one way to do that
-(this uses rbenv; rvm is similar):
+First install a version of ruby and rbenv; you can then
+use these shell commands to install the rest.
+This approach uses rbenv to select a particular version of Ruby;
+rvm is another way to select Ruby versions and its commands would be similar.
+We presume that your current directory is the top directory of the project,
+aka cii-best-practices-badge.
 
 ~~~~
-# if using rbenv:
+# if using rbenv, here's how to force install Ruby 2.2.2
 rbenv install 2.2.2
-rbenv global 2.2.2
+rbenv local 2.2.2 # In this directory AND BELOW, use Ruby 2.2.2 instead.
 
-gem sources --add https://rubygems.org
-gem install bundler
-gem install rails
-bundle install
-rake db:migrate
+gem sources --add https://rubygems.org  # Ensure you're getting gems here
+gem install bundler  # Install "bundler" gem package manager.
+gem install rails    # Install rails
+bundle install       # Install other gems we use - looks at Gemfile.lock.
+rake db:setup        # Setup database and seed it with dummy data
 ~~~~
-
-Then use 'git' to download the current version you wish to use.
 
 
 ## Running locally
@@ -54,6 +74,10 @@ Once your development environment is ready, you can run the application with:
 ~~~~
 bin/rails s
 ~~~~
+
+This will automatically set up what it needs to, and then run the
+web application.
+You can press control-C at any time to stop it.
 
 Then point your web browser at "localhost:3000".
 

@@ -49,6 +49,8 @@ class Project < ActiveRecord::Base
     'crypto_oss' => 'MUST',
     'crypto_keylength' => 'MUST',
     'crypto_working' => 'MUST',
+    'crypto_weaknesses' => 'SHOULD',
+    'crypto_alternatives' => 'SHOULD',
     'crypto_pfs' => 'SHOULD',
     'crypto_password_storage' => 'MUST',
     'crypto_random' => 'MUST',
@@ -140,6 +142,8 @@ class Project < ActiveRecord::Base
   validates :crypto_oss_status, inclusion: { in: STATUS_CHOICE }
   validates :crypto_keylength_status, inclusion: { in: STATUS_CHOICE }
   validates :crypto_working_status, inclusion: { in: STATUS_CHOICE }
+  validates :crypto_weaknesses_status, inclusion: { in: STATUS_CHOICE }
+  validates :crypto_alternatives_status, inclusion: { in: STATUS_CHOICE }
   validates :crypto_pfs_status, inclusion: { in: STATUS_CHOICE }
   validates :crypto_password_storage_status, inclusion: { in: STATUS_CHOICE }
   validates :crypto_random_status, inclusion: { in: STATUS_CHOICE }

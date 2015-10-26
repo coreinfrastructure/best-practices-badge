@@ -63,6 +63,8 @@ field_categories = {
   "crypto_oss" : "MUST",
   "crypto_keylength" : "MUST",
   "crypto_working" : "MUST",
+  "crypto_weaknesses" : "SHOULD",
+  "crypto_alternatives" : "SHOULD",
   "crypto_pfs" : "SHOULD",
   "crypto_password_storage" : "MUST",
   "crypto_random" : "MUST",

@@ -544,27 +544,31 @@ for commonly-used lists.
 }}) %>
 
     <br><br><br>
-    <h3>Uses basic good cryptographic practices</h3>
+    <h3>Good cryptographic practices</h3>
 
     <!-- TODO: Need make it easy to N/A many of these criteria. -->
-    <span class="criteria-desc"><b>Note:</b> These criteria do not always apply because some software
-                                has no need to directly use cryptographic capabilities.</span>
+    <span class="criteria-desc">
+<b>Note:</b> These criteria do not always apply because some software
+has no need to directly use cryptographic capabilities.
+A "project security mechanism" is a security mechanism
+provided by the delivered project's software.
+</span>
 
     <br>
 
     <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
              criteria: "crypto_published", desc: %{
-Cryptographic protocols and algorithms used by default in the software AND
-the delivery mechanisms MUST be publicly published and reviewed
-by experts.
+The project's cryptographic software MUST use cryptographic protocols
+and algorithms that are publicly published and reviewed by experts.
 }}) %>
     <hr>
 
     <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
              criteria: "crypto_call", desc: %{
-Application software that is not itself a cryptographic system/library MUST NOT
-implement its own cryptographic functions, but MUST instead call on software
-specifically designed for the purpose.
+If the project software is an application or library, and its primary
+purpose is not to implement cryptography, then it MUST call on software
+specifically designed to implement cryptographic functions; it MUST NOT
+implement its own.
 }}) %>
     <hr>
 
@@ -593,39 +597,41 @@ interoperability.)
 }}) %>
     <hr>
 
-<!-- TODO: Mixed MUST NOT and SUGGESTED and SHOULD -->
     <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
              criteria: "crypto_working", desc: %{
-Security mechanisms MUST NOT on depend cryptographic algorithms that are broken
-or have too-short key lengths (e.g., MD4, MD5, single DES, or RC4).},
+The project security mechanisms MUST NOT depend on cryptographic algorithms that are broken (e.g., MD4, MD5, single DES, or RC4).
+}}) %>
+    <hr>
+
+    <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
+             criteria: "crypto_weaknesses", desc: %{
+The project security mechanisms SHOULD NOT by default depend on cryptographic algorithms with known serious weaknesses (e.g., SHA-1).
+}}) %>
+    <hr>
+
+    <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
+             criteria: "crypto_alternatives", desc: %{
+The project SHOULD support multiple cryptographic algorithms, so users can quickly switch if one is broken.},
              details: %{
-It is SUGGESTED that SHA-1 not be used (we are well aware that git uses SHA-1).
-Currently-recommended algorithms include AES and SHA-256/SHA-512.
-Implementations SHOULD
-support multiple cryptographic algorithms, so users can quickly switch
-if one is broken.
+Common symmetric key algorithms include AES, Twofish, Serpent, Blowfish, and 3DES.  Common cryptographic hash algorithm alternatives include SHA-2 (including SHA-256 and SHA-512) and SHA-3.
 }}) %>
     <hr>
 
     <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
              criteria: "crypto_pfs", desc: %{
-Any key agreement protocol SHOULD implement perfect forward secrecy so a session key
-derived from a set of long-term keys cannot be compromised if one of the long-term keys
-is compromised in the future.
+The project SHOULD implement perfect forward secrecy for key agreement protocols so a session key derived from a set of long-term keys cannot be compromised if one of the long-term keys is compromised in the future.
 }}) %>
     <hr>
 
     <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
              criteria: "crypto_password_storage", desc: %{
-If passwords for later authentication are stored, they MUST be stored as
-iterated hashes with per-user salt.
+If passwords are stored for authentication of external users, the project MUST store them as iterated hashes with a per-user salt by using a key stretching (iterated) algorithm (e.g., PBKDF2, Bcrypt or Scrypt).
 }}) %>
     <hr>
 
     <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
              criteria: "crypto_random", desc: %{
-All keys and nonces MUST be generated using cryptographically random functions,
-and not through non-cryptographically random functions.
+The project MUST generate all cryptographic keys and nonces using cryptographically random functions, and MUST NOT do so through non-cryptographically random functions.
 }}) %>
 
     <br><br>

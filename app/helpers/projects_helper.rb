@@ -7,7 +7,7 @@ module ProjectsHelper
   end
 
   def fork_and_original
-    github = Github.new oauth_token: session[:user_token]
+    github = Github.new oauth_token: session[:user_token], auto_pagination: true
     repo_data = github.repos.list.map do |repo|
       [repo.full_name, repo.fork, repo.html_url]
     end

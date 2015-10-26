@@ -86,7 +86,7 @@ if not, see introductory materials such as
 [*Producing Open Source Software* by Karl Fogel](http://producingoss.com/).
 
 
-Current criteria: Basic Best Practices for OSS
+Current criteria: Best Practices for OSS
 ==============================================
 
 Here are the current *draft* criteria; it is certain to change.

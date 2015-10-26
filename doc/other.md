@@ -19,7 +19,7 @@ other potential criteria.
 There is no guarantee that the final criteria will be the same,
 or even grouped the same way.
 This list of potential future criteria is even less mature than the
-list of basic best practices; recommendations welcome.
+initial list of best practices; recommendations welcome.
 As the criteria become more mature, we expect some criteria to move between
 the current criteria and these potential future criteria (in both directions).
 In particular, we expect a number of the SHOULD or RECOMMENDED criteria
@@ -32,7 +32,7 @@ Eventually these criteria will be worded per
 Potential silver criteria
 -------------------------
 
-*   **Achieve the lower (basic/bronze) badge**.
+*   **Achieve the lower (passing) badge**.
 *   **Turn many should/suggested into MUST**
 *   **Build and test:**
     -   **Continuous integration**.   
@@ -73,7 +73,7 @@ Potential gold criteria
     -   (Ideal) Copyright notice in each file, e.g., "Copyright [year project started] - [current year], [project founder] and the [project name] contributors."
 *   Quality:
     -   Commits reviewed.  There should be evidence that at least one other person (other than the committer) are normally reviewing commits.
-    -   Automated test suite covers 100% of branches in source code.  We will *not* add 100% branch coverage to the *basic* set of criteria.  Some projects (like SQLite) do achieve this, but for some projects (such as the Linux kernel) this would be exceptionally difficult to achieve.  Some higher/different related badge *might* add 100% branch coverage.
+    -   Automated test suite covers 100% of branches in source code.  We will *not* add 100% branch coverage to the *passing* set of criteria.  Some projects (like SQLite) do achieve this, but for some projects (such as the Linux kernel) this would be exceptionally difficult to achieve.  Some higher/different related badge *might* add 100% branch coverage.
 
 
 Potential other criteria
@@ -107,7 +107,7 @@ Potential other criteria
     -   Executable binaries that are released (both DLL and EXE's on Windows) MUST be cryptographically signed (the goal is to allow application whitelisting systems to use the signature to allow applications to run rather then relying on path or hash based rules - this might be at odds with some users requirement to be able to build from source but I thought I'd raise it anyways).
 
 We are considering moving the criteria continuous integration
-and reproduceable builds into the basic best practices criteria.
+and reproduceable builds into the initial best practices criteria.
 
 In the future we might add some criteria that a project has to meet
 some subset of (e.g., it must meet at least 3 of 5 criteria).

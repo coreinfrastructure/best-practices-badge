@@ -1,7 +1,7 @@
-# Background on Basic Best Practices Criteria for Open Source Software (OSS)
+# Background on Best Practices Criteria for Open Source Software (OSS)
 
 This document gives background on the
-Basic Best Practices Criteria for Open Source Software (OSS).
+Best Practices Criteria for Open Source Software (OSS).
 This includes potential sources of criteria and
 identifying processes used by existing OSS project.
 See [criteria](./criteria.md) for the current version of the criteria.
@@ -843,7 +843,7 @@ Indeed, if many well-run projects do *not* perform a
 specific practice, it may not be a good practice.
 We believe that well-run OSS projects
 shouldn&#8217;t need to make many
-changes to meet the basic best practices.
+changes to meet the first (passing) set of best practices.
 
 Many OSS projects *do* a number of things well.
 Indeed, we intend for there to be many &#8220;0-day badge recipients&#8221; -

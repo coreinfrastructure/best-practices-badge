@@ -16,6 +16,88 @@ The production version may also be deployed to Heroku.
 
 Our emphasis will be on keeping the program *simple*.
 
+## Setting up a development environment
+
+First, install a Ruby on Rails development environment;
+there are many docs on how to do this.
+
+
+We currently fix the version of Ruby at exactly 2.2.2.
+That creates stability, but probably isn't the version you are using.
+Here's one way to do that
+(this uses rbenv; rvm is similar):
+
+~~~~
+# if using rbenv:
+rbenv install 2.2.2
+rbenv global 2.2.2
+
+gem sources --add https://rubygems.org
+gem install bundler
+gem install rails
+bundle install
+rake db:migrate
+~~~~
+
+Then use 'git' to download the current version you wish to use.
+
+
+## Running locally
+
+Once your development environment is ready, you can run the application with:
+
+~~~~
+bin/rails s
+~~~~
+
+Then point your web browser at "localhost:3000".
+
+
+## Adding criteria
+
+To add/modify the text of the criteria, edit these files:
+doc/criteria.md
+app/views/projects/_form.html.erb
+
+If you're adding/removing fields, be sure to edit:
+app/models/project.rb  # Server-side: E.g., put it the right category.
+app/controllers/projects_controller.rb   # Validate permitted field.
+app/assets/javascripts/project-form.js   # Client-side
+
+When adding/removing fields, you also need to create a database migration.
+The "status" (met/unmet) is the criterion name + "_status" stored as a string;
+each criterion also has a name + "_justification" stored as text.
+Here are the commands (assuming your current directory is at the top level,
+EDIT is the name of your favorite text editor, and MIGRATION_NAME is the
+logical name you're giving to the migration):
+
+~~~~
+  $ bin/rails generate migration MIGRATION_NAME
+  $ EDIT db/migrate/*MIGRATION_NAME.rb
+~~~~
+
+Your migration file should look something like this
+(where add_column takes the name of the table, the name of the column,
+the type of the column, and then various options):
+
+~~~~
+class MIGRATION_NAME < ActiveRecord::Migration
+  def change
+    add_column :projects, :crypto_alternatives_status, :string, default: '?'
+    add_column :projects, :crypto_alternatives_justification, :text
+  end
+end
+~~~~
+
+Once you've created the migration file, you can migrate by running:
+
+~~~~
+  $ bin/rake db:migrate
+~~~~
+
+If it fails, use the rake target db:rollback .
+
+
 ## App authentication via Github
 The BadgeApp needs to authenticate itself through OAuth2 on Github if users are logging 
 in with their Github accounts.  It also needs to authenticate itself to get repo details from Github if a 

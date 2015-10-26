@@ -4,7 +4,7 @@ Basic Best Practices Criteria for Open Source Software (OSS) (version 0.2.0)
 Introduction
 ============
 
-This is a *draft* of proposed basic best practices
+This is a *draft* of proposed best practices
 for open source software (OSS) projects.
 OSS projects that follow these best practices
 will be able to voluntarily self-certify and show that they've
@@ -27,11 +27,11 @@ These best practices have been created to:
 2. help new OSS projects discover what those practices are, and
 3. help users know which projects are following best practices (so users can prefer such projects).
 
-We are currently focused on identifying *basic* best practices
+We are currently focused on identifying best practices
 that well-run OSS projects typically already follow.
 We are capturing other practices so that we can create
 [more advanced badges](./other.md) later.
-The basic best practices, and the more detailed criteria
+The best practices, and the more detailed criteria
 specifically defining them, are inspired by a variety of sources.
 See the separate "[background](./background.md)" page for more information.
 

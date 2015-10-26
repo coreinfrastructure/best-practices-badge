@@ -32,7 +32,7 @@
            <td><%= project.description %></td>
            <td><%= project.project_url %></td>
            <td><%= project.license %></td>
-           <td><%= time_ago_in_words(project.created_at) %></td>
+           <td><%= project.created_at.to_time.iso8601 %></td>
          </tr>
        <% end %>
      </tbody>

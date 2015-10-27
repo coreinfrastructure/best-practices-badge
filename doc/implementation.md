@@ -285,17 +285,6 @@ A user can edit project P if one of the following is true:
 
 Previously we hoped to auto-generate the form, but it's difficult to create a good UI experience that way.  So for the moment, we're not doing that.
 
-Every bullet with a MUST, MUST NOT, SHOULD / RECOMMENDED, or SUGGESTED will have a matching [criteria-name] entry (note that [criteria-name] may have a dagger and/or asterisk after it).  Change a criteria-name into a "fieldname" by converting all "-" to "_"; this generates the database field name.  (The SQL specifications do not include "-" in simple field names).
-
-If the fieldname ends in "_url", it records a URL, and there are no other fields.  To get credit for such a URL, it needs to begin with "https?://", NOT include a "?" (that will counter some attempts to use BadgeApp to attack other systems), and that URL needs to be readable.  Empty URLs for MUST requirements should be highlighted somehow.
-
-Otherwise, the fieldname records Met/Not met/blank that users must directly assert, and there is at least one other field that users can enter text into: fieldname + "_justification".  *If* we have automated that field, then there is a field named fieldname + "_auto" that records an automated result justifying that it meets the criteria.  Any criteria with a MUST, MUST NOT, SHOULD, or RECOMMENDED gets credit if the fieldname is "Met" (if SHOULD/RECOMMENDED, then "Not Met" is also allowed) and (1) fieldname_auto justifies it, OR (2) filename_justification is nonblank and includes at least one URL (which is supposed to be a pointer to supporting information).
-
-We previously proposed a "Considered" value (separate from "blank"), but that makes the user interface excessively complex for little gain.  If it's marked "not met" and has a justification, then clearly it's been considered.
-
-We should try to occasionally save the form (perhaps every time they leave a field), so that people won't lose data partway through.
-
-
 ## GitHub-related badges
 
 Pages related to GitHub-related badges include:
@@ -331,18 +320,10 @@ Some information on how to detect licenses can be found in
 
 ## Analysis
 
-We intend to use Brakeman,
-a static analysis security scanner for Ruby on Rails.
-This lets us fulfill the "static source code analysis" criterion.
-
-We are using the OWASP ZAP web application scanner to find potential
+We intend to use the OWASP ZAP web application scanner to find potential
 vulnerabilities before full release.
 This lets us fulfill the "dynamic analysis" criterion.
 
-
-## Other things
-
-We are considering the use of RSpec, Cucumber, and FactoryGirl.
 
 # See also
 

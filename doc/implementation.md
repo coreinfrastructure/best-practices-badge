@@ -132,6 +132,9 @@ Once you've created the migration file, you can migrate by running:
 
 If it fails, use the rake target db:rollback .
 
+Be sure to "git add" all new files, including any migration files,
+and then use "git commit" and "git push".
+
 
 ## App authentication via Github
 

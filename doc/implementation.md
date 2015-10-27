@@ -53,7 +53,7 @@ rake db:setup        # Setup database and seed it with dummy data
 
 Some documents about Rails will tell you to execute "bin/rake" instead of
 "rake" or to use "bundle exec ..." to execute programs.
-The install process above eliminates the need for that.
+Using rbenv-bundler (above) eliminates the need for that.
 
 You can use "bundle outdated" to show the gems that are outdated;
 be sure to test after updating any gems.

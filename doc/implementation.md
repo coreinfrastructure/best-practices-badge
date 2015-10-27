@@ -25,46 +25,38 @@ The production version may also be deployed to Heroku.
 
 ## Setting up a development environment
 
-You need to have git, Ruby (version 1.9.3 or newer), and
-the SQLite3 database to set up a development environment.
+You need to have git, Ruby (version 1.9.3 or newer), and the SQLite3 database system installed to set up a development environment.  To follow these instructions you also need rbenv (this lets you select specific versions of Ruby); rvm is an alternative not documented here.
 
-Use 'git' to download the current version you wish to use.
-You can do this at the command line (assuming git is installed) with:
+First, use 'git' to download BadgeApp.  You can do this at the command line (assuming git is installed) with:
 
 ~~~~
 git clone https://github.com/linuxfoundation/cii-best-practices-badge.git
 cd cii-best-practices-badge
 ~~~~
 
-Now install a Ruby on Rails development environment.
-There are many docs on how to do this.
-The Ruby on Rails website download information at
-<http://rubyonrails.org/download/> has a quick summary.
-Ruby is a programming language; packaged downloadable libraries are
-called "gems".
-Rails is a widely-used web application development framework, implemented
-as a pre-selected set of gems.
-
-For development we currently fix the version of Ruby at exactly 2.2.2.
-That creates stability, but probably isn't the version you are using.
-First install a version of ruby and rbenv; you can then
-use these shell commands to install the rest.
-This approach uses rbenv to select a particular version of Ruby;
-rvm is another way to select Ruby versions and its commands would be similar.
-We presume that your current directory is the top directory of the project,
-aka cii-best-practices-badge.
+For development we currently fix the version of Ruby at exactly 2.2.2.  We also need to install a number of gems (including the ones in Rails); we will install the versions specified in Gemfile.lock.  We will do completely separate per-project Gem installs, to prevent potential interference issues in the development environment.  Here's how to do that.  We presume that your current directory is the top directory of the project, aka cii-best-practices-badge.
 
 ~~~~
-# if using rbenv, here's how to force install Ruby 2.2.2
+# Force install Ruby 2.2.2 using rbenv:
 rbenv install 2.2.2
 rbenv local 2.2.2 # In this directory AND BELOW, use Ruby 2.2.2 instead.
 
+# This makes "bundle ..." use rbenv's version of Ruby:
+git clone git://github.com/carsomyr/rbenv-bundler.git ~/.rbenv/plugins/bundler
+
 gem sources --add https://rubygems.org  # Ensure you're getting gems here
-gem install bundler  # Install "bundler" gem package manager.
-gem install rails    # Install rails
-bundle install       # Install other gems we use - looks at Gemfile.lock.
+gem install bundler  # Install the "bundler" gem package manager.
+rbenv rehash
+bundle install       # Install gems we use in Gemfile.lock, including Rails
 rake db:setup        # Setup database and seed it with dummy data
 ~~~~
+
+Some documents about Rails will tell you to execute "bin/rake" instead of
+"rake" or to use "bundle exec ..." to execute programs.
+The install process above eliminates the need for that.
+
+You can use "bundle outdated" to show the gems that are outdated;
+be sure to test after updating any gems.
 
 
 ## Running locally
@@ -72,7 +64,7 @@ rake db:setup        # Setup database and seed it with dummy data
 Once your development environment is ready, you can run the application with:
 
 ~~~~
-bin/rails s
+rails s
 ~~~~
 
 This will automatically set up what it needs to, and then run the
@@ -87,11 +79,11 @@ Then point your web browser at "localhost:3000".
 If you are contributing changes to *code*, the following rules apply.
 
 1.  Code contributions should have a clean style.  In particular, Ruby code should be clean per Rubocop; check this using:
-    bin/rake rubocop
+    rake rubocop
 2.  Contributions must be secure.  At the least, ensure that there are no warnings from Brakeman (this does some static analysis for security issues):
-    bin/rake brakeman
+    rake brakeman
 3.  Contributions must be tested.  If you're adding new functionality, please add tests for it.  Before submitting, run the test suite to ensure check for errors:
-    bin/rake test
+    rake test
 
 Please contribute in the form of a "git pull" request on the
 GitHub repository if possible.
@@ -115,7 +107,7 @@ EDIT is the name of your favorite text editor, and MIGRATION_NAME is the
 logical name you're giving to the migration):
 
 ~~~~
-  $ bin/rails generate migration MIGRATION_NAME
+  $ rails generate migration MIGRATION_NAME
   $ EDIT db/migrate/*MIGRATION_NAME.rb
 ~~~~
 
@@ -135,7 +127,7 @@ end
 Once you've created the migration file, you can migrate by running:
 
 ~~~~
-  $ bin/rake db:migrate
+  $ rake db:migrate
 ~~~~
 
 If it fails, use the rake target db:rollback .

@@ -36,6 +36,7 @@ class Project < ActiveRecord::Base
     'test' => 'MUST',
     'test_invocation' => 'SHOULD',
     'test_most' => 'SUGGESTED',
+    'test_continuous_integration' => 'SUGGESTED',
     'test_policy' => 'MUST',
     'tests_are_added' => 'MUST',
     'tests_documented_added' => 'SUGGESTED',
@@ -129,6 +130,8 @@ class Project < ActiveRecord::Base
   validates :test_status, inclusion: { in: STATUS_CHOICE }
   validates :test_invocation_status, inclusion: { in: STATUS_CHOICE }
   validates :test_most_status, inclusion: { in: STATUS_CHOICE }
+  validates :test_continuous_integration_status,
+            inclusion: { in: STATUS_CHOICE }
   validates :test_policy_status, inclusion: { in: STATUS_CHOICE }
   validates :tests_are_added_status, inclusion: { in: STATUS_CHOICE }
   validates :tests_documented_added_status, inclusion: { in: STATUS_CHOICE }

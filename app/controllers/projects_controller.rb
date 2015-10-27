@@ -93,6 +93,8 @@ class ProjectsController < ApplicationController
     :test_invocation_justification,
     :test_most_status,
     :test_most_justification,
+    :test_continuous_integration_status,
+    :test_continuous_integration_justification,
     # New functionality testing
     :test_policy_status,
     :test_policy_justification,

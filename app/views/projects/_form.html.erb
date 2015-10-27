@@ -439,6 +439,15 @@ For example, "make check", "mvn test", or "rake test".
 It is SUGGESTED that the test suite cover most (or ideally all)
 the code branches, input fields, and functionality.
 }}) %>
+      <hr>
+      <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
+               criteria: "test_continuous_integration", desc: %{
+It is SUGGESTED that the project implement continuous integration
+(where new or changed code is frequently integrated into a central
+code repository and automated tests are run on the result).
+}}) %>
+
+
 
     <br><br>
     <h3>New functionality testing</h3>

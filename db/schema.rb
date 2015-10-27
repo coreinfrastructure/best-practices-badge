@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151026190431) do
+ActiveRecord::Schema.define(version: 20151027231812) do
 
   create_table "projects", force: :cascade do |t|
     t.integer  "user_id"
@@ -153,6 +153,8 @@ ActiveRecord::Schema.define(version: 20151026190431) do
     t.text     "crypto_weaknesses_justification"
     t.string   "crypto_alternatives_status",                           default: "?"
     t.text     "crypto_alternatives_justification"
+    t.string   "test_continuous_integration_status",                   default: "?"
+    t.text     "test_continuous_integration_justification"
   end
 
   add_index "projects", ["user_id", "created_at"], name: "index_projects_on_user_id_and_created_at"

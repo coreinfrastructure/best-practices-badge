@@ -50,6 +50,7 @@ field_categories = {
   "test" : "MUST",
   "test_invocation" : "SHOULD",
   "test_most" : "SUGGESTED",
+  "test_continuous_integration" : "SUGGESTED",
   "test_policy" : "MUST",
   "tests_are_added" : "MUST",
   "tests_documented_added" : "SUGGESTED",

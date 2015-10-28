@@ -16,4 +16,4 @@
 //= require bootstrap
 // This is for a polyfill for Safari:
 //= require jquery-ui/autocomplete
-//  NOTE: Don't do "= require_tree ." since project-form.js isn't always used.
+//= require_tree .

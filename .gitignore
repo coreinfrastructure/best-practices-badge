@@ -21,3 +21,6 @@
 
 # Don't include precompiled assets
 /public/assets
+
+# Dropbox
+.DS_Store

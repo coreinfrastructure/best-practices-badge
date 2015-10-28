@@ -185,7 +185,7 @@ class ProjectsController < ApplicationController
     respond_to do |format|
       status = Project.valid_badge?(@project) ? 'pass' : 'fail'
       format.svg do
-        render Rails.application.assets["badge-#{status}.svg"].pathname
+        render file: Rails.application.assets["badge-#{status}.svg"].pathname
       end
     end
   end

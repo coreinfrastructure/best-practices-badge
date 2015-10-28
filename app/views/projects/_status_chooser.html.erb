@@ -9,7 +9,7 @@
               "criteria-#{ criteria }" %>">
        <%= f.form_group status_symbol do %>
          <div class="col-xs-2 text-center block-center">
-             <br><%= image_tag("/assets/Clear.gif", size: "20x20", id: criteria + "_enough") %>
+             <br><%= image_tag("/assets/Clear.gif", size: "20x20", id: criteria + "_enough", alt: "") %>
          </div>
          <div class="col-xs-2 text-center block-center">
              <%= f.radio_button status_symbol, 'Met', inline: true, disabled: is_disabled %><br><br>Met

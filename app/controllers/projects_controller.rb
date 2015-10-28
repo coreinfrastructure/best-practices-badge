@@ -4,6 +4,8 @@ class ProjectsController < ApplicationController
   before_action :logged_in?, only: :create
   before_action :authorized, only: [:destroy, :edit, :update]
 
+  helper_method :github
+
   PERMITTED_PARAMS =
   [
     :user_id,
@@ -210,6 +212,7 @@ class ProjectsController < ApplicationController
     # do a save yet.
 
     respond_to do |format|
+      @project.project_url ||= project_url
       if @project.save
         flash[:success] = "Thanks for adding the Project!   Please fill out
                            the rest of the information to get the Badge."
@@ -258,7 +261,17 @@ class ProjectsController < ApplicationController
     end
   end
 
+  def github
+    Github.new oauth_token: session[:user_token], auto_pagination: true
+  end
+
   private
+
+  def project_url
+    # TODO: Assign to repo.homepage if it exists, and else repo_url
+    # user, repo = @project.repo_url.gsub('https://github.com/','').split('/')
+    @project.repo_url
+  end
 
   # Use callbacks to share common setup or constraints between actions.
   def set_project

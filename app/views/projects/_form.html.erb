@@ -489,6 +489,7 @@ The project MUST enable one or more compiler warning flags, a "safe"
 language mode, or use a separate "linter" tool to look for code quality
 errors or common simple mistakes, if there is at least one OSS tool that
 can implement this criterion in the selected language.},
+               na: true,
                details: %{
 Examples of compiler warning flagss include gcc/clang "-Wall".
 Examples of a "safe" language mode include Javascript "use strict"
@@ -501,12 +502,13 @@ source code to look for code quality errors or common simple mistakes.
       <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
                criteria: "warnings_fixed", desc: %{
 The project MUST address warnings.},
+               na: true,
                details: %{The project should fix warnings or mark them in the source code as false positives.  Ideally there would be no warnings, but a project MAY accept some warnings (typically less than 1 warning per 100 lines or less than 10 warnings).
 }}) %>
       <hr>
 
       <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
-               criteria: "warnings_strict", desc: %{
+               criteria: "warnings_strict", na: true, desc: %{
 It is SUGGESTED that projects be maximally strict with warnings, but this is not
 always practical.
 }}) %>
@@ -566,14 +568,14 @@ provided by the delivered project's software.
     <br>
 
     <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
-             criteria: "crypto_published", desc: %{
+             criteria: "crypto_published", na: true, desc: %{
 The project's cryptographic software MUST use cryptographic protocols
 and algorithms that are publicly published and reviewed by experts.
 }}) %>
     <hr>
 
     <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
-             criteria: "crypto_call", desc: %{
+             criteria: "crypto_call", na: true, desc: %{
 If the project software is an application or library, and its primary
 purpose is not to implement cryptography, then it MUST call on software
 specifically designed to implement cryptographic functions; it MUST NOT
@@ -582,7 +584,7 @@ implement its own.
     <hr>
 
     <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
-             criteria: "crypto_oss", desc: %{
+             criteria: "crypto_oss", na: true, desc: %{
 All functionality that depends on cryptography MUST be implementable using
 OSS because its specification meets the
 <a href="https://opensource.org/osr">Open Standards Requirement for Software
@@ -591,7 +593,7 @@ by the Open Source Initiative</a>.
     <hr>
 
     <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
-             criteria: "crypto_keylength", desc: %{
+             criteria: "crypto_keylength", na: true, desc: %{
 The default keylengths MUST meet the NIST minimum requirements at least through the year 2030 (as stated in 2012).},
              details: %{
 These minimum bitlengths are: symmetric key 112, factoring modulus 2048,
@@ -607,19 +609,19 @@ interoperability.)
     <hr>
 
     <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
-             criteria: "crypto_working", desc: %{
+             criteria: "crypto_working", na: true, desc: %{
 The project security mechanisms MUST NOT depend on cryptographic algorithms that are broken (e.g., MD4, MD5, single DES, or RC4).
 }}) %>
     <hr>
 
     <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
-             criteria: "crypto_weaknesses", desc: %{
+             criteria: "crypto_weaknesses", na: true, desc: %{
 The project security mechanisms SHOULD NOT by default depend on cryptographic algorithms with known serious weaknesses (e.g., SHA-1).
 }}) %>
     <hr>
 
     <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
-             criteria: "crypto_alternatives", desc: %{
+             criteria: "crypto_alternatives", na: true, desc: %{
 The project SHOULD support multiple cryptographic algorithms, so users can quickly switch if one is broken.},
              details: %{
 Common symmetric key algorithms include AES, Twofish, Serpent, Blowfish, and 3DES.  Common cryptographic hash algorithm alternatives include SHA-2 (including SHA-256 and SHA-512) and SHA-3.
@@ -627,19 +629,19 @@ Common symmetric key algorithms include AES, Twofish, Serpent, Blowfish, and 3DE
     <hr>
 
     <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
-             criteria: "crypto_pfs", desc: %{
+             criteria: "crypto_pfs", na: true, desc: %{
 The project SHOULD implement perfect forward secrecy for key agreement protocols so a session key derived from a set of long-term keys cannot be compromised if one of the long-term keys is compromised in the future.
 }}) %>
     <hr>
 
     <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
-             criteria: "crypto_password_storage", desc: %{
+             criteria: "crypto_password_storage", na: true, desc: %{
 If passwords are stored for authentication of external users, the project MUST store them as iterated hashes with a per-user salt by using a key stretching (iterated) algorithm (e.g., PBKDF2, Bcrypt or Scrypt).
 }}) %>
     <hr>
 
     <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
-             criteria: "crypto_random", desc: %{
+             criteria: "crypto_random", na: true, desc: %{
 The project MUST generate all cryptographic keys and nonces using cryptographically random functions, and MUST NOT do so through non-cryptographically random functions.
 }}) %>
 

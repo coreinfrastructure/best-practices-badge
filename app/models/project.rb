@@ -1,6 +1,7 @@
 # rubocop:disable Metrics/ClassLength
 class Project < ActiveRecord::Base
   STATUS_CHOICE = ['?', 'Met', 'Unmet']
+  STATUS_CHOICE_NA = Array.new(STATUS_CHOICE) << 'N/A'
   MIN_SHOULD_LENGTH = 5
 
   FIELD_CATEGORIES = {
@@ -135,21 +136,21 @@ class Project < ActiveRecord::Base
   validates :test_policy_status, inclusion: { in: STATUS_CHOICE }
   validates :tests_are_added_status, inclusion: { in: STATUS_CHOICE }
   validates :tests_documented_added_status, inclusion: { in: STATUS_CHOICE }
-  validates :warnings_status, inclusion: { in: STATUS_CHOICE }
-  validates :warnings_fixed_status, inclusion: { in: STATUS_CHOICE }
-  validates :warnings_strict_status, inclusion: { in: STATUS_CHOICE }
+  validates :warnings_status, inclusion: { in: STATUS_CHOICE_NA }
+  validates :warnings_fixed_status, inclusion: { in: STATUS_CHOICE_NA }
+  validates :warnings_strict_status, inclusion: { in: STATUS_CHOICE_NA }
   validates :know_secure_design_status, inclusion: { in: STATUS_CHOICE }
   validates :know_common_errors_status, inclusion: { in: STATUS_CHOICE }
-  validates :crypto_published_status, inclusion: { in: STATUS_CHOICE }
-  validates :crypto_call_status, inclusion: { in: STATUS_CHOICE }
-  validates :crypto_oss_status, inclusion: { in: STATUS_CHOICE }
-  validates :crypto_keylength_status, inclusion: { in: STATUS_CHOICE }
-  validates :crypto_working_status, inclusion: { in: STATUS_CHOICE }
-  validates :crypto_weaknesses_status, inclusion: { in: STATUS_CHOICE }
-  validates :crypto_alternatives_status, inclusion: { in: STATUS_CHOICE }
-  validates :crypto_pfs_status, inclusion: { in: STATUS_CHOICE }
-  validates :crypto_password_storage_status, inclusion: { in: STATUS_CHOICE }
-  validates :crypto_random_status, inclusion: { in: STATUS_CHOICE }
+  validates :crypto_published_status, inclusion: { in: STATUS_CHOICE_NA }
+  validates :crypto_call_status, inclusion: { in: STATUS_CHOICE_NA }
+  validates :crypto_oss_status, inclusion: { in: STATUS_CHOICE_NA }
+  validates :crypto_keylength_status, inclusion: { in: STATUS_CHOICE_NA }
+  validates :crypto_working_status, inclusion: { in: STATUS_CHOICE_NA }
+  validates :crypto_weaknesses_status, inclusion: { in: STATUS_CHOICE_NA }
+  validates :crypto_alternatives_status, inclusion: { in: STATUS_CHOICE_NA }
+  validates :crypto_pfs_status, inclusion: { in: STATUS_CHOICE_NA }
+  validates :crypto_password_storage_status, inclusion: { in: STATUS_CHOICE_NA }
+  validates :crypto_random_status, inclusion: { in: STATUS_CHOICE_NA }
   validates :delivery_mitm_status, inclusion: { in: STATUS_CHOICE }
   validates :delivery_unsigned_status, inclusion: { in: STATUS_CHOICE }
   validates :vulnerabilities_fixed_60_days_status, inclusion:

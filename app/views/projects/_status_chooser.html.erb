@@ -8,18 +8,23 @@
               "category-#{ Project.field_category(criteria)} " +
               "criteria-#{ criteria }" %>">
        <%= f.form_group status_symbol do %>
-         <div class="col-xs-3 text-center block-center">
+         <div class="col-xs-2 text-center block-center">
+             <br><%= image_tag("/assets/Clear.gif", size: "20x20", id: criteria + "_enough") %>
+         </div>
+         <div class="col-xs-2 text-center block-center">
              <%= f.radio_button status_symbol, 'Met', inline: true, disabled: is_disabled %><br><br>Met
          </div>
+         <%# The text of "Unmet" is longer, so its column must be bigger %>
          <div class="col-xs-3 text-center block-center">
              <%= f.radio_button status_symbol, 'Unmet', inline: true, disabled: is_disabled  %><br><br>Unmet
          </div>
-         <div class="col-xs-3 text-center block-center">
-             <%= f.radio_button status_symbol, '?', inline: true, disabled: is_disabled  %><br><br>&nbsp;?&nbsp;
+         <% if defined?(na) %>
+         <div class="col-xs-2 text-center block-center">
+             <%= f.radio_button status_symbol, 'N/A', inline: true, disabled: is_disabled  %><br><br>&nbsp;N/A&nbsp;
          </div>
-         <br>
-         <div class="col-xs-3 text-center block-center">
-             <%= image_tag("/assets/Clear.gif", size: "20x20", id: criteria + "_enough") %>
+         <% end %>
+         <div class="col-xs-2 text-center block-center">
+             <%= f.radio_button status_symbol, '?', inline: true, disabled: is_disabled  %><br><br>&nbsp;?&nbsp;
          </div>
         <% end %>
        </div>

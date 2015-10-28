@@ -216,11 +216,14 @@ $(document).ready(function() {
     });
 
     if ($("#project_entry_form").length) {
-      // Set up the interactive displays of "enough".
-      $.each(field_categories, function(key, value) {
-        setup_field(key);
+      // Use "imagesloaded" to wait for image load before displaying them
+      imagesLoaded(document).on( 'always', function( instance ) {
+        // Set up the interactive displays of "enough".
+        $.each(field_categories, function(key, value) {
+          setup_field(key);
+        })
+        reset_progress_bar();
       })
-      reset_progress_bar();
     }
     // Polyfill datalist (for Safari users)
     polyfill_datalist();

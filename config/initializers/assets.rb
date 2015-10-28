@@ -11,4 +11,5 @@ Rails.application.config.assets.version = '1.0'
 # already added.
 # Rails.application.config.assets.precompile += %w( search.js )
 
-Rails.application.config.assets.precompile += %w( project-form.js )
+Rails.application.config.assets.precompile +=
+   %w( project-form.js imagesloaded.pkgd.js )

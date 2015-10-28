@@ -183,9 +183,10 @@ class ProjectsController < ApplicationController
   def badge
     @project = Project.find(params[:id])
     respond_to do |format|
-      status = Project.valid_badge?(@project) ? 'pass' : 'fail'
+      status = Project.valid_badge?(@project) ? 'passing' : 'failing'
       format.svg do
-        render file: Rails.application.assets["badge-#{status}.svg"].pathname
+        send_file Rails.application.assets["badge-#{status}.svg"].pathname,
+                  disposition: 'inline'
       end
     end
   end

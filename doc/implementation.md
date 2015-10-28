@@ -22,6 +22,15 @@ We deploy a test implementation to Heroku so that people can try it out
 for limited testing.
 The production version may also be deployed to Heroku.
 
+Other components we use are:
+
+- Bootstrap
+- Jquery
+- Jquery UI
+- Imagesloaded https://github.com/desandro/imagesloaded
+  (to ensure images are loaded before displaying them)
+- A number of supporting Ruby gems (see its Gemfile)
+
 
 ## Setting up a development environment
 

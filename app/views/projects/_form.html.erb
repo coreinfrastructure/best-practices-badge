@@ -25,7 +25,7 @@ Open source software (OSS) projects
 that follow the best practices below
 will be able to voluntarily self-certify and show that they've
 achieved a Core Infrastructure Initiative (CII) badge.
-<%= render(partial: "details", locals: {is_disabled: false,
+<%= render(partial: "details", locals: {
            criteria: "badge_intro", details: %{
 There is no set of practices that can guarantee that software
 will never have defects or vulnerabilities.
@@ -59,14 +59,14 @@ There is also a
 
     <h3>Identification</h3>
       <span>What is the human-readable name of the project?</span>
-<%= render(partial: "details", locals: {is_disabled: false,
+<%= render(partial: "details", locals: {
            criteria: "project_name", details: %{
 Note that other projects may use the same name.
 }}) %>
       <%= f.text_field :name, hide_label: true, class:"form-control", placeholder:'OSS Project Name', disabled: is_disabled %>
 
       <span>What is a brief description of the project?</span>
-<%= render(partial: "details", locals: {is_disabled: false,
+<%= render(partial: "details", locals: {
            criteria: "description", details: %{
 Include key comments about the project.
 This information is used when displaying badge information.
@@ -123,7 +123,7 @@ The information on how to contribute SHOULD include the basic criteria for accep
 
       <h3>OSS License</h3>
       <span>What license(s) is the project released under?</span>
-      <%= render(partial: "details", locals: {is_disabled: false,
+      <%= render(partial: "details", locals: {
            criteria: "license", details: %{
 Please use <a href="https://spdx.org/licenses/">SPDX format</a> (examples include "Apache-2.0", "BSD-2-Clause", "BSD-3-Clause", "GPL-2.0+", "LGPL-3.0+", and "MIT")
 }}) %>
@@ -561,15 +561,17 @@ for commonly-used lists.
     <br><br><br>
     <h3>Good cryptographic practices</h3>
 
-    <!-- TODO: Need make it easy to N/A many of these criteria. -->
-    <span class="criteria-desc">
-<b>Note:</b> These criteria do not always apply because some software
-has no need to directly use cryptographic capabilities.
+
+<span class="criteria-desc">
+Note that some software does not need to directly use cryptographic capabilities.
 A "project security mechanism" is a security mechanism
 provided by the delivered project's software.
 </span>
-
-    <br>
+<% if (!is_disabled) %>
+  <br><br>
+  <button class="btn btn-default hidden-print" type="button" id='all_crypto_na'>Press here if the project does not use or need cryptographic mechanisms</button>
+  <br>
+<% end %>
 
     <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
              criteria: "crypto_published", na: true, desc: %{

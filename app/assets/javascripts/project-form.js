@@ -87,6 +87,9 @@ min_should_length = 5;
 
 function is_enough(criteria) {
   var criteria_status = "#project_" + criteria + "_status";
+  if ($(criteria_status + "_na").is(':checked')) {
+    return true;
+  }
   if (field_categories[criteria] === "MUST") {
       return ($(criteria_status + "_met").is(':checked'));
   } else if (field_categories[criteria] === "SHOULD") {
@@ -215,7 +218,20 @@ $(document).ready(function() {
       $('.details-toggler').html('Show details');
     });
 
+
     if ($("#project_entry_form").length) {
+
+      // Implement "press this button to make all crypto N/A"
+      $("#all_crypto_na").click( function(e) {
+        $.each(field_categories, function(key, value) {
+          if ((/^crypto/).test(key)) {
+            $("#project_" + key + "_status_na").prop("checked", true);
+          }
+          update_criteria_display(key);
+        })
+        reset_progress_bar();
+      });
+
       // Use "imagesloaded" to wait for image load before displaying them
       imagesLoaded(document).on( 'always', function( instance ) {
         // Set up the interactive displays of "enough".

@@ -178,21 +178,25 @@ class Project < ActiveRecord::Base
     FIELD_CATEGORIES.all? do |key, value|
       criteria_status = (key + '_status')
       criteria_just = (key + '_justification')
-      case value
-      when 'MUST'
-        project[criteria_status] == 'Met'
-      when 'SHOULD'
-        if project[criteria_status] == 'Met'
-          true
-        elsif project[criteria_status] == 'Unmet' &&
-              (project[criteria_just].length >= MIN_SHOULD_LENGTH)
-          true
-        else
-          false
-        end
-      when 'SUGGESTED'
-        %w(Met Unmet).include? project[criteria_status]
-      end
+      if project[criteria_status] == 'N/A'
+        true
+      else
+        case value
+        when 'MUST'
+          project[criteria_status] == 'Met'
+        when 'SHOULD'
+          if project[criteria_status] == 'Met'
+            true
+          elsif project[criteria_status] == 'Unmet' &&
+                (project[criteria_just].length >= MIN_SHOULD_LENGTH)
+            true
+          else
+            false
+          end
+        when 'SUGGESTED'
+          %w(Met Unmet).include? project[criteria_status]
+        end # case
+      end # if
     end
   end
   # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity

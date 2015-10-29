@@ -75,6 +75,8 @@ Some guidelines include:
 
 *   [&#8220;Releasing Free/Libre/Open Source Software (FLOSS) for Source Installation.&#8221; David A. Wheeler](http://www.dwheeler.com/essays/releasing-floss-software.html)
 
+*   [OSS Manifesto](http://ossmanifesto.org/)
+
 
 ## Methods for evaluating OSS projects
 
@@ -240,6 +242,38 @@ bug tracker and email lists, goals/plans listed, a development team that
 responds quickly to questions, a good web site, good user documentation,
 and good developer documentation. A larger development team is a good
 sign, too.
+
+### OSS Manifesto
+
+The [OSS Manifesto](http://ossmanifesto.org/)
+states the following:
+
+"We are developers who want to support and sustain open source software."
+
+"We value:
+
+* Respect
+* Collaboration
+* Healthy debates
+
+We believe that all projects should:
+* Have a readme file
+* Have a contributing file
+* List all core team members in the readme file
+* Have a license file
+* Have a changelog
+* Follow semantic versioning
+* Tag all major releases
+* Provide documentation"
+
+
+David A. Wheeler is skeptical that listing
+"all core team members in the readme file" specifically is a good idea,
+and suggests that information about contributions needs to be documented
+somewhere (not necessarily in a "contributing" file).
+Still, this is a useful short list of best practices; we developed
+our list separately, and it is good to see that the list we developed
+includes practically all the same points.
 
 ### Stol and Babar
 

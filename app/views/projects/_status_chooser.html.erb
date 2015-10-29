@@ -51,11 +51,21 @@
                  raw unmet_placeholder
                end %>
          </div>
+         <div id="<%= criteria + '_na_placeholder' %>" class="hidden">
+          <%= if !defined?(na_placeholder)
+                 raw "(Optional) Please explain why this is not applicable (N/A), including 1+ key URLs."
+               else
+                 raw na_placeholder
+               end %>
+         </div>
          <% if defined?(met_suppress) %>
            <div id="<%= criteria + '_met_suppress' %>" class="hidden"></div>
          <% end %>
          <% if defined?(unmet_suppress) %>
            <div id="<%= criteria + '_unmet_suppress' %>" class="hidden"></div>
+         <% end %>
+         <% if defined?(na_suppress) %>
+           <div id="<%= criteria + '_na_suppress' %>" class="hidden"></div>
          <% end %>
          <%= f.text_field justification_symbol, class:"form-control", hide_label: true, placeholder:'Please explain', disabled: is_disabled  %>
       </div>

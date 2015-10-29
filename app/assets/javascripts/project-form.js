@@ -164,6 +164,16 @@ function update_criteria_display(criteria) {
          } else {
            $(criteria_just).show('fast');
          }
+    } else if ( $(criteria_status+"_na").is(':checked')) {
+         var criteria_na_placeholder = criteria + '_na_placeholder';
+         $(criteria_just).
+            attr("placeholder",
+              $("#" + criteria_na_placeholder).html().trim());
+         if (document.getElementById(criteria + "_na_suppress")) {
+           $(criteria_just).hide('fast');
+         } else {
+           $(criteria_just).show('fast');
+         }
     } else if ( $(criteria_status+"_").is(':checked')) {
          $(criteria_just).attr("placeholder", "Please explain");
          $(criteria_just).hide('fast');

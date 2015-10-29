@@ -173,7 +173,7 @@ class Project < ActiveRecord::Base
   end
 
   # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
-  # rubocop:disable Metrics/MethodLength
+  # rubocop:disable Metrics/MethodLength, Metrics/PerceivedComplexity
   def self.valid_badge?(project)
     FIELD_CATEGORIES.all? do |key, value|
       criteria_status = (key + '_status')
@@ -200,7 +200,7 @@ class Project < ActiveRecord::Base
     end
   end
   # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity
-  # rubocop:enable Metrics/MethodLength
+  # rubocop:enable Metrics/MethodLength, Metrics/PerceivedComplexity
 
   private
 

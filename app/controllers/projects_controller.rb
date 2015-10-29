@@ -212,6 +212,7 @@ class ProjectsController < ApplicationController
     # do a save yet.
 
     respond_to do |format|
+      @project.project_url ||= homepage_url
       if @project.save
         flash[:success] = "Thanks for adding the Project!   Please fill out
                            the rest of the information to get the Badge."
@@ -270,7 +271,7 @@ class ProjectsController < ApplicationController
   # Warning: DO NOT name a method "project_url";
   # that will interfere with Rails.
 
-  def project_find_default_url
+  def homepage_url
     # TODO: Assign to repo.homepage if it exists, and else repo_url
     # user, repo = @project.repo_url.gsub('https://github.com/','').split('/')
     @project.repo_url

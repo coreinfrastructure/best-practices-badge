@@ -194,7 +194,7 @@ class Project < ActiveRecord::Base
             false
           end
         when 'SUGGESTED'
-          %w(Met Unmet).include? project[criteria_status]
+          project[criteria_status] != '?'
         end # case
       end # if
     end

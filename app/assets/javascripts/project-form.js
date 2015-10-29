@@ -125,11 +125,11 @@ function changed_justification_text(criteria) {
 
     if (is_enough(criteria)) {
         $("#" + criteria + "_enough").
-            attr("src", "/assets/Thumbs_up_font_awesome.svg").
+            attr("src", $("#Thumbs_up_img").attr("src")).
             attr("alt", "Enough for a badge!");
     } else {
         $("#" + criteria + "_enough").
-            attr("src", "/assets/Thumbs_down_font_awesome.svg").
+            attr("src", $("#Thumbs_down_img").attr("src")).
             attr("alt", "Not enough for a badge.");
     }
     reset_progress_bar();
@@ -225,6 +225,7 @@ $(document).ready(function() {
         reset_progress_bar();
       })
     }
+
     // Polyfill datalist (for Safari users)
     polyfill_datalist();
 });

@@ -15,6 +15,7 @@ gem 'paper_trail', '4.0.0'
 gem 'rails', '4.2.4'
 gem 'sass-rails', '5.0.4'
 gem 'turbolinks', '2.5.3'
+gem 'jquery-turbolinks'
 gem 'uglifier', '2.7.2'
 gem 'will_paginate', '3.0.7'
 

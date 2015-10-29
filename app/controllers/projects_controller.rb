@@ -4,7 +4,7 @@ class ProjectsController < ApplicationController
   before_action :logged_in?, only: :create
   before_action :authorized, only: [:destroy, :edit, :update]
 
-  helper_method :github
+  helper_method :repo_data
 
   PERMITTED_PARAMS =
   [
@@ -212,7 +212,7 @@ class ProjectsController < ApplicationController
     # do a save yet.
 
     respond_to do |format|
-      @project.project_url ||= homepage_url
+      @project.project_url ||= set_homepage_url
       if @project.save
         flash[:success] = "Thanks for adding the Project!   Please fill out
                            the rest of the information to get the Badge."
@@ -262,19 +262,19 @@ class ProjectsController < ApplicationController
     end
   end
 
-  def github
-    Github.new oauth_token: session[:user_token], auto_pagination: true
+  def repo_data
+    github = Github.new oauth_token: session[:user_token], auto_pagination: true
+    github.repos.list.map do |repo|
+      [repo.full_name, repo.fork, repo.homepage, repo.html_url]
+    end
   end
 
   private
 
-  # Warning: DO NOT name a method "project_url";
-  # that will interfere with Rails.
-
-  def homepage_url
-    # TODO: Assign to repo.homepage if it exists, and else repo_url
-    # user, repo = @project.repo_url.gsub('https://github.com/','').split('/')
-    @project.repo_url
+  def set_homepage_url
+    # Assign to repo.homepage if it exists, and else repo_url
+    repo = repo_data.find { |r| @project.repo_url == r[3] }
+    repo[2].present? ? repo[2] : @project.repo_url
   end
 
   # Use callbacks to share common setup or constraints between actions.

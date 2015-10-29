@@ -7,9 +7,6 @@ module ProjectsHelper
   end
 
   def fork_and_original
-    repo_data = github.repos.list.map do |repo|
-      [repo.full_name, repo.fork, repo.html_url]
-    end
     repo_data.partition { |repo| repo[1] } # partition on fork
   end
 

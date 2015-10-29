@@ -160,7 +160,7 @@ where *client id* and *client secret* are registered OAuth2 credentials of the a
 [1] https://github.com/settings/applications/new
 [2] https://devcenter.heroku.com/articles/config-vars
 
-## Automation
+## Automation - flow
 
 We want to automate what we can, but since automation is imperfect,
 users need to be able to override the estimate.
@@ -189,17 +189,54 @@ Here's how we expect the form flow to go:
                  and then show the project form with any differences
                  between auto answers and project answers as flash entries.
 
-AUTO-FILL:
-This function tries to read from the project URL and repo URLs
-and determine project answers.  A few rules:
+### Autofill
 
-1.  Auto-fill will *ONLY* change values currently marked as "?".
-2.  Anything automatically filled will be noted on the next "flash" entries
-    on the edit form, so that people can check what was done (and why)
-    if they want to.  Perhaps those details should be toggleable.
+Earlier discussions presumed that the human would always be right, and
+that the automation would only fill in unknowns ("?").
+However, we've since abandoned this; instead, in some cases we want
+to override (either because we're confident or because we want to require
+projects to provide data in a way that we can be confident in it).
 
-This does create the risk that someone can claim they earned a badge
-even if they didn't.  This is the fundamental risk of self-assertion.
+Auto-fill must use some sort of pluggable interface, so that people
+can add them.  We will focus on getting data from GitHub, e.g.,
+api.gihub.com/repos has a lot of information.
+The pluggable interface could be implemented using Service Objects;
+it's not clear that's the best way.
+We do want to create directories where people can just add new files to
+add new plug-ins.
+
+For the moment, call each module that detects something a "Detective".
+A Detective needs to be called, be able to get data, and eventually
+return a set of findings.
+The findings would probable be a hash of
+project attributes and attribute-specific findings:
+(proposed new) value, confidence, justification (string),
+and if it should be forced (if so, we use it regardless of previous values).
+The Detective needs to be able to request evidence, on request the
+evidence will be kept so later Detectives can reuse the evidence.
+Examples of evidence:
+
+- Current (running) project attributes.  Might pass this on call.
+- Results from some URL (e.g., github repo data)
+- Current filenames of project (say, top level) (have to download)
+- Current file contents (we'll have to download that)
+- Commit history
+
+For filenames/contents, need a simple API that looks like a filesystem.
+
+At a first level, probably need to divide by repo host:
+GitHub, BitBucket, SourceForge, Other (which tries to interpret arbitrary).
+Under that, may need to divide by VCS: git, hg, svn, other
+(so that git things can be reused).  Perhaps those are "Detectives"
+that are called by other detectives.
+
+The "Autofill Judge" takes all the reports from the detectives
+and makes a final ruling on the project values.
+
+Issue: Do we *store* the justifications from the detectives in the
+justifications?  Or just make them "flash" values?
+We can change our minds later.
+
 We could identify *differences* between automation results and the
 project results - perhaps create an "audit" button on
 "show project form" that provided information on differences

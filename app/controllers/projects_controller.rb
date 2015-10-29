@@ -208,11 +208,10 @@ class ProjectsController < ApplicationController
   def create
     @project = current_user.projects.build(project_params)
 
-    # TODO: Error out if project_url and repo_url are both empty... don't
+    # Error out if project_url and repo_url are both empty... don't
     # do a save yet.
 
     respond_to do |format|
-      @project.project_url ||= project_url
       if @project.save
         flash[:success] = "Thanks for adding the Project!   Please fill out
                            the rest of the information to get the Badge."
@@ -253,6 +252,7 @@ class ProjectsController < ApplicationController
   def destroy
     @project.destroy
     respond_to do |format|
+      @project.project_url ||= project_find_default_url
       format.html do
         redirect_to projects_url
         flash[:success] = 'Project was successfully deleted.'
@@ -267,7 +267,10 @@ class ProjectsController < ApplicationController
 
   private
 
-  def project_url
+  # Warning: DO NOT name a method "project_url";
+  # that will interfere with Rails.
+
+  def project_find_default_url
     # TODO: Assign to repo.homepage if it exists, and else repo_url
     # user, repo = @project.repo_url.gsub('https://github.com/','').split('/')
     @project.repo_url

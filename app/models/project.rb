@@ -1,7 +1,7 @@
 # rubocop:disable Metrics/ClassLength
 class Project < ActiveRecord::Base
-  STATUS_CHOICE = ['?', 'Met', 'Unmet']
-  STATUS_CHOICE_NA = Array.new(STATUS_CHOICE) << 'N/A'
+  STATUS_CHOICE = %w(? Met Unmet).freeze
+  STATUS_CHOICE_NA = (STATUS_CHOICE + %w(N/A)).freeze
   MIN_SHOULD_LENGTH = 5
 
   FIELD_CATEGORIES = {

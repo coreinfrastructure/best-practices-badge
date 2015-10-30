@@ -2,7 +2,7 @@ require 'test_helper'
 
 class UserTest < ActiveSupport::TestCase
   def setup
-    @user = User.new(name: 'Example User', email: 'user@mail.com',
+    @user = User.new(name: 'Example User', email: 'user@example.com',
                      password: 'p@$$w0rd', password_confirmation: 'p@$$w0rd')
   end
 
@@ -62,5 +62,15 @@ class UserTest < ActiveSupport::TestCase
   test 'password should have a minimum length' do
     @user.password = @user.password_confirmation = 'a' * 6
     assert_not @user.valid?
+  end
+
+
+  test "associated projects should be destroyed" do
+    @user.save
+    @user.projects.create!(project_url: "https://www.example.org",
+                           repo_url: "https://www.example.org/code")
+    assert_difference 'Project.count', -1 do
+      @user.destroy
+    end
   end
 end

@@ -1,17 +1,9 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  user_id: 1
+  user: test_user
   name: Pathfinder OS
   description: Operating system for Pathfinder rover
   project_url: https://www.example.org
   license: MIT
   repo_url: https://www.example.org/code
-
-two:
-  user_id: 2
-  name: MyString
-  description: MyString
-  project_url: MyString
-  license: MyString
-  repo_url: MyString

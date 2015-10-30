@@ -188,7 +188,7 @@ class Project < ActiveRecord::Base
   end
 
   # rubocop:disable Metrics/CyclomaticComplexity
-  def valid_category?(status, justification, value)
+  def self.valid_category?(status, justification, value)
     case
     when status.in?(%w(Met N/A))
       true

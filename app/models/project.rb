@@ -172,35 +172,13 @@ class Project < ActiveRecord::Base
     FIELD_CATEGORIES[field]
   end
 
-  # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
-  # rubocop:disable Metrics/MethodLength, Metrics/PerceivedComplexity
   def self.valid_badge?(project)
     FIELD_CATEGORIES.all? do |key, value|
-      criteria_status = (key + '_status')
-      criteria_just = (key + '_justification')
-      if project[criteria_status] == 'N/A'
-        true
-      else
-        case value
-        when 'MUST'
-          project[criteria_status] == 'Met'
-        when 'SHOULD'
-          if project[criteria_status] == 'Met'
-            true
-          elsif project[criteria_status] == 'Unmet' &&
-                (project[criteria_just].length >= MIN_SHOULD_LENGTH)
-            true
-          else
-            false
-          end
-        when 'SUGGESTED'
-          project[criteria_status] != '?'
-        end # case
-      end # if
+      status = project["#{key}_status"]
+      justification = project["#{key}_justification"]
+      valid_category? status, justification, value
     end
   end
-  # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity
-  # rubocop:enable Metrics/MethodLength, Metrics/PerceivedComplexity
 
   private
 
@@ -208,4 +186,19 @@ class Project < ActiveRecord::Base
     return unless repo_url.blank? && project_url.blank?
     errors.add :base, 'Need at least a project or repository URL'
   end
+
+  # rubocop:disable Metrics/CyclomaticComplexity
+  def valid_category?(status, justification, value)
+    case
+    when status.in?(%w(Met N/A))
+      true
+    when value == 'SHOULD' && status == 'Unmet' &&
+      justification.length >= MIN_SHOULD_LENGTH
+      true
+    when value == 'SUGGESTED' && status != '?'
+      true
+    else false
+    end
+  end
+  # rubocop:enable Metrics/CyclomaticComplexity
 end

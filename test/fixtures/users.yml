@@ -7,7 +7,7 @@ test_user:
   provider: local
 
 test_user2:
-  name: May Kessler
-  email: mkessler@example.com
+  name: Melissa Lewis
+  email: melissa@example.com
   password_digest: <%= User.digest('password1') %>
   provider: local

@@ -64,11 +64,10 @@ class UserTest < ActiveSupport::TestCase
     assert_not @user.valid?
   end
 
-
-  test "associated projects should be destroyed" do
+  test 'associated projects should be destroyed' do
     @user.save
-    @user.projects.create!(project_url: "https://www.example.org",
-                           repo_url: "https://www.example.org/code")
+    @user.projects.create!(project_url: 'https://www.example.org',
+                           repo_url: 'https://www.example.org/code')
     assert_difference 'Project.count', -1 do
       @user.destroy
     end

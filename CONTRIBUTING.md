@@ -23,12 +23,17 @@ when writing code.
 When adding or changing functionality, please include new tests to
 cover them.  The system uses minitest.
 
-Before submitting changes, please run "rake".
-This will run a set of tools to change the software, including:
+Before submitting changes, please run "rake" (no options),
+which will run a set of tools to look for problems, and fix the problems
+found.  In some cases it's okay to fix them by disabling the warning
+in that particular place, but be careful; it's often better to make a
+real change. The specific list of tools run is listed in lib/tasks/default.rake.
+Currently these include at least the following:
 
+* bundle test - checks dependency information
+* "rake test" - runs the test suite.
 * "rake rubocop" - runs Rubocop, which checks code style
+* "rake rails_best_practices" - check against rails best practices.
 * "rake brakeman" - runs Brakeman, which is a static source code analyzer
   to look for Ruby on Rails security vulnerabilities.
-* "rake test" - runs the test suite.
-
 

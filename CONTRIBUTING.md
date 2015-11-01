@@ -16,6 +16,7 @@ Before submitting changes, please run "rake" (no options) to look for problems, 
 
 * bundle - use bundle to check dependencies ("bundle check || bundle install")
 * "rake test" - runs the test suite
+* "rake markdownlint" - runs markdownlint (check for errors in markdown text)
 * "rake rubocop" - runs Rubocop, which checks code style against the [community Ruby style guide](https://github.com/bbatsov/ruby-style-guide)
 * "rake rails_best_practices" - check against rails best practices using the gem [rails_best_practices](http://rails-bestpractices.com/)
 * "rake brakeman" - runs Brakeman, which is a static source code analyzer

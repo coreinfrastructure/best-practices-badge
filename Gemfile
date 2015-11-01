@@ -24,6 +24,7 @@ group :development, :test do
   gem 'bullet', '4.14.10'
   gem 'bundler-audit'
   gem 'dotenv-rails', '2.0.2'
+  gem 'mdl', '0.2.1'
   gem 'pronto', '0.4.3'
   gem 'pronto-brakeman', '0.4.3'
   gem 'pronto-rails_best_practices', '0.4.0'

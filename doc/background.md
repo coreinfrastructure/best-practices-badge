@@ -572,7 +572,7 @@ See: <https://www.owasp.org/index.php/Category:OWASP_CLASP_Project>.
 Building Security In Maturity Model (BSIMM)
 provides information about organizational software security initiatives
 and lets people compare their initiatives with others'.
-https://www.bsimm.com/
+<https://www.bsimm.com/>
 
 ### Heartbleed Lessons Learned
 
@@ -807,7 +807,7 @@ of learning experiences...
 another interesting aspect of badges is the potential to signal
 finer-grained skills, knowledge or dispositions."
 
-The Mozilla OpenBadges effort at http://openbadges.org/ is focused on
+The Mozilla OpenBadges effort at <http://openbadges.org/> is focused on
 giving badges to individuals.
 This is a different focus than ours, which is focused on giving
 badges to *projects*, but there may be useful lessons or code to glean.
@@ -990,19 +990,19 @@ In 2014 a new make target called "kselftest" was added to the
 kernel build system
 (see <https://lwn.net/Articles/608959/> for more).
 The xfstests suite also performs tests and is actively maintained at
-http://oss.sgi.com/cgi-bin/gitweb.cgi?p=xfs/cmds/xfstests.git;a=summary
+<http://oss.sgi.com/cgi-bin/gitweb.cgi?p=xfs/cmds/xfstests.git;a=summary>
 There are automated test processes, including the
 [Linux test project](http://linux-test-project.github.io/)
 and
 [Autotest](http://autotest.github.io/).
-https://lwn.net/Articles/654071/
+<https://lwn.net/Articles/654071/>
 In 2015 the libnvdimm subsystem was added to the kernel's
 driver infrastructure (it provides services over persistent memory
 to make access to that memory safer and more reliable);
 it appears to be the first device-driver subsystem to integrate
 in-kernel interface mocking techniques in support of unit testing,
 as further discussed in
-https://lwn.net/Articles/654071/ .
+<https://lwn.net/Articles/654071/> .
 Many major GNU/Linux distributions also include some additional
 certification systems to check a Linux kernel.
 That said, [Greg Kroah-Hartman](https://www.youtube.com/watch?feature=player_detailpage&v=L2SED6sewRw#t=867s) notes that it is very difficult
@@ -1012,7 +1012,7 @@ strongly depends on community testing.
 A variety of static analysis tools are used to analyze the Linux kernel.
 The "sparse" static analysis tool was initially developed by
 Linus Torvalds and can be used to find certain kernel code problems.
-The "Coccinelle" tool (http://coccinelle.lip6.fr/) can also find
+The "Coccinelle" tool (<http://coccinelle.lip6.fr/>) can also find
 many problems and sometimes propose fixes.
 [Eduard Bachmakov worked on the clang static analyzer in 2013 to improve its ability to detect Linux kernel defects](http://www.linux.com/news/featured-blogs/200-libby-clark/749649-a-summer-spent-on-the-llvm-clang-static-analyzer-for-the-linux-kernel).
 [Linux Kernel Developer Responses to Static Analysis Bug Reports by Philip J. Guo and Dawson Engler](https://www.usenix.org/legacy/event/usenix09/tech/full_papers/guo/guo_html/)
@@ -1021,9 +1021,9 @@ using Coverity Scan results.
 
 The Linux kernel has been fuzzed using the Trinity fuzz tester.
 The future of the Trinity fuzzer is in doubt, however; see
-https://lwn.net/Articles/650824/ .
+<https://lwn.net/Articles/650824/> .
 There is also a specialized fuzzer for fuzzing perf_events
-https://lwn.net/Articles/653182/ .
+<https://lwn.net/Articles/653182/> .
 
 Note that running static analysis and fuzzing tools is typically not
 required of initial contributors.
@@ -1109,7 +1109,7 @@ increasing unit testing (their ideal is that every bug fixed gets a
 unit test to stop it from recurring),
 Jenkins / CI integration with gerrit to test across 3 platforms,
 and coding guidelines.
-https://people.gnome.org/~michael/blog/2015-08-05-under-the-hood-5-0.html
+<https://people.gnome.org/~michael/blog/2015-08-05-under-the-hood-5-0.html>
 
 The primary LibreOffice license is the Mozilla Public License version 2.0
 (MPL-2.0), and they ask that all contributions
@@ -1307,7 +1307,7 @@ Sizes Efficiently.&#8221;
 
 \[Howard2003\] Michael Howard, Jon Pincus, and Jeannette M. Wing.
 Measuring Relative Attack Surfaces. 2003.
-http://www.cs.cmu.edu/\~wing/publications/Howard-Wing03.pdf
+<http://www.cs.cmu.edu/\~wing/publications/Howard-Wing03.pdf>
 
 \[Manadhata2004\] Manadhata, Pratyusa, and Jeannette M. Wing. &#8220;Measuring
 a System&#8217;s Attack Surface.&#8221; January 2004. CMU-CS-04-102.
@@ -1325,7 +1325,7 @@ Software Engineering. 1976-12. Volume 2, number 4. Pp. 308-320.
 using software metrics - A survey. International Conference on
 Information Communication and Embedded Systems (ICICES). 2013.
 2013-02-21 and -22.
-http://ieeexplore.ieee.org/xpls/abs\_all.jsp?arnumber=6508369
+<http://ieeexplore.ieee.org/xpls/abs\_all.jsp?arnumber=6508369>
 
 \[Rodriguez2012\] Rodriguez, Daniel, Israel Herraiz, and Rachel Harrison.
 &#8220;On Software Engineering Repositories and their Open Problems.&#8221;
@@ -1341,7 +1341,7 @@ the ACM*. Volume 47 Issue 10, October 2004. Pages 83-87.
 closed source software: towards measuring security.&#8221; SAC &#8216;09 Proceedings
 of the 2009 ACM symposium on Applied Computing. Pages 2016-2023. ACM New
 York, NY, USA. ISBN: 978-1-60558-166-8 doi&gt;10.1145/1529282.1529731.
-http://dl.acm.org/citation.cfm?id=1529731
+<http://dl.acm.org/citation.cfm?id=1529731>
 
 \[Schryen2011\] Schryen, Guido. &#8220;Is Open Source Security a Myth?&#8221;
 *Communications of the ACM*, Vol. 54 No. 5, Pages 130-140.

@@ -1,8 +1,6 @@
-Best Practices Criteria for Open Source Software (OSS) (version 0.3.0)
-========================================================================
+# Best Practices Criteria for Open Source Software (OSS) (version 0.3.0)
 
-Introduction
-============
+## Introduction
 
 This is a *draft* of proposed best practices
 for open source software (OSS) projects.
@@ -86,8 +84,7 @@ if not, see introductory materials such as
 [*Producing Open Source Software* by Karl Fogel](http://producingoss.com/).
 
 
-Current criteria: Best Practices for OSS
-==============================================
+## Current criteria: Best Practices for OSS
 
 Here are the current *draft* criteria; it is certain to change.
 The criteria marked with &#8224; are intended to be automatically testable
@@ -177,7 +174,7 @@ same as the project URL), and license(s).
 
 *Vulnerability reporting process*
 
-- <a name="vulnerability-report-process"></a>The project MUST publish the process for reporting vulnerabilities on the project site.  E.g., a clearly designated mailing address on https://PROJECTSITE/security, often security@SOMEWHERE.  This MAY be the same as its bug reporting process. <sup>[<a href="#vulnerability-report-process">vulnerability-report-process</a>]&#8224;</sup>
+- <a name="vulnerability-report-process"></a>The project MUST publish the process for reporting vulnerabilities on the project site.  E.g., a clearly designated mailing address on <https://PROJECTSITE/security>, often security@SOMEWHERE.  This MAY be the same as its bug reporting process. <sup>[<a href="#vulnerability-report-process">vulnerability-report-process</a>]&#8224;</sup>
 - <a name="vulnerability-report-private"></a>If private vulnerability reports are supported, the project MUST include how to send the information in a way that is kept private.  E.g., a private defect report submitted on the web using TLS or an email encrypted using OpenPGP. If private vulnerability reports are not supported this criterion is automatically met. <sup>[<a href="#vulnerability-report-private">vulnerability-report-private</a>]</sup>
 - <a name="vulnerability-report-response"></a>The project MUST provide an initial response to a vulnerability report, on average, less than 7 days within the last 6 months.  (If a project is being spammed on its vulnerability report channel, it is okay to only count non-spam messages.) <sup>[<a href="#vulnerability-report-response">vulnerability-report-response</a>]</sup>
 
@@ -279,8 +276,7 @@ For example,  "make check", "mvn test", or "rake test". <sup>[<a href="#test-inv
 - *Rationale*: Static source code analysis and dynamic analysis tend to find different kinds of defects (including defects that lead to vulnerabilities), so combining them is more likely to be effective.
 
 
-Non-criteria
-============
+## Non-criteria
 
 We plan to *not* require any specific products or services.
 In particular, we plan to *not* require
@@ -305,8 +301,7 @@ Some highly mature projects rarely change and thus may have little activity.
 We *do*, however, require that the project be responsive
 if vulnerabilities are reported to the project (see above).
 
-Uniquely identifying a project
-==============================
+## Uniquely identifying a project
 
 One challenge is uniquely identifying a project.
 Our rails application gives a unique id to each new project, so
@@ -333,8 +328,7 @@ We will probably implement some search mechanisms so that people can
 enter common names and find projects.
 
 
-Why have criteria?
-==================
+## Why have criteria?
 
 The paper [Open badges for education: what are the implications at the intersection of open systems and badging?](http://www.researchinlearningtechnology.net/index.php/rlt/article/view/23563)
 identifies three general reasons for badging systems (all are valid for this):
@@ -351,8 +345,7 @@ projects document *why* they think they meet the criteria
 (so users can quickly see the project's rationale).
 
 
-Improving the criteria
-======================
+## Improving the criteria
 
 We are hoping to get good suggestions and feedback from the public;
 please contribute!

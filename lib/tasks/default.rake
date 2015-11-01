@@ -3,6 +3,7 @@ task(:default).clear.enhance %w(
   bundle_audit
   test
   rubocop
+  markdownlint
   rails_best_practices
   brakeman
 )
@@ -30,5 +31,11 @@ end
 
 desc 'Run bundle-audit - check for known vulnerabilities in dependencies'
 task :bundle_audit do
-  sh 'bundle-audit update && bundle-audit check'
+  sh 'bundle exec bundle-audit update && bundle exec bundle-audit check'
+end
+
+desc 'Run markdownlint (mdl) - check for markdown problems'
+task :markdownlint do
+  style_file = 'config/markdown_style.rb'
+  sh "find . -name '*.md' -exec bundle exec mdl -s #{style_file} {} +"
 end

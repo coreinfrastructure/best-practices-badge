@@ -11,7 +11,7 @@ Other components we use are:
 - Bootstrap
 - Jquery
 - Jquery UI
-- Imagesloaded https://github.com/desandro/imagesloaded
+- Imagesloaded <https://github.com/desandro/imagesloaded>
   (to ensure images are loaded before displaying them)
 - A number of supporting Ruby gems (see its Gemfile)
 
@@ -89,10 +89,10 @@ OAuth2 credentials stored as environment variables.  The variable names of Oauth
 If running on heroku, set config variables by following instructions on [2].
 If running locally, one way to start up the application is: 
 GITHUB_KEY='client id' GITHUB_SECRET='client secret' rails s 
-where *client id* and *client secret* are registered OAuth2 credentials of the app. The authorization callback URL in Github is: http://localhost:3000/auth/github
+where *client id* and *client secret* are registered OAuth2 credentials of the app. The authorization callback URL in Github is: <http://localhost:3000/auth/github>
 
-[1] https://github.com/settings/applications/new
-[2] https://devcenter.heroku.com/articles/config-vars
+[1] <https://github.com/settings/applications/new>
+[2] <https://devcenter.heroku.com/articles/config-vars>
 
 ## Automation - flow
 
@@ -272,9 +272,9 @@ Previously we hoped to auto-generate the form, but it's difficult to create a go
 
 Pages related to GitHub-related badges include:
 
-*   http://shields.io/ - serves files that display a badge (as good-looking scalable SVG files)
-*   https://github.com/badges/shields -  Shields badge specification, website and default API server (connected to shields.io)
-*   http://nicbell.net/blog/github-flair - a blog post that identifies and discusses popular GitHub flair (badges)
+*   <http://shields.io/> - serves files that display a badge (as good-looking scalable SVG files)
+*   <https://github.com/badges/shields> -  Shields badge specification, website and default API server (connected to shields.io)
+*   <http://nicbell.net/blog/github-flair> - a blog post that identifies and discusses popular GitHub flair (badges)
 
 We want GitHub users to think of this
 as &#8220;just another badge to get.&#8221;

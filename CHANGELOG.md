@@ -1,9 +1,10 @@
 # Change Log
+
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 This Change Log format is suggested by
-https://github.com/olivierlacan/keep-a-changelog/blob/master/CHANGELOG.md
+<https://github.com/olivierlacan/keep-a-changelog/blob/master/CHANGELOG.md>
 
 ## 2015-10-15
 ### Added
@@ -16,7 +17,6 @@ https://github.com/olivierlacan/keep-a-changelog/blob/master/CHANGELOG.md
 ## 2015-08-26
 ### Added
 - Added initial version of Ruby on Rails Application
-
 
 ## 2015-08-06
 ### Added

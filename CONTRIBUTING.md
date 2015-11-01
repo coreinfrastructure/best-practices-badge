@@ -15,6 +15,7 @@ When adding or changing functionality, please include new tests for them as part
 Before submitting changes, please run "rake" (no options) to look for problems, and fix the problems found.  In some cases it's okay to fix them by disabling the warning in that particular place, but be careful; it's often better to make a real change, even if it doesn't matter in that particular case. The specific list of tools run by default is listed in [default.rake](lib/tasks/default.rake).  Currently these include at least the following:
 
 * bundle - use bundle to check dependencies ("bundle check || bundle install")
+* "rake bundle_audit" - check for vulnerable dependencies
 * "rake test" - runs the test suite
 * "rake markdownlint" - runs markdownlint (check for errors in markdown text)
 * "rake rubocop" - runs Rubocop, which checks code style against the [community Ruby style guide](https://github.com/bbatsov/ruby-style-guide)

@@ -2,9 +2,9 @@
 
 Feedback and contributions are very welcome!  For specific proposals, please provide them as issues or pull requests via our [GitHub site](https://github.com/linuxfoundation/cii-best-practices-badge).  Pull requests are especially appreciated!  For general dicussion, feel free to use the [cii-badges mailing list](https://lists.coreinfrastructure.org/mailman/listinfo/cii-badges).
 
-If you just want to propose or discuss changes to the criteria, the first step is proposing changes to the criteria text, which is in the file [criteria.md](doc/criteria.md).  See [other.md](doc/other.md) and [background.md](docs/background.md) for related information.
+If you just want to propose or discuss changes to the criteria, the first step is proposing changes to the criteria text, which is in the file [criteria.md](doc/criteria.md).  See [other.md](doc/other.md) and [background.md](doc/background.md) for related information.
 
-To make changes to the "BadgeApp" web application that implements the criteria, you may find the following helpful; [INSTALL.md](docs/INSTALL.md) (installation information) and [implementation.md](docs/implementation.md) (implementation infomrmation).
+To make changes to the "BadgeApp" web application that implements the criteria, you may find the following helpful; [INSTALL.md](doc/INSTALL.md) (installation information) and [implementation.md](doc/implementation.md) (implementation infomrmation).
 
 The web application is written in Ruby on Rails.  Please follow the [community Ruby style guide](https://github.com/bbatsov/ruby-style-guide) when writing code, e.g., use 2-space indents in Ruby.
 

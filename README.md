@@ -24,6 +24,7 @@ There is also a [mailing list](https://lists.coreinfrastructure.org/mailman/list
 * Draft Badging **[Criteria](./doc/criteria.md)**
 * Draft **[Background](./doc/background.md)** on Badging
 * Draft **BadgeApp** application (this repo)
+* **[ChangeLog](./CHANGELOG.md)**
 * Current **[implementation](./doc/implementation.md)**  - notes about the BadgeApp implementation, useful if you want to contribute to it
 * Current **[Burndown](https://burndown.io/#linuxfoundation/cii-best-practices-badge/1)** and **[Kanban Board](https://waffle.io/linuxfoundation/cii-best-practices-badge)** of this project.
 

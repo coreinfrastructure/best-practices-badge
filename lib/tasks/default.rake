@@ -1,5 +1,6 @@
 task(:default).clear.enhance %w(
   bundle
+  bundle_audit
   test
   rubocop
   rails_best_practices
@@ -25,4 +26,9 @@ end
 desc 'Run bundle if needed'
 task :bundle do
   sh 'bundle check || bundle install'
+end
+
+desc 'Run bundle-audit - check for known vulnerabilities in dependencies'
+task :bundle_audit do
+  sh 'bundle-audit update && bundle-audit check'
 end

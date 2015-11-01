@@ -22,6 +22,7 @@ gem 'will_paginate', '3.0.7'
 group :development, :test do
   gem 'awesome_print', '1.6.1'
   gem 'bullet', '4.14.10'
+  gem 'bundler-audit'
   gem 'dotenv-rails', '2.0.2'
   gem 'pronto', '0.4.3'
   gem 'pronto-brakeman', '0.4.3'

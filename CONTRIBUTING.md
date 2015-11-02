@@ -16,9 +16,13 @@ Using the "rake" command (described below) implemented in the development enviro
 
 To make changes to the "BadgeApp" web application that implements the criteria, you may find the following helpful; [INSTALL.md](doc/INSTALL.md) (installation information) and [implementation.md](doc/implementation.md) (implementation infomrmation).
 
-The web application is written in Ruby on Rails.  Please follow the [community Ruby style guide](https://github.com/bbatsov/ruby-style-guide) when writing code, e.g., use 2-space indents in Ruby.
+The code should strive to be DRY (don't repeat yourself), clear, and obviously correct.  Some technical debt is inevitable, just don't bankrupt us with it.  Improved refactorizations are welcome.
 
-For Ruby please prefer the String operations that do not have side-effects (e.g., "+", "sub", or "gsub"), and consider freezing strings.  Do *not* modify a String in-place (e.g., using "<<", "sub!", or "gsub!") until you have applied ".dup" to it.  There are current plans that [Ruby 3's strings will be immutable](https://twitter.com/yukihiro_matz/status/634386185507311616).  See [issue 11473](https://bugs.ruby-lang.org/issues/11473) for more.  One proposal is to allow "dup" to produce a slightly different object (a mutable version of String), and since "dup" is already permitted in the language, this provides a simple backwards-compatible way for us to indicate that String is mutable in this case.  If you want to build a string using append, do this:
+The web application is written in Ruby on Rails.  Please generally follow the [community Ruby style guide](https://github.com/bbatsov/ruby-style-guide) when writing code, e.g., use 2-space indents in Ruby and the complementary [community Rails style guide](https://github.com/bbatsov/rails-style-guide).  We don't follow them slavishly, but we do generally try to follow them.
+
+In the Ruby and Rails code, generally prefer symbols over strings when they do not potentially come from the user.  Symbols are typically faster, with no loss of readability.
+
+In Ruby please prefer the String operations that do not have side-effects (e.g., "+", "sub", or "gsub"), and consider freezing strings.  Do *not* modify a String in-place (e.g., using "<<", "sub!", or "gsub!") until you have applied ".dup" to it.  There are current plans that [Ruby 3's strings will be immutable](https://twitter.com/yukihiro_matz/status/634386185507311616).  See [issue 11473](https://bugs.ruby-lang.org/issues/11473) for more.  One proposal is to allow "dup" to produce a slightly different object (a mutable version of String), and since "dup" is already permitted in the language, this provides a simple backwards-compatible way for us to indicate that String is mutable in this case.  If you want to build a string using append, do this:
 
 ~~~~ruby
 "".dup << 'Hello, ' << 'World'
@@ -26,7 +30,7 @@ For Ruby please prefer the String operations that do not have side-effects (e.g.
 
 There is a small amount of application-specific Javascript.  This is written in Javascript, not CoffeeScript; it's only a small amount of Javascript, and far more people know basic Javascript instead of CoffeeScript.
 
-When adding or changing functionality, please include new tests for them as part of your contribution.  The system uses minitest.
+When adding or changing functionality, please include new tests for them as part of your contribution.  We are using minitest.
 
 ## How to check proposed changes before submitting them
 

@@ -6,7 +6,9 @@ If you just want to propose or discuss changes to the criteria, the first step i
 
 To make changes to the "BadgeApp" web application that implements the criteria, you may find the following helpful; [INSTALL.md](doc/INSTALL.md) (installation information) and [implementation.md](doc/implementation.md) (implementation infomrmation).
 
-The web application is written in Ruby on Rails.  Please follow the [community Ruby style guide](https://github.com/bbatsov/ruby-style-guide) when writing code, e.g., use 2-space indents in Ruby.  The application-specific Javascript is written in Javascript (not CoffeeScript); it's only a small amount of Javascript, and far more people know basic Javascript instead of CoffeeScript.
+The web application is written in Ruby on Rails.  Please follow the [community Ruby style guide](https://github.com/bbatsov/ruby-style-guide) when writing code, e.g., use 2-space indents in Ruby.
+
+There is a smal amount of application-specific Javascript.  This is written in Javascript, not CoffeeScript; it's only a small amount of Javascript, and far more people know basic Javascript instead of CoffeeScript.
 
 All markdown files use the .md extension and use [GitHub-flavored markdown](https://help.github.com/articles/github-flavored-markdown/), *not* CommonMark or the original Markdown.  In particular, [newlines in paragraph-like content are considered as real line breaks](https://help.github.com/articles/writing-on-github/) unlike the original Markdown and CommonMark formats.
 

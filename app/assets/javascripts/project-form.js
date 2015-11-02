@@ -1,12 +1,13 @@
 // Do a polyfill for datalist if it's not already supported
 // (e.g., Safari fails to support polyfill at the time of this writing).
 // See https://github.com/thgreasi/datalist-polyfill/blob/master/README.md
-function polyfill_datalist() {
+function polyfillDatalist() {
   var nativedatalist = !!('list' in document.createElement('input')) &&
       !!(document.createElement('datalist') && window.HTMLDataListElement);
   if (!nativedatalist) {
     $('input[list]').each(function() {
-      var availableTags = $('#' + $(this).attr('list')).find('option').map(function() {
+      var availableTags = $('#' + $(this).attr('list')).find('option').
+                          map(function() {
         return this.value;
       }).get();
       $(this).autocomplete({ source: availableTags });
@@ -15,7 +16,7 @@ function polyfill_datalist() {
 };
 
 
-field_categories = {
+FIELD_CATEGORIES = {
   // "project_url" : "MUST",
   // "project_url_https" : "SUGGESTED",
   description_sufficient: 'MUST',
@@ -83,19 +84,19 @@ field_categories = {
   dynamic_analysis_fixed: 'MUST',
 }
 
-min_should_length = 5;
+MIN_SHOULD_LENGTH = 5;
 
-function is_enough(criteria) {
+function isEnough(criteria) {
   var criteria_status = '#project_' + criteria + '_status';
   if ($(criteria_status + '_na').is(':checked')) {
     return true;
   }
-  if (field_categories[criteria] === 'MUST') {
+  if (FIELD_CATEGORIES[criteria] === 'MUST') {
     return ($(criteria_status + '_met').is(':checked'));
-  } else if (field_categories[criteria] === 'SHOULD') {
+  } else if (FIELD_CATEGORIES[criteria] === 'SHOULD') {
     return ($(criteria_status + '_met').is(':checked') ||
            ($(criteria_status + '_unmet').is(':checked') &&
-              $('#project_' + criteria + '_justification').val().length >= min_should_length));
+              $('#project_' + criteria + '_justification').val().length >= MIN_SHOULD_LENGTH));
   } else {
     return ($(criteria_status + '_met').is(':checked') ||
            $(criteria_status + '_unmet').is(':checked'));
@@ -105,9 +106,9 @@ function is_enough(criteria) {
 function reset_progress_bar() {
   var total = 0;
   var enough = 0;
-  $.each(field_categories, function(key, value) {
+  $.each(FIELD_CATEGORIES, function(key, value) {
     total++;
-    if (is_enough(key)) {enough++;};
+    if (isEnough(key)) {enough++;};
   })
   var percentage = enough / total;
   var percent_s =  Math.round(percentage * 100).toString() + '%'
@@ -119,14 +120,14 @@ function changed_justification_text(criteria) {
   var criteria_just = '#project_' + criteria + '_justification';
   var criteria_status = '#project_' + criteria + '_status';
   if ($(criteria_status + '_unmet').is(':checked') &&
-       (field_categories[criteria] === 'SHOULD') &&
-       ($(criteria_just).val().length < min_should_length)) {
+       (FIELD_CATEGORIES[criteria] === 'SHOULD') &&
+       ($(criteria_just).val().length < MIN_SHOULD_LENGTH)) {
     $(criteria_just).addClass('required-data');
   } else {
     $(criteria_just).removeClass('required-data');
   }
 
-  if (is_enough(criteria)) {
+  if (isEnough(criteria)) {
     $('#' + criteria + '_enough').
         attr('src', $('#Thumbs_up_img').attr('src')).
         attr('alt', 'Enough for a badge!');
@@ -158,7 +159,7 @@ function update_criteria_display(criteria) {
     $(criteria_just).
        attr('placeholder',
          $('#' + criteria_unmet_placeholder).html().trim());
-    if ((field_categories[criteria] === 'MUST') ||
+    if ((FIELD_CATEGORIES[criteria] === 'MUST') ||
          (document.getElementById(criteria + '_unmet_suppress'))) {
       $(criteria_just).hide('fast');
     } else {
@@ -233,7 +234,7 @@ $(document).ready(function() {
 
     // Implement "press this button to make all crypto N/A"
     $('#all_crypto_na').click(function(e) {
-        $.each(field_categories, function(key, value) {
+        $.each(FIELD_CATEGORIES, function(key, value) {
           if ((/^crypto/).test(key)) {
             $('#project_' + key + '_status_na').prop('checked', true);
           }
@@ -245,7 +246,7 @@ $(document).ready(function() {
     // Use "imagesloaded" to wait for image load before displaying them
     imagesLoaded(document).on('always', function(instance) {
         // Set up the interactive displays of "enough".
-        $.each(field_categories, function(key, value) {
+        $.each(FIELD_CATEGORIES, function(key, value) {
           setup_field(key);
         })
         reset_progress_bar();
@@ -253,5 +254,5 @@ $(document).ready(function() {
   }
 
   // Polyfill datalist (for Safari users)
-  polyfill_datalist();
+  polyfillDatalist();
 });

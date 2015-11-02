@@ -6,6 +6,11 @@ require 'rails/all'
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
+# This turns on a higher level of verbosity (warnings) from Ruby.
+# Unfortunately it also triggers some false alarms from Rails, so we're
+# not enabling it by default:
+# $VERBOSE = true
+
 module BadgeApp
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified

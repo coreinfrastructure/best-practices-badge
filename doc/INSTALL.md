@@ -1,6 +1,6 @@
 # Installation instructions
 
-Here is how to install the "BadgeApp" web application, for either a development environment or for deployment.  On most systems this be a quick and painless process.
+Here is how to install the "BadgeApp" web application, for either a development environment or for deployment.  On most systems this is a fairly quick and painless process, because we empahsize using widely-used tools designed for the purpose.  Just follow the instructions below.
 
 The web application is implemented with Ruby on Rails.  In development we store data in SQLite; the production system stores the data in Postgres.
 
@@ -22,14 +22,14 @@ You also need to install [rbenv](https://github.com/sstephenson/rbenv) to follow
 
 ## Development environment install process
 
-First, use 'git' to download BadgeApp.  You can do this at the command line (assuming git is installed) with:
+First, use 'git' to download BadgeApp, and then "cd" into that directory.  You can do this at the command line (assuming git is installed) with:
 
 ~~~~
 git clone <https://github.com/linuxfoundation/cii-best-practices-badge.git>
 cd cii-best-practices-badge
 ~~~~
 
-For development we currently fix the version of Ruby at exactly 2.2.2.  We also need to install a number of gems (including the ones in Rails); we will install the versions specified in Gemfile.lock.  We will do completely separate per-project Gem installs, to prevent potential interference issues in the development environment.  Here's how to do that.  We presume that your current directory is the top directory of the project, aka cii-best-practices-badge.
+For development we currently fix the version of Ruby at exactly 2.2.2.  We also need to install a number of gems (including the ones in Rails); we will install the versions specified in Gemfile.lock.  We will do completely separate per-project Gem installs, to prevent potential interference issues in the development environment.  Here's a way to do that.  We presume that your current directory is the top directory of the project, aka cii-best-practices-badge.
 
 ~~~~
 # Force install Ruby 2.2.2 using rbenv:
@@ -46,7 +46,7 @@ bundle install       # Install gems we use in Gemfile.lock, including Rails
 rake db:setup        # Setup database and seed it with dummy data
 ~~~~
 
-Some documents about Rails will tell you to execute "bin/rake" instead of "rake" or to use "bundle exec ..." to execute programs.  Using rbenv-bundler (above) eliminates the need for that.
+Some documents about Rails will tell you to execute "bin/rake" instead of "rake" or to use "bundle exec ..." to execute programs.  Using rbenv-bundler (above) eliminates the need for that.  While "bundle exec..." or "bin/..." are widely used, they are also extremely error-prone user interfaces; if you forget the prefixes, then it can *appear* to work yet subtly do the wrong thing.  Using rbev-bundler means that the *easy* way is the *correct* way.  A vitally important way to prevent defects is to make the *easy* way the *correct* way.
 
 You can use "bundle outdated" to show the gems that are outdated; be sure to test after updating any gems.
 

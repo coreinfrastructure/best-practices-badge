@@ -5,7 +5,7 @@ class Project < ActiveRecord::Base
   MIN_SHOULD_LENGTH = 5
 
   # Map each criterion to ['MUST|SHOULD|SUGGESTED', na_allowed?]
-  FIELD_CATEGORIES = {
+  CRITERIA_INFO = {
     description_sufficient: ['MUST', false],
     interact: ['MUST', false],
     contribution: ['MUST', false],
@@ -95,19 +95,19 @@ class Project < ActiveRecord::Base
 
   validates :user_id, presence: true
 
-  FIELD_CATEGORIES.each do |criterion, info|
+  CRITERIA_INFO.each do |criterion, info|
     # validates column, allow_blank: true, length: { maximum: 25 }
     status = "#{criterion}_status".to_sym
     validates status, inclusion: (
       info[1] ? { in: STATUS_CHOICE_NA } : { in: STATUS_CHOICE })
   end
 
-  def self.field_category(field)
-    (FIELD_CATEGORIES[field.to_sym])[0]
+  def self.criterion_category(field)
+    (CRITERIA_INFO[field.to_sym])[0]
   end
 
   def self.valid_badge?(project)
-    FIELD_CATEGORIES.all? do |criterion, value|
+    CRITERIA_INFO.all? do |criterion, value|
       status = project["#{criterion}_status"]
       justification = project["#{criterion}_justification"]
       valid_category? status, justification, value[0]

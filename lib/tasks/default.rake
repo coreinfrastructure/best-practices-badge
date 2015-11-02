@@ -52,7 +52,7 @@ end
 desc 'Run jscs - Javascript style checker'
 task :jscs do
   jscs_exe = 'node_modules/.bin/jscs'
-  jscs_options = '--preset=google'
+  jscs_options = '--preset=node'
   jscs_files = 'app/assets/javascripts/application.js' + ' ' \
                'app/assets/javascripts/project-form.js'
   sh "#{jscs_exe} #{jscs_options} #{jscs_files}"

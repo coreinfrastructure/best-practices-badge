@@ -87,19 +87,19 @@ FIELD_CATEGORIES = {
 MIN_SHOULD_LENGTH = 5;
 
 function isEnough(criteria) {
-  var criteria_status = '#project_' + criteria + '_status';
-  if ($(criteria_status + '_na').is(':checked')) {
+  var criteriaStatus = '#project_' + criteria + '_status';
+  if ($(criteriaStatus + '_na').is(':checked')) {
     return true;
   }
   if (FIELD_CATEGORIES[criteria] === 'MUST') {
-    return ($(criteria_status + '_met').is(':checked'));
+    return ($(criteriaStatus + '_met').is(':checked'));
   } else if (FIELD_CATEGORIES[criteria] === 'SHOULD') {
-    return ($(criteria_status + '_met').is(':checked') ||
-           ($(criteria_status + '_unmet').is(':checked') &&
+    return ($(criteriaStatus + '_met').is(':checked') ||
+           ($(criteriaStatus + '_unmet').is(':checked') &&
               $('#project_' + criteria + '_justification').val().length >= MIN_SHOULD_LENGTH));
   } else {
-    return ($(criteria_status + '_met').is(':checked') ||
-           $(criteria_status + '_unmet').is(':checked'));
+    return ($(criteriaStatus + '_met').is(':checked') ||
+           $(criteriaStatus + '_unmet').is(':checked'));
   }
 }
 
@@ -118,8 +118,8 @@ function reset_progress_bar() {
 
 function changed_justification_text(criteria) {
   var criteria_just = '#project_' + criteria + '_justification';
-  var criteria_status = '#project_' + criteria + '_status';
-  if ($(criteria_status + '_unmet').is(':checked') &&
+  var criteriaStatus = '#project_' + criteria + '_status';
+  if ($(criteriaStatus + '_unmet').is(':checked') &&
        (FIELD_CATEGORIES[criteria] === 'SHOULD') &&
        ($(criteria_just).val().length < MIN_SHOULD_LENGTH)) {
     $(criteria_just).addClass('required-data');
@@ -141,10 +141,10 @@ function changed_justification_text(criteria) {
 
 function update_criteria_display(criteria) {
   var criteria_just = '#project_' + criteria + '_justification';
-  var criteria_status = '#project_' + criteria + '_status';
+  var criteriaStatus = '#project_' + criteria + '_status';
   var justification_value = document.getElementById('project_' + criteria + '_justification').value;
   var placeholder = '';
-  if ($(criteria_status + '_met').is(':checked')) {
+  if ($(criteriaStatus + '_met').is(':checked')) {
     var criteria_met_placeholder = criteria + '_met_placeholder';
     $(criteria_just).
        attr('placeholder',
@@ -154,7 +154,7 @@ function update_criteria_display(criteria) {
     } else {
       $(criteria_just).show('fast');
     }
-  } else if ($(criteria_status + '_unmet').is(':checked')) {
+  } else if ($(criteriaStatus + '_unmet').is(':checked')) {
     var criteria_unmet_placeholder = criteria + '_unmet_placeholder';
     $(criteria_just).
        attr('placeholder',
@@ -165,7 +165,7 @@ function update_criteria_display(criteria) {
     } else {
       $(criteria_just).show('fast');
     }
-  } else if ($(criteria_status + '_na').is(':checked')) {
+  } else if ($(criteriaStatus + '_na').is(':checked')) {
     var criteria_na_placeholder = criteria + '_na_placeholder';
     $(criteria_just).
        attr('placeholder',
@@ -175,7 +175,7 @@ function update_criteria_display(criteria) {
     } else {
       $(criteria_just).show('fast');
     }
-  } else if ($(criteria_status + '_').is(':checked')) {
+  } else if ($(criteriaStatus + '_').is(':checked')) {
     $(criteria_just).attr('placeholder', 'Please explain');
     $(criteria_just).hide('fast');
   }

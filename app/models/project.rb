@@ -6,47 +6,65 @@ class Project < ActiveRecord::Base
 
   # Map each criterion to ['MUST|SHOULD|SUGGESTED', na_allowed?]
   CRITERIA_INFO = {
+    # Basic Project Website Content
     description_sufficient: ['MUST', false],
     interact: ['MUST', false],
     contribution: ['MUST', false],
     contribution_criteria: ['SHOULD', false],
+    # OSS License
     license_location: ['MUST', false],
     oss_license: ['MUST', false],
     oss_license_osi: ['SUGGESTED', false],
+    # Documentation
     documentation_basics: ['MUST', false],
     documentation_interface: ['MUST', false],
+    # CHANGE CONTROL
+    # Public version-controlled source repository
     repo_url: ['MUST', false],
     repo_track: ['MUST', false],
     repo_interim: ['MUST', false],
     repo_distributed: ['SUGGESTED', false],
+    # Unique version numbering
     version_unique: ['MUST', false],
     version_semver: ['SUGGESTED', false],
     version_tags: ['SUGGESTED', false],
+    # ChangeLog
     changelog: ['MUST', false],
     changelog_vulns: ['MUST', false],
+    # REPORTING
+    # Bug-reporting process
     report_tracker: ['SUGGESTED', false],
     report_process: ['MUST', false],
     report_responses: ['MUST', false],
     enhancement_responses: ['SHOULD', false],
     report_archive: ['MUST', false],
+    # Vulnerability report process
     vulnerability_report_process: ['MUST', false],
     vulnerability_report_private: ['MUST', false],
     vulnerability_report_response: ['MUST', false],
+    # QUALITY
+    # Working build system
     build: ['MUST', false],
     build_common_tools: ['SUGGESTED', false],
     build_oss_tools: ['SHOULD', false],
+    # Automated test suite
     test: ['MUST', false],
     test_invocation: ['SHOULD', false],
     test_most: ['SUGGESTED', false],
     test_continuous_integration: ['SUGGESTED', false],
+    # New functionality testing
     test_policy: ['MUST', false],
     tests_are_added: ['MUST', false],
     tests_documented_added: ['SUGGESTED', false],
+    # Warning flags
     warnings: ['MUST', true],
     warnings_fixed: ['MUST', true],
     warnings_strict: ['SUGGESTED', true],
+    # SECURITY
+    # Secure development knowledge
     know_secure_design: ['MUST', false],
     know_common_errors: ['MUST', false],
+    # Use basic good cryptographic practices
     crypto_published: ['MUST', true],
     crypto_call: ['MUST', true],
     crypto_oss: ['MUST', true],
@@ -57,14 +75,19 @@ class Project < ActiveRecord::Base
     crypto_pfs: ['SHOULD', true],
     crypto_password_storage: ['MUST', true],
     crypto_random: ['MUST', true],
+    # Secured delivery against man-in-the-middle (MITM) attacks
     delivery_mitm: ['MUST', false],
     delivery_unsigned: ['MUST', false],
+    # Publicly-known Vulnerabilities fixed
     vulnerabilities_fixed_60_days: ['MUST', false],
     vulnerabilities_critical_fixed: ['SHOULD', false],
+    # ANALYSIS
+    # Static code analysis
     static_analysis: ['MUST', false],
     static_analysis_common_vulnerabilities: ['SUGGESTED', false],
     static_analysis_fixed: ['MUST', false],
     static_analysis_often: ['SUGGESTED', false],
+    # Dynamic code analysis
     dynamic_analysis: ['MUST', false],
     dynamic_analysis_unsafe: ['MUST', false],
     dynamic_analysis_enable_assertions: ['SUGGESTED', false],

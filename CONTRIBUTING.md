@@ -45,3 +45,6 @@ Before submitting changes, please run "rake" (no options) to look for problems, 
 * "rake brakeman" - runs Brakeman, which is a static source code analyzer
   to look for Ruby on Rails security vulnerabilities
 
+We externally use OWASP ZAP to try to detect other security problems;
+you are encouraged to use web application scanners to find and fix
+problems too.

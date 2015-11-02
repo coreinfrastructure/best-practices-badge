@@ -1,3 +1,6 @@
+// This Javascript supporting implementing the per project form used
+// for showing and editing information about a project.
+
 // Do a polyfill for datalist if it's not already supported
 // (e.g., Safari fails to support polyfill at the time of this writing).
 // See https://github.com/thgreasi/datalist-polyfill/blob/master/README.md
@@ -15,10 +18,11 @@ function polyfillDatalist() {
   }
 };
 
-
+// The field names are from a spec, so we need to allow snake format here.
+// jscs : disable requireCamelCaseOrUpperCaseIdentifiers
 FIELD_CATEGORIES = {
-  // "project_url" : "MUST",
-  // "project_url_https" : "SUGGESTED",
+  // Omitted: project_url : "MUST",
+  // Omitted: project_url_https : "SUGGESTED",
   description_sufficient: 'MUST',
   interact: 'MUST',
   contribution: 'MUST',
@@ -83,6 +87,7 @@ FIELD_CATEGORIES = {
   dynamic_analysis_enable_assertions: 'SUGGESTED',
   dynamic_analysis_fixed: 'MUST',
 }
+// jscs: : enable requireCamelCaseOrUpperCaseIdentifiers
 
 MIN_SHOULD_LENGTH = 5;
 

@@ -18,7 +18,7 @@ To make changes to the "BadgeApp" web application that implements the criteria, 
 
 The code should strive to be DRY (don't repeat yourself), clear, and obviously correct.  Some technical debt is inevitable, just don't bankrupt us with it.  Improved refactorizations are welcome.
 
-The web application is written in Ruby on Rails.  Please generally follow the [community Ruby style guide](https://github.com/bbatsov/ruby-style-guide) when writing code, e.g., use 2-space indents in Ruby and the complementary [community Rails style guide](https://github.com/bbatsov/rails-style-guide).  We don't follow them slavishly, but we do generally try to follow them.
+The web application is primarily written in Ruby on Rails.  Please generally follow the [community Ruby style guide](https://github.com/bbatsov/ruby-style-guide) and the complementary [community Rails style guide](https://github.com/bbatsov/rails-style-guide).  For example, use two-space indents in Ruby.  We don't follow them slavishly, but we do generally try to follow them.
 
 In the Ruby and Rails code, generally prefer symbols over strings when they do not potentially come from the user.  Symbols are typically faster, with no loss of readability.
 
@@ -28,7 +28,7 @@ In Ruby please prefer the String operations that do not have side-effects (e.g.,
 "".dup << 'Hello, ' << 'World'
 ~~~~
 
-There is a small amount of application-specific Javascript.  This is written in Javascript, not CoffeeScript; it's only a small amount of Javascript, and far more people know basic Javascript instead of CoffeeScript.  For Javascript we are using the [Node.js style guide](https://github.com/felixge/node-style-guide).
+There is a small amount of application-specific Javascript.  This is written in Javascript, not CoffeeScript; it's only a small amount of Javascript, so the advantages of CoffeeScript aren't obvious, and far more people know basic Javascript than CoffeeScript.  For Javascript we are using the [Node.js style guide](https://github.com/felixge/node-style-guide).
 
 When adding or changing functionality, please include new tests for them as part of your contribution.  We are using minitest.
 
@@ -45,6 +45,4 @@ Before submitting changes, please run "rake" (no options) to look for problems, 
 * "rake brakeman" - runs Brakeman, which is a static source code analyzer
   to look for Ruby on Rails security vulnerabilities
 
-We externally use OWASP ZAP to try to detect other security problems;
-you are encouraged to use web application scanners to find and fix
-problems too.
+We externally use OWASP ZAP to try to detect other security problems; you are encouraged to use web application scanners to find and fix problems too.

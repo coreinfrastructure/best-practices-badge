@@ -28,7 +28,7 @@ In Ruby please prefer the String operations that do not have side-effects (e.g.,
 "".dup << 'Hello, ' << 'World'
 ~~~~
 
-There is a small amount of application-specific Javascript.  This is written in Javascript, not CoffeeScript; it's only a small amount of Javascript, and far more people know basic Javascript instead of CoffeeScript.
+There is a small amount of application-specific Javascript.  This is written in Javascript, not CoffeeScript; it's only a small amount of Javascript, and far more people know basic Javascript instead of CoffeeScript.  For Javascript we are using the [Node.js style guide](https://github.com/felixge/node-style-guide).
 
 When adding or changing functionality, please include new tests for them as part of your contribution.  We are using minitest.
 

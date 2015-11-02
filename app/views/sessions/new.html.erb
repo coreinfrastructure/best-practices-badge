@@ -9,7 +9,7 @@
       <%= f.email_field :email, class: 'form-control' %>
 
       <%= f.label :password %>
-      <%= f.password_field :password, class: 'form-control' %>
+      <%= f.password_field :password, autocomplete: 'off', class: 'form-control' %>
       <%= hidden_field_tag :provider, "local" %>
       <%= f.submit "Log in", class: "btn btn-primary" %>
     <% end %>

@@ -4,69 +4,71 @@ class Project < ActiveRecord::Base
   STATUS_CHOICE_NA = (STATUS_CHOICE + %w(N/A)).freeze
   MIN_SHOULD_LENGTH = 5
 
+  # Map each criterion to ['MUST|SHOULD|SUGGESTED', na_allowed?]
   FIELD_CATEGORIES = {
-    'description_sufficient' => 'MUST',
-    'interact' => 'MUST',
-    'contribution' => 'MUST',
-    'contribution_criteria' => 'SHOULD',
-    'license_location' => 'MUST',
-    'oss_license' => 'MUST',
-    'oss_license_osi' => 'SUGGESTED',
-    'documentation_basics' => 'MUST',
-    'documentation_interface' => 'MUST',
-    'repo_url' => 'MUST',
-    'repo_track' => 'MUST',
-    'repo_interim' => 'MUST',
-    'repo_distributed' => 'SUGGESTED',
-    'version_unique' => 'MUST',
-    'version_semver' => 'SUGGESTED',
-    'version_tags' => 'SUGGESTED',
-    'changelog' => 'MUST',
-    'changelog_vulns' => 'MUST',
-    'report_tracker' => 'SUGGESTED',
-    'report_process' => 'MUST',
-    'report_responses' => 'MUST',
-    'enhancement_responses' => 'SHOULD',
-    'report_archive' => 'MUST',
-    'vulnerability_report_process' => 'MUST',
-    'vulnerability_report_private' => 'MUST',
-    'vulnerability_report_response' => 'MUST',
-    'build' => 'MUST',
-    'build_common_tools' => 'SUGGESTED',
-    'build_oss_tools' => 'SHOULD',
-    'test' => 'MUST',
-    'test_invocation' => 'SHOULD',
-    'test_most' => 'SUGGESTED',
-    'test_continuous_integration' => 'SUGGESTED',
-    'test_policy' => 'MUST',
-    'tests_are_added' => 'MUST',
-    'tests_documented_added' => 'SUGGESTED',
-    'warnings' => 'MUST',
-    'warnings_fixed' => 'MUST',
-    'warnings_strict' => 'SUGGESTED',
-    'know_secure_design' => 'MUST',
-    'know_common_errors' => 'MUST',
-    'crypto_published' => 'MUST',
-    'crypto_call' => 'MUST',
-    'crypto_oss' => 'MUST',
-    'crypto_keylength' => 'MUST',
-    'crypto_working' => 'MUST',
-    'crypto_weaknesses' => 'SHOULD',
-    'crypto_alternatives' => 'SHOULD',
-    'crypto_pfs' => 'SHOULD',
-    'crypto_password_storage' => 'MUST',
-    'crypto_random' => 'MUST',
-    'delivery_mitm' => 'MUST',
-    'delivery_unsigned' => 'MUST',
-    'vulnerabilities_fixed_60_days' => 'MUST',
-    'vulnerabilities_critical_fixed' => 'SHOULD',
-    'static_analysis' => 'MUST',
-    'static_analysis_common_vulnerabilities' => 'SUGGESTED',
-    'static_analysis_fixed' => 'MUST',
-    'static_analysis_often' => 'SUGGESTED',
-    'dynamic_analysis_unsafe' => 'MUST',
-    'dynamic_analysis_enable_assertions' => 'SUGGESTED',
-    'dynamic_analysis_fixed' => 'MUST' }.freeze
+    description_sufficient: ['MUST', false],
+    interact: ['MUST', false],
+    contribution: ['MUST', false],
+    contribution_criteria: ['SHOULD', false],
+    license_location: ['MUST', false],
+    oss_license: ['MUST', false],
+    oss_license_osi: ['SUGGESTED', false],
+    documentation_basics: ['MUST', false],
+    documentation_interface: ['MUST', false],
+    repo_url: ['MUST', false],
+    repo_track: ['MUST', false],
+    repo_interim: ['MUST', false],
+    repo_distributed: ['SUGGESTED', false],
+    version_unique: ['MUST', false],
+    version_semver: ['SUGGESTED', false],
+    version_tags: ['SUGGESTED', false],
+    changelog: ['MUST', false],
+    changelog_vulns: ['MUST', false],
+    report_tracker: ['SUGGESTED', false],
+    report_process: ['MUST', false],
+    report_responses: ['MUST', false],
+    enhancement_responses: ['SHOULD', false],
+    report_archive: ['MUST', false],
+    vulnerability_report_process: ['MUST', false],
+    vulnerability_report_private: ['MUST', false],
+    vulnerability_report_response: ['MUST', false],
+    build: ['MUST', false],
+    build_common_tools: ['SUGGESTED', false],
+    build_oss_tools: ['SHOULD', false],
+    test: ['MUST', false],
+    test_invocation: ['SHOULD', false],
+    test_most: ['SUGGESTED', false],
+    test_continuous_integration: ['SUGGESTED', false],
+    test_policy: ['MUST', false],
+    tests_are_added: ['MUST', false],
+    tests_documented_added: ['SUGGESTED', false],
+    warnings: ['MUST', true],
+    warnings_fixed: ['MUST', true],
+    warnings_strict: ['SUGGESTED', true],
+    know_secure_design: ['MUST', false],
+    know_common_errors: ['MUST', false],
+    crypto_published: ['MUST', true],
+    crypto_call: ['MUST', true],
+    crypto_oss: ['MUST', true],
+    crypto_keylength: ['MUST', true],
+    crypto_working: ['MUST', true],
+    crypto_weaknesses: ['SHOULD', true],
+    crypto_alternatives: ['SHOULD', true],
+    crypto_pfs: ['SHOULD', true],
+    crypto_password_storage: ['MUST', true],
+    crypto_random: ['MUST', true],
+    delivery_mitm: ['MUST', false],
+    delivery_unsigned: ['MUST', false],
+    vulnerabilities_fixed_60_days: ['MUST', false],
+    vulnerabilities_critical_fixed: ['SHOULD', false],
+    static_analysis: ['MUST', false],
+    static_analysis_common_vulnerabilities: ['SUGGESTED', false],
+    static_analysis_fixed: ['MUST', false],
+    static_analysis_often: ['SUGGESTED', false],
+    dynamic_analysis: ['MUST', false],
+    dynamic_analysis_unsafe: ['MUST', false],
+    dynamic_analysis_enable_assertions: ['SUGGESTED', false],
+    dynamic_analysis_fixed: ['MUST', false] }.freeze
 
   # Peojects are associated with users
   belongs_to :user
@@ -93,90 +95,22 @@ class Project < ActiveRecord::Base
 
   validates :user_id, presence: true
 
-  validates :project_url_status, inclusion: { in: STATUS_CHOICE }
-  validates :project_url_https_status, inclusion: { in: STATUS_CHOICE }
-  validates :description_sufficient_status, inclusion: { in: STATUS_CHOICE }
-  validates :interact_status, inclusion: { in: STATUS_CHOICE }
-  validates :contribution_status, inclusion: { in: STATUS_CHOICE }
-  validates :contribution_criteria_status, inclusion: { in: STATUS_CHOICE }
-  validates :license_location_status, inclusion: { in: STATUS_CHOICE }
-  validates :oss_license_status, inclusion: { in: STATUS_CHOICE }
-  validates :oss_license_osi_status, inclusion: { in: STATUS_CHOICE }
-  validates :documentation_basics_status, inclusion: { in: STATUS_CHOICE }
-  validates :documentation_interface_status, inclusion: { in: STATUS_CHOICE }
-  validates :repo_url_status, inclusion: { in: STATUS_CHOICE }
-  validates :repo_track_status, inclusion: { in: STATUS_CHOICE }
-  validates :repo_interim_status, inclusion: { in: STATUS_CHOICE }
-  validates :repo_distributed_status, inclusion: { in: STATUS_CHOICE }
-  validates :version_unique_status, inclusion: { in: STATUS_CHOICE }
-  validates :version_semver_status, inclusion: { in: STATUS_CHOICE }
-  validates :version_tags_status, inclusion: { in: STATUS_CHOICE }
-  validates :changelog_status, inclusion: { in: STATUS_CHOICE }
-  validates :changelog_vulns_status, inclusion: { in: STATUS_CHOICE }
-  validates :report_url_status, inclusion: { in: STATUS_CHOICE }
-  validates :report_tracker_status, inclusion: { in: STATUS_CHOICE }
-  validates :report_process_status, inclusion: { in: STATUS_CHOICE }
-  validates :report_responses_status, inclusion: { in: STATUS_CHOICE }
-  validates :enhancement_responses_status, inclusion: { in: STATUS_CHOICE }
-  validates :report_archive_status, inclusion: { in: STATUS_CHOICE }
-  validates :vulnerability_report_process_status, inclusion:
-                                                  { in: STATUS_CHOICE }
-  validates :vulnerability_report_private_status, inclusion:
-                                                  { in: STATUS_CHOICE }
-  validates :vulnerability_report_response_status, inclusion:
-                                                   { in: STATUS_CHOICE }
-  validates :build_status, inclusion: { in: STATUS_CHOICE }
-  validates :build_common_tools_status, inclusion: { in: STATUS_CHOICE }
-  validates :build_oss_tools_status, inclusion: { in: STATUS_CHOICE }
-  validates :test_status, inclusion: { in: STATUS_CHOICE }
-  validates :test_invocation_status, inclusion: { in: STATUS_CHOICE }
-  validates :test_most_status, inclusion: { in: STATUS_CHOICE }
-  validates :test_continuous_integration_status,
-            inclusion: { in: STATUS_CHOICE }
-  validates :test_policy_status, inclusion: { in: STATUS_CHOICE }
-  validates :tests_are_added_status, inclusion: { in: STATUS_CHOICE }
-  validates :tests_documented_added_status, inclusion: { in: STATUS_CHOICE }
-  validates :warnings_status, inclusion: { in: STATUS_CHOICE_NA }
-  validates :warnings_fixed_status, inclusion: { in: STATUS_CHOICE_NA }
-  validates :warnings_strict_status, inclusion: { in: STATUS_CHOICE_NA }
-  validates :know_secure_design_status, inclusion: { in: STATUS_CHOICE }
-  validates :know_common_errors_status, inclusion: { in: STATUS_CHOICE }
-  validates :crypto_published_status, inclusion: { in: STATUS_CHOICE_NA }
-  validates :crypto_call_status, inclusion: { in: STATUS_CHOICE_NA }
-  validates :crypto_oss_status, inclusion: { in: STATUS_CHOICE_NA }
-  validates :crypto_keylength_status, inclusion: { in: STATUS_CHOICE_NA }
-  validates :crypto_working_status, inclusion: { in: STATUS_CHOICE_NA }
-  validates :crypto_weaknesses_status, inclusion: { in: STATUS_CHOICE_NA }
-  validates :crypto_alternatives_status, inclusion: { in: STATUS_CHOICE_NA }
-  validates :crypto_pfs_status, inclusion: { in: STATUS_CHOICE_NA }
-  validates :crypto_password_storage_status, inclusion: { in: STATUS_CHOICE_NA }
-  validates :crypto_random_status, inclusion: { in: STATUS_CHOICE_NA }
-  validates :delivery_mitm_status, inclusion: { in: STATUS_CHOICE }
-  validates :delivery_unsigned_status, inclusion: { in: STATUS_CHOICE }
-  validates :vulnerabilities_fixed_60_days_status, inclusion:
-                                                   { in: STATUS_CHOICE }
-  validates :vulnerabilities_critical_fixed_status, inclusion:
-                                                    { in: STATUS_CHOICE }
-  validates :static_analysis_status, inclusion: { in: STATUS_CHOICE }
-  validates :static_analysis_common_vulnerabilities_status,
-            inclusion: { in: STATUS_CHOICE }
-  validates :static_analysis_fixed_status, inclusion: { in: STATUS_CHOICE }
-  validates :static_analysis_often_status, inclusion: { in: STATUS_CHOICE }
-  validates :dynamic_analysis_status, inclusion: { in: STATUS_CHOICE }
-  validates :dynamic_analysis_unsafe_status, inclusion: { in: STATUS_CHOICE }
-  validates :dynamic_analysis_enable_assertions_status, inclusion:
-                                                        { in: STATUS_CHOICE }
-  validates :dynamic_analysis_fixed_status, inclusion: { in: STATUS_CHOICE }
+  FIELD_CATEGORIES.each do |criterion, info|
+    # validates column, allow_blank: true, length: { maximum: 25 }
+    status = "#{criterion}_status".to_sym
+    validates status, inclusion: (
+      info[1] ? { in: STATUS_CHOICE_NA } : { in: STATUS_CHOICE })
+  end
 
   def self.field_category(field)
-    FIELD_CATEGORIES[field]
+    (FIELD_CATEGORIES[field.to_sym])[0]
   end
 
   def self.valid_badge?(project)
-    FIELD_CATEGORIES.all? do |key, value|
-      status = project["#{key}_status"]
-      justification = project["#{key}_justification"]
-      valid_category? status, justification, value
+    FIELD_CATEGORIES.all? do |criterion, value|
+      status = project["#{criterion}_status"]
+      justification = project["#{criterion}_justification"]
+      valid_category? status, justification, value[0]
     end
   end
 

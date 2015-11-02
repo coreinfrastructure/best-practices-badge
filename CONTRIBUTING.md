@@ -8,7 +8,13 @@ To make changes to the "BadgeApp" web application that implements the criteria, 
 
 The web application is written in Ruby on Rails.  Please follow the [community Ruby style guide](https://github.com/bbatsov/ruby-style-guide) when writing code, e.g., use 2-space indents in Ruby.
 
-There is a smal amount of application-specific Javascript.  This is written in Javascript, not CoffeeScript; it's only a small amount of Javascript, and far more people know basic Javascript instead of CoffeeScript.
+SPECIAL RULE FOR RUBY: In general, prefer the String operations that do not have side-effects (e.g., "+", "sub", or "gsub"), and consider freezing strings.  Do *not* modify a String in-place (e.g., using "<<", "sub!", or "gsub!") until you have applied ".dup" to it.  There are current plans that [Ruby 3's strings will be immutable](https://twitter.com/yukihiro_matz/status/634386185507311616).  See [issue 11473](https://bugs.ruby-lang.org/issues/11473) for more.  One proposal is to allow "dup" to produce a slightly different object (a mutable version of String), and since "dup" is already permitted in the language, this provides a simple backwards-compatible way for us to indicate that String is mutable in this case.  If you want to build a string using append, do this:
+
+~~~~ruby
+"".dup << 'Hello, ' << 'World'
+~~~~
+
+There is a small amount of application-specific Javascript.  This is written in Javascript, not CoffeeScript; it's only a small amount of Javascript, and far more people know basic Javascript instead of CoffeeScript.
 
 All markdown files use the .md extension and use [GitHub-flavored markdown](https://help.github.com/articles/github-flavored-markdown/), *not* CommonMark or the original Markdown.  In particular, [newlines in paragraph-like content are considered as real line breaks](https://help.github.com/articles/writing-on-github/) unlike the original Markdown and CommonMark formats.
 

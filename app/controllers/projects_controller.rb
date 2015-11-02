@@ -6,11 +6,113 @@ class ProjectsController < ApplicationController
 
   helper_method :repo_data
 
+  # GET /projects
+  # GET /projects.json
+  def index
+    @projects = Project.all
+  end
+
+  # GET /projects/1
+  # GET /projects/1.json
+  def show
+  end
+
+  def badge
+    @project = Project.find(params[:id])
+    respond_to do |format|
+      status = Project.valid_badge?(@project) ? 'passing' : 'failing'
+      format.svg do
+        send_file Rails.application.assets["badge-#{status}.svg"].pathname,
+                  disposition: 'inline'
+      end
+    end
+  end
+
+  # GET /projects/new
+  def new
+    @project = Project.new
+  end
+
+  # GET /projects/1/
+  def edit
+  end
+
+  # POST /projects
+  # POST /projects.json
+  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+  def create
+    @project = current_user.projects.build(project_params)
+
+    # Error out if project_url and repo_url are both empty... don't
+    # do a save yet.
+
+    respond_to do |format|
+      @project.project_url ||= set_homepage_url
+      if @project.save
+        flash[:success] = "Thanks for adding the Project!   Please fill out
+                           the rest of the information to get the Badge."
+        format.html { redirect_to edit_project_path(@project) }
+        format.json { render :show, status: :created, location: @project }
+      else
+        format.html { render :new }
+        format.json do
+          render json: @project.errors, status: :unprocessable_entity
+        end
+      end
+    end
+  end
+  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
+
+  # PATCH/PUT /projects/1
+  # PATCH/PUT /projects/1.json
+  # rubocop:disable Metrics/MethodLength
+  def update
+    respond_to do |format|
+      if @project.update(project_params)
+        format.html do
+          redirect_to @project, success: 'Project was successfully updated.'
+        end
+        format.json { render :show, status: :ok, location: @project }
+      else
+        format.html { render :edit }
+        format.json do
+          render json: @project.errors, status: :unprocessable_entity
+        end
+      end
+    end
+    # rubocop:enable Metrics/MethodLength
+  end
+
+  # DELETE /projects/1
+  # DELETE /projects/1.json
+  def destroy
+    @project.destroy
+    respond_to do |format|
+      @project.project_url ||= project_find_default_url
+      format.html do
+        redirect_to projects_url
+        flash[:success] = 'Project was successfully deleted.'
+      end
+      format.json { head :no_content }
+    end
+  end
+
+  def repo_data
+    github = Github.new oauth_token: session[:user_token], auto_pagination: true
+    github.repos.list.map do |repo|
+      [repo.full_name, repo.fork, repo.homepage, repo.html_url]
+    end
+  end
+
+  private
+
   PERMITTED_PARAMS =
   [
     :user_id,
     :name, :description, :project_url, :repo_url,
     :license,
+    :general_comments,
+
     # Project Website (auto-populated, currently not in the form)
     :project_url_status,
     :project_url_justification,
@@ -166,110 +268,8 @@ class ProjectsController < ApplicationController
     :dynamic_analysis_enable_assertions_status,
     :dynamic_analysis_enable_assertions_justification,
     :dynamic_analysis_fixed_status,
-    :dynamic_analysis_fixed_justification,
-
-    :general_comments
+    :dynamic_analysis_fixed_justification
   ].freeze
-
-  # GET /projects
-  # GET /projects.json
-  def index
-    @projects = Project.all
-  end
-
-  # GET /projects/1
-  # GET /projects/1.json
-  def show
-  end
-
-  def badge
-    @project = Project.find(params[:id])
-    respond_to do |format|
-      status = Project.valid_badge?(@project) ? 'passing' : 'failing'
-      format.svg do
-        send_file Rails.application.assets["badge-#{status}.svg"].pathname,
-                  disposition: 'inline'
-      end
-    end
-  end
-
-  # GET /projects/new
-  def new
-    @project = Project.new
-  end
-
-  # GET /projects/1/
-  def edit
-  end
-
-  # POST /projects
-  # POST /projects.json
-  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
-  def create
-    @project = current_user.projects.build(project_params)
-
-    # Error out if project_url and repo_url are both empty... don't
-    # do a save yet.
-
-    respond_to do |format|
-      @project.project_url ||= set_homepage_url
-      if @project.save
-        flash[:success] = "Thanks for adding the Project!   Please fill out
-                           the rest of the information to get the Badge."
-        format.html { redirect_to edit_project_path(@project) }
-        format.json { render :show, status: :created, location: @project }
-      else
-        format.html { render :new }
-        format.json do
-          render json: @project.errors, status: :unprocessable_entity
-        end
-      end
-    end
-  end
-  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
-
-  # PATCH/PUT /projects/1
-  # PATCH/PUT /projects/1.json
-  # rubocop:disable Metrics/MethodLength
-  def update
-    respond_to do |format|
-      if @project.update(project_params)
-        format.html do
-          redirect_to @project, success: 'Project was successfully updated.'
-        end
-        format.json { render :show, status: :ok, location: @project }
-      else
-        format.html { render :edit }
-        format.json do
-          render json: @project.errors, status: :unprocessable_entity
-        end
-      end
-    end
-    # rubocop:enable Metrics/MethodLength
-  end
-
-  # DELETE /projects/1
-  # DELETE /projects/1.json
-  def destroy
-    @project.destroy
-    respond_to do |format|
-      @project.project_url ||= project_find_default_url
-      format.html do
-        redirect_to projects_url
-        flash[:success] = 'Project was successfully deleted.'
-      end
-      format.json { head :no_content }
-    end
-  end
-
-  def repo_data
-    github = Github.new oauth_token: session[:user_token], auto_pagination: true
-    github.repos.list.map do |repo|
-      [repo.full_name, repo.fork, repo.homepage, repo.html_url]
-    end
-  end
-
-  private
 
   def set_homepage_url
     # Assign to repo.homepage if it exists, and else repo_url

@@ -49,11 +49,12 @@ end
 # This not currently included in default "rake"; it *works* but is very
 # noisy.  We need to determine which ruleset to apply,
 # and we need to fix the Javascript to match that.
+# We don't scan 'app/assets/javascripts/application.js';
+# it is primarily auto-generated code + special directives.
 desc 'Run jscs - Javascript style checker'
 task :jscs do
   jscs_exe = 'node_modules/.bin/jscs'
-  jscs_options = '--preset=node'
-  jscs_files = 'app/assets/javascripts/application.js' + ' ' \
-               'app/assets/javascripts/project-form.js'
+  jscs_options = '--preset=node-style-guide -m 9999'
+  jscs_files = 'app/assets/javascripts/project-form.js'
   sh "#{jscs_exe} #{jscs_options} #{jscs_files}"
 end

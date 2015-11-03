@@ -1,14 +1,28 @@
 #!/bin/bash
-
 # We use 'bash', not sh, to ensure that we have the 'type' command.
 
-echo 'install-badge-dev-env: Install development environment for BadgeApp.'
+
+echo 'install-badge-dev-env: Auto-install development environment for BadgeApp.'
 
 system_install_prefix='sudo'
 
 set -e -u # Error detector
-
 # set -x # Show progress
+
+
+# Define globals and functions.
+
+# This is the running list of system packages to install.
+PACKAGES=''
+
+# Add list of packages to the PACKAGES list. Rename packages as needed.
+add_pkg () {
+  for p ; do
+    if [ "$p" = '' ] ; then continue ; fi
+    if [ "$p" = '-' ] ; then continue ; fi
+    PACKAGES="$PACKAGES $p"
+  done
+}
 
 # Given a list of commands, return the first one that exists (if any)
 find_command () {
@@ -22,18 +36,6 @@ find_command () {
   # None found, return something useful.
   echo UNKNOWN
   false
-}
-
-# This is the running list of system packages to install.
-PACKAGES=''
-
-# Add list of packages to the PACKAGES list. Rename as needed.
-add_pkg () {
-  for p ; do
-    if [ "$p" = '' ] ; then continue ; fi
-    if [ "$p" = '-' ] ; then continue ; fi
-    PACKAGES="$PACKAGES $p"
-  done
 }
 
 

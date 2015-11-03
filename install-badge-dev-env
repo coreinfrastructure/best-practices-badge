@@ -1,6 +1,4 @@
-#!/bin/bash
-# We use 'bash', not sh, to ensure that we have the 'type' command.
-
+#!/bin/sh
 
 echo 'install-badge-dev-env: Auto-install development environment for BadgeApp.'
 
@@ -24,10 +22,15 @@ add_pkg () {
   done
 }
 
+# Return true iff $1 is a command
+is_command () {
+  command -v "$1" > /dev/null
+}
+
 # Given a list of commands, return the first one that exists (if any)
 find_command () {
   for f ; do
-    if type "$f" >/dev/null 2>&1 ; then
+    if is_command "$f" ; then
       echo "$f"
       true
       return
@@ -77,16 +80,16 @@ echo "Will use the installer command '$installer'"
 echo
 echo 'STAGE 2: Identifying the packages to install.'
 
-# Install Ruby - Rails and our application are written in it.
+# Install a bootstrap version of Ruby, if we don't already have one.
 # We'll actually install a specific version later, but this will help us
 # bootstrap the installation and building of that version.
-add_pkg ruby
+is_command ruby || add_pkg ruby
 
 # SQLite3 database system, used in development for data storage
 add_pkg sqlite3
 
 # C compiler for rebuilding a specific version of ruby.
-add_pkg gcc automake autoconf
+add_pkg gcc
 
 echo 'About to install system packages with the command:'
 echo "  $system_install_prefix $installer $PACKAGES"
@@ -97,11 +100,11 @@ $system_install_prefix $installer $PACKAGES
 echo
 echo 'STAGE 3: Install rbenv'
 
-if type rvm > /dev/null 2>&1 ; then
+if is_command 'rvm' ; then
   echo 'WARNING: rvm installed, may be incompatible with rbenv.' >&2
 fi
 
-if type rbenv > /dev/null 2>&1 ; then
+if is_command 'rbenv' ; then
   echo 'rbenv already installed.'
 else
   git clone https://github.com/sstephenson/rbenv.git ~/.rbenv
@@ -171,4 +174,5 @@ fi
 
 echo
 echo 'FINAL STAGE: Test to see if it is working'
-rake
+
+bin/rake

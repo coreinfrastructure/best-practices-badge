@@ -16,7 +16,7 @@ Using the "rake" command (described below) implemented in the development enviro
 
 ## Code changes
 
-To make changes to the "BadgeApp" web application that implements the criteria, you may find the following helpful; [INSTALL.md](doc/INSTALL.md) (installation information) and [implementation.md](doc/implementation.md) (implementation infomrmation).
+To make changes to the "BadgeApp" web application that implements the criteria, you may find the following helpful; [INSTALL.md](doc/INSTALL.md) (installation information) and [implementation.md](doc/implementation.md) (implementation information).
 
 The code should strive to be DRY (don't repeat yourself), clear, and obviously correct.  Some technical debt is inevitable, just don't bankrupt us with it.  Improved refactorizations are welcome.
 

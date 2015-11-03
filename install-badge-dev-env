@@ -23,6 +23,9 @@ PACKAGES=''
 add_pkg () {
   for p ; do
     if [ "$p" = '' ] || [ "$p" = '-' ] ; then continue ; fi
+    if [ "$p" = 'sqlite3' ] && [ "$manager" = 'yum' ] ; then
+      p='sqlite'
+    fi
     PACKAGES="$PACKAGES $p"
   done
 }
@@ -165,8 +168,15 @@ fi
 echo
 echo 'STAGE 4: For this project, force install fixed version of ruby'
 
-rbenv install --skip-existing 2.2.2
-rbenv local 2.2.2 # In this directory AND BELOW, use Ruby 2.2.2 instead.
+if is_command rbenv ; then
+  # Get ruby version from Gemfile.
+  ruby_version=$(grep '^ruby ' Gemfile | sed -e "s/ruby '//" -e "s/'.*//")
+  echo "Using rbenv to locally install ruby version ${ruby_version}"
+  rbenv install --skip-existing "$ruby_version"
+  rbenv local "$ruby_version" # In this directory AND BELOW, use this version.
+else
+  echo 'Skipped installing fixed version of ruby - no rbenv'
+fi
 
 echo
 echo 'STAGE 5: Install gems (including bundler and Rails)'

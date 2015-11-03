@@ -1,17 +1,22 @@
-#!/bin/sh
+#!/bin/bash
+
+# We use 'bash', not sh, to ensure that we have the 'type' command.
 
 echo 'install-badge-dev-env: Install development environment for BadgeApp.'
 
 system_install_prefix='sudo'
 
-set -e  # Error detector
+set -e -u # Error detector
+
+# set -x # Show progress
 
 # Given a list of commands, return the first one that exists (if any)
 find_command () {
-  for f in $* do
-    if type "$f" >/dev/null ; then
+  for f ; do
+    if type "$f" >/dev/null 2>&1 ; then
       echo "$f"
       true
+      return
     fi
   done
   # None found, return something useful.
@@ -24,7 +29,7 @@ PACKAGES=''
 
 # Add list of packages to the PACKAGES list. Rename as needed.
 add_pkg () {
-  for p in $* do
+  for p ; do
     if [ "$p" = '' ] ; then continue ; fi
     if [ "$p" = '-' ] ; then continue ; fi
     PACKAGES="$PACKAGES $p"
@@ -34,18 +39,18 @@ add_pkg () {
 
 # Main line.
 
-if ! [ -f 'install-badge-dev-env ] ; then
+if ! [ -f 'install-badge-dev-env' ] ; then
   echo 'Must run at top level.' >&2
   exit 1
 fi
 
 # First, figure out what package manager to use.
-
+echo
 echo 'STAGE 1: Determine the package manager to use.'
 
-if [ "$(uname)" == "Darwin" ]; then
+if [ "$(uname)" = "Darwin" ] ; then
   manager='brew'
-elif [ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]; then
+elif [ "$(expr substr $(uname -s) 1 10)" = "MINGW32_NT" ] ; then
   echo 'MINGW, will not work' >&2
   exit 1
 # elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
@@ -64,10 +69,10 @@ fi
 
 installer="$manager install"
 
-echo "Will use the command '$installer'"
+echo "Will use the installer command '$installer'"
 
 # Now start adding packages. 
-
+echo
 echo 'STAGE 2: Identifying the packages to install.'
 
 # Install Ruby - Rails and our application are written in it.
@@ -76,24 +81,25 @@ echo 'STAGE 2: Identifying the packages to install.'
 add_pkg ruby
 
 # SQLite3 database system, used in development for data storage
-add_pkg sqlite
+add_pkg sqlite3
 
 # C compiler for rebuilding a specific version of ruby.
 add_pkg gcc automake autoconf
 
-echo "About to install packages: $PACKAGES"
+echo 'About to install system packages with the command:'
+echo "  $system_install_prefix $installer $PACKAGES"
 $system_install_prefix $installer $PACKAGES
 
 
 # Install rbenv, to let us select a specific version of ruby.
-
+echo
 echo 'STAGE 3: Install rbenv'
 
-if type rvm > /dev/null ; then
+if type rvm > /dev/null 2>&1 ; then
   echo 'WARNING: rvm installed, may be incompatible with rbenv.' >&2
 fi
 
-if type rbenv > /dev/null ; then
+if type rbenv > /dev/null 2>&1 ; then
   echo 'rbenv already installed.'
 else
   git clone https://github.com/sstephenson/rbenv.git ~/.rbenv
@@ -118,27 +124,49 @@ else
 fi
 
 # This makes "bundle ..." use rbenv's version of Ruby:
-git clone git://github.com/carsomyr/rbenv-bundler.git \
-          $HOME/.rbenv/plugins/bundler
+if ! [ -e "$HOME/.rbenv/plugins/bundler" ] ; then
+  git clone git://github.com/carsomyr/rbenv-bundler.git \
+            "$HOME/.rbenv/plugins/bundler"
+fi
 
 # Force install Ruby 2.2.2 using rbenv.  This may cause a compile.
-
+echo
 echo 'STAGE 4: For this project, force install fixed version of ruby'
 
-rbenv install 2.2.2
+rbenv install --skip-existing 2.2.2
 rbenv local 2.2.2 # In this directory AND BELOW, use Ruby 2.2.2 instead.
 
+echo
 echo 'STAGE 5: Install gems (including bundler and Rails)'
 
-gem sources --add <https://rubygems.org>  # Ensure you're getting gems here
+gem sources --add https://rubygems.org  # Ensure you're getting gems here
 gem install bundler  # Install the "bundler" gem package manager.
 rbenv rehash
 bundle install       # Install gems we use in Gemfile.lock, including Rails
 
+echo
+echo 'STAGE 6: Set up database for development if necessary'
 
-echo 'STAGE 6: Database setup for development'
-rake db:setup        # Setup database and seed it with dummy data
+# Is the database already set up?
+rails console > .rconsole <<END_OF_COMMANDS
+def database_exists?
+  db="database"
+  ActiveRecord::Base.connection
+rescue ActiveRecord::NoDatabaseError
+  puts "#{db} not present"
+else
+  puts "#{db} present"
+end
+database_exists?
+END_OF_COMMANDS
 
+if grep 'database not present' .rconsole > /dev/null ; then
+  echo 'Running "rake db:setup" - the database is not present'
+  rake db:setup        # Setup database and seed it with dummy data
+else
+  echo 'Skipping "rake db:setup" - the database appears to be present'
+fi
 
+echo
 echo 'FINAL STAGE: Test to see if it is working'
 rake

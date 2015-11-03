@@ -61,10 +61,12 @@ elif [ "$(expr substr "$(uname -s)" 1 10)" = "MINGW32_NT" ] ; then
 # elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
 else
   # apt-get : Debian, Ubuntu
-  # yum : Red Hat Enterprise Linux, CentOS, some Fedora
   # dnf : some Fedora
+  # yum : Red Hat Enterprise Linux, CentOS, some Fedora
+  # zypper : SuSE
   # emerge : Gentoo
-  manager=$(find_command apt-get dnf yum emerge pkg)
+  # pkg : *BSDs
+  manager=$(find_command apt-get dnf yum zypper emerge pkg)
 fi
 
 if [ "$manager" = 'UNKNOWN' ] ; then

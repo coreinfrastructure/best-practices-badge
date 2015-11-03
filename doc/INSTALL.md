@@ -6,9 +6,24 @@ We provide a simple script that does the work, and we emphasize using widely-use
 
 ## Development environment prerequisites
 
-You need an Internet connection and a Unix-like system.  This includes a general-purpose Linux distribution (e.g., Ubuntu, Fedora, Debian, and Red Hat Enterprise Linux, or SuSE) or MacOS.  If you're using Windows, install virtual machine software (such as VirtualBox) and install Linux on a virtual machine. We do not expect Windows to work directly.
+You need a Unix-like system.  This includes a general-purpose Linux distribution (e.g., Ubuntu, Fedora, Debian, Red Hat Enterprise Linux, or SuSE) or MacOS.  If you're using Windows, install virtual machine software (such as VirtualBox) and install Linux on a virtual machine. We do not expect Windows to work directly.
 
 If you use a virtual machine for development, maximize its memory.  It will run in less memory, and in particular the production version uses less.  However, we enable many monitoring tools during development and they consume a lot of memory.
+
+You need a working Internet connection.  Some organizations use an SSL/TLS interception proxy, which intercepts all SSL/TLS traffic.  If you must work with those, and you are willing to completely trust that proxy, then you need to download and install that proxy's certificates.  E.G., to install them on Ubuntu, when your current directorty has the certificates as .crt files, run this:
+
+~~~~sh
+# ONLY do this if you have an SSL/TLS interception proxy and are using Ubuntu
+sudo bash
+ca=/usr/share/ca-certificates
+tip=tls-interception-proxy
+mkdir -p $ca/$tip
+cp *.crt $ca/$tip
+cd $ca
+ls $tip/* >> /etc/ca-certificates.conf
+update-ca-certificates
+exit # End "sudo bash"
+~~~~
 
 If you're using MacOS, you need to install Homebrew (it provides the package manager command <tt>brew</tt>).  See <http://brew.sh/> for installation instructions. As reported by <tt>brew doctor</tt>, you should also do the following (if it isn't already there) so that updated programs from brew take precedence:
 

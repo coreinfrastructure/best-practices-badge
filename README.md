@@ -18,14 +18,15 @@ to produce better software, including more secure software.
 
 This is an early version of this material;
 we are releasing it so we can get feedback.
-Feedback is welcome via the [GitHub site](https://github.com/linuxfoundation/cii-best-practices-badge) as issues or pull requests.
+Feedback is welcome via the [GitHub site](https://github.com/linuxfoundation/cii-best-practices-badge) as issues or pull requests. 
 There is also a [mailing list](https://lists.coreinfrastructure.org/mailman/listinfo/cii-badges) for general discussion.
 
 * Draft Badging **[Criteria](./doc/criteria.md)**
 * Draft **[Background](./doc/background.md)** on Badging
 * Draft **BadgeApp** application (this repo)
 * **[ChangeLog](./CHANGELOG.md)**
-* Current **[implementation](./doc/implementation.md)**  - notes about the BadgeApp implementation, useful if you want to contribute to it
+* Current **[implementation](./doc/implementation.md)**  - notes about the BadgeApp implementation
+* Information on how to **[contribute](./CONTRIBUTING.md)**
 * Current **[Burndown](https://burndown.io/#linuxfoundation/cii-best-practices-badge/1)** and **[Kanban Board](https://waffle.io/linuxfoundation/cii-best-practices-badge)** of this project.
 
 All material is released under both the [MIT license](./LICENSE)

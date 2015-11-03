@@ -1,0 +1,144 @@
+#!/bin/sh
+
+echo 'install-badge-dev-env: Install development environment for BadgeApp.'
+
+system_install_prefix='sudo'
+
+set -e  # Error detector
+
+# Given a list of commands, return the first one that exists (if any)
+find_command () {
+  for f in $* do
+    if type "$f" >/dev/null ; then
+      echo "$f"
+      true
+    fi
+  done
+  # None found, return something useful.
+  echo UNKNOWN
+  false
+}
+
+# This is the running list of system packages to install.
+PACKAGES=''
+
+# Add list of packages to the PACKAGES list. Rename as needed.
+add_pkg () {
+  for p in $* do
+    if [ "$p" = '' ] ; then continue ; fi
+    if [ "$p" = '-' ] ; then continue ; fi
+    PACKAGES="$PACKAGES $p"
+  done
+}
+
+
+# Main line.
+
+if ! [ -f 'install-badge-dev-env ] ; then
+  echo 'Must run at top level.' >&2
+  exit 1
+fi
+
+# First, figure out what package manager to use.
+
+echo 'STAGE 1: Determine the package manager to use.'
+
+if [ "$(uname)" == "Darwin" ]; then
+  manager='brew'
+elif [ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]; then
+  echo 'MINGW, will not work' >&2
+  exit 1
+# elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
+else
+  # apt-get : Debian, Ubuntu
+  # yum : Red Hat Enterprise Linux, CentOS, some Fedora
+  # dnf : some Fedora
+  # emerge : Gentoo
+  manager=$(find_command apt-get dnf yum emerge pkg)
+fi
+
+if [ "$manager" = 'UNKNOWN' ] ; then
+  echo 'Could not find a system package manager.'
+  exit 1
+fi
+
+installer="$manager install"
+
+echo "Will use the command '$installer'"
+
+# Now start adding packages. 
+
+echo 'STAGE 2: Identifying the packages to install.'
+
+# Install Ruby - Rails and our application are written in it.
+# We'll actually install a specific version later, but this will help us
+# bootstrap the installation and building of that version.
+add_pkg ruby
+
+# SQLite3 database system, used in development for data storage
+add_pkg sqlite
+
+# C compiler for rebuilding a specific version of ruby.
+add_pkg gcc automake autoconf
+
+echo "About to install packages: $PACKAGES"
+$system_install_prefix $installer $PACKAGES
+
+
+# Install rbenv, to let us select a specific version of ruby.
+
+echo 'STAGE 3: Install rbenv'
+
+if type rvm > /dev/null ; then
+  echo 'WARNING: rvm installed, may be incompatible with rbenv.' >&2
+fi
+
+if type rbenv > /dev/null ; then
+  echo 'rbenv already installed.'
+else
+  git clone https://github.com/sstephenson/rbenv.git ~/.rbenv
+
+  # ensure rbenv is on the PATH when running the rest of this script.
+  export PATH="$HOME/.rbenv/bin:$PATH"
+
+  # Make rbenv a permanent fixture.
+  rbenv_set=0
+  for f in .bashrc .bash_profile .profile
+  do
+    if [ -f "$HOME/$f" ] ; then
+      if ! grep '\.rbenv/bin' > /dev/null ; then
+        echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> "$HOME/$f"
+      fi
+      rbenv_set=1
+    fi
+  done
+  if [ $rbenv_set = 0 ] ; then
+    echo 'Warning: Did not modify the PATH in a shell rc or profile.' >&2
+  fi
+fi
+
+# This makes "bundle ..." use rbenv's version of Ruby:
+git clone git://github.com/carsomyr/rbenv-bundler.git \
+          $HOME/.rbenv/plugins/bundler
+
+# Force install Ruby 2.2.2 using rbenv.  This may cause a compile.
+
+echo 'STAGE 4: For this project, force install fixed version of ruby'
+
+rbenv install 2.2.2
+rbenv local 2.2.2 # In this directory AND BELOW, use Ruby 2.2.2 instead.
+
+echo 'STAGE 5: Install gems (including bundler and Rails)'
+
+gem sources --add <https://rubygems.org>  # Ensure you're getting gems here
+gem install bundler  # Install the "bundler" gem package manager.
+rbenv rehash
+bundle install       # Install gems we use in Gemfile.lock, including Rails
+
+
+echo 'STAGE 6: Database setup for development'
+rake db:setup        # Setup database and seed it with dummy data
+
+
+echo 'FINAL STAGE: Test to see if it is working'
+rake

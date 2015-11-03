@@ -6,6 +6,8 @@ Feedback and contributions are very welcome!  For specific proposals, please pro
 
 If you just want to propose or discuss changes to the criteria, the first step is proposing changes to the criteria text, which is in the file [criteria.md](doc/criteria.md).  The "doc/" directory has information you may find helpful, including [other.md](doc/other.md) and [background.md](doc/background.md).
 
+Submitting pull requests is especially helpful.  We strongly recommend creating different branches for different (logical) changes, and creating a pull request when you're done.  See the GitHub documentation on [creating branches](https://help.github.com/articles/creating-and-deleting-branches-within-your-repository/) and [using pull requests](https://help.github.com/articles/using-pull-requests/).
+
 ## Documentation changes
 
 Most of the documentation is in "markdown" format.  All markdown files use the .md filename extension and use [GitHub-flavored markdown](https://help.github.com/articles/github-flavored-markdown/), *not* CommonMark or the original Markdown.  In particular, [newlines in paragraph-like content are considered as real line breaks](https://help.github.com/articles/writing-on-github/) unlike the original Markdown and CommonMark formats.
@@ -46,3 +48,9 @@ Before submitting changes, please run "rake" (no options) to look for problems, 
   to look for Ruby on Rails security vulnerabilities
 
 We externally use OWASP ZAP to try to detect other security problems; you are encouraged to use web application scanners to find and fix problems too.
+
+
+## Creating pull requests
+
+To submit a specific already-created change, submit a pull request. See: <https://help.github.com/articles/using-pull-requests/>
+

@@ -1,9 +1,12 @@
 #!/bin/sh
 echo 'install-badge-dev-env: Auto-install development environment for BadgeApp.'
+echo 'See INSTALL.md for more information.'
 
-# Configure options.
-system_install_prefix='sudo'
-
+# Set configure options defaults; set their values with environment variables.
+: "${MYINSTALL_SYSTEM_INSTALL_PREFIX:=sudo}"
+: "${MYINSTALL_SYSTEM_INSTALL_PACKAGES:=yes}"
+: "${MYINSTALL_RBENV:=yes}" # Should we install rbenv?
+: "${MYINSTALL_RBENV_BUILD:=yes}" # Should we install rbenv-build?
 
 # If you modify this script, please check it with the "shellcheck"
 # shell static analysis tool.
@@ -55,7 +58,7 @@ fi
 echo
 echo 'STAGE 1: Determine the package manager to use.'
 
-if [ "$(uname)" = "Darwin" ] ; then
+if [ "$(uname)" = 'Darwin' ] ; then
   manager='brew'
   if ! is_command brew ; then
     echo 'Downloading and installing brew.'
@@ -104,11 +107,14 @@ add_pkg sqlite3
 # C compiler for rebuilding a specific version of ruby.
 add_pkg gcc
 
-echo 'About to install system packages with the command:'
-echo "  $system_install_prefix $installer $PACKAGES"
-
-# shellcheck disable=SC2086
-$system_install_prefix $installer $PACKAGES
+if [ "$MYINSTALL_SYSTEM_INSTALL_PACKAGES" = 'yes' ] ; then
+  echo 'About to install system packages with the command:'
+  echo "  ${MYINSTALL_SYSTEM_INSTALL_PREFIX} $installer $PACKAGES"
+  # shellcheck disable=SC2086
+  $MYINSTALL_SYSTEM_INSTALL_PREFIX $installer $PACKAGES
+else
+  echo 'Skipping system package install.'
+fi
 
 
 # Install rbenv, to let us select a specific version of ruby.
@@ -121,7 +127,10 @@ fi
 
 if is_command 'rbenv' ; then
   echo 'rbenv already installed.'
+elif [ "$MYINSTALL_RBENV" != 'yes' ] ; then
+  echo 'Skipping rbenv install.'
 else
+  echo 'Downloading and installing rbenv from GitHub' >&2
   git clone https://github.com/sstephenson/rbenv.git ~/.rbenv
 
   # ensure rbenv is on the PATH when running the rest of this script.
@@ -145,7 +154,9 @@ else
 fi
 
 # This makes "bundle ..." use rbenv's version of Ruby:
-if ! [ -e "$HOME/.rbenv/plugins/bundler" ] ; then
+if [ "${MYINSTALL_RBENV_BUILD}" = 'yes' ] && \
+   ! [ -e "$HOME/.rbenv/plugins/bundler" ] ; then
+  echo 'Downloading and installing rbenv-bundler from GitHub' >&2
   git clone git://github.com/carsomyr/rbenv-bundler.git \
             "$HOME/.rbenv/plugins/bundler"
 fi
@@ -190,5 +201,12 @@ fi
 
 echo
 echo 'FINAL STAGE: Test to see if it is working'
+
+# We don't want to force everyone do this, but a check on install
+# if the tools already happen to be available seems reasonable.
+if is_command shellcheck ; then
+  echo 'Statically checking this install command'
+  shellcheck install-badge-dev-env
+fi
 
 bin/rake

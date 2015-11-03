@@ -55,7 +55,7 @@ echo 'STAGE 1: Determine the package manager to use.'
 
 if [ "$(uname)" = "Darwin" ] ; then
   manager='brew'
-elif [ "$(expr substr $(uname -s) 1 10)" = "MINGW32_NT" ] ; then
+elif [ "$(expr substr "$(uname -s)" 1 10)" = "MINGW32_NT" ] ; then
   echo 'MINGW, will not work' >&2
   exit 1
 # elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then

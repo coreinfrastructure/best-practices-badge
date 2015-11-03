@@ -1,11 +1,14 @@
 #!/bin/sh
-
 echo 'install-badge-dev-env: Auto-install development environment for BadgeApp.'
 
+# Configure options.
 system_install_prefix='sudo'
 
-set -e -u # Error detector
-# set -x # Show progress
+
+# If you modify this script, please check it with the "shellcheck"
+# shell static analysis tool.
+# The following enables some run-time error detection:
+set -e -u
 
 
 # Define globals and functions.
@@ -13,11 +16,10 @@ set -e -u # Error detector
 # This is the running list of system packages to install.
 PACKAGES=''
 
-# Add list of packages to the PACKAGES list. Rename packages as needed.
+# Add list of packages to the PACKAGES list. Rename packages as needed
 add_pkg () {
   for p ; do
-    if [ "$p" = '' ] ; then continue ; fi
-    if [ "$p" = '-' ] ; then continue ; fi
+    if [ "$p" = '' ] || [ "$p" = '-' ] ; then continue ; fi
     PACKAGES="$PACKAGES $p"
   done
 }
@@ -55,32 +57,41 @@ echo 'STAGE 1: Determine the package manager to use.'
 
 if [ "$(uname)" = "Darwin" ] ; then
   manager='brew'
-elif [ "$(expr substr "$(uname -s)" 1 10)" = "MINGW32_NT" ] ; then
-  echo 'MINGW, will not work' >&2
-  exit 1
-# elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
+  if ! is_command brew ; then
+    echo 'Downloading and installing brew.'
+    brew_url='https://raw.githubusercontent.com/Homebrew/install/master/install'
+    ruby -e "$(curl -fsSL $brew_url)"
+  fi
 else
   # apt-get : Debian, Ubuntu
   # dnf : some Fedora
   # yum : Red Hat Enterprise Linux, CentOS, some Fedora
   # zypper : SuSE
   # emerge : Gentoo
-  # pkg : *BSDs
-  manager=$(find_command apt-get dnf yum zypper emerge pkg)
+  # pkg : *BSDs.  We're not trying ports vs. packages; patches welcome.
+  # urpmi : Mageia/Mandriva
+  manager=$(find_command apt-get dnf yum zypper emerge pkg urpmi)
+  if [ "$manager" = 'UNKNOWN' ] ; then
+    echo 'Could not find a system package manager.'
+    exit 1
+  fi
 fi
 
-if [ "$manager" = 'UNKNOWN' ] ; then
-  echo 'Could not find a system package manager.'
-  exit 1
-fi
 
-installer="$manager install"
+if [ "$manager" = 'urpmi' ]; then
+  installer="$manager"
+else
+  installer="$manager install"
+fi
 
 echo "Will use the installer command '$installer'"
 
 # Now start adding packages. 
 echo
-echo 'STAGE 2: Identifying the packages to install.'
+echo 'STAGE 2: Identifying and install system packages'
+
+# git should already be installed, but we'll make sure of it.
+is_command git || add_pkg git
 
 # Install a bootstrap version of Ruby, if we don't already have one.
 # We'll actually install a specific version later, but this will help us
@@ -95,6 +106,8 @@ add_pkg gcc
 
 echo 'About to install system packages with the command:'
 echo "  $system_install_prefix $installer $PACKAGES"
+
+# shellcheck disable=SC2086
 $system_install_prefix $installer $PACKAGES
 
 
@@ -120,6 +133,7 @@ else
   do
     if [ -f "$HOME/$f" ] ; then
       if ! grep '\.rbenv/bin' > /dev/null ; then
+        # shellcheck disable=SC2016
         echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> "$HOME/$f"
       fi
       rbenv_set=1

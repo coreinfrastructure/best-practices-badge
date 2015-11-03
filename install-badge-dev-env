@@ -190,24 +190,18 @@ echo
 echo 'STAGE 6: Set up database for development if necessary'
 
 # Is the database already set up?
-rails console > .rconsole <<END_OF_COMMANDS
-def database_exists?
-  db="database"
-  ActiveRecord::Base.connection
-rescue ActiveRecord::NoDatabaseError
-  puts "#{db} not present"
-else
-  puts "#{db} present"
-end
-database_exists?
-END_OF_COMMANDS
+db_present=$(rails runner 'puts ActiveRecord::Base.connection.tables.present?')
 
-if grep 'database not present' .rconsole > /dev/null ; then
-  echo 'Running "rake db:setup" - the database is not present'
-  rake db:setup        # Setup database and seed it with dummy data
-else
-  echo 'Skipping "rake db:setup" - the database appears to be present'
-fi
+case "$db_present" in
+false)
+  echo 'Database not present. Running "rake db:setup" to seed with dummy data'
+  rake db:setup ;;
+true)
+  echo 'Skipping "rake db:setup" - the database appears to be present' ;;
+*)
+  echo 'UNEXPECTED RESULT from checking if database is set up' >&2
+  echo " $db_present" >&2 ;;
+esac
 
 echo
 echo 'FINAL STAGE: Test to see if it is working'

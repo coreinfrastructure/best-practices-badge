@@ -65,7 +65,7 @@ fi
 echo
 echo 'STAGE 1: Determine the package manager to use.'
 
-if [ "$(uname)" = 'Darwin' ] ; then
+if [ "$(uname)" = 'Darwin' ] ; then  # MacOS.  Use 'brew'.
   manager='brew'
   if ! is_command brew ; then
     echo 'Downloading and installing brew.'
@@ -149,6 +149,9 @@ fi
 
 
 # Install rbenv, to let us select a specific version of ruby.
+# TODO: Should we install the system versions of rbenv and ruby-build,
+# or use the latest version from GitHub?  Here we get them from GitHub,
+# since that is the latest and works for all platforms.
 echo
 echo 'STAGE 3: Install rbenv'
 

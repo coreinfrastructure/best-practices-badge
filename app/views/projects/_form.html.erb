@@ -753,12 +753,12 @@ It is SUGGESTED that static source code analysis occur on every commit or at lea
 
       <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
               criteria: "dynamic_analysis", desc: %{
-At least one dynamic analysis tool MUST be applied to any proposed major production
+It is SUGGESTED that at least one dynamic analysis tool be applied to any proposed major production
 release of the software before its release.},
               details: %{
 A dynamic analysis tool examines the software
 by executing it with specific inputs.
-For example, the project MAY use a fuzzing tool (e.g., <a href="http://lcamtuf.coredump.cx/afl/">American Fuzzy Lop</a>) or a web application scanner (e.g., <a href="https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project">OWASP ZAP</a> or <a href="http://w3af.org/">w3af</a>).  For purposes of this criterion the dynamic analysis tool MUST vary the inputs in some way to look for various kinds of problems <em>or</em> be an automated test suite with at least 80% branch coverage.  The <a href="https://en.wikipedia.org/wiki/Dynamic_program_analysis">Wikipedia page on dynamic analysis</a> and the <a href="https://www.owasp.org/index.php/Fuzzing">OWASP page on fuzzing</a> identify some dynamic analysis tools.
+For example, the project MAY use a fuzzing tool (e.g., <a href="http://lcamtuf.coredump.cx/afl/">American Fuzzy Lop</a>) or a web application scanner (e.g., <a href="https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project">OWASP ZAP</a> or <a href="http://w3af.org/">w3af</a>).  For purposes of this criterion the dynamic analysis tool needs o vary the inputs in some way to look for various kinds of problems <em>or</em> be an automated test suite with at least 80% branch coverage.  The <a href="https://en.wikipedia.org/wiki/Dynamic_program_analysis">Wikipedia page on dynamic analysis</a> and the <a href="https://www.owasp.org/index.php/Fuzzing">OWASP page on fuzzing</a> identify some dynamic analysis tools.
 <br>
 The analysis tool(s) MAY be focused on looking for security vulnerabilities, but this is not required.
 <b>Rationale:</b> Static source code analysis and dynamic analysis tend
@@ -770,7 +770,7 @@ to find different kinds of defects (including defects that lead to vulnerabiliti
               criteria: "dynamic_analysis_unsafe", desc: %{
 It is SUGGESTED that if the software is application-level software written
 using a memory-unsafe language (such as C or C++) then at least one tool to
-detect memory safety problems MUST be used during at least one dynamic tool use.
+detect memory safety problems will be used during at least one dynamic tool use.
 },
               details: %{
 Examples of memory safety tools include Address Sanitizer (ASAN) and

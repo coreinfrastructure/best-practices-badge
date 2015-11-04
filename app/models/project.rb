@@ -88,8 +88,8 @@ class Project < ActiveRecord::Base
     static_analysis_fixed: ['MUST', false],
     static_analysis_often: ['SUGGESTED', false],
     # Dynamic code analysis
-    dynamic_analysis: ['MUST', false],
-    dynamic_analysis_unsafe: ['MUST', false],
+    dynamic_analysis: ['SUGGESTED', false],
+    dynamic_analysis_unsafe: ['SUGGESTED', false],
     dynamic_analysis_enable_assertions: ['SUGGESTED', false],
     dynamic_analysis_fixed: ['MUST', false] }.freeze
 

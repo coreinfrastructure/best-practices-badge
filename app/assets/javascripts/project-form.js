@@ -82,8 +82,8 @@ FIELD_CATEGORIES = {
   static_analysis_common_vulnerabilities: 'SUGGESTED',
   static_analysis_fixed: 'MUST',
   static_analysis_often: 'SUGGESTED',
-  dynamic_analysis: 'MUST',
-  dynamic_analysis_unsafe: 'MUST',
+  dynamic_analysis: 'SUGGESTED',
+  dynamic_analysis_unsafe: 'SUGGESTED',
   dynamic_analysis_enable_assertions: 'SUGGESTED',
   dynamic_analysis_fixed: 'MUST',
 }

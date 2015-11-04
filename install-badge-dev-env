@@ -170,18 +170,29 @@ else
   # ensure rbenv is on the PATH when running the rest of this script.
   export PATH="$HOME/.rbenv/bin:$PATH"
 
-  # Make rbenv a permanent fixture.
+  # Make rbenv a permanent fixture.  Find file 'f' to set up.
   rbenv_set=0
-  for f in .bashrc .bash_profile .profile
-  do
-    if [ -f "$HOME/$f" ] ; then
-      if ! grep '\.rbenv/bin' > /dev/null ; then
-        # shellcheck disable=SC2016
-        echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> "$HOME/$f"
+  f=''
+  if [ "$manager" = 'apt-get' ] ; then
+    f="$HOME/.bashrc"
+  else
+    for try in .bashrc .bash_profile .zshrc .profile ; do
+      if [ -f "$HOME/$try" ] ; then
+        f="$HOME/$try"
+        break
       fi
-      rbenv_set=1
+    done
+  fi
+  if [ -n "$f" ] ; then
+    if ! grep '\.rbenv/bin' > /dev/null ; then
+      echo "Modifying $f to add rbenv setup."
+      # shellcheck disable=SC2016
+      echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> "$HOME/$f"
+      # shellcheck disable=SC2016
+      echo 'eval "$(rbenv init -)"' >> "$HOME/$f"
     fi
-  done
+    rbenv_set=1
+  fi
   if [ $rbenv_set = 0 ] ; then
     echo 'Warning: Did not modify the PATH in a shell rc or profile.' >&2
   fi

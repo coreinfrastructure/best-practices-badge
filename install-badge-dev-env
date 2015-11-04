@@ -14,7 +14,9 @@ echo 'See INSTALL.md for more information.'
 set -e -u
 
 
+######################################################################
 # Define globals and functions.
+######################################################################
 
 # This is the running list of system packages to install.
 PACKAGES=''
@@ -50,7 +52,9 @@ find_command () {
 }
 
 
+######################################################################
 # Main line.
+######################################################################
 
 if ! [ -f 'install-badge-dev-env' ] ; then
   echo 'Must run at top level.' >&2
@@ -74,22 +78,21 @@ else
   # yum : Red Hat Enterprise Linux, CentOS, some Fedora
   # zypper : SuSE
   # emerge : Gentoo
-  # pkg : *BSDs.  We're not trying ports vs. packages; patches welcome.
+  # pkg : *BSDs.  We're not dealing with ports vs. packages; patches welcome.
   # urpmi : Mageia/Mandriva
-  manager=$(find_command apt-get dnf yum zypper emerge pkg urpmi)
+  # pacman : Manjaro/Arch Linux
+  manager=$(find_command apt-get dnf yum zypper emerge pkg urpmi pacman)
   if [ "$manager" = 'UNKNOWN' ] ; then
     echo 'Could not find a system package manager.'
     exit 1
   fi
 fi
 
-
-if [ "$manager" = 'urpmi' ]; then
-  installer="$manager"
-else
-  installer="$manager install"
-fi
-
+case "$manager" in
+  urpmi)  installer="$manager" ;;
+  pacman) installer="$manager -S base-devel" ;;
+  *)      installer="$manager install" ;;
+esac
 echo "Will use the installer command '$installer'"
 
 # Now start adding packages. 
@@ -109,6 +112,31 @@ add_pkg sqlite3
 
 # C compiler for rebuilding a specific version of ruby.
 add_pkg gcc
+
+# We will build ruby via rbenv and ruby-build. This requires a number
+# of packages.  Here are the recommended packages per the ruby-build
+# instructions at <https://github.com/sstephenson/ruby-build/wiki>.
+case "$manager" in
+  brew)
+    add_pkg openssl libyaml libffi ;;
+  apt-get)
+    add_pkg autoconf bison build-essential libssl-dev libyaml-dev \
+            libreadline6-dev zlib1g-dev libncurses5-dev libffi-dev \
+            libgdbm3 libgdbm-dev ;;
+  yum|dnf)
+    # We will install gcc per above.
+    add_pkg openssl-devel libyaml-devel libffi-devel readline-devel \
+            zlib-devel gdbm-devel ncurses-devel ;;
+  zypper)
+    # We will install gcc per above.
+     add_pkg automake gdbm-devel libffi-devel libyaml-devel \
+             openssl-devel ncurses-devel readline-devel zlib-devel ;;
+  pacman)
+     add_pkg libffi libyaml openssl zlib ;;
+  *)
+     echo 'Warning:  You may need additional packages to rebuild ruby.' >&2 ;;
+esac
+
 
 if [ "$MYINSTALL_SYSTEM_INSTALL_PACKAGES" = 'yes' ] ; then
   echo 'About to install system packages with the command:'

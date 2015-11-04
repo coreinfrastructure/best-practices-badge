@@ -7,8 +7,9 @@ class ProjectTest < ActiveSupport::TestCase
 
   def setup
     @user = users(:test_user)
-    @project = @user.projects.build(project_url: 'https://www.example.org',
-                                    repo_url: 'https://www.example.org/code')
+    @project = @user.projects.build(
+      project_homepage_url: 'https://www.example.org',
+      repo_url: 'https://www.example.org/code')
   end
 
   test 'should be valid' do

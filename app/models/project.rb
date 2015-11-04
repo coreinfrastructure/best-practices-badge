@@ -113,7 +113,7 @@ class Project < ActiveRecord::Base
   # and http://something/?arbitrary_parameters
 
   validates :repo_url, url: true
-  validates :project_url, url: true
+  validates :project_homepage_url, url: true
   validate :need_a_url
 
   validates :user_id, presence: true
@@ -140,7 +140,7 @@ class Project < ActiveRecord::Base
   private
 
   def need_a_url
-    return unless repo_url.blank? && project_url.blank?
+    return unless repo_url.blank? && project_homepage_url.blank?
     errors.add :base, 'Need at least a project or repository URL'
   end
 

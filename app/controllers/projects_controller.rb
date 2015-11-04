@@ -43,11 +43,11 @@ class ProjectsController < ApplicationController
   def create
     @project = current_user.projects.build(project_params)
 
-    # Error out if project_url and repo_url are both empty... don't
+    # Error out if project_homepage_url and repo_url are both empty... don't
     # do a save yet.
 
     respond_to do |format|
-      @project.project_url ||= set_homepage_url
+      @project.project_homepage_url ||= set_homepage_url
       if @project.save
         flash[:success] = "Thanks for adding the Project!   Please fill out
                            the rest of the information to get the Badge."
@@ -88,7 +88,7 @@ class ProjectsController < ApplicationController
   def destroy
     @project.destroy
     respond_to do |format|
-      @project.project_url ||= project_find_default_url
+      @project.project_homepage_url ||= project_find_default_url
       format.html do
         redirect_to projects_url
         flash[:success] = 'Project was successfully deleted.'
@@ -109,15 +109,15 @@ class ProjectsController < ApplicationController
   PERMITTED_PARAMS =
   [
     :user_id,
-    :name, :description, :project_url, :repo_url,
+    :name, :description, :project_homepage_url, :repo_url,
     :license,
     :general_comments,
 
     # Project Website (auto-populated, currently not in the form)
-    :project_url_status,
-    :project_url_justification,
-    :project_url_https_status,
-    :project_url_https_justification,
+    :project_homepage_url_status,
+    :project_homepage_url_justification,
+    :project_homepage_https_status,
+    :project_homepage_https_justification,
     # Basic Project Website Content
     :description_sufficient_status,
     :description_sufficient_justification,

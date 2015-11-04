@@ -33,11 +33,11 @@
         <td><%= project.description %></td>
         <td>
           <%# Defend against bad data - link only if plausible URL. %>
-          <% if project.project_url.presence &&
-                project.project_url.match(/\Ahttps?:\/\//) %>
-            <a href="<%= project.project_url %>"><%= project.project_url %></a>
+          <% if project.project_homepage_url.presence &&
+                project.project_homepage_url.match(/\Ahttps?:\/\//) %>
+            <a href="<%= project.project_homepage_url %>"><%= project.project_homepage_url %></a>
           <% else %>
-            <%= project.project_url %>
+            <%= project.project_homepage_url %>
           <% end %>
         </td>
         <td><%= project.license %></td>

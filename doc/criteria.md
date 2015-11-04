@@ -74,10 +74,6 @@ The additional term SUGGESTED is added, as follows:
   not implementing the criterion must be documented, and
   all SUGGESTED criteria have to be considered (rated as met or unmet).
 
-We're experimenting with when justifications are required;
-since the badge is self-asserted, it might be wise to require justifications
-for all claims, so that others can review the truth of those claims.
-
 We assume that you are already familiar with
 software development and running an OSS project;
 if not, see introductory materials such as
@@ -102,8 +98,8 @@ same as the project URL), and license(s).
 
 *Project website*
 
-- <a name="project-url"></a>The project MUST have a public website with a stable URL. <sup>[<a href="#project-url">project-url</a>]&#8224;</sup>
-- <a name="project-url-https"></a>It is SUGGESTED that project websites use HTTPS, not HTTP.  Future versions of these criteria may make HTTPS a requirement. <sup>[<a href="#project-url-https">project-url-https</a>]&#8224;</sup>
+- <a name="project-homepage-url"></a>The project MUST have a public website with a stable URL. <sup>[<a href="#project-homepage-url">project-homepage-url</a>]&#8224;</sup>
+- <a name="project-homepage-https"></a>It is SUGGESTED that the project website use HTTPS, not HTTP.  Future versions of these criteria may make HTTPS a requirement. (The badging application will show a warning for HTTP-only URLs.) <sup>[<a href="#project-homepage-https">project-homepage-https</a>]&#8224;</sup>
 
 *Basic project website content*
 

@@ -4,6 +4,6 @@ one:
   user: test_user
   name: Pathfinder OS
   description: Operating system for Pathfinder rover
-  project_url: https://www.example.org
+  project_homepage_url: https://www.example.org
   license: MIT
   repo_url: https://www.example.org/code

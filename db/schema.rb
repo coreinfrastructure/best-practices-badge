@@ -11,19 +11,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151027231812) do
+ActiveRecord::Schema.define(version: 20151104160449) do
 
   create_table "projects", force: :cascade do |t|
     t.integer  "user_id"
     t.string   "name"
     t.text     "description"
-    t.string   "project_url"
+    t.string   "project_homepage_url"
     t.string   "repo_url"
     t.string   "license"
-    t.string   "project_url_status",                                   default: "?"
-    t.text     "project_url_justification"
-    t.string   "project_url_https_status",                             default: "?"
-    t.text     "project_url_https_justification"
+    t.string   "project_homepage_url_status",                          default: "?"
+    t.text     "project_homepage_url_justification"
+    t.string   "project_homepage_https_status",                        default: "?"
+    t.text     "project_homepage_https_justification"
     t.string   "description_sufficient_status",                        default: "?"
     t.text     "description_sufficient_justification"
     t.string   "interact_status",                                      default: "?"

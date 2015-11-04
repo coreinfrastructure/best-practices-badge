@@ -66,7 +66,7 @@ class UserTest < ActiveSupport::TestCase
 
   test 'associated projects should be destroyed' do
     @user.save
-    @user.projects.create!(project_url: 'https://www.example.org',
+    @user.projects.create!(project_homepage_url: 'https://www.example.org',
                            repo_url: 'https://www.example.org/code')
     assert_difference 'Project.count', -1 do
       @user.destroy

@@ -20,11 +20,13 @@ class ProjectsControllerTest < ActionController::TestCase
   test 'should create project' do
     log_in_as(@user)
     assert_difference('Project.count') do
-      post :create, project: { description: @project.description,
-                               license: @project.license,
-                               name: @project.name,
-                               repo_url: @project.repo_url,
-                               project_url: @project.project_url }
+      post :create, project: {
+        description: @project.description,
+        license: @project.license,
+        name: @project.name,
+        repo_url: @project.repo_url,
+        project_homepage_url: @project.project_homepage_url
+      }
     end
   end
 
@@ -41,11 +43,13 @@ class ProjectsControllerTest < ActionController::TestCase
 
   test 'should update project' do
     log_in_as(@project.user)
-    patch :update, id: @project, project: { description: @project.description,
-                                            license: @project.license,
-                                            name: @project.name,
-                                            repo_url: @project.repo_url,
-                                            project_url: @project.project_url }
+    patch :update, id: @project, project: {
+      description: @project.description,
+      license: @project.license,
+      name: @project.name,
+      repo_url: @project.repo_url,
+      project_homepage_url: @project.project_homepage_url
+    }
     assert_redirected_to project_path(assigns(:project))
   end
 

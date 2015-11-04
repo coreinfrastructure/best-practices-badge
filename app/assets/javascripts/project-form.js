@@ -21,8 +21,8 @@ function polyfillDatalist() {
 // The field names are from a spec, so we need to allow snake format here.
 // jscs : disable requireCamelCaseOrUpperCaseIdentifiers
 FIELD_CATEGORIES = {
-  // Omitted: project_url : "MUST",
-  // Omitted: project_url_https : "SUGGESTED",
+  // Omitted: project_homepage_url : "MUST",
+  // Omitted: project_homepage_https : "SUGGESTED",
   description_sufficient: 'MUST',
   interact: 'MUST',
   contribution: 'MUST',

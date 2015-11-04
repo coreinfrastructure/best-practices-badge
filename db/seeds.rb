@@ -35,13 +35,13 @@ user = User.find_by(email: 'test@example.org')
 user.projects.create!(user_id: user.id,
                       name:  'BadgeApp',
                       description: 'Badge Application',
-                      project_url:
+                      project_homepage_url:
                         'https://github.com/linuxfoundation/cii-best-practices-badge',
                       repo_url:
                         'https://github.com/linuxfoundation/cii-best-practices-badge',
                       license: 'MIT',
-                      project_url_status: '?',
-                      project_url_https_status: '?',
+                      project_homepage_url_status: '?',
+                      project_homepage_https_status: '?',
                       description_sufficient_status: '?',
                       interact_status: '?',
                       contribution_status: '?',
@@ -108,18 +108,18 @@ user.projects.create!(user_id: user.id,
 20.times do |n|
   name = "test-name-#{n + 1}"
   description = "test-description#{n + 1}"
-  project_url = 'https://' + "test-project-url-#{n + 1}.org"
+  project_homepage_url = 'https://' + "test-project-url-#{n + 1}.org"
   repo_url = 'https://' + "test-repo-url-#{n + 1}.org"
   license = ['MIT', 'Apache-2.0', 'GPL-2.0', 'GPL-2.0+', 'GPL-3.0+', 'MPL-2.0',
              'BSD-3-Clause', 'BSD-2-Clause', '(Apache-2.0 OR GPL-2.0+)'].sample
   user.projects.create!(user_id: user.id,
                         name: name,
                         description: description,
-                        project_url: project_url,
+                        project_homepage_url: project_homepage_url,
                         repo_url: repo_url,
                         license: license,
-                        project_url_status: '?',
-                        project_url_https_status: '?',
+                        project_homepage_url_status: '?',
+                        project_homepage_https_status: '?',
                         description_sufficient_status: '?',
                         interact_status: '?',
                         contribution_status: '?',

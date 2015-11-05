@@ -1,4 +1,5 @@
 task(:default).clear.enhance %w(
+  rbenv_rvm_setup
   bundle
   bundle_audit
   test
@@ -7,6 +8,15 @@ task(:default).clear.enhance %w(
   rails_best_practices
   brakeman
 )
+
+# Simple smoke test to avoid development environment misconfiguration
+desc 'Ensure that rbenv or rvm are set up in PATH'
+task :rbenv_rvm_setup do
+  path = ENV['PATH']
+  if !path.include?('.rbenv') && !path.include?('.rvm')
+    fail 'Must have rbenv or rvm in PATH'
+  end
+end
 
 desc 'Run Rubocop with options'
 task :rubocop do

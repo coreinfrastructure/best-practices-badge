@@ -5,8 +5,14 @@ echo 'See INSTALL.md for more information.'
 # Set configure options defaults; set their values with environment variables.
 : "${MYINSTALL_SYSTEM_INSTALL_PREFIX:=sudo}"
 : "${MYINSTALL_SYSTEM_INSTALL_PACKAGES:=yes}"
-: "${MYINSTALL_RBENV:=yes}" # Should we install rbenv?
-: "${MYINSTALL_RBENV_BUILD:=yes}" # Should we install rbenv-build?
+: "${MYINSTALL_RBENV:=yes}" # Should we install and use rbenv?
+: "${MYINSTALL_RBENV_BUNDLER:=yes}" # Should we install and use rbenv-bundler?
+
+if [ "$MYINSTALL_RBENV_BUNDLER" = yes ] &&
+   [ "$MYINSTALL_RBENV" = no ] ; then
+  echo "Error: rbenv-bundler requires rbenv."
+  exit 1
+fi
 
 # If you modify this script, please check it with the "shellcheck"
 # shell static analysis tool.
@@ -110,30 +116,33 @@ is_command ruby || add_pkg ruby
 # SQLite3 database system, used in development for data storage
 add_pkg sqlite3
 
-# C compiler for rebuilding a specific version of ruby.
-add_pkg gcc
-
-# We will build ruby via rbenv and ruby-build. This requires a number
-# of packages.  Here are the recommended packages per the ruby-build
+# We will build ruby via rbenv and ruby-build. This requires either those
+# packages themselves, or a number of other packages to build them.
+# Here are the recommended packages per the ruby-build
 # instructions at <https://github.com/sstephenson/ruby-build/wiki>.
 case "$manager" in
   brew)
-    add_pkg openssl libyaml libffi ;;
+    # We'll use the brew version. Install these to rebuild rbenv:
+    # add_pkg openssl libyaml libffi
+    add_pkg rbenv ruby-build ;;
   apt-get)
-    add_pkg autoconf bison build-essential libssl-dev libyaml-dev \
-            libreadline6-dev zlib1g-dev libncurses5-dev libffi-dev \
-            libgdbm3 libgdbm-dev ;;
+    # We'll use the system version.  If you want to use the latest one
+    # on GitHub, instead install these system components first:
+    # add_pkg autoconf bison build-essential libssl-dev libyaml-dev \
+    #         libreadline6-dev zlib1g-dev libncurses5-dev libffi-dev \
+    #         libgdbm3 libgdbm-dev
+    add_pkg rbenv ruby-build ;;
   yum|dnf)
-    # We will install gcc per above.
-    add_pkg openssl-devel libyaml-devel libffi-devel readline-devel \
+    add_pkg gcc openssl-devel libyaml-devel libffi-devel readline-devel \
             zlib-devel gdbm-devel ncurses-devel ;;
   zypper)
-    # We will install gcc per above.
-     add_pkg automake gdbm-devel libffi-devel libyaml-devel \
-             openssl-devel ncurses-devel readline-devel zlib-devel ;;
+    add_pkg gcc automake gdbm-devel libffi-devel libyaml-devel \
+            openssl-devel ncurses-devel readline-devel zlib-devel ;;
   pacman)
      add_pkg libffi libyaml openssl zlib ;;
   *)
+     # We'll guess some packages needed.
+     add_pkg gcc openssl zlib
      echo 'Warning:  You may need additional packages to rebuild ruby.' >&2 ;;
 esac
 
@@ -148,12 +157,10 @@ else
 fi
 
 
-# Install rbenv, to let us select a specific version of ruby.
-# TODO: Should we install the system versions of rbenv and ruby-build,
-# or use the latest version from GitHub?  Here we get them from GitHub,
-# since that is the latest and works for all platforms.
+# Install rbenv via GitHub, if it isn't already installed,
+# to let us select a specific version of ruby.
 echo
-echo 'STAGE 3: Install rbenv'
+echo 'STAGE 3: Install and setup rbenv and ruby-build'
 
 if is_command 'rvm' ; then
   echo 'WARNING: rvm installed, may be incompatible with rbenv.' >&2
@@ -166,7 +173,9 @@ elif [ "$MYINSTALL_RBENV" != 'yes' ] ; then
 else
   echo 'Downloading and installing rbenv from GitHub' >&2
   git clone https://github.com/sstephenson/rbenv.git ~/.rbenv
+fi
 
+if [ "$MYINSTALL_RBENV" = 'yes' ] ; then
   # ensure rbenv is on the PATH when running the rest of this script.
   export PATH="$HOME/.rbenv/bin:$PATH"
 
@@ -184,7 +193,7 @@ else
     done
   fi
   if [ -n "$f" ] ; then
-    if ! grep '\.rbenv/bin' > /dev/null ; then
+    if ! printf '%s' "$PATH" | grep '\.rbenv/bin' > /dev/null ; then
       echo "Modifying $f to add rbenv setup."
       # shellcheck disable=SC2016
       echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> "$HOME/$f"
@@ -194,14 +203,27 @@ else
     rbenv_set=1
   fi
   if [ $rbenv_set = 0 ] ; then
-    echo 'Warning: Did not modify the PATH in a shell rc or profile.' >&2
+    echo 'Warning: rbenv PATH is not set up.' >&2
+  fi
+
+  # Install ruby-build, which lets "rbenv install" recompile versions of ruby.
+  # First, detect if ruby-build already exists.
+  if echo 'n' | LANG='en_US.UTF-8' rbenv install 2>&1 | grep -q 'already exists'
+  then
+    echo 'ruby-build already installed.'
+  else
+     git clone https://github.com/sstephenson/ruby-build.git \
+         "$HOME/.rbenv/plugins/ruby-build"
   fi
 fi
 
-# This makes "bundle ..." use rbenv's version of Ruby:
-if [ "${MYINSTALL_RBENV_BUILD}" = 'yes' ] && \
+# Install rbenv-bundler.
+# This makes "bundle ..." use rbenv's version of Ruby, so we don't need
+# to prefix commands with "bin/..." or "bundle exec ...":
+if [ "${MYINSTALL_RBENV_BUNDLER}" = 'yes' ] && \
    ! [ -e "$HOME/.rbenv/plugins/bundler" ] ; then
   echo 'Downloading and installing rbenv-bundler from GitHub' >&2
+  mkdir -p "$HOME/.rbenv/plugins/"
   git clone git://github.com/carsomyr/rbenv-bundler.git \
             "$HOME/.rbenv/plugins/bundler"
 fi
@@ -210,7 +232,7 @@ fi
 echo
 echo 'STAGE 4: For this project, force install fixed version of ruby'
 
-if is_command rbenv ; then
+if [ "$MYINSTALL_RBENV" = 'yes' ] && is_command rbenv ; then
   # Get ruby version from Gemfile.
   ruby_version=$(grep '^ruby ' Gemfile | sed -e "s/ruby '//" -e "s/'.*//")
   echo "Using rbenv to locally install ruby version ${ruby_version}"
@@ -225,7 +247,10 @@ echo 'STAGE 5: Install gems (including bundler and Rails)'
 
 gem sources --add https://rubygems.org  # Ensure you're getting gems here
 gem install bundler  # Install the "bundler" gem package manager.
-rbenv rehash
+if is_command rbenv ; then
+  rbenv rehash
+fi
+
 bundle install       # Install gems we use in Gemfile.lock, including Rails
 
 echo
@@ -256,3 +281,5 @@ if is_command shellcheck ; then
 fi
 
 bin/rake
+
+echo 'All done! Use "rails server" and view localhost:3000 to see it run.'

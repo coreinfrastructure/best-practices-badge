@@ -19,7 +19,7 @@
   <br>
   <%= form_for(@project) do |f| %>
       <span>What is the URL for the project (as a whole)?</span>
-      <%= f.text_field :project_url, class:"form-control", hide_label: true, placeholder:'Project Website URL' %>
+      <%= f.text_field :project_homepage_url, class:"form-control", hide_label: true, placeholder:'Project Website URL' %>
       <span>What is the URL for the version control repository
             (it may the same as the project URL)?</span>
       <%= f.text_field :repo_url, class:"form-control", hide_label: true, placeholder:'Project Repo URL' %>

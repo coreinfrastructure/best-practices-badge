@@ -37,6 +37,10 @@ group :development, :test do
   gem 'web-console', '2.2.1'
 end
 
+group :development do
+  gem 'rails_db', '0.7.2' # Enable localhost:3000/rails/db debugging
+end
+
 group :test do
   gem 'coveralls', '0.8.3', require: false
   gem 'm', '1.4.0'

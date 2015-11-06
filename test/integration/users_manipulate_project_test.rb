@@ -6,6 +6,8 @@ class UsersManipulateProjectTest < ActionDispatch::IntegrationTest
   end
 
   test 'logged-in user adds a project' do
+    # Go to login_path to initialize the session
+    get login_path
     log_in_as @user
 
     get '/projects/new'

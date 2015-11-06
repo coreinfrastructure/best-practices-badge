@@ -49,15 +49,13 @@ module ActiveSupport
     # https://www.railstutorial.org/book
     def log_in_as(user, options = {})
       password = options[:password] || 'password'
-      provider = options[:provider] || 'local'
+      # provider = options[:provider] || 'local'
       if integration_test?
-        # post login_path, session: { email:       user.email,
-        #                            password:    password,
-        #                            remember_me: remember_me }
+        # post login_path, session: { email:   user.email,
+        #                            password: password,
+        #                            provider: provider}
         # Do this instead, it at least checks the password:
-        if !user.try(:authenticate, password)
-          session[:user_id] = user.id
-        end
+        session[:user_id] = user.id if user.try(:authenticate, password)
       else
         session[:user_id] = user.id
       end

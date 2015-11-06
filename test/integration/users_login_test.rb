@@ -15,12 +15,14 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
     assert flash.empty?
   end
 
+  # We currently can't test login in test integration.
+  # See the comments on test_helper.rb method log_in_as()
   test 'login with valid information and then logout' do
-    skip('Needs debugging')
+    skip('serious problem with post during integration testing')
     get login_path
-    post login_path, session: { provider: 'local',
-                                email: @user.email,
-                                password: 'password' }
+    assert_template 'sessions/new'
+    log_in_as @user
+
     assert logged_in?
     assert_redirected_to @user
     follow_redirect!

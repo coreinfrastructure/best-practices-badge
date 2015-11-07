@@ -31,31 +31,18 @@ module ActiveSupport
     end
 
     # Log in a test user.
-    # WARNING: this DOES NOT attempt to do a "post" during integration test
-    # to create a session. Thus, it doesn't receive the expected redirection
-    # and resulting page.  Instead, it just sets the session value for the
-    # current user if the password is correct.  The problem is that even
-    # with a correct password, a 'post' ALWAYS returned the
-    # 'failed login' page with a reply code of 200,
-    # instead of correctly replying with a redirect on successful login.
-    # That's because although "post"  correctly invokes the method
-    # SessionController#create, create is NOT receiving the
-    # email, password, or provider.  # Instead, create gets this:
-    # (byebug) params[:provider]
-    #   nil
-    # (byebug) params[:session]
-    #   {"email"=>"", "password"=>""}
+    # TODO: Put 'provider' into the session, along with email and password
     # This is based on "Ruby on Rails Tutorial" by Michael Hargle, chapter 8,
     # https://www.railstutorial.org/book
     def log_in_as(user, options = {})
       password = options[:password] || 'password'
-      # provider = options[:provider] || 'local'
+      provider = options[:provider] || 'local'
       if integration_test?
-        # post login_path, session: { email:   user.email,
-        #                            password: password,
-        #                            provider: provider}
+        post login_path,
+             provider: provider,
+             session: { email:  user.email, password: password }
         # Do this instead, it at least checks the password:
-        session[:user_id] = user.id if user.try(:authenticate, password)
+        # session[:user_id] = user.id if user.try(:authenticate, password)
       else
         session[:user_id] = user.id
       end

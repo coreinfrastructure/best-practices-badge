@@ -5,11 +5,22 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
     @user = users(:test_user)
   end
 
-  test 'login with invalid information' do
+  test 'login with invalid username and password' do
     get login_path
     assert_template 'sessions/new'
     post login_path,
          provider: 'local',
+         session: { email: 'unknown@example.org', password: 'bad_password' }
+    assert_template 'sessions/new'
+    assert_not flash.empty?
+    get root_path
+    assert flash.empty?
+  end
+
+  test 'login with no provider' do
+    get login_path
+    assert_template 'sessions/new'
+    post login_path,
          session: { email: 'unknown@example.org', password: 'bad_password' }
     assert_template 'sessions/new'
     assert_not flash.empty?

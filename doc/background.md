@@ -77,6 +77,8 @@ Some guidelines include:
 
 *   [OSS Manifesto](http://ossmanifesto.org/)
 
+*   [Keep a CHANGELOG](http://keepachangelog.com/) - a website advocating including ChangeLogs, including what they are and why they matter.  It recommends the filename "CHANGELOG.md" at the top.
+
 
 ## Methods for evaluating OSS projects
 

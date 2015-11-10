@@ -34,6 +34,7 @@ group :development, :test do
   gem 'rubocop-rspec', '1.3.1'
   gem 'spring', '1.4.0'
   gem 'sqlite3', '1.3.11'
+  gem 'webmock'
   gem 'web-console', '2.2.1'
 end
 

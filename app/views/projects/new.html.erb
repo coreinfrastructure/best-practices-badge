@@ -18,11 +18,15 @@
   <% end %>
   <br>
   <%= form_for(@project) do |f| %>
-      <span>What is the URL for the project (as a whole)?</span>
-      <%= f.text_field :project_homepage_url, class:"form-control", hide_label: true, placeholder:'Project Website URL' %>
+      <span>What is the URL for the project home page (the URL for the project as a whole)? Start with http(s)://</span>
+      <%= f.text_field :project_homepage_url, class:"form-control",
+            type: 'url', hide_label: true, pattern: 'https?://.+',
+            placeholder:'http(s)://... for project home page URL' %>
       <span>What is the URL for the version control repository
-            (it may the same as the project URL)?</span>
-      <%= f.text_field :repo_url, class:"form-control", hide_label: true, placeholder:'Project Repo URL' %>
+            (it may the same as the project home page)? Start with http(s)://</span>
+      <%= f.text_field :repo_url, class:"form-control",
+            type: 'url', hide_label: true, pattern: 'https?://.+',
+            placeholder:'http(s)://... for project repo URL' %>
      <%= f.submit 'Submit URL', class:"btn btn-primary" %>
   <% end %>
   </div>

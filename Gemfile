@@ -34,7 +34,6 @@ group :development, :test do
   gem 'rubocop-rspec', '1.3.1'
   gem 'spring', '1.4.0'
   gem 'sqlite3', '1.3.11'
-  gem 'webmock'
   gem 'web-console', '2.2.1'
 end
 
@@ -46,6 +45,7 @@ group :test do
   gem 'coveralls', '0.8.3', require: false
   gem 'm', '1.4.0'
   gem 'simplecov', '0.10.0', require: false
+  gem 'webmock'
 end
 
 group :production do

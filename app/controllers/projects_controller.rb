@@ -46,8 +46,10 @@ class ProjectsController < ApplicationController
     # Error out if project_homepage_url and repo_url are both empty... don't
     # do a save yet.
 
+    @project.project_homepage_url ||= set_homepage_url
+    @project = Chief.new(@project).autofill
+
     respond_to do |format|
-      @project.project_homepage_url ||= set_homepage_url
       if @project.save
         flash[:success] = "Thanks for adding the Project!   Please fill out
                            the rest of the information to get the Badge."
@@ -67,6 +69,7 @@ class ProjectsController < ApplicationController
   # PATCH/PUT /projects/1.json
   # rubocop:disable Metrics/MethodLength
   def update
+    @project = Chief.new(@project).autofill
     respond_to do |format|
       if @project.update(project_params)
         format.html do

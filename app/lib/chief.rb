@@ -1,0 +1,59 @@
+# A 'chief' instance initiates and coordinates analysis of project data.
+# It calls 'Detectives' (analyzers) in the right order, each of which have
+# access to the evidence accumulated so far.
+# Only the 'chief' decides when to update the proposed changes.
+
+class Chief
+  def initialize(project)
+    @evidence = Evidence.new(project)
+  end
+
+  # Given two changesets, produce merged "best" version
+  # When confidence is the same, c1 wins.
+  def merge_changeset(c1, c2)
+    result = c1.dup
+    c2.each do |field, data|
+      if !result.key?(field) ||
+         (field[:confidence] > result[field][:confidence])
+        result[field] = data
+      end
+    end
+    result
+  end
+
+  # Analyze project and reply with a changeset in the form
+  # { fieldname1: { value: value, confidence: 1..5, explanation: text}, ...}
+  # Do this by determining the right order and way to invoke "detectives"
+  # for this project, invoke them, and process their results.
+  def propose_changes
+    current_proposal = {} # Current best changeset.
+    # TODO: Create topographical sort and Real loop over detectives.
+    result = GithubBasicDetective.new.analyze(@evidence)
+    current_proposal = merge_changeset(current_proposal, result)
+    current_proposal
+  end
+
+  # Given project data, return it with the proposed changeset applied.
+  # Note: This should probably be class-level
+  # rubocop:disable Metrics/MethodLength
+  def apply_changes(project, changes)
+    p = project.clone
+    changes.each do |key, data|
+      if p.key?(key)
+        if (data.confidence == 5) || (p[key] == '?') || (p[key] == '')
+          p[key] = data.value
+          # TODO: Move explanation into corresponding justification text.
+        end
+      else
+        p[key] = data.value
+      end
+    end
+    # TODO: Filter so only final (saveable) criteria are here.
+    p
+  end
+
+  # Given form data about a project, return an improved version.
+  def autofill
+    apply_changes(@evidence.project, propose_changes)
+  end
+end

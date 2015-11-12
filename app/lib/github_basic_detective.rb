@@ -25,7 +25,7 @@ class GithubBasicDetective
       fullname = m[1] + '/' + m[2]
       basic_repo_data_raw = evidence.get(
         'https://api.github.com/repos/' + fullname)
-      if !basic_repo_data_raw.blank?
+      unless basic_repo_data_raw.blank?
         basic_repo_data = JSON.parse(basic_repo_data_raw)
         if basic_repo_data[:description]
           results[:name] = {

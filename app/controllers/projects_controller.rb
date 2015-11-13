@@ -47,7 +47,7 @@ class ProjectsController < ApplicationController
     # do a save yet.
 
     @project.project_homepage_url ||= set_homepage_url
-    @project = Chief.new(@project).autofill
+    Chief.new(@project).autofill
 
     respond_to do |format|
       if @project.save
@@ -69,7 +69,7 @@ class ProjectsController < ApplicationController
   # PATCH/PUT /projects/1.json
   # rubocop:disable Metrics/MethodLength
   def update
-    @project = Chief.new(@project).autofill
+    Chief.new(@project).autofill
     respond_to do |format|
       if @project.update(project_params)
         format.html do

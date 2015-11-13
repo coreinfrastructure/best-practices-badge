@@ -34,8 +34,7 @@ class Evidence
   def get(url)
     unless @cached_data.key?(url)
       open(url, 'rb') do |file|
-        file << open(url).read(MAXREAD)
-        @cached_data[url] = file
+        @cached_data[url] = file.read(MAXREAD)
       end
     end
     @cached_data[url]

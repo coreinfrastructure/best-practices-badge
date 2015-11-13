@@ -35,21 +35,15 @@ class Chief
 
   # Given project data, return it with the proposed changeset applied.
   # Note: This should probably be class-level
-  # rubocop:disable Metrics/MethodLength
   def apply_changes(project, changes)
-    p = project.clone
+    # TODO: Filter so only final (saveable) criteria are set.
+    # TODO: Move explanation into corresponding justification text.
     changes.each do |key, data|
-      if p.key?(key)
-        if (data.confidence == 5) || (p[key] == '?') || (p[key] == '')
-          p[key] = data.value
-          # TODO: Move explanation into corresponding justification text.
-        end
-      else
-        p[key] = data.value
+      if !project.has_attribute?(key) || project[key].blank? ||
+         (project[key] == '?') || (data[:confidence] == 5)
+        project[key] = data[:value]
       end
     end
-    # TODO: Filter so only final (saveable) criteria are here.
-    p
   end
 
   # Given form data about a project, return an improved version.

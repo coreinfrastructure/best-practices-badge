@@ -2,7 +2,7 @@
 class OsiLicenseDetective < Detective
   # Individual detectives must identify their inputs, outputs
   INPUTS = [:license]
-  OUTPUTS = [:oss_license_osi]
+  OUTPUTS = [:oss_license_osi_status, :oss_license_status]
 
   # From: http://opensource.org/licenses/alphabetical
   OSI_LICENSES_FROM_OSI_WEBSITE = [
@@ -102,14 +102,18 @@ class OsiLicenseDetective < Detective
     license = license.strip.chomp('+')
 
     if self.class.osi_license?(license)
-      { oss_license_osi_status: {
-        value: 'Met', confidence: 5,
-        explanation: 'The #{license} license is approved by the ' \
+      { oss_license_osi_status:
+          { value: 'Met', confidence: 5,
+            explanation: 'The #{license} license is approved by the ' \
+                         'Open Source Initiative (OSI)' },
+        oss_license_status:
+          { value: 'Met', confidence: 5,
+            explanation: 'The #{license} license is approved by the ' \
                      'Open Source Initiative (OSI)' } }
     elsif license =~ /\A[^(]/
-      { oss_license_osi_status: {
-        value: 'Unmet', confidence: 1,
-        explanation: 'Did not find license in the OSI list.' } }
+      { oss_license_osi_status:
+          { value: 'Unmet', confidence: 1,
+            explanation: 'Did not find license in the OSI list.' } }
     else
       # We currently don't handle (...), so don't even guess.
       {}

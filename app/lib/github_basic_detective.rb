@@ -7,7 +7,7 @@ require 'json'
 # Be sure to use strings, NOT symbols, as a key when accessing JSON-parsed
 # results (because strings and symbols are distinct in basic Ruby).
 
-class GithubBasicDetective
+class GithubBasicDetective < Detective
   # Individual detectives must identify their inputs, outputs
   INPUTS = [:repo_url]
   OUTPUTS = [:name, :license]

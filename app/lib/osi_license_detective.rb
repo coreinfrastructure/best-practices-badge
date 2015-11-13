@@ -95,8 +95,8 @@ class OsiLicenseDetective < Detective
 
   # Individual detectives must implement "analyze"
   # rubocop:disable Metrics/MethodLength
-  def analyze(evidence)
-    license = evidence[:license]
+  def analyze(_evidence, current)
+    license = current[:license]
     return {} if license.blank?
     # Remove '+' - allowing later license versions is always fine.
     license = license.strip.chomp('+')

@@ -1,12 +1,16 @@
 # A 'chief' instance initiates and coordinates analysis of project data.
 # It calls 'Detectives' (analyzers) in the right order, each of which have
 # access to the evidence accumulated so far.
+
 # Only the 'chief' decides when to update the proposed changes.
 
 class Chief
   def initialize(project)
     @evidence = Evidence.new(project)
   end
+
+  # TODO: Identify classes automatically and do topological sort.
+  ALL_DETECTIVES = [GithubBasicDetective, OsiLicenseDetective]
 
   # Given two changesets, produce merged "best" version
   # When confidence is the same, c1 wins.
@@ -21,6 +25,25 @@ class Chief
     result
   end
 
+  # Should we should update a project's value for 'key'?
+  def update_value?(project, key, changeset_data)
+    !project.has_attribute?(key) || project[key].blank? ||
+      (project[key] == '?') || (changeset_data[:confidence] == 5)
+  end
+
+  # Return the best estimates for fields, given project & current proposal.
+  def compute_current(fields, project, current_proposal)
+    result = {}
+    fields.each do |f|
+      if update_value?(project, f, current_proposal)
+        result[f] = current_proposal[f][:value]
+      elsif project.has_attribute?(f)
+        result[f] = project[f]
+      end
+    end
+    result
+  end
+
   # Analyze project and reply with a changeset in the form
   # { fieldname1: { value: value, confidence: 1..5, explanation: text}, ...}
   # Do this by determining the right order and way to invoke "detectives"
@@ -28,8 +51,12 @@ class Chief
   def propose_changes
     current_proposal = {} # Current best changeset.
     # TODO: Create topographical sort and Real loop over detectives.
-    result = GithubBasicDetective.new.analyze(@evidence)
-    current_proposal = merge_changeset(current_proposal, result)
+    ALL_DETECTIVES.each do |d|
+      current_data_for_d = compute_current(d::INPUTS, @evidence.project,
+                                           current_proposal)
+      result = d.new.analyze(@evidence, current_data_for_d)
+      current_proposal = merge_changeset(current_proposal, result)
+    end
     current_proposal
   end
 
@@ -39,10 +66,7 @@ class Chief
     # TODO: Filter so only final (saveable) criteria are set.
     # TODO: Move explanation into corresponding justification text.
     changes.each do |key, data|
-      if !project.has_attribute?(key) || project[key].blank? ||
-         (project[key] == '?') || (data[:confidence] == 5)
-        project[key] = data[:value]
-      end
+      project[key] = data[:value] if update_value?(project, key, data)
     end
   end
 

@@ -14,15 +14,16 @@ class GithubBasicDetective < Detective
 
   # Individual detectives must implement "analyze"
   # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
-  def analyze(evidence)
-    return {} if evidence.repo_url.nil?
+  def analyze(evidence, current)
+    repo_url = current[:repo_url]
+    return {} if repo_url.nil?
 
     results = {}
     # Has form https://github.com/:user/:name?
     # e.g.: https://github.com/linuxfoundation/cii-best-practices-badge
     # Note: this limits what's accepted, otherwise we'd have to worry
     # about URL escaping.
-    evidence.repo_url.match(
+    repo_url.match(
       %r{\Ahttps://github.com/([A-Za-z0-9_-]+)/([A-Za-z0-9_-]+)/?\Z}) do |m|
       # We have a github repo.  Get basic evidence using GET, e.g.:
       # https://api.github.com/repos/linuxfoundation/cii-best-practices-badge
@@ -46,8 +47,8 @@ class GithubBasicDetective < Detective
       license_data = JSON.parse(license_data_raw)
       if !license_data['license'].blank? &&
          !license_data['license']['key'].blank?
-        # GitHub doesn't reply with the expected upper/lower case for SPDX;
-        # 'upcase' handles common cases.  See:
+        # TODO: GitHub doesn't reply with the expected upper/lower case
+        # for SPDX; 'upcase' handles some common cases.  See:
         # https://github.com/benbalter/licensee/issues/72
         results[:license] = {
           value: license_data['license']['key'].upcase,

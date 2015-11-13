@@ -1,8 +1,8 @@
+# rubocop:disable Metrics/ClassLength
 class OsiLicenseDetective < Detective
   # Individual detectives must identify their inputs, outputs
   INPUTS = [:license]
   OUTPUTS = [:oss_license_osi]
-
 
   # From: http://opensource.org/licenses/alphabetical
   OSI_LICENSES_FROM_OSI_WEBSITE = [
@@ -101,7 +101,7 @@ class OsiLicenseDetective < Detective
     # Remove '+' - allowing later license versions is always fine.
     license = license.strip.chomp('+')
 
-    if OsiLicenseDetective::osi_license?(license)
+    if self.class.osi_license?(license)
       { oss_license_osi_status: {
         value: 'Met', confidence: 5,
         explanation: 'The #{license} license is approved by the ' \

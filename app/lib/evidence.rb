@@ -6,8 +6,7 @@ class Evidence
   # parallel writing doesn't cause any harm.
 
   def initialize(project)
-    @project = project
-    @changes = {}
+    @project = project # ActiveRecord. Detectives should NOT change this.
     @cached_data = {}
   end
 
@@ -25,7 +24,7 @@ class Evidence
 
   # Don't download more than this number of bytes per file;
   # this helps counter easy DoS attacks.
-  MAXREAD = 10 * (2**20)
+  MAXREAD = 1 * (2**20)
 
   # Get contents of given URL and return it (cached).
   # TODO: Handle exceptions - turn into nothing useful.

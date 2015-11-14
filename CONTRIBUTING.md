@@ -6,7 +6,7 @@ Feedback and contributions are very welcome!  For specific proposals, please pro
 
 If you just want to propose or discuss changes to the criteria, the first step is proposing changes to the criteria text, which is in the file [criteria.md](doc/criteria.md).  The "doc/" directory has information you may find helpful, including [other.md](doc/other.md) and [background.md](doc/background.md).
 
-Submitting pull requests is especially helpful.  We strongly recommend creating different branches for different (logical) changes, and creating a pull request when you're done.  See the GitHub documentation on [creating branches](https://help.github.com/articles/creating-and-deleting-branches-within-your-repository/) and [using pull requests](https://help.github.com/articles/using-pull-requests/).
+Submitting pull requests is especially helpful.  We strongly recommend creating different branches for different (logical) changes, and creating a pull request when you're done into the master branch.  See the GitHub documentation on [creating branches](https://help.github.com/articles/creating-and-deleting-branches-within-your-repository/) and [using pull requests](https://help.github.com/articles/using-pull-requests/).
 
 ## Documentation changes
 
@@ -41,14 +41,27 @@ Before submitting changes, please run "rake" (no options) to look for problems, 
 * bundle - use bundle to check dependencies ("bundle check || bundle install")
 * "rake bundle_audit" - check for vulnerable dependencies
 * "rake test" - runs the test suite
-* "rake markdownlint" - runs markdownlint (check for errors in markdown text)
+* "rake markdownlint" - runs markdownlint, also known as mdl (check for errors in markdown text)
 * "rake rubocop" - runs Rubocop, which checks code style against the [community Ruby style guide](https://github.com/bbatsov/ruby-style-guide)
 * "rake rails_best_practices" - check against rails best practices using the gem [rails_best_practices](http://rails-bestpractices.com/)
 * "rake brakeman" - runs Brakeman, which is a static source code analyzer
   to look for Ruby on Rails security vulnerabilities
 
-We externally use OWASP ZAP to try to detect other security problems; you are encouraged to use web application scanners to find and fix problems too.
+Here are some other tools we use, though they are not currently integrated into the default "rake" checking task:
 
+* OWASP ZAP web application security scanner.  You are encouraged to use this and other web application scanners to find and fix problems.
+* JSCS (Javascript style checker) using the Node.js format.
+* JSHint (Javascript error detector)
+
+Note that we also use some other continuous integration tools that check changes after they are checked into GitHub; if they find problems, please fix them.
+
+## Updating components
+
+For stability we set fixed version numbers of components (which are primarily gems).  This means that we need to occasionally update our dependencies.  The 'bundle_audit' task will note vulnerable components, which may need to be updated quickly.  Updates should be handled as a separate commit from functional improvements. It's okay if the commit includes both a component update and code changes to make it work.
+
+The "bundle outdated" command lists outdated Ruby gems.  If things look reasonable, run "bundle update" to update all Ruby gems (or "bundle update GEM" to update a specific gem).  Be *sure* to rerun the tests with "rake".
+
+Once the component update has been verified, it can be checked in as a new commit.
 
 ## Creating pull requests
 

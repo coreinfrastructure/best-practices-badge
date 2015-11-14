@@ -4,7 +4,8 @@
 # Only the 'chief' decides when to update the proposed changes.
 
 class Detective
-  # Individual detectives must identify their inputs, outputs
+  # Individual detectives must identify their inputs and outputs
+  # as a list of field name symbols.
   INPUTS = []
   OUTPUTS = []
 
@@ -12,6 +13,11 @@ class Detective
   # "Current" is a hash of current best estimates of fields and values.
   # We pass this separately from the evidence to reduce potential problems
   # from parallel execution (if we add that later).
+  # The "analyze" method returns its best estimates in this form:
+  # { fieldname1: { value: value, confidence: 1..5, explanation: text}, ...}
+  # fieldnames can be proposed project value, or names of intermediate
+  # values that later Detectives can use.
+
   def analyze(_evidence, _current)
   end
 end

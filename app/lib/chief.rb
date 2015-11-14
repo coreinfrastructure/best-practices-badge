@@ -1,8 +1,11 @@
-# A 'chief' instance initiates and coordinates analysis of project data.
-# It calls 'Detectives' (analyzers) in the right order, each of which have
+# A 'chief' instance analyzes project data.  It does this by calling
+# 'Detectives' (analyzers) in the right order, each of which have
 # access to the evidence accumulated so far.
 
 # Only the 'chief' decides when to update the proposed changes.
+# Currently it just runs sequentially, but the plan is for it to use
+# the Detective INPUTS and OUTPUTS to determine what order to run, and
+# run them in parallel in an appropriate order.
 
 class Chief
   def initialize(project)

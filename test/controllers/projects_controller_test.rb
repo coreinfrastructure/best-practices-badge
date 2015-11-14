@@ -54,6 +54,24 @@ class ProjectsControllerTest < ActionController::TestCase
     assert_redirected_to project_path(assigns(:project))
   end
 
+  test 'should fail to update project' do
+    new_project_data = {
+      description: '',
+      license: '',
+      name: '',
+      repo_url: '',
+      project_homepage_url: ''
+    }
+    log_in_as(@project.user)
+    patch :update, id: @project, project: new_project_data
+    assert_response :success
+    assert_template :edit
+
+    # Do the same thing, but as for JSON
+    patch :update, id: @project, format: :json, project: new_project_data
+    assert_response :unprocessable_entity
+  end
+
   test 'A perfect project should have the badge' do
     get :badge, { id: @perfect_project, format: 'svg'}
     assert_response :success

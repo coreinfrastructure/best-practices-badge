@@ -5,6 +5,8 @@
 
 class Detective
   # Individual detectives must identify their inputs, outputs
+  INPUTS = []
+  OUTPUTS = []
 
   # Individual detectives must implement "analyze"
   # "Current" is a hash of current best estimates of fields and values.

@@ -3,6 +3,7 @@ require 'test_helper'
 class ProjectsControllerTest < ActionController::TestCase
   setup do
     @project = projects(:one)
+    @perfect_project = projects(:perfect)
     @user = users(:test_user)
   end
 
@@ -51,6 +52,18 @@ class ProjectsControllerTest < ActionController::TestCase
       project_homepage_url: @project.project_homepage_url
     }
     assert_redirected_to project_path(assigns(:project))
+  end
+
+  test 'A perfect project should have the badge' do
+    get :badge, { id: @perfect_project, format: 'svg'}
+    assert_response :success
+    assert_includes @response.body, 'passing'
+  end
+
+  test 'An empty project should not have the badge' do
+    get :badge, { id: @project, format: 'svg'}
+    assert_response :success
+    assert_includes @response.body, 'failing'
   end
 
   test 'should destroy project' do

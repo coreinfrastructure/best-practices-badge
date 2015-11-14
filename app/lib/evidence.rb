@@ -12,16 +12,6 @@ class Evidence
 
   attr_reader :project
 
-  # We need to use the project_homepage_url and repo_url often,
-  # so we'll create helpers to access them quickly.
-  def project_homepage_url
-    @project[:project_homepage_url]
-  end
-
-  def repo_url
-    @project[:repo_url]
-  end
-
   # Don't download more than this number of bytes per file;
   # this helps counter easy DoS attacks.
   MAXREAD = 1 * (2**20)

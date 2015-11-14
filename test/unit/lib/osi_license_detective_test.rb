@@ -7,8 +7,7 @@ class OsiLicenseDetectiveTest < ActiveSupport::TestCase
   end
 
   test 'MIT is OSS' do
-    results = OsiLicenseDetective.new.analyze(nil, {license: 'MIT'})
-
+    results = OsiLicenseDetective.new.analyze(nil, license: 'MIT')
 
     assert results.key?(:oss_license_osi_status)
     assert results[:oss_license_osi_status].key?(:value)
@@ -22,7 +21,7 @@ class OsiLicenseDetectiveTest < ActiveSupport::TestCase
   end
 
   test 'GPL-2.0+ is OSS' do
-    results = OsiLicenseDetective.new.analyze(nil, {license: 'GPL-2.0+'})
+    results = OsiLicenseDetective.new.analyze(nil, license: 'GPL-2.0+')
 
     assert results.key?(:oss_license_osi_status)
     assert results[:oss_license_osi_status].key?(:value)
@@ -36,7 +35,7 @@ class OsiLicenseDetectiveTest < ActiveSupport::TestCase
   end
 
   test 'Apache-2.0 is OSS' do
-    results = OsiLicenseDetective.new.analyze(nil, {license: 'Apache-2.0'})
+    results = OsiLicenseDetective.new.analyze(nil, license: 'Apache-2.0')
 
     assert results.key?(:oss_license_osi_status)
     assert results[:oss_license_osi_status].key?(:value)
@@ -50,7 +49,7 @@ class OsiLicenseDetectiveTest < ActiveSupport::TestCase
   end
 
   test 'PROPRIETARY is probably not OSI-approved' do
-    results = OsiLicenseDetective.new.analyze(nil, {license: 'PROPRIETARY'})
+    results = OsiLicenseDetective.new.analyze(nil, license: 'PROPRIETARY')
 
     assert results.key?(:oss_license_osi_status)
     assert results[:oss_license_osi_status].key?(:value)
@@ -58,8 +57,8 @@ class OsiLicenseDetectiveTest < ActiveSupport::TestCase
   end
 
   test 'Assume nothing for complicated situations' do
-    results = OsiLicenseDetective.new.analyze(nil,
-              {license: '(GPL-2.0 WITH CLASSPATH'})
+    results = OsiLicenseDetective.new.analyze(
+      nil, license: '(GPL-2.0 WITH CLASSPATH')
     assert results == {}
   end
 end

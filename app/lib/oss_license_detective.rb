@@ -1,5 +1,8 @@
+# Examine software license (already determined), expressed with SPDX,
+# to report if it's open source software (OSS) and meets OSI requirements.
+
 # rubocop:disable Metrics/ClassLength
-class OsiLicenseDetective < Detective
+class OssLicenseDetective < Detective
   # Individual detectives must identify their inputs, outputs
   INPUTS = [:license]
   OUTPUTS = [:oss_license_osi_status, :oss_license_status]
@@ -79,7 +82,7 @@ class OsiLicenseDetective < Detective
 
   # Create list of *just* SPDX names, e.g., ['Apache-2.0', 'MIT', 'GPL-2.0']
   KNOWN_OSI_LICENSES =
-    OsiLicenseDetective::OSI_LICENSES_FROM_OSI_WEBSITE.map do |text|
+    OssLicenseDetective::OSI_LICENSES_FROM_OSI_WEBSITE.map do |text|
       text.match(/\(([^()]*)\)/) do |m|
         m[1] # Return whatever is inside first parentheses
       end
@@ -88,9 +91,9 @@ class OsiLicenseDetective < Detective
   # Report if string is an OSI-approved license.  We ignore case.
   # TODO: Handle AND, OR, WITH
   KNOWN_OSI_LICENSES_DOWNCASED =
-    OsiLicenseDetective::KNOWN_OSI_LICENSES.map(&:downcase)
+    OssLicenseDetective::KNOWN_OSI_LICENSES.map(&:downcase)
   def self.osi_license?(s)
-    OsiLicenseDetective::KNOWN_OSI_LICENSES_DOWNCASED.include?(s.downcase)
+    OssLicenseDetective::KNOWN_OSI_LICENSES_DOWNCASED.include?(s.downcase)
   end
 
   # Individual detectives must implement "analyze"

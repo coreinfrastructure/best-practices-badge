@@ -10,7 +10,7 @@ class Chief
   end
 
   # TODO: Identify classes automatically and do topological sort.
-  ALL_DETECTIVES = [GithubBasicDetective, OsiLicenseDetective]
+  ALL_DETECTIVES = [GithubBasicDetective, OssLicenseDetective]
 
   # Given two changesets, produce merged "best" version
   # When confidence is the same, c1 wins.

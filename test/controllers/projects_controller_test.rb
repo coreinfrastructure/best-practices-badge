@@ -106,4 +106,11 @@ class ProjectsControllerTest < ActionController::TestCase
 
     assert_redirected_to projects_path
   end
+
+  test 'should not destroy project if no one is logged in' do
+    # Notice that we do *not* call log_in_as.
+    assert_no_difference('Project.count') do
+      delete :destroy, id: @project
+    end
+  end
 end

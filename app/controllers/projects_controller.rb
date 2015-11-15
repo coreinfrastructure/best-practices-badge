@@ -103,8 +103,12 @@ class ProjectsController < ApplicationController
   def repo_data
     github = Github.new oauth_token: session[:user_token], auto_pagination: true
     github.repos.list.map do |repo|
-      [repo.full_name, repo.fork, repo.homepage, repo.html_url]
-    end
+      if repo.blank?
+        nil
+      else
+        [repo.full_name, repo.fork, repo.homepage, repo.html_url]
+      end
+    end.compact
   end
 
   private
@@ -277,6 +281,7 @@ class ProjectsController < ApplicationController
   def set_homepage_url
     # Assign to repo.homepage if it exists, and else repo_url
     repo = repo_data.find { |r| @project.repo_url == r[3] }
+    return nil if repo.nil?
     repo[2].present? ? repo[2] : @project.repo_url
   end
 

@@ -20,6 +20,8 @@ class ProjectsControllerTest < ActionController::TestCase
 
   test 'should create project' do
     log_in_as(@user)
+    stub_request(:get, 'https://api.github.com/user/repos')
+      .to_return(status: 200, body: '', headers: {})
     assert_difference('Project.count') do
       post :create, project: {
         description: @project.description,
@@ -28,6 +30,18 @@ class ProjectsControllerTest < ActionController::TestCase
         repo_url: @project.repo_url,
         project_homepage_url: @project.project_homepage_url
       }
+    end
+  end
+
+  test 'should fail to create project' do
+    log_in_as(@user)
+    stub_request(:get, 'https://api.github.com/user/repos')
+      .to_return(status: 200, body: '', headers: {})
+    assert_no_difference('Project.count') do
+      post :create, project: { name: @project.name }
+    end
+    assert_no_difference('Project.count') do
+      post :create, format: :json, project: { name: @project.name }
     end
   end
 
@@ -73,13 +87,13 @@ class ProjectsControllerTest < ActionController::TestCase
   end
 
   test 'A perfect project should have the badge' do
-    get :badge, { id: @perfect_project, format: 'svg'}
+    get :badge, id: @perfect_project, format: 'svg'
     assert_response :success
     assert_includes @response.body, 'passing'
   end
 
   test 'An empty project should not have the badge' do
-    get :badge, { id: @project, format: 'svg'}
+    get :badge, id: @project, format: 'svg'
     assert_response :success
     assert_includes @response.body, 'failing'
   end

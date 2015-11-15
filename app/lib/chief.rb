@@ -30,6 +30,7 @@ class Chief
 
   # Should we should update a project's value for 'key'?
   def update_value?(project, key, changeset_data)
+    return false if changeset_data.blank?
     !project.has_attribute?(key) || project[key].blank? ||
       (project[key] == '?') || (changeset_data[:confidence] == 5)
   end

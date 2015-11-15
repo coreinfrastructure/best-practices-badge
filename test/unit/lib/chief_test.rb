@@ -22,9 +22,15 @@ class ChiefTest < ActiveSupport::TestCase
     new_chief.autofill
     results = @sample_project
 
-    assert results[:license] == 'MIT'
-    assert results[:name] == @human_name
-    assert results[:oss_license_status] == 'Met'
-    assert results[:oss_license_osi_status] == 'Met'
+    assert_equal results[:license], 'MIT'
+    assert_equal results[:name], @human_name
+    assert_equal results[:oss_license_status], 'Met'
+    assert_equal(
+      results[:oss_license_justification],
+      'The MIT license is approved by the Open Source Initiative (OSI).')
+    assert_equal results[:oss_license_osi_status], 'Met'
+    assert_equal(
+      results[:oss_license_osi_justification],
+      'The MIT license is approved by the Open Source Initiative (OSI).')
   end
 end

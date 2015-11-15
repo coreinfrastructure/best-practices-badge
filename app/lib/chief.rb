@@ -31,7 +31,7 @@ class Chief
   # Should we should update a project's value for 'key'?
   def update_value?(project, key, changeset_data)
     return false if changeset_data.blank?
-    !project.has_attribute?(key) || project[key].blank? ||
+    !project.attribute_present?(key) || project[key].blank? ||
       (project[key] == '?') || (changeset_data[:confidence] == 5)
   end
 
@@ -41,7 +41,7 @@ class Chief
     fields.each do |f|
       if update_value?(project, f, current_proposal)
         result[f] = current_proposal[f][:value]
-      elsif project.has_attribute?(f)
+      elsif project.attribute_present?(f)
         result[f] = project[f]
       end
     end
@@ -66,13 +66,28 @@ class Chief
 
   # Given project data, return it with the proposed changeset applied.
   # Note: This should probably be class-level
+  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   def apply_changes(project, changes)
     # TODO: Filter so only final (saveable) criteria are set.
     # TODO: Move explanation into corresponding justification text.
     changes.each do |key, data|
-      project[key] = data[:value] if update_value?(project, key, data)
+      next unless update_value?(project, key, data)
+      project[key] = data[:value]
+      # Now add the explanation. Where depends on what's there now.
+      next unless key.to_s.end_with?('_status') && data.key?(:explanation)
+      justification_key =
+        (key.to_s.chomp('_status') + '_justification').to_sym
+      if project.attribute_present?(justification_key)
+        unless project[justification_key].end_with?(data[:explanation])
+          project[justification_key] =
+            project[justification_key] + ' ' + data[:explanation]
+        end
+      else
+        project[justification_key] = data[:explanation]
+      end
     end
   end
+  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
   # Given form data about a project, return an improved version.
   def autofill

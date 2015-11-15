@@ -107,12 +107,12 @@ class OssLicenseDetective < Detective
     if self.class.osi_license?(license)
       { oss_license_osi_status:
           { value: 'Met', confidence: 5,
-            explanation: 'The #{license} license is approved by the ' \
-                         'Open Source Initiative (OSI)' },
+            explanation: "The #{license} license is approved by the " \
+                         'Open Source Initiative (OSI).' },
         oss_license_status:
           { value: 'Met', confidence: 5,
-            explanation: 'The #{license} license is approved by the ' \
-                     'Open Source Initiative (OSI)' } }
+            explanation: "The #{license} license is approved by the " \
+                     'Open Source Initiative (OSI).' } }
     elsif license =~ /\A[^(]/
       { oss_license_osi_status:
           { value: 'Unmet', confidence: 1,

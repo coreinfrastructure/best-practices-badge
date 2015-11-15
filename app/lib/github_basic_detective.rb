@@ -12,6 +12,41 @@ class GithubBasicDetective < Detective
   INPUTS = [:repo_url]
   OUTPUTS = [:name, :license]
 
+  # These are the 'correct' display case for SPDX for OSI-approved licenses.
+  LICENSE_CORRECT_CASE =
+  {
+    'APACHE-2.0' => 'Apache-2.0',
+    'ARTISTIC-2.0' => 'Artistic-2.0',
+    'BSD-3-CLAUSE' => 'BSD-3-Clause',
+    'BSD-2-CLAUSE' => 'BSD-2-Clause',
+    'EUDATAGRID' => 'EUDatagrid',
+    'ENTESSA' => 'Entessa',
+    'FAIR' => 'Fair',
+    'FRAMEWORX-1.0' => 'Frameworx-1.0',
+    'MIROS' => 'MirOS',
+    'MOTOSOTO' => 'Motosoto',
+    'MULTICS' => 'Multics',
+    'NAUMEN' => 'Naumen',
+    'NOKIA' => 'Nokia',
+    'POSTGRESQL' => 'PostgreSQL',
+    'PYTHON-2.0' => 'Python-2.0',
+    'CNRI-PYTHON' => 'CNRI-Python',
+    'SIMPL-2.0' => 'SimPL-2.0',
+    'SLEEPYCAT' => 'Sleepycat',
+    'WATCOM-1.0' => 'Watcom-1.0',
+    'WXWINDOWS' => 'WXwindows',
+    'XNET' => 'Xnet',
+    'ZLIB' => 'Zlib'
+  }
+
+  # Clean up name of license to be like the SPDX display.
+  def cleanup_license(license)
+    return nil if license.nil?
+    license = license.upcase
+    license = LICENSE_CORRECT_CASE[license] if LICENSE_CORRECT_CASE[license]
+    license
+  end
+
   # Individual detectives must implement "analyze"
   # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   def analyze(evidence, current)
@@ -48,10 +83,12 @@ class GithubBasicDetective < Detective
       if !license_data['license'].blank? &&
          !license_data['license']['key'].blank?
         # TODO: GitHub doesn't reply with the expected upper/lower case
-        # for SPDX; 'upcase' handles some common cases.  See:
+        # for SPDX; see:
         # https://github.com/benbalter/licensee/issues/72
+        # For now, we'll upcase and then fix common cases.
+        license = cleanup_license(license_data['license']['key'])
         results[:license] = {
-          value: license_data['license']['key'].upcase,
+          value: license,
           confidence: 3, explanation: 'GitHub API license analysis' }
       end
     end

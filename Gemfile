@@ -32,7 +32,7 @@ group :development, :test do
   gem 'pry-byebug', '3.3.0'
   gem 'quiet_assets', '1.1.0'
   gem 'rubocop-rspec', '1.3.1'
-  gem 'spring', '1.4.0'
+  gem 'spring', '1.4.1'
   gem 'sqlite3', '1.3.11'
   gem 'web-console', '2.2.1'
 end

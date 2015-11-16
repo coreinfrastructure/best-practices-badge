@@ -61,7 +61,29 @@ For stability we set fixed version numbers of components (which are primarily ge
 
 The "bundle outdated" command lists outdated Ruby gems.  If things look reasonable, run "bundle update" to update all Ruby gems (or "bundle update GEM" to update a specific gem).  Be *sure* to rerun the tests with "rake".
 
+Ruby itself can be updated.  Use 'cd' to go the top directory of this project, edit 'Gemfile' to edit the "ruby ..." line so it has the new version number, then run:
+
+~~~~sh
+rbenv install NEW_VERSION_NUMBER
+rbenv local NEW_VERSION_NUMBER
+rbenv rehash
+bundle install
+rbenv rehash
+~~~~
+
 Once the component update has been verified, it can be checked in as a new commit.
+
+## Keeping up with external changes
+
+If you've already set your git remote 'upstream' per our previous instructions:
+
+~~~~sh
+git remote add upstream \
+    https://github.com/linuxfoundation/cii-best-practices-badge
+~~~~
+
+Then running 'git pull master upstream' will pull the current version.  If the version of Ruby has changed (in the Gemfile), use the 'Ruby itself can be updated' instructions.  If gems have been added, run "bundle install" to install the new ones.
+
 
 ## Creating pull requests
 

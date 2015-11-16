@@ -1,7 +1,7 @@
 <% content_for :nav_extras do %>
     <% if can_make_changes? %>
       <li><%= link_to 'Edit', edit_project_path(@project) %></li>
-      <li><%= link_to 'Delete', @project, method: :delete, data: { confirm: 'Are you sure?' } %></li>
+      <li><%= link_to 'Delete',  { action: :destroy, id: @project.id }, method: :delete, data: { confirm: 'Are you sure?' } %></li>
     <% end %>
 <% end %>
 
@@ -24,7 +24,7 @@
 <%= link_to 'Back', projects_path %>
 <% if can_make_changes? %>
   <%= link_to 'Edit', edit_project_path(@project) %>
-  <%= link_to 'Delete', @project, method: :delete, data: { confirm: 'Are you sure?' } %>
+  <%= link_to 'Delete',  { action: :destroy, id: @project.id }, method: :delete, data: { confirm: 'Are you sure?' } %>
 <% end %>
 </p>
 </div>

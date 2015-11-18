@@ -131,7 +131,9 @@ same as the project URL), and license(s).
   - how to start it,
   - how to use it (possibly with a tutorial using examples), and 
   - <a name="documentation-basics"></a>how to use it securely (e.g., what to do and what not to do) if that is an appropriate topic for the software.  The security documentation need not be long (it is better for the software to be designed to be secure by default).  <sup>[<a href="#documentation-basics">documentation-basics</a>]</sup>
+- <a name="documentation-architecture"></a>The project MUST include reference documentation that describes its architecture. <sup>[<a href="#documentation-architecture">documentation-architecture</a>]</sup>
 - <a name="documentation-interface"></a>The project MUST include reference documentation that describes its interface. <sup>[<a href="#documentation-interface">documentation-interface</a>]</sup>
+- <a name="documentation-dataflow"></a>The project MUST include reference documentation that describes its data flow. <sup>[<a href="#documentation-dataflow">documentation-dataflow</a>]</sup>
 - The project MAY use hypertext links to non-project material as documentation, as long as the linked-to information is available and meets the requirements.
 
 ### Change control

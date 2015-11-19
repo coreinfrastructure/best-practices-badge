@@ -1,6 +1,7 @@
 require 'test_helper'
 
 class ChiefTest < ActiveSupport::TestCase
+  # rubocop:disable Metrics/MethodLength
   def setup
     @full_name = 'linuxfoundation/cii-best-practices-badge'
     @human_name = 'Core Infrastructure Initiative Best Practices Badge'
@@ -15,6 +16,13 @@ class ChiefTest < ActiveSupport::TestCase
     stub_request(:get, "https://api.github.com/repos/#{@full_name}/license")
       .to_return(status: 200, headers: {},
                  body: '{ "license": { "key": "MIT" } }')
+
+    stub_request(:get, "https://api.github.com/repos/#{@full_name}/contents/")
+      .to_return(status: 200, headers: {}, body: '
+      [
+        { "name": "CONTRIBUTE.md", "size": 300 , "type": "file" }
+      ]
+   ')
   end
 
   test 'CII badge results correct' do

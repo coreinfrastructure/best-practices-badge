@@ -7,13 +7,17 @@
 # the Detective INPUTS and OUTPUTS to determine what order to run, and
 # run them in parallel in an appropriate order.
 
+require 'set'
+
 class Chief
   def initialize(project)
     @evidence = Evidence.new(project)
   end
 
   # TODO: Identify classes automatically and do topological sort.
-  ALL_DETECTIVES = [GithubBasicDetective, OssLicenseDetective]
+  ALL_DETECTIVES =
+    [GithubBasicDetective, RepoFilesDetective, FileCheckDetective,
+     OssLicenseDetective]
 
   # Given two changesets, produce merged "best" version
   # When confidence is the same, c1 wins.
@@ -64,16 +68,26 @@ class Chief
     current_proposal
   end
 
+  # List fields allowed to be written into Project (an ActiveRecord).
+  # TODO: Automatically determine allowed fields.
+  ALLOWED_FIELDS =
+    [:name, :license,
+     :oss_license_osi_status, :oss_license_osi_justification,
+     :contribution_status, :contribution_justification,
+     :oss_license_status, :oss_license_justification].to_set
+
   # Given project data, return it with the proposed changeset applied.
   # Note: This should probably be class-level
   # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+  # rubocop:disable Metrics/CyclomaticComplexity
+  # rubocop:disable Metrics/PerceivedComplexity
   def apply_changes(project, changes)
-    # TODO: Filter so only final (saveable) criteria are set.
-    # TODO: Move explanation into corresponding justification text.
     changes.each do |key, data|
+      next unless ALLOWED_FIELDS.include?(key)
       next unless update_value?(project, key, data)
+      # Store change:
       project[key] = data[:value]
-      # Now add the explanation. Where depends on what's there now.
+      # Now add the explanation, if we can.
       next unless key.to_s.end_with?('_status') && data.key?(:explanation)
       justification_key =
         (key.to_s.chomp('_status') + '_justification').to_sym

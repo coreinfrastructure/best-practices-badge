@@ -2,7 +2,7 @@
 # and set an appropriate :repo_files accessor.
 # Currently we only handle GitHub; extend this to support other ways.
 
-class RepoFilesDetective < Detective
+class HowAccessRepoFilesDetective < Detective
   # Individual detectives must identify their inputs, outputs
   INPUTS = [:repo_url]
   OUTPUTS = [:repo_files] # Ask :repo_files.get("FILENAME") for files.

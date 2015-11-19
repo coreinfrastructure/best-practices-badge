@@ -16,7 +16,7 @@ class Chief
 
   # TODO: Identify classes automatically and do topological sort.
   ALL_DETECTIVES =
-    [GithubBasicDetective, RepoFilesDetective, FileCheckDetective,
+    [GithubBasicDetective, HowAccessRepoFilesDetective, FileCheckDetective,
      OssLicenseDetective]
 
   # List fields allowed to be written into Project (an ActiveRecord).

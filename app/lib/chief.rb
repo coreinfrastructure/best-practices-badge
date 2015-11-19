@@ -26,6 +26,11 @@ class Chief
      :oss_license_osi_status, :oss_license_osi_justification,
      :contribution_status, :contribution_justification,
      :oss_license_status, :oss_license_justification,
+     :repo_track_status, :repo_track_justification,
+     :repo_distributed_status, :repo_distributed_justification,
+     :build_status, :build_justification,
+     :build_common_status, :build_common_justification,
+     :license_location_status, :license_location_justification,
      :changelog_status, :changelog_justification].to_set
 
   # Given two changesets, produce merged "best" version

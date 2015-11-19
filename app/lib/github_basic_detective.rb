@@ -60,7 +60,18 @@ class GithubBasicDetective < Detective
     # about URL escaping.
     repo_url.match(
       %r{\Ahttps://github.com/([A-Za-z0-9_-]+)/([A-Za-z0-9_-]+)/?\Z}) do |m|
-      # We have a github repo.  Get basic evidence using GET, e.g.:
+      # We have a github repo.
+      results[:repo_track_status] = {
+        value: 'Met', confidence: 4,
+        explanation: 'Repository on GitHub, which uses git. ' \
+          'git can track the changes, ' \
+          'who made them, and when they were made.' }
+      results[:repo_distributed_status] = {
+        value: 'Met', confidence: 4,
+        explanation: 'Repository on GitHub, which uses git. ' \
+          'git is distributed.' }
+
+      # Get basic evidence using GET, e.g.:
       # https://api.github.com/repos/linuxfoundation/cii-best-practices-badge
       fullname = m[1] + '/' + m[2]
       basic_repo_data_raw = evidence.get(

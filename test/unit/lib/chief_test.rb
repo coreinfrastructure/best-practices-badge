@@ -51,6 +51,22 @@ class ChiefTest < ActiveSupport::TestCase
       "git": "https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/git/blobs/17131ab0d29a598bd4021e01adbf9404f8cda163",
       "html": "https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/CONTRIBUTING.md"
     }
+  },
+  {
+    "name": "Rakefile",
+    "path": "Rakefile",
+    "sha": "dfa3aa4bfefd6dfba903204b63a615f94a23167e",
+    "size": 251,
+    "url": "https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/contents/Rakefile?ref=master",
+    "html_url": "https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/Rakefile",
+    "git_url": "https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/git/blobs/dfa3aa4bfefd6dfba903204b63a615f94a23167e",
+    "download_url": "https://raw.githubusercontent.com/linuxfoundation/cii-best-practices-badge/master/Rakefile",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/contents/Rakefile?ref=master",
+      "git": "https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/git/blobs/dfa3aa4bfefd6dfba903204b63a615f94a23167e",
+      "html": "https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/Rakefile"
+    }
   }
       ]
    ')
@@ -78,5 +94,10 @@ class ChiefTest < ActiveSupport::TestCase
                  '<https://github.com/linuxfoundation/' \
                  'cii-best-practices-badge/blob/master/CHANGELOG.md>.',
                  results[:changelog_justification]
+    assert_equal 'Met', results[:build_status]
+    assert_equal 'Non-trivial build file in repository: ' \
+                 '<https://github.com/linuxfoundation/' \
+                 'cii-best-practices-badge/blob/master/Rakefile>.',
+                 results[:build_justification]
   end
 end

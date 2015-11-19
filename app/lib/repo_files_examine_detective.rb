@@ -1,14 +1,16 @@
-# Examine repository files at the top level and in documentation directories.
+# Examine repository files at the top level and in key subdirectories
+# (those conventionally used for source and documentation).
 # Note that a key precondition is determining how to open repo files.
 
 class RepoFilesExamineDetective < Detective
   INPUTS = [:repo_files]
   OUTPUTS = [:contribution_status]
 
-  # Minimum file sizes before they count.
+  # Minimum file sizes (in bytes) before they are considered useful.
   # Empty files, in particular, clearly do NOT have enough content.
+  NONTRIVIAL_MIN_SIZE = 40
+  # Contribution should be longer to be considered useful.
   CONTRIBUTION_MIN_SIZE = 100
-  CHANGELOG_MIN_SIZE = 40
 
   # Given an enumeration of fso info hashes, return the fso info for files
   # that match the regex name pattern and are at least minimum_size in length.
@@ -55,13 +57,42 @@ class RepoFilesExamineDetective < Detective
 
     determine_results(
       :contribution_status,
-      /\A(contributing|contribute)(|\.md|\.txt)?\Z/i,
+      /\A(contributing|contribute)(\.md|\.txt)?\Z/i,
       CONTRIBUTION_MIN_SIZE, 'contribution')
 
     determine_results(
+      :license_location_status,
+      /\A([A-Za-z0-9]+-)?(license|copying)(\.md|\.txt)?\Z/i,
+      NONTRIVIAL_MIN_SIZE, 'license location')
+
+    determine_results(
       :changelog_status,
-      /\A(changelog)(|\.md|\.txt)?\Z/i,
-      CHANGELOG_MIN_SIZE, 'changelog')
+      /\A(changelog|news)(\.md|\.txt)?\Z/i,
+      NONTRIVIAL_MIN_SIZE, 'changelog')
+
+    # There are many different build systems, and different
+    # programming languages & environments have different common conventions.
+    # Many build systems work across languages, so they're not really
+    # that tied to specific ones.
+    # Also: Need to detect when a build system is unnecessary.
+    determine_results(
+      :build_status,
+      /\A(
+          Makefile|                 # Make
+          GNUmakefile|              # GNU make specific
+          autoconf.ac|automake.am|  # autotools
+          CMakeLists\.txt|          # cmake
+          Rakefile|                 # rake, common for Ruby
+          pom\.xml|                 # Maven, common for Java
+          build\.xml|               # Ant, common for Java
+          .*\.proj|                 # msbuild
+          build\.sbt|               # SBT, for Scala
+          SConstruct                # SCONS. Uses Python.
+        )\Z
+      /ix,
+      NONTRIVIAL_MIN_SIZE, 'build')
+    # If we can detect it, it's common enough to be considered common.
+    @results[:build_common_tools] = @results[:build_status]
 
     @results
   end

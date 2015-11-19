@@ -19,6 +19,15 @@ class Chief
     [GithubBasicDetective, RepoFilesDetective, FileCheckDetective,
      OssLicenseDetective]
 
+  # List fields allowed to be written into Project (an ActiveRecord).
+  # TODO: Automatically determine allowed fields, or get from elsewhere.
+  ALLOWED_FIELDS =
+    [:name, :license,
+     :oss_license_osi_status, :oss_license_osi_justification,
+     :contribution_status, :contribution_justification,
+     :oss_license_status, :oss_license_justification,
+     :changelog_status, :changelog_justification].to_set
+
   # Given two changesets, produce merged "best" version
   # When confidence is the same, c1 wins.
   def merge_changeset(c1, c2)
@@ -67,14 +76,6 @@ class Chief
     end
     current_proposal
   end
-
-  # List fields allowed to be written into Project (an ActiveRecord).
-  # TODO: Automatically determine allowed fields.
-  ALLOWED_FIELDS =
-    [:name, :license,
-     :oss_license_osi_status, :oss_license_osi_justification,
-     :contribution_status, :contribution_justification,
-     :oss_license_status, :oss_license_justification].to_set
 
   # Given project data, return it with the proposed changeset applied.
   # Note: This should probably be class-level

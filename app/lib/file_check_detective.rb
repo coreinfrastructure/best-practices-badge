@@ -4,7 +4,10 @@ class FileCheckDetective < Detective
   INPUTS = [:repo_files]
   OUTPUTS = [:contribution_status]
 
-  CONTRIBUTION_SIZE = 100
+  # Minimum file sizes before they should count.
+  # Empty files, in particular, clearly do NOT have enough content.
+  CONTRIBUTION_MIN_SIZE = 100
+  CHANGELOG_MIN_SIZE = 40
 
   # Return with array of directory names matching name pattern.
   # def dirs(contents, name)
@@ -31,10 +34,9 @@ class FileCheckDetective < Detective
 
     # TODO: Look in subdirectories.
 
-    contribution_files = files_named(
-      /\A(contributing|contribute)(\.md|\.txt)?\Z/i, CONTRIBUTION_SIZE)
-
-    if contribution_files.empty?
+    contribution = files_named(
+      /\A(contributing|contribute)(|\.md|\.txt)?\Z/i, CONTRIBUTION_MIN_SIZE)
+    if contribution.empty?
       results[:contribution_status] =
         { value: 'Unmet', confidence: 1,
           explanation: 'No contribution file found.' }
@@ -42,7 +44,20 @@ class FileCheckDetective < Detective
       results[:contribution_status] =
         { value: 'Met', confidence: 5,
           explanation: 'Non-trivial contribution file in repository: ' \
-            "<#{contribution_files.first['html_url']}>." }
+            "<#{contribution.first['html_url']}>." }
+    end
+
+    changelog = files_named(
+      /\A(changelog)(|\.md|\.txt)?\Z/i, CHANGELOG_MIN_SIZE)
+    if changelog.empty?
+      results[:changelog_status] =
+        { value: 'Unmet', confidence: 1,
+          explanation: 'No changelog file found.' }
+    else
+      results[:changelog_status] =
+        { value: 'Met', confidence: 5,
+          explanation: 'Non-trivial changelog file in repository: ' \
+            "<#{changelog.first['html_url']}>." }
     end
 
     results

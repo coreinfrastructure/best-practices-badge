@@ -7,7 +7,7 @@ class RepoFilesDetective < Detective
   INPUTS = [:repo_url]
   OUTPUTS = [:repo_files] # Ask :repo_files.get("FILENAME") for files.
 
-  GITHUB_REPO = %r{https?://github.com/([^/]*)/([^/]*)(.git)?}
+  GITHUB_REPO = %r{https?://github.com/([\w\.-]*)/([\w\.-]*)(.git|/)?}
   def analyze(_evidence, current)
     repo_url = current[:repo_url]
     return {} if repo_url.blank?

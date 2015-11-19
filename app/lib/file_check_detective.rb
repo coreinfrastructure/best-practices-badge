@@ -4,22 +4,40 @@ class FileCheckDetective < Detective
   INPUTS = [:repo_files]
   OUTPUTS = [:contribution_status]
 
-  # Minimum file sizes before they should count.
+  # Minimum file sizes before they count.
   # Empty files, in particular, clearly do NOT have enough content.
   CONTRIBUTION_MIN_SIZE = 100
   CHANGELOG_MIN_SIZE = 40
 
-  # Return with array of directory names matching name pattern.
-  # def dirs(contents, name)
-  # end
-
-  # Given an enumeration of fso info hashes, return the fso infos
+  # Given an enumeration of fso info hashes, return the fso info for files
   # that match the regex name pattern and are at least minimum_size in length.
-  def files_named(name, minimum_size)
+  def files_named(name_pattern, minimum_size)
     @top_level.select do |fso|
-      fso['type'] == 'file' && fso['name'].match(name) &&
+      fso['type'] == 'file' && fso['name'].match(name_pattern) &&
         fso['size'] >= minimum_size
     end
+  end
+
+  def unmet_result(result_description)
+    { value: 'Unmet', confidence: 1,
+      explanation: "No #{result_description} file found." }
+  end
+
+  def met_result(result_description, html_url)
+    { value: 'Met', confidence: 3,
+      explanation:
+        "Non-trivial #{result_description} file in repository: " \
+        "<#{html_url}>." }
+  end
+
+  def determine_results(status, name_pattern, minimum_size, result_description)
+    found_files = files_named(name_pattern, minimum_size)
+    @results[status] =
+      if found_files.empty?
+        unmet_result result_description
+      else
+        met_result result_description, found_files.first['html_url']
+      end
   end
 
   # rubocop:disable Metrics/MethodLength
@@ -27,39 +45,23 @@ class FileCheckDetective < Detective
     repo_files = current[:repo_files]
     return {} if repo_files.blank?
 
-    results = {}
+    @results = {}
 
     # Top_level is iterable, contains a hash with name, size, type (file|dir).
     @top_level = repo_files.get_info('/')
 
     # TODO: Look in subdirectories.
 
-    contribution = files_named(
-      /\A(contributing|contribute)(|\.md|\.txt)?\Z/i, CONTRIBUTION_MIN_SIZE)
-    if contribution.empty?
-      results[:contribution_status] =
-        { value: 'Unmet', confidence: 1,
-          explanation: 'No contribution file found.' }
-    else
-      results[:contribution_status] =
-        { value: 'Met', confidence: 5,
-          explanation: 'Non-trivial contribution file in repository: ' \
-            "<#{contribution.first['html_url']}>." }
-    end
+    determine_results(
+      :contribution_status,
+      /\A(contributing|contribute)(|\.md|\.txt)?\Z/i,
+      CONTRIBUTION_MIN_SIZE, 'contribution')
 
-    changelog = files_named(
-      /\A(changelog)(|\.md|\.txt)?\Z/i, CHANGELOG_MIN_SIZE)
-    if changelog.empty?
-      results[:changelog_status] =
-        { value: 'Unmet', confidence: 1,
-          explanation: 'No changelog file found.' }
-    else
-      results[:changelog_status] =
-        { value: 'Met', confidence: 5,
-          explanation: 'Non-trivial changelog file in repository: ' \
-            "<#{changelog.first['html_url']}>." }
-    end
+    determine_results(
+      :changelog_status,
+      /\A(changelog)(|\.md|\.txt)?\Z/i,
+      CHANGELOG_MIN_SIZE, 'changelog')
 
-    results
+    @results
   end
 end

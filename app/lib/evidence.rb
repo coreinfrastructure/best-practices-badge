@@ -5,6 +5,8 @@ class Evidence
   # If parallel execution is possible, this class locks/unlocks so
   # parallel writing doesn't cause any harm.
 
+  # NOTE: The current plan is to remove this class, it's not helping much.
+
   def initialize(project)
     @project = project # ActiveRecord. Detectives should NOT change this.
     @cached_data = {}

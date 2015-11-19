@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class ChiefTest < ActiveSupport::TestCase
-  # rubocop:disable Metrics/MethodLength
+  # rubocop:disable Metrics/MethodLength,Metrics/LineLength
   def setup
     @full_name = 'linuxfoundation/cii-best-practices-badge'
     @human_name = 'Core Infrastructure Initiative Best Practices Badge'
@@ -20,7 +20,38 @@ class ChiefTest < ActiveSupport::TestCase
     stub_request(:get, "https://api.github.com/repos/#{@full_name}/contents/")
       .to_return(status: 200, headers: {}, body: '
       [
-        { "name": "CONTRIBUTE.md", "size": 300 , "type": "file" }
+  {
+    "name": "CHANGELOG.md",
+    "path": "CHANGELOG.md",
+    "sha": "0c5c52f14f821c6a5d7591f485624938838d7b9c",
+    "size": 682,
+    "url": "https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/contents/CHANGELOG.md?ref=master",
+    "html_url": "https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/CHANGELOG.md",
+    "git_url": "https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/git/blobs/0c5c52f14f821c6a5d7591f485624938838d7b9c",
+    "download_url": "https://raw.githubusercontent.com/linuxfoundation/cii-best-practices-badge/master/CHANGELOG.md",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/contents/CHANGELOG.md?ref=master",
+      "git": "https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/git/blobs/0c5c52f14f821c6a5d7591f485624938838d7b9c",
+      "html": "https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/CHANGELOG.md"
+    }
+  },
+  {
+    "name": "CONTRIBUTING.md",
+    "path": "CONTRIBUTING.md",
+    "sha": "17131ab0d29a598bd4021e01adbf9404f8cda163",
+    "size": 7618,
+    "url": "https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/contents/CONTRIBUTING.md?ref=master",
+    "html_url": "https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/CONTRIBUTING.md",
+    "git_url": "https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/git/blobs/17131ab0d29a598bd4021e01adbf9404f8cda163",
+    "download_url": "https://raw.githubusercontent.com/linuxfoundation/cii-best-practices-badge/master/CONTRIBUTING.md",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/contents/CONTRIBUTING.md?ref=master",
+      "git": "https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/git/blobs/17131ab0d29a598bd4021e01adbf9404f8cda163",
+      "html": "https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/CONTRIBUTING.md"
+    }
+  }
       ]
    ')
   end
@@ -31,11 +62,16 @@ class ChiefTest < ActiveSupport::TestCase
     results = @sample_project
 
     mit_ok = 'The MIT license is approved by the Open Source Initiative (OSI).'
-    assert_equal results[:license], 'MIT'
-    assert_equal results[:name], @human_name
-    assert_equal results[:oss_license_status], 'Met'
-    assert_equal results[:oss_license_justification], mit_ok
-    assert_equal results[:oss_license_osi_status], 'Met'
-    assert_equal results[:oss_license_osi_justification], mit_ok
+    assert_equal 'MIT', results[:license]
+    assert_equal @human_name, results[:name]
+    assert_equal 'Met', results[:oss_license_status]
+    assert_equal mit_ok, results[:oss_license_justification]
+    assert_equal 'Met', results[:oss_license_osi_status]
+    assert_equal mit_ok, results[:oss_license_osi_justification]
+    assert_equal 'Met', results[:contribution_status]
+    assert_equal 'Non-trivial contribution file in repository: ' \
+                 '<https://github.com/linuxfoundation/' \
+                 'cii-best-practices-badge/blob/master/CONTRIBUTING.md>.',
+                 results[:contribution_justification]
   end
 end

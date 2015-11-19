@@ -29,7 +29,7 @@ class Chief
      :repo_track_status, :repo_track_justification,
      :repo_distributed_status, :repo_distributed_justification,
      :build_status, :build_justification,
-     :build_common_status, :build_common_justification,
+     :build_common_tools_status, :build_common_tools_justification,
      :license_location_status, :license_location_justification,
      :changelog_status, :changelog_justification].to_set
 

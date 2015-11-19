@@ -4,7 +4,8 @@
 
 class RepoFilesExamineDetective < Detective
   INPUTS = [:repo_files]
-  OUTPUTS = [:contribution_status]
+  OUTPUTS = [:contribution_status, :license_location_status,
+             :changelog_status, :build_status, :build_common_tools_status]
 
   # Minimum file sizes (in bytes) before they are considered useful.
   # Empty files, in particular, clearly do NOT have enough content.
@@ -92,7 +93,7 @@ class RepoFilesExamineDetective < Detective
       /ix,
       NONTRIVIAL_MIN_SIZE, 'build')
     # If we can detect it, it's common enough to be considered common.
-    @results[:build_common_tools] = @results[:build_status]
+    @results[:build_common_tools_status] = @results[:build_status]
 
     @results
   end

@@ -1,6 +1,7 @@
 # Examine repository files at the top level and in documentation directories.
+# Note that a key precondition is determining how to open repo files.
 
-class FileCheckDetective < Detective
+class RepoFilesExamineDetective < Detective
   INPUTS = [:repo_files]
   OUTPUTS = [:contribution_status]
 

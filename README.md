@@ -8,7 +8,7 @@
 
 This project identifies best practices for open source software (OSS)
 and implements a badging system for those best practices.
-The badging system is a simple web application
+The "BadgeApp" badging system is a simple web application
 that lets OSS projects self-certify that they meet the criteria
 and show a badge.
 The real goal of this project is to encourage OSS projects to
@@ -23,7 +23,6 @@ There is also a [mailing list](https://lists.coreinfrastructure.org/mailman/list
 
 * Draft Badging **[Criteria](./doc/criteria.md)**
 * Draft **[Background](./doc/background.md)** on Badging
-* Draft **BadgeApp** application (this repo)
 * **[ChangeLog](./CHANGELOG.md)**
 * Current **[implementation](./doc/implementation.md)**  - notes about the BadgeApp implementation
 * Information on how to **[contribute](./CONTRIBUTING.md)**

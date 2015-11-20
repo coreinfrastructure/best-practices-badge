@@ -1,7 +1,6 @@
     <div class="row">
       <% status_symbol = (criteria + "_status").to_sym %>
       <% justification_symbol = (criteria + "_justification").to_sym %>
-      <% criteria_shortname = criteria.gsub("_", "-") %>
 
       <div class="col-md-2 criteria-radio">
        <div class="row status-chooser <%=
@@ -32,7 +31,7 @@
 
       <div class='col-md-10 criteria-desc'>
           <br>
-          <%= raw desc %> <sup>[<%= criteria_shortname %>]</sup>
+          <%= raw desc %> <sup>[<%= criteria %>]</sup>
           <%= if defined?(details)
               render(partial: "details", locals: {f: f,
                        criteria: criteria, details: details})

@@ -1,8 +1,10 @@
 require 'test_helper'
 
+# rubocop:disable Metrics/ClassLength
 class ProjectsControllerTest < ActionController::TestCase
   setup do
     @project = projects(:one)
+    @perfect_unjustified_project = projects(:perfect_unjustified)
     @perfect_project = projects(:perfect)
     @user = users(:test_user)
   end
@@ -90,6 +92,12 @@ class ProjectsControllerTest < ActionController::TestCase
     get :badge, id: @perfect_project, format: 'svg'
     assert_response :success
     assert_includes @response.body, 'passing'
+  end
+
+  test 'A perfect unjustified project should not have the badge' do
+    get :badge, id: @perfect_unjustified_project, format: 'svg'
+    assert_response :success
+    assert_includes @response.body, 'failing'
   end
 
   test 'An empty project should not have the badge' do

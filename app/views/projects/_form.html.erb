@@ -108,6 +108,7 @@ The project website MUST provide information on how to: obtain, provide feedback
       <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
               criteria: "contribution", desc: %{
 The information on how to contribute MUST explain the contribution process (e.g., are pull requests used?)},
+              met_url: true,
               details: %{
 This can be short, e.g., stating that the project uses pull requests, an issue tracker, or posts to a mailing list (which one?).},
               met_placeholder: %{What is the process? What URL explains it?
@@ -117,6 +118,7 @@ This can be short, e.g., stating that the project uses pull requests, an issue t
       <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
               criteria: "contribution_criteria", desc: %{
 The information on how to contribute SHOULD include the basic criteria for acceptable contributions (e.g., a reference to any required coding standard).},
+              met_url: true,
               unmet_placeholder: %{Why are the criteria so obvious that this information isn't needed?
 }}) %>
       <br><br>
@@ -192,10 +194,10 @@ Licenses not approved by OSI might not be OSS licenses.
        <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
                criteria: "license_location", desc: %{
 The project MUST post licence(s) in a standard location.},
+               met_url: true,
                 details: %{
 E.g., as a top-level file named LICENSE or COPYING.
 License filenames MAY be followed by an extension such as ".txt" or ".md".},
-               met_suppress: true
 }) %>
 
       <br><br>
@@ -294,6 +296,7 @@ release using git tags.
       <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
                criteria: "changelog", desc: %{
 The project MUST provide a "ChangeLog" (a human-readable summary of major changes in each release).},
+               met_url: true,
                details: %{
 The ChangeLog MUST NOT be the output of the version control log of every change
 (e.g., the "git log" command is not a ChangeLog).
@@ -325,7 +328,7 @@ known vulnerabilities.
       -->
 
       <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
-               criteria: "report_process", desc: %{
+               criteria: "report_process", met_url: true, desc: %{
 The project MUST provide a process for users to submit bug reports
 (e.g., using an issue tracker or a mailing list).
 }}) %>
@@ -350,7 +353,7 @@ The project SHOULD respond to most enhancement requests in the last 2-12 months 
       <hr>
 
       <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
-               criteria: "report_archive", desc: %{
+               criteria: "report_archive", met_url: true, desc: %{
 The project MUST have a publicly available archive for reports and responses for later searching.
 }}) %>
 
@@ -360,6 +363,7 @@ The project MUST have a publicly available archive for reports and responses for
       <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
                criteria: "vulnerability_report_process", desc: %{
 The project MUST publish the process for reporting vulnerabilities on the project site.},
+               met_url: true,
                details: %{
 E.g., a clearly designated mailing address on https://PROJECTSITE/security, often security@SOMEWHERE.
 This MAY be the same as its bug reporting process.
@@ -370,6 +374,7 @@ This MAY be the same as its bug reporting process.
                criteria: "vulnerability_report_private", desc: %{
 If private vulnerability reports are supported, the project MUST include how
 to send the information in a way that is kept private.},
+               met_url: true,
                details: %{
 E.g., a private defect
 report submitted on the web using TLS or an email encrypted using OpenPGP.

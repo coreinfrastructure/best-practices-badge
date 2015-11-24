@@ -4,94 +4,95 @@ class Project < ActiveRecord::Base
   STATUS_CHOICE_NA = (STATUS_CHOICE + %w(N/A)).freeze
   MIN_SHOULD_LENGTH = 5
 
-  # Map each criterion to ['MUST|SHOULD|SUGGESTED', na_allowed?]
+  # Map each criterion to ['MUST|SHOULD|SUGGESTED',
+  #   na_allowed?, met_requires_url?]
   CRITERIA_INFO = {
     # Basic Project Website Content
-    description_sufficient: ['MUST', false],
-    interact: ['MUST', false],
-    contribution: ['MUST', false],
-    contribution_criteria: ['SHOULD', false],
+    description_sufficient: ['MUST', false, false],
+    interact: ['MUST', false, false],
+    contribution: ['MUST', false, true],
+    contribution_criteria: ['SHOULD', false, true],
     # OSS License
-    license_location: ['MUST', false],
-    oss_license: ['MUST', false],
-    oss_license_osi: ['SUGGESTED', false],
+    license_location: ['MUST', false, true],
+    oss_license: ['MUST', false, false],
+    oss_license_osi: ['SUGGESTED', false, false],
     # Documentation
-    documentation_basics: ['MUST', false],
-    documentation_interface: ['MUST', false],
+    documentation_basics: ['MUST', false, false],
+    documentation_interface: ['MUST', false, false],
     # CHANGE CONTROL
     # Public version-controlled source repository
-    repo_url: ['MUST', false],
-    repo_track: ['MUST', false],
-    repo_interim: ['MUST', false],
-    repo_distributed: ['SUGGESTED', false],
+    repo_url: ['MUST', false, false],
+    repo_track: ['MUST', false, false],
+    repo_interim: ['MUST', false, false],
+    repo_distributed: ['SUGGESTED', false, false],
     # Unique version numbering
-    version_unique: ['MUST', false],
-    version_semver: ['SUGGESTED', false],
-    version_tags: ['SUGGESTED', false],
+    version_unique: ['MUST', false, false],
+    version_semver: ['SUGGESTED', false, false],
+    version_tags: ['SUGGESTED', false, false],
     # ChangeLog
-    changelog: ['MUST', false],
-    changelog_vulns: ['MUST', false],
+    changelog: ['MUST', false, true],
+    changelog_vulns: ['MUST', false, false],
     # REPORTING
     # Bug-reporting process
-    report_tracker: ['SUGGESTED', false],
-    report_process: ['MUST', false],
-    report_responses: ['MUST', false],
-    enhancement_responses: ['SHOULD', false],
-    report_archive: ['MUST', false],
+    report_tracker: ['SUGGESTED', false, false],
+    report_process: ['MUST', false, true],
+    report_responses: ['MUST', false, false],
+    enhancement_responses: ['SHOULD', false, false],
+    report_archive: ['MUST', false, true],
     # Vulnerability report process
-    vulnerability_report_process: ['MUST', false],
-    vulnerability_report_private: ['MUST', false],
-    vulnerability_report_response: ['MUST', false],
+    vulnerability_report_process: ['MUST', false, true],
+    vulnerability_report_private: ['MUST', false, true],
+    vulnerability_report_response: ['MUST', false, false],
     # QUALITY
     # Working build system
-    build: ['MUST', false],
-    build_common_tools: ['SUGGESTED', false],
-    build_oss_tools: ['SHOULD', false],
+    build: ['MUST', false, false],
+    build_common_tools: ['SUGGESTED', false, false],
+    build_oss_tools: ['SHOULD', false, false],
     # Automated test suite
-    test: ['MUST', false],
-    test_invocation: ['SHOULD', false],
-    test_most: ['SUGGESTED', false],
-    test_continuous_integration: ['SUGGESTED', false],
+    test: ['MUST', false, false],
+    test_invocation: ['SHOULD', false, false],
+    test_most: ['SUGGESTED', false, false],
+    test_continuous_integration: ['SUGGESTED', false, false],
     # New functionality testing
-    test_policy: ['MUST', false],
-    tests_are_added: ['MUST', false],
-    tests_documented_added: ['SUGGESTED', false],
+    test_policy: ['MUST', false, false],
+    tests_are_added: ['MUST', false, false],
+    tests_documented_added: ['SUGGESTED', false, false],
     # Warning flags
-    warnings: ['MUST', true],
-    warnings_fixed: ['MUST', true],
-    warnings_strict: ['SUGGESTED', true],
+    warnings: ['MUST', true, false],
+    warnings_fixed: ['MUST', true, false],
+    warnings_strict: ['SUGGESTED', true, false],
     # SECURITY
     # Secure development knowledge
-    know_secure_design: ['MUST', false],
-    know_common_errors: ['MUST', false],
+    know_secure_design: ['MUST', false, false],
+    know_common_errors: ['MUST', false, false],
     # Use basic good cryptographic practices
-    crypto_published: ['MUST', true],
-    crypto_call: ['MUST', true],
-    crypto_oss: ['MUST', true],
-    crypto_keylength: ['MUST', true],
-    crypto_working: ['MUST', true],
-    crypto_weaknesses: ['SHOULD', true],
-    crypto_alternatives: ['SHOULD', true],
-    crypto_pfs: ['SHOULD', true],
-    crypto_password_storage: ['MUST', true],
-    crypto_random: ['MUST', true],
+    crypto_published: ['MUST', true, false],
+    crypto_call: ['MUST', true, false],
+    crypto_oss: ['MUST', true, false],
+    crypto_keylength: ['MUST', true, false],
+    crypto_working: ['MUST', true, false],
+    crypto_weaknesses: ['SHOULD', true, false],
+    crypto_alternatives: ['SHOULD', true, false],
+    crypto_pfs: ['SHOULD', true, false],
+    crypto_password_storage: ['MUST', true, false],
+    crypto_random: ['MUST', true, false],
     # Secured delivery against man-in-the-middle (MITM) attacks
-    delivery_mitm: ['MUST', false],
-    delivery_unsigned: ['MUST', false],
+    delivery_mitm: ['MUST', false, false],
+    delivery_unsigned: ['MUST', false, false],
     # Publicly-known Vulnerabilities fixed
-    vulnerabilities_fixed_60_days: ['MUST', false],
-    vulnerabilities_critical_fixed: ['SHOULD', false],
+    vulnerabilities_fixed_60_days: ['MUST', false, false],
+    vulnerabilities_critical_fixed: ['SHOULD', false, false],
     # ANALYSIS
     # Static code analysis
-    static_analysis: ['MUST', true],
-    static_analysis_common_vulnerabilities: ['SUGGESTED', false],
-    static_analysis_fixed: ['MUST', false],
-    static_analysis_often: ['SUGGESTED', false],
+    static_analysis: ['MUST', true, false],
+    static_analysis_common_vulnerabilities: ['SUGGESTED', false, false],
+    static_analysis_fixed: ['MUST', false, false],
+    static_analysis_often: ['SUGGESTED', false, false],
     # Dynamic code analysis
-    dynamic_analysis: ['SUGGESTED', false],
-    dynamic_analysis_unsafe: ['SUGGESTED', true],
-    dynamic_analysis_enable_assertions: ['SUGGESTED', false],
-    dynamic_analysis_fixed: ['MUST', false] }.freeze
+    dynamic_analysis: ['SUGGESTED', false, false],
+    dynamic_analysis_unsafe: ['SUGGESTED', true, false],
+    dynamic_analysis_enable_assertions: ['SUGGESTED', false, false],
+    dynamic_analysis_fixed: ['MUST', false, false] }.freeze
 
   # Peojects are associated with users
   belongs_to :user
@@ -133,7 +134,7 @@ class Project < ActiveRecord::Base
     CRITERIA_INFO.all? do |criterion, value|
       status = project["#{criterion}_status"]
       justification = project["#{criterion}_justification"]
-      enough_criterion? status, justification, value[0]
+      enough_criterion? status, justification, value[0], value[2]
     end
   end
 
@@ -144,12 +145,21 @@ class Project < ActiveRecord::Base
     errors.add :base, 'Need at least a project or repository URL'
   end
 
-  # Do we have enough for this criterion get a badge?
-  # rubocop:disable Metrics/CyclomaticComplexity
-  def self.enough_criterion?(status, justification, category)
+  # TODO: define standard URL regex, then use everywhere.
+  def self.contains_url?(text)
+    return false if text.nil?
+    text.match %r(https?://[^ ]{5,})
+  end
+
+  # Do we have enough about this criterion to get a badge?
+  # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+  # rubocop:disable Metrics/MethodLength
+  def self.enough_criterion?(status, justification, category, met_needs_url)
     case
-    when status.in?(%w(Met N/A))
+    when status == 'N/A'
       true
+    when status == 'Met'
+      met_needs_url ? self.contains_url?(justification) : true
     when category == 'SHOULD' && status == 'Unmet' &&
       justification.length >= MIN_SHOULD_LENGTH
       true

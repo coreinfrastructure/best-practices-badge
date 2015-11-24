@@ -129,11 +129,11 @@ class Project < ActiveRecord::Base
     (CRITERIA_INFO[field.to_sym])[0]
   end
 
-  def self.valid_badge?(project)
+  def self.badge_achieved?(project)
     CRITERIA_INFO.all? do |criterion, value|
       status = project["#{criterion}_status"]
       justification = project["#{criterion}_justification"]
-      valid_category? status, justification, value[0]
+      enough_criterion? status, justification, value[0]
     end
   end
 
@@ -144,15 +144,16 @@ class Project < ActiveRecord::Base
     errors.add :base, 'Need at least a project or repository URL'
   end
 
+  # Do we have enough for this criterion get a badge?
   # rubocop:disable Metrics/CyclomaticComplexity
-  def self.valid_category?(status, justification, value)
+  def self.enough_criterion?(status, justification, category)
     case
     when status.in?(%w(Met N/A))
       true
-    when value == 'SHOULD' && status == 'Unmet' &&
+    when category == 'SHOULD' && status == 'Unmet' &&
       justification.length >= MIN_SHOULD_LENGTH
       true
-    when value == 'SUGGESTED' && status != '?'
+    when category == 'SUGGESTED' && status != '?'
       true
     else false
     end

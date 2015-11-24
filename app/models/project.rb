@@ -41,7 +41,7 @@ class Project < ActiveRecord::Base
     report_archive: ['MUST', false, true],
     # Vulnerability report process
     vulnerability_report_process: ['MUST', false, true],
-    vulnerability_report_private: ['MUST', false, true],
+    vulnerability_report_private: ['MUST', true, true],
     vulnerability_report_response: ['MUST', false, false],
     # QUALITY
     # Working build system

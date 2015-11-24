@@ -36,13 +36,32 @@ Potential silver criteria
 *   **Turn many should/suggested into MUST**
 *   **Build and test:**
     -   **Continuous integration**.   
-        An automated test suite MUST applied on each check-in to a shared repository, at least for some branches, with a generated report available to at least project members on success or failure of the tests.  This test suite SHOULD be applied across many platforms where appropriate.  *Rationale*:  Continuous integration provides much more rapid feedback on whether or not changes will cause test failures, including regressions.
+        An automated test suite MUST applied on each check-in to a shared
+		repository, at least for some branches,
+		with a generated report available to at least project members on
+		success or failure of the tests.
+		This test suite SHOULD be applied across many platforms where
+		appropriate.
+		*Rationale*:  Continuous integration provides much more rapid feedback
+		on whether or not changes will cause test failures,
+		including regressions.
     -   *Tests are rigorously added for new functionality*.  
-        There MUST be a stated policy that when major new functionality is added, tests of that functionality MUST be added to an automated test suite, at least in the documentation for creating change proposals.  There MUST be evidence that such tests are being added in the most recent major changes to the project.
+        There MUST be a stated policy that when major new functionality is
+		added, tests of that functionality MUST be added to an automated test
+		suite, at least in the documentation for creating change proposals.
+		There MUST be evidence that such tests are being added in the most
+		recent major changes to the project.
     -   *Regression tests*.  
-        When a bug is fixed, a regression test MUST normally be added to the automated test suite to prevent its reoccurrence.
+        When a bug is fixed, a regression test MUST normally be added to the
+		automated test suite to prevent its reoccurrence.
     -   *Reproduceable build*.
-         It MUST be possible to rebuild executables that are bit-for-bit identical, given the same executables of the tools used for building.  This criterion is automatically met if there is no process for creating a separate executable or package.  *Rationale*:  Reproduceable builds make it much easier to verify that the executable and source code of a program correspond, countering certain kinds of malicious attacks.
+        It MUST be possible to rebuild executables that are bit-for-bit
+		identical, given the same executables of the tools used for building.
+		This criterion is automatically met if there is no process for
+		creating a separate executable or package.
+		*Rationale*:  Reproduceable builds make it much easier to verify that
+		the executable and source code of a program correspond,
+		countering certain kinds of malicious attacks.
 *   Documentation
     - <a name="documentation-architecture"></a>The project MUST include reference documentation that describes its architecture. <sup>[<a href="#documentation-architecture">documentation-architecture</a>]</sup>
     - <a name="documentation-interface"></a>The project MUST include reference documentation that describes its interface. <sup>[<a href="#documentation-interface">documentation-interface</a>]</sup>

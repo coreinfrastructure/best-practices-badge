@@ -711,7 +711,7 @@ are reported.
     <h3>Static code analysis</h3>
 
      <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
-             criteria: "static_analysis", desc: %{
+             criteria: "static_analysis", na: true, desc: %{
 At least one static code analysis tool MUST be applied to any proposed major production
 release of the software before its release, if there is at least one OSS tool that
 implement this criterion in the selected language.},
@@ -767,7 +767,7 @@ to find different kinds of defects (including defects that lead to vulnerabiliti
       <hr>
 
       <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
-              criteria: "dynamic_analysis_unsafe", desc: %{
+              criteria: "dynamic_analysis_unsafe", na: true, desc: %{
 It is SUGGESTED that if the software is application-level software written
 using a memory-unsafe language (such as C or C++) then at least one tool to
 detect memory safety problems will be used during at least one dynamic tool use.

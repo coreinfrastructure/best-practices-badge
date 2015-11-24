@@ -83,13 +83,13 @@ class Project < ActiveRecord::Base
     vulnerabilities_critical_fixed: ['SHOULD', false],
     # ANALYSIS
     # Static code analysis
-    static_analysis: ['MUST', false],
+    static_analysis: ['MUST', true],
     static_analysis_common_vulnerabilities: ['SUGGESTED', false],
     static_analysis_fixed: ['MUST', false],
     static_analysis_often: ['SUGGESTED', false],
     # Dynamic code analysis
     dynamic_analysis: ['SUGGESTED', false],
-    dynamic_analysis_unsafe: ['SUGGESTED', false],
+    dynamic_analysis_unsafe: ['SUGGESTED', true],
     dynamic_analysis_enable_assertions: ['SUGGESTED', false],
     dynamic_analysis_fixed: ['MUST', false] }.freeze
 

@@ -18,101 +18,40 @@ function polyfillDatalist() {
   }
 };
 
-// The field names are from a spec, so we need to allow snake format here.
-// jscs : disable requireCamelCaseOrUpperCaseIdentifiers
-FIELD_CATEGORIES = {
-  // Omitted: project_homepage_url : "MUST",
-  // Omitted: project_homepage_https : "SUGGESTED",
-  description_sufficient: 'MUST',
-  interact: 'MUST',
-  contribution: 'MUST',
-  contribution_criteria: 'SHOULD',
-  license_location: 'MUST',
-  oss_license: 'MUST',
-  oss_license_osi: 'SUGGESTED',
-  documentation_basics: 'MUST',
-  documentation_interface: 'MUST',
-  repo_url: 'MUST',
-  repo_track: 'MUST',
-  repo_interim: 'MUST',
-  repo_distributed: 'SUGGESTED',
-  version_unique: 'MUST',
-  version_semver: 'SUGGESTED',
-  version_tags: 'SUGGESTED',
-  changelog: 'MUST',
-  changelog_vulns: 'MUST',
-  report_tracker: 'SUGGESTED',
-  report_process: 'MUST',
-  report_responses: 'MUST',
-  enhancement_responses: 'SHOULD',
-  report_archive: 'MUST',
-  vulnerability_report_process: 'MUST',
-  vulnerability_report_private: 'MUST',
-  vulnerability_report_response: 'MUST',
-  build: 'MUST',
-  build_common_tools: 'SUGGESTED',
-  build_oss_tools: 'SHOULD',
-  test: 'MUST',
-  test_invocation: 'SHOULD',
-  test_most: 'SUGGESTED',
-  test_continuous_integration: 'SUGGESTED',
-  test_policy: 'MUST',
-  tests_are_added: 'MUST',
-  tests_documented_added: 'SUGGESTED',
-  warnings: 'MUST',
-  warnings_fixed: 'MUST',
-  warnings_strict: 'SUGGESTED',
-  know_secure_design: 'MUST',
-  know_common_errors: 'MUST',
-  crypto_published: 'MUST',
-  crypto_call: 'MUST',
-  crypto_oss: 'MUST',
-  crypto_keylength: 'MUST',
-  crypto_working: 'MUST',
-  crypto_weaknesses: 'SHOULD',
-  crypto_alternatives: 'SHOULD',
-  crypto_pfs: 'SHOULD',
-  crypto_password_storage: 'MUST',
-  crypto_random: 'MUST',
-  delivery_mitm: 'MUST',
-  delivery_unsigned: 'MUST',
-  vulnerabilities_fixed_60_days: 'MUST',
-  vulnerabilities_critical_fixed: 'SHOULD',
-  static_analysis: 'MUST',
-  static_analysis_common_vulnerabilities: 'SUGGESTED',
-  static_analysis_fixed: 'MUST',
-  static_analysis_often: 'SUGGESTED',
-  dynamic_analysis: 'SUGGESTED',
-  dynamic_analysis_unsafe: 'SUGGESTED',
-  dynamic_analysis_enable_assertions: 'SUGGESTED',
-  dynamic_analysis_fixed: 'MUST',
-}
-// jscs: : enable requireCamelCaseOrUpperCaseIdentifiers
+criterionCategoryValue = {}
+criteriaMetUrlRequired = {};
 
 MIN_SHOULD_LENGTH = 5;
 
+function containsURL(justification) {
+  return !!justification.match(/https?:\/\/[^ ]{5,}/);
+}
+
+// This must match the criteria implemented in Ruby to prevent confusion.
 function isEnough(criteria) {
   var criteriaStatus = '#project_' + criteria + '_status';
+  var justification = $('#project_' + criteria + '_justification').val();
   if ($(criteriaStatus + '_na').is(':checked')) {
     return true;
-  }
-  if (FIELD_CATEGORIES[criteria] === 'MUST') {
-    return ($(criteriaStatus + '_met').is(':checked'));
-  } else if (FIELD_CATEGORIES[criteria] === 'SHOULD') {
-    return ($(criteriaStatus + '_met').is(':checked') ||
-           ($(criteriaStatus + '_unmet').is(':checked') &&
-              $('#project_' + criteria + '_justification').val().length >=
-              MIN_SHOULD_LENGTH));
+  } else if ($(criteriaStatus + '_met').is(':checked')) {
+    return criteriaMetUrlRequired[criteria] ?
+      containsURL(justification) : true;
+  } else if (criterionCategoryValue[criteria] === 'SHOULD' &&
+             $(criteriaStatus + '_unmet').is(':checked') &&
+             justification.length >= MIN_SHOULD_LENGTH) {
+    return true;
+  } else if (criterionCategoryValue[criteria] === 'SUGGESTED' &&
+            !($(criteriaStatus + '_').is(':checked'))) {
+    return true;
   } else {
-    return ($(criteriaStatus + '_met').is(':checked') ||
-           $(criteriaStatus + '_unmet').is(':checked'));
+    return false;
   }
 }
 
 function resetProgressBar() {
   var total = 0;
   var enough = 0;
-  $.each(FIELD_CATEGORIES, function(key, value) {
+  $.each(criterionCategoryValue, function(key, value) {
     total++;
     if (isEnough(key)) {enough++;};
   })
@@ -126,8 +65,12 @@ function changedJustificationText(criteria) {
   var criteriaJust = '#project_' + criteria + '_justification';
   var criteriaStatus = '#project_' + criteria + '_status';
   if ($(criteriaStatus + '_unmet').is(':checked') &&
-       (FIELD_CATEGORIES[criteria] === 'SHOULD') &&
+       (criterionCategoryValue[criteria] === 'SHOULD') &&
        ($(criteriaJust).val().length < MIN_SHOULD_LENGTH)) {
+    $(criteriaJust).addClass('required-data');
+  } else if ($(criteriaStatus + '_met').is(':checked') &&
+           criteriaMetUrlRequired[criteria]  &&
+           !containsURL($(criteriaJust).val())) {
     $(criteriaJust).addClass('required-data');
   } else {
     $(criteriaJust).removeClass('required-data');
@@ -166,7 +109,7 @@ function updateCriteriaDisplay(criteria) {
     $(criteriaJust).
        attr('placeholder',
          $('#' + criteriaUnmetPlaceholder).html().trim());
-    if ((FIELD_CATEGORIES[criteria] === 'MUST') ||
+    if ((criterionCategoryValue[criteria] === 'MUST') ||
          (document.getElementById(criteria + '_unmet_suppress'))) {
       $(criteriaJust).hide('fast');
     } else {
@@ -218,6 +161,21 @@ function ToggleDetailsDisplay(e) {
     });
 }
 
+// Create mappings from criteria name to category and met_url_required.
+// Eventually replace with just accessing classes directly via Javascript.
+function SetupCriteriaStructures() {
+  $('.status-chooser').each(
+    function(index) {
+      criterionName = $(this).find('.criterion-name').text();
+      res = $(this).find('.criterion-met-url-required').text();
+      val = 'true' === res;
+      criteriaMetUrlRequired[criterionName] = val;
+      criterionCategoryValue[criterionName] =
+        $(this).find('.criterion-category').text();
+    }
+  )
+}
+
 // Setup display as soon as page is ready
 $(document).ready(function() {
   // By default, hide details.  We do the hiding in Javascript, so
@@ -239,9 +197,11 @@ $(document).ready(function() {
 
   if ($('#project_entry_form').length) {
 
+    SetupCriteriaStructures();
+
     // Implement "press this button to make all crypto N/A"
     $('#all_crypto_na').click(function(e) {
-        $.each(FIELD_CATEGORIES, function(key, value) {
+        $.each(criterionCategoryValue, function(key, value) {
           if ((/^crypto/).test(key)) {
             $('#project_' + key + '_status_na').prop('checked', true);
           }
@@ -253,7 +213,7 @@ $(document).ready(function() {
     // Use "imagesloaded" to wait for image load before displaying them
     imagesLoaded(document).on('always', function(instance) {
         // Set up the interactive displays of "enough".
-        $.each(FIELD_CATEGORIES, function(key, value) {
+        $.each(criterionCategoryValue, function(key, value) {
           setupProjectField(key);
         })
         resetProgressBar();

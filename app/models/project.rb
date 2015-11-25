@@ -126,8 +126,19 @@ class Project < ActiveRecord::Base
       info[1] ? { in: STATUS_CHOICE_NA } : { in: STATUS_CHOICE })
   end
 
-  def self.criterion_category(field)
-    (CRITERIA_INFO[field.to_sym])[0]
+  # Is this criterion in the category MUST, SHOULD, or SUGGESTED?
+  def self.criterion_category(criterion)
+    (CRITERIA_INFO[criterion.to_sym])[0]
+  end
+
+  # Is na allowed?
+  def self.na_allowed?(criterion)
+    (CRITERIA_INFO[criterion.to_sym])[1]
+  end
+
+  # Is a URL required in the justification to be enough with met?
+  def self.met_url_required?(criterion)
+    (CRITERIA_INFO[criterion.to_sym])[2]
   end
 
   def self.badge_achieved?(project)

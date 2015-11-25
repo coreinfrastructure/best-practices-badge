@@ -23,6 +23,19 @@ See the GitHub documentation on
 and
 [using pull requests](https://help.github.com/articles/using-pull-requests/).
 
+## Vulnerability reporting (security issues)
+
+If you find a significant vulnerability, or evidence of one,
+please send an email to the security contacts that you have such
+information, and we'll tell you the next steps.
+For now, the security contacts are:
+David A. Wheeler <dwheeler-NOSPAM@ida.org>,
+Dan Kohn <dankohn-NOSPAM@linux.com>,
+Emily Ratliff <eratliff-NOSPAM@linuxfoundation.org>,
+and Sam Khakimov <skhakimo-NOSPAM@ida.org>
+(remove the -NOSPAM markers).
+
+
 ## Documentation changes
 
 Most of the documentation is in "markdown" format.

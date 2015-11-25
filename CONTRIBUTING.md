@@ -6,8 +6,8 @@ Feedback and contributions are very welcome!
 For specific proposals, please provide them as issues or pull requests via our 
 [GitHub site](https://github.com/linuxfoundation/cii-best-practices-badge).
 Pull requests are especially appreciated!  We use git to track all changes.
-For general dicussion, feel free to use the [cii-badges mailing list]
-(https://lists.coreinfrastructure.org/mailman/listinfo/cii-badges).
+For general dicussion, feel free to use the
+[cii-badges mailing list](https://lists.coreinfrastructure.org/mailman/listinfo/cii-badges).
 
 If you just want to propose or discuss changes to the criteria,
 the first step is proposing changes to the criteria text,
@@ -18,21 +18,20 @@ including [other.md](doc/other.md) and [background.md](doc/background.md).
 Submitting pull requests is especially helpful.
 We strongly recommend creating different branches for different (logical)
 changes, and creating a pull request when you're done into the master branch.
-See the GitHub documentation on [creating branches]
-(https://help.github.com/articles/creating-and-deleting-branches-within-your-repository/)
-and [using pull requests](https://help.github.com/articles/using-pull-requests/).
+See the GitHub documentation on
+[creating branches](https://help.github.com/articles/creating-and-deleting-branches-within-your-repository/)
+and
+[using pull requests](https://help.github.com/articles/using-pull-requests/).
 
 ## Documentation changes
 
 Most of the documentation is in "markdown" format.
 All markdown files use the .md filename extension and use
-[GitHub-flavored markdown]
-(https://help.github.com/articles/github-flavored-markdown/), *not* CommonMark
-or the original Markdown.
+[GitHub-flavored markdown](https://help.github.com/articles/github-flavored-markdown/),
+*not* CommonMark or the original Markdown.
 In particular,
-[newlines in paragraph-like content are considered as real line breaks]
-(https://help.github.com/articles/writing-on-github/) unlike the original
-Markdown and CommonMark formats.
+[newlines in paragraph-like content are considered as real line breaks](https://help.github.com/articles/writing-on-github/)
+unlike the original Markdown and CommonMark formats.
 
 Using the "rake" command (described below) implemented in the development
 environment can detect some problems in the markdown.
@@ -53,8 +52,9 @@ Some technical debt is inevitable, just don't bankrupt us with it.
 Improved refactorizations are welcome.
 
 The web application is primarily written in Ruby on Rails.
-Please generally follow the [community Ruby style guide]
-(https://github.com/bbatsov/ruby-style-guide) and the complementary
+Please generally follow the
+[community Ruby style guide](https://github.com/bbatsov/ruby-style-guide)
+and the complementary
 [community Rails style guide](https://github.com/bbatsov/rails-style-guide).
 For example, use two-space indents in Ruby.
 We don't follow them slavishly, but we do generally try to follow them.
@@ -74,8 +74,8 @@ In Ruby please prefer the String operations that do not have side-effects
 (e.g., "+", "sub", or "gsub"), and consider freezing strings.
 Do *not* modify a String in-place (e.g., using "<<", "sub!", or "gsub!")
 until you have applied ".dup" to it.
-There are current plans that [Ruby 3's strings will be immutable]
-(https://twitter.com/yukihiro_matz/status/634386185507311616).
+There are current plans that
+[Ruby 3's strings will be immutable](https://twitter.com/yukihiro_matz/status/634386185507311616).
 See [issue 11473](https://bugs.ruby-lang.org/issues/11473) for more.
 One proposal is to allow "dup" to produce a slightly different object
 (a mutable version of String), and since "dup" is already permitted in the
@@ -113,20 +113,20 @@ Currently these include at least the following:
 * "rake bundle_audit" - check for vulnerable dependencies
 * "rake test" - runs the test suite
 * "rake markdownlint" - runs markdownlint, also known as mdl
-(check for errors in markdown text)
+  (check for errors in markdown text)
 * "rake rubocop" - runs Rubocop, which checks code style against the
-[community Ruby style guide](https://github.com/bbatsov/ruby-style-guide)
+  [community Ruby style guide](https://github.com/bbatsov/ruby-style-guide)
 * "rake rails_best_practices" - check against rails best practices using the gem
-[rails_best_practices](http://rails-bestpractices.com/)
+  [rails_best_practices](http://rails-bestpractices.com/)
 * "rake brakeman" - runs Brakeman, which is a static source code analyzer
-to look for Ruby on Rails security vulnerabilities
+  to look for Ruby on Rails security vulnerabilities
 
 Here are some other tools we use, though they are not currently integrated into
 the default "rake" checking task:
 
 * OWASP ZAP web application security scanner.
-You are encouraged to use this and other web application scanners to find and
-fix problems.
+  You are encouraged to use this and other web application scanners to find and
+  fix problems.
 * JSCS (Javascript style checker) using the Node.js format.
 * JSHint (Javascript error detector)
 

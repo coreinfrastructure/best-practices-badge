@@ -375,8 +375,7 @@ individuals not projects.
 ## License detection
 
 Some information on how to detect licenses can be found in
-[&#8220;Open Source Licensing by the Numbers&#8221; by Ben Balter]
-(https://speakerdeck.com/benbalter/open-source-licensing-by-the-numbers).
+[&#8220;Open Source Licensing by the Numbers&#8221; by Ben Balter](https://speakerdeck.com/benbalter/open-source-licensing-by-the-numbers).
 
 ## Analysis
 

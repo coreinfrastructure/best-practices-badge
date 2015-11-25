@@ -80,8 +80,7 @@ git config --global user.email "YOUR EMAIL ADDRESS"
 ## Forking the repo
 
 You'll now need to fork the repo on GitHub.
-[GitHub's instructions on forking a repo]
-(https://help.github.com/articles/fork-a-repo/)
+[GitHub's instructions on forking a repo](https://help.github.com/articles/fork-a-repo/)
 describe this in general.
 
 In our case, use your web browser to view
@@ -175,14 +174,13 @@ curl, zlib, openssl, expat, and libiconv.
 * SQLite3 database system, used in development for data storage
 * C compiler and basic libraries for rebuilding ruby.
 Install a sane C compiler such as gcc or clang.
-See the [ruby-build suggested build environment]
-(https://github.com/sstephenson/ruby-build/wiki#suggested-build-environment)
+See the [ruby-build suggested build environment](https://github.com/sstephenson/ruby-build/wiki#suggested-build-environment)
 for how to do install the other required components.
 The script installs gcc.
 
 You also need to install [rbenv](https://github.com/sstephenson/rbenv)
-to follow the instructions given here.  See the[rbenv basic github checkout]
-(https://github.com/sstephenson/rbenv#basic-github-checkout)
+to follow the instructions given here.  See the
+[rbenv basic github checkout](https://github.com/sstephenson/rbenv#basic-github-checkout)
 instructions for one approach for installing rbenv.
 The rbenv tool lets you select a specific version of Ruby, and from there,
 select specific versions of other libraries.

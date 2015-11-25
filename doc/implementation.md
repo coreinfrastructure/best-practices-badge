@@ -1,10 +1,28 @@
 # Implementation
 
-See [CONTRIBUTING.md](../CONTRIBUTING.md) for information on how to contribute ot this project, and [INSTALL.md](INSTALL.md) for information on how to install this software (e.g., for development).
+We have implemented a simple web application called "BadgeApp" that
+quickly captures self-assertion data, evaluates criteria automatically
+when it can, and provides badge information.
+Our emphasis is on keeping the program relatively *simple*.
 
-We have implemented a simple web application called "BadgeApp" that quickly captures self-assertion data, evaluates criteria automatically when it can, and provides badge information.  Our emphasis is on keeping the program relatively *simple*.
+This file provides information on how it's implemented, in the hopes that
+it will help people make improvements.
+See [CONTRIBUTING.md](../CONTRIBUTING.md) for information on how to
+contribute ot this project, and [INSTALL.md](INSTALL.md) for information
+on how to install this software (e.g., for development).
 
-The web application is itself OSS, and we intend for the web application to meet its own criteria.  We have implemented it with Ruby on Rails; Rails is good for very simple web applications like this one.  We are currently using Rails version 4.2.  The production system stores the data in Postgres; in development we use SQLite3 instead.  We deploy a test implementation to Heroku so that people can try it out for limited testing.  The production version may also be deployed to Heroku.
+## Overall
+
+The web application is itself OSS, and we intend for the web application
+to meet its own criteria.
+We have implemented it with Ruby on Rails;
+Rails is good for very simple web applications like this one.
+We are currently using Rails version 4.2.
+The production system stores the data in Postgres;
+in development we use SQLite3 instead.
+We deploy a test implementation to Heroku so that people
+can try it out for limited testing.
+The production version may also be deployed to Heroku.
 
 Other components we use are:
 
@@ -15,7 +33,45 @@ Other components we use are:
   (to ensure images are loaded before displaying them)
 - A number of supporting Ruby gems (see its Gemfile)
 
+## Terminology
 
+This section describes key application-specific terminology.
+
+The web application tracks data about many OSS *projects*,
+as identified and entered by *users*.
+
+We hope that projects will (eventually) *achieve* a *badge*.
+A project must satisfy all *criteria*
+(singular: criterion) enough to achieve a badge.
+The *status* of each criterion, for a given project, can be one of:
+'Met', 'Unmet', 'N/A' (not applicable, a status that only some
+criteria can have), and '?' (unknown, the initial state of all
+criteria for a project).
+Every criterion can also have a *justification*.
+For each project the system tracks the criteria status,
+criteria justification, and a few other data fields such as
+project name, project description, project home page URL, and
+project repository (repo) URL.
+
+We have a set of rule, for each criterion, to determine if
+it's enough to achieve a badge.
+In particular, each criterion is in one of three *categories*:
+'MUST', 'SHOULD', and 'SUGGESTED'.
+In some cases, to be enough to achieve a badge
+a criterion may require some justification
+or a URL in the justification.
+
+We have an 'autofill' system that fills in some data automatically.
+In some cases the autofill data will *override* human-entered data
+(this happens where we're either confident in the data, and/or
+the data is not available using a common convention
+that are enforcing for purposes of the badge).
+The autofill system uses the metaphor of *Detectives* that need
+some inputs, analyze them,
+and produce outputs (including confidence levels).
+Detectives are managed by a *Chief* of detectives.
+
+See below for more detail.
 
 ## Running locally
 

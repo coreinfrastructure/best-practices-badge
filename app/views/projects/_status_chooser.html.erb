@@ -2,9 +2,12 @@
       <% status_symbol = (criteria + "_status").to_sym %>
       <% justification_symbol = (criteria + "_justification").to_sym %>
 
+      <%# A criterion_category is 'MUST' | 'SHOULD' | 'SUGGESTED' %>
+      <% criterion_category = Project.criterion_category(criteria) %>
+
       <div class="col-md-2 criteria-radio">
        <div class="row status-chooser <%=
-              "category-#{ Project.criterion_category(criteria)} " +
+              "category-#{ criterion_category } " +
               "criteria-#{ criteria }" %>">
        <%= f.form_group status_symbol do %>
          <div class="col-xs-2 text-center block-center">

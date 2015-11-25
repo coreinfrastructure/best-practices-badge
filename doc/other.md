@@ -36,31 +36,31 @@ Potential silver criteria
 *   **Build and test:**
     -   **Continuous integration**.   
         An automated test suite MUST applied on each check-in to a shared
-                repository, at least for some branches,
-                with a generated report available to at least project members on
-                success or failure of the tests.
-                This test suite SHOULD be applied across many platforms where
-                appropriate.
-                *Rationale*:  Continuous integration provides much more rapid feedback
-                on whether or not changes will cause test failures,
-                including regressions.
+        repository, at least for some branches,
+        with a generated report available to at least project members on
+        success or failure of the tests.
+        This test suite SHOULD be applied across many platforms where
+        appropriate.
+        *Rationale*:  Continuous integration provides much more rapid feedback
+        on whether or not changes will cause test failures,
+        including regressions.
     -   *Tests are rigorously added for new functionality*.  
         There MUST be a stated policy that when major new functionality is
-                added, tests of that functionality MUST be added to an automated test
-                suite, at least in the documentation for creating change proposals.
-                There MUST be evidence that such tests are being added in the most
-                recent major changes to the project.
+        added, tests of that functionality MUST be added to an automated test
+        suite, at least in the documentation for creating change proposals.
+        There MUST be evidence that such tests are being added in the most
+        recent major changes to the project.
     -   *Regression tests*.  
         When a bug is fixed, a regression test MUST normally be added to the
-                automated test suite to prevent its reoccurrence.
+        automated test suite to prevent its reoccurrence.
     -   *Reproduceable build*.
         It MUST be possible to rebuild executables that are bit-for-bit
-                identical, given the same executables of the tools used for building.
-                This criterion is automatically met if there is no process for
-                creating a separate executable or package.
-                *Rationale*:  Reproduceable builds make it much easier to verify that
-                the executable and source code of a program correspond,
-                countering certain kinds of malicious attacks.
+        identical, given the same executables of the tools used for building.
+        This criterion is automatically met if there is no process for
+        creating a separate executable or package.
+        *Rationale*:  Reproduceable builds make it much easier to verify that
+        the executable and source code of a program correspond,
+        countering certain kinds of malicious attacks.
 *   Documentation
     - <a name="documentation-architecture"></a>
         The project MUST include reference documentation that describes
@@ -142,7 +142,8 @@ Potential gold criteria
         they can be improving documentation, adding test cases,
         or anything else that aids the project and helps the contributor
         understand more about the project.
-        There SHOULD be at least 3 small tasks made available over a one-year period
+        There SHOULD be at least 3 small tasks made available
+        over a one-year period
         that have been accepted by a relatively new contributor
         (those who started contributing less than a year ago) or left available
         (unimplemented by experienced developers) for at least 3 weeks.
@@ -160,7 +161,8 @@ Potential gold criteria
     -   Automated test suite covers 100% of branches in source code.
         We will *not* add 100% branch coverage to the *passing* set of criteria.
         Some projects (like SQLite) do achieve this, but for some projects
-        (such as the Linux kernel) this would be exceptionally difficult to achieve.
+        (such as the Linux kernel)
+        this would be exceptionally difficult to achieve.
         Some higher/different related badge *might* add 100% branch coverage.
 
 
@@ -187,7 +189,8 @@ Potential other criteria
         and/or an "Announcement" mailing list for new versions
         (at least for security updates).
     -   All inputs from untrusted sources checked against whitelist
-        (not a blacklist) and/or escaped before being transmitted to other users.
+        (not a blacklist) and/or escaped before being transmitted
+        to other users.
     -   Privileges limited/minimized.
     -   Attack surface documented and minimized.
     -   Automated regression test suite includes at least one check for
@@ -218,7 +221,8 @@ Potential other criteria
     -   Current/past security review of the code.
     -   Must have a process for rapidly fixing vulnerabilities and
         releasing the updated software.
-        Note that having a good test suite makes it easier to make changes and be
+        Note that having a good test suite makes it easier
+        to make changes and be
         confident the system still works.
         Also note that OSS projects are often embedded in larger systems and
         projects cannot control the larger projects they are in.

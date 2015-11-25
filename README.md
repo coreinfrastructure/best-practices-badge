@@ -35,6 +35,10 @@ for general discussion.
 **[Kanban Board](https://waffle.io/linuxfoundation/cii-best-practices-badge)**
 of this project.
 
-All material is released under both the [MIT license](./LICENSE) and the
-[Creative Commons Attribution 4.0 International (CC BY 4.0) license](https://creativecommons.org/licenses/by/4.0/).
-In Software Package Data Exchange (SPDX) notation, this is (MIT OR CC-BY-4.0).
+All material is released under the [MIT license](./LICENSE).
+All material that is not executable, including all text when not executed,
+is also released under the
+[Creative Commons Attribution 3.0 International (CC BY 3.0) license](https://creativecommons.org/licenses/by/3.0/) or later.
+In SPDX terms, everything here is licensed under MIT;
+if it's not executable, including the text when extracted from code, it's
+"(MIT OR CC-BY-3.0+)".

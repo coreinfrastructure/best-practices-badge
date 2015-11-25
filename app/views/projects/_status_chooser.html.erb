@@ -26,7 +26,7 @@
          <div class="col-xs-3 text-center block-center">
              <%= f.radio_button status_symbol, 'Unmet', inline: true, disabled: is_disabled  %><br><br>Unmet
          </div>
-         <% if defined?(na) %>
+         <% if Project.na_allowed?(criteria) %>
          <div class="col-xs-2 text-center block-center">
              <%= f.radio_button status_symbol, 'N/A', inline: true, disabled: is_disabled  %><br><br>&nbsp;N/A&nbsp;
          </div>

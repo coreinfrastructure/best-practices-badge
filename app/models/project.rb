@@ -85,9 +85,9 @@ class Project < ActiveRecord::Base
     # ANALYSIS
     # Static code analysis
     static_analysis: ['MUST', true, false],
-    static_analysis_common_vulnerabilities: ['SUGGESTED', false, false],
-    static_analysis_fixed: ['MUST', false, false],
-    static_analysis_often: ['SUGGESTED', false, false],
+    static_analysis_common_vulnerabilities: ['SUGGESTED', true, false],
+    static_analysis_fixed: ['MUST', true, false],
+    static_analysis_often: ['SUGGESTED', true, false],
     # Dynamic code analysis
     dynamic_analysis: ['SUGGESTED', false, false],
     dynamic_analysis_unsafe: ['SUGGESTED', true, false],

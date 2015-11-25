@@ -13,15 +13,16 @@ on how to install this software (e.g., for development).
 
 ## Overall
 
-The web application is itself OSS, and we intend for the web application
-to meet its own criteria.
-We have implemented it with Ruby on Rails;
-Rails is good for very simple web applications like this one.
+The web application is itself OSS, and we intend for the
+web application to meet its own criteria.
+We have implemented it with Ruby on Rails; Rails is good for very
+simple web applications like this one.
 We are currently using Rails version 4.2.
 The production system stores the data in Postgres;
 in development we use SQLite3 instead.
-We deploy a test implementation to Heroku so that people
-can try it out for limited testing.
+We deploy a test implementation to Heroku so that people can try it
+out for limited testing.
+
 The production version may also be deployed to Heroku.
 
 Other components we use are:
@@ -137,15 +138,19 @@ and then use "git commit" and "git push".
 
 ## App authentication via Github
 
-The BadgeApp needs to authenticate itself through OAuth2 on Github if users are logging 
-in with their Github accounts.  It also needs to authenticate itself to get repo details from Github if a 
-project is being hosted there. The app needs to be registered with Github[1] and its
-OAuth2 credentials stored as environment variables.  The variable names of Oauth2 credentials are 
-"GITHUB_KEY" and "GITHUB_SECRET".
+The BadgeApp needs to authenticate itself through OAuth2 on
+Github if users are logging in with their Github accounts.
+It also needs to authenticate itself to get repo details from Github if a 
+project is being hosted there.
+The app needs to be registered with Github[1] and its OAuth2 credentials
+stored as environment variables.
+The variable names of Oauth2 credentials are "GITHUB_KEY" and "GITHUB_SECRET".
 If running on heroku, set config variables by following instructions on [2].
 If running locally, one way to start up the application is: 
 GITHUB_KEY='client id' GITHUB_SECRET='client secret' rails s 
-where *client id* and *client secret* are registered OAuth2 credentials of the app. The authorization callback URL in Github is: <http://localhost:3000/auth/github>
+where *client id* and *client secret* are registered OAuth2 credentials
+of the app.
+The authorization callback URL in Github is: <http://localhost:3000/auth/github>
 
 [1] <https://github.com/settings/applications/new>
 [2] <https://devcenter.heroku.com/articles/config-vars>
@@ -260,8 +265,10 @@ and we can later loosen this restriction (e.g., if a user controls both the
 original and new project main URL).
 
 We plan to implement authentication in these three stages:
-1.  A way for GitHub users to authenticate themselves and show that they control specific projects on GitHub.
-2.  An override system so that users can report on other projects as well (this is important for debugging and error repair).
+1.  A way for GitHub users to authenticate themselves and
+show that they control specific projects on GitHub.
+2.  An override system so that users can report on other projects
+as well (this is important for debugging and error repair).
 3.  A system to support users and projects not on GitHub.
 
 For GitHub users reporting about specific projects on GitHub,
@@ -316,21 +323,34 @@ to be relatively uncommon, there is no need for that capability initially.
 
 A user can edit project P if one of the following is true:
 
-1.  If the user has "superuser" permission then the user can edit the badge information about any project.  This will let the Linux Foundation fix problems.
-2.  If project P is on GitHub AND the user is authorized via GitHub to edit project P, then that user can edit the badge information about project P.  In the future we might add repos other than GitHub, with the same kind of rule.
-3.  If the user's cryptographically randomly assigned "project edit validation code" is on the project's main web site (typically in an HTML comment), then the user can edit the badge information about project P.  Note that if the user is a local account (not GitHub), then the user also has to have their email address validated first.
+1.  If the user has "superuser" permission then the user can edit the
+badge information about any project.
+This will let the Linux Foundation fix problems.
+2.  If project P is on GitHub AND the user is authorized via GitHub
+to edit project P, then that user can edit the badge information about project P.
+In the future we might add repos other than GitHub, with the same kind of rule.
+3.  If the user's cryptographically randomly assigned
+"project edit validation code" is on the project's main web site
+(typically in an HTML comment), then the user can edit the badge
+information about project P.
+Note that if the user is a local account (not GitHub),
+then the user also has to have their email address validated first.
 
 ## Filling in the form
 
-Previously we hoped to auto-generate the form, but it's difficult to create a good UI experience that way.  So for the moment, we're not doing that.
+Previously we hoped to auto-generate the form, but it's difficult to create a
+good UI experience that way.  So for the moment, we're not doing that.
 
 ## GitHub-related badges
 
 Pages related to GitHub-related badges include:
 
-*   <http://shields.io/> - serves files that display a badge (as good-looking scalable SVG files)
-*   <https://github.com/badges/shields> -  Shields badge specification, website and default API server (connected to shields.io)
-*   <http://nicbell.net/blog/github-flair> - a blog post that identifies and discusses popular GitHub flair (badges)
+*   <http://shields.io/> - serves files that display a badge
+(as good-looking scalable SVG files)
+*   <https://github.com/badges/shields> -  Shields badge specification,
+website and default API server (connected to shields.io)
+*   <http://nicbell.net/blog/github-flair> - a blog post that identifies
+and discusses popular GitHub flair (badges)
 
 We want GitHub users to think of this
 as &#8220;just another badge to get.&#8221;
@@ -355,7 +375,8 @@ individuals not projects.
 ## License detection
 
 Some information on how to detect licenses can be found in
-[&#8220;Open Source Licensing by the Numbers&#8221; by Ben Balter](https://speakerdeck.com/benbalter/open-source-licensing-by-the-numbers).
+[&#8220;Open Source Licensing by the Numbers&#8221; by Ben Balter]
+(https://speakerdeck.com/benbalter/open-source-licensing-by-the-numbers).
 
 ## Analysis
 

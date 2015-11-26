@@ -68,3 +68,13 @@ task :jscs do
   jscs_files = 'app/assets/javascripts/project-form.js'
   sh "#{jscs_exe} #{jscs_options} #{jscs_files}"
 end
+
+desc 'Load current self.json'
+task :load_self_json do
+  require 'open-uri'
+  require 'json'
+  url = 'https://secret-retreat-6638.herokuapp.com/projects/1.json'
+  contents = open(url).read
+  pretty_contents = JSON.pretty_generate(JSON.parse(contents))
+  File.write('doc/self.json', pretty_contents)
+end

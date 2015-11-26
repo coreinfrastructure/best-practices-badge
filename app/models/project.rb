@@ -45,9 +45,9 @@ class Project < ActiveRecord::Base
     vulnerability_report_response: ['MUST', false, false],
     # QUALITY
     # Working build system
-    build: ['MUST', false, false],
-    build_common_tools: ['SUGGESTED', false, false],
-    build_oss_tools: ['SHOULD', false, false],
+    build: ['MUST', true, false],
+    build_common_tools: ['SUGGESTED', true, false],
+    build_oss_tools: ['SHOULD', true, false],
     # Automated test suite
     test: ['MUST', false, false],
     test_invocation: ['SHOULD', false, false],

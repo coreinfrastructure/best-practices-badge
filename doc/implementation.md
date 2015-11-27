@@ -116,7 +116,12 @@ must avoid being a conduit for others' attacks
 (e.g., not be vulnerable to cross-site scripting).
 
 It is difficult to implement truly secure software.
-However, we have taken a number of steps to reduce the likelihood
+An additional problem for BadgeApp is that it not only must accept,
+store, and retrieve data from untrusted users... it must also go out
+to untrusted websites with untrusted contents,
+using URLs provided by untrusted users,
+to gather data about those projects (so it can automatically fill in data).
+We have taken a number of steps to reduce the likelihood
 of vulnerabilities, and to reduce the impact of vulnerabilities
 where they exist.
 
@@ -169,14 +174,21 @@ Here are these items, and how we attempt to reduce their risks in BadgeApp.
 9. Using Components with Known Vulnerabilities.
    We use bundle-audit, which compares our gem libraries to a database
    of versions with known vulnerabilities.
-   This is part of the default 'rake' task, and we also have a front page
-   badge that checks for libraries with known vulnerabilities.
+   The default 'rake' task invokes bundle-audit.
    This is known to work; commit fdb83380aa71352
    on 2015-11-26 updated nokogiri, in response to a bundle-audit
    report on advisory CVE-2015-1819, "Nokogiri gem contains
    several vulnerabilities in libxml2 and libxslt".
+   We also use a gemnasium-based badge that warns us when there is an
+   out-of-date dependency; see
+   [it](https://gemnasium.com/linuxfoundation/cii-best-practices-badge)
+   for more information.
 10. Unvalidated Redirects and Forwards.
    Redirects and forwards are not used significantly, and they are validated.
+
+We have a mechanism for downloading (and backing up) the database of projects.
+That way, if the project data is corrupted, we can restore it to
+a previous state.
 
 In addition, we enable third-party review.
 We release the software as open source software (OSS),
@@ -191,6 +203,55 @@ avoiding defects that might lead to vulnerabilities), and
 also make the code easier to review.
 These steps cannot *guarantee* that there are no vulnerabilities,
 but we think they reduce the risks.
+
+## Interface
+
+This is a relatively simple web application, so its
+external interface is simple too.
+
+It has a few common use cases:
+
+- Users who want to get a new badge.
+  They will log in (possibly creating an account first
+  if they don't use GitHub), select "add a project".
+  They will see a long HTML form, which they can edit and submit.
+  They can always go back, re-edit, and re-submit.
+- Others who want to see the project data.  They can just go to
+  the project page (they don't need to log in) to see the data.
+- Those who want to see the badge for a given project
+  (typically because this is transcluded).
+  They would 'get' the /projects/:id/badge(.:format);
+  by default, they would get an SVG file showing the status
+  (i.e., 'passing' or 'failing').
+
+Its interface supports the following interfaces, which is enough
+to programmatically create a new user, login and logout, create project
+data, edit it, and delete it (subject to the authorization rules).
+
+~~~~
+Verb   URI Pattern                        Controller#Action
+GET    /projects/:id(.:format)            projects#show
+GET    /projects/:id/badge(.:format)      projects#badge {:format=>"svg"}
+
+GET    /projects(.:format)                projects#index
+POST   /projects(.:format)                projects#create
+GET    /projects/new(.:format)            projects#new
+GET    /projects/:id/edit(.:format)       projects#edit
+PATCH  /projects/:id(.:format)            projects#update
+PUT    /projects/:id(.:format)            projects#update
+DELETE /projects/:id(.:format)            projects#destroy
+
+GET    /users/new(.:format)               users#new
+GET    /signup(.:format)                  users#new
+GET    /users/:id/edit(.:format)          users#edit
+GET    /users/:id(.:format)               users#show
+
+GET    /sessions/new(.:format)            sessions#new
+GET    /login(.:format)                   sessions#new
+POST   /login(.:format)                   sessions#create
+DELETE /logout(.:format)                  sessions#destroy
+GET    /signout(.:format)                 sessions#destroy
+~~~~
 
 
 ## Adding criteria

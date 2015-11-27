@@ -88,6 +88,111 @@ You can press control-C at any time to stop it.
 
 Then point your web browser at "localhost:3000".
 
+## Security
+
+Here is what BadgeApp must do to be secure:
+
+- Confidentiality: Do not reveal any plaintext passwords used to authenticate
+  users.  This is primarily handled by only storing passwords
+  once processed by bcrypt.
+- Integrity:
+    - Data between the client and server must not be altered.
+      We use https in the deployed system and (via GitHub) for accessing
+      the source code.
+    - Only authorized people should be able to edit the record
+      of a given project.  On GitHub this is easy - we can ask people to
+      log in, and prove that they can edit that project.
+      For other projects, what we can do is ensure that once a project
+      record is created, only its creator can edit it... and then projects
+      can decide which (if any) to link to as their "official" representation.
+    - Only authorized people should be able to edit the source code.
+      We use GitHub, which has an authentication system for this purpose.
+  - Availability: We cannot prevent someone with significant
+  resources from overwhelming the system.  Instead, we will work so that
+  it can return to operation once an attack has ended.
+
+BadgeApp must avoid being taken over by other applications, and
+must avoid being a conduit for others' attacks
+(e.g., not be vulnerable to cross-site scripting).
+
+It is difficult to implement truly secure software.
+However, we have taken a number of steps to reduce the likelihood
+of vulnerabilities, and to reduce the impact of vulnerabilities
+where they exist.
+
+The
+[OWASP Top 10 (2013)](https://www.owasp.org/index.php/Top_10_2013-Top_10)
+([details](https://www.owasp.org/index.php/Category:OWASP_Top_Ten_Project))
+represents "a broad consensus about what the most
+critical web application security flaws are."
+Here are these items, and how we attempt to reduce their risks in BadgeApp.
+
+1. Injection.
+   BadgeApp is implemented in Ruby on Rails, which has
+   built-in protection against SQL injection.  SQL commands are not used
+   directly, instead parameterized commands are implemented via Rails.
+   The shell is not used to download or process file contents (e.g., from
+   repositories), instead, various Ruby APIs acquire and process it directly.
+2. Broken Authentication and Session Management.
+   Sessions are created and destroyed through a very common
+   Rails mechanism, including an encrypted and signed cookie session key.
+3. Cross-Site Scripting (XSS).
+   We use Rails' built-in XSS
+   countermeasures, in particular, its "safe" HTML mechanisms.  By default,
+   Rails always applies HTML escapes on strings displayed through views
+   unless they are marked as safe.
+   This greatly reduces the risk of mistakes leading to XSS vulnerabilities.
+4. Insecure Direct Object References.
+   The only supported direct object references are for publicly-available
+   objects (stylesheets, etc.).
+   All other requests go through routers and controllers,
+   which determine what may be accessed.
+5. Security Misconfiguration.
+   We have strived to enable secure defaults from the start.
+   In addition, we use brakeman, which can detect
+   some misconfigurations in Rails applications.
+   This is invoked by the default 'rake' task.
+   In addition, our continuous integrattion task reruns brakeman.
+6. Sensitive Data Exposure.
+   We generally do not store sensitive data; the data about projects
+   is intended to be public.  The only sensitive data we store are
+   local passwords, and those are encrypted and hashed with bcrypt.
+7. Missing Function Level Access Control.
+   The system depends on server-side routers and controllers for
+   access control.  There is some client-side Javascript, but no
+   access control depends on it.
+8. Cross-Site Request Forgery (CSRF).
+   We use the built-in Rails CSRF countermeasure, where csrf tokens
+   are included in replies and checked on POST inputs.
+   For more information, see the page on
+   [request forgery protection](http://api.rubyonrails.org/classes/ActionController/RequestForgeryProtection.html).
+9. Using Components with Known Vulnerabilities.
+   We use bundle-audit, which compares our gem libraries to a database
+   of versions with known vulnerabilities.
+   This is part of the default 'rake' task, and we also have a front page
+   badge that checks for libraries with known vulnerabilities.
+   This is known to work; commit fdb83380aa71352
+   on 2015-11-26 updated nokogiri, in response to a bundle-audit
+   report on advisory CVE-2015-1819, "Nokogiri gem contains
+   several vulnerabilities in libxml2 and libxslt".
+10. Unvalidated Redirects and Forwards.
+   Redirects and forwards are not used significantly, and they are validated.
+
+In addition, we enable third-party review.
+We release the software as open source software (OSS),
+using a well-known OSS license (MIT).
+We intentionally make the code relatively short and clean to ease review.
+We use rubocop (Ruby code style checker) and rails_best_practices
+and work to have no warnings in the code
+(typically by fixing the problem, though in some cases we will annotate
+in the code that we're allowing an exception).
+These style tools help us avoid more problematic constructs (in some cases
+avoiding defects that might lead to vulnerabilities), and
+also make the code easier to review.
+These steps cannot *guarantee* that there are no vulnerabilities,
+but we think they reduce the risks.
+
+
 ## Adding criteria
 
 To add/modify the text of the criteria, edit these files:
@@ -97,7 +202,6 @@ To add/modify the text of the criteria, edit these files:
 If you're adding/removing fields, be sure to edit:
 app/models/project.rb  # Server-side: E.g., put it the right category.
 app/controllers/projects_controller.rb   # Validate permitted field.
-app/assets/javascripts/project-form.js   # Client-side
 
 When adding/removing fields, you also need to create a database migration.
 The "status" (met/unmet) is the criterion name + "\_status" stored as a string;

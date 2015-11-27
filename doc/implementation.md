@@ -227,10 +227,16 @@ It has a few common use cases:
 Its interface supports the following interfaces, which is enough
 to programmatically create a new user, login and logout, create project
 data, edit it, and delete it (subject to the authorization rules).
+In particular, viewing with a web browser (which by default emits 'GET')
+a URL with the absolute path "/projects/:id" (where :id is an id number)
+will retrieve HTML that shows the status for project number id.
+A URL with absolute path "/projects/:id.json"
+will retrieve just the status data in JSON format (useful for further
+programmatic processing).
 
 ~~~~
 Verb   URI Pattern                        Controller#Action
-GET    /projects/:id(.:format)            projects#show
+GET    /projects/:id(.:format)            projects#show # .json supported.
 GET    /projects/:id/badge(.:format)      projects#badge {:format=>"svg"}
 
 GET    /projects(.:format)                projects#index
@@ -252,6 +258,11 @@ POST   /login(.:format)                   sessions#create
 DELETE /logout(.:format)                  sessions#destroy
 GET    /signout(.:format)                 sessions#destroy
 ~~~~
+
+This uses Rails' convention where
+a 'get' of /projects/:id/edit(.:format)' is considered an edit;
+this would normally create a CSRF vulnerability, but Rails automatiacally
+inserts and checks for a CSRF token, countering this potential vulnerability.
 
 
 ## Adding criteria
@@ -305,16 +316,21 @@ and then use "git commit" and "git push".
 
 The BadgeApp needs to authenticate itself through OAuth2 on
 Github if users are logging in with their Github accounts.
-It also needs to authenticate itself to get repo details from Github if a 
+It also needs to authenticate itself to get repo details from Github if a
 project is being hosted there.
 The app needs to be registered with Github[1] and its OAuth2 credentials
 stored as environment variables.
 The variable names of Oauth2 credentials are "GITHUB_KEY" and "GITHUB_SECRET".
 If running on heroku, set config variables by following instructions on [2].
-If running locally, one way to start up the application is: 
-GITHUB_KEY='client id' GITHUB_SECRET='client secret' rails s 
+If running locally, one way to start up the application is:
+
+~~~~sh
+GITHUB_KEY='client id' GITHUB_SECRET='client secret' rails s
+~~~~
+
 where *client id* and *client secret* are registered OAuth2 credentials
 of the app.
+
 The authorization callback URL in Github is: <http://localhost:3000/auth/github>
 
 [1] <https://github.com/settings/applications/new>

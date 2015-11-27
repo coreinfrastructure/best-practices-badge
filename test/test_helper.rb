@@ -18,7 +18,18 @@ require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'
 
 require 'webmock/minitest'
-WebMock.disable_net_connect!(allow_localhost: true)
+# This would disable network connections; would interfere with vcr:
+# WebMock.disable_net_connect!(allow_localhost: true)
+
+# For more info on vcr, see https://github.com/vcr/vcr
+# WARNING: Do *NOT* put the fixtures into test/fixtures (./fixtures is ok);
+# Rails will try to automatically load them into models, resulting in
+# confusing error messages.
+require 'vcr'
+VCR.configure do |config|
+  config.cassette_library_dir = 'test/vcr_cassettes'
+  config.hook_into :webmock # or :fakeweb
+end
 
 module ActiveSupport
   class TestCase

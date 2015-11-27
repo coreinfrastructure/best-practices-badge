@@ -1,11 +1,13 @@
-require 'json'
-
 # Accessor to GitHub so we can read (file) content info from GitHub.
 # Use this indirect class so that we can later plug in other accessors to
 # read data from other locations.
 class GithubContentAccess
   def initialize(fullname)
     @fullname = fullname
+    @octokit_client = Octokit::Client.new
+    @octokit_client.auto_paginate = true
+    #  TODO: add access_token: <OAuth token>
+    #  TODO: Perhaps have a single github client per chief.
   end
 
   # The GitHub contents API is defined here:
@@ -21,6 +23,6 @@ class GithubContentAccess
   # - For directories (type='dir') this is an iterable set of hashes;
   #   each hash represents a filesystem object (see above)
   def get_info(filename)
-    JSON.parse(Octokit.contents(@fullname, path: filename))
+    @octokit_client.contents @fullname, path: filename
   end
 end

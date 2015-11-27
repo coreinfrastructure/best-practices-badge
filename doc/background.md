@@ -48,7 +48,8 @@ including web application software, mobile software,
 traditional desktop GUI software, and command line programs.
 
 Please note that these are completely unrelated to the
-[Construction Industry Institute (CII) best practices](https://www.construction-institute.org/Store/CII/Publication_Pages/bp.cfm?section=orders).
+[Construction Industry Institute (CII) best practices]
+(https://www.construction-institute.org/Store/CII/Publication_Pages/bp.cfm?section=orders).
 
 # Potential sources of criteria
 
@@ -65,19 +66,27 @@ Some of these approaches may be useful for the badging system as well.
 
 Some guidelines include:
 
-*   [Karl Fogel&#8217;s book *Producing Open Source Software*](<http://producingoss.com/)
+*   [Karl Fogel&#8217;s book *Producing Open Source Software*]
+(<http://producingoss.com/)
 
-*   [Civic Commons&#8217; wiki page](http://wiki.civiccommons.org/Open_Source_Development_Guidelines/)
+*   [Civic Commons&#8217; wiki page]
+(http://wiki.civiccommons.org/Open_Source_Development_Guidelines/)
 
-*   [&#8220;Starting an Open Source project.&#8221;](http://www.smashingmagazine.com/2013/01/starting-an-open-source-project/)
+*   [&#8220;Starting an Open Source project.&#8221;]
+(http://www.smashingmagazine.com/2013/01/starting-an-open-source-project/)
 
-*   [&#8220;Software Release Practice HOWTO.&#8221; Eric Raymond, 2000 (somewhat dated)](http://en.tldp.org/HOWTO/Software-Release-Practice-HOWTO/)
+*   [&#8220;Software Release Practice HOWTO.&#8221; Eric Raymond, 2000
+(somewhat dated)](http://en.tldp.org/HOWTO/Software-Release-Practice-HOWTO/)
 
-*   [&#8220;Releasing Free/Libre/Open Source Software (FLOSS) for Source Installation.&#8221; David A. Wheeler](http://www.dwheeler.com/essays/releasing-floss-software.html)
+*   [&#8220;Releasing Free/Libre/Open Source Software (FLOSS) for Source
+Installation.&#8221; David A. Wheeler]
+(http://www.dwheeler.com/essays/releasing-floss-software.html)
 
 *   [OSS Manifesto](http://ossmanifesto.org/)
 
-*   [Keep a CHANGELOG](http://keepachangelog.com/) - a website advocating including ChangeLogs, including what they are and why they matter.  It recommends the filename "CHANGELOG.md" at the top.
+*   [Keep a CHANGELOG](http://keepachangelog.com/) - a website advocating
+including ChangeLogs, including what they are and why they matter.
+It recommends the filename "CHANGELOG.md" at the top.
 
 
 ## Methods for evaluating OSS projects
@@ -97,8 +106,8 @@ available online \[Callaway\]. This index is intended to be a quick
 measure of how well a FLOSS project follows common practices,
 particularly those that impede packaging or co-development by others. It
 measures &#8220;FAIL&#8221; points, so *low* scores are better; 0 is perfect,
-5 through 25 are &#8220;You&#8217;re probably doing okay, but you could be better,&#8221; and beyond 25
-is an indicator of serious problems.
+5 through 25 are &#8220;You&#8217;re probably doing okay, but you could be
+better,&#8221; and beyond 25 is an indicator of serious problems.
 
 The measures are grouped into categories: size, source (version)
 control, building from source, bundling, libraries, system install, code
@@ -125,7 +134,8 @@ a simple metric to point out potential issues in an OSS project.
 It is intentionally designed to produce a numerical score, making it
 relatively easy to report.
 
-A updated discussion is here: <http://opensource.com/life/15/7/why-your-open-source-project-failing>.
+A updated discussion is here:
+<http://opensource.com/life/15/7/why-your-open-source-project-failing>.
 
 ### Internet Success
 
@@ -178,8 +188,8 @@ success in an OSS project according to this quantitative data:
 6.  &#8220;Realize that successful projects are found in both GPL-based and
     non-GPL-compatible situations.&#8221;
 
-7.  &#8220;Consider, at the project&#8217;s outset, creating software that has the
-    potential to be useful to a substantial number of users.&#8221;
+7.  &#8220;Consider, at the project&#8217;s outset, creating software that
+    has the potential to be useful to a substantial number of users.&#8221;
     Remarkably, the minimum number of users is surprisingly small; they
     estimate that successful growth stage projects typically have at
     least 200 users. In general, the more potential users, the better.
@@ -429,23 +439,35 @@ The following might be relevant.
 
 Use Automated Tools:
 
-1.  Use source code security scanning packages, such as flawfinder and RATS. E.G., for level 1, the software must not have top risk warnings from RATS and flawfinder (inserting comments to disable them is fine as long as the person asserts that they checked the warnings to ensure that they weren&#8217;t really problems). For level 3, the software must not have warnings from the top 2 risk levels.
+1.  Use source code security scanning packages, such as flawfinder and
+RATS. E.G., for level 1, the software must not have top risk warnings
+from RATS and flawfinder (inserting comments to disable them is fine as
+long as the person asserts that they checked the warnings to ensure that
+they weren&#8217;t really problems).
+For level 3, the software must not have warnings from the top 2 risk levels.
 
-2.  Use execution testing tools, such as Brute Force Binary Tester and Whisker (for web-accessible programs) to send data in an attempt to break the program.
+2.  Use execution testing tools, such as Brute Force Binary Tester
+and Whisker (for web-accessible programs) to send data in an attempt
+to break the program.
 
-3.  Use tools to detect common software engineering flaws that are sometimes exploitable, e.g., valgrind.
+3.  Use tools to detect common software engineering flaws that are
+sometimes exploitable, e.g., valgrind.
 
-4.  Use other automated tools, such as port scanners (e.g., Nessus), network sniffers, and file scanning tools to identify cleartext that should not be cleartext.
+4.  Use other automated tools, such as port scanners (e.g., Nessus),
+network sniffers, and file scanning tools to identify cleartext that should not be cleartext.
 
-5.  Specialized tools could be used to search for specific security flaws (buffer overflows, temporary file use, etc.).
+5.  Specialized tools could be used to search for specific security
+flaws (buffer overflows, temporary file use, etc.).
 
-6.  Note that new tools could be developed as part of this evaluation scheme, and/or scripts to automate the entire process.
+6.  Note that new tools could be developed as part of this
+evaluation scheme, and/or scripts to automate the entire process.
 
 7.  See Fyodor&#8217;s security tool list for additional ideas.
 
 Require active peer review:
 
-1.  Evidence of multiple developers (e.g., in a ChangeLog). E.G., for level 2, the project must have at least 2 developers.
+1.  Evidence of multiple developers (e.g., in a ChangeLog).
+E.G., for level 2, the project must have at least 2 developers.
 
 2.  Evidence of people reviewing code (e.g., bug reports/patches).
 
@@ -453,21 +475,41 @@ Require active peer review:
 
 4.  (For level 5): Evidence that all code has been reviewed by someone else.
 
-5.  Evidence that there are a number of users (e.g., for level 4, at least 100 users).  If there are many users, this suggests the project is producing useful software and that there are a number of potential future reviewers.
+5.  Evidence that there are a number of users
+(e.g., for level 4, at least 100 users).
+If there are many users, this suggests the project is producing useful
+software and that there are a number of potential future reviewers.
 
-6.  Require that at least some developers learn how to write secure programs, including what to look for. There are freely available materials, such as <http://www.dwheeler.com/secure-programs> that teach how to do this. E.g., at level 2, at least 2 developers (including one trusted developer) has asserted that they&#8217;ve read at least one book on how to write secure programs. Level 5: all trusted developers have read at least one book.
+6.  Require that at least some developers learn how to write secure programs,
+including what to look for. There are freely available materials,
+such as <http://www.dwheeler.com/secure-programs> that teach how to do this.
+E.g., at level 2, at least 2 developers (including one trusted developer)
+has asserted that they&#8217;ve read at least one book on how to
+write secure programs. Level 5: all trusted developers have
+read at least one book.
 
 Good Practices:
 
-1.  Products must have a different version number for each public release (CC ACM\_CAP.1).
+1.  Products must have a different version number for each public
+release (CC ACM\_CAP.1).
 
-2.  Level 1: Products (source and binary) must be signed, the public key must be publicly posted (so it can be verified over time) and have an MD5 posted. This provides a simple way to check the product signature (keep signature from a while back - that way, if the website is broken, others can tell there&#8217;s a change).
+2.  Level 1: Products (source and binary) must be signed, the public
+key must be publicly posted (so it can be verified over time)
+and have an MD5 posted.
+This provides a simple way to check the product signature
+(keep signature from a while back - that way, if the website is broken,
+others can tell there&#8217;s a change).
 
-3.  The trusted repository must be configured so that only trusted developers can change code and passwords (if sent) cannot be sent in the clear.
+3.  The trusted repository must be configured so that only trusted
+developers can change code and passwords (if sent) cannot be sent in the clear.
 
-4.  Upper level: require the CM system to record who performed each change, what the change was, and when the change was made. Git and subversion are fine. (see CC ACM).
+4.  Upper level: require the CM system to record who performed each change,
+what the change was, and when the change was made. Git and subversion are fine.
+(see CC ACM).
 
-5.  Installation procedures must discuss how to install the software securely and security issues when using the software (like CC ADO\_IGS.1, AGD\_ADM.1, AGD\_USR.1)
+5.  Installation procedures must discuss how to install the software securely
+and security issues when using the software
+(like CC ADO\_IGS.1, AGD\_ADM.1, AGD\_USR.1)
 
 6.  Upper levels: Start to connect with the CC.
 
@@ -475,7 +517,8 @@ The &#8220;good practices&#8221; list probably needs to be divided further.
 Where possible, it might be possible to base the grouping on the CC:
 Configuration Management, Delivery and Operation, Development, Guidance
 Documents, Life cycle support, Tests, Vulnerability Assessment. Here&#8217;s
-an alternative grouping, based on the Trusted Software Development Methodology (TSDM):
+an alternative grouping, based on the Trusted Software Development
+Methodology (TSDM):
 Configuration management (CM),
 identification and authentication (I&A), auditing, access control,
 development environment administration, trusted distribution,
@@ -485,8 +528,11 @@ the CC for more details about this), and personnel.
 ### Talk Openly Develop Openly (TODO)
 
 Talk Openly Develop Openly (TODO)
-is "an open group of companies who want to collaborate on practices, tools, and other ways to run successful and effective open source projects and programs."
-Their "about" page states that "We will be sharing experiences, developing best practices, and working on common tooling."
+is "an open group of companies who want to collaborate on practices,
+tools, and other ways to run successful and effective
+open source projects and programs."
+Their "about" page states that "We will be sharing experiences,
+developing best practices, and working on common tooling."
 At this time they have not publicly released a best practices list.
 
 More information: <http://todogroup.org>
@@ -588,9 +634,17 @@ countered Heartbleed is given in \[Wheeler2014h\].
 
 ### Common Criteria
 
-The Common Criteria for Information Technology Security Evaluation (abbreviated as Common Criteria or CC) is an international standard (ISO/IEC 15408) for computer security certification.
+The Common Criteria for Information Technology Security Evaluation
+(abbreviated as Common Criteria or CC)
+is an international standard (ISO/IEC 15408) for computer security certification.
 
-Common Criteria is a framework within which security functional and assurance requirements (SFRs and SARs respectively) can be specified in Protection Profiles (PPs).  Suppliers can then claim what requirements they meet in a Security Target (which could cover 0 or more Protection Profile requirements).  Typically testing labs evaluate products to determine whether they meet the claims.
+Common Criteria is a framework within which security functional and
+assurance requirements (SFRs and SARs respectively) can be specified in
+Protection Profiles (PPs).
+Suppliers can then claim what requirements they meet in a Security Target
+(which could cover 0 or more Protection Profile requirements).
+Typically testing labs evaluate products to determine
+whether they meet the claims.
 
 Users of the Common Criteria typically focuses on the use of independent labs,
 who spend time evaluating a large set of documentatary evidence.
@@ -610,12 +664,14 @@ SAFECode publications are available at:
 
 ### "How we secure our phones"
 
-[How we secure our phones (SSL, cert pinning, PFS & more)](http://resetthenet.tumblr.com/post/84327981750/how-we-secure-our-phones-ssl-cert-pinning-pfs)
+[How we secure our phones (SSL, cert pinning, PFS & more)]
+(http://resetthenet.tumblr.com/post/84327981750/how-we-secure-our-phones-ssl-cert-pinning-pfs)
 on "Reset the Net" has set of specific recommendations on how to
 secure mobile applications.
 They are:
 
-1.  Make security & privacy a priority.  (This is true, but difficult to measure directly for our purposes.)
+1.  Make security & privacy a priority.  (This is true, but
+difficult to measure directly for our purposes.)
 2.  Don't send data unprotected. Use SSL.
 3.  Apps can be more secure than websites, with "cert pinning".
 4.  High standards for third party code (like ads & analytics).
@@ -624,7 +680,8 @@ They are:
 
 ### Encryption of data at-rest
 
-[Encryption of Data At-Rest: Step-by-step checklist (SNIA)](http://www.snia.org/sites/default/files/Encryption-Checklist-2.0.090909.pdf)
+[Encryption of Data At-Rest: Step-by-step checklist (SNIA)]
+(http://www.snia.org/sites/default/files/Encryption-Checklist-2.0.090909.pdf)
 has a checklist that may be useful.
 
 
@@ -698,8 +755,9 @@ ago suggests this might be a useful measure.
 
 ### Metrics from Wikipedia article on OSS Security
 
-Wikipedia&#8217;s article on &#8220;Open-Source Software security&#8221; has various
-comments about OSS security, including references to metrics and models.
+Wikipedia&#8217;s article on &#8220;Open-Source Software security&#8221;
+has various comments about OSS security, including references to
+metrics and models.
 The following is from the page
 <http://en.wikipedia.org/w/index.php?title=Open-source_software_security&oldid=627231105>
 (which is a permanent link).
@@ -755,23 +813,32 @@ The Core Infrastructure Initiative (CII) 2015 meeting in Madrid, Spain,
 discussed best practices.
 Issues raised included the following:
 
-*   There is a need for a community of practice to develop and iterate its own definition of "best"
-*   Bring in cognitive/behavioral scientists to discuss the implementation of incentive models that can raise the state of the ecosystem and avoiding incentives that produce perverse outcomes. (This is not to *trick* people, but to increase the chance of it working.)
-*   Match resources with best practice requirements (so projects won't have the problem of being unable to meet the standard due to under-resourcing).
+*   There is a need for a community of practice to develop and iterate
+its own definition of "best"
+*   Bring in cognitive/behavioral scientists to discuss the
+implementation of incentive models that can raise the state of the
+ecosystem and avoiding incentives that produce perverse outcomes.
+(This is not to *trick* people, but to increase the chance of it working.)
+*   Match resources with best practice requirements
+(so projects won't have the problem of being unable to meet the
+standard due to under-resourcing).
 
 ### Cognitive/behavioral
 
 We would like to have feedback from cognitive experts or studies
 to make the badges effective.
 
-The paper [Open badges for education: what are the implications at the intersection of open systems and badging?](http://www.researchinlearningtechnology.net/index.php/rlt/article/view/23563)
+The paper [Open badges for education: what are the implications at
+the intersection of open systems and badging?]
+(http://www.researchinlearningtechnology.net/index.php/rlt/article/view/23563)
 and its citations may help.  This paper includes a survey of literature
 on open badges for education, and
 organizes this literature into three general themes that emerge:
 
 1.  Badges as a motivator of behaviour,
 2.  Badges as a pedagogical tool, and
-3.  Badges as a signifier or credential, which link to economic and social opportunity.
+3.  Badges as a signifier or credential, which link to
+economic and social opportunity.
 
 Below is a summary of each theme.
 
@@ -833,7 +900,8 @@ if carefully written, can have dramatically positive effects.
 The criteria reference the well-known design principles of
 [Saltzer and Schroeder](http://web.mit.edu/Saltzer/www/publications/protection/).
 The text
-["Principles of Computer System Design: An Introduction" by Saltzer and Kaashoek](http://ocw.mit.edu/resources/res-6-004-principles-of-computer-system-design-an-introduction-spring-2009/online-textbook/principles_open_5_0.pdf)
+["Principles of Computer System Design: An Introduction" by Saltzer and Kaashoek]
+(http://ocw.mit.edu/resources/res-6-004-principles-of-computer-system-design-an-introduction-spring-2009/online-textbook/principles_open_5_0.pdf)
 mentions "adopt sweeping simplifications", which is mentioned also.
 
 There are certainly other texts we could point to for secure design
@@ -858,13 +926,22 @@ and "Option wrap:inner-sentence" for non-bulleted text.
 
 Here is a guide for how criteria should be written.
 
-1. Criteria may include multiple sentences.  Each criterion should be front-focused so that the most important information is in the first sentence.  Further information can be included in following sentences.
+1. Criteria may include multiple sentences.  Each criterion should be
+front-focused so that the most important information is in the first sentence. 
+Further information can be included in following sentences.
 2. The use of e.g.'s should be within parenthesis (e.g., (e.g., such as this)).
-3. MUST, MUST NOT, SHOULD, and MAY criteria should begin with 'The *object*' followed by the term (e.g., The Project MUST, The Software MAY , The ChangeLog SHOULD).
-4. If a criterion require an IF clause, consider including it at the very start of the criteria (e.g., IF *a* then the *object* MUST *do x,y,z*).  This is more controversial, because if the clause itself is long, the primary criteria might be obscured.
+3. MUST, MUST NOT, SHOULD, and MAY criteria should begin with 'The *object*'
+followed by the term
+(e.g., The Project MUST, The Software MAY , The ChangeLog SHOULD).
+4. If a criterion require an IF clause, consider including it at the
+very start of the criteria (e.g., IF *a* then the *object* MUST *do x,y,z*).
+This is more controversial, because if the clause itself is long,
+the primary criteria might be obscured.
 5. RECOMMENDED criteria should begin with 'It is RECOMMENDED...'
 6. If required, a rationale should be included as the last bullet in subsection.
-7. Criteria should be ordered from most restrictive and prohibitive to least restrictive and prohibitive (e.g., MUST and MUST NOT > SHOULD > RECOMMENDED > MAY).
+7. Criteria should be ordered from most restrictive and prohibitive to
+least restrictive and prohibitive
+(e.g., MUST and MUST NOT > SHOULD > RECOMMENDED > MAY).
 
 # Practices of some existing OSS Projects
 
@@ -902,7 +979,8 @@ so assume nothing about projects *not* on these lists.
 Here are some pages describing the processes used by some OSS projects
 to produce high-quality and/or high-security software.
 Some of this material is derived from
-[*How to Prevent the next Heartbleed*](http://www.dwheeler.com/essays/heartbleed.html#exemplars).
+[*How to Prevent the next Heartbleed*]
+(http://www.dwheeler.com/essays/heartbleed.html#exemplars).
 Note that any substantive project is difficult to summarize;
 the text below is necessarily a broad brush.
 
@@ -912,13 +990,18 @@ The Linux kernel is an operating system kernel.
 Its primary project page is <https://www.kernel.org/>.
 
 Some pages that describe the Linux kernel development process include:
-[Linux kernel documentation on its development](https://www.kernel.org/doc/Documentation/development-process/),
+[Linux kernel documentation on its development]
+(https://www.kernel.org/doc/Documentation/development-process/),
 especially
-[its file on the development process](https://www.kernel.org/doc/Documentation/development-process/2.Process),
+[its file on the development process]
+(https://www.kernel.org/doc/Documentation/development-process/2.Process),
 the
-[Linux Foundation page on how its development process works](http://www.linuxfoundation.org/content/2-how-development-process-works),
-[The changing kernel development process presentation by Jon Corbet (LWN.NET) given in 2014](https://www.youtube.com/watch?v=GQiik7X7-u8), and
-[Greg Kroah Hartman on the Linux Kernel (2008)](https://www.youtube.com/watch?feature=player_detailpage&v=L2SED6sewRw#t=867s)
+[Linux Foundation page on how its development process works]
+(http://www.linuxfoundation.org/content/2-how-development-process-works),
+[The changing kernel development process presentation by Jon Corbet
+(LWN.NET) given in 2014](https://www.youtube.com/watch?v=GQiik7X7-u8), and
+[Greg Kroah Hartman on the Linux Kernel (2008)]
+(https://www.youtube.com/watch?feature=player_detailpage&v=L2SED6sewRw#t=867s)
 More generally, <http://lwn.net> reports on
 Linux kernel development processes and results.
 
@@ -1007,18 +1090,24 @@ as further discussed in
 <https://lwn.net/Articles/654071/> .
 Many major GNU/Linux distributions also include some additional
 certification systems to check a Linux kernel.
-That said, [Greg Kroah-Hartman](https://www.youtube.com/watch?feature=player_detailpage&v=L2SED6sewRw#t=867s) notes that it is very difficult
-to create true test suites for a kernel, so the Linux kernel
-strongly depends on community testing.
+That said, [Greg Kroah-Hartman]
+(https://www.youtube.com/watch?feature=player_detailpage&v=L2SED6sewRw#t=867s)
+notes that it is very difficult to create true test suites for a kernel,
+so the Linux kernel strongly depends on community testing.
 
 A variety of static analysis tools are used to analyze the Linux kernel.
 The "sparse" static analysis tool was initially developed by
 Linus Torvalds and can be used to find certain kernel code problems.
 The "Coccinelle" tool (<http://coccinelle.lip6.fr/>) can also find
 many problems and sometimes propose fixes.
-[Eduard Bachmakov worked on the clang static analyzer in 2013 to improve its ability to detect Linux kernel defects](http://www.linux.com/news/featured-blogs/200-libby-clark/749649-a-summer-spent-on-the-llvm-clang-static-analyzer-for-the-linux-kernel).
-[Linux Kernel Developer Responses to Static Analysis Bug Reports by Philip J. Guo and Dawson Engler](https://www.usenix.org/legacy/event/usenix09/tech/full_papers/guo/guo_html/)
-examined "how Linux kernel developers respond to bug reports issued by a static analysis tool" (in particular how they triaged reports),
+[Eduard Bachmakov worked on the clang static analyzer in 2013 to 
+improve its ability to detect Linux kernel defects]
+(http://www.linux.com/news/featured-blogs/200-libby-clark/749649-a-summer-spent-on-the-llvm-clang-static-analyzer-for-the-linux-kernel).
+[Linux Kernel Developer Responses to Static Analysis Bug Reports by
+Philip J. Guo and Dawson Engler]
+(https://www.usenix.org/legacy/event/usenix09/tech/full_papers/guo/guo_html/)
+examined "how Linux kernel developers respond to bug reports
+issued by a static analysis tool" (in particular how they triaged reports),
 using Coverity Scan results.
 
 The Linux kernel has been fuzzed using the Trinity fuzz tester.
@@ -1073,7 +1162,8 @@ describes the general development approach for OpenBSD;
 this is also the development approach taken by OpenSSH.
 
 One unusual aspect is that they
-[split their core development efforts from portability developments](http://www.openssh.com/history.html#portable).
+[split their core development efforts from portability developments]
+(http://www.openssh.com/history.html#portable).
 One team does strictly OpenBSD-based development (to be as simple as possible),
 and the other team takes that version and makes it portable
 to run on many operating systems.
@@ -1155,14 +1245,51 @@ Their approach to testing can be summarized as follows (per their website):
 
 Here are a few interesting quotes:
 
-*   "Whenever a bug is reported against SQLite, that bug is not considered fixed until new test cases that would exhibit the bug have been added to either the TCL or TH3 test suites."
-*   "Another popular [coverage] metric is 'Modified Condition/Decision Coverage' or MC/DC...  [SQLite] achieves 100% MC/DC in addition to 100% branch coverage."
-*   "The developers of SQLite have found that full coverage testing is an extremely effective method for locating and preventing bugs. Because every single branch instruction in SQLite core code is covered by test cases, the developers can be confident that changes made in one part of the code do not have unintended consequences in other parts of the code. The many new features and performance improvements that have been added to SQLite in recent years would not have been possible without the availability full-coverage testing.  Maintaining 100% MC/DC is laborious and time-consuming. The level of effort needed to maintain full-coverage testing is probably not cost effective for a typical application. However, we think that full-coverage testing is justified for a very widely deployed infrastructure library like SQLite, and especially for a database library which by its very nature 'remembers' past mistakes."
-*   "To help ensure that SQLite does not make use of undefined or implementation defined behavior, the test suites are rerun using instrumented builds that try to detect undefined behavior. For example, test suites are run using the "-ftrapv" option of GCC. And they are run again using the "-fsanitize=undefined" option on Clang. And again using the "/RTC1" option in MSVC. Then the test suites are rerun using options like "-funsigned-char" and "-fsigned-char" to make sure that implementation differences do not matter either. Tests are then repeated on 32-bit and 64-bit systems and on big-endian and little-endian systems, using a variety of CPU architectures. Furthermore, the test suites are augmented with many test cases that are deliberately designed to provoke undefined behavior. For example: "SELECT -1*(-9223372036854775808);".
-*   "The SQLite core contains 4197 assert() statements that verify function preconditions and postconditions and loop invariants."
-*   "SQLite compiles without warnings on GCC and Clang using the -Wall and -Wextra flags on Linux and Mac and on MSVC on Windows. No valid warnings are generated by the Clang Static Analyzer tool 'scan-build' either (though recent versions of clang seem to generate many false-positives.)...  Static analysis has not proven to be especially helpful in finding bugs in SQLite. Static analysis has found a few bugs in SQLite, but those are the exceptions."
+*   "Whenever a bug is reported against SQLite, that bug is not considered
+fixed until new test cases that would exhibit the bug have been added
+to either the TCL or TH3 test suites."
+*   "Another popular [coverage] metric is 'Modified Condition/Decision Coverage'
+ or MC/DC...  [SQLite] achieves 100% MC/DC in addition to 100% branch coverage."
+*   "The developers of SQLite have found that full coverage testing is an
+extremely effective method for locating and preventing bugs.
+Because every single branch instruction in SQLite core code is covered by
+test cases, the developers can be confident that changes made in one part
+of the code do not have unintended consequences in other parts of the code.
+The many new features and performance improvements that have been added to
+SQLite in recent years would not have been possible without the availability
+full-coverage testing.
+Maintaining 100% MC/DC is laborious and time-consuming.
+The level of effort needed to maintain full-coverage testing is probably
+not cost effective for a typical application. However, we think that
+full-coverage testing is justified for a very widely deployed infrastructure
+library like SQLite, and especially for a database library which by its very
+nature 'remembers' past mistakes."
+*   "To help ensure that SQLite does not make use of undefined or
+implementation defined behavior, the test suites are rerun using instrumented
+builds that try to detect undefined behavior.
+For example, test suites are run using the "-ftrapv" option of GCC.
+And they are run again using the "-fsanitize=undefined" option on Clang.
+And again using the "/RTC1" option in MSVC.
+Then the test suites are rerun using options like "-funsigned-char"
+and "-fsigned-char" to make sure that implementation differences
+do not matter either.
+Tests are then repeated on 32-bit and 64-bit systems and on big-endian
+and little-endian systems, using a variety of CPU architectures.
+Furthermore, the test suites are augmented with many test cases that are
+deliberately designed to provoke undefined behavior.
+For example: "SELECT -1*(-9223372036854775808);".
+*   "The SQLite core contains 4197 assert() statements that verify
+function preconditions and postconditions and loop invariants."
+*   "SQLite compiles without warnings on GCC and Clang using the -Wall
+and -Wextra flags on Linux and Mac and on MSVC on Windows.
+No valid warnings are generated by the Clang Static Analyzer tool 'scan-build'
+either (though recent versions of clang seem to generate many false-positives).
+Static analysis has not proven to be especially
+helpful in finding bugs in SQLite.
+Static analysis has found a few bugs in SQLite, but those are the exceptions."
 
-For more information on how SQLite is tested, see: <https://www.sqlite.org/testing.html>.
+For more information on how SQLite is tested,
+see: <https://www.sqlite.org/testing.html>.
 
 All of the code and documentation in SQLite has been dedicated
 to the public domain, as
@@ -1205,19 +1332,27 @@ GPSD is notable as the basis for my assertion that conventional good
 practice with C can get you very close to never-break. I got fanatical
 about regression testing and routinely applying four static analyzers;
 it paid off.&#8221;
-The [lead developer has provided other comments about GPSD development processes](http://esr.ibiblio.org/?p=4340).
+The [lead developer has provided other comments about GPSD development processes]
+(http://esr.ibiblio.org/?p=4340).
 
 ## OSSEC
 
-OSSEC is "an Open Source Host-based Intrusion Detection System that performs log analysis, file integrity checking, policy monitoring, rootkit detection, real-time alerting and active response."
+OSSEC is "an Open Source Host-based Intrusion Detection System that performs
+log analysis, file integrity checking, policy monitoring, rootkit detection,
+real-time alerting and active response."
 Its project website is <http://www.ossec.net/>.
 
-From its [downloads](http://www.ossec.net/?page_id=19) page you can find its development snapshots, which are publicly version-controlled on GitHub.
-[OSSEC is released under the GPLv2 license with OpenSSL exception](http://www.ossec.net/?page_id=52).
-[OSSSEC-HIDS' license is in its LICENSE file](https://github.com/ossec/ossec-hids/blob/master/LICENSE).
+From its [downloads](http://www.ossec.net/?page_id=19) page you can
+find its development snapshots, which are publicly version-controlled on GitHub.
+[OSSEC is released under the GPLv2 license with OpenSSL exception]
+(http://www.ossec.net/?page_id=52).
+[OSSSEC-HIDS' license is in its LICENSE file]
+(https://github.com/ossec/ossec-hids/blob/master/LICENSE).
 
-[OSSEC has documentation that identifies its coding style guide](http://ossec-docs.readthedocs.org/en/latest/development/oRFC/orfc-2.html).
-[OSSEC includes a facility to test rules in bulk](http://ossec-docs.readthedocs.org/en/latest/development/build/test-rules.html).
+[OSSEC has documentation that identifies its coding style guide]
+(http://ossec-docs.readthedocs.org/en/latest/development/oRFC/orfc-2.html).
+[OSSEC includes a facility to test rules in bulk]
+(http://ossec-docs.readthedocs.org/en/latest/development/build/test-rules.html).
 
 They use [Coverity](https://scan.coverity.com/projects/1847)
 and flawfinder to look for vulnerabilities.
@@ -1246,7 +1381,8 @@ runs a set of daemons each performing a different set of tasks
 (facilitating a &#8220;least privilege&#8221; approach
 that can be easily further contained by using chroot or virtual containers).
 Postfix is implemented using a safe subset of C and POSIX, combined with an
-<a href="https://en.wikipedia.org/wiki/Postfix_%28software%29#Implementation">abstraction layer that creates safe alternatives</a>.
+<a href="https://en.wikipedia.org/wiki/Postfix_%28software%29#Implementation">
+abstraction layer that creates safe alternatives</a>.
 For example, it has a &#8220;vstring&#8221; primitive to help resist
 buffer overflow attacks and a
 &#8220;safe open&#8221; primitive to resist race conditions.
@@ -1272,6 +1408,7 @@ Some of the organizations who reported on the badging program included:
 *   [Threatpost](https://threatpost.com/core-infrastructure-initiative-launches-open-source-security-badge-program/114326)
 *   [ZDNet](http://www.zdnet.com/article/linux-core-infrastructure-initiative-launches-security-badge-scheme/)
 *   [Slashdot](http://news.slashdot.org/story/15/08/21/1332205/linux-foundation-project-will-evaluate-security-of-open-source-software).
+*   [ITNews](http://www.itnews.com.au/news/linux-foundation-starts-security-vetting-program-for-foss-408402)
 
 See <https://www.coreinfrastructure.org/programs/badge-program>
 for a high-level introduction to the badging program.
@@ -1340,9 +1477,10 @@ the ACM*. Volume 47 Issue 10, October 2004. Pages 83-87.
 <http://dl.acm.org/citation.cfm?id=1022598>
 
 \[Schryen2009\] Schryen, Guido, and Rouven Kadura. &#8220;Open source vs.
-closed source software: towards measuring security.&#8221; SAC &#8216;09 Proceedings
-of the 2009 ACM symposium on Applied Computing. Pages 2016-2023. ACM New
-York, NY, USA. ISBN: 978-1-60558-166-8 doi&gt;10.1145/1529282.1529731.
+closed source software: towards measuring security.&#8221; SAC &#8216;09
+Proceedings of the 2009 ACM symposium on Applied Computing.
+Pages 2016-2023. ACM New York, NY, USA.
+ISBN: 978-1-60558-166-8 doi&gt;10.1145/1529282.1529731.
 <http://dl.acm.org/citation.cfm?id=1529731>
 
 \[Schryen2011\] Schryen, Guido. &#8220;Is Open Source Security a Myth?&#8221;

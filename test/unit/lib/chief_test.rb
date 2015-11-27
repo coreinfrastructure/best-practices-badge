@@ -16,6 +16,7 @@ class ChiefTest < ActiveSupport::TestCase
     end
     results = @sample_project
 
+    skip 'Temporarily skip while debugging website problem.'
     mit_ok = 'The MIT license is approved by the Open Source Initiative (OSI).'
     assert_equal 'MIT', results[:license]
     assert_equal @human_name, results[:name]

@@ -134,11 +134,11 @@
   "dynamic_analysis_fixed_justification": "A few minor issues were found by OWASP ZAP during development; these have already been fixed.",
   "general_comments": "",
   "created_at": "2015-10-23T22:02:10.544Z",
-  "updated_at": "2015-11-26T23:39:25.031Z",
+  "updated_at": "2015-11-27T02:05:18.400Z",
   "crypto_weaknesses_status": "Met",
   "crypto_weaknesses_justification": "The only cryptography used directly by this application is bcrypt  (used for storing passwords as salted iterated hashes).  At the time of this writing, no serious breaks are known in bcrypt.  The application also dependes on the web server's https configuration, but that is out of scope for this code.",
   "crypto_alternatives_status": "Unmet",
-  "crypto_alternatives_justification": "Nothing in the code inhibits or prevents the use of PFS; that is a property of the website's web server.  The program uses bcrypt - and only bcrypt - for hashing passwords.",
+  "crypto_alternatives_justification": "Nothing in the code inhibits or prevents the use of PFS; that is a property of the website's web server.  The program uses bcrypt - and only bcrypt - for hashing passwords.  It does allow for increasing the bcrypt 'cost' parameter, which could counter some attacks if a weakness in bcrypt is found in the future.",
   "test_continuous_integration_status": "Met",
   "test_continuous_integration_justification": "Code is frequently integrated back into GitHub; CircleCI and several other tools are then run on the result to determine if there's a problem.  If a problem is found, the tools provide feedback via GitHub."
 }

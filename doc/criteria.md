@@ -44,11 +44,9 @@ We expect it will be easy to update the information,
 so this relatively short badge life should not be a barrier.
 
 Feedback is *very* welcome via the
-[GitHub site as issues or pull requests]
-(https://github.com/linuxfoundation/cii-best-practices-badge).
+[GitHub site as issues or pull requests](https://github.com/linuxfoundation/cii-best-practices-badge).
 There is also a
-[mailing list for general discussion]
-(https://lists.coreinfrastructure.org/mailman/listinfo/cii-badges).
+[mailing list for general discussion](https://lists.coreinfrastructure.org/mailman/listinfo/cii-badges).
 
 Below are the current *draft* criteria, potential criteria,
 non-criteria, future plans, and where to get more information.
@@ -141,16 +139,13 @@ same as the project URL), and license(s).
   of the following:
   - [an approved license by the Open Source Initiative
   (OSI)](https://opensource.org/licenses)
-  - [a free license as approved by the Free Software Foundation (FSF)]
-  (https://www.gnu.org/licenses/license-list.html)
-  - [a free license acceptable to Debian main]
-  (https://www.debian.org/legal/licenses/)
-  - [a "good" license according to Fedora]
-  (https://fedoraproject.org/wiki/Licensing:Main?rd=Licensing).
+  - [a free license as approved by the Free Software Foundation (FSF)](https://www.gnu.org/licenses/license-list.html)
+  - [a free license acceptable to Debian main](https://www.debian.org/legal/licenses/)
+  - [a "good" license according to Fedora](https://fedoraproject.org/wiki/Licensing:Main?rd=Licensing).
   <sup>[<a href="#oss_license">oss_license</a>]&#8224;</sup>
-- <a name="oss_license_osi"></a> It is SUGGESTED that any required license(s)
-  be [approved by the Open Source Initiative (OSI)]
-  (https://opensource.org/licenses). The OSI uses a rigorous approval
+- <a name="oss_license_osi"></a> It is SUGGESTED that any required license(s) be
+  [approved by the Open Source Initiative (OSI)](https://opensource.org/licenses).
+  The OSI uses a rigorous approval
   process to determine which licenses are OSS. 
   Licenses not approved by OSI might not be OSS licenses.
   <sup>[<a href="#oss_license_osi">oss_license_osi</a>]&#8224;</sup>
@@ -163,10 +158,8 @@ same as the project URL), and license(s).
   [BSD 2-clause](https://opensource.org/licenses/BSD-2-Clause),
   [BSD 3-clause revised](https://opensource.org/licenses/BSD-3-Clause),
   [Apache 2.0](https://opensource.org/licenses/Apache-2.0),
-  [Lesser GNU General Public License (LGPL)]
-  (https://opensource.org/licenses/lgpl-license),
-  and the [GNU General Public License (GPL)]
-  (https://opensource.org/licenses/gpl-license).
+  [Lesser GNU General Public License (LGPL)](https://opensource.org/licenses/lgpl-license),
+  and the [GNU General Public License (GPL)](https://opensource.org/licenses/gpl-license).
 - *Rationale*: These criteria are designed for OSS projects, so we need to
   ensure that they're only used where they apply.
   Some projects are thought of as OSS yet are not actually released as OSS
@@ -403,35 +396,35 @@ same as the project URL), and license(s).
 - <a name="know_secure_design"></a>The project MUST have at least one
   primary developer who knows how to design secure software.
   This requires understanding the following design principles,
-  including the 8 principles from [Saltzer and Schroeder]
-  (http://web.mit.edu/Saltzer/www/publications/protection/):
+  including the 8 principles from
+  [Saltzer and Schroeder](http://web.mit.edu/Saltzer/www/publications/protection/):
     - economy of mechanism (keep the design as simple and small as practical,
-	e.g., by adopting sweeping simplifications)
+      e.g., by adopting sweeping simplifications)
     - fail-safe defaults (access decisions should deny by default)
     - complete mediation (every access that might be limited must be
-	checked for authority and be non-bypassable)
+      checked for authority and be non-bypassable)
     - open design (security mechanisms should not depend on attacker
-	ignorance of its design, but instead on more easily protected and
-	changed information like keys and passwords)
+      ignorance of its design, but instead on more easily protected and
+      changed information like keys and passwords)
     - separation of privilege (multi-factor authentication,
-	such as requiring both a password and a hardware token,
-	is stronger than single-factor authentication)
+      such as requiring both a password and a hardware token,
+      is stronger than single-factor authentication)
     - least privilege (processes should operate with the
-	least privilege necesssary)
+      least privilege necesssary)
     - least common mechanism (the design should minimize the mechanisms
-	common to more than one user and depended on by all users,
-	e.g., directories for temporary files)
+      common to more than one user and depended on by all users,
+      e.g., directories for temporary files)
     - psychological acceptability
-	(the human interface must be designed for ease of use,
-	designing for "least astonishment" can help)
+      (the human interface must be designed for ease of use,
+      designing for "least astonishment" can help)
     - limited attack surface (the attack surface, the set of the different
-	points where an attacker can try to enter or extract data, should be limited)
+      points where an attacker can try to enter or extract data, should be limited)
     - input validation with whitelists
-	(inputs should typically be checked to determine if they are valid
-	before they are accepted; this validation should use whitelists
-	(which only accept known-good values),
-	not blacklists (which attempt to list known-bad values))
-	<sup>[<a href="#know_secure_design">know_secure_design</a>]</sup>
+      (inputs should typically be checked to determine if they are valid
+      before they are accepted; this validation should use whitelists
+      (which only accept known-good values),
+      not blacklists (which attempt to list known-bad values))
+      <sup>[<a href="#know_secure_design">know_secure_design</a>]</sup>
 - <a name="know_common_errors"></a>At least one of the primary developers
   MUST know of common kinds of errors that lead to vulnerabilities in this kind
   of software, as well as at least one method
@@ -467,8 +460,7 @@ by the delivered project's software.
 - <a name="crypto_oss"></a>All project functionality that depends
   on cryptography MUST be implementable using OSS because its specification
   meets the
-  [*Open Standards Requirement for Software* by the Open Source Initiative]
-  (https://opensource.org/osr).
+  [*Open Standards Requirement for Software* by the Open Source Initiative](https://opensource.org/osr).
   <sup>[<a href="#crypto_oss">crypto_oss</a>]\*</sup>
 - <a name="crypto_keylength"></a>The project security mechanisms
   MUST use default keylengths that meet the NIST minimum requirements
@@ -547,8 +539,7 @@ by the delivered project's software.
 - *Note*: this means that users might be left vulnerable to all
   attackers worldwide for up to 60 days.
   This criterion is often much easier to meet than what Google recommends in
-  [Rebooting responsible disclosure]
-  (http://googleonlinesecurity.blogspot.com/2010/07/rebooting-responsible-disclosure-focus.html),
+  [Rebooting responsible disclosure](http://googleonlinesecurity.blogspot.com/2010/07/rebooting-responsible-disclosure-focus.html),
   because Google recommends that the 60-day period start when the
   project is notified *even* if the report is not public.
 - *Rationale*: We intentionally chose to start measurement from the time of 
@@ -578,17 +569,12 @@ by the delivered project's software.
   [PMD](https://pmd.github.io/),
   [Brakeman](http://brakemanscanner.org/),
   [Coverity Quality Analyzer](https://scan.coverity.com/),
-  and [HP Fortify Static Code Analyzer]
-  (http://www8.hp.com/au/en/software-solutions/static-code-analysis-sast/).
+  and [HP Fortify Static Code Analyzer](http://www8.hp.com/au/en/software-solutions/static-code-analysis-sast/).
   Larger lists of tools can be found in places such as the
-  [Wikipedia list of tools for static code analysis]
-  (https://en.wikipedia.org/wiki/List_of_tools_for_static_code_analysis),
-  [OWASP information on static code analysis]
-  (https://www.owasp.org/index.php/Static_Code_Analysis),
-  [NIST list of source code security analyzers]
-  (http://samate.nist.gov/index.php/Source_Code_Security_Analyzers.html),
-  and [Wheeler's list of static analysis tools]
-  (http://www.dwheeler.com/essays/static-analysis-tools.html). 
+  [Wikipedia list of tools for static code analysis](https://en.wikipedia.org/wiki/List_of_tools_for_static_code_analysis),
+  [OWASP information on static code analysis](https://www.owasp.org/index.php/Static_Code_Analysis),
+  [NIST list of source code security analyzers](http://samate.nist.gov/index.php/Source_Code_Security_Analyzers.html),
+  and [Wheeler's list of static analysis tools](http://www.dwheeler.com/essays/static-analysis-tools.html). 
   The [SWAMP](https://continuousassurance.org/) is a no-cost platform
   for assessing vulnerabilities in software using a variety of tools.
   <sup>[<a href="#static_analysis">static_analysis</a>]\*</sup>
@@ -616,14 +602,12 @@ by the delivered project's software.
   For example, the project MAY use a fuzzing tool
   (e.g., [American Fuzzy Lop](http://lcamtuf.coredump.cx/afl/))
   or a web application scanner
-  (e.g., [OWASP ZAP]
-  (https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project)
+  (e.g., [OWASP ZAP](https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project)
   or [<a href="(https://w3af.org/)">w3af</a>](http://w3af.org/)).
   For purposes of this criterion the dynamic analysis tool needs to vary
   the inputs in some way to look for various kinds of problems *or*
   be an automated test suite with at least 80% branch coverage.
-  The [Wikipedia page on dynamic analysis]
-  (https://en.wikipedia.org/wiki/Dynamic_program_analysis)
+  The [Wikipedia page on dynamic analysis](https://en.wikipedia.org/wiki/Dynamic_program_analysis)
   and the [OWASP page on fuzzing](https://www.owasp.org/index.php/Fuzzing)
   identify some dynamic analysis tools.
   <sup>[<a href="#dynamic_analysis">dynamic_analysis</a>]</sup>
@@ -711,8 +695,7 @@ enter common names and find projects.
 ## Why have criteria?
 
 The paper [Open badges for education: what are the implications at the
-intersection of open systems and badging?]
-(http://www.researchinlearningtechnology.net/index.php/rlt/article/view/23563)
+intersection of open systems and badging?](http://www.researchinlearningtechnology.net/index.php/rlt/article/view/23563)
 identifies three general reasons for badging systems (all are valid for this):
 
 1. Badges as a motivator of behaviour.  We hope that by identifying

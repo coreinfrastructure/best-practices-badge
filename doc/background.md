@@ -48,8 +48,7 @@ including web application software, mobile software,
 traditional desktop GUI software, and command line programs.
 
 Please note that these are completely unrelated to the
-[Construction Industry Institute (CII) best practices]
-(https://www.construction-institute.org/Store/CII/Publication_Pages/bp.cfm?section=orders).
+[Construction Industry Institute (CII) best practices](https://www.construction-institute.org/Store/CII/Publication_Pages/bp.cfm?section=orders).
 
 # Potential sources of criteria
 
@@ -66,21 +65,17 @@ Some of these approaches may be useful for the badging system as well.
 
 Some guidelines include:
 
-*   [Karl Fogel&#8217;s book *Producing Open Source Software*]
-(<http://producingoss.com/)
+*   [Karl Fogel&#8217;s book *Producing Open Source Software*](<http://producingoss.com/)
 
-*   [Civic Commons&#8217; wiki page]
-(http://wiki.civiccommons.org/Open_Source_Development_Guidelines/)
+*   [Civic Commons&#8217; wiki page](http://wiki.civiccommons.org/Open_Source_Development_Guidelines/)
 
-*   [&#8220;Starting an Open Source project.&#8221;]
-(http://www.smashingmagazine.com/2013/01/starting-an-open-source-project/)
+*   [&#8220;Starting an Open Source project.&#8221;](http://www.smashingmagazine.com/2013/01/starting-an-open-source-project/)
 
 *   [&#8220;Software Release Practice HOWTO.&#8221; Eric Raymond, 2000
 (somewhat dated)](http://en.tldp.org/HOWTO/Software-Release-Practice-HOWTO/)
 
 *   [&#8220;Releasing Free/Libre/Open Source Software (FLOSS) for Source
-Installation.&#8221; David A. Wheeler]
-(http://www.dwheeler.com/essays/releasing-floss-software.html)
+Installation.&#8221; David A. Wheeler](http://www.dwheeler.com/essays/releasing-floss-software.html)
 
 *   [OSS Manifesto](http://ossmanifesto.org/)
 
@@ -664,8 +659,7 @@ SAFECode publications are available at:
 
 ### "How we secure our phones"
 
-[How we secure our phones (SSL, cert pinning, PFS & more)]
-(http://resetthenet.tumblr.com/post/84327981750/how-we-secure-our-phones-ssl-cert-pinning-pfs)
+[How we secure our phones (SSL, cert pinning, PFS & more)](http://resetthenet.tumblr.com/post/84327981750/how-we-secure-our-phones-ssl-cert-pinning-pfs)
 on "Reset the Net" has set of specific recommendations on how to
 secure mobile applications.
 They are:
@@ -680,8 +674,7 @@ difficult to measure directly for our purposes.)
 
 ### Encryption of data at-rest
 
-[Encryption of Data At-Rest: Step-by-step checklist (SNIA)]
-(http://www.snia.org/sites/default/files/Encryption-Checklist-2.0.090909.pdf)
+[Encryption of Data At-Rest: Step-by-step checklist (SNIA)](http://www.snia.org/sites/default/files/Encryption-Checklist-2.0.090909.pdf)
 has a checklist that may be useful.
 
 
@@ -829,8 +822,7 @@ We would like to have feedback from cognitive experts or studies
 to make the badges effective.
 
 The paper [Open badges for education: what are the implications at
-the intersection of open systems and badging?]
-(http://www.researchinlearningtechnology.net/index.php/rlt/article/view/23563)
+the intersection of open systems and badging?](http://www.researchinlearningtechnology.net/index.php/rlt/article/view/23563)
 and its citations may help.  This paper includes a survey of literature
 on open badges for education, and
 organizes this literature into three general themes that emerge:
@@ -900,8 +892,7 @@ if carefully written, can have dramatically positive effects.
 The criteria reference the well-known design principles of
 [Saltzer and Schroeder](http://web.mit.edu/Saltzer/www/publications/protection/).
 The text
-["Principles of Computer System Design: An Introduction" by Saltzer and Kaashoek]
-(http://ocw.mit.edu/resources/res-6-004-principles-of-computer-system-design-an-introduction-spring-2009/online-textbook/principles_open_5_0.pdf)
+["Principles of Computer System Design: An Introduction" by Saltzer and Kaashoek](http://ocw.mit.edu/resources/res-6-004-principles-of-computer-system-design-an-introduction-spring-2009/online-textbook/principles_open_5_0.pdf)
 mentions "adopt sweeping simplifications", which is mentioned also.
 
 There are certainly other texts we could point to for secure design
@@ -979,8 +970,7 @@ so assume nothing about projects *not* on these lists.
 Here are some pages describing the processes used by some OSS projects
 to produce high-quality and/or high-security software.
 Some of this material is derived from
-[*How to Prevent the next Heartbleed*]
-(http://www.dwheeler.com/essays/heartbleed.html#exemplars).
+[*How to Prevent the next Heartbleed*](http://www.dwheeler.com/essays/heartbleed.html#exemplars).
 Note that any substantive project is difficult to summarize;
 the text below is necessarily a broad brush.
 
@@ -990,18 +980,14 @@ The Linux kernel is an operating system kernel.
 Its primary project page is <https://www.kernel.org/>.
 
 Some pages that describe the Linux kernel development process include:
-[Linux kernel documentation on its development]
-(https://www.kernel.org/doc/Documentation/development-process/),
+[Linux kernel documentation on its development](https://www.kernel.org/doc/Documentation/development-process/),
 especially
-[its file on the development process]
-(https://www.kernel.org/doc/Documentation/development-process/2.Process),
+[its file on the development process](https://www.kernel.org/doc/Documentation/development-process/2.Process),
 the
-[Linux Foundation page on how its development process works]
-(http://www.linuxfoundation.org/content/2-how-development-process-works),
+[Linux Foundation page on how its development process works](http://www.linuxfoundation.org/content/2-how-development-process-works),
 [The changing kernel development process presentation by Jon Corbet
 (LWN.NET) given in 2014](https://www.youtube.com/watch?v=GQiik7X7-u8), and
-[Greg Kroah Hartman on the Linux Kernel (2008)]
-(https://www.youtube.com/watch?feature=player_detailpage&v=L2SED6sewRw#t=867s)
+[Greg Kroah Hartman on the Linux Kernel (2008)](https://www.youtube.com/watch?feature=player_detailpage&v=L2SED6sewRw#t=867s)
 More generally, <http://lwn.net> reports on
 Linux kernel development processes and results.
 
@@ -1090,8 +1076,7 @@ as further discussed in
 <https://lwn.net/Articles/654071/> .
 Many major GNU/Linux distributions also include some additional
 certification systems to check a Linux kernel.
-That said, [Greg Kroah-Hartman]
-(https://www.youtube.com/watch?feature=player_detailpage&v=L2SED6sewRw#t=867s)
+That said, [Greg Kroah-Hartman](https://www.youtube.com/watch?feature=player_detailpage&v=L2SED6sewRw#t=867s)
 notes that it is very difficult to create true test suites for a kernel,
 so the Linux kernel strongly depends on community testing.
 
@@ -1101,11 +1086,9 @@ Linus Torvalds and can be used to find certain kernel code problems.
 The "Coccinelle" tool (<http://coccinelle.lip6.fr/>) can also find
 many problems and sometimes propose fixes.
 [Eduard Bachmakov worked on the clang static analyzer in 2013 to 
-improve its ability to detect Linux kernel defects]
-(http://www.linux.com/news/featured-blogs/200-libby-clark/749649-a-summer-spent-on-the-llvm-clang-static-analyzer-for-the-linux-kernel).
+improve its ability to detect Linux kernel defects](http://www.linux.com/news/featured-blogs/200-libby-clark/749649-a-summer-spent-on-the-llvm-clang-static-analyzer-for-the-linux-kernel).
 [Linux Kernel Developer Responses to Static Analysis Bug Reports by
-Philip J. Guo and Dawson Engler]
-(https://www.usenix.org/legacy/event/usenix09/tech/full_papers/guo/guo_html/)
+Philip J. Guo and Dawson Engler](https://www.usenix.org/legacy/event/usenix09/tech/full_papers/guo/guo_html/)
 examined "how Linux kernel developers respond to bug reports
 issued by a static analysis tool" (in particular how they triaged reports),
 using Coverity Scan results.
@@ -1162,8 +1145,7 @@ describes the general development approach for OpenBSD;
 this is also the development approach taken by OpenSSH.
 
 One unusual aspect is that they
-[split their core development efforts from portability developments]
-(http://www.openssh.com/history.html#portable).
+[split their core development efforts from portability developments](http://www.openssh.com/history.html#portable).
 One team does strictly OpenBSD-based development (to be as simple as possible),
 and the other team takes that version and makes it portable
 to run on many operating systems.
@@ -1332,8 +1314,7 @@ GPSD is notable as the basis for my assertion that conventional good
 practice with C can get you very close to never-break. I got fanatical
 about regression testing and routinely applying four static analyzers;
 it paid off.&#8221;
-The [lead developer has provided other comments about GPSD development processes]
-(http://esr.ibiblio.org/?p=4340).
+The [lead developer has provided other comments about GPSD development processes](http://esr.ibiblio.org/?p=4340).
 
 ## OSSEC
 
@@ -1344,15 +1325,11 @@ Its project website is <http://www.ossec.net/>.
 
 From its [downloads](http://www.ossec.net/?page_id=19) page you can
 find its development snapshots, which are publicly version-controlled on GitHub.
-[OSSEC is released under the GPLv2 license with OpenSSL exception]
-(http://www.ossec.net/?page_id=52).
-[OSSSEC-HIDS' license is in its LICENSE file]
-(https://github.com/ossec/ossec-hids/blob/master/LICENSE).
+[OSSEC is released under the GPLv2 license with OpenSSL exception](http://www.ossec.net/?page_id=52).
+[OSSSEC-HIDS' license is in its LICENSE file](https://github.com/ossec/ossec-hids/blob/master/LICENSE).
 
-[OSSEC has documentation that identifies its coding style guide]
-(http://ossec-docs.readthedocs.org/en/latest/development/oRFC/orfc-2.html).
-[OSSEC includes a facility to test rules in bulk]
-(http://ossec-docs.readthedocs.org/en/latest/development/build/test-rules.html).
+[OSSEC has documentation that identifies its coding style guide](http://ossec-docs.readthedocs.org/en/latest/development/oRFC/orfc-2.html).
+[OSSEC includes a facility to test rules in bulk](http://ossec-docs.readthedocs.org/en/latest/development/build/test-rules.html).
 
 They use [Coverity](https://scan.coverity.com/projects/1847)
 and flawfinder to look for vulnerabilities.

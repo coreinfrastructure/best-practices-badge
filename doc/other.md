@@ -8,10 +8,8 @@ There may eventually be multiple levels or
 other badges (with a prerequisite) later.
 We are currently leaning towards using the silver/gold/platinum naming system,
 which is similar to the
-[LEED certification naming system of certified, silver, gold, platinum]
-(http://www.usgbc.org/certification) and how the
-[Linux Foundation ranks membership (silver, gold, platinum)]
-(http://www.linuxfoundation.org/about/members)
+[LEED certification naming system of certified, silver, gold, platinum](http://www.usgbc.org/certification) and how the
+[Linux Foundation ranks membership (silver, gold, platinum)](http://www.linuxfoundation.org/about/members)
 An alternative is the the Olympic system naming (bronze, silver, gold).
 
 To help organize these potential criteria, they are currently grouped
@@ -70,11 +68,11 @@ Potential silver criteria
         <sup>[<a href="#documentation-architecture">documentation-architecture</a>]</sup>
     - <a name="documentation-interface"></a>
         The project MUST include reference documentation that describes
-		its interface.
+        its interface.
         <sup>[<a href="#documentation-interface">documentation-interface</a>]</sup>
     - <a name="documentation-dataflow"></a>
         The project MUST include reference documentation that describes
-		its data flow.
+        its data flow.
         <sup>[<a href="#documentation-dataflow">documentation-dataflow</a>]</sup>
 *   Code/build requirements:
     -   Coding standards / coding style guide
@@ -84,7 +82,7 @@ Potential silver criteria
         Widely-used coding standards that include ways to reduce the likelihood
         of defects (including vulnerabilities) might be especially helpful.
         Projects can create their own coding standard by referring to
-		an existing one and then adding their own additions or exceptions.
+        an existing one and then adding their own additions or exceptions.
         There are a number of secure coding standards,
         e.g., the SEI CERT's at <https://www.securecoding.cert.org/>
     -   Program can use the local version of system library/applications
@@ -99,18 +97,18 @@ Potential silver criteria
         won't use them, then the updates don't actually help.
         In some cases it's important to use the "other" version;
         the goal here is to make it *possible* to easily use the
-		standard version.
+        standard version.
         See, e.g., <http://spot.livejournal.com/312320.html> .
 *   Security analysis:
     -   Dependencies (including embedded dependencies) are periodically checked
         for known vulnerabilities
         (using an origin analyzer, e.g., Sonatype, Black Duck,
-		Codenomicon AppScan, OWASP Dependency-Check),
+        Codenomicon AppScan, OWASP Dependency-Check),
         and if they have known vulnerabilities,
         they are updated or verified as unexploitable.
         It is acceptable if the components' vulnerability cannot be exploited,
         but this analysis is difficult and it is sometimes easier to
-		simply update or fix the part.
+        simply update or fix the part.
         Developers must periodically re-scan to look for newly found publicly
         known vulnerabilities in the components they use,
         since new vulnerabilities are continuously being discovered.
@@ -129,11 +127,9 @@ Potential silver criteria
 It would be quite plausible to add many requirements specific to security.
 For example, it would be plausible to require that a system meet the
 requirements (or a specified subset) of the
-[OWASP Application Security Verification Standard Project]
-(https://www.owasp.org/index.php/Category:OWASP_Application_Security_Verification_Standard_Project)
+[OWASP Application Security Verification Standard Project](https://www.owasp.org/index.php/Category:OWASP_Application_Security_Verification_Standard_Project)
 or the
-[Securing Web Application Technologies (SWAT) Checklist]
-(https://software-security.sans.org/resources/swat).
+[Securing Web Application Technologies (SWAT) Checklist](https://software-security.sans.org/resources/swat).
 Note that both of these focus only on web applications.
 
 

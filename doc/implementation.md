@@ -568,7 +568,9 @@ This lets us fulfill the "dynamic analysis" criterion.
 
 We test this on heroku.  You can create a branch with:
 
+~~~~
 git remote add heroku https://git.heroku.com/secret-retreat-6638.git
+~~~~
 
 Then after installing heroku tools:
 

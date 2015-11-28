@@ -1,0 +1,220 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.github.com/repos/linuxfoundation/cii-best-practices-badge
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - GitHub.com
+      Date:
+      - Sat, 28 Nov 2015 00:00:06 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Status:
+      - 200 OK
+      X-Ratelimit-Limit:
+      - '60'
+      X-Ratelimit-Remaining:
+      - '56'
+      X-Ratelimit-Reset:
+      - '1448670037'
+      Cache-Control:
+      - public, max-age=60, s-maxage=60
+      Last-Modified:
+      - Sat, 21 Nov 2015 21:58:07 GMT
+      Etag:
+      - W/"93687f42122e8957463373886cfa3be6"
+      Vary:
+      - Accept
+      - Accept-Encoding
+      X-Github-Media-Type:
+      - github.v3
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Frame-Options:
+      - deny
+      Content-Security-Policy:
+      - default-src 'none'
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Expose-Headers:
+      - ETag, Link, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset,
+        X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval
+      Access-Control-Allow-Origin:
+      - "*"
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      X-Content-Type-Options:
+      - nosniff
+      X-Served-By:
+      - 7f48e2f7761567e923121f17538d7a6d
+      X-Github-Request-Id:
+      - 81F6FE9C:15336:382341B:5658EE82
+    body:
+      encoding: ASCII-8BIT
+      string: '{"id":39528049,"name":"cii-best-practices-badge","full_name":"linuxfoundation/cii-best-practices-badge","owner":{"login":"linuxfoundation","id":1040002,"avatar_url":"https://avatars.githubusercontent.com/u/1040002?v=3","gravatar_id":"","url":"https://api.github.com/users/linuxfoundation","html_url":"https://github.com/linuxfoundation","followers_url":"https://api.github.com/users/linuxfoundation/followers","following_url":"https://api.github.com/users/linuxfoundation/following{/other_user}","gists_url":"https://api.github.com/users/linuxfoundation/gists{/gist_id}","starred_url":"https://api.github.com/users/linuxfoundation/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/linuxfoundation/subscriptions","organizations_url":"https://api.github.com/users/linuxfoundation/orgs","repos_url":"https://api.github.com/users/linuxfoundation/repos","events_url":"https://api.github.com/users/linuxfoundation/events{/privacy}","received_events_url":"https://api.github.com/users/linuxfoundation/received_events","type":"Organization","site_admin":false},"private":false,"html_url":"https://github.com/linuxfoundation/cii-best-practices-badge","description":"Core
+        Infrastructure Initiative Best Practices Badge","fork":false,"url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge","forks_url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/forks","keys_url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/keys{/key_id}","collaborators_url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/collaborators{/collaborator}","teams_url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/teams","hooks_url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/hooks","issue_events_url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/issues/events{/number}","events_url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/events","assignees_url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/assignees{/user}","branches_url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/branches{/branch}","tags_url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/tags","blobs_url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/git/blobs{/sha}","git_tags_url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/git/tags{/sha}","git_refs_url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/git/refs{/sha}","trees_url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/git/trees{/sha}","statuses_url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/statuses/{sha}","languages_url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/languages","stargazers_url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/stargazers","contributors_url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/contributors","subscribers_url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/subscribers","subscription_url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/subscription","commits_url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/commits{/sha}","git_commits_url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/git/commits{/sha}","comments_url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/comments{/number}","issue_comment_url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/issues/comments{/number}","contents_url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/contents/{+path}","compare_url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/compare/{base}...{head}","merges_url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/merges","archive_url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/{archive_format}{/ref}","downloads_url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/downloads","issues_url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/issues{/number}","pulls_url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/pulls{/number}","milestones_url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/milestones{/number}","notifications_url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/notifications{?since,all,participating}","labels_url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/labels{/name}","releases_url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/releases{/id}","created_at":"2015-07-22T20:14:25Z","updated_at":"2015-11-21T21:58:07Z","pushed_at":"2015-11-27T21:19:24Z","git_url":"git://github.com/linuxfoundation/cii-best-practices-badge.git","ssh_url":"git@github.com:linuxfoundation/cii-best-practices-badge.git","clone_url":"https://github.com/linuxfoundation/cii-best-practices-badge.git","svn_url":"https://github.com/linuxfoundation/cii-best-practices-badge","homepage":null,"size":2604,"stargazers_count":64,"watchers_count":64,"language":"Ruby","has_issues":true,"has_downloads":true,"has_wiki":true,"has_pages":false,"forks_count":11,"mirror_url":null,"open_issues_count":43,"forks":11,"open_issues":43,"watchers":64,"default_branch":"master","organization":{"login":"linuxfoundation","id":1040002,"avatar_url":"https://avatars.githubusercontent.com/u/1040002?v=3","gravatar_id":"","url":"https://api.github.com/users/linuxfoundation","html_url":"https://github.com/linuxfoundation","followers_url":"https://api.github.com/users/linuxfoundation/followers","following_url":"https://api.github.com/users/linuxfoundation/following{/other_user}","gists_url":"https://api.github.com/users/linuxfoundation/gists{/gist_id}","starred_url":"https://api.github.com/users/linuxfoundation/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/linuxfoundation/subscriptions","organizations_url":"https://api.github.com/users/linuxfoundation/orgs","repos_url":"https://api.github.com/users/linuxfoundation/repos","events_url":"https://api.github.com/users/linuxfoundation/events{/privacy}","received_events_url":"https://api.github.com/users/linuxfoundation/received_events","type":"Organization","site_admin":false},"network_count":11,"subscribers_count":25}'
+    http_version: 
+  recorded_at: Sat, 28 Nov 2015 00:00:06 GMT
+- request:
+    method: get
+    uri: https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/license
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - GitHub.com
+      Date:
+      - Sat, 28 Nov 2015 00:00:06 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Status:
+      - 200 OK
+      X-Ratelimit-Limit:
+      - '60'
+      X-Ratelimit-Remaining:
+      - '55'
+      X-Ratelimit-Reset:
+      - '1448670037'
+      Cache-Control:
+      - public, max-age=60, s-maxage=60
+      Last-Modified:
+      - Fri, 27 Nov 2015 21:17:53 GMT
+      Etag:
+      - W/"dd1a26fd9b71c435bcf8896aaba64866"
+      Vary:
+      - Accept
+      - Accept-Encoding
+      X-Github-Media-Type:
+      - github.v3
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Frame-Options:
+      - deny
+      Content-Security-Policy:
+      - default-src 'none'
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Expose-Headers:
+      - ETag, Link, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset,
+        X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval
+      Access-Control-Allow-Origin:
+      - "*"
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      X-Content-Type-Options:
+      - nosniff
+      X-Served-By:
+      - 7f48e2f7761567e923121f17538d7a6d
+      X-Github-Request-Id:
+      - 81F6FE9C:1532C:B49E9E:5658EE86
+    body:
+      encoding: ASCII-8BIT
+      string: '{"name":"LICENSE","path":"LICENSE","sha":"abfda27cc173bb59d8b2d781ad20d5ec75ab06e3","size":1157,"url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/contents/LICENSE?ref=master","html_url":"https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/LICENSE","git_url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/git/blobs/abfda27cc173bb59d8b2d781ad20d5ec75ab06e3","download_url":"https://raw.githubusercontent.com/linuxfoundation/cii-best-practices-badge/master/LICENSE","type":"file","content":"VGhlIE1JVCBMaWNlbnNlIChNSVQpCgpDb3B5cmlnaHQgKGMpIDIwMTUgVGhl\nIExpbnV4IEZvdW5kYXRpb24sIHRoZSBJbnN0aXR1dGUgZm9yIERlZmVuc2Ug\nQW5hbHlzZXMsCmFuZCBvdGhlciBwcm9qZWN0IGNvbnRyaWJ1dG9ycy4KClBl\ncm1pc3Npb24gaXMgaGVyZWJ5IGdyYW50ZWQsIGZyZWUgb2YgY2hhcmdlLCB0\nbyBhbnkgcGVyc29uIG9idGFpbmluZyBhIGNvcHkKb2YgdGhpcyBzb2Z0d2Fy\nZSBhbmQgYXNzb2NpYXRlZCBkb2N1bWVudGF0aW9uIGZpbGVzICh0aGUgIlNv\nZnR3YXJlIiksIHRvIGRlYWwKaW4gdGhlIFNvZnR3YXJlIHdpdGhvdXQgcmVz\ndHJpY3Rpb24sIGluY2x1ZGluZyB3aXRob3V0IGxpbWl0YXRpb24gdGhlIHJp\nZ2h0cwp0byB1c2UsIGNvcHksIG1vZGlmeSwgbWVyZ2UsIHB1Ymxpc2gsIGRp\nc3RyaWJ1dGUsIHN1YmxpY2Vuc2UsIGFuZC9vciBzZWxsCmNvcGllcyBvZiB0\naGUgU29mdHdhcmUsIGFuZCB0byBwZXJtaXQgcGVyc29ucyB0byB3aG9tIHRo\nZSBTb2Z0d2FyZSBpcwpmdXJuaXNoZWQgdG8gZG8gc28sIHN1YmplY3QgdG8g\ndGhlIGZvbGxvd2luZyBjb25kaXRpb25zOgoKVGhlIGFib3ZlIGNvcHlyaWdo\ndCBub3RpY2UgYW5kIHRoaXMgcGVybWlzc2lvbiBub3RpY2Ugc2hhbGwgYmUg\naW5jbHVkZWQgaW4gYWxsCmNvcGllcyBvciBzdWJzdGFudGlhbCBwb3J0aW9u\ncyBvZiB0aGUgU29mdHdhcmUuCgpUSEUgU09GVFdBUkUgSVMgUFJPVklERUQg\nIkFTIElTIiwgV0lUSE9VVCBXQVJSQU5UWSBPRiBBTlkgS0lORCwgRVhQUkVT\nUyBPUgpJTVBMSUVELCBJTkNMVURJTkcgQlVUIE5PVCBMSU1JVEVEIFRPIFRI\nRSBXQVJSQU5USUVTIE9GIE1FUkNIQU5UQUJJTElUWSwKRklUTkVTUyBGT1Ig\nQSBQQVJUSUNVTEFSIFBVUlBPU0UgQU5EIE5PTklORlJJTkdFTUVOVC4gSU4g\nTk8gRVZFTlQgU0hBTEwgVEhFCkFVVEhPUlMgT1IgQ09QWVJJR0hUIEhPTERF\nUlMgQkUgTElBQkxFIEZPUiBBTlkgQ0xBSU0sIERBTUFHRVMgT1IgT1RIRVIK\nTElBQklMSVRZLCBXSEVUSEVSIElOIEFOIEFDVElPTiBPRiBDT05UUkFDVCwg\nVE9SVCBPUiBPVEhFUldJU0UsIEFSSVNJTkcgRlJPTSwKT1VUIE9GIE9SIElO\nIENPTk5FQ1RJT04gV0lUSCBUSEUgU09GVFdBUkUgT1IgVEhFIFVTRSBPUiBP\nVEhFUiBERUFMSU5HUyBJTiBUSEUKU09GVFdBUkUuCgo=\n","encoding":"base64","_links":{"self":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/contents/LICENSE?ref=master","git":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/git/blobs/abfda27cc173bb59d8b2d781ad20d5ec75ab06e3","html":"https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/LICENSE"},"license":{"key":"mit","name":"MIT
+        License","url":"https://api.github.com/licenses/mit","featured":true}}'
+    http_version: 
+  recorded_at: Sat, 28 Nov 2015 00:00:06 GMT
+- request:
+    method: get
+    uri: https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/contents/
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/vnd.github.v3+json
+      User-Agent:
+      - Octokit Ruby Gem 4.1.1
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - GitHub.com
+      Date:
+      - Sat, 28 Nov 2015 00:00:06 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Status:
+      - 200 OK
+      X-Ratelimit-Limit:
+      - '60'
+      X-Ratelimit-Remaining:
+      - '54'
+      X-Ratelimit-Reset:
+      - '1448670037'
+      Cache-Control:
+      - public, max-age=60, s-maxage=60
+      Last-Modified:
+      - Sat, 21 Nov 2015 21:58:07 GMT
+      Etag:
+      - W/"20254e7b52a0098dd4f1a4bc6c097793"
+      Vary:
+      - Accept
+      - Accept-Encoding
+      X-Github-Media-Type:
+      - github.v3; format=json
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Frame-Options:
+      - deny
+      Content-Security-Policy:
+      - default-src 'none'
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Expose-Headers:
+      - ETag, Link, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset,
+        X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval
+      Access-Control-Allow-Origin:
+      - "*"
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      X-Content-Type-Options:
+      - nosniff
+      X-Served-By:
+      - c6c65e5196703428e7641f7d1e9bc353
+      X-Github-Request-Id:
+      - 81F6FE9C:15338:4350DF9:5658EE86
+    body:
+      encoding: ASCII-8BIT
+      string: '[{"name":".env","path":".env","sha":"fe453294ad06035d5192befe18c971c603f3da86","size":109,"url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/contents/.env?ref=master","html_url":"https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/.env","git_url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/git/blobs/fe453294ad06035d5192befe18c971c603f3da86","download_url":"https://raw.githubusercontent.com/linuxfoundation/cii-best-practices-badge/master/.env","type":"file","_links":{"self":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/contents/.env?ref=master","git":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/git/blobs/fe453294ad06035d5192befe18c971c603f3da86","html":"https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/.env"}},{"name":".gitignore","path":".gitignore","sha":"10f4e41d58d535fd320dfa54ef4e4ea9c59ada44","size":584,"url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/contents/.gitignore?ref=master","html_url":"https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/.gitignore","git_url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/git/blobs/10f4e41d58d535fd320dfa54ef4e4ea9c59ada44","download_url":"https://raw.githubusercontent.com/linuxfoundation/cii-best-practices-badge/master/.gitignore","type":"file","_links":{"self":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/contents/.gitignore?ref=master","git":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/git/blobs/10f4e41d58d535fd320dfa54ef4e4ea9c59ada44","html":"https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/.gitignore"}},{"name":".pryrc","path":".pryrc","sha":"f68dff77909f27d3787f3b72183b77b9b711db06","size":42,"url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/contents/.pryrc?ref=master","html_url":"https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/.pryrc","git_url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/git/blobs/f68dff77909f27d3787f3b72183b77b9b711db06","download_url":"https://raw.githubusercontent.com/linuxfoundation/cii-best-practices-badge/master/.pryrc","type":"file","_links":{"self":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/contents/.pryrc?ref=master","git":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/git/blobs/f68dff77909f27d3787f3b72183b77b9b711db06","html":"https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/.pryrc"}},{"name":".rubocop.yml","path":".rubocop.yml","sha":"f690e6b014d6bc9fa9da6bc7df1fb78cdc7c4e02","size":682,"url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/contents/.rubocop.yml?ref=master","html_url":"https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/.rubocop.yml","git_url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/git/blobs/f690e6b014d6bc9fa9da6bc7df1fb78cdc7c4e02","download_url":"https://raw.githubusercontent.com/linuxfoundation/cii-best-practices-badge/master/.rubocop.yml","type":"file","_links":{"self":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/contents/.rubocop.yml?ref=master","git":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/git/blobs/f690e6b014d6bc9fa9da6bc7df1fb78cdc7c4e02","html":"https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/.rubocop.yml"}},{"name":"AUTHORS","path":"AUTHORS","sha":"898de26c35eb0ee73c0198940e1cf6ceb095b0b8","size":227,"url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/contents/AUTHORS?ref=master","html_url":"https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/AUTHORS","git_url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/git/blobs/898de26c35eb0ee73c0198940e1cf6ceb095b0b8","download_url":"https://raw.githubusercontent.com/linuxfoundation/cii-best-practices-badge/master/AUTHORS","type":"file","_links":{"self":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/contents/AUTHORS?ref=master","git":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/git/blobs/898de26c35eb0ee73c0198940e1cf6ceb095b0b8","html":"https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/AUTHORS"}},{"name":"CHANGELOG.md","path":"CHANGELOG.md","sha":"0c5c52f14f821c6a5d7591f485624938838d7b9c","size":682,"url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/contents/CHANGELOG.md?ref=master","html_url":"https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/CHANGELOG.md","git_url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/git/blobs/0c5c52f14f821c6a5d7591f485624938838d7b9c","download_url":"https://raw.githubusercontent.com/linuxfoundation/cii-best-practices-badge/master/CHANGELOG.md","type":"file","_links":{"self":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/contents/CHANGELOG.md?ref=master","git":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/git/blobs/0c5c52f14f821c6a5d7591f485624938838d7b9c","html":"https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/CHANGELOG.md"}},{"name":"CONTRIBUTING.md","path":"CONTRIBUTING.md","sha":"8ae2868204fef96b1b50d7471514050206d171e7","size":9441,"url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/contents/CONTRIBUTING.md?ref=master","html_url":"https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/CONTRIBUTING.md","git_url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/git/blobs/8ae2868204fef96b1b50d7471514050206d171e7","download_url":"https://raw.githubusercontent.com/linuxfoundation/cii-best-practices-badge/master/CONTRIBUTING.md","type":"file","_links":{"self":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/contents/CONTRIBUTING.md?ref=master","git":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/git/blobs/8ae2868204fef96b1b50d7471514050206d171e7","html":"https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/CONTRIBUTING.md"}},{"name":"Gemfile","path":"Gemfile","sha":"5dbfa6eb41450382441e5eba64b25cabdf4a3a38","size":1360,"url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/contents/Gemfile?ref=master","html_url":"https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/Gemfile","git_url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/git/blobs/5dbfa6eb41450382441e5eba64b25cabdf4a3a38","download_url":"https://raw.githubusercontent.com/linuxfoundation/cii-best-practices-badge/master/Gemfile","type":"file","_links":{"self":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/contents/Gemfile?ref=master","git":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/git/blobs/5dbfa6eb41450382441e5eba64b25cabdf4a3a38","html":"https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/Gemfile"}},{"name":"Gemfile.lock","path":"Gemfile.lock","sha":"2b15dd98b02d5ab2f75f4bfece38edc832be376c","size":10034,"url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/contents/Gemfile.lock?ref=master","html_url":"https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/Gemfile.lock","git_url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/git/blobs/2b15dd98b02d5ab2f75f4bfece38edc832be376c","download_url":"https://raw.githubusercontent.com/linuxfoundation/cii-best-practices-badge/master/Gemfile.lock","type":"file","_links":{"self":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/contents/Gemfile.lock?ref=master","git":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/git/blobs/2b15dd98b02d5ab2f75f4bfece38edc832be376c","html":"https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/Gemfile.lock"}},{"name":"LICENSE","path":"LICENSE","sha":"abfda27cc173bb59d8b2d781ad20d5ec75ab06e3","size":1157,"url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/contents/LICENSE?ref=master","html_url":"https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/LICENSE","git_url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/git/blobs/abfda27cc173bb59d8b2d781ad20d5ec75ab06e3","download_url":"https://raw.githubusercontent.com/linuxfoundation/cii-best-practices-badge/master/LICENSE","type":"file","_links":{"self":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/contents/LICENSE?ref=master","git":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/git/blobs/abfda27cc173bb59d8b2d781ad20d5ec75ab06e3","html":"https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/LICENSE"}},{"name":"LICENSE.spdx","path":"LICENSE.spdx","sha":"4fe71362801ae9890344faf2ab4a1b1ef697f899","size":222,"url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/contents/LICENSE.spdx?ref=master","html_url":"https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/LICENSE.spdx","git_url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/git/blobs/4fe71362801ae9890344faf2ab4a1b1ef697f899","download_url":"https://raw.githubusercontent.com/linuxfoundation/cii-best-practices-badge/master/LICENSE.spdx","type":"file","_links":{"self":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/contents/LICENSE.spdx?ref=master","git":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/git/blobs/4fe71362801ae9890344faf2ab4a1b1ef697f899","html":"https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/LICENSE.spdx"}},{"name":"NEWS","path":"NEWS","sha":"a158c21d9daff86f21bf089342d0d8d332a35b1c","size":18,"url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/contents/NEWS?ref=master","html_url":"https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/NEWS","git_url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/git/blobs/a158c21d9daff86f21bf089342d0d8d332a35b1c","download_url":"https://raw.githubusercontent.com/linuxfoundation/cii-best-practices-badge/master/NEWS","type":"file","_links":{"self":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/contents/NEWS?ref=master","git":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/git/blobs/a158c21d9daff86f21bf089342d0d8d332a35b1c","html":"https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/NEWS"}},{"name":"README.md","path":"README.md","sha":"9dc5f4c2cca7a4ef7ed3d7d986e53a91041112a0","size":2714,"url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/contents/README.md?ref=master","html_url":"https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/README.md","git_url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/git/blobs/9dc5f4c2cca7a4ef7ed3d7d986e53a91041112a0","download_url":"https://raw.githubusercontent.com/linuxfoundation/cii-best-practices-badge/master/README.md","type":"file","_links":{"self":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/contents/README.md?ref=master","git":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/git/blobs/9dc5f4c2cca7a4ef7ed3d7d986e53a91041112a0","html":"https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/README.md"}},{"name":"Rakefile","path":"Rakefile","sha":"dfa3aa4bfefd6dfba903204b63a615f94a23167e","size":251,"url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/contents/Rakefile?ref=master","html_url":"https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/Rakefile","git_url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/git/blobs/dfa3aa4bfefd6dfba903204b63a615f94a23167e","download_url":"https://raw.githubusercontent.com/linuxfoundation/cii-best-practices-badge/master/Rakefile","type":"file","_links":{"self":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/contents/Rakefile?ref=master","git":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/git/blobs/dfa3aa4bfefd6dfba903204b63a615f94a23167e","html":"https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/Rakefile"}},{"name":"app","path":"app","sha":"f96a2fadf4ae7c8ac5dd50e96d702b7381643dd9","size":0,"url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/contents/app?ref=master","html_url":"https://github.com/linuxfoundation/cii-best-practices-badge/tree/master/app","git_url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/git/trees/f96a2fadf4ae7c8ac5dd50e96d702b7381643dd9","download_url":null,"type":"dir","_links":{"self":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/contents/app?ref=master","git":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/git/trees/f96a2fadf4ae7c8ac5dd50e96d702b7381643dd9","html":"https://github.com/linuxfoundation/cii-best-practices-badge/tree/master/app"}},{"name":"bin","path":"bin","sha":"8bfe0a61f5b0b994824c9fcd64bf8bd39bb86fd0","size":0,"url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/contents/bin?ref=master","html_url":"https://github.com/linuxfoundation/cii-best-practices-badge/tree/master/bin","git_url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/git/trees/8bfe0a61f5b0b994824c9fcd64bf8bd39bb86fd0","download_url":null,"type":"dir","_links":{"self":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/contents/bin?ref=master","git":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/git/trees/8bfe0a61f5b0b994824c9fcd64bf8bd39bb86fd0","html":"https://github.com/linuxfoundation/cii-best-practices-badge/tree/master/bin"}},{"name":"circle.yml","path":"circle.yml","sha":"510fb48e898296f1f69f61d1f12b874369763272","size":621,"url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/contents/circle.yml?ref=master","html_url":"https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/circle.yml","git_url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/git/blobs/510fb48e898296f1f69f61d1f12b874369763272","download_url":"https://raw.githubusercontent.com/linuxfoundation/cii-best-practices-badge/master/circle.yml","type":"file","_links":{"self":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/contents/circle.yml?ref=master","git":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/git/blobs/510fb48e898296f1f69f61d1f12b874369763272","html":"https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/circle.yml"}},{"name":"config.ru","path":"config.ru","sha":"bd83b25412305f93fdb0a892aded30e5178899ba","size":153,"url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/contents/config.ru?ref=master","html_url":"https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/config.ru","git_url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/git/blobs/bd83b25412305f93fdb0a892aded30e5178899ba","download_url":"https://raw.githubusercontent.com/linuxfoundation/cii-best-practices-badge/master/config.ru","type":"file","_links":{"self":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/contents/config.ru?ref=master","git":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/git/blobs/bd83b25412305f93fdb0a892aded30e5178899ba","html":"https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/config.ru"}},{"name":"config","path":"config","sha":"16cb5930bc75a1d74cb5e7cde509e36122dfdf4d","size":0,"url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/contents/config?ref=master","html_url":"https://github.com/linuxfoundation/cii-best-practices-badge/tree/master/config","git_url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/git/trees/16cb5930bc75a1d74cb5e7cde509e36122dfdf4d","download_url":null,"type":"dir","_links":{"self":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/contents/config?ref=master","git":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/git/trees/16cb5930bc75a1d74cb5e7cde509e36122dfdf4d","html":"https://github.com/linuxfoundation/cii-best-practices-badge/tree/master/config"}},{"name":"db","path":"db","sha":"a3140903c5791ac18af193328ce2f75c6ff7cf5f","size":0,"url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/contents/db?ref=master","html_url":"https://github.com/linuxfoundation/cii-best-practices-badge/tree/master/db","git_url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/git/trees/a3140903c5791ac18af193328ce2f75c6ff7cf5f","download_url":null,"type":"dir","_links":{"self":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/contents/db?ref=master","git":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/git/trees/a3140903c5791ac18af193328ce2f75c6ff7cf5f","html":"https://github.com/linuxfoundation/cii-best-practices-badge/tree/master/db"}},{"name":"doc","path":"doc","sha":"58e910b5a1641022573a760fa5087a9874511273","size":0,"url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/contents/doc?ref=master","html_url":"https://github.com/linuxfoundation/cii-best-practices-badge/tree/master/doc","git_url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/git/trees/58e910b5a1641022573a760fa5087a9874511273","download_url":null,"type":"dir","_links":{"self":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/contents/doc?ref=master","git":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/git/trees/58e910b5a1641022573a760fa5087a9874511273","html":"https://github.com/linuxfoundation/cii-best-practices-badge/tree/master/doc"}},{"name":"install-badge-dev-env","path":"install-badge-dev-env","sha":"3b4fd5fece597a0cc54750ccedd62159164df389","size":9078,"url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/contents/install-badge-dev-env?ref=master","html_url":"https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/install-badge-dev-env","git_url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/git/blobs/3b4fd5fece597a0cc54750ccedd62159164df389","download_url":"https://raw.githubusercontent.com/linuxfoundation/cii-best-practices-badge/master/install-badge-dev-env","type":"file","_links":{"self":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/contents/install-badge-dev-env?ref=master","git":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/git/blobs/3b4fd5fece597a0cc54750ccedd62159164df389","html":"https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/install-badge-dev-env"}},{"name":"lib","path":"lib","sha":"48423b61492ffb18ca2bb15f704eeb2e0d85c753","size":0,"url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/contents/lib?ref=master","html_url":"https://github.com/linuxfoundation/cii-best-practices-badge/tree/master/lib","git_url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/git/trees/48423b61492ffb18ca2bb15f704eeb2e0d85c753","download_url":null,"type":"dir","_links":{"self":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/contents/lib?ref=master","git":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/git/trees/48423b61492ffb18ca2bb15f704eeb2e0d85c753","html":"https://github.com/linuxfoundation/cii-best-practices-badge/tree/master/lib"}},{"name":"log","path":"log","sha":"29a422c19251aeaeb907175e9b3219a9bed6c616","size":0,"url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/contents/log?ref=master","html_url":"https://github.com/linuxfoundation/cii-best-practices-badge/tree/master/log","git_url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/git/trees/29a422c19251aeaeb907175e9b3219a9bed6c616","download_url":null,"type":"dir","_links":{"self":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/contents/log?ref=master","git":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/git/trees/29a422c19251aeaeb907175e9b3219a9bed6c616","html":"https://github.com/linuxfoundation/cii-best-practices-badge/tree/master/log"}},{"name":"public","path":"public","sha":"23a3236904020a96c2a827875e3e065213747cda","size":0,"url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/contents/public?ref=master","html_url":"https://github.com/linuxfoundation/cii-best-practices-badge/tree/master/public","git_url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/git/trees/23a3236904020a96c2a827875e3e065213747cda","download_url":null,"type":"dir","_links":{"self":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/contents/public?ref=master","git":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/git/trees/23a3236904020a96c2a827875e3e065213747cda","html":"https://github.com/linuxfoundation/cii-best-practices-badge/tree/master/public"}},{"name":"test","path":"test","sha":"625b44d0c0ef523372e1ab0e785989c5ad77786b","size":0,"url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/contents/test?ref=master","html_url":"https://github.com/linuxfoundation/cii-best-practices-badge/tree/master/test","git_url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/git/trees/625b44d0c0ef523372e1ab0e785989c5ad77786b","download_url":null,"type":"dir","_links":{"self":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/contents/test?ref=master","git":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/git/trees/625b44d0c0ef523372e1ab0e785989c5ad77786b","html":"https://github.com/linuxfoundation/cii-best-practices-badge/tree/master/test"}},{"name":"vendor","path":"vendor","sha":"8084e8e04d510cc28321f30a9646477cc50c235c","size":0,"url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/contents/vendor?ref=master","html_url":"https://github.com/linuxfoundation/cii-best-practices-badge/tree/master/vendor","git_url":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/git/trees/8084e8e04d510cc28321f30a9646477cc50c235c","download_url":null,"type":"dir","_links":{"self":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/contents/vendor?ref=master","git":"https://api.github.com/repos/linuxfoundation/cii-best-practices-badge/git/trees/8084e8e04d510cc28321f30a9646477cc50c235c","html":"https://github.com/linuxfoundation/cii-best-practices-badge/tree/master/vendor"}}]'
+    http_version: 
+  recorded_at: Sat, 28 Nov 2015 00:00:06 GMT
+recorded_with: VCR 3.0.0

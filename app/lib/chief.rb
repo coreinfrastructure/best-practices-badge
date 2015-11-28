@@ -111,6 +111,6 @@ class Chief
 
   # Given form data about a project, return an improved version.
   def autofill
-    apply_changes(@evidence.project, propose_changes)
+    # apply_changes(@evidence.project, propose_changes)
   end
 end

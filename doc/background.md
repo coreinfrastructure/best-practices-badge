@@ -816,6 +816,13 @@ ecosystem and avoiding incentives that produce perverse outcomes.
 (so projects won't have the problem of being unable to meet the
 standard due to under-resourcing).
 
+### 12-factor app
+
+[The 12-factor app](http://12factor.net/) list
+is a list of recommended criteria for software-as-a-service apps,
+developed based on experience of Heroku.
+Point V is "V. Build, release, run: Strictly separate build and run stages".
+
 ### Cognitive/behavioral
 
 We would like to have feedback from cognitive experts or studies

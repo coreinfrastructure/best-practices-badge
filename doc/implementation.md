@@ -564,6 +564,19 @@ We intend to use the OWASP ZAP web application scanner to find potential
 vulnerabilities before full release.
 This lets us fulfill the "dynamic analysis" criterion.
 
+## Heroku
+
+We test this on heroku.  You can create a branch with:
+
+git remote add heroku https://git.heroku.com/secret-retreat-6638.git
+
+Then after installing heroku tools:
+
+~~~~
+heroku login
+git push heroku master
+~~~~
+
 
 # See also
 

@@ -112,8 +112,15 @@ Here is what BadgeApp must do to be secure:
     - Only authorized people should be able to edit the source code.
       We use GitHub, which has an authentication system for this purpose.
   - Availability: We cannot prevent someone with significant
-  resources from overwhelming the system.  Instead, we will work so that
-  it can return to operation once an attack has ended.
+    resources from overwhelming the system.  (This includes DDoS attacks,
+    since someone who controls many clients controls a lot of resources).
+    Instead, we will work so that it can return to operation
+    once an attack has ended.
+    We use the 'puma' web server to serve multiple processes
+    (so at least attackers have to cause multiple requests simultaneously),
+    and timeouts so recovery is automatic after a request.
+    We plan to use CDNs to provide cached values of badges, which are
+    the most resource-intense kind of request.
 
 BadgeApp must avoid being taken over by other applications, and
 must avoid being a conduit for others' attacks

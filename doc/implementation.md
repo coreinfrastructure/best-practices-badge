@@ -25,14 +25,18 @@ out for limited testing.
 
 The production version may also be deployed to Heroku.
 
-Other components we use are:
+Some other components we use are:
 
 - Bootstrap
 - Jquery
 - Jquery UI
 - Imagesloaded <https://github.com/desandro/imagesloaded>
   (to ensure images are loaded before displaying them)
-- A number of supporting Ruby gems (see its Gemfile)
+- Puma as the webserver - not webrick, because Puma can handle multiple
+  processes and multiple threads.  We don't use multiple threads right
+  now, but that's desirable in the future. See:
+  <https://devcenter.heroku.com/articles/ruby-default-web-server>
+- A number of supporting Ruby gems (see the Gemfile)
 
 ## Terminology
 

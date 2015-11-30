@@ -35,24 +35,24 @@ group :development, :test do
   gem 'pry-byebug', '3.3.0'
   gem 'quiet_assets', '1.1.0'
   gem 'rubocop-rspec', '1.3.1'
-  gem 'spring', '1.4.1'
+  gem 'spring', '1.4.4'
   gem 'sqlite3', '1.3.11'
   gem 'vcr', '3.0.0' # Record network responses for later test reuse
   gem 'web-console', '2.2.1'
 end
 
 group :development do
-  gem 'rails_db', '0.7.2' # Enable localhost:3000/rails/db debugging
+  gem 'rails_db', '0.9.9' # Enable localhost:3000/rails/db debugging
 end
 
 group :test do
   gem 'coveralls', '0.8.9', require: false
-  gem 'm', '1.4.0'
+  gem 'm', '1.4.2' # Run test/unit tests by line number
   gem 'simplecov', '0.10.0', require: false
   gem 'webmock'
 end
 
 group :production do
-  gem 'pg', '0.18.4'
+  gem 'pg', '0.18.4' # PostgreSQL database
   gem 'rails_12factor', '0.0.3'
 end

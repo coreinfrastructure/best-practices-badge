@@ -204,6 +204,17 @@ also make the code easier to review.
 These steps cannot *guarantee* that there are no vulnerabilities,
 but we think they reduce the risks.
 
+Of course, it has to be secure as actually deployed.
+We currently use Heroku for deployment; see the
+[Heroku security policy](https://www.heroku.com/policy/security)
+for some information on how they manage security
+(including physical security and environmental safeguards).
+
+Security is hard; we welcome your help.
+Please report potential vulnerabilities you find to us, so we can fix them.
+We also welcome hardening in general, particularly pull requests
+that actually do the work of hardening.
+
 ## Interface
 
 This is a relatively simple web application, so its

@@ -115,7 +115,7 @@ GEM
     fastercsv (1.5.5)
     font-awesome-rails (4.4.0.0)
       railties (>= 3.2, < 5.0)
-    github_api (0.12.4)
+    github_api (0.13.0)
       addressable (~> 2.3)
       descendants_tracker (~> 0.0.4)
       faraday (~> 0.8, < 0.10)
@@ -376,7 +376,7 @@ DEPENDENCIES
   coveralls (= 0.8.9)
   dotenv-rails (= 2.0.2)
   faker (= 1.6.1)
-  github_api (= 0.12.4)
+  github_api (= 0.13.0)
   jbuilder (= 2.3.2)
   jquery-rails (= 4.0.5)
   jquery-turbolinks

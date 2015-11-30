@@ -6,7 +6,7 @@ gem 'bootstrap-sass', '3.3.6'
 gem 'bootstrap-will_paginate', '0.0.10'
 gem 'bootstrap_form', '2.3.0'
 gem 'faker', '1.6.1'
-gem 'github_api', '0.12.4'
+gem 'github_api', '0.13.0'
 gem 'jbuilder', '2.3.2'
 gem 'jquery-rails', '4.0.5' # Javascript jQuery library (for Rails)
 gem 'jquery-ui-rails', '5.0.5' # Javascript jQueryUI library (for Rails)

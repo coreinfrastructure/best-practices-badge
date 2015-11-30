@@ -1,16 +1,16 @@
 source 'https://rubygems.org'
 ruby '2.2.3'
 
-gem 'bcrypt', '3.1.10'
+gem 'bcrypt', '3.1.10' # Security - for salted hashed interated passwords
 gem 'bootstrap-sass', '3.3.5.1'
 gem 'bootstrap-will_paginate', '0.0.10'
 gem 'bootstrap_form', '2.3.0'
 gem 'faker', '1.5.0'
 gem 'github_api', '0.12.4'
 gem 'jbuilder', '2.3.2'
-gem 'jquery-rails', '4.0.5'
-gem 'jquery-ui-rails', '5.0.5'
-gem 'omniauth-github', '1.1.2'
+gem 'jquery-rails', '4.0.5' # Javascript jQuery library (for Rails)
+gem 'jquery-ui-rails', '5.0.5' # Javascript jQueryUI library (for Rails)
+gem 'omniauth-github', '1.1.2' # Authentication to GitHub (get project info)
 gem 'paper_trail', '4.0.0' # Record previous versions of project data
 gem 'puma', '2.15.3' # Faster webserver; recommended by Heroku
 gem 'rails', '4.2.5' # Our web framework

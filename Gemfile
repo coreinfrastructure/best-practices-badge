@@ -11,11 +11,12 @@ gem 'jbuilder', '2.3.2'
 gem 'jquery-rails', '4.0.5'
 gem 'jquery-ui-rails', '5.0.5'
 gem 'omniauth-github', '1.1.2'
-gem 'paper_trail', '4.0.0'
-gem 'rails', '4.2.5'
+gem 'paper_trail', '4.0.0' # Record previous versions of project data
+gem 'puma', '2.15.3' # Faster webserver; recommended by Heroku
+gem 'rails', '4.2.5' # Our web framework
 gem 'sass-rails', '5.0.4'
-gem 'turbolinks', '2.5.3'
-gem 'jquery-turbolinks'
+gem 'turbolinks', '2.5.3' # Speed UI access
+gem 'jquery-turbolinks'   # Make turbolinks work with jQuery
 gem 'uglifier', '2.7.2'
 gem 'will_paginate', '3.0.7'
 

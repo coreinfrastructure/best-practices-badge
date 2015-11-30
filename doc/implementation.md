@@ -605,6 +605,13 @@ heroku login
 git push heroku master
 ~~~~
 
+## Badge SVG
+
+The SVG files for badges are:
+
+- https://img.shields.io/badge/cii_best_practices-passing-green.svg
+- https://img.shields.io/badge/cii_best_practices-failing-red.svg
+
 
 # See also
 

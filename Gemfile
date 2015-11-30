@@ -10,6 +10,7 @@ gem 'github_api', '0.12.4'
 gem 'jbuilder', '2.3.2'
 gem 'jquery-rails', '4.0.5' # Javascript jQuery library (for Rails)
 gem 'jquery-ui-rails', '5.0.5' # Javascript jQueryUI library (for Rails)
+gem 'octokit', '4.1.1' # GitHub's official Ruby API
 gem 'omniauth-github', '1.1.2' # Authentication to GitHub (get project info)
 gem 'paper_trail', '4.0.0' # Record previous versions of project data
 gem 'puma', '2.15.3' # Faster webserver; recommended by Heroku

@@ -382,6 +382,7 @@ DEPENDENCIES
   jquery-ui-rails (= 5.0.5)
   m (= 1.4.0)
   mdl (= 0.2.1)
+  octokit (= 4.1.1)
   omniauth-github (= 1.1.2)
   paper_trail (= 4.0.0)
   pg (= 0.18.4)

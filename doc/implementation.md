@@ -98,7 +98,8 @@ Here is what BadgeApp must do to be secure:
 
 - Confidentiality: Do not reveal any plaintext passwords used to authenticate
   users.  This is primarily handled by only storing passwords
-  once processed by bcrypt.
+  once processed by bcrypt.  Project data is considered public, as is
+  the existence of users, so we don't need to keep those confidential.
 - Integrity:
     - Data between the client and server must not be altered.
       We use https in the deployed system and (via GitHub) for accessing
@@ -113,12 +114,15 @@ Here is what BadgeApp must do to be secure:
       We use GitHub, which has an authentication system for this purpose.
   - Availability: We cannot prevent someone with significant
     resources from overwhelming the system.  (This includes DDoS attacks,
-    since someone who controls many clients controls a lot of resources).
+    since someone who controls many clients controls a lot of resources.)
     Instead, we will work so that it can return to operation
     once an attack has ended.
     We use the 'puma' web server to serve multiple processes
     (so at least attackers have to cause multiple requests simultaneously),
     and timeouts so recovery is automatic after a request.
+    The system is designed to be easily scalable (just add more worker
+    processes), so we can quickly purchase additional computing resources
+    to handle requests if needed.
     We plan to use CDNs to provide cached values of badges, which are
     the most resource-intense kind of request.
 

@@ -8,8 +8,8 @@ threads threads_count, threads_count
 
 preload_app!
 
-rackup      DefaultRackup
-port        ENV['PORT']     || 3000
+rackup DefaultRackup
+port ENV['PORT'] || 3000
 environment ENV['RACK_ENV'] || 'development'
 
 on_worker_boot do
@@ -17,6 +17,6 @@ on_worker_boot do
   # https://devcenter.heroku.com/articles/deploying-rails-applications-with-the-puma-web-server#on-worker-boot
   ActiveRecord::Base.establish_connection
   if defined?(Resque)
-     Resque.redis = ENV["<redis-uri>"] || "redis://127.0.0.1:6379"
+    Resque.redis = ENV['<redis-uri>'] || 'redis://127.0.0.1:6379'
   end
 end

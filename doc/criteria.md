@@ -460,14 +460,16 @@ by the delivered project's software.
 - <a name="crypto_oss"></a>All project functionality that depends
   on cryptography MUST be implementable using OSS because its specification
   meets the
-  [*Open Standards Requirement for Software* by the Open Source Initiative](https://opensource.org/osr).
+  [*Open Standards Requirement for Software* by the Open Source Initiative]https://opensource.org/osr).
   <sup>[<a href="#crypto_oss">crypto_oss</a>]\*</sup>
 - <a name="crypto_keylength"></a>The project security mechanisms
   MUST use default keylengths that meet the NIST minimum requirements
   at least through the year 2030 (as stated in 2012).
   These minimum bitlengths are: symmetric key 112, factoring modulus 2048,
   discrete logarithm key 224, discrete logarithmic group 2048,
-  elliptic curve 224, and hash 224.
+  elliptic curve 224. Hashing algorithms must be at least SHA-224 
+  (see <a href="#crypto_password_storage">crypto_password_storage</a>
+  for specific password hashing criterion).
   See <http://www.keylength.com> for a comparison of keylength
   recommendations from various organizations.
   The software MUST be configurable so that it will reject smaller keylengths.
@@ -482,13 +484,13 @@ by the delivered project's software.
 - <a name="crypto_weaknesses"></a>The project security mechanisms
   SHOULD NOT by default depend on cryptographic algorithms with known
   serious weaknesses (e.g., SHA-1).
-  [<a href="#crypto_weaknesses">crypto_weaknesses</a>]\*</sup>
+  <sup>[<a href="#crypto_weaknesses">crypto_weaknesses</a>]\*</sup>
 - <a name="crypto_alternatives"></a>The project SHOULD support multiple
   cryptographic algorithms, so users can quickly switch if one is broken.
   Common symmetric key algorithms include AES, Twofish, Serpent,
   Blowfish, and 3DES.
   Common cryptographic hash algorithm alternatives include SHA-2
-  (including SHA-256 and SHA-512) and SHA-3.
+  (including SHA-224, SHA-256, SHA-384 and SHA-512) and SHA-3.
   <sup>[<a href="#crypto_alternatives">crypto_alternatives</a>]\*</sup>
 - <a name="crypto_pfs"></a>The project SHOULD implement perfect forward
   secrecy for key agreement protocols so a session key derived from a set
@@ -498,7 +500,7 @@ by the delivered project's software.
 - <a name="crypto_password_storage"></a>If passwords are stored for
   authentication of external users, the project MUST store them as
   iterated hashes with a per-user salt by using a key stretching
-  (iterated) algorithm (e.g., PBKDF2, Bcrypt or Scrypt).
+  (iterated) algorithm (e.g., PBKDF2, Bcrypt or Scrypt).  This is 
   <sup>[<a href="#crypto_password_storage">crypto_password_storage</a>]\*</sup>
 - <a name="crypto_random"></a>The project MUST generate all
   cryptographic keys and nonces using cryptographically random functions,

@@ -582,9 +582,10 @@ by the delivered project's software.
   that the tool include rules or approaches to look for common
   vulnerabilities in the analyzed language or environment.
   <sup>[<a href="#static_analysis_common_vulnerabilities">static_analysis_common_vulnerabilities</a>]\*</sup>
-- <a name="static_analysis_fixed"></a>All confirmed medium
-  and high severity exploitable vulnerabilities discovered
-  with static code analysis MUST be fixed.
+- <a name="static_analysis_fixed"></a>The project MUST have a process for 
+  confirming and fixing all medium and high severity exploitable vulnerabilities
+  discovered with static code analysis.  Fixes SHOULD be implemented prior to
+  each major production release.
   A vulnerability is medium to high severity if its
   [CVSS 2.0](https://nvd.nist.gov/cvss.cfm) is 4 or higher.
   <sup>[<a href="#static_analysis_fixed">static_analysis_fixed</a>]\*</sup>
@@ -627,10 +628,10 @@ by the delivered project's software.
   <sup>[<a href="#dynamic_analysis_enable_assertions">dynamic_analysis_enable_assertions</a>]</sup>
 - The analysis tool(s) MAY be focused on looking for security
   vulnerabilities, but this is not required.
-- <a name="dynamic_analysis_fixed"></a>The project MUST have process for 
-  fixing all medium and high severity exploitable vulnerabilities discovered
-  with dynamic code analysis.  The fixes SHOULD be implemented before each major
-  production release.
+- <a name="dynamic_analysis_fixed"></a>The project MUST have a process for 
+  confirming and fixing all medium and high severity exploitable vulnerabilities
+  discovered with static code analysis.  Fixes SHOULD be implemented prior to
+  each major production release.
   A vulnerability is medium to high severity if its
   [CVSS 2.0](https://nvd.nist.gov/cvss.cfm)
   base score is 4 or higher.

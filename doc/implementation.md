@@ -94,6 +94,9 @@ Then point your web browser at "localhost:3000".
 
 ## Security
 
+
+### Security Requirements
+
 Here is what BadgeApp must do to be secure:
 
 - Confidentiality: Do not reveal any plaintext passwords used to authenticate
@@ -139,6 +142,12 @@ to gather data about those projects (so it can automatically fill in data).
 We have taken a number of steps to reduce the likelihood
 of vulnerabilities, and to reduce the impact of vulnerabilities
 where they exist.
+
+We have a mechanism for downloading (and backing up) the database of projects.
+That way, if the project data is corrupted, we can restore the database to
+a previous state.
+
+### Security in Implementation and Verification
 
 The
 [OWASP Top 10 (2013)](https://www.owasp.org/index.php/Top_10_2013-Top_10)
@@ -198,14 +207,24 @@ Here are these items, and how we attempt to reduce their risks in BadgeApp.
    out-of-date dependency; see
    [it](https://gemnasium.com/linuxfoundation/cii-best-practices-badge)
    for more information.
+   We have also optimized the component update process through
+   high test coverage.  The files Gemfile and Gemfile.lock
+   identify the current versions of Ruby gems (Gemfile identifies direct
+   dependencies; Gemfile.lock includes all transitive dependencies and
+   the exact version numbers).  We can update libraries by
+   updating those files, running "bundle install", and then using "rake"
+   to run various checks including a robust test suite.
 10. Unvalidated Redirects and Forwards.
    Redirects and forwards are not used significantly, and they are validated.
 
-We have a mechanism for downloading (and backing up) the database of projects.
-That way, if the project data is corrupted, we can restore it to
-a previous state.
+When software is modified, it is reviewed by the
+'rake' process, which performs a number of checks and tests,
+including static source code analysis using brakeman.
+Modifications integrated into the master branch
+are further automatically checked.
+See [CONTRIBUTING.md](../CONTRIBUTING.md) for more.
 
-In addition, we enable third-party review.
+We work to enable third-party review.
 We release the software as open source software (OSS),
 using a well-known OSS license (MIT).
 We intentionally make the code relatively short and clean to ease review.
@@ -218,6 +237,8 @@ avoiding defects that might lead to vulnerabilities), and
 also make the code easier to review.
 These steps cannot *guarantee* that there are no vulnerabilities,
 but we think they reduce the risks.
+
+### Other security issues
 
 Of course, it has to be secure as actually deployed.
 We currently use Heroku for deployment; see the

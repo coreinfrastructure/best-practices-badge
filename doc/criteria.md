@@ -627,9 +627,10 @@ by the delivered project's software.
   <sup>[<a href="#dynamic_analysis_enable_assertions">dynamic_analysis_enable_assertions</a>]</sup>
 - The analysis tool(s) MAY be focused on looking for security
   vulnerabilities, but this is not required.
-- <a name="dynamic_analysis_fixed"></a>All confirmed medium and high
-  severity exploitable vulnerabilities discovered with dynamic
-  code analysis MUST be fixed.
+- <a name="dynamic_analysis_fixed"></a>The project MUST have process for 
+  fixing all medium and high severity exploitable vulnerabilities discovered
+  with dynamic code analysis.  The fixes SHOULD be implemented before each major
+  production release.
   A vulnerability is medium to high severity if its
   [CVSS 2.0](https://nvd.nist.gov/cvss.cfm)
   base score is 4 or higher.

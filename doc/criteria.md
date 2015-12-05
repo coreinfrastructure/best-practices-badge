@@ -467,9 +467,9 @@ by the delivered project's software.
   at least through the year 2030 (as stated in 2012).
   These minimum bitlengths are: symmetric key 112, factoring modulus 2048,
   discrete logarithm key 224, discrete logarithmic group 2048,
-  elliptic curve 224, and hash 224 (password hashing is not covered by this and
-  can be found in the <a href="#crypto_password_storage">crypto_password_storage
-  </a> criterion.
+  elliptic curve 224, and hash 224 (password hashing is not covered by this
+  bitlength, more information on password hashing can be found in the
+  <a href="#crypto_password_storage">crypto_password_storage</a> criterion).
   See <http://www.keylength.com> for a comparison of keylength
   recommendations from various organizations.
   The software MUST be configurable so that it will reject smaller keylengths.

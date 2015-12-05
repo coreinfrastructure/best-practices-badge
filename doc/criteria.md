@@ -467,9 +467,9 @@ by the delivered project's software.
   at least through the year 2030 (as stated in 2012).
   These minimum bitlengths are: symmetric key 112, factoring modulus 2048,
   discrete logarithm key 224, discrete logarithmic group 2048,
-  elliptic curve 224. Hashing algorithms must be at least SHA-224 
-  (see <a href="#crypto_password_storage">crypto_password_storage</a>
-  for specific password hashing criterion).
+  elliptic curve 224, and hash 224 (password hashing is not covered by this and
+  can be found in the <a href="#crypto_password_storage">crypto_password_storage
+  </a> criterion.
   See <http://www.keylength.com> for a comparison of keylength
   recommendations from various organizations.
   The software MUST be configurable so that it will reject smaller keylengths.
@@ -500,7 +500,7 @@ by the delivered project's software.
 - <a name="crypto_password_storage"></a>If passwords are stored for
   authentication of external users, the project MUST store them as
   iterated hashes with a per-user salt by using a key stretching
-  (iterated) algorithm (e.g., PBKDF2, Bcrypt or Scrypt).  This is 
+  (iterated) algorithm (e.g., PBKDF2, Bcrypt or Scrypt).
   <sup>[<a href="#crypto_password_storage">crypto_password_storage</a>]\*</sup>
 - <a name="crypto_random"></a>The project MUST generate all
   cryptographic keys and nonces using cryptographically random functions,

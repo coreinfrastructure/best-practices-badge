@@ -83,6 +83,9 @@ Installation.&#8221; David A. Wheeler](http://www.dwheeler.com/essays/releasing-
 including ChangeLogs, including what they are and why they matter.
 It recommends the filename "CHANGELOG.md" at the top.
 
+*   [Debian Upstream guide](https://wiki.debian.org/UpstreamGuide) -
+includes references to some other guides.
+
 
 ## Methods for evaluating OSS projects
 

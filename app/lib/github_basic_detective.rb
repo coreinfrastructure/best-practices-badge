@@ -92,8 +92,8 @@ class GithubBasicDetective < Detective
       license_data_raw = evidence.get(
         'https://api.github.com/repos/' + fullname + '/license')
       license_data = JSON.parse(license_data_raw) if license_data_raw
-      if license_data_raw && !license_data['license'].blank? &&
-         !license_data['license']['key'].blank?
+      if license_data_raw && license_data['license'].present? &&
+         license_data['license']['key'].present?
         # TODO: GitHub doesn't reply with the expected upper/lower case
         # for SPDX; see:
         # https://github.com/benbalter/licensee/issues/72

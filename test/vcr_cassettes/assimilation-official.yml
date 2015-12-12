@@ -1,0 +1,208 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.github.com/repos/assimilation/assimilation-official
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - GitHub.com
+      Date:
+      - Sat, 12 Dec 2015 18:58:16 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Status:
+      - 200 OK
+      X-Ratelimit-Limit:
+      - '60'
+      X-Ratelimit-Remaining:
+      - '57'
+      X-Ratelimit-Reset:
+      - '1449947889'
+      Cache-Control:
+      - public, max-age=60, s-maxage=60
+      Last-Modified:
+      - Wed, 02 Dec 2015 16:40:01 GMT
+      Etag:
+      - W/"4bd2557a7c83c43e2943dd1cdbd459bc"
+      Vary:
+      - Accept
+      - Accept-Encoding
+      X-Github-Media-Type:
+      - github.v3
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Frame-Options:
+      - deny
+      Content-Security-Policy:
+      - default-src 'none'
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Expose-Headers:
+      - ETag, Link, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset,
+        X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval
+      Access-Control-Allow-Origin:
+      - "*"
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      X-Content-Type-Options:
+      - nosniff
+      X-Served-By:
+      - b0ef53392caa42315c6206737946d931
+      X-Github-Request-Id:
+      - 6424A926:134F1:454EA83:566C6E48
+    body:
+      encoding: ASCII-8BIT
+      string: '{"id":42373046,"name":"assimilation-official","full_name":"assimilation/assimilation-official","owner":{"login":"assimilation","id":8259338,"avatar_url":"https://avatars.githubusercontent.com/u/8259338?v=3","gravatar_id":"","url":"https://api.github.com/users/assimilation","html_url":"https://github.com/assimilation","followers_url":"https://api.github.com/users/assimilation/followers","following_url":"https://api.github.com/users/assimilation/following{/other_user}","gists_url":"https://api.github.com/users/assimilation/gists{/gist_id}","starred_url":"https://api.github.com/users/assimilation/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/assimilation/subscriptions","organizations_url":"https://api.github.com/users/assimilation/orgs","repos_url":"https://api.github.com/users/assimilation/repos","events_url":"https://api.github.com/users/assimilation/events{/privacy}","received_events_url":"https://api.github.com/users/assimilation/received_events","type":"Organization","site_admin":false},"private":false,"html_url":"https://github.com/assimilation/assimilation-official","description":"This
+        is the official main repository for the Assimilation project","fork":false,"url":"https://api.github.com/repos/assimilation/assimilation-official","forks_url":"https://api.github.com/repos/assimilation/assimilation-official/forks","keys_url":"https://api.github.com/repos/assimilation/assimilation-official/keys{/key_id}","collaborators_url":"https://api.github.com/repos/assimilation/assimilation-official/collaborators{/collaborator}","teams_url":"https://api.github.com/repos/assimilation/assimilation-official/teams","hooks_url":"https://api.github.com/repos/assimilation/assimilation-official/hooks","issue_events_url":"https://api.github.com/repos/assimilation/assimilation-official/issues/events{/number}","events_url":"https://api.github.com/repos/assimilation/assimilation-official/events","assignees_url":"https://api.github.com/repos/assimilation/assimilation-official/assignees{/user}","branches_url":"https://api.github.com/repos/assimilation/assimilation-official/branches{/branch}","tags_url":"https://api.github.com/repos/assimilation/assimilation-official/tags","blobs_url":"https://api.github.com/repos/assimilation/assimilation-official/git/blobs{/sha}","git_tags_url":"https://api.github.com/repos/assimilation/assimilation-official/git/tags{/sha}","git_refs_url":"https://api.github.com/repos/assimilation/assimilation-official/git/refs{/sha}","trees_url":"https://api.github.com/repos/assimilation/assimilation-official/git/trees{/sha}","statuses_url":"https://api.github.com/repos/assimilation/assimilation-official/statuses/{sha}","languages_url":"https://api.github.com/repos/assimilation/assimilation-official/languages","stargazers_url":"https://api.github.com/repos/assimilation/assimilation-official/stargazers","contributors_url":"https://api.github.com/repos/assimilation/assimilation-official/contributors","subscribers_url":"https://api.github.com/repos/assimilation/assimilation-official/subscribers","subscription_url":"https://api.github.com/repos/assimilation/assimilation-official/subscription","commits_url":"https://api.github.com/repos/assimilation/assimilation-official/commits{/sha}","git_commits_url":"https://api.github.com/repos/assimilation/assimilation-official/git/commits{/sha}","comments_url":"https://api.github.com/repos/assimilation/assimilation-official/comments{/number}","issue_comment_url":"https://api.github.com/repos/assimilation/assimilation-official/issues/comments{/number}","contents_url":"https://api.github.com/repos/assimilation/assimilation-official/contents/{+path}","compare_url":"https://api.github.com/repos/assimilation/assimilation-official/compare/{base}...{head}","merges_url":"https://api.github.com/repos/assimilation/assimilation-official/merges","archive_url":"https://api.github.com/repos/assimilation/assimilation-official/{archive_format}{/ref}","downloads_url":"https://api.github.com/repos/assimilation/assimilation-official/downloads","issues_url":"https://api.github.com/repos/assimilation/assimilation-official/issues{/number}","pulls_url":"https://api.github.com/repos/assimilation/assimilation-official/pulls{/number}","milestones_url":"https://api.github.com/repos/assimilation/assimilation-official/milestones{/number}","notifications_url":"https://api.github.com/repos/assimilation/assimilation-official/notifications{?since,all,participating}","labels_url":"https://api.github.com/repos/assimilation/assimilation-official/labels{/name}","releases_url":"https://api.github.com/repos/assimilation/assimilation-official/releases{/id}","created_at":"2015-09-12T21:04:36Z","updated_at":"2015-12-02T16:40:01Z","pushed_at":"2015-12-06T03:22:27Z","git_url":"git://github.com/assimilation/assimilation-official.git","ssh_url":"git@github.com:assimilation/assimilation-official.git","clone_url":"https://github.com/assimilation/assimilation-official.git","svn_url":"https://github.com/assimilation/assimilation-official","homepage":null,"size":3955,"stargazers_count":6,"watchers_count":6,"language":"C","has_issues":true,"has_downloads":true,"has_wiki":true,"has_pages":false,"forks_count":2,"mirror_url":null,"open_issues_count":3,"forks":2,"open_issues":3,"watchers":6,"default_branch":"master","organization":{"login":"assimilation","id":8259338,"avatar_url":"https://avatars.githubusercontent.com/u/8259338?v=3","gravatar_id":"","url":"https://api.github.com/users/assimilation","html_url":"https://github.com/assimilation","followers_url":"https://api.github.com/users/assimilation/followers","following_url":"https://api.github.com/users/assimilation/following{/other_user}","gists_url":"https://api.github.com/users/assimilation/gists{/gist_id}","starred_url":"https://api.github.com/users/assimilation/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/assimilation/subscriptions","organizations_url":"https://api.github.com/users/assimilation/orgs","repos_url":"https://api.github.com/users/assimilation/repos","events_url":"https://api.github.com/users/assimilation/events{/privacy}","received_events_url":"https://api.github.com/users/assimilation/received_events","type":"Organization","site_admin":false},"network_count":2,"subscribers_count":5}'
+    http_version: 
+  recorded_at: Sat, 12 Dec 2015 18:58:16 GMT
+- request:
+    method: get
+    uri: https://api.github.com/repos/assimilation/assimilation-official/license
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      Server:
+      - GitHub.com
+      Date:
+      - Sat, 12 Dec 2015 18:58:16 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Status:
+      - 404 Not Found
+      X-Ratelimit-Limit:
+      - '60'
+      X-Ratelimit-Remaining:
+      - '56'
+      X-Ratelimit-Reset:
+      - '1449947889'
+      X-Github-Media-Type:
+      - github.v3
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Frame-Options:
+      - deny
+      Content-Security-Policy:
+      - default-src 'none'
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Expose-Headers:
+      - ETag, Link, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset,
+        X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval
+      Access-Control-Allow-Origin:
+      - "*"
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      X-Content-Type-Options:
+      - nosniff
+      X-Github-Request-Id:
+      - 6424A926:134F2:5B88036:566C6E48
+    body:
+      encoding: ASCII-8BIT
+      string: '{"message":"Not Found","documentation_url":"https://developer.github.com/v3"}'
+    http_version: 
+  recorded_at: Sat, 12 Dec 2015 18:58:16 GMT
+- request:
+    method: get
+    uri: https://api.github.com/repos/assimilation/assimilation-official/contents/
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/vnd.github.v3+json
+      User-Agent:
+      - Octokit Ruby Gem 4.1.1
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - GitHub.com
+      Date:
+      - Sat, 12 Dec 2015 18:58:16 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Status:
+      - 200 OK
+      X-Ratelimit-Limit:
+      - '60'
+      X-Ratelimit-Remaining:
+      - '55'
+      X-Ratelimit-Reset:
+      - '1449947889'
+      Cache-Control:
+      - public, max-age=60, s-maxage=60
+      Last-Modified:
+      - Wed, 02 Dec 2015 16:40:01 GMT
+      Etag:
+      - W/"5dd14a04263ab28e8df2f8e3a2b4d379"
+      Vary:
+      - Accept
+      - Accept-Encoding
+      X-Github-Media-Type:
+      - github.v3; format=json
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Frame-Options:
+      - deny
+      Content-Security-Policy:
+      - default-src 'none'
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Expose-Headers:
+      - ETag, Link, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset,
+        X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval
+      Access-Control-Allow-Origin:
+      - "*"
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      X-Content-Type-Options:
+      - nosniff
+      X-Served-By:
+      - 593010132f82159af0ded24b4932e109
+      X-Github-Request-Id:
+      - 6424A926:134F0:32A3A67:566C6E48
+    body:
+      encoding: ASCII-8BIT
+      string: '[{"name":".gitignore","path":".gitignore","sha":"3689aa1556d16f29defb28962f4e5bd425436b71","size":999,"url":"https://api.github.com/repos/assimilation/assimilation-official/contents/.gitignore?ref=master","html_url":"https://github.com/assimilation/assimilation-official/blob/master/.gitignore","git_url":"https://api.github.com/repos/assimilation/assimilation-official/git/blobs/3689aa1556d16f29defb28962f4e5bd425436b71","download_url":"https://raw.githubusercontent.com/assimilation/assimilation-official/master/.gitignore","type":"file","_links":{"self":"https://api.github.com/repos/assimilation/assimilation-official/contents/.gitignore?ref=master","git":"https://api.github.com/repos/assimilation/assimilation-official/git/blobs/3689aa1556d16f29defb28962f4e5bd425436b71","html":"https://github.com/assimilation/assimilation-official/blob/master/.gitignore"}},{"name":".travis.yml","path":".travis.yml","sha":"58fe8aa584923706ce48fa90371115a599377ce6","size":1043,"url":"https://api.github.com/repos/assimilation/assimilation-official/contents/.travis.yml?ref=master","html_url":"https://github.com/assimilation/assimilation-official/blob/master/.travis.yml","git_url":"https://api.github.com/repos/assimilation/assimilation-official/git/blobs/58fe8aa584923706ce48fa90371115a599377ce6","download_url":"https://raw.githubusercontent.com/assimilation/assimilation-official/master/.travis.yml","type":"file","_links":{"self":"https://api.github.com/repos/assimilation/assimilation-official/contents/.travis.yml?ref=master","git":"https://api.github.com/repos/assimilation/assimilation-official/git/blobs/58fe8aa584923706ce48fa90371115a599377ce6","html":"https://github.com/assimilation/assimilation-official/blob/master/.travis.yml"}},{"name":"CMakeLists.txt","path":"CMakeLists.txt","sha":"4ef67f1c67983c7421b6b2b8eb803cfd0f844257","size":20569,"url":"https://api.github.com/repos/assimilation/assimilation-official/contents/CMakeLists.txt?ref=master","html_url":"https://github.com/assimilation/assimilation-official/blob/master/CMakeLists.txt","git_url":"https://api.github.com/repos/assimilation/assimilation-official/git/blobs/4ef67f1c67983c7421b6b2b8eb803cfd0f844257","download_url":"https://raw.githubusercontent.com/assimilation/assimilation-official/master/CMakeLists.txt","type":"file","_links":{"self":"https://api.github.com/repos/assimilation/assimilation-official/contents/CMakeLists.txt?ref=master","git":"https://api.github.com/repos/assimilation/assimilation-official/git/blobs/4ef67f1c67983c7421b6b2b8eb803cfd0f844257","html":"https://github.com/assimilation/assimilation-official/blob/master/CMakeLists.txt"}},{"name":"Doxyfile.in","path":"Doxyfile.in","sha":"3049ec394a370b0991a6cc774430aa445803b45f","size":68248,"url":"https://api.github.com/repos/assimilation/assimilation-official/contents/Doxyfile.in?ref=master","html_url":"https://github.com/assimilation/assimilation-official/blob/master/Doxyfile.in","git_url":"https://api.github.com/repos/assimilation/assimilation-official/git/blobs/3049ec394a370b0991a6cc774430aa445803b45f","download_url":"https://raw.githubusercontent.com/assimilation/assimilation-official/master/Doxyfile.in","type":"file","_links":{"self":"https://api.github.com/repos/assimilation/assimilation-official/contents/Doxyfile.in?ref=master","git":"https://api.github.com/repos/assimilation/assimilation-official/git/blobs/3049ec394a370b0991a6cc774430aa445803b45f","html":"https://github.com/assimilation/assimilation-official/blob/master/Doxyfile.in"}},{"name":"README.md","path":"README.md","sha":"6dd3a486f5633bafd0cea569007144a272f11cc1","size":4800,"url":"https://api.github.com/repos/assimilation/assimilation-official/contents/README.md?ref=master","html_url":"https://github.com/assimilation/assimilation-official/blob/master/README.md","git_url":"https://api.github.com/repos/assimilation/assimilation-official/git/blobs/6dd3a486f5633bafd0cea569007144a272f11cc1","download_url":"https://raw.githubusercontent.com/assimilation/assimilation-official/master/README.md","type":"file","_links":{"self":"https://api.github.com/repos/assimilation/assimilation-official/contents/README.md?ref=master","git":"https://api.github.com/repos/assimilation/assimilation-official/git/blobs/6dd3a486f5633bafd0cea569007144a272f11cc1","html":"https://github.com/assimilation/assimilation-official/blob/master/README.md"}},{"name":"best_practices","path":"best_practices","sha":"dd15d606ef564f3b3a04c85f3c92bc72ef80ccc7","size":0,"url":"https://api.github.com/repos/assimilation/assimilation-official/contents/best_practices?ref=master","html_url":"https://github.com/assimilation/assimilation-official/tree/master/best_practices","git_url":"https://api.github.com/repos/assimilation/assimilation-official/git/trees/dd15d606ef564f3b3a04c85f3c92bc72ef80ccc7","download_url":null,"type":"dir","_links":{"self":"https://api.github.com/repos/assimilation/assimilation-official/contents/best_practices?ref=master","git":"https://api.github.com/repos/assimilation/assimilation-official/git/trees/dd15d606ef564f3b3a04c85f3c92bc72ef80ccc7","html":"https://github.com/assimilation/assimilation-official/tree/master/best_practices"}},{"name":"buildtools","path":"buildtools","sha":"abbb4e57260e3a70d40d2c9b839cc486734882e0","size":0,"url":"https://api.github.com/repos/assimilation/assimilation-official/contents/buildtools?ref=master","html_url":"https://github.com/assimilation/assimilation-official/tree/master/buildtools","git_url":"https://api.github.com/repos/assimilation/assimilation-official/git/trees/abbb4e57260e3a70d40d2c9b839cc486734882e0","download_url":null,"type":"dir","_links":{"self":"https://api.github.com/repos/assimilation/assimilation-official/contents/buildtools?ref=master","git":"https://api.github.com/repos/assimilation/assimilation-official/git/trees/abbb4e57260e3a70d40d2c9b839cc486734882e0","html":"https://github.com/assimilation/assimilation-official/tree/master/buildtools"}},{"name":"ci","path":"ci","sha":"e6537d7bc005ed40bf416ed76f59c62ddd883419","size":0,"url":"https://api.github.com/repos/assimilation/assimilation-official/contents/ci?ref=master","html_url":"https://github.com/assimilation/assimilation-official/tree/master/ci","git_url":"https://api.github.com/repos/assimilation/assimilation-official/git/trees/e6537d7bc005ed40bf416ed76f59c62ddd883419","download_url":null,"type":"dir","_links":{"self":"https://api.github.com/repos/assimilation/assimilation-official/contents/ci?ref=master","git":"https://api.github.com/repos/assimilation/assimilation-official/git/trees/e6537d7bc005ed40bf416ed76f59c62ddd883419","html":"https://github.com/assimilation/assimilation-official/tree/master/ci"}},{"name":"clientlib","path":"clientlib","sha":"ff6857810370a39e82289ac914a3cc497355d0f9","size":0,"url":"https://api.github.com/repos/assimilation/assimilation-official/contents/clientlib?ref=master","html_url":"https://github.com/assimilation/assimilation-official/tree/master/clientlib","git_url":"https://api.github.com/repos/assimilation/assimilation-official/git/trees/ff6857810370a39e82289ac914a3cc497355d0f9","download_url":null,"type":"dir","_links":{"self":"https://api.github.com/repos/assimilation/assimilation-official/contents/clientlib?ref=master","git":"https://api.github.com/repos/assimilation/assimilation-official/git/trees/ff6857810370a39e82289ac914a3cc497355d0f9","html":"https://github.com/assimilation/assimilation-official/tree/master/clientlib"}},{"name":"cma","path":"cma","sha":"9cb1c778f7bbc37261220b4ed583de8e2aac092b","size":0,"url":"https://api.github.com/repos/assimilation/assimilation-official/contents/cma?ref=master","html_url":"https://github.com/assimilation/assimilation-official/tree/master/cma","git_url":"https://api.github.com/repos/assimilation/assimilation-official/git/trees/9cb1c778f7bbc37261220b4ed583de8e2aac092b","download_url":null,"type":"dir","_links":{"self":"https://api.github.com/repos/assimilation/assimilation-official/contents/cma?ref=master","git":"https://api.github.com/repos/assimilation/assimilation-official/git/trees/9cb1c778f7bbc37261220b4ed583de8e2aac092b","html":"https://github.com/assimilation/assimilation-official/tree/master/cma"}},{"name":"discovery_agents","path":"discovery_agents","sha":"44e66eecad40bb8b15247d8b5cd708978273285a","size":0,"url":"https://api.github.com/repos/assimilation/assimilation-official/contents/discovery_agents?ref=master","html_url":"https://github.com/assimilation/assimilation-official/tree/master/discovery_agents","git_url":"https://api.github.com/repos/assimilation/assimilation-official/git/trees/44e66eecad40bb8b15247d8b5cd708978273285a","download_url":null,"type":"dir","_links":{"self":"https://api.github.com/repos/assimilation/assimilation-official/contents/discovery_agents?ref=master","git":"https://api.github.com/repos/assimilation/assimilation-official/git/trees/44e66eecad40bb8b15247d8b5cd708978273285a","html":"https://github.com/assimilation/assimilation-official/tree/master/discovery_agents"}},{"name":"docfiles","path":"docfiles","sha":"c3e3db4c18f06a8391575ac616d39569af010e99","size":0,"url":"https://api.github.com/repos/assimilation/assimilation-official/contents/docfiles?ref=master","html_url":"https://github.com/assimilation/assimilation-official/tree/master/docfiles","git_url":"https://api.github.com/repos/assimilation/assimilation-official/git/trees/c3e3db4c18f06a8391575ac616d39569af010e99","download_url":null,"type":"dir","_links":{"self":"https://api.github.com/repos/assimilation/assimilation-official/contents/docfiles?ref=master","git":"https://api.github.com/repos/assimilation/assimilation-official/git/trees/c3e3db4c18f06a8391575ac616d39569af010e99","html":"https://github.com/assimilation/assimilation-official/tree/master/docfiles"}},{"name":"docker","path":"docker","sha":"3778ddbcb6b0a03aa81bd87733b29be99d06e980","size":0,"url":"https://api.github.com/repos/assimilation/assimilation-official/contents/docker?ref=master","html_url":"https://github.com/assimilation/assimilation-official/tree/master/docker","git_url":"https://api.github.com/repos/assimilation/assimilation-official/git/trees/3778ddbcb6b0a03aa81bd87733b29be99d06e980","download_url":null,"type":"dir","_links":{"self":"https://api.github.com/repos/assimilation/assimilation-official/contents/docker?ref=master","git":"https://api.github.com/repos/assimilation/assimilation-official/git/trees/3778ddbcb6b0a03aa81bd87733b29be99d06e980","html":"https://github.com/assimilation/assimilation-official/tree/master/docker"}},{"name":"include","path":"include","sha":"4e1235ccaa848e1edfd27d08e4dd42b9342c1155","size":0,"url":"https://api.github.com/repos/assimilation/assimilation-official/contents/include?ref=master","html_url":"https://github.com/assimilation/assimilation-official/tree/master/include","git_url":"https://api.github.com/repos/assimilation/assimilation-official/git/trees/4e1235ccaa848e1edfd27d08e4dd42b9342c1155","download_url":null,"type":"dir","_links":{"self":"https://api.github.com/repos/assimilation/assimilation-official/contents/include?ref=master","git":"https://api.github.com/repos/assimilation/assimilation-official/git/trees/4e1235ccaa848e1edfd27d08e4dd42b9342c1155","html":"https://github.com/assimilation/assimilation-official/tree/master/include"}},{"name":"legal","path":"legal","sha":"8793c2a6b6db7e24c4de54b40e6765edbe315636","size":0,"url":"https://api.github.com/repos/assimilation/assimilation-official/contents/legal?ref=master","html_url":"https://github.com/assimilation/assimilation-official/tree/master/legal","git_url":"https://api.github.com/repos/assimilation/assimilation-official/git/trees/8793c2a6b6db7e24c4de54b40e6765edbe315636","download_url":null,"type":"dir","_links":{"self":"https://api.github.com/repos/assimilation/assimilation-official/contents/legal?ref=master","git":"https://api.github.com/repos/assimilation/assimilation-official/git/trees/8793c2a6b6db7e24c4de54b40e6765edbe315636","html":"https://github.com/assimilation/assimilation-official/tree/master/legal"}},{"name":"monrules","path":"monrules","sha":"95983a0a1990d6c403259321db08493d3593b32a","size":0,"url":"https://api.github.com/repos/assimilation/assimilation-official/contents/monrules?ref=master","html_url":"https://github.com/assimilation/assimilation-official/tree/master/monrules","git_url":"https://api.github.com/repos/assimilation/assimilation-official/git/trees/95983a0a1990d6c403259321db08493d3593b32a","download_url":null,"type":"dir","_links":{"self":"https://api.github.com/repos/assimilation/assimilation-official/contents/monrules?ref=master","git":"https://api.github.com/repos/assimilation/assimilation-official/git/trees/95983a0a1990d6c403259321db08493d3593b32a","html":"https://github.com/assimilation/assimilation-official/tree/master/monrules"}},{"name":"nanoprobe","path":"nanoprobe","sha":"c04413498b29bbcc4dfb7e212db078d3fbec5259","size":0,"url":"https://api.github.com/repos/assimilation/assimilation-official/contents/nanoprobe?ref=master","html_url":"https://github.com/assimilation/assimilation-official/tree/master/nanoprobe","git_url":"https://api.github.com/repos/assimilation/assimilation-official/git/trees/c04413498b29bbcc4dfb7e212db078d3fbec5259","download_url":null,"type":"dir","_links":{"self":"https://api.github.com/repos/assimilation/assimilation-official/contents/nanoprobe?ref=master","git":"https://api.github.com/repos/assimilation/assimilation-official/git/trees/c04413498b29bbcc4dfb7e212db078d3fbec5259","html":"https://github.com/assimilation/assimilation-official/tree/master/nanoprobe"}},{"name":"ocf","path":"ocf","sha":"e366f4fb3c6e3349431de571f6fca72b06a4ceac","size":0,"url":"https://api.github.com/repos/assimilation/assimilation-official/contents/ocf?ref=master","html_url":"https://github.com/assimilation/assimilation-official/tree/master/ocf","git_url":"https://api.github.com/repos/assimilation/assimilation-official/git/trees/e366f4fb3c6e3349431de571f6fca72b06a4ceac","download_url":null,"type":"dir","_links":{"self":"https://api.github.com/repos/assimilation/assimilation-official/contents/ocf?ref=master","git":"https://api.github.com/repos/assimilation/assimilation-official/git/trees/e366f4fb3c6e3349431de571f6fca72b06a4ceac","html":"https://github.com/assimilation/assimilation-official/tree/master/ocf"}},{"name":"pcap","path":"pcap","sha":"480e62f149eb7e943399fb50028ec7cea8bf34b0","size":0,"url":"https://api.github.com/repos/assimilation/assimilation-official/contents/pcap?ref=master","html_url":"https://github.com/assimilation/assimilation-official/tree/master/pcap","git_url":"https://api.github.com/repos/assimilation/assimilation-official/git/trees/480e62f149eb7e943399fb50028ec7cea8bf34b0","download_url":null,"type":"dir","_links":{"self":"https://api.github.com/repos/assimilation/assimilation-official/contents/pcap?ref=master","git":"https://api.github.com/repos/assimilation/assimilation-official/git/trees/480e62f149eb7e943399fb50028ec7cea8bf34b0","html":"https://github.com/assimilation/assimilation-official/tree/master/pcap"}},{"name":"queries","path":"queries","sha":"e1783c6226e0fc30dbf701c279630e816084fb69","size":0,"url":"https://api.github.com/repos/assimilation/assimilation-official/contents/queries?ref=master","html_url":"https://github.com/assimilation/assimilation-official/tree/master/queries","git_url":"https://api.github.com/repos/assimilation/assimilation-official/git/trees/e1783c6226e0fc30dbf701c279630e816084fb69","download_url":null,"type":"dir","_links":{"self":"https://api.github.com/repos/assimilation/assimilation-official/contents/queries?ref=master","git":"https://api.github.com/repos/assimilation/assimilation-official/git/trees/e1783c6226e0fc30dbf701c279630e816084fb69","html":"https://github.com/assimilation/assimilation-official/tree/master/queries"}},{"name":"samples.d","path":"samples.d","sha":"28af135d5fe7d6f43ba24ecb7f96ef25f34f8c19","size":0,"url":"https://api.github.com/repos/assimilation/assimilation-official/contents/samples.d?ref=master","html_url":"https://github.com/assimilation/assimilation-official/tree/master/samples.d","git_url":"https://api.github.com/repos/assimilation/assimilation-official/git/trees/28af135d5fe7d6f43ba24ecb7f96ef25f34f8c19","download_url":null,"type":"dir","_links":{"self":"https://api.github.com/repos/assimilation/assimilation-official/contents/samples.d?ref=master","git":"https://api.github.com/repos/assimilation/assimilation-official/git/trees/28af135d5fe7d6f43ba24ecb7f96ef25f34f8c19","html":"https://github.com/assimilation/assimilation-official/tree/master/samples.d"}},{"name":"serverlib","path":"serverlib","sha":"3cd85fcc6a0b427404cd852b22aac2b430712c4a","size":0,"url":"https://api.github.com/repos/assimilation/assimilation-official/contents/serverlib?ref=master","html_url":"https://github.com/assimilation/assimilation-official/tree/master/serverlib","git_url":"https://api.github.com/repos/assimilation/assimilation-official/git/trees/3cd85fcc6a0b427404cd852b22aac2b430712c4a","download_url":null,"type":"dir","_links":{"self":"https://api.github.com/repos/assimilation/assimilation-official/contents/serverlib?ref=master","git":"https://api.github.com/repos/assimilation/assimilation-official/git/trees/3cd85fcc6a0b427404cd852b22aac2b430712c4a","html":"https://github.com/assimilation/assimilation-official/tree/master/serverlib"}},{"name":"testcode","path":"testcode","sha":"20f8c0169aae0df87fc975b4a8f6c9ba5a02060a","size":0,"url":"https://api.github.com/repos/assimilation/assimilation-official/contents/testcode?ref=master","html_url":"https://github.com/assimilation/assimilation-official/tree/master/testcode","git_url":"https://api.github.com/repos/assimilation/assimilation-official/git/trees/20f8c0169aae0df87fc975b4a8f6c9ba5a02060a","download_url":null,"type":"dir","_links":{"self":"https://api.github.com/repos/assimilation/assimilation-official/contents/testcode?ref=master","git":"https://api.github.com/repos/assimilation/assimilation-official/git/trees/20f8c0169aae0df87fc975b4a8f6c9ba5a02060a","html":"https://github.com/assimilation/assimilation-official/tree/master/testcode"}}]'
+    http_version: 
+  recorded_at: Sat, 12 Dec 2015 18:58:17 GMT
+recorded_with: VCR 3.0.0

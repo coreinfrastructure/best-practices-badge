@@ -49,6 +49,7 @@ class Chief
   # Should we should update a project's value for 'key'?
   def update_value?(project, key, changeset_data)
     return false if changeset_data.blank?
+    return false unless changeset_data.member?(key)
     !project.attribute_present?(key) || project[key].blank? ||
       (project[key] == '?') || (changeset_data[:confidence] == 5)
   end
@@ -90,7 +91,7 @@ class Chief
   def apply_changes(project, changes)
     changes.each do |key, data|
       next unless ALLOWED_FIELDS.include?(key)
-      next unless update_value?(project, key, data)
+      next unless update_value?(project, key, changes)
       # Store change:
       project[key] = data[:value]
       # Now add the explanation, if we can.

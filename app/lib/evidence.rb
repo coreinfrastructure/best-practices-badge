@@ -24,8 +24,13 @@ class Evidence
   # TODO: Timeout on reads.
   def get(url)
     unless @cached_data.key?(url)
-      open(url, 'rb') do |file|
-        @cached_data[url] = file.read(MAXREAD)
+      begin
+        open(url, 'rb') do |file|
+          @cached_data[url] = file.read(MAXREAD)
+        end
+      rescue
+        # Skip if error - use what we have, if anything.
+        @cached_data[url] ||= nil
       end
     end
     @cached_data[url]

@@ -49,6 +49,7 @@ class GithubBasicDetective < Detective
 
   # Individual detectives must implement "analyze"
   # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+  # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
   def analyze(evidence, current)
     repo_url = current[:repo_url]
     return {} if repo_url.nil?
@@ -90,8 +91,8 @@ class GithubBasicDetective < Detective
       # but it's a quick win to figure it out.
       license_data_raw = evidence.get(
         'https://api.github.com/repos/' + fullname + '/license')
-      license_data = JSON.parse(license_data_raw)
-      if !license_data['license'].blank? &&
+      license_data = JSON.parse(license_data_raw) if license_data_raw
+      if license_data_raw && !license_data['license'].blank? &&
          !license_data['license']['key'].blank?
         # TODO: GitHub doesn't reply with the expected upper/lower case
         # for SPDX; see:

@@ -38,4 +38,29 @@ class UsersManipulateProjectTest < ActionDispatch::IntegrationTest
       #  assert_select 'a[href=?]', user_path(@user), count: 0
     end
   end
+
+  test 'logged-in user adds assimilation-official' do
+    # Regression test, see:
+    # https://github.com/linuxfoundation/cii-best-practices-badge/issues/160
+    # Go to login_path to initialize the session
+    get login_path
+    log_in_as @user
+
+    get '/projects/new'
+    assert_response :success
+    assert_template 'projects/new'
+
+    repo_url = 'https://github.com/assimilation/assimilation-official'
+
+    VCR.use_cassette('assimilation-official') do
+      post '/projects',
+           'project[project_homepage_url]' =>  repo_url,
+           'project[repo_url]' => repo_url
+      assert_response :redirect
+      follow_redirect!
+
+      assert_response :success
+      assert_template 'projects/edit'
+    end
+  end
 end

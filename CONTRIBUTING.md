@@ -89,11 +89,18 @@ Please generally follow the
 [community Ruby style guide](https://github.com/bbatsov/ruby-style-guide)
 and the complementary
 [community Rails style guide](https://github.com/bbatsov/rails-style-guide).
-For example, use two-space indents in Ruby.
 We don't follow them slavishly, but we do generally try to follow them.
+For example, in Ruby:
 
-In the Ruby and Rails code, generally prefer symbols over strings when they do
-not potentially come from the user.
+* [use two-space indents](https://github.com/bbatsov/ruby-style-guide#spaces-indentation)
+* [use Unix line-endings](https://github.com/bbatsov/ruby-style-guide#crlf)
+* [use single-quoted strings when you don't need string interpolation or special symbols](https://github.com/bbatsov/ruby-style-guide#consistent-string-literals)
+* [Use the Ruby 1.9 hash literal syntax when your hash keys are symbols.](https://github.com/bbatsov/ruby-style-guide#hash-literals)
+* [Prefer symbols instead of strings as hash keys](https://github.com/bbatsov/ruby-style-guide#hash-literals)
+
+In Ruby,
+[prefer symbols over strings (especially as hash keys)](https://github.com/bbatsov/ruby-style-guide#symbols-as-keys)
+when they do not potentially come from the user.
 Symbols are typically faster, with no loss of readability.
 There is one big exception:
 Data from JSON should normally be accessed with strings, since that's how
@@ -102,6 +109,12 @@ Rails normally uses the type HashWithIndifferentAccess,
 where the difference between symbols and strings is ignored,
 but JSON results use standard Ruby hashes where symbols and strings are
 considered different; be careful to use the correct type in these cases.
+
+Our goal is for the application to be thread-safe, so please
+follow the guidelines in
+[How Do I Know Whether My Rails App Is Thread-safe or Not?](https://bearmetal.eu/theden/how-do-i-know-whether-my-rails-app-is-thread-safe-or-not/).
+It's challenging to be certain an application is thread-safe,
+so we aren't currently running it with multiple threads, but that is an intent.
 
 In Ruby please prefer the String operations that do not have side-effects
 (e.g., "+", "sub", or "gsub"), and consider freezing strings.

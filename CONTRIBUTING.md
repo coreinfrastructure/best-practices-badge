@@ -179,25 +179,33 @@ the default "rake" checking task:
 Note that we also use some other continuous integration tools that check changes
  after they are checked into GitHub; if they find problems, please fix them.
 
-## Supply chain
+## Supply chain (reuse)
 
-We like reusing components, but evaluate all new components before use.
+We like reusing components, but please evaluate all new components
+before adding them.
 In particular:
 
 * Before adding a Ruby gem, check its popularity on
   <https://www.ruby-toolbox.com/>, and prefer "more popular" gems.
   A popular gem may have unintentional or intentional vulnerabilities,
   but they are less likely.
-* For Ruby gems, look at its data at <https://rubygems.org/>.
-  Prefer gems that appear to be maintained recently,
-  have more than one developer, and appear to be applying good practices
-  (e.g., use semantic versioning and have a ChangeLog).
-  Someday we hope to add "have one of our badges".
+* For Ruby gems, look at its data at <https://rubygems.org/> to learn
+  more about it.
 
-## Updating components
+For any reused software, prefer software that
+appears to be currently maintained (e.g., has recent updates),
+has more than one developer, and appears to be applying good practices
+(e.g., it uses semantic versioning and have a ChangeLog).
+Someday we hope to add "have one of our badges" as a preference.
 
-For stability we set fixed version numbers of components
+If you add a Ruby gem, put its *fixed* version number in the Gemfile file,
+and please add a brief comment to explain what it is and/or why it's there.
+
+## Updating reused components
+
+For stability we set fixed version numbers of reused components
 (which are primarily gems).
+
 This means that we need to occasionally update our dependencies.
 The 'bundle_audit' task will note vulnerable components,
 which may need to be updated quickly.

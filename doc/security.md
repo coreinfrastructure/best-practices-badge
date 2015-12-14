@@ -2,7 +2,8 @@
 
 Security is important and challenging.
 Below are the overall security requirements, how we approach
-security in the design, and security in the implementation and verfication.
+security in the design, security in the implementation and verification,
+and a brief note about the supply chain (reuse).
 
 If you find a vulnerability, please see
 [CONTRIBUTING.md](../CONTRIBUTING.md) for how to submit a vulnerability report.
@@ -269,11 +270,13 @@ also make the code easier to review.
 These steps cannot *guarantee* that there are no vulnerabilities,
 but we think they reduce the risks.
 
-## Supply chain
+## Supply chain (reuse)
 
-We consider the libraries we reuse before adding them, to reduce
-the risk of unintentional and intentional vulnerabilities.
-See [CONTRIBUTING.md](../CONTRIBUTING.md) for more.
+We consider the code we reuse
+(e.g., libraries and frameworks) before adding them, to reduce
+the risk of unintentional and intentional vulnerabilities from them.
+See [CONTRIBUTING.md](../CONTRIBUTING.md) for more about our rules
+to reduce these risks.
 
 ## Other security issues
 

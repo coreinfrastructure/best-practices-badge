@@ -2,7 +2,8 @@
 
 Security is important and challenging.
 Below are the overall security requirements, how we approach
-security in the design, security in the implementation and verification,
+security in the design, security in the implementation,
+security in verification,
 and a brief note about the supply chain (reuse).
 
 If you find a vulnerability, please see
@@ -180,7 +181,7 @@ including the 8 principles from
   application is just looking for the presence or absence of certain
   data patterns, and never executes data from the project.
 
-## Security in Implementation and Verification
+## Security in Implementation
 
 The
 [OWASP Top 10 (2013)](https://www.owasp.org/index.php/Top_10_2013-Top_10)
@@ -250,13 +251,6 @@ most critical flaws), and how we attempt to reduce their risks in BadgeApp.
    to run various checks including a robust test suite.
 10. Unvalidated Redirects and Forwards.
    Redirects and forwards are not used significantly, and they are validated.
-
-When software is modified, it is reviewed by the
-'rake' process, which performs a number of checks and tests,
-including static source code analysis using brakeman.
-Modifications integrated into the master branch
-are further automatically checked.
-See [CONTRIBUTING.md](../CONTRIBUTING.md) for more.
 
 We also work to apply the
 [Ruby on Rails Security Guide](http://guides.rubyonrails.org/security.html).
@@ -350,9 +344,13 @@ as of 2015-12-14:
    The default security HTTP headers are used, which help counter some attacks.
    Future versions may harden the headers further.
 
-We work to enable third-party review.
-We release the software as open source software (OSS),
-using a well-known OSS license (MIT).
+## Security in Verification
+
+When software is modified, it is reviewed by the
+'rake' process, which performs a number of checks and tests,
+including static source code analysis using brakeman (which focuses
+on finding security issues in Ruby on Rails applications).
+
 We intentionally make the code relatively short and clean to ease review.
 We use rubocop (Ruby code style checker) and rails_best_practices
 and work to have no warnings in the code
@@ -360,7 +358,20 @@ and work to have no warnings in the code
 in the code that we're allowing an exception).
 These style tools help us avoid more problematic constructs (in some cases
 avoiding defects that might lead to vulnerabilities), and
-also make the code easier to review.
+also make the code easier to review
+(by both humans and other programs).
+
+Modifications integrated into the master branch
+are further automatically checked.
+See [CONTRIBUTING.md](../CONTRIBUTING.md) for more information.
+
+The software has a strong test suite; this helps find problems, and
+makes it easier to update components or fix problems.
+
+We work to enable third-party review.
+We release the software as open source software (OSS),
+using a well-known OSS license (MIT).
+
 These steps cannot *guarantee* that there are no vulnerabilities,
 but we think they reduce the risks.
 

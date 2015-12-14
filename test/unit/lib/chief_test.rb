@@ -41,17 +41,21 @@ class ChiefTest < ActiveSupport::TestCase
                  results[:build_justification]
   end
 
-  test 'Fatal exceptions in a Detective will not crash the system' do
+  test 'Fatal exceptions in a Detective will not crash production system' do
     old_environment = ENV['RAILS_ENV']
     # TEMPORARILY make this a 'production' environment (it isn't really)
     ENV['RAILS_ENV'] = 'production'
 
     new_chief = Chief.new(@sample_project)
 
+    # Create special exception that happens nowhere else.  That way if
+    # a *different* exception happens we don't accidentally pass the test.
+    class WeirdException < StandardError
+    end
     # Mock a detective who always fails
     class BadRepoFilesExamineDetective < RepoFilesExamineDetective
       def analyze(_, _)
-        fail StandardError, 'Exception of BadRepoFilesExamineDetective', caller
+        fail WeirdException, 'Exception of BadRepoFilesExamineDetective', caller
       end
     end
     detective = BadRepoFilesExamineDetective.new
@@ -66,10 +70,51 @@ class ChiefTest < ActiveSupport::TestCase
       end
       # Ruby weirdness: {} is considered a block, not an empty hash,
       # so we can't use 'assert_equal {}, ...'.  We can't surround the {}
-      # with parentheses to disambiguate, because rubocop complains.
-      # with Lint/ParenthesesAsGroupedExpression.  So do this instead.
+      # with parentheses to disambiguate it, because rubocop complains
+      # with Lint/ParenthesesAsGroupedExpression.  So, do this instead.
       empty_hash = {}
       assert_equal empty_hash, my_results
+    end
+  end
+
+  test 'Fatal exceptions in a Detective will crash the test system' do
+    # Note difference with previous test.
+    # Here we ensure that Detective exceptions WILL crash during testing.
+    # This is an important distinction - we want the test environment
+    # to crash quickly, so we detect problems and their causes quickly.
+    # However, in production we don't want the system to crash.
+    # Normally we want test and production systems to be the same,
+    # but not in this way.  Thus, we must more carefully test the alternatives,
+    # to ensure that both behaviors occur.
+
+    old_environment = ENV['RAILS_ENV']
+    # TEMPORARILY make this a 'test' environment (it probably is anyway)
+    ENV['RAILS_ENV'] = 'test'
+
+    new_chief = Chief.new(@sample_project)
+
+    # Create special exception that happens nowhere else.  That way if
+    # a *different* exception happens we don't accidentally pass the test.
+    class WeirdException < StandardError
+    end
+    # Mock a detective who always fails
+    class BadRepoFilesExamineDetective < RepoFilesExamineDetective
+      def analyze(_, _)
+        fail WeirdException, 'Exception of BadRepoFilesExamineDetective', caller
+      end
+    end
+    detective = BadRepoFilesExamineDetective.new
+
+    VCR.use_cassette('github') do
+      assert_raises WeirdException do
+        new_chief.propose_one_change(detective, {})
+      end
+    end
+    # Restore original environment.
+    if old_environment
+      ENV['RAILS_ENV'] = old_environment
+    else
+      ENV.delete('RAILS_ENV')
     end
   end
 end

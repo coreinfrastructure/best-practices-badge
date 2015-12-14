@@ -108,7 +108,7 @@ class Project < ActiveRecord::Base
 
   # For these fields we'll have just simple validation rules.
   # We'll rely on Rails' HTML escaping system to counter XSS.
-  validates :name, length: { maximum: MAX_TEXT_LENGTH } # TODO: SHORT_STRING?
+  validates :name, length: { maximum: MAX_SHORT_STRING_LENGTH }
   validates :description, length: { maximum: MAX_TEXT_LENGTH }
   validates :license, length: { maximum: MAX_SHORT_STRING_LENGTH }
 

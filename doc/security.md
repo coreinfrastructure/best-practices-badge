@@ -70,6 +70,23 @@ a previous state.
 ## Security in Design
 
 This web application has a simple design.
+Users potentially create an id, then log in and enter data
+about projects (as new or updated data).
+Non-admin users are not trusted.
+The entry of project data (and potentially periodically) triggers
+an evaluation of data about the project, which automatically fills in
+data about the project.
+Projects that meet certain criteria earn a badge, which is displayed
+by requesting a specific URL.
+It is a standard Ruby on Rails design with models, views, and controllers,
+building on a database (the database system itself is trusted, and is
+not directly accessible by untrusted users).
+A "Chief" class and "Detective" classes attempt to get data about a project
+and analyze that data; this project data is also untrusted.
+
+There is some Javascript served to the client,
+but no security decisions depend on code that runs on the client.
+
 Here are a number of secure design principles,
 including the 8 principles from
 [Saltzer and Schroeder](http://web.mit.edu/Saltzer/www/publications/protection/)
@@ -254,8 +271,9 @@ but we think they reduce the risks.
 
 ## Supply chain
 
-We consider the libraries we reuse before adding them; see
-[CONTRIBUTING.md](../CONTRIBUTING.md) for more.
+We consider the libraries we reuse before adding them, to reduce
+the risk of unintentional and intentional vulnerabilities.
+See [CONTRIBUTING.md](../CONTRIBUTING.md) for more.
 
 ## Other security issues
 

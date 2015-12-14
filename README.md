@@ -31,6 +31,7 @@ for general discussion.
 * Current **[implementation](./doc/implementation.md)**  - notes about the
   BadgeApp implementation
 * Information on how to **[contribute](./CONTRIBUTING.md)**
+* **[security](./doc/security.md)**  - notes about BadgeApp security
 * Current **[Burndown](https://burndown.io/#linuxfoundation/cii-best-practices-badge/1)** and
 **[Kanban Board](https://waffle.io/linuxfoundation/cii-best-practices-badge)**
 of this project.

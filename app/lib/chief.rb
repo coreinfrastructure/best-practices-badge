@@ -12,6 +12,15 @@ require 'set'
 class Chief
   def initialize(project)
     @evidence = Evidence.new(project)
+
+    # Determine what exceptions to intercept - if we're in
+    # test or development, we will only intercept an exception we don't use.
+    current_environment = (ENV['RAILS_ENV'] || 'development').to_sym
+    if [:test, :development].include?(current_environment)
+      @intercept_exception = NoSuchException
+    else
+      @intercept_exception = StandardError
+    end
   end
 
   # TODO: Identify classes automatically and do topological sort.
@@ -67,6 +76,31 @@ class Chief
     result
   end
 
+  def log_detective_failure(source, e, detective, proposal, data)
+    Rails.logger.error(
+      "In method #{source}, exception #{e} on #{detective.class.name}, " \
+      "current_proposal= #{proposal}, current_data= #{data}")
+  end
+
+  # Invoke one "Detective", which will
+  # analyze the project and reply with an updated changeset in the form
+  # { fieldname1: { value: value, confidence: 1..5, explanation: text}, ...}
+  # rubocop:disable Metrics/MethodLength
+  def propose_one_change(detective, current_proposal)
+    begin
+      current_data = compute_current(
+        detective.class::INPUTS, @evidence.project, current_proposal)
+      result = detective.analyze(@evidence, current_data)
+      current_proposal = merge_changeset(current_proposal, result)
+    # If we're in production, ignore exceptions from detectives.
+    # That way we just autofill less, instead of completely failing.
+    rescue @intercept_exception => e
+      log_detective_failure(
+        'propose_one_change', e, detective, current_proposal, current_data)
+    end
+    current_proposal
+  end
+
   # Analyze project and reply with a changeset in the form
   # { fieldname1: { value: value, confidence: 1..5, explanation: text}, ...}
   # Do this by determining the right order and way to invoke "detectives"
@@ -74,11 +108,9 @@ class Chief
   def propose_changes
     current_proposal = {} # Current best changeset.
     # TODO: Create topographical sort and Real loop over detectives.
-    ALL_DETECTIVES.each do |d|
-      current_data_for_d = compute_current(d::INPUTS, @evidence.project,
-                                           current_proposal)
-      result = d.new.analyze(@evidence, current_data_for_d)
-      current_proposal = merge_changeset(current_proposal, result)
+    ALL_DETECTIVES.each do |detective_class|
+      detective = detective_class.new
+      current_proposal = propose_one_change(detective, current_proposal)
     end
     current_proposal
   end
@@ -108,7 +140,6 @@ class Chief
       end
     end
   end
-  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
   # Given form data about a project, return an improved version.
   def autofill

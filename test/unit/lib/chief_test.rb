@@ -40,4 +40,36 @@ class ChiefTest < ActiveSupport::TestCase
                  'cii-best-practices-badge/blob/master/Rakefile>.',
                  results[:build_justification]
   end
+
+  test 'Fatal exceptions in a Detective will not crash the system' do
+    old_environment = ENV['RAILS_ENV']
+    # TEMPORARILY make this a 'production' environment (it isn't really)
+    ENV['RAILS_ENV'] = 'production'
+
+    new_chief = Chief.new(@sample_project)
+
+    # Mock a detective who always fails
+    class BadRepoFilesExamineDetective < RepoFilesExamineDetective
+      def analyze(_, _)
+        fail StandardError, 'Exception of BadRepoFilesExamineDetective', caller
+      end
+    end
+    detective = BadRepoFilesExamineDetective.new
+
+    VCR.use_cassette('github') do
+      my_results = new_chief.propose_one_change(detective, {})
+      # Restore original environment BEFORE assertions (clean up FIRST)
+      if old_environment
+        ENV['RAILS_ENV'] = old_environment
+      else
+        ENV.delete('RAILS_ENV')
+      end
+      # Ruby weirdness: {} is considered a block, not an empty hash,
+      # so we can't use 'assert_equal {}, ...'.  We can't surround the {}
+      # with parentheses to disambiguate, because rubocop complains.
+      # with Lint/ParenthesesAsGroupedExpression.  So do this instead.
+      empty_hash = {}
+      assert_equal empty_hash, my_results
+    end
+  end
 end

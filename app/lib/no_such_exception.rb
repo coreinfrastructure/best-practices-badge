@@ -1,0 +1,2 @@
+class NoSuchException < Exception
+end

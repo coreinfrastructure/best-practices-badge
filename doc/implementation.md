@@ -11,6 +11,30 @@ See [CONTRIBUTING.md](../CONTRIBUTING.md) for information on how to
 contribute ot this project, and [INSTALL.md](INSTALL.md) for information
 on how to install this software (e.g., for development).
 
+## Requirements
+
+The BadgeApp web application MUST:
+
+1. Meet its own criteria.
+2. Support users of modern widely-used web browsers, including
+   Chrome, Firefox, Safari, and Internet Explorer version 10 and up.
+   Users should be able to enter data from laptops/desktops
+   (running Linux (Ubuntu, Debian, Fedora, Red Hat Enterprise Linus),
+   Microsoft Windows, or Apple MacOS) and mobile devices
+   (including Android and iOS).
+3. NOT require Javascript to be enabled on the web browser (some
+   security-conscious people disable it) - instead, support graceful
+   degradation (many features will work much better if Javascript is enabled).
+   Requiring CSS is fine.
+4. NOT require OSS projects to use GitHub or git.
+5. Automatically fill in some criteria where it can, at least if a
+   project is on GitHub.
+
+See the security section for the security requirements.
+There are many specific requirements; instead of a huge requirements document,
+most specific requirements are proposed and processed via the issue tracker.
+See [CONTRIBUTING](../CONTRIBUTING.md).
+
 ## Overall
 
 The web application is itself OSS, and we intend for the
@@ -94,6 +118,10 @@ Then point your web browser at "localhost:3000".
 
 ## Security
 
+Security is important and challenging.
+Below are the overall security requirements, how we approach
+security in the design, and security in the implementation and verfication.
+
 
 ### Security Requirements
 
@@ -119,15 +147,18 @@ Here is what BadgeApp must do to be secure:
     resources from overwhelming the system.  (This includes DDoS attacks,
     since someone who controls many clients controls a lot of resources.)
     Instead, we will work so that it can return to operation
-    once an attack has ended.
+    once an attack has ended and/or been halted.
     We use the 'puma' web server to serve multiple processes
     (so at least attackers have to cause multiple requests simultaneously),
     and timeouts so recovery is automatic after a request.
     The system is designed to be easily scalable (just add more worker
     processes), so we can quickly purchase additional computing resources
     to handle requests if needed.
-    We plan to use CDNs to provide cached values of badges, which are
-    the most resource-intense kind of request.
+    We plan to use a CDN (Fastly) to provide cached values of badges, which are
+    the most resource-intense kind of request, and even for the read-only
+    version of project data.  As long as the CDN is up, even if the
+    application crashes the then-current data will stay available until
+    the system recovers.
 
 BadgeApp must avoid being taken over by other applications, and
 must avoid being a conduit for others' attacks
@@ -147,6 +178,82 @@ We have a mechanism for downloading (and backing up) the database of projects.
 That way, if the project data is corrupted, we can restore the database to
 a previous state.
 
+### Security in Design
+
+This web application has a simple design.
+Here are a number of secure design principles,
+including the 8 principles from
+[Saltzer and Schroeder](http://web.mit.edu/Saltzer/www/publications/protection/)
+
+- Economy of mechanism (keep the design as simple and small as practical,
+  e.g., by adopting sweeping simplifications):
+  The custom code has been kept as small as possible, in particular, we've
+  tried to keep it DRY (don't repeat yourself).
+- Fail-safe defaults (access decisions should deny by default):
+  Access decisions are deny by default.
+- Complete mediation (every access that might be limited must be
+  checked for authority and be non-bypassable):
+  Every access that might be limited is checked for authority and
+  non-bypassable.  Security checks are in the controllers, not the router,
+  because multiple routes can lead to the same controller
+  (this is per Rails security guidelines).
+  When entering data, Javascript code on the client shows whether or not
+  the badge has been achieved, but the client-side code is *not* the
+  final authority (it's merely a convenience).  The final arbiter of
+  badge acceptance is server-side code, which is not bypassable.
+- Open design (security mechanisms should not depend on attacker
+  ignorance of its design, but instead on more easily protected and
+  changed information like keys and passwords):
+  The entire program is open source software and subject to inspection.
+  Keys are kept in separate files not included in the public repository.
+- Separation of privilege (multi-factor authentication,
+  such as requiring both a password and a hardware token,
+  is stronger than single-factor authentication):
+  We don't use multi-factor authentication because the risks from compromise
+  are smaller compared to many other systems
+  (it's almost entirely public data, and failures generally can be recovered
+  through backups).
+- Least privilege (processes should operate with the
+  least privilege necesssary): The application runs as a normal user,
+  not a privileged user like "root".  It must have read/write access to
+  its database, so it has that privilege.
+- Least common mechanism (the design should minimize the mechanisms
+  common to more than one user and depended on by all users,
+  e.g., directories for temporary files):
+  No shared temporary directory is used.  Each time a new request is made,
+  new objects are instantiated; this makes the program generally thread-safe
+  as well as minimizing mechanisms common to more than one user.
+  The database is shared, but each table row has access control implemented
+  which limits sharing to those authorized to share.
+- Psychological acceptability
+  (the human interface must be designed for ease of use,
+  designing for "least astonishment" can help):
+  The application presents a simple login and "fill in the form"
+  interface, so it should be acceptable.
+- Limited attack surface (the attack surface, the set of the different
+  points where an attacker can try to enter or extract data, should be limited):
+  The application has a very limited attack surface.
+  As with all Ruby on Rails applications, all access must go through the
+  router to the controllers; the controllers then check for access permission.
+  There are few routes, and few controller methods are publicly accessible.
+  The underlying database is configured to *not* be publicly accessible.
+  Many of the operations use numeric ids (e.g., which project), which are
+  simply numbers (limiting the opportunity for attack because numbers are
+  trivial to validate).
+- Input validation with whitelists
+  (inputs should typically be checked to determine if they are valid
+  before they are accepted; this validation should use whitelists
+  (which only accept known-good values),
+  not blacklists (which attempt to list known-bad values)):
+  Input validation is done with whitelists through controllers and models.
+  Parameters are first checked in the controllers using the Ruby on Rails
+  "strong parameter" mechanism, which ensures that only a whitelisted set
+  of parameters are accepted at all.
+  The values of the parameters are checked against a whitelist by the models.
+  When project data (new or edited) is provided, all proposed status values
+  are checked to ensure they are one of the legal criteria values for
+  that criterion.
+
 ### Security in Implementation and Verification
 
 The
@@ -154,7 +261,8 @@ The
 ([details](https://www.owasp.org/index.php/Category:OWASP_Top_Ten_Project))
 represents "a broad consensus about what the most
 critical web application security flaws are."
-Here are these items, and how we attempt to reduce their risks in BadgeApp.
+Here are these items (focusing on them so we don't ignore the
+most critical flaws), and how we attempt to reduce their risks in BadgeApp.
 
 1. Injection.
    BadgeApp is implemented in Ruby on Rails, which has

@@ -3,6 +3,8 @@ class Project < ActiveRecord::Base
   STATUS_CHOICE = %w(? Met Unmet).freeze
   STATUS_CHOICE_NA = (STATUS_CHOICE + %w(N/A)).freeze
   MIN_SHOULD_LENGTH = 5
+  MAX_TEXT_LENGTH = 8192 # Arbitrary maximum to reduce abuse
+  MAX_SHORT_STRING_LENGTH = 254 # Arbitrary maximum to reduce abuse
 
   # Map each criterion to ['MUST|SHOULD|SUGGESTED',
   #   na_allowed?, met_requires_url?]
@@ -104,17 +106,21 @@ class Project < ActiveRecord::Base
   # We'll also record previous versions of information:
   has_paper_trail
 
-  # Currently no validation rules for:
-  #  name, description, license, *_justification
+  # For these fields we'll have just simple validation rules.
   # We'll rely on Rails' HTML escaping system to counter XSS.
+  validates :name, length: { maximum: MAX_TEXT_LENGTH } # TODO: SHORT_STRING?
+  validates :description, length: { maximum: MAX_TEXT_LENGTH }
+  validates :license, length: { maximum: MAX_SHORT_STRING_LENGTH }
 
   # We'll do automated analysis on these URLs, which means we will *download*
   # from URLs provided by untrusted users.  Thus we'll add additional
   # URL restrictions to counter tricks like http://ACCOUNT:PASSWORD@host...
   # and http://something/?arbitrary_parameters
 
-  validates :repo_url, url: true
-  validates :project_homepage_url, url: true
+  validates :repo_url, url: true, length: { maximum: MAX_SHORT_STRING_LENGTH }
+  validates :project_homepage_url,
+            url: true,
+            length: { maximum: MAX_SHORT_STRING_LENGTH }
   validate :need_a_base_url
 
   validates :user_id, presence: true
@@ -124,6 +130,8 @@ class Project < ActiveRecord::Base
     status = "#{criterion}_status".to_sym
     validates status, inclusion: (
       info[1] ? { in: STATUS_CHOICE_NA } : { in: STATUS_CHOICE })
+    justification = "#{criterion}_justification".to_sym
+    validates justification, length: { maximum: MAX_TEXT_LENGTH }
   end
 
   # Is this criterion in the category MUST, SHOULD, or SUGGESTED?

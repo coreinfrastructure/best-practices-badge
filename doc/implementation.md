@@ -249,7 +249,11 @@ including the 8 principles from
   Parameters are first checked in the controllers using the Ruby on Rails
   "strong parameter" mechanism, which ensures that only a whitelisted set
   of parameters are accepted at all.
-  The values of the parameters are checked against a whitelist by the models.
+  The values of the parameters are checked against a whitelist by the models,
+  and justifications have a maximum length.
+  Other strings (e.g., name, license) also have a maximum length imposed.
+  (See the text on security in implementation for the discussion on
+  how the application counters SQL injection, XSS, and CSRF attacks.)
   When project data (new or edited) is provided, all proposed status values
   are checked to ensure they are one of the legal criteria values for
   that criterion.

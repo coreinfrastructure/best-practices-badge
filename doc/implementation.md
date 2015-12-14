@@ -154,6 +154,11 @@ Here is what BadgeApp must do to be secure:
     The system is designed to be easily scalable (just add more worker
     processes), so we can quickly purchase additional computing resources
     to handle requests if needed.
+    The system is currently deployed to Heroku, which imposes a hard
+    time limit for each request; thus, if a request gets stuck
+    (say during autofill by a malevolent actor who responds very slowly),
+    eventually the timeout will cause the response to stop and the
+    system is ready for another request.
     We plan to use a CDN (Fastly) to provide cached values of badges, which are
     the most resource-intense kind of request, and even for the read-only
     version of project data.  As long as the CDN is up, even if the
@@ -245,18 +250,31 @@ including the 8 principles from
   before they are accepted; this validation should use whitelists
   (which only accept known-good values),
   not blacklists (which attempt to list known-bad values)):
-  Input validation is done with whitelists through controllers and models.
+  In data provided directly to the web application,
+  input validation is done with whitelists through controllers and models.
   Parameters are first checked in the controllers using the Ruby on Rails
   "strong parameter" mechanism, which ensures that only a whitelisted set
   of parameters are accepted at all.
-  The values of the parameters are checked against a whitelist by the models,
-  and justifications have a maximum length.
-  Other strings (e.g., name, license) also have a maximum length imposed.
-  (See the text on security in implementation for the discussion on
-  how the application counters SQL injection, XSS, and CSRF attacks.)
+  Once the parameters are accepted, Ruby on Rails'
+  [active record validations](http://guides.rubyonrails.org/active_record_validations.html)
+  are used.
+  All project parameters are checked by the model, in particular,
+  status values (the key values used for badges) are checked against
+  a whitelist of values allowed for that criterion.
+  There are a number of freetext fields, which each have a maximum length
+  (name, license, and the justifications).
+  These checks for maximum length do not by themselves counter certain attacks;
+  see the text on security in implementation for the discussion on
+  how the application counters SQL injection, XSS, and CSRF attacks.
+  URLs are also limited by length and a whitelisted regex, which counters
+  some kinds of attacks.
   When project data (new or edited) is provided, all proposed status values
   are checked to ensure they are one of the legal criteria values for
   that criterion.
+  Once project data is received, the application tries to get some
+  values from the project itself; this data may be malevolent, but the
+  application is just looking for the presence or absence of certain
+  data patterns, and never executes data from the project.
 
 ### Security in Implementation and Verification
 
@@ -349,6 +367,11 @@ avoiding defects that might lead to vulnerabilities), and
 also make the code easier to review.
 These steps cannot *guarantee* that there are no vulnerabilities,
 but we think they reduce the risks.
+
+### Supply chain
+
+We consider the libraries we reuse before adding them; see
+[CONTRIBUTING.md](../CONTRIBUTING.md) for more.
 
 ### Other security issues
 

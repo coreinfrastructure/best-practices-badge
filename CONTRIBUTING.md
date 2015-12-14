@@ -179,6 +179,21 @@ the default "rake" checking task:
 Note that we also use some other continuous integration tools that check changes
  after they are checked into GitHub; if they find problems, please fix them.
 
+## Supply chain
+
+We like reusing components, but evaluate all new components before use.
+In particular:
+
+* Before adding a Ruby gem, check its popularity on
+  <https://www.ruby-toolbox.com/>, and prefer "more popular" gems.
+  A popular gem may have unintentional or intentional vulnerabilities,
+  but they are less likely.
+* For Ruby gems, look at its data at <https://rubygems.org/>.
+  Prefer gems that appear to be maintained recently,
+  have more than one developer, and appear to be applying good practices
+  (e.g., use semantic versioning and have a ChangeLog).
+  Someday we hope to add "have one of our badges".
+
 ## Updating components
 
 For stability we set fixed version numbers of components

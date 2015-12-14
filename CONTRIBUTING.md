@@ -201,6 +201,11 @@ Someday we hope to add "have one of our badges" as a preference.
 If you add a Ruby gem, put its *fixed* version number in the Gemfile file,
 and please add a brief comment to explain what it is and/or why it's there.
 
+Our default 'rake' process includes bundle_audit, which
+checks for dependencies with known vulnerabilities.
+See the next section for how to detect obsolete reused components, and
+how we update them.
+
 ## Updating reused components
 
 For stability we set fixed version numbers of reused components

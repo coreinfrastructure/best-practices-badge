@@ -79,15 +79,23 @@ class GithubBasicDetective < Detective
         'https://api.github.com/repos/' + fullname)
       unless basic_repo_data_raw.blank?
         basic_repo_data = JSON.parse(basic_repo_data_raw)
-        if basic_repo_data['name']
+        if basic_repo_data['description'] &&
+           basic_repo_data['description'].to_s.length < 60
+          # Short description, it's probably really the name.
           results[:name] = {
-            value: basic_repo_data['name'],
-            confidence: 3, explanation: 'GitHub name' }
-        end
-        if basic_repo_data['description']
-          results[:description] = {
             value: basic_repo_data['description'],
-            confidence: 3, explanation: 'GitHub description' }
+            confidence: 3, explanation: 'GitHub name' }
+        else
+          if basic_repo_data['name']
+            results[:name] = {
+              value: basic_repo_data['name'],
+              confidence: 3, explanation: 'GitHub name' }
+          end
+          if basic_repo_data['description']
+            results[:description] = {
+              value: basic_repo_data['description'],
+              confidence: 3, explanation: 'GitHub description' }
+          end
         end
       end
 

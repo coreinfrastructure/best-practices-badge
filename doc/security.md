@@ -83,7 +83,9 @@ It is a standard Ruby on Rails design with models, views, and controllers,
 building on a database (the database system itself is trusted, and is
 not directly accessible by untrusted users).
 A "Chief" class and "Detective" classes attempt to get data about a project
-and analyze that data; this project data is also untrusted.
+and analyze that data; this project data is also untrusted
+(in particular, filenames, file contents, issue tracker information and
+contents, etc., are all untrusted).
 
 There is some Javascript served to the client,
 but no security decisions depend on code that runs on the client.
@@ -256,6 +258,98 @@ Modifications integrated into the master branch
 are further automatically checked.
 See [CONTRIBUTING.md](../CONTRIBUTING.md) for more.
 
+We also work to apply the
+[Ruby on Rails Security Guide](http://guides.rubyonrails.org/security.html).
+Here are comments on how we apply the guide, per its chapters
+as of 2015-12-14:
+
+1. *Introduction.* N/A.
+2. *Sessions.*
+   We use sessions, and use session cookies to store them
+   because of their wide support and efficiency.
+   Session data is intentionally kept small, because of the limited
+   amount of data available in a cookie.
+   To counteract session hijacking, file config/environments/production.rb 
+   "config.force_ssl" to true, requiring all communication in the
+   *production* environment to be over an encrypted channel using TLS.
+   The design allows users to drop cookies at any time
+   (at worse they may have to re-login to get another session cookie).
+   We do not use CookieStore (so guidance on its use is irrelevant).
+   We don't expire sessions, since makes usage a little more painful.
+3. *Cross-Site Request Forgery (CSRF).*
+   We use the standard REST operations with their standard meanings
+   (GET, POST, etc., with the standard Rails method workaround).
+   We have a CSRF required security token implemented using
+   protect_from_forgery built into the application-wide controller
+   app/controllers/application_controller.rb
+   (we do not use cookies.permanent or similar, a contra-indicator).
+4. *Redirection and Files.*
+   The application uses relatively few redirects; those that do involve
+   the "id", which only works if it can find the value corresponding to
+   the id first (which is a whitelist).
+   File uploads aren't directly supported; the application does
+   temporarily load some files (as part of autofill), but those filenames
+   and contents are not directly made available to any other user
+   (indeed, they're thrown away once autofill completes; caching may
+   keep them, but that simply allows re-reading of data already acquired).
+   The files aren't put into a filesystem, so there's no
+   opportunity for executable code to put into the filesystem this way.
+   There is no arbitrary file downloading capability, and private files
+   (e.g., with keys) are not in the docroot.
+5. *Intranet and Admin Security.*
+   Some users have 'admin' privileges, but these additional privileges
+   simply let them edit other project records.
+   Any other direct access requires logging in to the production system
+   through a separate log in (e.g., to use 'rails console').
+   Indirect access (e.g., to update the site) requires separately logging into
+   GitHub and performing a valid git push (this must also pass through the
+   continuous integration test suite).
+6. *User management.*
+   The system is not fast enough for a naive password-guesser to succeed.
+   The forgotten-password system for local accounts
+   uses email; that has its weaknesses,
+   but the data is sufficiently low value, and there aren't
+   good alternatives for low value data like this.
+   If users don't like that, they can log in via GitHub and use GitHub's
+   forgotten password system.
+   The file config/initializers/filter_parameter_logging.rb 
+   intentionally filters passwords so that they are not included in the log.
+   We don't currently force "good" passwords on local users;
+   users who care can use one (future versions of the application may require
+   a minimum length).
+   Ruby's regular expression (regex) language oddly interprets "^" and "$",
+   which can lead to defects (you're supposed to use \A and \Z instead).
+   However, Ruby's format validator and the "brakeman" tool both detect
+   this common mistake with regexes, so this should be unlikely.
+   Since the project data is public, manipulating the 'id' cannot reveal
+   private public data.  We don't consider the list of valid users
+   private either, so again, manipulating 'id' cannot reveal anything private.
+7. *Injection.*
+   We use whitelists to validate project data entered into the system.
+   When acquiring data from projects during autofill, we do only for the
+   presence or absence of patterns; the data is not stored (other than caching)
+   and the data is not used in command interpreters (such as SQL or shell).
+   SQL injection is countered by Rails' built-in database query mechanisms,
+   we primarily use specialized routines like find() that counter
+   SQL injection, but parameterized queries are also allowed
+   (and also counter SQL injection).
+   XSS, CSS injection, and Ajax injection are
+   countered using Rails' HTML sanitization
+   (by default strings are escaped when generating HTML).
+   The program doesn't call out ot the command line or use a routine
+   that directly does so, e.g., there's no call
+   to system()... so command injection won't work either.
+   The software resists header injection including response splitting;
+   headers are typically not dynamicaly generated, most redirections
+   (using redirect_to) are to static locations, and the rest are based
+   on filtered locations.
+8. *Unsafe Query Generation.*
+   We use the default Rails behavior, in particular, we leave
+   deep_munge at its default value (which counters a number of vulnerabilities).
+9. *Default Headers.*
+   The default security HTTP headers are used, which help counter some attacks.
+   Future versions may harden the headers further.
+
 We work to enable third-party review.
 We release the software as open source software (OSS),
 using a well-known OSS license (MIT).
@@ -275,8 +369,14 @@ but we think they reduce the risks.
 We consider the code we reuse
 (e.g., libraries and frameworks) before adding them, to reduce
 the risk of unintentional and intentional vulnerabilities from them.
-See [CONTRIBUTING.md](../CONTRIBUTING.md) for more about our rules
-to reduce these risks.
+We also have a process for detecting when the components we use
+have known vulnerabilities (using bundle-audit)
+or are out-of-date.
+We can't eliminate all risks, and
+if we rewrote all the software (instead of reusing software)
+we would risk creating vulnerabilities in own code.
+See [CONTRIBUTING.md](../CONTRIBUTING.md) for more about how we
+reduce these risks.
 
 ## Other security issues
 

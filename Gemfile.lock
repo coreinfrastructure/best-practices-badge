@@ -44,6 +44,8 @@ GEM
     autoprefixer-rails (6.1.1)
       execjs
       json
+    autosize-rails (1.18.17)
+      rails (>= 3.1)
     awesome_print (1.6.1)
     axlsx (2.0.1)
       htmlentities (~> 4.3.1)
@@ -393,6 +395,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  autosize-rails (= 1.18.17)
   awesome_print (= 1.6.1)
   bcrypt (= 3.1.10)
   bootstrap-sass (= 3.3.6)

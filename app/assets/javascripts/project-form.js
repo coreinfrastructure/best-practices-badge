@@ -194,6 +194,9 @@ $(document).ready(function() {
       $('.details-toggler').html('Show details');
     });
 
+  $(document).ready(function() {
+    $('textarea').autosize();
+  });
 
   if ($('#project_entry_form').length) {
 

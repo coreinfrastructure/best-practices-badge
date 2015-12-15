@@ -1,6 +1,7 @@
 source 'https://rubygems.org'
 ruby '2.2.3'
 
+gem 'autosize-rails', '1.18.17' # Improve HTML textareas
 gem 'bcrypt', '3.1.10' # Security - for salted hashed interated passwords
 gem 'bootstrap-sass', '3.3.6'
 gem 'bootstrap-will_paginate', '0.0.10'

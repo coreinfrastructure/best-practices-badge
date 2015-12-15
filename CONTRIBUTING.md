@@ -224,10 +224,12 @@ appears to be currently maintained (e.g., has recent updates),
 has more than one developer, and appears to be applying good practices
 (e.g., it uses semantic versioning and have a ChangeLog).
 Someday we hope to add "have one of our badges" as a preference.
+
 In general, prefer a Rails-specific gem over a generic Ruby gem, and
-for Javascript Node.js pacakges prefer a Ruby gem that repackages it
-(since the repackage will often help make it work more cleanly
-with a Ruby on Rails application).
+for Javascript Node.js packages prefer a Ruby gem that repackages it.
+The repackage will often help make it work more cleanly
+with the Rails application, and it also suggests that the package is
+a more common one (and thus more likely to be maintained).
 
 If you add a Ruby gem, put its *fixed* version number in the Gemfile file,
 and please add a brief comment to explain what it is and/or why it's there.

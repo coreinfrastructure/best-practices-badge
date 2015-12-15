@@ -28,6 +28,7 @@ group :development, :test do
   gem 'bullet', '4.14.10'
   gem 'bundler-audit'
   gem 'dotenv-rails', '2.0.2'
+  gem 'license_finder'
   gem 'mdl', '0.2.1'
   gem 'pronto', '0.5.3'
   gem 'pronto-brakeman', '0.5.0'

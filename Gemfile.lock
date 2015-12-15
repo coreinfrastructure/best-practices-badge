@@ -169,6 +169,11 @@ GEM
     kramdown (1.9.0)
     launchy (2.4.3)
       addressable (~> 2.3)
+    license_finder (2.0.4)
+      bundler
+      httparty
+      thor
+      xml-simple
     loofah (2.0.3)
       nokogiri (>= 1.5.9)
     m (1.4.2)
@@ -390,6 +395,7 @@ GEM
       crack (>= 0.3.2)
       hashdiff
     will_paginate (3.0.7)
+    xml-simple (1.1.5)
 
 PLATFORMS
   ruby
@@ -411,6 +417,7 @@ DEPENDENCIES
   jquery-rails (= 4.0.5)
   jquery-turbolinks
   jquery-ui-rails (= 5.0.5)
+  license_finder
   m (= 1.4.2)
   mdl (= 0.2.1)
   octokit (= 4.1.1)

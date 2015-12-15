@@ -167,7 +167,7 @@ including the 8 principles from
   status values (the key values used for badges) are checked against
   a whitelist of values allowed for that criterion.
   There are a number of freetext fields, which each have a maximum length
-  (name, license, and the justifications).
+  (name, license, and the justifications) to limit some abuses.
   These checks for maximum length do not by themselves counter certain attacks;
   see the text on security in implementation for the discussion on
   how the application counters SQL injection, XSS, and CSRF attacks.
@@ -219,8 +219,9 @@ most critical flaws), and how we attempt to reduce their risks in BadgeApp.
    In addition, our continuous integrattion task reruns brakeman.
 6. Sensitive Data Exposure.
    We generally do not store sensitive data; the data about projects
-   is intended to be public.  The only sensitive data we store are
-   local passwords, and those are encrypted and hashed with bcrypt.
+   is intended to be public.  The only sensitive data we centrally store are
+   local passwords, and those are encrypted and hashed with bcrypt
+   (this is a well-known iterated salted hash algorithm).
 7. Missing Function Level Access Control.
    The system depends on server-side routers and controllers for
    access control.  There is some client-side Javascript, but no
@@ -269,6 +270,8 @@ as of 2015-12-14:
    The design allows users to drop cookies at any time
    (at worse they may have to re-login to get another session cookie).
    We do not use CookieStore (so guidance on its use is irrelevant).
+   Passwords may be stored in the session, but this is encrypted and the
+   password is *not* retained on the server (it stays on the web browser).
    We don't expire sessions, since makes usage a little more painful.
 3. *Cross-Site Request Forgery (CSRF).*
    We use the standard REST operations with their standard meanings
@@ -308,9 +311,10 @@ as of 2015-12-14:
    forgotten password system.
    The file config/initializers/filter_parameter_logging.rb 
    intentionally filters passwords so that they are not included in the log.
-   We don't currently force "good" passwords on local users;
-   users who care can use one (future versions of the application may require
-   a minimum length).
+   We require that local user passwords have a minimum length
+   (see the User model), and this is validated by the server
+   (in some cases the minimum length is also checked by the web client,
+   but this is not depended on).
    Ruby's regular expression (regex) language oddly interprets "^" and "$",
    which can lead to defects (you're supposed to use \A and \Z instead).
    However, Ruby's format validator and the "brakeman" tool both detect

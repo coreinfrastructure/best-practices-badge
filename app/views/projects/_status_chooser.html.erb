@@ -79,6 +79,6 @@
          <% if defined?(na_suppress) %>
            <div id="<%= criteria + '_na_suppress' %>" class="hidden"></div>
          <% end %>
-         <%= f.text_field justification_symbol, class:"form-control", hide_label: true, placeholder:'Please explain', disabled: is_disabled  %>
+         <%= f.text_area justification_symbol, class:"form-control", hide_label: true, placeholder:'Please explain', disabled: is_disabled  %>
       </div>
     </div>

@@ -204,20 +204,21 @@ In particular:
   that *requires* proprietary software (making it portable so it *can* use
   some proprietary software is gratefully welcome).
   Acceptable licenses include MIT,
-  Apache License 2.0 (Apache-2.0)',
-  BSD 3-Clause "New" or "Revised" License (BSD-3-Clause),
   BSD 2-Clause "Simplified" or "FreeBSD" License (BSD-2-Clause),
-  GNU General Public License version 2.0 or later (GPL-2.0+),
+  BSD 3-Clause "New" or "Revised" License (BSD-3-Clause), the
+  [original Ruby license](https://spdx.org/licenses/Ruby.html) (Ruby) or the
+  [current Ruby license](https://www.ruby-lang.org/en/about/license.txt)
+  (the latter includes BSD-2-Clause as an option),
+  Apache License 2.0 (Apache-2.0) (but note the GPL-2.0 only issue below),
+  GNU Library or "Lesser" General Public License (any version),
+  GNU General Public License version 2.0 or later (GPL-2.0+), and
   GNU General Public License version 3.0 ("or later" or not)
   (GPL-3.0 or GPL-3.0+),
-  GNU Library or "Lesser" General Public License version 2.1 or later
-  (LGPL-2.1+), and the
-  GNU "Lesser" General Public License version 3.0 ("or later" or not)
-  (LGPL-3.0 or LGPL-3.0+).
   If it's GPL-2.0 exactly (GNU GPL version 2.0 only), check that it's in
   a separable executable from anything with the Apache License 2.0
-  (Apache-2.0 and GPL-2.0 exactly have potential compatibility issues);
-  most GPL'ed software is "or any later version" and thus causes no issues.
+  (Apache-2.0 and GPL-2.0 only have potential compatibility issues);
+  most GPL'ed software is "or any later version", or is in a
+  separate executable from the Apache software, and thus causes no issues.
 
 For any reused software, prefer software that
 appears to be currently maintained (e.g., has recent updates),

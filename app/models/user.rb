@@ -3,10 +3,13 @@ class User < ActiveRecord::Base
   has_secure_password
   has_many :projects, dependent: :destroy
 
+  MIN_PASSWORD_LENGTH = 7
+
   validates :name, presence: true, length: { maximum: 50 }
   validates :email, presence: true, length: { maximum: 255 },
                     uniqueness: { case_sensitive: false }, email: true
-  validates :password, presence: true, length: { minimum: 7 }
+  validates :password, presence: true,
+                       length: { minimum: MIN_PASSWORD_LENGTH }
 
   # Returns the hash digest of the given string.
   def self.digest(string)

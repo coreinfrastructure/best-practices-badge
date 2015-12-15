@@ -5,7 +5,7 @@
 Feedback and contributions are very welcome!
 For specific proposals, please provide them as issues or pull requests via our 
 [GitHub site](https://github.com/linuxfoundation/cii-best-practices-badge).
-Pull requests are especially appreciated!  We use git to track all changes.
+Pull requests are especially appreciated!
 For general dicussion, feel free to use the
 [cii-badges mailing list](https://lists.coreinfrastructure.org/mailman/listinfo/cii-badges).
 
@@ -22,6 +22,14 @@ See the GitHub documentation on
 [creating branches](https://help.github.com/articles/creating-and-deleting-branches-within-your-repository/)
 and
 [using pull requests](https://help.github.com/articles/using-pull-requests/).
+
+We use GitHub to track all changes via its
+[issue tracker](https://github.com/linuxfoundation/cii-best-practices-badge/issues) and
+[pull requests](https://github.com/linuxfoundation/cii-best-practices-badge/pulls).
+Specific changes are proposed using those mechanisms.
+Issues are assigned to an individual, who works it and then marks it complete.
+If there are questions or objections, the conversation area of that
+issue or pull request is used to resolve it.
 
 ## Vulnerability reporting (security issues)
 
@@ -191,12 +199,35 @@ In particular:
   but they are less likely.
 * For Ruby gems, look at its data at <https://rubygems.org/> to learn
   more about it.
+* All required reused components MUST be open source software (OSS),
+  and must be GPL-compatible.  It is *not* acceptable to insert a depedency
+  that *requires* proprietary software (making it portable so it *can* use
+  some proprietary software is gratefully welcome).
+  Acceptable licenses include MIT,
+  Apache License 2.0 (Apache-2.0)',
+  BSD 3-Clause "New" or "Revised" License (BSD-3-Clause),
+  BSD 2-Clause "Simplified" or "FreeBSD" License (BSD-2-Clause),
+  GNU General Public License version 2.0 or later (GPL-2.0+),
+  GNU General Public License version 3.0 ("or later" or not)
+  (GPL-3.0 or GPL-3.0+),
+  GNU Library or "Lesser" General Public License version 2.1 or later
+  (LGPL-2.1+), and the
+  GNU "Lesser" General Public License version 3.0 ("or later" or not)
+  (LGPL-3.0 or LGPL-3.0+).
+  If it's GPL-2.0 exactly (GNU GPL version 2.0 only), check that it's in
+  a separable executable from anything with the Apache License 2.0
+  (Apache-2.0 and GPL-2.0 exactly have potential compatibility issues);
+  most GPL'ed software is "or any later version" and thus causes no issues.
 
 For any reused software, prefer software that
 appears to be currently maintained (e.g., has recent updates),
 has more than one developer, and appears to be applying good practices
 (e.g., it uses semantic versioning and have a ChangeLog).
 Someday we hope to add "have one of our badges" as a preference.
+In general, prefer a Rails-specific gem over a generic Ruby gem, and
+for Javascript Node.js pacakges prefer a Ruby gem that repackages it
+(since the repackage will often help make it work more cleanly
+with a Ruby on Rails application).
 
 If you add a Ruby gem, put its *fixed* version number in the Gemfile file,
 and please add a brief comment to explain what it is and/or why it's there.

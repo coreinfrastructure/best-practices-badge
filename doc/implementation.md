@@ -15,25 +15,31 @@ on how to install this software (e.g., for development).
 
 The BadgeApp web application MUST:
 
-1. Meet its own criteria.
-2. Support users of modern widely-used web browsers, including
+1. Meet its own criteria.  This implies that it must be open source software
+   (OSS).
+2. Be capable of being developed and run using *only* OSS
+   (it may *run* on proprietary software; portability improvements welcome).
+3. Support users of modern widely-used web browsers, including
    Chrome, Firefox, Safari, and Internet Explorer version 10 and up.
-   Users should be able to enter data from laptops/desktops
-   (running Linux (Ubuntu, Debian, Fedora, Red Hat Enterprise Linus),
-   Microsoft Windows, or Apple MacOS) and mobile devices
-   (including Android and iOS).
-3. NOT require Javascript to be enabled on the web browser (some
+   We expect Internet Explorer pre-10 users will use a different browser.
+4. NOT require Javascript to be enabled on the web browser (some
    security-conscious people disable it) - instead, support graceful
    degradation (many features will work much better if Javascript is enabled).
    Requiring CSS is fine.
-4. NOT require OSS projects to use GitHub or git.
-5. Automatically fill in some criteria where it can, at least if a
+5. Support users of various laptops/desktops
+   (running Linux (Ubuntu, Debian, Fedora, Red Hat Enterprise Linus),
+   Microsoft Windows, or Apple MacOS) and mobile devices
+   (including at least Android and iOS).
+6. NOT require OSS projects to use GitHub or git.
+7. Automatically fill in some criteria where it can, at least if a
    project is on GitHub.
 
 See the security section for the security requirements.
+
 There are many specific requirements; instead of a huge requirements document,
-most specific requirements are proposed and processed via the issue tracker.
-See [CONTRIBUTING](../CONTRIBUTING.md).
+most specific requirements are proposed and processed via its
+[GitHub issue tracker](https://github.com/linuxfoundation/cii-best-practices-badge/issues).
+See [CONTRIBUTING](../CONTRIBUTING.md) for more.
 
 ## Overall
 

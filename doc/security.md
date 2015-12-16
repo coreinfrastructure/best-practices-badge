@@ -264,9 +264,10 @@ as of 2015-12-14:
    because of their wide support and efficiency.
    Session data is intentionally kept small, because of the limited
    amount of data available in a cookie.
-   To counteract session hijacking, file config/environments/production.rb 
-   "config.force_ssl" to true, requiring all communication in the
-   *production* environment to be over an encrypted channel using TLS.
+   To counteract session hijacking, we configure the production
+   environment to always communicate over an enrypted channel using TLS
+   (see file config/environments/production.rb which sets
+   "config.force_ssl" to true).
    The design allows users to drop cookies at any time
    (at worse they may have to re-login to get another session cookie).
    We do not use CookieStore (so guidance on its use is irrelevant).
@@ -347,6 +348,15 @@ as of 2015-12-14:
 9. *Default Headers.*
    The default security HTTP headers are used, which help counter some attacks.
    Future versions may harden the headers further.
+
+
+In production "config.force_ssl" to set to true.
+This enables a number of hardening mechanisms in Rails, including
+HTTP Strict Transport Security (HSTS),
+TLS redirection, and secure cookies.
+See
+["Rails, Secure Cookies, HSTS and friends" by Ilija Eftimov (2015-12-14)](http://eftimov.net/rails-tls-hsts-cookies/)
+for more about the impact of force_ssl.
 
 ## Security in Verification
 

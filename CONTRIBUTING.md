@@ -120,9 +120,12 @@ considered different; be careful to use the correct type in these cases.
 
 Our goal is for the application to be thread-safe, so please
 follow the guidelines in
-[How Do I Know Whether My Rails App Is Thread-safe or Not?](https://bearmetal.eu/theden/how-do-i-know-whether-my-rails-app-is-thread-safe-or-not/).
+[How Do I Know Whether My Rails App Is Thread-safe or Not?](https://bearmetal.eu/theden/how-do-i-know-whether-my-rails-app-is-thread-safe-or-not/);
+see also
+[How to test multithreaded code](http://www.mikeperham.com/2015/12/14/how-to-test-multithreaded-code/).
 It's challenging to be certain an application is thread-safe,
-so we aren't currently running it with multiple threads, but that is an intent.
+so we aren't currently running it with multiple threads,
+but we intend for it to be thread-safe and use that in the future.
 
 In Ruby please prefer the String operations that do not have side-effects
 (e.g., "+", "sub", or "gsub"), and consider freezing strings.

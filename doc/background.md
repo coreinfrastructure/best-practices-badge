@@ -86,6 +86,7 @@ It recommends the filename "CHANGELOG.md" at the top.
 *   [Debian Upstream guide](https://wiki.debian.org/UpstreamGuide) -
 includes references to some other guides.
 
+*   [US Government OSS best practices](http://government.github.io/best-practices/) - a collection of guidelines from some in the US federal government
 
 ## Methods for evaluating OSS projects
 

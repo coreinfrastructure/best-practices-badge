@@ -523,6 +523,10 @@ and were researched separately:
 * gitlab: URL <https://github.com/NARKOZ/gitlab/blob/master/LICENSE.txt> reveals this to be license BSD-2-Clause.
 * colored: URL <https://github.com/defunkt/colored/blob/master/LICENSE> reveals this to be license MIT.
 
+For more on license decisions see doc/dependency_decisions.yml.
+You can also run 'rake' and see the generated report
+license_finder_report.html.
+
 # See also
 
 See the separate "[background](./background.md)" and

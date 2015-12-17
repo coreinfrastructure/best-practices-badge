@@ -177,6 +177,7 @@ Currently these include at least the following:
   [rails_best_practices](http://rails-bestpractices.com/)
 * "rake brakeman" - runs Brakeman, which is a static source code analyzer
   to look for Ruby on Rails security vulnerabilities
+* "license_finder" - checks OSS licenses of dependencies (transitively).
 
 Here are some other tools we use, though they are not currently integrated into
 the default "rake" checking task:
@@ -202,26 +203,35 @@ In particular:
   but they are less likely.
 * For Ruby gems, look at its data at <https://rubygems.org/> to learn
   more about it.
-* All required reused components MUST be open source software (OSS),
-  and must be GPL-compatible.  It is *not* acceptable to insert a depedency
+* All required reused components MUST be open source software (OSS).
+  It is *not* acceptable to insert a dependency
   that *requires* proprietary software (making it portable so it *can* use
   some proprietary software is gratefully welcome).
-  Acceptable licenses include MIT,
-  BSD 2-Clause "Simplified" or "FreeBSD" License (BSD-2-Clause),
-  BSD 3-Clause "New" or "Revised" License (BSD-3-Clause), the
-  [original Ruby license](https://spdx.org/licenses/Ruby.html) (Ruby) or the
-  [current Ruby license](https://www.ruby-lang.org/en/about/license.txt)
-  (the latter includes BSD-2-Clause as an option),
-  Apache License 2.0 (Apache-2.0) (but note the GPL-2.0 only issue below),
-  GNU Library or "Lesser" General Public License (any version),
-  GNU General Public License version 2.0 or later (GPL-2.0+), and
-  GNU General Public License version 3.0 ("or later" or not)
-  (GPL-3.0 or GPL-3.0+),
-  If it's GPL-2.0 exactly (GNU GPL version 2.0 only), check that it's in
-  a separable executable from anything with the Apache License 2.0
-  (Apache-2.0 and GPL-2.0 only have potential compatibility issues);
-  most GPL'ed software is "or any later version", or is in a
-  separate executable from the Apache software, and thus causes no issues.
+  Obviously, we also have to combine them legally in the way they are used.
+
+We use 'license_finder' to help ensure that we're using OSS legally.
+In general we want to use GPL-compatible OSS licenses.
+Acceptable licenses include MIT,
+BSD 2-Clause "Simplified" or "FreeBSD" License (BSD-2-Clause),
+BSD 3-Clause "New" or "Revised" License (BSD-3-Clause), the
+[original Ruby license](https://spdx.org/licenses/Ruby.html) (Ruby) or the
+[current Ruby license](https://www.ruby-lang.org/en/about/license.txt)
+(the latter includes BSD-2-Clause as an option),
+GNU Library or "Lesser" General Public License (any version),
+GNU General Public License version 2.0 or later (GPL-2.0+), and the
+GNU General Public License version 3.0 ("or later" or not)
+(GPL-3.0 or GPL-3.0+).
+We can use Apache License 2.0 (Apache-2.0)
+and GPL-2.0 exactly (GNU GPL version 2.0 only),
+but the Apache-2.0 and GPL-2.0 only have potential compatibility issues.
+First check if that Apache-2.0 and GPL-2.0 only components are
+in separate executables (if so, no problem).
+Most software licensed using the GPL version 2.0 is actually
+GPL-2.0+ (GPL version 2 or later), and GPL version 3 is known to be
+compatible with the Apache 2.0 license, so this is not a common problem.
+For more on license decisions see doc/dependency_decisions.yml;
+you can also run 'rake' and see the generated report
+license_finder_report.html.
 
 For any reused software, prefer software that
 appears to be currently maintained (e.g., has recent updates),

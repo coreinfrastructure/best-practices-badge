@@ -611,7 +611,10 @@ The default keylengths MUST meet the NIST minimum requirements at least through 
              details: %{
 These minimum bitlengths are: symmetric key 112, factoring modulus 2048,
 discrete logarithm key 224,
-discrete logarithmic group 2048, elliptic curve 224, and hash 224.
+discrete logarithmic group 2048, elliptic curve 224,
+and hash 224 (password hashing is not covered by this
+bitlength, more information on password hashing can be found in the
+<a href="#crypto_password_storage">crypto_password_storage</a> criterion).
 See <a href="http://www.keylength.com">http://www.keylength.com</a>
 for a comparison of keylength recommendations from various organizations.
 The software MUST be configurable so that it will reject smaller keylengths.
@@ -637,7 +640,7 @@ The project security mechanisms SHOULD NOT by default depend on cryptographic al
              criteria: "crypto_alternatives", desc: %{
 The project SHOULD support multiple cryptographic algorithms, so users can quickly switch if one is broken.},
              details: %{
-Common symmetric key algorithms include AES, Twofish, Serpent, Blowfish, and 3DES.  Common cryptographic hash algorithm alternatives include SHA-2 (including SHA-256 and SHA-512) and SHA-3.
+Common symmetric key algorithms include AES, Twofish, Serpent, Blowfish, and 3DES.  Common cryptographic hash algorithm alternatives include SHA-2 (including SHA-224, SHA-256, SHA-384 and SHA-512) and SHA-3.
 }}) %>
     <hr>
 

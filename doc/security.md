@@ -8,6 +8,9 @@ and a brief note about the supply chain (reuse).
 
 If you find a vulnerability, please see
 [CONTRIBUTING.md](../CONTRIBUTING.md) for how to submit a vulnerability report.
+For more technical information on the implementation, see
+[implementation.md](implementation.md).
+
 
 ## Security Requirements
 
@@ -72,24 +75,34 @@ a previous state.
 ## Security in Design
 
 This web application has a simple design.
-Users potentially create an id, then log in and enter data
+It is a standard Ruby on Rails design with models, views, and controllers.
+In production it is accessed via a web server (Puma) and
+builds on a relational database database system (PostgreSQL).
+The software is multi-process and is intended to be multi-threaded
+(see the CONTRIBUTING.md file for more about this).
+The database system itself is trusted, and the database is
+not directly accessible by untrusted users.
+The application runs on Linux kernel and uses some standard operating system
+facilities and libraries (e.g., to provide TLS).
+All interaction between the users and the web application go over
+an encrypted channel using TLS.
+There is some Javascript served to the client,
+but no security decisions depend on code that runs on the client.
+
+From a user's point of view,
+users potentially create an id, then log in and enter data
 about projects (as new or updated data).
+Users can log in using a local account or by using their GitHub account.
 Non-admin users are not trusted.
 The entry of project data (and potentially periodically) triggers
 an evaluation of data about the project, which automatically fills in
 data about the project.
 Projects that meet certain criteria earn a badge, which is displayed
 by requesting a specific URL.
-It is a standard Ruby on Rails design with models, views, and controllers,
-building on a database (the database system itself is trusted, and is
-not directly accessible by untrusted users).
 A "Chief" class and "Detective" classes attempt to get data about a project
 and analyze that data; this project data is also untrusted
 (in particular, filenames, file contents, issue tracker information and
 contents, etc., are all untrusted).
-
-There is some Javascript served to the client,
-but no security decisions depend on code that runs on the client.
 
 Here are a number of secure design principles,
 including the 8 principles from
@@ -180,6 +193,17 @@ including the 8 principles from
   values from the project itself; this data may be malevolent, but the
   application is just looking for the presence or absence of certain
   data patterns, and never executes data from the project.
+
+All of the custom code is written in memory-safe languages
+(Ruby and Javascript), so the vulnerabilities of memory-unsafe
+languages (such as C and C++) cannot occur in the custom code.
+This also applies to most of the code in the directly-depended libraries.
+Some lower-level components (e.g., the operating system kernel,
+database management system, encryption library, and some of the Ruby gems)
+do have C/C++, but these are widely-used components where we have
+good reason to believe that developers are directly working to mitigate
+the problems from memory-unsafe languages.
+
 
 ## Security in Implementation
 
@@ -348,7 +372,6 @@ as of 2015-12-14:
 9. *Default Headers.*
    The default security HTTP headers are used, which help counter some attacks.
    Future versions may harden the headers further.
-
 
 In production "config.force_ssl" to set to true.
 This enables a number of hardening mechanisms in Rails, including

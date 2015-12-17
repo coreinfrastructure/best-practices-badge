@@ -467,7 +467,9 @@ by the delivered project's software.
   at least through the year 2030 (as stated in 2012).
   These minimum bitlengths are: symmetric key 112, factoring modulus 2048,
   discrete logarithm key 224, discrete logarithmic group 2048,
-  elliptic curve 224, and hash 224.
+  elliptic curve 224, and hash 224 (password hashing is not covered by this
+  bitlength, more information on password hashing can be found in the
+  <a href="#crypto_password_storage">crypto_password_storage</a> criterion).
   See <http://www.keylength.com> for a comparison of keylength
   recommendations from various organizations.
   The software MUST be configurable so that it will reject smaller keylengths.
@@ -482,13 +484,13 @@ by the delivered project's software.
 - <a name="crypto_weaknesses"></a>The project security mechanisms
   SHOULD NOT by default depend on cryptographic algorithms with known
   serious weaknesses (e.g., SHA-1).
-  [<a href="#crypto_weaknesses">crypto_weaknesses</a>]\*</sup>
+  <sup>[<a href="#crypto_weaknesses">crypto_weaknesses</a>]\*</sup>
 - <a name="crypto_alternatives"></a>The project SHOULD support multiple
   cryptographic algorithms, so users can quickly switch if one is broken.
   Common symmetric key algorithms include AES, Twofish, Serpent,
   Blowfish, and 3DES.
   Common cryptographic hash algorithm alternatives include SHA-2
-  (including SHA-256 and SHA-512) and SHA-3.
+  (including SHA-224, SHA-256, SHA-384 and SHA-512) and SHA-3.
   <sup>[<a href="#crypto_alternatives">crypto_alternatives</a>]\*</sup>
 - <a name="crypto_pfs"></a>The project SHOULD implement perfect forward
   secrecy for key agreement protocols so a session key derived from a set

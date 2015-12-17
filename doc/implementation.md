@@ -479,7 +479,8 @@ individuals not projects.
 
 ## License detection
 
-Some information on how to detect licenses can be found in
+Some information on how to detect licenses in projects
+(so we can perhaps autofill them) can be found in
 [&#8220;Open Source Licensing by the Numbers&#8221; by Ben Balter](https://speakerdeck.com/benbalter/open-source-licensing-by-the-numbers).
 
 ## Analysis
@@ -510,6 +511,17 @@ The SVG files for badges are:
 - <https://img.shields.io/badge/cii_best_practices-passing-green.svg>
 - <https://img.shields.io/badge/cii_best_practices-failing-red.svg>
 
+## Licenses of the software used by BadgeApp
+
+See CONTRIBUTING.md for the license rules;
+fundamentally we require software to be released as OSS
+before we can depend on it.
+
+The following components don't declare a license in their Gemfile,
+and were researched separately:
+
+* gitlab: URL <https://github.com/NARKOZ/gitlab/blob/master/LICENSE.txt> reveals this to be license BSD-2-Clause.
+* colored: URL <https://github.com/defunkt/colored/blob/master/LICENSE> reveals this to be license MIT.
 
 # See also
 

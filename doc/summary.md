@@ -1,5 +1,8 @@
 # Best Practices Criteria Summary
 
+This is a summary of the criteria; for details, see the
+[full list of criteria](criteria.md).
+
 - **Have a [stable website](criteria.md#project_homepage_url)**,
   [accessible over HTTPS](project_homepage_https), which says:
   - **[what it does](criteria.md#description_sufficient)**

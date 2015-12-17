@@ -7,6 +7,7 @@ task(:default).clear.enhance %w(
   markdownlint
   rails_best_practices
   brakeman
+  license_check
 )
 
 # Simple smoke test to avoid development environment misconfiguration
@@ -77,4 +78,18 @@ task :load_self_json do
   contents = open(url).read
   pretty_contents = JSON.pretty_generate(JSON.parse(contents))
   File.write('doc/self.json', pretty_contents)
+end
+
+desc 'Examine licenses of reused components; see license_finder docs.'
+task license_check:
+       ['license_finder_report.html', 'license_finder_summary.txt']
+
+file 'license_finder_report.html' => 'Gemfile.lock' do
+  sh 'bundle exec license_finder report --format html ' \
+     '> license_finder_report.html'
+end
+
+file 'license_finder_summary.txt' => 'Gemfile.lock' do
+  # This will error-out if there's a license problem.
+  sh 'bundle exec license_finder | tee license_finder_summary.txt'
 end

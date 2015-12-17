@@ -1,0 +1,178 @@
+---
+- - :whitelist
+  - MIT
+  - :who: David A. Wheeler
+    :why: This is OSI-approved OSS license, and the license of BadgeApp
+    :when: 2015-12-17 15:37:53.518652272 Z
+- - :whitelist
+  - New BSD
+  - :who: David A. Wheeler
+    :why: OSI-approved OSS license BSD-3-Clause, known compatible with MIT
+    :when: 2015-12-17 15:40:01.131233040 Z
+- - :whitelist
+  - 2-clause BSDL
+  - :who: David A. Wheeler
+    :why: OSI-approved OSS license BSD-2-Clause, known compatible with MIT
+    :when: 2015-12-17 15:40:09.473789072 Z
+- - :approve
+  - rake
+  - &1
+    :who: David A. Wheeler
+    :why: It's actually MIT license per https://github.com/ruby/rake
+    :when: 2015-12-17 15:47:53.894712861 Z
+- - :approve
+  - MIT
+  - *1
+- - :approve
+  - term-ansicolor
+  - :who: David A. Wheeler
+    :why: GPL-2.0 only, but only used in separate Coveralls executable, so there's
+      no issue with Apache-2.0 being combined into a single executable
+      (those libraries are in other executables). The old Ruby license
+      expressly permits choosing GPL-2.0 as an option, and the newer
+      Ruby license permits BSD-2-Clause (which is GPL-compatible),
+      so no possible issue there.  The code is written in Ruby, but
+      this means it is considered *data* to an old Ruby interpreter,
+      so still no issue.
+    :when: 2015-12-17 15:53:23.499258275 Z
+- - :approve
+  - pg
+  - &2
+    :who: David A. Wheeler
+    :why: Actual license is SPDX license expression '(BSD-2-Clause OR Ruby)' as shown
+      in https://github.com/ged/ruby-pg/blob/master/LICENSE
+    :when: 2015-12-17 16:02:10.446729059 Z
+- - :approve
+  - "(BSD-2-Clause OR Ruby)"
+  - *2
+- - :approve
+  - xml-simple
+  - &3
+    :who: David A. Wheeler
+    :why: Actual license is '(BSD-2-Clause OR Ruby)';
+          file https://github.com/maik/xml-simple/blob/master/README.md
+          says It is free software, and may be redistributed under the
+          terms specified in the COPYING file of the
+          current Ruby distribution. This would
+          be https://www.ruby-lang.org/en/about/license.txt - and this is now
+          (BSD-2-Clause OR Ruby), which has no issues.
+    :when: 2015-12-17 16:12:01.024528531 Z
+- - :approve
+  - "(BSD-2-Clause OR Ruby)"
+  - *3
+- - :approve
+  - byebug
+  - &4
+    :who: David A. Wheeler
+    :why: The gemspec says this is ISC license but it's not. File https://github.com/deivid-rodriguez/byebug/blob/master/LICENSE
+      is BSD-2-Clause, not ISC - https://spdx.org/licenses/ISC.html https://spdx.org/licenses/BSD-2-Clause
+      However, both ISC and BSD-2-Clause are OSI-approved licenses with no issues.
+      Also, The software is not *distributed* with byebug enabled (it's only used
+      during debugging).
+    :when: 2015-12-17 16:18:14.448593848 Z
+- - :approve
+  - BSD-2-Clause
+  - *4
+- - :approve
+  - colored
+  - &5
+    :who: David A. Wheeler
+    :why: The gemspec does not define the license.  However, tracking it to its repository
+      shows that its license is MIT at https://github.com/defunkt/colored/blob/master/LICENSE
+    :when: 2015-12-17 16:26:47.407347936 Z
+- - :approve
+  - MIT
+  - *5
+- - :approve
+  - json
+  - &6
+    :who: David A. Wheeler
+    :why: Running 'gem server' and viewing localhost:8808, we see that json 1.8.1
+      is bundled with Ruby, and thus has its license of https://www.ruby-lang.org/en/about/license.txt
+      which is (BSD-2-Clause OR Ruby). json 1.8.3's repository is at https://github.com/flori/json/tree/master
+      and according to https://github.com/flori/json/blob/master/COPYING this is (GPL-2.0
+      OR Ruby). This is clearly GPL-2.0 compatible.
+    :when: 2015-12-17 16:28:08.522364532 Z
+- - :approve
+  - "((BSD-2-Clause OR Ruby) AND (GPL-2.0 OR Ruby))"
+  - *6
+- - :approve
+  - bundler-audit
+  - :who: David A. Wheeler
+    :why: bundler-audit is a separate executable, and its GPL-3.0 license is known
+      to be compatible with Apache-2.0 anyway, so no known issue.
+    :when: 2015-12-17 16:37:46.944680154 Z
+- - :approve
+  - rubyzip
+  - :who: David A. Wheeler
+    :why: Its README file at https://github.com/rubyzip/rubyzip says that 'Rubyzip
+      is distributed under the same license as ruby. See <http://www.ruby-lang.org/en/LICENSE.txt>.'
+      This is (BSD-2-Clause OR Ruby), so no issues.
+    :when: 2015-12-17 16:40:49.742365613 Z
+- - :approve
+  - fastercsv
+  - &7
+    :who: David A. Wheeler
+    :why: Page http://fastercsv.rubyforge.org/ viewing LICENSE shows "Distributed
+      under the user‘s choice of the GPL Version 2 (see COPYING for details) or the
+      Ruby software license by James Edward Gray II." The latter refers to http://www.ruby-lang.org/en/LICENSE.txt
+      which in SPDX is (BSD-2-Clause or Ruby). Nothing is incompatible with BSD-2-Clause,
+      so there cannot be any problem.
+    :when: 2015-12-17 16:48:41.817542725 Z
+- - :approve
+  - "(GPL-2.0 OR BSD-2-Clause OR Ruby)"
+  - *7
+- - :approve
+  - gitlab
+  - &8
+    :who: David A. Wheeler
+    :why: File https://github.com/NARKOZ/gitlab/blob/master/LICENSE.txt has the BSD-2-Clause
+      text in it.
+    :when: 2015-12-17 16:53:07.506348427 Z
+- - :approve
+  - BSD-2-Clause
+  - *8
+- - :approve
+  - highline
+  - &9
+    :who: David A. Wheeler
+    :why: File https://github.com/JEG2/highline/blob/master/LICENSE says Distributed
+      under the user's choice of the {GPL Version 2}[http://www.gnu.org/licenses/old-licenses/gpl-2.0.html]
+      (see COPYING for details) or the {Ruby software license}[http://www.ruby-lang.org/en/LICENSE.txt]
+      by James Edward Gray II and Greg Brown. The current Ruby license is (BSD-2-Clause
+      OR Ruby), which is compatible with everything.  The unusual way the Ruby software
+      license is referenced could intend to permit the old license, but the old license
+      is (GPL-2.0 OR Ruby), which is still clearly compatible with GPL-2.0 and I am
+      unaware of any other incompatibilities.  Besides, it is unlikely the old one
+      is meant. On 2015-12-17 the last merged change was 3 days earlier, so this is
+      clearly an active project, suggesting that the current Ruby license is the one
+      that is accepted.
+    :when: 2015-12-17 17:00:56.453607377 Z
+- - :approve
+  - "(GPL-2.0 OR BSD-2-Clause OR Ruby)"
+  - *9
+- - :approve
+  - launchy
+  - :who: David A. Wheeler
+    :why: 
+    :when: 2015-12-17 17:09:18.274813788 Z
+- - :approve
+  - mixlib-cli
+  - :who: David A. Wheeler
+    :why: Apache 2.0 okay as long as GPL-2.0 only does not conflict, and no conflicts identified.
+    :when: 2015-12-17 17:13:57.316335083 Z
+- - :approve
+  - addressable
+  - :who: David A. Wheeler
+    :why: Apache 2.0 okay as long as GPL-2.0 only does not conflict, and no conflicts identified.
+    :when: 2015-12-17 17:14:19.144833431 Z
+- - :approve
+  - mixlib-config
+  - :who: David A. Wheeler
+    :why: Apache 2.0 okay as long as GPL-2.0 only does not conflict, and no conflicts identified.
+    :when: 2015-12-17 17:14:33.457195760 Z
+- - :approve
+  - thread_safe
+  - :who: David A. Wheeler
+    :why: Apache 2.0 okay as long as GPL-2.0 only does not conflict, and no conflicts identified.
+    :when: 2015-12-17 17:14:44.331125510 Z

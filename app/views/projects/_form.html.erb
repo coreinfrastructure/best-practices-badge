@@ -131,7 +131,7 @@ The information on how to contribute SHOULD include the basic criteria for accep
       <span>What license(s) is the project released under?</span>
       <%= render(partial: "details", locals: {
            criteria: "license", details: %{
-Please use <a href="https://spdx.org/licenses/">SPDX license expression format</a> (examples include "Apache-2.0", "BSD-2-Clause", "BSD-3-Clause", "GPL-2.0+", "LGPL-3.0+", "MIT", and "(BSD-2-Clause OR Ruby)")
+Please use <a href="https://spdx.org/licenses/">SPDX license expression format</a>; examples include "Apache-2.0", "BSD-2-Clause", "BSD-3-Clause", "GPL-2.0+", "LGPL-3.0+", "MIT", and "(BSD-2-Clause OR Ruby)".
 }}) %>
       <%= f.text_field :license, class:"form-control", hide_label: true, placeholder:'OSS License', list: "license_list", disabled: is_disabled %>
      <!-- Some examples from http://wiki.spdx.org/view/FileNoticeExamples -->

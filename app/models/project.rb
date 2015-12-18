@@ -96,7 +96,19 @@ class Project < ActiveRecord::Base
     dynamic_analysis_enable_assertions: ['SUGGESTED', false, false],
     dynamic_analysis_fixed: ['MUST', false, false] }.freeze
 
-  # Peojects are associated with users
+  ALL_CRITERIA = CRITERIA_INFO.keys.freeze
+  ALL_CRITERIA_STATUS = ALL_CRITERIA.map do |criterion|
+    "#{criterion}_status".to_sym
+  end.freeze
+  ALL_CRITERIA_JUSTIFICATION = ALL_CRITERIA.map do |criterion|
+    "#{criterion}_justification".to_sym
+  end.freeze
+  PROJECT_OTHER_FIELDS = [
+    :name, :description, :project_homepage_url, :repo_url,
+    :license, :general_comments,
+    :user_id]
+
+  # A project is associated with a user
   belongs_to :user
   delegate :name, to: :user, prefix: true
 

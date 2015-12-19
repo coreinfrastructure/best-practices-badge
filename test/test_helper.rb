@@ -2,10 +2,9 @@ ENV['RAILS_ENV'] ||= 'test'
 
 require 'simplecov'
 require 'coveralls'
-SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
-  SimpleCov::Formatter::HTMLFormatter,
-  Coveralls::SimpleCov::Formatter
-]
+SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new(
+  [SimpleCov::Formatter::HTMLFormatter,
+   Coveralls::SimpleCov::Formatter])
 SimpleCov.start 'rails' do
   add_group 'Validators', 'app/validators'
   add_filter '/config/'

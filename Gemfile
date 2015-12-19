@@ -13,7 +13,7 @@ gem 'jquery-rails', '4.0.5' # Javascript jQuery library (for Rails)
 gem 'jquery-ui-rails', '5.0.5' # Javascript jQueryUI library (for Rails)
 gem 'octokit', '4.1.1' # GitHub's official Ruby API
 gem 'omniauth-github', '1.1.2' # Authentication to GitHub (get project info)
-gem 'paper_trail', '4.0.0' # Record previous versions of project data
+gem 'paper_trail', '4.0.1' # Record previous versions of project data
 gem 'puma', '2.15.3' # Faster webserver; recommended by Heroku
 gem 'rack-timeout', '0.3.2' # Timeout per https://github.com/heroku/rack-timeout
 gem 'rails', '4.2.5' # Our web framework
@@ -44,13 +44,13 @@ group :development, :test do
 end
 
 group :development do
-  gem 'rails_db', '0.9.9' # Enable localhost:3000/rails/db debugging
+  gem 'rails_db', '1.0.0' # Enable localhost:3000/rails/db debugging
 end
 
 group :test do
-  gem 'coveralls', '0.8.9', require: false
+  gem 'coveralls', '0.8.10', require: false
   gem 'm', '1.4.2' # Run test/unit tests by line number
-  gem 'simplecov', '0.10.0', require: false
+  gem 'simplecov', '0.11.0', require: false
   gem 'webmock'
 end
 

@@ -37,7 +37,7 @@ group :development, :test do
   gem 'pry-byebug', '3.3.0'
   gem 'quiet_assets', '1.1.0'
   gem 'rubocop-rspec', '1.3.1'
-  gem 'spring', '1.4.4'
+  gem 'spring', '1.6.0'
   gem 'sqlite3', '1.3.11'
   gem 'vcr', '3.0.0' # Record network responses for later test reuse
   gem 'web-console', '2.2.1'

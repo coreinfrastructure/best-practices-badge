@@ -50,7 +50,7 @@ end
 group :test do
   gem 'coveralls', '0.8.10', require: false
   gem 'm', '1.4.2' # Run test/unit tests by line number
-  gem 'simplecov', '0.11.0', require: false
+  gem 'simplecov', '0.11.1', require: false
   gem 'webmock'
 end
 

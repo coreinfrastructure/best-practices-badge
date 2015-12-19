@@ -161,11 +161,22 @@ class Project < ActiveRecord::Base
     (CRITERIA_INFO[criterion.to_sym])[2]
   end
 
+  # TODO: Should be normal method.
   def self.badge_achieved?(project)
     CRITERIA_INFO.all? do |criterion, value|
       status = project["#{criterion}_status"]
       justification = project["#{criterion}_justification"]
       enough_criterion? status, justification, value[0], value[2]
+    end
+  end
+
+  def self.badge_achieved_id?(id)
+    return false if id.nil?
+    old_project = Project.find(id)
+    if old_project
+      self.badge_achieved?(old_project)
+    else
+      false
     end
   end
 

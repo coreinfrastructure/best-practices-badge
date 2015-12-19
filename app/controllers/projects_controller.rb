@@ -69,13 +69,11 @@ class ProjectsController < ApplicationController
   # PATCH/PUT /projects/1.json
   # rubocop:disable Metrics/MethodLength
   def update
+    old_badge_status = Project.badge_achieved_id?(params[:id])
     Chief.new(@project).autofill
     respond_to do |format|
       if @project.update(project_params)
-        format.html do
-          redirect_to @project, success: 'Project was successfully updated.'
-        end
-        format.json { render :show, status: :ok, location: @project }
+        successful_update(format, old_badge_status)
       else
         format.html { render :edit }
         format.json do
@@ -83,7 +81,16 @@ class ProjectsController < ApplicationController
         end
       end
     end
-    # rubocop:enable Metrics/MethodLength
+  end
+  # rubocop:enable Metrics/MethodLength
+
+  def successful_update(format, _old_badge_status)
+    format.html do
+      redirect_to @project, success: 'Project was successfully updated.'
+    end
+    format.json { render :show, status: :ok, location: @project }
+    # new_badge_status = Project.badge_achieved?(@project)
+    # TODO: report change if old_badge_status != new_badge_status
   end
 
   # DELETE /projects/1

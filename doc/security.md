@@ -14,45 +14,39 @@ For more technical information on the implementation, see
 
 ## Security Requirements
 
-Here is what BadgeApp must do to be secure:
+Here is what BadgeApp must do to be secure (and a few comments about
+how we implement these requirements):
 
-- Confidentiality: Do not reveal any plaintext passwords used to authenticate
-  users.  This is primarily handled by only storing passwords
-  once processed by bcrypt.  Project data is considered public, as is
-  the existence of users, so we don't need to keep those confidential.
+- Confidentiality:
+  Project data is considered public, as is
+  the set of users, so we don't need to keep those confidential.
+  We must not reveal any plaintext passwords used to authenticate users.
+  This is primarily handled by only centrally storing passwords
+  once they are processed by bcrypt.
+  Passwords may be stored in encrypted user cookies, but those passwords
+  must not be retained.  There's no need to worry about covert channels.
 - Integrity:
     - Data between the client and server must not be altered.
-      We use https in the deployed system and (via GitHub) for accessing
-      the source code.
+      We use https in the deployed system.
     - Only authorized people should be able to edit the record
-      of a given project.  On GitHub this is easy - we can ask people to
+      of a given project.  If a project is on GitHub this is easy -
+      we can ask people to
       log in, and prove that they can edit that project.
       For other projects, what we can do is ensure that once a project
       record is created, only its creator can edit it... and then projects
       can decide which (if any) to link to as their "official" representation.
     - Only authorized people should be able to edit the source code.
-      We use GitHub, which has an authentication system for this purpose.
-  - Availability: We cannot prevent someone with significant
-    resources from overwhelming the system.  (This includes DDoS attacks,
-    since someone who controls many clients controls a lot of resources.)
-    Instead, we will work so that it can return to operation
-    once an attack has ended and/or been halted.
-    We use the 'puma' web server to serve multiple processes
-    (so at least attackers have to cause multiple requests simultaneously),
-    and timeouts so recovery is automatic after a request.
-    The system is designed to be easily scalable (just add more worker
-    processes), so we can quickly purchase additional computing resources
-    to handle requests if needed.
-    The system is currently deployed to Heroku, which imposes a hard
-    time limit for each request; thus, if a request gets stuck
-    (say during autofill by a malevolent actor who responds very slowly),
-    eventually the timeout will cause the response to stop and the
-    system is ready for another request.
-    We plan to use a CDN (Fastly) to provide cached values of badges, which are
-    the most resource-intense kind of request, and even for the read-only
-    version of project data.  As long as the CDN is up, even if the
-    application crashes the then-current data will stay available until
-    the system recovers.
+      We use GitHub for managing the source code and issue tracker; it
+      has an authentication system for this purpose.
+- Availability: We cannot prevent someone with significant
+  resources from overwhelming the system.  (This includes DDoS attacks,
+  since someone who controls many clients controls a lot of resources.)
+  Instead, we will work so that it can return to operation
+  once an attack has ended and/or been halted.
+  We will also design the system so it can scale up
+  (e.g., using multiple processes and a CDNs), to make it harder for
+  someone without significant resources to shut it down.
+  See the design section below about how we handle scaling up.
 
 BadgeApp must avoid being taken over by other applications, and
 must avoid being a conduit for others' attacks
@@ -79,9 +73,9 @@ It is a standard Ruby on Rails design with models, views, and controllers.
 In production it is accessed via a web server (Puma) and
 builds on a relational database database system (PostgreSQL).
 The software is multi-process and is intended to be multi-threaded
-(see the CONTRIBUTING.md file for more about this).
-The database system itself is trusted, and the database is
-not directly accessible by untrusted users.
+(see the [CONTRIBUTING.md](../CONTRIBUTING.md) file for more about this).
+The database system itself is trusted, and the database managed
+by the database system is not directly accessible by untrusted users.
 The application runs on Linux kernel and uses some standard operating system
 facilities and libraries (e.g., to provide TLS).
 All interaction between the users and the web application go over
@@ -203,7 +197,28 @@ database management system, encryption library, and some of the Ruby gems)
 do have C/C++, but these are widely-used components where we have
 good reason to believe that developers are directly working to mitigate
 the problems from memory-unsafe languages.
+See the section below on supply chain (reuse) for more.
 
+Availability is, as always, especially challenging;
+the design scales.
+As a Ruby on Rails application, it is designed so each request can
+be processed separately on separate processes.
+We use the 'puma' web server to serve multiple processes
+(so at least attackers have to cause multiple requests simultaneously),
+and timeouts so recovery is automatic after a request.
+The system is designed to be easily scalable (just add more worker
+processes), so we can quickly purchase additional computing resources
+to handle requests if needed.
+The system is currently deployed to Heroku, which imposes a hard
+time limit for each request; thus, if a request gets stuck
+(say during autofill by a malevolent actor who responds very slowly),
+eventually the timeout will cause the response to stop and the
+system will become ready for another request.
+We plan to use a CDN (Fastly) to provide cached values of badges, which are
+the most resource-intense kind of request, and even for the read-only
+version of project data.  As long as the CDN is up, even if the
+application crashes the then-current data will stay available until
+the system recovers.
 
 ## Security in Implementation
 
@@ -433,6 +448,11 @@ We currently use Heroku for deployment; see the
 [Heroku security policy](https://www.heroku.com/policy/security)
 for some information on how they manage security
 (including physical security and environmental safeguards).
+Normal users cannot directly access the database management system (DBMS),
+which on the production system is Postgres.
+Anyone can create a Heroku application and run it on Heroku, however,
+at that point we trust the Postgres developers and the Heroku administrators
+to keep the databases separate.
 
 Security is hard; we welcome your help.
 Please report potential vulnerabilities you find

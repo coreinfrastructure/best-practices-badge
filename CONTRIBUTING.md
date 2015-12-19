@@ -255,20 +255,31 @@ how we update them.
 
 ## Updating reused components
 
-For stability we set fixed version numbers of reused components
-(which are primarily gems).
-
+For stability we set fixed version numbers of reused components,
+which are primarily gems.
+We use the bundler Ruby gem package management system (<http://bundler.io>);
+file 'Gemfile' lists direct gem dependencies; 'Gemfile.lock' lists them
+transitively.
 This means that we need to occasionally update our dependencies.
-The 'bundle_audit' task will note vulnerable components,
-which may need to be updated quickly.
-Updates should be handled as a separate commit from functional improvements.
-It's okay if the commit includes both a component update and code changes to
-make it work.
 
-The "bundle outdated" command lists outdated Ruby gems.
-If things look reasonable, run "bundle update" to update all Ruby gems
-(or "bundle update GEM" to update a specific gem).
-Be *sure* to rerun the tests with "rake".
+Two commands can help detect outdated components:
+
+- The 'bundle_audit' task will note vulnerable components,
+  which may need to be updated quickly.
+  This task is run as part of the default 'rake' checking task.
+- The 'bundle outdated' command lists all outdated Ruby gems.
+  Note that our continuous integration suite (linked to from the README)
+  also lists all outdated dependencies.
+
+Use 'bundle update GEM' to update a specific gem
+('bundle update' will update all Ruby gems - that may be too much at once).
+You *must* run 'rake' after updating; this will run the regression tests,
+check the licenses (transitively, which is important because
+sometimes library updates add new dependencies), and so on.
+Updates should be handled as a separate commit from functional improvements.
+One exception: it's okay if the commit includes
+both a component update and the minimum set of code changes to
+make the update work.
 
 Ruby itself can be updated.  Use 'cd' to go the top directory of this project,
 edit 'Gemfile' to edit the "ruby ..." line so it has the new version number,

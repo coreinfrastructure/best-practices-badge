@@ -55,8 +55,6 @@ GEM
       axlsx (>= 2.0.1)
       rails (>= 3.1)
     bcrypt (3.1.10)
-    binding_of_caller (0.7.2)
-      debug_inspector (>= 0.0.1)
     bootstrap-sass (3.3.6)
       autoprefixer-rails (>= 5.2.1)
       sass (>= 3.3.4)
@@ -387,11 +385,10 @@ GEM
     unf_ext (0.0.7.1)
     uniform_notifier (1.9.0)
     vcr (3.0.0)
-    web-console (2.2.1)
-      activemodel (>= 4.0)
-      binding_of_caller (>= 0.7.2)
-      railties (>= 4.0)
-      sprockets-rails (>= 2.0, < 4.0)
+    web-console (3.0.0)
+      activemodel (>= 4.2)
+      debug_inspector
+      railties (>= 4.2)
     webmock (1.22.3)
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
@@ -445,7 +442,7 @@ DEPENDENCIES
   turbolinks (= 2.5.3)
   uglifier (= 2.7.2)
   vcr (= 3.0.0)
-  web-console (= 2.2.1)
+  web-console (= 3.0.0)
   webmock
   will_paginate (= 3.0.7)
 

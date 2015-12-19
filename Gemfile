@@ -40,11 +40,11 @@ group :development, :test do
   gem 'spring', '1.6.0'
   gem 'sqlite3', '1.3.11'
   gem 'vcr', '3.0.0' # Record network responses for later test reuse
-  gem 'web-console', '2.2.1'
 end
 
 group :development do
   gem 'rails_db', '1.0.0' # Enable localhost:3000/rails/db debugging
+  gem 'web-console', '3.0.0'
 end
 
 group :test do

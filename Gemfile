@@ -39,7 +39,7 @@ group :development, :test do
   gem 'rubocop-rspec', '1.3.1'
   gem 'spring', '1.6.0'
   gem 'sqlite3', '1.3.11'
-  gem 'vcr', '3.0.0' # Record network responses for later test reuse
+  gem 'vcr', '3.0.1' # Record network responses for later test reuse
 end
 
 group :development do

@@ -146,10 +146,18 @@ If you want to build a string using append, do this:
 
 There is a small amount of application-specific Javascript.
 This is written in Javascript, not CoffeeScript;
-it's only a small amount of Javascript, so the advantages of CoffeeScript aren't
- obvious, and far more people know basic Javascript than CoffeeScript.
- For Javascript we are using the
- [Node.js style guide](https://github.com/felixge/node-style-guide).
+it's only a small amount of Javascript, so the advantages of
+CoffeeScript aren't
+obvious, and far more people know basic Javascript than CoffeeScript.
+For Javascript we are using the
+[Node.js style guide](https://github.com/felixge/node-style-guide).
+Please ensure changes pass JSCS (Javascript style checker)
+using the Node.js format.
+
+There's a small amount of Bourne shell code
+(the script that sets up a new development install).
+If you modify it, make sure it passes shellcheck
+(a static analysis tool for shell).
 
 When adding or changing functionality, please include new tests for them as
 part of your contribution.
@@ -188,8 +196,10 @@ the default "rake" checking task:
 * JSCS (Javascript style checker) using the Node.js format.
 * JSHint (Javascript error detector)
 
-Note that we also use some other continuous integration tools that check changes
- after they are checked into GitHub; if they find problems, please fix them.
+Note that we also use
+[CicleCI](https://circleci.com/gh/linuxfoundation/cii-best-practices-badge)
+for continuous integration tools to check changes
+after they are checked into GitHub; if they find problems, please fix them.
 
 ## Supply chain (reuse)
 
@@ -200,13 +210,13 @@ In particular:
 * Before adding a Ruby gem, check its popularity on
   <https://www.ruby-toolbox.com/>, and prefer "more popular" gems.
   A popular gem may have unintentional or intentional vulnerabilities,
-  but they are less likely.
+  but they are less likely, and are more likely to be noticed.
 * For Ruby gems, look at its data at <https://rubygems.org/> to learn
-  more about it.
+  more about it. E.G., is it still actively maintained?
 * All required reused components MUST be open source software (OSS).
   It is *not* acceptable to insert a dependency
-  that *requires* proprietary software (making it portable so it *can* use
-  some proprietary software is gratefully welcome).
+  that *requires* proprietary software; making it portable so it *can* use
+  some proprietary software is gratefully welcome.
   Obviously, we also have to combine them legally in the way they are used.
 
 We use 'license_finder' to help ensure that we're using OSS legally.
@@ -268,8 +278,9 @@ Two commands can help detect outdated components:
   which may need to be updated quickly.
   This task is run as part of the default 'rake' checking task.
 - The 'bundle outdated' command lists all outdated Ruby gems.
-  Note that our continuous integration suite (linked to from the README)
-  also lists all outdated dependencies.
+  Our continuous integration suite (linked to from the README) also uses
+  [Gemnasium](https://gemnasium.com/linuxfoundation/cii-best-practices-badge)
+  to identify all outdated dependencies.
 
 Use 'bundle update GEM' to update a specific gem
 ('bundle update' will update all Ruby gems - that may be too much at once).

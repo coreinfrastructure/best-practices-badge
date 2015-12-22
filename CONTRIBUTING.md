@@ -92,6 +92,8 @@ clear, and obviously correct.
 Some technical debt is inevitable, just don't bankrupt us with it.
 Improved refactorizations are welcome.
 
+### Ruby
+
 The web application is primarily written in Ruby on Rails.
 Please generally follow the
 [community Ruby style guide](https://github.com/bbatsov/ruby-style-guide)
@@ -144,6 +146,8 @@ If you want to build a string using append, do this:
 "".dup << 'Hello, ' << 'World'
 ~~~~
 
+### Javascript
+
 There is a small amount of application-specific Javascript.
 This is written in Javascript, not CoffeeScript;
 it's only a small amount of Javascript, so the advantages of
@@ -168,18 +172,34 @@ Please do *not* use <tt>$(document).on('ready', function)</tt>,
 because jquery-turbolinks doesn't fix those;
 instead, use <tt>$(document).ready(function)</tt> or <tt>$(function)</tt>.
 
+### Shell
+
 There's a small amount of Bourne shell code
 (the script that sets up a new development install).
 If you modify it, make sure it passes shellcheck
 (a static analysis tool for shell).
 
+### Automated tests
+
 When adding or changing functionality, please include new tests for them as
 part of your contribution.
-We are using minitest.
+
+We require the Ruby code to have at least 90% statement coverage;
+please ensure your contributions do not lower the coverage below that minimum.
+The Ruby code uses minitest as the test framework, and we use
+'vcr' to record live data for replaying later.
+Additional tests are very welcome.
+
+We encourage tests to be created first, run to ensure they fail, and
+then add code to implement the test (aka test driven development).
+However, each git commit should have both
+the test and improvement in the *same* commit,
+because 'git bisect' will then work well.
 
 ## How to check proposed changes before submitting them
 
-Before submitting changes, please run "rake" (no options) to look for problems,
+Before submitting changes, you *must*
+run 'rake' (no options) to look for problems,
 and fix the problems found.
 In some cases it's okay to fix them by disabling the warning in that particular
 place, but be careful; it's often better to make a real change,
@@ -190,7 +210,7 @@ Currently these include at least the following:
 
 * bundle - use bundle to check dependencies ("bundle check || bundle install")
 * "rake bundle_audit" - check for vulnerable dependencies
-* "rake test" - runs the test suite
+* "rake test" - runs the automated test suite
 * "rake markdownlint" - runs markdownlint, also known as mdl
   (check for errors in markdown text)
 * "rake rubocop" - runs Rubocop, which checks code style against the

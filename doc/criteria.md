@@ -479,7 +479,7 @@ by the delivered project's software.
   <sup>[<a href="#crypto_keylength">crypto_keylength</a>]\*</sup>
 - <a name="crypto_working"></a>The project security mechanisms MUST NOT
   depend on cryptographic algorithms that are broken
-  (e.g., MD4, MD5, single DES, or RC4).
+  (e.g., MD4, MD5, single DES, RC4, or Dual_EC_DRBG).
   <sup>[<a href="#crypto_working">crypto_working</a>]\*</sup>
 - <a name="crypto_weaknesses"></a>The project security mechanisms
   SHOULD NOT by default depend on cryptographic algorithms with known

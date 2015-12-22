@@ -154,6 +154,20 @@ For Javascript we are using the
 Please ensure changes pass JSCS (Javascript style checker)
 using the Node.js format.
 
+If you edit the Javascript, beware of ready events.
+Rails' turbolinks gem claims that it
+["works great with the jQuery framework"](https://github.com/rails/turbolinks),
+but this is misleading.
+[Turbolinks breaks <tt>"$(document).ready"</tt>](http://guides.rubyonrails.org/working_with_javascript_in_rails.html#page-change-events)
+(an extremely common construct)
+and by default requires you to use a nonstandard on..."page:change".
+To solve this botch in turbolinks we use
+[jquery-turbolinks](https://github.com/kossnocorp/jquery.turbolinks),
+which makes "ready" work correctly.
+Please do *not* use <tt>$(document).on('ready', function)</tt>,
+because jquery-turbolinks doesn't fix those;
+instead, use <tt>$(document).ready(function)</tt> or <tt>$(function)</tt>.
+
 There's a small amount of Bourne shell code
 (the script that sets up a new development install).
 If you modify it, make sure it passes shellcheck

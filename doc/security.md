@@ -25,6 +25,8 @@ how we implement these requirements):
   once they are processed by bcrypt.
   Passwords may be stored in encrypted user cookies, but those passwords
   must not be retained.  There's no need to worry about covert channels.
+  We do not intend to reveal user passwords to the public, but even those
+  are not especially sensitive.
 - Integrity:
     - Data between the client and server must not be altered.
       We use https in the deployed system.
@@ -51,6 +53,11 @@ how we implement these requirements):
 BadgeApp must avoid being taken over by other applications, and
 must avoid being a conduit for others' attacks
 (e.g., not be vulnerable to cross-site scripting).
+
+The application must not have any behaviors or features designed
+to allow authorized access, exposure of sensitive information, or allow
+bypass of security features or restrictions.
+In particular, it must not have backdoors that allow unauthorized control.
 
 It is difficult to implement truly secure software.
 An additional problem for BadgeApp is that it not only must accept,

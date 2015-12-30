@@ -5,12 +5,20 @@ Below are the overall security requirements, how we approach
 security in the design, security in the implementation,
 security in verification,
 and a brief note about the supply chain (reuse).
+Our overall security approach is called
+defense-in-breadth, that is, we consider
+security (including security countermeasures) in all
+our software development processes (including
+requirements, design, implementation, verification, and reuse from
+external suppliers).
+In each software development process we
+identify the specific issues that most need to be addressed,
+and then address them.
 
 If you find a vulnerability, please see
 [CONTRIBUTING.md](../CONTRIBUTING.md) for how to submit a vulnerability report.
 For more technical information on the implementation, see
 [implementation.md](implementation.md).
-
 
 ## Security Requirements
 
@@ -107,7 +115,9 @@ contents, etc., are all untrusted).
 
 Here are a number of secure design principles,
 including the 8 principles from
-[Saltzer and Schroeder](http://web.mit.edu/Saltzer/www/publications/protection/)
+[Saltzer and Schroeder](http://web.mit.edu/Saltzer/www/publications/protection/),
+showing that we apply many secure design principles including
+all of the ones from S and S:
 
 - Economy of mechanism (keep the design as simple and small as practical,
   e.g., by adopting sweeping simplifications):
@@ -229,18 +239,29 @@ the system recovers.
 
 ## Security in Implementation
 
+To reduce the risk of security vulnerabilities in implementation we
+have focused on countering the
+[OWASP Top 10 (2013)](https://www.owasp.org/index.php/Top_10_2013-Top_10),
+apply the
+[Ruby on Rails Security Guide](http://guides.rubyonrails.org/security.html),
+and have taken steps to harden the application.
+Below is how we've done each, in turn.
+
 The
 [OWASP Top 10 (2013)](https://www.owasp.org/index.php/Top_10_2013-Top_10)
 ([details](https://www.owasp.org/index.php/Category:OWASP_Top_Ten_Project))
 represents "a broad consensus about what the most
 critical web application security flaws are."
-Here are these items (focusing on them so we don't ignore the
-most critical flaws), and how we attempt to reduce their risks in BadgeApp.
+Here are these items (we focus on them so we address all of the
+most critical and common flaws),
+and how we attempt to reduce their risks in BadgeApp.
 
 1. Injection.
    BadgeApp is implemented in Ruby on Rails, which has
    built-in protection against SQL injection.  SQL commands are not used
-   directly, instead parameterized commands are implemented via Rails.
+   directly, instead Rails includes Active Record, which implements an
+   Object Relational Mapping (ORM) with parameterized commands.
+   SQL commands are never used directly by the custom code.
    The shell is not used to download or process file contents (e.g., from
    repositories), instead, various Ruby APIs acquire and process it directly.
 2. Broken Authentication and Session Management.
@@ -409,6 +430,11 @@ When software is modified, it is reviewed by the
 'rake' process, which performs a number of checks and tests,
 including static source code analysis using brakeman (which focuses
 on finding security issues in Ruby on Rails applications).
+Modifications integrated into the master branch
+are further automatically checked.
+See [CONTRIBUTING.md](../CONTRIBUTING.md) for more information;
+the following is a brief summary of how our verification process
+helps make the software more secure.
 
 We intentionally make the code relatively short and clean to ease review.
 We use rubocop (Ruby code style checker) and rails_best_practices
@@ -419,10 +445,6 @@ These style tools help us avoid more problematic constructs (in some cases
 avoiding defects that might lead to vulnerabilities), and
 also make the code easier to review
 (by both humans and other programs).
-
-Modifications integrated into the master branch
-are further automatically checked.
-See [CONTRIBUTING.md](../CONTRIBUTING.md) for more information.
 
 The software has a strong test suite; this helps find problems, and
 makes it easier to update components or fix problems.
@@ -439,9 +461,12 @@ but we think they reduce the risks.
 We consider the code we reuse
 (e.g., libraries and frameworks) before adding them, to reduce
 the risk of unintentional and intentional vulnerabilities from them.
+In particular, we prefer the use of popular components (where problems
+are more likely to be addressed) and common OSS licenses.
 We also have a process for detecting when the components we use
 have known vulnerabilities (using bundle-audit)
 or are out-of-date.
+
 We can't eliminate all risks, and
 if we rewrote all the software (instead of reusing software)
 we would risk creating vulnerabilities in own code.
@@ -461,11 +486,13 @@ Anyone can create a Heroku application and run it on Heroku, however,
 at that point we trust the Postgres developers and the Heroku administrators
 to keep the databases separate.
 
-Security is hard; we welcome your help.
-Please report potential vulnerabilities you find
-(see [CONTRIBUTING.md](../CONTRIBUTING.md) for how to submit
-a vulnerability report).
+## Your help is welcome!
 
-We also welcome hardening in general, particularly pull requests
+Security is hard; we welcome your help.
+We welcome hardening in general, particularly pull requests
 that actually do the work of hardening.
+
+Please report potential vulnerabilities you find.
+See [CONTRIBUTING.md](../CONTRIBUTING.md) for how to submit
+a vulnerability report.
 

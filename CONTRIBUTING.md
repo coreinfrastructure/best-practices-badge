@@ -161,6 +161,16 @@ If you want to build a string using append, do this:
 "".dup << 'Hello, ' << 'World'
 ~~~~
 
+We use
+[Ruby version 2.3.0](https://www.ruby-lang.org/en/news/2015/12/25/ruby-2-3-0-released/),
+but do not use the safe navigation operator '&amp;.' quite yet.
+Our static analysis tools' parsers cannot yet handle syntax new to 2.3.0
+(it *is* in [upstream](https://github.com/whitequark/parser/issues/209)).
+Using [# freeze_string: true](https://bugs.ruby-lang.org/issues/8976) is
+fine, since that 'magic comment' doesn't interfere with parsing
+and will help us get ready for the planned Ruby transition to
+immutable strings.
+
 ### Javascript
 
 There is a small amount of application-specific Javascript.

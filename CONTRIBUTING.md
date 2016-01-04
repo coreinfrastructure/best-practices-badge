@@ -23,11 +23,19 @@ See the GitHub documentation on
 and
 [using pull requests](https://help.github.com/articles/using-pull-requests/).
 
+We use GitHub to track all changes via its
+[issue tracker](https://github.com/linuxfoundation/cii-best-practices-badge/issues) and
+[pull requests](https://github.com/linuxfoundation/cii-best-practices-badge/pulls).
+Specific changes are proposed using those mechanisms.
+Issues are assigned to an individual, who works it and then marks it complete.
+If there are questions or objections, the conversation area of that
+issue or pull request is used to resolve it.
+
 All contributions (including pull requests) must agree to
 the [Developer Certificate of Origin (DCO) version 1.1](doc/dco.txt).
 This is exactly the same one created and used by the Linux kernel developers
 and posted on <http://developercertificate.org/>.
-This is a a developer's certification that he or she has the right to
+This is a developer's certification that he or she has the right to
 submit the patch for inclusion into the project.
 Simply submitting a contribution implies this agreement, however,
 please include a "Signed-off-by" tag in every patch.
@@ -37,14 +45,6 @@ message, on a line by itself separated by a blank line from the body of
 the commit:
 
     Signed-off-by: Your Name <your.email@example.com>
-
-We use GitHub to track all changes via its
-[issue tracker](https://github.com/linuxfoundation/cii-best-practices-badge/issues) and
-[pull requests](https://github.com/linuxfoundation/cii-best-practices-badge/pulls).
-Specific changes are proposed using those mechanisms.
-Issues are assigned to an individual, who works it and then marks it complete.
-If there are questions or objections, the conversation area of that
-issue or pull request is used to resolve it.
 
 ## Vulnerability reporting (security issues)
 

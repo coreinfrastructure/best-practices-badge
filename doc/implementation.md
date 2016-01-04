@@ -527,6 +527,40 @@ For more on license decisions see doc/dependency_decisions.yml.
 You can also run 'rake' and see the generated report
 license_finder_report.html.
 
+## Updating Ruby
+
+Here's how to update to a new version of Ruby.
+Our development environment currently uses
+rbenv (to manage the Ruby environment),
+ruby-build (to install a specific version of Ruby), and
+Bundler (to install/update Ruby gems).
+
+These instructions assume you're in the top-level directory (with the Gemfile).
+We'll demonstrate how to do this with 2.3.0.
+
+First, make sure your branch is up-to-date (use <tt>git pull</tt>).
+Then run:
+
+    (cd $HOME/.rbenv/plugins/ruby-build && git pull) # Update ruby-build list
+    rbenv install 2.3.0                              # Install with ruby-build
+    rbenv local 2.3.0                                # Use new Ruby version
+    gem install bundler                              # Reinstall bundler for it
+    rbenv rehash                                     # Tell rbenv about bundler
+
+If you're changing a repository branch to switch to the new version,
+now edit 'Gemfile' and change the line beginning with 'ruby' to
+refer to the new Ruby version (otherwise the previous <tt>git pull</tt>
+already did this). Then run:
+
+    bundle install                                   # Reinstall gems
+    rbenv rehash                                     # Update rbenv commands
+
+For more details about this, see
+<https://github.com/rbenv/ruby-build> and
+<http://dan.carley.co/blog/2012/02/07/rbenv-and-bundler/>.
+Note that 'rbenv install 2.3.0' is equivalent to the longer
+<tt>ruby-build 2.3.0 $HOME/.rbenv/versions/2.3.0</tt>.
+
 # See also
 
 See the separate "[background](./background.md)" and

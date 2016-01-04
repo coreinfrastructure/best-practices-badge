@@ -250,6 +250,17 @@ Note that we also use
 for continuous integration tools to check changes
 after they are checked into GitHub; if they find problems, please fix them.
 
+When running the static analysis tools (e.g., via 'rake')
+there will be some spurious warnings.
+These warnings occur because we have updated to Ruby version 2.3.0,
+but the Ruby parsers have not updated yet.
+These warnings you should ignore are:
+
+    warning: parser/current is loading parser/ruby22, which recognizes
+    warning: 2.2.x-compliant syntax, but you are running 2.3.0.
+    warning: please see https://github.com/whitequark/parser#compatibility-with-ruby-mri.
+
+
 ## Supply chain (reuse)
 
 We like reusing components, but please evaluate all new components

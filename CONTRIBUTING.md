@@ -363,16 +363,25 @@ both a component update and the minimum set of code changes to
 make the update work.
 
 Ruby itself can be updated.  Use 'cd' to go the top directory of this project,
-edit 'Gemfile' to edit the "ruby ..." line so it has the new version number,
-then run:
+use 'git pull' to ensure this branch is up-to-date,
+edit 'Gemfile' to edit the "ruby ..." line so it has the new version number
+(if it's not already different), then run:
 
 ~~~~sh
-rbenv install NEW_VERSION_NUMBER
-rbenv local NEW_VERSION_NUMBER
-rbenv rehash
-bundle install
-rbenv rehash
+(cd $HOME/.rbenv/plugins/ruby-build && git pull) # Update ruby-build list
+rbenv install NEW_VERSION_NUMBER                 # Install with ruby-build
+rbenv local NEW_VERSION_NUMBER                   # Use new Ruby version
+gem install bundler                              # Reinstall bundler for it
+rbenv rehash                                     # Tell rbenv about bundler
+bundle install                                   # Reinstall gems
+rbenv rehash                                     # Update rbenv commands
 ~~~~
+
+For more details about updating Ruby versions with rbenv, see
+<https://github.com/rbenv/ruby-build> and
+<http://dan.carley.co/blog/2012/02/07/rbenv-and-bundler/>.
+Note that 'rbenv install 2.3.0' is equivalent to the longer
+<tt>ruby-build 2.3.0 $HOME/.rbenv/versions/2.3.0</tt>.
 
 Once the component update has been verified,
 it can be checked in as a new commit.

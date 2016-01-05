@@ -38,7 +38,8 @@ and posted on <http://developercertificate.org/>.
 This is a developer's certification that he or she has the right to
 submit the patch for inclusion into the project.
 Simply submitting a contribution implies this agreement, however,
-please include a "Signed-off-by" tag in every patch.
+please include a "Signed-off-by" tag in every patch
+(this tag is a conventional way to confirm that you agree to the DCO).
 You can do this with <tt>git commit --signoff</tt>.
 Another way to do this is to write the following at the end of the commit
 message, on a line by itself separated by a blank line from the body of

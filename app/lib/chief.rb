@@ -7,6 +7,8 @@
 # the Detective INPUTS and OUTPUTS to determine what order to run, and
 # run them in parallel in an appropriate order.
 
+# frozen_string_literal: true
+
 require 'set'
 
 class Chief

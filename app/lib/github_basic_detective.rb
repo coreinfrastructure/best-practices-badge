@@ -7,6 +7,8 @@ require 'json'
 # Be sure to use strings, NOT symbols, as a key when accessing JSON-parsed
 # results (because strings and symbols are distinct in basic Ruby).
 
+# frozen_string_literal: true
+
 class GithubBasicDetective < Detective
   # Individual detectives must identify their inputs, outputs
   INPUTS = [:repo_url]

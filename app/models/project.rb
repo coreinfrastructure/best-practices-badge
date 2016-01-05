@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # rubocop:disable Metrics/ClassLength
 class Project < ActiveRecord::Base
   STATUS_CHOICE = %w(? Met Unmet).freeze

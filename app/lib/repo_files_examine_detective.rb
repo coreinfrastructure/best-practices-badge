@@ -2,6 +2,8 @@
 # (those conventionally used for source and documentation).
 # Note that a key precondition is determining how to open repo files.
 
+# frozen_string_literal: true
+
 class RepoFilesExamineDetective < Detective
   INPUTS = [:repo_files]
   OUTPUTS = [:contribution_status, :license_location_status,

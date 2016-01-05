@@ -1,6 +1,8 @@
 # Examine software license (already determined), expressed with SPDX,
 # to report if it's open source software (OSS) and meets OSI requirements.
 
+# frozen_string_literal: true
+
 # rubocop:disable Metrics/ClassLength
 class OssLicenseDetective < Detective
   # Individual detectives must identify their inputs, outputs

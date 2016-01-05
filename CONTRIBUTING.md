@@ -162,15 +162,20 @@ If you want to build a string using append, do this:
 "".dup << 'Hello, ' << 'World'
 ~~~~
 
+We encourage using
+[# frozen_string_literal: true](https://bugs.ruby-lang.org/issues/8976)
+near the beginning of each file.
+This 'magic comment' (added in Ruby 2.3.0) automatically freezes
+string constants, increasing speed, preventing accidental changes, and
+will help us get ready for the planned Ruby transition to immutable strings.
+
 We use
 [Ruby version 2.3.0](https://www.ruby-lang.org/en/news/2015/12/25/ruby-2-3-0-released/),
 but do not use the safe navigation operator '&amp;.' quite yet.
 Our static analysis tools' parsers cannot yet handle syntax new to 2.3.0
 (it *is* in [upstream](https://github.com/whitequark/parser/issues/209)).
-Using [# freeze_string: true](https://bugs.ruby-lang.org/issues/8976) is
-fine, since that 'magic comment' doesn't interfere with parsing
-and will help us get ready for the planned Ruby transition to
-immutable strings.
+This is different from the frozen_string_literal magic comment, because
+a parser that ignores comments will still work.
 
 ### Javascript
 

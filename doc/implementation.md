@@ -255,6 +255,15 @@ GITHUB_KEY='client id' GITHUB_SECRET='client secret' rails s
 where *client id* and *client secret* are registered OAuth2 credentials
 of the app.
 
+However, since that can be inconvenient, you can instead store this
+data in the file '.env' at the top level.
+Simply put the data into the .env in this form:
+
+~~~~sh
+export GITHUB_KEY = '..VALUE..'
+export GITHUB_SECRET = '..VALUE..'
+~~~~
+
 The authorization callback URL in Github is: <http://localhost:3000/auth/github>
 
 [1] <https://github.com/settings/applications/new>

@@ -43,7 +43,7 @@ group :development, :test do
 end
 
 group :development do
-  gem 'rails_db', '1.0.0' # Enable localhost:3000/rails/db debugging
+  gem 'rails_db', '1.1.1' # Enable localhost:3000/rails/db debugging
   gem 'web-console', '3.0.0'
 end
 

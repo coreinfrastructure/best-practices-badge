@@ -269,6 +269,34 @@ The authorization callback URL in Github is: <http://localhost:3000/auth/github>
 [1] <https://github.com/settings/applications/new>
 [2] <https://devcenter.heroku.com/articles/config-vars>
 
+## Database content manipulation
+
+In some cases you may need to view or edit the database contents directly.
+For example, we don't currently have code to set a user to have the
+'admin' role, or to change the ownership of a project.
+
+In development mode, simply view 'localhost:3000/rails/db'
+in your web browser.
+You can select any table (on the left-hand side) so you can view
+or edit the database contents with a UI.
+
+To change the database contents of a production system,
+log into that system and use the SQL language to make changes.
+E.G., on Heroku, presuming that you have installed the heroku command,
+and configured it for the system you are controlling
+(including the the necessary keys),
+you can pipe SQL commands to 'heroku pg:psql'.
+Obviously this only works if you've been given keys to control this.
+On Heroku we use PostgreSQL.
+Here are a few examples:
+
+~~~~sh
+echo "SELECT * FROM users WHERE users.id = 1" | heroku pg:psql
+echo "SELECT * FROM users WHERE name = 'David A. Wheeler'" | heroku pg:psql
+echo "UPDATE users SET role = 'admin' where id = 25" | heroku pg:psql
+echo "UPDATE projects SET user_id = 25 WHERE id = 1" | heroku pg:psql
+~~~~
+
 ## Automation - flow
 
 We want to automate what we can, but since automation is imperfect,

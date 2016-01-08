@@ -486,6 +486,8 @@ We consider the code we reuse
 the risk of unintentional and intentional vulnerabilities from them.
 In particular, we prefer the use of popular components (where problems
 are more likely to be identified and addressed) and common OSS licenses.
+These steps reduce the risk of malicious components
+(e.g., malicious gems).
 We also have a process for detecting when the components we use
 have known vulnerabilities (using bundle-audit)
 or are out-of-date.

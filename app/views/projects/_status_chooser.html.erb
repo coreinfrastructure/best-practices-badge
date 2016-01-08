@@ -9,7 +9,8 @@
       <% criterion_category = Project.criterion_category(criteria) %>
       <% criterion_met_url_required = Project.met_url_required?(criteria) %>
 
-      <div class="col-md-2 criteria-radio<%= crypto_class %>">
+      <div id="<%= criteria
+        %>" class="col-md-2 criteria-radio<%= crypto_class %>">
        <div class="row status-chooser">
        <span class="criterion-name hidden"><%= criteria %></span>
        <span class="criterion-category hidden"><%= criterion_category %></span>

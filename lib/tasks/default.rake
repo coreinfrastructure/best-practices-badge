@@ -8,6 +8,7 @@ task(:default).clear.enhance %w(
   rails_best_practices
   brakeman
   license_check
+  whitespace_check
 )
 
 # Simple smoke test to avoid development environment misconfiguration
@@ -87,6 +88,11 @@ task license_check:
 file 'license_finder_report.html' => 'Gemfile.lock' do
   sh 'bundle exec license_finder report --format html ' \
      '> license_finder_report.html'
+end
+
+desc 'Check for trailing whitespace in latest proposed (git) patch.'
+task :whitespace_check do
+  sh 'git diff --check'
 end
 
 file 'license_finder_summary.txt' => 'Gemfile.lock' do

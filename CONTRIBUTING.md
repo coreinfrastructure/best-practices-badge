@@ -54,10 +54,20 @@ then configure git to use that as a commit template.  For example:
 
     git config commit.template ~/cii-best-practices-badge/git-template
 
+In general we try to be very proactive to detect and eliminate
+mistakes and vulnerabilities as soon as possible,
+and to reduce their impact when they do happen.
+We using defensive coding styles to reduce the likelihood of mistakes, followed
+by a variety of tools and a test suite to detect mistakes that are made.
+Since that can never be perfect, we also try to
+detect and repair problems during deployment as quickly as possible.
+This is *especially* true for security issues; see our
+[security information](doc/security.md) for more.
+
 Please do not use or include trailing whitespace.
 Since they are often not visible, they can cause silent problems
 and misleading unexpected changes.
-Some editors (e.g., Atom) quietly delete them by default.
+For example, some editors (e.g., Atom) quietly delete them by default.
 
 ## Vulnerability reporting (security issues)
 

@@ -105,6 +105,8 @@ Potential silver criteria
         the project should be able to continue.
         [Truck-Factor](https://github.com/mtov/Truck-Factor) can
         calculate this for projects on GitHub.
+        See [Assessing the Bus Factor of Git Repositories](https://www.researchgate.net/publication/272824568_Assessing_the_Bus_Factor_of_Git_Repositories)
+        by Cosentino et al.
 *   Security analysis:
     -   Dependencies (including embedded dependencies) are periodically checked
         for known vulnerabilities

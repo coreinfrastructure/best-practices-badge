@@ -120,7 +120,7 @@ check them that way.
 
 Do not use trailing two spaces for line breaks, since these cannot be
 seen and may be silently removed by some tools.
-Instead, use <tt>&lt;br&nbsp;&gt;</tt> (an HTML break).
+Instead, use <tt>&lt;br&nbsp;/&gt;</tt> (an HTML break).
 
 ## Code changes
 

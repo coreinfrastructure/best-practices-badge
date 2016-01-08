@@ -54,6 +54,10 @@ then configure git to use that as a commit template.  For example:
 
     git config commit.template ~/cii-best-practices-badge/git-template
 
+Please do not use or include trailing whitespace.
+Since they are often not visible, they can cause silent problems
+and misleading unexpected changes.
+Some editors (e.g., Atom) quietly delete them by default.
 
 ## Vulnerability reporting (security issues)
 
@@ -103,6 +107,10 @@ environment can detect some problems in the markdown.
 That said, if you don't know how to install the development environment,
 don't worry - we'd rather have your proposals, even if you don't know how to
 check them that way.
+
+Do not use trailing two spaces for line breaks, since these cannot be
+seen and may be silently removed by some tools.
+Instead, use <tt>&lt;br&nbsp;&gt;</tt> (an HTML break).
 
 ## Code changes
 
@@ -260,6 +268,7 @@ Currently these include at least the following:
 * "rake brakeman" - runs Brakeman, which is a static source code analyzer
   to look for Ruby on Rails security vulnerabilities
 * "license_finder" - checks OSS licenses of dependencies (transitively).
+* "git diff --check" - detect trailing whitespace in latest diff
 
 Here are some other tools we use, though they are not currently integrated into
 the default "rake" checking task:

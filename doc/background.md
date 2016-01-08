@@ -929,7 +929,7 @@ and "Option wrap:inner-sentence" for non-bulleted text.
 Here is a guide for how criteria should be written.
 
 1. Criteria may include multiple sentences.  Each criterion should be
-front-focused so that the most important information is in the first sentence. 
+front-focused so that the most important information is in the first sentence.
 Further information can be included in following sentences.
 2. The use of e.g.'s should be within parenthesis (e.g., (e.g., such as this)).
 3. MUST, MUST NOT, SHOULD, and MAY criteria should begin with 'The *object*'
@@ -1096,7 +1096,7 @@ The "sparse" static analysis tool was initially developed by
 Linus Torvalds and can be used to find certain kernel code problems.
 The "Coccinelle" tool (<http://coccinelle.lip6.fr/>) can also find
 many problems and sometimes propose fixes.
-[Eduard Bachmakov worked on the clang static analyzer in 2013 to 
+[Eduard Bachmakov worked on the clang static analyzer in 2013 to
 improve its ability to detect Linux kernel defects](http://www.linux.com/news/featured-blogs/200-libby-clark/749649-a-summer-spent-on-the-llvm-clang-static-analyzer-for-the-linux-kernel).
 [Linux Kernel Developer Responses to Static Analysis Bug Reports by
 Philip J. Guo and Dawson Engler](https://www.usenix.org/legacy/event/usenix09/tech/full_papers/guo/guo_html/)

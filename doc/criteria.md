@@ -39,7 +39,7 @@ we are releasing this very early version so that we can get feedback.
 We expect that these practices and their detailed criteria will be updated,
 even after badges are released.
 Thus, criteria (and badges) probably will have a year identifier
-and will phase out after a year or two. 
+and will phase out after a year or two.
 We expect it will be easy to update the information,
 so this relatively short badge life should not be a barrier.
 
@@ -146,7 +146,7 @@ same as the project URL), and license(s).
 - <a name="oss_license_osi"></a> It is SUGGESTED that any required license(s) be
   [approved by the Open Source Initiative (OSI)](https://opensource.org/licenses).
   The OSI uses a rigorous approval
-  process to determine which licenses are OSS. 
+  process to determine which licenses are OSS.
   Licenses not approved by OSI might not be OSS licenses.
   <sup>[<a href="#oss_license_osi">oss_license_osi</a>]&#8224;</sup>
 - The software MAY also be licensed other ways
@@ -172,12 +172,12 @@ same as the project URL), and license(s).
 
 *Documentation*
 
-- <a name="documentation-basics"></a>The project MUST provide basic 
+- <a name="documentation-basics"></a>The project MUST provide basic
   documentation for the software in some media (such as text or video)
   that includes:
   - how to install it,
   - how to start it,
-  - how to use it (possibly with a tutorial using examples), and 
+  - how to use it (possibly with a tutorial using examples), and
   - how to use it securely (e.g., what to do and what not to do)
   if that is an appropriate topic for the software.
   The security documentation need not be long
@@ -237,7 +237,7 @@ same as the project URL), and license(s).
 
 *ChangeLog*
 
-- <a name="changelog"></a>The project MUST provide a "ChangeLog" 
+- <a name="changelog"></a>The project MUST provide a "ChangeLog"
   (a human-readable summary of major changes in each release).
   The ChangeLog MUST NOT be the output of the version control log
   of every change (e.g., the "git log" command is not a ChangeLog).
@@ -544,7 +544,7 @@ by the delivered project's software.
   [Rebooting responsible disclosure](http://googleonlinesecurity.blogspot.com/2010/07/rebooting-responsible-disclosure-focus.html),
   because Google recommends that the 60-day period start when the
   project is notified *even* if the report is not public.
-- *Rationale*: We intentionally chose to start measurement from the time of 
+- *Rationale*: We intentionally chose to start measurement from the time of
   public knowledge, and not from the time reported to the project,
   because this is much easier to measure and verify by those
   *outside* the project.
@@ -576,7 +576,7 @@ by the delivered project's software.
   [Wikipedia list of tools for static code analysis](https://en.wikipedia.org/wiki/List_of_tools_for_static_code_analysis),
   [OWASP information on static code analysis](https://www.owasp.org/index.php/Static_Code_Analysis),
   [NIST list of source code security analyzers](http://samate.nist.gov/index.php/Source_Code_Security_Analyzers.html),
-  and [Wheeler's list of static analysis tools](http://www.dwheeler.com/essays/static-analysis-tools.html). 
+  and [Wheeler's list of static analysis tools](http://www.dwheeler.com/essays/static-analysis-tools.html).
   The [SWAMP](https://continuousassurance.org/) is a no-cost platform
   for assessing vulnerabilities in software using a variety of tools.
   <sup>[<a href="#static_analysis">static_analysis</a>]\*</sup>

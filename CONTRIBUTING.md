@@ -3,7 +3,7 @@
 ## General
 
 Feedback and contributions are very welcome!
-For specific proposals, please provide them as issues or pull requests via our 
+For specific proposals, please provide them as issues or pull requests via our
 [GitHub site](https://github.com/linuxfoundation/cii-best-practices-badge).
 Pull requests are especially appreciated!
 For general dicussion, feel free to use the
@@ -107,7 +107,7 @@ check them that way.
 ## Code changes
 
 To make changes to the "BadgeApp" web application that implements the criteria,
-you may find the following helpful; [INSTALL.md](doc/INSTALL.md) 
+you may find the following helpful; [INSTALL.md](doc/INSTALL.md)
 (installation information) and [implementation.md](doc/implementation.md)
 (implementation information).
 

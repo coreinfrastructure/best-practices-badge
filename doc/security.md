@@ -400,7 +400,7 @@ as of 2015-12-14:
    good alternatives for low value data like this.
    If users don't like that, they can log in via GitHub and use GitHub's
    forgotten password system.
-   The file config/initializers/filter_parameter_logging.rb 
+   The file config/initializers/filter_parameter_logging.rb
    intentionally filters passwords so that they are not included in the log.
    We require that local user passwords have a minimum length
    (see the User model), and this is validated by the server

@@ -47,6 +47,14 @@ the commit:
 
     Signed-off-by: Your Name <your.email@example.com>
 
+You can signoff by default in this project by creating a file
+(say "git-template") that contains
+some blank lines and the signed-off-by text above;
+then configure git to use that as a commit template.  For example:
+
+    git config commit.template ~/cii-best-practices-badge/git-template
+
+
 ## Vulnerability reporting (security issues)
 
 If you find a significant vulnerability, or evidence of one,

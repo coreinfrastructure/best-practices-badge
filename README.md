@@ -26,11 +26,11 @@ There is also a
 for general discussion.
 
 * Draft Badging **[Criteria](./doc/criteria.md)**
+* Information on how to **[contribute](./CONTRIBUTING.md)**
 * Draft **[Background](./doc/background.md)** on Badging
 * **[ChangeLog](./CHANGELOG.md)**
 * Current **[implementation](./doc/implementation.md)**  - notes about the
   BadgeApp implementation
-* Information on how to **[contribute](./CONTRIBUTING.md)**
 * **[security](./doc/security.md)**  - notes about BadgeApp security
 * Current **[Burndown](https://burndown.io/#linuxfoundation/cii-best-practices-badge/1)** and
 **[Kanban Board](https://waffle.io/linuxfoundation/cii-best-practices-badge)**

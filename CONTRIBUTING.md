@@ -278,6 +278,8 @@ the default "rake" checking task:
   fix problems.
 * JSCS (Javascript style checker) using the Node.js format.
 * JSHint (Javascript error detector)
+* W3C link checker <https://validator.w3.org/checklink>
+* W3C markup validation service <https://validator.w3.org/>
 
 Note that we also use
 [CicleCI](https://circleci.com/gh/linuxfoundation/cii-best-practices-badge)

@@ -81,6 +81,28 @@ We have a mechanism for downloading (and backing up) the database of projects.
 That way, if the project data is corrupted, we can restore the database to
 a previous state.
 
+The permissions system is intentionally simple.
+Every user has an account, either a 'local' account or an external
+system account (currently we support GitHub as an external account).
+Anyone can create an account.
+A user with role='admin' is an administator;
+only a very few users are administrators.
+A user can create as many project entries as desired.
+Each project entry gets a new unique project id and is
+owned by the user who created the project entry.
+A project entry can only be edited (and deleted) by either the
+entry creator or an administrator.
+Anyone can see the project entry results once they are saved.
+We do require, in the case of a GitHub project entry, that the
+entry creator be logged in via GitHub *and* be someone who can edit that
+project.
+Anyone can create a project entry about a project not on GitHub,
+however, nothing makes the project refer to that data...
+which makes entering nonsense data have much less value.
+We may in the future add support for groups (e.g., where the owner
+can designate other users who can edit that entry) and
+a way to 'validate' project entries for projects not on GitHub.
+
 ## Security in Design
 
 This web application has a simple design.
@@ -190,8 +212,9 @@ all of the ones from S and S:
   All project parameters are checked by the model, in particular,
   status values (the key values used for badges) are checked against
   a whitelist of values allowed for that criterion.
-  There are a number of freetext fields, which each have a maximum length
-  (name, license, and the justifications) to limit some abuses.
+  There are a number of freetext fields
+  (name, license, and the justifications);
+  each have a maximum length to limit some abuses.
   These checks for maximum length do not by themselves counter certain attacks;
   see the text on security in implementation for the discussion on
   how the application counters SQL injection, XSS, and CSRF attacks.

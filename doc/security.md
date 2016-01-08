@@ -485,10 +485,14 @@ We consider the code we reuse
 (e.g., libraries and frameworks) before adding them, to reduce
 the risk of unintentional and intentional vulnerabilities from them.
 In particular, we prefer the use of popular components (where problems
-are more likely to be addressed) and common OSS licenses.
+are more likely to be identified and addressed) and common OSS licenses.
 We also have a process for detecting when the components we use
 have known vulnerabilities (using bundle-audit)
 or are out-of-date.
+
+We counter man-in-the-middle (MITM) attacks when downloading gems
+because the Gemfile configuration uses an HTTPS source to the
+standard place for loading gems ('https://rubygems.org').
 
 We can't eliminate all risks, and
 if we rewrote all the software (instead of reusing software)

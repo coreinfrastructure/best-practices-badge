@@ -494,7 +494,7 @@ or are out-of-date.
 
 We counter man-in-the-middle (MITM) attacks when downloading gems
 because the Gemfile configuration uses an HTTPS source to the
-standard place for loading gems ('https://rubygems.org').
+standard place for loading gems (<https://rubygems.org>).
 
 We can't eliminate all risks, and
 if we rewrote all the software (instead of reusing software)

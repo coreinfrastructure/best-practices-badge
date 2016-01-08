@@ -99,10 +99,12 @@ Potential silver criteria
         the goal here is to make it *possible* to easily use the
         standard version.
         See, e.g., <http://spot.livejournal.com/312320.html> .
-*   Bus factor:
-    -   No one developer should be indespensible.
+*   Bus factor aka truck factor:
+    -   No one developer should be indispensible.
         If a developer was killed or incapacitated ("hit by a bus"),
         the project should be able to continue.
+        [Truck-Factor](https://github.com/mtov/Truck-Factor) can
+        calculate this for projects on GitHub.
 *   Security analysis:
     -   Dependencies (including embedded dependencies) are periodically checked
         for known vulnerabilities

@@ -99,6 +99,10 @@ Potential silver criteria
         the goal here is to make it *possible* to easily use the
         standard version.
         See, e.g., <http://spot.livejournal.com/312320.html> .
+*   Bus factor:
+    -   No one developer should be indespensible.
+        If a developer was killed or incapacitated ("hit by a bus"),
+        the project should be able to continue.
 *   Security analysis:
     -   Dependencies (including embedded dependencies) are periodically checked
         for known vulnerabilities

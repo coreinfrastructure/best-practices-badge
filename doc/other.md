@@ -34,7 +34,7 @@ Potential silver criteria
 *   **Achieve the lower (passing) badge**.
 *   **Turn many should/suggested into MUST**
 *   **Build and test:**
-    -   **Continuous integration**.   
+    -   **Continuous integration**.<br />
         An automated test suite MUST applied on each check-in to a shared
         repository, at least for some branches,
         with a generated report available to at least project members on
@@ -44,13 +44,13 @@ Potential silver criteria
         *Rationale*:  Continuous integration provides much more rapid feedback
         on whether or not changes will cause test failures,
         including regressions.
-    -   *Tests are rigorously added for new functionality*.  
+    -   *Tests are rigorously added for new functionality*.<br />
         There MUST be a stated policy that when major new functionality is
         added, tests of that functionality MUST be added to an automated test
         suite, at least in the documentation for creating change proposals.
         There MUST be evidence that such tests are being added in the most
         recent major changes to the project.
-    -   *Regression tests*.  
+    -   *Regression tests*.<br />
         When a bug is fixed, a regression test MUST normally be added to the
         automated test suite to prevent its reoccurrence.
     -   *Reproduceable build*.

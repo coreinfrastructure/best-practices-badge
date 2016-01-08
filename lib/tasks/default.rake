@@ -93,3 +93,8 @@ file 'license_finder_summary.txt' => 'Gemfile.lock' do
   # This will error-out if there's a license problem.
   sh 'bundle exec license_finder | tee license_finder_summary.txt'
 end
+
+desc 'Create visualization of gem dependencies (requires graphviz)'
+task :bundle_viz do
+  sh 'bundle viz --version --requirements --format svg'
+end

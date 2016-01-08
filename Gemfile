@@ -27,6 +27,7 @@ group :development, :test do
   gem 'awesome_print', '1.6.1'
   gem 'bullet', '4.14.10'
   gem 'bundler-audit'
+  gem 'ruby-graphviz'
   gem 'dotenv-rails', '2.0.2'
   gem 'license_finder'
   gem 'mdl', '0.2.1'

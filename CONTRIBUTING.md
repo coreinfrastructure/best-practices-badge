@@ -8,9 +8,9 @@ Here's help on how to make contributions, divided into the following sections:
 * vulnerability reporting,
 * documentation changes,
 * code changes,
-* reuse (supply chain for third-party components, including updating them),
-* keeping up with external changes, and
-* how to check proposed changes before submitting them.
+* how to check proposed changes before submitting them,
+* reuse (supply chain for third-party components, including updating them), and
+* keeping up with external changes.
 
 ## General information
 
@@ -300,6 +300,58 @@ However, each git commit should have both
 the test and improvement in the *same* commit,
 because 'git bisect' will then work well.
 
+## How to check proposed changes before submitting them
+
+Before submitting changes, you *must*
+run 'rake' (no options) to look for problems,
+and fix the problems found.
+In some cases it's okay to fix them by disabling the warning in that particular
+place, but be careful; it's often better to make a real change,
+even if it doesn't matter in that particular case.
+The specific list of tools run by default is listed in
+[default.rake](lib/tasks/default.rake).
+Currently these include at least the following:
+
+* bundle - use bundle to check dependencies ("bundle check || bundle install")
+* "rake bundle_audit" - check for vulnerable dependencies
+* "rake test" - runs the automated test suite
+* "rake markdownlint" - runs markdownlint, also known as mdl
+  (check for errors in markdown text)
+* "rake rubocop" - runs Rubocop, which checks code style against the
+  [community Ruby style guide](https://github.com/bbatsov/ruby-style-guide)
+* "rake rails_best_practices" - check against rails best practices using the gem
+  [rails_best_practices](http://rails-bestpractices.com/)
+* "rake brakeman" - runs Brakeman, which is a static source code analyzer
+  to look for Ruby on Rails security vulnerabilities
+* "license_finder" - checks OSS licenses of dependencies (transitively).
+* "git diff --check" - detect trailing whitespace in latest diff
+
+Here are some other tools we use, though they are not currently integrated into
+the default "rake" checking task:
+
+* OWASP ZAP web application security scanner.
+  You are encouraged to use this and other web application scanners to find and
+  fix problems.
+* JSCS (Javascript style checker) using the Node.js format.
+* JSHint (Javascript error detector)
+* W3C link checker <https://validator.w3.org/checklink>
+* W3C markup validation service <https://validator.w3.org/>
+
+Note that we also use
+[CicleCI](https://circleci.com/gh/linuxfoundation/cii-best-practices-badge)
+for continuous integration tools to check changes
+after they are checked into GitHub; if they find problems, please fix them.
+
+When running the static analysis tools (e.g., via 'rake')
+there will be some spurious warnings.
+These warnings occur because we have updated to Ruby version 2.3.0,
+but the Ruby parsers have not updated yet.
+These warnings you should ignore are:
+
+    warning: parser/current is loading parser/ruby22, which recognizes
+    warning: 2.2.x-compliant syntax, but you are running 2.3.0.
+    warning: please see https://github.com/whitequark/parser#compatibility-with-ruby-mri.
+
 ## Reuse (supply chain)
 
 ### Requirements for reused components
@@ -448,56 +500,4 @@ Then running 'git pull master upstream' will pull the current version.
 If the version of Ruby has changed (in the Gemfile),
 use the 'Ruby itself can be updated' instructions.
 If gems have been added, run "bundle install" to install the new ones.
-
-## How to check proposed changes before submitting them
-
-Before submitting changes, you *must*
-run 'rake' (no options) to look for problems,
-and fix the problems found.
-In some cases it's okay to fix them by disabling the warning in that particular
-place, but be careful; it's often better to make a real change,
-even if it doesn't matter in that particular case.
-The specific list of tools run by default is listed in
-[default.rake](lib/tasks/default.rake).
-Currently these include at least the following:
-
-* bundle - use bundle to check dependencies ("bundle check || bundle install")
-* "rake bundle_audit" - check for vulnerable dependencies
-* "rake test" - runs the automated test suite
-* "rake markdownlint" - runs markdownlint, also known as mdl
-  (check for errors in markdown text)
-* "rake rubocop" - runs Rubocop, which checks code style against the
-  [community Ruby style guide](https://github.com/bbatsov/ruby-style-guide)
-* "rake rails_best_practices" - check against rails best practices using the gem
-  [rails_best_practices](http://rails-bestpractices.com/)
-* "rake brakeman" - runs Brakeman, which is a static source code analyzer
-  to look for Ruby on Rails security vulnerabilities
-* "license_finder" - checks OSS licenses of dependencies (transitively).
-* "git diff --check" - detect trailing whitespace in latest diff
-
-Here are some other tools we use, though they are not currently integrated into
-the default "rake" checking task:
-
-* OWASP ZAP web application security scanner.
-  You are encouraged to use this and other web application scanners to find and
-  fix problems.
-* JSCS (Javascript style checker) using the Node.js format.
-* JSHint (Javascript error detector)
-* W3C link checker <https://validator.w3.org/checklink>
-* W3C markup validation service <https://validator.w3.org/>
-
-Note that we also use
-[CicleCI](https://circleci.com/gh/linuxfoundation/cii-best-practices-badge)
-for continuous integration tools to check changes
-after they are checked into GitHub; if they find problems, please fix them.
-
-When running the static analysis tools (e.g., via 'rake')
-there will be some spurious warnings.
-These warnings occur because we have updated to Ruby version 2.3.0,
-but the Ruby parsers have not updated yet.
-These warnings you should ignore are:
-
-    warning: parser/current is loading parser/ruby22, which recognizes
-    warning: 2.2.x-compliant syntax, but you are running 2.3.0.
-    warning: please see https://github.com/whitequark/parser#compatibility-with-ruby-mri.
 

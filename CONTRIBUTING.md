@@ -8,10 +8,9 @@ Here's help on how to make contributions, divided into the following sections:
 * vulnerability reporting,
 * documentation changes,
 * code changes,
-* reuse (supply chain for third-party components),
-* updating reused components,
+* reuse (supply chain for third-party components, including updating them),
 * keeping up with external changes, and
-* how to check proposed changes before submitting them,
+* how to check proposed changes before submitting them.
 
 ## General information
 
@@ -301,11 +300,19 @@ However, each git commit should have both
 the test and improvement in the *same* commit,
 because 'git bisect' will then work well.
 
-## Supply chain (reuse)
+## Reuse (supply chain)
+
+### Requirements for reused components
 
 We like reusing components, but please evaluate all new components
 before adding them.
-In particular:
+We want to reduce our risks of depending on software that is poorly
+maintained or has vulnerabilities (intentional or unintentional).
+
+#### Requirements for reused Ruby gems
+
+In most cases we add reusable components by adding Ruby gems.
+Here are guidelines for adding Ruby gems:
 
 * Before adding a Ruby gem, check its popularity on
   <https://www.ruby-toolbox.com/>, and prefer "more popular" gems.
@@ -313,13 +320,39 @@ In particular:
   but they are less likely, and are more likely to be noticed.
 * For Ruby gems, look at its data at <https://rubygems.org/> to learn
   more about it. E.G., is it still actively maintained?
+  (e.g., it uses semantic versioning and have a ChangeLog).
 * All required reused components MUST be open source software (OSS).
   It is *not* acceptable to insert a dependency
   that *requires* proprietary software; making it portable so it *can* use
   some proprietary software is gratefully welcome.
   Obviously, we also have to combine them legally in the way they are used.
 
+If you add a Ruby gem, put its *fixed* version number in the Gemfile file,
+and please add a brief comment to explain what it is and/or why it's there.
+
+#### Requirements for reused components in general
+
+For any reused software, here are a few general rules:
+
+* Prefer software that
+  appears to be currently maintained (e.g., has recent updates),
+  has more than one developer, and appears to be applying good practices
+* In general, prefer a Rails-specific gem over a generic Ruby gem, and
+  for Javascript Node.js packages prefer a Ruby gem that repackages it.
+  The repackage will often help make it work more cleanly
+  with the Rails application, and it also suggests that the package is
+  a more common one (and thus more likely to be maintained).
+
+Someday we hope to add "have one of our badges" as a preference.
+
+#### License requirements for reused components
+
+All required reused software *must* be open source software (OSS).
+It's okay to *optionally* use proprietary software and add
+portability fixes.
 We use 'license_finder' to help ensure that we're using OSS legally.
+We generally use SPDX license expressions to describe licenses.
+
 In general we want to use GPL-compatible OSS licenses.
 Acceptable licenses include MIT,
 BSD 2-Clause "Simplified" or "FreeBSD" License (BSD-2-Clause),
@@ -330,7 +363,8 @@ BSD 3-Clause "New" or "Revised" License (BSD-3-Clause), the
 GNU Library or "Lesser" General Public License (any version),
 GNU General Public License version 2.0 or later (GPL-2.0+), and the
 GNU General Public License version 3.0 ("or later" or not)
-(GPL-3.0 or GPL-3.0+).
+(either GPL-3.0 or GPL-3.0+).
+
 We can use Apache License 2.0 (Apache-2.0)
 and GPL-2.0 exactly (GNU GPL version 2.0 only),
 but the Apache-2.0 and GPL-2.0 only have potential compatibility issues.
@@ -343,44 +377,27 @@ For more on license decisions see doc/dependency_decisions.yml;
 you can also run 'rake' and see the generated report
 license_finder_report.html.
 
-For any reused software, prefer software that
-appears to be currently maintained (e.g., has recent updates),
-has more than one developer, and appears to be applying good practices
-(e.g., it uses semantic versioning and have a ChangeLog).
-Someday we hope to add "have one of our badges" as a preference.
+### Updating reused components
 
-In general, prefer a Rails-specific gem over a generic Ruby gem, and
-for Javascript Node.js packages prefer a Ruby gem that repackages it.
-The repackage will often help make it work more cleanly
-with the Rails application, and it also suggests that the package is
-a more common one (and thus more likely to be maintained).
+For stability we set fixed version numbers for Ruby and the Ruby gems.
 
-If you add a Ruby gem, put its *fixed* version number in the Gemfile file,
-and please add a brief comment to explain what it is and/or why it's there.
+#### Updating Ruby gems
 
-Our default 'rake' process includes bundle_audit, which
-checks for dependencies with known vulnerabilities.
-See the next section for how to detect obsolete reused components, and
-how we update them.
-
-## Updating reused components
-
-For stability we set fixed version numbers of reused components,
-which are primarily gems.
 We use the bundler Ruby gem package management system (<http://bundler.io>);
 file 'Gemfile' lists direct gem dependencies; 'Gemfile.lock' lists them
 transitively.
 This means that we need to occasionally update our dependencies.
 
-Two commands can help detect outdated components:
+Two commands, included in the default 'rake' checking task,
+can help detect outdated components:
 
-- The 'bundle_audit' task will note vulnerable components,
-  which may need to be updated quickly.
-  This task is run as part of the default 'rake' checking task.
+- The 'bundle_audit' task reports if a Ruby gem we use has a known
+  vulnerability listed in the National Vulnerability Database (NVD).
 - The 'bundle outdated' command lists all outdated Ruby gems.
-  Our continuous integration suite (linked to from the README) also uses
-  [Gemnasium](https://gemnasium.com/linuxfoundation/cii-best-practices-badge)
-  to identify all outdated dependencies.
+
+Our continuous integration suite (linked to from the README) also uses
+[Gemnasium](https://gemnasium.com/linuxfoundation/cii-best-practices-badge)
+to identify all outdated dependencies.
 
 Use 'bundle update GEM' to update a specific gem
 ('bundle update' will update all Ruby gems - that may be too much at once).
@@ -391,6 +408,8 @@ Updates should be handled as a separate commit from functional improvements.
 One exception: it's okay if the commit includes
 both a component update and the minimum set of code changes to
 make the update work.
+
+#### Updating Ruby
 
 Ruby itself can be updated.  Use 'cd' to go the top directory of this project,
 use 'git pull' to ensure this branch is up-to-date,

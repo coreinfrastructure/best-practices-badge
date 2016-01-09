@@ -1,27 +1,49 @@
 # Contributing
 
-## General
-
 Feedback and contributions are very welcome!
-For specific proposals, please provide them as issues or pull requests via our
+
+Here's help on how to make contributions, divided into the following sections:
+
+* general information,
+* vulnerability reporting,
+* documentation changes,
+* code changes,
+* reuse (supply chain for third-party components),
+* updating reused components,
+* keeping up with external changes, and
+* how to check proposed changes before submitting them,
+
+## General information
+
+For specific proposals, please provide them as
+[pull requests](https://github.com/linuxfoundation/cii-best-practices-badge/pulls)
+or
+[issues](https://github.com/linuxfoundation/cii-best-practices-badge/issues)
+via our
 [GitHub site](https://github.com/linuxfoundation/cii-best-practices-badge).
-Pull requests are especially appreciated!
 For general dicussion, feel free to use the
 [cii-badges mailing list](https://lists.coreinfrastructure.org/mailman/listinfo/cii-badges).
 
-If you just want to propose or discuss changes to the criteria,
+If you want to propose or discuss changes to the criteria,
 the first step is proposing changes to the criteria text,
 which is in the file [criteria.md](doc/criteria.md).
 The "doc/" directory has information you may find helpful,
 including [other.md](doc/other.md) and [background.md](doc/background.md).
 
-Submitting pull requests is especially helpful.
-We strongly recommend creating different branches for different (logical)
+### Pull requests and different branches recommended
+
+Pull requests are preferred, since they are specific.
+For more about how to create a pull request, see
+<https://help.github.com/articles/using-pull-requests/>.
+
+We recommend creating different branches for different (logical)
 changes, and creating a pull request when you're done into the master branch.
 See the GitHub documentation on
 [creating branches](https://help.github.com/articles/creating-and-deleting-branches-within-your-repository/)
 and
 [using pull requests](https://help.github.com/articles/using-pull-requests/).
+
+### How we handle proposals
 
 We use GitHub to track all changes via its
 [issue tracker](https://github.com/linuxfoundation/cii-best-practices-badge/issues) and
@@ -31,12 +53,15 @@ Issues are assigned to an individual, who works it and then marks it complete.
 If there are questions or objections, the conversation area of that
 issue or pull request is used to resolve it.
 
+### Developer Certificate of Origin (DCO)
+
 All contributions (including pull requests) must agree to
 the [Developer Certificate of Origin (DCO) version 1.1](doc/dco.txt).
 This is exactly the same one created and used by the Linux kernel developers
 and posted on <http://developercertificate.org/>.
 This is a developer's certification that he or she has the right to
 submit the patch for inclusion into the project.
+
 Simply submitting a contribution implies this agreement, however,
 please include a "Signed-off-by" tag in every patch
 (this tag is a conventional way to confirm that you agree to the DCO).
@@ -54,20 +79,40 @@ then configure git to use that as a commit template.  For example:
 
     git config commit.template ~/cii-best-practices-badge/git-template
 
+### License (MIT)
+
+All (new) contributed material must be released
+under the [MIT license](./LICENSE).
+All new contributed material
+that is not executable, including all text when not executed,
+is also released under the
+[Creative Commons Attribution 3.0 International (CC BY 3.0) license](https://creativecommons.org/licenses/by/3.0/) or later.
+
+See the section on reuse for their license requirements
+(they don't need to be MIT, but all required components must be
+open source software).
+
+### No trailing whitespace
+
+Please do not use or include trailing whitespace
+(spaces or tabs at the end of a line).
+Since they are often not visible, they can cause silent problems
+and misleading unexpected changes.
+For example, some editors (e.g., Atom) quietly delete them by default.
+
+### We are proactive
+
 In general we try to be very proactive to detect and eliminate
 mistakes and vulnerabilities as soon as possible,
 and to reduce their impact when they do happen.
 We using defensive coding styles to reduce the likelihood of mistakes, followed
-by a variety of tools and a test suite to detect mistakes that are made.
-Since that can never be perfect, we also try to
+by a variety of tools and a test suite to detect mistakes as
+early as possible.
+
+Since early detection and impact reduction can never be perfect, we also try to
 detect and repair problems during deployment as quickly as possible.
 This is *especially* true for security issues; see our
 [security information](doc/security.md) for more.
-
-Please do not use or include trailing whitespace.
-Since they are often not visible, they can cause silent problems
-and misleading unexpected changes.
-For example, some editors (e.g., Atom) quietly delete them by default.
 
 ## Vulnerability reporting (security issues)
 
@@ -81,11 +126,11 @@ Emily Ratliff <eratliff-NOSPAM@linuxfoundation.org>,
 and Sam Khakimov <skhakimo-NOSPAM@ida.org>
 (remove the -NOSPAM markers).
 
-
 ## Documentation changes
 
 Most of the documentation is in "markdown" format.
 All markdown files use the .md filename extension.
+
 Where reasonable, limit yourself to Markdown
 that will be accepted by different markdown processors
 (e.g., what is specified by CommonMark or the original Markdown)
@@ -133,6 +178,8 @@ The code should strive to be DRY (don't repeat yourself),
 clear, and obviously correct.
 Some technical debt is inevitable, just don't bankrupt us with it.
 Improved refactorizations are welcome.
+
+Below are guidelines for specific languages.
 
 ### Ruby
 
@@ -253,59 +300,6 @@ then add code to implement the test (aka test driven development).
 However, each git commit should have both
 the test and improvement in the *same* commit,
 because 'git bisect' will then work well.
-
-## How to check proposed changes before submitting them
-
-Before submitting changes, you *must*
-run 'rake' (no options) to look for problems,
-and fix the problems found.
-In some cases it's okay to fix them by disabling the warning in that particular
-place, but be careful; it's often better to make a real change,
-even if it doesn't matter in that particular case.
-The specific list of tools run by default is listed in
-[default.rake](lib/tasks/default.rake).
-Currently these include at least the following:
-
-* bundle - use bundle to check dependencies ("bundle check || bundle install")
-* "rake bundle_audit" - check for vulnerable dependencies
-* "rake test" - runs the automated test suite
-* "rake markdownlint" - runs markdownlint, also known as mdl
-  (check for errors in markdown text)
-* "rake rubocop" - runs Rubocop, which checks code style against the
-  [community Ruby style guide](https://github.com/bbatsov/ruby-style-guide)
-* "rake rails_best_practices" - check against rails best practices using the gem
-  [rails_best_practices](http://rails-bestpractices.com/)
-* "rake brakeman" - runs Brakeman, which is a static source code analyzer
-  to look for Ruby on Rails security vulnerabilities
-* "license_finder" - checks OSS licenses of dependencies (transitively).
-* "git diff --check" - detect trailing whitespace in latest diff
-
-Here are some other tools we use, though they are not currently integrated into
-the default "rake" checking task:
-
-* OWASP ZAP web application security scanner.
-  You are encouraged to use this and other web application scanners to find and
-  fix problems.
-* JSCS (Javascript style checker) using the Node.js format.
-* JSHint (Javascript error detector)
-* W3C link checker <https://validator.w3.org/checklink>
-* W3C markup validation service <https://validator.w3.org/>
-
-Note that we also use
-[CicleCI](https://circleci.com/gh/linuxfoundation/cii-best-practices-badge)
-for continuous integration tools to check changes
-after they are checked into GitHub; if they find problems, please fix them.
-
-When running the static analysis tools (e.g., via 'rake')
-there will be some spurious warnings.
-These warnings occur because we have updated to Ruby version 2.3.0,
-but the Ruby parsers have not updated yet.
-These warnings you should ignore are:
-
-    warning: parser/current is loading parser/ruby22, which recognizes
-    warning: 2.2.x-compliant syntax, but you are running 2.3.0.
-    warning: please see https://github.com/whitequark/parser#compatibility-with-ruby-mri.
-
 
 ## Supply chain (reuse)
 
@@ -436,8 +430,55 @@ If the version of Ruby has changed (in the Gemfile),
 use the 'Ruby itself can be updated' instructions.
 If gems have been added, run "bundle install" to install the new ones.
 
+## How to check proposed changes before submitting them
 
-## Creating pull requests
+Before submitting changes, you *must*
+run 'rake' (no options) to look for problems,
+and fix the problems found.
+In some cases it's okay to fix them by disabling the warning in that particular
+place, but be careful; it's often better to make a real change,
+even if it doesn't matter in that particular case.
+The specific list of tools run by default is listed in
+[default.rake](lib/tasks/default.rake).
+Currently these include at least the following:
 
-To submit a specific already-created change, submit a pull request.
-See: <https://help.github.com/articles/using-pull-requests/>
+* bundle - use bundle to check dependencies ("bundle check || bundle install")
+* "rake bundle_audit" - check for vulnerable dependencies
+* "rake test" - runs the automated test suite
+* "rake markdownlint" - runs markdownlint, also known as mdl
+  (check for errors in markdown text)
+* "rake rubocop" - runs Rubocop, which checks code style against the
+  [community Ruby style guide](https://github.com/bbatsov/ruby-style-guide)
+* "rake rails_best_practices" - check against rails best practices using the gem
+  [rails_best_practices](http://rails-bestpractices.com/)
+* "rake brakeman" - runs Brakeman, which is a static source code analyzer
+  to look for Ruby on Rails security vulnerabilities
+* "license_finder" - checks OSS licenses of dependencies (transitively).
+* "git diff --check" - detect trailing whitespace in latest diff
+
+Here are some other tools we use, though they are not currently integrated into
+the default "rake" checking task:
+
+* OWASP ZAP web application security scanner.
+  You are encouraged to use this and other web application scanners to find and
+  fix problems.
+* JSCS (Javascript style checker) using the Node.js format.
+* JSHint (Javascript error detector)
+* W3C link checker <https://validator.w3.org/checklink>
+* W3C markup validation service <https://validator.w3.org/>
+
+Note that we also use
+[CicleCI](https://circleci.com/gh/linuxfoundation/cii-best-practices-badge)
+for continuous integration tools to check changes
+after they are checked into GitHub; if they find problems, please fix them.
+
+When running the static analysis tools (e.g., via 'rake')
+there will be some spurious warnings.
+These warnings occur because we have updated to Ruby version 2.3.0,
+but the Ruby parsers have not updated yet.
+These warnings you should ignore are:
+
+    warning: parser/current is loading parser/ruby22, which recognizes
+    warning: 2.2.x-compliant syntax, but you are running 2.3.0.
+    warning: please see https://github.com/whitequark/parser#compatibility-with-ruby-mri.
+

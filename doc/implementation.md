@@ -273,7 +273,10 @@ The authorization callback URL in Github is: <http://localhost:3000/auth/github>
 
 In some cases you may need to view or edit the database contents directly.
 For example, we don't currently have code to set a user to have the
-'admin' role, or to change the ownership of a project.
+'admin' role, or to change the ownership of a project,
+to backup the database, or restore the database.
+Instead, we simply interact with the database software, which
+already has the functions to do this.
 
 In development mode, simply view 'localhost:3000/rails/db'
 in your web browser.
@@ -295,6 +298,17 @@ echo "SELECT * FROM users WHERE users.id = 1" | heroku pg:psql
 echo "SELECT * FROM users WHERE name = 'David A. Wheeler'" | heroku pg:psql
 echo "UPDATE users SET role = 'admin' where id = 25" | heroku pg:psql
 echo "UPDATE projects SET user_id = 25 WHERE id = 1" | heroku pg:psql
+~~~~
+
+You can
+[import or export databases on Heroku](https://devcenter.heroku.com/articles/heroku-postgres-import-export)
+For example, here's how to quickly back up the database
+(presuming that it's set up for the Heroku site and that you have
+the authorization keys to do this):
+
+~~~~sh
+heroku pg:backups capture
+curl -o latest.dump $(heroku pg:backups public-url)
 ~~~~
 
 ## Automation - flow

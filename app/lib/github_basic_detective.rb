@@ -73,6 +73,12 @@ class GithubBasicDetective < Detective
         value: 'Met', confidence: 4,
         explanation: 'Repository on GitHub, which uses git. ' \
           'git is distributed.' }
+      results[:contribution_status] = {
+        value: 'Met', confidence: 2,
+        explanation: 'Projects on GitHub by default use pull requests, ' \
+          'as encouraged by ' \
+          '<https://help.github.com/articles/using-pull-requests/analysis>.'
+      }
 
       # Get basic evidence using GET, e.g.:
       # https://api.github.com/repos/linuxfoundation/cii-best-practices-badge
@@ -119,6 +125,7 @@ class GithubBasicDetective < Detective
           confidence: 3, explanation: 'GitHub API license analysis' }
       end
     end
+
     results
   end
 end

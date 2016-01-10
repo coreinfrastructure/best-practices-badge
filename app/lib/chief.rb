@@ -50,7 +50,7 @@ class Chief
     result = c1.dup
     c2.each do |field, data|
       if !result.key?(field) ||
-         (field[:confidence] > result[field][:confidence])
+         (data[:confidence] > result[field][:confidence])
         result[field] = data
       end
     end

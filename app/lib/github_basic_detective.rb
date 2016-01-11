@@ -75,9 +75,9 @@ class GithubBasicDetective < Detective
           'git is distributed.' }
       results[:contribution_status] = {
         value: 'Met', confidence: 2,
-        explanation: 'Projects on GitHub by default use pull requests, ' \
-          'as encouraged by ' \
-          '<https://help.github.com/articles/using-pull-requests/analysis>.'
+        explanation: 'Projects on GitHub by default use issues and ' \
+          'pull requests, as encouraged by documentation such as ' \
+          '<https://guides.github.com/activities/contributing-to-open-source/>.'
       }
 
       # Get basic evidence using GET, e.g.:

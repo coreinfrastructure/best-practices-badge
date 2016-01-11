@@ -122,6 +122,9 @@ same as the project URL), and license(s).
   <sup>[<a href="#interact">interact</a>]</sup>
 - <a name="contribution"></a>The information on how to contribute MUST
   explain the contribution process (e.g., are pull requests used?)
+  We presume that
+  <a href="https://guides.github.com/activities/contributing-to-open-source/">projects on GitHub use issues and pull requests</a>
+  unless otherwise noted.
   <sup>[<a href="#contribution">contribution</a>]</sup>
 - <a name="contribution_criteria"></a>The information on how to contribute
   SHOULD include the basic criteria for acceptable contributions

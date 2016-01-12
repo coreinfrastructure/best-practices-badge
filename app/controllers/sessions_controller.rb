@@ -29,7 +29,7 @@ class SessionsController < ApplicationController
                         email: params[:session][:email].downcase
     if user && user.authenticate(params[:session][:password])
       log_in user
-      redirect_to root_url
+      redirect_back_or root_url
       flash[:success] = 'Signed in!'
     else
       flash.now[:danger] = 'Invalid email/password combination'
@@ -45,7 +45,7 @@ class SessionsController < ApplicationController
     session[:user_token] = auth['credentials']['token']
     log_in user
     flash[:success] = 'Signed in!'
-    redirect_to root_url
+    redirect_back_or root_url
   end
   # rubocop:enable Metrics/AbcSize
 end

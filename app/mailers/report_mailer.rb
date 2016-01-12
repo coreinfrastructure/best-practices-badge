@@ -3,9 +3,9 @@ class ReportMailer < ApplicationMailer
     @project = project
     @old_badge_status = old_badge_status
     @new_badge_status = new_badge_status
-    @report_destination = 'dwheeler@ida.org' # TODO
+    @report_destination = 'cii-badge-log@lists.coreinfrastructure.org'
     mail(to: @report_destination,
-         # content_type: 'multipart/alternative', # automatic
-         subject: "Project #{project.id} status change")
+         subject: "Project #{project.id} status change to " \
+                  "passing=#{new_badge_status}")
   end
 end

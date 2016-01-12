@@ -555,6 +555,24 @@ heroku login
 git push heroku master
 ~~~~
 
+## Setup for deployment
+
+If you want to deploy this, you need to set some things up.
+Here we'll presume Heroku.
+
+You need to have email set up.
+See the Action mailer basics guide at
+<http://guides.rubyonrails.org/action_mailer_basics.html>
+and Hartl's Rails tutorial, e.g.:
+<https://www.railstutorial.org/book/account_activation_password_reset#sec-email_in_production>
+
+To install sendgrid on Heroku to make this work, use:
+
+~~~~sh
+heroku addons:create sendgrid:starter
+~~~~
+
+
 ## Badge SVG
 
 The SVG files for badges are:

@@ -84,14 +84,21 @@ class ProjectsController < ApplicationController
   end
   # rubocop:enable Metrics/MethodLength
 
-  def successful_update(format, _old_badge_status)
+  # Rubocop misparses the 'if' here.
+  # rubocop:disable Style/GuardClause
+  def successful_update(format, old_badge_status)
     format.html do
       redirect_to @project, success: 'Project was successfully updated.'
     end
     format.json { render :show, status: :ok, location: @project }
-    # new_badge_status = Project.badge_achieved?(@project)
-    # TODO: report change if old_badge_status != new_badge_status
+    new_badge_status = Project.badge_achieved?(@project)
+    if new_badge_status != old_badge_status
+      # TODO: Eventually deliver_later
+      ReportMailer.project_status_change(
+        @project, old_badge_status, new_badge_status).deliver_now
+    end
   end
+  # rubocop:enable Style/GuardClause
 
   # DELETE /projects/1
   # DELETE /projects/1.json

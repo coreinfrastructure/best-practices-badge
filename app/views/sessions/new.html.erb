@@ -10,7 +10,7 @@
 
       <%= f.label :password %>
       <%= f.password_field :password, autocomplete: 'off', class: 'form-control' %>
-      <%= hidden_field_tag :provider, "local" %>
+      <%= f.hidden_field :provider, :value => "local" %>
       <%= f.submit "Log in", class: "btn btn-primary" %>
     <% end %>
 

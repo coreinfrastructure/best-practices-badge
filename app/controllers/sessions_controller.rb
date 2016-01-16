@@ -5,10 +5,10 @@ class SessionsController < ApplicationController
   end
 
   def create
-    if params[:provider] == 'local'
-      local_login
-    elsif request.env['omniauth.auth'].present?
+    if request.env['omniauth.auth'].present?
       omniauth_login
+    elsif params[:session][:provider] == 'local'
+      local_login
     else
       flash.now[:danger] = 'Incorrect login information'
       render 'new'

@@ -51,8 +51,8 @@ module ActiveSupport
       provider = options[:provider] || 'local'
       if integration_test?
         post login_path,
-             provider: provider,
-             session: { email:  user.email, password: password }
+             session: { email:  user.email, password: password,
+                        provider: provider }
         # Do this instead, it at least checks the password:
         # session[:user_id] = user.id if user.try(:authenticate, password)
       else

@@ -49,10 +49,11 @@ module ActiveSupport
     def log_in_as(user, options = {})
       password = options[:password] || 'password'
       provider = options[:provider] || 'local'
+      remember_me = options[:remember_me] || '1'
       if integration_test?
         post login_path,
              session: { email:  user.email, password: password,
-                        provider: provider }
+                        provider: provider, remember_me: remember_me }
         # Do this instead, it at least checks the password:
         # session[:user_id] = user.id if user.try(:authenticate, password)
       else

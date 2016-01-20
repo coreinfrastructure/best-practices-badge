@@ -10,6 +10,12 @@
 
       <%= f.label :password %>
       <%= f.password_field :password, autocomplete: 'off', class: 'form-control' %>
+
+      <%= f.label :remember_me, class: "checkbox inline" do %>
+        <%= f.check_box :remember_me %>
+        <span>Remember me</span>
+      <% end %>
+
       <%= f.hidden_field :provider, :value => "local" %>
       <%= f.submit "Log in", class: "btn btn-primary" %>
     <% end %>

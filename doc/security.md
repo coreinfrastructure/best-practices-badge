@@ -31,8 +31,11 @@ how we implement these requirements):
   We must not reveal any plaintext passwords used to authenticate users.
   This is primarily handled by only centrally storing passwords
   once they are processed by bcrypt.
-  Passwords may be stored in encrypted user cookies, but those passwords
-  must not be retained.  There's no need to worry about covert channels.
+  Passwords may also be stored in encrypted user cookies, but the
+  decrypted passwords are not stored on the server's database,
+  and users can choose whether or not to store passwords in encrypted cookies
+  (using the "remember me" box implemented in commit e79decec67).
+  There's no need to worry about covert channels.
   We do not intend to reveal user passwords to the public, but even those
   are not especially sensitive.
 - Integrity:
@@ -239,8 +242,8 @@ good reason to believe that developers are directly working to mitigate
 the problems from memory-unsafe languages.
 See the section below on supply chain (reuse) for more.
 
-Availability is, as always, especially challenging;
-the design scales.
+Availability is, as always, especially challenging.
+Our primary appraoch is to ensure that the design scales.
 As a Ruby on Rails application, it is designed so each request can
 be processed separately on separate processes.
 We use the 'puma' web server to serve multiple processes
@@ -268,6 +271,10 @@ have focused on countering the
 apply the
 [Ruby on Rails Security Guide](http://guides.rubyonrails.org/security.html),
 and have taken steps to harden the application.
+Most vulnerabilities are caused by failing to counter common weaknesses
+(such as those listed in the OWASP top 10), so we can be maximally
+effective by focusing on common weaknesses and applying generally-accepted
+hardening steps for our environment.
 Below is how we've done each, in turn.
 
 The
@@ -469,15 +476,19 @@ avoiding defects that might lead to vulnerabilities), and
 also make the code easier to review
 (by both humans and other programs).
 
-The software has a strong test suite; this helps find problems, and
-makes it easier to update components or fix problems.
+The software has a strong test suite, with over 90% statement coverage; this
+makes it easier to update components (e.g., if a third-party component
+has a publicly-disclosed vulnerability).
+The test suite also makes it easier to make other fixes (e.g., to harden
+something) and have fairly high
+confidence that the change did not break functionality.
 
 We work to enable third-party review.
-We release the software as open source software (OSS),
+We release the custom software as open source software (OSS),
 using a well-known OSS license (MIT).
 
 These steps cannot *guarantee* that there are no vulnerabilities,
-but we think they reduce the risks.
+but we think they greatly reduce the risks.
 
 ## Supply chain (reuse)
 
@@ -500,7 +511,7 @@ We can't eliminate all risks, and
 if we rewrote all the software (instead of reusing software)
 we would risk creating vulnerabilities in own code.
 See [CONTRIBUTING.md](../CONTRIBUTING.md) for more about how we
-reduce these risks.
+reduce the risks of reused code.
 
 ## Other security issues
 
@@ -514,6 +525,38 @@ which on the production system is Postgres.
 Anyone can create a Heroku application and run it on Heroku, however,
 at that point we trust the Postgres developers and the Heroku administrators
 to keep the databases separate.
+
+## People
+
+Of course, it's important to have developers who know how to develop software,
+with at least someone in the group who knows how to develop secure software.
+
+The lead software developer,
+[David A. Wheeler](http://www.dwheeler.com/), is an expert in the area
+of developing secure software.
+He has a PhD in Information Technology, a Master's degree in Computer Science,
+a certificate in Software Engineering, a certificate in
+Information Systems Security, and a BS in Electronics Engineering,
+all from George Mason University (GMU).
+He wrote the book
+[Secure Programming HOWTO](http://www.dwheeler.com/secure-programs/)
+and teaches a graduate course at George Mason University (GMU) on
+how to design and implement secure software.
+Dr. Wheeler's doctoral dissertation,
+[Fully Countering Trusting Trust through Diverse Double-Compiling](http://www.dwheeler.com/trusting-trust/),
+discusses how to counter malicious compilers.
+
+Sam Khakimov has been developing software for a number of years,
+in a variety of languages.
+He has a Bachelor of Business Admin in Finance and Mathematics
+(CUNY Baruch College Summa Cum Laude Double Major) and a
+Master of Science in Mathematics (New York University) with
+additional coursework in Cyber Security.
+
+[Dan Kohn](http://www.dankohn.com/bio.html)
+received a bachelor's degree in Economics and Computer Science
+from the Honors program of Swarthmore College.
+He has long expertise in Ruby on Rails.
 
 ## Your help is welcome!
 

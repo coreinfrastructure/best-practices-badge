@@ -143,7 +143,9 @@ function setupProjectField(criteria) {
       function() {updateCriteriaDisplay(criteria);});
   $('input[name="project[' + criteria + '_justification]"]').blur(
       function() {updateCriteriaDisplay(criteria);});
-  $('input[name="project[' + criteria + '_justification]"]').on('input',
+  $('#project_' + criteria + '_justification').on('input',
+      function() {changedJustificationText(criteria);});
+  $('#project_' + criteria + '_justification').on('keyup',
       function() {changedJustificationText(criteria);});
 }
 

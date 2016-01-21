@@ -36,7 +36,7 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
 
     log_in_as @user
 
-    assert logged_in?
+    assert user_logged_in?
     # If we redirect users to @user on login:
     # assert_redirected_to @user
     # follow_redirect!
@@ -46,7 +46,7 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
     # assert_select 'a[href=?]', user_path(@user)
 
     delete logout_path
-    assert_not logged_in?
+    assert_not user_logged_in?
     assert_redirected_to root_url
     follow_redirect!
     assert_select 'a[href=?]', login_path
@@ -54,12 +54,12 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
     assert_select 'a[href=?]', user_path(@user), count: 0
   end
 
-  test "login with remembering" do
+  test 'login with remembering' do
     log_in_as(@user, remember_me: '1')
     assert_not_nil cookies['remember_token']
   end
 
-  test "login without remembering" do
+  test 'login without remembering' do
     log_in_as(@user, remember_me: '0')
     assert_nil cookies['remember_token']
   end

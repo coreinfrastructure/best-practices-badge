@@ -38,7 +38,7 @@ module ActiveSupport
     # Add more helper methods to be used by all tests here...
 
     # Returns true if a test user is logged in.
-    def logged_in?
+    def user_logged_in?
       !session[:user_id].nil?
     end
 

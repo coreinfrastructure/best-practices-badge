@@ -42,7 +42,7 @@ class Chief
      :build_status, :build_justification,
      :build_common_tools_status, :build_common_tools_justification,
      :license_location_status, :license_location_justification,
-     :changelog_status, :changelog_justification].to_set
+     :release_notes_status, :release_notes_justification].to_set
 
   # Given two changesets, produce merged "best" version
   # When confidence is the same, c1 wins.

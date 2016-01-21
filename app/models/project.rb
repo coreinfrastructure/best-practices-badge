@@ -32,9 +32,9 @@ class Project < ActiveRecord::Base
     version_unique: ['MUST', false, false],
     version_semver: ['SUGGESTED', false, false],
     version_tags: ['SUGGESTED', false, false],
-    # ChangeLog
-    changelog: ['MUST', false, true],
-    changelog_vulns: ['MUST', false, false],
+    # Release notes
+    release_notes: ['MUST', false, true],
+    release_notes_vulns: ['MUST', false, false],
     # REPORTING
     # Bug-reporting process
     report_tracker: ['SUGGESTED', false, false],

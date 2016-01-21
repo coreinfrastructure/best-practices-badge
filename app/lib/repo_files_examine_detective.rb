@@ -7,7 +7,7 @@
 class RepoFilesExamineDetective < Detective
   INPUTS = [:repo_files]
   OUTPUTS = [:contribution_status, :license_location_status,
-             :changelog_status, :build_status, :build_common_tools_status]
+             :release_notes_status, :build_status, :build_common_tools_status]
 
   # Minimum file sizes (in bytes) before they are considered useful.
   # Empty files, in particular, clearly do NOT have enough content.
@@ -69,9 +69,9 @@ class RepoFilesExamineDetective < Detective
       NONTRIVIAL_MIN_SIZE, 'license location')
 
     determine_results(
-      :changelog_status,
-      /\A(changelog|news)(\.md|\.txt)?\Z/i,
-      NONTRIVIAL_MIN_SIZE, 'changelog')
+      :release_notes_status,
+      /\A(changelog|news)(\.md|\.markdown|\.txt|\.html)?\Z/i,
+      NONTRIVIAL_MIN_SIZE, 'release notes')
 
     # There are many different build systems, and different
     # programming languages & environments have different common conventions.

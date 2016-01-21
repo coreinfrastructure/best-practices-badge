@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160119195552) do
+ActiveRecord::Schema.define(version: 20160121190453) do
 
   create_table "projects", force: :cascade do |t|
     t.integer  "user_id"
@@ -56,10 +56,10 @@ ActiveRecord::Schema.define(version: 20160119195552) do
     t.text     "version_semver_justification"
     t.string   "version_tags_status",                                  default: "?"
     t.text     "version_tags_justification"
-    t.string   "changelog_status",                                     default: "?"
-    t.text     "changelog_justification"
-    t.string   "changelog_vulns_status",                               default: "?"
-    t.text     "changelog_vulns_justification"
+    t.string   "release_notes_status",                                 default: "?"
+    t.text     "release_notes_justification"
+    t.string   "release_notes_vulns_status",                           default: "?"
+    t.text     "release_notes_vulns_justification"
     t.string   "report_url_status",                                    default: "?"
     t.text     "report_url_justification"
     t.string   "report_tracker_status",                                default: "?"

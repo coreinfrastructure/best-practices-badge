@@ -29,11 +29,11 @@ class ChiefTest < ActiveSupport::TestCase
                  '<https://github.com/linuxfoundation/' \
                  'cii-best-practices-badge/blob/master/CONTRIBUTING.md>.',
                  results[:contribution_justification]
-    assert_equal 'Met', results[:changelog_status]
-    assert_equal 'Non-trivial changelog file in repository: ' \
+    assert_equal 'Met', results[:release_notes_status]
+    assert_equal 'Non-trivial release notes file in repository: ' \
                  '<https://github.com/linuxfoundation/' \
                  'cii-best-practices-badge/blob/master/CHANGELOG.md>.',
-                 results[:changelog_justification]
+                 results[:release_notes_justification]
     assert_equal 'Met', results[:build_status]
     assert_equal 'Non-trivial build file in repository: ' \
                  '<https://github.com/linuxfoundation/' \

@@ -238,24 +238,28 @@ same as the project URL), and license(s).
   using git tags.
   <sup>[<a href="#version_tags">version_tags</a>]&#8224;</sup>
 
-*ChangeLog*
+*Release notes (ChangeLog)*
 
-- <a name="changelog"></a>The project MUST provide a "ChangeLog"
-  (a human-readable summary of major changes in each release).
-  The ChangeLog MUST NOT be the output of the version control log
-  of every change (e.g., the "git log" command is not a ChangeLog).
-  <sup>[<a href="#changelog">changelog</a>]&#8224;</sup>
-- <a name="changelog_vulns"></a>The ChangeLog MUST identify whether the new
+- <a name="release_notes"></a><a name="changelog"></a>The project
+  MUST provide, in each release, release notes that are
+  a human-readable *summary* of major changes in that release.
+  The release notes MUST NOT be the output of a version control log
+  (e.g., the "git log" command results are not release notes).
+  <sup>[<a href="#release_notes">release_notes</a>]&#8224;</sup>
+- <a name="release_notes_vulns"></a><a name="changelog_vulns"></a>The
+  release notes MUST identify whether the new
   release fixes any publicly known vulnerabilities.
-  <sup>[<a href="#changelog_vulns">changelog_vulns</a>]</sup>
-- The ChangeLog MAY implemented in a variety of ways.
-  The ChangeLog MAY be a separate file (e.g., "ChangeLog" or "changelog")
-  and the filename MAY be followed by an extension
-  such as ".txt", ".md", or ".html".
-  The ChangeLog MAY instead use version control system mechanisms such as the
+  <sup>[<a href="#release_notes_vulns">release_notes_vulns</a>]</sup>
+- The release notes MAY implemented in a variety of ways.
+  Many projects provide them in a file named "NEWS", "CHANGELOG",
+  or "ChangeLog", optionally with extensions such as ".txt", ".md", or ".html".
+  Historically the term "change log" meant a log of *every* change,
+  but to meet these criteria what is needed is a human-readable summary.
+  The release notes MAY instead be provided by
+  version control system mechanisms such as the
   [GitHub Releases workflow](https://github.com/blog/1547-release-your-software).
-- *Rationale*: ChangeLogs are important because they help users decide whether
-  or not they will want to update, and what the impact would be
+- *Rationale*: Release notes are important because they help users
+  decide whether or not they will want to update, and what the impact would be
   (e.g., if the new release fixes vulnerabilities).
 
 ### Reporting

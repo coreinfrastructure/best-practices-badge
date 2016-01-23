@@ -105,7 +105,7 @@ class Project < ActiveRecord::Base
     "#{criterion}_justification".to_sym
   end.freeze
   PROJECT_OTHER_FIELDS = [
-    :name, :description, :project_homepage_url, :repo_url,
+    :name, :description, :project_homepage_url, :repo_url, :cpe,
     :license, :general_comments,
     :user_id]
 
@@ -135,6 +135,10 @@ class Project < ActiveRecord::Base
             url: true,
             length: { maximum: MAX_SHORT_STRING_LENGTH }
   validate :need_a_base_url
+
+  validates :cpe,
+            length: { maximum: MAX_SHORT_STRING_LENGTH },
+            format: { with: /\A(cpe:.*)?\Z/, message: 'Must begin with cpe:' }
 
   validates :user_id, presence: true
 

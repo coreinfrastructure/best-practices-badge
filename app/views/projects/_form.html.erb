@@ -88,6 +88,19 @@ This information is used when displaying badge information.
      However, first is implied by "description_sufficient",
      and the MITM stuff notes https as a way to implement it. -->
 
+      <span>What is the
+            <a href="https://nvd.nist.gov/cpe.cfm">Common Platform Enumeration (CPE)</a>
+            name for the project (if it has one)?</span>
+       <%= render(partial: "details", locals: {
+           criteria: "cpe", details: %{
+            The <a href="https://nvd.nist.gov/cpe.cfm">Common Platform Enumeration (CPE)</a>
+            is a structured naming scheme for information technology systems,
+            software, and packages.  It is used in a number of systems and
+            databases when reporting vulnerabilities.
+}}) %>
+      <%= f.text_field :cpe, hide_label: true, class:"form-control", placeholder:'(Optional) CPE name', disabled: is_disabled %>
+
+
    <%# Note: render() accepts met_suppress: ..., unmet_placeholder:  ... %>
 
     <h3>Basic Project Website Content</h3>

@@ -79,10 +79,12 @@ function changedJustificationText(criteria) {
   if (isEnough(criteria)) {
     $('#' + criteria + '_enough').
         attr('src', $('#Thumbs_up_img').attr('src')).
+        attr('width', 30).attr('height', 30).
         attr('alt', 'Enough for a badge!');
   } else {
     $('#' + criteria + '_enough').
         attr('src', $('#Thumbs_down_img').attr('src')).
+        attr('width', 30).attr('height', 30).
         attr('alt', 'Not enough for a badge.');
   }
   resetProgressBar();

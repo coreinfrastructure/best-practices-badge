@@ -26,6 +26,11 @@ class UsersManipulateProjectTest < ActionDispatch::IntegrationTest
       assert_response :success
       assert_template 'projects/edit'
 
+      assert_select '#project_name' do
+        assert_select '[value=?]',
+                      'Core Infrastructure Initiative Best Practices Badge'
+      end
+
       #  assert_select 'a[href=?]', login_path, count: 0
       #  assert_select 'a[href=?]', logout_path
       #  assert_select 'a[href=?]', user_path(@user)
@@ -61,6 +66,32 @@ class UsersManipulateProjectTest < ActionDispatch::IntegrationTest
 
       assert_response :success
       assert_template 'projects/edit'
+    end
+  end
+
+  test 'logged-in user adds www.sendmail.com' do
+    # Go to login_path to initialize the session
+    get login_path
+    log_in_as @user
+
+    get '/projects/new'
+    assert_response :success
+    assert_template 'projects/new'
+
+    project_url = 'https://www.sendmail.com/'
+
+    VCR.use_cassette('sendmail') do
+      post '/projects',
+           'project[project_homepage_url]' =>  project_url,
+           'project[repo_url]' => project_url
+      assert_response :redirect
+      follow_redirect!
+
+      assert_response :success
+      assert_template 'projects/edit'
+      assert_select '#project_name' do
+        assert_select '[value=?]', 'sendmail'
+      end
     end
   end
 end

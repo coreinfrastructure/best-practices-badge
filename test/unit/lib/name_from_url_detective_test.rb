@@ -7,7 +7,7 @@ class NameFromUrlDetectiveTest < ActiveSupport::TestCase
 
   test 'Simple name in project URL domain name is detected' do
     results = NameFromUrlDetective.new.analyze(
-      @evidence, project_url: 'http://www.sendmail.com')
+      @evidence, project_homepage_url: 'http://www.sendmail.com')
 
     assert results.key?(:name)
     assert results[:name].key?(:value)
@@ -17,7 +17,7 @@ class NameFromUrlDetectiveTest < ActiveSupport::TestCase
 
   test 'Simple name in project URL tail is detected' do
     results = NameFromUrlDetective.new.analyze(
-      @evidence, project_url: 'http://www.dwheeler.com/flawfinder')
+      @evidence, project_homepage_url: 'http://www.dwheeler.com/flawfinder')
 
     assert results.key?(:name)
     assert results[:name].key?(:value)

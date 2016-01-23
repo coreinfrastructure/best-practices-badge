@@ -33,7 +33,7 @@ class ProjectsController < ApplicationController
     @project = Project.new
   end
 
-  # GET /projects/1/
+  # GET /projects/:id/edit(.:format)
   def edit
   end
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160123040035) do
+ActiveRecord::Schema.define(version: 20160123144005) do
 
   create_table "projects", force: :cascade do |t|
     t.integer  "user_id"
@@ -175,6 +175,9 @@ ActiveRecord::Schema.define(version: 20160123040035) do
     t.string   "role"
     t.string   "remember_digest"
   end
+
+  add_index "users", ["email"], name: "index_users_on_email"
+  add_index "users", ["uid"], name: "index_users_on_uid"
 
   create_table "versions", force: :cascade do |t|
     t.string   "item_type",                     null: false

@@ -14,20 +14,23 @@
 <%= link_to 'Add New Project', new_project_path, class:"btn btn-success" %>
 <br>
 <br>
-<table class="project_index" style="margin-left:auto; margin-right:auto">
+<table class="project_index table-bordered table-striped table-responsive" style="margin-left:auto; margin-right:auto">
   <thead>
     <tr>
+      <th>Id</th>
       <th>Name</th>
       <th>Description</th>
       <th>Website</th>
       <th>License</th>
       <th>Added By</th>
+      <th>Badge</th>
     </tr>
   </thead>
 
   <tbody>
     <% @projects.each do |project| %>
       <tr>
+        <td><%= link_to project.id, project %></td>
         <td><%= link_to (project.name.presence || "(Name Unknown)"),
                 project %></td>
         <td><%= project.description %></td>
@@ -42,6 +45,8 @@
         </td>
         <td><%= project.license %></td>
         <td><%= link_to project.user_name, project.user %></td>
+        <td><%= link_to "<img src='/projects/#{project.id}/badge'>".html_safe,
+                        project %></td>
       </tr>
     <% end %>
   </tbody>

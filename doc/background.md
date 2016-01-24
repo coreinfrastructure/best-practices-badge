@@ -1381,6 +1381,16 @@ It is released under the
 Source is released as a .tar.gz tarball.
 No official public version control repository has been identified.
 
+## nokogiri - vulnerability reporting
+
+The criteria include requiring some way to report vulnerabilities.
+A number of OSS projects don't do this.
+That said, it appears that OSS projects do agree that this is
+a best practice.
+For example,
+[nokogiri issue #1191](https://github.com/sparklemotion/nokogiri/issues/1191)
+requires creation of a vulnerability reporting process.
+
 
 # Public responses
 

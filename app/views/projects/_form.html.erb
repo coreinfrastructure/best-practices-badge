@@ -1,3 +1,5 @@
+<%# TODO: Get hostname programmatically. %>
+<% badge_hostname='https://secret-retreat-6638.herokuapp.com/' %>
 <% content_for :nav_progress do %>
 <div class="progress">
   <div id="badge-progress" class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%; min-width: 2em;">0%</div>
@@ -5,10 +7,9 @@
 <% end %>
 
 <div class="row">
-<div class="col-md-12">
+<div class="col-xs-12">
 
 <span id="project_entry_form"></span>
-
 <div class="text-center hidden-print">
 <button id="show-all-details" class="btn" title="Show all detailed text" type="button">Show all detailed text</button>
 |
@@ -19,37 +20,65 @@
 <%= image_tag "Thumbs_down.svg", id: "Thumbs_down_img" %>
 </div>
 
-<br>
 <p>
 Open source software (OSS) projects
 that follow the best practices below
 will be able to voluntarily self-certify and show that they've
 achieved a Core Infrastructure Initiative (CII) badge.
-<% if (!is_disabled) %>
-<b>Please 'submit' often</b> to save your work
-(you can always go back and edit more later).
-<% end %>
+</div>
+</div>
+
+
+
+<div class="row">
+<div class="col-xs-12">
+<p>
 <%= render(partial: "details", locals: {
            criteria: "badge_intro", details: %{
+<p>
 There is no set of practices that can guarantee that software
 will never have defects or vulnerabilities.
 However, following best practices can help improve the results
 of OSS projects.
 We plan to improve the page design later; for now, please focus on
 the criteria and how they're combined.
-To earn a badge the current rules are:
-<ul>
-<li>all MUST and MUST NOT criteria must be met,
-<li>all SHOULD criteria must be met OR be unmet with justification, <i>and</i>
-<li>all SUGGESTED criteria must be met OR unmet (we want them considered at least)
-</ul>
+To earn a badge,
+all MUST and MUST NOT criteria must be met,
+all SHOULD criteria must be met OR be unmet with justification, <i>and</i>
+all SUGGESTED criteria must be met OR unmet (we want them considered at least).
 Feedback is welcome via the
 <a href="https://github.com/linuxfoundation/cii-best-practices-badge">GitHub site as issues or pull requests</a>
 There is also a
-<a href="https://lists.coreinfrastructure.org/mailman/listinfo/cii-badges">mailing list for general discussion</a>.
+<a href="https://lists.coreinfrastructure.org/mailman/listinfo/cii-badges">mailing list for general discussion</a>.<br /><br />
 }}) %>
 </div>
 </div>
+
+<% if (is_disabled) %>
+<%   if Project.badge_achieved?(project) %>
+<div class="row">
+<div class="col-xs-1"></div>
+<div class="col-xs-2">
+  <%= image_tag "trophy.svg", width: 96, height: 96 %>
+</div>
+<div class="col-xs-8">
+  According to the information below, this project <i>has</i> achieved
+  a badge.
+  If this is your project, you can show a badge by embedding this HTML:<br />
+  &lt;a href='<%= badge_hostname %>/projects/<%= project.id %>'&gt;&lt;img src='<%= badge_hostname %>/projects/<%= project.id %>/badge'&gt;&lt;/a&gt; <br />
+  or put this in your markdown file:<br />
+ [![CII Best Practices](<%= badge_hostname %>/projects/<%= project.id %>/badge)](<%= badge_hostname %>/projects/<%= project.id %>)
+</div>
+</div>
+<%   end %>
+<% else %>
+<div class="row">
+<div class="col-xs-12">
+<b>Please 'submit' often</b> to save your work
+(you can always go back and edit more later).
+</div>
+</div>
+<% end %>
 
 
 

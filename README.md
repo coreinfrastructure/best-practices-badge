@@ -39,7 +39,7 @@ of this project.
 ## Summary of Best Practices Criteria
 
 This is a summary of the criteria (not all a required for a badge;
-for details, see the [full list of criteria](doc/criteria.md):
+for details, see the [full list of criteria](doc/criteria.md)):
 
 - **Have a [stable website](doc/criteria.md#project_homepage_url)**,
   [accessible over HTTPS](project_homepage_https), which says:

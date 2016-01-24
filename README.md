@@ -36,6 +36,73 @@ for general discussion.
 **[Kanban Board](https://waffle.io/linuxfoundation/cii-best-practices-badge)**
 of this project.
 
+## Summary of Best Practices Criteria
+
+This is a summary of the criteria (not all a required for a badge;
+for details, see the [full list of criteria](doc/criteria.md):
+
+- **Have a [stable website](doc/criteria.md#project_homepage_url)**,
+  [accessible over HTTPS](project_homepage_https), which says:
+  - **[what it does](doc/criteria.md#description_sufficient)**
+  - **[how to get it](doc/criteria.md#interact)**
+  - **[how to give feedback](doc/criteria.md#interact)**
+  - **[how to contribute](doc/criteria.md#contribution)** and
+    [preferred styles](doc/criteria.md#contribution_criteria)
+- **[Explicitly specify](doc/criteria.md#license_location) an
+  [OSS](doc/criteria.md#oss_license) [license](doc/criteria.md#oss_license_osi)**
+- **[Document how to install and run (securely)](doc/criteria.md#documentation_basics),
+  and [any API](doc/criteria.md#documentation_interface)**
+- **Have a** [distributed](doc/criteria.md#repo_distributed)
+  **[public version control system](doc/criteria.md#repo_url),
+  including [changes between releases](doc/criteria.md#repo_interim)**:
+  - **[Give each release a unique version](doc/criteria.md#version_unique)**, using
+    [semantic versioning format](doc/criteria.md#version_semver)
+  - **Give a [summarized change log for each release](doc/criteria.md#changelog),
+    [identifying any fixed vulnerabilities](doc/criteria.md#changelog_vulns)**
+- **Allow [bug reports to be submitted](doc/criteria.md#report_process),
+  [archived](doc/criteria.md#report_archive)** and
+  [tracked](doc/criteria.md#report_tracker):
+  - **[Acknowledge](doc/criteria.md#report_responses)**/respond to bugs &
+    [enhancement requests](doc/criteria.md#enhancement_responses), rather than
+    ignoring them
+  - **Have a [secure](doc/criteria.md#vulnerability_report_private),
+    [documented process](doc/criteria.md#vulnerability_report_process) for
+    reporting vulnerabilities**
+  - **[Respond within 7 days](doc/criteria.md#vulnerability_report_response)
+    (on average), and [fix vulnerabilities](doc/criteria.md#vulnerabilities_critical_fixed),
+    [within 60 days if they're public](doc/criteria.md#vulnerabilities_fixed_60_days)**
+- **[Have a build that works](doc/criteria.md#build)**, using
+  [standard](doc/criteria.md#build_common_tools)
+  [open-source](doc/criteria.md#build_oss_tools) tools
+  - **Enable (and [fix](doc/criteria.md#warnings_fixed))
+    [compiler warnings and lint-like checks](doc/criteria.md#warnings)**
+  - **[Run other static analysis tools](doc/criteria.md#static_analysis) and
+    [fix exploitable problems](doc/criteria.md#static_analysis_fixed)**
+- **[Have an automated test suite](doc/criteria.md#test)** that
+  [covers most of the code/functionality](doc/criteria.md#test_most), and
+  [officially](doc/criteria.md#tests_documented_added)
+  **[require new tests for new code](doc/criteria.md#test_policy)**
+- [Automate running the tests on all changes](doc/criteria.md#test_continuous_integration),
+  and apply dynamic checks:
+  - [Run memory/behaviour analysis tools](doc/criteria.md#dynamic_analysis)
+    ([sanitizers/Valgrind](doc/criteria.md#dynamic_analysis_unsafe) etc.)
+  - [Run a fuzzer or web-scanner over the code](doc/criteria.md#dynamic_analysis)
+- **[Have a developer who understands secure software](doc/criteria.md#know_secure_design)
+  and [common vulnerability errors](doc/criteria.md#know_common_errors)**
+- If cryptography is used:
+  - **[Use public protocols/algorithm](doc/criteria.md#crypto_published)**
+  - **[Don't re-implement standard functionality](doc/criteria.md#crypto_call)**
+  - **[Use open-source cryptography](doc/criteria.md#crypto_oss)**
+  - **[Use key lengths that will stay secure](doc/criteria.md#crypto_keylength)**
+  - **[Don't use known-broken](doc/criteria.md#crypto_working)** or
+    [known-weak](doc/criteria.md#crypto_weaknesses) algorithms
+  - [Use algorithms with forward secrecy](doc/criteria.md#crypto_pfs)
+  - [Support multiple algorithms, and allow switching between them](doc/criteria.md#crypto_alternatives)
+  - **[Store any passwords with iterated, salted, hashes using a key-stretching algorithm](doc/criteria.md#crypto_password_storage)**
+  - **[Use cryptographic random number sources](doc/criteria.md#crypto_random)**
+
+## License
+
 All material is released under the [MIT license](./LICENSE).
 All material that is not executable, including all text when not executed,
 is also released under the

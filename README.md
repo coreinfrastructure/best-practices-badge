@@ -38,7 +38,7 @@ of this project.
 
 ## Summary of Best Practices Criteria
 
-This is a summary of the criteria, with requirements in bod
+This is a summary of the criteria, with requirements in bold
 (for details, see the [full list of criteria](doc/criteria.md)):
 
 - **Have a [stable website](doc/criteria.md#project_homepage_url)**,

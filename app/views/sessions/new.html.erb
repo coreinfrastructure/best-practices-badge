@@ -3,6 +3,20 @@
 
 <div class="row">
   <div class="col-md-6 col-md-offset-3">
+   <div class="center-block">
+    <br>
+    <br>
+    <br>
+    <%= link_to "Log in with GitHub", "/auth/github", class: "btn btn-default btn-primary btn-block" %>
+    <br><br>
+    <div class='center-block h2'>- OR -</div>
+    <br><br>
+   </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
     <%= form_for(:session, url: login_path) do |f| %>
 
       <%= f.label :email %>
@@ -17,14 +31,12 @@
       <% end %>
 
       <%= f.hidden_field :provider, :value => "local" %>
-      <%= f.submit "Log in", class: "btn btn-primary" %>
+      <%= f.submit "Log in using custom account", class: "btn btn-primary" %>
     <% end %>
 
-    <%= link_to "Sign up now!", signup_path %>
+    <br><br>
+    <%= link_to "No custom account? Sign up now!", signup_path %>
     <br>
     <br>
-    <%= link_to "Sign in with GitHub", "/auth/github", class: "btn btn-social btn-github" %>
-
-
   </div>
 </div>

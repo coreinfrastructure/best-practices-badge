@@ -380,7 +380,7 @@ GEM
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
       hashdiff
-    will_paginate (3.0.7)
+    will_paginate (3.1.0)
     xml-simple (1.1.5)
 
 PLATFORMS
@@ -432,7 +432,7 @@ DEPENDENCIES
   vcr (= 3.0.1)
   web-console (= 3.0.0)
   webmock
-  will_paginate (= 3.0.7)
+  will_paginate (= 3.1.0)
 
 BUNDLED WITH
    1.11.2

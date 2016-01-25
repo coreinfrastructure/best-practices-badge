@@ -21,7 +21,7 @@ gem 'sass-rails', '5.0.4'
 gem 'turbolinks', '2.5.3' # Speed UI access
 gem 'jquery-turbolinks'   # Make turbolinks work with jQuery
 gem 'uglifier', '2.7.2'
-gem 'will_paginate', '3.0.7'
+gem 'will_paginate', '3.1.0'
 
 group :development, :test do
   gem 'awesome_print', '1.6.1'

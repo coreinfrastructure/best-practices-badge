@@ -28,7 +28,7 @@ group :development, :test do
   gem 'bullet', '5.0.0'
   gem 'bundler-audit'
   gem 'ruby-graphviz'
-  gem 'dotenv-rails', '2.0.2'
+  gem 'dotenv-rails', '2.1.0'
   gem 'license_finder'
   gem 'mdl', '0.2.1'
   gem 'pronto', '0.5.3'

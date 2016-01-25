@@ -337,6 +337,13 @@ the default "rake" checking task:
 * W3C link checker <https://validator.w3.org/checklink>
 * W3C markup validation service <https://validator.w3.org/>
 
+We sometimes run this to check if assets compile properly (see
+[heroku_rails_deflate](https://github.com/mattolson/heroku_rails_deflate)):
+
+~~~~
+RAILS_ENV=production rake assets:precompile
+~~~~
+
 Note that we also use
 [CicleCI](https://circleci.com/gh/linuxfoundation/cii-best-practices-badge)
 for continuous integration tools to check changes

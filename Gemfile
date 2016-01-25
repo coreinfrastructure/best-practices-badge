@@ -58,4 +58,5 @@ end
 group :production do
   gem 'pg', '0.18.4' # PostgreSQL database
   gem 'rails_12factor', '0.0.3'
+  gem 'heroku_rails_deflate', '1.0.3' # Compress (reduces network load)
 end

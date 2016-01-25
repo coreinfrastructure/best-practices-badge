@@ -131,6 +131,10 @@ GEM
       tilt
     hashdiff (0.2.3)
     hashie (3.4.3)
+    heroku_rails_deflate (1.0.3)
+      actionpack (>= 3.2.13)
+      activesupport (>= 3.2.13)
+      rack (>= 1.4.5)
     highline (1.7.8)
     http-cookie (1.0.2)
       domain_name (~> 0.5)
@@ -399,6 +403,7 @@ DEPENDENCIES
   dotenv-rails (= 2.1.0)
   faker (= 1.6.1)
   github_api (= 0.13.0)
+  heroku_rails_deflate (= 1.0.3)
   jbuilder (= 2.3.2)
   jquery-rails (= 4.0.5)
   jquery-turbolinks

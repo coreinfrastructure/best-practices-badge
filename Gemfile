@@ -13,7 +13,7 @@ gem 'jquery-rails', '4.0.5' # Javascript jQuery library (for Rails)
 gem 'jquery-ui-rails', '5.0.5' # Javascript jQueryUI library (for Rails)
 gem 'octokit', '4.1.1' # GitHub's official Ruby API
 gem 'omniauth-github', '1.1.2' # Authentication to GitHub (get project info)
-gem 'paper_trail', '4.0.1' # Record previous versions of project data
+gem 'paper_trail', '4.0.2' # Record previous versions of project data
 gem 'puma', '2.15.3' # Faster webserver; recommended by Heroku
 gem 'rack-timeout', '0.3.2' # Timeout per https://github.com/heroku/rack-timeout
 gem 'rails', '4.2.5' # Our web framework
@@ -38,7 +38,7 @@ group :development, :test do
   gem 'pry-byebug', '3.3.0'
   gem 'quiet_assets', '1.1.0'
   gem 'rubocop-rspec', '1.3.1'
-  gem 'spring', '1.6.1'
+  gem 'spring', '1.6.2'
   gem 'sqlite3', '1.3.11'
   gem 'vcr', '3.0.1' # Record network responses for later test reuse
 end

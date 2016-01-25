@@ -3,8 +3,8 @@
 # frozen_string_literal: true
 
 class NameFromUrlDetective < Detective
-  INPUTS = [:repo_url, :project_homepage_url]
-  OUTPUTS = [:name]
+  INPUTS = [:repo_url, :project_homepage_url].freeze
+  OUTPUTS = [:name].freeze
 
   # rubocop:disable Metrics/MethodLength
   # rubocop:disable Metrics/AbcSize

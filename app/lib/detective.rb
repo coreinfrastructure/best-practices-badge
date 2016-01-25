@@ -6,8 +6,8 @@
 class Detective
   # Individual detectives must identify their inputs and outputs
   # as a list of field name symbols.
-  INPUTS = []
-  OUTPUTS = []
+  INPUTS = [].freeze
+  OUTPUTS = [].freeze
 
   # Individual detectives must implement "analyze"
   # "Current" is a hash of current best estimates of fields and values.

@@ -12,6 +12,7 @@
 require 'set'
 
 class Chief
+  # rubocop:disable Style/ConditionalAssignment
   def initialize(project)
     @evidence = Evidence.new(project)
 
@@ -24,11 +25,12 @@ class Chief
       @intercept_exception = StandardError
     end
   end
+  # rubocop:enable Style/ConditionalAssignment
 
   # TODO: Identify classes automatically and do topological sort.
   ALL_DETECTIVES =
     [NameFromUrlDetective, GithubBasicDetective, HowAccessRepoFilesDetective,
-     RepoFilesExamineDetective, OssLicenseDetective]
+     RepoFilesExamineDetective, OssLicenseDetective].freeze
 
   # List fields allowed to be written into Project (an ActiveRecord).
   # TODO: Automatically determine allowed fields, or get from elsewhere.
@@ -42,7 +44,7 @@ class Chief
      :build_status, :build_justification,
      :build_common_tools_status, :build_common_tools_justification,
      :license_location_status, :license_location_justification,
-     :release_notes_status, :release_notes_justification].to_set
+     :release_notes_status, :release_notes_justification].to_set.freeze
 
   # Given two changesets, produce merged "best" version
   # When confidence is the same, c1 wins.
@@ -87,7 +89,6 @@ class Chief
   # Invoke one "Detective", which will
   # analyze the project and reply with an updated changeset in the form
   # { fieldname1: { value: value, confidence: 1..5, explanation: text}, ...}
-  # rubocop:disable Metrics/MethodLength
   def propose_one_change(detective, current_proposal)
     begin
       current_data = compute_current(

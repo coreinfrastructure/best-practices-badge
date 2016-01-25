@@ -107,7 +107,7 @@ class Project < ActiveRecord::Base
   PROJECT_OTHER_FIELDS = [
     :name, :description, :project_homepage_url, :repo_url, :cpe,
     :license, :general_comments,
-    :user_id]
+    :user_id].freeze
 
   # A project is associated with a user
   belongs_to :user
@@ -179,7 +179,7 @@ class Project < ActiveRecord::Base
     return false if id.nil?
     old_project = Project.find(id)
     if old_project
-      self.badge_achieved?(old_project)
+      badge_achieved?(old_project)
     else
       false
     end
@@ -197,6 +197,7 @@ class Project < ActiveRecord::Base
     return false if text.nil?
     text.match %r(https?://[^ ]{5,})
   end
+  private_class_method :contains_url?
 
   # Do we have enough about this criterion to get a badge?
   # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
@@ -206,7 +207,7 @@ class Project < ActiveRecord::Base
     when status == 'N/A'
       true
     when status == 'Met'
-      met_needs_url ? self.contains_url?(justification) : true
+      met_needs_url ? contains_url?(justification) : true
     when category == 'SHOULD' && status == 'Unmet' &&
       justification.length >= MIN_SHOULD_LENGTH
       true
@@ -215,5 +216,7 @@ class Project < ActiveRecord::Base
     else false
     end
   end
+  private_class_method :enough_criterion?
+
   # rubocop:enable Metrics/CyclomaticComplexity
 end

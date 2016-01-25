@@ -34,7 +34,7 @@ group :development, :test do
   gem 'pronto', '0.5.3'
   gem 'pronto-brakeman', '0.5.0'
   gem 'pronto-rails_best_practices', '0.5.0'
-  gem 'pronto-rubocop', '0.5.0'
+  gem 'pronto-rubocop', '0.5.2'
   gem 'pry-byebug', '3.3.0'
   gem 'quiet_assets', '1.1.0'
   gem 'rubocop-rspec', '1.3.1'

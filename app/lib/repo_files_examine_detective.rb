@@ -5,9 +5,10 @@
 # frozen_string_literal: true
 
 class RepoFilesExamineDetective < Detective
-  INPUTS = [:repo_files]
+  INPUTS = [:repo_files].freeze
   OUTPUTS = [:contribution_status, :license_location_status,
-             :release_notes_status, :build_status, :build_common_tools_status]
+             :release_notes_status, :build_status,
+             :build_common_tools_status].freeze
 
   # Minimum file sizes (in bytes) before they are considered useful.
   # Empty files, in particular, clearly do NOT have enough content.

@@ -1,8 +1,9 @@
 require: rubocop-rspec
+Rails:
+  Enabled: true
 AllCops:
   DisplayCopNames: true
   DisplayStyleGuide: true
-  RunRailsCops: true
   Include:
     - '**/*.pryrc'
     - '**/*.rake'

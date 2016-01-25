@@ -4,8 +4,8 @@
 
 class HowAccessRepoFilesDetective < Detective
   # Individual detectives must identify their inputs, outputs
-  INPUTS = [:repo_url]
-  OUTPUTS = [:repo_files] # Ask :repo_files.get("FILENAME") for files.
+  INPUTS = [:repo_url].freeze
+  OUTPUTS = [:repo_files].freeze # Ask :repo_files.get("FILENAME") for files.
 
   GITHUB_REPO = %r{https?://github.com/([\w\.-]*)/([\w\.-]*)(.git|/)?}
   def analyze(_evidence, current)

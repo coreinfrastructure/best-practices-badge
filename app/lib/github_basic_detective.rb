@@ -11,12 +11,11 @@ require 'json'
 
 class GithubBasicDetective < Detective
   # Individual detectives must identify their inputs, outputs
-  INPUTS = [:repo_url]
-  OUTPUTS = [:name, :license]
+  INPUTS = [:repo_url].freeze
+  OUTPUTS = [:name, :license].freeze
 
   # These are the 'correct' display case for SPDX for OSI-approved licenses.
-  LICENSE_CORRECT_CASE =
-  {
+  LICENSE_CORRECT_CASE = {
     'APACHE-2.0' => 'Apache-2.0',
     'ARTISTIC-2.0' => 'Artistic-2.0',
     'BSD-3-CLAUSE' => 'BSD-3-Clause',
@@ -39,7 +38,7 @@ class GithubBasicDetective < Detective
     'WXWINDOWS' => 'WXwindows',
     'XNET' => 'Xnet',
     'ZLIB' => 'Zlib'
-  }
+  }.freeze
 
   # Clean up name of license to be like the SPDX display.
   def cleanup_license(license)
@@ -61,6 +60,8 @@ class GithubBasicDetective < Detective
     # e.g.: https://github.com/linuxfoundation/cii-best-practices-badge
     # Note: this limits what's accepted, otherwise we'd have to worry
     # about URL escaping.
+    # Rubocop misinterprets and thinks we don't use the match.
+    # rubocop:disable Performance/RedundantMatch
     repo_url.match(
       %r{\Ahttps://github.com/([A-Za-z0-9_-]+)/([A-Za-z0-9_-]+)/?\Z}) do |m|
       # We have a github repo.

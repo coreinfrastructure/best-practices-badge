@@ -6,8 +6,8 @@
 # rubocop:disable Metrics/ClassLength
 class OssLicenseDetective < Detective
   # Individual detectives must identify their inputs, outputs
-  INPUTS = [:license]
-  OUTPUTS = [:oss_license_osi_status, :oss_license_status]
+  INPUTS = [:license].freeze
+  OUTPUTS = [:oss_license_osi_status, :oss_license_status].freeze
 
   # From: http://opensource.org/licenses/alphabetical
   OSI_LICENSES_FROM_OSI_WEBSITE = [
@@ -80,7 +80,7 @@ class OssLicenseDetective < Detective
     'wxWindows Library License (WXwindows)',
     'X.Net License (Xnet)',
     'Zope Public License 2.0 (ZPL-2.0)',
-    'zlib/libpng license (Zlib)']
+    'zlib/libpng license (Zlib)'].freeze
 
   # Create list of *just* SPDX names, e.g., ['Apache-2.0', 'MIT', 'GPL-2.0']
   KNOWN_OSI_LICENSES =

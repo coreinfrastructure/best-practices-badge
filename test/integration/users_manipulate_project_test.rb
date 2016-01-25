@@ -18,7 +18,7 @@ class UsersManipulateProjectTest < ActionDispatch::IntegrationTest
 
     VCR.use_cassette('users_manipulate_test') do
       post '/projects',
-           'project[project_homepage_url]' =>  repo_url,
+           'project[project_homepage_url]' => repo_url,
            'project[repo_url]' => repo_url
       assert_response :redirect
       follow_redirect!
@@ -59,7 +59,7 @@ class UsersManipulateProjectTest < ActionDispatch::IntegrationTest
 
     VCR.use_cassette('assimilation-official') do
       post '/projects',
-           'project[project_homepage_url]' =>  repo_url,
+           'project[project_homepage_url]' => repo_url,
            'project[repo_url]' => repo_url
       assert_response :redirect
       follow_redirect!
@@ -82,7 +82,7 @@ class UsersManipulateProjectTest < ActionDispatch::IntegrationTest
 
     VCR.use_cassette('sendmail') do
       post '/projects',
-           'project[project_homepage_url]' =>  project_url,
+           'project[project_homepage_url]' => project_url,
            'project[repo_url]' => project_url
       assert_response :redirect
       follow_redirect!

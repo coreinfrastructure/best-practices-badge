@@ -7,10 +7,12 @@
     <br>
     <br>
     <br>
-    <%= link_to '<span class="fa fa-github"></span>Log in with GitHub',
-                '/auth/github', class: 'btn btn-social btn-github btn-block' %>
+    <%= link_to '<span class="fa fa-github"></span>' \
+                  'Log in with GitHub'.html_safe,
+                '/auth/github', class: 'btn btn-lg btn-social btn-github btn-block',
+                method: 'post' %>
     <br><br>
-    <div class='center-block h2'>- OR -</div>
+    <div class='text-center h2'>- OR -</div>
     <br><br>
    </div>
   </div>
@@ -32,7 +34,7 @@
       <% end %>
 
       <%= f.hidden_field :provider, :value => "local" %>
-      <%= f.submit "Log in using custom account", class: "btn btn-primary" %>
+      <%= f.submit "Log in using custom account", class: "btn btn-lg btn-primary" %>
     <% end %>
 
     <br><br>

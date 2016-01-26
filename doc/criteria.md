@@ -102,7 +102,7 @@ same as the project URL), and license(s).
 - <a name="project-homepage-url"></a>The project MUST have a public website
   with a stable URL.
   <sup>[<a href="#project_homepage_url">project_homepage_url</a>]&#8224;</sup>
-- <a name="project-homepage-https"></a>It is SUGGESTED that the projectwebsite
+- <a name="project-homepage-https"></a>It is SUGGESTED that the project website
   use HTTPS, not HTTP.
   Future versions of these criteria may make HTTPS a requirement.
   (The badging application will show a warning for HTTP-only URLs.)
@@ -118,7 +118,7 @@ same as the project URL), and license(s).
 - <a name="interact"></a>The project website MUST provide information on how to:
   - obtain,
   - provide feedback (as bug reports or enhancements),
-  - and contribute to the sofware.
+  - and contribute to the software.
   <sup>[<a href="#interact">interact</a>]</sup>
 - <a name="contribution"></a>The information on how to contribute MUST
   explain the contribution process (e.g., are pull requests used?)
@@ -133,7 +133,7 @@ same as the project URL), and license(s).
 
 *OSS license*
 
-- <a name="license_location"></a>The project MUST post licence(s) in a standard
+- <a name="license_location"></a>The project MUST post license(s) in a standard
   location (e.g., as a top-level file named LICENSE or COPYING).
   License filenames MAY be followed by an extension such as ".txt" or ".md"
   <sup>[<a href="#license_location">license_location</a>]&#8224;</sup>
@@ -359,7 +359,7 @@ same as the project URL), and license(s).
 
 - <a name="test_policy"></a>The project MUST have a general policy
   (formal or not) that as major new functionality is added,
-  tests of thatfunctionality SHOULD be added to an automated test suite.
+  tests of that functionality SHOULD be added to an automated test suite.
   <sup>[<a href="#test_policy">test_policy</a>]</sup>
 - <a name="tests_are_added"></a>The project MUST have evidence that such
   tests are being added in the most recent major changes to the project.
@@ -380,7 +380,7 @@ same as the project URL), and license(s).
   look for code quality errors or common simple mistakes,
   if there is at least one OSS tool that can implement this criterion
   in the selected language.
-  Examples of compiler warning flagss include gcc/clang "-Wall".
+  Examples of compiler warning flags include gcc/clang "-Wall".
   Examples of a "safe" language mode include Javascript "use strict"
   and perl5's "use warnings".
   A separate "linter" tool is simply a tool that examines the source
@@ -417,7 +417,7 @@ same as the project URL), and license(s).
       such as requiring both a password and a hardware token,
       is stronger than single-factor authentication)
     - least privilege (processes should operate with the
-      least privilege necesssary)
+      least privilege necessary)
     - least common mechanism (the design should minimize the mechanisms
       common to more than one user and depended on by all users,
       e.g., directories for temporary files)
@@ -707,7 +707,7 @@ The paper [Open badges for education: what are the implications at the
 intersection of open systems and badging?](http://www.researchinlearningtechnology.net/index.php/rlt/article/view/23563)
 identifies three general reasons for badging systems (all are valid for this):
 
-1. Badges as a motivator of behaviour.  We hope that by identifying
+1. Badges as a motivator of behavior.  We hope that by identifying
    best practices, we'll encourage projects to implement those
    best practices if they do not do them already.
 2. Badges as a pedagogical tool.  Some projects may not be aware

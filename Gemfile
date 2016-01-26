@@ -4,6 +4,7 @@ ruby '2.3.0'
 gem 'autosize-rails', '1.18.17' # Improve HTML textareas
 gem 'bcrypt', '3.1.10' # Security - for salted hashed interated passwords
 gem 'bootstrap-sass', '3.3.6'
+gem 'bootstrap-social-rails', '4.8.0'
 gem 'bootstrap-will_paginate', '0.0.10'
 gem 'bootstrap_form', '2.3.0'
 gem 'faker', '1.6.1'

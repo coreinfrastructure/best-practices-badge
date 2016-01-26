@@ -153,7 +153,7 @@ This MUST be in language that potential users can understand (e.g., it uses mini
       <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
               criteria: "interact", desc: %{
 The project website MUST provide information on how to: obtain, provide feedback
-(as bug reports or enhancements), and contribute to the sofware.},
+(as bug reports or enhancements), and contribute to the software.},
               met_placeholder: %{(Optional) Where is this information?  Consider providing URL(s).
 }}) %>
       <hr>
@@ -250,7 +250,7 @@ Licenses not approved by OSI might not be OSS licenses.
 
        <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
                criteria: "license_location", desc: %{
-The project MUST post licence(s) in a standard location.},
+The project MUST post license(s) in a standard location.},
                met_url: true,
                details: %{
 E.g., as a top-level file named LICENSE or COPYING.
@@ -562,7 +562,7 @@ language mode, or use a separate "linter" tool to look for code quality
 errors or common simple mistakes, if there is at least one OSS tool that
 can implement this criterion in the selected language.},
                details: %{
-Examples of compiler warning flagss include gcc/clang "-Wall".
+Examples of compiler warning flags include gcc/clang "-Wall".
 Examples of a "safe" language mode include Javascript "use strict"
 and perl5's "use warnings".
 A separate "linter" tool is simply a tool that examines the
@@ -599,7 +599,7 @@ This requires understanding the following design principles, including the 8 pri
 <li>complete mediation (every access that might be limited must be checked for authority and be non-bypassable)
 <li>open design (security mechanisms should not depend on attacker ignorance of its design, but instead on more easily protected and changed information like keys and passwords)
 <li>separation of privilege (multi-factor authentication, such as requiring both a password and a hardware token, is stronger than single-factor authentication)
-<li>least privilege (processes should operate with the least privilege necesssary)
+<li>least privilege (processes should operate with the least privilege necessary)
 <li>least common mechanism (the design should minimize the mechanisms common to more than one user and depended on by all users, e.g., directories for temporary files)
 <li>psychological acceptability (the human interface must be designed for ease of use - designing for "least astonishment" can help)
 <li>limited attack surface (the attack surface - the set of the different points where an attacker can try to enter or extract data - should be limited)

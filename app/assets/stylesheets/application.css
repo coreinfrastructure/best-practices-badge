@@ -16,7 +16,6 @@
  *
  *= require_tree .
  *= require_self
- *= require font-awesome
  *= require jquery-ui/autocomplete
  *= require rails_bootstrap_forms
  *= require bootstrap-social

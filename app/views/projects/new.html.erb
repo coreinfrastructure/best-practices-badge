@@ -18,6 +18,7 @@
   <% end %>
   <br>
   <%= form_for(@project) do |f| %>
+      <%= render 'shared/error_messages', object: f.object %>
       <span>What is the URL for the project home page (the URL for the project as a whole)? Start with http(s):// (many characters are not allowed, including "?")</span>
       <%= f.text_field :project_homepage_url, class:"form-control",
             type: 'url', hide_label: true,

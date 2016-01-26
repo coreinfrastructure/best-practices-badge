@@ -14,10 +14,14 @@ to explain how they meet these practices and their detailed criteria.
 There is no set of practices that can guarantee that software
 will never have defects or vulnerabilities;
 even formal methods can fail if the specifications or assumptions are wrong.
+Nor is there any set of practices that can guarantee that a project will
+sustain a healthy and well-functioning development community.
 However, following best practices can help improve the results
 of OSS projects.
-For example, some practices enable multi-person review before release
-that can help find otherwise hard-to-find vulnerabilities.
+For example, some practices enable multi-person review before release,
+which can both help find otherwise hard-to-find technical vulnerabilities 
+and help build trust and a desire for repeated interaction among developers 
+from different companies.
 
 These best practices have been created to:
 

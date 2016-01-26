@@ -21,3 +21,20 @@
  *= require rails_bootstrap_forms
  *= require bootstrap-social
  */
+
+/* Work around a bug in Bootstrap's navigation bar. When the display is narrow,
+   the navigation bar gets longer, but the body padding doesn't adjust.
+   The result is that the navigation bar overlaps the beginning of the
+   body content below it.  This particular workaround is based on:
+   http://stackoverflow.com/questions/10336194/
+   twitter-bootstrap-top-nav-bar-blocking-top-content-of-the-page
+   but note that for us the key breakpoint is width 767px, not 979px.  */
+
+body {
+  padding-top: 80px;
+}
+@media (max-width: 767px) {
+  body {
+    padding-top: 240px;
+  }
+}

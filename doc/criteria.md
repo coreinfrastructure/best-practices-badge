@@ -88,16 +88,17 @@ if not, see introductory materials such as
 ## Current criteria: Best Practices for OSS
 
 Here are the current *draft* criteria; it is certain to change.
-The criteria marked with &#8224; are intended to be automatically testable
-if the project is hosted on GitHub and follows standard conventions.
-The criteria marked with * at the end may be not applicable or not required;
-see their text for more information.
-Text inside square brackets is the short name of the criterion.
-In a few cases rationale is also included.
-
-We expect that there will be a few other fields for the
-project name, description, project URL, repository URL (which may be the
-same as the project URL), and license(s).
+Note that:
+* The criteria marked with "&#8224;" are intended to be automatically testable
+  if the project follows standard conventions and
+  is hosted on a repository platform (e.g., GitHub) with decent API support.
+* The criteria marked with "*" at the end may be not applicable
+  or not required; see their text for more information.
+* Text inside square brackets is the short name of the criterion.
+* In a few cases rationale is also included.
+* We expect that there will be a few other fields for the
+  project name, description, project URL, repository URL (which may be the
+  same as the project URL), and license(s).
 
 ### OSS project basics
 
@@ -672,6 +673,8 @@ common methods or ways of doing something
 can help people understand and meet the criteria.
 We do plan to create an "easy on-ramp" for projects using git on GitHub,
 since that is a common case.
+We would welcome good patches that help provide an "easy on-ramp" for
+projects on other repository platforms.
 
 We do not plan to require active user discussion within a project.
 Some highly mature projects rarely change and thus may have little activity.

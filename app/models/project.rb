@@ -37,7 +37,7 @@ class Project < ActiveRecord::Base
     release_notes_vulns: ['MUST', false, false],
     # REPORTING
     # Bug-reporting process
-    report_tracker: ['SUGGESTED', false, false],
+    report_tracker: ['SHOULD', false, false],
     report_process: ['MUST', false, true],
     report_responses: ['MUST', false, false],
     enhancement_responses: ['SHOULD', false, false],

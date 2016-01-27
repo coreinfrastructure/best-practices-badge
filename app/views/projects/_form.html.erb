@@ -399,8 +399,8 @@ The project MUST provide a process for users to submit bug reports
 
       <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
                criteria: "report_tracker", desc: %{
-It is SUGGESTED that an issue tracker be used for tracking individual issues.
-}}) %>
+The project SHOULD use an issue tracker for tracking individual issues.},
+              unmet_placeholder: %{Why is there no issue tracker?}}) %>
       <hr>
 
       <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,

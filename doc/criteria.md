@@ -274,7 +274,7 @@ Note that:
 - <a name="report_process"></a>The project MUST provide a process for users
   to submit bug reports (e.g., using an issue tracker or a mailing list).
   <sup>[<a href="#report_process">report_process</a>]&#8224;</sup>
-- <a name="report_tracker"></a>It is SUGGESTED that the project use an issue
+- <a name="report_tracker"></a>The project SHOULD use an issue
   tracker for tracking individual issues.
   <sup>[<a href="#report_tracker">report_tracker</a>]&#8224;</sup>
 - <a name="report_responses"></a>The project MUST acknowledge a majority of

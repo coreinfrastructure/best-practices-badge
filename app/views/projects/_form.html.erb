@@ -448,11 +448,8 @@ automatically met.
 
       <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
                criteria: "vulnerability_report_response", desc: %{
-The project MUST provide an initial reply to a security vulnerability report
-sent to the project, on average, less than 7 days within the last 6 months.},
-               details: %{
-If a project is being spammed on its vulnerability report channel,
-it is okay to only count non-spam messages.
+The project's initial response time for any vulnerability report received
+in the last 6 months MUST be less than 14 days.
 }}) %>
 
      <br><br><br>

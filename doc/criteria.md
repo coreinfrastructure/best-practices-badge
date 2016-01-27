@@ -305,11 +305,9 @@ Note that:
   If private vulnerability reports are not supported this criterion
   is automatically met.
   <sup>[<a href="#vulnerability_report_private">vulnerability_report_private</a>]</sup>
-- <a name="vulnerability_report_response"></a>The project MUST provide an
-  initial response to a vulnerability report, on average,
-  less than 7 days within the last 6 months.
-  (If a project is being spammed on its vulnerability report channel,
-  it is okay to only count non-spam messages.)
+- <a name="vulnerability_report_response"></a>The project's
+  initial response time for any vulnerability report received
+  in the last 6 months MUST be less than 14 days.
   <sup>[<a href="#vulnerability_report_response">vulnerability_report_response</a>]</sup>
 
 ### Quality

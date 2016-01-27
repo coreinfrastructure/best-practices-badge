@@ -1,4 +1,6 @@
 
+<% post_delay_warning = 'There may be a significant delay after submitting ' \
+     'as we try to automatically fill in information.' %>
 <% if logged_in? %>
   <div class='row'>
   <div class="col-md-12">
@@ -11,7 +13,8 @@
      <br>
      <%= form_for(@project) do |f| %>
        <%= f.collection_select :repo_url, github_select, :last, :first, { prompt: 'Select one of your Github repos', disabled: lambda{ |repo| repo.last == 'none' }} %>
-       <%= f.submit 'Submit GitHub Repository', class:"btn btn-primary" %>
+       <%= f.submit 'Submit GitHub Repository', class: 'btn btn-primary',
+                    'data-toggle' => 'tooltip', title: post_delay_warning %>
      <% end %>
 
      <br><h2 class='center'>OR</h2>
@@ -30,7 +33,8 @@
             type: 'url', hide_label: true,
             pattern: '(|https?:\/\/[A-Za-z0-9][-A-Za-z0-9_.\/]*(\/[-A-Za-z0-9_.\/\+,#]*)?)',
             placeholder:'http(s)://... for project repo URL' %>
-     <%= f.submit 'Submit URL', class:"btn btn-primary" %>
+     <%= f.submit 'Submit URL', class: 'btn btn-primary',
+                  'data-toggle' => 'tooltip', title: post_delay_warning %>
   <% end %>
   </div>
   </div>

@@ -198,9 +198,8 @@ $(document).ready(function() {
       $('.details-toggler').html('Show details');
     });
 
-  $(document).ready(function() {
-    $('textarea').autosize();
-  });
+  $('[data-toggle="tooltip"]').tooltip(); // Enable bootstrap tooltips
+  $('textarea').autosize();
 
   if ($('#project_entry_form').length) {
 

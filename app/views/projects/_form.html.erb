@@ -488,7 +488,8 @@ The project SHOULD be buildable using only OSS tools.
 
       <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
                criteria: "test", desc: %{
-The project MUST have at least one automated test suite.},
+The project MUST have at least one automated test suite that is publicly
+released as OSS (this test suite may be maintained as a separate OSS project).},
                details: %{
 The project MAY have multiple automated test suites (e.g., one that runs quickly, vs. another that is more thorough but requires special equipment).
 <b>Rationale</b>: Automated test suites immediately help detect a variety of problems.  A large test suite can find more problems, but even a small test suite can detect problems and provide a framework to build on.

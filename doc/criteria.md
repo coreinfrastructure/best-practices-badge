@@ -335,7 +335,9 @@ Note that:
 
 *Automated test suite*
 
-- <a name="test"></a>The project MUST have at least one automated test suite.
+- <a name="test"></a>The project MUST have at least one automated test suite
+  that is publicly released as OSS
+  (this test suite may be maintained as a separate OSS project)."
   <sup>[<a href="#test">test</a>]</sup>
 - <a name="test_invocation"></a>A test suite SHOULD be invocable in
   a standard way for that language.

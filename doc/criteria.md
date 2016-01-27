@@ -307,7 +307,7 @@ Note that:
   <sup>[<a href="#vulnerability_report_private">vulnerability_report_private</a>]</sup>
 - <a name="vulnerability_report_response"></a>The project's
   initial response time for any vulnerability report received
-  in the last 6 months MUST be less than 14 days.
+  in the last 6 months MUST be less than or equal to 14 days.
   <sup>[<a href="#vulnerability_report_response">vulnerability_report_response</a>]</sup>
 
 ### Quality

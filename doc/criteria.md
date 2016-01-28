@@ -469,14 +469,14 @@ A "project security mechanism" is a security mechanism provided
 by the delivered project's software.
 
 - <a name="crypto_published"></a>The project's cryptographic software MUST
-  use cryptographic protocols and algorithms that are publicly published
- and reviewed by experts.
- <sup>[<a href="#crypto_published">crypto_published</a>]\*</sup>
+  use only cryptographic protocols and algorithms that are publicly published
+  and reviewed by experts.
+  <sup>[<a href="#crypto_published">crypto_published</a>]\*</sup>
 - <a name="crypto_call"></a>If the project software is an application
   or library, and its primary purpose is not to implement cryptography,
-  then it MUST call on software specifically designed to implement
+  then it MUST only call on software specifically designed to implement
   cryptographic functions;
-  it MUST NOT implement its own.
+  it MUST NOT re-implement its own.
   <sup>[<a href="#crypto_call">crypto_call</a>]\*</sup>
 - <a name="crypto_oss"></a>All project functionality that depends
   on cryptography MUST be implementable using OSS because its specification

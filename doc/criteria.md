@@ -19,8 +19,8 @@ sustain a healthy and well-functioning development community.
 However, following best practices can help improve the results
 of OSS projects.
 For example, some practices enable multi-person review before release,
-which can both help find otherwise hard-to-find technical vulnerabilities 
-and help build trust and a desire for repeated interaction among developers 
+which can both help find otherwise hard-to-find technical vulnerabilities
+and help build trust and a desire for repeated interaction among developers
 from different companies.
 
 These best practices have been created to:

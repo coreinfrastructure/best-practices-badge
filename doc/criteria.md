@@ -576,13 +576,13 @@ by the delivered project's software.
 
 - <a name="static_analysis"></a>At least one static code analysis tool
   MUST be applied to any proposed major production release of the software
-  before its release, if there is at least one OSS tool that implement this
+  before its release, if there is at least one OSS tool that implements this
   criterion in the selected language.
   A static code analysis tool examines the software code
   (as source code, intermediate code, or executable)
   without executing it with specific inputs.
-  For purposes of this criterion compiler warnings and "safe"
-  language modes do not count as a static code analysis tool
+  For purposes of this criterion, compiler warnings and "safe"
+  language modes do not count as static code analysis tools
   (these typically avoid deep analysis because speed is vital).
   Examples of such static code analysis tools include
   [cppcheck](http://cppcheck.sourceforge.net/),

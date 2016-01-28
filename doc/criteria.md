@@ -155,7 +155,6 @@ Note that:
   [approved by the Open Source Initiative (OSI)](https://opensource.org/licenses).
   The OSI uses a rigorous approval
   process to determine which licenses are OSS.
-  Licenses not approved by OSI might not be OSS licenses.
   <sup>[<a href="#oss_license_osi">oss_license_osi</a>]&#8224;</sup>
 - The software MAY also be licensed other ways
   (e.g., "GPLv2 or proprietary" is acceptable).

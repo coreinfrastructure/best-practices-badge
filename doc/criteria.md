@@ -91,7 +91,7 @@ Here are the current *draft* criteria; it is certain to change.
 Note that:
 * The criteria marked with "&#8224;" are intended to be automatically testable
   if the project follows standard conventions and
-  is hosted on a repository platform (e.g., GitHub) with decent API support.
+  is hosted on a site (e.g., GitHub) with decent API support.
 * The criteria marked with "*" at the end may be not applicable
   or not required; see their text for more information.
 * Text inside square brackets is the short name of the criterion.
@@ -763,4 +763,3 @@ You may also want to see the "[background](./background.md)" file
 for more information about these criteria,
 and the "[implementation](./implementation.md)" notes
 about the BadgeApp application.
-

@@ -593,7 +593,8 @@ how to design secure software.},
 This requires understanding the following design principles, including the 8 principles from <a href="http://web.mit.edu/Saltzer/www/publications/protection/">Saltzer and Schroeder</a>:
 <ul>
 <li>economy of mechanism (keep the design as simple and small as practical, e.g., by adopting sweeping simplifications)
-<li>fail-safe defaults (access decisions should deny by default)
+<li>fail-safe defaults (access decisions should deny by default, and
+projects' installation should be secure by default)
 <li>complete mediation (every access that might be limited must be checked for authority and be non-bypassable)
 <li>open design (security mechanisms should not depend on attacker ignorance of its design, but instead on more easily protected and changed information like keys and passwords)
 <li>separation of privilege (multi-factor authentication, such as requiring both a password and a hardware token, is stronger than single-factor authentication)

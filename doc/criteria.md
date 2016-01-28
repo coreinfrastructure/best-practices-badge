@@ -412,7 +412,8 @@ Note that:
   [Saltzer and Schroeder](http://web.mit.edu/Saltzer/www/publications/protection/):
     - economy of mechanism (keep the design as simple and small as practical,
       e.g., by adopting sweeping simplifications)
-    - fail-safe defaults (access decisions should deny by default)
+    - fail-safe defaults (access decisions should deny by default, and
+      projects' installation should be secure by default)
     - complete mediation (every access that might be limited must be
       checked for authority and be non-bypassable)
     - open design (security mechanisms should not depend on attacker

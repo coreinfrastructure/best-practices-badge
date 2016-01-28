@@ -726,7 +726,13 @@ If passwords are stored for authentication of external users, the project MUST s
 
     <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
              criteria: "crypto_random", desc: %{
-The project MUST generate all cryptographic keys and nonces using cryptographically random functions, and MUST NOT do so through non-cryptographically random functions.
+The project MUST generate all cryptographic keys and nonces
+using a cryptographically secure random number generator,
+and MUST NOT do so using generators that are not cryptographically secure.
+A cryptographically secure random number generator may be a
+hardware random number generator, or it may be
+a cryptographically secure pseudo-random number generator (CSPRNG) using 
+an algorithm such as Hash_DRBG, HMAC_DRBG, CTR_DRBG, Yarrow, or Fortuna.
 }}) %>
 
     <br><br>

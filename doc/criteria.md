@@ -524,8 +524,13 @@ by the delivered project's software.
   (iterated) algorithm (e.g., PBKDF2, Bcrypt or Scrypt).
   <sup>[<a href="#crypto_password_storage">crypto_password_storage</a>]\*</sup>
 - <a name="crypto_random"></a>The project MUST generate all
-  cryptographic keys and nonces using cryptographically random functions,
-  and MUST NOT do so through non-cryptographically random functions.
+  cryptographic keys and nonces
+  using a cryptographically secure random number generator,
+  and MUST NOT do so using generators that are not cryptographically secure.
+  A cryptographically secure random number generator may be a
+  hardware random number generator, or it may be
+  a cryptographically secure pseudo-random number generator (CSPRNG) using
+  an algorithm such as Hash_DRBG, HMAC_DRBG, CTR_DRBG, Yarrow, or Fortuna.
   <sup>[<a href="#crypto_random">crypto_random</a>]\*</sup>
 
 *Secured delivery mechanism*

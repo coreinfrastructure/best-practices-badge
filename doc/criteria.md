@@ -232,7 +232,7 @@ Note that:
   for each release intended to be used by users.
   <sup>[<a href="#version_unique">version_unique</a>]</sup>
 - <a name="version_semver"></a>It is SUGGESTED that the
-  [Semantic Versioning (SemVer) format](http://semver.org) is used for releases.
+  [Semantic Versioning (SemVer) format](http://semver.org) be used for releases.
   <sup>[<a href="#version_semver">version_semver</a>]</sup>
 - Commit IDs (or similar) MAY be used as version numbers.
   They are unique, but note that these can cause problems for users as they may

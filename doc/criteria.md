@@ -252,8 +252,8 @@ Note that:
   (e.g., the "git log" command results are not release notes).
   <sup>[<a href="#release_notes">release_notes</a>]&#8224;</sup>
 - <a name="release_notes_vulns"></a><a name="changelog_vulns"></a>The
-  release notes MUST identify whether the new
-  release fixes any publicly known vulnerabilities.
+  release notes MUST identify every publicly known vulnerability
+  that is fixed in each new release.
   <sup>[<a href="#release_notes_vulns">release_notes_vulns</a>]</sup>
 - The release notes MAY implemented in a variety of ways.
   Many projects provide them in a file named "NEWS", "CHANGELOG",

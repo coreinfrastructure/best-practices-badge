@@ -221,7 +221,7 @@ Note that:
   difficult to contribute to a project and to track its progress in detail.
   <sup>[<a href="#repo_interim">repo_interim</a>]</sup>
 - <a name="repo_distributed"></a>It is SUGGESTED that common distributed
-  version control software is used (e.g., git).
+  version control software be used (e.g., git).
   Git is not specifically required and projects can use centralized version
   control software (such as subversion).
   <sup>[<a href="#repo_distributed">repo_distributed</a>]&#8224;</sup>

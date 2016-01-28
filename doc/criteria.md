@@ -255,7 +255,7 @@ Note that:
   release notes MUST identify every publicly known vulnerability
   that is fixed in each new release.
   <sup>[<a href="#release_notes_vulns">release_notes_vulns</a>]</sup>
-- The release notes MAY implemented in a variety of ways.
+- The release notes MAY be implemented in a variety of ways.
   Many projects provide them in a file named "NEWS", "CHANGELOG",
   or "ChangeLog", optionally with extensions such as ".txt", ".md", or ".html".
   Historically the term "change log" meant a log of *every* change,

@@ -193,8 +193,7 @@ Note that:
 - <a name="documentation_interface"></a>The project MUST include reference
   documentation that describes its interface.
   <sup>[<a href="#documentation_interface">documentation_interface</a>]</sup>
-- The project MAY use hypertext links to non-project material as documentation,
-  as long as the linked-to information is available and meets the requirements.
+- The project MAY use hypertext links to non-project material as documentation.
 
 ### Change control
 

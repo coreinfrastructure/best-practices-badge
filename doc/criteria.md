@@ -438,17 +438,6 @@ Note that:
       (which only accept known-good values),
       not blacklists (which attempt to list known-bad values)).
       <sup>[<a href="#know_secure_design">know_secure_design</a>]</sup>
-    A "primary developer" in a project is anyone who is familiar with
-    the project's code base, is comfortable making changes to it, and is
-    acknowledged as such by most other participants in the project.
-    A primary developer would typically make a number of contributions
-    over the past year (via code, documentation, or answering questions).
-    Developers would typically be considered primary developers if they
-    initiated the project (and have not left the project more than three
-    years ago), have the option of receiving information on a private
-    vulnerability reporting channel (if there is one), can accept commits
-    on behalf of the project, or perform final releases of the project
-    software.
 - <a name="know_common_errors"></a>At least one of the primary developers
   MUST know of common kinds of errors that lead to vulnerabilities in this kind
   of software, as well as at least one method
@@ -460,8 +449,17 @@ Note that:
   [OWASP Top 10](https://www.owasp.org/index.php/Category:OWASP_Top_Ten_Project)
   for commonly-used lists.
   <sup>[<a href="#know_common_errors">know_common_errors</a>]</sup>
-- *Note*: If there is only one developer,
-  by definition that individual is the primary developer.
+- A "primary developer" in a project is anyone who is familiar with
+  the project's code base, is comfortable making changes to it, and is
+  acknowledged as such by most other participants in the project.
+  A primary developer would typically make a number of contributions
+  over the past year (via code, documentation, or answering questions).
+  Developers would typically be considered primary developers if they
+  initiated the project (and have not left the project more than three
+  years ago), have the option of receiving information on a private
+  vulnerability reporting channel (if there is one), can accept commits
+  on behalf of the project, or perform final releases of the project software.
+  If there is only one developer, that individual is the primary developer.
 
 
 *Good cryptographic practices*

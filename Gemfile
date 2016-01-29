@@ -17,7 +17,7 @@ gem 'omniauth-github', '1.1.2' # Authentication to GitHub (get project info)
 gem 'paper_trail', '4.0.2' # Record previous versions of project data
 gem 'puma', '2.15.3' # Faster webserver; recommended by Heroku
 gem 'rack-timeout', '0.3.2' # Timeout per https://github.com/heroku/rack-timeout
-gem 'rails', '4.2.5' # Our web framework
+gem 'rails', '4.2.5.1' # Our web framework
 gem 'sass-rails', '5.0.4'
 gem 'turbolinks', '2.5.3' # Speed UI access
 gem 'jquery-turbolinks'   # Make turbolinks work with jQuery

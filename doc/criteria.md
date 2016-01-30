@@ -195,6 +195,23 @@ Note that:
   <sup>[<a href="#documentation_interface">documentation_interface</a>]</sup>
 - The project MAY use hypertext links to non-project material as documentation.
 
+
+*Other*
+
+- <a name="discussion"></a>The project MUST have one or more mechanisms
+  for discussion (including proposed changes and issues) that are:
+    - searchable,
+    - allow messages and topics to be addressed by URL,
+    - enable new people to participate in some of the discussions, and
+    - do not require client-side installation of proprietary software.
+  Examples of acceptable mechanisms include
+  GitHub issue and pull request discussions, Bugzilla, Mantis, and Trac.
+  Asynchronous discussion mechanisms (like IRC) are acceptable if
+  they meet these criteria; make sure there is a URL-addressable
+  archiving mechanism.
+  Proprietary Javascript, while discouraged, is permitted.
+  <sup>[<a href="#discussion">discussion</a>]</sup>
+
 ### Change control
 
 *Public version-controlled source repository*

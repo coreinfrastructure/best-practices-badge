@@ -22,6 +22,8 @@ class Project < ActiveRecord::Base
     # Documentation
     documentation_basics: ['MUST', false, false],
     documentation_interface: ['MUST', false, false],
+    # Other
+    discussion: ['MUST', false, false],
     # CHANGE CONTROL
     # Public version-controlled source repository
     repo_url: ['MUST', false, false],

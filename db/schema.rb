@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160123144005) do
+ActiveRecord::Schema.define(version: 20160130165746) do
 
   create_table "projects", force: :cascade do |t|
     t.integer  "user_id"
@@ -156,6 +156,8 @@ ActiveRecord::Schema.define(version: 20160123144005) do
     t.string   "test_continuous_integration_status",                   default: "?"
     t.text     "test_continuous_integration_justification"
     t.string   "cpe"
+    t.string   "discussion_status",                                    default: "?"
+    t.text     "discussion_justification"
   end
 
   add_index "projects", ["user_id", "created_at"], name: "index_projects_on_user_id_and_created_at"

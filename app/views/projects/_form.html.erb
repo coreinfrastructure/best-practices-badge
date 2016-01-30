@@ -278,6 +278,26 @@ The project MUST include reference documentation that describes its interface.},
 The project MAY use hypertext links to non-project material as documentation.
 }}) %>
 
+
+      <br><br>
+      <h3>Other</h3>
+
+      <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
+              criteria: "discussion", desc: %{
+The project MUST have one or more mechanisms
+for discussion (including proposed changes and issues) that are
+searchable, allow messages and topics to be addressed by URL,
+enable new people to participate in some of the discussions, and
+do not require client-side installation of proprietary software.},
+              details: %{
+Examples of acceptable mechanisms include
+GitHub issue and pull request discussions, Bugzilla, Mantis, and Trac.
+Asynchronous discussion mechanisms (like IRC) are acceptable if
+they meet these criteria; make sure there is a URL-addressable
+archiving mechanism.
+Proprietary Javascript, while discouraged, is permitted.
+}}) %>
+
       <br><br><br>
 
       <h2 class="center h2">Change Control</h2>

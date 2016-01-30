@@ -702,17 +702,26 @@ we can certainly use that id to identify projects.
 However, that doesn't help people who searching for the project
 and do not already know that id.
 
-The *real* name of a project, for our purposes, is the project URL.
-This may be a project "front page" URL and/or the front URL for its repository.
+The *real* name of a project, for our purposes, is the
+project "front page" URL and/or the URL for its repository.
 Most projects have a human-readable name, but these names are not enough.
 The same human-readable name can be used for many different projects
 (including project forks), and the same project may go by many different names.
 In many cases it will be useful to point to other names for the project
 (e.g., the source package name in Debian, the package name in some
 language-specific repository, or its name in OpenHub).
+
+In the future we may try to check more carefully that a user can
+legitimately represent a project.
+For the moment, we primarily focus on checking if GitHub repositories
+are involved; there are ways to do this for other situations if that
+becomes important.
 We expect that users will *not* be able to edit the URL in most cases,
 since if they could, they might fool people into thinking they controlled
 a project that they did not.
+That said, creating a bogus row entry does not really help someone very
+much; what matters is the id used by the project when it refers to its
+badge, and the project determines that.
 
 Thus, a badge would have its URL as its name, year range, and level/name
 (once there is more than one).

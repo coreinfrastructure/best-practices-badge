@@ -5,6 +5,7 @@ class SessionsController < ApplicationController
   end
 
   def create
+    reset_session # Counter session fixation
     if request.env['omniauth.auth'].present?
       omniauth_login
     elsif params[:session][:provider] == 'local'

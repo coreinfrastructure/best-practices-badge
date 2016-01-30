@@ -743,9 +743,7 @@ identifies three general reasons for badging systems (all are valid for this):
 We have chosen to use self-certification, because this makes it
 possible for a large number of projects (even small ones) to
 participate.  There's a risk that projects may make false claims,
-but we think the risk is small, and in any case we require that
-projects document *why* they think they meet the criteria
-(so users can quickly see the project's rationale).
+but we think the risk is small, and users can check the claims for themselves.
 
 
 ## Improving the criteria

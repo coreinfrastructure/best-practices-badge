@@ -195,19 +195,19 @@ To add/modify the text of the criteria, edit these files:
 <doc/criteria.md>
 <app/views/projects/_form.html.erb>
 
-If you're adding/removing fields, be sure to edit:
-app/models/project.rb  # Server-side: E.g., put it the right category.
-app/controllers/projects_controller.rb   # Validate permitted field.
+If you're adding/removing fields (including criteria), be sure to edit:
+<app/models/project.rb>.
 
 When adding/removing fields, you also need to create a database migration.
 The "status" (met/unmet) is the criterion name + "\_status" stored as a string;
 each criterion also has a name + "\_justification" stored as text.
-Here are the commands (assuming your current directory is at the top level,
+Here are the commands, assuming your current directory is at the top level,
 EDIT is the name of your favorite text editor, and MIGRATION_NAME is the
-logical name you're giving to the migration):
+logical name you're giving to the migration (e.g., "add_discussion"):
 
 ~~~~
   $ rails generate migration MIGRATION_NAME
+  $ git add db/migrate/*MIGRATION_NAME.rb
   $ EDIT db/migrate/*MIGRATION_NAME.rb
 ~~~~
 

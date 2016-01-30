@@ -429,7 +429,8 @@ Note that:
       (the human interface must be designed for ease of use,
       designing for "least astonishment" can help)
     - limited attack surface (the attack surface, the set of the different
-      points where an attacker can try to enter or extract data, should be limited)
+      points where an attacker can try to enter or extract data,
+      should be limited)
     - input validation with whitelists
       (inputs should typically be checked to determine if they are valid
       before they are accepted; this validation should use whitelists

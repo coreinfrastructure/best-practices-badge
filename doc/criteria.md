@@ -21,7 +21,7 @@ of OSS projects.
 For example, some practices enable multi-person review before release,
 which can both help find otherwise hard-to-find technical vulnerabilities
 and help build trust and a desire for repeated interaction among developers
-from different companies.
+from different organizations.
 
 These best practices have been created to:
 

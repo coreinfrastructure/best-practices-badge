@@ -46,18 +46,22 @@ module ActiveSupport
     # TODO: Put 'provider' into the session, along with email and password
     # This is based on "Ruby on Rails Tutorial" by Michael Hargle, chapter 8,
     # https://www.railstutorial.org/book
+    # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     def log_in_as(user, options = {})
       password = options[:password] || 'password'
       provider = options[:provider] || 'local'
       remember_me = options[:remember_me] || '1'
+      time_last_used = options[:time_last_used] || Time.now.utc
       if integration_test?
         post login_path,
              session: { email:  user.email, password: password,
-                        provider: provider, remember_me: remember_me }
+                        provider: provider, remember_me: remember_me,
+                        time_last_used: time_last_used }
         # Do this instead, it at least checks the password:
         # session[:user_id] = user.id if user.try(:authenticate, password)
       else
         session[:user_id] = user.id
+        session[:time_last_used] = time_last_used
       end
     end
 

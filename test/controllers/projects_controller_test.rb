@@ -58,6 +58,13 @@ class ProjectsControllerTest < ActionController::TestCase
     assert_response :success
   end
 
+  test 'should fail to edit due to old session' do
+    log_in_as(@project.user, time_last_used: 1000.days.ago.utc)
+    get :edit, id: @project
+    assert_response 302
+    assert_redirected_to login_path
+  end
+
   test 'should update project' do
     log_in_as(@project.user)
     patch :update, id: @project, project: {

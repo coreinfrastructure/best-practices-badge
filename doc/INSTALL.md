@@ -76,6 +76,19 @@ git config --global user.name "YOUR NAME"
 git config --global user.email "YOUR EMAIL ADDRESS"
 ~~~~
 
+We also recommend adding these lines to your $HOME/.gitconf file
+(per a recommendation about git integrity by Eric Myhre):
+
+~~~~
+# check that anything we're getting is complete and sane on a regular basis
+[transfer]
+fsckobjects = true
+[fetch]
+fsckobjects = true
+[receive]
+fsckObjects = true
+~~~~
+
 
 ## Forking the repo
 

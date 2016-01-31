@@ -186,7 +186,8 @@ Note that:
   - how to start it,
   - how to use it (possibly with a tutorial using examples), and
   - how to use it securely (e.g., what to do and what not to do)
-  if that is an appropriate topic for the software.
+    if that is an appropriate topic for the software.
+
   The security documentation need not be long
   (it is better for the software to be designed to be secure by default).
   <sup>[<a href="#documentation_basics">documentation_basics</a>]</sup>
@@ -204,6 +205,7 @@ Note that:
     - allow messages and topics to be addressed by URL,
     - enable new people to participate in some of the discussions, and
     - do not require client-side installation of proprietary software.
+
   Examples of acceptable mechanisms include
   GitHub issue and pull request discussions, Bugzilla, Mantis, and Trac.
   Asynchronous discussion mechanisms (like IRC) are acceptable if

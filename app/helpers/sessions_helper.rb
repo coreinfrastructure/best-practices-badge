@@ -69,7 +69,7 @@ module SessionsHelper
   end
 
   def session_expired
-    true unless session.key?(:time_last_used)
+    return true unless session.key?(:time_last_used)
     session[:time_last_used] < SESSION_TTL.ago.utc
   end
 

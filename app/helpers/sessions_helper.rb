@@ -1,4 +1,6 @@
 module SessionsHelper
+  SESSION_TTL = 48.hours # Automatically log off session if inactive this long
+
   def log_in(user)
     session[:user_id] = user.id
   end
@@ -64,5 +66,22 @@ module SessionsHelper
   def store_location
     url = request.url if request.get?
     session[:forwarding_url] = url unless url == login_url
+  end
+
+  def session_expired
+    return true unless session.key?(:time_last_used)
+    session[:time_last_used] < SESSION_TTL.ago.utc
+  end
+
+  def validate_session_timestamp
+    if logged_in? && session_expired
+      reset_session
+      session[:current_user] = nil
+      redirect_to login_path
+    end
+  end
+
+  def persist_session_timestamp
+    session[:time_last_used] = Time.now.utc if logged_in?
   end
 end

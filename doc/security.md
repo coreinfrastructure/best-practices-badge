@@ -517,13 +517,15 @@ reduce the risks of reused code.
 
 Subversion of the development environment can easily lead to
 a compromise of the resulting system.
-As noted earlier, are cautious about the components we use.
+As noted earlier, we are cautious about the components we use.
 The source code is managed on GitHub;
 [GitHub takes steps to keep itself secure](https://help.github.com/articles/github-security/).
 The key developers use development environments
 specifically configured to be secure.
 The INSTALL.md file suggests various steps to counter some attacks, e.g.,
-git integrity recommendations from Eric Myhre.
+git integrity recommendations from Eric Myhre that check all
+git objects transferred from an external site.
+The primary developers apply these git integrity checks.
 
 Of course, it has to be secure as actually deployed.
 We currently use Heroku for deployment; see the

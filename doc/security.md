@@ -359,6 +359,13 @@ as of 2015-12-14:
 2. *Sessions.*
    We use sessions, and use session cookies to store them
    because of their wide support and efficiency.
+   We use the default Rails CookieStore mechanism to store sessions;
+   it is both simple and much faster than alternatives.
+   Rails implements an automatic authentication mechanism (using a
+   secret key) to ensure that clients cannot undetectably change
+   these cookies; a changed value is thrown away.
+   Logged-in users have their user id stored in this authenticated cookie
+   (There is also a session_id, kept for capability but not currently used.)
    Session data is intentionally kept small, because of the limited
    amount of data available in a cookie.
    To counteract session hijacking, we configure the production
@@ -367,10 +374,17 @@ as of 2015-12-14:
    "config.force_ssl" to true).
    The design allows users to drop cookies at any time
    (at worse they may have to re-login to get another session cookie).
-   We do not use CookieStore (so guidance on its use is irrelevant).
-   Passwords may be stored in the session, but this is encrypted and the
+   Passwords may be stored in a cookie, but this is encrypted and the
    password is *not* retained on the server (it stays on the web browser).
-   We don't expire sessions, since makes usage a little more painful.
+   One complaint about Rails' traditional CookieStore is that if someone
+   gets a copy of a session cookie, they can log in as that user, even
+   if the cookie is years old and the user logged out.
+   (e.g., because someone got a backup copied).
+   Our countermeasure is to time out inactive sessions, by
+   also storing a time_last_used in the session
+   cookie (the UTC time the cookie was last used).
+   Once the time expires, then even if someone else later gets an old
+   cookie value, it cannot be used to log into the system.
 3. *Cross-Site Request Forgery (CSRF).*
    We use the standard REST operations with their standard meanings
    (GET, POST, etc., with the standard Rails method workaround).

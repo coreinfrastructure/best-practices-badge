@@ -24,31 +24,37 @@ class SessionsController < ApplicationController
 
   private
 
-  # rubocop:disable Metrics/AbcSize
   def local_login
     user = User.find_by provider: 'local',
                         email: params[:session][:email].downcase
     if user && user.authenticate(params[:session][:password])
-      login_procedure(user)
-      params[:session][:remember_me] == '1' ? remember(user) : forget(user)
+      local_login_procedure(user)
     else
       flash.now[:danger] = 'Invalid email/password combination'
       render 'new'
     end
   end
-  # rubocop:enable Metrics/AbcSize
 
   def omniauth_login
     auth = request.env['omniauth.auth']
     user = User.find_by(provider: auth['provider'], uid: auth['uid']) ||
            User.create_with_omniauth(auth)
     session[:user_token] = auth['credentials']['token']
-    login_procedure(user)
-  end
-
-  def login_procedure(user)
     log_in user
     redirect_back_or root_url
     flash[:success] = 'Signed in!'
+  end
+
+  def local_login_procedure(user)
+    if user.activated?
+      log_in user
+      redirect_back_or root_url
+      flash[:success] = 'Signed in!'
+      params[:session][:remember_me] == '1' ? remember(user) : forget(user)
+    else
+      flash[:warning] = 'Account not activated.
+                         Check your email for the activation link.'
+      redirect_to root_url
+    end
   end
 end

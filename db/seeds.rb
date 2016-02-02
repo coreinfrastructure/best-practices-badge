@@ -11,13 +11,16 @@ User.create!(name: 'Admin User', email: 'admin@example.org',
              password: 'p@$$w0rd',
              password_confirmation: 'p@$$w0rd',
              provider: 'local',
-             role: 'admin')
+             role: 'admin', activated: true,
+             activated_at: Time.zone.now)
 
 User.create!(name:  'Test User',
              email: 'test@example.org',
              password:              'password',
              password_confirmation: 'password',
-             provider: 'local')
+             provider: 'local',
+             activated: true,
+             activated_at: Time.zone.now)
 
 20.times do |n|
   name  = Faker::Name.name
@@ -27,7 +30,9 @@ User.create!(name:  'Test User',
                email: email,
                password:              password,
                password_confirmation: password,
-               provider: 'local')
+               provider: 'local',
+               activated: true,
+               activated_at: Time.zone.now)
 end
 
 # Projects for testing
@@ -58,8 +63,8 @@ user.projects.create!(user_id: user.id,
                       version_unique_status: '?',
                       version_semver_status: '?',
                       version_tags_status: '?',
-                      changelog_status: '?',
-                      changelog_vulns_status: '?',
+                      release_notes_status: '?',
+                      release_notes_vulns_status: '?',
                       report_url_status: '?',
                       report_tracker_status: '?',
                       report_process_status: '?',
@@ -136,8 +141,8 @@ user.projects.create!(user_id: user.id,
                         version_unique_status: '?',
                         version_semver_status: '?',
                         version_tags_status: '?',
-                        changelog_status: '?',
-                        changelog_vulns_status: '?',
+                        release_notes_status: '?',
+                        release_notes_vulns_status: '?',
                         report_url_status: '?',
                         report_tracker_status: '?',
                         report_process_status: '?',

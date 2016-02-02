@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160130165746) do
+ActiveRecord::Schema.define(version: 20160131030706) do
 
   create_table "projects", force: :cascade do |t|
     t.integer  "user_id"
@@ -172,10 +172,13 @@ ActiveRecord::Schema.define(version: 20160130165746) do
     t.string   "password_digest"
     t.string   "secret_token"
     t.string   "validation_code"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
     t.string   "role"
     t.string   "remember_digest"
+    t.string   "activation_digest"
+    t.boolean  "activated",         default: false
+    t.datetime "activated_at"
   end
 
   add_index "users", ["email"], name: "index_users_on_email"

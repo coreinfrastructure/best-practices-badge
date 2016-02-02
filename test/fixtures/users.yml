@@ -5,15 +5,21 @@ test_user:
   email: test@example.org
   password_digest: <%= User.digest('password') %>
   provider: local
+  activated: true
+  activated_at: <%= Time.zone.now %>
 
 test_user_melissa:
   name: Melissa Lewis
   email: melissa@example.com
   password_digest: <%= User.digest('password1') %>
   provider: local
+  activated: true
+  activated_at: <%= Time.zone.now %>
 
 test_user_mark:
   name: Mark Watney
   email: mark@example.com
   password_digest: <%= User.digest('password') %>
   provider: local
+  activated: true
+  activated_at: <%= Time.zone.now %>

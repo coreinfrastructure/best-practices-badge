@@ -12,7 +12,9 @@ require 'json'
 class GithubBasicDetective < Detective
   # Individual detectives must identify their inputs, outputs
   INPUTS = [:repo_url].freeze
-  OUTPUTS = [:name, :license].freeze
+  OUTPUTS = [:name, :license,
+             :discussion_status, :repo_track_status,
+             :repo_distributed_status, :contribution_status].freeze
 
   # These are the 'correct' display case for SPDX for OSI-approved licenses.
   LICENSE_CORRECT_CASE = {
@@ -79,6 +81,10 @@ class GithubBasicDetective < Detective
         explanation: 'Projects on GitHub by default use issues and ' \
           'pull requests, as encouraged by documentation such as ' \
           '<https://guides.github.com/activities/contributing-to-open-source/>.'
+      }
+      results[:discussion_status] = {
+        value: 'Met', confidence: 3,
+        explanation: 'GitHub supports discussions on issues and pull requests.'
       }
 
       # Get basic evidence using GET, e.g.:

@@ -35,7 +35,7 @@ class Chief
   # List fields allowed to be written into Project (an ActiveRecord).
   # TODO: Automatically determine allowed fields, or get from elsewhere.
   ALLOWED_FIELDS =
-    [:name, :license,
+    [:name, :license, :discussion_status, :discussion_justification,
      :oss_license_osi_status, :oss_license_osi_justification,
      :contribution_status, :contribution_justification,
      :oss_license_status, :oss_license_justification,

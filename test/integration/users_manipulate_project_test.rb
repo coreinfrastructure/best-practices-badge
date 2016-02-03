@@ -26,12 +26,28 @@ class UsersManipulateProjectTest < ActionDispatch::IntegrationTest
       assert_response :success
       assert_template 'projects/edit'
 
+      # Check that returned settings are correct.
       # Note: You can use byebug... css_select to interactively check things.
       assert_select '#project_name[value=?]',
                     'Core Infrastructure Initiative Best Practices Badge'
-      assert_select '#project_repo_distributed_status_met[checked]'
       assert_select '#project_contribution_status_met[checked]'
+      assert_select '#project_oss_license_status_met[checked]'
       assert_select '#project_oss_license_osi_status_met[checked]'
+      assert_select '#project_license_location_status_met[checked]'
+      assert_select '#project_repo_track_status_met[checked]'
+      assert_select '#project_repo_distributed_status_met[checked]'
+      assert_select '#project_release_notes_status_met[checked]'
+      assert_select '#project_build_status_met[checked]'
+      assert_select '#project_build_common_tools_status_met[checked]'
+      assert_select '#project_contribution_status_met[checked]'
+
+      assert_select '#project_static_analysis_status_[checked]' # Unknown.
+
+      # Ensure alternate entries exist but are not checked
+      assert_select '#project_repo_distributed_status_'
+      assert_select '#project_repo_distributed_status_[checked]', count: 0
+      assert_select '#project_repo_distributed_status_unmet'
+      assert_select '#project_repo_distributed_status_unmet[checked]', count: 0
 
       #  assert_select 'a[href=?]', login_path, count: 0
       #  assert_select 'a[href=?]', logout_path

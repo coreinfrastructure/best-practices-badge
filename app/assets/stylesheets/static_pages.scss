@@ -72,6 +72,7 @@ p {
 
 /* Project Display*/
 .project_index thead tr th,.project_index tbody tr td {
+ table-layout:fixed;
  border: 1px solid black;
  border-collapse: collapse;
  padding: 5px 5px 5px 5px;

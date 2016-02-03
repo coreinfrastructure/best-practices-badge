@@ -35,6 +35,7 @@ class UsersManipulateProjectTest < ActionDispatch::IntegrationTest
       assert_select '#project_oss_license_status_met[checked]'
       assert_select '#project_oss_license_osi_status_met[checked]'
       assert_select '#project_license_location_status_met[checked]'
+      assert_select '#project_repo_url_status_met[checked]'
       assert_select '#project_repo_track_status_met[checked]'
       assert_select '#project_repo_distributed_status_met[checked]'
       assert_select '#project_release_notes_status_met[checked]'

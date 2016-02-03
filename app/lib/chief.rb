@@ -39,6 +39,7 @@ class Chief
      :oss_license_osi_status, :oss_license_osi_justification,
      :contribution_status, :contribution_justification,
      :oss_license_status, :oss_license_justification,
+     :repo_url_status, :repo_url_justification,
      :repo_track_status, :repo_track_justification,
      :repo_distributed_status, :repo_distributed_justification,
      :build_status, :build_justification,

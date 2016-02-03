@@ -13,7 +13,7 @@ class GithubBasicDetective < Detective
   # Individual detectives must identify their inputs, outputs
   INPUTS = [:repo_url].freeze
   OUTPUTS = [:name, :license,
-             :discussion_status, :repo_track_status,
+             :discussion_status, :repo_url_status, :repo_track_status,
              :repo_distributed_status, :contribution_status].freeze
 
   # These are the 'correct' display case for SPDX for OSI-approved licenses.
@@ -67,6 +67,10 @@ class GithubBasicDetective < Detective
     repo_url.match(
       %r{\Ahttps://github.com/([A-Za-z0-9_-]+)/([A-Za-z0-9_-]+)/?\Z}) do |m|
       # We have a github repo.
+      results[:repo_url_status] = {
+        value: 'Met', confidence: 3,
+        explanation: 'Repository on GitHub, which provides ' \
+          'public git repositories with URLs.' }
       results[:repo_track_status] = {
         value: 'Met', confidence: 4,
         explanation: 'Repository on GitHub, which uses git. ' \

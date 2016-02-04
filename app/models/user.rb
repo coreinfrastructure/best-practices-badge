@@ -11,7 +11,7 @@ class User < ActiveRecord::Base
   validates :email, presence: true, length: { maximum: 255 },
                     uniqueness: { case_sensitive: false }, email: true
   validates :password, presence: true,
-                       length: { minimum: MIN_PASSWORD_LENGTH }
+                       length: { minimum: MIN_PASSWORD_LENGTH }, allow_nil: true
 
   # Returns the hash digest of the given string.
   def self.digest(string)

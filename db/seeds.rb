@@ -22,7 +22,7 @@ User.create!(name:  'Test User',
              activated: true,
              activated_at: Time.zone.now)
 
-20.times do |n|
+100.times do |n|
   name  = Faker::Name.name
   email = "test-#{n + 1}@example.org"
   password = 'password'
@@ -110,7 +110,7 @@ user.projects.create!(user_id: user.id,
                       dynamic_analysis_fixed_status: '?'
                      )
 
-20.times do |n|
+100.times do |n|
   name = "test-name-#{n + 1}"
   description = "test-description#{n + 1}"
   project_homepage_url = 'https://' + "test-project-url-#{n + 1}.org"

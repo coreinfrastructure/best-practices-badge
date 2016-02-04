@@ -17,7 +17,9 @@
             </a>
             <ul class="dropdown-menu nav-color">
               <li><%= link_to "Profile", current_user %></li>
-              <li><%= link_to "Settings", '#' %></li>
+              <% if current_user.provider == 'local' %>
+                <li><%= link_to "Settings", edit_user_path(current_user) %></li>
+              <% end %>
               <li class="divider"></li>
               <li>
                 <%= link_to '<span class="glyphicon glyphicon-log-in"></span> Logout'.html_safe, logout_path, method: "delete" %>

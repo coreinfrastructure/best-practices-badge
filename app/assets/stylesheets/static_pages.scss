@@ -60,14 +60,19 @@ p {
 
 #logo {
   float: left;
-  margin-right: 10px;
-  font-size: 1.7em;
+  font-size: 1.5em;
   color: #fff;
   text-transform: uppercase;
-  letter-spacing: -1px;
+  letter-spacing: -0.5px;
   padding-top: 5px;
   padding-bottom: 5px;
   font-weight: bold;
+  margin-left: 10px;
+}
+
+#logo:hover {
+  color: #fff;
+  text-decoration: none;
 }
 
 /* Project Display*/
@@ -79,12 +84,13 @@ p {
 /* header */
 .nav-color {
   background-color: #000066;
-  padding-top: 5px;
+  padding-top: 10px;
 }
 
 .nav.navbar-nav.navbar-right li a {
   color: white;
   font-size: 1.2em;
+  margin-right: 10px;
   &:hover {
   color: #4791FF;
   }

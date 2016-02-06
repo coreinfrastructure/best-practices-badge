@@ -71,7 +71,7 @@ Rails.application.configure do
   # https://www.railstutorial.org/book/account_activation_password_reset
   config.action_mailer.raise_delivery_errors = true
   config.action_mailer.delivery_method = :smtp
-  host = 'secret-retreat-6638.herokuapp.com'
+  host = (ENV['PUBLIC_HOSTNAME'] || 'public-hostname-not-configured')
   config.action_mailer.default_url_options = { host: host }
   ActionMailer::Base.smtp_settings = {
     address: 'smtp.sendgrid.net',

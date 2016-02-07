@@ -216,16 +216,17 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
                criteria: "oss_license", desc: %{
 The software MUST be released as OSS.},
                details: %{
-For our purposes, this means that the license MUST be at least one of the following:
+Examples of OSS licenses include the
+<a href="http://creativecommons.org/publicdomain/zero/1.0/">CC0</a>, <a href="https://opensource.org/licenses/MIT">MIT</a>, <a href="https://opensource.org/licenses/BSD-2-Clause">BSD 2-clause</a>, <a href="https://opensource.org/licenses/BSD-3-Clause">BSD 3-clause revised</a>, <a href="https://opensource.org/licenses/Apache-2.0">Apache 2.0</a>, <a href="https://opensource.org/licenses/lgpl-license">Lesser GNU General Public License (LGPL)</a>, and the <a href="https://opensource.org/licenses/gpl-license">GNU General Public License (GPL)</a>.
+For our purposes, this means that the license MUST be:
 <ul>
-<li><a href="https://opensource.org/licenses">an approved license by the Open Source Initiative (OSI)</a></li>
-<li><a href="https://www.gnu.org/licenses/license-list.html">a free license as approved by the Free Software Foundation (FSF)</a></li>
-<li><a href="https://www.debian.org/legal/licenses/">a free license acceptable to Debian main</a></li>
-<li><a href="https://fedoraproject.org/wiki/Licensing:Main?rd=Licensing">a "good" license according to Fedora</a></li>
+<li><a href="https://opensource.org/licenses">an approved license by the Open Source Initiative (OSI)</a>, or</li>
+<li><a href="https://www.gnu.org/licenses/license-list.html">a free license as approved by the Free Software Foundation (FSF)</a>, or</li>
+<li><a href="https://www.debian.org/legal/licenses/">a free license acceptable to Debian main</a>, or</li>
+<li><a href="https://fedoraproject.org/wiki/Licensing:Main?rd=Licensing">a "good" license according to Fedora</a>.</li>
 </ul>
 The software MAY also be licensed other ways (e.g., "GPLv2 or proprietary" is acceptable).
 <br>
-<em>Note</em>: We intend for the automated tool to focus on identifying common OSS licenses such as:     <a href="http://creativecommons.org/publicdomain/zero/1.0/">CC0</a>, <a href="https://opensource.org/licenses/MIT">MIT</a>, <a href="https://opensource.org/licenses/BSD-2-Clause">BSD 2-clause</a>, <a href="https://opensource.org/licenses/BSD-3-Clause">BSD 3-clause revised</a>, <a href="https://opensource.org/licenses/Apache-2.0">Apache 2.0</a>, <a href="https://opensource.org/licenses/lgpl-license">Lesser GNU General Public License (LGPL)</a>, and the <a href="https://opensource.org/licenses/gpl-license">GNU General Public License (GPL)</a>.
 <br>
 <em>Rationale</em>: These criteria are designed for OSS projects, so we need to ensure that they're only used where they apply.  Some projects are thought of as OSS yet are not actually released as OSS (e.g., they might not have any license, in which case the defaults of the country's legal system apply, or they might use a non-OSS license).  Unusual licenses can cause long-term problems for OSS projects and are more difficult for tools to handle.  We expect that more advanced badges would set a higher bar (e.g., that it <em>must</em> be released under an OSI-approved license).
 }}) %>

@@ -138,35 +138,33 @@ Note that:
 
 *OSS license*
 
-- <a name="license_location"></a>The project MUST post license(s) in a standard
-  location (e.g., as a top-level file named LICENSE or COPYING).
-  License filenames MAY be followed by an extension such as ".txt" or ".md"
-  <sup>[<a href="#license_location">license_location</a>]&#8224;</sup>
 - <a name="oss_license"></a> The software MUST be licensed as OSS.
-  For our purposes, this means that the license MUST be at least one
-  of the following:
-  - [an approved license by the Open Source Initiative
-  (OSI)](https://opensource.org/licenses)
-  - [a free license as approved by the Free Software Foundation (FSF)](https://www.gnu.org/licenses/license-list.html)
-  - [a free license acceptable to Debian main](https://www.debian.org/legal/licenses/)
-  - [a "good" license according to Fedora](https://fedoraproject.org/wiki/Licensing:Main?rd=Licensing).
+  Examples of OSS licenses include the
+  [CC0](http://creativecommons.org/publicdomain/zero/1.0/),
+  [MIT](https://opensource.org/licenses/MIT),
+  [BSD 2-clause](https://opensource.org/licenses/BSD-2-Clause),
+  [BSD 3-clause revised](https://opensource.org/licenses/BSD-3-Clause),
+  [Apache 2.0](https://opensource.org/licenses/Apache-2.0),
+  [Lesser GNU General Public License (LGPL)](https://opensource.org/licenses/lgpl-license) (any version),
+  and the [GNU General Public License (GPL)](https://opensource.org/licenses/gpl-license) (any version).
+  For our purposes, this means that the license MUST be:
+    - [an approved license by the Open Source Initiative (OSI)](https://opensource.org/licenses), or
+    - [a free license as approved by the Free Software Foundation (FSF)](https://www.gnu.org/licenses/license-list.html), or
+    - [a free license acceptable to Debian main](https://www.debian.org/legal/licenses/), or
+    - [a "good" license according to Fedora](https://fedoraproject.org/wiki/Licensing:Main?rd=Licensing).
+
   <sup>[<a href="#oss_license">oss_license</a>]&#8224;</sup>
 - <a name="oss_license_osi"></a> It is SUGGESTED that any required license(s) be
   [approved by the Open Source Initiative (OSI)](https://opensource.org/licenses).
   The OSI uses a rigorous approval
   process to determine which licenses are OSS.
   <sup>[<a href="#oss_license_osi">oss_license_osi</a>]&#8224;</sup>
+- <a name="license_location"></a>The project MUST post license(s) in a standard
+  location (e.g., as a top-level file named LICENSE or COPYING).
+  License filenames MAY be followed by an extension such as ".txt" or ".md"
+  <sup>[<a href="#license_location">license_location</a>]&#8224;</sup>
 - The software MAY also be licensed other ways
   (e.g., "GPLv2 or proprietary" is acceptable).
-- *Note*: We intend for the automated tool to focus on identifying common OSS
-  licenses such as:
-  [CC0](http://creativecommons.org/publicdomain/zero/1.0/),
-  [MIT](https://opensource.org/licenses/MIT),
-  [BSD 2-clause](https://opensource.org/licenses/BSD-2-Clause),
-  [BSD 3-clause revised](https://opensource.org/licenses/BSD-3-Clause),
-  [Apache 2.0](https://opensource.org/licenses/Apache-2.0),
-  [Lesser GNU General Public License (LGPL)](https://opensource.org/licenses/lgpl-license),
-  and the [GNU General Public License (GPL)](https://opensource.org/licenses/gpl-license).
 - *Rationale*: These criteria are designed for OSS projects, so we need to
   ensure that they're only used where they apply.
   Some projects are thought of as OSS yet are not actually released as OSS

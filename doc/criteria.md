@@ -186,8 +186,7 @@ Note that:
   - how to use it securely (e.g., what to do and what not to do)
     if that is an appropriate topic for the software.
 
-  The security documentation need not be long
-  (it is better for the software to be designed to be secure by default).
+  The security documentation need not be long.
   <sup>[<a href="#documentation_basics">documentation_basics</a>]</sup>
 - <a name="documentation_interface"></a>The project MUST include reference
   documentation that describes its interface.

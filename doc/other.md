@@ -74,6 +74,9 @@ Potential silver criteria
         The project MUST include reference documentation that describes
         its data flow.
         <sup>[<a href="#documentation-dataflow">documentation-dataflow</a>]</sup>
+    - The project’s documentation MUST be consistent with the current
+      version of the program.
+      Documentation of other versions MAY be included.
 *   Code/build requirements:
     -   Coding standards / coding style guide
         (typically by pointing to something).

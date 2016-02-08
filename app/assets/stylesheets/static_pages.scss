@@ -80,6 +80,10 @@ p {
   text-align: center;
 }
 
+.tab-title {
+  margin-left: 5px;
+  margin-right: 5px;
+}
 
 /* header */
 .nav-color {
@@ -94,10 +98,6 @@ p {
   &:hover {
   color: #4791FF;
   }
-}
-
-h3 {
-color:#000066;
 }
 
 /* footer */

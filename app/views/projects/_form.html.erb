@@ -95,8 +95,21 @@ There is also a
   <%= bootstrap_form_for(project) do |f| %>
     <%= render 'shared/error_messages', object: f.object %>
 
-    <h2 class="center">OSS Project Basics</h2>
+<br><br><br>
+<div>
+  <!-- Nav tabs -->
+  <ul class="nav nav-tabs">
+    <li class="active"><a href="#projectbasics" data-toggle="tab"><h3 class="tab-title">OSS Project Basics</h3></a></li>
+    <li><a href="#changecontrol" data-toggle="tab"><h3 class="tab-title">Change Control</h3></a></li>
+    <li><a href="#reporting" data-toggle="tab"><h3 class="tab-title">Reporting</h3></a></li>
+    <li><a href="#quality" data-toggle="tab"><h3 class="tab-title">Quality</h3></a></li>
+    <li><a href="#security" data-toggle="tab"><h3 class="tab-title">Security</h3></a></li>
+    <li><a href="#analysis" data-toggle="tab"><h3 class="tab-title">Analysis</h3></a></li>
+  </ul>
 
+  <div class="tab-content">
+  <div class="tab-pane active" id="projectbasics">
+<br>
     <h3>Identification</h3>
       <span>What is the human-readable name of the project?</span>
 <%= render(partial: "details", locals: {
@@ -136,7 +149,7 @@ This information is used when displaying badge information.
 }}) %>
       <%= f.text_field :cpe, hide_label: true, class:"form-control", placeholder:'(Optional) CPE name', disabled: is_disabled %>
 
-
+  <br>
    <%# Note: render() accepts met_suppress: ..., unmet_placeholder:  ... %>
 
     <h3>Basic Project Website Content</h3>
@@ -177,7 +190,7 @@ The information on how to contribute SHOULD include the basic criteria for accep
               met_url: true,
               unmet_placeholder: %{Why are the criteria so obvious that this information isn't needed?
 }}) %>
-      <br><br>
+      <br>
 
       <h3>OSS License</h3>
       <span>What license(s) is the project released under?</span>
@@ -257,7 +270,7 @@ E.g., as a top-level file named LICENSE or COPYING.
 License filenames MAY be followed by an extension such as ".txt" or ".md".},
 }) %>
 
-      <br><br>
+      <br>
       <h3>Documentation</h3>
 
       <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
@@ -279,8 +292,7 @@ The project MUST include reference documentation that describes its interface.},
 The project MAY use hypertext links to non-project material as documentation.
 }}) %>
 
-
-      <br><br>
+      <br>
       <h3>Other</h3>
 
       <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
@@ -298,10 +310,10 @@ they meet these criteria; make sure there is a URL-addressable
 archiving mechanism.
 Proprietary Javascript, while discouraged, is permitted.
 }}) %>
+</div>
 
-      <br><br><br>
-
-      <h2 class="center h2">Change Control</h2>
+      <div class="tab-pane" id="changecontrol">
+      <br>
       <h3>Public version-controlled source repository</h3>
 
        <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
@@ -341,7 +353,7 @@ can use centralized version control software
 (such as subversion) with justification.
 }}) %>
 
-      <br><br>
+      <br>
       <h3>Version numbering</h3>
 
       <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
@@ -369,7 +381,7 @@ For example, it is SUGGESTED that those using git identify each
 release using git tags.
 }}) %>
 
-      <br><br>
+      <br>
       <h3>ChangeLog</h3>
 
       <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
@@ -400,10 +412,10 @@ decide whether or not they will want to update, and what the impact would be
 The release notes MUST identify every publicly known vulnerability
 that is fixed in each new release.
 }}) %>
-      <hr>
+</div>
 
-      <br><br><br>
-      <h2 class="center h2">Reporting</h2>
+      <div class="tab-pane" id="reporting">
+      <br>
       <h3>Bug reporting process</h3>
 
       <!-- TODO: Add report_url to model and database.
@@ -442,7 +454,7 @@ The project SHOULD respond to most enhancement requests in the last 2-12 months 
 The project MUST have a publicly available archive for reports and responses for later searching.
 }}) %>
 
-      <br><br>
+      <br>
 
       <h3>Vulnerability reporting process</h3>
       <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
@@ -473,9 +485,10 @@ automatically met.
 The project's initial response time for any vulnerability report received
 in the last 6 months MUST be less than or equal to 14 days.
 }}) %>
+</div>
 
-     <br><br><br>
-     <h2 class="center h2">Quality</h2>
+     <div class="tab-pane" id="quality">
+     <br>
      <h3>Working build system</h3>
 
       <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
@@ -504,7 +517,7 @@ For example, Maven, Ant, cmake, the autotools, make, or rake.
 The project SHOULD be buildable using only OSS tools.
 }}) %>
 
-      <br><br>
+      <br>
 
       <h3>Automated test suite</h3>
 
@@ -539,9 +552,7 @@ It is SUGGESTED that the project implement continuous integration
 code repository and automated tests are run on the result).
 }}) %>
 
-
-
-    <br><br>
+    <br>
     <h3>New functionality testing</h3>
 
       <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
@@ -572,7 +583,7 @@ However, even an informal rule is acceptable as long as the tests are being
 added in practice.
 }}) %>
 
-    <br><br>
+    <br>
     <h3>Warning flags</h3>
 
       <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
@@ -602,9 +613,10 @@ The project MUST address warnings.},
 It is SUGGESTED that projects be maximally strict with warnings, but this is not
 always practical.
 }}) %>
+</div>
 
-    <br><br><br>
-    <h2 class="center h2">Security</h2>
+    <div class="tab-pane" id="security">
+    <br>
     <h3>Secure development knowledge</h3>
 
     <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
@@ -660,7 +672,7 @@ See the <a href="http://cwe.mitre.org/top25/">CWE/SANS top 25</a> or
 for commonly-used lists.
 }}) %>
 
-    <br><br><br>
+    <br>
     <h3>Good cryptographic practices</h3>
 
 
@@ -763,7 +775,7 @@ a cryptographically secure pseudo-random number generator (CSPRNG) using
 an algorithm such as Hash_DRBG, HMAC_DRBG, CTR_DRBG, Yarrow, or Fortuna.
 }}) %>
 
-    <br><br>
+    <br>
     <h3>Secured delivery against man-in-the-middle (MITM) attacks</h3>
 
     <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
@@ -785,7 +797,7 @@ used without checking for a cryptographic signature.},
              details: %{
 These hashes can be modified in transit.
 }}) %>
-
+<br>
     <h3>Publicly-known vulnerabilities fixed</h3>
 
     <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
@@ -815,11 +827,10 @@ verify by those outside the project.
 Projects SHOULD fix all critical vulnerabilities rapidly after they
 are reported.
 }}) %>
-    <br>
+</div>
 
-
-    <br><br><br>
-    <h2 class="center h2">Analysis</h2>
+    <div class="tab-pane" id="analysis">
+      <br>
     <h3>Static code analysis</h3>
 
      <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
@@ -860,7 +871,7 @@ A vulnerability is medium to high severity if its <a href="https://nvd.nist.gov/
 It is SUGGESTED that static source code analysis occur on every commit or at least daily.
 }}) %>
 
-     <br><br>
+     <br>
 
      <h3>Dynamic analysis</h3>
 
@@ -907,6 +918,9 @@ All confirmed medium and high severity exploitable vulnerabilities discovered
 with dynamic code analysis MUST be fixed. A vulnerability is medium to high
 severity if its <a href="https://nvd.nist.gov/cvss.cfm">CVSS 2.0</a> base score is 4 or higher.
 }}) %>
+
+</div>
+</div>
       <hr>
 
       <br>

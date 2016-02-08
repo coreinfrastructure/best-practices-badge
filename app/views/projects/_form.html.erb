@@ -321,11 +321,15 @@ and when the changes were made.
 
       <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
                criteria: "repo_interim", desc: %{
-The source repository MUST include interim versions for review between releases;
-it MUST NOT include only final releases.},
+  To enable collaborative review, the project's source repository MUST
+  include interim versions for review between releases;
+  it MUST NOT include only final releases.},
                details: %{
-This enables easy tracking and public review.  Some OSS projects do not use a version control system or do not provide public access to it. The lack of a public version control repository makes it unnecessarily difficult to contribute to a project and to track its progress in detail.
-}}) %>
+  Projects MAY choose to omit specific interim versions
+  from their public source repositories
+  (e.g., ones that fix specific non-public security vulnerabilities, 
+  may never be publicly released, or include material that cannot 
+  be legally posted and are not in the final release).}}) %>
       <hr>
 
       <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,

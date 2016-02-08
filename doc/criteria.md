@@ -225,14 +225,15 @@ Note that:
 - <a name="repo_track"></a>The source repository MUST track what changes
   were made, who made the changes, and when the changes were made.
   <sup>[<a href="#repo_track">repo_track</a>]&#8224;</sup>
-- <a name="repo_interim"></a>The source repository MUST include interim
+- <a name="repo_interim"></a>To enable collaborative review,
+  the project's source repository MUST include interim
   versions for review between releases;
   it MUST NOT include only final releases.
-  *Rationale*:  This enables easy tracking and public review.
-  Some OSS projects do not use a version control system or do not provide
-  public access to it.
-  The lack of a public version control repository makes it unnecessarily
-  difficult to contribute to a project and to track its progress in detail.
+  Projects MAY choose to omit specific interim versions
+  from their public source repositories
+  (e.g., ones that fix specific non-public security vulnerabilities,
+  may never be publicly released, or include material that cannot
+  be legally posted and are not in the final release).
   <sup>[<a href="#repo_interim">repo_interim</a>]</sup>
 - <a name="repo_distributed"></a>It is SUGGESTED that common distributed
   version control software be used (e.g., git).

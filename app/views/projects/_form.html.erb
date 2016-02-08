@@ -694,7 +694,8 @@ re-implement its own.
     <%= render(partial: "status_chooser", locals: {f: f, is_disabled: is_disabled,
              criteria: "crypto_oss", desc: %{
 All functionality that depends on cryptography MUST be implementable using
-OSS because its specification meets the
+OSS.},
+             details: %{See the
 <a href="https://opensource.org/osr">Open Standards Requirement for Software
 by the Open Source Initiative</a>.
 }}) %>

@@ -498,8 +498,7 @@ by the delivered project's software.
   it MUST NOT re-implement its own.
   <sup>[<a href="#crypto_call">crypto_call</a>]\*</sup>
 - <a name="crypto_oss"></a>All project functionality that depends
-  on cryptography MUST be implementable using OSS because its specification
-  meets the
+  on cryptography MUST be implementable using OSS.  See the
   [*Open Standards Requirement for Software* by the Open Source Initiative](https://opensource.org/osr).
   <sup>[<a href="#crypto_oss">crypto_oss</a>]\*</sup>
 - <a name="crypto_keylength"></a>The project security mechanisms

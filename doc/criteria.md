@@ -434,9 +434,11 @@ Note that:
     - open design (security mechanisms should not depend on attacker
       ignorance of its design, but instead on more easily protected and
       changed information like keys and passwords)
-    - separation of privilege (multi-factor authentication,
-      such as requiring both a password and a hardware token,
-      is stronger than single-factor authentication)
+    - separation of privilege (ideally, access to important objects
+      should depend on more than one condition, so that defeating
+      one protection system won't enable complete access.
+      E.G., multi-factor authentication, such as requiring both a password
+      and a hardware token, is stronger than single-factor authentication)
     - least privilege (processes should operate with the
       least privilege necessary)
     - least common mechanism (the design should minimize the mechanisms

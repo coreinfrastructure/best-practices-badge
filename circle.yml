@@ -8,8 +8,20 @@ deployment:
   master:
     branch: master
     commands:
-      - git push git@heroku.com:secret-retreat-6638.git $CIRCLE_SHA1:refs/heads/master
-      - heroku run rake db:migrate --app secret-retreat-6638:
+      - git push git@heroku.com:master-bestpractices.git $CIRCLE_SHA1:refs/heads/master
+      - heroku run rake db:migrate --app master-bestpractices:
+          timeout: 400 # if your deploys take a long time
+  staging:
+    branch: staging
+    commands:
+      - git push git@heroku.com:staging-bestpractices.git $CIRCLE_SHA1:refs/heads/master
+      - heroku run rake db:migrate --app staging-bestpractices:
+          timeout: 400 # if your deploys take a long time
+  production:
+    branch: production
+    commands:
+      - git push git@heroku.com:production-bestpractices.git $CIRCLE_SHA1:refs/heads/master
+      - heroku run rake db:migrate --app production-bestpractices:
           timeout: 400 # if your deploys take a long time
 general:
   artifacts:

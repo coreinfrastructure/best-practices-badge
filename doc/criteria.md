@@ -100,7 +100,7 @@ Note that:
   project name, description, project URL, repository URL (which may be the
   same as the project URL), and license(s).
 
-### OSS project basics
+### Basics
 
 *Project website*
 

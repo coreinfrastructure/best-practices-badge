@@ -81,9 +81,9 @@
            <div id="<%= criteria + '_na_suppress' %>" class="hidden"></div>
          <% end %>
          <% if (is_disabled) %>
-           <% if @project[justification_symbol] %>
+           <% if project[justification_symbol] %>
              <div class="justification-markdown">
-               <%= ApplicationHelper.markdown(@project[justification_symbol]) %>
+               <%= ApplicationHelper.markdown(project[justification_symbol]) %>
              </div>
            <% end %>
          <% else %>

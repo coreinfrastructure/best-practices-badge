@@ -119,12 +119,18 @@ Note that other projects may use the same name.
       <%= f.text_field :name, hide_label: true, class:"form-control", placeholder:'OSS Project Name', disabled: is_disabled %>
 
       <span>What is a brief description of the project?</span>
-<%= render(partial: "details", locals: {
+      <% if (is_disabled) %>
+        <div class="discussion-markdown">
+          <%= ApplicationHelper.markdown(project[:description]) %>
+        </div>
+      <% else %>
+        <%= render(partial: "details", locals: {
            criteria: "description", details: %{
 Include key comments about the project.
 This information is used when displaying badge information.
 }}) %>
       <%= f.text_area :description, class:"form-control", hide_label: true, placeholder:'Project Description', disabled: is_disabled %>
+     <% end %>
 
       <span>What is the URL for the project (as a whole)?</span>
       <%= f.text_field :project_homepage_url, hide_label: true, class: "form-control", placeholder:'Project Website URL', label: "Project URL", disabled: is_disabled %>
@@ -926,7 +932,13 @@ severity if its <a href="https://nvd.nist.gov/cvss.cfm">CVSS 2.0</a> base score 
       <br>
       <div class="row">
         <div class="col-md-12">
-          <%= f.text_area :general_comments, class:"form-control",  hide_label: true, placeholder:'Additional Comments', disabled: is_disabled %>
+          <% if (is_disabled) %>
+            <div class="discussion-markdown">
+              <%= ApplicationHelper.markdown(project[:description]) %>
+            </div>
+          <% else %>
+            <%= f.text_area :general_comments, class:"form-control",  hide_label: true, placeholder:'Additional Comments', disabled: is_disabled %>
+          <% end %>
         </div>
       </div>
       <br>

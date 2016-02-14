@@ -133,7 +133,7 @@ footer ul li {
 
 /* forms */
 
-input, textarea, select, .uneditable-input {
+input, textarea, select, .discussion-markdown, .uneditable-input {
   border: 1px solid #bbb;
   width: 100%;
   margin-bottom: 15px;
@@ -262,8 +262,23 @@ aside {
 }
 
 .justification-markdown {
-  background-color: #e0e0e0;
+  background-color: #eeeeee;
   p {
-  padding-left: 5px;
+    padding-left: 5px;
   }
+}
+
+.discussion-markdown {
+  background-color: #eeeeee;
+  p {
+    padding-left: 5px;
+  }
+}
+
+td p {
+  text-align: left;
+  font-size: 14px;
+  line-height: 1.42857143;
+  padding-left: 5px;
+  padding-right: 5px;
 }

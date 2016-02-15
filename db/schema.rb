@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160205054718) do
+ActiveRecord::Schema.define(version: 20160215180800) do
 
   create_table "projects", force: :cascade do |t|
     t.integer  "user_id"
@@ -151,8 +151,6 @@ ActiveRecord::Schema.define(version: 20160205054718) do
     t.datetime "updated_at",                                                         null: false
     t.string   "crypto_weaknesses_status",                             default: "?"
     t.text     "crypto_weaknesses_justification"
-    t.string   "crypto_alternatives_status",                           default: "?"
-    t.text     "crypto_alternatives_justification"
     t.string   "test_continuous_integration_status",                   default: "?"
     t.text     "test_continuous_integration_justification"
     t.string   "cpe"

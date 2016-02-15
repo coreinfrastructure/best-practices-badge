@@ -134,6 +134,15 @@ Potential silver criteria
         That way, third parties will not be able to determine exactly what
         version is being downloaded.  This also provides some verification that
         the correct software is being downloaded from the site.
+* Cryptography
+    -    <a name="crypto_alternatives"></a>The project SHOULD support multiple
+  cryptographic algorithms, so users can quickly switch if one is broken.
+  Common symmetric key algorithms include AES, Twofish, Serpent,
+  Blowfish, and 3DES.
+  Common cryptographic hash algorithm alternatives include SHA-2
+  (including SHA-224, SHA-256, SHA-384 and SHA-512) and SHA-3.
+  However, see discussion per
+  [issue #215](https://github.com/linuxfoundation/cii-best-practices-badge/issues/215)
 
 It would be quite plausible to add many requirements specific to security.
 For example, it would be plausible to require that a system meet the

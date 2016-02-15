@@ -77,7 +77,6 @@ class Project < ActiveRecord::Base
     crypto_keylength: ['MUST', true, false],
     crypto_working: ['MUST', true, false],
     crypto_weaknesses: ['SHOULD', true, false],
-    crypto_alternatives: ['SHOULD', true, false],
     crypto_pfs: ['SHOULD', true, false],
     crypto_password_storage: ['MUST', true, false],
     crypto_random: ['MUST', true, false],

@@ -126,7 +126,7 @@ Note that other projects may use the same name.
       <% else %>
         <%= render(partial: "details", locals: {
            criteria: "description", details: %{
-Include key comments about the project.
+Include key comments about the project.  Use markdown.
 This information is used when displaying badge information.
 }}) %>
       <%= f.text_area :description, class:"form-control", hide_label: true, placeholder:'Project Description', disabled: is_disabled %>
@@ -752,14 +752,6 @@ The project security mechanisms SHOULD NOT by default depend on cryptographic al
     <hr>
 
     <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
-             criteria: "crypto_alternatives", desc: %{
-The project SHOULD support multiple cryptographic algorithms, so users can quickly switch if one is broken.},
-             details: %{
-Common symmetric key algorithms include AES, Twofish, Serpent, Blowfish, and 3DES.  Common cryptographic hash algorithm alternatives include SHA-2 (including SHA-224, SHA-256, SHA-384 and SHA-512) and SHA-3.
-}}) %>
-    <hr>
-
-    <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
              criteria: "crypto_pfs", desc: %{
 The project SHOULD implement perfect forward secrecy for key agreement protocols so a session key derived from a set of long-term keys cannot be compromised if one of the long-term keys is compromised in the future.
 }}) %>
@@ -938,7 +930,7 @@ severity if its <a href="https://nvd.nist.gov/cvss.cfm">CVSS 2.0</a> base score 
               <%= ApplicationHelper.markdown(project[:description]) %>
             </div>
           <% else %>
-            <%= f.text_area :general_comments, class:"form-control",  hide_label: true, placeholder:'Additional Comments', disabled: is_disabled %>
+            <%= f.text_area :general_comments, class:"form-control",  hide_label: true, placeholder:'Additional Comments (in markdown)', disabled: is_disabled %>
           <% end %>
         </div>
       </div>

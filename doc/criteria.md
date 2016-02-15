@@ -524,13 +524,6 @@ by the delivered project's software.
   SHOULD NOT by default depend on cryptographic algorithms with known
   serious weaknesses (e.g., SHA-1).
   <sup>[<a href="#crypto_weaknesses">crypto_weaknesses</a>]\*</sup>
-- <a name="crypto_alternatives"></a>The project SHOULD support multiple
-  cryptographic algorithms, so users can quickly switch if one is broken.
-  Common symmetric key algorithms include AES, Twofish, Serpent,
-  Blowfish, and 3DES.
-  Common cryptographic hash algorithm alternatives include SHA-2
-  (including SHA-224, SHA-256, SHA-384 and SHA-512) and SHA-3.
-  <sup>[<a href="#crypto_alternatives">crypto_alternatives</a>]\*</sup>
 - <a name="crypto_pfs"></a>The project SHOULD implement perfect forward
   secrecy for key agreement protocols so a session key derived from a set
   of long-term keys cannot be compromised if one of the long-term keys is

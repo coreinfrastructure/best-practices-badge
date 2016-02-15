@@ -4,7 +4,7 @@
 
 This is a *draft* of proposed best practices
 for open source software (OSS) projects.
-OSS projects that follow these best practices
+Projects that follow these best practices
 will be able to voluntarily self-certify and show that they've
 achieved a Core Infrastructure Initiative (CII) badge.
 Projects can do this, at no cost,
@@ -17,7 +17,7 @@ even formal methods can fail if the specifications or assumptions are wrong.
 Nor is there any set of practices that can guarantee that a project will
 sustain a healthy and well-functioning development community.
 However, following best practices can help improve the results
-of OSS projects.
+of projects.
 For example, some practices enable multi-person review before release,
 which can both help find otherwise hard-to-find technical vulnerabilities
 and help build trust and a desire for repeated interaction among developers
@@ -25,13 +25,13 @@ from different organizations.
 
 These best practices have been created to:
 
-1. encourage OSS projects to follow best practices,
-2. help new OSS projects discover what those practices are, and
+1. encourage projects to follow best practices,
+2. help new projects discover what those practices are, and
 3. help users know which projects are following best practices
    (so users can prefer such projects).
 
 We are currently focused on identifying best practices
-that well-run OSS projects typically already follow.
+that well-run projects typically already follow.
 We are capturing other practices so that we can create
 [more advanced badges](./other.md) later.
 The best practices, and the more detailed criteria
@@ -139,7 +139,7 @@ Note that:
 *OSS license*
 
 - <a name="oss_license"></a> The software MUST be licensed as OSS.
-  Examples of OSS licenses include the
+  Examples of such licenses include the
   [CC0](http://creativecommons.org/publicdomain/zero/1.0/),
   [MIT](https://opensource.org/licenses/MIT),
   [BSD 2-clause](https://opensource.org/licenses/BSD-2-Clause),
@@ -167,7 +167,7 @@ Note that:
   (e.g., "GPLv2 or proprietary" is acceptable).
 - *Rationale*: These criteria are designed for OSS projects, so we need to
   ensure that they're only used where they apply.
-  Some projects are thought of as OSS yet are not actually released as OSS
+  Some projects may be mistakenly considered OSS even though they are not
   (e.g., they might not have any license, in which case the defaults of the
   country's legal system apply, or they might use a non-OSS license).
   Unusual licenses can cause long-term problems for OSS projects and are

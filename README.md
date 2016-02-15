@@ -9,9 +9,9 @@
 This project identifies best practices for open source software (OSS)
 and implements a badging system for those best practices.
 The "BadgeApp" badging system is a simple web application
-that lets OSS projects self-certify that they meet the criteria
+that lets projects self-certify that they meet the criteria
 and show a badge.
-The real goal of this project is to encourage OSS projects to
+The real goal of this project is to encourage projects to
 apply best practices, and to help users determine which OSS projects do so.
 We believe that OSS projects that implement best practices are more likely
 to produce better software, including more secure software.

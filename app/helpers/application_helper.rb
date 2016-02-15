@@ -8,6 +8,7 @@ module ApplicationHelper
     space_after_headers: true, fenced_code_blocks: true)
 
   def self.markdown(content)
+    return '' if content.nil?
     ApplicationHelper::MARKDOWN_PROCESSOR.render(content).html_safe
   end
 end

@@ -4,10 +4,10 @@
 # frozen_string_literal: true
 
 # rubocop:disable Metrics/ClassLength
-class OssLicenseDetective < Detective
+class FlossLicenseDetective < Detective
   # Individual detectives must identify their inputs, outputs
   INPUTS = [:license].freeze
-  OUTPUTS = [:oss_license_osi_status, :oss_license_status].freeze
+  OUTPUTS = [:floss_license_osi_status, :floss_license_status].freeze
 
   # From: http://opensource.org/licenses/alphabetical
   OSI_LICENSES_FROM_OSI_WEBSITE = [
@@ -84,7 +84,7 @@ class OssLicenseDetective < Detective
 
   # Create list of *just* SPDX names, e.g., ['Apache-2.0', 'MIT', 'GPL-2.0']
   KNOWN_OSI_LICENSES =
-    OssLicenseDetective::OSI_LICENSES_FROM_OSI_WEBSITE.map do |text|
+    FlossLicenseDetective::OSI_LICENSES_FROM_OSI_WEBSITE.map do |text|
       text.match(/\(([^()]*)\)/) do |m|
         m[1] # Return whatever is inside first parentheses
       end
@@ -93,9 +93,9 @@ class OssLicenseDetective < Detective
   # Report if string is an OSI-approved license.  We ignore case.
   # TODO: Handle AND, OR, WITH
   KNOWN_OSI_LICENSES_DOWNCASED =
-    OssLicenseDetective::KNOWN_OSI_LICENSES.map(&:downcase)
+    FlossLicenseDetective::KNOWN_OSI_LICENSES.map(&:downcase)
   def self.osi_license?(s)
-    OssLicenseDetective::KNOWN_OSI_LICENSES_DOWNCASED.include?(s.downcase)
+    FlossLicenseDetective::KNOWN_OSI_LICENSES_DOWNCASED.include?(s.downcase)
   end
 
   # Individual detectives must implement "analyze"
@@ -107,16 +107,16 @@ class OssLicenseDetective < Detective
     license = license.strip.chomp('+')
 
     if self.class.osi_license?(license)
-      { oss_license_osi_status:
+      { floss_license_osi_status:
           { value: 'Met', confidence: 5,
             explanation: "The #{license} license is approved by the " \
                          'Open Source Initiative (OSI).' },
-        oss_license_status:
+        floss_license_status:
           { value: 'Met', confidence: 5,
             explanation: "The #{license} license is approved by the " \
                      'Open Source Initiative (OSI).' } }
     elsif license =~ /\A[^(]/
-      { oss_license_osi_status:
+      { floss_license_osi_status:
           { value: 'Unmet', confidence: 1,
             explanation: 'Did not find license in the OSI list.' } }
     else

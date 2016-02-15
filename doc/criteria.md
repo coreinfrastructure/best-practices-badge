@@ -138,7 +138,7 @@ Note that:
 
 *FLOSS license*
 
-- <a name="oss_license"></a> The software MUST be licensed as FLOSS.
+- <a name="floss_license"></a> The software MUST be licensed as FLOSS.
   Examples of such licenses include the
   [CC0](http://creativecommons.org/publicdomain/zero/1.0/),
   [MIT](https://opensource.org/licenses/MIT),
@@ -153,12 +153,12 @@ Note that:
     - [a free license acceptable to Debian main](https://www.debian.org/legal/licenses/), or
     - [a "good" license according to Fedora](https://fedoraproject.org/wiki/Licensing:Main?rd=Licensing).
 
-  <sup>[<a href="#oss_license">oss_license</a>]&#8224;</sup>
-- <a name="oss_license_osi"></a> It is SUGGESTED that any required license(s) be
+  <sup>[<a href="#floss_license">floss_license</a>]&#8224;</sup>
+- <a name="floss_license_osi"></a> It is SUGGESTED that any required license(s) be
   [approved by the Open Source Initiative (OSI)](https://opensource.org/licenses).
   The OSI uses a rigorous license approval
   process to determine which licenses are OSS.
-  <sup>[<a href="#oss_license_osi">oss_license_osi</a>]&#8224;</sup>
+  <sup>[<a href="#floss_license_osi">floss_license_osi</a>]&#8224;</sup>
 - <a name="license_location"></a>The project MUST post license(s) in a standard
   location (e.g., as a top-level file named LICENSE or COPYING).
   License filenames MAY be followed by an extension such as ".txt" or ".md"
@@ -339,9 +339,9 @@ Note that:
   tools be used for building the software.
   For example, Maven, Ant, cmake, the autotools, make, or rake.
   <sup>[<a href="#build_common_tools">build_common_tools</a>]\*&#8224;</sup>
-- <a name="build_oss_tools"></a> The project SHOULD be buildable
+- <a name="build_floss_tools"></a> The project SHOULD be buildable
   using only FLOSS tools.
-  <sup>[<a href="#build_oss_tools">build_oss_tools</a>]\*</sup>
+  <sup>[<a href="#build_floss_tools">build_floss_tools</a>]\*</sup>
 - *Rationale*: If a project needs to be built but there is no working
   build system, then potential co-developers will not be able to easily
   contribute and many security analysis tools will be ineffective.

@@ -232,7 +232,7 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
       <hr>
 
        <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
-               criteria: "oss_license", desc: %{
+               criteria: "floss_license", desc: %{
 The software MUST be released as FLOSS.},
                details: %{
 Examples of such licenses include the
@@ -252,7 +252,7 @@ The software MAY also be licensed other ways (e.g., "GPLv2 or proprietary" is ac
        <hr>
 
        <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
-               criteria: "oss_license_osi", desc: %{
+               criteria: "floss_license_osi", desc: %{
 It is SUGGESTED that any required license(s) be
 <a href="https://opensource.org/licenses">approved by the
 Open Source Initiative (OSI).</a>},
@@ -519,7 +519,7 @@ For example, Maven, Ant, cmake, the autotools, make, or rake.
       <hr>
 
       <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
-               criteria: "build_oss_tools", desc: %{
+               criteria: "build_floss_tools", desc: %{
 The project SHOULD be buildable using only FLOSS tools.
 }}) %>
 
@@ -710,7 +710,7 @@ re-implement its own.
     <hr>
 
     <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
-             criteria: "crypto_oss", desc: %{
+             criteria: "crypto_floss", desc: %{
 All functionality that depends on cryptography MUST be implementable using
 FLOSS.},
              details: %{See the

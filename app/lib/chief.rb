@@ -30,15 +30,15 @@ class Chief
   # TODO: Identify classes automatically and do topological sort.
   ALL_DETECTIVES =
     [NameFromUrlDetective, GithubBasicDetective, HowAccessRepoFilesDetective,
-     RepoFilesExamineDetective, OssLicenseDetective].freeze
+     RepoFilesExamineDetective, FlossLicenseDetective].freeze
 
   # List fields allowed to be written into Project (an ActiveRecord).
   # TODO: Automatically determine allowed fields, or get from elsewhere.
   ALLOWED_FIELDS =
     [:name, :license, :discussion_status, :discussion_justification,
-     :oss_license_osi_status, :oss_license_osi_justification,
+     :floss_license_osi_status, :floss_license_osi_justification,
      :contribution_status, :contribution_justification,
-     :oss_license_status, :oss_license_justification,
+     :floss_license_status, :floss_license_justification,
      :repo_url_status, :repo_url_justification,
      :repo_track_status, :repo_track_justification,
      :repo_distributed_status, :repo_distributed_justification,

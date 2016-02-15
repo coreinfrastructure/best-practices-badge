@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160215180800) do
+ActiveRecord::Schema.define(version: 20160215195756) do
 
   create_table "projects", force: :cascade do |t|
     t.integer  "user_id"
@@ -34,10 +34,10 @@ ActiveRecord::Schema.define(version: 20160215180800) do
     t.text     "contribution_criteria_justification"
     t.string   "license_location_status",                              default: "?"
     t.text     "license_location_justification"
-    t.string   "oss_license_status",                                   default: "?"
-    t.text     "oss_license_justification"
-    t.string   "oss_license_osi_status",                               default: "?"
-    t.text     "oss_license_osi_justification"
+    t.string   "floss_license_status",                                 default: "?"
+    t.text     "floss_license_justification"
+    t.string   "floss_license_osi_status",                             default: "?"
+    t.text     "floss_license_osi_justification"
     t.string   "documentation_basics_status",                          default: "?"
     t.text     "documentation_basics_justification"
     t.string   "documentation_interface_status",                       default: "?"
@@ -82,8 +82,8 @@ ActiveRecord::Schema.define(version: 20160215180800) do
     t.text     "build_justification"
     t.string   "build_common_tools_status",                            default: "?"
     t.text     "build_common_tools_justification"
-    t.string   "build_oss_tools_status",                               default: "?"
-    t.text     "build_oss_tools_justification"
+    t.string   "build_floss_tools_status",                             default: "?"
+    t.text     "build_floss_tools_justification"
     t.string   "test_status",                                          default: "?"
     t.text     "test_justification"
     t.string   "test_invocation_status",                               default: "?"
@@ -110,8 +110,8 @@ ActiveRecord::Schema.define(version: 20160215180800) do
     t.text     "crypto_published_justification"
     t.string   "crypto_call_status",                                   default: "?"
     t.text     "crypto_call_justification"
-    t.string   "crypto_oss_status",                                    default: "?"
-    t.text     "crypto_oss_justification"
+    t.string   "crypto_floss_status",                                  default: "?"
+    t.text     "crypto_floss_justification"
     t.string   "crypto_keylength_status",                              default: "?"
     t.text     "crypto_keylength_justification"
     t.string   "crypto_working_status",                                default: "?"

@@ -20,10 +20,10 @@ class ChiefTest < ActiveSupport::TestCase
     mit_ok = 'The MIT license is approved by the Open Source Initiative (OSI).'
     assert_equal 'MIT', results[:license]
     assert_equal @human_name, results[:name]
-    assert_equal 'Met', results[:oss_license_status]
-    assert_equal mit_ok, results[:oss_license_justification]
-    assert_equal 'Met', results[:oss_license_osi_status]
-    assert_equal mit_ok, results[:oss_license_osi_justification]
+    assert_equal 'Met', results[:floss_license_status]
+    assert_equal mit_ok, results[:floss_license_justification]
+    assert_equal 'Met', results[:floss_license_osi_status]
+    assert_equal mit_ok, results[:floss_license_osi_justification]
     assert_equal 'Met', results[:contribution_status]
     assert_equal 'Non-trivial contribution file in repository: ' \
                  '<https://github.com/linuxfoundation/' \

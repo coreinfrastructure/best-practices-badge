@@ -17,8 +17,8 @@ class Project < ActiveRecord::Base
     contribution_criteria: ['SHOULD', false, true],
     # OSS License
     license_location: ['MUST', false, true],
-    oss_license: ['MUST', false, false],
-    oss_license_osi: ['SUGGESTED', false, false],
+    floss_license: ['MUST', false, false],
+    floss_license_osi: ['SUGGESTED', false, false],
     # Documentation
     documentation_basics: ['MUST', false, false],
     documentation_interface: ['MUST', false, false],
@@ -52,7 +52,7 @@ class Project < ActiveRecord::Base
     # Working build system
     build: ['MUST', true, false],
     build_common_tools: ['SUGGESTED', true, false],
-    build_oss_tools: ['SHOULD', true, false],
+    build_floss_tools: ['SHOULD', true, false],
     # Automated test suite
     test: ['MUST', false, false],
     test_invocation: ['SHOULD', false, false],
@@ -73,7 +73,7 @@ class Project < ActiveRecord::Base
     # Use basic good cryptographic practices
     crypto_published: ['MUST', true, false],
     crypto_call: ['MUST', true, false],
-    crypto_oss: ['MUST', true, false],
+    crypto_floss: ['MUST', true, false],
     crypto_keylength: ['MUST', true, false],
     crypto_working: ['MUST', true, false],
     crypto_weaknesses: ['SHOULD', true, false],

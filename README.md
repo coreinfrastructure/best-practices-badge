@@ -69,8 +69,8 @@ This is a summary of the criteria, with requirements in bold
   - **Have a [secure](doc/criteria.md#vulnerability_report_private),
     [documented process](doc/criteria.md#vulnerability_report_process) for
     reporting vulnerabilities**
-  - **[Respond within 7 days](doc/criteria.md#vulnerability_report_response)
-    (on average), and [fix vulnerabilities](doc/criteria.md#vulnerabilities_critical_fixed),
+  - **[Respond within 14 days](doc/criteria.md#vulnerability_report_response),
+    and [fix vulnerabilities](doc/criteria.md#vulnerabilities_critical_fixed),
     [within 60 days if they're public](doc/criteria.md#vulnerabilities_fixed_60_days)**
 - **[Have a build that works](doc/criteria.md#build)**, using
   [standard](doc/criteria.md#build_common_tools)

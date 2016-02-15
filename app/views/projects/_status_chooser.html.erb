@@ -86,6 +86,7 @@
                <%= ApplicationHelper.markdown(project[justification_symbol]) %>
              </div>
            <% end %>
+           <%= f.text_area justification_symbol, class:"form-control hidden", hide_label: true, placeholder:'Please explain', disabled: is_disabled  %>
          <% else %>
            <%= f.text_area justification_symbol, class:"form-control", hide_label: true, placeholder:'Please explain', disabled: is_disabled  %>
          <% end %>

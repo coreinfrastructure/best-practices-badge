@@ -24,13 +24,18 @@ criteriaMetUrlRequired = {};
 MIN_SHOULD_LENGTH = 5;
 
 function containsURL(justification) {
-  return !!justification.match(/https?:\/\/[^ ]{5,}/);
+  if (!justification) {
+    return false;
+  } else {
+    return !!justification.match(/https?:\/\/[^ ]{5,}/);
+  }
 }
 
 // This must match the criteria implemented in Ruby to prevent confusion.
 function isEnough(criteria) {
   var criteriaStatus = '#project_' + criteria + '_status';
   var justification = $('#project_' + criteria + '_justification').val();
+  if (!justification) justification = '';
   if ($(criteriaStatus + '_na').is(':checked')) {
     return true;
   } else if ($(criteriaStatus + '_met').is(':checked')) {
@@ -93,9 +98,13 @@ function changedJustificationText(criteria) {
 function updateCriteriaDisplay(criteria) {
   var criteriaJust = '#project_' + criteria + '_justification';
   var criteriaStatus = '#project_' + criteria + '_status';
-  var justificationValue = document.getElementById('project_' +
-                           criteria + '_justification').value;
+  var justificationElement = document.getElementById('project_' +
+                           criteria + '_justification');
+  var justificationValue = '';
   var placeholder = '';
+  if (justificationElement) {
+    justificationValue = justificationElement.value;
+  }
   if ($(criteriaStatus + '_met').is(':checked')) {
     var criteriaMetPlaceholder = criteria + '_met_placeholder';
     $(criteriaJust).

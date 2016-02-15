@@ -312,6 +312,18 @@ heroku pg:backups capture
 curl -o latest.dump $(heroku pg:backups public-url)
 ~~~~
 
+## Resetting Heroku plug-ins
+
+Here's how to reset the heroku-local plugin:
+
+~~~~sh
+heroku plugins:uninstall heroku-local --app master-bestpractices
+heroku plugins --app master-bestpractices
+~~~~
+
+The latter automatically reinstalls heroku-local.
+This information is from: <https://github.com/heroku/heroku/issues/1690>.
+
 ## Automation - flow
 
 We want to automate what we can, but since automation is imperfect,

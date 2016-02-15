@@ -1,9 +1,9 @@
-# Best Practices Criteria for Open Source Software (OSS) (version 0.3.0)
+# Best Practices Criteria for Free/Libre and Open Source Software (FLOSS) (version 0.5.0)
 
 ## Introduction
 
 This is a *draft* of proposed best practices
-for open source software (OSS) projects.
+for Free/Libre and Open Source Software (FLOSS) projects.
 Projects that follow these best practices
 will be able to voluntarily self-certify and show that they've
 achieved a Core Infrastructure Initiative (CII) badge.
@@ -80,12 +80,12 @@ The additional term SUGGESTED is added, as follows:
   all SUGGESTED criteria have to be considered (rated as met or unmet).
 
 We assume that you are already familiar with
-software development and running an OSS project;
+software development and running a FLOSS project;
 if not, see introductory materials such as
 [*Producing Open Source Software* by Karl Fogel](http://producingoss.com/).
 
 
-## Current criteria: Best Practices for OSS
+## Current criteria: Best Practices for FLOSS
 
 Here are the current *draft* criteria; it is certain to change.
 Note that:
@@ -136,9 +136,9 @@ Note that:
   (e.g., a reference to any required coding standard).
   <sup>[<a href="#contribution_criteria">contribution_criteria</a>]</sup>
 
-*OSS license*
+*FLOSS license*
 
-- <a name="oss_license"></a> The software MUST be licensed as OSS.
+- <a name="oss_license"></a> The software MUST be licensed as FLOSS.
   Examples of such licenses include the
   [CC0](http://creativecommons.org/publicdomain/zero/1.0/),
   [MIT](https://opensource.org/licenses/MIT),
@@ -156,7 +156,7 @@ Note that:
   <sup>[<a href="#oss_license">oss_license</a>]&#8224;</sup>
 - <a name="oss_license_osi"></a> It is SUGGESTED that any required license(s) be
   [approved by the Open Source Initiative (OSI)](https://opensource.org/licenses).
-  The OSI uses a rigorous approval
+  The OSI uses a rigorous license approval
   process to determine which licenses are OSS.
   <sup>[<a href="#oss_license_osi">oss_license_osi</a>]&#8224;</sup>
 - <a name="license_location"></a>The project MUST post license(s) in a standard
@@ -165,12 +165,12 @@ Note that:
   <sup>[<a href="#license_location">license_location</a>]&#8224;</sup>
 - The software MAY also be licensed other ways
   (e.g., "GPLv2 or proprietary" is acceptable).
-- *Rationale*: These criteria are designed for OSS projects, so we need to
+- *Rationale*: These criteria are designed for FLOSS projects, so we need to
   ensure that they're only used where they apply.
-  Some projects may be mistakenly considered OSS even though they are not
+  Some projects may be mistakenly considered FLOSS even though they are not
   (e.g., they might not have any license, in which case the defaults of the
-  country's legal system apply, or they might use a non-OSS license).
-  Unusual licenses can cause long-term problems for OSS projects and are
+  country's legal system apply, or they might use a non-FLOSS license).
+  Unusual licenses can cause long-term problems for FLOSS projects and are
   more difficult for tools to handle.
   We expect that [more advanced badges](./other.md) would set a higher bar
   (e.g., that it *must* be released under an OSI-approved license).
@@ -340,7 +340,7 @@ Note that:
   For example, Maven, Ant, cmake, the autotools, make, or rake.
   <sup>[<a href="#build_common_tools">build_common_tools</a>]\*&#8224;</sup>
 - <a name="build_oss_tools"></a> The project SHOULD be buildable
-  using only OSS tools.
+  using only FLOSS tools.
   <sup>[<a href="#build_oss_tools">build_oss_tools</a>]\*</sup>
 - *Rationale*: If a project needs to be built but there is no working
   build system, then potential co-developers will not be able to easily
@@ -351,8 +351,8 @@ Note that:
 *Automated test suite*
 
 - <a name="test"></a>The project MUST have at least one automated test suite
-  that is publicly released as OSS
-  (this test suite may be maintained as a separate OSS project)."
+  that is publicly released as FLOSS
+  (this test suite may be maintained as a separate FLOSS project)."
   <sup>[<a href="#test">test</a>]</sup>
 - <a name="test_invocation"></a>A test suite SHOULD be invocable in
   a standard way for that language.
@@ -398,7 +398,7 @@ Note that:
 - <a name="warnings"></a>The project MUST enable one or more compiler
   warning flags, a "safe" language mode, or use a separate "linter" tool to
   look for code quality errors or common simple mistakes,
-  if there is at least one OSS tool that can implement this criterion
+  if there is at least one FLOSS tool that can implement this criterion
   in the selected language.
   Examples of compiler warning flags include gcc/clang "-Wall".
   Examples of a "safe" language mode include Javascript "use strict"
@@ -498,7 +498,7 @@ by the delivered project's software.
   it MUST NOT re-implement its own.
   <sup>[<a href="#crypto_call">crypto_call</a>]\*</sup>
 - <a name="crypto_oss"></a>All project functionality that depends
-  on cryptography MUST be implementable using OSS.  See the
+  on cryptography MUST be implementable using FLOSS.  See the
   [*Open Standards Requirement for Software* by the Open Source Initiative](https://opensource.org/osr).
   <sup>[<a href="#crypto_oss">crypto_oss</a>]\*</sup>
 - <a name="crypto_keylength"></a>The project security mechanisms
@@ -592,7 +592,7 @@ by the delivered project's software.
 
 - <a name="static_analysis"></a>At least one static code analysis tool
   MUST be applied to any proposed major production release of the software
-  before its release, if there is at least one OSS tool that implements this
+  before its release, if there is at least one FLOSS tool that implements this
   criterion in the selected language.
   A static code analysis tool examines the software code
   (as source code, intermediate code, or executable)
@@ -694,7 +694,7 @@ This also means that as new tools and capabilities become available,
 projects can quickly switch to them without failing to meet any criteria.
 However, the criteria will sometimes identify
 common methods or ways of doing something
-(especially if they are OSS) since that information
+(especially if they are FLOSS) since that information
 can help people understand and meet the criteria.
 We do plan to create an "easy on-ramp" for projects using git on GitHub,
 since that is a common case.

@@ -1,13 +1,23 @@
-# Background on Best Practices Criteria for Open Source Software (OSS)
+# Background on Best Practices Criteria for Free/Libre and Open Source Software (OSS)
 
 This document gives background on the
-Best Practices Criteria for Open Source Software (OSS).
+Best Practices Criteria for
+Free/Libre and Open Source Software (FLOSS).
 This includes potential sources of criteria and
-identifying processes used by existing OSS project.
+identifying processes used by existing FLOSS projects.
 See [criteria](./criteria.md) for the current version of the criteria.
 See [implementation](./implementation.md)
 about the implementation of the BadgeApp web application that helps
 projects determine (and demonstrate) that they meet these criteria.
+
+Older materials here used the shorter term
+"open source software (OSS)".
+More recently we've switched to
+Free/Libre and Open Source Software (FLOSS) to try to be more inclusive,
+though some materials may not have been switched.
+We refer to other documents, which use a variety of names including
+OSS, FLOSS, Free and Open Source Software (FOSS), Free software,
+libre software, and Free/libre software.
 
 There is no time or need to record *everything* that is related
 in this document.
@@ -26,19 +36,19 @@ and then clean it up over time if that cleanup is important.
 Creating good criteria is our real objective, so please focus on the
 [criteria](./criteria.md) list.
 
-The criteria are focused on best practices for OSS, particularly
+The criteria are focused on best practices for FLOSS, particularly
 those that are more likely to produce secure software,
 and not on proprietary software.
 Clearly developers of proprietary software should also strive to
 develop secure software.
-That said, OSS software is sufficiently different that it's appropriate
-to have a set of criteria specific to OSS.
-For example, a key approach for developing secure OSS is to enable
+That said, FLOSS software is sufficiently different that it's appropriate
+to have a set of criteria specific to FLOSS.
+For example, a key approach for developing secure FLOSS is to enable
 and encourage widespread review of the software.
 Many of the criteria focus on how to best enable and encourage this review.
 This kind of information availability and worldwide detailed review would be
 unacceptable to most businesses that develop proprietary software.
-As a result, there's a need for criteria that focus specifically on OSS.
+As a result, there's a need for criteria that focus specifically on FLOSS.
 
 The criteria are intended to apply to all kinds of software.
 This includes firmware, operating system kernels, client software,
@@ -54,14 +64,14 @@ Please note that these are completely unrelated to the
 
 This section basically provides a literature search of related materials.
 These include
-guidelines for OSS projects,
-general methods for evaluating OSS projects,
+guidelines for FLOSS projects,
+general methods for evaluating FLOSS projects,
 security-related materials (e.g., guidelines or evaluation processes),
 security-related metrics,
 and miscellanea.
 Some of these approaches may be useful for the badging system as well.
 
-## Guidelines for OSS projects
+## Guidelines for FLOSS projects
 
 Some guidelines include:
 
@@ -88,10 +98,10 @@ includes references to some other guides.
 
 *   [US Government OSS best practices](http://government.github.io/best-practices/) - a collection of guidelines from some in the US federal government
 
-## Methods for evaluating OSS projects
+## Methods for evaluating FLOSS projects
 
-There are a number of complete processes specifically for evaluating OSS
-(as software, a project, or both). These typically evaluate OSS
+There are a number of complete processes specifically for evaluating FLOSS
+(as software, a project, or both). These typically evaluate FLOSS
 for a particular purpose, not their security per se, but they may have
 useful approaches that can be reused in criteria for a best practices badge.
 
@@ -129,7 +139,7 @@ documentation. Examples of causes for fail points are:
 Obviously a high score does not always doom a project to fail, nor does
 a low score guarantee success.
 However, it can provide
-a simple metric to point out potential issues in an OSS project.
+a simple metric to point out potential issues in a FLOSS project.
 It is intentionally designed to produce a numerical score, making it
 relatively easy to report.
 

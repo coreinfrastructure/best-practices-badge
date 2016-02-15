@@ -115,7 +115,7 @@ There is also a
            criteria: "project_name", details: %{
 Note that other projects may use the same name.
 }}) %>
-      <%= f.text_field :name, hide_label: true, class:"form-control", placeholder:'OSS Project Name', disabled: is_disabled %>
+      <%= f.text_field :name, hide_label: true, class:"form-control", placeholder:'FLOSS Project Name', disabled: is_disabled %>
 
       <span>What is a brief description of the project?</span>
       <% if (is_disabled) %>
@@ -197,13 +197,13 @@ The information on how to contribute SHOULD include the basic criteria for accep
 }}) %>
       <br>
 
-      <h3>OSS License</h3>
+      <h3>FLOSS License</h3>
       <span>What license(s) is the project released under?</span>
       <%= render(partial: "details", locals: {
            criteria: "license", details: %{
 Please use <a href="https://spdx.org/licenses/">SPDX license expression format</a>; examples include "Apache-2.0", "BSD-2-Clause", "BSD-3-Clause", "GPL-2.0+", "LGPL-3.0+", "MIT", and "(BSD-2-Clause OR Ruby)".
 }}) %>
-      <%= f.text_field :license, class:"form-control", hide_label: true, placeholder:'OSS License', list: "license_list", disabled: is_disabled %>
+      <%= f.text_field :license, class:"form-control", hide_label: true, placeholder:'FLOSS License', list: "license_list", disabled: is_disabled %>
      <!-- Some examples from http://wiki.spdx.org/view/FileNoticeExamples -->
      <div class="hidden">
      <datalist id="license_list">
@@ -233,7 +233,7 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
 
        <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
                criteria: "oss_license", desc: %{
-The software MUST be released as OSS.},
+The software MUST be released as FLOSS.},
                details: %{
 Examples of such licenses include the
 <a href="http://creativecommons.org/publicdomain/zero/1.0/">CC0</a>, <a href="https://opensource.org/licenses/MIT">MIT</a>, <a href="https://opensource.org/licenses/BSD-2-Clause">BSD 2-clause</a>, <a href="https://opensource.org/licenses/BSD-3-Clause">BSD 3-clause revised</a>, <a href="https://opensource.org/licenses/Apache-2.0">Apache 2.0</a>, <a href="https://opensource.org/licenses/lgpl-license">Lesser GNU General Public License (LGPL)</a>, and the <a href="https://opensource.org/licenses/gpl-license">GNU General Public License (GPL)</a>.
@@ -247,7 +247,7 @@ For our purposes, this means that the license MUST be:
 The software MAY also be licensed other ways (e.g., "GPLv2 or proprietary" is acceptable).
 <br>
 <br>
-<em>Rationale</em>: These criteria are designed for OSS projects, so we need to ensure that they're only used where they apply.  Some projects may be mistakenly considered OSS even though they are not (e.g., they might not have any license, in which case the defaults of the country's legal system apply, or they might use a non-OSS license).  Unusual licenses can cause long-term problems for OSS projects and are more difficult for tools to handle.  We expect that more advanced badges would set a higher bar (e.g., that it <em>must</em> be released under an OSI-approved license).
+<em>Rationale</em>: These criteria are designed for FLOSS projects, so we need to ensure that they're only used where they apply.  Some projects may be mistakenly considered FLOSS even though they are not (e.g., they might not have any license, in which case the defaults of the country's legal system apply, or they might use a non-FLOSS license).  Unusual licenses can cause long-term problems for FLOSS projects and are more difficult for tools to handle.  We expect that more advanced badges would set a higher bar (e.g., that it <em>must</em> be released under an OSI-approved license).
 }}) %>
        <hr>
 
@@ -520,7 +520,7 @@ For example, Maven, Ant, cmake, the autotools, make, or rake.
 
       <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
                criteria: "build_oss_tools", desc: %{
-The project SHOULD be buildable using only OSS tools.
+The project SHOULD be buildable using only FLOSS tools.
 }}) %>
 
       <br>
@@ -530,7 +530,7 @@ The project SHOULD be buildable using only OSS tools.
       <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
                criteria: "test", desc: %{
 The project MUST have at least one automated test suite that is publicly
-released as OSS (this test suite may be maintained as a separate OSS project).},
+released as FLOSS (this test suite may be maintained as a separate FLOSS project).},
                details: %{
 The project MAY have multiple automated test suites (e.g., one that runs quickly, vs. another that is more thorough but requires special equipment).
 <b>Rationale</b>: Automated test suites immediately help detect a variety of problems.  A large test suite can find more problems, but even a small test suite can detect problems and provide a framework to build on.
@@ -596,7 +596,7 @@ added in practice.
                criteria: "warnings", desc: %{
 The project MUST enable one or more compiler warning flags, a "safe"
 language mode, or use a separate "linter" tool to look for code quality
-errors or common simple mistakes, if there is at least one OSS tool that
+errors or common simple mistakes, if there is at least one FLOSS tool that
 can implement this criterion in the selected language.},
                details: %{
 Examples of compiler warning flags include gcc/clang "-Wall".
@@ -712,7 +712,7 @@ re-implement its own.
     <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
              criteria: "crypto_oss", desc: %{
 All functionality that depends on cryptography MUST be implementable using
-OSS.},
+FLOSS.},
              details: %{See the
 <a href="https://opensource.org/osr">Open Standards Requirement for Software
 by the Open Source Initiative</a>.
@@ -834,7 +834,7 @@ are reported.
      <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
              criteria: "static_analysis", desc: %{
 At least one static code analysis tool MUST be applied to any proposed major production
-release of the software before its release, if there is at least one OSS tool that
+release of the software before its release, if there is at least one FLOSS tool that
 implements this criterion in the selected language.},
              details: %{
 A static code analysis tool examines

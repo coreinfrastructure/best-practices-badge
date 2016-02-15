@@ -6,14 +6,15 @@
 [![Dependency Status](https://gemnasium.com/linuxfoundation/cii-best-practices-badge.svg)](https://gemnasium.com/linuxfoundation/cii-best-practices-badge)
 [![License](http://img.shields.io/:license-mit-blue.svg?style=flat-square)](http://badges.mit-license.org)
 
-This project identifies best practices for open source software (OSS)
+This project identifies best practices for
+Free/Libre and Open Source Software (FLOSS)
 and implements a badging system for those best practices.
 The "BadgeApp" badging system is a simple web application
 that lets projects self-certify that they meet the criteria
 and show a badge.
 The real goal of this project is to encourage projects to
-apply best practices, and to help users determine which OSS projects do so.
-We believe that OSS projects that implement best practices are more likely
+apply best practices, and to help users determine which FLOSS projects do so.
+We believe that FLOSS projects that implement best practices are more likely
 to produce better software, including more secure software.
 
 This is an early version of this material;
@@ -49,7 +50,7 @@ This is a summary of the criteria, with requirements in bold
   - **[how to contribute](doc/criteria.md#contribution)** and
     [preferred styles](doc/criteria.md#contribution_criteria)
 - **[Explicitly specify](doc/criteria.md#license_location) an
-  [OSS](doc/criteria.md#oss_license) [license](doc/criteria.md#oss_license_osi)**
+  [FLOSS](doc/criteria.md#oss_license) [license](doc/criteria.md#oss_license_osi)**
 - **[Document how to install and run (securely)](doc/criteria.md#documentation_basics),
   and [any API](doc/criteria.md#documentation_interface)**
 - **Have a** [distributed](doc/criteria.md#repo_distributed)

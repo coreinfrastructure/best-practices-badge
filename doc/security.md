@@ -498,8 +498,8 @@ something) and have fairly high
 confidence that the change did not break functionality.
 
 We work to enable third-party review.
-We release the custom software as open source software (OSS),
-using a well-known OSS license (MIT).
+We release the custom software as Free/Libre and open source software (FLOSS),
+using a well-known FLOSS license (MIT).
 
 These steps cannot *guarantee* that there are no vulnerabilities,
 but we think they greatly reduce the risks.
@@ -510,7 +510,7 @@ We consider the code we reuse
 (e.g., libraries and frameworks) before adding them, to reduce
 the risk of unintentional and intentional vulnerabilities from them.
 In particular, we prefer the use of popular components (where problems
-are more likely to be identified and addressed) and common OSS licenses.
+are more likely to be identified and addressed) and common FLOSS licenses.
 These steps reduce the risk of malicious components
 (e.g., malicious gems).
 We also have a process for detecting when the components we use

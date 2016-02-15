@@ -90,7 +90,7 @@ Potential silver criteria
         e.g., the SEI CERT's at <https://www.securecoding.cert.org/>
     -   Program can use the local version of system library/applications
         (so vulnerable ones easily replaced).
-        Many OSS programs are distributed with "convenience libraries"
+        Many FLOSS programs are distributed with "convenience libraries"
         that are local copies of standard libraries (possibly forked).
         However, if the program *must* use these local (forked) copies,
         then updating the "standard" libraries as a security update will
@@ -247,7 +247,7 @@ Potential other criteria
         Note that having a good test suite makes it easier
         to make changes and be
         confident the system still works.
-        Also note that OSS projects are often embedded in larger systems and
+        Also note that FLOSS projects are often embedded in larger systems and
         projects cannot control the larger projects they are in.
     -   An automated test suite must achieve at least an aggregate 80% branch
         coverage (the goal is to cover a significant portion of the program;

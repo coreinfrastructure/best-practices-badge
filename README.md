@@ -49,7 +49,7 @@ This is a summary of the criteria, with requirements in bold
   - **[how to give feedback](doc/criteria.md#interact)**
   - **[how to contribute](doc/criteria.md#contribution)** and
     [preferred styles](doc/criteria.md#contribution_criteria)
-- **[Explicitly specify](doc/criteria.md#license_location) an
+- **[Explicitly specify](doc/criteria.md#license_location) a
   [FLOSS](doc/criteria.md#oss_license) [license](doc/criteria.md#oss_license_osi)**
 - **[Document how to install and run (securely)](doc/criteria.md#documentation_basics),
   and [any API](doc/criteria.md#documentation_interface)**

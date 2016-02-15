@@ -246,7 +246,17 @@ The app needs to be registered with Github[1] and its OAuth2 credentials
 stored as environment variables.
 The variable names of Oauth2 credentials are "GITHUB_KEY" and "GITHUB_SECRET".
 If running on heroku, set config variables by following instructions on [2].
-If running locally, one way to start up the application is:
+
+If running locally, these variables need to be set up.
+We have set up a file '.env' at the top level which has stub values,
+formatted like this, so that it automatically starts up:
+
+~~~~sh
+export GITHUB_KEY = '..VALUE..'
+export GITHUB_SECRET = '..VALUE..'
+~~~~
+
+You can instead provide the information this way:
 
 ~~~~sh
 GITHUB_KEY='client id' GITHUB_SECRET='client secret' rails s
@@ -254,15 +264,6 @@ GITHUB_KEY='client id' GITHUB_SECRET='client secret' rails s
 
 where *client id* and *client secret* are registered OAuth2 credentials
 of the app.
-
-However, since that can be inconvenient, you can instead store this
-data in the file '.env' at the top level.
-Simply put the data into the .env in this form:
-
-~~~~sh
-export GITHUB_KEY = '..VALUE..'
-export GITHUB_SECRET = '..VALUE..'
-~~~~
 
 The authorization callback URL in Github is: <http://localhost:3000/auth/github>
 

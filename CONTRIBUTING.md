@@ -179,6 +179,12 @@ clear, and obviously correct.
 Some technical debt is inevitable, just don't bankrupt us with it.
 Improved refactorizations are welcome.
 
+Always ensure that all Javascript and CSS styles are
+in *separate* files, do not embed them in the HTML.
+That includes any generated HTML.
+That way we can use CSP entries
+that harden the program against security attacks.
+
 Below are guidelines for specific languages.
 
 ### Ruby
@@ -252,6 +258,10 @@ This is different from the frozen_string_literal magic comment, because
 a parser that ignores comments will still work.
 
 ### Javascript
+
+Always put Javascript (and CSS styles) in *separate* files, do not
+embed them in the HTML.  That way we can use CSP entries
+that harden the program against security attacks.
 
 There is a small amount of application-specific Javascript.
 This is written in Javascript, not CoffeeScript;

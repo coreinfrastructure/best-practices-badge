@@ -21,7 +21,7 @@ This is an early version of this material;
 we are releasing it so we can get feedback.
 Feedback is welcome via the
 [GitHub site](https://github.com/linuxfoundation/cii-best-practices-badge)
-as issues or pull requests.
+as issues or pull (merge) requests.
 There is also a
 [mailing list](https://lists.coreinfrastructure.org/mailman/listinfo/cii-badges)
 for general discussion.

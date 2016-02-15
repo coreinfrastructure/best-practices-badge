@@ -206,9 +206,9 @@ EDIT is the name of your favorite text editor, and MIGRATION_NAME is the
 logical name you're giving to the migration (e.g., "add_discussion"):
 
 ~~~~
-  $ rails generate migration MIGRATION_NAME
-  $ git add db/migrate/*MIGRATION_NAME.rb
-  $ EDIT db/migrate/*MIGRATION_NAME.rb
+  rails generate migration MIGRATION_NAME
+  git add db/migrate/*MIGRATION_NAME.rb
+  $EDITOR db/migrate/*MIGRATION_NAME.rb
 ~~~~
 
 Your migration file should look something like this

@@ -98,7 +98,6 @@ This is a summary of the criteria, with requirements in bold
   - **[Don't use known-broken](doc/criteria.md#crypto_working)** or
     [known-weak](doc/criteria.md#crypto_weaknesses) algorithms
   - [Use algorithms with forward secrecy](doc/criteria.md#crypto_pfs)
-  - [Support multiple algorithms, and allow switching between them](doc/criteria.md#crypto_alternatives)
   - **[Store any passwords with iterated, salted, hashes using a key-stretching algorithm](doc/criteria.md#crypto_password_storage)**
   - **[Use cryptographic random number sources](doc/criteria.md#crypto_random)**
 

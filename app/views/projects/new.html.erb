@@ -13,7 +13,7 @@
      <br>
      <%= form_for(@project) do |f| %>
        <%= render 'shared/error_messages', object: f.object %>
-       <%= f.collection_select :repo_url, github_select, :last, :first, { prompt: 'Select one of your Github repos', disabled: lambda{ |repo| repo.last == 'none' }} %>
+       <%= f.collection_select :repo_url, github_select, :last, :first, { prompt: 'Select one of your GitHub repos', disabled: lambda{ |repo| repo.last == 'none' }} %>
        <%= f.submit 'Submit GitHub Repository', class: 'btn btn-primary',
                     'data-toggle' => 'tooltip', title: post_delay_warning %>
      <% end %>

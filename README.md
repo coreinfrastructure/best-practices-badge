@@ -50,7 +50,7 @@ This is a summary of the criteria, with requirements in bold
   - **[how to contribute](doc/criteria.md#contribution)** and
     [preferred styles](doc/criteria.md#contribution_criteria)
 - **[Explicitly specify](doc/criteria.md#license_location) a
-  [FLOSS](doc/criteria.md#oss_license) [license](doc/criteria.md#oss_license_osi)**
+  [FLOSS](doc/criteria.md#floss_license) [license](doc/criteria.md#floss_license_osi)**
 - **[Document how to install and run (securely)](doc/criteria.md#documentation_basics),
   and [any API](doc/criteria.md#documentation_interface)**
 - **Have a** [distributed](doc/criteria.md#repo_distributed)
@@ -74,7 +74,7 @@ This is a summary of the criteria, with requirements in bold
     [within 60 days if they're public](doc/criteria.md#vulnerabilities_fixed_60_days)**
 - **[Have a build that works](doc/criteria.md#build)**, using
   [standard](doc/criteria.md#build_common_tools)
-  [open-source](doc/criteria.md#build_oss_tools) tools
+  [open-source](doc/criteria.md#build_floss_tools) tools
   - **Enable (and [fix](doc/criteria.md#warnings_fixed))
     [compiler warnings and lint-like checks](doc/criteria.md#warnings)**
   - **[Run other static analysis tools](doc/criteria.md#static_analysis) and
@@ -93,7 +93,7 @@ This is a summary of the criteria, with requirements in bold
 - If cryptography is used:
   - **[Use public protocols/algorithm](doc/criteria.md#crypto_published)**
   - **[Don't re-implement standard functionality](doc/criteria.md#crypto_call)**
-  - **[Use open-source cryptography](doc/criteria.md#crypto_oss)**
+  - **[Use open-source cryptography](doc/criteria.md#crypto_floss)**
   - **[Use key lengths that will stay secure](doc/criteria.md#crypto_keylength)**
   - **[Don't use known-broken](doc/criteria.md#crypto_working)** or
     [known-weak](doc/criteria.md#crypto_weaknesses) algorithms

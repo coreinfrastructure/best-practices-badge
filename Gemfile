@@ -8,6 +8,7 @@ gem 'bootstrap-social-rails', '4.8.0'
 gem 'bootstrap-will_paginate', '0.0.10'
 gem 'bootstrap_form', '2.3.0'
 gem 'faker', '1.6.1'
+gem 'fastly-rails', '0.4.0' # Use Fastly CDN
 gem 'github_api', '0.13.0'
 gem 'jbuilder', '2.3.2'
 gem 'jquery-rails', '4.0.5' # Javascript jQuery library (for Rails)

@@ -1,8 +1,11 @@
 # rubocop:disable Metrics/ClassLength
 class ProjectsController < ApplicationController
-  before_action :set_project, only: [:edit, :update, :destroy, :show]
+  before_action :set_project, only: [:edit, :update, :destroy, :show, :badge]
   before_action :logged_in?, only: :create
   before_action :authorized, only: [:destroy, :edit, :update]
+
+  # Cache with Fastly CDN
+  before_action :set_cache_control_headers, only: [:index, :show, :badge]
 
   helper_method :repo_data
 
@@ -11,15 +14,17 @@ class ProjectsController < ApplicationController
   def index
     @projects = Project.all.includes(:user)
                        .paginate(page: params[:page]) # per_page: 5
+    set_surrogate_key_header 'projects', @projects.map(&:record_key)
   end
 
   # GET /projects/1
   # GET /projects/1.json
   def show
+    set_surrogate_key_header @project.record_key
   end
 
   def badge
-    @project = Project.find(params[:id])
+    set_surrogate_key_header @project.record_key + '/badge'
     respond_to do |format|
       status = Project.badge_achieved?(@project) ? 'passing' : 'failing'
       format.svg do
@@ -52,6 +57,7 @@ class ProjectsController < ApplicationController
 
     respond_to do |format|
       if @project.save
+        @project.purge_all
         flash[:success] = "Thanks for adding the Project!   Please fill out
                            the rest of the information to get the Badge."
         format.html { redirect_to edit_project_path(@project) }
@@ -85,23 +91,30 @@ class ProjectsController < ApplicationController
   end
   # rubocop:enable Metrics/MethodLength
 
+  # rubocop:disable Metrics/MethodLength
   def successful_update(format, old_badge_status)
+    FastlyRails.purge_by_key(@project.record_key + '/badge')
+    @project.purge
     format.html do
       redirect_to @project, success: 'Project was successfully updated.'
     end
     format.json { render :show, status: :ok, location: @project }
     new_badge_status = Project.badge_achieved?(@project)
-    if new_badge_status != old_badge_status
-      # TODO: Eventually deliver_later
+    if new_badge_status != old_badge_status # TODO: Eventually deliver_later
       ReportMailer.project_status_change(
         @project, old_badge_status, new_badge_status).deliver_now
     end
   end
+  # rubocop:enable Metrics/MethodLength
 
   # DELETE /projects/1
   # DELETE /projects/1.json
+  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   def destroy
     @project.destroy
+    FastlyRails.purge_by_key @project.record_key + '/badge'
+    @project.purge
+    @project.purge_all
     respond_to do |format|
       @project.project_homepage_url ||= project_find_default_url
       format.html do
@@ -111,6 +124,7 @@ class ProjectsController < ApplicationController
       format.json { head :no_content }
     end
   end
+  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
   def repo_data
     github = Github.new oauth_token: session[:user_token], auto_pagination: true

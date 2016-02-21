@@ -95,4 +95,13 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+
+  # Use Fastly as a CDN. See: https://devcenter.heroku.com/articles/fastly
+  config.action_controller.asset_host = ENV['FASTLY_CDN_URL']
+  # Use CDN directly for static assets
+  config.serve_static_assets = true
+  # Cache static content.  Until we're confident in the results, we'll
+  # use a relatively short caching time of 1 hour.
+  # config.static_cache_control = 'public, s-maxage=2592000, maxage=86400'
+  config.static_cache_control = 'public, s-maxage=3600, maxage=3600'
 end

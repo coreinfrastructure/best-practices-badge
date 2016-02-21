@@ -399,6 +399,7 @@ GEM
       hashdiff
     will_paginate (3.1.0)
     xml-simple (1.1.5)
+    yaml-lint (0.0.7)
 
 PLATFORMS
   ruby
@@ -454,6 +455,7 @@ DEPENDENCIES
   web-console (= 3.0.0)
   webmock
   will_paginate (= 3.1.0)
+  yaml-lint (= 0.0.7)
 
 BUNDLED WITH
    1.11.2

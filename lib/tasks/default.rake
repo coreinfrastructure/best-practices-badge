@@ -9,6 +9,7 @@ task(:default).clear.enhance %w(
   brakeman
   license_check
   whitespace_check
+  yaml_syntax_check
 )
 
 # Simple smoke test to avoid development environment misconfiguration
@@ -99,6 +100,16 @@ file 'license_finder_summary.txt' => 'Gemfile.lock' do
   # This will error-out if there's a license problem.
   sh 'bundle exec license_finder | tee license_finder_summary.txt'
 end
+
+desc 'Check YAML syntax (except project.yml, which is not straight YAML)'
+task :yaml_syntax_check do
+  # Don't check "project.yml" - it's not a straight YAML file, but instead
+  # it's processed by ERB (even though the filename doesn't admit it).
+  sh "find . -name '*.yml' ! -name 'projects.yml' -exec yaml-lint {} + | " \
+     "grep -v '^Checking the content of' | grep -v 'Syntax OK'"
+end
+
+# The following are invoked as needed.
 
 desc 'Create visualization of gem dependencies (requires graphviz)'
 task :bundle_viz do

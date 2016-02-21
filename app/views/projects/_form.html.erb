@@ -70,10 +70,13 @@ There is also a
 <div class="col-xs-8">
   According to the information below, this project <i>has</i> achieved
   a badge.
+  <%= render(partial: "details", locals: {
+             criteria: "got_badge", details: %{
   If this is your project, you can show a badge by embedding this HTML:<br />
-  &lt;a href='<%= badge_hostname %>/projects/<%= project.id %>'&gt;&lt;img src='<%= badge_hostname %>/projects/<%= project.id %>/badge'&gt;&lt;/a&gt; <br />
+  &lt;a href="https://#{badge_hostname}/projects/#{ project.id }"&gt;&lt;img src="https://#{ badge_hostname }/projects/#{ project.id }/badge"&gt;&lt;/a&gt; <br />
   or put this in your markdown file:<br />
- [![CII Best Practices](<%= badge_hostname %>/projects/<%= project.id %>/badge)](<%= badge_hostname %>/projects/<%= project.id %>)
+ [![CII Best Practices](https://#{ badge_hostname }/projects/#{ project.id }/badge)](https://#{ badge_hostname }/projects/#{ project.id })
+}}) %>
 </div>
 </div>
 <%   end %>

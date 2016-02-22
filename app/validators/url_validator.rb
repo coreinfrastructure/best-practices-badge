@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class UrlValidator < ActiveModel::EachValidator
   # The URL validation rules are somewhat overly strict, but should serve;
   # the idea is to prevent attackers from inserting redirecting URLs

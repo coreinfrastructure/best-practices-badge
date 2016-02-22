@@ -375,7 +375,7 @@ GEM
       json (>= 1.8.0)
     uniform_notifier (1.9.0)
     vcr (3.0.1)
-    web-console (3.0.0)
+    web-console (3.1.1)
       activemodel (>= 4.2)
       debug_inspector
       railties (>= 4.2)
@@ -438,7 +438,7 @@ DEPENDENCIES
   turbolinks (= 2.5.3)
   uglifier (= 2.7.2)
   vcr (= 3.0.1)
-  web-console (= 3.0.0)
+  web-console (= 3.1.1)
   webmock
   will_paginate (= 3.1.0)
   yaml-lint (= 0.0.7)

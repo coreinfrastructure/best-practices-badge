@@ -10,7 +10,7 @@ gem 'bootstrap_form', '2.3.0'
 gem 'faker', '1.6.2'
 gem 'fastly-rails', '0.4.0' # Use Fastly CDN
 gem 'github_api', '0.13.0'
-gem 'jbuilder', '2.3.2'
+gem 'jbuilder', '2.4.1'
 gem 'jquery-rails', '4.0.5' # Javascript jQuery library (for Rails)
 gem 'jquery-ui-rails', '5.0.5' # Javascript jQueryUI library (for Rails)
 gem 'redcarpet', '3.3.4' # Process markdown in form textareas (justifications)

@@ -349,7 +349,7 @@ Here's how we expect the form flow to go:
     *   "Auto" - re-run AUTO-FILL, apply the answers to anything currently
                  marked as "?", and go to edit project form.
     *   "JSON" - provide project info in JSON format.
-    *   "Audit"- (Maybe) - run AUTO-FILL *without* editing the results,
+    *   "Audit"- (Maybe) - run AUTO-FILL without editing the results,
                  and then show the project form with any differences
                  between auto answers and project answers as flash entries.
 

@@ -17,7 +17,7 @@ desc 'Ensure that rbenv or rvm are set up in PATH'
 task :rbenv_rvm_setup do
   path = ENV['PATH']
   if !path.include?('.rbenv') && !path.include?('.rvm')
-    fail 'Must have rbenv or rvm in PATH'
+    raise 'Must have rbenv or rvm in PATH'
   end
 end
 

@@ -55,7 +55,8 @@ class ChiefTest < ActiveSupport::TestCase
     # Mock a detective who always fails
     class BadRepoFilesExamineDetective < RepoFilesExamineDetective
       def analyze(_, _)
-        fail WeirdException, 'Exception of BadRepoFilesExamineDetective', caller
+        raise WeirdException,
+              'Exception of BadRepoFilesExamineDetective', caller
       end
     end
     detective = BadRepoFilesExamineDetective.new
@@ -100,7 +101,8 @@ class ChiefTest < ActiveSupport::TestCase
     # Mock a detective who always fails
     class BadRepoFilesExamineDetective < RepoFilesExamineDetective
       def analyze(_, _)
-        fail WeirdException, 'Exception of BadRepoFilesExamineDetective', caller
+        raise WeirdException,
+              'Exception of BadRepoFilesExamineDetective', caller
       end
     end
     detective = BadRepoFilesExamineDetective.new

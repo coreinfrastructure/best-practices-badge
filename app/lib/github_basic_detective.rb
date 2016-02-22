@@ -62,8 +62,6 @@ class GithubBasicDetective < Detective
     # e.g.: https://github.com/linuxfoundation/cii-best-practices-badge
     # Note: this limits what's accepted, otherwise we'd have to worry
     # about URL escaping.
-    # Rubocop misinterprets and thinks we don't use the match.
-    # rubocop:disable Performance/RedundantMatch
     repo_url.match(
       %r{\Ahttps://github.com/([A-Za-z0-9_-]+)/([A-Za-z0-9_-]+)/?\Z}) do |m|
       # We have a github repo.

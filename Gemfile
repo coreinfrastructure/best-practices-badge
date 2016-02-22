@@ -7,7 +7,7 @@ gem 'bootstrap-sass', '3.3.6'
 gem 'bootstrap-social-rails', '4.8.0'
 gem 'bootstrap-will_paginate', '0.0.10'
 gem 'bootstrap_form', '2.3.0'
-gem 'faker', '1.6.1'
+gem 'faker', '1.6.2'
 gem 'fastly-rails', '0.4.0' # Use Fastly CDN
 gem 'github_api', '0.13.0'
 gem 'jbuilder', '2.3.2'

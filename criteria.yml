@@ -1,0 +1,198 @@
+# This YAML file provides information about each criterion.
+# The top level hash key is the identifier of the criterion,
+# with the following keys inside:
+#   category: MUST|SHOULD|SUGGESTED  # required
+#   na_allowed?: true|false # optional, default false
+#   met_requires_url?: true|false # optional, default false
+#
+# BASICS
+#
+# Basic Project Website Content
+description_sufficient:
+  category: MUST
+interact:
+  category: MUST
+contribution:
+  category: MUST
+  met_requires_url?: true
+contribution_criteria:
+  category: SHOULD
+  met_requires_url?: true
+# OSS License
+license_location:
+  category: MUST
+  met_requires_url?: true
+floss_license:
+  category: MUST
+floss_license_osi:
+  category: SUGGESTED
+# Documentation
+documentation_basics:
+  category: MUST
+documentation_interface:
+  category: MUST
+# Other
+discussion:
+  category: MUST
+#
+# CHANGE CONTROL
+#
+# Public version-controlled source repository
+repo_url:
+  category: MUST
+repo_track:
+  category: MUST
+repo_interim:
+  category: MUST
+repo_distributed:
+  category: SUGGESTED
+# Unique version numbering
+version_unique:
+  category: MUST
+version_semver:
+  category: SUGGESTED
+version_tags:
+  category: SUGGESTED
+# Release notes
+release_notes:
+  category: MUST
+  met_requires_url?: true
+release_notes_vulns:
+  category: MUST
+#
+# REPORTING
+#
+# Bug-reporting process
+report_tracker:
+  category: SHOULD
+report_process:
+  category: MUST
+  met_requires_url?: true
+report_responses:
+  category: MUST
+enhancement_responses:
+  category: SHOULD
+report_archive:
+  category: MUST
+  met_requires_url?: true
+# Vulnerability report process
+vulnerability_report_process:
+  category: MUST
+  met_requires_url?: true
+vulnerability_report_private:
+  category: MUST
+  na_allowed?: true
+  met_requires_url?: true
+vulnerability_report_response:
+  category: MUST
+#
+# QUALITY
+#
+# Working build system
+build:
+  category: MUST
+  na_allowed?: true
+build_common_tools:
+  category: SUGGESTED
+  na_allowed?: true
+build_floss_tools:
+  category: SHOULD
+  na_allowed?: true
+# Automated test suite
+test:
+  category: MUST
+test_invocation:
+  category: SHOULD
+test_most:
+  category: SUGGESTED
+test_continuous_integration:
+  category: SUGGESTED
+# New functionality testing
+test_policy:
+  category: MUST
+tests_are_added:
+  category: MUST
+tests_documented_added:
+  category: SUGGESTED
+# Warning flags
+warnings:
+  category: MUST
+  na_allowed?: true
+warnings_fixed:
+  category: MUST
+  na_allowed?: true
+warnings_strict:
+  category: SUGGESTED
+  na_allowed?: true
+#
+# SECURITY
+#
+# Secure development knowledge
+know_secure_design:
+  category: MUST
+know_common_errors:
+  category: MUST
+# Use basic good cryptographic practices
+crypto_published:
+  category: MUST
+  na_allowed?: true
+crypto_call:
+  category: MUST
+  na_allowed?: true
+crypto_floss:
+  category: MUST
+  na_allowed?: true
+crypto_keylength:
+  category: MUST
+  na_allowed?: true
+crypto_working:
+  category: MUST
+  na_allowed?: true
+crypto_weaknesses:
+  category: SHOULD
+  na_allowed?: true
+crypto_pfs:
+  category: SHOULD
+  na_allowed?: true
+crypto_password_storage:
+  category: MUST
+  na_allowed?: true
+crypto_random:
+  category: MUST
+  na_allowed?: true
+# Secured delivery against man-in-the-middle (MITM) attacks
+delivery_mitm:
+  category: MUST
+delivery_unsigned:
+  category: MUST
+# Publicly-known Vulnerabilities fixed
+vulnerabilities_fixed_60_days:
+  category: MUST
+vulnerabilities_critical_fixed:
+  category: SHOULD
+#
+# ANALYSIS
+#
+# Static code analysis
+static_analysis:
+  category: MUST
+  na_allowed?: true
+static_analysis_common_vulnerabilities:
+  category: SUGGESTED
+  na_allowed?: true
+static_analysis_fixed:
+  category: MUST
+  na_allowed?: true
+static_analysis_often:
+  category: SUGGESTED
+  na_allowed?: true
+# Dynamic code analysis
+dynamic_analysis:
+  category: SUGGESTED
+dynamic_analysis_unsafe:
+  category: SUGGESTED
+  na_allowed?: true
+dynamic_analysis_enable_assertions:
+  category: SUGGESTED
+dynamic_analysis_fixed:
+  category: MUST

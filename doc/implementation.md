@@ -196,7 +196,7 @@ To add/modify the text of the criteria, edit these files:
 <app/views/projects/_form.html.erb>
 
 If you're adding/removing fields (including criteria), be sure to edit:
-<app/models/project.rb>.
+<criteria.yml>.
 
 When adding/removing fields, you also need to create a database migration.
 The "status" (met/unmet) is the criterion name + "\_status" stored as a string;

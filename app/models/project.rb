@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-# rubocop:disable Metrics/ClassLength
 class Project < ActiveRecord::Base
   STATUS_CHOICE = %w(? Met Unmet).freeze
   STATUS_CHOICE_NA = (STATUS_CHOICE + %w(N/A)).freeze
@@ -7,98 +6,10 @@ class Project < ActiveRecord::Base
   MAX_TEXT_LENGTH = 8192 # Arbitrary maximum to reduce abuse
   MAX_SHORT_STRING_LENGTH = 254 # Arbitrary maximum to reduce abuse
 
-  # Map each criterion to ['MUST|SHOULD|SUGGESTED',
-  #   na_allowed?, met_requires_url?]
-  CRITERIA_INFO = {
-    # Basic Project Website Content
-    description_sufficient: ['MUST', false, false],
-    interact: ['MUST', false, false],
-    contribution: ['MUST', false, true],
-    contribution_criteria: ['SHOULD', false, true],
-    # OSS License
-    license_location: ['MUST', false, true],
-    floss_license: ['MUST', false, false],
-    floss_license_osi: ['SUGGESTED', false, false],
-    # Documentation
-    documentation_basics: ['MUST', false, false],
-    documentation_interface: ['MUST', false, false],
-    # Other
-    discussion: ['MUST', false, false],
-    # CHANGE CONTROL
-    # Public version-controlled source repository
-    repo_url: ['MUST', false, false],
-    repo_track: ['MUST', false, false],
-    repo_interim: ['MUST', false, false],
-    repo_distributed: ['SUGGESTED', false, false],
-    # Unique version numbering
-    version_unique: ['MUST', false, false],
-    version_semver: ['SUGGESTED', false, false],
-    version_tags: ['SUGGESTED', false, false],
-    # Release notes
-    release_notes: ['MUST', false, true],
-    release_notes_vulns: ['MUST', false, false],
-    # REPORTING
-    # Bug-reporting process
-    report_tracker: ['SHOULD', false, false],
-    report_process: ['MUST', false, true],
-    report_responses: ['MUST', false, false],
-    enhancement_responses: ['SHOULD', false, false],
-    report_archive: ['MUST', false, true],
-    # Vulnerability report process
-    vulnerability_report_process: ['MUST', false, true],
-    vulnerability_report_private: ['MUST', true, true],
-    vulnerability_report_response: ['MUST', false, false],
-    # QUALITY
-    # Working build system
-    build: ['MUST', true, false],
-    build_common_tools: ['SUGGESTED', true, false],
-    build_floss_tools: ['SHOULD', true, false],
-    # Automated test suite
-    test: ['MUST', false, false],
-    test_invocation: ['SHOULD', false, false],
-    test_most: ['SUGGESTED', false, false],
-    test_continuous_integration: ['SUGGESTED', false, false],
-    # New functionality testing
-    test_policy: ['MUST', false, false],
-    tests_are_added: ['MUST', false, false],
-    tests_documented_added: ['SUGGESTED', false, false],
-    # Warning flags
-    warnings: ['MUST', true, false],
-    warnings_fixed: ['MUST', true, false],
-    warnings_strict: ['SUGGESTED', true, false],
-    # SECURITY
-    # Secure development knowledge
-    know_secure_design: ['MUST', false, false],
-    know_common_errors: ['MUST', false, false],
-    # Use basic good cryptographic practices
-    crypto_published: ['MUST', true, false],
-    crypto_call: ['MUST', true, false],
-    crypto_floss: ['MUST', true, false],
-    crypto_keylength: ['MUST', true, false],
-    crypto_working: ['MUST', true, false],
-    crypto_weaknesses: ['SHOULD', true, false],
-    crypto_pfs: ['SHOULD', true, false],
-    crypto_password_storage: ['MUST', true, false],
-    crypto_random: ['MUST', true, false],
-    # Secured delivery against man-in-the-middle (MITM) attacks
-    delivery_mitm: ['MUST', false, false],
-    delivery_unsigned: ['MUST', false, false],
-    # Publicly-known Vulnerabilities fixed
-    vulnerabilities_fixed_60_days: ['MUST', false, false],
-    vulnerabilities_critical_fixed: ['SHOULD', false, false],
-    # ANALYSIS
-    # Static code analysis
-    static_analysis: ['MUST', true, false],
-    static_analysis_common_vulnerabilities: ['SUGGESTED', true, false],
-    static_analysis_fixed: ['MUST', true, false],
-    static_analysis_often: ['SUGGESTED', true, false],
-    # Dynamic code analysis
-    dynamic_analysis: ['SUGGESTED', false, false],
-    dynamic_analysis_unsafe: ['SUGGESTED', true, false],
-    dynamic_analysis_enable_assertions: ['SUGGESTED', false, false],
-    dynamic_analysis_fixed: ['MUST', false, false] }.freeze
+  # The "Criteria" hash is loaded during application initialization
+  # from a YAML file.
 
-  ALL_CRITERIA = CRITERIA_INFO.keys.freeze
+  ALL_CRITERIA = Criteria.keys.freeze
   ALL_CRITERIA_STATUS = ALL_CRITERIA.map do |criterion|
     "#{criterion}_status".to_sym
   end.freeze
@@ -143,36 +54,44 @@ class Project < ActiveRecord::Base
 
   validates :user_id, presence: true
 
-  CRITERIA_INFO.each do |criterion, info|
+  # Validate all of the criteria-related inputs
+  ALL_CRITERIA.each do |criterion|
     # validates column, allow_blank: true, length: { maximum: 25 }
     status = "#{criterion}_status".to_sym
-    validates status, inclusion: (
-      info[1] ? { in: STATUS_CHOICE_NA } : { in: STATUS_CHOICE })
+    if Criteria[criterion.to_s]['na_allowed?']
+      validates status, inclusion: { in: STATUS_CHOICE_NA }
+    else
+      validates status, inclusion: { in: STATUS_CHOICE }
+    end
     justification = "#{criterion}_justification".to_sym
     validates justification, length: { maximum: MAX_TEXT_LENGTH }
   end
 
+  # TODO: Remove these Criteria queries from the project model
+
   # Is this criterion in the category MUST, SHOULD, or SUGGESTED?
   def self.criterion_category(criterion)
-    (CRITERIA_INFO[criterion.to_sym])[0]
+    (Criteria[criterion.to_s])['category']
   end
 
   # Is na allowed?
   def self.na_allowed?(criterion)
-    (CRITERIA_INFO[criterion.to_sym])[1]
+    (Criteria[criterion.to_s])['na_allowed?']
   end
 
   # Is a URL required in the justification to be enough with met?
   def self.met_url_required?(criterion)
-    (CRITERIA_INFO[criterion.to_sym])[2]
+    (Criteria[criterion.to_s])['met_url_required?']
   end
 
   # TODO: Should be normal method.
   def self.badge_achieved?(project)
-    CRITERIA_INFO.all? do |criterion, value|
+    ALL_CRITERIA.all? do |criterion|
       status = project["#{criterion}_status"]
       justification = project["#{criterion}_justification"]
-      enough_criterion? status, justification, value[0], value[2]
+      enough_criterion? status, justification,
+                        Criteria[criterion.to_s]['category'],
+                        Criteria[criterion.to_s]['met_requires_url?']
     end
   end
 

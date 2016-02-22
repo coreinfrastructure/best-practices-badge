@@ -40,7 +40,7 @@ group :development, :test do
   gem 'pronto-rubocop', '0.5.3'
   gem 'pry-byebug', '3.3.0'
   gem 'quiet_assets', '1.1.0'
-  gem 'rubocop-rspec', '1.3.1'
+  gem 'rubocop-rspec', '1.4.0'
   gem 'spring', '1.6.3'
   gem 'sqlite3', '1.3.11'
   gem 'vcr', '3.0.1' # Record network responses for later test reuse

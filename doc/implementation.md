@@ -189,16 +189,18 @@ this would normally create a CSRF vulnerability, but Rails automatiacally
 inserts and checks for a CSRF token, countering this potential vulnerability.
 
 
-## Adding criteria
+## Changing criteria
 
-To add/modify the text of the criteria, edit these files:
-<doc/criteria.md>
-<app/views/projects/_form.html.erb>
+To modify the text of the criteria, edit these files:
 
-If you're adding/removing fields (including criteria), be sure to edit:
-<criteria.yml>.
+- <doc/criteria.md> - Document
+- <./criteria.yml> - YAML file used by BadgeApp for criteria information.
 
-When adding/removing fields, you also need to create a database migration.
+If you're adding/removing fields (including criteria), be sure to also edit
+<app/views/projects/_form.html.erb> (to determine where to display it).
+
+When adding or removing fields, or when renamming
+a criterion name, you also need to create a database migration.
 The "status" (met/unmet) is the criterion name + "\_status" stored as a string;
 each criterion also has a name + "\_justification" stored as text.
 Here are the commands, assuming your current directory is at the top level,

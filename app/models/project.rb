@@ -71,17 +71,17 @@ class Project < ActiveRecord::Base
 
   # Is this criterion in the category MUST, SHOULD, or SUGGESTED?
   def self.criterion_category(criterion)
-    (Criteria[criterion.to_s])['category']
+    (Criteria[criterion.to_s])[:category]
   end
 
   # Is na allowed?
   def self.na_allowed?(criterion)
-    (Criteria[criterion.to_s])['na_allowed?']
+    (Criteria[criterion.to_s])[:na_allowed]
   end
 
   # Is a URL required in the justification to be enough with met?
   def self.met_url_required?(criterion)
-    (Criteria[criterion.to_s])['met_url_required?']
+    (Criteria[criterion.to_s])[:met_url_required]
   end
 
   # TODO: Should be normal method.
@@ -90,8 +90,8 @@ class Project < ActiveRecord::Base
       status = project["#{criterion}_status"]
       justification = project["#{criterion}_justification"]
       enough_criterion? status, justification,
-                        Criteria[criterion.to_s]['category'],
-                        Criteria[criterion.to_s]['met_requires_url?']
+                        Criteria[criterion.to_s][:category],
+                        Criteria[criterion.to_s][:met_url_required]
     end
   end
 

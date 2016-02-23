@@ -1,4 +1,3 @@
-<%# TODO: Get hostname programmatically. %>
 <% badge_hostname= (ENV['PUBLIC_HOSTNAME'] || 'localhost') %>
 <% content_for :nav_progress do %>
 <div class="progress">
@@ -161,43 +160,24 @@ This information is used when displaying badge information.
    <%# Note: render() accepts met_suppress: ..., unmet_placeholder:  ... %>
 
     <h3>Basic Project Website Content</h3>
-      <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
-              criteria: "description_sufficient", desc: %{
-The project website MUST succinctly describe what the software does
-(what problem does it solve?).},
-              details: %{
-This MUST be in language that potential users can understand (e.g., it uses minimal jargon).},
-              met_placeholder: %{(Optional) Where is the succinct description?  Consider providing a URL.
-}}) %>
+      <%= render(partial: "status_chooser",
+                 locals: {f: f, project: project, is_disabled: is_disabled,
+                          criteria: "description_sufficient" }) %>
       <hr>
 
-      <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
-              criteria: "interact", desc: %{
-The project website MUST provide information on how to: obtain, provide feedback
-(as bug reports or enhancements), and contribute to the software.},
-              met_placeholder: %{(Optional) Where is this information?  Consider providing URL(s).
-}}) %>
+      <%= render(partial: "status_chooser",
+                 locals: {f: f, project: project,  is_disabled: is_disabled,
+                          criteria: "interact"}) %>
       <hr>
 
-      <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
-              criteria: "contribution", desc: %{
-The information on how to contribute MUST explain the contribution process (e.g., are pull requests used?)},
-              met_url: true,
-              details: %{
-We presume that
-<a href="https://guides.github.com/activities/contributing-to-open-source/">projects on GitHub use issues and pull requests</a>
-unless otherwise noted.
-This information can be short, e.g., stating that the project uses pull requests, an issue tracker, or posts to a mailing list (which one?).},
-              met_placeholder: %{(URL required) What is the process? What URL explains it?
-}}) %>
+      <%= render(partial: "status_chooser",
+                 locals: {f: f, project: project,  is_disabled: is_disabled,
+                          criteria: "contribution"}) %>
       <hr>
 
-      <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
-              criteria: "contribution_criteria", desc: %{
-The information on how to contribute SHOULD include the basic criteria for acceptable contributions (e.g., a reference to any required coding standard).},
-              met_url: true,
-              unmet_placeholder: %{Why are the criteria so obvious that this information isn't needed?
-}}) %>
+      <%= render(partial: "status_chooser",
+                 locals: {f: f, project: project,  is_disabled: is_disabled,
+                          criteria: "contribution_criteria"}) %>
       <br>
 
       <h3>FLOSS License</h3>
@@ -234,193 +214,92 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
       <br>
       <hr>
 
-       <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
-               criteria: "floss_license", desc: %{
-The software MUST be released as FLOSS.},
-               details: %{
-Examples of such licenses include the
-<a href="http://creativecommons.org/publicdomain/zero/1.0/">CC0</a>, <a href="https://opensource.org/licenses/MIT">MIT</a>, <a href="https://opensource.org/licenses/BSD-2-Clause">BSD 2-clause</a>, <a href="https://opensource.org/licenses/BSD-3-Clause">BSD 3-clause revised</a>, <a href="https://opensource.org/licenses/Apache-2.0">Apache 2.0</a>, <a href="https://opensource.org/licenses/lgpl-license">Lesser GNU General Public License (LGPL)</a>, and the <a href="https://opensource.org/licenses/gpl-license">GNU General Public License (GPL)</a>.
-For our purposes, this means that the license MUST be:
-<ul>
-<li><a href="https://opensource.org/licenses">an approved license by the Open Source Initiative (OSI)</a>, or</li>
-<li><a href="https://www.gnu.org/licenses/license-list.html">a free license as approved by the Free Software Foundation (FSF)</a>, or</li>
-<li><a href="https://www.debian.org/legal/licenses/">a free license acceptable to Debian main</a>, or</li>
-<li><a href="https://fedoraproject.org/wiki/Licensing:Main?rd=Licensing">a "good" license according to Fedora</a>.</li>
-</ul>
-The software MAY also be licensed other ways (e.g., "GPLv2 or proprietary" is acceptable).
-<br>
-<br>
-<em>Rationale</em>: These criteria are designed for FLOSS projects, so we need to ensure that they're only used where they apply.  Some projects may be mistakenly considered FLOSS even though they are not (e.g., they might not have any license, in which case the defaults of the country's legal system apply, or they might use a non-FLOSS license).  Unusual licenses can cause long-term problems for FLOSS projects and are more difficult for tools to handle.  We expect that more advanced badges would set a higher bar (e.g., that it <em>must</em> be released under an OSI-approved license).
-}}) %>
+       <%= render(partial: "status_chooser",
+                  locals: {f: f, project: project,  is_disabled: is_disabled,
+                           criteria: "floss_license"}) %>
        <hr>
 
-       <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
-               criteria: "floss_license_osi", desc: %{
-It is SUGGESTED that any required license(s) be
-<a href="https://opensource.org/licenses">approved by the
-Open Source Initiative (OSI).</a>},
-               details: %{
-The OSI uses a rigorous approval process to determine
-which licenses are OSS.
-},
-               met_suppress: true,
-               unmet_suppress: true
-}) %>
-
+       <%= render(partial: "status_chooser",
+                  locals: {f: f, project: project,  is_disabled: is_disabled,
+                           criteria: "floss_license_osi"}) %>
        <hr>
 
 
-       <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
-               criteria: "license_location", desc: %{
-The project MUST post license(s) in a standard location.},
-               met_url: true,
-               details: %{
-E.g., as a top-level file named LICENSE or COPYING.
-License filenames MAY be followed by an extension such as ".txt" or ".md".},
-}) %>
-
+       <%= render(partial: "status_chooser",
+                  locals: {f: f, project: project,  is_disabled: is_disabled,
+                  criteria: "license_location"}) %>
       <br>
+
       <h3>Documentation</h3>
 
-      <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
-              criteria: "documentation_basics", desc: %{
-The project MUST provide basic documentation for the software.},
-              details: %{
-This documentation must be in some media (such as text or video) that includes:
-how to install it, how to start it, how to use it (possibly with a tutorial using examples), and
-how to use it securely (e.g., what to do and what not to do) if that is an appropriate topic for the software.
-The security documentation need not be long.},
-              met_placeholder: %{(Optional) What URL(s) are the starting points to for documentation?
-}}) %>
+      <%= render(partial: "status_chooser",
+                 locals: {f: f, project: project,  is_disabled: is_disabled,
+                          criteria: "documentation_basics"}) %>
       <hr>
 
-      <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
-              criteria: "documentation_interface", desc: %{
-The project MUST include reference documentation that describes its interface.},
-              details: %{
-The project MAY use hypertext links to non-project material as documentation.
-}}) %>
-
+      <%= render(partial: "status_chooser",
+                 locals: {f: f, project: project,  is_disabled: is_disabled,
+                          criteria: "documentation_interface"}) %>
       <br>
+
       <h3>Other</h3>
 
-      <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
-              criteria: "discussion", desc: %{
-The project MUST have one or more mechanisms
-for discussion (including proposed changes and issues) that are
-searchable, allow messages and topics to be addressed by URL,
-enable new people to participate in some of the discussions, and
-do not require client-side installation of proprietary software.},
-              details: %{
-Examples of acceptable mechanisms include
-GitHub issue and pull request discussions, Bugzilla, Mantis, and Trac.
-Asynchronous discussion mechanisms (like IRC) are acceptable if
-they meet these criteria; make sure there is a URL-addressable
-archiving mechanism.
-Proprietary Javascript, while discouraged, is permitted.
-}}) %>
+      <%= render(partial: "status_chooser",
+                 locals: {f: f, project: project,  is_disabled: is_disabled,
+                          criteria: "discussion"}) %>
 </div>
 
       <div class="tab-pane" id="changecontrol">
       <br>
       <h3>Public version-controlled source repository</h3>
 
-       <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
-               criteria: "repo_url", desc: %{
-The project MUST have a version-controlled source repository that is publicly readable and has a URL (the URL MAY be the same as the project URL).},
-               details: %{
-The project MAY use private (non-public) branches in specific cases while the change is not publicly released (e.g., for fixing a vulnerability before it is revealed to the public).
-}}) %>
+       <%= render(partial: "status_chooser",
+                  locals: {f: f, project: project,  is_disabled: is_disabled,
+                           criteria: "repo_url"}) %>
       <hr>
 
-      <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
-               criteria: "repo_track", desc: %{
-The source repository MUST track what changes were made, who made the changes,
-and when the changes were made.
-}}) %>
+      <%= render(partial: "status_chooser",
+                 locals: {f: f, project: project,  is_disabled: is_disabled,
+                          criteria: "repo_track"}) %>
       <hr>
 
-      <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
-               criteria: "repo_interim", desc: %{
-  To enable collaborative review, the project's source repository MUST
-  include interim versions for review between releases;
-  it MUST NOT include only final releases.},
-               details: %{
-  Projects MAY choose to omit specific interim versions
-  from their public source repositories
-  (e.g., ones that fix specific non-public security vulnerabilities,
-  may never be publicly released, or include material that cannot
-  be legally posted and are not in the final release).}}) %>
+      <%= render(partial: "status_chooser",
+                 locals: {f: f, project: project,  is_disabled: is_disabled,
+                          criteria: "repo_interim"}) %>
       <hr>
 
-      <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
-               criteria: "repo_distributed", desc: %{
-It is SUGGESTED that common distributed version control software be used (e.g., git).},
-               details: %{
-Git is not specifically required and projects
-can use centralized version control software
-(such as subversion) with justification.
-}}) %>
-
+      <%= render(partial: "status_chooser",
+                 locals: {f: f, project: project,  is_disabled: is_disabled,
+                          criteria: "repo_distributed"}) %>
       <br>
+
       <h3>Version numbering</h3>
 
-      <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
-               criteria: "version_unique", desc: %{
-The project MUST have a unique version number for each release intended
-to be used by users.
-}}) %>
-
-      <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
-               criteria: "version_semver", desc: %{
-It is SUGGESTED that the
-<a href="http://semver.org">Semantic Versioning (SemVer) format</a>
-be used for releases.},
-               met_suppress: true,
-               details: %{
-Commit IDs (or similar) MAY be used as version numbers. They are unique, but note that these can
-cause problems for users as they may not be able to determine whether or not they're up-to-date.
-}}) %>
+      <%= render(partial: "status_chooser",
+                 locals: {f: f, project: project,  is_disabled: is_disabled,
+                          criteria: "version_unique"}) %>
       <hr>
 
-      <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
-               criteria: "version_tags", desc: %{
-It is SUGGESTED that projects identify each release within their version control system.
-For example, it is SUGGESTED that those using git identify each
-release using git tags.
-}}) %>
+      <%= render(partial: "status_chooser",
+                 locals: {f: f, project: project,  is_disabled: is_disabled,
+                          criteria: "version_semver"}) %>
+      <hr>
 
+      <%= render(partial: "status_chooser",
+                 locals: {f: f, project: project,  is_disabled: is_disabled,
+                          criteria: "version_tags"}) %>
       <br>
+
       <h3>ChangeLog</h3>
 
-      <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
-               criteria: "release_notes", desc: %{
-The project MUST provide, in each release, release notes that are
-a human-readable <i>summary</i> of major changes in that release.},
-               met_url: true,
-               details: %{
-The release notes MUST NOT be the output of a version control log
-(e.g., the "git log" command results are not release notes).<br />
-The release notes MAY be implemented in a variety of ways.
-Many projects provide them in a file named "NEWS", "CHANGELOG",
-or "ChangeLog", optionally with extensions such as ".txt", ".md", or ".html".
-Historically the term "change log" meant a log of <i>every</i> change,
-but to meet these criteria what is needed is a human-readable summary.
-The release notes MAY instead be provided by
-version control system mechanisms such as the
-<a href="https://github.com/blog/1547-release-your-software">GitHub Releases workflow</a>.<br />
-<b>Rationale</b>:
-Release notes are important because they help users
-decide whether or not they will want to update, and what the impact would be
-(e.g., if the new release fixes vulnerabilities).
-}}) %>
+      <%= render(partial: "status_chooser",
+                 locals: {f: f, project: project,  is_disabled: is_disabled,
+                          criteria: "release_notes"}) %>
       <hr>
 
-      <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
-               criteria: "release_notes_vulns", desc: %{
-The release notes MUST identify every publicly known vulnerability
-that is fixed in each new release.
-}}) %>
+      <%= render(partial: "status_chooser",
+                 locals: {f: f, project: project,  is_disabled: is_disabled,
+                          criteria: "release_notes_vulns"}) %>
 </div>
 
       <div class="tab-pane" id="reporting">
@@ -433,257 +312,136 @@ that is fixed in each new release.
       \<\% = f.text_field :report_url , class:"form-control", placeholder:'Issue tracker URL (if any)', disabled: is_disabled % >
       -->
 
-      <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
-               criteria: "report_process", met_url: true, desc: %{
-The project MUST provide a process for users to submit bug reports
-(e.g., using an issue tracker or a mailing list).
-}}) %>
+      <%= render(partial: "status_chooser",
+                 locals: {f: f, project: project,  is_disabled: is_disabled,
+                          criteria: "report_process"}) %>
       <hr>
 
-      <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
-               criteria: "report_tracker", desc: %{
-The project SHOULD use an issue tracker for tracking individual issues.},
-              unmet_placeholder: %{Why is there no issue tracker?}}) %>
+      <%= render(partial: "status_chooser",
+                 locals: {f: f, project: project,  is_disabled: is_disabled,
+                         criteria: "report_tracker"}) %>
       <hr>
 
-      <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
-               criteria: "report_responses", desc: %{
-The project MUST acknowledge a majority of bug reports submitted in the last 2-12 months (inclusive); the response need not include a fix.
-}}) %>
+      <%= render(partial: "status_chooser",
+                 locals: {f: f, project: project,  is_disabled: is_disabled,
+                          criteria: "report_responses"}) %>
       <hr>
 
-      <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
-               criteria: "enhancement_responses", desc: %{
-The project SHOULD respond to most enhancement requests in the last 2-12 months (inclusive). The project MAY choose not to respond.
-}}) %>
+      <%= render(partial: "status_chooser",
+                 locals: {f: f, project: project,  is_disabled: is_disabled,
+                          criteria: "enhancement_responses"}) %>
       <hr>
 
-      <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
-               criteria: "report_archive", met_url: true, desc: %{
-The project MUST have a publicly available archive for reports and responses for later searching.
-}}) %>
-
+      <%= render(partial: "status_chooser",
+                 locals: {f: f, project: project,  is_disabled: is_disabled,
+                          criteria: "report_archive"}) %>
       <br>
 
       <h3>Vulnerability reporting process</h3>
-      <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
-               criteria: "vulnerability_report_process", desc: %{
-The project MUST publish the process for reporting vulnerabilities on the project site.},
-               met_url: true,
-               details: %{
-E.g., a clearly designated mailing address on https://PROJECTSITE/security, often security@SOMEWHERE.
-This MAY be the same as its bug reporting process.
-}}) %>
+      <%= render(partial: "status_chooser",
+                 locals: {f: f, project: project,  is_disabled: is_disabled,
+                          criteria: "vulnerability_report_process"}) %>
       <hr>
 
-      <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
-               criteria: "vulnerability_report_private", desc: %{
-If private vulnerability reports are supported, the project MUST include how
-to send the information in a way that is kept private.},
-               met_url: true,
-               details: %{
-E.g., a private defect
-report submitted on the web using TLS or an email encrypted using OpenPGP.
-If private vulnerability reports are not supported this criterion is
-automatically met.
-}}) %>
+      <%= render(partial: "status_chooser",
+                 locals: {f: f, project: project,  is_disabled: is_disabled,
+                          criteria: "vulnerability_report_private"}) %>
       <hr>
 
-      <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
-               criteria: "vulnerability_report_response", desc: %{
-The project's initial response time for any vulnerability report received
-in the last 6 months MUST be less than or equal to 14 days.
-}}) %>
+      <%= render(partial: "status_chooser",
+                 locals: {f: f, project: project,  is_disabled: is_disabled,
+                          criteria: "vulnerability_report_response"}) %>
 </div>
 
      <div class="tab-pane" id="quality">
      <br>
      <h3>Working build system</h3>
 
-      <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
-               criteria: "build", desc: %{
-If the software requires building for use, the project MUST provide a working
-build system that can automatically rebuild the software from source code.},
-               details: %{
-A build system determines what actions need to occur to rebuild the software (and in what order), and then performs those steps.
-<b>Rationale</b>: If a project needs to be built but there is no working build system,
-            then potential co-developers will not be able to easily contribute and many security analysis
-            tools will be ineffective. Criteria for a working build system are not applicable if there is
-            no need to build anything for use.
-}}) %>
+      <%= render(partial: "status_chooser",
+                 locals: {f: f, project: project,  is_disabled: is_disabled,
+                          criteria: "build"}) %>
       <hr>
 
-      <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
-               criteria: "build_common_tools", desc: %{
-It is SUGGESTED that common tools be used for building the software.},
-               details: %{
-For example, Maven, Ant, cmake, the autotools, make, or rake.
-}}) %>
+      <%= render(partial: "status_chooser",
+                 locals: {f: f, project: project,  is_disabled: is_disabled,
+                          criteria: "build_common_tools"}) %>
       <hr>
 
-      <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
-               criteria: "build_floss_tools", desc: %{
-The project SHOULD be buildable using only FLOSS tools.
-}}) %>
-
+      <%= render(partial: "status_chooser",
+                 locals: {f: f, project: project,  is_disabled: is_disabled,
+                          criteria: "build_floss_tools"}) %>
       <br>
 
       <h3>Automated test suite</h3>
 
-      <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
-               criteria: "test", desc: %{
-The project MUST have at least one automated test suite that is publicly
-released as FLOSS (this test suite may be maintained as a separate FLOSS project).},
-               details: %{
-The project MAY have multiple automated test suites (e.g., one that runs quickly, vs. another that is more thorough but requires special equipment).
-<b>Rationale</b>: Automated test suites immediately help detect a variety of problems.  A large test suite can find more problems, but even a small test suite can detect problems and provide a framework to build on.
-}}) %>
+      <%= render(partial: "status_chooser",
+                 locals: {f: f, project: project,  is_disabled: is_disabled,
+                          criteria: "test"}) %>
       <hr>
 
-      <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
-               criteria: "test_invocation", desc: %{
-A test suite SHOULD be invocable in a standard way for that language.},
-               details: %{
-For example, "make check", "mvn test", or "rake test".
-}}) %>
+      <%= render(partial: "status_chooser",
+                 locals: {f: f, project: project,  is_disabled: is_disabled,
+                          criteria: "test_invocation"}) %>
       <hr>
 
-      <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
-               criteria: "test_most", desc: %{
-It is SUGGESTED that the test suite cover most (or ideally all)
-the code branches, input fields, and functionality.
-}}) %>
+      <%= render(partial: "status_chooser",
+                 locals: {f: f, project: project,  is_disabled: is_disabled,
+                          criteria: "test_most"}) %>
       <hr>
-      <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
-               criteria: "test_continuous_integration", desc: %{
-It is SUGGESTED that the project implement continuous integration
-(where new or changed code is frequently integrated into a central
-code repository and automated tests are run on the result).
-}}) %>
-
+      <%= render(partial: "status_chooser",
+                 locals: {f: f, project: project,  is_disabled: is_disabled,
+                          criteria: "test_continuous_integration"}) %>
     <br>
+
     <h3>New functionality testing</h3>
 
-      <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
-               criteria: "test_policy", desc: %{
-The project MUST have a general policy (formal or not) that as major
-new functionality is added, tests of that functionality SHOULD
-be added to an automated test suite.
-}}) %>
+      <%= render(partial: "status_chooser",
+                 locals: {f: f, project: project,  is_disabled: is_disabled,
+                          criteria: "test_policy"}) %>
       <hr>
 
-      <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
-               criteria: "tests_are_added", desc: %{
-The project MUST have evidence that such tests are being added in
-the most recent major changes to the project.},
-               details: %{
-Major functionality would typically be mentioned in the ChangeLog.
-(Perfection is not required, merely evidence
-that tests are typically being added in practice.)
-}}) %>
+      <%= render(partial: "status_chooser",
+                 locals: {f: f, project: project,  is_disabled: is_disabled,
+                          criteria: "tests_are_added"}) %>
       <hr>
 
-      <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
-               criteria: "tests_documented_added", desc: %{
-It is SUGGESTED that this policy on adding tests be
-<i>documented</i> in the instructions for change proposals.},
-               details: %{
-However, even an informal rule is acceptable as long as the tests are being
-added in practice.
-}}) %>
-
+      <%= render(partial: "status_chooser",
+                 locals: {f: f, project: project,  is_disabled: is_disabled,
+                          criteria: "tests_documented_added"}) %>
     <br>
+
     <h3>Warning flags</h3>
 
-      <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
-               criteria: "warnings", desc: %{
-The project MUST enable one or more compiler warning flags, a "safe"
-language mode, or use a separate "linter" tool to look for code quality
-errors or common simple mistakes, if there is at least one FLOSS tool that
-can implement this criterion in the selected language.},
-               details: %{
-Examples of compiler warning flags include gcc/clang "-Wall".
-Examples of a "safe" language mode include Javascript "use strict"
-and perl5's "use warnings".
-A separate "linter" tool is simply a tool that examines the
-source code to look for code quality errors or common simple mistakes.
-}}) %>
-
-      <hr>
-      <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
-               criteria: "warnings_fixed", desc: %{
-The project MUST address warnings.},
-               details: %{The project should fix warnings or mark them in the source code as false positives.  Ideally there would be no warnings, but a project MAY accept some warnings (typically less than 1 warning per 100 lines or less than 10 warnings).
-}}) %>
+      <%= render(partial: "status_chooser",
+          locals: {f: f, project: project,  is_disabled: is_disabled,
+                   criteria: "warnings"}) %>
       <hr>
 
-      <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
-               criteria: "warnings_strict", desc: %{
-It is SUGGESTED that projects be maximally strict with warnings, but this is not
-always practical.
-}}) %>
+      <%= render(partial: "status_chooser",
+                 locals: {f: f, project: project,  is_disabled: is_disabled,
+                          criteria: "warnings_fixed"}) %>
+      <hr>
+
+      <%= render(partial: "status_chooser",
+                 locals: {f: f, project: project,  is_disabled: is_disabled,
+                          criteria: "warnings_strict"}) %>
 </div>
 
     <div class="tab-pane" id="security">
     <br>
     <h3>Secure development knowledge</h3>
 
-    <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
-             criteria: "know_secure_design", desc: %{
-The project MUST have at least one primary developer who knows
-how to design secure software.},
-             details: %{
-This requires understanding the following design principles, including the 8 principles from <a href="http://web.mit.edu/Saltzer/www/publications/protection/">Saltzer and Schroeder</a>:
-<ul>
-<li>economy of mechanism (keep the design as simple and small as practical, e.g., by adopting sweeping simplifications)
-<li>fail-safe defaults (access decisions should deny by default, and
-projects' installation should be secure by default)
-<li>complete mediation (every access that might be limited must be checked for authority and be non-bypassable)
-<li>open design (security mechanisms should not depend on attacker ignorance of its design, but instead on more easily protected and changed information like keys and passwords)
-<li>separation of privilege (ideally, access to important objects
-should depend on more than one condition, so that defeating
-one protection system won't enable complete access.
-E.G., multi-factor authentication, such as requiring both a password
-and a hardware token, is stronger than single-factor authentication)
-<li>least privilege (processes should operate with the least privilege necessary)
-<li>least common mechanism (the design should minimize the mechanisms common to more than one user and depended on by all users, e.g., directories for temporary files)
-<li>psychological acceptability (the human interface must be designed for ease of use - designing for "least astonishment" can help)
-<li>limited attack surface (the attack surface - the set of the different points where an attacker can try to enter or extract data - should be limited)
-<li>input validation with whitelists (inputs should typically be checked to determine if they are valid before they are accepted; this validation should use whitelists (which only accept known-good values),
-not blacklists (which attempt to list known-bad values)).
-</ul>
-A "primary developer" in a project is anyone who is familiar with
-the project's code base, is comfortable making changes to it, and is
-acknowledged as such by most other participants in the project.
-A primary developer would typically make a number of contributions
-over the past year (via code, documentation, or answering questions).
-Developers would typically be considered primary developers if they
-initiated the project (and have not left the project more than three
-years ago), have the option of receiving information on a private
-vulnerability reporting channel (if there is one), can accept commits
-on behalf of the project, or perform final releases of the project
-software.
-If there is only one developer, that individual is the primary developer.
-}}) %>
-
+    <%= render(partial: "status_chooser",
+        locals: {f: f, project: project,  is_disabled: is_disabled,
+                 criteria: "know_secure_design"}) %>
     <hr>
-    <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
-             criteria: "know_common_errors", desc: %{
-At least one of the primary developers MUST know of common kinds of errors that
-lead to vulnerabilities in this kind of software, as well as at least one method
-to counter or mitigate each of them.},
-             details: %{
-Examples (depending on the type of software)
-include SQL injection, OS injection, classic buffer overflow,
-cross-site scripting, missing authentication, and missing authorization.
-See the <a href="http://cwe.mitre.org/top25/">CWE/SANS top 25</a> or
-<a href="https://www.owasp.org/index.php/Category:OWASP_Top_Ten_Project">OWASP Top 10</a>
-for commonly-used lists.
-}}) %>
 
+    <%= render(partial: "status_chooser",
+               locals: {f: f, project: project,  is_disabled: is_disabled,
+                        criteria: "know_common_errors"}) %>
     <br>
-    <h3>Good cryptographic practices</h3>
 
+    <h3>Good cryptographic practices</h3>
 
 <span class="criteria-desc">
 Note that some software does not need to directly use cryptographic capabilities.
@@ -696,229 +454,119 @@ provided by the delivered project's software.
   <br>
 <% end %>
 
-    <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
-             criteria: "crypto_published", desc: %{
-The project's cryptographic software MUST use only cryptographic protocols
-and algorithms that are publicly published and reviewed by experts.
-}}) %>
+    <%= render(partial: "status_chooser",
+               locals: {f: f, project: project,  is_disabled: is_disabled,
+                        criteria: "crypto_published"}) %>
     <hr>
 
-    <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
-             criteria: "crypto_call", desc: %{
-If the project software is an application or library, and its primary
-purpose is not to implement cryptography, then it MUST only call on software
-specifically designed to implement cryptographic functions; it MUST NOT
-re-implement its own.
-}}) %>
+    <%= render(partial: "status_chooser",
+               locals: {f: f, project: project,  is_disabled: is_disabled,
+                        criteria: "crypto_call"}) %>
     <hr>
 
-    <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
-             criteria: "crypto_floss", desc: %{
-All functionality that depends on cryptography MUST be implementable using
-FLOSS.},
-             details: %{See the
-<a href="https://opensource.org/osr">Open Standards Requirement for Software
-by the Open Source Initiative</a>.
-}}) %>
+    <%= render(partial: "status_chooser",
+               locals: {f: f, project: project,  is_disabled: is_disabled,
+                        criteria: "crypto_floss"}) %>
     <hr>
 
-    <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
-             criteria: "crypto_keylength", desc: %{
-The default keylengths MUST meet the NIST minimum requirements at least through the year 2030 (as stated in 2012).},
-             details: %{
-These minimum bitlengths are: symmetric key 112, factoring modulus 2048,
-discrete logarithm key 224,
-discrete logarithmic group 2048, elliptic curve 224,
-and hash 224 (password hashing is not covered by this
-bitlength, more information on password hashing can be found in the
-<a href="#crypto_password_storage">crypto_password_storage</a> criterion).
-See <a href="http://www.keylength.com">http://www.keylength.com</a>
-for a comparison of keylength recommendations from various organizations.
-The software MUST be configurable so that it will reject smaller keylengths.
-The software MAY allow smaller keylengths in some configurations (ideally it would not, since this allows
-downgrade attacks, but shorter keylengths are sometimes necessary for
-interoperability.)
-}}) %>
+    <%= render(partial: "status_chooser",
+               locals: {f: f, project: project,  is_disabled: is_disabled,
+                        criteria: "crypto_keylength"}) %>
     <hr>
 
-    <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
-             criteria: "crypto_working", desc: %{
-The project security mechanisms MUST NOT depend on cryptographic algorithms that are broken (e.g., MD4, MD5, single DES, RC4, or Dual_EC_DRBG).
-}}) %>
+    <%= render(partial: "status_chooser",
+               locals: {f: f, project: project,  is_disabled: is_disabled,
+                        criteria: "crypto_working"}) %>
     <hr>
 
-    <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
-             criteria: "crypto_weaknesses", desc: %{
-The project security mechanisms SHOULD NOT by default depend on cryptographic algorithms with known serious weaknesses (e.g., SHA-1).
-}}) %>
+    <%= render(partial: "status_chooser",
+               locals: {f: f, project: project,  is_disabled: is_disabled,
+                        criteria: "crypto_weaknesses"}) %>
     <hr>
 
-    <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
-             criteria: "crypto_pfs", desc: %{
-The project SHOULD implement perfect forward secrecy for key agreement protocols so a session key derived from a set of long-term keys cannot be compromised if one of the long-term keys is compromised in the future.
-}}) %>
+    <%= render(partial: "status_chooser",
+               locals: {f: f, project: project,  is_disabled: is_disabled,
+                        criteria: "crypto_pfs"}) %>
     <hr>
 
-    <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
-             criteria: "crypto_password_storage", desc: %{
-If passwords are stored for authentication of external users, the project MUST store them as iterated hashes with a per-user salt by using a key stretching (iterated) algorithm (e.g., PBKDF2, Bcrypt or Scrypt).
-}}) %>
+    <%= render(partial: "status_chooser",
+               locals: {f: f, project: project,  is_disabled: is_disabled,
+                        criteria: "crypto_password_storage"}) %>
     <hr>
 
-    <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
-             criteria: "crypto_random", desc: %{
-The project MUST generate all cryptographic keys and nonces
-using a cryptographically secure random number generator,
-and MUST NOT do so using generators that are not cryptographically secure.
-A cryptographically secure random number generator may be a
-hardware random number generator, or it may be
-a cryptographically secure pseudo-random number generator (CSPRNG) using
-an algorithm such as Hash_DRBG, HMAC_DRBG, CTR_DRBG, Yarrow, or Fortuna.
-}}) %>
-
+    <%= render(partial: "status_chooser",
+               locals: {f: f, project: project,  is_disabled: is_disabled,
+                        criteria: "crypto_random"}) %>
     <br>
+
     <h3>Secured delivery against man-in-the-middle (MITM) attacks</h3>
 
-    <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
-             criteria: "delivery_mitm", desc: %{
-The project MUST use a delivery mechanism that counters MITM attacks.
-Using https or ssh+scp is acceptable.},
-             details: %{
-An even stronger mechanism is releasing
-the software with digitally signed packages, since that mitigates attacks on the distribution system,
-but this only works if the users can be confident that the public keys for signatures are correct
-<i>and</i> if the users will actually check the signature.
-}}) %>
+    <%= render(partial: "status_chooser",
+               locals: {f: f, project: project,  is_disabled: is_disabled,
+                        criteria: "delivery_mitm"}) %>
     <hr>
 
-    <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
-             criteria: "delivery_unsigned", desc: %{
-A cryptographic hash (e.g., a sha1sum) MUST NOT be retrieved over http and
-used without checking for a cryptographic signature.},
-             details: %{
-These hashes can be modified in transit.
-}}) %>
-<br>
+    <%= render(partial: "status_chooser",
+               locals: {f: f, project: project,  is_disabled: is_disabled,
+                        criteria: "delivery_unsigned"}) %>
+    <br>
+
     <h3>Publicly-known vulnerabilities fixed</h3>
 
-    <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
-             criteria: "vulnerabilities_fixed_60_days", desc: %{
-There MUST be no unpatched vulnerabilities of medium or high severity that
-have been publicly known for more than 60 days.},
-             details: %{
-The vulnerability must be patched and
-released by the project itself (patches may be developed elsewhere).
-A vulnerability becomes publicly known (for this purpose) once it has a CVE with
-publicly released non-paywalled information (reported, for example,
-in the <a href="https://nvd.nist.gov/">National Vulnerability Database</a>) or when the project has been informed and the
-information has been released to the public (possibly by the project). A vulnerability is medium
-to high severity if its <a href="https://nvd.nist.gov/cvss.cfm">CVSS 2.0</a> base score is 4 or higher.
-<br><br>
-<b>Note</b>: this means that users might be left vulnerable to all attackers
-worldwide for up to 60 days. This criterion is often much easier to meet than what Google recommends in
-<a href="http://googleonlinesecurity.blogspot.com/2010/07/rebooting-responsible-disclosure-focus.html">Rebooting responsible disclosure</a>, because Google recommends that the 60-day period start when the project is notified <em>even</em> if the report is not public.<br>
-<b>Rationale</b>: We intentionally chose to start measurement from the time of public knowledge,
-and not from the time reported to the project, because this is much easier to measure and
-verify by those outside the project.
-}}) %>
+    <%= render(partial: "status_chooser",
+               locals: {f: f, project: project,  is_disabled: is_disabled,
+                        criteria: "vulnerabilities_fixed_60_days"}) %>
     <hr>
 
-    <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
-             criteria: "vulnerabilities_critical_fixed", desc: %{
-Projects SHOULD fix all critical vulnerabilities rapidly after they
-are reported.
-}}) %>
+    <%= render(partial: "status_chooser",
+               locals: {f: f, project: project,  is_disabled: is_disabled,
+                        criteria: "vulnerabilities_critical_fixed"}) %>
 </div>
 
     <div class="tab-pane" id="analysis">
-      <br>
+    <br>
     <h3>Static code analysis</h3>
 
-     <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
-             criteria: "static_analysis", desc: %{
-At least one static code analysis tool MUST be applied to any proposed major production
-release of the software before its release, if there is at least one FLOSS tool that
-implements this criterion in the selected language.},
-             details: %{
-A static code analysis tool examines
-the software code (as source code, intermediate code, or executable) without executing it
-with specific inputs.
-For purposes of this criterion, compiler warnings and "safe"
-language modes do not count as static code analysis tools
-(these typically avoid deep analysis because speed is vital).
-Examples of such static code analysis tools include <a href="http://cppcheck.sourceforge.net/">cppcheck</a>, <a href="http://clang-analyzer.llvm.org/">clang static analyzer</a>, <a href="http://findbugs.sourceforge.net/">FindBugs</a> (including <a href="https://h3xstream.github.io/find-sec-bugs/">FindSecurityBugs</a>), <a href="https://pmd.github.io/">PMD</a>, <a href="http://brakemanscanner.org/">Brakeman</a>, <a href="https://scan.coverity.com/">Coverity Quality Analyzer</a>, and <a href="http://www8.hp.com/au/en/software-solutions/static-code-analysis-sast/index.html">HP Fortify Static Code Analyzer</a>.  Larger lists of tools can be found in places such as the <a href="https://en.wikipedia.org/wiki/List_of_tools_for_static_code_analysis">Wikipedia list of tools for static code analysis</a>, <a href="https://www.owasp.org/index.php/Static_Code_Analysis">OWASP information on static code analysis</a>, <a href="http://samate.nist.gov/index.php/Source_Code_Security_Analyzers.html">NIST list of source code security analyzers</a>, and <a href="http://www.dwheeler.com/essays/static-analysis-tools.html">Wheeler's list of static analysis tools</a>.  The <a href="https://continuousassurance.org/">SWAMP</a> is a no-cost platform for assessing vulnerabilities in software using a variety of tools.
-}}) %>
-     <br>
-
+    <%= render(partial: "status_chooser",
+               locals: {f: f, project: project,  is_disabled: is_disabled,
+                        criteria: "static_analysis"}) %>
      <hr>
 
-     <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
-             criteria: "static_analysis_common_vulnerabilities", desc: %{
-It is SUGGESTED that the tool include rules or approaches to look for
-common vulnerabilities in the analyzed language or environment.
-}}) %>
+     <%= render(partial: "status_chooser",
+                locals: {f: f, project: project,  is_disabled: is_disabled,
+                         criteria: "static_analysis_common_vulnerabilities"}) %>
      <hr>
 
-     <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
-             criteria: "static_analysis_fixed", desc: %{
-All confirmed medium and high severity exploitable vulnerabilities discovered with static code analysis MUST be fixed.},
-             details: %{
-A vulnerability is medium to high severity if its <a href="https://nvd.nist.gov/cvss.cfm">CVSS 2.0</a> is 4 or higher.
-}}) %>
+     <%= render(partial: "status_chooser",
+                locals: {f: f, project: project,  is_disabled: is_disabled,
+                         criteria: "static_analysis_fixed"}) %>
      <hr>
 
-     <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
-             criteria: "static_analysis_often", desc: %{
-It is SUGGESTED that static source code analysis occur on every commit or at least daily.
-}}) %>
-
+     <%= render(partial: "status_chooser",
+                locals: {f: f, project: project,  is_disabled: is_disabled,
+                         criteria: "static_analysis_often"}) %>
      <br>
 
      <h3>Dynamic analysis</h3>
 
-      <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
-              criteria: "dynamic_analysis", desc: %{
-It is SUGGESTED that at least one dynamic analysis tool be applied to any proposed major production
-release of the software before its release.},
-              details: %{
-A dynamic analysis tool examines the software
-by executing it with specific inputs.
-For example, the project MAY use a fuzzing tool (e.g., <a href="http://lcamtuf.coredump.cx/afl/">American Fuzzy Lop</a>) or a web application scanner (e.g., <a href="https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project">OWASP ZAP</a> or <a href="http://w3af.org/">w3af</a>).  For purposes of this criterion the dynamic analysis tool needs to vary the inputs in some way to look for various kinds of problems <em>or</em> be an automated test suite with at least 80% branch coverage.  The <a href="https://en.wikipedia.org/wiki/Dynamic_program_analysis">Wikipedia page on dynamic analysis</a> and the <a href="https://www.owasp.org/index.php/Fuzzing">OWASP page on fuzzing</a> identify some dynamic analysis tools.
-<br>
-The analysis tool(s) MAY be focused on looking for security vulnerabilities, but this is not required.
-<b>Rationale:</b> Static source code analysis and dynamic analysis tend
-to find different kinds of defects (including defects that lead to vulnerabilities), so combining them is more likely to be effective.
-}}) %>
+      <%= render(partial: "status_chooser",
+                 locals: {f: f, project: project,  is_disabled: is_disabled,
+                          criteria: "dynamic_analysis"}) %>
       <hr>
 
-      <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
-              criteria: "dynamic_analysis_unsafe", desc: %{
-It is SUGGESTED that if the software is application-level software written
-using a memory-unsafe language (such as C or C++) then at least one tool to
-detect memory safety problems will be used during at least one dynamic tool use.
-},
-              details: %{
-Examples of memory safety tools include Address Sanitizer (ASAN) and
-<a href="http://valgrind.org/">valgrind</a>.
-If the software is not application-level,
-or is not in a memory-unsafe language, then this criterion is
-automatically met.
-}}) %>
+      <%= render(partial: "status_chooser",
+                 locals: {f: f, project: project,  is_disabled: is_disabled,
+                          criteria: "dynamic_analysis_unsafe"}) %>
       <hr>
 
-      <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
-              criteria: "dynamic_analysis_enable_assertions", desc: %{
-It is SUGGESTED that the software include many run-time assertions
-that are checked during dynamic analysis.
-}}) %>
+      <%= render(partial: "status_chooser",
+                 locals: {f: f, project: project,  is_disabled: is_disabled,
+                          criteria: "dynamic_analysis_enable_assertions"}) %>
       <hr>
 
-      <%= render(partial: "status_chooser", locals: {f: f, project: project,  is_disabled: is_disabled,
-              criteria: "dynamic_analysis_fixed", desc: %{
-All confirmed medium and high severity exploitable vulnerabilities discovered
-with dynamic code analysis MUST be fixed. A vulnerability is medium to high
-severity if its <a href="https://nvd.nist.gov/cvss.cfm">CVSS 2.0</a> base score is 4 or higher.
-}}) %>
+      <%= render(partial: "status_chooser",
+                 locals: {f: f, project: project,  is_disabled: is_disabled,
+                          criteria: "dynamic_analysis_fixed"}) %>
 
 </div>
 </div>

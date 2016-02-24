@@ -247,6 +247,15 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
       <%= render(partial: "status_chooser",
                  locals: {f: f, project: project,  is_disabled: is_disabled,
                           criterion: "discussion"}) %>
+      <br>
+          Other general comments about the project:<br>
+          <% if (is_disabled) %>
+            <div class="discussion-markdown">
+              <%= ApplicationHelper.markdown(project[:description]) %>
+            </div>
+          <% else %>
+            <%= f.text_area :general_comments, class:"form-control",  hide_label: true, placeholder:'Additional Comments (in markdown)', disabled: is_disabled %>
+          <% end %>
 </div>
 
       <div class="tab-pane" id="changecontrol">
@@ -570,20 +579,6 @@ provided by the delivered project's software.
 
 </div>
 </div>
-      <hr>
-
-      <br>
-      <div class="row">
-        <div class="col-md-12">
-          <% if (is_disabled) %>
-            <div class="discussion-markdown">
-              <%= ApplicationHelper.markdown(project[:description]) %>
-            </div>
-          <% else %>
-            <%= f.text_area :general_comments, class:"form-control",  hide_label: true, placeholder:'Additional Comments (in markdown)', disabled: is_disabled %>
-          <% end %>
-        </div>
-      </div>
       <br>
       <% if ! is_disabled %>
         <%= f.submit 'Submit', class:"btn btn-primary" %>

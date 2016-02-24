@@ -104,10 +104,10 @@ Note that:
 
 *Project website*
 
-- <a name="project-homepage-url"></a>The project MUST have a public website
+- <a name="project_homepage_url"></a>The project MUST have a public website
   with a stable URL.
   <sup>[<a href="#project_homepage_url">project_homepage_url</a>]&#8224;</sup>
-- <a name="project-homepage-https"></a>It is SUGGESTED that the project website
+- <a name="project_homepage_https"></a>It is SUGGESTED that the project website
   use HTTPS, not HTTP.
   Future versions of these criteria may make HTTPS a requirement.
   (The badging application will show a warning for HTTP-only URLs.)
@@ -115,7 +115,7 @@ Note that:
 
 *Basic project website content*
 
-- <a name="description-sufficient"></a>The project website MUST succinctly
+- <a name="description_sufficient"></a>The project website MUST succinctly
   describe what the software does (what problem does it solve?).
   This MUST be in language that potential users can understand
   (e.g., it uses minimal jargon).
@@ -177,7 +177,7 @@ Note that:
 
 *Documentation*
 
-- <a name="documentation-basics"></a>The project MUST provide basic
+- <a name="documentation_basics"></a>The project MUST provide basic
   documentation for the software in some media (such as text or video)
   that includes:
   - how to install it,

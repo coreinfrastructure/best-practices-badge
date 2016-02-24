@@ -611,6 +611,48 @@ For more on license decisions see doc/dependency_decisions.yml.
 You can also run 'rake' and see the generated report
 license_finder_report.html.
 
+## HTML link checking
+
+GitHub has relatively recently changed its robots.txt file so
+that only certain agents are allowed to retrieve files.
+This means that typical link-checking services don't work, since common
+services like the W3C's link checker are rejected.
+
+This can be worked around by downloading the W3C link checker,
+disabling robots.txt, and running it directly.  You need to be very
+careful when doing this.  We'll install the "Linkchecker" package from CPAN
+(command name is 'checklink') to do this.  Here's how.
+
+~~~~
+cpan /W3C-LinkChecker-4.81/
+cpan LWP::Protocol::https # Needed for HTTPS
+su
+cd /usr/local/bin
+cp checklink checklink-norobots
+
+patch -p0 <<END
+--- checklink   2016-02-24 10:37:05.000000000 -0500
++++ checklink-norobots  2016-02-24 10:48:24.856983414 -0500
+@@ -48,7 +48,7 @@
+ use Net::HTTP::Methods 5.833 qw();    # >= 5.833 for 4kB cookies (#6678)
+ 
+ # if 0, ignore robots exclusion (useful for testing)
+-use constant USE_ROBOT_UA => 1;
++use constant USE_ROBOT_UA => 0;
+ 
+ if (USE_ROBOT_UA) {
+     @W3C::UserAgent::ISA = qw(LWP::RobotUA);
+END
+~~~~
+
+You can then run, e.g.:
+
+~~~~
+checklink-norobots -b -e \
+  https://github.com/linuxfoundation/cii-best-practices-badge | tee results
+~~~~
+
+
 # See also
 
 See the separate "[background](./background.md)" and

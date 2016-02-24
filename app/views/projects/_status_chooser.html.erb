@@ -1,4 +1,4 @@
-    <div class="row"><% raise unless criterion %>
+    <div class="row"><% raise unless criterion && Criteria[criterion] %>
       <% status_symbol = (criterion + "_status").to_sym %>
       <% justification_symbol = (criterion + "_justification").to_sym %>
 

@@ -32,7 +32,7 @@ achieved a Core Infrastructure Initiative (CII) badge.
 <div class="col-xs-12">
 <p>
 <%= render(partial: "details", locals: {
-           criteria: "badge_intro", details: %{
+           criterion: "badge_intro", details: %{
 <p>
 There is no set of practices that can guarantee that software
 will never have defects or vulnerabilities;
@@ -70,7 +70,7 @@ There is also a
   According to the information below, this project <i>has</i> achieved
   a badge.
   <%= render(partial: "details", locals: {
-             criteria: "got_badge", details: %{
+             criterion: "got_badge", details: %{
   If this is your project, you can show a badge by embedding this HTML:<br />
   &lt;a href="https://#{badge_hostname}/projects/#{ project.id }"&gt;&lt;img src="https://#{ badge_hostname }/projects/#{ project.id }/badge"&gt;&lt;/a&gt; <br />
   or put this in your markdown file:<br />
@@ -114,7 +114,7 @@ There is also a
     <h3>Identification</h3>
       <span>What is the human-readable name of the project?</span>
 <%= render(partial: "details", locals: {
-           criteria: "project_name", details: %{
+           criterion: "project_name", details: %{
 Note that other projects may use the same name.
 }}) %>
       <%= f.text_field :name, hide_label: true, class:"form-control", placeholder:'FLOSS Project Name', disabled: is_disabled %>
@@ -126,7 +126,7 @@ Note that other projects may use the same name.
         </div>
       <% else %>
         <%= render(partial: "details", locals: {
-           criteria: "description", details: %{
+           criterion: "description", details: %{
 Include key comments about the project.  Use markdown.
 This information is used when displaying badge information.
 }}) %>
@@ -148,7 +148,7 @@ This information is used when displaying badge information.
             <a href="https://nvd.nist.gov/cpe.cfm">Common Platform Enumeration (CPE)</a>
             name for the project (if it has one)?</span>
        <%= render(partial: "details", locals: {
-           criteria: "cpe", details: %{
+           criterion: "cpe", details: %{
             The <a href="https://nvd.nist.gov/cpe.cfm">Common Platform Enumeration (CPE)</a>
             is a structured naming scheme for information technology systems,
             software, and packages.  It is used in a number of systems and
@@ -162,28 +162,28 @@ This information is used when displaying badge information.
     <h3>Basic Project Website Content</h3>
       <%= render(partial: "status_chooser",
                  locals: {f: f, project: project, is_disabled: is_disabled,
-                          criteria: "description_sufficient" }) %>
+                          criterion: "description_sufficient" }) %>
       <hr>
 
       <%= render(partial: "status_chooser",
                  locals: {f: f, project: project,  is_disabled: is_disabled,
-                          criteria: "interact"}) %>
+                          criterion: "interact"}) %>
       <hr>
 
       <%= render(partial: "status_chooser",
                  locals: {f: f, project: project,  is_disabled: is_disabled,
-                          criteria: "contribution"}) %>
+                          criterion: "contribution"}) %>
       <hr>
 
       <%= render(partial: "status_chooser",
                  locals: {f: f, project: project,  is_disabled: is_disabled,
-                          criteria: "contribution_criteria"}) %>
+                          criterion: "contribution_criteria"}) %>
       <br>
 
       <h3>FLOSS License</h3>
       <span>What license(s) is the project released under?</span>
       <%= render(partial: "details", locals: {
-           criteria: "license", details: %{
+           criterion: "license", details: %{
 Please use <a href="https://spdx.org/licenses/">SPDX license expression format</a>; examples include "Apache-2.0", "BSD-2-Clause", "BSD-3-Clause", "GPL-2.0+", "LGPL-3.0+", "MIT", and "(BSD-2-Clause OR Ruby)".
 }}) %>
       <%= f.text_field :license, class:"form-control", hide_label: true, placeholder:'FLOSS License', list: "license_list", disabled: is_disabled %>
@@ -216,37 +216,37 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
 
        <%= render(partial: "status_chooser",
                   locals: {f: f, project: project,  is_disabled: is_disabled,
-                           criteria: "floss_license"}) %>
+                           criterion: "floss_license"}) %>
        <hr>
 
        <%= render(partial: "status_chooser",
                   locals: {f: f, project: project,  is_disabled: is_disabled,
-                           criteria: "floss_license_osi"}) %>
+                           criterion: "floss_license_osi"}) %>
        <hr>
 
 
        <%= render(partial: "status_chooser",
                   locals: {f: f, project: project,  is_disabled: is_disabled,
-                  criteria: "license_location"}) %>
+                  criterion: "license_location"}) %>
       <br>
 
       <h3>Documentation</h3>
 
       <%= render(partial: "status_chooser",
                  locals: {f: f, project: project,  is_disabled: is_disabled,
-                          criteria: "documentation_basics"}) %>
+                          criterion: "documentation_basics"}) %>
       <hr>
 
       <%= render(partial: "status_chooser",
                  locals: {f: f, project: project,  is_disabled: is_disabled,
-                          criteria: "documentation_interface"}) %>
+                          criterion: "documentation_interface"}) %>
       <br>
 
       <h3>Other</h3>
 
       <%= render(partial: "status_chooser",
                  locals: {f: f, project: project,  is_disabled: is_disabled,
-                          criteria: "discussion"}) %>
+                          criterion: "discussion"}) %>
 </div>
 
       <div class="tab-pane" id="changecontrol">
@@ -255,51 +255,51 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
 
        <%= render(partial: "status_chooser",
                   locals: {f: f, project: project,  is_disabled: is_disabled,
-                           criteria: "repo_public"}) %>
+                           criterion: "repo_public"}) %>
       <hr>
 
       <%= render(partial: "status_chooser",
                  locals: {f: f, project: project,  is_disabled: is_disabled,
-                          criteria: "repo_track"}) %>
+                          criterion: "repo_track"}) %>
       <hr>
 
       <%= render(partial: "status_chooser",
                  locals: {f: f, project: project,  is_disabled: is_disabled,
-                          criteria: "repo_interim"}) %>
+                          criterion: "repo_interim"}) %>
       <hr>
 
       <%= render(partial: "status_chooser",
                  locals: {f: f, project: project,  is_disabled: is_disabled,
-                          criteria: "repo_distributed"}) %>
+                          criterion: "repo_distributed"}) %>
       <br>
 
       <h3>Version numbering</h3>
 
       <%= render(partial: "status_chooser",
                  locals: {f: f, project: project,  is_disabled: is_disabled,
-                          criteria: "version_unique"}) %>
+                          criterion: "version_unique"}) %>
       <hr>
 
       <%= render(partial: "status_chooser",
                  locals: {f: f, project: project,  is_disabled: is_disabled,
-                          criteria: "version_semver"}) %>
+                          criterion: "version_semver"}) %>
       <hr>
 
       <%= render(partial: "status_chooser",
                  locals: {f: f, project: project,  is_disabled: is_disabled,
-                          criteria: "version_tags"}) %>
+                          criterion: "version_tags"}) %>
       <br>
 
       <h3>ChangeLog</h3>
 
       <%= render(partial: "status_chooser",
                  locals: {f: f, project: project,  is_disabled: is_disabled,
-                          criteria: "release_notes"}) %>
+                          criterion: "release_notes"}) %>
       <hr>
 
       <%= render(partial: "status_chooser",
                  locals: {f: f, project: project,  is_disabled: is_disabled,
-                          criteria: "release_notes_vulns"}) %>
+                          criterion: "release_notes_vulns"}) %>
 </div>
 
       <div class="tab-pane" id="reporting">
@@ -314,43 +314,43 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
 
       <%= render(partial: "status_chooser",
                  locals: {f: f, project: project,  is_disabled: is_disabled,
-                          criteria: "report_process"}) %>
+                          criterion: "report_process"}) %>
       <hr>
 
       <%= render(partial: "status_chooser",
                  locals: {f: f, project: project,  is_disabled: is_disabled,
-                         criteria: "report_tracker"}) %>
+                         criterion: "report_tracker"}) %>
       <hr>
 
       <%= render(partial: "status_chooser",
                  locals: {f: f, project: project,  is_disabled: is_disabled,
-                          criteria: "report_responses"}) %>
+                          criterion: "report_responses"}) %>
       <hr>
 
       <%= render(partial: "status_chooser",
                  locals: {f: f, project: project,  is_disabled: is_disabled,
-                          criteria: "enhancement_responses"}) %>
+                          criterion: "enhancement_responses"}) %>
       <hr>
 
       <%= render(partial: "status_chooser",
                  locals: {f: f, project: project,  is_disabled: is_disabled,
-                          criteria: "report_archive"}) %>
+                          criterion: "report_archive"}) %>
       <br>
 
       <h3>Vulnerability reporting process</h3>
       <%= render(partial: "status_chooser",
                  locals: {f: f, project: project,  is_disabled: is_disabled,
-                          criteria: "vulnerability_report_process"}) %>
+                          criterion: "vulnerability_report_process"}) %>
       <hr>
 
       <%= render(partial: "status_chooser",
                  locals: {f: f, project: project,  is_disabled: is_disabled,
-                          criteria: "vulnerability_report_private"}) %>
+                          criterion: "vulnerability_report_private"}) %>
       <hr>
 
       <%= render(partial: "status_chooser",
                  locals: {f: f, project: project,  is_disabled: is_disabled,
-                          criteria: "vulnerability_report_response"}) %>
+                          criterion: "vulnerability_report_response"}) %>
 </div>
 
      <div class="tab-pane" id="quality">
@@ -359,72 +359,72 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
 
       <%= render(partial: "status_chooser",
                  locals: {f: f, project: project,  is_disabled: is_disabled,
-                          criteria: "build"}) %>
+                          criterion: "build"}) %>
       <hr>
 
       <%= render(partial: "status_chooser",
                  locals: {f: f, project: project,  is_disabled: is_disabled,
-                          criteria: "build_common_tools"}) %>
+                          criterion: "build_common_tools"}) %>
       <hr>
 
       <%= render(partial: "status_chooser",
                  locals: {f: f, project: project,  is_disabled: is_disabled,
-                          criteria: "build_floss_tools"}) %>
+                          criterion: "build_floss_tools"}) %>
       <br>
 
       <h3>Automated test suite</h3>
 
       <%= render(partial: "status_chooser",
                  locals: {f: f, project: project,  is_disabled: is_disabled,
-                          criteria: "test"}) %>
+                          criterion: "test"}) %>
       <hr>
 
       <%= render(partial: "status_chooser",
                  locals: {f: f, project: project,  is_disabled: is_disabled,
-                          criteria: "test_invocation"}) %>
+                          criterion: "test_invocation"}) %>
       <hr>
 
       <%= render(partial: "status_chooser",
                  locals: {f: f, project: project,  is_disabled: is_disabled,
-                          criteria: "test_most"}) %>
+                          criterion: "test_most"}) %>
       <hr>
       <%= render(partial: "status_chooser",
                  locals: {f: f, project: project,  is_disabled: is_disabled,
-                          criteria: "test_continuous_integration"}) %>
+                          criterion: "test_continuous_integration"}) %>
     <br>
 
     <h3>New functionality testing</h3>
 
       <%= render(partial: "status_chooser",
                  locals: {f: f, project: project,  is_disabled: is_disabled,
-                          criteria: "test_policy"}) %>
+                          criterion: "test_policy"}) %>
       <hr>
 
       <%= render(partial: "status_chooser",
                  locals: {f: f, project: project,  is_disabled: is_disabled,
-                          criteria: "tests_are_added"}) %>
+                          criterion: "tests_are_added"}) %>
       <hr>
 
       <%= render(partial: "status_chooser",
                  locals: {f: f, project: project,  is_disabled: is_disabled,
-                          criteria: "tests_documented_added"}) %>
+                          criterion: "tests_documented_added"}) %>
     <br>
 
     <h3>Warning flags</h3>
 
       <%= render(partial: "status_chooser",
           locals: {f: f, project: project,  is_disabled: is_disabled,
-                   criteria: "warnings"}) %>
+                   criterion: "warnings"}) %>
       <hr>
 
       <%= render(partial: "status_chooser",
                  locals: {f: f, project: project,  is_disabled: is_disabled,
-                          criteria: "warnings_fixed"}) %>
+                          criterion: "warnings_fixed"}) %>
       <hr>
 
       <%= render(partial: "status_chooser",
                  locals: {f: f, project: project,  is_disabled: is_disabled,
-                          criteria: "warnings_strict"}) %>
+                          criterion: "warnings_strict"}) %>
 </div>
 
     <div class="tab-pane" id="security">
@@ -433,12 +433,12 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
 
     <%= render(partial: "status_chooser",
         locals: {f: f, project: project,  is_disabled: is_disabled,
-                 criteria: "know_secure_design"}) %>
+                 criterion: "know_secure_design"}) %>
     <hr>
 
     <%= render(partial: "status_chooser",
                locals: {f: f, project: project,  is_disabled: is_disabled,
-                        criteria: "know_common_errors"}) %>
+                        criterion: "know_common_errors"}) %>
     <br>
 
     <h3>Good cryptographic practices</h3>
@@ -456,71 +456,71 @@ provided by the delivered project's software.
 
     <%= render(partial: "status_chooser",
                locals: {f: f, project: project,  is_disabled: is_disabled,
-                        criteria: "crypto_published"}) %>
+                        criterion: "crypto_published"}) %>
     <hr>
 
     <%= render(partial: "status_chooser",
                locals: {f: f, project: project,  is_disabled: is_disabled,
-                        criteria: "crypto_call"}) %>
+                        criterion: "crypto_call"}) %>
     <hr>
 
     <%= render(partial: "status_chooser",
                locals: {f: f, project: project,  is_disabled: is_disabled,
-                        criteria: "crypto_floss"}) %>
+                        criterion: "crypto_floss"}) %>
     <hr>
 
     <%= render(partial: "status_chooser",
                locals: {f: f, project: project,  is_disabled: is_disabled,
-                        criteria: "crypto_keylength"}) %>
+                        criterion: "crypto_keylength"}) %>
     <hr>
 
     <%= render(partial: "status_chooser",
                locals: {f: f, project: project,  is_disabled: is_disabled,
-                        criteria: "crypto_working"}) %>
+                        criterion: "crypto_working"}) %>
     <hr>
 
     <%= render(partial: "status_chooser",
                locals: {f: f, project: project,  is_disabled: is_disabled,
-                        criteria: "crypto_weaknesses"}) %>
+                        criterion: "crypto_weaknesses"}) %>
     <hr>
 
     <%= render(partial: "status_chooser",
                locals: {f: f, project: project,  is_disabled: is_disabled,
-                        criteria: "crypto_pfs"}) %>
+                        criterion: "crypto_pfs"}) %>
     <hr>
 
     <%= render(partial: "status_chooser",
                locals: {f: f, project: project,  is_disabled: is_disabled,
-                        criteria: "crypto_password_storage"}) %>
+                        criterion: "crypto_password_storage"}) %>
     <hr>
 
     <%= render(partial: "status_chooser",
                locals: {f: f, project: project,  is_disabled: is_disabled,
-                        criteria: "crypto_random"}) %>
+                        criterion: "crypto_random"}) %>
     <br>
 
     <h3>Secured delivery against man-in-the-middle (MITM) attacks</h3>
 
     <%= render(partial: "status_chooser",
                locals: {f: f, project: project,  is_disabled: is_disabled,
-                        criteria: "delivery_mitm"}) %>
+                        criterion: "delivery_mitm"}) %>
     <hr>
 
     <%= render(partial: "status_chooser",
                locals: {f: f, project: project,  is_disabled: is_disabled,
-                        criteria: "delivery_unsigned"}) %>
+                        criterion: "delivery_unsigned"}) %>
     <br>
 
     <h3>Publicly-known vulnerabilities fixed</h3>
 
     <%= render(partial: "status_chooser",
                locals: {f: f, project: project,  is_disabled: is_disabled,
-                        criteria: "vulnerabilities_fixed_60_days"}) %>
+                        criterion: "vulnerabilities_fixed_60_days"}) %>
     <hr>
 
     <%= render(partial: "status_chooser",
                locals: {f: f, project: project,  is_disabled: is_disabled,
-                        criteria: "vulnerabilities_critical_fixed"}) %>
+                        criterion: "vulnerabilities_critical_fixed"}) %>
 </div>
 
     <div class="tab-pane" id="analysis">
@@ -529,44 +529,44 @@ provided by the delivered project's software.
 
     <%= render(partial: "status_chooser",
                locals: {f: f, project: project,  is_disabled: is_disabled,
-                        criteria: "static_analysis"}) %>
+                        criterion: "static_analysis"}) %>
      <hr>
 
      <%= render(partial: "status_chooser",
                 locals: {f: f, project: project,  is_disabled: is_disabled,
-                         criteria: "static_analysis_common_vulnerabilities"}) %>
+                         criterion: "static_analysis_common_vulnerabilities"}) %>
      <hr>
 
      <%= render(partial: "status_chooser",
                 locals: {f: f, project: project,  is_disabled: is_disabled,
-                         criteria: "static_analysis_fixed"}) %>
+                         criterion: "static_analysis_fixed"}) %>
      <hr>
 
      <%= render(partial: "status_chooser",
                 locals: {f: f, project: project,  is_disabled: is_disabled,
-                         criteria: "static_analysis_often"}) %>
+                         criterion: "static_analysis_often"}) %>
      <br>
 
      <h3>Dynamic analysis</h3>
 
       <%= render(partial: "status_chooser",
                  locals: {f: f, project: project,  is_disabled: is_disabled,
-                          criteria: "dynamic_analysis"}) %>
+                          criterion: "dynamic_analysis"}) %>
       <hr>
 
       <%= render(partial: "status_chooser",
                  locals: {f: f, project: project,  is_disabled: is_disabled,
-                          criteria: "dynamic_analysis_unsafe"}) %>
+                          criterion: "dynamic_analysis_unsafe"}) %>
       <hr>
 
       <%= render(partial: "status_chooser",
                  locals: {f: f, project: project,  is_disabled: is_disabled,
-                          criteria: "dynamic_analysis_enable_assertions"}) %>
+                          criterion: "dynamic_analysis_enable_assertions"}) %>
       <hr>
 
       <%= render(partial: "status_chooser",
                  locals: {f: f, project: project,  is_disabled: is_disabled,
-                          criteria: "dynamic_analysis_fixed"}) %>
+                          criterion: "dynamic_analysis_fixed"}) %>
 
 </div>
 </div>

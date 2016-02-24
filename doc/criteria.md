@@ -215,13 +215,13 @@ Note that:
 
 *Public version-controlled source repository*
 
-- <a name="repo_url"></a>The project MUST have a version-controlled
-  source repository that is publicly readable and has a URL
-  (the URL MAY be the same as the project URL).
+- <a name="repo_public"></a>The project MUST have a version-controlled
+  source repository that is publicly readable and has a URL.
+  The URL MAY be the same as the project URL.
   The project MAY use private (non-public) branches in specific cases while the
   change is not publicly released
   (e.g., for fixing a vulnerability before it is revealed to the public).
-   <sup>[<a href="#repo_url">repo_url</a>]&#8224;</sup>
+   <sup>[<a href="#repo_public">repo_url</a>]&#8224;</sup>
 - <a name="repo_track"></a>The source repository MUST track what changes
   were made, who made the changes, and when the changes were made.
   <sup>[<a href="#repo_track">repo_track</a>]&#8224;</sup>

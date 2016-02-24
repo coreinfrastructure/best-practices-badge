@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160215195756) do
+ActiveRecord::Schema.define(version: 20160224021902) do
 
   create_table "projects", force: :cascade do |t|
     t.integer  "user_id"
@@ -42,8 +42,8 @@ ActiveRecord::Schema.define(version: 20160215195756) do
     t.text     "documentation_basics_justification"
     t.string   "documentation_interface_status",                       default: "?"
     t.text     "documentation_interface_justification"
-    t.string   "repo_url_status",                                      default: "?"
-    t.text     "repo_url_justification"
+    t.string   "repo_public_status",                                   default: "?"
+    t.text     "repo_public_justification"
     t.string   "repo_track_status",                                    default: "?"
     t.text     "repo_track_justification"
     t.string   "repo_interim_status",                                  default: "?"

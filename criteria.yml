@@ -158,15 +158,13 @@ discussion:
 # CHANGE CONTROL
 #
 # Public version-controlled source repository
-# TODO: Rename this 'repo_url' criterion - it is easily confused with the
-# 'repo_url' identification information (they aren't the same).
-repo_url:
+repo_public:
   category: MUST
   description: >
     The project MUST have a version-controlled source repository that
-    is publicly readable and has a URL (the URL MAY be the same as the
-    project URL).
+    is publicly readable and has a URL.
   details: >
+    The URL MAY be the same as the project URL.
     The project MAY use private (non-public) branches in specific
     cases while the change is not publicly released (e.g., for fixing
     a vulnerability before it is revealed to the public).

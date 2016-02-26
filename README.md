@@ -43,7 +43,7 @@ This is a summary of the criteria, with requirements in bold
 (for details, see the [full list of criteria](doc/criteria.md)):
 
 - **Have a [stable website](doc/criteria.md#project_homepage_url)**,
-  [accessible over HTTPS](project_homepage_https), which says:
+  [accessible over HTTPS](doc/criteria.md#project_homepage_https), which says:
   - **[what it does](doc/criteria.md#description_sufficient)**
   - **[how to get it](doc/criteria.md#interact)**
   - **[how to give feedback](doc/criteria.md#interact)**

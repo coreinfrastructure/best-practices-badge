@@ -17,9 +17,12 @@ apply best practices, and to help users determine which FLOSS projects do so.
 We believe that FLOSS projects that implement best practices are more likely
 to produce better software, including more secure software.
 
-This is an early version of this material;
-we are releasing it so we can get feedback.
-Feedback is welcome via the
+See the
+*[Core Infrastructure Initiative (CII) Best Practices badge website](https://bestpractices.coreinfrastructure.org/)* if you want to try to actually get a badge.
+
+This is the development site for the criteria and badge application
+software that runs the website.
+Feedback is very welcome via the
 [GitHub site](https://github.com/linuxfoundation/cii-best-practices-badge)
 as issues or pull (merge) requests.
 There is also a

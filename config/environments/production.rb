@@ -97,7 +97,7 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
 
   # Use Fastly as a CDN. See: https://devcenter.heroku.com/articles/fastly
-  config.action_controller.asset_host = ENV['FASTLY_CDN_URL']
+  # config.action_controller.asset_host = ENV['FASTLY_CDN_URL']
   # Use CDN directly for static assets
   # TODO: Do we need to set this to true?
   # The documentation for Fastly suggests setting

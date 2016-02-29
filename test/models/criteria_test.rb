@@ -30,6 +30,22 @@ class CriteriaTest < ActiveSupport::TestCase
     end
   end
 
+  test 'Ensure that required fields are in Criteria' do
+    required_set = Set.new [:category, :description]
+    Criteria.each do |_criterion, values|
+      required_set.each do |required_field|
+        assert_includes values.keys, required_field.to_s
+      end
+    end
+  end
+
+  test 'Ensure only valid categories in Criteria' do
+    Criteria.each do |_criterion, values|
+      allowed_field_values = %w(MUST SHOULD SUGGESTED)
+      assert_includes allowed_field_values, values['category']
+    end
+  end
+
   test 'If URL required, do not suppress justification' do
     Criteria.each do |_criterion, values|
       assert_not values[:met_url_required] && values[:met_suppress]

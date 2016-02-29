@@ -586,6 +586,16 @@ by the delivered project's software.
   because this is much easier to measure and verify by those
   *outside* the project.
 
+*Other security issues*
+
+- <a name="no_leaked_credentials"></a>The public repositories
+  MUST NOT leak a valid private credential
+  (e.g., a working password or private key) that is intended to limit
+  public access.
+  A project MAY leak "sample" credentials for testing and
+  unimportant databases, as long as they are not intended to limit
+  public access.
+
 ### Analysis
 
 *Static code analysis*

@@ -205,7 +205,8 @@ The "status" (met/unmet) is the criterion name + "\_status" stored as a string;
 each criterion also has a name + "\_justification" stored as text.
 Here are the commands, assuming your current directory is at the top level,
 EDIT is the name of your favorite text editor, and MIGRATION_NAME is the
-logical name you're giving to the migration (e.g., "add_discussion"):
+logical name you're giving to the migration (e.g., "add_discussion").
+By convention, begin a migration name with 'add' to add a column:
 
 ~~~~
   rails generate migration MIGRATION_NAME
@@ -232,7 +233,7 @@ Once you've created the migration file, you can migrate by running:
   $ rake db:migrate
 ~~~~
 
-If it fails, use the rake target db:rollback .
+If it fails, use "rake db:rollback" to roll it back.
 
 Be sure to "git add" all new files, including any migration files,
 and then use "git commit" and "git push".

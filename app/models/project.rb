@@ -58,7 +58,7 @@ class Project < ActiveRecord::Base
   ALL_CRITERIA.each do |criterion|
     # validates column, allow_blank: true, length: { maximum: 25 }
     status = "#{criterion}_status".to_sym
-    if Criteria[criterion.to_s]['na_allowed?']
+    if Criteria[criterion.to_s]['na_allowed']
       validates status, inclusion: { in: STATUS_CHOICE_NA }
     else
       validates status, inclusion: { in: STATUS_CHOICE }

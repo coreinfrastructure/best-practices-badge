@@ -5,8 +5,8 @@ class CriteriaTest < ActiveSupport::TestCase
   def setup
   end
 
-  test 'Criteria should have contribution_criteria' do
-    assert Criteria[:contribution_criteria]
+  test 'Criteria should have floss_license_osi' do
+    assert Criteria[:floss_license_osi]
   end
 
   test 'Criteria "contribution" is in the category MUST' do

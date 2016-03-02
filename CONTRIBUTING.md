@@ -323,7 +323,8 @@ and fix the problems found.
 In some cases it's okay to fix them by disabling the warning in that particular
 place, but be careful; it's often better to make a real change,
 even if it doesn't matter in that particular case.
-The specific list of tools run by default is listed in
+
+The specific list of tools run by default using 'rake' is listed in
 [default.rake](lib/tasks/default.rake).
 Currently these include at least the following:
 
@@ -340,7 +341,19 @@ Currently these include at least the following:
   to look for Ruby on Rails security vulnerabilities
 * "license_finder" - checks OSS licenses of dependencies (transitively).
 * "git diff --check" - detect trailing whitespace in latest diff
-* "yaml_syntax_check" - checks syntax of YAML (.yml) files
+* "yaml_syntax_check" - checks syntax of YAML (.yml) files.
+  Note that the automated test suite includes a number of specific
+  checks on the criteria.yml file.
+
+We tolerate the following warnings from rails_best_practices
+(patches to fix these are welcome):
+
+~~~~
+cii-best-practices-badge/app/helpers/password_resets_helper.rb:1 -
+  remove empty helpers
+cii-best-practices-badge/app/controllers/users_controller.rb:75 -
+  use scope access
+~~~~
 
 Here are some other tools we use, though they are not currently integrated into
 the default "rake" checking task:
@@ -526,4 +539,3 @@ Then running 'git pull master upstream' will pull the current version.
 If the version of Ruby has changed (in the Gemfile),
 use the 'Ruby itself can be updated' instructions.
 If gems have been added, run "bundle install" to install the new ones.
-

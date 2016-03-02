@@ -26,6 +26,12 @@ class UsersManipulateProjectTest < ActionDispatch::IntegrationTest
       assert_response :success
       assert_template 'projects/edit'
 
+      # The form needs to include all the criteria.
+      # This could fail if the view incorrectly omits one or more.
+      Criteria.keys.each do |criterion|
+        assert_select "##{criterion}"
+      end
+
       # Check that returned settings are correct.
       # Note: You can use byebug... css_select to interactively check things.
       assert_select '#project_name[value=?]',

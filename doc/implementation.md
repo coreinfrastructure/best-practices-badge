@@ -11,14 +11,19 @@ See [CONTRIBUTING.md](../CONTRIBUTING.md) for information on how to
 contribute ot this project, and [INSTALL.md](INSTALL.md) for information
 on how to install this software (e.g., for development).
 
+In this document we'll use the term "open source software" (OSS),
+and treat Free/Libre and Open Source Software (FLOSS) as a synonym.
+
 ## Requirements
 
 The BadgeApp web application MUST:
 
 1. Meet its own criteria.  This implies that it must be open source software
    (OSS).
-2. Be capable of being developed and run using *only* OSS
-   (it may *run* on proprietary software; portability improvements welcome).
+2. Be capable of being developed and run using *only* OSS.
+   It may *run* on proprietary software; portability improvements welcome.
+   It's also fine if it can use proprietary services, as long as it can
+   *run* without them.
 3. Support users of modern widely-used web browsers, including
    Chrome, Firefox, Safari, and Internet Explorer version 10 and up.
    We expect Internet Explorer pre-10 users will use a different browser.
@@ -31,10 +36,15 @@ The BadgeApp web application MUST:
    Microsoft Windows, or Apple MacOS) and mobile devices
    (including at least Android and iOS).
 6. NOT require OSS projects to use GitHub or git.
+   We do use GitHub and git to *develop* BadgeApp (that's different).
 7. Automatically fill in some criteria where it can, at least if a
-   project is on GitHub.
+   project is on GitHub.  Automating filling in data is a never-ending
+   process of refinement. Thus, we intend to fill a few to start, and then
+   add more automation over time.
 
-See the security section for the security requirements.
+See the separate
+[security](security.md) document for more about security, including
+its requirements.
 
 There are many specific requirements; instead of a huge requirements document,
 most specific requirements are proposed and processed via its
@@ -47,15 +57,10 @@ The web application is itself OSS, and we intend for the
 web application to meet its own criteria.
 We have implemented it with Ruby on Rails; Rails is good for very
 simple web applications like this one.
-We are currently using Rails version 4.2.
-The production system stores the data in Postgres;
-in development we use SQLite3 instead.
-We deploy a test implementation to Heroku so that people can try it
-out for limited testing.
+We are currently using Rails version 4.
+The production system stores the data in Postgres.
 
-The production version may also be deployed to Heroku.
-
-Some other components we use are:
+Some other key components we use are:
 
 - Bootstrap
 - Jquery
@@ -68,6 +73,16 @@ Some other components we use are:
   <https://devcenter.heroku.com/articles/ruby-default-web-server>
 - A number of supporting Ruby gems (see the Gemfile)
 
+## Deployment
+
+We have three publicly-accessible tiers:
+
+* master - an instance of the master branch
+* staging
+* production
+
+These are currently executed on Heroku.
+
 ## Terminology
 
 This section describes key application-specific terminology.
@@ -76,8 +91,9 @@ The web application tracks data about many OSS *projects*,
 as identified and entered by *users*.
 
 We hope that projects will (eventually) *achieve* a *badge*.
-A project must satisfy all *criteria*
+A project must *satisfy* all *criteria*
 (singular: criterion) enough to achieve a badge.
+
 The *status* of each criterion, for a given project, can be one of:
 'Met', 'Unmet', 'N/A' (not applicable, a status that only some
 criteria can have), and '?' (unknown, the initial state of all
@@ -88,13 +104,12 @@ criteria justification, and a few other data fields such as
 project name, project description, project home page URL, and
 project repository (repo) URL.
 
-We have a set of rule, for each criterion, to determine if
-it's enough to achieve a badge.
-In particular, each criterion is in one of three *categories*:
+Each criterion is in one of three *categories*:
 'MUST', 'SHOULD', and 'SUGGESTED'.
-In some cases, to be enough to achieve a badge
-a criterion may require some justification
-or a URL in the justification.
+In some cases, a criterion may require some justification
+or a URL in the justification to be enough to satisfy the criterion for
+a badge.  See the [criteria](./criteria.md) or
+application form for the current exact rules.
 
 We have an 'autofill' system that fills in some data automatically.
 In some cases the autofill data will *override* human-entered data
@@ -198,6 +213,8 @@ To modify the text of the criteria, edit these files:
 
 If you're adding/removing fields (including criteria), be sure to also edit
 <app/views/projects/_form.html.erb> (to determine where to display it).
+You may also want to edit the README file, which includes a summary
+of the criteria.
 
 When adding or removing fields, or when renamming
 a criterion name, you also need to create a database migration.
@@ -206,7 +223,8 @@ each criterion also has a name + "\_justification" stored as text.
 Here are the commands, assuming your current directory is at the top level,
 EDIT is the name of your favorite text editor, and MIGRATION_NAME is the
 logical name you're giving to the migration (e.g., "add_discussion").
-By convention, begin a migration name with 'add' to add a column:
+By convention, begin a migration name with 'add' to add a column and
+'rename' to rename a column:
 
 ~~~~
   rails generate migration MIGRATION_NAME
@@ -227,13 +245,17 @@ class MIGRATION_NAME < ActiveRecord::Migration
 end
 ~~~~
 
+In some cases it may be useful to insert SQL commands or do
+other special operations.
+See the migrations in the db/migrate/ directory for examples.
+
 Once you've created the migration file, you can migrate by running:
 
 ~~~~
   $ rake db:migrate
 ~~~~
 
-If it fails, use "rake db:rollback" to roll it back.
+If it fails, you may need to use "rake db:rollback" to roll it back.
 
 Be sure to "git add" all new files, including any migration files,
 and then use "git commit" and "git push".
@@ -252,14 +274,17 @@ If running on heroku, set config variables by following instructions on [2].
 
 If running locally, these variables need to be set up.
 We have set up a file '.env' at the top level which has stub values,
-formatted like this, so that it automatically starts up:
+formatted like this, so that it automatically starts up
+(note that these keys are *not* what we used for the deployed systems,
+for obvious reasons):
 
 ~~~~sh
 export GITHUB_KEY = '..VALUE..'
 export GITHUB_SECRET = '..VALUE..'
 ~~~~
 
-You can instead provide the information this way:
+You can instead provide the information this way if you want to
+temporarily override these:
 
 ~~~~sh
 GITHUB_KEY='client id' GITHUB_SECRET='client secret' rails s
@@ -327,36 +352,17 @@ heroku plugins --app master-bestpractices
 The latter automatically reinstalls heroku-local.
 This information is from: <https://github.com/heroku/heroku/issues/1690>.
 
-## Automation - flow
+## Auditing
 
-We want to automate what we can, but since automation is imperfect,
-users need to be able to override the estimate.
+The intent is to eventually have an "audit" function that
+runs auto-fill without actually editing the results, and then
+show the differences between the automatic results and the form values.
+This will let external users compare things.
 
-Here's how we expect the form flow to go:
+## Autofill
 
-*   User clicks on "Get your badge!", request shows up at server.
-*   If user isn't logged in, redirected to login (which may redirect to
-    "make account").  Once logged in (including by making an account),
-    continue on to...
-*   "Short new project form" - show list of their github projects
-    (if we can get that) that they can select, OR ask for
-    project name, project URL, and repo URL.
-    Once they identify the project and provide that back to us,
-    we run AUTO-FILL, then use "edit project form".
-*   "Edit project form" - note that flash entries will show anything
-    added by auto-fill.  On "submit", it'll go to...
-*   "Show project form" (a variant of the edit project, but all editable
-    items cannot be selected).  Here it'll show if you got the badge,
-    as well as all the details.  From "Show Project" you can:
-    *   "Edit" - goes directly to edit project form
-    *   "Auto" - re-run AUTO-FILL, apply the answers to anything currently
-                 marked as "?", and go to edit project form.
-    *   "JSON" - provide project info in JSON format.
-    *   "Audit"- (Maybe) - run AUTO-FILL without editing the results,
-                 and then show the project form with any differences
-                 between auto answers and project answers as flash entries.
-
-### Autofill
+The process of automatically filling in the form is called
+"autofill".
 
 Earlier discussions presumed that the human would always be right, and
 that the automation would only fill in unknowns ("?").
@@ -364,7 +370,7 @@ However, we've since abandoned this; instead, in some cases we want
 to override (either because we're confident or because we want to require
 projects to provide data in a way that we can be confident in it).
 
-Auto-fill must use some sort of pluggable interface, so that people
+Autofill must use some sort of pluggable interface, so that people
 can add them.  We will focus on getting data from GitHub, e.g.,
 api.gihub.com/repos has a lot of information.
 The pluggable interface could be implemented using Service Objects;
@@ -372,51 +378,24 @@ it's not clear that's the best way.
 We do want to create directories where people can just add new files to
 add new plug-ins.
 
-For the moment, call each module that detects something a "Detective".
+We name each separate module that detects something a "Detective".
 A Detective needs to be called, be able to get data, and eventually
 return a set of findings.
-The findings would probable be a hash of
-project attributes and attribute-specific findings:
-(proposed new) value, confidence, justification (string),
-and if it should be forced (if so, we use it regardless of previous values).
-The Detective needs to be able to request evidence, on request the
-evidence will be kept so later Detectives can reuse the evidence.
-Examples of evidence:
+The findings are a hash with
+attributes and findings about them:
+(proposed new) value, confidence, and justification (string).
 
-- Current (running) project attributes.  Might pass this on call.
-- Results from some URL (e.g., github repo data)
-- Current filenames of project (say, top level) (have to download)
-- Current file contents (we'll have to download that)
-- Commit history
-
-For filenames/contents, need a simple API that looks like a filesystem.
-
-At a first level, probably need to divide by repo host:
-GitHub, BitBucket, SourceForge, Other (which tries to interpret arbitrary).
-Under that, may need to divide by VCS: git, hg, svn, other
-(so that git things can be reused).  Perhaps those are "Detectives"
-that are called by other detectives.
-
-The "Autofill Judge" takes all the reports from the detectives
-and makes a final ruling on the project values.
-
-Issue: Do we *store* the justifications from the detectives in the
-justifications?  Or just make them "flash" values?
-We can change our minds later.
-
-We could identify *differences* between automation results and the
-project results - perhaps create an "audit" button on
-"show project form" that provided information on differences
-as flash entries on another
-display of the "show project form" (that way, nothing would CHANGE).
-
-Note: The "flash" entries for specific criteria should be shown next
-to that specific criteria.  E.G., if the user asserts that their license
-is "MIT" but the automation determines otherwise, then the "Audit"
-report should note the difference.
-
+The "Chief" module calls the Detectives in the right order and
+merges the results.
+Confidence values range from 0..5; confidence values of 4 or higher
+override the user input.
 
 ## Authentication
+
+Currently we allow people to log in using their GitHub account
+or a local account (so people who don't want to use GitHub don't need to).
+
+## Ideas about Authentication
 
 An important issue is how to handle authentication.
 Here is our current plan, which may change (suggestions welcome).
@@ -489,7 +468,7 @@ In the longer term we may need to support transition of a project
 from one URL to another, but since we expect problems
 to be relatively uncommon, there is no need for that capability initially.
 
-## Who can edit project P?
+## Plans: Who can edit project P?
 
 (This is a summary of the previous section.)
 
@@ -507,11 +486,6 @@ In the future we might add repos other than GitHub, with the same kind of rule.
 information about project P.
 Note that if the user is a local account (not GitHub),
 then the user also has to have their email address validated first.
-
-## Filling in the form
-
-Previously we hoped to auto-generate the form, but it's difficult to create a
-good UI experience that way.  So for the moment, we're not doing that.
 
 ## GitHub-related badges
 
@@ -550,30 +524,18 @@ Some information on how to detect licenses in projects
 (so we can perhaps autofill them) can be found in
 [&#8220;Open Source Licensing by the Numbers&#8221; by Ben Balter](https://speakerdeck.com/benbalter/open-source-licensing-by-the-numbers).
 
+For the moment, we just use GitHub's mechanism.
+It's easy to invoke and resolves it in a number of cases.
+
 ## Analysis
 
-We intend to use the OWASP ZAP web application scanner to find potential
-vulnerabilities before full release.
+We use the OWASP ZAP web application scanner to find potential
+vulnerabilities.
 This lets us fulfill the "dynamic analysis" criterion.
-
-## Heroku
-
-We test this on heroku.  You can create a branch with:
-
-~~~~
-git remote add heroku https://git.heroku.com/secret-retreat-6638.git
-~~~~
-
-Then after installing heroku tools:
-
-~~~~
-heroku login
-git push heroku master
-~~~~
 
 ## Setup for deployment
 
-If you want to deploy this, you need to set some things up.
+If you want to deploy this yourself, you need to set some things up.
 Here we'll presume Heroku.
 
 You need to have email set up.
@@ -588,6 +550,8 @@ To install sendgrid on Heroku to make this work, use:
 heroku addons:create sendgrid:starter
 ~~~~
 
+If you plan to handle a lot of queries, you probably want to use a CDN.
+It's currently set up for Fastly.
 
 ## Badge SVG
 
@@ -658,4 +622,3 @@ checklink-norobots -b -e \
 
 See the separate "[background](./background.md)" and
 "[criteria](./criteria.md)" pages for more information.
-

@@ -21,6 +21,7 @@
       <th>Website</th>
       <th>License</th>
       <th>Added By</th>
+      <th>%Achieved</th>
       <th>Badge</th>
     </tr>
   </thead>
@@ -46,6 +47,7 @@
         </td>
         <td><%= project.license %></td>
         <td><%= link_to project.user_name, project.user %></td>
+        <td><%= Project.badge_percentage(project) %>%</td>
         <td><%= link_to "<img src='/projects/#{project.id}/badge'>".html_safe,
                         project %></td>
       </tr>

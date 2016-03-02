@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+# rubocop:disable Metrics/ClassLength
 class Project < ActiveRecord::Base
   STATUS_CHOICE = %w(? Met Unmet).freeze
   STATUS_CHOICE_NA = (STATUS_CHOICE + %w(N/A)).freeze
@@ -93,6 +94,29 @@ class Project < ActiveRecord::Base
                         Criteria[criterion.to_s][:category],
                         Criteria[criterion.to_s][:met_url_required]
     end
+  end
+
+  def self.to_percentage(portion, total)
+    if portion == total
+      100
+    elsif portion == 0
+      0
+    else
+      ((portion * 100.0) / total).round
+    end
+  end
+
+  # TODO: Should be normal method.
+  def self.badge_percentage(project)
+    met = 0
+    ALL_CRITERIA.each do |criterion|
+      status = project["#{criterion}_status"]
+      justification = project["#{criterion}_justification"]
+      met += 1 if enough_criterion?(status, justification,
+                                    Criteria[criterion.to_s][:category],
+                                    Criteria[criterion.to_s][:met_url_required])
+    end
+    to_percentage met, ALL_CRITERIA.length
   end
 
   def self.badge_achieved_id?(id)

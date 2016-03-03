@@ -17,4 +17,11 @@ module ProjectsHelper
   def fork_header(fork_repos)
     fork_repos.blank? ? [] : [['=> Forked Github Repos', '', 'none']]
   end
+
+  # Use the status_chooser to render the given criterion.
+  def render_status(criterion, f, project, is_disabled)
+    render(partial: 'status_chooser',
+           locals: { f: f, project: project, is_disabled: is_disabled,
+                     criterion: criterion })
+  end
 end

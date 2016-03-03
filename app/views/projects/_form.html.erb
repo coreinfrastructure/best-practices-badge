@@ -160,24 +160,16 @@ This information is used when displaying badge information.
    <%# Note: render() accepts met_suppress: ..., unmet_placeholder:  ... %>
 
     <h3>Basic Project Website Content</h3>
-      <%= render(partial: "status_chooser",
-                 locals: {f: f, project: project, is_disabled: is_disabled,
-                          criterion: "description_sufficient" }) %>
+      <%= render_status 'description_sufficient', f, project, is_disabled %>
       <hr>
 
-      <%= render(partial: "status_chooser",
-                 locals: {f: f, project: project,  is_disabled: is_disabled,
-                          criterion: "interact"}) %>
+      <%= render_status 'interact', f, project, is_disabled %>
       <hr>
 
-      <%= render(partial: "status_chooser",
-                 locals: {f: f, project: project,  is_disabled: is_disabled,
-                          criterion: "contribution"}) %>
+      <%= render_status 'contribution', f, project, is_disabled %>
       <hr>
 
-      <%= render(partial: "status_chooser",
-                 locals: {f: f, project: project,  is_disabled: is_disabled,
-                          criterion: "contribution_criteria"}) %>
+      <%= render_status 'contribution_criteria', f, project, is_disabled %>
       <br>
 
       <h3>FLOSS License</h3>
@@ -214,101 +206,71 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
       <br>
       <hr>
 
-       <%= render(partial: "status_chooser",
-                  locals: {f: f, project: project,  is_disabled: is_disabled,
-                           criterion: "floss_license"}) %>
-       <hr>
+      <%= render_status 'floss_license', f, project, is_disabled %>
+      <hr>
 
-       <%= render(partial: "status_chooser",
-                  locals: {f: f, project: project,  is_disabled: is_disabled,
-                           criterion: "floss_license_osi"}) %>
-       <hr>
+      <%= render_status 'floss_license_osi', f, project, is_disabled %>
+      <hr>
 
-
-       <%= render(partial: "status_chooser",
-                  locals: {f: f, project: project,  is_disabled: is_disabled,
-                  criterion: "license_location"}) %>
+      <%= render_status 'license_location', f, project, is_disabled %>
       <br>
 
       <h3>Documentation</h3>
 
-      <%= render(partial: "status_chooser",
-                 locals: {f: f, project: project,  is_disabled: is_disabled,
-                          criterion: "documentation_basics"}) %>
+      <%= render_status 'documentation_basics', f, project, is_disabled %>
       <hr>
 
-      <%= render(partial: "status_chooser",
-                 locals: {f: f, project: project,  is_disabled: is_disabled,
-                          criterion: "documentation_interface"}) %>
+      <%= render_status 'documentation_interface', f, project, is_disabled %>
       <br>
 
       <h3>Other</h3>
 
-      <%= render(partial: "status_chooser",
-                 locals: {f: f, project: project,  is_disabled: is_disabled,
-                          criterion: "discussion"}) %>
+      <%= render_status 'discussion', f, project, is_disabled %>
       <br>
-          Other general comments about the project:<br>
-          <% if (is_disabled) %>
-            <div class="discussion-markdown">
-              <%= ApplicationHelper.markdown(project[:description]) %>
-            </div>
-          <% else %>
-            <%= f.text_area :general_comments, class:"form-control",  hide_label: true, placeholder:'Additional Comments (in markdown)', disabled: is_disabled %>
-          <% end %>
+
+      Other general comments about the project:<br>
+      <% if (is_disabled) %>
+        <div class="discussion-markdown">
+          <%= ApplicationHelper.markdown(project[:description]) %>
+        </div>
+      <% else %>
+        <%= f.text_area :general_comments, class:"form-control",  hide_label: true, placeholder:'Additional Comments (in markdown)', disabled: is_disabled %>
+      <% end %>
 </div>
 
       <div class="tab-pane" id="changecontrol">
       <br>
       <h3>Public version-controlled source repository</h3>
 
-       <%= render(partial: "status_chooser",
-                  locals: {f: f, project: project,  is_disabled: is_disabled,
-                           criterion: "repo_public"}) %>
+      <%= render_status 'repo_public', f, project, is_disabled %>
       <hr>
 
-      <%= render(partial: "status_chooser",
-                 locals: {f: f, project: project,  is_disabled: is_disabled,
-                          criterion: "repo_track"}) %>
+      <%= render_status 'repo_track', f, project, is_disabled %>
       <hr>
 
-      <%= render(partial: "status_chooser",
-                 locals: {f: f, project: project,  is_disabled: is_disabled,
-                          criterion: "repo_interim"}) %>
+      <%= render_status 'repo_interim', f, project, is_disabled %>
       <hr>
 
-      <%= render(partial: "status_chooser",
-                 locals: {f: f, project: project,  is_disabled: is_disabled,
-                          criterion: "repo_distributed"}) %>
+      <%= render_status 'repo_distributed', f, project, is_disabled %>
       <br>
 
       <h3>Version numbering</h3>
 
-      <%= render(partial: "status_chooser",
-                 locals: {f: f, project: project,  is_disabled: is_disabled,
-                          criterion: "version_unique"}) %>
+      <%= render_status 'version_unique', f, project, is_disabled %>
       <hr>
 
-      <%= render(partial: "status_chooser",
-                 locals: {f: f, project: project,  is_disabled: is_disabled,
-                          criterion: "version_semver"}) %>
+      <%= render_status 'version_semver', f, project, is_disabled %>
       <hr>
 
-      <%= render(partial: "status_chooser",
-                 locals: {f: f, project: project,  is_disabled: is_disabled,
-                          criterion: "version_tags"}) %>
+      <%= render_status 'version_tags', f, project, is_disabled %>
       <br>
 
       <h3>ChangeLog</h3>
 
-      <%= render(partial: "status_chooser",
-                 locals: {f: f, project: project,  is_disabled: is_disabled,
-                          criterion: "release_notes"}) %>
+      <%= render_status 'release_notes', f, project, is_disabled %>
       <hr>
 
-      <%= render(partial: "status_chooser",
-                 locals: {f: f, project: project,  is_disabled: is_disabled,
-                          criterion: "release_notes_vulns"}) %>
+      <%= render_status 'release_notes_vulns', f, project, is_disabled %>
 </div>
 
       <div class="tab-pane" id="reporting">

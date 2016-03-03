@@ -26,10 +26,13 @@ class UsersManipulateProjectTest < ActionDispatch::IntegrationTest
       assert_response :success
       assert_template 'projects/edit'
 
-      # The form needs to include all the criteria.
-      # This could fail if the view incorrectly omits one or more.
+      # Check to ensure that the form includes all the criteria, but only once.
+      # This could fail if the view incorrectly omits or duplicates one.
       Criteria.keys.each do |criterion|
-        assert_select "##{criterion}"
+        assert_select "##{criterion}" # Check for existence
+        assert_select "##{criterion}" do |elements|
+          assert_equal 1, elements.count # Check for duplication
+        end
       end
 
       # Check that returned settings are correct.

@@ -61,7 +61,7 @@ This is a summary of the criteria, with requirements in bold
   including [changes between releases](doc/criteria.md#repo_interim)**:
   - **[Give each release a unique version](doc/criteria.md#version_unique)**, using
     [semantic versioning format](doc/criteria.md#version_semver)
-  - **Give a [summarizy of changes for each release](doc/criteria.md#release_notes),
+  - **Give a [summary of changes for each release](doc/criteria.md#release_notes),
     [identifying any fixed vulnerabilities](doc/criteria.md#release_notes_vulns)**
 - **Allow [bug reports to be submitted](doc/criteria.md#report_process),
   [archived](doc/criteria.md#report_archive)** and

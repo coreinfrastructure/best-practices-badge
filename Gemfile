@@ -21,7 +21,7 @@ gem 'puma', '3.0.2' # Faster webserver; recommended by Heroku
 gem 'rack-timeout', '0.3.2' # Timeout per https://github.com/heroku/rack-timeout
 gem 'rails', '4.2.5.2' # Our web framework
 gem 'sass-rails', '5.0.4'
-gem 'secure_headers', '3.0.0' # Harden app security using HTTP headers
+gem 'secure_headers', '3.0.3' # Harden app security using HTTP headers
 gem 'turbolinks', '2.5.3' # Speed UI access
 gem 'jquery-turbolinks'   # Make turbolinks work with jQuery
 gem 'uglifier', '2.7.2'
@@ -42,7 +42,7 @@ group :development, :test do
   gem 'pry-byebug', '3.3.0'
   gem 'quiet_assets', '1.1.0'
   gem 'rubocop-rspec', '1.4.0'
-  gem 'spring', '1.6.3'
+  gem 'spring', '1.6.4'
   gem 'sqlite3', '1.3.11'
   gem 'vcr', '3.0.1' # Record network responses for later test reuse
   gem 'yaml-lint', '0.0.7' # Check YAML file syntax

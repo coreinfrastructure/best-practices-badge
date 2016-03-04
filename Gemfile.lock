@@ -85,7 +85,6 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.10.0)
-    colored (1.2)
     concurrent-ruby (1.0.1)
     coveralls (0.8.13)
       json (~> 1.8)
@@ -224,9 +223,9 @@ GEM
     pronto-brakeman (0.5.0)
       brakeman (~> 3.1.0)
       pronto (~> 0.5.0)
-    pronto-rails_best_practices (0.5.0)
+    pronto-rails_best_practices (0.5.1)
       pronto (~> 0.5.0)
-      rails_best_practices (~> 1.15.0)
+      rails_best_practices (~> 1.16.0)
     pronto-rubocop (0.5.3)
       pronto (~> 0.5.0)
       rubocop (~> 0.37.0)
@@ -266,10 +265,9 @@ GEM
     rails_12factor (0.0.3)
       rails_serve_static_assets
       rails_stdout_logging
-    rails_best_practices (1.15.7)
+    rails_best_practices (1.16.0)
       activesupport
       code_analyzer (>= 0.4.3)
-      colored
       erubis
       i18n
       json
@@ -418,7 +416,7 @@ DEPENDENCIES
   pg (= 0.18.4)
   pronto (= 0.5.3)
   pronto-brakeman (= 0.5.0)
-  pronto-rails_best_practices (= 0.5.0)
+  pronto-rails_best_practices (= 0.5.1)
   pronto-rubocop (= 0.5.3)
   pry-byebug (= 3.3.0)
   puma (= 3.0.2)

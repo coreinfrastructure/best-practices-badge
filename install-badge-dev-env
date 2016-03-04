@@ -228,7 +228,7 @@ if [ "${MYINSTALL_RBENV_BUNDLER}" = 'yes' ] && \
             "$HOME/.rbenv/plugins/bundler"
 fi
 
-# Force install Ruby 2.2.2 using rbenv.  This may cause a compile.
+# Force install Gemfile ruby version using rbenv. This may cause a compile.
 echo
 echo 'STAGE 4: For this project, force install fixed version of ruby'
 

@@ -11,6 +11,14 @@
 #   na_placeholder: ...special na_placeholder text... # optional
 #   met_suppress: true|false # optional, default false. Suppress justification?
 #   unmet_suppress: true|false # optional, default false. Suppress just.
+#   autofill: ...text describing *ideas* for how to autofill
+#
+# Please note that autofill text is *not* a guarantee of how it will
+# be implemented (or even if it will be automated); it is simply a way
+# to record ideas that might be implemented.  Also, autofill is often
+# used to *guess* correct values, to help speed filling in the form;
+# we only force values if we are confident in their answer or are willing
+# to require that the information be provided in a specific way.
 #
 # We use an *ordered* map (omap), because the order below is used to determine
 # the order of presentation.
@@ -101,6 +109,21 @@
       for FLOSS projects and are more difficult for tools to handle.
       We expect that more advanced badges would set a higher bar (e.g.,
       that it <em>must</em> be released under an OSI-approved license).
+    autofill: >
+      We currently use GitHub's API to request license information.
+      This API examines the LICENSE file using the gem licensee.
+      This only works on GitHub, and only in simple cases
+      (when there's a single license).
+      We could in addition look for the file LICENSE.spdx for the
+      entry 'PackageLicenseDeclared' - these aren't included often,
+      but it would let people declare *exactly* what license is in use.
+      We could add running Ben Balter's gem
+      [licensee](https://github.com/benbalter/licensee), this is the same
+      library used by GitHub but we can then apply it outside of GitHub.
+      See [&#8220;Open Source Licensing by the Numbers&#8221; by Ben Balter](https://speakerdeck.com/benbalter/open-source-licensing-by-the-numbers).
+      We could also do more specialized analysis (e.g., looking for
+      license information in various packaging formats) - this would
+      probably be best done by improving some existing library like licensee.
 - floss_license_osi:
     category: SUGGESTED
     description: >
@@ -112,6 +135,11 @@
       which licenses are OSS.
     met_suppress: true
     unmet_suppress: true
+    autofill: >
+      Currently we compare the license to see if it's on a simple list
+      from OSI.  We could add support for automatically getting the list
+      from elsewhere (e.g., OSI or SPDX), and support more complex
+      license structures (OR, AND, and WITH).
 - license_location:
     category: MUST
     met_url_required: true
@@ -120,6 +148,10 @@
     details: >
       E.g., as a top-level file named LICENSE or COPYING.
       License filenames MAY be followed by an extension such as ".txt" or ".md".
+    autofill: >
+      Look for files with the name LICENSE, COPYING, or COPYING-(name)
+      optionally extensions .txt or .md.  Name could include
+      GPL, LGPL, and MIT.
 # Documentation
 - documentation_basics:
     category: MUST
@@ -157,6 +189,12 @@
       they meet these criteria; make sure there is a URL-addressable
       archiving mechanism.
       Proprietary Javascript, while discouraged, is permitted.
+    autofill: >
+      Currently if it's on GitHub we assume they will use its mechanisms.
+      We could do the same for other forges like
+      SourceForge, GitLab, and Savannah.
+      We could also look for links from the project website that suggest
+      the use of Bugzilla, Mantis, or Trac.
 #
 # CHANGE CONTROL
 #

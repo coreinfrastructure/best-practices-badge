@@ -22,7 +22,7 @@ class CriteriaTest < ActiveSupport::TestCase
                            :description, :details,
                            :met_placeholder, :unmet_placeholder,
                            :na_placeholder,
-                           :met_suppress, :unmet_suppress]
+                           :met_suppress, :unmet_suppress, :autofill]
     Criteria.each do |_criterion, values|
       values.each do |key, _value|
         assert_includes allowed_set, key.to_sym

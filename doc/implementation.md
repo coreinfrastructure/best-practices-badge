@@ -213,7 +213,7 @@ To modify the text of the criteria, edit these files:
 
 If you're adding/removing fields (including criteria), be sure to also edit
 <app/views/projects/_form.html.erb> (to determine where to display it).
-You may also want to edit the README file, which includes a summary
+You may also want to edit the README.md file, which includes a summary
 of the criteria.
 
 When adding or removing fields, or when renaming

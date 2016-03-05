@@ -30,7 +30,7 @@
 # BASICS
 #
 # Basic Project Website Content
-- description_sufficient:
+- description_good:
     category: MUST
     description: >
       The project website MUST succinctly describe what the software does

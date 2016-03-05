@@ -115,11 +115,11 @@ Note that:
 
 *Basic project website content*
 
-- <a name="description_sufficient"></a>The project website MUST succinctly
+- <a name="description_good"></a>The project website MUST succinctly
   describe what the software does (what problem does it solve?).
   This MUST be in language that potential users can understand
   (e.g., it uses minimal jargon).
-  <sup>[<a href="#description_sufficient">description_sufficient</a>]</sup>
+  <sup>[<a href="#description_good">description_good</a>]</sup>
 - <a name="interact"></a>The project website MUST provide information on how to:
   - obtain,
   - provide feedback (as bug reports or enhancements),

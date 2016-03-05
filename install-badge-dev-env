@@ -152,6 +152,11 @@ if [ "$MYINSTALL_SYSTEM_INSTALL_PACKAGES" = 'yes' ] ; then
   echo "  ${MYINSTALL_SYSTEM_INSTALL_PREFIX} $installer $PACKAGES"
   # shellcheck disable=SC2086
   $MYINSTALL_SYSTEM_INSTALL_PREFIX $installer $PACKAGES
+  if [ "$manager" = 'apt-get' ] ; then
+    echo "  We will be replacing rbenv with v1.0.0 from GitHub."
+    echo "  sudo $manager remove rbenv"
+    sudo $manager remove rbenv
+  fi
 else
   echo 'Skipping system package install.'
 fi

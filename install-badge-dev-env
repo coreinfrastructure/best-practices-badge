@@ -101,7 +101,7 @@ case "$manager" in
 esac
 echo "Will use the installer command '$installer'"
 
-# Now start adding packages. 
+# Now start adding packages.
 echo
 echo 'STAGE 2: Identifying and install system packages'
 
@@ -173,9 +173,11 @@ elif [ "$MYINSTALL_RBENV" != 'yes' ] ; then
 else
   echo 'Downloading and installing rbenv from GitHub' >&2
   git clone git@github.com:rbenv/rbenv.git ~/.rbenv
+  # Following performed in subshell so as not to change working directory.
+  (
   cd ~/.rbenv
   git checkout 3997a394d975136f468be196941492d3d0ef5143
-  cd -
+  )
 fi
 
 if [ "$MYINSTALL_RBENV" = 'yes' ] ; then
@@ -231,7 +233,7 @@ if [ "${MYINSTALL_RBENV_BUNDLER}" = 'yes' ] && \
             "$HOME/.rbenv/plugins/bundler"
 fi
 
-# Force install Ruby 2.2.2 using rbenv.  This may cause a compile.
+# Force install Gemfile ruby version using rbenv. This may cause a compile.
 echo
 echo 'STAGE 4: For this project, force install fixed version of ruby'
 

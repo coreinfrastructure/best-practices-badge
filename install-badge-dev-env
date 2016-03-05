@@ -177,7 +177,7 @@ elif [ "$MYINSTALL_RBENV" != 'yes' ] ; then
   echo 'Skipping rbenv install.'
 else
   echo 'Downloading and installing rbenv from GitHub' >&2
-  git clone git@github.com:rbenv/rbenv.git ~/.rbenv
+  git clone git://github.com/rbenv/rbenv.git ~/.rbenv
   # Following performed in subshell so as not to change working directory.
   (
   cd ~/.rbenv

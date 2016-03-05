@@ -260,6 +260,9 @@ Once you've created the migration file, you can migrate by running:
 
 If it fails, you may need to use "rake db:rollback" to roll it back.
 
+You may also need to modify tests in the tests/ subdirectory, or
+modify the autofill code in the app/lib/ directory.
+
 Be sure to "git add" all new files, including any migration files,
 and then use "git commit" and "git push".
 

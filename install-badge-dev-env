@@ -131,7 +131,7 @@ case "$manager" in
     # add_pkg autoconf bison build-essential libssl-dev libyaml-dev \
     #         libreadline6-dev zlib1g-dev libncurses5-dev libffi-dev \
     #         libgdbm3 libgdbm-dev
-    add_pkg rbenv ruby-build ;;
+    add_pkg ruby-build postgresql-server-dev-9.3 cmake ;;
   yum|dnf)
     add_pkg gcc openssl-devel libyaml-devel libffi-devel readline-devel \
             zlib-devel gdbm-devel ncurses-devel ;;
@@ -172,7 +172,10 @@ elif [ "$MYINSTALL_RBENV" != 'yes' ] ; then
   echo 'Skipping rbenv install.'
 else
   echo 'Downloading and installing rbenv from GitHub' >&2
-  git clone https://github.com/sstephenson/rbenv.git ~/.rbenv
+  git clone git@github.com:rbenv/rbenv.git ~/.rbenv
+  cd ~/.rbenv
+  git checkout 3997a394d975136f468be196941492d3d0ef5143
+  cd -
 fi
 
 if [ "$MYINSTALL_RBENV" = 'yes' ] ; then
@@ -238,6 +241,7 @@ if [ "$MYINSTALL_RBENV" = 'yes' ] && is_command rbenv ; then
   echo "Using rbenv to locally install ruby version ${ruby_version}"
   rbenv install --skip-existing "$ruby_version"
   rbenv local "$ruby_version" # In this directory AND BELOW, use this version.
+  eval "$(rbenv init -)"
 else
   echo 'Skipped installing fixed version of ruby - no rbenv'
 fi

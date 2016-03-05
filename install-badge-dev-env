@@ -131,7 +131,7 @@ case "$manager" in
     # add_pkg autoconf bison build-essential libssl-dev libyaml-dev \
     #         libreadline6-dev zlib1g-dev libncurses5-dev libffi-dev \
     #         libgdbm3 libgdbm-dev
-    add_pkg ruby-build postgresql-server-dev-9.3 cmake ;;
+    add_pkg ruby-build postgresql-server-dev-all cmake nodejs ;;
   yum|dnf)
     add_pkg gcc openssl-devel libyaml-devel libffi-devel readline-devel \
             zlib-devel gdbm-devel ncurses-devel ;;

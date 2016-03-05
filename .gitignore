@@ -24,3 +24,9 @@
 
 # Dropbox
 .DS_Store
+
+# Gedit
+*~
+
+# Setup script artifacts
+.ruby-version

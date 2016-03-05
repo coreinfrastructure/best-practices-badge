@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160229153025) do
+ActiveRecord::Schema.define(version: 20160305175953) do
 
   create_table "projects", force: :cascade do |t|
     t.integer  "user_id"
@@ -30,8 +30,8 @@ ActiveRecord::Schema.define(version: 20160229153025) do
     t.text     "interact_justification"
     t.string   "contribution_status",                                  default: "?"
     t.text     "contribution_justification"
-    t.string   "contribution_criteria_status",                         default: "?"
-    t.text     "contribution_criteria_justification"
+    t.string   "contribution_requirements_status",                     default: "?"
+    t.text     "contribution_requirements_justification"
     t.string   "license_location_status",                              default: "?"
     t.text     "license_location_justification"
     t.string   "floss_license_status",                                 default: "?"

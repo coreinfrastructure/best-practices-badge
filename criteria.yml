@@ -75,15 +75,15 @@
       Look on the project website for words like
       "contribute|bug report|feedback|enhancement" and
       "contribute|pull request|merge request".
-- contribution_criteria:
+- contribution_requirements:
     category: SHOULD
     met_url_required: true
     description: >
       The information on how to contribute SHOULD include the
-      basic criteria for acceptable contributions
+      requirements for acceptable contributions
       (e.g., a reference to any required coding standard).},
     unmet_placeholder: >
-      Why are the criteria so obvious that this information isn't needed?
+      Why are the requirements so obvious that this information isn't needed?
     autofill: >
       Look for a CONTRIBUTING{,.md,.txt,.html} file.
 # OSS License

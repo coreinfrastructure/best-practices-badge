@@ -131,10 +131,10 @@ Note that:
   <a href="https://guides.github.com/activities/contributing-to-open-source/">projects on GitHub use issues and pull requests</a>
   unless otherwise noted.
   <sup>[<a href="#contribution">contribution</a>]</sup>
-- <a name="contribution_criteria"></a>The information on how to contribute
-  SHOULD include the basic criteria for acceptable contributions
+- <a name="contribution_requirements"></a>The information on how to contribute
+  SHOULD include the requirements for acceptable contributions
   (e.g., a reference to any required coding standard).
-  <sup>[<a href="#contribution_criteria">contribution_criteria</a>]</sup>
+  <sup>[<a href="#contribution_requirements">contribution_requirements</a>]</sup>
 
 *FLOSS license*
 

@@ -13,8 +13,8 @@ class CriteriaTest < ActiveSupport::TestCase
     assert_equal 'MUST', Criteria[:contribution][:category]
   end
 
-  test 'Criteria "contribution_criteria" is in the category SHOULD' do
-    assert_equal 'SHOULD', Criteria[:contribution_criteria][:category]
+  test 'Criteria "contribution_requirements" is in the category SHOULD' do
+    assert_equal 'SHOULD', Criteria[:contribution_requirements][:category]
   end
 
   test 'Ensure that only allowed fields are in Criteria' do

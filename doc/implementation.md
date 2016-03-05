@@ -235,7 +235,7 @@ By convention, begin a migration name with 'add' to add a column and
   $EDITOR db/migrate/*MIGRATION_NAME.rb
 ~~~~
 
-Your migration file should look something like this
+Your migration file should look something like this if it adds columns
 (where add_column takes the name of the table, the name of the column,
 the type of the column, and then various options):
 
@@ -248,8 +248,24 @@ class MIGRATION_NAME < ActiveRecord::Migration
 end
 ~~~~
 
+Similarly, your migration file should look something like this
+if it renames columns:
+
+~~~~
+class Rename < ActiveRecord::Migration
+  def change
+    rename_column :projects,
+                  :description_sufficient_status,
+                  :description_good_status
+    rename_column :projects,
+                  :description_sufficient_justification,
+                  :description_good_justification
+  end
+end
+~~~~
+
 In some cases it may be useful to insert SQL commands or do
-other special operations.
+other special operations in a migration.
 See the migrations in the db/migrate/ directory for examples.
 
 Once you've created the migration file, you can migrate by running:

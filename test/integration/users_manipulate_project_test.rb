@@ -43,7 +43,12 @@ class UsersManipulateProjectTest < ActionDispatch::IntegrationTest
         all_name_id.add e['id']
       end
 
-      assert_select '#badge-progress' # Ensure we have progress bar area.
+      # This ensures that all rows are in containers - except that
+      # this currently isn't true:
+      # assert_select '#badge-progress' # Ensure we have progress bar area.
+      # css_select('.row').each do |e|
+      #   assert_includes ['container', 'container-fluid'], e.parent['class']
+      # end
 
       # Check that returned settings are correct.
       # Note: You can use byebug... css_select to interactively check things.

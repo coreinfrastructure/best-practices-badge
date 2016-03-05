@@ -216,10 +216,13 @@ If you're adding/removing fields (including criteria), be sure to also edit
 You may also want to edit the README file, which includes a summary
 of the criteria.
 
-When adding or removing fields, or when renamming
-a criterion name, you also need to create a database migration.
+When adding or removing fields, or when renaming
+a criterion name, you may need to edit the test creator <db/seeds.rb>,
+and you will certainly need to create a database migration.
 The "status" (met/unmet) is the criterion name + "\_status" stored as a string;
 each criterion also has a name + "\_justification" stored as text.
+So every add, remove, or rename of a criterion involves changing
+*two* fields in the database schema.
 Here are the commands, assuming your current directory is at the top level,
 EDIT is the name of your favorite text editor, and MIGRATION_NAME is the
 logical name you're giving to the migration (e.g., "add_discussion").

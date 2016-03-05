@@ -507,23 +507,42 @@
       variety of problems.  A large test suite can find more problems, but
       even a small test suite can detect problems and provide a framework
       to build on.
+    autofill: >
+      See test_invocation, and use its value here also.
 - test_invocation:
     category: SHOULD
     description: >
       A test suite SHOULD be invocable in a standard way for that language.
     details: >
       For example, "make check", "mvn test", or "rake test".
+    autofill: >
+      Look in the build scripts for a non-empty test command.
+      E.g., look for a Makefile (including Makefile.am) with a non-empty
+      "check" or "test" entry.  Similarly look for an entry for
+      maven (mvn test) or rake (rake test).
 - test_most:
     category: SUGGESTED
     description: >
       It is SUGGESTED that the test suite cover most (or ideally all)
       the code branches, input fields, and functionality.
+    autofill: >
+      We could run a test suite with coverage enabled, but that would
+      take far too long for our time budget.
+      However, we *could* look for a Coveralls badge
+      (a link to a badge under <https://coveralls.io>) and pull in
+      *that* data (since that would be the final result).
+      Coveralls prefers 90% or more statement coverage.
 - test_continuous_integration:
     category: SUGGESTED
     description: >
       It is SUGGESTED that the project implement continuous integration
       (where new or changed code is frequently integrated into a central
       code repository and automated tests are run on the result).
+    autofill: >
+      We could look for evidence of pulls each of which are "relatively"
+      small (instead of rare massive changes being the norm).
+      We also see if it has a badge from CircleCI.
+      Also, make this depend on the "test" or "test_invocation" criterion.
 # New functionality testing
 - test_policy:
     category: MUST
@@ -531,6 +550,10 @@
       The project MUST have a general policy (formal or not) that as major
       new functionality is added, tests of that functionality SHOULD
       be added to an automated test suite.
+    autofill: >
+      Look for text patterns hinting at this in README, CONTRIBUTING,
+      or the doc/* directory.
+      Also, make this depend on the "test" or "test_invocation" criterion.
 - tests_are_added:
     category: MUST
     description: >
@@ -540,6 +563,11 @@
       Major functionality would typically be mentioned in the ChangeLog.
       (Perfection is not required, merely evidence
       that tests are typically being added in practice.)
+    autofill: >
+      Look for evidence that new tests are created.
+      E.G., do at least some contributions include new tests
+      (e.g., changes to contents in a directory whose full pathname
+      contains the phrase "test").
 - tests_documented_added:
     category: SUGGESTED
     description: >
@@ -548,6 +576,8 @@
     details: >
       However, even an informal rule is acceptable as long as the tests
       are being added in practice.
+    autofill: >
+      Look in CONTRIBUTING and README.  See also test_policy.
 # Warning flags
 - warnings:
     category: MUST
@@ -563,6 +593,8 @@
       and perl5's "use warnings".
       A separate "linter" tool is simply a tool that examines the
       source code to look for code quality errors or common simple mistakes.
+    autofill: >
+      See the "details" - search the build script and source code for these.
 - warnings_fixed:
     category: MUST
     na_allowed: true
@@ -573,12 +605,17 @@
       as false positives.  Ideally there would be no warnings, but a project
       MAY accept some warnings (typically less than 1 warning per 100
       lines or less than 10 warnings).
+    autofill: >
+      The only good way to do this is to actually do a build.
+      If it uses CircleCI we could look at that.
 - warnings_strict:
     category: SUGGESTED
     na_allowed: true
     description: >
       It is SUGGESTED that projects be maximally strict with warnings,
       but this is not always practical.
+    autofill: >
+      If we find "-Wall -Wextra" in the build that's pretty strict.
 #
 # SECURITY
 #
@@ -635,6 +672,7 @@
       on behalf of the project, or perform final releases of the project
       software.
       If there is only one developer, that individual is the primary developer.
+    # autofill: TODO
 - know_common_errors:
     category: MUST
     description: >
@@ -648,6 +686,7 @@
       See the <a href="http://cwe.mitre.org/top25/">CWE/SANS top 25</a> or
       <a href="https://www.owasp.org/index.php/Category:OWASP_Top_Ten_Project">OWASP Top 10</a>
       for commonly-used lists.
+    # autofill: TODO
 # Use basic good cryptographic practices
 - crypto_published:
     category: MUST
@@ -655,6 +694,7 @@
     description: >
       The project's cryptographic software MUST use only cryptographic protocols
       and algorithms that are publicly published and reviewed by experts.
+    # autofill: TODO
 - crypto_call:
     category: MUST
     na_allowed: true
@@ -663,6 +703,7 @@
       purpose is not to implement cryptography, then it MUST only call on
       software specifically designed to implement cryptographic functions;
       it MUST NOT re-implement its own.
+    # autofill: TODO
 - crypto_floss:
     category: MUST
     na_allowed: true
@@ -672,6 +713,7 @@
     details: >
       See the <a href="https://opensource.org/osr">Open Standards Requirement
       for Software by the Open Source Initiative</a>.
+    # autofill: TODO
 - crypto_keylength:
     category: MUST
     na_allowed: true
@@ -692,6 +734,7 @@
       The software MAY allow smaller keylengths in some configurations
       (ideally it would not, since this allows downgrade attacks,
       but shorter keylengths are sometimes necessary for interoperability.)
+    # autofill: TODO
 - crypto_working:
     category: MUST
     na_allowed: true
@@ -699,12 +742,14 @@
       The project security mechanisms MUST NOT depend on cryptographic
       algorithms that are broken (e.g., MD4, MD5, single DES, RC4,
       or Dual_EC_DRBG).
+    # autofill: TODO
 - crypto_weaknesses:
     category: SHOULD
     na_allowed: true
     description: >
       The project security mechanisms SHOULD NOT by default depend on
       cryptographic algorithms with known serious weaknesses (e.g., SHA-1).
+    # autofill: TODO
 - crypto_pfs:
     category: SHOULD
     na_allowed: true
@@ -712,6 +757,7 @@
       The project SHOULD implement perfect forward secrecy for key agreement
       protocols so a session key derived from a set of long-term keys cannot
       be compromised if one of the long-term keys is compromised in the future.
+    # autofill: TODO
 - crypto_password_storage:
     category: MUST
     na_allowed: true
@@ -720,6 +766,7 @@
       project MUST store them as iterated hashes with a per-user salt by
       using a key stretching (iterated) algorithm (e.g., PBKDF2, Bcrypt
       or Scrypt).
+    # autofill: TODO
 - crypto_random:
     category: MUST
     na_allowed: true
@@ -731,6 +778,7 @@
       hardware random number generator, or it may be
       a cryptographically secure pseudo-random number generator (CSPRNG) using
       an algorithm such as Hash_DRBG, HMAC_DRBG, CTR_DRBG, Yarrow, or Fortuna.
+    # autofill: TODO
 # Secured delivery against man-in-the-middle (MITM) attacks
 - delivery_mitm:
     category: MUST
@@ -743,6 +791,7 @@
       system, but this only works if the users can be confident that the
       public keys for signatures are correct <i>and</i> if the users will
       actually check the signature.
+    # autofill: TODO
 - delivery_unsigned:
     category: MUST
     description: >
@@ -750,6 +799,7 @@
       used without checking for a cryptographic signature.},
     details: >
       These hashes can be modified in transit.
+    # autofill: TODO
 # Publicly-known Vulnerabilities fixed
 - vulnerabilities_fixed_60_days:
     category: MUST
@@ -780,11 +830,13 @@
       and not from the time reported to the project, because this is much
       easier to measure and
       verify by those outside the project.
+    # autofill: TODO
 - vulnerabilities_critical_fixed:
     category: SHOULD
     description: >
       Projects SHOULD fix all critical vulnerabilities rapidly after they
       are reported.
+    # autofill: TODO
 # Other security issues
 - no_leaked_credentials:
     category: MUST
@@ -796,6 +848,7 @@
       A project MAY leak "sample" credentials for testing and
       unimportant databases, as long as they are not intended to limit
       public access.
+    # autofill: TODO
 #
 # ANALYSIS
 #
@@ -835,12 +888,14 @@
       The <a href="https://continuousassurance.org/">SWAMP</a> is a no-cost
       platform for assessing vulnerabilities in software using a variety
       of tools.
+    # autofill: TODO
 - static_analysis_common_vulnerabilities:
     category: SUGGESTED
     na_allowed: true
     description: >
       It is SUGGESTED that the tool include rules or approaches to look for
       common vulnerabilities in the analyzed language or environment.
+    # autofill: TODO
 - static_analysis_fixed:
     category: MUST
     na_allowed: true
@@ -850,12 +905,14 @@
     details: >
       A vulnerability is medium to high severity if its <a
       href="https://nvd.nist.gov/cvss.cfm">CVSS 2.0</a> is 4 or higher.
+    # autofill: TODO
 - static_analysis_often:
     category: SUGGESTED
     na_allowed: true
     description: >
       It is SUGGESTED that static source code analysis occur on every
       commit or at least daily.
+    # autofill: TODO
 # Dynamic code analysis
 - dynamic_analysis:
     category: SUGGESTED
@@ -885,6 +942,7 @@
       <b>Rationale:</b> Static source code analysis and dynamic analysis tend
       to find different kinds of defects (including defects that lead to
       vulnerabilities), so combining them is more likely to be effective.
+    # autofill: TODO
 - dynamic_analysis_unsafe:
     category: SUGGESTED
     na_allowed: true
@@ -899,11 +957,13 @@
       If the software is not application-level,
       or is not in a memory-unsafe language, then this criterion is
       automatically met.
+    # autofill: TODO
 - dynamic_analysis_enable_assertions:
     category: SUGGESTED
     description: >
       It is SUGGESTED that the software include many run-time assertions
       that are checked during dynamic analysis.
+    # autofill: TODO
 - dynamic_analysis_fixed:
     category: MUST
     description: >
@@ -912,3 +972,4 @@
     details: >
        A vulnerability is medium to high severity if its <a
        href="https://nvd.nist.gov/cvss.cfm">CVSS 2.0</a> base score is 4
+    # autofill: TODO

@@ -47,11 +47,11 @@ This is a summary of the criteria, with requirements in bold
 
 - **Have a [stable website](doc/criteria.md#project_homepage_url)**,
   [accessible over HTTPS](doc/criteria.md#project_homepage_https), which says:
-  - **[what it does](doc/criteria.md#description_sufficient)**
+  - **[what it does](doc/criteria.md#description_good)**
   - **[how to get it](doc/criteria.md#interact)**
   - **[how to give feedback](doc/criteria.md#interact)**
   - **[how to contribute](doc/criteria.md#contribution)** and
-    [preferred styles](doc/criteria.md#contribution_criteria)
+    [preferred styles](doc/criteria.md#contribution_requirements)
 - **[Explicitly specify](doc/criteria.md#license_location) a
   [FLOSS](doc/criteria.md#floss_license) [license](doc/criteria.md#floss_license_osi)**
 - **[Document how to install and run (securely)](doc/criteria.md#documentation_basics),

@@ -13,8 +13,8 @@ class CriteriaTest < ActiveSupport::TestCase
     assert_equal 'MUST', Criteria[:contribution][:category]
   end
 
-  test 'Criteria "contribution_criteria" is in the category SHOULD' do
-    assert_equal 'SHOULD', Criteria[:contribution_criteria][:category]
+  test 'Criteria "contribution_requirements" is in the category SHOULD' do
+    assert_equal 'SHOULD', Criteria[:contribution_requirements][:category]
   end
 
   test 'Ensure that only allowed fields are in Criteria' do
@@ -22,7 +22,7 @@ class CriteriaTest < ActiveSupport::TestCase
                            :description, :details,
                            :met_placeholder, :unmet_placeholder,
                            :na_placeholder,
-                           :met_suppress, :unmet_suppress]
+                           :met_suppress, :unmet_suppress, :autofill]
     Criteria.each do |_criterion, values|
       values.each do |key, _value|
         assert_includes allowed_set, key.to_sym

@@ -213,13 +213,16 @@ To modify the text of the criteria, edit these files:
 
 If you're adding/removing fields (including criteria), be sure to also edit
 <app/views/projects/_form.html.erb> (to determine where to display it).
-You may also want to edit the README file, which includes a summary
+You may also want to edit the README.md file, which includes a summary
 of the criteria.
 
-When adding or removing fields, or when renamming
-a criterion name, you also need to create a database migration.
+When adding or removing fields, or when renaming
+a criterion name, you may need to edit the test creator <db/seeds.rb>,
+and you will certainly need to create a database migration.
 The "status" (met/unmet) is the criterion name + "\_status" stored as a string;
 each criterion also has a name + "\_justification" stored as text.
+So every add, remove, or rename of a criterion involves changing
+*two* fields in the database schema.
 Here are the commands, assuming your current directory is at the top level,
 EDIT is the name of your favorite text editor, and MIGRATION_NAME is the
 logical name you're giving to the migration (e.g., "add_discussion").
@@ -232,7 +235,7 @@ By convention, begin a migration name with 'add' to add a column and
   $EDITOR db/migrate/*MIGRATION_NAME.rb
 ~~~~
 
-Your migration file should look something like this
+Your migration file should look something like this if it adds columns
 (where add_column takes the name of the table, the name of the column,
 the type of the column, and then various options):
 
@@ -245,8 +248,24 @@ class MIGRATION_NAME < ActiveRecord::Migration
 end
 ~~~~
 
+Similarly, your migration file should look something like this
+if it renames columns:
+
+~~~~
+class Rename < ActiveRecord::Migration
+  def change
+    rename_column :projects,
+                  :description_sufficient_status,
+                  :description_good_status
+    rename_column :projects,
+                  :description_sufficient_justification,
+                  :description_good_justification
+  end
+end
+~~~~
+
 In some cases it may be useful to insert SQL commands or do
-other special operations.
+other special operations in a migration.
 See the migrations in the db/migrate/ directory for examples.
 
 Once you've created the migration file, you can migrate by running:
@@ -256,6 +275,9 @@ Once you've created the migration file, you can migrate by running:
 ~~~~
 
 If it fails, you may need to use "rake db:rollback" to roll it back.
+
+You may also need to modify tests in the tests/ subdirectory, or
+modify the autofill code in the app/lib/ directory.
 
 Be sure to "git add" all new files, including any migration files,
 and then use "git commit" and "git push".

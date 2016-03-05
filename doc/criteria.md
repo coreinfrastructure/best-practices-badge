@@ -115,11 +115,11 @@ Note that:
 
 *Basic project website content*
 
-- <a name="description_sufficient"></a>The project website MUST succinctly
+- <a name="description_good"></a>The project website MUST succinctly
   describe what the software does (what problem does it solve?).
   This MUST be in language that potential users can understand
   (e.g., it uses minimal jargon).
-  <sup>[<a href="#description_sufficient">description_sufficient</a>]</sup>
+  <sup>[<a href="#description_good">description_good</a>]</sup>
 - <a name="interact"></a>The project website MUST provide information on how to:
   - obtain,
   - provide feedback (as bug reports or enhancements),
@@ -131,10 +131,10 @@ Note that:
   <a href="https://guides.github.com/activities/contributing-to-open-source/">projects on GitHub use issues and pull requests</a>
   unless otherwise noted.
   <sup>[<a href="#contribution">contribution</a>]</sup>
-- <a name="contribution_criteria"></a>The information on how to contribute
-  SHOULD include the basic criteria for acceptable contributions
+- <a name="contribution_requirements"></a>The information on how to contribute
+  SHOULD include the requirements for acceptable contributions
   (e.g., a reference to any required coding standard).
-  <sup>[<a href="#contribution_criteria">contribution_criteria</a>]</sup>
+  <sup>[<a href="#contribution_requirements">contribution_requirements</a>]</sup>
 
 *FLOSS license*
 

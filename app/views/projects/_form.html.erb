@@ -141,7 +141,7 @@ This information is used when displaying badge information.
       <%= f.text_field :repo_url, class:"form-control", hide_label: true, placeholder:'Project Repo URL', disabled: is_disabled %>
 
 <!-- TODO: MUST have a project or repo URL, SUGGESTED to use HTTPS.
-     However, first is implied by "description_sufficient",
+     However, first is implied by "description_good",
      and the MITM stuff notes https as a way to implement it. -->
 
       <span>What is the
@@ -160,7 +160,7 @@ This information is used when displaying badge information.
    <%# Note: render() accepts met_suppress: ..., unmet_placeholder:  ... %>
 
     <h3>Basic Project Website Content</h3>
-      <%= render_status 'description_sufficient', f, project, is_disabled %>
+      <%= render_status 'description_good', f, project, is_disabled %>
       <hr>
 
       <%= render_status 'interact', f, project, is_disabled %>
@@ -169,7 +169,7 @@ This information is used when displaying badge information.
       <%= render_status 'contribution', f, project, is_disabled %>
       <hr>
 
-      <%= render_status 'contribution_criteria', f, project, is_disabled %>
+      <%= render_status 'contribution_requirements', f, project, is_disabled %>
       <br>
 
       <h3>FLOSS License</h3>

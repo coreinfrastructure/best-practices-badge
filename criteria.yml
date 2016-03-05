@@ -19,6 +19,10 @@
 # used to *guess* correct values, to help speed filling in the form;
 # we only force values if we are confident in their answer or are willing
 # to require that the information be provided in a specific way.
+# We've focused on GitHub, but where reasonable we'd like to create
+# portability layers and support other forges like SourceForge,
+# Savannah, Bitbucket, and GitLab; we'd also like to be able to support
+# standalone sites (e.g., detect use of Bugzilla and work with that).
 #
 # We use an *ordered* map (omap), because the order below is used to determine
 # the order of presentation.
@@ -672,7 +676,9 @@
       on behalf of the project, or perform final releases of the project
       software.
       If there is only one developer, that individual is the primary developer.
-    # autofill: TODO
+    autofill: >
+      We could try to search the documentation for evidence of phrases
+      that suggest security knowledge, such as the phrases listed above.
 - know_common_errors:
     category: MUST
     description: >
@@ -686,7 +692,11 @@
       See the <a href="http://cwe.mitre.org/top25/">CWE/SANS top 25</a> or
       <a href="https://www.owasp.org/index.php/Category:OWASP_Top_Ten_Project">OWASP Top 10</a>
       for commonly-used lists.
-    # autofill: TODO
+    autofill: >
+      We could try to search the documentation for evidence of phrases
+      that suggest security knowledge, such as the phrases for common
+      types of vulnerabilities such as CWE/SANS top 25 or OWASP top 10.
+      Simply mentioning those could also be an indicator.
 # Use basic good cryptographic practices
 - crypto_published:
     category: MUST
@@ -791,7 +801,8 @@
       system, but this only works if the users can be confident that the
       public keys for signatures are correct <i>and</i> if the users will
       actually check the signature.
-    # autofill: TODO
+    autofill: >
+      Look for a download site using https.
 - delivery_unsigned:
     category: MUST
     description: >
@@ -799,7 +810,8 @@
       used without checking for a cryptographic signature.},
     details: >
       These hashes can be modified in transit.
-    # autofill: TODO
+    autofill: >
+      Again, look for a download site using https.
 # Publicly-known Vulnerabilities fixed
 - vulnerabilities_fixed_60_days:
     category: MUST
@@ -830,13 +842,18 @@
       and not from the time reported to the project, because this is much
       easier to measure and
       verify by those outside the project.
-    # autofill: TODO
+    autofill: >
+      Look at vulnerability databases (such as NVD), pull out unpatched ones,
+      and look at days since report.
 - vulnerabilities_critical_fixed:
     category: SHOULD
     description: >
       Projects SHOULD fix all critical vulnerabilities rapidly after they
       are reported.
-    # autofill: TODO
+    autofill: >
+       Look at vulnerability databases for say the last 2 years, and
+       find the worst-case time for response to any critical vulnerabilities.
+       More than 60 days is not a good sign.
 # Other security issues
 - no_leaked_credentials:
     category: MUST
@@ -848,7 +865,12 @@
       A project MAY leak "sample" credentials for testing and
       unimportant databases, as long as they are not intended to limit
       public access.
-    # autofill: TODO
+    autofill: >
+      Search repo for filenames that suggest credential leaking, e.g.,
+      id_dsa (SSH private key).  Could also look at file contents for
+      things like Amazon keys or Heroku keys.
+      Could look at .env file, though "SECRETS" there might not really
+      be secrets.
 #
 # ANALYSIS
 #
@@ -888,14 +910,18 @@
       The <a href="https://continuousassurance.org/">SWAMP</a> is a no-cost
       platform for assessing vulnerabilities in software using a variety
       of tools.
-    # autofill: TODO
+    autofill: >
+      Look in build scripts for execution of common tools, and in
+      documentation for names of tools and the URL of a Coverity scan entry.
 - static_analysis_common_vulnerabilities:
     category: SUGGESTED
     na_allowed: true
     description: >
       It is SUGGESTED that the tool include rules or approaches to look for
       common vulnerabilities in the analyzed language or environment.
-    # autofill: TODO
+    autofill: >
+      We might start by looking primarily for tools that also meet this.
+      E.g., brakeman for Ruby on Rails.
 - static_analysis_fixed:
     category: MUST
     na_allowed: true
@@ -912,7 +938,9 @@
     description: >
       It is SUGGESTED that static source code analysis occur on every
       commit or at least daily.
-    # autofill: TODO
+    autofill: >
+      Look for commit hooks or continuous integration tools like CircleCI
+      that would meet this.
 # Dynamic code analysis
 - dynamic_analysis:
     category: SUGGESTED
@@ -942,7 +970,8 @@
       <b>Rationale:</b> Static source code analysis and dynamic analysis tend
       to find different kinds of defects (including defects that lead to
       vulnerabilities), so combining them is more likely to be effective.
-    # autofill: TODO
+    autofill: >
+      Look in documentation for references to such tools.
 - dynamic_analysis_unsafe:
     category: SUGGESTED
     na_allowed: true
@@ -957,13 +986,16 @@
       If the software is not application-level,
       or is not in a memory-unsafe language, then this criterion is
       automatically met.
-    # autofill: TODO
+    autofill: >
+      Look in build/test script for reference to invocation of
+      valgrind or ASAN.
 - dynamic_analysis_enable_assertions:
     category: SUGGESTED
     description: >
       It is SUGGESTED that the software include many run-time assertions
       that are checked during dynamic analysis.
-    # autofill: TODO
+    autofill: >
+      Perhaps look in source code for many asserts.
 - dynamic_analysis_fixed:
     category: MUST
     description: >

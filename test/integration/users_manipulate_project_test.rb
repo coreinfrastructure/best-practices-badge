@@ -35,6 +35,16 @@ class UsersManipulateProjectTest < ActionDispatch::IntegrationTest
         end
       end
 
+      # Ensure that all id's are unique.
+      all_name_id = Set.new
+      my_result_id = css_select('[id]') # my_result[0]['id']
+      my_result_id.each do |e|
+        assert_not_includes all_name_id, e['id']
+        all_name_id.add e['id']
+      end
+
+      assert_select '#badge-progress' # Ensure we have progress bar area.
+
       # Check that returned settings are correct.
       # Note: You can use byebug... css_select to interactively check things.
       assert_select '#project_name[value=?]',

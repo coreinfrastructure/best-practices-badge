@@ -11,7 +11,7 @@
 #   na_placeholder: ...special na_placeholder text... # optional
 #   met_suppress: true|false # optional, default false. Suppress justification?
 #   unmet_suppress: true|false # optional, default false. Suppress just.
-#   autofill: ...text describing *ideas* for how to autofill
+#   autofill: ...text describing *ideas* for how to autofill, in markdown
 #
 # Please note that autofill text is *not* a guarantee of how it will
 # be implemented (or even if it will be automated); it is simply a way
@@ -36,6 +36,11 @@
       (e.g., it uses minimal jargon).
     met_placeholder: >
       (Optional) Where is the succinct description?  Consider providing a URL.
+    autofill: >
+      We could try examining the project website or README for an
+      early sentence of the form (This software|project name).
+      It's unclear how effective this would be; we could survey a number
+      of existing projects to see if there are common patterns.
 - interact:
     category: MUST
     description: >
@@ -44,6 +49,10 @@
       and contribute to the software.
     met_placeholder: >
       (Optional) Where is this information?  Consider providing URL(s).
+    autofill: >
+      Look on the project website for words like "download|obtain",
+      "contribute|bug report|feedback|enhancement", and
+      "contribute|pull request|merge request".
 - contribution:
     category: MUST
     met_url_required: true
@@ -58,6 +67,10 @@
       pull requests, an issue tracker, or posts to a mailing list (which one?)
     met_placeholder: >
       (URL required) What is the process? What URL explains it?
+    autofill: >
+      Look on the project website for words like
+      "contribute|bug report|feedback|enhancement" and
+      "contribute|pull request|merge request".
 - contribution_criteria:
     category: SHOULD
     met_url_required: true
@@ -67,6 +80,8 @@
       (e.g., a reference to any required coding standard).},
     unmet_placeholder: >
       Why are the criteria so obvious that this information isn't needed?
+    autofill: >
+      Look for a CONTRIBUTING{,.md,.txt,.html} file.
 # OSS License
 - floss_license:
     category: MUST
@@ -120,6 +135,8 @@
       We could add running Ben Balter's gem
       [licensee](https://github.com/benbalter/licensee), this is the same
       library used by GitHub but we can then apply it outside of GitHub.
+      [Licensee issue #85](https://github.com/benbalter/licensee/issues/85)
+      proposes adding LICENSE.spdx support to licensee.
       See [&#8220;Open Source Licensing by the Numbers&#8221; by Ben Balter](https://speakerdeck.com/benbalter/open-source-licensing-by-the-numbers).
       We could also do more specialized analysis (e.g., looking for
       license information in various packaging formats) - this would
@@ -165,6 +182,11 @@
       The security documentation need not be long.
     met_placeholder: >
       (Optional) What URL(s) are the starting points to for documentation?
+    autofill: >
+      Look for the project web page,
+      or a direct links from it on the same site,
+      that includes words like "install(ation)?", "use|using",
+      and "security|secure".
 - documentation_interface:
     category: MUST
     description: >
@@ -173,6 +195,9 @@
     details: >
       The project MAY use hypertext links to
       non-project material as documentation.
+    autofill: >
+      Look for a "docs" or "doc" directory, or the main site, with
+      .txt, .html, .md, .tex extension and uses the word "interface".
 # Other
 - discussion:
     category: MUST
@@ -209,11 +234,17 @@
       The project MAY use private (non-public) branches in specific
       cases while the change is not publicly released (e.g., for fixing
       a vulnerability before it is revealed to the public).
+    autofill: >
+      We currently assume that being on GitHub is enough.
+      Again, consider supporting other forges.
 - repo_track:
     category: MUST
     description: >
       The source repository MUST track what changes were made, who made
       the changes, and when the changes were made.
+    autofill: >
+      If it uses git, subversion (svn), mercurial (hg), or even CVS
+      this would normally be met.
 - repo_interim:
     category: MUST
     description: >
@@ -226,6 +257,9 @@
       (e.g., ones that fix specific non-public security vulnerabilities,
       may never be publicly released, or include material that cannot
       be legally posted and are not in the final release).
+    autofill: >
+      Consider checking if there are many versions.  If versions are
+      only posted once every 3+ months, there's probably a problem.
 - repo_distributed:
     category: SUGGESTED
     description: >
@@ -235,12 +269,17 @@
       Git is not specifically required and projects
       can use centralized version control software
       (such as subversion) with justification.
+    autofill: >
+      Look for git, subversion (svn), and mercurial (hg).
 # Unique version numbering
 - version_unique:
     category: MUST
     description: >
       The project MUST have a unique version number for each release intended
       to be used by users.
+    autofill: >
+      Look for downloads with version numbers in the filename, or
+      version tags in a git repo.
 - version_semver:
     category: SUGGESTED
     description: >
@@ -252,6 +291,9 @@
       unique, but note that these can cause problems for users as they
       may not be able to determine whether or not they're up-to-date.
     met_suppress: true
+    autofill: >
+      Look for git tags (at least on GitHub) that have version format, e.g.,
+      v?[0-9]+\.[0-9]+\.[0-9]+.*   The prefixed 'v' is sometimes used in tags.
 - version_tags:
     category: SUGGESTED
     description: >
@@ -259,6 +301,10 @@
       version control system.
       For example, it is SUGGESTED that those using git identify each release
       using git tags.
+    autofill: >
+      Again,
+      look for git tags (at least on GitHub) that have version format, e.g.,
+      v?[0-9]+\.[0-9]+\.[0-9]+.*   The prefixed 'v' is sometimes used in tags.
 # Release notes
 - release_notes:
     category: MUST
@@ -282,11 +328,22 @@
       Release notes are important because they help users decide whether
       or not they will want to update, and what the impact would be (e.g.,
       if the new release fixes vulnerabilities).
+    autofill: >
+      Look for version-controlled files named NEWS, CHANGELOG, or ChangeLog
+      (optionally with an extension .txt, .md, or .html).
+      Also check to see if it uses a GitHub Releases workflow.
 - release_notes_vulns:
     category: MUST
     description: >
       The release notes MUST identify every publicly known vulnerability
       that is fixed in each new release.
+    autofill: >
+      Examine the release notes (per above) to see if they include
+      CVE identifiers.  Also,
+      use a vulnerability database such as the
+      National Vulnerability Database (NVD) to try to identify
+      publicly known vulnerabilities in this software, and see if all of
+      them are mentioned in the release notes.
 #
 # REPORTING
 #
@@ -297,27 +354,49 @@
       The project MUST provide a process for users to submit bug reports
       (e.g., using an issue tracker or a mailing list).
     met_url_required: true
+    autofill: >
+      On GitHub we presume that at least issue trackers can be used.
+      Search CONTRIBUTING (if it exists) for a phrase like "bug reports".
 - report_tracker:
     category: SHOULD
     description: >
       The project SHOULD use an issue tracker for tracking individual issues.
     unmet_placeholder: Why is there no issue tracker?
+    autofill: >
+      On GitHub we presume that at least issue trackers can be used.
+      Search CONTRIBUTING (if it exists) for a phrase like "issue tracker".
 - report_responses:
     category: MUST
     description: >
       The project MUST acknowledge a majority of bug reports submitted in
       the last 2-12 months (inclusive); the response need not include a fix.
+    autofill: >
+      Examine issue tracker, and see what is marked as a "bug".
+      Exclude the top contributor(s) as reported by the repo changes.
+      Then examine the responses for the rest.
+      Measuring "top contributors" is tricky; one potential rule is
+      those who contribute more than 10% of the system, or, when you
+      sort people by their contributions, the ones who cumulatively wrote
+      2/3s of the system.  However, these measures may be difficult to obtain
+      in a short time - perhaps just exclude anyone listed in AUTHORS or
+      CREDITS, or someone listed in the last X commits?
 - enhancement_responses:
     category: SHOULD
     description: >
       The project SHOULD respond to most enhancement requests in the last
       2-12 months (inclusive). The project MAY choose not to respond.
+    autofill: >
+      Examine issue tracker, and see what is marked as an "enhancement".
+      Exclude the top contributor(s) as reported by the repo changes.
+      Then examine the responses for the rest.
 - report_archive:
     category: MUST
     met_url_required: true
     description: >
       The project MUST have a publicly available archive for reports and
       responses for later searching.
+    autofill: >
+      If on GitHub, Savannah, SourceForge, GitLab, this is probably fine.
 # Vulnerability report process
 - vulnerability_report_process:
     category: MUST
@@ -329,6 +408,10 @@
       E.g., a clearly designated mailing address on
       https://PROJECTSITE/security, often security@SOMEWHERE.
       This MAY be the same as its bug reporting process.
+    autofill: >
+      Look for phrase like "vulnerability reporting" or
+      "how to report vulnerabilities" in various documents
+      like README, CONTRIBUTING, or a doc/* file.
 - vulnerability_report_private:
     category: MUST
     na_allowed: true
@@ -341,11 +424,26 @@
       or an email encrypted using OpenPGP.
       If private vulnerability reports are not supported this criterion is
       automatically met.
+    autofill: >
+      Look for phrase like "private vulnerability reporting" or
+      "how to report private vulnerabilities" in various documents
+      like README, CONTRIBUTING, or a doc/* file, and *also*
+      look for an OpenPGP key to use for encrypting the information.
+      Sadly, while Bugzilla easily supports this,
+      GitHub doesn't currently support this in its issue tracker, see
+      https://github.com/isaacs/github/issues/37
 - vulnerability_report_response:
     category: MUST
     description: >
       The project's initial response time for any vulnerability report received
       in the last 6 months MUST be less than or equal to 14 days.
+    autofill: >
+      If GitHub is used, and the issue tracker has something marked
+      "security" or "vulnerability", measure the appropriate times.
+      GitHub doesn't support private reports, though, so a lot of people
+      won't use this.
+      If Bugzilla is used, grab the information publicly available and
+      track this.
 #
 # QUALITY
 #
@@ -365,6 +463,8 @@
       able to easily contribute and many security analysis tools will be
       ineffective. Criteria for a working build system are not applicable
       if there is no need to build anything for use.
+    autofill: >
+      See build_common_tools.
 - build_common_tools:
     category: SUGGESTED
     na_allowed: true
@@ -372,10 +472,26 @@
       It is SUGGESTED that common tools be used for building the software.
     details: >
       For example, Maven, Ant, cmake, the autotools, make, or rake.
+    autofill: >
+      Look for files that suggest the use of a common build systems, e.g.:
+      the autotools (configure.ac, makefile.am),
+      traditional make (Makefile, makefile),
+      cmake, rake, ant, maven, etc.
+      See http://www.dwheeler.com/essays/releasing-floss-software.html
 - build_floss_tools:
     category: SHOULD
     na_allowed: true
     description: The project SHOULD be buildable using only FLOSS tools.
+    autofill: >
+      If it's packaged in a Linux distribution repo that is FLOSS-only,
+      then this is met.  That includes official Debian distribution
+      (but not contrib or non-free) or Fedora's official distribution.
+      If it's only source code file extensions that don't normally require
+      building (.py, .rb, etc.), then it is likely NA.
+      If the build_common_tools answers are themselves FLOSS, then this
+      is more likely to *also* be true.  The only *real* way to check this
+      is to install and build on a system that only has FLOSS, and we
+      won't have the time to do that ourselves.
 # Automated test suite
 - test:
     category: MUST

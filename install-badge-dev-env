@@ -202,13 +202,15 @@ if [ "$MYINSTALL_RBENV" = 'yes' ] ; then
       fi
     done
   fi
-  if [ -n "$f" ] ; then
-    if ! printf '%s' "$PATH" | grep '\.rbenv/bin' > /dev/null ; then
-      echo "Modifying $f to add rbenv setup."
+  if [ -e "$f" ] ; then
+    if ! grep "PATH=.*\.rbenv/bin" "$f" > /dev/null ; then
+      echo "Modifying $f to add rbenv setup. NOTE: Use this command:"
+      echo "  . $f"
+      echo "for the environment changes to take effect in current shell."
       # shellcheck disable=SC2016
-      echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> "$HOME/$f"
+      echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> "$f"
       # shellcheck disable=SC2016
-      echo 'eval "$(rbenv init -)"' >> "$HOME/$f"
+      echo 'eval "$(rbenv init -)"' >> "$f"
     fi
     rbenv_set=1
   fi

@@ -101,7 +101,7 @@ case "$manager" in
 esac
 echo "Will use the installer command '$installer'"
 
-# Now start adding packages. 
+# Now start adding packages.
 echo
 echo 'STAGE 2: Identifying and install system packages'
 
@@ -131,7 +131,7 @@ case "$manager" in
     # add_pkg autoconf bison build-essential libssl-dev libyaml-dev \
     #         libreadline6-dev zlib1g-dev libncurses5-dev libffi-dev \
     #         libgdbm3 libgdbm-dev
-    add_pkg rbenv ruby-build ;;
+    add_pkg ruby-build postgresql-server-dev-all cmake nodejs ;;
   yum|dnf)
     add_pkg gcc openssl-devel libyaml-devel libffi-devel readline-devel \
             zlib-devel gdbm-devel ncurses-devel ;;
@@ -152,6 +152,11 @@ if [ "$MYINSTALL_SYSTEM_INSTALL_PACKAGES" = 'yes' ] ; then
   echo "  ${MYINSTALL_SYSTEM_INSTALL_PREFIX} $installer $PACKAGES"
   # shellcheck disable=SC2086
   $MYINSTALL_SYSTEM_INSTALL_PREFIX $installer $PACKAGES
+  if [ "$manager" = 'apt-get' ] ; then
+    echo "  We will be replacing rbenv with v1.0.0 from GitHub."
+    echo "  sudo $manager remove rbenv"
+    sudo "$manager" remove rbenv
+  fi
 else
   echo 'Skipping system package install.'
 fi
@@ -172,7 +177,12 @@ elif [ "$MYINSTALL_RBENV" != 'yes' ] ; then
   echo 'Skipping rbenv install.'
 else
   echo 'Downloading and installing rbenv from GitHub' >&2
-  git clone https://github.com/sstephenson/rbenv.git ~/.rbenv
+  git clone git://github.com/rbenv/rbenv.git ~/.rbenv
+  # Following performed in subshell so as not to change working directory.
+  (
+  cd ~/.rbenv
+  git checkout 3997a394d975136f468be196941492d3d0ef5143
+  )
 fi
 
 if [ "$MYINSTALL_RBENV" = 'yes' ] ; then
@@ -192,13 +202,15 @@ if [ "$MYINSTALL_RBENV" = 'yes' ] ; then
       fi
     done
   fi
-  if [ -n "$f" ] ; then
-    if ! printf '%s' "$PATH" | grep '\.rbenv/bin' > /dev/null ; then
-      echo "Modifying $f to add rbenv setup."
+  if [ -e "$f" ] ; then
+    if ! grep "PATH=.*\.rbenv/bin" "$f" > /dev/null ; then
+      echo "Modifying $f to add rbenv setup. NOTE: Use this command:"
+      echo "  . $f"
+      echo "for the environment changes to take effect in current shell."
       # shellcheck disable=SC2016
-      echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> "$HOME/$f"
+      echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> "$f"
       # shellcheck disable=SC2016
-      echo 'eval "$(rbenv init -)"' >> "$HOME/$f"
+      echo 'eval "$(rbenv init -)"' >> "$f"
     fi
     rbenv_set=1
   fi
@@ -238,6 +250,7 @@ if [ "$MYINSTALL_RBENV" = 'yes' ] && is_command rbenv ; then
   echo "Using rbenv to locally install ruby version ${ruby_version}"
   rbenv install --skip-existing "$ruby_version"
   rbenv local "$ruby_version" # In this directory AND BELOW, use this version.
+  eval "$(rbenv init -)"
 else
   echo 'Skipped installing fixed version of ruby - no rbenv'
 fi

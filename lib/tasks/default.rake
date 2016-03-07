@@ -7,7 +7,8 @@ task(:default).clear.enhance %w(
   markdownlint
   rails_best_practices
   brakeman
-  license_check
+  license_okay
+  license_finder_report.html
   whitespace_check
   yaml_syntax_check
 )
@@ -82,11 +83,17 @@ task :load_self_json do
   File.write('doc/self.json', pretty_contents)
 end
 
+# We use a file here because we do NOT want to run this check if there's
+# no need.  We use the file 'license_okay' as a marker to record that we
+# HAVE run this program locally.
 desc 'Examine licenses of reused components; see license_finder docs.'
-task license_check:
-       ['license_finder_report.html', 'license_finder_summary.txt']
+file 'license_okay' => ['Gemfile.lock', 'doc/dependency_decisions.yml'] do
+  sh 'bundle exec license_finder && touch license_okay'
+end
 
-file 'license_finder_report.html' => 'Gemfile.lock' do
+desc 'Create license report'
+file 'license_finder_report.html' =>
+     ['Gemfile.lock', 'doc/dependency_decisions.yml'] do
   sh 'bundle exec license_finder report --format html ' \
      '> license_finder_report.html'
 end
@@ -94,11 +101,6 @@ end
 desc 'Check for trailing whitespace in latest proposed (git) patch.'
 task :whitespace_check do
   sh 'git diff --check'
-end
-
-file 'license_finder_summary.txt' => 'Gemfile.lock' do
-  # This will error-out if there's a license problem.
-  sh 'bundle exec license_finder | tee license_finder_summary.txt'
 end
 
 desc 'Check YAML syntax (except project.yml, which is not straight YAML)'

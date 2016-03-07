@@ -43,6 +43,13 @@ class UsersManipulateProjectTest < ActionDispatch::IntegrationTest
         all_name_id.add e['id']
       end
 
+      # Check that major sections/classes are included in the HTML
+      assert_select 'header'
+      assert_select '.navbar'
+      assert_select 'footer'
+      assert_select '.footer'
+      assert_select '.container'
+
       # This ensures that all rows are in containers - except that
       # this currently isn't true:
       # assert_select '#badge-progress' # Ensure we have progress bar area.

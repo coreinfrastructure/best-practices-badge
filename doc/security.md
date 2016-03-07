@@ -30,14 +30,13 @@ how we implement these requirements):
   the set of users, so we don't need to keep those confidential.
   We must not reveal any plaintext passwords used to authenticate users.
   This is primarily handled by only centrally storing passwords
-  once they are processed by bcrypt.
+  once they are processed by bcrypt (so passwords are *only* stored as
+  iterated salted cryptographic hashes).
   Passwords may also be stored in encrypted user cookies, but the
   decrypted passwords are not stored on the server's database,
   and users can choose whether or not to store passwords in encrypted cookies
   (using the "remember me" box implemented in commit e79decec67).
   There's no need to worry about covert channels.
-  We do not intend to reveal user passwords to the public, but even those
-  are not especially sensitive.
 - Integrity:
     - Data between the client and server must not be altered.
       We use https in the deployed system.
@@ -69,6 +68,8 @@ The application must not have any behaviors or features designed
 to allow authorized access, exposure of sensitive information, or allow
 bypass of security features or restrictions.
 In particular, it must not have backdoors that allow unauthorized control.
+We search for this, and since it is open source software, others can
+verify that the custom code does not include these problems.
 
 It is difficult to implement truly secure software.
 An additional problem for BadgeApp is that it not only must accept,
@@ -105,6 +106,8 @@ which makes entering nonsense data have much less value.
 We may in the future add support for groups (e.g., where the owner
 can designate other users who can edit that entry) and
 a way to 'validate' project entries for projects not on GitHub.
+We intend to add the ability for any GitHub user to edit badge data
+if the user can modify that GitHub project's data.
 
 ## Security in Design
 

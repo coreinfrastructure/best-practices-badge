@@ -426,7 +426,7 @@ Someday we hope to add "have one of our badges" as a preference.
 
 #### License requirements for reused components
 
-All required reused software *must* be open source software (OSS).
+All *required* reused software *must* be open source software (OSS).
 It's okay to *optionally* use proprietary software and add
 portability fixes.
 We use 'license_finder' to help ensure that we're using OSS legally.
@@ -446,7 +446,7 @@ GNU General Public License version 3.0 ("or later" or not)
 
 We can use Apache License 2.0 (Apache-2.0)
 and GPL-2.0 exactly (GNU GPL version 2.0 only),
-but the Apache-2.0 and GPL-2.0 only have potential compatibility issues.
+but Apache-2.0 and GPL-2.0 (only) have potential compatibility issues.
 First check if that Apache-2.0 and GPL-2.0 only components are
 in separate executables (if so, no problem).
 Most software licensed using the GPL version 2.0 is actually
@@ -455,6 +455,13 @@ compatible with the Apache 2.0 license, so this is not a common problem.
 For more on license decisions see doc/dependency_decisions.yml;
 you can also run 'rake' and see the generated report
 license_finder_report.html.
+Once you've checked, you can approve a library and its license with the
+this command (this quickly modifies doc/dependency_decisions.yml;
+you can edit the file as well):
+
+~~~~
+license_finder approval add --who=WHO --why=WHY GEM-NAME
+~~~~
 
 ### Updating reused components
 

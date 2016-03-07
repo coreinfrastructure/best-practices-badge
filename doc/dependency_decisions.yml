@@ -27,13 +27,11 @@
   - term-ansicolor
   - :who: David A. Wheeler
     :why: GPL-2.0 only, but only used in separate Coveralls executable, so there's
-      no issue with Apache-2.0 being combined into a single executable
-      (those libraries are in other executables). The old Ruby license
-      expressly permits choosing GPL-2.0 as an option, and the newer
-      Ruby license permits BSD-2-Clause (which is GPL-compatible),
-      so no possible issue there.  The code is written in Ruby, but
-      this means it is considered *data* to an old Ruby interpreter,
-      so still no issue.
+      no issue with Apache-2.0 being combined into a single executable (those libraries
+      are in other executables). The old Ruby license expressly permits choosing GPL-2.0
+      as an option, and the newer Ruby license permits BSD-2-Clause (which is GPL-compatible),
+      so no possible issue there.  The code is written in Ruby, but this means it
+      is considered *data* to an old Ruby interpreter, so still no issue.
     :when: 2015-12-17 15:53:23.499258275 Z
 - - :approve
   - pg
@@ -49,13 +47,10 @@
   - xml-simple
   - &3
     :who: David A. Wheeler
-    :why: Actual license is '(BSD-2-Clause OR Ruby)';
-          file https://github.com/maik/xml-simple/blob/master/README.md
-          says It is free software, and may be redistributed under the
-          terms specified in the COPYING file of the
-          current Ruby distribution. This would
-          be https://www.ruby-lang.org/en/about/license.txt - and this is now
-          (BSD-2-Clause OR Ruby), which has no issues.
+    :why: Actual license is '(BSD-2-Clause OR Ruby)'; file https://github.com/maik/xml-simple/blob/master/README.md
+      says It is free software, and may be redistributed under the terms specified
+      in the COPYING file of the current Ruby distribution. This would be https://www.ruby-lang.org/en/about/license.txt
+      - and this is now (BSD-2-Clause OR Ruby), which has no issues.
     :when: 2015-12-17 16:12:01.024528531 Z
 - - :approve
   - "(BSD-2-Clause OR Ruby)"
@@ -154,49 +149,59 @@
 - - :approve
   - launchy
   - :who: David A. Wheeler
-    :why: >
-      ISC license. Known OSS license (basically 2-clause BSD). See
-      https://github.com/copiousfreetime/launchy/blob/master/LICENSE
+    :why: 'ISC license. Known OSS license (basically 2-clause BSD). See https://github.com/copiousfreetime/launchy/blob/master/LICENSE
+
+'
     :when: 2015-12-17 17:09:18.274813788 Z
 - - :approve
   - curb
   - :who: David A. Wheeler
-    :why: >
-      Actual license is Ruby license, known OSS license.  See
-      <https://github.com/taf2/curb/blob/master/LICENSE>
+    :why: 'Actual license is Ruby license, known OSS license.  See <https://github.com/taf2/curb/blob/master/LICENSE>
+
+'
     :when: 2015-12-17 16:02:10.446729059 Z
 - - :approve
   - curb-fu
   - :who: David A. Wheeler
-    :why: >
-      Actual license is Ruby license, known OSS license. See
-      <http://www.rubydoc.info/gems/curb-fu/0.6.2>
+    :why: 'Actual license is Ruby license, known OSS license. See <http://www.rubydoc.info/gems/curb-fu/0.6.2>
+
+'
     :when: 2015-12-17 16:02:10.446729059 Z
 - - :approve
   - mixlib-cli
   - :who: David A. Wheeler
-    :why: >
-      Apache 2.0 okay as long as GPL-2.0 only does not conflict,
-      and no conflicts identified.
+    :why: 'Apache 2.0 okay as long as GPL-2.0 only does not conflict, and no conflicts
+      identified.
+
+'
     :when: 2015-12-17 17:13:57.316335083 Z
 - - :approve
   - addressable
   - :who: David A. Wheeler
-    :why: >
-      Apache 2.0 okay as long as GPL-2.0 only does not conflict,
-      and no conflicts identified.
+    :why: 'Apache 2.0 okay as long as GPL-2.0 only does not conflict, and no conflicts
+      identified.
+
+'
     :when: 2015-12-17 17:14:19.144833431 Z
 - - :approve
   - mixlib-config
   - :who: David A. Wheeler
-    :why: >
-      Apache 2.0 okay as long as GPL-2.0 only does not conflict,
-      and no conflicts identified.
+    :why: 'Apache 2.0 okay as long as GPL-2.0 only does not conflict, and no conflicts
+      identified.
+
+'
     :when: 2015-12-17 17:14:33.457195760 Z
 - - :approve
   - thread_safe
   - :who: David A. Wheeler
-    :why: >
-      Apache 2.0 okay as long as GPL-2.0 only does not conflict,
-      and no conflicts identified.
+    :why: 'Apache 2.0 okay as long as GPL-2.0 only does not conflict, and no conflicts
+      identified.
+
+'
     :when: 2015-12-17 17:14:44.331125510 Z
+- - :approve
+  - secure_headers
+  - :who: David A. Wheeler
+    :why: Apache 2.0 okay as long as GPL-2.0 only does not conflict,
+      and no conflicts identified
+    :when: 2016-03-07 16:37:10.600203350 Z

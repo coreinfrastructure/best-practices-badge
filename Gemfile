@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby '2.3.0'
+ruby File.open('.ruby-version', 'rb') { |f| f.read.chomp }
 
 gem 'autosize-rails', '1.18.17' # Improve HTML textareas
 gem 'bcrypt', '3.1.10' # Security - for salted hashed interated passwords

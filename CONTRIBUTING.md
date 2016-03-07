@@ -499,8 +499,7 @@ make the update work.
 
 Ruby itself can be updated.  Use 'cd' to go the top directory of this project,
 use 'git pull' to ensure this branch is up-to-date,
-edit 'Gemfile' to edit the "ruby ..." line so it has the new version number
-(if it's not already different), then run:
+and then do the following:
 
 ~~~~sh
 (cd $HOME/.rbenv/plugins/ruby-build && git pull) # Update ruby-build list
@@ -512,13 +511,18 @@ bundle install                                   # Reinstall gems
 rbenv rehash                                     # Update rbenv commands
 ~~~~
 
+The "rbenv local" command changes the contents of the tracked file
+"$HOME/.ruby-version".  Be sure to run "git commit -a" and "git push"
+after doing this.  The file Gemfile declares that the ruby version
+used is whatever is in ".ruby-version".
+
 For more details about updating Ruby versions with rbenv, see
 <https://github.com/rbenv/ruby-build> and
 <http://dan.carley.co/blog/2012/02/07/rbenv-and-bundler/>.
 Note that 'rbenv install 2.3.0' is equivalent to the longer
 <tt>ruby-build 2.3.0 $HOME/.rbenv/versions/2.3.0</tt>.
 
-If you update ruby but don't update the parser gem
+If you update Ruby but don't update the parser gem
 (e.g., a new version may not be available yet), you'll get a number
 of warnings from the static analysis tools that we run via rake.
 Where possible, consider updating the parser gem as well.

@@ -108,6 +108,13 @@ a way to 'validate' project entries for projects not on GitHub.
 
 ## Security in Design
 
+We emphasize security in design by using a simple design,
+applying secure design principles,
+limiting memory-unsafe language use, and
+increasing availability through scaleability.
+
+### Simple design
+
 This web application has a simple design.
 It is a standard Ruby on Rails design with models, views, and controllers.
 In production it is accessed via a web server (Puma) and
@@ -138,11 +145,13 @@ and analyze that data; this project data is also untrusted
 (in particular, filenames, file contents, issue tracker information and
 contents, etc., are all untrusted).
 
+### Secure design principles
+
 Here are a number of secure design principles,
 including the 8 principles from
 [Saltzer and Schroeder](http://web.mit.edu/Saltzer/www/publications/protection/),
 showing that we apply many secure design principles including
-all of the ones from S and S:
+all of the ones from Saltzer and Schroeder:
 
 - Economy of mechanism (keep the design as simple and small as practical,
   e.g., by adopting sweeping simplifications):
@@ -231,6 +240,8 @@ all of the ones from S and S:
   application is just looking for the presence or absence of certain
   data patterns, and never executes data from the project.
 
+### Memory-safe languages
+
 All of the custom code is written in memory-safe languages
 (Ruby and Javascript), so the vulnerabilities of memory-unsafe
 languages (such as C and C++) cannot occur in the custom code.
@@ -241,6 +252,8 @@ do have C/C++, but these are widely-used components where we have
 good reason to believe that developers are directly working to mitigate
 the problems from memory-unsafe languages.
 See the section below on supply chain (reuse) for more.
+
+### Availability through scaleability
 
 Availability is, as always, especially challenging.
 Our primary appraoch is to ensure that the design scales.
@@ -269,21 +282,21 @@ To reduce the risk of security vulnerabilities in implementation we
 have focused on countering the
 [OWASP Top 10 (2013)](https://www.owasp.org/index.php/Top_10_2013-Top_10),
 apply the
-[Ruby on Rails Security Guide](http://guides.rubyonrails.org/security.html),
-and have taken steps to harden the application.
-Most vulnerabilities are caused by failing to counter common weaknesses
-(such as those listed in the OWASP top 10), so we can be maximally
-effective by focusing on common weaknesses and applying generally-accepted
-hardening steps for our environment.
+[Ruby on Rails Security Guide](http://guides.rubyonrails.org/security.html)
+to configure the software correctly,
+and we have also taken steps to harden the application.
 Below is how we've done each, in turn.
+
+### Countering OWASP top 10
 
 The
 [OWASP Top 10 (2013)](https://www.owasp.org/index.php/Top_10_2013-Top_10)
 ([details](https://www.owasp.org/index.php/Category:OWASP_Top_Ten_Project))
 represents "a broad consensus about what the most
 critical web application security flaws are."
-Here are these items (we focus on them so we address all of the
-most critical and common flaws),
+We concentrate on countering them; by focusing on them,
+we address all of the most critical and common flaws.
+Here are the OWASP top 10
 and how we attempt to reduce their risks in BadgeApp.
 
 1. Injection.
@@ -350,8 +363,15 @@ and how we attempt to reduce their risks in BadgeApp.
 10. Unvalidated Redirects and Forwards.
    Redirects and forwards are not used significantly, and they are validated.
 
-We also work to apply the
-[Ruby on Rails Security Guide](http://guides.rubyonrails.org/security.html).
+### Ruby on Rails Security Guide
+
+This application uses Ruby on Rails.
+The Ruby on Rails developers provide a
+[Ruby on Rails Security Guide](http://guides.rubyonrails.org/security.html),
+which identifies what they believe are the most important areas to
+check for securing such applications.
+Since this is focused on the infrastructure we use, we think this is
+the most important guide for us to focus on.
 Here are comments on how we apply the guide, per its chapters
 as of 2015-12-14:
 
@@ -460,7 +480,13 @@ as of 2015-12-14:
    The default security HTTP headers are used, which help counter some attacks.
    Future versions may harden the headers further.
 
-In production "config.force_ssl" to set to true.
+### Hardening
+
+We also use various mechanisms to harden the system against attack;
+these attempt to thwart or slow attack even if the system has a vulnerability.
+We use the secure_headers gem (developed by Twitter) to enable
+a number of HTTP headers for hardening.
+In addition, in production "config.force_ssl" to set to true.
 This enables a number of hardening mechanisms in Rails, including
 HTTP Strict Transport Security (HSTS),
 TLS redirection, and secure cookies.
@@ -471,9 +497,7 @@ for more about the impact of force_ssl.
 ## Security in Verification
 
 When software is modified, it is reviewed by the
-'rake' process, which performs a number of checks and tests,
-including static source code analysis using brakeman (which focuses
-on finding security issues in Ruby on Rails applications).
+'rake' process, which performs a number of checks and tests.
 Modifications integrated into the master branch
 are further automatically checked.
 See [CONTRIBUTING.md](../CONTRIBUTING.md) for more information;
@@ -489,6 +513,10 @@ These style tools help us avoid more problematic constructs (in some cases
 avoiding defects that might lead to vulnerabilities), and
 also make the code easier to review
 (by both humans and other programs).
+
+The 'rake' process also uses brakeman,
+a static source code analysis that focuses
+on finding security issues in Ruby on Rails applications.
 
 The software has a strong test suite, with over 90% statement coverage; this
 makes it easier to update components (e.g., if a third-party component
@@ -513,9 +541,18 @@ In particular, we prefer the use of popular components (where problems
 are more likely to be identified and addressed) and common FLOSS licenses.
 These steps reduce the risk of malicious components
 (e.g., malicious gems).
+
 We also have a process for detecting when the components we use
 have known vulnerabilities (using bundle-audit)
 or are out-of-date.
+This check is run by the default 'rake' process, so once a vulnerability
+is found in a gem we use and is added to the public database, we
+are notified that we need to update it.
+The list of libraries used (transitively) is managed by bundler, so
+updating libraries or sets of libraries can be done quickly.
+As noted earlier, our strong automated test suite makes it easy to test this
+updated set, so we can rapidly update libraries, test the result, and
+deploy it.
 
 We counter man-in-the-middle (MITM) attacks when downloading gems
 because the Gemfile configuration uses an HTTPS source to the

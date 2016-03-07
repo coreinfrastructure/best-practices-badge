@@ -661,15 +661,19 @@ by the delivered project's software.
   identify some dynamic analysis tools.
   <sup>[<a href="#dynamic_analysis">dynamic_analysis</a>]</sup>
 - <a name="dynamic_analysis_unsafe"></a>It is SUGGESTED that if the
-  software is application-level software written using a memory-unsafe language
-  (such as C or C++) then at least one tool to detect memory safety
-  problems will be used during at least one dynamic tool use.
-  Examples of memory safety tools include Address Sanitizer (ASAN) and
+  software is application-level software
+  written using a memory-unsafe language (e.g., C or C++) then at
+  least one dynamic tool (e.g., a fuzzer or web application scanner)
+  be routinely used with a mechanism to detect memory safety problems
+  such as buffer overwrites.
+  Examples of mechanisms to detect memory safety problems
+  include Address Sanitizer (ASAN) and
   [valgrind](http://valgrind.org/).
+  Widespread assertions would also work.
   If the software is not application-level,
-   or is not in a memory-unsafe language,
-   then this criterion is automatically met.
-   <sup>[<a href="#dynamic_analysis_unsafe">dynamic_analysis_unsafe</a>]</sup>
+  or is not in a memory-unsafe language, then this criterion is
+  automatically met.
+  <sup>[<a href="#dynamic_analysis_unsafe">dynamic_analysis_unsafe</a>]</sup>
 - <a name="dynamic_analysis_enable_assertions"></a>It is SUGGESTED that
   the software include many run-time assertions that are
   checked during dynamic analysis.

@@ -1,4 +1,4 @@
-<div class="jumbotron">
+<div class="center">
 
  <% provide(:title, @user.name) %>
  <div class="row">
@@ -20,6 +20,7 @@
          <th>Description</th>
          <th>Website</th>
          <th>License</th>
+         <th>%Achieved</th>
          <th>Badge</th>
        </tr>
      </thead>
@@ -40,6 +41,7 @@
              <% end %>
            </td>
            <td><%= project.license %></td>
+           <td><%= Project.badge_percentage(project) %>%</td>
            <td><%= link_to "<img src='/projects/#{project.id}/badge'>".html_safe,
                            project %></td>
          </tr>

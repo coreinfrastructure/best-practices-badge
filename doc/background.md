@@ -613,6 +613,14 @@ practitioners can use to build security into software in every phase of
 its development."
 See <https://buildsecurityin.us-cert.gov/>.
 
+### Open Group O-TTPS
+
+Open Group has developed the
+["Open Trusted Technology Provider Standard - Mitigating Maliciously Tainted and Counterfeit Products (O-TTPS)"](https://www2.opengroup.org/ogsys/catalog/c139).
+This has been approved
+as an ISO/IEC International Standard (ISO/IEC 20243:2015).
+There is also an [O-TTPS Accreditation Program](http://www.opengroup.org/accreditation/o-ttps).
+
 ### OWASP CLASP
 
 CLASP (Comprehensive, Lightweight Application Security Process)

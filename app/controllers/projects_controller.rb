@@ -162,13 +162,10 @@ class ProjectsController < ApplicationController
   end
 
   def authorized
-    if !current_user
-      redirect_to root_url
-    elsif current_user.admin?
+    if can_make_changes?
       true
     else
-      @project = current_user.projects.find_by(id: params[:id])
-      redirect_to root_url if @project.nil?
+      redirect_to root_url
     end
   end
 end

@@ -621,6 +621,13 @@ This has been approved
 as an ISO/IEC International Standard (ISO/IEC 20243:2015).
 There is also an [O-TTPS Accreditation Program](http://www.opengroup.org/accreditation/o-ttps).
 
+
+### UL Cybersecurity Assurance Program (CAP)
+
+UL (formerly Underwriters Laboratories) is developing a
+Cybersecurity Assurance Program (CAP).
+[Codenomicon has a video about CAP](http://www.codenomicon.com/resources/video/2015/08/04/codenomiconusa2015-UL-cybersecurity-assurance-program-video.html).
+
 ### OWASP CLASP
 
 CLASP (Comprehensive, Lightweight Application Security Process)

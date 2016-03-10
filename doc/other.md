@@ -10,7 +10,7 @@ We are currently leaning towards using the silver/gold/platinum naming system,
 which is similar to the
 [LEED certification naming system of certified, silver, gold, platinum](http://www.usgbc.org/certification) and how the
 [Linux Foundation ranks membership (silver, gold, platinum)](http://www.linuxfoundation.org/about/members)
-An alternative is the the Olympic system naming (bronze, silver, gold).
+An alternative is the Olympic system naming (bronze, silver, gold).
 
 To help organize these potential criteria, they are currently grouped
 in terms of a potential future silver, potential future gold, and
@@ -82,7 +82,7 @@ Potential silver criteria
         (typically by pointing to something).
         There are a number of coding standards that can be recommended
         for specific languages.
-        Widely-used coding standards that include ways to reduce the likelihood
+        Widely used coding standards that include ways to reduce the likelihood
         of defects (including vulnerabilities) might be especially helpful.
         Projects can create their own coding standard by referring to
         an existing one and then adding their own additions or exceptions.

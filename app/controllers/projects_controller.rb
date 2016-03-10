@@ -162,10 +162,7 @@ class ProjectsController < ApplicationController
   end
 
   def authorized
-    if can_make_changes?
-      true
-    else
-      redirect_to root_url
-    end
+    return true if can_make_changes?
+    redirect_to root_url
   end
 end

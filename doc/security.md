@@ -90,7 +90,7 @@ Every user has an account, either a 'local' account or an external
 system account (currently we support GitHub as an external account).
 Anyone can create an account.
 A user with role='admin' is an administator;
-only a very few users are administrators.
+few users are administrators.
 A user can create as many project entries as desired.
 Each project entry gets a new unique project id and is
 owned by the user who created the project entry.
@@ -203,7 +203,7 @@ all of the ones from Saltzer and Schroeder:
   interface, so it should be acceptable.
 - Limited attack surface (the attack surface, the set of the different
   points where an attacker can try to enter or extract data, should be limited):
-  The application has a very limited attack surface.
+  The application has a limited attack surface.
   As with all Ruby on Rails applications, all access must go through the
   router to the controllers; the controllers then check for access permission.
   There are few routes, and few controller methods are publicly accessible.
@@ -248,10 +248,10 @@ all of the ones from Saltzer and Schroeder:
 All of the custom code is written in memory-safe languages
 (Ruby and Javascript), so the vulnerabilities of memory-unsafe
 languages (such as C and C++) cannot occur in the custom code.
-This also applies to most of the code in the directly-depended libraries.
+This also applies to most of the code in the directly depended libraries.
 Some lower-level components (e.g., the operating system kernel,
 database management system, encryption library, and some of the Ruby gems)
-do have C/C++, but these are widely-used components where we have
+do have C/C++, but these are widely used components where we have
 good reason to believe that developers are directly working to mitigate
 the problems from memory-unsafe languages.
 See the section below on supply chain (reuse) for more.
@@ -270,7 +270,7 @@ processes), so we can quickly purchase additional computing resources
 to handle requests if needed.
 The system is currently deployed to Heroku, which imposes a hard
 time limit for each request; thus, if a request gets stuck
-(say during autofill by a malevolent actor who responds very slowly),
+(say during autofill by a malevolent actor who responds slowly),
 eventually the timeout will cause the response to stop and the
 system will become ready for another request.
 We plan to use a CDN (Fastly) to provide cached values of badges, which are
@@ -311,7 +311,7 @@ and how we attempt to reduce their risks in BadgeApp.
    The shell is not used to download or process file contents (e.g., from
    repositories), instead, various Ruby APIs acquire and process it directly.
 2. Broken Authentication and Session Management.
-   Sessions are created and destroyed through a very common
+   Sessions are created and destroyed through a common
    Rails mechanism, including an encrypted and signed cookie session key.
 3. Cross-Site Scripting (XSS).
    We use Rails' built-in XSS
@@ -320,7 +320,7 @@ and how we attempt to reduce their risks in BadgeApp.
    unless they are marked as safe.
    This greatly reduces the risk of mistakes leading to XSS vulnerabilities.
 4. Insecure Direct Object References.
-   The only supported direct object references are for publicly-available
+   The only supported direct object references are for publicly available
    objects (stylesheets, etc.).
    All other requests go through routers and controllers,
    which determine what may be accessed.
@@ -523,7 +523,7 @@ on finding security issues in Ruby on Rails applications.
 
 The software has a strong test suite, with over 90% statement coverage; this
 makes it easier to update components (e.g., if a third-party component
-has a publicly-disclosed vulnerability).
+has a publicly disclosed vulnerability).
 The test suite also makes it easier to make other fixes (e.g., to harden
 something) and have fairly high
 confidence that the change did not break functionality.

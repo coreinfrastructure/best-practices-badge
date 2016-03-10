@@ -29,7 +29,7 @@ review and discussion of the criteria;
 looking at other related information (documented here) is simply
 a supplement.
 
-In some cases this material is very rough.
+In some cases this material is rough.
 We believed it was more important to capture background information,
 even if it is rough,
 and then clean it up over time if that cleanup is important.
@@ -136,7 +136,7 @@ documentation. Examples of causes for fail points are:
 -   Licensing: Your code does not have per-file licensing \[ +10 points
     of FAIL \].
 
-Obviously a high score does not always doom a project to fail, nor does
+A high score does not always doom a project to fail, nor does
 a low score guarantee success.
 However, it can provide
 a simple metric to point out potential issues in a FLOSS project.
@@ -155,7 +155,7 @@ to success and others to abandonment?&#8221; \[Schweik2012\]
 
 Schweik and English examined over 100,000 projects on SourceForge, using
 data from SourceForge and developer surveys, and using quantitative analysis
-instead of guesswork. They use a very simple project lifecycle model:
+instead of guesswork. They use a simple project lifecycle model:
 projects begin in initiation, and once the project has made its first
 software release, it switches to growth. They also categorized projects
 as success, abandonment, or indeterminate. Combining these produces six
@@ -164,7 +164,7 @@ categories of project: success initiation (SI); abandonment initiation
 initiation (II); and indeterminant growth (IG). Their operational
 definition of success initiation (SI) is oversimplified but easy to
 understand: an SI project has at least one release. Their operational
-definition for a success growth (SG) project is very generous: at least
+definition for a success growth (SG) project is generous: at least
 3 releases, at least 6 months between releases, and has more than 10
 downloads.
 
@@ -963,7 +963,7 @@ Further information can be included in following sentences.
 followed by the term
 (e.g., The Project MUST, The Software MAY , The ChangeLog SHOULD).
 4. If a criterion require an IF clause, consider including it at the
-very start of the criteria (e.g., IF *a* then the *object* MUST *do x,y,z*).
+start of the criteria (e.g., IF *a* then the *object* MUST *do x,y,z*).
 This is more controversial, because if the clause itself is long,
 the primary criteria might be obscured.
 5. RECOMMENDED criteria should begin with 'It is RECOMMENDED...'
@@ -1082,7 +1082,7 @@ for that portion of the kernel.
 The Linux kernel developers intentionally do not use an issue tracker
 (there is one, but it is not generally used); many
 key developers do not believe
-that issue trackers are helpful for the very large scale of their project.
+that issue trackers are helpful for the large scale of their project.
 
 The Linux kernel has a standard coding style (though not all of the
 code meets it).
@@ -1115,7 +1115,7 @@ as further discussed in
 Many major GNU/Linux distributions also include some additional
 certification systems to check a Linux kernel.
 That said, [Greg Kroah-Hartman](https://www.youtube.com/watch?feature=player_detailpage&v=L2SED6sewRw#t=867s)
-notes that it is very difficult to create true test suites for a kernel,
+notes that it is difficult to create true test suites for a kernel,
 so the Linux kernel strongly depends on community testing.
 
 A variety of static analysis tools are used to analyze the Linux kernel.
@@ -1389,7 +1389,7 @@ The
 <a href="http://www.360is.com/06-postfix.htm">Postfix approach
 for developing secure software</a>
 emphasizes using
-a very experienced team of just a few security conscious individuals,
+an experienced team of just a few security conscious individuals,
 writing it from scratch to be secure (and in particular resistant to
 buffer overflows), and developing an architecture that
 runs a set of daemons each performing a different set of tasks

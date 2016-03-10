@@ -102,7 +102,7 @@ For example, some editors (e.g., Atom) quietly delete them by default.
 
 ### We are proactive
 
-In general we try to be very proactive to detect and eliminate
+In general we try to be proactive to detect and eliminate
 mistakes and vulnerabilities as soon as possible,
 and to reduce their impact when they do happen.
 We use a defensive design and coding style to reduce the likelihood of mistakes,
@@ -404,7 +404,7 @@ Here are guidelines for adding Ruby gems:
   It is *not* acceptable to insert a dependency
   that *requires* proprietary software; making it portable so it *can* use
   some proprietary software is gratefully welcome.
-  Obviously, we also have to combine them legally in the way they are used.
+  We also have to combine them legally in the way they are used.
 
 If you add a Ruby gem, put its *fixed* version number in the Gemfile file,
 and please add a brief comment to explain what it is and/or why it's there.

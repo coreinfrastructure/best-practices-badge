@@ -621,6 +621,12 @@ This has been approved
 as an ISO/IEC International Standard (ISO/IEC 20243:2015).
 There is also an [O-TTPS Accreditation Program](http://www.opengroup.org/accreditation/o-ttps).
 
+### Critical Infrastructure Cyber Community Voluntary Program / Cyber Resilience Review
+
+The US CERT has a
+"Critical Infrastructure Cyber Community Voluntary Program" including a
+"Cyber Resilience Review".  More information is here:
+<https://www.us-cert.gov/ccubedvp>
 
 ### UL Cybersecurity Assurance Program (CAP)
 

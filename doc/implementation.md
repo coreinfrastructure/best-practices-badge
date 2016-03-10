@@ -24,7 +24,7 @@ The BadgeApp web application MUST:
    It may *run* on proprietary software; portability improvements welcome.
    It's also fine if it can use proprietary services, as long as it can
    *run* without them.
-3. Support users of modern widely-used web browsers, including
+3. Support users of modern widely used web browsers, including
    Chrome, Firefox, Safari, and Internet Explorer version 10 and up.
    We expect Internet Explorer pre-10 users will use a different browser.
 4. NOT require Javascript to be enabled on the web browser (some
@@ -55,7 +55,7 @@ See [CONTRIBUTING](../CONTRIBUTING.md) for more.
 
 The web application is itself OSS, and we intend for the
 web application to meet its own criteria.
-We have implemented it with Ruby on Rails; Rails is good for very
+We have implemented it with Ruby on Rails; Rails is good for
 simple web applications like this one.
 We are currently using Rails version 4.
 The production system stores the data in Postgres.
@@ -75,7 +75,7 @@ Some other key components we use are:
 
 ## Deployment
 
-We have three publicly-accessible tiers:
+We have three publicly accessible tiers:
 
 * master - an instance of the master branch
 * staging
@@ -338,9 +338,9 @@ To change the database contents of a production system,
 log into that system and use the SQL language to make changes.
 E.G., on Heroku, presuming that you have installed the heroku command,
 and configured it for the system you are controlling
-(including the the necessary keys),
+(including the necessary keys),
 you can pipe SQL commands to 'heroku pg:psql'.
-Obviously this only works if you've been given keys to control this.
+This only works if you've been given keys to control this.
 On Heroku we use PostgreSQL.
 Here are a few examples:
 

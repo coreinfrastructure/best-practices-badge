@@ -691,7 +691,7 @@
       cross-site scripting, missing authentication, and missing authorization.
       See the <a href="http://cwe.mitre.org/top25/">CWE/SANS top 25</a> or
       <a href="https://www.owasp.org/index.php/Category:OWASP_Top_Ten_Project">OWASP Top 10</a>
-      for commonly-used lists.
+      for commonly used lists.
     autofill: >
       We could try to search the documentation for evidence of phrases
       that suggest security knowledge, such as the phrases for common
@@ -812,7 +812,7 @@
       These hashes can be modified in transit.
     autofill: >
       Again, look for a download site using https.
-# Publicly-known Vulnerabilities fixed
+# Publicly known Vulnerabilities fixed
 - vulnerabilities_fixed_60_days:
     category: MUST
     description: >

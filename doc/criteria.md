@@ -39,7 +39,7 @@ specifically defining them, are inspired by a variety of sources.
 See the separate "[background](./background.md)" page for more information.
 
 This version of the criteria is *NOT* endorsed by anyone;
-we are releasing this very early version so that we can get feedback.
+we are releasing this early version so that we can get feedback.
 We expect that these practices and their detailed criteria will be updated,
 even after badges are released.
 Thus, criteria (and badges) probably will have a year identifier
@@ -53,7 +53,7 @@ There is also a
 [mailing list for general discussion](https://lists.coreinfrastructure.org/mailman/listinfo/cii-badges).
 
 Below are the current *draft* criteria, potential criteria,
-non-criteria, future plans, and where to get more information.
+non-criteria, plans, and where to get more information.
 The key words "MUST", "MUST NOT",
 "SHOULD", "SHOULD NOT", and "MAY"
 in this document are to be interpreted as described in
@@ -465,7 +465,7 @@ Note that:
   missing authentication, and missing authorization.
   See the [CWE/SANS top 25](http://cwe.mitre.org/top25/) or
   [OWASP Top 10](https://www.owasp.org/index.php/Category:OWASP_Top_Ten_Project)
-  for commonly-used lists.
+  for commonly used lists.
   <sup>[<a href="#know_common_errors">know_common_errors</a>]</sup>
 - A "primary developer" in a project is anyone who is familiar with
   the project's code base, is comfortable making changes to it, and is
@@ -556,7 +556,7 @@ by the delivered project's software.
    actually check the signature.
   <sup>[<a href="#delivery_mitm">delivery_mitm</a>]&#8224;</sup>
 
-*Publicly-known vulnerabilities fixed*
+*Publicly known vulnerabilities fixed*
 
 - <a name="vulnerabilities_fixed_60_days"></a>There MUST be no unpatched
   vulnerabilities of medium or high severity that have been *publicly* known

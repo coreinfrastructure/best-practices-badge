@@ -66,8 +66,8 @@ module SessionsHelper
     elsif current_user.admin?
       true
     elsif current_user.provider == 'github'
-      project = projects.find_by(id: project_id)
-      return false if project.repo_url.blank?
+      project = Project.find_by(id: project_id)
+      return false if project.repo_url?
       github_user_projects.include? project.repo_url
     else
       false

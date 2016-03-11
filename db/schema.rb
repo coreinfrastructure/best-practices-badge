@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160305194843) do
+ActiveRecord::Schema.define(version: 20160311164125) do
 
   create_table "projects", force: :cascade do |t|
     t.integer  "user_id"
@@ -158,6 +158,8 @@ ActiveRecord::Schema.define(version: 20160305194843) do
     t.text     "discussion_justification"
     t.string   "no_leaked_credentials_status",                         default: "?"
     t.text     "no_leaked_credentials_justification"
+    t.string   "english_status",                                       default: "?"
+    t.text     "english_justification"
   end
 
   add_index "projects", ["user_id", "created_at"], name: "index_projects_on_user_id_and_created_at"

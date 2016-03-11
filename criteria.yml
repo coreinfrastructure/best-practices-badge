@@ -224,6 +224,24 @@
       SourceForge, GitLab, and Savannah.
       We could also look for links from the project website that suggest
       the use of Bugzilla, Mantis, or Trac.
+- english:
+    category: SHOULD
+    description: >
+      The project SHOULD include documentation in English and be able
+      to accept bug reports and comments about code in English.
+    details: >
+      English is currently the <a
+      href="https://en.wikipedia.org/wiki/Lingua_franca">lingua franca</a>
+      of computer technology; supporting English increases the number
+      of different potential developers and reviewers worldwide.
+      A project can meet this criterion even if its core developers'
+      primary language is not English.
+    autofill: >
+      Look at project and/or repo page.  If it's in English,
+      then clearly the project can accept English.
+      We can use more general tools to detect the natural language,
+      or simple mechanisms like using dictionaries/spellcheckers to
+      see if it's mostly English.
 #
 # CHANGE CONTROL
 #

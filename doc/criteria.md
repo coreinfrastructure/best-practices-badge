@@ -210,6 +210,16 @@ Note that:
   archiving mechanism.
   Proprietary Javascript, while discouraged, is permitted.
   <sup>[<a href="#discussion">discussion</a>]</sup>
+- <a name="english"></a>The project SHOULD
+  include documentation in English and be able
+  to accept bug reports and comments about code in English.
+  English is currently the <a
+  href="https://en.wikipedia.org/wiki/Lingua_franca">lingua franca</a>
+  of computer technology; supporting English increases the number
+  of different potential developers and reviewers worldwide.
+  A project can meet this criterion even if its core developers'
+  primary language is not English.
+  <sup>[<a href="#english">english</a>]</sup>
 
 ### Change control
 

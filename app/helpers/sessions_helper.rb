@@ -40,13 +40,7 @@ module SessionsHelper
 
   def github_user_projects
     github = Github.new oauth_token: session[:user_token], auto_pagination: true
-    github.repos.list.map do |repo|
-      if repo.blank?
-        nil
-      else
-        repo.html_url
-      end
-    end.compact
+    github.repos.list.map(&:html_url).reject(&:blank?)
   end
 
   # Logs out the current user.
@@ -61,13 +55,13 @@ module SessionsHelper
     project_id = params[:id]
     if current_user.nil?
       false
-    elsif !current_user.projects.find_by(id: project_id).nil?
+    elsif current_user.projects.exists?(id: project_id)
       true
     elsif current_user.admin?
       true
     elsif current_user.provider == 'github'
       project = Project.find_by(id: project_id)
-      return false if project.repo_url?
+      return false unless project.repo_url?
       github_user_projects.include? project.repo_url
     else
       false

@@ -38,6 +38,17 @@ module SessionsHelper
     cookies.delete(:remember_token)
   end
 
+  def github_user_projects
+    github = Github.new oauth_token: session[:user_token], auto_pagination: true
+    github.repos.list.map do |repo|
+      if repo.blank?
+        nil
+      else
+        repo.html_url
+      end
+    end.compact
+  end
+
   # Logs out the current user.
   def log_out
     forget(current_user)
@@ -45,16 +56,24 @@ module SessionsHelper
     @current_user = nil
   end
 
+  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   def can_make_changes?
-    if current_user && current_user.admin?
+    project_id = params[:id]
+    if current_user.nil?
+      false
+    elsif !current_user.projects.find_by(id: project_id).nil?
       true
-    elsif logged_in?
-      project = current_user.projects.find_by(id: params[:id])
-      !project.nil?
+    elsif current_user.admin?
+      true
+    elsif current_user.provider == 'github'
+      project = projects.find_by(id: project_id)
+      return false if project.repo_url.blank?
+      github_user_projects.include? project.repo_url
     else
       false
     end
   end
+  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
   # Redirects to stored location (or to the default)
   def redirect_back_or(default)

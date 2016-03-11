@@ -29,7 +29,7 @@ class ProjectsControllerTest < ActionController::TestCase
         description: @project.description,
         license: @project.license,
         name: @project.name,
-        repo_url: @project.repo_url,
+        repo_url: 'https://www.example.org/code',
         project_homepage_url: @project.project_homepage_url
       }
     end

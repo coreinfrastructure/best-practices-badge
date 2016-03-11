@@ -43,7 +43,8 @@ class Project < ActiveRecord::Base
   # URL restrictions to counter tricks like http://ACCOUNT:PASSWORD@host...
   # and http://something/?arbitrary_parameters
 
-  validates :repo_url, url: true, length: { maximum: MAX_SHORT_STRING_LENGTH }
+  validates :repo_url, url: true, length: { maximum: MAX_SHORT_STRING_LENGTH },
+                       uniqueness: true
   validates :project_homepage_url,
             url: true,
             length: { maximum: MAX_SHORT_STRING_LENGTH }

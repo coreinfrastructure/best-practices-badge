@@ -7,7 +7,7 @@ one:
   description: Operating system for Pathfinder rover
   project_homepage_url: https://www.example.org
   license: MIT
-  repo_url: https://www.example.org/code
+  repo_url: https://www.example.org/code1
 
 # TODO: Generate list of status fields from central location.
 perfect_unjustified:
@@ -15,7 +15,7 @@ perfect_unjustified:
   name: Perfect project
   description: The perfect project
   project_homepage_url: https://www.example.org
-  repo_url: https://www.example.org/code
+  repo_url: https://www.example.org/code2
   license: MIT
 <% Project::ALL_CRITERIA_STATUS.each do |criterion_status| %>  <%= criterion_status %>: Met
 <% end %>
@@ -26,9 +26,8 @@ perfect:
   name: Perfect project
   description: The perfect project
   project_homepage_url: https://www.example.org
-  repo_url: https://www.example.org/code
+  repo_url: https://www.example.org/code3
   license: MIT
 <% Project::ALL_CRITERIA_STATUS.each do |criterion_status| %>  <%= criterion_status %>: Met
 <% end %><% Project::ALL_CRITERIA_JUSTIFICATION.each do |criterion_justification| %>  <%= criterion_justification %>: For more information see <https://www.example.org/>
 <% end %>
-

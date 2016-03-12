@@ -472,24 +472,36 @@ For stability we set fixed version numbers for Ruby and the Ruby gems.
 We use the bundler Ruby gem package management system (<http://bundler.io>);
 file 'Gemfile' lists direct gem dependencies; 'Gemfile.lock' lists them
 transitively.
-This means that we need to occasionally update our dependencies.
+In short, we have strong package management
+over the exact versions used for each gem, and we
+can easily update our dependencies.
+That's important, because transitively depend on over 150 gems.
 
-Two commands, included in the default 'rake' checking task,
-can help detect outdated components:
+The default 'rake' task includes the rake 'bundle_audit' task.
+This reports if a Ruby gem we use has a publicly known
+vulnerability listed in the National Vulnerability Database (NVD).
+Thus, simply running 'rake' will immediately warn you if there is a
+publicly known vulnerability in the version of a gem we use.
+Obviously, if there is a known vulnerability you *definitely* need
+to update that gem.
 
-- The 'bundle_audit' task reports if a Ruby gem we use has a known
-  vulnerability listed in the National Vulnerability Database (NVD).
-- The 'bundle outdated' command lists all outdated Ruby gems.
-
+To find all outdated gems, use the 'bundle outdated' command.
 Our continuous integration suite (linked to from the README) also uses
 [Gemnasium](https://gemnasium.com/linuxfoundation/cii-best-practices-badge)
-to identify all outdated dependencies.
+to identify all outdated dependencies, so you can also view its report
+to see what is outdated.
+Many of the gems named "action..." are part of rails, and thus, you should
+update rails to update them.
 
 Use 'bundle update GEM' to update a specific gem
 ('bundle update' will update all Ruby gems - that may be too much at once).
 You *must* run 'rake' after updating; this will run the regression tests,
 check the licenses (transitively, which is important because
 sometimes library updates add new dependencies), and so on.
+One of the main reasons we maintain a strong testsuite, and have
+a number of other automated checks, is so that we can quickly and
+confidently update gems.
+
 Updates should be handled as a separate commit from functional improvements.
 One exception: it's okay if the commit includes
 both a component update and the minimum set of code changes to

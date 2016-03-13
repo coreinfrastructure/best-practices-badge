@@ -79,6 +79,13 @@ then configure git to use that as a commit template.  For example:
 
     git config commit.template ~/cii-best-practices-badge/git-template
 
+It's not practical to fix old contributions in git, so if one is forgotten,
+do not try to fix them.  We presume that if someone sometimes used a DCO,
+a commit without a DCO is an accident and the DCO still applies.
+
+You generally should *not* use the "-m" option of git commit,
+because that doesn't let you enter "Signed-off-by".
+
 ### License (MIT)
 
 All (new) contributed material must be released
@@ -518,11 +525,8 @@ the 'rails' gem instead.  Once edited, run:
 bundle update && rake
 ~~~~
 
-If that works, use this to commit the change:
-
-~~~~
-git commit -a -m 'Update gem GEM_NAME'
-~~~~
+If that works commit the change with a git comment with summary form
+'Update gem GEM_NAME'.
 
 Updates sometimes fail.  In particular, sometimes one gem has been
 update but a related gem is temporarily incompatible.

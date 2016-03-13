@@ -14,7 +14,7 @@ gem 'jbuilder', '2.4.1'
 gem 'jquery-rails', '4.1.1' # Javascript jQuery library (for Rails)
 gem 'jquery-ui-rails', '5.0.5' # Javascript jQueryUI library (for Rails)
 gem 'redcarpet', '3.3.4' # Process markdown in form textareas (justifications)
-gem 'octokit', '4.1.1' # GitHub's official Ruby API
+gem 'octokit', '4.3.0' # GitHub's official Ruby API
 gem 'omniauth-github', '1.1.2' # Authentication to GitHub (get project info)
 gem 'paper_trail', '4.1.0' # Record previous versions of project data
 gem 'puma', '3.1.0' # Faster webserver; recommended by Heroku
@@ -35,13 +35,13 @@ group :development, :test do
   gem 'dotenv-rails', '2.1.0'
   gem 'license_finder'
   gem 'mdl', '0.2.1'
-  gem 'pronto', '0.5.3'
-  gem 'pronto-brakeman', '0.5.0'
-  gem 'pronto-rails_best_practices', '0.5.1'
-  gem 'pronto-rubocop', '0.5.3'
+  gem 'pronto', '0.6.0'
+  gem 'pronto-brakeman', '0.6.0'
+  gem 'pronto-rails_best_practices', '0.6.0'
+  gem 'pronto-rubocop', '0.6.1'
   gem 'pry-byebug', '3.3.0'
   gem 'quiet_assets', '1.1.0'
-  gem 'rubocop-rspec', '1.4.0'
+  # gem 'rubocop-rspec', '1.4.0'
   gem 'spring', '1.6.4'
   gem 'sqlite3', '1.3.11'
   gem 'vcr', '3.0.1' # Record network responses for later test reuse

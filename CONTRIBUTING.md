@@ -493,10 +493,64 @@ to see what is outdated.
 Many of the gems named "action..." are part of rails, and thus, you should
 update rails to update them.
 
-Use 'bundle update GEM' to update a specific gem
-('bundle update' will update all Ruby gems - that may be too much at once).
-You *must* run 'rake' after updating; this will run the regression tests,
-check the licenses (transitively, which is important because
+I recommend updating in stages (instead of all at once) since this
+makes it easier to debug problems (if any).  Here is a suggested order,
+though these are only suggestions.
+
+First, update gems that are only indirectly depended on.
+(These are gems listed in Gemfile.lock, but *not* listed in Gemfile.)
+If you happen to know that a particular gem is large,
+or has a higher risk of problems, or just want to be more methodical,
+you can update a specific gem using "bundle update GEM".
+(Ignore the gems named as "action...".)
+You can just run "bundle update" to update them all at once.
+Then run "rake" to make sure it works;
+and if it does, use "git commit -a" to commit that change.
+
+Next, edit the file Gemfile to update versions of gems depended on directly.
+It's best to do this one line at a time if you can, though in some
+cases it may be necessary to update several at the same time.
+If you see gems with names beginning with "active",
+those are gems in rails; update the Gemfile to change the version of
+the 'rails' gem instead.  Once edited, run:
+
+~~~~
+bundle update && rake
+~~~~
+
+If that works, use this to commit the change:
+
+~~~~
+git commit -a -m 'Update gem GEM_NAME'
+~~~~
+
+Updates sometimes fail.  In particular, sometimes one gem has been
+update but a related gem is temporarily incompatible.
+
+It's important to occasionally try to update.
+However, it's usually not possible to keep
+everything perfectly up-to-date, because
+different gems' specifications forbid it.
+It's normal to have some gems that are not the latest.
+The key is to replace gem versions that have security vulnerabilities,
+and to not get *too* far behind (if it's too far back it's
+harder to update).
+
+Historically the gems that cause trouble updating in this app are
+github_api, octokit, and the various "pronto" gems.
+
+If an update fails, you can use this to undo it:
+
+~~~~
+git checkout -- Gemfile Gemfile.lock
+bundle update
+~~~~
+
+You can learn more about "bundle update" by running
+"bundle help update".
+
+Again, you *must* run 'rake' after updating; this will run the
+regression tests, check the licenses (transitively, which is important because
 sometimes library updates add new dependencies), and so on.
 One of the main reasons we maintain a strong testsuite, and have
 a number of other automated checks, is so that we can quickly and

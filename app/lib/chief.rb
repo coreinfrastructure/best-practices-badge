@@ -49,12 +49,19 @@ class Chief
   end
 
   # Should we should update a project's value for 'key'?
+  # rubocop:disable Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
   def update_value?(project, key, changeset_data)
-    return false if changeset_data.blank?
-    return false unless changeset_data.member?(key)
-    !project.attribute_present?(key) || project[key].blank? ||
-      (project[key] == '?') || (changeset_data[:confidence] == 5)
+    if changeset_data.blank? || !changeset_data.member?(key)
+      false
+    elsif !project.attribute_present?(key) || project[key].blank?
+      true
+    elsif project[key] == '?'
+      true
+    else
+      changeset_data[:confidence].present? && changeset_data[:confidence] >= 4
+    end
   end
+  # rubocop:enable Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
 
   # Return the best estimates for fields, given project & current proposal.
   def compute_current(fields, project, current_proposal)

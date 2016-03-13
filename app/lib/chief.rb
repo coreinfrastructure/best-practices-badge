@@ -12,6 +12,11 @@
 require 'set'
 
 class Chief
+  # Confidence level (1..5) where automation result will *override*
+  # the status value provided by humans.
+  # If the confidence is lower than this, we'll only override status '?'.
+  CONFIDENCE_OVERRIDE = 4
+
   # rubocop:disable Style/ConditionalAssignment
   def initialize(project)
     @evidence = Evidence.new(project)
@@ -58,7 +63,8 @@ class Chief
     elsif project[key] == '?'
       true
     else
-      changeset_data[:confidence].present? && changeset_data[:confidence] >= 4
+      changeset_data[:confidence].present? &&
+        changeset_data[:confidence] >= CONFIDENCE_OVERRIDE
     end
   end
   # rubocop:enable Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity

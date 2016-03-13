@@ -11,7 +11,7 @@ gem 'faker', '1.6.3'
 gem 'fastly-rails', '0.4.1' # Use Fastly CDN
 gem 'github_api', '0.13.0'
 gem 'jbuilder', '2.4.1'
-gem 'jquery-rails', '4.1.0' # Javascript jQuery library (for Rails)
+gem 'jquery-rails', '4.1.1' # Javascript jQuery library (for Rails)
 gem 'jquery-ui-rails', '5.0.5' # Javascript jQueryUI library (for Rails)
 gem 'redcarpet', '3.3.4' # Process markdown in form textareas (justifications)
 gem 'octokit', '4.1.1' # GitHub's official Ruby API

@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 # rubocop:disable Metrics/ClassLength
+require 'set'
 class Project < ActiveRecord::Base
   STATUS_CHOICE = %w(? Met Unmet).freeze
   STATUS_CHOICE_NA = (STATUS_CHOICE + %w(N/A)).freeze
@@ -10,19 +11,20 @@ class Project < ActiveRecord::Base
   # The "Criteria" hash is loaded during application initialization
   # from a YAML file.
 
-  ALL_CRITERIA = Criteria.keys.freeze
+  ALL_CRITERIA = Criteria.keys.to_set.freeze
   ALL_CRITERIA_STATUS = ALL_CRITERIA.map do |criterion|
     "#{criterion}_status".to_sym
-  end.freeze
+  end.to_set.freeze
   ALL_CRITERIA_JUSTIFICATION = ALL_CRITERIA.map do |criterion|
     "#{criterion}_justification".to_sym
-  end.freeze
-  PROJECT_OTHER_FIELDS = [
-    :name, :description, :project_homepage_url, :repo_url, :cpe,
-    :license, :general_comments,
-    :user_id].freeze
+  end.to_set.freeze
+  PROJECT_OTHER_FIELDS = Set.new(
+    [:name, :description, :project_homepage_url, :repo_url, :cpe,
+     :license, :general_comments,
+     :user_id]).freeze
   PROJECT_PERMITTED_FIELDS = (PROJECT_OTHER_FIELDS +
-    ALL_CRITERIA_STATUS + ALL_CRITERIA_JUSTIFICATION).freeze
+    ALL_CRITERIA_STATUS + ALL_CRITERIA_JUSTIFICATION).to_set.freeze
+  PROJECT_PERMITTED_FIELDS_ARRAY = PROJECT_PERMITTED_FIELDS.to_a.freeze
 
   # A project is associated with a user
   belongs_to :user

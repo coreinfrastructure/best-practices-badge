@@ -154,7 +154,7 @@ class ProjectsController < ApplicationController
   # Never trust parameters from the scary internet,
   # only allow the white list through.
   def project_params
-    params.require(:project).permit(Project::PROJECT_PERMITTED_FIELDS)
+    params.require(:project).permit(Project::PROJECT_PERMITTED_FIELDS_ARRAY)
   end
 
   def change_authorized

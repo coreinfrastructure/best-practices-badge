@@ -2,7 +2,7 @@
 class ProjectsController < ApplicationController
   before_action :set_project, only: [:edit, :update, :destroy, :show, :badge]
   before_action :logged_in?, only: :create
-  before_action :authorized, only: [:destroy, :edit, :update]
+  before_action :change_authorized, only: [:destroy, :edit, :update]
 
   # Cache with Fastly CDN.  We can't use this header, because logged-in
   # and not-logged-in users see different things (and thus we can't
@@ -161,7 +161,7 @@ class ProjectsController < ApplicationController
     params.require(:project).permit(PERMITTED_PARAMS)
   end
 
-  def authorized
+  def change_authorized
     return true if can_make_changes?
     redirect_to root_url
   end

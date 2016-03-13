@@ -139,10 +139,6 @@ class ProjectsController < ApplicationController
 
   private
 
-  PERMITTED_PARAMS = (Project::PROJECT_OTHER_FIELDS +
-                     Project::ALL_CRITERIA_STATUS +
-                     Project::ALL_CRITERIA_JUSTIFICATION).freeze
-
   def set_homepage_url
     # Assign to repo.homepage if it exists, and else repo_url
     repo = repo_data.find { |r| @project.repo_url == r[3] }
@@ -158,7 +154,7 @@ class ProjectsController < ApplicationController
   # Never trust parameters from the scary internet,
   # only allow the white list through.
   def project_params
-    params.require(:project).permit(PERMITTED_PARAMS)
+    params.require(:project).permit(Project::PROJECT_PERMITTED_FIELDS)
   end
 
   def change_authorized

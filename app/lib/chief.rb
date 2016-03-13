@@ -33,19 +33,7 @@ class Chief
      RepoFilesExamineDetective, FlossLicenseDetective].freeze
 
   # List fields allowed to be written into Project (an ActiveRecord).
-  # TODO: Automatically determine allowed fields, or get from elsewhere.
-  ALLOWED_FIELDS =
-    [:name, :license, :discussion_status, :discussion_justification,
-     :floss_license_osi_status, :floss_license_osi_justification,
-     :contribution_status, :contribution_justification,
-     :floss_license_status, :floss_license_justification,
-     :repo_public_status, :repo_public_justification,
-     :repo_track_status, :repo_track_justification,
-     :repo_distributed_status, :repo_distributed_justification,
-     :build_status, :build_justification,
-     :build_common_tools_status, :build_common_tools_justification,
-     :license_location_status, :license_location_justification,
-     :release_notes_status, :release_notes_justification].to_set.freeze
+  ALLOWED_FIELDS = Project::PROJECT_PERMITTED_FIELDS.to_set.freeze
 
   # Given two changesets, produce merged "best" version
   # When confidence is the same, c1 wins.

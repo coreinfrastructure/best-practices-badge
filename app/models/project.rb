@@ -21,6 +21,8 @@ class Project < ActiveRecord::Base
     :name, :description, :project_homepage_url, :repo_url, :cpe,
     :license, :general_comments,
     :user_id].freeze
+  PROJECT_PERMITTED_FIELDS = (PROJECT_OTHER_FIELDS +
+    ALL_CRITERIA_STATUS + ALL_CRITERIA_JUSTIFICATION).freeze
 
   # A project is associated with a user
   belongs_to :user

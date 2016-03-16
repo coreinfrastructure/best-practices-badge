@@ -604,6 +604,9 @@ Anyone can create a Heroku application and run it on Heroku, however,
 at that point we trust the Postgres developers and the Heroku administrators
 to keep the databases separate.
 
+The <a href="https://www.ssllabs.com/ssltest/analyze.html?d=bestpractices.coreinfrastructure.org">Qualys SSL labs check of our TLS configuration</a> gives the main site an "A+" rating.
+Similarly, the <a href="https://securityheaders.io/?q=bestpractices.coreinfrastructure.org">securityheaders.io check of our HTTP security headers</a> for hardening is also an "A+".
+
 ## People
 
 Of course, it's important to have developers who know how to develop software,

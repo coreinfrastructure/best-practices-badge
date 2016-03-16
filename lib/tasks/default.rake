@@ -118,14 +118,14 @@ task :bundle_viz do
   sh 'bundle viz --version --requirements --format svg'
 end
 
-desc 'Deploy current master to production'
-task :deploy_production do
-  sh 'git checkout production && git pull && ' \
-     'git merge --ff-only origin/master && git push && git checkout master'
-end
-
-desc 'Deploy current master to staging'
+desc 'Deploy current origin/master to staging'
 task :deploy_staging do
   sh 'git checkout staging && git pull && ' \
      'git merge --ff-only origin/master && git push && git checkout master'
+end
+
+desc 'Deploy current origin/staging to production'
+task :deploy_production do
+  sh 'git checkout production && git pull && ' \
+     'git merge --ff-only origin/staging && git push && git checkout master'
 end

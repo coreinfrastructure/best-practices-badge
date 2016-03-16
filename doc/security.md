@@ -516,17 +516,24 @@ These style tools help us avoid more problematic constructs (in some cases
 avoiding defects that might lead to vulnerabilities), and
 also make the code easier to review
 (by both humans and other programs).
+Our style checking tools detect misleading indentation;
+<a href="http://www.dwheeler.com/essays/apple-goto-fail.html#indentation">this
+counters the mistake in the Apple goto fail vulnerability</a>.
 
 The 'rake' process also uses brakeman,
 a static source code analysis that focuses
 on finding security issues in Ruby on Rails applications.
 
-The software has a strong test suite, with over 90% statement coverage; this
-makes it easier to update components (e.g., if a third-party component
+The software has a strong test suite, with over 90% statement coverage.
+This makes it easier to update components (e.g., if a third-party component
 has a publicly disclosed vulnerability).
 The test suite also makes it easier to make other fixes (e.g., to harden
 something) and have fairly high
 confidence that the change did not break functionality.
+It can also counter some vulnerabilities, e.g.,
+<a href="http://www.dwheeler.com/essays/apple-goto-fail.html#coverage">Apple's
+goto fail vulnerability would have been detected has they
+checked statement coverage</a>.
 
 We work to enable third-party review.
 We release the custom software as Free/Libre and open source software (FLOSS),
@@ -567,19 +574,24 @@ we would risk creating vulnerabilities in own code.
 See [CONTRIBUTING.md](../CONTRIBUTING.md) for more about how we
 reduce the risks of reused code.
 
-## Other security issues
+## Security of the development environment
 
 Subversion of the development environment can easily lead to
 a compromise of the resulting system.
+The key developers use development environments
+specifically configured to be secure.
+
 As noted earlier, we are cautious about the components we use.
 The source code is managed on GitHub;
 [GitHub takes steps to keep itself secure](https://help.github.com/articles/github-security/).
-The key developers use development environments
-specifically configured to be secure.
-The INSTALL.md file suggests various steps to counter some attacks, e.g.,
-git integrity recommendations from Eric Myhre that check all
-git objects transferred from an external site.
-The primary developers apply these git integrity checks.
+
+The INSTALL.md file suggests various steps to counter some attacks.
+In particular,
+we use the git integrity recommendations from Eric Myhre that check all
+git objects transferred from an external site into our development environment.
+This sets "fsckObjects = true" for transfer (thus also for fetch and receive).
+
+## Deployment and operations
 
 Of course, it has to be secure as actually deployed.
 We currently use Heroku for deployment; see the

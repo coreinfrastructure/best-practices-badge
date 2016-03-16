@@ -82,6 +82,12 @@ We have three publicly accessible tiers:
 * production
 
 These are currently executed on Heroku.
+If you have write authorization to the GitHub repository,
+the commands "rake deploy_staging" and "rake deploy_production"
+will update the staging and production branches (respectively).
+Those updates will trigger tests by CircleCI (via webhooks).
+If those tests pass, that updated branch is then deployed to
+its respective tier.
 
 ## Terminology
 

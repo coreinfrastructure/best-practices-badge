@@ -1,10 +1,9 @@
 # Security
 
 Security is important and challenging.
-Below are the overall security requirements, how we approach
-security in the design, security in the implementation,
-security in verification,
-and a brief note about the supply chain (reuse).
+This document describes why we think this software (the "BadgeApp")
+is adequately secure (i.e., its "assurance case").
+
 Our overall security approach is called
 defense-in-breadth, that is, we consider
 security (including security countermeasures) in all
@@ -15,6 +14,12 @@ In each software development process we
 identify the specific issues that most need to be addressed,
 and then address them.
 
+Below are the overall security requirements, followed by how we approach
+security in design, implementation,
+verification, supply chain (reuse), development environment,
+and deployment/operations.
+
+Sadly, perfection is rare; we really want your help.
 If you find a vulnerability, please see
 [CONTRIBUTING.md](../CONTRIBUTING.md) for how to submit a vulnerability report.
 For more technical information on the implementation, see
@@ -47,7 +52,7 @@ how we implement these requirements):
       For other projects, what we can do is ensure that once a project
       record is created, only its creator can edit it... and then projects
       can decide which (if any) to link to as their "official" representation.
-    - Only authorized people should be able to edit the source code.
+    - Only authorized people should be able to edit the BadgeApp source code.
       We use GitHub for managing the source code and issue tracker; it
       has an authentication system for this purpose.
 - Availability: We cannot prevent someone with significant
@@ -63,6 +68,8 @@ how we implement these requirements):
 BadgeApp must avoid being taken over by other applications, and
 must avoid being a conduit for others' attacks
 (e.g., not be vulnerable to cross-site scripting).
+We do this by focusing on having a secure design and countering the
+most common kinds of attacks (as described below).
 
 The application must not have any behaviors or features designed
 to allow authorized access, exposure of sensitive information, or allow
@@ -80,6 +87,10 @@ to gather data about those projects (so it can automatically fill in data).
 We have taken a number of steps to reduce the likelihood
 of vulnerabilities, and to reduce the impact of vulnerabilities
 where they exist.
+In particular, retrieval of external information is subject to a timeout,
+we use Ruby (a memory-safe language),
+and exceptions halt automated processing for that entry (which merely
+disables automated data gathering for that entry).
 
 We have a mechanism for downloading (and backing up) the database of projects.
 That way, if the project data is corrupted, we can restore the database to
@@ -94,8 +105,9 @@ few users are administrators.
 A user can create as many project entries as desired.
 Each project entry gets a new unique project id and is
 owned by the user who created the project entry.
-A project entry can only be edited (and deleted) by either the
-entry creator or an administrator.
+A project entry can only be edited (and deleted) by the entry creator,
+an administrator, or by others who can prove that they
+can edit that GitHub repository (if it is on GitHub).
 Anyone can see the project entry results once they are saved.
 We do require, in the case of a GitHub project entry, that the
 entry creator be logged in via GitHub *and* be someone who can edit that
@@ -106,8 +118,6 @@ which makes entering nonsense data have much less value.
 We may in the future add support for groups (e.g., where the owner
 can designate other users who can edit that entry) and
 a way to 'validate' project entries for projects not on GitHub.
-We intend to add the ability for any GitHub user to edit badge data
-if the user can modify that GitHub project's data.
 
 ## Security in Design
 
@@ -259,7 +269,8 @@ See the section below on supply chain (reuse) for more.
 ### Availability through scaleability
 
 Availability is, as always, especially challenging.
-Our primary appraoch is to ensure that the design scales.
+Our primary approach is to ensure that the design scales.
+
 As a Ruby on Rails application, it is designed so each request can
 be processed separately on separate processes.
 We use the 'puma' web server to serve multiple processes
@@ -268,16 +279,25 @@ and timeouts so recovery is automatic after a request.
 The system is designed to be easily scalable (just add more worker
 processes), so we can quickly purchase additional computing resources
 to handle requests if needed.
+
 The system is currently deployed to Heroku, which imposes a hard
 time limit for each request; thus, if a request gets stuck
 (say during autofill by a malevolent actor who responds slowly),
 eventually the timeout will cause the response to stop and the
 system will become ready for another request.
-We plan to use a CDN (Fastly) to provide cached values of badges, which are
-the most resource-intense kind of request, and even for the read-only
-version of project data.  As long as the CDN is up, even if the
-application crashes the then-current data will stay available until
-the system recovers.
+
+We use a CDN (Fastly) to provide cached values of badges.
+These are the most resource-intense kind of request.
+As long as the CDN is up, even if the application crashes the
+then-current data will stay available until the system recovers.
+
+A determined attacker with significant resources could disable the
+system through a distributed denial-of-service (DDoS) attack.
+However, this site doesn't have any particular political agenda,
+and taking it down is unlikely to provide monitary gain.
+Thus, this site doesn't seem as likely a target for a long-term DDoS
+attack, and there is not much else we can do to counter DDoS
+by an attacker with signficant resources.
 
 ## Security in Implementation
 

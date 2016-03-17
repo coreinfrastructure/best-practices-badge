@@ -559,6 +559,11 @@ We work to enable third-party review.
 We release the custom software as Free/Libre and open source software (FLOSS),
 using a well-known FLOSS license (MIT).
 
+We have briefly experimented with using the "dawnscanner" security scanner.
+We have decided to not add dawnscanner to the set of scanners that we
+routinely use.
+See the [dawnscanner.md](dawnscanner) file for more information.
+
 These steps cannot *guarantee* that there are no vulnerabilities,
 but we think they greatly reduce the risks.
 

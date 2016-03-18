@@ -129,3 +129,12 @@ task :deploy_production do
   sh 'git checkout production && git pull && ' \
      'git merge --ff-only origin/staging && git push && git checkout master'
 end
+
+rule '.html' => '.md' do |t|
+  sh "script/my-markdown \"#{t.source}\" > \"#{t.name}\""
+end
+
+markdown_files = Rake::FileList.new('*.md', 'doc/*.md')
+
+# Use this task to locally generate HTML files from .md (markdown)
+task 'html_from_markdown' => markdown_files.ext('.html')

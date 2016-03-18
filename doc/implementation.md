@@ -274,13 +274,20 @@ In some cases it may be useful to insert SQL commands or do
 other special operations in a migration.
 See the migrations in the db/migrate/ directory for examples.
 
-Once you've created the migration file, you can migrate by running:
+Once you've created the migration file, check it first by running
+"rake rubocop".  This will warn you of some potential issues, and
+it's much better to fix them early.
+(You can't run just "rake", because that invokes "rake test", and
+the dynamic tests in "rake test" won't work until you execute
+the migration).
+
+You can migrate by running:
 
 ~~~~
   $ rake db:migrate
 ~~~~
 
-If it fails, you may need to use "rake db:rollback" to roll it back.
+If it fails, you *may* need to use "rake db:rollback" to roll it back.
 
 You may also need to modify tests in the tests/ subdirectory, or
 modify the autofill code in the app/lib/ directory.

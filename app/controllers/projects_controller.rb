@@ -52,9 +52,10 @@ class ProjectsController < ApplicationController
   # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   def create
     @project = current_user.projects.build(project_params)
-    if @project.repo_url? && Project.exists?(repo_url: @project.repo_url)
+    project_repo_url = @project.repo_url
+    if @project.repo_url? && Project.exists?(repo_url: project_repo_url)
       flash[:info] = 'This project already exists!'
-      return redirect_to Project.find_by(repo_url: @project.repo_url)
+      return redirect_to Project.find_by(repo_url: project_repo_url)
     end
 
     # Error out if project_homepage_url and repo_url are both empty... don't

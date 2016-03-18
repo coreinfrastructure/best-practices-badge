@@ -17,7 +17,7 @@ gem 'redcarpet', '3.3.4' # Process markdown in form textareas (justifications)
 gem 'octokit', '4.3.0' # GitHub's official Ruby API
 gem 'omniauth-github', '1.1.2' # Authentication to GitHub (get project info)
 gem 'paper_trail', '4.1.0' # Record previous versions of project data
-gem 'puma', '3.1.0' # Faster webserver; recommended by Heroku
+gem 'puma', '3.1.1' # Faster webserver; recommended by Heroku
 gem 'rack-timeout', '0.3.2' # Timeout per https://github.com/heroku/rack-timeout
 gem 'rails', '4.2.6' # Our web framework
 gem 'sass-rails', '5.0.4'

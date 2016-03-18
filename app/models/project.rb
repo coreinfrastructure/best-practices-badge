@@ -48,7 +48,7 @@ class Project < ActiveRecord::Base
   # and http://something/?arbitrary_parameters
 
   validates :repo_url, url: true, length: { maximum: MAX_SHORT_STRING_LENGTH },
-                       uniqueness: true
+                       uniqueness: { allow_blank: true }
   validates :project_homepage_url,
             url: true,
             length: { maximum: MAX_SHORT_STRING_LENGTH }

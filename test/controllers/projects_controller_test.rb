@@ -136,4 +136,12 @@ class ProjectsControllerTest < ActionController::TestCase
       delete :destroy, id: @project
     end
   end
+
+  test 'should redirect to project page if project repo exists' do
+    log_in_as(@user)
+    assert_no_difference('Project.count') do
+      post :create, project: { repo_url: @project.repo_url }
+    end
+    assert_redirected_to project_path(@project)
+  end
 end

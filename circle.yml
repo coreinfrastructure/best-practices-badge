@@ -2,8 +2,7 @@ test:
   pre:
     - "[[ ! -s \"$(git rev-parse --git-dir)/shallow\" ]] || git fetch --unshallow"
   post:
-    - bundle exec pronto run -f github -c=$(git log --pretty=format:%H | tail -1)
-    - bundle exec pronto run -f text -c=$(git log --pretty=format:%H | tail -1) --exit-code
+    - bundle exec pronto run -f github text -c=$(git log --pretty=format:%H | tail -1) --exit-code
 deployment:
   master:
     branch: master

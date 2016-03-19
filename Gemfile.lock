@@ -83,6 +83,7 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.10.0)
+    colorize (0.7.7)
     concurrent-ruby (1.0.1)
     coveralls (0.8.13)
       json (~> 1.8)
@@ -106,6 +107,9 @@ GEM
       i18n (~> 0.5)
     faraday (0.9.2)
       multipart-post (>= 1.2, < 3)
+    fasterer (0.3.2)
+      colorize (~> 0.7)
+      ruby_parser (~> 3.7)
     fastly (1.2.3)
     fastly-rails (0.4.1)
       fastly (~> 1.2.1)
@@ -395,6 +399,7 @@ DEPENDENCIES
   coveralls (= 0.8.13)
   dotenv-rails (= 2.1.0)
   faker (= 1.6.3)
+  fasterer
   fastly-rails (= 0.4.1)
   github_api (= 0.13.1)
   heroku_rails_deflate (= 1.0.3)

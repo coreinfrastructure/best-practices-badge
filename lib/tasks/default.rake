@@ -15,6 +15,7 @@ task(:default).clear.enhance %w(
   license_finder_report.html
   whitespace_check
   yaml_syntax_check
+  html_from_markdown
   fasterer
   test
 )

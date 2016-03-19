@@ -1,8 +1,12 @@
+# Rake tasks for BadgeApp
+
+# Run tests last. That way, runtime problems (e.g., undone migrations)
+# do not interfere with the other checks.
+
 task(:default).clear.enhance %w(
   rbenv_rvm_setup
   bundle
   bundle_audit
-  test
   rubocop
   markdownlint
   rails_best_practices
@@ -11,6 +15,8 @@ task(:default).clear.enhance %w(
   license_finder_report.html
   whitespace_check
   yaml_syntax_check
+  fasterer
+  test
 )
 
 # Simple smoke test to avoid development environment misconfiguration
@@ -138,3 +144,8 @@ markdown_files = Rake::FileList.new('*.md', 'doc/*.md')
 
 # Use this task to locally generate HTML files from .md (markdown)
 task 'html_from_markdown' => markdown_files.ext('.html')
+
+desc 'Use fasterer to report Ruby constructs that perform poorly'
+task :fasterer do
+  sh 'fasterer'
+end

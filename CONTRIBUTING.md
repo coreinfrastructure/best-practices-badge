@@ -337,9 +337,8 @@ Currently these include at least the following:
 
 * bundle - use bundle to check dependencies ("bundle check || bundle install")
 * "rake bundle_audit" - check for vulnerable dependencies
-* "rake test" - runs the automated test suite
 * "rake markdownlint" - runs markdownlint, also known as mdl
-  (check for errors in markdown text)
+  (this checks for errors in the markdown text)
 * "rake rubocop" - runs Rubocop, which checks code style against the
   [community Ruby style guide](https://github.com/bbatsov/ruby-style-guide)
 * "rake rails_best_practices" - check against rails best practices using the gem
@@ -351,13 +350,13 @@ Currently these include at least the following:
 * "yaml_syntax_check" - checks syntax of YAML (.yml) files.
   Note that the automated test suite includes a number of specific
   checks on the criteria.yml file.
+* fasterer - report on Ruby constructs with poor performance
+* "rake test" - run the automated test suite
 
-We tolerate the following warnings from rails_best_practices
-(patches to fix these are welcome):
+We tolerate the following warning from rails_best_practices
+(patches to fix this are welcome):
 
 ~~~~
-cii-best-practices-badge/app/helpers/password_resets_helper.rb:1 -
-  remove empty helpers
 cii-best-practices-badge/app/controllers/users_controller.rb:75 -
   use scope access
 ~~~~

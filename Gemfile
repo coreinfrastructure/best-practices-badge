@@ -51,6 +51,7 @@ end
 group :development do
   gem 'fasterer' # Provide speed recommendations - run 'fasterer'
   gem 'rails_db', '1.1.1' # Enable localhost:3000/rails/db debugging
+  gem 'traceroute' # Adds 'rake traceroute' command to check routes
   gem 'web-console', '3.1.1'
 end
 

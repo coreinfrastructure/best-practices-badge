@@ -514,7 +514,7 @@ This enables a number of hardening mechanisms in Rails, including
 HTTP Strict Transport Security (HSTS),
 TLS redirection, and secure cookies.
 See
-["Rails, Secure Cookies, HSTS and friends" by Ilija Eftimov (2015-12-14)](http://eftimov.net/rails-tls-hsts-cookies/)
+["Rails, Secure Cookies, HSTS and friends" by Ilija Eftimov (2015-12-14)](http://eftimov.net/rails-tls-hsts-cookies)
 for more about the impact of force_ssl.
 
 ## Security in Verification
@@ -562,7 +562,7 @@ using a well-known FLOSS license (MIT).
 We have briefly experimented with using the "dawnscanner" security scanner.
 We have decided to not add dawnscanner to the set of scanners that we
 routinely use.
-See the [dawnscanner.md](dawnscanner) file for more information.
+See the [dawnscanner.md](./dawnscanner.md) file for more information.
 
 These steps cannot *guarantee* that there are no vulnerabilities,
 but we think they greatly reduce the risks.

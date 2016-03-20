@@ -1369,8 +1369,7 @@ Its project website is <http://www.ossec.net/>.
 
 From its [downloads](http://ossec.github.io/downloads.html) page you can
 find its development snapshots, which are publicly version-controlled on GitHub.
-[OSSEC is released under the GPLv2 license with OpenSSL exception](http://www.ossec.net/?page_id=52).
-[OSSSEC-HIDS' license is in its LICENSE file](https://github.com/ossec/ossec-hids/blob/master/LICENSE).
+[OSSSEC-HIDS' license is in its LICENSE file](https://github.com/ossec/ossec-hids/blob/master/LICENSE), which is GPL-2.0 with the OpenSSL exception.
 
 [OSSEC has documentation that identifies its coding style guide](http://ossec-docs.readthedocs.org/en/latest/development/oRFC/orfc-2.html).
 [OSSEC includes a facility to test rules in bulk](http://ossec-docs.readthedocs.org/en/latest/development/build/test-rules.html).

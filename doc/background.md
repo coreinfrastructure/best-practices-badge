@@ -1336,7 +1336,7 @@ to be queried on TCP port 2947 of the host computer.
 It is widely used, e.g.,
 it underlies the map service on Android phones, and is in many other
 devices that need location information (e.g., drones).
-Its main website is <http://www.catb.org/gpsd>.
+Its main website is <http://www.catb.org/gpsd/>.
 
 It is released under the BSD-new license, aka Revised BSD or 3-clause license.
 
@@ -1367,7 +1367,7 @@ log analysis, file integrity checking, policy monitoring, rootkit detection,
 real-time alerting and active response."
 Its project website is <http://www.ossec.net/>.
 
-From its [downloads](http://www.ossec.net/?page_id=19) page you can
+From its [downloads](http://ossec.github.io/downloads.html) page you can
 find its development snapshots, which are publicly version-controlled on GitHub.
 [OSSEC is released under the GPLv2 license with OpenSSL exception](http://www.ossec.net/?page_id=52).
 [OSSSEC-HIDS' license is in its LICENSE file](https://github.com/ossec/ossec-hids/blob/master/LICENSE).
@@ -1392,7 +1392,7 @@ thought that Postfix did an overall
 good job on security and reliability.
 
 The
-<a href="http://www.360is.com/06-postfix.htm">Postfix approach
+<a href="https://web.archive.org/web/20120701162903/http://www.360is.com/06-postfix.htm">Postfix approach
 for developing secure software</a>
 emphasizes using
 an experienced team of just a few security conscious individuals,
@@ -1436,7 +1436,7 @@ in the hope that the user comments will yield some gems.
 
 Some of the organizations who reported on the badging program included:
 
-*   [Threatpost](https://threatpost.com/core-infrastructure-initiative-launches-open-source-security-badge-program/114326)
+*   [Threatpost](https://threatpost.com/core-infrastructure-initiative-launches-open-source-security-badge-program/114326/)
 *   [ZDNet](http://www.zdnet.com/article/linux-core-infrastructure-initiative-launches-security-badge-scheme/)
 *   [Slashdot](http://news.slashdot.org/story/15/08/21/1332205/linux-foundation-project-will-evaluate-security-of-open-source-software).
 *   [ITNews](http://www.itnews.com.au/news/linux-foundation-starts-security-vetting-program-for-foss-408402)

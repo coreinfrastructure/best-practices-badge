@@ -8,7 +8,7 @@ There may eventually be multiple levels or
 other badges (with a prerequisite) later.
 We are currently leaning towards using the silver/gold/platinum naming system,
 which is similar to the
-[LEED certification naming system of certified, silver, gold, platinum](http://www.usgbc.org/certification) and how the
+[LEED certification naming system of certified, silver, gold, platinum](http://www.usgbc.org/leed) and how the
 [Linux Foundation ranks membership (silver, gold, platinum)](http://www.linuxfoundation.org/about/members)
 An alternative is the Olympic system naming (bronze, silver, gold).
 

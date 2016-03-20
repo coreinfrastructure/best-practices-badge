@@ -319,7 +319,7 @@ Note that:
 - <a name="vulnerability_report_process"></a>The project MUST publish the
   process for reporting vulnerabilities on the project site.
   E.g., a clearly designated mailing address on <https://PROJECTSITE/security>,
-  often security@SOMEWHERE.
+  often in the form security@example.org.
   This MAY be the same as its bug reporting process.
   <sup>[<a href="#vulnerability_report_process">vulnerability_report_process</a>]&#8224;</sup>
 - <a name="vulnerability_report_private"></a>If private vulnerability reports
@@ -588,7 +588,7 @@ by the delivered project's software.
 - *Note*: this means that users might be left vulnerable to all
   attackers worldwide for up to 60 days.
   This criterion is often much easier to meet than what Google recommends in
-  [Rebooting responsible disclosure](http://googleonlinesecurity.blogspot.com/2010/07/rebooting-responsible-disclosure-focus.html),
+  [Rebooting responsible disclosure](https://security.googleblog.com/2010/07/rebooting-responsible-disclosure-focus.html),
   because Google recommends that the 60-day period start when the
   project is notified *even* if the report is not public.
 - *Rationale*: We intentionally chose to start measurement from the time of
@@ -662,7 +662,7 @@ by the delivered project's software.
   (e.g., [American Fuzzy Lop](http://lcamtuf.coredump.cx/afl/))
   or a web application scanner
   (e.g., [OWASP ZAP](https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project)
-  or [<a href="(https://w3af.org/)">w3af</a>](http://w3af.org/)).
+  or [w3af.org](http://w3af.org/)).
   For purposes of this criterion the dynamic analysis tool needs to vary
   the inputs in some way to look for various kinds of problems *or*
   be an automated test suite with at least 80% branch coverage.

@@ -138,7 +138,7 @@ task :deploy_production do
 end
 
 rule '.html' => '.md' do |t|
-  sh "script/my-markdown \"#{t.source}\" > \"#{t.name}\""
+  sh "script/my-markdown \"#{t.source}\" | script/my-patch-html > \"#{t.name}\""
 end
 
 markdown_files = Rake::FileList.new('*.md', 'doc/*.md')

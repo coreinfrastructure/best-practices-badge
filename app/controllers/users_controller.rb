@@ -15,6 +15,9 @@ class UsersController < ApplicationController
   def show
     @user = User.find(params[:id])
     @projects = @user.projects
+    if @user == current_user && @user.provider == 'github'
+      @edit_projects = Project.where(repo_url: github_user_projects) - @projects
+    end
   end
 
   def create

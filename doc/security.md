@@ -445,7 +445,7 @@ as of 2015-12-14:
    (indeed, they're thrown away once autofill completes; caching may
    keep them, but that simply allows re-reading of data already acquired).
    The files aren't put into a filesystem, so there's no
-   opportunity for executable code to put into the filesystem this way.
+   opportunity for executable code to be put into the filesystem this way.
    There is no arbitrary file downloading capability, and private files
    (e.g., with keys) are not in the docroot.
 5. *Intranet and Admin Security.*
@@ -453,11 +453,20 @@ as of 2015-12-14:
    simply let them edit other project records.
    Any other direct access requires logging in to the production system
    through a separate log in (e.g., to use 'rails console').
-   Indirect access (e.g., to update the site) requires separately logging into
+   Indirect access (e.g., to update the code the site runs)
+   requires separately logging into
    GitHub and performing a valid git push (this must also pass through the
    continuous integration test suite).
+   It's possible to directly push to the Heroku sites to deploy software,
+   but this requires the credentials for directly logging into the
+   relevant tier (e.g., production), and only authorized system administrators
+   have those credentials.
 6. *User management.*
-   The system is not fast enough for a naive password-guesser to succeed.
+   Local passwords have a minimum length, and we expect users to
+   protect their own passwords; we do not try to protect users from themselves.
+   The system is not fast enough for a naive password-guesser to succeed
+   guessing local passwords via network access (unless the password
+   is really bad).
    The forgotten-password system for local accounts
    uses email; that has its weaknesses,
    but the data is sufficiently low value, and there aren't
@@ -507,8 +516,10 @@ as of 2015-12-14:
 
 We also use various mechanisms to harden the system against attack;
 these attempt to thwart or slow attack even if the system has a vulnerability.
-We use the secure_headers gem (developed by Twitter) to enable
+We use the [secure_headers](https://github.com/twitter/secureheaders) gem
+(developed by Twitter) to enable
 a number of HTTP headers for hardening.
+
 In addition, in production "config.force_ssl" to set to true.
 This enables a number of hardening mechanisms in Rails, including
 HTTP Strict Transport Security (HSTS),
@@ -574,6 +585,9 @@ We consider the code we reuse
 the risk of unintentional and intentional vulnerabilities from them.
 In particular, we prefer the use of popular components (where problems
 are more likely to be identified and addressed) and common FLOSS licenses.
+(A FLOSS component with a rarely-used license, particularly a
+GPL-incompatible one, is less likely to be reviewed by others because
+in most cases fewer people will contribute to it.)
 These steps reduce the risk of malicious components
 (e.g., malicious gems).
 

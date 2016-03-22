@@ -629,8 +629,21 @@ Anyone can create a Heroku application and run it on Heroku, however,
 at that point we trust the Postgres developers and the Heroku administrators
 to keep the databases separate.
 
-The <a href="https://www.ssllabs.com/ssltest/analyze.html?d=bestpractices.coreinfrastructure.org">Qualys SSL labs check of our TLS configuration</a> gives the main site an "A+" rating.
-Similarly, the <a href="https://securityheaders.io/?q=bestpractices.coreinfrastructure.org">securityheaders.io check of our HTTP security headers</a> for hardening is also an "A+".
+Various online checkers give us a clean bill of health.
+For the main bestpractices.coreinfrastructure.org site we have:
+
+* An "A+" rating from the
+  <a href="https://www.ssllabs.com/ssltest/analyze.html?d=bestpractices.coreinfrastructure.org">Qualys SSL labs check of our TLS configuration</a>.
+* An "A+" rating from the
+  <a href="https://securityheaders.io/?q=bestpractices.coreinfrastructure.org">securityheaders.io check of our HTTP security headers</a>.
+* An all-pass report from the
+  <a href="https://www.sslshopper.com/ssl-checker.html#hostname=bestpractices.coreinfrastructure.org">SSLShopper SSL checker</a>.
+* A 96% result from <a href="https://www.wormly.com/test_ssl/h/bestpractices.coreinfrastructure.org/i/157.52.75.7/p/443">Wormly</a>.
+  The only item not passed was the "SSL Handshake Size" test; the live site
+  provides 5667 bytes, and they consider values beyond 4K (with unclear
+  units) to be large. This is not a security issue, at most this will
+  result in a slower initial connection.  Thus, we don't plan to worry
+  about the missing test.
 
 ## People
 

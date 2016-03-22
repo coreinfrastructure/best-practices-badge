@@ -507,10 +507,10 @@ by the delivered project's software.
   cryptographic functions;
   it MUST NOT re-implement its own.
   <sup>[<a href="#crypto_call">crypto_call</a>]\*</sup>
-- <a name="crypto_oss"></a>All project functionality that depends
+- <a name="crypto_floss"></a>All project functionality that depends
   on cryptography MUST be implementable using FLOSS.  See the
   [*Open Standards Requirement for Software* by the Open Source Initiative](https://opensource.org/osr).
-  <sup>[<a href="#crypto_oss">crypto_oss</a>]\*</sup>
+  <sup>[<a href="#crypto_floss">crypto_floss</a>]\*</sup>
 - <a name="crypto_keylength"></a>The project security mechanisms
   MUST use default keylengths that meet the NIST minimum requirements
   at least through the year 2030 (as stated in 2012).

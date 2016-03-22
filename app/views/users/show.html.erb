@@ -17,7 +17,7 @@
     <%= will_paginate @projects %>
   <% end %>
 
-  <% if @user.provider == 'github' && logged_in? && @edit_projects.any? %>
+  <% if @edit_projects.present? %>
   <br>
   <h2>Other Projects you can edit</h2>
   <br>

@@ -1,0 +1,42 @@
+<table class="table table-bordered table-striped table-responsive">
+  <thead>
+    <tr>
+      <th>Id</th>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Website</th>
+      <th>License</th>
+      <th>Added By</th>
+      <th>%Achieved</th>
+      <th>Badge</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% projects.each do |project| %>
+      <tr>
+        <td><%= link_to project.id, project %></td>
+        <td><%= link_to (project.name.presence || "(Name Unknown)"),
+                project %></td>
+        <td><%= ApplicationHelper.markdown(
+                  (project.description || '').
+                  truncate(160, separator: ' ')) %></td>
+
+        <td>
+          <%# Defend against bad data - link only if plausible URL. %>
+          <% if project.project_homepage_url.presence &&
+                project.project_homepage_url.match(/\Ahttps?:\/\//) %>
+            <a href="<%= project.project_homepage_url %>"><%= project.project_homepage_url %></a>
+          <% else %>
+            <%= project.project_homepage_url %>
+          <% end %>
+        </td>
+        <td><%= project.license %></td>
+        <td><%= link_to project.user_name, project.user %></td>
+        <td><%= Project.badge_percentage(project) %>%</td>
+        <td><%= link_to "<img src='/projects/#{project.id}/badge'>".html_safe,
+                        project %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

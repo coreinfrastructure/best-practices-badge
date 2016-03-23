@@ -24,3 +24,6 @@
 
 # Dropbox
 .DS_Store
+
+# rbenv local Ruby version file
+.ruby-version

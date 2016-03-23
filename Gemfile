@@ -26,6 +26,7 @@ gem 'turbolinks', '2.5.3' # Speed UI access
 gem 'jquery-turbolinks'   # Make turbolinks work with jQuery
 gem 'uglifier', '2.7.2'
 gem 'will_paginate', '3.1.0'
+gem 'sunspot_rails', '2.2.5' # Search: bundles Solr and hooks into ActiveRecord
 
 group :development, :test do
   gem 'awesome_print', '1.6.1'

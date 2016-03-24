@@ -14,6 +14,7 @@ gem 'jbuilder', '2.4.1'
 gem 'jquery-rails', '4.1.1' # Javascript jQuery library (for Rails)
 gem 'jquery-ui-rails', '5.0.5' # Javascript jQueryUI library (for Rails)
 gem 'redcarpet', '3.3.4' # Process markdown in form textareas (justifications)
+gem 'minitest-rails' # Capybara integration for Minitest and Rails.
 gem 'octokit', '4.3.0' # GitHub's official Ruby API
 gem 'omniauth-github', '1.1.2' # Authentication to GitHub (get project info)
 gem 'paper_trail', '4.1.0' # Record previous versions of project data
@@ -58,6 +59,7 @@ end
 group :test do
   gem 'coveralls', '0.8.13', require: false
   gem 'm', '1.4.2' # Run test/unit tests by line number
+  gem 'minitest-rails-capybara'
   gem 'simplecov', '0.11.2', require: false
   gem 'webmock'
 end

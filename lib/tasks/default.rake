@@ -150,3 +150,9 @@ desc 'Use fasterer to report Ruby constructs that perform poorly'
 task :fasterer do
   sh 'fasterer'
 end
+
+Rails::TestTask.new('test:features' => 'test:prepare') do |t|
+  t.pattern = 'test/features/**/*_test.rb'
+end
+
+Rake::Task['test:run'].enhance ['test:features']

@@ -29,6 +29,8 @@ VCR.configure do |config|
   config.hook_into :webmock # or :fakeweb
 end
 
+require 'minitest/rails/capybara'
+
 module ActiveSupport
   class TestCase
     # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical

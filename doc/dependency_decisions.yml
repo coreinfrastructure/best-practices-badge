@@ -208,7 +208,13 @@
 - - :approve
   - colorize
   - :who: David A. Wheeler
-    :why: 'This license is actually GPL-2.0 (2.0 or later), which has no conflicts
+    :why: This license is actually GPL-2.0 (2.0 or later), which has no conflicts
       with Apache 2.0.  This is documented at https://github.com/fazibear/colorize
-      .  In addition, the library is in a separate executable (fasterer) from any Apache 2.0 code.'
+      .  In addition, the library is in a separate executable (fasterer) from any
+      Apache 2.0 code.
     :when: 2016-03-19 18:16:39.548315050 Z
+- - :approve
+  - xpath
+  - :who: Samir Khakimov
+    :why: MIT License in README
+    :when: 2016-03-24 19:56:00.309479000 Z

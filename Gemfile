@@ -27,6 +27,7 @@ gem 'turbolinks', '2.5.3' # Speed UI access
 gem 'jquery-turbolinks'   # Make turbolinks work with jQuery
 gem 'uglifier', '2.7.2'
 gem 'will_paginate', '3.1.0'
+gem 'ransack', '1.7.0' # Make search available in all.
 
 group :development, :test do
   gem 'awesome_print', '1.6.1'

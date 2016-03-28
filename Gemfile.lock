@@ -452,6 +452,7 @@ DEPENDENCIES
   rails (= 4.2.6)
   rails_12factor (= 0.0.3)
   rails_db (= 1.1.1)
+  ransack (= 1.7.0)
   redcarpet (= 3.3.4)
   ruby-graphviz
   sass-rails (= 5.0.4)

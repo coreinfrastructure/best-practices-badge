@@ -24,3 +24,8 @@
 
 # Dropbox
 .DS_Store
+
+# Rake output files
+/*.html
+doc/*.html
+license_okay

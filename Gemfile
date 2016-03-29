@@ -36,7 +36,7 @@ group :development, :test do
   gem 'ruby-graphviz'
   gem 'dotenv-rails', '2.1.1'
   gem 'license_finder'
-  gem 'mdl', '0.2.1'
+  gem 'mdl', '0.3.1'
   gem 'pronto', '0.6.0'
   gem 'pronto-brakeman', '0.6.0'
   gem 'pronto-rails_best_practices', '0.6.0'

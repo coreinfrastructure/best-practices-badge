@@ -140,6 +140,10 @@ input, textarea, select, .discussion-markdown, .uneditable-input {
   @include box_sizing;
 }
 
+form.project_search input {
+  width: auto;
+}
+
 input {
   height: auto !important;
 }

@@ -1,7 +1,7 @@
 # This YAML file provides information about each criterion.
 # The top level hash key is the identifier of the criterion,
 # with the following keys inside:
-#   category: MUST|SHOULD|SUGGESTED  # required
+#   category: MUST|SHOULD|SUGGESTED|FUTURE  # required
 #   na_allowed: true|false # optional, default false
 #   met_url_required: true|false # optional, default false
 #   description: ...HTML description... # required
@@ -879,6 +879,22 @@
        find the worst-case time for response to any critical vulnerabilities.
        More than 60 days is not a good sign.
 # Other security issues
+- hardening
+    category: FUTURE
+    description: >
+      It is SUGGESTED that hardening mechanisms be used so software defects
+      are less likely to result in security vulnerabilities.
+    details: >
+      Hardening mechanisms may include
+      HTTP headers like Content Security Policy (CSP),
+      compiler flags to mitigate attacks
+      (such as -fstack-protector), or compiler flags to
+      eliminate undefined behavior,
+      For our purposes least privilege is not considered a hardening
+      mechanism (least privilege is important, but separate).
+    autofill: >
+      Look for gems like secure_headers, and
+      relevant compiler flags in build files.
 - no_leaked_credentials:
     category: MUST
     description: >

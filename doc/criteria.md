@@ -601,6 +601,17 @@ by the delivered project's software.
 
 *Other security issues*
 
+- <a name="hardening">
+  It is SUGGESTED that hardening mechanisms be used so software defects
+  are less likely to result in security vulnerabilities.
+  Hardening mechanisms may include
+  HTTP headers like Content Security Policy (CSP),
+  compiler flags to mitigate attacks
+  (such as -fstack-protector), or compiler flags to
+  eliminate undefined behavior,
+  For our purposes least privilege is not considered a hardening
+  mechanism (least privilege is important, but separate).
+  <sup>[<a href="#hardening">hardening</a>]</sup>
 - <a name="no_leaked_credentials"></a>The public repositories
   MUST NOT leak a valid private credential
   (e.g., a working password or private key) that is intended to limit
@@ -608,6 +619,7 @@ by the delivered project's software.
   A project MAY leak "sample" credentials for testing and
   unimportant databases, as long as they are not intended to limit
   public access.
+  <sup>[<a href="#no_leaked_credentials">no_leaked_credentials</a>]</sup>
 
 ### Analysis
 

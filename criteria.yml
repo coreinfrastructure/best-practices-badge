@@ -879,7 +879,7 @@
        find the worst-case time for response to any critical vulnerabilities.
        More than 60 days is not a good sign.
 # Other security issues
-- hardening
+- hardening:
     category: FUTURE
     description: >
       It is SUGGESTED that hardening mechanisms be used so software defects

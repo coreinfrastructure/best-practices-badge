@@ -41,7 +41,7 @@ class CriteriaTest < ActiveSupport::TestCase
 
   test 'Ensure only valid categories in Criteria' do
     Criteria.each do |_criterion, values|
-      allowed_field_values = %w(MUST SHOULD SUGGESTED)
+      allowed_field_values = %w(MUST SHOULD SUGGESTED FUTURE)
       assert_includes allowed_field_values, values['category']
     end
   end

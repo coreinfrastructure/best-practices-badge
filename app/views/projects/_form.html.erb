@@ -435,6 +435,7 @@ provided by the delivered project's software.
 
     <h3>Publicly-known vulnerabilities fixed</h3>
 
+      <%= render_status 'hardening', f, project, is_disabled %>
       <%= render_status 'no_leaked_credentials', f, project, is_disabled %>
 </div>
 

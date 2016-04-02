@@ -151,6 +151,7 @@ class Project < ActiveRecord::Base
   # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
   # rubocop:disable Metrics/MethodLength
   def self.enough_criterion?(status, justification, category, met_needs_url)
+    return true if category == 'FUTURE'
     case
     when status == 'N/A'
       true

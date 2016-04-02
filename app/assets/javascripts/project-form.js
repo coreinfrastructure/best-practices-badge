@@ -36,7 +36,9 @@ function isEnough(criteria) {
   var criteriaStatus = '#project_' + criteria + '_status';
   var justification = $('#project_' + criteria + '_justification').val();
   if (!justification) justification = '';
-  if ($(criteriaStatus + '_na').is(':checked')) {
+  if (criterionCategoryValue[criteria] === 'FUTURE') {
+    return true;
+  } else if ($(criteriaStatus + '_na').is(':checked')) {
     return true;
   } else if ($(criteriaStatus + '_met').is(':checked')) {
     return criteriaMetUrlRequired[criteria] ?

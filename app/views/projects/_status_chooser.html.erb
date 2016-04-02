@@ -5,7 +5,7 @@
       <% is_crypto = criterion.to_s.match(/^crypto_/) %>
       <% crypto_class = is_crypto ? ' criterion-is-crypto' : '' %>
 
-      <%# A criterion_category is 'MUST' | 'SHOULD' | 'SUGGESTED' %>
+      <%# A criterion_category is 'MUST' | 'SHOULD' | 'SUGGESTED' | 'FUTURE' %>
       <% criterion_category = Project.criterion_category(criterion) %>
       <% criterion_met_url_required = Project.met_url_required?(criterion) %>
 
@@ -41,6 +41,9 @@
 
       <div class='col-md-10 criteria-desc'>
           <br>
+          <% if criterion_category == 'FUTURE' %>
+          (Future criterion)
+          <% end %>
           <%= raw Criteria[criterion][:description] %> <sup>[<%= criterion %>]</sup>
           <%= if Criteria[criterion][:details]
               render(partial: "details", locals: {f: f,

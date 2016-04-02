@@ -139,6 +139,9 @@ Note that:
 *FLOSS license*
 
 - <a name="floss_license"></a> The software MUST be licensed as FLOSS.
+  FLOSS is software released in a way that meets the
+  [Open Source Definition](https://opensource.org/osd-annotated) or
+  [Free Software Definition](http://www.gnu.org/philosophy/free-sw.en.html).
   Examples of such licenses include the
   [CC0](http://creativecommons.org/publicdomain/zero/1.0/),
   [MIT](https://opensource.org/licenses/MIT),

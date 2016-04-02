@@ -92,6 +92,11 @@
     description: >
       The software MUST be released as FLOSS.
     details: >
+      FLOSS is software released in a way that meets the
+      <a href="https://opensource.org/osd-annotated">Open Source Definition</a>
+      or
+      <a href="http://www.gnu.org/philosophy/free-sw.en.html">Free Software
+      Definition</a>.
       Examples of such licenses include the
       <a href="http://creativecommons.org/publicdomain/zero/1.0/">CC0</a>,
       <a href="https://opensource.org/licenses/MIT">MIT</a>, <a

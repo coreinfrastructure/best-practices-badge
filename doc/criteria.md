@@ -78,6 +78,8 @@ The additional term SUGGESTED is added, as follows:
   SHOULD criteria must be met OR the rationale for
   not implementing the criterion must be documented, and
   all SUGGESTED criteria have to be considered (rated as met or unmet).
+- The text "(Future criterion)" marks criteria that are not currently
+  required, but may be required in the future.
 
 We assume that you are already familiar with
 software development and running a FLOSS project;
@@ -602,6 +604,7 @@ by the delivered project's software.
 *Other security issues*
 
 - <a name="hardening">
+  (Future criterion)
   It is SUGGESTED that hardening mechanisms be used so software defects
   are less likely to result in security vulnerabilities.
   Hardening mechanisms may include

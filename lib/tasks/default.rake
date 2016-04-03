@@ -52,14 +52,16 @@ end
 
 desc 'Run bundle-audit - check for known vulnerabilities in dependencies'
 task :bundle_audit do
-  sh <<-END
-    if ping -c 1 rubygems.org; then
-      bundle exec bundle-audit update && bundle exec bundle-audit check
-    else
-      echo 'Cannot access rubygems.org, so skipping bundle_audit check'
-      true # If we can't access google, don't bother.
-    fi
-END
+  verbose(false) do
+    sh <<-END
+      if ping -q -c 1 google.com > /dev/null 2> /dev/null ; then
+        bundle exec bundle-audit update && bundle exec bundle-audit check
+      else
+        echo 'Cannot access rubygems.org, so skipping bundle_audit check'
+        true # If we can't access google, don't bother.
+      fi
+    END
+  end
 end
 
 desc 'Run markdownlint (mdl) - check for markdown problems'

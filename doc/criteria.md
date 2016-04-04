@@ -603,7 +603,7 @@ by the delivered project's software.
 
 *Other security issues*
 
-- <a name="hardening">
+- <a name="hardening"></a>
   (Future criterion)
   It is SUGGESTED that hardening mechanisms be used so software defects
   are less likely to result in security vulnerabilities.

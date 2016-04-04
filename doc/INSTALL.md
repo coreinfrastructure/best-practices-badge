@@ -217,7 +217,7 @@ rbenv local 2.2.2 # In this directory AND BELOW, use Ruby 2.2.2 instead.
 # This makes "bundle ..." use rbenv's version of Ruby:
 git clone git://github.com/carsomyr/rbenv-bundler.git ~/.rbenv/plugins/bundler
 
-gem sources --add <https://rubygems.org>  # Ensure you're getting gems here
+gem sources --add https://rubygems.org  # Ensure you're getting gems here
 gem install bundler  # Install the "bundler" gem package manager.
 rbenv rehash
 bundle install       # Install gems we use in Gemfile.lock, including Rails

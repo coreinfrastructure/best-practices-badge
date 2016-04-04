@@ -214,16 +214,17 @@ inserts and checks for a CSRF token, countering this potential vulnerability.
 
 To modify the text of the criteria, edit these files:
 
-- <doc/criteria.md> - Document
-- <./criteria.yml> - YAML file used by BadgeApp for criteria information.
+- doc/criteria.md - Document
+- ./criteria.yml - YAML file used by BadgeApp for criteria information.
 
 If you're adding/removing fields (including criteria), be sure to also edit
-<app/views/projects/_form.html.erb> (to determine where to display it).
+app/views/projects/\_form.html.erb
+(to determine where to display it).
 You may also want to edit the README.md file, which includes a summary
 of the criteria.
 
 When adding or removing fields, or when renaming
-a criterion name, you may need to edit the test creator <db/seeds.rb>,
+a criterion name, you may need to edit the test creator db/seeds.rb file,
 and you will certainly need to create a database migration.
 The "status" (met/unmet) is the criterion name + "\_status" stored as a string;
 each criterion also has a name + "\_justification" stored as text.
@@ -328,7 +329,7 @@ GITHUB_KEY='client id' GITHUB_SECRET='client secret' rails s
 where *client id* and *client secret* are registered OAuth2 credentials
 of the app.
 
-The authorization callback URL in GitHub is: <http://localhost:3000/auth/github>
+The authorization callback URL in GitHub is: http://localhost:3000/auth/github
 
 [1] <https://github.com/settings/applications/new>
 [2] <https://devcenter.heroku.com/articles/config-vars>

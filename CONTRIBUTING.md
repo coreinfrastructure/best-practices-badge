@@ -70,7 +70,7 @@ Another way to do this is to write the following at the end of the commit
 message, on a line by itself separated by a blank line from the body of
 the commit:
 
-    Signed-off-by: Your Name <your.email@example.com>
+    Signed-off-by: YOUR NAME &lt;YOUR.EMAIL@EXAMPLE.COM&gt;
 
 You can signoff by default in this project by creating a file
 (say "git-template") that contains

@@ -44,7 +44,11 @@
           <% if criterion_category == 'FUTURE' %>
           (Future criterion)
           <% end %>
-          <%= raw Criteria[criterion][:description] %> <sup>[<%= criterion %>]</sup>
+          <%= raw Criteria[criterion][:description] %>
+          <% if criterion_met_url_required %>
+            (URL required)
+          <% end %>
+          <sup>[<%= criterion %>]</sup>
           <%= if Criteria[criterion][:details]
               render(partial: "details", locals: {f: f,
                        criterion: criterion,

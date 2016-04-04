@@ -25,7 +25,7 @@ gem 'sass-rails', '5.0.4'
 gem 'secure_headers', '3.1.2' # Harden app security using HTTP headers
 gem 'turbolinks', '2.5.3' # Speed UI access
 gem 'jquery-turbolinks'   # Make turbolinks work with jQuery
-gem 'uglifier', '2.7.2'
+gem 'uglifier', '3.0.0'
 gem 'will_paginate', '3.1.0'
 gem 'ransack', '1.7.0' # Make search available in all.
 

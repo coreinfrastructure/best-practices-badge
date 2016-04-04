@@ -1,3 +1,6 @@
 #!/bin/sh
 
+# When generating HTML files locally, make their local links to other
+# HTML files, not to markdown files, so hyperlinks work correctly.
+
 sed -E 's/(href=[\"''][^h][^"'']*)\.md([#"''])/\1.html\2/g'

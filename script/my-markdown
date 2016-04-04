@@ -43,10 +43,13 @@ end
 
 # Generate results.
 
+title=ARGV[0]
+
 puts <<-END
 <!DOCTYPE html>
 <html>
 <head>
+<title>#{title}</title>
 </head>
 <body>
 END

@@ -168,9 +168,10 @@ GEM
     kramdown (1.10.0)
     launchy (2.4.3)
       addressable (~> 2.3)
-    license_finder (2.0.4)
+    license_finder (2.1.0)
       bundler
       httparty
+      rubyzip
       thor
       xml-simple
     loofah (2.0.3)
@@ -339,6 +340,7 @@ GEM
       sexp_processor (~> 4.0)
     ruby_parser (3.8.1)
       sexp_processor (~> 4.1)
+    rubyzip (1.2.0)
     rugged (0.24.0)
     safe_yaml (1.0.4)
     sass (3.4.22)

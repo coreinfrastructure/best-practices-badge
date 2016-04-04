@@ -50,6 +50,11 @@ class UsersManipulateProjectTest < ActionDispatch::IntegrationTest
       assert_select '.footer'
       assert_select '.container'
 
+      # Check if Fastly logo is included.  We can't easily check the img src
+      # value, because the image asset has a fingerprint, but we can detect
+      # the 'alt' value easily, and we want to provide an alt value anyway.
+      assert_select "img[alt='Fastly logo']"
+
       # This ensures that all rows are in containers - except that
       # this currently isn't true:
       # assert_select '#badge-progress' # Ensure we have progress bar area.

@@ -889,7 +889,7 @@
       HTTP headers like Content Security Policy (CSP),
       compiler flags to mitigate attacks
       (such as -fstack-protector), or compiler flags to
-      eliminate undefined behavior,
+      eliminate undefined behavior.
       For our purposes least privilege is not considered a hardening
       mechanism (least privilege is important, but separate).
     autofill: >

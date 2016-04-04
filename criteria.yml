@@ -34,7 +34,7 @@
     category: MUST
     description: >
       The project website MUST succinctly describe what the software does
-      (what problem does it solve?).},
+      (what problem does it solve?).
     details: >
       This MUST be in language that potential users can understand
       (e.g., it uses minimal jargon).
@@ -81,7 +81,7 @@
     description: >
       The information on how to contribute SHOULD include the
       requirements for acceptable contributions
-      (e.g., a reference to any required coding standard).},
+      (e.g., a reference to any required coding standard).
     unmet_placeholder: >
       Why are the requirements so obvious that this information isn't needed?
     autofill: >
@@ -312,7 +312,7 @@
     description: >
       It is SUGGESTED that the
       <a href="http://semver.org">Semantic Versioning (SemVer) format</a>
-      be used for releases.},
+      be used for releases.
     details: >
       Commit IDs (or similar) MAY be used as version numbers. They are
       unique, but note that these can cause problems for users as they
@@ -614,7 +614,7 @@
       The project MUST enable one or more compiler warning flags, a "safe"
       language mode, or use a separate "linter" tool to look for code quality
       errors or common simple mistakes, if there is at least one FLOSS tool that
-      can implement this criterion in the selected language.},
+      can implement this criterion in the selected language.
     details: >
       Examples of compiler warning flags include gcc/clang "-Wall".
       Examples of a "safe" language mode include Javascript "use strict"
@@ -831,7 +831,7 @@
     category: MUST
     description: >
       A cryptographic hash (e.g., a sha1sum) MUST NOT be retrieved over http and
-      used without checking for a cryptographic signature.},
+      used without checking for a cryptographic signature.
     details: >
       These hashes can be modified in transit.
     autofill: >

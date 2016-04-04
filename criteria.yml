@@ -722,6 +722,42 @@
       types of vulnerabilities such as CWE/SANS top 25 or OWASP top 10.
       Simply mentioning those could also be an indicator.
 # Use basic good cryptographic practices
+- crypto_used_network:
+    category: FUTURE
+    na_allowed: true
+    description: >
+      The project SHOULD NOT use
+      unencrypted network communication protocols (such as HTTP and telnet)
+      if there an encrypted equivalent (e.g., HTTPS/TLS and SSH),
+      unless the user specifically requests or configures it.
+- crypto_tls12:
+    category: FUTURE
+    na_allowed: true
+    description: >
+      The project SHOULD,
+      if it supports TLS, support at least TLS version 1.2.
+      Note that the predecessor of TLS was called SSL.
+- crypto_certificate_verification:
+    category: FUTURE
+    na_allowed: true
+    description: >
+      The project MUST,
+      if it supports TLS, perform TLS certificate verification by default
+      when using TLS, including on subresources.
+    details: >
+      Note that incorrect TLS certificate verification is a common mistake.
+      For more information, see
+      <a href="http://crypto.stanford.edu/~dabo/pubs/abstracts/ssl-client-bugs.html">"The Most Dangerous Code in the World: Validating SSL Certificates in Non-Browser Software" by Martin Georgiev et al.</a>
+      and
+      <a href="https://blogs.gnome.org/mcatanzaro/2016/03/12/do-you-trust-this-application/">"Do you trust this application?" by Michael Catanzaro</a>.
+- crypto_verification_private:
+    category: FUTURE
+    na_allowed: true
+    description: >
+      The project SHOULD,
+      if it supports TLS, perform certificate verification
+      before sending HTTP headers with private information
+      (such as secure cookies).
 - crypto_published:
     category: MUST
     na_allowed: true

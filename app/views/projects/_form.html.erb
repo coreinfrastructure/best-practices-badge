@@ -387,6 +387,17 @@ provided by the delivered project's software.
   <button class="btn btn-default hidden-print" type="button" id='all_crypto_na'>Press here if the project does not use or need cryptographic mechanisms</button>
   <br>
 <% end %>
+      <%= render_status 'crypto_used_network', f, project, is_disabled %>
+      <hr>
+
+      <%= render_status 'crypto_tls12', f, project, is_disabled %>
+      <hr>
+
+      <%= render_status 'crypto_certificate_verification', f, project, is_disabled %>
+      <hr>
+
+      <%= render_status 'crypto_verification_private', f, project, is_disabled %>
+      <hr>
 
       <%= render_status 'crypto_published', f, project, is_disabled %>
       <hr>

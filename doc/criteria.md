@@ -502,6 +502,31 @@ need to directly use cryptographic capabilities.
 A "project security mechanism" is a security mechanism provided
 by the delivered project's software.
 
+- <a name="crypto_used_network"></a>(Future criterion)
+   The project SHOULD NOT use
+   unencrypted network communication protocols (such as HTTP and telnet)
+   if there an encrypted equivalent (e.g., HTTPS/TLS and SSH),
+   unless the user specifically requests or configures it.
+  <sup>[<a href="#crypto_used_network">crypto_used_network</a>]</sup>
+- <a name="crypto_tls12"></a>(Future criterion) The project SHOULD,
+   if it supports TLS, support at least TLS version 1.2.
+   Note that the predecessor of TLS was called SSL.
+  <sup>[<a href="#crypto_tls12">crypto_tls12</a>]</sup>
+- <a name="crypto_certificate_verification"></a>(Future criterion)
+   The project MUST,
+   if it supports TLS, perform TLS certificate verification by default
+   when using TLS, including on subresources.
+   Note that incorrect TLS certificate verification is a common mistake.
+   For more information, see
+   ["The Most Dangerous Code in the World: Validating SSL Certificates in Non-Browser Software" by Martin Georgiev et al.](http://crypto.stanford.edu/~dabo/pubs/abstracts/ssl-client-bugs.html) and
+   ["Do you trust this application?" by Michael Catanzaro](https://blogs.gnome.org/mcatanzaro/2016/03/12/do-you-trust-this-application/).
+   <sup>[<a href="#crypto_certificate_verification">crypto_certificate_verification</a>]</sup>
+- <a name="crypto_verification_private"></a>(Future criterion)
+   The project SHOULD,
+   if it supports TLS, perform certificate verification
+   before sending HTTP headers with private information
+   (such as secure cookies).
+   <sup>[<a href="#crypto_verification_private">crypto_verification_private</a>]</sup>
 - <a name="crypto_published"></a>The project's cryptographic software MUST
   use only cryptographic protocols and algorithms that are publicly published
   and reviewed by experts.

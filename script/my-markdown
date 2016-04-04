@@ -43,7 +43,7 @@ end
 
 # Generate results.
 
-title=ARGV[0]
+title = ARGV[0]
 
 puts <<-END
 <!DOCTYPE html>

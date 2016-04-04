@@ -218,3 +218,13 @@
   - :who: Samir Khakimov
     :why: MIT License in README
     :when: 2016-03-24 19:56:00.309479000 Z
+- - :approve
+  - ffi
+  - :who: Samir Khakimov
+    :why: BSD-3-Clause License https://github.com/ffi/ffi/blob/master/LICENSE
+    :when:  2016-04-04 16:50:00 Z
+- - :approve
+  - selenium-webdriver
+  - :who: Samir Khakimov
+    :why: Apache 2.0
+    :when:  2016-04-04 16:50:00 Z

@@ -61,6 +61,7 @@ group :test do
   gem 'coveralls', '0.8.13', require: false
   gem 'm', '1.4.2' # Run test/unit tests by line number
   gem 'minitest-rails-capybara'
+  gem 'selenium-webdriver'
   gem 'simplecov', '0.11.2', require: false
   gem 'webmock'
 end

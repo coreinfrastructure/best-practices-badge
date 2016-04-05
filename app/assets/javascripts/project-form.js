@@ -97,6 +97,22 @@ function changedJustificationText(criteria) {
   resetProgressBar();
 }
 
+// If we should, hide the criteria that are "Met" and are enough.
+// Do NOT hide 'met' criteria that aren't enough (e.g., missing required URL),
+// and do NOT hide the last-selected-met criterion (so users can enter/edit
+// justification text).
+function hideMet() {
+  $.each(criterionCategoryValue, function(key, value) {
+    if ( global_hide_met_criteria && key !== global_last_selected_met &&
+         $('#project_' + key + '_status_met').is(':checked') &&
+         isEnough(key)) {
+      $('#' + key).addClass('hidden');
+    } else {
+      $('#' + key).removeClass('hidden');
+    }
+  })
+}
+
 function updateCriteriaDisplay(criteria) {
   var criteriaJust = '#project_' + criteria + '_justification';
   var criteriaStatus = '#project_' + criteria + '_status';
@@ -117,6 +133,7 @@ function updateCriteriaDisplay(criteria) {
     } else {
       $(criteriaJust).show('fast');
     }
+    global_last_selected_met = criteria;
   } else if ($(criteriaStatus + '_unmet').is(':checked')) {
     var criteriaUnmetPlaceholder = criteria + '_unmet_placeholder';
     $(criteriaJust).
@@ -147,7 +164,27 @@ function updateCriteriaDisplay(criteria) {
   if (justificationValue.length > 0) {
     $(criteriaJust).show('fast');
   }
+  if (global_hide_met_criteria) {
+    // If we're hiding met criteria, walk through and hide them.
+    // We don't need to keep running this if we are NOT hiding them,
+    // which is the normal case.
+    hideMet();
+  }
   changedJustificationText(criteria);
+}
+
+function ToggleHideMet(e) {
+  global_hide_met_criteria = !global_hide_met_criteria;
+  // Note that button text shows what WILL happen on click, so it
+  // shows the REVERSED state (not the current state).
+  if (global_hide_met_criteria) {
+    $('#toggle-hide-met-criteria')
+      .addClass('active').html('Show met criteria');
+  } else {
+    $('#toggle-hide-met-criteria')
+      .removeClass('active').html('Hide met criteria');
+  }
+  hideMet();
 }
 
 function setupProjectField(criteria) {
@@ -175,6 +212,11 @@ function ToggleDetailsDisplay(e) {
       $('#' + e.target.id).html(buttonText);
     });
 }
+
+// Global - name of criterion we last selected as 'met'.
+// We don't want to hide this (yet), so users can enter a justification.
+var global_last_selected_met = '';
+var global_hide_met_criteria = false;
 
 // Create mappings from criteria name to category and met_url_required.
 // Eventually replace with just accessing classes directly via Javascript.
@@ -207,6 +249,10 @@ $(document).ready(function() {
   $('#hide-all-details').click(function(e) {
       $('.details-text').hide('fast');
       $('.details-toggler').html('Show details');
+    });
+
+  $('#toggle-hide-met-criteria').click(function(e) {
+    ToggleHideMet(e);
     });
 
   $('[data-toggle="tooltip"]').tooltip(); // Enable bootstrap tooltips

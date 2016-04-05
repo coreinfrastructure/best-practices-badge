@@ -1,4 +1,4 @@
-    <div class="row"><% raise unless criterion && Criteria[criterion] %>
+    <div id="<%= criterion %>" class="row"><% raise unless criterion && Criteria[criterion] %>
       <% status_symbol = (criterion + "_status").to_sym %>
       <% justification_symbol = (criterion + "_justification").to_sym %>
 
@@ -9,8 +9,7 @@
       <% criterion_category = Project.criterion_category(criterion) %>
       <% criterion_met_url_required = Project.met_url_required?(criterion) %>
 
-      <div id="<%= criterion
-        %>" class="col-md-2 criteria-radio<%= crypto_class %>">
+      <div class="col-md-2 criteria-radio<%= crypto_class %>">
        <div class="row status-chooser">
        <span class="criterion-name hidden"><%= criterion %></span>
        <span class="criterion-category hidden"><%= criterion_category %></span>

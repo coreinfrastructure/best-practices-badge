@@ -535,6 +535,28 @@
       is more likely to *also* be true.  The only *real* way to check this
       is to install and build on a system that only has FLOSS, and we
       won't have the time to do that ourselves.
+- build_reproducible:
+    category: FUTURE
+    na_allowed: true
+    description: >
+      It is SUGGESTED that
+      the project have a
+      <a href="https://reproducible-builds.org/">reproducible build</a>.
+    details: >
+      With reproducible builds, multiple parties can independently redo the
+      process of generating information from source files and get exactly
+      the same result.
+      The <a href="https://reproducible-builds.org/docs/">reproducible builds project has documentation on how to do this</a>.
+      This criterion does not apply if no building occurs
+      (e.g., scripting languages where the source code
+      is used directly instead of being compiled).
+    autofill: >
+      If the project seems to only have scripting language code,
+      prefill it as N/A.
+      Otherwise, check if the reproducible build project lists the project
+      as being reproducible.
+      The only *real* way to check is to actually perform the build
+      multiple times, but we don't have time for that.
 # Automated test suite
 - test:
     category: MUST

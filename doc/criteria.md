@@ -368,6 +368,17 @@ Note that:
 - <a name="build_floss_tools"></a> The project SHOULD be buildable
   using only FLOSS tools.
   <sup>[<a href="#build_floss_tools">build_floss_tools</a>]\*</sup>
+- <a name="build_reproducible"></a>(Future criterion)
+  It is SUGGESTED that
+  the project have a [reproducible build](https://reproducible-builds.org/).
+  With reproducible builds, multiple parties can independently redo the
+  process of generating information from source files and get exactly
+  the same result.
+  The [reproducible builds project has documentation on how to do this](https://reproducible-builds.org/docs/).
+  This criterion does not apply if no building occurs
+  (e.g., scripting languages where the source code
+  is used directly instead of being compiled).
+  <sup>[<a href="#build_reproducible">build_reproducible</a>]\*</sup>
 - *Rationale*: If a project needs to be built but there is no working
   build system, then potential co-developers will not be able to easily
   contribute and many security analysis tools will be ineffective.

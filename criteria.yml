@@ -799,7 +799,8 @@
     category: MUST
     na_allowed: true
     description: >
-      The project's cryptographic software MUST use only cryptographic protocols
+      The project's cryptographic software MUST use by default
+      only cryptographic protocols
       and algorithms that are publicly published and reviewed by experts.
     # autofill: TODO
 - crypto_call:
@@ -846,7 +847,7 @@
     category: MUST
     na_allowed: true
     description: >
-      The project security mechanisms MUST NOT depend on cryptographic
+      The default project security mechanisms MUST NOT depend on cryptographic
       algorithms that are broken (e.g., MD4, MD5, single DES, RC4,
       or Dual_EC_DRBG).
     # autofill: TODO

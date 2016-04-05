@@ -550,7 +550,8 @@ by the delivered project's software.
    (such as secure cookies).
    <sup>[<a href="#crypto_verification_private">crypto_verification_private</a>]</sup>
 - <a name="crypto_published"></a>The project's cryptographic software MUST
-  use only cryptographic protocols and algorithms that are publicly published
+  use by default
+  only cryptographic protocols and algorithms that are publicly published
   and reviewed by experts.
   <sup>[<a href="#crypto_published">crypto_published</a>]\*</sup>
 - <a name="crypto_call"></a>If the project software is an application
@@ -578,7 +579,7 @@ by the delivered project's software.
   (ideally it would not, since this allows downgrade attacks,
   but shorter keylengths are sometimes necessary for interoperability.)
   <sup>[<a href="#crypto_keylength">crypto_keylength</a>]\*</sup>
-- <a name="crypto_working"></a>The project security mechanisms MUST NOT
+- <a name="crypto_working"></a>The default project security mechanisms MUST NOT
   depend on cryptographic algorithms that are broken
   (e.g., MD4, MD5, single DES, RC4, or Dual_EC_DRBG).
   <sup>[<a href="#crypto_working">crypto_working</a>]\*</sup>

@@ -226,6 +226,16 @@ Note that:
   A project can meet this criterion even if its core developers'
   primary language is not English.
   <sup>[<a href="#english">english</a>]</sup>
+- <a name="installation_common"></a>The project SHOULD
+  provide a way to easily install and uninstall the software using a
+  commonly-used convention.
+  Examples include using a package manager (at
+  the system or language level), "make install/uninstall" (supporting
+  DESTDIR), a container in a standard format,
+  or a virtual machine image in a standard format.
+  The installation and uninstallation process (e.g., its packaging)
+  MAY be implemented by a third party as long as it is FLOSS.
+  <sup>[<a href="#installation_common">installation_common</a>]</sup>
 
 ### Change control
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160405012958) do
+ActiveRecord::Schema.define(version: 20160405014948) do
 
   create_table "projects", force: :cascade do |t|
     t.integer  "user_id"
@@ -172,6 +172,8 @@ ActiveRecord::Schema.define(version: 20160405012958) do
     t.text     "crypto_verification_private_justification"
     t.string   "hardened_site_status",                                 default: "?"
     t.text     "hardened_site_justification"
+    t.string   "installation_common_status",                           default: "?"
+    t.text     "installation_common_justification"
   end
 
   add_index "projects", ["repo_url"], name: "index_projects_on_repo_url"

@@ -247,6 +247,21 @@
       We can use more general tools to detect the natural language,
       or simple mechanisms like using dictionaries/spellcheckers to
       see if it's mostly English.
+- installation_common:
+    category: FUTURE
+    description: >
+      The project SHOULD
+      provide a way to easily install and uninstall the software using a
+      commonly-used convention.
+    details: >
+      Examples include using a package manager (at
+      the system or language level), "make install/uninstall" (supporting
+      DESTDIR), a container in a standard format,
+      or a virtual machine image in a standard format.
+      The installation and uninstallation process (e.g., its packaging)
+      MAY be implemented by a third party as long as it is FLOSS.
+    autofill: >
+      Look for a standard install format, or a build instruction for one.
 #
 # CHANGE CONTROL
 #

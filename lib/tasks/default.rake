@@ -42,7 +42,7 @@ end
 
 desc 'Run brakeman'
 task :brakeman do
-  sh 'bundle exec brakeman --quiet || true'
+  sh 'bundle exec brakeman --quiet'
 end
 
 desc 'Run bundle if needed'

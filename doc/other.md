@@ -199,7 +199,8 @@ Potential other criteria
     -   Issue tracking for requirements/enhancement requests.
     -   Bug/vulnerability report responsiveness,
         e.g., commitment to respond to any vulnerability
-        report within (say) 14 days.
+        report within (say) 14 days,
+        or respond to all/nearly all bug reports (far more than 50%).
     -   If this is a project fork,
         actively working to become sustainable by either growing its community
         *or* working to heal the fork (e.g., contribute to the mainline).

@@ -251,6 +251,9 @@ $(document).ready(function() {
       $('.details-toggler').html('Show details');
     });
 
+  // Force these values on page reload
+  global_last_selected_met = '';
+  global_hide_met_criteria = false;
   $('#toggle-hide-met-criteria').click(function(e) {
     ToggleHideMet(e);
     });

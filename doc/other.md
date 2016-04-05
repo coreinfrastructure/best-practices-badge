@@ -61,6 +61,7 @@ Potential silver criteria
         *Rationale*:  Reproduceable builds make it much easier to verify that
         the executable and source code of a program correspond,
         countering certain kinds of malicious attacks.
+        (Proposed for main criteria.)
 *   Documentation
     - <a name="documentation-architecture"></a>
         The project MUST include reference documentation that describes

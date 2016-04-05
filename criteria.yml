@@ -1055,8 +1055,9 @@
     category: MUST
     na_allowed: true
     description: >
-      All confirmed medium and high severity exploitable vulnerabilities
-      discovered with static code analysis MUST be fixed.
+      All medium and high severity exploitable vulnerabilities
+      discovered with static code analysis MUST be fixed
+      in a timely way after they are confirmed.
     details: >
       A vulnerability is medium to high severity if its <a
       href="https://nvd.nist.gov/cvss.cfm">CVSS 2.0</a> is 4 or higher.
@@ -1131,8 +1132,9 @@
 - dynamic_analysis_fixed:
     category: MUST
     description: >
-      All confirmed medium and high severity exploitable vulnerabilities
-      discovered with dynamic code analysis MUST be fixed.
+      All medium and high severity exploitable vulnerabilities
+      discovered with dynamic code analysis MUST be fixed
+      in a timely way after they are confirmed.
     details: >
        A vulnerability is medium to high severity if its <a
        href="https://nvd.nist.gov/cvss.cfm">CVSS 2.0</a> base score is 4

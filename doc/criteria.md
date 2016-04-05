@@ -91,6 +91,7 @@ if not, see introductory materials such as
 
 Here are the current *draft* criteria; it is certain to change.
 Note that:
+
 * The criteria marked with "&#8224;" are intended to be automatically testable
   if the project follows standard conventions and
   is hosted on a site (e.g., GitHub) with decent API support.
@@ -595,6 +596,17 @@ by the delivered project's software.
   for signatures are correct *and* if the users will
    actually check the signature.
   <sup>[<a href="#delivery_mitm">delivery_mitm</a>]&#8224;</sup>
+- <a name="hardened_site"></a>(Future criterion)
+  It is SUGGESTED that the project website, repository (if accessible
+  via the web), and download site (if separate) include key hardening headers
+  with nonpermissive values.
+  Note that GitHub is known to meet this.
+  Sites such as https://securityheaders.io/ can quickly check this.
+  The key hardening headers are:
+  Content Security Policy (CSP), HTTP Strict Transport Security
+  (HSTS), X-Content-Type-Options (as "nosniff"), X-Frame-Options,
+  and X-XSS-Protection.
+  <sup>[<a href="#hardened_site">hardened_site</a>]&#8224;</sup>
 
 *Publicly known vulnerabilities fixed*
 

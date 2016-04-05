@@ -863,6 +863,21 @@
       actually check the signature.
     autofill: >
       Look for a download site using https.
+- hardened_site:
+    category: FUTURE
+    description: >
+      It is SUGGESTED that the project website, repository (if accessible
+      via the web), and download site (if separate) include key hardening
+      headers with nonpermissive values.
+    details: >
+      Note that GitHub is known to meet this.
+      Sites such as https://securityheaders.io/ can quickly check this.
+      The key hardening headers are:
+      Content Security Policy (CSP), HTTP Strict Transport Security
+      (HSTS), X-Content-Type-Options (as "nosniff"), X-Frame-Options,
+      and X-XSS-Protection.
+    autofill: >
+      Load the URLs and look for those HTTP headers.
 - delivery_unsigned:
     category: MUST
     description: >

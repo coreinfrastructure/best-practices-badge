@@ -39,5 +39,5 @@ UseMultipartAlternativeAsContentTypeOfEmailCheck: { }
 UseObserverCheck: { }
 UseQueryAttributeCheck: { }
 UseSayWithTimeInMigrationsCheck: { }
-UseScopeAccessCheck: { }
+# UseScopeAccessCheck: { }
 UseTurboSprocketsRails3Check: { }

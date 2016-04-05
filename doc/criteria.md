@@ -555,9 +555,9 @@ by the delivered project's software.
   <sup>[<a href="#crypto_published">crypto_published</a>]\*</sup>
 - <a name="crypto_call"></a>If the project software is an application
   or library, and its primary purpose is not to implement cryptography,
-  then it MUST only call on software specifically designed to implement
+  then it SHOULD only call on software specifically designed to implement
   cryptographic functions;
-  it MUST NOT re-implement its own.
+  it SHOULD NOT re-implement its own.
   <sup>[<a href="#crypto_call">crypto_call</a>]\*</sup>
 - <a name="crypto_floss"></a>All project functionality that depends
   on cryptography MUST be implementable using FLOSS.  See the

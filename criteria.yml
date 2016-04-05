@@ -803,13 +803,13 @@
       and algorithms that are publicly published and reviewed by experts.
     # autofill: TODO
 - crypto_call:
-    category: MUST
+    category: SHOULD
     na_allowed: true
     description: >
       If the project software is an application or library, and its primary
-      purpose is not to implement cryptography, then it MUST only call on
+      purpose is not to implement cryptography, then it SHOULD only call on
       software specifically designed to implement cryptographic functions;
-      it MUST NOT re-implement its own.
+      it SHOULD NOT re-implement its own.
     # autofill: TODO
 - crypto_floss:
     category: MUST

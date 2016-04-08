@@ -163,7 +163,7 @@ class Project < ActiveRecord::Base
   end
 
   def self.any_status_in_progress?(project)
-    ALL_CRITERIA.any? do |criterion|
+    ALL_ACTIVE_CRITERIA.any? do |criterion|
       status = project["#{criterion}_status"]
       status == '?' || status.blank?
     end
@@ -171,7 +171,7 @@ class Project < ActiveRecord::Base
   private_class_method :any_status_in_progress?
 
   def self.all_status_enough?(project)
-    ALL_CRITERIA.all? do |criterion|
+    ALL_ACTIVE_CRITERIA.all? do |criterion|
       enough_criterion? project["#{criterion}_status"],
                         project["#{criterion}_justification"],
                         Criteria[criterion.to_s][:category],

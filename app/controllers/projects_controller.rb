@@ -31,9 +31,9 @@ class ProjectsController < ApplicationController
   def badge
     set_surrogate_key_header @project.record_key + '/badge'
     respond_to do |format|
-      status = Project.badge_achieved?(@project) ? 'passing' : 'failing'
+      level = Project.badge_level(@project)
       format.svg do
-        send_file Rails.application.assets["badge-#{status}.svg"].pathname,
+        send_file Rails.application.assets["badge-#{level}.svg"].pathname,
                   disposition: 'inline'
       end
     end
@@ -86,11 +86,11 @@ class ProjectsController < ApplicationController
   # PATCH/PUT /projects/1.json
   # rubocop:disable Metrics/MethodLength
   def update
-    old_badge_status = Project.badge_achieved_id?(params[:id])
+    old_badge_level = Project.badge_level_id?(params[:id])
     Chief.new(@project).autofill
     respond_to do |format|
       if @project.update(project_params)
-        successful_update(format, old_badge_status)
+        successful_update(format, old_badge_level)
       else
         format.html { render :edit }
         format.json do
@@ -101,17 +101,17 @@ class ProjectsController < ApplicationController
   end
   # rubocop:enable Metrics/MethodLength
 
-  def successful_update(format, old_badge_status)
+  def successful_update(format, old_badge_level)
     FastlyRails.purge_by_key(@project.record_key + '/badge')
     # @project.purge
     format.html do
       redirect_to @project, success: 'Project was successfully updated.'
     end
     format.json { render :show, status: :ok, location: @project }
-    new_badge_status = Project.badge_achieved?(@project)
-    if new_badge_status != old_badge_status # TODO: Eventually deliver_later
+    new_badge_level = Project.badge_level(@project)
+    if new_badge_level != old_badge_level # TODO: Eventually deliver_later
       ReportMailer.project_status_change(
-        @project, old_badge_status, new_badge_status).deliver_now
+        @project, old_badge_level, new_badge_level).deliver_now
     end
   end
 

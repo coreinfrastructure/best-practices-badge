@@ -115,10 +115,10 @@ class ProjectsControllerTest < ActionController::TestCase
     assert_includes @response.body, 'failing'
   end
 
-  test 'An empty project should not have the badge' do
+  test 'An empty project should not have the badge; it should be in progress' do
     get :badge, id: @project, format: 'svg'
     assert_response :success
-    assert_includes @response.body, 'failing'
+    assert_includes @response.body, 'in progress'
   end
 
   test 'should destroy project' do

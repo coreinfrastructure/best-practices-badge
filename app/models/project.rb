@@ -91,15 +91,30 @@ class Project < ActiveRecord::Base
   end
 
   # TODO: Should be normal method.
-  def self.badge_achieved?(project)
-    ALL_CRITERIA.all? do |criterion|
+  # Return badge level of the given project.
+  # If every non-future criterion is enough, it's passing.
+  # Otherwise, if there are no '?' statuses, it's failing.
+  # Otherwise, it's in_progress.
+  # We have to disable Style/Next; rubocop gets confused here.
+  # rubocop:disable Metrics/MethodLength, Style/Next
+  def self.badge_level(project)
+    badge_level = 'passing'
+    ALL_CRITERIA.each do |criterion|
       status = project["#{criterion}_status"]
+      if status == '?'
+        badge_level = 'in_progress'
+        break
+      end
       justification = project["#{criterion}_justification"]
-      enough_criterion? status, justification,
-                        Criteria[criterion.to_s][:category],
-                        Criteria[criterion.to_s][:met_url_required]
+      unless enough_criterion? status, justification,
+                               Criteria[criterion.to_s][:category],
+                               Criteria[criterion.to_s][:met_url_required]
+        badge_level = 'failing'
+      end
     end
+    badge_level
   end
+  # rubocop:enable Metrics/MethodLength, Style/Next
 
   def self.to_percentage(portion, total)
     if portion == total
@@ -123,13 +138,13 @@ class Project < ActiveRecord::Base
     to_percentage met, ALL_CRITERIA.length
   end
 
-  def self.badge_achieved_id?(id)
+  def self.badge_level_id?(id)
     return false if id.nil?
     old_project = Project.find(id)
     if old_project
-      badge_achieved?(old_project)
+      badge_level(old_project)
     else
-      false
+      'failing'
     end
   end
 

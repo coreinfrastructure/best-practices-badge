@@ -93,31 +93,16 @@ class Project < ActiveRecord::Base
     (Criteria[criterion.to_s])[:met_url_required]
   end
 
-  # TODO: Should be normal method.
   # Return badge level of the given project.
-  # If every non-future criterion is enough, it's passing.
-  # Otherwise, if there are no '?' statuses, it's failing.
-  # Otherwise, it's in_progress.
-  # We have to disable Style/Next; rubocop gets confused here.
-  # rubocop:disable Metrics/MethodLength, Style/Next
+  # TODO: Should be normal method.
   def self.badge_level(project)
-    badge_level = 'passing'
-    ALL_ACTIVE_CRITERIA.each do |criterion|
-      status = project["#{criterion}_status"]
-      if status == '?' || status.blank?
-        badge_level = 'in_progress'
-        break
-      end
-      justification = project["#{criterion}_justification"]
-      unless enough_criterion? status, justification,
-                               Criteria[criterion.to_s][:category],
-                               Criteria[criterion.to_s][:met_url_required]
-        badge_level = 'failing'
-      end
+    if any_status_in_progress?(project)
+      'in_progress'
+    elsif all_status_enough?(project)
+      'passing'
+    else 'failing'
     end
-    badge_level
   end
-  # rubocop:enable Metrics/MethodLength, Style/Next
 
   def self.to_percentage(portion, total)
     if portion == total
@@ -151,20 +136,6 @@ class Project < ActiveRecord::Base
     end
   end
 
-  private
-
-  def need_a_base_url
-    return unless repo_url.blank? && project_homepage_url.blank?
-    errors.add :base, 'Need at least a project or repository URL'
-  end
-
-  # TODO: define standard URL regex, then use everywhere.
-  def self.contains_url?(text)
-    return false if text.nil?
-    text.match %r(https?://[^ ]{5,})
-  end
-  private_class_method :contains_url?
-
   # Do we have enough about this criterion to get a badge?
   # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
   # rubocop:disable Metrics/MethodLength
@@ -183,7 +154,38 @@ class Project < ActiveRecord::Base
     else false
     end
   end
-  private_class_method :enough_criterion?
+
+  private
+
+  def need_a_base_url
+    return unless repo_url.blank? && project_homepage_url.blank?
+    errors.add :base, 'Need at least a project or repository URL'
+  end
+
+  def self.any_status_in_progress?(project)
+    ALL_CRITERIA.any? do |criterion|
+      status = project["#{criterion}_status"]
+      status == '?' || status.blank?
+    end
+  end
+  private_class_method :any_status_in_progress?
+
+  def self.all_status_enough?(project)
+    ALL_CRITERIA.all? do |criterion|
+      enough_criterion? project["#{criterion}_status"],
+                        project["#{criterion}_justification"],
+                        Criteria[criterion.to_s][:category],
+                        Criteria[criterion.to_s][:met_url_required]
+    end
+  end
+  private_class_method :all_status_enough?
+
+  # TODO: define standard URL regex, then use everywhere.
+  def self.contains_url?(text)
+    return false if text.nil?
+    text.match %r(https?://[^ ]{5,})
+  end
+  private_class_method :contains_url?
 
   # rubocop:enable Metrics/CyclomaticComplexity
 end

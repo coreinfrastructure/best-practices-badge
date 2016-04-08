@@ -33,8 +33,7 @@ class ProjectsController < ApplicationController
     respond_to do |format|
       level = Project.badge_level(@project)
       format.svg do
-        send_file Rails.application.assets["badge-#{level}.svg"].pathname,
-                  disposition: 'inline'
+        send_file badge_file(level), disposition: 'inline'
       end
     end
   end
@@ -144,6 +143,15 @@ class ProjectsController < ApplicationController
   end
 
   private
+
+  # Return name of badge file for given level
+  def badge_file(level)
+    if %(passing in_progress failing).include? level
+      Rails.application.assets["badge-#{level}.svg"].pathname
+    else
+      ''
+    end
+  end
 
   def set_homepage_url
     # Assign to repo.homepage if it exists, and else repo_url

@@ -12,6 +12,9 @@ class Project < ActiveRecord::Base
   # from a YAML file.
 
   ALL_CRITERIA = Criteria.keys.to_set.freeze
+  ALL_ACTIVE_CRITERIA = ALL_CRITERIA.select do |criterion|
+    Criteria[criterion] != 'FUTURE'
+  end.to_set.freeze
   ALL_CRITERIA_STATUS = ALL_CRITERIA.map do |criterion|
     "#{criterion}_status".to_sym
   end.to_set.freeze
@@ -99,7 +102,7 @@ class Project < ActiveRecord::Base
   # rubocop:disable Metrics/MethodLength, Style/Next
   def self.badge_level(project)
     badge_level = 'passing'
-    ALL_CRITERIA.each do |criterion|
+    ALL_ACTIVE_CRITERIA.each do |criterion|
       status = project["#{criterion}_status"]
       if status == '?'
         badge_level = 'in_progress'

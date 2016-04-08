@@ -131,14 +131,14 @@ class Project < ActiveRecord::Base
 
   # TODO: Should be normal method.
   def self.badge_percentage(project)
-    met = ALL_CRITERIA.count do |criterion|
+    met = ALL_ACTIVE_CRITERIA.count do |criterion|
       status = project["#{criterion}_status"]
       justification = project["#{criterion}_justification"]
       enough_criterion?(status, justification,
                         Criteria[criterion.to_s][:category],
                         Criteria[criterion.to_s][:met_url_required])
     end
-    to_percentage met, ALL_CRITERIA.length
+    to_percentage met, ALL_ACTIVE_CRITERIA.length
   end
 
   def self.badge_level_id?(id)

@@ -98,7 +98,7 @@ class Project < ActiveRecord::Base
   def self.badge_level(project)
     if any_status_in_progress?(project)
       'in_progress'
-    elsif all_status_enough?(project)
+    elsif all_status_passing?(project)
       'passing'
     else 'failing'
     end
@@ -119,9 +119,9 @@ class Project < ActiveRecord::Base
     met = ALL_ACTIVE_CRITERIA.count do |criterion|
       status = project["#{criterion}_status"]
       justification = project["#{criterion}_justification"]
-      enough_criterion?(status, justification,
-                        Criteria[criterion.to_s][:category],
-                        Criteria[criterion.to_s][:met_url_required])
+      passing_criterion?(status, justification,
+                         Criteria[criterion.to_s][:category],
+                         Criteria[criterion.to_s][:met_url_required])
     end
     to_percentage met, ALL_ACTIVE_CRITERIA.length
   end
@@ -139,7 +139,7 @@ class Project < ActiveRecord::Base
   # Do we have enough about this criterion to get a badge?
   # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
   # rubocop:disable Metrics/MethodLength
-  def self.enough_criterion?(status, justification, category, met_needs_url)
+  def self.passing_criterion?(status, justification, category, met_needs_url)
     return true if category == 'FUTURE'
     case
     when status == 'N/A'
@@ -170,15 +170,15 @@ class Project < ActiveRecord::Base
   end
   private_class_method :any_status_in_progress?
 
-  def self.all_status_enough?(project)
+  def self.all_status_passing?(project)
     ALL_ACTIVE_CRITERIA.all? do |criterion|
-      enough_criterion? project["#{criterion}_status"],
-                        project["#{criterion}_justification"],
-                        Criteria[criterion.to_s][:category],
-                        Criteria[criterion.to_s][:met_url_required]
+      passing_criterion? project["#{criterion}_status"],
+                         project["#{criterion}_justification"],
+                         Criteria[criterion.to_s][:category],
+                         Criteria[criterion.to_s][:met_url_required]
     end
   end
-  private_class_method :all_status_enough?
+  private_class_method :all_status_passing?
 
   # TODO: define standard URL regex, then use everywhere.
   def self.contains_url?(text)

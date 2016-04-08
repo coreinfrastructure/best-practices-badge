@@ -594,6 +594,7 @@ It's currently set up for Fastly.
 The SVG files for badges are:
 
 - <https://img.shields.io/badge/cii_best_practices-passing-green.svg>
+- <https://img.shields.io/badge/cii_best_practices-in_progress-yellow.svg>
 - <https://img.shields.io/badge/cii_best_practices-failing-red.svg>
 
 ## Licenses of the software used by BadgeApp

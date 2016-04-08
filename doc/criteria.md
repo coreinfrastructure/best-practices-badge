@@ -110,11 +110,12 @@ Note that:
 - <a name="project_homepage_url"></a>The project MUST have a public website
   with a stable URL.
   <sup>[<a href="#project_homepage_url">project_homepage_url</a>]&#8224;</sup>
-- <a name="project_homepage_https"></a>It is SUGGESTED that the project website
-  use HTTPS, not HTTP.
-  Future versions of these criteria may make HTTPS a requirement.
-  (The badging application will show a warning for HTTP-only URLs.)
-  <sup>[<a href="#project_homepage_https">project_homepage_https</a>]&#8224;</sup>
+- <a name="project_sites_https"></a>The project sites
+  (website, repository, and download URLs)
+  MUST support HTTPS using TLS.
+  The badging application will show a warning if only HTTP is provided
+  for the project website home page, repository, or download URLS.
+  <sup>[<a href="#project_sites_https">project_sites_https</a>]&#8224;</sup>
 
 *Basic project website content*
 

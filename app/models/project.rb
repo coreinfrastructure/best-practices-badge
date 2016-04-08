@@ -13,7 +13,7 @@ class Project < ActiveRecord::Base
 
   ALL_CRITERIA = Criteria.keys.to_set.freeze
   ALL_ACTIVE_CRITERIA = ALL_CRITERIA.select do |criterion|
-    Criteria[criterion] != 'FUTURE'
+    Criteria[criterion.to_s]['category'] != 'FUTURE'
   end.to_set.freeze
   ALL_CRITERIA_STATUS = ALL_CRITERIA.map do |criterion|
     "#{criterion}_status".to_sym

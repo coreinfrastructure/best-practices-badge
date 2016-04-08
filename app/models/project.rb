@@ -104,7 +104,7 @@ class Project < ActiveRecord::Base
     badge_level = 'passing'
     ALL_ACTIVE_CRITERIA.each do |criterion|
       status = project["#{criterion}_status"]
-      if status == '?'
+      if status == '?' || status.blank?
         badge_level = 'in_progress'
         break
       end

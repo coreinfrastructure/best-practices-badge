@@ -33,7 +33,7 @@
         </td>
         <td><%= project.license %></td>
         <td><%= link_to project.user_name, project.user %></td>
-        <td><%= Project.badge_percentage(project) %>%</td>
+        <td><%= project.badge_percentage %>%</td>
         <td><%= link_to "<img src='/projects/#{project.id}/badge'>".html_safe,
                         project %></td>
       </tr>

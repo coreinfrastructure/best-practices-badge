@@ -24,9 +24,9 @@ class User < ActiveRecord::Base
   end
 
   def self.create_with_omniauth(auth)
-    @user = User.new(provider: auth['provider'], uid: auth['uid'],
-                     name: auth['info']['name'], email: auth['info']['email'],
-                     nickname: auth['info']['nickname'], activated: true)
+    @user = User.new(provider: auth[:provider], uid: auth[:uid],
+                     name: auth[:info][:name], email: auth[:info][:email],
+                     nickname: auth[:info][:nickname], activated: true)
     @user.save(validate: false)
     @user
   end

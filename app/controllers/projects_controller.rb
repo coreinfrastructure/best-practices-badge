@@ -31,7 +31,7 @@ class ProjectsController < ApplicationController
   def badge
     set_surrogate_key_header @project.record_key + '/badge'
     respond_to do |format|
-      level = Project.badge_level(@project)
+      level = @project.badge_level
       format.svg do
         send_file badge_file(level), disposition: 'inline'
       end
@@ -83,9 +83,9 @@ class ProjectsController < ApplicationController
 
   # PATCH/PUT /projects/1
   # PATCH/PUT /projects/1.json
-  # rubocop:disable Metrics/MethodLength
+  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   def update
-    old_badge_level = Project.badge_level_id?(params[:id])
+    old_badge_level = Project(params[:id]).badge_level
     Chief.new(@project).autofill
     respond_to do |format|
       if @project.update(project_params)
@@ -98,7 +98,7 @@ class ProjectsController < ApplicationController
       end
     end
   end
-  # rubocop:enable Metrics/MethodLength
+  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
   def successful_update(format, old_badge_level)
     FastlyRails.purge_by_key(@project.record_key + '/badge')
@@ -107,7 +107,7 @@ class ProjectsController < ApplicationController
       redirect_to @project, success: 'Project was successfully updated.'
     end
     format.json { render :show, status: :ok, location: @project }
-    new_badge_level = Project.badge_level(@project)
+    new_badge_level = @project.badge_level
     if new_badge_level != old_badge_level # TODO: Eventually deliver_later
       ReportMailer.project_status_change(
         @project, old_badge_level, new_badge_level).deliver_now
@@ -168,7 +168,7 @@ class ProjectsController < ApplicationController
   # Never trust parameters from the scary internet,
   # only allow the white list through.
   def project_params
-    params.require(:project).permit(Project::PROJECT_PERMITTED_FIELDS_ARRAY)
+    params.require(:project).permit(Project::PROJECT_PERMITTED_FIELDS)
   end
 
   def change_authorized

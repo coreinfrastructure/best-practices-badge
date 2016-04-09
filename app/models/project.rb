@@ -120,8 +120,8 @@ class Project < ActiveRecord::Base
   def passing?(criterion)
     status = self[criterion.status]
     justification = self[criterion.justification]
-    category = Criteria[criterion][:category]
-    met_needs_url = Criteria[criterion][:met_url_required]
+    category = Project.criterion_category(criterion)
+    met_needs_url = Project.met_url_required?(criterion)
 
     return true if category == 'FUTURE'
     return true if status == 'N/A'

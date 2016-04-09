@@ -85,7 +85,7 @@ class ProjectsController < ApplicationController
   # PATCH/PUT /projects/1.json
   # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   def update
-    old_badge_level = Project(params[:id]).badge_level
+    old_badge_level = Project.find(params[:id]).badge_level
     Chief.new(@project).autofill
     respond_to do |format|
       if @project.update(project_params)

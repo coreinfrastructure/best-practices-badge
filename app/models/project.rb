@@ -109,7 +109,7 @@ class Project < ActiveRecord::Base
   end
 
   def contains_url?(text)
-    text =~ /\A#{URI.regexp(%w(http https))}\z/
+    text =~ /#{URI.regexp(%w(http https))}/
   end
 
   # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity

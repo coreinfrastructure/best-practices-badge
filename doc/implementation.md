@@ -89,6 +89,12 @@ Those updates will trigger tests by CircleCI (via webhooks).
 If those tests pass, that updated branch is then deployed to
 its respective tier.
 
+Most administrative actions require logging into the relevant Heroku tier
+using the "heroku" command (this requires authorization).
+The one exception: the BadgeApp web application does support an 'admin'
+role for logged in users; admin users
+are allowed to edit and delete any project entry.
+
 ## Terminology
 
 This section describes key application-specific terminology.
@@ -97,7 +103,7 @@ The web application tracks data about many OSS *projects*,
 as identified and entered by *users*.
 
 We hope that projects will (eventually) *achieve* a *badge*.
-A project must *satisfy* all *criteria*
+A project must *satisfy* (or "pass") all *criteria*
 (singular: criterion) enough to achieve a badge.
 
 The *status* of each criterion, for a given project, can be one of:
@@ -110,12 +116,13 @@ criteria justification, and a few other data fields such as
 project name, project description, project home page URL, and
 project repository (repo) URL.
 
-Each criterion is in one of three *categories*:
-'MUST', 'SHOULD', and 'SUGGESTED'.
+Each criterion is in one of four *categories*:
+'MUST', 'SHOULD', 'SUGGESTED', and 'FUTURE'.
 In some cases, a criterion may require some justification
 or a URL in the justification to be enough to satisfy the criterion for
 a badge.  See the [criteria](./criteria.md) or
 application form for the current exact rules.
+A synonym for 'satifying' a criterion is 'passing' a criterion.
 
 We have an 'autofill' system that fills in some data automatically.
 In some cases the autofill data will *override* human-entered data
@@ -374,6 +381,20 @@ the authorization keys to do this):
 ~~~~sh
 heroku pg:backups capture
 curl -o latest.dump $(heroku pg:backups public-url)
+~~~~
+
+## Purging Fastly CDN cache
+
+If a change in the application causes badge level(s) to change,
+you need to purge the Fastly CDN cache after pushing.
+Otherwise, the Fastly CDN cache will continue to serve the old badge
+images until they time out.
+
+You can purge the Fastly CDN cache this way (assuming you're
+allowed to log in to the relevant Heroku app):
+
+~~~~sh
+heroku run --app HEROKU_APP_HERE rake fastly:purge
 ~~~~
 
 ## Resetting Heroku plug-ins

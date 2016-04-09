@@ -161,7 +161,7 @@ task :fasterer do
 end
 
 # Implement full purge of Fastly CDN cache.  Invoke using:
-#   heroku run rake fastly:purge --app NAME_OF_APPLICATION
+#   heroku run --app HEROKU_APP_HERE rake fastly:purge
 # Run this if code changes will cause a change in badge level, since otherwise
 # the old badge levels will keep being displayed until the cache times out.
 # See: https://robots.thoughtbot.com/

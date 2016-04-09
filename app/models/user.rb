@@ -27,7 +27,7 @@ class User < ActiveRecord::Base
     @user = User.new(provider: auth[:provider], uid: auth[:uid],
                      name: auth[:info][:name], email: auth[:info][:email],
                      nickname: auth[:info][:nickname], activated: true)
-    @user.save(validate: false)
+    @user.save!(validate: false)
     @user
   end
 

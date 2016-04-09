@@ -43,5 +43,5 @@
   </div>
 <% else %>
   <% flash.now[:danger] = "Please sign in to add a project!"%>
-  <%= render :template => "sessions/new" %>
+  <%= render template: "sessions/new" %>
 <% end %>

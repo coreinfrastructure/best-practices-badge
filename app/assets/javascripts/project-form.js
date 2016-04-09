@@ -59,8 +59,10 @@ function resetProgressBar() {
   var total = 0;
   var enough = 0;
   $.each(criterionCategoryValue, function(key, value) {
-    total++;
-    if (isEnough(key)) {enough++;};
+    if (value !== 'FUTURE') { // Only include non-future values
+      total++;
+      if (isEnough(key)) {enough++;};
+    }
   })
   var percentage = enough / total;
   var percentAsString =  Math.round(percentage * 100).toString() + '%'

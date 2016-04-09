@@ -208,6 +208,15 @@
       Look for a "docs" or "doc" directory, or the main site, with
       .txt, .html, .md, .tex extension and uses the word "interface".
 # Other
+- project_sites_https:
+    category: FUTURE
+    description: >
+      The project sites (website, repository, and download URLs)
+      MUST support HTTPS using TLS.
+    autofill: >
+      Look at project, repo, and download URLs. https is okay, http is not.
+      Typically anything supporting HTTPS also supports TLS, so
+      it's probably not worth trying to detect that specifically.
 - discussion:
     category: MUST
     description: >

@@ -1,10 +1,6 @@
 require 'test_helper'
 
 class ProjectTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
-
   def setup
     @user = users(:test_user)
     @project = @user.projects.build(
@@ -19,5 +15,12 @@ class ProjectTest < ActiveSupport::TestCase
   test 'user id should be present' do
     @project.user_id = nil
     assert_not @project.valid?
+  end
+
+  test '#contains_url?' do
+    assert Project.new.send :contains_url?, 'https://www.example.org'
+    assert Project.new.send :contains_url?, 'http://www.example.org'
+    refute Project.new.send :contains_url?, 'mailto://mail@example.org'
+    refute Project.new.send :contains_url?, 'abc'
   end
 end

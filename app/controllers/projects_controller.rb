@@ -31,7 +31,7 @@ class ProjectsController < ApplicationController
   def badge
     set_surrogate_key_header @project.record_key + '/badge'
     respond_to do |format|
-      # Test level has a legal value to avoid brakeman sanitization warning
+      # Ensure level has a legal value to avoid brakeman sanitization warning
       level = @project.badge_level if %w(passing failing in_progress)
                                       .include? @project.badge_level
       format.svg do

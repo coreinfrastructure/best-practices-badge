@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-# rubocop:disable Metrics/ClassLength
 class Project < ActiveRecord::Base
   STATUS_CHOICE = %w(? Met Unmet).freeze
   STATUS_CHOICE_NA = (STATUS_CHOICE + %w(N/A)).freeze
@@ -109,10 +108,8 @@ class Project < ActiveRecord::Base
     ALL_ACTIVE_CRITERIA.all? { |criterion| passing? criterion }
   end
 
-  # TODO: define standard URL regex, then use everywhere.
   def contains_url?(text)
-    return false if text.nil?
-    text.match %r(https?://[^ ]{5,})
+    text =~ /\A#{URI.regexp(%w(http https))}\z/
   end
 
   # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity

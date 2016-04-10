@@ -1,4 +1,4 @@
-    <div id="<%= criterion %>" class="row"><% raise unless criterion && Criteria[criterion] %>
+    <div id="<%= criterion %>" class="row"><% raise unless criterion && Criteria.send(criterion) %>
       <% status_symbol = (criterion + "_status").to_sym %>
       <% justification_symbol = (criterion + "_justification").to_sym %>
 
@@ -6,8 +6,8 @@
       <% crypto_class = is_crypto ? ' criterion-is-crypto' : '' %>
 
       <%# A criterion_category is 'MUST' | 'SHOULD' | 'SUGGESTED' | 'FUTURE' %>
-      <% criterion_category = Project.criterion_category(criterion) %>
-      <% criterion_met_url_required = Project.met_url_required?(criterion) %>
+      <% criterion_category = Criteria.criterion_category(criterion) %>
+      <% criterion_met_url_required = Criteria.met_url_required?(criterion) %>
 
       <div class="col-md-2 criteria-radio<%= crypto_class %>">
        <div class="row status-chooser">
@@ -26,7 +26,7 @@
          <div class="col-xs-3 text-center block-center">
              <%= f.radio_button status_symbol, 'Unmet', inline: true, disabled: is_disabled  %><br><br>Unmet
          </div>
-         <% if Project.na_allowed?(criterion) %>
+         <% if Criteria.na_allowed?(criterion) %>
          <div class="col-xs-2 text-center block-center">
              <%= f.radio_button status_symbol, 'N/A', inline: true, disabled: is_disabled  %><br><br>&nbsp;N/A&nbsp;
          </div>
@@ -43,21 +43,21 @@
           <% if criterion_category == 'FUTURE' %>
           (Future criterion)
           <% end %>
-          <%= raw Criteria[criterion][:description] %>
+          <%= sanitize Criteria.send(criterion).description %>
           <% if criterion_met_url_required %>
             (URL required)
           <% end %>
           <sup>[<%= criterion %>]</sup>
-          <%= if Criteria[criterion][:details]
+          <%= if Criteria.send(criterion).details
               render(partial: "details", locals: {f: f,
                        criterion: criterion,
-                       details: Criteria[criterion]['details']})
+                       details: Criteria.send(criterion).details})
              end %>
          <div id="<%= criterion + '_met_placeholder' %>" class="hidden">
-          <%= if Criteria[criterion][:met_placeholder]
-                raw Criteria[criterion][:met_placeholder]
+          <%= if Criteria.send(criterion).met_placeholder
+                raw Criteria.send(criterion).met_placeholder
               else
-                if Criteria[criterion][:met_url]
+                if Criteria.send(criterion).met_url
                   raw "(URL required) Please explain how this is met, including 1+ key URLs."
                 else
                   raw "(Optional) Please explain how this is met, including 1+ key URLs."
@@ -65,20 +65,20 @@
               end %>
          </div>
          <div id="<%= criterion + '_unmet_placeholder' %>" class="hidden">
-          <%= raw (Criteria[criterion][:unmet_placeholder] ||
+          <%= sanitize (Criteria.send(criterion).unmet_placeholder ||
                  "Please explain why it's okay this is unmet, including 1+ key URLs.") %>
          </div>
          <div id="<%= criterion + '_na_placeholder' %>" class="hidden">
-          <%= raw (Criteria[criterion][:na_placeholder] ||
+          <%= sanitize (Criteria.send(criterion).na_placeholder ||
                  "(Optional) Please explain why this is not applicable (N/A), including 1+ key URLs." ) %>
          </div>
-         <% if Criteria[criterion][:met_suppress] %>
+         <% if Criteria.send(criterion).met_suppress %>
            <div id="<%= criterion + '_met_suppress' %>" class="hidden"></div>
          <% end %>
-         <% if Criteria[criterion][:unmet_suppress] %>
+         <% if Criteria.send(criterion).unmet_suppress %>
            <div id="<%= criterion + '_unmet_suppress' %>" class="hidden"></div>
          <% end %>
-         <% if Criteria[criterion][:na_suppress] %>
+         <% if Criteria.send(criterion).na_suppress %>
            <div id="<%= criterion + '_na_suppress' %>" class="hidden"></div>
          <% end %>
          <% if (is_disabled) %>

@@ -1,5 +1,18 @@
 # frozen_string_literal: true
+using Module.new do
+  refine Symbol do
+    def status
+      "#{self}_status".to_sym
+    end
+
+    def justification
+      "#{self}_justification".to_sym
+    end
+  end
+end
+
 class Project < ActiveRecord::Base
+
   STATUS_CHOICE = %w(? Met Unmet).freeze
   STATUS_CHOICE_NA = (STATUS_CHOICE + %w(N/A)).freeze
   MIN_SHOULD_LENGTH = 5

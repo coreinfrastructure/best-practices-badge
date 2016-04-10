@@ -62,7 +62,7 @@ There is also a
 </div>
 
 <% if (is_disabled) %>
-<%   if ! %w(failing in_progress).include? Project.badge_level(project) %>
+<%   if ! %w(failing in_progress).include? project.badge_level %>
 <div class="row">
 <div class="col-xs-1"></div>
 <div class="col-xs-2">

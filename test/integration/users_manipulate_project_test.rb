@@ -78,6 +78,7 @@ class UsersManipulateProjectTest < ActionDispatch::IntegrationTest
       assert_select '#project_build_status_met[checked]'
       assert_select '#project_build_common_tools_status_met[checked]'
       assert_select '#project_contribution_status_met[checked]'
+      assert_select '#project_project_sites_https_status_met[checked]'
 
       assert_select '#project_static_analysis_status_[checked]' # Unknown.
 

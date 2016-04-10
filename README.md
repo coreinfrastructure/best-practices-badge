@@ -54,6 +54,7 @@ This is a summary of the criteria, with requirements in bold
     [preferred styles](doc/criteria.md#contribution_requirements)
 - **[Explicitly specify](doc/criteria.md#license_location) a
   [FLOSS](doc/criteria.md#floss_license) [license](doc/criteria.md#floss_license_osi)**
+- **[Support HTTPS on the project sites](doc/criteria.md#project_sites_https)**
 - **[Document how to install and run (securely)](doc/criteria.md#documentation_basics),
   and [any API](doc/criteria.md#documentation_interface)**
 - **Have a** [distributed](doc/criteria.md#repo_distributed)

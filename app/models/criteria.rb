@@ -11,7 +11,7 @@ class Criteria
 
   ALL_CRITERIA = CriteriaHash.keys.map(&:to_sym).freeze
   ALL_ACTIVE_CRITERIA = ALL_CRITERIA.reject do |criterion|
-    CriteriaHash[criterion]['category'] == 'FUTURE'
+    CriteriaHash[criterion][:category] == 'FUTURE'
   end.freeze
 
   # Create recursive class methods for each criterion

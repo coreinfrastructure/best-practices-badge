@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 class Project < ActiveRecord::Base
+  using SymbolRefinements
+
   STATUS_CHOICE = %w(? Met Unmet).freeze
   STATUS_CHOICE_NA = (STATUS_CHOICE + %w(N/A)).freeze
   MIN_SHOULD_LENGTH = 5
@@ -8,9 +10,11 @@ class Project < ActiveRecord::Base
 
   PROJECT_OTHER_FIELDS = %i(name description project_homepage_url repo_url cpe
                             license general_comments user_id).freeze
-  ALL_CRITERIA_STATUS = Criteria::ALL_CRITERIA.map(&:status).freeze
-  ALL_CRITERIA_JUSTIFICATION = Criteria::ALL_CRITERIA.map(&:justification)
-                                                     .freeze
+  # rubocop:disable Style/SymbolProc # Refinements don't work with Symbol#Proc
+  ALL_CRITERIA_STATUS = Criteria::ALL_CRITERIA.map { |c| c.status }.freeze
+  ALL_CRITERIA_JUSTIFICATION = Criteria::ALL_CRITERIA
+                               .map { |c| c.justification }.freeze
+  # rubocop:enable Style/SymbolProc
   PROJECT_PERMITTED_FIELDS = (PROJECT_OTHER_FIELDS + ALL_CRITERIA_STATUS +
                               ALL_CRITERIA_JUSTIFICATION).freeze
 
@@ -74,18 +78,23 @@ class Project < ActiveRecord::Base
 
   private
 
+  def all_active_criteria_passing?
+    Criteria::ALL_ACTIVE_CRITERIA.all? { |criterion| passing? criterion }
+  end
+
   def any_status_in_progress?
     Criteria::ALL_ACTIVE_CRITERIA.any? do |criterion|
       self[criterion.status] == '?' || self[criterion.status].blank?
     end
   end
 
-  def all_active_criteria_passing?
-    Criteria::ALL_ACTIVE_CRITERIA.all? { |criterion| passing? criterion }
-  end
-
   def contains_url?(text)
     text =~ /#{URI.regexp(%w(http https))}/
+  end
+
+  def need_a_base_url
+    return unless repo_url.blank? && project_homepage_url.blank?
+    errors.add :base, 'Need at least a project or repository URL'
   end
 
   # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
@@ -108,18 +117,7 @@ class Project < ActiveRecord::Base
   # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity
   # rubocop:enable Metrics/MethodLength, Metrics/PerceivedComplexity
 
-  def need_a_base_url
-    return unless repo_url.blank? && project_homepage_url.blank?
-    errors.add :base, 'Need at least a project or repository URL'
-  end
-
   def to_percentage(portion, total)
-    if portion == total
-      100
-    elsif portion == 0
-      0
-    else
-      ((portion * 100.0) / total).round
-    end
+    ((portion * 100.0) / total).round
   end
 end

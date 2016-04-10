@@ -385,10 +385,10 @@ curl -o latest.dump $(heroku pg:backups public-url)
 
 ## Purging Fastly CDN cache
 
-If a change in the application causes badge level(s) to change,
+If a change in the application causes any badge level(s) to change,
 you need to purge the Fastly CDN cache after pushing.
 Otherwise, the Fastly CDN cache will continue to serve the old badge
-images until they time out.
+images (until they time out).
 
 You can purge the Fastly CDN cache this way (assuming you're
 allowed to log in to the relevant Heroku app):
@@ -396,6 +396,15 @@ allowed to log in to the relevant Heroku app):
 ~~~~sh
 heroku run --app HEROKU_APP_HERE rake fastly:purge
 ~~~~
+
+This command will use the value of the FASTLY_API_KEY
+configured for that Heroku application (Fastly requires authorization
+for purging the entire cache)... so you don't have to provide it yourself.
+
+It's safe to purge the cache if you're not sure if you need to do it.
+After a cache purge, the next request for each badge will go
+to the website, so for a brief time the site will
+be busy serving badge files.
 
 ## Resetting Heroku plug-ins
 

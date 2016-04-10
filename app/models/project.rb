@@ -1,17 +1,7 @@
 # frozen_string_literal: true
-using Module.new do
-  refine Symbol do
-    def status
-      "#{self}_status".to_sym
-    end
-
-    def justification
-      "#{self}_justification".to_sym
-    end
-  end
-end
-
+# rubocop:disable Metrics/ClassLength
 class Project < ActiveRecord::Base
+  using SymbolRefinements
 
   STATUS_CHOICE = %w(? Met Unmet).freeze
   STATUS_CHOICE_NA = (STATUS_CHOICE + %w(N/A)).freeze
@@ -21,13 +11,16 @@ class Project < ActiveRecord::Base
 
   # The "Criteria" hash is loaded during application initialization
   # from a YAML file.
-
   ALL_CRITERIA = Criteria.keys.map(&:to_sym).freeze
   ALL_ACTIVE_CRITERIA = ALL_CRITERIA.reject do |criterion|
     Criteria[criterion][:category] == 'FUTURE'
   end.freeze
-  ALL_CRITERIA_STATUS = ALL_CRITERIA.map(&:status).freeze
-  ALL_CRITERIA_JUSTIFICATION = ALL_CRITERIA.map(&:justification).freeze
+
+  # rubocop:disable Style/SymbolProc # Refinements don't work with Symbol#Proc
+  ALL_CRITERIA_STATUS = ALL_CRITERIA.map { |c| c.status }.freeze
+  ALL_CRITERIA_JUSTIFICATION = ALL_CRITERIA.map { |c| c.justification }.freeze
+  # rubocop:enable Style/SymbolProc
+
   PROJECT_OTHER_FIELDS = %i(name description project_homepage_url repo_url cpe
                             license general_comments user_id).freeze
   PROJECT_PERMITTED_FIELDS = (PROJECT_OTHER_FIELDS + ALL_CRITERIA_STATUS +

@@ -23,4 +23,14 @@ class ProjectTest < ActiveSupport::TestCase
     refute Project.new.send :contains_url?, 'mailto://mail@example.org'
     refute Project.new.send :contains_url?, 'abc'
   end
+
+  using SymbolRefinements
+
+  test '#status' do
+    assert_equal :test.status, :test_status
+  end
+ 
+  test '#justification' do
+    assert_equal :test.justification, :test_justification
+  end
 end

@@ -32,6 +32,38 @@ end
 
 require 'minitest/rails/capybara'
 
+driver = ENV['DRIVER'].try(:to_sym)
+
+setup_poltergeist = lambda do
+  Capybara.register_driver :poltergeist do |app|
+    Capybara::Poltergeist::Driver.new(app, timeout: ENV['CI'] ? 30 : 60_000)
+  end
+end
+
+Capybara.register_driver :chrome do |app|
+  Capybara::Selenium::Driver.new(app, browser: :chrome, args: ['no-sandbox'])
+end
+if driver == :poltergeist
+  require 'capybara/poltergeist'
+  setup_poltergeist.call
+  Capybara.default_driver = :poltergeist
+  Capybara.current_driver = :poltergeist
+  Capybara.javascript_driver = :poltergeist
+elsif driver.nil?
+  require 'capybara/poltergeist'
+  setup_poltergeist.call
+  Capybara.default_driver = :rack_test
+  Capybara.current_driver = :rack_test
+  Capybara.javascript_driver = :poltergeist
+else
+  Capybara.register_driver :selenium do |app|
+    Capybara::Selenium::Driver.new(app, browser: driver)
+  end
+  Capybara.default_driver = :selenium
+  Capybara.current_driver = :selenium
+  Capybara.javascript_driver = :selenium
+end
+
 module ActiveSupport
   class TestCase
     # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical

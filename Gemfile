@@ -14,7 +14,6 @@ gem 'jbuilder', '2.4.1'
 gem 'jquery-rails', '4.1.1' # Javascript jQuery library (for Rails)
 gem 'jquery-ui-rails', '5.0.5' # Javascript jQueryUI library (for Rails)
 gem 'redcarpet', '3.3.4' # Process markdown in form textareas (justifications)
-gem 'minitest-rails' # Capybara integration for Minitest and Rails.
 gem 'octokit', '4.3.0' # GitHub's official Ruby API
 gem 'omniauth-github', '1.1.2' # Authentication to GitHub (get project info)
 gem 'paper_trail', '4.1.0' # Record previous versions of project data
@@ -32,8 +31,8 @@ gem 'ransack', '1.7.0' # Make search available in all.
 group :development, :test do
   gem 'awesome_print', '1.6.1'
   gem 'bullet', '5.0.0'
-  gem 'bundler-audit'
-  gem 'ruby-graphviz'
+  gem 'bundler-audit', '0.5.0'
+  gem 'ruby-graphviz', '1.2.2'
   gem 'dotenv-rails', '2.1.1'
   gem 'license_finder'
   gem 'mdl', '0.3.1'
@@ -43,7 +42,6 @@ group :development, :test do
   gem 'pronto-rubocop', '0.6.1'
   gem 'pry-byebug', '3.3.0'
   gem 'quiet_assets', '1.1.0'
-  # gem 'rubocop-rspec', '1.4.0'
   gem 'spring', '1.6.4'
   gem 'sqlite3', '1.3.11'
   gem 'vcr', '3.0.1' # Record network responses for later test reuse
@@ -51,19 +49,21 @@ group :development, :test do
 end
 
 group :development do
-  gem 'fasterer' # Provide speed recommendations - run 'fasterer'
+  gem 'fasterer', '0.3.2' # Provide speed recommendations - run 'fasterer'
   gem 'rails_db', '1.1.1' # Enable localhost:3000/rails/db debugging
-  gem 'traceroute' # Adds 'rake traceroute' command to check routes
+  gem 'traceroute', '0.5.0' # Adds 'rake traceroute' command to check routes
   gem 'web-console', '3.1.1'
 end
 
 group :test do
+  gem 'chromedriver-helper', '1.0.0'
   gem 'coveralls', '0.8.13', require: false
   gem 'm', '1.4.2' # Run test/unit tests by line number
-  gem 'minitest-rails-capybara'
-  gem 'selenium-webdriver'
+  gem 'minitest-rails-capybara', '2.1.1', require: false
+  gem 'poltergeist', '1.9.0', require: false
+  gem 'selenium-webdriver', '2.53.0', require: false
   gem 'simplecov', '0.11.2', require: false
-  gem 'webmock'
+  gem 'webmock', '1.24.2', require: false
 end
 
 group :production do

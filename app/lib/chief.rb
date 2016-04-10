@@ -34,7 +34,8 @@ class Chief
 
   # TODO: Identify classes automatically and do topological sort.
   ALL_DETECTIVES =
-    [NameFromUrlDetective, GithubBasicDetective, HowAccessRepoFilesDetective,
+    [NameFromUrlDetective, ProjectSitesHttpsDetective,
+     GithubBasicDetective, HowAccessRepoFilesDetective,
      RepoFilesExamineDetective, FlossLicenseDetective].freeze
 
   # List fields allowed to be written into Project (an ActiveRecord).
@@ -148,6 +149,7 @@ class Chief
 
   # Given form data about a project, return an improved version.
   def autofill
-    apply_changes(@evidence.project, propose_changes)
+    my_proposed_changes = propose_changes
+    apply_changes(@evidence.project, my_proposed_changes)
   end
 end

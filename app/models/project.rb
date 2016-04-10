@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-# rubocop:disable Metrics/ClassLength
 class Project < ActiveRecord::Base
   using SymbolRefinements
 
@@ -104,14 +103,14 @@ class Project < ActiveRecord::Base
 
   private
 
+  def all_active_criteria_passing?
+    ALL_ACTIVE_CRITERIA.all? { |criterion| passing? criterion }
+  end
+
   def any_status_in_progress?
     ALL_ACTIVE_CRITERIA.any? do |criterion|
       self[criterion.status] == '?' || self[criterion.status].blank?
     end
-  end
-
-  def all_active_criteria_passing?
-    ALL_ACTIVE_CRITERIA.all? { |criterion| passing? criterion }
   end
 
   def contains_url?(text)
@@ -144,12 +143,6 @@ class Project < ActiveRecord::Base
   end
 
   def to_percentage(portion, total)
-    if portion == total
-      100
-    elsif portion == 0
-      0
-    else
-      ((portion * 100.0) / total).round
-    end
+    ((portion * 100.0) / total).round
   end
 end

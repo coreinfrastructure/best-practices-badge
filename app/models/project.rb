@@ -138,12 +138,6 @@ class Project < ActiveRecord::Base
   end
 
   def to_percentage(portion, total)
-    if portion == total
-      100
-    elsif portion == 0
-      0
-    else
-      ((portion * 100.0) / total).round
-    end
+    ((portion * 100.0) / total).round
   end
 end

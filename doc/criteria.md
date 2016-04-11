@@ -229,16 +229,6 @@ Note that:
   A project can meet this criterion even if its core developers'
   primary language is not English.
   <sup>[<a href="#english">english</a>]</sup>
-- <a name="installation_common"></a>The project SHOULD
-  provide a way to easily install and uninstall the software using a
-  commonly-used convention.
-  Examples include using a package manager (at
-  the system or language level), "make install/uninstall" (supporting
-  DESTDIR), a container in a standard format,
-  or a virtual machine image in a standard format.
-  The installation and uninstallation process (e.g., its packaging)
-  MAY be implemented by a third party as long as it is FLOSS.
-  <sup>[<a href="#installation_common">installation_common</a>]</sup>
 
 ### Change control
 
@@ -371,22 +361,6 @@ Note that:
 - <a name="build_floss_tools"></a> The project SHOULD be buildable
   using only FLOSS tools.
   <sup>[<a href="#build_floss_tools">build_floss_tools</a>]\*</sup>
-- <a name="build_reproducible"></a>(Future criterion)
-  It is SUGGESTED that
-  the project have a [reproducible build](https://reproducible-builds.org/).
-  With reproducible builds, multiple parties can independently redo the
-  process of generating information from source files and get exactly
-  the same result.
-  The [reproducible builds project has documentation on how to do this](https://reproducible-builds.org/docs/).
-  This criterion does not apply if no building occurs
-  (e.g., scripting languages where the source code
-  is used directly instead of being compiled).
-  <sup>[<a href="#build_reproducible">build_reproducible</a>]\*</sup>
-- *Rationale*: If a project needs to be built but there is no working
-  build system, then potential co-developers will not be able to easily
-  contribute and many security analysis tools will be ineffective.
-  Criteria for a working build system are not applicable if there is
-  no need to build anything for use.
 
 *Automated test suite*
 
@@ -527,31 +501,6 @@ need to directly use cryptographic capabilities.
 A "project security mechanism" is a security mechanism provided
 by the delivered project's software.
 
-- <a name="crypto_used_network"></a>(Future criterion)
-   The project SHOULD NOT use
-   unencrypted network communication protocols (such as HTTP and telnet)
-   if there an encrypted equivalent (e.g., HTTPS/TLS and SSH),
-   unless the user specifically requests or configures it.
-  <sup>[<a href="#crypto_used_network">crypto_used_network</a>]</sup>
-- <a name="crypto_tls12"></a>(Future criterion) The project SHOULD,
-   if it supports TLS, support at least TLS version 1.2.
-   Note that the predecessor of TLS was called SSL.
-  <sup>[<a href="#crypto_tls12">crypto_tls12</a>]</sup>
-- <a name="crypto_certificate_verification"></a>(Future criterion)
-   The project MUST,
-   if it supports TLS, perform TLS certificate verification by default
-   when using TLS, including on subresources.
-   Note that incorrect TLS certificate verification is a common mistake.
-   For more information, see
-   ["The Most Dangerous Code in the World: Validating SSL Certificates in Non-Browser Software" by Martin Georgiev et al.](http://crypto.stanford.edu/~dabo/pubs/abstracts/ssl-client-bugs.html) and
-   ["Do you trust this application?" by Michael Catanzaro](https://blogs.gnome.org/mcatanzaro/2016/03/12/do-you-trust-this-application/).
-   <sup>[<a href="#crypto_certificate_verification">crypto_certificate_verification</a>]</sup>
-- <a name="crypto_verification_private"></a>(Future criterion)
-   The project SHOULD,
-   if it supports TLS, perform certificate verification
-   before sending HTTP headers with private information
-   (such as secure cookies).
-   <sup>[<a href="#crypto_verification_private">crypto_verification_private</a>]</sup>
 - <a name="crypto_published"></a>The project's cryptographic software MUST
   use by default
   only cryptographic protocols and algorithms that are publicly published
@@ -621,17 +570,6 @@ by the delivered project's software.
   for signatures are correct *and* if the users will
    actually check the signature.
   <sup>[<a href="#delivery_mitm">delivery_mitm</a>]&#8224;</sup>
-- <a name="hardened_site"></a>(Future criterion)
-  It is SUGGESTED that the project website, repository (if accessible
-  via the web), and download site (if separate) include key hardening headers
-  with nonpermissive values.
-  Note that GitHub is known to meet this.
-  Sites such as https://securityheaders.io/ can quickly check this.
-  The key hardening headers are:
-  Content Security Policy (CSP), HTTP Strict Transport Security
-  (HSTS), X-Content-Type-Options (as "nosniff"), X-Frame-Options,
-  and X-XSS-Protection.
-  <sup>[<a href="#hardened_site">hardened_site</a>]&#8224;</sup>
 
 *Publicly known vulnerabilities fixed*
 
@@ -665,18 +603,6 @@ by the delivered project's software.
 
 *Other security issues*
 
-- <a name="hardening"></a>
-  (Future criterion)
-  It is SUGGESTED that hardening mechanisms be used so software defects
-  are less likely to result in security vulnerabilities.
-  Hardening mechanisms may include
-  HTTP headers like Content Security Policy (CSP),
-  compiler flags to mitigate attacks
-  (such as -fstack-protector), or compiler flags to
-  eliminate undefined behavior,
-  For our purposes least privilege is not considered a hardening
-  mechanism (least privilege is important, but separate).
-  <sup>[<a href="#hardening">hardening</a>]</sup>
 - <a name="no_leaked_credentials"></a>The public repositories
   MUST NOT leak a valid private credential
   (e.g., a working password or private key) that is intended to limit
@@ -783,6 +709,84 @@ by the delivered project's software.
   (including defects that lead to vulnerabilities),
   so combining them is more likely to be effective.
 
+### Future
+
+These 'future' criteria are criteria we intend to add in the near future.
+
+- <a name="installation_common"></a>(Future criterion) The project SHOULD
+  provide a way to easily install and uninstall the software using a
+  commonly-used convention.
+  Examples include using a package manager (at
+  the system or language level), "make install/uninstall" (supporting
+  DESTDIR), a container in a standard format,
+  or a virtual machine image in a standard format.
+  The installation and uninstallation process (e.g., its packaging)
+  MAY be implemented by a third party as long as it is FLOSS.
+  <sup>[<a href="#installation_common">installation_common</a>]</sup>
+- <a name="build_reproducible"></a>(Future criterion)
+  It is SUGGESTED that
+  the project have a [reproducible build](https://reproducible-builds.org/).
+  With reproducible builds, multiple parties can independently redo the
+  process of generating information from source files and get exactly
+  the same result.
+  The [reproducible builds project has documentation on how to do this](https://reproducible-builds.org/docs/).
+  This criterion does not apply if no building occurs
+  (e.g., scripting languages where the source code
+  is used directly instead of being compiled).
+  <sup>[<a href="#build_reproducible">build_reproducible</a>]\*</sup>
+  *Rationale*: If a project needs to be built but there is no working
+  build system, then potential co-developers will not be able to easily
+  contribute and many security analysis tools will be ineffective.
+  Criteria for a working build system are not applicable if there is
+  no need to build anything for use.
+- <a name="crypto_used_network"></a>(Future criterion)
+   The project SHOULD NOT use
+   unencrypted network communication protocols (such as HTTP and telnet)
+   if there an encrypted equivalent (e.g., HTTPS/TLS and SSH),
+   unless the user specifically requests or configures it.
+  <sup>[<a href="#crypto_used_network">crypto_used_network</a>]</sup>
+- <a name="crypto_tls12"></a>(Future criterion) The project SHOULD,
+   if it supports TLS, support at least TLS version 1.2.
+   Note that the predecessor of TLS was called SSL.
+  <sup>[<a href="#crypto_tls12">crypto_tls12</a>]</sup>
+- <a name="crypto_certificate_verification"></a>(Future criterion)
+   The project MUST,
+   if it supports TLS, perform TLS certificate verification by default
+   when using TLS, including on subresources.
+   Note that incorrect TLS certificate verification is a common mistake.
+   For more information, see
+   ["The Most Dangerous Code in the World: Validating SSL Certificates in Non-Browser Software" by Martin Georgiev et al.](http://crypto.stanford.edu/~dabo/pubs/abstracts/ssl-client-bugs.html) and
+   ["Do you trust this application?" by Michael Catanzaro](https://blogs.gnome.org/mcatanzaro/2016/03/12/do-you-trust-this-application/).
+   <sup>[<a href="#crypto_certificate_verification">crypto_certificate_verification</a>]</sup>
+- <a name="crypto_verification_private"></a>(Future criterion)
+   The project SHOULD,
+   if it supports TLS, perform certificate verification
+   before sending HTTP headers with private information
+   (such as secure cookies).
+   <sup>[<a href="#crypto_verification_private">crypto_verification_private</a>]</sup>
+- <a name="hardened_site"></a>(Future criterion)
+  It is SUGGESTED that the project website, repository (if accessible
+  via the web), and download site (if separate) include key hardening headers
+  with nonpermissive values.
+  Note that GitHub is known to meet this.
+  Sites such as https://securityheaders.io/ can quickly check this.
+  The key hardening headers are:
+  Content Security Policy (CSP), HTTP Strict Transport Security
+  (HSTS), X-Content-Type-Options (as "nosniff"), X-Frame-Options,
+  and X-XSS-Protection.
+  <sup>[<a href="#hardened_site">hardened_site</a>]&#8224;</sup>
+- <a name="hardening"></a>
+  (Future criterion)
+  It is SUGGESTED that hardening mechanisms be used so software defects
+  are less likely to result in security vulnerabilities.
+  Hardening mechanisms may include
+  HTTP headers like Content Security Policy (CSP),
+  compiler flags to mitigate attacks
+  (such as -fstack-protector), or compiler flags to
+  eliminate undefined behavior,
+  For our purposes least privilege is not considered a hardening
+  mechanism (least privilege is important, but separate).
+  <sup>[<a href="#hardening">hardening</a>]</sup>
 
 ## Non-criteria
 

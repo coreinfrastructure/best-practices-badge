@@ -108,6 +108,7 @@ There is also a
     <li><a href="#quality" data-toggle="tab"><h3 class="tab-title">Quality</h3></a></li>
     <li><a href="#security" data-toggle="tab"><h3 class="tab-title">Security</h3></a></li>
     <li><a href="#analysis" data-toggle="tab"><h3 class="tab-title">Analysis</h3></a></li>
+    <li><a href="#future" data-toggle="tab"><h3 class="tab-title">Future</h3></a></li>
   </ul>
 
   <div class="tab-content">
@@ -234,9 +235,6 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
       <hr>
 
       <%= render_status 'english', f, project, is_disabled %>
-      <hr>
-
-      <%= render_status 'installation_common', f, project, is_disabled %>
       <br>
 
       Other general comments about the project:<br>
@@ -334,9 +332,6 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
       <hr>
 
       <%= render_status 'build_floss_tools', f, project, is_disabled %>
-      <hr>
-
-      <%= render_status 'build_reproducible', f, project, is_disabled %>
       <br>
 
       <h3>Automated test suite</h3>
@@ -398,18 +393,6 @@ provided by the delivered project's software.
   <button class="btn btn-default hidden-print" type="button" id='all_crypto_na'>Press here if the project does not use or need cryptographic mechanisms</button>
   <br>
 <% end %>
-      <%= render_status 'crypto_used_network', f, project, is_disabled %>
-      <hr>
-
-      <%= render_status 'crypto_tls12', f, project, is_disabled %>
-      <hr>
-
-      <%= render_status 'crypto_certificate_verification', f, project, is_disabled %>
-      <hr>
-
-      <%= render_status 'crypto_verification_private', f, project, is_disabled %>
-      <hr>
-
       <%= render_status 'crypto_published', f, project, is_disabled %>
       <hr>
 
@@ -442,9 +425,6 @@ provided by the delivered project's software.
       <%= render_status 'delivery_mitm', f, project, is_disabled %>
       <hr>
 
-      <%= render_status 'hardened_site', f, project, is_disabled %>
-      <hr>
-
       <%= render_status 'delivery_unsigned', f, project, is_disabled %>
       <br>
 
@@ -460,7 +440,6 @@ provided by the delivered project's software.
 
     <h3>Other security</h3>
 
-      <%= render_status 'hardening', f, project, is_disabled %>
       <%= render_status 'no_leaked_credentials', f, project, is_disabled %>
 </div>
 
@@ -496,7 +475,42 @@ provided by the delivered project's software.
 
       <%= render_status 'dynamic_analysis_fixed',
                         f, project, is_disabled %>
-</div>
+    </div>
+
+    <div class="tab-pane" id="future">
+     <br>
+     These are criteria we intend to add in the near future, but are
+     <i>not</i> currently required for a the badge.
+     This grace period allows projects to update to changed criteria
+     and retain their badge as best practices improve.
+     <br>
+
+      <%= render_status 'installation_common', f, project, is_disabled %>
+      <hr>
+
+      <%= render_status 'build_reproducible', f, project, is_disabled %>
+      <hr>
+
+      <%= render_status 'crypto_used_network', f, project, is_disabled %>
+      <hr>
+
+      <%= render_status 'crypto_tls12', f, project, is_disabled %>
+      <hr>
+
+      <%= render_status 'crypto_certificate_verification', f, project, is_disabled %>
+      <hr>
+
+      <%= render_status 'crypto_verification_private', f, project, is_disabled %>
+      <hr>
+
+      <%= render_status 'hardened_site', f, project, is_disabled %>
+      <hr>
+
+      <%= render_status 'hardening', f, project, is_disabled %>
+      <br>
+
+    </div>
+
 </div>
       <br>
       <% if ! is_disabled %>

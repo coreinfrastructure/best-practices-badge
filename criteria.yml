@@ -209,7 +209,7 @@
       .txt, .html, .md, .tex extension and uses the word "interface".
 # Other
 - project_sites_https:
-    category: FUTURE
+    category: MUST
     description: >
       The project sites (website, repository, and download URLs)
       MUST support HTTPS using TLS.

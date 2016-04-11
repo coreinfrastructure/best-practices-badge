@@ -13,6 +13,12 @@ Bundler.require(*Rails.groups)
 
 module BadgeApp
   class Application < Rails::Application
+    config.after_initialize do
+      p "Test instances before after_initialize: #{Test.count}"
+      Test.instantiate
+      p "Test instances after after_initialize: #{Test.count}"
+    end
+
     # Settings in config/environments/* take precedence over those specified
     # here.
     # Application configuration should go into files in config/initializers

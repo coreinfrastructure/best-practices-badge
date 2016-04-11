@@ -4,6 +4,7 @@ class Criteria
     attributes | criterion[1].keys
   end.map(&:to_sym).freeze
   ACCESSORS = (%i(name) + ATTRIBUTES).freeze
+  # self.instantiate_from_yaml
 
   include ActiveModel::Model
   attr_accessor(*ACCESSORS)
@@ -13,40 +14,51 @@ class Criteria
     alias length count
     alias size count
 
-    # CriteriaHash is loaded during application initialization
-    # from the criteria.yml YAML file. This instantiates all criteria:
-    CriteriaHash.each do |criterion|
-      Criteria.new({ name: criterion[0].to_sym }.merge(criterion[1]))
-    end
-
     def active
       reject(&:future?)
     end
 
     def all
-      ObjectSpace.each_object(self).to_a
+      memoize.to_a
     end
 
     def each
       # Each method is required for Criteria to use class-level Enumerable mixin
-      ObjectSpace.each_object(self) do |criterion|
+      memoize.each do |criterion|
         yield criterion
       end
       self
     end
 
-    def find_by_name(name)
-      find { |criterion| criterion.name.to_s == name.to_s }
+    def find_by_name(input)
+      find { |criterion| criterion.name.to_s == input.to_s }
+    end
+
+    def instantiate_from_yaml
+      # @instantiating = true
+      CriteriaHash.each do |criterion|
+        new({ name: criterion[0].to_sym }.merge(criterion[1]))
+      end
+      # memoize
+      # binding.pry
+      # @instantiating = false
     end
 
     def keys
       all.map(&:name)
+    end
+
+    def memoize
+      @criteria ||= ObjectSpace.each_object(self)
     end
   end
 
   # Instance Methods
 
   def initialize(*parameters)
+    # Criteria.instantiate_from_yaml unless @criteria || @instantiating
+    @criteria = false # Erase memoization
+    # binding.pry
     super(*parameters)
     freeze
   end
@@ -62,5 +74,9 @@ class Criteria
 
   def na_allowed?
     na_allowed == true
+  end
+
+  def to_s
+    name.to_s
   end
 end

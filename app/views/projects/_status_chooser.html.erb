@@ -13,6 +13,7 @@
        <div class="row status-chooser">
        <span class="criterion-name hidden"><%= criterion %></span>
        <span class="criterion-category hidden"><%= criterion_category %></span>
+       <span class="criterion-future hidden"><%= Criteria.future?(criterion) %></span>
        <span class="criterion-met-url-required hidden"><%=
           criterion_met_url_required %></span>
        <%= f.form_group status_symbol do %>
@@ -40,7 +41,7 @@
 
       <div class='col-md-10 criteria-desc'>
           <br>
-          <% if criterion_category == 'FUTURE' %>
+          <% if Criteria.future?(criterion) %>
           (Future criterion)
           <% end %>
           <%= sanitize Criteria.send(criterion).description %>

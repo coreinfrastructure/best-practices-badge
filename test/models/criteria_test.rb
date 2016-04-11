@@ -18,7 +18,7 @@ class CriteriaTest < ActiveSupport::TestCase
   end
 
   test 'Ensure that only allowed fields are in Criteria' do
-    allowed_set = Set.new [:category, :na_allowed, :met_url_required,
+    allowed_set = Set.new [:category, :future, :na_allowed, :met_url_required,
                            :description, :details,
                            :met_placeholder, :unmet_placeholder,
                            :na_placeholder,
@@ -41,7 +41,7 @@ class CriteriaTest < ActiveSupport::TestCase
 
   test 'Ensure only valid categories in Criteria' do
     Criteria.to_h.each do |_criterion, values|
-      allowed_field_values = %w(MUST SHOULD SUGGESTED FUTURE)
+      allowed_field_values = %w(MUST SHOULD SUGGESTED)
       assert_includes allowed_field_values, values['category']
     end
   end

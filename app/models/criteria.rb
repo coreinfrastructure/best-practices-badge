@@ -11,7 +11,7 @@ class Criteria
 
   ALL_CRITERIA = CriteriaHash.keys.map(&:to_sym).freeze
   ALL_ACTIVE_CRITERIA = ALL_CRITERIA.reject do |criterion|
-    CriteriaHash[criterion][:category] == 'FUTURE'
+    CriteriaHash[criterion][:future]
   end.freeze
 
   # Create recursive class methods for each criterion
@@ -42,6 +42,10 @@ class Criteria
   def self.criterion_category(criterion)
     # Is this criterion in the category MUST, SHOULD, or SUGGESTED?
     send(criterion).category
+  end
+
+  def self.future?(criterion)
+    send(criterion).future
   end
 
   def self.na_allowed?(criterion)

@@ -213,6 +213,9 @@
     description: >
       The project sites (website, repository, and download URLs)
       MUST support HTTPS using TLS.
+    details: >
+      You can get free certificates from
+      <a href="https://letsencrypt.org/">Let's Encrypt</a>.
     autofill: >
       Look at project, repo, and download URLs. https is okay, http is not.
       Typically anything supporting HTTPS also supports TLS, so

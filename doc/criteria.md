@@ -202,6 +202,8 @@ Note that:
 - <a name="project_sites_https"></a>The project sites
   (website, repository, and download URLs)
   MUST support HTTPS using TLS.
+  You can get free certificates from
+  [Let's Encrypt](https://letsencrypt.org/).
   <sup>[<a href="#project_sites_https">project_sites_https</a>]&#8224;</sup>
 - <a name="discussion"></a>The project MUST have one or more mechanisms
   for discussion (including proposed changes and issues) that are:

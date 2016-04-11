@@ -24,6 +24,7 @@ class CanLoginTest < Capybara::Rails::TestCase
     choose 'project_report_process_status_unmet'
     # TODO: Need to make this test work.
     # Disabling for now so it won't break the build.
-    # assert page.find('#report_process_enough')['src'].include? 'result_symbol_x'
+    # assert page.find('#report_process_enough')['src'].include?(
+    #   'result_symbol_x')
   end
 end

@@ -11,14 +11,14 @@ default: &default
 
 development:
   <<: *default
-  database: db/development
+  database: development
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
 test:
   <<: *default
-  database: db/test
+  database: test
 
 # On production systems (e.g., Heroku)
 # the settings are merged from this file and DATABASE_URL.
@@ -27,4 +27,4 @@ test:
 #
 production:
   <<: *default
-#  database: db/production
+#  database: production

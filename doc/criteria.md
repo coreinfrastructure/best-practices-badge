@@ -1,4 +1,4 @@
-# Best Practices Criteria for Free/Libre and Open Source Software (FLOSS) (version 0.5.0)
+# Best Practices Criteria for Free/Libre and Open Source Software (FLOSS) (version 0.7.0)
 
 ## Introduction
 

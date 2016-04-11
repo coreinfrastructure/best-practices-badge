@@ -18,6 +18,7 @@ gem 'minitest-rails' # Capybara integration for Minitest and Rails.
 gem 'octokit', '4.3.0' # GitHub's official Ruby API
 gem 'omniauth-github', '1.1.2' # Authentication to GitHub (get project info)
 gem 'paper_trail', '4.1.0' # Record previous versions of project data
+gem 'pg', '0.18.4' # PostgreSQL database, used for data storage
 gem 'puma', '3.4.0' # Faster webserver; recommended by Heroku
 gem 'rack-timeout', '0.4.2' # Timeout per https://github.com/heroku/rack-timeout
 gem 'rails', '4.2.6' # Our web framework
@@ -45,7 +46,6 @@ group :development, :test do
   gem 'quiet_assets', '1.1.0'
   # gem 'rubocop-rspec', '1.4.0'
   gem 'spring', '1.6.4'
-  gem 'sqlite3', '1.3.11'
   gem 'vcr', '3.0.1' # Record network responses for later test reuse
   gem 'yaml-lint', '0.0.7' # Check YAML file syntax
 end
@@ -67,7 +67,6 @@ group :test do
 end
 
 group :production do
-  gem 'pg', '0.18.4' # PostgreSQL database
   gem 'rails_12factor', '0.0.3'
   gem 'heroku_rails_deflate', '1.0.3' # Compress (reduces network load)
 end

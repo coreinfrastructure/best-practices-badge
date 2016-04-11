@@ -13,6 +13,10 @@
 
 ActiveRecord::Schema.define(version: 20160409184200) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+  enable_extension "pg_stat_statements"
+
   create_table "projects", force: :cascade do |t|
     t.integer  "user_id"
     t.string   "name"
@@ -178,9 +182,9 @@ ActiveRecord::Schema.define(version: 20160409184200) do
     t.text     "build_reproducible_justification"
   end
 
-  add_index "projects", ["repo_url"], name: "index_projects_on_repo_url"
-  add_index "projects", ["user_id", "created_at"], name: "index_projects_on_user_id_and_created_at"
-  add_index "projects", ["user_id"], name: "index_projects_on_user_id"
+  add_index "projects", ["repo_url"], name: "index_projects_on_repo_url", using: :btree
+  add_index "projects", ["user_id", "created_at"], name: "index_projects_on_user_id_and_created_at", using: :btree
+  add_index "projects", ["user_id"], name: "index_projects_on_user_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "provider"
@@ -202,18 +206,19 @@ ActiveRecord::Schema.define(version: 20160409184200) do
     t.datetime "reset_sent_at"
   end
 
-  add_index "users", ["email"], name: "index_users_on_email"
-  add_index "users", ["uid"], name: "index_users_on_uid"
+  add_index "users", ["email"], name: "index_users_on_email", using: :btree
+  add_index "users", ["uid"], name: "index_users_on_uid", using: :btree
 
   create_table "versions", force: :cascade do |t|
-    t.string   "item_type",                     null: false
-    t.integer  "item_id",                       null: false
-    t.string   "event",                         null: false
+    t.string   "item_type",  null: false
+    t.integer  "item_id",    null: false
+    t.string   "event",      null: false
     t.string   "whodunnit"
-    t.text     "object",     limit: 1073741823
+    t.text     "object"
     t.datetime "created_at"
   end
 
-  add_index "versions", ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
+  add_index "versions", ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id", using: :btree
 
+  add_foreign_key "projects", "users"
 end

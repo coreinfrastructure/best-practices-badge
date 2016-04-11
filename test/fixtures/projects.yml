@@ -5,7 +5,7 @@ one:
   user: test_user
   name: Pathfinder OS
   description: Operating system for Pathfinder rover
-  project_homepage_url: https://www.example.org
+  homepage_url: https://www.example.org
   license: MIT
   repo_url: https://www.example.org/code1
 
@@ -14,7 +14,7 @@ perfect_unjustified:
   user: test_user
   name: Perfect project
   description: The perfect project
-  project_homepage_url: https://www.example.org
+  homepage_url: https://www.example.org
   repo_url: https://www.example.org/code2
   license: MIT
 <% Project::ALL_CRITERIA_STATUS.each do |criterion_status| %>  <%= criterion_status %>: Met
@@ -25,7 +25,7 @@ perfect:
   user: test_user
   name: Perfect project
   description: The perfect project
-  project_homepage_url: https://www.example.org
+  homepage_url: https://www.example.org
   repo_url: https://www.example.org/code3
   license: MIT
 <% Project::ALL_CRITERIA_STATUS.each do |criterion_status| %>  <%= criterion_status %>: Met

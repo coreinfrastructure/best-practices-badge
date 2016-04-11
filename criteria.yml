@@ -208,7 +208,7 @@
       Look for a "docs" or "doc" directory, or the main site, with
       .txt, .html, .md, .tex extension and uses the word "interface".
 # Other
-- project_sites_https:
+- sites_https:
     category: MUST
     description: >
       The project sites (website, repository, and download URLs)

@@ -107,11 +107,11 @@ Note that:
 
 *Project website*
 
-- <a name="project_homepage_url"></a>The project MUST have a public website
+- <a name="homepage_url"></a>The project MUST have a public website
   with a stable URL.
   (The badging application enforces this by requiring a URL to
   create a badge entry.)
-  <sup>[<a href="#project_homepage_url">project_homepage_url</a>]&#8224;</sup>
+  <sup>[<a href="#homepage_url">homepage_url</a>]&#8224;</sup>
 
 *Basic project website content*
 
@@ -199,12 +199,12 @@ Note that:
 
 *Other*
 
-- <a name="project_sites_https"></a>The project sites
+- <a name="sites_https"></a>The project sites
   (website, repository, and download URLs)
   MUST support HTTPS using TLS.
   You can get free certificates from
   [Let's Encrypt](https://letsencrypt.org/).
-  <sup>[<a href="#project_sites_https">project_sites_https</a>]&#8224;</sup>
+  <sup>[<a href="#sites_https">sites_https</a>]&#8224;</sup>
 - <a name="discussion"></a>The project MUST have one or more mechanisms
   for discussion (including proposed changes and issues) that are:
     - searchable,

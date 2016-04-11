@@ -136,7 +136,7 @@ This information is used when displaying badge information.
      <% end %>
 
       <span>What is the URL for the project (as a whole)?</span>
-      <%= f.text_field :project_homepage_url, hide_label: true, class: "form-control", placeholder:'Project Website URL', label: "Project URL", disabled: is_disabled %>
+      <%= f.text_field :homepage_url, hide_label: true, class: "form-control", placeholder:'Project Website URL', label: "Project URL", disabled: is_disabled %>
 
       <span>What is the URL for the version control repository
             (it may the same as the project URL)?</span>
@@ -227,7 +227,7 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
 
       <h3>Other</h3>
 
-      <%= render_status 'project_sites_https', f, project, is_disabled %>
+      <%= render_status 'sites_https', f, project, is_disabled %>
       <hr>
 
       <%= render_status 'discussion', f, project, is_disabled %>

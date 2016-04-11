@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160409184200) do
+ActiveRecord::Schema.define(version: 20160411134222) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,13 +21,13 @@ ActiveRecord::Schema.define(version: 20160409184200) do
     t.integer  "user_id"
     t.string   "name"
     t.text     "description"
-    t.string   "project_homepage_url"
+    t.string   "homepage_url"
     t.string   "repo_url"
     t.string   "license"
-    t.string   "project_homepage_url_status",                          default: "?"
-    t.text     "project_homepage_url_justification"
-    t.string   "project_sites_https_status",                           default: "?"
-    t.text     "project_sites_https_justification"
+    t.string   "homepage_url_status",                                  default: "?"
+    t.text     "homepage_url_justification"
+    t.string   "sites_https_status",                                   default: "?"
+    t.text     "sites_https_justification"
     t.string   "description_good_status",                              default: "?"
     t.text     "description_good_justification"
     t.string   "interact_status",                                      default: "?"

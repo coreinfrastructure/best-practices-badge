@@ -24,11 +24,11 @@
 
         <td>
           <%# Defend against bad data - link only if plausible URL. %>
-          <% if project.project_homepage_url.presence &&
-                project.project_homepage_url.match(/\Ahttps?:\/\//) %>
-            <a href="<%= project.project_homepage_url %>"><%= project.project_homepage_url %></a>
+          <% if project.homepage_url.presence &&
+                project.homepage_url.match(/\Ahttps?:\/\//) %>
+            <a href="<%= project.homepage_url %>"><%= project.homepage_url %></a>
           <% else %>
-            <%= project.project_homepage_url %>
+            <%= project.homepage_url %>
           <% end %>
         </td>
         <td><%= project.license %></td>

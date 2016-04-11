@@ -26,7 +26,7 @@
         <%= render 'shared/error_messages', object: f.object %>
       <% end %>
       <span>What is the URL for the project home page (the URL for the project as a whole)? Start with http(s):// (many characters are not allowed, including "?")</span>
-      <%= f.text_field :project_homepage_url, class:"form-control",
+      <%= f.text_field :homepage_url, class:"form-control",
             type: 'url', hide_label: true,
             pattern: '(|https?:\/\/[A-Za-z0-9][-A-Za-z0-9_.\/]*(\/[-A-Za-z0-9_.\/\+,#]*)?)',
             placeholder:'http(s)://... for project home page URL' %>

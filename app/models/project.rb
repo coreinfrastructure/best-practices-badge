@@ -8,40 +8,15 @@ class Project < ActiveRecord::Base
   MAX_TEXT_LENGTH = 8192 # Arbitrary maximum to reduce abuse
   MAX_SHORT_STRING_LENGTH = 254 # Arbitrary maximum to reduce abuse
 
-  # The "Criteria" hash is loaded during application initialization
-  # from a YAML file.
-  ALL_CRITERIA = Criteria.keys.map(&:to_sym).freeze
-  ALL_ACTIVE_CRITERIA = ALL_CRITERIA.reject do |criterion|
-    Criteria[criterion][:category] == 'FUTURE'
-  end.freeze
-
-  # rubocop:disable Style/SymbolProc # Refinements don't work with Symbol#Proc
-  ALL_CRITERIA_STATUS = ALL_CRITERIA.map { |c| c.status }.freeze
-  ALL_CRITERIA_JUSTIFICATION = ALL_CRITERIA.map { |c| c.justification }.freeze
-  # rubocop:enable Style/SymbolProc
-
   PROJECT_OTHER_FIELDS = %i(name description project_homepage_url repo_url cpe
                             license general_comments user_id).freeze
+  # rubocop:disable Style/SymbolProc # Refinements don't work with Symbol#Proc
+  ALL_CRITERIA_STATUS = Criteria::ALL_CRITERIA.map { |c| c.status }.freeze
+  ALL_CRITERIA_JUSTIFICATION = Criteria::ALL_CRITERIA
+                               .map { |c| c.justification }.freeze
+  # rubocop:enable Style/SymbolProc
   PROJECT_PERMITTED_FIELDS = (PROJECT_OTHER_FIELDS + ALL_CRITERIA_STATUS +
                               ALL_CRITERIA_JUSTIFICATION).freeze
-
-  # TODO: Remove these Criteria queries from the project model
-  # Note: These are up top because they must be defined before use
-
-  # Is this criterion in the category MUST, SHOULD, or SUGGESTED?
-  def self.criterion_category(criterion)
-    (Criteria[criterion])[:category]
-  end
-
-  # Is a URL required in the justification to be enough with met?
-  def self.met_url_required?(criterion)
-    (Criteria[criterion])[:met_url_required]
-  end
-
-  # Is na allowed?
-  def self.na_allowed?(criterion)
-    (Criteria[criterion])[:na_allowed]
-  end
 
   # A project is associated with a user
   belongs_to :user
@@ -78,8 +53,8 @@ class Project < ActiveRecord::Base
   validates :user_id, presence: true
 
   # Validate all of the criteria-related inputs
-  ALL_CRITERIA.each do |criterion|
-    if na_allowed?(criterion)
+  Criteria::ALL_CRITERIA.each do |criterion|
+    if Criteria.na_allowed?(criterion)
       validates criterion.status, inclusion: { in: STATUS_CHOICE_NA }
     else
       validates criterion.status, inclusion: { in: STATUS_CHOICE }
@@ -97,18 +72,18 @@ class Project < ActiveRecord::Base
   end
 
   def badge_percentage
-    met = ALL_ACTIVE_CRITERIA.count { |criterion| passing? criterion }
-    to_percentage met, ALL_ACTIVE_CRITERIA.length
+    met = Criteria::ALL_ACTIVE_CRITERIA.count { |criterion| passing? criterion }
+    to_percentage met, Criteria::ALL_ACTIVE_CRITERIA.length
   end
 
   private
 
   def all_active_criteria_passing?
-    ALL_ACTIVE_CRITERIA.all? { |criterion| passing? criterion }
+    Criteria::ALL_ACTIVE_CRITERIA.all? { |criterion| passing? criterion }
   end
 
   def any_status_in_progress?
-    ALL_ACTIVE_CRITERIA.any? do |criterion|
+    Criteria::ALL_ACTIVE_CRITERIA.any? do |criterion|
       self[criterion.status] == '?' || self[criterion.status].blank?
     end
   end
@@ -117,13 +92,18 @@ class Project < ActiveRecord::Base
     text =~ /#{URI.regexp(%w(http https))}/
   end
 
+  def need_a_base_url
+    return unless repo_url.blank? && project_homepage_url.blank?
+    errors.add :base, 'Need at least a project or repository URL'
+  end
+
   # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
   # rubocop:disable Metrics/MethodLength, Metrics/PerceivedComplexity
   def passing?(criterion)
     status = self[criterion.status]
     justification = self[criterion.justification]
-    category = Project.criterion_category(criterion)
-    met_needs_url = Project.met_url_required?(criterion)
+    category = Criteria.criterion_category(criterion)
+    met_needs_url = Criteria.met_url_required?(criterion)
 
     return true if category == 'FUTURE'
     return true if status == 'N/A'
@@ -136,11 +116,6 @@ class Project < ActiveRecord::Base
   end
   # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity
   # rubocop:enable Metrics/MethodLength, Metrics/PerceivedComplexity
-
-  def need_a_base_url
-    return unless repo_url.blank? && project_homepage_url.blank?
-    errors.add :base, 'Need at least a project or repository URL'
-  end
 
   def to_percentage(portion, total)
     ((portion * 100.0) / total).round

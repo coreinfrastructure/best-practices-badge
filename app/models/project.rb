@@ -112,8 +112,6 @@ class Project < ActiveRecord::Base
   # rubocop:enable Metrics/MethodLength, Metrics/PerceivedComplexity
 
   def to_percentage(portion, total)
-    p "portion: #{portion}"
-    p "total: #{total}"
     return 0 if portion.zero?
     ((portion * 100.0) / total).round
   end

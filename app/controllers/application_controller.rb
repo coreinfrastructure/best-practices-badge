@@ -15,6 +15,6 @@ class ApplicationController < ActionController::Base
   def ensure_criteria_instantiated
     p "COUNT: #{Criteria.count}"
     return unless Criteria.count.zero?
-    Criteria.instantiate_from_yaml
+    Criteria.instantiate
   end
 end

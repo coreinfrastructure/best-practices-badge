@@ -6,17 +6,13 @@
       <% is_crypto = criterion.to_s.match(/^crypto_/) %>
       <% crypto_class = is_crypto ? ' criterion-is-crypto' : '' %>
 
-      <%# A criterion_category is 'MUST' | 'SHOULD' | 'SUGGESTED' | 'FUTURE' %>
-      <% criterion_category = criterion.category %>
-      <% criterion_met_url_required = criterion.met_url_required? %>
-
       <div class="col-md-2 criteria-radio<%= crypto_class %>">
        <div class="row status-chooser">
-       <span class="criterion-name hidden"><%= criterion %></span>
-       <span class="criterion-category hidden"><%= criterion_category %></span>
-       <span class="criterion-future hidden"><%= Criteria.future?(criterion) %></span>
+       <span class="criterion-name hidden"><%= criterion.to_s %></span>
+       <span class="criterion-category hidden"><%= criterion.category %></span>
+       <span class="criterion-future hidden"><%= criterion.future? %></span>
        <span class="criterion-met-url-required hidden"><%=
-          criterion_met_url_required %></span>
+          criterion.met_url_required? %></span>
        <%= f.form_group status_symbol do %>
          <div class="col-xs-4 text-center block-center">
           <br><%= image_tag("Clear.gif", size: "40x40", id: criterion.to_s + "_enough", alt: "") %>
@@ -35,11 +31,11 @@
 
       <div class='col-md-10 criteria-desc'>
           <br>
-          <% if Criteria.future?(criterion) %>
+          <% if criterion.future? %>
           (Future criterion)
           <% end %>
           <%= sanitize criterion.description %>
-          <% if criterion_met_url_required %>
+          <% if criterion.met_url_required? %>
             (URL required)
           <% end %>
           <sup>[<%= criterion %>]</sup>

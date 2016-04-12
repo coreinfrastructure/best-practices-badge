@@ -35,7 +35,7 @@ class Criteria
       end
     end
 
-    def instantiate_from_yaml
+    def instantiate
       @criteria = nil
       CriteriaHash.each do |criterion|
         new({ name: criterion[0].to_sym }.merge(criterion[1]))
@@ -48,6 +48,10 @@ class Criteria
     end
 
     alias length count
+
+    def to_h
+      CriteriaHash
+    end
   end
 
   # Instance methods

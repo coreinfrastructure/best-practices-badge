@@ -3,18 +3,20 @@ require 'set'
 
 class CriteriaTest < ActiveSupport::TestCase
   def setup
+    Criteria.instantiate
   end
 
   test 'Criteria should have floss_license_osi' do
-    assert Criteria.floss_license_osi
+    assert Criteria.find_by_name :floss_license_osi
   end
 
   test 'Criteria "contribution" is in the category MUST' do
-    assert_equal 'MUST', Criteria.contribution.category
+    assert_equal 'MUST', Criteria.find_by_name(:contribution).category
   end
 
   test 'Criteria "contribution_requirements" is in the category SHOULD' do
-    assert_equal 'SHOULD', Criteria.contribution_requirements.category
+    assert_equal 'SHOULD', Criteria.find_by_name(:contribution_requirements)
+      .category
   end
 
   test 'Ensure that only allowed fields are in Criteria' do

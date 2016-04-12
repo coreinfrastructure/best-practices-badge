@@ -12,19 +12,19 @@ class CanLoginTest < Capybara::Rails::TestCase
   end
 
   scenario 'Can Login and edit using custom account', js: true do
+    Capybara.default_max_wait_time = 10
     visit login_path
     fill_in 'Email', with: @user.email
     fill_in 'Password', with: 'password'
     click_button 'Log in using custom account'
     assert page.has_content? 'Signed in!'
+
     visit edit_project_path(@project)
-    # choose 'project_english_status_met'
-    # assert page.find('#english_enough')['src'].include? 'Thumbs_up'
+    choose 'project_english_status_met'
+    assert page.find('#english_enough[src*="result_symbol_check"')
+
     click_on 'Reporting'
     choose 'project_report_process_status_unmet'
-    # TODO: Need to make this test work.
-    # Disabling for now so it won't break the build.
-    # assert page.find('#report_process_enough')['src'].include?(
-    #   'result_symbol_x')
+    assert page.find('#report_process_enough[src*="result_symbol_x"')
   end
 end

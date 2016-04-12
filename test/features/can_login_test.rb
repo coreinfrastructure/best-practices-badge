@@ -21,10 +21,10 @@ class CanLoginTest < Capybara::Rails::TestCase
 
     visit edit_project_path(@project)
     choose 'project_english_status_met'
-    assert page.find('#english_enough[src*="result_symbol_check"')
+    assert page.find('#english_enough[src*="result_symbol_check"]')
 
     click_on 'Reporting'
     choose 'project_report_process_status_unmet'
-    assert page.find('#report_process_enough[src*="result_symbol_x"')
+    assert page.find('#report_process_enough[src*="result_symbol_x"]')
   end
 end

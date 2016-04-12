@@ -15,7 +15,7 @@ class Criteria
     include Enumerable
 
     def active
-      reject(&:future?)
+      @active ||= reject(&:future?)
     end
 
     def all
@@ -48,8 +48,6 @@ class Criteria
     def keys
       map(&:name)
     end
-
-    alias length count
 
     def to_h
       CriteriaHash

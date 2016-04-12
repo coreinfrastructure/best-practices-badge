@@ -105,7 +105,6 @@ class Project < ActiveRecord::Base
     category = Criteria.criterion_category(criterion)
     met_needs_url = Criteria.met_url_required?(criterion)
 
-    return true if category == 'FUTURE'
     return true if status == 'N/A'
     return true if status == 'Met' && !met_needs_url
     return true if status == 'Met' && contains_url?(justification)

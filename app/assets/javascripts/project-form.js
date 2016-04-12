@@ -18,8 +18,9 @@ function polyfillDatalist() {
   }
 };
 
-criterionCategoryValue = {}
+criterionCategoryValue = {};
 criteriaMetUrlRequired = {};
+criterionFuture = {};
 
 MIN_SHOULD_LENGTH = 5;
 
@@ -36,9 +37,7 @@ function isEnough(criteria) {
   var criteriaStatus = '#project_' + criteria + '_status';
   var justification = $('#project_' + criteria + '_justification').val();
   if (!justification) justification = '';
-  if (criterionCategoryValue[criteria] === 'FUTURE') {
-    return true;
-  } else if ($(criteriaStatus + '_na').is(':checked')) {
+  if ($(criteriaStatus + '_na').is(':checked')) {
     return true;
   } else if ($(criteriaStatus + '_met').is(':checked')) {
     return criteriaMetUrlRequired[criteria] ?
@@ -59,7 +58,7 @@ function resetProgressBar() {
   var total = 0;
   var enough = 0;
   $.each(criterionCategoryValue, function(key, value) {
-    if (value !== 'FUTURE') { // Only include non-future values
+    if (!criterionFuture[key]) { // Only include non-future values
       total++;
       if (isEnough(key)) {enough++;};
     }
@@ -87,13 +86,13 @@ function changedJustificationText(criteria) {
 
   if (isEnough(criteria)) {
     $('#' + criteria + '_enough').
-        attr('src', $('#Thumbs_up_img').attr('src')).
-        attr('width', 30).attr('height', 30).
+        attr('src', $('#result_symbol_check_img').attr('src')).
+        attr('width', 40).attr('height', 40).
         attr('alt', 'Enough for a badge!');
   } else {
     $('#' + criteria + '_enough').
-        attr('src', $('#Thumbs_down_img').attr('src')).
-        attr('width', 30).attr('height', 30).
+        attr('src', $('#result_symbol_x_img').attr('src')).
+        attr('width', 40).attr('height', 40).
         attr('alt', 'Not enough for a badge.');
   }
   resetProgressBar();
@@ -231,6 +230,8 @@ function SetupCriteriaStructures() {
       criteriaMetUrlRequired[criterionName] = val;
       criterionCategoryValue[criterionName] =
         $(this).find('.criterion-category').text();
+      criterionFuture[criterionName] =
+        $(this).find('.criterion-future').text() === 'true';
     }
   )
 }

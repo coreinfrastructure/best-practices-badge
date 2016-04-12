@@ -25,9 +25,7 @@ class Criteria
     end
 
     def each
-      all.each do |criterion|
-        yield criterion
-      end
+      all.each { |criterion| yield criterion }
       self
     end
 

@@ -20,11 +20,20 @@ class CanLoginTest < Capybara::Rails::TestCase
     assert page.has_content? 'Signed in!'
 
     visit edit_project_path(@project)
+    choose 'project_discussion_status_unmet'
+    assert page.find('#discussion_enough[src*="result_symbol_x"]')
+
     choose 'project_english_status_met'
     assert page.find('#english_enough[src*="result_symbol_check"]')
 
-    click_on 'Reporting'
-    choose 'project_report_process_status_unmet'
-    assert page.find('#report_process_enough[src*="result_symbol_x"]')
+    click_on 'Change Control'
+    assert page.has_content? 'repo_public'
+    choose 'project_repo_public_status_unmet'
+    assert page.find('#repo_public_enough[src*="result_symbol_x"]')
+
+    # click_on 'Reporting'
+    # assert page.has_content? 'report_process'
+    # choose 'project_report_process_status_unmet'
+    # assert page.find('#report_process_enough[src*="result_symbol_x"]')
   end
 end

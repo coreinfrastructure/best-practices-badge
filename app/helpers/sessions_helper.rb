@@ -39,8 +39,9 @@ module SessionsHelper
   end
 
   def github_user_projects
-    github = Github.new oauth_token: session[:user_token], auto_pagination: true
-    github.repos.list.map(&:html_url).reject(&:blank?)
+    octokit_client = Octokit::Client.new access_token: session[:user_token]
+    octokit_client.auto_paginate = true
+    octokit_client.repositories.map(&:html_url).reject(&:blank?)
   end
 
   # Logs out the current user.

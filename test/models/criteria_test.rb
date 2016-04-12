@@ -3,7 +3,6 @@ require 'set'
 
 class CriteriaTest < ActiveSupport::TestCase
   def setup
-    Criteria.instantiate
   end
 
   test 'Criteria should have floss_license_osi' do

@@ -67,7 +67,7 @@ class Project < ActiveRecord::Base
 
   def badge_percentage
     met = Criteria.active.count { |criterion| passing? criterion }
-    to_percentage met, Criteria.length
+    to_percentage met, Criteria.active.length
   end
 
   private

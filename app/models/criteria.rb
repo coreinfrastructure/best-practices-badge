@@ -36,6 +36,7 @@ class Criteria
     end
 
     def instantiate_from_yaml
+      @criteria = nil
       CriteriaHash.each do |criterion|
         new({ name: criterion[0].to_sym }.merge(criterion[1]))
       end
@@ -60,6 +61,10 @@ class Criteria
     freeze
   end
 
+  def met_url
+    nil
+  end
+
   def met_url_required?
     # Is a URL required in the justification to be passing with met?
     met_url_required == true
@@ -67,6 +72,14 @@ class Criteria
 
   def na_allowed?
     na_allowed == true
+  end
+
+  def na_placeholder
+    nil
+  end
+
+  def na_suppress
+    nil
   end
 
   delegate :to_s, to: :name

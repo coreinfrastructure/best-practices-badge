@@ -4,7 +4,8 @@ class Criteria
   ATTRIBUTES = CriteriaHash.reduce([]) do |attributes, criterion|
     attributes | criterion[1].keys
   end.map(&:to_sym).freeze
-  ACCESSORS = (%i(name) + ATTRIBUTES).freeze
+  FUTURE_ATTRIBUTES = %i(met_url na_placeholder na_suppress).freeze
+  ACCESSORS = (%i(name) + ATTRIBUTES + FUTURE_ATTRIBUTES).freeze
 
   include ActiveModel::Model
   attr_accessor(*ACCESSORS)
@@ -18,7 +19,9 @@ class Criteria
     end
 
     def all
-      @criteria ||= ObjectSpace.each_object(self).to_a
+      # Creates class instances on first use and after reload! in rails console
+      instantiate if @criteria.blank?
+      @criteria
     end
 
     def each
@@ -36,15 +39,14 @@ class Criteria
     end
 
     def instantiate
-      @criteria = nil
+      @criteria = []
       CriteriaHash.each do |criterion|
-        new({ name: criterion[0].to_sym }.merge(criterion[1]))
+        @criteria << new({ name: criterion[0].to_sym }.merge(criterion[1]))
       end
-      all # This memoizes result to prevent garbage collection of instances
     end
 
     def keys
-      all.map(&:name)
+      map(&:name)
     end
 
     alias length count
@@ -65,10 +67,6 @@ class Criteria
     freeze
   end
 
-  def met_url
-    nil
-  end
-
   def met_url_required?
     # Is a URL required in the justification to be passing with met?
     met_url_required == true
@@ -76,14 +74,6 @@ class Criteria
 
   def na_allowed?
     na_allowed == true
-  end
-
-  def na_placeholder
-    nil
-  end
-
-  def na_suppress
-    nil
   end
 
   delegate :to_s, to: :name

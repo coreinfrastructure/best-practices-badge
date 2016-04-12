@@ -30,7 +30,7 @@ class ProjectsControllerTest < ActionController::TestCase
         license: @project.license,
         name: @project.name,
         repo_url: 'https://www.example.org/code',
-        project_homepage_url: @project.project_homepage_url
+        homepage_url: @project.homepage_url
       }
     end
   end
@@ -80,7 +80,7 @@ class ProjectsControllerTest < ActionController::TestCase
       license: @project.license,
       name: @project.name,
       repo_url: @project.repo_url,
-      project_homepage_url: @project.project_homepage_url
+      homepage_url: @project.homepage_url
     }
     assert_redirected_to project_path(assigns(:project))
   end
@@ -91,7 +91,7 @@ class ProjectsControllerTest < ActionController::TestCase
       license: '',
       name: '',
       repo_url: '',
-      project_homepage_url: ''
+      homepage_url: ''
     }
     log_in_as(@project.user)
     patch :update, id: @project, project: new_project_data

@@ -53,7 +53,7 @@ class Criteria
   # Instance methods
 
   def future?
-    category == 'FUTURE'
+    future == true
   end
 
   def initialize(*parameters)

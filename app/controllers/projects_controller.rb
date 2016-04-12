@@ -60,10 +60,10 @@ class ProjectsController < ApplicationController
       return redirect_to Project.find_by(repo_url: project_repo_url)
     end
 
-    # Error out if project_homepage_url and repo_url are both empty... don't
+    # Error out if homepage_url and repo_url are both empty... don't
     # do a save yet.
 
-    @project.project_homepage_url ||= set_homepage_url
+    @project.homepage_url ||= set_homepage_url
     Chief.new(@project).autofill
 
     respond_to do |format|
@@ -124,7 +124,7 @@ class ProjectsController < ApplicationController
     # @project.purge
     # @project.purge_all
     respond_to do |format|
-      @project.project_homepage_url ||= project_find_default_url
+      @project.homepage_url ||= project_find_default_url
       format.html do
         redirect_to projects_url
         flash[:success] = 'Project was successfully deleted.'

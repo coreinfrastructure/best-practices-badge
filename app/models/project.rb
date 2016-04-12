@@ -8,7 +8,7 @@ class Project < ActiveRecord::Base
   MAX_TEXT_LENGTH = 8192 # Arbitrary maximum to reduce abuse
   MAX_SHORT_STRING_LENGTH = 254 # Arbitrary maximum to reduce abuse
 
-  PROJECT_OTHER_FIELDS = %i(name description project_homepage_url repo_url cpe
+  PROJECT_OTHER_FIELDS = %i(name description homepage_url repo_url cpe
                             license general_comments user_id).freeze
   ALL_CRITERIA_STATUS = Criteria.map { |c| c.name.status }.freeze
   ALL_CRITERIA_JUSTIFICATION = Criteria.map { |c| c.name.justification }.freeze
@@ -38,7 +38,7 @@ class Project < ActiveRecord::Base
 
   validates :repo_url, url: true, length: { maximum: MAX_SHORT_STRING_LENGTH },
                        uniqueness: { allow_blank: true }
-  validates :project_homepage_url,
+  validates :homepage_url,
             url: true,
             length: { maximum: MAX_SHORT_STRING_LENGTH }
   validate :need_a_base_url
@@ -87,8 +87,8 @@ class Project < ActiveRecord::Base
   end
 
   def need_a_base_url
-    return unless repo_url.blank? && project_homepage_url.blank?
-    errors.add :base, 'Need at least a project or repository URL'
+    return unless repo_url.blank? && homepage_url.blank?
+    errors.add :base, 'Need at least a home page or repository URL'
   end
 
   # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
@@ -99,7 +99,6 @@ class Project < ActiveRecord::Base
     category = criterion.category
     met_needs_url = criterion.met_url_required?
 
-    return true if category == 'FUTURE'
     return true if status == 'N/A'
     return true if status == 'Met' && !met_needs_url
     return true if status == 'Met' && contains_url?(justification)

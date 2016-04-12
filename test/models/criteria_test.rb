@@ -19,6 +19,10 @@ class CriteriaTest < ActiveSupport::TestCase
       .category
   end
 
+  test 'Criteria#keys' do
+    assert_includes Criteria.keys, :contribution
+  end
+
   test 'Ensure that only allowed fields are in Criteria' do
     allowed_set = Set.new [:category, :future, :na_allowed, :met_url_required,
                            :description, :details,

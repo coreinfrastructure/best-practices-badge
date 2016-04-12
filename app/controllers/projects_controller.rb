@@ -134,8 +134,9 @@ class ProjectsController < ApplicationController
   end
 
   def repo_data
-    github = Github.new oauth_token: session[:user_token], auto_pagination: true
-    github.repos.list.map do |repo|
+    octokit_client = Octokit::Client.new access_token: session[:user_token]
+    octokit_client.auto_paginate = true
+    octokit_client.repositories.map do |repo|
       if repo.blank?
         nil
       else

@@ -22,6 +22,6 @@ module ProjectsHelper
   def render_status(criterion, f, project, is_disabled)
     render(partial: 'status_chooser',
            locals: { f: f, project: project, is_disabled: is_disabled,
-                     criterion: Criteria.find_by_name(criterion) })
+                     criterion: Criteria[criterion] })
   end
 end

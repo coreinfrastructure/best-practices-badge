@@ -14,6 +14,11 @@ class Criteria
     # Class methods
     include Enumerable
 
+    def [](key)
+      instantiate if @criteria.blank?
+      @criteria[key.to_sym]
+    end
+
     def active
       @active ||= reject(&:future?)
     end
@@ -27,11 +32,6 @@ class Criteria
     def each
       all.each { |criterion| yield criterion }
       self
-    end
-
-    def find_by_name(input)
-      instantiate if @criteria.blank?
-      @criteria[input.to_sym]
     end
 
     def instantiate

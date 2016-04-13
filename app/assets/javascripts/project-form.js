@@ -164,7 +164,6 @@ function updateCriteriaDisplay(criteria) {
     } else {
       $(criteriaJust).show('fast');
     }
-    global_last_selected_met = criteria;
   } else if ($(criteriaStatus + '_unmet').is(':checked')) {
     var criteriaUnmetPlaceholder = criteria + '_unmet_placeholder';
     $(criteriaJust).
@@ -204,6 +203,14 @@ function updateCriteriaDisplay(criteria) {
   changedJustificationText(criteria);
 }
 
+function changeCriterion(criterion) {
+  var criterionStatus = '#project_' + criterion + '_status';
+  if ($(criterionStatus + '_met').is(':checked')) {
+    global_last_selected_met = criterion;
+  }
+  updateCriteriaDisplay(criterion);
+}
+
 function ToggleHideMet(e) {
   global_hide_metna_criteria = !global_hide_metna_criteria;
   // Note that button text shows what WILL happen on click, so it
@@ -221,7 +228,7 @@ function ToggleHideMet(e) {
 function setupProjectField(criteria) {
   updateCriteriaDisplay(criteria);
   $('input[name="project[' + criteria + '_status]"]').click(
-      function() {updateCriteriaDisplay(criteria);});
+      function() {changeCriteriaDisplay(criteria);});
   $('input[name="project[' + criteria + '_justification]"]').blur(
       function() {updateCriteriaDisplay(criteria);});
   $('#project_' + criteria + '_justification').on('input',

@@ -21,7 +21,7 @@ class Criteria
     def all
       # Creates class instances on first use and after reload! in rails console
       instantiate if @criteria.blank?
-      @criteria
+      @criteria.values
     end
 
     def each
@@ -30,16 +30,15 @@ class Criteria
     end
 
     def find_by_name(input)
-      @find_by_name ||= {}
-      @find_by_name[input.to_sym] ||= find do |criterion|
-        criterion.name == input.to_sym
-      end
+      instantiate if @criteria.blank?
+      @criteria[input.to_sym]
     end
 
     def instantiate
-      @criteria = []
+      @criteria = {}
       CriteriaHash.each do |criterion|
-        @criteria << new({ name: criterion[0].to_sym }.merge(criterion[1]))
+        name = criterion[0].to_sym
+        @criteria[name] = new({ name: name }.merge(criterion[1]))
       end
     end
 

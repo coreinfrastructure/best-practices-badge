@@ -31,6 +31,7 @@ class CanLoginTest < Capybara::Rails::TestCase
     visit edit_project_path(@project)
     scroll_to_see('project_discussion_status_unmet')
     choose 'project_discussion_status_unmet'
+    scroll_to_see('discussion_enough')
     assert page.find('#discussion_enough[src*="result_symbol_x"]')
 
     scroll_to_see('project_english_status_met')

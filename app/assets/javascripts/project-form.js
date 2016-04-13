@@ -127,14 +127,15 @@ function changedJustificationText(criteria) {
   resetProgressBar();
 }
 
-// If we should, hide the criteria that are "Met" and are enough.
+// If we should, hide the criteria that are "Met" or N/A and are enough.
 // Do NOT hide 'met' criteria that aren't enough (e.g., missing required URL),
 // and do NOT hide the last-selected-met criterion (so users can enter/edit
 // justification text).
-function hideMet() {
+function hideMetNA() {
   $.each(criterionCategoryValue, function(key, value) {
-    if ( global_hide_met_criteria && key !== global_last_selected_met &&
-         $('#project_' + key + '_status_met').is(':checked') &&
+    if ( global_hide_metna_criteria && key !== global_last_selected_met &&
+         ($('#project_' + key + '_status_met').is(':checked') ||
+          $('#project_' + key + '_status_na').is(':checked')) &&
          isEnough(key)) {
       $('#' + key).addClass('hidden');
     } else {
@@ -194,27 +195,27 @@ function updateCriteriaDisplay(criteria) {
   if (justificationValue.length > 0) {
     $(criteriaJust).show('fast');
   }
-  if (global_hide_met_criteria) {
+  if (global_hide_metna_criteria) {
     // If we're hiding met criteria, walk through and hide them.
     // We don't need to keep running this if we are NOT hiding them,
     // which is the normal case.
-    hideMet();
+    hideMetNA();
   }
   changedJustificationText(criteria);
 }
 
 function ToggleHideMet(e) {
-  global_hide_met_criteria = !global_hide_met_criteria;
+  global_hide_metna_criteria = !global_hide_metna_criteria;
   // Note that button text shows what WILL happen on click, so it
   // shows the REVERSED state (not the current state).
-  if (global_hide_met_criteria) {
-    $('#toggle-hide-met-criteria')
-      .addClass('active').html('Show met criteria');
+  if (global_hide_metna_criteria) {
+    $('#toggle-hide-metna-criteria')
+      .addClass('active').html('Show met and N/A criteria');
   } else {
-    $('#toggle-hide-met-criteria')
-      .removeClass('active').html('Hide met criteria');
+    $('#toggle-hide-metna-criteria')
+      .removeClass('active').html('Hide met or N/A criteria');
   }
-  hideMet();
+  hideMetNA();
 }
 
 function setupProjectField(criteria) {
@@ -246,7 +247,7 @@ function ToggleDetailsDisplay(e) {
 // Global - name of criterion we last selected as 'met'.
 // We don't want to hide this (yet), so users can enter a justification.
 var global_last_selected_met = '';
-var global_hide_met_criteria = false;
+var global_hide_metna_criteria = false;
 
 // Create mappings from criteria name to category and met_url_required.
 // Eventually replace with just accessing classes directly via Javascript.
@@ -285,8 +286,8 @@ $(document).ready(function() {
 
   // Force these values on page reload
   global_last_selected_met = '';
-  global_hide_met_criteria = false;
-  $('#toggle-hide-met-criteria').click(function(e) {
+  global_hide_metna_criteria = false;
+  $('#toggle-hide-metna-criteria').click(function(e) {
     ToggleHideMet(e);
     });
 

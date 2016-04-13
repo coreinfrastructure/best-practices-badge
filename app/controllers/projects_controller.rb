@@ -1,3 +1,5 @@
+require 'net/http'
+
 # rubocop:disable Metrics/ClassLength
 class ProjectsController < ApplicationController
   before_action :set_project, only: [:edit, :update, :destroy, :show, :badge]
@@ -159,7 +161,17 @@ class ProjectsController < ApplicationController
     # Assign to repo.homepage if it exists, and else repo_url
     repo = repo_data.find { |r| @project.repo_url == r[3] }
     return nil if repo.nil?
-    repo[2].present? ? repo[2] : @project.repo_url
+    repo[2].present? ? check_https(repo[2]) : @project.repo_url
+  end
+
+  def check_https(url)
+    # Prepend http:// or https:// if not present in url
+    return url if url.start_with? 'http'
+    https_url = 'https://' + url
+    http_url = 'http://' + url
+    request = Net::HTTP.get URI(https_url)
+  rescue
+    request.nil? ? http_url : https_url
   end
 
   # Use callbacks to share common setup or constraints between actions.

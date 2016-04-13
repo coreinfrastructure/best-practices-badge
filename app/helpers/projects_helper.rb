@@ -24,4 +24,8 @@ module ProjectsHelper
            locals: { f: f, project: project, is_disabled: is_disabled,
                      criterion: Criteria[criterion] })
   end
+
+  def repo_url_disabled?(project)
+    true unless current_user.admin? || !project.repo_url?
+  end
 end

@@ -32,26 +32,41 @@ function containsURL(justification) {
   }
 }
 
-// This must match the criteria implemented in Ruby to prevent confusion.
-function isEnough(criteria) {
-  var criteriaStatus = '#project_' + criteria + '_status';
-  var justification = $('#project_' + criteria + '_justification').val();
+// Determine result for a given criterion, which is one of
+// passing, barely, failing, or question.
+// The result calculation here must match the equivalent routine
+// implemented on the server to prevent confusion.
+function criterionResult(criterion) {
+  var criterionStatus = '#project_' + criterion + '_status';
+  var justification = $('#project_' + criterion + '_justification').val();
   if (!justification) justification = '';
-  if ($(criteriaStatus + '_na').is(':checked')) {
-    return true;
-  } else if ($(criteriaStatus + '_met').is(':checked')) {
-    return criteriaMetUrlRequired[criteria] ?
-      containsURL(justification) : true;
-  } else if (criterionCategoryValue[criteria] === 'SHOULD' &&
-             $(criteriaStatus + '_unmet').is(':checked') &&
+  if ($(criterionStatus + '_na').is(':checked')) {
+    return 'passing';
+  } else if ($(criterionStatus + '_met').is(':checked')) {
+    if (criteriaMetUrlRequired[criterion]  && !containsURL(justification)) {
+      // Odd case: met is claimed, but we're still missing information.
+      return 'question';
+    } else {
+      return 'passing';
+    }
+  } else if (criterionCategoryValue[criterion] === 'SHOULD' &&
+             $(criterionStatus + '_unmet').is(':checked') &&
              justification.length >= MIN_SHOULD_LENGTH) {
-    return true;
-  } else if (criterionCategoryValue[criteria] === 'SUGGESTED' &&
-            !($(criteriaStatus + '_').is(':checked'))) {
-    return true;
+    return 'barely';
+  } else if (criterionCategoryValue[criterion] === 'SUGGESTED' &&
+            !($(criterionStatus + '_').is(':checked'))) {
+    return 'barely';
+  } else if ($(criterionStatus + '_').is(':checked')) {
+    return 'question';
   } else {
-    return false;
+    return 'failing';
   }
+}
+
+// This must match the criteria implemented in Ruby to prevent confusion.
+function isEnough(criterion) {
+  result = criterionResult(criterion);
+  return (result === 'passing' || result === 'barely');
 }
 
 function resetProgressBar() {
@@ -69,6 +84,31 @@ function resetProgressBar() {
                       text(percentAsString).css('width', percentAsString);
 }
 
+function resetCriterionResult(criterion) {
+  var result = criterionResult(criterion);
+  if (result === 'passing') {
+    $('#' + criterion + '_enough').
+        attr('src', $('#result_symbol_check_img').attr('src')).
+        attr('width', 40).attr('height', 40).
+        attr('alt', 'Enough for a badge!');
+  } else if (result === 'barely') {
+    $('#' + criterion + '_enough').
+        attr('src', $('#result_symbol_dash').attr('src')).
+        attr('width', 40).attr('height', 40).
+        attr('alt', 'Not enough for a badge.');
+  } else if (result === 'question') {
+    $('#' + criterion + '_enough').
+        attr('src', $('#result_symbol_question').attr('src')).
+        attr('width', 40).attr('height', 40).
+        attr('alt', 'Not enough for a badge.');
+  } else {
+    $('#' + criterion + '_enough').
+        attr('src', $('#result_symbol_x_img').attr('src')).
+        attr('width', 40).attr('height', 40).
+        attr('alt', 'Not enough for a badge.');
+  }
+}
+
 function changedJustificationText(criteria) {
   var criteriaJust = '#project_' + criteria + '_justification';
   var criteriaStatus = '#project_' + criteria + '_status';
@@ -83,29 +123,19 @@ function changedJustificationText(criteria) {
   } else {
     $(criteriaJust).removeClass('required-data');
   }
-
-  if (isEnough(criteria)) {
-    $('#' + criteria + '_enough').
-        attr('src', $('#result_symbol_check_img').attr('src')).
-        attr('width', 40).attr('height', 40).
-        attr('alt', 'Enough for a badge!');
-  } else {
-    $('#' + criteria + '_enough').
-        attr('src', $('#result_symbol_x_img').attr('src')).
-        attr('width', 40).attr('height', 40).
-        attr('alt', 'Not enough for a badge.');
-  }
+  resetCriterionResult(criteria);
   resetProgressBar();
 }
 
-// If we should, hide the criteria that are "Met" and are enough.
+// If we should, hide the criteria that are "Met" or N/A and are enough.
 // Do NOT hide 'met' criteria that aren't enough (e.g., missing required URL),
 // and do NOT hide the last-selected-met criterion (so users can enter/edit
 // justification text).
-function hideMet() {
+function hideMetNA() {
   $.each(criterionCategoryValue, function(key, value) {
-    if ( global_hide_met_criteria && key !== global_last_selected_met &&
-         $('#project_' + key + '_status_met').is(':checked') &&
+    if ( global_hide_metna_criteria && key !== global_last_selected_met &&
+         ($('#project_' + key + '_status_met').is(':checked') ||
+          $('#project_' + key + '_status_na').is(':checked')) &&
          isEnough(key)) {
       $('#' + key).addClass('hidden');
     } else {
@@ -134,7 +164,6 @@ function updateCriteriaDisplay(criteria) {
     } else {
       $(criteriaJust).show('fast');
     }
-    global_last_selected_met = criteria;
   } else if ($(criteriaStatus + '_unmet').is(':checked')) {
     var criteriaUnmetPlaceholder = criteria + '_unmet_placeholder';
     $(criteriaJust).
@@ -165,33 +194,41 @@ function updateCriteriaDisplay(criteria) {
   if (justificationValue.length > 0) {
     $(criteriaJust).show('fast');
   }
-  if (global_hide_met_criteria) {
+  if (global_hide_metna_criteria) {
     // If we're hiding met criteria, walk through and hide them.
     // We don't need to keep running this if we are NOT hiding them,
     // which is the normal case.
-    hideMet();
+    hideMetNA();
   }
   changedJustificationText(criteria);
 }
 
+function changeCriterion(criterion) {
+  var criterionStatus = '#project_' + criterion + '_status';
+  if ($(criterionStatus + '_met').is(':checked')) {
+    global_last_selected_met = criterion;
+  }
+  updateCriteriaDisplay(criterion);
+}
+
 function ToggleHideMet(e) {
-  global_hide_met_criteria = !global_hide_met_criteria;
+  global_hide_metna_criteria = !global_hide_metna_criteria;
   // Note that button text shows what WILL happen on click, so it
   // shows the REVERSED state (not the current state).
-  if (global_hide_met_criteria) {
-    $('#toggle-hide-met-criteria')
-      .addClass('active').html('Show met criteria');
+  if (global_hide_metna_criteria) {
+    $('#toggle-hide-metna-criteria')
+      .addClass('active').html('Show met and N/A criteria');
   } else {
-    $('#toggle-hide-met-criteria')
-      .removeClass('active').html('Hide met criteria');
+    $('#toggle-hide-metna-criteria')
+      .removeClass('active').html('Hide met or N/A criteria');
   }
-  hideMet();
+  hideMetNA();
 }
 
 function setupProjectField(criteria) {
   updateCriteriaDisplay(criteria);
   $('input[name="project[' + criteria + '_status]"]').click(
-      function() {updateCriteriaDisplay(criteria);});
+      function() {changeCriteriaDisplay(criteria);});
   $('input[name="project[' + criteria + '_justification]"]').blur(
       function() {updateCriteriaDisplay(criteria);});
   $('#project_' + criteria + '_justification').on('input',
@@ -217,7 +254,7 @@ function ToggleDetailsDisplay(e) {
 // Global - name of criterion we last selected as 'met'.
 // We don't want to hide this (yet), so users can enter a justification.
 var global_last_selected_met = '';
-var global_hide_met_criteria = false;
+var global_hide_metna_criteria = false;
 
 // Create mappings from criteria name to category and met_url_required.
 // Eventually replace with just accessing classes directly via Javascript.
@@ -256,8 +293,8 @@ $(document).ready(function() {
 
   // Force these values on page reload
   global_last_selected_met = '';
-  global_hide_met_criteria = false;
-  $('#toggle-hide-met-criteria').click(function(e) {
+  global_hide_metna_criteria = false;
+  $('#toggle-hide-metna-criteria').click(function(e) {
     ToggleHideMet(e);
     });
 

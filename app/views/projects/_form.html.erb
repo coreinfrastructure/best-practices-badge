@@ -14,11 +14,13 @@
 |
 <button id="hide-all-details" class="btn" title="Hide all detailed text" type="button">Hide all detailed text</button>
 |
-<button id="toggle-hide-met-criteria" class="btn" title="Hide met criteria" type="button">Hide met criteria</button>
+<button id="toggle-hide-metna-criteria" class="btn" title="Hide met or N/A criteria" type="button">Hide met or N/A criteria</button>
 </div>
 <div class="hidden">
 <%= image_tag "result_symbol_check.png", id: "result_symbol_check_img" %>
 <%= image_tag "result_symbol_x.png", id: "result_symbol_x_img" %>
+<%= image_tag "result_symbol_dash.png", id: "result_symbol_dash" %>
+<%= image_tag "result_symbol_question.png", id: "result_symbol_question" %>
 </div>
 
 <p>
@@ -141,7 +143,7 @@ This information is used when displaying badge information.
 
       <span>What is the URL for the version control repository
             (it may the same as the project URL)?</span>
-      <%= f.text_field :repo_url, class:"form-control", hide_label: true, placeholder:'Project Repo URL', disabled: is_disabled %>
+      <%= f.text_field :repo_url, class:"form-control", hide_label: true, placeholder:'Project Repo URL', disabled: repo_disabled %>
 
 <!-- TODO: MUST have a project or repo URL, SUGGESTED to use HTTPS.
      However, first is implied by "description_good",

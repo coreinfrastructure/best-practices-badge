@@ -143,7 +143,7 @@ This information is used when displaying badge information.
 
       <span>What is the URL for the version control repository
             (it may the same as the project URL)?</span>
-      <%= f.text_field :repo_url, class:"form-control", hide_label: true, placeholder:'Project Repo URL', disabled: is_disabled %>
+      <%= f.text_field :repo_url, class:"form-control", hide_label: true, placeholder:'Project Repo URL', disabled: repo_disabled %>
 
 <!-- TODO: MUST have a project or repo URL, SUGGESTED to use HTTPS.
      However, first is implied by "description_good",

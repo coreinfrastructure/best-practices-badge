@@ -31,8 +31,8 @@ class Criteria
 
     def find_by_name(input)
       @find_by_name ||= {}
-      @find_by_name[input.to_s] ||= find do |criterion|
-        criterion.to_s == input.to_s
+      @find_by_name[input.to_sym] ||= find do |criterion|
+        criterion.name == input.to_sym
       end
     end
 

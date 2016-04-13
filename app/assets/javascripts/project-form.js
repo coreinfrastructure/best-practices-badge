@@ -32,26 +32,41 @@ function containsURL(justification) {
   }
 }
 
-// This must match the criteria implemented in Ruby to prevent confusion.
-function isEnough(criteria) {
-  var criteriaStatus = '#project_' + criteria + '_status';
-  var justification = $('#project_' + criteria + '_justification').val();
+// Determine result for a given criterion, which is one of
+// passing, barely, failing, or question.
+// The result calculation here must match the equivalent routine
+// implemented on the server to prevent confusion.
+function criterionResult(criterion) {
+  var criterionStatus = '#project_' + criterion + '_status';
+  var justification = $('#project_' + criterion + '_justification').val();
   if (!justification) justification = '';
-  if ($(criteriaStatus + '_na').is(':checked')) {
-    return true;
-  } else if ($(criteriaStatus + '_met').is(':checked')) {
-    return criteriaMetUrlRequired[criteria] ?
-      containsURL(justification) : true;
-  } else if (criterionCategoryValue[criteria] === 'SHOULD' &&
-             $(criteriaStatus + '_unmet').is(':checked') &&
+  if ($(criterionStatus + '_na').is(':checked')) {
+    return 'passing';
+  } else if ($(criterionStatus + '_met').is(':checked')) {
+    if (criteriaMetUrlRequired[criterion]  && !containsURL(justification)) {
+      // Odd case: met is claimed, but we're still missing information.
+      return 'question';
+    } else {
+      return 'passing';
+    }
+  } else if (criterionCategoryValue[criterion] === 'SHOULD' &&
+             $(criterionStatus + '_unmet').is(':checked') &&
              justification.length >= MIN_SHOULD_LENGTH) {
-    return true;
-  } else if (criterionCategoryValue[criteria] === 'SUGGESTED' &&
-            !($(criteriaStatus + '_').is(':checked'))) {
-    return true;
+    return 'barely';
+  } else if (criterionCategoryValue[criterion] === 'SUGGESTED' &&
+            !($(criterionStatus + '_').is(':checked'))) {
+    return 'barely';
+  } else if ($(criterionStatus + '_').is(':checked')) {
+    return 'question';
   } else {
-    return false;
+    return 'failing';
   }
+}
+
+// This must match the criteria implemented in Ruby to prevent confusion.
+function isEnough(criterion) {
+  result = criterionResult(criterion);
+  return (result === 'passing' || result === 'barely');
 }
 
 function resetProgressBar() {
@@ -69,6 +84,31 @@ function resetProgressBar() {
                       text(percentAsString).css('width', percentAsString);
 }
 
+function resetCriterionResult(criterion) {
+  var result = criterionResult(criterion);
+  if (result === 'passing') {
+    $('#' + criterion + '_enough').
+        attr('src', $('#result_symbol_check_img').attr('src')).
+        attr('width', 40).attr('height', 40).
+        attr('alt', 'Enough for a badge!');
+  } else if (result === 'barely') {
+    $('#' + criterion + '_enough').
+        attr('src', $('#result_symbol_dash').attr('src')).
+        attr('width', 40).attr('height', 40).
+        attr('alt', 'Not enough for a badge.');
+  } else if (result === 'question') {
+    $('#' + criterion + '_enough').
+        attr('src', $('#result_symbol_question').attr('src')).
+        attr('width', 40).attr('height', 40).
+        attr('alt', 'Not enough for a badge.');
+  } else {
+    $('#' + criterion + '_enough').
+        attr('src', $('#result_symbol_x_img').attr('src')).
+        attr('width', 40).attr('height', 40).
+        attr('alt', 'Not enough for a badge.');
+  }
+}
+
 function changedJustificationText(criteria) {
   var criteriaJust = '#project_' + criteria + '_justification';
   var criteriaStatus = '#project_' + criteria + '_status';
@@ -83,18 +123,7 @@ function changedJustificationText(criteria) {
   } else {
     $(criteriaJust).removeClass('required-data');
   }
-
-  if (isEnough(criteria)) {
-    $('#' + criteria + '_enough').
-        attr('src', $('#result_symbol_check_img').attr('src')).
-        attr('width', 40).attr('height', 40).
-        attr('alt', 'Enough for a badge!');
-  } else {
-    $('#' + criteria + '_enough').
-        attr('src', $('#result_symbol_x_img').attr('src')).
-        attr('width', 40).attr('height', 40).
-        attr('alt', 'Not enough for a badge.');
-  }
+  resetCriterionResult(criteria);
   resetProgressBar();
 }
 

@@ -53,7 +53,7 @@ class GithubBasicDetective < Detective
   # Individual detectives must implement "analyze"
   # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
-  def analyze(evidence, current)
+  def analyze(_evidence, current)
     repo_url = current[:repo_url]
     return {} if repo_url.nil?
 
@@ -63,7 +63,7 @@ class GithubBasicDetective < Detective
     # Note: this limits what's accepted, otherwise we'd have to worry
     # about URL escaping.
     repo_url.match(
-      %r{\Ahttps://github.com/([A-Za-z0-9_-]+)/([A-Za-z0-9_-]+)/?\Z}) do |m|
+      %r{\Ahttps://github.com/([A-Za-z0-9_.-]+)/([A-Za-z0-9_.-]+)/?\Z}) do |m|
       # We have a github repo.
       results[:repo_public_status] = {
         value: 'Met', confidence: 3,
@@ -89,46 +89,46 @@ class GithubBasicDetective < Detective
         explanation: 'GitHub supports discussions on issues and pull requests.'
       }
 
-      # Get basic evidence using GET, e.g.:
-      # https://api.github.com/repos/linuxfoundation/cii-best-practices-badge
+      # Get basic evidence
       fullname = m[1] + '/' + m[2]
-      basic_repo_data_raw = evidence.get(
-        'https://api.github.com/repos/' + fullname)
-      unless basic_repo_data_raw.blank?
-        basic_repo_data = JSON.parse(basic_repo_data_raw)
-        if basic_repo_data['description'] &&
-           basic_repo_data['description'].to_s.length < 60
-          # Short description, it's probably really the name.
+      client = Octokit::Client.new
+      return results unless client
+      # The special 'accept' value is required to get the GitHub-provided
+      # license analysis
+      accept_beta = 'application/vnd.github.drax-preview+json'
+      basic_repo_data = client.repository fullname, accept: accept_beta
+
+      return results unless basic_repo_data
+
+      if basic_repo_data[:description] &&
+         basic_repo_data[:description].to_s.length < 60
+        # Short description, it's probably really the name.
+        results[:name] = {
+          value: basic_repo_data[:description],
+          confidence: 3, explanation: 'GitHub name' }
+      else
+        if basic_repo_data[:name]
           results[:name] = {
-            value: basic_repo_data['description'],
+            value: basic_repo_data[:name],
             confidence: 3, explanation: 'GitHub name' }
-        else
-          if basic_repo_data['name']
-            results[:name] = {
-              value: basic_repo_data['name'],
-              confidence: 3, explanation: 'GitHub name' }
-          end
-          if basic_repo_data['description']
-            results[:description] = {
-              value: basic_repo_data['description'],
-              confidence: 3, explanation: 'GitHub description' }
-          end
+        end
+        if basic_repo_data[:description]
+          results[:description] = {
+            value: basic_repo_data[:description],
+            confidence: 3, explanation: 'GitHub description' }
         end
       end
 
       # We'll ask GitHub what the license is.  This is a "preview"
       # API subject to change without notice, and doesn't do much analysis,
       # but it's a quick win to figure it out.
-      license_data_raw = evidence.get(
-        'https://api.github.com/repos/' + fullname + '/license')
-      license_data = JSON.parse(license_data_raw) if license_data_raw
-      if license_data_raw && license_data['license'].present? &&
-         license_data['license']['key'].present?
+      license_data_raw = basic_repo_data[:license]
+      if license_data_raw && license_data_raw[:key].present?
         # TODO: GitHub doesn't reply with the expected upper/lower case
         # for SPDX; see:
         # https://github.com/benbalter/licensee/issues/72
         # For now, we'll upcase and then fix common cases.
-        license = cleanup_license(license_data['license']['key'])
+        license = cleanup_license(license_data_raw[:key])
         results[:license] = {
           value: license,
           confidence: 3, explanation: 'GitHub API license analysis' }

@@ -1,3 +1,5 @@
+<!-- SPDX-License-Identifier: (MIT OR CC-BY-3.0+) -->
+
 # Implementation
 
 We have implemented a simple web application called "BadgeApp" that

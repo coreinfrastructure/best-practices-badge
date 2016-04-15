@@ -103,8 +103,6 @@ GEM
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
     debug_inspector (0.0.2)
-    descendants_tracker (0.0.4)
-      thread_safe (~> 0.3, >= 0.3.1)
     docile (1.1.5)
     dotenv (2.1.1)
     dotenv-rails (2.1.1)
@@ -127,13 +125,6 @@ GEM
     ffi (1.9.10)
     font-awesome-rails (4.5.0.1)
       railties (>= 3.2, < 5.1)
-    github_api (0.13.1)
-      addressable (~> 2.4.0)
-      descendants_tracker (~> 0.0.4)
-      faraday (~> 0.8, < 0.10)
-      hashie (>= 3.4)
-      multi_json (>= 1.7.5, < 2.0)
-      oauth2
     gitlab (3.6.1)
       httparty
       terminal-table
@@ -435,7 +426,6 @@ DEPENDENCIES
   faker (= 1.6.3)
   fasterer
   fastly-rails (= 0.5.0)
-  github_api (= 0.13.1)
   heroku_rails_deflate (= 1.0.3)
   jbuilder (= 2.4.1)
   jquery-rails (= 4.1.1)

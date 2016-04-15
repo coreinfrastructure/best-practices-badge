@@ -76,14 +76,17 @@ class ProjectsControllerTest < ActionController::TestCase
 
   test 'should update project' do
     log_in_as(@project.user)
+    new_name = @project.name + '_updated'
     patch :update, id: @project, project: {
       description: @project.description,
       license: @project.license,
-      name: @project.name,
+      name: new_name,
       repo_url: @project.repo_url,
       homepage_url: @project.homepage_url
     }
     assert_redirected_to project_path(assigns(:project))
+    @project.reload
+    assert_equal @project.name, new_name
   end
 
   test 'should fail to update project' do
@@ -91,8 +94,7 @@ class ProjectsControllerTest < ActionController::TestCase
       description: '',
       license: '',
       name: '',
-      repo_url: '',
-      homepage_url: ''
+      homepage_url: 'example.org' # bad url
     }
     log_in_as(@project.user)
     patch :update, id: @project, project: new_project_data
@@ -102,6 +104,16 @@ class ProjectsControllerTest < ActionController::TestCase
     # Do the same thing, but as for JSON
     patch :update, id: @project, format: :json, project: new_project_data
     assert_response :unprocessable_entity
+  end
+
+  test 'should fail to update other users project' do
+    new_name = @project_two.name + '_updated'
+    assert_not_equal @user, @project_two.user
+    log_in_as(@user)
+    patch :update, id: @project_two, project: {
+      name: new_name
+    }
+    assert_redirected_to root_url
   end
 
   test 'A perfect project should have the badge' do

@@ -7,7 +7,6 @@ test_user:
   provider: local
   activated: true
   activated_at: <%= Time.zone.now %>
-  role: 'admin'
 
 test_user_melissa:
   name: Melissa Lewis

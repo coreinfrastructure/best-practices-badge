@@ -1,5 +1,7 @@
 # Dawnscanner
 
+<!-- SPDX-License-Identifier: (MIT OR CC-BY-3.0+) -->
+
 
 We have experimented with the
 [dawnscanner](https://github.com/thesp0nge/dawnscanner/)

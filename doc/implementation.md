@@ -1,6 +1,6 @@
-<!-- SPDX-License-Identifier: (MIT OR CC-BY-3.0+) -->
-
 # Implementation
+
+<!-- SPDX-License-Identifier: (MIT OR CC-BY-3.0+) -->
 
 We have implemented a simple web application called "BadgeApp" that
 quickly captures self-assertion data, evaluates criteria automatically

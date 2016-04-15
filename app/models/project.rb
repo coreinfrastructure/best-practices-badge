@@ -8,7 +8,7 @@ class Project < ActiveRecord::Base
   MAX_TEXT_LENGTH = 8192 # Arbitrary maximum to reduce abuse
   MAX_SHORT_STRING_LENGTH = 254 # Arbitrary maximum to reduce abuse
 
-  PROJECT_OTHER_FIELDS = %i(name description homepage_url repo_url cpe
+  PROJECT_OTHER_FIELDS = %i(name description homepage_url cpe
                             license general_comments user_id).freeze
   # rubocop:disable Style/SymbolProc # Refinements don't work with Symbol#Proc
   ALL_CRITERIA_STATUS = Criteria::ALL_CRITERIA.map { |c| c.status }.freeze

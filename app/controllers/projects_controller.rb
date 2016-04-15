@@ -2,6 +2,7 @@ require 'net/http'
 
 # rubocop:disable Metrics/ClassLength
 class ProjectsController < ApplicationController
+  include ProjectsHelper
   before_action :set_project, only: [:edit, :update, :destroy, :show, :badge]
   before_action :logged_in?, only: :create
   before_action :change_authorized, only: [:destroy, :edit, :update]
@@ -182,7 +183,12 @@ class ProjectsController < ApplicationController
   # Never trust parameters from the scary internet,
   # only allow the white list through.
   def project_params
-    params.require(:project).permit(Project::PROJECT_PERMITTED_FIELDS)
+    if @project && repo_url_disabled?(@project)
+      params.require(:project).permit(Project::PROJECT_PERMITTED_FIELDS)
+    else
+      params.require(:project).permit(:repo_url,
+                                      Project::PROJECT_PERMITTED_FIELDS)
+    end
   end
 
   def change_authorized

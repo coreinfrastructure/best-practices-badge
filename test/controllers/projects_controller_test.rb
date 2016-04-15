@@ -4,6 +4,7 @@ require 'test_helper'
 class ProjectsControllerTest < ActionController::TestCase
   setup do
     @project = projects(:one)
+    @project_two = projects(:two)
     @perfect_unjustified_project = projects(:perfect_unjustified)
     @perfect_project = projects(:perfect)
     @user = users(:test_user)
@@ -143,5 +144,14 @@ class ProjectsControllerTest < ActionController::TestCase
       post :create, project: { repo_url: @project.repo_url }
     end
     assert_redirected_to project_path(@project)
+  end
+
+  test 'should fail to change non-blank repo_url' do
+    new_repo_url = 'https://www.example.org/code100'
+    log_in_as(@project_two.user)
+    patch :update, id: @project_two, project: {
+      repo_url:  new_repo_url }
+    @project_two.reload
+    assert_not_equal @project_two.repo_url, new_repo_url
   end
 end

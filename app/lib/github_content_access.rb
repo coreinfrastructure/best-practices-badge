@@ -2,12 +2,9 @@
 # Use this indirect class so that we can later plug in other accessors to
 # read data from other locations.
 class GithubContentAccess
-  def initialize(fullname)
+  def initialize(fullname, client)
     @fullname = fullname
-    @octokit_client = Octokit::Client.new
-    @octokit_client.auto_paginate = true
-    #  TODO: add access_token: <OAuth token>
-    #  TODO: Perhaps have a single github client per chief.
+    @octokit_client = client
   end
 
   # The GitHub contents API is defined here:

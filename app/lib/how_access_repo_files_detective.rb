@@ -13,12 +13,13 @@ class HowAccessRepoFilesDetective < Detective
     return {} if repo_url.blank?
 
     github_match = repo_url.match(GITHUB_REPO)
-    if github_match
-      fullname = "#{github_match[1]}/#{github_match[2]}"
-      { repo_files:
-        { value: GithubContentAccess.new(fullname), confidence: 5 } }
-    else
-      {} # We currently don't handle other cases.
-    end
+    github_match ? assemble_result("#{github_match[1]}/#{github_match[2]}") : {}
+  end
+
+  def assemble_result(fullname)
+    { repo_files:
+          { value: GithubContentAccess.new(fullname, @octokit_client),
+            confidence: 5 }
+    }
   end
 end

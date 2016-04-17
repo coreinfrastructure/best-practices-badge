@@ -1,5 +1,7 @@
 # Contributing
 
+<!-- SPDX-License-Identifier: (MIT OR CC-BY-3.0+) -->
+
 Feedback and contributions are very welcome!
 
 Here's help on how to make contributions, divided into the following sections:

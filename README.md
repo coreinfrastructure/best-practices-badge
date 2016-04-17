@@ -1,5 +1,7 @@
 # Core Infrastructure Initiative Best Practices Badge
 
+<!-- SPDX-License-Identifier: (MIT OR CC-BY-3.0+) -->
+
 [![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/1/badge)](https://bestpractices.coreinfrastructure.org/projects/1)
 [![CircleCI Build Status](https://circleci.com/gh/linuxfoundation/cii-best-practices-badge.svg?&style=shield&circle-token=ca450ac150523030464677a1aa7f3cacfb8b3472)](https://circleci.com/gh/linuxfoundation/cii-best-practices-badge)
 [![Coverage Status](https://coveralls.io/repos/linuxfoundation/cii-best-practices-badge/badge.svg?branch=master&service=github)](https://coveralls.io/github/linuxfoundation/cii-best-practices-badge?branch=master)
@@ -45,8 +47,7 @@ of this project.
 This is a summary of the criteria, with requirements in bold
 (for details, see the [full list of criteria](doc/criteria.md)):
 
-- **Have a [stable website](doc/criteria.md#project_homepage_url)**,
-  [accessible over HTTPS](doc/criteria.md#project_homepage_https), which says:
+- **Have a [stable website](doc/criteria.md#homepage_url)**, which says:
   - **[what it does](doc/criteria.md#description_good)**
   - **[how to get it](doc/criteria.md#interact)**
   - **[how to give feedback](doc/criteria.md#interact)**
@@ -54,7 +55,7 @@ This is a summary of the criteria, with requirements in bold
     [preferred styles](doc/criteria.md#contribution_requirements)
 - **[Explicitly specify](doc/criteria.md#license_location) a
   [FLOSS](doc/criteria.md#floss_license) [license](doc/criteria.md#floss_license_osi)**
-- **[Support HTTPS on the project sites](doc/criteria.md#project_sites_https)**
+- **[Support HTTPS on the project sites](doc/criteria.md#sites_https)**
 - **[Document how to install and run (securely)](doc/criteria.md#documentation_basics),
   and [any API](doc/criteria.md#documentation_interface)**
 - **Have a** [distributed](doc/criteria.md#repo_distributed)

@@ -18,7 +18,7 @@ class UsersManipulateProjectTest < ActionDispatch::IntegrationTest
 
     VCR.use_cassette('users_manipulate_test') do
       post '/projects',
-           'project[project_homepage_url]' => repo_url,
+           'project[homepage_url]' => repo_url,
            'project[repo_url]' => repo_url
       assert_response :redirect
       follow_redirect!
@@ -28,7 +28,7 @@ class UsersManipulateProjectTest < ActionDispatch::IntegrationTest
 
       # Check to ensure that the form includes all the criteria, but only once.
       # This could fail if the view incorrectly omits or duplicates one.
-      Criteria.each_key do |criterion|
+      Criteria.each do |criterion|
         assert_select "##{criterion}" # Check for existence
         assert_select "##{criterion}" do |elements|
           assert_equal 1, elements.count # Check for duplication
@@ -78,7 +78,7 @@ class UsersManipulateProjectTest < ActionDispatch::IntegrationTest
       assert_select '#project_build_status_met[checked]'
       assert_select '#project_build_common_tools_status_met[checked]'
       assert_select '#project_contribution_status_met[checked]'
-      assert_select '#project_project_sites_https_status_met[checked]'
+      assert_select '#project_sites_https_status_met[checked]'
 
       assert_select '#project_static_analysis_status_[checked]' # Unknown.
 
@@ -116,7 +116,7 @@ class UsersManipulateProjectTest < ActionDispatch::IntegrationTest
 
     VCR.use_cassette('assimilation-official') do
       post '/projects',
-           'project[project_homepage_url]' => repo_url,
+           'project[homepage_url]' => repo_url,
            'project[repo_url]' => repo_url
       assert_response :redirect
       follow_redirect!
@@ -141,7 +141,7 @@ class UsersManipulateProjectTest < ActionDispatch::IntegrationTest
 
     VCR.use_cassette('sendmail') do
       post '/projects',
-           'project[project_homepage_url]' => project_url,
+           'project[homepage_url]' => project_url,
            'project[repo_url]' => project_url
       assert_response :redirect
       follow_redirect!

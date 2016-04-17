@@ -1,7 +1,8 @@
 # This YAML file provides information about each criterion.
 # The top level hash key is the identifier of the criterion,
 # with the following keys inside:
-#   category: MUST|SHOULD|SUGGESTED|FUTURE  # required
+#   category: MUST|SHOULD|SUGGESTED # required
+#   future: true|false # optional, default false
 #   na_allowed: true|false # optional, default false
 #   met_url_required: true|false # optional, default false
 #   description: ...HTML description... # required
@@ -160,7 +161,6 @@
       The OSI uses a rigorous approval process to determine
       which licenses are OSS.
     met_suppress: true
-    unmet_suppress: true
     autofill: >
       Currently we compare the license to see if it's on a simple list
       from OSI.  We could add support for automatically getting the list
@@ -208,11 +208,14 @@
       Look for a "docs" or "doc" directory, or the main site, with
       .txt, .html, .md, .tex extension and uses the word "interface".
 # Other
-- project_sites_https:
-    category: FUTURE
+- sites_https:
+    category: MUST
     description: >
       The project sites (website, repository, and download URLs)
       MUST support HTTPS using TLS.
+    details: >
+      You can get free certificates from
+      <a href="https://letsencrypt.org/">Let's Encrypt</a>.
     autofill: >
       Look at project, repo, and download URLs. https is okay, http is not.
       Typically anything supporting HTTPS also supports TLS, so
@@ -256,21 +259,6 @@
       We can use more general tools to detect the natural language,
       or simple mechanisms like using dictionaries/spellcheckers to
       see if it's mostly English.
-- installation_common:
-    category: FUTURE
-    description: >
-      The project SHOULD
-      provide a way to easily install and uninstall the software using a
-      commonly-used convention.
-    details: >
-      Examples include using a package manager (at
-      the system or language level), "make install/uninstall" (supporting
-      DESTDIR), a container in a standard format,
-      or a virtual machine image in a standard format.
-      The installation and uninstallation process (e.g., its packaging)
-      MAY be implemented by a third party as long as it is FLOSS.
-    autofill: >
-      Look for a standard install format, or a build instruction for one.
 #
 # CHANGE CONTROL
 #
@@ -544,28 +532,6 @@
       is more likely to *also* be true.  The only *real* way to check this
       is to install and build on a system that only has FLOSS, and we
       won't have the time to do that ourselves.
-- build_reproducible:
-    category: FUTURE
-    na_allowed: true
-    description: >
-      It is SUGGESTED that
-      the project have a
-      <a href="https://reproducible-builds.org/">reproducible build</a>.
-    details: >
-      With reproducible builds, multiple parties can independently redo the
-      process of generating information from source files and get exactly
-      the same result.
-      The <a href="https://reproducible-builds.org/docs/">reproducible builds project has documentation on how to do this</a>.
-      This criterion does not apply if no building occurs
-      (e.g., scripting languages where the source code
-      is used directly instead of being compiled).
-    autofill: >
-      If the project seems to only have scripting language code,
-      prefill it as N/A.
-      Otherwise, check if the reproducible build project lists the project
-      as being reproducible.
-      The only *real* way to check is to actually perform the build
-      multiple times, but we don't have time for that.
 # Automated test suite
 - test:
     category: MUST
@@ -768,42 +734,6 @@
       types of vulnerabilities such as CWE/SANS top 25 or OWASP top 10.
       Simply mentioning those could also be an indicator.
 # Use basic good cryptographic practices
-- crypto_used_network:
-    category: FUTURE
-    na_allowed: true
-    description: >
-      The project SHOULD NOT use
-      unencrypted network communication protocols (such as HTTP and telnet)
-      if there an encrypted equivalent (e.g., HTTPS/TLS and SSH),
-      unless the user specifically requests or configures it.
-- crypto_tls12:
-    category: FUTURE
-    na_allowed: true
-    description: >
-      The project SHOULD,
-      if it supports TLS, support at least TLS version 1.2.
-      Note that the predecessor of TLS was called SSL.
-- crypto_certificate_verification:
-    category: FUTURE
-    na_allowed: true
-    description: >
-      The project MUST,
-      if it supports TLS, perform TLS certificate verification by default
-      when using TLS, including on subresources.
-    details: >
-      Note that incorrect TLS certificate verification is a common mistake.
-      For more information, see
-      <a href="http://crypto.stanford.edu/~dabo/pubs/abstracts/ssl-client-bugs.html">"The Most Dangerous Code in the World: Validating SSL Certificates in Non-Browser Software" by Martin Georgiev et al.</a>
-      and
-      <a href="https://blogs.gnome.org/mcatanzaro/2016/03/12/do-you-trust-this-application/">"Do you trust this application?" by Michael Catanzaro</a>.
-- crypto_verification_private:
-    category: FUTURE
-    na_allowed: true
-    description: >
-      The project SHOULD,
-      if it supports TLS, perform certificate verification
-      before sending HTTP headers with private information
-      (such as secure cookies).
 - crypto_published:
     category: MUST
     na_allowed: true
@@ -910,21 +840,6 @@
       actually check the signature.
     autofill: >
       Look for a download site using https.
-- hardened_site:
-    category: FUTURE
-    description: >
-      It is SUGGESTED that the project website, repository (if accessible
-      via the web), and download site (if separate) include key hardening
-      headers with nonpermissive values.
-    details: >
-      Note that GitHub is known to meet this.
-      Sites such as https://securityheaders.io/ can quickly check this.
-      The key hardening headers are:
-      Content Security Policy (CSP), HTTP Strict Transport Security
-      (HSTS), X-Content-Type-Options (as "nosniff"), X-Frame-Options,
-      and X-XSS-Protection.
-    autofill: >
-      Load the URLs and look for those HTTP headers.
 - delivery_unsigned:
     category: MUST
     description: >
@@ -977,22 +892,6 @@
        find the worst-case time for response to any critical vulnerabilities.
        More than 60 days is not a good sign.
 # Other security issues
-- hardening:
-    category: FUTURE
-    description: >
-      It is SUGGESTED that hardening mechanisms be used so software defects
-      are less likely to result in security vulnerabilities.
-    details: >
-      Hardening mechanisms may include
-      HTTP headers like Content Security Policy (CSP),
-      compiler flags to mitigate attacks
-      (such as -fstack-protector), or compiler flags to
-      eliminate undefined behavior.
-      For our purposes least privilege is not considered a hardening
-      mechanism (least privilege is important, but separate).
-    autofill: >
-      Look for gems like secure_headers, and
-      relevant compiler flags in build files.
 - no_leaked_credentials:
     category: MUST
     description: >
@@ -1148,3 +1047,118 @@
        A vulnerability is medium to high severity if its <a
        href="https://nvd.nist.gov/cvss.cfm">CVSS 2.0</a> base score is 4
     # autofill: TODO
+#
+# FUTURE
+#
+- installation_common: # Put after 'english'
+    category: SHOULD
+    future: true
+    description: >
+      The project SHOULD
+      provide a way to easily install and uninstall the software using a
+      commonly-used convention.
+    details: >
+      Examples include using a package manager (at
+      the system or language level), "make install/uninstall" (supporting
+      DESTDIR), a container in a standard format,
+      or a virtual machine image in a standard format.
+      The installation and uninstallation process (e.g., its packaging)
+      MAY be implemented by a third party as long as it is FLOSS.
+    autofill: >
+      Look for a standard install format, or a build instruction for one.
+- build_reproducible: # After build_floss_tools
+    category: SUGGESTED
+    future: true
+    na_allowed: true
+    description: >
+      It is SUGGESTED that
+      the project have a
+      <a href="https://reproducible-builds.org/">reproducible build</a>.
+    details: >
+      With reproducible builds, multiple parties can independently redo the
+      process of generating information from source files and get exactly
+      the same result.
+      The <a href="https://reproducible-builds.org/docs/">reproducible builds project has documentation on how to do this</a>.
+      This criterion does not apply if no building occurs
+      (e.g., scripting languages where the source code
+      is used directly instead of being compiled).
+    autofill: >
+      If the project seems to only have scripting language code,
+      prefill it as N/A.
+      Otherwise, check if the reproducible build project lists the project
+      as being reproducible.
+      The only *real* way to check is to actually perform the build
+      multiple times, but we don't have time for that.
+- crypto_used_network:
+    category: SHOULD
+    future: true
+    na_allowed: true
+    description: >
+      The project SHOULD NOT use
+      unencrypted network communication protocols (such as HTTP and telnet)
+      if there an encrypted equivalent (e.g., HTTPS/TLS and SSH),
+      unless the user specifically requests or configures it.
+- crypto_tls12:
+    category: SHOULD
+    future: true
+    na_allowed: true
+    description: >
+      The project SHOULD,
+      if it supports TLS, support at least TLS version 1.2.
+      Note that the predecessor of TLS was called SSL.
+- crypto_certificate_verification:
+    category: MUST
+    future: true
+    na_allowed: true
+    description: >
+      The project MUST,
+      if it supports TLS, perform TLS certificate verification by default
+      when using TLS, including on subresources.
+    details: >
+      Note that incorrect TLS certificate verification is a common mistake.
+      For more information, see
+      <a href="http://crypto.stanford.edu/~dabo/pubs/abstracts/ssl-client-bugs.html">"The Most Dangerous Code in the World: Validating SSL Certificates in Non-Browser Software" by Martin Georgiev et al.</a>
+      and
+      <a href="https://blogs.gnome.org/mcatanzaro/2016/03/12/do-you-trust-this-application/">"Do you trust this application?" by Michael Catanzaro</a>.
+- crypto_verification_private:
+    category: SHOULD
+    future: true
+    na_allowed: true
+    description: >
+      The project SHOULD,
+      if it supports TLS, perform certificate verification
+      before sending HTTP headers with private information
+      (such as secure cookies).
+- hardened_site: # After delivery_mitm?
+    category: SUGGESTED
+    future: true
+    description: >
+      It is SUGGESTED that the project website, repository (if accessible
+      via the web), and download site (if separate) include key hardening
+      headers with nonpermissive values.
+    details: >
+      Note that GitHub is known to meet this.
+      Sites such as https://securityheaders.io/ can quickly check this.
+      The key hardening headers are:
+      Content Security Policy (CSP), HTTP Strict Transport Security
+      (HSTS), X-Content-Type-Options (as "nosniff"), X-Frame-Options,
+      and X-XSS-Protection.
+    autofill: >
+      Load the URLs and look for those HTTP headers.
+- hardening: # In 'Other security issues'
+    category: SUGGESTED
+    future: true
+    description: >
+      It is SUGGESTED that hardening mechanisms be used so software defects
+      are less likely to result in security vulnerabilities.
+    details: >
+      Hardening mechanisms may include
+      HTTP headers like Content Security Policy (CSP),
+      compiler flags to mitigate attacks
+      (such as -fstack-protector), or compiler flags to
+      eliminate undefined behavior.
+      For our purposes least privilege is not considered a hardening
+      mechanism (least privilege is important, but separate).
+    autofill: >
+      Look for gems like secure_headers, and
+      relevant compiler flags in build files.

@@ -14,11 +14,13 @@
 |
 <button id="hide-all-details" class="btn" title="Hide all detailed text" type="button">Hide all detailed text</button>
 |
-<button id="toggle-hide-met-criteria" class="btn" title="Hide met criteria" type="button">Hide met criteria</button>
+<button id="toggle-hide-metna-criteria" class="btn" title="Hide met or N/A criteria" type="button">Hide met or N/A criteria</button>
 </div>
 <div class="hidden">
-<%= image_tag "Thumbs_up.svg", id: "Thumbs_up_img" %>
-<%= image_tag "Thumbs_down.svg", id: "Thumbs_down_img" %>
+<%= image_tag "result_symbol_check.png", id: "result_symbol_check_img" %>
+<%= image_tag "result_symbol_x.png", id: "result_symbol_x_img" %>
+<%= image_tag "result_symbol_dash.png", id: "result_symbol_dash" %>
+<%= image_tag "result_symbol_question.png", id: "result_symbol_question" %>
 </div>
 
 <p>
@@ -62,7 +64,7 @@ There is also a
 </div>
 
 <% if (is_disabled) %>
-<%   if ! %w(failing in_progress).include? Project.badge_level(project) %>
+<%   if ! %w(failing in_progress).include? project.badge_level %>
 <div class="row">
 <div class="col-xs-1"></div>
 <div class="col-xs-2">
@@ -108,6 +110,7 @@ There is also a
     <li><a href="#quality" data-toggle="tab"><h3 class="tab-title">Quality</h3></a></li>
     <li><a href="#security" data-toggle="tab"><h3 class="tab-title">Security</h3></a></li>
     <li><a href="#analysis" data-toggle="tab"><h3 class="tab-title">Analysis</h3></a></li>
+    <li><a href="#future" data-toggle="tab"><h3 class="tab-title">Future</h3></a></li>
   </ul>
 
   <div class="tab-content">
@@ -136,11 +139,11 @@ This information is used when displaying badge information.
      <% end %>
 
       <span>What is the URL for the project (as a whole)?</span>
-      <%= f.text_field :project_homepage_url, hide_label: true, class: "form-control", placeholder:'Project Website URL', label: "Project URL", disabled: is_disabled %>
+      <%= f.text_field :homepage_url, hide_label: true, class: "form-control", placeholder:'Project Website URL', label: "Project URL", disabled: is_disabled %>
 
       <span>What is the URL for the version control repository
             (it may the same as the project URL)?</span>
-      <%= f.text_field :repo_url, class:"form-control", hide_label: true, placeholder:'Project Repo URL', disabled: is_disabled %>
+      <%= f.text_field :repo_url, class:"form-control", hide_label: true, placeholder:'Project Repo URL', disabled: repo_disabled %>
 
 <!-- TODO: MUST have a project or repo URL, SUGGESTED to use HTTPS.
      However, first is implied by "description_good",
@@ -227,16 +230,13 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
 
       <h3>Other</h3>
 
-      <%= render_status 'project_sites_https', f, project, is_disabled %>
+      <%= render_status 'sites_https', f, project, is_disabled %>
       <hr>
 
       <%= render_status 'discussion', f, project, is_disabled %>
       <hr>
 
       <%= render_status 'english', f, project, is_disabled %>
-      <hr>
-
-      <%= render_status 'installation_common', f, project, is_disabled %>
       <br>
 
       Other general comments about the project:<br>
@@ -334,9 +334,6 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
       <hr>
 
       <%= render_status 'build_floss_tools', f, project, is_disabled %>
-      <hr>
-
-      <%= render_status 'build_reproducible', f, project, is_disabled %>
       <br>
 
       <h3>Automated test suite</h3>
@@ -398,18 +395,6 @@ provided by the delivered project's software.
   <button class="btn btn-default hidden-print" type="button" id='all_crypto_na'>Press here if the project does not use or need cryptographic mechanisms</button>
   <br>
 <% end %>
-      <%= render_status 'crypto_used_network', f, project, is_disabled %>
-      <hr>
-
-      <%= render_status 'crypto_tls12', f, project, is_disabled %>
-      <hr>
-
-      <%= render_status 'crypto_certificate_verification', f, project, is_disabled %>
-      <hr>
-
-      <%= render_status 'crypto_verification_private', f, project, is_disabled %>
-      <hr>
-
       <%= render_status 'crypto_published', f, project, is_disabled %>
       <hr>
 
@@ -442,9 +427,6 @@ provided by the delivered project's software.
       <%= render_status 'delivery_mitm', f, project, is_disabled %>
       <hr>
 
-      <%= render_status 'hardened_site', f, project, is_disabled %>
-      <hr>
-
       <%= render_status 'delivery_unsigned', f, project, is_disabled %>
       <br>
 
@@ -460,7 +442,6 @@ provided by the delivered project's software.
 
     <h3>Other security</h3>
 
-      <%= render_status 'hardening', f, project, is_disabled %>
       <%= render_status 'no_leaked_credentials', f, project, is_disabled %>
 </div>
 
@@ -496,7 +477,42 @@ provided by the delivered project's software.
 
       <%= render_status 'dynamic_analysis_fixed',
                         f, project, is_disabled %>
-</div>
+    </div>
+
+    <div class="tab-pane" id="future">
+     <br>
+     These are criteria we intend to add in the near future, but are
+     <i>not</i> currently required for a the badge.
+     This grace period allows projects to update to changed criteria
+     and retain their badge as best practices improve.
+     <br>
+
+      <%= render_status 'installation_common', f, project, is_disabled %>
+      <hr>
+
+      <%= render_status 'build_reproducible', f, project, is_disabled %>
+      <hr>
+
+      <%= render_status 'crypto_used_network', f, project, is_disabled %>
+      <hr>
+
+      <%= render_status 'crypto_tls12', f, project, is_disabled %>
+      <hr>
+
+      <%= render_status 'crypto_certificate_verification', f, project, is_disabled %>
+      <hr>
+
+      <%= render_status 'crypto_verification_private', f, project, is_disabled %>
+      <hr>
+
+      <%= render_status 'hardened_site', f, project, is_disabled %>
+      <hr>
+
+      <%= render_status 'hardening', f, project, is_disabled %>
+      <br>
+
+    </div>
+
 </div>
       <br>
       <% if ! is_disabled %>

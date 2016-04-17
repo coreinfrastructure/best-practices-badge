@@ -4,9 +4,11 @@ require 'test_helper'
 class ProjectsControllerTest < ActionController::TestCase
   setup do
     @project = projects(:one)
+    @project_two = projects(:two)
     @perfect_unjustified_project = projects(:perfect_unjustified)
     @perfect_project = projects(:perfect)
     @user = users(:test_user)
+    @admin = users(:admin_user)
   end
 
   test 'should get index' do
@@ -30,7 +32,7 @@ class ProjectsControllerTest < ActionController::TestCase
         license: @project.license,
         name: @project.name,
         repo_url: 'https://www.example.org/code',
-        project_homepage_url: @project.project_homepage_url
+        homepage_url: @project.homepage_url
       }
     end
   end
@@ -75,14 +77,17 @@ class ProjectsControllerTest < ActionController::TestCase
 
   test 'should update project' do
     log_in_as(@project.user)
+    new_name = @project.name + '_updated'
     patch :update, id: @project, project: {
       description: @project.description,
       license: @project.license,
-      name: @project.name,
+      name: new_name,
       repo_url: @project.repo_url,
-      project_homepage_url: @project.project_homepage_url
+      homepage_url: @project.homepage_url
     }
     assert_redirected_to project_path(assigns(:project))
+    @project.reload
+    assert_equal @project.name, new_name
   end
 
   test 'should fail to update project' do
@@ -90,8 +95,7 @@ class ProjectsControllerTest < ActionController::TestCase
       description: '',
       license: '',
       name: '',
-      repo_url: '',
-      project_homepage_url: ''
+      homepage_url: 'example.org' # bad url
     }
     log_in_as(@project.user)
     patch :update, id: @project, project: new_project_data
@@ -101,6 +105,28 @@ class ProjectsControllerTest < ActionController::TestCase
     # Do the same thing, but as for JSON
     patch :update, id: @project, format: :json, project: new_project_data
     assert_response :unprocessable_entity
+  end
+
+  test 'should fail to update other users project' do
+    new_name = @project_two.name + '_updated'
+    assert_not_equal @user, @project_two.user
+    log_in_as(@user)
+    patch :update, id: @project_two, project: {
+      name: new_name
+    }
+    assert_redirected_to root_url
+  end
+
+  test 'admin can update other users project' do
+    new_name = @project.name + '_updated'
+    log_in_as(@admin)
+    assert_not_equal @admin, @project.user
+    patch :update, id: @project, project: {
+      name: new_name
+    }
+    assert_redirected_to project_path(assigns(:project))
+    @project.reload
+    assert_equal @project.name, new_name
   end
 
   test 'A perfect project should have the badge' do
@@ -121,8 +147,18 @@ class ProjectsControllerTest < ActionController::TestCase
     assert_includes @response.body, 'in progress'
   end
 
-  test 'should destroy project' do
+  test 'should destroy own project' do
     log_in_as(@project.user)
+    assert_difference('Project.count', -1) do
+      delete :destroy, id: @project
+    end
+    assert_not_empty flash
+    assert_redirected_to projects_path
+  end
+
+  test 'Admin can destroy any project' do
+    log_in_as(@admin)
+    assert_not_equal @admin, @project.user
     assert_difference('Project.count', -1) do
       delete :destroy, id: @project
     end
@@ -143,5 +179,24 @@ class ProjectsControllerTest < ActionController::TestCase
       post :create, project: { repo_url: @project.repo_url }
     end
     assert_redirected_to project_path(@project)
+  end
+
+  test 'should fail to change non-blank repo_url' do
+    new_repo_url = @project_two.repo_url + '_new'
+    log_in_as(@project_two.user)
+    patch :update, id: @project_two, project: {
+      repo_url:  new_repo_url }
+    @project_two.reload
+    assert_not_equal @project_two.repo_url, new_repo_url
+  end
+
+  test 'admin can change other users non-blank repo_url' do
+    new_repo_url = @project_two.repo_url + '_new'
+    log_in_as(@admin)
+    assert_not_equal @admin, @project.user
+    patch :update, id: @project_two, project: {
+      repo_url:  new_repo_url }
+    @project_two.reload
+    assert_equal @project_two.repo_url, new_repo_url
   end
 end

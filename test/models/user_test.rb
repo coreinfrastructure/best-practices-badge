@@ -50,7 +50,7 @@ class UserTest < ActiveSupport::TestCase
 
   test 'emails should be unique' do
     duplicate_user = @user.dup
-    @user.save
+    @user.save!
     assert_not duplicate_user.valid?
   end
 
@@ -65,8 +65,8 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'associated projects should be destroyed' do
-    @user.save
-    @user.projects.create!(project_homepage_url: 'https://www.example.org',
+    @user.save!
+    @user.projects.create!(homepage_url: 'https://www.example.org',
                            repo_url: 'https://www.example.org/code')
     assert_difference 'Project.count', -1 do
       @user.destroy

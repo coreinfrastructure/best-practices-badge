@@ -1,5 +1,7 @@
 # Background on Best Practices Criteria for Free/Libre and Open Source Software (OSS)
 
+<!-- SPDX-License-Identifier: (MIT OR CC-BY-3.0+) -->
+
 This document gives background on the
 Best Practices Criteria for
 Free/Libre and Open Source Software (FLOSS).

@@ -176,6 +176,21 @@ namespace :fastly do
   end
 end
 
+desc 'Copy database from production into development (requires access privs)'
+task :pull_database do
+  puts 'Getting database'
+  # This fails, probably because we use Unix sockets with local db:
+  # sh 'rake db:drop &&
+  #     heroku pg:pull DATABASE_URL development --app production-bestpractices'
+  sh 'heroku pg:backups capture --app production-bestpractices && \
+      curl -o db/latest.dump `heroku pg:backups public-url \
+        --app production-bestpractices` && \
+      rake db:reset && \
+      pg_restore --verbose --clean --no-acl --no-owner -U `whoami` \
+        -d development db/latest.dump'
+  puts 'You may need to run "rake db:migrate".'
+end
+
 Rails::TestTask.new('test:features' => 'test:prepare') do |t|
   t.pattern = 'test/features/**/*_test.rb'
 end

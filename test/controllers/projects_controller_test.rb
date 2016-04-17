@@ -8,6 +8,7 @@ class ProjectsControllerTest < ActionController::TestCase
     @perfect_unjustified_project = projects(:perfect_unjustified)
     @perfect_project = projects(:perfect)
     @user = users(:test_user)
+    @admin = users(:admin_user)
   end
 
   test 'should get index' do
@@ -116,6 +117,18 @@ class ProjectsControllerTest < ActionController::TestCase
     assert_redirected_to root_url
   end
 
+  test 'admin can update other users project' do
+    new_name = @project.name + '_updated'
+    log_in_as(@admin)
+    assert_not_equal @admin, @project.user
+    patch :update, id: @project, project: {
+      name: new_name
+    }
+    assert_redirected_to project_path(assigns(:project))
+    @project.reload
+    assert_equal @project.name, new_name
+  end
+
   test 'A perfect project should have the badge' do
     get :badge, id: @perfect_project, format: 'svg'
     assert_response :success
@@ -134,8 +147,18 @@ class ProjectsControllerTest < ActionController::TestCase
     assert_includes @response.body, 'in progress'
   end
 
-  test 'should destroy project' do
+  test 'should destroy own project' do
     log_in_as(@project.user)
+    assert_difference('Project.count', -1) do
+      delete :destroy, id: @project
+    end
+    assert_not_empty flash
+    assert_redirected_to projects_path
+  end
+
+  test 'Admin can destroy any project' do
+    log_in_as(@admin)
+    assert_not_equal @admin, @project.user
     assert_difference('Project.count', -1) do
       delete :destroy, id: @project
     end
@@ -159,11 +182,21 @@ class ProjectsControllerTest < ActionController::TestCase
   end
 
   test 'should fail to change non-blank repo_url' do
-    new_repo_url = 'https://www.example.org/code100'
+    new_repo_url = @project_two.repo_url + '_new'
     log_in_as(@project_two.user)
     patch :update, id: @project_two, project: {
       repo_url:  new_repo_url }
     @project_two.reload
     assert_not_equal @project_two.repo_url, new_repo_url
+  end
+
+  test 'admin can change other users non-blank repo_url' do
+    new_repo_url = @project_two.repo_url + '_new'
+    log_in_as(@admin)
+    assert_not_equal @admin, @project.user
+    patch :update, id: @project_two, project: {
+      repo_url:  new_repo_url }
+    @project_two.reload
+    assert_equal @project_two.repo_url, new_repo_url
   end
 end

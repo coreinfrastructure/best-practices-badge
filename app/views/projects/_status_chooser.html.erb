@@ -81,6 +81,15 @@
                <%= ApplicationHelper.markdown(project[justification_symbol]) %>
              </div>
            <% end %>
+           <% if project[status_symbol] == 'Met' &&
+                 criterion_met_url_required &&
+                 !project.contains_url?(project[justification_symbol]) %>
+             <p class="bg-warning">Warning: URL required, but no URL found.</p>
+           <% elsif project[status_symbol] == 'Unmet' &&
+                      criterion_category == 'SHOULD' &&
+                      justification.length < MIN_SHOULD_LENGTH %>
+             <p class="bg-warning">Warning: Requires lengthier justification.</p>
+           <% end %>
            <%= f.text_area justification_symbol, class:"form-control hidden", hide_label: true, placeholder:'Please explain', disabled: is_disabled  %>
          <% else %>
            <%= f.text_area justification_symbol, class:"form-control", hide_label: true, placeholder:'Please explain', disabled: is_disabled  %>

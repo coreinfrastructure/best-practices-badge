@@ -76,6 +76,10 @@ class Project < ActiveRecord::Base
     to_percentage met, Criteria::ALL_ACTIVE_CRITERIA.length
   end
 
+  def contains_url?(text)
+    text =~ /#{URI.regexp(%w(http https))}/
+  end
+
   private
 
   def all_active_criteria_passing?
@@ -86,10 +90,6 @@ class Project < ActiveRecord::Base
     Criteria::ALL_ACTIVE_CRITERIA.any? do |criterion|
       self[criterion.status] == '?' || self[criterion.status].blank?
     end
-  end
-
-  def contains_url?(text)
-    text =~ /#{URI.regexp(%w(http https))}/
   end
 
   def need_a_base_url

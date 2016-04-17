@@ -51,7 +51,7 @@
           <%= if Criteria.send(criterion).met_placeholder
                 raw Criteria.send(criterion).met_placeholder
               else
-                if Criteria.send(criterion).met_url
+                if criterion_met_url_required
                   raw "(URL required) Please explain how this is met, including 1+ key URLs."
                 else
                   raw "(Optional) Please explain how this is met, including 1+ key URLs."

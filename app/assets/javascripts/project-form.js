@@ -169,8 +169,7 @@ function updateCriteriaDisplay(criteria) {
     $(criteriaJust).
        attr('placeholder',
          $('#' + criteriaUnmetPlaceholder).html().trim());
-    if ((criterionCategoryValue[criteria] === 'MUST') ||
-         (document.getElementById(criteria + '_unmet_suppress'))) {
+    if (document.getElementById(criteria + '_unmet_suppress')) {
       $(criteriaJust).hide('fast');
     } else {
       $(criteriaJust).show('fast');
@@ -228,7 +227,7 @@ function ToggleHideMet(e) {
 function setupProjectField(criteria) {
   updateCriteriaDisplay(criteria);
   $('input[name="project[' + criteria + '_status]"]').click(
-      function() {changeCriteriaDisplay(criteria);});
+      function() {updateCriteriaDisplay(criteria);});
   $('input[name="project[' + criteria + '_justification]"]').blur(
       function() {updateCriteriaDisplay(criteria);});
   $('#project_' + criteria + '_justification').on('input',

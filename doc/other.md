@@ -1,5 +1,6 @@
-Other potential future criteria
-=========================
+# Other potential future criteria
+
+<!-- SPDX-License-Identifier: (MIT OR CC-BY-3.0+) -->
 
 Here are some other potential criteria.
 
@@ -28,8 +29,7 @@ Eventually these criteria will be worded per
 [RFC 2119](https://tools.ietf.org/html/rfc2119).
 
 
-Potential silver criteria
--------------------------
+## Potential silver criteria
 
 *   **Achieve the lower (passing) badge**.
 *   **Turn many should/suggested into MUST**
@@ -154,8 +154,7 @@ or the
 Note that both of these focus only on web applications.
 
 
-Potential gold criteria
------------------------
+## Potential gold criteria
 
 *   Achieve the lower (silver) badge.
 *   General criteria:
@@ -190,8 +189,7 @@ Potential gold criteria
         Some higher/different related badge *might* add 100% branch coverage.
 
 
-Potential other criteria
-------------------------
+## Potential other criteria
 
 *   Issue tracking (This must be different for big projects like the Linux
     kernel; it is not clear how to capture that.):
@@ -269,8 +267,7 @@ In the future we might add some criteria that a project has to meet
 some subset of (e.g., it must meet at least 3 of 5 criteria).
 
 
-Improving the criteria
-======================
+## Improving the criteria
 
 We are hoping to get good suggestions and feedback from the public;
 please contribute!

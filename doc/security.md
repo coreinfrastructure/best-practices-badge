@@ -1,5 +1,7 @@
 # Security
 
+<!-- SPDX-License-Identifier: (MIT OR CC-BY-3.0+) -->
+
 Security is important and challenging.
 This document describes why we think this software (the "BadgeApp")
 is adequately secure (i.e., its "assurance case").

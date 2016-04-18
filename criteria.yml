@@ -161,7 +161,6 @@
       The OSI uses a rigorous approval process to determine
       which licenses are OSS.
     met_suppress: true
-    unmet_suppress: true
     autofill: >
       Currently we compare the license to see if it's on a simple list
       from OSI.  We could add support for automatically getting the list

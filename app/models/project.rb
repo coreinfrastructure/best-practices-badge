@@ -8,7 +8,7 @@ class Project < ActiveRecord::Base
   MAX_TEXT_LENGTH = 8192 # Arbitrary maximum to reduce abuse
   MAX_SHORT_STRING_LENGTH = 254 # Arbitrary maximum to reduce abuse
 
-  PROJECT_OTHER_FIELDS = %i(name description homepage_url repo_url cpe
+  PROJECT_OTHER_FIELDS = %i(name description homepage_url cpe
                             license general_comments user_id).freeze
   ALL_CRITERIA_STATUS = Criteria.map { |c| c.name.status }.freeze
   ALL_CRITERIA_JUSTIFICATION = Criteria.map { |c| c.name.justification }.freeze
@@ -70,6 +70,10 @@ class Project < ActiveRecord::Base
     to_percentage met, Criteria.active.length
   end
 
+  def contains_url?(text)
+    text =~ /#{URI.regexp(%w(http https))}/
+  end
+
   private
 
   def all_active_criteria_passing?
@@ -80,10 +84,6 @@ class Project < ActiveRecord::Base
     Criteria.active.any? do |criterion|
       self[criterion.name.status] == '?' || self[criterion.name.status].blank?
     end
-  end
-
-  def contains_url?(text)
-    text =~ /#{URI.regexp(%w(http https))}/
   end
 
   def need_a_base_url

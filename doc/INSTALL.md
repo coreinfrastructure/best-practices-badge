@@ -1,5 +1,7 @@
 # Installation instructions
 
+<!-- SPDX-License-Identifier: (MIT OR CC-BY-3.0+) -->
+
 Here is how to install the "BadgeApp" web application, for either a development
 environment or for deployment.
 On most systems this is a fairly quick and painless process.

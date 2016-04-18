@@ -9,6 +9,14 @@ one:
   license: MIT
   repo_url: https://www.example.org/code1
 
+two:
+  user: test_user_melissa
+  name: Pathfinder OS
+  description: Operating system for Pathfinder rover
+  homepage_url: https://www.example.org1
+  license: MIT
+  repo_url: https://www.example.org/code5
+
 # TODO: Generate list of status fields from central location.
 perfect_unjustified:
   user: test_user

@@ -48,5 +48,8 @@ class CanLoginTest < Capybara::Rails::TestCase
     assert page.has_content? 'report_process'
     choose 'project_report_process_status_unmet'
     assert page.find('#report_process_enough[src*="result_symbol_x"]')
+
+    click_on 'Submit'
+    assert page.find('#discussion_enough[src*="result_symbol_x"]')
   end
 end

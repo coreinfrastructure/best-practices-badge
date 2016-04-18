@@ -10,7 +10,7 @@ class ChiefTest < ActiveSupport::TestCase
   end
 
   test 'CII badge results correct' do
-    new_chief = Chief.new(@sample_project)
+    new_chief = Chief.new(@sample_project, proc { Octokit::Client.new })
     VCR.use_cassette('github') do
       new_chief.autofill
     end
@@ -46,7 +46,7 @@ class ChiefTest < ActiveSupport::TestCase
     # TEMPORARILY make this a 'production' environment (it isn't really)
     ENV['RAILS_ENV'] = 'production'
 
-    new_chief = Chief.new(@sample_project)
+    new_chief = Chief.new(@sample_project, Octokit::Client.new)
 
     # Create special exception that happens nowhere else.  That way if
     # a *different* exception happens we don't accidentally pass the test.
@@ -92,7 +92,7 @@ class ChiefTest < ActiveSupport::TestCase
     # TEMPORARILY make this a 'test' environment (it probably is anyway)
     ENV['RAILS_ENV'] = 'test'
 
-    new_chief = Chief.new(@sample_project)
+    new_chief = Chief.new(@sample_project, Octokit::Client.new)
 
     # Create special exception that happens nowhere else.  That way if
     # a *different* exception happens we don't accidentally pass the test.

@@ -10,7 +10,7 @@ class ChiefTest < ActiveSupport::TestCase
   end
 
   test 'CII badge results correct' do
-    new_chief = Chief.new(@sample_project, Octokit::Client.new)
+    new_chief = Chief.new(@sample_project, proc { Octokit::Client.new })
     VCR.use_cassette('github') do
       new_chief.autofill
     end

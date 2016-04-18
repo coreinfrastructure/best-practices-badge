@@ -2,9 +2,10 @@
 # Use this indirect class so that we can later plug in other accessors to
 # read data from other locations.
 class GithubContentAccess
-  def initialize(fullname, client)
+  def initialize(fullname, octokit_client_factory)
     @fullname = fullname
-    @octokit_client = client
+    @octokit_client_factory = octokit_client_factory
+    @octokit_client = nil
   end
 
   # The GitHub contents API is defined here:
@@ -20,6 +21,7 @@ class GithubContentAccess
   # - For directories (type='dir') this is an iterable set of hashes;
   #   each hash represents a filesystem object (see above)
   def get_info(filename)
+    @octokit_client = @octokit_client_factory.call if @octokit_client.nil?
     @octokit_client.contents @fullname, path: filename
   end
 end

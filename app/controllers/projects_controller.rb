@@ -67,7 +67,7 @@ class ProjectsController < ApplicationController
     # do a save yet.
 
     @project.homepage_url ||= set_homepage_url
-    Chief.new(@project, client).autofill
+    Chief.new(@project, client_factory).autofill
 
     respond_to do |format|
       if @project.save
@@ -91,7 +91,7 @@ class ProjectsController < ApplicationController
   # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   def update
     old_badge_level = Project.find(params[:id]).badge_level
-    Chief.new(@project, client).autofill
+    Chief.new(@project, client_factory).autofill
     respond_to do |format|
       if @project.update(project_params)
         successful_update(format, old_badge_level)
@@ -105,11 +105,13 @@ class ProjectsController < ApplicationController
   end
   # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
-  def client
-    if current_user.nil? || current_user.provider != 'github'
-      Octokit::Client.new
-    else
-      Octokit::Client.new access_token: session[:user_token]
+  def client_factory
+    proc do
+      if current_user.nil? || current_user.provider != 'github'
+        Octokit::Client.new
+      else
+        Octokit::Client.new access_token: session[:user_token]
+      end
     end
   end
 

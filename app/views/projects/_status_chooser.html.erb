@@ -1,29 +1,26 @@
-    <div id="<%= criterion %>" class="row"><% raise unless criterion && Criteria.send(criterion) %>
-      <% status_symbol = (criterion + "_status").to_sym %>
-      <% justification_symbol = (criterion + "_justification").to_sym %>
+    <div id="<%= criterion.to_s %>" class="row">
+    <% # raise unless criterion.to_s && criterion.name %>
+      <% status_symbol = (criterion.to_s + "_status").to_sym %>
+      <% justification_symbol = (criterion.to_s + "_justification").to_sym %>
 
       <% is_crypto = criterion.to_s.match(/^crypto_/) %>
       <% crypto_class = is_crypto ? ' criterion-is-crypto' : '' %>
 
-      <%# A criterion_category is 'MUST' | 'SHOULD' | 'SUGGESTED' | 'FUTURE' %>
-      <% criterion_category = Criteria.criterion_category(criterion) %>
-      <% criterion_met_url_required = Criteria.met_url_required?(criterion) %>
-
       <div class="col-md-2 criteria-radio<%= crypto_class %>">
        <div class="row status-chooser">
-       <span class="criterion-name hidden"><%= criterion %></span>
-       <span class="criterion-category hidden"><%= criterion_category %></span>
-       <span class="criterion-future hidden"><%= Criteria.future?(criterion) %></span>
+       <span class="criterion-name hidden"><%= criterion.to_s %></span>
+       <span class="criterion-category hidden"><%= criterion.category %></span>
+       <span class="criterion-future hidden"><%= criterion.future? %></span>
        <span class="criterion-met-url-required hidden"><%=
-          criterion_met_url_required %></span>
+          criterion.met_url_required? %></span>
        <%= f.form_group status_symbol do %>
          <div class="col-xs-4 text-center block-center">
-          <br><%= image_tag("Clear.gif", size: "40x40", id: criterion + "_enough", alt: "") %>
+          <br><%= image_tag("Clear.gif", size: "40x40", id: criterion.to_s + "_enough", alt: "") %>
          </div>
          <div class="col-xs-3 text-center block-center">
              <%= f.radio_button status_symbol, 'Met', label: 'Met', disabled: is_disabled %>
              <%= f.radio_button status_symbol, 'Unmet', label: 'Unmet', disabled: is_disabled  %>
-         <% if Criteria.na_allowed?(criterion) %>
+         <% if criterion.na_allowed? %>
              <%= f.radio_button status_symbol, 'N/A', label: 'N/A', disabled: is_disabled  %>
          <% end %>
              <%= f.radio_button status_symbol, '?', label: '?', disabled: is_disabled  %>
@@ -34,52 +31,61 @@
 
       <div class='col-md-10 criteria-desc'>
           <br>
-          <% if Criteria.future?(criterion) %>
+          <% if criterion.future? %>
           (Future criterion)
           <% end %>
-          <%= sanitize Criteria.send(criterion).description %>
-          <% if criterion_met_url_required %>
+          <%= sanitize criterion.description %>
+          <% if criterion.met_url_required? %>
             (URL required)
           <% end %>
           <sup>[<%= criterion %>]</sup>
-          <%= if Criteria.send(criterion).details
+          <%= if criterion.details
               render(partial: "details", locals: {f: f,
                        criterion: criterion,
-                       details: Criteria.send(criterion).details})
+                       details: criterion.details})
              end %>
-         <div id="<%= criterion + '_met_placeholder' %>" class="hidden">
-          <%= if Criteria.send(criterion).met_placeholder
-                raw Criteria.send(criterion).met_placeholder
+         <div id="<%= criterion.to_s + '_met_placeholder' %>" class="hidden">
+          <%= if criterion.met_placeholder
+                raw criterion.met_placeholder
               else
-                if Criteria.send(criterion).met_url
+                if criterion.met_url_required?
                   raw "(URL required) Please explain how this is met, including 1+ key URLs."
                 else
                   raw "(Optional) Please explain how this is met, including 1+ key URLs."
                 end
               end %>
          </div>
-         <div id="<%= criterion + '_unmet_placeholder' %>" class="hidden">
-          <%= sanitize (Criteria.send(criterion).unmet_placeholder ||
+         <div id="<%= criterion.to_s + '_unmet_placeholder' %>" class="hidden">
+          <%= sanitize (criterion.unmet_placeholder ||
                  "Please explain why it's okay this is unmet, including 1+ key URLs.") %>
          </div>
-         <div id="<%= criterion + '_na_placeholder' %>" class="hidden">
-          <%= sanitize (Criteria.send(criterion).na_placeholder ||
+         <div id="<%= criterion.to_s + '_na_placeholder' %>" class="hidden">
+          <%= sanitize (criterion.na_placeholder ||
                  "(Optional) Please explain why this is not applicable (N/A), including 1+ key URLs." ) %>
          </div>
-         <% if Criteria.send(criterion).met_suppress %>
-           <div id="<%= criterion + '_met_suppress' %>" class="hidden"></div>
+         <% if criterion.met_suppress %>
+           <div id="<%= criterion.to_s + '_met_suppress' %>" class="hidden"></div>
          <% end %>
-         <% if Criteria.send(criterion).unmet_suppress %>
-           <div id="<%= criterion + '_unmet_suppress' %>" class="hidden"></div>
+         <% if criterion.unmet_suppress %>
+           <div id="<%= criterion.to_s + '_unmet_suppress' %>" class="hidden"></div>
          <% end %>
-         <% if Criteria.send(criterion).na_suppress %>
-           <div id="<%= criterion + '_na_suppress' %>" class="hidden"></div>
+         <% if criterion.na_suppress %>
+           <div id="<%= criterion.to_s + '_na_suppress' %>" class="hidden"></div>
          <% end %>
          <% if (is_disabled) %>
            <% if project[justification_symbol] %>
              <div class="justification-markdown">
                <%= ApplicationHelper.markdown(project[justification_symbol]) %>
              </div>
+           <% end %>
+           <% if project[status_symbol] == 'Met' &&
+                 criterion_met_url_required &&
+                 !project.contains_url?(project[justification_symbol]) %>
+             <p class="bg-warning">Warning: URL required, but no URL found.</p>
+           <% elsif project[status_symbol] == 'Unmet' &&
+                      criterion_category == 'SHOULD' &&
+                      project[justification_symbol].length < Project::MIN_SHOULD_LENGTH %>
+             <p class="bg-warning">Warning: Requires lengthier justification.</p>
            <% end %>
            <%= f.text_area justification_symbol, class:"form-control hidden", hide_label: true, placeholder:'Please explain', disabled: is_disabled  %>
          <% else %>

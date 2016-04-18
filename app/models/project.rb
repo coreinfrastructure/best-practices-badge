@@ -10,11 +10,8 @@ class Project < ActiveRecord::Base
 
   PROJECT_OTHER_FIELDS = %i(name description homepage_url cpe
                             license general_comments user_id).freeze
-  # rubocop:disable Style/SymbolProc # Refinements don't work with Symbol#Proc
-  ALL_CRITERIA_STATUS = Criteria::ALL_CRITERIA.map { |c| c.status }.freeze
-  ALL_CRITERIA_JUSTIFICATION = Criteria::ALL_CRITERIA
-                               .map { |c| c.justification }.freeze
-  # rubocop:enable Style/SymbolProc
+  ALL_CRITERIA_STATUS = Criteria.map { |c| c.name.status }.freeze
+  ALL_CRITERIA_JUSTIFICATION = Criteria.map { |c| c.name.justification }.freeze
   PROJECT_PERMITTED_FIELDS = (PROJECT_OTHER_FIELDS + ALL_CRITERIA_STATUS +
                               ALL_CRITERIA_JUSTIFICATION).freeze
 
@@ -53,43 +50,40 @@ class Project < ActiveRecord::Base
   validates :user_id, presence: true
 
   # Validate all of the criteria-related inputs
-  Criteria::ALL_CRITERIA.each do |criterion|
-    if Criteria.na_allowed?(criterion)
-      validates criterion.status, inclusion: { in: STATUS_CHOICE_NA }
+  Criteria.each do |criterion|
+    if criterion.na_allowed?
+      validates criterion.name.status, inclusion: { in: STATUS_CHOICE_NA }
     else
-      validates criterion.status, inclusion: { in: STATUS_CHOICE }
+      validates criterion.name.status, inclusion: { in: STATUS_CHOICE }
     end
-    validates criterion.justification, length: { maximum: MAX_TEXT_LENGTH }
+    validates criterion.name.justification, length: { maximum: MAX_TEXT_LENGTH }
   end
 
   def badge_level
-    if any_status_in_progress?
-      'in_progress'
-    elsif all_active_criteria_passing?
-      'passing'
-    else 'failing'
-    end
+    return 'in_progress' if any_status_in_progress?
+    return 'passing' if all_active_criteria_passing?
+    'failing'
   end
 
   def badge_percentage
-    met = Criteria::ALL_ACTIVE_CRITERIA.count { |criterion| passing? criterion }
-    to_percentage met, Criteria::ALL_ACTIVE_CRITERIA.length
+    met = Criteria.active.count { |criterion| passing? criterion }
+    to_percentage met, Criteria.active.length
+  end
+
+  def contains_url?(text)
+    text =~ /#{URI.regexp(%w(http https))}/
   end
 
   private
 
   def all_active_criteria_passing?
-    Criteria::ALL_ACTIVE_CRITERIA.all? { |criterion| passing? criterion }
+    Criteria.active.all? { |criterion| passing? criterion }
   end
 
   def any_status_in_progress?
-    Criteria::ALL_ACTIVE_CRITERIA.any? do |criterion|
-      self[criterion.status] == '?' || self[criterion.status].blank?
+    Criteria.active.any? do |criterion|
+      self[criterion.name.status] == '?' || self[criterion.name.status].blank?
     end
-  end
-
-  def contains_url?(text)
-    text =~ /#{URI.regexp(%w(http https))}/
   end
 
   def need_a_base_url
@@ -100,10 +94,10 @@ class Project < ActiveRecord::Base
   # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
   # rubocop:disable Metrics/MethodLength, Metrics/PerceivedComplexity
   def passing?(criterion)
-    status = self[criterion.status]
-    justification = self[criterion.justification]
-    category = Criteria.criterion_category(criterion)
-    met_needs_url = Criteria.met_url_required?(criterion)
+    status = self[criterion.name.status]
+    justification = self[criterion.name.justification]
+    category = criterion.category
+    met_needs_url = criterion.met_url_required?
 
     return true if status == 'N/A'
     return true if status == 'Met' && !met_needs_url
@@ -117,6 +111,7 @@ class Project < ActiveRecord::Base
   # rubocop:enable Metrics/MethodLength, Metrics/PerceivedComplexity
 
   def to_percentage(portion, total)
+    return 0 if portion.zero?
     ((portion * 100.0) / total).round
   end
 end

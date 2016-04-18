@@ -7,7 +7,6 @@ test_user:
   provider: local
   activated: true
   activated_at: <%= Time.zone.now %>
-  role: 'admin'
 
 test_user_melissa:
   name: Melissa Lewis
@@ -24,3 +23,12 @@ test_user_mark:
   provider: local
   activated: true
   activated_at: <%= Time.zone.now %>
+
+admin_user:
+  name: Admin
+  email: admin@example.com
+  password_digest: <%= User.digest('p@$$word') %>
+  provider: local
+  activated: true
+  activated_at: <%= Time.zone.now %>
+  role: admin

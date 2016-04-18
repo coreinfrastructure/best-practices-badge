@@ -1,59 +1,76 @@
 # frozen_string_literal: true
+# rubocop:disable Rails/FindEach
 class Criteria
+  ATTRIBUTES = CriteriaHash.reduce([]) do |attributes, criterion|
+    attributes | criterion[1].keys
+  end.map(&:to_sym).freeze
+  FUTURE_ATTRIBUTES = %i(met_url na_placeholder na_suppress unmet
+                         unmet_suppress).freeze
+  ACCESSORS = (%i(name) + ATTRIBUTES + FUTURE_ATTRIBUTES).freeze
+
+  include ActiveModel::Model
+  attr_accessor(*ACCESSORS)
+
   class << self
+    # Class methods
     include Enumerable
-    alias length count
-    alias size count
-  end
 
-  # CriteriaHash is loaded during application initialization
-  # from the criteria.yml YAML file
+    def [](key)
+      instantiate if @criteria.blank?
+      @criteria[key.to_sym]
+    end
 
-  ALL_CRITERIA = CriteriaHash.keys.map(&:to_sym).freeze
-  ALL_ACTIVE_CRITERIA = ALL_CRITERIA.reject do |criterion|
-    CriteriaHash[criterion][:future]
-  end.freeze
+    def active
+      @active ||= reject(&:future?)
+    end
 
-  # Create recursive class methods for each criterion
-  # Criteria name is a singleton class method on Criteria
-  # Criteria attributes use an OpenStruct to respond to methods
-  ALL_CRITERIA.each do |criterion|
-    define_singleton_method(criterion) do
-      OpenStruct.new(CriteriaHash[criterion])
+    def all
+      # Creates class instances on first use and after reload! in rails console
+      instantiate if @criteria.blank?
+      @criteria.values
+    end
+
+    def each
+      all.each { |criterion| yield criterion }
+      self
+    end
+
+    def instantiate
+      @criteria = {}
+      CriteriaHash.each do |criterion|
+        name = criterion[0].to_sym
+        @criteria[name] = new({ name: name }.merge(criterion[1]))
+      end
+    end
+
+    def keys
+      map(&:name)
+    end
+
+    def to_h
+      CriteriaHash
     end
   end
 
-  def self.each
-    # Each method is required for Criteria to use class-level Enumerable mixin
-    ALL_CRITERIA.each do |criterion|
-      yield criterion
-    end
-    self
+  # Instance methods
+
+  def future?
+    future == true
   end
 
-  def self.keys
-    ALL_CRITERIA
+  def initialize(*parameters)
+    super(*parameters)
+    freeze
   end
 
-  def self.to_h
-    CriteriaHash
+  def met_url_required?
+    # Is a URL required in the justification to be passing with met?
+    met_url_required == true
   end
 
-  def self.criterion_category(criterion)
-    # Is this criterion in the category MUST, SHOULD, or SUGGESTED?
-    send(criterion).category
+  def na_allowed?
+    na_allowed == true
   end
 
-  def self.future?(criterion)
-    send(criterion).future
-  end
-
-  def self.na_allowed?(criterion)
-    send(criterion).na_allowed
-  end
-
-  def self.met_url_required?(criterion)
-    # Is a URL required in the justification to be enough with met?
-    send(criterion).met_url_required
-  end
+  delegate :to_s, to: :name
 end

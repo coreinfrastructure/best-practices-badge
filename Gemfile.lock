@@ -37,6 +37,8 @@ GEM
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
     addressable (2.4.0)
+    archive-zip (0.7.0)
+      io-like (~> 0.3.0)
     arel (6.0.3)
     ast (2.2.0)
     autoprefixer-rails (6.3.6)
@@ -80,6 +82,10 @@ GEM
       xpath (~> 2.0)
     childprocess (0.5.9)
       ffi (~> 1.0, >= 1.0.11)
+    chromedriver-helper (1.0.0)
+      archive-zip (~> 0.7.0)
+      nokogiri (~> 1.6)
+    cliver (0.3.2)
     code_analyzer (0.4.5)
       sexp_processor
     codemirror-rails (5.11)
@@ -152,6 +158,7 @@ GEM
       json (~> 1.8)
       multi_xml (>= 0.5.2)
     i18n (0.7.0)
+    io-like (0.3.0)
     jbuilder (2.4.1)
       activesupport (>= 3.0.0, < 5.1)
       multi_json (~> 1.2)
@@ -238,6 +245,11 @@ GEM
     parser (2.3.0.7)
       ast (~> 2.2)
     pg (0.18.4)
+    poltergeist (1.9.0)
+      capybara (~> 2.1)
+      cliver (~> 0.3.1)
+      multi_json (~> 1.0)
+      websocket-driver (>= 0.2.0)
     polyamorous (1.3.0)
       activerecord (>= 3.0)
     powerpack (0.1.1)
@@ -411,6 +423,9 @@ GEM
       crack (>= 0.3.2)
       hashdiff
     websocket (1.2.3)
+    websocket-driver (0.6.3)
+      websocket-extensions (>= 0.1.0)
+    websocket-extensions (0.1.2)
     will_paginate (3.1.0)
     xml-simple (1.1.5)
     xpath (2.0.0)
@@ -429,11 +444,12 @@ DEPENDENCIES
   bootstrap-will_paginate (= 0.0.10)
   bootstrap_form (= 2.3.0)
   bullet (= 5.0.0)
-  bundler-audit
+  bundler-audit (= 0.5.0)
+  chromedriver-helper (= 1.0.0)
   coveralls (= 0.8.13)
   dotenv-rails (= 2.1.1)
   faker (= 1.6.3)
-  fasterer
+  fasterer (= 0.3.2)
   fastly-rails (= 0.5.0)
   github_api (= 0.13.1)
   heroku_rails_deflate (= 1.0.3)
@@ -444,12 +460,12 @@ DEPENDENCIES
   license_finder
   m (= 1.4.2)
   mdl (= 0.3.1)
-  minitest-rails
-  minitest-rails-capybara
+  minitest-rails-capybara (= 2.1.1)
   octokit (= 4.3.0)
   omniauth-github (= 1.1.2)
   paper_trail (= 4.1.0)
   pg (= 0.18.4)
+  poltergeist (= 1.9.0)
   pronto (= 0.6.0)
   pronto-brakeman (= 0.6.0)
   pronto-rails_best_practices (= 0.6.0)
@@ -463,18 +479,18 @@ DEPENDENCIES
   rails_db (= 1.1.1)
   ransack (= 1.7.0)
   redcarpet (= 3.3.4)
-  ruby-graphviz
+  ruby-graphviz (= 1.2.2)
   sass-rails (= 5.0.4)
   secure_headers (= 3.1.2)
-  selenium-webdriver
+  selenium-webdriver (= 2.53.0)
   simplecov (= 0.11.2)
   spring (= 1.6.4)
-  traceroute
+  traceroute (= 0.5.0)
   turbolinks (= 2.5.3)
   uglifier (= 3.0.0)
   vcr (= 3.0.1)
   web-console (= 3.1.1)
-  webmock
+  webmock (= 1.24.2)
   will_paginate (= 3.1.0)
   yaml-lint (= 0.0.7)
 

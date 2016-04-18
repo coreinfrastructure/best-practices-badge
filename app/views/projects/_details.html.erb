@@ -1,6 +1,6 @@
          <% raise unless criterion
-            details_toggler_id = criterion + "_details_toggler"
-            details_text_id = criterion + "_details_text" %>
+            details_toggler_id = criterion.to_s + "_details_toggler"
+            details_text_id = criterion.to_s + "_details_text" %>
          <button class="btn btn-xs details-toggler hidden-print" title="Toggle details text" type="button" id='<%= details_toggler_id %>'>Details</button>
          <div class="details-text" id="<%= details_text_id %>">
          <%= raw details %>

@@ -124,7 +124,7 @@ case "$manager" in
   brew)
     # We'll use the brew version. Install these to rebuild rbenv:
     # add_pkg openssl libyaml libffi
-    add_pkg rbenv ruby-build ;;
+    add_pkg phantomjs198 rbenv ruby-build ;;
   apt-get)
     # We'll use the system version.  If you want to use the latest one
     # on GitHub, instead install these system components first:

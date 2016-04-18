@@ -34,10 +34,20 @@ class CanLoginTest < Capybara::Rails::TestCase
     choose 'project_english_status_met'
     assert page.find('#english_enough[src*="result_symbol_check"]')
 
+    choose 'project_contribution_status_met' # No URL given, so fails
+    assert page.find('#contribution_enough[src*="result_symbol_question"]')
+
+    choose 'project_contribution_requirements_status_unmet' # No URL given
+    assert page.find(
+      '#contribution_requirements_enough[src*="result_symbol_x"]')
+
     click_on 'Change Control'
     assert page.has_content? 'repo_public'
     choose 'project_repo_public_status_unmet'
     assert page.find('#repo_public_enough[src*="result_symbol_x"]')
+
+    choose 'project_repo_distributed_status_unmet' # SUGGESTED, so enough
+    assert page.find('#repo_distributed_enough[src*="result_symbol_dash"]')
 
     click_on 'Reporting'
     assert page.has_content? 'report_process'

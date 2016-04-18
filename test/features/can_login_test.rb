@@ -12,7 +12,6 @@ class CanLoginTest < Capybara::Rails::TestCase
   def scroll_to_see(id)
     page.execute_script("document.getElementById('#{id}')." \
                         'scrollIntoView(false);')
-    sleep 0.5 # TODO: Wait until it's visible
   end
 
   scenario 'Has link to GitHub Login', js: true do

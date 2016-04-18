@@ -6,15 +6,19 @@ class CriteriaTest < ActiveSupport::TestCase
   end
 
   test 'Criteria should have floss_license_osi' do
-    assert Criteria.floss_license_osi
+    assert Criteria[:floss_license_osi]
   end
 
   test 'Criteria "contribution" is in the category MUST' do
-    assert_equal 'MUST', Criteria.contribution.category
+    assert_equal 'MUST', Criteria[:contribution].category
   end
 
   test 'Criteria "contribution_requirements" is in the category SHOULD' do
-    assert_equal 'SHOULD', Criteria.contribution_requirements.category
+    assert_equal 'SHOULD', Criteria[:contribution_requirements].category
+  end
+
+  test 'Criteria#keys' do
+    assert_includes Criteria.keys, :contribution
   end
 
   test 'Ensure that only allowed fields are in Criteria' do

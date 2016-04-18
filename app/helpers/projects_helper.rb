@@ -22,7 +22,7 @@ module ProjectsHelper
   def render_status(criterion, f, project, is_disabled)
     render(partial: 'status_chooser',
            locals: { f: f, project: project, is_disabled: is_disabled,
-                     criterion: criterion })
+                     criterion: Criteria[criterion] })
   end
 
   def repo_url_disabled?(project)

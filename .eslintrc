@@ -1,4 +1,3 @@
 {
-  "rules": {"camelcase": 1},
   "env":   {"node": true}
 }

@@ -39,7 +39,7 @@ group :development, :test do
   gem 'mdl', '0.3.1'
   gem 'pronto', '0.6.0'
   gem 'pronto-brakeman', '0.6.0'
-  gem 'pronto-eslint'
+  gem 'pronto-eslint', '0.6.1'
   gem 'pronto-rails_best_practices', '0.6.0'
   gem 'pronto-rubocop', '0.6.2'
   gem 'pry-byebug', '3.3.0'

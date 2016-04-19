@@ -3,7 +3,10 @@
 # On Ubuntu you can install icotool with:
 #   sudo apt-get install icoutils
 
-FAVICON_SRC = favicon2x.png.png favicon.png.png
+%.transparent.png: %.png.png
+	pngtopnm $< | pnmtopng -transparent =white > $@
+
+FAVICON_SRC = favicon2x.transparent.png favicon.transparent.png
 
 favicon.ico: $(FAVICON_SRC)
 	icotool -c $(FAVICON_SRC) > favicon.ico

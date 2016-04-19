@@ -63,7 +63,7 @@ group :test do
   gem 'poltergeist', '1.9.0', require: false
   gem 'selenium-webdriver', '2.53.0', require: false
   gem 'simplecov', '0.11.2', require: false
-  gem 'webmock', '1.24.2', require: false
+  gem 'webmock', '1.24.3', require: false
 end
 
 group :production do

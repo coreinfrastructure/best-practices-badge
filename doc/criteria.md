@@ -1,4 +1,4 @@
-# Best Practices Criteria for Free/Libre and Open Source Software (FLOSS) (version 0.7.0)
+# Best Practices Criteria for Free/Libre and Open Source Software (FLOSS) (version 0.8.0)
 
 <!-- SPDX-License-Identifier: (MIT OR CC-BY-3.0+) -->
 

@@ -475,7 +475,7 @@ DEPENDENCIES
   poltergeist (= 1.9.0)
   pronto (= 0.6.0)
   pronto-brakeman (= 0.6.0)
-  pronto-eslint
+  pronto-eslint (= 0.6.1)
   pronto-rails_best_practices (= 0.6.0)
   pronto-rubocop (= 0.6.2)
   pry-byebug (= 3.3.0)

@@ -242,7 +242,7 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
       Other general comments about the project:<br>
       <% if (is_disabled) %>
         <div class="discussion-markdown">
-          <%= ApplicationHelper.markdown(project[:description]) %>
+          <%= ApplicationHelper.markdown(project[:general_comments]) %>
         </div>
       <% else %>
         <%= f.text_area :general_comments, class:"form-control",  hide_label: true, placeholder:'Additional Comments (in markdown)', disabled: is_disabled %>

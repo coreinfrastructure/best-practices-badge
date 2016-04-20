@@ -646,8 +646,10 @@ by the delivered project's software.
   for assessing vulnerabilities in software using a variety of tools.
   <sup>[<a href="#static_analysis">static_analysis</a>]\*</sup>
 - <a name="static_analysis_common_vulnerabilities"></a>It is SUGGESTED
-  that the tool include rules or approaches to look for common
-  vulnerabilities in the analyzed language or environment.
+  that at least one of the static analysis tools
+  used for the static_analysis criterion
+  include rules or approaches to look for
+  common vulnerabilities in the analyzed language or environment.
   <sup>[<a href="#static_analysis_common_vulnerabilities">static_analysis_common_vulnerabilities</a>]\*</sup>
 - <a name="static_analysis_fixed"></a>All medium
   and high severity exploitable vulnerabilities discovered

@@ -35,7 +35,8 @@ group :development, :test do
   gem 'bundler-audit', '0.5.0'
   gem 'ruby-graphviz', '1.2.2'
   gem 'dotenv-rails', '2.1.1'
-  gem 'eslintrb', git: 'https://github.com/dankohn/eslintrb.git', ref: '306932f'
+  # Following line addresses https://github.com/ocke/eslintrb/pull/5
+  gem 'eslintrb', github: 'dankohn/eslintrb', ref: '306932f'
   gem 'license_finder'
   gem 'mdl', '0.3.1'
   gem 'pronto', '0.6.0'

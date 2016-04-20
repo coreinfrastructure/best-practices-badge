@@ -196,7 +196,7 @@ Rails::TestTask.new('test:features' => 'test:prepare') do |t|
 end
 
 # This gem isn't available in production
-unless rails.env.production?
+unless Rails.env.production?
   require 'eslintrb/eslinttask'
   Eslintrb::EslintTask.new :eslint do |t|
     # We only examine one Javascript file.  This would examine all of them,

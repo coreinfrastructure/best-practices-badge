@@ -36,7 +36,7 @@ group :development, :test do
   gem 'ruby-graphviz', '1.2.2'
   gem 'dotenv-rails', '2.1.1'
   # Following line addresses https://github.com/ocke/eslintrb/pull/5
-  gem 'eslintrb', github: 'dankohn/eslintrb', ref: '306932f'
+  gem 'eslintrb', git: 'https://github.com/dankohn/eslintrb.git', ref: '306932f'
   gem 'license_finder'
   gem 'mdl', '0.3.1'
   gem 'pronto', '0.6.0'

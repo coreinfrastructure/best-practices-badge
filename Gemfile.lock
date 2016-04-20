@@ -1,5 +1,5 @@
 GIT
-  remote: git://github.com/dankohn/eslintrb.git
+  remote: https://github.com/dankohn/eslintrb.git
   revision: 306932f332bc7fe611e2e1cbea5ede64afeac551
   ref: 306932f
   specs:

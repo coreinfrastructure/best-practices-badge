@@ -195,21 +195,21 @@ Rails::TestTask.new('test:features' => 'test:prepare') do |t|
   t.pattern = 'test/features/**/*_test.rb'
 end
 
-# Eslint rake configuration per https://github.com/ocke/eslintrb
-# Unfortunately, this will cause rake 11.* to complain as follows:
-#   [DEPRECATION] `last_comment` is deprecated.
-#   Please use `last_description` instead.
-# The warning is not caused by our gem, and does not affect our
-# executable, so we don't plan to change it.
-require 'eslintrb/eslinttask'
-Eslintrb::EslintTask.new :eslint do |t|
-  # We only examine one Javascript file.  This would examine all of them,
-  # but the ESLint parser fails on comment-only files:
-  # t.pattern = 'app/assets/javascripts/**/*.js'
-  t.pattern = 'app/assets/javascripts/*.js'
-  t.exclude_pattern =
-    'app/assets/javascripts/{application,imagesloaded.pkgd}.js'
-  t.options = :eslintrc
-end
+# # Eslint rake configuration per https://github.com/ocke/eslintrb
+# # Unfortunately, this will cause rake 11.* to complain as follows:
+# #   [DEPRECATION] `last_comment` is deprecated.
+# #   Please use `last_description` instead.
+# # The warning is not caused by our gem, and does not affect our
+# # executable, so we don't plan to change it.
+# require 'eslintrb/eslinttask'
+# Eslintrb::EslintTask.new :eslint do |t|
+#   # We only examine one Javascript file.  This would examine all of them,
+#   # but the ESLint parser fails on comment-only files:
+#   # t.pattern = 'app/assets/javascripts/**/*.js'
+#   t.pattern = 'app/assets/javascripts/*.js'
+#   t.exclude_pattern =
+#     'app/assets/javascripts/{application,imagesloaded.pkgd}.js'
+#   t.options = :eslintrc
+# end
 
 Rake::Task['test:run'].enhance ['test:features']

@@ -431,7 +431,7 @@ GEM
       activemodel (>= 4.2)
       debug_inspector
       railties (>= 4.2)
-    webmock (1.24.3)
+    webmock (1.24.4)
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
       hashdiff
@@ -505,7 +505,7 @@ DEPENDENCIES
   uglifier (= 3.0.0)
   vcr (= 3.0.1)
   web-console (= 3.1.1)
-  webmock (= 1.24.3)
+  webmock (= 1.24.4)
   will_paginate (= 3.1.0)
   yaml-lint (= 0.0.7)
 

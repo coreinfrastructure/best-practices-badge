@@ -150,7 +150,6 @@ function updateCriteriaDisplay(criteria) {
   var justificationElement = document.getElementById('project_' +
                            criteria + '_justification');
   var justificationValue = '';
-  var placeholder = '';
   if (justificationElement) {
     justificationValue = justificationElement.value;
   }
@@ -227,7 +226,7 @@ function ToggleHideMet(e) {
 function setupProjectField(criteria) {
   updateCriteriaDisplay(criteria);
   $('input[name="project[' + criteria + '_status]"]').click(
-      function() {updateCriteriaDisplay(criteria);});
+      function() {changeCriterion(criteria);});
   $('input[name="project[' + criteria + '_justification]"]').blur(
       function() {updateCriteriaDisplay(criteria);});
   $('#project_' + criteria + '_justification').on('input',

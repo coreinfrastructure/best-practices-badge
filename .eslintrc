@@ -25,6 +25,7 @@
     "no-fallthrough": 2,
     "no-octal": 2,
     "no-redeclare": 2,
-    "no-delete-var": 2
+    "no-delete-var": 2,
+    "no-unused-vars": [2, {"args": "none"}]
   }
 }

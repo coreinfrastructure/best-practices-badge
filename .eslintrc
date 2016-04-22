@@ -17,6 +17,15 @@
     "no-irregular-whitespace": 2,
     "no-negated-in-lhs": 2,
     "no-obj-calls": 2,
-    "no-proto": 2
+    "no-proto": 2,
+    "no-unexpected-multiline": 2,
+    "no-unreachable": 2,
+    "use-isnan": 2,
+    "valid-typeof": 2,
+    "no-fallthrough": 2,
+    "no-octal": 2,
+    "no-redeclare": 2,
+    "strict": [2, "global"],
+    "no-delete-var": 2
   }
 }

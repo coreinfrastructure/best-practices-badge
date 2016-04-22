@@ -1,6 +1,8 @@
 // This Javascript supporting implementing the per project form used
 // for showing and editing information about a project.
 
+"use strict";
+
 // Do a polyfill for datalist if it's not already supported
 // (e.g., Safari fails to support polyfill at the time of this writing).
 // See https://github.com/thgreasi/datalist-polyfill/blob/master/README.md
@@ -18,11 +20,11 @@ function polyfillDatalist() {
   }
 }
 
-criterionCategoryValue = {};
-criteriaMetUrlRequired = {};
-criterionFuture = {};
+var criterionCategoryValue = {};
+var criteriaMetUrlRequired = {};
+var criterionFuture = {};
 
-MIN_SHOULD_LENGTH = 5;
+var MIN_SHOULD_LENGTH = 5;
 
 function containsURL(justification) {
   if (!justification) {
@@ -65,7 +67,7 @@ function criterionResult(criterion) {
 
 // This must match the criteria implemented in Ruby to prevent confusion.
 function isEnough(criterion) {
-  result = criterionResult(criterion);
+  var result = criterionResult(criterion);
   return (result === 'passing' || result === 'barely');
 }
 
@@ -241,10 +243,11 @@ function ToggleDetailsDisplay(e) {
                         replace('_details_toggler', '_details_text');
   $('#' + detailsTextID).toggle('fast',
     function() {
+      var buttonText;
       if ($('#' + detailsTextID).is(':hidden')) {
-        var buttonText = 'Show details';
+        buttonText = 'Show details';
       } else {
-        var buttonText = 'Hide details';
+        buttonText = 'Hide details';
       }
       $('#' + e.target.id).html(buttonText);
     });
@@ -260,9 +263,9 @@ var global_hide_metna_criteria = false;
 function SetupCriteriaStructures() {
   $('.status-chooser').each(
     function(index) {
-      criterionName = $(this).find('.criterion-name').text();
-      res = $(this).find('.criterion-met-url-required').text();
-      val = 'true' === res;
+      var criterionName = $(this).find('.criterion-name').text();
+      var res = $(this).find('.criterion-met-url-required').text();
+      var val = 'true' === res;
       criteriaMetUrlRequired[criterionName] = val;
       criterionCategoryValue[criterionName] =
         $(this).find('.criterion-category').text();

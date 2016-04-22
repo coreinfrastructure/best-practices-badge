@@ -20,7 +20,7 @@ class CanLoginTest < Capybara::Rails::TestCase
   end
 
   scenario 'Can Login and edit using custom account', js: true do
-    Capybara.default_max_wait_time = 10
+    Capybara.default_max_wait_time = 30
     visit login_path
     fill_in 'Email', with: @user.email
     fill_in 'Password', with: 'password'
@@ -38,7 +38,7 @@ class CanLoginTest < Capybara::Rails::TestCase
     assert page.find('#contribution_enough[src*="result_symbol_question"]')
 
     choose 'project_contribution_requirements_status_unmet' # No URL given
-    sleep 1 # TODO: Force delay to ensure we will find this
+    # sleep 5 # TODO: Force delay to ensure we will find this
     assert page.find(
       '#contribution_requirements_enough[src*="result_symbol_x"]')
 

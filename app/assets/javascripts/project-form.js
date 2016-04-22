@@ -16,7 +16,7 @@ function polyfillDatalist() {
       $(this).autocomplete({ source: availableTags });
     });
   }
-};
+}
 
 criterionCategoryValue = {};
 criteriaMetUrlRequired = {};
@@ -75,7 +75,7 @@ function resetProgressBar() {
   $.each(criterionCategoryValue, function(key, value) {
     if (!criterionFuture[key]) { // Only include non-future values
       total++;
-      if (isEnough(key)) {enough++;};
+      if (isEnough(key)) {enough++;}
     }
   })
   var percentage = enough / total;

@@ -1,3 +1,6 @@
 {
-  "env":   {"node": true}
+  "env":   {"browser": true, "jquery": true},
+  "rules": {
+    "comma-dangle": [2, "only-multiline"]
+  }
 }

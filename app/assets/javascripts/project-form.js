@@ -9,10 +9,10 @@ function polyfillDatalist() {
       !!(document.createElement('datalist') && window.HTMLDataListElement);
   if (!nativedatalist) {
     $('input[list]').each(function() {
-      var availableTags = $('#' + $(this).attr('list')).find('option').
-                          map(function() {
-        return this.value;
-      }).get();
+      var availableTags = $('#' + $(this).attr('list')).find('option').map(
+        function() {
+          return this.value;
+        }).get();
       $(this).autocomplete({ source: availableTags });
     });
   }
@@ -282,20 +282,20 @@ $(document).ready(function() {
   $('.details-toggler').click(ToggleDetailsDisplay);
 
   $('#show-all-details').click(function(e) {
-      $('.details-text').show('fast');
-      $('.details-toggler').html('Hide details');
-    });
+    $('.details-text').show('fast');
+    $('.details-toggler').html('Hide details');
+  });
   $('#hide-all-details').click(function(e) {
-      $('.details-text').hide('fast');
-      $('.details-toggler').html('Show details');
-    });
+    $('.details-text').hide('fast');
+    $('.details-toggler').html('Show details');
+  });
 
   // Force these values on page reload
   global_last_selected_met = '';
   global_hide_metna_criteria = false;
   $('#toggle-hide-metna-criteria').click(function(e) {
     ToggleHideMet(e);
-    });
+  });
 
   $('[data-toggle="tooltip"]').tooltip(); // Enable bootstrap tooltips
   $('textarea').autosize();
@@ -306,23 +306,23 @@ $(document).ready(function() {
 
     // Implement "press this button to make all crypto N/A"
     $('#all_crypto_na').click(function(e) {
-        $.each(criterionCategoryValue, function(key, value) {
-          if ((/^crypto/).test(key)) {
-            $('#project_' + key + '_status_na').prop('checked', true);
-          }
-          updateCriteriaDisplay(key);
-        })
-        resetProgressBar();
-      });
+      $.each(criterionCategoryValue, function(key, value) {
+        if ((/^crypto/).test(key)) {
+          $('#project_' + key + '_status_na').prop('checked', true);
+        }
+        updateCriteriaDisplay(key);
+      })
+      resetProgressBar();
+    });
 
     // Use "imagesloaded" to wait for image load before displaying them
     imagesLoaded(document).on('always', function(instance) {
-        // Set up the interactive displays of "enough".
-        $.each(criterionCategoryValue, function(key, value) {
-          setupProjectField(key);
-        })
-        resetProgressBar();
+      // Set up the interactive displays of "enough".
+      $.each(criterionCategoryValue, function(key, value) {
+        setupProjectField(key);
       })
+      resetProgressBar();
+    })
   }
 
   // Polyfill datalist (for Safari users)

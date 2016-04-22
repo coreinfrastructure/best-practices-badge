@@ -26,6 +26,12 @@
     "no-octal": 2,
     "no-redeclare": 2,
     "no-delete-var": 2,
-    "no-unused-vars": [2, {"args": "none"}]
+    "no-unused-vars": [2, {"args": "none"}],
+    "no-mixed-requires": 2,
+    "no-new-require": 2,
+    "no-path-concat": 2,
+    "no-restricted-modules": [2, "sys", "_linklist"],
+    "comma-spacing": 2,
+    "eol-last": 2
   }
 }

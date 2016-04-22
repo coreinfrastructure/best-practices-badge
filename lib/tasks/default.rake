@@ -17,6 +17,7 @@ task(:default).clear.enhance %w(
   yaml_syntax_check
   html_from_markdown
   fasterer
+  eslint
   test
 )
 
@@ -196,7 +197,11 @@ Rails::TestTask.new('test:features' => 'test:prepare') do |t|
 end
 
 # This gem isn't available in production
-unless Rails.env.production?
+if Rails.env.production?
+  task :eslint do
+    puts 'Skipping eslint checking in production (libraries not available).'
+  end
+else
   require 'eslintrb/eslinttask'
   Eslintrb::EslintTask.new :eslint do |t|
     # We only examine one Javascript file.  This would examine all of them,

@@ -1,6 +1,10 @@
 {
   "env":   {"browser": true, "jquery": true},
   "rules": {
-    "comma-dangle": [2, "only-multiline"]
+    "comma-dangle": [2, "only-multiline"],
+    "no-control-regex": 2,
+    "no-debugger": 2,
+    "no-dupe-args": 2,
+    "no-dupe-keys": 2
   }
 }

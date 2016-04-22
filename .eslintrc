@@ -25,7 +25,6 @@
     "no-fallthrough": 2,
     "no-octal": 2,
     "no-redeclare": 2,
-    "strict": [2, "global"],
     "no-delete-var": 2
   }
 }

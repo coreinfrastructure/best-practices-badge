@@ -1,8 +1,6 @@
 // This Javascript supporting implementing the per project form used
 // for showing and editing information about a project.
 
-"use strict";
-
 // Do a polyfill for datalist if it's not already supported
 // (e.g., Safari fails to support polyfill at the time of this writing).
 // See https://github.com/thgreasi/datalist-polyfill/blob/master/README.md

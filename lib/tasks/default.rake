@@ -205,9 +205,9 @@ else
   require 'eslintrb/eslinttask'
   Eslintrb::EslintTask.new :eslint do |t|
     t.pattern = 'app/assets/javascripts/*.js'
-    # the ESLint parser fails on comment-only files, so exclude this one:
+    # If you modify the exclude_pattern, also modify file .eslintignore
     t.exclude_pattern =
-      'app/assets/javascripts/application.js'
+      'app/assets/javascripts/{application,imagesloaded.pkgd}.js'
     t.options = :eslintrc
   end
 end

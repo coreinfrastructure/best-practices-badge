@@ -204,12 +204,10 @@ if Rails.env.production?
 else
   require 'eslintrb/eslinttask'
   Eslintrb::EslintTask.new :eslint do |t|
-    # We only examine one Javascript file.  This would examine all of them,
-    # but the ESLint parser fails on comment-only files:
-    # t.pattern = 'app/assets/javascripts/**/*.js'
     t.pattern = 'app/assets/javascripts/*.js'
+    # the ESLint parser fails on comment-only files, so exclude this one:
     t.exclude_pattern =
-      'app/assets/javascripts/{application,imagesloaded.pkgd}.js'
+      'app/assets/javascripts/application.js'
     t.options = :eslintrc
   end
 end

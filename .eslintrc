@@ -32,7 +32,6 @@
     "no-path-concat": 2,
     "no-restricted-modules": [2, "sys", "_linklist"],
     "comma-spacing": 2,
-    "eol-last": 2,
-    "indent": [2, 2, {"SwitchCase": 1}]
+    "eol-last": 2
   }
 }

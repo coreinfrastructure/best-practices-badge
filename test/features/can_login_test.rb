@@ -38,6 +38,7 @@ class CanLoginTest < Capybara::Rails::TestCase
     assert page.find('#contribution_enough[src*="result_symbol_question"]')
 
     choose 'project_contribution_requirements_status_unmet' # No URL given
+    sleep 1 # TODO: Force delay to ensure we will find this
     assert page.find(
       '#contribution_requirements_enough[src*="result_symbol_x"]')
 

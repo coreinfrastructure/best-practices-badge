@@ -133,10 +133,10 @@ function changedJustificationText(criteria) {
 // justification text).
 function hideMetNA() {
   $.each(criterionCategoryValue, function(key, value) {
-    if ( global_hide_metna_criteria && key !== global_last_selected_met &&
-         ($('#project_' + key + '_status_met').is(':checked') ||
-          $('#project_' + key + '_status_na').is(':checked')) &&
-         isEnough(key)) {
+    if (global_hide_metna_criteria && key !== global_last_selected_met &&
+        ($('#project_' + key + '_status_met').is(':checked') ||
+         $('#project_' + key + '_status_na').is(':checked')) &&
+        isEnough(key)) {
       $('#' + key).addClass('hidden');
     } else {
       $('#' + key).removeClass('hidden');

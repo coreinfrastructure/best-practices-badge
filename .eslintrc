@@ -1,5 +1,8 @@
 {
   "env":   {"browser": true, "jquery": true},
+  "globals": {
+    "imagesLoaded": false
+  },
   "rules": {
     "comma-dangle": [2, "only-multiline"],
     "no-control-regex": 2,
@@ -26,6 +29,7 @@
     "no-octal": 2,
     "no-redeclare": 2,
     "no-delete-var": 2,
+    "no-undef": 2,
     "no-unused-vars": [2, {"args": "none"}],
     "no-mixed-requires": 2,
     "no-new-require": 2,

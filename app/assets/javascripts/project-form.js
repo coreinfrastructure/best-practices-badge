@@ -77,9 +77,9 @@ function resetProgressBar() {
       total++;
       if (isEnough(key)) {enough++;}
     }
-  })
+  });
   var percentage = enough / total;
-  var percentAsString =  Math.round(percentage * 100).toString() + '%'
+  var percentAsString =  Math.round(percentage * 100).toString() + '%';
   $('#badge-progress').attr('aria-valuenow', percentage).
                       text(percentAsString).css('width', percentAsString);
 }
@@ -141,7 +141,7 @@ function hideMetNA() {
     } else {
       $('#' + key).removeClass('hidden');
     }
-  })
+  });
 }
 
 function updateCriteriaDisplay(criteria) {
@@ -269,7 +269,7 @@ function SetupCriteriaStructures() {
       criterionFuture[criterionName] =
         $(this).find('.criterion-future').text() === 'true';
     }
-  )
+  );
 }
 
 // Setup display as soon as page is ready
@@ -311,7 +311,7 @@ $(document).ready(function() {
           $('#project_' + key + '_status_na').prop('checked', true);
         }
         updateCriteriaDisplay(key);
-      })
+      });
       resetProgressBar();
     });
 
@@ -320,9 +320,9 @@ $(document).ready(function() {
       // Set up the interactive displays of "enough".
       $.each(criterionCategoryValue, function(key, value) {
         setupProjectField(key);
-      })
+      });
       resetProgressBar();
-    })
+    });
   }
 
   // Polyfill datalist (for Safari users)

@@ -46,6 +46,16 @@
     "space-before-function-paren": [2, "never"],
     "space-in-parens": [2, "never"],
     "space-infix-ops": 2,
-    "space-unary-ops": 2
+    "space-unary-ops": 2,
+    "arrow-parens": [2, "always"],
+    "arrow-spacing": [2, {"before": true, "after": true}],
+    "constructor-super": 2,
+    "no-class-assign": 2,
+    "no-confusing-arrow": 2,
+    "no-const-assign": 2,
+    "no-dupe-class-members": 2,
+    "no-new-symbol": 2,
+    "no-this-before-super": 2,
+    "prefer-const": 2
   }
 }

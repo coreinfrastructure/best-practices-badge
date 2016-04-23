@@ -135,7 +135,7 @@ function changedJustificationText(criteria) {
 // justification text).
 function hideMetNA() {
   $.each(criterionCategoryValue, function(key, value) {
-    if (global_hide_metna_criteria && key !== global_last_selected_met &&
+    if (globalHideMetnaCriteria && key !== globalLastSelectedMet &&
         ($('#project_' + key + '_status_met').is(':checked') ||
          $('#project_' + key + '_status_na').is(':checked')) &&
         isEnough(key)) {
@@ -194,7 +194,7 @@ function updateCriteriaDisplay(criteria) {
   if (justificationValue.length > 0) {
     $(criteriaJust).show('fast');
   }
-  if (global_hide_metna_criteria) {
+  if (globalHideMetnaCriteria) {
     // If we're hiding met criteria, walk through and hide them.
     // We don't need to keep running this if we are NOT hiding them,
     // which is the normal case.
@@ -206,16 +206,16 @@ function updateCriteriaDisplay(criteria) {
 function changeCriterion(criterion) {
   var criterionStatus = '#project_' + criterion + '_status';
   if ($(criterionStatus + '_met').is(':checked')) {
-    global_last_selected_met = criterion;
+    globalLastSelectedMet = criterion;
   }
   updateCriteriaDisplay(criterion);
 }
 
 function ToggleHideMet(e) {
-  global_hide_metna_criteria = !global_hide_metna_criteria;
+  globalHideMetnaCriteria = !globalHideMetnaCriteria;
   // Note that button text shows what WILL happen on click, so it
   // shows the REVERSED state (not the current state).
-  if (global_hide_metna_criteria) {
+  if (globalHideMetnaCriteria) {
     $('#toggle-hide-metna-criteria')
       .addClass('active').html('Show met and N/A criteria');
   } else {
@@ -262,8 +262,8 @@ function ToggleDetailsDisplay(e) {
 
 // Global - name of criterion we last selected as 'met'.
 // We don't want to hide this (yet), so users can enter a justification.
-var global_last_selected_met = '';
-var global_hide_metna_criteria = false;
+var globalLastSelectedMet = '';
+var globalHideMetnaCriteria = false;
 
 // Create mappings from criteria name to category and met_url_required.
 // Eventually replace with just accessing classes directly via Javascript.
@@ -301,8 +301,8 @@ $(document).ready(function() {
   });
 
   // Force these values on page reload
-  global_last_selected_met = '';
-  global_hide_metna_criteria = false;
+  globalLastSelectedMet = '';
+  globalHideMetnaCriteria = false;
   $('#toggle-hide-metna-criteria').click(function(e) {
     ToggleHideMet(e);
   });

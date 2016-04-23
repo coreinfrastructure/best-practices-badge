@@ -61,6 +61,7 @@
     "no-new-symbol": 2,
     "no-this-before-super": 2,
     "prefer-const": 2,
-    "brace-style": 2
+    "brace-style": 2,
+    "camelcase": 2
   }
 }

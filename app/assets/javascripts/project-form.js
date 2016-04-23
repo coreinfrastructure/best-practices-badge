@@ -1,6 +1,16 @@
 // This Javascript supporting implementing the per project form used
 // for showing and editing information about a project.
 
+var criterionCategoryValue = {};
+var criteriaMetUrlRequired = {};
+var criterionFuture = {};
+var MIN_SHOULD_LENGTH = 5;
+
+// Global - name of criterion we last selected as 'met'.
+// Don't hide this criterion (yet), so that users can enter a justification.
+var globalLastSelectedMet = '';
+var globalHideMetnaCriteria = false;
+
 // Do a polyfill for datalist if it's not already supported
 // (e.g., Safari fails to support polyfill at the time of this writing).
 // See https://github.com/thgreasi/datalist-polyfill/blob/master/README.md
@@ -18,12 +28,6 @@ function polyfillDatalist() {
   }
 }
 
-var criterionCategoryValue = {};
-var criteriaMetUrlRequired = {};
-var criterionFuture = {};
-
-var MIN_SHOULD_LENGTH = 5;
-
 function containsURL(justification) {
   if (!justification) {
     return false;
@@ -39,11 +43,13 @@ function containsURL(justification) {
 function criterionResult(criterion) {
   var criterionStatus = '#project_' + criterion + '_status';
   var justification = $('#project_' + criterion + '_justification').val();
-  if (!justification) justification = '';
+  if (!justification) {
+    justification = '';
+  }
   if ($(criterionStatus + '_na').is(':checked')) {
     return 'passing';
   } else if ($(criterionStatus + '_met').is(':checked')) {
-    if (criteriaMetUrlRequired[criterion]  && !containsURL(justification)) {
+    if (criteriaMetUrlRequired[criterion] && !containsURL(justification)) {
       // Odd case: met is claimed, but we're still missing information.
       return 'question';
     } else {
@@ -72,6 +78,8 @@ function isEnough(criterion) {
 function resetProgressBar() {
   var total = 0;
   var enough = 0;
+  var percentage;
+  var percentAsString;
   $.each(criterionCategoryValue, function(key, value) {
     if (!criterionFuture[key]) { // Only include non-future values
       total++;
@@ -80,8 +88,8 @@ function resetProgressBar() {
       }
     }
   });
-  var percentage = enough / total;
-  var percentAsString =  Math.round(percentage * 100).toString() + '%';
+  percentage = enough / total;
+  percentAsString = Math.round(percentage * 100).toString() + '%';
   $('#badge-progress').attr('aria-valuenow', percentage).
                       text(percentAsString).css('width', percentAsString);
 }
@@ -119,7 +127,7 @@ function changedJustificationText(criteria) {
        ($(criteriaJust).val().length < MIN_SHOULD_LENGTH)) {
     $(criteriaJust).addClass('required-data');
   } else if ($(criteriaStatus + '_met').is(':checked') &&
-           criteriaMetUrlRequired[criteria]  &&
+           criteriaMetUrlRequired[criteria] &&
            !containsURL($(criteriaJust).val())) {
     $(criteriaJust).addClass('required-data');
   } else {
@@ -259,11 +267,6 @@ function ToggleDetailsDisplay(e) {
       $('#' + e.target.id).html(buttonText);
     });
 }
-
-// Global - name of criterion we last selected as 'met'.
-// We don't want to hide this (yet), so users can enter a justification.
-var globalLastSelectedMet = '';
-var globalHideMetnaCriteria = false;
 
 // Create mappings from criteria name to category and met_url_required.
 // Eventually replace with just accessing classes directly via Javascript.

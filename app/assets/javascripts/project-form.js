@@ -75,7 +75,9 @@ function resetProgressBar() {
   $.each(criterionCategoryValue, function(key, value) {
     if (!criterionFuture[key]) { // Only include non-future values
       total++;
-      if (isEnough(key)) {enough++;}
+      if (isEnough(key)) {
+        enough++;
+      }
     }
   });
   var percentage = enough / total;
@@ -226,13 +228,21 @@ function ToggleHideMet(e) {
 function setupProjectField(criteria) {
   updateCriteriaDisplay(criteria);
   $('input[name="project[' + criteria + '_status]"]').click(
-      function() {changeCriterion(criteria);});
+      function() {
+        changeCriterion(criteria);
+      });
   $('input[name="project[' + criteria + '_justification]"]').blur(
-      function() {updateCriteriaDisplay(criteria);});
+      function() {
+        updateCriteriaDisplay(criteria);
+      });
   $('#project_' + criteria + '_justification').on('input',
-      function() {changedJustificationText(criteria);});
+      function() {
+        changedJustificationText(criteria);
+      });
   $('#project_' + criteria + '_justification').on('keyup',
-      function() {changedJustificationText(criteria);});
+      function() {
+        changedJustificationText(criteria);
+      });
 }
 
 function ToggleDetailsDisplay(e) {

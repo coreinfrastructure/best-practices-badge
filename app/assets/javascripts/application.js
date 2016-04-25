@@ -17,5 +17,7 @@
 //= require bootstrap
 // This is for a polyfill for Safari:
 //= require jquery-ui/autocomplete
+// This allows us to wait for image loading to complete:
+//= require imagesloaded
 //= require_tree .
 //= require turbolinks

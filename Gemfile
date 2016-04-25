@@ -10,6 +10,7 @@ gem 'bootstrap_form', '2.3.0'
 gem 'faker', '1.6.3'
 gem 'fastly-rails', '0.5.0' # Use Fastly CDN
 gem 'github_api', '0.13.1'
+gem 'imagesLoaded_rails', '4.1.0' # Javascript - enable wait for image load
 gem 'jbuilder', '2.4.1'
 gem 'jquery-rails', '4.1.1' # Javascript jQuery library (for Rails)
 gem 'jquery-ui-rails', '5.0.5' # Javascript jQueryUI library (for Rails)

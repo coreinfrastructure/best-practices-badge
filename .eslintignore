@@ -8,6 +8,3 @@
 # The "application.js" file only contains comments, and the
 # ESLint parser has trouble with comment-only files, so skip it:
 **/application.js
-# This is actually an externally-developed file, with its own
-# conventions, so skip it:
-**/imagesloaded.pkgd.js

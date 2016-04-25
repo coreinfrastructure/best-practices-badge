@@ -206,8 +206,7 @@ else
   Eslintrb::EslintTask.new :eslint do |t|
     t.pattern = 'app/assets/javascripts/*.js'
     # If you modify the exclude_pattern, also modify file .eslintignore
-    t.exclude_pattern =
-      'app/assets/javascripts/{application,imagesloaded.pkgd}.js'
+    t.exclude_pattern = 'app/assets/javascripts/application.js'
     t.options = :eslintrc
   end
 end

@@ -28,3 +28,7 @@ test:
 production:
   <<: *default
 #  database: production
+
+fake_production:
+  <<: *default
+  database: development

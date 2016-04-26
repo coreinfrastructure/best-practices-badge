@@ -522,7 +522,7 @@ We use the [secure_headers](https://github.com/twitter/secureheaders) gem
 (developed by Twitter) to enable
 a number of HTTP headers for hardening.
 
-In addition, in production "config.force_ssl" to set to true.
+In addition, in production "config.force_ssl" is set to true.
 This enables a number of hardening mechanisms in Rails, including
 HTTP Strict Transport Security (HSTS),
 TLS redirection, and secure cookies.

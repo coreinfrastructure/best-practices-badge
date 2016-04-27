@@ -93,16 +93,17 @@ if not, see introductory materials such as
 
 Here are the current criteria.  Note that:
 
-* The criteria marked with "&#8224;" are intended to be automatically testable
-  if the project follows standard conventions and
-  is hosted on a site (e.g., GitHub) with decent API support.
-* The criteria marked with "*" at the end may be not applicable
-  or not required; see their text for more information.
 * Text inside square brackets is the short name of the criterion.
 * In a few cases rationale is also included.
 * We expect that there will be a few other fields for the
   project name, description, project URL, repository URL (which may be the
   same as the project URL), and license(s).
+* In some cases N/A ("not applicable") may be an appropriate and permitted
+  response.
+
+We intend to try to automatically test and fill in information
+if the project follows standard conventions and
+is hosted on a site (e.g., GitHub) with decent API support.
 
 ### Basics
 
@@ -112,7 +113,7 @@ Here are the current criteria.  Note that:
   with a stable URL.
   (The badging application enforces this by requiring a URL to
   create a badge entry.)
-  <sup>[<a href="#homepage_url">homepage_url</a>]&#8224;</sup>
+  <sup>[<a href="#homepage_url">homepage_url</a>]</sup>
 
 *Basic project website content*
 
@@ -157,16 +158,16 @@ Here are the current criteria.  Note that:
     - [a free license acceptable to Debian main](https://www.debian.org/legal/licenses/), or
     - [a "good" license according to Fedora](https://fedoraproject.org/wiki/Licensing:Main?rd=Licensing).
 
-  <sup>[<a href="#floss_license">floss_license</a>]&#8224;</sup>
+  <sup>[<a href="#floss_license">floss_license</a>]</sup>
 - <a name="floss_license_osi"></a> It is SUGGESTED that any required license(s) be
   [approved by the Open Source Initiative (OSI)](https://opensource.org/licenses).
   The OSI uses a rigorous license approval
   process to determine which licenses are OSS.
-  <sup>[<a href="#floss_license_osi">floss_license_osi</a>]&#8224;</sup>
+  <sup>[<a href="#floss_license_osi">floss_license_osi</a>]</sup>
 - <a name="license_location"></a>The project MUST post license(s) in a standard
   location (e.g., as a top-level file named LICENSE or COPYING).
   License filenames MAY be followed by an extension such as ".txt" or ".md"
-  <sup>[<a href="#license_location">license_location</a>]&#8224;</sup>
+  <sup>[<a href="#license_location">license_location</a>]</sup>
 - The software MAY also be licensed other ways
   (e.g., "GPLv2 or proprietary" is acceptable).
 - *Rationale*: These criteria are designed for FLOSS projects, so we need to
@@ -205,7 +206,7 @@ Here are the current criteria.  Note that:
   MUST support HTTPS using TLS.
   You can get free certificates from
   [Let's Encrypt](https://letsencrypt.org/).
-  <sup>[<a href="#sites_https">sites_https</a>]&#8224;</sup>
+  <sup>[<a href="#sites_https">sites_https</a>]</sup>
 - <a name="discussion"></a>The project MUST have one or more mechanisms
   for discussion (including proposed changes and issues) that are:
     - searchable,
@@ -241,10 +242,10 @@ Here are the current criteria.  Note that:
   The project MAY use private (non-public) branches in specific cases while the
   change is not publicly released
   (e.g., for fixing a vulnerability before it is revealed to the public).
-   <sup>[<a href="#repo_public">repo_url</a>]&#8224;</sup>
+   <sup>[<a href="#repo_public">repo_url</a>]</sup>
 - <a name="repo_track"></a>The source repository MUST track what changes
   were made, who made the changes, and when the changes were made.
-  <sup>[<a href="#repo_track">repo_track</a>]&#8224;</sup>
+  <sup>[<a href="#repo_track">repo_track</a>]</sup>
 - <a name="repo_interim"></a>To enable collaborative review,
   the project's source repository MUST include interim
   versions for review between releases;
@@ -259,7 +260,7 @@ Here are the current criteria.  Note that:
   version control software be used (e.g., git).
   Git is not specifically required and projects can use centralized version
   control software (such as subversion).
-  <sup>[<a href="#repo_distributed">repo_distributed</a>]&#8224;</sup>
+  <sup>[<a href="#repo_distributed">repo_distributed</a>]</sup>
 
 *Version numbering*
 
@@ -276,7 +277,7 @@ Here are the current criteria.  Note that:
   release within their version control system.
   For example, it is SUGGESTED that those using git identify each release
   using git tags.
-  <sup>[<a href="#version_tags">version_tags</a>]&#8224;</sup>
+  <sup>[<a href="#version_tags">version_tags</a>]</sup>
 
 *Release notes (ChangeLog)*
 
@@ -285,7 +286,7 @@ Here are the current criteria.  Note that:
   a human-readable *summary* of major changes in that release.
   The release notes MUST NOT be the output of a version control log
   (e.g., the "git log" command results are not release notes).
-  <sup>[<a href="#release_notes">release_notes</a>]&#8224;</sup>
+  <sup>[<a href="#release_notes">release_notes</a>]</sup>
 - <a name="release_notes_vulns"></a><a name="changelog_vulns"></a>The
   release notes MUST identify every publicly known vulnerability
   that is fixed in each new release.
@@ -308,21 +309,21 @@ Here are the current criteria.  Note that:
 
 - <a name="report_process"></a>The project MUST provide a process for users
   to submit bug reports (e.g., using an issue tracker or a mailing list).
-  <sup>[<a href="#report_process">report_process</a>]&#8224;</sup>
+  <sup>[<a href="#report_process">report_process</a>]</sup>
 - <a name="report_tracker"></a>The project SHOULD use an issue
   tracker for tracking individual issues.
-  <sup>[<a href="#report_tracker">report_tracker</a>]&#8224;</sup>
+  <sup>[<a href="#report_tracker">report_tracker</a>]</sup>
 - <a name="report_responses"></a>The project MUST acknowledge a majority of
   bug reports submitted in the last 2-12 months (inclusive);
   the response need not include a fix.
-  <sup>[<a href="#report_responses">report_responses</a>]&#8224;</sup>
+  <sup>[<a href="#report_responses">report_responses</a>]</sup>
 - <a name="enhancement_responses"></a>The project SHOULD respond to most
   enhancement requests in the last 2-12 months (inclusive).
   The project MAY choose not to respond.
-  <sup>[<a href="#enhancement_responses">enhancement_responses</a>]&#8224;</sup>
+  <sup>[<a href="#enhancement_responses">enhancement_responses</a>]</sup>
 - <a name="report_archive"></a>The project MUST have a publicly available
   archive for reports and responses for later searching.
-  <sup>[<a href="#report_archive">report_archive</a>]&#8224;</sup>
+  <sup>[<a href="#report_archive">report_archive</a>]</sup>
 
 *Vulnerability reporting process*
 
@@ -331,7 +332,7 @@ Here are the current criteria.  Note that:
   E.g., a clearly designated mailing address on <https://PROJECTSITE/security>,
   often in the form security@example.org.
   This MAY be the same as its bug reporting process.
-  <sup>[<a href="#vulnerability_report_process">vulnerability_report_process</a>]&#8224;</sup>
+  <sup>[<a href="#vulnerability_report_process">vulnerability_report_process</a>]</sup>
 - <a name="vulnerability_report_private"></a>If private vulnerability reports
   are supported, the project MUST include how to send the information in a
   way that is kept private.
@@ -354,14 +355,14 @@ Here are the current criteria.  Note that:
   rebuild the software from source code.
   A build system determines what actions need to occur to rebuild the software
   (and in what order), and then performs those steps.
-  <sup>[<a href="#build">build</a>]\*&#8224;</sup>
+  <sup>[<a href="#build">build</a>]</sup>
 - <a name="build_common_tools"></a>It is SUGGESTED that common
   tools be used for building the software.
   For example, Maven, Ant, cmake, the autotools, make, or rake.
-  <sup>[<a href="#build_common_tools">build_common_tools</a>]\*&#8224;</sup>
+  <sup>[<a href="#build_common_tools">build_common_tools</a>]</sup>
 - <a name="build_floss_tools"></a> The project SHOULD be buildable
   using only FLOSS tools.
-  <sup>[<a href="#build_floss_tools">build_floss_tools</a>]\*</sup>
+  <sup>[<a href="#build_floss_tools">build_floss_tools</a>]</sup>
 
 *Automated test suite*
 
@@ -420,16 +421,16 @@ Here are the current criteria.  Note that:
   and perl5's "use warnings".
   A separate "linter" tool is simply a tool that examines the source
   code to look for code quality errors or common simple mistakes.
-  <sup>[<a href="#warnings">warnings</a>]\*</sup>
+  <sup>[<a href="#warnings">warnings</a>]</sup>
 - <a name="warnings_fixed"></a>The project MUST address warnings.
   The project should fix warnings or mark them in the source
   code as false positives.
   Ideally there would be no warnings, but a project MAY accept some warnings
   (typically less than 1 warning per 100 lines or less than 10 warnings).
-  <sup>[<a href="#warnings_fixed">warnings_fixed</a>]\*</sup>
+  <sup>[<a href="#warnings_fixed">warnings_fixed</a>]</sup>
 - <a name="warnings_strict"></a>It is SUGGESTED that projects be
   maximally strict with warnings, but this is not always practical.
-  <sup>[<a href="#warnings_strict">warnings_strict</a>]\*</sup>
+  <sup>[<a href="#warnings_strict">warnings_strict</a>]</sup>
 
 ### Security
 
@@ -506,17 +507,17 @@ by the delivered project's software.
   use by default
   only cryptographic protocols and algorithms that are publicly published
   and reviewed by experts.
-  <sup>[<a href="#crypto_published">crypto_published</a>]\*</sup>
+  <sup>[<a href="#crypto_published">crypto_published</a>]</sup>
 - <a name="crypto_call"></a>If the project software is an application
   or library, and its primary purpose is not to implement cryptography,
   then it SHOULD only call on software specifically designed to implement
   cryptographic functions;
   it SHOULD NOT re-implement its own.
-  <sup>[<a href="#crypto_call">crypto_call</a>]\*</sup>
+  <sup>[<a href="#crypto_call">crypto_call</a>]</sup>
 - <a name="crypto_floss"></a>All project functionality that depends
   on cryptography MUST be implementable using FLOSS.  See the
   [*Open Standards Requirement for Software* by the Open Source Initiative](https://opensource.org/osr).
-  <sup>[<a href="#crypto_floss">crypto_floss</a>]\*</sup>
+  <sup>[<a href="#crypto_floss">crypto_floss</a>]</sup>
 - <a name="crypto_keylength"></a>The project security mechanisms
   MUST use default keylengths that meet the NIST minimum requirements
   at least through the year 2030 (as stated in 2012).
@@ -531,25 +532,25 @@ by the delivered project's software.
   The software MAY allow smaller keylengths in some configurations
   (ideally it would not, since this allows downgrade attacks,
   but shorter keylengths are sometimes necessary for interoperability.)
-  <sup>[<a href="#crypto_keylength">crypto_keylength</a>]\*</sup>
+  <sup>[<a href="#crypto_keylength">crypto_keylength</a>]</sup>
 - <a name="crypto_working"></a>The default project security mechanisms MUST NOT
   depend on cryptographic algorithms that are broken
   (e.g., MD4, MD5, single DES, RC4, or Dual_EC_DRBG).
-  <sup>[<a href="#crypto_working">crypto_working</a>]\*</sup>
+  <sup>[<a href="#crypto_working">crypto_working</a>]</sup>
 - <a name="crypto_weaknesses"></a>The project security mechanisms
   SHOULD NOT by default depend on cryptographic algorithms with known
   serious weaknesses (e.g., SHA-1).
-  <sup>[<a href="#crypto_weaknesses">crypto_weaknesses</a>]\*</sup>
+  <sup>[<a href="#crypto_weaknesses">crypto_weaknesses</a>]</sup>
 - <a name="crypto_pfs"></a>The project SHOULD implement perfect forward
   secrecy for key agreement protocols so a session key derived from a set
   of long-term keys cannot be compromised if one of the long-term keys is
   compromised in the future.
-  <sup>[<a href="#crypto_pfs">crypto_pfs</a>]\*</sup>
+  <sup>[<a href="#crypto_pfs">crypto_pfs</a>]</sup>
 - <a name="crypto_password_storage"></a>If passwords are stored for
   authentication of external users, the project MUST store them as
   iterated hashes with a per-user salt by using a key stretching
   (iterated) algorithm (e.g., PBKDF2, Bcrypt or Scrypt).
-  <sup>[<a href="#crypto_password_storage">crypto_password_storage</a>]\*</sup>
+  <sup>[<a href="#crypto_password_storage">crypto_password_storage</a>]</sup>
 - <a name="crypto_random"></a>The project MUST generate all
   cryptographic keys and nonces
   using a cryptographically secure random number generator,
@@ -558,7 +559,7 @@ by the delivered project's software.
   hardware random number generator, or it may be
   a cryptographically secure pseudo-random number generator (CSPRNG) using
   an algorithm such as Hash_DRBG, HMAC_DRBG, CTR_DRBG, Yarrow, or Fortuna.
-  <sup>[<a href="#crypto_random">crypto_random</a>]\*</sup>
+  <sup>[<a href="#crypto_random">crypto_random</a>]</sup>
 
 *Secured delivery mechanism*
 
@@ -570,7 +571,7 @@ by the delivered project's software.
   but this only works if the users can be confident that the public keys
   for signatures are correct *and* if the users will
    actually check the signature.
-  <sup>[<a href="#delivery_mitm">delivery_mitm</a>]&#8224;</sup>
+  <sup>[<a href="#delivery_mitm">delivery_mitm</a>]</sup>
 
 *Publicly known vulnerabilities fixed*
 
@@ -587,7 +588,7 @@ by the delivered project's software.
   released to the public (possibly by the project).
   A vulnerability is medium to high severity if its
   [CVSS 2.0](https://nvd.nist.gov/cvss.cfm) base score is 4 or higher.
-  <sup>[<a href="#vulnerabilities_fixed_60_days">vulnerabilities_fixed_60_days</a>]&#8224;</sup>
+  <sup>[<a href="#vulnerabilities_fixed_60_days">vulnerabilities_fixed_60_days</a>]</sup>
 - <a name="vulnerabilities_critical_fixed"></a>Projects SHOULD fix all
   critical vulnerabilities rapidly after they are reported.
   <sup>[<a href="#vulnerabilities_critical_fixed">vulnerabilities_critical_fixed</a>]</sup>
@@ -643,23 +644,23 @@ by the delivered project's software.
   and [Wheeler's list of static analysis tools](http://www.dwheeler.com/essays/static-analysis-tools.html).
   The [SWAMP](https://continuousassurance.org/) is a no-cost platform
   for assessing vulnerabilities in software using a variety of tools.
-  <sup>[<a href="#static_analysis">static_analysis</a>]\*</sup>
+  <sup>[<a href="#static_analysis">static_analysis</a>]</sup>
 - <a name="static_analysis_common_vulnerabilities"></a>It is SUGGESTED
   that at least one of the static analysis tools
   used for the static_analysis criterion
   include rules or approaches to look for
   common vulnerabilities in the analyzed language or environment.
-  <sup>[<a href="#static_analysis_common_vulnerabilities">static_analysis_common_vulnerabilities</a>]\*</sup>
+  <sup>[<a href="#static_analysis_common_vulnerabilities">static_analysis_common_vulnerabilities</a>]</sup>
 - <a name="static_analysis_fixed"></a>All medium
   and high severity exploitable vulnerabilities discovered
   with static code analysis MUST be fixed
   in a timely way after they are confirmed.
   A vulnerability is medium to high severity if its
   [CVSS 2.0](https://nvd.nist.gov/cvss.cfm) is 4 or higher.
-  <sup>[<a href="#static_analysis_fixed">static_analysis_fixed</a>]\*</sup>
+  <sup>[<a href="#static_analysis_fixed">static_analysis_fixed</a>]</sup>
 - <a name="static_analysis_often"></a>It is SUGGESTED that
   static source code analysis occur on every commit or at least daily.
-  <sup>[<a href="#static_analysis_often">static_analysis_often</a>]\*</sup>
+  <sup>[<a href="#static_analysis_often">static_analysis_often</a>]</sup>
 
 *Dynamic analysis*
 
@@ -736,7 +737,7 @@ These 'future' criteria are criteria we intend to add in the near future.
   This criterion does not apply if no building occurs
   (e.g., scripting languages where the source code
   is used directly instead of being compiled).
-  <sup>[<a href="#build_reproducible">build_reproducible</a>]\*</sup>
+  <sup>[<a href="#build_reproducible">build_reproducible</a>]</sup>
   *Rationale*: If a project needs to be built but there is no working
   build system, then potential co-developers will not be able to easily
   contribute and many security analysis tools will be ineffective.
@@ -777,7 +778,7 @@ These 'future' criteria are criteria we intend to add in the near future.
   Content Security Policy (CSP), HTTP Strict Transport Security
   (HSTS), X-Content-Type-Options (as "nosniff"), X-Frame-Options,
   and X-XSS-Protection.
-  <sup>[<a href="#hardened_site">hardened_site</a>]&#8224;</sup>
+  <sup>[<a href="#hardened_site">hardened_site</a>]</sup>
 - <a name="hardening"></a>
   (Future criterion)
   It is SUGGESTED that hardening mechanisms be used so software defects

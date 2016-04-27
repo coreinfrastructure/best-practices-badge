@@ -1,4 +1,28 @@
 <div class="center jumbotron">
+  <h1>Criteria</h1>
+  <!-- This page quickly shows some information about the Criteria. -->
   <p>
   <a href='https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/doc/criteria.md'>Criteria information is on GitHub</a>.</p>
+  <p>
+  <%
+    active_criteria = Criteria.all.select {|c| !c.future?}
+    future_criteria = Criteria.all.select {|c| c.future?}
+  %>
+  Current number of criteria:
+    <%= active_criteria.count %> (active)
+    + <%= future_criteria.count %> (future)
+    = <%= Criteria.all.count %> (total)
+  <br>
+  Among active criteria, there are
+    <%= active_criteria.select {|c| c.category == 'MUST'}.count %> MUST,
+    <%= active_criteria.select {|c| c.category == 'SHOULD'}.count %> SHOULD, and
+    <%= active_criteria.select {|c| c.category == 'SUGGESTED'}.count %>
+    SUGGESTED criteria.
+  Among active criteria,
+    <%= active_criteria.select {|c| c.na_allowed}.count %> allow N/A,
+    <%= active_criteria.select {|c| c.met_url_required}.count %>
+    require a URL when met, and
+    <%= active_criteria.select {|c| c.details.present?}.count %>
+    have details in their description.
+  <p>
 </div>

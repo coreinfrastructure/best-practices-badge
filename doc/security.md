@@ -34,15 +34,21 @@ how we implement these requirements):
 
 - Confidentiality:
   Project data is considered public, as is
-  the set of users, so we don't need to keep those confidential.
-  We must not reveal any plaintext passwords used to authenticate users.
-  This is primarily handled by only centrally storing passwords
-  once they are processed by bcrypt (so passwords are *only* stored as
+  the users who own the records, so we don't need to keep those confidential.
+  The only things we need to keep confidential, really, are
+  passwords and user email addresses.  We handle specially, since
+  we must not reveal any plaintext passwords used to authenticate users.
+  Password proteciton is primarily handled by only centrally storing passwords
+  once they are encrypted by bcrypt (so passwords are *only* stored as
   iterated salted cryptographic hashes).
   Passwords may also be stored in encrypted user cookies, but the
   decrypted passwords are not stored on the server's database,
   and users can choose whether or not to store passwords in encrypted cookies
   (using the "remember me" box implemented in commit e79decec67).
+  We do store email addresses; we need those for various purposes
+  (e.g., contact badge entry owners for clarification).
+  We will strive to not reveal user email addresses to others
+  (with the exception administrators, who can see them).
   There's no need to worry about covert channels.
 - Integrity:
     - Data between the client and server must not be altered.

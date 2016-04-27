@@ -4,7 +4,7 @@
 
 ## Introduction
 
-This is a *draft* of proposed best practices
+This is a set of best practices
 for Free/Libre and Open Source Software (FLOSS) projects.
 Projects that follow these best practices
 will be able to voluntarily self-certify and show that they've
@@ -40,22 +40,21 @@ The best practices, and the more detailed criteria
 specifically defining them, are inspired by a variety of sources.
 See the separate "[background](./background.md)" page for more information.
 
-This version of the criteria is *NOT* endorsed by anyone;
-we are releasing this early version so that we can get feedback.
 We expect that these practices and their detailed criteria will be updated,
 even after badges are released.
 Thus, criteria (and badges) probably will have a year identifier
 and will phase out after a year or two.
 We expect it will be easy to update the information,
 so this relatively short badge life should not be a barrier.
+We plan to add new criteria but mark them as "future" criteria, so that
+projects can add that information and maintain their badge.
 
 Feedback is *very* welcome via the
 [GitHub site as issues or pull requests](https://github.com/linuxfoundation/cii-best-practices-badge).
 There is also a
 [mailing list for general discussion](https://lists.coreinfrastructure.org/mailman/listinfo/cii-badges).
 
-Below are the current *draft* criteria, potential criteria,
-non-criteria, plans, and where to get more information.
+Below are the current criteria, along with and where to get more information.
 The key words "MUST", "MUST NOT",
 "SHOULD", "SHOULD NOT", and "MAY"
 in this document are to be interpreted as described in
@@ -80,6 +79,7 @@ The additional term SUGGESTED is added, as follows:
   SHOULD criteria must be met OR the rationale for
   not implementing the criterion must be documented, and
   all SUGGESTED criteria have to be considered (rated as met or unmet).
+  In some cases a URL may be required as part of the criterion's justification.
 - The text "(Future criterion)" marks criteria that are not currently
   required, but may be required in the future.
 
@@ -91,8 +91,7 @@ if not, see introductory materials such as
 
 ## Current criteria: Best Practices for FLOSS
 
-Here are the current *draft* criteria; it is certain to change.
-Note that:
+Here are the current criteria.  Note that:
 
 * The criteria marked with "&#8224;" are intended to be automatically testable
   if the project follows standard conventions and

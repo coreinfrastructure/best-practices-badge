@@ -2,7 +2,7 @@
   <h1>Criteria</h1>
   <!-- This page quickly shows some information about the Criteria. -->
   <p>
-  <a href='https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/doc/criteria.md'>Criteria information is on GitHub</a>.</p>
+  <a href='https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/doc/criteria.md'>The detailed criteria are on GitHub</a>.</p>
   <p>
   <%
     active_criteria = Criteria.reject(&:future?)
@@ -11,7 +11,7 @@
   Current number of criteria:
     <%= active_criteria.count %> (active)
     + <%= future_criteria.count %> (future)
-    = <%= Criteria.count %> (total)
+    = <%= Criteria.count %> (total).
   <br>
   Among active criteria, there are
     <%= active_criteria.count(&:must?) %> MUST,

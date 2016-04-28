@@ -76,7 +76,7 @@ class Criteria
     na_allowed == true
   end
 
-  delegate :present?, to: :details, prefix: :details
+  delegate :present?, to: :details, prefix: true
 
   def should?
     category == 'SHOULD'

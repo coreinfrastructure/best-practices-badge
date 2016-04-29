@@ -68,6 +68,7 @@ please include a "Signed-off-by" tag in every patch
 (this tag is a conventional way to confirm that you agree to the DCO).
 You can do this with <tt>git commit --signoff</tt> (the <tt>-s</tt> flag
 is a synonym for <tt>--signoff</tt>).
+
 Another way to do this is to write the following at the end of the commit
 message, on a line by itself separated by a blank line from the body of
 the commit:
@@ -84,9 +85,6 @@ then configure git to use that as a commit template.  For example:
 It's not practical to fix old contributions in git, so if one is forgotten,
 do not try to fix them.  We presume that if someone sometimes used a DCO,
 a commit without a DCO is an accident and the DCO still applies.
-
-You generally should *not* use the "-m" option of git commit,
-because that doesn't let you enter "Signed-off-by".
 
 ### License (MIT)
 
@@ -116,7 +114,7 @@ mistakes and vulnerabilities as soon as possible,
 and to reduce their impact when they do happen.
 We use a defensive design and coding style to reduce the likelihood of mistakes,
 a variety of tools that try to detect mistakes early,
-and a test suite with significant coverage.
+and an automatic test suite with significant coverage.
 We also release the software as open source software so others can review it.
 
 Since early detection and impact reduction can never be perfect, we also try to
@@ -272,19 +270,24 @@ a parser that ignores comments will still work.
 
 ### Javascript
 
-Always put Javascript (and CSS styles) in *separate* files, do not
-embed them in the HTML.  That way we can use CSP entries
-that harden the program against security attacks.
+There is a small amount of application-specific client-side Javascript;
+by convention custom client-side Javascript is in "app/assets/javascripts/".
 
-There is a small amount of application-specific Javascript.
 This is written in Javascript, not CoffeeScript;
 it's only a small amount of Javascript, so the advantages of
 CoffeeScript aren't
 obvious, and far more people know basic Javascript than CoffeeScript.
-For Javascript we are using the
+Our Javascript coding style is based on the
 [Node.js style guide](https://github.com/felixge/node-style-guide).
-Please ensure changes pass JSCS (Javascript style checker)
-using the Node.js format.
+In particular, we use
+2-space indents, terminating semicolons, camelCase, required braces,
+and '===' (never '==') for string comparison,
+These coding style rules are checked by ESLint
+(see .eslintrc for the rule list).
+
+Always put Javascript (and CSS styles) in *separate* files, do not
+embed Javascript in the HTML.  That way we can use CSP entries
+that harden the program against security attacks.
 
 If you edit the Javascript, beware of ready events.
 Rails' turbolinks gem claims that it

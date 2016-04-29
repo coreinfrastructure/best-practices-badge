@@ -355,13 +355,21 @@ Currently these include at least the following:
 * fasterer - report on Ruby constructs with poor performance
 * "rake test" - run the automated test suite
 
-We tolerate the following warning from rails_best_practices
-(patches to fix this are welcome):
+Running "rake test" (the automated test suite) will show
+"Run options: --seed ...", "# Running:", and a series of dots (passing tests).
+In some cases you'll see a test retry message like this
+(but it will eventually pass):
 
 ~~~~
-cii-best-practices-badge/app/controllers/users_controller.rb:75 -
-  use scope access
+..[MinitestRetry] retry 'test_0002_Can Login and edit using custom account'
+count: 1,  msg: Unexpected exception
 ~~~~
+
+The retry messages, when they happen, come from
+the few tests we use that use a full simulated web browser (via Capybara).
+Sometimes these full tests cause spurious failures, so we intentionally
+retry failing tests to eliminate false failure reports (to make sure the
+problem is in the software under test, and not in our test framework).
 
 Here are some other tools we use, though they are not currently integrated into
 the default "rake" checking task:

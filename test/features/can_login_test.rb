@@ -40,11 +40,11 @@ class CanLoginTest < Capybara::Rails::TestCase
     choose 'project_english_status_met'
     assert_match CHECK, page.find('#english_enough')['src']
 
+    kill_sticky_headers # This is necessary for Chrome and Firefox
     choose 'project_contribution_status_met' # No URL given, so fails
     assert_match QUESTION, page.find('#contribution_enough')['src']
 
     choose 'project_contribution_requirements_status_unmet' # No URL given
-    # sleep 5 # TODO: Force delay to ensure we will find this
     assert_match X, page.find('#contribution_requirements_enough')['src']
 
     click_on 'Change Control'

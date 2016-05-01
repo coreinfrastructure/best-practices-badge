@@ -24,6 +24,21 @@ Write Capybara features to test the happy path of new features. Test the feature
 
 ## Troubleshooting
 
+Flapping tests are a challenge, especially with browser automation that requires Javascript. Examine the `while` loop in [can_login_test.rb](https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/test/features/can_login_test.rb) for one approach to make sure that actions are occurring before testing for their impact.
+
+It's quite helpful to debug a flapping test by running it multiple times. If you're using bash shell, you can run `repeat 10 m test/features/can_login_test.rb` by adding the following to your `~/.bash_profile`:
+
+```bash
+# http://www.shellhacks.com/en/HowTo-Run-and-Repeat-a-Command-N-Times-in-Bash
+function repeat() {
+    number=$1
+    shift
+    for n in $(seq $number); do
+      $@
+    done
+}
+```
+
 ### On Linux
 
 You need to install phantomjs with: `npm install phantomjs-prebuilt`

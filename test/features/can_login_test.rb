@@ -1,6 +1,12 @@
 require 'test_helper'
+include ActionView::Helpers::TextHelper
 
 class CanLoginTest < Capybara::Rails::TestCase
+  CHECK = /result_symbol_check/
+  DASH = /result_symbol_dash/
+  QUESTION = /result_symbol_question/
+  X = /result_symbol_x/
+
   setup do
     @user = users(:test_user)
     @project = projects(:one)
@@ -29,34 +35,42 @@ class CanLoginTest < Capybara::Rails::TestCase
 
     visit edit_project_path(@project)
     choose 'project_discussion_status_unmet'
-    assert page.find('#discussion_enough[src*="result_symbol_x"]')
+    assert_match X, page.find('#discussion_enough')['src']
 
     choose 'project_english_status_met'
-    assert page.find('#english_enough[src*="result_symbol_check"]')
+    assert_match CHECK, page.find('#english_enough')['src']
 
     choose 'project_contribution_status_met' # No URL given, so fails
-    assert page.find('#contribution_enough[src*="result_symbol_question"]')
+    assert_match QUESTION, page.find('#contribution_enough')['src']
 
     choose 'project_contribution_requirements_status_unmet' # No URL given
     # sleep 5 # TODO: Force delay to ensure we will find this
-    assert page.find(
-      '#contribution_requirements_enough[src*="result_symbol_x"]')
+    assert_match X, page.find('#contribution_requirements_enough')['src']
 
     click_on 'Change Control'
     assert page.has_content? 'repo_public'
     choose 'project_repo_public_status_unmet'
-    assert page.find('#repo_public_enough[src*="result_symbol_x"]')
+    assert_match X, page.find('#repo_public_enough')['src']
 
-    choose 'project_repo_distributed_status_unmet' # SUGGESTED, so enough
-    wait_for_jquery
-    assert page.find('#repo_distributed_enough[src*="result_symbol_dash"]')
+    # Extra assertions to deal with flapping test
+    assert page.find('#project_repo_distributed_status_')['checked']
+    # loop needed because selection doesn't always take the first time
+    loops = 0
+    while page.find('#project_repo_distributed_status_')['checked']
+      puts "#{pluralize loops, 'extra loop'} required" if loops > 0
+      loops += 1
+      choose 'project_repo_distributed_status_unmet' # SUGGESTED, so enough
+      wait_for_jquery
+    end
+    assert page.find('#project_repo_distributed_status_unmet')['checked']
+    assert_match DASH, page.find('#repo_distributed_enough')['src']
 
     click_on 'Reporting'
     assert page.has_content? 'report_process'
     choose 'project_report_process_status_unmet'
-    assert page.find('#report_process_enough[src*="result_symbol_x"]')
+    assert_match X, page.find('#report_process_enough')['src']
 
     click_on 'Submit'
-    assert page.find('#discussion_enough[src*="result_symbol_x"]')
+    assert_match X, page.find('#discussion_enough')['src']
   end
 end

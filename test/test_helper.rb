@@ -1,7 +1,9 @@
 ENV['RAILS_ENV'] ||= 'test'
 
-require 'minitest/retry'
-Minitest::Retry.use!
+if ENV['CI']
+  require 'minitest/retry'
+  Minitest::Retry.use!
+end
 
 require 'simplecov'
 SimpleCov.start 'rails' do

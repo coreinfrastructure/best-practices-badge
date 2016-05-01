@@ -44,7 +44,7 @@ class GithubBasicDetective < Detective
 
   # Clean up name of license to be like the SPDX display.
   def cleanup_license(license)
-    LICENSE_CORRECT_CASE[license.upcase]
+    LICENSE_CORRECT_CASE[license.upcase] || license
   end
 
   # Individual detectives must implement "analyze"

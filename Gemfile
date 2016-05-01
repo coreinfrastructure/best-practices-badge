@@ -64,6 +64,7 @@ group :test do
   gem 'coveralls', '0.8.13', require: false
   gem 'm', '1.4.2' # Run test/unit tests by line number
   gem 'minitest-rails-capybara', '2.1.1', require: false
+  gem 'minitest-retry', '0.1.4' # Rerun tests (counter false Capybara fails)
   gem 'poltergeist', '1.9.0', require: false
   gem 'selenium-webdriver', '2.53.0', require: false
   gem 'simplecov', '0.11.2', require: false

@@ -31,9 +31,9 @@ There is also a
 [mailing list](https://lists.coreinfrastructure.org/mailman/listinfo/cii-badges)
 for general discussion.
 
-* Draft Badging **[Criteria](./doc/criteria.md)**
+* Badging **[Criteria](./doc/criteria.md)**
 * Information on how to **[contribute](./CONTRIBUTING.md)**
-* Draft **[Background](./doc/background.md)** on Badging
+* **[Background](./doc/background.md)** on Badging
 * **[ChangeLog](./CHANGELOG.md)**
 * Current **[implementation](./doc/implementation.md)**  - notes about the
   BadgeApp implementation

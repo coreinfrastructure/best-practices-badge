@@ -137,6 +137,24 @@ function changedJustificationText(criteria) {
   resetProgressBar();
 }
 
+// Do we have any text in this field region?  Handle the variations.
+function hasFieldTextInside(e) {
+  var i;
+  i = e.find('input[type="text"]');
+  if (i && i.val()) {
+    return true;
+  }
+  i = e.find('textarea');
+  if (i && i.val()) {
+    return true;
+  }
+  i = e.find('.discussion-markdown');
+  if (i && i.text()) {
+    return true;
+  }
+  return false;
+}
+
 // If we should, hide the criteria that are "Met" or N/A and are enough.
 // Do NOT hide 'met' criteria that aren't enough (e.g., missing required URL),
 // and do NOT hide the last-selected-met criterion (so users can enter/edit
@@ -150,6 +168,13 @@ function hideMetNA() {
       $('#' + key).addClass('hidden');
     } else {
       $('#' + key).removeClass('hidden');
+    }
+  });
+  $('.hidable-text-entry').each(function() {
+    if (globalHideMetnaCriteria && hasFieldTextInside($(this))) {
+      $(this).addClass('hidden');
+    } else {
+      $(this).removeClass('hidden');
     }
   });
 }

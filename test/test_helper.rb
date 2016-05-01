@@ -1,5 +1,8 @@
 ENV['RAILS_ENV'] ||= 'test'
 
+require 'minitest/retry'
+Minitest::Retry.use!
+
 require 'simplecov'
 SimpleCov.start 'rails' do
   add_group 'Validators', 'app/validators'
@@ -8,6 +11,7 @@ SimpleCov.start 'rails' do
   add_filter '/test/'
   add_filter '/vendor/'
 end
+
 require 'coveralls'
 SimpleCov.formatters = [SimpleCov::Formatter::HTMLFormatter,
                         Coveralls::SimpleCov::Formatter]

@@ -117,13 +117,17 @@ There is also a
   <div class="tab-pane active" id="projectbasics">
 <br>
     <h3>Identification</h3>
+
+      <div class="hidable-text-entry">
       <span>What is the human-readable name of the project?</span>
 <%= render(partial: "details", locals: {
            criterion: "project_name", details: %{
 Note that other projects may use the same name.
 }}) %>
       <%= f.text_field :name, hide_label: true, class:"form-control", placeholder:'FLOSS Project Name', disabled: is_disabled %>
+      </div>
 
+      <div class="hidable-text-entry">
       <span>What is a brief description of the project?</span>
       <% if (is_disabled) %>
         <div class="discussion-markdown">
@@ -136,19 +140,25 @@ Include key comments about the project.  Use markdown.
 This information is used when displaying badge information.
 }}) %>
       <%= f.text_area :description, class:"form-control", hide_label: true, placeholder:'Project Description', disabled: is_disabled %>
-     <% end %>
+      <% end %>
+      </div>
 
+      <div class="hidable-text-entry">
       <span>What is the URL for the project (as a whole)?</span>
       <%= f.text_field :homepage_url, hide_label: true, class: "form-control", placeholder:'Project Website URL', label: "Project URL", disabled: is_disabled %>
+      </div>
 
+      <div class="hidable-text-entry">
       <span>What is the URL for the version control repository
             (it may the same as the project URL)?</span>
       <%= f.text_field :repo_url, class:"form-control", hide_label: true, placeholder:'Project Repo URL', disabled: repo_disabled %>
+      </div>
 
 <!-- TODO: MUST have a project or repo URL, SUGGESTED to use HTTPS.
      However, first is implied by "description_good",
      and the MITM stuff notes https as a way to implement it. -->
 
+      <div class="hidable-text-entry">
       <span>What is the
             <a href="https://nvd.nist.gov/cpe.cfm">Common Platform Enumeration (CPE)</a>
             name for the project (if it has one)?</span>
@@ -160,6 +170,7 @@ This information is used when displaying badge information.
             databases when reporting vulnerabilities.
 }}) %>
       <%= f.text_field :cpe, hide_label: true, class:"form-control", placeholder:'(Optional) CPE name', disabled: is_disabled %>
+      </div>
 
   <br>
    <%# Note: render() accepts met_suppress: ..., unmet_placeholder:  ... %>
@@ -178,6 +189,8 @@ This information is used when displaying badge information.
       <br>
 
       <h3>FLOSS License</h3>
+
+      <div class="hidable-text-entry">
       <span>What license(s) is the project released under?</span>
       <%= render(partial: "details", locals: {
            criterion: "license", details: %{
@@ -210,6 +223,7 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
      </datalist></div>
       <br>
       <hr>
+     </div>
 
       <%= render_status 'floss_license', f, project, is_disabled %>
       <hr>

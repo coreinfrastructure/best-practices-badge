@@ -168,6 +168,8 @@ GEM
       json (~> 1.8)
       multi_xml (>= 0.5.2)
     i18n (0.7.0)
+    imagesLoaded_rails (4.1.0)
+      railties (>= 3.1)
     io-like (0.3.0)
     jbuilder (2.4.1)
       activesupport (>= 3.0.0, < 5.1)
@@ -469,6 +471,7 @@ DEPENDENCIES
   fastly-rails (= 0.5.0)
   github_api (= 0.13.1)
   heroku_rails_deflate (= 1.0.3)
+  imagesLoaded_rails (= 4.1.0)
   jbuilder (= 2.4.1)
   jquery-rails (= 4.1.1)
   jquery-turbolinks

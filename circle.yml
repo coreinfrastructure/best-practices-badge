@@ -1,6 +1,10 @@
 test:
   pre:
     - "[[ ! -s \"$(git rev-parse --git-dir)/shallow\" ]] || git fetch --unshallow"
+    - sudo apt-get update; sudo apt-get install libicu52
+    - curl --output /home/ubuntu/bin/phantomjs-2.0.1-linux-x86_64-dynamic https://s3.amazonaws.com/circle-support-bucket/phantomjs/phantomjs-2.0.1-linux-x86_64-dynamic
+    - chmod a+x /home/ubuntu/bin/phantomjs-2.0.1-linux-x86_64-dynamic
+    - sudo ln -s --force /home/ubuntu/bin/phantomjs-2.0.1-linux-x86_64-dynamic /usr/local/bin/phantomjs
   post:
     - bundle exec pronto run -f github text -c=$(git log --pretty=format:%H | tail -1) --exit-code
 deployment:

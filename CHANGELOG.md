@@ -6,6 +6,20 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This Change Log format is suggested by
 <https://github.com/olivierlacan/keep-a-changelog/blob/master/CHANGELOG.md>
 
+## 0.8.0 - 2016-04-19
+
+- When accessing GitHub we now use the logged-in-user's token
+  everywhere.  This makes us much less susceptible to rate limit issues.
+- The test framework now (finally!) directly invokes a web browser
+  and tests the Javascript code.. and it even works on CircleCI.
+  This is important; before, many kinds of errors could slip through,
+  and we've had some annoying problems getting it working.
+- Various bug fixes, including problems that our new Javascript testing
+  mechanisms will now automatically detect.
+- Better data structuring for Criteria - this is an important data structure
+  in the application, so it's better to handle that cleanly.
+- Users can no longer change the repo_url (Admins still can)
+
 ## 0.7.0 - 2016-04-11
 - Added criteria, including making site HTTPS a MUST, and adding 'future'
   criteria so we can add criteria later without making everyone

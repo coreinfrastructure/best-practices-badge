@@ -25,7 +25,6 @@ class Criteria
     end
 
     def all
-      # Creates class instances on first use and after reload! in rails console
       instantiate if @criteria.blank?
       @criteria.values
     end
@@ -36,6 +35,7 @@ class Criteria
     end
 
     def instantiate
+      # Creates class instances on first use and after reload! in rails console
       @criteria = {}
       CriteriaHash.each do |criterion|
         name = criterion[0].to_sym
@@ -68,8 +68,22 @@ class Criteria
     met_url_required == true
   end
 
+  def must?
+    category == 'MUST'
+  end
+
   def na_allowed?
     na_allowed == true
+  end
+
+  delegate :present?, to: :details, prefix: true
+
+  def should?
+    category == 'SHOULD'
+  end
+
+  def suggested?
+    category == 'SUGGESTED'
   end
 
   delegate :to_s, to: :name

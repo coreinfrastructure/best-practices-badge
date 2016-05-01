@@ -466,7 +466,7 @@
 
 	// Expose the class either via AMD, CommonJS or the global object
 	if (typeof define === 'function' && define.amd) {
-		define('eventEmitter/EventEmitter',[],function () {
+		define('eventEmitter/EventEmitter', [], function () {
 			return EventEmitter;
 		});
 	}
@@ -548,7 +548,7 @@ var eventie = {
 // transport
 if ( typeof define === 'function' && define.amd ) {
   // AMD
-  define( 'eventie/eventie',eventie );
+  define('eventie/eventie', eventie);
 } else {
   // browser global
   window.eventie = eventie;

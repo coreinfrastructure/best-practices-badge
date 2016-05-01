@@ -1,0 +1,13 @@
+# If you modify this file, also modify file: lib/tasks/default.rake
+#
+# Unfortunately the "eslintrb" gem doesn't pay attention to this
+# .eslintignore file.  So to ignore Javascript files when running ESLint,
+# you need to modify both this .eslintignore file (for pronto)
+# and the rake file (for the eslintrb gem).
+#
+# The "application.js" file only contains comments, and the
+# ESLint parser has trouble with comment-only files, so skip it:
+**/application.js
+# This is actually an externally-developed file, with its own
+# conventions, so skip it:
+**/imagesloaded.pkgd.js

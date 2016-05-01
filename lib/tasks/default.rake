@@ -17,6 +17,7 @@ task(:default).clear.enhance %w(
   yaml_syntax_check
   html_from_markdown
   fasterer
+  eslint
   test
 )
 
@@ -193,6 +194,26 @@ end
 
 Rails::TestTask.new('test:features' => 'test:prepare') do |t|
   t.pattern = 'test/features/**/*_test.rb'
+end
+
+# This gem isn't available in production
+if Rails.env.production?
+  task :eslint do
+    puts 'Skipping eslint checking in production (libraries not available).'
+  end
+else
+  require 'eslintrb/eslinttask'
+  Eslintrb::EslintTask.new :eslint do |t|
+    t.pattern = 'app/assets/javascripts/*.js'
+    # If you modify the exclude_pattern, also modify file .eslintignore
+    t.exclude_pattern =
+      'app/assets/javascripts/{application,imagesloaded.pkgd}.js'
+    t.options = :eslintrc
+  end
+end
+
+desc 'Stub do-nothing jobs:work task to eliminate Heroku log complaints'
+task 'jobs:work' do
 end
 
 Rake::Task['test:run'].enhance ['test:features']

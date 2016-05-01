@@ -1,6 +1,16 @@
 // This Javascript supporting implementing the per project form used
 // for showing and editing information about a project.
 
+var criterionCategoryValue = {};
+var criteriaMetUrlRequired = {};
+var criterionFuture = {};
+var MIN_SHOULD_LENGTH = 5;
+
+// Global - name of criterion we last selected as 'met'.
+// Don't hide this criterion (yet), so that users can enter a justification.
+var globalLastSelectedMet = '';
+var globalHideMetnaCriteria = false;
+
 // Do a polyfill for datalist if it's not already supported
 // (e.g., Safari fails to support polyfill at the time of this writing).
 // See https://github.com/thgreasi/datalist-polyfill/blob/master/README.md
@@ -9,20 +19,14 @@ function polyfillDatalist() {
       !!(document.createElement('datalist') && window.HTMLDataListElement);
   if (!nativedatalist) {
     $('input[list]').each(function() {
-      var availableTags = $('#' + $(this).attr('list')).find('option').
-                          map(function() {
-        return this.value;
-      }).get();
+      var availableTags = $('#' + $(this).attr('list')).find('option').map(
+        function() {
+          return this.value;
+        }).get();
       $(this).autocomplete({ source: availableTags });
     });
   }
-};
-
-criterionCategoryValue = {};
-criteriaMetUrlRequired = {};
-criterionFuture = {};
-
-MIN_SHOULD_LENGTH = 5;
+}
 
 function containsURL(justification) {
   if (!justification) {
@@ -39,11 +43,13 @@ function containsURL(justification) {
 function criterionResult(criterion) {
   var criterionStatus = '#project_' + criterion + '_status';
   var justification = $('#project_' + criterion + '_justification').val();
-  if (!justification) justification = '';
+  if (!justification) {
+    justification = '';
+  }
   if ($(criterionStatus + '_na').is(':checked')) {
     return 'passing';
   } else if ($(criterionStatus + '_met').is(':checked')) {
-    if (criteriaMetUrlRequired[criterion]  && !containsURL(justification)) {
+    if (criteriaMetUrlRequired[criterion] && !containsURL(justification)) {
       // Odd case: met is claimed, but we're still missing information.
       return 'question';
     } else {
@@ -65,21 +71,25 @@ function criterionResult(criterion) {
 
 // This must match the criteria implemented in Ruby to prevent confusion.
 function isEnough(criterion) {
-  result = criterionResult(criterion);
+  var result = criterionResult(criterion);
   return (result === 'passing' || result === 'barely');
 }
 
 function resetProgressBar() {
   var total = 0;
   var enough = 0;
+  var percentage;
+  var percentAsString;
   $.each(criterionCategoryValue, function(key, value) {
     if (!criterionFuture[key]) { // Only include non-future values
       total++;
-      if (isEnough(key)) {enough++;};
+      if (isEnough(key)) {
+        enough++;
+      }
     }
-  })
-  var percentage = enough / total;
-  var percentAsString =  Math.round(percentage * 100).toString() + '%'
+  });
+  percentage = enough / total;
+  percentAsString = Math.round(percentage * 100).toString() + '%';
   $('#badge-progress').attr('aria-valuenow', percentage).
                       text(percentAsString).css('width', percentAsString);
 }
@@ -117,7 +127,7 @@ function changedJustificationText(criteria) {
        ($(criteriaJust).val().length < MIN_SHOULD_LENGTH)) {
     $(criteriaJust).addClass('required-data');
   } else if ($(criteriaStatus + '_met').is(':checked') &&
-           criteriaMetUrlRequired[criteria]  &&
+           criteriaMetUrlRequired[criteria] &&
            !containsURL($(criteriaJust).val())) {
     $(criteriaJust).addClass('required-data');
   } else {
@@ -127,21 +137,46 @@ function changedJustificationText(criteria) {
   resetProgressBar();
 }
 
+// Do we have any text in this field region?  Handle the variations.
+function hasFieldTextInside(e) {
+  var i;
+  i = e.find('input[type="text"]');
+  if (i && i.val()) {
+    return true;
+  }
+  i = e.find('textarea');
+  if (i && i.val()) {
+    return true;
+  }
+  i = e.find('.discussion-markdown');
+  if (i && i.text()) {
+    return true;
+  }
+  return false;
+}
+
 // If we should, hide the criteria that are "Met" or N/A and are enough.
 // Do NOT hide 'met' criteria that aren't enough (e.g., missing required URL),
 // and do NOT hide the last-selected-met criterion (so users can enter/edit
 // justification text).
 function hideMetNA() {
   $.each(criterionCategoryValue, function(key, value) {
-    if ( global_hide_metna_criteria && key !== global_last_selected_met &&
-         ($('#project_' + key + '_status_met').is(':checked') ||
-          $('#project_' + key + '_status_na').is(':checked')) &&
-         isEnough(key)) {
+    if (globalHideMetnaCriteria && key !== globalLastSelectedMet &&
+        ($('#project_' + key + '_status_met').is(':checked') ||
+         $('#project_' + key + '_status_na').is(':checked')) &&
+        isEnough(key)) {
       $('#' + key).addClass('hidden');
     } else {
       $('#' + key).removeClass('hidden');
     }
-  })
+  });
+  $('.hidable-text-entry').each(function() {
+    if (globalHideMetnaCriteria && hasFieldTextInside($(this))) {
+      $(this).addClass('hidden');
+    } else {
+      $(this).removeClass('hidden');
+    }
+  });
 }
 
 function updateCriteriaDisplay(criteria) {
@@ -150,7 +185,6 @@ function updateCriteriaDisplay(criteria) {
   var justificationElement = document.getElementById('project_' +
                            criteria + '_justification');
   var justificationValue = '';
-  var placeholder = '';
   if (justificationElement) {
     justificationValue = justificationElement.value;
   }
@@ -193,7 +227,7 @@ function updateCriteriaDisplay(criteria) {
   if (justificationValue.length > 0) {
     $(criteriaJust).show('fast');
   }
-  if (global_hide_metna_criteria) {
+  if (globalHideMetnaCriteria) {
     // If we're hiding met criteria, walk through and hide them.
     // We don't need to keep running this if we are NOT hiding them,
     // which is the normal case.
@@ -205,16 +239,16 @@ function updateCriteriaDisplay(criteria) {
 function changeCriterion(criterion) {
   var criterionStatus = '#project_' + criterion + '_status';
   if ($(criterionStatus + '_met').is(':checked')) {
-    global_last_selected_met = criterion;
+    globalLastSelectedMet = criterion;
   }
   updateCriteriaDisplay(criterion);
 }
 
 function ToggleHideMet(e) {
-  global_hide_metna_criteria = !global_hide_metna_criteria;
+  globalHideMetnaCriteria = !globalHideMetnaCriteria;
   // Note that button text shows what WILL happen on click, so it
   // shows the REVERSED state (not the current state).
-  if (global_hide_metna_criteria) {
+  if (globalHideMetnaCriteria) {
     $('#toggle-hide-metna-criteria')
       .addClass('active').html('Show met and N/A criteria');
   } else {
@@ -227,13 +261,21 @@ function ToggleHideMet(e) {
 function setupProjectField(criteria) {
   updateCriteriaDisplay(criteria);
   $('input[name="project[' + criteria + '_status]"]').click(
-      function() {updateCriteriaDisplay(criteria);});
+      function() {
+        changeCriterion(criteria);
+      });
   $('input[name="project[' + criteria + '_justification]"]').blur(
-      function() {updateCriteriaDisplay(criteria);});
+      function() {
+        updateCriteriaDisplay(criteria);
+      });
   $('#project_' + criteria + '_justification').on('input',
-      function() {changedJustificationText(criteria);});
+      function() {
+        changedJustificationText(criteria);
+      });
   $('#project_' + criteria + '_justification').on('keyup',
-      function() {changedJustificationText(criteria);});
+      function() {
+        changedJustificationText(criteria);
+      });
 }
 
 function ToggleDetailsDisplay(e) {
@@ -241,35 +283,31 @@ function ToggleDetailsDisplay(e) {
                         replace('_details_toggler', '_details_text');
   $('#' + detailsTextID).toggle('fast',
     function() {
+      var buttonText;
       if ($('#' + detailsTextID).is(':hidden')) {
-        var buttonText = 'Show details';
+        buttonText = 'Show details';
       } else {
-        var buttonText = 'Hide details';
+        buttonText = 'Hide details';
       }
       $('#' + e.target.id).html(buttonText);
     });
 }
-
-// Global - name of criterion we last selected as 'met'.
-// We don't want to hide this (yet), so users can enter a justification.
-var global_last_selected_met = '';
-var global_hide_metna_criteria = false;
 
 // Create mappings from criteria name to category and met_url_required.
 // Eventually replace with just accessing classes directly via Javascript.
 function SetupCriteriaStructures() {
   $('.status-chooser').each(
     function(index) {
-      criterionName = $(this).find('.criterion-name').text();
-      res = $(this).find('.criterion-met-url-required').text();
-      val = 'true' === res;
+      var criterionName = $(this).find('.criterion-name').text();
+      var res = $(this).find('.criterion-met-url-required').text();
+      var val = 'true' === res;
       criteriaMetUrlRequired[criterionName] = val;
       criterionCategoryValue[criterionName] =
         $(this).find('.criterion-category').text();
       criterionFuture[criterionName] =
         $(this).find('.criterion-future').text() === 'true';
     }
-  )
+  );
 }
 
 // Setup display as soon as page is ready
@@ -282,20 +320,20 @@ $(document).ready(function() {
   $('.details-toggler').click(ToggleDetailsDisplay);
 
   $('#show-all-details').click(function(e) {
-      $('.details-text').show('fast');
-      $('.details-toggler').html('Hide details');
-    });
+    $('.details-text').show('fast');
+    $('.details-toggler').html('Hide details');
+  });
   $('#hide-all-details').click(function(e) {
-      $('.details-text').hide('fast');
-      $('.details-toggler').html('Show details');
-    });
+    $('.details-text').hide('fast');
+    $('.details-toggler').html('Show details');
+  });
 
   // Force these values on page reload
-  global_last_selected_met = '';
-  global_hide_metna_criteria = false;
+  globalLastSelectedMet = '';
+  globalHideMetnaCriteria = false;
   $('#toggle-hide-metna-criteria').click(function(e) {
     ToggleHideMet(e);
-    });
+  });
 
   $('[data-toggle="tooltip"]').tooltip(); // Enable bootstrap tooltips
   $('textarea').autosize();
@@ -306,23 +344,23 @@ $(document).ready(function() {
 
     // Implement "press this button to make all crypto N/A"
     $('#all_crypto_na').click(function(e) {
-        $.each(criterionCategoryValue, function(key, value) {
-          if ((/^crypto/).test(key)) {
-            $('#project_' + key + '_status_na').prop('checked', true);
-          }
-          updateCriteriaDisplay(key);
-        })
-        resetProgressBar();
+      $.each(criterionCategoryValue, function(key, value) {
+        if ((/^crypto/).test(key)) {
+          $('#project_' + key + '_status_na').prop('checked', true);
+        }
+        updateCriteriaDisplay(key);
       });
+      resetProgressBar();
+    });
 
     // Use "imagesloaded" to wait for image load before displaying them
     imagesLoaded(document).on('always', function(instance) {
-        // Set up the interactive displays of "enough".
-        $.each(criterionCategoryValue, function(key, value) {
-          setupProjectField(key);
-        })
-        resetProgressBar();
-      })
+      // Set up the interactive displays of "enough".
+      $.each(criterionCategoryValue, function(key, value) {
+        setupProjectField(key);
+      });
+      resetProgressBar();
+    });
   }
 
   // Polyfill datalist (for Safari users)

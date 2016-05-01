@@ -18,8 +18,9 @@ class Chief
   CONFIDENCE_OVERRIDE = 4
 
   # rubocop:disable Style/ConditionalAssignment
-  def initialize(project)
+  def initialize(project, client_factory)
     @evidence = Evidence.new(project)
+    @client_factory = client_factory
 
     # Determine what exceptions to intercept - if we're in
     # test or development, we will only intercept an exception we don't use.
@@ -116,6 +117,7 @@ class Chief
     # TODO: Create topographical sort and Real loop over detectives.
     ALL_DETECTIVES.each do |detective_class|
       detective = detective_class.new
+      detective.octokit_client_factory = @client_factory
       current_proposal = propose_one_change(detective, current_proposal)
     end
     current_proposal

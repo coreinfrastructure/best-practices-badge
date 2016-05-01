@@ -954,7 +954,9 @@
     category: SUGGESTED
     na_allowed: true
     description: >
-      It is SUGGESTED that the tool include rules or approaches to look for
+      It is SUGGESTED that at least one of the static analysis tools
+      used for the static_analysis criterion
+      include rules or approaches to look for
       common vulnerabilities in the analyzed language or environment.
     autofill: >
       We might start by looking primarily for tools that also meet this.

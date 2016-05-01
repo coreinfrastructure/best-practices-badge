@@ -68,6 +68,7 @@ please include a "Signed-off-by" tag in every patch
 (this tag is a conventional way to confirm that you agree to the DCO).
 You can do this with <tt>git commit --signoff</tt> (the <tt>-s</tt> flag
 is a synonym for <tt>--signoff</tt>).
+
 Another way to do this is to write the following at the end of the commit
 message, on a line by itself separated by a blank line from the body of
 the commit:
@@ -84,9 +85,6 @@ then configure git to use that as a commit template.  For example:
 It's not practical to fix old contributions in git, so if one is forgotten,
 do not try to fix them.  We presume that if someone sometimes used a DCO,
 a commit without a DCO is an accident and the DCO still applies.
-
-You generally should *not* use the "-m" option of git commit,
-because that doesn't let you enter "Signed-off-by".
 
 ### License (MIT)
 
@@ -116,7 +114,7 @@ mistakes and vulnerabilities as soon as possible,
 and to reduce their impact when they do happen.
 We use a defensive design and coding style to reduce the likelihood of mistakes,
 a variety of tools that try to detect mistakes early,
-and a test suite with significant coverage.
+and an automatic test suite with significant coverage.
 We also release the software as open source software so others can review it.
 
 Since early detection and impact reduction can never be perfect, we also try to
@@ -272,19 +270,24 @@ a parser that ignores comments will still work.
 
 ### Javascript
 
-Always put Javascript (and CSS styles) in *separate* files, do not
-embed them in the HTML.  That way we can use CSP entries
-that harden the program against security attacks.
+There is a small amount of application-specific client-side Javascript;
+by convention custom client-side Javascript is in "app/assets/javascripts/".
 
-There is a small amount of application-specific Javascript.
 This is written in Javascript, not CoffeeScript;
 it's only a small amount of Javascript, so the advantages of
 CoffeeScript aren't
 obvious, and far more people know basic Javascript than CoffeeScript.
-For Javascript we are using the
+Our Javascript coding style is based on the
 [Node.js style guide](https://github.com/felixge/node-style-guide).
-Please ensure changes pass JSCS (Javascript style checker)
-using the Node.js format.
+In particular, we use
+2-space indents, terminating semicolons, camelCase, required braces,
+and '===' (never '==') for string comparison,
+These coding style rules are checked by ESLint
+(see .eslintrc for the rule list).
+
+Always put Javascript (and CSS styles) in *separate* files, do not
+embed Javascript in the HTML.  That way we can use CSP entries
+that harden the program against security attacks.
 
 If you edit the Javascript, beware of ready events.
 Rails' turbolinks gem claims that it
@@ -335,33 +338,50 @@ even if it doesn't matter in that particular case.
 
 The specific list of tools run by default using 'rake' is listed in
 [default.rake](lib/tasks/default.rake).
-Currently these include at least the following:
+Currently these include at least the following rake tasks that
+check the software:
 
-* bundle - use bundle to check dependencies ("bundle check || bundle install")
-* "rake bundle_audit" - check for vulnerable dependencies
-* "rake markdownlint" - runs markdownlint, also known as mdl
-  (this checks for errors in the markdown text)
-* "rake rubocop" - runs Rubocop, which checks code style against the
-  [community Ruby style guide](https://github.com/bbatsov/ruby-style-guide)
-* "rake rails_best_practices" - check against rails best practices using the gem
-  [rails_best_practices](http://rails-bestpractices.com/)
-* "rake brakeman" - runs Brakeman, which is a static source code analyzer
-  to look for Ruby on Rails security vulnerabilities
-* "license_finder" - checks OSS licenses of dependencies (transitively).
-* "git diff --check" - detect trailing whitespace in latest diff
-* "yaml_syntax_check" - checks syntax of YAML (.yml) files.
-  Note that the automated test suite includes a number of specific
-  checks on the criteria.yml file.
-* fasterer - report on Ruby constructs with poor performance
-* "rake test" - run the automated test suite
+1. *bundle* - use bundle to check dependencies
+   ("bundle check || bundle install")
+2. *bundle_audit* - check for transitive gem dependencies with
+   known vulnerabilities
+3. *rubocop* - runs Rubocop, which checks Ruby code style against the
+   [community Ruby style guide](https://github.com/bbatsov/ruby-style-guide)
+4. *markdownlint* - runs markdownlint, also known as mdl
+   (this checks for errors in the markdown text)
+5. *rails_best_practices* - check Ruby against rails best practices
+   using the gem
+   [rails_best_practices](http://rails-bestpractices.com/)
+6. *brakeman* - runs Brakeman, which is a static source code analyzer
+   to look for Ruby on Rails security vulnerabilities
+7. *license_okay* - runs license_finder to check the
+   OSS licenses of gem dependencies (transitively).
+   A separate dependency on file 'license_finder_report.html' generates
+   a detailed license report in HTML format.
+8. *whitespace_check* - runs "git diff --check" to detect
+   trailing whitespace in latest diff
+9. *yaml_syntax_check* - checks syntax of YAML (.yml) files.
+   Note that the automated test suite includes a number of specific
+   checks on the criteria.yml file.
+10. *fasterer* - report on Ruby constructs with poor performance
+11. *eslint* - Perform code style check on Javascript using eslint
+12. *test* - run the automated test suite
 
-We tolerate the following warning from rails_best_practices
-(patches to fix this are welcome):
+Running "rake test" (the automated test suite) will show
+"Run options: --seed ...", "# Running:", and a series of dots (passing tests).
+In some cases you'll see a test retry message like this
+(but it will eventually pass):
 
 ~~~~
-cii-best-practices-badge/app/controllers/users_controller.rb:75 -
-  use scope access
+..[MinitestRetry] retry 'test_0002_Can Login and edit using custom account'
+count: 1,  msg: Unexpected exception
 ~~~~
+
+The retry messages, when they happen, come from
+the few tests we use that use a full simulated web browser (via Capybara).
+Sometimes these full tests cause spurious failures, so we intentionally
+retry failing tests to eliminate false failure reports (to make sure the
+problem is in the software under test, and not in our test framework).
 
 Here are some other tools we use, though they are not currently integrated into
 the default "rake" checking task:
@@ -382,7 +402,7 @@ RAILS_ENV=production rake assets:precompile
 ~~~~
 
 Note that we also use
-[CicleCI](https://circleci.com/gh/linuxfoundation/cii-best-practices-badge)
+[CircleCI](https://circleci.com/gh/linuxfoundation/cii-best-practices-badge)
 for continuous integration tools to check changes
 after they are checked into GitHub; if they find problems, please fix them.
 

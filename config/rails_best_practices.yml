@@ -26,7 +26,10 @@ RemoveUnusedMethodsInControllersCheck: { except_methods: [] }
 RemoveUnusedMethodsInHelpersCheck: { except_methods: [] }
 RemoveUnusedMethodsInModelsCheck: { except_methods: [
   'Criteria#to_h',
-  'User#digest'
+  'Criteria#must?', # Used in ERB template; doesn't notice.
+  'Criteria#should?', # Used in ERB template; doesn't notice.
+  'Criteria#suggested?', # Used in ERB template; doesn't notice.
+  'User#digest',
   ] }
 ReplaceComplexCreationWithFactoryMethodCheck: { attribute_assignment_count: 2 }
 ReplaceInstanceVariableWithLocalVariableCheck: { }

@@ -1,3 +1,13 @@
+GIT
+  remote: https://github.com/dankohn/eslintrb.git
+  revision: 306932f332bc7fe611e2e1cbea5ede64afeac551
+  ref: 306932f
+  specs:
+    eslintrb (2.0.2)
+      execjs
+      multi_json (>= 1.3)
+      rake
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -131,7 +141,7 @@ GEM
       mime-types (>= 1.16, < 3)
       railties
     ffi (1.9.10)
-    font-awesome-rails (4.5.0.1)
+    font-awesome-rails (4.6.1.0)
       railties (>= 3.2, < 5.1)
     github_api (0.13.1)
       addressable (~> 2.4.0)
@@ -214,6 +224,8 @@ GEM
       minitest-capybara (~> 0.7.0)
       minitest-metadata (~> 0.5.0)
       minitest-rails (~> 2.1)
+    minitest-retry (0.1.4)
+      minitest (>= 5.0)
     mixlib-cli (1.5.0)
     mixlib-config (2.2.1)
     multi_json (1.11.2)
@@ -261,10 +273,13 @@ GEM
     pronto-brakeman (0.6.0)
       brakeman (~> 3.2, >= 3.2.0)
       pronto (~> 0.6.0)
+    pronto-eslint (0.6.1)
+      eslintrb (~> 2.0, >= 2.0.0)
+      pronto (~> 0.6.0)
     pronto-rails_best_practices (0.6.0)
       pronto (~> 0.6.0)
       rails_best_practices (~> 1.16, >= 1.15.0)
-    pronto-rubocop (0.6.1)
+    pronto-rubocop (0.6.2)
       pronto (~> 0.6.0)
       rubocop (~> 0.38, >= 0.35.0)
     pry (0.10.3)
@@ -367,7 +382,7 @@ GEM
     sawyer (0.7.0)
       addressable (>= 2.3.5, < 2.5)
       faraday (~> 0.8, < 0.10)
-    secure_headers (3.1.2)
+    secure_headers (3.2.0)
       useragent
     selenium-webdriver (2.53.0)
       childprocess (~> 0.5)
@@ -386,7 +401,7 @@ GEM
       temple (~> 0.7.3)
       tilt (>= 1.3.3, < 2.1)
     slop (3.6.0)
-    spring (1.6.4)
+    spring (1.7.1)
     sprockets (3.6.0)
       concurrent-ruby (~> 1.0)
       rack (> 1, < 3)
@@ -418,7 +433,7 @@ GEM
       activemodel (>= 4.2)
       debug_inspector
       railties (>= 4.2)
-    webmock (1.24.2)
+    webmock (1.24.4)
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
       hashdiff
@@ -448,6 +463,7 @@ DEPENDENCIES
   chromedriver-helper (= 1.0.0)
   coveralls (= 0.8.13)
   dotenv-rails (= 2.1.1)
+  eslintrb!
   faker (= 1.6.3)
   fasterer (= 0.3.2)
   fastly-rails (= 0.5.0)
@@ -461,6 +477,7 @@ DEPENDENCIES
   m (= 1.4.2)
   mdl (= 0.3.1)
   minitest-rails-capybara (= 2.1.1)
+  minitest-retry (= 0.1.4)
   octokit (= 4.3.0)
   omniauth-github (= 1.1.2)
   paper_trail (= 4.1.0)
@@ -468,8 +485,9 @@ DEPENDENCIES
   poltergeist (= 1.9.0)
   pronto (= 0.6.0)
   pronto-brakeman (= 0.6.0)
+  pronto-eslint (= 0.6.1)
   pronto-rails_best_practices (= 0.6.0)
-  pronto-rubocop (= 0.6.1)
+  pronto-rubocop (= 0.6.2)
   pry-byebug (= 3.3.0)
   puma (= 3.4.0)
   quiet_assets (= 1.1.0)
@@ -481,16 +499,16 @@ DEPENDENCIES
   redcarpet (= 3.3.4)
   ruby-graphviz (= 1.2.2)
   sass-rails (= 5.0.4)
-  secure_headers (= 3.1.2)
+  secure_headers (= 3.2.0)
   selenium-webdriver (= 2.53.0)
   simplecov (= 0.11.2)
-  spring (= 1.6.4)
+  spring (= 1.7.1)
   traceroute (= 0.5.0)
   turbolinks (= 2.5.3)
   uglifier (= 3.0.0)
   vcr (= 3.0.1)
   web-console (= 3.1.1)
-  webmock (= 1.24.2)
+  webmock (= 1.24.4)
   will_paginate (= 3.1.0)
   yaml-lint (= 0.0.7)
 

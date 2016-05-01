@@ -4,6 +4,8 @@
 # Only the 'chief' decides when to update the proposed changes.
 
 class Detective
+  attr_writer :octokit_client_factory
+
   # Individual detectives must identify their inputs and outputs
   # as a list of field name symbols.
   INPUTS = [].freeze

@@ -218,9 +218,9 @@ end
 desc 'Run in fake_production mode'
 # This tests the asset pipeline
 task :fake_production do
-  sh "RAILS_ENV=fake_production bundle exec rake assets:precompile"
-  sh "RAILS_ENV=fake_production bundle check || bundle install"
-  sh "RAILS_ENV=fake_production rails server -p 4000"
+  sh 'RAILS_ENV=fake_production bundle exec rake assets:precompile'
+  sh 'RAILS_ENV=fake_production bundle check || bundle install'
+  sh 'RAILS_ENV=fake_production rails server -p 4000'
 end
 
 Rake::Task['test:run'].enhance ['test:features']

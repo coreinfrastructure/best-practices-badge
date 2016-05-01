@@ -2,6 +2,21 @@
 class Project < ActiveRecord::Base
   using SymbolRefinements
 
+  # Ransack needs an "ActiveRecord"-like object for populating the dropdown,
+  # or it won't do its query generation magic.
+  class BadgeStatus
+    attr_reader :id, :name
+
+    def initialize(id, name)
+      @id = id
+      @name = name
+    end
+  end
+
+  BADGE_STATUS_CHOICE = [BadgeStatus.new(nil, nil),
+                         BadgeStatus.new('in_progress', 'in progress'),
+                         BadgeStatus.new('passing', 'passing'),
+                         BadgeStatus.new('failing', 'failing')].freeze
   STATUS_CHOICE = %w(? Met Unmet).freeze
   STATUS_CHOICE_NA = (STATUS_CHOICE + %w(N/A)).freeze
   MIN_SHOULD_LENGTH = 5
@@ -49,6 +64,8 @@ class Project < ActiveRecord::Base
 
   validates :user_id, presence: true
 
+  before_save :update_badge_status
+
   # Validate all of the criteria-related inputs
   Criteria.each do |criterion|
     if criterion.na_allowed?
@@ -57,6 +74,10 @@ class Project < ActiveRecord::Base
       validates criterion.name.status, inclusion: { in: STATUS_CHOICE }
     end
     validates criterion.name.justification, length: { maximum: MAX_TEXT_LENGTH }
+  end
+
+  def update_badge_status
+    self.badge_status = badge_level
   end
 
   def badge_level

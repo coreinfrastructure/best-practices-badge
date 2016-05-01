@@ -104,7 +104,17 @@ module ActiveSupport
       end
     end
 
+    def wait_for_jquery
+      Timeout.timeout(Capybara.default_max_wait_time) do
+        loop until finished_all_jquery_requests?
+      end
+    end
+
     private
+
+    def finished_all_jquery_requests?
+      page.evaluate_script('jQuery.active').zero?
+    end
 
     # Returns true inside an integration test.
     # Based on "Ruby on Rails Tutorial" by Michael Hargle, chapter 8,

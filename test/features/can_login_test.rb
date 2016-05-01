@@ -48,6 +48,7 @@ class CanLoginTest < Capybara::Rails::TestCase
     assert page.find('#repo_public_enough[src*="result_symbol_x"]')
 
     choose 'project_repo_distributed_status_unmet' # SUGGESTED, so enough
+    wait_for_jquery
     assert page.find('#repo_distributed_enough[src*="result_symbol_dash"]')
 
     click_on 'Reporting'

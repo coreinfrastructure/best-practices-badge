@@ -11,11 +11,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160411134222) do
+ActiveRecord::Schema.define(version: 20160501224428) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-  enable_extension "pg_stat_statements"
 
   create_table "projects", force: :cascade do |t|
     t.integer  "user_id"
@@ -180,8 +179,11 @@ ActiveRecord::Schema.define(version: 20160411134222) do
     t.text     "installation_common_justification"
     t.string   "build_reproducible_status",                            default: "?"
     t.text     "build_reproducible_justification"
+    t.string   "badge_status"
   end
 
+  add_index "projects", ["badge_status"], name: "index_projects_on_badge_status", using: :btree
+  add_index "projects", ["name"], name: "index_projects_on_name", using: :btree
   add_index "projects", ["repo_url"], name: "index_projects_on_repo_url", using: :btree
   add_index "projects", ["user_id", "created_at"], name: "index_projects_on_user_id_and_created_at", using: :btree
   add_index "projects", ["user_id"], name: "index_projects_on_user_id", using: :btree

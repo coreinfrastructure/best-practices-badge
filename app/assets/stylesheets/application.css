@@ -19,6 +19,7 @@
  *= require jquery-ui/autocomplete
  *= require rails_bootstrap_forms
  *= require bootstrap-social
+ *= require font-awesome
  */
 
 /* Work around a bug in Bootstrap's navigation bar. When the display is narrow,

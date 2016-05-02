@@ -8,6 +8,7 @@ one:
   homepage_url: https://www.example.org
   license: MIT
   repo_url: https://www.example.org/code1
+  badge_status: in_progress
 
 two:
   user: test_user_melissa
@@ -16,6 +17,7 @@ two:
   homepage_url: https://www.example.org1
   license: MIT
   repo_url: https://www.example.org/code5
+  badge_status: in_progress
 
 # TODO: Generate list of status fields from central location.
 perfect_unjustified:
@@ -25,6 +27,7 @@ perfect_unjustified:
   homepage_url: https://www.example.org
   repo_url: https://www.example.org/code2
   license: MIT
+  badge_status: in_progress
 <% Project::ALL_CRITERIA_STATUS.each do |criterion_status| %>  <%= criterion_status %>: Met
 <% end %>
 
@@ -36,6 +39,7 @@ perfect:
   homepage_url: https://www.example.org
   repo_url: https://www.example.org/code3
   license: MIT
+  badge_status: failing
 <% Project::ALL_CRITERIA_STATUS.each do |criterion_status| %>  <%= criterion_status %>: Met
 <% end %><% Project::ALL_CRITERIA_JUSTIFICATION.each do |criterion_justification| %>  <%= criterion_justification %>: For more information see <https://www.example.org/>
 <% end %>

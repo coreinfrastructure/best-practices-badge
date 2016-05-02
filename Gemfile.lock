@@ -469,6 +469,7 @@ DEPENDENCIES
   faker (= 1.6.3)
   fasterer (= 0.3.2)
   fastly-rails (= 0.5.0)
+  font-awesome-rails (= 4.6.1.0)
   github_api (= 0.13.1)
   heroku_rails_deflate (= 1.0.3)
   imagesLoaded_rails (= 4.1.0)

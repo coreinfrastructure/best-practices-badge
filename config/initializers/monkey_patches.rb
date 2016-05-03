@@ -1,1 +1,1 @@
-Dir[Rails.root.join('lib/ext/**/*.rb')].each { |file| require file }
+Dir[Rails.root.join('lib/monley_patches/**/*.rb')].each { |file| require file }

@@ -9,6 +9,7 @@ gem 'bootstrap-will_paginate', '0.0.10'
 gem 'bootstrap_form', '2.3.0'
 gem 'faker', '1.6.3'
 gem 'fastly-rails', '0.5.0' # Use Fastly CDN
+gem 'font-awesome-rails', '4.6.1.0'
 gem 'github_api', '0.13.1'
 gem 'imagesLoaded_rails', '4.1.0' # Javascript - enable wait for image load
 gem 'jbuilder', '2.4.1'
@@ -17,13 +18,13 @@ gem 'jquery-ui-rails', '5.0.5' # Javascript jQueryUI library (for Rails)
 gem 'redcarpet', '3.3.4' # Process markdown in form textareas (justifications)
 gem 'octokit', '4.3.0' # GitHub's official Ruby API
 gem 'omniauth-github', '1.1.2' # Authentication to GitHub (get project info)
-gem 'paper_trail', '4.1.0' # Record previous versions of project data
+gem 'paper_trail', '5.0.0' # Record previous versions of project data
 gem 'pg', '0.18.4' # PostgreSQL database, used for data storage
 gem 'puma', '3.4.0' # Faster webserver; recommended by Heroku
 gem 'rack-timeout', '0.4.2' # Timeout per https://github.com/heroku/rack-timeout
 gem 'rails', '4.2.6' # Our web framework
 gem 'sass-rails', '5.0.4'
-gem 'secure_headers', '3.2.0' # Harden app security using HTTP headers
+gem 'secure_headers', '3.3.0' # Harden app security using HTTP headers
 gem 'turbolinks', '2.5.3' # Speed UI access
 gem 'jquery-turbolinks'   # Make turbolinks work with jQuery
 gem 'uglifier', '3.0.0'
@@ -36,9 +37,8 @@ group :development, :test do
   gem 'bundler-audit', '0.5.0'
   gem 'ruby-graphviz', '1.2.2'
   gem 'dotenv-rails', '2.1.1'
-  # Following line addresses https://github.com/ocke/eslintrb/pull/5
-  gem 'eslintrb', git: 'https://github.com/dankohn/eslintrb.git', ref: '306932f'
-  gem 'license_finder'
+  gem 'eslintrb', '2.0.4'
+  gem 'license_finder', '2.1.0'
   gem 'mdl', '0.3.1'
   gem 'pronto', '0.6.0'
   gem 'pronto-brakeman', '0.6.0'
@@ -68,7 +68,7 @@ group :test do
   gem 'poltergeist', '1.9.0', require: false
   gem 'selenium-webdriver', '2.53.0', require: false
   gem 'simplecov', '0.11.2', require: false
-  gem 'webmock', '1.24.4', require: false
+  gem 'webmock', '2.0.1', require: false
 end
 
 group :production do

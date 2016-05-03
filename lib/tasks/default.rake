@@ -21,6 +21,17 @@ task(:default).clear.enhance %w(
   test
 )
 
+task(:ci).clear.enhance %w(
+  rbenv_rvm_setup
+  bundle_audit
+  markdownlint
+  license_okay
+  license_finder_report.html
+  whitespace_check
+  yaml_syntax_check
+  fasterer
+)
+
 # Simple smoke test to avoid development environment misconfiguration
 desc 'Ensure that rbenv or rvm are set up in PATH'
 task :rbenv_rvm_setup do
@@ -117,14 +128,19 @@ end
 
 desc 'Check for trailing whitespace in latest proposed (git) patch.'
 task :whitespace_check do
-  sh 'git diff --check'
+  if ENV['CI'] # CircleCI modifies database.yml
+    sh "git diff --check -- . ':!config/database.yml'"
+  else
+    sh 'git diff --check'
+  end
 end
 
 desc 'Check YAML syntax (except project.yml, which is not straight YAML)'
 task :yaml_syntax_check do
   # Don't check "project.yml" - it's not a straight YAML file, but instead
   # it's processed by ERB (even though the filename doesn't admit it).
-  sh "find . -name '*.yml' ! -name 'projects.yml' -exec yaml-lint {} + | " \
+  sh "find . -name '*.yml' ! -name 'projects.yml' " \
+     "! -path './vendor/*' -exec bundle exec yaml-lint {} + | " \
      "grep -v '^Checking the content of' | grep -v 'Syntax OK'"
 end
 

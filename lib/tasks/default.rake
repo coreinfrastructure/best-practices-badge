@@ -223,6 +223,18 @@ task :pull_master do
   Rake::Task['db:migrate'].invoke
 end
 
+desc 'Copy production database to master, overwriting master database'
+task :production_to_master do
+  sh 'heroku pg:backups restore $(heroku pg:backups public-url ' \
+     '--app production-badgeapp) DATABASE_URL --app master-badgeapp'
+end
+
+desc 'Copy production database to staging, overwriting staging database'
+task :production_to_staging do
+  sh 'heroku pg:backups restore $(heroku pg:backups public-url ' \
+     '--app production-badgeapp) DATABASE_URL --app staging-badgeapp'
+end
+
 Rails::TestTask.new('test:features' => 'test:prepare') do |t|
   t.pattern = 'test/features/**/*_test.rb'
 end

@@ -420,6 +420,20 @@ heroku plugins --app master-bestpractices
 The latter automatically reinstalls heroku-local.
 This information is from: <https://github.com/heroku/heroku/issues/1690>.
 
+Normally you should just push changes to "master" first, so that
+CircleCI will test it.  If you want to push directly to Heroku
+(and have the necessary rights):
+
+git remote add heroku https://git.heroku.com/master-bestpractices.git
+
+Now you can directly deploy to Heroku:
+
+~~~~
+git checkout master
+git push heroku master
+~~~~
+
+
 ## Auditing
 
 The intent is to eventually have an "audit" function that

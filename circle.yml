@@ -4,6 +4,7 @@ test:
     - sudo curl --output /usr/local/bin/phantomjs https://s3.amazonaws.com/circle-downloads/phantomjs-2.1.1
   post:
     - bundle exec pronto run -f github text -c=$(git log --pretty=format:%H | tail -1) --exit-code
+    - bundle exec rake ci
 deployment:
   master:
     branch: master

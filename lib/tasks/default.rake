@@ -193,7 +193,7 @@ namespace :fastly do
   end
 end
 
-desc 'Copy database from production into development (requires access privs)'
+desc 'Drop development database'
 task :drop_database do
   puts 'Dropping database development'
   # Command from http://stackoverflow.com/a/13245265/1935918

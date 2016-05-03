@@ -194,18 +194,33 @@ namespace :fastly do
 end
 
 desc 'Copy database from production into development (requires access privs)'
-task :pull_database do
-  puts 'Getting database'
-  # This fails, probably because we use Unix sockets with local db:
-  # sh 'rake db:drop &&
-  #     heroku pg:pull DATABASE_URL development --app production-bestpractices'
-  sh 'heroku pg:backups capture --app production-bestpractices && \
-      curl -o db/latest.dump `heroku pg:backups public-url \
-        --app production-bestpractices` && \
-      rake db:reset && \
-      pg_restore --verbose --clean --no-acl --no-owner -U `whoami` \
-        -d development db/latest.dump'
-  puts 'You may need to run "rake db:migrate".'
+task :drop_database do
+  puts 'Dropping database development'
+  # Command from http://stackoverflow.com/a/13245265/1935918
+  sh "echo 'SELECT pg_terminate_backend(pg_stat_activity.pid) FROM " \
+     'pg_stat_activity WHERE datname = current_database() AND ' \
+     "pg_stat_activity.pid <> pg_backend_pid();' | psql development; " \
+     'dropdb -e development'
+end
+
+desc 'Copy database from production into development (requires access privs)'
+task :pull_production do
+  puts 'Getting production database'
+  Rake::Task['drop_database'].reenable
+  Rake::Task['drop_database'].invoke
+  sh 'heroku pg:pull DATABASE_URL development --app production-bestpractices'
+  Rake::Task['db:migrate'].reenable
+  Rake::Task['db:migrate'].invoke
+end
+
+desc 'Copy database from master into development (requires access privs)'
+task :pull_master do
+  puts 'Getting master database'
+  Rake::Task['drop_database'].reenable
+  Rake::Task['drop_database'].invoke
+  sh 'heroku pg:pull DATABASE_URL development --app master-bestpractices'
+  Rake::Task['db:migrate'].reenable
+  Rake::Task['db:migrate'].invoke
 end
 
 Rails::TestTask.new('test:features' => 'test:prepare') do |t|

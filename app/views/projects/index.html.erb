@@ -10,8 +10,10 @@
 <h2>Projects</h2>
   <%= search_form_for @search do |f| %>
       <%= f.label :badge_status %>
-      <%= f.collection_select(:badge_status_matches, Project::BADGE_STATUS_CHOICE, :id, :name) %>
-      <%= f.label(:name_or_homepage_url_or_repo_url_start, "Name or URLs begin with") %>
+      <%= f.collection_select(:badge_status_eq,
+                              Project::BADGE_STATUS_CHOICE, :id, :name) %>
+      <%= f.label(:name_or_homepage_url_or_repo_url_start,
+                  "Name or URLs begin with") %>
       <%= f.search_field :name_or_homepage_url_or_repo_url_start %>
       <%= f.submit %>
   <% end %>

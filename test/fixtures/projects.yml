@@ -20,6 +20,7 @@ two:
   badge_status: in_progress
 
 # TODO: Generate list of status fields from central location.
+# No justifications means failing status.
 perfect_unjustified:
   user: test_user
   name: Perfect project
@@ -27,7 +28,7 @@ perfect_unjustified:
   homepage_url: https://www.example.org
   repo_url: https://www.example.org/code2
   license: MIT
-  badge_status: in_progress
+  badge_status: failing
 <% Project::ALL_CRITERIA_STATUS.each do |criterion_status| %>  <%= criterion_status %>: Met
 <% end %>
 

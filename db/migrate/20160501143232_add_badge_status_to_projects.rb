@@ -4,7 +4,7 @@ class AddBadgeStatusToProjects < ActiveRecord::Migration
     add_index :projects, :badge_status
     Project.find_each do |project|
       project.update_badge_status
-      project.save(validate: false)
+      project.save!(validate: false)
     end
   end
 

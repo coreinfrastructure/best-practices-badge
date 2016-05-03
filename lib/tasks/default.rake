@@ -139,7 +139,8 @@ desc 'Check YAML syntax (except project.yml, which is not straight YAML)'
 task :yaml_syntax_check do
   # Don't check "project.yml" - it's not a straight YAML file, but instead
   # it's processed by ERB (even though the filename doesn't admit it).
-  sh "find . -name '*.yml' ! -name 'projects.yml' -exec yaml-lint {} + | " \
+  sh "find . -name '*.yml' ! -name 'projects.yml' " \
+     "! -path './vendor/*' -exec bundle exec yaml-lint {} + | " \
      "grep -v '^Checking the content of' | grep -v 'Syntax OK'"
 end
 

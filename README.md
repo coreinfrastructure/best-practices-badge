@@ -1,3 +1,5 @@
+# this github is belone to `q24688@gmail.com`
+# linux foundation take it without I agree!
 # Core Infrastructure Initiative Best Practices Badge
 
 <!-- SPDX-License-Identifier: (MIT OR CC-BY-3.0+) -->

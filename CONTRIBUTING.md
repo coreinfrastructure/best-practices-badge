@@ -31,6 +31,9 @@ which is in the file [criteria.md](doc/criteria.md).
 The "doc/" directory has information you may find helpful,
 including [other.md](doc/other.md) and [background.md](doc/background.md).
 
+The [INSTALL.md](doc/INSTALL.md) file explains how to install the program
+locally (highly recommended if you're going to make code changes).
+
 ### Pull requests and different branches recommended
 
 Pull requests are preferred, since they are specific.

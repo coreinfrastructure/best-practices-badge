@@ -344,7 +344,7 @@
       Again,
       look for git tags (at least on GitHub) that have version format, e.g.,
       v?[0-9]+\.[0-9]+\.[0-9]+.*   The prefixed 'v' is sometimes used in tags.
-# Release notes
+# Release notes (ChangeLog)
 - release_notes:
     category: MUST
     met_url_required: true

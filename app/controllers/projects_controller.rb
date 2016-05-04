@@ -212,7 +212,7 @@ class ProjectsController < ApplicationController
     # If we can't authenticate to the CDN, complain but don't crash.
     begin
       FastlyRails.purge_by_key cdn_badge_key
-    rescue AuthRequired => e
+    rescue StandardError => e
       Rails.logger.error "Failed authentication purging #{cdn_badgekey} - #{e}"
     end
   end

@@ -25,4 +25,8 @@
     <%= active_criteria.count(&:details_present?) %>
     have details in their description.
   <p>
+  There are <%= Project.count %> project entries;
+  <%= Project.where(badge_status: 'passing').count %> are passing,
+  <%= Project.where(badge_status: 'failing').count %> are failing, and
+  <%= Project.where(badge_status: 'in_progress').count %> are in progress.
 </div>

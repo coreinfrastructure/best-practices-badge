@@ -116,7 +116,7 @@ class ProjectsController < ApplicationController
   end
 
   def successful_update(format, old_badge_level)
-    FastlyRails.purge_by_key(@project.record_key + '/badge')
+    purge_cdn_badge
     # @project.purge
     format.html do
       redirect_to @project, success: 'Project was successfully updated.'
@@ -133,7 +133,7 @@ class ProjectsController < ApplicationController
   # DELETE /projects/1.json
   def destroy
     @project.destroy
-    FastlyRails.purge_by_key @project.record_key + '/badge'
+    purge_cdn_badge
     # @project.purge
     # @project.purge_all
     respond_to do |format|
@@ -204,5 +204,16 @@ class ProjectsController < ApplicationController
   def change_authorized
     return true if can_make_changes?
     redirect_to root_url
+  end
+
+  # Purge the badge from the CDN (if any)
+  def purge_cdn_badge
+    cdn_badge_key = @project.record_key + '/badge'
+    # If we can't authenticate to the CDN, complain but don't crash.
+    begin
+      FastlyRails.purge_by_key cdn_badge_key
+    rescue AuthRequired => e
+      Rails.logger.error "Failed authentication purging #{cdn_badgekey} - #{e}"
+    end
   end
 end

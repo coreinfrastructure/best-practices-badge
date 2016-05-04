@@ -1,0 +1,19 @@
+// Header styles
+.nav-color {
+  background-color: #000;
+}
+
+.nav-margin {
+  margin-top: -10px;
+}
+
+.nav-margin > li > a {
+  font-weight: bold;
+}
+
+#logo {
+  background: url('/assets/images/cii-logo-header.png') no-repeat;
+  padding-left: 40px;
+  font-size: 1.2em;
+  font-weight: bold;
+}

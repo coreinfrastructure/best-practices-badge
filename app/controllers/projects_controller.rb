@@ -213,7 +213,7 @@ class ProjectsController < ApplicationController
     begin
       FastlyRails.purge_by_key cdn_badge_key
     rescue StandardError => e
-      Rails.logger.error "Failed authentication purging #{cdn_badgekey} - #{e}"
+      Rails.logger.error "Failed authentication purging #{cdn_badge_key} - #{e}"
     end
   end
 end

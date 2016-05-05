@@ -25,11 +25,22 @@ class Project < ActiveRecord::Base
   scope :in_progress, -> { where(badge_status: 'in_progress') }
   scope :passing, -> { where(badge_status: 'passing') }
 
+  # scope :text_search, (
+  #   lambda do |text|
+  #     where(
+  #       'name ILIKE :text OR homepage_url ILIKE :text or repo_url ILIKE :text',
+  #       text: "#{text}%"
+  #     )
+  #   end
+  # )
+
   scope :text_search, (
     lambda do |text|
+      start_text = "#{text}%"
       where(
-        'name ILIKE :text OR homepage_url ILIKE :text or repo_url ILIKE :text',
-        text: "#{text}%"
+        Project.arel_table[:name].matches(start_text).or(
+          Project.arel_table[:homepage_url].matches(start_text)).or(
+            Project.arel_table[:repo_url].matches(start_text))
       )
     end
   )

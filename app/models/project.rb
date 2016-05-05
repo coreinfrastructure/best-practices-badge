@@ -27,10 +27,11 @@ class Project < ActiveRecord::Base
 
   # scope :text_search, (
   #   lambda do |text|
-  #     where(
-  #       'name ILIKE :text OR homepage_url ILIKE :text or repo_url ILIKE :text',
-  #       text: "#{text}%"
-  #     )
+  #     where('name ILIKE :text OR ' \
+  #           'homepage_url ILIKE :text OR ' \
+  #           'repo_url ILIKE :text',
+  #           text: "#{text}%"
+  #          )
   #   end
   # )
 

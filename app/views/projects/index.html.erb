@@ -8,19 +8,21 @@
 
 <div class="center">
 <h2>Projects</h2>
-  <%= form_for projects_path, method: 'get', enforce_utf8: false do %>
+  <%= form_for projects_path, method: 'get', enforce_utf8: false,
+               html: { class: 'project_search' } do %>
       <%= label_tag :badge_status %>
       <%= select_tag(:status,
                      options_for_select(([nil] + Project::BADGE_STATUSES)
                        .map { |status| [status.to_s.titleize, status] },
-                     params[:status])) %>
+                     params[:status]), onchange: 'this.form.submit();') %>
+      &nbsp; &nbsp; &nbsp;
       <%= label_tag :text_search %>
-      <%= text_field_tag :q, params[:q],
+      <%= text_field_tag :q, params[:q], size: 25,
                          placeholder: 'Name or URL begins with...' %>
-      <%= submit_tag "Search", name: nil %>
+      <%= submit_tag 'Search' %>
   <% end %>
 <br>
-<%= link_to 'Add New Project', new_project_path, class:"btn btn-success" %>
+<%= link_to 'Add New Project', new_project_path, class: 'btn btn-success' %>
 <br>
 <br>
   <%= render 'table', projects: @projects %>

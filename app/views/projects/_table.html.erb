@@ -34,7 +34,7 @@
         <td><%= project.license %></td>
         <td><%= link_to project.user_name, project.user %></td>
         <td><%= project.badge_percentage %>%</td>
-        <td><%= link_to "<img src='/projects/#{project.id}/badge'>".html_safe,
+        <td><%= link_to inline_svg(badge_file(project.badge_status)),
                         project %></td>
       </tr>
     <% end %>

@@ -14,7 +14,7 @@ class ProjectsController < ApplicationController
   # We *can* cache the badge result, and that's what matters anyway.
   before_action :set_cache_control_headers, only: [:badge]
 
-  helper_method :repo_data
+  helper_method :repo_data, :badge_file
 
   # GET /projects
   # GET /projects.json

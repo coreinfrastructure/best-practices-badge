@@ -64,14 +64,19 @@ end
 
 desc 'Run bundle-audit - check for known vulnerabilities in dependencies'
 task :bundle_audit do
-  verbose(false) do
+  verbose(true) do
     sh <<-END
-      if ping -q -c 1 google.com > /dev/null 2> /dev/null ; then
-        bundle exec bundle-audit update && bundle exec bundle-audit check
+      if ping -q -c 1 github.com > /dev/null 2> /dev/null ; then
+        # We have access to the database for updating
+        if ! bundle exec bundle-audit update ; then
+          echo "Bundle-audit update failed.  Retrying."
+          sleep 10
+          bundle exec bundle-audit update || exit 1
+        fi
       else
-        echo 'Cannot access rubygems.org, so skipping bundle_audit check'
-        true # If we can't access google, don't bother.
+        echo "Cannot update bundle-audit database; using current data."
       fi
+      bundle exec bundle-audit check
     END
   end
 end

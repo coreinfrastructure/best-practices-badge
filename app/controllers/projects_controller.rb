@@ -17,6 +17,8 @@ class ProjectsController < ApplicationController
 
   helper_method :repo_data
 
+  # GET /projects
+  # GET /projects.json
   # rubocop:disable Metrics/AbcSize
   def index
     @projects = Project.all
@@ -28,6 +30,8 @@ class ProjectsController < ApplicationController
   end
   # rubocop:enable Metrics/AbcSize
 
+  # GET /projects/1
+  # GET /projects/1.json
   def show
   end
 
@@ -197,7 +201,7 @@ class ProjectsController < ApplicationController
     return unless parsed.query_values.present?
     queries_with_values = parsed.query_values.reject { |_k, v| v.blank? }
     if queries_with_values.blank?
-      parsed.omit!(:query)
+      parsed.omit!(:query) # Removes trailing '?'
     else parsed.query_values = queries_with_values
     end
     redirect_to parsed.to_s unless parsed.to_s == original

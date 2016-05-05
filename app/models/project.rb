@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 class Project < ActiveRecord::Base
+  using StringRefinements
   using SymbolRefinements
 
   # Ransack needs an "ActiveRecord"-like object for populating the dropdown,
@@ -29,7 +30,6 @@ class Project < ActiveRecord::Base
   ALL_CRITERIA_JUSTIFICATION = Criteria.map { |c| c.name.justification }.freeze
   PROJECT_PERMITTED_FIELDS = (PROJECT_OTHER_FIELDS + ALL_CRITERIA_STATUS +
                               ALL_CRITERIA_JUSTIFICATION).freeze
-
   # A project is associated with a user
   belongs_to :user
   delegate :name, to: :user, prefix: true
@@ -103,7 +103,7 @@ class Project < ActiveRecord::Base
 
   def any_status_in_progress?
     Criteria.active.any? do |criterion|
-      self[criterion.name.status] == '?' || self[criterion.name.status].blank?
+      self[criterion.name.status].unknown? || self[criterion.name.status].blank?
     end
   end
 
@@ -113,23 +113,21 @@ class Project < ActiveRecord::Base
   end
 
   # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
-  # rubocop:disable Metrics/MethodLength, Metrics/PerceivedComplexity
+  # rubocop:disable Metrics/PerceivedComplexity
   def passing?(criterion)
     status = self[criterion.name.status]
     justification = self[criterion.name.justification]
-    category = criterion.category
-    met_needs_url = criterion.met_url_required?
 
-    return true if status == 'N/A'
-    return true if status == 'Met' && !met_needs_url
-    return true if status == 'Met' && contains_url?(justification)
-    return true if category == 'SHOULD' && status == 'Unmet' &&
+    return true if status.na?
+    return true if status.met? && !criterion.met_url_required?
+    return true if status.met? && contains_url?(justification)
+    return true if criterion.should? && status.unmet? &&
                    justification.length >= MIN_SHOULD_LENGTH
-    return true if category == 'SUGGESTED' && status != '?'
+    return true if criterion.suggested? && !status.unknown?
     false
   end
   # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity
-  # rubocop:enable Metrics/MethodLength, Metrics/PerceivedComplexity
+  # rubocop:enable Metrics/PerceivedComplexity
 
   def to_percentage(portion, total)
     return 0 if portion.zero?

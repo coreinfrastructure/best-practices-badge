@@ -24,7 +24,6 @@ class ProjectsController < ApplicationController
       %w(in_progress passing failing).include? params[:status]
     @projects = @projects.text_search(params[:q]) if params[:q].present?
     @projects = @projects.includes(:user).paginate(page: params[:page])
-    # p @projects.to_sql
     remove_empty_query_params
   end
   # rubocop:enable Metrics/AbcSize
@@ -192,6 +191,7 @@ class ProjectsController < ApplicationController
   end
 
   def remove_empty_query_params
+    # Rewrites /projects?q=&status=failing to /projects?status=failing
     original = request.original_url
     parsed = Addressable::URI.parse(original)
     return unless parsed.query_values.present?

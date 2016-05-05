@@ -21,9 +21,9 @@ class Project < ActiveRecord::Base
   delegate :name, to: :user, prefix: true
 
   default_scope { order(:created_at) }
-  scope :passing, -> { where(badge_status: 'passing') }
   scope :failing, -> { where(badge_status: 'failing') }
   scope :in_progress, -> { where(badge_status: 'in_progress') }
+  scope :passing, -> { where(badge_status: 'passing') }
 
   scope :text_search, (
     lambda do |text|

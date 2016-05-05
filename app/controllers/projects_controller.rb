@@ -21,12 +21,12 @@ class ProjectsController < ApplicationController
   # GET /projects.json
   # rubocop:disable Metrics/AbcSize
   def index
+    remove_empty_query_params
     @projects = Project.all
     @projects = @projects.send params[:status] if
       %w(in_progress passing failing).include? params[:status]
     @projects = @projects.text_search(params[:q]) if params[:q].present?
     @projects = @projects.includes(:user).paginate(page: params[:page])
-    remove_empty_query_params
   end
   # rubocop:enable Metrics/AbcSize
 
@@ -194,19 +194,6 @@ class ProjectsController < ApplicationController
     @project = Project.find(params[:id])
   end
 
-  def remove_empty_query_params
-    # Rewrites /projects?q=&status=failing to /projects?status=failing
-    original = request.original_url
-    parsed = Addressable::URI.parse(original)
-    return unless parsed.query_values.present?
-    queries_with_values = parsed.query_values.reject { |_k, v| v.blank? }
-    if queries_with_values.blank?
-      parsed.omit!(:query) # Removes trailing '?'
-    else parsed.query_values = queries_with_values
-    end
-    redirect_to parsed.to_s unless parsed.to_s == original
-  end
-
   # Never trust parameters from the scary internet,
   # only allow the white list through.
   def project_params
@@ -232,5 +219,18 @@ class ProjectsController < ApplicationController
     rescue StandardError => e
       Rails.logger.error "FAILED TO PURGE #{cdn_badge_key} , #{e.class}: #{e}"
     end
+  end
+
+  def remove_empty_query_params
+    # Rewrites /projects?q=&status=failing to /projects?status=failing
+    original = request.original_url
+    parsed = Addressable::URI.parse(original)
+    return unless parsed.query_values.present?
+    queries_with_values = parsed.query_values.reject { |_k, v| v.blank? }
+    if queries_with_values.blank?
+      parsed.omit!(:query) # Removes trailing '?'
+    else parsed.query_values = queries_with_values
+    end
+    redirect_to parsed.to_s unless parsed.to_s == original
   end
 end

@@ -19,7 +19,7 @@
       <%= label_tag :text_search %>
       <%= text_field_tag :q, params[:q], size: 25,
                          placeholder: 'Name or URL begins with...' %>
-      <%= submit_tag 'Search' %>
+      <%= submit_tag 'Search', name: nil %>
   <% end %>
 <br>
 <%= link_to 'Add New Project', new_project_path, class: 'btn btn-success' %>

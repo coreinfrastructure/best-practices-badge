@@ -12,6 +12,7 @@ gem 'fastly-rails', '0.5.0' # Use Fastly CDN
 gem 'font-awesome-rails', '4.6.1.0'
 gem 'github_api', '0.13.1'
 gem 'imagesLoaded_rails', '4.1.0' # Javascript - enable wait for image load
+gem 'inline_svg', '0.7.0'
 gem 'jbuilder', '2.4.1'
 gem 'jquery-rails', '4.1.1' # Javascript jQuery library (for Rails)
 gem 'jquery-ui-rails', '5.0.5' # Javascript jQueryUI library (for Rails)

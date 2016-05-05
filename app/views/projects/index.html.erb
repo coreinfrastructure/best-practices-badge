@@ -14,7 +14,9 @@
                      options_for_select(([nil] + Project::BADGE_STATUSES)
                        .map { |status| [status.to_s.titleize, status] },
                      params[:status])) %>
-<!--       <%= text_field_tag :name_or_homepage_url_or_repo_url_start %> -->
+      <%= label_tag :text_search %>
+      <%= text_field_tag :q, params[:q],
+                         placeholder: 'Name or URL begins with...' %>
       <%= submit_tag "Search", name: nil %>
   <% end %>
 <br>

@@ -6,8 +6,6 @@ Rails.application.routes.draw do
   get 'background' => 'static_pages#background'
   get 'criteria' => 'static_pages#criteria'
 
-  get 'projects/:badge_status', to: 'projects#badge_status'
-
   resources :projects do
     member do
       get 'badge', defaults: { format: 'svg' }

@@ -25,6 +25,15 @@ class Project < ActiveRecord::Base
   scope :failing, -> { where(badge_status: 'failing') }
   scope :in_progress, -> { where(badge_status: 'in_progress') }
 
+  scope :text_search, (
+    lambda do |text|
+      where(
+        'name ILIKE :text OR homepage_url ILIKE :text or repo_url ILIKE :text',
+        text: "#{text}%"
+      )
+    end
+  )
+
   # Record information about a project.
   # We'll also record previous versions of information:
   has_paper_trail

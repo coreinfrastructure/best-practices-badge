@@ -1,3 +1,4 @@
+require 'addressable/uri'
 require 'net/http'
 
 # rubocop:disable Metrics/ClassLength
@@ -16,22 +17,19 @@ class ProjectsController < ApplicationController
 
   helper_method :repo_data
 
-  # GET /projects
-  # GET /projects.json
+  # rubocop:disable Metrics/AbcSize
   def index
-    console
-    @search = if params[:status].in? Project::BADGE_STATUSES
-                Project.send params[:status]
-              else
-                Project.all
-              end
-    @projects = @search.includes(:user).paginate(page: params[:page])
+    @projects = Project.all
+    @projects = @projects.send params[:status] if
+      %w(in_progress passing failing).include? params[:status]
+    @projects = @projects.text_search(params[:q]) if params[:q].present?
+    @projects = @projects.includes(:user).paginate(page: params[:page])
+    # p @projects.to_sql
+    remove_empty_query_params
   end
+  # rubocop:enable Metrics/AbcSize
 
-  # GET /projects/1
-  # GET /projects/1.json
   def show
-    # set_surrogate_key_header @project.record_key
   end
 
   def badge
@@ -191,6 +189,18 @@ class ProjectsController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_project
     @project = Project.find(params[:id])
+  end
+
+  def remove_empty_query_params
+    original = request.original_url
+    parsed = Addressable::URI.parse(original)
+    return unless parsed.query_values.present?
+    queries_with_values = parsed.query_values.reject { |_k, v| v.blank? }
+    if queries_with_values.blank?
+      parsed.omit!(:query)
+    else parsed.query_values = queries_with_values
+    end
+    redirect_to parsed.to_s unless parsed.to_s == original
   end
 
   # Never trust parameters from the scary internet,

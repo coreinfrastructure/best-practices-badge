@@ -2,21 +2,7 @@
 class Project < ActiveRecord::Base
   using SymbolRefinements
 
-  # Ransack needs an "ActiveRecord"-like object for populating the dropdown,
-  # or it won't do its query generation magic.
-  class BadgeStatus
-    attr_reader :id, :name
-
-    def initialize(id, name)
-      @id = id
-      @name = name
-    end
-  end
-
-  BADGE_STATUS_CHOICE = [BadgeStatus.new(nil, nil),
-                         BadgeStatus.new('in_progress', 'in progress'),
-                         BadgeStatus.new('passing', 'passing'),
-                         BadgeStatus.new('failing', 'failing')].freeze
+  BADGE_STATUSES = %w(in_progress passing failing).freeze
   STATUS_CHOICE = %w(? Met Unmet).freeze
   STATUS_CHOICE_NA = (STATUS_CHOICE + %w(N/A)).freeze
   MIN_SHOULD_LENGTH = 5
@@ -35,6 +21,9 @@ class Project < ActiveRecord::Base
   delegate :name, to: :user, prefix: true
 
   default_scope { order(:created_at) }
+  scope :passing, -> { where(badge_status: 'passing') }
+  scope :failing, -> { where(badge_status: 'failing') }
+  scope :in_progress, -> { where(badge_status: 'in_progress') }
 
   # Record information about a project.
   # We'll also record previous versions of information:

@@ -12,17 +12,9 @@ class CanLoginTest < Capybara::Rails::TestCase
     @project = projects(:one)
   end
 
-  # Inspired by
-  # http://toolsqa.com/selenium-webdriver/
-  # scroll-element-view-selenium-javascript/
-  def scroll_to_see(id)
-    page.execute_script("document.getElementById('#{id}')." \
-                        'scrollIntoView(false);')
-  end
-
   scenario 'Has link to GitHub Login', js: true do
     visit login_path
-    page.must_have_content('Log in with GitHub')
+    assert has_content? 'Log in with GitHub'
   end
 
   scenario 'Can Login and edit using custom account', js: true do
@@ -31,46 +23,46 @@ class CanLoginTest < Capybara::Rails::TestCase
     fill_in 'Email', with: @user.email
     fill_in 'Password', with: 'password'
     click_button 'Log in using custom account'
-    assert page.has_content? 'Signed in!'
+    assert has_content? 'Signed in!'
 
     visit edit_project_path(@project)
     choose 'project_discussion_status_unmet'
-    assert_match X, page.find('#discussion_enough')['src']
+    assert_match X, find('#discussion_enough')['src']
 
     choose 'project_english_status_met'
-    assert_match CHECK, page.find('#english_enough')['src']
+    assert_match CHECK, find('#english_enough')['src']
 
     kill_sticky_headers # This is necessary for Chrome and Firefox
     choose 'project_contribution_status_met' # No URL given, so fails
-    assert_match QUESTION, page.find('#contribution_enough')['src']
+    assert_match QUESTION, find('#contribution_enough')['src']
 
     choose 'project_contribution_requirements_status_unmet' # No URL given
-    assert_match X, page.find('#contribution_requirements_enough')['src']
+    assert_match X, find('#contribution_requirements_enough')['src']
 
     click_on 'Change Control'
-    assert page.has_content? 'repo_public'
+    assert has_content? 'repo_public'
     choose 'project_repo_public_status_unmet'
-    assert_match X, page.find('#repo_public_enough')['src']
+    assert_match X, find('#repo_public_enough')['src']
 
     # Extra assertions to deal with flapping test
-    assert page.find('#project_repo_distributed_status_')['checked']
+    assert find('#project_repo_distributed_status_')['checked']
     # loop needed because selection doesn't always take the first time
     loops = 0
-    while page.find('#project_repo_distributed_status_')['checked']
+    while find('#project_repo_distributed_status_')['checked']
       puts "#{pluralize loops, 'extra loop'} required" if loops > 0
       loops += 1
       choose 'project_repo_distributed_status_unmet' # SUGGESTED, so enough
       wait_for_jquery
     end
-    assert page.find('#project_repo_distributed_status_unmet')['checked']
-    assert_match DASH, page.find('#repo_distributed_enough')['src']
+    assert find('#project_repo_distributed_status_unmet')['checked']
+    assert_match DASH, find('#repo_distributed_enough')['src']
 
     click_on 'Reporting'
-    assert page.has_content? 'report_process'
+    assert has_content? 'report_process'
     choose 'project_report_process_status_unmet'
-    assert_match X, page.find('#report_process_enough')['src']
+    assert_match X, find('#report_process_enough')['src']
 
     click_on 'Submit'
-    assert_match X, page.find('#discussion_enough')['src']
+    assert_match X, find('#discussion_enough')['src']
   end
 end

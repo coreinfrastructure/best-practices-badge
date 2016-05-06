@@ -1,5 +1,4 @@
 require 'test_helper'
-include ActionView::Helpers::TextHelper
 
 class CanFilterTest < Capybara::Rails::TestCase
   scenario 'Can Filter Projects', js: true do
@@ -17,6 +16,7 @@ class CanFilterTest < Capybara::Rails::TestCase
     refute has_content? 'Mars Ascent Vehicle (MAV)'
     refute has_content? 'Unjustified perfect project'
     assert has_content? 'Justified perfect project'
+    p 'Got here'
 
     select 'Failing', from: 'status'
     wait_for_url '/projects?status=failing'

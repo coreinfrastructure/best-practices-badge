@@ -2,11 +2,11 @@ require 'test_helper'
 
 class StringRefinementsNegativeTest < ActiveSupport::TestCase
   test '#met? unpatched' do
-    assert_raises(NoMethodError) { 'met'.met? }
+    assert_raises(NoMethodError) { 'Met'.met? }
   end
 
   test '#na? unpatched' do
-    assert_raises(NoMethodError) { 'na'.na? }
+    assert_raises(NoMethodError) { 'N/A'.na? }
   end
 
   test '#unknown? unpatched' do
@@ -14,7 +14,7 @@ class StringRefinementsNegativeTest < ActiveSupport::TestCase
   end
 
   test '#unmet? unpatched' do
-    assert_raises(NoMethodError) { 'unmet'.unmet? }
+    assert_raises(NoMethodError) { 'Unmet'.unmet? }
   end
 end
 

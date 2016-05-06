@@ -18,7 +18,6 @@ class CanLoginTest < Capybara::Rails::TestCase
   end
 
   scenario 'Can Login and edit using custom account', js: true do
-    Capybara.default_max_wait_time = 30
     visit login_path
     fill_in 'Email', with: @user.email
     fill_in 'Password', with: 'password'

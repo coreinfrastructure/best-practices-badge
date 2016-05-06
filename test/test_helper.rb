@@ -70,6 +70,8 @@ else
   Capybara.javascript_driver = :selenium
 end
 
+Capybara.default_max_wait_time = 5
+
 module ActiveSupport
   class TestCase
     # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical
@@ -137,10 +139,12 @@ module ActiveSupport
     end
 
     def wait_for_url(url)
-      loop do
-        uri = URI.parse(current_url)
-        break if "#{uri.path}?#{uri.query}" == url
-        sleep 1
+      Timeout.timeout(Capybara.default_max_wait_time) do
+        loop do
+          uri = URI.parse(current_url)
+          p "#{uri.path}?#{uri.query}"
+          break if "#{uri.path}?#{uri.query}" == url
+        end
       end
     end
 

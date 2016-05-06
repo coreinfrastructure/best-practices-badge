@@ -1,4 +1,12 @@
 module ProjectsHelper
+  MARKDOWN_RENDERER = Redcarpet::Render::HTML.new(
+    filter_html: true, no_images: true,
+    no_styles: true, safe_links_only: true)
+  MARKDOWN_PROCESSOR = Redcarpet::Markdown.new(
+    MARKDOWN_RENDERER,
+    no_intra_emphasis: true, autolink: true,
+    space_after_headers: true, fenced_code_blocks: true)
+
   def github_select
     # List original then forked Github projects, with headers
     fork_repos, original_repos = fork_and_original
@@ -16,6 +24,11 @@ module ProjectsHelper
 
   def fork_header(fork_repos)
     fork_repos.blank? ? [] : [['=> Forked Github Repos', '', 'none']]
+  end
+
+  def markdown(content)
+    return '' if content.blank?
+    MARKDOWN_PROCESSOR.render(content).html_safe
   end
 
   # Use the status_chooser to render the given criterion.

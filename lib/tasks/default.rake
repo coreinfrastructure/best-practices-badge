@@ -88,6 +88,8 @@ task :bundle_audit do
       fi
       if [ "$apply_bundle_audit" = 't' ] ; then
         bundle exec bundle-audit check
+      else
+        true
       fi
     END
   end

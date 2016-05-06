@@ -12,7 +12,7 @@ MoveCodeIntoControllerCheck: { }
 MoveCodeIntoHelperCheck: { array_count: 3 }
 MoveCodeIntoModelCheck: { use_count: 4 }
 MoveFinderToNamedScopeCheck: { }
-MoveModelLogicIntoModelCheck: { use_count: 5 }
+MoveModelLogicIntoModelCheck: { use_count: 10 }
 NeedlessDeepNestingCheck: { nested_count: 2 }
 NotRescueExceptionCheck: { }
 NotUseDefaultRouteCheck: { }
@@ -25,10 +25,13 @@ RemoveTrailingWhitespaceCheck: { }
 RemoveUnusedMethodsInControllersCheck: { except_methods: [] }
 RemoveUnusedMethodsInHelpersCheck: { except_methods: [] }
 RemoveUnusedMethodsInModelsCheck: { except_methods: [
-  'Criteria#to_h',
+  'Criteria#to_h', # Used by tests
   'Criteria#must?', # Used in ERB template; doesn't notice.
   'Criteria#should?', # Used in ERB template; doesn't notice.
   'Criteria#suggested?', # Used in ERB template; doesn't notice.
+  'Project#failing', # Scope called dynamincally
+  'Project#in_progress', # Scope called dynamincally
+  'Project#passing', # Scope called dynamincally
   'User#digest',
   ] }
 ReplaceComplexCreationWithFactoryMethodCheck: { attribute_assignment_count: 2 }

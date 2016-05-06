@@ -1,3 +1,4 @@
+require 'addressable/uri'
 require 'net/http'
 
 # rubocop:disable Metrics/ClassLength
@@ -18,17 +19,20 @@ class ProjectsController < ApplicationController
 
   # GET /projects
   # GET /projects.json
+  # rubocop:disable Metrics/AbcSize
   def index
-    @search = Project.all.includes(:user).ransack(params[:q])
-    @projects = @search.result
-                       .paginate(page: params[:page]) # per_page: 5
-    # set_surrogate_key_header 'projects', @projects.map(&:record_key)
+    remove_empty_query_params
+    @projects = Project.all
+    @projects = @projects.send params[:status] if
+      %w(in_progress passing failing).include? params[:status]
+    @projects = @projects.text_search(params[:q]) if params[:q].present?
+    @projects = @projects.includes(:user).paginate(page: params[:page])
   end
+  # rubocop:enable Metrics/AbcSize
 
   # GET /projects/1
   # GET /projects/1.json
   def show
-    # set_surrogate_key_header @project.record_key
   end
 
   def badge
@@ -215,5 +219,18 @@ class ProjectsController < ApplicationController
     rescue StandardError => e
       Rails.logger.error "FAILED TO PURGE #{cdn_badge_key} , #{e.class}: #{e}"
     end
+  end
+
+  def remove_empty_query_params
+    # Rewrites /projects?q=&status=failing to /projects?status=failing
+    original = request.original_url
+    parsed = Addressable::URI.parse(original)
+    return unless parsed.query_values.present?
+    queries_with_values = parsed.query_values.reject { |_k, v| v.blank? }
+    if queries_with_values.blank?
+      parsed.omit!(:query) # Removes trailing '?'
+    else parsed.query_values = queries_with_values
+    end
+    redirect_to parsed.to_s unless parsed.to_s == original
   end
 end

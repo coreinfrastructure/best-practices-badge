@@ -199,4 +199,14 @@ class ProjectsControllerTest < ActionController::TestCase
     @project_two.reload
     assert_equal @project_two.repo_url, new_repo_url
   end
+
+  test 'should redirect with empty query params removed' do
+    get :index, q: '', status: 'passing'
+    assert_redirected_to 'http://test.host/projects?status=passing'
+  end
+
+  test 'should redirect with all query params removed' do
+    get :index, q: '', status: ''
+    assert_redirected_to 'http://test.host/projects'
+  end
 end

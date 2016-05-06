@@ -66,17 +66,29 @@ desc 'Run bundle-audit - check for known vulnerabilities in dependencies'
 task :bundle_audit do
   verbose(true) do
     sh <<-END
+      apply_bundle_audit=t
       if ping -q -c 1 github.com > /dev/null 2> /dev/null ; then
-        # We have access to the database for updating
-        if ! bundle exec bundle-audit update ; then
-          echo "Bundle-audit update failed.  Retrying."
-          sleep 10
-          bundle exec bundle-audit update || exit 1
+        echo "Have network access, trying to update bundle-audit database."
+        tries_left=10
+        while [ "$tries_left" -gt 0 ] ; do
+          if bundle exec bundle-audit update ; then
+            echo 'Successful bundle-audit update.'
+            break
+          fi
+          sleep 2
+          tries_left=$((tries_left - 1))
+          echo "Bundle-audit update failed. Number of tries left=$tries_left"
+        done
+        if [ "$tries_left" -eq 0 ] ; then
+          echo "Bundle-audit update failed after multiple attempts. Skipping."
+          apply_bundle_audit=f
         fi
       else
         echo "Cannot update bundle-audit database; using current data."
       fi
-      bundle exec bundle-audit check
+      if [ "$apply_bundle_audit" = 't' ] ; then
+        bundle exec bundle-audit check
+      fi
     END
   end
 end

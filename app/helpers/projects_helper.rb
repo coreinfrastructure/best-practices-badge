@@ -27,7 +27,7 @@ module ProjectsHelper
   end
 
   def markdown(content)
-    return '' if content.blank?
+    return '' if content.nil?
     MARKDOWN_PROCESSOR.render(content).html_safe
   end
 

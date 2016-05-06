@@ -92,4 +92,9 @@
            <%= f.text_area justification_symbol, class:"form-control", hide_label: true, placeholder:'Please explain', disabled: is_disabled  %>
          <% end %>
       </div>
+    <% if is_last %>
+      <br>
+    <%else%>
+      <hr>
+    <%end%>
     </div>

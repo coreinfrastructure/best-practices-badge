@@ -19,10 +19,10 @@ module ProjectsHelper
   end
 
   # Use the status_chooser to render the given criterion.
-  def render_status(criterion, f, project, is_disabled)
+  def render_status(criterion, f, project, is_disabled, is_last=false)
     render(partial: 'status_chooser',
            locals: { f: f, project: project, is_disabled: is_disabled,
-                     criterion: Criteria[criterion] })
+                     is_last: is_last, criterion: Criteria[criterion] })
   end
 
   def repo_url_disabled?(project)

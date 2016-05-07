@@ -189,16 +189,12 @@ This information is used when displaying badge information.
 
     <h3>Basic Project Website Content</h3>
       <%= render_status 'description_good', f, project, is_disabled %>
-      <hr>
 
       <%= render_status 'interact', f, project, is_disabled %>
-      <hr>
 
       <%= render_status 'contribution', f, project, is_disabled %>
-      <hr>
 
-      <%= render_status 'contribution_requirements', f, project, is_disabled %>
-      <br>
+      <%= render_status 'contribution_requirements', f, project, is_disabled, true %>
 
       <h3>FLOSS License</h3>
 
@@ -238,32 +234,24 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
      </div>
 
       <%= render_status 'floss_license', f, project, is_disabled %>
-      <hr>
 
       <%= render_status 'floss_license_osi', f, project, is_disabled %>
-      <hr>
 
-      <%= render_status 'license_location', f, project, is_disabled %>
-      <br>
+      <%= render_status 'license_location', f, project, is_disabled, true %>
 
       <h3>Documentation</h3>
 
       <%= render_status 'documentation_basics', f, project, is_disabled %>
-      <hr>
 
-      <%= render_status 'documentation_interface', f, project, is_disabled %>
-      <br>
+      <%= render_status 'documentation_interface', f, project, is_disabled, true %>
 
       <h3>Other</h3>
 
       <%= render_status 'sites_https', f, project, is_disabled %>
-      <hr>
 
       <%= render_status 'discussion', f, project, is_disabled %>
-      <hr>
 
-      <%= render_status 'english', f, project, is_disabled %>
-      <br>
+      <%= render_status 'english', f, project, is_disabled, true %>
 
       Other general comments about the project:<br>
       <% if is_disabled %>
@@ -280,34 +268,26 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
       <h3>Public version-controlled source repository</h3>
 
       <%= render_status 'repo_public', f, project, is_disabled %>
-      <hr>
 
       <%= render_status 'repo_track', f, project, is_disabled %>
-      <hr>
 
       <%= render_status 'repo_interim', f, project, is_disabled %>
-      <hr>
 
-      <%= render_status 'repo_distributed', f, project, is_disabled %>
-      <br>
+      <%= render_status 'repo_distributed', f, project, is_disabled, true %>
 
       <h3>Version numbering</h3>
 
       <%= render_status 'version_unique', f, project, is_disabled %>
-      <hr>
 
       <%= render_status 'version_semver', f, project, is_disabled %>
-      <hr>
 
-      <%= render_status 'version_tags', f, project, is_disabled %>
-      <br>
+      <%= render_status 'version_tags', f, project, is_disabled, true %>
 
       <h3>Release Notes (ChangeLog)</h3>
 
       <%= render_status 'release_notes', f, project, is_disabled %>
-      <hr>
 
-      <%= render_status 'release_notes_vulns', f, project, is_disabled %>
+      <%= render_status 'release_notes_vulns', f, project, is_disabled, true %>
 </div>
 
       <div class="tab-pane" id="reporting">
@@ -321,32 +301,25 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
       -->
 
       <%= render_status 'report_process', f, project, is_disabled %>
-      <hr>
 
       <%= render_status 'report_tracker', f, project, is_disabled %>
-      <hr>
 
       <%= render_status 'report_responses', f, project, is_disabled %>
-      <hr>
 
       <%= render_status 'enhancement_responses', f, project, is_disabled %>
-      <hr>
 
-      <%= render_status 'report_archive', f, project, is_disabled %>
-      <br>
+      <%= render_status 'report_archive', f, project, is_disabled, true %>
 
       <h3>Vulnerability reporting process</h3>
 
       <%= render_status 'vulnerability_report_process',
                         f, project, is_disabled %>
-      <hr>
 
       <%= render_status 'vulnerability_report_private',
                         f, project, is_disabled %>
-      <hr>
 
       <%= render_status 'vulnerability_report_response',
-                        f, project, is_disabled %>
+                        f, project, is_disabled, true %>
 </div>
 
      <div class="tab-pane" id="quality">
@@ -354,49 +327,37 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
      <h3>Working build system</h3>
 
       <%= render_status 'build', f, project, is_disabled %>
-      <hr>
 
       <%= render_status 'build_common_tools', f, project, is_disabled %>
-      <hr>
 
-      <%= render_status 'build_floss_tools', f, project, is_disabled %>
-      <br>
+      <%= render_status 'build_floss_tools', f, project, is_disabled, true %>
 
       <h3>Automated test suite</h3>
 
       <%= render_status 'test', f, project, is_disabled %>
-      <hr>
 
       <%= render_status 'test_invocation', f, project, is_disabled %>
-      <hr>
 
       <%= render_status 'test_most', f, project, is_disabled %>
-      <hr>
 
       <%= render_status 'test_continuous_integration',
-                        f, project, is_disabled %>
-      <br>
+                        f, project, is_disabled, true %>
 
     <h3>New functionality testing</h3>
 
       <%= render_status 'test_policy', f, project, is_disabled %>
-      <hr>
 
       <%= render_status 'tests_are_added', f, project, is_disabled %>
-      <hr>
 
-      <%= render_status 'tests_documented_added', f, project, is_disabled %>
-      <br>
+      <%= render_status 'tests_documented_added', f, project, is_disabled, true %>
 
     <h3>Warning flags</h3>
 
       <%= render_status 'warnings', f, project, is_disabled %>
-      <hr>
 
       <%= render_status 'warnings_fixed', f, project, is_disabled %>
-      <hr>
 
-      <%= render_status 'warnings_strict', f, project, is_disabled %>
+      <%= render_status 'warnings_strict', f, project, is_disabled, true %>
 </div>
 
     <div class="tab-pane" id="security">
@@ -404,10 +365,8 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
     <h3>Secure development knowledge</h3>
 
       <%= render_status 'know_secure_design', f, project, is_disabled %>
-      <hr>
 
-      <%= render_status 'know_common_errors', f, project, is_disabled %>
-      <br>
+      <%= render_status 'know_common_errors', f, project, is_disabled, true %>
 
     <h3>Good cryptographic practices</h3>
 
@@ -422,53 +381,40 @@ provided by the delivered project's software.
   <br>
 <% end %>
       <%= render_status 'crypto_published', f, project, is_disabled %>
-      <hr>
 
       <%= render_status 'crypto_call', f, project, is_disabled %>
-      <hr>
 
       <%= render_status 'crypto_floss', f, project, is_disabled %>
-      <hr>
 
       <%= render_status 'crypto_keylength', f, project, is_disabled %>
-      <hr>
 
       <%= render_status 'crypto_working', f, project, is_disabled %>
-      <hr>
 
       <%= render_status 'crypto_weaknesses', f, project, is_disabled %>
-      <hr>
 
       <%= render_status 'crypto_pfs', f, project, is_disabled %>
-      <hr>
 
       <%= render_status 'crypto_password_storage', f, project, is_disabled %>
-      <hr>
 
-      <%= render_status 'crypto_random', f, project, is_disabled %>
-      <br>
+      <%= render_status 'crypto_random', f, project, is_disabled, true %>
 
     <h3>Secured delivery against man-in-the-middle (MITM) attacks</h3>
 
       <%= render_status 'delivery_mitm', f, project, is_disabled %>
-      <hr>
 
-      <%= render_status 'delivery_unsigned', f, project, is_disabled %>
-      <br>
+      <%= render_status 'delivery_unsigned', f, project, is_disabled, true %>
 
     <h3>Publicly-known vulnerabilities fixed</h3>
 
       <%= render_status 'vulnerabilities_fixed_60_days',
                         f, project, is_disabled %>
-      <hr>
 
       <%= render_status 'vulnerabilities_critical_fixed',
-                        f, project, is_disabled %>
-      <br>
+                        f, project, is_disabled, true %>
 
     <h3>Other security</h3>
 
-      <%= render_status 'no_leaked_credentials', f, project, is_disabled %>
+      <%= render_status 'no_leaked_credentials', f, project, is_disabled, true %>
 </div>
 
     <div class="tab-pane" id="analysis">
@@ -476,33 +422,26 @@ provided by the delivered project's software.
     <h3>Static code analysis</h3>
 
       <%= render_status 'static_analysis', f, project, is_disabled %>
-      <hr>
 
       <%= render_status 'static_analysis_common_vulnerabilities',
                         f, project, is_disabled %>
-      <hr>
 
       <%= render_status 'static_analysis_fixed',
                         f, project, is_disabled %>
-      <hr>
 
-      <%= render_status 'static_analysis_often', f, project, is_disabled %>
-      <br>
+      <%= render_status 'static_analysis_often', f, project, is_disabled, true %>
 
      <h3>Dynamic analysis</h3>
 
       <%= render_status 'dynamic_analysis', f, project, is_disabled %>
-      <hr>
 
       <%= render_status 'dynamic_analysis_unsafe', f, project, is_disabled %>
-      <hr>
 
       <%= render_status 'dynamic_analysis_enable_assertions',
                         f, project, is_disabled %>
-      <hr>
 
       <%= render_status 'dynamic_analysis_fixed',
-                        f, project, is_disabled %>
+                        f, project, is_disabled, true %>
     </div>
 
     <div class="tab-pane" id="future">
@@ -514,28 +453,20 @@ provided by the delivered project's software.
      <br>
 
       <%= render_status 'installation_common', f, project, is_disabled %>
-      <hr>
 
       <%= render_status 'build_reproducible', f, project, is_disabled %>
-      <hr>
 
       <%= render_status 'crypto_used_network', f, project, is_disabled %>
-      <hr>
 
       <%= render_status 'crypto_tls12', f, project, is_disabled %>
-      <hr>
 
       <%= render_status 'crypto_certificate_verification', f, project, is_disabled %>
-      <hr>
 
       <%= render_status 'crypto_verification_private', f, project, is_disabled %>
-      <hr>
 
       <%= render_status 'hardened_site', f, project, is_disabled %>
-      <hr>
 
-      <%= render_status 'hardening', f, project, is_disabled %>
-      <br>
+      <%= render_status 'hardening', f, project, is_disabled, true %>
 
     </div>
 

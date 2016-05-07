@@ -75,7 +75,7 @@
          <% if (is_disabled) %>
            <% if project[justification_symbol] %>
              <div class="justification-markdown">
-               <%= ApplicationHelper.markdown(project[justification_symbol]) %>
+               <%= markdown(project[justification_symbol]) %>
              </div>
            <% end %>
            <% if project[status_symbol] == 'Met' &&

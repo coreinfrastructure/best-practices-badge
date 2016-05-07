@@ -18,7 +18,7 @@
         <td><%= link_to project.id, project %></td>
         <td><%= link_to (project.name.presence || "(Name Unknown)"),
                 project %></td>
-        <td><%= ApplicationHelper.markdown(
+        <td><%= markdown(
                   (project.description || '').
                   truncate(160, separator: ' ')) %></td>
 

@@ -70,6 +70,8 @@ else
   Capybara.javascript_driver = :selenium
 end
 
+Capybara.default_max_wait_time = 5
+
 module ActiveSupport
   class TestCase
     # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical
@@ -78,17 +80,30 @@ module ActiveSupport
 
     # Add more helper methods to be used by all tests here...
 
-    # Returns true if a test user is logged in.
-    def user_logged_in?
-      !session[:user_id].nil?
-    end
+    # rubocop:disable Metrics/MethodLength
+    def kill_sticky_headers
+      # https://alisdair.mcdiarmid.org/kill-sticky-headers/
+      script = <<-EOS
+      (function () {
+        var i, elements = document.querySelectorAll('body *');
 
-    # Log in a test user.
-    # TODO: Put 'provider' into the session, along with email and password
-    # This is based on "Ruby on Rails Tutorial" by Michael Hargle, chapter 8,
-    # https://www.railstutorial.org/book
+        for (i = 0; i < elements.length; i++) {
+          if (getComputedStyle(elements[i]).position === 'fixed') {
+            elements[i].parentNode.removeChild(elements[i]);
+          }
+        }
+      })();
+      EOS
+      execute_script script
+    end
+    # rubocop:enable Metrics/MethodLength
+
     # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     def log_in_as(user, options = {})
+      # Log in a test user.
+      # TODO: Put 'provider' into the session, along with email and password
+      # This is based on "Ruby on Rails Tutorial" by Michael Hargle, chapter 8,
+      # https://www.railstutorial.org/book
       password = options[:password] || 'password'
       provider = options[:provider] || 'local'
       remember_me = options[:remember_me] || '1'
@@ -105,6 +120,17 @@ module ActiveSupport
         session[:time_last_used] = time_last_used
       end
     end
+    # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
+
+    def scroll_to_see(id)
+      # From http://toolsqa.com/selenium-webdriver/scroll-element-view-selenium-javascript/
+      execute_script("document.getElementById('#{id}').scrollIntoView(false);")
+    end
+
+    def user_logged_in?
+      # Returns true if a test user is logged in.
+      !session[:user_id].nil?
+    end
 
     def wait_for_jquery
       Timeout.timeout(Capybara.default_max_wait_time) do
@@ -112,32 +138,26 @@ module ActiveSupport
       end
     end
 
-    def kill_sticky_headers
-      # https://alisdair.mcdiarmid.org/kill-sticky-headers/
-      script = <<-EOS
-      (function () {
-        var i, elements = document.querySelectorAll('body *');
-
-        for (i = 0; i < elements.length; i++) {
-          if (getComputedStyle(elements[i]).position === 'fixed') {
-            elements[i].parentNode.removeChild(elements[i]);
-          }
-        }
-      })();
-      EOS
-      page.execute_script script
+    def wait_for_url(url)
+      Timeout.timeout(Capybara.default_max_wait_time) do
+        loop do
+          uri = URI.parse(current_url)
+          p "#{uri.path}?#{uri.query}"
+          break if "#{uri.path}?#{uri.query}" == url
+        end
+      end
     end
 
     private
 
     def finished_all_jquery_requests?
-      page.evaluate_script('jQuery.active').zero?
+      evaluate_script('jQuery.active').zero?
     end
 
-    # Returns true inside an integration test.
-    # Based on "Ruby on Rails Tutorial" by Michael Hargle, chapter 8,
-    # https://www.railstutorial.org/book
     def integration_test?
+      # Returns true inside an integration test.
+      # Based on "Ruby on Rails Tutorial" by Michael Hargle, chapter 8,
+      # https://www.railstutorial.org/book
       defined?(post_via_redirect)
     end
   end

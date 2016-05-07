@@ -1,4 +1,4 @@
-<% badge_hostname= (ENV['PUBLIC_HOSTNAME'] || 'localhost') %>
+<% badge_hostname = (ENV['PUBLIC_HOSTNAME'] || 'localhost') %>
 <% content_for :nav_progress do %>
 <div class="progress">
   <div id="badge-progress" class="progress-bar progress-bar-success badge-progress" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
@@ -63,7 +63,7 @@ There is also a
 </div>
 </div>
 
-<% if (is_disabled) %>
+<% if is_disabled %>
 <%   if ! %w(failing in_progress).include? project.badge_level %>
 <div class="row">
 <div class="col-xs-1"></div>
@@ -129,9 +129,9 @@ Note that other projects may use the same name.
 
       <div class="hidable-text-entry">
       <span>What is a brief description of the project?</span>
-      <% if (is_disabled) %>
+      <% if is_disabled %>
         <div class="discussion-markdown">
-          <%= ApplicationHelper.markdown(project[:description]) %>
+          <%= markdown(project[:description]) %>
         </div>
       <% else %>
         <%= render(partial: "details", locals: {
@@ -145,13 +145,25 @@ This information is used when displaying badge information.
 
       <div class="hidable-text-entry">
       <span>What is the URL for the project (as a whole)?</span>
-      <%= f.text_field :homepage_url, hide_label: true, class: "form-control", placeholder:'Project Website URL', label: "Project URL", disabled: is_disabled %>
+      <% if is_disabled %>
+        <div class="discussion-markdown">
+           <%= link_to_if project.contains_url?(project.homepage_url), project.homepage_url %>
+        </div>
+      <% else %>
+        <%= f.text_field :homepage_url, hide_label: true, class: "form-control", placeholder:'Project Website URL', label: "Project URL", disabled: is_disabled %>
+      <% end %>
       </div>
 
       <div class="hidable-text-entry">
       <span>What is the URL for the version control repository
             (it may the same as the project URL)?</span>
-      <%= f.text_field :repo_url, class:"form-control", hide_label: true, placeholder:'Project Repo URL', disabled: repo_disabled %>
+      <% if is_disabled || repo_disabled%>
+        <div class="discussion-markdown">
+           <%= link_to_if project.contains_url?(project.repo_url), project.repo_url %>
+        </div>
+      <% else %>
+        <%= f.text_field :repo_url, class:"form-control", hide_label: true, placeholder:'Project Repo URL', disabled: repo_disabled %>
+      <% end %>
       </div>
 
 <!-- TODO: MUST have a project or repo URL, SUGGESTED to use HTTPS.
@@ -254,9 +266,9 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
       <br>
 
       Other general comments about the project:<br>
-      <% if (is_disabled) %>
+      <% if is_disabled %>
         <div class="discussion-markdown">
-          <%= ApplicationHelper.markdown(project[:general_comments]) %>
+          <%= markdown(project[:general_comments]) %>
         </div>
       <% else %>
         <%= f.text_area :general_comments, class:"form-control",  hide_label: true, placeholder:'Additional Comments (in markdown)', disabled: is_disabled %>

@@ -5,42 +5,46 @@ one:
   user: test_user
   name: Pathfinder OS
   description: Operating system for Pathfinder rover
-  homepage_url: https://www.example.org
+  homepage_url: https://www.nasa.gov
   license: MIT
-  repo_url: https://www.example.org/code1
+  repo_url: https://www.nasa.gov/pathfinder
   badge_status: in_progress
 
 two:
   user: test_user_melissa
-  name: Pathfinder OS
+  name: Mars Ascent Vehicle (MAV)
   description: Operating system for Pathfinder rover
-  homepage_url: https://www.example.org1
+  homepage_url: https://www.nasa.gov
   license: MIT
-  repo_url: https://www.example.org/code5
+  repo_url: https://www.nasa.gov/mav
   badge_status: in_progress
 
 # TODO: Generate list of status fields from central location.
 # No justifications means failing status.
 perfect_unjustified:
   user: test_user
-  name: Perfect project
+  name: Unjustified perfect project
   description: The perfect project
   homepage_url: https://www.example.org
   repo_url: https://www.example.org/code2
   license: MIT
   badge_status: failing
-<% Project::ALL_CRITERIA_STATUS.each do |criterion_status| %>  <%= criterion_status %>: Met
+<% Project::ALL_CRITERIA_STATUS.each do |criterion_status| %>
+  <%= criterion_status %>: Met
 <% end %>
 
 # TODO: Generate list of status fields from central location.
 perfect:
   user: test_user
-  name: Perfect project
+  name: Justified perfect project
   description: The perfect project
   homepage_url: https://www.example.org
   repo_url: https://www.example.org/code3
   license: MIT
   badge_status: passing
-<% Project::ALL_CRITERIA_STATUS.each do |criterion_status| %>  <%= criterion_status %>: Met
-<% end %><% Project::ALL_CRITERIA_JUSTIFICATION.each do |criterion_justification| %>  <%= criterion_justification %>: For more information see <https://www.example.org/>
+<% Project::ALL_CRITERIA_STATUS.each do |criterion_status| %>
+  <%= criterion_status %>: Met
+<% end %>
+<% Project::ALL_CRITERIA_JUSTIFICATION.each do |criterion_justification| %>
+  <%= criterion_justification %>: For more information see <https://www.example.org/>
 <% end %>

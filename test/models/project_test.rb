@@ -20,7 +20,25 @@ class ProjectTest < ActiveSupport::TestCase
   test '#contains_url?' do
     assert Project.new.send :contains_url?, 'https://www.example.org'
     assert Project.new.send :contains_url?, 'http://www.example.org'
+    assert Project.new.send :contains_url?,
+                            'See also <http://x.org>.'
+    assert Project.new.send :contains_url?,
+                            'See also <http://x.org>.'
     refute Project.new.send :contains_url?, 'mailto://mail@example.org'
     refute Project.new.send :contains_url?, 'abc'
+    refute Project.new.send :contains_url?,
+                            'See also http://x for more information.'
+    refute Project.new.send :contains_url?, 'www.google.com'
+  end
+
+  test 'Rigorous project and repo URL checker' do
+    regex = UrlValidator::URL_REGEX
+    my_url = 'https://github.com/linuxfoundation/cii-best-practices-badge'
+    assert my_url =~ regex
+    assert 'https://kernel.org' =~ regex
+    assert_not 'https://' =~ regex
+    assert_not 'www.google.com' =~ regex
+    assert_not 'See also http://x.org for more information.' =~ regex
+    assert_not 'See also <http://x.org>.' =~ regex
   end
 end

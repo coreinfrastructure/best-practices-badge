@@ -91,8 +91,15 @@ class Project < ActiveRecord::Base
     to_percentage met, Criteria.active.length
   end
 
+  # Does this contain a URL *anywhere* in the text?
+  # Note that we do NOT need to validate these URLs, because the BadgeApp
+  # 1. escapes these (as part of normal processing) against XSS attacks, and
+  # 2. it does not traverse these URLs in its automated processing.
+  # Thus, this rule is intentionally *not* strict at all.  Contrast this
+  # with the intentionally strict validation of the project and repo URLs,
+  # which *are* traversed and thus need to be much more strict.
   def contains_url?(text)
-    text =~ /#{URI.regexp(%w(http https))}/
+    text =~ %r{https?://.{3}}
   end
 
   private

@@ -99,7 +99,9 @@ class ProjectsControllerTest < ActionController::TestCase
     }
     log_in_as(@project.user)
     patch :update, id: @project, project: new_project_data
+    # "Success" here only in the HTTP sense - we *do* get a form...
     assert_response :success
+    # ... but we just get the edit form.
     assert_template :edit
 
     # Do the same thing, but as for JSON

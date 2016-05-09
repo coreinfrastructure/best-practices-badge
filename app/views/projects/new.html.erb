@@ -26,15 +26,17 @@
         <%= render 'shared/error_messages', object: f.object %>
       <% end %>
       <span>What is the URL for the project home page (the URL for the project as a whole)? Start with http(s):// (many characters are not allowed, including "?")</span>
+      <!-- Note: Server tests URLs, this is just sanity checking -->
       <%= f.text_field :homepage_url, class:"form-control",
             type: 'url', hide_label: true,
-            pattern: '(|https?:\/\/[A-Za-z0-9][-A-Za-z0-9_.\/]*(\/[-A-Za-z0-9_.\/\+,#]*)?)',
+            pattern: '^(|https?:\/\/[A-Za-z0-9_][-A-Za-z0-9_.]*(\/[-A-Za-z0-9_.:\/\+!,#]*)?)',
+
             placeholder:'http(s)://... for project home page URL' %>
       <span>What is the URL for the version control repository
             (it may the same as the project home page)? Start with http(s):// (many characters are not allowed, including "?")</span>
       <%= f.text_field :repo_url, class:"form-control",
             type: 'url', hide_label: true,
-            pattern: '(|https?:\/\/[A-Za-z0-9][-A-Za-z0-9_.\/]*(\/[-A-Za-z0-9_.\/\+,#]*)?)',
+            pattern: '^(|https?:\/\/[A-Za-z0-9_][-A-Za-z0-9_.]*(\/[-A-Za-z0-9_.:\/\+!,#]*)?)',
             placeholder:'http(s)://... for project repo URL' %>
      <%= f.submit 'Submit URL', class: 'btn btn-primary',
                   'data-toggle' => 'tooltip', title: post_delay_warning %>

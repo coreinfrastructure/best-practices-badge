@@ -73,6 +73,8 @@ end
 
 Capybara.default_max_wait_time = 5
 Capybara.server_port = 31_337
+ENV['GITHUB_KEY'] = ENV['TEST_GITHUB_KEY']
+ENV['GITHUB_SECRET'] = ENV['TEST_GITHUB_SECRET']
 
 module ActiveSupport
   class TestCase

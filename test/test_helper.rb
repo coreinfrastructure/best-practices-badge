@@ -23,17 +23,18 @@ require 'rails/test_help'
 
 require 'webmock/minitest'
 # This would disable network connections; would interfere with vcr:
-# WebMock.disable_net_connect!(allow_localhost: true)
+WebMock.disable_net_connect!(allow_localhost: true)
 
 # For more info on vcr, see https://github.com/vcr/vcr
 # WARNING: Do *NOT* put the fixtures into test/fixtures (./fixtures is ok);
 # Rails will try to automatically load them into models, resulting in
 # confusing error messages.
 require 'vcr'
-VCR.configure do |config|
-  config.ignore_localhost = true
-  config.cassette_library_dir = 'test/vcr_cassettes'
-  config.hook_into :webmock # or :fakeweb
+VCR.configure do |c|
+  c.ignore_localhost = true
+  c.cassette_library_dir = 'test/vcr_cassettes'
+  c.hook_into :webmock
+  c.filter_sensitive_data('linustorvalds2016!') { ENV['TEST_GITHUB_PASSWORD'] }
 end
 
 require 'minitest/rails/capybara'
@@ -71,6 +72,7 @@ else
 end
 
 Capybara.default_max_wait_time = 5
+Capybara.server_port = 31_337
 
 module ActiveSupport
   class TestCase

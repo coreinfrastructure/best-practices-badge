@@ -2,7 +2,7 @@
 
 ## Workflow
 
-Please review documentation on [testing](http://guides.rubyonrails.org/testing.html). Pull requests should endeavor to increase, not decrease test coverage, as monitored in [Coveralls](https://coveralls.io/github/linuxfoundation/cii-best-practices-badge).
+Please review documentation on [testing](http://guides.rubyonrails.org/testing.html). Pull requests should endeavor to increase, not decrease test coverage, as monitored in [Codecov](https://codecov.io/gh/linuxfoundation/cii-best-practices-badge).
 
 Running `m test/features/can_access_home_test.rb:4` will execute just the test from line 4. Removing the `:4` will run all tests in that file.
 

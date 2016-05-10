@@ -24,16 +24,6 @@
   - MIT
   - *1
 - - :approve
-  - term-ansicolor
-  - :who: David A. Wheeler
-    :why: GPL-2.0 only, but only used in separate Coveralls executable, so there's
-      no issue with Apache-2.0 being combined into a single executable (those libraries
-      are in other executables). The old Ruby license expressly permits choosing GPL-2.0
-      as an option, and the newer Ruby license permits BSD-2-Clause (which is GPL-compatible),
-      so no possible issue there.  The code is written in Ruby, but this means it
-      is considered *data* to an old Ruby interpreter, so still no issue.
-    :when: 2015-12-17 15:53:23.499258275 Z
-- - :approve
   - pg
   - &2
     :who: David A. Wheeler
@@ -222,9 +212,14 @@
   - ffi
   - :who: Samir Khakimov
     :why: BSD-3-Clause License https://github.com/ffi/ffi/blob/master/LICENSE
-    :when:  2016-04-04 16:50:00 Z
+    :when: 2016-04-04 16:50:00.000000000 Z
 - - :approve
   - selenium-webdriver
   - :who: Samir Khakimov
     :why: Apache 2.0
-    :when:  2016-04-04 16:50:00 Z
+    :when: 2016-04-04 16:50:00.000000000 Z
+- - :approve
+  - codecov
+  - :who: Dan Kohn
+    :why: MIT
+    :when: 2016-05-10 15:49:14.036712000 Z

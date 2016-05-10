@@ -66,6 +66,7 @@ group :test do
   gem 'minitest-rails-capybara', '2.1.1', require: false
   gem 'minitest-retry', '0.1.4', require: false # Avoid Capybara false positives
   gem 'poltergeist', '1.9.0', require: false
+  gem 'puffing-billy', '0.7.0'
   gem 'selenium-webdriver', '2.53.0', require: false
   gem 'simplecov', '0.11.2', require: false
   gem 'webmock', '2.0.1', require: false

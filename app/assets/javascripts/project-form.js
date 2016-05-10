@@ -35,7 +35,7 @@ function containsURL(justification) {
   if (!justification) {
     return false;
   } else {
-    return !!justification.match(/https?:\/\/[^ ]{5/);
+    return !!justification.match(/https?:\/\/[^ ]{5}/);
   }
 }
 

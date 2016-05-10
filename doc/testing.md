@@ -22,18 +22,6 @@ Selenium tests for Safari require this [file](http://selenium-release.storage.go
 
 Write Capybara features to test the happy path of new features. Test the feature both with the default rack-test (or poltergeist, for tests requiring Javascript) and with Selenium `DRIVER=chrome rake test`.
 
-## External API testing
-
-We use Webmock and VCR to record external API responses and test against them without needing to make actual HTTP requests. If the external services (particularly Github) change their API, you need to delete the corresponding VCR cassette and re-rerun the test to re-rerecord. This would involve running:
-```bash
-TEST_GITHUB_PASSWORD=real_password_here m test/features/github_login_test.rb
-```
-To manually walk through the login process with Github OAuth authentication, you want to run the rails server with
-```bash
-RAILS_ENV=test rails s -p 31337 -b 0.0.0.0
-```
-and then going to http://127.0.0.1:31337 in your web browser.
-
 ## Troubleshooting
 
 Flapping tests are a challenge, especially with browser automation that requires Javascript. Examine the `while` loop in [can_login_test.rb](https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/test/features/can_login_test.rb) for one approach to make sure that actions are occurring before testing for their impact.

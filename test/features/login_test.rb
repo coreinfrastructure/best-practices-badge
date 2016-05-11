@@ -1,7 +1,7 @@
 require 'test_helper'
 include ActionView::Helpers::TextHelper
 
-class CanLoginTest < Capybara::Rails::TestCase
+class LoginTest < Capybara::Rails::TestCase
   CHECK = /result_symbol_check/
   DASH = /result_symbol_dash/
   QUESTION = /result_symbol_question/

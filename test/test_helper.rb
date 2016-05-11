@@ -23,7 +23,7 @@ require 'rails/test_help'
 
 require 'webmock/minitest'
 # This would disable network connections; would interfere with vcr:
-# WebMock.disable_net_connect!(allow_localhost: true)
+WebMock.disable_net_connect!(allow_localhost: true)
 
 # For more info on vcr, see https://github.com/vcr/vcr
 # WARNING: Do *NOT* put the fixtures into test/fixtures (./fixtures is ok);
@@ -33,7 +33,7 @@ require 'vcr'
 VCR.configure do |config|
   config.ignore_localhost = true
   config.cassette_library_dir = 'test/vcr_cassettes'
-  config.hook_into :webmock # or :fakeweb
+  config.hook_into :webmock
 end
 
 require 'minitest/rails/capybara'
@@ -71,6 +71,7 @@ else
 end
 
 Capybara.default_max_wait_time = 5
+Capybara.server_port = 31_337
 
 module ActiveSupport
   class TestCase
@@ -79,6 +80,11 @@ module ActiveSupport
     fixtures :all
 
     # Add more helper methods to be used by all tests here...
+
+    def configure_omniauth_mock
+      OmniAuth.config.test_mode = true
+      OmniAuth.config.add_mock(:github, omniauth_hash)
+    end
 
     # rubocop:disable Metrics/MethodLength
     def kill_sticky_headers
@@ -158,6 +164,25 @@ module ActiveSupport
       # Based on "Ruby on Rails Tutorial" by Michael Hargle, chapter 8,
       # https://www.railstutorial.org/book
       defined?(post_via_redirect)
+    end
+
+    def omniauth_hash
+      { 'provider' => 'github',
+        'uid' => '12345',
+        'credentials' => { 'token' => vcr_oauth_token },
+        'info' => {
+          'name' => 'CII Test',
+          'email' => 'test@example.com',
+          'nickname' => 'CIITheRobot'
+        }
+      }
+    end
+
+    def vcr_oauth_token
+      y = YAML.load(File.open('test/vcr_cassettes/github_login.yml'))
+              .with_indifferent_access
+      url = y[:http_interactions][1][:request][:uri]
+      Addressable::URI.parse(url).query_values['access_token']
     end
   end
 end

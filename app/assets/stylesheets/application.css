@@ -50,6 +50,6 @@ html, body {
 .container_margins {
   min-height: 100%;
   height: auto;
-  margin: 4em auto -9em;
-  padding-bottom: 116px;
+  margin: 1.5em auto -9.6em;
+  padding-bottom: 100px;
 }

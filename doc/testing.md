@@ -31,7 +31,7 @@ rm test/vcr_cassettes/github_login.yml
 GITHUB_PASSWORD=real_password m test/features/github_login_test.rb
 ```
 
-After completing the VCR recording, `github_login_test.rb' revokes the authorization of the oauth app so that Github doesn't complain about committing a live token to the repo. To manually walk through the login process with Github OAuth authentication, you can run the rails server with
+After completing the VCR recording, `github_login_test.rb` revokes the authorization of the oauth app so that Github doesn't complain about committing a live token to the repo. To manually walk through the login process with Github OAuth authentication, you can run the rails server with
 
 ```bash
 RAILS_ENV=test rails s -p 31337 -b 0.0.0.0

@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class CanFilterTest < Capybara::Rails::TestCase
+class FilterTest < Capybara::Rails::TestCase
   scenario 'Can Filter Projects', js: true do
     visit '/projects'
     assert_equal 4, all('tbody tr').count

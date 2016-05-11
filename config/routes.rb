@@ -6,6 +6,8 @@ Rails.application.routes.draw do
   get 'background' => 'static_pages#background'
   get 'criteria' => 'static_pages#criteria'
 
+  get 'feed' => 'projects#feed', defaults: { format: 'rss' }
+
   resources :projects do
     member do
       get 'badge', defaults: { format: 'svg' }
@@ -21,7 +23,7 @@ Rails.application.routes.draw do
   delete 'logout' => 'sessions#destroy'
 
   get 'auth/:provider/callback' => 'sessions#create'
-  get '/signout' => 'sessions#destroy', :as => :signout
+  get '/signout' => 'sessions#destroy', as: :signout
 
   # The priority is based upon order of creation: first created ->
   # highest priority.

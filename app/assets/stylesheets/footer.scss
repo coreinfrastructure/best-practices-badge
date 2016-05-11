@@ -1,16 +1,36 @@
 // footer styles
 
-.footer {
+footer {
+  margin-top: 50px;
+  padding-top: 5px;
+  border-top: 1px solid #eaeaea;
+  padding-left: 20px;
+  padding-right: 100px;
   overflow: hidden;
   background-color: #000;
 }
 
-.footer small {
-  padding-top: 1em;
-  color: #666;
+footer a {
+  color: #555;
 }
 
-.footer > .container {
+footer small {
+  padding-top: 1em;
+  color: #666;
+  float: left;
+}
+
+footer > .container {
   padding-top: 1em;
   padding-bottom: 1em;
+}
+
+footer ul {
+  float: right;
+  list-style: none;
+}
+
+footer ul li {
+  float: left;
+  margin-left: 25px;
 }

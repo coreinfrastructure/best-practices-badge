@@ -80,6 +80,10 @@ module ActiveSupport
 
     # Add more helper methods to be used by all tests here...
 
+    def contents(file_name)
+      IO.read "test/fixtures/files/#{file_name}"
+    end
+
     # rubocop:disable Metrics/MethodLength
     def kill_sticky_headers
       # https://alisdair.mcdiarmid.org/kill-sticky-headers/

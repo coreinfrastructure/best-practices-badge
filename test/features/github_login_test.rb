@@ -38,7 +38,7 @@ class GithubLoginTest < Capybara::Rails::TestCase
         assert has_content? 'Are you sure you want to revoke authorization?'
         click_on 'I understand, revoke access'
         sleep 1
-        page.driver.browser.navigate.refresh
+        page.evaluate_script 'window.location.reload()'
         assert has_content? 'No authorized applications'
       end
     end

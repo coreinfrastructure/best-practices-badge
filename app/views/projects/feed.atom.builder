@@ -13,7 +13,7 @@ atom_feed do |feed|
                       .truncate(160, separator: ' '))
       content = status + link + description
       entry.content(type: 'html') { entry.cdata! content }
-      entry.author { |author| author.name(project.user.name) }
+      entry.author { |author| author.name(project.user_name) }
     end
   end
 end

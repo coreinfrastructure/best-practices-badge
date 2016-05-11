@@ -24,15 +24,16 @@ Write Capybara features to test the happy path of new features. Test the feature
 
 ## External API testing
 
-We use Webmock and VCR to record external API responses and test against them without needing to make actual HTTP requests. If the external services (particularly Github) change their API, you need to delete the corresponding VCR cassette and re-rerun the test to re-rerecord. This would involve running:
+We use Webmock and VCR to record external API responses and test against them without needing to make actual HTTP requests. If the external services (particularly Github) change their API, you need to delete the corresponding VCR cassette and re-rerun the test to rerecord. This would involve:
 ```bash
-TEST_GITHUB_PASSWORD=real_password_here m test/features/github_login_test.rb
+rm test/vcr_cassettes/github_login.yml
+TEST_GITHUB_PASSWORD=real_password m test/features/github_login_test.rb
 ```
-To manually walk through the login process with Github OAuth authentication, you want to run the rails server with
+On committing the revised github_login.yml, Github will complain that it saw an oauth token committed to the repo and will disable that token. That's fine.To manually walk through the login process with Github OAuth authentication, you can run the rails server with
 ```bash
 RAILS_ENV=test rails s -p 31337 -b 0.0.0.0
 ```
-and then going to http://127.0.0.1:31337 in your web browser.
+and then go to http://127.0.0.1:31337 in your web browser.
 
 ## Troubleshooting
 

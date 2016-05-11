@@ -84,6 +84,11 @@ module ActiveSupport
 
     # Add more helper methods to be used by all tests here...
 
+    def configure_omniauth_mock
+      OmniAuth.config.test_mode = true
+      OmniAuth.config.add_mock(:github, omniauth_hash)
+    end
+
     # rubocop:disable Metrics/MethodLength
     def kill_sticky_headers
       # https://alisdair.mcdiarmid.org/kill-sticky-headers/
@@ -162,6 +167,25 @@ module ActiveSupport
       # Based on "Ruby on Rails Tutorial" by Michael Hargle, chapter 8,
       # https://www.railstutorial.org/book
       defined?(post_via_redirect)
+    end
+
+    def omniauth_hash
+      { 'provider' => 'github',
+        'uid' => '12345',
+        'credentials' => { 'token' => vcr_oauth_token },
+        'info' => {
+          'name' => 'CII Test',
+          'email' => 'test@example.com',
+          'nickname' => 'CIITheRobot'
+        }
+      }
+    end
+
+    def vcr_oauth_token
+      y = YAML.load(File.open('test/vcr_cassettes/github_login.yml'))
+              .with_indifferent_access
+      url = y[:http_interactions][1][:request][:uri]
+      Addressable::URI.parse(url).query_values['access_token']
     end
   end
 end

@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   get 'background' => 'static_pages#background'
   get 'criteria' => 'static_pages#criteria'
 
-  get 'feed' => 'projects#feed', defaults: { format: 'rss' }
+  get 'feed' => 'projects#feed', defaults: { format: 'atom' }
 
   resources :projects do
     member do

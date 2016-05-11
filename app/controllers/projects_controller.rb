@@ -152,9 +152,7 @@ class ProjectsController < ApplicationController
 
   def feed
     @projects = Project.recently_updated
-    respond_to do |format|
-      format.rss { render layout: false }
-    end
+    respond_to { |format| format.atom }
   end
 
   def repo_data

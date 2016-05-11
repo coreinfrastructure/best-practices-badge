@@ -2,7 +2,7 @@ require 'test_helper'
 
 class GithubLoginTest < Capybara::Rails::TestCase
   scenario 'Has link to GitHub Login', js: true do
-    configure_omniauth_mock unless ENV['TEST_GITHUB_PASSWORD']
+    configure_omniauth_mock unless ENV['GITHUB_PASSWORD']
 
     VCR.use_cassette('github_login') do
       visit '/'
@@ -11,10 +11,12 @@ class GithubLoginTest < Capybara::Rails::TestCase
       assert has_content? 'Log in with GitHub'
       click_link 'Log in with GitHub'
 
-      if ENV['TEST_GITHUB_PASSWORD']
+      if ENV['GITHUB_PASSWORD'] # for re-recording cassettes
         fill_in 'login_field', with: 'ciitest'
-        fill_in 'password', with: ENV['TEST_GITHUB_PASSWORD']
+        fill_in 'password', with: ENV['GITHUB_PASSWORD']
         click_on 'Sign in'
+        assert has_content? 'Test BadgeApp (not for production use)'
+        click_on 'Authorize application'
       end
 
       assert has_content? 'Signed in!'
@@ -29,6 +31,16 @@ class GithubLoginTest < Capybara::Rails::TestCase
       click_on 'Submit GitHub Repository'
       assert has_content? 'Thanks for adding the Project! Please fill out ' \
                          'the rest of the information to get the Badge.'
+
+      if ENV['GITHUB_PASSWORD'] # revoke OAuth authorization
+        visit 'https://github.com/settings/applications'
+        click_on 'Revoke'
+        assert has_content? 'Are you sure you want to revoke authorization?'
+        click_on 'I understand, revoke access'
+        sleep 1
+        page.driver.browser.navigate.refresh
+        assert has_content? 'No authorized applications'
+      end
     end
   end
 end

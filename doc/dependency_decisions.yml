@@ -222,24 +222,9 @@
   - ffi
   - :who: Samir Khakimov
     :why: BSD-3-Clause License https://github.com/ffi/ffi/blob/master/LICENSE
-    :when: 2016-04-04 16:50:00.000000000 Z
+    :when:  2016-04-04 16:50:00 Z
 - - :approve
   - selenium-webdriver
   - :who: Samir Khakimov
     :why: Apache 2.0
-    :when: 2016-04-04 16:50:00.000000000 Z
-- - :approve
-  - cookiejar
-  - :who: Dan Kohn
-    :why: BSD-2-Clause
-    :when: 2016-05-10 21:11:07.298020000 Z
-- - :approve
-  - eventmachine
-  - :who: Dan Kohn
-    :why: GPL-2 or Ruby
-    :when: 2016-05-10 21:12:11.508243000 Z
-- - :approve
-  - eventmachine_httpserver
-  - :who: Dan Kohn
-    :why: GPL-2 or Ruby
-    :when: 2016-05-10 21:13:43.705335000 Z
+    :when:  2016-04-04 16:50:00 Z

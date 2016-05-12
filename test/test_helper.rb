@@ -86,6 +86,10 @@ module ActiveSupport
       OmniAuth.config.add_mock(:github, omniauth_hash)
     end
 
+    def contents(file_name)
+      IO.read "test/fixtures/files/#{file_name}"
+    end
+
     # rubocop:disable Metrics/MethodLength
     def kill_sticky_headers
       # https://alisdair.mcdiarmid.org/kill-sticky-headers/

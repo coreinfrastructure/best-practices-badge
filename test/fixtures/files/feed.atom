@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xml:lang="en-US" xmlns="http://www.w3.org/2005/Atom">
+  <id>tag:www.example.com,2005:/feed</id>
+  <link rel="alternate" type="text/html" href="http://www.example.com"/>
+  <link rel="self" type="application/atom+xml" href="http://www.example.com/feed"/>
+  <title>CII Best Practices BadgeApp Updated Projects</title>
+  <updated>2015-03-01T12:00:00Z</updated>
+  <entry>
+    <id>tag:www.example.com,2005:Project/980190962</id>
+    <published>2015-03-01T12:00:00Z</published>
+    <updated>2015-03-01T12:00:00Z</updated>
+    <link rel="alternate" type="text/html" href="http://www.example.com/projects/980190962"/>
+    <title>Pathfinder OS</title>
+    <content type="html">
+      <![CDATA[<p><b>In Progress: 0%</b></p><p><a href='https://www.nasa.gov'>https://www.nasa.gov</a></p><p>Operating system for Pathfinder rover</p>
+]]>
+    </content>
+    <author>
+      <name>Test</name>
+    </author>
+  </entry>
+  <entry>
+    <id>tag:www.example.com,2005:Project/298486374</id>
+    <published>2015-03-01T12:00:00Z</published>
+    <updated>2015-03-01T12:00:00Z</updated>
+    <link rel="alternate" type="text/html" href="http://www.example.com/projects/298486374"/>
+    <title>Mars Ascent Vehicle (MAV)</title>
+    <content type="html">
+      <![CDATA[<p><b>In Progress: 0%</b></p><p><a href='https://www.nasa.gov'>https://www.nasa.gov</a></p><p>Operating system for Pathfinder rover</p>
+]]>
+    </content>
+    <author>
+      <name>Melissa Lewis</name>
+    </author>
+  </entry>
+  <entry>
+    <id>tag:www.example.com,2005:Project/832656895</id>
+    <published>2015-03-01T12:00:00Z</published>
+    <updated>2015-03-01T12:00:00Z</updated>
+    <link rel="alternate" type="text/html" href="http://www.example.com/projects/832656895"/>
+    <title>Unjustified perfect project</title>
+    <content type="html">
+      <![CDATA[<p><b>Failing: 88%</b></p><p><a href='https://www.example.org'>https://www.example.org</a></p><p>The perfect project</p>
+]]>
+    </content>
+    <author>
+      <name>Test</name>
+    </author>
+  </entry>
+  <entry>
+    <id>tag:www.example.com,2005:Project/600182345</id>
+    <published>2015-03-01T12:00:00Z</published>
+    <updated>2015-03-01T12:00:00Z</updated>
+    <link rel="alternate" type="text/html" href="http://www.example.com/projects/600182345"/>
+    <title>Justified perfect project</title>
+    <content type="html">
+      <![CDATA[<p><b>Passing: 100%</b></p><p><a href='https://www.example.org'>https://www.example.org</a></p><p>The perfect project</p>
+]]>
+    </content>
+    <author>
+      <name>Test</name>
+    </author>
+  </entry>
+</feed>

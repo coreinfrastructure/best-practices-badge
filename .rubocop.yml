@@ -34,3 +34,9 @@ Metrics/MethodLength:
 Style/TrivialAccessors:
   Enabled: true
   ExactNameMatch: true
+Style/MultilineMethodCallBraceLayout:
+  Enabled: false
+Style/MultilineHashBraceLayout:
+  Enabled: false
+Style/MultilineArrayBraceLayout:
+  Enabled: false

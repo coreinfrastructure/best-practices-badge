@@ -568,10 +568,10 @@
     autofill: >
       We could run a test suite with coverage enabled, but that would
       take far too long for our time budget.
-      However, we *could* look for a Coveralls badge
+      However, we *could* look for a Coveralls or Codecov badge
       (a link to a badge under <https://coveralls.io>) and pull in
       *that* data (since that would be the final result).
-      Coveralls prefers 90% or more statement coverage.
+      Coveralls or Code prefer 90% or more statement coverage.
 - test_continuous_integration:
     category: SUGGESTED
     description: >

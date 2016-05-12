@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class CanAccessHomeTest < Capybara::Rails::TestCase
+class AccessHomeTest < Capybara::Rails::TestCase
   test 'sanity' do
     visit root_path
     assert has_content? 'CII Best Practices Badge Program'

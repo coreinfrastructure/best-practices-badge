@@ -14,9 +14,13 @@ SimpleCov.start 'rails' do
   add_filter '/vendor/'
 end
 
-require 'coveralls'
-SimpleCov.formatters = [SimpleCov::Formatter::HTMLFormatter,
-                        Coveralls::SimpleCov::Formatter]
+if ENV['CI']
+  require 'codecov'
+  SimpleCov.formatters = [SimpleCov::Formatter::HTMLFormatter,
+                          SimpleCov::Formatter::Codecov]
+else
+  SimpleCov.formatters = [SimpleCov::Formatter::HTMLFormatter]
+end
 
 require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'

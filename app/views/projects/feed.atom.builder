@@ -9,8 +9,7 @@ atom_feed do |feed|
                "#{project.badge_percentage}%</b></p>"
       url = project.homepage_url.presence || project.repo_url
       link = "<p><a href='#{url}'>#{url}</a></p>"
-      description = markdown((project.description || '')
-                      .truncate(160, separator: ' '))
+      description = markdown(project.description || '')
       content = status + link + description
       entry.content(type: 'html') { entry.cdata! content }
       entry.author { |author| author.name(project.user_name) }

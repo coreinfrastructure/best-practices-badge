@@ -8,6 +8,7 @@
   <%= favicon_link_tag %>
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= auto_discovery_link_tag :atom, { controller: 'projects', action: 'feed' }, { title: 'CII Best Practices BadgeApp Updated Projects' } %>
   <%= csrf_meta_tags %>
 </head>
 <body>

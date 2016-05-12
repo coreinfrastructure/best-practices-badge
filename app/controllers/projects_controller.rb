@@ -150,6 +150,11 @@ class ProjectsController < ApplicationController
     end
   end
 
+  def feed
+    @projects = Project.recently_updated
+    respond_to { |format| format.atom }
+  end
+
   def repo_data
     github = Github.new oauth_token: session[:user_token], auto_pagination: true
     github.repos.list.map do |repo|

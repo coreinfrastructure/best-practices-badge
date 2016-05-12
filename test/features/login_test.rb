@@ -25,43 +25,41 @@ class LoginTest < Capybara::Rails::TestCase
     assert has_content? 'Signed in!'
 
     visit edit_project_path(@project)
-    choose 'project_discussion_status_unmet'
+    kill_sticky_headers # This is necessary for Chrome and Firefox
+
+    ensure_choice 'project_discussion_status_unmet'
     assert_match X, find('#discussion_enough')['src']
 
-    choose 'project_english_status_met'
+    ensure_choice 'project_english_status_met'
     assert_match CHECK, find('#english_enough')['src']
 
-    kill_sticky_headers # This is necessary for Chrome and Firefox
-    choose 'project_contribution_status_met' # No URL given, so fails
+    ensure_choice 'project_contribution_status_met' # No URL given, so fails
     assert_match QUESTION, find('#contribution_enough')['src']
 
-    choose 'project_contribution_requirements_status_unmet' # No URL given
+    ensure_choice 'project_contribution_requirements_status_unmet' # No URL
     assert_match X, find('#contribution_requirements_enough')['src']
 
     click_on 'Change Control'
     assert has_content? 'repo_public'
-    choose 'project_repo_public_status_unmet'
+    ensure_choice 'project_repo_public_status_unmet'
     assert_match X, find('#repo_public_enough')['src']
 
-    # Extra assertions to deal with flapping test
     assert find('#project_repo_distributed_status_')['checked']
-    # loop needed because selection doesn't always take the first time
-    loops = 0
-    while find('#project_repo_distributed_status_')['checked']
-      puts "#{pluralize loops, 'extra loop'} required" if loops > 0
-      loops += 1
-      choose 'project_repo_distributed_status_unmet' # SUGGESTED, so enough
-      wait_for_jquery
-    end
+    ensure_choice 'project_repo_distributed_status_unmet' # SUGGESTED, so enough
     assert find('#project_repo_distributed_status_unmet')['checked']
     assert_match DASH, find('#repo_distributed_enough')['src']
 
     click_on 'Reporting'
     assert has_content? 'report_process'
-    choose 'project_report_process_status_unmet'
+    ensure_choice 'project_report_process_status_unmet'
     assert_match X, find('#report_process_enough')['src']
 
     click_on 'Submit'
     assert_match X, find('#discussion_enough')['src']
+  end
+
+  def ensure_choice(radio_button_id)
+    # Necessary because Capybara click doesn't always take the first time
+    choose radio_button_id until find("##{radio_button_id}")['checked']
   end
 end

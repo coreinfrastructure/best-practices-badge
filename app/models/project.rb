@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+# rubocop:disable Metrics/ClassLength
 class Project < ActiveRecord::Base
   using StringRefinements
   using SymbolRefinements
@@ -24,6 +25,12 @@ class Project < ActiveRecord::Base
   scope :failing, -> { where(badge_status: 'failing') }
   scope :in_progress, -> { where(badge_status: 'in_progress') }
   scope :passing, -> { where(badge_status: 'passing') }
+
+  scope :recently_updated, (
+    lambda do
+      unscoped.limit(50).order(updated_at: :desc).includes(:user)
+    end
+  )
 
   scope :text_search, (
     lambda do |text|

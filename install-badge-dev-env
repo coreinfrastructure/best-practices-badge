@@ -131,7 +131,8 @@ case "$manager" in
     # add_pkg autoconf bison build-essential libssl-dev libyaml-dev \
     #         libreadline6-dev zlib1g-dev libncurses5-dev libffi-dev \
     #         libgdbm3 libgdbm-dev
-    add_pkg ruby-build postgresql-server-dev-all cmake nodejs ;;
+    add_pkg ruby-build postgresql-server-dev-all postgresql cmake nodejs \
+            phantomjs;;
   yum|dnf)
     add_pkg gcc openssl-devel libyaml-devel libffi-devel readline-devel \
             zlib-devel gdbm-devel ncurses-devel ;;
@@ -270,9 +271,17 @@ bundle install       # Install gems we use in Gemfile.lock, including Rails
 
 echo
 echo 'STAGE 6: Set up database for development if necessary'
+echo 'Make sure PostgreSQL superuser role for current user exists.'
+sudo -u postgres createuser -s `whoami`
 
 # Is the database already set up?
-db_present=$(rails runner 'puts ActiveRecord::Base.connection.tables.present?')
+db_present=unknown
+if psql -d development -c "\dt" | grep schema_migrations 2>&1 >/dev/null
+then
+  db_present=true
+else
+  db_present=false
+fi
 
 case "$db_present" in
 false)

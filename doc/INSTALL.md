@@ -202,7 +202,7 @@ but that approach is not documented here.
 
 ### Installing the project environment
 
-For development we currently fix the version of Ruby at exactly 2.3.1.
+For development we fix the version of Ruby at the version specified in `.ruby-version`. Please check that file and use that version in the steps below.
 We also need to install a number of gems (including the ones in Rails);
 we will install the versions specified in Gemfile.lock.
 We will do completely separate per-project Gem installs,

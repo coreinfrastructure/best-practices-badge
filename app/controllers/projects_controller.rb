@@ -24,7 +24,9 @@ class ProjectsController < ApplicationController
     remove_empty_query_params
     @projects = Project.all
     @projects = @projects.send params[:status] if
-      %w(in_progress passing failing).include? params[:status]
+      %w(in_progress passing).include? params[:status]
+    @projects = @projects.gteq(params[:gteq]) if params[:gteq].present?
+    @projects = @projects.lteq(params[:lteq]) if params[:lteq].present?
     @projects = @projects.text_search(params[:q]) if params[:q].present?
     @projects = @projects.includes(:user).paginate(page: params[:page])
   end

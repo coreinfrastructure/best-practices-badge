@@ -11,10 +11,8 @@
   <%= form_for projects_path, method: 'get', enforce_utf8: false,
                html: { class: 'project_search' } do %>
     <%= label_tag :badge_status %>
-    <%= select_tag(:status,
-                   options_for_select(([nil] + Project::BADGE_STATUSES)
-                     .map { |status| [status.to_s.titleize, status] },
-                   params[:status]), onchange: 'this.form.submit();') %>
+    <%= select_tag(:gteq, options_for_select(Project::BADGE_STATUSES,
+                   params[:gteq]), onchange: 'this.form.submit();') %>
     &nbsp; &nbsp; &nbsp;
     <%= label_tag :text_search %>
     <%= text_field_tag :q, params[:q], size: 25,

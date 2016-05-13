@@ -589,11 +589,31 @@ One exception: it's okay if the commit includes
 both a component update and the minimum set of code changes to
 make the update work.
 
-#### Updating Ruby
+#### Updating Ruby (and handling Ruby updates)
 
-Ruby itself can be updated.  Use 'cd' to go the top directory of this project,
-use 'git pull' to ensure this branch is up-to-date,
-and then do the following:
+Ruby itself can be updated.
+You can change the Ruby version yourself, and
+when you use git pull the current version of Ruby in use could change.
+There are extra steps needed when Ruby is updated; here they are.
+
+In particular, if you try to run commands and you see errors like this,
+you need to update your local installation of Ruby:
+
+~~~~
+rbenv: version \`2.3.9' is not installed (set by .../.ruby-version)
+~~~~
+
+The current version of Ruby used in the project is stored in
+the file `.ruby-version` in the project's top directory
+(for example, file Gemfile declares that the ruby version
+used is whatever is in ".ruby-version").
+The `.ruby-version` file is controlled by git.
+
+If you want to change the current version of Ruby used in the project,
+use `cd` to go this project's top directory,
+and use 'git pull' to ensure this branch is up-to-date.
+You should normally use `git checkout -b NEW_BRANCH_NAME` for the new branch.
+Then run these commands:
 
 ~~~~sh
 (cd $HOME/.rbenv/plugins/ruby-build && git pull) # Update ruby-build list
@@ -605,10 +625,22 @@ bundle install                                   # Reinstall gems
 rbenv rehash                                     # Update rbenv commands
 ~~~~
 
-The "rbenv local" command changes the contents of the tracked file
-"$HOME/.ruby-version".  Be sure to run "git commit -a" and "git push"
-after doing this.  The file Gemfile declares that the ruby version
-used is whatever is in ".ruby-version".
+Note that the `rbenv local` command changes the contents of the tracked file
+`.ruby-version`.  Be sure to run `git commit -a` and `git push`
+after doing this.
+
+If you've done a `git pull` and the Ruby version has changed in file
+`.ruby-version` (e.g., you're seeing the rbenv: version... not installed
+error message), you need to run these similar steps:
+
+~~~~sh
+(cd $HOME/.rbenv/plugins/ruby-build && git pull) # Update ruby-build list
+rbenv install $(cat .ruby-version)               # Install with ruby-build
+gem install bundler                              # Reinstall bundler for it
+rbenv rehash                                     # Tell rbenv about bundler
+bundle install                                   # Reinstall gems
+rbenv rehash                                     # Update rbenv commands
+~~~~
 
 For more details about updating Ruby versions with rbenv, see
 <https://github.com/rbenv/ruby-build> and

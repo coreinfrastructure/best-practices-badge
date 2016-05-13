@@ -202,7 +202,7 @@ but that approach is not documented here.
 
 ### Installing the project environment
 
-For development we currently fix the version of Ruby at exactly 2.2.2.
+For development we fix the version of Ruby at the version specified in `.ruby-version`. Please check that file and use that version in the steps below.
 We also need to install a number of gems (including the ones in Rails);
 we will install the versions specified in Gemfile.lock.
 We will do completely separate per-project Gem installs,
@@ -212,9 +212,9 @@ We presume that your current directory is the top directory of the project,
 aka cii-best-practices-badge.
 
 ~~~~
-# Force install Ruby 2.2.2 using rbenv:
-rbenv install 2.2.2
-rbenv local 2.2.2 # In this directory AND BELOW, use Ruby 2.2.2 instead.
+# Force install Ruby 2.3.1 using rbenv:
+rbenv install 2.3.1
+rbenv local 2.3.1 # In this directory AND BELOW, use Ruby 2.3.1 instead.
 
 # This makes "bundle ..." use rbenv's version of Ruby:
 git clone git://github.com/carsomyr/rbenv-bundler.git ~/.rbenv/plugins/bundler

@@ -104,9 +104,8 @@ class Project < ActiveRecord::Base
   end
 
   def badge_level
-    return 'in_progress' if any_status_in_progress?
     return 'passing' if all_active_criteria_passing?
-    'failing'
+    'in_progress'
   end
 
   def badge_percentage
@@ -135,12 +134,7 @@ class Project < ActiveRecord::Base
   def all_active_criteria_passing?
     Criteria.active.all? { |criterion| passing? criterion }
   end
-
-  def any_status_in_progress?
-    Criteria.active.any? do |criterion|
-      self[criterion.name.status].unknown? || self[criterion.name.status].blank?
-    end
-  end
+  
 
   def need_a_base_url
     return unless repo_url.blank? && homepage_url.blank?

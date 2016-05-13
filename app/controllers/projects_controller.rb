@@ -41,10 +41,13 @@ class ProjectsController < ApplicationController
     set_surrogate_key_header @project.record_key + '/badge'
     respond_to do |format|
       # Ensure level has a legal value to avoid brakeman sanitization warning
-      level = @project.badge_level if %w(passing failing in_progress)
-                                      .include? @project.badge_level
+      # level = @project.badge_level if %w(passing failing in_progress)
+      #                                 .include? @project.badge_level
+      # level = "badge-#{@project.badge_percentage}"
+      percentage = @project.badge_level if
+        (0..100).include? @project.badge_percentage
       format.svg do
-        send_file badge_file(level), disposition: 'inline'
+        send_file badge_file("badge-#{percentage}"), disposition: 'inline'
       end
     end
   end

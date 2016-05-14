@@ -16,4 +16,8 @@ class BadgeTest < ActiveSupport::TestCase
   test '100% Badge matches fixture file' do
     assert_equal contents('badge-100.svg'), Badge[100].to_s
   end
+
+  test 'Badge requires integer parameters' do
+    assert_raise(ArgumentError) { Badge[5.5] }
+  end
 end

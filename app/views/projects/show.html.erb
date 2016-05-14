@@ -19,8 +19,10 @@
 
 <b>Project badge entry owned by:</b>
 <%= link_to @project.user_name, user_path(@project.user) %>.<br>
-<b>Entry created on</b> <%= @project.created_at %>,
-<b>last updated on</b> <%= @project.updated_at %>.
+<b>Entry created on</b> <%= @project.created_at %>
+(<%= time_ago_in_words @project.created_at %> ago),
+<b>last updated on</b> <%= @project.updated_at %>
+(<%= time_ago_in_words @project.updated_at %> ago).
 <br><br>
 <p>
 <%= link_to 'Back', projects_path %>

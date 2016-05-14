@@ -112,8 +112,7 @@ user.projects.create!(user_id: user.id,
                       dynamic_analysis_status: '?',
                       dynamic_analysis_unsafe_status: '?',
                       dynamic_analysis_enable_assertions_status: '?',
-                      dynamic_analysis_fixed_status: '?'
-                     )
+                      dynamic_analysis_fixed_status: '?')
 
 100.times do |n|
   name = "test-name-#{n + 1}"
@@ -195,6 +194,5 @@ user.projects.create!(user_id: user.id,
                         dynamic_analysis_status: '?',
                         dynamic_analysis_unsafe_status: '?',
                         dynamic_analysis_enable_assertions_status: '?',
-                        dynamic_analysis_fixed_status: '?'
-                       )
+                        dynamic_analysis_fixed_status: '?')
 end

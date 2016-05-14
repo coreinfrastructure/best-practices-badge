@@ -182,8 +182,7 @@ module ActiveSupport
           'name' => 'CII Test',
           'email' => 'test@example.com',
           'nickname' => 'CIITheRobot'
-        }
-      }
+        } }
     end
 
     def vcr_oauth_token

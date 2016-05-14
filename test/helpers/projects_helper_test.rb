@@ -15,19 +15,22 @@ class ProjectsHelperTest < ActionView::TestCase
     assert_equal(
       '<p><a href="http://www.dwheeler.com">' \
       "http://www.dwheeler.com</a></p>\n",
-      markdown('http://www.dwheeler.com'))
+      markdown('http://www.dwheeler.com')
+    )
   end
 
   test 'markdown - angles around URL' do
     assert_equal(
       '<p><a href="http://www.dwheeler.com">' \
       "http://www.dwheeler.com</a></p>\n",
-      markdown('<http://www.dwheeler.com>'))
+      markdown('<http://www.dwheeler.com>')
+    )
   end
 
   test 'markdown - no script HTML' do
     assert_equal(
       "<p>Hello</p>\n",
-      markdown('<script src="hi"></script>Hello'))
+      markdown('<script src="hi"></script>Hello')
+    )
   end
 end

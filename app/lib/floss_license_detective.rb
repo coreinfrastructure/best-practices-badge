@@ -80,7 +80,8 @@ class FlossLicenseDetective < Detective
     'wxWindows Library License (WXwindows)',
     'X.Net License (Xnet)',
     'Zope Public License 2.0 (ZPL-2.0)',
-    'zlib/libpng license (Zlib)'].freeze
+    'zlib/libpng license (Zlib)'
+  ].freeze
 
   # Create list of *just* SPDX names, e.g., ['Apache-2.0', 'MIT', 'GPL-2.0']
   KNOWN_OSI_LICENSES =

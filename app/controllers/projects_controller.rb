@@ -119,6 +119,7 @@ class ProjectsController < ApplicationController
     end
   end
 
+  # rubocop:disable Metrics/MethodLength
   def successful_update(format, old_badge_level)
     purge_cdn_badge
     # @project.purge
@@ -129,9 +130,11 @@ class ProjectsController < ApplicationController
     new_badge_level = @project.badge_level
     if new_badge_level != old_badge_level # TODO: Eventually deliver_later
       ReportMailer.project_status_change(
-        @project, old_badge_level, new_badge_level).deliver_now
+        @project, old_badge_level, new_badge_level
+      ).deliver_now
     end
   end
+  # rubocop:enable Metrics/MethodLength
 
   # DELETE /projects/1
   # DELETE /projects/1.json

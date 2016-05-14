@@ -23,9 +23,11 @@ class GithubLoginTest < Capybara::Rails::TestCase
       click_on 'Get Your Badge Now!'
       wait_for_url '/projects/new?'
       assert find(
-        "option[value='https://github.com/ciitest/test-repo']")
+        "option[value='https://github.com/ciitest/test-repo']"
+      )
       assert find(
-        "option[value='https://github.com/ciitest/cii-best-practices-badge']")
+        "option[value='https://github.com/ciitest/cii-best-practices-badge']"
+      )
       select 'ciitest/cii-best-practices-badge',
              from: 'project[repo_url]'
       click_on 'Submit GitHub Repository'

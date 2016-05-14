@@ -47,6 +47,7 @@ class Badge
   private
 
   def create_svg(percentage)
+    # svg badges generated from http://shields.io/
     return passing_svg if percentage == 100
     in_progress_svg(percentage)
   end

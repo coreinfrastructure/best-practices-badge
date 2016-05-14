@@ -1,3 +1,11 @@
+GIT
+  remote: https://github.com/dankohn/secureheaders
+  revision: 96287e2a70ea7b53145285a19c8bc092df0b28a2
+  ref: 96287e2
+  specs:
+    secure_headers (3.3.1)
+      useragent
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -363,8 +371,6 @@ GEM
     sawyer (0.7.0)
       addressable (>= 2.3.5, < 2.5)
       faraday (~> 0.8, < 0.10)
-    secure_headers (3.3.1)
-      useragent
     selenium-webdriver (2.53.0)
       childprocess (~> 0.5)
       rubyzip (~> 1.0)
@@ -476,7 +482,7 @@ DEPENDENCIES
   redcarpet (= 3.3.4)
   ruby-graphviz (= 1.2.2)
   sass-rails (= 5.0.4)
-  secure_headers (= 3.3.1)
+  secure_headers!
   selenium-webdriver (= 2.53.0)
   simplecov (= 0.11.2)
   spring (= 1.7.1)
@@ -489,5 +495,8 @@ DEPENDENCIES
   will_paginate (= 3.1.0)
   yaml-lint (= 0.0.7)
 
+RUBY VERSION
+   ruby 2.3.1p112
+
 BUNDLED WITH
-   1.11.2
+   1.12.3

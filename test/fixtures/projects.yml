@@ -8,7 +8,7 @@ one:
   homepage_url: https://www.nasa.gov
   license: MIT
   repo_url: https://www.nasa.gov/pathfinder
-  badge_status: in_progress
+  badge_percentage: 0
 
 two:
   user: test_user_melissa
@@ -17,7 +17,7 @@ two:
   homepage_url: https://www.nasa.gov
   license: MIT
   repo_url: https://www.nasa.gov/mav
-  badge_status: in_progress
+  badge_percentage: 0
 
 # TODO: Generate list of status fields from central location.
 # No justifications means failing status.
@@ -28,7 +28,7 @@ perfect_unjustified:
   homepage_url: https://www.example.org
   repo_url: https://www.example.org/code2
   license: MIT
-  badge_status: failing
+  badge_percentage: 88
 <% Project::ALL_CRITERIA_STATUS.each do |criterion_status| %>
   <%= criterion_status %>: Met
 <% end %>
@@ -41,7 +41,7 @@ perfect:
   homepage_url: https://www.example.org
   repo_url: https://www.example.org/code3
   license: MIT
-  badge_status: passing
+  badge_percentage: 100
 <% Project::ALL_CRITERIA_STATUS.each do |criterion_status| %>
   <%= criterion_status %>: Met
 <% end %>

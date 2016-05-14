@@ -10,7 +10,7 @@ class Badge
     def [](percentage)
       valid? percentage
       @badges ||= {}
-      @badges[percentage.to_i] ||= new(percentage.to_i)
+      @badges[percentage] ||= new(percentage)
     end
 
     def all
@@ -37,7 +37,7 @@ class Badge
   # Instance methods
   def initialize(percentage)
     self.class.valid? percentage
-    @svg = create_svg(percentage.to_i)
+    @svg = create_svg(percentage)
   end
 
   def to_s

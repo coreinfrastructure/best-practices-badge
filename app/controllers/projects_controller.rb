@@ -40,14 +40,9 @@ class ProjectsController < ApplicationController
   def badge
     set_surrogate_key_header @project.record_key + '/badge'
     respond_to do |format|
-      # Ensure level has a legal value to avoid brakeman sanitization warning
-      # level = @project.badge_level if %w(passing failing in_progress)
-      #                                 .include? @project.badge_level
-      # level = "badge-#{@project.badge_percentage}"
-      percentage = @project.badge_level if
-        (0..100).include? @project.badge_percentage
       format.svg do
-        send_file badge_file("badge-#{percentage}"), disposition: 'inline'
+        send_data Badge[@project.badge_percentage],
+                  type: 'image/svg+xml', disposition: 'inline'
       end
     end
   end
@@ -172,15 +167,6 @@ class ProjectsController < ApplicationController
   end
 
   private
-
-  # Return name of badge file for given level
-  def badge_file(level)
-    if %(passing in_progress failing).include? level
-      Rails.application.assets["badge-#{level}.svg"].pathname
-    else
-      ''
-    end
-  end
 
   def set_homepage_url
     # Assign to repo.homepage if it exists, and else repo_url

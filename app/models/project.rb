@@ -100,7 +100,7 @@ class Project < ActiveRecord::Base
   end
 
   def update_badge_percentage
-    self.badge_percentage = badge_percentage
+    self.badge_percentage = calculate_badge_percentage
   end
 
   def badge_level
@@ -108,7 +108,7 @@ class Project < ActiveRecord::Base
     'in_progress'
   end
 
-  def badge_percentage
+  def calculate_badge_percentage
     met = Criteria.active.count { |criterion| passing? criterion }
     to_percentage met, Criteria.active.length
   end
@@ -134,7 +134,6 @@ class Project < ActiveRecord::Base
   def all_active_criteria_passing?
     Criteria.active.all? { |criterion| passing? criterion }
   end
-  
 
   def need_a_base_url
     return unless repo_url.blank? && homepage_url.blank?

@@ -1,5 +1,8 @@
 require 'test_helper'
+
+puts 'Please ignore the following warnings about "previous definition"...'
 load 'Rakefile'
+puts 'End of expected warnings about previous definitions.'
 
 class FeedTest < ActionDispatch::IntegrationTest
   def setup

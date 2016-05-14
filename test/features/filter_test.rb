@@ -3,6 +3,7 @@ require 'test_helper'
 class FilterTest < Capybara::Rails::TestCase
   scenario 'Can Filter Projects', js: true do
     visit '/projects'
+    assert has_content? 'Add New Project'
     assert_equal 4, all('tbody tr').count
     assert has_content? 'Pathfinder OS'
     assert has_content? 'Mars Ascent Vehicle (MAV)'

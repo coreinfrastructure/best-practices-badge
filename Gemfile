@@ -22,11 +22,11 @@ gem 'paper_trail', '5.0.1' # Record previous versions of project data
 gem 'pg', '0.18.4' # PostgreSQL database, used for data storage
 gem 'puma', '3.4.0' # Faster webserver; recommended by Heroku
 gem 'rack-timeout', '0.4.2' # Timeout per https://github.com/heroku/rack-timeout
-gem 'rails', '4.2.6' # Our web framework
+gem 'rails', '5.0.0.rc1' # Our web framework
 gem 'sass-rails', '5.0.4'
 gem 'secure_headers', '3.3.1' # Harden app security using HTTP headers
-gem 'turbolinks', '2.5.3' # Speed UI access
-gem 'jquery-turbolinks'   # Make turbolinks work with jQuery
+gem 'turbolinks', '5.0.0.beta2' # Speed UI access
+gem 'jquery-turbolinks', '2.1.0' # Make turbolinks work with jQuery
 gem 'uglifier', '3.0.0'
 gem 'will_paginate', '3.1.0'
 
@@ -63,9 +63,10 @@ group :test do
   gem 'chromedriver-helper', '1.0.0'
   gem 'codecov', '0.1.4', require: false
   gem 'm', '1.5.0' # Run test/unit tests by line number
-  gem 'minitest-rails-capybara', '2.1.2', require: false
+  gem 'minitest-rails-capybara', '3.0.0.rc1', require: false
   gem 'minitest-retry', '0.1.4', require: false # Avoid Capybara false positives
   gem 'poltergeist', '1.9.0', require: false
+  gem 'rails-controller-testing', '0.1.0', require: false # Removed from Rails 5
   gem 'selenium-webdriver', '2.53.0', require: false
   gem 'simplecov', '0.11.2', require: false
   gem 'webmock', '2.0.1', require: false

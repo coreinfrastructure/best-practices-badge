@@ -7,7 +7,7 @@
 <% end %>
 
 <div class="center">
-<h2>Projects</h2>
+<h2><%= pluralize(@count, 'Project') %></h2>
   <%= form_for projects_path, method: 'get', enforce_utf8: false,
                html: { class: 'project_search' } do %>
     <%= label_tag :badge_status %>

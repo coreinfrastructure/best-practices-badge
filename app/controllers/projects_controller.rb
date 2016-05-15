@@ -28,6 +28,7 @@ class ProjectsController < ApplicationController
     @projects = @projects.gteq(params[:gteq]) if params[:gteq].present?
     @projects = @projects.lteq(params[:lteq]) if params[:lteq].present?
     @projects = @projects.text_search(params[:q]) if params[:q].present?
+    @count = @projects.count
     @projects = @projects.includes(:user).paginate(page: params[:page])
   end
   # rubocop:enable Metrics/AbcSize

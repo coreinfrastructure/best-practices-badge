@@ -1,12 +1,13 @@
+# frozen_string_literal: true
 require 'addressable/uri'
 require 'net/http'
 
 # rubocop:disable Metrics/ClassLength
 class ProjectsController < ApplicationController
   include ProjectsHelper
-  before_action :set_project, only: [:edit, :update, :destroy, :show, :badge]
+  before_action :set_project, only: %i(edit update destroy show badge)
   before_action :logged_in?, only: :create
-  before_action :change_authorized, only: [:destroy, :edit, :update]
+  before_action :change_authorized, only: %i(destroy edit update)
 
   # Cache with Fastly CDN.  We can't use this header, because logged-in
   # and not-logged-in users see different things (and thus we can't
@@ -208,8 +209,10 @@ class ProjectsController < ApplicationController
     if @project && repo_url_disabled?(@project)
       params.require(:project).permit(Project::PROJECT_PERMITTED_FIELDS)
     else
-      params.require(:project).permit(:repo_url,
-                                      Project::PROJECT_PERMITTED_FIELDS)
+      params.require(:project).permit(
+        :repo_url,
+        Project::PROJECT_PERMITTED_FIELDS
+      )
     end
   end
 

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CreateProjects < ActiveRecord::Migration
   def change
     create_table :projects do |t|
@@ -165,6 +166,6 @@ class CreateProjects < ActiveRecord::Migration
 
       t.timestamps null: false
     end
-    add_index :projects, [:user_id, :created_at]
+    add_index :projects, %i(user_id created_at)
   end
 end

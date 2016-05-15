@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class User < ActiveRecord::Base
   before_save { self.email = email.downcase }
   has_secure_password
@@ -15,18 +16,21 @@ class User < ActiveRecord::Base
 
   # Returns the hash digest of the given string.
   def self.digest(string)
-    cost = if ActiveModel::SecurePassword.min_cost
-             BCrypt::Engine::MIN_COST
-           else
-             BCrypt::Engine.cost
-           end
+    cost =
+      if ActiveModel::SecurePassword.min_cost
+        BCrypt::Engine::MIN_COST
+      else
+        BCrypt::Engine.cost
+      end
     BCrypt::Password.create(string, cost: cost)
   end
 
   def self.create_with_omniauth(auth)
-    @user = User.new(provider: auth[:provider], uid: auth[:uid],
-                     name: auth[:info][:name], email: auth[:info][:email],
-                     nickname: auth[:info][:nickname], activated: true)
+    @user = User.new(
+      provider: auth[:provider], uid: auth[:uid],
+      name: auth[:info][:name], email: auth[:info][:email],
+      nickname: auth[:info][:nickname], activated: true
+    )
     @user.save!(validate: false)
     @user
   end

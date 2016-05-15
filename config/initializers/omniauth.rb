@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 Rails.application.config.middleware.use OmniAuth::Builder do
   if Rails.env.test?
     # Test app OAuth returns to a different port

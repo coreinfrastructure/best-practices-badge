@@ -11,8 +11,10 @@ class Project < ActiveRecord::Base
   MAX_TEXT_LENGTH = 8192 # Arbitrary maximum to reduce abuse
   MAX_SHORT_STRING_LENGTH = 254 # Arbitrary maximum to reduce abuse
 
-  PROJECT_OTHER_FIELDS = %i(name description homepage_url cpe
-                            license general_comments user_id).freeze
+  PROJECT_OTHER_FIELDS = %i(
+    name description homepage_url cpe
+    license general_comments user_id
+  ).freeze
   ALL_CRITERIA_STATUS = Criteria.map { |c| c.name.status }.freeze
   ALL_CRITERIA_JUSTIFICATION = Criteria.map { |c| c.name.justification }.freeze
   PROJECT_PERMITTED_FIELDS = (PROJECT_OTHER_FIELDS + ALL_CRITERIA_STATUS +

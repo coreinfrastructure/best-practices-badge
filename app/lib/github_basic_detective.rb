@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'json'
 
 # If it's a GitHub repo, grab easily-acquired data from GitHub API and
@@ -7,15 +8,14 @@ require 'json'
 # Be sure to use strings, NOT symbols, as a key when accessing JSON-parsed
 # results (because strings and symbols are distinct in basic Ruby).
 
-# frozen_string_literal: true
-
 # rubocop:disable Metrics/ClassLength
 class GithubBasicDetective < Detective
   # Individual detectives must identify their inputs, outputs
   INPUTS = [:repo_url].freeze
-  OUTPUTS = [:name, :license,
-             :discussion_status, :repo_public_status, :repo_track_status,
-             :repo_distributed_status, :contribution_status].freeze
+  OUTPUTS = %i(
+    name license discussion_status repo_public_status repo_track_status
+    repo_distributed_status contribution_status
+  ).freeze
 
   # These are the 'correct' display case for SPDX for OSI-approved licenses.
   LICENSE_CORRECT_CASE = {

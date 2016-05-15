@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module ProjectsHelper
   MARKDOWN_RENDERER = Redcarpet::Render::HTML.new(
     filter_html: true, no_images: true,
@@ -35,9 +36,13 @@ module ProjectsHelper
 
   # Use the status_chooser to render the given criterion.
   def render_status(criterion, f, project, is_disabled, is_last = false)
-    render(partial: 'status_chooser',
-           locals: { f: f, project: project, is_disabled: is_disabled,
-                     is_last: is_last, criterion: Criteria[criterion] })
+    render(
+      partial: 'status_chooser',
+      locals: {
+        f: f, project: project, is_disabled: is_disabled,
+        is_last: is_last, criterion: Criteria[criterion]
+      }
+    )
   end
 
   def repo_url_disabled?(project)

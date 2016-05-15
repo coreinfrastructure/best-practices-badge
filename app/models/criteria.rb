@@ -4,8 +4,10 @@ class Criteria
   ATTRIBUTES = CriteriaHash.reduce([]) do |attributes, criterion|
     attributes | criterion[1].keys
   end.map(&:to_sym).freeze
-  FUTURE_ATTRIBUTES = %i(met_url na_placeholder na_suppress unmet
-                         unmet_suppress).freeze
+  FUTURE_ATTRIBUTES = %i(
+    met_url na_placeholder na_suppress unmet
+    unmet_suppress
+  ).freeze
   ACCESSORS = (%i(name) + ATTRIBUTES + FUTURE_ATTRIBUTES).freeze
 
   include ActiveModel::Model

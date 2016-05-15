@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class RenameContributionCriteriaToContributionRequirements <
       ActiveRecord::Migration
   def change

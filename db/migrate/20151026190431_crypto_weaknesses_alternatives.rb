@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CryptoWeaknessesAlternatives < ActiveRecord::Migration
   def change
     add_column :projects, :crypto_weaknesses_status, :string, default: '?'

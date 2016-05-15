@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class UrlValidator < ActiveModel::EachValidator
   # The URL validation rules are somewhat overly strict, but should serve;
   # the idea is to prevent attackers from inserting redirecting URLs
@@ -13,7 +14,7 @@ class UrlValidator < ActiveModel::EachValidator
     %r{\A(|https?://[A-Za-z0-9][-A-Za-z0-9_.]*(/[-A-Za-z0-9_.:/+!,#]*)?)\z}
 
   URL_MESSAGE = 'must begin with http: or https: and use a limited' \
-                ' charset'.freeze
+                ' charset'
 
   def validate_each(record, attribute, value)
     return if value =~ URL_REGEX

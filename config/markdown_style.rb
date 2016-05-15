@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Configure for markdownlint (mdl), a markdown style checker
 # Note: mdl 0.2.0 and 0.2.1 have a serious bug in command line parsing,
 # and thus you *have* to use a file to adjust rules.

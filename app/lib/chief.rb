@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # A 'chief' instance analyzes project data.  It does this by calling
 # 'Detectives' (analyzers) in the right order, each of which have
 # access to the evidence accumulated so far.
@@ -26,7 +27,7 @@ class Chief
     # Determine what exceptions to intercept - if we're in
     # test or development, we will only intercept an exception we don't use.
     current_environment = (ENV['RAILS_ENV'] || 'development').to_sym
-    if [:test, :development].include?(current_environment)
+    if %i(test development).include?(current_environment)
       @intercept_exception = NoSuchException
     else
       @intercept_exception = StandardError
@@ -36,9 +37,11 @@ class Chief
 
   # TODO: Identify classes automatically and do topological sort.
   ALL_DETECTIVES =
-    [NameFromUrlDetective, ProjectSitesHttpsDetective,
-     GithubBasicDetective, HowAccessRepoFilesDetective,
-     RepoFilesExamineDetective, FlossLicenseDetective].freeze
+    [
+      NameFromUrlDetective, ProjectSitesHttpsDetective,
+      GithubBasicDetective, HowAccessRepoFilesDetective,
+      RepoFilesExamineDetective, FlossLicenseDetective
+    ].freeze
 
   # List fields allowed to be written into Project (an ActiveRecord).
   ALLOWED_FIELDS = Project::PROJECT_PERMITTED_FIELDS.to_set.freeze

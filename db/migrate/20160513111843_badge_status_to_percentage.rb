@@ -5,8 +5,8 @@ class BadgeStatusToPercentage < ActiveRecord::Migration
       project.update_badge_percentage
       project.save!(validate: false)
     end
-    change_column :projects, :badge_status,
-                  'integer USING CAST("badge_status" AS integer)'
+    change_column :projects, :badge_percentage,
+                  'integer USING CAST("badge_percentage" AS integer)'
   end
 
   def down

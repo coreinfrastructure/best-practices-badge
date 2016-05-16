@@ -4,20 +4,24 @@ class Project < ActiveRecord::Base
   using StringRefinements
   using SymbolRefinements
 
-  BADGE_STATUSES = [['All', nil],
-                    ['Passing (100%)', 100],
-                    ['In Progress (25% or more)', 25],
-                    ['In Progress (50% or more)', 50],
-                    ['In Progress (75% or more)', 75],
-                    ['In Progress (90% or more)', 90]].freeze
+  BADGE_STATUSES = [
+    ['All', nil],
+    ['Passing (100%)', 100],
+    ['In Progress (25% or more)', 25],
+    ['In Progress (50% or more)', 50],
+    ['In Progress (75% or more)', 75],
+    ['In Progress (90% or more)', 90]
+  ].freeze
   STATUS_CHOICE = %w(? Met Unmet).freeze
   STATUS_CHOICE_NA = (STATUS_CHOICE + %w(N/A)).freeze
   MIN_SHOULD_LENGTH = 5
   MAX_TEXT_LENGTH = 8192 # Arbitrary maximum to reduce abuse
   MAX_SHORT_STRING_LENGTH = 254 # Arbitrary maximum to reduce abuse
 
-  PROJECT_OTHER_FIELDS = %i(name description homepage_url cpe
-                            license general_comments user_id).freeze
+  PROJECT_OTHER_FIELDS = %i(
+    name description homepage_url cpe
+    license general_comments user_id
+  ).freeze
   ALL_CRITERIA_STATUS = Criteria.map { |c| c.name.status }.freeze
   ALL_CRITERIA_JUSTIFICATION = Criteria.map { |c| c.name.justification }.freeze
   PROJECT_PERMITTED_FIELDS = (PROJECT_OTHER_FIELDS + ALL_CRITERIA_STATUS +

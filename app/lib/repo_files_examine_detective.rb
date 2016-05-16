@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Examine repository files at the top level and in key subdirectories
 # (those conventionally used for source and documentation).
 # Note that a key precondition is determining how to open repo files.
@@ -6,9 +7,10 @@
 
 class RepoFilesExamineDetective < Detective
   INPUTS = [:repo_files].freeze
-  OUTPUTS = [:contribution_status, :license_location_status,
-             :release_notes_status, :build_status,
-             :build_common_tools_status].freeze
+  OUTPUTS = %i(
+    contribution_status license_location_status release_notes_status
+    build_status build_common_tools_status
+  ).freeze
 
   # Minimum file sizes (in bytes) before they are considered useful.
   # Empty files, in particular, clearly do NOT have enough content.
@@ -26,15 +28,19 @@ class RepoFilesExamineDetective < Detective
   end
 
   def unmet_result(result_description)
-    { value: 'Unmet', confidence: 1,
-      explanation: "No #{result_description} file found." }
+    {
+      value: 'Unmet', confidence: 1,
+      explanation: "No #{result_description} file found."
+    }
   end
 
   def met_result(result_description, html_url)
-    { value: 'Met', confidence: 3,
+    {
+      value: 'Met', confidence: 3,
       explanation:
         "Non-trivial #{result_description} file in repository: " \
-        "<#{html_url}>." }
+        "<#{html_url}>."
+    }
   end
 
   def determine_results(status, name_pattern, minimum_size, result_description)

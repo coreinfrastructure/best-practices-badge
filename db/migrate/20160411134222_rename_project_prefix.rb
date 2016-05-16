@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class RenameProjectPrefix < ActiveRecord::Migration
   def change
     rename_column :projects,

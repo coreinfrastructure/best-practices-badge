@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class RenameRepoUrlToRepoPublic < ActiveRecord::Migration
   def change
     rename_column :projects, :repo_url_status, :repo_public_status

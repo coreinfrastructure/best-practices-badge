@@ -1,7 +1,8 @@
+# frozen_string_literal: true
 class UsersController < ApplicationController
-  before_action :require_admin,  only: [:index, :destroy]
-  before_action :logged_in_user, only: [:edit, :update]
-  before_action :correct_user,   only: [:edit, :update]
+  before_action :require_admin,  only: %i(index destroy)
+  before_action :logged_in_user, only: %i(edit update)
+  before_action :correct_user,   only: %i(edit update)
   include SessionsHelper
 
   def new
@@ -56,8 +57,10 @@ class UsersController < ApplicationController
   private
 
   def user_params
-    params.require(:user).permit(:provider, :uid, :name, :email, :password,
-                                 :password_confirmation)
+    params.require(:user).permit(
+      :provider, :uid, :name, :email, :password,
+      :password_confirmation
+    )
   end
 
   def require_admin

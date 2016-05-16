@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # A 'Detective' (analyzer) analyzes data from evidence and reports
 # what it believes the new values should be.
 # This is subclassed (one per each analyzer); an instance analyzes 1 project.

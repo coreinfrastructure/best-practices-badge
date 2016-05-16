@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class FillProjectSitesHttps < ActiveRecord::Migration
   def change
     # Previous rename was misleading, change to follow conventions:

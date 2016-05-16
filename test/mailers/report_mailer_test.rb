@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'test_helper'
 # See http://guides.rubyonrails.org/testing.html#testing-your-mailers
 

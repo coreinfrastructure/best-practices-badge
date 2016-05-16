@@ -31,7 +31,7 @@ PACKAGES=''
 add_pkg () {
   for p ; do
     if [ "$p" = '' ] || [ "$p" = '-' ] ; then continue ; fi
-    if [ "$p" = 'sqlite3' ] && [ "$manager" = 'yum' ] ; then
+    if [ "$p" = 'sqlite3' ] && { [ "$manager" = 'dnf' ] || [ "$manager" = 'yum' ]; }; then
       p='sqlite'
     fi
     PACKAGES="$PACKAGES $p"
@@ -135,7 +135,8 @@ case "$manager" in
             phantomjs;;
   yum|dnf)
     add_pkg gcc openssl-devel libyaml-devel libffi-devel readline-devel \
-            zlib-devel gdbm-devel ncurses-devel ;;
+            zlib-devel gdbm-devel ncurses-devel postgresql-devel cmake npm \
+            postgresql-server postgresql-contrib ;;
   zypper)
     add_pkg gcc automake gdbm-devel libffi-devel libyaml-devel \
             openssl-devel ncurses-devel readline-devel zlib-devel ;;
@@ -157,6 +158,34 @@ else
   echo 'Skipping system package install.'
 fi
 
+case "$manager" in
+  yum|dnf)
+    npm install phantomjs-prebuilt
+    npm_path="$(pwd)/node_modules/.bin"
+    export PATH="$npm_path:$PATH"
+    f=''
+    for try in .bashrc .bash_profile .zshrc .profile ; do
+      if [ -f "$HOME/$try" ] ; then
+        f="$HOME/$try"
+        break
+      fi
+    done
+    if [ -e "$f" ] ; then
+      if ! grep "PATH=.*node_modules/\.bin" "$f" > /dev/null ; then
+        echo "Modifying $f to add npm .bin path. NOTE: Use this command:"
+        echo "  . $f"
+        echo "for the environment changes to take effect in current shell."
+        # shellcheck disable=SC2016
+        echo "export PATH=$npm_path:"'$PATH' >> "$f"
+      fi
+    fi
+    sudo postgresql-setup initdb
+    sudo systemctl enable postgresql
+    sudo systemctl start postgresql
+    ;;
+  *)
+    # do nothing
+esac
 
 # Install rbenv 1.0.0 via GitHub, if it isn't already installed,
 # to let us select a specific version of ruby.
@@ -174,8 +203,11 @@ if is_command 'rbenv' ; then
     echo '  Installed rbenv version != 1.0.0'
     DO_LOCAL_RBENV='yes'
   fi
-elif [ "$MYINSTALL_RBENV" != 'yes' ] ; then
-  echo 'Skipping rbenv install.'
+else
+  DO_LOCAL_RBENV='yes'
+  if [ "$MYINSTALL_RBENV" != 'yes' ] ; then
+    echo 'Skipping rbenv install.'
+  fi
 fi
 
 if [ $DO_LOCAL_RBENV = 'yes' ] ; then
@@ -272,11 +304,11 @@ bundle install       # Install gems we use in Gemfile.lock, including Rails
 echo
 echo 'STAGE 6: Set up database for development if necessary'
 echo 'Make sure PostgreSQL superuser role for current user exists.'
-sudo -u postgres createuser -s `whoami`
+sudo -u postgres createuser -s "$(whoami)"
 
 # Is the database already set up?
 db_present=unknown
-if psql -d development -c "\dt" | grep schema_migrations 2>&1 >/dev/null
+if psql -d development -c "\dt" | grep schema_migrations >/dev/null 2>&1
 then
   db_present=true
 else

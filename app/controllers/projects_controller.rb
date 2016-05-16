@@ -24,8 +24,11 @@ class ProjectsController < ApplicationController
     remove_empty_query_params
     @projects = Project.all
     @projects = @projects.send params[:status] if
-      %w(in_progress passing failing).include? params[:status]
+      %w(in_progress passing).include? params[:status]
+    @projects = @projects.gteq(params[:gteq]) if params[:gteq].present?
+    @projects = @projects.lteq(params[:lteq]) if params[:lteq].present?
     @projects = @projects.text_search(params[:q]) if params[:q].present?
+    @count = @projects.count
     @projects = @projects.includes(:user).paginate(page: params[:page])
   end
   # rubocop:enable Metrics/AbcSize
@@ -38,11 +41,9 @@ class ProjectsController < ApplicationController
   def badge
     set_surrogate_key_header @project.record_key + '/badge'
     respond_to do |format|
-      # Ensure level has a legal value to avoid brakeman sanitization warning
-      level = @project.badge_level if %w(passing failing in_progress)
-                                      .include? @project.badge_level
       format.svg do
-        send_file badge_file(level), disposition: 'inline'
+        send_data Badge[@project.badge_percentage],
+                  type: 'image/svg+xml', disposition: 'inline'
       end
     end
   end
@@ -167,15 +168,6 @@ class ProjectsController < ApplicationController
   end
 
   private
-
-  # Return name of badge file for given level
-  def badge_file(level)
-    if %(passing in_progress failing).include? level
-      Rails.application.assets["badge-#{level}.svg"].pathname
-    else
-      ''
-    end
-  end
 
   def set_homepage_url
     # Assign to repo.homepage if it exists, and else repo_url

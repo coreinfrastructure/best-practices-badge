@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160511222530) do
+ActiveRecord::Schema.define(version: 20160513111843) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -180,10 +180,10 @@ ActiveRecord::Schema.define(version: 20160511222530) do
     t.text     "installation_common_justification"
     t.string   "build_reproducible_status",                            default: "?"
     t.text     "build_reproducible_justification"
-    t.string   "badge_status"
+    t.integer  "badge_percentage"
   end
 
-  add_index "projects", ["badge_status"], name: "index_projects_on_badge_status", using: :btree
+  add_index "projects", ["badge_percentage"], name: "index_projects_on_badge_percentage", using: :btree
   add_index "projects", ["homepage_url"], name: "index_projects_on_homepage_url", using: :btree
   add_index "projects", ["name"], name: "index_projects_on_name", using: :btree
   add_index "projects", ["repo_url"], name: "index_projects_on_repo_url", using: :btree

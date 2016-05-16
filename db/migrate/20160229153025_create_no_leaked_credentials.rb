@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CreateNoLeakedCredentials < ActiveRecord::Migration
   def change
     add_column :projects, :no_leaked_credentials_status, :string, default: '?'

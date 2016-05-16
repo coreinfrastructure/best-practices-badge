@@ -1,11 +1,13 @@
 Rails:
   Enabled: true
 AllCops:
+  TargetRubyVersion: 2.3
   DisplayCopNames: true
   DisplayStyleGuide: true
   Include:
     - '**/*.pryrc'
     - '**/*.rake'
+    - '.env'
     - '.simplecov'
     - '**/config.ru'
     - '**/Gemfile'
@@ -13,7 +15,6 @@ AllCops:
     - '**/Rakefile'
   Exclude:
     - 'db/schema.rb'
-    - 'features/support/_circleci_formatter.rb'
 Documentation:
   Enabled: false
 Lint/HandleExceptions:
@@ -31,6 +32,28 @@ Metrics/LineLength:
 Metrics/MethodLength:
   Exclude:
     - 'db/migrate/*'
+Style/AutoResourceCleanup:
+  Enabled: true
+Style/CollectionMethods:
+  Enabled: true
+Style/Encoding:
+  Enabled: true
+Style/FirstArrayElementLineBreak:
+  Enabled: true
+Style/FirstHashElementLineBreak:
+  Enabled: true
+Style/FirstMethodArgumentLineBreak:
+  Enabled: true
+Style/FirstMethodParameterLineBreak:
+  Enabled: true
+Style/MultilineAssignmentLayout:
+  Enabled: true
+Style/OptionHash:
+  Enabled: true
+Style/StringMethods:
+  Enabled: true
+Style/SymbolArray:
+  Enabled: true
 Style/TrivialAccessors:
   Enabled: true
   ExactNameMatch: true

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 SecureHeaders::Configuration.default do |config|
   normal_src = %w('self')
   if ENV['PUBLIC_HOSTNAME']

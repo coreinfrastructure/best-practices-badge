@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class BadgeStatusToPercentage < ActiveRecord::Migration
   def up
     rename_column :projects, :badge_status, :badge_percentage

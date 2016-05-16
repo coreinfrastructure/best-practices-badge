@@ -3,7 +3,7 @@
 # frozen_string_literal: true
 
 class NameFromUrlDetective < Detective
-  INPUTS = [:repo_url, :homepage_url].freeze
+  INPUTS = %i(repo_url homepage_url).freeze
   OUTPUTS = [:name].freeze
 
   # rubocop:disable Metrics/MethodLength
@@ -22,14 +22,18 @@ class NameFromUrlDetective < Detective
       finding = name_in_homepage_url_domain.match(homepage_url)
       if finding && finding[2].present?
         @results[:name] =
-          { value: finding[2], confidence: 1,
-            explanation: "The project URL's domain name suggests this." }
+          {
+            value: finding[2], confidence: 1,
+            explanation: "The project URL's domain name suggests this."
+          }
       else
         finding = name_in_url_tail.match(homepage_url)
         if finding
           @results[:name] =
-            { value: finding[1], confidence: 1,
-              explanation: "The project URL's tail suggests this." }
+            {
+              value: finding[1], confidence: 1,
+              explanation: "The project URL's tail suggests this."
+            }
         end
       end
     end
@@ -37,8 +41,10 @@ class NameFromUrlDetective < Detective
       finding = name_in_url_tail.match(repo_url)
       if finding
         @results[:name] =
-          { value: finding[1], confidence: 1,
-            explanation: "The repo URL's tail suggests this." }
+          {
+            value: finding[1], confidence: 1,
+            explanation: "The repo URL's tail suggests this."
+          }
       end
     end
     @results

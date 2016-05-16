@@ -1,9 +1,12 @@
+# frozen_string_literal: true
 require 'test_helper'
 
 class UserTest < ActiveSupport::TestCase
   def setup
-    @user = User.new(name: 'Example User', email: 'user@example.com',
-                     password: 'p@$$w0rd', password_confirmation: 'p@$$w0rd')
+    @user = User.new(
+      name: 'Example User', email: 'user@example.com',
+      password: 'p@$$w0rd', password_confirmation: 'p@$$w0rd'
+    )
   end
 
   test 'should be valid' do
@@ -31,8 +34,10 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'email validation should accept good emails' do
-    good_emails = %w(user@mail.com USER@foo.COM A_US-ER@abc.mail.org
-                     first.last@foo.co hello+bye@baz.uk)
+    good_emails = %w(
+      user@mail.com USER@foo.COM A_US-ER@abc.mail.org
+      first.last@foo.co hello+bye@baz.uk
+    )
     good_emails.each do |good_email|
       @user.email = good_email
       assert @user.valid?, "#{good_email.inspect} should be valid"
@@ -40,8 +45,10 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'email validation should reject bad emails' do
-    bad_emails = %w(user@mail,com user_at_foo.org user.name@mail.
-                    foo@bar_baz.com foo@bar+baz.com)
+    bad_emails = %w(
+      user@mail,com user_at_foo.org user.name@mail.
+      foo@bar_baz.com foo@bar+baz.com
+    )
     bad_emails.each do |bad_email|
       @user.email = bad_email
       assert_not @user.valid?, "#{bad_email.inspect} should be invalid"
@@ -66,8 +73,10 @@ class UserTest < ActiveSupport::TestCase
 
   test 'associated projects should be destroyed' do
     @user.save!
-    @user.projects.create!(homepage_url: 'https://www.example.org',
-                           repo_url: 'https://www.example.org/code')
+    @user.projects.create!(
+      homepage_url: 'https://www.example.org',
+      repo_url: 'https://www.example.org/code'
+    )
     assert_difference 'Project.count', -1 do
       @user.destroy
     end

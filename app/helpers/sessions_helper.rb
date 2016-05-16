@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module SessionsHelper
   SESSION_TTL = 48.hours # Automatically log off session if inactive this long
 

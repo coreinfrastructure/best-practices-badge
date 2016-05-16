@@ -33,7 +33,7 @@
   <% end %>
   <% if current_user.admin? %>
     As an admin, you may also:
-    <% if @user.email.present? %>
+    <% if @user.email? %>
       <a href="mailto:<%= CGI::escape(@user.email).html_safe %>">email
         <%= @user.email %></a> |
     <% end %>

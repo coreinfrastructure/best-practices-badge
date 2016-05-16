@@ -9,7 +9,7 @@
       <%= gravatar_for user %>
       <%= link_to user.name, user %>
       <% if current_user.admin? %>
-        <% if user.email.present? %>
+        <% if user.email? %>
     |     <a href="mailto:<%= CGI::escape(user.email).html_safe %>">email
             <%= user.email %></a>
         <% end %>

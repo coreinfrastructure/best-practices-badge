@@ -24,7 +24,8 @@ gem 'puma', '3.4.0' # Faster webserver; recommended by Heroku
 gem 'rack-timeout', '0.4.2' # Timeout per https://github.com/heroku/rack-timeout
 gem 'rails', '4.2.6' # Our web framework
 gem 'sass-rails', '5.0.4'
-gem 'secure_headers', '3.3.1' # Harden app security using HTTP headers
+gem 'secure_headers', git: 'https://github.com/dankohn/secureheaders',
+                      ref: '96287e2'
 gem 'turbolinks', '2.5.3' # Speed UI access
 gem 'jquery-turbolinks'   # Make turbolinks work with jQuery
 gem 'uglifier', '3.0.0'

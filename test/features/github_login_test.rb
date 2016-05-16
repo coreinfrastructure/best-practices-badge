@@ -32,6 +32,11 @@ class GithubLoginTest < Capybara::Rails::TestCase
       assert has_content? 'Thanks for adding the Project! Please fill out ' \
                          'the rest of the information to get the Badge.'
 
+      click_on 'Account'
+      assert has_content? 'Profile'
+      click_on 'Profile'
+      assert has_content? 'CII Test'
+
       if ENV['GITHUB_PASSWORD'] # revoke OAuth authorization
         visit 'https://github.com/settings/applications'
         click_on 'Revoke'

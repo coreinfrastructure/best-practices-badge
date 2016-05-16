@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class RemoveCryptoAlternatives < ActiveRecord::Migration
   def up
     remove_column :projects, :crypto_alternatives_status

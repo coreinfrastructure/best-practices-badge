@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Examine software license (already determined), expressed with SPDX,
 # to report if it's open source software (OSS) and meets OSI requirements.
 
@@ -7,7 +8,7 @@
 class FlossLicenseDetective < Detective
   # Individual detectives must identify their inputs, outputs
   INPUTS = [:license].freeze
-  OUTPUTS = [:floss_license_osi_status, :floss_license_status].freeze
+  OUTPUTS = %i(floss_license_osi_status floss_license_status).freeze
 
   # From: http://opensource.org/licenses/alphabetical
   OSI_LICENSES_FROM_OSI_WEBSITE = [
@@ -80,7 +81,8 @@ class FlossLicenseDetective < Detective
     'wxWindows Library License (WXwindows)',
     'X.Net License (Xnet)',
     'Zope Public License 2.0 (ZPL-2.0)',
-    'zlib/libpng license (Zlib)'].freeze
+    'zlib/libpng license (Zlib)'
+  ].freeze
 
   # Create list of *just* SPDX names, e.g., ['Apache-2.0', 'MIT', 'GPL-2.0']
   KNOWN_OSI_LICENSES =
@@ -107,18 +109,26 @@ class FlossLicenseDetective < Detective
     license = license.strip.chomp('+')
 
     if self.class.osi_license?(license)
-      { floss_license_osi_status:
-          { value: 'Met', confidence: 5,
-            explanation: "The #{license} license is approved by the " \
-                         'Open Source Initiative (OSI).' },
+      {
+        floss_license_osi_status:
+                  {
+                    value: 'Met', confidence: 5,
+                    explanation: "The #{license} license is approved by the " \
+                                 'Open Source Initiative (OSI).'
+                  },
         floss_license_status:
-          { value: 'Met', confidence: 5,
+          {
+            value: 'Met', confidence: 5,
             explanation: "The #{license} license is approved by the " \
-                     'Open Source Initiative (OSI).' } }
+                     'Open Source Initiative (OSI).'
+          }
+      }
     elsif license =~ /\A[^(]/
       { floss_license_osi_status:
-          { value: 'Unmet', confidence: 1,
-            explanation: 'Did not find license in the OSI list.' } }
+          {
+            value: 'Unmet', confidence: 1,
+            explanation: 'Did not find license in the OSI list.'
+          } }
     else
       # We currently don't handle (...), so don't even guess.
       {}

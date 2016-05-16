@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 source 'https://rubygems.org'
 ruby File.open('.ruby-version', 'rb') { |f| f.read.chomp }
 
@@ -14,6 +15,7 @@ gem 'github_api', '0.13.1'
 gem 'imagesLoaded_rails', '4.1.0' # Javascript - enable wait for image load
 gem 'jbuilder', '2.4.1'
 gem 'jquery-rails', '4.1.1' # Javascript jQuery library (for Rails)
+gem 'jquery-turbolinks', '2.1.0' # Make turbolinks work with jQuery
 gem 'jquery-ui-rails', '5.0.5' # Javascript jQueryUI library (for Rails)
 gem 'redcarpet', '3.3.4' # Process markdown in form textareas (justifications)
 gem 'octokit', '4.3.0' # GitHub's official Ruby API
@@ -24,9 +26,9 @@ gem 'puma', '3.4.0' # Faster webserver; recommended by Heroku
 gem 'rack-timeout', '0.4.2' # Timeout per https://github.com/heroku/rack-timeout
 gem 'rails', '5.0.0.rc1' # Our web framework
 gem 'sass-rails', '5.0.4'
-gem 'secure_headers', '3.3.1' # Harden app security using HTTP headers
+gem 'secure_headers', git: 'https://github.com/dankohn/secureheaders',
+                      ref: '96287e2'
 gem 'turbolinks', '5.0.0.beta2' # Speed UI access
-gem 'jquery-turbolinks', '2.1.0' # Make turbolinks work with jQuery
 gem 'uglifier', '3.0.0'
 gem 'will_paginate', '3.1.0'
 
@@ -69,7 +71,7 @@ group :test do
   gem 'rails-controller-testing', '0.1.0', require: false # Removed from Rails 5
   gem 'selenium-webdriver', '2.53.0', require: false
   gem 'simplecov', '0.11.2', require: false
-  gem 'webmock', '2.0.1', require: false
+  gem 'webmock', '2.0.2', require: false
 end
 
 group :production do

@@ -5,7 +5,7 @@ atom_feed do |feed|
   @projects.each do |project|
     feed.entry(project) do |entry|
       entry.title project.name.presence || '(Name Unknown)'
-      status = "<p><b>#{project.badge_status.titleize}: " \
+      status = "<p><b>#{project.badge_level.titleize}: " \
                "#{project.badge_percentage}%</b></p>"
       url = project.homepage_url.presence || project.repo_url
       link = "<p><a href='#{url}'>#{url}</a></p>"

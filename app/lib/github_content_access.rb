@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Accessor to GitHub so we can read (file) content info from GitHub.
 # Use this indirect class so that we can later plug in other accessors to
 # read data from other locations.

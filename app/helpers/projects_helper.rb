@@ -1,11 +1,14 @@
+# frozen_string_literal: true
 module ProjectsHelper
   MARKDOWN_RENDERER = Redcarpet::Render::HTML.new(
     filter_html: true, no_images: true,
-    no_styles: true, safe_links_only: true)
+    no_styles: true, safe_links_only: true
+  )
   MARKDOWN_PROCESSOR = Redcarpet::Markdown.new(
     MARKDOWN_RENDERER,
     no_intra_emphasis: true, autolink: true,
-    space_after_headers: true, fenced_code_blocks: true)
+    space_after_headers: true, fenced_code_blocks: true
+  )
 
   def github_select
     # List original then forked Github projects, with headers
@@ -33,9 +36,13 @@ module ProjectsHelper
 
   # Use the status_chooser to render the given criterion.
   def render_status(criterion, f, project, is_disabled, is_last = false)
-    render(partial: 'status_chooser',
-           locals: { f: f, project: project, is_disabled: is_disabled,
-                     is_last: is_last, criterion: Criteria[criterion] })
+    render(
+      partial: 'status_chooser',
+      locals: {
+        f: f, project: project, is_disabled: is_disabled,
+        is_last: is_last, criterion: Criteria[criterion]
+      }
+    )
   end
 
   def repo_url_disabled?(project)

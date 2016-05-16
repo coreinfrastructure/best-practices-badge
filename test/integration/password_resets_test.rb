@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'test_helper'
 
 class PasswordResetsTest < ActionDispatch::IntegrationTest
@@ -35,24 +36,30 @@ class PasswordResetsTest < ActionDispatch::IntegrationTest
     # Right email, right token
     get edit_password_reset_path(user.reset_token, email: user.email)
     assert_template 'password_resets/edit'
-    assert_select 'input[name=email][type=hidden][value=?]', user.email
+    assert_select 'input[name=email][type=hidden][value=?]'.dup, user.email
     # Invalid password & confirmation
     patch password_reset_path(user.reset_token),
           email: user.email,
-          user: { password:              '1235foo',
-                  password_confirmation: 'bar4567' }
+          user: {
+            password:              '1235foo',
+            password_confirmation: 'bar4567'
+          }
     assert_select 'div#error_explanation'
     # Empty password
     patch password_reset_path(user.reset_token),
           email: user.email,
-          user: { password:              '',
-                  password_confirmation: '' }
+          user: {
+            password:              '',
+            password_confirmation: ''
+          }
     assert_select 'div#error_explanation'
     # Valid password & confirmation
     patch password_reset_path(user.reset_token),
           email: user.email,
-          user: { password:              'foo1234',
-                  password_confirmation: 'foo1234' }
+          user: {
+            password:              'foo1234',
+            password_confirmation: 'foo1234'
+          }
     assert user_logged_in?
     assert_not flash.empty?
     assert_redirected_to user
@@ -66,8 +73,10 @@ class PasswordResetsTest < ActionDispatch::IntegrationTest
     @user.update_attribute(:reset_sent_at, 3.hours.ago)
     patch password_reset_path(@user.reset_token),
           email: @user.email,
-          user: { password:              'foo1234',
-                  password_confirmation: 'bar5678' }
+          user: {
+            password:              'foo1234',
+            password_confirmation: 'bar5678'
+          }
     assert_response :redirect
     follow_redirect!
     assert_match 'expired', response.body

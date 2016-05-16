@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Determine how to open the development files in the repository,
 # and set an appropriate :repo_files accessor.
 # Currently we only handle GitHub; extend this to support other ways.
@@ -18,8 +19,9 @@ class HowAccessRepoFilesDetective < Detective
 
   def assemble_result(fullname)
     { repo_files:
-          { value: GithubContentAccess.new(fullname, @octokit_client_factory),
-            confidence: 5 }
-    }
+          {
+            value: GithubContentAccess.new(fullname, @octokit_client_factory),
+            confidence: 5
+          } }
   end
 end

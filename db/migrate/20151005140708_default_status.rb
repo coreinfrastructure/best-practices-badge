@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class DefaultStatus < ActiveRecord::Migration
   def change
     change_column_default :projects, :project_url_status, '?'

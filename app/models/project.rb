@@ -4,15 +4,24 @@ class Project < ActiveRecord::Base
   using StringRefinements
   using SymbolRefinements
 
-  BADGE_STATUSES = %w(in_progress passing failing).freeze
+  BADGE_STATUSES = [
+    ['All', nil],
+    ['Passing (100%)', 100],
+    ['In Progress (25% or more)', 25],
+    ['In Progress (50% or more)', 50],
+    ['In Progress (75% or more)', 75],
+    ['In Progress (90% or more)', 90]
+  ].freeze
   STATUS_CHOICE = %w(? Met Unmet).freeze
   STATUS_CHOICE_NA = (STATUS_CHOICE + %w(N/A)).freeze
   MIN_SHOULD_LENGTH = 5
   MAX_TEXT_LENGTH = 8192 # Arbitrary maximum to reduce abuse
   MAX_SHORT_STRING_LENGTH = 254 # Arbitrary maximum to reduce abuse
 
-  PROJECT_OTHER_FIELDS = %i(name description homepage_url cpe
-                            license general_comments user_id).freeze
+  PROJECT_OTHER_FIELDS = %i(
+    name description homepage_url cpe
+    license general_comments user_id
+  ).freeze
   ALL_CRITERIA_STATUS = Criteria.map { |c| c.name.status }.freeze
   ALL_CRITERIA_JUSTIFICATION = Criteria.map { |c| c.name.justification }.freeze
   PROJECT_PERMITTED_FIELDS = (PROJECT_OTHER_FIELDS + ALL_CRITERIA_STATUS +
@@ -22,9 +31,20 @@ class Project < ActiveRecord::Base
   delegate :name, to: :user, prefix: true
 
   default_scope { order(:created_at) }
-  scope :failing, -> { where(badge_status: 'failing') }
-  scope :in_progress, -> { where(badge_status: 'in_progress') }
-  scope :passing, -> { where(badge_status: 'passing') }
+  scope :in_progress, -> { lteq(99) }
+  scope :passing, -> { gteq(100) }
+
+  scope :gteq, (
+    lambda do |floor|
+      where(Project.arel_table[:badge_percentage].gteq(floor.to_i))
+    end
+  )
+
+  scope :lteq, (
+    lambda do |ceiling|
+      where(Project.arel_table[:badge_percentage].lteq(ceiling.to_i))
+    end
+  )
 
   scope :recently_updated, (
     lambda do
@@ -37,8 +57,10 @@ class Project < ActiveRecord::Base
       start_text = "#{text}%"
       where(
         Project.arel_table[:name].matches(start_text).or(
-          Project.arel_table[:homepage_url].matches(start_text)).or(
-            Project.arel_table[:repo_url].matches(start_text))
+          Project.arel_table[:homepage_url].matches(start_text)
+        ).or(
+          Project.arel_table[:repo_url].matches(start_text)
+        )
       )
     end
   )
@@ -71,7 +93,7 @@ class Project < ActiveRecord::Base
 
   validates :user_id, presence: true
 
-  before_save :update_badge_status
+  before_save :update_badge_percentage
 
   # Validate all of the criteria-related inputs
   Criteria.each do |criterion|
@@ -83,17 +105,16 @@ class Project < ActiveRecord::Base
     validates criterion.name.justification, length: { maximum: MAX_TEXT_LENGTH }
   end
 
-  def update_badge_status
-    self.badge_status = badge_level
+  def update_badge_percentage
+    self.badge_percentage = calculate_badge_percentage
   end
 
   def badge_level
-    return 'in_progress' if any_status_in_progress?
     return 'passing' if all_active_criteria_passing?
-    'failing'
+    'in_progress'
   end
 
-  def badge_percentage
+  def calculate_badge_percentage
     met = Criteria.active.count { |criterion| passing? criterion }
     to_percentage met, Criteria.active.length
   end
@@ -118,12 +139,6 @@ class Project < ActiveRecord::Base
 
   def all_active_criteria_passing?
     Criteria.active.all? { |criterion| passing? criterion }
-  end
-
-  def any_status_in_progress?
-    Criteria.active.any? do |criterion|
-      self[criterion.name.status].unknown? || self[criterion.name.status].blank?
-    end
   end
 
   def need_a_base_url

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'test_helper'
 
 class FlossLicenseDetectiveTest < ActiveSupport::TestCase
@@ -58,7 +59,8 @@ class FlossLicenseDetectiveTest < ActiveSupport::TestCase
 
   test 'Assume nothing for complicated situations' do
     results = FlossLicenseDetective.new.analyze(
-      nil, license: '(GPL-2.0 WITH CLASSPATH')
+      nil, license: '(GPL-2.0 WITH CLASSPATH'
+    )
     assert results == {}
   end
 end

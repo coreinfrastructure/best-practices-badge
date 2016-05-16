@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Rake tasks for BadgeApp
 
 # Run tests last. That way, runtime problems (e.g., undone migrations)

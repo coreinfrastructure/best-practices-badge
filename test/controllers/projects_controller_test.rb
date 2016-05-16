@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'test_helper'
 
 # rubocop:disable Metrics/ClassLength
@@ -140,7 +141,7 @@ class ProjectsControllerTest < ActionController::TestCase
   test 'A perfect unjustified project should not have the badge' do
     get :badge, id: @perfect_unjustified_project, format: 'svg'
     assert_response :success
-    assert_includes @response.body, 'failing'
+    assert_includes @response.body, 'in progress'
   end
 
   test 'An empty project should not have the badge; it should be in progress' do
@@ -187,7 +188,8 @@ class ProjectsControllerTest < ActionController::TestCase
     new_repo_url = @project_two.repo_url + '_new'
     log_in_as(@project_two.user)
     patch :update, id: @project_two, project: {
-      repo_url:  new_repo_url }
+      repo_url:  new_repo_url
+    }
     @project_two.reload
     assert_not_equal @project_two.repo_url, new_repo_url
   end
@@ -197,7 +199,8 @@ class ProjectsControllerTest < ActionController::TestCase
     log_in_as(@admin)
     assert_not_equal @admin, @project.user
     patch :update, id: @project_two, project: {
-      repo_url:  new_repo_url }
+      repo_url:  new_repo_url
+    }
     @project_two.reload
     assert_equal @project_two.repo_url, new_repo_url
   end

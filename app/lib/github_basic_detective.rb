@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'json'
 
 # If it's a GitHub repo, grab easily-acquired data from GitHub API and
@@ -7,14 +8,14 @@ require 'json'
 # Be sure to use strings, NOT symbols, as a key when accessing JSON-parsed
 # results (because strings and symbols are distinct in basic Ruby).
 
-# frozen_string_literal: true
-
+# rubocop:disable Metrics/ClassLength
 class GithubBasicDetective < Detective
   # Individual detectives must identify their inputs, outputs
   INPUTS = [:repo_url].freeze
-  OUTPUTS = [:name, :license,
-             :discussion_status, :repo_public_status, :repo_track_status,
-             :repo_distributed_status, :contribution_status].freeze
+  OUTPUTS = %i(
+    name license discussion_status repo_public_status repo_track_status
+    repo_distributed_status contribution_status
+  ).freeze
 
   # These are the 'correct' display case for SPDX for OSI-approved licenses.
   LICENSE_CORRECT_CASE = {
@@ -60,21 +61,25 @@ class GithubBasicDetective < Detective
     # Note: this limits what's accepted, otherwise we'd have to worry
     # about URL escaping.
     repo_url.match(
-      %r{\Ahttps://github.com/([A-Za-z0-9_.-]+)/([A-Za-z0-9_.-]+)/?\Z}) do |m|
+      %r{\Ahttps://github.com/([A-Za-z0-9_.-]+)/([A-Za-z0-9_.-]+)/?\Z}
+    ) do |m|
       # We have a github repo.
       results[:repo_public_status] = {
         value: 'Met', confidence: 3,
         explanation: 'Repository on GitHub, which provides ' \
-          'public git repositories with URLs.' }
+          'public git repositories with URLs.'
+      }
       results[:repo_track_status] = {
         value: 'Met', confidence: 4,
         explanation: 'Repository on GitHub, which uses git. ' \
           'git can track the changes, ' \
-          'who made them, and when they were made.' }
+          'who made them, and when they were made.'
+      }
       results[:repo_distributed_status] = {
         value: 'Met', confidence: 4,
         explanation: 'Repository on GitHub, which uses git. ' \
-          'git is distributed.' }
+          'git is distributed.'
+      }
       results[:contribution_status] = {
         value: 'Met', confidence: 2,
         explanation: 'Projects on GitHub by default use issues and ' \
@@ -102,17 +107,20 @@ class GithubBasicDetective < Detective
         # Short description, it's probably really the name.
         results[:name] = {
           value: basic_repo_data[:description],
-          confidence: 3, explanation: 'GitHub name' }
+          confidence: 3, explanation: 'GitHub name'
+        }
       else
         if basic_repo_data[:name]
           results[:name] = {
             value: basic_repo_data[:name],
-            confidence: 3, explanation: 'GitHub name' }
+            confidence: 3, explanation: 'GitHub name'
+          }
         end
         if basic_repo_data[:description]
           results[:description] = {
             value: basic_repo_data[:description],
-            confidence: 3, explanation: 'GitHub description' }
+            confidence: 3, explanation: 'GitHub description'
+          }
         end
       end
 
@@ -128,7 +136,8 @@ class GithubBasicDetective < Detective
         license = cleanup_license(license_data_raw[:key])
         results[:license] = {
           value: license,
-          confidence: 3, explanation: 'GitHub API license analysis' }
+          confidence: 3, explanation: 'GitHub API license analysis'
+        }
       end
     end
 

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'test_helper'
 
 class UsersControllerTest < ActionController::TestCase
@@ -5,6 +6,13 @@ class UsersControllerTest < ActionController::TestCase
     @user = users(:test_user_melissa)
     @other_user = users(:test_user_mark)
     @admin = users(:admin_user)
+  end
+
+  test 'should get index' do
+    log_in_as(@admin)
+    get :index
+    assert_response :success
+    assert_not_nil assigns(:users)
   end
 
   test 'should get new' do

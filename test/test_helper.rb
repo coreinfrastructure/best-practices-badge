@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 ENV['RAILS_ENV'] ||= 'test'
 
 if ENV['CI']
@@ -16,10 +17,12 @@ end
 
 if ENV['CI']
   require 'codecov'
-  SimpleCov.formatters = [SimpleCov::Formatter::HTMLFormatter,
-                          SimpleCov::Formatter::Codecov]
+  SimpleCov.formatters = [
+    SimpleCov::Formatter::HTMLFormatter,
+    SimpleCov::Formatter::Codecov
+  ]
 else
-  SimpleCov.formatters = [SimpleCov::Formatter::HTMLFormatter]
+  SimpleCov.formatters = SimpleCov::Formatter::HTMLFormatter
 end
 
 require File.expand_path('../../config/environment', __FILE__)
@@ -44,11 +47,12 @@ require 'minitest/rails/capybara'
 
 driver = ENV['DRIVER'].try(:to_sym)
 
-setup_poltergeist = lambda do
-  Capybara.register_driver :poltergeist do |app|
-    Capybara::Poltergeist::Driver.new(app, timeout: ENV['CI'] ? 30 : 60_000)
+setup_poltergeist =
+  lambda do
+    Capybara.register_driver :poltergeist do |app|
+      Capybara::Poltergeist::Driver.new(app, timeout: ENV['CI'] ? 30 : 60_000)
+    end
   end
-end
 
 Capybara.register_driver :chrome do |app|
   Capybara::Selenium::Driver.new(app, browser: :chrome, args: ['no-sandbox'])
@@ -81,6 +85,7 @@ module ActiveSupport
   class TestCase
     # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical
     # order.
+    self.use_transactional_fixtures = true
     fixtures :all
 
     # Add more helper methods to be used by all tests here...
@@ -112,21 +117,20 @@ module ActiveSupport
     end
     # rubocop:enable Metrics/MethodLength
 
-    # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-    def log_in_as(user, options = {})
-      # Log in a test user.
-      # TODO: Put 'provider' into the session, along with email and password
+    # rubocop:disable Metrics/MethodLength
+    def log_in_as(
+      user, password: 'password', provider: 'local', remember_me: '1',
+      time_last_used: Time.now.utc
+    )
       # This is based on "Ruby on Rails Tutorial" by Michael Hargle, chapter 8,
       # https://www.railstutorial.org/book
-      password = options[:password] || 'password'
-      provider = options[:provider] || 'local'
-      remember_me = options[:remember_me] || '1'
-      time_last_used = options[:time_last_used] || Time.now.utc
       if integration_test?
         post login_path,
-             session: { email:  user.email, password: password,
-                        provider: provider, remember_me: remember_me,
-                        time_last_used: time_last_used }
+             session: {
+               email:  user.email, password: password,
+               provider: provider, remember_me: remember_me,
+               time_last_used: time_last_used
+             }
         # Do this instead, it at least checks the password:
         # session[:user_id] = user.id if user.try(:authenticate, password)
       else
@@ -134,7 +138,7 @@ module ActiveSupport
         session[:time_last_used] = time_last_used
       end
     end
-    # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
+    # rubocop:enable Metrics/MethodLength
 
     def scroll_to_see(id)
       # From http://toolsqa.com/selenium-webdriver/scroll-element-view-selenium-javascript/
@@ -175,7 +179,8 @@ module ActiveSupport
     end
 
     def omniauth_hash
-      { 'provider' => 'github',
+      {
+        'provider' => 'github',
         'uid' => '12345',
         'credentials' => { 'token' => vcr_oauth_token },
         'info' => { 'name' => 'CII Test',
@@ -184,7 +189,7 @@ module ActiveSupport
     end
 
     def vcr_oauth_token
-      y = YAML.load(File.open('test/vcr_cassettes/github_login.yml'))
+      y = YAML.load_file('test/vcr_cassettes/github_login.yml')
               .with_indifferent_access
       url = y[:http_interactions][1][:request][:uri]
       Addressable::URI.parse(url).query_values['access_token']

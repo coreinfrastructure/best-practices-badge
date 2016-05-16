@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 # Processor for Github flavored markdown, using redcarpet version 2.
 #
 # Inspired by:
@@ -28,6 +29,7 @@ class RenderResult < Redcarpet::Render::HTML
   end
 end
 
+# rubocop:disable Metrics/MethodLength
 def markdown(text)
   renderer = RenderResult.new xhtml: true # Set render options
   markdown = Redcarpet::Markdown.new( # Set parser options
@@ -37,9 +39,11 @@ def markdown(text)
     tables: true,
     autolink: true,
     strikethrough: true,
-    space_after_headers: true)
+    space_after_headers: true
+  )
   markdown.render(text)
 end
+# rubocop:enable Metrics/MethodLength
 
 # Generate results.
 

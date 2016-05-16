@@ -1,12 +1,13 @@
+# frozen_string_literal: true
 require 'addressable/uri'
 require 'net/http'
 
 # rubocop:disable Metrics/ClassLength
 class ProjectsController < ApplicationController
   include ProjectsHelper
-  before_action :set_project, only: [:edit, :update, :destroy, :show, :badge]
+  before_action :set_project, only: %i(edit update destroy show badge)
   before_action :logged_in?, only: :create
-  before_action :change_authorized, only: [:destroy, :edit, :update]
+  before_action :change_authorized, only: %i(destroy edit update)
 
   # Cache with Fastly CDN.  We can't use this header, because logged-in
   # and not-logged-in users see different things (and thus we can't
@@ -24,8 +25,11 @@ class ProjectsController < ApplicationController
     remove_empty_query_params
     @projects = Project.all
     @projects = @projects.send params[:status] if
-      %w(in_progress passing failing).include? params[:status]
+      %w(in_progress passing).include? params[:status]
+    @projects = @projects.gteq(params[:gteq]) if params[:gteq].present?
+    @projects = @projects.lteq(params[:lteq]) if params[:lteq].present?
     @projects = @projects.text_search(params[:q]) if params[:q].present?
+    @count = @projects.count
     @projects = @projects.includes(:user).paginate(page: params[:page])
   end
   # rubocop:enable Metrics/AbcSize
@@ -38,11 +42,9 @@ class ProjectsController < ApplicationController
   def badge
     set_surrogate_key_header @project.record_key + '/badge'
     respond_to do |format|
-      # Ensure level has a legal value to avoid brakeman sanitization warning
-      level = @project.badge_level if %w(passing failing in_progress)
-                                      .include? @project.badge_level
       format.svg do
-        send_file badge_file(level), disposition: 'inline'
+        send_data Badge[@project.badge_percentage],
+                  type: 'image/svg+xml', disposition: 'inline'
       end
     end
   end
@@ -119,6 +121,7 @@ class ProjectsController < ApplicationController
     end
   end
 
+  # rubocop:disable Metrics/MethodLength
   def successful_update(format, old_badge_level)
     purge_cdn_badge
     # @project.purge
@@ -129,9 +132,11 @@ class ProjectsController < ApplicationController
     new_badge_level = @project.badge_level
     if new_badge_level != old_badge_level # TODO: Eventually deliver_later
       ReportMailer.project_status_change(
-        @project, old_badge_level, new_badge_level).deliver_now
+        @project, old_badge_level, new_badge_level
+      ).deliver_now
     end
   end
+  # rubocop:enable Metrics/MethodLength
 
   # DELETE /projects/1
   # DELETE /projects/1.json
@@ -168,15 +173,6 @@ class ProjectsController < ApplicationController
 
   private
 
-  # Return name of badge file for given level
-  def badge_file(level)
-    if %(passing in_progress failing).include? level
-      Rails.application.assets["badge-#{level}.svg"].pathname
-    else
-      ''
-    end
-  end
-
   def set_homepage_url
     # Assign to repo.homepage if it exists, and else repo_url
     repo = repo_data.find { |r| @project.repo_url == r[3] }
@@ -205,8 +201,10 @@ class ProjectsController < ApplicationController
     if @project && repo_url_disabled?(@project)
       params.require(:project).permit(Project::PROJECT_PERMITTED_FIELDS)
     else
-      params.require(:project).permit(:repo_url,
-                                      Project::PROJECT_PERMITTED_FIELDS)
+      params.require(:project).permit(
+        :repo_url,
+        Project::PROJECT_PERMITTED_FIELDS
+      )
     end
   end
 

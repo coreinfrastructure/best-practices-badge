@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'test_helper'
 
 class GithubLoginTest < Capybara::Rails::TestCase
@@ -23,14 +24,21 @@ class GithubLoginTest < Capybara::Rails::TestCase
       click_on 'Get Your Badge Now!'
       wait_for_url '/projects/new?'
       assert find(
-        "option[value='https://github.com/ciitest/test-repo']")
+        "option[value='https://github.com/ciitest/test-repo']"
+      )
       assert find(
-        "option[value='https://github.com/ciitest/cii-best-practices-badge']")
+        "option[value='https://github.com/ciitest/cii-best-practices-badge']"
+      )
       select 'ciitest/cii-best-practices-badge',
              from: 'project[repo_url]'
       click_on 'Submit GitHub Repository'
       assert has_content? 'Thanks for adding the Project! Please fill out ' \
                          'the rest of the information to get the Badge.'
+
+      click_on 'Account'
+      assert has_content? 'Profile'
+      click_on 'Profile'
+      assert has_content? 'CII Test'
 
       if ENV['GITHUB_PASSWORD'] # revoke OAuth authorization
         visit 'https://github.com/settings/applications'

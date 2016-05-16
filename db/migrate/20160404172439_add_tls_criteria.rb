@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class AddTlsCriteria < ActiveRecord::Migration
   def change
     add_column :projects, :crypto_used_network_status, :string, default: '?'

@@ -183,9 +183,12 @@ module ActiveSupport
         'provider' => 'github',
         'uid' => '12345',
         'credentials' => { 'token' => vcr_oauth_token },
-        'info' => { 'name' => 'CII Test',
-                    'email' => 'test@example.com',
-                    'nickname' => 'CIITheRobot' } }
+        'info' => {
+          'name' => 'CII Test',
+          'email' => 'test@example.com',
+          'nickname' => 'CIITheRobot'
+        }
+      }
     end
 
     def vcr_oauth_token

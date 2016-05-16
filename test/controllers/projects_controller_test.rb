@@ -141,7 +141,7 @@ class ProjectsControllerTest < ActionController::TestCase
   test 'A perfect unjustified project should not have the badge' do
     get :badge, id: @perfect_unjustified_project, format: 'svg'
     assert_response :success
-    assert_includes @response.body, 'failing'
+    assert_includes @response.body, 'in progress'
   end
 
   test 'An empty project should not have the badge; it should be in progress' do

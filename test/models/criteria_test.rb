@@ -3,9 +3,6 @@ require 'test_helper'
 require 'set'
 
 class CriteriaTest < ActiveSupport::TestCase
-  def setup
-  end
-
   test 'Criteria should have floss_license_osi' do
     assert Criteria[:floss_license_osi]
   end

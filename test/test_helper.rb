@@ -22,7 +22,7 @@ if ENV['CI']
     SimpleCov::Formatter::Codecov
   ]
 else
-  SimpleCov.formatters = [SimpleCov::Formatter::HTMLFormatter]
+  SimpleCov.formatters = SimpleCov::Formatter::HTMLFormatter
 end
 
 require File.expand_path('../../config/environment', __FILE__)
@@ -85,6 +85,7 @@ module ActiveSupport
   class TestCase
     # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical
     # order.
+    self.use_transactional_fixtures = true
     fixtures :all
 
     # Add more helper methods to be used by all tests here...

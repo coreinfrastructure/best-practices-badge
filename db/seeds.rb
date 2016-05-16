@@ -53,7 +53,7 @@ user.projects.create!(
   repo_url:
                           'https://github.com/linuxfoundation/cii-best-practices-badge',
   license: 'MIT',
-  badge_status: 'in_progress',
+  badge_percentage: 0,
   homepage_url_status: '?',
   sites_https_status: '?',
   description_good_status: '?',
@@ -139,7 +139,7 @@ user.projects.create!(
     homepage_url: homepage_url,
     repo_url: repo_url,
     license: license,
-    badge_status: 'in_progress',
+    badge_percentage: 0,
     homepage_url_status: '?',
     sites_https_status: '?',
     description_good_status: '?',

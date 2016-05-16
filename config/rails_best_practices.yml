@@ -12,7 +12,7 @@ MoveCodeIntoControllerCheck: { }
 MoveCodeIntoHelperCheck: { array_count: 3 }
 MoveCodeIntoModelCheck: { use_count: 4 }
 MoveFinderToNamedScopeCheck: { }
-MoveModelLogicIntoModelCheck: { use_count: 10 }
+MoveModelLogicIntoModelCheck: { use_count: 15 }
 NeedlessDeepNestingCheck: { nested_count: 2 }
 NotRescueExceptionCheck: { }
 NotUseDefaultRouteCheck: { }

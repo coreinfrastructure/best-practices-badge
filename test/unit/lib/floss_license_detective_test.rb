@@ -58,7 +58,8 @@ class FlossLicenseDetectiveTest < ActiveSupport::TestCase
 
   test 'Assume nothing for complicated situations' do
     results = FlossLicenseDetective.new.analyze(
-      nil, license: '(GPL-2.0 WITH CLASSPATH')
+      nil, license: '(GPL-2.0 WITH CLASSPATH'
+    )
     assert results == {}
   end
 end

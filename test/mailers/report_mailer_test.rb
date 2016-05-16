@@ -9,7 +9,8 @@ class ReportMailerTest < ActionMailer::TestCase
 
   test 'Does ReportMailer project_status_change send anything?' do
     email = ReportMailer.project_status_change(
-      @perfect_project, false, true).deliver_now
+      @perfect_project, false, true
+    ).deliver_now
     assert_not ActionMailer::Base.deliveries.empty?
     # We don't want to modify the test when we reconfigure things.
     # So instead of insisting on specific values, we'll just

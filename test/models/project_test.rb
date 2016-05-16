@@ -5,7 +5,8 @@ class ProjectTest < ActiveSupport::TestCase
     @user = users(:test_user)
     @project = @user.projects.build(
       homepage_url: 'https://www.example.org',
-      repo_url: 'https://www.example.org/code')
+      repo_url: 'https://www.example.org/code'
+    )
   end
 
   test 'should be valid' do

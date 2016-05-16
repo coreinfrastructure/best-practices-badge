@@ -11,6 +11,7 @@
 
 require 'set'
 
+# rubocop:disable Metrics/ClassLength
 class Chief
   # Confidence level (1..5) where automation result will *override*
   # the status value provided by humans.
@@ -87,26 +88,31 @@ class Chief
   def log_detective_failure(source, e, detective, proposal, data)
     Rails.logger.error(
       "In method #{source}, exception #{e} on #{detective.class.name}, " \
-      "current_proposal= #{proposal}, current_data= #{data}")
+      "current_proposal= #{proposal}, current_data= #{data}"
+    )
   end
 
   # Invoke one "Detective", which will
   # analyze the project and reply with an updated changeset in the form
   # { fieldname1: { value: value, confidence: 1..5, explanation: text}, ...}
+  # rubocop:disable Metrics/MethodLength
   def propose_one_change(detective, current_proposal)
     begin
       current_data = compute_current(
-        detective.class::INPUTS, @evidence.project, current_proposal)
+        detective.class::INPUTS, @evidence.project, current_proposal
+      )
       result = detective.analyze(@evidence, current_data)
       current_proposal = merge_changeset(current_proposal, result)
     # If we're in production, ignore exceptions from detectives.
     # That way we just autofill less, instead of completely failing.
     rescue @intercept_exception => e
       log_detective_failure(
-        'propose_one_change', e, detective, current_proposal, current_data)
+        'propose_one_change', e, detective, current_proposal, current_data
+      )
     end
     current_proposal
   end
+  # rubocop:enable Metrics/MethodLength
 
   # Analyze project and reply with a changeset in the form
   # { fieldname1: { value: value, confidence: 1..5, explanation: text}, ...}

@@ -27,7 +27,7 @@ test_user_mark:
 admin_user:
   name: Admin
   email: admin@example.com
-  password_digest: <%= User.digest('p@$$word') %>
+  password_digest: <%= User.digest('password') %>
   provider: local
   activated: true
   activated_at: <%= Time.zone.now %>

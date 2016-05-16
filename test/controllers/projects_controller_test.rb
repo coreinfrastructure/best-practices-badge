@@ -187,7 +187,8 @@ class ProjectsControllerTest < ActionController::TestCase
     new_repo_url = @project_two.repo_url + '_new'
     log_in_as(@project_two.user)
     patch :update, id: @project_two, project: {
-      repo_url:  new_repo_url }
+      repo_url:  new_repo_url
+    }
     @project_two.reload
     assert_not_equal @project_two.repo_url, new_repo_url
   end
@@ -197,7 +198,8 @@ class ProjectsControllerTest < ActionController::TestCase
     log_in_as(@admin)
     assert_not_equal @admin, @project.user
     patch :update, id: @project_two, project: {
-      repo_url:  new_repo_url }
+      repo_url:  new_repo_url
+    }
     @project_two.reload
     assert_equal @project_two.repo_url, new_repo_url
   end

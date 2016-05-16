@@ -1,11 +1,13 @@
 module ProjectsHelper
   MARKDOWN_RENDERER = Redcarpet::Render::HTML.new(
     filter_html: true, no_images: true,
-    no_styles: true, safe_links_only: true)
+    no_styles: true, safe_links_only: true
+  )
   MARKDOWN_PROCESSOR = Redcarpet::Markdown.new(
     MARKDOWN_RENDERER,
     no_intra_emphasis: true, autolink: true,
-    space_after_headers: true, fenced_code_blocks: true)
+    space_after_headers: true, fenced_code_blocks: true
+  )
 
   def github_select
     # List original then forked Github projects, with headers

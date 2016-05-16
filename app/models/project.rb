@@ -53,8 +53,10 @@ class Project < ActiveRecord::Base
       start_text = "#{text}%"
       where(
         Project.arel_table[:name].matches(start_text).or(
-          Project.arel_table[:homepage_url].matches(start_text)).or(
-            Project.arel_table[:repo_url].matches(start_text))
+          Project.arel_table[:homepage_url].matches(start_text)
+        ).or(
+          Project.arel_table[:repo_url].matches(start_text)
+        )
       )
     end
   )

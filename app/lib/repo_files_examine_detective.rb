@@ -62,17 +62,20 @@ class RepoFilesExamineDetective < Detective
     determine_results(
       :contribution_status,
       /\A(contributing|contribute)(\.md|\.txt)?\Z/i,
-      CONTRIBUTION_MIN_SIZE, 'contribution')
+      CONTRIBUTION_MIN_SIZE, 'contribution'
+    )
 
     determine_results(
       :license_location_status,
       /\A([A-Za-z0-9]+-)?(license|copying)(\.md|\.txt)?\Z/i,
-      NONTRIVIAL_MIN_SIZE, 'license location')
+      NONTRIVIAL_MIN_SIZE, 'license location'
+    )
 
     determine_results(
       :release_notes_status,
       /\A(changelog|news)(\.md|\.markdown|\.txt|\.html)?\Z/i,
-      NONTRIVIAL_MIN_SIZE, 'release notes')
+      NONTRIVIAL_MIN_SIZE, 'release notes'
+    )
 
     # There are many different build systems, and different
     # programming languages & environments have different common conventions.
@@ -94,7 +97,8 @@ class RepoFilesExamineDetective < Detective
           SConstruct                # SCONS. Uses Python.
         )\Z
       /ix,
-      NONTRIVIAL_MIN_SIZE, 'build')
+      NONTRIVIAL_MIN_SIZE, 'build'
+    )
     # If we can detect it, it's common enough to be considered common.
     @results[:build_common_tools_status] = @results[:build_status]
 

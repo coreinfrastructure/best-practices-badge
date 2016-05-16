@@ -19,7 +19,7 @@ if ENV['CI']
   SimpleCov.formatters = [SimpleCov::Formatter::HTMLFormatter,
                           SimpleCov::Formatter::Codecov]
 else
-  SimpleCov.formatters = [SimpleCov::Formatter::HTMLFormatter]
+  SimpleCov.formatters = SimpleCov::Formatter::HTMLFormatter
 end
 
 require File.expand_path('../../config/environment', __FILE__)

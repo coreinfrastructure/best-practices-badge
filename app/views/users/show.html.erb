@@ -30,8 +30,15 @@
    See <a href="https://github.com/<%= @user.nickname %>">this user's
    external page</a>.
   <% end %>
+  <% if current_user.admin? %>
+    As an admin, you may also:
+    <% if @user.email.present? %>
+      <%# This doesn't handle ? in email addresses, but those are rare. %>
+      <a href="mailto:<%= @user.email %>">email</a> |
+    <% end %>
+    <%= link_to "delete", @user, method: :delete,
+                                 data: { confirm: "Are you sure?" } %>
+  <% end %>
  </div>
-
 </div>
-
 </div>

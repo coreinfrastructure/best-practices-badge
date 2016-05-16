@@ -8,6 +8,10 @@
       <%= gravatar_for user %>
       <%= link_to user.name, user %>
       <% if current_user.admin? %>
+        <% if user.email.present? %>
+          <%# This doesn't handle ? in email addresses, but those are rare. %>
+    |     <a href="mailto:<%= user.email %>">email</a>
+        <% end %>
     |   <%= link_to "delete", user, method: :delete,
                                     data: { confirm: "Are you sure?" } %>
       <% end %>

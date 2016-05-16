@@ -38,3 +38,18 @@ body {
     padding-top: 240px;
   }
 }
+
+html, body {
+  height: 100%;
+}
+
+.container_padding {
+  padding: 1em 0;
+}
+
+.container_margins {
+  min-height: 100%;
+  height: auto;
+  margin: 1.5em auto -9.6em;
+  padding-bottom: 100px;
+}

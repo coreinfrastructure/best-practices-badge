@@ -14,7 +14,6 @@
     <%= render 'form', project: @project, is_disabled: true, repo_disabled: true %>
 <div class="row">
 <div class="col-md-12">
-
 <b>Project badge entry owned by:</b>
 <%= link_to @project.user_name, user_path(@project.user) %>.<br>
 <b>Entry created on</b> <%= @project.created_at %>

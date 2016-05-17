@@ -28,13 +28,13 @@ class ProjectsControllerTest < ActionController::TestCase
     stub_request(:get, 'https://api.github.com/user/repos')
       .to_return(status: 200, body: '', headers: {})
     assert_difference('Project.count') do
-      post :create, project: {
+      post :create, params: { project: {
         description: @project.description,
         license: @project.license,
         name: @project.name,
         repo_url: 'https://www.example.org/code',
         homepage_url: @project.homepage_url
-      }
+      } }
     end
   end
 
@@ -43,27 +43,27 @@ class ProjectsControllerTest < ActionController::TestCase
     stub_request(:get, 'https://api.github.com/user/repos')
       .to_return(status: 200, body: '', headers: {})
     assert_no_difference('Project.count') do
-      post :create, project: { name: @project.name }
+      post :create, params: { project: { name: @project.name } }
     end
     assert_no_difference('Project.count') do
-      post :create, format: :json, project: { name: @project.name }
+      post :create, format: :json, params: { project: { name: @project.name } }
     end
   end
 
   test 'should show project' do
-    get :show, id: @project
+    get :show, params: { id: @project }
     assert_response :success
   end
 
   test 'should get edit' do
     log_in_as(@project.user)
-    get :edit, id: @project
+    get :edit, params: { id: @project }
     assert_response :success
   end
 
   test 'should fail to edit due to old session' do
     log_in_as(@project.user, time_last_used: 1000.days.ago.utc)
-    get :edit, id: @project
+    get :edit, params: { id: @project }
     assert_response 302
     assert_redirected_to login_path
   end
@@ -71,7 +71,7 @@ class ProjectsControllerTest < ActionController::TestCase
   test 'should fail to edit due to session time missing' do
     log_in_as(@project.user, time_last_used: 1000.days.ago.utc)
     session.delete(:time_last_used)
-    get :edit, id: @project
+    get :edit, params: { id: @project }
     assert_response 302
     assert_redirected_to login_path
   end
@@ -79,12 +79,14 @@ class ProjectsControllerTest < ActionController::TestCase
   test 'should update project' do
     log_in_as(@project.user)
     new_name = @project.name + '_updated'
-    patch :update, id: @project, project: {
-      description: @project.description,
-      license: @project.license,
-      name: new_name,
-      repo_url: @project.repo_url,
-      homepage_url: @project.homepage_url
+    patch :update, params: {
+      id: @project, project: {
+        description: @project.description,
+        license: @project.license,
+        name: new_name,
+        repo_url: @project.repo_url,
+        homepage_url: @project.homepage_url
+      }
     }
     assert_redirected_to project_path(assigns(:project))
     @project.reload
@@ -99,14 +101,16 @@ class ProjectsControllerTest < ActionController::TestCase
       homepage_url: 'example.org' # bad url
     }
     log_in_as(@project.user)
-    patch :update, id: @project, project: new_project_data
+    patch :update, params: { id: @project, project: new_project_data }
     # "Success" here only in the HTTP sense - we *do* get a form...
     assert_response :success
     # ... but we just get the edit form.
     assert_template :edit
 
     # Do the same thing, but as for JSON
-    patch :update, id: @project, format: :json, project: new_project_data
+    patch :update, params: {
+      id: @project, format: :json, project: new_project_data
+    }
     assert_response :unprocessable_entity
   end
 
@@ -114,9 +118,7 @@ class ProjectsControllerTest < ActionController::TestCase
     new_name = @project_two.name + '_updated'
     assert_not_equal @user, @project_two.user
     log_in_as(@user)
-    patch :update, id: @project_two, project: {
-      name: new_name
-    }
+    patch :update, params: { id: @project_two, project: { name: new_name } }
     assert_redirected_to root_url
   end
 
@@ -124,28 +126,26 @@ class ProjectsControllerTest < ActionController::TestCase
     new_name = @project.name + '_updated'
     log_in_as(@admin)
     assert_not_equal @admin, @project.user
-    patch :update, id: @project, project: {
-      name: new_name
-    }
+    patch :update, params: { id: @project, project: { name: new_name } }
     assert_redirected_to project_path(assigns(:project))
     @project.reload
     assert_equal @project.name, new_name
   end
 
   test 'A perfect project should have the badge' do
-    get :badge, id: @perfect_project, format: 'svg'
+    get :badge, params: { id: @perfect_project, format: 'svg' }
     assert_response :success
     assert_includes @response.body, 'passing'
   end
 
   test 'A perfect unjustified project should not have the badge' do
-    get :badge, id: @perfect_unjustified_project, format: 'svg'
+    get :badge, params: { id: @perfect_unjustified_project, format: 'svg' }
     assert_response :success
     assert_includes @response.body, 'in progress'
   end
 
   test 'An empty project should not have the badge; it should be in progress' do
-    get :badge, id: @project, format: 'svg'
+    get :badge, params: { id: @project, format: 'svg' }
     assert_response :success
     assert_includes @response.body, 'in progress'
   end
@@ -153,7 +153,7 @@ class ProjectsControllerTest < ActionController::TestCase
   test 'should destroy own project' do
     log_in_as(@project.user)
     assert_difference('Project.count', -1) do
-      delete :destroy, id: @project
+      delete :destroy, params: { id: @project }
     end
     assert_not_empty flash
     assert_redirected_to projects_path
@@ -163,7 +163,7 @@ class ProjectsControllerTest < ActionController::TestCase
     log_in_as(@admin)
     assert_not_equal @admin, @project.user
     assert_difference('Project.count', -1) do
-      delete :destroy, id: @project
+      delete :destroy, params: { id: @project }
     end
 
     assert_redirected_to projects_path
@@ -172,14 +172,14 @@ class ProjectsControllerTest < ActionController::TestCase
   test 'should not destroy project if no one is logged in' do
     # Notice that we do *not* call log_in_as.
     assert_no_difference('Project.count') do
-      delete :destroy, id: @project
+      delete :destroy, params: { id: @project }
     end
   end
 
   test 'should redirect to project page if project repo exists' do
     log_in_as(@user)
     assert_no_difference('Project.count') do
-      post :create, project: { repo_url: @project.repo_url }
+      post :create, params: { project: { repo_url: @project.repo_url } }
     end
     assert_redirected_to project_path(@project)
   end
@@ -187,8 +187,10 @@ class ProjectsControllerTest < ActionController::TestCase
   test 'should fail to change non-blank repo_url' do
     new_repo_url = @project_two.repo_url + '_new'
     log_in_as(@project_two.user)
-    patch :update, id: @project_two, project: {
-      repo_url:  new_repo_url
+    patch :update, params: {
+      id: @project_two, project: {
+        repo_url:  new_repo_url
+      }
     }
     @project_two.reload
     assert_not_equal @project_two.repo_url, new_repo_url
@@ -198,20 +200,22 @@ class ProjectsControllerTest < ActionController::TestCase
     new_repo_url = @project_two.repo_url + '_new'
     log_in_as(@admin)
     assert_not_equal @admin, @project.user
-    patch :update, id: @project_two, project: {
-      repo_url:  new_repo_url
+    patch :update, params: {
+      id: @project_two, project: {
+        repo_url:  new_repo_url
+      }
     }
     @project_two.reload
     assert_equal @project_two.repo_url, new_repo_url
   end
 
   test 'should redirect with empty query params removed' do
-    get :index, q: '', status: 'passing'
+    get :index, params: { q: '', status: 'passing' }
     assert_redirected_to 'http://test.host/projects?status=passing'
   end
 
   test 'should redirect with all query params removed' do
-    get :index, q: '', status: ''
+    get :index, params: { q: '', status: '' }
     assert_redirected_to 'http://test.host/projects'
   end
 end

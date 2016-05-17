@@ -277,3 +277,95 @@ nav {
   }
 }
 // home page end
+
+// edit/status page
+.main-badge-ques {
+  margin-top: 10px;
+  width: 140px;
+  height: 140px;
+  background: image-url('questions_page_badge.png') no-repeat top left;
+}
+
+.btn-simple {
+  border: thin solid #ccc;
+  background-color: white;
+  border-radius: 0;
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: bold;
+  color: #999;
+}
+
+.no-padding {
+    padding: 0;
+}
+
+.main-subtext {
+    padding-right: 150px;
+    padding-top: 15px;
+    font-size: 1.1em;
+    color: black;
+    line-height: 19px;
+}
+
+.progress {
+    height: 22px;
+    border-radius: 0;
+    margin-bottom: 5px;
+}
+
+.progress-subtext {
+    color: #999;
+    font-size: 1.2em;
+    text-transform: capitalize;
+}
+
+.nav.subnav > li > a {
+  padding: 0 24px;
+  border-radius: 0;
+  border: 1px solid #ddd;
+  border-right: none;
+  border-bottom-color: transparent;
+  cursor: default;
+  margin-right: 0;
+  color: #979797;
+}
+
+.nav.subnav > li.active > a {
+  color: #4d91df;
+}
+
+.nav.subnav > li:last-child {
+  border-right: 1px solid #ddd;
+}
+
+.nav.subnav > li > a > h3 {
+  font-size: 1em;
+  font-weight: normal;
+  margin: 14px 0;
+}
+
+.well-color {
+  -webkit-box-shadow: none;
+	-moz-box-shadow: none;
+	box-shadow: none;
+  background-color: transparent;
+  border: none;
+}
+
+input[type="text"].form-control, .inputbox-look, textarea.form-control  {
+  margin: 10px 0;
+  border-radius: 0;
+}
+
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .main-badge-ques {
+    background: image-url('questions_page_badge@2x.png') no-repeat top left;
+    background-size: 140px 140px;
+  }
+}
+
+/* bootstrap utilities */
+ .m-t-0 {
+   margin-top: 0 !important;
+ }

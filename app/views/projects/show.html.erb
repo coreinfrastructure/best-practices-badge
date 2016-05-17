@@ -6,28 +6,25 @@
 <% end %>
 
 <div class="row">
-<div class="col-md-12">
-<h1 class="center">Badge Status for <%=
-    @project.try(:name).presence || '(Name Unknown)' %></h1>
-</div>
-</div>
-
-<%= render 'form', project: @project, is_disabled: true, repo_disabled: true %>
-
+  <div class="col-md-2">
+    <div class="main-badge-ques"></div>
+  </div>
+  <div class="col-md-7">
+    <h2 class="text-uppercase m-t-0">Badge Status for <%=@project.try(:name).presence || '(Name Unknown)' %></h2>
+    <%= render 'form', project: @project, is_disabled: true, repo_disabled: true %>
 <div class="row">
-<div class="col-md-12">
-
-<b>Project badge entry owned by:</b>
-<%= link_to @project.user_name, user_path(@project.user) %>.<br>
-<b>Entry created on</b> <%= @project.created_at %>,
-<b>last updated on</b> <%= @project.updated_at %>.
-<br><br>
-<p>
-<%= link_to 'Back', projects_path %>
-<% if can_make_changes? %>
-  <%= link_to 'Edit', edit_project_path(@project) %>
-  <%= link_to 'Delete',  { action: :destroy, id: @project.id }, method: :delete, data: { confirm: 'Are you sure?' } %>
-<% end %>
-</p>
+  <div class="col-md-12">
+    <b>Project badge entry owned by:</b>
+    <%= link_to @project.user_name, user_path(@project.user) %>.<br>
+    <b>Entry created on</b> <%= @project.created_at %>,
+    <b>last updated on</b> <%= @project.updated_at %>.
+    <br><br>
+    <p>
+    <%= link_to 'Back', projects_path %>
+    <% if can_make_changes? %>
+      <%= link_to 'Edit', edit_project_path(@project) %>
+      <%= link_to 'Delete',  { action: :destroy, id: @project.id }, method: :delete, data: { confirm: 'Are you sure?' } %>
+    <% end %>
+  </p>
 </div>
 </div>

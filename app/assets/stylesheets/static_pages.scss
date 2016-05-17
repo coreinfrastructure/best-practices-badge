@@ -10,6 +10,13 @@
   box-sizing:         border-box;
 }
 
+@mixin background_size($width, $height) {
+  -webkit-background-size: $width $height;
+     -moz-background-size: $width $height;
+       -o-background-size: $width $height;
+          background-size: $width $height;
+}
+
 body,
 h1,
 h2,
@@ -272,7 +279,7 @@ nav {
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
   .home-badge {
     background: image-url('home_badge@2x.png') no-repeat top left;
-    background-size: 250px 250px;
+    @include background_size(250px,250px);
   }
 }
 
@@ -281,7 +288,7 @@ nav {
       font-size: 3em;
   }
   .home-badge {
-      background-size: 200px 200px;
+     @include background_size(200px,200px);
   }
 }
 // home page end
@@ -369,7 +376,7 @@ input[type="text"].form-control, .inputbox-look, textarea.form-control  {
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
   .main-badge-ques {
     background: image-url('questions_page_badge@2x.png') no-repeat top left;
-    background-size: 140px 140px;
+    @include background_size(140px,140px);
   }
 }
 

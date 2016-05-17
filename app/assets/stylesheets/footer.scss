@@ -1,11 +1,9 @@
 // footer styles
 
 footer {
-  margin-top: 50px;
+  margin-top: 60px;
   padding-top: 5px;
   border-top: 1px solid #eaeaea;
-  padding-left: 20px;
-  padding-right: 100px;
   overflow: hidden;
   background-color: #000;
 }
@@ -15,9 +13,9 @@ footer a {
 }
 
 footer small {
-  padding-top: 1em;
   color: #666;
-  float: left;
+  display: block;
+  margin: 10px 0 0 10px;
 }
 
 footer > .container {
@@ -33,4 +31,17 @@ footer ul {
 footer ul li {
   float: left;
   margin-left: 25px;
+}
+
+@media (max-width: 768px) {
+  footer {
+    nav {
+      float: left;
+      margin-top: 5px;
+      margin-left: -50px;
+    }
+    small {
+      margin: 0;
+    }
+  }
 }

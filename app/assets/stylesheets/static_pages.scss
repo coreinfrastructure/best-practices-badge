@@ -243,20 +243,19 @@ nav {
 
 .best-practices-banner {
   font-size: 5em;
-  padding-top: 0.5em;
 }
 
 .best-practices-main-text {
-  font-size: 1.8em;
+  font-size: 1.1em;
   padding-left:0px;
   padding-right:0px;
 }
 
 .home-badge {
-  margin-top: 4em;
+  margin-top: 1em;
   background: image-url('home_badge.png') no-repeat top left;
-  width: 300px;
-  height: 300px;
+  width: 250px;
+  height: 250px;
 }
 
 .btn-main-getbadge {
@@ -273,7 +272,16 @@ nav {
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
   .home-badge {
     background: image-url('home_badge@2x.png') no-repeat top left;
-    background-size: 300px 300px;
+    background-size: 250px 250px;
+  }
+}
+
+@media (max-width: 768px) {
+  .best-practices-banner {
+      font-size: 3em;
+  }
+  .home-badge {
+      background-size: 200px 200px;
   }
 }
 // home page end
@@ -362,6 +370,12 @@ input[type="text"].form-control, .inputbox-look, textarea.form-control  {
   .main-badge-ques {
     background: image-url('questions_page_badge@2x.png') no-repeat top left;
     background-size: 140px 140px;
+  }
+}
+
+@media (max-width: 768px) {
+  .nav.subnav > li > a {
+      padding: 0 14px;
   }
 }
 

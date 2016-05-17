@@ -46,7 +46,7 @@ group :development, :test do
   gem 'pronto-eslint', '0.6.1'
   gem 'pronto-rails_best_practices', '0.6.0'
   gem 'pronto-rubocop', '0.6.2'
-  gem 'pry-byebug', '3.3.0'
+  gem 'pry-byebug', '3.4.0'
   gem 'quiet_assets', '1.1.0'
   gem 'spring', '1.7.1'
   gem 'vcr', '3.0.1' # Record network responses for later test reuse

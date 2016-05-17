@@ -7,7 +7,9 @@ gem 'bcrypt', '3.1.11' # Security - for salted hashed interated passwords
 gem 'bootstrap-sass', '3.3.6'
 gem 'bootstrap-social-rails', '4.12.0'
 gem 'bootstrap-will_paginate', '0.0.10'
-gem 'bootstrap_form', '2.3.0'
+# Avoids Rails 5 alias_method errors. https://github.com/bootstrap-ruby/rails-bootstrap-forms/pull/261
+gem 'bootstrap_form', git: 'https://github.com/narugami/rails-bootstrap-forms',
+                      ref: '0d8607f'
 gem 'faker', '1.6.3'
 gem 'fastly-rails', '0.6.0' # Use Fastly CDN
 gem 'font-awesome-rails', '4.6.3.0'

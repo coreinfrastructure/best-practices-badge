@@ -6,6 +6,13 @@ GIT
     secure_headers (3.3.1)
       useragent
 
+GIT
+  remote: https://github.com/narugami/rails-bootstrap-forms
+  revision: 0d8607f0abecae3f5daace592bb02f9628a2259b
+  ref: 0d8607f
+  specs:
+    bootstrap_form (2.3.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -64,7 +71,6 @@ GEM
       railties (>= 3.1)
     bootstrap-will_paginate (0.0.10)
       will_paginate
-    bootstrap_form (2.3.0)
     brakeman (3.3.0)
     builder (3.2.2)
     bullet (5.0.0)
@@ -442,7 +448,7 @@ DEPENDENCIES
   bootstrap-sass (= 3.3.6)
   bootstrap-social-rails (= 4.12.0)
   bootstrap-will_paginate (= 0.0.10)
-  bootstrap_form (= 2.3.0)
+  bootstrap_form!
   bullet (= 5.0.0)
   bundler-audit (= 0.5.0)
   capybara-slow_finder_errors (= 0.1.4)

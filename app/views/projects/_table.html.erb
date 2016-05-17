@@ -22,7 +22,7 @@
                   (project.description || '').
                   truncate(160, separator: ' ')) %></td>
 
-        <td>
+        <td class='website'>
           <%# Defend against bad data - link only if plausible URL. %>
           <% if project.homepage_url.presence &&
                 project.homepage_url.match(/\Ahttps?:\/\//) %>

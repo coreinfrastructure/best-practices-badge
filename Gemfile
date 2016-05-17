@@ -10,7 +10,7 @@ gem 'bootstrap-will_paginate', '0.0.10'
 gem 'bootstrap_form', '2.3.0'
 gem 'faker', '1.6.3'
 gem 'fastly-rails', '0.6.0' # Use Fastly CDN
-gem 'font-awesome-rails', '4.6.2.0'
+gem 'font-awesome-rails', '4.6.3.0'
 gem 'github_api', '0.13.1'
 gem 'imagesLoaded_rails', '4.1.0' # Javascript - enable wait for image load
 gem 'jbuilder', '2.4.1'
@@ -46,7 +46,7 @@ group :development, :test do
   gem 'pronto-eslint', '0.6.1'
   gem 'pronto-rails_best_practices', '0.6.0'
   gem 'pronto-rubocop', '0.6.2'
-  gem 'pry-byebug', '3.3.0'
+  gem 'pry-byebug', '3.4.0'
   gem 'quiet_assets', '1.1.0'
   gem 'spring', '1.7.1'
   gem 'vcr', '3.0.1' # Record network responses for later test reuse

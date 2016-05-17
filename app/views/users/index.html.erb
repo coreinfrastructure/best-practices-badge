@@ -1,3 +1,4 @@
+<% require 'cgi' %>
 
 <div class="jumbotron">
 <h2 class>All users</h2>
@@ -7,7 +8,11 @@
     <li>
       <%= gravatar_for user %>
       <%= link_to user.name, user %>
-      <% if current_user.admin? %>
+      <% if current_user&.admin? %>
+        <% if user.email? %>
+    |     <a href="mailto:<%= CGI::escape(user.email).html_safe %>">email
+            <%= user.email %></a>
+        <% end %>
     |   <%= link_to "delete", user, method: :delete,
                                     data: { confirm: "Are you sure?" } %>
       <% end %>

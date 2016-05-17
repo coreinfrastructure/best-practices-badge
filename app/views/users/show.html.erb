@@ -1,3 +1,4 @@
+<% require 'cgi' %>
 <div class="center">
 
  <% provide(:title, @user.name) %>
@@ -30,8 +31,15 @@
    See <a href="https://github.com/<%= @user.nickname %>">this user's
    external page</a>.
   <% end %>
+  <% if current_user&.admin? %>
+    As an admin, you may also:
+    <% if @user.email? %>
+      <a href="mailto:<%= CGI::escape(@user.email).html_safe %>">email
+        <%= @user.email %></a> |
+    <% end %>
+    <%= link_to "delete", @user, method: :delete,
+                                 data: { confirm: "Are you sure?" } %>
+  <% end %>
  </div>
-
 </div>
-
 </div>

@@ -13,6 +13,14 @@ GIT
   specs:
     bootstrap_form (2.3.0)
 
+GIT
+  remote: https://github.com/rossbeale/quiet_assets
+  revision: c9df6e81e0b073704b367031d694c76c75c3e2d5
+  ref: c9df6e8
+  specs:
+    quiet_assets (1.1.0)
+      railties (>= 3.1, < 5.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -284,8 +292,6 @@ GEM
       byebug (~> 9.0)
       pry (~> 0.10)
     puma (3.4.0)
-    quiet_assets (1.1.0)
-      railties (>= 3.1, < 5.0)
     rack (2.0.0.rc1)
       json
     rack-test (0.6.3)
@@ -484,7 +490,7 @@ DEPENDENCIES
   pronto-rubocop (= 0.6.2)
   pry-byebug (= 3.4.0)
   puma (= 3.4.0)
-  quiet_assets (= 1.1.0)
+  quiet_assets!
   rack-timeout (= 0.4.2)
   rails (= 5.0.0.rc1)
   rails-controller-testing (= 0.1.0)

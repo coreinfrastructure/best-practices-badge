@@ -36,6 +36,7 @@ gem 'will_paginate', '3.1.0'
 
 group :development, :test do
   gem 'awesome_print', '1.6.1'
+  # Waiting for https://github.com/flyerhzm/bullet/issues/286 to resolve errors
   gem 'bullet', '5.0.0'
   gem 'bundler-audit', '0.5.0'
   gem 'ruby-graphviz', '1.2.2'
@@ -49,7 +50,9 @@ group :development, :test do
   gem 'pronto-rails_best_practices', '0.6.0'
   gem 'pronto-rubocop', '0.6.2'
   gem 'pry-byebug', '3.4.0'
-  gem 'quiet_assets', '1.1.0'
+  # Avoids Rails 5 alias_method errors. https://github.com/evrone/quiet_assets/pull/43
+  gem 'quiet_assets', git: 'https://github.com/rossbeale/quiet_assets',
+                      ref: 'c9df6e8'
   gem 'spring', '1.7.1'
   gem 'vcr', '3.0.1' # Record network responses for later test reuse
   gem 'yaml-lint', '0.0.7' # Check YAML file syntax

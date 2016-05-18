@@ -198,9 +198,6 @@ GEM
       xml-simple
     loofah (2.0.3)
       nokogiri (>= 1.5.9)
-    m (1.5.0)
-      method_source (>= 0.6.7)
-      rake (>= 0.9.2.2)
     mail (2.6.4)
       mime-types (>= 1.16, < 4)
     mdl (0.3.1)
@@ -474,7 +471,6 @@ DEPENDENCIES
   jquery-turbolinks (= 2.1.0)
   jquery-ui-rails (= 5.0.5)
   license_finder (= 2.1.0)
-  m (= 1.5.0)
   mdl (= 0.3.1)
   minitest-rails-capybara (= 3.0.0.rc1)
   minitest-retry (= 0.1.4)

@@ -16,6 +16,7 @@ gem 'imagesLoaded_rails', '4.1.0' # Javascript - enable wait for image load
 gem 'jbuilder', '2.4.1'
 gem 'jquery-rails', '4.1.1' # Javascript jQuery library (for Rails)
 gem 'jquery-ui-rails', '5.0.5' # Javascript jQueryUI library (for Rails)
+gem 'newrelic_rpm', '3.15.2.317' # Server monitoring
 gem 'redcarpet', '3.3.4' # Process markdown in form textareas (justifications)
 gem 'octokit', '4.3.0' # GitHub's official Ruby API
 gem 'omniauth-github', '1.1.2' # Authentication to GitHub (get project info)

@@ -172,9 +172,7 @@ task :bundle_viz do
 end
 
 desc 'Deploy current origin/master to staging'
-task :deploy_staging do
-  Rake::Task['production_to_staging'].reenable
-  Rake::Task['production_to_staging'].invoke
+task deploy_staging: :production_to_staging do
   sh 'git checkout staging && git pull && ' \
      'git merge --ff-only origin/master && git push && git checkout master'
 end

@@ -1,14 +1,19 @@
 <footer class="footer">
-  <p><small>
-  © 2015-2016 Core Infrastructure Initiative, a Linux Foundation Collaborative Project. All Rights Reserved.
-  </small>
-  </p>
-  <nav>
-    <ul>
-      <li><%= link_to image_tag('cii-footer.png', {width: 120, height: 30}),'https://www.coreinfrastructure.org/' %></li>
-      <li><%= link_to image_tag('lf-footer.png', {width: 120, height: 30}),'http://www.linuxfoundation.org/' %></li>
-      <!-- Link to Fastly is a condition for our use of their CDN services. -->
-      <li><%= link_to image_tag('fastly-logo.png', {width: 45, height: 17}),'http://www.fastly.com/' %></li>
-    </ul>
-  </nav>
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-7">
+        <small>© 2015-2016 Core Infrastructure Initiative, a Linux Foundation Collaborative Project. All Rights Reserved.</small>
+      </div>
+    <div class="col-xs-12 col-sm-12 col-md-5">
+      <nav>
+        <ul>
+          <li><%= link_to image_tag('cii-footer.png', {width: 120, height: 30}),'https://www.coreinfrastructure.org/' %></li>
+          <li><%= link_to image_tag('lf-footer.png', {width: 120, height: 30}),'http://www.linuxfoundation.org/' %></li>
+          <!-- Link to Fastly is a condition for our use of their CDN services. -->
+          <li><%= link_to image_tag('fastly-logo.png', {width: 45, height: 17}),'http://www.fastly.com/' %></li>
+        </ul>
+      </nav>
+    </div>
+   </div>
+  </div>
 </footer>

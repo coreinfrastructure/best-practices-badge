@@ -6,7 +6,7 @@
       <% is_crypto = criterion.to_s.match(/^crypto_/) %>
       <% crypto_class = is_crypto ? ' criterion-is-crypto' : '' %>
 
-      <div class="col-md-2 criteria-radio<%= crypto_class %>">
+      <div class="col-md-2 col-xs-3 criteria-radio<%= crypto_class %>">
        <div class="row status-chooser">
        <span class="criterion-name hidden"><%= criterion.to_s %></span>
        <span class="criterion-category hidden"><%= criterion.category %></span>
@@ -29,7 +29,7 @@
        </div>
       </div>
 
-      <div class='col-md-10 criteria-desc'>
+      <div class='col-md-10 col-xs-9 criteria-desc'>
           <br>
           <% if criterion.future? %>
           (Future criterion)

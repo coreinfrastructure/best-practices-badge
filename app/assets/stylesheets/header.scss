@@ -1,0 +1,29 @@
+// Header styles
+.nav-color {
+  background-color: #000;
+  padding-top: 10px;
+}
+
+.nav.navbar-nav.navbar-right li a {
+  color: white;
+  font-size: 1.2em;
+  margin-right: 10px;
+  margin-top: -10px;
+  font-weight: bold;
+  &:hover {
+  color: #4791FF;
+  }
+}
+
+#logo {
+  background: image-url('cci-logo-header.png') no-repeat;
+  padding: 5px 0 5px 40px;
+  font-size: 1.2em;
+  font-weight: bold;
+  float: left;
+  color: #fff;
+}
+
+#logo:hover {
+  text-decoration: none;
+}

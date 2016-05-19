@@ -48,7 +48,7 @@ class Project < ActiveRecord::Base
 
   scope :recently_updated, (
     lambda do
-      unscoped.limit(50).order(updated_at: :desc).includes(:user)
+      unscoped.limit(50).order(updated_at: :desc, id: :asc).eager_load(:user)
     end
   )
 

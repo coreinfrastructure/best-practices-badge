@@ -1,0 +1,39 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>When:</strong>
+  <%= @project_stat.when %>
+</p>
+
+<p>
+  <strong>All:</strong>
+  <%= @project_stat.all %>
+</p>
+
+<p>
+  <strong>Percent ge 25:</strong>
+  <%= @project_stat.percent_ge_25 %>
+</p>
+
+<p>
+  <strong>Percent ge 50:</strong>
+  <%= @project_stat.percent_ge_50 %>
+</p>
+
+<p>
+  <strong>Percent ge 75:</strong>
+  <%= @project_stat.percent_ge_75 %>
+</p>
+
+<p>
+  <strong>Percent ge 90:</strong>
+  <%= @project_stat.percent_ge_90 %>
+</p>
+
+<p>
+  <strong>Percent ge 100:</strong>
+  <%= @project_stat.percent_ge_100 %>
+</p>
+
+<%= link_to 'Edit', edit_project_stat_path(@project_stat) %> |
+<%= link_to 'Back', project_stats_path %>

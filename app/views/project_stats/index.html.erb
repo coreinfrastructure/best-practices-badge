@@ -1,0 +1,39 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Project Stats</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>When</th>
+      <th>All</th>
+      <th>Percent ge 25</th>
+      <th>Percent ge 50</th>
+      <th>Percent ge 75</th>
+      <th>Percent ge 90</th>
+      <th>Percent ge 100</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @project_stats.each do |project_stat| %>
+      <tr>
+        <td><%= project_stat.when %></td>
+        <td><%= project_stat.all %></td>
+        <td><%= project_stat.percent_ge_25 %></td>
+        <td><%= project_stat.percent_ge_50 %></td>
+        <td><%= project_stat.percent_ge_75 %></td>
+        <td><%= project_stat.percent_ge_90 %></td>
+        <td><%= project_stat.percent_ge_100 %></td>
+        <td><%= link_to 'Show', project_stat %></td>
+        <td><%= link_to 'Edit', edit_project_stat_path(project_stat) %></td>
+        <td><%= link_to 'Destroy', project_stat, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Project stat', new_project_stat_path %>

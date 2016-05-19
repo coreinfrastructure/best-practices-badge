@@ -85,4 +85,10 @@ class UserTest < ActiveSupport::TestCase
   test 'authenticated? should return false for a user with nil digest' do
     assert_not @user.authenticated?(:remember, '')
   end
+
+  test 'Bcrypt of text with full rounds' do
+    ActiveModel::SecurePassword.min_cost = false
+    assert_match(/\$2a\$/, User.digest('foobar'))
+    ActiveModel::SecurePassword.min_cost = true
+  end
 end

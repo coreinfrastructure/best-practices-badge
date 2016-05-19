@@ -1,40 +1,23 @@
 <% badge_hostname = (ENV['PUBLIC_HOSTNAME'] || 'localhost') %>
-<% content_for :nav_progress do %>
-<div class="progress">
-  <div id="badge-progress" class="progress-bar progress-bar-success badge-progress" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+<div>
+  <span id="project_entry_form"></span>
+  <div class="hidden-print">
+    <button id="show-all-details" class="btn btn-simple" title="Show all detailed text" type="button">Show all detailed text</button>
+    <button id="hide-all-details" class="btn btn-simple" title="Hide all detailed text" type="button">Hide all detailed text</button>
+    <button id="toggle-hide-metna-criteria" class="btn btn-simple" title="Hide met or N/A criteria" type="button">Hide met or N/A criteria</button>
+  </div>
+  <div class="hidden">
+    <%= image_tag "result_symbol_check.png", id: "result_symbol_check_img" %>
+    <%= image_tag "result_symbol_x.png", id: "result_symbol_x_img" %>
+    <%= image_tag "result_symbol_dash.png", id: "result_symbol_dash" %>
+    <%= image_tag "result_symbol_question.png", id: "result_symbol_question" %>
+  </div>
 </div>
-<% end %>
-
-<div class="row">
-<div class="col-xs-12">
-
-<span id="project_entry_form"></span>
-<div class="text-center hidden-print">
-<button id="show-all-details" class="btn" title="Show all detailed text" type="button">Show all detailed text</button>
-|
-<button id="hide-all-details" class="btn" title="Hide all detailed text" type="button">Hide all detailed text</button>
-|
-<button id="toggle-hide-metna-criteria" class="btn" title="Hide met or N/A criteria" type="button">Hide met or N/A criteria</button>
-</div>
-<div class="hidden">
-<%= image_tag "result_symbol_check.png", id: "result_symbol_check_img" %>
-<%= image_tag "result_symbol_x.png", id: "result_symbol_x_img" %>
-<%= image_tag "result_symbol_dash.png", id: "result_symbol_dash" %>
-<%= image_tag "result_symbol_question.png", id: "result_symbol_question" %>
-</div>
-
-<p>
+<p class="no-padding padding-right main-subtext">
 Projects that follow the best practices below
 will be able to voluntarily self-certify and show that they've
 achieved a Core Infrastructure Initiative (CII) badge.
-</div>
-</div>
 
-
-
-<div class="row">
-<div class="col-xs-12">
-<p>
 <%= render(partial: "details", locals: {
            criterion: "badge_intro", details: %{
 <p>
@@ -60,8 +43,6 @@ Feedback is welcome via the
 There is also a
 <a href="https://lists.coreinfrastructure.org/mailman/listinfo/cii-badges">mailing list for general discussion</a>.<br /><br />
 }}) %>
-</div>
-</div>
 
 <% if is_disabled %>
 <%   if ! %w(failing in_progress).include? project.badge_level %>
@@ -85,15 +66,21 @@ There is also a
 <%   end %>
 <% else %>
 <div class="row">
-<div class="col-xs-12">
-<b>Please 'submit' often</b> to save your work
-(you can always go back and edit more later).
-</div>
+  <div class="col-xs-12">
+    <b>Please 'submit' often</b> to save your work
+    (you can always go back and edit more later).
+    </div>
 </div>
 <% end %>
+</div>
 
+<div class="col-md-3 col-xs-3">
+  <div class="progress">
+    <div id="badge-progress" class="progress-bar progress-bar-success badge-progress" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+  </div>
+</div>
 
-
+</div>
 <div class="row">
   <div class="col-md-12">
 
@@ -103,7 +90,7 @@ There is also a
 <br><br><br>
 <div>
   <!-- Nav tabs -->
-  <ul class="nav nav-tabs">
+  <ul class="nav nav-tabs subnav">
     <li class="active"><a href="#projectbasics" data-toggle="tab"><h3 class="tab-title">Basics</h3></a></li>
     <li><a href="#changecontrol" data-toggle="tab"><h3 class="tab-title">Change Control</h3></a></li>
     <li><a href="#reporting" data-toggle="tab"><h3 class="tab-title">Reporting</h3></a></li>
@@ -113,7 +100,7 @@ There is also a
     <li><a href="#future" data-toggle="tab"><h3 class="tab-title">Future</h3></a></li>
   </ul>
 
-  <div class="tab-content">
+  <div class="tab-content well well-lg well-color">
   <div class="tab-pane active" id="projectbasics">
 <br>
     <h3>Identification</h3>
@@ -477,4 +464,5 @@ provided by the delivered project's software.
       <% end %>
     <% end %>
   </div>
+</div>
 </div>

@@ -6,17 +6,14 @@
 <% end %>
 
 <div class="row">
-<div class="col-md-12">
-<h1 class="center">Badge Status for <%=
-    @project.try(:name).presence || '(Name Unknown)' %></h1>
-</div>
-</div>
-
-<%= render 'form', project: @project, is_disabled: true, repo_disabled: true %>
-
+  <div class="col-md-2 col-xs-3">
+    <div class="main-badge-ques"></div>
+  </div>
+  <div class="col-md-7 col-xs-6">
+    <h2 class="text-uppercase m-t-0">Badge Status for <%=@project.try(:name).presence || '(Name Unknown)' %></h2>
+    <%= render 'form', project: @project, is_disabled: true, repo_disabled: true %>
 <div class="row">
 <div class="col-md-12">
-
 <b>Project badge entry owned by:</b>
 <%= link_to @project.user_name, user_path(@project.user) %>.<br>
 <b>Entry created on</b> <%= @project.created_at %>

@@ -10,6 +10,13 @@
   box-sizing:         border-box;
 }
 
+@mixin background_size($width, $height) {
+  -webkit-background-size: $width $height;
+     -moz-background-size: $width $height;
+       -o-background-size: $width $height;
+          background-size: $width $height;
+}
+
 body,
 h1,
 h2,
@@ -58,23 +65,6 @@ p {
   padding-right: 100px;
 }
 
-#logo {
-  float: left;
-  font-size: 1.5em;
-  color: #fff;
-  text-transform: uppercase;
-  letter-spacing: -0.5px;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  font-weight: bold;
-  margin-left: 10px;
-}
-
-#logo:hover {
-  color: #fff;
-  text-decoration: none;
-}
-
 /* Project Display*/
 .table thead tr th, .table tbody tr td {
   text-align: center;
@@ -83,52 +73,6 @@ p {
 .tab-title {
   margin-left: 5px;
   margin-right: 5px;
-}
-
-/* header */
-.nav-color {
-  background-color: #000066;
-  padding-top: 10px;
-}
-
-.nav.navbar-nav.navbar-right li a {
-  color: white;
-  font-size: 1.2em;
-  margin-right: 10px;
-  &:hover {
-  color: #4791FF;
-  }
-}
-
-/* footer */
-
-footer {
-  margin-top: 50px;
-  padding-top: 5px;
-  border-top: 1px solid #eaeaea;
-  padding-left: 20px;
-  padding-right: 100px;
-  background-color: #f8f8f8;
-}
-
-
-footer a {
-  color: #555;
-}
-
-
-footer small {
-  float: left;
-}
-
-footer ul {
-  float: right;
-  list-style: none;
-}
-
-footer ul li {
-  float: left;
-  margin-left: 25px;
 }
 
 /* forms */
@@ -301,3 +245,149 @@ nav {
   padding-left: 5px;
   padding-right: 5px;
 }
+
+// home page start
+
+.best-practices-banner {
+  font-size: 5em;
+}
+
+.best-practices-main-text {
+  font-size: 1.1em;
+  padding-left:0px;
+  padding-right:0px;
+}
+
+.home-badge {
+  margin-top: 1em;
+  background: image-url('home_badge.png') no-repeat top left;
+  width: 250px;
+  height: 250px;
+  background-size: contain;
+}
+
+.btn-main-getbadge {
+  border-radius: 50px;
+  padding: .5em;
+  font-size: 1.5em;
+  background-color: #80B957;
+}
+
+.btn-main-margin {
+  margin: 1em 0;
+}
+
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .home-badge {
+    background: image-url('home_badge@2x.png') no-repeat top left;
+    @include background_size(250px,250px);
+  }
+}
+
+@media (max-width: 768px) {
+  .best-practices-banner {
+      font-size: 3em;
+  }
+  .home-badge {
+     @include background_size(200px,200px);
+  }
+}
+// home page end
+
+// edit/status page
+.main-badge-ques {
+  margin-top: 10px;
+  width: 140px;
+  height: 140px;
+  background: image-url('questions_page_badge.png') no-repeat top left;
+}
+
+.btn-simple {
+  border: thin solid #ccc;
+  background-color: white;
+  border-radius: 0;
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: bold;
+  color: #999;
+}
+
+.no-padding {
+    padding: 0;
+}
+
+.main-subtext {
+    padding-right: 150px;
+    padding-top: 15px;
+    font-size: 1.1em;
+    color: black;
+    line-height: 19px;
+}
+
+.progress {
+    height: 22px;
+    border-radius: 0;
+    margin-bottom: 5px;
+}
+
+.progress-subtext {
+    color: #999;
+    font-size: 1.2em;
+    text-transform: capitalize;
+}
+
+.nav.subnav > li > a {
+  padding: 0 24px;
+  border-radius: 0;
+  border: 1px solid #ddd;
+  border-right: none;
+  border-bottom-color: transparent;
+  cursor: default;
+  margin-right: 0;
+  color: #979797;
+}
+
+.nav.subnav > li.active > a {
+  color: #4d91df;
+}
+
+.nav.subnav > li:last-child {
+  border-right: 1px solid #ddd;
+}
+
+.nav.subnav > li > a > h3 {
+  font-size: 1em;
+  font-weight: normal;
+  margin: 14px 0;
+}
+
+.well-color {
+  -webkit-box-shadow: none;
+	-moz-box-shadow: none;
+	box-shadow: none;
+  background-color: transparent;
+  border: none;
+}
+
+input[type="text"].form-control, .inputbox-look, textarea.form-control  {
+  margin: 10px 0;
+  border-radius: 0;
+}
+
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .main-badge-ques {
+    background: image-url('questions_page_badge@2x.png') no-repeat top left;
+    @include background_size(140px,140px);
+  }
+}
+
+@media (max-width: 768px) {
+  .nav.subnav > li > a {
+      padding: 0 14px;
+  }
+}
+
+/* bootstrap utilities */
+ .m-t-0 {
+   margin-top: 0 !important;
+ }

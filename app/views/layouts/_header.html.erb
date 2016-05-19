@@ -1,12 +1,11 @@
 <header class='navbar navbar-fixed-top navbar-inverse nav-color'>
-  <div class='container'>
+  <div class='container container_padding'>
     <%= link_to 'CII Best Practices', root_path, id: 'logo' %>
     <nav>
       <div class='nav navbar-nav navbar-left'>
         <br>
-        <%= yield :nav_progress %>
       </div>
-      <ul class='nav navbar-nav navbar-right'>
+      <ul class='nav navbar-nav navbar-right nav-margin'>
         <%= yield :nav_extras %>
         <li><%= link_to 'Projects', projects_path %></li>
         <% if logged_in? %>

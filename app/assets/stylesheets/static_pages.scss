@@ -301,3 +301,39 @@ nav {
   padding-left: 5px;
   padding-right: 5px;
 }
+
+// home page start
+
+.best-practices-banner {
+  font-size: 6.25em;
+}
+
+.best-practices-main-text {
+  font-size: 1.81em;
+}
+
+.home-badge {
+  margin-top: 2em;
+  background: url('/assets/images/home_badge.png') no-repeat top left;
+  width: 370px;
+  height: 370px;
+}
+
+.btn-main-getbadge {
+  border-radius: 50px;
+  padding: 1em;
+  font-size: 2em;
+  background-color: #80B957;
+}
+
+.btn-main-margin {
+  margin: 1em 0 3em;
+}
+
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .home-badge {
+    background: url('/assets/images/home_badge@2x.png') no-repeat top left;
+    background-size: 370px 370px;
+  }
+}
+// home page end

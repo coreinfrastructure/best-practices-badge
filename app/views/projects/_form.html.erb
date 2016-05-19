@@ -147,7 +147,7 @@ This information is used when displaying badge information.
       <span>What is the URL for the project (as a whole)?</span>
       <% if is_disabled %>
         <div class="discussion-markdown">
-           <%= link_to_if project.contains_url?(project.homepage_url), project.homepage_url %>
+           <%= link_to_if project.contains_url?(project.homepage_url), project.homepage_url, project.homepage_url %>
         </div>
       <% else %>
         <%= f.text_field :homepage_url, hide_label: true, class: "form-control", placeholder:'Project Website URL', label: "Project URL", disabled: is_disabled %>
@@ -159,7 +159,7 @@ This information is used when displaying badge information.
             (it may the same as the project URL)?</span>
       <% if is_disabled || repo_disabled%>
         <div class="discussion-markdown">
-           <%= link_to_if project.contains_url?(project.repo_url), project.repo_url %>
+           <%= link_to_if project.contains_url?(project.repo_url), project.repo_url, project.repo_url %>
         </div>
       <% else %>
         <%= f.text_field :repo_url, class:"form-control", hide_label: true, placeholder:'Project Repo URL', disabled: repo_disabled %>

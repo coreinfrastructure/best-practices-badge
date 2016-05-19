@@ -53,6 +53,8 @@ class ProjectsControllerTest < ActionController::TestCase
   test 'should show project' do
     get :show, id: @project
     assert_response :success
+    assert_select 'a[href=?]'.dup, 'https://www.nasa.gov'
+    assert_select 'a[href=?]'.dup, 'https://www.nasa.gov/pathfinder'
   end
 
   test 'should get edit' do

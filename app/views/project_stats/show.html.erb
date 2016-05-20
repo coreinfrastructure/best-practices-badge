@@ -35,4 +35,14 @@
   <%= @project_stat.percent_ge_100 %>
 </p>
 
+<p>
+  <strong>New in the last day:</strong>
+  <%= @project_stat.created_since_yesterday %>
+</p>
+
+<p>
+  <strong>Updated in the last day:</strong>
+  <%= @project_stat.updated_since_yesterday %>
+</p>
+
 <%= link_to 'Back', project_stats_path %>

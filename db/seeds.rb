@@ -42,6 +42,8 @@ User.create!(
   )
 end
 
+ProjectStat.create!
+
 # Projects for testing
 user = User.find_by(email: 'test@example.org')
 user.projects.create!(
@@ -122,6 +124,8 @@ user.projects.create!(
   dynamic_analysis_enable_assertions_status: '?',
   dynamic_analysis_fixed_status: '?'
 )
+
+ProjectStat.create!
 
 100.times do |n|
   name = "test-name-#{n + 1}"
@@ -209,3 +213,5 @@ user.projects.create!(
     dynamic_analysis_fixed_status: '?'
   )
 end
+
+ProjectStat.create!

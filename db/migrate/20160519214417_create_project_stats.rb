@@ -11,11 +11,14 @@ class CreateProjectStats < ActiveRecord::Migration
       t.integer :percent_ge_75, null: false
       t.integer :percent_ge_90, null: false
       t.integer :percent_ge_100, null: false
+      t.integer :created_since_yesterday, null: false
+      t.integer :updated_since_yesterday, null: false
 
       t.timestamps null: false
     end
 
     # Optimize performance for sort and lookup by date.
     add_index :project_stats, :created_at
+    add_index :projects, :created_at
   end
 end

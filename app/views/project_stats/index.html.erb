@@ -7,11 +7,11 @@
     <tr>
       <th>When</th>
       <th>All</th>
-      <th>Percent ge 25</th>
-      <th>Percent ge 50</th>
-      <th>Percent ge 75</th>
-      <th>Percent ge 90</th>
-      <th>Percent ge 100</th>
+      <th>&gt;= 25%</th>
+      <th>&gt;= 50%</th>
+      <th>&gt;= 75%</th>
+      <th>&gt;= 90%</th>
+      <th>&gt;= 100%</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -27,13 +27,8 @@
         <td><%= project_stat.percent_ge_90 %></td>
         <td><%= project_stat.percent_ge_100 %></td>
         <td><%= link_to 'Show', project_stat %></td>
-        <td><%= link_to 'Edit', edit_project_stat_path(project_stat) %></td>
-        <td><%= link_to 'Destroy', project_stat, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
   </tbody>
 </table>
-
 <br>
-
-<%= link_to 'New Project stat', new_project_stat_path %>

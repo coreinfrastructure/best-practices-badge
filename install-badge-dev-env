@@ -57,6 +57,31 @@ find_command () {
   false
 }
 
+# Given the path to the user's shell init file, adds a path concatenation of
+# the second and third parameters to it. Expects three parameters:
+#
+# $1 is the shell init file
+# $2 is base part of path /home... without trailing slash
+# $3 is unique end part of path
+#
+# returns true (0) if shell init file exists and PATH was appended to, false
+#         (1) otherwise
+add_to_path () {
+  if [ -e "$1" ] ; then
+    local pattern="PATH=.*"$(echo "$3" | sed -e "s/\./\\\./g")
+    if ! grep "$pattern" "$1" > /dev/null ; then
+      echo "Modifying $1 to add $3 to path. NOTE: Use this command:"
+      echo "  . $1"
+      echo "for the environment changes to take effect in current shell."
+      # shellcheck disable=SC2016
+      echo "export PATH=$2/$3:"'$PATH' >> "$1"
+      true
+      return
+    fi
+  fi
+  false
+  return
+}
 
 ######################################################################
 # Main line.
@@ -158,27 +183,20 @@ else
   echo 'Skipping system package install.'
 fi
 
+shell_init=''
+for try in .bashrc .bash_profile .zshrc .profile ; do
+  if [ -f "$HOME/$try" ] ; then
+    shell_init="$HOME/$try"
+    break
+  fi
+done
+
 case "$manager" in
   yum|dnf)
     npm install phantomjs-prebuilt
-    npm_path="$(pwd)/node_modules/.bin"
-    export PATH="$npm_path:$PATH"
-    f=''
-    for try in .bashrc .bash_profile .zshrc .profile ; do
-      if [ -f "$HOME/$try" ] ; then
-        f="$HOME/$try"
-        break
-      fi
-    done
-    if [ -e "$f" ] ; then
-      if ! grep "PATH=.*node_modules/\.bin" "$f" > /dev/null ; then
-        echo "Modifying $f to add npm .bin path. NOTE: Use this command:"
-        echo "  . $f"
-        echo "for the environment changes to take effect in current shell."
-        # shellcheck disable=SC2016
-        echo "export PATH=$npm_path:"'$PATH' >> "$f"
-      fi
-    fi
+    npm_path="node_modules/.bin"
+    export PATH="$(pwd)/$npm_path:$PATH"
+    add_to_path "$shell_init" "$(pwd)" "$npm_path"
     sudo postgresql-setup initdb
     sudo systemctl enable postgresql
     sudo systemctl start postgresql
@@ -223,33 +241,12 @@ fi
 if [ "$DO_LOCAL_RBENV" = 'yes' ] ; then
   # ensure rbenv is on the PATH when running the rest of this script.
   export PATH="$HOME/.rbenv/bin:$PATH"
-
-  # Make rbenv a permanent fixture.  Find file 'f' to set up.
-  rbenv_set=0
-  f=''
-  if [ "$manager" = 'apt-get' ] ; then
-    f="$HOME/.bashrc"
-  else
-    for try in .bashrc .bash_profile .zshrc .profile ; do
-      if [ -f "$HOME/$try" ] ; then
-        f="$HOME/$try"
-        break
-      fi
-    done
+  # shellcheck disable=SC2016
+  if add_to_path "$shell_init" "$HOME" '.rbenv/bin' ; then
+    # shellcheck disable=SC2016
+    echo 'eval "$(rbenv init -)"' >> "$shell_init"
   fi
-  if [ -e "$f" ] ; then
-    if ! grep "PATH=.*\.rbenv/bin" "$f" > /dev/null ; then
-      echo "Modifying $f to add rbenv setup. NOTE: Use this command:"
-      echo "  . $f"
-      echo "for the environment changes to take effect in current shell."
-      # shellcheck disable=SC2016
-      echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> "$f"
-      # shellcheck disable=SC2016
-      echo 'eval "$(rbenv init -)"' >> "$f"
-    fi
-    rbenv_set=1
-  fi
-  if [ $rbenv_set = 0 ] ; then
+  if [ ! -e "$shell_init" ] ; then
     echo 'Warning: rbenv PATH is not set up.' >&2
   fi
 

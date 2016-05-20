@@ -31,5 +31,6 @@ deployment:
 general:
   artifacts:
     - 'coverage'
+    - 'license_finder_report.html'
     - 'log/test.log'
     - 'tmp/capybara'

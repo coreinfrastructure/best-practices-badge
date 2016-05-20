@@ -3,15 +3,19 @@
 class CreateProjectStats < ActiveRecord::Migration
   def change
     create_table :project_stats do |t|
-      t.datetime :when
-      t.integer :all
-      t.integer :percent_ge_25
-      t.integer :percent_ge_50
-      t.integer :percent_ge_75
-      t.integer :percent_ge_90
-      t.integer :percent_ge_100
+      # The data columns can't be null.  This forces the data to be cleaner,
+      # and is a modest performance and space optimization too.
+      t.integer :percent_ge_0, null: false
+      t.integer :percent_ge_25, null: false
+      t.integer :percent_ge_50, null: false
+      t.integer :percent_ge_75, null: false
+      t.integer :percent_ge_90, null: false
+      t.integer :percent_ge_100, null: false
 
       t.timestamps null: false
     end
+
+    # Optimize performance for sort and lookup by date.
+    add_index :project_stats, :created_at
   end
 end

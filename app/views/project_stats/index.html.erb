@@ -23,8 +23,8 @@ We plan to add a chart display in the future.
   <tbody>
     <% @project_stats.each do |project_stat| %>
       <tr>
-        <td><%= project_stat.when %></td>
-        <td><%= project_stat.all %></td>
+        <td><%= project_stat.created_at %></td>
+        <td><%= project_stat.percent_ge_0 %></td>
         <td><%= project_stat.percent_ge_25 %></td>
         <td><%= project_stat.percent_ge_50 %></td>
         <td><%= project_stat.percent_ge_75 %></td>

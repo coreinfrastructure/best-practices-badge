@@ -23,13 +23,12 @@ class ProjectStatsControllerTest < ActionController::TestCase
     assert_raises AbstractController::ActionNotFound do
       post :create, project_stat:
         {
-          when: @project_stat.when,
-          all: @project_stat.all,
-          percent_ge_100: @project_stat.percent_ge_100,
+          percent_ge_0: @project_stat.percent_ge_0,
           percent_ge_25: @project_stat.percent_ge_25,
           percent_ge_50: @project_stat.percent_ge_50,
           percent_ge_75: @project_stat.percent_ge_75,
-          percent_ge_90: @project_stat.percent_ge_90
+          percent_ge_90: @project_stat.percent_ge_90,
+          percent_ge_100: @project_stat.percent_ge_100
         }
     end
   end
@@ -51,13 +50,12 @@ class ProjectStatsControllerTest < ActionController::TestCase
             id: @project_stat,
             project_stat:
               {
-                when: @project_stat.when,
-                all: @project_stat.all,
-                percent_ge_100: @project_stat.percent_ge_100,
+                percent_ge_0: @project_stat.percent_ge_0,
                 percent_ge_25: @project_stat.percent_ge_25,
                 percent_ge_50: @project_stat.percent_ge_50,
                 percent_ge_75: @project_stat.percent_ge_75,
-                percent_ge_90: @project_stat.percent_ge_90
+                percent_ge_90: @project_stat.percent_ge_90,
+                percent_ge_100: @project_stat.percent_ge_100
               }
     end
   end

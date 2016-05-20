@@ -11,23 +11,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160520135911) do
+ActiveRecord::Schema.define(version: 20160519214417) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "pg_stat_statements"
 
   create_table "project_stats", force: :cascade do |t|
-    t.datetime "when",           null: false
-    t.integer  "all",            null: false
+    t.integer  "percent_ge_0",   null: false
     t.integer  "percent_ge_25",  null: false
     t.integer  "percent_ge_50",  null: false
     t.integer  "percent_ge_75",  null: false
     t.integer  "percent_ge_90",  null: false
     t.integer  "percent_ge_100", null: false
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
   end
 
-  add_index "project_stats", ["when"], name: "index_project_stats_on_when", using: :btree
+  add_index "project_stats", ["created_at"], name: "index_project_stats_on_created_at", using: :btree
 
   create_table "projects", force: :cascade do |t|
     t.integer  "user_id"

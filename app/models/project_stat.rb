@@ -22,6 +22,6 @@ class ProjectStat < ActiveRecord::Base
 
   # Record a new ProjectStat in the database; depends on stamp.
   def self.record
-    ProjectStat.new.stamp.save
+    ProjectStat.new.stamp.save!
   end
 end

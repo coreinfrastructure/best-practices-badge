@@ -19,7 +19,7 @@ NotUseDefaultRouteCheck: { }
 NotUseTimeAgoInWordsCheck: { }
 OveruseRouteCustomizationsCheck: { customize_count: 3 }
 ProtectMassAssignmentCheck: { }
-RemoveEmptyHelpersCheck: { }
+# RemoveEmptyHelpersCheck: { }
 RemoveTabCheck: { }
 RemoveTrailingWhitespaceCheck: { }
 RemoveUnusedMethodsInControllersCheck: { except_methods: [] }
@@ -29,10 +29,9 @@ RemoveUnusedMethodsInModelsCheck: { except_methods: [
   'Criteria#must?', # Used in ERB template; doesn't notice.
   'Criteria#should?', # Used in ERB template; doesn't notice.
   'Criteria#suggested?', # Used in ERB template; doesn't notice.
-  'Project#failing', # Scope called dynamincally
-  'Project#in_progress', # Scope called dynamincally
-  'Project#passing', # Scope called dynamincally
-  'User#digest',
+  'Project#created_since', # Scope called dynamincally
+  'Project#updated_since', # Scope called dynamincally
+  'User#digest'
   ] }
 ReplaceComplexCreationWithFactoryMethodCheck: { attribute_assignment_count: 2 }
 ReplaceInstanceVariableWithLocalVariableCheck: { }

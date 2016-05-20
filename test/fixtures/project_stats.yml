@@ -1,0 +1,24 @@
+# Read about fixtures at
+# http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  created_at: 2013-05-19 17:44:18
+  percent_ge_0: 20
+  percent_ge_25: 18
+  percent_ge_50: 13
+  percent_ge_75: 9
+  percent_ge_90: 5
+  percent_ge_100: 2
+  created_since_yesterday: 2
+  updated_since_yesterday: 1
+
+two:
+  created_at: 2014-05-19 17:44:19
+  percent_ge_0: 19
+  percent_ge_25: 18
+  percent_ge_50: 13
+  percent_ge_75: 9
+  percent_ge_90: 5
+  percent_ge_100: 2
+  created_since_yesterday: 4
+  updated_since_yesterday: 0

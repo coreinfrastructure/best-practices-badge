@@ -85,6 +85,7 @@ module ActiveSupport
   class TestCase
     # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical
     # order.
+    ActiveRecord::Migration.maintain_test_schema!
     self.use_transactional_fixtures = true
     fixtures :all
 

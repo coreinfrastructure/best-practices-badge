@@ -26,13 +26,14 @@ class Project < ActiveRecord::Base
   ALL_CRITERIA_JUSTIFICATION = Criteria.map { |c| c.name.justification }.freeze
   PROJECT_PERMITTED_FIELDS = (PROJECT_OTHER_FIELDS + ALL_CRITERIA_STATUS +
                               ALL_CRITERIA_JUSTIFICATION).freeze
-  # A project is associated with a user
-  belongs_to :user
-  delegate :name, to: :user, prefix: true
 
   default_scope { order(:created_at) }
-  scope :in_progress, -> { lteq(99) }
-  scope :passing, -> { gteq(100) }
+
+  scope :created_since, (
+    lambda do |time|
+      where(Project.arel_table[:created_at].gteq(time))
+    end
+  )
 
   scope :gteq, (
     lambda do |floor|
@@ -40,11 +41,15 @@ class Project < ActiveRecord::Base
     end
   )
 
+  scope :in_progress, -> { lteq(99) }
+
   scope :lteq, (
     lambda do |ceiling|
       where(Project.arel_table[:badge_percentage].lteq(ceiling.to_i))
     end
   )
+
+  scope :passing, -> { gteq(100) }
 
   scope :recently_updated, (
     lambda do
@@ -65,9 +70,21 @@ class Project < ActiveRecord::Base
     end
   )
 
+  scope :updated_since, (
+    lambda do |time|
+      where(Project.arel_table[:updated_at].gteq(time))
+    end
+  )
+
   # Record information about a project.
   # We'll also record previous versions of information:
   has_paper_trail
+
+  before_save :update_badge_percentage
+
+  # A project is associated with a user
+  belongs_to :user
+  delegate :name, to: :user, prefix: true
 
   # For these fields we'll have just simple validation rules.
   # We'll rely on Rails' HTML escaping system to counter XSS.
@@ -93,8 +110,6 @@ class Project < ActiveRecord::Base
 
   validates :user_id, presence: true
 
-  before_save :update_badge_percentage
-
   # Validate all of the criteria-related inputs
   Criteria.each do |criterion|
     if criterion.na_allowed?
@@ -103,10 +118,6 @@ class Project < ActiveRecord::Base
       validates criterion.name.status, inclusion: { in: STATUS_CHOICE }
     end
     validates criterion.name.justification, length: { maximum: MAX_TEXT_LENGTH }
-  end
-
-  def update_badge_percentage
-    self.badge_percentage = calculate_badge_percentage
   end
 
   def badge_level
@@ -133,6 +144,10 @@ class Project < ActiveRecord::Base
   #
   def contains_url?(text)
     text =~ %r{https?://[^ ]{5}}
+  end
+
+  def update_badge_percentage
+    self.badge_percentage = calculate_badge_percentage
   end
 
   private

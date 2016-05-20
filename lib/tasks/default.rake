@@ -289,3 +289,10 @@ task :fake_production do
 end
 
 Rake::Task['test:run'].enhance ['test:features']
+
+# This is the task to run every day, e.g., to record statistics
+# Configure your system (e.g., Heroku) to run this daily.  If you're using
+# Heroku, see: https://devcenter.heroku.com/articles/scheduler
+task daily: :environment do
+  ProjectStat.create!
+end

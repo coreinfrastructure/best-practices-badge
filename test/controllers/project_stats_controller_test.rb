@@ -28,8 +28,8 @@ class ProjectStatsControllerTest < ActionController::TestCase
           percent_ge_50: @project_stat.percent_ge_50,
           percent_ge_75: @project_stat.percent_ge_75,
           percent_ge_90: @project_stat.percent_ge_90,
-          percent_ge_100: @project_stat.percent_ge_100
-          created_since_yesterday: @project_stat.created_since_yesterday
+          percent_ge_100: @project_stat.percent_ge_100,
+          created_since_yesterday: @project_stat.created_since_yesterday,
           updated_since_yesterday: @project_stat.updated_since_yesterday
         }
     end
@@ -57,8 +57,8 @@ class ProjectStatsControllerTest < ActionController::TestCase
                 percent_ge_50: @project_stat.percent_ge_50,
                 percent_ge_75: @project_stat.percent_ge_75,
                 percent_ge_90: @project_stat.percent_ge_90,
-                percent_ge_100: @project_stat.percent_ge_100
-                created_since_yesterday: @project_stat.created_since_yesterday
+                percent_ge_100: @project_stat.percent_ge_100,
+                created_since_yesterday: @project_stat.created_since_yesterday,
                 updated_since_yesterday: @project_stat.updated_since_yesterday
               }
     end

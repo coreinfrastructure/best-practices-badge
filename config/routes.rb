@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 Rails.application.routes.draw do
+  resources :project_stats
   get 'sessions/new'
 
   get 'signup' => 'users#new'

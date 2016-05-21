@@ -920,6 +920,7 @@
       major production release of the software before its release,
       if there is at least one FLOSS tool that implements this criterion in
       the selected language.
+    details: >
       A static code analysis tool examines the software code (as source
       code, intermediate code, or executable) without executing it
       with specific inputs.  For purposes of this criterion, compiler

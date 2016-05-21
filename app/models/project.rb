@@ -59,7 +59,7 @@ class Project < ActiveRecord::Base
 
   scope :text_search, (
     lambda do |text|
-      start_text = "#{text}%"
+      start_text = "#{sanitize_sql_like(text)}%"
       where(
         Project.arel_table[:name].matches(start_text).or(
           Project.arel_table[:homepage_url].matches(start_text)

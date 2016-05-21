@@ -821,6 +821,7 @@
       The project MUST generate all cryptographic keys and nonces
       using a cryptographically secure random number generator,
       and MUST NOT do so using generators that are not cryptographically secure.
+    details: >
       A cryptographically secure random number generator may be a
       hardware random number generator, or it may be
       a cryptographically secure pseudo-random number generator (CSPRNG) using

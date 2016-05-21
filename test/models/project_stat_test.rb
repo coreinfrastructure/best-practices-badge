@@ -6,8 +6,7 @@ class ProjectStatTest < ActiveSupport::TestCase
   def setup
     # Normalize time in order to test timestamps
     travel_to Time.zone.parse('2015-03-01T12:00:00') do
-      @project_stat = ProjectStat.new.stamp
-      @project_stat.save!
+      @project_stat = ProjectStat.create!
     end
   end
 

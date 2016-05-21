@@ -3,12 +3,13 @@
 class ProjectStat < ActiveRecord::Base
   STAT_VALUES = %w(0 25 50 75 90 100).freeze
 
+  before_create :stamp
+
   # Stamp (fill in) the current values into a ProjectStat. Uses database.
   # rubocop:disable Metrics/AbcSize
   def stamp
     # Use a transaction to get values from a single consistent point in time.
     Project.transaction do
-      # binding.pry
       # Count projects at different levels of completion
       STAT_VALUES.each do |completion|
         send "percent_ge_#{completion}=", Project.gteq(completion).count

@@ -294,5 +294,5 @@ Rake::Task['test:run'].enhance ['test:features']
 # Configure your system (e.g., Heroku) to run this daily.  If you're using
 # Heroku, see: https://devcenter.heroku.com/articles/scheduler
 task daily: :environment do
-  ProjectStat.create!
+  ProjectStat.new.stamp.save!
 end

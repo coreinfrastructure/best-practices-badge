@@ -14,7 +14,7 @@
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               Account <b class="caret"></b>
             </a>
-            <ul class="dropdown-menu nav-color">
+            <ul class="dropdown-menu reverse-dropdown">
               <li><%= link_to "Profile", current_user %></li>
               <% if current_user.provider == 'local' %>
                 <li><%= link_to "Settings", edit_user_path(current_user) %></li>

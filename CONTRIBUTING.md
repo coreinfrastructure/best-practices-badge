@@ -327,6 +327,11 @@ However, each git commit should have both
 the test and improvement in the *same* commit,
 because 'git bisect' will then work well.
 
+*WARNING*: Currently some tests intermittently fail, even though
+the software works fine.  There may more than one cause of this.
+For now, if tests fail, restart to see if it's a problem with the software
+or the tests.  On CircleCI you can choose to rebuild.
+
 ## How to check proposed changes before submitting them
 
 Before submitting changes, you *must*

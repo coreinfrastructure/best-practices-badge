@@ -4,7 +4,7 @@
   padding-top: 10px;
 }
 
-.nav.navbar-nav.navbar-right li a {
+.nav.navbar-nav.navbar-right > li > a {
   color: white;
   font-size: 1.2em;
   margin-right: 10px;
@@ -12,6 +12,20 @@
   font-weight: bold;
   &:hover {
   color: #4791FF;
+  }
+}
+
+.dropdown-menu.reverse-dropdown {
+  background-color: #222;
+  &>li>a{
+    color: #fff;
+    &:hover{
+    color: #4791FF;;
+    background-color: #000;
+    }
+  }
+  &>.divider {
+    background-color: #000;
   }
 }
 

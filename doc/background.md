@@ -1425,6 +1425,15 @@ For example,
 [nokogiri issue #1191](https://github.com/sparklemotion/nokogiri/issues/1191)
 requires creation of a vulnerability reporting process.
 
+## Tor (including lessons learned)
+
+The Tor project develops software that is under constant attack,
+so they've no doubt learned a number of things about security.
+
+[Nick Mathewson reported in 2016 on the Tor blog an informal survey he did for "severe" bugs in Tor over the last few years](https://blog.torproject.org/blog/mid-2016-tor-bug-retrospective-lessons-future-coding).
+It breaks down the 70 bugs he found into different categories that are
+correlated with some recommendations for ways to try to avoid them in
+the future.
 
 # Public responses
 

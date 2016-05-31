@@ -1328,6 +1328,10 @@ branch coverage and 100% MC/DC test coverage).
 There is no COPYING or LICENSE file at the top level of the source
 distribution, and its README.md file does not clearly state the license.
 
+["SQLite: The art of keep it simple" (Posted on May 30, 2016 by CoderGears Team)](http://www.jarchitect.com/Blog/?p=2392)
+is a separate article that discusses the SQLite project and
+its code.
+
 ## Global Positioning System Service Daemon (GPSD)
 
 Global Positioning System Service Daemon (GPSD) is a daemon

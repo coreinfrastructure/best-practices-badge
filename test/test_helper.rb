@@ -89,6 +89,15 @@ module ActiveSupport
     self.use_transactional_fixtures = true
     fixtures :all
 
+    def setup
+      # Temporary fix for issue #397
+      # This deletes an extra record introduced by VCR with some test seeds
+      return if Project.count == 4
+      p "Deleting extra project. #{Project.count} projects in #{method_name}"
+      Project.where(name: 'Core Infrastructure Initiative Best Practices Badge')
+             .destroy_all
+    end
+
     # Add more helper methods to be used by all tests here...
 
     def configure_omniauth_mock

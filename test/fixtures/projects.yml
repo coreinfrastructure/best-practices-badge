@@ -1,6 +1,15 @@
 # Read about fixtures at
 # http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
+# WARNING: If you add test records here, you must surprisingly
+# modify other test code that you might expect to be unrelated. The problem
+# is that tests are not reliably cleaned up after running,
+# leading to intermittent failures.  This is issue #397:
+# https://github.com/linuxfoundation/cii-best-practices-badge/issues/397
+# To work around this problem, commit 3b87c59b9902dd modified
+# test cases to forcibly reset the test status, but this creates a
+# subtle interdependency on the number of fixtures here.
+
 one:
   user: test_user
   name: Pathfinder OS

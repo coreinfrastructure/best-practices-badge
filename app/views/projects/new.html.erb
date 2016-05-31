@@ -1,6 +1,17 @@
 
 <% post_delay_warning = 'There may be a significant delay after submitting ' \
-     'as we try to automatically fill in information.' %>
+     'as we try to automatically fill in information.'
+   # Quick check of project and repo URLs.  This check is for responsiveness,
+   # not for security; they're checked more rigorously
+   # at the server (see app/validators/url_validator.rb).
+   # This pattern is intentionally limited, e.g., we don't allow '?', to make
+   # it harder to use this app to attack improperly-written sites.
+   # The regex syntax here is per the *HTML* spec for HTML5 patterns, so
+   # "^" and "$" are not needed.
+   domain_pattern = '[A-Za-z0-9_][-A-Za-z0-9_.]*'
+   url_pattern = 'https?:\/\/' + domain_pattern + \
+     '(\/([-A-Za-z0-9_.:\/\+!,#]|%(20|[89A-Ea-e][0-9A-Fa-f]|[Ff][0-7]))*)?'
+%>
 <% if logged_in? %>
   <div class='row'>
   <div class="col-md-12">
@@ -29,14 +40,13 @@
       <!-- Note: Server tests URLs, this is just sanity checking -->
       <%= f.text_field :homepage_url, class:"form-control",
             type: 'url', hide_label: true,
-            pattern: '^(|https?:\/\/[A-Za-z0-9_][-A-Za-z0-9_.]*(\/[-A-Za-z0-9_.:\/\+!,#]*)?)',
-
+            pattern: url_pattern,
             placeholder:'http(s)://... for project home page URL' %>
       <span>What is the URL for the version control repository
             (it may the same as the project home page)? Start with http(s):// (many characters are not allowed, including "?")</span>
       <%= f.text_field :repo_url, class:"form-control",
             type: 'url', hide_label: true,
-            pattern: '^(|https?:\/\/[A-Za-z0-9_][-A-Za-z0-9_.]*(\/[-A-Za-z0-9_.:\/\+!,#]*)?)',
+            pattern: url_pattern,
             placeholder:'http(s)://... for project repo URL' %>
      <%= f.submit 'Submit URL', class: 'btn btn-primary',
                   'data-toggle' => 'tooltip', title: post_delay_warning %>

@@ -3,7 +3,11 @@ echo 'install-badge-dev-env: Auto-install development environment for BadgeApp.'
 echo 'See INSTALL.md for more information.'
 
 # Set configure options defaults; set their values with environment variables.
-: "${MYINSTALL_SYSTEM_INSTALL_PREFIX:=sudo}"
+if [ "$(uname)" != 'Darwin' ] ; then  # NOT MacOS
+  : "${MYINSTALL_SYSTEM_INSTALL_PREFIX:=sudo}"
+else
+  : "${MYINSTALL_SYSTEM_INSTALL_PREFIX:= }"
+fi
 : "${MYINSTALL_SYSTEM_INSTALL_PACKAGES:=yes}"
 : "${MYINSTALL_RBENV:=yes}" # Should we install and use rbenv?
 : "${MYINSTALL_RBENV_BUNDLER:=yes}" # Should we install and use rbenv-bundler?
@@ -138,8 +142,6 @@ is_command git || add_pkg git
 # bootstrap the installation and building of that version.
 is_command ruby || add_pkg ruby
 
-# SQLite3 database system, used in development for data storage
-add_pkg sqlite3
 
 # We will build ruby via rbenv and ruby-build. This requires either those
 # packages themselves, or a number of other packages to build them.
@@ -149,7 +151,7 @@ case "$manager" in
   brew)
     # We'll use the brew version. Install these to rebuild rbenv:
     # add_pkg openssl libyaml libffi
-    add_pkg phantomjs198 rbenv ruby-build ;;
+    add_pkg phantomjs rbenv ruby-build ;;
   apt-get)
     # We'll use the system version.  If you want to use the latest one
     # on GitHub, instead install these system components first:

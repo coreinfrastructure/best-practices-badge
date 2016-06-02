@@ -27,7 +27,7 @@ class Evidence
     unless @cached_data.key?(url)
       begin
         open(url, 'rb') do |file|
-          @cached_data[url] = file.read(MAXREAD)
+          @cached_data[url] = { meta: file.meta, body: file.read(MAXREAD) }
         end
       rescue
         # Skip if error - use what we have, if anything.

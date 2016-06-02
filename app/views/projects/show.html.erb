@@ -6,10 +6,10 @@
 <% end %>
 
 <div class="row">
-  <div class="col-md-2 col-xs-3">
+  <div class="col-md-2 col-sm-3">
     <div class="main-badge-ques"></div>
   </div>
-  <div class="col-md-7 col-xs-6">
+  <div class="col-md-7 col-sm-6">
     <h2 class="text-uppercase m-t-0">Badge Status for <%=@project.try(:name).presence || '(Name Unknown)' %></h2>
     <%= render 'form', project: @project, is_disabled: true, repo_disabled: true %>
 <div class="row">

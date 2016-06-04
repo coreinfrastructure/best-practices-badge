@@ -1148,7 +1148,9 @@
       (HSTS), X-Content-Type-Options (as "nosniff"), X-Frame-Options,
       and X-XSS-Protection.
     autofill: >
-      Load the URLs and look for those HTTP headers.
+      Load the URLs and look for those HTTP headers. In the future, we
+      may want to specify certain disallowed content security policies.
+      See http://content-security-policy.com/.
 - hardening: # In 'Other security issues'
     category: SUGGESTED
     future: true

@@ -1,0 +1,513 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://www.sendmail.com/
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Thu, 02 Jun 2016 20:16:53 GMT
+      Server:
+      - Apache
+      Transfer-Encoding:
+      - chunked
+      Content-Type:
+      - text/html; charset=ISO-8859-1
+    body:
+      encoding: UTF-8
+      string: "\r\n\r\n<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">\n\n<html>\n<head>\n\n<link
+        rel=\"SHORTCUT ICON\" href=\"http://www.sendmail.com/favicon.ico\">\n\n<title>The
+        Messaging Infrastructure Experts - Sendmail.com</title>\n\n\n\n<!-- sitewide
+        values -->\n<meta name=\"ROBOTS\" content=\"ALL\">\n<meta name=\"revisit-after\"
+        content=\"10 days\">\n<meta name=\"rating\" content=\"general\">\n<meta name=\"distribution\"
+        content=\"global\">\n<meta http-equiv=\"Content-Type\" content=\"text/html;
+        charset=iso-8859-1\">\n<meta http-equiv=\"Content-Script-Type\" content=\"text/javascript\">\n<meta
+        http-equiv=\"Content-Style-Type\" content=\"text/css\">\n<meta name=\"Content-Language\"
+        content=\"en-US\"> \n<meta name=\"CLASSIFICATION\" content=\"Email Security
+        and Solutions\">\n<meta http-equiv=\"author\" content=\"Max Perez - webmaster@sendmail.com\">\n<meta
+        name=\"copyright\" content=\"Copyright &copy; 2000-2016 Sendmail&reg;, Inc.
+        All Rights Reserved.\">\n<meta name=\"Abstract\" content=\"Sendmail&reg; -
+        Modernizing Enterprise Messaging Infrastructures\">\n\n<meta name=\"description\"
+        content=\"Driven by the industry's most powerful policy engine, Sendmail technology
+        provides protection where 80% of security and compliance violations occur
+        - inbound and outbound messaging.\">\n<meta name=\"keywords\" content=\"sendmail,
+        sentrion, cisco ironport, email, messaging, send mail, email compliance, email
+        security, email security software, email infrastructure, corporate email compliance,
+        messaging security, enterprise messaging, mimecast, proofpoint, exchange,
+        microsoft exchange, exchange on-line, office 365 exchange, email management,
+        cloud email, hybrid cloud email, email archiving, email continuity, email
+        encryption, email applications, email compliance, email security, email security
+        software, corporate email compliance, messaging security, enterprise messaging\">\n\n<link
+        rel=\"stylesheet\" type=\"text/css\" href=\"/sm/inc/css/head.css\">\n<link
+        rel=\"stylesheet\" type=\"text/css\" href=\"/sm/inc/css/main.css\">\n<!--[if
+        IE]>\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"/sm/inc/css/main_ie.css\">\n<![endif]-->\n<script
+        src=\"/sm/inc/swfobject.js\" type=\"text/javascript\"></script>\n\n\n\n<!--
+        ImageReady Preload Script (Nav Top - OFF.v.1.5.psd) -->\n<script type=\"text/javascript\">\n\n
+        \   //Preload page\n    function loadImages() {\n        if (document.getElementById)
+        {  // DOM3 = IE5, NS6\n            document.getElementById('hidepage').style.visibility
+        = 'hidden';\n        } else {\n            if (document.layers) {  // Netscape
+        4\n                document.hidepage.visibility = 'hidden';\n            }
+        else {  // IE 4\n                document.all.hidepage.style.visibility =
+        'hidden';\n            }\n        }\n    }\n    //End preload page - check
+        body for additional\n\n    //Homepage revision - toggle func\n    function
+        setVisibility(objectID,state) {\n        var object = getElementById(objectID);\n
+        \       object.style.visibility = state;\n    }\n\n    function toggleVisibility(objectID)
+        {\n        var object = getElementById(objectID);\n        state = object.style.visibility;\n
+        \       if (state == 'hidden')\n            object.style.visibility = 'visible';\n
+        \       else {\n            if (state == 'visible')\n                object.style.visibility
+        = 'hidden';\n            else object.style.visibility = 'visible';\n        }\n
+        \   }\n    //End Homepage revision - toggle func\n\n\n    //Drop down adjust\n\n
+        \   function setClassName(objId, className) {\n        if (navigator.appName
+        != \"Netscape\") {\n        } else {\n            //FF:\n            document.getElementById(objId).className
+        = className;\n        }\n    }\n\n    function setClassName2(objId, className)
+        {\n        /*FF adjust for non_red_tabs */\n        if (navigator.appName
+        != \"Netscape\") {\n        } else {\n            //FF:\n            document.getElementById(objId).className
+        = className;\n        }\n    }\n\n    //End drop down adjust\n\n    <!--\n
+        \   function newImage(arg) {\n        if (document.images) {\n            rslt
+        = new Image();\n            rslt.src = arg;\n            return rslt;\n        }\n
+        \   }\n\n\n    function changeImages() {\n        if (document.images && (preloadFlag
+        == true)) {\n            for (var i=0; i<changeImages.arguments.length; i+=2)
+        {\n                document[changeImages.arguments[i]].src = changeImages.arguments[i+1];\n
+        \           }\n        }\n    }\n\n\n    function changeImagesArray(array)
+        {\n        if (document.images && (preloadFlag == true)) {\n            for
+        (var i=0; i<array.length; i+=2) {\n                document[array[i]].src
+        = array[i+1];\n            }\n        }\n    }\n    function changeImages()
+        {\n        changeImagesArray(changeImages.arguments);\n    }\n\n    var selected;\n
+        \   function toggleImages() {\n        for (var i=0; i<toggleImages.arguments.length;
+        i+=2) {\n            if (selected == toggleImages.arguments[i])      changeImagesArray(toggleImages.arguments[i+1]);\n
+        \       }\n    }\n\n\n    var preloadFlag = false;\n    function preloadImages()
+        {\n        if (document.images) {\n\n            //HP toggle display:\n            //
+        corrected path below. -max 08-2009\n            //toggle_dkim_sel = newImage(\"images/toggle-dkim_sel.gif\");\n
+        \           toggle_dkim_sel = newImage(\"/sm/img/home_page/toggle_display/toggle-dkim_sel.gif\");\n
+        \           var customerSuccess = document.getElementById(\"customerSuccess\");\n
+        \           var newsTab = document.getElementById(\"newsTab\");;\n            //
+        customerSuccess = newImage(\"/sm/img/home_page/toggle_display/tab_customer_success_on.png\");\n
+        \           // newsTab = newImage(\"/sm/img/home_page/toggle_display/tab_news_off.png\");\n\n
+        \           // commented out obsolite image file. need to clean this up -max
+        08-2009\n            //Homepage Nav:\n            /* repaced these images
+        with text and css mar 2010 will remove when change is confirmed\n                sentrion_appliances
+        = newImage(\"/sm/img/nav_top/blue/sentrion_on.png\");\n                solutions
+        = newImage(\"/sm/img/nav_top/blue/solutions_on.png\");\n                services
+        = newImage(\"/sm/img/nav_top/blue/services_on.png\");\n                partners
+        = newImage(\"/sm/img/nav_top/blue/partners_on.png\");\n                support
+        = newImage(\"/sm/img/nav_top/blue/support_on.png\");\n                company
+        = newImage(\"/sm/img/nav_top/blue/company_on.png\");\n                resources
+        = newImage(\"/sm/img/nav_top/blue/resources_on.png\");\n                contact_us
+        = newImage(\"/sm/img/nav_top/blue/contact_us_on.png\");\n             */\n
+        \           // home = newImage(\"/sm/img/nav_top_home/home-over.png\");\n\n
+        \           //HP Rotator Banners\n            // this is obsolete, and had
+        the wrong path anyway. these image maps have been replaced with text/css\n
+        \           // i corrected the path, but commenting out until i figure out
+        what is going on with this -max 08-2009\n            //HP Image Map\n            //
+        btm_r_content_box_v_1_2_01_contact_usa_over = newImage(\"/sm/img/home_page/btm_r_content/revised/btm_r_content_box.v.1.2_01-.gif\");\n
+        \           // btm_r_content_box_v_1_2_01_blog_over = newImage(\"/sm/img/images/btm_r_content/revised/btm_r_content_box.v.1.2_-03.gif\");\n
+        \           // btm_r_content_box_v_1_2_01_resources_over = newImage(\"/sm/img/home_page/btm_r_content/revised/btm_r_content_box.v.1.2_-04.gif\");\n
+        \           // btm_r_content_box_v_1_2_01_chalktalks_over = newImage(\"/sm/img/home_page/btm_r_content/revised/btm_r_content_box.v.1.2_-05.gif\");\n\n
+        \           preloadFlag = true;\n        }\n    }\n\n\n    //homepage toggle
+        display:\n    function doNewstoggle() {\n        document.getElementById(\"customer_stories\").style.visibility
+        = 'hidden';\n        document.getElementById(\"news\").style.visibility =
+        'visible';\n    }\n\n    function doCustomertoggle() {\n        document.getElementById(\"customer_stories\").style.visibility
+        = 'visible';\n        document.getElementById(\"news\").style.visibility =
+        'hidden';\n    }\n\n    // Define PreLoad Image List - clear the search box\n
+        \   function doClearField(theText) {\n        if (theText.value == theText.defaultValue)
+        {\n            theText.value = \"\";\n        }\n    }\n\n    // -->\n</script>\n<!--
+        End Preload Script -->\n\n\n<script language=\"JavaScript\" type=\"text/javascript\">\n\n
+        \   var objNavMenu = null;\n    var prevObjNavMenu = null;\n    var prevObjDropMenu
+        = null;\n    var numDropMenu = 9;\n    ////// link styles\n    var bgLinkColor
+        = ''; /* #cccccc */\n    var bgLinkHover = ''/* #ffffff */\n    var bgLinkActive
+        = '' /* #000000 */\n    var linkColor = '' /* #000000 */\n    var linkHover
+        = '' /* #000000 */\n    var linkActive = '' /* #ffffff */\n\n    var isIE
+        = null;\n    if (navigator.appName.indexOf('Microsoft Internet Explorer')
+        != -1) isIE=1;\n    var isSafari = null;\n    isSafari = navigator.userAgent.toLowerCase().indexOf('safari')
+        > -1;\n    var isOpera = null;\n    isOpera = navigator.appName.indexOf('Opera')
+        > -1;\n    var isChrome = null;\n    isChrome = navigator.userAgent.toLowerCase().indexOf('chrome')
+        > -1;\n    if ( isChrome ) {\n        isSafari = null;\n    }\n\n    function
+        initDropMenu () {\n        document.onclick = hideDropMenu;\n        for (i=1;
+        i<=numDropMenu; i++) {\n            menuName = 'dropMenu' + i;\n            navName
+        = 'navMenu' + i;\n            objDropMenu = document.getElementById(menuName);\n
+        \           objNavMenu = document.getElementById(navName);\n            objDropMenu.style.visibility
+        = 'hidden';\n            objNavMenu.onmouseover =  menuHover;\n            objNavMenu.onmouseout
+        = menuOut;\n            objNavMenu.onclick = showDropMenu;\n        }\n        objNavMenu
+        = null;\n        return;\n    }\n\n    function  menuHover(e) {\n        document.onclick
+        = null;\n        hoverObjNavMenu = document.getElementById(this.id);\n        if
+        (hoverObjNavMenu != objNavMenu) {\n            hoverObjNavMenu.style.color
+        = linkHover;\n            hoverObjNavMenu.style.backgroundColor = bgLinkHover;\n
+        \       }\n    }\n\n    function menuOut (e) {\n        document.onclick =
+        hideDropMenu;\n        outObjNavMenu = document.getElementById(this.id);\n
+        \       if (outObjNavMenu != objNavMenu) {\n            outObjNavMenu.style.color
+        = linkColor;\n            outObjNavMenu.style.backgroundColor = bgLinkColor;\n
+        \       }\n    }\n\n    function showDropMenu(e) {\n        menuName = 'drop'
+        + this.id.substring(3,this.id.length);\n        objDropMenu = document.getElementById(menuName);\n
+        \       if (prevObjDropMenu == objDropMenu) {\n            hideDropMenu();\n
+        \           return;\n        }\n        if (prevObjDropMenu != null) hideDropMenu();\n
+        \       objNavMenu = document.getElementById(this.id);\n\n        if ((prevObjNavMenu
+        != objNavMenu ) || (prevObjDropMenu == null)) {\n            objNavMenu.style.color
+        = linkActive;\n            objNavMenu.style.backgroundColor = bgLinkActive;\n
+        \       }\n\n        if (objDropMenu) {\n            xPos = objNavMenu.offsetParent.offsetLeft
+        + objNavMenu.offsetLeft;\n            yPos = objNavMenu.offsetParent.offsetTop
+        + objNavMenu.offsetParent.offsetHeight;\n            if (isIE) {\n                yPos
+        -= 1;\n                xPos -= 14;\n            } else if ( isChrome || isSafari
+        ) {\n                yPos -= 9;\n                xPos -= 9;\n            }
+        else if ( isOpera ) {\n                yPos -= 9;\n                xPos -=
+        9;\n            } else {\n                yPos -= 9;\n                xPos
+        -= 11;\n            }\n\n            objDropMenu.style.left = xPos + 'px';\n
+        \           objDropMenu.style.top = yPos + 'px';\n            objDropMenu.style.visibility
+        = 'visible';\n            prevObjDropMenu = objDropMenu;\n            prevObjNavMenu
+        = objNavMenu;\n        }\n    }\n\n    function hideDropMenu() {\n        document.onclick
+        = null;\n        if (prevObjDropMenu) {\n            prevObjDropMenu.style.visibility
+        = 'hidden';\n            prevObjDropMenu = null;\n            prevObjNavMenu.style.color
+        = linkColor;\n            prevObjNavMenu.style.backgroundColor = bgLinkColor;\n
+        \       }\n        objNavMenu = null;\n    }\n\n\n    //Sentrion Pop Over
+        divs:\n\n    function setVisibility(objectID,state) {\n        var object
+        = document.getElementById(objectID);\n        object.style.visibility = state;\n
+        \   }\n\n    function toggleVisibility(objectID) {\n        var object = document.getElementById(objectID);\n
+        \       state = object.style.visibility;\n        if (state == 'hidden')\n
+        \           object.style.visibility = 'visible';\n        else {\n            if
+        (state == 'visible')\n                object.style.visibility = 'hidden';\n
+        \           else object.style.visibility = 'visible';\n        }\n    }\n\n\n\n
+        \   // How many pixels from the top to display the navBar\n    var topOffset
+        = 1;\n    window.defaultStatus =\"\";\n    // window.onload = doLoad;\n\n
+        \   //End Sentrion Pop Over Divs\n</script>\n\n<script src=\"http://munchkin.marketo.net/munchkin.js\"
+        type=\"text/javascript\"></script>\n<script>\n  mktoMunchkin(\"860-YTI-520\");\n
+        \ var mmf_return = \"mmf return is: \";\n  mktoMunchkinFunction('function',\n
+        \                      { key: 'value', key2: 'value'},\n                       'hash');\n</script>\n\n</head>\n\n<body
+        onload=\"preloadImages();initDropMenu();loadImages();\">\n<div style=\"background-image:url('/sm/img/top/bg.top.gif');
+        background-repeat:repeat-x;\">&nbsp;</div>\n\n<div id=\"top_nav_div\" align=\"center\">\n
+        \   <div id=\"dropMenu1\" class=\"menuDrop\">\n    <a href=\"/sm/sentrion_appliances/\"
+        class=\"menuLink\">Sentrion Overview</a>\n    <a href=\"/sm/sentrion_appliances/sentrion_mpe/\"
+        class=\"menuLink\">Sentrion Platform</a>\n    <a href=\"/sm/sentrion_appliances/sentrion_mimecast/\"
+        class=\"menuLink\">Sentrion Mimecast</a>\n    <a href=\"/sm/sentrion_appliances/sentrion_hard_appliances/\"
+        class=\"menuLink\">Hard Appliances</a>\n    <a href=\"/sm/sentrion_appliances/sentrion_mpv/\"
+        class=\"menuLink\">Virtual Appliances</a>\n    </div>\n\n<div id=\"dropMenu8\"
+        class=\"menuDrop\">\n    <a href=\"/sm/apps/\" class=\"menuLink\">Overview</a>\n
+        \   <a href=\"/sm/apps/compliance/\" class=\"menuLink\">Policy Compliance</a>\n
+        \   <a href=\"/sm/apps/secure/\" class=\"menuLink\">Secure Content</a>\n    <a
+        href=\"/sm/apps/filtering/\" class=\"menuLink\" >Filtering</a>\n    <a href=\"/sm/apps/cloud/\"
+        class=\"menuLink\" >Cloud</a>\n    <a href=\"/sm/apps/partner/\" class=\"menuLink\">Partner</a>\n
+        \   <a href=\"/sm/apps/enterprise/\" class=\"menuLink\">Enterprise</a>\n    <a
+        href=\"/sm/apps/community/\" class=\"menuLink\">Community</a>\n    </div>\n\n<div
+        id=\"dropMenu2\" class=\"menuDrop\">\n    <a href=\"/sm/open_source/\" class=\"menuLink\">Overview</a>\n
+        \   <a href=\"/sm/open_source/download/\" class=\"menuLink\">Download</a>\n
+        \   <a href=\"/sm/open_source/security/\" class=\"menuLink\">Security</a>\n
+        \   <a href=\"/sm/open_source/support/\" class=\"menuLink\">Support</a>\n
+        \   <a href=\"/sm/open_source/news/\" class=\"menuLink\">News</a>\n    <a
+        href=\"/sm/open_source/docs/\" class=\"menuLink\">Documentation</a>\n    <a
+        href=\"/sm/open_source/tips/\" class=\"menuLink\">Tips &amp; Tricks</a>\n
+        \   <a href=\"/sm/open_source/dkim/\" class=\"menuLink\">DKIM</a>\n    <a
+        href=\"/sm/open_source/support/support_faq/\" class=\"menuLink\">FAQ</a>\n
+        \   <a href=\"/sm/open_source/misc/\" class=\"menuLink\">Misc</a>\n    <a
+        href=\"/sm/open_source/milter/\" class=\"menuLink\">Milters</a>\n</div>\n\n<div
+        id=\"dropMenu3\" class=\"menuDrop\">\n    <a href=\"/sm/services/\" class=\"menuLink\">Overview</a>\n
+        \   <a href=\"/sm/services/directory_synchronization/\" class=\"menuLink\">Directory
+        Synchronization</a>\n    <a href=\"/sm/services/email_architecture_review/\"
+        class=\"menuLink\">Messaging Architecture Review</a>\n    <a href=\"/sm/services/high_volume_mail/\"
+        class=\"menuLink\">High Volume Mail</a>\n    <a href=\"/sm/services/hipaa_policy/\"
+        class=\"menuLink\">HIPAA Policy</a>\n    <a href=\"/sm/services/quickstart_implementation/\"
+        class=\"menuLink\">QUICKStart Implementation</a>\n    <a href=\"/sm/services/performance_tuning/\"
+        class=\"menuLink\">Performance Tuning</a>\n        <a href=\"/sm/services/training/\"
+        class=\"menuLink\">Training Services Overview</a>\n    <a href=\"/sm/services/training/message_routing/\"
+        class=\"menuLink\">Message Routing and<br>Configuration</a>\n    <a href=\"/sm/services/training/policy_management/\"
+        class=\"menuLink\">Message Policy<br>Management</a>\n    <a href=\"/sm/services/training/connection_control/\"
+        class=\"menuLink\">Connection Control /<br>Attack Prevention</a>\n    <a href=\"/sm/services/training/directory_configuration/\"
+        class=\"menuLink\">Directory Configuration<br>and Management</a>\n    </div>\n\n<div
+        id=\"dropMenu4\" class=\"menuDrop\">\n    <a href=\"/sm/partners/\" class=\"menuLink\">Overview</a>\n
+        \   <a href=\"/sm/partners/milter_partners/\" class=\"menuLink\">Milter Community</a>\n
+        \   <a href=\"/sm/partners/industries/\" class=\"menuLink\">Industry Organizations</a>\n
+        \   <a href=\"/sm/partners/system_resellers/\" class=\"menuLink\">System Integrators
+        &amp; Distributors</a>\n</div>\n\n<div id=\"dropMenu5\" class=\"menuDrop\">\n
+        \   <a href=\"/sm/support/\" class=\"menuLink\">Overview</a>\n        <a href=\"/sm/support/silver/\"
+        class=\"menuLink\">Silver Support</a>\n    <a href=\"/sm/support/gold/\" class=\"menuLink\">Gold
+        Support</a>\n    <a href=\"/sm/support/platinum/\" class=\"menuLink\">Platinum
+        Support</a>\n    <a href=\"/sm/security/\" class=\"menuLink\">Security Advisories</a>\n
+        \   <a href=\"/sm/support/contact_support/\" class=\"menuLink\">Contact Support</a>\n</div>\n\n<div
+        id=\"dropMenu6\" class=\"menuDrop\">\n    <a href=\"/sm/company/\" class=\"menuLink\">Overview</a>\n
+        \   <a href=\"/sm/company/customers/\" class=\"menuLink\">Customers</a>\n
+        \       <a href=\"/sm/company/press/\" class=\"menuLink\" >Press Room</a>\n
+        \   <a href=\"http://www.proofpoint.com/about-us/leadership-board-directors.php\"
+        class=\"menuLink\">Board of Directors</a>\n    <a href=\"http://www.proofpoint.com/about-us/leadership-management-team.php\"
+        class=\"menuLink\">Leadership<br> Management Team</a>\n    <a href=\"http://www.proofpoint.com/about-us/careers/index.php\"
+        class=\"menuLink\">Join Our Team</a>\n    <a href=\"/sm/contact/\" class=\"menuLink\">Contact
+        Us</a>\n</div>\n\n<div id=\"dropMenu7\" class=\"menuDrop\">\n    <a href=\"/sm/resources/\"
+        class=\"menuLink\">Overview</a>\n    <a href=\"/sm/resources/ask_the_experts/\"
+        class=\"menuLink\">Ask the Experts</a>\n    <a href=\"/sm/services/training/chalk/\"
+        class=\"menuLink\">Security Chalk Talks</a>\n    <a href=\"/sm/resources/collateral/\"
+        class=\"menuLink\">Collateral</a>\n    <a href=\"/sm/resources/product_reviews/\"
+        class=\"menuLink\">Product Reviews &amp; Awards</a>\n    <a href=\"/sm/resources/tools/ip_reputation/\"
+        class=\"menuLink\">IP Reputation Check</a>\n    <a href=\"/sm/resources/tools/commtouch_malware/\"
+        class=\"menuLink\">Real-time Outbreak Monitor</a>\n    </div>\n\n\n</div>
+        <!-- end nav top div -->\n    <form action=\"/sm/company/search/\" id=\"cse-search-box\">\n
+        \               <div id=\"page_body\" align=\"center\">\n            <!--
+        \ Nav Top Table -->\n            \r\n\r\n            <div id=\"wrap_home\"
+        style='background-color:#E6EEF5;border:none;'>\n\n                                    <table
+        width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" style='height:97px;'>\n
+        \                                                   <!-- <tr style=\"background-image:url('/sm/img/top/bg.top.gif');
+        background-repeat:repeat-x;\"> -->\n                        <tr style=\"background-image:none;\">\n
+        \                           <td rowspan=\"2\" style=\"vertical-align:top;text-align:left;width:300px;height:97px;\">\n
+        \                               <a href=\"/\"><img src=\"/sm/img/logo/proofpoint-sendmail-logo_240.png\"
+        alt=\"Sendmail Inc.\" style=\"margin:36px 0px 0px 30px;\" border=\"0\"></a></td>\n
+        \                           \n                            <td rowspan=\"2\"
+        style=\"vertical-align:top;text-align:right;width:380px;height:97px;\">\n
+        \                               \t\t\t\t<p style=\"margin:2.4em 0 0 0;color:#98002e;font-weight:bold;margin-top:3.9em;\">\n\t\t\t\t</p>\n
+        \                           </td>\n\n                            <td style=\"vertical-align:top;text-align:right;width:280px;padding:30px
+        15px 0px 0px;\">\n                                                                <span
+        id='home_and_login'><a href='/'>HOME</a> | <a href=\" https://www.sendmail.com/cfusion/CFIDE/smi/support/
+        \" >CUSTOMER LOGIN</a></span>\n                                <!-- displays
+        popup notification of office move \n                                <span
+        id='home_and_login'><a href='/'>HOME</a> | <a href=\" https://www.sendmail.com/cfusion/CFIDE/smi/support/
+        \" onclick=\"alert('Due to a data center move the weekend of October 19, customers
+        needing to reach Sendmail Support for Production Down emergencies should call:
+        \\n\\n1-877-473-6362 (option 1 then 4-digit PIN) or +1 510 594-5402 (option
+        2, option 1, then 4-digit PIN).\\n\\nThank you. We will be back on line by
+        8AM Monday morning, 21 October.')\">CUSTOMER LOGIN</a></span>\n                                -->\n
+        \                           </td>\n\n                            <td style=\"vertical-align:top;text-align:left;width:280px;padding:25px
+        0px 0px 0px;\">\n                                                                <div>\n
+        \                                                                           <input
+        type=\"hidden\" name=\"cx\" value=\"007539067038001830779:wavt_pkwan4\">\n
+        \                                   <input type=\"hidden\" name=\"cof\" value=\"FORID:10\">\n
+        \                                   <input type=\"hidden\" name=\"ie\" value=\"UTF-8\">\n
+        \                                   <input type=\"text\" name=\"q\" size=\"20\"
+        style=\"float:left;\">\n                                    <input name=\"sa\"
+        \ type=\"image\" src=\"/images/102506.hp/btn_search_trans.png\" value=\"submit\"
+        style=\"vertical-align:middle;margin-top:0px;_margin-top:-2px;margin-left:2px;_margin-left:0;\">\n
+        \                                   <!-- \n                                    <input
+        name=\"sa\"  type=\"image\" src=\"/images/102506.hp/btn.search.gif\" value=\"submit\"
+        style=\"vertical-align:middle;\">\n                                    <input
+        type=\"submit\" name=\"sa\" value=\"Search\" />\n                                     -->\n
+        \                               </div>\n                                <script
+        type=\"text/javascript\" src=\"http://www.google.com/cse/brand?form=cse-search-box&lang=en\"></script>\n
+        \                                                               </td>\n\n
+        \                       </tr>\n<tr>\n    <td colspan=\"2\">\n\n            \n
+        \   </td>\n</tr>\n                    </table>\n\n                    <div
+        class=\"clear\"></div>\n</div> <!-- end head wrap div -->\n\n                    <div
+        id=\"menuBar\" class=\"menuBar\" style=\"width:100%;\">\n\n    <div id=\"tabs\"
+        style=\"width:984px;\">\n                <div id=\"navMenu1\" class=\"menuHeader\"
+        \ style=\"width:206px;\">\n            <a href=\"#\" onClick=\"setClassName2('dropMenu1','menuDrop');\"
+        class=\"menuHeader\">Sentrion Message Processors</a>\n        </div>\n                    <div
+        id=\"navMenu8\" class=\"menuHeader\" style=\"width:190px;\">\n            <a
+        href=\"#\" class=\"menuHeader\" onClick=\"setClassName2('dropMenu8','menuDrop');\">Sentrion
+        Application Store</a>\n        </div>\n                    <div id=\"navMenu3\"
+        class=\"menuHeader\">\n            <a href=\"#\" class=\"menuHeader\" onClick=\"setClassName2('dropMenu3','menuDrop');\">Services</a>\n
+        \       </div>\n                    <div id=\"navMenu4\" class=\"menuHeader\">\n
+        \           <a href=\"#\" class=\"menuHeader\" onClick=\"setClassName2('dropMenu4','menuDrop');\">Partners</a>\n
+        \       </div>\n                    <div id=\"navMenu5\" class=\"menuHeader\">\n
+        \           <a href=\"#\" class=\"menuHeader\" onClick=\"setClassName2('dropMenu5','menuDrop');\">Support</a>\n
+        \       </div>\n                    <div id=\"navMenu6\" class=\"menuHeader\">\n
+        \           <a href=\"#\" class=\"menuHeader\" onClick=\"setClassName2('dropMenu6','menuDrop');\">Company</a>\n
+        \       </div>\n                    <div id=\"navMenu7\" class=\"menuHeader\"
+        style=\"width:105px;\">\n            <a href=\"#\" class=\"menuHeader\" onClick=\"setClassName2('dropMenu7','menuDrop');\">Resources</a>\n
+        \       </div>\n                    <div id=\"navMenu2\" class=\"menuHeader\"
+        style='width:105px;'>\n            <a href=\"#\"  class=\"menuHeader\" onClick=\"setClassName2('dropMenu9','menuDrop');\">Open
+        Source</a> \n        </div>\n                </div> <!--  end tabs div -->\n</div>
+        <!--  end menu bar div -->\n\n<div class=\"clear\"></div>\n<div id=\"nav_top_btm_line\"></div>
+        \n\n\n&nbsp;\n<div id=\"wrap_home\">\n\n                    <div class=\"clear\"></div>\n
+        \                                           <!-- End Nav Top Table -->\n\n
+        \                                       <div class=\"content_display_outer_full\">\n\n
+        \                       </form> \n\n<div class=\"content_display\" id=\"content_home\">\n\r\n<div
+        id=\"banner\" style=\"width:980px;margin-left:0;\">\r\n    <!-- create new
+        html files for each banner -->\n\n<object id=\"myId\" classid=\"clsid:D27CDB6E-AE6D-11cf-96B8-444553540000\"
+        \ style=\"width:980px;width:981px;height:219px;\">\n    <param name=\"wmode\"
+        value=\"transparent\">\n    <!-- \n    <param name=\"movie\" value=\"/sm/media/flash/homepage/2011_12_20_homepage_flash_banner.swf\">\n
+        \   <param name=\"movie\" value=\"/sm/media/flash/homepage/2012_05_02_homepage_flash_banner.swf\">\n
+        \   <param name=\"movie\" value=\"/sm/media/flash/homepage/2012_06_06_homepage_flash_banner.swf\">\n
+        \   <param name=\"movie\" value=\"/sm/media/flash/homepage/20120818_home_banner.swf\">\n
+        \   <param name=\"movie\" value=\"/sm/media/flash/homepage/20121003_home_banner.swf\">\n
+        \   -->\n    <param name=\"movie\" value=\"/sm/media/flash/homepage/20130417_home_banner.swf\">\n\n
+        \   <!--[if !IE]>-->\n        <!-- \n        <object type=\"application/x-shockwave-flash\"
+        data=\"/sm/media/flash/homepage/2011_12_20_homepage_flash_banner.swf\" width=\"980\"
+        height=\"219\" wmode=\"transparent\">\n        <object type=\"application/x-shockwave-flash\"
+        data=\"/sm/media/flash/homepage/2012_05_02_homepage_flash_banner.swf\" width=\"980\"
+        height=\"219\" wmode=\"transparent\">\n        <object type=\"application/x-shockwave-flash\"
+        data=\"/sm/media/flash/homepage/2012_06_06_homepage_flash_banner.swf\" width=\"980\"
+        height=\"219\" wmode=\"transparent\">\n        <object type=\"application/x-shockwave-flash\"
+        data=\"/sm/media/flash/homepage/20120818_home_banner.swf\" width=\"980\" height=\"219\"
+        wmode=\"transparent\">\n        <object type=\"application/x-shockwave-flash\"
+        data=\"/sm/media/flash/homepage/20121003_home_banner.swf\" width=\"980\" height=\"219\"
+        wmode=\"transparent\">\n        -->\n        <object type=\"application/x-shockwave-flash\"
+        data=\"/sm/media/flash/homepage/20130417_home_banner.swf\" width=\"980\" height=\"219\"
+        wmode=\"transparent\">\n    <!--<![endif]-->\n    <div id=\"flashcontent\"
+        style=\"width:980px;height:219px;\">\n    <!-- non flssh content \n    <a
+        href=\"http://marketing.sendmail.com/May2012Flash_Landing.html\"><img src=\"/sm/media/flash/homepage/2012_05_02_homepage_banner.jpg\"
+        style=\"border:0;width:980px;_width:981px;height:219px;\" alt=\"Sendmail\"></a></div>\n
+        \   <a href=\"/sm/sentrion_appliances/\"><img src=\"/sm/media/flash/homepage/20120818_home_banner.jpg\"
+        style=\"border:0;width:980px;_width:981px;height:219px;\" alt=\"Sendmail\"></a></div>\n
+        \   <a href=\"/sm/sentrion_appliances/\"><img src=\"/sm/media/flash/homepage/20121003_home_banner.jpg\"
+        style=\"border:0;width:980px;_width:981px;height:219px;\" alt=\"Sendmail\"></a></div>\n
+        \   -->\n    <a href=\"/sm/sentrion_appliances/\"><img src=\"/sm/media/flash/homepage/20130417_home_banner.jpg\"
+        style=\"border:0;width:980px;_width:981px;height:219px;\" alt=\"Sendmail\"></a></div>\n
+        \   <!--[if !IE]>-->\n\t</object><!--<![endif]--></object>\n\n<script type=\"text/javascript\"
+        src=\"/sm/inc/ieupdate.js\"></script>\t\n\n<!-- #This /sm/inc/ieupdate.js
+        script is required to kill the ie bounding area/active link bug; must be placed
+        right below </object> tag or closing flash statement -->\n\n    <div style=\"clear:both;\"></div>\r\n</div>\r\n\r\n\r\n\r\n<div
+        class=\"bg_sliver\">\r\n\r\n\r\n    <div style='clear:both;'></div>\r\n    <style
+        type='text/css'>\r\n        #news_banner { text-align:center;padding:2em;
+        } \r\n        #news_banner a { color:#fff; font-weight:700; font-size:16px;
+        } \r\n        #news_banner a:hover { color:#98002e; } \r\n        #news_banner
+        ul { margin-top:1.6em;list-style-type: none; margin-left:4em;padding-left:0;
+        } \r\n        #news_banner li { margin-bottom:3.5em; } \r\n    </style>\r\n
+        \   <div style='text-align:left;height:10em;overflow:hidden;text-align:left;margin:.8em;margin-top:1em;
+        margin-bottom:0em;'>\r\n        \n        <style type=\"text/css\">\n\n.b1997761471,
+        .b2997761471, .b3997761471, .b4997761471{font-size:1px; overflow:hidden; display:block;}\n.b1997761471
+        {height:1px; background:#888; margin:0 5px;}\n.b2997761471 {height:1px; background:#3d6db5;
+        border-right:2px solid #888; border-left:2px solid #888; margin:0 3px;}\n.b3997761471
+        {height:1px; background:#3d6db5; border-right:1px solid #888; border-left:1px
+        solid #888; margin:0 2px;}\n.b4997761471 {height:2px; background:#3d6db5;
+        border-right:1px solid #888; border-left:1px solid #888; margin:0 1px;}\n.contentb997761471
+        {background: #3d6db5; border-right:1px solid #888; border-left:1px solid #888;}\n.contentb997761471
+        div {margin-left: 0px;}\n        </style>\n        \n            <div style=\"width:960px\">\n\t
+        \           <b class=\"b1997761471\"></b><b class=\"b2997761471\"></b><b class=\"b3997761471\"></b><b
+        class=\"b4997761471\"></b>\n\t            <div class=\"contentb997761471\">\n\t\t
+        \           <div style=\"padding:0px\">\n        \r\n                <div
+        id='news_banner'>\r\n                    <a href='http://www.proofpoint.com/about-us/press-releases/10012013.php'>\r\n
+        \                   <span style='font-weight:bold; font-size:16pt;'>Proofpoint,
+        Inc. Acquires Sendmail, Inc.</span><br>\r\n                    <span style='font-style:italic'>Industry-standard
+        MTA technology bolsters<br>\r\n                    Proofpoint&rsquo;s leading
+        position in enterprise security and messaging</span>\r\n                    </a>\r\n
+        \               </div>\r\n            \n\t\t            </div>\n\t            </div>\n\t
+        \           <b class=\"b4997761471\"></b><b class=\"b3997761471\"></b><b class=\"b2997761471\"></b><b
+        class=\"b1997761471\"></b>\n            </div>\n            </div>\r\n\r\n
+        \   <div style='clear:both;'></div>\r\n\r\n    <div class='multi_box_wrap'>\r\n
+        \       <!-- top box, first module 70/30 split -->\r\n        <!-- div id='box_648x288'
+        -->\r\n        <div id='box_648x400' style='overflow:hidden;'>\r\n            <!--
+        /////////////////////////////// First Section /////////////////////////////////
+        -->\r\n\r\n            <style type='text/css'>\r\n                #hp_backbone
+        ul { list-style-type: circle;}\r\n                #hp_backbone li { margin:6px;
+        }\r\n                #hp_compact { float:left;width:26em;overflow:hidden;border-right:1px
+        solid #777;height:100%; }\r\n            </style>\r\n            <div id='hp_compact'>\r\n
+        \               <div style='padding:4em 0 0 3em;'>\r\n                    <h3
+        style='font-weight:800;font-size:15px;margin-top:0;'>Sentrion Email Integration
+        Platform</h3>\r\n                    <div id='hp_backbone' style='margin-left:.0em;margin-top:.7em;'>\r\n
+        \                       <p><strong>Intelligent Email Backbone</strong></p>\r\n
+        \                       <ul>\r\n                            <li>Integrate
+        cloud email</li>\r\n                            <li>Control machine email</li>\r\n
+        \                           <li>Protect &amp; route message content</li>\r\n
+        \                           <li>Manage compliance &amp; use policies</li>\r\n
+        \                           <li>Optimize Exchange system performance</li>\r\n
+        \                       </ul>\r\n                        <p style='margin-top:.9em;'><strong>Intelligent
+        Email Gateway</strong></p>\r\n                        <ul>\r\n                            <li>Secure
+        &amp; filter messages</li>\r\n                            <li>Connect in-cloud
+        w/ on-premises systems</li>\r\n                            <li>Ensure critical
+        customer communications</li>\r\n                            <li>Modernize
+        outdated MTA&rsquo;s</li>\r\n                        </ul>\r\n                    </div>\r\n
+        \               </div>\r\n\r\n                <!-- ///////////////////////////////
+        social networking links ///////////////////////////////// -->\r\n                            </div>\r\n\r\n
+        \           <!-- /////////////////////////////// 2econd Section /////////////////////////////////
+        -->\r\n            <!-- /////////////////////////////// 3rd Section /////////////////////////////////
+        -->\r\n\r\n            <style type=\"text/css\">\r\n                #stick_figure_link
+        a {color:#98002e;}\r\n                #stick_figure_link a:hover {color:#00549e;}\r\n
+        \           </style>\r\n            <div style='width:22.6em;_width:23em;float:left;height:100%;padding-left:.5em;padding-top:1.6em;_padding-top:2.6em;padding-right:0;margin-right:0;'>\r\n\r\n
+        \                               <!--\r\n                                <p>\r\n
+        \                                   <a href='http://marketing.sendmail.com/AccessGartnerNewsletterintro.html'><img
+        src='/sm/img/partners/Gartner_Sm_Blu.png' style='float:left;margin-top:-0.5em;border:0;margin-left:-1.6em;'
+        alt=\"\"></a>\r\n                                </p>\r\n                -->\r\n
+        \               <!-- p style='margin-top:0;margin-bottom:.6em;' -->\r\n                <p
+        style='padding:0em 4em 0em 4em;_padding-bottom:-1em;'>\r\n                    <a
+        href=''><img src='/sm/img/partners/Gartner_Sm_Blu.png' style='float:left;border:0;margin-left:-1.6em;'
+        alt=\"\"></a>\r\n                </p>\r\n\r\n                <div class='clear'></div>\r\n\r\n
+        \               <p style='padding:0em 4em 0em 4em;_margin-top:-1em;'>\r\n
+        \                   Sendmail&rsquo;s unique position called out in the 2013
+        Secure Email Gateway Magic Quadrant: \r\n                </p>\r\n                <p
+        style='padding:1em 4em 1em 4em;'>\r\n                    Download on <a href='http://www.gartner.com/id=2538216'
+        target='_blank'>Gartner.com</a>\r\n                </p>\r\n\r\n                <div
+        style='clear:both;width:22.6em;_width:23em;border-top:1px black dotted;margin-top:1.5em;margin-bottom:1.5em;_margin-top:.0em;'></div>\r\n\r\n
+        \               <p style='padding:1em 4em 1em 4em;'>\r\n                    <strong>Download
+        the <a href=\"/pdfs/whitepapers/Sendmail_TN_CloudReadiness_R2.pdf\">Gartner
+        Cloud Email Readiness Assessment Toolkit Companion Guide</a></strong>\r\n
+        \               </p>\r\n\r\n            </div>\r\n        </div>\r\n\r\n\r\n
+        \               <div id='box_300x400'>\r\n            <style type='text/css'>\r\n
+        \               .hp_app_icon_small { height:40px;_height:40px;border:none;
+        }\r\n                #hp_app_table { width:inherit;}\r\n                #hp_app_table
+        td { padding-left:.5px;border:solid 0px green; text-align:left;vertical-align:middle;font-size:13px;
+        font-weight:400; }\r\n                #hp_app_table td.icon { padding-right:2em;_padding-left:3em;height:46px;text-align:center;vertical-align:middle;
+        }\r\n                #hp_apps { float:left; width:22em;;overflow:hidden;border-right:1px
+        solid #777;border-right:none;height:100%; }\r\n            </style>\r\n            <div
+        id='hp_apps'>\r\n                <div style='width:inherit;float:left;padding:1em;padding-left:1.5em;padding-right:.5em;'>\r\n
+        \                   <h3 style='margin-top:0;margin-bottom:.5em;font-size:15px;'>Sentrion
+        Infrastructure Applications</h3>\r\n                    <table id='hp_app_table'>\r\n
+        \                       <tr>\r\n                            <td class='icon'>\r\n
+        \                               <a href='/sm/apps/compliance/'><img src='/sm/img/apps/compliance_blue_100h.png'
+        alt='Compliance' class='hp_app_icon_small'></a>\r\n                            </td>\r\n
+        \                           <td>\r\n                                <a href='/sm/apps/compliance/'>Policy</a>\r\n
+        \                           </td>\r\n                        </tr>\r\n                        <tr>\r\n
+        \                           <td class='icon'>\r\n                                <a
+        href='/sm/apps/secure/'><img src='/sm/img/apps/secure_blue_100h.png' alt='Security'
+        class='hp_app_icon_small'></a>\r\n                            </td>\r\n                            <td>\r\n
+        \                               <a href='/sm/apps/secure/'>Security</a>\r\n
+        \                           </td>\r\n                        </tr>\r\n                        <tr>\r\n
+        \                           <td class='icon'>\r\n                                <a
+        href='/sm/apps/filtering/'><img src='/sm/img/apps/filtering_blue_100h.png'
+        alt='Filtering' class='hp_app_icon_small'></a>\r\n                            </td>\r\n
+        \                           <td>\r\n                                <a href='/sm/apps/filtering/'>Filtering</a>\r\n
+        \                           </td>\r\n                        </tr>\r\n                        <tr>\r\n
+        \                           <td class='icon'>\r\n                                <a
+        href='/sm/apps/cloud/'><img src='/sm/img/apps/cloud_blue_120.png' alt='Cloud'
+        class='hp_app_icon_small' style='height:31px;'></a>\r\n                            </td>\r\n
+        \                           <td>\r\n                                <a href='/sm/apps/cloud/'>Cloud</a>\r\n
+        \                           </td>\r\n                        </tr>\r\n                        <tr>\r\n
+        \                           <td class='icon'>\r\n                                <a
+        href='/sm/apps/outbound_delivery/'><img src='/sm/img/apps/outbound_delivery_blue_100h.png'
+        alt='Delivery' class='hp_app_icon_small'></a>\r\n                            </td>\r\n
+        \                           <td>\r\n                                <a href='/sm/apps/outbound_delivery/'>Delivery</a>\r\n
+        \                           </td>\r\n                        </tr>\r\n                        <tr>\r\n
+        \                           <td class='icon'>\r\n                                <a
+        href='/sm/apps/partner/'><img src='/sm/img/apps/partners_blue_100h.png' alt='Partner'
+        class='hp_app_icon_small'></a>\r\n                            </td>\r\n                            <td>\r\n
+        \                               <a href='/sm/apps/partner/'>Partner</a>\r\n
+        \                           </td>\r\n                        </tr>\r\n                        <tr>\r\n
+        \                           <td class='icon'>\r\n                                <a
+        href='/sm/apps/enterprise/'><img src='/sm/img/apps/enterprise_blue_100.png'
+        alt='Enterprise' class='hp_app_icon_small'></a>\r\n                            </td>\r\n
+        \                           <td>\r\n                                <a href='/sm/apps/enterprise/'>Enterprise</a>\r\n
+        \                           </td>\r\n                        </tr>\r\n                    </table>\r\n
+        \               </div>\r\n            </div>\r\n\r\n                    </div>\r\n
+        \       \r\n    </div> <!-- ends multi_box_wrap -->\r\n\r\n    <div style='clear:both;'></div>\r\n
+        \   <style type='text/css'>\r\n        #reac_banner a { color:#fff; font-weight:700;
+        font-size:16px; } \r\n        #reac_banner a:hover { color:#98002e; } \r\n
+        \       #reac_banner ul { margin-top:1.6em;list-style-type: none; margin-left:3em;padding-left:0;
+        } \r\n        #reac_banner li { margin-bottom:3.5em; } \r\n    </style>\r\n
+        \   <!--\r\n    <div id='reac_button' style=\"text-align:left;height:22.5em;overflow:hidden;text-align:left;margin:.8em;margin-top:.2em;
+        margin-bottom:1em;\">\r\n            </div>\r\n    -->\r\n\r\n    <div style='clear:both;'></div>\r\n
+        \   <div id='reac_button' style=\"text-align:center;display:none;display:block;margin:.8em;margin-top:.2em;
+        margin-bottom:1em;\">\r\n            </div>\r\n\r\n    <div style='clear:both;'></div>\r\n\r\n
+        \   \r\n\r\n    \r\n<div style='clear:both;'>&nbsp;</div>\r\n</div><!-- End
+        bg_sliver -->\r\n\r\n\r\n\r\n\r\n</div> <!-- end content display -->\n\t        <div
+        class=\"clear\"></div>\n\n\t        \n\t        </div> <!-- content display
+        outer -->\n    \n\t        <div class=\"clear\"></div>\n    \n\t        </div><!--
+        \ Ending wrap div -->\n    \n            <div id='footer'>\n\t            <a
+        href=\"/sm/company/site_map/\">Site Map</a> | <a href=\"/sm/company/privacy/\">Privacy
+        Policy</a> | <a href=\"/sm/company/terms/\">Terms & Conditions</a> | Copyright
+        &copy; 1998-2016 Sendmail, Inc. All Rights Reserved.\n\t        </div>\n    \n\t
+        \       <div class=\"clear\"></div>\n    \n        </div><!-- end page div
+        -->\n    \n\t    <!-- Begin Salesforce Tracking Code, Place immediately before
+        closing </BODY> tag -->\r\n<!-- End Salesforce Tracking Code, Place immediately
+        before closing </BODY> tag -->\r\n\r\n\r\n<!-- start google universal analytics
+        tracking code -->\r\n<script>\r\n  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){\r\n
+        \ (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),\r\n
+        \ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)\r\n
+        \ })(window,document,'script','//www.google-analytics.com/analytics.js','ga');\r\n\r\n
+        \ ga('create', 'UA-668253-1', 'sendmail.com');\r\n  ga('send', 'pageview');\r\n\r\n</script>\r\n\r\n<!--
+        end google tracking code -->\r\n\r\n\r\n\r\n\t<!-- LeadFormix started 3/2/2011-->\r\n\t<a
+        href=\"http://www.leadformix.com\" title=\"Marketing Automation\" onclick=\"window.open(this.href);return(false);\">\r\n\t<script
+        language=\"javascript\">\r\n\tvar pkBaseURL = ((\"https:\" == document.location.protocol)
+        ? \"https://vlog.leadformix.com/\" : \"http://vlog.leadformix.com/\");\r\n\tdocument.write(unescape(\"%3Cscript
+        src='\" + pkBaseURL + \"bf/bf.js' type='text/javascript'%3E%3C/script%3E\"));\r\n\t</script>\r\n\t<script
+        type=\"text/javascript\">\r\n\tvar pkBaseURL = ((\"https:\" == document.location.protocol)
+        ? \"https://vlog.leadformix.com/\" : \"http://vlog.leadformix.com/\");\r\n\t<!--\r\n\tbf_action_name
+        = '';\r\n\tbf_idsite = 6603;\r\n\tbf_url = pkBaseURL+'bf/bf.php';\r\n\tsetTimeout('bf_log(\"'
+        + bf_action_name+'\",'+ bf_idsite+',\"'+ bf_url +'\")',0);\r\n\t//-->\r\n\t</script></a>\r\n\t<!--
+        LeadFormix -->\r\n\r\n    \n        <div id='foot_stripe'>&nbsp;</div>\n    </body>\n</html>\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\n\n\n\t\n"
+    http_version: 
+  recorded_at: Thu, 02 Jun 2016 20:16:54 GMT
+recorded_with: VCR 3.0.3

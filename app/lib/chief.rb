@@ -40,7 +40,8 @@ class Chief
     [
       NameFromUrlDetective, ProjectSitesHttpsDetective,
       GithubBasicDetective, HowAccessRepoFilesDetective,
-      RepoFilesExamineDetective, FlossLicenseDetective
+      RepoFilesExamineDetective, FlossLicenseDetective,
+      HardenedSitesDetective
     ].freeze
 
   # List fields allowed to be written into Project (an ActiveRecord).

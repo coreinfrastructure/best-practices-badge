@@ -121,7 +121,7 @@ GEM
       colorize (~> 0.7)
       ruby_parser (~> 3.7)
     fastly (1.4.3)
-    fastly-rails (0.6.0)
+    fastly-rails (0.7.0)
       fastly (~> 1.4)
       mime-types (>= 1.16, < 3)
       railties
@@ -442,7 +442,7 @@ DEPENDENCIES
   eslintrb (= 2.0.4)
   faker (= 1.6.3)
   fasterer (= 0.3.2)
-  fastly-rails (= 0.6.0)
+  fastly-rails (= 0.7.0)
   font-awesome-rails (= 4.6.3.0)
   github_api (= 0.14.0)
   heroku_rails_deflate (= 1.0.3)

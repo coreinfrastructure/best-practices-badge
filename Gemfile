@@ -9,7 +9,7 @@ gem 'bootstrap-social-rails', '4.12.0'
 gem 'bootstrap-will_paginate', '0.0.10'
 gem 'bootstrap_form', '2.3.0'
 gem 'faker', '1.6.3'
-gem 'fastly-rails', '0.6.0' # Use Fastly CDN
+gem 'fastly-rails', '0.7.0' # Use Fastly CDN
 gem 'font-awesome-rails', '4.6.3.0'
 gem 'github_api', '0.14.0'
 gem 'imagesLoaded_rails', '4.1.0' # Javascript - enable wait for image load

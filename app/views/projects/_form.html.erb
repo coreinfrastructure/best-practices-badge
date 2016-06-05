@@ -48,11 +48,12 @@ There is also a
   on your project page!  Here are the details:
   <%= render(partial: "details", locals: {
          criterion: "got_badge", details: %{
+  <p><img src='/projects/#{project.id}/badge' alt='Badge level for project #{project.id} is #{project.badge_percentage}%'></p>
   You can show your badge status
   by embedding this HTML:<br />
-  &lt;a href="https://#{badge_hostname}/projects/#{ project.id }"&gt;&lt;img src="https://#{ badge_hostname }/projects/#{ project.id }/badge"&gt;&lt;/a&gt; <br />
+  <code>&lt;a href="https://#{badge_hostname}/projects/#{ project.id }"&gt;&lt;img src="https://#{ badge_hostname }/projects/#{ project.id }/badge"&gt;&lt;/a&gt; </code><br />
   or by putting this in your markdown file:<br />
- [![CII Best Practices](https://#{ badge_hostname }/projects/#{ project.id }/badge)](https://#{ badge_hostname }/projects/#{ project.id })
+ <code>[![CII Best Practices](https://#{ badge_hostname }/projects/#{ project.id }/badge)](https://#{ badge_hostname }/projects/#{ project.id })</code>
   }}) %>
 <% else %>
   <b>Please 'submit' often</b> to save your work

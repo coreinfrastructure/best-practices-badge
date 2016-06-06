@@ -242,7 +242,7 @@ is hosted on a site (e.g., GitHub) with decent API support.
   The project MAY use private (non-public) branches in specific cases while the
   change is not publicly released
   (e.g., for fixing a vulnerability before it is revealed to the public).
-   <sup>[<a href="#repo_public">repo_url</a>]</sup>
+   <sup>[<a href="#repo_public">repo_public</a>]</sup>
 - <a name="repo_track"></a>The source repository MUST track what changes
   were made, who made the changes, and when the changes were made.
   <sup>[<a href="#repo_track">repo_track</a>]</sup>

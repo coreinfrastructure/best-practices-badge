@@ -20,7 +20,6 @@ achieved a Core Infrastructure Initiative (CII) badge.
 
 <%= render(partial: "details", locals: {
            criterion: "badge_intro", details: %{
-<p>
 There is no set of practices that can guarantee that software
 will never have defects or vulnerabilities;
 even formal methods can fail if the specifications or assumptions are wrong.
@@ -45,33 +44,23 @@ There is also a
 }}) %>
 
 <% if is_disabled %>
-<%   if ! %w(failing in_progress).include? project.badge_level %>
-<div class="row">
-<div class="col-xs-1"></div>
-<div class="col-xs-2">
-  <%= image_tag "trophy.svg", width: 96, height: 96 %>
-</div>
-<div class="col-xs-8">
-  According to the information below, this project <i>has</i> achieved
-  a badge.
+  If this is your project, please show your badge status
+  on your project page!  Here are the details:
   <%= render(partial: "details", locals: {
-             criterion: "got_badge", details: %{
-  If this is your project, you can show a badge by embedding this HTML:<br />
-  &lt;a href="https://#{badge_hostname}/projects/#{ project.id }"&gt;&lt;img src="https://#{ badge_hostname }/projects/#{ project.id }/badge"&gt;&lt;/a&gt; <br />
-  or put this in your markdown file:<br />
- [![CII Best Practices](https://#{ badge_hostname }/projects/#{ project.id }/badge)](https://#{ badge_hostname }/projects/#{ project.id })
-}}) %>
-</div>
-</div>
-<%   end %>
+         criterion: "got_badge", details: %{
+  <p><img src='/projects/#{project.id}/badge' alt='Badge level for project #{project.id} is #{project.badge_percentage}%'></p>
+  You can show your badge status
+  by embedding this HTML:<br />
+  <code>&lt;a href="https://#{badge_hostname}/projects/#{ project.id }"&gt;&lt;img src="https://#{ badge_hostname }/projects/#{ project.id }/badge"&gt;&lt;/a&gt; </code><br />
+  or by putting this in your markdown file:<br />
+ <code>[![CII Best Practices](https://#{ badge_hostname }/projects/#{ project.id }/badge)](https://#{ badge_hostname }/projects/#{ project.id })</code>
+  }}) %>
 <% else %>
-<div class="row">
-  <div class="col-xs-12">
-    <b>Please 'submit' often</b> to save your work
-    (you can always go back and edit more later).
-    </div>
-</div>
+  <b>Please 'submit' often</b> to save your work
+  (you can always go back and edit more later).
 <% end %>
+
+<%# End column started outside. %>
 </div>
 
 <div class="col-md-3 col-xs-3">
@@ -80,7 +69,10 @@ There is also a
   </div>
 </div>
 
+<%# end row started outside %>
 </div>
+
+
 <div class="row">
   <div class="col-md-12">
 

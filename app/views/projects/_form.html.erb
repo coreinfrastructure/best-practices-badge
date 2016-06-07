@@ -45,10 +45,12 @@ There is also a
 
 <% if is_disabled %>
   If this is your project, please show your badge status
-  on your project page!  Here are the details:
+  on your project page!
+  The badge status looks like this:
+  <img src='/projects/<%= project.id %>/badge' alt='Badge level for project <%= project.id %> is <%= project.badge_percentage %>%'>
+  Here are the details:
   <%= render(partial: "details", locals: {
          criterion: "got_badge", details: %{
-  <p><img src='/projects/#{project.id}/badge' alt='Badge level for project #{project.id} is #{project.badge_percentage}%'></p>
   You can show your badge status
   by embedding this HTML:<br />
   <code>&lt;a href="https://#{badge_hostname}/projects/#{ project.id }"&gt;&lt;img src="https://#{ badge_hostname }/projects/#{ project.id }/badge"&gt;&lt;/a&gt; </code><br />

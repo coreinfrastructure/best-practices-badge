@@ -14,6 +14,11 @@
   - :who: David A. Wheeler
     :why: OSI-approved OSS license BSD-2-Clause, known compatible with MIT
     :when: 2015-12-17 15:40:09.473789072 Z
+- - :whitelist
+  - LGPLv2+
+  - :who: David A. Wheeler
+    :why: OSI-approved OSS license LGPL-2.0+, known compatible with MIT
+    :when: 2016-06-07 17:30-0400
 - - :approve
   - rake
   - &1

@@ -69,16 +69,6 @@ tools, e.g., at the command line:
 - <kbd>emerge install git</kbd> (Gentoo)
 - <kbd>brew install git</kbd> (MacOS)
 
-Also, [set up Git](https://help.github.com/articles/set-up-git/)
-so it will correctly record who you are; here are the key commands
-(please use your own name and email address):
-
-~~~~sh
-git config --global user.name "YOUR NAME"
-git config --global user.email "YOUR EMAIL ADDRESS"
-~~~~
-
-
 ## Forking the repo
 
 You'll now need to fork the repo on GitHub.
@@ -112,6 +102,23 @@ So at the command line just run:
 If that fails, see the section later on "What does install-badge-dev-env do?"
 to manually do what it's trying to do.
 If it doesn't work, patches welcome.
+
+## Telling git who you are
+
+The installation will ask you for your full name and email address
+if git does not already have them set.
+This is used to
+[set up Git](https://help.github.com/articles/set-up-git/)
+so it will correctly record who you are.
+Please use your own name and email address.
+
+You can change these later using:
+
+~~~~sh
+git config --global user.name "YOUR NAME"
+git config --global user.email "YOUR EMAIL ADDRESS"
+~~~~
+
 
 ## Running locally
 

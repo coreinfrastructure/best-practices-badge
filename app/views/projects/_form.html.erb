@@ -45,15 +45,17 @@ There is also a
 
 <% if is_disabled %>
   If this is your project, please show your badge status
-  on your project page!  Here are the details:
+  on your project page!
+  The badge status looks like this:
+  <img src='/projects/<%= project.id %>/badge' alt='Badge level for project <%= project.id %> is <%= project.badge_percentage %>%'>
+  Here is how to embed it:
   <%= render(partial: "details", locals: {
          criterion: "got_badge", details: %{
-  <p><img src='/projects/#{project.id}/badge' alt='Badge level for project #{project.id} is #{project.badge_percentage}%'></p>
   You can show your badge status
-  by embedding this HTML:<br />
-  <code>&lt;a href="https://#{badge_hostname}/projects/#{ project.id }"&gt;&lt;img src="https://#{ badge_hostname }/projects/#{ project.id }/badge"&gt;&lt;/a&gt; </code><br />
-  or by putting this in your markdown file:<br />
+  or embedding this in your markdown file:<br />
  <code>[![CII Best Practices](https://#{ badge_hostname }/projects/#{ project.id }/badge)](https://#{ badge_hostname }/projects/#{ project.id })</code>
+  or by embedding this in your HTML:<br />
+  <code>&lt;a href="https://#{badge_hostname}/projects/#{ project.id }"&gt;&lt;img src="https://#{ badge_hostname }/projects/#{ project.id }/badge"&gt;&lt;/a&gt; </code><br />
   }}) %>
 <% else %>
   <b>Please 'submit' often</b> to save your work

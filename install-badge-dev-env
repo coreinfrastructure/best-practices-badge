@@ -204,7 +204,7 @@ case "$manager" in
     sudo systemctl start postgresql
     ;;
   *)
-    # do nothing
+    : # do nothing
 esac
 
 # Install rbenv 1.0.0 via GitHub, if it isn't already installed,

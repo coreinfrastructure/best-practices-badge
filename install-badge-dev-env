@@ -344,6 +344,16 @@ if is_command shellcheck ; then
   shellcheck install-badge-dev-env
 fi
 
+# Remarkably, older versions of git didn't check retrieved objects.
+# Always check.  Technically we only need to set this for 'transfer',
+# because fetch defaults to whatever transfer does, but let's force it.
+# Receive also defaults to what 'transfer' does, but it's unlikely to have
+# something different.
+# This is per a recommendation about git integrity by Eric Myhre.
+echo 'Forcing git to check retrieved objects'
+git config --global transfer.fsckobjects true
+git config --global fetch.fsckobjects true
+
 bin/rake
 
 echo 'All done! Use "rails server" and view localhost:3000 to see it run.'

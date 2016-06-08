@@ -78,16 +78,6 @@ git config --global user.name "YOUR NAME"
 git config --global user.email "YOUR EMAIL ADDRESS"
 ~~~~
 
-We also recommend adding these lines to your $HOME/.gitconf file
-(per a recommendation about git integrity by Eric Myhre;
-the [fetch] and [receive] options default to whatever [transfer] is):
-
-~~~~
-# check that anything we're getting is complete and sane on a regular basis
-[transfer]
-fsckObjects = true
-~~~~
-
 
 ## Forking the repo
 
@@ -224,6 +214,16 @@ gem install bundler  # Install the "bundler" gem package manager.
 rbenv rehash
 bundle install       # Install gems we use in Gemfile.lock, including Rails
 rake db:setup        # Setup database and seed it with dummy data
+~~~~
+
+### git integrity
+
+Per a recommendation about git integrity by Eric Myhre, we force
+git to check the integrity of incoming data using:
+
+~~~~
+git config --global transfer.fsckobjects true
+git config --global fetch.fsckobjects true
 ~~~~
 
 ### Consequences of our install approach

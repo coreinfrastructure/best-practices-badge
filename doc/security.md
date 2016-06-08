@@ -632,7 +632,8 @@ As noted earlier, we are cautious about the components we use.
 The source code is managed on GitHub;
 [GitHub takes steps to keep itself secure](https://help.github.com/articles/github-security/).
 
-The INSTALL.md file suggests various steps to counter some attacks.
+The installation process, as described in the INSTALL.md file,
+includes a few steps to counter some attacks.
 In particular,
 we use the git integrity recommendations from Eric Myhre that check all
 git objects transferred from an external site into our development environment.

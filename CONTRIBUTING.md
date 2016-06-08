@@ -667,14 +667,18 @@ it can be checked in as a new commit.
 
 ## Keeping up with external changes
 
-If you've already set your git remote 'upstream' per our previous instructions:
+The installer adds a git remote named 'upstream'.
+Running 'git pull master upstream' will pull the current version from
+upstream, enabling you to sync with upstream.
+
+You can reset this, if something has happened to it, using:
 
 ~~~~sh
 git remote add upstream \
-    https://github.com/linuxfoundation/cii-best-practices-badge
+    https://github.com/linuxfoundation/cii-best-practices-badge.git
 ~~~~
 
-Then running 'git pull master upstream' will pull the current version.
 If the version of Ruby has changed (in the Gemfile),
 use the 'Ruby itself can be updated' instructions.
-If gems have been added, run "bundle install" to install the new ones.
+If gems have been added or their versions changed,
+run "bundle install" to install the new ones.

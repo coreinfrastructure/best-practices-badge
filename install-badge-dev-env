@@ -326,6 +326,15 @@ true)
 esac
 
 echo
+echo 'STAGE 7: Final minor setups.'
+
+if ! git remote | grep -q '^upstream$' ; then
+  echo 'Adding git remote "upstream"'
+  git remote add upstream \
+      https://github.com/linuxfoundation/cii-best-practices-badge.git
+fi
+
+echo
 echo 'FINAL STAGE: Test to see if it is working'
 
 # We don't want to force everyone do this, but a check on install

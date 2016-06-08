@@ -109,17 +109,6 @@ Once it's done, change into the newly-created directory:
 cd cii-best-practices-badge
 ~~~~
 
-Now add an "upstream" remote so that you can easily track the master version:
-
-~~~~sh
-git remote add upstream https://github.com/linuxfoundation/cii-best-practices-badge
-~~~~
-
-<!-- If you have edit rights, do this instead:
-git clone <https://github.com/linuxfoundation/cii-best-practices-badge.git>
-cd cii-best-practices-badge
--->
-
 ## Installing the development environment
 
 We provide a simple shell script that should install all the necessary
@@ -190,14 +179,25 @@ See the [ruby-build suggested build environment](https://github.com/sstephenson/
 for how to do install the other required components.
 The script installs gcc.
 
-You also need to install [rbenv](https://github.com/sstephenson/rbenv)
-to follow the instructions given here.  See the
+It then normally installs [rbenv](https://github.com/sstephenson/rbenv).
+See the
 [rbenv basic github checkout](https://github.com/sstephenson/rbenv#basic-github-checkout)
 instructions for one approach for installing rbenv.
 The rbenv tool lets you select a specific version of Ruby, and from there,
 select specific versions of other libraries.
 An alternative way to select specific versions is to use rvm,
 but that approach is not documented here.
+
+It also adds an "upstream" remote so that you can easily track it:
+
+~~~~sh
+git remote add upstream https://github.com/linuxfoundation/cii-best-practices-badge.git
+~~~~
+
+<!-- If you have edit rights, do this instead:
+git clone <https://github.com/linuxfoundation/cii-best-practices-badge.git>
+cd cii-best-practices-badge
+-->
 
 
 ### Installing the project environment

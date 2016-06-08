@@ -103,6 +103,11 @@ Eventually these criteria will be worded per
         the goal here is to make it *possible* to easily use the
         standard version.
         See, e.g., <http://spot.livejournal.com/312320.html> .
+*   Active development community
+    - Active development
+      demonstrated by active number of commits, issues opened and closed,
+      discussion (e.g., in issues, mailing list, or whatever the project
+      uses for discussion), multiple developers, etc.
 *   Bus factor aka truck factor:
     -   No one developer should be indispensible.
         If a developer was killed or incapacitated ("hit by a bus"),

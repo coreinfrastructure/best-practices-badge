@@ -26,7 +26,7 @@
           <%# Defend against bad data - link only if plausible URL. %>
           <% if project.homepage_url.presence &&
                 project.homepage_url.match(/\Ahttps?:\/\//) %>
-            <a href="<%= project.homepage_url %>"><%= project.homepage_url %></a>
+            <a rel='nofollow' href="<%= project.homepage_url %>"><%= project.homepage_url %></a>
           <% else %>
             <%= project.homepage_url %>
           <% end %>

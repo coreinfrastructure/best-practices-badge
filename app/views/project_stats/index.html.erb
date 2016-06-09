@@ -2,11 +2,53 @@
 
 <h1>Project Stats</h1>
 
-<p>
-This is a temporary view, so that you can see the data.
-We plan to add a chart display in the future.
+All projects
 
-<table>
+<%=
+  # Show a chart with just total # projects.
+  series_dataset = ProjectStat.all.reduce({}) do |h,e|
+    h.merge(e.created_at => e.percent_ge_0)
+  end
+  line_chart series_dataset
+%>
+
+<br><br><br>
+
+Projects with non-trivial progress
+<%=
+  # Show project counts, but skip <25% because that makes chart scale unusable
+  gt0_stats = ProjectStat::STAT_VALUES.select do |e|
+    e.to_i > 0
+  end.freeze
+  dataset = gt0_stats.map do |minimum|
+    desired_field = 'percent_ge_' + minimum.to_s
+    series_dataset = ProjectStat.all.reduce({}) do |h,e|
+     h.merge(e.created_at => e[desired_field])
+    end
+    {name: '>=' + minimum.to_s + '%', data: series_dataset}
+  end
+  line_chart dataset
+%>
+
+<br><br><br>
+
+<%=
+  # Show new and edited projects
+  dataset = ['created', 'updated'].freeze.map do |action|
+    desired_field = action + '_since_yesterday'
+    series_dataset = ProjectStat.all.reduce({}) do |h,e|
+     h.merge(e.created_at => e[desired_field])
+    end
+    {name: 'projects ' + action + ' since day before', data: series_dataset}
+  end
+  line_chart dataset
+%>
+
+<br><br><br>
+<p>
+Here is the raw data (you can also get the raw data in JSON format):
+
+<table class='table-bordered table-striped'>
   <thead>
     <tr>
       <th>When</th>

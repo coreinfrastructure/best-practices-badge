@@ -19,5 +19,8 @@
 //= require jquery-ui/autocomplete
 // This allows us to wait for image loading to complete:
 //= require imagesloaded
+// Chart creation via chartkick:
+//= require Chart.bundle
+//= require chartkick
 //= require_tree .
 //= require turbolinks

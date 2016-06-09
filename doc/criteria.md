@@ -519,8 +519,9 @@ by the delivered project's software.
   [*Open Standards Requirement for Software* by the Open Source Initiative](https://opensource.org/osr).
   <sup>[<a href="#crypto_floss">crypto_floss</a>]</sup>
 - <a name="crypto_keylength"></a>The project security mechanisms
-  MUST use default keylengths that meet the NIST minimum requirements
-  at least through the year 2030 (as stated in 2012).
+  MUST use default keylengths that at least
+  meet the NIST minimum requirements
+  through the year 2030 (as stated in 2012).
   These minimum bitlengths are: symmetric key 112, factoring modulus 2048,
   discrete logarithm key 224, discrete logarithmic group 2048,
   elliptic curve 224, and hash 224 (password hashing is not covered by this
@@ -531,7 +532,7 @@ by the delivered project's software.
   The software MUST be configurable so that it will reject smaller keylengths.
   The software MAY allow smaller keylengths in some configurations
   (ideally it would not, since this allows downgrade attacks,
-  but shorter keylengths are sometimes necessary for interoperability.)
+  but shorter keylengths are sometimes necessary for interoperability).
   <sup>[<a href="#crypto_keylength">crypto_keylength</a>]</sup>
 - <a name="crypto_working"></a>The default project security mechanisms MUST NOT
   depend on cryptographic algorithms that are broken

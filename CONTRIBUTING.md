@@ -668,7 +668,7 @@ it can be checked in as a new commit.
 ## Keeping up with external changes
 
 The installer adds a git remote named 'upstream'.
-Running 'git pull master upstream' will pull the current version from
+Running 'git pull upstream master' will pull the current version from
 upstream, enabling you to sync with upstream.
 
 You can reset this, if something has happened to it, using:

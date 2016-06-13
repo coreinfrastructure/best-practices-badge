@@ -24,6 +24,7 @@ class CriteriaTest < ActiveSupport::TestCase
       category future na_allowed met_url_required description details
       met_placeholder unmet_placeholder na_placeholder met_suppress
       unmet_suppress autofill
+      major minor
     )
     Criteria.to_h.each do |_criterion, values|
       values.each do |key, _value|

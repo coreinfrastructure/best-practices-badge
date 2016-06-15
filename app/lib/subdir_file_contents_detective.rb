@@ -57,7 +57,7 @@ class SubdirFileContentsDetective < Detective
     folder = folder_named(patterns[:folder])
     @results[status] =
       if folder.nil?
-        unmet_result result_description
+        unmet_result description
       else
         match_file_content(repo_files.get(folder), patterns, description)
       end

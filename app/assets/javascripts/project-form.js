@@ -313,6 +313,24 @@ function SetupCriteriaStructures() {
   );
 }
 
+// Synchronize panes, location.hash and browser history
+// This code originally from a Bootstrap proposed patch by theill,
+// improved by enosdan, see:
+// https://github.com/linuxfoundation/cii-best-practices-badge/issues/218
+// Activate parent pane and scroll to requested id
+function showPane() {
+  var targetElement = $(window.location.hash);
+  var parentPane = targetElement.closest('div.tab-pane');
+  var paneAnchor = $('a[href="#' + parentPane.attr('id') + '"]');
+  if (paneAnchor.length) {
+    paneAnchor.tab('show');
+  }
+  if (targetElement.length) {
+    targetElement.get(0).scrollIntoView(true);
+  }
+}
+
+
 // Setup display as soon as page is ready
 $(document).ready(function() {
   // By default, hide details.  We do the hiding in Javascript, so
@@ -364,6 +382,17 @@ $(document).ready(function() {
       });
       resetProgressBar();
     });
+
+    // Activate pane when the page loads
+    showPane();
+
+    // Change hash upon pane activation.
+    $('a[href^="#"]').on('click', function() {
+      window.location.hash = $(this).attr('href');
+    });
+
+    // Activate pane upon hash changes (forward / back)
+    $(window).on('hashchange', showPane);
   }
 
   // Polyfill datalist (for Safari users)

@@ -4,9 +4,13 @@
 
 All projects
 
+<%
+  all_stats  = ProjectStat.all
+%>
+
 <%=
   # Show a chart with just total # projects.
-  series_dataset = ProjectStat.all.reduce({}) do |h,e|
+  series_dataset = all_stats.reduce({}) do |h,e|
     h.merge(e.created_at => e.percent_ge_0)
   end
   line_chart series_dataset
@@ -22,7 +26,7 @@ Projects with non-trivial progress
   end.freeze
   dataset = gt0_stats.map do |minimum|
     desired_field = 'percent_ge_' + minimum.to_s
-    series_dataset = ProjectStat.all.reduce({}) do |h,e|
+    series_dataset = all_stats.reduce({}) do |h,e|
      h.merge(e.created_at => e[desired_field])
     end
     {name: '>=' + minimum.to_s + '%', data: series_dataset}
@@ -34,19 +38,40 @@ Projects with non-trivial progress
 
 <%=
   # Show new and edited projects
-  dataset = ['created', 'updated'].freeze.map do |action|
+  dataset = []
+  ndays = 7
+  actions = ['created', 'updated'].freeze
+  actions.each do |action|
     desired_field = action + '_since_yesterday'
-    series_dataset = ProjectStat.all.reduce({}) do |h,e|
-     h.merge(e.created_at => e[desired_field])
+    series_dataset = all_stats.reduce({}) do |h,e|
+      h.merge(e.created_at => e[desired_field])
     end
-    {name: 'projects ' + action + ' since day before', data: series_dataset}
+    dataset << {name: 'projects ' + action + ' since day before',
+                data: series_dataset}
+    # Calculate moving average over ndays
+    series_counts = all_stats.map { |e| e[desired_field] }
+    series_moving_average = series_counts.each_cons(ndays).map do |e|
+      e.reduce(&:+).to_f/ndays
+    end
+    moving_average_dataset = {}
+    all_stats.each_with_index do |e, index|
+      if index >= ndays
+        moving_average_dataset[e.created_at] =
+          series_moving_average[index-ndays]
+      end
+    end
+    dataset << {name: 'projects ' + action + " average over #{ndays} days",
+                data: moving_average_dataset,
+                library: {borderDash: [5,5]}}
   end
-  line_chart dataset
+  line_chart dataset, colors: ['green', 'darkgreen', 'blue', 'darkblue']
 %>
 
 <br><br><br>
 <p>
-Here is the raw data (you can also get the raw data in JSON format):
+Here is the raw data
+(<a href="/project_stats.json">you can also get the raw data
+in JSON format</a>):
 
 <table class='table-bordered table-striped'>
   <thead>

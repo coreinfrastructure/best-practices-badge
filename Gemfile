@@ -7,7 +7,7 @@ gem 'bcrypt', '3.1.11' # Security - for salted hashed interated passwords
 gem 'bootstrap-sass', '3.3.6'
 gem 'bootstrap-social-rails', '4.12.0'
 gem 'bootstrap-will_paginate', '0.0.10'
-gem 'bootstrap_form', '2.3.0'
+gem 'bootstrap_form', '2.4.0'
 gem 'chartkick', '2.0.0' # Chart project_stats
 gem 'faker', '1.6.3'
 gem 'fastly-rails', '0.7.0' # Use Fastly CDN

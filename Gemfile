@@ -40,7 +40,7 @@ group :development, :test do
   gem 'ruby-graphviz', '1.2.2'
   gem 'dotenv-rails', '2.1.1'
   gem 'eslintrb', '2.0.4'
-  gem 'license_finder', '2.1.0'
+  gem 'license_finder', '2.1.2'
   gem 'mdl', '0.3.1'
   gem 'pronto', '0.6.0'
   gem 'pronto-brakeman', '0.6.0'

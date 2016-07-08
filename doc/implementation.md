@@ -357,6 +357,8 @@ in your web browser.
 You can select any table (on the left-hand side) so you can view
 or edit the database contents with a UI.
 
+You can directly connect to the database engine and run commands.
+On the local development system, run "rails db" as always.
 To change the database contents of a production system,
 log into that system and use the SQL language to make changes.
 E.G., on Heroku, presuming that you have installed the heroku command,
@@ -365,13 +367,35 @@ and configured it for the system you are controlling
 you can pipe SQL commands to 'heroku pg:psql'.
 This only works if you've been given keys to control this.
 On Heroku we use PostgreSQL.
-Here are a few examples:
+Here are a few examples (replace the "heroku pg:psql..." with "rails db"
+to do it locally):
 
 ~~~~sh
-echo "SELECT * FROM users WHERE users.id = 1" | heroku pg:psql
-echo "SELECT * FROM users WHERE name = 'David A. Wheeler'" | heroku pg:psql
-echo "UPDATE users SET role = 'admin' where id = 25" | heroku pg:psql
-echo "UPDATE projects SET user_id = 25 WHERE id = 1" | heroku pg:psql
+echo "SELECT * FROM users WHERE users.id = 1" | \
+  heroku pg:psql --app master-bestpractices
+echo "SELECT * FROM users WHERE name = 'David A. Wheeler'" | \
+  heroku pg:psql --app master-bestpractices
+echo "UPDATE users SET role = 'admin' where id = 25" | \
+  heroku pg:psql --app master-bestpractices
+echo "UPDATE projects SET user_id = 25 WHERE id = 1" | \
+  heroku pg:psql --app master-bestpractices
+~~~~
+
+You can force-create new users and make them admins
+(again, if you have the rights to do so).
+To create new github user, first get their github uid from their
+github username (nickname) by looking at
+https://api.github.com/users/USERNAME
+and getting the "id" value.
+Then run this, replacing all-caps stubs with the values in single quotes
+(this will create a local id automatically):
+
+~~~~sh
+echo "INSERT INTO users (provider,uid,name,nickname,email,role,activated,
+  created_at,updated_at)
+  VALUES ('github',GITHUB_UID,FULL_USER_NAME,
+  GITHUB_USERNAME,EMAIL,'admin',t,now(),now());" | \
+  heroku pg:psql --app master-bestpractices
 ~~~~
 
 You can

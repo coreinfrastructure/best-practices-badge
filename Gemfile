@@ -34,7 +34,7 @@ gem 'uglifier', '3.0.0'
 gem 'will_paginate', '3.1.0'
 
 group :development, :test do
-  gem 'awesome_print', '1.6.1'
+  gem 'awesome_print', '1.7.0'
   gem 'bullet', '5.1.0'
   gem 'bundler-audit', '0.5.0'
   gem 'ruby-graphviz', '1.2.2'

@@ -45,7 +45,7 @@ GEM
       execjs
     autosize-rails (1.18.17)
       rails (>= 3.1)
-    awesome_print (1.6.1)
+    awesome_print (1.7.0)
     bcrypt (3.1.11)
     bootstrap-sass (3.3.6)
       autoprefixer-rails (>= 5.2.1)
@@ -430,7 +430,7 @@ PLATFORMS
 
 DEPENDENCIES
   autosize-rails (= 1.18.17)
-  awesome_print (= 1.6.1)
+  awesome_print (= 1.7.0)
   bcrypt (= 3.1.11)
   bootstrap-sass (= 3.3.6)
   bootstrap-social-rails (= 4.12.0)

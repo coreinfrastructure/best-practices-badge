@@ -127,7 +127,7 @@ GEM
       mime-types (>= 1.16, < 3)
       railties
     ffi (1.9.10)
-    font-awesome-rails (4.6.3.0)
+    font-awesome-rails (4.6.3.1)
       railties (>= 3.2, < 5.1)
     github_api (0.14.0)
       addressable (~> 2.4.0)
@@ -447,7 +447,7 @@ DEPENDENCIES
   faker (= 1.6.5)
   fasterer (= 0.3.2)
   fastly-rails (= 0.7.0)
-  font-awesome-rails (= 4.6.3.0)
+  font-awesome-rails (= 4.6.3.1)
   github_api (= 0.14.0)
   heroku_rails_deflate (= 1.0.3)
   imagesLoaded_rails (= 4.1.0)

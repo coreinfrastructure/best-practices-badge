@@ -34,19 +34,40 @@ Projects with non-trivial progress
 
 <%=
   # Show new and edited projects
-  dataset = ['created', 'updated'].freeze.map do |action|
+  dataset = []
+  ndays = 7
+  actions = ['created', 'updated'].freeze
+  actions.each do |action|
     desired_field = action + '_since_yesterday'
     series_dataset = ProjectStat.all.reduce({}) do |h,e|
-     h.merge(e.created_at => e[desired_field])
+      h.merge(e.created_at => e[desired_field])
     end
-    {name: 'projects ' + action + ' since day before', data: series_dataset}
+    dataset << {name: 'projects ' + action + ' since day before',
+                data: series_dataset}
+    # Calculate moving average over ndays
+    series_counts = ProjectStat.all.map { |e| e[desired_field] }
+    series_moving_average = series_counts.each_cons(ndays).map do |e|
+      e.reduce(&:+).to_f/ndays
+    end
+    moving_average_dataset = {}
+    ProjectStat.all.each_with_index do |e, index|
+      if index >= ndays
+        moving_average_dataset[e.created_at] =
+          series_moving_average[index-ndays]
+      end
+    end
+    dataset << {name: 'projects ' + action + " average over #{ndays} days",
+                data: moving_average_dataset,
+                library: {borderDash: [5,5]}}
   end
-  line_chart dataset
+  line_chart dataset, colors: ['green', 'darkgreen', 'blue', 'darkblue']
 %>
 
 <br><br><br>
 <p>
-Here is the raw data (you can also get the raw data in JSON format):
+Here is the raw data
+(<a href="/project_stats.json">you can also get the raw data
+in JSON format</a>):
 
 <table class='table-bordered table-striped'>
   <thead>

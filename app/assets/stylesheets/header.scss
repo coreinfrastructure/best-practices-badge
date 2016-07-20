@@ -41,3 +41,32 @@
 #logo:hover {
   text-decoration: none;
 }
+
+//Responsive styles for the header at xs or cell phone size
+@media (max-width: 768px) {
+  .nav-color {
+    padding-top: 10px;
+    padding-left: 10px;
+  }
+
+  .nav.navbar-nav.navbar-right {
+    // float: right;
+  }
+
+
+  .nav.navbar-nav.navbar-right > li > a {
+    float: left;
+    display:inline-block;
+    font-size: 0.9em;
+    margin-right: 10px;
+    margin-top: -10px;
+    // padding-bottom: 5px;
+  }
+
+  .container.container_padding {
+    padding-top: 5px;
+    padding-bottom: 0px;
+  }
+
+#logo {font-size: 1.2em;}
+}

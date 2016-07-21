@@ -44,17 +44,31 @@ class SubdirFileContentsDetective < Detective
     nil
   end
 
-  def match_file_content(repo_files, folder, patterns, description)
+  def get_content(fso, repo_files)
+    content = repo_files.get_info(fso['path'])['content']
+    encoding = fso['encoding']
+    content = Base64.decode64(content) if encoding.nil? || encoding == 'base64'
+    content
+  end
+
+  def get_relevant_files(repo_files, folder, patterns)
     files = repo_files.get_info(folder)
-    files = files.select { |f| match_fso?(f, 'file', patterns[:file]) }
-    files.select do |fso|
-      path = fso['path']
-      content = repo_files.get_info(path)['content']
-      encoding = fso['encoding']
-      content = Base64.decode64(content) if encoding.nil? || encoding == 'base64'
-      patterns[:contents].each do |pattern|
-        Rails.logger.info('SubdirFileContentsDetective: ' + path + ' matches?: ' + (content.match(pattern) ? 'yes' : 'no'))
-        return met_result description if content.match(pattern)
+    files.select { |f| match_fso?(f, 'file', patterns[:file]) }
+  end
+
+  def match_file_contents(fso, content, pattern)
+    match = content.match(pattern)
+    Rails.logger.info('SubdirFileContentsDetective: ' + fso['path'] +
+        ' matches?: ' + (match ? 'yes' : 'no'))
+    match
+  end
+
+  def match_file_content(repo_files, folder, patterns, description)
+    files = get_relevant_files(repo_files, folder, patterns)
+    files.select do |f|
+      content = get_content(f, repo_files)
+      patterns[:contents].each do |p|
+        return met_result description if match_file_contents(f, content, p)
       end
     end
     unmet_result description

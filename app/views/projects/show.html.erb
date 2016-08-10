@@ -20,6 +20,15 @@
 (<%= time_ago_in_words @project.created_at %> ago),
 <b>last updated on</b> <%= @project.updated_at %>
 (<%= time_ago_in_words @project.updated_at %> ago).
+<% if ! @project.lost_passing_at.nil? %>
+  Last lost passing badge on <%= @project.lost_passing_at %>
+  (<%= time_ago_in_words @project.lost_passing_at %> ago).
+<% end %>
+<% if ! @project.achieved_passing_at.nil? %>
+  Last achieved passing badge on <%= @project.achieved_passing_at %>
+  (<%= time_ago_in_words @project.achieved_passing_at %> ago).
+<% end %>
+
 <br><br>
 <p>
 <%= link_to 'Back', projects_path %>

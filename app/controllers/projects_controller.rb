@@ -121,20 +121,6 @@ class ProjectsController < ApplicationController
     end
   end
 
-  # Update the relevant event datetime because we have a new_badge_level.
-  # This code will need to changed if there are multiple badge levels.
-  def update_achievement_time(new_badge_level)
-    if new_badge_level == 'passing'
-      @project.achieved_passing_at = Time.now.utc
-    elsif new_badge_level == 'in_progress'
-      @project.lost_passing_at = Time.now.utc
-    end
-    # Save the project again, even though we *just* saved, so that the
-    # achievement dates are recorded.  Skip validations, because
-    # we can only get here after already validating the model.
-    @project.save! perform_validation: false
-  end
-
   # rubocop:disable Metrics/MethodLength
   def successful_update(format, old_badge_level)
     purge_cdn_badge
@@ -145,7 +131,6 @@ class ProjectsController < ApplicationController
     format.json { render :show, status: :ok, location: @project }
     new_badge_level = @project.badge_level
     if new_badge_level != old_badge_level # TODO: Eventually deliver_later
-      update_achievement_time new_badge_level
       ReportMailer.project_status_change(
         @project, old_badge_level, new_badge_level
       ).deliver_now

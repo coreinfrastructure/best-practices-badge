@@ -12,7 +12,7 @@ gem 'chartkick', '2.0.2' # Chart project_stats
 gem 'faker', '1.6.6'
 gem 'fastly-rails', '0.7.1' # Use Fastly CDN
 gem 'font-awesome-rails', '4.6.3.1'
-gem 'github_api', '0.14.0'
+gem 'github_api', '0.14.5'
 gem 'imagesLoaded_rails', '4.1.0' # Javascript - enable wait for image load
 gem 'jbuilder', '2.5.0'
 gem 'jquery-rails', '4.1.1' # Javascript jQuery library (for Rails)

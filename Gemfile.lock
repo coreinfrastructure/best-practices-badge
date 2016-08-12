@@ -129,12 +129,12 @@ GEM
     ffi (1.9.14)
     font-awesome-rails (4.6.3.1)
       railties (>= 3.2, < 5.1)
-    github_api (0.14.0)
+    github_api (0.14.5)
       addressable (~> 2.4.0)
       descendants_tracker (~> 0.0.4)
       faraday (~> 0.8, < 0.10)
       hashie (>= 3.4)
-      oauth2
+      oauth2 (~> 1.0)
     gitlab (3.6.1)
       httparty
       terminal-table
@@ -442,7 +442,7 @@ DEPENDENCIES
   fasterer (= 0.3.2)
   fastly-rails (= 0.7.1)
   font-awesome-rails (= 4.6.3.1)
-  github_api (= 0.14.0)
+  github_api (= 0.14.5)
   heroku_rails_deflate (= 1.0.3)
   imagesLoaded_rails (= 4.1.0)
   jbuilder (= 2.5.0)

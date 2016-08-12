@@ -44,7 +44,7 @@ class ProjectTest < ActiveSupport::TestCase
 
     # Here we use the full validator.  We stub out the info necessary
     # to create a validator instance to test (we won't really use them).
-    validator = UrlValidator.new(attributes: %i(:repo_url :project_url))
+    validator = UrlValidator.new(attributes: %i(repo_url project_url))
     assert validator.url_acceptable?(my_url)
     assert validator.url_acceptable?('https://kernel.org')
     assert validator.url_acceptable?('') # Empty allowed.

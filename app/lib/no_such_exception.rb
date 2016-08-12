@@ -1,3 +1,3 @@
 # frozen_string_literal: true
-class NoSuchException < Exception
+class NoSuchException < RuntimeError
 end

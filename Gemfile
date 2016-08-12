@@ -30,7 +30,7 @@ gem 'sass-rails', '5.0.4'
 gem 'secure_headers', '3.3.2'
 gem 'turbolinks', '2.5.3' # Speed UI access
 gem 'jquery-turbolinks'   # Make turbolinks work with jQuery
-gem 'uglifier', '3.0.0'
+gem 'uglifier', '3.0.1'
 gem 'will_paginate', '3.1.0'
 
 group :development, :test do

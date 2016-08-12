@@ -8,7 +8,7 @@ gem 'bootstrap-sass', '3.3.6'
 gem 'bootstrap-social-rails', '4.12.0'
 gem 'bootstrap-will_paginate', '0.0.10'
 gem 'bootstrap_form', '2.4.0'
-gem 'chartkick', '2.0.0' # Chart project_stats
+gem 'chartkick', '2.0.2' # Chart project_stats
 gem 'faker', '1.6.5'
 gem 'fastly-rails', '0.7.0' # Use Fastly CDN
 gem 'font-awesome-rails', '4.6.3.1'

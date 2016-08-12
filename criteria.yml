@@ -239,6 +239,7 @@
           do not require client-side installation of proprietary software.
         details: >
           Examples of acceptable mechanisms include
+          archived mailing list(s),
           GitHub issue and pull request discussions, Bugzilla, Mantis, and Trac.
           Asynchronous discussion mechanisms (like IRC) are acceptable if
           they meet these criteria; make sure there is a URL-addressable

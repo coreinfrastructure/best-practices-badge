@@ -49,7 +49,7 @@ group :development, :test do
   gem 'pronto-rubocop', '0.6.2'
   gem 'pry-byebug', '3.4.0'
   gem 'quiet_assets', '1.1.0'
-  gem 'spring', '1.7.1'
+  gem 'spring', '1.7.2'
   gem 'vcr', '3.0.3' # Record network responses for later test reuse
   gem 'yaml-lint', '0.0.9' # Check YAML file syntax
 end

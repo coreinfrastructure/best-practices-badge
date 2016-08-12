@@ -67,7 +67,7 @@ group :test do
   gem 'codecov', '0.1.5', require: false
   gem 'm', '1.5.0' # Run test/unit tests by line number
   gem 'minitest-rails-capybara', '2.1.2', require: false
-  gem 'minitest-retry', '0.1.4', require: false # Avoid Capybara false positives
+  gem 'minitest-retry', '0.1.5', require: false # Avoid Capybara false positives
   gem 'poltergeist', '1.9.0', require: false
   gem 'selenium-webdriver', '2.53.0', require: false
   gem 'simplecov', '0.11.2', require: false

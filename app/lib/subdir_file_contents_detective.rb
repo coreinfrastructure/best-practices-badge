@@ -7,10 +7,7 @@
 
 class SubdirFileContentsDetective < Detective
   INPUTS = [:repo_files].freeze
-  OUTPUTS = %i(
-    contribution_status license_location_status release_notes_status
-    build_status build_common_tools_status
-  ).freeze
+  OUTPUTS = [:documentation_basics_status].freeze
   DOCS_BASICS = {
     folder: /\Adoc(s|umentation)\Z/i,
     file: /(\.md|\.markdown|\.txt|\.html)?\Z/i,

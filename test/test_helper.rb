@@ -1,20 +1,13 @@
 # frozen_string_literal: true
+
+# *MUST* load 'simplecov' FIRST, before any other code is run.
+# See: https://github.com/colszowka/simplecov/issues/296
+require 'simplecov'
+
+# *MUST* state VERY EARLY that we're in the test environment.
 ENV['RAILS_ENV'] ||= 'test'
 
-if ENV['CI']
-  require 'minitest/retry'
-  Minitest::Retry.use!
-end
-
-require 'simplecov'
-SimpleCov.start 'rails' do
-  add_group 'Validators', 'app/validators'
-  add_filter '/config/'
-  add_filter '/lib/tasks'
-  add_filter '/test/'
-  add_filter '/vendor/'
-end
-
+# Configure SimpleCov formatting before we start it
 if ENV['CI']
   require 'codecov'
   SimpleCov.formatters = [
@@ -23,6 +16,21 @@ if ENV['CI']
   ]
 else
   SimpleCov.formatters = SimpleCov::Formatter::HTMLFormatter
+end
+
+# Start SimpleCov to track coverage
+SimpleCov.start 'rails' do
+  add_group 'Validators', 'app/validators'
+  add_filter '/config/'
+  add_filter '/lib/tasks'
+  add_filter '/test/'
+  add_filter '/vendor/'
+end
+
+# Some tests flap, producing false failures, so enable auto-retry
+if ENV['CI']
+  require 'minitest/retry'
+  Minitest::Retry.use!
 end
 
 require File.expand_path('../../config/environment', __FILE__)

@@ -239,6 +239,7 @@
           do not require client-side installation of proprietary software.
         details: >
           Examples of acceptable mechanisms include
+          archived mailing list(s),
           GitHub issue and pull request discussions, Bugzilla, Mantis, and Trac.
           Asynchronous discussion mechanisms (like IRC) are acceptable if
           they meet these criteria; make sure there is a URL-addressable
@@ -586,9 +587,12 @@
           (where new or changed code is frequently integrated into a central
           code repository and automated tests are run on the result).
         autofill: >
+          Look for a .travis.yml or circle.yml file.
+          We also see if it has a badge from CircleCI or Travis.
+          Extra points: We could ask Travis or CircleCI if it's enabled.
           We could look for evidence of pulls each of which are "relatively"
-          small (instead of rare massive changes being the norm).
-          We also see if it has a badge from CircleCI.
+          small (instead of rare massive changes being the norm), though
+          that by itself would give less confidence.
           Also, make this depend on the "test" or "test_invocation" criterion.
   - New functionality testing: !!omap
     - test_policy:

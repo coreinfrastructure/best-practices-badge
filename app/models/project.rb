@@ -146,8 +146,18 @@ class Project < ActiveRecord::Base
     text =~ %r{https?://[^ ]{5}}
   end
 
+  # Update the badge percentage, and update relevant event datetime if needed.
+  # This code will need to changed if there are multiple badge levels, or
+  # if there are more than 100 criteria. (If > 100 criteria, switch
+  # percentage to something like millipercentage.)
   def update_badge_percentage
+    old_badge_percentage = badge_percentage
     self.badge_percentage = calculate_badge_percentage
+    if badge_percentage == 100 && old_badge_percentage < 100
+      self.achieved_passing_at = Time.now.utc
+    elsif badge_percentage < 100 && old_badge_percentage == 100
+      self.lost_passing_at = Time.now.utc
+    end
   end
 
   private

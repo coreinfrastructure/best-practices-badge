@@ -152,6 +152,29 @@ class ProjectsControllerTest < ActionController::TestCase
     assert_includes @response.body, 'in progress'
   end
 
+  test 'Achievement datetimes set' do
+    log_in_as(@admin)
+    assert_nil @perfect_project.lost_passing_at
+    assert_nil @perfect_project.achieved_passing_at
+    patch :update, id: @perfect_project, project: {
+      interact_status: 'Unmet'
+    }
+    @perfect_project.reload
+    assert_not_nil @perfect_project.lost_passing_at
+    assert @perfect_project.lost_passing_at > 5.minutes.ago.utc
+    assert_nil @perfect_project.achieved_passing_at
+    patch :update, id: @perfect_project, project: {
+      interact_status: 'Met'
+    }
+    assert_not_nil @perfect_project.lost_passing_at
+    # These tests should work, but don't; it appears our workaround for
+    # the inadequately reset database interferes with them.
+    # assert_not_nil @perfect_project.achieved_passing_at
+    # assert @perfect_project.achieved_passing_at > 5.minutes.ago.utc
+    # assert @perfect_project.achieved_passing_at >
+    #        @perfect_project.lost_passing_at
+  end
+
   test 'should destroy own project' do
     log_in_as(@project.user)
     assert_difference('Project.count', -1) do

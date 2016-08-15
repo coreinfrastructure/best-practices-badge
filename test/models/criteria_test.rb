@@ -54,4 +54,12 @@ class CriteriaTest < ActiveSupport::TestCase
       assert_not values[:met_url_required] && values[:met_suppress]
     end
   end
+
+  # The "badge_percentage" and related values are currently integers 0..100;
+  # that won't work well if we have > 100 criteria.
+  # We can change the code later to address this; for now, let's make sure
+  # the software stays within the limitation
+  test 'No more than 100 criteria' do
+    assert Criteria.keys.length <= 100
+  end
 end

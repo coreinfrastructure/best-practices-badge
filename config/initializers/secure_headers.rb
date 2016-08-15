@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 SecureHeaders::Configuration.default do |config|
-  normal_src = %w('self')
+  normal_src = ["'self'"]
   if ENV['PUBLIC_HOSTNAME']
     fastly_alternate = 'https://' + ENV['PUBLIC_HOSTNAME'] +
                        '.global.ssl.fastly.net'
@@ -23,8 +23,8 @@ SecureHeaders::Configuration.default do |config|
     # "Content Security Policy: The page's settings blocked the loading
     # of a resource at self ('default-src http://localhost:3000')
     # There are probably other functions that also don't work.
-    script_src: normal_src + %w('unsafe-eval' 'unsafe-inline'),
-    style_src: normal_src + %w('unsafe-inline')
+    script_src: normal_src + ["'unsafe-eval'", "'unsafe-inline'"],
+    style_src: normal_src + ["'unsafe-inline'"]
   }
   # Not using Public Key Pinning Extension for HTTP (HPKP).
   # Yes, it can counter some attacks, but it can also cause a lot of problems;

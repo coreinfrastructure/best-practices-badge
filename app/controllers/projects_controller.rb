@@ -232,7 +232,8 @@ class ProjectsController < ApplicationController
     queries_with_values = parsed.query_values.reject { |_k, v| v.blank? }
     if queries_with_values.blank?
       parsed.omit!(:query) # Removes trailing '?'
-    else parsed.query_values = queries_with_values
+    else
+      parsed.query_values = queries_with_values
     end
     redirect_to parsed.to_s unless parsed.to_s == original
   end

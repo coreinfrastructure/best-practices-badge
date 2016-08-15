@@ -6,7 +6,11 @@
   <body>
     <h1>Project status change in project <%= @project.id %></h1>
     <p>
-      Project <%= @project.id %> named <%= @project.name %> has changed
+      Project <%= @project.id %> named <%= @project.name %>
+      <% if ENV.include?('PUBLIC_HOSTNAME') %>
+        on <%= ENV['PUBLIC_HOSTNAME'] %>
+      <% end %>
+      has changed
       from passing=<%= @old_badge_status %>
       to passing=<%= @new_badge_status %>.
       See <a href="<%= @project_info_url %>"><%= @project_info_url %></a>

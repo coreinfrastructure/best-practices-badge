@@ -7,6 +7,7 @@
       <th>Website</th>
       <th>License</th>
       <th>Owner</th>
+      <th>Achieved at</th>
       <th>% Achieved</th>
       <th>Badge</th>
     </tr>
@@ -33,6 +34,8 @@
         </td>
         <td><%= project.license %></td>
         <td><%= link_to project.user_name, project.user %></td>
+        <td><%= project.achieved_passing_at&.
+                  to_formatted_s(:db) %></td>
         <td><%= project.badge_percentage %>%</td>
         <td><%= link_to "<img src='/projects/#{project.id}/badge' alt='Badge level for project #{project.id} is #{project.badge_percentage}%'>".html_safe,
                         project %></td>

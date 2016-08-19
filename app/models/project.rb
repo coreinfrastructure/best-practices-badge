@@ -4,6 +4,8 @@ class Project < ActiveRecord::Base
   using StringRefinements
   using SymbolRefinements
 
+  include PgSearch # PostgreSQL-specific text search
+
   BADGE_STATUSES = [
     ['All', nil],
     ['Passing (100%)', 100],
@@ -57,6 +59,7 @@ class Project < ActiveRecord::Base
     end
   )
 
+  # old system
   scope :text_search, (
     lambda do |text|
       start_text = "#{sanitize_sql_like(text)}%"
@@ -69,6 +72,11 @@ class Project < ActiveRecord::Base
       )
     end
   )
+
+  # Use PostgreSQl-specific text search mechanism
+  pg_search_scope(:search_for, against:
+    %i(name homepage_url repo_url description),
+    using: { tsearch: { any_word: true } })
 
   scope :updated_since, (
     lambda do |time|

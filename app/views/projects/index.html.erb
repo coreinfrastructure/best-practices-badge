@@ -19,7 +19,7 @@
     &nbsp; &nbsp; &nbsp;
     <%= label_tag :text_search %>
     <%= text_field_tag :q, params[:q], size: 25,
-                       placeholder: 'Name or URL begins with...' %>
+                       placeholder: 'Name or description text'%>
     <%= submit_tag 'Search', name: nil %>
     &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
     <%= link_to image_tag('feed-icon-28x28', width: '28', height: '28'), feed_path %>

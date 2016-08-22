@@ -59,7 +59,7 @@ class Project < ActiveRecord::Base
     end
   )
 
-  # old system
+  # prefix query (old search system)
   scope :text_search, (
     lambda do |text|
       start_text = "#{sanitize_sql_like(text)}%"
@@ -73,11 +73,13 @@ class Project < ActiveRecord::Base
     end
   )
 
-  # Use PostgreSQl-specific text search mechanism
+  # Use PostgreSQL-specific text search mechanism
+  # There are many options we aren't currently using; for more info, see:
+  # https://github.com/Casecommons/pg_search
   pg_search_scope(
     :search_for,
-    against: %i(name homepage_url repo_url description),
-    using: { tsearch: { any_word: true } }
+    against: %i(name homepage_url repo_url description)
+    # using: { tsearch: { any_word: true } }
   )
 
   scope :updated_since, (

@@ -218,6 +218,26 @@ a 'get' of /projects/:id/edit(.:format)' is considered an edit;
 this would normally create a CSRF vulnerability, but Rails automatiacally
 inserts and checks for a CSRF token, countering this potential vulnerability.
 
+## Search
+
+The "/projects" URL supports various searches.
+We reserve the right to change the details, but we do try
+to provide a reasonable interface.
+The following search parameters are supported:
+
+* status: "passing" or "in_progress"
+* gteq: Integer, % greater than or equal
+* lteq: Integer, % less than or equal.  Can be combined with gteq.
+* pq: Text, "prefix query" - matches against *prefix* of URL or name
+* q: Text, "normal query" - match against parsed name, description, URL.
+  This is implemented by PostgreSQL, so you can use "&amp;" (and),
+  "|" (or), and "'text...*'" (prefix).
+  This parses URLs into parts; you can't search on a whole URL (use pq).
+* page: Page to display
+
+See app/controllers/project_controllers.rb for how these
+are implemented.
+
 
 ## Changing criteria
 

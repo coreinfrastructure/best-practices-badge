@@ -28,7 +28,7 @@ class ProjectsController < ApplicationController
       %w(in_progress passing).include? params[:status]
     @projects = @projects.gteq(params[:gteq]) if params[:gteq].present?
     @projects = @projects.lteq(params[:lteq]) if params[:lteq].present?
-    # @projects = @projects.text_search(params[:q]) if params[:q].present?
+    @projects = @projects.text_search(params[:tq]) if params[:tq].present?
     @projects = @projects.search_for(params[:q]) if params[:q].present?
     @count = @projects.count
     @projects = @projects.includes(:user).paginate(page: params[:page])

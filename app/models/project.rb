@@ -74,9 +74,11 @@ class Project < ActiveRecord::Base
   )
 
   # Use PostgreSQl-specific text search mechanism
-  pg_search_scope(:search_for, against:
-    %i(name homepage_url repo_url description),
-    using: { tsearch: { any_word: true } })
+  pg_search_scope(
+    :search_for,
+    against: %i(name homepage_url repo_url description),
+    using: { tsearch: { any_word: true } }
+  )
 
   scope :updated_since, (
     lambda do |time|

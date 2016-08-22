@@ -400,7 +400,7 @@ GEM
       coffee-rails
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
-    uglifier (3.0.1)
+    uglifier (3.0.2)
       execjs (>= 0.3.0, < 3)
     unicode-display_width (1.1.0)
     uniform_notifier (1.10.0)
@@ -488,7 +488,7 @@ DEPENDENCIES
   spring (= 1.7.2)
   traceroute (= 0.5.0)
   turbolinks (= 2.5.3)
-  uglifier (= 3.0.1)
+  uglifier (= 3.0.2)
   vcr (= 3.0.3)
   web-console (= 3.1.1)
   webmock (= 2.1.0)

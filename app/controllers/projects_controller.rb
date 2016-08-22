@@ -138,6 +138,14 @@ class ProjectsController < ApplicationController
       ReportMailer.project_status_change(
         @project, old_badge_level, new_badge_level
       ).deliver_now
+      if new_badge_level == 'passing'
+        flash[:success] = 'CONGRATULATIONS on earning a badge!' \
+          ' Please show your badge status on your project page (see the' \
+          ' "how to embed it" text just below if you don\'t' \
+          ' know how to do that).'
+      elsif new_badge_level == 'in_progress'
+        flash[:danger] = 'Project no longer has a badge.'
+      end
     end
   end
   # rubocop:enable Metrics/MethodLength

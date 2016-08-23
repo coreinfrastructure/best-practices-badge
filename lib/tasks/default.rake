@@ -28,7 +28,7 @@
 # https://github.com/linuxfoundation/cii-best-practices-badge/issues/397
 # https://github.com/vcr/vcr/issues/586
 
-ENV['TESTOPTS'] = "--seed=#{[3_956, 27_725, 29_928, 55_177].sample}"
+ENV['TESTOPTS'] = "--seed=#{[29_928, 29_931].sample}"
 
 # Run tests last. That way, runtime problems (e.g., undone migrations)
 # do not interfere with the other checks.

@@ -18,9 +18,33 @@ class ProjectsController < ApplicationController
 
   helper_method :repo_data
 
+  # These are the only allowed values for "sort" (if a value is provided)
+  ALLOWED_SORT =
+    %w(
+      id name achieved_passing_at badge_percentage
+      homepage_url repo_url updated_at user_id created_at
+    ).freeze
+
+  # If a valid "sort" parameter is provided, sort @projects in "sort_direction"
+  # rubocop:disable Metrics/AbcSize, Style/ConditionalAssignment
+  def sort_projects
+    # Sort, if there is a requested order (otherwise use default created_at)
+    if params[:sort].present? && ALLOWED_SORT.include?(params[:sort])
+      if params[:sort_direction] == 'desc' # descending
+        sort_direction = ' desc'
+      else
+        sort_direction = ' asc' # default is ascending
+      end
+      @projects = @projects
+                  .reorder(params[:sort] + sort_direction)
+                  .order('created_at' + sort_direction)
+    end
+  end
+  # rubocop:enable Metrics/AbcSize, Style/ConditionalAssignment
+
   # GET /projects
   # GET /projects.json
-  # rubocop:disable Metrics/AbcSize
+  # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
   def index
     remove_empty_query_params
     @projects = Project.all
@@ -35,8 +59,10 @@ class ProjectsController < ApplicationController
     @projects = @projects.search_for(params[:q]) if params[:q].present?
     @count = @projects.count
     @projects = @projects.includes(:user).paginate(page: params[:page])
+    sort_projects
+    @projects
   end
-  # rubocop:enable Metrics/AbcSize
+  # rubocop:enable Metrics/AbcSize,Metrics/MethodLength
 
   # GET /projects/1
   # GET /projects/1.json

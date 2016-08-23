@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160819204955) do
+ActiveRecord::Schema.define(version: 20160823211834) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -210,6 +210,7 @@ ActiveRecord::Schema.define(version: 20160819204955) do
     t.datetime "lost_passing_at"
   end
 
+  add_index "projects", ["achieved_passing_at"], name: "index_projects_on_achieved_passing_at", using: :btree
   add_index "projects", ["badge_percentage"], name: "index_projects_on_badge_percentage", using: :btree
   add_index "projects", ["created_at"], name: "index_projects_on_created_at", using: :btree
   add_index "projects", ["homepage_url"], name: "index_projects_on_homepage_url", using: :btree

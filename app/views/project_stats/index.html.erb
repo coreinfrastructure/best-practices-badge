@@ -4,12 +4,26 @@
 
 All projects
 
+<%
+  date_chart_options = {
+    scales: {
+      xAxes: [{
+        type: 'time',
+        unit: 'day',
+        unitStepSize: 1,
+        time: {
+          displayFormats: {
+             'day': 'YYYY-MM-DD'
+          } } }]}
+  }
+%>
+
 <%=
   # Show a chart with just total # projects.
   series_dataset = ProjectStat.all.reduce({}) do |h,e|
     h.merge(e.created_at => e.percent_ge_0)
   end
-  line_chart series_dataset
+  line_chart series_dataset, library: date_chart_options
 %>
 
 <br><br><br>
@@ -27,7 +41,7 @@ Projects with non-trivial progress
     end
     {name: '>=' + minimum.to_s + '%', data: series_dataset}
   end
-  line_chart dataset
+  line_chart dataset, library: date_chart_options
 %>
 
 <br><br><br>
@@ -60,7 +74,8 @@ Projects with non-trivial progress
                 data: moving_average_dataset,
                 library: {borderDash: [5,5]}}
   end
-  line_chart dataset, colors: ['green', 'darkgreen', 'blue', 'darkblue']
+  line_chart dataset, colors: ['green', 'darkgreen', 'blue', 'darkblue'],
+    library: date_chart_options
 %>
 
 <br><br><br>

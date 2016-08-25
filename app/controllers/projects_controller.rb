@@ -26,21 +26,21 @@ class ProjectsController < ApplicationController
     ).freeze
 
   # If a valid "sort" parameter is provided, sort @projects in "sort_direction"
-  # rubocop:disable Metrics/AbcSize, Style/ConditionalAssignment
+  # rubocop:disable Metrics/AbcSize
   def sort_projects
     # Sort, if there is a requested order (otherwise use default created_at)
-    if params[:sort].present? && ALLOWED_SORT.include?(params[:sort])
+    return unless params[:sort].present? && ALLOWED_SORT.include?(params[:sort])
+    sort_direction =
       if params[:sort_direction] == 'desc' # descending
-        sort_direction = ' desc'
+        ' desc'
       else
-        sort_direction = ' asc' # default is ascending
+        ' asc' # default is ascending
       end
-      @projects = @projects
-                  .reorder(params[:sort] + sort_direction)
-                  .order('created_at' + sort_direction)
-    end
+    @projects = @projects
+                .reorder(params[:sort] + sort_direction)
+                .order('created_at' + sort_direction)
   end
-  # rubocop:enable Metrics/AbcSize, Style/ConditionalAssignment
+  # rubocop:enable Metrics/AbcSize
 
   # GET /projects
   # GET /projects.json

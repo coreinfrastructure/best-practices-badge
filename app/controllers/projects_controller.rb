@@ -151,7 +151,7 @@ class ProjectsController < ApplicationController
     end
   end
 
-  # rubocop:disable Metrics/MethodLength
+  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   def successful_update(format, old_badge_level)
     purge_cdn_badge
     # @project.purge
@@ -169,12 +169,14 @@ class ProjectsController < ApplicationController
           ' Please show your badge status on your project page (see the' \
           ' "how to embed it" text just below if you don\'t' \
           ' know how to do that).'
+        ReportMailer.email_owner(@project, new_badge_level).deliver_now
       elsif new_badge_level == 'in_progress'
         flash[:danger] = 'Project no longer has a badge.'
+        ReportMailer.email_owner(@project, new_badge_level).deliver_now
       end
     end
   end
-  # rubocop:enable Metrics/MethodLength
+  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
   # DELETE /projects/1
   # DELETE /projects/1.json

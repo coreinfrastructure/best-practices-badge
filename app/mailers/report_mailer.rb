@@ -29,11 +29,10 @@ class ReportMailer < ApplicationMailer
   end
 
   def subject_for(new_badge_status)
-    case new_badge_status
-    when 'passing'
-      'CONGRATUlATIONS on achieving a passing best practices badge!'
+    if new_badge_status == 'passing'
+      'CONGRATULATIONS on achieving a passing best practices badge!'
     else
-      return 'Your best practices badge is no longer passing'
+      'Your best practices badge is no longer passing'
     end
   end
 

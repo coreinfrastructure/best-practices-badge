@@ -11,5 +11,15 @@ class ApplicationController < ActionController::Base
   before_action :validate_session_timestamp
   after_action :persist_session_timestamp
 
+  # See: http://stackoverflow.com/questions/4329176/
+  #   rails-how-to-redirect-from-http-example-com-to-https-www-example-com
+  def redirect_https
+    if Rails.application.config.force_ssl && !request.ssl?
+      redirect_to protocol: 'https://', status: :moved_permanently
+    end
+    true
+  end
+  before_action :redirect_https
+
   include SessionsHelper
 end

@@ -239,4 +239,12 @@ class ProjectsControllerTest < ActionController::TestCase
     get :index, q: '', status: ''
     assert_redirected_to 'http://test.host/projects'
   end
+
+  test 'should redirect http to https' do
+    old = Rails.application.config.force_ssl
+    Rails.application.config.force_ssl = true
+    get :index
+    assert_redirected_to 'https://test.host/projects'
+    Rails.application.config.force_ssl = old
+  end
 end

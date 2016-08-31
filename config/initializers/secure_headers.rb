@@ -24,6 +24,7 @@ SecureHeaders::Configuration.default do |config|
     # of a resource at self ('default-src http://localhost:3000')
     # There are probably other functions that also don't work.
     script_src: normal_src + ["'unsafe-eval'", "'unsafe-inline'"],
+    # TODO: script_src: normal_src + ["'unsafe-eval'"],
     style_src: normal_src + ["'unsafe-inline'"]
   }
   # Not using Public Key Pinning Extension for HTTP (HPKP).

@@ -671,6 +671,10 @@ ALL_DETECTIVES =
 
   A template detective called blank_detective.rb is supplied with the project with internal documentation as to how to use it.  
 
+  Remember, in addition to the detective you must right a test in order for it
+  to be accepted into the repository.  The tests are located at ./test/unit/lib/
+  with an example test of blank_detective included.
+
 ## Analysis
 
 We use the OWASP ZAP web application scanner to find potential

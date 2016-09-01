@@ -14,7 +14,7 @@ class BlankDetective < Detective
   # Setup and major work goes here.  Do not attempt to return anything from this
   # part of the code as it causes crashes.
 
-  def analyze(_evidence, current)
+  def analyze(_evidence, _current)
     {
       # Your return has to go here.  This reformats the hashed return into
       # chief understands.  Remember the output must corrospond to one of the

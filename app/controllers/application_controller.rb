@@ -21,7 +21,5 @@ class ApplicationController < ActionController::Base
   end
   before_action :redirect_https
 
-  newrelic_ignore
-
   include SessionsHelper
 end

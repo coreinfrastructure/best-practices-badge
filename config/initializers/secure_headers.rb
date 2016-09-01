@@ -17,13 +17,7 @@ SecureHeaders::Configuration.default do |config|
     default_src: normal_src,
     img_src: normal_src,
     object_src: normal_src,
-    # Unfortunately, we can't be as strong as we want to be.
-    # If we make this just 'self' then the auto-size of vertical textareas
-    # doesn't work, and Firefox reports
-    # "Content Security Policy: The page's settings blocked the loading
-    # of a resource at self ('default-src http://localhost:3000')
-    # There are probably other functions that also don't work.
-    style_src: normal_src + ["'unsafe-inline'"]
+    style_src: normal_src
   }
   # Not using Public Key Pinning Extension for HTTP (HPKP).
   # Yes, it can counter some attacks, but it can also cause a lot of problems;

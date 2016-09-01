@@ -341,6 +341,12 @@ $(document).ready(function() {
   $('[data-toggle="tooltip"]').tooltip(); // Enable bootstrap tooltips
   $('textarea').autosize();
 
+  // A form element with class onchange-submit automatically submits its
+  // form whenever it is changed.
+  $('.onchange-submit').change(function() {
+    $(this).parents('form').submit();
+  });
+
   if ($('#project_entry_form').length) {
 
     SetupCriteriaStructures();

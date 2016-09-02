@@ -6,7 +6,7 @@ SecureHeaders::Configuration.default do |config|
                        '.global.ssl.fastly.net'
     normal_src += [fastly_alternate]
   end
-  config.hsts = "max-age=#{20.years.to_i}; includeSubdomains; preload"
+  config.hsts = "max-age=#{20.years.to_i}; includeSubDomains; preload"
   config.x_frame_options = 'DENY'
   config.x_content_type_options = 'nosniff'
   config.x_xss_protection = '1; mode=block'

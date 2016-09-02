@@ -527,6 +527,8 @@ these attempt to thwart or slow attack even if the system has a vulnerability.
 We use the [secure_headers](https://github.com/twitter/secureheaders) gem
 (developed by Twitter) to enable
 a number of HTTP headers for hardening.
+This includes a Content Security Policy (CSP) header with just
+"normal sources" (normal_src).
 
 In addition, in production "config.force_ssl" is set to true.
 This enables a number of hardening mechanisms in Rails, including
@@ -535,6 +537,13 @@ TLS redirection, and secure cookies.
 See
 ["Rails, Secure Cookies, HSTS and friends" by Ilija Eftimov (2015-12-14)](http://eftimov.net/rails-tls-hsts-cookies)
 for more about the impact of force_ssl.
+
+We separately configure our CDN (Fastly) to redirect HTTP to HTTPS
+(this has to be done by the CDN, since it intercepts the requests first).
+This means that users who use HTTP will be redirected to HTTPS, and
+once there they will receive the
+HTTP Strict Transport Security (HSTS) information that will tell their
+web browser to always use HTTPS in the future.
 
 ## Security in Verification
 
@@ -661,6 +670,7 @@ For the main bestpractices.coreinfrastructure.org site we have:
   <a href="https://securityheaders.io/?q=bestpractices.coreinfrastructure.org">securityheaders.io check of our HTTP security headers</a>.
 * An all-pass report from the
   <a href="https://www.sslshopper.com/ssl-checker.html#hostname=bestpractices.coreinfrastructure.org">SSLShopper SSL checker</a>.
+* An "A+" rating from the [Mozilla Observatory](https://observatory.mozilla.org/analyze.html?host=master.bestpractices.coreinfrastructure.org) (This link is actually for the master branch.)
 * A 96% result from <a href="https://www.wormly.com/test_ssl/h/bestpractices.coreinfrastructure.org/i/157.52.75.7/p/443">Wormly</a>.
   The only item not passed was the "SSL Handshake Size" test; the live site
   provides 5667 bytes, and they consider values beyond 4K (with unclear

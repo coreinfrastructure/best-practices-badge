@@ -5,7 +5,6 @@
 # Be sure to use strings, NOT symbols, as a key when accessing JSON-parsed
 # results (because strings and symbols are distinct in basic Ruby).
 
-# rubocop:disable Metrics/ClassLength
 class BlankDetective < Detective
   # Individual detectives must identify their inputs, outputs
   INPUTS = [].freeze  # Input Hash required for Search

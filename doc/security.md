@@ -49,6 +49,8 @@ how we implement these requirements):
   (e.g., contact badge entry owners for clarification).
   We will strive to not reveal user email addresses to others
   (with the exception administrators, who can see them).
+  Communications between users and the application must use an encrypted
+  (HTTPS) channel.
   There's no need to worry about covert channels.
 - Integrity:
     - Data between the client and server must not be altered.
@@ -347,6 +349,8 @@ and how we attempt to reduce their risks in BadgeApp.
    Rails always applies HTML escapes on strings displayed through views
    unless they are marked as safe.
    This greatly reduces the risk of mistakes leading to XSS vulnerabilities.
+   In addition, we use a restrictive Content Security Policy (CSP),
+   which makes damage more difficult even if an attacker gets something in.
 4. Insecure Direct Object References.
    The only supported direct object references are for publicly available
    objects (stylesheets, etc.).
@@ -354,6 +358,8 @@ and how we attempt to reduce their risks in BadgeApp.
    which determine what may be accessed.
 5. Security Misconfiguration.
    We have strived to enable secure defaults from the start.
+   We use a number of external scanning programs to detect common
+   HTTPS misconfiguration problems (see below).
    In addition, we use brakeman, which can detect
    some misconfigurations in Rails applications.
    This is invoked by the default 'rake' task.
@@ -363,6 +369,7 @@ and how we attempt to reduce their risks in BadgeApp.
    is intended to be public.  The only sensitive data we centrally store are
    local passwords, and those are encrypted and hashed with bcrypt
    (this is a well-known iterated salted hash algorithm).
+   We use HTTPS to establish an encrypted link between the server and users.
 7. Missing Function Level Access Control.
    The system depends on server-side routers and controllers for
    access control.  There is some client-side Javascript, but no
@@ -370,6 +377,7 @@ and how we attempt to reduce their risks in BadgeApp.
 8. Cross-Site Request Forgery (CSRF).
    We use the built-in Rails CSRF countermeasure, where csrf tokens
    are included in replies and checked on POST inputs.
+   Our restrictive Content Security Policy (CSP) helps here, too.
    For more information, see the page on
    [request forgery protection](http://api.rubyonrails.org/classes/ActionController/RequestForgeryProtection.html).
 9. Using Components with Known Vulnerabilities.
@@ -416,7 +424,7 @@ as of 2015-12-14:
    secret key) to ensure that clients cannot undetectably change
    these cookies; a changed value is thrown away.
    Logged-in users have their user id stored in this authenticated cookie
-   (There is also a session_id, kept for capability but not currently used.)
+   (There is also a session_id, not currently used.)
    Session data is intentionally kept small, because of the limited
    amount of data available in a cookie.
    To counteract session hijacking, we configure the production
@@ -513,12 +521,14 @@ as of 2015-12-14:
    headers are typically not dynamicaly generated, most redirections
    (using redirect_to) are to static locations, and the rest are based
    on filtered locations.
+   We use a restrictive CSP setting to limit damage if all those fail.
 8. *Unsafe Query Generation.*
    We use the default Rails behavior, in particular, we leave
    deep_munge at its default value (which counters a number of vulnerabilities).
 9. *Default Headers.*
-   The default security HTTP headers are used, which help counter some attacks.
-   Future versions may harden the headers further.
+   We use at least the default security HTTP headers,
+   which help counter some attacks.
+   In many cases we harden the headers further.
 
 ### Hardening
 
@@ -544,6 +554,8 @@ This means that users who use HTTP will be redirected to HTTPS, and
 once there they will receive the
 HTTP Strict Transport Security (HSTS) information that will tell their
 web browser to always use HTTPS in the future.
+If that is misconfigured or omitted for some reason, the application
+will also redirect the user from HTTP to HTTPS.
 
 ## Security in Verification
 

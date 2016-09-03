@@ -653,6 +653,28 @@ Some information on how to detect licenses in projects
 For the moment, we just use GitHub's mechanism.
 It's easy to invoke and resolves it in a number of cases.
 
+## Implementation of Detectives.
+
+The detective classes are located in the directory often located in the directory ./workspace/cii-best-practices-badge/app/lib.  This directory contains all of the detectives and has a very specific naming convention.  All new detectives must be named name1_detective.rb.  This name is important as it will be called by the primary code chief.rb which calls and collects the results of all of the detective classes.  
+
+To integrate a new class chief.rb must be edited in the following line.
+
+ALL_DETECTIVES =
+  [
+    NameFromUrlDetective, ProjectSitesHttpsDetective,
+    GithubBasicDetective, HowAccessRepoFilesDetective,
+    RepoFilesExamineDetective, FlossLicenseDetective,
+    HardenedSitesDetective (Name1Detective)
+  ].freeze
+
+  where Name1Detective corrosponds to the new class created in name1_detective.  Without following the naming convention chief will not run the new detective.
+
+  A template detective called blank_detective.rb is supplied with the project with internal documentation as to how to use it.  
+
+  Remember, in addition to the detective you must right a test in order for it
+  to be accepted into the repository.  The tests are located at ./test/unit/lib/
+  with an example test of blank_detective included.
+
 ## Analysis
 
 We use the OWASP ZAP web application scanner to find potential
@@ -727,11 +749,11 @@ patch -p0 <<END
 +++ checklink-norobots  2016-02-24 10:48:24.856983414 -0500
 @@ -48,7 +48,7 @@
  use Net::HTTP::Methods 5.833 qw();    # >= 5.833 for 4kB cookies (#6678)
- 
+
  # if 0, ignore robots exclusion (useful for testing)
 -use constant USE_ROBOT_UA => 1;
 +use constant USE_ROBOT_UA => 0;
- 
+
  if (USE_ROBOT_UA) {
      @W3C::UserAgent::ISA = qw(LWP::RobotUA);
 END

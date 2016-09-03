@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160823211834) do
+ActiveRecord::Schema.define(version: 20160902221520) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -176,8 +176,8 @@ ActiveRecord::Schema.define(version: 20160823211834) do
     t.string   "dynamic_analysis_fixed_status",                        default: "?"
     t.text     "dynamic_analysis_fixed_justification"
     t.text     "general_comments"
-    t.datetime "created_at",                                                         null: false
-    t.datetime "updated_at",                                                         null: false
+    t.datetime "created_at",                                                           null: false
+    t.datetime "updated_at",                                                           null: false
     t.string   "crypto_weaknesses_status",                             default: "?"
     t.text     "crypto_weaknesses_justification"
     t.string   "test_continuous_integration_status",                   default: "?"
@@ -208,12 +208,16 @@ ActiveRecord::Schema.define(version: 20160823211834) do
     t.integer  "badge_percentage"
     t.datetime "achieved_passing_at"
     t.datetime "lost_passing_at"
+    t.datetime "last_reminder_at"
+    t.boolean  "disabled_reminders",                                   default: false, null: false
   end
 
   add_index "projects", ["achieved_passing_at"], name: "index_projects_on_achieved_passing_at", using: :btree
   add_index "projects", ["badge_percentage"], name: "index_projects_on_badge_percentage", using: :btree
   add_index "projects", ["created_at"], name: "index_projects_on_created_at", using: :btree
   add_index "projects", ["homepage_url"], name: "index_projects_on_homepage_url", using: :btree
+  add_index "projects", ["last_reminder_at"], name: "index_projects_on_last_reminder_at", using: :btree
+  add_index "projects", ["lost_passing_at"], name: "index_projects_on_lost_passing_at", using: :btree
   add_index "projects", ["name"], name: "index_projects_on_name", using: :btree
   add_index "projects", ["repo_url"], name: "index_projects_on_repo_url", using: :btree
   add_index "projects", ["updated_at"], name: "index_projects_on_updated_at", using: :btree

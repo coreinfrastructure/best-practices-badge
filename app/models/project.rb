@@ -213,7 +213,7 @@ class Project < ActiveRecord::Base
     #   Use: projects.order("COALESCE(last_reminder_at, updated_at)")
     Project
       .where('badge_percentage < 100')
-      .where('lost_passing_at IS NULL OR lost_passing_at >= ?', 30.days.ago)
+      .where('lost_passing_at IS NULL OR lost_passing_at < ?', 30.days.ago)
       .where('disabled_reminders = FALSE')
       .where('projects.updated_at < ?', 30.days.ago)
       .where('last_reminder_at IS NULL OR last_reminder_at < ?', 60.days.ago)

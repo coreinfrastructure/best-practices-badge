@@ -26,7 +26,7 @@ class ProjectStatTest < ActiveSupport::TestCase
     assert_equal 2, @project_stat.percent_ge_75
     assert_equal 1, @project_stat.percent_ge_90
     assert_equal 1, @project_stat.percent_ge_100
-    assert_equal 4, @project_stat.created_since_yesterday
+    assert_equal 3, @project_stat.created_since_yesterday
     assert_equal 0, @project_stat.updated_since_yesterday
     assert_equal '2015-03-01 12:00:00 UTC', @project_stat.created_at.to_s
     assert_equal '2015-03-01 12:00:00 UTC', @project_stat.updated_at.to_s

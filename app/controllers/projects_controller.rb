@@ -211,6 +211,24 @@ class ProjectsController < ApplicationController
     end.compact
   end
 
+  # Send reminders to users for inactivity. Return # of reminders sent
+  # You should only invoke this in a test environment (where mailers are
+  # disabled & the data is forged anyway) or the "real" production site,
+  # because we don't want to bother our users.
+  def self.send_reminders
+    projects = Project.projects_to_remind
+    ReportMailer.report_reminder_summary(projects).deliver_now # Tell LF
+    projects.each do |inactive_project| # Send actual reminders
+      ReportMailer.email_reminder_owner(inactive_project).deliver_now
+      # Save while disabling paper_trail's versioning through self.
+      inactive_project.paper_trail.without_versioning do
+        # project.last_reminder_at = DateTime.now.utc
+        inactive_project.update_attributes! last_reminder_at: DateTime.now.utc
+      end
+    end
+    projects # Return the projects that were sent reminders (can be empty).
+  end
+
   private
 
   def set_homepage_url

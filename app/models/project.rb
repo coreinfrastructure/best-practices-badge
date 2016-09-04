@@ -22,7 +22,7 @@ class Project < ActiveRecord::Base
 
   PROJECT_OTHER_FIELDS = %i(
     name description homepage_url cpe
-    license general_comments user_id
+    license general_comments user_id disabled_reminders
   ).freeze
   ALL_CRITERIA_STATUS = Criteria.map { |c| c.name.status }.freeze
   ALL_CRITERIA_JUSTIFICATION = Criteria.map { |c| c.name.justification }.freeze
@@ -173,21 +173,24 @@ class Project < ActiveRecord::Base
   end
 
   # Maximum number of reminders to send by email at one time.
+  # We want a rate limit to avoid being misinterpreted as a spammer,
+  # and also to limit damage if there's a mistake in the code.
   # By default, start very low until we're confident in the code.
-  MAX_NUMBER_REMINDERS = ENV['BADGEAPP_MAX_REMINDERS'] || 2
+  MAX_REMINDERS = (ENV['BADGEAPP_MAX_REMINDERS'] || 2).to_i
 
   # Return which projects should be reminded to work on their badges.  See:
   # https://github.com/linuxfoundation/cii-best-practices-badge/issues/487
-  # This is computed entirely using the ActiveRecord query interface
-  # as a single select+sort+limit, and not implemented using methods or
-  # direct SQL commands. Using the ActiveRecord query interface will turn
-  # this directly into a single database request, which will be blazingly
-  # fast regardless of the database size (once we add the indexes). Method
-  # invocations would be super-slow, and direct SQL commands can be harder
-  # to port than ActiveRecord's interface (which works to paper over
-  # differences between SQL engines).
   # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-  def projects_to_remind
+  def self.projects_to_remind
+    # This is computed entirely using the ActiveRecord query interface
+    # as a single select+sort+limit, and not implemented using methods or
+    # direct SQL commands. Using the ActiveRecord query interface will turn
+    # this directly into a single database request, which will be blazingly
+    # fast regardless of the database size (via the indexes). Method
+    # invocations would be super-slow, and direct SQL commands will be less
+    # portable than ActiveRecord's interface (which works to paper over
+    # differences between SQL engines).
+    #
     # Select projects eligible for reminders =
     #   in_progress and not_recently_lost_badge and not_disabled_reminders
     #   and inactive and not_recently_reminded and valid_email.
@@ -205,7 +208,8 @@ class Project < ActiveRecord::Base
     #   (use updated_at if last_reminder_at is null), oldest first.
     #   Since last_reminder_at gets updated with a newer datetime when
     #   we send a message, each email we send will lower its reminder
-    #   priority - we will eventually cycle through all inactive projects.
+    #   priority. Thus we will eventually cycle through all inactive projects
+    #   if none of them respond to reminders.
     #   Use: projects.order("COALESCE(last_reminder_at, updated_at)")
     Project
       .where('badge_percentage < 100')
@@ -218,24 +222,11 @@ class Project < ActiveRecord::Base
       .where('users.email IS NOT NULL')
       .where('users.email LIKE \'%@%\'') # We can't send emails without '@'
       .reorder('COALESCE(last_reminder_at, projects.updated_at)')
-      .first(MAX_NUMBER_REMINDERS)
+      .first(MAX_REMINDERS)
   end
   # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
   REAL_PRODUCTION_HOSTNAME = 'bestpractices.coreinfrastructure.org'
-
-  # Send reminders to users for inactivity. Return # of reminders sent
-  def send_reminders
-    # TODO
-    # Only send emails if we have the real production hostname.
-    #   return 0 unless ENV['PUBLIC_HOSTNAME'] == REAL_PRODUCTION_HOSTNAME
-    #   projects_to_process = projects_to_remind
-    # Send X of the highest-priority (oldest) emails,
-    # and for each, reset its last_reminder_at as we send the email
-    # (WITHOUT recording a change on paper_trail).
-    # Send a single report message to the LF,
-    # providing a list of projects who were given a reminder.
-  end
 
   private
 

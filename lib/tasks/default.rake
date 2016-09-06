@@ -335,6 +335,7 @@ Rake::Task['test:run'].enhance ['test:features']
 # This is the task to run every day, e.g., to record statistics
 # Configure your system (e.g., Heroku) to run this daily.  If you're using
 # Heroku, see: https://devcenter.heroku.com/articles/scheduler
+desc 'Run daily tasks used in any tier, e.g., record daily statistics'
 task daily: :environment do
   ProjectStat.create!
 end
@@ -343,6 +344,7 @@ end
 # that do not have a badge.
 # Configure your system (e.g., Heroku) to run this daily.  If you're using
 # Heroku, see: https://devcenter.heroku.com/articles/scheduler
+desc 'Send reminders to the oldest inactive project badge entries.'
 task reminders: :environment do
   puts 'Sending inactive project reminders. List of reminded project ids:'
   p ProjectsController.send_reminders

@@ -97,6 +97,18 @@ The one exception: the BadgeApp web application does support an 'admin'
 role for logged in users; admin users
 are allowed to edit and delete any project entry.
 
+## Environment variables
+
+The application is configured by various environment variables:
+
+* PUBLIC_HOSTNAME (default 'localhost')
+* BADGEAPP_MAX_REMINDERS (default 2): Number of email reminders to send
+  to inactive projects when running "rake reminders".
+  This rate limit is best set low to start,
+  and relatively low afterwards, to limit impact if there's an error.
+* RAILS_ENV (default 'development'): Rails environment.
+  The master, staging, and production systems set this to 'production'.
+
 ## Terminology
 
 This section describes key application-specific terminology.

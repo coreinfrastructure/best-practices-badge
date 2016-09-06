@@ -332,5 +332,7 @@ end
 # Configure your system (e.g., Heroku) to run this daily.  If you're using
 # Heroku, see: https://devcenter.heroku.com/articles/scheduler
 task reminders: :environment do
-  ProjectsController.send_reminders
+  puts 'Sending inactive project reminders. List of reminded project ids:'
+  p ProjectsController.send_reminders
+  true
 end

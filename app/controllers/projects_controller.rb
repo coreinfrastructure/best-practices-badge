@@ -228,7 +228,7 @@ class ProjectsController < ApplicationController
         inactive_project.update_attributes! last_reminder_at: DateTime.now.utc
       end
     end
-    projects.map { |p| p.id } # Return just a list of ids.
+    projects.map(&:id) # Return a list of project ids that were reminded.
   end
 
   private

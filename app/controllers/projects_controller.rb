@@ -211,9 +211,11 @@ class ProjectsController < ApplicationController
     end.compact
   end
 
-  # Send reminders to users for inactivity. Return # of reminders sent
+  # Send reminders to users for inactivity. Return array of project ids
+  # that were sent reminders (this array may be empty).
   # You should only invoke this in a test environment (where mailers are
-  # disabled & the data is forged anyway) or the "real" production site,
+  # disabled & the data is forged anyway) or the "real" production site.
+  # Do *not* call this on the "master" or "staging" tiers,
   # because we don't want to bother our users.
   def self.send_reminders
     projects = Project.projects_to_remind
@@ -226,7 +228,7 @@ class ProjectsController < ApplicationController
         inactive_project.update_attributes! last_reminder_at: DateTime.now.utc
       end
     end
-    projects # Return the projects that were sent reminders (can be empty).
+    projects.map { |p| p.id } # Return just a list of ids.
   end
 
   private

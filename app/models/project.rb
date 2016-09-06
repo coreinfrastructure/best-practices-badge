@@ -226,8 +226,6 @@ class Project < ActiveRecord::Base
   end
   # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
-  REAL_PRODUCTION_HOSTNAME = 'bestpractices.coreinfrastructure.org'
-
   private
 
   def all_active_criteria_passing?

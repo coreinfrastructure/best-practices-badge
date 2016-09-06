@@ -238,6 +238,18 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
 
       <%= render_status 'english', f, project, is_disabled, true %>
 
+      <div class="row">
+      <div class="col-xs-12">
+        <br>
+        <%= f.form_group :disabled_reminders do %>
+          <%= f.check_box :disabled_reminders, disabled: is_disabled do %>
+            (Advanced) Disable inactivity reminder (we recommend you leave this unchecked)
+          <% end %>
+        <% end %>
+      </div>
+      </div>
+
+      <br><br>
       Other general comments about the project:<br>
       <% if is_disabled %>
         <div class="discussion-markdown">

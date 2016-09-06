@@ -28,7 +28,7 @@
 # https://github.com/linuxfoundation/cii-best-practices-badge/issues/397
 # https://github.com/vcr/vcr/issues/586
 
-ENV['TESTOPTS'] = "--seed=#{[29_928, 29_931].sample}"
+ENV['TESTOPTS'] = "--seed=#{[29_928].sample}"
 
 # Run tests last. That way, runtime problems (e.g., undone migrations)
 # do not interfere with the other checks.
@@ -325,4 +325,14 @@ Rake::Task['test:run'].enhance ['test:features']
 # Heroku, see: https://devcenter.heroku.com/articles/scheduler
 task daily: :environment do
   ProjectStat.create!
+end
+
+# Run this task to email a limited set of reminders to inactive projects
+# that do not have a badge.
+# Configure your system (e.g., Heroku) to run this daily.  If you're using
+# Heroku, see: https://devcenter.heroku.com/articles/scheduler
+task reminders: :environment do
+  puts 'Sending inactive project reminders. List of reminded project ids:'
+  p ProjectsController.send_reminders
+  true
 end

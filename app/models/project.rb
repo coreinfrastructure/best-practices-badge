@@ -212,6 +212,7 @@ class Project < ActiveRecord::Base
     #   if none of them respond to reminders.
     #   Use: projects.order("COALESCE(last_reminder_at, updated_at)")
     Project
+      .select('projects.*, users.email as user_email')
       .where('badge_percentage < 100')
       .where('lost_passing_at IS NULL OR lost_passing_at < ?', 30.days.ago)
       .where('disabled_reminders = FALSE')

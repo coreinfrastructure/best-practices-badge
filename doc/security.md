@@ -557,6 +557,14 @@ web browser to always use HTTPS in the future.
 If that is misconfigured or omitted for some reason, the application
 will also redirect the user from HTTP to HTTPS.
 
+We send reminder emails to projects that have not updated their
+badge entry in a long time. The detailed algorithm that prioritizes projects
+is in "app/models/project.rb" class method "self.projects_to_remind".
+It sorts by reminder date, so we always cycle through before returning to
+a previously-reminded project.  We have a hard rate limit on the number
+of emails we will send out each time; this keeps us from looking like
+a spammer.
+
 ## Security in Verification
 
 When software is modified, it is reviewed by the

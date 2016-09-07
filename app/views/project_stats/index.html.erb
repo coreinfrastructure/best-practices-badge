@@ -90,6 +90,7 @@ Next projects scheduled for inactive reminders:
       <th>Name</th>
       <th>Updated at</th>
       <th>Last reminder at</th>
+      <th>Email</th>
     </tr>
   </thead>
 
@@ -100,6 +101,7 @@ Next projects scheduled for inactive reminders:
         <td><%= project.name %></td>
         <td><%= project.updated_at %></td>
         <td><%= project.last_reminder_at %></td>
+        <td><%= User.find(project.user_id).email %></td>
       </tr>
     <% end %>
   </tbody>

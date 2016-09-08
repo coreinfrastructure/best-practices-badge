@@ -79,6 +79,38 @@ Projects with non-trivial progress
     library: date_chart_options
 %>
 
+<% if current_user&.admin? %>
+<br><br><br>
+As an admin, you may also see the
+next projects scheduled for inactive reminders:
+
+<table class='table-bordered table-striped'>
+  <thead>
+    <tr>
+      <th>id</th>
+      <th>Name</th>
+      <th>Updated at</th>
+      <th>Last reminder at</th>
+      <th>%</th>
+      <th>Email</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% Project.projects_to_remind.each do |project| %>
+      <tr>
+        <td><a href="/projects/<%= project.id %>"><%= project.id %></a></td>
+        <td><%= project.name %></td>
+        <td><%= project.updated_at %></td>
+        <td><%= project.last_reminder_at %></td>
+        <td><%= project.badge_percentage %>%</td>
+        <td><%= project.user_email %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<% end %>
+
 <br><br><br>
 <p>
 Here is the raw data

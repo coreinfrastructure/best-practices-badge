@@ -49,8 +49,8 @@
   </entry>
   <entry>
     <id>tag:www.example.com,2005:Project/980190962</id>
-    <published>2015-03-01T12:00:00Z</published>
-    <updated>2015-03-01T12:00:00Z</updated>
+    <published>2000-01-01T00:00:00Z</published>
+    <updated>2000-01-01T00:00:00Z</updated>
     <link rel="alternate" type="text/html" href="http://www.example.com/projects/980190962"/>
     <title>Pathfinder OS</title>
     <content type="html">

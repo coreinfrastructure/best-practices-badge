@@ -1,0 +1,9 @@
+This is an automated summary of the badge reminders that are being sent.
+
+Reminders are being sent to the following projects:
+
+<% @projects.each do |project| %>
+<%= project.id %>: <%= project.name %>, updated <%= project.updated_at %>
+<% end %>
+
+--- David A. Wheeler, CII Best Practices Badge Technical Lead

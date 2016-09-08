@@ -53,3 +53,7 @@ html, body {
   margin: 1.5em auto -9.6em;
   padding-bottom: 100px;
 }
+
+textarea {
+  min-height: 12ex;
+}

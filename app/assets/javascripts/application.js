@@ -16,7 +16,6 @@
 //
 //= require jquery
 //= require jquery.turbolinks
-//= require jquery.autosize
 //= require jquery_ujs
 //= require bootstrap
 // This is for a polyfill for Safari:

@@ -28,7 +28,7 @@
 # https://github.com/linuxfoundation/cii-best-practices-badge/issues/397
 # https://github.com/vcr/vcr/issues/586
 
-ENV['TESTOPTS'] = "--seed=#{[29_928, 29_931].sample}"
+ENV['TESTOPTS'] = "--seed=#{[29_928].sample}"
 
 # Run tests last. That way, runtime problems (e.g., undone migrations)
 # do not interfere with the other checks.
@@ -262,6 +262,18 @@ task :pull_production do
   Rake::Task['db:migrate'].invoke
 end
 
+# Don't use this one unless you need to
+desc 'Copy database from production into development (if normal one fails)'
+task :pull_production_alternative do
+  puts 'Getting production database (alternative)'
+  sh 'heroku pg:backups capture --app production-bestpractices && ' \
+     'curl -o db/latest.dump `heroku pg:backups public-url ' \
+     '     --app production-bestpractices` && ' \
+     'rake db:reset && ' \
+     'pg_restore --verbose --clean --no-acl --no-owner -U `whoami` ' \
+     '           -d development db/latest.dump'
+end
+
 desc 'Copy database from master into development (requires access privs)'
 task :pull_master do
   puts 'Getting master database'
@@ -323,6 +335,18 @@ Rake::Task['test:run'].enhance ['test:features']
 # This is the task to run every day, e.g., to record statistics
 # Configure your system (e.g., Heroku) to run this daily.  If you're using
 # Heroku, see: https://devcenter.heroku.com/articles/scheduler
+desc 'Run daily tasks used in any tier, e.g., record daily statistics'
 task daily: :environment do
   ProjectStat.create!
+end
+
+# Run this task to email a limited set of reminders to inactive projects
+# that do not have a badge.
+# Configure your system (e.g., Heroku) to run this daily.  If you're using
+# Heroku, see: https://devcenter.heroku.com/articles/scheduler
+desc 'Send reminders to the oldest inactive project badge entries.'
+task reminders: :environment do
+  puts 'Sending inactive project reminders. List of reminded project ids:'
+  p ProjectsController.send_reminders
+  true
 end

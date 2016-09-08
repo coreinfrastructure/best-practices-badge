@@ -22,7 +22,7 @@ class Project < ActiveRecord::Base
 
   PROJECT_OTHER_FIELDS = %i(
     name description homepage_url cpe
-    license general_comments user_id
+    license general_comments user_id disabled_reminders
   ).freeze
   ALL_CRITERIA_STATUS = Criteria.map { |c| c.name.status }.freeze
   ALL_CRITERIA_JUSTIFICATION = Criteria.map { |c| c.name.justification }.freeze
@@ -171,6 +171,61 @@ class Project < ActiveRecord::Base
       self.lost_passing_at = Time.now.utc
     end
   end
+
+  # Maximum number of reminders to send by email at one time.
+  # We want a rate limit to avoid being misinterpreted as a spammer,
+  # and also to limit damage if there's a mistake in the code.
+  # By default, start very low until we're confident in the code.
+  MAX_REMINDERS = (ENV['BADGEAPP_MAX_REMINDERS'] || 2).to_i
+
+  # Return which projects should be reminded to work on their badges.  See:
+  # https://github.com/linuxfoundation/cii-best-practices-badge/issues/487
+  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  def self.projects_to_remind
+    # This is computed entirely using the ActiveRecord query interface
+    # as a single select+sort+limit, and not implemented using methods or
+    # direct SQL commands. Using the ActiveRecord query interface will turn
+    # this directly into a single database request, which will be blazingly
+    # fast regardless of the database size (via the indexes). Method
+    # invocations would be super-slow, and direct SQL commands will be less
+    # portable than ActiveRecord's interface (which works to paper over
+    # differences between SQL engines).
+    #
+    # Select projects eligible for reminders =
+    #   in_progress and not_recently_lost_badge and not_disabled_reminders
+    #   and inactive and not_recently_reminded and valid_email.
+    # where these terms are defined as:
+    #   in_progress = badge_percentage less than 100%.
+    #   not_recently_lost_badge = lost_passing_at IS NULL OR
+    #     less than 30 days ago
+    #   not_disabled_reminders = not(project.disabled_reminders), default false
+    #   inactive = updated_at is 30 days ago or more
+    #   not_recently_reminded = last_reminder_at IS NULL OR
+    #     more than 60 days ago. Notice that if recently_reminded is null
+    #     (no reminders have been sent), only the other criteria matter.
+    #   valid_email = user_id.email (joined) is not null and includes "@"
+    # Prioritize. Sort by the last_reminder_at datetime
+    #   (use updated_at if last_reminder_at is null), oldest first.
+    #   Since last_reminder_at gets updated with a newer datetime when
+    #   we send a message, each email we send will lower its reminder
+    #   priority. Thus we will eventually cycle through all inactive projects
+    #   if none of them respond to reminders.
+    #   Use: projects.order("COALESCE(last_reminder_at, updated_at)")
+    Project
+      .select('projects.*, users.email as user_email')
+      .where('badge_percentage < 100')
+      .where('lost_passing_at IS NULL OR lost_passing_at < ?', 30.days.ago)
+      .where('disabled_reminders = FALSE')
+      .where('projects.updated_at < ?', 30.days.ago)
+      .where('last_reminder_at IS NULL OR last_reminder_at < ?', 60.days.ago)
+      .joins(:user).references(:user) # Need this to check email address
+      .where('user_id IS NOT NULL') # Safety check
+      .where('users.email IS NOT NULL')
+      .where('users.email LIKE \'%@%\'') # We can't send emails without '@'
+      .reorder('COALESCE(last_reminder_at, projects.updated_at)')
+      .first(MAX_REMINDERS)
+  end
+  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
   private
 

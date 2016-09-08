@@ -247,4 +247,9 @@ class ProjectsControllerTest < ActionController::TestCase
     assert_redirected_to 'https://test.host/projects'
     Rails.application.config.force_ssl = old
   end
+
+  test 'sanity test of reminders' do
+    result = ProjectsController.send_reminders
+    assert_equal 1, result.size
+  end
 end

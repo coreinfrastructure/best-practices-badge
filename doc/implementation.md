@@ -106,6 +106,12 @@ The application is configured by various environment variables:
   to inactive projects when running "rake reminders".
   This rate limit is best set low to start,
   and relatively low afterwards, to limit impact if there's an error.
+* LOST_PASSING_REMINDER (default 30): Minimum number of days since
+  last lost a badge before sending reminder
+* LAST_UPDATED_REMINDER (default 30): Minimum number of days
+  since project last updated before sending reminder
+* LAST_SENT_REMINDER (default 60): Minimum number of days since
+  project was last sent a reminder
 * RAILS_ENV (default 'development'): Rails environment.
   The master, staging, and production systems set this to 'production'.
 

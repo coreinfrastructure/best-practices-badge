@@ -172,11 +172,24 @@ class Project < ActiveRecord::Base
     end
   end
 
+  # The following configuration options are trusted.  Set them to
+  # reasonable numbers or accept the defaults.
+
   # Maximum number of reminders to send by email at one time.
   # We want a rate limit to avoid being misinterpreted as a spammer,
   # and also to limit damage if there's a mistake in the code.
   # By default, start very low until we're confident in the code.
   MAX_REMINDERS = (ENV['BADGEAPP_MAX_REMINDERS'] || 2).to_i
+
+  # Minimum number of days since last lost a badge before sending reminder,
+  # if it lost one.
+  LOST_PASSING_REMINDER = (ENV['BADGEAPP_LOST_PASSING_REMINDER'] || 30).to_i
+
+  # Minimum number of days since project last updated before sending reminder
+  LAST_UPDATED_REMINDER = (ENV['BADGEAPP_LAST_UPDATED_REMINDER'] || 30).to_i
+
+  # Minimum number of days since project was last sent a reminder
+  LAST_SENT_REMINDER = (ENV['BADGEAPP_LAST_SENT_REMINDER'] || 60).to_i
 
   # Return which projects should be reminded to work on their badges.  See:
   # https://github.com/linuxfoundation/cii-best-practices-badge/issues/487
@@ -197,9 +210,9 @@ class Project < ActiveRecord::Base
     # where these terms are defined as:
     #   in_progress = badge_percentage less than 100%.
     #   not_recently_lost_badge = lost_passing_at IS NULL OR
-    #     less than 30 days ago
+    #     less than LOST_PASSING_REMINDER (30) days ago
     #   not_disabled_reminders = not(project.disabled_reminders), default false
-    #   inactive = updated_at is 30 days ago or more
+    #   inactive = updated_at is LAST_UPDATED_REMINDER (30) days ago or more
     #   not_recently_reminded = last_reminder_at IS NULL OR
     #     more than 60 days ago. Notice that if recently_reminded is null
     #     (no reminders have been sent), only the other criteria matter.
@@ -214,10 +227,13 @@ class Project < ActiveRecord::Base
     Project
       .select('projects.*, users.email as user_email')
       .where('badge_percentage < 100')
-      .where('lost_passing_at IS NULL OR lost_passing_at < ?', 30.days.ago)
+      .where('lost_passing_at IS NULL OR lost_passing_at < ?',
+             LOST_PASSING_REMINDER.days.ago)
       .where('disabled_reminders = FALSE')
-      .where('projects.updated_at < ?', 30.days.ago)
-      .where('last_reminder_at IS NULL OR last_reminder_at < ?', 60.days.ago)
+      .where('projects.updated_at < ?',
+             LAST_UPDATED_REMINDER.days.ago)
+      .where('last_reminder_at IS NULL OR last_reminder_at < ?',
+             LAST_SENT_REMINDER.days.ago)
       .joins(:user).references(:user) # Need this to check email address
       .where('user_id IS NOT NULL') # Safety check
       .where('users.email IS NOT NULL')

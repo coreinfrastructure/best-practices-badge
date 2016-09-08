@@ -111,11 +111,13 @@ next projects scheduled for inactive reminders:
 </table>
 <% end %>
 
-<br><br><br>
+<br><br>
+<a class="btn btn-primary" role="button" data-toggle="collapse" href="#raw-project-data" aria-expanded="false" aria-controls="collapseExample">
+Show raw project data
+</a>
+<div class="collapse" id="raw-project-data">
+  <div class="well">
 <p>
-Here is the raw data
-(<a href="/project_stats.json">you can also get the raw data
-in JSON format</a>):
 
 <table class='table-bordered table-striped'>
   <thead>
@@ -151,3 +153,9 @@ in JSON format</a>):
   </tbody>
 </table>
 <br>
+  </div>
+</div>
+
+<br>
+<br>
+<a href="/project_stats.json">You can also get the raw data in JSON format</a>.

@@ -5,7 +5,7 @@ class GithubLoginTest < Capybara::Rails::TestCase
   scenario 'Has link to GitHub Login', js: true do
     configure_omniauth_mock unless ENV['GITHUB_PASSWORD']
 
-    VCR.use_cassette('github_login') do
+    VCR.use_cassette('github_login', allow_playback_repeats: true) do
       visit '/'
       assert has_content? 'CII Best Practices Badge Program'
       click_on 'Get Your Badge Now!'

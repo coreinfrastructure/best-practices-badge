@@ -21,6 +21,7 @@ All projects
 
 <%=
   # Show a chart with just total # projects.
+  # This gets its own chart because its scale hides everything else.
   series_dataset = ProjectStat.all.reduce({}) do |h,e|
     h.merge(e.created_at => e.percent_ge_0)
   end
@@ -29,7 +30,7 @@ All projects
 
 <br><br><br>
 
-Projects with non-trivial progress
+Projects with non-trivial progress or activity
 <%=
   # Show project counts, but skip <25% because that makes chart scale unusable
   gt0_stats = ProjectStat::STAT_VALUES.select do |e|
@@ -42,13 +43,28 @@ Projects with non-trivial progress
     end
     {name: '>=' + minimum.to_s + '%', data: series_dataset}
   end
+  # Active projects
+  active_dataset = ProjectStat.all.reduce({}) do |h,e|
+    h.merge(e.created_at => e.active_projects)
+  end
+  dataset << {name: 'Active projects (updated within 30 days)',
+              data: active_dataset}
+  # Active in-progress projects
+  active_in_progress_dataset = ProjectStat.all.reduce({}) do |h,e|
+    h.merge(e.created_at => e.active_in_progress)
+  end
+  dataset << {name: 'Active in-progress projects (updated within 30 days)',
+              data: active_in_progress_dataset}
+  # Done transforming data; display it.
   line_chart dataset, library: date_chart_options
 %>
 
 <br><br><br>
 
 <%=
-  # Show new and edited projects
+  # Show new and edited projects, reminders sent, reactivated after reminders
+  # These are expected to be smaller numbers, and show detailed activity,
+  # so showring them separately will let us use scales that show more info.
   dataset = []
   ndays = 7
   actions = ['created', 'updated'].freeze
@@ -75,7 +91,21 @@ Projects with non-trivial progress
                 data: moving_average_dataset,
                 library: {borderDash: [5,5]}}
   end
-  line_chart dataset, colors: ['green', 'darkgreen', 'blue', 'darkblue'],
+  # Reminders sent
+  reminders_dataset = ProjectStat.all.reduce({}) do |h,e|
+    h.merge(e.created_at => e.reminders_sent)
+  end
+  dataset << {name: 'Reminders sent since yesterday',
+              data: reminders_dataset}
+  # Reactivated after reminders
+  reactivated_dataset = ProjectStat.all.reduce({}) do |h,e|
+    h.merge(e.created_at => e.reactivated_after_reminder)
+  end
+  dataset <<
+    {name: 'Reactivated projects in 14 days after receiving reminder',
+     data: reactivated_dataset}
+  line_chart dataset, colors: ['green', 'darkgreen', 'blue', 'darkblue',
+                               'red', 'purple'],
     library: date_chart_options
 %>
 
@@ -111,11 +141,13 @@ next projects scheduled for inactive reminders:
 </table>
 <% end %>
 
-<br><br><br>
+<br><br>
+<a class="btn btn-primary" role="button" data-toggle="collapse" href="#raw-project-data" aria-expanded="false" aria-controls="collapseExample">
+Show raw project data
+</a>
+<div class="collapse" id="raw-project-data">
+  <div class="well">
 <p>
-Here is the raw data
-(<a href="/project_stats.json">you can also get the raw data
-in JSON format</a>):
 
 <table class='table-bordered table-striped'>
   <thead>
@@ -151,3 +183,9 @@ in JSON format</a>):
   </tbody>
 </table>
 <br>
+  </div>
+</div>
+
+<br>
+<br>
+<a href="/project_stats.json">You can also get the raw data in JSON format</a>.

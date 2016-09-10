@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160902221520) do
+ActiveRecord::Schema.define(version: 20160908201830) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -28,16 +28,20 @@ ActiveRecord::Schema.define(version: 20160902221520) do
   add_index "pg_search_documents", ["searchable_type", "searchable_id"], name: "index_pg_search_documents_on_searchable_type_and_searchable_id", using: :btree
 
   create_table "project_stats", force: :cascade do |t|
-    t.integer  "percent_ge_0",            null: false
-    t.integer  "percent_ge_25",           null: false
-    t.integer  "percent_ge_50",           null: false
-    t.integer  "percent_ge_75",           null: false
-    t.integer  "percent_ge_90",           null: false
-    t.integer  "percent_ge_100",          null: false
-    t.integer  "created_since_yesterday", null: false
-    t.integer  "updated_since_yesterday", null: false
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
+    t.integer  "percent_ge_0",                           null: false
+    t.integer  "percent_ge_25",                          null: false
+    t.integer  "percent_ge_50",                          null: false
+    t.integer  "percent_ge_75",                          null: false
+    t.integer  "percent_ge_90",                          null: false
+    t.integer  "percent_ge_100",                         null: false
+    t.integer  "created_since_yesterday",                null: false
+    t.integer  "updated_since_yesterday",                null: false
+    t.datetime "created_at",                             null: false
+    t.datetime "updated_at",                             null: false
+    t.integer  "reminders_sent",             default: 0, null: false
+    t.integer  "reactivated_after_reminder", default: 0, null: false
+    t.integer  "active_projects"
+    t.integer  "active_in_progress"
   end
 
   add_index "project_stats", ["created_at"], name: "index_project_stats_on_created_at", using: :btree

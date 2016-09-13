@@ -2,7 +2,7 @@
 
 <h1>Project Stats</h1>
 
-All projects
+<h2>All projects</h2>
 
 <%
   date_chart_options = {
@@ -30,7 +30,7 @@ All projects
 
 <br><br><br>
 
-Projects with non-trivial progress
+<h2>Projects with non-trivial progress</h2>
 <%=
   # Show project counts, but skip <25% because that makes chart scale unusable
   gt0_stats = ProjectStat::STAT_VALUES.select do |e|
@@ -49,7 +49,7 @@ Projects with non-trivial progress
 
 <br><br><br>
 
-Projects with badge entry activity in last 30 days
+<h2>Projects with badge entry activity in last 30 days</h2>
 <%=
   dataset = []
   # Active projects
@@ -82,7 +82,7 @@ Projects with badge entry activity in last 30 days
 
 <br><br><br>
 
-Daily badge entry activity
+<h2>Daily badge entry activity</h2>
 <%=
   # Show new and edited projects, reminders sent, reactivated after reminders
   # These are expected to be smaller numbers, and show detailed activity,
@@ -133,6 +133,10 @@ Daily badge entry activity
 
 <% if current_user&.admin? %>
 <br><br><br>
+
+<h2>Upcoming inactive reminders</h2>
+
+<p>
 As an admin, you may also see the
 next projects scheduled for inactive reminders:
 
@@ -164,6 +168,7 @@ next projects scheduled for inactive reminders:
 <% end %>
 
 <br><br>
+<h2>Raw data</h2>
 <a class="btn btn-primary" role="button" data-toggle="collapse" href="#raw-project-data" aria-expanded="false" aria-controls="collapseExample">
 Show raw project data
 </a>

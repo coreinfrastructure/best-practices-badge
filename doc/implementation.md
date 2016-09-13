@@ -115,6 +115,16 @@ The application is configured by various environment variables:
 * RAILS_ENV (default 'development'): Rails environment.
   The master, staging, and production systems set this to 'production'.
 
+This can be set on Heroku.  For example, to change the maximum number
+of email reminders to inactive projects on production-bestpractices:
+
+~~~~
+heroku config:set --app production-bestpractices BADGEAPP_MAX_REMINDERS=5
+~~~~
+
+On Heroku, using config:set to set a value will automatically restart the
+application (causing it to take effect).
+
 ## Terminology
 
 This section describes key application-specific terminology.

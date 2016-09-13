@@ -113,6 +113,17 @@
                 data: moving_average_dataset,
                 library: {borderDash: [5,5]}}
   end
+  line_chart dataset, colors: ['green', 'darkgreen', 'blue', 'darkblue',
+                               'red', 'purple'],
+    library: date_chart_options
+%>
+
+<br><br><br>
+
+<h2>Reminders</h2>
+<%=
+  # Show reminders sent, reactivated after reminders
+  dataset = []
   # Reminders sent
   reminders_dataset = ProjectStat.all.reduce({}) do |h,e|
     h.merge(e.created_at => e.reminders_sent)
@@ -126,8 +137,7 @@
   dataset <<
     {name: 'Reactivated projects in 14 days after receiving reminder',
      data: reactivated_dataset}
-  line_chart dataset, colors: ['green', 'darkgreen', 'blue', 'darkblue',
-                               'red', 'purple'],
+  line_chart dataset, colors: ['green', 'blue'],
     library: date_chart_options
 %>
 

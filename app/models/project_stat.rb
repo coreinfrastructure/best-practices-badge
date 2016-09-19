@@ -20,6 +20,7 @@ class ProjectStat < ActiveRecord::Base
       STAT_VALUES.each do |completion|
         send "percent_ge_#{completion}=", Project.gteq(completion).count
       end
+      self.projects_edited = Project.where('created_at < updated_at').count
 
       # These use 1.day.ago, so a create or updates in 24 hours + fractional
       # seconds won't be counted today, and *might* not be counted previously.
@@ -45,8 +46,15 @@ class ProjectStat < ActiveRecord::Base
       # (the number of project badge entries updated
       # within ACTIVE_PERIOD number of days)
       self.active_projects = Project.updated_since(ACTIVE_PERIOD.day.ago).count
+      self.active_edited_projects =
+        Project.updated_since(ACTIVE_PERIOD.day.ago)
+               .where('created_at < updated_at').count
       self.active_in_progress =
         Project.updated_since(ACTIVE_PERIOD.day.ago)
+               .where('badge_percentage < 100').count
+      self.active_edited_in_progress =
+        Project.updated_since(ACTIVE_PERIOD.day.ago)
+               .where('created_at < updated_at')
                .where('badge_percentage < 100').count
     end
     self # Return self to support method chaining

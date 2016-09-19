@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160908201830) do
+ActiveRecord::Schema.define(version: 20160911193415) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -42,6 +42,9 @@ ActiveRecord::Schema.define(version: 20160908201830) do
     t.integer  "reactivated_after_reminder", default: 0, null: false
     t.integer  "active_projects"
     t.integer  "active_in_progress"
+    t.integer  "projects_edited"
+    t.integer  "active_edited_projects"
+    t.integer  "active_edited_in_progress"
   end
 
   add_index "project_stats", ["created_at"], name: "index_project_stats_on_created_at", using: :btree

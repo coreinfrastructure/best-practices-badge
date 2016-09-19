@@ -972,6 +972,8 @@
           The <a href="https://continuousassurance.org/">SWAMP</a> is a no-cost
           platform for assessing vulnerabilities in software using a variety
           of tools.
+        na_placeholder: >
+          Why can't this be met (e.g., no FLOSS tools exist for that language)?
         autofill: >
           Look in build scripts for execution of common tools, and in
           documentation for names of tools and the URL of a Coverity scan entry.

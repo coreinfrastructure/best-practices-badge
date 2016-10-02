@@ -29,7 +29,6 @@ class BuildDetective < Detective
   def determine_results(status, name_pattern, result_description)
     found_files = files_named(name_pattern)
     if found_files.empty?
-
       @results[status] =
         {
           value: 'N/A', confidence: 3,
@@ -37,9 +36,7 @@ class BuildDetective < Detective
           'No build structure found in repository:
           assuming one is not required'
         }
-
     else
-
       @results[status] =
         met_result result_description, found_files.first['html_url']
     end

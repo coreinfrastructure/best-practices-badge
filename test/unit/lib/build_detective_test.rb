@@ -13,5 +13,6 @@ class BuildDetectiveTest < ActiveSupport::TestCase
     results = BuildDetective.new.analyze(
       @evidence, repo_url: @repo_url
     )
+    
   end
 end

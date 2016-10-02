@@ -10,7 +10,7 @@ class BuildDetective < Detective
   # Individual detectives must identify their inputs, outputs
   INPUTS = %i(repo_url repo_files).freeze # repo_url for future use
   OUTPUTS = %i(build_status build_common_tools_status).freeze
-
+  @results = {} # Blank results for return
   def files_named(name_pattern)
     @top_level.select do |fso|
       fso['type'] == 'file' && fso['name'].match(name_pattern)
@@ -47,7 +47,7 @@ class BuildDetective < Detective
     # doc = Nokogiri::HTML(open(repo_url)) # For future use to search
     # more thoroughly
     repo_files = current[:repo_files]
-    @results = {} # Blank results for return
+    # @results = {} # Blank results for return
     return {} if repo_files.blank?
 
     # Top_level is iterable, contains a hash with name, size, type (file|dir).

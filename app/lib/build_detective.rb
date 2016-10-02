@@ -10,10 +10,7 @@ class BuildDetective < Detective
   # Individual detectives must identify their inputs, outputs
   INPUTS = %i(repo_url repo_files).freeze # repo_url for future use
   OUTPUTS = %i(build_status build_common_tools_status).freeze
-  # Output Hash required to set database values.  Please see
-  # database schema for allowed valuses to be set.
-  # Setup and major work goes here.  Do not attempt to return anything from this
-  # part of the code as it causes crashes.
+
   def files_named(name_pattern)
     @top_level.select do |fso|
       fso['type'] == 'file' && fso['name'].match(name_pattern)

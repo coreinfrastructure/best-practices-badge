@@ -81,8 +81,7 @@ class RepoFilesExamineDetective < Detective
       :release_notes_status,
       /\A(changelog|news)(\.md|\.markdown|\.txt|\.html)?\Z/i,
       NONTRIVIAL_MIN_SIZE, 'release notes'
-    )
-    
+    )  
     # There are many different build systems, and different
     # programming languages & environments have different common conventions.
     # Many build systems work across languages, so they're not really

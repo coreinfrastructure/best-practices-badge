@@ -38,7 +38,7 @@ class BuildDetective < Detective
 
   def met_na
     {
-      value: 'N/A', confidence: 2,
+      value: 'N/A', confidence: 3,
       explanation:
         'No build structure found in repository: assuming one is not required'
     }

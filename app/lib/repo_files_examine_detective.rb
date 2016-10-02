@@ -103,8 +103,7 @@ class RepoFilesExamineDetective < Detective
         )\Z
       /ix,
       NONTRIVIAL_MIN_SIZE, 'build'
-    )
-    
+    )  
     # If we can detect it, it's common enough to be considered common.
     @results[:build_common_tools_status] = @results[:build_status]
 

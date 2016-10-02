@@ -10,7 +10,6 @@ class BuildDetective < Detective
   # Individual detectives must identify their inputs, outputs
   INPUTS = %i(repo_url repo_files).freeze # repo_url for future use
   OUTPUTS = %i(build_status build_common_tools_status).freeze
-
   def files_named(name_pattern)
     @top_level.select do |fso|
       fso['type'] == 'file' && fso['name'].match(name_pattern)
@@ -29,13 +28,7 @@ class BuildDetective < Detective
   def determine_results(status, name_pattern, result_description)
     found_files = files_named(name_pattern)
     if found_files.empty?
-      @results[status] =
-        {
-          value: 'N/A', confidence: 3,
-          explanation:
-          'No build structure found in repository:
-          assuming one is not required'
-        }
+
     else
       @results[status] =
         met_result result_description, found_files.first['html_url']
@@ -49,7 +42,6 @@ class BuildDetective < Detective
     repo_files = current[:repo_files]
     @results = {} # Blank results for return
     return {} if repo_files.blank?
-
     # Top_level is iterable, contains a hash with name, size, type (file|dir).
     @top_level = repo_files.get_info('/')
     # doc.css('a').each do |link| # For future use to search more thoroughly
@@ -66,7 +58,8 @@ class BuildDetective < Detective
           build\.xml|               # Ant, common for Java
           .*\.proj|                 # msbuild
           build\.sbt|               # SBT, for Scala
-          SConstruct                # SCONS. Uses Python.
+          SConstruct|               # SCONS. Uses Python.
+          wscript                   # WAF build system
         )\Z
       /ix, 'build'
     )

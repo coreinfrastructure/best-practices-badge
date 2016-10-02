@@ -17,6 +17,13 @@ class BuildDetective < Detective
     end
   end
 
+  def unmet_result(result_description)
+    {
+      value: 'Unmet', confidence: 1,
+      explanation: "No #{result_description} file found."
+    }
+  end
+
   def met_result(result_description, html_url)
     {
       value: 'Met', confidence: 3,

@@ -47,9 +47,8 @@ class BuildDetective < Detective
     # doc = Nokogiri::HTML(open(repo_url)) # For future use to search
     # more thoroughly
     repo_files = current[:repo_files]
-    # @results = {} # Blank results for return
+    @results = {} # Blank results for return
     return {} if repo_files.blank?
-
     # Top_level is iterable, contains a hash with name, size, type (file|dir).
     @top_level = repo_files.get_info('/')
     # doc.css('a').each do |link| # For future use to search more thoroughly

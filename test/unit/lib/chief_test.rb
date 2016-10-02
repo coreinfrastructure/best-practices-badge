@@ -35,11 +35,11 @@ class ChiefTest < ActiveSupport::TestCase
                  '<https://github.com/linuxfoundation/' \
                  'cii-best-practices-badge/blob/master/CHANGELOG.md>.',
                  results[:release_notes_justification]
-    # assert_equal 'Met', results[:build_status]
-    # assert_equal 'Non-trivial build file in repository: ' \
-    #              '<https://github.com/linuxfoundation/' \
-    #              'cii-best-practices-badge/blob/master/Rakefile>.',
-    #              results[:build_justification]
+    assert_equal 'Met', results[:build_status]
+    assert_equal 'Non-trivial build file in repository: ' \
+                 '<https://github.com/linuxfoundation/' \
+                 'cii-best-practices-badge/blob/master/Rakefile>.',
+                results[:build_justification]
   end
 
   test 'Fatal exceptions in a Detective will not crash production system' do

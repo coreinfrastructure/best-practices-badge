@@ -13,7 +13,5 @@ class BuildDetectiveTest < ActiveSupport::TestCase
     results = BuildDetective.new.analyze(
       @evidence, repo_url: @repo_url
     )
-    assert results.key?(:build_status)
-    assert results[:build_status].key?(:value)
   end
 end

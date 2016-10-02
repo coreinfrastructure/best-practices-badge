@@ -17,13 +17,6 @@ class BuildDetective < Detective
     end
   end
 
-  def unmet_result(result_description)
-    {
-      value: 'Unmet', confidence: 1,
-      explanation: "No #{result_description} file found."
-    }
-  end
-
   def met_result(result_description, html_url)
     {
       value: 'Met', confidence: 3,
@@ -43,7 +36,9 @@ class BuildDetective < Detective
           'No build structure found in repository:
           assuming one is not required'
         }
+
     else
+
       @results[status] =
         met_result result_description, found_files.first['html_url']
     end

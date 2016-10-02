@@ -29,7 +29,7 @@ class BuildDetective < Detective
   def determine_results(status, name_pattern, result_description)
     found_files = files_named(name_pattern)
     if found_files.empty?
-      results[status] =
+      @results[status] =
         {
           value: 'N/A', confidence: 3,
           explanation:
@@ -37,7 +37,7 @@ class BuildDetective < Detective
           assuming one is not required'
         }
     else
-      results[status] =
+      @results[status] =
         met_result result_description, found_files.first['html_url']
     end
   end
@@ -47,7 +47,7 @@ class BuildDetective < Detective
     # doc = Nokogiri::HTML(open(repo_url)) # For future use to search
     # more thoroughly
     repo_files = current[:repo_files]
-    results = {} # Blank results for return
+    @results = {} # Blank results for return
     return {} if repo_files.blank?
     # Top_level is iterable, contains a hash with name, size, type (file|dir).
     @top_level = repo_files.get_info('/')
@@ -70,8 +70,8 @@ class BuildDetective < Detective
       /ix, 'build'
     )
     # If we can detect it, it's common enough to be considered common.
-    results[:build_common_tools_status] = results[:build_status]
+    @results[:build_common_tools_status] = @results[:build_status]
 
-    results
+    @results
   end
 end

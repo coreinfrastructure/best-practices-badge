@@ -17,6 +17,14 @@ class BuildDetective < Detective
     end
   end
 
+  def met_na(explination_text)
+    {
+      value: 'N/A', confidence: 3,
+      explanation:
+      explination_text.to_s
+    }
+  end
+
   def met_result(result_description, html_url)
     {
       value: 'Met', confidence: 3,
@@ -30,12 +38,8 @@ class BuildDetective < Detective
     found_files = files_named(name_pattern)
     @results[status] =
       if found_files.empty?
-        {
-          value: 'N/A', confidence: 3,
-          explanation:
-          'No build structure found in repository:
-           assuming one is not required'
-        }
+        met_na 'No build structure found in repository:
+         assuming one is not required'
       else
         met_result result_description, found_files.first['html_url']
       end

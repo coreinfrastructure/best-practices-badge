@@ -31,10 +31,10 @@ class BuildDetective < Detective
     if found_files.empty?
       @results[status] =
         {
-          value: 'N//A', confidence: 3,
+          value: 'Unmet', confidence: 1,
           explanation:
           'No build structure found in repository:
-          assuming one is not required'
+          assuming one is required'
         }
     else
       @results[status] =

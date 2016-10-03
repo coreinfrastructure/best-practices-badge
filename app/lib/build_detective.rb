@@ -10,7 +10,6 @@ class BuildDetective < Detective
   # Individual detectives must identify their inputs, outputs
   INPUTS = %i(repo_url repo_files).freeze # repo_url for future use
   OUTPUTS = %i(build_status build_common_tools_status).freeze
-  @results = {} # Blank results for return
   def files_named(name_pattern)
     @top_level.select do |fso|
       fso['type'] == 'file' && fso['name'].match(name_pattern)
@@ -29,7 +28,7 @@ class BuildDetective < Detective
   def determine_results(status, name_pattern, result_description)
     found_files = files_named(name_pattern)
     if found_files.empty?
-      @results[status] = {}
+      
     else
       @results[status] =
         met_result result_description, found_files.first['html_url']

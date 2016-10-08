@@ -58,7 +58,8 @@ class BuildDetective < Detective
           build\.xml|               # Ant, common for Java
           .*\.proj|                 # msbuild
           build\.sbt|               # SBT, for Scala
-          SConstruct                # SCONS. Uses Python.
+          SConstruct|               # SCONS. Uses Python.
+          wscript                   # WAF build system
         )\Z
       /ix, 'build'
     )

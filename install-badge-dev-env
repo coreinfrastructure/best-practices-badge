@@ -151,24 +151,24 @@ case "$manager" in
   brew)
     # We'll use the brew version. Install these to rebuild rbenv:
     # add_pkg openssl libyaml libffi
-    add_pkg phantomjs rbenv ruby-build ;;
+    add_pkg phantomjs rbenv ruby-build graphviz ;;
   apt-get)
     # We'll use the system version.  If you want to use the latest one
     # on GitHub, instead install these system components first:
     # add_pkg autoconf bison build-essential libssl-dev libyaml-dev \
     #         libreadline6-dev zlib1g-dev libncurses5-dev libffi-dev \
     #         libgdbm3 libgdbm-dev
-    add_pkg ruby-build postgresql-server-dev-all postgresql cmake nodejs \
-            phantomjs;;
+    add_pkg ruby-build postgresql-server-dev-all postgresql \
+            postgresql-contrib cmake nodejs phantomjs graphviz ;;
   yum|dnf)
     add_pkg gcc openssl-devel libyaml-devel libffi-devel readline-devel \
             zlib-devel gdbm-devel ncurses-devel postgresql-devel cmake npm \
-            postgresql-server postgresql-contrib ;;
+            postgresql-server postgresql-contrib graphviz ;;
   zypper)
     add_pkg gcc automake gdbm-devel libffi-devel libyaml-devel \
             openssl-devel ncurses-devel readline-devel zlib-devel ;;
   pacman)
-     add_pkg libffi libyaml openssl zlib ;;
+     add_pkg libffi libyaml openssl zlib graphviz ;;
   *)
      # We'll guess some packages needed.
      add_pkg gcc openssl zlib
@@ -244,7 +244,9 @@ fi
 
 if [ $DO_LOCAL_RBENV = 'yes' ] ; then
   echo 'Downloading and installing rbenv from GitHub' >&2
-  git clone git://github.com/rbenv/rbenv.git ~/.rbenv
+  if ! [ -d ~/.rbenv ] ; then
+    git clone git://github.com/rbenv/rbenv.git ~/.rbenv
+  fi
   # Following performed in subshell so as not to change working directory.
   (
   cd ~/.rbenv
@@ -315,7 +317,10 @@ bundle install       # Install gems we use in Gemfile.lock, including Rails
 echo
 echo 'STAGE 6: Set up database for development if necessary'
 echo 'Make sure PostgreSQL superuser role for current user exists.'
-sudo -u postgres createuser -s "$(whoami)"
+if ! sudo -u postgres createuser -s "$(whoami)"
+then
+  echo "Warning: Did not create user $(whoami)"
+fi
 
 # Is the database already set up?
 db_present=unknown
@@ -373,5 +378,7 @@ fi
 
 bin/rake
 
-echo 'All done! Use "rails server" and view localhost:3000 to see it run.'
-echo '(It may be necessary to reinitialize the shell or start a new shell.)'
+echo 'All done! Please reopen your terminal or run'
+echo '"source ~/.bashrc" to adjust your PATH.'
+echo 'Then run "rails server" and use a web browser'
+echo 'to view localhost:3000 to see it run.'

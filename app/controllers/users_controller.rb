@@ -25,7 +25,7 @@ class UsersController < ApplicationController
   def create
     @user = User.find_by email: user_params[:email].downcase
     if @user && !@user.activated
-      new_activation_digest
+      regenerate_activation_digest
       send_activation
     else
       @user = User.new(user_params)
@@ -94,7 +94,7 @@ class UsersController < ApplicationController
     redirect_to(root_url) unless @user == current_user || current_user.admin?
   end
 
-  def new_activation_digest
+  def regenerate_activation_digest
     @user.activation_token = User.new_token
     @user.update_attribute(
       :activation_digest, User.digest(@user.activation_token)

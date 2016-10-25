@@ -47,4 +47,34 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
     assert_template 'users/show'
     assert user_logged_in?
   end
+
+  test 'resend account activation for unactivated account' do
+    get signup_path
+    assert_difference 'User.count', 1 do
+      post users_path, user: {
+        name:  'Example User',
+        email: 'user@example.com',
+        password:              'password',
+        password_confirmation: 'password'
+      }
+    end
+    assert_equal 1, ActionMailer::Base.deliveries.size
+    assert_difference 'User.count', 0 do
+      post users_path, user: {
+        name:  'Example User',
+        email: 'user@example.com',
+        password:              'password',
+        password_confirmation: 'password'
+      }
+    end
+    assert_equal 2, ActionMailer::Base.deliveries.size
+    user = assigns(:user)
+    assert_not user.activated?
+    # Valid activation token
+    get edit_account_activation_path(user.activation_token, email: user.email)
+    assert user.reload.activated?
+    follow_redirect!
+    assert_template 'users/show'
+    assert user_logged_in?
+  end
 end

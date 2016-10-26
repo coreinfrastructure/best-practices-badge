@@ -23,7 +23,7 @@ class UsersController < ApplicationController
 
   # rubocop: disable Metrics/MethodLength
   def create
-    @user = User.find_by email: user_params[:email].downcase
+    @user = User.find_by(email: user_params[:email].downcase)
     if @user && !@user.activated
       regenerate_activation_digest
       send_activation

@@ -21,17 +21,23 @@ class UsersController < ApplicationController
     end
   end
 
+  # rubocop: disable Metrics/MethodLength
   def create
-    @user = User.new(user_params)
-    @user.provider = 'local'
-    if @user.save
-      @user.send_activation_email
-      flash[:info] = 'Please check your email to activate your account.'
-      redirect_to root_url
+    @user = User.find_by(email: user_params[:email].downcase)
+    if @user && !@user.activated
+      regenerate_activation_digest
+      send_activation
     else
-      render 'new'
+      @user = User.new(user_params)
+      @user.provider = 'local'
+      if @user.save
+        send_activation
+      else
+        render 'new'
+      end
     end
   end
+  # rubocop: enable Metrics/MethodLength
 
   def edit
     @user = User.find(params[:id])
@@ -52,6 +58,13 @@ class UsersController < ApplicationController
     User.find(params[:id]).destroy
     flash[:success] = 'User deleted'
     redirect_to users_url
+  end
+
+  def send_activation
+    @user.send_activation_email
+    flash[:info] = 'New activation link created. ' \
+                   'Please check your email to activate your account.'
+    redirect_to root_url
   end
 
   private
@@ -79,5 +92,12 @@ class UsersController < ApplicationController
   def correct_user
     @user = User.find(params[:id])
     redirect_to(root_url) unless @user == current_user || current_user.admin?
+  end
+
+  def regenerate_activation_digest
+    @user.activation_token = User.new_token
+    @user.update_attribute(
+      :activation_digest, User.digest(@user.activation_token)
+    )
   end
 end

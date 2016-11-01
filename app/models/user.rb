@@ -90,6 +90,12 @@ class User < ActiveRecord::Base
     reset_sent_at < 2.hours.ago
   end
 
+  # Returns avatar URL
+  def avatar_url
+    avatar_id = Digest::MD5.hexdigest(email.downcase)
+    "https://secure.gravatar.com/avatar/#{avatar_id}?d=mm"
+  end
+
   private
 
   # Creates and assigns the activation token and digest.

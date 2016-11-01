@@ -32,3 +32,12 @@ admin_user:
   activated: true
   activated_at: <%= Time.zone.now %>
   role: admin
+
+github_user:
+  name: GitHub The User
+  nickname: github-user
+  email: github-user@example.com
+  password_digest: <%= User.digest('password') %>
+  provider: github
+  activated: true
+  activated_at: <%= Time.zone.now %>

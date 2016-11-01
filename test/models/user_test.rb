@@ -86,6 +86,17 @@ class UserTest < ActiveSupport::TestCase
     assert_not @user.authenticated?(:remember, '')
   end
 
+  test 'gravatar URL for local user' do
+    avatar_id = Digest::MD5.hexdigest(users(:admin_user).email.downcase)
+    assert_equal "https://secure.gravatar.com/avatar/#{avatar_id}?d=mm&size=80",
+                 users(:admin_user).avatar_url
+  end
+
+  test 'gravatar URL for github user' do
+    assert_equal 'https://avatars.githubusercontent.com/github-user?size=80',
+                 users(:github_user).avatar_url
+  end
+
   test 'Bcrypt of text with full rounds' do
     ActiveModel::SecurePassword.min_cost = false
     assert_match(/\$2a\$/, User.digest('foobar'))

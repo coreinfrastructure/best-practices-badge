@@ -92,8 +92,12 @@ class User < ActiveRecord::Base
 
   # Returns avatar URL
   def avatar_url
-    avatar_id = Digest::MD5.hexdigest(email.downcase)
-    "https://secure.gravatar.com/avatar/#{avatar_id}?d=mm"
+    if provider == 'github'
+      "https://avatars.githubusercontent.com/#{nickname}?size=80"
+    else
+      avatar_id = Digest::MD5.hexdigest(email.downcase)
+      "https://secure.gravatar.com/avatar/#{avatar_id}?d=mm&size=80"
+    end
   end
 
   private

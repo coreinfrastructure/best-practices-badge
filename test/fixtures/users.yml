@@ -24,6 +24,14 @@ test_user_mark:
   activated: true
   activated_at: <%= Time.zone.now %>
 
+test_user_cs:
+  name: Case Sensitive
+  email: CaseSensitive@example.org
+  password_digest: <%= User.digest('password') %>
+  provider: local
+  activated: true
+  activated_at: <%= Time.zone.now %>
+
 admin_user:
   name: Admin
   email: admin@example.com

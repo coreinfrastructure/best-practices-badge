@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 class User < ActiveRecord::Base
-  before_save { self.email = email.downcase }
   has_secure_password
   has_many :projects, dependent: :destroy
   attr_accessor :remember_token, :activation_token, :reset_token

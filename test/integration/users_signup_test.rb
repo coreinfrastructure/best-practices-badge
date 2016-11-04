@@ -59,7 +59,7 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
       }
     end
     assert_equal 1, ActionMailer::Base.deliveries.size
-    assert_difference 'User.count', 0 do
+    assert_no_difference 'User.count' do
       post users_path, user: {
         name:  'Example User',
         email: 'user@example.com',
@@ -76,5 +76,21 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
     follow_redirect!
     assert_template 'users/show'
     assert user_logged_in?
+  end
+
+  test 'redirect activated user to login' do
+    @user = users(:test_user)
+    assert_no_difference 'User.count' do
+      post users_path, user: {
+        name:  @user.name,
+        email: @user.email,
+        password:              'password',
+        password_confirmation: 'password'
+      }
+    end
+    assert_not flash.empty?
+    follow_redirect!
+    assert_template 'sessions/new'
+    assert_not user_logged_in?
   end
 end

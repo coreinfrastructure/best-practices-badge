@@ -683,7 +683,7 @@ It's easy to invoke and resolves it in a number of cases.
 
 ## Implementation of Detectives.
 
-The detective classes are located in the directory often located in the directory ./workspace/cii-best-practices-badge/app/lib.  This directory contains all of the detectives and has a very specific naming convention.  All new detectives must be named name1_detective.rb.  This name is important as it will be called by the primary code chief.rb which calls and collects the results of all of the detective classes.  
+The detective classes are located in the directory often located in the directory ./workspace/cii-best-practices-badge/app/lib.  This directory contains all of the detectives and has a very specific naming convention.  All new detectives must be named name1_detective.rb.  This name is important as it will be called by the primary code chief.rb which calls and collects the results of all of the detective classes.
 
 To integrate a new class chief.rb must be edited in the following line.
 
@@ -697,7 +697,7 @@ ALL_DETECTIVES =
 
   where Name1Detective corrosponds to the new class created in name1_detective.  Without following the naming convention chief will not run the new detective.
 
-  A template detective called blank_detective.rb is supplied with the project with internal documentation as to how to use it.  
+  A template detective called blank_detective.rb is supplied with the project with internal documentation as to how to use it.
 
   Remember, in addition to the detective you must right a test in order for it
   to be accepted into the repository.  The tests are located at ./test/unit/lib/
@@ -793,6 +793,21 @@ You can then run, e.g.:
 checklink-norobots -b -e \
   https://github.com/linuxfoundation/cii-best-practices-badge | tee results
 ~~~~
+
+## PostgreSQL Dependencies
+
+Our current database implementation requires PostgreSQL.  Our internal
+project search engine uses PostgreSQL specific commands.  Additionally,
+we are using the PostgreSQL specific citext character string type to
+store email addresses.  This allows us, within PostgreSQL, to store
+case sensitive emails but have a case insensitive index on them.
+
+We do this as we can foresee a case where a user's email requires case
+sensitivity to be received (Microsoft Exchange allows this).  We do not,
+however, want to allow for emails that are not case insensitive unique
+since this could possibly allow for a number of duplicate users to be
+created and the possibility of two users from the same domain having
+emails which differ only in case is exceedingly rare.
 
 
 # See also

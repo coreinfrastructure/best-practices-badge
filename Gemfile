@@ -19,7 +19,7 @@ gem 'jquery-ui-rails', '5.0.5' # Javascript jQueryUI library (for Rails)
 gem 'redcarpet', '3.3.4' # Process markdown in form textareas (justifications)
 gem 'octokit', '4.3.0' # GitHub's official Ruby API
 gem 'omniauth-github', '1.1.2' # Authentication to GitHub (get project info)
-gem 'paper_trail', '5.2.0' # Record previous versions of project data
+gem 'paper_trail', '5.2.2' # Record previous versions of project data
 gem 'pg', '0.18.4' # PostgreSQL database, used for data storage
 gem 'pg_search', '1.0.6' # PostgreSQL full-text search
 gem 'puma', '3.6.0' # Faster webserver; recommended by Heroku

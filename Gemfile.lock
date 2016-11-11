@@ -41,7 +41,7 @@ GEM
       io-like (~> 0.3.0)
     arel (6.0.3)
     ast (2.3.0)
-    autoprefixer-rails (6.5.1.1)
+    autoprefixer-rails (6.5.3)
       execjs
     awesome_print (1.7.0)
     bcrypt (3.1.11)
@@ -53,7 +53,7 @@ GEM
     bootstrap-will_paginate (0.0.10)
       will_paginate
     bootstrap_form (2.5.2)
-    brakeman (3.4.0)
+    brakeman (3.4.1)
     builder (3.2.2)
     bullet (5.3.0)
       activesupport (>= 3.0.0)
@@ -276,7 +276,7 @@ GEM
     puma (3.6.0)
     quiet_assets (1.1.0)
       railties (>= 3.1, < 5.0)
-    rack (1.6.4)
+    rack (1.6.5)
     rack-test (0.6.3)
       rack (>= 1.0)
     rack-timeout (0.4.2)

@@ -244,6 +244,11 @@ class Project < ActiveRecord::Base
   end
   # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
+  # Return owning user's name for purposes of display.
+  def user_display_name
+    user_name || user_nickname
+  end
+
   private
 
   def all_active_criteria_passing?

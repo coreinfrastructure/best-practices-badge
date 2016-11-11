@@ -34,7 +34,7 @@ gem 'will_paginate', '3.1.5'
 
 group :development, :test do
   gem 'awesome_print', '1.7.0'
-  gem 'bullet', '5.3.0'
+  gem 'bullet', '5.4.2'
   gem 'bundler-audit', '0.5.0'
   gem 'ruby-graphviz', '1.2.2'
   gem 'dotenv-rails', '2.1.1'

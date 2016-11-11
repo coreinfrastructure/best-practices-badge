@@ -96,7 +96,8 @@ class Project < ActiveRecord::Base
 
   # A project is associated with a user
   belongs_to :user
-  delegate :name, to: :user, prefix: true
+  delegate :name, to: :user, prefix: true # Support "user_name"
+  delegate :nickname, to: :user, prefix: true # Support "user_nickname"
 
   # For these fields we'll have just simple validation rules.
   # We'll rely on Rails' HTML escaping system to counter XSS.

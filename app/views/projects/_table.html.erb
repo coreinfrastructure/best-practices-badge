@@ -33,7 +33,8 @@
           <% end %>
         </td>
         <td><%= project.license %></td>
-        <td><%= link_to project.user_name, project.user %></td>
+        <td><%= link_to project.user_name || project.user_nickname,
+                        project.user %></td>
         <td><%= project.achieved_passing_at&.
                   to_formatted_s(:db) %></td>
         <td><%= project.badge_percentage %>%</td>

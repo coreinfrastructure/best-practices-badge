@@ -217,22 +217,24 @@ class ProjectsController < ApplicationController
   # disabled & the data is forged anyway) or the "real" production site.
   # Do *not* call this on the "master" or "staging" tiers,
   # because we don't want to bother our users.
+  # rubocop:disable Metrics/MethodLength
   def self.send_reminders
     projects = Project.projects_to_remind
-    ReportMailer.report_reminder_summary(projects).deliver_now # Tell LF
+    unless projects.empty?
+      ReportMailer.report_reminder_summary(projects).deliver_now
+    end
     projects.each do |inactive_project| # Send actual reminders
       ReportMailer.email_reminder_owner(inactive_project).deliver_now
       # Save while disabling paper_trail's versioning through self.
       # Don't update the updated_at value either, since we interpret that
       # value as being an update of the project badge status information.
       inactive_project.paper_trail.without_versioning do
-        # project.last_reminder_at = DateTime.now.utc
-        # inactive_project.update_attributes! last_reminder_at: DateTime.now.utc
         inactive_project.update_columns last_reminder_at: DateTime.now.utc
       end
     end
     projects.map(&:id) # Return a list of project ids that were reminded.
   end
+  # rubocop:enable Metrics/MethodLength
 
   private
 

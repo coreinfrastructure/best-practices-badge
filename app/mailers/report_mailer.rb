@@ -72,7 +72,7 @@ class ReportMailer < ApplicationMailer
     set_headers
     mail(
       to: @email_destination,
-      bcc: REPORT_EMAIL_DESTINATION, # Eventually remove this.
+      # bcc: REPORT_EMAIL_DESTINATION, # This would bcc individual reminders
       subject: 'Your project does not yet have the "best practices" badge'
     )
   end

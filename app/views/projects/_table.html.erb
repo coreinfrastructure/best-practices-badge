@@ -1,14 +1,14 @@
 <table class="table table-bordered table-striped table-responsive">
   <thead>
     <tr>
-      <th>Id</th>
-      <th>Name</th>
+      <th><%= sortable_header 'Id', 'id' %></th>
+      <th><%= sortable_header 'Name', 'name' %></th>
       <th>Description</th>
-      <th>Website</th>
+      <th><%= sortable_header 'Website', 'homepage_url' %></th>
       <th>License</th>
       <th>Owner</th>
-      <th>Achieved at</th>
-      <th>% Achieved</th>
+      <th><%= sortable_header 'Achieved at', 'achieved_passing_at' %></th>
+      <th><%= sortable_header '% Achieved', 'badge_percentage' %></th>
       <th>Badge</th>
     </tr>
   </thead>
@@ -43,3 +43,12 @@
     <% end %>
   </tbody>
 </table>
+
+<p>
+You can also sort by
+<%= sortable_header 'repository URL', 'repo_url' %>,
+<%= sortable_header 'create time (for the badge entry)', 'created_at' %>,
+<%= sortable_header 'last update time (for the badge entry)', 'updated_at' %>,
+and
+<%= sortable_header 'user id', 'user_id' %>.
+</p>

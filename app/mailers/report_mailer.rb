@@ -98,7 +98,7 @@ class ReportMailer < ApplicationMailer
     set_headers
     mail(
       to: @report_destination,
-      subject: 'A project was deleted'
+      subject: "Project #{project.id} named #{project.name} was deleted"
     )
   end
 end

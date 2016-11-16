@@ -6,9 +6,9 @@ on <%= ENV['PUBLIC_HOSTNAME'] %>
 <% end %>
 has been deleted.
 
-This action was carried out by the user: <%= @user.name %>.
+This action was carried out by user <%= @user.id %> named <%= @user.name %>.
 
-The projects JSON record at deletion was:
+The project's JSON record at deletion was:
 
-<%= JSON.pretty_generate(@project.as_json)%>
+<%= JSON.pretty_generate(@project.as_json) %>
 

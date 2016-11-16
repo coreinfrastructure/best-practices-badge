@@ -177,26 +177,30 @@ class ProjectsControllerTest < ActionController::TestCase
 
   test 'should destroy own project' do
     log_in_as(@project.user)
+    num = ActionMailer::Base.deliveries.size
     assert_difference('Project.count', -1) do
       delete :destroy, id: @project
     end
     assert_not_empty flash
     assert_redirected_to projects_path
+    assert_equal num + 1, ActionMailer::Base.deliveries.size
   end
 
   test 'Admin can destroy any project' do
     log_in_as(@admin)
+    num = ActionMailer::Base.deliveries.size
     assert_not_equal @admin, @project.user
     assert_difference('Project.count', -1) do
       delete :destroy, id: @project
     end
 
     assert_redirected_to projects_path
+    assert_equal num + 1, ActionMailer::Base.deliveries.size
   end
 
   test 'should not destroy project if no one is logged in' do
     # Notice that we do *not* call log_in_as.
-    assert_no_difference('Project.count') do
+    assert_no_difference('Project.count', ActionMailer::Base.deliveries.size) do
       delete :destroy, id: @project
     end
   end

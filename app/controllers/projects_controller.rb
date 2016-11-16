@@ -180,8 +180,10 @@ class ProjectsController < ApplicationController
 
   # DELETE /projects/1
   # DELETE /projects/1.json
+  # rubocop:disable Metrics/MethodLength
   def destroy
     @project.destroy
+    ReportMailer.report_project_deleted(@project, current_user).deliver_now
     purge_cdn_badge
     # @project.purge
     # @project.purge_all
@@ -194,6 +196,7 @@ class ProjectsController < ApplicationController
       format.json { head :no_content }
     end
   end
+  # rubocop:enable Metrics/MethodLength
 
   def feed
     @projects = Project.recently_updated

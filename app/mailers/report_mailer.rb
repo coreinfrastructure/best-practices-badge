@@ -89,4 +89,16 @@ class ReportMailer < ApplicationMailer
       subject: 'Summary of reminders sent'
     )
   end
+
+  # Report if a project is deleted
+  def report_project_deleted(project, user)
+    @report_destination = REPORT_EMAIL_DESTINATION
+    @project = project
+    @user = user
+    set_headers
+    mail(
+      to: @report_destination,
+      subject: "Project #{project.id} named #{project.name} was deleted"
+    )
+  end
 end

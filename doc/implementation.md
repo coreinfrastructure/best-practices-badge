@@ -810,6 +810,35 @@ created and the possibility of two users from the same domain having
 emails which differ only in case is exceedingly rare.
 
 
+## Forbidden Passwords
+
+[NIST has proposed draft password rules in 2016](https://nakedsecurity.sophos.com/2016/08/18/nists-new-password-rules-what-you-need-to-know/).
+They recommend having a minimum of 8 characters in passwords and
+checking against a list of bad passwords.
+Here we'll call them forbidden passwords - they are forbidden because
+they're too easy to guess.
+
+Here's how to recreate the bad-passwords list.
+It's derived from the skyzyx "bad-passwords" list, which is dedicated
+to the public domain via the CC0 license.
+
+We create a modified version of the original source material.
+We don't need to store anything less than 8 characters
+(they will be forbidden anyway), and we only store lowercase versions
+(we check downcased versions).
+We compress it into a .gz file; it doesn't take long to read, and that greatly
+reduces the space we use when storing and and transmitting the program.
+Using the bad-passwords version dated "May 27 11:03:00 2016 -0700",
+starting with the "mutated" list, we end up with 106,251 forbidden passwords.
+
+~~~
+(cd .. && git clone https://github.com/skyzyx/bad-passwords )
+cat ../bad-passwords/raw-mutated.txt | grep -E '^.{8}' | tr A-Z a-z | \
+  sort -u > raw-bad-passwords-lowercase.txt
+rm -f raw-bad-passwords-lowercase.txt.gz
+gzip --best raw-bad-passwords-lowercase.txt
+~~~~
+
 # See also
 
 See the separate "[background](./background.md)" and

@@ -57,8 +57,8 @@ class PasswordResetsTest < ActionDispatch::IntegrationTest
     patch password_reset_path(user.reset_token),
           email: user.email,
           user: {
-            password:              'foo1234',
-            password_confirmation: 'foo1234'
+            password:              'foo1234!',
+            password_confirmation: 'foo1234!'
           }
     assert user_logged_in?
     assert_not flash.empty?

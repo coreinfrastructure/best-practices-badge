@@ -5,7 +5,7 @@ class User < ActiveRecord::Base
   attr_accessor :remember_token, :activation_token, :reset_token
   before_create :create_activation_digest
 
-  MIN_PASSWORD_LENGTH = 7
+  MIN_PASSWORD_LENGTH = 8
 
   validates :name, presence: true, length: { maximum: 50 }
   validates :email, presence: true, length: { maximum: 255 },

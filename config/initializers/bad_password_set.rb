@@ -8,7 +8,7 @@ require 'zlib'
 BadPasswordSet = {}.to_set
 Zlib::GzipReader.open('raw-bad-passwords-lowercase.txt.gz') do |gz|
   gz.each_line do |line|
-    BadPasswordSet.add(line.downcase.freeze)
+    BadPasswordSet.add(line.chomp.downcase.freeze)
   end
 end
 BadPasswordSet.freeze

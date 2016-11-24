@@ -478,7 +478,12 @@ as of 2015-12-14:
    relevant tier (e.g., production), and only authorized system administrators
    have those credentials.
 6. *User management.*
-   Local passwords have a minimum length, and we expect users to
+   Local passwords have a minimum length (8) and cannot be
+   a member of a set of known-bad passwords.  We allow much longer passwords.
+   This complies with draft NIST Special Publication 800-63B,
+   "Digital Authentication Guideline: Authentication and Lifecycle Management"
+   dated Thu, 24 Nov 2016 08:15:51 -0500 <https://pages.nist.gov/800-63-3/>.
+   We expect users to
    protect their own passwords; we do not try to protect users from themselves.
    The system is not fast enough for a naive password-guesser to succeed
    guessing local passwords via network access (unless the password

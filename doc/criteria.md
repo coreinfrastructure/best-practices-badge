@@ -518,8 +518,6 @@ by the delivered project's software.
   on cryptography MUST be implementable using FLOSS.  See the
   [*Open Standards Requirement for Software* by the Open Source Initiative](https://opensource.org/osr).
   <sup>[<a href="#crypto_floss">crypto_floss</a>]</sup>
-- <a name="crypto_agility"></a>Cryptographic agility SHOULD be considered during project design. Cryptographic algorithms SHOULD NOT be hard coded. It is SUGGESTED that the cryptographic modules be independent and the cryptographic API be scalable for easy replacement and update.
-  <sup>[<a href="#crypto_agility">crypto_agility</a>]</sup>
 - <a name="crypto_keylength"></a>The project security mechanisms
   MUST use default keylengths that at least
   meet the NIST minimum requirements

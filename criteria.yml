@@ -457,6 +457,8 @@
           https://PROJECTSITE/security,
           often in the form security@example.org.
           This MAY be the same as its bug reporting process.
+          Vulnerability reports MAY always be public, but
+          many projects have a private vulnerability reporting mechanism.
         autofill: >
           Look for phrase like "vulnerability reporting" or
           "how to report vulnerabilities" in various documents
@@ -469,12 +471,13 @@
           If private vulnerability reports are supported, the project MUST
           include how to send the information in a way that is kept private.
         details: >
-          E.g., a private defect report submitted on the web using TLS
-          or an email encrypted using OpenPGP.
-          If private vulnerability reports are not supported this criterion is
-          automatically met.
+          Examples include a private defect report submitted on the web
+          using HTTPS (TLS) or an email encrypted using OpenPGP.
+          If vulnerability reports are always public (so there
+          are never private vulnerability reports),
+          choose "not applicable" (N/A).
         autofill: >
-          Look for phrase like "private vulnerability reporting" or
+          Look for a phrase like "private vulnerability reporting" or
           "how to report private vulnerabilities" in various documents
           like README, CONTRIBUTING, or a doc/* file, and *also*
           look for an OpenPGP key to use for encrypting the information.

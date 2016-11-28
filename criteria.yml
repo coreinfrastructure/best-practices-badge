@@ -508,11 +508,16 @@
         details: >
           A build system determines what actions need to occur to rebuild the
           software (and in what order), and then performs those steps.
+          For example, it can invoke a compiler to compile the source code.
+          If an executable is created from source code, it must be possible
+          to modify the project's source code and then generate
+          an updated executable with those modifications.
           <b>Rationale</b>: If a project needs to be built but there is no
           working build system, then potential co-developers will not be
           able to easily contribute and many security analysis tools will be
-          ineffective. Criteria for a working build system are not applicable
-          if there is no need to build anything for use.
+          ineffective.  If there is no need to build anything to use the
+          software after its source code is modified,
+          select "not applicable" (N/A).
         autofill: >
           See build_common_tools.
     - build_common_tools:

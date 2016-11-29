@@ -36,6 +36,7 @@ class User < ActiveRecord::Base
       nickname: auth[:info][:nickname], activated: true
     )
     @user.save!(validate: false)
+    @user.send_github_welcome_email if @user.email
     @user
   end
 
@@ -60,6 +61,11 @@ class User < ActiveRecord::Base
   # Sends password reset email.
   def send_password_reset_email
     UserMailer.password_reset(self).deliver_now
+  end
+
+  # Sends welcome email to GitHub users.
+  def send_github_welcome_email
+    UserMailer.github_welcome(self).deliver_now
   end
 
   def admin?

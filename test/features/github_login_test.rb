@@ -10,6 +10,7 @@ class GithubLoginTest < Capybara::Rails::TestCase
       assert has_content? 'CII Best Practices Badge Program'
       click_on 'Get Your Badge Now!'
       assert has_content? 'Log in with GitHub'
+      num = ActionMailer::Base.deliveries.size
       click_link 'Log in with GitHub'
 
       if ENV['GITHUB_PASSWORD'] # for re-recording cassettes
@@ -20,6 +21,7 @@ class GithubLoginTest < Capybara::Rails::TestCase
         click_on 'Authorize application'
       end
 
+      assert_equal num + 1, ActionMailer::Base.deliveries.size
       assert has_content? 'Signed in!'
       click_on 'Get Your Badge Now!'
       wait_for_url '/projects/new?'

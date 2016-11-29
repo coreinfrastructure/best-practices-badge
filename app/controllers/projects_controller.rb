@@ -107,6 +107,7 @@ class ProjectsController < ApplicationController
 
     respond_to do |format|
       if @project.save
+        @project.send_new_project_email
         # @project.purge_all
         flash[:success] = "Thanks for adding the Project!   Please fill out
                            the rest of the information to get the Badge."

@@ -27,7 +27,9 @@ class ProjectsControllerTest < ActionController::TestCase
     log_in_as(@user)
     stub_request(:get, 'https://api.github.com/user/repos')
       .to_return(status: 200, body: '', headers: {})
-    assert_difference('Project.count') do
+    assert_difference [
+      'Project.count', 'ActionMailer::Base.deliveries.size'
+    ] do
       post :create, project: {
         description: @project.description,
         license: @project.license,

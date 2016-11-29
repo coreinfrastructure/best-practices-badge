@@ -37,6 +37,7 @@ class GithubLoginTest < Capybara::Rails::TestCase
       assert has_content? 'Thanks for adding the Project! Please fill out ' \
                          'the rest of the information to get the Badge.'
 
+      assert_equal num + 2, ActionMailer::Base.deliveries.size
       click_on 'Account'
       assert has_content? 'Profile'
       click_on 'Profile'

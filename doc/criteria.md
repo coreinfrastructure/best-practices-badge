@@ -722,11 +722,21 @@ by the delivered project's software.
   or the indirect data from the untrusted sources which is used as 
   the array index MUST be ensured within a legal range.
   Input validation is always the best practices of secure coding. 
-  (e.g., [CERT](http://lcamtuf.coredump.cx/afl/),
+  (e.g., [CERT](http://www.cert.org/secure-coding/research/secure-coding-standards.cfm),
   [OWASP](https://www.owasp.org/index.php/OWASP_Secure_Coding_Practices_-_Quick_Reference_Guide))
   A lot of vulnerabilities related to this topic.
   See the [CWE](http://cwe.mitre.org/data/definitions/129.html).
   <sup>[<a href="#validate_the_tainted_array_index">validate_the_tainted_array_index</a>]</sup>
+
+- <a name="validate_the_tainted_buffer_length"></a>The direct data 
+  or the indirect data from the untrusted sources which is used as 
+  the buffer length for read/write MUST be ensured within a legal range.
+  Input validation is always the best practices of secure coding. 
+  (e.g., [CERT](http://www.cert.org/secure-coding/research/secure-coding-standards.cfm),
+  [OWASP](https://www.owasp.org/index.php/OWASP_Secure_Coding_Practices_-_Quick_Reference_Guide))
+  A lot of vulnerabilities related to this topic.
+  See the [CWE](http://cwe.mitre.org/data/definitions/119.html).
+  <sup>[<a href="#validate_the_tainted_buffer_length">validate_the_tainted_buffer_length</a>]</sup>
 
 ### Future
 

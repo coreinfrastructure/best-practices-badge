@@ -714,6 +714,20 @@ by the delivered project's software.
   (including defects that lead to vulnerabilities),
   so combining them is more likely to be effective.
 
+### Code review
+
+*Security Code Review*
+
+- <a name="validate_the_tainted_array_index"></a>The direct data 
+  or the indirect data from the untrusted sources which is used as 
+  the array index MUST be ensured within a legal range.
+  Input validation is always the best practices of secure coding. 
+  (e.g., [CERT](http://lcamtuf.coredump.cx/afl/),
+  [OWASP](https://www.owasp.org/index.php/OWASP_Secure_Coding_Practices_-_Quick_Reference_Guide))
+  A lot of vulnerabilities related to this topic.
+  See the [CWE](http://cwe.mitre.org/data/definitions/129.html).
+  <sup>[<a href="#validate_the_tainted_array_index">validate_the_tainted_array_index</a>]</sup>
+
 ### Future
 
 These 'future' criteria are criteria we intend to add in the near future.

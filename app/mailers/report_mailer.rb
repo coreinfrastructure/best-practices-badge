@@ -90,6 +90,25 @@ class ReportMailer < ApplicationMailer
     )
   end
 
+  # Email user when they add a new project
+  # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
+  def email_new_project_owner(project)
+    return if project.nil? || project.id.nil? || project.user_id.nil?
+    @project = project
+    user = User.find(project.user_id)
+    return if user.nil?
+    return unless user.email?
+    return unless user.email.include?('@')
+    @project_info_url = project_info_url(@project.id)
+    @email_destination = user.email
+    set_headers
+    mail(
+      to: @email_destination,
+      subject: 'You added a project to the Best Practices Badging Program'
+    )
+  end
+  # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity
+
   # Report if a project is deleted
   def report_project_deleted(project, user)
     @report_destination = REPORT_EMAIL_DESTINATION

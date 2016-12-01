@@ -249,6 +249,11 @@ class Project < ActiveRecord::Base
     user_name || user_nickname
   end
 
+  # Send owner an email they add a new project.
+  def send_new_project_email
+    ReportMailer.email_new_project_owner(self).deliver_now
+  end
+
   private
 
   def all_active_criteria_passing?

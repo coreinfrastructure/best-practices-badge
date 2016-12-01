@@ -5,17 +5,13 @@ class User < ActiveRecord::Base
   attr_accessor :remember_token, :activation_token, :reset_token
   before_create :create_activation_digest
 
-  # This is the minimum password length for *new* passwords. After increasing
-  # this, users can log into existing user accounts even if they don't meet
-  # this requirement.
-  MIN_PASSWORD_LENGTH = 8
+  MIN_PASSWORD_LENGTH = 7
 
   validates :name, presence: true, length: { maximum: 50 }
   validates :email, presence: true, length: { maximum: 255 },
                     uniqueness: { case_sensitive: false }, email: true
   validates :password, presence: true,
                        length: { minimum: MIN_PASSWORD_LENGTH },
-                       password: true,
                        allow_nil: true
 
   # Returns the hash digest of the given string.

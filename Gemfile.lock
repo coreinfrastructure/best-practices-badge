@@ -98,6 +98,7 @@ GEM
     concurrent-ruby (1.0.2)
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
+    database_cleaner (1.5.2)
     debug_inspector (0.0.2)
     descendants_tracker (0.0.4)
       thread_safe (~> 0.3, >= 0.3.1)
@@ -436,6 +437,7 @@ DEPENDENCIES
   chartkick (= 2.1.1)
   chromedriver-helper (= 1.0.0)
   codecov (= 0.1.6)
+  database_cleaner (= 1.5.2)
   dotenv-rails (= 2.1.1)
   eslintrb (= 2.1.0)
   faker (= 1.6.6)
@@ -493,4 +495,4 @@ RUBY VERSION
    ruby 2.3.1p112
 
 BUNDLED WITH
-   1.12.3
+   1.13.5

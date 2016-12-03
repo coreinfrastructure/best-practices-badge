@@ -52,6 +52,7 @@ group :development, :test do
   gem 'spring', '1.7.2'
   gem 'vcr', '3.0.3' # Record network responses for later test reuse
   gem 'yaml-lint', '0.0.9' # Check YAML file syntax
+  gem 'database_cleaner', '1.5.2' # Cleans up database between tests
 end
 
 group :development do

@@ -51,6 +51,12 @@ VCR.configure do |config|
   config.hook_into :webmock
 end
 
+# We use DatabaseCleaner to clean up database between tests.
+# This is a little bit slower but avoids issues with tests
+# ran using capybara.
+require 'database_cleaner'
+DatabaseCleaner.strategy = :transaction
+
 require 'minitest/rails/capybara'
 
 driver = ENV['DRIVER'].try(:to_sym)
@@ -94,16 +100,18 @@ module ActiveSupport
     # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical
     # order.
     ActiveRecord::Migration.maintain_test_schema!
-    self.use_transactional_fixtures = true
+    # When using DatabaseCleaner, transactional fixtures must be off.
+    self.use_transactional_fixtures = false
     fixtures :all
 
     def setup
-      # Temporary fix for issue #397
-      # This deletes an extra record introduced by VCR with some test seeds
-      return if Project.count == 4
-      p "Deleting extra project. #{Project.count} projects in #{method_name}"
-      Project.where(name: 'Core Infrastructure Initiative Best Practices Badge')
-             .destroy_all
+      # Start DatabaseCleaner before each test.
+      DatabaseCleaner.start
+    end
+
+    teardown do
+      # Clean up the database with DatabaseCleaner after each test.
+      DatabaseCleaner.clean
     end
 
     # Add more helper methods to be used by all tests here...

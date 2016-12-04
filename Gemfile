@@ -15,8 +15,8 @@ gem 'github_api', '0.14.5'
 gem 'imagesLoaded_rails', '4.1.0' # Javascript - enable wait for image load
 gem 'jbuilder', '2.6.0'
 gem 'jquery-rails', '4.2.1' # Javascript jQuery library (for Rails)
+gem 'jquery-turbolinks' # Make turbolinks work with jQuery
 gem 'jquery-ui-rails', '5.0.5' # Javascript jQueryUI library (for Rails)
-gem 'redcarpet', '3.3.4' # Process markdown in form textareas (justifications)
 gem 'octokit', '4.3.0' # GitHub's official Ruby API
 gem 'omniauth-github', '1.1.2' # Authentication to GitHub (get project info)
 gem 'paper_trail', '5.2.2' # Record previous versions of project data
@@ -25,10 +25,10 @@ gem 'pg_search', '1.0.6' # PostgreSQL full-text search
 gem 'puma', '3.6.0' # Faster webserver; recommended by Heroku
 gem 'rack-timeout', '0.4.2' # Timeout per https://github.com/heroku/rack-timeout
 gem 'rails', '4.2.7.1' # Our web framework
+gem 'redcarpet', '3.3.4' # Process markdown in form textareas (justifications)
 gem 'sass-rails', '5.0.6'
 gem 'secure_headers', '3.4.0'
 gem 'turbolinks', '2.5.3' # Speed UI access
-gem 'jquery-turbolinks'   # Make turbolinks work with jQuery
 gem 'uglifier', '3.0.3'
 gem 'will_paginate', '3.1.5'
 
@@ -36,7 +36,7 @@ group :development, :test do
   gem 'awesome_print', '1.7.0'
   gem 'bullet', '5.4.2'
   gem 'bundler-audit', '0.5.0'
-  gem 'ruby-graphviz', '1.2.2'
+  gem 'database_cleaner', '1.5.2' # Cleans up database between tests
   gem 'dotenv-rails', '2.1.1'
   gem 'eslintrb', '2.1.0'
   gem 'license_finder', '2.1.2'
@@ -49,10 +49,10 @@ group :development, :test do
   gem 'pry-byebug', '3.4.0'
   gem 'quiet_assets', '1.1.0'
   gem 'rubocop', '0.42.0' # Style checker.  Changes can cause test failure
+  gem 'ruby-graphviz', '1.2.2'
   gem 'spring', '1.7.2'
   gem 'vcr', '3.0.3' # Record network responses for later test reuse
   gem 'yaml-lint', '0.0.9' # Check YAML file syntax
-  gem 'database_cleaner', '1.5.2' # Cleans up database between tests
 end
 
 group :development do

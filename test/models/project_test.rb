@@ -2,7 +2,7 @@
 require 'test_helper'
 
 class ProjectTest < ActiveSupport::TestCase
-  def setup
+  setup do
     @user = users(:test_user)
     @project = @user.projects.build(
       homepage_url: 'https://www.example.org',

@@ -2,7 +2,7 @@
 require 'test_helper'
 
 class PasswordResetsTest < ActionDispatch::IntegrationTest
-  def setup
+  setup do
     ActionMailer::Base.deliveries.clear
     @user = users(:test_user)
     @ghuser = users(:github_user)

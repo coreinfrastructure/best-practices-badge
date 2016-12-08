@@ -3,16 +3,7 @@
 require 'test_helper'
 
 class ProjectStatTest < ActiveSupport::TestCase
-  def setup
-    # Temporary fix for issue #397
-    # This deletes an extra record introduced by VCR with some test seeds
-    # Repeated here because this runs before test_helper setup
-    unless Project.count == 4
-      p "Deleting extra project. #{Project.count} projects in #{method_name}"
-      Project.where(name: 'Core Infrastructure Initiative Best Practices Badge')
-             .destroy_all
-    end
-
+  setup do
     # Normalize time in order to test timestamps
     travel_to Time.zone.parse('2015-03-01T12:00:00') do
       @project_stat = ProjectStat.create!

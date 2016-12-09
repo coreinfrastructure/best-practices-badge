@@ -1,7 +1,7 @@
 # frozen_string_literal: true
-require 'test_helper'
+require 'capybara_feature_test'
 
-class GithubLoginTest < Capybara::Rails::TestCase
+class GithubLoginTest < CapybaraFeatureTest
   scenario 'Has link to GitHub Login', js: true do
     # Clean up database here and restart DatabaseCleaner.
     # This solves a transient issue if test restarts without running

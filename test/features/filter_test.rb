@@ -1,7 +1,7 @@
 # frozen_string_literal: true
-require 'test_helper'
+require 'capybara_feature_test'
 
-class FilterTest < Capybara::Rails::TestCase
+class FilterTest < CapybaraFeatureTest
   scenario 'Can Filter Projects', js: true do
     visit '/projects'
     assert has_content? 'Add New Project'

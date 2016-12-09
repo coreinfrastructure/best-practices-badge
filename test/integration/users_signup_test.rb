@@ -2,7 +2,7 @@
 require 'test_helper'
 
 class UsersSignupTest < ActionDispatch::IntegrationTest
-  def setup
+  setup do
     ActionMailer::Base.deliveries.clear
   end
 

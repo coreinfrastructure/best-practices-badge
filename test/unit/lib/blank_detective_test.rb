@@ -2,7 +2,7 @@
 require 'test_helper'
 
 class BlankDetectiveTest < ActiveSupport::TestCase
-  def setup
+  setup do
     # @user = User.new(name: 'Example User', email: 'user@example.com',
     #                 password: 'p@$$w0rd', password_confirmation: 'p@$$w0rd')
   end

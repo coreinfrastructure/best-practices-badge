@@ -2,7 +2,7 @@
 require 'test_helper'
 
 class UsersControllerTest < ActionController::TestCase
-  def setup
+  setup do
     @user = users(:test_user_melissa)
     @other_user = users(:test_user_mark)
     @admin = users(:admin_user)

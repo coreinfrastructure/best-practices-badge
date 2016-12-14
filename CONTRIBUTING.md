@@ -268,6 +268,11 @@ You may use the safe navigation operator '&amp;.' added in
 Our static analysis tools' parsers can now handle this syntax.
 This means that this application *requires* Ruby version 2.3.0 or later to run.
 
+When making new tests, if you need to modify the setup or teardown methods for a
+test class, please use callbacks instead of overwrites; i.e.  use "setup do"
+instead of "def setup."  This preserves any changes to those methods that
+may have been made in test_helper.rb.
+
 ### Javascript
 
 There is a small amount of application-specific client-side Javascript;

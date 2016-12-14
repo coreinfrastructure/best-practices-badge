@@ -486,9 +486,13 @@
           https://github.com/isaacs/github/issues/37
     - vulnerability_report_response:
         category: MUST
+        na_allowed: true
         description: >
           The project's initial response time for any vulnerability report received
           in the last 6 months MUST be less than or equal to 14 days.
+        details: >
+          If there have been no vulnerabilities reported in the last 6 months,
+          choose "not applicable" (N/A).
         autofill: >
           If GitHub is used, and the issue tracker has something marked
           "security" or "vulnerability", measure the appropriate times.
@@ -609,6 +613,10 @@
           The project MUST have a general policy (formal or not) that as major
           new functionality is added, tests of that functionality SHOULD
           be added to an automated test suite.
+        details: >
+          As long as a policy is in place, even by word of mouth,
+          that says developers should add tests to the automated
+          test suite for major new functionality, select "Met."
         autofill: >
           Look for text patterns hinting at this in README, CONTRIBUTING,
           or the doc/* directory.
@@ -1076,13 +1084,16 @@
           Perhaps look in source code for many asserts.
     - dynamic_analysis_fixed:
         category: MUST
+        na_allowed: true
         description: >
           All medium and high severity exploitable vulnerabilities
           discovered with dynamic code analysis MUST be fixed
           in a timely way after they are confirmed.
         details: >
            A vulnerability is medium to high severity if its <a
-           href="https://nvd.nist.gov/cvss.cfm">CVSS 2.0</a> base score is 4
+           href="https://nvd.nist.gov/cvss.cfm">CVSS 2.0</a> base score is 4.
+           If you are not running dynamic code analysis and thus have not
+           found any vulnerabilities in this way, choose "not applicable" (N/A).
         # autofill: TODO
 - Future: !!omap
   - future: !!omap

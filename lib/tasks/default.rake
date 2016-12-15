@@ -99,7 +99,7 @@ task :markdownlint do
   sh "bundle exec mdl -s #{style_file} *.md doc/*.md"
 end
 
-# Apply JSCS to look for issues in Javascript files.
+# Apply JSCS to look for issues in JavaScript files.
 # To use, must install jscs; the easy way is to use npm, and at
 # the top directory of this project run "npm install jscs".
 # This presumes that the jscs executable is installed in "node_modules/.bin/".
@@ -107,10 +107,10 @@ end
 #
 # This not currently included in default "rake"; it *works* but is very
 # noisy.  We need to determine which ruleset to apply,
-# and we need to fix the Javascript to match that.
+# and we need to fix the JavaScript to match that.
 # We don't scan 'app/assets/javascripts/application.js';
 # it is primarily auto-generated code + special directives.
-desc 'Run jscs - Javascript style checker'
+desc 'Run jscs - JavaScript style checker'
 task :jscs do
   jscs_exe = 'node_modules/.bin/jscs'
   jscs_options = '--preset=node-style-guide -m 9999'

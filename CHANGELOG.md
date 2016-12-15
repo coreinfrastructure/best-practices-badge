@@ -11,10 +11,10 @@ This Change Log format is suggested by
 - When accessing GitHub we now use the logged-in-user's token
   everywhere.  This makes us much less susceptible to rate limit issues.
 - The test framework now (finally!) directly invokes a web browser
-  and tests the Javascript code.. and it even works on CircleCI.
+  and tests the JavaScript code.. and it even works on CircleCI.
   This is important; before, many kinds of errors could slip through,
   and we've had some annoying problems getting it working.
-- Various bug fixes, including problems that our new Javascript testing
+- Various bug fixes, including problems that our new JavaScript testing
   mechanisms will now automatically detect.
 - Better data structuring for Criteria - this is an important data structure
   in the application, so it's better to handle that cleanly.

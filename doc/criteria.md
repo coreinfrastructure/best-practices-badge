@@ -219,7 +219,7 @@ is hosted on a site (e.g., GitHub) with decent API support.
   Asynchronous discussion mechanisms (like IRC) are acceptable if
   they meet these criteria; make sure there is a URL-addressable
   archiving mechanism.
-  Proprietary Javascript, while discouraged, is permitted.
+  Proprietary JavaScript, while discouraged, is permitted.
   <sup>[<a href="#discussion">discussion</a>]</sup>
 - <a name="english"></a>The project SHOULD
   include documentation in English and be able
@@ -417,7 +417,7 @@ is hosted on a site (e.g., GitHub) with decent API support.
   if there is at least one FLOSS tool that can implement this criterion
   in the selected language.
   Examples of compiler warning flags include gcc/clang "-Wall".
-  Examples of a "safe" language mode include Javascript "use strict"
+  Examples of a "safe" language mode include JavaScript "use strict"
   and perl5's "use warnings".
   A separate "linter" tool is simply a tool that examines the source
   code to look for code quality errors or common simple mistakes.

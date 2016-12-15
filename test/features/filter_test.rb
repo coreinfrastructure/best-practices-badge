@@ -14,7 +14,7 @@ class FilterTest < CapybaraFeatureTest
 
     # We would *like* to be able to use the select... wait_for_url pattern to
     # more accurately test the UI.  However, for security reasons
-    # we use a Content Security Policy (CSP) that disables embedded Javascript.
+    # we use a Content Security Policy (CSP) that disables embedded JavaScript.
     # This CSP setting causes select...wait to fail in some environments.
     # We *want* to use CSP to harden the software, and we need to make
     # sure that our tests run while CSP is enabled.

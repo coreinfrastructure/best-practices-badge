@@ -12,11 +12,11 @@ gem 'faker', '1.6.6'
 gem 'fastly-rails', '0.7.1' # Use Fastly CDN
 gem 'font-awesome-rails', '4.6.3.1'
 gem 'github_api', '0.14.5'
-gem 'imagesLoaded_rails', '4.1.0' # Javascript - enable wait for image load
+gem 'imagesLoaded_rails', '4.1.0' # JavaScript - enable wait for image load
 gem 'jbuilder', '2.6.0'
-gem 'jquery-rails', '4.2.1' # Javascript jQuery library (for Rails)
+gem 'jquery-rails', '4.2.1' # JavaScript jQuery library (for Rails)
 gem 'jquery-turbolinks' # Make turbolinks work with jQuery
-gem 'jquery-ui-rails', '5.0.5' # Javascript jQueryUI library (for Rails)
+gem 'jquery-ui-rails', '5.0.5' # JavaScript jQueryUI library (for Rails)
 gem 'octokit', '4.3.0' # GitHub's official Ruby API
 gem 'omniauth-github', '1.1.2' # Authentication to GitHub (get project info)
 gem 'paper_trail', '5.2.2' # Record previous versions of project data

@@ -29,9 +29,9 @@ The BadgeApp web application MUST:
 3. Support users of modern widely used web browsers, including
    Chrome, Firefox, Safari, and Internet Explorer version 10 and up.
    We expect Internet Explorer pre-10 users will use a different browser.
-4. NOT require Javascript to be enabled on the web browser (some
+4. NOT require JavaScript to be enabled on the web browser (some
    security-conscious people disable it) - instead, support graceful
-   degradation (many features will work much better if Javascript is enabled).
+   degradation (many features will work much better if JavaScript is enabled).
    Requiring CSS is fine.
 5. Support users of various laptops/desktops
    (running Linux (Ubuntu, Debian, Fedora, Red Hat Enterprise Linus),

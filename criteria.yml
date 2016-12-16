@@ -244,7 +244,7 @@
           Asynchronous discussion mechanisms (like IRC) are acceptable if
           they meet these criteria; make sure there is a URL-addressable
           archiving mechanism.
-          Proprietary Javascript, while discouraged, is permitted.
+          Proprietary JavaScript, while discouraged, is permitted.
         autofill: >
           Currently if it's on GitHub we assume they will use its mechanisms.
           We could do the same for other forges like
@@ -658,7 +658,7 @@
           can implement this criterion in the selected language.
         details: >
           Examples of compiler warning flags include gcc/clang "-Wall".
-          Examples of a "safe" language mode include Javascript "use strict"
+          Examples of a "safe" language mode include JavaScript "use strict"
           and perl5's "use warnings".
           A separate "linter" tool is simply a tool that examines the
           source code to look for code quality errors or common simple mistakes.

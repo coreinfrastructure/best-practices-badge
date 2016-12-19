@@ -2,7 +2,7 @@
 require 'test_helper'
 
 class UserTest < ActiveSupport::TestCase
-  def setup
+  setup do
     @user = User.new(
       name: 'Example User', email: 'user@example.com',
       password: 'p@$$w0rd', password_confirmation: 'p@$$w0rd'
@@ -61,6 +61,13 @@ class UserTest < ActiveSupport::TestCase
     assert_not duplicate_user.valid?
   end
 
+  test 'emails should be unique when ignoring case' do
+    duplicate_user = @user.dup
+    duplicate_user.email = @user.email.upcase
+    @user.save!
+    assert_not duplicate_user.valid?
+  end
+
   test 'password should be present and not empty' do
     @user.password = @user.password_confirmation = ' ' * 6
     assert_not @user.valid?
@@ -84,6 +91,17 @@ class UserTest < ActiveSupport::TestCase
 
   test 'authenticated? should return false for a user with nil digest' do
     assert_not @user.authenticated?(:remember, '')
+  end
+
+  test 'gravatar URL for local user' do
+    avatar_id = Digest::MD5.hexdigest(users(:admin_user).email.downcase)
+    assert_equal "https://secure.gravatar.com/avatar/#{avatar_id}?d=mm&size=80",
+                 users(:admin_user).avatar_url
+  end
+
+  test 'gravatar URL for github user' do
+    assert_equal 'https://avatars.githubusercontent.com/github-user?size=80',
+                 users(:github_user).avatar_url
   end
 
   test 'Bcrypt of text with full rounds' do

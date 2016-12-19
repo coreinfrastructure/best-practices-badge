@@ -2,9 +2,10 @@
 require 'test_helper'
 
 class PasswordResetsTest < ActionDispatch::IntegrationTest
-  def setup
+  setup do
     ActionMailer::Base.deliveries.clear
     @user = users(:test_user)
+    @ghuser = users(:github_user)
   end
 
   test 'password resets' do
@@ -14,6 +15,11 @@ class PasswordResetsTest < ActionDispatch::IntegrationTest
     post password_resets_path, password_reset: { email: '' }
     assert_not flash.empty?
     assert_template 'password_resets/new'
+    # Valid email, github user
+    post password_resets_path, password_reset: { email: @ghuser.email }
+    assert_equal 0, ActionMailer::Base.deliveries.size
+    assert_not flash.empty?
+    assert_redirected_to login_url
     # Valid email
     post password_resets_path, password_reset: { email: @user.email }
     assert_not_equal @user.reset_digest, @user.reload.reset_digest
@@ -57,8 +63,8 @@ class PasswordResetsTest < ActionDispatch::IntegrationTest
     patch password_reset_path(user.reset_token),
           email: user.email,
           user: {
-            password:              'foo1234',
-            password_confirmation: 'foo1234'
+            password:              'foo1234!',
+            password_confirmation: 'foo1234!'
           }
     assert user_logged_in?
     assert_not flash.empty?

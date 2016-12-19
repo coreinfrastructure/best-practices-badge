@@ -1,4 +1,4 @@
-// This Javascript supporting implementing the per project form used
+// This JavaScript supporting implementing the per project form used
 // for showing and editing information about a project.
 
 var criterionCategoryValue = {};
@@ -297,7 +297,7 @@ function ToggleDetailsDisplay(e) {
 }
 
 // Create mappings from criteria name to category and met_url_required.
-// Eventually replace with just accessing classes directly via Javascript.
+// Eventually replace with just accessing classes directly via JavaScript.
 function SetupCriteriaStructures() {
   $('.status-chooser').each(
     function(index) {
@@ -315,8 +315,8 @@ function SetupCriteriaStructures() {
 
 // Setup display as soon as page is ready
 $(document).ready(function() {
-  // By default, hide details.  We do the hiding in Javascript, so
-  // those who disable Javascript will still see the text
+  // By default, hide details.  We do the hiding in JavaScript, so
+  // those who disable JavaScript will still see the text
   // (they'll have no way to later reveal it).
   $('.details-text').hide('fast');
   $('.details-toggler').html('Show details');

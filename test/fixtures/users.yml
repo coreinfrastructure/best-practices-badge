@@ -24,6 +24,21 @@ test_user_mark:
   activated: true
   activated_at: <%= Time.zone.now %>
 
+test_user_not_active:
+  name: Forgetful
+  email: forgetful@example.com
+  password_digest: <%= User.digest('password') %>
+  provider: local
+  activated: false
+
+test_user_cs:
+  name: Case Sensitive
+  email: CaseSensitive@example.org
+  password_digest: <%= User.digest('password') %>
+  provider: local
+  activated: true
+  activated_at: <%= Time.zone.now %>
+
 admin_user:
   name: Admin
   email: admin@example.com
@@ -32,3 +47,12 @@ admin_user:
   activated: true
   activated_at: <%= Time.zone.now %>
   role: admin
+
+github_user:
+  name: GitHub The User
+  nickname: github-user
+  email: github-user@example.com
+  password_digest: <%= User.digest('password') %>
+  provider: github
+  activated: true
+  activated_at: <%= Time.zone.now %>

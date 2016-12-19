@@ -29,9 +29,9 @@ The BadgeApp web application MUST:
 3. Support users of modern widely used web browsers, including
    Chrome, Firefox, Safari, and Internet Explorer version 10 and up.
    We expect Internet Explorer pre-10 users will use a different browser.
-4. NOT require Javascript to be enabled on the web browser (some
+4. NOT require JavaScript to be enabled on the web browser (some
    security-conscious people disable it) - instead, support graceful
-   degradation (many features will work much better if Javascript is enabled).
+   degradation (many features will work much better if JavaScript is enabled).
    Requiring CSS is fine.
 5. Support users of various laptops/desktops
    (running Linux (Ubuntu, Debian, Fedora, Red Hat Enterprise Linus),
@@ -683,7 +683,7 @@ It's easy to invoke and resolves it in a number of cases.
 
 ## Implementation of Detectives.
 
-The detective classes are located in the directory often located in the directory ./workspace/cii-best-practices-badge/app/lib.  This directory contains all of the detectives and has a very specific naming convention.  All new detectives must be named name1_detective.rb.  This name is important as it will be called by the primary code chief.rb which calls and collects the results of all of the detective classes.  
+The detective classes are located in the directory often located in the directory ./workspace/cii-best-practices-badge/app/lib.  This directory contains all of the detectives and has a very specific naming convention.  All new detectives must be named name1_detective.rb.  This name is important as it will be called by the primary code chief.rb which calls and collects the results of all of the detective classes.
 
 To integrate a new class chief.rb must be edited in the following line.
 
@@ -697,7 +697,7 @@ ALL_DETECTIVES =
 
   where Name1Detective corrosponds to the new class created in name1_detective.  Without following the naming convention chief will not run the new detective.
 
-  A template detective called blank_detective.rb is supplied with the project with internal documentation as to how to use it.  
+  A template detective called blank_detective.rb is supplied with the project with internal documentation as to how to use it.
 
   Remember, in addition to the detective you must right a test in order for it
   to be accepted into the repository.  The tests are located at ./test/unit/lib/
@@ -794,6 +794,54 @@ checklink-norobots -b -e \
   https://github.com/linuxfoundation/cii-best-practices-badge | tee results
 ~~~~
 
+## PostgreSQL Dependencies
+
+Our current database implementation requires PostgreSQL.  Our internal
+project search engine uses PostgreSQL specific commands.  Additionally,
+we are using the PostgreSQL specific citext character string type to
+store email addresses.  This allows us, within PostgreSQL, to store
+case sensitive emails but have a case insensitive index on them.
+
+We do this as we can foresee a case where a user's email requires case
+sensitivity to be received (Microsoft Exchange allows this).  We do not,
+however, want to allow for emails that are not case insensitive unique
+since this could possibly allow for a number of duplicate users to be
+created and the possibility of two users from the same domain having
+emails which differ only in case is exceedingly rare.
+
+
+## Forbidden Passwords
+
+Currently we allow local passwords if they are 7 characters or longer.
+We intend to change this in the future, described here
+(we currently load bad passwords, we just don't check them yet).
+
+[NIST has proposed draft password rules in 2016](https://nakedsecurity.sophos.com/2016/08/18/nists-new-password-rules-what-you-need-to-know/).
+They recommend having a minimum of 8 characters in passwords and
+checking against a list of bad passwords.
+Here we'll call them forbidden passwords - they are forbidden because
+they're too easy to guess.
+
+Here's how to recreate the bad-passwords list.
+It's derived from the skyzyx "bad-passwords" list, which is dedicated
+to the public domain via the CC0 license.
+
+We create a modified version of the original source material.
+We don't need to store anything less than 8 characters
+(they will be forbidden anyway), and we only store lowercase versions
+(we check downcased versions).
+We compress it into a .gz file; it doesn't take long to read, and that greatly
+reduces the space we use when storing and and transmitting the program.
+Using the bad-passwords version dated "May 27 11:03:00 2016 -0700",
+starting with the "mutated" list, we end up with 106,251 forbidden passwords.
+
+~~~
+(cd .. && git clone https://github.com/skyzyx/bad-passwords )
+cat ../bad-passwords/raw-mutated.txt | grep -E '^.{8}' | tr A-Z a-z | \
+  sort -u > raw-bad-passwords-lowercase.txt
+rm -f raw-bad-passwords-lowercase.txt.gz
+gzip --best raw-bad-passwords-lowercase.txt
+~~~~
 
 # See also
 

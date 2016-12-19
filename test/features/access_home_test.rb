@@ -1,7 +1,7 @@
 # frozen_string_literal: true
-require 'test_helper'
+require 'capybara_feature_test'
 
-class AccessHomeTest < Capybara::Rails::TestCase
+class AccessHomeTest < CapybaraFeatureTest
   test 'sanity' do
     visit root_path
     assert has_content? 'CII Best Practices Badge Program'

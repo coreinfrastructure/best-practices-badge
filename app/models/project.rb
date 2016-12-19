@@ -96,7 +96,8 @@ class Project < ActiveRecord::Base
 
   # A project is associated with a user
   belongs_to :user
-  delegate :name, to: :user, prefix: true
+  delegate :name, to: :user, prefix: true # Support "user_name"
+  delegate :nickname, to: :user, prefix: true # Support "user_nickname"
 
   # For these fields we'll have just simple validation rules.
   # We'll rely on Rails' HTML escaping system to counter XSS.
@@ -242,6 +243,16 @@ class Project < ActiveRecord::Base
       .first(MAX_REMINDERS)
   end
   # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
+
+  # Return owning user's name for purposes of display.
+  def user_display_name
+    user_name || user_nickname
+  end
+
+  # Send owner an email they add a new project.
+  def send_new_project_email
+    ReportMailer.email_new_project_owner(self).deliver_now
+  end
 
   private
 

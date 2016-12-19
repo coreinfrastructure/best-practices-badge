@@ -10,7 +10,7 @@ Write regression tests and ensure that they fail without your fix and pass with 
 
 ## Features
 
-Features that don't need Javascript should default to the headless rack-test driver, which is fastest. Features that need Javascript should set `Capybara.current_driver = Capybara.javascript_driver` as described in this [blog post](http://www.rubytutorial.io/how-to-test-an-autocomplete-with-rails/). To debug features in a browser, preface the test with the driver in an environment variable, like:
+Features that don't need JavaScript should default to the headless rack-test driver, which is fastest. Features that need JavaScript should set `Capybara.current_driver = Capybara.javascript_driver` as described in this [blog post](http://www.rubytutorial.io/how-to-test-an-autocomplete-with-rails/). To debug features in a browser, preface the test with the driver in an environment variable, like:
 
 ```bash
 DRIVER=firefox rake test
@@ -20,7 +20,7 @@ DRIVER=poltergeist m test/features/can_access_home_test.rb
 
 Selenium tests for Safari require this [file](http://selenium-release.storage.googleapis.com/2.48/SafariDriver.safariextz) but still do not seem to be working currently.
 
-Write Capybara features to test the happy path of new features. Test the feature both with the default rack-test (or poltergeist, for tests requiring Javascript) and with Selenium `DRIVER=chrome rake test`.
+Write Capybara features to test the happy path of new features. Test the feature both with the default rack-test (or poltergeist, for tests requiring JavaScript) and with Selenium `DRIVER=chrome rake test`.
 
 ## External API testing
 
@@ -46,7 +46,7 @@ Do your best to avoid creating flapping tests; they slow development and test,
 cause unnecessary work (because they typically warn of the wrong things),
 and reduce confidence in the entire test suite.
 
-Flapping tests are a challenge, especially with browser automation that requires Javascript. Examine the `while` loop in [can_login_test.rb](https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/test/features/can_login_test.rb) for one approach to make sure that actions are occurring before testing for their impact.
+Flapping tests are a challenge, especially with browser automation that requires JavaScript. Examine the `while` loop in [can_login_test.rb](https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/test/features/can_login_test.rb) for one approach to make sure that actions are occurring before testing for their impact.
 
 It's quite helpful to debug a flapping test by running it multiple times. If you're using bash shell, you can run `repeat 10 m test/features/can_login_test.rb` by adding the following to your `~/.bash_profile`:
 

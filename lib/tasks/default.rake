@@ -1,38 +1,6 @@
 # frozen_string_literal: true
 # Rake tasks for BadgeApp
 
-# UGLY work-around for intermittently failing tests, by forcing the test seed.
-# The underlying problem this addresses is that
-# tests intermittently fail (issue #397).  We believe this is because
-# at the end of each test the test framework does a
-# ROLLBACK, but for reasons we've not determined a SAVEPOINT is not always
-# performed at the start of each test (it SHOULD happen!).
-# Intermittent test failures significantly impede development and
-# deployment, because it means that tests will fail even though the
-# software is fine. There's value in doing a random test order, so we try to
-# select randomly between several known-working seeds.
-# The *CORRECT* solution is to fix the problem, but this appears to be
-# a subtle bug in our dependencies. We believe it traces
-# back to vcr; a bug report has been submitted.  Until it's fixed, here's
-# a work-around.
-#
-# NOTE: Changing the test suite may cause a seed to fail, so you'll need to
-# change the seed at that point.  An easy solution is to comment out the
-# line below, run "rake test" many times until you find working seeds
-# that don't trigger "Deleting extra project..." or failing tests,
-# and then set the seed.  We use multiple random seeds, and have other
-# work-arounds in place, so hopefully a test suite change will simply
-# bring us back to intermittent failures until the seeds are reset.
-#
-# For more info:
-# https://github.com/linuxfoundation/cii-best-practices-badge/issues/397
-# https://github.com/vcr/vcr/issues/586
-
-ENV['TESTOPTS'] = "--seed=#{[29_928].sample}"
-
-# Run tests last. That way, runtime problems (e.g., undone migrations)
-# do not interfere with the other checks.
-
 task(:default).clear.enhance %w(
   rbenv_rvm_setup
   bundle
@@ -131,7 +99,7 @@ task :markdownlint do
   sh "bundle exec mdl -s #{style_file} *.md doc/*.md"
 end
 
-# Apply JSCS to look for issues in Javascript files.
+# Apply JSCS to look for issues in JavaScript files.
 # To use, must install jscs; the easy way is to use npm, and at
 # the top directory of this project run "npm install jscs".
 # This presumes that the jscs executable is installed in "node_modules/.bin/".
@@ -139,10 +107,10 @@ end
 #
 # This not currently included in default "rake"; it *works* but is very
 # noisy.  We need to determine which ruleset to apply,
-# and we need to fix the Javascript to match that.
+# and we need to fix the JavaScript to match that.
 # We don't scan 'app/assets/javascripts/application.js';
 # it is primarily auto-generated code + special directives.
-desc 'Run jscs - Javascript style checker'
+desc 'Run jscs - JavaScript style checker'
 task :jscs do
   jscs_exe = 'node_modules/.bin/jscs'
   jscs_options = '--preset=node-style-guide -m 9999'
@@ -266,8 +234,8 @@ end
 desc 'Copy database from production into development (if normal one fails)'
 task :pull_production_alternative do
   puts 'Getting production database (alternative)'
-  sh 'heroku pg:backups capture --app production-bestpractices && ' \
-     'curl -o db/latest.dump `heroku pg:backups public-url ' \
+  sh 'heroku pg:backups:capture --app production-bestpractices && ' \
+     'curl -o db/latest.dump `heroku pg:backups:public-url ' \
      '     --app production-bestpractices` && ' \
      'rake db:reset && ' \
      'pg_restore --verbose --clean --no-acl --no-owner -U `whoami` ' \
@@ -286,14 +254,14 @@ end
 
 desc 'Copy production database to master, overwriting master database'
 task :production_to_master do
-  sh 'heroku pg:backups restore $(heroku pg:backups public-url ' \
+  sh 'heroku pg:backups:restore $(heroku pg:backups:public-url ' \
      '--app production-bestpractices) DATABASE_URL --app master-bestpractices'
   sh 'heroku run bundle exec rake db:migrate --app master-bestpractices'
 end
 
 desc 'Copy production database to staging, overwriting staging database'
 task :production_to_staging do
-  sh 'heroku pg:backups restore $(heroku pg:backups public-url ' \
+  sh 'heroku pg:backups:restore $(heroku pg:backups:public-url ' \
      '--app production-bestpractices) DATABASE_URL ' \
      '--app staging-bestpractices --confirm staging-bestpractices'
   sh 'heroku run bundle exec rake db:migrate --app staging-bestpractices'

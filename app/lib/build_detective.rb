@@ -28,7 +28,7 @@ class BuildDetective < Detective
   def determine_results(status, name_pattern, result_description)
     found_files = files_named(name_pattern)
     if found_files.empty?
-
+      #
     else
       @results[status] =
         met_result result_description, found_files.first['html_url']
@@ -64,7 +64,9 @@ class BuildDetective < Detective
       /ix, 'build'
     )
     # If we can detect it, it's common enough to be considered common.
-    @results[:build_common_tools_status] = @results[:build_status]
+    if @results.key?(:build_status)
+      @results[:build_common_tools_status] = @results[:build_status]
+    end
 
     @results
   end

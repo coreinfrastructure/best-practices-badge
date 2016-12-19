@@ -1,8 +1,8 @@
 # frozen_string_literal: true
-require 'test_helper'
+require 'capybara_feature_test'
 include ActionView::Helpers::TextHelper
 
-class LoginTest < Capybara::Rails::TestCase
+class LoginTest < CapybaraFeatureTest
   CHECK = /result_symbol_check/
   DASH = /result_symbol_dash/
   QUESTION = /result_symbol_question/

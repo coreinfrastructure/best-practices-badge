@@ -12,7 +12,7 @@ atom_feed do |feed|
       description = markdown(project.description || '')
       content = status + link + description
       entry.content(type: 'html') { entry.cdata! content }
-      entry.author { |author| author.name(project.user_name) }
+      entry.author { |author| author.name(project.user_display_name) }
     end
   end
 end

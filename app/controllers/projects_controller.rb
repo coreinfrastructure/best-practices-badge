@@ -107,6 +107,7 @@ class ProjectsController < ApplicationController
 
     respond_to do |format|
       if @project.save
+        @project.send_new_project_email
         # @project.purge_all
         flash[:success] = "Thanks for adding the Project!   Please fill out
                            the rest of the information to get the Badge."
@@ -180,8 +181,10 @@ class ProjectsController < ApplicationController
 
   # DELETE /projects/1
   # DELETE /projects/1.json
+  # rubocop:disable Metrics/MethodLength
   def destroy
     @project.destroy
+    ReportMailer.report_project_deleted(@project, current_user).deliver_now
     purge_cdn_badge
     # @project.purge
     # @project.purge_all
@@ -194,6 +197,7 @@ class ProjectsController < ApplicationController
       format.json { head :no_content }
     end
   end
+  # rubocop:enable Metrics/MethodLength
 
   def feed
     @projects = Project.recently_updated
@@ -217,22 +221,24 @@ class ProjectsController < ApplicationController
   # disabled & the data is forged anyway) or the "real" production site.
   # Do *not* call this on the "master" or "staging" tiers,
   # because we don't want to bother our users.
+  # rubocop:disable Metrics/MethodLength
   def self.send_reminders
     projects = Project.projects_to_remind
-    ReportMailer.report_reminder_summary(projects).deliver_now # Tell LF
+    unless projects.empty?
+      ReportMailer.report_reminder_summary(projects).deliver_now
+    end
     projects.each do |inactive_project| # Send actual reminders
       ReportMailer.email_reminder_owner(inactive_project).deliver_now
       # Save while disabling paper_trail's versioning through self.
       # Don't update the updated_at value either, since we interpret that
       # value as being an update of the project badge status information.
       inactive_project.paper_trail.without_versioning do
-        # project.last_reminder_at = DateTime.now.utc
-        # inactive_project.update_attributes! last_reminder_at: DateTime.now.utc
         inactive_project.update_columns last_reminder_at: DateTime.now.utc
       end
     end
     projects.map(&:id) # Return a list of project ids that were reminded.
   end
+  # rubocop:enable Metrics/MethodLength
 
   private
 
@@ -240,17 +246,7 @@ class ProjectsController < ApplicationController
     # Assign to repo.homepage if it exists, and else repo_url
     repo = repo_data.find { |r| @project.repo_url == r[3] }
     return nil if repo.nil?
-    repo[2].present? ? check_https(repo[2]) : @project.repo_url
-  end
-
-  def check_https(url)
-    # Prepend http:// or https:// if not present in url
-    return url if url.start_with? 'http'
-    https_url = 'https://' + url
-    http_url = 'http://' + url
-    request = Net::HTTP.get URI(https_url)
-  rescue
-    request.nil? ? http_url : https_url
+    repo[2].present? ? repo[2] : @project.repo_url
   end
 
   # Use callbacks to share common setup or constraints between actions.

@@ -23,10 +23,9 @@ class UsersController < ApplicationController
 
   # rubocop: disable Metrics/MethodLength
   def create
-    @user = User.find_by(email: user_params[:email].downcase)
-    if @user && !@user.activated
-      regenerate_activation_digest
-      send_activation
+    @user = User.find_by(email: user_params[:email])
+    if @user
+      redirect_existing
     else
       @user = User.new(user_params)
       @user.provider = 'local'
@@ -58,6 +57,17 @@ class UsersController < ApplicationController
     User.find(params[:id]).destroy
     flash[:success] = 'User deleted'
     redirect_to users_url
+  end
+
+  def redirect_existing
+    if @user.activated
+      flash[:info] = 'That user already exists. ' \
+                     'Did you mean to sign in?'
+      redirect_to login_url
+    else
+      regenerate_activation_digest
+      send_activation
+    end
   end
 
   def send_activation

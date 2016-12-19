@@ -11,11 +11,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160911193415) do
+ActiveRecord::Schema.define(version: 20161102170815) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "pg_stat_statements"
+  enable_extension "citext"
 
   create_table "pg_search_documents", force: :cascade do |t|
     t.text     "content"
@@ -236,7 +237,7 @@ ActiveRecord::Schema.define(version: 20160911193415) do
     t.string   "uid"
     t.string   "name"
     t.string   "nickname"
-    t.string   "email"
+    t.citext   "email"
     t.string   "password_digest"
     t.string   "secret_token"
     t.string   "validation_code"

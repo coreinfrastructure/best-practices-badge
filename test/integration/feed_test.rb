@@ -3,7 +3,12 @@ require 'test_helper'
 load 'Rakefile'
 
 class FeedTest < ActionDispatch::IntegrationTest
-  def setup
+  # Turn off transactional fixtures for this test since we are loading
+  # the fixtures database anyway. This will prevent the timestamp change
+  # from spilling into other tests.
+  self.use_transactional_fixtures = false
+
+  setup do
     # Normalize time in order to match fixture file
     travel_to Time.zone.parse('2015-03-01T12:00:00') do
       silence_stream(STDOUT) do

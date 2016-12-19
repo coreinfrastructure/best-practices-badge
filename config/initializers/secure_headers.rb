@@ -15,7 +15,7 @@ SecureHeaders::Configuration.default do |config|
   # Configure CSP
   config.csp = {
     default_src: normal_src,
-    img_src: ['secure.gravatar.com', "'self'"],
+    img_src: ['secure.gravatar.com', 'avatars.githubusercontent.com', "'self'"],
     object_src: normal_src,
     style_src: normal_src
   }

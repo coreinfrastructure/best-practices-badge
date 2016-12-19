@@ -97,15 +97,6 @@ module ActiveSupport
     self.use_transactional_fixtures = true
     fixtures :all
 
-    def setup
-      # Temporary fix for issue #397
-      # This deletes an extra record introduced by VCR with some test seeds
-      return if Project.count == 4
-      p "Deleting extra project. #{Project.count} projects in #{method_name}"
-      Project.where(name: 'Core Infrastructure Initiative Best Practices Badge')
-             .destroy_all
-    end
-
     # Add more helper methods to be used by all tests here...
 
     def configure_omniauth_mock
@@ -136,6 +127,10 @@ module ActiveSupport
     # rubocop:enable Metrics/MethodLength
 
     # rubocop:disable Metrics/MethodLength
+    # Note: In many tests we use "password" as the password.
+    # Users can (no longer) create accounts with this too-easy password.
+    # Using "password" helps test that users can log in to their
+    # existing accounts, even if we make the password rules harsher later.
     def log_in_as(
       user, password: 'password', provider: 'local', remember_me: '1',
       time_last_used: Time.now.utc

@@ -2,7 +2,7 @@
 require 'test_helper'
 
 class UsersManipulateProjectTest < ActionDispatch::IntegrationTest
-  def setup
+  setup do
     @user = users(:test_user)
   end
 

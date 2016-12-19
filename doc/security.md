@@ -150,7 +150,7 @@ The application runs on Linux kernel and uses some standard operating system
 facilities and libraries (e.g., to provide TLS).
 All interaction between the users and the web application go over
 an encrypted channel using TLS.
-There is some Javascript served to the client,
+There is some JavaScript served to the client,
 but no security decisions depend on code that runs on the client.
 
 From a user's point of view,
@@ -188,7 +188,7 @@ all of the ones from Saltzer and Schroeder:
   non-bypassable.  Security checks are in the controllers, not the router,
   because multiple routes can lead to the same controller
   (this is per Rails security guidelines).
-  When entering data, Javascript code on the client shows whether or not
+  When entering data, JavaScript code on the client shows whether or not
   the badge has been achieved, but the client-side code is *not* the
   final authority (it's merely a convenience).  The final arbiter of
   badge acceptance is server-side code, which is not bypassable.
@@ -266,7 +266,7 @@ all of the ones from Saltzer and Schroeder:
 ### Memory-safe languages
 
 All of the custom code is written in memory-safe languages
-(Ruby and Javascript), so the vulnerabilities of memory-unsafe
+(Ruby and JavaScript), so the vulnerabilities of memory-unsafe
 languages (such as C and C++) cannot occur in the custom code.
 This also applies to most of the code in the directly depended libraries.
 Some lower-level components (e.g., the operating system kernel,
@@ -372,7 +372,7 @@ and how we attempt to reduce their risks in BadgeApp.
    We use HTTPS to establish an encrypted link between the server and users.
 7. Missing Function Level Access Control.
    The system depends on server-side routers and controllers for
-   access control.  There is some client-side Javascript, but no
+   access control.  There is some client-side JavaScript, but no
    access control depends on it.
 8. Cross-Site Request Forgery (CSRF).
    We use the built-in Rails CSRF countermeasure, where csrf tokens
@@ -478,7 +478,12 @@ as of 2015-12-14:
    relevant tier (e.g., production), and only authorized system administrators
    have those credentials.
 6. *User management.*
-   Local passwords have a minimum length, and we expect users to
+   Local passwords have a minimum length (8) and cannot be
+   a member of a set of known-bad passwords.  We allow much longer passwords.
+   This complies with draft NIST Special Publication 800-63B,
+   "Digital Authentication Guideline: Authentication and Lifecycle Management"
+   dated Thu, 24 Nov 2016 08:15:51 -0500 <https://pages.nist.gov/800-63-3/>.
+   We expect users to
    protect their own passwords; we do not try to protect users from themselves.
    The system is not fast enough for a naive password-guesser to succeed
    guessing local passwords via network access (unless the password

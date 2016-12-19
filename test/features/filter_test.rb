@@ -1,7 +1,7 @@
 # frozen_string_literal: true
-require 'test_helper'
+require 'capybara_feature_test'
 
-class FilterTest < Capybara::Rails::TestCase
+class FilterTest < CapybaraFeatureTest
   scenario 'Can Filter Projects', js: true do
     visit '/projects'
     assert has_content? 'Add New Project'
@@ -14,7 +14,7 @@ class FilterTest < Capybara::Rails::TestCase
 
     # We would *like* to be able to use the select... wait_for_url pattern to
     # more accurately test the UI.  However, for security reasons
-    # we use a Content Security Policy (CSP) that disables embedded Javascript.
+    # we use a Content Security Policy (CSP) that disables embedded JavaScript.
     # This CSP setting causes select...wait to fail in some environments.
     # We *want* to use CSP to harden the software, and we need to make
     # sure that our tests run while CSP is enabled.

@@ -7,14 +7,19 @@ Here are some other potential criteria.
 We currently plan to launch with a single badge level (once it is ready).
 There may eventually be multiple levels or
 other badges (with a prerequisite) later.
+
+There are various options for naming.
 We are currently leaning towards using the silver/gold/platinum naming system,
 which is similar to the
 [LEED certification naming system of certified, silver, gold, platinum](http://www.usgbc.org/leed) and how the
 [Linux Foundation ranks membership (silver, gold, platinum)](http://www.linuxfoundation.org/about/members)
 An alternative is the Olympic system naming (bronze, silver, gold).
 
+For now, we'll use the terms "passing+1" and "passing+2" to refer to the
+two levels above the current "passing" level.
+
 To help organize these potential criteria, they are currently grouped
-in terms of a potential future silver, potential future gold, and
+in terms of a potential future passing+1, potential future passing+2, and
 other potential criteria.
 There is no guarantee that the final criteria will be the same,
 or even grouped the same way.
@@ -29,7 +34,7 @@ Eventually these criteria will be worded per
 [RFC 2119](https://tools.ietf.org/html/rfc2119).
 
 
-## Potential silver criteria
+## Potential passing+1 criteria
 
 *   **Achieve the lower (passing) badge**.
 *   **Turn many should/suggested into MUST**
@@ -159,9 +164,9 @@ or the
 Note that both of these focus only on web applications.
 
 
-## Potential gold criteria
+## Potential passing+2 criteria
 
-*   Achieve the lower (silver) badge.
+*   Achieve the lower passing+1 badge.
 *   General criteria:
     -   Roadmap exists.  There should be some information on where the
         project is or isn't going.

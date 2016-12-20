@@ -22,7 +22,7 @@ gem 'omniauth-github', '1.1.2' # Authentication to GitHub (get project info)
 gem 'paper_trail', '5.2.2' # Record previous versions of project data
 gem 'pg', '0.18.4' # PostgreSQL database, used for data storage
 gem 'pg_search', '1.0.6' # PostgreSQL full-text search
-gem 'puma', '3.6.0' # Faster webserver; recommended by Heroku
+gem 'puma', '3.6.2' # Faster webserver; recommended by Heroku
 gem 'rack-timeout', '0.4.2' # Timeout per https://github.com/heroku/rack-timeout
 gem 'rails', '4.2.7.1' # Our web framework
 gem 'redcarpet', '3.3.4' # Process markdown in form textareas (justifications)

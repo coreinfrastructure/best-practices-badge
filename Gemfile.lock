@@ -80,7 +80,7 @@ GEM
     cliver (0.3.2)
     code_analyzer (0.4.7)
       sexp_processor
-    codecov (0.1.6)
+    codecov (0.1.9)
       json
       simplecov
       url
@@ -436,7 +436,7 @@ DEPENDENCIES
   capybara-slow_finder_errors (= 0.1.4)
   chartkick (= 2.2.1)
   chromedriver-helper (= 1.0.0)
-  codecov (= 0.1.6)
+  codecov (= 0.1.9)
   database_cleaner (= 1.5.2)
   dotenv-rails (= 2.1.1)
   eslintrb (= 2.1.0)

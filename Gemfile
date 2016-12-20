@@ -34,7 +34,7 @@ gem 'will_paginate', '3.1.5'
 
 group :development, :test do
   gem 'awesome_print', '1.7.0'
-  gem 'bullet', '5.4.2'
+  gem 'bullet', '5.4.3'
   gem 'bundler-audit', '0.5.0'
   gem 'database_cleaner', '1.5.2' # Cleans up database between tests
   gem 'dotenv-rails', '2.1.1'

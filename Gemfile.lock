@@ -152,7 +152,7 @@ GEM
     imagesLoaded_rails (4.1.0)
       railties (>= 3.1)
     io-like (0.3.0)
-    jbuilder (2.6.0)
+    jbuilder (2.6.1)
       activesupport (>= 3.0.0, < 5.1)
       multi_json (~> 1.2)
     jquery-rails (4.2.1)
@@ -447,7 +447,7 @@ DEPENDENCIES
   github_api (= 0.14.5)
   heroku_rails_deflate (= 1.0.3)
   imagesLoaded_rails (= 4.1.0)
-  jbuilder (= 2.6.0)
+  jbuilder (= 2.6.1)
   jquery-rails (= 4.2.1)
   jquery-turbolinks
   jquery-ui-rails (= 5.0.5)

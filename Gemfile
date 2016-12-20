@@ -36,7 +36,7 @@ group :development, :test do
   gem 'awesome_print', '1.7.0'
   gem 'bullet', '5.4.3'
   gem 'bundler-audit', '0.5.0'
-  gem 'database_cleaner', '1.5.2' # Cleans up database between tests
+  gem 'database_cleaner', '1.5.3' # Cleans up database between tests
   gem 'dotenv-rails', '2.1.1'
   gem 'eslintrb', '2.1.0'
   gem 'license_finder', '2.1.2'

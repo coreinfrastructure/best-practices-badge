@@ -10,7 +10,7 @@ gem 'bootstrap_form', '2.5.2'
 gem 'chartkick', '2.2.1' # Chart project_stats
 gem 'faker', '1.6.6'
 gem 'fastly-rails', '0.7.1' # Use Fastly CDN
-gem 'font-awesome-rails', '4.6.3.1'
+gem 'font-awesome-rails', '4.7.0.1'
 gem 'github_api', '0.14.5'
 gem 'imagesLoaded_rails', '4.1.0' # JavaScript - enable wait for image load
 gem 'jbuilder', '2.6.1'

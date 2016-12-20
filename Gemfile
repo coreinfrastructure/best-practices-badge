@@ -27,7 +27,7 @@ gem 'rack-timeout', '0.4.2' # Timeout per https://github.com/heroku/rack-timeout
 gem 'rails', '4.2.7.1' # Our web framework
 gem 'redcarpet', '3.3.4' # Process markdown in form textareas (justifications)
 gem 'sass-rails', '5.0.6'
-gem 'secure_headers', '3.4.0'
+gem 'secure_headers', '3.5.1'
 gem 'turbolinks', '2.5.3' # Speed UI access
 gem 'uglifier', '3.0.4'
 gem 'will_paginate', '3.1.5'

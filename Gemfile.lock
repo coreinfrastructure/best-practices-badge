@@ -361,7 +361,7 @@ GEM
     sawyer (0.7.0)
       addressable (>= 2.3.5, < 2.5)
       faraday (~> 0.8, < 0.10)
-    secure_headers (3.4.0)
+    secure_headers (3.5.1)
       useragent
     selenium-webdriver (2.53.4)
       childprocess (~> 0.5)
@@ -478,7 +478,7 @@ DEPENDENCIES
   rubocop (= 0.42.0)
   ruby-graphviz (= 1.2.2)
   sass-rails (= 5.0.6)
-  secure_headers (= 3.4.0)
+  secure_headers (= 3.5.1)
   selenium-webdriver (= 2.53.4)
   simplecov (= 0.12.0)
   spring (= 1.7.2)

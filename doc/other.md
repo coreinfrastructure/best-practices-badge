@@ -221,28 +221,28 @@ SHOULD or MUST.
 
 START HERE.
 
-*   release:
-    -   releases must be cryptographically signed.
-        these may be implemented as signed git tags
-        (using cryptographic digital signatures).
-        there must be a documented process explaining how users can obtain
-        the public keys used for signing and how to verify the signature.
-    -   releases must be downloadable through a channel that both encrypts
-        and authenticates (e.g., tls).
-        that way, third parties will not be able to determine exactly what
-        version is being downloaded.  this also provides some verification that
-        the correct software is being downloaded from the site.
-* cryptography
-    -    <a name="crypto_alternatives"></a>the project should support multiple
-  cryptographic algorithms, so users can quickly switch if one is broken.
-  common symmetric key algorithms include aes, twofish, serpent,
-  blowfish, and 3des.
-  common cryptographic hash algorithm alternatives include sha-2
-  (including sha-224, sha-256, sha-384 and sha-512) and sha-3.
-  however, see discussion per
-  [issue #215](https://github.com/linuxfoundation/cii-best-practices-badge/issues/215)
+### Release
 
-it would be quite plausible to add many requirements specific to security.
+-   Releases of the software intended for widespread use
+    MUST be cryptographically signed, and there MUST be a documented
+    process explaining to users how they can obtain the public signing keys
+    and verify the signature.
+    These may be implemented as signed git tags
+    (using cryptographic digital signatures).
+    <sup>[<a href="#signed_releases">signed_releases</a>]</sup>
+
+### Cryptography
+
+-   <a name="crypto_alternatives"></a>the project should support multiple
+    cryptographic algorithms, so users can quickly switch if one is broken.
+    common symmetric key algorithms include aes, twofish, serpent,
+    blowfish, and 3des.
+    common cryptographic hash algorithm alternatives include sha-2
+    (including sha-224, sha-256, sha-384 and sha-512) and sha-3.
+    however, see discussion per
+    [issue #215](https://github.com/linuxfoundation/cii-best-practices-badge/issues/215)
+
+It would be quite plausible to add many requirements specific to security.
 for example, it would be plausible to require that a system meet the
 requirements (or a specified subset) of the
 [owasp application security verification standard project](https://www.owasp.org/index.php/category:owasp_application_security_verification_standard_project)
@@ -389,6 +389,18 @@ and reproduceable builds into the initial best practices criteria.
 
 In the future we might add some criteria that a project has to meet
 some subset of (e.g., it must meet at least 3 of 5 criteria).
+
+## To be reviewed
+
+-   Releases must be downloadable through a channel that both encrypts
+    and authenticates (e.g., tls).
+    that way, third parties will not be able to determine exactly what
+    version is being downloaded.  this also provides some verification that
+    the correct software is being downloaded from the site.
+    (This is probably already covered by https_sites.)
+
+-   Review all comment replies on
+    https://lists.coreinfrastructure.org/pipermail/cii-badges/2016-December/000347.html
 
 
 ## Improving the criteria

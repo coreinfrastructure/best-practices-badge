@@ -37,6 +37,7 @@ Eventually these criteria will be worded per
 You must achieve the lower (passing) badge.  In addition,
 some SHOULD will become MUST, and some SUGGESTED will become
 SHOULD or MUST.
+
 * FIXME - list of upgrades of SHOULD and SUGGESTED.
 
 
@@ -45,7 +46,7 @@ SHOULD or MUST.
 -   An automated test suite MUST be applied on each check-in to a shared
     repository for at least one branch.  This test suite MUST
     produce a report on test success or failure.
-    [automated_integration_testing]
+    <sup>[<a href="#automated_integration_testing">automated_integration_testing</a>]</sup>
 
     *Rationale*: This is inspired by continuous integration.
     Continuous integration provides much more rapid feedback
@@ -70,6 +71,7 @@ SHOULD or MUST.
 -   The project MUST have a formal written policy that as major
     new functionality is added, tests for it MUST be added to an automated
     test suite.
+    <sup>[<a href="#test_policy_mandated">test_policy_mandated</a>]</sup>
 
     *Rationale*: This ensures that major new functionality is tested.
     This is related to the criterion test_policy, but is rewritten
@@ -78,6 +80,7 @@ SHOULD or MUST.
 -   The project MUST have a formal written policy that as bugs are fixed,
     regression tests for it SHOULD be added to an automated test suite
     to detect its reoccurrence.
+    <sup>[<a href="#regression_tests_added">regression_tests_added</a>]</sup>
 
 -   <a name="build_reproducible"></a>
     The project SHOULD
@@ -103,72 +106,121 @@ SHOULD or MUST.
 
 ### Documentation
 
-    - <a name="documentation-architecture"></a>
-        the project must include reference documentation that describes
-        its architecture.
-        <sup>[<a href="#documentation-architecture">documentation-architecture</a>]</sup>
-    - <a name="documentation-interface"></a>
-        the project must include reference documentation that describes
-        its interface.
-        <sup>[<a href="#documentation-interface">documentation-interface</a>]</sup>
-    - <a name="documentation-dataflow"></a>
-        the project must include reference documentation that describes
-        its data flow.
-        <sup>[<a href="#documentation-dataflow">documentation-dataflow</a>]</sup>
-    - the project's documentation must be consistent with the current
-      version of the program.
-      documentation of other versions may be included.
-* Code/build requirements:
-    -   coding standards / coding style guide
-        (typically by pointing to something).
-        there are a number of coding standards that can be recommended
-        for specific languages.
-        widely used coding standards that include ways to reduce the likelihood
-        of defects (including vulnerabilities) might be especially helpful.
-        projects can create their own coding standard by referring to
-        an existing one and then adding their own additions or exceptions.
-        there are a number of secure coding standards,
-        e.g., the sei cert's at <https://www.securecoding.cert.org/>
-    -   program can use the local version of system library/applications
-        (so vulnerable ones easily replaced).
-        many floss programs are distributed with "convenience libraries"
-        that are local copies of standard libraries (possibly forked).
-        however, if the program *must* use these local (forked) copies,
-        then updating the "standard" libraries as a security update will
-        leave these additional copies still vulnerable.
-        this is especially an issue for cloud-based systems (e.g., heroku);
-        if the cloud provider updates their "standard" libaries but the program
-        won't use them, then the updates don't actually help.
-        in some cases it's important to use the "other" version;
-        the goal here is to make it *possible* to easily use the
-        standard version.
-        see, e.g., <http://spot.livejournal.com/312320.html> .
-* Active development community
-    - active development
-      demonstrated by active number of commits, issues opened and closed,
-      discussion (e.g., in issues, mailing list, or whatever the project
-      uses for discussion), multiple developers, etc.
-* Bus factor aka truck factor:
-    -   no one developer should be indispensible.
-        if a developer was killed or incapacitated ("hit by a bus"),
-        the project should be able to continue.
-        [truck-factor](https://github.com/mtov/truck-factor) can
-        calculate this for projects on github.
-        see [assessing the bus factor of git repositories](https://www.researchgate.net/publication/272824568_assessing_the_bus_factor_of_git_repositories)
-        by cosentino et al.
-* Security analysis:
-    -   dependencies (including embedded dependencies) are periodically checked
-        for known vulnerabilities
-        (using an origin analyzer, e.g., sonatype, black duck,
-        codenomicon appscan, owasp dependency-check),
-        and if they have known vulnerabilities,
-        they are updated or verified as unexploitable.
-        it is acceptable if the components' vulnerability cannot be exploited,
-        but this analysis is difficult and it is sometimes easier to
-        simply update or fix the part.
-        developers must periodically re-scan to look for newly found publicly
-        known vulnerabilities in the components they use,
-        since new vulnerabilities are continuously being discovered.
+-   <a name="documentation_architecture"></a>
+    The project MUST include reference documentation that describes
+    its software architecture.
+    A software architecture explains a program's fundamental structures,
+    i.e., the program's major components, the relationships among them, and
+    the key properties of these components and relationships.
+    <sup>[<a href="#documentation_architecture">documentation_architecture</a>]</sup>
+
+-   <a name="documentation_interface"></a>
+    The project MUST provide reference documentation that describes
+    its external interface (both input and output).
+    Note that this may be automatically generated, e.g., 
+    documentation of a REST interface may be generated using Swagger/OpenAPI,
+    and code interfaces documentation may be generated using Doxygen.
+    Merely having comments in code is not sufficient to satisfy this criterion.
+    <sup>[<a href="#documentation_interface">documentation_interface</a>]</sup>
+
+-   <a name="documentation_current"></a>
+    The project MUST make an effort to
+    keep the documentation consistent with the current version of the
+    program and any known documentation defects making it inconsistent
+    MUST be fixed.
+    Documentation of other versions may be included.
+    If the documentation is generally current, but erroneously
+    includes some older information, just treat that as a defect, then
+    track and fix as usual.  The intent of this criterion is that the
+    documentation is kept consistent, not that the documentation
+    must be perfect.
+    *Rationale*: It's difficult to keep documentation up-to-date, so the
+    criterion is worded this way to make it more practical.
+    <sup>[<a href="#documentation_current">documentation_current</a>]</sup>
+
+### Code/build requirements:
+
+-   The project MUST identify the specific coding style guides
+    for the primary languages it uses, and require that contributions
+    comply with it (where exceptions occur, they MUST be rare and documented
+    in the code at that locations).
+    In most cases this is done by referring to some existing style guide(s),
+    possibly listing differences, and then enforcing the style guide where
+    possible using an automated style guide checker that is configured to match.
+    These style guides can include ways to improve readability and
+    ways to reduce the likelihood of defects (including vulnerabilities).
+    Many programming languages have one or more widely-used style guides.
+    Examples of style guides include
+    [Google's style guides](https://github.com/google/styleguide) and
+    [SEI CERT Coding Standards](https://www.securecoding.cert.org/).
+    <sup>[<a href="#coding_standards">coding_standards</a>]</sup>
+
+-   The project MUST make it easy to either
+    (1) identify and update reused externally-maintained components or (2)
+    use the standard components provided by the system or programming language.
+    Then, if a vulnerability is found in a reused component, it will be
+    easy to update that component.
+    A typical way to meet this criterion is to use
+    system and programming language package management systems.
+    Many FLOSS programs are distributed with "convenience libraries"
+    that are local copies of standard libraries (possibly forked).
+    By itself, that's fine.
+    However, if the program *must* use these local (forked) copies,
+    then updating the "standard" libraries as a security update will
+    leave these additional copies still vulnerable.
+    This is especially an issue for cloud-based systems;
+    if the cloud provider updates their "standard" libaries but the program
+    won't use them, then the updates don't actually help.
+    See, e.g.,
+    ["Chromium: Why it isn't in Fedora yet as a proper package" by Tom Callaway](http://spot.livejournal.com/312320.html).
+    <sup>[<a href="#updateable_reused_components">updateable_reused_components</a>]</sup>
+
+
+### Continuity
+
+-   The project MUST be able to continue with minimal interruption
+    if any one person is incapacitated or killed.
+    In particular, the project MUST be able to create and close issues,
+    accept proposed changes, and release versions of software, within a
+    week of confirmation that an individual is incapacitated or killed.
+    This MAY be done by ensuring someone else has any necessary
+    keys, passwords, and legal rights to continue the project.
+    <sup>[<a href="#access_continuity">access_continuity</a>]</sup>
+
+-   The project SHOULD have a "bus factor" of 2 or more.
+    A "bus factor" (aka "truck factor") is the
+    minimum number of project members that have to suddenly disappear from
+    a project ("hit by a bus") before the project stalls
+    due to lack of knowledgeable or competent personnel.
+    The [truck-factor](https://github.com/mtov/truck-factor) tool can
+    estimate this for projects on GitHub.  For more information, see
+    [Assessing the Bus Factor of Git Repositories](https://www.researchgate.net/publication/272824568_assessing_the_bus_factor_of_git_repositories)
+    by Cosentino et al.
+    <sup>[<a href="#bus_factor">bus_factor</a>]</sup>
+
+### Security analysis
+
+-   Projects MUST monitor or periodically check their dependencies
+    (including embedded dependencies) to detect known vulnerabilities and
+    fix exploitable vulnerabilities or verify them as unexploitable.
+    This can be done using an origin analyzer / dependency checking tool
+    such as
+    [OWASP's Dependency-Check](https://www.owasp.org/index.php/OWASP_Dependency_Check),
+    [Sonatype's Nexus Auditor](https://www.sonatype.com/nexus-auditor),
+    [Black Duck's Protex](https://www.blackducksoftware.com/products/protex),
+    [Synopsys' Protecode](http://www.protecode.com/), and
+    [Bundler-audit (for Ruby)](https://github.com/rubysec/bundler-audit).
+    It is acceptable if the components' vulnerability cannot be exploited,
+    but this analysis is difficult and it is sometimes easier to
+    simply update or fix the part.
+    <sup>[<a href="#dependency_monitoring">dependency_monitoring</a>]</sup>
+
+    *Rationale*:
+    This must be monitored or periodically checked, because
+    new vulnerabilities are continuously being discovered.
+
+START HERE.
+
 *   release:
     -   releases must be cryptographically signed.
         these may be implemented as signed git tags
@@ -202,6 +254,17 @@ note that both of these focus only on web applications.
 ## Potential passing+2 criteria
 
 *   achieve the lower passing+1 badge.
+
+-   The project SHOULD employ continuous integration, where
+    the primary developers team integrate their work frequently, usually each
+    person integrates at least daily.
+    [continuous_integration]
+
+    *Rationale*: See
+    [Martin Fowler](http://martinfowler.com/articles/continuousIntegration.html)
+    We realize that this can be difficult for some projects to apply,
+    which is why it proposed as a SHOULD.
+
 *   general criteria:
     -   roadmap exists.  there should be some information on where the
         project is or isn't going.
@@ -304,6 +367,22 @@ note that both of these focus only on web applications.
         run rather then relying on path or hash based rules -
         this might be at odds with some users requirement to be able to
         build from source but I thought I'd raise it anyways).
+
+-   The project MUST have active development.  At the least,
+    questions are routinely answered, and proposed issues and changes are
+    responded to.
+    This could be
+    demonstrated by active number of commits, issues opened and closed,
+    discussion (e.g., in issues, mailing list, or whatever the project
+    uses for discussion), multiple developers, etc.
+    However, note that the criteria report_responses and enhancement_responses
+    already take steps in this direction.
+    Some projects are essentially "completed" and so have relatively
+    little to respond to.
+
+-   Test coverage.  See:
+    https://lists.coreinfrastructure.org/pipermail/cii-badges/2016-December/000350.html
+    Note that Ruby doesn't support branch testing.
 
 We are considering moving the criteria continuous integration
 and reproduceable builds into the initial best practices criteria.

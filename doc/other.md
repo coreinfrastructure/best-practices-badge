@@ -2,8 +2,9 @@
 
 <!-- SPDX-License-Identifier: (MIT OR CC-BY-3.0+) -->
 
-Here are some other potential criteria.
+## Introduction
 
+This document lists the draft potential criteria for badges.
 We initially launched with a single badge level called "passing".
 We're currently in the process of developing higher level badges.
 
@@ -33,38 +34,75 @@ Eventually these criteria will be worded per
 
 ## Potential passing+1 criteria
 
-* **Achieve the lower (passing) badge**.
-* **Turn many should/suggested into MUST**
-* **Build and test:**
-    -   **continuous integration**.<br />
-        an automated test suite must applied on each check-in to a shared
-        repository, at least for some branches,
-        with a generated report available to at least project members on
-        success or failure of the tests.
-        this test suite should be applied across many platforms where
-        appropriate.
-        *rationale*:  continuous integration provides much more rapid feedback
-        on whether or not changes will cause test failures,
-        including regressions.
-    -   *tests are rigorously added for new functionality*.<br />
-        there must be a stated policy that when major new functionality is
-        added, tests of that functionality must be added to an automated test
-        suite, at least in the documentation for creating change proposals.
-        there must be evidence that such tests are being added in the most
-        recent major changes to the project.
-    -   *regression tests*.<br />
-        when a bug is fixed, a regression test must normally be added to the
-        automated test suite to prevent its reoccurrence.
-    -   *reproduceable build*.
-        it must be possible to rebuild executables that are bit-for-bit
-        identical, given the same executables of the tools used for building.
-        this criterion is automatically met if there is no process for
-        creating a separate executable or package.
-        *rationale*:  reproduceable builds make it much easier to verify that
-        the executable and source code of a program correspond,
-        countering certain kinds of malicious attacks.
-        (proposed for main criteria.)
-* Documentation
+You must achieve the lower (passing) badge.  In addition,
+some SHOULD will become MUST, and some SUGGESTED will become
+SHOULD or MUST.
+* FIXME - list of upgrades of SHOULD and SUGGESTED.
+
+
+### Build and test
+
+-   An automated test suite MUST be applied on each check-in to a shared
+    repository for at least one branch.  This test suite MUST
+    produce a report on test success or failure.
+    [automated_integration_testing]
+
+    *Rationale*: This is inspired by continuous integration.
+    Continuous integration provides much more rapid feedback
+    on whether or not changes will cause test failures,
+    including regressions.  The term "continuous integration" (CI)
+    is defined in Wikipedia as "merging all developer working copies
+    to a shared mainline several times a day".
+    [Martin Fowler](http://martinfowler.com/articles/continuousIntegration.html)
+    says that
+    "Continuous Integration is a software development practice where
+    members of a team integrate their work frequently, usually each
+    person integrates at least daily - leading to multiple integrations
+    per day. Each integration is verified by an automated build (including
+    test) to detect integration errors as quickly as possible. Many teams
+    find that this approach leads to significantly reduced integration
+    problems and allows a team to develop cohesive software more rapidly."
+    However, while merging all developer working copies at this pace can
+    be very useful, in practice many projects do not or cannot always do this.
+    In practice, many developers maintain at least some branches that are
+    not merged for longer than a day.
+
+-   The project MUST have a formal written policy that as major
+    new functionality is added, tests for it MUST be added to an automated
+    test suite.
+
+    *Rationale*: This ensures that major new functionality is tested.
+    This is related to the criterion test_policy, but is rewritten
+    to be stronger.
+
+-   The project MUST have a formal written policy that as bugs are fixed,
+    regression tests for it SHOULD be added to an automated test suite
+    to detect its reoccurrence.
+
+-   <a name="build_reproducible"></a>
+    The project SHOULD
+    have a [reproducible build](https://reproducible-builds.org/).
+    With reproducible builds, multiple parties can independently redo the
+    process of generating information from source files and get exactly
+    the same bit-for-bit result.
+    The [reproducible builds project has documentation on how to do this](https://reproducible-builds.org/docs/).
+    This criterion does not apply if no building occurs
+    (e.g., scripting languages where the source code
+    is used directly instead of being compiled).
+    <sup>[<a href="#build_reproducible">build_reproducible</a>]</sup>
+
+    *Rationale*: If a project needs to be built but there is no working
+    build system, then potential co-developers will not be able to easily
+    contribute and many security analysis tools will be ineffective.
+    Reproduceable builds counter malicious attacks that generate malicious
+    executables, by making it easy to recreate the executable to determine
+    if the result is correct.
+    By itself, reproduceable builds do not counter malicious compilers,
+    but they can be extended to counter malicious compilers using
+    processes such as diverse double-compiling (DDC).
+
+### Documentation
+
     - <a name="documentation-architecture"></a>
         the project must include reference documentation that describes
         its architecture.
@@ -161,7 +199,7 @@ or the
 note that both of these focus only on web applications.
 
 
-## potential passing+2 criteria
+## Potential passing+2 criteria
 
 *   achieve the lower passing+1 badge.
 *   general criteria:
@@ -284,3 +322,4 @@ You may also want to see the "[background](./background.md)" file
 for more information about these criteria,
 and the "[implementation](./implementation.md)" notes
 about the BadgeApp application.
+

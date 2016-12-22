@@ -373,7 +373,10 @@ SHOULD or MUST.
 -   The project MUST clearly identify small tasks that can be performed
     by new or casual contributors.
     This identification is typically done by marking selected issues
-    in an issue tracker, e.g., up-for-grabs, first-timers-only,
+    in an issue tracker with one or more tags the project uses
+    for the purpose, e.g.,
+    [up-for-grabs](http://up-for-grabs.net/#/),
+    [first-timers-only](http://www.firsttimersonly.com/),
     "Small fix", microtask, or IdealFirstBug.
     These new tasks need not involve adding functionality;
     they can be improving documentation, adding test cases,

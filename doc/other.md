@@ -77,32 +77,47 @@ SHOULD or MUST.
     This is related to the criterion test_policy, but is rewritten
     to be stronger.
 
--   The project MUST have a formal written policy that as bugs are fixed,
-    regression tests for it SHOULD be added to an automated test suite
-    to detect its reoccurrence.
-    <sup>[<a href="#regression_tests_added">regression_tests_added</a>]</sup>
+-   The project MUST add regression tests to an automated test suite
+    for at least 50% of the bugs fixed within the last six months.
+    <sup>[<a href="#regression_tests_added50">regression_tests_added50</a>]</sup>
 
--   <a name="build_reproducible"></a>
-    The project SHOULD
-    have a [reproducible build](https://reproducible-builds.org/).
-    With reproducible builds, multiple parties can independently redo the
-    process of generating information from source files and get exactly
+    *Rationale*: Regression tests prevent undetected resurfacing of
+     defects.  If a defect has happened before, there is an increased
+     likelihood that it will happen again.  We only require 50% of bugs to
+     have regression tests; not all bugs are equally likely to recur,
+     and in some cases it is extremely difficult to build robust tests for
+     them.  Thus, there is a diminishing point of return for adding
+     regression tests.  The 50% value could be argued as being arbitrary,
+     however, requiring less than 50% would mean that projects could
+     get the badge even if a majority of their bugs in the time frame
+     would not have regression tests.  Projects may,
+     of course, choose to have much larger percentages.
+     We choose six months, as with other requirements, so that projects
+     that have done nothing in the past (or recorded nothing in the past)
+     can catch up in a reasonable period of time.
+
+-   <a name="build_repeatable"></a>
+    The project MUST be able to repeat the process of
+    generating information from source files and get exactly
     the same bit-for-bit result.
-    The [reproducible builds project has documentation on how to do this](https://reproducible-builds.org/docs/).
-    This criterion does not apply if no building occurs
+    If no building occurs
     (e.g., scripting languages where the source code
-    is used directly instead of being compiled).
-    <sup>[<a href="#build_reproducible">build_reproducible</a>]</sup>
+    is used directly instead of being compiled), select "N/A".
+    GCC and clang users may find the -frandom-seed option useful;
+    in some cases, this can resolved by forcing some sort order.
+    More suggestions can be found at the
+    [reproducible build](https://reproducible-builds.org/) site.
+    <sup>[<a href="#build_repeatable">build_repeatable</a>]</sup>
 
-    *Rationale*: If a project needs to be built but there is no working
-    build system, then potential co-developers will not be able to easily
-    contribute and many security analysis tools will be ineffective.
-    Reproduceable builds counter malicious attacks that generate malicious
-    executables, by making it easy to recreate the executable to determine
-    if the result is correct.
-    By itself, reproduceable builds do not counter malicious compilers,
-    but they can be extended to counter malicious compilers using
-    processes such as diverse double-compiling (DDC).
+    *Rationale*: This is a step towards having a
+    [reproducible build](https://reproducible-builds.org/).
+    This criterion is much easier to meet, because it does not require
+    that external parties be able to reproduce the results - merely
+    that the project can.
+    Supporting full reproducible builds requires that projects provide
+    external parties enough information about their build environment(s),
+    which can be harder to do - so we have split this requirement up.
+    See the [reproducible build criterion](#reproducible_build).
 
 ### Documentation
 
@@ -174,7 +189,6 @@ SHOULD or MUST.
     See, e.g.,
     ["Chromium: Why it isn't in Fedora yet as a proper package" by Tom Callaway](http://spot.livejournal.com/312320.html).
     <sup>[<a href="#updateable_reused_components">updateable_reused_components</a>]</sup>
-
 
 ### Continuity
 
@@ -296,6 +310,34 @@ note that both of these focus only on web applications.
         this would be exceptionally difficult to achieve.
         Some higher/different related badge *might* add 100% branch coverage.
 
+-   <a name="build_reproducible"></a>
+    The project MUST
+    have a [reproducible build](https://reproducible-builds.org/).
+    If no building occurs
+    (e.g., scripting languages where the source code
+    is used directly instead of being compiled), select "N/A".
+    With reproducible builds, multiple parties can independently redo the
+    process of generating information from source files and get exactly
+    the same bit-for-bit result.
+    GCC and clang users may find the -frandom-seed option useful;
+    in some cases, this can resolved by forcing some sort order.
+    The build environment (including the toolset) can often be defined
+    for external parties by specifying the cryptographic hash of a
+    specific container or virtual machine that they can use for rebuilding.
+    The [reproducible builds project has documentation on how to do this](https://reproducible-builds.org/docs/).
+    <sup>[<a href="#build_reproducible">build_reproducible</a>]</sup>
+
+    *Rationale*: If a project needs to be built but there is no working
+    build system, then potential co-developers will not be able to easily
+    contribute and many security analysis tools will be ineffective.
+    Reproduceable builds counter malicious attacks that generate malicious
+    executables, by making it easy to recreate the executable to determine
+    if the result is correct.
+    By itself, reproducible builds do not counter malicious compilers,
+    but they can be extended to counter malicious compilers using
+    processes such as diverse double-compiling (DDC).
+
+
 
 ## Potential other criteria
 
@@ -385,7 +427,7 @@ note that both of these focus only on web applications.
     Note that Ruby doesn't support branch testing.
 
 We are considering moving the criteria continuous integration
-and reproduceable builds into the initial best practices criteria.
+and reproducible builds into the initial best practices criteria.
 
 In the future we might add some criteria that a project has to meet
 some subset of (e.g., it must meet at least 3 of 5 criteria).

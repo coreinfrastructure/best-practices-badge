@@ -276,11 +276,11 @@ SHOULD or MUST.
 
 ## Potential passing+2 criteria
 
-*   achieve the lower passing+1 badge.
+*   Achieve the lower passing+1 badge.
 
 -   The project SHOULD employ continuous integration, where
-    the primary developers team integrate their work frequently, usually each
-    person integrates at least daily.
+    the primary developers team integrate their work frequently.
+    In most cases this means that each developer integrates at least daily.
     [continuous_integration]
 
     *Rationale*: See
@@ -288,28 +288,88 @@ SHOULD or MUST.
     We realize that this can be difficult for some projects to apply,
     which is why it proposed as a SHOULD.
 
-*   general criteria:
-    -   posted list of small project tasks for new users.
-        these new tasks need not be adding functionality;
-        they can be improving documentation, adding test cases,
-        or anything else that aids the project and helps the contributor
-        understand more about the project.
-        there should be at least 3 small tasks made available
-        over a one-year period
-        that have been accepted by a relatively new contributor
-        (those who started contributing less than a year ago) or left available
-        (unimplemented by experienced developers) for at least 3 weeks.
-        *rationale*:  identified small tasks make it easier for new potential
-        contributors to become involved in a project, and projects with more
-        contributors have an increased likelihood of continuing.
-    -   multiple contributors from more than one organization.
-    -   License statement in each file (aka per-file licensing).
-    -   (Ideal) Copyright notice in each file, e.g.,
-        "Copyright [year project started] - [current year], [project founder]
-        and the [project name] contributors."
-*   Quality:
-    -   Commits reviewed.  There should be evidence that at least one
-        other person (other than the committer) are normally reviewing commits.
+### General criteria
+
+-   The project MUST clearly identify small tasks that can be performed
+    by new or casual contributors.
+    This identification is typically done by marking selected issues
+    in an issue tracker, e.g., up-for-grabs, first-timers-only,
+    "Small fix", microtask, or IdealFirstBug.
+    These new tasks need not involve adding functionality;
+    they can be improving documentation, adding test cases,
+    or anything else that aids the project and helps the contributor
+    understand more about the project.
+
+    *Rationale*:  Identified small tasks make it easier for new potential
+    contributors to become involved in a project, and projects with more
+    contributors have an increased likelihood of continuing.
+
+-   The project MUST have at least two unassociated significant
+    contributors.
+    Contributors are associated if they are paid to work
+    by the same organization (as an employee or contractor)
+    and the organization stands to benefit from the project's results.
+    Financial grants do not count as being from the same organization
+    if they pass through other organizations
+    (e.g., science grants paid to different organizations
+    from a common government or NGO source do not cause contributors
+    to be associated).
+    Someone is a significant contributor if they have made non-trivial
+    contributions to the project in the past year.
+    Examples of good indicators of a significant contributor are:
+    written at least 1,000 lines of code, contributed 50 commits, or
+    contributed at least 20 pages of documentation.
+
+    *Rationale*: This reduces the risk of non-support if
+    a single organization stops supporting the project as FLOSS.
+    It also reduces the risk of malicious code insertion, since there
+    is more independence between contributors.
+    This covers the case where "two people work for company X, but
+    only one is paid to work on this project" (because the non-paid person
+    could still have many of the same incentives).
+    It also covers the case where "two people got paid working for
+    Red Cross for a day, but Red Cross doesn't use the project".
+
+-   The project MUST include a license statement in each source file.
+    This may be done by including near the beginning
+    of each file the following in a comment:
+    ["SPDX-License-Identifier: [SPDX license expression]"](https://spdx.org/using-spdx#identifiers)
+    (see [this tutorial](https://github.com/david-a-wheeler/spdx-tutorial) for more information).
+    The project could also include, as a license statement, a stable URL
+    pointing to the license text, or could include the full license text.
+    Note that the criterion license_location requires the
+    project license be in a standard location.
+    <sup>[<a href="#license_per_file">license_per_file</a>]</sup>
+
+    *Rationale*: Files are sometimes individually copied from one
+    project into another.  Per-file license information increases the
+    likelihood that the original license will be honored.
+    SPDX provides a simple standard way to identify common licenses,
+    without having to embed the full license text in each file;
+    since this makes the criterion easier to do, we specifically mention it.
+    Technically, the text after "SPDX-License-Identifier" is a
+    SPDX license expression, not an identifier, but the tag
+    "SPDX-License-Identifier" is what is used for backwards-compatibility.
+
+### Quality
+
+-   The project MUST have a second person review at least
+    50% of all proposed modifications
+    before release, to determine if it is a worthwhile modification and
+    free of known issues which would argue against its inclusion.
+
+    *Rationale*: Review can counter many problems.
+    The percentage here could be changed; 100% would be great but untenable for
+    many projects.  We have selected 50%, because
+    anything less than 50% would mean that most changes could go unreviewed.
+    See, for example, the
+    [Linux Kernel's "Reviewer's statement of oversight"](https://www.kernel.org/doc/Documentation/SubmittingPatches).
+    Note that the set of criteria allow people within the same organization
+    to review each others' work; it is better to require different
+    organizations to review each others' work, but in many situations
+    that is not practical.
+
+???
     -   Automated test suite covers 100% of branches in source code.
         We will *not* add 100% branch coverage to the *passing* set of criteria.
         Some projects (like SQLite) do achieve this, but for some projects
@@ -458,7 +518,21 @@ or the
 [securing web application technologies (swat) checklist](https://software-security.sans.org/resources/swat).
 note that both of these focus only on web applications.
 
+## Keep thinking
 
+These are criteria were are currently *not* planning to add.
+
+-   Copyright notice in each file, e.g.,
+    "Copyright [year project started] - [current year], [project founder]
+    and the [project name] contributors."
+
+    *Rationale*: It isn't legally required.
+    That said,
+    [Ben Balter's "Copyright notices for open source projects"](http://ben.balter.com/2015/06/03/copyright-notices-for-websites-and-open-source-projects/)
+    provides a good argument for why it *should* be included,
+    and it is not hard to add.
+
+## Probably not
 
 ## Improving the criteria
 

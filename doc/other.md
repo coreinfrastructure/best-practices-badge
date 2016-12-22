@@ -121,6 +121,13 @@ SHOULD or MUST.
 
 ### Documentation
 
+-   The project MUST have a documented roadmap that describes
+    what the project intends to do and not do for at least the next year.
+    The project might not achieve the roadmap, and that's fine;
+    the purpose of the roadmap is to help potential users and
+    constributors understand the intended direction of the project.
+    It need not be detailed.
+
 -   <a name="documentation_architecture"></a>
     The project MUST include reference documentation that describes
     its software architecture.
@@ -233,11 +240,9 @@ SHOULD or MUST.
     This must be monitored or periodically checked, because
     new vulnerabilities are continuously being discovered.
 
-START HERE.
-
 ### Release
 
--   Releases of the software intended for widespread use
+-   Project releases of the software intended for widespread use
     MUST be cryptographically signed, and there MUST be a documented
     process explaining to users how they can obtain the public signing keys
     and verify the signature.
@@ -247,22 +252,26 @@ START HERE.
 
 ### Cryptography
 
--   <a name="crypto_alternatives"></a>the project should support multiple
+-   <a name="crypto_agility"></a>
+    The project SHOULD support multiple
     cryptographic algorithms, so users can quickly switch if one is broken.
-    common symmetric key algorithms include aes, twofish, serpent,
-    blowfish, and 3des.
-    common cryptographic hash algorithm alternatives include sha-2
-    (including sha-224, sha-256, sha-384 and sha-512) and sha-3.
-    however, see discussion per
-    [issue #215](https://github.com/linuxfoundation/cii-best-practices-badge/issues/215)
+    Common symmetric key algorithms include AES, Twofish, and Serpent.
+    Common cryptographic hash algorithm alternatives include SHA-2
+    (including SHA-224, SHA-256, SHA-384 AND SHA-512) and SHA-3.
+    <sup>[<a href="#crypto_agility">crypto_agility</a>]</sup>
 
-It would be quite plausible to add many requirements specific to security.
-for example, it would be plausible to require that a system meet the
-requirements (or a specified subset) of the
-[owasp application security verification standard project](https://www.owasp.org/index.php/category:owasp_application_security_verification_standard_project)
-or the
-[securing web application technologies (swat) checklist](https://software-security.sans.org/resources/swat).
-note that both of these focus only on web applications.
+    *Rationale*:
+    The advantage of crypto agility is that if one crypto algorithm is
+    broken, other algorithms can be used instead.
+    Many protocols, including TLS and IPSEC, are specifically designed to
+    support crypto agility.
+    There is disagreement by some experts who argue that this
+    negotiation can itself be a point of attack, and that
+    people should instead simply choose and stay with with one good algorithm.
+    The problem with this position is that no one can be certain about
+    what that "one good algorithm" is; a new attack could be found at any time.
+    See the discussion per
+    [issue #215](https://github.com/linuxfoundation/cii-best-practices-badge/issues/215)
 
 
 ## Potential passing+2 criteria
@@ -280,8 +289,6 @@ note that both of these focus only on web applications.
     which is why it proposed as a SHOULD.
 
 *   general criteria:
-    -   roadmap exists.  there should be some information on where the
-        project is or isn't going.
     -   posted list of small project tasks for new users.
         these new tasks need not be adding functionality;
         they can be improving documentation, adding test cases,
@@ -336,7 +343,6 @@ note that both of these focus only on web applications.
     By itself, reproducible builds do not counter malicious compilers,
     but they can be extended to counter malicious compilers using
     processes such as diverse double-compiling (DDC).
-
 
 
 ## Potential other criteria
@@ -443,6 +449,15 @@ some subset of (e.g., it must meet at least 3 of 5 criteria).
 
 -   Review all comment replies on
     https://lists.coreinfrastructure.org/pipermail/cii-badges/2016-December/000347.html
+
+- It would be quite plausible to add many requirements specific to security.
+for example, it would be plausible to require that a system meet the
+requirements (or a specified subset) of the
+[owasp application security verification standard project](https://www.owasp.org/index.php/category:owasp_application_security_verification_standard_project)
+or the
+[securing web application technologies (swat) checklist](https://software-security.sans.org/resources/swat).
+note that both of these focus only on web applications.
+
 
 
 ## Improving the criteria

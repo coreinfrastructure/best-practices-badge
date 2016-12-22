@@ -42,7 +42,7 @@ SHOULD or MUST.
 * FIXME - list of upgrades of SHOULD and SUGGESTED.
 
 
-### Build and test
+### Test
 
 -   An automated test suite MUST be applied on each check-in to a shared
     repository for at least one branch.  This test suite MUST
@@ -168,29 +168,6 @@ SHOULD or MUST.
     numbers, say below half, are a sign of trouble. But high numbers don't
     necessarily mean much, and lead to ignorance-promoting dashboards.”
 
--   <a name="build_repeatable"></a>
-    The project MUST be able to repeat the process of
-    generating information from source files and get exactly
-    the same bit-for-bit result.
-    If no building occurs
-    (e.g., scripting languages where the source code
-    is used directly instead of being compiled), select "N/A".
-    GCC and clang users may find the -frandom-seed option useful;
-    in some cases, this can resolved by forcing some sort order.
-    More suggestions can be found at the
-    [reproducible build](https://reproducible-builds.org/) site.
-    <sup>[<a href="#build_repeatable">build_repeatable</a>]</sup>
-
-    *Rationale*: This is a step towards having a
-    [reproducible build](https://reproducible-builds.org/).
-    This criterion is much easier to meet, because it does not require
-    that external parties be able to reproduce the results - merely
-    that the project can.
-    Supporting full reproducible builds requires that projects provide
-    external parties enough information about their build environment(s),
-    which can be harder to do - so we have split this requirement up.
-    See the [reproducible build criterion](#reproducible_build).
-
 ### Documentation
 
 -   The project MUST have a documented roadmap that describes
@@ -268,6 +245,30 @@ SHOULD or MUST.
     See, e.g.,
     ["Chromium: Why it isn't in Fedora yet as a proper package" by Tom Callaway](http://spot.livejournal.com/312320.html).
     <sup>[<a href="#updateable_reused_components">updateable_reused_components</a>]</sup>
+
+-   <a name="build_repeatable"></a>
+    The project MUST be able to repeat the process of
+    generating information from source files and get exactly
+    the same bit-for-bit result.
+    If no building occurs
+    (e.g., scripting languages where the source code
+    is used directly instead of being compiled), select "N/A".
+    GCC and clang users may find the -frandom-seed option useful;
+    in some cases, this can resolved by forcing some sort order.
+    More suggestions can be found at the
+    [reproducible build](https://reproducible-builds.org/) site.
+    <sup>[<a href="#build_repeatable">build_repeatable</a>]</sup>
+
+    *Rationale*: This is a step towards having a
+    [reproducible build](https://reproducible-builds.org/).
+    This criterion is much easier to meet, because it does not require
+    that external parties be able to reproduce the results - merely
+    that the project can.
+    Supporting full reproducible builds requires that projects provide
+    external parties enough information about their build environment(s),
+    which can be harder to do - so we have split this requirement up.
+    See the [reproducible build criterion](#reproducible_build).
+
 
 ### Continuity
 
@@ -350,12 +351,14 @@ SHOULD or MUST.
 
 *   Achieve the lower passing+1 badge.
 
-*   FIXME - list of upgrades of SHOULD and SUGGESTED.
+*   FIXME - list of upgrades of SHOULD and SUGGESTED from passing and passing+1.
     - Change "report_tracker" to MUST, to require issue tracking.
       Using GitHub issues meets this.
       Note that the Linux kernel project has reported that this is very
       hard to do at their scale.
       NOTE: Kevin Wall thinks this should be at passing+1, not passing+2.
+
+### General criteria
 
 -   The project SHOULD employ continuous integration, where
     the primary developers team integrate their work frequently.
@@ -366,8 +369,6 @@ SHOULD or MUST.
     [Martin Fowler](http://martinfowler.com/articles/continuousIntegration.html)
     We realize that this can be difficult for some projects to apply,
     which is why it proposed as a SHOULD.
-
-### General criteria
 
 -   The project MUST clearly identify small tasks that can be performed
     by new or casual contributors.
@@ -409,6 +410,22 @@ SHOULD or MUST.
     It also covers the case where "two people got paid working for
     Red Cross for a day, but Red Cross doesn't use the project".
 
+-   The project MUST have a second person review at least
+    50% of all proposed modifications
+    before release, to determine if it is a worthwhile modification and
+    free of known issues which would argue against its inclusion.
+
+    *Rationale*: Review can counter many problems.
+    The percentage here could be changed; 100% would be great but untenable for
+    many projects.  We have selected 50%, because
+    anything less than 50% would mean that most changes could go unreviewed.
+    See, for example, the
+    [Linux Kernel's "Reviewer's statement of oversight"](https://www.kernel.org/doc/Documentation/SubmittingPatches).
+    Note that the set of criteria allow people within the same organization
+    to review each others' work; it is better to require different
+    organizations to review each others' work, but in many situations
+    that is not practical.
+
 -   The project MUST include a license statement in each source file.
     This may be done by including near the beginning
     of each file the following in a comment:
@@ -431,22 +448,6 @@ SHOULD or MUST.
     "SPDX-License-Identifier" is what is used for backwards-compatibility.
 
 ### Quality
-
--   The project MUST have a second person review at least
-    50% of all proposed modifications
-    before release, to determine if it is a worthwhile modification and
-    free of known issues which would argue against its inclusion.
-
-    *Rationale*: Review can counter many problems.
-    The percentage here could be changed; 100% would be great but untenable for
-    many projects.  We have selected 50%, because
-    anything less than 50% would mean that most changes could go unreviewed.
-    See, for example, the
-    [Linux Kernel's "Reviewer's statement of oversight"](https://www.kernel.org/doc/Documentation/SubmittingPatches).
-    Note that the set of criteria allow people within the same organization
-    to review each others' work; it is better to require different
-    organizations to review each others' work, but in many situations
-    that is not practical.
 
 -   The project MUST have FLOSS automated test suite(s) that provide at least
     90% statement coverage if there is at least

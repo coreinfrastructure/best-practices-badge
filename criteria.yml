@@ -225,6 +225,15 @@
         details: >
           You can get free certificates from
           <a href="https://letsencrypt.org/">Let's Encrypt</a>.
+          If you are using GitHub pages without a custom domain, you can simply
+          <a href="https://help.github.com/articles/securing-your-github-pages-site-with-https/">change its settings to enforce HTTPS</a>.
+          If you are using GitHub pages with a custom
+          domain, you MAY use a content delivery network
+          (CDN) such as CloudFlare as a proxy to support HTTPS; see <a
+          href=”https://blog.cloudflare.com/secure-and-fast-github-pages-with-cloudflare/”>Secure
+          and fast GitHub Pages with CloudFlare</a>.
+          A project MAY also support HTTP, though we
+          encourage users to use HTTPS instead.
         autofill: >
           Look at project, repo, and download URLs. https is okay, http is not.
           Typically anything supporting HTTPS also supports TLS, so

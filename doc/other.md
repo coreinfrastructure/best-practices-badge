@@ -386,6 +386,8 @@ SHOULD or MUST.
     *Rationale*:  Identified small tasks make it easier for new potential
     contributors to become involved in a project, and projects with more
     contributors have an increased likelihood of continuing.
+    [Alluxio uses SMALLFIX](http://www.alluxio.org/docs/master/en/Contributing-to-Alluxio.html) and
+    [OWASP ZAP uses IdealFirstBug](https://github.com/zaproxy/zaproxy/issues?q=is%3Aopen+is%3Aissue+label%3AIdealFirstBug).
 
 -   The project MUST have at least two unassociated significant
     contributors.

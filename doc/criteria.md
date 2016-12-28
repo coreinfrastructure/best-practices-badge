@@ -356,6 +356,8 @@ is hosted on a site (e.g., GitHub) with decent API support.
 - <a name="vulnerability_report_response"></a>The project's
   initial response time for any vulnerability report received
   in the last 6 months MUST be less than or equal to 14 days.
+  If there have been no vulnerabilities reported in the last 6 months,
+  choose "not applicable" (N/A).
   <sup>[<a href="#vulnerability_report_response">vulnerability_report_response</a>]</sup>
 
 ### Quality
@@ -408,6 +410,9 @@ is hosted on a site (e.g., GitHub) with decent API support.
 - <a name="test_policy"></a>The project MUST have a general policy
   (formal or not) that as major new functionality is added,
   tests of that functionality SHOULD be added to an automated test suite.
+  As long as a policy is in place, even by word of mouth,
+  that says developers should add tests to the automated
+  test suite for major new functionality, select "Met."
   <sup>[<a href="#test_policy">test_policy</a>]</sup>
 - <a name="tests_are_added"></a>The project MUST have evidence that such
   tests are being added in the most recent major changes to the project.
@@ -720,6 +725,8 @@ by the delivered project's software.
   A vulnerability is medium to high severity if its
   [CVSS 2.0](https://nvd.nist.gov/cvss.cfm)
   base score is 4 or higher.
+  If you are not running dynamic code analysis and thus have not
+  found any vulnerabilities in this way, choose "not applicable" (N/A).
   <sup>[<a href="#dynamic_analysis_fixed">dynamic_analysis_fixed</a>]</sup>
 - *Rationale*: Static source code analysis and dynamic
   analysis tend to find different kinds of defects

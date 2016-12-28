@@ -206,6 +206,18 @@ is hosted on a site (e.g., GitHub) with decent API support.
   MUST support HTTPS using TLS.
   You can get free certificates from
   [Let's Encrypt](https://letsencrypt.org/).
+  Projects MAY implement this criterion using (for example) <a
+  href="https://help.github.com/articles/securing-your-github-pages-site-with-https/">GitHub
+  pages</a>, <a
+  href="https://about.gitlab.com/2016/12/24/were-bringing-gitlab-pages-to-community-edition/">GitLab
+  pages</a>, or <a
+  href="https://sourceforge.net/blog/introducing-https-for-project-websites/">SourceForge
+  project pages</a>.  If you are using GitHub pages with
+  custom domains, you MAY use a content delivery network
+  (CDN) as a proxy to support HTTPS, such as described in this <a
+  href=”https://blog.cloudflare.com/secure-and-fast-github-pages-with-cloudflare/”>blog
+  post</a>, to satisfy this criterion. If you support HTTP,
+  we urge you to redirect the HTTP traffic to HTTPS.
   <sup>[<a href="#sites_https">sites_https</a>]</sup>
 - <a name="discussion"></a>The project MUST have one or more mechanisms
   for discussion (including proposed changes and issues) that are:

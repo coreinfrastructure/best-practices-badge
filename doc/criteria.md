@@ -662,6 +662,8 @@ by the delivered project's software.
   and [Wheeler's list of static analysis tools](http://www.dwheeler.com/essays/static-analysis-tools.html).
   The [SWAMP](https://continuousassurance.org/) is a no-cost platform
   for assessing vulnerabilities in software using a variety of tools.
+  If there are no static analysis tools available for the implementation
+  language(s) used, select 'N/A'.
   <sup>[<a href="#static_analysis">static_analysis</a>]</sup>
 - <a name="static_analysis_common_vulnerabilities"></a>It is SUGGESTED
   that at least one of the static analysis tools

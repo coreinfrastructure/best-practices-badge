@@ -206,6 +206,18 @@ is hosted on a site (e.g., GitHub) with decent API support.
   MUST support HTTPS using TLS.
   You can get free certificates from
   [Let's Encrypt](https://letsencrypt.org/).
+  Projects MAY implement this criterion using (for example) <a
+  href="https://help.github.com/articles/securing-your-github-pages-site-with-https/">GitHub
+  pages</a>, <a
+  href="https://about.gitlab.com/2016/12/24/were-bringing-gitlab-pages-to-community-edition/">GitLab
+  pages</a>, or <a
+  href="https://sourceforge.net/blog/introducing-https-for-project-websites/">SourceForge
+  project pages</a>.  If you are using GitHub pages with
+  custom domains, you MAY use a content delivery network
+  (CDN) as a proxy to support HTTPS, such as described in this <a
+  href=”https://blog.cloudflare.com/secure-and-fast-github-pages-with-cloudflare/”>blog
+  post</a>, to satisfy this criterion. If you support HTTP,
+  we urge you to redirect the HTTP traffic to HTTPS.
   <sup>[<a href="#sites_https">sites_https</a>]</sup>
 - <a name="discussion"></a>The project MUST have one or more mechanisms
   for discussion (including proposed changes and issues) that are:
@@ -344,6 +356,8 @@ is hosted on a site (e.g., GitHub) with decent API support.
 - <a name="vulnerability_report_response"></a>The project's
   initial response time for any vulnerability report received
   in the last 6 months MUST be less than or equal to 14 days.
+  If there have been no vulnerabilities reported in the last 6 months,
+  choose "not applicable" (N/A).
   <sup>[<a href="#vulnerability_report_response">vulnerability_report_response</a>]</sup>
 
 ### Quality
@@ -396,6 +410,9 @@ is hosted on a site (e.g., GitHub) with decent API support.
 - <a name="test_policy"></a>The project MUST have a general policy
   (formal or not) that as major new functionality is added,
   tests of that functionality SHOULD be added to an automated test suite.
+  As long as a policy is in place, even by word of mouth,
+  that says developers should add tests to the automated
+  test suite for major new functionality, select "Met."
   <sup>[<a href="#test_policy">test_policy</a>]</sup>
 - <a name="tests_are_added"></a>The project MUST have evidence that such
   tests are being added in the most recent major changes to the project.
@@ -645,6 +662,8 @@ by the delivered project's software.
   and [Wheeler's list of static analysis tools](http://www.dwheeler.com/essays/static-analysis-tools.html).
   The [SWAMP](https://continuousassurance.org/) is a no-cost platform
   for assessing vulnerabilities in software using a variety of tools.
+  If there are no static analysis tools available for the implementation
+  language(s) used, select 'N/A'.
   <sup>[<a href="#static_analysis">static_analysis</a>]</sup>
 - <a name="static_analysis_common_vulnerabilities"></a>It is SUGGESTED
   that at least one of the static analysis tools
@@ -708,6 +727,8 @@ by the delivered project's software.
   A vulnerability is medium to high severity if its
   [CVSS 2.0](https://nvd.nist.gov/cvss.cfm)
   base score is 4 or higher.
+  If you are not running dynamic code analysis and thus have not
+  found any vulnerabilities in this way, choose "not applicable" (N/A).
   <sup>[<a href="#dynamic_analysis_fixed">dynamic_analysis_fixed</a>]</sup>
 - *Rationale*: Static source code analysis and dynamic
   analysis tend to find different kinds of defects

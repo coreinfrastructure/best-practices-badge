@@ -222,6 +222,24 @@ SHOULD or MUST.
     criterion is worded this way to make it more practical.
     <sup>[<a href="#documentation_current">documentation_current</a>]</sup>
 
+-   <a name="documentation_achievements"></a>
+    The project repository front page and/or website MUST
+    identify and hyperlink to any achievements,
+    including this best practices badge, within 48 hours
+    of public recognition that the achievement has been attained.
+    An achievement is any set of external criteria that the project
+    has specifically worked to meet, including some badges.
+    This information does not need to be on the project website front page.
+    A project using GitHub can put achievements on the repository front page
+    by adding them to the README file.
+
+    *Rationale*: Users and potential co-developers need to be able to
+    see what achievements have been attained by a project they are considering
+    using or contributing to.  This information can help them determine
+    if they should.  In addition, if projects identify their achievements,
+    other projects will be encouraged to follow suit and also make those
+    achievements, benefitting everyone.
+
 ### Code/build requirements:
 
 -   The project MUST identify the specific coding style guides
@@ -301,6 +319,8 @@ SHOULD or MUST.
     selecting the location where built artifacts are written to
     at installation time.  For example, if it installs
     files on a POSIX system it MUST honor the DESTDIR environment variable.
+    If there is no installation system or no standard convention,
+    select "N/A".
 
     *Rationale* : This supports capturing the artifacts (e.g., for analysis)
     without interfering with the build or installation system due to

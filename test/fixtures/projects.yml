@@ -51,6 +51,7 @@ perfect:
   description: The perfect project
   homepage_url: https://www.example.org
   repo_url: https://www.example.org/code3
+  implementation_languages: JavaScript, Java, C++ # Handle multiple names
   license: MIT
   badge_percentage: 100
 <% Project::ALL_CRITERIA_STATUS.each do |criterion_status| %>

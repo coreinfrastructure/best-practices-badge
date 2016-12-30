@@ -75,21 +75,21 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
   test 'resend account activation for unactivated account' do
     get signup_path
     assert_difference 'User.count', 1 do
-      post users_path, user: {
+      post users_path, params: { user: {
         name:  'Example User',
         email: 'user@example.com',
         password:              'a-g00d!Xpassword',
         password_confirmation: 'a-g00d!Xpassword'
-      }
+      } }
     end
     assert_equal 1, ActionMailer::Base.deliveries.size
     assert_no_difference 'User.count' do
-      post users_path, user: {
+      post users_path, params: { user: {
         name:  'Example User',
         email: 'user@example.com',
         password:              'password',
         password_confirmation: 'password'
-      }
+      } }
     end
     assert_equal 2, ActionMailer::Base.deliveries.size
     user = assigns(:user)
@@ -105,12 +105,12 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
   test 'redirect activated user to login' do
     @user = users(:test_user)
     assert_no_difference 'User.count' do
-      post users_path, user: {
+      post users_path, params: { user: {
         name:  @user.name,
         email: @user.email,
         password:              'password',
         password_confirmation: 'password'
-      }
+      } }
     end
     assert_not flash.empty?
     follow_redirect!

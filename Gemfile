@@ -9,9 +9,9 @@ gem 'bootstrap-will_paginate', '0.0.10'
 gem 'bootstrap_form', '2.5.2'
 gem 'chartkick', '2.2.1' # Chart project_stats
 gem 'faker', '1.6.6'
-gem 'fastly-rails', git:'https://github.com/dankohn/fastly-rails',
+gem 'fastly-rails', git: 'https://github.com/dankohn/fastly-rails',
                     ref: 'a909d09'
-     # Fastly master is locked to a railties version
+# Fastly master is locked to a railties version
 gem 'font-awesome-rails', '4.7.0.1'
 gem 'github_api', '0.14.5'
 gem 'imagesLoaded_rails', '4.1.0' # JavaScript - enable wait for image load

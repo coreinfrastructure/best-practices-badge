@@ -49,8 +49,8 @@ class ProjectStatsControllerTest < ActionController::TestCase
   test 'should NOT update project_stat' do
     assert_raises AbstractController::ActionNotFound do
       patch :update, params: {
-            id: @project_stat,
-            project_stat:
+        id: @project_stat,
+        project_stat:
               {
                 percent_ge_0: @project_stat.percent_ge_0,
                 percent_ge_25: @project_stat.percent_ge_25,
@@ -60,7 +60,8 @@ class ProjectStatsControllerTest < ActionController::TestCase
                 percent_ge_100: @project_stat.percent_ge_100,
                 created_since_yesterday: @project_stat.created_since_yesterday,
                 updated_since_yesterday: @project_stat.updated_since_yesterday
-              } }
+              }
+      }
     end
   end
 

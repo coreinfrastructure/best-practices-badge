@@ -47,27 +47,30 @@ class PasswordResetsTest < ActionDispatch::IntegrationTest
     assert_select 'input[name=email][type=hidden][value=?]'.dup, user.email
     # Invalid password & confirmation
     patch password_reset_path(user.reset_token), params: {
-          email: user.email,
-          user: {
-            password:              '1235foo',
-            password_confirmation: 'bar4567'
-          } }
+      email: user.email,
+      user: {
+        password:              '1235foo',
+        password_confirmation: 'bar4567'
+      }
+    }
     assert_select 'div#error_explanation'
     # Empty password
     patch password_reset_path(user.reset_token), params: {
-          email: user.email,
-          user: {
-            password:              '',
-            password_confirmation: ''
-          } }
+      email: user.email,
+      user: {
+        password:              '',
+        password_confirmation: ''
+      }
+    }
     assert_select 'div#error_explanation'
     # Valid password & confirmation
     patch password_reset_path(user.reset_token), params: {
-          email: user.email,
-          user: {
-            password:              'foo1234!',
-            password_confirmation: 'foo1234!'
-          } }
+      email: user.email,
+      user: {
+        password:              'foo1234!',
+        password_confirmation: 'foo1234!'
+      }
+    }
     assert user_logged_in?
     assert_not flash.empty?
     assert_redirected_to user
@@ -81,11 +84,12 @@ class PasswordResetsTest < ActionDispatch::IntegrationTest
     @user = assigns(:user)
     @user.update_attribute(:reset_sent_at, 3.hours.ago)
     patch password_reset_path(@user.reset_token), params: {
-          email: @user.email,
-          user: {
-            password:              'foo1234',
-            password_confirmation: 'bar5678'
-          } }
+      email: @user.email,
+      user: {
+        password:              'foo1234',
+        password_confirmation: 'bar5678'
+      }
+    }
     assert_response :redirect
     follow_redirect!
     assert_match 'expired', response.body

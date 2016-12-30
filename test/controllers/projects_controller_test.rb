@@ -158,16 +158,20 @@ class ProjectsControllerTest < ActionController::TestCase
     log_in_as(@admin)
     assert_nil @perfect_project.lost_passing_at
     assert_nil @perfect_project.achieved_passing_at
-    patch :update, params: { id: @perfect_project, project: {
-      interact_status: 'Unmet'
-    } }
+    patch :update, params: {
+      id: @perfect_project, project: {
+        interact_status: 'Unmet'
+      }
+    }
     @perfect_project.reload
     assert_not_nil @perfect_project.lost_passing_at
     assert @perfect_project.lost_passing_at > 5.minutes.ago.utc
     assert_nil @perfect_project.achieved_passing_at
-    patch :update, params: { id: @perfect_project, project: {
-      interact_status: 'Met'
-    } }
+    patch :update, params: {
+      id: @perfect_project, project: {
+        interact_status: 'Met'
+      }
+    }
     assert_not_nil @perfect_project.lost_passing_at
     # These tests should work, but don't; it appears our workaround for
     # the inadequately reset database interferes with them.

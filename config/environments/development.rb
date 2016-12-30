@@ -8,9 +8,12 @@ Rails.application.configure do
   # since you don't have to restart the web server when you make code changes.
   config.cache_classes = false
 
-  config.serve_static_files = true
+  config.public_file_server.enabled = true
   # Do not eager load code on boot.
   config.eager_load = false
+
+  # This replaces the quiet assets gem in Rails 5
+  config.assets.quiet = true
 
   # Show full error reports and disable caching.
   config.consider_all_requests_local       = true

@@ -202,16 +202,8 @@ class ProjectsControllerTest < ActionController::TestCase
 
   test 'should not destroy project if no one is logged in' do
     # Notice that we do *not* call log_in_as.
-<<<<<<< HEAD
     assert_no_difference('Project.count', ActionMailer::Base.deliveries.size) do
-      delete :destroy, id: @project
-||||||| merged common ancestors
-    assert_no_difference('Project.count') do
-      delete :destroy, id: @project
-=======
-    assert_no_difference('Project.count') do
       delete :destroy, params: { id: @project }
->>>>>>> dan-rails-5
     end
   end
 

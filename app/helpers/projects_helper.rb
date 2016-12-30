@@ -61,6 +61,9 @@ module ProjectsHelper
     else
       new_params.delete(:sort_direction)
     end
+    # Avoiding 'non-sanitized request parameters' from Rails 5
+    # David, please confirm this is safe and then revise these comments
+    new_params.permit!
     # The html_safe assertion here allows the HTML of
     # <a href...> to go through.  This *is* handled for security;
     # params.merge performs the URL encoding as required, and "title" is

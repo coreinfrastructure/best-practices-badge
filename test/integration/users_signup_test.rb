@@ -53,8 +53,8 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
       } }
     end
     assert_equal 1, ActionMailer::Base.deliveries.size
-    assert_equal 'Please check your email to activate your account.',
-                 flash['info']
+    user = assigns(:user)
+    assert_not user.activated?
     # Try to log in before activation.
     log_in_as(user)
     assert_not user_logged_in?

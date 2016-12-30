@@ -56,21 +56,19 @@ module ProjectsHelper
   # Return HTML for a sortable header.
   def sortable_header(title, field_name)
     new_params = params.merge(sort: field_name)
+                       .permit(ProjectsController::ALLOWED_QUERY_PARAMS)
     if params[:sort] == field_name && params[:sort_direction] != 'desc'
       new_params[:sort_direction] = 'desc'
     else
       new_params.delete(:sort_direction)
     end
 
-    # Avoiding 'non-sanitized request parameters' error in Rails 5
-    permitted_new_params = new_params.permit(:sort, :sort_direction, :q)
-
     # The html_safe assertion here allows the HTML of
     # <a href...> to go through.  This *is* handled for security;
     # params.merge performs the URL encoding as required, and "title" is
     # trusted (it's provided by the code, not by a potential attacker).
     # rubocop:disable Rails/OutputSafety
-    "<a href=\"#{url_for(permitted_new_params)}\">#{title}</a>".html_safe
+    "<a href=\"#{url_for(new_params)}\">#{title}</a>".html_safe
     # rubocop:enable Rails/OutputSafety
   end
 end

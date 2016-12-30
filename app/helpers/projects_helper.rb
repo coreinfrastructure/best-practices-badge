@@ -63,8 +63,7 @@ module ProjectsHelper
     end
 
     # Avoiding 'non-sanitized request parameters' error in Rails 5
-    permitted_new_params = new_params.permit(:sort, :sort_direction)
-
+    permitted_new_params = new_params.permit(:sort, :sort_direction, :q)
 
     # The html_safe assertion here allows the HTML of
     # <a href...> to go through.  This *is* handled for security;

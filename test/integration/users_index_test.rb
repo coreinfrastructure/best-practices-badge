@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'test_helper'
 
-class UsersEditTest < ActionDispatch::IntegrationTest
+class UsersIndexTest < ActionDispatch::IntegrationTest
   setup do
     @user = users(:test_user)
     @admin_user = users(:admin_user)

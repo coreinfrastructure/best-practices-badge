@@ -298,6 +298,13 @@ task :fake_production do
   sh 'RAILS_ENV=fake_production rails server -p 4000'
 end
 
+# Use this if the badge rules change.  This will email those who
+# gain/lose a badge because of the changes.
+desc 'Run to recalculate all badge percentages for all projects'
+task :update_all_badge_percentages do
+  Project.update_all_badge_percentages
+end
+
 Rake::Task['test:run'].enhance ['test:features']
 
 # This is the task to run every day, e.g., to record statistics

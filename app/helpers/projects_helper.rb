@@ -61,15 +61,17 @@ module ProjectsHelper
     else
       new_params.delete(:sort_direction)
     end
-    # Avoiding 'non-sanitized request parameters' from Rails 5
-    # David, please confirm this is safe and then revise these comments
-    new_params.permit!
+
+    # Avoiding 'non-sanitized request parameters' error in Rails 5
+    permitted_new_params = new_params.permit(:sort, :sort_direction)
+
+
     # The html_safe assertion here allows the HTML of
     # <a href...> to go through.  This *is* handled for security;
     # params.merge performs the URL encoding as required, and "title" is
     # trusted (it's provided by the code, not by a potential attacker).
     # rubocop:disable Rails/OutputSafety
-    "<a href=\"#{url_for(new_params)}\">#{title}</a>".html_safe
+    "<a href=\"#{url_for(permitted_new_params)}\">#{title}</a>".html_safe
     # rubocop:enable Rails/OutputSafety
   end
 end

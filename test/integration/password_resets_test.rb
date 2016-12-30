@@ -8,6 +8,7 @@ class PasswordResetsTest < ActionDispatch::IntegrationTest
     @ghuser = users(:github_user)
   end
 
+  # rubocop:disable Metrics/BlockLength
   test 'password resets' do
     get new_password_reset_path
     assert_template 'password_resets/new'
@@ -94,4 +95,5 @@ class PasswordResetsTest < ActionDispatch::IntegrationTest
     follow_redirect!
     assert_match 'expired', response.body
   end
+  # rubocop:enable Metrics/BlockLength
 end

@@ -2,6 +2,7 @@
 require 'capybara_feature_test'
 
 class FilterTest < CapybaraFeatureTest
+  # rubocop:disable Metrics/BlockLength
   scenario 'Can Filter Projects', js: true do
     visit '/projects'
     assert has_content? 'Add New Project'
@@ -83,4 +84,5 @@ class FilterTest < CapybaraFeatureTest
     assert has_content? 'Unjustified perfect project'
     assert has_no_content? 'Justified perfect project'
   end
+  # rubocop:enable Metrics/BlockLength
 end

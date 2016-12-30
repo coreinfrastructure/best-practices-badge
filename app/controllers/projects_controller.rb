@@ -68,8 +68,7 @@ class ProjectsController < ApplicationController
 
   # GET /projects/1
   # GET /projects/1.json
-  def show
-  end
+  def show; end
 
   def badge
     set_surrogate_key_header @project.record_key + '/badge'
@@ -87,8 +86,7 @@ class ProjectsController < ApplicationController
   end
 
   # GET /projects/:id/edit(.:format)
-  def edit
-  end
+  def edit; end
 
   # POST /projects
   # POST /projects.json
@@ -163,20 +161,20 @@ class ProjectsController < ApplicationController
     end
     format.json { render :show, status: :ok, location: @project }
     new_badge_level = @project.badge_level
-    if new_badge_level != old_badge_level # TODO: Eventually deliver_later
-      ReportMailer.project_status_change(
-        @project, old_badge_level, new_badge_level
-      ).deliver_now
-      if new_badge_level == 'passing'
-        flash[:success] = 'CONGRATULATIONS on earning a badge!' \
-          ' Please show your badge status on your project page (see the' \
-          ' "how to embed it" text just below if you don\'t' \
-          ' know how to do that).'
-        ReportMailer.email_owner(@project, new_badge_level).deliver_now
-      elsif new_badge_level == 'in_progress'
-        flash[:danger] = 'Project no longer has a badge.'
-        ReportMailer.email_owner(@project, new_badge_level).deliver_now
-      end
+    return unless new_badge_level != old_badge_level
+    # TODO: Eventually deliver_later
+    ReportMailer.project_status_change(
+      @project, old_badge_level, new_badge_level
+    ).deliver_now
+    if new_badge_level == 'passing'
+      flash[:success] = 'CONGRATULATIONS on earning a badge!' \
+        ' Please show your badge status on your project page (see the' \
+        ' "how to embed it" text just below if you don\'t' \
+        ' know how to do that).'
+      ReportMailer.email_owner(@project, new_badge_level).deliver_now
+    elsif new_badge_level == 'in_progress'
+      flash[:danger] = 'Project no longer has a badge.'
+      ReportMailer.email_owner(@project, new_badge_level).deliver_now
     end
   end
   # rubocop:enable Metrics/MethodLength, Metrics/AbcSize

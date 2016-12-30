@@ -38,7 +38,7 @@ class HardenedSitesDetective < Detective
   def security_fields_present?(headers_list)
     result = true
     headers_list.each do |headers|
-      result &&= CHECK.reduce(true) { |a, e| a & headers.key?(e) }
+      result &&= CHECK.reduce(true) { |acc, elem| acc & headers.key?(elem) }
     end
     result
   end

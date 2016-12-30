@@ -18,6 +18,7 @@ class LoginTest < CapybaraFeatureTest
     assert has_content? 'Log in with GitHub'
   end
 
+  # rubocop:disable Metrics/BlockLength
   scenario 'Can Login and edit using custom account', js: true do
     visit login_path
     fill_in 'Email', with: @user.email
@@ -58,6 +59,7 @@ class LoginTest < CapybaraFeatureTest
     click_on 'Submit'
     assert_match X, find('#discussion_enough')['src']
   end
+  # rubocop:enable Metrics/BlockLength
 
   def ensure_choice(radio_button_id)
     # Necessary because Capybara click doesn't always take the first time

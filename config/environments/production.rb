@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+# rubocop:disable Metrics/BlockLength
 Rails.application.configure do
   # Settings specified here will take precedence over those in
   # config/application.rb.
@@ -109,3 +110,4 @@ Rails.application.configure do
   # config.static_cache_control = 'public, s-maxage=2592000, maxage=86400'
   config.static_cache_control = 'public, s-maxage=3600, maxage=3600'
 end
+# rubocop:enable Metrics/BlockLength

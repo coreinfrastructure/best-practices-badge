@@ -49,7 +49,7 @@ group :development, :test do
   gem 'pronto-rails_best_practices', '0.7.0'
   gem 'pronto-rubocop', '0.7.0'
   gem 'pry-byebug', '3.4.2'
-  gem 'rubocop', '0.42.0' # Style checker.  Changes can cause test failure
+  gem 'rubocop', '0.46.0' # Style checker.  Changes can cause test failure
   gem 'ruby-graphviz', '1.2.2'
   gem 'spring', '1.7.2'
   gem 'vcr', '3.0.3' # Record network responses for later test reuse
@@ -77,6 +77,6 @@ group :test do
 end
 
 group :production do
-  gem 'rails_12factor', '0.0.3'
   gem 'heroku_rails_deflate', '1.0.3' # Compress (reduces network load)
+  gem 'rails_12factor', '0.0.3'
 end

@@ -21,6 +21,5 @@ class Detective
   # fieldnames can be proposed project value, or names of intermediate
   # values that later Detectives can use.
 
-  def analyze(_evidence, _current)
-  end
+  def analyze(_evidence, _current); end
 end

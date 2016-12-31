@@ -11,11 +11,9 @@ class FeedTest < ActionDispatch::IntegrationTest
   setup do
     # Normalize time in order to match fixture file
     travel_to Time.zone.parse('2015-03-01T12:00:00') do
-      silence_warnings do
-        # anything written to STDOUT here will be silenced
-        Rake::Task['db:schema:load'].reenable
-        Rake::Task['db:schema:load'].invoke
-      end
+      ActiveRecord::Schema.verbose = false
+      Rake::Task['db:schema:load'].reenable
+      Rake::Task['db:schema:load'].invoke
       Rake::Task['db:fixtures:load'].reenable
       Rake::Task['db:fixtures:load'].invoke
     end

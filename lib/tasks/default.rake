@@ -20,7 +20,6 @@ task(:default).clear.enhance %w(
 # Temporarily removed fasterer
 # Waiting for Ruby 2.4 support: https://github.com/seattlerb/ruby_parser/issues/239
 
-
 task(:ci).clear.enhance %w(
   rbenv_rvm_setup
   bundle_audit

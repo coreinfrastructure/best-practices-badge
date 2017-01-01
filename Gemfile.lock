@@ -7,6 +7,13 @@ GIT
       fastly (~> 1.6)
       mime-types (>= 1.16, < 3)
 
+GIT
+  remote: https://github.com/flori/json
+  revision: c7a6e31f3abde6efbf0629dea68b43bebb62c94a
+  ref: c7a6e31
+  specs:
+    json (1.8.5)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -98,7 +105,6 @@ GEM
     codemirror-rails (5.16.0)
       railties (>= 3.0, < 6.0)
     coderay (1.1.1)
-    colorize (0.8.1)
     concurrent-ruby (1.0.4)
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
@@ -121,9 +127,6 @@ GEM
       i18n (~> 0.5)
     faraday (0.9.2)
       multipart-post (>= 1.2, < 3)
-    fasterer (0.3.2)
-      colorize (~> 0.7)
-      ruby_parser (~> 3.7)
     fastly (1.7.0)
     ffi (1.9.14)
     font-awesome-rails (4.7.0.1)
@@ -164,7 +167,6 @@ GEM
       turbolinks
     jquery-ui-rails (6.0.1)
       railties (>= 3.2.16)
-    json (1.8.3)
     jwt (1.5.6)
     kaminari (0.17.0)
       actionpack (>= 3.0.0)
@@ -345,8 +347,6 @@ GEM
       unicode-display_width (~> 1.0, >= 1.0.1)
     ruby-graphviz (1.2.2)
     ruby-progressbar (1.8.1)
-    ruby_parser (3.8.3)
-      sexp_processor (~> 4.1)
     rubyzip (1.2.0)
     rugged (0.24.0)
     safe_yaml (1.0.4)
@@ -443,7 +443,6 @@ DEPENDENCIES
   dotenv-rails (= 2.1.1)
   eslintrb (= 2.1.0)
   faker (= 1.7.1)
-  fasterer (= 0.3.2)
   fastly-rails!
   font-awesome-rails (= 4.7.0.1)
   github_api (= 0.14.5)
@@ -453,6 +452,7 @@ DEPENDENCIES
   jquery-rails (= 4.2.2)
   jquery-turbolinks
   jquery-ui-rails (= 6.0.1)
+  json!
   license_finder (= 2.1.2)
   mdl (= 0.4.0)
   minitest-rails-capybara (= 3.0.0)
@@ -493,7 +493,7 @@ DEPENDENCIES
   yaml-lint (= 0.0.9)
 
 RUBY VERSION
-   ruby 2.3.1p112
+   ruby 2.4.0p0
 
 BUNDLED WITH
    1.12.6

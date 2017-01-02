@@ -263,7 +263,7 @@ class ProjectsControllerTest < ActionController::TestCase
   end
 
   test 'sanity test of reminders' do
-    result = ProjectsController.send_reminders
+    result = ProjectsController.send :send_reminders
     assert_equal 1, result.size
   end
 end

@@ -27,23 +27,6 @@ class ProjectsController < ApplicationController
 
   ALLOWED_QUERY_PARAMS = %i(gteq lteq pq q sort sort_direction status).freeze
 
-  # If a valid "sort" parameter is provided, sort @projects in "sort_direction"
-  # rubocop:disable Metrics/AbcSize
-  def sort_projects
-    # Sort, if there is a requested order (otherwise use default created_at)
-    return unless params[:sort].present? && ALLOWED_SORT.include?(params[:sort])
-    sort_direction =
-      if params[:sort_direction] == 'desc' # descending
-        ' desc'
-      else
-        ' asc' # default is ascending
-      end
-    @projects = @projects
-                .reorder(params[:sort] + sort_direction)
-                .order('created_at' + sort_direction)
-  end
-  # rubocop:enable Metrics/AbcSize
-
   # GET /projects
   # GET /projects.json
   # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
@@ -142,6 +125,64 @@ class ProjectsController < ApplicationController
   end
   # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
+  # DELETE /projects/1
+  # DELETE /projects/1.json
+  # rubocop:disable Metrics/MethodLength
+  def destroy
+    @project.destroy
+    ReportMailer.report_project_deleted(@project, current_user).deliver_now
+    purge_cdn_badge
+    # @project.purge
+    # @project.purge_all
+    respond_to do |format|
+      @project.homepage_url ||= project_find_default_url
+      format.html do
+        redirect_to projects_url
+        flash[:success] = 'Project was successfully deleted.'
+      end
+      format.json { head :no_content }
+    end
+  end
+  # rubocop:enable Metrics/MethodLength
+
+  def feed
+    @projects = Project.recently_updated
+    respond_to { |format| format.atom }
+  end
+
+  private
+
+  # Send reminders to users for inactivity. Return array of project ids
+  # that were sent reminders (this array may be empty).
+  # You should only invoke this in a test environment (where mailers are
+  # disabled & the data is forged anyway) or the "real" production site.
+  # Do *not* call this on the "master" or "staging" tiers,
+  # because we don't want to bother our users.
+  # rubocop:disable Metrics/MethodLength
+  def self.send_reminders
+    projects = Project.projects_to_remind
+    unless projects.empty?
+      ReportMailer.report_reminder_summary(projects).deliver_now
+    end
+    projects.each do |inactive_project| # Send actual reminders
+      ReportMailer.email_reminder_owner(inactive_project).deliver_now
+      # Save while disabling paper_trail's versioning through self.
+      # Don't update the updated_at value either, since we interpret that
+      # value as being an update of the project badge status information.
+      inactive_project.paper_trail.without_versioning do
+        inactive_project.update_columns last_reminder_at: DateTime.now.utc
+      end
+    end
+    projects.map(&:id) # Return a list of project ids that were reminded.
+  end
+  private_class_method :send_reminders
+  # rubocop:enable Metrics/MethodLength
+
+  def change_authorized
+    return true if can_make_changes?
+    redirect_to root_url
+  end
+
   def client_factory
     proc do
       if current_user.nil? || current_user.provider != 'github'
@@ -151,6 +192,79 @@ class ProjectsController < ApplicationController
       end
     end
   end
+
+  # Never trust parameters from the scary internet,
+  # only allow the white list through.
+  def project_params
+    if @project && repo_url_disabled?(@project)
+      params.require(:project).permit(Project::PROJECT_PERMITTED_FIELDS)
+    else
+      params.require(:project).permit(
+        :repo_url,
+        Project::PROJECT_PERMITTED_FIELDS
+      )
+    end
+  end
+
+  # Purge the badge from the CDN (if any)
+  def purge_cdn_badge
+    cdn_badge_key = @project.record_key + '/badge'
+    # If we can't authenticate to the CDN, complain but don't crash.
+    begin
+      FastlyRails.purge_by_key cdn_badge_key
+    rescue StandardError => e
+      Rails.logger.error "FAILED TO PURGE #{cdn_badge_key} , #{e.class}: #{e}"
+    end
+  end
+
+  def remove_empty_query_params
+    # Rewrites /projects?q=&status=failing to /projects?status=failing
+    original = request.original_url
+    parsed = Addressable::URI.parse(original)
+    return unless parsed.query_values.present?
+    queries_with_values = parsed.query_values.reject { |_k, v| v.blank? }
+    if queries_with_values.blank?
+      parsed.omit!(:query) # Removes trailing '?'
+    else
+      parsed.query_values = queries_with_values
+    end
+    redirect_to parsed.to_s unless parsed.to_s == original
+  end
+
+  def repo_data
+    github = Github.new oauth_token: session[:user_token], auto_pagination: true
+    github.repos.list.map do |repo|
+      if repo.blank?
+        nil
+      else
+        [repo.full_name, repo.fork, repo.homepage, repo.html_url]
+      end
+    end.compact
+  end
+
+  def set_homepage_url
+    # Assign to repo.homepage if it exists, and else repo_url
+    repo = repo_data.find { |r| @project.repo_url == r[3] }
+    return nil if repo.nil?
+    repo[2].present? ? repo[2] : @project.repo_url
+  end
+
+  # Use callbacks to share common setup or constraints between actions.
+  def set_project
+    @project = Project.find(params[:id])
+  end
+
+  # If a valid "sort" parameter is provided, sort @projects in "sort_direction"
+  # rubocop:disable Metrics/AbcSize
+  def sort_projects
+    # Sort, if there is a requested order (otherwise use default created_at)
+    return unless params[:sort].present? && ALLOWED_SORT.include?(params[:sort])
+    sort_direction = params[:sort_direction] == 'desc' ? ' desc' : ' asc'
+    @projects = @projects
+                .reorder(params[:sort] + sort_direction)
+                .order('created_at' + sort_direction)
+  end
+  # rubocop:enable Metrics/AbcSize
 
   # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   def successful_update(format, old_badge_level)
@@ -178,122 +292,4 @@ class ProjectsController < ApplicationController
     end
   end
   # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
-
-  # DELETE /projects/1
-  # DELETE /projects/1.json
-  # rubocop:disable Metrics/MethodLength
-  def destroy
-    @project.destroy
-    ReportMailer.report_project_deleted(@project, current_user).deliver_now
-    purge_cdn_badge
-    # @project.purge
-    # @project.purge_all
-    respond_to do |format|
-      @project.homepage_url ||= project_find_default_url
-      format.html do
-        redirect_to projects_url
-        flash[:success] = 'Project was successfully deleted.'
-      end
-      format.json { head :no_content }
-    end
-  end
-  # rubocop:enable Metrics/MethodLength
-
-  def feed
-    @projects = Project.recently_updated
-    respond_to { |format| format.atom }
-  end
-
-  def repo_data
-    github = Github.new oauth_token: session[:user_token], auto_pagination: true
-    github.repos.list.map do |repo|
-      if repo.blank?
-        nil
-      else
-        [repo.full_name, repo.fork, repo.homepage, repo.html_url]
-      end
-    end.compact
-  end
-
-  # Send reminders to users for inactivity. Return array of project ids
-  # that were sent reminders (this array may be empty).
-  # You should only invoke this in a test environment (where mailers are
-  # disabled & the data is forged anyway) or the "real" production site.
-  # Do *not* call this on the "master" or "staging" tiers,
-  # because we don't want to bother our users.
-  # rubocop:disable Metrics/MethodLength
-  def self.send_reminders
-    projects = Project.projects_to_remind
-    unless projects.empty?
-      ReportMailer.report_reminder_summary(projects).deliver_now
-    end
-    projects.each do |inactive_project| # Send actual reminders
-      ReportMailer.email_reminder_owner(inactive_project).deliver_now
-      # Save while disabling paper_trail's versioning through self.
-      # Don't update the updated_at value either, since we interpret that
-      # value as being an update of the project badge status information.
-      inactive_project.paper_trail.without_versioning do
-        inactive_project.update_columns last_reminder_at: DateTime.now.utc
-      end
-    end
-    projects.map(&:id) # Return a list of project ids that were reminded.
-  end
-  # rubocop:enable Metrics/MethodLength
-
-  private
-
-  def set_homepage_url
-    # Assign to repo.homepage if it exists, and else repo_url
-    repo = repo_data.find { |r| @project.repo_url == r[3] }
-    return nil if repo.nil?
-    repo[2].present? ? repo[2] : @project.repo_url
-  end
-
-  # Use callbacks to share common setup or constraints between actions.
-  def set_project
-    @project = Project.find(params[:id])
-  end
-
-  # Never trust parameters from the scary internet,
-  # only allow the white list through.
-  def project_params
-    if @project && repo_url_disabled?(@project)
-      params.require(:project).permit(Project::PROJECT_PERMITTED_FIELDS)
-    else
-      params.require(:project).permit(
-        :repo_url,
-        Project::PROJECT_PERMITTED_FIELDS
-      )
-    end
-  end
-
-  def change_authorized
-    return true if can_make_changes?
-    redirect_to root_url
-  end
-
-  # Purge the badge from the CDN (if any)
-  def purge_cdn_badge
-    cdn_badge_key = @project.record_key + '/badge'
-    # If we can't authenticate to the CDN, complain but don't crash.
-    begin
-      FastlyRails.purge_by_key cdn_badge_key
-    rescue StandardError => e
-      Rails.logger.error "FAILED TO PURGE #{cdn_badge_key} , #{e.class}: #{e}"
-    end
-  end
-
-  def remove_empty_query_params
-    # Rewrites /projects?q=&status=failing to /projects?status=failing
-    original = request.original_url
-    parsed = Addressable::URI.parse(original)
-    return unless parsed.query_values.present?
-    queries_with_values = parsed.query_values.reject { |_k, v| v.blank? }
-    if queries_with_values.blank?
-      parsed.omit!(:query) # Removes trailing '?'
-    else
-      parsed.query_values = queries_with_values
-    end
-    redirect_to parsed.to_s unless parsed.to_s == original
-  end
 end

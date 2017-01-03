@@ -211,20 +211,22 @@ namespace :fastly do
   end
 
   desc 'Test Fastly Caching'
-  task :test do
+  task :test, [:site_name] do |_t, args|
+    args.with_defaults site_name:
+      'https://master.bestpractices.coreinfrastructure.org/projects/1/badge'
     puts 'Starting test of Fastly caching'
     verbose(false) do
       sh <<-END
-        s=https://master.bestpractices.coreinfrastructure.org/projects/1/badge
-        echo "Purging Fastly cache of badge for project 1"
-        curl -X PURGE $s
-        if [ "$(curl -svo /dev/null $s 2>&1 | grep MISS)" ]; then
+        site="#{args.site_name}"
+        echo 'Purging Fastly cache of badge for project 1'
+        curl -X PURGE $site
+        if [ "$(curl -svo /dev/null $site 2>&1 | grep MISS)" ]; then
           echo "Fastly cache of badge for project 1 successfully purged."
         else
           echo "Failed to purge badge for project 1 from Fastly cache."
           exit 1
         fi
-        if [ "$(curl -svo /dev/null $s 2>&1 | grep HIT)" ]; then
+        if [ "$(curl -svo /dev/null $site 2>&1 | grep HIT)" ]; then
           echo "Fastly cache of badge for project 1 successfully restored."
         else
           echo "Fastly failed to restore cache of badge for project 1."

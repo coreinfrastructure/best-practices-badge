@@ -194,19 +194,44 @@ task :fasterer do
   sh 'fasterer'
 end
 
-# Implement full purge of Fastly CDN cache.  Invoke using:
-#   heroku run --app HEROKU_APP_HERE rake fastly:purge
-# Run this if code changes will cause a change in badge level, since otherwise
-# the old badge levels will keep being displayed until the cache times out.
-# See: https://robots.thoughtbot.com/
-# a-guide-to-caching-your-rails-application-with-fastly
+# Tasks for Fastly including purging and testing the cache.
 namespace :fastly do
+  # Implement full purge of Fastly CDN cache.  Invoke using:
+  #   heroku run --app HEROKU_APP_HERE rake fastly:purge
+  # Run this if code changes will cause a change in badge level, since otherwise
+  # the old badge levels will keep being displayed until the cache times out.
+  # See: https://robots.thoughtbot.com/
+  # a-guide-to-caching-your-rails-application-with-fastly
   desc 'Purge Fastly cache (takes about 5s)'
   task :purge do
     puts 'Starting full purge of Fastly cache (typically takes about 5s)'
     require Rails.root.join('config/initializers/fastly')
     FastlyRails.client.get_service(ENV.fetch('FASTLY_SERVICE_ID')).purge_all
     puts 'Cache purged'
+  end
+
+  desc 'Test Fastly Caching'
+  task :test do
+    puts 'Starting test of Fastly caching'
+    verbose(false) do
+      sh <<-END
+        s=https://master.bestpractices.coreinfrastructure.org/projects/1/badge
+        echo "Purging Fastly cache of badge for project 1"
+        curl -X PURGE $s
+        if [ "$(curl -svo /dev/null $s 2>&1 | grep MISS)" ]; then
+          echo "Fastly cache of badge for project 1 successfully purged."
+        else
+          echo "Failed to purge badge for project 1 from Fastly cache."
+          exit 1
+        fi
+        if [ "$(curl -svo /dev/null $s 2>&1 | grep HIT)" ]; then
+          echo "Fastly cache of badge for project 1 successfully restored."
+        else
+          echo "Fastly failed to restore cache of badge for project 1."
+          exit 1
+        fi
+      END
+    end
   end
 end
 

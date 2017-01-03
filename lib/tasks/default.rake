@@ -15,6 +15,7 @@ task(:default).clear.enhance %w(
   yaml_syntax_check
   html_from_markdown
   fasterer
+  fastly:test
   eslint
   test
 )

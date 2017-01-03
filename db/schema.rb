@@ -11,12 +11,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161229185811) do
+ActiveRecord::Schema.define(version: 20161230160523) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-  enable_extension "citext"
   enable_extension "pg_stat_statements"
+  enable_extension "citext"
 
   create_table "pg_search_documents", force: :cascade do |t|
     t.text     "content"
@@ -219,6 +219,7 @@ ActiveRecord::Schema.define(version: 20161229185811) do
     t.datetime "last_reminder_at"
     t.boolean  "disabled_reminders",                                   default: false, null: false
     t.string   "implementation_languages",                             default: ""
+    t.integer  "lock_version",                                         default: 0
   end
 
   add_index "projects", ["achieved_passing_at"], name: "index_projects_on_achieved_passing_at", using: :btree

@@ -141,6 +141,14 @@ class ProjectsController < ApplicationController
         end
       end
     end
+  rescue ActiveRecord::StaleObjectError
+    @project.reload.attributes =
+      params[:project].reject do |attrb, _value|
+        attrb.to_sym == :lock_version
+      end
+    flash[:error] = 'Another user has made a change to that ' \
+      'record since you accessed the edit form.'
+    render :edit, status: :conflict
   end
   # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 

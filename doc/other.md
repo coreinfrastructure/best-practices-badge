@@ -188,11 +188,24 @@ SHOULD or MUST.
 -   <a name="documentation_interface"></a>
     The project MUST provide reference documentation that describes
     its external interface (both input and output).
-    Note that this may be automatically generated, e.g., 
+    Note that this may be automatically generated, e.g.,
     documentation of a REST interface may be generated using Swagger/OpenAPI,
     and code interfaces documentation may be generated using Doxygen.
     Merely having comments in code is not sufficient to satisfy this criterion.
     <sup>[<a href="#documentation_interface">documentation_interface</a>]</sup>
+
+-   <a name="documentation_security"></a>
+    The project MUST document what the user can and cannot expect
+    in terms of security.  This MUST identify the security requirements
+    that the software is intended to meet and a justification
+    ("assurance case") for why they are believed to have been met.
+    <sup>[<a href="#documentation_security">documentation_security</a>]</sup>
+
+    *Rationale*: Writing the specification helps the developers think about the
+    interface (including the API) the developers are providing, as well
+    letting any user or researcher know what to expect.
+    This was inspired by
+    [issue #502](https://github.com/linuxfoundation/cii-best-practices-badge/issues/502).
 
 -   <a name="documentation_current"></a>
     The project MUST make an effort to
@@ -208,6 +221,24 @@ SHOULD or MUST.
     *Rationale*: It's difficult to keep documentation up-to-date, so the
     criterion is worded this way to make it more practical.
     <sup>[<a href="#documentation_current">documentation_current</a>]</sup>
+
+-   <a name="documentation_achievements"></a>
+    The project repository front page and/or website MUST
+    identify and hyperlink to any achievements,
+    including this best practices badge, within 48 hours
+    of public recognition that the achievement has been attained.
+    An achievement is any set of external criteria that the project
+    has specifically worked to meet, including some badges.
+    This information does not need to be on the project website front page.
+    A project using GitHub can put achievements on the repository front page
+    by adding them to the README file.
+
+    *Rationale*: Users and potential co-developers need to be able to
+    see what achievements have been attained by a project they are considering
+    using or contributing to.  This information can help them determine
+    if they should.  In addition, if projects identify their achievements,
+    other projects will be encouraged to follow suit and also make those
+    achievements, benefitting everyone.
 
 ### Code/build requirements:
 
@@ -246,6 +277,20 @@ SHOULD or MUST.
     ["Chromium: Why it isn't in Fedora yet as a proper package" by Tom Callaway](http://spot.livejournal.com/312320.html).
     <sup>[<a href="#updateable_reused_components">updateable_reused_components</a>]</sup>
 
+-   <a name="build_standard_variables"></a>
+    Build systems for native binaries MUST honor the relevant compiler and
+    linker (environment) variables passed in to them (e.g., CC, CFLAGS,
+    CXX, CXXFLAGS, and LDFLAGS) and pass them to compiler and linker
+    invocations. A build system MAY extend them with additional flags;
+    it MUST NOT simply replace provided values with its own.
+    DETAILS: It should be easy to enable special build features like
+    Address Sanitizer (ASAN), or to comply with distribution hardening
+    best practices (e.g., by easily turning on compiler flags to do so).
+    If no native binaries are being generated, select "N/A".
+
+    *Rationale*: See
+     https://github.com/linuxfoundation/cii-best-practices-badge/issues/453
+
 -   <a name="build_repeatable"></a>
     The project MUST be able to repeat the process of
     generating information from source files and get exactly
@@ -269,6 +314,23 @@ SHOULD or MUST.
     which can be harder to do - so we have split this requirement up.
     See the [reproducible build criterion](#reproducible_build).
 
+-   <a name="installation_standard_variables"></a>
+    The installation system MUST honor standard conventions for
+    selecting the location where built artifacts are written to
+    at installation time.  For example, if it installs
+    files on a POSIX system it MUST honor the DESTDIR environment variable.
+    If there is no installation system or no standard convention,
+    select "N/A".
+
+    *Rationale* : This supports capturing the artifacts (e.g., for analysis)
+    without interfering with the build or installation system due to
+    system-wide changes. See https://github.com/linuxfoundation/cii-best-practices-badge/issues/455
+
+I think "N/A" would have to be permitted, e.g., it doesn't apply when there's no "installation" process, or when POSIX filesystems aren't supported during installation (e.g., Windows-only programs).
+
+    *Rationale*: See
+     https://github.com/linuxfoundation/cii-best-practices-badge/issues/453
+
 
 ### Continuity
 
@@ -279,6 +341,9 @@ SHOULD or MUST.
     week of confirmation that an individual is incapacitated or killed.
     This MAY be done by ensuring someone else has any necessary
     keys, passwords, and legal rights to continue the project.
+    Individuals who run a FLOSS project MAY do this by providing keys in
+    a lockbox and a will providing any needed legal rights
+    (e.g., for DNS names).
     <sup>[<a href="#access_continuity">access_continuity</a>]</sup>
 
 -   The project SHOULD have a "bus factor" of 2 or more.
@@ -364,11 +429,14 @@ SHOULD or MUST.
     the primary developers team integrate their work frequently.
     In most cases this means that each developer integrates at least daily.
     [continuous_integration]
+    ??? NOTE: There's at least one other "continuous_integration" criterion
+    draft text, and there's difference in what CI means to people.
 
     *Rationale*: See
     [Martin Fowler](http://martinfowler.com/articles/continuousIntegration.html)
     We realize that this can be difficult for some projects to apply,
     which is why it proposed as a SHOULD.
+
 
 -   The project MUST clearly identify small tasks that can be performed
     by new or casual contributors.
@@ -382,6 +450,7 @@ SHOULD or MUST.
     they can be improving documentation, adding test cases,
     or anything else that aids the project and helps the contributor
     understand more about the project.
+    <sup>[<a href="#small_tasks">small_tasks</a>]</sup>
 
     *Rationale*:  Identified small tasks make it easier for new potential
     contributors to become involved in a project, and projects with more
@@ -404,6 +473,7 @@ SHOULD or MUST.
     Examples of good indicators of a significant contributor are:
     written at least 1,000 lines of code, contributed 50 commits, or
     contributed at least 20 pages of documentation.
+    <sup>[<a href="#contributors_unassociated">contributors_unassociated</a>]</sup>
 
     *Rationale*: This reduces the risk of non-support if
     a single organization stops supporting the project as FLOSS.
@@ -415,10 +485,11 @@ SHOULD or MUST.
     It also covers the case where "two people got paid working for
     Red Cross for a day, but Red Cross doesn't use the project".
 
--   The project MUST have a second person review at least
-    50% of all proposed modifications
-    before release, to determine if it is a worthwhile modification and
+-   The project MUST have at least 50% of all proposed modifications
+    reviewed before release by a person other than the author,
+    to determine if it is a worthwhile modification and
     free of known issues which would argue against its inclusion.
+    <sup>[<a href="#two_person_review">two_person_review</a>]</sup>
 
     *Rationale*: Review can counter many problems.
     The percentage here could be changed; 100% would be great but untenable for
@@ -536,7 +607,8 @@ that need to be reviewed.
         (at least for security updates).
     -   All inputs from untrusted sources checked against whitelist
         (not a blacklist) and/or escaped before being transmitted
-        to other users.
+        to other users.  Media (images, audio, and video) is normally considered
+        untrusted since the data is often provided by untrusted sources.
     -   Privileges limited/minimized.
     -   Attack surface documented and minimized.
     -   Automated regression test suite includes at least one check for
@@ -632,6 +704,67 @@ some subset of (e.g., it must meet at least 3 of 5 criteria).
     [Ben Balter's "Copyright notices for open source projects"](http://ben.balter.com/2015/06/03/copyright-notices-for-websites-and-open-source-projects/)
     provides a good argument for why it *should* be included,
     and it is not hard to add.
+
+### Security Code review ideas from liujin28
+
+liujin28 proposed some specifics for security code review in
+https://github.com/linuxfoundation/cii-best-practices-badge/pull/536
+
+This may be too detailed, but perhaps we should list some specific
+things reviewers should look for.
+
+- <a name="validate_the_tainted_array_index"></a>The direct data
+  or the indirect data from the untrusted sources which is used as
+  the array index MUST be ensured within a legal range.
+  Input validation is always the best practices of secure coding.
+  (e.g., [CERT](http://www.cert.org/secure-coding/research/secure-coding-standards.cfm),
+  [OWASP](https://www.owasp.org/index.php/OWASP_Secure_Coding_Practices_-_Quick_Reference_Guide))
+  A lot of vulnerabilities related to this topic.
+  See the [CWE](http://cwe.mitre.org/data/definitions/129.html).
+  <sup>[<a href="#validate_the_tainted_array_index">validate_the_tainted_array_index</a>]</sup>
+
+- <a name="validate_the_tainted_buffer_length"></a>The direct data
+  or the indirect data from the untrusted sources which is used as
+  the buffer length for read/write MUST be ensured within a legal range.
+  Input validation is always the best practices of secure coding.
+  (e.g., [CERT](http://www.cert.org/secure-coding/research/secure-coding-standards.cfm),
+  [OWASP](https://www.owasp.org/index.php/OWASP_Secure_Coding_Practices_-_Quick_Reference_Guide))
+  A lot of vulnerabilities related to this topic.
+  See the [CWE](http://cwe.mitre.org/data/definitions/119.html).
+  <sup>[<a href="#validate_the_tainted_buffer_length">validate_the_tainted_buffer_length</a>]</sup>
+
+- <a name="validate_the_tainted_loop_condiction"></a>The direct data
+  or the indirect data from the untrusted sources which is used as
+  the loop ending condiction MUST be avoided infinite loop or other logic mistake.
+  Input validation is always the best practices of secure coding.
+  (e.g., [CERT](http://www.cert.org/secure-coding/research/secure-coding-standards.cfm),
+  [OWASP](https://www.owasp.org/index.php/OWASP_Secure_Coding_Practices_-_Quick_Reference_Guide))
+  See the [CWE](http://cwe.mitre.org/data/definitions/606.html).
+  <sup>[<a href="#validate_the_tainted_loop_condiction">validate_the_tainted_loop_condiction</a>]</sup>
+
+- <a name="validate_the_tainted_string"></a>When copying from a string
+  that is not a trusted source, it MUST ensure
+  that there is enough space to hold the data and the end.
+  Input validation is always the best practices of secure coding.
+  (e.g., [CERT](http://www.cert.org/secure-coding/research/secure-coding-standards.cfm),
+  [OWASP](https://www.owasp.org/index.php/OWASP_Secure_Coding_Practices_-_Quick_Reference_Guide))
+  See the [CWE](http://cwe.mitre.org/data/definitions/120.html).
+  <sup>[<a href="#validate_the_tainted_string">validate_the_tainted_string</a>]</sup>
+
+- <a name="validate_the_tainted_integer_on_caculation"></a>The integer values
+  from untrusted sources MUST be avoided the integer overflow or wraparound.
+  (e.g., [CERT](http://www.cert.org/secure-coding/research/secure-coding-standards.cfm),
+  [OWASP](https://www.owasp.org/index.php/OWASP_Secure_Coding_Practices_-_Quick_Reference_Guide))
+  See the [CWE](http://cwe.mitre.org/data/definitions/190.html).
+  <sup>[<a href="#validate_the_tainted_integer_on_caculation">validate_the_tainted_integer_on_caculation</a>]</sup>
+
+- <a name="validate_the_malloc_size"></a>Appropriate size limits
+  SHOULD be used to allocate memory from an unreliable source, and
+  MUST check the return value of the allocate function.
+  (e.g., [CERT](http://www.cert.org/secure-coding/research/secure-coding-standards.cfm),
+  [OWASP](https://www.owasp.org/index.php/OWASP_Secure_Coding_Practices_-_Quick_Reference_Guide))
+  See the [CWE](http://cwe.mitre.org/data/definitions/789.html).
+  <sup>[<a href="#validate_the_malloc_size">validate_the_malloc_size</a>]</sup>
 
 ## Test coverage
 

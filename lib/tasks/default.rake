@@ -218,16 +218,16 @@ namespace :fastly do
     puts 'Starting test of Fastly caching'
     verbose(false) do
       sh <<-END
-        site="#{args.site_name}"
+        site_name="#{args.site_name}"
         echo 'Purging Fastly cache of badge for project 1'
-        curl -X PURGE $site
-        if [ "$(curl -svo /dev/null $site 2>&1 | grep MISS)" ]; then
+        curl -X PURGE "$site_name"
+        if [ '$(curl -svo /dev/null "$site_name" 2>&1 | grep "X-Cache: MISS")' ]; then
           echo "Fastly cache of badge for project 1 successfully purged."
         else
           echo "Failed to purge badge for project 1 from Fastly cache."
           exit 1
         fi
-        if [ "$(curl -svo /dev/null $site 2>&1 | grep HIT)" ]; then
+        if [ '$(curl -svo /dev/null "site_name" 2>&1 | grep "X-Cache: HIT")' ]; then
           echo "Fastly cache of badge for project 1 successfully restored."
         else
           echo "Fastly failed to restore cache of badge for project 1."

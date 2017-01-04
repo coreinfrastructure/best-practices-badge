@@ -25,6 +25,8 @@ class ProjectsController < ApplicationController
       homepage_url repo_url updated_at user_id created_at
     ).freeze
 
+  ALLOWED_QUERY_PARAMS = %i(gteq lteq pq q sort sort_direction status).freeze
+
   # If a valid "sort" parameter is provided, sort @projects in "sort_direction"
   # rubocop:disable Metrics/AbcSize
   def sort_projects

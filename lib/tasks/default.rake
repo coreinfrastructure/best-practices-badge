@@ -294,8 +294,14 @@ task :production_to_staging do
   sh 'heroku run bundle exec rake db:migrate --app staging-bestpractices'
 end
 
-Rails::TestTask.new('test:features' => 'test:prepare') do |t|
-  t.pattern = 'test/features/**/*_test.rb'
+# require 'rails/testtask.rb'
+# Rails::TestTask.new('test:features' => 'test:prepare') do |t|
+#   t.pattern = 'test/features/**/*_test.rb'
+# end
+
+task 'test:features' => 'test:prepare' do
+  $LOAD_PATH << 'test'
+  Minitest.rake_run(['test/features'])
 end
 
 # This gem isn't available in production

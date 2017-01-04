@@ -9,14 +9,16 @@ gem 'bootstrap-will_paginate', '0.0.10'
 gem 'bootstrap_form', '2.5.2'
 gem 'chartkick', '2.2.1' # Chart project_stats
 gem 'faker', '1.6.6'
-gem 'fastly-rails', '0.7.1' # Use Fastly CDN
+gem 'fastly-rails', git: 'https://github.com/dankohn/fastly-rails',
+                    ref: 'a909d09'
+# Fastly master is locked to a railties version
 gem 'font-awesome-rails', '4.7.0.1'
 gem 'github_api', '0.14.5'
 gem 'imagesLoaded_rails', '4.1.0' # JavaScript - enable wait for image load
 gem 'jbuilder', '2.6.1'
 gem 'jquery-rails', '4.2.1' # JavaScript jQuery library (for Rails)
 gem 'jquery-turbolinks' # Make turbolinks work with jQuery
-gem 'jquery-ui-rails', '5.0.5' # JavaScript jQueryUI library (for Rails)
+gem 'jquery-ui-rails', '6.0.1' # JavaScript jQueryUI library (for Rails)
 gem 'octokit', '4.3.0' # GitHub's official Ruby API
 gem 'omniauth-github', '1.1.2' # Authentication to GitHub (get project info)
 gem 'paper_trail', '5.2.2' # Record previous versions of project data
@@ -24,7 +26,7 @@ gem 'pg', '0.18.4' # PostgreSQL database, used for data storage
 gem 'pg_search', '1.0.6' # PostgreSQL full-text search
 gem 'puma', '3.6.2' # Faster webserver; recommended by Heroku
 gem 'rack-timeout', '0.4.2' # Timeout per https://github.com/heroku/rack-timeout
-gem 'rails', '4.2.7.1' # Our web framework
+gem 'rails', '5.0.1' # Our web framework
 gem 'redcarpet', '3.3.4' # Process markdown in form textareas (justifications)
 gem 'sass-rails', '5.0.6'
 gem 'secure_headers', '3.5.1'
@@ -47,7 +49,6 @@ group :development, :test do
   gem 'pronto-rails_best_practices', '0.7.0'
   gem 'pronto-rubocop', '0.7.0'
   gem 'pry-byebug', '3.4.2'
-  gem 'quiet_assets', '1.1.0'
   gem 'rubocop', '0.42.0' # Style checker.  Changes can cause test failure
   gem 'ruby-graphviz', '1.2.2'
   gem 'spring', '1.7.2'
@@ -66,10 +67,10 @@ group :test do
   gem 'capybara-slow_finder_errors', '0.1.4' # warn if test waits for timeout
   gem 'chromedriver-helper', '1.0.0'
   gem 'codecov', '0.1.9', require: false
-  gem 'm', '1.5.0' # Run test/unit tests by line number
-  gem 'minitest-rails-capybara', '2.1.2', require: false
+  gem 'minitest-rails-capybara', '3.0.0', require: false
   gem 'minitest-retry', '0.1.6', require: false # Avoid Capybara false positives
   gem 'poltergeist', '1.10.0', require: false
+  gem 'rails-controller-testing', '1.0.1'
   gem 'selenium-webdriver', '2.53.4', require: false
   gem 'simplecov', '0.12.0', require: false
   gem 'webmock', '2.1.0', require: false

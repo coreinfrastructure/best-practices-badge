@@ -27,23 +27,6 @@ class ProjectsController < ApplicationController
 
   ALLOWED_QUERY_PARAMS = %i(gteq lteq pq q sort sort_direction status).freeze
 
-  # If a valid "sort" parameter is provided, sort @projects in "sort_direction"
-  # rubocop:disable Metrics/AbcSize
-  def sort_projects
-    # Sort, if there is a requested order (otherwise use default created_at)
-    return unless params[:sort].present? && ALLOWED_SORT.include?(params[:sort])
-    sort_direction =
-      if params[:sort_direction] == 'desc' # descending
-        ' desc'
-      else
-        ' asc' # default is ascending
-      end
-    @projects = @projects
-                .reorder(params[:sort] + sort_direction)
-                .order('created_at' + sort_direction)
-  end
-  # rubocop:enable Metrics/AbcSize
-
   # GET /projects
   # GET /projects.json
   # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
@@ -68,8 +51,7 @@ class ProjectsController < ApplicationController
 
   # GET /projects/1
   # GET /projects/1.json
-  def show
-  end
+  def show; end
 
   def badge
     set_surrogate_key_header @project.record_key + '/badge'
@@ -87,8 +69,7 @@ class ProjectsController < ApplicationController
   end
 
   # GET /projects/:id/edit(.:format)
-  def edit
-  end
+  def edit; end
 
   # POST /projects
   # POST /projects.json
@@ -150,43 +131,6 @@ class ProjectsController < ApplicationController
   end
   # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
-  def client_factory
-    proc do
-      if current_user.nil? || current_user.provider != 'github'
-        Octokit::Client.new
-      else
-        Octokit::Client.new access_token: session[:user_token]
-      end
-    end
-  end
-
-  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
-  def successful_update(format, old_badge_level)
-    purge_cdn_badge
-    # @project.purge
-    format.html do
-      redirect_to @project, success: 'Project was successfully updated.'
-    end
-    format.json { render :show, status: :ok, location: @project }
-    new_badge_level = @project.badge_level
-    if new_badge_level != old_badge_level # TODO: Eventually deliver_later
-      ReportMailer.project_status_change(
-        @project, old_badge_level, new_badge_level
-      ).deliver_now
-      if new_badge_level == 'passing'
-        flash[:success] = 'CONGRATULATIONS on earning a badge!' \
-          ' Please show your badge status on your project page (see the' \
-          ' "how to embed it" text just below if you don\'t' \
-          ' know how to do that).'
-        ReportMailer.email_owner(@project, new_badge_level).deliver_now
-      elsif new_badge_level == 'in_progress'
-        flash[:danger] = 'Project no longer has a badge.'
-        ReportMailer.email_owner(@project, new_badge_level).deliver_now
-      end
-    end
-  end
-  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
-
   # DELETE /projects/1
   # DELETE /projects/1.json
   # rubocop:disable Metrics/MethodLength
@@ -212,16 +156,7 @@ class ProjectsController < ApplicationController
     respond_to { |format| format.atom }
   end
 
-  def repo_data
-    github = Github.new oauth_token: session[:user_token], auto_pagination: true
-    github.repos.list.map do |repo|
-      if repo.blank?
-        nil
-      else
-        [repo.full_name, repo.fork, repo.homepage, repo.html_url]
-      end
-    end.compact
-  end
+  private
 
   # Send reminders to users for inactivity. Return array of project ids
   # that were sent reminders (this array may be empty).
@@ -246,20 +181,22 @@ class ProjectsController < ApplicationController
     end
     projects.map(&:id) # Return a list of project ids that were reminded.
   end
+  private_class_method :send_reminders
   # rubocop:enable Metrics/MethodLength
 
-  private
-
-  def set_homepage_url
-    # Assign to repo.homepage if it exists, and else repo_url
-    repo = repo_data.find { |r| @project.repo_url == r[3] }
-    return nil if repo.nil?
-    repo[2].present? ? repo[2] : @project.repo_url
+  def change_authorized
+    return true if can_make_changes?
+    redirect_to root_url
   end
 
-  # Use callbacks to share common setup or constraints between actions.
-  def set_project
-    @project = Project.find(params[:id])
+  def client_factory
+    proc do
+      if current_user.nil? || current_user.provider != 'github'
+        Octokit::Client.new
+      else
+        Octokit::Client.new access_token: session[:user_token]
+      end
+    end
   end
 
   # Never trust parameters from the scary internet,
@@ -273,11 +210,6 @@ class ProjectsController < ApplicationController
         Project::PROJECT_PERMITTED_FIELDS
       )
     end
-  end
-
-  def change_authorized
-    return true if can_make_changes?
-    redirect_to root_url
   end
 
   # Purge the badge from the CDN (if any)
@@ -304,4 +236,66 @@ class ProjectsController < ApplicationController
     end
     redirect_to parsed.to_s unless parsed.to_s == original
   end
+
+  def repo_data
+    github = Github.new oauth_token: session[:user_token], auto_pagination: true
+    github.repos.list.map do |repo|
+      if repo.blank?
+        nil
+      else
+        [repo.full_name, repo.fork, repo.homepage, repo.html_url]
+      end
+    end.compact
+  end
+
+  def set_homepage_url
+    # Assign to repo.homepage if it exists, and else repo_url
+    repo = repo_data.find { |r| @project.repo_url == r[3] }
+    return nil if repo.nil?
+    repo[2].present? ? repo[2] : @project.repo_url
+  end
+
+  # Use callbacks to share common setup or constraints between actions.
+  def set_project
+    @project = Project.find(params[:id])
+  end
+
+  # If a valid "sort" parameter is provided, sort @projects in "sort_direction"
+  # rubocop:disable Metrics/AbcSize
+  def sort_projects
+    # Sort, if there is a requested order (otherwise use default created_at)
+    return unless params[:sort].present? && ALLOWED_SORT.include?(params[:sort])
+    sort_direction = params[:sort_direction] == 'desc' ? ' desc' : ' asc'
+    @projects = @projects
+                .reorder(params[:sort] + sort_direction)
+                .order('created_at' + sort_direction)
+  end
+  # rubocop:enable Metrics/AbcSize
+
+  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+  def successful_update(format, old_badge_level)
+    purge_cdn_badge
+    # @project.purge
+    format.html do
+      redirect_to @project, success: 'Project was successfully updated.'
+    end
+    format.json { render :show, status: :ok, location: @project }
+    new_badge_level = @project.badge_level
+    return unless new_badge_level != old_badge_level
+    # TODO: Eventually deliver_later
+    ReportMailer.project_status_change(
+      @project, old_badge_level, new_badge_level
+    ).deliver_now
+    if new_badge_level == 'passing'
+      flash[:success] = 'CONGRATULATIONS on earning a badge!' \
+        ' Please show your badge status on your project page (see the' \
+        ' "how to embed it" text just below if you don\'t' \
+        ' know how to do that).'
+      ReportMailer.email_owner(@project, new_badge_level).deliver_now
+    elsif new_badge_level == 'in_progress'
+      flash[:danger] = 'Project no longer has a badge.'
+      ReportMailer.email_owner(@project, new_badge_level).deliver_now
+    end
+  end
+  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 end

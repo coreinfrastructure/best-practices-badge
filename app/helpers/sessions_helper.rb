@@ -88,11 +88,10 @@ module SessionsHelper
   end
 
   def validate_session_timestamp
-    if logged_in? && session_expired
-      reset_session
-      session[:current_user] = nil
-      redirect_to login_path
-    end
+    return unless logged_in? && session_expired
+    reset_session
+    session[:current_user] = nil
+    redirect_to login_path
   end
 
   def persist_session_timestamp

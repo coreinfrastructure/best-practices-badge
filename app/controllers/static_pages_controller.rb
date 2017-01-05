@@ -1,11 +1,8 @@
 # frozen_string_literal: true
 class StaticPagesController < ApplicationController
-  def home
-  end
+  def home; end
 
-  def background
-  end
+  def background; end
 
-  def criteria
-  end
+  def criteria; end
 end

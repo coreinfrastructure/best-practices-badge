@@ -6,6 +6,7 @@ class UsersManipulateProjectTest < ActionDispatch::IntegrationTest
     @user = users(:test_user)
   end
 
+  # rubocop:disable Metrics/BlockLength
   test 'logged-in user adds a project' do
     # Go to login_path to initialize the session
     get login_path
@@ -103,6 +104,7 @@ class UsersManipulateProjectTest < ActionDispatch::IntegrationTest
       #  assert_select 'a[href=?]', user_path(@user), count: 0
     end
   end
+  # rubocop:enable Metrics/BlockLength
 
   test 'logged-in user adds assimilation-official' do
     # Regression test, see:

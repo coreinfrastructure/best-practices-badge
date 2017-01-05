@@ -76,7 +76,7 @@ Another way to do this is to write the following at the end of the commit
 message, on a line by itself separated by a blank line from the body of
 the commit:
 
-    Signed-off-by: YOUR NAME &lt;YOUR.EMAIL@EXAMPLE.COM&gt;
+    Signed-off-by: YOUR NAME <YOUR.EMAIL@EXAMPLE.COM>
 
 You can signoff by default in this project by creating a file
 (say "git-template") that contains
@@ -205,7 +205,8 @@ Please generally follow the
 [community Ruby style guide](https://github.com/bbatsov/ruby-style-guide)
 and the complementary
 [community Rails style guide](https://github.com/bbatsov/rails-style-guide).
-We don't follow them slavishly, but we do generally try to follow them.
+Our continous integration setups runs Rubocop on each commit to ensure they're
+being followed.
 For example, in Ruby:
 
 * [use two-space indents](https://github.com/bbatsov/ruby-style-guide#spaces-indentation)
@@ -373,7 +374,7 @@ check the software:
 9. *yaml_syntax_check* - checks syntax of YAML (.yml) files.
    Note that the automated test suite includes a number of specific
    checks on the criteria.yml file.
-10. *fasterer* - report on Ruby constructs with poor performance
+10. *fasterer* - report on Ruby constructs with poor performance (temporarily disabled until it supports Ruby 2.4)
 11. *eslint* - Perform code style check on JavaScript using eslint
 12. *test* - run the automated test suite
 
@@ -513,7 +514,7 @@ transitively.
 In short, we have strong package management
 over the exact versions used for each gem, and we
 can easily update our dependencies.
-That's important, because transitively depend on over 150 gems.
+That's important, because we transitively depend on over 150 gems.
 
 The default 'rake' task includes the rake 'bundle_audit' task.
 This reports if a Ruby gem we use has a publicly known

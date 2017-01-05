@@ -127,10 +127,10 @@ class ProjectsControllerTest < ActionController::TestCase
       lock_version: @project.lock_version
     }
     log_in_as(@project.user)
-    patch :update, id: @project, project: new_project_data_1
+    patch :update, params: { id: @project, project: new_project_data_1 }
     assert_redirected_to project_path(assigns(:project))
-    get :edit, id: @project
-    patch :update, id: @project, project: new_project_data_2
+    get :edit, params: { id: @project }
+    patch :update, params: { id: @project, project: new_project_data_2 }
     assert_not_empty flash
     assert_template :edit
     assert_difference '@project.lock_version' do

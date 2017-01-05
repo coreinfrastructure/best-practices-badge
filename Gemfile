@@ -8,6 +8,7 @@ gem 'bootstrap-social-rails', '4.12.0'
 gem 'bootstrap-will_paginate', '0.0.10'
 gem 'bootstrap_form', '2.5.3'
 gem 'chartkick', '2.2.1' # Chart project_stats
+gem 'coffee-rails', '4.2.1' # Support CoffeeScript (Javascript preprocessor)
 gem 'faker', '1.7.1'
 gem 'fastly-rails', git: 'https://github.com/dankohn/fastly-rails',
                     ref: 'a909d09'

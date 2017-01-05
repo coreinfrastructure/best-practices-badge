@@ -119,24 +119,24 @@ class ProjectsControllerTest < ActionController::TestCase
   end
 
   test 'should fail to update stale project' do
-    new_name_1 = @project.name + '_updated-1'
-    new_project_data_1 = { name: new_name_1 }
-    new_name_2 = @project.name + '_updated-2'
-    new_project_data_2 = {
-      name: new_name_2,
+    new_name1 = @project.name + '_updated-1'
+    new_project_data1 = { name: new_name1 }
+    new_name2 = @project.name + '_updated-2'
+    new_project_data2 = {
+      name: new_name2,
       lock_version: @project.lock_version
     }
     log_in_as(@project.user)
-    patch :update, params: { id: @project, project: new_project_data_1 }
+    patch :update, params: { id: @project, project: new_project_data1 }
     assert_redirected_to project_path(assigns(:project))
     get :edit, params: { id: @project }
-    patch :update, params: { id: @project, project: new_project_data_2 }
+    patch :update, params: { id: @project, project: new_project_data2 }
     assert_not_empty flash
     assert_template :edit
     assert_difference '@project.lock_version' do
       @project.reload
     end
-    assert_equal @project.name, new_name_1
+    assert_equal @project.name, new_name1
   end
 
   test 'should fail to update other users project' do

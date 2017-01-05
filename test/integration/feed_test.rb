@@ -11,11 +11,12 @@ class FeedTest < ActionDispatch::IntegrationTest
   setup do
     # Normalize time in order to match fixture file
     travel_to Time.zone.parse('2015-03-01T12:00:00') do
-      silence_warnings do
-        # anything written to STDOUT here will be silenced
-        Rake::Task['db:schema:load'].reenable
-        Rake::Task['db:schema:load'].invoke
-      end
+      # -silence_warnings do
+      # anything written to STDOUT here will be silenced
+      # currently using hack as silence warnings is not working in rails 5
+      capture_stdout { Rake::Task['db:schema:load'].reenable }
+      capture_stdout { Rake::Task['db:schema:load'].invoke }
+      # -end
       Rake::Task['db:fixtures:load'].reenable
       Rake::Task['db:fixtures:load'].invoke
     end
@@ -24,5 +25,20 @@ class FeedTest < ActionDispatch::IntegrationTest
   test 'feed matches fixture file' do
     get feed_path
     assert_equal contents('feed.atom'), response.body
+  end
+
+  private
+
+  # Method to silence stuff printed to stdout
+  # Use this since silence_warnings is not working in rails 5
+  def capture_stdout(&_block)
+    original_stdout = $stdout
+    $stdout = fake = StringIO.new
+    begin
+      yield
+    ensure
+      $stdout = original_stdout
+    end
+    fake.string
   end
 end

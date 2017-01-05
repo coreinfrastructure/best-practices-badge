@@ -21,7 +21,7 @@ class Project < ActiveRecord::Base
   MAX_SHORT_STRING_LENGTH = 254 # Arbitrary maximum to reduce abuse
 
   PROJECT_OTHER_FIELDS = %i(
-    name description homepage_url cpe
+    name description homepage_url cpe implementation_languages
     license general_comments user_id disabled_reminders
   ).freeze
   ALL_CRITERIA_STATUS = Criteria.map { |c| c.name.status }.freeze
@@ -116,6 +116,21 @@ class Project < ActiveRecord::Base
             url: true,
             length: { maximum: MAX_SHORT_STRING_LENGTH }
   validate :need_a_base_url
+
+  # Comma-separated list.  This is very generous in what characters it
+  # allows in a language name, but restricts it to ASCII and omits
+  # problematic characters that are very unlikely in a name like
+  # <, >, &, ", brackets, and braces.  This handles language names like
+  # JavaScript, C++, C#, D-, and PL/I.  A space is optional after a comma.
+  VALID_LANGUAGE_LIST = %r{\A(|-|
+                          ([A-Za-z0-9!\#$%'()*+.\/\:;=?@\[\]^~-]+
+                            (,\ ?[A-Za-z0-9!\#$%'()*+.\/\:;=?@\[\]^~-]+)*))\Z}x
+  validates :implementation_languages,
+            length: { maximum: MAX_SHORT_STRING_LENGTH },
+            format: {
+              with: VALID_LANGUAGE_LIST,
+              message: 'Must a comma-separated list of names'
+            }
 
   validates :cpe,
             length: { maximum: MAX_SHORT_STRING_LENGTH },

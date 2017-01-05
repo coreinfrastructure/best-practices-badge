@@ -77,6 +77,8 @@ group :test do
 end
 
 group :production do
-  gem 'heroku_rails_deflate', '1.0.3' # Compress (reduces network load)
   gem 'rails_12factor', '0.0.3'
+  # gem 'heroku_rails_deflate', '1.0.3' # Compress (reduces network load)
+  # Removed according to http://stackoverflow.com/a/39550697/1935918
+  # (it has not yet been updated to work with Rails 5).
 end

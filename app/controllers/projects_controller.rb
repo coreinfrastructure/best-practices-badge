@@ -142,9 +142,10 @@ class ProjectsController < ApplicationController
       end
     end
   rescue ActiveRecord::StaleObjectError
-    @project.reload
-    flash[:alert] = 'Another user has made a change to that ' \
-      'record since you accessed the edit form.'
+    flash.now[:danger] =
+      'Another user has made a change to that record since you ' \
+      'accessed the edit form. Please open a new edit form in a ' \
+      'new window to transfer your changes.'
     render :edit, status: :conflict
   end
   # rubocop:enable Metrics/AbcSize, Metrics/MethodLength

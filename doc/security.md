@@ -723,7 +723,8 @@ Dr. Wheeler's doctoral dissertation,
 [Fully Countering Trusting Trust through Diverse Double-Compiling](http://www.dwheeler.com/trusting-trust/),
 discusses how to counter malicious compilers.
 
-Sam Khakimov has been developing software for a number of years,
+Sam Khakimov was greatly involved in its earlier development.
+He has been developing software for a number of years,
 in a variety of languages.
 He has a Bachelor of Business Admin in Finance and Mathematics
 (CUNY Baruch College Summa Cum Laude Double Major) and a
@@ -734,6 +735,9 @@ additional coursework in Cyber Security.
 received a bachelor's degree in Economics and Computer Science
 from the Honors program of Swarthmore College.
 He has long expertise in Ruby on Rails.
+
+Jason Dossett has a PhD in Physics from The University of Texas at Dallas,
+and has been involved in software development for many years.
 
 ## Your help is welcome!
 

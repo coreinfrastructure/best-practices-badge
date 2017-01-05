@@ -73,6 +73,7 @@ class PasswordResetsControllerTest < ActionController::TestCase
   end
   # rubocop:enable Metrics/BlockLength
 
+  # rubocop:enable Metrics/BlockLength
   test 'expired token' do
     get :new
     post :create, params: { password_reset: { email: @user.email } }

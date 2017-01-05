@@ -141,10 +141,6 @@ GEM
       activesupport (>= 4.1.0)
     hashdiff (0.3.2)
     hashie (3.4.6)
-    heroku_rails_deflate (1.0.3)
-      actionpack (>= 3.2.13)
-      activesupport (>= 3.2.13)
-      rack (>= 1.4.5)
     httparty (0.13.7)
       json (~> 1.8)
       multi_xml (>= 0.5.2)
@@ -447,7 +443,6 @@ DEPENDENCIES
   fastly-rails!
   font-awesome-rails (= 4.7.0.1)
   github_api (= 0.14.5)
-  heroku_rails_deflate (= 1.0.3)
   imagesLoaded_rails (= 4.1.0)
   jbuilder (= 2.6.1)
   jquery-rails (= 4.2.2)

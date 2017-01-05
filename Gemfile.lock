@@ -205,7 +205,7 @@ GEM
       minitest-capybara (~> 0.8)
       minitest-metadata (~> 0.6)
       minitest-rails (~> 3.0)
-    minitest-retry (0.1.6)
+    minitest-retry (0.1.7)
       minitest (>= 5.0)
     mixlib-cli (1.7.0)
     mixlib-config (2.2.4)
@@ -412,7 +412,7 @@ GEM
       activemodel (>= 5.0)
       debug_inspector
       railties (>= 5.0)
-    webmock (2.3.1)
+    webmock (2.3.2)
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
       hashdiff
@@ -459,7 +459,7 @@ DEPENDENCIES
   license_finder (= 2.1.2)
   mdl (= 0.4.0)
   minitest-rails-capybara (= 3.0.0)
-  minitest-retry (= 0.1.6)
+  minitest-retry (= 0.1.7)
   octokit (= 4.6.2)
   omniauth-github (= 1.1.2)
   paper_trail (= 6.0.2)
@@ -491,7 +491,7 @@ DEPENDENCIES
   uglifier (= 3.0.4)
   vcr (= 3.0.3)
   web-console (= 3.4.0)
-  webmock (= 2.3.1)
+  webmock (= 2.3.2)
   will_paginate (= 3.1.5)
   yaml-lint (= 0.0.9)
 

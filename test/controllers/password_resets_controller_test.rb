@@ -71,6 +71,7 @@ class PasswordResetsControllerTest < ActionController::TestCase
     assert_not flash.empty?
     assert_redirected_to user
   end
+  # rubocop:enable Metrics/BlockLength
 
   # rubocop:enable Metrics/BlockLength
   test 'expired token' do

@@ -72,6 +72,7 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
     assert user_logged_in?
   end
 
+  # rubocop:disable Metrics/BlockLength
   test 'resend account activation for unactivated account' do
     get signup_path
     assert_difference 'User.count', 1 do
@@ -101,6 +102,7 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
     assert_template 'users/show'
     assert user_logged_in?
   end
+  # rubocop:enable Metrics/BlockLength
 
   test 'redirect activated user to login' do
     @user = users(:test_user)

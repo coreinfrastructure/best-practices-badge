@@ -344,7 +344,7 @@ GEM
     redcarpet (3.3.4)
     request_store (1.3.1)
     require_all (1.3.3)
-    rubocop (0.42.0)
+    rubocop (0.46.0)
       parser (>= 2.3.1.1, < 3.0)
       powerpack (~> 0.1)
       rainbow (>= 1.99.1, < 3.0)
@@ -480,7 +480,7 @@ DEPENDENCIES
   rails_12factor (= 0.0.3)
   rails_db (= 1.3.4)
   redcarpet (= 3.3.4)
-  rubocop (= 0.42.0)
+  rubocop (= 0.46.0)
   ruby-graphviz (= 1.2.2)
   sass-rails (= 5.0.6)
   secure_headers (= 3.5.1)
@@ -500,4 +500,4 @@ RUBY VERSION
    ruby 2.3.1p112
 
 BUNDLED WITH
-   1.13.7
+   1.12.6

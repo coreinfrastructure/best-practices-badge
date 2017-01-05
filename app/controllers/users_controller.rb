@@ -16,9 +16,8 @@ class UsersController < ApplicationController
   def show
     @user = User.find(params[:id])
     @projects = @user.projects.paginate(page: params[:page])
-    if @user == current_user && @user.provider == 'github'
-      @edit_projects = Project.where(repo_url: github_user_projects) - @projects
-    end
+    return unless @user == current_user && @user.provider == 'github'
+    @edit_projects = Project.where(repo_url: github_user_projects) - @projects
   end
 
   # rubocop: disable Metrics/MethodLength
@@ -92,10 +91,9 @@ class UsersController < ApplicationController
 
   # Confirms a logged-in user.
   def logged_in_user
-    unless logged_in?
-      flash[:danger] = 'Please log in.'
-      redirect_to login_url
-    end
+    return if logged_in?
+    flash[:danger] = 'Please log in.'
+    redirect_to login_url
   end
 
   # Confirms the correct user.

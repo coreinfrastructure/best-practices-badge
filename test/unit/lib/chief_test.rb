@@ -10,6 +10,7 @@ class ChiefTest < ActiveSupport::TestCase
     @sample_project[:repo_url] = "https://github.com/#{@full_name}"
   end
 
+  # rubocop:disable Metrics/BlockLength
   test 'CII badge results correct' do
     new_chief = Chief.new(@sample_project, proc { Octokit::Client.new })
     VCR.use_cassette('github') do
@@ -41,6 +42,7 @@ class ChiefTest < ActiveSupport::TestCase
                  'cii-best-practices-badge/blob/master/Rakefile>.',
                  results[:build_justification]
   end
+  # rubocop:enable Metrics/BlockLength
 
   test 'Fatal exceptions in a Detective will not crash production system' do
     old_environment = ENV['RAILS_ENV']

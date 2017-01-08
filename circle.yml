@@ -16,7 +16,7 @@ deployment:
       - git push git@heroku.com:master-bestpractices.git $CIRCLE_SHA1:refs/heads/master
       - heroku run rake db:migrate --app master-bestpractices:
           timeout: 400 # if your deploys take a long time
-      - "sleep 5 && rake fastly:test" # Check if Fastly CDN caching works
+      - "sleep 5 && bundle exec rake fastly:test" # Is Fastly CDN working?
   staging:
     branch: staging
     commands:

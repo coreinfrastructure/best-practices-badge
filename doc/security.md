@@ -27,6 +27,8 @@ If you find a vulnerability, please see
 For more technical information on the implementation, see
 [implementation.md](implementation.md).
 
+![Assurance case summary](./assurance-case.png)
+
 ## Security Requirements
 
 Here is what BadgeApp must do to be secure (and a few comments about

@@ -6,6 +6,17 @@ Security is important and challenging.
 This document describes why we think this software (the "BadgeApp")
 is adequately secure (i.e., its "assurance case").
 
+Sadly, perfection is rare; we really want your help.
+If you find a vulnerability, please see
+[CONTRIBUTING.md](../CONTRIBUTING.md) for how to submit a vulnerability report.
+For more technical information on the implementation, see
+[implementation.md](implementation.md).
+
+The following figure summarizes why we think this application
+is adequately secure:
+
+![Assurance case summary](./assurance-case.png)
+
 Our overall security approach is called
 defense-in-breadth, that is, we consider
 security (including security countermeasures) in all
@@ -20,14 +31,6 @@ Below are the overall security requirements, followed by how we approach
 security in design, implementation,
 verification, supply chain (reuse), development environment,
 and deployment/operations.
-
-Sadly, perfection is rare; we really want your help.
-If you find a vulnerability, please see
-[CONTRIBUTING.md](../CONTRIBUTING.md) for how to submit a vulnerability report.
-For more technical information on the implementation, see
-[implementation.md](implementation.md).
-
-![Assurance case summary](./assurance-case.png)
 
 ## Security Requirements
 

@@ -1053,6 +1053,9 @@
           Fuzzy Lop</a>) or a web application scanner (e.g.,
           <a href="https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project">OWASP
           ZAP</a> or <a href="http://w3af.org/">w3af</a>).
+          In some cases the
+          <a href="https://github.com/google/oss-fuzz#introduction">OSS-Fuzz</a>
+          project may be willing to apply fuzz testing to your project.
           For purposes of this criterion the dynamic analysis
           tool needs to vary the inputs in some way to look for
           various kinds of problems <em>or</em> be an automated

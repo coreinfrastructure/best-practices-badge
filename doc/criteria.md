@@ -694,6 +694,9 @@ by the delivered project's software.
   or a web application scanner
   (e.g., [OWASP ZAP](https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project)
   or [w3af.org](http://w3af.org/)).
+  In some cases the
+  [OSS-Fuzz](https://github.com/google/oss-fuzz#introduction)
+  project may be willing to apply fuzz testing to your project.
   For purposes of this criterion the dynamic analysis tool needs to vary
   the inputs in some way to look for various kinds of problems *or*
   be an automated test suite with at least 80% branch coverage.

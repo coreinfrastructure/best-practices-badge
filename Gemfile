@@ -18,7 +18,7 @@ gem 'github_api', '0.14.5'
 gem 'imagesLoaded_rails', '4.1.0' # JavaScript - enable wait for image load
 gem 'jbuilder', '2.6.1'
 gem 'jquery-rails', '4.2.2' # JavaScript jQuery library (for Rails)
-gem 'jquery-turbolinks' # Make turbolinks work with jQuery
+# gem 'jquery-turbolinks' # Make turbolinks work with jQuery
 gem 'jquery-ui-rails', '6.0.1' # JavaScript jQueryUI library (for Rails)
 gem 'octokit', '4.6.2' # GitHub's official Ruby API
 gem 'omniauth-github', '1.1.2' # Authentication to GitHub (get project info)
@@ -31,7 +31,7 @@ gem 'rails', '5.0.1' # Our web framework
 gem 'redcarpet', '3.4.0' # Process markdown in form textareas (justifications)
 gem 'sass-rails', '5.0.6'
 gem 'secure_headers', '3.5.1'
-gem 'turbolinks', '5.0.1' # Speed UI access
+# gem 'turbolinks', '5.0.1' # Speed UI access
 gem 'uglifier', '3.0.4'
 gem 'will_paginate', '3.1.5'
 

@@ -6,8 +6,8 @@
   <meta name=viewport content="width=device-width, initial-scale=1">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <%= favicon_link_tag %>
-  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
-  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= stylesheet_link_tag    'application', media: 'all' %>
+  <%= javascript_include_tag 'application' %>
   <%= auto_discovery_link_tag :atom, { controller: 'projects', action: 'feed' }, { title: 'CII Best Practices BadgeApp Updated Projects' } %>
   <%= csrf_meta_tags %>
 </head>

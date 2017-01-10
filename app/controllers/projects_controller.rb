@@ -123,13 +123,17 @@ class ProjectsController < ApplicationController
       end
     end
   rescue ActiveRecord::StaleObjectError
-    # rubocop:disable Rails/OutputSafety
     flash.now[:danger] =
-      'Another user has made a change to that record since you ' \
-      'accessed the edit form. <br> Please open a new ' \
-      "<a href='#{edit_project_url}' target=_blank>edit form</a> " \
-      'to transfer your changes.'.html_safe
-    # rubocop:enable Rails/OutputSafety
+      safe_join(
+        [
+          'Another user has made a change to that record since you ' \
+          'accessed the edit form. <br> Please open a new ' \
+          '<a href='.html_safe,
+          edit_project_url, # this is HTML escaped, for safety
+          ' target=_blank>edit form</a> to transfer your changes.'.html_safe
+        ],
+        ''
+      )
     render :edit, status: :conflict
   end
   # rubocop:enable Metrics/AbcSize, Metrics/MethodLength

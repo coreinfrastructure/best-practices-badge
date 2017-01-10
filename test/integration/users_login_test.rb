@@ -10,11 +10,12 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
   test 'login with invalid username and password' do
     get login_path
     assert_template 'sessions/new'
-    post login_path,
-         session: {
-           email: 'unknown@example.org', password: 'bad_password',
-           provider: 'local'
-         }
+    post login_path, params: {
+      session: {
+        email: 'unknown@example.org', password: 'bad_password',
+        provider: 'local'
+      }
+    }
     assert_template 'sessions/new'
     assert_not flash.empty?
     get root_path
@@ -24,8 +25,9 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
   test 'login with no provider' do
     get login_path
     assert_template 'sessions/new'
-    post login_path,
-         session: { email: 'unknown@example.org', password: 'bad_password' }
+    post login_path, params: {
+      session: { email: 'unknown@example.org', password: 'bad_password' }
+    }
     assert_template 'sessions/new'
     assert_not flash.empty?
     get root_path

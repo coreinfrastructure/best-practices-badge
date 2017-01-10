@@ -15,15 +15,15 @@
 // about supported directives.
 //
 //= require jquery
-//= require jquery.turbolinks
+//  No longer used: = require jquery.turbolinks
 //= require jquery_ujs
 //= require bootstrap
 // This is for a polyfill for Safari:
-//= require jquery-ui/autocomplete
+//= require jquery-ui/widgets/autocomplete
 // This allows us to wait for image loading to complete:
 //= require imagesloaded
 // Chart creation via chartkick:
 //= require Chart.bundle
 //= require chartkick
 //= require_tree .
-//= require turbolinks
+//= No longer used: = require turbolinks

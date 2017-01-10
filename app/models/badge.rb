@@ -29,7 +29,7 @@ class Badge
     end
 
     def valid?(percentage)
-      raise ArgumentError unless percentage.is_a?(Fixnum) &&
+      raise ArgumentError unless percentage.is_a?(Integer) &&
                                  (0..100).cover?(percentage)
     end
   end
@@ -52,7 +52,6 @@ class Badge
     in_progress_svg(percentage)
   end
 
-  # rubocop:disable Metrics/MethodLength
   def in_progress_svg(percentage)
     <<-ENDOFSTRING.squish
     <svg xmlns="http://www.w3.org/2000/svg" width="204"
@@ -73,9 +72,8 @@ class Badge
     #{percentage}%</text></g></svg>
     ENDOFSTRING
   end
-  # rubocop:enable Metrics/MethodLength
 
-  # rubocop:disable Metrics/MethodLength
+  # rubocop:enable Metrics/MethodLength
   def passing_svg
     <<-ENDOFSTRING.squish
     <svg xmlns="http://www.w3.org/2000/svg" width="192"

@@ -194,19 +194,46 @@ task :fasterer do
   sh 'fasterer'
 end
 
-# Implement full purge of Fastly CDN cache.  Invoke using:
-#   heroku run --app HEROKU_APP_HERE rake fastly:purge
-# Run this if code changes will cause a change in badge level, since otherwise
-# the old badge levels will keep being displayed until the cache times out.
-# See: https://robots.thoughtbot.com/
-# a-guide-to-caching-your-rails-application-with-fastly
+# Tasks for Fastly including purging and testing the cache.
 namespace :fastly do
+  # Implement full purge of Fastly CDN cache.  Invoke using:
+  #   heroku run --app HEROKU_APP_HERE rake fastly:purge
+  # Run this if code changes will cause a change in badge level, since otherwise
+  # the old badge levels will keep being displayed until the cache times out.
+  # See: https://robots.thoughtbot.com/
+  # a-guide-to-caching-your-rails-application-with-fastly
   desc 'Purge Fastly cache (takes about 5s)'
   task :purge do
     puts 'Starting full purge of Fastly cache (typically takes about 5s)'
     require Rails.root.join('config/initializers/fastly')
     FastlyRails.client.get_service(ENV.fetch('FASTLY_SERVICE_ID')).purge_all
     puts 'Cache purged'
+  end
+
+  desc 'Test Fastly Caching'
+  task :test, [:site_name] do |_t, args|
+    args.with_defaults site_name:
+      'https://master.bestpractices.coreinfrastructure.org/projects/1/badge'
+    puts 'Starting test of Fastly caching'
+    verbose(false) do
+      sh <<-END
+        site_name="#{args.site_name}"
+        echo "Purging Fastly cache of badge for ${site_name}"
+        curl -X PURGE "$site_name" || exit 1
+        if curl -svo /dev/null "$site_name" 2>&1 | grep 'X-Cache: MISS' ; then
+          echo "Fastly cache of badge for project 1 successfully purged."
+        else
+          echo "Failed to purge badge for project 1 from Fastly cache."
+          exit 1
+        fi
+        if curl -svo /dev/null "$site_name" 2>&1 | grep 'X-Cache: HIT' ; then
+          echo "Fastly cache successfully restored."
+        else
+          echo "Fastly failed to restore cache."
+          exit 1
+        fi
+      END
+    end
   end
 end
 
@@ -267,8 +294,14 @@ task :production_to_staging do
   sh 'heroku run bundle exec rake db:migrate --app staging-bestpractices'
 end
 
-Rails::TestTask.new('test:features' => 'test:prepare') do |t|
-  t.pattern = 'test/features/**/*_test.rb'
+# require 'rails/testtask.rb'
+# Rails::TestTask.new('test:features' => 'test:prepare') do |t|
+#   t.pattern = 'test/features/**/*_test.rb'
+# end
+
+task 'test:features' => 'test:prepare' do
+  $LOAD_PATH << 'test'
+  Minitest.rake_run(['test/features'])
 end
 
 # This gem isn't available in production

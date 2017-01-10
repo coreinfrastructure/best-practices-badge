@@ -56,11 +56,13 @@ module ProjectsHelper
   # Return HTML for a sortable header.
   def sortable_header(title, field_name)
     new_params = params.merge(sort: field_name)
+                       .permit(ProjectsController::ALLOWED_QUERY_PARAMS)
     if params[:sort] == field_name && params[:sort_direction] != 'desc'
       new_params[:sort_direction] = 'desc'
     else
       new_params.delete(:sort_direction)
     end
+
     # The html_safe assertion here allows the HTML of
     # <a href...> to go through.  This *is* handled for security;
     # params.merge performs the URL encoding as required, and "title" is

@@ -94,7 +94,7 @@ module ActiveSupport
     # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical
     # order.
     ActiveRecord::Migration.maintain_test_schema!
-    self.use_transactional_fixtures = true
+    self.use_transactional_tests = true
     fixtures :all
 
     # Add more helper methods to be used by all tests here...
@@ -138,12 +138,13 @@ module ActiveSupport
       # This is based on "Ruby on Rails Tutorial" by Michael Hargle, chapter 8,
       # https://www.railstutorial.org/book
       if integration_test?
-        post login_path,
-             session: {
-               email:  user.email, password: password,
-               provider: provider, remember_me: remember_me,
-               time_last_used: time_last_used
-             }
+        post login_path, params: {
+          session: {
+            email:  user.email, password: password,
+            provider: provider, remember_me: remember_me,
+            time_last_used: time_last_used
+          }
+        }
         # Do this instead, it at least checks the password:
         # session[:user_id] = user.id if user.try(:authenticate, password)
       else

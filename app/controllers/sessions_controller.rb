@@ -2,8 +2,7 @@
 class SessionsController < ApplicationController
   include SessionsHelper
 
-  def new
-  end
+  def new; end
 
   def create
     reset_session # Counter session fixation

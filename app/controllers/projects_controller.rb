@@ -108,7 +108,7 @@ class ProjectsController < ApplicationController
 
   # PATCH/PUT /projects/1
   # PATCH/PUT /projects/1.json
-  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Rails/OutputSafety
+  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   def update
     old_badge_level = Project.find(params[:id]).badge_level
     Chief.new(@project, client_factory).autofill
@@ -123,14 +123,16 @@ class ProjectsController < ApplicationController
       end
     end
   rescue ActiveRecord::StaleObjectError
+    # rubocop:disable Rails/OutputSafety
     flash.now[:danger] =
       'Another user has made a change to that record since you ' \
       'accessed the edit form. <br> Please open a new ' \
       "#{view_context.link_to('edit form', edit_project_url)} " \
       'in a new window to transfer your changes.'.html_safe
+    # rubocop:enable Rails/OutputSafety
     render :edit, status: :conflict
   end
-  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength, Rails/OutputSafety
+  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
   # DELETE /projects/1
   # DELETE /projects/1.json

@@ -22,7 +22,7 @@ class Project < ActiveRecord::Base
 
   PROJECT_OTHER_FIELDS = %i(
     name description homepage_url cpe implementation_languages
-    license general_comments user_id disabled_reminders
+    license general_comments user_id disabled_reminders lock_version
   ).freeze
   ALL_CRITERIA_STATUS = Criteria.map { |c| c.name.status }.freeze
   ALL_CRITERIA_JUSTIFICATION = Criteria.map { |c| c.name.justification }.freeze

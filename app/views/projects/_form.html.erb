@@ -84,6 +84,7 @@ There is also a
 
   <%= bootstrap_form_for(project) do |f| %>
     <%= render 'shared/error_messages', object: f.object %>
+    <%= f.hidden_field :lock_version %>
 
 <br><br><br>
 <div>

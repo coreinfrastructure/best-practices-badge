@@ -118,6 +118,27 @@ class ProjectsControllerTest < ActionController::TestCase
     assert_response :unprocessable_entity
   end
 
+  test 'should fail to update stale project' do
+    new_name1 = @project.name + '_updated-1'
+    new_project_data1 = { name: new_name1 }
+    new_name2 = @project.name + '_updated-2'
+    new_project_data2 = {
+      name: new_name2,
+      lock_version: @project.lock_version
+    }
+    log_in_as(@project.user)
+    patch :update, params: { id: @project, project: new_project_data1 }
+    assert_redirected_to project_path(assigns(:project))
+    get :edit, params: { id: @project }
+    patch :update, params: { id: @project, project: new_project_data2 }
+    assert_not_empty flash
+    assert_template :edit
+    assert_difference '@project.lock_version' do
+      @project.reload
+    end
+    assert_equal @project.name, new_name1
+  end
+
   test 'should fail to update other users project' do
     new_name = @project_two.name + '_updated'
     assert_not_equal @user, @project_two.user

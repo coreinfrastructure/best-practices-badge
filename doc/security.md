@@ -558,14 +558,30 @@ See
 ["Rails, Secure Cookies, HSTS and friends" by Ilija Eftimov (2015-12-14)](http://eftimov.net/rails-tls-hsts-cookies)
 for more about the impact of force_ssl.
 
-We separately configure our CDN (Fastly) to redirect HTTP to HTTPS
+When we upgraded to Rails 5 we enabled two additional
+security hardening mechanisms that it added;
+both counter cross-site request forgery (CSRF).
+These are:
+
+* Enable per-form CSRF tokens.
+  (Rails.application.config.action_controller.per_form_csrf_tokens)
+* Enable origin-checking CSRF mitigation.
+  (Rails.application.config.action_controller.forgery_protection_origin_check)
+
+We take many steps to ensure that users will use HTTPS (which
+is authenticated and encrypted), and not the unencrypted HTTP protocol.
+The "coreinfrastructure.org" domain is included in
+[Chrome's HTTP Strict Transport Security (HSTS) preload list](https://hstspreload.org/?domain=coreinfrastructure.org).
+This is a list of sites that are hardcoded into Chrome as being HTTPS only
+(some other browsers also use this list).
+In addition, we redirect HTTP requests to HTTPS (in production).
+Once users use HTTPS
+they will receive the HTTP Strict Transport Security (HSTS) information
+that will tell their web browser to always use HTTPS in the future.
+This is configured via our CDN (Fastly) to redirect HTTP to HTTPS
 (this has to be done by the CDN, since it intercepts the requests first).
-This means that users who use HTTP will be redirected to HTTPS, and
-once there they will receive the
-HTTP Strict Transport Security (HSTS) information that will tell their
-web browser to always use HTTPS in the future.
-If that is misconfigured or omitted for some reason, the application
-will also redirect the user from HTTP to HTTPS.
+If our CDN is misconfigured or skipped for some reason, the application
+will also redirect the user from HTTP to HTTPS if queried directly.
 
 We send reminder emails to projects that have not updated their
 badge entry in a long time. The detailed algorithm that prioritizes projects

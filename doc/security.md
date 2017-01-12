@@ -12,10 +12,15 @@ If you find a vulnerability, please see
 For more technical information on the implementation, see
 [implementation.md](implementation.md).
 
-The following figure summarizes why we think this application
-is adequately secure:
+The following figures summarize why we think this application
+is adequately secure; in short, we have identified the security
+requirements, implement the functional requirements, and we implement
+security in all our software development processes
+(we don't use a waterfall appraoch, but we obviously *do* design,
+implement, verify, and so on):
 
 ![Assurance case summary](./assurance-case.png)
+![Assurance case in lifecycle](./assurance-case-lifecycle.png)
 
 Our overall security approach is called
 defense-in-breadth, that is, we consider

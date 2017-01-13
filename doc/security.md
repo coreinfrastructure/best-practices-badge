@@ -17,8 +17,10 @@ is adequately secure:
 
 ![Assurance case summary](./assurance-case.png)
 ![Assurance case in lifecycle](./assurance-case-lifecycle.png)
+![Assurance case in implementation](./assurance-case-implementation.png)
 
-These figures are in Claims, Arguments and Evidence (CAE) notation.
+These figures are in Claims, Arguments and Evidence (CAE) notation,
+which is a simple notation often used for assurance cases.
 Ovals are claims or sub-claims, while rounded rectangles are the supporting
 arguments justifying the claims.
 

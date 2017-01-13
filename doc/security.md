@@ -59,6 +59,9 @@ security in design, implementation,
 verification, supply chain (reuse), development environment,
 and deployment/operations.
 
+(Note to editors: to edit the figures above, edit the .odg file, then
+export to .png so that it can viewed on GitHub.)
+
 ## Security Requirements
 
 Here is what BadgeApp must do to be secure (and a few comments about

@@ -552,8 +552,8 @@ by the delivered project's software.
   but shorter keylengths are sometimes necessary for interoperability).
   <sup>[<a href="#crypto_keylength">crypto_keylength</a>]</sup>
 - <a name="crypto_working"></a>The default project security mechanisms MUST NOT
-  depend on cryptographic algorithms that are broken
-  (e.g., MD4, MD5, single DES, RC4, or Dual_EC_DRBG).
+  depend on cryptographic algorithms/modes that are broken
+  (e.g., MD4, MD5, single DES, RC4, Dual_EC_DRBG, or ECB mode).
   <sup>[<a href="#crypto_working">crypto_working</a>]</sup>
 - <a name="crypto_weaknesses"></a>The project security mechanisms
   SHOULD NOT by default depend on cryptographic algorithms with known

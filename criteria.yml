@@ -836,8 +836,8 @@
         na_allowed: true
         description: >
           The default project security mechanisms MUST NOT depend on
-          cryptographic algorithms that are broken
-          (e.g., MD4, MD5, single DES, RC4, or Dual_EC_DRBG).
+          cryptographic algorithms/modes that are broken
+          (e.g., MD4, MD5, single DES, RC4, Dual_EC_DRBG, or ECB mode).
         # autofill: TODO
     - crypto_weaknesses:
         category: SHOULD

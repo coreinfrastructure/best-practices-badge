@@ -828,6 +828,7 @@ He has long expertise in Ruby on Rails.
 
 Jason Dossett has a PhD in Physics from The University of Texas at Dallas,
 and has been involved in software development for many years.
+He has reviewed and is familiar with the security assurance case here.
 
 ## Receive CII best practices badge
 

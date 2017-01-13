@@ -13,14 +13,14 @@ For more technical information on the implementation, see
 [implementation.md](implementation.md).
 
 The following figures summarize why we think this application
-is adequately secure; in short, we have identified the security
-requirements, implement the functional requirements, and we implement
-security in all our software development processes
-(we don't use a waterfall appraoch, but we obviously *do* design,
-implement, verify, and so on):
+is adequately secure:
 
 ![Assurance case summary](./assurance-case.png)
 ![Assurance case in lifecycle](./assurance-case-lifecycle.png)
+
+These figures are in Claims, Arguments and Evidence (CAE) notation.
+Ovals are claims or sub-claims, while rounded rectangles are the supporting
+arguments justifying the claims.
 
 Our overall security approach is called
 defense-in-breadth, that is, we consider
@@ -31,6 +31,28 @@ external suppliers).
 In each software development process we
 identify the specific issues that most need to be addressed,
 and then address them.
+
+We do *not* use a waterfall model for software development.
+It's important to note that when we use the word *process* it
+has a completely different meaning from a time *phase*.
+Instead, we use the word "process" with its standard meaning in
+software and systems engineering, that is,
+a "process" is just a "set of interrelated or interacting activities
+which transforms inputs into outputs" (ISO ISO 9000:2005, quoted in
+ISO/IEEE 12207:2008).
+In a waterfall model, these processes are done to completion
+in a strict sequence of "phases": you create all of the requirements in
+one phase, then do all the design in the next phase, and so on.
+Winston Royce's paper "Managing the Development of Large Software Systems"
+(1970) notes that this naive waterfall approach
+"is risky and invites failure" - in practice
+"design iterations are never confined to the successive steps".
+We obviously *do* determine what the software will do differently
+(requirements), as well as design, implement, and verify it, so we
+certainly do have these processes.
+However, as with almost all real software development projects,
+we perform these processes in parallel, iterating and
+feeding back as appropriate.
 
 Below are the overall security requirements, followed by how we approach
 security in design, implementation,
@@ -138,6 +160,15 @@ which makes entering nonsense data have much less value.
 We may in the future add support for groups (e.g., where the owner
 can designate other users who can edit that entry) and
 a way to 'validate' project entries for projects not on GitHub.
+
+Here we have identified the key security requirements and why we believe
+they've been met overall.  However, there is always the possibility that
+a mistake could lead to failure to meet these requirements.
+We manage this risk by
+implementing security in all our software development processes.
+We also protect our development environment and choose people
+who will help support this.
+The following sections describe how we've managed this risk.
 
 ## Security in Design
 

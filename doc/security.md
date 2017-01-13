@@ -746,6 +746,8 @@ Anyone can create a Heroku application and run it on Heroku, however,
 at that point we trust the Postgres developers and the Heroku administrators
 to keep the databases separate.
 
+### Online checkers
+
 Various online checkers give us a clean bill of health.
 For the main bestpractices.coreinfrastructure.org site we have:
 
@@ -762,6 +764,32 @@ For the main bestpractices.coreinfrastructure.org site we have:
   units) to be large. This is not a security issue, at most this will
   result in a slower initial connection.  Thus, we don't plan to worry
   about the missing test.
+
+### Detection
+
+There are two aspects to detection:
+Internal (which has access to our internal information, such as logs)
+and external (which does not).
+
+#### Internal
+
+This is a [12 factor app](https://12factor.net/); as such,
+events are streamed to standard out for logging.
+We use the "rails_12factor" to ensure that all Rails logs go to
+standard out, and then use standard Heroku logging mechanisms.
+We intentionally omit here, in this public document, details about
+how logs are stored and how anomaly detection is done.
+
+#### External
+
+We are alerted if the website goes down via uptime robot:
+
+https://uptimerobot.com/dashboard
+
+### Recovery
+
+We backup the database daily.
+See the [Heroku site](https://devcenter.heroku.com/articles/heroku-postgres-backups#scheduled-backups-retention-limits) for retention times.
 
 ## People
 

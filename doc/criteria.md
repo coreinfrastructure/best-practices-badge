@@ -569,6 +569,8 @@ by the delivered project's software.
   iterated hashes with a per-user salt by using a key stretching
   (iterated) algorithm (e.g., PBKDF2, Bcrypt or Scrypt).
   <sup>[<a href="#crypto_password_storage">crypto_password_storage</a>]</sup>
+- <a name="crypto_blockmode"></a>The project SHOULD select the GCM (Galois/Counter Mode) or CBC (Cipher Block Channing) mode when using block ciphers. The ECB mode SHOULD NOT be used directly for cryptographic purposes.
+  <sup>[<a href="#crypto_blockmode">crypto_blockmode</a>]</sup>
 - <a name="crypto_random"></a>The project MUST generate all
   cryptographic keys and nonces
   using a cryptographically secure random number generator,

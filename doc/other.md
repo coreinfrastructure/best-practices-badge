@@ -381,12 +381,26 @@ I think "N/A" would have to be permitted, e.g., it doesn't apply when there's no
 ### Release
 
 -   Project releases of the software intended for widespread use
-    MUST be cryptographically signed, and there MUST be a documented
+    MUST be cryptographically signed, there MUST be a documented
     process explaining to users how they can obtain the public signing keys
-    and verify the signature.
+    and verify the signature. The private key for this signature MUST NOT
+    be on site(s) used to directly distribute the software to the public.
     These may be implemented as signed git tags
     (using cryptographic digital signatures).
     <sup>[<a href="#signed_releases">signed_releases</a>]</sup>
+
+    *Rationale*:
+    This provides protection from compromised distribution systems.
+    The public key must be accessible so that recipients can check the
+    signature.  The private key must not be on sites(s) distributing the
+    software to the public; that way, even if those sites are compromised,
+    the signature cannot be altered.  This is sometimes called "code signing".
+    A common way to implement this is by using GPG to sign the code,
+    for example, the GPG keys of every person who signs releases
+    could be in the project README.
+    Node.js implements this via GPG keys in the README, but note that
+    in the criterion we are intentionally more general:
+    https://github.com/nodejs/node#release-team
 
 ### Cryptography
 
@@ -411,6 +425,19 @@ I think "N/A" would have to be permitted, e.g., it doesn't apply when there's no
     See the discussion per
     [issue #215](https://github.com/linuxfoundation/cii-best-practices-badge/issues/215)
 
+### Other passing+1 criteria
+
+
+-   <a name="implement_secure_design"></a>
+    The project MUST implement secure design principles
+    (from "know_secure_design") to the largest practical extent.
+    This includes performing input validation with whitelists
+    on all untrusted input.
+    Note that in some cases principles will conflict, in which case
+    a choice must be made
+    (e.g., many mechanisms can make things more complex, contravening
+    "economy of mechanism" / keep it simple)
+    <sup>[<a href="#implement_secure_design">implement_secure_design</a>]</sup>
 
 ## Potential passing+2 criteria
 
@@ -576,6 +603,11 @@ I think "N/A" would have to be permitted, e.g., it doesn't apply when there's no
     but they can be extended to counter malicious compilers using
     processes such as diverse double-compiling (DDC).
 
+## To do
+
+* Review proposed criteria changes (issues/PRs on GitHub)
+* Review potential other criteria (below)
+* Review current non-MUST criteria
 
 ## Potential other criteria
 
@@ -583,34 +615,12 @@ Here are some potential ideas for criteria (or where to get them)
 that need to be reviewed.
 
 - Perhaps generalize some Node.js practices:
-  - The GPG keys of every person who signs releases is in the project README https://github.com/nodejs/node#release-team
-  - We have a private repository for security issues and every member of that team is required to have 2FA enabled on their GitHub account.
+  - We have a private repository for security issues
+    and every member of that team is required to have
+    2FA enabled on their GitHub account.
   - We’re considering requiring GPG signing of all of their commits as well.
 
-*   Issue tracking (This must be different for big projects like the Linux
-    kernel; it is not clear how to capture that.):
-    -   Issue tracking for defects.
-    -   Issue tracking for requirements/enhancement requests.
-    -   Bug/vulnerability report responsiveness,
-        e.g., commitment to respond to any vulnerability
-        report within (say) 14 days,
-        or respond to all/nearly all bug reports (far more than 50%).
-    -   If this is a project fork,
-        actively working to become sustainable by either growing its community
-        *or* working to heal the fork (e.g., contribute to the mainline).
-*   Quality:
-    -   Documented test plan.
 *   Security:
-    -   Public advisories issued for vulnerabilities,
-        this could include advisories on the <https://SOMEWHERE/security> page
-        and/or an "Announcement" mailing list for new versions
-        (at least for security updates).
-    -   All inputs from untrusted sources checked against whitelist
-        (not a blacklist) and/or escaped before being transmitted
-        to other users.  Media (images, audio, and video) is normally considered
-        untrusted since the data is often provided by untrusted sources.
-    -   Privileges limited/minimized.
-    -   Attack surface documented and minimized.
     -   Automated regression test suite includes at least one check for
         rejection of invalid data for each input field.
         *Rationale:* Many regression test suites check only for perfect data;
@@ -814,6 +824,12 @@ Thoughts?
 
 
 ## Probably not
+
+* Public advisories issued for vulnerabilities,
+  this could include advisories on the <https://SOMEWHERE/security> page
+  and/or an "Announcement" mailing list for new versions
+  (at least for security updates).
+  Often projects don't know (or are unsure) if they are vulnerabilities.
 
 ## Improving the criteria
 

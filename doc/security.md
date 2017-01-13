@@ -796,6 +796,14 @@ He has long expertise in Ruby on Rails.
 Jason Dossett has a PhD in Physics from The University of Texas at Dallas,
 and has been involved in software development for many years.
 
+## Receive CII best practices badge
+
+The CII best practices badging project was established to identify
+best practices that can lead to more secure software.
+The BadgeApp application achieves its own badge.
+This is evidence that the BadgeApp application is
+applying practices expected in a well-run FLOSS project.
+
 ## Your help is welcome!
 
 Security is hard; we welcome your help.

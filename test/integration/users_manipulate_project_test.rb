@@ -2,10 +2,11 @@
 require 'test_helper'
 
 class UsersManipulateProjectTest < ActionDispatch::IntegrationTest
-  def setup
+  setup do
     @user = users(:test_user)
   end
 
+  # rubocop:disable Metrics/BlockLength
   test 'logged-in user adds a project' do
     # Go to login_path to initialize the session
     get login_path
@@ -18,9 +19,10 @@ class UsersManipulateProjectTest < ActionDispatch::IntegrationTest
     repo_url = 'https://github.com/linuxfoundation/cii-best-practices-badge'
 
     VCR.use_cassette('users_manipulate_test') do
-      post '/projects',
-           'project[homepage_url]' => repo_url,
-           'project[repo_url]' => repo_url
+      post '/projects', params: {
+        'project[homepage_url]' => repo_url,
+        'project[repo_url]' => repo_url
+      }
       assert_response :redirect
       follow_redirect!
 
@@ -102,6 +104,7 @@ class UsersManipulateProjectTest < ActionDispatch::IntegrationTest
       #  assert_select 'a[href=?]', user_path(@user), count: 0
     end
   end
+  # rubocop:enable Metrics/BlockLength
 
   test 'logged-in user adds assimilation-official' do
     # Regression test, see:
@@ -117,9 +120,10 @@ class UsersManipulateProjectTest < ActionDispatch::IntegrationTest
     repo_url = 'https://github.com/assimilation/assimilation-official'
 
     VCR.use_cassette('assimilation-official') do
-      post '/projects',
-           'project[homepage_url]' => repo_url,
-           'project[repo_url]' => repo_url
+      post '/projects', params: {
+        'project[homepage_url]' => repo_url,
+        'project[repo_url]' => repo_url
+      }
       assert_response :redirect
       follow_redirect!
 
@@ -142,9 +146,10 @@ class UsersManipulateProjectTest < ActionDispatch::IntegrationTest
     project_url = 'https://www.sendmail.com/'
 
     VCR.use_cassette('sendmail') do
-      post '/projects',
-           'project[homepage_url]' => project_url,
-           'project[repo_url]' => project_url
+      post '/projects', params: {
+        'project[homepage_url]' => project_url,
+        'project[repo_url]' => project_url
+      }
       assert_response :redirect
       follow_redirect!
 

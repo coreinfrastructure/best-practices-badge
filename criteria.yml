@@ -225,6 +225,18 @@
         details: >
           You can get free certificates from
           <a href="https://letsencrypt.org/">Let's Encrypt</a>.
+          Projects MAY implement this criterion using (for example) <a
+          href="https://help.github.com/articles/securing-your-github-pages-site-with-https/">GitHub
+          pages</a>, <a
+          href="https://about.gitlab.com/2016/12/24/were-bringing-gitlab-pages-to-community-edition/">GitLab
+          pages</a>, or <a
+          href="https://sourceforge.net/blog/introducing-https-for-project-websites/">SourceForge
+          project pages</a>.  If you are using GitHub pages with
+          custom domains, you MAY use a content delivery network
+          (CDN) as a proxy to support HTTPS, such as described in this <a
+          href=”https://blog.cloudflare.com/secure-and-fast-github-pages-with-cloudflare/”>blog
+          post</a>, to satisfy this criterion. If you support HTTP,
+          we urge you to redirect the HTTP traffic to HTTPS.
         autofill: >
           Look at project, repo, and download URLs. https is okay, http is not.
           Typically anything supporting HTTPS also supports TLS, so
@@ -244,7 +256,7 @@
           Asynchronous discussion mechanisms (like IRC) are acceptable if
           they meet these criteria; make sure there is a URL-addressable
           archiving mechanism.
-          Proprietary Javascript, while discouraged, is permitted.
+          Proprietary JavaScript, while discouraged, is permitted.
         autofill: >
           Currently if it's on GitHub we assume they will use its mechanisms.
           We could do the same for other forges like
@@ -457,6 +469,8 @@
           https://PROJECTSITE/security,
           often in the form security@example.org.
           This MAY be the same as its bug reporting process.
+          Vulnerability reports MAY always be public, but
+          many projects have a private vulnerability reporting mechanism.
         autofill: >
           Look for phrase like "vulnerability reporting" or
           "how to report vulnerabilities" in various documents
@@ -469,12 +483,13 @@
           If private vulnerability reports are supported, the project MUST
           include how to send the information in a way that is kept private.
         details: >
-          E.g., a private defect report submitted on the web using TLS
-          or an email encrypted using OpenPGP.
-          If private vulnerability reports are not supported this criterion is
-          automatically met.
+          Examples include a private defect report submitted on the web
+          using HTTPS (TLS) or an email encrypted using OpenPGP.
+          If vulnerability reports are always public (so there
+          are never private vulnerability reports),
+          choose "not applicable" (N/A).
         autofill: >
-          Look for phrase like "private vulnerability reporting" or
+          Look for a phrase like "private vulnerability reporting" or
           "how to report private vulnerabilities" in various documents
           like README, CONTRIBUTING, or a doc/* file, and *also*
           look for an OpenPGP key to use for encrypting the information.
@@ -483,9 +498,13 @@
           https://github.com/isaacs/github/issues/37
     - vulnerability_report_response:
         category: MUST
+        na_allowed: true
         description: >
           The project's initial response time for any vulnerability report received
           in the last 6 months MUST be less than or equal to 14 days.
+        details: >
+          If there have been no vulnerabilities reported in the last 6 months,
+          choose "not applicable" (N/A).
         autofill: >
           If GitHub is used, and the issue tracker has something marked
           "security" or "vulnerability", measure the appropriate times.
@@ -505,11 +524,16 @@
         details: >
           A build system determines what actions need to occur to rebuild the
           software (and in what order), and then performs those steps.
+          For example, it can invoke a compiler to compile the source code.
+          If an executable is created from source code, it must be possible
+          to modify the project's source code and then generate
+          an updated executable with those modifications.
           <b>Rationale</b>: If a project needs to be built but there is no
           working build system, then potential co-developers will not be
           able to easily contribute and many security analysis tools will be
-          ineffective. Criteria for a working build system are not applicable
-          if there is no need to build anything for use.
+          ineffective.  If there is no need to build anything to use the
+          software after its source code is modified,
+          select "not applicable" (N/A).
         autofill: >
           See build_common_tools.
     - build_common_tools:
@@ -601,6 +625,10 @@
           The project MUST have a general policy (formal or not) that as major
           new functionality is added, tests of that functionality SHOULD
           be added to an automated test suite.
+        details: >
+          As long as a policy is in place, even by word of mouth,
+          that says developers should add tests to the automated
+          test suite for major new functionality, select "Met."
         autofill: >
           Look for text patterns hinting at this in README, CONTRIBUTING,
           or the doc/* directory.
@@ -642,7 +670,7 @@
           can implement this criterion in the selected language.
         details: >
           Examples of compiler warning flags include gcc/clang "-Wall".
-          Examples of a "safe" language mode include Javascript "use strict"
+          Examples of a "safe" language mode include JavaScript "use strict"
           and perl5's "use warnings".
           A separate "linter" tool is simply a tool that examines the
           source code to look for code quality errors or common simple mistakes.
@@ -808,8 +836,8 @@
         na_allowed: true
         description: >
           The default project security mechanisms MUST NOT depend on
-          cryptographic algorithms that are broken
-          (e.g., MD4, MD5, single DES, RC4, or Dual_EC_DRBG).
+          cryptographic algorithms/modes that are broken
+          (e.g., MD4, MD5, single DES, RC4, Dual_EC_DRBG, or ECB mode).
         # autofill: TODO
     - crypto_weaknesses:
         category: SHOULD
@@ -972,6 +1000,10 @@
           The <a href="https://continuousassurance.org/">SWAMP</a> is a no-cost
           platform for assessing vulnerabilities in software using a variety
           of tools.
+          If there are no static analysis tools available for the implementation
+          language(s) used, select 'N/A'.
+        na_placeholder: >
+          Why can't this be met (e.g., no FLOSS tools exist for that language)?
         autofill: >
           Look in build scripts for execution of common tools, and in
           documentation for names of tools and the URL of a Coverity scan entry.
@@ -1021,6 +1053,9 @@
           Fuzzy Lop</a>) or a web application scanner (e.g.,
           <a href="https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project">OWASP
           ZAP</a> or <a href="http://w3af.org/">w3af</a>).
+          In some cases the
+          <a href="https://github.com/google/oss-fuzz#introduction">OSS-Fuzz</a>
+          project may be willing to apply fuzz testing to your project.
           For purposes of this criterion the dynamic analysis
           tool needs to vary the inputs in some way to look for
           various kinds of problems <em>or</em> be an automated
@@ -1066,13 +1101,16 @@
           Perhaps look in source code for many asserts.
     - dynamic_analysis_fixed:
         category: MUST
+        na_allowed: true
         description: >
           All medium and high severity exploitable vulnerabilities
           discovered with dynamic code analysis MUST be fixed
           in a timely way after they are confirmed.
         details: >
            A vulnerability is medium to high severity if its <a
-           href="https://nvd.nist.gov/cvss.cfm">CVSS 2.0</a> base score is 4
+           href="https://nvd.nist.gov/cvss.cfm">CVSS 2.0</a> base score is 4.
+           If you are not running dynamic code analysis and thus have not
+           found any vulnerabilities in this way, choose "not applicable" (N/A).
         # autofill: TODO
 - Future: !!omap
   - future: !!omap

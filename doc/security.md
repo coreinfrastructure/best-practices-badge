@@ -6,6 +6,24 @@ Security is important and challenging.
 This document describes why we think this software (the "BadgeApp")
 is adequately secure (i.e., its "assurance case").
 
+Sadly, perfection is rare; we really want your help.
+If you find a vulnerability, please see
+[CONTRIBUTING.md](../CONTRIBUTING.md) for how to submit a vulnerability report.
+For more technical information on the implementation, see
+[implementation.md](implementation.md).
+
+The following figures summarize why we think this application
+is adequately secure:
+
+![Assurance case summary](./assurance-case.png)
+![Assurance case in lifecycle](./assurance-case-lifecycle.png)
+![Assurance case in implementation](./assurance-case-implementation.png)
+
+These figures are in Claims, Arguments and Evidence (CAE) notation,
+which is a simple notation often used for assurance cases.
+Ovals are claims or sub-claims, while rounded rectangles are the supporting
+arguments justifying the claims.
+
 Our overall security approach is called
 defense-in-breadth, that is, we consider
 security (including security countermeasures) in all
@@ -16,16 +34,35 @@ In each software development process we
 identify the specific issues that most need to be addressed,
 and then address them.
 
+We do *not* use a waterfall model for software development.
+It's important to note that when we use the word *process* it
+has a completely different meaning from a time *phase*.
+Instead, we use the word "process" with its standard meaning in
+software and systems engineering, that is,
+a "process" is just a "set of interrelated or interacting activities
+which transforms inputs into outputs" (ISO ISO 9000:2005, quoted in
+ISO/IEEE 12207:2008).
+In a waterfall model, these processes are done to completion
+in a strict sequence of "phases": you create all of the requirements in
+one phase, then do all the design in the next phase, and so on.
+Winston Royce's paper "Managing the Development of Large Software Systems"
+(1970) notes that this naive waterfall approach
+"is risky and invites failure" - in practice
+"design iterations are never confined to the successive steps".
+We obviously *do* determine what the software will do differently
+(requirements), as well as design, implement, and verify it, so we
+certainly do have these processes.
+However, as with almost all real software development projects,
+we perform these processes in parallel, iterating and
+feeding back as appropriate.
+
 Below are the overall security requirements, followed by how we approach
 security in design, implementation,
 verification, supply chain (reuse), development environment,
 and deployment/operations.
 
-Sadly, perfection is rare; we really want your help.
-If you find a vulnerability, please see
-[CONTRIBUTING.md](../CONTRIBUTING.md) for how to submit a vulnerability report.
-For more technical information on the implementation, see
-[implementation.md](implementation.md).
+(Note to editors: to edit the figures above, edit the .odg file, then
+export to .png so that it can viewed on GitHub.)
 
 ## Security Requirements
 
@@ -49,6 +86,8 @@ how we implement these requirements):
   (e.g., contact badge entry owners for clarification).
   We will strive to not reveal user email addresses to others
   (with the exception administrators, who can see them).
+  Communications between users and the application must use an encrypted
+  (HTTPS) channel.
   There's no need to worry about covert channels.
 - Integrity:
     - Data between the client and server must not be altered.
@@ -127,6 +166,15 @@ We may in the future add support for groups (e.g., where the owner
 can designate other users who can edit that entry) and
 a way to 'validate' project entries for projects not on GitHub.
 
+Here we have identified the key security requirements and why we believe
+they've been met overall.  However, there is always the possibility that
+a mistake could lead to failure to meet these requirements.
+We manage this risk by
+implementing security in all our software development processes.
+We also protect our development environment and choose people
+who will help support this.
+The following sections describe how we've managed this risk.
+
 ## Security in Design
 
 We emphasize security in design by using a simple design,
@@ -148,7 +196,7 @@ The application runs on Linux kernel and uses some standard operating system
 facilities and libraries (e.g., to provide TLS).
 All interaction between the users and the web application go over
 an encrypted channel using TLS.
-There is some Javascript served to the client,
+There is some JavaScript served to the client,
 but no security decisions depend on code that runs on the client.
 
 From a user's point of view,
@@ -186,7 +234,7 @@ all of the ones from Saltzer and Schroeder:
   non-bypassable.  Security checks are in the controllers, not the router,
   because multiple routes can lead to the same controller
   (this is per Rails security guidelines).
-  When entering data, Javascript code on the client shows whether or not
+  When entering data, JavaScript code on the client shows whether or not
   the badge has been achieved, but the client-side code is *not* the
   final authority (it's merely a convenience).  The final arbiter of
   badge acceptance is server-side code, which is not bypassable.
@@ -264,7 +312,7 @@ all of the ones from Saltzer and Schroeder:
 ### Memory-safe languages
 
 All of the custom code is written in memory-safe languages
-(Ruby and Javascript), so the vulnerabilities of memory-unsafe
+(Ruby and JavaScript), so the vulnerabilities of memory-unsafe
 languages (such as C and C++) cannot occur in the custom code.
 This also applies to most of the code in the directly depended libraries.
 Some lower-level components (e.g., the operating system kernel,
@@ -347,6 +395,8 @@ and how we attempt to reduce their risks in BadgeApp.
    Rails always applies HTML escapes on strings displayed through views
    unless they are marked as safe.
    This greatly reduces the risk of mistakes leading to XSS vulnerabilities.
+   In addition, we use a restrictive Content Security Policy (CSP),
+   which makes damage more difficult even if an attacker gets something in.
 4. Insecure Direct Object References.
    The only supported direct object references are for publicly available
    objects (stylesheets, etc.).
@@ -354,6 +404,8 @@ and how we attempt to reduce their risks in BadgeApp.
    which determine what may be accessed.
 5. Security Misconfiguration.
    We have strived to enable secure defaults from the start.
+   We use a number of external scanning programs to detect common
+   HTTPS misconfiguration problems (see below).
    In addition, we use brakeman, which can detect
    some misconfigurations in Rails applications.
    This is invoked by the default 'rake' task.
@@ -363,13 +415,15 @@ and how we attempt to reduce their risks in BadgeApp.
    is intended to be public.  The only sensitive data we centrally store are
    local passwords, and those are encrypted and hashed with bcrypt
    (this is a well-known iterated salted hash algorithm).
+   We use HTTPS to establish an encrypted link between the server and users.
 7. Missing Function Level Access Control.
    The system depends on server-side routers and controllers for
-   access control.  There is some client-side Javascript, but no
+   access control.  There is some client-side JavaScript, but no
    access control depends on it.
 8. Cross-Site Request Forgery (CSRF).
    We use the built-in Rails CSRF countermeasure, where csrf tokens
    are included in replies and checked on POST inputs.
+   Our restrictive Content Security Policy (CSP) helps here, too.
    For more information, see the page on
    [request forgery protection](http://api.rubyonrails.org/classes/ActionController/RequestForgeryProtection.html).
 9. Using Components with Known Vulnerabilities.
@@ -416,7 +470,7 @@ as of 2015-12-14:
    secret key) to ensure that clients cannot undetectably change
    these cookies; a changed value is thrown away.
    Logged-in users have their user id stored in this authenticated cookie
-   (There is also a session_id, kept for capability but not currently used.)
+   (There is also a session_id, not currently used.)
    Session data is intentionally kept small, because of the limited
    amount of data available in a cookie.
    To counteract session hijacking, we configure the production
@@ -470,7 +524,12 @@ as of 2015-12-14:
    relevant tier (e.g., production), and only authorized system administrators
    have those credentials.
 6. *User management.*
-   Local passwords have a minimum length, and we expect users to
+   Local passwords have a minimum length (8) and cannot be
+   a member of a set of known-bad passwords.  We allow much longer passwords.
+   This complies with draft NIST Special Publication 800-63B,
+   "Digital Authentication Guideline: Authentication and Lifecycle Management"
+   dated Thu, 24 Nov 2016 08:15:51 -0500 <https://pages.nist.gov/800-63-3/>.
+   We expect users to
    protect their own passwords; we do not try to protect users from themselves.
    The system is not fast enough for a naive password-guesser to succeed
    guessing local passwords via network access (unless the password
@@ -513,12 +572,14 @@ as of 2015-12-14:
    headers are typically not dynamicaly generated, most redirections
    (using redirect_to) are to static locations, and the rest are based
    on filtered locations.
+   We use a restrictive CSP setting to limit damage if all those fail.
 8. *Unsafe Query Generation.*
    We use the default Rails behavior, in particular, we leave
    deep_munge at its default value (which counters a number of vulnerabilities).
 9. *Default Headers.*
-   The default security HTTP headers are used, which help counter some attacks.
-   Future versions may harden the headers further.
+   We use at least the default security HTTP headers,
+   which help counter some attacks.
+   In many cases we harden the headers further.
 
 ### Hardening
 
@@ -527,6 +588,8 @@ these attempt to thwart or slow attack even if the system has a vulnerability.
 We use the [secure_headers](https://github.com/twitter/secureheaders) gem
 (developed by Twitter) to enable
 a number of HTTP headers for hardening.
+This includes a Content Security Policy (CSP) header with just
+"normal sources" (normal_src).
 
 In addition, in production "config.force_ssl" is set to true.
 This enables a number of hardening mechanisms in Rails, including
@@ -535,6 +598,39 @@ TLS redirection, and secure cookies.
 See
 ["Rails, Secure Cookies, HSTS and friends" by Ilija Eftimov (2015-12-14)](http://eftimov.net/rails-tls-hsts-cookies)
 for more about the impact of force_ssl.
+
+When we upgraded to Rails 5 we enabled two additional
+security hardening mechanisms that it added;
+both counter cross-site request forgery (CSRF).
+These are:
+
+* Enable per-form CSRF tokens.
+  (Rails.application.config.action_controller.per_form_csrf_tokens)
+* Enable origin-checking CSRF mitigation.
+  (Rails.application.config.action_controller.forgery_protection_origin_check)
+
+We take many steps to ensure that users will use HTTPS (which
+is authenticated and encrypted), and not the unencrypted HTTP protocol.
+The "coreinfrastructure.org" domain is included in
+[Chrome's HTTP Strict Transport Security (HSTS) preload list](https://hstspreload.org/?domain=coreinfrastructure.org).
+This is a list of sites that are hardcoded into Chrome as being HTTPS only
+(some other browsers also use this list).
+In addition, we redirect HTTP requests to HTTPS (in production).
+Once users use HTTPS
+they will receive the HTTP Strict Transport Security (HSTS) information
+that will tell their web browser to always use HTTPS in the future.
+This is configured via our CDN (Fastly) to redirect HTTP to HTTPS
+(this has to be done by the CDN, since it intercepts the requests first).
+If our CDN is misconfigured or skipped for some reason, the application
+will also redirect the user from HTTP to HTTPS if queried directly.
+
+We send reminder emails to projects that have not updated their
+badge entry in a long time. The detailed algorithm that prioritizes projects
+is in "app/models/project.rb" class method "self.projects_to_remind".
+It sorts by reminder date, so we always cycle through before returning to
+a previously-reminded project.  We have a hard rate limit on the number
+of emails we will send out each time; this keeps us from looking like
+a spammer.
 
 ## Security in Verification
 
@@ -652,6 +748,8 @@ Anyone can create a Heroku application and run it on Heroku, however,
 at that point we trust the Postgres developers and the Heroku administrators
 to keep the databases separate.
 
+### Online checkers
+
 Various online checkers give us a clean bill of health.
 For the main bestpractices.coreinfrastructure.org site we have:
 
@@ -661,12 +759,39 @@ For the main bestpractices.coreinfrastructure.org site we have:
   <a href="https://securityheaders.io/?q=bestpractices.coreinfrastructure.org">securityheaders.io check of our HTTP security headers</a>.
 * An all-pass report from the
   <a href="https://www.sslshopper.com/ssl-checker.html#hostname=bestpractices.coreinfrastructure.org">SSLShopper SSL checker</a>.
+* An "A+" rating from the [Mozilla Observatory](https://observatory.mozilla.org/analyze.html?host=master.bestpractices.coreinfrastructure.org) (This link is actually for the master branch.)
 * A 96% result from <a href="https://www.wormly.com/test_ssl/h/bestpractices.coreinfrastructure.org/i/157.52.75.7/p/443">Wormly</a>.
   The only item not passed was the "SSL Handshake Size" test; the live site
   provides 5667 bytes, and they consider values beyond 4K (with unclear
   units) to be large. This is not a security issue, at most this will
   result in a slower initial connection.  Thus, we don't plan to worry
   about the missing test.
+
+### Detection
+
+There are two aspects to detection:
+Internal (which has access to our internal information, such as logs)
+and external (which does not).
+
+#### Internal
+
+This is a [12 factor app](https://12factor.net/); as such,
+events are streamed to standard out for logging.
+We use the "rails_12factor" to ensure that all Rails logs go to
+standard out, and then use standard Heroku logging mechanisms.
+We intentionally omit here, in this public document, details about
+how logs are stored and how anomaly detection is done.
+
+#### External
+
+We are alerted if the website goes down via uptime robot:
+
+https://uptimerobot.com/dashboard
+
+### Recovery
+
+We backup the database daily.
+See the [Heroku site](https://devcenter.heroku.com/articles/heroku-postgres-backups#scheduled-backups-retention-limits) for retention times.
 
 ## People
 
@@ -688,7 +813,8 @@ Dr. Wheeler's doctoral dissertation,
 [Fully Countering Trusting Trust through Diverse Double-Compiling](http://www.dwheeler.com/trusting-trust/),
 discusses how to counter malicious compilers.
 
-Sam Khakimov has been developing software for a number of years,
+Sam Khakimov was greatly involved in its earlier development.
+He has been developing software for a number of years,
 in a variety of languages.
 He has a Bachelor of Business Admin in Finance and Mathematics
 (CUNY Baruch College Summa Cum Laude Double Major) and a
@@ -699,6 +825,18 @@ additional coursework in Cyber Security.
 received a bachelor's degree in Economics and Computer Science
 from the Honors program of Swarthmore College.
 He has long expertise in Ruby on Rails.
+
+Jason Dossett has a PhD in Physics from The University of Texas at Dallas,
+and has been involved in software development for many years.
+He has reviewed and is familiar with the security assurance case here.
+
+## Receive CII best practices badge
+
+The CII best practices badging project was established to identify
+best practices that can lead to more secure software.
+The BadgeApp application achieves its own badge.
+This is evidence that the BadgeApp application is
+applying practices expected in a well-run FLOSS project.
 
 ## Your help is welcome!
 

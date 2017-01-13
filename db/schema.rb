@@ -1,4 +1,3 @@
-# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -11,26 +10,42 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160810204829) do
+ActiveRecord::Schema.define(version: 20161230160523) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "pg_stat_statements"
+  enable_extension "citext"
 
-  create_table "project_stats", force: :cascade do |t|
-    t.integer  "percent_ge_0",            null: false
-    t.integer  "percent_ge_25",           null: false
-    t.integer  "percent_ge_50",           null: false
-    t.integer  "percent_ge_75",           null: false
-    t.integer  "percent_ge_90",           null: false
-    t.integer  "percent_ge_100",          null: false
-    t.integer  "created_since_yesterday", null: false
-    t.integer  "updated_since_yesterday", null: false
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
+  create_table "pg_search_documents", force: :cascade do |t|
+    t.text     "content"
+    t.integer  "searchable_id"
+    t.string   "searchable_type"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.index ["searchable_type", "searchable_id"], name: "index_pg_search_documents_on_searchable_type_and_searchable_id", using: :btree
   end
 
-  add_index "project_stats", ["created_at"], name: "index_project_stats_on_created_at", using: :btree
+  create_table "project_stats", force: :cascade do |t|
+    t.integer  "percent_ge_0",                           null: false
+    t.integer  "percent_ge_25",                          null: false
+    t.integer  "percent_ge_50",                          null: false
+    t.integer  "percent_ge_75",                          null: false
+    t.integer  "percent_ge_90",                          null: false
+    t.integer  "percent_ge_100",                         null: false
+    t.integer  "created_since_yesterday",                null: false
+    t.integer  "updated_since_yesterday",                null: false
+    t.datetime "created_at",                             null: false
+    t.datetime "updated_at",                             null: false
+    t.integer  "reminders_sent",             default: 0, null: false
+    t.integer  "reactivated_after_reminder", default: 0, null: false
+    t.integer  "active_projects"
+    t.integer  "active_in_progress"
+    t.integer  "projects_edited"
+    t.integer  "active_edited_projects"
+    t.integer  "active_edited_in_progress"
+    t.index ["created_at"], name: "index_project_stats_on_created_at", using: :btree
+  end
 
   create_table "projects", force: :cascade do |t|
     t.integer  "user_id"
@@ -166,8 +181,8 @@ ActiveRecord::Schema.define(version: 20160810204829) do
     t.string   "dynamic_analysis_fixed_status",                        default: "?"
     t.text     "dynamic_analysis_fixed_justification"
     t.text     "general_comments"
-    t.datetime "created_at",                                                         null: false
-    t.datetime "updated_at",                                                         null: false
+    t.datetime "created_at",                                                           null: false
+    t.datetime "updated_at",                                                           null: false
     t.string   "crypto_weaknesses_status",                             default: "?"
     t.text     "crypto_weaknesses_justification"
     t.string   "test_continuous_integration_status",                   default: "?"
@@ -198,23 +213,29 @@ ActiveRecord::Schema.define(version: 20160810204829) do
     t.integer  "badge_percentage"
     t.datetime "achieved_passing_at"
     t.datetime "lost_passing_at"
+    t.datetime "last_reminder_at"
+    t.boolean  "disabled_reminders",                                   default: false, null: false
+    t.string   "implementation_languages",                             default: ""
+    t.integer  "lock_version",                                         default: 0
+    t.index ["achieved_passing_at"], name: "index_projects_on_achieved_passing_at", using: :btree
+    t.index ["badge_percentage"], name: "index_projects_on_badge_percentage", using: :btree
+    t.index ["created_at"], name: "index_projects_on_created_at", using: :btree
+    t.index ["homepage_url"], name: "index_projects_on_homepage_url", using: :btree
+    t.index ["last_reminder_at"], name: "index_projects_on_last_reminder_at", using: :btree
+    t.index ["lost_passing_at"], name: "index_projects_on_lost_passing_at", using: :btree
+    t.index ["name"], name: "index_projects_on_name", using: :btree
+    t.index ["repo_url"], name: "index_projects_on_repo_url", using: :btree
+    t.index ["updated_at"], name: "index_projects_on_updated_at", using: :btree
+    t.index ["user_id", "created_at"], name: "index_projects_on_user_id_and_created_at", using: :btree
+    t.index ["user_id"], name: "index_projects_on_user_id", using: :btree
   end
-
-  add_index "projects", ["badge_percentage"], name: "index_projects_on_badge_percentage", using: :btree
-  add_index "projects", ["created_at"], name: "index_projects_on_created_at", using: :btree
-  add_index "projects", ["homepage_url"], name: "index_projects_on_homepage_url", using: :btree
-  add_index "projects", ["name"], name: "index_projects_on_name", using: :btree
-  add_index "projects", ["repo_url"], name: "index_projects_on_repo_url", using: :btree
-  add_index "projects", ["updated_at"], name: "index_projects_on_updated_at", using: :btree
-  add_index "projects", ["user_id", "created_at"], name: "index_projects_on_user_id_and_created_at", using: :btree
-  add_index "projects", ["user_id"], name: "index_projects_on_user_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "provider"
     t.string   "uid"
     t.string   "name"
     t.string   "nickname"
-    t.string   "email"
+    t.citext   "email"
     t.string   "password_digest"
     t.string   "secret_token"
     t.string   "validation_code"
@@ -227,10 +248,9 @@ ActiveRecord::Schema.define(version: 20160810204829) do
     t.datetime "activated_at"
     t.string   "reset_digest"
     t.datetime "reset_sent_at"
+    t.index ["email"], name: "index_users_on_email", using: :btree
+    t.index ["uid"], name: "index_users_on_uid", using: :btree
   end
-
-  add_index "users", ["email"], name: "index_users_on_email", using: :btree
-  add_index "users", ["uid"], name: "index_users_on_uid", using: :btree
 
   create_table "versions", force: :cascade do |t|
     t.string   "item_type",  null: false
@@ -239,9 +259,8 @@ ActiveRecord::Schema.define(version: 20160810204829) do
     t.string   "whodunnit"
     t.text     "object"
     t.datetime "created_at"
+    t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id", using: :btree
   end
-
-  add_index "versions", ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id", using: :btree
 
   add_foreign_key "projects", "users"
 end

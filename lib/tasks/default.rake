@@ -1,38 +1,6 @@
 # frozen_string_literal: true
 # Rake tasks for BadgeApp
 
-# UGLY work-around for intermittently failing tests, by forcing the test seed.
-# The underlying problem this addresses is that
-# tests intermittently fail (issue #397).  We believe this is because
-# at the end of each test the test framework does a
-# ROLLBACK, but for reasons we've not determined a SAVEPOINT is not always
-# performed at the start of each test (it SHOULD happen!).
-# Intermittent test failures significantly impede development and
-# deployment, because it means that tests will fail even though the
-# software is fine. There's value in doing a random test order, so we try to
-# select randomly between several known-working seeds.
-# The *CORRECT* solution is to fix the problem, but this appears to be
-# a subtle bug in our dependencies. We believe it traces
-# back to vcr; a bug report has been submitted.  Until it's fixed, here's
-# a work-around.
-#
-# NOTE: Changing the test suite may cause a seed to fail, so you'll need to
-# change the seed at that point.  An easy solution is to comment out the
-# line below, run "rake test" many times until you find working seeds
-# that don't trigger "Deleting extra project..." or failing tests,
-# and then set the seed.  We use multiple random seeds, and have other
-# work-arounds in place, so hopefully a test suite change will simply
-# bring us back to intermittent failures until the seeds are reset.
-#
-# For more info:
-# https://github.com/linuxfoundation/cii-best-practices-badge/issues/397
-# https://github.com/vcr/vcr/issues/586
-
-ENV['TESTOPTS'] = "--seed=#{[3_956, 27_725, 29_928, 55_177].sample}"
-
-# Run tests last. That way, runtime problems (e.g., undone migrations)
-# do not interfere with the other checks.
-
 task(:default).clear.enhance %w(
   rbenv_rvm_setup
   bundle
@@ -131,7 +99,7 @@ task :markdownlint do
   sh "bundle exec mdl -s #{style_file} *.md doc/*.md"
 end
 
-# Apply JSCS to look for issues in Javascript files.
+# Apply JSCS to look for issues in JavaScript files.
 # To use, must install jscs; the easy way is to use npm, and at
 # the top directory of this project run "npm install jscs".
 # This presumes that the jscs executable is installed in "node_modules/.bin/".
@@ -139,10 +107,10 @@ end
 #
 # This not currently included in default "rake"; it *works* but is very
 # noisy.  We need to determine which ruleset to apply,
-# and we need to fix the Javascript to match that.
+# and we need to fix the JavaScript to match that.
 # We don't scan 'app/assets/javascripts/application.js';
 # it is primarily auto-generated code + special directives.
-desc 'Run jscs - Javascript style checker'
+desc 'Run jscs - JavaScript style checker'
 task :jscs do
   jscs_exe = 'node_modules/.bin/jscs'
   jscs_options = '--preset=node-style-guide -m 9999'
@@ -226,19 +194,46 @@ task :fasterer do
   sh 'fasterer'
 end
 
-# Implement full purge of Fastly CDN cache.  Invoke using:
-#   heroku run --app HEROKU_APP_HERE rake fastly:purge
-# Run this if code changes will cause a change in badge level, since otherwise
-# the old badge levels will keep being displayed until the cache times out.
-# See: https://robots.thoughtbot.com/
-# a-guide-to-caching-your-rails-application-with-fastly
+# Tasks for Fastly including purging and testing the cache.
 namespace :fastly do
+  # Implement full purge of Fastly CDN cache.  Invoke using:
+  #   heroku run --app HEROKU_APP_HERE rake fastly:purge
+  # Run this if code changes will cause a change in badge level, since otherwise
+  # the old badge levels will keep being displayed until the cache times out.
+  # See: https://robots.thoughtbot.com/
+  # a-guide-to-caching-your-rails-application-with-fastly
   desc 'Purge Fastly cache (takes about 5s)'
   task :purge do
     puts 'Starting full purge of Fastly cache (typically takes about 5s)'
     require Rails.root.join('config/initializers/fastly')
     FastlyRails.client.get_service(ENV.fetch('FASTLY_SERVICE_ID')).purge_all
     puts 'Cache purged'
+  end
+
+  desc 'Test Fastly Caching'
+  task :test, [:site_name] do |_t, args|
+    args.with_defaults site_name:
+      'https://master.bestpractices.coreinfrastructure.org/projects/1/badge'
+    puts 'Starting test of Fastly caching'
+    verbose(false) do
+      sh <<-END
+        site_name="#{args.site_name}"
+        echo "Purging Fastly cache of badge for ${site_name}"
+        curl -X PURGE "$site_name" || exit 1
+        if curl -svo /dev/null "$site_name" 2>&1 | grep 'X-Cache: MISS' ; then
+          echo "Fastly cache of badge for project 1 successfully purged."
+        else
+          echo "Failed to purge badge for project 1 from Fastly cache."
+          exit 1
+        fi
+        if curl -svo /dev/null "$site_name" 2>&1 | grep 'X-Cache: HIT' ; then
+          echo "Fastly cache successfully restored."
+        else
+          echo "Fastly failed to restore cache."
+          exit 1
+        fi
+      END
+    end
   end
 end
 
@@ -262,6 +257,18 @@ task :pull_production do
   Rake::Task['db:migrate'].invoke
 end
 
+# Don't use this one unless you need to
+desc 'Copy database from production into development (if normal one fails)'
+task :pull_production_alternative do
+  puts 'Getting production database (alternative)'
+  sh 'heroku pg:backups:capture --app production-bestpractices && ' \
+     'curl -o db/latest.dump `heroku pg:backups:public-url ' \
+     '     --app production-bestpractices` && ' \
+     'rake db:reset && ' \
+     'pg_restore --verbose --clean --no-acl --no-owner -U `whoami` ' \
+     '           -d development db/latest.dump'
+end
+
 desc 'Copy database from master into development (requires access privs)'
 task :pull_master do
   puts 'Getting master database'
@@ -274,21 +281,27 @@ end
 
 desc 'Copy production database to master, overwriting master database'
 task :production_to_master do
-  sh 'heroku pg:backups restore $(heroku pg:backups public-url ' \
+  sh 'heroku pg:backups:restore $(heroku pg:backups:public-url ' \
      '--app production-bestpractices) DATABASE_URL --app master-bestpractices'
   sh 'heroku run bundle exec rake db:migrate --app master-bestpractices'
 end
 
 desc 'Copy production database to staging, overwriting staging database'
 task :production_to_staging do
-  sh 'heroku pg:backups restore $(heroku pg:backups public-url ' \
+  sh 'heroku pg:backups:restore $(heroku pg:backups:public-url ' \
      '--app production-bestpractices) DATABASE_URL ' \
      '--app staging-bestpractices --confirm staging-bestpractices'
   sh 'heroku run bundle exec rake db:migrate --app staging-bestpractices'
 end
 
-Rails::TestTask.new('test:features' => 'test:prepare') do |t|
-  t.pattern = 'test/features/**/*_test.rb'
+# require 'rails/testtask.rb'
+# Rails::TestTask.new('test:features' => 'test:prepare') do |t|
+#   t.pattern = 'test/features/**/*_test.rb'
+# end
+
+task 'test:features' => 'test:prepare' do
+  $LOAD_PATH << 'test'
+  Minitest.rake_run(['test/features'])
 end
 
 # This gem isn't available in production
@@ -323,6 +336,18 @@ Rake::Task['test:run'].enhance ['test:features']
 # This is the task to run every day, e.g., to record statistics
 # Configure your system (e.g., Heroku) to run this daily.  If you're using
 # Heroku, see: https://devcenter.heroku.com/articles/scheduler
+desc 'Run daily tasks used in any tier, e.g., record daily statistics'
 task daily: :environment do
   ProjectStat.create!
+end
+
+# Run this task to email a limited set of reminders to inactive projects
+# that do not have a badge.
+# Configure your system (e.g., Heroku) to run this daily.  If you're using
+# Heroku, see: https://devcenter.heroku.com/articles/scheduler
+desc 'Send reminders to the oldest inactive project badge entries.'
+task reminders: :environment do
+  puts 'Sending inactive project reminders. List of reminded project ids:'
+  p ProjectsController.send_reminders
+  true
 end

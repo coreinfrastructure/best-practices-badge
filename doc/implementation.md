@@ -29,9 +29,9 @@ The BadgeApp web application MUST:
 3. Support users of modern widely used web browsers, including
    Chrome, Firefox, Safari, and Internet Explorer version 10 and up.
    We expect Internet Explorer pre-10 users will use a different browser.
-4. NOT require Javascript to be enabled on the web browser (some
+4. NOT require JavaScript to be enabled on the web browser (some
    security-conscious people disable it) - instead, support graceful
-   degradation (many features will work much better if Javascript is enabled).
+   degradation (many features will work much better if JavaScript is enabled).
    Requiring CSS is fine.
 5. Support users of various laptops/desktops
    (running Linux (Ubuntu, Debian, Fedora, Red Hat Enterprise Linus),
@@ -96,6 +96,34 @@ using the "heroku" command (this requires authorization).
 The one exception: the BadgeApp web application does support an 'admin'
 role for logged in users; admin users
 are allowed to edit and delete any project entry.
+
+## Environment variables
+
+The application is configured by various environment variables:
+
+* PUBLIC_HOSTNAME (default 'localhost')
+* BADGEAPP_MAX_REMINDERS (default 2): Number of email reminders to send
+  to inactive projects when running "rake reminders".
+  This rate limit is best set low to start,
+  and relatively low afterwards, to limit impact if there's an error.
+* LOST_PASSING_REMINDER (default 30): Minimum number of days since
+  last lost a badge before sending reminder
+* LAST_UPDATED_REMINDER (default 30): Minimum number of days
+  since project last updated before sending reminder
+* LAST_SENT_REMINDER (default 60): Minimum number of days since
+  project was last sent a reminder
+* RAILS_ENV (default 'development'): Rails environment.
+  The master, staging, and production systems set this to 'production'.
+
+This can be set on Heroku.  For example, to change the maximum number
+of email reminders to inactive projects on production-bestpractices:
+
+~~~~
+heroku config:set --app production-bestpractices BADGEAPP_MAX_REMINDERS=5
+~~~~
+
+On Heroku, using config:set to set a value will automatically restart the
+application (causing it to take effect).
 
 ## Terminology
 
@@ -217,6 +245,26 @@ This uses Rails' convention where
 a 'get' of /projects/:id/edit(.:format)' is considered an edit;
 this would normally create a CSRF vulnerability, but Rails automatiacally
 inserts and checks for a CSRF token, countering this potential vulnerability.
+
+## Search
+
+The "/projects" URL supports various searches.
+We reserve the right to change the details, but we do try
+to provide a reasonable interface.
+The following search parameters are supported:
+
+* status: "passing" or "in_progress"
+* gteq: Integer, % greater than or equal
+* lteq: Integer, % less than or equal.  Can be combined with gteq.
+* pq: Text, "prefix query" - matches against *prefix* of URL or name
+* q: Text, "normal query" - match against parsed name, description, URL.
+  This is implemented by PostgreSQL, so you can use "&amp;" (and),
+  "|" (or), and "'text...*'" (prefix).
+  This parses URLs into parts; you can't search on a whole URL (use pq).
+* page: Page to display
+
+See app/controllers/project_controllers.rb for how these
+are implemented.
 
 
 ## Changing criteria
@@ -633,6 +681,28 @@ Some information on how to detect licenses in projects
 For the moment, we just use GitHub's mechanism.
 It's easy to invoke and resolves it in a number of cases.
 
+## Implementation of Detectives.
+
+The detective classes are located in the directory often located in the directory ./workspace/cii-best-practices-badge/app/lib.  This directory contains all of the detectives and has a very specific naming convention.  All new detectives must be named name1_detective.rb.  This name is important as it will be called by the primary code chief.rb which calls and collects the results of all of the detective classes.
+
+To integrate a new class chief.rb must be edited in the following line.
+
+ALL_DETECTIVES =
+  [
+    NameFromUrlDetective, ProjectSitesHttpsDetective,
+    GithubBasicDetective, HowAccessRepoFilesDetective,
+    RepoFilesExamineDetective, FlossLicenseDetective,
+    HardenedSitesDetective (Name1Detective)
+  ].freeze
+
+  where Name1Detective corrosponds to the new class created in name1_detective.  Without following the naming convention chief will not run the new detective.
+
+  A template detective called blank_detective.rb is supplied with the project with internal documentation as to how to use it.
+
+  Remember, in addition to the detective you must right a test in order for it
+  to be accepted into the repository.  The tests are located at ./test/unit/lib/
+  with an example test of blank_detective included.
+
 ## Analysis
 
 We use the OWASP ZAP web application scanner to find potential
@@ -707,11 +777,11 @@ patch -p0 <<END
 +++ checklink-norobots  2016-02-24 10:48:24.856983414 -0500
 @@ -48,7 +48,7 @@
  use Net::HTTP::Methods 5.833 qw();    # >= 5.833 for 4kB cookies (#6678)
- 
+
  # if 0, ignore robots exclusion (useful for testing)
 -use constant USE_ROBOT_UA => 1;
 +use constant USE_ROBOT_UA => 0;
- 
+
  if (USE_ROBOT_UA) {
      @W3C::UserAgent::ISA = qw(LWP::RobotUA);
 END
@@ -724,6 +794,54 @@ checklink-norobots -b -e \
   https://github.com/linuxfoundation/cii-best-practices-badge | tee results
 ~~~~
 
+## PostgreSQL Dependencies
+
+Our current database implementation requires PostgreSQL.  Our internal
+project search engine uses PostgreSQL specific commands.  Additionally,
+we are using the PostgreSQL specific citext character string type to
+store email addresses.  This allows us, within PostgreSQL, to store
+case sensitive emails but have a case insensitive index on them.
+
+We do this as we can foresee a case where a user's email requires case
+sensitivity to be received (Microsoft Exchange allows this).  We do not,
+however, want to allow for emails that are not case insensitive unique
+since this could possibly allow for a number of duplicate users to be
+created and the possibility of two users from the same domain having
+emails which differ only in case is exceedingly rare.
+
+
+## Forbidden Passwords
+
+Currently we allow local passwords if they are 7 characters or longer.
+We intend to change this in the future, described here
+(we currently load bad passwords, we just don't check them yet).
+
+[NIST has proposed draft password rules in 2016](https://nakedsecurity.sophos.com/2016/08/18/nists-new-password-rules-what-you-need-to-know/).
+They recommend having a minimum of 8 characters in passwords and
+checking against a list of bad passwords.
+Here we'll call them forbidden passwords - they are forbidden because
+they're too easy to guess.
+
+Here's how to recreate the bad-passwords list.
+It's derived from the skyzyx "bad-passwords" list, which is dedicated
+to the public domain via the CC0 license.
+
+We create a modified version of the original source material.
+We don't need to store anything less than 8 characters
+(they will be forbidden anyway), and we only store lowercase versions
+(we check downcased versions).
+We compress it into a .gz file; it doesn't take long to read, and that greatly
+reduces the space we use when storing and and transmitting the program.
+Using the bad-passwords version dated "May 27 11:03:00 2016 -0700",
+starting with the "mutated" list, we end up with 106,251 forbidden passwords.
+
+~~~
+(cd .. && git clone https://github.com/skyzyx/bad-passwords )
+cat ../bad-passwords/raw-mutated.txt | grep -E '^.{8}' | tr A-Z a-z | \
+  sort -u > raw-bad-passwords-lowercase.txt
+rm -f raw-bad-passwords-lowercase.txt.gz
+gzip --best raw-bad-passwords-lowercase.txt
+~~~~
 
 # See also
 

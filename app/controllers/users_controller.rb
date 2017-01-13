@@ -16,22 +16,26 @@ class UsersController < ApplicationController
   def show
     @user = User.find(params[:id])
     @projects = @user.projects.paginate(page: params[:page])
-    if @user == current_user && @user.provider == 'github'
-      @edit_projects = Project.where(repo_url: github_user_projects) - @projects
-    end
+    return unless @user == current_user && @user.provider == 'github'
+    @edit_projects = Project.where(repo_url: github_user_projects) - @projects
   end
 
+  # rubocop: disable Metrics/MethodLength
   def create
-    @user = User.new(user_params)
-    @user.provider = 'local'
-    if @user.save
-      @user.send_activation_email
-      flash[:info] = 'Please check your email to activate your account.'
-      redirect_to root_url
+    @user = User.find_by(email: user_params[:email])
+    if @user
+      redirect_existing
     else
-      render 'new'
+      @user = User.new(user_params)
+      @user.provider = 'local'
+      if @user.save
+        send_activation
+      else
+        render 'new'
+      end
     end
   end
+  # rubocop: enable Metrics/MethodLength
 
   def edit
     @user = User.find(params[:id])
@@ -54,6 +58,24 @@ class UsersController < ApplicationController
     redirect_to users_url
   end
 
+  def redirect_existing
+    if @user.activated
+      flash[:info] = 'That user already exists. ' \
+                     'Did you mean to sign in?'
+      redirect_to login_url
+    else
+      regenerate_activation_digest
+      send_activation
+    end
+  end
+
+  def send_activation
+    @user.send_activation_email
+    flash[:info] = 'New activation link created. ' \
+                   'Please check your email to activate your account.'
+    redirect_to root_url
+  end
+
   private
 
   def user_params
@@ -69,15 +91,21 @@ class UsersController < ApplicationController
 
   # Confirms a logged-in user.
   def logged_in_user
-    unless logged_in?
-      flash[:danger] = 'Please log in.'
-      redirect_to login_url
-    end
+    return if logged_in?
+    flash[:danger] = 'Please log in.'
+    redirect_to login_url
   end
 
   # Confirms the correct user.
   def correct_user
     @user = User.find(params[:id])
     redirect_to(root_url) unless @user == current_user || current_user.admin?
+  end
+
+  def regenerate_activation_digest
+    @user.activation_token = User.new_token
+    @user.update_attribute(
+      :activation_digest, User.digest(@user.activation_token)
+    )
   end
 end

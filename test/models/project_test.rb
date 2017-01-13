@@ -2,7 +2,7 @@
 require 'test_helper'
 
 class ProjectTest < ActiveSupport::TestCase
-  def setup
+  setup do
     @user = users(:test_user)
     @project = @user.projects.build(
       homepage_url: 'https://www.example.org',
@@ -30,6 +30,7 @@ class ProjectTest < ActiveSupport::TestCase
     refute Project.new.contains_url? 'www.google.com'
   end
 
+  # rubocop:disable Metrics/BlockLength
   test 'Rigorous project and repo URL checker' do
     regex = UrlValidator::URL_REGEX
     my_url = 'https://github.com/linuxfoundation/cii-best-practices-badge'
@@ -83,4 +84,5 @@ class ProjectTest < ActiveSupport::TestCase
     refute validator.url_acceptable?('https://github.com/linuxfoundation/' \
                                     'cii-best-practices-badge%ff%ff')
   end
+  # rubocop:enable Metrics/BlockLength
 end

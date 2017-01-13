@@ -127,6 +127,7 @@ user.projects.create!(
 
 ProjectStat.create!
 
+# rubocop:disable Metrics/BlockLength
 100.times do |n|
   name = "test-name-#{n + 1}"
   description = "test-description#{n + 1}"
@@ -213,5 +214,6 @@ ProjectStat.create!
     dynamic_analysis_fixed_status: '?'
   )
 end
+# rubocop:enable Metrics/BlockLength
 
 ProjectStat.create!

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+# rubocop:disable Metrics/BlockLength
 Rails.application.configure do
   # Settings specified here will take precedence over those in
   # config/application.rb.
@@ -24,7 +25,8 @@ Rails.application.configure do
 
   # Disable serving static files from the `/public` folder by default since
   # Apache or NGINX already handles this.
-  config.serve_static_files = ENV['RAILS_SERVE_STATIC_FILES'].present?
+  # config.serve_static_files = ENV['RAILS_SERVE_STATIC_FILES'].present?
+  config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
 
   # We want to serve compressed values
   config.assets.compress = true
@@ -107,5 +109,10 @@ Rails.application.configure do
   # Cache static content.  Until we're confident in the results, we'll
   # use a relatively short caching time of 1 hour.
   # config.static_cache_control = 'public, s-maxage=2592000, maxage=86400'
-  config.static_cache_control = 'public, s-maxage=3600, maxage=3600'
+  # config.static_cache_control = 'public, s-maxage=3600, maxage=3600'
+  config.public_file_server.headers =
+    {
+      'Cache-Control' => 'public, s-maxage=3600, max-age=3600'
+    }
 end
+# rubocop:enable Metrics/BlockLength

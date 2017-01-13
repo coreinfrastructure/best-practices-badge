@@ -1,15 +1,22 @@
 # frozen_string_literal: true
-require 'test_helper'
+require 'capybara_feature_test'
 
-class GithubLoginTest < Capybara::Rails::TestCase
+class GithubLoginTest < CapybaraFeatureTest
+  # rubocop:disable Metrics/BlockLength
   scenario 'Has link to GitHub Login', js: true do
+    # Clean up database here and restart DatabaseCleaner.
+    # This solves a transient issue if test restarts without running
+    # teardown meaning the database is dirty after restart.
+    DatabaseCleaner.clean
+    DatabaseCleaner.start
     configure_omniauth_mock unless ENV['GITHUB_PASSWORD']
 
-    VCR.use_cassette('github_login') do
+    VCR.use_cassette('github_login', allow_playback_repeats: true) do
       visit '/'
       assert has_content? 'CII Best Practices Badge Program'
       click_on 'Get Your Badge Now!'
       assert has_content? 'Log in with GitHub'
+      num = ActionMailer::Base.deliveries.size
       click_link 'Log in with GitHub'
 
       if ENV['GITHUB_PASSWORD'] # for re-recording cassettes
@@ -20,6 +27,7 @@ class GithubLoginTest < Capybara::Rails::TestCase
         click_on 'Authorize application'
       end
 
+      assert_equal num + 1, ActionMailer::Base.deliveries.size
       assert has_content? 'Signed in!'
       click_on 'Get Your Badge Now!'
       wait_for_url '/projects/new?'
@@ -35,6 +43,7 @@ class GithubLoginTest < Capybara::Rails::TestCase
       assert has_content? 'Thanks for adding the Project! Please fill out ' \
                          'the rest of the information to get the Badge.'
 
+      assert_equal num + 2, ActionMailer::Base.deliveries.size
       click_on 'Account'
       assert has_content? 'Profile'
       click_on 'Profile'
@@ -51,4 +60,5 @@ class GithubLoginTest < Capybara::Rails::TestCase
       end
     end
   end
+  # rubocop:enable Metrics/BlockLength
 end

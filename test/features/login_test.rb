@@ -1,8 +1,8 @@
 # frozen_string_literal: true
-require 'test_helper'
+require 'capybara_feature_test'
 include ActionView::Helpers::TextHelper
 
-class LoginTest < Capybara::Rails::TestCase
+class LoginTest < CapybaraFeatureTest
   CHECK = /result_symbol_check/
   DASH = /result_symbol_dash/
   QUESTION = /result_symbol_question/
@@ -18,6 +18,7 @@ class LoginTest < Capybara::Rails::TestCase
     assert has_content? 'Log in with GitHub'
   end
 
+  # rubocop:disable Metrics/BlockLength
   scenario 'Can Login and edit using custom account', js: true do
     visit login_path
     fill_in 'Email', with: @user.email
@@ -58,6 +59,7 @@ class LoginTest < Capybara::Rails::TestCase
     click_on 'Submit'
     assert_match X, find('#discussion_enough')['src']
   end
+  # rubocop:enable Metrics/BlockLength
 
   def ensure_choice(radio_button_id)
     # Necessary because Capybara click doesn't always take the first time

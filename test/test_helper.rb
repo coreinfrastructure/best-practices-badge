@@ -94,17 +94,8 @@ module ActiveSupport
     # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical
     # order.
     ActiveRecord::Migration.maintain_test_schema!
-    self.use_transactional_fixtures = true
+    self.use_transactional_tests = true
     fixtures :all
-
-    def setup
-      # Temporary fix for issue #397
-      # This deletes an extra record introduced by VCR with some test seeds
-      return if Project.count == 4
-      p "Deleting extra project. #{Project.count} projects in #{method_name}"
-      Project.where(name: 'Core Infrastructure Initiative Best Practices Badge')
-             .destroy_all
-    end
 
     # Add more helper methods to be used by all tests here...
 
@@ -136,6 +127,10 @@ module ActiveSupport
     # rubocop:enable Metrics/MethodLength
 
     # rubocop:disable Metrics/MethodLength
+    # Note: In many tests we use "password" as the password.
+    # Users can (no longer) create accounts with this too-easy password.
+    # Using "password" helps test that users can log in to their
+    # existing accounts, even if we make the password rules harsher later.
     def log_in_as(
       user, password: 'password', provider: 'local', remember_me: '1',
       time_last_used: Time.now.utc
@@ -143,12 +138,13 @@ module ActiveSupport
       # This is based on "Ruby on Rails Tutorial" by Michael Hargle, chapter 8,
       # https://www.railstutorial.org/book
       if integration_test?
-        post login_path,
-             session: {
-               email:  user.email, password: password,
-               provider: provider, remember_me: remember_me,
-               time_last_used: time_last_used
-             }
+        post login_path, params: {
+          session: {
+            email:  user.email, password: password,
+            provider: provider, remember_me: remember_me,
+            time_last_used: time_last_used
+          }
+        }
         # Do this instead, it at least checks the password:
         # session[:user_id] = user.id if user.try(:authenticate, password)
       else

@@ -2,20 +2,29 @@
 require 'test_helper'
 
 class PasswordResetsTest < ActionDispatch::IntegrationTest
-  def setup
+  setup do
     ActionMailer::Base.deliveries.clear
     @user = users(:test_user)
+    @ghuser = users(:github_user)
   end
 
+  # rubocop:disable Metrics/BlockLength
   test 'password resets' do
     get new_password_reset_path
     assert_template 'password_resets/new'
     # Invalid email
-    post password_resets_path, password_reset: { email: '' }
+    post password_resets_path, params: { password_reset: { email: '' } }
     assert_not flash.empty?
     assert_template 'password_resets/new'
+    # Valid email, github user
+    post password_resets_path, params: { password_reset:
+      { email: @ghuser.email } }
+    assert_equal 0, ActionMailer::Base.deliveries.size
+    assert_not flash.empty?
+    assert_redirected_to login_url
     # Valid email
-    post password_resets_path, password_reset: { email: @user.email }
+    post password_resets_path, params: { password_reset:
+      { email: @user.email } }
     assert_not_equal @user.reset_digest, @user.reload.reset_digest
     assert_equal 1, ActionMailer::Base.deliveries.size
     assert_not flash.empty?
@@ -38,28 +47,31 @@ class PasswordResetsTest < ActionDispatch::IntegrationTest
     assert_template 'password_resets/edit'
     assert_select 'input[name=email][type=hidden][value=?]'.dup, user.email
     # Invalid password & confirmation
-    patch password_reset_path(user.reset_token),
-          email: user.email,
-          user: {
-            password:              '1235foo',
-            password_confirmation: 'bar4567'
-          }
+    patch password_reset_path(user.reset_token), params: {
+      email: user.email,
+      user: {
+        password:              '1235foo',
+        password_confirmation: 'bar4567'
+      }
+    }
     assert_select 'div#error_explanation'
     # Empty password
-    patch password_reset_path(user.reset_token),
-          email: user.email,
-          user: {
-            password:              '',
-            password_confirmation: ''
-          }
+    patch password_reset_path(user.reset_token), params: {
+      email: user.email,
+      user: {
+        password:              '',
+        password_confirmation: ''
+      }
+    }
     assert_select 'div#error_explanation'
     # Valid password & confirmation
-    patch password_reset_path(user.reset_token),
-          email: user.email,
-          user: {
-            password:              'foo1234',
-            password_confirmation: 'foo1234'
-          }
+    patch password_reset_path(user.reset_token), params: {
+      email: user.email,
+      user: {
+        password:              'foo1234!',
+        password_confirmation: 'foo1234!'
+      }
+    }
     assert user_logged_in?
     assert_not flash.empty?
     assert_redirected_to user
@@ -67,18 +79,21 @@ class PasswordResetsTest < ActionDispatch::IntegrationTest
 
   test 'expired token' do
     get new_password_reset_path
-    post password_resets_path, password_reset: { email: @user.email }
+    post password_resets_path, params: { password_reset:
+      { email: @user.email } }
 
     @user = assigns(:user)
     @user.update_attribute(:reset_sent_at, 3.hours.ago)
-    patch password_reset_path(@user.reset_token),
-          email: @user.email,
-          user: {
-            password:              'foo1234',
-            password_confirmation: 'bar5678'
-          }
+    patch password_reset_path(@user.reset_token), params: {
+      email: @user.email,
+      user: {
+        password:              'foo1234',
+        password_confirmation: 'bar5678'
+      }
+    }
     assert_response :redirect
     follow_redirect!
     assert_match 'expired', response.body
   end
+  # rubocop:enable Metrics/BlockLength
 end

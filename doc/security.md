@@ -57,9 +57,13 @@ we perform these processes in parallel, iterating and
 feeding back as appropriate.
 
 Below are the overall security requirements, followed by how we approach
-security in design, implementation,
-verification, supply chain (reuse), development environment,
-and deployment/operations.
+security in the rest of the software development processes:
+design, implementation,
+verification, supply chain (reuse), and deployment/operations.
+This is followed by a discussion about security in the
+development environment and our people.
+Note that receive our own badge, the CII best practices badge,
+which provides additional evidence that we've covered key areas.
 
 (Note to editors: to edit the figures above, edit the .odg file, then
 export to .png so that it can viewed on GitHub.)
@@ -199,6 +203,9 @@ an encrypted channel using TLS.
 There is some JavaScript served to the client,
 but no security decisions depend on code that runs on the client.
 
+The custom code has been kept as small as possible, in particular, we've
+tried to keep it DRY (don't repeat yourself).
+
 From a user's point of view,
 users potentially create an id, then log in and enter data
 about projects (as new or updated data).
@@ -223,9 +230,8 @@ showing that we apply many secure design principles including
 all of the ones from Saltzer and Schroeder:
 
 - Economy of mechanism (keep the design as simple and small as practical,
-  e.g., by adopting sweeping simplifications):
-  The custom code has been kept as small as possible, in particular, we've
-  tried to keep it DRY (don't repeat yourself).
+  e.g., by adopting sweeping simplifications).
+  We discuss this in more detail in the earlier section "simple design".
 - Fail-safe defaults (access decisions should deny by default):
   Access decisions are deny by default.
 - Complete mediation (every access that might be limited must be
@@ -391,9 +397,11 @@ and how we attempt to reduce their risks in BadgeApp.
    Rails mechanism, including an encrypted and signed cookie session key.
 3. Cross-Site Scripting (XSS).
    We use Rails' built-in XSS
-   countermeasures, in particular, its "safe" HTML mechanisms.  By default,
-   Rails always applies HTML escapes on strings displayed through views
-   unless they are marked as safe.
+   countermeasures, in particular, its "safe" HTML mechanisms such
+   as SafeBuffer.  By default, Rails always applies HTML escapes
+   on strings displayed through views unless they are marked as safe.
+   [SafeBuffers and Rails 3.0](http://yehudakatz.com/2010/02/01/safebuffers-and-rails-3-0/)
+   discusses this in more detail.
    This greatly reduces the risk of mistakes leading to XSS vulnerabilities.
    In addition, we use a restrictive Content Security Policy (CSP),
    which makes damage more difficult even if an attacker gets something in.
@@ -427,24 +435,10 @@ and how we attempt to reduce their risks in BadgeApp.
    For more information, see the page on
    [request forgery protection](http://api.rubyonrails.org/classes/ActionController/RequestForgeryProtection.html).
 9. Using Components with Known Vulnerabilities.
-   We use bundle-audit, which compares our gem libraries to a database
-   of versions with known vulnerabilities.
-   The default 'rake' task invokes bundle-audit.
-   This is known to work; commit fdb83380aa71352
-   on 2015-11-26 updated nokogiri, in response to a bundle-audit
-   report on advisory CVE-2015-1819, "Nokogiri gem contains
-   several vulnerabilities in libxml2 and libxslt".
-   We also use a gemnasium-based badge that warns us when there is an
-   out-of-date dependency; see
-   [it](https://gemnasium.com/linuxfoundation/cii-best-practices-badge)
-   for more information.
-   We have also optimized the component update process through
-   high test coverage.  The files Gemfile and Gemfile.lock
-   identify the current versions of Ruby gems (Gemfile identifies direct
-   dependencies; Gemfile.lock includes all transitive dependencies and
-   the exact version numbers).  We can update libraries by
-   updating those files, running "bundle install", and then using "rake"
-   to run various checks including a robust test suite.
+   We detect components with publicly known vulnerabilities
+   using bundle-audit and gemnasium.
+   These use the Gemfile* and National Vulnerability Database (NVD) data.
+   For more information, see the "supply chain" section.
 10. Unvalidated Redirects and Forwards.
    Redirects and forwards are not used significantly, and they are validated.
 
@@ -684,32 +678,82 @@ but we think they greatly reduce the risks.
 
 ## Supply chain (reuse)
 
+## Review before use
+
 We consider the code we reuse
 (e.g., libraries and frameworks) before adding them, to reduce
 the risk of unintentional and intentional vulnerabilities from them.
 In particular, we prefer the use of popular components (where problems
-are more likely to be identified and addressed) and common FLOSS licenses.
-(A FLOSS component with a rarely-used license, particularly a
-GPL-incompatible one, is less likely to be reviewed by others because
-in most cases fewer people will contribute to it.)
-These steps reduce the risk of malicious components
-(e.g., malicious gems).
+are more likely to be identified and addressed).
+In some cases we review the code ourselves.
 
-We also have a process for detecting when the components we use
-have known vulnerabilities (using bundle-audit)
-or are out-of-date.
-This check is run by the default 'rake' process, so once a vulnerability
-is found in a gem we use and is added to the public database, we
-are notified that we need to update it.
+We prefer common FLOSS licenses.
+A FLOSS component with a rarely-used license, particularly a
+GPL-incompatible one, is less likely to be reviewed by others because
+in most cases fewer people will contribute to it.
+
+We use license_finder to ensure that the licenses are what we expect,
+and that the licenses do not change to something unexpected later
+in later versions.
+
+## Auto-detect vulnerabilities when publicly reported (and speedily respond)
+
+We have a process for automatically detecting when the components we use
+have publicly known vulnerabilities or are out-of-date, and
+can quickly respond to alerts that there are publicly known
+vulnerabilities.
+We specifically focus on detecting all components with any publicly known
+vulnerability, both in our direct and indirect dependencies.
+
 The list of libraries used (transitively) is managed by bundler, so
 updating libraries or sets of libraries can be done quickly.
 As noted earlier, our strong automated test suite makes it easy to test this
 updated set, so we can rapidly update libraries, test the result, and
 deploy it.
 
+We detect components with publicly known vulnerabilities
+using bundle-audit and gemnasium.
+These use the Gemfile* files and National Vulnerability Database (NVD) data.
+We use bundle-audit, which compares our gem libraries to a database
+of versions with known vulnerabilities, and gemnasium
+The default 'rake' task invokes bundle-audit, so every time we run
+"rake" we are alerted about publicly known vulnerabilities in the
+components we depend on (directly or not).
+
+We also use a gemnasium-based badge that warns us when there is an
+out-of-date direct dependency as well vulnerable direct dependencies; see
+[it](https://gemnasium.com/linuxfoundation/cii-best-practices-badge)
+for more information.
+
+We have also optimized the component update process through
+using the package manager (bundler) and high test coverage.
+The files Gemfile and Gemfile.lock
+identify the current versions of Ruby gems (Gemfile identifies direct
+dependencies; Gemfile.lock includes all transitive dependencies and
+the exact version numbers).  We can update libraries by
+updating those files, running "bundle install", and then using "rake"
+to run various checks including a robust test suite.
+
+This approach is known to work.
+Commit fdb83380aa71352
+on 2015-11-26 updated nokogiri, in response to a bundle-audit
+report on advisory CVE-2015-1819, "Nokogiri gem contains
+several vulnerabilities in libxml2 and libxslt".
+When it was publicly reported we were alerted.
+In less than an hour from the time the vulnerability
+was publicly reported we were alerted,
+updated the library, ran the full test suite, and deployed the fixed version.
+
+## MITM Countered
+
 We counter man-in-the-middle (MITM) attacks when downloading gems
 because the Gemfile configuration uses an HTTPS source to the
 standard place for loading gems (<https://rubygems.org>).
+
+## Other risk reduction measures for third-party components
+
+These steps reduce the risk of malicious components
+(e.g., malicious gems).
 
 We can't eliminate all risks, and
 if we rewrote all the software (instead of reusing software)
@@ -750,16 +794,31 @@ to keep the databases separate.
 
 ### Online checkers
 
-Various online checkers give us a clean bill of health.
+Various online checkers give us an overall clean bill of health.
+Most of the checkers test our HTTPS (TLS) configuration and
+if common hardening mechanisms are enabled.
+
 For the main bestpractices.coreinfrastructure.org site we have:
 
 * An "A+" rating from the
-  <a href="https://www.ssllabs.com/ssltest/analyze.html?d=bestpractices.coreinfrastructure.org">Qualys SSL labs check of our TLS configuration</a>.
-* An "A+" rating from the
-  <a href="https://securityheaders.io/?q=bestpractices.coreinfrastructure.org">securityheaders.io check of our HTTP security headers</a>.
+  <a href="https://www.ssllabs.com/ssltest/analyze.html?d=bestpractices.coreinfrastructure.org">Qualys SSL labs check of our TLS configuration</a>
+  on 2017-01-14.
+* An "A" rating from the
+  <a href="https://securityheaders.io/?q=https%3A%2F%2Fbestpractices.coreinfrastructure.org">securityheaders.io check of our HTTP security headers</a>
+  on 2017-01-14.
+  It gives us a slightly lower score because we do not include
+  "Public-Key-Pins".  This simply notes that
+  we are do not implement HTTP Public Key Pinning (HPKP).
+  HPKP counters rogue certificate authorities (CAs), but it also has problems.
+  HPKP makes it harder to switch CAs *and* any error in its configuration,
+  at any time, risks serious access problems that are unfixable -
+  making it somewhat dangerous to use.
+  As a result, we have chosen to not add HPKP at this time.
 * An all-pass report from the
-  <a href="https://www.sslshopper.com/ssl-checker.html#hostname=bestpractices.coreinfrastructure.org">SSLShopper SSL checker</a>.
-* An "A+" rating from the [Mozilla Observatory](https://observatory.mozilla.org/analyze.html?host=master.bestpractices.coreinfrastructure.org) (This link is actually for the master branch.)
+  <a href="https://www.sslshopper.com/ssl-checker.html#hostname=bestpractices.coreinfrastructure.org">SSLShopper SSL checker</a>
+  on 2017-01-14.
+* An "A+" rating from the [Mozilla Observatory](https://observatory.mozilla.org/analyze.html?host=bestpractices.coreinfrastructure.org) scan summary
+  on 2017-01-14.
 * A 96% result from <a href="https://www.wormly.com/test_ssl/h/bestpractices.coreinfrastructure.org/i/157.52.75.7/p/443">Wormly</a>.
   The only item not passed was the "SSL Handshake Size" test; the live site
   provides 5667 bytes, and they consider values beyond 4K (with unclear
@@ -769,9 +828,13 @@ For the main bestpractices.coreinfrastructure.org site we have:
 
 ### Detection
 
-There are two aspects to detection:
-Internal (which has access to our internal information, such as logs)
-and external (which does not).
+There are two approaches to detection:
+* internal (which has access to our internal information, such as logs)
+* external (which does not have access to internal information)
+
+We use both approaches.  The external approaches do not have access
+to as much information, but they see the site as a "typical" user
+would, so combining these approaches has its advantages.
 
 #### Internal
 

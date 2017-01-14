@@ -106,3 +106,11 @@ We intend to try to automatically test and fill in information
 if the project follows standard conventions and
 is hosted on a site (e.g., GitHub) with decent API support.
 
+There is an implied criterion that we should mention here:
+
+- <a name="homepage_url"></a>The project MUST have a public website
+  with a stable URL.
+  (The badging application enforces this by requiring a URL to
+  create a badge entry.)
+  <sup>[<a href="#homepage_url">homepage_url</a>]</sup>
+

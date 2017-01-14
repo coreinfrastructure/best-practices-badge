@@ -132,15 +132,13 @@
           (e.g., "GPLv2 or proprietary" is acceptable).
           <br>
           <br>
-          <em>Rationale</em>: These criteria are designed for FLOSS projects,
+        rationale: >
+          These criteria are designed for FLOSS projects,
           so we need to ensure that they're only used where they apply.
           Some projects may be mistakenly considered FLOSS even though they
           are not (e.g., they might not have any license, in which case the
           defaults of the country's legal system apply, or they might use a
-          non-FLOSS license).  Unusual licenses can cause long-term problems
-          for FLOSS projects and are more difficult for tools to handle.
-          We expect that more advanced badges would set a higher bar (e.g.,
-          that it <em>must</em> be released under an OSI-approved license).
+          non-FLOSS license).
         autofill: >
           We currently use GitHub's API to request license information.
           This API examines the LICENSE file using the gem licensee.
@@ -169,6 +167,11 @@
           The OSI uses a rigorous approval process to determine
           which licenses are OSS.
         met_suppress: true
+        rationale: >
+          Unusual licenses can cause long-term problems
+          for FLOSS projects and are more difficult for tools to handle.
+          We expect that more advanced badges would set a higher bar (e.g.,
+          that it <em>must</em> be released under an OSI-approved license).
         autofill: >
           Currently we compare the license to see if it's on a simple list
           from OSI.  We could add support for automatically getting the list
@@ -199,6 +202,8 @@
           tutorial using examples), and how to use it securely (e.g., what to do
           and what not to do) if that is an appropriate topic for the software.
           The security documentation need not be long.
+          The project MAY use hypertext links to
+          non-project material as documentation.
         met_placeholder: >
           (Optional) What URL(s) are the starting points to for documentation?
         autofill: >
@@ -375,8 +380,8 @@
           a human-readable <i>summary</i> of major changes in that release.
         details: >
           The release notes MUST NOT be the output of a version control log
-          (e.g., the "git log" command results are not release notes).<br
-          /> The release notes MAY be implemented in a variety of ways.
+          (e.g., the "git log" command results are not release notes).<br/>
+          The release notes MAY be implemented in a variety of ways.
           Many projects provide them in a file named "NEWS", "CHANGELOG",
           or "ChangeLog", optionally with extensions such as ".txt", ".md",
           or ".html".  Historically the term "change log" meant a log of
@@ -384,8 +389,8 @@
           is a human-readable summary.  The release notes MAY instead be
           provided by version control system mechanisms such as the <a
           href="https://github.com/blog/1547-release-your-software">GitHub
-          Releases workflow</a>.<br />
-          <b>Rationale</b>:
+          Releases workflow</a>.
+        rationale: >
           Release notes are important because they help users decide whether
           or not they will want to update, and what the impact would be (e.g.,
           if the new release fixes vulnerabilities).
@@ -576,7 +581,8 @@
           The project MAY have multiple automated test suites (e.g., one
           that runs quickly, vs. another that is more thorough but requires
           special equipment).
-          <b>Rationale</b>: Automated test suites immediately help detect a
+        rationale: >
+          Automated test suites immediately help detect a
           variety of problems.  A large test suite can find more problems, but
           even a small test suite can detect problems and provide a framework
           to build on.
@@ -786,6 +792,10 @@
           The project's cryptographic software MUST use by default
           only cryptographic protocols
           and algorithms that are publicly published and reviewed by experts.
+        details: >
+          These cryptographic
+          criteria do not always apply because some software has no
+          need to directly use cryptographic capabilities.
         # autofill: TODO
     - crypto_call:
         category: SHOULD
@@ -831,6 +841,8 @@
           The software MAY allow smaller keylengths in some configurations
           (ideally it would not, since this allows downgrade attacks,
           but shorter keylengths are sometimes necessary for interoperability).
+          A "project security mechanism" is a security mechanism provided
+          by the delivered project's software.
         # autofill: TODO
     - crypto_working:
         category: MUST
@@ -928,7 +940,8 @@
           responsible disclosure</a>, because Google recommends that the 60-day
           period start when the project is notified <em>even</em> if the report
           is not public.<br>
-          <b>Rationale</b>: We intentionally chose to start measurement from the
+        rationale: >
+          We intentionally chose to start measurement from the
           time of public knowledge,
           and not from the time reported to the project, because this is much
           easier to measure and
@@ -1068,7 +1081,8 @@
           <br>
           The analysis tool(s) MAY be focused on looking for security
           vulnerabilities, but this is not required.
-          <b>Rationale:</b> Static source code analysis and dynamic analysis tend
+        rationale: >
+          Static source code analysis and dynamic analysis tend
           to find different kinds of defects (including defects that lead to
           vulnerabilities), so combining them is more likely to be effective.
         autofill: >

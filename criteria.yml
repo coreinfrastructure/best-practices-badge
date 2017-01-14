@@ -14,6 +14,7 @@
 #   na_placeholder: ...special na_placeholder text... # optional
 #   met_suppress: true|false # optional, default false. Suppress justification?
 #   unmet_suppress: true|false # optional, default false. Suppress just.
+#   rationale: ...text describing the rationale for this criterion.
 #   autofill: ...text describing *ideas* for how to autofill, in markdown
 #
 # Please note that autofill text is *not* a guarantee of how it will

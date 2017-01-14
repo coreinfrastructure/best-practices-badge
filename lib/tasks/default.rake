@@ -2,6 +2,7 @@
 # Rake tasks for BadgeApp
 
 task(:default).clear.enhance %w(
+  generate_criteria_doc
   rbenv_rvm_setup
   bundle
   bundle_audit
@@ -17,7 +18,6 @@ task(:default).clear.enhance %w(
   fasterer
   eslint
   test
-  generate_criteria_doc
 )
 
 task(:ci).clear.enhance %w(
@@ -94,7 +94,9 @@ task :bundle_audit do
   end
 end
 
-desc 'Run markdownlint (mdl) - check for markdown problems'
+# Note: If you don't want mdl to be run on a markdown file, rename it to
+# end in ".markdown" instead.  (E.g., for markdown fragments.)
+desc 'Run markdownlint (mdl) - check for markdown problems on **.md files'
 task :markdownlint do
   style_file = 'config/markdown_style.rb'
   sh "bundle exec mdl -s #{style_file} *.md doc/*.md"
@@ -191,13 +193,16 @@ markdown_files = Rake::FileList.new('*.md', 'doc/*.md')
 task 'html_from_markdown' => markdown_files.ext('.html')
 
 file 'doc/criteria-generated.md' =>
-     ['criteria.yml', 'doc/criteria-header.md', 'doc/criteria-footer.md',
-      './gen_markdown.rb' ] do
+     [
+       'criteria.yml',
+       'doc/criteria-header.markdown', 'doc/criteria-footer.markdown',
+       './gen_markdown.rb'
+     ] do
   sh './gen_markdown.rb'
 end
 
 # Name task so we don't have to use the filename
-task :generate_criteria_doc => 'doc/criteria-generated.md' do
+task generate_criteria_doc: 'doc/criteria-generated.md' do
 end
 
 desc 'Use fasterer to report Ruby constructs that perform poorly'

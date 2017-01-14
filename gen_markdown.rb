@@ -1,6 +1,5 @@
 #!/usr/bin/env ruby
 # Read criteria.yml and generate markdown with embedded HTML.
-
 # frozen_string_literal: true
 
 # It mostly generates HTML, so that any later reformat for line length
@@ -14,16 +13,9 @@ require 'yaml'
 # Load in entire criteria.yml, which keys off the major/minor groups
 FullCriteriaHash = YAML.load_file('criteria.yml')
 
-# Generate a warning so people are less likely to edit the generated result.
-def puts_warning
-  puts ''
-  puts '[](DO-NOT-EDIT-this-is-GENERATED-from-criteria.yml)'
-  puts ''
-end
-
 def print_file(filename)
-  File.open(filename, "r") do |file|
-    while line = file.gets
+  File.open(filename, 'r') do |file|
+    while (line = file.gets)
       puts line
     end
   end
@@ -48,9 +40,8 @@ def puts_criterion(key, criterion)
 end
 
 # Generate results
-$stdout.reopen("doc/criteria-generated.md", "w") || abort('Cannot write')
-puts_warning
-print_file('doc/criteria-header.md')
+$stdout.reopen('doc/criteria-generated.md', 'w') || abort('Cannot write')
+print_file('doc/criteria-header.markdown')
 FullCriteriaHash.each do |major, major_value|
   puts ''
   puts "### #{major}"
@@ -65,4 +56,4 @@ FullCriteriaHash.each do |major, major_value|
     puts '</ul>'
   end
 end
-print_file('doc/criteria-footer.md')
+print_file('doc/criteria-footer.markdown')

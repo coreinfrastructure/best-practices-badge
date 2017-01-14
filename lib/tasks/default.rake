@@ -17,6 +17,7 @@ task(:default).clear.enhance %w(
   fasterer
   eslint
   test
+  generate_criteria_doc
 )
 
 task(:ci).clear.enhance %w(
@@ -188,6 +189,16 @@ markdown_files = Rake::FileList.new('*.md', 'doc/*.md')
 
 # Use this task to locally generate HTML files from .md (markdown)
 task 'html_from_markdown' => markdown_files.ext('.html')
+
+file 'doc/criteria-generated.md' =>
+     ['criteria.yml', 'doc/criteria-header.md', 'doc/criteria-footer.md',
+      './gen_markdown.rb' ] do
+  sh './gen_markdown.rb'
+end
+
+# Name task so we don't have to use the filename
+task :generate_criteria_doc => 'doc/criteria-generated.md' do
+end
 
 desc 'Use fasterer to report Ruby constructs that perform poorly'
 task :fasterer do

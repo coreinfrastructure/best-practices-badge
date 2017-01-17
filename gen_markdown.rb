@@ -24,7 +24,7 @@ end
 
 def show_extra(key, header_text, criterion)
   return unless criterion.key?(key)
-  print "<br><i>#{header_text}</i>: #{criterion[key]}"
+  print "<dt><i>#{header_text}</i>:<dt> <dd>#{criterion[key]}</dd>"
 end
 
 def puts_criterion(key, criterion)
@@ -34,9 +34,11 @@ def puts_criterion(key, criterion)
   # print " (N/A #{criterion.key?('na_allowed') ? '' : 'not '}allowed.)"
   print ' (N/A allowed.)' if criterion.key?('na_allowed')
   print ' (URL required for "met".)' if criterion.key?('met_url_required')
+  print " <sup>[<a href=\"\##{key}\">#{key}</a>]</sup>"
+  print '<dl>' # Put details and rationale in a detail list
   show_extra('details', 'Details', criterion)
   show_extra('rationale', 'Rationale', criterion)
-  puts " <sup>[<a href=\"\##{key}\">#{key}</a>]</sup></li>"
+  puts '</dl></li>'
 end
 
 # Generate results

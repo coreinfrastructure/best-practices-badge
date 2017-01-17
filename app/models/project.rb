@@ -112,6 +112,7 @@ class Project < ActiveRecord::Base
 
   validates :repo_url, url: true, length: { maximum: MAX_SHORT_STRING_LENGTH },
                        uniqueness: { allow_blank: true }
+  validate :valid_repo_url_change
   validates :homepage_url,
             url: true,
             length: { maximum: MAX_SHORT_STRING_LENGTH }
@@ -273,6 +274,14 @@ class Project < ActiveRecord::Base
 
   def all_active_criteria_passing?
     Criteria.active.all? { |criterion| passing? criterion }
+  end
+
+  def valid_repo_url_change
+    return unless repo_url_changed?
+    return if repo_url_was.blank?
+    return unless repo_url.split('://')[1] != repo_url_was.split('://')[1]
+    return if :user.admin?
+    errors.add :repo, 'You may only change your repo_url from http to https'
   end
 
   def need_a_base_url

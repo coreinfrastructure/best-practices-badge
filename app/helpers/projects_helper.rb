@@ -50,7 +50,8 @@ module ProjectsHelper
   end
 
   def repo_url_disabled?(project)
-    true unless current_user.admin? || !project.repo_url?
+    # true unless current_user.admin? || !project.repo_url?
+    false
   end
 
   # Return HTML for a sortable header.

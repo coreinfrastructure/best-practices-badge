@@ -1,7 +1,8 @@
-# Best Practices Criteria for Free/Libre and Open Source Software (FLOSS) (version 0.8.0)
+# Best Practices Criteria for Free/Libre and Open Source Software (FLOSS)
 
 <!-- SPDX-License-Identifier: (MIT OR CC-BY-3.0+) -->
-<!-- DO NOT EDIT generated file criteria-generated.md -->
+<!-- DO NOT EDIT generated file criteria-generated.md !! -->
+<!-- The actual criteria are stored in criteria.yml -->
 
 ## Introduction
 
@@ -102,9 +103,13 @@ Here are the current criteria.  Note that:
 * In some cases N/A ("not applicable") may be an appropriate and permitted
   response.
 
-We intend to try to automatically test and fill in information
+In some cases we automatically test and fill in information
 if the project follows standard conventions and
 is hosted on a site (e.g., GitHub) with decent API support.
+We intend to improve this automation in the future (improvements welcome!).
+
+The actual criteria are stored in the file "criteria.yml", including
+details, rationale, and how it could be automated.
 
 There is an implied criterion that we should mention here:
 

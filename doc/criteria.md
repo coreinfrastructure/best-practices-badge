@@ -1,7 +1,8 @@
-# Best Practices Criteria for Free/Libre and Open Source Software (FLOSS) (version 0.8.0)
+# Best Practices Criteria for Free/Libre and Open Source Software (FLOSS)
 
 <!-- SPDX-License-Identifier: (MIT OR CC-BY-3.0+) -->
-<!-- DO NOT EDIT generated file criteria-generated.md -->
+<!-- DO NOT EDIT generated file criteria-generated.md !! -->
+<!-- The actual criteria are stored in criteria.yml -->
 
 ## Introduction
 
@@ -102,9 +103,13 @@ Here are the current criteria.  Note that:
 * In some cases N/A ("not applicable") may be an appropriate and permitted
   response.
 
-We intend to try to automatically test and fill in information
+In some cases we automatically test and fill in information
 if the project follows standard conventions and
 is hosted on a site (e.g., GitHub) with decent API support.
+We intend to improve this automation in the future (improvements welcome!).
+
+The actual criteria are stored in the file "criteria.yml", including
+details, rationale, and how it could be automated.
 
 There is an implied criterion that we should mention here:
 
@@ -142,7 +147,7 @@ There is an implied criterion that we should mention here:
 <ul>
 
 <li><a name="floss_license"></a>The software MUST be released as FLOSS.
- <sup>[<a href="#floss_license">floss_license</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>FLOSS is software released in a way that meets the <a href="https://opensource.org/osd-annotated">Open Source Definition</a> or <a href="http://www.gnu.org/philosophy/free-sw.en.html">Free Software Definition</a>. Examples of such licenses include the <a href="http://creativecommons.org/publicdomain/zero/1.0/">CC0</a>, <a href="https://opensource.org/licenses/MIT">MIT</a>, <a href="https://opensource.org/licenses/BSD-2-Clause">BSD 2-clause</a>, <a href="https://opensource.org/licenses/BSD-3-Clause">BSD 3-clause revised</a>, <a href="https://opensource.org/licenses/Apache-2.0">Apache 2.0</a>, <a href="https://opensource.org/licenses/lgpl-license">Lesser GNU General Public License (LGPL)</a>, and the <a href="https://opensource.org/licenses/gpl-license">GNU General Public License (GPL)</a>. For our purposes, this means that the license MUST be: <ul> <li><a href="https://opensource.org/licenses">an approved license by the Open Source Initiative (OSI)</a>, or</li> <li><a href="https://www.gnu.org/licenses/license-list.html">a free license as approved by the Free Software Foundation (FSF)</a>, or</li> <li><a href="https://www.debian.org/legal/licenses/">a free license acceptable to Debian main</a>, or</li> <li><a href="https://fedoraproject.org/wiki/Licensing:Main?rd=Licensing">a "good" license according to Fedora</a>.</li> </ul> The software MAY also be licensed other ways (e.g., "GPLv2 or proprietary" is acceptable). <br> <br>
+ <sup>[<a href="#floss_license">floss_license</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>FLOSS is software released in a way that meets the <a href="https://opensource.org/osd-annotated">Open Source Definition</a> or <a href="http://www.gnu.org/philosophy/free-sw.en.html">Free Software Definition</a>. Examples of such licenses include the <a href="http://creativecommons.org/publicdomain/zero/1.0/">CC0</a>, <a href="https://opensource.org/licenses/MIT">MIT</a>, <a href="https://opensource.org/licenses/BSD-2-Clause">BSD 2-clause</a>, <a href="https://opensource.org/licenses/BSD-3-Clause">BSD 3-clause revised</a>, <a href="https://opensource.org/licenses/Apache-2.0">Apache 2.0</a>, <a href="https://opensource.org/licenses/lgpl-license">Lesser GNU General Public License (LGPL)</a>, and the <a href="https://opensource.org/licenses/gpl-license">GNU General Public License (GPL)</a>. For our purposes, this means that the license MUST be: <ul> <li><a href="https://opensource.org/licenses">an approved license by the Open Source Initiative (OSI)</a>, or</li> <li><a href="https://www.gnu.org/licenses/license-list.html">a free license as approved by the Free Software Foundation (FSF)</a>, or</li> <li><a href="https://www.debian.org/legal/licenses/">a free license acceptable to Debian main</a>, or</li> <li><a href="https://fedoraproject.org/wiki/Licensing:Main?rd=Licensing">a "good" license according to Fedora</a>.</li> </ul> The software MAY also be licensed other ways (e.g., "GPLv2 or proprietary" is acceptable).
 </dd><dt><i>Rationale</i>:<dt> <dd>These criteria are designed for FLOSS projects, so we need to ensure that they're only used where they apply. Some projects may be mistakenly considered FLOSS even though they are not (e.g., they might not have any license, in which case the defaults of the country's legal system apply, or they might use a non-FLOSS license).
 </dd></dl></li>
 
@@ -228,8 +233,8 @@ There is an implied criterion that we should mention here:
 
 <ul>
 
-<li><a name="release_notes"></a>The project MUST provide, in each release, release notes that are a human-readable <i>summary</i> of major changes in that release.
- (URL required for "met".) <sup>[<a href="#release_notes">release_notes</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>The release notes MUST NOT be the output of a version control log (e.g., the "git log" command results are not release notes).<br/> The release notes MAY be implemented in a variety of ways. Many projects provide them in a file named "NEWS", "CHANGELOG", or "ChangeLog", optionally with extensions such as ".txt", ".md", or ".html".  Historically the term "change log" meant a log of <i>every</i> change, but to meet these criteria what is needed is a human-readable summary.  The release notes MAY instead be provided by version control system mechanisms such as the <a href="https://github.com/blog/1547-release-your-software">GitHub Releases workflow</a>.
+<li><a name="release_notes"></a>The project MUST provide, in each release, release notes that are a human-readable <i>summary</i> of major changes in that release. The release notes MUST NOT be the output of a version control log (e.g., the "git log" command results are not release notes).
+ (URL required for "met".) <sup>[<a href="#release_notes">release_notes</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>The release notes MAY be implemented in a variety of ways. Many projects provide them in a file named "NEWS", "CHANGELOG", or "ChangeLog", optionally with extensions such as ".txt", ".md", or ".html".  Historically the term "change log" meant a log of <i>every</i> change, but to meet these criteria what is needed is a human-readable summary.  The release notes MAY instead be provided by version control system mechanisms such as the <a href="https://github.com/blog/1547-release-your-software">GitHub Releases workflow</a>.
 </dd><dt><i>Rationale</i>:<dt> <dd>Release notes are important because they help users decide whether or not they will want to update, and what the impact would be (e.g., if the new release fixes vulnerabilities).
 </dd></dl></li>
 
@@ -283,7 +288,7 @@ There is an implied criterion that we should mention here:
 <ul>
 
 <li><a name="build"></a>If the software requires building for use, the project MUST provide a working build system that can automatically rebuild the software from source code.
- (N/A allowed.) <sup>[<a href="#build">build</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>A build system determines what actions need to occur to rebuild the software (and in what order), and then performs those steps. For example, it can invoke a compiler to compile the source code. If an executable is created from source code, it must be possible to modify the project's source code and then generate an updated executable with those modifications. <br>If there is no need to build anything to use the software after its source code is modified, select "not applicable" (N/A).
+ (N/A allowed.) <sup>[<a href="#build">build</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>A build system determines what actions need to occur to rebuild the software (and in what order), and then performs those steps. For example, it can invoke a compiler to compile the source code. If an executable is created from source code, it must be possible to modify the project's source code and then generate an updated executable with those modifications. If there is no need to build anything to use the software after its source code is modified, select "not applicable" (N/A).
 </dd><dt><i>Rationale</i>:<dt> <dd>If a project needs to be built but there is no working build system, then potential co-developers will not be able to easily contribute and many security analysis tools will be ineffective.
 </dd></dl></li>
 
@@ -416,7 +421,7 @@ There is an implied criterion that we should mention here:
 <ul>
 
 <li><a name="vulnerabilities_fixed_60_days"></a>There MUST be no unpatched vulnerabilities of medium or high severity that have been publicly known for more than 60 days.
- <sup>[<a href="#vulnerabilities_fixed_60_days">vulnerabilities_fixed_60_days</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>The vulnerability must be patched and released by the project itself (patches may be developed elsewhere).  A vulnerability becomes publicly known (for this purpose) once it has a CVE with publicly released non-paywalled information (reported, for example, in the <a href="https://nvd.nist.gov/">National Vulnerability Database</a>) or when the project has been informed and the information has been released to the public (possibly by the project). A vulnerability is medium to high severity if its <a href="https://nvd.nist.gov/cvss.cfm">CVSS 2.0</a> base score is 4 or higher. <br><br> <b>Note</b>: this means that users might be left vulnerable to all attackers worldwide for up to 60 days.  This criterion is often much easier to meet than what Google recommends in <a href="https://security.googleblog.com/2010/07/rebooting-responsible-disclosure-focus.html">Rebooting responsible disclosure</a>, because Google recommends that the 60-day period start when the project is notified <em>even</em> if the report is not public.<br>
+ <sup>[<a href="#vulnerabilities_fixed_60_days">vulnerabilities_fixed_60_days</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>The vulnerability must be patched and released by the project itself (patches may be developed elsewhere).  A vulnerability becomes publicly known (for this purpose) once it has a CVE with publicly released non-paywalled information (reported, for example, in the <a href="https://nvd.nist.gov/">National Vulnerability Database</a>) or when the project has been informed and the information has been released to the public (possibly by the project). A vulnerability is medium to high severity if its <a href="https://nvd.nist.gov/cvss.cfm">CVSS 2.0</a> base score is 4 or higher. <b>Note</b>: this means that users might be left vulnerable to all attackers worldwide for up to 60 days.  This criterion is often much easier to meet than what Google recommends in <a href="https://security.googleblog.com/2010/07/rebooting-responsible-disclosure-focus.html">Rebooting responsible disclosure</a>, because Google recommends that the 60-day period start when the project is notified <em>even</em> if the report is not public.
 </dd><dt><i>Rationale</i>:<dt> <dd>We intentionally chose to start measurement from the time of public knowledge, and not from the time reported to the project, because this is much easier to measure and verify by those outside the project.
 </dd></dl></li>
 
@@ -459,7 +464,7 @@ There is an implied criterion that we should mention here:
 <ul>
 
 <li><a name="dynamic_analysis"></a>It is SUGGESTED that at least one dynamic analysis tool be applied to any proposed major production release of the software before its release.
- <sup>[<a href="#dynamic_analysis">dynamic_analysis</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>A dynamic analysis tool examines the software by executing it with specific inputs. For example, the project MAY use a fuzzing tool (e.g., <a href="http://lcamtuf.coredump.cx/afl/">American Fuzzy Lop</a>) or a web application scanner (e.g., <a href="https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project">OWASP ZAP</a> or <a href="http://w3af.org/">w3af</a>). In some cases the <a href="https://github.com/google/oss-fuzz#introduction">OSS-Fuzz</a> project may be willing to apply fuzz testing to your project. For purposes of this criterion the dynamic analysis tool needs to vary the inputs in some way to look for various kinds of problems <em>or</em> be an automated test suite with at least 80% branch coverage.  The <a href="https://en.wikipedia.org/wiki/Dynamic_program_analysis">Wikipedia page on dynamic analysis</a> and the <a href="https://www.owasp.org/index.php/Fuzzing">OWASP page on fuzzing</a> identify some dynamic analysis tools. <br> The analysis tool(s) MAY be focused on looking for security vulnerabilities, but this is not required.
+ <sup>[<a href="#dynamic_analysis">dynamic_analysis</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>A dynamic analysis tool examines the software by executing it with specific inputs. For example, the project MAY use a fuzzing tool (e.g., <a href="http://lcamtuf.coredump.cx/afl/">American Fuzzy Lop</a>) or a web application scanner (e.g., <a href="https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project">OWASP ZAP</a> or <a href="http://w3af.org/">w3af</a>). In some cases the <a href="https://github.com/google/oss-fuzz#introduction">OSS-Fuzz</a> project may be willing to apply fuzz testing to your project. For purposes of this criterion the dynamic analysis tool needs to vary the inputs in some way to look for various kinds of problems <em>or</em> be an automated test suite with at least 80% branch coverage.  The <a href="https://en.wikipedia.org/wiki/Dynamic_program_analysis">Wikipedia page on dynamic analysis</a> and the <a href="https://www.owasp.org/index.php/Fuzzing">OWASP page on fuzzing</a> identify some dynamic analysis tools. The analysis tool(s) MAY be focused on looking for security vulnerabilities, but this is not required.
 </dd><dt><i>Rationale</i>:<dt> <dd>Static source code analysis and dynamic analysis tend to find different kinds of defects (including defects that lead to vulnerabilities), so combining them is more likely to be effective.
 </dd></dl></li>
 
@@ -519,25 +524,35 @@ by the delivered project's software.
 
 ## Non-criteria
 
-We plan to *not* require any specific products or services.
-In particular, we plan to *not* require
-proprietary tools or services,
+We do *not* require any specific products or services, and in
+general do not require any particular technology.
+In particular, we do *not* require
+proprietary tools, services, or technology,
 since many [free software](https://www.gnu.org/philosophy/free-sw.en.html)
 developers would reject such criteria.
-Therefore, we will intentionally *not* require git or GitHub.
-We will also not require or forbid any particular programming language
-(though for some programming languages we may be able to make
-some recommendations).
-This also means that as new tools and capabilities become available,
+For example, we intentionally do *not* require git or GitHub.
+We also do not require or forbid any particular programming language.
+We do require that additional measures be taken for certain
+*kinds* of programming languages, but that is different.
+This means that as new tools and capabilities become available,
 projects can quickly switch to them without failing to meet any criteria.
-However, the criteria will sometimes identify
+
+We *do* provide guidance and help for common cases.
+The criteria *do* sometimes identify
 common methods or ways of doing something
-(especially if they are FLOSS) since that information
+(especially if they are FLOSS), since that information
 can help people understand and meet the criteria.
-We do plan to create an "easy on-ramp" for projects using git on GitHub,
+We also created an "easy on-ramp" for projects using git on GitHub,
 since that is a common case.
+But note that nothing *requires* git or GitHub.
 We would welcome good patches that help provide an "easy on-ramp" for
-projects on other repository platforms.
+projects on other repository platforms;
+GitLab was one of the first projects with a badge.
+
+We avoid requiring, at the passing level, criteria that would be
+impractical for a single-person project, e.g., something that requires
+a significant amount of money.
+Many FLOSS projects are small, and we do not want to disenfranchise them.
 
 We do not plan to require active user discussion within a project.
 Some highly mature projects rarely change and thus may have little activity.
@@ -547,14 +562,16 @@ if vulnerabilities are reported to the project (see above).
 ## Uniquely identifying a project
 
 One challenge is uniquely identifying a project.
-Our rails application gives a unique id to each new project, so
-we can certainly use that id to identify projects.
+Our Rails application gives a unique id to each new project, so
+we can use that id to uniquely identify project entries.
 However, that doesn't help people who searching for the project
 and do not already know that id.
 
 The *real* name of a project, for our purposes, is the
-project "front page" URL and/or the URL for its repository.
-Most projects have a human-readable name, but these names are not enough.
+URL for its repository, and where that is not available, the
+project "front page" URL can help find it.
+Most projects have a human-readable name, and we provide a search
+mechanims, but these names are not enough to uniquely identify a project.
 The same human-readable name can be used for many different projects
 (including project forks), and the same project may go by many different names.
 In many cases it will be useful to point to other names for the project
@@ -566,19 +583,16 @@ legitimately represent a project.
 For the moment, we primarily focus on checking if GitHub repositories
 are involved; there are ways to do this for other situations if that
 becomes important.
-We expect that users will *not* be able to edit the URL in most cases,
-since if they could, they might fool people into thinking they controlled
+
+Non-admin users cannot edit the repo URL once one is entered.
+(Exception: they can upgrade http to https.)
+If they could change the repo URL,
+they might fool people into thinking they controlled
 a project that they did not.
 That said, creating a bogus row entry does not really help someone very
-much; what matters is the id used by the project when it refers to its
-badge, and the project determines that.
-
-Thus, a badge would have its URL as its name, year range, and level/name
-(once there is more than one).
-
-We will probably implement some search mechanisms so that people can
-enter common names and find projects.
-
+much; what matters to the software
+is the id used by the project when it refers to its badge,
+and the project determines that.
 
 ## Why have criteria?
 
@@ -610,13 +624,8 @@ but we think the risk is small, and users can check the claims for themselves.
 We are hoping to get good suggestions and feedback from the public;
 please contribute!
 
-We currently plan to launch with a single badge level (once it is ready).
-There may eventually be multiple levels (bronze, silver, gold) or
-other badges (with a prerequisite) later.
-One area we have often discussed is whether or not to require
-continuous integration in this set of criteria;
-if it is not, it is expected to be required at higher levels.
-See [other](./other.md) for more information.
+We launched with a single badge level called *passing*.
+For higher level badges, see [other](./other.md).
 
 You may also want to see the "[background](./background.md)" file
 for more information about these criteria,

@@ -7,25 +7,35 @@ by the delivered project's software.
 
 ## Non-criteria
 
-We plan to *not* require any specific products or services.
-In particular, we plan to *not* require
-proprietary tools or services,
+We do *not* require any specific products or services, and in
+general do not require any particular technology.
+In particular, we do *not* require
+proprietary tools, services, or technology,
 since many [free software](https://www.gnu.org/philosophy/free-sw.en.html)
 developers would reject such criteria.
-Therefore, we will intentionally *not* require git or GitHub.
-We will also not require or forbid any particular programming language
-(though for some programming languages we may be able to make
-some recommendations).
-This also means that as new tools and capabilities become available,
+For example, we intentionally do *not* require git or GitHub.
+We also do not require or forbid any particular programming language.
+We do require that additional measures be taken for certain
+*kinds* of programming languages, but that is different.
+This means that as new tools and capabilities become available,
 projects can quickly switch to them without failing to meet any criteria.
-However, the criteria will sometimes identify
+
+We *do* provide guidance and help for common cases.
+The criteria *do* sometimes identify
 common methods or ways of doing something
-(especially if they are FLOSS) since that information
+(especially if they are FLOSS), since that information
 can help people understand and meet the criteria.
-We do plan to create an "easy on-ramp" for projects using git on GitHub,
+We also created an "easy on-ramp" for projects using git on GitHub,
 since that is a common case.
+But note that nothing *requires* git or GitHub.
 We would welcome good patches that help provide an "easy on-ramp" for
-projects on other repository platforms.
+projects on other repository platforms;
+GitLab was one of the first projects with a badge.
+
+We avoid requiring, at the passing level, criteria that would be
+impractical for a single-person project, e.g., something that requires
+a significant amount of money.
+Many FLOSS projects are small, and we do not want to disenfranchise them.
 
 We do not plan to require active user discussion within a project.
 Some highly mature projects rarely change and thus may have little activity.
@@ -35,14 +45,16 @@ if vulnerabilities are reported to the project (see above).
 ## Uniquely identifying a project
 
 One challenge is uniquely identifying a project.
-Our rails application gives a unique id to each new project, so
-we can certainly use that id to identify projects.
+Our Rails application gives a unique id to each new project, so
+we can use that id to uniquely identify project entries.
 However, that doesn't help people who searching for the project
 and do not already know that id.
 
 The *real* name of a project, for our purposes, is the
-project "front page" URL and/or the URL for its repository.
-Most projects have a human-readable name, but these names are not enough.
+URL for its repository, and where that is not available, the
+project "front page" URL can help find it.
+Most projects have a human-readable name, and we provide a search
+mechanims, but these names are not enough to uniquely identify a project.
 The same human-readable name can be used for many different projects
 (including project forks), and the same project may go by many different names.
 In many cases it will be useful to point to other names for the project
@@ -54,19 +66,16 @@ legitimately represent a project.
 For the moment, we primarily focus on checking if GitHub repositories
 are involved; there are ways to do this for other situations if that
 becomes important.
-We expect that users will *not* be able to edit the URL in most cases,
-since if they could, they might fool people into thinking they controlled
+
+Non-admin users cannot edit the repo URL once one is entered.
+(Exception: they can upgrade http to https.)
+If they could change the repo URL,
+they might fool people into thinking they controlled
 a project that they did not.
 That said, creating a bogus row entry does not really help someone very
-much; what matters is the id used by the project when it refers to its
-badge, and the project determines that.
-
-Thus, a badge would have its URL as its name, year range, and level/name
-(once there is more than one).
-
-We will probably implement some search mechanisms so that people can
-enter common names and find projects.
-
+much; what matters to the software
+is the id used by the project when it refers to its badge,
+and the project determines that.
 
 ## Why have criteria?
 
@@ -98,13 +107,8 @@ but we think the risk is small, and users can check the claims for themselves.
 We are hoping to get good suggestions and feedback from the public;
 please contribute!
 
-We currently plan to launch with a single badge level (once it is ready).
-There may eventually be multiple levels (bronze, silver, gold) or
-other badges (with a prerequisite) later.
-One area we have often discussed is whether or not to require
-continuous integration in this set of criteria;
-if it is not, it is expected to be required at higher levels.
-See [other](./other.md) for more information.
+We launched with a single badge level called *passing*.
+For higher level badges, see [other](./other.md).
 
 You may also want to see the "[background](./background.md)" file
 for more information about these criteria,

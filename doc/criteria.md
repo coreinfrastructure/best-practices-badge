@@ -118,7 +118,7 @@ There is an implied criterion that we should mention here:
 
 ### Basics
 
-<i>Basic Project Website Content</i>
+<b><i>Basic Project Website Content</i></b>
 
 <ul>
 
@@ -137,7 +137,7 @@ There is an implied criterion that we should mention here:
  (URL required for "met".) <sup>[<a href="#contribution_requirements">contribution_requirements</a>]</sup></li>
 </ul>
 
-<i>OSS License</i>
+<b><i>OSS License</i></b>
 
 <ul>
 
@@ -156,7 +156,7 @@ There is an implied criterion that we should mention here:
 </dd></dl></li>
 </ul>
 
-<i>Documentation</i>
+<b><i>Documentation</i></b>
 
 <ul>
 
@@ -169,7 +169,7 @@ There is an implied criterion that we should mention here:
 </dd></dl></li>
 </ul>
 
-<i>Other</i>
+<b><i>Other</i></b>
 
 <ul>
 
@@ -188,7 +188,7 @@ There is an implied criterion that we should mention here:
 
 ### Change Control
 
-<i>Public version-controlled source repository</i>
+<b><i>Public version-controlled source repository</i></b>
 
 <ul>
 
@@ -208,7 +208,7 @@ There is an implied criterion that we should mention here:
 </dd></dl></li>
 </ul>
 
-<i>Unique version numbering</i>
+<b><i>Unique version numbering</i></b>
 
 <ul>
 
@@ -224,7 +224,7 @@ There is an implied criterion that we should mention here:
  <sup>[<a href="#version_tags">version_tags</a>]</sup></li>
 </ul>
 
-<i>Release notes (ChangeLog)</i>
+<b><i>Release notes (ChangeLog)</i></b>
 
 <ul>
 
@@ -239,7 +239,7 @@ There is an implied criterion that we should mention here:
 
 ### Reporting
 
-<i>Bug-reporting process</i>
+<b><i>Bug-reporting process</i></b>
 
 <ul>
 
@@ -259,7 +259,7 @@ There is an implied criterion that we should mention here:
  (URL required for "met".) <sup>[<a href="#report_archive">report_archive</a>]</sup></li>
 </ul>
 
-<i>Vulnerability report process</i>
+<b><i>Vulnerability report process</i></b>
 
 <ul>
 
@@ -278,7 +278,7 @@ There is an implied criterion that we should mention here:
 
 ### Quality
 
-<i>Working build system</i>
+<b><i>Working build system</i></b>
 
 <ul>
 
@@ -294,7 +294,7 @@ There is an implied criterion that we should mention here:
 <li><a name="build_floss_tools"></a>The project SHOULD be buildable using only FLOSS tools. (N/A allowed.) <sup>[<a href="#build_floss_tools">build_floss_tools</a>]</sup></li>
 </ul>
 
-<i>Automated test suite</i>
+<b><i>Automated test suite</i></b>
 
 <ul>
 
@@ -314,7 +314,7 @@ There is an implied criterion that we should mention here:
  <sup>[<a href="#test_continuous_integration">test_continuous_integration</a>]</sup></li>
 </ul>
 
-<i>New functionality testing</i>
+<b><i>New functionality testing</i></b>
 
 <ul>
 
@@ -331,7 +331,7 @@ There is an implied criterion that we should mention here:
 </dd></dl></li>
 </ul>
 
-<i>Warning flags</i>
+<b><i>Warning flags</i></b>
 
 <ul>
 
@@ -349,7 +349,7 @@ There is an implied criterion that we should mention here:
 
 ### Security
 
-<i>Secure development knowledge</i>
+<b><i>Secure development knowledge</i></b>
 
 <ul>
 
@@ -362,7 +362,7 @@ There is an implied criterion that we should mention here:
 </dd></dl></li>
 </ul>
 
-<i>Use basic good cryptographic practices</i>
+<b><i>Use basic good cryptographic practices</i></b>
 
 <ul>
 
@@ -398,7 +398,7 @@ There is an implied criterion that we should mention here:
 </dd></dl></li>
 </ul>
 
-<i>Secured delivery against man-in-the-middle (MITM) attacks</i>
+<b><i>Secured delivery against man-in-the-middle (MITM) attacks</i></b>
 
 <ul>
 
@@ -411,7 +411,7 @@ There is an implied criterion that we should mention here:
 </dd></dl></li>
 </ul>
 
-<i>Publicly known Vulnerabilities fixed</i>
+<b><i>Publicly known Vulnerabilities fixed</i></b>
 
 <ul>
 
@@ -424,7 +424,7 @@ There is an implied criterion that we should mention here:
  <sup>[<a href="#vulnerabilities_critical_fixed">vulnerabilities_critical_fixed</a>]</sup></li>
 </ul>
 
-<i>Other security issues</i>
+<b><i>Other security issues</i></b>
 
 <ul>
 
@@ -435,7 +435,7 @@ There is an implied criterion that we should mention here:
 
 ### Analysis
 
-<i>Static code analysis</i>
+<b><i>Static code analysis</i></b>
 
 <ul>
 
@@ -454,7 +454,7 @@ There is an implied criterion that we should mention here:
  (N/A allowed.) <sup>[<a href="#static_analysis_often">static_analysis_often</a>]</sup></li>
 </ul>
 
-<i>Dynamic code analysis</i>
+<b><i>Dynamic code analysis</i></b>
 
 <ul>
 
@@ -477,7 +477,7 @@ There is an implied criterion that we should mention here:
 
 ### Future
 
-<i>future</i>
+<b><i>future</i></b>
 
 <ul>
 

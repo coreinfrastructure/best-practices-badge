@@ -54,7 +54,7 @@ FullCriteriaHash.each do |major, major_value|
   puts "### #{major}"
   major_value.each do |minor, criteria|
     puts ''
-    puts "<i>#{minor}</i>" # Use <i>...</i> and <ul> to force HTML interp.
+    puts "<b><i>#{minor}</i></b>" # Force HTML interpretation
     puts ''
     puts '<ul>'
     criteria.each do |key, criterion|

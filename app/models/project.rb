@@ -145,7 +145,9 @@ class Project < ActiveRecord::Base
     else
       validates criterion.name.status, inclusion: { in: STATUS_CHOICE }
     end
-    validates criterion.name.justification, length: { maximum: MAX_TEXT_LENGTH }
+    validates criterion.name.justification,
+              length: { maximum: MAX_TEXT_LENGTH },
+              utf8: true
   end
 
   def badge_level

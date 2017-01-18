@@ -143,12 +143,12 @@ This information is used when displaying badge information.
       <div class="hidable-text-entry">
       <span>What is the URL for the version control repository
             (it may be the same as the project URL)?</span>
-      <% if is_disabled || repo_disabled%>
+      <% if is_disabled %>
         <div class="discussion-markdown">
            <%= link_to_if project.contains_url?(project.repo_url), project.repo_url, project.repo_url, rel: 'nofollow' %>
         </div>
       <% else %>
-        <%= f.text_field :repo_url, class:"form-control", hide_label: true, placeholder:'Project Repo URL', disabled: repo_disabled %>
+        <%= f.text_field :repo_url, class:"form-control", hide_label: true, placeholder:'Project Repo URL', disabled: is_disabled %>
       <% end %>
       </div>
 

@@ -350,11 +350,15 @@
           <a href="http://semver.org">Semantic Versioning (SemVer) format</a>
           be used for releases.
         details: >
-          Other schemes like commit IDs, or date-based schemes like YYYYMMDD,
-          MAY be used as version numbers. They are
-          unique, but note that these can cause problems for users as they
-          may not be able to easily determine whether or not
-          they're up-to-date.
+          Other version numbering schemes, such as commit IDs (such as
+          git's) or date-based schemes like YYYYMMDD, MAY be used as
+          version numbers, since they are unique.
+          Some alternatives can cause problems, because
+          users may not be able to easily determine if they are up-to-date.
+          SemVer may be less helpful for identifying software releases
+          if all recipients only run the latest version
+          (e.g., it is the code for a single website or internet service that
+          is constantly updated via continuous delivery).
         rationale: >
           SemVer is widely used to communicate what an update
           is (e.g., if it involves incompatible API changes),

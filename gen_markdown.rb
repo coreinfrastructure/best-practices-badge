@@ -24,9 +24,10 @@ end
 
 def show_extra(key, header_text, criterion)
   return unless criterion.key?(key)
-  print "<br><i>#{header_text}</i>: #{criterion[key]}"
+  print "<dt><i>#{header_text}</i>:<dt> <dd>#{criterion[key]}</dd>"
 end
 
+# rubocop:disable Metrics/AbcSize,Metrics/MethodLength
 def puts_criterion(key, criterion)
   print "\n<li><a name=\"#{key}\"></a>"
   print '(Future criterion) ' if criterion.key?('future')
@@ -34,10 +35,16 @@ def puts_criterion(key, criterion)
   # print " (N/A #{criterion.key?('na_allowed') ? '' : 'not '}allowed.)"
   print ' (N/A allowed.)' if criterion.key?('na_allowed')
   print ' (URL required for "met".)' if criterion.key?('met_url_required')
-  show_extra('details', 'Details', criterion)
-  show_extra('rationale', 'Rationale', criterion)
-  puts " <sup>[<a href=\"\##{key}\">#{key}</a>]</sup></li>"
+  print " <sup>[<a href=\"\##{key}\">#{key}</a>]</sup>"
+  if criterion.key?('details') || criterion.key?('rationale')
+    print '<dl>' # Put details and rationale in a detail list
+    show_extra('details', 'Details', criterion)
+    show_extra('rationale', 'Rationale', criterion)
+    print '</dl>'
+  end
+  puts '</li>'
 end
+# rubocop:enable Metrics/AbcSize,Metrics/MethodLength
 
 # Generate results
 $stdout.reopen('doc/criteria-generated.md', 'w') || abort('Cannot write')

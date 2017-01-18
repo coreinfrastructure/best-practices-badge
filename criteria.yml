@@ -533,13 +533,14 @@
           For example, it can invoke a compiler to compile the source code.
           If an executable is created from source code, it must be possible
           to modify the project's source code and then generate
-          an updated executable with those modifications.
-          <b>Rationale</b>: If a project needs to be built but there is no
+          an updated executable with those modifications. <br>If there is
+          no need to build anything to use the software after its source
+          code is modified, select "not applicable" (N/A).
+        rationale: >
+          If a project needs to be built but there is no
           working build system, then potential co-developers will not be
           able to easily contribute and many security analysis tools will be
-          ineffective.  If there is no need to build anything to use the
-          software after its source code is modified,
-          select "not applicable" (N/A).
+          ineffective.
         autofill: >
           See build_common_tools.
     - build_common_tools:

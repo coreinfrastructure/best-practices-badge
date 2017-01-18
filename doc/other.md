@@ -314,6 +314,9 @@ SHOULD or MUST.
     which can be harder to do - so we have split this requirement up.
     See the [reproducible build criterion](#reproducible_build).
 
+-   <a name="installation_common"></a>(Future criterion) The project SHOULD provide a way to easily install and uninstall the software using a commonly-used convention.  <sup>[<a href="#installation_common">installation_common</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>Examples include using a language-level package manager (such as npm, pip, maven, or bundler), system-level package manager (such as apt-get or dnf), "make install/uninstall" (supporting DESTDIR), a container in a standard format, or a virtual machine image in a standard format. The installation and uninstallation process (e.g., its packaging) MAY be implemented by a third party as long as it is FLOSS.
+</dd></dl>
+
 -   <a name="installation_standard_variables"></a>
     The installation system MUST honor standard conventions for
     selecting the location where built artifacts are written to
@@ -425,8 +428,21 @@ I think "N/A" would have to be permitted, e.g., it doesn't apply when there's no
     See the discussion per
     [issue #215](https://github.com/linuxfoundation/cii-best-practices-badge/issues/215)
 
-### Other passing+1 criteria
+-   <a name="crypto_used_network"></a>(Future criterion) The project SHOULD NOT use unencrypted network communication protocols (such as HTTP and telnet) if there is an encrypted equivalent (e.g., HTTPS/TLS and SSH), unless the user specifically requests or configures it.
+ (N/A allowed.) <sup>[<a href="#crypto_used_network">crypto_used_network</a>]</sup>
 
+- <a name="crypto_tls12"></a>(Future criterion) The project SHOULD, if it supports TLS, support at least TLS version 1.2. Note that the predecessor of TLS was called SSL.
+ (N/A allowed.) <sup>[<a href="#crypto_tls12">crypto_tls12</a>]</sup><
+
+- <a name="crypto_certificate_verification"></a>(Future criterion) The project MUST, if it supports TLS, perform TLS certificate verification by default when using TLS, including on subresources.
+ (N/A allowed.) <sup>[<a href="#crypto_certificate_verification">crypto_certificate_verification</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>Note that incorrect TLS certificate verification is a common mistake. For more information, see <a href="http://crypto.stanford.edu/~dabo/pubs/abstracts/ssl-client-bugs.html">"The Most Dangerous Code in the World: Validating SSL Certificates in Non-Browser Software" by Martin Georgiev et al.</a> and <a href="https://blogs.gnome.org/mcatanzaro/2016/03/12/do-you-trust-this-application/">"Do you trust this application?" by Michael Catanzaro</a>.
+</dd></dl>
+
+- <a name="crypto_verification_private"></a>(Future criterion) The project MUST, if it supports TLS, perform certificate verification before sending HTTP headers with private information (such as secure cookies).
+ (N/A allowed.) <sup>[<a href="#crypto_verification_private">crypto_verification_private</a>]</sup>
+
+
+### Other passing+1 criteria
 
 -   <a name="implement_secure_design"></a>
     The project MUST implement secure design principles
@@ -438,6 +454,10 @@ I think "N/A" would have to be permitted, e.g., it doesn't apply when there's no
     (e.g., many mechanisms can make things more complex, contravening
     "economy of mechanism" / keep it simple)
     <sup>[<a href="#implement_secure_design">implement_secure_design</a>]</sup>
+
+- <a name="hardening"></a>(Future criterion) Hardening mechanisms SHOULD be used so software defects are less likely to result in security vulnerabilities.
+ <sup>[<a href="#hardening">hardening</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>Hardening mechanisms may include HTTP headers like Content Security Policy (CSP), compiler flags to mitigate attacks (such as -fstack-protector), or compiler flags to eliminate undefined behavior. For our purposes least privilege is not considered a hardening mechanism (least privilege is important, but separate).
+</dd></dl>
 
 ## Potential passing+2 criteria
 

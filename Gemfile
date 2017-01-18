@@ -69,7 +69,7 @@ group :test do
   gem 'chromedriver-helper', '1.0.0'
   gem 'codecov', '0.1.9', require: false
   gem 'minitest-rails-capybara', '3.0.0', require: false
-  gem 'minitest-retry', '0.1.7', require: false # Avoid Capybara false positives
+  gem 'minitest-retry', '0.1.8', require: false # Avoid Capybara false positives
   gem 'poltergeist', '1.12.0', require: false
   gem 'rails-controller-testing', '1.0.1'
   gem 'selenium-webdriver', '3.0.5', require: false

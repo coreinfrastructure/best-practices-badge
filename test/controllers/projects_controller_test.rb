@@ -240,7 +240,7 @@ class ProjectsControllerTest < ActionController::TestCase
     assert_redirected_to project_path(@project)
   end
 
-  test 'should fail to change non-blank repo_url' do
+  test 'should fail to change tail of non-blank repo_url' do
     new_repo_url = @project_two.repo_url + '_new'
     log_in_as(@project_two.user)
     patch :update, params: {
@@ -248,8 +248,24 @@ class ProjectsControllerTest < ActionController::TestCase
         repo_url:  new_repo_url
       }
     }
+    assert_not_empty flash
+    assert_template :edit
     @project_two.reload
     assert_not_equal @project_two.repo_url, new_repo_url
+  end
+
+  test 'should change https to http in non-blank repo_url' do
+    old_repo_url = @project_two.repo_url
+    new_repo_url = 'http://www.nasa.gov/mav'
+    log_in_as(@project_two.user)
+    patch :update, params: {
+      id: @project_two, project: {
+        repo_url:  new_repo_url
+      }
+    }
+    @project_two.reload
+    assert_not_equal @project_two.repo_url, old_repo_url
+    assert_equal @project_two.repo_url, new_repo_url
   end
 
   test 'admin can change other users non-blank repo_url' do

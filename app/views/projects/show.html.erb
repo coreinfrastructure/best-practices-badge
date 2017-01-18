@@ -11,7 +11,7 @@
   </div>
   <div class="col-md-7 col-sm-6">
     <h2 class="text-uppercase m-t-0">Badge Status for <%=@project.try(:name).presence || '(Name Unknown)' %></h2>
-    <%= render 'form', project: @project, is_disabled: true, repo_disabled: true %>
+    <%= render 'form', project: @project, is_disabled: true %>
 <div class="row">
 <div class="col-md-12">
 <b>Project badge entry owned by:</b>

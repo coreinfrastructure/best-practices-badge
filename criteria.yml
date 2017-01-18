@@ -130,8 +130,6 @@
           </ul>
           The software MAY also be licensed other ways
           (e.g., "GPLv2 or proprietary" is acceptable).
-          <br>
-          <br>
         rationale: >
           These criteria are designed for FLOSS projects,
           so we need to ensure that they're only used where they apply.
@@ -393,9 +391,9 @@
         description: >
           The project MUST provide, in each release, release notes that are
           a human-readable <i>summary</i> of major changes in that release.
-        details: >
           The release notes MUST NOT be the output of a version control log
-          (e.g., the "git log" command results are not release notes).<br/>
+          (e.g., the "git log" command results are not release notes).
+        details: >
           The release notes MAY be implemented in a variety of ways.
           Many projects provide them in a file named "NEWS", "CHANGELOG",
           or "ChangeLog", optionally with extensions such as ".txt", ".md",
@@ -548,7 +546,7 @@
           For example, it can invoke a compiler to compile the source code.
           If an executable is created from source code, it must be possible
           to modify the project's source code and then generate
-          an updated executable with those modifications. <br>If there is
+          an updated executable with those modifications. If there is
           no need to build anything to use the software after its source
           code is modified, select "not applicable" (N/A).
         rationale: >
@@ -948,14 +946,13 @@
           A vulnerability is medium
           to high severity if its <a href="https://nvd.nist.gov/cvss.cfm">CVSS
           2.0</a> base score is 4 or higher.
-          <br><br>
           <b>Note</b>: this means that users might be left vulnerable to all
           attackers worldwide for up to 60 days.  This criterion is often
           much easier to meet than what Google recommends in <a
           href="https://security.googleblog.com/2010/07/rebooting-responsible-disclosure-focus.html">Rebooting
           responsible disclosure</a>, because Google recommends that the 60-day
           period start when the project is notified <em>even</em> if the report
-          is not public.<br>
+          is not public.
         rationale: >
           We intentionally chose to start measurement from the
           time of public knowledge,
@@ -1094,7 +1091,6 @@
           page on dynamic analysis</a> and the
           <a href="https://www.owasp.org/index.php/Fuzzing">OWASP page on
           fuzzing</a> identify some dynamic analysis tools.
-          <br>
           The analysis tool(s) MAY be focused on looking for security
           vulnerabilities, but this is not required.
         rationale: >

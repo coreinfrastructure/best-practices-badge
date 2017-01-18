@@ -47,7 +47,7 @@ end
 # rubocop:enable Metrics/AbcSize,Metrics/MethodLength
 
 # Generate results
-$stdout.reopen('doc/criteria-generated.md', 'w') || abort('Cannot write')
+$stdout.reopen('doc/criteria.md', 'w') || abort('Cannot write')
 print_file('doc/criteria-header.markdown')
 FullCriteriaHash.each do |major, major_value|
   puts ''

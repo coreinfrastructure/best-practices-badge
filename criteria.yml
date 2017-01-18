@@ -1113,9 +1113,15 @@
           be routinely used with a mechanism to detect memory safety problems
           such as buffer overwrites.
         details: >
-          Examples of mechanisms to detect memory safety problems
-          include Address Sanitizer (ASAN) and
-          <a href="http://valgrind.org/">valgrind</a>.
+          Examples of mechanisms to detect memory safety problems include
+          <a href="https://github.com/google/sanitizers/wiki/AddressSanitizer">Address Sanitizer (ASAN)</a>
+          (available in GCC and LLVM),
+          <a href="http://clang.llvm.org/docs/MemorySanitizer.html">Memory Sanitizer</a>,
+          and <a href="http://valgrind.org/">valgrind</a>.
+          Other potentially-used tools include
+          <a href="http://clang.llvm.org/docs/ThreadSanitizer.html">thread sanitizer</a>
+          and
+          <a href="http://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html">undefined behavior sanitizer</a>.
           Widespread assertions would also work.
           If the software is not application-level,
           or is not in a memory-unsafe language, then this criterion is

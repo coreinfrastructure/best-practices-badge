@@ -1,4 +1,4 @@
-# Other potential future criteria
+# Other criteria for higher-level badges
 
 <!-- SPDX-License-Identifier: (MIT OR CC-BY-3.0+) -->
 
@@ -388,6 +388,8 @@ I think "N/A" would have to be permitted, e.g., it doesn't apply when there's no
     process explaining to users how they can obtain the public signing keys
     and verify the signature. The private key for this signature MUST NOT
     be on site(s) used to directly distribute the software to the public.
+    This includes both source code and executables (where applicable).
+    Executables MAY be signed separately from source code.
     These may be implemented as signed git tags
     (using cryptographic digital signatures).
     <sup>[<a href="#signed_releases">signed_releases</a>]</sup>
@@ -629,45 +631,10 @@ I think "N/A" would have to be permitted, e.g., it doesn't apply when there's no
 * Review potential other criteria (below)
 * Review current non-MUST criteria
 
-## Potential other criteria
+## Turn into criteria text
 
-Here are some potential ideas for criteria (or where to get them)
-that need to be reviewed.
+### Passing+1 to be created
 
-- Perhaps generalize some Node.js practices:
-  - We have a private repository for security issues
-    and every member of that team is required to have
-    2FA enabled on their GitHub account.
-  - We’re considering requiring GPG signing of all of their commits as well.
-
-*   Security:
-    -   Automated regression test suite includes at least one check for
-        rejection of invalid data for each input field.
-        *Rationale:* Many regression test suites check only for perfect data;
-        attackers will instead provide invalid data, and programs need to
-        protect themselves against it.
-    -   Developers contributing a majority of the software
-        (over 50%) have learned how to develop secure software.
-        Kevin Wall asked this question: "Exactly how would you measure that? Do you just except them to have some security-related certification or take some specific course or what?"
-    -   Standard security advisory template and a pre-notification process
-        (useful for big projects; see Xen project as an example).
-    -   All inputs from potentially untrusted sources are checked to ensure
-        they are valid (a *whitelist*).
-        Invalid inputs are rejected.
-        Note that comparing against a list of "bad formats" (a *blacklist*)
-        is not enough.
-        In particular, numbers are converted and checked if they are between
-        their minimum and maximum (inclusive), and text strings are checked
-        to ensure that they are valid text patterns.
-    -   OWASP Application Security Verification Standard (ASVS).
-    -   SANS' Securing Web Application Technologies (SWAT) criteria.
-    -   Privacy requirements.  The distribution system does not reveal to
-        third parties what software or version number is being distributed,
-        or to who.
-        The distribution system does not require users to identify
-        themselves nor does it perform passive machine fingerprinting.
-*   Security analysis:
-    -   Current/past security review of the code.
     -   Must have a process for rapidly fixing vulnerabilities and
         releasing the updated software.
         Note that having a good test suite makes it easier
@@ -675,41 +642,48 @@ that need to be reviewed.
         confident the system still works.
         Also note that FLOSS projects are often embedded in larger systems and
         projects cannot control the larger projects they are in.
-*   Release:
-    -   Executable binaries that are released (both DLL and EXE's on Windows)
-        MUST be cryptographically signed (the goal is to allow application
-        whitelisting systems to use the signature to allow applications to
-        run rather then relying on path or hash based rules -
-        this might be at odds with some users requirement to be able to
-        build from source but I thought I'd raise it anyways).
 
--   The project MUST have active development.  At the least,
-    questions are routinely answered, and proposed issues and changes are
-    responded to.
-    This could be
-    demonstrated by active number of commits, issues opened and closed,
-    discussion (e.g., in issues, mailing list, or whatever the project
-    uses for discussion), multiple developers, etc.
-    However, note that the criteria report_responses and enhancement_responses
-    already take steps in this direction.
-    Some projects are essentially "completed" and so have relatively
-    little to respond to.
+-   All inputs from potentially untrusted sources are checked to ensure
+    they are valid (a *whitelist*), if there are any restrictions on
+    the data at all. A "MUST".
+    Invalid inputs are rejected.
+    Note that comparing against a list of "bad formats" (a *blacklist*)
+    is not enough.
+    In particular, numbers are converted and checked if they are between
+    their minimum and maximum (inclusive), and text strings are checked
+    to ensure that they are valid text patterns (valid UTF-8, length,
+    syntax, etc.).  In rare cases data may need to be "anything at all"
+    (e.g., a file uploader).
 
--   Test coverage.  See:
-    https://lists.coreinfrastructure.org/pipermail/cii-badges/2016-December/000350.html
-    Note that Ruby doesn't support branch testing.
+### Passing+2 to be created
 
--   Releases must be downloadable through a channel that both encrypts
-    and authenticates (e.g., tls).
-    that way, third parties will not be able to determine exactly what
-    version is being downloaded.  this also provides some verification that
-    the correct software is being downloaded from the site.
-    (This is probably already covered by https_sites.)
+-   Current/past security review of the code.
+    Perhaps passing+2.  Ideally it would be independent, but that
+    often requires a lot of money.
+    Kevin Wall: "If passing+2 is going to be the highest back level, I'd
+    also like to see some sort of mandatory code inspection (possibly
+    SAST assisted), and when applicable, some sort of DAST (for APIs,
+    probably just fuzzing), where failed tests would have to be added
+    to the regression test suite."
 
--   Review all comment replies on
-    https://lists.coreinfrastructure.org/pipermail/cii-badges/2016-December/000347.html
 
--   Kevin Wall: "If passing+2 is going to be the highest back level, I'd also like to see some sort of mandatory code inspection (possibly SAST assisted), and when applicable, some sort of DAST (for APIs, probably just fuzzing), where failed tests would have to be added to the regression test suite."
+## Still considering as criteria
+
+-   Developers contributing a majority of the software
+        (over 50%) have learned how to develop secure software.
+        Kevin Wall asked this question: "Exactly how would you measure
+        that? Do you just except them to have some security-related
+        certification or take some specific course or what?"
+
+- If C/C++, MUST use ASAN or something like it. See
+  https://github.com/linuxfoundation/cii-best-practices-badge/issues/256
+  
+
+## Potential sources for other criteria
+
+Here are some potential sources for criteria that need to be reviewed.
+
+Review these larger criteria sets for things to add:
 
 - It would be quite plausible to add many requirements specific to security.
 for example, it would be plausible to require that a system meet the
@@ -718,30 +692,75 @@ requirements (or a specified subset) of the
 or the
 [securing web application technologies (swat) checklist](https://software-security.sans.org/resources/swat).
 note that both of these focus only on web applications.
-
-We are considering moving the criteria continuous integration
-and reproducible builds into the initial best practices criteria.
+These are:
+    -   OWASP Application Security Verification Standard (ASVS) -
+        "provides a basis for testing web application technical security
+        controls and also provides developers with a list of requirements
+        for secure development."
+    -   SANS' Securing Web Application Technologies (SWAT) criteria.
 
 In the future we might add some criteria that a project has to meet
 some subset of (e.g., it must meet at least 3 of 5 criteria).
 
+## Probably not
+
+* Public advisories issued for vulnerabilities,
+  this could include advisories on the <https://SOMEWHERE/security> page
+  and/or an "Announcement" mailing list for new versions
+  (at least for security updates).
+  Often projects don't know (or are unsure) if they are vulnerabilities.
+
+* Security:
+
+-   Automated regression test suite includes at least one check for
+        rejection of invalid data for each input field.
+        *Rationale:* Many regression test suites check only for perfect data;
+        attackers will instead provide invalid data, and programs need to
+        protect themselves against it.
+        However, on many projects this would be a hard burden, and it's
+        not clear it's necessarily worth it (there are diminishing returns).
+
+- (Node.js practice): We have a private repository for security issues
+    and every member of that team is required to have
+    2FA enabled on their GitHub account.
+    Response: Not everyone agrees on having a private repo for security issues,
+    and some projects will have significant difficulties deploying 2FA.
+- (Node.js)
+    We’re considering requiring GPG signing of all of their commits as well.
+    Response: This is helpful, but somewhat onerous to *require*,
+    especially for projects with a large number of commits.
+
+-   Standard security advisory template and a pre-notification process
+        (useful for big projects; see Xen project as an example).
+
+-   Privacy requirements.  The distribution system does not reveal to
+        third parties what software or version number is being distributed,
+        or to who.
+        The distribution system does not require users to identify
+        themselves nor does it perform passive machine fingerprinting.
+        Response: We'd like to add this, but the widespread use of
+        "app stores" makes this kind of requirement untenable in
+        many circumstances.  So we don't plan to add this.
+        Maybe the EFF can help?!?
+
 -   Copyright notice in each file, e.g.,
     "Copyright [year project started] - [current year], [project founder]
     and the [project name] contributors."
-
     *Rationale*: It isn't legally required.
     That said,
     [Ben Balter's "Copyright notices for open source projects"](http://ben.balter.com/2015/06/03/copyright-notices-for-websites-and-open-source-projects/)
     provides a good argument for why it *should* be included,
     and it is not hard to add.
+    On the other hand, is this really that important?
 
 ### Security Code review ideas from liujin28
 
 liujin28 proposed some specifics for security code review in
 https://github.com/linuxfoundation/cii-best-practices-badge/pull/536
 
-This may be too detailed, but perhaps we should list some specific
-things reviewers should look for.
+Response: We think this is too detailed, and too restrictive to
+specific situations.  Instead, point to guidelines to follow
+(like CERT's).
 
 - <a name="validate_the_tainted_array_index"></a>The direct data
   or the indirect data from the untrusted sources which is used as
@@ -796,6 +815,8 @@ things reviewers should look for.
   See the [CWE](http://cwe.mitre.org/data/definitions/789.html).
   <sup>[<a href="#validate_the_malloc_size">validate_the_malloc_size</a>]</sup>
 
+
+
 ## Test coverage
 
 I’m thinking that perhaps we should add some test coverage measurements for higher-level badges (NOT for “passing”).  However, there are many options, and a variety of pros and cons.  Below are some of my own thoughts; I’d like to hear others’ thoughts.
@@ -842,14 +863,9 @@ We could also add a warning that just adding tests to make the numbers go up, wi
 
 Thoughts?
 
+See: https://lists.coreinfrastructure.org/pipermail/cii-badges/2016-December/000350.html Note that Ruby doesn't support branch testing.
 
-## Probably not
 
-* Public advisories issued for vulnerabilities,
-  this could include advisories on the <https://SOMEWHERE/security> page
-  and/or an "Announcement" mailing list for new versions
-  (at least for security updates).
-  Often projects don't know (or are unsure) if they are vulnerabilities.
 
 ## Improving the criteria
 

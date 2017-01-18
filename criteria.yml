@@ -352,9 +352,24 @@
           <a href="http://semver.org">Semantic Versioning (SemVer) format</a>
           be used for releases.
         details: >
-          Commit IDs (or similar) MAY be used as version numbers. They are
+          Other schemes like commit IDs, or date-based schemes like YYYYMMDD,
+          MAY be used as version numbers. They are
           unique, but note that these can cause problems for users as they
-          may not be able to determine whether or not they're up-to-date.
+          may not be able to easily determine whether or not
+          they're up-to-date.
+        rationale: >
+          SemVer is widely used to communicate what an update
+          is (e.g., if it involves incompatible API changes),
+          whether something is newer or older.  The scheme is simple,
+          supports multiple simultaneous branches, and because it uses at
+          least three numbers it can be distinguished from floating point.
+          However, many find SemVer less useful for identifying software
+          versions if only one version of the component is run (e.g.,
+          it is the code for a single website or internet service that
+          is constantly updated via continuous delivery).
+          For more discussion of the pros and cons of SemVer, see
+          <a href="https://news.ycombinator.com/item?id=13378637">Hacker News' Is Semantic Versioning an Anti-Pattern?</a> and
+          <a href="https://surfingthe.cloud/semantic-versioning-anti-pattern/">The Semantic Versioning Anti-Pattern</a>.
         met_suppress: true
         autofill: >
           Look for git tags (at least on GitHub) that have version format, e.g.,

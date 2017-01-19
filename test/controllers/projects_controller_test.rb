@@ -139,6 +139,26 @@ class ProjectsControllerTest < ActionController::TestCase
     assert_equal @project.name, new_name1
   end
 
+  test 'should fail update project with invalid control in name' do
+    log_in_as(@project.user)
+    old_name = @project.name
+    new_name = @project.name + "\x0c"
+    patch :update, params: {
+      id: @project, project: {
+        description: @project.description,
+        license: @project.license,
+        name: new_name,
+        repo_url: @project.repo_url,
+        homepage_url: @project.homepage_url
+      }
+    }
+    # "Success" here only in the HTTP sense - we *do* get a form...
+    assert_response :success
+    # ... but we just get the edit form.
+    assert_template :edit
+    assert_equal @project.name, old_name
+  end
+
   test 'should fail to update other users project' do
     new_name = @project_two.name + '_updated'
     assert_not_equal @user, @project_two.user

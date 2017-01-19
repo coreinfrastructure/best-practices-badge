@@ -221,7 +221,7 @@ namespace :fastly do
   desc 'Purge Fastly cache (takes about 5s)'
   task :purge do
     puts 'Starting full purge of Fastly cache (typically takes about 5s)'
-    require Rails.root.join('config/initializers/fastly')
+    require Rails.root.join('config', 'initializers', 'fastly')
     FastlyRails.client.get_service(ENV.fetch('FASTLY_SERVICE_ID')).purge_all
     puts 'Cache purged'
   end

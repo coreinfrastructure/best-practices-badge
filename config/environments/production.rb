@@ -114,5 +114,12 @@ Rails.application.configure do
     {
       'Cache-Control' => 'public, s-maxage=3600, max-age=3600'
     }
+
+  # As a failsafe, trigger an exception if the response just hangs for
+  # too long.  We only do this in production, because it's not
+  # supposed to happen in normal use - this is simply an automatic
+  # recovery mechanism if things get stuck.  We don't do this in test or
+  # development, because it interferes with them.
+  use Rack::Timeout, service_timeout: 30, wait_timeout: false
 end
 # rubocop:enable Metrics/BlockLength

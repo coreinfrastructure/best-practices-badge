@@ -118,6 +118,27 @@ class ProjectsControllerTest < ActionController::TestCase
     assert_response :unprocessable_entity
   end
 
+  test 'should fail to update stale project' do
+    new_name1 = @project.name + '_updated-1'
+    new_project_data1 = { name: new_name1 }
+    new_name2 = @project.name + '_updated-2'
+    new_project_data2 = {
+      name: new_name2,
+      lock_version: @project.lock_version
+    }
+    log_in_as(@project.user)
+    patch :update, params: { id: @project, project: new_project_data1 }
+    assert_redirected_to project_path(assigns(:project))
+    get :edit, params: { id: @project }
+    patch :update, params: { id: @project, project: new_project_data2 }
+    assert_not_empty flash
+    assert_template :edit
+    assert_difference '@project.lock_version' do
+      @project.reload
+    end
+    assert_equal @project.name, new_name1
+  end
+
   test 'should fail to update other users project' do
     new_name = @project_two.name + '_updated'
     assert_not_equal @user, @project_two.user
@@ -219,7 +240,7 @@ class ProjectsControllerTest < ActionController::TestCase
     assert_redirected_to project_path(@project)
   end
 
-  test 'should fail to change non-blank repo_url' do
+  test 'should fail to change tail of non-blank repo_url' do
     new_repo_url = @project_two.repo_url + '_new'
     log_in_as(@project_two.user)
     patch :update, params: {
@@ -227,8 +248,24 @@ class ProjectsControllerTest < ActionController::TestCase
         repo_url:  new_repo_url
       }
     }
+    assert_not_empty flash
+    assert_template :edit
     @project_two.reload
     assert_not_equal @project_two.repo_url, new_repo_url
+  end
+
+  test 'should change https to http in non-blank repo_url' do
+    old_repo_url = @project_two.repo_url
+    new_repo_url = 'http://www.nasa.gov/mav'
+    log_in_as(@project_two.user)
+    patch :update, params: {
+      id: @project_two, project: {
+        repo_url:  new_repo_url
+      }
+    }
+    @project_two.reload
+    assert_not_equal @project_two.repo_url, old_repo_url
+    assert_equal @project_two.repo_url, new_repo_url
   end
 
   test 'admin can change other users non-blank repo_url' do

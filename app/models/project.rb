@@ -21,8 +21,8 @@ class Project < ActiveRecord::Base
   MAX_SHORT_STRING_LENGTH = 254 # Arbitrary maximum to reduce abuse
 
   PROJECT_OTHER_FIELDS = %i(
-    name description homepage_url cpe implementation_languages
-    license general_comments user_id disabled_reminders
+    name description homepage_url repo_url cpe implementation_languages
+    license general_comments user_id disabled_reminders lock_version
   ).freeze
   ALL_CRITERIA_STATUS = Criteria.map { |c| c.name.status }.freeze
   ALL_CRITERIA_JUSTIFICATION = Criteria.map { |c| c.name.justification }.freeze

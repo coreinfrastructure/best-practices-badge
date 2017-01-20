@@ -14,6 +14,7 @@
 #   na_placeholder: ...special na_placeholder text... # optional
 #   met_suppress: true|false # optional, default false. Suppress justification?
 #   unmet_suppress: true|false # optional, default false. Suppress just.
+#   rationale: ...text describing the rationale for this criterion.
 #   autofill: ...text describing *ideas* for how to autofill, in markdown
 #
 # Please note that autofill text is *not* a guarantee of how it will
@@ -129,17 +130,13 @@
           </ul>
           The software MAY also be licensed other ways
           (e.g., "GPLv2 or proprietary" is acceptable).
-          <br>
-          <br>
-          <em>Rationale</em>: These criteria are designed for FLOSS projects,
+        rationale: >
+          These criteria are designed for FLOSS projects,
           so we need to ensure that they're only used where they apply.
           Some projects may be mistakenly considered FLOSS even though they
           are not (e.g., they might not have any license, in which case the
           defaults of the country's legal system apply, or they might use a
-          non-FLOSS license).  Unusual licenses can cause long-term problems
-          for FLOSS projects and are more difficult for tools to handle.
-          We expect that more advanced badges would set a higher bar (e.g.,
-          that it <em>must</em> be released under an OSI-approved license).
+          non-FLOSS license).
         autofill: >
           We currently use GitHub's API to request license information.
           This API examines the LICENSE file using the gem licensee.
@@ -168,6 +165,11 @@
           The OSI uses a rigorous approval process to determine
           which licenses are OSS.
         met_suppress: true
+        rationale: >
+          Unusual licenses can cause long-term problems
+          for FLOSS projects and are more difficult for tools to handle.
+          We expect that more advanced badges would set a higher bar (e.g.,
+          that it <em>must</em> be released under an OSI-approved license).
         autofill: >
           Currently we compare the license to see if it's on a simple list
           from OSI.  We could add support for automatically getting the list
@@ -198,6 +200,8 @@
           tutorial using examples), and how to use it securely (e.g., what to do
           and what not to do) if that is an appropriate topic for the software.
           The security documentation need not be long.
+          The project MAY use hypertext links to
+          non-project material as documentation.
         met_placeholder: >
           (Optional) What URL(s) are the starting points to for documentation?
         autofill: >
@@ -346,9 +350,28 @@
           <a href="http://semver.org">Semantic Versioning (SemVer) format</a>
           be used for releases.
         details: >
-          Commit IDs (or similar) MAY be used as version numbers. They are
-          unique, but note that these can cause problems for users as they
-          may not be able to determine whether or not they're up-to-date.
+          Other version numbering schemes, such as commit IDs (such as
+          git's) or date-based schemes like YYYYMMDD, MAY be used as
+          version numbers, since they are unique.
+          Some alternatives can cause problems, because
+          users may not be able to easily determine if they are up-to-date.
+          SemVer may be less helpful for identifying software releases
+          if all recipients only run the latest version
+          (e.g., it is the code for a single website or internet service that
+          is constantly updated via continuous delivery).
+        rationale: >
+          SemVer is widely used to communicate what an update
+          is (e.g., if it involves incompatible API changes),
+          whether something is newer or older.  The scheme is simple,
+          supports multiple simultaneous branches, and because it uses at
+          least three numbers it can be distinguished from floating point.
+          However, many find SemVer less useful for identifying software
+          versions if only one version of the component is run (e.g.,
+          it is the code for a single website or internet service that
+          is constantly updated via continuous delivery).
+          For more discussion of the pros and cons of SemVer, see
+          <a href="https://news.ycombinator.com/item?id=13378637">Hacker News' Is Semantic Versioning an Anti-Pattern?</a> and
+          <a href="https://surfingthe.cloud/semantic-versioning-anti-pattern/">The Semantic Versioning Anti-Pattern</a>.
         met_suppress: true
         autofill: >
           Look for git tags (at least on GitHub) that have version format, e.g.,
@@ -372,10 +395,10 @@
         description: >
           The project MUST provide, in each release, release notes that are
           a human-readable <i>summary</i> of major changes in that release.
-        details: >
           The release notes MUST NOT be the output of a version control log
-          (e.g., the "git log" command results are not release notes).<br
-          /> The release notes MAY be implemented in a variety of ways.
+          (e.g., the "git log" command results are not release notes).
+        details: >
+          The release notes MAY be implemented in a variety of ways.
           Many projects provide them in a file named "NEWS", "CHANGELOG",
           or "ChangeLog", optionally with extensions such as ".txt", ".md",
           or ".html".  Historically the term "change log" meant a log of
@@ -383,8 +406,8 @@
           is a human-readable summary.  The release notes MAY instead be
           provided by version control system mechanisms such as the <a
           href="https://github.com/blog/1547-release-your-software">GitHub
-          Releases workflow</a>.<br />
-          <b>Rationale</b>:
+          Releases workflow</a>.
+        rationale: >
           Release notes are important because they help users decide whether
           or not they will want to update, and what the impact would be (e.g.,
           if the new release fixes vulnerabilities).
@@ -527,13 +550,14 @@
           For example, it can invoke a compiler to compile the source code.
           If an executable is created from source code, it must be possible
           to modify the project's source code and then generate
-          an updated executable with those modifications.
-          <b>Rationale</b>: If a project needs to be built but there is no
+          an updated executable with those modifications. If there is
+          no need to build anything to use the software after its source
+          code is modified, select "not applicable" (N/A).
+        rationale: >
+          If a project needs to be built but there is no
           working build system, then potential co-developers will not be
           able to easily contribute and many security analysis tools will be
-          ineffective.  If there is no need to build anything to use the
-          software after its source code is modified,
-          select "not applicable" (N/A).
+          ineffective.
         autofill: >
           See build_common_tools.
     - build_common_tools:
@@ -575,7 +599,8 @@
           The project MAY have multiple automated test suites (e.g., one
           that runs quickly, vs. another that is more thorough but requires
           special equipment).
-          <b>Rationale</b>: Automated test suites immediately help detect a
+        rationale: >
+          Automated test suites immediately help detect a
           variety of problems.  A large test suite can find more problems, but
           even a small test suite can detect problems and provide a framework
           to build on.
@@ -785,6 +810,10 @@
           The project's cryptographic software MUST use by default
           only cryptographic protocols
           and algorithms that are publicly published and reviewed by experts.
+        details: >
+          These cryptographic
+          criteria do not always apply because some software has no
+          need to directly use cryptographic capabilities.
         # autofill: TODO
     - crypto_call:
         category: SHOULD
@@ -830,14 +859,16 @@
           The software MAY allow smaller keylengths in some configurations
           (ideally it would not, since this allows downgrade attacks,
           but shorter keylengths are sometimes necessary for interoperability).
+          A "project security mechanism" is a security mechanism provided
+          by the delivered project's software.
         # autofill: TODO
     - crypto_working:
         category: MUST
         na_allowed: true
         description: >
           The default project security mechanisms MUST NOT depend on
-          cryptographic algorithms that are broken
-          (e.g., MD4, MD5, single DES, RC4, or Dual_EC_DRBG).
+          cryptographic algorithms/modes that are broken
+          (e.g., MD4, MD5, single DES, RC4, Dual_EC_DRBG, or ECB mode).
         # autofill: TODO
     - crypto_weaknesses:
         category: SHOULD
@@ -919,15 +950,15 @@
           A vulnerability is medium
           to high severity if its <a href="https://nvd.nist.gov/cvss.cfm">CVSS
           2.0</a> base score is 4 or higher.
-          <br><br>
           <b>Note</b>: this means that users might be left vulnerable to all
           attackers worldwide for up to 60 days.  This criterion is often
           much easier to meet than what Google recommends in <a
           href="https://security.googleblog.com/2010/07/rebooting-responsible-disclosure-focus.html">Rebooting
           responsible disclosure</a>, because Google recommends that the 60-day
           period start when the project is notified <em>even</em> if the report
-          is not public.<br>
-          <b>Rationale</b>: We intentionally chose to start measurement from the
+          is not public.
+        rationale: >
+          We intentionally chose to start measurement from the
           time of public knowledge,
           and not from the time reported to the project, because this is much
           easier to measure and
@@ -1064,10 +1095,10 @@
           page on dynamic analysis</a> and the
           <a href="https://www.owasp.org/index.php/Fuzzing">OWASP page on
           fuzzing</a> identify some dynamic analysis tools.
-          <br>
           The analysis tool(s) MAY be focused on looking for security
           vulnerabilities, but this is not required.
-          <b>Rationale:</b> Static source code analysis and dynamic analysis tend
+        rationale: >
+          Static source code analysis and dynamic analysis tend
           to find different kinds of defects (including defects that lead to
           vulnerabilities), so combining them is more likely to be effective.
         autofill: >
@@ -1082,9 +1113,15 @@
           be routinely used with a mechanism to detect memory safety problems
           such as buffer overwrites.
         details: >
-          Examples of mechanisms to detect memory safety problems
-          include Address Sanitizer (ASAN) and
-          <a href="http://valgrind.org/">valgrind</a>.
+          Examples of mechanisms to detect memory safety problems include
+          <a href="https://github.com/google/sanitizers/wiki/AddressSanitizer">Address Sanitizer (ASAN)</a>
+          (available in GCC and LLVM),
+          <a href="http://clang.llvm.org/docs/MemorySanitizer.html">Memory Sanitizer</a>,
+          and <a href="http://valgrind.org/">valgrind</a>.
+          Other potentially-used tools include
+          <a href="http://clang.llvm.org/docs/ThreadSanitizer.html">thread sanitizer</a>
+          and
+          <a href="http://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html">undefined behavior sanitizer</a>.
           Widespread assertions would also work.
           If the software is not application-level,
           or is not in a memory-unsafe language, then this criterion is

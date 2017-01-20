@@ -110,18 +110,36 @@ class ProjectsController < ApplicationController
   # PATCH/PUT /projects/1.json
   # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   def update
-    old_badge_level = Project.find(params[:id]).badge_level
-    Chief.new(@project, client_factory).autofill
-    respond_to do |format|
-      if @project.update(project_params)
-        successful_update(format, old_badge_level)
-      else
-        format.html { render :edit }
-        format.json do
-          render json: @project.errors, status: :unprocessable_entity
+    if repo_url_change_allowed?
+      old_badge_level = Project.find(params[:id]).badge_level
+      Chief.new(@project, client_factory).autofill
+      respond_to do |format|
+        if @project.update(project_params)
+          successful_update(format, old_badge_level)
+        else
+          format.html { render :edit }
+          format.json do
+            render json: @project.errors, status: :unprocessable_entity
+          end
         end
       end
+    else
+      flash.now[:danger] = 'You may only change your repo_url from http to '\
+                           'https'
+      render :edit
     end
+  rescue ActiveRecord::StaleObjectError
+    # rubocop:disable Rails/OutputSafety
+    message =
+      (
+        'Another user has made a change to that record since you ' \
+        'accessed the edit form. <br> Please open a new <a href="'.html_safe +
+        edit_project_url + # force escape
+        '" target=_blank>edit form</a> to transfer your changes.'.html_safe
+      )
+    flash.now[:danger] = message
+    # rubocop:enable Rails/OutputSafety
+    render :edit, status: :conflict
   end
   # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
@@ -196,14 +214,15 @@ class ProjectsController < ApplicationController
   # Never trust parameters from the scary internet,
   # only allow the white list through.
   def project_params
-    if @project && repo_url_disabled?(@project)
-      params.require(:project).permit(Project::PROJECT_PERMITTED_FIELDS)
-    else
-      params.require(:project).permit(
-        :repo_url,
-        Project::PROJECT_PERMITTED_FIELDS
-      )
-    end
+    params.require(:project).permit(Project::PROJECT_PERMITTED_FIELDS)
+  end
+
+  def repo_url_change_allowed?
+    return true unless @project.repo_url?
+    return true if project_params[:repo_url].nil?
+    return true if current_user.admin?
+    project_params[:repo_url].split('://', 2)[1] ==
+      @project.repo_url.split('://', 2)[1]
   end
 
   # Purge the badge from the CDN (if any)

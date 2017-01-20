@@ -12,10 +12,17 @@ If you find a vulnerability, please see
 For more technical information on the implementation, see
 [implementation.md](implementation.md).
 
-The following figure summarizes why we think this application
+The following figures summarize why we think this application
 is adequately secure:
 
 ![Assurance case summary](./assurance-case.png)
+![Assurance case in lifecycle](./assurance-case-lifecycle.png)
+![Assurance case in implementation](./assurance-case-implementation.png)
+
+These figures are in Claims, Arguments and Evidence (CAE) notation,
+which is a simple notation often used for assurance cases.
+Ovals are claims or sub-claims, while rounded rectangles are the supporting
+arguments justifying the claims.
 
 Our overall security approach is called
 defense-in-breadth, that is, we consider
@@ -27,10 +34,39 @@ In each software development process we
 identify the specific issues that most need to be addressed,
 and then address them.
 
+We do *not* use a waterfall model for software development.
+It's important to note that when we use the word *process* it
+has a completely different meaning from a time *phase*.
+Instead, we use the word "process" with its standard meaning in
+software and systems engineering, that is,
+a "process" is just a "set of interrelated or interacting activities
+which transforms inputs into outputs" (ISO ISO 9000:2005, quoted in
+ISO/IEEE 12207:2008).
+In a waterfall model, these processes are done to completion
+in a strict sequence of "phases": you create all of the requirements in
+one phase, then do all the design in the next phase, and so on.
+Winston Royce's paper "Managing the Development of Large Software Systems"
+(1970) notes that this naive waterfall approach
+"is risky and invites failure" - in practice
+"design iterations are never confined to the successive steps".
+We obviously *do* determine what the software will do differently
+(requirements), as well as design, implement, and verify it, so we
+certainly do have these processes.
+However, as with almost all real software development projects,
+we perform these processes in parallel, iterating and
+feeding back as appropriate.
+
 Below are the overall security requirements, followed by how we approach
-security in design, implementation,
-verification, supply chain (reuse), development environment,
-and deployment/operations.
+security in the rest of the software development processes:
+design, implementation,
+verification, supply chain (reuse), and deployment/operations.
+This is followed by a discussion about security in the
+development environment and our people.
+Note that receive our own badge, the CII best practices badge,
+which provides additional evidence that we've covered key areas.
+
+(Note to editors: to edit the figures above, edit the .odg file, then
+export to .png so that it can viewed on GitHub.)
 
 ## Security Requirements
 
@@ -134,6 +170,15 @@ We may in the future add support for groups (e.g., where the owner
 can designate other users who can edit that entry) and
 a way to 'validate' project entries for projects not on GitHub.
 
+Here we have identified the key security requirements and why we believe
+they've been met overall.  However, there is always the possibility that
+a mistake could lead to failure to meet these requirements.
+We manage this risk by
+implementing security in all our software development processes.
+We also protect our development environment and choose people
+who will help support this.
+The following sections describe how we've managed this risk.
+
 ## Security in Design
 
 We emphasize security in design by using a simple design,
@@ -157,6 +202,9 @@ All interaction between the users and the web application go over
 an encrypted channel using TLS.
 There is some JavaScript served to the client,
 but no security decisions depend on code that runs on the client.
+
+The custom code has been kept as small as possible, in particular, we've
+tried to keep it DRY (don't repeat yourself).
 
 From a user's point of view,
 users potentially create an id, then log in and enter data
@@ -182,9 +230,8 @@ showing that we apply many secure design principles including
 all of the ones from Saltzer and Schroeder:
 
 - Economy of mechanism (keep the design as simple and small as practical,
-  e.g., by adopting sweeping simplifications):
-  The custom code has been kept as small as possible, in particular, we've
-  tried to keep it DRY (don't repeat yourself).
+  e.g., by adopting sweeping simplifications).
+  We discuss this in more detail in the earlier section "simple design".
 - Fail-safe defaults (access decisions should deny by default):
   Access decisions are deny by default.
 - Complete mediation (every access that might be limited must be
@@ -350,9 +397,11 @@ and how we attempt to reduce their risks in BadgeApp.
    Rails mechanism, including an encrypted and signed cookie session key.
 3. Cross-Site Scripting (XSS).
    We use Rails' built-in XSS
-   countermeasures, in particular, its "safe" HTML mechanisms.  By default,
-   Rails always applies HTML escapes on strings displayed through views
-   unless they are marked as safe.
+   countermeasures, in particular, its "safe" HTML mechanisms such
+   as SafeBuffer.  By default, Rails always applies HTML escapes
+   on strings displayed through views unless they are marked as safe.
+   [SafeBuffers and Rails 3.0](http://yehudakatz.com/2010/02/01/safebuffers-and-rails-3-0/)
+   discusses this in more detail.
    This greatly reduces the risk of mistakes leading to XSS vulnerabilities.
    In addition, we use a restrictive Content Security Policy (CSP),
    which makes damage more difficult even if an attacker gets something in.
@@ -386,24 +435,10 @@ and how we attempt to reduce their risks in BadgeApp.
    For more information, see the page on
    [request forgery protection](http://api.rubyonrails.org/classes/ActionController/RequestForgeryProtection.html).
 9. Using Components with Known Vulnerabilities.
-   We use bundle-audit, which compares our gem libraries to a database
-   of versions with known vulnerabilities.
-   The default 'rake' task invokes bundle-audit.
-   This is known to work; commit fdb83380aa71352
-   on 2015-11-26 updated nokogiri, in response to a bundle-audit
-   report on advisory CVE-2015-1819, "Nokogiri gem contains
-   several vulnerabilities in libxml2 and libxslt".
-   We also use a gemnasium-based badge that warns us when there is an
-   out-of-date dependency; see
-   [it](https://gemnasium.com/linuxfoundation/cii-best-practices-badge)
-   for more information.
-   We have also optimized the component update process through
-   high test coverage.  The files Gemfile and Gemfile.lock
-   identify the current versions of Ruby gems (Gemfile identifies direct
-   dependencies; Gemfile.lock includes all transitive dependencies and
-   the exact version numbers).  We can update libraries by
-   updating those files, running "bundle install", and then using "rake"
-   to run various checks including a robust test suite.
+   We detect components with publicly known vulnerabilities
+   using bundle-audit and gemnasium.
+   These use the Gemfile* and National Vulnerability Database (NVD) data.
+   For more information, see the "supply chain" section.
 10. Unvalidated Redirects and Forwards.
    Redirects and forwards are not used significantly, and they are validated.
 
@@ -558,14 +593,30 @@ See
 ["Rails, Secure Cookies, HSTS and friends" by Ilija Eftimov (2015-12-14)](http://eftimov.net/rails-tls-hsts-cookies)
 for more about the impact of force_ssl.
 
-We separately configure our CDN (Fastly) to redirect HTTP to HTTPS
+When we upgraded to Rails 5 we enabled two additional
+security hardening mechanisms that it added;
+both counter cross-site request forgery (CSRF).
+These are:
+
+* Enable per-form CSRF tokens.
+  (Rails.application.config.action_controller.per_form_csrf_tokens)
+* Enable origin-checking CSRF mitigation.
+  (Rails.application.config.action_controller.forgery_protection_origin_check)
+
+We take many steps to ensure that users will use HTTPS (which
+is authenticated and encrypted), and not the unencrypted HTTP protocol.
+The "coreinfrastructure.org" domain is included in
+[Chrome's HTTP Strict Transport Security (HSTS) preload list](https://hstspreload.org/?domain=coreinfrastructure.org).
+This is a list of sites that are hardcoded into Chrome as being HTTPS only
+(some other browsers also use this list).
+In addition, we redirect HTTP requests to HTTPS (in production).
+Once users use HTTPS
+they will receive the HTTP Strict Transport Security (HSTS) information
+that will tell their web browser to always use HTTPS in the future.
+This is configured via our CDN (Fastly) to redirect HTTP to HTTPS
 (this has to be done by the CDN, since it intercepts the requests first).
-This means that users who use HTTP will be redirected to HTTPS, and
-once there they will receive the
-HTTP Strict Transport Security (HSTS) information that will tell their
-web browser to always use HTTPS in the future.
-If that is misconfigured or omitted for some reason, the application
-will also redirect the user from HTTP to HTTPS.
+If our CDN is misconfigured or skipped for some reason, the application
+will also redirect the user from HTTP to HTTPS if queried directly.
 
 We send reminder emails to projects that have not updated their
 badge entry in a long time. The detailed algorithm that prioritizes projects
@@ -627,32 +678,82 @@ but we think they greatly reduce the risks.
 
 ## Supply chain (reuse)
 
+## Review before use
+
 We consider the code we reuse
 (e.g., libraries and frameworks) before adding them, to reduce
 the risk of unintentional and intentional vulnerabilities from them.
 In particular, we prefer the use of popular components (where problems
-are more likely to be identified and addressed) and common FLOSS licenses.
-(A FLOSS component with a rarely-used license, particularly a
-GPL-incompatible one, is less likely to be reviewed by others because
-in most cases fewer people will contribute to it.)
-These steps reduce the risk of malicious components
-(e.g., malicious gems).
+are more likely to be identified and addressed).
+In some cases we review the code ourselves.
 
-We also have a process for detecting when the components we use
-have known vulnerabilities (using bundle-audit)
-or are out-of-date.
-This check is run by the default 'rake' process, so once a vulnerability
-is found in a gem we use and is added to the public database, we
-are notified that we need to update it.
+We prefer common FLOSS licenses.
+A FLOSS component with a rarely-used license, particularly a
+GPL-incompatible one, is less likely to be reviewed by others because
+in most cases fewer people will contribute to it.
+
+We use license_finder to ensure that the licenses are what we expect,
+and that the licenses do not change to something unexpected later
+in later versions.
+
+## Auto-detect vulnerabilities when publicly reported (and speedily respond)
+
+We have a process for automatically detecting when the components we use
+have publicly known vulnerabilities or are out-of-date, and
+can quickly respond to alerts that there are publicly known
+vulnerabilities.
+We specifically focus on detecting all components with any publicly known
+vulnerability, both in our direct and indirect dependencies.
+
 The list of libraries used (transitively) is managed by bundler, so
 updating libraries or sets of libraries can be done quickly.
 As noted earlier, our strong automated test suite makes it easy to test this
 updated set, so we can rapidly update libraries, test the result, and
 deploy it.
 
+We detect components with publicly known vulnerabilities
+using bundle-audit and gemnasium.
+These use the Gemfile* files and National Vulnerability Database (NVD) data.
+We use bundle-audit, which compares our gem libraries to a database
+of versions with known vulnerabilities, and gemnasium
+The default 'rake' task invokes bundle-audit, so every time we run
+"rake" we are alerted about publicly known vulnerabilities in the
+components we depend on (directly or not).
+
+We also use a gemnasium-based badge that warns us when there is an
+out-of-date direct dependency as well vulnerable direct dependencies; see
+[it](https://gemnasium.com/linuxfoundation/cii-best-practices-badge)
+for more information.
+
+We have also optimized the component update process through
+using the package manager (bundler) and high test coverage.
+The files Gemfile and Gemfile.lock
+identify the current versions of Ruby gems (Gemfile identifies direct
+dependencies; Gemfile.lock includes all transitive dependencies and
+the exact version numbers).  We can update libraries by
+updating those files, running "bundle install", and then using "rake"
+to run various checks including a robust test suite.
+
+This approach is known to work.
+Commit fdb83380aa71352
+on 2015-11-26 updated nokogiri, in response to a bundle-audit
+report on advisory CVE-2015-1819, "Nokogiri gem contains
+several vulnerabilities in libxml2 and libxslt".
+When it was publicly reported we were alerted.
+In less than an hour from the time the vulnerability
+was publicly reported we were alerted,
+updated the library, ran the full test suite, and deployed the fixed version.
+
+## MITM Countered
+
 We counter man-in-the-middle (MITM) attacks when downloading gems
 because the Gemfile configuration uses an HTTPS source to the
 standard place for loading gems (<https://rubygems.org>).
+
+## Other risk reduction measures for third-party components
+
+These steps reduce the risk of malicious components
+(e.g., malicious gems).
 
 We can't eliminate all risks, and
 if we rewrote all the software (instead of reusing software)
@@ -691,22 +792,69 @@ Anyone can create a Heroku application and run it on Heroku, however,
 at that point we trust the Postgres developers and the Heroku administrators
 to keep the databases separate.
 
-Various online checkers give us a clean bill of health.
+### Online checkers
+
+Various online checkers give us an overall clean bill of health.
+Most of the checkers test our HTTPS (TLS) configuration and
+if common hardening mechanisms are enabled.
+
 For the main bestpractices.coreinfrastructure.org site we have:
 
 * An "A+" rating from the
-  <a href="https://www.ssllabs.com/ssltest/analyze.html?d=bestpractices.coreinfrastructure.org">Qualys SSL labs check of our TLS configuration</a>.
-* An "A+" rating from the
-  <a href="https://securityheaders.io/?q=bestpractices.coreinfrastructure.org">securityheaders.io check of our HTTP security headers</a>.
+  <a href="https://www.ssllabs.com/ssltest/analyze.html?d=bestpractices.coreinfrastructure.org">Qualys SSL labs check of our TLS configuration</a>
+  on 2017-01-14.
+* An "A" rating from the
+  <a href="https://securityheaders.io/?q=https%3A%2F%2Fbestpractices.coreinfrastructure.org">securityheaders.io check of our HTTP security headers</a>
+  on 2017-01-14.
+  It gives us a slightly lower score because we do not include
+  "Public-Key-Pins".  This simply notes that
+  we are do not implement HTTP Public Key Pinning (HPKP).
+  HPKP counters rogue certificate authorities (CAs), but it also has problems.
+  HPKP makes it harder to switch CAs *and* any error in its configuration,
+  at any time, risks serious access problems that are unfixable -
+  making it somewhat dangerous to use.
+  As a result, we have chosen to not add HPKP at this time.
 * An all-pass report from the
-  <a href="https://www.sslshopper.com/ssl-checker.html#hostname=bestpractices.coreinfrastructure.org">SSLShopper SSL checker</a>.
-* An "A+" rating from the [Mozilla Observatory](https://observatory.mozilla.org/analyze.html?host=master.bestpractices.coreinfrastructure.org) (This link is actually for the master branch.)
+  <a href="https://www.sslshopper.com/ssl-checker.html#hostname=bestpractices.coreinfrastructure.org">SSLShopper SSL checker</a>
+  on 2017-01-14.
+* An "A+" rating from the [Mozilla Observatory](https://observatory.mozilla.org/analyze.html?host=bestpractices.coreinfrastructure.org) scan summary
+  on 2017-01-14.
 * A 96% result from <a href="https://www.wormly.com/test_ssl/h/bestpractices.coreinfrastructure.org/i/157.52.75.7/p/443">Wormly</a>.
   The only item not passed was the "SSL Handshake Size" test; the live site
   provides 5667 bytes, and they consider values beyond 4K (with unclear
   units) to be large. This is not a security issue, at most this will
   result in a slower initial connection.  Thus, we don't plan to worry
   about the missing test.
+
+### Detection
+
+There are two approaches to detection:
+* internal (which has access to our internal information, such as logs)
+* external (which does not have access to internal information)
+
+We use both approaches.  The external approaches do not have access
+to as much information, but they see the site as a "typical" user
+would, so combining these approaches has its advantages.
+
+#### Internal
+
+This is a [12 factor app](https://12factor.net/); as such,
+events are streamed to standard out for logging.
+We use the "rails_12factor" to ensure that all Rails logs go to
+standard out, and then use standard Heroku logging mechanisms.
+We intentionally omit here, in this public document, details about
+how logs are stored and how anomaly detection is done.
+
+#### External
+
+We are alerted if the website goes down via uptime robot:
+
+https://uptimerobot.com/dashboard
+
+### Recovery
+
+We backup the database daily.
+See the [Heroku site](https://devcenter.heroku.com/articles/heroku-postgres-backups#scheduled-backups-retention-limits) for retention times.
 
 ## People
 
@@ -743,6 +891,15 @@ He has long expertise in Ruby on Rails.
 
 Jason Dossett has a PhD in Physics from The University of Texas at Dallas,
 and has been involved in software development for many years.
+He has reviewed and is familiar with the security assurance case here.
+
+## Receive CII best practices badge
+
+The CII best practices badging project was established to identify
+best practices that can lead to more secure software.
+The BadgeApp application achieves its own badge.
+This is evidence that the BadgeApp application is
+applying practices expected in a well-run FLOSS project.
 
 ## Your help is welcome!
 

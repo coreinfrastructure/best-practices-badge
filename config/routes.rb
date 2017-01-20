@@ -83,4 +83,12 @@ Rails.application.routes.draw do
   #     # (app/controllers/admin/products_controller.rb)
   #     resources :products
   #   end
+
+  # If no route found, just redirect to a 404 page.  The production site is
+  # constantly hit by nonsense paths, and while Rails has a built-in
+  # mechanism to handle nonsense, Rails' built-in mechanism creates
+  # very noisy logs.  Instead, we quickly redirect to a 404 (without a
+  # lengthy log of the cause) and move on.  Inspired by:
+  # http://rubyjunky.com/cleaning-up-rails-4-production-logging.html
+  match '*path', via: :all, to: 'static_pages#error_404'
 end

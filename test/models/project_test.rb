@@ -85,4 +85,16 @@ class ProjectTest < ActiveSupport::TestCase
                                     'cii-best-practices-badge%ff%ff')
   end
   # rubocop:enable Metrics/BlockLength
+
+  test 'UTF-8 validator should refute non-UTF-8 encoding' do
+    validator = TextValidator.new(attributes: %i(name description))
+    # Don't accept non-UTF-8, even if the individual bytes are acceptable.
+    refute validator.text_acceptable?("The best practices badge\255")
+    refute validator.text_acceptable?("The best practices badge\xff\xff")
+    refute validator.text_acceptable?("The best practices badge\xee")
+    refute validator.text_acceptable?("The best practices badge\xe4")
+    # Don't accept an invalid control character
+    refute validator.text_acceptable?("The best practices badge\x0c")
+    assert validator.text_acceptable?('The best practices badge.')
+  end
 end

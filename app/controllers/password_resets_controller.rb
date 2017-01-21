@@ -18,13 +18,16 @@ class PasswordResetsController < ApplicationController
 
   def edit; end
 
+  # rubocop: disable Metrics/MethodLength,Metrics/AbcSize
   def update
     if params[:user][:password].empty?
       @user.errors.add(:password, 'can\'t be empty')
       render 'edit'
-    elsif !User.valid_password?(params[:user][:password])
-      @user.errors.add(:password, 'doesnt meet our complexity/length  
-                                   requirements')
+    elsif !@user.valid_password?(params[:user][:password])
+      @user.errors.add(
+        :password,
+        'doesnt meet our complexity/length requirements'
+      )
       render 'edit'
     elsif @user.update_attributes(user_params)
       log_in @user
@@ -34,6 +37,7 @@ class PasswordResetsController < ApplicationController
       render 'edit'
     end
   end
+  # rubocop: enable Metrics/MethodLength,Metrics/AbcSize
 
   private
 

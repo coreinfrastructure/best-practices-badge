@@ -45,6 +45,7 @@ class SessionsController < ApplicationController
     flash[:success] = 'Signed in!'
   end
 
+  # rubocop: disable Metrics/MethodLength,Metrics/AbcSize
   def local_login_procedure(user)
     if user.activated?
       log_in user
@@ -63,4 +64,5 @@ class SessionsController < ApplicationController
       redirect_to root_url
     end
   end
+  # rubocop: ensable Metrics/MethodLength,Metrics/AbcSize
 end

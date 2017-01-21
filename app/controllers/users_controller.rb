@@ -47,7 +47,7 @@ class UsersController < ApplicationController
     redirect_to @user unless @user.provider == 'local'
   end
 
-  # rubocop: disable Metrics/MethodLength Metrics/AbcSize
+  # rubocop: disable Metrics/MethodLength,Metrics/AbcSize
   def update
     @user = User.find(params[:id])
     if !@user.password_valid?(user_params[:password])
@@ -62,7 +62,7 @@ class UsersController < ApplicationController
       render 'edit'
     end
   end
-  # rubocop: enable Metrics/MethodLength Metrics/AbcSize
+  # rubocop: enable Metrics/MethodLength,Metrics/AbcSize
 
   def destroy
     User.find(params[:id]).destroy

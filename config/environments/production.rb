@@ -119,7 +119,9 @@ Rails.application.configure do
   # too long.  We only do this in production, because it's not
   # supposed to happen in normal use - this is simply an automatic
   # recovery mechanism if things get stuck.  We don't do this in test or
-  # development, because it interferes with them.
-  use Rack::Timeout, service_timeout: 30, wait_timeout: false
+  # development, because it interferes with their purposes.
+  # The "use" form is preferred, but it doesn't actually work here,
+  # so we'll just set the timeout here.
+  Rack::Timeout.service_timeout = 30  # seconds
 end
 # rubocop:enable Metrics/BlockLength

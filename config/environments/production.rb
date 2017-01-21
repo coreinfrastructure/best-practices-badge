@@ -120,8 +120,8 @@ Rails.application.configure do
   # supposed to happen in normal use - this is simply an automatic
   # recovery mechanism if things get stuck.  We don't do this in test or
   # development, because it interferes with their purposes.
-  # The "use" form is preferred, but it doesn't actually work here,
-  # so we'll just set the timeout here.
-  Rack::Timeout.service_timeout = 30  # seconds
+  # The "use" form is preferred, but it doesn't actually work when placed
+  # in this file, so we'll just set the timeout directly.
+  Rack::Timeout.service_timeout = 30 # seconds
 end
 # rubocop:enable Metrics/BlockLength

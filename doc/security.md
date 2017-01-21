@@ -36,17 +36,19 @@ and then address them.
 
 We do *not* use a waterfall model for software development.
 It's important to note that when we use the word *process* it
-has a completely different meaning from a time *phase*.
+has a completely different meaning from a *phase*.
 Instead, we use the word "process" with its standard meaning in
 software and systems engineering, that is,
 a "process" is just a "set of interrelated or interacting activities
 which transforms inputs into outputs" (ISO ISO 9000:2005, quoted in
 ISO/IEEE 12207:2008).
 In a waterfall model, these processes are done to completion
-in a strict sequence of "phases": you create all of the requirements in
+in a strict sequence of phases (where each phase occurs for some
+period of time).
+That is, you create all of the requirements in
 one phase, then do all the design in the next phase, and so on.
 Winston Royce's paper "Managing the Development of Large Software Systems"
-(1970) notes that this naive waterfall approach
+(1970) notes that in software development this naive waterfall approach
 "is risky and invites failure" - in practice
 "design iterations are never confined to the successive steps".
 We obviously *do* determine what the software will do differently
@@ -55,6 +57,8 @@ certainly do have these processes.
 However, as with almost all real software development projects,
 we perform these processes in parallel, iterating and
 feeding back as appropriate.
+Each process is (notionally) run in parallel;
+each receives inputs and produces outputs.
 
 Below are the overall security requirements, followed by how we approach
 security in the rest of the software development processes:
@@ -74,47 +78,58 @@ Here is what BadgeApp must do to be secure (and a few comments about
 how we implement these requirements):
 
 - Confidentiality:
-  Project data is considered public, as is
-  the users who own the records, so we don't need to keep those confidential.
-  The only things we need to keep confidential, really, are
-  passwords and user email addresses.  We handle specially, since
-  we must not reveal any plaintext passwords used to authenticate users.
-  Password proteciton is primarily handled by only centrally storing passwords
-  once they are encrypted by bcrypt (so passwords are *only* stored as
-  iterated salted cryptographic hashes).
-  Passwords may also be stored in encrypted user cookies, but the
-  decrypted passwords are not stored on the server's database,
-  and users can choose whether or not to store passwords in encrypted cookies
-  (using the "remember me" box implemented in commit e79decec67).
-  We do store email addresses; we need those for various purposes
-  (e.g., contact badge entry owners for clarification).
-  We will strive to not reveal user email addresses to others
-  (with the exception administrators, who can see them).
-  Communications between users and the application must use an encrypted
-  (HTTPS) channel.
-  There's no need to worry about covert channels.
+    - Almost all data is considered public, e.g., all project data
+      and who owns the records, so we don't need to keep those confidential.
+    - Non-public data is kept confidential.  Non-public data is currently
+      unencrypted user passwords and user email addresses,
+      which we do protect specially:
+          - User passwords are only stored on the server as
+            iterated salted hashes (using bcrypt).
+          - Passwords may also be stored in encrypted user cookies,
+            but the decrypted passwords are not stored on the server's
+            database, and users can choose whether or not to store
+            passwords in encrypted cookies (using the "remember me"
+            box implemented in commit e79decec67).
+          - Email addresses are only revealed to the logged-in owner and
+            administrators. We do store email addresses;
+            we need those for various purposes
+            (e.g., contact badge entry owners for clarification).
+            We will strive to not reveal user email addresses to others
+            (with the exception of administrators, who can see them).
+          - HTTPS is used to encrypt all communications between users
+            and the application; this protects the confidentiality of
+            all data in motion.
+            There's no need to worry about covert channels.
 - Integrity:
-    - Data between the client and server must not be altered.
-      We use https in the deployed system.
-    - Only authorized people should be able to edit the record
-      of a given project.  If a project is on GitHub this is easy -
-      we can ask people to
-      log in, and prove that they can edit that project.
-      For other projects, what we can do is ensure that once a project
-      record is created, only its creator can edit it... and then projects
-      can decide which (if any) to link to as their "official" representation.
-    - Only authorized people should be able to edit the BadgeApp source code.
+    - HTTPS is used to protect the integrity of all communications between users
+      and the application, as well as to authenticate the server
+      to the user.
+    - Edits require a logged-in user with authorization.
+      Edits may be performed by the data owner, anyone GitHub reports as
+      being authorized to edit the project (if it's on GitHub), or
+      BadgeApp administrator ("admin").
+      The badge owner is whoever created the badge entry.
+    - Modifications to the official BadgeApp application require
+      authentication via GitHub.
       We use GitHub for managing the source code and issue tracker; it
       has an authentication system for this purpose.
-- Availability: We cannot prevent someone with significant
-  resources from overwhelming the system.  (This includes DDoS attacks,
-  since someone who controls many clients controls a lot of resources.)
-  Instead, we will work so that it can return to operation
-  once an attack has ended and/or been halted.
-  We will also design the system so it can scale up
-  (e.g., using multiple processes and a CDNs), to make it harder for
-  someone without significant resources to shut it down.
-  See the design section below about how we handle scaling up.
+- Availability:
+    - As with any publicly-accessible website,
+      we cannot prevent someone with significant
+      resources from overwhelming the system.
+      (This includes DDoS attacks,
+      since someone who controls many clients controls a lot of resources.)
+      So instead, we focus on various kinds of resilience.
+      See the design section "availability through scaleability" below
+      for more about how we handle scaling up.
+    - We use a cloud and CDN deployment, which allows quick scale-up
+      of resources when necessary.
+    - All queries, including project data queries, have a timeout.
+      That way, the system is not permanently "stuck" on a request.
+    - The system can return to operation quickly after
+      a DDoS attack has ended.
+
+Here are a few other notes about the security requirements.
 
 BadgeApp must avoid being taken over by other applications, and
 must avoid being a conduit for others' attacks
@@ -223,11 +238,15 @@ contents, etc., are all untrusted).
 
 ### Secure design principles
 
-Here are a number of secure design principles,
-including the 8 principles from
-[Saltzer and Schroeder](http://web.mit.edu/Saltzer/www/publications/protection/),
-showing that we apply many secure design principles including
-all of the ones from Saltzer and Schroeder:
+Applying various secure design principles helps us avoid
+security problems in the first place.
+The most widely-used list of security design principles, and
+one we build on, is the list developed by
+[Saltzer and Schroeder](http://web.mit.edu/Saltzer/www/publications/protection/).
+
+Here are a number of secure design principles and how we follow them,
+including all 8 principles from
+[Saltzer and Schroeder](http://web.mit.edu/Saltzer/www/publications/protection/):
 
 - Economy of mechanism (keep the design as simple and small as practical,
   e.g., by adopting sweeping simplifications).
@@ -315,19 +334,6 @@ all of the ones from Saltzer and Schroeder:
   application is just looking for the presence or absence of certain
   data patterns, and never executes data from the project.
 
-### Memory-safe languages
-
-All of the custom code is written in memory-safe languages
-(Ruby and JavaScript), so the vulnerabilities of memory-unsafe
-languages (such as C and C++) cannot occur in the custom code.
-This also applies to most of the code in the directly depended libraries.
-Some lower-level components (e.g., the operating system kernel,
-database management system, encryption library, and some of the Ruby gems)
-do have C/C++, but these are widely used components where we have
-good reason to believe that developers are directly working to mitigate
-the problems from memory-unsafe languages.
-See the section below on supply chain (reuse) for more.
-
 ### Availability through scaleability
 
 Availability is, as always, especially challenging.
@@ -361,26 +367,45 @@ Thus, this site doesn't seem as likely a target for a long-term DDoS
 attack, and there is not much else we can do to counter DDoS
 by an attacker with signficant resources.
 
+### Memory-safe languages
+
+All of the custom code is written in memory-safe languages
+(Ruby and JavaScript), so the vulnerabilities of memory-unsafe
+languages (such as C and C++) cannot occur in the custom code.
+This also applies to most of the code in the directly depended libraries.
+
+Some lower-level reused components (e.g., the operating system kernel,
+database management system, encryption library, and some of the Ruby gems)
+do have C/C++, but these are widely used components where we have
+good reason to believe that developers are directly working to mitigate
+the problems from memory-unsafe languages.
+See the section below on supply chain (reuse) for more.
+
 ## Security in Implementation
+
+Most implementation vulnerabilities are due to common types
+of implementation errors or common misconfigurations,
+so countering them greatly reduces security risks.
 
 To reduce the risk of security vulnerabilities in implementation we
 have focused on countering the
-[OWASP Top 10 (2013)](https://www.owasp.org/index.php/Top_10_2013-Top_10),
-apply the
-[Ruby on Rails Security Guide](http://guides.rubyonrails.org/security.html)
-to configure the software correctly,
-and we have also taken steps to harden the application.
+[OWASP Top 10 (2013)](https://www.owasp.org/index.php/Top_10_2013-Top_10).
+To counter common misconfigurations, we apply the
+[Ruby on Rails Security Guide](http://guides.rubyonrails.org/security.html).
+We have also taken steps to harden the application.
 Below is how we've done each, in turn.
 
-### Countering OWASP top 10
+### Common implementation vulnerability types countered (OWASP top 10)
 
 The
 [OWASP Top 10 (2013)](https://www.owasp.org/index.php/Top_10_2013-Top_10)
 ([details](https://www.owasp.org/index.php/Category:OWASP_Top_Ten_Project))
 represents "a broad consensus about what the most
 critical web application security flaws are."
-We concentrate on countering them; by focusing on them,
-we address all of the most critical and common flaws.
+We address all of them.  By ensuring that we address all of them,
+we address all of the most critical and common flaws for
+this we application.
+
 Here are the OWASP top 10
 and how we attempt to reduce their risks in BadgeApp.
 
@@ -442,16 +467,19 @@ and how we attempt to reduce their risks in BadgeApp.
 10. Unvalidated Redirects and Forwards.
    Redirects and forwards are not used significantly, and they are validated.
 
-### Ruby on Rails Security Guide
+### Common misconfiguration errors countered: Ruby on Rails Security Guide
 
-This application uses Ruby on Rails.
+A common problems with applications is misconfiguration.
+
+This application is built on Ruby on Rails.
 The Ruby on Rails developers provide a
 [Ruby on Rails Security Guide](http://guides.rubyonrails.org/security.html),
 which identifies what they believe are the most important areas to
 check for securing such applications.
-Since this is focused on the infrastructure we use, we think this is
+Since this guide is focused on the infrastructure we use, we think this is
 the most important guide for us to focus on.
-Here are comments on how we apply the guide, per its chapters
+We apply the entire guide.
+Here is a discussion on how we apply the entire guide, per its chapters
 as of 2015-12-14:
 
 1. *Introduction.* N/A.
@@ -579,106 +607,57 @@ as of 2015-12-14:
 
 We also use various mechanisms to harden the system against attack;
 these attempt to thwart or slow attack even if the system has a vulnerability.
-We use the [secure_headers](https://github.com/twitter/secureheaders) gem
-(developed by Twitter) to enable
-a number of HTTP headers for hardening.
-This includes a Content Security Policy (CSP) header with just
-"normal sources" (normal_src).
 
-In addition, in production "config.force_ssl" is set to true.
-This enables a number of hardening mechanisms in Rails, including
-HTTP Strict Transport Security (HSTS),
-TLS redirection, and secure cookies.
-See
-["Rails, Secure Cookies, HSTS and friends" by Ilija Eftimov (2015-12-14)](http://eftimov.net/rails-tls-hsts-cookies)
-for more about the impact of force_ssl.
-
-When we upgraded to Rails 5 we enabled two additional
-security hardening mechanisms that it added;
-both counter cross-site request forgery (CSRF).
-These are:
-
-* Enable per-form CSRF tokens.
+* We harden the HTTP headers, including the use of a
+  restrictive Content Security Policy (CSP) header with just
+  "normal sources" (normal_src).
+  CSP is perhaps one of the most important hardening items,
+  since it prevents execution of injected JavaScript).
+  The HTTP headers are hardened via the
+  [secure_headers](https://github.com/twitter/secureheaders) gem,
+  developed by Twitter to enable a number of HTTP headers for hardening.
+* We force the use of HTTPS, including via HSTS.
+  The "coreinfrastructure.org" domain is included in
+  [Chrome's HTTP Strict Transport Security (HSTS) preload list](https://hstspreload.org/?domain=coreinfrastructure.org).
+  This is a list of sites that are hardcoded into Chrome as being HTTPS only
+  (some other browsers also use this list), so in many cases browsers
+  will automatically use HTTPS (even if HTTP is requested).
+  If the web brower uses HTTP anyway,
+  our CDN (Fastly) is configured to redirect HTTP to HTTPS.
+  If our CDN is misconfigured or skipped for some reason, the application
+  will also redirect the user from HTTP to HTTPS if queried directly.
+  This is because in production "config.force_ssl" is set to true,
+  which enables a number of hardening mechanisms in Rails, including
+  TLS redirection (which redirects HTTP to HTTPS), secure cookies,
+  and HTTP Strict Transport Security (HSTS).
+  HSTS tells browsers to always use HTTPS in the future for this site,
+  so once the user contacts the site once, it will use HTTPS in the future.
+  See
+  ["Rails, Secure Cookies, HSTS and friends" by Ilija Eftimov (2015-12-14)](http://eftimov.net/rails-tls-hsts-cookies)
+  for more about the impact of force_ssl.
+* We enable per-form CSRF tokens, a Rails 5 addition.
   (Rails.application.config.action_controller.per_form_csrf_tokens)
-* Enable origin-checking CSRF mitigation.
+* We enable origin-checking CSRF mitigation, a Rails 5 addition.
   (Rails.application.config.action_controller.forgery_protection_origin_check)
-
-We take many steps to ensure that users will use HTTPS (which
-is authenticated and encrypted), and not the unencrypted HTTP protocol.
-The "coreinfrastructure.org" domain is included in
-[Chrome's HTTP Strict Transport Security (HSTS) preload list](https://hstspreload.org/?domain=coreinfrastructure.org).
-This is a list of sites that are hardcoded into Chrome as being HTTPS only
-(some other browsers also use this list).
-In addition, we redirect HTTP requests to HTTPS (in production).
-Once users use HTTPS
-they will receive the HTTP Strict Transport Security (HSTS) information
-that will tell their web browser to always use HTTPS in the future.
-This is configured via our CDN (Fastly) to redirect HTTP to HTTPS
-(this has to be done by the CDN, since it intercepts the requests first).
-If our CDN is misconfigured or skipped for some reason, the application
-will also redirect the user from HTTP to HTTPS if queried directly.
-
-We send reminder emails to projects that have not updated their
-badge entry in a long time. The detailed algorithm that prioritizes projects
-is in "app/models/project.rb" class method "self.projects_to_remind".
-It sorts by reminder date, so we always cycle through before returning to
-a previously-reminded project.  We have a hard rate limit on the number
-of emails we will send out each time; this keeps us from looking like
-a spammer.
-
-## Security in Verification
-
-When software is modified, it is reviewed by the
-'rake' process, which performs a number of checks and tests.
-Modifications integrated into the master branch
-are further automatically checked.
-See [CONTRIBUTING.md](../CONTRIBUTING.md) for more information;
-the following is a brief summary of how our verification process
-helps make the software more secure.
-
-We intentionally make the code relatively short and clean to ease review.
-We use rubocop (Ruby code style checker) and rails_best_practices
-and work to have no warnings in the code
-(typically by fixing the problem, though in some cases we will annotate
-in the code that we're allowing an exception).
-These style tools help us avoid more problematic constructs (in some cases
-avoiding defects that might lead to vulnerabilities), and
-also make the code easier to review
-(by both humans and other programs).
-Our style checking tools detect misleading indentation;
-<a href="http://www.dwheeler.com/essays/apple-goto-fail.html#indentation">this
-counters the mistake in the Apple goto fail vulnerability</a>.
-
-The 'rake' process also uses brakeman,
-a static source code analysis that focuses
-on finding security issues in Ruby on Rails applications.
-
-The software has a strong test suite, with over 90% statement coverage.
-This makes it easier to update components (e.g., if a third-party component
-has a publicly disclosed vulnerability).
-The test suite also makes it easier to make other fixes (e.g., to harden
-something) and have fairly high
-confidence that the change did not break functionality.
-It can also counter some vulnerabilities, e.g.,
-<a href="http://www.dwheeler.com/essays/apple-goto-fail.html#coverage">Apple's
-goto fail vulnerability would have been detected has they
-checked statement coverage</a>.
-
-We work to enable third-party review.
-We release the custom software as Free/Libre and open source software (FLOSS),
-using a well-known FLOSS license (MIT).
-
-We have briefly experimented with using the "dawnscanner" security scanner.
-We have decided to not add dawnscanner to the set of scanners that we
-routinely use.
-See the [dawnscanner.md](./dawnscanner.md) file for more information.
-
-These steps cannot *guarantee* that there are no vulnerabilities,
-but we think they greatly reduce the risks.
+* We enable rate limits on reminder emails.
+  We send reminder emails to projects that have not updated their
+  badge entry in a long time. The detailed algorithm that prioritizes projects
+  is in "app/models/project.rb" class method "self.projects_to_remind".
+  It sorts by reminder date, so we always cycle through before returning to
+  a previously-reminded project.  We have a hard rate limit on the number
+  of emails we will send out each time; this keeps us from looking like
+  a spammer.
 
 ## Supply chain (reuse)
 
-## Review before use
+Like all modern software, we reuse components developed by others.
+We can't eliminate all risks, and
+if we rewrote all the software (instead of reusing software)
+we would risk creating vulnerabilities in own code.
+See [CONTRIBUTING.md](../CONTRIBUTING.md) for more about how we
+reduce the risks of reused code.
+
+### Review before use
 
 We consider the code we reuse
 (e.g., libraries and frameworks) before adding them, to reduce
@@ -686,6 +665,9 @@ the risk of unintentional and intentional vulnerabilities from them.
 In particular, we prefer the use of popular components (where problems
 are more likely to be identified and addressed).
 In some cases we review the code ourselves.
+
+We require that all components that are *required* for use
+have FLOSS licenses.  This enables review by us and by others.
 
 We prefer common FLOSS licenses.
 A FLOSS component with a rarely-used license, particularly a
@@ -696,7 +678,7 @@ We use license_finder to ensure that the licenses are what we expect,
 and that the licenses do not change to something unexpected later
 in later versions.
 
-## Auto-detect vulnerabilities when publicly reported (and speedily respond)
+### Auto-detect vulnerabilities when publicly reported (and speedily respond)
 
 We have a process for automatically detecting when the components we use
 have publicly known vulnerabilities or are out-of-date, and
@@ -744,44 +726,83 @@ In less than an hour from the time the vulnerability
 was publicly reported we were alerted,
 updated the library, ran the full test suite, and deployed the fixed version.
 
-## MITM Countered
+### MITM countered when obtaining reused components
 
 We counter man-in-the-middle (MITM) attacks when downloading gems
 because the Gemfile configuration uses an HTTPS source to the
 standard place for loading gems (<https://rubygems.org>).
 
-## Other risk reduction measures for third-party components
+## Security in Verification
 
-These steps reduce the risk of malicious components
-(e.g., malicious gems).
+When software is modified, it is reviewed by the
+'rake' process, which performs a number of checks and tests.
+Modifications integrated into the master branch
+are further automatically checked.
+See [CONTRIBUTING.md](../CONTRIBUTING.md) for more information.
 
-We can't eliminate all risks, and
-if we rewrote all the software (instead of reusing software)
-we would risk creating vulnerabilities in own code.
-See [CONTRIBUTING.md](../CONTRIBUTING.md) for more about how we
-reduce the risks of reused code.
+The following is a brief summary of part of our verification process,
+and how it helps make the software more secure:
 
-## Security of the development environment
+* Style checking tools.
+  We intentionally make the code relatively short and clean to ease review
+  by both humans and other tools.
+  We use rubocop (a Ruby code style checker), rails_best_practices
+  (a style checker specific to Rails), and ESLint
+  (a style checker for JavaScript).
+  We work to have no warnings in the code,
+  typically by fixing the problem, though in some cases we will annotate
+  in the code that we're allowing an exception.
+  These style tools help us avoid more problematic constructs (in some cases
+  avoiding defects that might lead to vulnerabilities), and
+  also make the code easier to review
+  (by both humans and other programs).
+  Our style checking tools detect misleading indentation;
+  <a href="http://www.dwheeler.com/essays/apple-goto-fail.html#indentation">this
+  counters the mistake in the Apple goto fail vulnerability</a>.
+* Security vulnerability scanner (for new vulnerabilities).
+  We use brakeman, a static source code analysis that focuses
+  on finding security issues in Ruby on Rails applications.
+  Note that this is separate from the automatic detection of
+  third-party components with publicly-known vulnerabilities
+  (see the supply chain discussion above for how we counter those).
+* FLOSS.  Reviewability is important for security.
+  All the required reused components are FLOSS, and our
+  custom software is released as Free/Libre and open source software (FLOSS)
+  using a well-known FLOSS license (MIT).
+* The software has a strong test suite; our policy requires
+  at least 90% statement coverage (and in practice our coverage is higher).
+  This makes it easier to update components (e.g., if a third-party component
+  has a publicly disclosed vulnerability).
+  The test suite also makes it easier to make other fixes (e.g., to harden
+  something) and have fairly high
+  confidence that the change did not break functionality.
+  It can also counter some vulnerabilities, e.g.,
+  <a href="http://www.dwheeler.com/essays/apple-goto-fail.html#coverage">Apple's
+  goto fail vulnerability would have been detected had they
+  checked statement coverage</a>.
 
-Subversion of the development environment can easily lead to
-a compromise of the resulting system.
-The key developers use development environments
-specifically configured to be secure.
+We have briefly experimented with using the "dawnscanner" security scanner.
+We have decided to *not* add dawnscanner to the set of scanners that we
+routinely use, because it doesn't really add any value in our particular
+situation.
+See the [dawnscanner.md](./dawnscanner.md) file for more information.
 
-As noted earlier, we are cautious about the components we use.
-The source code is managed on GitHub;
-[GitHub takes steps to keep itself secure](https://help.github.com/articles/github-security/).
-
-The installation process, as described in the INSTALL.md file,
-includes a few steps to counter some attacks.
-In particular,
-we use the git integrity recommendations from Eric Myhre that check all
-git objects transferred from an external site into our development environment.
-This sets "fsckObjects = true" for transfer (thus also for fetch and receive).
+These steps cannot *guarantee* that there are no vulnerabilities,
+but we think they greatly reduce the risks.
 
 ## Deployment and operations
 
-Of course, it has to be secure as actually deployed.
+To be secure, the software has to be secure as actually deployed.
+Our deployment provider takes steps to be secure.
+Online checkers of our deployed site suggest that we have
+a secure site.
+In addition, we have detection and recovery processes
+that help us limit damage.
+
+### Deployment provider
+
+We deploy via a cloud provider who takes a number of steps
+to keep our system secure.
 We currently use Heroku for deployment; see the
 [Heroku security policy](https://www.heroku.com/policy/security)
 for some information on how they manage security
@@ -828,11 +849,15 @@ For the main bestpractices.coreinfrastructure.org site we have:
 
 ### Detection
 
+We have various detection mechanisms to detect problems.
 There are two approaches to detection:
 * internal (which has access to our internal information, such as logs)
 * external (which does not have access to internal information)
 
-We use both approaches.  The external approaches do not have access
+We use *both* detection approaches.
+We tend to focus on the internal approach, which has more information
+available to it.
+The external approaches do not have access
 to as much information, but they see the site as a "typical" user
 would, so combining these approaches has its advantages.
 
@@ -842,19 +867,46 @@ This is a [12 factor app](https://12factor.net/); as such,
 events are streamed to standard out for logging.
 We use the "rails_12factor" to ensure that all Rails logs go to
 standard out, and then use standard Heroku logging mechanisms.
+The logs then go out to other components for further analysis.
+
 We intentionally omit here, in this public document, details about
-how logs are stored and how anomaly detection is done.
+how logs are stored and how anomaly detection is done to
+detect and counter things.
 
 #### External
 
-We are alerted if the website goes down via uptime robot:
+We are also alerted if the website goes down.
 
-https://uptimerobot.com/dashboard
+One of those mechanisms is uptime robot:
+<https://uptimerobot.com/dashboard>
 
 ### Recovery
 
-We backup the database daily.
+We backup the database daily, and archive many versions so
+we can restore from them.
 See the [Heroku site](https://devcenter.heroku.com/articles/heroku-postgres-backups#scheduled-backups-retention-limits) for retention times.
+
+The update process to the "staging" site backs up the production site
+to the staging site.  This provides an additional backup, and also
+serves as a check to make sure the backup process is working.
+
+## Security of the development environment
+
+Subversion of the development environment can easily lead to
+a compromise of the resulting system.
+The key developers use development environments
+specifically configured to be secure.
+
+As noted earlier, we are cautious about the components we use.
+The source code is managed on GitHub;
+[GitHub takes steps to keep itself secure](https://help.github.com/articles/github-security/).
+
+The installation process, as described in the INSTALL.md file,
+includes a few steps to counter some attacks.
+In particular,
+we use the git integrity recommendations from Eric Myhre that check all
+git objects transferred from an external site into our development environment.
+This sets "fsckObjects = true" for transfer (thus also for fetch and receive).
 
 ## People
 

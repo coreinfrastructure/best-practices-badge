@@ -28,15 +28,15 @@ class UsersController < ApplicationController
     else
       @user = User.new(user_params)
       @user.provider = 'local'
-      if password_valid?(user_params[:password])
+      if User.password_valid?(user_params[:password])
         if @user.save
           send_activation
         else
           render 'new'
-      else 
-        flash.now[:warning] = 'Your password does not meet our new
-                               requirements.  We strongly suggest you 
-                               change it.'
+        end
+      else
+        flash.now[:warning] = 'Your password does not meet our
+                               complexity/lenght requirements.'
       end
     end
   end
@@ -47,15 +47,22 @@ class UsersController < ApplicationController
     redirect_to @user unless @user.provider == 'local'
   end
 
+  # rubocop: disable Metrics/MethodLength Metrics/AbcSize
   def update
     @user = User.find(params[:id])
-    if @user.update_attributes(user_params)
+    if !@user.password_valid?(user_params[:password])
+      flash.now[:danger] =
+        'Your new password does not meet our
+        complexity/length requirements.'
+      render 'edit'
+    elsif @user.update_attributes(user_params)
       flash[:success] = 'Profile updated'
       redirect_to @user
     else
       render 'edit'
     end
   end
+  # rubocop: enable Metrics/MethodLength Metrics/AbcSize
 
   def destroy
     User.find(params[:id]).destroy

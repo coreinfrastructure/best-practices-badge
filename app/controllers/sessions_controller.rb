@@ -49,7 +49,7 @@ class SessionsController < ApplicationController
     if user.activated?
       log_in user
       params[:session][:remember_me] == '1' ? remember(user) : forget(user)
-      if password_valid?(params[:session][:password])
+      if user.password_valid?(params[:session][:password])
         redirect_back_or root_url
         flash[:success] = 'Signed in!'
       else

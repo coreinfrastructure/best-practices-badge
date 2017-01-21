@@ -47,8 +47,8 @@ class User < ActiveRecord::Base
   end
 
   def password_valid?(password)
-    return false if password < MIN_PASSWORD_LENGTH
-    !BadPasswordSet.include?(value.downcase)
+    return false if password.length < MIN_PASSWORD_LENGTH
+    !BadPasswordSet.include?(password.downcase)
   end
 
   # Sets the password reset attributes.

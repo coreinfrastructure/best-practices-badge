@@ -5,13 +5,12 @@ class User < ActiveRecord::Base
   attr_accessor :remember_token, :activation_token, :reset_token
   before_create :create_activation_digest
 
-  MIN_PASSWORD_LENGTH = 7
+  MIN_PASSWORD_LENGTH = 8
 
   validates :name, presence: true, length: { maximum: 50 }
   validates :email, presence: true, length: { maximum: 255 },
                     uniqueness: { case_sensitive: false }, email: true
   validates :password, presence: true,
-                       length: { minimum: MIN_PASSWORD_LENGTH },
                        allow_nil: true
 
   # Returns the hash digest of the given string.
@@ -45,6 +44,11 @@ class User < ActiveRecord::Base
   # Sends activation email.
   def send_activation_email
     UserMailer.account_activation(self).deliver_now
+  end
+
+  def password_valid?(password)
+    return false if password < MIN_PASSWORD_LENGTH
+    !BadPasswordSet.include?(value.downcase)
   end
 
   # Sets the password reset attributes.

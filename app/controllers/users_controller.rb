@@ -28,10 +28,15 @@ class UsersController < ApplicationController
     else
       @user = User.new(user_params)
       @user.provider = 'local'
-      if @user.save
-        send_activation
-      else
-        render 'new'
+      if password_valid?(user_params[:password])
+        if @user.save
+          send_activation
+        else
+          render 'new'
+      else 
+        flash.now[:warning] = 'Your password does not meet our new
+                               requirements.  We strongly suggest you 
+                               change it.'
       end
     end
   end

@@ -48,9 +48,15 @@ class SessionsController < ApplicationController
   def local_login_procedure(user)
     if user.activated?
       log_in user
-      redirect_back_or root_url
-      flash[:success] = 'Signed in!'
       params[:session][:remember_me] == '1' ? remember(user) : forget(user)
+      if password_valid?(params[:session][:password])
+        redirect_back_or root_url
+        flash[:success] = 'Signed in!'
+      else
+        flash[:warning] = 'Your password does not meet our new requirements.
+                           We strongly suggest you change it.'
+        redirect_to edit_user_path(user)
+      end
     else
       flash[:warning] = 'Account not activated.
                          Check your email for the activation link.'

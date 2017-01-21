@@ -51,7 +51,7 @@ group :development, :test do
   gem 'pry-byebug', '3.4.2'
   gem 'rubocop', '0.46.0' # Style checker.  Changes can cause test failure
   gem 'ruby-graphviz', '1.2.2'
-  gem 'spring', '2.0.0'
+  gem 'spring', '2.0.1'
   gem 'vcr', '3.0.3' # Record network responses for later test reuse
   gem 'yaml-lint', '0.0.9' # Check YAML file syntax
 end

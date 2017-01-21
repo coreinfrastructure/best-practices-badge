@@ -46,9 +46,10 @@ class User < ActiveRecord::Base
     UserMailer.account_activation(self).deliver_now
   end
 
-  def password_valid?(password)
-    return false if password.length < MIN_PASSWORD_LENGTH
-    !BadPasswordSet.include?(password.downcase)
+  def password_valid?(value)
+    return true if value.blank?
+    return false if value.length < MIN_PASSWORD_LENGTH
+    !BadPasswordSet.include?(value.downcase)
   end
 
   # Sets the password reset attributes.

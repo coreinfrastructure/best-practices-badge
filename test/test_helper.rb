@@ -132,7 +132,7 @@ module ActiveSupport
     # Using "password" helps test that users can log in to their
     # existing accounts, even if we make the password rules harsher later.
     def log_in_as(
-      user, password: 'password', provider: 'local', remember_me: '1',
+      user, password: 'pa$$word', provider: 'local', remember_me: '1',
       time_last_used: Time.now.utc
     )
       # This is based on "Ruby on Rails Tutorial" by Michael Hargle, chapter 8,

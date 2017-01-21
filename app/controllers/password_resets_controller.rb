@@ -23,7 +23,7 @@ class PasswordResetsController < ApplicationController
     if params[:user][:password].empty?
       @user.errors.add(:password, 'can\'t be empty')
       render 'edit'
-    elsif !@user.valid_password?(params[:user][:password])
+    elsif !@user.password_valid?(params[:user][:password])
       @user.errors.add(
         :password,
         'doesnt meet our complexity/length requirements'

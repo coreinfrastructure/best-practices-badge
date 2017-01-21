@@ -75,7 +75,7 @@ class UserTest < ActiveSupport::TestCase
 
   test 'password should have a minimum length' do
     @user.password = @user.password_confirmation = 'a' * 6
-    assert_not @user.valid?
+    assert_not @user.password_valid?(@user.password)
   end
 
   test 'associated projects should be destroyed' do

@@ -54,8 +54,8 @@ class SessionsController < ApplicationController
         redirect_back_or root_url
         flash[:success] = 'Signed in!'
       else
-        flash[:warning] = 'Your password does not meet our new requirements.
-                           We strongly suggest you change it.'
+        flash[:danger] = 'Your password does not meet our new requirements.
+                          We strongly suggest you change it.'
         redirect_to edit_user_path(user)
       end
     else

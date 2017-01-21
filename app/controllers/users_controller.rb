@@ -20,7 +20,7 @@ class UsersController < ApplicationController
     @edit_projects = Project.where(repo_url: github_user_projects) - @projects
   end
 
-  # rubocop: disable Metrics/MethodLength
+  # rubocop: disable Metrics/MethodLength,Metrics/AbcSize
   def create
     @user = User.find_by(email: user_params[:email])
     if @user
@@ -28,19 +28,20 @@ class UsersController < ApplicationController
     else
       @user = User.new(user_params)
       @user.provider = 'local'
-      if User.password_valid?(user_params[:password])
+      if @user.password_valid?(user_params[:password])
         if @user.save
           send_activation
         else
           render 'new'
         end
       else
-        flash.now[:warning] = 'Your password does not meet our
-                               complexity/lenght requirements.'
+        flash.now[:danger] = 'Your password does not meet our
+                              complexity/length requirements.'
+        render 'new'
       end
     end
   end
-  # rubocop: enable Metrics/MethodLength
+  # rubocop: enable Metrics/MethodLength,Metrics/AbcSize
 
   def edit
     @user = User.find(params[:id])
@@ -53,7 +54,7 @@ class UsersController < ApplicationController
     if !@user.password_valid?(user_params[:password])
       flash.now[:danger] =
         'Your new password does not meet our
-        complexity/length requirements.'
+         complexity/length requirements.'
       render 'edit'
     elsif @user.update_attributes(user_params)
       flash[:success] = 'Profile updated'

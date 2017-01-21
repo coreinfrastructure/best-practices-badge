@@ -15,10 +15,11 @@ task(:default).clear.enhance %w(
   whitespace_check
   yaml_syntax_check
   html_from_markdown
-  fasterer
   eslint
   test
 )
+# Temporarily removed fasterer
+# Waiting for Ruby 2.4 support: https://github.com/seattlerb/ruby_parser/issues/239
 
 task(:ci).clear.enhance %w(
   rbenv_rvm_setup
@@ -28,8 +29,8 @@ task(:ci).clear.enhance %w(
   license_finder_report.html
   whitespace_check
   yaml_syntax_check
-  fasterer
 )
+# Temporarily removed fasterer
 
 # Simple smoke test to avoid development environment misconfiguration
 desc 'Ensure that rbenv or rvm are set up in PATH'

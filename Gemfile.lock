@@ -7,13 +7,6 @@ GIT
       fastly (~> 1.6)
       mime-types (>= 1.16, < 3)
 
-GIT
-  remote: https://github.com/flori/json
-  revision: c7a6e31f3abde6efbf0629dea68b43bebb62c94a
-  ref: c7a6e31
-  specs:
-    json (1.8.5)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -167,6 +160,7 @@ GEM
       thor (>= 0.14, < 2.0)
     jquery-ui-rails (6.0.1)
       railties (>= 3.2.16)
+    json (1.8.6)
     jwt (1.5.6)
     kaminari (1.0.1)
       activesupport (>= 4.1.0)
@@ -457,7 +451,7 @@ DEPENDENCIES
   jbuilder (= 2.6.1)
   jquery-rails (= 4.2.2)
   jquery-ui-rails (= 6.0.1)
-  json!
+  json (= 1.8.6)
   license_finder (= 2.1.2)
   mdl (= 0.4.0)
   minitest-rails-capybara (= 3.0.0)

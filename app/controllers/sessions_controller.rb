@@ -2,8 +2,7 @@
 class SessionsController < ApplicationController
   include SessionsHelper
 
-  def new
-  end
+  def new; end
 
   def create
     reset_session # Counter session fixation
@@ -27,7 +26,7 @@ class SessionsController < ApplicationController
 
   def local_login
     user = User.find_by provider: 'local',
-                        email: params[:session][:email].downcase
+                        email: params[:session][:email]
     if user && user.authenticate(params[:session][:password])
       local_login_procedure(user)
     else

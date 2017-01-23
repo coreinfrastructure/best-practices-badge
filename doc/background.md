@@ -100,6 +100,8 @@ includes references to some other guides.
 
 *   [US Government OSS best practices](http://government.github.io/best-practices/) - a collection of guidelines from some in the US federal government
 
+* [A Maturity Model for Apache Projects](http://community.apache.org/apache-way/apache-project-maturity-model.html)
+
 ## Methods for evaluating FLOSS projects
 
 There are a number of complete processes specifically for evaluating FLOSS

@@ -4,6 +4,8 @@ class Project < ActiveRecord::Base
   using StringRefinements
   using SymbolRefinements
 
+  include PgSearch # PostgreSQL-specific text search
+
   BADGE_STATUSES = [
     ['All', nil],
     ['Passing (100%)', 100],
@@ -19,8 +21,8 @@ class Project < ActiveRecord::Base
   MAX_SHORT_STRING_LENGTH = 254 # Arbitrary maximum to reduce abuse
 
   PROJECT_OTHER_FIELDS = %i(
-    name description homepage_url cpe
-    license general_comments user_id
+    name description homepage_url repo_url cpe implementation_languages
+    license general_comments user_id disabled_reminders lock_version
   ).freeze
   ALL_CRITERIA_STATUS = Criteria.map { |c| c.name.status }.freeze
   ALL_CRITERIA_JUSTIFICATION = Criteria.map { |c| c.name.justification }.freeze
@@ -57,6 +59,7 @@ class Project < ActiveRecord::Base
     end
   )
 
+  # prefix query (old search system)
   scope :text_search, (
     lambda do |text|
       start_text = "#{sanitize_sql_like(text)}%"
@@ -68,6 +71,15 @@ class Project < ActiveRecord::Base
         )
       )
     end
+  )
+
+  # Use PostgreSQL-specific text search mechanism
+  # There are many options we aren't currently using; for more info, see:
+  # https://github.com/Casecommons/pg_search
+  pg_search_scope(
+    :search_for,
+    against: %i(name homepage_url repo_url description)
+    # using: { tsearch: { any_word: true } }
   )
 
   scope :updated_since, (
@@ -84,13 +96,18 @@ class Project < ActiveRecord::Base
 
   # A project is associated with a user
   belongs_to :user
-  delegate :name, to: :user, prefix: true
+  delegate :name, to: :user, prefix: true # Support "user_name"
+  delegate :nickname, to: :user, prefix: true # Support "user_nickname"
 
   # For these fields we'll have just simple validation rules.
   # We'll rely on Rails' HTML escaping system to counter XSS.
-  validates :name, length: { maximum: MAX_SHORT_STRING_LENGTH }
-  validates :description, length: { maximum: MAX_TEXT_LENGTH }
-  validates :license, length: { maximum: MAX_SHORT_STRING_LENGTH }
+  validates :name, length: { maximum: MAX_SHORT_STRING_LENGTH },
+                   text: true
+  validates :description, length: { maximum: MAX_TEXT_LENGTH },
+                          text: true
+  validates :license, length: { maximum: MAX_SHORT_STRING_LENGTH },
+                      text: true
+  validates :general_comments, text: true
 
   # We'll do automated analysis on these URLs, which means we will *download*
   # from URLs provided by untrusted users.  Thus we'll add additional
@@ -103,6 +120,21 @@ class Project < ActiveRecord::Base
             url: true,
             length: { maximum: MAX_SHORT_STRING_LENGTH }
   validate :need_a_base_url
+
+  # Comma-separated list.  This is very generous in what characters it
+  # allows in a language name, but restricts it to ASCII and omits
+  # problematic characters that are very unlikely in a name like
+  # <, >, &, ", brackets, and braces.  This handles language names like
+  # JavaScript, C++, C#, D-, and PL/I.  A space is optional after a comma.
+  VALID_LANGUAGE_LIST = %r{\A(|-|
+                          ([A-Za-z0-9!\#$%'()*+.\/\:;=?@\[\]^~-]+
+                            (,\ ?[A-Za-z0-9!\#$%'()*+.\/\:;=?@\[\]^~-]+)*))\Z}x
+  validates :implementation_languages,
+            length: { maximum: MAX_SHORT_STRING_LENGTH },
+            format: {
+              with: VALID_LANGUAGE_LIST,
+              message: 'Must a comma-separated list of names'
+            }
 
   validates :cpe,
             length: { maximum: MAX_SHORT_STRING_LENGTH },
@@ -117,7 +149,9 @@ class Project < ActiveRecord::Base
     else
       validates criterion.name.status, inclusion: { in: STATUS_CHOICE }
     end
-    validates criterion.name.justification, length: { maximum: MAX_TEXT_LENGTH }
+    validates criterion.name.justification,
+              length: { maximum: MAX_TEXT_LENGTH },
+              text: true
   end
 
   def badge_level
@@ -158,6 +192,87 @@ class Project < ActiveRecord::Base
     elsif badge_percentage < 100 && old_badge_percentage == 100
       self.lost_passing_at = Time.now.utc
     end
+  end
+
+  # The following configuration options are trusted.  Set them to
+  # reasonable numbers or accept the defaults.
+
+  # Maximum number of reminders to send by email at one time.
+  # We want a rate limit to avoid being misinterpreted as a spammer,
+  # and also to limit damage if there's a mistake in the code.
+  # By default, start very low until we're confident in the code.
+  MAX_REMINDERS = (ENV['BADGEAPP_MAX_REMINDERS'] || 2).to_i
+
+  # Minimum number of days since last lost a badge before sending reminder,
+  # if it lost one.
+  LOST_PASSING_REMINDER = (ENV['BADGEAPP_LOST_PASSING_REMINDER'] || 30).to_i
+
+  # Minimum number of days since project last updated before sending reminder
+  LAST_UPDATED_REMINDER = (ENV['BADGEAPP_LAST_UPDATED_REMINDER'] || 30).to_i
+
+  # Minimum number of days since project was last sent a reminder
+  LAST_SENT_REMINDER = (ENV['BADGEAPP_LAST_SENT_REMINDER'] || 60).to_i
+
+  # Return which projects should be reminded to work on their badges.  See:
+  # https://github.com/linuxfoundation/cii-best-practices-badge/issues/487
+  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  def self.projects_to_remind
+    # This is computed entirely using the ActiveRecord query interface
+    # as a single select+sort+limit, and not implemented using methods or
+    # direct SQL commands. Using the ActiveRecord query interface will turn
+    # this directly into a single database request, which will be blazingly
+    # fast regardless of the database size (via the indexes). Method
+    # invocations would be super-slow, and direct SQL commands will be less
+    # portable than ActiveRecord's interface (which works to paper over
+    # differences between SQL engines).
+    #
+    # Select projects eligible for reminders =
+    #   in_progress and not_recently_lost_badge and not_disabled_reminders
+    #   and inactive and not_recently_reminded and valid_email.
+    # where these terms are defined as:
+    #   in_progress = badge_percentage less than 100%.
+    #   not_recently_lost_badge = lost_passing_at IS NULL OR
+    #     less than LOST_PASSING_REMINDER (30) days ago
+    #   not_disabled_reminders = not(project.disabled_reminders), default false
+    #   inactive = updated_at is LAST_UPDATED_REMINDER (30) days ago or more
+    #   not_recently_reminded = last_reminder_at IS NULL OR
+    #     more than 60 days ago. Notice that if recently_reminded is null
+    #     (no reminders have been sent), only the other criteria matter.
+    #   valid_email = user_id.email (joined) is not null and includes "@"
+    # Prioritize. Sort by the last_reminder_at datetime
+    #   (use updated_at if last_reminder_at is null), oldest first.
+    #   Since last_reminder_at gets updated with a newer datetime when
+    #   we send a message, each email we send will lower its reminder
+    #   priority. Thus we will eventually cycle through all inactive projects
+    #   if none of them respond to reminders.
+    #   Use: projects.order("COALESCE(last_reminder_at, updated_at)")
+    Project
+      .select('projects.*, users.email as user_email')
+      .where('badge_percentage < 100')
+      .where('lost_passing_at IS NULL OR lost_passing_at < ?',
+             LOST_PASSING_REMINDER.days.ago)
+      .where('disabled_reminders = FALSE')
+      .where('projects.updated_at < ?',
+             LAST_UPDATED_REMINDER.days.ago)
+      .where('last_reminder_at IS NULL OR last_reminder_at < ?',
+             LAST_SENT_REMINDER.days.ago)
+      .joins(:user).references(:user) # Need this to check email address
+      .where('user_id IS NOT NULL') # Safety check
+      .where('users.email IS NOT NULL')
+      .where('users.email LIKE \'%@%\'') # We can't send emails without '@'
+      .reorder('COALESCE(last_reminder_at, projects.updated_at)')
+      .first(MAX_REMINDERS)
+  end
+  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
+
+  # Return owning user's name for purposes of display.
+  def user_display_name
+    user_name || user_nickname
+  end
+
+  # Send owner an email they add a new project.
+  def send_new_project_email
+    ReportMailer.email_new_project_owner(self).deliver_now
   end
 
   private

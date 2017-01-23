@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 class User < ActiveRecord::Base
-  before_save { self.email = email.downcase }
   has_secure_password
   has_many :projects, dependent: :destroy
   attr_accessor :remember_token, :activation_token, :reset_token
@@ -12,7 +11,8 @@ class User < ActiveRecord::Base
   validates :email, presence: true, length: { maximum: 255 },
                     uniqueness: { case_sensitive: false }, email: true
   validates :password, presence: true,
-                       length: { minimum: MIN_PASSWORD_LENGTH }, allow_nil: true
+                       length: { minimum: MIN_PASSWORD_LENGTH },
+                       allow_nil: true
 
   # Returns the hash digest of the given string.
   def self.digest(string)
@@ -32,6 +32,7 @@ class User < ActiveRecord::Base
       nickname: auth[:info][:nickname], activated: true
     )
     @user.save!(validate: false)
+    @user.send_github_welcome_email if @user.email
     @user
   end
 
@@ -56,6 +57,11 @@ class User < ActiveRecord::Base
   # Sends password reset email.
   def send_password_reset_email
     UserMailer.password_reset(self).deliver_now
+  end
+
+  # Sends welcome email to GitHub users.
+  def send_github_welcome_email
+    UserMailer.github_welcome(self).deliver_now
   end
 
   def admin?
@@ -88,6 +94,16 @@ class User < ActiveRecord::Base
   # Returns true if a password reset has expired.
   def password_reset_expired?
     reset_sent_at < 2.hours.ago
+  end
+
+  # Returns avatar URL
+  def avatar_url
+    if provider == 'github'
+      "https://avatars.githubusercontent.com/#{nickname}?size=80"
+    else
+      avatar_id = Digest::MD5.hexdigest(email.downcase)
+      "https://secure.gravatar.com/avatar/#{avatar_id}?d=mm&size=80"
+    end
   end
 
   private

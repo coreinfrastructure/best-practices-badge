@@ -1,7 +1,7 @@
 # If you modify this file, also modify file: lib/tasks/default.rake
 #
 # Unfortunately the "eslintrb" gem doesn't pay attention to this
-# .eslintignore file.  So to ignore Javascript files when running ESLint,
+# .eslintignore file.  So to ignore JavaScript files when running ESLint,
 # you need to modify both this .eslintignore file (for pronto)
 # and the rake file (for the eslintrb gem).
 #

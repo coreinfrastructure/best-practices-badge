@@ -6,7 +6,8 @@
 [![CircleCI Build Status](https://circleci.com/gh/linuxfoundation/cii-best-practices-badge.svg?&style=shield&circle-token=ca450ac150523030464677a1aa7f3cacfb8b3472)](https://circleci.com/gh/linuxfoundation/cii-best-practices-badge)
 [![codecov](https://codecov.io/gh/linuxfoundation/cii-best-practices-badge/branch/master/graph/badge.svg)](https://codecov.io/gh/linuxfoundation/cii-best-practices-badge)
 [![Dependency Status](https://gemnasium.com/linuxfoundation/cii-best-practices-badge.svg)](https://gemnasium.com/linuxfoundation/cii-best-practices-badge)
-[![License](http://img.shields.io/:license-mit-blue.svg?style=flat-square)](http://badges.mit-license.org)
+[![License](https://img.shields.io/:license-mit-blue.svg)](https://badges.mit-license.org)
+[![Changelog #215](https://img.shields.io/badge/changelog-%23215-lightgrey.svg)](https://changelog.com/215)
 
 This project identifies best practices for
 Free/Libre and Open Source Software (FLOSS)

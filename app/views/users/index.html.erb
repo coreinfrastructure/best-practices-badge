@@ -6,7 +6,7 @@
 <ul class="users">
   <% @users.each do |user| %>
     <li>
-      <%= gravatar_for user %>
+      <%= avatar_for user %>
       <%= link_to user.name, user %>
       <% if current_user&.admin? %>
         <% if user.email? %>

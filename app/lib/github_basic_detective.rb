@@ -60,6 +60,7 @@ class GithubBasicDetective < Detective
     # e.g.: https://github.com/linuxfoundation/cii-best-practices-badge
     # Note: this limits what's accepted, otherwise we'd have to worry
     # about URL escaping.
+    # rubocop:disable Metrics/BlockLength
     repo_url.match(
       %r{\Ahttps://github.com/([A-Za-z0-9_.-]+)/([A-Za-z0-9_.-]+)/?\Z}
     ) do |m|
@@ -123,6 +124,7 @@ class GithubBasicDetective < Detective
           }
         end
       end
+      # rubocop:enable Metrics/BlockLength
 
       # We'll ask GitHub what the license is.  This is a "preview"
       # API subject to change without notice, and doesn't do much analysis,

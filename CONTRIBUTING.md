@@ -76,7 +76,7 @@ Another way to do this is to write the following at the end of the commit
 message, on a line by itself separated by a blank line from the body of
 the commit:
 
-    Signed-off-by: YOUR NAME &lt;YOUR.EMAIL@EXAMPLE.COM&gt;
+    Signed-off-by: YOUR NAME <YOUR.EMAIL@EXAMPLE.COM>
 
 You can signoff by default in this project by creating a file
 (say "git-template") that contains
@@ -190,7 +190,7 @@ clear, and obviously correct.
 Some technical debt is inevitable, just don't bankrupt us with it.
 Improved refactorizations are welcome.
 
-Always ensure that all Javascript and CSS styles are
+Always ensure that all JavaScript and CSS styles are
 in *separate* files, do not embed them in the HTML.
 That includes any generated HTML.
 That way we can use CSP entries
@@ -205,7 +205,8 @@ Please generally follow the
 [community Ruby style guide](https://github.com/bbatsov/ruby-style-guide)
 and the complementary
 [community Rails style guide](https://github.com/bbatsov/rails-style-guide).
-We don't follow them slavishly, but we do generally try to follow them.
+Our continous integration setups runs Rubocop on each commit to ensure they're
+being followed.
 For example, in Ruby:
 
 * [use two-space indents](https://github.com/bbatsov/ruby-style-guide#spaces-indentation)
@@ -268,16 +269,21 @@ You may use the safe navigation operator '&amp;.' added in
 Our static analysis tools' parsers can now handle this syntax.
 This means that this application *requires* Ruby version 2.3.0 or later to run.
 
-### Javascript
+When making new tests, if you need to modify the setup or teardown methods for a
+test class, please use callbacks instead of overwrites; i.e.  use "setup do"
+instead of "def setup."  This preserves any changes to those methods that
+may have been made in test_helper.rb.
 
-There is a small amount of application-specific client-side Javascript;
-by convention custom client-side Javascript is in "app/assets/javascripts/".
+### JavaScript
 
-This is written in Javascript, not CoffeeScript;
-it's only a small amount of Javascript, so the advantages of
+There is a small amount of application-specific client-side JavaScript;
+by convention custom client-side JavaScript is in "app/assets/javascripts/".
+
+This is written in JavaScript, not CoffeeScript;
+it's only a small amount of JavaScript, so the advantages of
 CoffeeScript aren't
-obvious, and far more people know basic Javascript than CoffeeScript.
-Our Javascript coding style is based on the
+obvious, and far more people know basic JavaScript than CoffeeScript.
+Our JavaScript coding style is based on the
 [Node.js style guide](https://github.com/felixge/node-style-guide).
 In particular, we use
 2-space indents, terminating semicolons, camelCase, required braces,
@@ -285,11 +291,11 @@ and '===' (never '==') for string comparison,
 These coding style rules are checked by ESLint
 (see .eslintrc for the rule list).
 
-Always put Javascript (and CSS styles) in *separate* files, do not
-embed Javascript in the HTML.  That way we can use CSP entries
+Always put JavaScript (and CSS styles) in *separate* files, do not
+embed JavaScript in the HTML.  That way we can use CSP entries
 that harden the program against security attacks.
 
-If you edit the Javascript, beware of ready events.
+If you edit the JavaScript, beware of ready events.
 Rails' turbolinks gem claims that it
 ["works great with the jQuery framework"](https://github.com/rails/turbolinks),
 but this is misleading.
@@ -368,8 +374,8 @@ check the software:
 9. *yaml_syntax_check* - checks syntax of YAML (.yml) files.
    Note that the automated test suite includes a number of specific
    checks on the criteria.yml file.
-10. *fasterer* - report on Ruby constructs with poor performance
-11. *eslint* - Perform code style check on Javascript using eslint
+10. *fasterer* - report on Ruby constructs with poor performance (temporarily disabled until it supports Ruby 2.4)
+11. *eslint* - Perform code style check on JavaScript using eslint
 12. *test* - run the automated test suite
 
 Running "rake test" (the automated test suite) will show
@@ -394,8 +400,8 @@ the default "rake" checking task:
 * OWASP ZAP web application security scanner.
   You are encouraged to use this and other web application scanners to find and
   fix problems.
-* JSCS (Javascript style checker) using the Node.js format.
-* JSHint (Javascript error detector)
+* JSCS (JavaScript style checker) using the Node.js format.
+* JSHint (JavaScript error detector)
 * W3C link checker <https://validator.w3.org/checklink>
 * W3C markup validation service <https://validator.w3.org/>
 
@@ -450,7 +456,7 @@ For any reused software, here are a few general rules:
   appears to be currently maintained (e.g., has recent updates),
   has more than one developer, and appears to be applying good practices
 * In general, prefer a Rails-specific gem over a generic Ruby gem, and
-  for Javascript Node.js packages prefer a Ruby gem that repackages it.
+  for JavaScript Node.js packages prefer a Ruby gem that repackages it.
   The repackage will often help make it work more cleanly
   with the Rails application, and it also suggests that the package is
   a more common one (and thus more likely to be maintained).
@@ -508,7 +514,7 @@ transitively.
 In short, we have strong package management
 over the exact versions used for each gem, and we
 can easily update our dependencies.
-That's important, because transitively depend on over 150 gems.
+That's important, because we transitively depend on over 150 gems.
 
 The default 'rake' task includes the rake 'bundle_audit' task.
 This reports if a Ruby gem we use has a publicly known

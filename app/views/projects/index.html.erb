@@ -12,14 +12,14 @@
                html: { class: 'project_search' } do %>
     <%= label_tag :badge_status %>
     <%= select_tag(:gteq, options_for_select(Project::BADGE_STATUSES,
-                   params[:gteq]), onchange: 'this.form.submit();') %>
+                   params[:gteq]), class: 'onchange-submit') %>
     &nbsp; &nbsp; &nbsp;
     <%= label_tag :exclude_passing %>
-    <%= check_box_tag :lteq, '99', params[:lteq], onchange: 'this.form.submit();' %>
+    <%= check_box_tag :lteq, '99', params[:lteq], class: 'onchange-submit' %>
     &nbsp; &nbsp; &nbsp;
     <%= label_tag :text_search %>
     <%= text_field_tag :q, params[:q], size: 25,
-                       placeholder: 'Name or URL begins with...' %>
+                       placeholder: 'Name or description text'%>
     <%= submit_tag 'Search', name: nil %>
     &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
     <%= link_to image_tag('feed-icon-28x28', width: '28', height: '28'), feed_path %>

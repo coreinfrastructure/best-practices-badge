@@ -2,7 +2,7 @@
 require 'test_helper'
 
 class NameFromUrlDetectiveTest < ActiveSupport::TestCase
-  def setup
+  setup do
     @evidence = Evidence.new({})
   end
 

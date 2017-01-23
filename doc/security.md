@@ -23,6 +23,7 @@ These figures are in Claims, Arguments and Evidence (CAE) notation,
 which is a simple notation often used for assurance cases.
 Ovals are claims or sub-claims, while rounded rectangles are the supporting
 arguments justifying the claims.
+The figures are simply a summary; the text below provides the details.
 
 Our overall security approach is called
 defense-in-breadth, that is, we consider
@@ -450,13 +451,7 @@ and how we attempt to reduce their risks in BadgeApp.
    All other requests go through routers and controllers,
    which determine what may be accessed.
 5. Security Misconfiguration.
-   We have strived to enable secure defaults from the start.
-   We use a number of external scanning programs to detect common
-   HTTPS misconfiguration problems (see below).
-   In addition, we use brakeman, which can detect
-   some misconfigurations in Rails applications.
-   This is invoked by the default 'rake' task.
-   In addition, our continuous integrattion task reruns brakeman.
+   See the section on [countering misconfiguration](#misconfiguration).
 6. Sensitive Data Exposure.
    We generally do not store sensitive data; the data about projects
    is intended to be public.  The only sensitive data we centrally store are
@@ -477,15 +472,26 @@ and how we attempt to reduce their risks in BadgeApp.
    We detect components with publicly known vulnerabilities
    using bundle-audit and gemnasium.
    These use the Gemfile* and National Vulnerability Database (NVD) data.
-   For more information, see the "supply chain" section.
+   For more information, see the "[supply chain](#supply-chain)" section.
 10. Unvalidated Redirects and Forwards.
    Redirects and forwards are not used significantly, and they are validated.
 
-### Common misconfiguration errors countered: Ruby on Rails Security Guide
+### <a name="misconfiguration"></a>Common misconfiguration errors countered: Ruby on Rails Security Guide
 
-A common problems with applications is misconfiguration.
-We counter this by identifying the most-relevant security guide
-available, and the applying it.
+A common security problem with applications is misconfiguration;
+here is how we reduce the risks from misconfiguration.
+
+We take a number of steps to counter misconfiguration.
+We have strived to enable secure defaults from the start.
+We use a number of [external online checkers](#online-checkers)
+to detect common HTTPS misconfiguration problems (see below).
+We use brakeman, which can detect
+some misconfigurations in Rails applications.
+Brakeman is invoked by the default 'rake' task,
+and our continuous integration task reruns brakeman.
+
+However, our primary mechanism for countering misconfigurations is by
+identifying and apply ing the most-relevant security guide available.
 
 This entire application is built on Ruby on Rails.
 The Ruby on Rails developers provide a
@@ -518,8 +524,6 @@ as of 2015-12-14:
    "config.force_ssl" to true).
    The design allows users to drop cookies at any time
    (at worse they may have to re-login to get another session cookie).
-   Passwords may be stored in a cookie, but this is encrypted and the
-   password is *not* retained on the server (it stays on the web browser).
    One complaint about Rails' traditional CookieStore is that if someone
    gets a copy of a session cookie, they can log in as that user, even
    if the cookie is years old and the user logged out.
@@ -668,7 +672,7 @@ these attempt to thwart or slow attack even if the system has a vulnerability.
   of emails we will send out each time; this keeps us from looking like
   a spammer.
 
-## Supply chain (reuse)
+## <a name="supply-chain"></a>Supply chain (reuse)
 
 Like all modern software, we reuse components developed by others.
 We can't eliminate all risks, and
@@ -785,6 +789,7 @@ and how it helps make the software more secure:
   Note that this is separate from the automatic detection of
   third-party components with publicly-known vulnerabilities
   (see the supply chain discussion above for how we counter those).
+  [supply chain](#supply-chain)
 * FLOSS.  Reviewability is important for security.
   All the required reused components are FLOSS, and our
   custom software is released as Free/Libre and open source software (FLOSS)
@@ -837,7 +842,7 @@ People can log in via GitHub accounts; in those cases we depend
 on GitHub to correctly authenticate users.
 [GitHub takes steps to keep itself secure](https://help.github.com/articles/github-security/).
 
-### Online checkers
+### <a name="online-checkers"></a>Online checkers
 
 Various online checkers give us an overall clean bill of health.
 Most of the checkers test our HTTPS (TLS) configuration and
@@ -986,4 +991,3 @@ that actually do the work of hardening.
 Please report potential vulnerabilities you find.
 See [CONTRIBUTING.md](../CONTRIBUTING.md) for how to submit
 a vulnerability report.
-

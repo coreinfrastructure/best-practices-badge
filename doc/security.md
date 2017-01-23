@@ -333,12 +333,15 @@ including all 8 principles from
   All project parameters are checked by the model, in particular,
   status values (the key values used for badges) are checked against
   a whitelist of values allowed for that criterion.
-  There are a number of freetext fields
-  (name, license, and the justifications);
-  each have a maximum length to limit some abuses.
-  These checks for maximum length do not by themselves counter certain attacks;
+  There are a number of freetext fields (name, license, and the
+  justifications); since they are freetext these are the hardest
+  to whitelist.
+  That said, we even impose restrictions on freetext, in particular,
+  they must be valid UTF-8, they must not include control characters
+  (other than \\n and \\r), and they have maximum lengths.
+  These checks by themselves cannot counter certain attacks;
   see the text on security in implementation for the discussion on
-  how the application counters SQL injection, XSS, and CSRF attacks.
+  how this application counters SQL injection, XSS, and CSRF attacks.
   URLs are also limited by length and a whitelisted regex, which counters
   some kinds of attacks.
   When project data (new or edited) is provided, all proposed status values

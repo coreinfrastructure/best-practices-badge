@@ -51,6 +51,7 @@ class GithubLoginTest < CapybaraFeatureTest
       # Next two lines give a quick coverage increase in session_helper.rb
       click_on 'Projects'
       click_on 'Pathfinder OS'
+      refute has_content? 'Edit'
 
       if ENV['GITHUB_PASSWORD'] # revoke OAuth authorization
         visit 'https://github.com/settings/applications'

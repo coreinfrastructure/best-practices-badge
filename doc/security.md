@@ -718,27 +718,32 @@ updated set, so we can rapidly update libraries, test the result, and
 deploy it.
 
 We detect components with publicly known vulnerabilities
-using bundle-audit and gemnasium.
-These use the Gemfile* files and National Vulnerability Database (NVD) data.
-We use bundle-audit, which compares our gem libraries to a database
-of versions with known vulnerabilities, and gemnasium
-The default 'rake' task invokes bundle-audit, so every time we run
-"rake" we are alerted about publicly known vulnerabilities in the
-components we depend on (directly or not).
-
-We also use a gemnasium-based badge that warns us when there is an
-out-of-date direct dependency as well vulnerable direct dependencies; see
-[it](https://gemnasium.com/linuxfoundation/cii-best-practices-badge)
-for more information.
+using both bundle-audit and gemnasium.
+These use the Gemfile* files and National Vulnerability Database (NVD) data:
+* bundle-audit compares the entire set of gems (libraries),
+  both direct and indirect dependencies, to a database
+  of versions with known vulnerabilities.
+  This is a more complete analysis compared to Gemnasium.
+  The default 'rake' task invokes bundle-audit, so every time we run
+  "rake" we are alerted about publicly known vulnerabilities in the
+  components we depend on (directly or not).
+* Gemnasium warns us when there are vulnerable or
+  out-of-date direct dependencies.  Gemnasium only looks at the
+  direct dependencies (Gemfile, not Gemfile.lock).
+  The BadgeApp Gemnasium badge provides a quick view of the
+  current state, and links to the
+  [Badgeapp Gemnasium page](https://gemnasium.com/linuxfoundation/cii-best-practices-badge)
+  for more information.
 
 We have also optimized the component update process through
 using the package manager (bundler) and high test coverage.
 The files Gemfile and Gemfile.lock
 identify the current versions of Ruby gems (Gemfile identifies direct
 dependencies; Gemfile.lock includes all transitive dependencies and
-the exact version numbers).  We can update libraries by
+the exact version numbers).  We can rapidly update libraries by
 updating those files, running "bundle install", and then using "rake"
-to run various checks including a robust test suite.
+to run various automated checks including a robust test suite.
+Once those pass, we can immediately field the results.
 
 This approach is known to work.
 Commit fdb83380aa71352
@@ -783,13 +788,12 @@ and how it helps make the software more secure:
   Our style checking tools detect misleading indentation;
   <a href="http://www.dwheeler.com/essays/apple-goto-fail.html#indentation">this
   counters the mistake in the Apple goto fail vulnerability</a>.
-* Security vulnerability scanner (for new vulnerabilities).
-  We use brakeman, a static source code analysis that focuses
+* Security vulnerability scanner (for finding new vulnerabilities).
+  We use brakeman, a static source code analyzer that focuses
   on finding security issues in Ruby on Rails applications.
   Note that this is separate from the automatic detection of
-  third-party components with publicly-known vulnerabilities
-  (see the supply chain discussion above for how we counter those).
-  [supply chain](#supply-chain)
+  third-party components with publicly-known vulnerabilities;
+  see the [supply chain](#supply-chain) section for how we counter those.
 * FLOSS.  Reviewability is important for security.
   All the required reused components are FLOSS, and our
   custom software is released as Free/Libre and open source software (FLOSS)

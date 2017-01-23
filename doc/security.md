@@ -724,6 +724,7 @@ deploy it.
 We detect components with publicly known vulnerabilities
 using both bundle-audit and gemnasium.
 These use the Gemfile* files and National Vulnerability Database (NVD) data:
+
 * bundle-audit compares the entire set of gems (libraries),
   both direct and indirect dependencies, to a database
   of versions with known vulnerabilities.

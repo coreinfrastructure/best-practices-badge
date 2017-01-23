@@ -508,6 +508,6 @@ http_interactions:
         = '';\r\n\tbf_idsite = 6603;\r\n\tbf_url = pkBaseURL+'bf/bf.php';\r\n\tsetTimeout('bf_log(\"'
         + bf_action_name+'\",'+ bf_idsite+',\"'+ bf_url +'\")',0);\r\n\t//-->\r\n\t</script></a>\r\n\t<!--
         LeadFormix -->\r\n\r\n    \n        <div id='foot_stripe'>&nbsp;</div>\n    </body>\n</html>\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\n\n\n\t\n"
-    http_version: 
+    http_version:
   recorded_at: Wed, 15 Jun 2016 14:51:57 GMT
 recorded_with: VCR 3.0.3

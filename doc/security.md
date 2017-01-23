@@ -381,7 +381,7 @@ then-current data will stay available until the system recovers.
 A determined attacker with significant resources could disable the
 system through a distributed denial-of-service (DDoS) attack.
 However, this site doesn't have any particular political agenda,
-and taking it down is unlikely to provide monitary gain.
+and taking it down is unlikely to provide monetary gain.
 Thus, this site doesn't seem as likely a target for a long-term DDoS
 attack, and there is not much else we can do to counter DDoS
 by an attacker with signficant resources.

@@ -47,7 +47,7 @@ class GithubLoginTest < CapybaraFeatureTest
       click_on 'Account'
       assert has_content? 'Profile'
       click_on 'Profile'
-      assert has_content? 'CII Test'
+      assert has_content? 'Core Infrastructure Initiative Best Practices Badge'
 
       if ENV['GITHUB_PASSWORD'] # revoke OAuth authorization
         visit 'https://github.com/settings/applications'

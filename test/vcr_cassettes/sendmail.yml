@@ -19,7 +19,7 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Thu, 02 Jun 2016 20:16:53 GMT
+      - Wed, 15 Jun 2016 14:51:58 GMT
       Server:
       - Apache
       Transfer-Encoding:
@@ -358,17 +358,17 @@ http_interactions:
         ul { margin-top:1.6em;list-style-type: none; margin-left:4em;padding-left:0;
         } \r\n        #news_banner li { margin-bottom:3.5em; } \r\n    </style>\r\n
         \   <div style='text-align:left;height:10em;overflow:hidden;text-align:left;margin:.8em;margin-top:1em;
-        margin-bottom:0em;'>\r\n        \n        <style type=\"text/css\">\n\n.b1997761471,
-        .b2997761471, .b3997761471, .b4997761471{font-size:1px; overflow:hidden; display:block;}\n.b1997761471
-        {height:1px; background:#888; margin:0 5px;}\n.b2997761471 {height:1px; background:#3d6db5;
-        border-right:2px solid #888; border-left:2px solid #888; margin:0 3px;}\n.b3997761471
+        margin-bottom:0em;'>\r\n        \n        <style type=\"text/css\">\n\n.b141663873,
+        .b241663873, .b341663873, .b441663873{font-size:1px; overflow:hidden; display:block;}\n.b141663873
+        {height:1px; background:#888; margin:0 5px;}\n.b241663873 {height:1px; background:#3d6db5;
+        border-right:2px solid #888; border-left:2px solid #888; margin:0 3px;}\n.b341663873
         {height:1px; background:#3d6db5; border-right:1px solid #888; border-left:1px
-        solid #888; margin:0 2px;}\n.b4997761471 {height:2px; background:#3d6db5;
-        border-right:1px solid #888; border-left:1px solid #888; margin:0 1px;}\n.contentb997761471
-        {background: #3d6db5; border-right:1px solid #888; border-left:1px solid #888;}\n.contentb997761471
+        solid #888; margin:0 2px;}\n.b441663873 {height:2px; background:#3d6db5; border-right:1px
+        solid #888; border-left:1px solid #888; margin:0 1px;}\n.contentb41663873
+        {background: #3d6db5; border-right:1px solid #888; border-left:1px solid #888;}\n.contentb41663873
         div {margin-left: 0px;}\n        </style>\n        \n            <div style=\"width:960px\">\n\t
-        \           <b class=\"b1997761471\"></b><b class=\"b2997761471\"></b><b class=\"b3997761471\"></b><b
-        class=\"b4997761471\"></b>\n\t            <div class=\"contentb997761471\">\n\t\t
+        \           <b class=\"b141663873\"></b><b class=\"b241663873\"></b><b class=\"b341663873\"></b><b
+        class=\"b441663873\"></b>\n\t            <div class=\"contentb41663873\">\n\t\t
         \           <div style=\"padding:0px\">\n        \r\n                <div
         id='news_banner'>\r\n                    <a href='http://www.proofpoint.com/about-us/press-releases/10012013.php'>\r\n
         \                   <span style='font-weight:bold; font-size:16pt;'>Proofpoint,
@@ -376,8 +376,8 @@ http_interactions:
         MTA technology bolsters<br>\r\n                    Proofpoint&rsquo;s leading
         position in enterprise security and messaging</span>\r\n                    </a>\r\n
         \               </div>\r\n            \n\t\t            </div>\n\t            </div>\n\t
-        \           <b class=\"b4997761471\"></b><b class=\"b3997761471\"></b><b class=\"b2997761471\"></b><b
-        class=\"b1997761471\"></b>\n            </div>\n            </div>\r\n\r\n
+        \           <b class=\"b441663873\"></b><b class=\"b341663873\"></b><b class=\"b241663873\"></b><b
+        class=\"b141663873\"></b>\n            </div>\n            </div>\r\n\r\n
         \   <div style='clear:both;'></div>\r\n\r\n    <div class='multi_box_wrap'>\r\n
         \       <!-- top box, first module 70/30 split -->\r\n        <!-- div id='box_648x288'
         -->\r\n        <div id='box_648x400' style='overflow:hidden;'>\r\n            <!--
@@ -508,6 +508,6 @@ http_interactions:
         = '';\r\n\tbf_idsite = 6603;\r\n\tbf_url = pkBaseURL+'bf/bf.php';\r\n\tsetTimeout('bf_log(\"'
         + bf_action_name+'\",'+ bf_idsite+',\"'+ bf_url +'\")',0);\r\n\t//-->\r\n\t</script></a>\r\n\t<!--
         LeadFormix -->\r\n\r\n    \n        <div id='foot_stripe'>&nbsp;</div>\n    </body>\n</html>\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\n\n\n\t\n"
-    http_version: 
-  recorded_at: Thu, 02 Jun 2016 20:16:54 GMT
+    http_version:
+  recorded_at: Wed, 15 Jun 2016 14:51:57 GMT
 recorded_with: VCR 3.0.3

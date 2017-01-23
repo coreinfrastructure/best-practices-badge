@@ -85,11 +85,24 @@ how we implement these requirements):
       which we do protect specially:
           - User passwords are only stored on the server as
             iterated salted hashes (using bcrypt).
-          - Passwords may also be stored in encrypted user cookies,
-            but the decrypted passwords are not stored on the server's
-            database, and users can choose whether or not to store
-            passwords in encrypted cookies (using the "remember me"
-            box implemented in commit e79decec67).
+          - Users may choose to "remember me" to automatically re-login on
+            that specific browser if they use a local account.
+            This is implemented using a
+            cryptographically random nonce stored in the user's cookie store
+            which acts like a password, which is verified against a
+            remember_digest value stored in the server
+            that is an iterated salted hash (using bcrypt).
+            This "remember me" functionality cannot reveal the user's
+            original password, and if the server's user database is
+            compromised an attacker cannot easily find the nonce.
+            The nonce is protected in transit by HTTPS (discussed elsewhere).
+            The user_id stored by the user is signed by the server.
+            As with any system, the "remember me" functionality has a
+            weakness: if the user's system is compromised, others can log
+            in as that user.  But this is fundamental to any "remember me"
+            functionality, and users must opt in to this functionality.
+            The "remember me" box was originally implemented
+            in commit e79decec67.
           - Email addresses are only revealed to the logged-in owner and
             administrators. We do store email addresses;
             we need those for various purposes
@@ -201,7 +214,7 @@ applying secure design principles,
 limiting memory-unsafe language use, and
 increasing availability through scaleability.
 
-### Simple design
+### <a name="simple-design"></a>Simple design
 
 This web application has a simple design.
 It is a standard Ruby on Rails design with models, views, and controllers.
@@ -250,7 +263,8 @@ including all 8 principles from
 
 - Economy of mechanism (keep the design as simple and small as practical,
   e.g., by adopting sweeping simplifications).
-  We discuss this in more detail in the earlier section "simple design".
+  We discuss this in more detail in the section
+  "[simple design](#simple-design)".
 - Fail-safe defaults (access decisions should deny by default):
   Access decisions are deny by default.
 - Complete mediation (every access that might be limited must be
@@ -470,14 +484,17 @@ and how we attempt to reduce their risks in BadgeApp.
 ### Common misconfiguration errors countered: Ruby on Rails Security Guide
 
 A common problems with applications is misconfiguration.
+We counter this by identifying the most-relevant security guide
+available, and the applying it.
 
-This application is built on Ruby on Rails.
+This entire application is built on Ruby on Rails.
 The Ruby on Rails developers provide a
 [Ruby on Rails Security Guide](http://guides.rubyonrails.org/security.html),
 which identifies what they believe are the most important areas to
 check for securing such applications.
 Since this guide is focused on the infrastructure we use, we think this is
 the most important guide for us to focus on.
+
 We apply the entire guide.
 Here is a discussion on how we apply the entire guide, per its chapters
 as of 2015-12-14:
@@ -601,7 +618,10 @@ as of 2015-12-14:
 9. *Default Headers.*
    We use at least the default security HTTP headers,
    which help counter some attacks.
-   In many cases we harden the headers further.
+   We harden the headers further, in particular via the
+   [secure_headers](https://github.com/twitter/secureheaders) gem.
+   For example, we use a restrictive Content Security Policy (CSP) header.
+   For more information, see the hardening section.
 
 ### Hardening
 
@@ -812,6 +832,10 @@ which on the production system is Postgres.
 Anyone can create a Heroku application and run it on Heroku, however,
 at that point we trust the Postgres developers and the Heroku administrators
 to keep the databases separate.
+
+People can log in via GitHub accounts; in those cases we depend
+on GitHub to correctly authenticate users.
+[GitHub takes steps to keep itself secure](https://help.github.com/articles/github-security/).
 
 ### Online checkers
 

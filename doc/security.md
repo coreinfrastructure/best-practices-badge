@@ -84,36 +84,37 @@ how we implement these requirements):
     - Non-public data is kept confidential.  Non-public data is currently
       unencrypted user passwords and user email addresses,
       which we do protect specially:
-          - User passwords are only stored on the server as
-            iterated salted hashes (using bcrypt).
-          - Users may choose to "remember me" to automatically re-login on
-            that specific browser if they use a local account.
-            This is implemented using a
-            cryptographically random nonce stored in the user's cookie store
-            which acts like a password, which is verified against a
-            remember_digest value stored in the server
-            that is an iterated salted hash (using bcrypt).
-            This "remember me" functionality cannot reveal the user's
-            original password, and if the server's user database is
-            compromised an attacker cannot easily find the nonce.
-            The nonce is protected in transit by HTTPS (discussed elsewhere).
-            The user_id stored by the user is signed by the server.
-            As with any system, the "remember me" functionality has a
-            weakness: if the user's system is compromised, others can log
-            in as that user.  But this is fundamental to any "remember me"
-            functionality, and users must opt in to this functionality.
-            The "remember me" box was originally implemented
-            in commit e79decec67.
-          - Email addresses are only revealed to the logged-in owner and
-            administrators. We do store email addresses;
-            we need those for various purposes
-            (e.g., contact badge entry owners for clarification).
-            We will strive to not reveal user email addresses to others
-            (with the exception of administrators, who can see them).
-          - HTTPS is used to encrypt all communications between users
-            and the application; this protects the confidentiality of
-            all data in motion.
-            There's no need to worry about covert channels.
+        - User passwords are only stored on the server as
+          iterated salted hashes (using bcrypt).
+        - Users may choose to "remember me" to automatically re-login on
+          that specific browser if they use a local account.
+          This is implemented using a
+          cryptographically random nonce stored in the user's cookie store
+          which acts like a password, which is verified against a
+          remember_digest value stored in the server
+          that is an iterated salted hash (using bcrypt).
+          This "remember me" functionality cannot reveal the user's
+          original password, and if the server's user database is
+          compromised an attacker cannot easily find the nonce.
+          The nonce is protected in transit by HTTPS (discussed elsewhere).
+          The user_id stored by the user is signed by the server.
+          As with any system, the "remember me" functionality has a
+          weakness: if the user's system is compromised, others can log
+          in as that user.  But this is fundamental to any "remember me"
+          functionality, and users must opt in to enable "remember me"
+          (by default users must enter their password on each login).
+          The "remember me" box was originally implemented
+          in commit e79decec67.
+        - Email addresses are only revealed to the logged-in owner and
+          administrators. We do store email addresses;
+          we need those for various purposes
+          (e.g., contact badge entry owners for clarification).
+          We will strive to not reveal user email addresses to others
+          (with the exception of administrators, who can see them).
+        - HTTPS is used to encrypt all communications between users
+          and the application; this protects the confidentiality of
+          all data in motion.
+          There's no need to worry about covert channels.
 - Integrity:
     - HTTPS is used to protect the integrity of all communications between users
       and the application, as well as to authenticate the server

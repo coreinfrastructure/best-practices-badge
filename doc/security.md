@@ -78,7 +78,7 @@ export to .png so that it can viewed on GitHub.)
 Here is what BadgeApp must do to be secure (and a few comments about
 how we implement these requirements):
 
-- Confidentiality:
+* Confidentiality:
     - Almost all data is considered public, e.g., all project data
       and who owns the records, so we don't need to keep those confidential.
     - Non-public data is kept confidential.  Non-public data is currently
@@ -115,7 +115,7 @@ how we implement these requirements):
           and the application; this protects the confidentiality of
           all data in motion.
           There's no need to worry about covert channels.
-- Integrity:
+* Integrity:
     - HTTPS is used to protect the integrity of all communications between users
       and the application, as well as to authenticate the server
       to the user.
@@ -128,7 +128,7 @@ how we implement these requirements):
       authentication via GitHub.
       We use GitHub for managing the source code and issue tracker; it
       has an authentication system for this purpose.
-- Availability:
+* Availability:
     - As with any publicly-accessible website,
       we cannot prevent someone with significant
       resources from overwhelming the system.
@@ -263,13 +263,13 @@ Here are a number of secure design principles and how we follow them,
 including all 8 principles from
 [Saltzer and Schroeder](http://web.mit.edu/Saltzer/www/publications/protection/):
 
-- Economy of mechanism (keep the design as simple and small as practical,
+* Economy of mechanism (keep the design as simple and small as practical,
   e.g., by adopting sweeping simplifications).
   We discuss this in more detail in the section
   "[simple design](#simple-design)".
-- Fail-safe defaults (access decisions should deny by default):
+* Fail-safe defaults (access decisions should deny by default):
   Access decisions are deny by default.
-- Complete mediation (every access that might be limited must be
+* Complete mediation (every access that might be limited must be
   checked for authority and be non-bypassable):
   Every access that might be limited is checked for authority and
   non-bypassable.  Security checks are in the controllers, not the router,
@@ -279,23 +279,23 @@ including all 8 principles from
   the badge has been achieved, but the client-side code is *not* the
   final authority (it's merely a convenience).  The final arbiter of
   badge acceptance is server-side code, which is not bypassable.
-- Open design (security mechanisms should not depend on attacker
+* Open design (security mechanisms should not depend on attacker
   ignorance of its design, but instead on more easily protected and
   changed information like keys and passwords):
   The entire program is open source software and subject to inspection.
   Keys are kept in separate files not included in the public repository.
-- Separation of privilege (multi-factor authentication,
+* Separation of privilege (multi-factor authentication,
   such as requiring both a password and a hardware token,
   is stronger than single-factor authentication):
   We don't use multi-factor authentication because the risks from compromise
   are smaller compared to many other systems
   (it's almost entirely public data, and failures generally can be recovered
   through backups).
-- Least privilege (processes should operate with the
+* Least privilege (processes should operate with the
   least privilege necesssary): The application runs as a normal user,
   not a privileged user like "root".  It must have read/write access to
   its database, so it has that privilege.
-- Least common mechanism (the design should minimize the mechanisms
+* Least common mechanism (the design should minimize the mechanisms
   common to more than one user and depended on by all users,
   e.g., directories for temporary files):
   No shared temporary directory is used.  Each time a new request is made,
@@ -303,12 +303,12 @@ including all 8 principles from
   as well as minimizing mechanisms common to more than one user.
   The database is shared, but each table row has access control implemented
   which limits sharing to those authorized to share.
-- Psychological acceptability
+* Psychological acceptability
   (the human interface must be designed for ease of use,
   designing for "least astonishment" can help):
   The application presents a simple login and "fill in the form"
   interface, so it should be acceptable.
-- Limited attack surface (the attack surface, the set of the different
+* Limited attack surface (the attack surface, the set of the different
   points where an attacker can try to enter or extract data, should be limited):
   The application has a limited attack surface.
   As with all Ruby on Rails applications, all access must go through the
@@ -318,7 +318,7 @@ including all 8 principles from
   Many of the operations use numeric ids (e.g., which project), which are
   simply numbers (limiting the opportunity for attack because numbers are
   trivial to validate).
-- Input validation with whitelists
+* Input validation with whitelists
   (inputs should typically be checked to determine if they are valid
   before they are accepted; this validation should use whitelists
   (which only accept known-good values),

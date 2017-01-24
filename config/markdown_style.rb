@@ -10,6 +10,9 @@ exclude_tag :line_length
 
 # For the moment we'll disable many rules to make it easier to get started.
 # The current plan is to slowly remove many of these over time.
+# Rule MD004 requires that unordered lists use a consistent marking, but it
+# has no way to enforce the rule "* at the topmost level, - at the next one".
+# Having all levels with the same symbol is confusing, so we exclude the rule.
 exclude_rule 'MD004'
 exclude_rule 'MD005'
 exclude_rule 'MD007'

@@ -63,11 +63,11 @@ You also need a version of git installed.
 If you don't already have it set up, install it using your system installation
 tools, e.g., at the command line:
 
-- <kbd>sudo apt-get install git</kbd> (Debian, Ubuntu)
-- <kbd>yum install git</kbd> (Red Hat Enterprise Linux, CentOS, older Fedora)
-- <kbd>dnf install git</kbd> (newer Fedora)
-- <kbd>emerge install git</kbd> (Gentoo)
-- <kbd>brew install git</kbd> (MacOS)
+* <kbd>sudo apt-get install git</kbd> (Debian, Ubuntu)
+* <kbd>yum install git</kbd> (Red Hat Enterprise Linux, CentOS, older Fedora)
+* <kbd>dnf install git</kbd> (newer Fedora)
+* <kbd>emerge install git</kbd> (Gentoo)
+* <kbd>brew install git</kbd> (MacOS)
 
 ## Forking the repo
 

@@ -46,25 +46,25 @@ for general discussion.
 This is a summary of the criteria, with requirements in bold
 (for details, see the [full list of criteria](doc/criteria.md)):
 
-- **Have a [stable website](doc/criteria.md#homepage_url)**, which says:
+* **Have a [stable website](doc/criteria.md#homepage_url)**, which says:
   - **[what it does](doc/criteria.md#description_good)**
   - **[how to get it](doc/criteria.md#interact)**
   - **[how to give feedback](doc/criteria.md#interact)**
   - **[how to contribute](doc/criteria.md#contribution)** and
     [preferred styles](doc/criteria.md#contribution_requirements)
-- **[Explicitly specify](doc/criteria.md#license_location) a
+* **[Explicitly specify](doc/criteria.md#license_location) a
   [FLOSS](doc/criteria.md#floss_license) [license](doc/criteria.md#floss_license_osi)**
-- **[Support HTTPS on the project sites](doc/criteria.md#sites_https)**
-- **[Document how to install and run (securely)](doc/criteria.md#documentation_basics),
+* **[Support HTTPS on the project sites](doc/criteria.md#sites_https)**
+* **[Document how to install and run (securely)](doc/criteria.md#documentation_basics),
   and [any API](doc/criteria.md#documentation_interface)**
-- **Have a** [distributed](doc/criteria.md#repo_distributed)
+* **Have a** [distributed](doc/criteria.md#repo_distributed)
   **[public version control system](doc/criteria.md#repo_public),
-  including [changes between releases](doc/criteria.md#repo_interim)**:
+* including [changes between releases](doc/criteria.md#repo_interim)**:
   - **[Give each release a unique version](doc/criteria.md#version_unique)**, using
     [semantic versioning format](doc/criteria.md#version_semver)
   - **Give a [summary of changes for each release](doc/criteria.md#release_notes),
     [identifying any fixed vulnerabilities](doc/criteria.md#release_notes_vulns)**
-- **Allow [bug reports to be submitted](doc/criteria.md#report_process),
+* **Allow [bug reports to be submitted](doc/criteria.md#report_process),
   [archived](doc/criteria.md#report_archive)** and
   [tracked](doc/criteria.md#report_tracker):
   - **[Acknowledge](doc/criteria.md#report_responses)**/respond to bugs &
@@ -76,25 +76,25 @@ This is a summary of the criteria, with requirements in bold
   - **[Respond within 14 days](doc/criteria.md#vulnerability_report_response),
     and [fix vulnerabilities](doc/criteria.md#vulnerabilities_critical_fixed),
     [within 60 days if they're public](doc/criteria.md#vulnerabilities_fixed_60_days)**
-- **[Have a build that works](doc/criteria.md#build)**, using
+* **[Have a build that works](doc/criteria.md#build)**, using
   [standard](doc/criteria.md#build_common_tools)
   [open-source](doc/criteria.md#build_floss_tools) tools
   - **Enable (and [fix](doc/criteria.md#warnings_fixed))
     [compiler warnings and lint-like checks](doc/criteria.md#warnings)**
   - **[Run other static analysis tools](doc/criteria.md#static_analysis) and
     [fix exploitable problems](doc/criteria.md#static_analysis_fixed)**
-- **[Have an automated test suite](doc/criteria.md#test)** that
+* **[Have an automated test suite](doc/criteria.md#test)** that
   [covers most of the code/functionality](doc/criteria.md#test_most), and
   [officially](doc/criteria.md#tests_documented_added)
   **[require new tests for new code](doc/criteria.md#test_policy)**
-- [Automate running the tests on all changes](doc/criteria.md#test_continuous_integration),
+* [Automate running the tests on all changes](doc/criteria.md#test_continuous_integration),
   and apply dynamic checks:
   - [Run memory/behaviour analysis tools](doc/criteria.md#dynamic_analysis)
     ([sanitizers/Valgrind](doc/criteria.md#dynamic_analysis_unsafe) etc.)
   - [Run a fuzzer or web-scanner over the code](doc/criteria.md#dynamic_analysis)
-- **[Have a developer who understands secure software](doc/criteria.md#know_secure_design)
+* **[Have a developer who understands secure software](doc/criteria.md#know_secure_design)
   and [common vulnerability errors](doc/criteria.md#know_common_errors)**
-- If cryptography is used:
+* If cryptography is used:
   - **[Use public protocols/algorithm](doc/criteria.md#crypto_published)**
   - **[Don't re-implement standard functionality](doc/criteria.md#crypto_call)**
   - **[Use open-source cryptography](doc/criteria.md#crypto_floss)**

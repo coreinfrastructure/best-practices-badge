@@ -29,7 +29,7 @@ gem 'puma', '3.6.2' # Faster webserver; recommended by Heroku
 gem 'rails', '5.0.1' # Our web framework
 gem 'redcarpet', '3.4.0' # Process markdown in form textareas (justifications)
 gem 'sass-rails', '5.0.6'
-gem 'secure_headers', '3.6.0' # Add hardening measures to HTTP headers
+gem 'secure_headers', '3.6.1' # Add hardening measures to HTTP headers
 # gem 'turbolinks', '5.0.1' # Speed UI access
 gem 'uglifier', '3.0.4'
 gem 'will_paginate', '3.1.5'

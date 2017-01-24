@@ -7,7 +7,7 @@ gem 'bootstrap-sass', '3.3.7'
 gem 'bootstrap-social-rails', '4.12.0'
 gem 'bootstrap-will_paginate', '0.0.10'
 gem 'bootstrap_form', '2.5.3'
-gem 'chartkick', '2.2.1' # Chart project_stats
+gem 'chartkick', '2.2.2' # Chart project_stats
 gem 'coffee-rails', '4.2.1' # Support CoffeeScript (Javascript preprocessor)
 gem 'faker', '1.7.2'
 gem 'fastly-rails', git: 'https://github.com/dankohn/fastly-rails',
@@ -26,11 +26,10 @@ gem 'paper_trail', '6.0.2' # Record previous versions of project data
 gem 'pg', '0.19.0' # PostgreSQL database, used for data storage
 gem 'pg_search', '2.0.1' # PostgreSQL full-text search
 gem 'puma', '3.6.2' # Faster webserver; recommended by Heroku
-gem 'rack-timeout', '0.4.2' # Timeout per https://github.com/heroku/rack-timeout
 gem 'rails', '5.0.1' # Our web framework
 gem 'redcarpet', '3.4.0' # Process markdown in form textareas (justifications)
 gem 'sass-rails', '5.0.6'
-gem 'secure_headers', '3.5.1'
+gem 'secure_headers', '3.6.1' # Add hardening measures to HTTP headers
 # gem 'turbolinks', '5.0.1' # Speed UI access
 gem 'uglifier', '3.0.4'
 gem 'will_paginate', '3.1.5'
@@ -40,7 +39,7 @@ group :development, :test do
   gem 'bullet', '5.5.0'
   gem 'bundler-audit', '0.5.0'
   gem 'database_cleaner', '1.5.3' # Cleans up database between tests
-  gem 'dotenv-rails', '2.1.1'
+  gem 'dotenv-rails', '2.1.2'
   gem 'eslintrb', '2.1.0'
   gem 'license_finder', '2.1.2'
   gem 'mdl', '0.4.0'
@@ -52,7 +51,7 @@ group :development, :test do
   gem 'pry-byebug', '3.4.2'
   gem 'rubocop', '0.46.0' # Style checker.  Changes can cause test failure
   gem 'ruby-graphviz', '1.2.2'
-  gem 'spring', '2.0.0'
+  gem 'spring', '2.0.1'
   gem 'vcr', '3.0.3' # Record network responses for later test reuse
   gem 'yaml-lint', '0.0.9' # Check YAML file syntax
 end
@@ -69,7 +68,7 @@ group :test do
   gem 'chromedriver-helper', '1.0.0'
   gem 'codecov', '0.1.9', require: false
   gem 'minitest-rails-capybara', '3.0.0', require: false
-  gem 'minitest-retry', '0.1.7', require: false # Avoid Capybara false positives
+  gem 'minitest-retry', '0.1.8', require: false # Avoid Capybara false positives
   gem 'poltergeist', '1.12.0', require: false
   gem 'rails-controller-testing', '1.0.1'
   gem 'selenium-webdriver', '3.0.5', require: false
@@ -82,4 +81,5 @@ group :production do
   # gem 'heroku_rails_deflate', '1.0.3' # Compress (reduces network load)
   # Removed according to http://stackoverflow.com/a/39550697/1935918
   # (it has not yet been updated to work with Rails 5).
+  gem 'rack-timeout', '0.4.2' # Timeout; https://github.com/heroku/rack-timeout
 end

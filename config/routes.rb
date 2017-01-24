@@ -83,4 +83,21 @@ Rails.application.routes.draw do
   #     # (app/controllers/admin/products_controller.rb)
   #     resources :products
   #   end
+
+  # If no route found in some cases, just redirect to a 404 page.
+  # The production site is constantly hit by nonsense paths,
+  # and while Rails has a built-in mechanism to handle nonsense,
+  # Rails' built-in mechanism creates very noisy logs.
+  # Ideally we'd redirect all no-match cases quickly to a 404 handler.
+  # Unfortunately, the noise-reduction approach for Rails 4 noted here:
+  # http://rubyjunky.com/cleaning-up-rails-4-production-logging.html
+  # works in development but does NOT work in production.
+  # So instead, we'll select a few common cases where we have nothing
+  # and there's no possible security problem, and fast-path its rejection
+  # by redirecting to a 404 (without a lengthy log of the cause).
+  # wp-login.php queries are evidences of WordPress brute-force attacks:
+  # http://www.inmotionhosting.com/support/edu/wordpress/
+  # wp-login-brute-force-attack
+  match 'wp-login.php', via: :all, to: 'static_pages#error_404'
+  match '.well-known/*path', via: :all, to: 'static_pages#error_404'
 end

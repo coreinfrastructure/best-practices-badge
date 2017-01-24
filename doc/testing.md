@@ -37,7 +37,7 @@ After completing the VCR recording, `github_login_test.rb` revokes the authoriza
 RAILS_ENV=test rails s -p 31337 -b 0.0.0.0
 ```
 
-and then go to http://127.0.0.1:31337 in your web browser.
+and then go to <http://127.0.0.1:31337> in your web browser.
 
 ## Troubleshooting
 

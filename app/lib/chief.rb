@@ -41,7 +41,8 @@ class Chief
       NameFromUrlDetective, ProjectSitesHttpsDetective,
       GithubBasicDetective, HowAccessRepoFilesDetective,
       RepoFilesExamineDetective, FlossLicenseDetective,
-      HardenedSitesDetective, BlankDetective, BuildDetective
+      HardenedSitesDetective, BlankDetective, BuildDetective,
+      SubdirFileContentsDetective
     ].freeze
 
   # List fields allowed to be written into Project (an ActiveRecord).
@@ -61,9 +62,9 @@ class Chief
   end
 
   # Should we should update a project's value for 'key'?
-  # rubocop:disable Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
+  # changeset_data is hash with :value, :confidence, :explanation
   def update_value?(project, key, changeset_data)
-    if changeset_data.blank? || !changeset_data.member?(key)
+    if changeset_data.blank?
       false
     elsif !project.attribute_present?(key) || project[key].blank?
       true
@@ -74,13 +75,13 @@ class Chief
         changeset_data[:confidence] >= CONFIDENCE_OVERRIDE
     end
   end
-  # rubocop:enable Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
 
   # Return the best estimates for fields, given project & current proposal.
+  # Current proposal is a hash, keys are symbols of what that might be changed.
   def compute_current(fields, project, current_proposal)
     result = {}
     fields.each do |f|
-      if update_value?(project, f, current_proposal)
+      if update_value?(project, f, current_proposal[f])
         result[f] = current_proposal[f][:value]
       elsif project.attribute_present?(f)
         result[f] = project[f]
@@ -141,7 +142,7 @@ class Chief
   def apply_changes(project, changes)
     changes.each do |key, data|
       next unless ALLOWED_FIELDS.include?(key)
-      next unless update_value?(project, key, changes)
+      next unless update_value?(project, key, data)
       # Store change:
       project[key] = data[:value]
       # Now add the explanation, if we can.

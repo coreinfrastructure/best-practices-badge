@@ -47,7 +47,11 @@ class GithubLoginTest < CapybaraFeatureTest
       click_on 'Account'
       assert has_content? 'Profile'
       click_on 'Profile'
-      assert has_content? 'CII Test'
+      assert has_content? 'Core Infrastructure Initiative Best Practices Badge'
+      # Next two lines give a quick coverage increase in session_helper.rb
+      click_on 'Projects'
+      click_on 'Pathfinder OS'
+      refute has_content? 'Edit'
 
       if ENV['GITHUB_PASSWORD'] # revoke OAuth authorization
         visit 'https://github.com/settings/applications'

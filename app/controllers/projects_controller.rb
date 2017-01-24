@@ -110,17 +110,27 @@ class ProjectsController < ApplicationController
   # PATCH/PUT /projects/1.json
   # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   def update
-    old_badge_level = Project.find(params[:id]).badge_level
-    Chief.new(@project, client_factory).autofill
-    respond_to do |format|
-      if @project.update(project_params)
-        successful_update(format, old_badge_level)
-      else
-        format.html { render :edit }
-        format.json do
-          render json: @project.errors, status: :unprocessable_entity
+    if repo_url_change_allowed?
+      old_badge_level = @project.badge_level
+      project_params.each do |key, user_value| # mass assign
+        @project[key] = user_value
+      end
+      Chief.new(@project, client_factory).autofill
+      respond_to do |format|
+        # Was project.update(project_params)
+        if @project.save
+          successful_update(format, old_badge_level)
+        else
+          format.html { render :edit }
+          format.json do
+            render json: @project.errors, status: :unprocessable_entity
+          end
         end
       end
+    else
+      flash.now[:danger] = 'You may only change your repo_url from http to '\
+                           'https'
+      render :edit
     end
   rescue ActiveRecord::StaleObjectError
     # rubocop:disable Rails/OutputSafety
@@ -208,14 +218,15 @@ class ProjectsController < ApplicationController
   # Never trust parameters from the scary internet,
   # only allow the white list through.
   def project_params
-    if @project && repo_url_disabled?(@project)
-      params.require(:project).permit(Project::PROJECT_PERMITTED_FIELDS)
-    else
-      params.require(:project).permit(
-        :repo_url,
-        Project::PROJECT_PERMITTED_FIELDS
-      )
-    end
+    params.require(:project).permit(Project::PROJECT_PERMITTED_FIELDS)
+  end
+
+  def repo_url_change_allowed?
+    return true unless @project.repo_url?
+    return true if project_params[:repo_url].nil?
+    return true if current_user.admin?
+    project_params[:repo_url].split('://', 2)[1] ==
+      @project.repo_url.split('://', 2)[1]
   end
 
   # Purge the badge from the CDN (if any)

@@ -21,7 +21,13 @@ exclude_rule 'MD025'
 exclude_rule 'MD026'
 exclude_rule 'MD029'
 exclude_rule 'MD030'
-exclude_rule 'MD032'
+# We include rule MD032, which requires that
+# lists be surrounded by blank lines (MD032).
+# This detects a lot of malformed text that should be in a list but is not.
+# This is also important for portability: Some markdown formatters
+# require blank lines around lists, while others don't.
+# To see this portability problem in action, see:
+# http://johnmacfarlane.net/babelmark2/?text=Is+this+a+list%3F%0A*+First+bullet%0A*+Second+bullet%0A
 exclude_rule 'MD033'
 exclude_rule 'MD034' # Bare URLs are okay, just surround with <..>
 exclude_rule 'MD036'

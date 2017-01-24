@@ -889,6 +889,7 @@ For the main bestpractices.coreinfrastructure.org site we have:
 
 We have various detection mechanisms to detect problems.
 There are two approaches to detection:
+
 * internal (which has access to our internal information, such as logs)
 * external (which does not have access to internal information)
 

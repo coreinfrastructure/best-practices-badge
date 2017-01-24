@@ -83,22 +83,21 @@ Some guidelines include:
 
 *   [&#8220;Starting an Open Source project.&#8221;](http://www.smashingmagazine.com/2013/01/starting-an-open-source-project/)
 
-*   [&#8220;Software Release Practice HOWTO.&#8221; Eric Raymond, 2000
-(somewhat dated)](http://en.tldp.org/HOWTO/Software-Release-Practice-HOWTO/)
+*   [&#8220;Software Release Practice HOWTO.&#8221; Eric Raymond, 2000 (somewhat dated)](http://en.tldp.org/HOWTO/Software-Release-Practice-HOWTO/)
 
-*   [&#8220;Releasing Free/Libre/Open Source Software (FLOSS) for Source
-Installation.&#8221; David A. Wheeler](http://www.dwheeler.com/essays/releasing-floss-software.html)
+*   [&#8220;Releasing Free/Libre/Open Source Software (FLOSS) for Source Installation.&#8221; David A. Wheeler](http://www.dwheeler.com/essays/releasing-floss-software.html)
 
 *   [OSS Manifesto](http://ossmanifesto.org/)
 
 *   [Keep a CHANGELOG](http://keepachangelog.com/) - a website advocating
-including ChangeLogs, including what they are and why they matter.
-It recommends the filename "CHANGELOG.md" at the top.
+  including ChangeLogs, including what they are and why they matter.
+  It recommends the filename "CHANGELOG.md" at the top.
 
 *   [Debian Upstream guide](https://wiki.debian.org/UpstreamGuide) -
-includes references to some other guides.
+  includes references to some other guides.
 
-*   [US Government OSS best practices](http://government.github.io/best-practices/) - a collection of guidelines from some in the US federal government
+*   [US Government OSS best practices](http://government.github.io/best-practices/) -
+   a collection of guidelines from some in the US federal government
 
 * [A Maturity Model for Apache Projects](http://community.apache.org/apache-way/apache-project-maturity-model.html)
 
@@ -226,23 +225,25 @@ importance, and these may suggest some metrics
     software... Do this the same way it is done in initiation: spending
     time, maintain goals and plans, communicate the plans, and maintain
     a high-quality project web site.&#8221; The user community should be
-    actively
-    interacting with the development team.
-> (Wheeler notes that possible related metrics include:
-> actively maintained website (e.g., date of last page change on
-> website), messages/month (e.g., email, bug tracker, etc.), number of
-> commits/month, number of committers, etc.)
+    actively interacting with the development team.
+
+    > (Wheeler notes that possible related metrics include:
+    > actively maintained website (e.g., date of last page change on
+    > website), messages/month (e.g., email, bug tracker, etc.), number of
+    > commits/month, number of committers, etc.)
 
 2.  &#8220;Advertize and market your project.&#8221; In particular, successful
     growth projects are frequently projects that have added at least one
     new developer in the growth stage.
-> (Wheeler notes that possible related metrics include number of
-> developers that have been added (post initial release or within a
-> year).)
+
+    > (Wheeler notes that possible related metrics include number of
+    > developers that have been added (post initial release or within a
+    > year).)
 
 3. "Have some small tasks available for contributors with limited time."
-> (Wheeler notes that a possible metric is a posted list of small tasks
-> for new/limited contributors.)
+
+    > (Wheeler notes that a possible metric is a posted list of small tasks
+    > for new/limited contributors.)
 
 4.  "Welcome competition." The authors were surprised, but noted that
     &#8220;competition seems to favor success.&#8221;
@@ -282,6 +283,7 @@ states the following:
 * Healthy debates
 
 We believe that all projects should:
+
 * Have a readme file
 * Have a contributing file
 * List all core team members in the readme file
@@ -453,34 +455,35 @@ The following might be relevant.
 Use Automated Tools:
 
 1.  Use source code security scanning packages, such as flawfinder and
-RATS. E.G., for level 1, the software must not have top risk warnings
-from RATS and flawfinder (inserting comments to disable them is fine as
-long as the person asserts that they checked the warnings to ensure that
-they weren&#8217;t really problems).
-For level 3, the software must not have warnings from the top 2 risk levels.
+  RATS. E.G., for level 1, the software must not have top risk warnings
+  from RATS and flawfinder (inserting comments to disable them is fine as
+  long as the person asserts that they checked the warnings to ensure that
+  they weren&#8217;t really problems).
+  For level 3, the software must not have warnings from the top 2 risk levels.
 
 2.  Use execution testing tools, such as Brute Force Binary Tester
-and Whisker (for web-accessible programs) to send data in an attempt
-to break the program.
+  and Whisker (for web-accessible programs) to send data in an attempt
+  to break the program.
 
 3.  Use tools to detect common software engineering flaws that are
-sometimes exploitable, e.g., valgrind.
+  sometimes exploitable, e.g., valgrind.
 
 4.  Use other automated tools, such as port scanners (e.g., Nessus),
-network sniffers, and file scanning tools to identify cleartext that should not be cleartext.
+  network sniffers, and file scanning tools to identify cleartext that
+  should not be cleartext.
 
 5.  Specialized tools could be used to search for specific security
-flaws (buffer overflows, temporary file use, etc.).
+  flaws (buffer overflows, temporary file use, etc.).
 
 6.  Note that new tools could be developed as part of this
-evaluation scheme, and/or scripts to automate the entire process.
+  evaluation scheme, and/or scripts to automate the entire process.
 
 7.  See Fyodor&#8217;s security tool list for additional ideas.
 
 Require active peer review:
 
 1.  Evidence of multiple developers (e.g., in a ChangeLog).
-E.G., for level 2, the project must have at least 2 developers.
+  E.G., for level 2, the project must have at least 2 developers.
 
 2.  Evidence of people reviewing code (e.g., bug reports/patches).
 
@@ -489,40 +492,41 @@ E.G., for level 2, the project must have at least 2 developers.
 4.  (For level 5): Evidence that all code has been reviewed by someone else.
 
 5.  Evidence that there are a number of users
-(e.g., for level 4, at least 100 users).
-If there are many users, this suggests the project is producing useful
-software and that there are a number of potential future reviewers.
+  (e.g., for level 4, at least 100 users).
+  If there are many users, this suggests the project is producing useful
+  software and that there are a number of potential future reviewers.
 
 6.  Require that at least some developers learn how to write secure programs,
-including what to look for. There are freely available materials,
-such as <http://www.dwheeler.com/secure-programs> that teach how to do this.
-E.g., at level 2, at least 2 developers (including one trusted developer)
-has asserted that they&#8217;ve read at least one book on how to
-write secure programs. Level 5: all trusted developers have
-read at least one book.
+  including what to look for. There are freely available materials,
+  such as <http://www.dwheeler.com/secure-programs> that teach how to do this.
+  E.g., at level 2, at least 2 developers (including one trusted developer)
+  has asserted that they&#8217;ve read at least one book on how to
+  write secure programs. Level 5: all trusted developers have
+  read at least one book.
 
 Good Practices:
 
 1.  Products must have a different version number for each public
-release (CC ACM\_CAP.1).
+  release (CC ACM\_CAP.1).
 
-2.  Level 1: Products (source and binary) must be signed, the public
-key must be publicly posted (so it can be verified over time)
-and have an MD5 posted.
-This provides a simple way to check the product signature
-(keep signature from a while back - that way, if the website is broken,
-others can tell there&#8217;s a change).
+2. Level 1: Products (source and binary) must be signed, the public
+  key must be publicly posted (so it can be verified over time)
+  and have an MD5 posted.
+  This provides a simple way to check the product signature
+  (keep signature from a while back - that way, if the website is broken,
+  others can tell there&#8217;s a change).
 
 3.  The trusted repository must be configured so that only trusted
-developers can change code and passwords (if sent) cannot be sent in the clear.
+  developers can change code and passwords (if sent) cannot be sent in
+  the clear.
 
 4.  Upper level: require the CM system to record who performed each change,
-what the change was, and when the change was made. Git and subversion are fine.
-(see CC ACM).
+  what the change was, and when the change was made. Git and subversion
+  are fine.  (see CC ACM).
 
 5.  Installation procedures must discuss how to install the software securely
-and security issues when using the software
-(like CC ADO\_IGS.1, AGD\_ADM.1, AGD\_USR.1)
+  and security issues when using the software
+  (like CC ADO\_IGS.1, AGD\_ADM.1, AGD\_USR.1)
 
 6.  Upper levels: Start to connect with the CC.
 
@@ -705,13 +709,13 @@ on "Reset the Net" has set of specific recommendations on how to
 secure mobile applications.
 They are:
 
-1.  Make security & privacy a priority.  (This is true, but
-difficult to measure directly for our purposes.)
-2.  Don't send data unprotected. Use SSL.
-3.  Apps can be more secure than websites, with "cert pinning".
-4.  High standards for third party code (like ads & analytics).
-5.  Don't forget Perfect Forward Secrecy (PFS).
-6.  Bring out the big guns: end-to-end encryption.
+1. Make security & privacy a priority.  (This is true, but
+  difficult to measure directly for our purposes.)
+2. Don't send data unprotected. Use SSL.
+3. Apps can be more secure than websites, with "cert pinning".
+4. High standards for third party code (like ads & analytics).
+5. Don't forget Perfect Forward Secrecy (PFS).
+6. Bring out the big guns: end-to-end encryption.
 
 ### Encryption of data at-rest
 
@@ -847,15 +851,15 @@ The Core Infrastructure Initiative (CII) 2015 meeting in Madrid, Spain,
 discussed best practices.
 Issues raised included the following:
 
-*   There is a need for a community of practice to develop and iterate
-its own definition of "best"
-*   Bring in cognitive/behavioral scientists to discuss the
-implementation of incentive models that can raise the state of the
-ecosystem and avoiding incentives that produce perverse outcomes.
-(This is not to *trick* people, but to increase the chance of it working.)
-*   Match resources with best practice requirements
-(so projects won't have the problem of being unable to meet the
-standard due to under-resourcing).
+* There is a need for a community of practice to develop and iterate
+  its own definition of "best"
+* Bring in cognitive/behavioral scientists to discuss the
+  implementation of incentive models that can raise the state of the
+  ecosystem and avoiding incentives that produce perverse outcomes.
+  (This is not to *trick* people, but to increase the chance of it working.)
+* Match resources with best practice requirements
+  (so projects won't have the problem of being unable to meet the
+  standard due to under-resourcing).
 
 ### 12-factor app
 
@@ -875,10 +879,10 @@ and its citations may help.  This paper includes a survey of literature
 on open badges for education, and
 organizes this literature into three general themes that emerge:
 
-1.  Badges as a motivator of behaviour,
-2.  Badges as a pedagogical tool, and
-3.  Badges as a signifier or credential, which link to
-economic and social opportunity.
+1. Badges as a motivator of behaviour,
+2. Badges as a pedagogical tool, and
+3. Badges as a signifier or credential, which link to
+  economic and social opportunity.
 
 Below is a summary of each theme.
 
@@ -966,21 +970,21 @@ and "Option wrap:inner-sentence" for non-bulleted text.
 Here is a guide for how criteria should be written.
 
 1. Criteria may include multiple sentences.  Each criterion should be
-front-focused so that the most important information is in the first sentence.
-Further information can be included in following sentences.
+  front-focused so that the most important information is in the first sentence.
+  Further information can be included in following sentences.
 2. The use of e.g.'s should be within parenthesis (e.g., (e.g., such as this)).
 3. MUST, MUST NOT, SHOULD, and MAY criteria should begin with 'The *object*'
-followed by the term
-(e.g., The Project MUST, The Software MAY , The ChangeLog SHOULD).
+  followed by the term
+  (e.g., The Project MUST, The Software MAY , The ChangeLog SHOULD).
 4. If a criterion require an IF clause, consider including it at the
-start of the criteria (e.g., IF *a* then the *object* MUST *do x,y,z*).
-This is more controversial, because if the clause itself is long,
-the primary criteria might be obscured.
+  start of the criteria (e.g., IF *a* then the *object* MUST *do x,y,z*).
+  This is more controversial, because if the clause itself is long,
+  the primary criteria might be obscured.
 5. RECOMMENDED criteria should begin with 'It is RECOMMENDED...'
 6. If required, a rationale should be included as the last bullet in subsection.
 7. Criteria should be ordered from most restrictive and prohibitive to
-least restrictive and prohibitive
-(e.g., MUST and MUST NOT > SHOULD > RECOMMENDED > MAY).
+  least restrictive and prohibitive
+  (e.g., MUST and MUST NOT > SHOULD > RECOMMENDED > MAY).
 
 # Practices of some existing OSS Projects
 
@@ -1275,48 +1279,49 @@ Their approach to testing can be summarized as follows (per their website):
 
 Here are a few interesting quotes:
 
-*   "Whenever a bug is reported against SQLite, that bug is not considered
-fixed until new test cases that would exhibit the bug have been added
-to either the TCL or TH3 test suites."
-*   "Another popular [coverage] metric is 'Modified Condition/Decision Coverage'
- or MC/DC...  [SQLite] achieves 100% MC/DC in addition to 100% branch coverage."
-*   "The developers of SQLite have found that full coverage testing is an
-extremely effective method for locating and preventing bugs.
-Because every single branch instruction in SQLite core code is covered by
-test cases, the developers can be confident that changes made in one part
-of the code do not have unintended consequences in other parts of the code.
-The many new features and performance improvements that have been added to
-SQLite in recent years would not have been possible without the availability
-full-coverage testing.
-Maintaining 100% MC/DC is laborious and time-consuming.
-The level of effort needed to maintain full-coverage testing is probably
-not cost effective for a typical application. However, we think that
-full-coverage testing is justified for a very widely deployed infrastructure
-library like SQLite, and especially for a database library which by its very
-nature 'remembers' past mistakes."
-*   "To help ensure that SQLite does not make use of undefined or
-implementation defined behavior, the test suites are rerun using instrumented
-builds that try to detect undefined behavior.
-For example, test suites are run using the "-ftrapv" option of GCC.
-And they are run again using the "-fsanitize=undefined" option on Clang.
-And again using the "/RTC1" option in MSVC.
-Then the test suites are rerun using options like "-funsigned-char"
-and "-fsigned-char" to make sure that implementation differences
-do not matter either.
-Tests are then repeated on 32-bit and 64-bit systems and on big-endian
-and little-endian systems, using a variety of CPU architectures.
-Furthermore, the test suites are augmented with many test cases that are
-deliberately designed to provoke undefined behavior.
-For example: "SELECT -1*(-9223372036854775808);".
-*   "The SQLite core contains 4197 assert() statements that verify
-function preconditions and postconditions and loop invariants."
-*   "SQLite compiles without warnings on GCC and Clang using the -Wall
-and -Wextra flags on Linux and Mac and on MSVC on Windows.
-No valid warnings are generated by the Clang Static Analyzer tool 'scan-build'
-either (though recent versions of clang seem to generate many false-positives).
-Static analysis has not proven to be especially
-helpful in finding bugs in SQLite.
-Static analysis has found a few bugs in SQLite, but those are the exceptions."
+* "Whenever a bug is reported against SQLite, that bug is not considered
+  fixed until new test cases that would exhibit the bug have been added
+  to either the TCL or TH3 test suites."
+* "Another popular [coverage] metric is 'Modified Condition/Decision Coverage'
+  or MC/DC...  [SQLite] achieves 100% MC/DC in addition to
+  100% branch coverage."
+* "The developers of SQLite have found that full coverage testing is an
+  extremely effective method for locating and preventing bugs.
+  Because every single branch instruction in SQLite core code is covered by
+  test cases, the developers can be confident that changes made in one part
+  of the code do not have unintended consequences in other parts of the code.
+  The many new features and performance improvements that have been added to
+  SQLite in recent years would not have been possible without the availability
+  full-coverage testing.
+  Maintaining 100% MC/DC is laborious and time-consuming.
+  The level of effort needed to maintain full-coverage testing is probably
+  not cost effective for a typical application. However, we think that
+  full-coverage testing is justified for a very widely deployed infrastructure
+  library like SQLite, and especially for a database library which by its very
+  nature 'remembers' past mistakes."
+* "To help ensure that SQLite does not make use of undefined or
+  implementation defined behavior, the test suites are rerun using instrumented
+  builds that try to detect undefined behavior.
+  For example, test suites are run using the "-ftrapv" option of GCC.
+  And they are run again using the "-fsanitize=undefined" option on Clang.
+  And again using the "/RTC1" option in MSVC.
+  Then the test suites are rerun using options like "-funsigned-char"
+  and "-fsigned-char" to make sure that implementation differences
+  do not matter either.
+  Tests are then repeated on 32-bit and 64-bit systems and on big-endian
+  and little-endian systems, using a variety of CPU architectures.
+  Furthermore, the test suites are augmented with many test cases that are
+  deliberately designed to provoke undefined behavior.
+  For example: "SELECT -1*(-9223372036854775808);".
+* "The SQLite core contains 4197 assert() statements that verify
+  function preconditions and postconditions and loop invariants."
+* "SQLite compiles without warnings on GCC and Clang using the -Wall
+  and -Wextra flags on Linux and Mac and on MSVC on Windows.  No valid
+  warnings are generated by the Clang Static Analyzer tool 'scan-build'
+  either (though recent versions of clang seem to generate many
+  false-positives).  Static analysis has not proven to be especially
+  helpful in finding bugs in SQLite.  Static analysis has found a few
+  bugs in SQLite, but those are the exceptions."
 
 For more information on how SQLite is tested,
 see: <https://www.sqlite.org/testing.html>.
@@ -1549,7 +1554,7 @@ Electronic Notes in Theoretical Computer Science, 233 (2009).
 
 \[Wang2011\] Wang, Huanjing, Taghi M. Khoshgoftaar, and Naeem Seliya.
 &#8220;How Many Software Metrics Should be Selected for Defect Prediction?&#8221;
-2011. Association for the Advancement of Artificial Intelligence.
+2011\. Association for the Advancement of Artificial Intelligence.
 <http://www.aaai.org/ocs/index.php/flairs/flairs11/paper/download/2558/2993>
 
 \[Wheeler2011e\] Wheeler, David A. *How to Evaluate Open Source Software

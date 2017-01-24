@@ -314,8 +314,7 @@ SHOULD or MUST.
     which can be harder to do - so we have split this requirement up.
     See the [reproducible build criterion](#reproducible_build).
 
--   <a name="installation_common"></a>(Future criterion) The project SHOULD provide a way to easily install and uninstall the software using a commonly-used convention.  <sup>[<a href="#installation_common">installation_common</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>Examples include using a language-level package manager (such as npm, pip, maven, or bundler), system-level package manager (such as apt-get or dnf), "make install/uninstall" (supporting DESTDIR), a container in a standard format, or a virtual machine image in a standard format. The installation and uninstallation process (e.g., its packaging) MAY be implemented by a third party as long as it is FLOSS.
-</dd></dl>
+-   <a name="installation_common"></a>(Future criterion) The project SHOULD provide a way to easily install and uninstall the software using a commonly-used convention.  <sup>[<a href="#installation_common">installation_common</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>Examples include using a language-level package manager (such as npm, pip, maven, or bundler), system-level package manager (such as apt-get or dnf), "make install/uninstall" (supporting DESTDIR), a container in a standard format, or a virtual machine image in a standard format. The installation and uninstallation process (e.g., its packaging) MAY be implemented by a third party as long as it is FLOSS.</dd></dl>
 
 -   <a name="installation_standard_variables"></a>
     The installation system MUST honor standard conventions for
@@ -681,18 +680,19 @@ Here are some potential sources for criteria that need to be reviewed.
 Review these larger criteria sets for things to add:
 
 - It would be quite plausible to add many requirements specific to security.
-for example, it would be plausible to require that a system meet the
-requirements (or a specified subset) of the
-[owasp application security verification standard project](https://www.owasp.org/index.php/category:owasp_application_security_verification_standard_project)
-or the
-[securing web application technologies (swat) checklist](https://software-security.sans.org/resources/swat).
-note that both of these focus only on web applications.
-These are:
-    -   OWASP Application Security Verification Standard (ASVS) -
-        "provides a basis for testing web application technical security
-        controls and also provides developers with a list of requirements
-        for secure development."
-    -   SANS' Securing Web Application Technologies (SWAT) criteria.
+  for example, it would be plausible to require that a system meet the
+  requirements (or a specified subset) of the
+  [owasp application security verification standard project](https://www.owasp.org/index.php/category:owasp_application_security_verification_standard_project)
+  or the
+  [securing web application technologies (swat) checklist](https://software-security.sans.org/resources/swat).
+  note that both of these focus only on web applications.
+  These are:
+
+   - OWASP Application Security Verification Standard (ASVS) -
+     "provides a basis for testing web application technical security
+     controls and also provides developers with a list of requirements
+     for secure development."
+   - SANS' Securing Web Application Technologies (SWAT) criteria.
 
 In the future we might add some criteria that a project has to meet
 some subset of (e.g., it must meet at least 3 of 5 criteria).

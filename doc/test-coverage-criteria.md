@@ -13,12 +13,30 @@ At the "passing" level we require automated testing, but we intentionally don't 
 However – what should we do at higher badge levels?  I think we should expect some minimum kind of automated testing at higher levels.  What's more, that minimum shouldn't be some sort of ambiguous feel-good requirement.  Instead, we should have *some* kind of specific, quantifiable test coverage criteria to give an indication of how good the automated testing is.  To make it consistent, we'd need to pick a *specific* measure & define a minimum value for badging purposes.  There are complications, though, because there are a *lot* of ways to measure test coverage <https://en.wikipedia.org/wiki/Code_coverage> and there will always be reasons to debate any specific threshold.  Note that I am including *all* tests (unit and system/integration) together.
 
 I believe the most common kinds of test coverage measurement are, in rough order of difficulty:
-1. Statement coverage: % of lines|statements run by at least one test.  This is what codecov.io does (they only count a line if it's *fully* executed).  Un-executable ("dead") code will reduce these scores – but that can also reveal problems like Apple's "goto fail; goto fail;" vulnerability <http://www.dwheeler.com/essays/apple-goto-fail.html>.
-2. Branch coverage: % branches of each control structure (including if, case, for, while) executed.  SQLite achieves 100% branch coverage.
-3. Decision coverage: For 100% decision coverage, every point of entry and exit in the program has been invoked at least once, and every decision (branch) in the program has taken all possible outcomes at least once.  DO-178B (an avionics standard) requires, if system failure is "hazardous", 100% decision coverage and 100% statement coverage. <https://en.wikipedia.org/wiki/Modified_condition/decision_coverage >
-4. Modified condition/decision coverage (MC/DC); this is used in safety-critical applications (e.g., for avionics software).  DO-178B requires "catastrophic" effect software to have 100% modified condition/decision coverage and 100% statement coverage.  SQLite achieves 100% MC/DC too.
 
-All of these are structural testing measures, and thus can only measure what *is* in the code.  None can detect by themselves, for example, if a project *failed* to include some test or information in your code.  There are no obvious solutions to that, though.
+1. Statement coverage: % of lines|statements run by at least one test.
+  This is what codecov.io does (they only count a line if it's *fully*
+  executed).  Un-executable ("dead") code will reduce these scores –
+  but that can also reveal problems like Apple's "goto fail; goto fail;"
+  vulnerability <http://www.dwheeler.com/essays/apple-goto-fail.html>.
+2. Branch coverage: % branches of each control structure (including if,
+  case, for, while) executed.  SQLite achieves 100% branch coverage.
+3. Decision coverage: For 100% decision coverage, every point of entry
+  and exit in the program has been invoked at least once, and every
+  decision (branch) in the program has taken all possible outcomes at
+  least once.  DO-178B (an avionics standard) requires, if system failure
+  is "hazardous", 100% decision coverage and 100% statement coverage.
+  <https://en.wikipedia.org/wiki/Modified_condition/decision_coverage >
+4. Modified condition/decision coverage (MC/DC); this is used
+  in safety-critical applications (e.g., for avionics software).
+  DO-178B requires "catastrophic" effect software to have 100% modified
+  condition/decision coverage and 100% statement coverage.  SQLite achieves
+  100% MC/DC too.
+
+All of these are structural testing measures, and thus can only measure
+what *is* in the code.  None can detect by themselves, for example,
+if a project *failed* to include some test or information in your code.
+There are no obvious solutions to that, though.
 
 Almost every language has FLOSS tools to measure the first two, at least (e.g., GCC users can use gcov/lcov).  The last one is common in safety-critical software, but it's a really harsh requirement that is less well-supported, so I think we can omit MC/DC for the badging project.  There are other measures, but since they're less-used, too coarse (e.g., function coverage), or hard to consistently apply across FLOSS projects (e.g., requirements statement coverage).
 

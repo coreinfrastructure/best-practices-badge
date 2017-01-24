@@ -63,11 +63,11 @@ You also need a version of git installed.
 If you don't already have it set up, install it using your system installation
 tools, e.g., at the command line:
 
-- <kbd>sudo apt-get install git</kbd> (Debian, Ubuntu)
-- <kbd>yum install git</kbd> (Red Hat Enterprise Linux, CentOS, older Fedora)
-- <kbd>dnf install git</kbd> (newer Fedora)
-- <kbd>emerge install git</kbd> (Gentoo)
-- <kbd>brew install git</kbd> (MacOS)
+* <kbd>sudo apt-get install git</kbd> (Debian, Ubuntu)
+* <kbd>yum install git</kbd> (Red Hat Enterprise Linux, CentOS, older Fedora)
+* <kbd>dnf install git</kbd> (newer Fedora)
+* <kbd>emerge install git</kbd> (Gentoo)
+* <kbd>brew install git</kbd> (MacOS)
 
 ## Forking the repo
 
@@ -166,12 +166,13 @@ First, it tries to automatically detect your system package management tool
 and then tries to install some key tools if they're not already there:
 
 * git, to get some of the programs we use.
-Installing git will also install some libraries such as
-curl, zlib, openssl, expat, and libiconv.
+  Installing git will also install some libraries such as
+  curl, zlib, openssl, expat, and libiconv.
 * Ruby (version 1.9.3 or newer), to bootstrap installing the Ruby we'll use
 * SQLite3 database system, used in development for data storage
 * C compiler and basic libraries for rebuilding ruby.
-Install a sane C compiler such as gcc or clang.
+  Install a sane C compiler such as gcc or clang.
+
 See the [ruby-build suggested build environment](https://github.com/sstephenson/ruby-build/wiki#suggested-build-environment)
 for how to do install the other required components.
 The script installs gcc.

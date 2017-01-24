@@ -44,7 +44,7 @@ SHOULD or MUST.
 
 ### Test
 
--   An automated test suite MUST be applied on each check-in to a shared
+*   An automated test suite MUST be applied on each check-in to a shared
     repository for at least one branch.  This test suite MUST
     produce a report on test success or failure.
     <sup>[<a href="#automated_integration_testing">automated_integration_testing</a>]</sup>
@@ -69,7 +69,7 @@ SHOULD or MUST.
     In practice, many developers maintain at least some branches that are
     not merged for longer than a day.
 
--   The project MUST have a formal written policy that as major
+*   The project MUST have a formal written policy that as major
     new functionality is added, tests for it MUST be added to an automated
     test suite.
     <sup>[<a href="#test_policy_mandated">test_policy_mandated</a>]</sup>
@@ -78,7 +78,7 @@ SHOULD or MUST.
     This is related to the criterion test_policy, but is rewritten
     to be stronger.
 
--   The project MUST add regression tests to an automated test suite
+*   The project MUST add regression tests to an automated test suite
     for at least 50% of the bugs fixed within the last six months.
     <sup>[<a href="#regression_tests_added50">regression_tests_added50</a>]</sup>
 
@@ -97,7 +97,7 @@ SHOULD or MUST.
      that have done nothing in the past (or recorded nothing in the past)
      can catch up in a reasonable period of time.
 
--   The project MUST have FLOSS automated test suite(s) that provide at least
+*   The project MUST have FLOSS automated test suite(s) that provide at least
     80% statement coverage if there is at least
     one FLOSS tool that can measure this criterion in the selected language.
     Many FLOSS tools are available to measure test coverage,
@@ -170,14 +170,14 @@ SHOULD or MUST.
 
 ### Documentation
 
--   The project MUST have a documented roadmap that describes
+*   The project MUST have a documented roadmap that describes
     what the project intends to do and not do for at least the next year.
     The project might not achieve the roadmap, and that's fine;
     the purpose of the roadmap is to help potential users and
     constributors understand the intended direction of the project.
     It need not be detailed.
 
--   <a name="documentation_architecture"></a>
+*   <a name="documentation_architecture"></a>
     The project MUST include reference documentation that describes
     its software architecture.
     A software architecture explains a program's fundamental structures,
@@ -185,7 +185,7 @@ SHOULD or MUST.
     the key properties of these components and relationships.
     <sup>[<a href="#documentation_architecture">documentation_architecture</a>]</sup>
 
--   <a name="documentation_interface"></a>
+*   <a name="documentation_interface"></a>
     The project MUST provide reference documentation that describes
     its external interface (both input and output).
     Note that this may be automatically generated, e.g.,
@@ -194,7 +194,7 @@ SHOULD or MUST.
     Merely having comments in code is not sufficient to satisfy this criterion.
     <sup>[<a href="#documentation_interface">documentation_interface</a>]</sup>
 
--   <a name="documentation_security"></a>
+*   <a name="documentation_security"></a>
     The project MUST document what the user can and cannot expect
     in terms of security.  This MUST identify the security requirements
     that the software is intended to meet and a justification
@@ -207,7 +207,7 @@ SHOULD or MUST.
     This was inspired by
     [issue #502](https://github.com/linuxfoundation/cii-best-practices-badge/issues/502).
 
--   <a name="documentation_current"></a>
+*   <a name="documentation_current"></a>
     The project MUST make an effort to
     keep the documentation consistent with the current version of the
     program and any known documentation defects making it inconsistent
@@ -222,7 +222,7 @@ SHOULD or MUST.
     criterion is worded this way to make it more practical.
     <sup>[<a href="#documentation_current">documentation_current</a>]</sup>
 
--   <a name="documentation_achievements"></a>
+*   <a name="documentation_achievements"></a>
     The project repository front page and/or website MUST
     identify and hyperlink to any achievements,
     including this best practices badge, within 48 hours
@@ -242,7 +242,7 @@ SHOULD or MUST.
 
 ### Code/build requirements:
 
--   The project MUST identify the specific coding style guides
+*   The project MUST identify the specific coding style guides
     for the primary languages it uses, and require that contributions
     comply with it (where exceptions occur, they MUST be rare and documented
     in the code at that locations).
@@ -257,7 +257,7 @@ SHOULD or MUST.
     [SEI CERT Coding Standards](https://www.securecoding.cert.org/).
     <sup>[<a href="#coding_standards">coding_standards</a>]</sup>
 
--   The project MUST make it easy to either
+*   The project MUST make it easy to either
     (1) identify and update reused externally-maintained components or (2)
     use the standard components provided by the system or programming language.
     Then, if a vulnerability is found in a reused component, it will be
@@ -277,7 +277,7 @@ SHOULD or MUST.
     ["Chromium: Why it isn't in Fedora yet as a proper package" by Tom Callaway](http://spot.livejournal.com/312320.html).
     <sup>[<a href="#updateable_reused_components">updateable_reused_components</a>]</sup>
 
--   <a name="build_standard_variables"></a>
+*   <a name="build_standard_variables"></a>
     Build systems for native binaries MUST honor the relevant compiler and
     linker (environment) variables passed in to them (e.g., CC, CFLAGS,
     CXX, CXXFLAGS, and LDFLAGS) and pass them to compiler and linker
@@ -291,7 +291,7 @@ SHOULD or MUST.
     *Rationale*: See
      https://github.com/linuxfoundation/cii-best-practices-badge/issues/453
 
--   <a name="build_repeatable"></a>
+*   <a name="build_repeatable"></a>
     The project MUST be able to repeat the process of
     generating information from source files and get exactly
     the same bit-for-bit result.
@@ -314,10 +314,9 @@ SHOULD or MUST.
     which can be harder to do - so we have split this requirement up.
     See the [reproducible build criterion](#reproducible_build).
 
--   <a name="installation_common"></a>(Future criterion) The project SHOULD provide a way to easily install and uninstall the software using a commonly-used convention.  <sup>[<a href="#installation_common">installation_common</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>Examples include using a language-level package manager (such as npm, pip, maven, or bundler), system-level package manager (such as apt-get or dnf), "make install/uninstall" (supporting DESTDIR), a container in a standard format, or a virtual machine image in a standard format. The installation and uninstallation process (e.g., its packaging) MAY be implemented by a third party as long as it is FLOSS.
-</dd></dl>
+*   <a name="installation_common"></a>(Future criterion) The project SHOULD provide a way to easily install and uninstall the software using a commonly-used convention.  <sup>[<a href="#installation_common">installation_common</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>Examples include using a language-level package manager (such as npm, pip, maven, or bundler), system-level package manager (such as apt-get or dnf), "make install/uninstall" (supporting DESTDIR), a container in a standard format, or a virtual machine image in a standard format. The installation and uninstallation process (e.g., its packaging) MAY be implemented by a third party as long as it is FLOSS.</dd></dl>
 
--   <a name="installation_standard_variables"></a>
+*   <a name="installation_standard_variables"></a>
     The installation system MUST honor standard conventions for
     selecting the location where built artifacts are written to
     at installation time.  For example, if it installs
@@ -336,7 +335,7 @@ SHOULD or MUST.
 
 ### Continuity
 
--   The project MUST be able to continue with minimal interruption
+*   The project MUST be able to continue with minimal interruption
     if any one person is incapacitated or killed.
     In particular, the project MUST be able to create and close issues,
     accept proposed changes, and release versions of software, within a
@@ -348,7 +347,7 @@ SHOULD or MUST.
     (e.g., for DNS names).
     <sup>[<a href="#access_continuity">access_continuity</a>]</sup>
 
--   The project SHOULD have a "bus factor" of 2 or more.
+*   The project SHOULD have a "bus factor" of 2 or more.
     A "bus factor" (aka "truck factor") is the
     minimum number of project members that have to suddenly disappear from
     a project ("hit by a bus") before the project stalls
@@ -361,7 +360,7 @@ SHOULD or MUST.
 
 ### Security analysis
 
--   Projects MUST monitor or periodically check their dependencies
+*   Projects MUST monitor or periodically check their dependencies
     (including embedded dependencies) to detect known vulnerabilities and
     fix exploitable vulnerabilities or verify them as unexploitable.
     This can be done using an origin analyzer / dependency checking tool
@@ -382,7 +381,7 @@ SHOULD or MUST.
 
 ### Release
 
--   Project releases of the software intended for widespread use
+*   Project releases of the software intended for widespread use
     MUST be cryptographically signed, there MUST be a documented
     process explaining to users how they can obtain the public signing keys
     and verify the signature. The private key for this signature MUST NOT
@@ -408,7 +407,7 @@ SHOULD or MUST.
 
 ### Cryptography
 
--   <a name="crypto_agility"></a>
+*   <a name="crypto_agility"></a>
     The project SHOULD support multiple
     cryptographic algorithms, so users can quickly switch if one is broken.
     Common symmetric key algorithms include AES, Twofish, and Serpent.
@@ -429,23 +428,23 @@ SHOULD or MUST.
     See the discussion per
     [issue #215](https://github.com/linuxfoundation/cii-best-practices-badge/issues/215)
 
--   <a name="crypto_used_network"></a>(Future criterion) The project SHOULD NOT use unencrypted network communication protocols (such as HTTP and telnet) if there is an encrypted equivalent (e.g., HTTPS/TLS and SSH), unless the user specifically requests or configures it.
+*   <a name="crypto_used_network"></a>(Future criterion) The project SHOULD NOT use unencrypted network communication protocols (such as HTTP and telnet) if there is an encrypted equivalent (e.g., HTTPS/TLS and SSH), unless the user specifically requests or configures it.
  (N/A allowed.) <sup>[<a href="#crypto_used_network">crypto_used_network</a>]</sup>
 
-- <a name="crypto_tls12"></a>(Future criterion) The project SHOULD, if it supports TLS, support at least TLS version 1.2. Note that the predecessor of TLS was called SSL.
+* <a name="crypto_tls12"></a>(Future criterion) The project SHOULD, if it supports TLS, support at least TLS version 1.2. Note that the predecessor of TLS was called SSL.
  (N/A allowed.) <sup>[<a href="#crypto_tls12">crypto_tls12</a>]</sup>
 
-- <a name="crypto_certificate_verification"></a>(Future criterion) The project MUST, if it supports TLS, perform TLS certificate verification by default when using TLS, including on subresources.
+* <a name="crypto_certificate_verification"></a>(Future criterion) The project MUST, if it supports TLS, perform TLS certificate verification by default when using TLS, including on subresources.
  (N/A allowed.) <sup>[<a href="#crypto_certificate_verification">crypto_certificate_verification</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>Note that having incorrect TLS certificate verification is a common mistake. For more information, see <a href="http://crypto.stanford.edu/~dabo/pubs/abstracts/ssl-client-bugs.html">"The Most Dangerous Code in the World: Validating SSL Certificates in Non-Browser Software" by Martin Georgiev et al.</a> and <a href="https://blogs.gnome.org/mcatanzaro/2016/03/12/do-you-trust-this-application/">"Do you trust this application?" by Michael Catanzaro</a>.
 </dd></dl>
 
-- <a name="crypto_verification_private"></a>(Future criterion) The project MUST, if it supports TLS, perform certificate verification before sending HTTP headers with private information (such as secure cookies).
+* <a name="crypto_verification_private"></a>(Future criterion) The project MUST, if it supports TLS, perform certificate verification before sending HTTP headers with private information (such as secure cookies).
  (N/A allowed.) <sup>[<a href="#crypto_verification_private">crypto_verification_private</a>]</sup>
 
 
 ### Other passing+1 criteria
 
--   <a name="implement_secure_design"></a>
+*   <a name="implement_secure_design"></a>
     The project MUST implement secure design principles
     (from "know_secure_design") to the largest practical extent.
     This includes performing input validation with whitelists
@@ -456,7 +455,7 @@ SHOULD or MUST.
     "economy of mechanism" / keep it simple)
     <sup>[<a href="#implement_secure_design">implement_secure_design</a>]</sup>
 
-- <a name="hardening"></a>(Future criterion) Hardening mechanisms SHOULD be used so software defects are less likely to result in security vulnerabilities.
+* <a name="hardening"></a>(Future criterion) Hardening mechanisms SHOULD be used so software defects are less likely to result in security vulnerabilities.
  <sup>[<a href="#hardening">hardening</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>Hardening mechanisms may include HTTP headers like Content Security Policy (CSP), compiler flags to mitigate attacks (such as -fstack-protector), or compiler flags to eliminate undefined behavior. For our purposes least privilege is not considered a hardening mechanism (least privilege is important, but separate).
 </dd></dl>
 
@@ -473,7 +472,7 @@ SHOULD or MUST.
 
 ### General criteria
 
--   The project SHOULD employ continuous integration, where
+*   The project SHOULD employ continuous integration, where
     the primary developers team integrate their work frequently.
     In most cases this means that each developer integrates at least daily.
     [continuous_integration]
@@ -486,7 +485,7 @@ SHOULD or MUST.
     which is why it proposed as a SHOULD.
 
 
--   The project MUST clearly identify small tasks that can be performed
+*   The project MUST clearly identify small tasks that can be performed
     by new or casual contributors.
     This identification is typically done by marking selected issues
     in an issue tracker with one or more tags the project uses
@@ -506,7 +505,7 @@ SHOULD or MUST.
     [Alluxio uses SMALLFIX](http://www.alluxio.org/docs/master/en/Contributing-to-Alluxio.html) and
     [OWASP ZAP uses IdealFirstBug](https://github.com/zaproxy/zaproxy/issues?q=is%3Aopen+is%3Aissue+label%3AIdealFirstBug).
 
--   The project MUST have at least two unassociated significant
+*   The project MUST have at least two unassociated significant
     contributors.
     Contributors are associated if they are paid to work
     by the same organization (as an employee or contractor)
@@ -533,7 +532,7 @@ SHOULD or MUST.
     It also covers the case where "two people got paid working for
     Red Cross for a day, but Red Cross doesn't use the project".
 
--   The project MUST have at least 50% of all proposed modifications
+*   The project MUST have at least 50% of all proposed modifications
     reviewed before release by a person other than the author,
     to determine if it is a worthwhile modification and
     free of known issues which would argue against its inclusion.
@@ -550,7 +549,7 @@ SHOULD or MUST.
     organizations to review each others' work, but in many situations
     that is not practical.
 
--   The project MUST include a license statement in each source file.
+*   The project MUST include a license statement in each source file.
     This may be done by including near the beginning
     of each file the following in a comment:
     ["SPDX-License-Identifier: [SPDX license expression]"](https://spdx.org/using-spdx#identifiers)
@@ -573,7 +572,7 @@ SHOULD or MUST.
 
 ### Quality
 
--   The project MUST have FLOSS automated test suite(s) that provide at least
+*   The project MUST have FLOSS automated test suite(s) that provide at least
     90% statement coverage if there is at least
     one FLOSS tool that can measure this criterion in the selected language.
     <sup>[<a href="#test_statement_coverage90">test_statement_coverage90</a>]</sup>
@@ -582,7 +581,7 @@ SHOULD or MUST.
     from the previous badge level, thus requiring even more
     thorough testing (by this measure).
 
--   The project MUST have FLOSS automated test suite(s) that provide at least
+*   The project MUST have FLOSS automated test suite(s) that provide at least
     80% branch coverage if there is at least
     one FLOSS tool that can measure this criterion in the selected language.
     <sup>[<a href="#test_branch_coverage80">test_branch_coverage80</a>]</sup>
@@ -597,7 +596,7 @@ SHOULD or MUST.
     a stricter measure of tests is used.
     Branch coverage is widely (but not universally) implemented.
 
--   <a name="build_reproducible"></a>
+*   <a name="build_reproducible"></a>
     The project MUST
     have a [reproducible build](https://reproducible-builds.org/).
     If no building occurs
@@ -630,7 +629,7 @@ We intend to turn these into criteria text.
 
 ### Passing+1 to be created
 
-- Must have a process for rapidly fixing vulnerabilities and
+* Must have a process for rapidly fixing vulnerabilities and
   releasing the updated software.
   Note that having a good test suite makes it easier
   to make changes and be
@@ -638,7 +637,7 @@ We intend to turn these into criteria text.
   Also note that FLOSS projects are often embedded in larger systems and
   projects cannot control the larger projects they are in.
 
--   All inputs from potentially untrusted sources are checked to ensure
+*   All inputs from potentially untrusted sources are checked to ensure
     they are valid (a *whitelist*), if there are any restrictions on
     the data at all. A "MUST".
     Invalid inputs are rejected.
@@ -652,7 +651,7 @@ We intend to turn these into criteria text.
 
 ### Passing+2 to be created
 
--   Current/past security review of the code.
+*   Current/past security review of the code.
     Perhaps passing+2.  Ideally it would be independent, but that
     often requires a lot of money.
     Kevin Wall: "If passing+2 is going to be the highest back level, I'd
@@ -664,13 +663,13 @@ We intend to turn these into criteria text.
 
 ## Still considering as criteria
 
--   Developers contributing a majority of the software
+*   Developers contributing a majority of the software
         (over 50%) have learned how to develop secure software.
         Kevin Wall asked this question: "Exactly how would you measure
         that? Do you just except them to have some security-related
         certification or take some specific course or what?"
 
-- If C/C++, MUST use ASAN or something like it. See
+* If C/C++, MUST use ASAN or something like it. See
   https://github.com/linuxfoundation/cii-best-practices-badge/issues/256
   
 
@@ -680,32 +679,33 @@ Here are some potential sources for criteria that need to be reviewed.
 
 Review these larger criteria sets for things to add:
 
-- It would be quite plausible to add many requirements specific to security.
-for example, it would be plausible to require that a system meet the
-requirements (or a specified subset) of the
-[owasp application security verification standard project](https://www.owasp.org/index.php/category:owasp_application_security_verification_standard_project)
-or the
-[securing web application technologies (swat) checklist](https://software-security.sans.org/resources/swat).
-note that both of these focus only on web applications.
-These are:
-    -   OWASP Application Security Verification Standard (ASVS) -
-        "provides a basis for testing web application technical security
-        controls and also provides developers with a list of requirements
-        for secure development."
-    -   SANS' Securing Web Application Technologies (SWAT) criteria.
+* It would be quite plausible to add many requirements specific to security.
+  for example, it would be plausible to require that a system meet the
+  requirements (or a specified subset) of the
+  [owasp application security verification standard project](https://www.owasp.org/index.php/category:owasp_application_security_verification_standard_project)
+  or the
+  [securing web application technologies (swat) checklist](https://software-security.sans.org/resources/swat).
+  note that both of these focus only on web applications.
+  These are:
+
+    - OWASP Application Security Verification Standard (ASVS)
+      "provides a basis for testing web application technical security
+      controls and also provides developers with a list of requirements
+      for secure development."
+    - SANS' Securing Web Application Technologies (SWAT) criteria.
 
 In the future we might add some criteria that a project has to meet
 some subset of (e.g., it must meet at least 3 of 5 criteria).
 
 ## Probably not
 
-- Public advisories issued for vulnerabilities,
+* Public advisories issued for vulnerabilities,
   this could include advisories on the <https://SOMEWHERE/security> page
   and/or an "Announcement" mailing list for new versions
   (at least for security updates).
   Often projects don't know (or are unsure) if they are vulnerabilities.
 
--   Automated regression test suite includes at least one check for
+*   Automated regression test suite includes at least one check for
         rejection of invalid data for each input field.
         *Rationale:* Many regression test suites check only for perfect data;
         attackers will instead provide invalid data, and programs need to
@@ -713,20 +713,20 @@ some subset of (e.g., it must meet at least 3 of 5 criteria).
         However, on many projects this would be a hard burden, and it's
         not clear it's necessarily worth it (there are diminishing returns).
 
-- (Node.js practice): We have a private repository for security issues
+* (Node.js practice): We have a private repository for security issues
     and every member of that team is required to have
     2FA enabled on their GitHub account.
     Response: Not everyone agrees on having a private repo for security issues,
     and some projects will have significant difficulties deploying 2FA.
-- (Node.js)
+* (Node.js)
     We're considering requiring GPG signing of all of their commits as well.
     Response: This is helpful, but somewhat onerous to *require*,
     especially for projects with a large number of commits.
 
--   Standard security advisory template and a pre-notification process
+*   Standard security advisory template and a pre-notification process
         (useful for big projects; see Xen project as an example).
 
--   Privacy requirements.  The distribution system does not reveal to
+*   Privacy requirements.  The distribution system does not reveal to
         third parties what software or version number is being distributed,
         or to who.
         The distribution system does not require users to identify
@@ -736,7 +736,7 @@ some subset of (e.g., it must meet at least 3 of 5 criteria).
         many circumstances.  So we don't plan to add this.
         Maybe the EFF can help?!?
 
--   Copyright notice in each file, e.g.,
+*   Copyright notice in each file, e.g.,
     "Copyright [year project started] - [current year], [project founder]
     and the [project name] contributors."
     *Rationale*: It isn't legally required.
@@ -755,7 +755,7 @@ Response: We think this is too detailed, and too restrictive to
 specific situations.  Instead, we would want to discuss review, and
 point to guidelines to follow (like CERT's).
 
-- <a name="validate_the_tainted_array_index"></a>The direct data
+* <a name="validate_the_tainted_array_index"></a>The direct data
   or the indirect data from the untrusted sources which is used as
   the array index MUST be ensured within a legal range.
   Input validation is always the best practices of secure coding.
@@ -765,7 +765,7 @@ point to guidelines to follow (like CERT's).
   See the [CWE](http://cwe.mitre.org/data/definitions/129.html).
   <sup>[<a href="#validate_the_tainted_array_index">validate_the_tainted_array_index</a>]</sup>
 
-- <a name="validate_the_tainted_buffer_length"></a>The direct data
+* <a name="validate_the_tainted_buffer_length"></a>The direct data
   or the indirect data from the untrusted sources which is used as
   the buffer length for read/write MUST be ensured within a legal range.
   Input validation is always the best practices of secure coding.
@@ -775,7 +775,7 @@ point to guidelines to follow (like CERT's).
   See the [CWE](http://cwe.mitre.org/data/definitions/119.html).
   <sup>[<a href="#validate_the_tainted_buffer_length">validate_the_tainted_buffer_length</a>]</sup>
 
-- <a name="validate_the_tainted_loop_condiction"></a>The direct data
+* <a name="validate_the_tainted_loop_condiction"></a>The direct data
   or the indirect data from the untrusted sources which is used as
   the loop ending condiction MUST be avoided infinite loop or other logic mistake.
   Input validation is always the best practices of secure coding.
@@ -784,7 +784,7 @@ point to guidelines to follow (like CERT's).
   See the [CWE](http://cwe.mitre.org/data/definitions/606.html).
   <sup>[<a href="#validate_the_tainted_loop_condiction">validate_the_tainted_loop_condiction</a>]</sup>
 
-- <a name="validate_the_tainted_string"></a>When copying from a string
+* <a name="validate_the_tainted_string"></a>When copying from a string
   that is not a trusted source, it MUST ensure
   that there is enough space to hold the data and the end.
   Input validation is always the best practices of secure coding.
@@ -793,14 +793,14 @@ point to guidelines to follow (like CERT's).
   See the [CWE](http://cwe.mitre.org/data/definitions/120.html).
   <sup>[<a href="#validate_the_tainted_string">validate_the_tainted_string</a>]</sup>
 
-- <a name="validate_the_tainted_integer_on_caculation"></a>The integer values
+* <a name="validate_the_tainted_integer_on_caculation"></a>The integer values
   from untrusted sources MUST be avoided the integer overflow or wraparound.
   (e.g., [CERT](http://www.cert.org/secure-coding/research/secure-coding-standards.cfm),
   [OWASP](https://www.owasp.org/index.php/OWASP_Secure_Coding_Practices_-_Quick_Reference_Guide))
   See the [CWE](http://cwe.mitre.org/data/definitions/190.html).
   <sup>[<a href="#validate_the_tainted_integer_on_caculation">validate_the_tainted_integer_on_caculation</a>]</sup>
 
-- <a name="validate_the_malloc_size"></a>Appropriate size limits
+* <a name="validate_the_malloc_size"></a>Appropriate size limits
   SHOULD be used to allocate memory from an unreliable source, and
   MUST check the return value of the allocate function.
   (e.g., [CERT](http://www.cert.org/secure-coding/research/secure-coding-standards.cfm),

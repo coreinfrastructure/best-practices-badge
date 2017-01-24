@@ -688,11 +688,11 @@ Review these larger criteria sets for things to add:
   note that both of these focus only on web applications.
   These are:
 
-   - OWASP Application Security Verification Standard (ASVS) -
-     "provides a basis for testing web application technical security
-     controls and also provides developers with a list of requirements
-     for secure development."
-   - SANS' Securing Web Application Technologies (SWAT) criteria.
+    - OWASP Application Security Verification Standard (ASVS)
+      "provides a basis for testing web application technical security
+      controls and also provides developers with a list of requirements
+      for secure development."
+    - SANS' Securing Web Application Technologies (SWAT) criteria.
 
 In the future we might add some criteria that a project has to meet
 some subset of (e.g., it must meet at least 3 of 5 criteria).

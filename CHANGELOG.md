@@ -32,6 +32,7 @@ This Change Log format is suggested by
 - Search in projects
 
 ## 2015-10-15
+
 ### Added
 
 - "Alpha" milestone - End-to-end functionality.  Can sign in/log in,
@@ -42,16 +43,19 @@ This Change Log format is suggested by
 - Improved criteria
 
 ## 2015-08-26
+
 ### Added
 
 - Added initial version of Ruby on Rails Application
 
 ## 2015-08-06
+
 ### Added
 
 - Initial check-in of draft criteria and supporting information.
 
 ## 2015-07-22
+
 ### Added
 
 - Initial commit.

@@ -62,7 +62,7 @@ traditional desktop GUI software, and command line programs.
 Please note that these are completely unrelated to the
 [Construction Industry Institute (CII) best practices](https://www.construction-institute.org/Store/CII/Publication_Pages/bp.cfm?section=orders).
 
-# Potential sources of criteria
+## Potential sources of criteria
 
 This section basically provides a literature search of related materials.
 These include
@@ -73,7 +73,7 @@ security-related metrics,
 and miscellanea.
 Some of these approaches may be useful for the badging system as well.
 
-## Guidelines for FLOSS projects
+### Guidelines for FLOSS projects
 
 Some guidelines include:
 
@@ -101,14 +101,14 @@ Some guidelines include:
 
 * [A Maturity Model for Apache Projects](http://community.apache.org/apache-way/apache-project-maturity-model.html)
 
-## Methods for evaluating FLOSS projects
+### Methods for evaluating FLOSS projects
 
 There are a number of complete processes specifically for evaluating FLOSS
 (as software, a project, or both). These typically evaluate FLOSS
 for a particular purpose, not their security per se, but they may have
 useful approaches that can be reused in criteria for a best practices badge.
 
-### Callaway&#8217;s FAIL index
+#### Callaway&#8217;s FAIL index
 
 Tom &#8220;spot&#8221; Callaway, Fedora Engineering Manager at Red Hat, posted a
 blog post titled &#8220;How to tell if a FLOSS project is doomed to FAIL (or
@@ -149,7 +149,7 @@ relatively easy to report.
 A updated discussion is here:
 <http://opensource.com/life/15/7/why-your-open-source-project-failing>.
 
-### Internet Success
+#### Internet Success
 
 The book *Internet Success* by Schweik and English reports a detailed
 quantitative analysis to answer the question,
@@ -269,7 +269,7 @@ responds quickly to questions, a good web site, good user documentation,
 and good developer documentation. A larger development team is a good
 sign, too.
 
-### OSS Manifesto
+#### OSS Manifesto
 
 The [OSS Manifesto](http://ossmanifesto.org/)
 states the following:
@@ -301,7 +301,7 @@ Still, this is a useful short list of best practices; we developed
 our list separately, and it is good to see that the list we developed
 includes practically all the same points.
 
-### Stol and Babar
+#### Stol and Babar
 
 There are so many processes for evaluating OSS that Stol and Babar have
 published a framework comparing them here:
@@ -309,7 +309,7 @@ published a framework comparing them here:
 is that there are several methods named
 &#8220;Open Source Maturity Model.&#8221;
 
-### QualiPSo OpenSource Maturity Model (OMM)
+#### QualiPSo OpenSource Maturity Model (OMM)
 
 The QualiPSo OpenSource Maturity Model (OMM) a methodology for assessing
 Free/Libre Open Source Software (FLOSS) and more specifically the FLOSS
@@ -380,7 +380,7 @@ Advanced level requirements:
 Unfortunately, we have had trouble accessing <http://www.qualipso.org/>
 for more information.
 
-### Wheeler OSS Evaluation model
+#### Wheeler OSS Evaluation model
 
 David A. Wheeler (the author) has previously described a general process
 for evaluating open source software in &#8220;How to Evaluate Open Source
@@ -438,7 +438,7 @@ Its section on reliability notes metrics that may be useful are:
 
 -   Presence of an automated (regression) test suite.
 
-### Gratis-Security
+#### Gratis-Security
 
 In 2003 David A. Wheeler developed an unpublished list of techniques
 that might be useful in an inexpensive evaluation approach he called
@@ -541,7 +541,7 @@ development environment administration, trusted distribution,
 documentation (document what the product should and should not do - see
 the CC for more details about this), and personnel.
 
-### Talk Openly Develop Openly (TODO)
+#### Talk Openly Develop Openly (TODO)
 
 Talk Openly Develop Openly (TODO)
 is "an open group of companies who want to collaborate on practices,
@@ -553,9 +553,9 @@ At this time they have not publicly released a best practices list.
 
 More information: <http://todogroup.org>
 
-## Security-related
+### Security-related
 
-### OWASP Application Security Verification Standard (ASVS)
+#### OWASP Application Security Verification Standard (ASVS)
 
 The OWASP Application Security Verification Standard (ASVS) Project
 provides &#8220;a basis for testing web application technical security
@@ -578,11 +578,11 @@ defines &#8220;security requirements that must be verified for an application
 to achieve a certain level. How those requirements are verified is left
 up to the verifier.&#8221;
 
-### OWASP OpenSAMM
+#### OWASP OpenSAMM
 
 OpenSAMM is documented here: <http://www.opensamm.org/>.
 
-### SANS&#8217; Securing Web Application Technologies (SWAT)
+#### SANS&#8217; Securing Web Application Technologies (SWAT)
 
 SANS has released the &#8220;Security Web Application Technologies&#8221; (SWAT)
 checklist, available at:
@@ -610,7 +610,7 @@ As the name implies, this is focused on web applications.
 The checklist items are cross-referenced to the relevant CWE entries - a
 nice touch.
 
-### Build Security In
+#### Build Security In
 
 The US DHS "Build Security In" website
 "provides practices, tools, guidelines, rules, principles, and
@@ -619,7 +619,7 @@ practitioners can use to build security into software in every phase of
 its development."
 See <https://buildsecurityin.us-cert.gov/>.
 
-### Open Group O-TTPS
+#### Open Group O-TTPS
 
 Open Group has developed the
 ["Open Trusted Technology Provider Standard - Mitigating Maliciously Tainted and Counterfeit Products (O-TTPS)"](https://www2.opengroup.org/ogsys/catalog/c139).
@@ -627,14 +627,14 @@ This has been approved
 as an ISO/IEC International Standard (ISO/IEC 20243:2015).
 There is also an [O-TTPS Accreditation Program](http://www.opengroup.org/accreditation/o-ttps).
 
-### Critical Infrastructure Cyber Community Voluntary Program / Cyber Resilience Review
+#### Critical Infrastructure Cyber Community Voluntary Program / Cyber Resilience Review
 
 The US CERT has a
 "Critical Infrastructure Cyber Community Voluntary Program" including a
 "Cyber Resilience Review".  More information is here:
 <https://www.us-cert.gov/ccubedvp>
 
-### UL Cybersecurity Assurance Program (CAP)
+#### UL Cybersecurity Assurance Program (CAP)
 
 UL (formerly Underwriters Laboratories) is developing a
 Cybersecurity Assurance Program (CAP).
@@ -642,7 +642,7 @@ Cybersecurity Assurance Program (CAP).
 At this time the criteria are not public; when they become public
 they should be reviewed.
 
-### OWASP CLASP
+#### OWASP CLASP
 
 CLASP (Comprehensive, Lightweight Application Security Process)
 "provides a well-organized and structured approach for moving security
@@ -652,14 +652,14 @@ be integrated into any software development process."
 
 See: <https://www.owasp.org/index.php/Category:OWASP_CLASP_Project>.
 
-### BSIMM
+#### BSIMM
 
 Building Security In Maturity Model (BSIMM)
 provides information about organizational software security initiatives
 and lets people compare their initiatives with others'.
 <https://www.bsimm.com/>
 
-### Heartbleed Lessons Learned
+#### Heartbleed Lessons Learned
 
 The Heartbleed vulnerability in OpenSSL could not be found by many of
 the techniques used to counter vulnerabilities. However, a number of
@@ -669,7 +669,7 @@ have similar vulnerabilities, and if so, should include at least one
 technique that could counter it. A list of techniques that could have
 countered Heartbleed is given in \[Wheeler2014h\].
 
-### Common Criteria
+#### Common Criteria
 
 The Common Criteria for Information Technology Security Evaluation
 (abbreviated as Common Criteria or CC)
@@ -687,7 +687,7 @@ Users of the Common Criteria typically focuses on the use of independent labs,
 who spend time evaluating a large set of documentatary evidence.
 That is radically different than the approach taken here.
 
-### SAFECode
+#### SAFECode
 
 The Software Assurance Forum for Excellence in Code (SAFECode)
 organization at
@@ -699,7 +699,7 @@ strengthen the criteria used for badges.
 SAFECode publications are available at:
 <http://www.safecode.org/publications/>.
 
-### "How we secure our phones"
+#### "How we secure our phones"
 
 [How we secure our phones (SSL, cert pinning, PFS & more)](http://resetthenet.tumblr.com/post/84327981750/how-we-secure-our-phones-ssl-cert-pinning-pfs)
 on "Reset the Net" has set of specific recommendations on how to
@@ -714,17 +714,17 @@ They are:
 5. Don't forget Perfect Forward Secrecy (PFS).
 6. Bring out the big guns: end-to-end encryption.
 
-### Encryption of data at-rest
+#### Encryption of data at-rest
 
 [Encryption of Data At-Rest: Step-by-step checklist (SNIA)](http://www.snia.org/sites/default/files/Encryption-Checklist-2.0.090909.pdf)
 has a checklist that may be useful.
 
-## Specific potentially useful security metrics
+### Specific potentially useful security metrics
 
 Many metrics have been proposed for evaluating software that are more
 security-focused. Some are focused on security.
 
-### In-depth static analysis security tools (e.g., Coverity Scan)
+#### In-depth static analysis security tools (e.g., Coverity Scan)
 
 Some tools are specifically designed to look for potential security
 vulnerabilities and report them. Their sheer counts, perhaps limited to
@@ -770,7 +770,7 @@ splint has not been maintained recently.)
 Note that these tools use heuristics to determine what is a
 vulnerability, thus, different tools will report different values.
 
-### Lexically scanning static analysis security tools (e.g., flawfinder and RATS)
+#### Lexically scanning static analysis security tools (e.g., flawfinder and RATS)
 
 A slightly different approach is to use lexical scanning tools
 to report constructs
@@ -787,7 +787,7 @@ that if developers often use riskier constructs, they are more likely to
 produce insecure results. A comparison of sendmail and postfix of years
 ago suggests this might be a useful measure.
 
-### Metrics from Wikipedia article on OSS Security
+#### Metrics from Wikipedia article on OSS Security
 
 Wikipedia&#8217;s article on &#8220;Open-Source Software security&#8221;
 has various comments about OSS security, including references to
@@ -828,7 +828,7 @@ Metrics they mention include:
 
 -   Coverity (see discussion on Coverity).
 
-### Origin analysis for known vulnerabilities
+#### Origin analysis for known vulnerabilities
 
 Today software is often composed from other systems, transitively.
 Unfortunately, these transcluded components may have known
@@ -839,9 +839,9 @@ it includes components that have known vulnerabilities. Such tools
 include OWASP Dependency-check, as well as tools from Sonatype, Black
 Duck, and Codenomicon.
 
-## Miscellaneous
+### Miscellaneous
 
-### Madrid 2015 meeting
+#### Madrid 2015 meeting
 
 The Core Infrastructure Initiative (CII) 2015 meeting in Madrid, Spain,
 discussed best practices.
@@ -857,14 +857,14 @@ Issues raised included the following:
   (so projects won't have the problem of being unable to meet the
   standard due to under-resourcing).
 
-### 12-factor app
+#### 12-factor app
 
 [The 12-factor app](http://12factor.net/) list
 is a list of recommended criteria for software-as-a-service apps,
 developed based on experience of Heroku.
 Point V is "V. Build, release, run: Strictly separate build and run stages".
 
-### Cognitive/behavioral
+#### Cognitive/behavioral
 
 We would like to have feedback from cognitive experts or studies
 to make the badges effective.
@@ -921,7 +921,7 @@ giving badges to individuals.
 This is a different focus than ours, which is focused on giving
 badges to *projects*, but there may be useful lessons or code to glean.
 
-### Checklist Manifesto
+#### Checklist Manifesto
 
 The *Checklist Manifesto* by Dr. Atul Gawande is not focused on software,
 but it advocates the use of checklists and emphasizes how to make effective
@@ -934,7 +934,7 @@ time to do. Nevertheless, the checklist manifesto is noted here because
 it clearly shows that simple &#8220;to do&#8221; lists,
 if carefully written, can have dramatically positive effects.
 
-### Secure design principles
+#### Secure design principles
 
 The criteria reference the well-known design principles of
 [Saltzer and Schroeder](http://web.mit.edu/Saltzer/www/publications/protection/).
@@ -949,7 +949,7 @@ Simply reading a list of principles does not automatically make a
 program secure, but ensuring that developers know them increases the
 likelihood that the developers will follow those practices.
 
-### Markdown style
+#### Markdown style
 
 We need to capture the criteria, and we're doing this in markdown.
 
@@ -959,7 +959,7 @@ If we use it, we'd probably use "Option space-sentence:2",
 "Option wrap:no" for bulleted text
 and "Option wrap:inner-sentence" for non-bulleted text.
 
-### Criteria style
+#### Criteria style
 
 Here is a guide for how criteria should be written.
 
@@ -980,7 +980,7 @@ Here is a guide for how criteria should be written.
   least restrictive and prohibitive
   (e.g., MUST and MUST NOT > SHOULD > RECOMMENDED > MAY).
 
-# Practices of some existing OSS Projects
+## Practices of some existing OSS Projects
 
 This section describes the practices of some existing OSS projects.
 We have selected a few projects that are popular,
@@ -1020,7 +1020,7 @@ Some of this material is derived from
 Note that any substantive project is difficult to summarize;
 the text below is necessarily a broad brush.
 
-## Linux kernel
+### Linux kernel
 
 The Linux kernel is an operating system kernel.
 Its primary project page is <https://www.kernel.org/>.
@@ -1150,7 +1150,7 @@ required of initial contributors.
 Instead, they are typically applied
 by others who then report on any issues they find.
 
-## OpenBSD
+### OpenBSD
 
 OpenBSD is an operating system (including a kernel).
 Its main web page is <http://www.openbsd.org>.
@@ -1179,7 +1179,7 @@ They use a variety of ways to help solve problems, for example:
 *   Privilege revocation
 *   Chroot jailing.
 
-## OpenSSH
+### OpenSSH
 
 OpenSSH implements SSH connectivity tools (e.g., ssh and scp)
 for encrypted connections.
@@ -1213,7 +1213,7 @@ of attack mitigation measures in the operating system (OS)
 For more on how OpenSSH implements privilege separation, see
 [<a href="https://www.usenix.org/events/sec03/tech/full_papers/provos_et_al/provos_et_al.pdf">Provos2003</a>].
 
-## LibreOffice
+### LibreOffice
 
 LibreOffice 5.0 uses variety of tools to detect defects to fix.
 These include
@@ -1243,7 +1243,7 @@ and COPYING.MPL (contains the Mozilla Public License Version 2.0),
 but it might not be obvious from those files
 to what each license applies.
 
-## SQLite
+### SQLite
 
 The SQLite developers emphasize extremely thorough (dynamic) testing.
 As of version 3.8.10, the SQLite library consists of approximately 94.2
@@ -1331,7 +1331,7 @@ distribution, and its README.md file does not clearly state the license.
 is a separate article that discusses the SQLite project and
 its code.
 
-## Global Positioning System Service Daemon (GPSD)
+### Global Positioning System Service Daemon (GPSD)
 
 Global Positioning System Service Daemon (GPSD) is a daemon
 that monitors one or more GPSes or AIS receivers attached
@@ -1365,7 +1365,7 @@ about regression testing and routinely applying four static analyzers;
 it paid off.&#8221;
 The [lead developer has provided other comments about GPSD development processes](http://esr.ibiblio.org/?p=4340).
 
-## OSSEC
+### OSSEC
 
 OSSEC is "an Open Source Host-based Intrusion Detection System that performs
 log analysis, file integrity checking, policy monitoring, rootkit detection,
@@ -1385,7 +1385,7 @@ The use a continuous integration server.
 
 <!-- Scott R. Shinn is willing to be a guinea pig for entering criteria info.-->
 
-## Postfix
+### Postfix
 
 Postfix is a mail server.
 Its primary website is <http://www.postfix.org>.
@@ -1416,7 +1416,7 @@ It is released under the
 Source is released as a .tar.gz tarball.
 No official public version control repository has been identified.
 
-## nokogiri - vulnerability reporting
+### nokogiri - vulnerability reporting
 
 The criteria include requiring some way to report vulnerabilities.
 A number of OSS projects don't do this.
@@ -1426,7 +1426,7 @@ For example,
 [nokogiri issue #1191](https://github.com/sparklemotion/nokogiri/issues/1191)
 requires creation of a vulnerability reporting process.
 
-## Tor (including lessons learned)
+### Tor (including lessons learned)
 
 The Tor project develops software that is under constant attack,
 so they've no doubt learned a number of things about security.
@@ -1436,7 +1436,7 @@ It breaks down the 70 bugs he found into different categories that are
 correlated with some recommendations for ways to try to avoid them in
 the future.
 
-# Public responses
+## Public responses
 
 We are grateful to the many news organizations (including blogging sites)
 who noticed and reported on the badging proposal.
@@ -1455,7 +1455,7 @@ Some of the organizations who reported on the badging program included:
 See <https://www.coreinfrastructure.org/programs/badge-program>
 for a high-level introduction to the badging program.
 
-# Bibliography
+## Bibliography
 
 Not all of these items are referenced directly, but they may still
 be useful.

@@ -17,8 +17,7 @@ exclude_tag :line_length
 exclude_rule 'MD004'
 
 exclude_rule 'MD007'
-exclude_rule 'MD022'
-exclude_rule 'MD025'
+exclude_rule 'MD024' # Duplicate headers are okay, e.g., "Added"
 exclude_rule 'MD026'
 exclude_rule 'MD029'
 exclude_rule 'MD030'

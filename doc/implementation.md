@@ -840,7 +840,7 @@ rm -f raw-bad-passwords-lowercase.txt.gz
 gzip --best raw-bad-passwords-lowercase.txt
 ~~~~
 
-# See also
+## See also
 
 See the separate "[background](./background.md)" and
 "[criteria](./criteria.md)" pages for more information.

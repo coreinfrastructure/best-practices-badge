@@ -293,7 +293,6 @@ We believe that all projects should:
 * Tag all major releases
 * Provide documentation"
 
-
 David A. Wheeler is skeptical that listing
 "all core team members in the readme file" specifically is a good idea,
 and suggests that information about contributions needs to be documented
@@ -554,7 +553,6 @@ At this time they have not publicly released a best practices list.
 
 More information: <http://todogroup.org>
 
-
 ## Security-related
 
 ### OWASP Application Security Verification Standard (ASVS)
@@ -654,7 +652,6 @@ be integrated into any software development process."
 
 See: <https://www.owasp.org/index.php/Category:OWASP_CLASP_Project>.
 
-
 ### BSIMM
 
 Building Security In Maturity Model (BSIMM)
@@ -721,7 +718,6 @@ They are:
 
 [Encryption of Data At-Rest: Step-by-step checklist (SNIA)](http://www.snia.org/sites/default/files/Encryption-Checklist-2.0.090909.pdf)
 has a checklist that may be useful.
-
 
 ## Specific potentially useful security metrics
 
@@ -925,7 +921,6 @@ giving badges to individuals.
 This is a different focus than ours, which is focused on giving
 badges to *projects*, but there may be useful lessons or code to glean.
 
-
 ### Checklist Manifesto
 
 The *Checklist Manifesto* by Dr. Atul Gawande is not focused on software,
@@ -953,7 +948,6 @@ principles, and we could add more from Saltzer and Kaashoek.
 Simply reading a list of principles does not automatically make a
 program secure, but ensuring that developers know them increases the
 likelihood that the developers will follow those practices.
-
 
 ### Markdown style
 
@@ -1185,7 +1179,6 @@ They use a variety of ways to help solve problems, for example:
 *   Privilege revocation
 *   Chroot jailing.
 
-
 ## OpenSSH
 
 OpenSSH implements SSH connectivity tools (e.g., ssh and scp)
@@ -1249,7 +1242,6 @@ contain the files COPYING (contains GPLv3), COPYING.LGPL
 and COPYING.MPL (contains the Mozilla Public License Version 2.0),
 but it might not be obvious from those files
 to what each license applies.
-
 
 ## SQLite
 
@@ -1392,8 +1384,6 @@ and flawfinder to look for vulnerabilities.
 The use a continuous integration server.
 
 <!-- Scott R. Shinn is willing to be a guinea pig for entering criteria info.-->
-
-
 
 ## Postfix
 
@@ -1576,7 +1566,6 @@ Software (OSS/FS, FLOSS, or FOSS)? Look at the Numbers!*
 Predicting Software Assurance Using Quality and Reliability Measures.
 December 2014. CMU/SEI-2014-TN-026.
 <http://resources.sei.cmu.edu/library/asset-view.cfm?assetid=428589>
-
 
 See [criteria](./criteria.md) for the current version of the criteria.
 See [implementation](./implementation.md)

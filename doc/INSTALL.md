@@ -119,7 +119,6 @@ git config --global user.name "YOUR NAME"
 git config --global user.email "YOUR EMAIL ADDRESS"
 ~~~~
 
-
 ## Running locally
 
 Once your development environment is ready, you can run the application with:
@@ -131,7 +130,6 @@ rails s
 This will automatically set up what it needs to, and then run the
 web application.  You can press control-C at any time to stop it.
 Then point your web browser at "localhost:3000".
-
 
 ## Contributing in general
 
@@ -146,18 +144,15 @@ to an appropriate destination.
 At this point, a deployment is automatically done to a staging system once
 it's checked into the repository on the master branch.
 
-
 ## See also
 
 See the separate "[background](./background.md)" and "[criteria](./criteria.md)"
 pages for more information.
 
-
 ## What does install-badge-dev-env do?
 
 The install-badge-dev-env script tries to install all (missing) tools and
 libraries.  You can re-run it again if something got corrupted.
-
 
 ### Installing system tools
 
@@ -196,7 +191,6 @@ git remote add upstream https://github.com/linuxfoundation/cii-best-practices-ba
 git clone <https://github.com/linuxfoundation/cii-best-practices-badge.git>
 cd cii-best-practices-badge
 -->
-
 
 ### Installing the project environment
 

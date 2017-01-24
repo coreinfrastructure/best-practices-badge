@@ -32,7 +32,6 @@ in higher level badges.
 Eventually these criteria will be worded per
 [RFC 2119](https://tools.ietf.org/html/rfc2119).
 
-
 ## Potential passing+1 criteria
 
 You must achieve the lower (passing) badge.  In addition,
@@ -40,7 +39,6 @@ some SHOULD will become MUST, and some SUGGESTED will become
 SHOULD or MUST.
 
 * FIXME - list of upgrades of SHOULD and SUGGESTED.
-
 
 ### Test
 
@@ -332,7 +330,6 @@ SHOULD or MUST.
     Windows-only programs).  See
     https://github.com/linuxfoundation/cii-best-practices-badge/issues/453
 
-
 ### Continuity
 
 *   The project MUST be able to continue with minimal interruption
@@ -441,7 +438,6 @@ SHOULD or MUST.
 * <a name="crypto_verification_private"></a>(Future criterion) The project MUST, if it supports TLS, perform certificate verification before sending HTTP headers with private information (such as secure cookies).
  (N/A allowed.) <sup>[<a href="#crypto_verification_private">crypto_verification_private</a>]</sup>
 
-
 ### Other passing+1 criteria
 
 *   <a name="implement_secure_design"></a>
@@ -483,7 +479,6 @@ SHOULD or MUST.
     [Martin Fowler](http://martinfowler.com/articles/continuousIntegration.html)
     We realize that this can be difficult for some projects to apply,
     which is why it proposed as a SHOULD.
-
 
 *   The project MUST clearly identify small tasks that can be performed
     by new or casual contributors.
@@ -660,7 +655,6 @@ We intend to turn these into criteria text.
     probably just fuzzing), where failed tests would have to be added
     to the regression test suite."
 
-
 ## Still considering as criteria
 
 *   Developers contributing a majority of the software
@@ -671,7 +665,6 @@ We intend to turn these into criteria text.
 
 * If C/C++, MUST use ASAN or something like it. See
   https://github.com/linuxfoundation/cii-best-practices-badge/issues/256
-  
 
 ## Potential sources for other criteria
 

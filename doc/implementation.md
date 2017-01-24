@@ -185,7 +185,6 @@ Then point your web browser at "localhost:3000".
 See the separate
 [security](security.md) document for more about security.
 
-
 ## Interface
 
 This is a relatively simple web application, so its
@@ -265,7 +264,6 @@ The following search parameters are supported:
 
 See app/controllers/project_controllers.rb for how these
 are implemented.
-
 
 ## Changing criteria
 
@@ -352,7 +350,6 @@ modify the autofill code in the app/lib/ directory.
 
 Be sure to "git add" all new files, including any migration files,
 and then use "git commit" and "git push".
-
 
 ## App authentication via GitHub
 
@@ -504,7 +501,6 @@ Now you can directly deploy to Heroku:
 git checkout master
 git push heroku master
 ~~~~
-
 
 ## Auditing
 
@@ -810,7 +806,6 @@ however, want to allow for emails that are not case insensitive unique
 since this could possibly allow for a number of duplicate users to be
 created and the possibility of two users from the same domain having
 emails which differ only in case is exceedingly rare.
-
 
 ## Forbidden Passwords
 

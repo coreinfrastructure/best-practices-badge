@@ -417,7 +417,6 @@ Note that we also use
 for continuous integration tools to check changes
 after they are checked into GitHub; if they find problems, please fix them.
 
-
 ## Reuse (supply chain)
 
 ### Requirements for reused components

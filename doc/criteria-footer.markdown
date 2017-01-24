@@ -101,7 +101,6 @@ possible for a large number of projects (even small ones) to
 participate.  There's a risk that projects may make false claims,
 but we think the risk is small, and users can check the claims for themselves.
 
-
 ## Improving the criteria
 
 We are hoping to get good suggestions and feedback from the public;

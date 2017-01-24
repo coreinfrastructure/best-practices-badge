@@ -16,10 +16,7 @@ exclude_tag :line_length
 # Having all levels with the same symbol is confusing, so we exclude the rule.
 exclude_rule 'MD004'
 
-# exclude_rule 'MD005'
 exclude_rule 'MD007'
-exclude_rule 'MD009'
-exclude_rule 'MD012'
 exclude_rule 'MD022'
 exclude_rule 'MD025'
 exclude_rule 'MD026'

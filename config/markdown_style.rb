@@ -10,7 +10,6 @@ exclude_tag :line_length
 
 # For the moment we'll disable many rules to make it easier to get started.
 # The current plan is to slowly remove many of these over time.
-exclude_rule 'MD003'
 exclude_rule 'MD004'
 exclude_rule 'MD005'
 exclude_rule 'MD007'

@@ -5,6 +5,7 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
   setup do
     @user = users(:test_user)
     @user2 = users(:test_user_not_active)
+    @user3 = users(:test_user_mark)
   end
 
   test 'login with invalid username and password' do
@@ -29,6 +30,23 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
       session: { email: 'unknown@example.org', password: 'bad_password' }
     }
     assert_template 'sessions/new'
+    assert_not flash.empty?
+    get root_path
+    assert flash.empty?
+  end
+
+  test 'login with simple password' do
+    get login_path
+    assert_template 'sessions/new'
+    post login_path, params: {
+      session: {
+        email: @user3.email, password: 'password',
+        provider: @user3.provider
+      }
+    }
+    assert user_logged_in?
+    assert_redirected_to edit_user_path(@user3)
+    follow_redirect!
     assert_not flash.empty?
     get root_path
     assert flash.empty?

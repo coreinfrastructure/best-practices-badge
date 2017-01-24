@@ -20,7 +20,7 @@ class UsersController < ApplicationController
     @edit_projects = Project.where(repo_url: github_user_projects) - @projects
   end
 
-  # rubocop: disable Metrics/MethodLength
+  # rubocop: disable Metrics/MethodLength,Metrics/AbcSize
   def create
     @user = User.find_by(email: user_params[:email])
     if @user
@@ -28,29 +28,42 @@ class UsersController < ApplicationController
     else
       @user = User.new(user_params)
       @user.provider = 'local'
-      if @user.save
-        send_activation
+      if @user.password_valid?(user_params[:password])
+        if @user.save
+          send_activation
+        else
+          render 'new'
+        end
       else
+        flash.now[:danger] = 'Your password does not meet our
+                              complexity/length requirements.'
         render 'new'
       end
     end
   end
-  # rubocop: enable Metrics/MethodLength
+  # rubocop: enable Metrics/MethodLength,Metrics/AbcSize
 
   def edit
     @user = User.find(params[:id])
     redirect_to @user unless @user.provider == 'local'
   end
 
+  # rubocop: disable Metrics/MethodLength,Metrics/AbcSize
   def update
     @user = User.find(params[:id])
-    if @user.update_attributes(user_params)
+    if !@user.password_valid?(user_params[:password])
+      flash.now[:danger] =
+        'Your new password does not meet our
+         complexity/length requirements.'
+      render 'edit'
+    elsif @user.update_attributes(user_params)
       flash[:success] = 'Profile updated'
       redirect_to @user
     else
       render 'edit'
     end
   end
+  # rubocop: enable Metrics/MethodLength,Metrics/AbcSize
 
   def destroy
     User.find(params[:id]).destroy

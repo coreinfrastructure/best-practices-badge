@@ -3,7 +3,7 @@
 test_user:
   name: Test
   email: test@example.org
-  password_digest: <%= User.digest('password') %>
+  password_digest: <%= User.digest('pa$$word') %>
   provider: local
   activated: true
   activated_at: <%= Time.zone.now %>
@@ -11,7 +11,7 @@ test_user:
 test_user_melissa:
   name: Melissa Lewis
   email: melissa@example.com
-  password_digest: <%= User.digest('password1') %>
+  password_digest: <%= User.digest('pa$$word1') %>
   provider: local
   activated: true
   activated_at: <%= Time.zone.now %>
@@ -27,14 +27,14 @@ test_user_mark:
 test_user_not_active:
   name: Forgetful
   email: forgetful@example.com
-  password_digest: <%= User.digest('password') %>
+  password_digest: <%= User.digest('pa$$word') %>
   provider: local
   activated: false
 
 test_user_cs:
   name: Case Sensitive
   email: CaseSensitive@example.org
-  password_digest: <%= User.digest('password') %>
+  password_digest: <%= User.digest('pa$$word') %>
   provider: local
   activated: true
   activated_at: <%= Time.zone.now %>
@@ -42,7 +42,7 @@ test_user_cs:
 admin_user:
   name: Admin
   email: admin@example.com
-  password_digest: <%= User.digest('password') %>
+  password_digest: <%= User.digest('pa$$word') %>
   provider: local
   activated: true
   activated_at: <%= Time.zone.now %>

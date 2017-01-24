@@ -22,7 +22,7 @@ class LoginTest < CapybaraFeatureTest
   scenario 'Can Login and edit using custom account', js: true do
     visit login_path
     fill_in 'Email', with: @user.email
-    fill_in 'Password', with: 'password'
+    fill_in 'Password', with: 'pa$$word'
     click_button 'Log in using custom account'
     assert has_content? 'Signed in!'
 

@@ -58,13 +58,43 @@ class PasswordResetsControllerTest < ActionController::TestCase
       }
     }
     assert_select 'div#error_explanation'
-    # Valid password & confirmation
+    # password too short
     patch :update, params: {
       id: user.reset_token,
       email: user.email,
       user: {
         password:              'foo1234',
         password_confirmation: 'foo1234'
+      }
+    }
+    assert_select 'div#error_explanation'
+    # password not complex
+    patch :update, params: {
+      id: user.reset_token,
+      email: user.email,
+      user: {
+        password:              'password',
+        password_confirmation: 'password'
+      }
+    }
+    assert_select 'div#error_explanation'
+    # Valid password, invalid confirm
+    patch :update, params: {
+      id: user.reset_token,
+      email: user.email,
+      user: {
+        password:              'foo12345',
+        password_confirmation: 'foo123467'
+      }
+    }
+    assert_select 'div#error_explanation'
+    # Valid password & confirmation
+    patch :update, params: {
+      id: user.reset_token,
+      email: user.email,
+      user: {
+        password:              'foo12345',
+        password_confirmation: 'foo12345'
       }
     }
     assert user_logged_in?

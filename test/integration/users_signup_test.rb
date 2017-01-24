@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 require 'test_helper'
 
+# rubocop:disable Metrics/ClassLength
 class UsersSignupTest < ActionDispatch::IntegrationTest
   setup do
     ActionMailer::Base.deliveries.clear
@@ -11,36 +12,36 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
       post users_path, params: { user: {
         name:  '',
         email: 'user@invalid',
-        password:              'foo',
-        password_confirmation: 'bar'
+        password:              'p@ssword',
+        password_confirmation: 'p@ssword'
       } }
     end
     assert_template 'users/new'
   end
 
-  #   test 'too-short password' do
-  #     assert_no_difference 'User.count' do
-  #       post users_path, user: {
-  #         name:  'Example User',
-  #         email: 'user@example.com',
-  #         password:              '1234567',
-  #         password_confirmation: '1234567'
-  #       }
-  #     end
-  #     assert_template 'users/new'
-  #   end
-  #
-  #   test 'too-easy password' do
-  #     assert_no_difference 'User.count' do
-  #       post users_path, user: {
-  #         name:  'Example User',
-  #         email: 'user@example.com',
-  #         password:              'password',
-  #         password_confirmation: 'password'
-  #       }
-  #     end
-  #     assert_template 'users/new'
-  #   end
+  test 'too-short password' do
+    assert_no_difference 'User.count' do
+      post users_path, params: { user: {
+        name:  'Example User',
+        email: 'user@example.com',
+        password:              '1234567',
+        password_confirmation: '1234567'
+      } }
+    end
+    assert_template 'users/new'
+  end
+
+  test 'too-easy password' do
+    assert_no_difference 'User.count' do
+      post users_path, params: { user: {
+        name:  'Example User',
+        email: 'user@example.com',
+        password:              'password',
+        password_confirmation: 'password'
+      } }
+    end
+    assert_template 'users/new'
+  end
 
   test 'valid signup information with account activation' do
     get signup_path
@@ -120,3 +121,4 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
     assert_not user_logged_in?
   end
 end
+# rubocop:enable Metrics/ClassLength

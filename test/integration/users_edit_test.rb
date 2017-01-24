@@ -6,15 +6,26 @@ class UsersEditTest < ActionDispatch::IntegrationTest
     @user = users(:test_user)
   end
 
-  test 'unsuccessful edit' do
+  test 'unsuccessful edit, bad password' do
+    log_in_as(@user)
+    get edit_user_path(@user)
+    assert_template 'users/edit'
+    patch user_path(@user), params: { user: {
+      name:  @user.name,
+      email: @user.email,
+      password:              'password',
+      password_confirmation: 'password'
+    } }
+    assert_template 'users/edit'
+  end
+
+  test 'unsuccessful edit, bad name and email' do
     log_in_as(@user)
     get edit_user_path(@user)
     assert_template 'users/edit'
     patch user_path(@user), params: { user: {
       name:  '',
-      email: 'foo@invalid',
-      password:              '12a',
-      password_confirmation: '45b'
+      email: 'foo@invalid'
     } }
     assert_template 'users/edit'
   end

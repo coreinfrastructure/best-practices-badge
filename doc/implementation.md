@@ -383,7 +383,8 @@ GITHUB_KEY='client id' GITHUB_SECRET='client secret' rails s
 where *client id* and *client secret* are registered OAuth2 credentials
 of the app.
 
-The authorization callback URL in GitHub is: http://localhost:3000/auth/github
+The authorization callback URL in GitHub is:
+<http://localhost:3000/auth/github>
 
 [1] <https://github.com/settings/applications/new>
 [2] <https://devcenter.heroku.com/articles/config-vars>
@@ -430,7 +431,7 @@ You can force-create new users and make them admins
 (again, if you have the rights to do so).
 To create new github user, first get their github uid from their
 github username (nickname) by looking at
-https://api.github.com/users/USERNAME
+<https://api.github.com/users/USERNAME>
 and getting the "id" value.
 Then run this, replacing all-caps stubs with the values in single quotes
 (this will create a local id automatically):
@@ -493,7 +494,9 @@ Normally you should just push changes to "master" first, so that
 CircleCI will test it.  If you want to push directly to Heroku
 (and have the necessary rights):
 
+~~~~
 git remote add heroku https://git.heroku.com/master-bestpractices.git
+~~~~
 
 Now you can directly deploy to Heroku:
 

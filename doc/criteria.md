@@ -593,8 +593,8 @@ and the project determines that.
 
 ## Why have criteria?
 
-The paper [Open badges for education: what are the implications at the
-intersection of open systems and badging?](http://www.researchinlearningtechnology.net/index.php/rlt/article/view/23563)
+The paper
+[Open badges for education: what are the implications at the intersection of open systems and badging?](http://www.researchinlearningtechnology.net/index.php/rlt/article/view/23563)
 identifies three general reasons for badging systems (all are valid for this):
 
 1. Badges as a motivator of behavior.  We hope that by identifying

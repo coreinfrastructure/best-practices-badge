@@ -28,8 +28,9 @@ exclude_rule 'MD030'
 # require blank lines around lists, while others don't.
 # To see this portability problem in action, see:
 # http://johnmacfarlane.net/babelmark2/?text=Is+this+a+list%3F%0A*+First+bullet%0A*+Second+bullet%0A
-exclude_rule 'MD033'
-exclude_rule 'MD034' # Bare URLs are okay, just surround with <..>
+exclude_rule 'MD033' # We need embedded HTML in some cases
+# We have to exclude MD034, otherwise generated criteria.md doesn't work.
+exclude_rule 'MD034' # Just surround bare URLs with <..>
 exclude_rule 'MD036'
-exclude_rule 'MD039'
+# exclude_rule 'MD039'
 exclude_rule 'MD040'

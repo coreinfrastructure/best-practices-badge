@@ -287,7 +287,7 @@ SHOULD or MUST.
     If no native binaries are being generated, select "N/A".
 
     *Rationale*: See
-     https://github.com/linuxfoundation/cii-best-practices-badge/issues/453
+     <https://github.com/linuxfoundation/cii-best-practices-badge/issues/453>
 
 *   <a name="build_repeatable"></a>
     The project MUST be able to repeat the process of
@@ -324,11 +324,12 @@ SHOULD or MUST.
 
     *Rationale* : This supports capturing the artifacts (e.g., for analysis)
     without interfering with the build or installation system due to
-    system-wide changes. See https://github.com/linuxfoundation/cii-best-practices-badge/issues/455
+    system-wide changes. See
+    <https://github.com/linuxfoundation/cii-best-practices-badge/issues/455>
     This doesn't apply when there's no "installation" process, or
     when POSIX filesystems aren't supported during installation (e.g.,
     Windows-only programs).  See
-    https://github.com/linuxfoundation/cii-best-practices-badge/issues/453
+    <https://github.com/linuxfoundation/cii-best-practices-badge/issues/453>
 
 ### Continuity
 
@@ -400,7 +401,7 @@ SHOULD or MUST.
     could be in the project README.
     Node.js implements this via GPG keys in the README, but note that
     in the criterion we are intentionally more general:
-    https://github.com/nodejs/node#release-team
+    <https://github.com/nodejs/node#release-team>
 
 ### Cryptography
 
@@ -664,7 +665,7 @@ We intend to turn these into criteria text.
         certification or take some specific course or what?"
 
 * If C/C++, MUST use ASAN or something like it. See
-  https://github.com/linuxfoundation/cii-best-practices-badge/issues/256
+  <https://github.com/linuxfoundation/cii-best-practices-badge/issues/256>
 
 ## Potential sources for other criteria
 
@@ -742,7 +743,7 @@ some subset of (e.g., it must meet at least 3 of 5 criteria).
 ### Probably not: Security Code review ideas from liujin28
 
 liujin28 proposed some specifics for security code review in
-https://github.com/linuxfoundation/cii-best-practices-badge/pull/536
+<https://github.com/linuxfoundation/cii-best-practices-badge/pull/536>
 
 Response: We think this is too detailed, and too restrictive to
 specific situations.  Instead, we would want to discuss review, and

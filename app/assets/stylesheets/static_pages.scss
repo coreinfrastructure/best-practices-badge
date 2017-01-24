@@ -17,6 +17,17 @@
           background-size: $width $height;
 }
 
+
+// // These next two styles are helpful in revealing the bootstrap formatting durring development
+// div[class="row"] {
+//     border: 1px dotted rgba(0, 0, 0, 0.5);
+// }
+// div[class^="col-"] {
+//     background-color: rgba(255, 0, 0, 0.2);
+// }
+
+
+
 body,
 h1,
 h2,
@@ -246,6 +257,8 @@ nav {
   padding-right: 5px;
 }
 
+
+
 // home page start
 
 .best-practices-banner {
@@ -297,9 +310,24 @@ nav {
 // edit/status page
 .main-badge-ques {
   margin-top: 10px;
+  margin-bottom: 20px;
   width: 140px;
   height: 140px;
   background: image-url('questions_page_badge.png') no-repeat top left;
+}
+
+/* For width 768px and smaller: */
+@media only screen and (max-width: 767px) {
+  .main-badge-ques {
+    position:relative;
+    top:-10px;
+    margin-top: 0px;
+    margin-bottom: 10px;
+    width: 100px;
+    height: 100px;
+    background: image-url('questions_page_badge.png') no-repeat top left;
+    background-size: 100px 100px;
+  }
 }
 
 .btn-simple {
@@ -317,7 +345,8 @@ nav {
 }
 
 .main-subtext {
-    padding-right: 150px;
+//the padding-right was commented out because it didn't look good on the form page in mobile sizes
+  //  padding-right: 150px;
     padding-top: 15px;
     font-size: 1.1em;
     color: black;
@@ -328,6 +357,35 @@ nav {
     height: 22px;
     border-radius: 0;
     margin-bottom: 5px;
+    display: block;
+}
+
+#progress-mobile
+{
+   position: absolute;
+   top: 152px;
+   left:125px;
+   display: none;
+}
+
+/* For width 768px and smaller: */
+@media only screen and (max-width: 767px) {
+  .progress {
+    width:150px;
+    height: 22px;
+    border-radius: 0;
+    margin-bottom: 5px;
+    display: none;
+  }
+  #progress-mobile
+  {
+     display: inline;
+     width:150px;
+     height: 22px;
+     border-radius: 0;
+     margin-bottom: 5px;
+
+  }
 }
 
 .progress-subtext {
@@ -387,6 +445,11 @@ input[type="text"].form-control, .inputbox-look, textarea.form-control  {
   }
 }
 
+@media (max-width: 480px) {
+    .nav-tabs > li {
+        float:none;
+    }
+}
 /* bootstrap utilities */
  .m-t-0 {
    margin-top: 0 !important;

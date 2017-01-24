@@ -19,7 +19,7 @@ exclude_rule 'MD004'
 exclude_rule 'MD007'
 exclude_rule 'MD024' # Duplicate headers are okay, e.g., "Added"
 exclude_rule 'MD026'
-exclude_rule 'MD029'
+rule 'MD029', style: 'ordered'
 exclude_rule 'MD030'
 # We include rule MD032, which requires that
 # lists be surrounded by blank lines (MD032).

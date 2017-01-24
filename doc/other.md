@@ -289,6 +289,16 @@ SHOULD or MUST.
     *Rationale*: See
      <https://github.com/linuxfoundation/cii-best-practices-badge/issues/453>
 
+*   <a name="build_preserve_debug"></a>
+    The build and installation system SHOULD preserve debugging information if they are requested in the relevant flags (e.g., "install -s" is not used).
+    If there is no build or installation system (e.g.,
+    typical JavaScript libraries), this is N/A.
+    *Details*: E.G., setting CFLAGS (C) or CXXFLAGS (C++) should create the
+    relevant debugging information if those languages are used, and they
+    should not be stripped during installation. Debugging information
+    is needed for support and analysis, and also useful for measuring
+    the presence of hardening features in the compiled binaries.
+
 *   <a name="build_repeatable"></a>
     The project MUST be able to repeat the process of
     generating information from source files and get exactly
@@ -439,6 +449,41 @@ SHOULD or MUST.
 * <a name="crypto_verification_private"></a>(Future criterion) The project MUST, if it supports TLS, perform certificate verification before sending HTTP headers with private information (such as secure cookies).
  (N/A allowed.) <sup>[<a href="#crypto_verification_private">crypto_verification_private</a>]</sup>
 
+### Accessibility
+
+* Accessibility best practices SHOULD be followed so that
+  persons with disabilities can still participate in the project and
+  use the project results where it is reasonable to do so.
+  *Details*:
+  For web applications, see the [W3C accessibility information](https://www.w3.org/standards/webdesign/accessibility).
+  For GUI applications, consider using the environment-specific
+  accessibility guidelines (such as
+  [Gnome](https://developer.gnome.org/accessibility-devel-guide/stable/),
+  [KDE](https://accessibility.kde.org/),
+  [XFCE](http://docs.xfce.org/xfce/xfce4-settings/accessibility),
+  [Android](https://developer.android.com/guide/topics/ui/accessibility/),
+  [iOS](https://developer.apple.com/accessibility/ios/),
+  [Mac](http://www.apple.com/accessibility/osx/voiceover/), and
+  [Windows](https://msdn.microsoft.com/en-us/windows/uwp/accessibility/accessibility-overview)).
+  Some TUI applications (e.g. `ncurses` programs) can do
+  certain things to make themselves more accessible (such as `alpine`'s
+  `force-arrow-cursor` setting).
+  Most command-line applications are fairly accessible as-is.
+  This criterion is often N/A, e.g., for program libraries.
+  Here are some examples of actions to take or issues to consider:
+
+  - Neither color nor sound SHOULD be used as the only way information
+    is conveyed
+  - Color combinations SHOULD be tested in a high-contrast environment
+  - If the software uses flashing or animation it SHOULD grant the user
+    control to disable it
+  - All applications SHOULD be tested for keyboard-only navigation
+  - A GUI or web-based project SHOULD test with at least one
+    screen-reader on the target platform(s) (e.g. NVDA, Jaws, or WindowEyes
+    on Windows; VoiceOver on Mac & iOS; Orca on Linux/BSD; TalkBack on
+    Android). TUI programs MAY work to reduce overdraw to prevent redundant
+    reading by screen-readers.
+
 ### Other passing+1 criteria
 
 *   <a name="implement_secure_design"></a>
@@ -456,16 +501,46 @@ SHOULD or MUST.
  <sup>[<a href="#hardening">hardening</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>Hardening mechanisms may include HTTP headers like Content Security Policy (CSP), compiler flags to mitigate attacks (such as -fstack-protector), or compiler flags to eliminate undefined behavior. For our purposes least privilege is not considered a hardening mechanism (least privilege is important, but separate).
 </dd></dl>
 
+* <a name="warnings_strict"></a>
+  Projects MUST be maximally strict with warnings, where practical.
+  *Details*: Some warnings cannot be effectively enabled on some projects,
+  or specific exceptions must be given.
+  What is needed is evidence that the project is striving to enable
+  warning flags where it can, so that errors are detected early.
+
+* <a name="dco"></a>The project SHOULD have a legal mechanism where
+  all developers of non-trivial amounts of project software assert that
+  they are legally authorized to make these contributions. The most
+  common and easily-implemented approach for doing this is by using a <a
+  href="http://developercertificate.org/">Developer Certificate of Origin
+  (DCO)</a>, where users add "signed-off-by" in their commits and
+  the project links to the DCO website.
+  However, this MAY be implemented as a
+  Contributor License Agreement (CLA), or other legal mechanism.
+  *Details*: The DCO is the recommended
+  mechanism because it's easy to implement, tracked in the source code,
+  and git directly supports a "signed-off" feature using "commit -s".
+  To be most effective it is best if the project documentation
+  explains what "signed-off" means for that project.
+  A CLA is a legal agreement that defines
+  the terms under which intellectual works have been licensed to an
+  organization or project.  A contributor assignment agreement (CAA)
+  is a legal agreement that transfers rights in an intellectual work
+  to another party; projects are not required to have CAAs, since
+  having CAA increases the risk that potential contributors
+  will not contribute, especially if the receiver is a for-profit organization.
+
 ## Potential passing+2 criteria
 
-*   Achieve the lower passing+1 badge.
+* Achieve the lower passing+1 badge.
 
-*   FIXME - list of upgrades of SHOULD and SUGGESTED from passing and passing+1.
-    - Change "report_tracker" to MUST, to require issue tracking.
-      Using GitHub issues meets this.
-      Note that the Linux kernel project has reported that this is very
-      hard to do at their scale.
-      NOTE: Kevin Wall thinks this should be at passing+1, not passing+2.
+* FIXME - list of upgrades of SHOULD and SUGGESTED from passing and passing+1.
+  - E.g., MUST have bus factor of 2 or more.
+  - Change "report_tracker" to MUST, to require issue tracking.
+    Using GitHub issues meets this.
+    Note that the Linux kernel project has reported that this is very
+    hard to do at their scale.
+    NOTE: Kevin Wall thinks this should be at passing+1, not passing+2.
 
 ### General criteria
 
@@ -682,11 +757,11 @@ Review these larger criteria sets for things to add:
   note that both of these focus only on web applications.
   These are:
 
-    - OWASP Application Security Verification Standard (ASVS)
-      "provides a basis for testing web application technical security
-      controls and also provides developers with a list of requirements
-      for secure development."
-    - SANS' Securing Web Application Technologies (SWAT) criteria.
+  - OWASP Application Security Verification Standard (ASVS)
+    "provides a basis for testing web application technical security
+    controls and also provides developers with a list of requirements
+    for secure development."
+  - SANS' Securing Web Application Technologies (SWAT) criteria.
 
 In the future we might add some criteria that a project has to meet
 some subset of (e.g., it must meet at least 3 of 5 criteria).

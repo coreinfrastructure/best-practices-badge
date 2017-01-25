@@ -205,11 +205,11 @@ class Project < ActiveRecord::Base
       project.with_lock do
         old_badge_percentage = project.badge_percentage
         project.update_badge_percentage
-        if old_badge_percentage == project.badge_percentage
+        unless old_badge_percentage == project.badge_percentage
           # FIXME: There's no easy way to save while *not* updating the
           # updated_at and uselessly re-running update_badge_percentage.
           # When we move to Rails 5, change this to: project.save(touch: false)
-          project.save!
+          project.save!(touch: false)
         end
       end
     end

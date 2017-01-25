@@ -7,10 +7,26 @@ class RecalcTest < ActionDispatch::IntegrationTest
   end
 
   test 'Recalc percentages' do
-    # This is a lousy test that only checks if we can run
-    # all_badge_percentages, not whether it produces correct results.
-    # But it at least validates that it *runs*.
-    Project.update_all_badge_percentages
-    assert Project.find(projects(:one).id).badge_percentage.zero?
+    # Check starting badge_percentage is zero, as expected
+    old_percentage = Project.find(projects(:one).id).badge_percentage
+    assert old_percentage.zero?
+    # Update some columns without triggering percentage calculation or change
+    # in updated_at
+    assert_no_difference(
+      'Project.find(projects(:one).id).badge_percentage',
+      'Project.find(projects(:one).id).updated_at'
+    ) do
+      @project.update_column(:homepage_url_status, 'Met')
+      @project.update_column(:description_good_status, 'Met')
+    end
+    # Run the update task, make sure updated_at doesnt change
+    assert_no_difference 'Project.find(projects(:one).id).updated_at' do
+      Project.update_all_badge_percentages
+    end
+    # Check the badge percentage changed, but not update time
+    assert_not_equal(
+      Project.find(projects(:one).id).badge_percentage,
+      old_percentage
+    )
   end
 end

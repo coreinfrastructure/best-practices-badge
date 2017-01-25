@@ -10,8 +10,8 @@ class RecalcTest < ActionDispatch::IntegrationTest
     # Check starting badge_percentage is zero, as expected
     old_percentage = Project.find(projects(:one).id).badge_percentage
     assert old_percentage.zero?
-    # Update some columns without triggering percentage calculation or change
-    # in updated_at
+    # Update some columns without triggering percentage calculation
+    # or change in updated_at
     assert_no_difference(
       'Project.find(projects(:one).id).badge_percentage',
       'Project.find(projects(:one).id).updated_at'
@@ -23,7 +23,7 @@ class RecalcTest < ActionDispatch::IntegrationTest
     assert_no_difference 'Project.find(projects(:one).id).updated_at' do
       Project.update_all_badge_percentages
     end
-    # Check the badge percentage changed, but not update time
+    # Check the badge percentage changed
     assert_not_equal(
       Project.find(projects(:one).id).badge_percentage,
       old_percentage

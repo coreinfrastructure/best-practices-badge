@@ -9,6 +9,7 @@ class FeedTest < ActionDispatch::IntegrationTest
   self.use_transactional_tests = false
 
   setup do
+    Rake::Task['db:environment:set'].invoke
     # Normalize time in order to match fixture file
     travel_to Time.zone.parse('2015-03-01T12:00:00') do
       ActiveRecord::Schema.verbose = false

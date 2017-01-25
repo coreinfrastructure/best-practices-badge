@@ -6,7 +6,7 @@ DatabaseCleaner.strategy = :transaction
 
 class CapybaraFeatureTest < Capybara::Rails::TestCase
   # When using DatabaseCleaner, transactional fixtures must be off.
-  self.use_transactional_fixtures = false
+  self.use_transactional_tests = false
 
   setup do
     # Start DatabaseCleaner before each test.

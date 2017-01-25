@@ -69,11 +69,16 @@ There is also a
 <%# End column started outside. %>
 </div>
 
-<div class="col-md-3 col-xs-3">
+<div class="col-md-3 col-sm-3">
   <div class="progress">
     <div id="badge-progress" class="progress-bar progress-bar-success badge-progress" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
   </div>
 </div>
+
+  <div id="progress-mobile" class="progress">
+    <div id="badge-progress-mobile" class="progress-bar progress-bar-success badge-progress" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+  </div>
+
 
 <%# end row started outside %>
 </div>
@@ -84,6 +89,7 @@ There is also a
 
   <%= bootstrap_form_for(project) do |f| %>
     <%= render 'shared/error_messages', object: f.object %>
+    <%= f.hidden_field :lock_version %>
 
 <br><br><br>
 <div>
@@ -142,12 +148,12 @@ This information is used when displaying badge information.
       <div class="hidable-text-entry">
       <span>What is the URL for the version control repository
             (it may be the same as the project URL)?</span>
-      <% if is_disabled || repo_disabled%>
+      <% if is_disabled %>
         <div class="discussion-markdown">
            <%= link_to_if project.contains_url?(project.repo_url), project.repo_url, project.repo_url, rel: 'nofollow' %>
         </div>
       <% else %>
-        <%= f.text_field :repo_url, class:"form-control", hide_label: true, placeholder:'Project Repo URL', disabled: repo_disabled %>
+        <%= f.text_field :repo_url, class:"form-control", hide_label: true, placeholder:'Project Repo URL', disabled: is_disabled %>
       <% end %>
       </div>
 
@@ -162,7 +168,117 @@ If there is no language (e.g., this is a documentation-only or test-only
 project), use the single character "-".
 Please use a conventional capitalization for each language, e.g., "JavaScript".
 }}) %>
-      <%= f.text_field :implementation_languages, hide_label: true, class:"form-control", placeholder:'Implementation language(s) used as a comma-separated list, sorted by amount of use', disabled: is_disabled %>
+      <%= f.text_field :implementation_languages, hide_label: true, class:"form-control", placeholder:'Implementation language(s) used as a comma-separated list, sorted by amount of use', list: 'implementation_language_list', disabled: is_disabled %>
+     <!-- Some examples from http://wiki.spdx.org/view/FileNoticeExamples -->
+     <div class="hidden">
+     <datalist id="implementation_language_list">
+      <select>
+        <option value="-">- (None)</option>
+        <option value="4th Dimension/4D">4th Dimension/4D</option>
+        <option value="ABAP">ABAP</option>
+        <option value="ABC">ABC</option>
+        <option value="ActionScript">ActionScript</option>
+        <option value="Ada">Ada</option>
+        <option value="Alice">Alice</option>
+        <option value="Apex">Apex</option>
+        <option value="APL">APL</option>
+        <option value="Assembly language">Assembly language</option>
+        <option value="AutoLISP">AutoLISP</option>
+        <option value="Awk">Awk</option>
+        <option value="Bash">Bash (bash-specific)</option>
+        <option value="bc">bc</option>
+        <option value="BlitzMax">BlitzMax</option>
+        <option value="Bourne shell">Bourne shell (portable)</option>
+        <option value="C">C</option>
+        <option value="C#">C#</option>
+        <option value="C++">C++</option>
+        <option value="CFML">CFML</option>
+        <option value="cg">cg</option>
+        <option value="Clojure">Clojure</option>
+        <option value="CL (OS/400)">CL (OS/400)</option>
+        <option value="COBOL">COBOL</option>
+        <option value="Common Lisp">Common Lisp</option>
+        <option value="Crystal">Crystal</option>
+        <option value="C shell">C shell</option>
+        <option value="D">D</option>
+        <option value="Dart">Dart</option>
+        <option value="Delphi">Delphi</option>
+        <option value="Eiffel">Eiffel</option>
+        <option value="Elixir">Elixir</option>
+        <option value="Elm">Elm</option>
+        <option value="Emacs Lisp">Emacs Lisp</option>
+        <option value="Erlang">Erlang</option>
+        <option value="F#">F#</option>
+        <option value="Factor">Factor</option>
+        <option value="Forth">Forth</option>
+        <option value="Fortran">Fortran</option>
+        <option value="FoxPro">FoxPro</option>
+        <option value="Go">Go</option>
+        <option value="Groovy">Groovy</option>
+        <option value="Hack">Hack</option>
+        <option value="Haskell">Haskell</option>
+        <option value="Icon">Icon</option>
+        <option value="IDL">IDL</option>
+        <option value="Inform 6">Inform 6</option>
+        <option value="Inform 7">Inform 7</option>
+        <option value="Io">Io</option>
+        <option value="J">J</option>
+        <option value="Java">Java</option>
+        <option value="JavaScript">JavaScript</option>
+        <option value="Julia">Julia</option>
+        <option value="Korn shell">Korn shell</option>
+        <option value="Kotlin">Kotlin</option>
+        <option value="LabVIEW">LabVIEW</option>
+        <option value="Ladder Logic">Ladder Logic</option>
+        <option value="Lisp">Lisp (other than Common Lisp, Scheme, Emacs Lisp, or Clojure)</option>
+        <option value="Logo">Logo</option>
+        <option value="Lua">Lua</option>
+        <option value="Maple">Maple</option>
+        <option value="MATLAB">MATLAB</option>
+        <option value="ML">ML</option>
+        <option value="MQL4">MQL4</option>
+        <option value="NATURAL">NATURAL</option>
+        <option value="NXT-G">NXT-G</option>
+        <option value="Objective-C">Objective-C</option>
+        <option value="OCaml">OCaml</option>
+        <option value="OpenCL">OpenCL</option>
+        <option value="Oz">Oz</option>
+        <option value="Perl">Perl</option>
+        <option value="PHP">PHP</option>
+        <option value="PL/I">PL/I</option>
+        <option value="PL/SQL">PL/SQL</option>
+        <option value="PostScript">PostScript</option>
+        <option value="PowerShell">PowerShell</option>
+        <option value="Prolog">Prolog</option>
+        <option value="Python">Python</option>
+        <option value="Q">Q</option>
+        <option value="R">R</option>
+        <option value="REXX">REXX</option>
+        <option value="RPG (OS/400)">RPG (OS/400)</option>
+        <option value="Ruby">Ruby</option>
+        <option value="Rust">Rust</option>
+        <option value="SAS">SAS</option>
+        <option value="Scala">Scala</option>
+        <option value="Scheme">Scheme</option>
+        <option value="Scratch">Scratch</option>
+        <option value="Simulink">Simulink</option>
+        <option value="Smalltalk">Smalltalk</option>
+        <option value="SPARK">SPARK</option>
+        <option value="SPSS">SPSS</option>
+        <option value="Standard ML">Standard ML</option>
+        <option value="Stata">Stata</option>
+        <option value="Swift">Swift</option>
+        <option value="Tcl">Tcl</option>
+        <option value="Transact-SQL">Transact-SQL</option>
+        <option value="VBScript">VBScript</option>
+        <option value="Verilog ">Verilog </option>
+        <option value="VHDL">VHDL</option>
+        <option value="Visual Basic">Visual Basic (not .NET)</option>
+        <option value="Visual Basic .NET">Visual Basic .NET</option>
+      </select>
+     </datalist></div>
+      <br>
+      <hr>
       </div>
 
 <!-- TODO: MUST have a project or repo URL, SUGGESTED to use HTTPS.

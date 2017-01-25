@@ -159,7 +159,8 @@ case "$manager" in
     #         libreadline6-dev zlib1g-dev libncurses5-dev libffi-dev \
     #         libgdbm3 libgdbm-dev
     add_pkg ruby-build postgresql-server-dev-all postgresql \
-            postgresql-contrib cmake nodejs phantomjs graphviz ;;
+            postgresql-contrib cmake nodejs phantomjs graphviz \
+            pkg-config;;
   yum|dnf)
     add_pkg gcc openssl-devel libyaml-devel libffi-devel readline-devel \
             zlib-devel gdbm-devel ncurses-devel postgresql-devel cmake npm \
@@ -376,6 +377,10 @@ if is_command shellcheck ; then
   shellcheck install-badge-dev-env
 fi
 
+# On initial setup the test in feed_test.rb will fail with an
+# ActiveRecord::EnvironmentMismatchError
+# Running db:migrate in the test environment fixes the error.
+bin/rake db:migrate RAILS_ENV=test 
 bin/rake
 
 echo 'All done! Please reopen your terminal or run'

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class CreateProjects < ActiveRecord::Migration
   def change
+    # rubocop:disable Metrics/BlockLength
     create_table :projects do |t|
       t.references :user, index: true, foreign_key: true
       # OSS PROJECT BASICS
@@ -166,6 +167,7 @@ class CreateProjects < ActiveRecord::Migration
 
       t.timestamps null: false
     end
+    # rubocop:enable Metrics/BlockLength
     add_index :projects, %i(user_id created_at)
   end
 end

@@ -63,11 +63,11 @@ You also need a version of git installed.
 If you don't already have it set up, install it using your system installation
 tools, e.g., at the command line:
 
-- <kbd>sudo apt-get install git</kbd> (Debian, Ubuntu)
-- <kbd>yum install git</kbd> (Red Hat Enterprise Linux, CentOS, older Fedora)
-- <kbd>dnf install git</kbd> (newer Fedora)
-- <kbd>emerge install git</kbd> (Gentoo)
-- <kbd>brew install git</kbd> (MacOS)
+* <kbd>sudo apt-get install git</kbd> (Debian, Ubuntu)
+* <kbd>yum install git</kbd> (Red Hat Enterprise Linux, CentOS, older Fedora)
+* <kbd>dnf install git</kbd> (newer Fedora)
+* <kbd>emerge install git</kbd> (Gentoo)
+* <kbd>brew install git</kbd> (MacOS)
 
 ## Forking the repo
 
@@ -119,7 +119,6 @@ git config --global user.name "YOUR NAME"
 git config --global user.email "YOUR EMAIL ADDRESS"
 ~~~~
 
-
 ## Running locally
 
 Once your development environment is ready, you can run the application with:
@@ -131,7 +130,6 @@ rails s
 This will automatically set up what it needs to, and then run the
 web application.  You can press control-C at any time to stop it.
 Then point your web browser at "localhost:3000".
-
 
 ## Contributing in general
 
@@ -146,18 +144,15 @@ to an appropriate destination.
 At this point, a deployment is automatically done to a staging system once
 it's checked into the repository on the master branch.
 
-
 ## See also
 
 See the separate "[background](./background.md)" and "[criteria](./criteria.md)"
 pages for more information.
 
-
 ## What does install-badge-dev-env do?
 
 The install-badge-dev-env script tries to install all (missing) tools and
 libraries.  You can re-run it again if something got corrupted.
-
 
 ### Installing system tools
 
@@ -166,12 +161,13 @@ First, it tries to automatically detect your system package management tool
 and then tries to install some key tools if they're not already there:
 
 * git, to get some of the programs we use.
-Installing git will also install some libraries such as
-curl, zlib, openssl, expat, and libiconv.
+  Installing git will also install some libraries such as
+  curl, zlib, openssl, expat, and libiconv.
 * Ruby (version 1.9.3 or newer), to bootstrap installing the Ruby we'll use
 * SQLite3 database system, used in development for data storage
 * C compiler and basic libraries for rebuilding ruby.
-Install a sane C compiler such as gcc or clang.
+  Install a sane C compiler such as gcc or clang.
+
 See the [ruby-build suggested build environment](https://github.com/sstephenson/ruby-build/wiki#suggested-build-environment)
 for how to do install the other required components.
 The script installs gcc.
@@ -195,7 +191,6 @@ git remote add upstream https://github.com/linuxfoundation/cii-best-practices-ba
 git clone <https://github.com/linuxfoundation/cii-best-practices-badge.git>
 cd cii-best-practices-badge
 -->
-
 
 ### Installing the project environment
 

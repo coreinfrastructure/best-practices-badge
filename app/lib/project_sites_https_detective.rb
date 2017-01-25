@@ -13,8 +13,8 @@ class ProjectSitesHttpsDetective < Detective
     repo_url = current[:repo_url]
     @results = {}
 
-    https_pattern = %r{^https://}
-    http_pattern = %r{^http://}
+    https_pattern = %r{\Ahttps://}i
+    http_pattern = %r{\Ahttp://}i
 
     if homepage_url =~ http_pattern || repo_url =~ http_pattern
       @results[:sites_https_status] =

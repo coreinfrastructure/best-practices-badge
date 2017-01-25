@@ -299,7 +299,7 @@ If you edit the JavaScript, beware of ready events.
 Rails' turbolinks gem claims that it
 ["works great with the jQuery framework"](https://github.com/rails/turbolinks),
 but this is misleading.
-[Turbolinks breaks <tt>"$(document).ready"</tt>](http://guides.rubyonrails.org/working_with_javascript_in_rails.html#page-change-events)
+[Turbolinks breaks $(document).ready](http://guides.rubyonrails.org/working_with_javascript_in_rails.html#page-change-events)
 (an extremely common construct)
 and by default requires you to use a nonstandard on..."page:change".
 To solve this botch in turbolinks we use
@@ -416,7 +416,6 @@ Note that we also use
 [CircleCI](https://circleci.com/gh/linuxfoundation/cii-best-practices-badge)
 for continuous integration tools to check changes
 after they are checked into GitHub; if they find problems, please fix them.
-
 
 ## Reuse (supply chain)
 

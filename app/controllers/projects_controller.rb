@@ -111,10 +111,14 @@ class ProjectsController < ApplicationController
   # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   def update
     if repo_url_change_allowed?
-      old_badge_level = Project.find(params[:id]).badge_level
+      old_badge_level = @project.badge_level
+      project_params.each do |key, user_value| # mass assign
+        @project[key] = user_value
+      end
       Chief.new(@project, client_factory).autofill
       respond_to do |format|
-        if @project.update(project_params)
+        # Was project.update(project_params)
+        if @project.save
           successful_update(format, old_badge_level)
         else
           format.html { render :edit }

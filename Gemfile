@@ -26,11 +26,10 @@ gem 'paper_trail', '6.0.2' # Record previous versions of project data
 gem 'pg', '0.19.0' # PostgreSQL database, used for data storage
 gem 'pg_search', '2.0.1' # PostgreSQL full-text search
 gem 'puma', '3.6.2' # Faster webserver; recommended by Heroku
-gem 'rack-timeout', '0.4.2' # Timeout per https://github.com/heroku/rack-timeout
 gem 'rails', '5.0.1' # Our web framework
 gem 'redcarpet', '3.4.0' # Process markdown in form textareas (justifications)
 gem 'sass-rails', '5.0.6'
-gem 'secure_headers', '3.6.0' # Add hardening measures to HTTP headers
+gem 'secure_headers', '3.6.1' # Add hardening measures to HTTP headers
 # gem 'turbolinks', '5.0.1' # Speed UI access
 gem 'uglifier', '3.0.4'
 gem 'will_paginate', '3.1.5'
@@ -52,7 +51,7 @@ group :development, :test do
   gem 'pry-byebug', '3.4.2'
   gem 'rubocop', '0.46.0' # Style checker.  Changes can cause test failure
   gem 'ruby-graphviz', '1.2.2'
-  gem 'spring', '2.0.0'
+  gem 'spring', '2.0.1'
   gem 'vcr', '3.0.3' # Record network responses for later test reuse
   gem 'yaml-lint', '0.0.9' # Check YAML file syntax
 end
@@ -82,4 +81,5 @@ group :production do
   # gem 'heroku_rails_deflate', '1.0.3' # Compress (reduces network load)
   # Removed according to http://stackoverflow.com/a/39550697/1935918
   # (it has not yet been updated to work with Rails 5).
+  gem 'rack-timeout', '0.4.2' # Timeout; https://github.com/heroku/rack-timeout
 end

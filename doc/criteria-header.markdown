@@ -90,7 +90,6 @@ software development and running a FLOSS project;
 if not, see introductory materials such as
 [*Producing Open Source Software* by Karl Fogel](http://producingoss.com/).
 
-
 ## Current criteria: Best Practices for FLOSS
 
 Here are the current criteria.  Note that:
@@ -118,4 +117,3 @@ There is an implied criterion that we should mention here:
   (The badging application enforces this by requiring a URL to
   create a badge entry.)
   <sup>[<a href="#homepage_url">homepage_url</a>]</sup>
-

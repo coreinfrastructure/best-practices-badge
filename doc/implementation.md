@@ -185,7 +185,6 @@ Then point your web browser at "localhost:3000".
 See the separate
 [security](security.md) document for more about security.
 
-
 ## Interface
 
 This is a relatively simple web application, so its
@@ -265,7 +264,6 @@ The following search parameters are supported:
 
 See app/controllers/project_controllers.rb for how these
 are implemented.
-
 
 ## Changing criteria
 
@@ -353,7 +351,6 @@ modify the autofill code in the app/lib/ directory.
 Be sure to "git add" all new files, including any migration files,
 and then use "git commit" and "git push".
 
-
 ## App authentication via GitHub
 
 The BadgeApp needs to authenticate itself through OAuth2 on
@@ -386,7 +383,8 @@ GITHUB_KEY='client id' GITHUB_SECRET='client secret' rails s
 where *client id* and *client secret* are registered OAuth2 credentials
 of the app.
 
-The authorization callback URL in GitHub is: http://localhost:3000/auth/github
+The authorization callback URL in GitHub is:
+<http://localhost:3000/auth/github>
 
 [1] <https://github.com/settings/applications/new>
 [2] <https://devcenter.heroku.com/articles/config-vars>
@@ -433,7 +431,7 @@ You can force-create new users and make them admins
 (again, if you have the rights to do so).
 To create new github user, first get their github uid from their
 github username (nickname) by looking at
-https://api.github.com/users/USERNAME
+<https://api.github.com/users/USERNAME>
 and getting the "id" value.
 Then run this, replacing all-caps stubs with the values in single quotes
 (this will create a local id automatically):
@@ -496,7 +494,9 @@ Normally you should just push changes to "master" first, so that
 CircleCI will test it.  If you want to push directly to Heroku
 (and have the necessary rights):
 
+~~~~
 git remote add heroku https://git.heroku.com/master-bestpractices.git
+~~~~
 
 Now you can directly deploy to Heroku:
 
@@ -504,7 +504,6 @@ Now you can directly deploy to Heroku:
 git checkout master
 git push heroku master
 ~~~~
-
 
 ## Auditing
 
@@ -570,11 +569,12 @@ and we can later loosen this restriction (e.g., if a user controls both the
 original and new project main URL).
 
 We plan to implement authentication in these three stages:
-1.  A way for GitHub users to authenticate themselves and
-show that they control specific projects on GitHub.
-2.  An override system so that users can report on other projects
-as well (this is important for debugging and error repair).
-3.  A system to support users and projects not on GitHub.
+
+1. A way for GitHub users to authenticate themselves and
+  show that they control specific projects on GitHub.
+2. An override system so that users can report on other projects
+  as well (this is important for debugging and error repair).
+3. A system to support users and projects not on GitHub.
 
 For GitHub users reporting about specific projects on GitHub,
 we plan to hook into GitHub itself.
@@ -628,29 +628,30 @@ to be relatively uncommon, there is no need for that capability initially.
 
 A user can edit project P if one of the following is true:
 
-1.  If the user has "superuser" permission then the user can edit the
-badge information about any project.
-This will let the Linux Foundation fix problems.
-2.  If project P is on GitHub AND the user is authorized via GitHub
-to edit project P, then that user can edit the badge information about project P.
-In the future we might add repos other than GitHub, with the same kind of rule.
-3.  If the user's cryptographically randomly assigned
-"project edit validation code" is on the project's main web site
-(typically in an HTML comment), then the user can edit the badge
-information about project P.
-Note that if the user is a local account (not GitHub),
-then the user also has to have their email address validated first.
+1. If the user has "superuser" permission then the user can edit the
+  badge information about any project.
+  This will let the Linux Foundation fix problems.
+2. If project P is on GitHub AND the user is authorized via GitHub
+  to edit project P, then that user can edit the badge information about
+  project P.  In the future we might add repos other than GitHub, with
+  the same kind of rule.
+3. If the user's cryptographically randomly assigned
+  "project edit validation code" is on the project's main web site
+  (typically in an HTML comment), then the user can edit the badge
+  information about project P.
+  Note that if the user is a local account (not GitHub),
+  then the user also has to have their email address validated first.
 
 ## GitHub-related badges
 
 Pages related to GitHub-related badges include:
 
-*   <http://shields.io/> - serves files that display a badge
-(as good-looking scalable SVG files)
-*   <https://github.com/badges/shields> -  Shields badge specification,
-website and default API server (connected to shields.io)
-*   <http://nicbell.net/blog/github-flair> - a blog post that identifies
-and discusses popular GitHub flair (badges)
+* <http://shields.io/> - serves files that display a badge
+  (as good-looking scalable SVG files)
+* <https://github.com/badges/shields> -  Shields badge specification,
+  website and default API server (connected to shields.io)
+* <http://nicbell.net/blog/github-flair> - a blog post that identifies
+  and discusses popular GitHub flair (badges)
 
 We want GitHub users to think of this
 as &#8220;just another badge to get.&#8221;
@@ -809,7 +810,6 @@ since this could possibly allow for a number of duplicate users to be
 created and the possibility of two users from the same domain having
 emails which differ only in case is exceedingly rare.
 
-
 ## Forbidden Passwords
 
 Currently we allow local passwords if they are 7 characters or longer.
@@ -843,7 +843,7 @@ rm -f raw-bad-passwords-lowercase.txt.gz
 gzip --best raw-bad-passwords-lowercase.txt
 ~~~~
 
-# See also
+## See also
 
 See the separate "[background](./background.md)" and
 "[criteria](./criteria.md)" pages for more information.

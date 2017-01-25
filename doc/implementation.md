@@ -812,10 +812,6 @@ emails which differ only in case is exceedingly rare.
 
 ## Forbidden Passwords
 
-Currently we allow local passwords if they are 7 characters or longer.
-We intend to change this in the future, described here
-(we currently load bad passwords, we just don't check them yet).
-
 [NIST has proposed draft password rules in 2016](https://nakedsecurity.sophos.com/2016/08/18/nists-new-password-rules-what-you-need-to-know/).
 They recommend having a minimum of 8 characters in passwords and
 checking against a list of bad passwords.

@@ -34,6 +34,9 @@ Metrics/LineLength:
 Metrics/MethodLength:
   Exclude:
     - 'db/migrate/*'
+Rails/SkipsModelValidations:
+  Exclude:
+    - 'test/**/*.rb'
 Style/AutoResourceCleanup:
   Enabled: true
 Style/CollectionMethods:

@@ -54,7 +54,7 @@ group :development, :test do
   gem 'pronto-rails_best_practices', '0.7.0'
   gem 'pronto-rubocop', '0.7.0'
   gem 'pry-byebug', '3.4.2'
-  gem 'rubocop', '0.46.0' # Style checker.  Changes can cause test failure
+  gem 'rubocop', '0.47.1' # Style checker.  Changes can cause test failure
   gem 'ruby-graphviz', '1.2.2'
   gem 'spring', '2.0.1'
   gem 'vcr', '3.0.3' # Record network responses for later test reuse

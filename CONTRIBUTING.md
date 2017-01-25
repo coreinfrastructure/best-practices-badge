@@ -347,6 +347,8 @@ In some cases it's okay to fix them by disabling the warning in that particular
 place, but be careful; it's often better to make a real change,
 even if it doesn't matter in that particular case.
 
+### Standard checks
+
 The specific list of tools run by default using 'rake' is listed in
 [default.rake](lib/tasks/default.rake).
 Currently these include at least the following rake tasks that
@@ -380,6 +382,18 @@ check the software:
 
 Running "rake test" (the automated test suite) will show
 "Run options: --seed ...", "# Running:", and a series of dots (passing tests).
+
+### Expected noise from 'rake'
+
+Ruby 2.4.0 has deprecated the Fixnum and Bignum classes, but they are used
+by some gems we depend on.
+Because we now use Ruby 2.4.0, there may be several warnings of this form:
+
+~~~~
+FILENAME.rb:LINE: warning: constant ::Fixnum is deprecated
+FILENAME.rb:LINE: warning: constant ::Bignum is deprecated
+~~~~
+
 In some cases you'll see a test retry message like this
 (but it will eventually pass):
 
@@ -393,6 +407,8 @@ the few tests we use that use a full simulated web browser (via Capybara).
 Sometimes these full tests cause spurious failures, so we intentionally
 retry failing tests to eliminate false failure reports (to make sure the
 problem is in the software under test, and not in our test framework).
+
+### Other tools
 
 Here are some other tools we use, though they are not currently integrated into
 the default "rake" checking task:
@@ -412,10 +428,13 @@ We sometimes run this to check if assets compile properly (see
 RAILS_ENV=production rake assets:precompile
 ~~~~
 
+### Testing during continuous integration
+
 Note that we also use
 [CircleCI](https://circleci.com/gh/linuxfoundation/cii-best-practices-badge)
 for continuous integration tools to check changes
 after they are checked into GitHub; if they find problems, please fix them.
+These run essentially the same set of checks as the default rake task.
 
 ## Reuse (supply chain)
 

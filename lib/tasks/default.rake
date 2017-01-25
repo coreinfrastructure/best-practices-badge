@@ -15,10 +15,11 @@ task(:default).clear.enhance %w(
   whitespace_check
   yaml_syntax_check
   html_from_markdown
-  fasterer
   eslint
   test
 )
+# Temporarily removed fasterer
+# Waiting for Ruby 2.4 support: https://github.com/seattlerb/ruby_parser/issues/239
 
 task(:ci).clear.enhance %w(
   rbenv_rvm_setup
@@ -28,8 +29,8 @@ task(:ci).clear.enhance %w(
   license_finder_report.html
   whitespace_check
   yaml_syntax_check
-  fasterer
 )
+# Temporarily removed fasterer
 
 # Simple smoke test to avoid development environment misconfiguration
 desc 'Ensure that rbenv or rvm are set up in PATH'
@@ -345,6 +346,13 @@ task :fake_production do
   sh 'RAILS_ENV=fake_production bundle exec rake assets:precompile'
   sh 'RAILS_ENV=fake_production bundle check || bundle install'
   sh 'RAILS_ENV=fake_production rails server -p 4000'
+end
+
+# Use this if the badge rules change.  This will email those who
+# gain/lose a badge because of the changes.
+desc 'Run to recalculate all badge percentages for all projects'
+task :update_all_badge_percentages do
+  Project.update_all_badge_percentages
 end
 
 Rake::Task['test:run'].enhance ['test:features']

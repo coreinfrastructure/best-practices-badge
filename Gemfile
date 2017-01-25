@@ -10,9 +10,9 @@ gem 'bootstrap_form', '2.5.3'
 gem 'chartkick', '2.2.2' # Chart project_stats
 gem 'coffee-rails', '4.2.1' # Support CoffeeScript (Javascript preprocessor)
 gem 'faker', '1.7.2'
+# Fastly master is locked to a railties version
 gem 'fastly-rails', git: 'https://github.com/dankohn/fastly-rails',
                     ref: 'a909d09'
-# Fastly master is locked to a railties version
 gem 'font-awesome-rails', '4.7.0.1'
 gem 'github_api', '0.14.5'
 gem 'imagesLoaded_rails', '4.1.0' # JavaScript - enable wait for image load
@@ -34,6 +34,10 @@ gem 'secure_headers', '3.6.1' # Add hardening measures to HTTP headers
 gem 'uglifier', '3.0.4'
 gem 'will_paginate', '3.1.5'
 
+# This is an indirect dependency - force this version so we can work
+# with Ruby 2.4.0.
+gem 'rainbow', '2.1.0'
+
 group :development, :test do
   gem 'awesome_print', '1.7.0'
   gem 'bullet', '5.5.0'
@@ -41,6 +45,7 @@ group :development, :test do
   gem 'database_cleaner', '1.5.3' # Cleans up database between tests
   gem 'dotenv-rails', '2.1.2'
   gem 'eslintrb', '2.1.0'
+  gem 'json', '1.8.6'
   gem 'license_finder', '2.1.2'
   gem 'mdl', '0.4.0'
   gem 'pronto', '0.7.1'
@@ -57,7 +62,8 @@ group :development, :test do
 end
 
 group :development do
-  gem 'fasterer', '0.3.2' # Provide speed recommendations - run 'fasterer'
+  # gem 'fasterer', '0.3.2' # Provide speed recommendations - run 'fasterer'
+  # Waiting for Ruby 2.4 support: https://github.com/seattlerb/ruby_parser/issues/239
   gem 'rails_db', '1.3.4' # Enable localhost:3000/rails/db debugging
   gem 'traceroute', '0.5.0' # Adds 'rake traceroute' command to check routes
   gem 'web-console', '3.4.0'

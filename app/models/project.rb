@@ -194,6 +194,24 @@ class Project < ActiveRecord::Base
     end
   end
 
+  # Update badge percentages for all project entries, and send emails
+  # to any project where this causes loss or gain of a badge.
+  # Use this after the badging rules have changed.
+  # We need this we precalculate and store percentages in the database;
+  # this speeds up many actions, but it means that a change in the rules
+  # doesn't automatically change the precalculated values.
+  def self.update_all_badge_percentages
+    Project.find_each do |project|
+      project.with_lock do
+        old_badge_percentage = project.badge_percentage
+        project.update_badge_percentage
+        unless old_badge_percentage == project.badge_percentage
+          project.save!(touch: false)
+        end
+      end
+    end
+  end
+
   # The following configuration options are trusted.  Set them to
   # reasonable numbers or accept the defaults.
 

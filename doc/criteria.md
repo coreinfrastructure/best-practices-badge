@@ -90,7 +90,6 @@ software development and running a FLOSS project;
 if not, see introductory materials such as
 [*Producing Open Source Software* by Karl Fogel](http://producingoss.com/).
 
-
 ## Current criteria: Best Practices for FLOSS
 
 Here are the current criteria.  Note that:
@@ -118,8 +117,6 @@ There is an implied criterion that we should mention here:
   (The badging application enforces this by requiring a URL to
   create a badge entry.)
   <sup>[<a href="#homepage_url">homepage_url</a>]</sup>
-
-
 
 ### Basics
 
@@ -596,8 +593,8 @@ and the project determines that.
 
 ## Why have criteria?
 
-The paper [Open badges for education: what are the implications at the
-intersection of open systems and badging?](http://www.researchinlearningtechnology.net/index.php/rlt/article/view/23563)
+The paper
+[Open badges for education: what are the implications at the intersection of open systems and badging?](http://www.researchinlearningtechnology.net/index.php/rlt/article/view/23563)
 identifies three general reasons for badging systems (all are valid for this):
 
 1. Badges as a motivator of behavior.  We hope that by identifying
@@ -617,7 +614,6 @@ We have chosen to use self-certification, because this makes it
 possible for a large number of projects (even small ones) to
 participate.  There's a risk that projects may make false claims,
 but we think the risk is small, and users can check the claims for themselves.
-
 
 ## Improving the criteria
 

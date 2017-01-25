@@ -23,6 +23,7 @@ These figures are in Claims, Arguments and Evidence (CAE) notation,
 which is a simple notation often used for assurance cases.
 Ovals are claims or sub-claims, while rounded rectangles are the supporting
 arguments justifying the claims.
+The figures are simply a summary; the text below provides the details.
 
 Our overall security approach is called
 defense-in-breadth, that is, we consider
@@ -77,30 +78,44 @@ export to .png so that it can viewed on GitHub.)
 Here is what BadgeApp must do to be secure (and a few comments about
 how we implement these requirements):
 
-- Confidentiality:
+* Confidentiality:
     - Almost all data is considered public, e.g., all project data
       and who owns the records, so we don't need to keep those confidential.
     - Non-public data is kept confidential.  Non-public data is currently
       unencrypted user passwords and user email addresses,
       which we do protect specially:
-          - User passwords are only stored on the server as
-            iterated salted hashes (using bcrypt).
-          - Passwords may also be stored in encrypted user cookies,
-            but the decrypted passwords are not stored on the server's
-            database, and users can choose whether or not to store
-            passwords in encrypted cookies (using the "remember me"
-            box implemented in commit e79decec67).
-          - Email addresses are only revealed to the logged-in owner and
-            administrators. We do store email addresses;
-            we need those for various purposes
-            (e.g., contact badge entry owners for clarification).
-            We will strive to not reveal user email addresses to others
-            (with the exception of administrators, who can see them).
-          - HTTPS is used to encrypt all communications between users
-            and the application; this protects the confidentiality of
-            all data in motion.
-            There's no need to worry about covert channels.
-- Integrity:
+        - User passwords are only stored on the server as
+          iterated salted hashes (using bcrypt).
+        - Users may choose to "remember me" to automatically re-login on
+          that specific browser if they use a local account.
+          This is implemented using a
+          cryptographically random nonce stored in the user's cookie store
+          which acts like a password, which is verified against a
+          remember_digest value stored in the server
+          that is an iterated salted hash (using bcrypt).
+          This "remember me" functionality cannot reveal the user's
+          original password, and if the server's user database is
+          compromised an attacker cannot easily find the nonce.
+          The nonce is protected in transit by HTTPS (discussed elsewhere).
+          The user_id stored by the user is signed by the server.
+          As with any system, the "remember me" functionality has a
+          weakness: if the user's system is compromised, others can log
+          in as that user.  But this is fundamental to any "remember me"
+          functionality, and users must opt in to enable "remember me"
+          (by default users must enter their password on each login).
+          The "remember me" box was originally implemented
+          in commit e79decec67.
+        - Email addresses are only revealed to the logged-in owner and
+          administrators. We do store email addresses;
+          we need those for various purposes
+          (e.g., contact badge entry owners for clarification).
+          We will strive to not reveal user email addresses to others
+          (with the exception of administrators, who can see them).
+        - HTTPS is used to encrypt all communications between users
+          and the application; this protects the confidentiality of
+          all data in motion.
+          There's no need to worry about covert channels.
+* Integrity:
     - HTTPS is used to protect the integrity of all communications between users
       and the application, as well as to authenticate the server
       to the user.
@@ -113,7 +128,7 @@ how we implement these requirements):
       authentication via GitHub.
       We use GitHub for managing the source code and issue tracker; it
       has an authentication system for this purpose.
-- Availability:
+* Availability:
     - As with any publicly-accessible website,
       we cannot prevent someone with significant
       resources from overwhelming the system.
@@ -201,7 +216,7 @@ applying secure design principles,
 limiting memory-unsafe language use, and
 increasing availability through scaleability.
 
-### Simple design
+### <a name="simple-design"></a>Simple design
 
 This web application has a simple design.
 It is a standard Ruby on Rails design with models, views, and controllers.
@@ -248,12 +263,13 @@ Here are a number of secure design principles and how we follow them,
 including all 8 principles from
 [Saltzer and Schroeder](http://web.mit.edu/Saltzer/www/publications/protection/):
 
-- Economy of mechanism (keep the design as simple and small as practical,
+* Economy of mechanism (keep the design as simple and small as practical,
   e.g., by adopting sweeping simplifications).
-  We discuss this in more detail in the earlier section "simple design".
-- Fail-safe defaults (access decisions should deny by default):
+  We discuss this in more detail in the section
+  "[simple design](#simple-design)".
+* Fail-safe defaults (access decisions should deny by default):
   Access decisions are deny by default.
-- Complete mediation (every access that might be limited must be
+* Complete mediation (every access that might be limited must be
   checked for authority and be non-bypassable):
   Every access that might be limited is checked for authority and
   non-bypassable.  Security checks are in the controllers, not the router,
@@ -263,23 +279,23 @@ including all 8 principles from
   the badge has been achieved, but the client-side code is *not* the
   final authority (it's merely a convenience).  The final arbiter of
   badge acceptance is server-side code, which is not bypassable.
-- Open design (security mechanisms should not depend on attacker
+* Open design (security mechanisms should not depend on attacker
   ignorance of its design, but instead on more easily protected and
   changed information like keys and passwords):
   The entire program is open source software and subject to inspection.
   Keys are kept in separate files not included in the public repository.
-- Separation of privilege (multi-factor authentication,
+* Separation of privilege (multi-factor authentication,
   such as requiring both a password and a hardware token,
   is stronger than single-factor authentication):
   We don't use multi-factor authentication because the risks from compromise
   are smaller compared to many other systems
   (it's almost entirely public data, and failures generally can be recovered
   through backups).
-- Least privilege (processes should operate with the
+* Least privilege (processes should operate with the
   least privilege necesssary): The application runs as a normal user,
   not a privileged user like "root".  It must have read/write access to
   its database, so it has that privilege.
-- Least common mechanism (the design should minimize the mechanisms
+* Least common mechanism (the design should minimize the mechanisms
   common to more than one user and depended on by all users,
   e.g., directories for temporary files):
   No shared temporary directory is used.  Each time a new request is made,
@@ -287,12 +303,12 @@ including all 8 principles from
   as well as minimizing mechanisms common to more than one user.
   The database is shared, but each table row has access control implemented
   which limits sharing to those authorized to share.
-- Psychological acceptability
+* Psychological acceptability
   (the human interface must be designed for ease of use,
   designing for "least astonishment" can help):
   The application presents a simple login and "fill in the form"
   interface, so it should be acceptable.
-- Limited attack surface (the attack surface, the set of the different
+* Limited attack surface (the attack surface, the set of the different
   points where an attacker can try to enter or extract data, should be limited):
   The application has a limited attack surface.
   As with all Ruby on Rails applications, all access must go through the
@@ -302,7 +318,7 @@ including all 8 principles from
   Many of the operations use numeric ids (e.g., which project), which are
   simply numbers (limiting the opportunity for attack because numbers are
   trivial to validate).
-- Input validation with whitelists
+* Input validation with whitelists
   (inputs should typically be checked to determine if they are valid
   before they are accepted; this validation should use whitelists
   (which only accept known-good values),
@@ -318,12 +334,15 @@ including all 8 principles from
   All project parameters are checked by the model, in particular,
   status values (the key values used for badges) are checked against
   a whitelist of values allowed for that criterion.
-  There are a number of freetext fields
-  (name, license, and the justifications);
-  each have a maximum length to limit some abuses.
-  These checks for maximum length do not by themselves counter certain attacks;
+  There are a number of freetext fields (name, license, and the
+  justifications); since they are freetext these are the hardest
+  to whitelist.
+  That said, we even impose restrictions on freetext, in particular,
+  they must be valid UTF-8, they must not include control characters
+  (other than \\n and \\r), and they have maximum lengths.
+  These checks by themselves cannot counter certain attacks;
   see the text on security in implementation for the discussion on
-  how the application counters SQL injection, XSS, and CSRF attacks.
+  how this application counters SQL injection, XSS, and CSRF attacks.
   URLs are also limited by length and a whitelisted regex, which counters
   some kinds of attacks.
   When project data (new or edited) is provided, all proposed status values
@@ -362,7 +381,7 @@ then-current data will stay available until the system recovers.
 A determined attacker with significant resources could disable the
 system through a distributed denial-of-service (DDoS) attack.
 However, this site doesn't have any particular political agenda,
-and taking it down is unlikely to provide monitary gain.
+and taking it down is unlikely to provide monetary gain.
 Thus, this site doesn't seem as likely a target for a long-term DDoS
 attack, and there is not much else we can do to counter DDoS
 by an attacker with signficant resources.
@@ -436,13 +455,7 @@ and how we attempt to reduce their risks in BadgeApp.
    All other requests go through routers and controllers,
    which determine what may be accessed.
 5. Security Misconfiguration.
-   We have strived to enable secure defaults from the start.
-   We use a number of external scanning programs to detect common
-   HTTPS misconfiguration problems (see below).
-   In addition, we use brakeman, which can detect
-   some misconfigurations in Rails applications.
-   This is invoked by the default 'rake' task.
-   In addition, our continuous integrattion task reruns brakeman.
+   See the section on [countering misconfiguration](#misconfiguration).
 6. Sensitive Data Exposure.
    We generally do not store sensitive data; the data about projects
    is intended to be public.  The only sensitive data we centrally store are
@@ -463,21 +476,35 @@ and how we attempt to reduce their risks in BadgeApp.
    We detect components with publicly known vulnerabilities
    using bundle-audit and gemnasium.
    These use the Gemfile* and National Vulnerability Database (NVD) data.
-   For more information, see the "supply chain" section.
+   For more information, see the "[supply chain](#supply-chain)" section.
 10. Unvalidated Redirects and Forwards.
    Redirects and forwards are not used significantly, and they are validated.
 
-### Common misconfiguration errors countered: Ruby on Rails Security Guide
+### <a name="misconfiguration"></a>Common misconfiguration errors countered: Ruby on Rails Security Guide
 
-A common problems with applications is misconfiguration.
+A common security problem with applications is misconfiguration;
+here is how we reduce the risks from misconfiguration.
 
-This application is built on Ruby on Rails.
+We take a number of steps to counter misconfiguration.
+We have strived to enable secure defaults from the start.
+We use a number of [external online checkers](#online-checkers)
+to detect common HTTPS misconfiguration problems (see below).
+We use brakeman, which can detect
+some misconfigurations in Rails applications.
+Brakeman is invoked by the default 'rake' task,
+and our continuous integration task reruns brakeman.
+
+However, our primary mechanism for countering misconfigurations is by
+identifying and apply ing the most-relevant security guide available.
+
+This entire application is built on Ruby on Rails.
 The Ruby on Rails developers provide a
 [Ruby on Rails Security Guide](http://guides.rubyonrails.org/security.html),
 which identifies what they believe are the most important areas to
 check for securing such applications.
 Since this guide is focused on the infrastructure we use, we think this is
 the most important guide for us to focus on.
+
 We apply the entire guide.
 Here is a discussion on how we apply the entire guide, per its chapters
 as of 2015-12-14:
@@ -501,8 +528,6 @@ as of 2015-12-14:
    "config.force_ssl" to true).
    The design allows users to drop cookies at any time
    (at worse they may have to re-login to get another session cookie).
-   Passwords may be stored in a cookie, but this is encrypted and the
-   password is *not* retained on the server (it stays on the web browser).
    One complaint about Rails' traditional CookieStore is that if someone
    gets a copy of a session cookie, they can log in as that user, even
    if the cookie is years old and the user logged out.
@@ -601,7 +626,10 @@ as of 2015-12-14:
 9. *Default Headers.*
    We use at least the default security HTTP headers,
    which help counter some attacks.
-   In many cases we harden the headers further.
+   We harden the headers further, in particular via the
+   [secure_headers](https://github.com/twitter/secureheaders) gem.
+   For example, we use a restrictive Content Security Policy (CSP) header.
+   For more information, see the hardening section.
 
 ### Hardening
 
@@ -648,7 +676,7 @@ these attempt to thwart or slow attack even if the system has a vulnerability.
   of emails we will send out each time; this keeps us from looking like
   a spammer.
 
-## Supply chain (reuse)
+## <a name="supply-chain"></a>Supply chain (reuse)
 
 Like all modern software, we reuse components developed by others.
 We can't eliminate all risks, and
@@ -694,27 +722,33 @@ updated set, so we can rapidly update libraries, test the result, and
 deploy it.
 
 We detect components with publicly known vulnerabilities
-using bundle-audit and gemnasium.
-These use the Gemfile* files and National Vulnerability Database (NVD) data.
-We use bundle-audit, which compares our gem libraries to a database
-of versions with known vulnerabilities, and gemnasium
-The default 'rake' task invokes bundle-audit, so every time we run
-"rake" we are alerted about publicly known vulnerabilities in the
-components we depend on (directly or not).
+using both bundle-audit and gemnasium.
+These use the Gemfile* files and National Vulnerability Database (NVD) data:
 
-We also use a gemnasium-based badge that warns us when there is an
-out-of-date direct dependency as well vulnerable direct dependencies; see
-[it](https://gemnasium.com/linuxfoundation/cii-best-practices-badge)
-for more information.
+* bundle-audit compares the entire set of gems (libraries),
+  both direct and indirect dependencies, to a database
+  of versions with known vulnerabilities.
+  This is a more complete analysis compared to Gemnasium.
+  The default 'rake' task invokes bundle-audit, so every time we run
+  "rake" we are alerted about publicly known vulnerabilities in the
+  components we depend on (directly or not).
+* Gemnasium warns us when there are vulnerable or
+  out-of-date direct dependencies.  Gemnasium only looks at the
+  direct dependencies (Gemfile, not Gemfile.lock).
+  The BadgeApp Gemnasium badge provides a quick view of the
+  current state, and links to the
+  [Badgeapp Gemnasium page](https://gemnasium.com/linuxfoundation/cii-best-practices-badge)
+  for more information.
 
 We have also optimized the component update process through
 using the package manager (bundler) and high test coverage.
 The files Gemfile and Gemfile.lock
 identify the current versions of Ruby gems (Gemfile identifies direct
 dependencies; Gemfile.lock includes all transitive dependencies and
-the exact version numbers).  We can update libraries by
+the exact version numbers).  We can rapidly update libraries by
 updating those files, running "bundle install", and then using "rake"
-to run various checks including a robust test suite.
+to run various automated checks including a robust test suite.
+Once those pass, we can immediately field the results.
 
 This approach is known to work.
 Commit fdb83380aa71352
@@ -759,12 +793,12 @@ and how it helps make the software more secure:
   Our style checking tools detect misleading indentation;
   <a href="http://www.dwheeler.com/essays/apple-goto-fail.html#indentation">this
   counters the mistake in the Apple goto fail vulnerability</a>.
-* Security vulnerability scanner (for new vulnerabilities).
-  We use brakeman, a static source code analysis that focuses
+* Security vulnerability scanner (for finding new vulnerabilities).
+  We use brakeman, a static source code analyzer that focuses
   on finding security issues in Ruby on Rails applications.
   Note that this is separate from the automatic detection of
-  third-party components with publicly-known vulnerabilities
-  (see the supply chain discussion above for how we counter those).
+  third-party components with publicly-known vulnerabilities;
+  see the [supply chain](#supply-chain) section for how we counter those.
 * FLOSS.  Reviewability is important for security.
   All the required reused components are FLOSS, and our
   custom software is released as Free/Libre and open source software (FLOSS)
@@ -813,7 +847,11 @@ Anyone can create a Heroku application and run it on Heroku, however,
 at that point we trust the Postgres developers and the Heroku administrators
 to keep the databases separate.
 
-### Online checkers
+People can log in via GitHub accounts; in those cases we depend
+on GitHub to correctly authenticate users.
+[GitHub takes steps to keep itself secure](https://help.github.com/articles/github-security/).
+
+### <a name="online-checkers"></a>Online checkers
 
 Various online checkers give us an overall clean bill of health.
 Most of the checkers test our HTTPS (TLS) configuration and
@@ -851,6 +889,7 @@ For the main bestpractices.coreinfrastructure.org site we have:
 
 We have various detection mechanisms to detect problems.
 There are two approaches to detection:
+
 * internal (which has access to our internal information, such as logs)
 * external (which does not have access to internal information)
 
@@ -962,4 +1001,3 @@ that actually do the work of hardening.
 Please report potential vulnerabilities you find.
 See [CONTRIBUTING.md](../CONTRIBUTING.md) for how to submit
 a vulnerability report.
-

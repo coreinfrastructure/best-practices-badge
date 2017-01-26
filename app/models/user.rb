@@ -44,7 +44,7 @@ class User < ActiveRecord::Base
   def activate
     self.activated = true
     self.activated_at = Time.zone.now
-    save!(touch: false)
+    save!
   end
 
   # Sends activation email.

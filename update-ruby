@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# The following enables some run-time error detection:
+set -e -u
+
 if [ "$1" ] ; then
     ruby_version="$1"
 else

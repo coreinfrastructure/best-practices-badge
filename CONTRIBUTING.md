@@ -132,9 +132,10 @@ please send an email to the security contacts that you have such
 information, and we'll tell you the next steps.
 For now, the security contacts are:
 David A. Wheeler <dwheeler-NOSPAM@ida.org>,
+Jason Dossett <jdossett-NOSPAM@ida.org>,
 Dan Kohn <dankohn-NOSPAM@linux.com>,
-Emily Ratliff <eratliff-NOSPAM@linuxfoundation.org>,
-and Sam Khakimov <skhakimo-NOSPAM@ida.org>
+and
+Marcus Streets <mstreets-NOSPAM@linuxfoundation.org>
 (remove the -NOSPAM markers).
 
 ## Documentation changes

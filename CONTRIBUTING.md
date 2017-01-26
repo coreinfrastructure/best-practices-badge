@@ -639,33 +639,21 @@ If you want to change the current version of Ruby used in the project,
 use `cd` to go this project's top directory,
 and use 'git pull' to ensure this branch is up-to-date.
 You should normally use `git checkout -b NEW_BRANCH_NAME` for the new branch.
-Then run these commands:
+Then run the following command:
 
 ~~~~sh
-(cd $HOME/.rbenv/plugins/ruby-build && git pull) # Update ruby-build list
-rbenv install NEW_VERSION_NUMBER                 # Install with ruby-build
-rbenv local NEW_VERSION_NUMBER                   # Use new Ruby version
-gem install bundler                              # Reinstall bundler for it
-rbenv rehash                                     # Tell rbenv about bundler
-bundle install                                   # Reinstall gems
-rbenv rehash                                     # Update rbenv commands
+./update-ruby NEW_VERSION_NUMBER
 ~~~~
 
-Note that the `rbenv local` command changes the contents of the tracked file
-`.ruby-version`.  Be sure to run `git commit -a` and `git push`
-after doing this.
+Note at the end of this script a `git commit -as` will be initiated,
+but you will need to be sure to run `git push` after doing this.
 
 If you've done a `git pull` and the Ruby version has changed in file
 `.ruby-version` (e.g., you're seeing the rbenv: version... not installed
 error message), you need to run these similar steps:
 
 ~~~~sh
-(cd $HOME/.rbenv/plugins/ruby-build && git pull) # Update ruby-build list
-rbenv install $(cat .ruby-version)               # Install with ruby-build
-gem install bundler                              # Reinstall bundler for it
-rbenv rehash                                     # Tell rbenv about bundler
-bundle install                                   # Reinstall gems
-rbenv rehash                                     # Update rbenv commands
+./update-ruby
 ~~~~
 
 For more details about updating Ruby versions with rbenv, see

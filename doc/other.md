@@ -530,6 +530,16 @@ SHOULD or MUST.
   having CAA increases the risk that potential contributors
   will not contribute, especially if the receiver is a for-profit organization.
 
+* <a name="code_of_conduct"></a>The project MUST adopt a code of conduct and post it in a standard location. <sup>code_of_conduct</sup>
+
+  *Rationale*: Projects may be able to improve the civility of their
+  community and to set expectations about acceptable conduct by adopting a
+  code of conduct. This can help avoid problems before they occur and make
+  the project a more welcoming place to encourage contributions. Example
+  codes of conduct are the
+  [Contributor Covenant Code of Conduct](http://contributor-covenant.org/)
+  and the Linux kernel [Code of Conflict](https://www.kernel.org/doc/html/latest/process/code-of-conflict.html).
+
 ## Potential passing+2 criteria
 
 * Achieve the lower passing+1 badge.

@@ -34,6 +34,7 @@ for general discussion.
 
 * Badging **[Criteria](./doc/criteria.md)**
 * Information on how to **[contribute](./CONTRIBUTING.md)**
+  (including how to report vulnerabilities)
 * **[Background](./doc/background.md)** on Badging
 * **[ChangeLog](./CHANGELOG.md)**
 * Current **[implementation](./doc/implementation.md)**  - notes about the

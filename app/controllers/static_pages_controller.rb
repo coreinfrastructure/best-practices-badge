@@ -13,6 +13,10 @@ class StaticPagesController < ApplicationController
     # You can do something like this to log more information, but be sure
     # to escape attacker data to counter log forging:
     # logger.info 'Page not found'
-    render status: 404
+    render(
+      template: 'static_pages/error_404',
+      layout: false,
+      status: 404
+    )
   end
 end

@@ -192,7 +192,8 @@ class ProjectsController < ApplicationController
       # Don't update the updated_at value either, since we interpret that
       # value as being an update of the project badge status information.
       inactive_project.paper_trail.without_versioning do
-        inactive_project.update_columns last_reminder_at: DateTime.now.utc
+        inactive_project.last_reminder_at = DateTime.now.utc
+        inactive_project.save!(touch: false)
       end
     end
     projects.map(&:id) # Return a list of project ids that were reminded.

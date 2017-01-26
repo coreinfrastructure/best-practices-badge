@@ -104,8 +104,7 @@ class UsersController < ApplicationController
 
   def regenerate_activation_digest
     @user.activation_token = User.new_token
-    @user.update_attribute(
-      :activation_digest, User.digest(@user.activation_token)
-    )
+    @user.activation_digest = User.digest(@user.activation_token)
+    @user.save!(touch: false)
   end
 end

@@ -62,6 +62,7 @@ task :bundle do
   sh 'bundle check || bundle install'
 end
 
+# rubocop: disable Metrics/BlockLength
 desc 'Run bundle-audit - check for known vulnerabilities in dependencies'
 task :bundle_audit do
   verbose(true) do
@@ -94,6 +95,7 @@ task :bundle_audit do
     END
   end
 end
+# rubocop: enable Metrics/BlockLength
 
 # Note: If you don't want mdl to be run on a markdown file, rename it to
 # end in ".markdown" instead.  (E.g., for markdown fragments.)
@@ -211,6 +213,7 @@ task :fasterer do
   sh 'fasterer'
 end
 
+# rubocop: disable Metrics/BlockLength
 # Tasks for Fastly including purging and testing the cache.
 namespace :fastly do
   # Implement full purge of Fastly CDN cache.  Invoke using:
@@ -253,6 +256,7 @@ namespace :fastly do
     end
   end
 end
+# rubocop: enable Metrics/BlockLength
 
 desc 'Drop development database'
 task :drop_database do

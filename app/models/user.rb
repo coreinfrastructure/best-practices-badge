@@ -42,8 +42,9 @@ class User < ActiveRecord::Base
 
   # Activates an account.
   def activate
-    update_attribute(:activated, true)
-    update_attribute(:activated_at, Time.zone.now)
+    self.activated = true
+    self.activated_at = Time.zone.now
+    save!
   end
 
   # Sends activation email.
@@ -54,8 +55,9 @@ class User < ActiveRecord::Base
   # Sets the password reset attributes.
   def create_reset_digest
     self.reset_token = User.new_token
-    update_attribute(:reset_digest,  User.digest(reset_token))
-    update_attribute(:reset_sent_at, Time.zone.now)
+    self.reset_digest = User.digest(reset_token)
+    self.reset_sent_at = Time.zone.now
+    save!(touch: false)
   end
 
   # Sends password reset email.
@@ -80,7 +82,8 @@ class User < ActiveRecord::Base
   # Remembers a user in the database for use in persistent sessions
   def remember
     self.remember_token = User.new_token
-    update_attribute(:remember_digest, User.digest(remember_token))
+    self.remember_digest = User.digest(remember_token)
+    save!(touch: false)
   end
 
   # Returns true if the given token matches the digest
@@ -92,7 +95,8 @@ class User < ActiveRecord::Base
 
   # Forgets a user
   def forget
-    update_attribute(:remember_digest, nil)
+    self.remember_digest = nil
+    save!(touch: false)
   end
 
   # Returns true if a password reset has expired.

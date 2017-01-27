@@ -16,6 +16,10 @@ on how to install this software (e.g., for development).
 In this document we'll use the term "open source software" (OSS),
 and treat Free/Libre and Open Source Software (FLOSS) as a synonym.
 
+The following figure shows a high-level design of the implementation:
+
+![Design](./design.png)
+
 ## Requirements
 
 The BadgeApp web application MUST:
@@ -43,10 +47,9 @@ The BadgeApp web application MUST:
    project is on GitHub.  Automating filling in data is a never-ending
    process of refinement. Thus, we intend to fill a few to start, and then
    add more automation over time.
-
-See the separate
-[security](security.md) document for more about security, including
-its requirements.
+8. Be secure.  See the separate
+   [security](security.md) document for more about security, including
+   its requirements.
 
 There are many specific requirements; instead of a huge requirements document,
 most specific requirements are proposed and processed via its

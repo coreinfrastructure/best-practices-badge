@@ -174,6 +174,7 @@ SHOULD or MUST.
     the purpose of the roadmap is to help potential users and
     constributors understand the intended direction of the project.
     It need not be detailed.
+    <sup>documentation_roadmap</sup>
 
 *   <a name="documentation_architecture"></a>
     The project MUST include reference documentation that describes
@@ -191,6 +192,7 @@ SHOULD or MUST.
     and code interfaces documentation may be generated using Doxygen.
     Merely having comments in code is not sufficient to satisfy this criterion.
     <sup>[<a href="#documentation_interface">documentation_interface</a>]</sup>
+    ??? DUPLICATE?
 
 *   <a name="documentation_security"></a>
     The project MUST document what the user can and cannot expect
@@ -530,6 +532,23 @@ SHOULD or MUST.
   having CAA increases the risk that potential contributors
   will not contribute, especially if the receiver is a for-profit organization.
 
+* <a name="code_of_conduct"></a>The project MUST adopt a code of conduct and post it in a standard location. <sup>code_of_conduct</sup>
+
+  *Rationale*: Projects may be able to improve the civility of their
+  community and to set expectations about acceptable conduct by adopting a
+  code of conduct. This can help avoid problems before they occur and make
+  the project a more welcoming place to encourage contributions. Example
+  codes of conduct are the
+  [Contributor Covenant Code of Conduct](http://contributor-covenant.org/)
+  and the Linux kernel [Code of Conflict](https://www.kernel.org/doc/html/latest/process/code-of-conflict.html).
+
+* <a name="documentation_design"></a>The project MUST include documentation of its high-level design (aka architecture), that is, documentation that identifies its major components and how they interact. <sup>documentation_design</sup>
+
+  *Rationale*: Documenting the basic design makes it easier for potential
+  new developers to understand its basics.
+  This is related to know_secure_design, as well
+  as implement_secure_design and proposed documentation_security.
+
 ## Potential passing+2 criteria
 
 * Achieve the lower passing+1 badge.
@@ -730,6 +749,7 @@ We intend to turn these into criteria text.
     SAST assisted), and when applicable, some sort of DAST (for APIs,
     probably just fuzzing), where failed tests would have to be added
     to the regression test suite."
+    <sup>security_review</sup>
 
 ## Still considering as criteria
 

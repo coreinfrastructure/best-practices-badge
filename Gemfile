@@ -64,7 +64,7 @@ end
 group :development do
   # gem 'fasterer', '0.3.2' # Provide speed recommendations - run 'fasterer'
   # Waiting for Ruby 2.4 support: https://github.com/seattlerb/ruby_parser/issues/239
-  gem 'rails_db', '1.3.4' # Enable localhost:3000/rails/db debugging
+  gem 'rails_db', '1.4.1' # Enable localhost:3000/rails/db debugging
   gem 'traceroute', '0.5.0' # Adds 'rake traceroute' command to check routes
   gem 'web-console', '3.4.0'
 end

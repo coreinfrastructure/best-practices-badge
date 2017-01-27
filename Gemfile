@@ -75,7 +75,7 @@ group :test do
   gem 'codecov', '0.1.9', require: false
   gem 'minitest-rails-capybara', '3.0.0', require: false
   gem 'minitest-retry', '0.1.8', require: false # Avoid Capybara false positives
-  gem 'poltergeist', '1.12.0', require: false
+  gem 'poltergeist', '1.13.0', require: false
   gem 'rails-controller-testing', '1.0.1'
   gem 'selenium-webdriver', '3.0.5', require: false
   gem 'simplecov', '0.13.0', require: false

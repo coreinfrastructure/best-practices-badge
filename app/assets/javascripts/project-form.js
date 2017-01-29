@@ -51,7 +51,7 @@ function criterionResult(criterion) {
     justification = '';
   }
   if ($(criterionStatus + '_na').is(':checked')) {
-    if ( !criteriaNAJustificationRequired[criterion] ||
+    if (!criteriaNAJustificationRequired[criterion] ||
         justification.length >= MIN_SHOULD_LENGTH) {
       return 'passing';
     } else {
@@ -139,7 +139,7 @@ function changedJustificationText(criteria) {
            criteriaMetUrlRequired[criteria] &&
            !containsURL($(criteriaJust).val())) {
     $(criteriaJust).addClass('required-data');
-  } else if($(criteriaStatus + '_na').is(':checked') &&
+  } else if ($(criteriaStatus + '_na').is(':checked') &&
        (criteriaNAJustificationRequired[criteria]) &&
        ($(criteriaJust).val().length < MIN_SHOULD_LENGTH)) {
     $(criteriaJust).addClass('required-data');

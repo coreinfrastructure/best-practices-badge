@@ -310,7 +310,8 @@ class Project < ActiveRecord::Base
     status = self[criterion.name.status]
     justification = self[criterion.name.justification]
 
-    return true if status.na?
+    return true if status.na? && !criterion.na_justification_required?
+    return true if status.na? && justification.length >= MIN_SHOULD_LENGTH
     return true if status.met? && !criterion.met_url_required?
     return true if status.met? && contains_url?(justification)
     return true if criterion.should? && status.unmet? &&

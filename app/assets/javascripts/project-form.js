@@ -3,6 +3,7 @@
 
 var criterionCategoryValue = {};
 var criteriaMetUrlRequired = {};
+var criteriaNAJustificationRequired = {};
 var criterionFuture = {};
 var MIN_SHOULD_LENGTH = 5;
 
@@ -50,7 +51,12 @@ function criterionResult(criterion) {
     justification = '';
   }
   if ($(criterionStatus + '_na').is(':checked')) {
-    return 'passing';
+    if ( !criteriaNAJustificationRequired[criterion] ||
+        justification.length >= MIN_SHOULD_LENGTH) {
+      return 'passing';
+    } else {
+      return 'question';
+    }
   } else if ($(criterionStatus + '_met').is(':checked')) {
     if (criteriaMetUrlRequired[criterion] && !containsURL(justification)) {
       // Odd case: met is claimed, but we're still missing information.
@@ -132,6 +138,10 @@ function changedJustificationText(criteria) {
   } else if ($(criteriaStatus + '_met').is(':checked') &&
            criteriaMetUrlRequired[criteria] &&
            !containsURL($(criteriaJust).val())) {
+    $(criteriaJust).addClass('required-data');
+  } else if($(criteriaStatus + '_na').is(':checked') &&
+       (criteriaNAJustificationRequired[criteria]) &&
+       ($(criteriaJust).val().length < MIN_SHOULD_LENGTH)) {
     $(criteriaJust).addClass('required-data');
   } else {
     $(criteriaJust).removeClass('required-data');
@@ -309,6 +319,8 @@ function SetupCriteriaStructures() {
         $(this).find('.criterion-category').text();
       criterionFuture[criterionName] =
         $(this).find('.criterion-future').text() === 'true';
+      criteriaNAJustificationRequired[criterionName] =
+        $(this).find('.criterion-na-justification-required').text() === 'true';
     }
   );
 }

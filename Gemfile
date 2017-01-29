@@ -2,6 +2,8 @@
 source 'https://rubygems.org'
 ruby File.open('.ruby-version', 'rb') { |f| f.read.chomp }
 
+gem 'actionpack-action_caching', '1.2.0'
+gem 'actionpack-page_caching', '1.1.0'
 gem 'bcrypt', '3.1.11' # Security - for salted hashed interated passwords
 gem 'bootstrap-sass', '3.3.7'
 gem 'bootstrap-social-rails', '4.12.0'
@@ -33,8 +35,6 @@ gem 'secure_headers', '3.6.1' # Add hardening measures to HTTP headers
 # gem 'turbolinks', '5.0.1' # Speed UI access
 gem 'uglifier', '3.0.4'
 gem 'will_paginate', '3.1.5'
-gem 'actionpack-page_caching', '1.1.0'
-gem 'actionpack-action_caching', '1.2.0'
 
 # This is an indirect dependency - force this version so we can work
 # with Ruby 2.4.0.

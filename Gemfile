@@ -27,7 +27,7 @@ gem 'omniauth-github', '1.1.2' # Authentication to GitHub (get project info)
 gem 'paper_trail', '6.0.2' # Record previous versions of project data
 gem 'pg', '0.19.0' # PostgreSQL database, used for data storage
 gem 'pg_search', '2.0.1' # PostgreSQL full-text search
-gem 'puma', '3.6.2' # Faster webserver; recommended by Heroku
+gem 'puma', '3.7.0' # Faster webserver; recommended by Heroku
 gem 'rails', '5.0.1' # Our web framework
 gem 'redcarpet', '3.4.0' # Process markdown in form textareas (justifications)
 gem 'sass-rails', '5.0.6'
@@ -36,16 +36,12 @@ gem 'secure_headers', '3.6.1' # Add hardening measures to HTTP headers
 gem 'uglifier', '3.0.4'
 gem 'will_paginate', '3.1.5'
 
-# This is an indirect dependency - force this version so we can work
-# with Ruby 2.4.0.
-gem 'rainbow', '2.1.0'
-
 group :development, :test do
   gem 'awesome_print', '1.7.0'
   gem 'bullet', '5.5.0'
   gem 'bundler-audit', '0.5.0'
   gem 'database_cleaner', '1.5.3' # Cleans up database between tests
-  gem 'dotenv-rails', '2.1.2'
+  gem 'dotenv-rails', '2.2.0'
   gem 'eslintrb', '2.1.0'
   gem 'json', '1.8.6'
   gem 'license_finder', '2.1.2'
@@ -66,7 +62,7 @@ end
 group :development do
   # gem 'fasterer', '0.3.2' # Provide speed recommendations - run 'fasterer'
   # Waiting for Ruby 2.4 support: https://github.com/seattlerb/ruby_parser/issues/239
-  gem 'rails_db', '1.3.4' # Enable localhost:3000/rails/db debugging
+  gem 'rails_db', '1.4.1' # Enable localhost:3000/rails/db debugging
   gem 'traceroute', '0.5.0' # Adds 'rake traceroute' command to check routes
   gem 'web-console', '3.4.0'
 end
@@ -77,10 +73,10 @@ group :test do
   gem 'codecov', '0.1.9', require: false
   gem 'minitest-rails-capybara', '3.0.0', require: false
   gem 'minitest-retry', '0.1.8', require: false # Avoid Capybara false positives
-  gem 'poltergeist', '1.12.0', require: false
+  gem 'poltergeist', '1.13.0', require: false
   gem 'rails-controller-testing', '1.0.1'
   gem 'selenium-webdriver', '3.0.5', require: false
-  gem 'simplecov', '0.12.0', require: false
+  gem 'simplecov', '0.13.0', require: false
   gem 'webmock', '2.3.2', require: false
 end
 

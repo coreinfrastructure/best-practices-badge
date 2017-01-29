@@ -30,5 +30,16 @@
 doc/*.html
 license_okay
 
+# Temporary files
+,*
+*.temp
+*.TEMP
+*.tmp
+*.TMP
+*.old
+*.OLD
+*.BAD
+*.ALT
+
 # Some environments will have a node_modules file created by the install script.
 /node_modules/

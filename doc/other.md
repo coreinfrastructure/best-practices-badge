@@ -244,11 +244,10 @@ SHOULD or MUST.
 
 *   The project MUST identify the specific coding style guides
     for the primary languages it uses, and require that contributions
-    comply with it (where exceptions occur, they MUST be rare and documented
-    in the code at that locations).
+    generally comply with it.
+    *Details*:
     In most cases this is done by referring to some existing style guide(s),
-    possibly listing differences, and then enforcing the style guide where
-    possible using an automated style guide checker that is configured to match.
+    possibly listing differences.
     These style guides can include ways to improve readability and
     ways to reduce the likelihood of defects (including vulnerabilities).
     Many programming languages have one or more widely-used style guides.
@@ -256,6 +255,21 @@ SHOULD or MUST.
     [Google's style guides](https://github.com/google/styleguide) and
     [SEI CERT Coding Standards](https://www.securecoding.cert.org/).
     <sup>[<a href="#coding_standards">coding_standards</a>]</sup>
+
+*   The project MUST automatically enforce its selected coding style(s)
+    if there is at least one FLOSS tool that can do so in the selected
+    language(s).
+    *Details*:
+    This MAY be implemented using static analysis tool(s) and/or by
+    forcing the code through code reformatters.
+    In many cases the tool configuration is included in the project's
+    repository (since different projects may choose different configurations).
+    Projects MAY allow style exceptions (and typically will);
+    where exceptions occur, they MUST be rare and documented
+    in the code at their locations, so that these exceptions can be reviewed
+    and so that tools can automatically handle them in the future.
+    Examples of such tools include ESLint (JavaScript) and Rubocop (Ruby).
+    <sup>[<a href="#coding_standards_enforced">coding_standards_enforced</a>]</sup>
 
 *   The project MUST make it easy to either
     (1) identify and update reused externally-maintained components or (2)
@@ -713,6 +727,13 @@ SHOULD or MUST.
     but they can be extended to counter malicious compilers using
     processes such as diverse double-compiling (DDC).
 
+* The project MUST require two-factor authentication (2FA)
+  for developers for changing a central repository
+  or accessing sensitive data (such as private vulnerability reports).
+  This 2FA mechanism MAY use SMS, though note that SMS is not
+  encrypted nor authenticated and thus is weaker than other 2FA mechanisms.
+  two_factor_authentication
+
 ## To be turned into criteria text
 
 We intend to turn these into criteria text.
@@ -805,8 +826,9 @@ some subset of (e.g., it must meet at least 3 of 5 criteria).
 * (Node.js practice): We have a private repository for security issues
     and every member of that team is required to have
     2FA enabled on their GitHub account.
-    Response: Not everyone agrees on having a private repo for security issues,
-    and some projects will have significant difficulties deploying 2FA.
+    Response: Not everyone agrees on having a private repo for security issues.
+    Some projects will have significant difficulties deploying 2FA
+    (two-factor authentication), so if we do, it should be passing+2.
 * (Node.js)
     We're considering requiring GPG signing of all of their commits as well.
     Response: This is helpful, but somewhat onerous to *require*,

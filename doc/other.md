@@ -338,10 +338,19 @@ SHOULD or MUST.
     which can be harder to do - so we have split this requirement up.
     See the [reproducible build criterion](#reproducible_build).
 
-*   <a name="installation_common"></a>(Future criterion) The project SHOULD provide a way to easily install and uninstall the software using a commonly-used convention.  <sup>[<a href="#installation_common">installation_common</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>Examples include using a language-level package manager (such as npm, pip, maven, or bundler), system-level package manager (such as apt-get or dnf), "make install/uninstall" (supporting DESTDIR), a container in a standard format, or a virtual machine image in a standard format. The installation and uninstallation process (e.g., its packaging) MAY be implemented by a third party as long as it is FLOSS.</dd></dl>
+* <a name="installation_common"></a>(Future criterion) The
+  project MUST provide a way for end-users to easily install and
+  uninstall the software using a commonly-used convention.  <sup>[<a
+  href="#installation_common">installation_common</a>]</sup><dl><dt><i>Details</i>:<dt>
+  <dd>Examples include using a language-level package manager (such as npm,
+  pip, maven, or bundler), system-level package manager (such as apt-get
+  or dnf), "make install/uninstall" (supporting DESTDIR), a container in
+  a standard format, or a virtual machine image in a standard format. The
+  installation and uninstallation process (e.g., its packaging) MAY be
+  implemented by a third party as long as it is FLOSS.</dd></dl>
 
 *   <a name="installation_standard_variables"></a>
-    The installation system MUST honor standard conventions for
+    The installation system for end-users MUST honor standard conventions for
     selecting the location where built artifacts are written to
     at installation time.  For example, if it installs
     files on a POSIX system it MUST honor the DESTDIR environment variable.
@@ -356,6 +365,20 @@ SHOULD or MUST.
     when POSIX filesystems aren't supported during installation (e.g.,
     Windows-only programs).  See
     <https://github.com/linuxfoundation/cii-best-practices-badge/issues/453>
+
+* <a name="installation_development_quick"></a>The
+  project MUST provide a way for potential developers to quickly install all
+  the project results and support environment necessary to make changes,
+  including the tests and test environment.
+  This MUST be performed with a commonly-used convention.
+  <sup>[<a
+  href="#installation_development_quick">installation_development_quick</a>]</sup><dl><dt><i>Details</i>:<dt>
+  <dd>
+  This MAY be implemented using a generated container and/or
+  installation script(s).
+  Dependencies would typically be installed by invoking
+  system and/or language package manager(s).
+  </dd></dl>
 
 ### Continuity
 
@@ -563,6 +586,14 @@ SHOULD or MUST.
   This is related to know_secure_design, as well
   as implement_secure_design and proposed documentation_security.
 
+* <a name="vulnerability_report_credit"></a>The project MUST give credit to the reporter(s) of all vulnerability reports resolved in the last 12 months, except for the reporter(s) who request anonymity.
+ (N/A allowed.) <sup>[<a href="#vulnerability_report_credit">vulnerability_report_credit</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>If there have been no vulnerabilities resolved in the last 12 months, choose "not applicable" (N/A).
+</dd></dl></li>
+  *Rationale*: It is only fair to credit those who provide vulnerability
+  reports.  In many cases, the only reporter requirement is that
+  they receive credit.  This is also important long-term, because giving
+  credit encourages additional reporting.
+
 ## Potential passing+2 criteria
 
 * Achieve the lower passing+1 badge.
@@ -608,6 +639,7 @@ SHOULD or MUST.
     contributors have an increased likelihood of continuing.
     [Alluxio uses SMALLFIX](http://www.alluxio.org/docs/master/en/Contributing-to-Alluxio.html) and
     [OWASP ZAP uses IdealFirstBug](https://github.com/zaproxy/zaproxy/issues?q=is%3Aopen+is%3Aissue+label%3AIdealFirstBug).
+    This is related to criterion installation_development_quick.
 
 *   The project MUST have at least two unassociated significant
     contributors.
@@ -717,6 +749,9 @@ SHOULD or MUST.
     The [reproducible builds project has documentation on how to do this](https://reproducible-builds.org/docs/).
     <sup>[<a href="#build_reproducible">build_reproducible</a>]</sup>
 
+    TODO: There is an existing "build_reproducible" text, but this
+    rewritten version is better.
+
     *Rationale*: If a project needs to be built but there is no working
     build system, then potential co-developers will not be able to easily
     contribute and many security analysis tools will be ineffective.
@@ -780,8 +815,10 @@ We intend to turn these into criteria text.
         that? Do you just except them to have some security-related
         certification or take some specific course or what?"
 
-* If C/C++, MUST use ASAN or something like it. See
+* If C/C++, MUST use ASAN or something like it during testing
+  and fuzz testing. See
   <https://github.com/linuxfoundation/cii-best-practices-badge/issues/256>
+  Perhaps simply upgrade dynamic_analysis_unsafe to SHOULD or MUST.
 
 ## Potential sources for other criteria
 

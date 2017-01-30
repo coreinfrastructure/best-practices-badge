@@ -19,7 +19,6 @@ def print_file(filename)
       puts line
     end
   end
-  puts ''
 end
 
 def show_extra(key, header_text, criterion)
@@ -28,12 +27,16 @@ def show_extra(key, header_text, criterion)
 end
 
 # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+# rubocop:disable Metrics/CyclomaticComplexity
 def puts_criterion(key, criterion)
   print "\n<li><a name=\"#{key}\"></a>"
   print '(Future criterion) ' if criterion.key?('future')
   print criterion['description']
   # print " (N/A #{criterion.key?('na_allowed') ? '' : 'not '}allowed.)"
   print ' (N/A allowed.)' if criterion.key?('na_allowed')
+  if criterion.key?('na_justification_required')
+    print ' (Justification required for "N/A".)'
+  end
   print ' (URL required for "met".)' if criterion.key?('met_url_required')
   print " <sup>[<a href=\"\##{key}\">#{key}</a>]</sup>"
   if criterion.key?('details') || criterion.key?('rationale')
@@ -45,6 +48,7 @@ def puts_criterion(key, criterion)
   puts '</li>'
 end
 # rubocop:enable Metrics/AbcSize,Metrics/MethodLength
+# rubocop:enable Metrics/CyclomaticComplexity
 
 # Generate results
 $stdout.reopen('doc/criteria.md', 'w') || abort('Cannot write')
@@ -64,3 +68,4 @@ FullCriteriaHash.each do |major, major_value|
   end
 end
 print_file('doc/criteria-footer.markdown')
+puts ''

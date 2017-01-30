@@ -78,6 +78,10 @@ class Criteria
     na_allowed == true
   end
 
+  def na_justification_required?
+    na_justification_required == true
+  end
+
   delegate :present?, to: :details, prefix: true
 
   def should?

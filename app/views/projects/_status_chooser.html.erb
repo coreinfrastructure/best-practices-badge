@@ -13,6 +13,8 @@
        <span class="criterion-future hidden"><%= criterion.future? %></span>
        <span class="criterion-met-url-required hidden"><%=
           criterion.met_url_required? %></span>
+       <span class="criterion-na-justification-required hidden"><%=
+          criterion.na_justification_required? %></span>
        <%= f.form_group status_symbol do %>
          <div class="col-xs-4 text-center block-center">
           <br><%= image_tag("Clear.gif", size: "40x40", id: criterion.to_s + "_enough", alt: "") %>
@@ -60,8 +62,15 @@
                  "Please explain why it's okay this is unmet, including 1+ key URLs.") %>
          </div>
          <div id="<%= criterion.to_s + '_na_placeholder' %>" class="hidden">
-          <%= sanitize (criterion.na_placeholder ||
-                 "(Optional) Please explain why this is not applicable (N/A), including 1+ key URLs." ) %>
+          <%= if criterion.na_placeholder
+                sanitize (criterion.na_placeholder)
+              else
+                if criterion.na_justification_required?
+                  sanitize ("(Required) Please explain why this is not applicable (N/A), including 1+ key URLs." )
+                else
+                  sanitize ("(Optional) Please explain why this is not applicable (N/A), including 1+ key URLs." )
+                end
+              end %>
          </div>
          <% if criterion.met_suppress %>
            <div id="<%= criterion.to_s + '_met_suppress' %>" class="hidden"></div>
@@ -84,6 +93,10 @@
              <p class="bg-warning">Warning: URL required, but no URL found.</p>
            <% elsif project[status_symbol] == 'Unmet' &&
                       criterion.category == 'SHOULD' &&
+                      project[justification_symbol].length < Project::MIN_SHOULD_LENGTH %>
+             <p class="bg-warning">Warning: Requires lengthier justification.</p>
+           <% elsif criterion.na_allowed? &&
+                      project[status_symbol] == 'N/A' &&
                       project[justification_symbol].length < Project::MIN_SHOULD_LENGTH %>
              <p class="bg-warning">Warning: Requires lengthier justification.</p>
            <% end %>

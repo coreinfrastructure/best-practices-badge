@@ -1,8 +1,9 @@
 # Best Practices Criteria for Free/Libre and Open Source Software (FLOSS)
 
 <!-- SPDX-License-Identifier: (MIT OR CC-BY-3.0+) -->
-<!-- DO NOT EDIT generated file criteria-generated.md !! -->
-<!-- The actual criteria are stored in criteria.yml -->
+<!-- DO NOT EDIT generated file criteria.md !! -->
+<!-- The actual criteria are stored in criteria.yml . -->
+<!-- See also files criteria-header.markdown and criteria-footer.markdown . -->
 
 ## Introduction
 

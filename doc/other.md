@@ -315,6 +315,34 @@ SHOULD or MUST.
     is needed for support and analysis, and also useful for measuring
     the presence of hardening features in the compiled binaries.
 
+* <a name="build_non_recursive"></a>
+  The project's build system MUST NOT recursively build subdirectories
+  if there are cross-dependencies in the subdirectories.
+  <sup>[<a href="#build_non_recursive">build_non_recursive</a>]</sup>
+  *Details*: The project build system's internal dependency information
+  needs to be
+  accurate, otherwise, changes to the project may not build correctly.
+  Incorrect builds can lead to defects (including vulnerabilities).
+  A common mistake in large build systems is to use a "recursive build"
+  or "recursive make", that is,
+  a hierarchy of subdirectories containing source files,
+  where each subdirectory is independently built.
+  Unless each subdirectory is fully independent, this is a mistake,
+  because the dependency information is incorrect.
+
+  *Rationale*:
+  For more information, see
+  ["Recursive Make Considered Harmful" by Peter Miller](http://aegis.sourceforge.net/auug97.pdf)
+  (note that this incorrect approach can be used in any build system,
+  not just <i>make</i>).
+  Note that ["Non-recursive Make Considered
+  Harmful"](http://research.microsoft.com/en-us/um/people/simonpj/papers/ghc-shake/ghc-shake.pdf)
+  agrees that recursive builds are bad; its argument is that
+  for large projects you should use a tool other than make.
+  In many cases it is better to automatically determine the dependencies,
+  but this is not always accurate or practical, so we did not require
+  that dependencies be automatically generated.
+
 *   <a name="build_repeatable"></a>
     The project MUST be able to repeat the process of
     generating information from source files and get exactly
@@ -376,9 +404,18 @@ SHOULD or MUST.
   <dd>
   This MAY be implemented using a generated container and/or
   installation script(s).
-  Dependencies would typically be installed by invoking
-  system and/or language package manager(s).
+  External dependencies would typically be installed by invoking
+  system and/or language package manager(s), per external_dependencies.
   </dd></dl>
+
+*   <a name="external_dependencies"></a>
+    The project MUST list external dependencies in a computer-processable
+    way.
+    <sup>[<a href="#external_dependencies">external_dependencies</a>]</sup>
+    *Details*:
+    Typically this is done using the conventions of package manager
+    and/or build system.
+    Note that this helps implement installation_development_quick.
 
 ### Continuity
 
@@ -407,9 +444,10 @@ SHOULD or MUST.
 
 ### Security analysis
 
-*   Projects MUST monitor or periodically check their dependencies
-    (including embedded dependencies) to detect known vulnerabilities and
+*   Projects MUST monitor or periodically check their external dependencies
+    (including convenience copies) to detect known vulnerabilities, and
     fix exploitable vulnerabilities or verify them as unexploitable.
+    *Details*:
     This can be done using an origin analyzer / dependency checking tool
     such as
     [OWASP's Dependency-Check](https://www.owasp.org/index.php/OWASP_Dependency_Check),
@@ -417,6 +455,7 @@ SHOULD or MUST.
     [Black Duck's Protex](https://www.blackducksoftware.com/products/protex),
     [Synopsys' Protecode](http://www.protecode.com/), and
     [Bundler-audit (for Ruby)](https://github.com/rubysec/bundler-audit).
+    Some package managers include mechanisms to do this.
     It is acceptable if the components' vulnerability cannot be exploited,
     but this analysis is difficult and it is sometimes easier to
     simply update or fix the part.
@@ -594,6 +633,18 @@ SHOULD or MUST.
   they receive credit.  This is also important long-term, because giving
   credit encourages additional reporting.
 
+* <a name="maintenance_or_update"></a>
+  The project MUST maintain the most often used older versions of the product
+  <i>or</i> provide an upgrade path to newer versions.
+  If the upgrade path is difficult, the project MUST document how
+  to perform the upgrade (e.g., the interfaces that have changed and
+  detailed suggested steps to help upgrade).
+  <sup>[<a href="#maintenance_or_update">maintenance_or_update</a>]</sup>
+
+  *Rationale*:
+  This was inspired by
+  https://projects.ow2.org/bin/view/ow2/OMM DFCT-1.2
+
 ## Potential passing+2 criteria
 
 * Achieve the lower passing+1 badge.
@@ -765,9 +816,25 @@ SHOULD or MUST.
 * The project MUST require two-factor authentication (2FA)
   for developers for changing a central repository
   or accessing sensitive data (such as private vulnerability reports).
-  This 2FA mechanism MAY use SMS, though note that SMS is not
-  encrypted nor authenticated and thus is weaker than other 2FA mechanisms.
+  This 2FA mechanism MAY use mechanisms without cryptographic mechanisms
+  such as SMS, though that is not recommended.
   two_factor_authentication
+
+  *Rationale*: 2FA is used by Node.js and the Linux kernel projects.
+  See
+  ["Linux Kernel Git Repositories Add 2-Factor Authentication" by
+Kontin Ryabitsev](https://www.linux.com/blog/linux-kernel-git-repositories-add-2-factor-authentication)
+  and
+  ["Linux Foundation Protects Kernel Git Repositories With 2FA" by Eduard Kovacs](http://www.securityweek.com/linux-foundation-protects-kernel-git-repositories-2fa).
+
+* The project's two-factor authentication (2FA) SHOULD use cryptographic
+  mechanisms to prevent impersonation.  Short Message Service (SMS) based
+  2FA, by itself, does not meet this criterion, since it is not encrypted.
+  *Rationale*: SMS is easier and lower cost for many people,
+  but it also provides much weaker security.  It has been argued
+  that SMS isn't really 2FA at all; we permit it, because it's better
+  than nothing, but we don't recommend it because of its weaknesses.
+  [So Hey You Should Stop Using Texts for Two-Factor Authentication](https://www.wired.com/2016/06/hey-stop-using-texts-two-factor-authentication/)
 
 ## To be turned into criteria text
 
@@ -860,12 +927,6 @@ some subset of (e.g., it must meet at least 3 of 5 criteria).
         However, on many projects this would be a hard burden, and it's
         not clear it's necessarily worth it (there are diminishing returns).
 
-* (Node.js practice): We have a private repository for security issues
-    and every member of that team is required to have
-    2FA enabled on their GitHub account.
-    Response: Not everyone agrees on having a private repo for security issues.
-    Some projects will have significant difficulties deploying 2FA
-    (two-factor authentication), so if we do, it should be passing+2.
 * (Node.js)
     We're considering requiring GPG signing of all of their commits as well.
     Response: This is helpful, but somewhat onerous to *require*,

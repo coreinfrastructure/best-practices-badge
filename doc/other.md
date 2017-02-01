@@ -881,14 +881,6 @@ We intend to turn these into criteria text.
 
 ### Passing+1 to be created
 
-* Must have a process for rapidly fixing vulnerabilities and
-  releasing the updated software.
-  Note that having a good test suite makes it easier
-  to make changes and be
-  confident the system still works.
-  Also note that FLOSS projects are often embedded in larger systems and
-  projects cannot control the larger projects they are in.
-
 *   All inputs from potentially untrusted sources are checked to ensure
     they are valid (a *whitelist*), if there are any restrictions on
     the data at all. A "MUST".

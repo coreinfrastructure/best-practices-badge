@@ -618,6 +618,29 @@ SHOULD or MUST.
   [Contributor Covenant Code of Conduct](http://contributor-covenant.org/)
   and the Linux kernel [Code of Conflict](https://www.kernel.org/doc/html/latest/process/code-of-conflict.html).
 
+* <a name="governance"></a>The project MUST clearly define and document
+  its project governance model (the way it makes decisions,
+  including key roles).  <sup>governance</sup>
+
+  *Details*: There needs to be some well-established documented way
+  to make decisions and resolve disputes.
+  In small projects, this may be as simple as "the project owner and lead
+  makes all final decisions".
+  There are various governance models, including benevolent dictator
+  and formal meritocracy; for more details, see
+  <a href="http://oss-watch.ac.uk/resources/governancemodels">Governance models</a>.
+  The governance information does not need to document the possibility
+  of creating a project fork, since that is always possible
+  for FLOSS projects.
+
+  *Rationale*:
+  There are many different governance models used by a wide array of
+  successful projects.  Therefore, we do not believe that we should
+  specify a particular governance model.  However, we do think it is
+  important to have a governance model, and clearly define it, so that
+  all participants and potential participants will know how decisions
+  will be made.
+
 * <a name="documentation_design"></a>The project MUST include documentation of its high-level design (aka architecture), that is, documentation that identifies its major components and how they interact. <sup>documentation_design</sup>
 
   *Rationale*: Documenting the basic design makes it easier for potential

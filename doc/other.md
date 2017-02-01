@@ -656,6 +656,17 @@ SHOULD or MUST.
   they receive credit.  This is also important long-term, because giving
   credit encourages additional reporting.
 
+* <a name="vulnerability_response_process"></a>The project MUST have a documented process for responding to vulnerability reports.
+ <sup>[<a href="#vulnerability_response_process">vulnerability_response_process</a>]</sup>
+
+  *Details*: This is strongly related to vulnerability_report_process,
+  which requires that there be a documented way to report vulnerabilities.
+  It also related to vulnerability_report_response, which requires
+  response to vulnerability reports within a certain time frame.
+
+  *Rationale*: This is inspired by
+  <a href="http://community.apache.org/apache-way/apache-project-maturity-model.html">Apache Project Maturity Model</a> QU30.
+
 * <a name="maintenance_or_update"></a>
   The project MUST maintain the most often used older versions of the product
   <i>or</i> provide an upgrade path to newer versions.
@@ -971,12 +982,22 @@ some subset of (e.g., it must meet at least 3 of 5 criteria).
 *   Copyright notice in each file, e.g.,
     "Copyright [year project started] - [current year], [project founder]
     and the [project name] contributors."
-    *Rationale*: It isn't legally required.
-    That said,
+    *Rationale*: This isn't legally required.
+    On the other hand, this is not hard to add.
+    In addition,
     [Ben Balter's "Copyright notices for open source projects"](http://ben.balter.com/2015/06/03/copyright-notices-for-websites-and-open-source-projects/)
-    provides a good argument for why it *should* be included,
-    and it is not hard to add.
-    On the other hand, is this really that important?
+    provides a good argument for why it *should* be included:
+    "First, someone may want to use your work in ways not allowed
+    by your license; notices help them determine who to ask for
+    permission. Explicit notices can help you prove that you and your
+    collaborators really are the copyright holders. They can serve to put
+    a potential infringer on notice by providing an informal sniff test to
+    counter the “Oh yeah, well I didn’t know it was copyrighted”
+    defense. For some users the copyright notice may suggest higher
+    quality, as they expect that good software will include a notice...
+    Git can track these things, but people may receive software outside
+    of git or where the git history has not been retained."
+    The question is, is this really that important?
 
 ### Probably not: Security Code review ideas from liujin28
 

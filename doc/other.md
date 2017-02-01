@@ -555,17 +555,17 @@ SHOULD or MUST.
   This criterion is often N/A, e.g., for program libraries.
   Here are some examples of actions to take or issues to consider:
 
-  - Neither color nor sound SHOULD be used as the only way information
-    is conveyed
-  - Color combinations SHOULD be tested in a high-contrast environment
-  - If the software uses flashing or animation it SHOULD grant the user
-    control to disable it
-  - All applications SHOULD be tested for keyboard-only navigation
-  - A GUI or web-based project SHOULD test with at least one
-    screen-reader on the target platform(s) (e.g. NVDA, Jaws, or WindowEyes
-    on Windows; VoiceOver on Mac & iOS; Orca on Linux/BSD; TalkBack on
-    Android). TUI programs MAY work to reduce overdraw to prevent redundant
-    reading by screen-readers.
+    - Neither color nor sound SHOULD be used as the only way information
+      is conveyed
+    - Color combinations SHOULD be tested in a high-contrast environment
+    - If the software uses flashing or animation it SHOULD grant the user
+      control to disable it
+    - All applications SHOULD be tested for keyboard-only navigation
+    - A GUI or web-based project SHOULD test with at least one
+      screen-reader on the target platform(s) (e.g. NVDA, Jaws, or WindowEyes
+      on Windows; VoiceOver on Mac & iOS; Orca on Linux/BSD; TalkBack on
+      Android). TUI programs MAY work to reduce overdraw to prevent redundant
+      reading by screen-readers.
 
 ### Other passing+1 criteria
 
@@ -689,12 +689,13 @@ SHOULD or MUST.
 * Achieve the lower passing+1 badge.
 
 * FIXME - list of upgrades of SHOULD and SUGGESTED from passing and passing+1.
-  - E.g., MUST have bus factor of 2 or more.
-  - Change "report_tracker" to MUST, to require issue tracking.
-    Using GitHub issues meets this.
-    Note that the Linux kernel project has reported that this is very
-    hard to do at their scale.
-    NOTE: Kevin Wall thinks this should be at passing+1, not passing+2.
+
+    - E.g., MUST have bus factor of 2 or more.
+    - Change "report_tracker" to MUST, to require issue tracking.
+      Using GitHub issues meets this.
+      Note that the Linux kernel project has reported that this is very
+      hard to do at their scale.
+      NOTE: Kevin Wall thinks this should be at passing+1, not passing+2.
 
 ### General criteria
 
@@ -928,11 +929,11 @@ Review these larger criteria sets for things to add:
   note that both of these focus only on web applications.
   These are:
 
-  - OWASP Application Security Verification Standard (ASVS)
-    "provides a basis for testing web application technical security
-    controls and also provides developers with a list of requirements
-    for secure development."
-  - SANS' Securing Web Application Technologies (SWAT) criteria.
+    - OWASP Application Security Verification Standard (ASVS)
+      "provides a basis for testing web application technical security
+      controls and also provides developers with a list of requirements
+      for secure development."
+    - SANS' Securing Web Application Technologies (SWAT) criteria.
 
 In the future we might add some criteria that a project has to meet
 some subset of (e.g., it must meet at least 3 of 5 criteria).

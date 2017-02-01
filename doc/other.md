@@ -40,6 +40,11 @@ SHOULD or MUST.
 
 * FIXME - list of upgrades of SHOULD and SUGGESTED.
 
+    - Upgrade dynamic_analysis_unsafe from SUGGESTED to MUST.
+      This would mean that C/C++ would be required to use something like
+      ASAN during some testing/ and fuzz testing. See:
+      <https://github.com/linuxfoundation/cii-best-practices-badge/issues/256>
+
 ### Test
 
 *   An automated test suite MUST be applied on each check-in to a shared
@@ -915,11 +920,6 @@ We intend to turn these into criteria text.
         Kevin Wall asked this question: "Exactly how would you measure
         that? Do you just except them to have some security-related
         certification or take some specific course or what?"
-
-* If C/C++, MUST use ASAN or something like it during testing
-  and fuzz testing. See
-  <https://github.com/linuxfoundation/cii-best-practices-badge/issues/256>
-  Perhaps simply upgrade dynamic_analysis_unsafe to SHOULD or MUST.
 
 ## Potential sources for other criteria
 

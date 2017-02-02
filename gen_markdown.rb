@@ -19,7 +19,6 @@ def print_file(filename)
       puts line
     end
   end
-  puts ''
 end
 
 def show_extra(key, header_text, criterion)

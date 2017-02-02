@@ -296,6 +296,19 @@ SHOULD or MUST.
     ["Chromium: Why it isn't in Fedora yet as a proper package" by Tom Callaway](http://spot.livejournal.com/312320.html).
     <sup>[<a href="#updateable_reused_components">updateable_reused_components</a>]</sup>
 
+    TODO: What about vendoring, where code is copied in with the
+    express intent of *only* using that copied version?
+    (These are intentional forks.)  There's a risk of divergence
+    and failure to apply security fixes both ways.
+    For an example, see
+    <a href="https://lwn.net/Articles/713175/">"LZ4: vendoring in the kernel"
+    by Jonathan Corbet (LWN, February 1, 2017)</a>, based on a
+    2017 linux.conf.au talk by Robert Lefkowitz.
+    Lefkowitz talked about the process of "vendoring" — the copying
+    of code from other projects into one's own repository rather than
+    accepting a dependency on those projects - and
+    LZ4 in the Linux kernel.
+
 *   <a name="build_standard_variables"></a>
     Build systems for native binaries MUST honor the relevant compiler and
     linker (environment) variables passed in to them (e.g., CC, CFLAGS,

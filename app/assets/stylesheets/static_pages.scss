@@ -353,40 +353,35 @@ nav {
     line-height: 19px;
 }
 
+//We used to have a need for this and we might again
 .progress {
-    height: 22px;
-    border-radius: 0;
-    margin-bottom: 5px;
-    display: block;
+
 }
 
 #progress-mobile
 {
    position: absolute;
-   top: 152px;
-   left:125px;
-   display: none;
+   top: 22px;
+   left:195px;
+   width:80px;
 }
 
-/* For width 768px and smaller: */
-@media only screen and (max-width: 767px) {
-  .progress {
-    width:150px;
-    height: 22px;
-    border-radius: 0;
-    margin-bottom: 5px;
-    display: none;
-  }
+
+@media only screen and (min-width: 767px) {
   #progress-mobile
   {
-     display: inline;
-     width:150px;
+     position: absolute;
+     margin: auto;
+     margin-left: -10%;
+     width: 25%;
+     top: 30px;
+     left:40%;
      height: 22px;
      border-radius: 0;
-     margin-bottom: 5px;
 
   }
 }
+
 
 .progress-subtext {
     color: #999;

@@ -628,4 +628,3 @@ You may also want to see the "[background](./background.md)" file
 for more information about these criteria,
 and the "[implementation](./implementation.md)" notes
 about the BadgeApp application.
-

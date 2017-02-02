@@ -998,6 +998,7 @@
     - static_analysis:
         category: MUST
         na_allowed: true
+        na_justification_required: true
         description: >
           At least one static code analysis tool MUST be applied to any proposed
           major production release of the software before its release,
@@ -1052,6 +1053,7 @@
     - static_analysis_fixed:
         category: MUST
         na_allowed: true
+        na_justification_required: true
         description: >
           All medium and high severity exploitable vulnerabilities
           discovered with static code analysis MUST be fixed

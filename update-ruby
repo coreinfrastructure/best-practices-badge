@@ -1,7 +1,11 @@
 #!/bin/sh
+# Update Ruby.  If you're initiating this for the project, pass the
+# new version as the first parameter - this will update and commit.
+# If you're not initiative this for the project, provide no parameters -
+# this will update as needed.
 
 # The following enables some run-time error detection:
-set -e -u
+set -e
 
 if [ "$1" ] ; then
     ruby_version="$1"
@@ -18,6 +22,10 @@ if [ "$1" ]; then
     rbenv local "$ruby_version"
 fi
 
+# Make sure we're using the current "gem" system
+gem update --system
+# Tell rbenv about that
+rbenv rehash
 # Reinstall bundler for it
 gem install bundler
 # Tell rbenv about bundler

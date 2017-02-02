@@ -40,6 +40,11 @@ SHOULD or MUST.
 
 * FIXME - list of upgrades of SHOULD and SUGGESTED.
 
+    - Upgrade dynamic_analysis_unsafe from SUGGESTED to MUST.
+      This would mean that C/C++ would be required to use something like
+      ASAN during some testing/ and fuzz testing. See:
+      <https://github.com/linuxfoundation/cii-best-practices-badge/issues/256>
+
 ### Test
 
 *   An automated test suite MUST be applied on each check-in to a shared
@@ -244,11 +249,10 @@ SHOULD or MUST.
 
 *   The project MUST identify the specific coding style guides
     for the primary languages it uses, and require that contributions
-    comply with it (where exceptions occur, they MUST be rare and documented
-    in the code at that locations).
+    generally comply with it.
+    *Details*:
     In most cases this is done by referring to some existing style guide(s),
-    possibly listing differences, and then enforcing the style guide where
-    possible using an automated style guide checker that is configured to match.
+    possibly listing differences.
     These style guides can include ways to improve readability and
     ways to reduce the likelihood of defects (including vulnerabilities).
     Many programming languages have one or more widely-used style guides.
@@ -256,6 +260,21 @@ SHOULD or MUST.
     [Google's style guides](https://github.com/google/styleguide) and
     [SEI CERT Coding Standards](https://www.securecoding.cert.org/).
     <sup>[<a href="#coding_standards">coding_standards</a>]</sup>
+
+*   The project MUST automatically enforce its selected coding style(s)
+    if there is at least one FLOSS tool that can do so in the selected
+    language(s).
+    *Details*:
+    This MAY be implemented using static analysis tool(s) and/or by
+    forcing the code through code reformatters.
+    In many cases the tool configuration is included in the project's
+    repository (since different projects may choose different configurations).
+    Projects MAY allow style exceptions (and typically will);
+    where exceptions occur, they MUST be rare and documented
+    in the code at their locations, so that these exceptions can be reviewed
+    and so that tools can automatically handle them in the future.
+    Examples of such tools include ESLint (JavaScript) and Rubocop (Ruby).
+    <sup>[<a href="#coding_standards_enforced">coding_standards_enforced</a>]</sup>
 
 *   The project MUST make it easy to either
     (1) identify and update reused externally-maintained components or (2)
@@ -301,6 +320,34 @@ SHOULD or MUST.
     is needed for support and analysis, and also useful for measuring
     the presence of hardening features in the compiled binaries.
 
+* <a name="build_non_recursive"></a>
+  The project's build system MUST NOT recursively build subdirectories
+  if there are cross-dependencies in the subdirectories.
+  <sup>[<a href="#build_non_recursive">build_non_recursive</a>]</sup>
+  *Details*: The project build system's internal dependency information
+  needs to be
+  accurate, otherwise, changes to the project may not build correctly.
+  Incorrect builds can lead to defects (including vulnerabilities).
+  A common mistake in large build systems is to use a "recursive build"
+  or "recursive make", that is,
+  a hierarchy of subdirectories containing source files,
+  where each subdirectory is independently built.
+  Unless each subdirectory is fully independent, this is a mistake,
+  because the dependency information is incorrect.
+
+  *Rationale*:
+  For more information, see
+  ["Recursive Make Considered Harmful" by Peter Miller](http://aegis.sourceforge.net/auug97.pdf)
+  (note that this incorrect approach can be used in any build system,
+  not just <i>make</i>).
+  Note that ["Non-recursive Make Considered
+  Harmful"](http://research.microsoft.com/en-us/um/people/simonpj/papers/ghc-shake/ghc-shake.pdf)
+  agrees that recursive builds are bad; its argument is that
+  for large projects you should use a tool other than make.
+  In many cases it is better to automatically determine the dependencies,
+  but this is not always accurate or practical, so we did not require
+  that dependencies be automatically generated.
+
 *   <a name="build_repeatable"></a>
     The project MUST be able to repeat the process of
     generating information from source files and get exactly
@@ -324,10 +371,19 @@ SHOULD or MUST.
     which can be harder to do - so we have split this requirement up.
     See the [reproducible build criterion](#reproducible_build).
 
-*   <a name="installation_common"></a>(Future criterion) The project SHOULD provide a way to easily install and uninstall the software using a commonly-used convention.  <sup>[<a href="#installation_common">installation_common</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>Examples include using a language-level package manager (such as npm, pip, maven, or bundler), system-level package manager (such as apt-get or dnf), "make install/uninstall" (supporting DESTDIR), a container in a standard format, or a virtual machine image in a standard format. The installation and uninstallation process (e.g., its packaging) MAY be implemented by a third party as long as it is FLOSS.</dd></dl>
+* <a name="installation_common"></a>(Future criterion) The
+  project MUST provide a way for end-users to easily install and
+  uninstall the software using a commonly-used convention.  <sup>[<a
+  href="#installation_common">installation_common</a>]</sup><dl><dt><i>Details</i>:<dt>
+  <dd>Examples include using a language-level package manager (such as npm,
+  pip, maven, or bundler), system-level package manager (such as apt-get
+  or dnf), "make install/uninstall" (supporting DESTDIR), a container in
+  a standard format, or a virtual machine image in a standard format. The
+  installation and uninstallation process (e.g., its packaging) MAY be
+  implemented by a third party as long as it is FLOSS.</dd></dl>
 
 *   <a name="installation_standard_variables"></a>
-    The installation system MUST honor standard conventions for
+    The installation system for end-users MUST honor standard conventions for
     selecting the location where built artifacts are written to
     at installation time.  For example, if it installs
     files on a POSIX system it MUST honor the DESTDIR environment variable.
@@ -342,6 +398,29 @@ SHOULD or MUST.
     when POSIX filesystems aren't supported during installation (e.g.,
     Windows-only programs).  See
     <https://github.com/linuxfoundation/cii-best-practices-badge/issues/453>
+
+* <a name="installation_development_quick"></a>The
+  project MUST provide a way for potential developers to quickly install all
+  the project results and support environment necessary to make changes,
+  including the tests and test environment.
+  This MUST be performed with a commonly-used convention.
+  <sup>[<a
+  href="#installation_development_quick">installation_development_quick</a>]</sup><dl><dt><i>Details</i>:<dt>
+  <dd>
+  This MAY be implemented using a generated container and/or
+  installation script(s).
+  External dependencies would typically be installed by invoking
+  system and/or language package manager(s), per external_dependencies.
+  </dd></dl>
+
+*   <a name="external_dependencies"></a>
+    The project MUST list external dependencies in a computer-processable
+    way.
+    <sup>[<a href="#external_dependencies">external_dependencies</a>]</sup>
+    *Details*:
+    Typically this is done using the conventions of package manager
+    and/or build system.
+    Note that this helps implement installation_development_quick.
 
 ### Continuity
 
@@ -370,9 +449,10 @@ SHOULD or MUST.
 
 ### Security analysis
 
-*   Projects MUST monitor or periodically check their dependencies
-    (including embedded dependencies) to detect known vulnerabilities and
+*   Projects MUST monitor or periodically check their external dependencies
+    (including convenience copies) to detect known vulnerabilities, and
     fix exploitable vulnerabilities or verify them as unexploitable.
+    *Details*:
     This can be done using an origin analyzer / dependency checking tool
     such as
     [OWASP's Dependency-Check](https://www.owasp.org/index.php/OWASP_Dependency_Check),
@@ -380,6 +460,7 @@ SHOULD or MUST.
     [Black Duck's Protex](https://www.blackducksoftware.com/products/protex),
     [Synopsys' Protecode](http://www.protecode.com/), and
     [Bundler-audit (for Ruby)](https://github.com/rubysec/bundler-audit).
+    Some package managers include mechanisms to do this.
     It is acceptable if the components' vulnerability cannot be exploited,
     but this analysis is difficult and it is sometimes easier to
     simply update or fix the part.
@@ -474,17 +555,17 @@ SHOULD or MUST.
   This criterion is often N/A, e.g., for program libraries.
   Here are some examples of actions to take or issues to consider:
 
-  - Neither color nor sound SHOULD be used as the only way information
-    is conveyed
-  - Color combinations SHOULD be tested in a high-contrast environment
-  - If the software uses flashing or animation it SHOULD grant the user
-    control to disable it
-  - All applications SHOULD be tested for keyboard-only navigation
-  - A GUI or web-based project SHOULD test with at least one
-    screen-reader on the target platform(s) (e.g. NVDA, Jaws, or WindowEyes
-    on Windows; VoiceOver on Mac & iOS; Orca on Linux/BSD; TalkBack on
-    Android). TUI programs MAY work to reduce overdraw to prevent redundant
-    reading by screen-readers.
+    - Neither color nor sound SHOULD be used as the only way information
+      is conveyed
+    - Color combinations SHOULD be tested in a high-contrast environment
+    - If the software uses flashing or animation it SHOULD grant the user
+      control to disable it
+    - All applications SHOULD be tested for keyboard-only navigation
+    - A GUI or web-based project SHOULD test with at least one
+      screen-reader on the target platform(s) (e.g. NVDA, Jaws, or WindowEyes
+      on Windows; VoiceOver on Mac & iOS; Orca on Linux/BSD; TalkBack on
+      Android). TUI programs MAY work to reduce overdraw to prevent redundant
+      reading by screen-readers.
 
 ### Other passing+1 criteria
 
@@ -542,6 +623,29 @@ SHOULD or MUST.
   [Contributor Covenant Code of Conduct](http://contributor-covenant.org/)
   and the Linux kernel [Code of Conflict](https://www.kernel.org/doc/html/latest/process/code-of-conflict.html).
 
+* <a name="governance"></a>The project MUST clearly define and document
+  its project governance model (the way it makes decisions,
+  including key roles).  <sup>governance</sup>
+
+  *Details*: There needs to be some well-established documented way
+  to make decisions and resolve disputes.
+  In small projects, this may be as simple as "the project owner and lead
+  makes all final decisions".
+  There are various governance models, including benevolent dictator
+  and formal meritocracy; for more details, see
+  <a href="http://oss-watch.ac.uk/resources/governancemodels">Governance models</a>.
+  The governance information does not need to document the possibility
+  of creating a project fork, since that is always possible
+  for FLOSS projects.
+
+  *Rationale*:
+  There are many different governance models used by a wide array of
+  successful projects.  Therefore, we do not believe that we should
+  specify a particular governance model.  However, we do think it is
+  important to have a governance model, and clearly define it, so that
+  all participants and potential participants will know how decisions
+  will be made.
+
 * <a name="documentation_design"></a>The project MUST include documentation of its high-level design (aka architecture), that is, documentation that identifies its major components and how they interact. <sup>documentation_design</sup>
 
   *Rationale*: Documenting the basic design makes it easier for potential
@@ -549,17 +653,49 @@ SHOULD or MUST.
   This is related to know_secure_design, as well
   as implement_secure_design and proposed documentation_security.
 
+* <a name="vulnerability_report_credit"></a>The project MUST give credit to the reporter(s) of all vulnerability reports resolved in the last 12 months, except for the reporter(s) who request anonymity.
+ (N/A allowed.) <sup>[<a href="#vulnerability_report_credit">vulnerability_report_credit</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>If there have been no vulnerabilities resolved in the last 12 months, choose "not applicable" (N/A).
+</dd></dl></li>
+  *Rationale*: It is only fair to credit those who provide vulnerability
+  reports.  In many cases, the only reporter requirement is that
+  they receive credit.  This is also important long-term, because giving
+  credit encourages additional reporting.
+
+* <a name="vulnerability_response_process"></a>The project MUST have a documented process for responding to vulnerability reports.
+ <sup>[<a href="#vulnerability_response_process">vulnerability_response_process</a>]</sup>
+
+  *Details*: This is strongly related to vulnerability_report_process,
+  which requires that there be a documented way to report vulnerabilities.
+  It also related to vulnerability_report_response, which requires
+  response to vulnerability reports within a certain time frame.
+
+  *Rationale*: This is inspired by
+  <a href="http://community.apache.org/apache-way/apache-project-maturity-model.html">Apache Project Maturity Model</a> QU30.
+
+* <a name="maintenance_or_update"></a>
+  The project MUST maintain the most often used older versions of the product
+  <i>or</i> provide an upgrade path to newer versions.
+  If the upgrade path is difficult, the project MUST document how
+  to perform the upgrade (e.g., the interfaces that have changed and
+  detailed suggested steps to help upgrade).
+  <sup>[<a href="#maintenance_or_update">maintenance_or_update</a>]</sup>
+
+  *Rationale*:
+  This was inspired by
+  https://projects.ow2.org/bin/view/ow2/OMM DFCT-1.2
+
 ## Potential passing+2 criteria
 
 * Achieve the lower passing+1 badge.
 
 * FIXME - list of upgrades of SHOULD and SUGGESTED from passing and passing+1.
-  - E.g., MUST have bus factor of 2 or more.
-  - Change "report_tracker" to MUST, to require issue tracking.
-    Using GitHub issues meets this.
-    Note that the Linux kernel project has reported that this is very
-    hard to do at their scale.
-    NOTE: Kevin Wall thinks this should be at passing+1, not passing+2.
+
+    - E.g., MUST have bus factor of 2 or more.
+    - Change "report_tracker" to MUST, to require issue tracking.
+      Using GitHub issues meets this.
+      Note that the Linux kernel project has reported that this is very
+      hard to do at their scale.
+      NOTE: Kevin Wall thinks this should be at passing+1, not passing+2.
 
 ### General criteria
 
@@ -594,6 +730,7 @@ SHOULD or MUST.
     contributors have an increased likelihood of continuing.
     [Alluxio uses SMALLFIX](http://www.alluxio.org/docs/master/en/Contributing-to-Alluxio.html) and
     [OWASP ZAP uses IdealFirstBug](https://github.com/zaproxy/zaproxy/issues?q=is%3Aopen+is%3Aissue+label%3AIdealFirstBug).
+    This is related to criterion installation_development_quick.
 
 *   The project MUST have at least two unassociated significant
     contributors.
@@ -703,6 +840,9 @@ SHOULD or MUST.
     The [reproducible builds project has documentation on how to do this](https://reproducible-builds.org/docs/).
     <sup>[<a href="#build_reproducible">build_reproducible</a>]</sup>
 
+    TODO: There is an existing "build_reproducible" text, but this
+    rewritten version is better.
+
     *Rationale*: If a project needs to be built but there is no working
     build system, then potential co-developers will not be able to easily
     contribute and many security analysis tools will be ineffective.
@@ -713,19 +853,34 @@ SHOULD or MUST.
     but they can be extended to counter malicious compilers using
     processes such as diverse double-compiling (DDC).
 
+* The project MUST require two-factor authentication (2FA)
+  for developers for changing a central repository
+  or accessing sensitive data (such as private vulnerability reports).
+  This 2FA mechanism MAY use mechanisms without cryptographic mechanisms
+  such as SMS, though that is not recommended.
+  two_factor_authentication
+
+  *Rationale*: 2FA is used by Node.js and the Linux kernel projects.
+  See
+  ["Linux Kernel Git Repositories Add 2-Factor Authentication" by
+Kontin Ryabitsev](https://www.linux.com/blog/linux-kernel-git-repositories-add-2-factor-authentication)
+  and
+  ["Linux Foundation Protects Kernel Git Repositories With 2FA" by Eduard Kovacs](http://www.securityweek.com/linux-foundation-protects-kernel-git-repositories-2fa).
+
+* The project's two-factor authentication (2FA) SHOULD use cryptographic
+  mechanisms to prevent impersonation.  Short Message Service (SMS) based
+  2FA, by itself, does not meet this criterion, since it is not encrypted.
+  *Rationale*: SMS is easier and lower cost for many people,
+  but it also provides much weaker security.  It has been argued
+  that SMS isn't really 2FA at all; we permit it, because it's better
+  than nothing, but we don't recommend it because of its weaknesses.
+  [So Hey You Should Stop Using Texts for Two-Factor Authentication](https://www.wired.com/2016/06/hey-stop-using-texts-two-factor-authentication/)
+
 ## To be turned into criteria text
 
 We intend to turn these into criteria text.
 
 ### Passing+1 to be created
-
-* Must have a process for rapidly fixing vulnerabilities and
-  releasing the updated software.
-  Note that having a good test suite makes it easier
-  to make changes and be
-  confident the system still works.
-  Also note that FLOSS projects are often embedded in larger systems and
-  projects cannot control the larger projects they are in.
 
 *   All inputs from potentially untrusted sources are checked to ensure
     they are valid (a *whitelist*), if there are any restrictions on
@@ -759,9 +914,6 @@ We intend to turn these into criteria text.
         that? Do you just except them to have some security-related
         certification or take some specific course or what?"
 
-* If C/C++, MUST use ASAN or something like it. See
-  <https://github.com/linuxfoundation/cii-best-practices-badge/issues/256>
-
 ## Potential sources for other criteria
 
 Here are some potential sources for criteria that need to be reviewed.
@@ -777,11 +929,11 @@ Review these larger criteria sets for things to add:
   note that both of these focus only on web applications.
   These are:
 
-  - OWASP Application Security Verification Standard (ASVS)
-    "provides a basis for testing web application technical security
-    controls and also provides developers with a list of requirements
-    for secure development."
-  - SANS' Securing Web Application Technologies (SWAT) criteria.
+    - OWASP Application Security Verification Standard (ASVS)
+      "provides a basis for testing web application technical security
+      controls and also provides developers with a list of requirements
+      for secure development."
+    - SANS' Securing Web Application Technologies (SWAT) criteria.
 
 In the future we might add some criteria that a project has to meet
 some subset of (e.g., it must meet at least 3 of 5 criteria).
@@ -802,11 +954,6 @@ some subset of (e.g., it must meet at least 3 of 5 criteria).
         However, on many projects this would be a hard burden, and it's
         not clear it's necessarily worth it (there are diminishing returns).
 
-* (Node.js practice): We have a private repository for security issues
-    and every member of that team is required to have
-    2FA enabled on their GitHub account.
-    Response: Not everyone agrees on having a private repo for security issues,
-    and some projects will have significant difficulties deploying 2FA.
 * (Node.js)
     We're considering requiring GPG signing of all of their commits as well.
     Response: This is helpful, but somewhat onerous to *require*,
@@ -828,12 +975,22 @@ some subset of (e.g., it must meet at least 3 of 5 criteria).
 *   Copyright notice in each file, e.g.,
     "Copyright [year project started] - [current year], [project founder]
     and the [project name] contributors."
-    *Rationale*: It isn't legally required.
-    That said,
+    *Rationale*: This isn't legally required.
+    On the other hand, this is not hard to add.
+    In addition,
     [Ben Balter's "Copyright notices for open source projects"](http://ben.balter.com/2015/06/03/copyright-notices-for-websites-and-open-source-projects/)
-    provides a good argument for why it *should* be included,
-    and it is not hard to add.
-    On the other hand, is this really that important?
+    provides a good argument for why it *should* be included:
+    "First, someone may want to use your work in ways not allowed
+    by your license; notices help them determine who to ask for
+    permission. Explicit notices can help you prove that you and your
+    collaborators really are the copyright holders. They can serve to put
+    a potential infringer on notice by providing an informal sniff test to
+    counter the “Oh yeah, well I didn’t know it was copyrighted”
+    defense. For some users the copyright notice may suggest higher
+    quality, as they expect that good software will include a notice...
+    Git can track these things, but people may receive software outside
+    of git or where the git history has not been retained."
+    The question is, is this really that important?
 
 ### Probably not: Security Code review ideas from liujin28
 

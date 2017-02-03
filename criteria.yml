@@ -117,8 +117,7 @@
           GNU General Public License (LGPL)</a>, and the <a
           href="https://opensource.org/licenses/gpl-license">GNU General Public
           License (GPL)</a>.
-          For our purposes, this means that the license MUST be:
-          <ul>
+          For our purposes, this means that the license MUST be: <ul>
           <li><a href="https://opensource.org/licenses">an approved license
           by the Open Source Initiative (OSI)</a>, or</li>
           <li><a href="https://www.gnu.org/licenses/license-list.html">a free
@@ -1203,7 +1202,6 @@
           container or virtual machine that they can use for rebuilding.
           The <a href="https://reproducible-builds.org/docs/">reproducible
           builds project has documentation on how to do this</a>.
-    <sup>[<a href="#build_reproducible">build_reproducible</a>]</sup>
         rationale: >
           If a project needs to be built but there is no working
           build system, then potential co-developers will not be able to easily

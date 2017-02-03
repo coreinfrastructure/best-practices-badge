@@ -874,7 +874,7 @@ Kontin Ryabitsev](https://www.linux.com/blog/linux-kernel-git-repositories-add-2
     where new or changed code is frequently integrated into a central
     code repository and automated tests are run on the result.
     <sup>test_continuous_integration</sup>
-  
+
     *Details*: This criterion is merely SUGGESTED at passing level.
     A subset of this criterion is required for passing+1; see
     <a href="#automated_integration_testing">automated_integration_testing</a>.

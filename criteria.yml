@@ -6,6 +6,7 @@
 #   category: MUST|SHOULD|SUGGESTED # required
 #   future: true|false # optional, default false
 #   na_allowed: true|false # optional, default false
+#   na_justification_required: true|false # optional, default false
 #   met_url_required: true|false # optional, default false
 #   description: ...HTML description... # required
 #   details: ...HTML description... # optional
@@ -1053,7 +1054,6 @@
     - static_analysis_fixed:
         category: MUST
         na_allowed: true
-        # na_justification_required: true
         description: >
           All medium and high severity exploitable vulnerabilities
           discovered with static code analysis MUST be fixed

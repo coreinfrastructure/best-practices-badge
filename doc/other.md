@@ -266,6 +266,10 @@ SHOULD or MUST.
     produce a report on test success or failure.
     <sup>[<a href="#automated_integration_testing">automated_integration_testing</a>]</sup>
 
+    *Details*: This requirement can be viewed as
+    a subset of test_continuous_integration, but
+    focused on just testing, without requiring continuous integration.
+
     *Rationale*: This is inspired by continuous integration.
     Continuous integration provides much more rapid feedback
     on whether or not changes will cause test failures,
@@ -730,6 +734,8 @@ SHOULD or MUST.
 
 * Achieve the lower passing+1 badge.
 
+### Upgrade of SHOULD and SUGGESTED
+
 * FIXME - list of upgrades of SHOULD and SUGGESTED from passing and passing+1.
 
     - E.g., MUST have bus factor of 2 or more.
@@ -738,41 +744,33 @@ SHOULD or MUST.
       Note that the Linux kernel project has reported that this is very
       hard to do at their scale.
       NOTE: Kevin Wall thinks this should be at passing+1, not passing+2.
+    - Change build_reproducible to become a MUST.
+    - We've done this specially for test_continuous_integration
 
-### General criteria
+### Basics
 
-*   The project SHOULD employ continuous integration, where
-    the primary developers team integrate their work frequently.
-    In most cases this means that each developer integrates at least daily.
-    [continuous_integration]
-    ??? NOTE: There's at least one other "continuous_integration" criterion
-    draft text, and there's difference in what CI means to people.
+*   The project MUST include a license statement in each source file.
+    This may be done by including near the beginning
+    of each file the following in a comment:
+    ["SPDX-License-Identifier: [SPDX license expression]"](https://spdx.org/using-spdx#identifiers)
+    (see [this tutorial](https://github.com/david-a-wheeler/spdx-tutorial) for more information).
+    The project could also include, as a license statement, a stable URL
+    pointing to the license text, or could include the full license text.
+    Note that the criterion license_location requires the
+    project license be in a standard location.
+    <sup>[<a href="#license_per_file">license_per_file</a>]</sup>
 
-    *Rationale*: See
-    [Martin Fowler](http://martinfowler.com/articles/continuousIntegration.html)
-    We realize that this can be difficult for some projects to apply,
-    which is why it proposed as a SHOULD.
+    *Rationale*: Files are sometimes individually copied from one
+    project into another.  Per-file license information increases the
+    likelihood that the original license will be honored.
+    SPDX provides a simple standard way to identify common licenses,
+    without having to embed the full license text in each file;
+    since this makes the criterion easier to do, we specifically mention it.
+    Technically, the text after "SPDX-License-Identifier" is a
+    SPDX license expression, not an identifier, but the tag
+    "SPDX-License-Identifier" is what is used for backwards-compatibility.
 
-*   The project MUST clearly identify small tasks that can be performed
-    by new or casual contributors.
-    This identification is typically done by marking selected issues
-    in an issue tracker with one or more tags the project uses
-    for the purpose, e.g.,
-    [up-for-grabs](http://up-for-grabs.net/#/),
-    [first-timers-only](http://www.firsttimersonly.com/),
-    "Small fix", microtask, or IdealFirstBug.
-    These new tasks need not involve adding functionality;
-    they can be improving documentation, adding test cases,
-    or anything else that aids the project and helps the contributor
-    understand more about the project.
-    <sup>[<a href="#small_tasks">small_tasks</a>]</sup>
-
-    *Rationale*:  Identified small tasks make it easier for new potential
-    contributors to become involved in a project, and projects with more
-    contributors have an increased likelihood of continuing.
-    [Alluxio uses SMALLFIX](http://www.alluxio.org/docs/master/en/Contributing-to-Alluxio.html) and
-    [OWASP ZAP uses IdealFirstBug](https://github.com/zaproxy/zaproxy/issues?q=is%3Aopen+is%3Aissue+label%3AIdealFirstBug).
-    This is related to criterion installation_development_quick.
+#### Continuity
 
 *   The project MUST have at least two unassociated significant
     contributors.
@@ -801,6 +799,58 @@ SHOULD or MUST.
     It also covers the case where "two people got paid working for
     Red Cross for a day, but Red Cross doesn't use the project".
 
+### Change Control
+
+*   The project MUST clearly identify small tasks that can be performed
+    by new or casual contributors.
+    This identification is typically done by marking selected issues
+    in an issue tracker with one or more tags the project uses
+    for the purpose, e.g.,
+    [up-for-grabs](http://up-for-grabs.net/#/),
+    [first-timers-only](http://www.firsttimersonly.com/),
+    "Small fix", microtask, or IdealFirstBug.
+    These new tasks need not involve adding functionality;
+    they can be improving documentation, adding test cases,
+    or anything else that aids the project and helps the contributor
+    understand more about the project.
+    <sup>[<a href="#small_tasks">small_tasks</a>]</sup>
+
+    *Rationale*:  Identified small tasks make it easier for new potential
+    contributors to become involved in a project, and projects with more
+    contributors have an increased likelihood of continuing.
+    [Alluxio uses SMALLFIX](http://www.alluxio.org/docs/master/en/Contributing-to-Alluxio.html) and
+    [OWASP ZAP uses IdealFirstBug](https://github.com/zaproxy/zaproxy/issues?q=is%3Aopen+is%3Aissue+label%3AIdealFirstBug).
+    This is related to criterion installation_development_quick.
+
+* The project MUST require two-factor authentication (2FA)
+  for developers for changing a central repository
+  or accessing sensitive data (such as private vulnerability reports).
+  This 2FA mechanism MAY use mechanisms without cryptographic mechanisms
+  such as SMS, though that is not recommended.
+  two_factor_authentication
+
+  *Rationale*: 2FA is used by Node.js and the Linux kernel projects.
+  See
+  ["Linux Kernel Git Repositories Add 2-Factor Authentication" by
+Kontin Ryabitsev](https://www.linux.com/blog/linux-kernel-git-repositories-add-2-factor-authentication)
+  and
+  ["Linux Foundation Protects Kernel Git Repositories With 2FA" by Eduard Kovacs](http://www.securityweek.com/linux-foundation-protects-kernel-git-repositories-2fa).
+
+* The project's two-factor authentication (2FA) SHOULD use cryptographic
+  mechanisms to prevent impersonation.  Short Message Service (SMS) based
+  2FA, by itself, does not meet this criterion, since it is not encrypted.
+  *Rationale*: SMS is easier and lower cost for many people,
+  but it also provides much weaker security.  It has been argued
+  that SMS isn't really 2FA at all; we permit it, because it's better
+  than nothing, but we don't recommend it because of its weaknesses.
+  [So Hey You Should Stop Using Texts for Two-Factor Authentication](https://www.wired.com/2016/06/hey-stop-using-texts-two-factor-authentication/)
+
+### Reporting
+
+(No new criteria)
+
+### Quality
+
 *   The project MUST have at least 50% of all proposed modifications
     reviewed before release by a person other than the author,
     to determine if it is a worthwhile modification and
@@ -818,28 +868,27 @@ SHOULD or MUST.
     organizations to review each others' work, but in many situations
     that is not practical.
 
-*   The project MUST include a license statement in each source file.
-    This may be done by including near the beginning
-    of each file the following in a comment:
-    ["SPDX-License-Identifier: [SPDX license expression]"](https://spdx.org/using-spdx#identifiers)
-    (see [this tutorial](https://github.com/david-a-wheeler/spdx-tutorial) for more information).
-    The project could also include, as a license statement, a stable URL
-    pointing to the license text, or could include the full license text.
-    Note that the criterion license_location requires the
-    project license be in a standard location.
-    <sup>[<a href="#license_per_file">license_per_file</a>]</sup>
+#### Testing
 
-    *Rationale*: Files are sometimes individually copied from one
-    project into another.  Per-file license information increases the
-    likelihood that the original license will be honored.
-    SPDX provides a simple standard way to identify common licenses,
-    without having to embed the full license text in each file;
-    since this makes the criterion easier to do, we specifically mention it.
-    Technically, the text after "SPDX-License-Identifier" is a
-    SPDX license expression, not an identifier, but the tag
-    "SPDX-License-Identifier" is what is used for backwards-compatibility.
+*   A project MUST implement continuous integration,
+    where new or changed code is frequently integrated into a central
+    code repository and automated tests are run on the result.
+    <sup>test_continuous_integration</sup>
+  
+    *Details*: This criterion is merely SUGGESTED at passing level.
+    A subset of this criterion is required for passing+1; see
+    <a href="#automated_integration_testing">automated_integration_testing</a>.
+    Here, we require both the continuous check-in <i>and</i> its testing.
+    In most cases this means that each developer who works full-time on
+    the progject integrates at least daily.
 
-### Quality
+    *Rationale*: See
+    [Martin Fowler](http://martinfowler.com/articles/continuousIntegration.html)
+    There has been some language shift; historically "continuous integration"
+    focused on the first part - the frequent integration - and not
+    on its testing.
+    We realize that this can be difficult for some projects to apply,
+    which is why it is this higher level.
 
 *   The project MUST have FLOSS automated test suite(s) that provide at least
     90% statement coverage if there is at least
@@ -865,58 +914,7 @@ SHOULD or MUST.
     a stricter measure of tests is used.
     Branch coverage is widely (but not universally) implemented.
 
-*   <a name="build_reproducible"></a>
-    The project MUST
-    have a [reproducible build](https://reproducible-builds.org/).
-    If no building occurs
-    (e.g., scripting languages where the source code
-    is used directly instead of being compiled), select "N/A".
-    With reproducible builds, multiple parties can independently redo the
-    process of generating information from source files and get exactly
-    the same bit-for-bit result.
-    GCC and clang users may find the -frandom-seed option useful;
-    in some cases, this can resolved by forcing some sort order.
-    The build environment (including the toolset) can often be defined
-    for external parties by specifying the cryptographic hash of a
-    specific container or virtual machine that they can use for rebuilding.
-    The [reproducible builds project has documentation on how to do this](https://reproducible-builds.org/docs/).
-    <sup>[<a href="#build_reproducible">build_reproducible</a>]</sup>
-
-    TODO: There is an existing "build_reproducible" text, but this
-    rewritten version is better.
-
-    *Rationale*: If a project needs to be built but there is no working
-    build system, then potential co-developers will not be able to easily
-    contribute and many security analysis tools will be ineffective.
-    Reproduceable builds counter malicious attacks that generate malicious
-    executables, by making it easy to recreate the executable to determine
-    if the result is correct.
-    By itself, reproducible builds do not counter malicious compilers,
-    but they can be extended to counter malicious compilers using
-    processes such as diverse double-compiling (DDC).
-
-* The project MUST require two-factor authentication (2FA)
-  for developers for changing a central repository
-  or accessing sensitive data (such as private vulnerability reports).
-  This 2FA mechanism MAY use mechanisms without cryptographic mechanisms
-  such as SMS, though that is not recommended.
-  two_factor_authentication
-
-  *Rationale*: 2FA is used by Node.js and the Linux kernel projects.
-  See
-  ["Linux Kernel Git Repositories Add 2-Factor Authentication" by
-Kontin Ryabitsev](https://www.linux.com/blog/linux-kernel-git-repositories-add-2-factor-authentication)
-  and
-  ["Linux Foundation Protects Kernel Git Repositories With 2FA" by Eduard Kovacs](http://www.securityweek.com/linux-foundation-protects-kernel-git-repositories-2fa).
-
-* The project's two-factor authentication (2FA) SHOULD use cryptographic
-  mechanisms to prevent impersonation.  Short Message Service (SMS) based
-  2FA, by itself, does not meet this criterion, since it is not encrypted.
-  *Rationale*: SMS is easier and lower cost for many people,
-  but it also provides much weaker security.  It has been argued
-  that SMS isn't really 2FA at all; we permit it, because it's better
-  than nothing, but we don't recommend it because of its weaknesses.
-  [So Hey You Should Stop Using Texts for Two-Factor Authentication](https://www.wired.com/2016/06/hey-stop-using-texts-two-factor-authentication/)
+### Security
 
 *   The project MUST have performed a security review within the last 5 years.
     <sup>security_review</sup>
@@ -941,6 +939,10 @@ Kontin Ryabitsev](https://www.linux.com/blog/linux-kernel-git-repositories-add-2
     SAST assisted), and when applicable, some sort of DAST (for APIs,
     probably just fuzzing), where failed tests would have to be added
     to the regression test suite."
+
+### Analysis
+
+(No new criteria)
 
 ## Potential sources for other criteria
 

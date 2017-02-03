@@ -1189,13 +1189,31 @@
           the project have a
           <a href="https://reproducible-builds.org/">reproducible build</a>.
         details: >
-          With reproducible builds, multiple parties can independently redo the
-          process of generating information from source files and get exactly
-          the same result.
-          The <a href="https://reproducible-builds.org/docs/">reproducible builds project has documentation on how to do this</a>.
-          This criterion does not apply if no building occurs
-          (e.g., scripting languages where the source code
-          is used directly instead of being compiled).
+          A reproducible build means that multiple parties can
+          independently redo the process of generating information from
+          source files and get exactly the same bit-for-bit result.  If no
+          building occurs (e.g., scripting languages where the source
+          code is used directly instead of being compiled), select "N/A".
+          In some cases, this can resolved by forcing some sort order.
+          JavaScript developers may consider using npm shrinkwrap and
+          webpack OccurenceOrderPlugin.  GCC and clang users may find
+          the -frandom-seed option useful.  The build environment
+          (including the toolset) can often be defined for external
+          parties by specifying the cryptographic hash of a specific
+          container or virtual machine that they can use for rebuilding.
+          The <a href="https://reproducible-builds.org/docs/">reproducible
+          builds project has documentation on how to do this</a>.
+    <sup>[<a href="#build_reproducible">build_reproducible</a>]</sup>
+        rationale: >
+          If a project needs to be built but there is no working
+          build system, then potential co-developers will not be able to easily
+          contribute and many security analysis tools will be ineffective.
+          Reproduceable builds counter malicious attacks that generate malicious
+          executables, by making it easy to recreate the executable to determine
+          if the result is correct.
+          By itself, reproducible builds do not counter malicious compilers,
+          but they can be extended to counter malicious compilers using
+          processes such as diverse double-compiling (DDC).
         autofill: >
           If the project seems to only have scripting language code,
           prefill it as N/A.

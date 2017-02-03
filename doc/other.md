@@ -584,14 +584,35 @@ SHOULD or MUST.
 
 *   <a name="implement_secure_design"></a>
     The project MUST implement secure design principles
-    (from "know_secure_design") to the largest practical extent.
-    This includes performing input validation with whitelists
-    on all untrusted input.
+    (from "know_secure_design"), where applicable.
+    *Details*:
+    For example, the project results should have fail-safe defaults
+    (access decisions should deny by default,
+    and projects' installation should be secure by default).
+    They should also have
+    complete mediation (every access that might be limited must be
+    checked for authority and be non-bypassable).
     Note that in some cases principles will conflict, in which case
     a choice must be made
     (e.g., many mechanisms can make things more complex, contravening
     "economy of mechanism" / keep it simple)
+    If the project is not producing software, this may be N/A.
     <sup>[<a href="#implement_secure_design">implement_secure_design</a>]</sup>
+
+*   The project results MUST check
+    all inputs from potentially untrusted sources to ensure
+    they are valid (a *whitelist*), and reject invalid inputs,
+    if there are any restrictions on the data at all.
+    *Details*: Note that comparing input against a list of "bad formats"
+    (aka a *blacklist*) is normally not enough, because attackers can often
+    work around a blacklist.
+    In particular, numbers are converted into internal formats
+    and then checked if they are between
+    their minimum and maximum (inclusive), and text strings are checked
+    to ensure that they are valid text patterns (e.g., valid UTF-8, length,
+    syntax, etc.).  Some data may need to be "anything at all"
+    (e.g., a file uploader), but these would typically be rare.
+    <sup>[<a href="#input_validation">input_validation</a>]</sup>
 
 * <a name="hardening"></a>(Future criterion) Hardening mechanisms SHOULD be used so software defects are less likely to result in security vulnerabilities.
  <sup>[<a href="#hardening">hardening</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>Hardening mechanisms may include HTTP headers like Content Security Policy (CSP), compiler flags to mitigate attacks (such as -fstack-protector), or compiler flags to eliminate undefined behavior. For our purposes least privilege is not considered a hardening mechanism (least privilege is important, but separate).
@@ -889,43 +910,29 @@ Kontin Ryabitsev](https://www.linux.com/blog/linux-kernel-git-repositories-add-2
   than nothing, but we don't recommend it because of its weaknesses.
   [So Hey You Should Stop Using Texts for Two-Factor Authentication](https://www.wired.com/2016/06/hey-stop-using-texts-two-factor-authentication/)
 
-## To be turned into criteria text
-
-We intend to turn these into criteria text.
-
-### Passing+1 to be created
-
-*   All inputs from potentially untrusted sources are checked to ensure
-    they are valid (a *whitelist*), if there are any restrictions on
-    the data at all. A "MUST".
-    Invalid inputs are rejected.
-    Note that comparing against a list of "bad formats" (a *blacklist*)
-    is not enough.
-    In particular, numbers are converted and checked if they are between
-    their minimum and maximum (inclusive), and text strings are checked
-    to ensure that they are valid text patterns (valid UTF-8, length,
-    syntax, etc.).  In rare cases data may need to be "anything at all"
-    (e.g., a file uploader).
-
-### Passing+2 to be created
-
-*   Current/past security review of the code.
-    Perhaps passing+2.  Ideally it would be independent, but that
-    often requires a lot of money.
-    Kevin Wall: "If passing+2 is going to be the highest back level, I'd
+*   The project MUST have performed a security review within the last 5 years.
+    <sup>security_review</sup>
+    *Details*: This can be by the project members and/or an
+    independent evaluation.
+    This evaluation MAY be supported by static and dynamic analysis tools,
+    but there also must be human review to identify problems (paricularly
+    in design) that tools cannot detect.
+    Projects that do not have any results that have security implications
+    may select N/A.
+    *Rationale*:
+    Security review is important, because security problems often come from
+    subtle interactions of components.  Reviewing the system as a whole
+    can help find these problems.
+    Ideally this would be independent, but that often requires a lot of
+    money, and we would rather have some review than none at all.
+    We do not require a specific level of review; this is difficult to
+    quantify given the different environments, requirements, and sizes
+    of various projects.
+    Kevin Wall noted, "If passing+2 is going to be the highest back level, I'd
     also like to see some sort of mandatory code inspection (possibly
     SAST assisted), and when applicable, some sort of DAST (for APIs,
     probably just fuzzing), where failed tests would have to be added
     to the regression test suite."
-    <sup>security_review</sup>
-
-## Still considering as criteria
-
-*   Developers contributing a majority of the software
-        (over 50%) have learned how to develop secure software.
-        Kevin Wall asked this question: "Exactly how would you measure
-        that? Do you just except them to have some security-related
-        certification or take some specific course or what?"
 
 ## Potential sources for other criteria
 
@@ -950,6 +957,15 @@ Review these larger criteria sets for things to add:
 
 In the future we might add some criteria that a project has to meet
 some subset of (e.g., it must meet at least 3 of 5 criteria).
+
+## Still considering as criteria
+
+*   Developers contributing a majority of the software
+    (over 50%) have learned how to develop secure software.
+    Kevin Wall asked this question: "Exactly how would you measure
+    that? Do you just except them to have some security-related
+    certification or take some specific course or what?"
+    Also, who are the "developers" - do they include drive-by contributions?
 
 ## Probably not
 

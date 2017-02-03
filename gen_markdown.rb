@@ -68,4 +68,3 @@ FullCriteriaHash.each do |major, major_value|
   end
 end
 print_file('doc/criteria-footer.markdown')
-puts ''

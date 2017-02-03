@@ -214,10 +214,21 @@
         category: MUST
         description: >
           The project MUST include reference documentation that describes
-          its interface.
+          its external interface (both input and output).
         details: >
-          The project MAY use hypertext links to
-          non-project material as documentation.
+          The project MAY use hypertext links to non-project material
+          as documentation.
+          Documentation MAY be automatically generated
+          (where practical this is often the best way to do so).
+          Documentation of a REST interface may be generated using
+          Swagger/OpenAPI.
+          Code interface documentation MAY be generated using
+          tools such as <a href="http://usejsdoc.org/">JSDoc</a>
+          (JavaScript), <a href="https://esdoc.org/">ESDoc</a> (JavaScript),
+          pydoc (Python), and Doxygen (many).  Merely having comments in
+          implementation code is not sufficient to satisfy this criterion;
+          there needs to be an easy way to see the information without
+          reading through all the source code.
         autofill: >
           Look for a "docs" or "doc" directory, or the main site, with
           .txt, .html, .md, .tex extension and uses the word "interface".

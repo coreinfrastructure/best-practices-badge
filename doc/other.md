@@ -38,6 +38,8 @@ You must achieve the lower (passing) badge.  In addition,
 some SHOULD will become MUST, and some SUGGESTED will become
 SHOULD or MUST.
 
+### Upgrade of SHOULD and SUGGESTED
+
 * FIXME - list of upgrades of SHOULD and SUGGESTED.
 
     - Upgrade dynamic_analysis_unsafe from SUGGESTED to MUST.
@@ -45,7 +47,219 @@ SHOULD or MUST.
       ASAN during some testing/ and fuzz testing. See:
       <https://github.com/linuxfoundation/cii-best-practices-badge/issues/256>
 
-### Test
+### Basics
+
+* <a name="dco"></a>The project SHOULD have a legal mechanism where
+  all developers of non-trivial amounts of project software assert that
+  they are legally authorized to make these contributions. The most
+  common and easily-implemented approach for doing this is by using a <a
+  href="http://developercertificate.org/">Developer Certificate of Origin
+  (DCO)</a>, where users add "signed-off-by" in their commits and
+  the project links to the DCO website.
+  However, this MAY be implemented as a
+  Contributor License Agreement (CLA), or other legal mechanism.
+  *Details*: The DCO is the recommended
+  mechanism because it's easy to implement, tracked in the source code,
+  and git directly supports a "signed-off" feature using "commit -s".
+  To be most effective it is best if the project documentation
+  explains what "signed-off" means for that project.
+  A CLA is a legal agreement that defines
+  the terms under which intellectual works have been licensed to an
+  organization or project.  A contributor assignment agreement (CAA)
+  is a legal agreement that transfers rights in an intellectual work
+  to another party; projects are not required to have CAAs, since
+  having CAA increases the risk that potential contributors
+  will not contribute, especially if the receiver is a for-profit organization.
+
+* <a name="code_of_conduct"></a>The project MUST adopt a code of conduct and post it in a standard location. <sup>code_of_conduct</sup>
+
+  *Rationale*: Projects may be able to improve the civility of their
+  community and to set expectations about acceptable conduct by adopting a
+  code of conduct. This can help avoid problems before they occur and make
+  the project a more welcoming place to encourage contributions. Example
+  codes of conduct are the
+  [Contributor Covenant Code of Conduct](http://contributor-covenant.org/)
+  and the Linux kernel [Code of Conflict](https://www.kernel.org/doc/html/latest/process/code-of-conflict.html).
+
+* <a name="governance"></a>The project MUST clearly define and document
+  its project governance model (the way it makes decisions,
+  including key roles).  <sup>governance</sup>
+
+  *Details*: There needs to be some well-established documented way
+  to make decisions and resolve disputes.
+  In small projects, this may be as simple as "the project owner and lead
+  makes all final decisions".
+  There are various governance models, including benevolent dictator
+  and formal meritocracy; for more details, see
+  <a href="http://oss-watch.ac.uk/resources/governancemodels">Governance models</a>.
+  The governance information does not need to document the possibility
+  of creating a project fork, since that is always possible
+  for FLOSS projects.
+
+  *Rationale*:
+  There are many different governance models used by a wide array of
+  successful projects.  Therefore, we do not believe that we should
+  specify a particular governance model.  However, we do think it is
+  important to have a governance model, and clearly define it, so that
+  all participants and potential participants will know how decisions
+  will be made.
+
+* <a name="documentation_design"></a>The project MUST include documentation of its high-level design (aka architecture), that is, documentation that identifies its major components and how they interact. <sup>documentation_design</sup>
+
+  *Rationale*: Documenting the basic design makes it easier for potential
+  new developers to understand its basics.
+  This is related to know_secure_design, as well
+  as implement_secure_design and proposed documentation_security.
+
+#### Documentation
+
+*   The project MUST have a documented roadmap that describes
+    what the project intends to do and not do for at least the next year.
+    The project might not achieve the roadmap, and that's fine;
+    the purpose of the roadmap is to help potential users and
+    constributors understand the intended direction of the project.
+    It need not be detailed.
+    <sup>documentation_roadmap</sup>
+
+*   <a name="documentation_architecture"></a>
+    The project MUST include reference documentation that describes
+    its software architecture.
+    A software architecture explains a program's fundamental structures,
+    i.e., the program's major components, the relationships among them, and
+    the key properties of these components and relationships.
+    <sup>[<a href="#documentation_architecture">documentation_architecture</a>]</sup>
+
+*   <a name="documentation_current"></a>
+    The project MUST make an effort to
+    keep the documentation consistent with the current version of the
+    program and any known documentation defects making it inconsistent
+    MUST be fixed.
+    Documentation of other versions may be included.
+    If the documentation is generally current, but erroneously
+    includes some older information, just treat that as a defect, then
+    track and fix as usual.  The intent of this criterion is that the
+    documentation is kept consistent, not that the documentation
+    must be perfect.
+    *Rationale*: It's difficult to keep documentation up-to-date, so the
+    criterion is worded this way to make it more practical.
+    <sup>[<a href="#documentation_current">documentation_current</a>]</sup>
+
+*   <a name="documentation_achievements"></a>
+    The project repository front page and/or website MUST
+    identify and hyperlink to any achievements,
+    including this best practices badge, within 48 hours
+    of public recognition that the achievement has been attained.
+    An achievement is any set of external criteria that the project
+    has specifically worked to meet, including some badges.
+    This information does not need to be on the project website front page.
+    A project using GitHub can put achievements on the repository front page
+    by adding them to the README file.
+
+    *Rationale*: Users and potential co-developers need to be able to
+    see what achievements have been attained by a project they are considering
+    using or contributing to.  This information can help them determine
+    if they should.  In addition, if projects identify their achievements,
+    other projects will be encouraged to follow suit and also make those
+    achievements, benefitting everyone.
+
+#### Accessibility
+
+* Accessibility best practices SHOULD be followed so that
+  persons with disabilities can still participate in the project and
+  use the project results where it is reasonable to do so.
+  *Details*:
+  For web applications, see the [W3C accessibility information](https://www.w3.org/standards/webdesign/accessibility).
+  For GUI applications, consider using the environment-specific
+  accessibility guidelines (such as
+  [Gnome](https://developer.gnome.org/accessibility-devel-guide/stable/),
+  [KDE](https://accessibility.kde.org/),
+  [XFCE](http://docs.xfce.org/xfce/xfce4-settings/accessibility),
+  [Android](https://developer.android.com/guide/topics/ui/accessibility/),
+  [iOS](https://developer.apple.com/accessibility/ios/),
+  [Mac](http://www.apple.com/accessibility/osx/voiceover/), and
+  [Windows](https://msdn.microsoft.com/en-us/windows/uwp/accessibility/accessibility-overview)).
+  Some TUI applications (e.g. `ncurses` programs) can do
+  certain things to make themselves more accessible (such as `alpine`'s
+  `force-arrow-cursor` setting).
+  Most command-line applications are fairly accessible as-is.
+  This criterion is often N/A, e.g., for program libraries.
+  Here are some examples of actions to take or issues to consider:
+
+    - Neither color nor sound SHOULD be used as the only way information
+      is conveyed
+    - Color combinations SHOULD be tested in a high-contrast environment
+    - If the software uses flashing or animation it SHOULD grant the user
+      control to disable it
+    - All applications SHOULD be tested for keyboard-only navigation
+    - A GUI or web-based project SHOULD test with at least one
+      screen-reader on the target platform(s) (e.g. NVDA, Jaws, or WindowEyes
+      on Windows; VoiceOver on Mac & iOS; Orca on Linux/BSD; TalkBack on
+      Android). TUI programs MAY work to reduce overdraw to prevent redundant
+      reading by screen-readers.
+
+#### Continuity
+
+*   The project MUST be able to continue with minimal interruption
+    if any one person is incapacitated or killed.
+    In particular, the project MUST be able to create and close issues,
+    accept proposed changes, and release versions of software, within a
+    week of confirmation that an individual is incapacitated or killed.
+    This MAY be done by ensuring someone else has any necessary
+    keys, passwords, and legal rights to continue the project.
+    Individuals who run a FLOSS project MAY do this by providing keys in
+    a lockbox and a will providing any needed legal rights
+    (e.g., for DNS names).
+    <sup>[<a href="#access_continuity">access_continuity</a>]</sup>
+
+*   The project SHOULD have a "bus factor" of 2 or more.
+    A "bus factor" (aka "truck factor") is the
+    minimum number of project members that have to suddenly disappear from
+    a project ("hit by a bus") before the project stalls
+    due to lack of knowledgeable or competent personnel.
+    The [truck-factor](https://github.com/mtov/truck-factor) tool can
+    estimate this for projects on GitHub.  For more information, see
+    [Assessing the Bus Factor of Git Repositories](https://www.researchgate.net/publication/272824568_assessing_the_bus_factor_of_git_repositories)
+    by Cosentino et al.
+    <sup>[<a href="#bus_factor">bus_factor</a>]</sup>
+
+### Change Control
+
+* <a name="maintenance_or_update"></a>
+  The project MUST maintain the most often used older versions of the product
+  <i>or</i> provide an upgrade path to newer versions.
+  If the upgrade path is difficult, the project MUST document how
+  to perform the upgrade (e.g., the interfaces that have changed and
+  detailed suggested steps to help upgrade).
+  <sup>[<a href="#maintenance_or_update">maintenance_or_update</a>]</sup>
+
+  *Rationale*:
+  This was inspired by
+  https://projects.ow2.org/bin/view/ow2/OMM DFCT-1.2
+
+### Reporting
+
+* <a name="vulnerability_report_credit"></a>The project MUST give credit to the reporter(s) of all vulnerability reports resolved in the last 12 months, except for the reporter(s) who request anonymity.
+ (N/A allowed.) <sup>[<a href="#vulnerability_report_credit">vulnerability_report_credit</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>If there have been no vulnerabilities resolved in the last 12 months, choose "not applicable" (N/A).
+</dd></dl></li>
+  *Rationale*: It is only fair to credit those who provide vulnerability
+  reports.  In many cases, the only reporter requirement is that
+  they receive credit.  This is also important long-term, because giving
+  credit encourages additional reporting.
+
+* <a name="vulnerability_response_process"></a>The project MUST have a documented process for responding to vulnerability reports.
+ <sup>[<a href="#vulnerability_response_process">vulnerability_response_process</a>]</sup>
+
+  *Details*: This is strongly related to vulnerability_report_process,
+  which requires that there be a documented way to report vulnerabilities.
+  It also related to vulnerability_report_response, which requires
+  response to vulnerability reports within a certain time frame.
+
+  *Rationale*: This is inspired by
+  <a href="http://community.apache.org/apache-way/apache-project-maturity-model.html">Apache Project Maturity Model</a> QU30.
+
+### Quality
+
+#### Test
 
 *   An automated test suite MUST be applied on each check-in to a shared
     repository for at least one branch.  This test suite MUST
@@ -171,81 +385,7 @@ SHOULD or MUST.
     numbers, say below half, are a sign of trouble. But high numbers don't
     necessarily mean much, and lead to ignorance-promoting dashboards."
 
-### Documentation
-
-*   The project MUST have a documented roadmap that describes
-    what the project intends to do and not do for at least the next year.
-    The project might not achieve the roadmap, and that's fine;
-    the purpose of the roadmap is to help potential users and
-    constributors understand the intended direction of the project.
-    It need not be detailed.
-    <sup>documentation_roadmap</sup>
-
-*   <a name="documentation_architecture"></a>
-    The project MUST include reference documentation that describes
-    its software architecture.
-    A software architecture explains a program's fundamental structures,
-    i.e., the program's major components, the relationships among them, and
-    the key properties of these components and relationships.
-    <sup>[<a href="#documentation_architecture">documentation_architecture</a>]</sup>
-
-*   <a name="documentation_interface"></a>
-    The project MUST provide reference documentation that describes
-    its external interface (both input and output).
-    Note that this may be automatically generated, e.g.,
-    documentation of a REST interface may be generated using Swagger/OpenAPI,
-    and code interfaces documentation may be generated using Doxygen.
-    Merely having comments in code is not sufficient to satisfy this criterion.
-    <sup>[<a href="#documentation_interface">documentation_interface</a>]</sup>
-    ??? DUPLICATE?
-
-*   <a name="documentation_security"></a>
-    The project MUST document what the user can and cannot expect
-    in terms of security.  This MUST identify the security requirements
-    that the software is intended to meet and a justification
-    ("assurance case") for why they are believed to have been met.
-    <sup>[<a href="#documentation_security">documentation_security</a>]</sup>
-
-    *Rationale*: Writing the specification helps the developers think about the
-    interface (including the API) the developers are providing, as well
-    letting any user or researcher know what to expect.
-    This was inspired by
-    [issue #502](https://github.com/linuxfoundation/cii-best-practices-badge/issues/502).
-
-*   <a name="documentation_current"></a>
-    The project MUST make an effort to
-    keep the documentation consistent with the current version of the
-    program and any known documentation defects making it inconsistent
-    MUST be fixed.
-    Documentation of other versions may be included.
-    If the documentation is generally current, but erroneously
-    includes some older information, just treat that as a defect, then
-    track and fix as usual.  The intent of this criterion is that the
-    documentation is kept consistent, not that the documentation
-    must be perfect.
-    *Rationale*: It's difficult to keep documentation up-to-date, so the
-    criterion is worded this way to make it more practical.
-    <sup>[<a href="#documentation_current">documentation_current</a>]</sup>
-
-*   <a name="documentation_achievements"></a>
-    The project repository front page and/or website MUST
-    identify and hyperlink to any achievements,
-    including this best practices badge, within 48 hours
-    of public recognition that the achievement has been attained.
-    An achievement is any set of external criteria that the project
-    has specifically worked to meet, including some badges.
-    This information does not need to be on the project website front page.
-    A project using GitHub can put achievements on the repository front page
-    by adding them to the README file.
-
-    *Rationale*: Users and potential co-developers need to be able to
-    see what achievements have been attained by a project they are considering
-    using or contributing to.  This information can help them determine
-    if they should.  In addition, if projects identify their achievements,
-    other projects will be encouraged to follow suit and also make those
-    achievements, benefitting everyone.
-
-### Code/build requirements:
+#### Coding standards
 
 *   The project MUST identify the specific coding style guides
     for the primary languages it uses, and require that contributions
@@ -275,6 +415,24 @@ SHOULD or MUST.
     and so that tools can automatically handle them in the future.
     Examples of such tools include ESLint (JavaScript) and Rubocop (Ruby).
     <sup>[<a href="#coding_standards_enforced">coding_standards_enforced</a>]</sup>
+
+* <a name="warnings_strict"></a>
+  Projects MUST be maximally strict with warnings, where practical.
+  *Details*: Some warnings cannot be effectively enabled on some projects,
+  or specific exceptions must be given.
+  What is needed is evidence that the project is striving to enable
+  warning flags where it can, so that errors are detected early.
+
+#### Externally-maintained components
+
+*   <a name="external_dependencies"></a>
+    The project MUST list external dependencies in a computer-processable
+    way.
+    <sup>[<a href="#external_dependencies">external_dependencies</a>]</sup>
+    *Details*:
+    Typically this is done using the conventions of package manager
+    and/or build system.
+    Note that this helps implement installation_development_quick.
 
 *   The project MUST make it easy to either
     (1) identify and update reused externally-maintained components or (2)
@@ -308,6 +466,8 @@ SHOULD or MUST.
     of code from other projects into one's own repository rather than
     accepting a dependency on those projects - and
     LZ4 in the Linux kernel.
+
+#### Build
 
 *   <a name="build_standard_variables"></a>
     Build systems for native binaries MUST honor the relevant compiler and
@@ -384,6 +544,8 @@ SHOULD or MUST.
     which can be harder to do - so we have split this requirement up.
     See the [reproducible build criterion](#reproducible_build).
 
+#### Installation
+
 * <a name="installation_common"></a>(Future criterion) The
   project MUST provide a way for end-users to easily install and
   uninstall the software using a commonly-used convention.  <sup>[<a
@@ -426,161 +588,7 @@ SHOULD or MUST.
   system and/or language package manager(s), per external_dependencies.
   </dd></dl>
 
-*   <a name="external_dependencies"></a>
-    The project MUST list external dependencies in a computer-processable
-    way.
-    <sup>[<a href="#external_dependencies">external_dependencies</a>]</sup>
-    *Details*:
-    Typically this is done using the conventions of package manager
-    and/or build system.
-    Note that this helps implement installation_development_quick.
-
-### Continuity
-
-*   The project MUST be able to continue with minimal interruption
-    if any one person is incapacitated or killed.
-    In particular, the project MUST be able to create and close issues,
-    accept proposed changes, and release versions of software, within a
-    week of confirmation that an individual is incapacitated or killed.
-    This MAY be done by ensuring someone else has any necessary
-    keys, passwords, and legal rights to continue the project.
-    Individuals who run a FLOSS project MAY do this by providing keys in
-    a lockbox and a will providing any needed legal rights
-    (e.g., for DNS names).
-    <sup>[<a href="#access_continuity">access_continuity</a>]</sup>
-
-*   The project SHOULD have a "bus factor" of 2 or more.
-    A "bus factor" (aka "truck factor") is the
-    minimum number of project members that have to suddenly disappear from
-    a project ("hit by a bus") before the project stalls
-    due to lack of knowledgeable or competent personnel.
-    The [truck-factor](https://github.com/mtov/truck-factor) tool can
-    estimate this for projects on GitHub.  For more information, see
-    [Assessing the Bus Factor of Git Repositories](https://www.researchgate.net/publication/272824568_assessing_the_bus_factor_of_git_repositories)
-    by Cosentino et al.
-    <sup>[<a href="#bus_factor">bus_factor</a>]</sup>
-
-### Security analysis
-
-*   Projects MUST monitor or periodically check their external dependencies
-    (including convenience copies) to detect known vulnerabilities, and
-    fix exploitable vulnerabilities or verify them as unexploitable.
-    *Details*:
-    This can be done using an origin analyzer / dependency checking tool
-    such as
-    [OWASP's Dependency-Check](https://www.owasp.org/index.php/OWASP_Dependency_Check),
-    [Sonatype's Nexus Auditor](https://www.sonatype.com/nexus-auditor),
-    [Black Duck's Protex](https://www.blackducksoftware.com/products/protex),
-    [Synopsys' Protecode](http://www.protecode.com/), and
-    [Bundler-audit (for Ruby)](https://github.com/rubysec/bundler-audit).
-    Some package managers include mechanisms to do this.
-    It is acceptable if the components' vulnerability cannot be exploited,
-    but this analysis is difficult and it is sometimes easier to
-    simply update or fix the part.
-    <sup>[<a href="#dependency_monitoring">dependency_monitoring</a>]</sup>
-
-    *Rationale*:
-    This must be monitored or periodically checked, because
-    new vulnerabilities are continuously being discovered.
-
-### Release
-
-*   Project releases of the software intended for widespread use
-    MUST be cryptographically signed, there MUST be a documented
-    process explaining to users how they can obtain the public signing keys
-    and verify the signature. The private key for this signature MUST NOT
-    be on site(s) used to directly distribute the software to the public.
-    This includes both source code and executables (where applicable).
-    Executables MAY be signed separately from source code.
-    These may be implemented as signed git tags
-    (using cryptographic digital signatures).
-    <sup>[<a href="#signed_releases">signed_releases</a>]</sup>
-
-    *Rationale*:
-    This provides protection from compromised distribution systems.
-    The public key must be accessible so that recipients can check the
-    signature.  The private key must not be on sites(s) distributing the
-    software to the public; that way, even if those sites are compromised,
-    the signature cannot be altered.  This is sometimes called "code signing".
-    A common way to implement this is by using GPG to sign the code,
-    for example, the GPG keys of every person who signs releases
-    could be in the project README.
-    Node.js implements this via GPG keys in the README, but note that
-    in the criterion we are intentionally more general:
-    <https://github.com/nodejs/node#release-team>
-
-### Cryptography
-
-*   <a name="crypto_agility"></a>
-    The project SHOULD support multiple
-    cryptographic algorithms, so users can quickly switch if one is broken.
-    Common symmetric key algorithms include AES, Twofish, and Serpent.
-    Common cryptographic hash algorithm alternatives include SHA-2
-    (including SHA-224, SHA-256, SHA-384 AND SHA-512) and SHA-3.
-    <sup>[<a href="#crypto_agility">crypto_agility</a>]</sup>
-
-    *Rationale*:
-    The advantage of crypto agility is that if one crypto algorithm is
-    broken, other algorithms can be used instead.
-    Many protocols, including TLS and IPSEC, are specifically designed to
-    support crypto agility.
-    There is disagreement by some experts who argue that this
-    negotiation can itself be a point of attack, and that
-    people should instead simply choose and stay with with one good algorithm.
-    The problem with this position is that no one can be certain about
-    what that "one good algorithm" is; a new attack could be found at any time.
-    See the discussion per
-    [issue #215](https://github.com/linuxfoundation/cii-best-practices-badge/issues/215)
-
-*   <a name="crypto_used_network"></a>(Future criterion) The project SHOULD NOT use unencrypted network communication protocols (such as HTTP and telnet) if there is an encrypted equivalent (e.g., HTTPS/TLS and SSH), unless the user specifically requests or configures it.
- (N/A allowed.) <sup>[<a href="#crypto_used_network">crypto_used_network</a>]</sup>
-
-* <a name="crypto_tls12"></a>(Future criterion) The project SHOULD, if it supports TLS, support at least TLS version 1.2. Note that the predecessor of TLS was called SSL.
- (N/A allowed.) <sup>[<a href="#crypto_tls12">crypto_tls12</a>]</sup>
-
-* <a name="crypto_certificate_verification"></a>(Future criterion) The project MUST, if it supports TLS, perform TLS certificate verification by default when using TLS, including on subresources.
- (N/A allowed.) <sup>[<a href="#crypto_certificate_verification">crypto_certificate_verification</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>Note that having incorrect TLS certificate verification is a common mistake. For more information, see <a href="http://crypto.stanford.edu/~dabo/pubs/abstracts/ssl-client-bugs.html">"The Most Dangerous Code in the World: Validating SSL Certificates in Non-Browser Software" by Martin Georgiev et al.</a> and <a href="https://blogs.gnome.org/mcatanzaro/2016/03/12/do-you-trust-this-application/">"Do you trust this application?" by Michael Catanzaro</a>.
-</dd></dl>
-
-* <a name="crypto_verification_private"></a>(Future criterion) The project MUST, if it supports TLS, perform certificate verification before sending HTTP headers with private information (such as secure cookies).
- (N/A allowed.) <sup>[<a href="#crypto_verification_private">crypto_verification_private</a>]</sup>
-
-### Accessibility
-
-* Accessibility best practices SHOULD be followed so that
-  persons with disabilities can still participate in the project and
-  use the project results where it is reasonable to do so.
-  *Details*:
-  For web applications, see the [W3C accessibility information](https://www.w3.org/standards/webdesign/accessibility).
-  For GUI applications, consider using the environment-specific
-  accessibility guidelines (such as
-  [Gnome](https://developer.gnome.org/accessibility-devel-guide/stable/),
-  [KDE](https://accessibility.kde.org/),
-  [XFCE](http://docs.xfce.org/xfce/xfce4-settings/accessibility),
-  [Android](https://developer.android.com/guide/topics/ui/accessibility/),
-  [iOS](https://developer.apple.com/accessibility/ios/),
-  [Mac](http://www.apple.com/accessibility/osx/voiceover/), and
-  [Windows](https://msdn.microsoft.com/en-us/windows/uwp/accessibility/accessibility-overview)).
-  Some TUI applications (e.g. `ncurses` programs) can do
-  certain things to make themselves more accessible (such as `alpine`'s
-  `force-arrow-cursor` setting).
-  Most command-line applications are fairly accessible as-is.
-  This criterion is often N/A, e.g., for program libraries.
-  Here are some examples of actions to take or issues to consider:
-
-    - Neither color nor sound SHOULD be used as the only way information
-      is conveyed
-    - Color combinations SHOULD be tested in a high-contrast environment
-    - If the software uses flashing or animation it SHOULD grant the user
-      control to disable it
-    - All applications SHOULD be tested for keyboard-only navigation
-    - A GUI or web-based project SHOULD test with at least one
-      screen-reader on the target platform(s) (e.g. NVDA, Jaws, or WindowEyes
-      on Windows; VoiceOver on Mac & iOS; Orca on Linux/BSD; TalkBack on
-      Android). TUI programs MAY work to reduce overdraw to prevent redundant
-      reading by screen-readers.
-
-### Other passing+1 criteria
+### Security
 
 *   <a name="implement_secure_design"></a>
     The project MUST implement secure design principles
@@ -618,105 +626,105 @@ SHOULD or MUST.
  <sup>[<a href="#hardening">hardening</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>Hardening mechanisms may include HTTP headers like Content Security Policy (CSP), compiler flags to mitigate attacks (such as -fstack-protector), or compiler flags to eliminate undefined behavior. For our purposes least privilege is not considered a hardening mechanism (least privilege is important, but separate).
 </dd></dl>
 
-* <a name="warnings_strict"></a>
-  Projects MUST be maximally strict with warnings, where practical.
-  *Details*: Some warnings cannot be effectively enabled on some projects,
-  or specific exceptions must be given.
-  What is needed is evidence that the project is striving to enable
-  warning flags where it can, so that errors are detected early.
+#### Assurance case
 
-* <a name="dco"></a>The project SHOULD have a legal mechanism where
-  all developers of non-trivial amounts of project software assert that
-  they are legally authorized to make these contributions. The most
-  common and easily-implemented approach for doing this is by using a <a
-  href="http://developercertificate.org/">Developer Certificate of Origin
-  (DCO)</a>, where users add "signed-off-by" in their commits and
-  the project links to the DCO website.
-  However, this MAY be implemented as a
-  Contributor License Agreement (CLA), or other legal mechanism.
-  *Details*: The DCO is the recommended
-  mechanism because it's easy to implement, tracked in the source code,
-  and git directly supports a "signed-off" feature using "commit -s".
-  To be most effective it is best if the project documentation
-  explains what "signed-off" means for that project.
-  A CLA is a legal agreement that defines
-  the terms under which intellectual works have been licensed to an
-  organization or project.  A contributor assignment agreement (CAA)
-  is a legal agreement that transfers rights in an intellectual work
-  to another party; projects are not required to have CAAs, since
-  having CAA increases the risk that potential contributors
-  will not contribute, especially if the receiver is a for-profit organization.
+*   <a name="documentation_security"></a>
+    The project MUST document what the user can and cannot expect
+    in terms of security.  This MUST identify the security requirements
+    that the software is intended to meet and a justification
+    ("assurance case") for why they are believed to have been met.
+    <sup>[<a href="#documentation_security">documentation_security</a>]</sup>
 
-* <a name="code_of_conduct"></a>The project MUST adopt a code of conduct and post it in a standard location. <sup>code_of_conduct</sup>
+    *Rationale*: Writing the specification helps the developers think about the
+    interface (including the API) the developers are providing, as well
+    letting any user or researcher know what to expect.
+    This was inspired by
+    [issue #502](https://github.com/linuxfoundation/cii-best-practices-badge/issues/502).
 
-  *Rationale*: Projects may be able to improve the civility of their
-  community and to set expectations about acceptable conduct by adopting a
-  code of conduct. This can help avoid problems before they occur and make
-  the project a more welcoming place to encourage contributions. Example
-  codes of conduct are the
-  [Contributor Covenant Code of Conduct](http://contributor-covenant.org/)
-  and the Linux kernel [Code of Conflict](https://www.kernel.org/doc/html/latest/process/code-of-conflict.html).
+#### Cryptography
 
-* <a name="governance"></a>The project MUST clearly define and document
-  its project governance model (the way it makes decisions,
-  including key roles).  <sup>governance</sup>
+*   <a name="crypto_agility"></a>
+    The project SHOULD support multiple
+    cryptographic algorithms, so users can quickly switch if one is broken.
+    Common symmetric key algorithms include AES, Twofish, and Serpent.
+    Common cryptographic hash algorithm alternatives include SHA-2
+    (including SHA-224, SHA-256, SHA-384 AND SHA-512) and SHA-3.
+    <sup>[<a href="#crypto_agility">crypto_agility</a>]</sup>
 
-  *Details*: There needs to be some well-established documented way
-  to make decisions and resolve disputes.
-  In small projects, this may be as simple as "the project owner and lead
-  makes all final decisions".
-  There are various governance models, including benevolent dictator
-  and formal meritocracy; for more details, see
-  <a href="http://oss-watch.ac.uk/resources/governancemodels">Governance models</a>.
-  The governance information does not need to document the possibility
-  of creating a project fork, since that is always possible
-  for FLOSS projects.
+    *Rationale*:
+    The advantage of crypto agility is that if one crypto algorithm is
+    broken, other algorithms can be used instead.
+    Many protocols, including TLS and IPSEC, are specifically designed to
+    support crypto agility.
+    There is disagreement by some experts who argue that this
+    negotiation can itself be a point of attack, and that
+    people should instead simply choose and stay with with one good algorithm.
+    The problem with this position is that no one can be certain about
+    what that "one good algorithm" is; a new attack could be found at any time.
+    See the discussion per
+    [issue #215](https://github.com/linuxfoundation/cii-best-practices-badge/issues/215)
 
-  *Rationale*:
-  There are many different governance models used by a wide array of
-  successful projects.  Therefore, we do not believe that we should
-  specify a particular governance model.  However, we do think it is
-  important to have a governance model, and clearly define it, so that
-  all participants and potential participants will know how decisions
-  will be made.
+*   <a name="crypto_used_network"></a>(Future criterion) The project SHOULD NOT use unencrypted network communication protocols (such as HTTP and telnet) if there is an encrypted equivalent (e.g., HTTPS/TLS and SSH), unless the user specifically requests or configures it.
+ (N/A allowed.) <sup>[<a href="#crypto_used_network">crypto_used_network</a>]</sup>
 
-* <a name="documentation_design"></a>The project MUST include documentation of its high-level design (aka architecture), that is, documentation that identifies its major components and how they interact. <sup>documentation_design</sup>
+* <a name="crypto_tls12"></a>(Future criterion) The project SHOULD, if it supports TLS, support at least TLS version 1.2. Note that the predecessor of TLS was called SSL.
+ (N/A allowed.) <sup>[<a href="#crypto_tls12">crypto_tls12</a>]</sup>
 
-  *Rationale*: Documenting the basic design makes it easier for potential
-  new developers to understand its basics.
-  This is related to know_secure_design, as well
-  as implement_secure_design and proposed documentation_security.
+* <a name="crypto_certificate_verification"></a>(Future criterion) The project MUST, if it supports TLS, perform TLS certificate verification by default when using TLS, including on subresources.
+ (N/A allowed.) <sup>[<a href="#crypto_certificate_verification">crypto_certificate_verification</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>Note that having incorrect TLS certificate verification is a common mistake. For more information, see <a href="http://crypto.stanford.edu/~dabo/pubs/abstracts/ssl-client-bugs.html">"The Most Dangerous Code in the World: Validating SSL Certificates in Non-Browser Software" by Martin Georgiev et al.</a> and <a href="https://blogs.gnome.org/mcatanzaro/2016/03/12/do-you-trust-this-application/">"Do you trust this application?" by Michael Catanzaro</a>.
+</dd></dl>
 
-* <a name="vulnerability_report_credit"></a>The project MUST give credit to the reporter(s) of all vulnerability reports resolved in the last 12 months, except for the reporter(s) who request anonymity.
- (N/A allowed.) <sup>[<a href="#vulnerability_report_credit">vulnerability_report_credit</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>If there have been no vulnerabilities resolved in the last 12 months, choose "not applicable" (N/A).
-</dd></dl></li>
-  *Rationale*: It is only fair to credit those who provide vulnerability
-  reports.  In many cases, the only reporter requirement is that
-  they receive credit.  This is also important long-term, because giving
-  credit encourages additional reporting.
+* <a name="crypto_verification_private"></a>(Future criterion) The project MUST, if it supports TLS, perform certificate verification before sending HTTP headers with private information (such as secure cookies).
+ (N/A allowed.) <sup>[<a href="#crypto_verification_private">crypto_verification_private</a>]</sup>
 
-* <a name="vulnerability_response_process"></a>The project MUST have a documented process for responding to vulnerability reports.
- <sup>[<a href="#vulnerability_response_process">vulnerability_response_process</a>]</sup>
+#### Secure Release
 
-  *Details*: This is strongly related to vulnerability_report_process,
-  which requires that there be a documented way to report vulnerabilities.
-  It also related to vulnerability_report_response, which requires
-  response to vulnerability reports within a certain time frame.
+*   Project releases of the software intended for widespread use
+    MUST be cryptographically signed, there MUST be a documented
+    process explaining to users how they can obtain the public signing keys
+    and verify the signature. The private key for this signature MUST NOT
+    be on site(s) used to directly distribute the software to the public.
+    This includes both source code and executables (where applicable).
+    Executables MAY be signed separately from source code.
+    These may be implemented as signed git tags
+    (using cryptographic digital signatures).
+    <sup>[<a href="#signed_releases">signed_releases</a>]</sup>
 
-  *Rationale*: This is inspired by
-  <a href="http://community.apache.org/apache-way/apache-project-maturity-model.html">Apache Project Maturity Model</a> QU30.
+    *Rationale*:
+    This provides protection from compromised distribution systems.
+    The public key must be accessible so that recipients can check the
+    signature.  The private key must not be on sites(s) distributing the
+    software to the public; that way, even if those sites are compromised,
+    the signature cannot be altered.  This is sometimes called "code signing".
+    A common way to implement this is by using GPG to sign the code,
+    for example, the GPG keys of every person who signs releases
+    could be in the project README.
+    Node.js implements this via GPG keys in the README, but note that
+    in the criterion we are intentionally more general:
+    <https://github.com/nodejs/node#release-team>
 
-* <a name="maintenance_or_update"></a>
-  The project MUST maintain the most often used older versions of the product
-  <i>or</i> provide an upgrade path to newer versions.
-  If the upgrade path is difficult, the project MUST document how
-  to perform the upgrade (e.g., the interfaces that have changed and
-  detailed suggested steps to help upgrade).
-  <sup>[<a href="#maintenance_or_update">maintenance_or_update</a>]</sup>
+### Analysis
 
-  *Rationale*:
-  This was inspired by
-  https://projects.ow2.org/bin/view/ow2/OMM DFCT-1.2
+*   Projects MUST monitor or periodically check their external dependencies
+    (including convenience copies) to detect known vulnerabilities, and
+    fix exploitable vulnerabilities or verify them as unexploitable.
+    *Details*:
+    This can be done using an origin analyzer / dependency checking tool
+    such as
+    [OWASP's Dependency-Check](https://www.owasp.org/index.php/OWASP_Dependency_Check),
+    [Sonatype's Nexus Auditor](https://www.sonatype.com/nexus-auditor),
+    [Black Duck's Protex](https://www.blackducksoftware.com/products/protex),
+    [Synopsys' Protecode](http://www.protecode.com/), and
+    [Bundler-audit (for Ruby)](https://github.com/rubysec/bundler-audit).
+    Some package managers include mechanisms to do this.
+    It is acceptable if the components' vulnerability cannot be exploited,
+    but this analysis is difficult and it is sometimes easier to
+    simply update or fix the part.
+    <sup>[<a href="#dependency_monitoring">dependency_monitoring</a>]</sup>
+
+    *Rationale*:
+    This must be monitored or periodically checked, because
+    new vulnerabilities are continuously being discovered.
 
 ## Potential passing+2 criteria
 

@@ -1,12 +1,6 @@
 # frozen_string_literal: true
 # rubocop:disable Rails/FindEach
 class Criteria
-  # Commented out the compact code below as, while dense, it is not as robust
-  # as explicitly defining the possible attributes
-  #
-  # ATTRIBUTES = CriteriaHash.reduce([]) do |attributes, criterion|
-  #   attributes | criterion[1].keys
-  # end.map(&:to_sym).freeze
   ATTRIBUTES = %i(
     autofill category description details future major met_placeholder
     met_suppress met_url_required minor na_allowed na_justification_required

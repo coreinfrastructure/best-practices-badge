@@ -1,14 +1,15 @@
 # frozen_string_literal: true
 # rubocop:disable Rails/FindEach
 class Criteria
-  ATTRIBUTES = CriteriaHash.reduce([]) do |attributes, criterion|
-    attributes | criterion[1].keys
-  end.map(&:to_sym).freeze
-  FUTURE_ATTRIBUTES = %i(
-    met_url na_placeholder na_suppress unmet
-    unmet_suppress
+  ACCESSORS = %i(
+    name category future
+    description details rationale
+    met_suppress na_suppress unmet_suppress
+    met_url_required met_url
+    na_allowed na_justification_required
+    autofill met_placeholder unmet_placeholder na_placeholder
+    major minor unmet
   ).freeze
-  ACCESSORS = (%i(name) + ATTRIBUTES + FUTURE_ATTRIBUTES).freeze
 
   include ActiveModel::Model
   attr_accessor(*ACCESSORS)

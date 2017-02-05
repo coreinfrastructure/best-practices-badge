@@ -178,11 +178,11 @@ SHOULD or MUST.
 
 #### Accessibility
 
-*   <a name ="accessibility"></a>
+*   <a name ="accessibility_best_practices"></a>
     Accessibility best practices SHOULD be followed so that
     persons with disabilities can still participate in the project and
     use the project results where it is reasonable to do so.
-    <sup>[<a href="#accessibility">accessibility</a>]</sup>
+    <sup>[<a href="#accessibility_best_practices">accessibility_best_practices</a>]</sup>
 
     *Details*:
     For web applications, see the

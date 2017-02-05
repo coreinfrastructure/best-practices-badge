@@ -161,7 +161,7 @@ SHOULD or MUST.
     identify and hyperlink to any achievements,
     including this best practices badge, within 48 hours
     of public recognition that the achievement has been attained.
-    <sup>[<a href="#documentation_achievments">documentation_achievments</a>]</sup>
+    <sup>[<a href="#documentation_achievements">documentation_achievements</a>]</sup>
 
     *Details*: An achievement is any set of external criteria that the project
     has specifically worked to meet, including some badges.
@@ -240,7 +240,6 @@ SHOULD or MUST.
     estimate this for projects on GitHub.  For more information, see
     <a href="https://www.researchgate.net/publication/272824568_assessing_the_bus_factor_of_git_repositories">Assessing the Bus Factor of Git Repositories</a>
     by Cosentino et al.
-    <sup>[<a href="#bus_factor">bus_factor</a>]</sup>
 
 ### Change Control
 
@@ -879,7 +878,8 @@ SHOULD or MUST.
 
 ### Change Control
 
-*   The project MUST clearly identify small tasks that can be performed
+*   <a name="small_tasks"></a>
+    The project MUST clearly identify small tasks that can be performed
     by new or casual contributors.
     <sup>[<a href="#small_tasks">small_tasks</a>]</sup>
 

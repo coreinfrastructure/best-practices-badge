@@ -255,8 +255,9 @@ There is an implied criterion that we should mention here:
 <li><a name="report_responses"></a>The project MUST acknowledge a majority of bug reports submitted in the last 2-12 months (inclusive); the response need not include a fix.
  <sup>[<a href="#report_responses">report_responses</a>]</sup></li>
 
-<li><a name="enhancement_responses"></a>The project SHOULD respond to most enhancement requests in the last 2-12 months (inclusive). The project MAY choose not to respond.
- <sup>[<a href="#enhancement_responses">enhancement_responses</a>]</sup></li>
+<li><a name="enhancement_responses"></a>The project SHOULD respond to a majority (&gt;50%) of enhancement requests in the last 2-12 months (inclusive).
+ <sup>[<a href="#enhancement_responses">enhancement_responses</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>The response MAY be 'no' or a discussion about its merits. The goal is simply that there be some response to some requests, which indicates that the project is still alive. For purposes of this criterion, projects need not count fake requests (e.g., from spammers or automated systems).
+</dd></dl></li>
 
 <li><a name="report_archive"></a>The project MUST have a publicly available archive for reports and responses for later searching.
  (URL required for "met".) <sup>[<a href="#report_archive">report_archive</a>]</sup></li>

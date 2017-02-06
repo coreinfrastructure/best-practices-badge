@@ -41,12 +41,173 @@ SHOULD or MUST.
 
 ### Upgrade of SHOULD and SUGGESTED
 
-*   FIXME - list of upgrades of SHOULD and SUGGESTED.
+Upgrade some "passing" level SHOULD and SUGGESTED:
 
-    - Upgrade dynamic_analysis_unsafe from SUGGESTED to MUST.
-      This would mean that C/C++ would be required to use something like
-      ASAN during some testing/ and fuzz testing. See:
-      https://github.com/linuxfoundation/cii-best-practices-badge/issues/256
+#### Upgrade: Basics
+
+*   Upgrade contribution_requirements from SHOULD to MUST.
+    "The information on how to contribute MUST include the
+    requirements for acceptable contributions (e.g., a reference to
+    any required coding standard)."
+*   Upgrade report_tracker from SHOULD to MUST -
+    "The project MUST use an issue tracker for tracking individual issues."
+    Note: The Linux kernel project has indicated that using an issue
+    tracker is difficult at their scale.
+*   Unchanged:
+    - floss_license_osi -
+      "It is SUGGESTED that any required license(s) be <a
+      href="https://opensource.org/licenses">approved by the Open Source
+      Initiative (OSI).</a>"
+    - english -
+      "The project SHOULD include documentation in English and be able
+      to accept bug reports and comments about code in English."
+
+#### Upgrade: Change Control
+
+*   Unchanged:
+    - repo_distributed -
+      "It is SUGGESTED that common distributed version control software
+      be used (e.g., git)."
+    - version_semver -
+      "It is SUGGESTED that the <a href="http://semver.org">Semantic
+      Versioning (SemVer) format</a> be used for releases."
+    - version_tags -
+      "It is SUGGESTED that projects identify each release within
+      their version control system. For example, it is SUGGESTED
+      that those using git identify each release using git tags."
+
+#### Upgrade: Reporting
+
+*   Upgrade
+    - enhancement_responses: SHOULD to MUST.
+      "The project MUST respond to a majority of enhancement requests in the
+      last 2-12 months (inclusive)."
+
+#### Upgrade: Quality
+
+*   tests_documented_added.  Upgrade from SUGGESTED to MUST.
+    "The project MUST include, in its documented instructions for
+    change proposals, the policy that tests are to be added for major
+    new functionality."<br>
+    This is a change from, "It is SUGGESTED that this policy on
+    adding tests be <i>documented</i> in the instructions for change
+    proposals."
+*   <a name="warnings_strict"></a>
+    warnings_strict -
+    Projects MUST be maximally strict with warnings, where practical.
+    <sup>[<a href="#warnings_strict">warnings_strict</a>]</sup>
+
+    *Details*: Some warnings cannot be effectively enabled on some projects,
+    or specific exceptions must be given.
+    What is needed is evidence that the project is striving to enable
+    warning flags where it can, so that errors are detected early.
+
+*   Unchanged:
+    - build_common_tools -
+      "It is SUGGESTED that common tools be used for building the software."
+    - build_floss_tools -
+      "The project SHOULD be buildable using only FLOSS tools."
+    - test_invocation -
+      "A test suite SHOULD be invocable in a standard way for that language."
+    - test_most -
+      "It is SUGGESTED that the test suite cover most (or ideally all)
+      the code branches, input fields, and functionality."
+      *NOTE*: Statement/branch coverage is covered separately; they are
+      increased, so we are not changing the level of this one.
+    - test_continuous_integration -
+      "It is SUGGESTED that the project implement continuous integration
+      (where new or changed code is frequently integrated into a central
+      code repository and automated tests are run on the result)."
+      *NOTE*: This is upgraded to MUST in passing+2, and passing+1 adds
+      an intermediate criterion called <a
+      href="#automated_integration_testing">automated_integration_testing</a>.
+
+#### Upgrade: Security
+
+*   Upgrade crypto_weaknesses from SHOULD to MUST.
+    "The project security mechanisms MUST NOT by default depend on
+    cryptographic algorithms with known serious weaknesses (e.g., SHA-1)."
+
+*   Unchanged:
+    - crypto_call -
+      "If the project software is an application or library, and
+      its primary purpose is not to implement cryptography, then it
+      SHOULD only call on software specifically designed to implement
+      cryptographic functions; it SHOULD NOT re-implement its own."
+    - crypto_pfs -
+      "The project SHOULD implement perfect forward secrecy for key
+      agreement protocols so a session key derived from a set of
+      long-term keys cannot be compromised if one of the long-term keys
+      is compromised in the future."
+    - vulnerabilities_critical_fixed -
+      "Projects SHOULD fix all critical vulnerabilities rapidly after
+      they are reported."
+      *NOTE*: We'd like this to always be true, but some vulnerabilities
+      are hard to fix, so it's difficult to mandate this.
+      We *could* require activities to actively work to fix it, and
+      that is worth considering - but would that really help users?
+
+#### Upgrade: Analysis
+
+*   Upgrade static_analysis_common_vulnerabilities from SUGGESTED to MUST:
+    "A project MUST use at least one static analysis tool
+    with rules or approaches to look for common vulnerabilities
+    in the analyzed language or environment, if
+    there is at least one FLOSS tool that can implement this criterion
+    in the selected language."
+
+    *NOTE*: We'd like all projects to use this kind of static analysis tool,
+    but there may not be one in the chosen language, or it may only be
+    proprietary (and some developers will therefore not use it).
+
+*   Upgrade dynamic_analysis_unsafe from SUGGESTED to MUST.
+    "<i>If</i> the software is application-level software
+    written using a memory-unsafe language (e.g., C or C++),
+    <i>then</i> the project MUST use
+    at least one dynamic tool (e.g., a fuzzer or web application scanner)
+    routinely along with a mechanism to detect
+    memory safety problems such as buffer overwrites."
+
+    This reorders the "passing" level text, which reads as follows:
+    "It is SUGGESTED that if the software is application-level software
+    written using a memory-unsafe language (e.g., C or C++) then at
+    least one dynamic tool (e.g., a fuzzer or web application scanner)
+    be routinely used with a mechanism to detect memory safety problems
+    such as buffer overwrites.
+
+    *NOTE*:
+    This would mean that C/C++ would be required to use something like
+    ASAN during some testing and/or fuzz testing. See:
+    <https://github.com/linuxfoundation/cii-best-practices-badge/issues/256>
+
+*   Unchanged:
+
+    - static_analysis_often -
+      "It is SUGGESTED that static source code analysis occur on every
+      commit or at least daily."
+
+    - dynamic_analysis -
+      "It is SUGGESTED that at least one dynamic analysis tool be applied
+      to any proposed major production release of the software before
+      its release."
+
+      *Note*: There are good arguments for increasing this at passing+1,
+      clearly using different kinds of tools can find different things.
+      However, while these tools can find problems, they often miss many,
+      and it's often harder to backtrack the problem to determine
+      how to fix it.  We encourage use of these tools, but that doesn't
+      mean we should mandate them in all cases at this level.
+      We've chosen instead to focus on requiring these kinds of tools for
+      memory-unsafe languages, and thus upgraded dynamic_analysis_unsafe.
+
+    - dynamic_analysis_enable_assertions -
+      "It is SUGGESTED that the software include many run-time assertions
+      that are checked during dynamic analysis."
+
+#### Upgrade: Future
+
+All the "future" criteria are moved into passing+1 or passing+2
+as described below.
 
 ### Basics
 
@@ -72,7 +233,8 @@ SHOULD or MUST.
     is a legal agreement that transfers rights in an intellectual work
     to another party; projects are not required to have CAAs, since
     having CAA increases the risk that potential contributors
-    will not contribute, especially if the receiver is a for-profit organization.
+    will not contribute, especially if the receiver is
+    a for-profit organization.
 
 *   <a name="code_of_conduct"></a>The project MUST adopt a code of conduct and
     post it in a standard location.
@@ -252,7 +414,7 @@ SHOULD or MUST.
     <sup>[<a href="#maintenance_or_update">maintenance_or_update</a>]</sup>
 
     *Rationale*:
-    This was inspired by https://projects.ow2.org/bin/view/ow2/OMM DFCT-1.2
+    This was inspired by <https://projects.ow2.org/bin/view/ow2/OMM DFCT-1.2>
 
 ### Reporting
 
@@ -386,13 +548,13 @@ SHOULD or MUST.
 
     The 80% suggested here is supported by various sources.
     The defaults of codecov.io
-    http://docs.codecov.io/docs/coverage-configuration.  They define
+    <http://docs.codecov.io/docs/coverage-configuration.>  They define
     70% and below as red, 100% as perfectly green, and anything between
     70..100 as a range between red and green. This renders ~80% as yellow,
     and somewhere between ~85% and 90% it starts looking pretty green.
 
     The paper "Minimum Acceptable Code Coverage" by Steve
-    Cornett http://www.bullseye.com/minimum.html claims, "Code
+    Cornett <http://www.bullseye.com/minimum.html> claims, "Code
     coverage of 70-80% is a reasonable goal for system test of most
     projects with most coverage metrics. Use a higher goal for projects
     specifically organized for high testability or that have high failure
@@ -407,7 +569,7 @@ SHOULD or MUST.
     but high code coverage guarantees nothing."
 
     "TestCoverage" by Martin Fowler (17 April 2012)
-    http://martinfowler.com/bliki/TestCoverage.html points out the
+    <http://martinfowler.com/bliki/TestCoverage.html> points out the
     problems with coverage measures.  he states that "Test coverage is
     a useful tool for finding untested parts of a codebase. Test coverage
     is of little use as a numeric statement of how good your tests are...
@@ -452,15 +614,6 @@ SHOULD or MUST.
     in the code at their locations, so that these exceptions can be reviewed
     and so that tools can automatically handle them in the future.
     Examples of such tools include ESLint (JavaScript) and Rubocop (Ruby).
-
-*   <a name="warnings_strict"></a>
-    Projects MUST be maximally strict with warnings, where practical.
-    <sup>[<a href="#warnings_strict">warnings_strict</a>]</sup>
-
-    *Details*: Some warnings cannot be effectively enabled on some projects,
-    or specific exceptions must be given.
-    What is needed is evidence that the project is striving to enable
-    warning flags where it can, so that errors are detected early.
 
 #### Externally-maintained components
 
@@ -617,11 +770,11 @@ SHOULD or MUST.
     *Rationale*   : This supports capturing the artifacts (e.g., for analysis)
     without interfering with the build or installation system due to
     system-wide changes. See
-    https://github.com/linuxfoundation/cii-best-practices-badge/issues/455
+    <https://github.com/linuxfoundation/cii-best-practices-badge/issues/455>
     This doesn't apply when there's no "installation" process, or
     when POSIX filesystems aren't supported during installation (e.g.,
     Windows-only programs).  See
-    https://github.com/linuxfoundation/cii-best-practices-badge/issues/453
+    <https://github.com/linuxfoundation/cii-best-practices-badge/issues/453>
 
 *   <a name="installation_development_quick"></a>
     The project MUST provide a way for potential developers to quickly install all
@@ -775,7 +928,7 @@ SHOULD or MUST.
     could be in the project README.
     Node.js implements this via GPG keys in the README, but note that
     in the criterion we are intentionally more general:
-    https://github.com/nodejs/node#release-team
+    <https://github.com/nodejs/node#release-team>
 
 ### Analysis
 

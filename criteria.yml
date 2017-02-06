@@ -477,8 +477,14 @@
     - enhancement_responses:
         category: SHOULD
         description: >
-          The project SHOULD respond to most enhancement requests in the last
-          2-12 months (inclusive). The project MAY choose not to respond.
+          The project SHOULD respond to a majority (&gt;50%)
+          of enhancement requests in the last 2-12 months (inclusive).
+        details: >
+          The response MAY be 'no' or a discussion about its merits.
+          The goal is simply that there be some response to some requests,
+          which indicates that the project is still alive.
+          For purposes of this criterion, projects need not count fake requests
+          (e.g., from spammers or automated systems).
         autofill: >
           Examine issue tracker, and see what is marked as an "enhancement".
           Exclude the top contributor(s) as reported by the repo changes.

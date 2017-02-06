@@ -249,6 +249,10 @@ as described below.
     and the Linux kernel
     <a href="https://www.kernel.org/doc/html/latest/process/code-of-conflict.html">Code of Conflict</a>.
 
+    *Rationale*: Suggested in
+    <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/608">issue#608</a>
+    by Dan Kohn and in the NYC 2016 brainstorm session.
+
 *   <a name="governance"></a>The project MUST clearly define and document
     its project governance model (the way it makes decisions,
     including key roles). <sup>[<a href="#governance">governance</a>]</sup>
@@ -271,6 +275,9 @@ as described below.
     important to have a governance model, and clearly define it, so that
     all participants and potential participants will know how decisions
     will be made.
+    This was inspired by the
+    <a href="https://projects.ow2.org/bin/view/ow2/OMM">OW2 Open-source Maturity Model</a>,
+    in particular RDMP-1 and STK-1.
 
 *   <a name="documentation_design"></a>The project MUST include documentation of
     its high-level design (aka architecture), that is, documentation that
@@ -430,6 +437,10 @@ as described below.
     reports.  In many cases, the only reporter requirement is that
     they receive credit.  This is also important long-term, because giving
     credit encourages additional reporting.
+
+    *Rationale*:
+    Recommended in the
+    <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/473">NYC 2016 brainstorming session</a>.
 
 *   <a name="vulnerability_response_process"></a>The project MUST have a
     documented process for responding to vulnerability reports.
@@ -626,6 +637,10 @@ as described below.
     and/or build system.
     Note that this helps implement installation_development_quick.
 
+    *Rationale*:
+    Inspired by the
+    <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/473">NYC 2016 brainstorming session</a>.
+
 *   <a name="updateable_reused_components"></a>
     The project MUST make it easy to either
     (1) identify and update reused externally-maintained components or (2)
@@ -788,6 +803,10 @@ as described below.
     External dependencies would typically be installed by invoking
     system and/or language package manager(s), per external_dependencies.
 
+    *Rationale*:
+    Recommended in the
+    <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/473">NYC 2016 brainstorming session</a>.
+
 ### Security
 
 *   <a name="implement_secure_design"></a>
@@ -807,6 +826,10 @@ as described below.
     (e.g., many mechanisms can make things more complex, contravening
     "economy of mechanism" / keep it simple)
     If the project is not producing software, this may be N/A.
+
+    *Rationale*:
+    This was inspired by the
+    <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/473">NYC 2016 brainstorming session</a>.
 
 *   <a name="input_validation"></a>
     The project results MUST check
@@ -847,8 +870,10 @@ as described below.
     *Rationale*: Writing the specification helps the developers think about the
     interface (including the API) the developers are providing, as well
     letting any user or researcher know what to expect.
+    Many sources discuss the rationale for an "assurance case".
     This was inspired by
-    <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/502">issue #502</a>.
+    <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/502">issue #502</a> and by the
+    <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/473">NYC 2016 brainstorming session</a>.
 
 #### Cryptography
 

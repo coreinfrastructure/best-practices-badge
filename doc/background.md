@@ -864,7 +864,7 @@ is a list of recommended criteria for software-as-a-service apps,
 developed based on experience of Heroku.
 Point V is "V. Build, release, run: Strictly separate build and run stages".
 
-#### 
+#### Good Enough Practices in Scientific Computing
 
 [Good Enough Practices in Scientific Computing](https://arxiv.org/pdf/1609.00037v2.pdf)
 is a "set of computing tools and techniques that every researcher can and

@@ -864,6 +864,28 @@ is a list of recommended criteria for software-as-a-service apps,
 developed based on experience of Heroku.
 Point V is "V. Build, release, run: Strictly separate build and run stages".
 
+#### 
+
+[Good Enough Practices in Scientific Computing](https://arxiv.org/pdf/1609.00037v2.pdf)
+is a "set of computing tools and techniques that every researcher can and
+should adopt."
+These are organized as follows:
+
+* Data Management: saving both raw and intermediate forms; documenting all
+  steps; creating tidy data amenable to analysis.
+  (For example: "Where possible, save data as originally generated (i.e.
+  by an instrument or from a survey.")
+* Software: writing, organizing, and sharing scripts and programs used
+  in an analysis.
+* Collaboration: making it easy for existing and new collaborators to
+  understand and contribute to a project.
+* Project Organization: organizing the digital artifacts of a project to ease
+  discovery and understanding.
+* Tracking Changes: recording how various components of your project change
+  over time.
+* Manuscripts: writing manuscripts in a way that leaves an audit trail and
+  minimizes manual merging of conflict
+
 #### Cognitive/behavioral
 
 We would like to have feedback from cognitive experts or studies

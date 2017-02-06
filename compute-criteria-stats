@@ -1,0 +1,47 @@
+#!/bin/sh
+# Report the criteria that the most projects are missing
+
+rails console <<CONSOLE_END
+
+Rails.logger.level = :warn # Reduce log noise
+
+# Print analysis for projects at least "min_percentage"
+def analyze(min_percentage)
+  puts
+  puts "Reporting on projects #{min_percentage}% or better but NOT 100%."
+  results = []
+  # Show only "MUST" since those aren't easily justified.  To show all, use:
+  # my_criteria = Project::ALL_CRITERIA_STATUS
+  my_criteria = Criteria.select { |c| c.must? }
+  # puts my_criteria
+  my_criteria = my_criteria.map { |c| c.name.to_s + '_status' }
+  # puts my_criteria
+  project_count=Project.where("badge_percentage >= #{min_percentage} AND badge_percentage < 100").count
+  puts "Number of projects with minimum percentage = #{project_count}"
+  my_criteria.each do |criterion|
+    data=Project.where("badge_percentage >= #{min_percentage} AND badge_percentage < 100").select(criterion.to_s).group(criterion.to_s).unscope(:order).count
+    results.append([criterion.to_s, data.fetch('Met',0),
+      data.fetch('Unmet',0), data.fetch('?',0), data.fetch('N/A',0)])
+  end
+  # Sort by total "unmet+?", because "Met" and "N/A" are okay.
+  # Negate to reverse search ("largest first") - start with most unmet+?
+  results.sort! { |x,y| -(x[2]+x[3]) <=> -(y[2]+y[3]) }
+  puts 'criterion,Met,Unmet,?,N/A,Unmet+?'
+  results.each do |row|
+    totaluq=row[2].to_i+row[3].to_i # Unmet + ?
+    percentuq=(totaluq*100.0/project_count).round
+    print row.join(',')
+    print ",#{totaluq}"
+    print ",#{percentuq}%"
+    puts
+  end
+  nil # Don't return the results
+end
+
+puts "Total number of projects = #{Project.count}"
+puts "Total number of passing projects = #{Project.where('badge_percentage >= 100').count}"
+analyze(90)
+analyze(75)
+puts 'Done.'
+
+CONSOLE_END

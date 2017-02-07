@@ -295,7 +295,12 @@ class ProjectsController < ApplicationController
     purge_cdn_badge
     # @project.purge
     format.html do
-      redirect_to @project, success: 'Project was successfully updated.'
+      if params[:continue]
+        flash[:success] = 'Project was successfully updated.'
+        redirect_to edit_project_path(@project)
+      else
+        redirect_to @project, success: 'Project was successfully updated.'
+      end
     end
     format.json { render :show, status: :ok, location: @project }
     new_badge_level = @project.badge_level

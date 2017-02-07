@@ -290,6 +290,10 @@ nav {
   margin: 1em 0;
 }
 
+.btn-submit {
+  width: 40%
+}
+
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
   .home-badge {
     background: image-url('home_badge@2x.png') no-repeat top left;
@@ -416,8 +420,8 @@ nav {
 
 .well-color {
   -webkit-box-shadow: none;
-	-moz-box-shadow: none;
-	box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
   background-color: transparent;
   border: none;
 }

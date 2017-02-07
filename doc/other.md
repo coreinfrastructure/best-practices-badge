@@ -663,8 +663,12 @@ as described below.
     See, e.g.,
     <a href="http://spot.livejournal.com/312320.html">"Chromium: Why it isn't in Fedora yet as a proper package" by Tom Callaway</a>.
 
+    *Rationale*: A very common problem is to have obsolete components with
+    known vulnerabilities.  This is OWASP Top 10 (2013) number A9
+    (using known vulnerable components).  See also
+    <a href="http://www.aspectsecurity.com/research-presentations/the-unfortunate-reality-of-insecure-libraries">The Unfortunate Reality of Insecure Libraries</a>.
     TODO: What about vendoring, where code is copied in with the
-    express intent of *only*   using that copied version?
+    express intent of *only* using that copied version?
     (These are intentional forks.)  There's a risk of divergence
     and failure to apply security fixes both ways.
     For an example, see
@@ -761,7 +765,7 @@ as described below.
 
 #### Installation
 
-*   <a name="installation_common"></a>
+*   <a name="installation_common"></a>(Future criterion)
     The project MUST provide a way for end-users to easily install and
     uninstall the software using a commonly-used convention.
     <sup>[<a href="#installation_common">installation_common</a>]</sup>
@@ -898,18 +902,18 @@ as described below.
     See the discussion per
     <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/215">issue #215</a>
 
-*   <a name="crypto_used_network"></a>The project
+*   <a name="crypto_used_network"></a>(Future) The project
     SHOULD NOT use unencrypted network communication protocols (such as HTTP
     and telnet) if there is an encrypted equivalent (e.g., HTTPS/TLS and SSH),
     unless the user specifically requests or configures it. (N/A allowed.)
     <sup>[<a href="#crypto_used_network">crypto_used_network</a>]</sup>
 
-*   <a name="crypto_tls12"></a>
+*   <a name="crypto_tls12"></a>(Future)
     The project SHOULD, if it supports TLS, support at least TLS version 1.2.
     Note that the predecessor of TLS was called SSL (N/A allowed).
     <sup>[<a href="#crypto_tls12">crypto_tls12</a>]</sup>
 
-*   <a name="crypto_certificate_verification"></a>
+*   <a name="crypto_certificate_verification"></a>(Future)
     The project MUST, if it supports TLS, perform TLS certificate verification
     by default when using TLS, including on subresources.
     (N/A allowed.)
@@ -922,7 +926,7 @@ as described below.
     and
     <a href="https://blogs.gnome.org/mcatanzaro/2016/03/12/do-you-trust-this-application/">"Do you trust this application?" by Michael Catanzaro</a>.
 
-*   <a name="crypto_verification_private"></a>The project
+*   <a name="crypto_verification_private"></a>(Future) The project
     MUST, if it supports TLS, perform certificate verification before sending
     HTTP headers with private information (such as secure cookies).
     (N/A allowed.)
@@ -994,8 +998,142 @@ as described below.
       Note that the Linux kernel project has reported that this is very
       hard to do at their scale.
       NOTE: Kevin Wall thinks this should be at passing+1, not passing+2.
-    - Change build_reproducible to become a MUST.
     - We've done this specially for test_continuous_integration
+
+#### Upgrade: Basics
+
+*   Unchanged:
+    - floss_license_osi -
+      "It is SUGGESTED that any required license(s) be <a
+      href="https://opensource.org/licenses">approved by the Open Source
+      Initiative (OSI).</a>"
+    - english -
+      "The project SHOULD include documentation in English and be able
+      to accept bug reports and comments about code in English."
+
+#### Upgrade: Change Control
+
+*   Upgrade repo_distributed from SUGGESTED to MUST
+    "The project MUST use a common distributed version control software
+    (e.g., git or mercurial)."
+
+*   Unchanged:
+    - version_semver -
+      "It is SUGGESTED that the <a href="http://semver.org">Semantic
+      Versioning (SemVer) format</a> be used for releases."
+    - version_tags -
+      "It is SUGGESTED that projects identify each release within
+      their version control system. For example, it is SUGGESTED
+      that those using git identify each release using git tags."
+
+#### Upgrade: Reporting
+
+#### Upgrade: Quality
+
+*   Upgrade test_invocation from SHOULD to MUST
+    "A test suite MUST be invocable in a standard way for that language."
+
+*   Upgrade test_continuous_integration from SUGGESTED to MUST.
+    "A project MUST implement continuous integration,
+    where new or changed code is frequently integrated into a central
+    code repository and automated tests are run on the result."
+
+    *Details*: This criterion is merely SUGGESTED at passing level.
+    A subset of this criterion is required for passing+1; see
+    <a href="#automated_integration_testing">automated_integration_testing</a>.
+    Here, we require both the continuous check-in <i>and</i> its testing.
+    In most cases this means that each developer who works full-time on
+    the project integrates at least daily.
+
+*   Unchanged:
+    - build_common_tools -
+      "It is SUGGESTED that common tools be used for building the software."
+    - build_floss_tools -
+      "The project SHOULD be buildable using only FLOSS tools."
+    - test_most -
+      "It is SUGGESTED that the test suite cover most (or ideally all)
+      the code branches, input fields, and functionality."
+      *NOTE*: Statement/branch coverage is covered separately; they are
+      increased, so we are not changing the level of this one.
+
+#### Upgrade: Security
+
+*   Unchanged:
+    - crypto_call -
+      "If the project software is an application or library, and
+      its primary purpose is not to implement cryptography, then it
+      SHOULD only call on software specifically designed to implement
+      cryptographic functions; it SHOULD NOT re-implement its own."
+    - crypto_pfs -
+      "The project SHOULD implement perfect forward secrecy for key
+      agreement protocols so a session key derived from a set of
+      long-term keys cannot be compromised if one of the long-term keys
+      is compromised in the future."
+    - vulnerabilities_critical_fixed -
+      "Projects SHOULD fix all critical vulnerabilities rapidly after
+      they are reported."
+      *NOTE*: We'd like this to always be true, but some vulnerabilities
+      are hard to fix, so it's difficult to mandate this.
+      We *could* require activities to actively work to fix it, and
+      that is worth considering - but would that really help users?
+
+#### Upgrade: Analysis
+
+*   Upgrade dynamic_analysis from SUGGESTED to MUST.
+     "The project MUST apply at least one dynamic analysis tool
+     to any proposed major production release of the software before
+     its release."
+
+*   Upgrade dynamic_analysis_enable_assertions from SUGGESTED to SHOULD.
+    "The project MUST include many run-time assertions in the software
+    it produces, and those assertions MUST be checked during dynamic analysis."
+
+    It was: "It is SUGGESTED that the software include many run-time assertions
+    that are checked during dynamic analysis."
+
+*   Unchanged:
+
+    - static_analysis_often -
+      "It is SUGGESTED that static source code analysis occur on every
+      commit or at least daily."
+
+### Upgrade: passing+1 to passing+2
+
+#### Upgrade: Basics
+
+*   Unchanged - dco, accessibility
+
+*   Upgrade bus_factor from SHOULD to MUST.
+    "The project MUST have a "bus factor" of 2 or more.
+    <sup>[<a href="#bus_factor">bus_factor</a>]</sup>
+
+#### Upgrade: Quality
+
+*   Unchanged - build_preserve_debug
+
+#### Upgrade: Security
+
+*   Upgrade hardening from SHOULD to MUST.  (Future criterion)
+    "The project software MUST use hardening mechanisms
+    so software defects are less likely to result in security
+    vulnerabilities.  If the project does not produce software,
+    choose N/A."
+
+*   Upgrade crypto_used_network from SHOULD (NOT) to MUST (NOT).
+    (Future)
+    "The project MUST NOT use
+    unencrypted network communication protocols (such as HTTP
+    and telnet) if there is an encrypted equivalent (e.g., HTTPS/TLS and SSH),
+    unless the user specifically requests or configures it. (N/A allowed.)
+    <sup>[<a href="#crypto_used_network">crypto_used_network</a>]</sup>
+
+*   Upgrade crypto_tls12 from SHOULD to MUST.
+    (Future)
+    The project MUST, if it supports TLS, support at least TLS version 1.2.
+    Note that the predecessor of TLS was called SSL (N/A allowed).
+    <sup>[<a href="#crypto_tls12">crypto_tls12</a>]</sup>
+
+*   Unchanged - crypto_agility
 
 ### Basics
 
@@ -1130,28 +1268,34 @@ as described below.
     organizations to review each others' work, but in many situations
     that is not practical.
 
+*   <a name="build_reproducible"></a>(Future criterion) The project MUST
+    have a <a href="https://reproducible-builds.org/">reproducible
+    build</a>.  (N/A allowed.) <sup>[<a
+    href="#build_reproducible">build_reproducible</a>]</sup><dl><dt><i>Details</i>:<dt>
+    <dd>A reproducible build means that multiple parties can independently
+    redo the process of generating information from source files and
+    get exactly the same bit-for-bit result.  If no building occurs
+    (e.g., scripting languages where the source code is used directly
+    instead of being compiled), select "N/A". In some cases, this can
+    resolved by forcing some sort order. JavaScript developers may
+    consider using npm shrinkwrap and webpack OccurenceOrderPlugin.
+    GCC and clang users may find the -frandom-seed option useful.
+    The build environment (including the toolset) can often be defined for
+    external parties by specifying the cryptographic hash of a specific
+    container or virtual machine that they can use for rebuilding. The <a
+    href="https://reproducible-builds.org/docs/">reproducible builds project
+    has documentation on how to do this</a>.  </dd><dt><i>Rationale</i>:<dt>
+    <dd>If a project needs to be built but there is no working build system,
+    then potential co-developers will not be able to easily contribute
+    and many security analysis tools will be ineffective. Reproduceable
+    builds counter malicious attacks that generate malicious executables,
+    by making it easy to recreate the executable to determine if the result
+    is correct. By itself, reproducible builds do not counter malicious
+    compilers, but they can be extended to counter malicious compilers using
+    processes such as diverse double-compiling (DDC).
+    </dd></dl>
+
 #### Testing
-
-*   <a name="test_continuous_integration"></a>
-    A project MUST implement continuous integration,
-    where new or changed code is frequently integrated into a central
-    code repository and automated tests are run on the result.
-    <sup>[<a href="#test_continuous_integration">test_continuous_integration</a>]</sup>
-
-    *Details*: This criterion is merely SUGGESTED at passing level.
-    A subset of this criterion is required for passing+1; see
-    <a href="#automated_integration_testing">automated_integration_testing</a>.
-    Here, we require both the continuous check-in <i>and</i> its testing.
-    In most cases this means that each developer who works full-time on
-    the progject integrates at least daily.
-
-    *Rationale*: See
-    <a href="http://martinfowler.com/articles/continuousIntegration.html">Martin Fowler</a>
-    There has been some language shift; historically "continuous integration"
-    focused on the first part - the frequent integration - and not
-    on its testing.
-    We realize that this can be difficult for some projects to apply,
-    which is why it is this higher level.
 
 *   <a name="test_statement_coverage90"></a>
     The project MUST have FLOSS automated test suite(s) that provide at least
@@ -1207,6 +1351,13 @@ as described below.
     SAST assisted), and when applicable, some sort of DAST (for APIs,
     probably just fuzzing), where failed tests would have to be added
     to the regression test suite."
+
+*   <a name="hardened_site">
+    hardened_site (Future)
+    "The project website, repository (if accessible
+    via the web), and download site (if separate) MUST include key hardening
+    headers with nonpermissive values."
+    <sup>[<a href="#hardened_site">hardened_site</a>]</sup>
 
 ### Analysis
 

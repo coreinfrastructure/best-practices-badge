@@ -1513,13 +1513,6 @@ point to guidelines to follow (like CERT's).
     See the <a href="http://cwe.mitre.org/data/definitions/789.html">CWE</a>.
     <sup>[<a href="#validate_the_malloc_size">validate_the_malloc_size</a>]</sup>
 
-## To do
-
-*   Review proposed criteria changes (issues/PRs on GitHub)
-*   Review current non-MUST criteria in "passing"
-*   Review "Still considering as criteria"
-*   Review "Potential sources for other criteria"
-
 ## Improving the criteria
 
 We are hoping to get good suggestions and feedback from the public;

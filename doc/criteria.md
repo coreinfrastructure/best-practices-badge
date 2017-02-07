@@ -315,7 +315,8 @@ There is an implied criterion that we should mention here:
  <sup>[<a href="#test_most">test_most</a>]</sup></li>
 
 <li><a name="test_continuous_integration"></a>It is SUGGESTED that the project implement continuous integration (where new or changed code is frequently integrated into a central code repository and automated tests are run on the result).
- <sup>[<a href="#test_continuous_integration">test_continuous_integration</a>]</sup></li>
+ <sup>[<a href="#test_continuous_integration">test_continuous_integration</a>]</sup><dl><dt><i>Rationale</i>:<dt> <dd>See <a href="http://martinfowler.com/articles/continuousIntegration.html">Martin Fowler</a> There has been some shift in the meaning of the term continuous integration. Historically the term continuous integration focused on the first part - the frequent integration - and not on its testing.  However, over time the emphasis has shifted to include the notion of running automated tests as soon as the code is integrated.  We realize that this can be difficult for some projects to apply, which is why it is only SUGGESTED at the passing level.
+</dd></dl></li>
 </ul>
 
 <b><i>New functionality testing</i></b>

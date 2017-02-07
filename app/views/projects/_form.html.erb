@@ -83,7 +83,7 @@ There is also a
 <div class="row">
   <div class="col-md-12">
 
-  <%= bootstrap_form_for(project) do |f| %>
+  <%= bootstrap_form_for project, url: put_project_path(project) do |f| %>
     <%= render 'shared/error_messages', object: f.object %>
     <%= f.hidden_field :lock_version %>
 

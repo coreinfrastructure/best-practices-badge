@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+# rubocop:disable Metrics/BlockLength
 Rails.application.routes.draw do
   resources :project_stats
   get 'sessions/new'
@@ -20,8 +21,10 @@ Rails.application.routes.draw do
   resources :account_activations, only: [:edit]
   resources :password_resets,     only: %i(new create edit update)
   resources :projects
-  match 'projects/:id/edit' => 'projects#update', :via => [:put, :patch], :as => :put_project
-
+  match(
+    'projects/:id/edit' => 'projects#update',
+    :via => %i(put patch), :as => :put_project
+  )
   get 'login' => 'sessions#new'
   post 'login' => 'sessions#create'
   delete 'logout' => 'sessions#destroy'
@@ -103,3 +106,4 @@ Rails.application.routes.draw do
   match 'wp-login.php', via: :all, to: 'static_pages#error_404'
   match '.well-known/*path', via: :all, to: 'static_pages#error_404'
 end
+# rubocop:enable Metrics/BlockLength

@@ -10,14 +10,14 @@
 <h2><%= pluralize(@count, 'Project') %></h2>
   <%= form_for projects_path, method: 'get', enforce_utf8: false,
                html: { class: 'project_search' } do %>
-    <%= label_tag :badge_status %>
+    <label for="gteq">Badge status</label>
     <%= select_tag(:gteq, options_for_select(Project::BADGE_STATUSES,
                    params[:gteq]), class: 'onchange-submit') %>
     &nbsp; &nbsp; &nbsp;
-    <%= label_tag :exclude_passing %>
+    <label for="lteq">Exclude passing</label>
     <%= check_box_tag :lteq, '99', params[:lteq], class: 'onchange-submit' %>
     &nbsp; &nbsp; &nbsp;
-    <%= label_tag :text_search %>
+    <label for="q">Text Search</label>
     <%= text_field_tag :q, params[:q], size: 25,
                        placeholder: 'Name or description text'%>
     <%= submit_tag 'Search', name: nil %>

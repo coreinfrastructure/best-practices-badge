@@ -64,7 +64,7 @@ GEM
     bootstrap-will_paginate (0.0.10)
       will_paginate
     bootstrap_form (2.6.0)
-    brakeman (3.4.1)
+    brakeman (3.5.0)
     builder (3.2.3)
     bullet (5.5.0)
       activesupport (>= 3.0.0)

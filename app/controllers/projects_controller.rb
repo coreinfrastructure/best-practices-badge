@@ -284,8 +284,9 @@ class ProjectsController < ApplicationController
     # Sort, if there is a requested order (otherwise use default created_at)
     return unless params[:sort].present? && ALLOWED_SORT.include?(params[:sort])
     sort_direction = params[:sort_direction] == 'desc' ? ' desc' : ' asc'
+    sort_index = ALLOWED_SORT.index(params[:sort])
     @projects = @projects
-                .reorder(params[:sort] + sort_direction)
+                .reorder(ALLOWED_SORT[sort_index] + sort_direction)
                 .order('created_at' + sort_direction)
   end
   # rubocop:enable Metrics/AbcSize

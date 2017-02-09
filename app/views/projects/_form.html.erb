@@ -82,13 +82,13 @@ There is also a
 
 <div class="row">
   <div class="col-md-12">
-
+ <div>
   <%= bootstrap_form_for project, url: put_project_path(project) do |f| %>
     <%= render 'shared/error_messages', object: f.object %>
     <%= f.hidden_field :lock_version %>
 
 <br><br><br>
-<div>
+
   <!-- Nav tabs -->
   <ul class="nav nav-tabs subnav">
     <li class="active"><a href="#projectbasics" data-toggle="tab"><h3 class="tab-title">Basics</h3></a></li>

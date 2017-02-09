@@ -63,7 +63,7 @@ GEM
       railties (>= 3.1)
     bootstrap-will_paginate (0.0.10)
       will_paginate
-    bootstrap_form (2.5.3)
+    bootstrap_form (2.6.0)
     brakeman (3.4.1)
     builder (3.2.3)
     bullet (5.5.0)
@@ -432,7 +432,7 @@ DEPENDENCIES
   bootstrap-sass (= 3.3.7)
   bootstrap-social-rails (= 4.12.0)
   bootstrap-will_paginate (= 0.0.10)
-  bootstrap_form (= 2.5.3)
+  bootstrap_form (= 2.6.0)
   bullet (= 5.5.0)
   bundler-audit (= 0.5.0)
   capybara-slow_finder_errors (= 0.1.4)

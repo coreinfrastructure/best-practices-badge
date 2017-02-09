@@ -167,8 +167,8 @@ There is an implied criterion that we should mention here:
  <sup>[<a href="#documentation_basics">documentation_basics</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>This documentation must be in some media (such as text or video) that includes: how to install it, how to start it, how to use it (possibly with a tutorial using examples), and how to use it securely (e.g., what to do and what not to do) if that is an appropriate topic for the software. The security documentation need not be long. The project MAY use hypertext links to non-project material as documentation.
 </dd></dl></li>
 
-<li><a name="documentation_interface"></a>The project MUST include reference documentation that describes its interface.
- <sup>[<a href="#documentation_interface">documentation_interface</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>The project MAY use hypertext links to non-project material as documentation.
+<li><a name="documentation_interface"></a>The project MUST include reference documentation that describes its external interface (both input and output).
+ <sup>[<a href="#documentation_interface">documentation_interface</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>The project MAY use hypertext links to non-project material as documentation. Documentation MAY be automatically generated (where practical this is often the best way to do so). Documentation of a REST interface may be generated using Swagger/OpenAPI. Code interface documentation MAY be generated using tools such as <a href="http://usejsdoc.org/">JSDoc</a> (JavaScript), <a href="https://esdoc.org/">ESDoc</a> (JavaScript), pydoc (Python), and Doxygen (many).  Merely having comments in implementation code is not sufficient to satisfy this criterion; there needs to be an easy way to see the information without reading through all the source code.
 </dd></dl></li>
 </ul>
 
@@ -255,8 +255,9 @@ There is an implied criterion that we should mention here:
 <li><a name="report_responses"></a>The project MUST acknowledge a majority of bug reports submitted in the last 2-12 months (inclusive); the response need not include a fix.
  <sup>[<a href="#report_responses">report_responses</a>]</sup></li>
 
-<li><a name="enhancement_responses"></a>The project SHOULD respond to most enhancement requests in the last 2-12 months (inclusive). The project MAY choose not to respond.
- <sup>[<a href="#enhancement_responses">enhancement_responses</a>]</sup></li>
+<li><a name="enhancement_responses"></a>The project SHOULD respond to a majority (&gt;50%) of enhancement requests in the last 2-12 months (inclusive).
+ <sup>[<a href="#enhancement_responses">enhancement_responses</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>The response MAY be 'no' or a discussion about its merits. The goal is simply that there be some response to some requests, which indicates that the project is still alive. For purposes of this criterion, projects need not count fake requests (e.g., from spammers or automated systems).
+</dd></dl></li>
 
 <li><a name="report_archive"></a>The project MUST have a publicly available archive for reports and responses for later searching.
  (URL required for "met".) <sup>[<a href="#report_archive">report_archive</a>]</sup></li>
@@ -314,7 +315,8 @@ There is an implied criterion that we should mention here:
  <sup>[<a href="#test_most">test_most</a>]</sup></li>
 
 <li><a name="test_continuous_integration"></a>It is SUGGESTED that the project implement continuous integration (where new or changed code is frequently integrated into a central code repository and automated tests are run on the result).
- <sup>[<a href="#test_continuous_integration">test_continuous_integration</a>]</sup></li>
+ <sup>[<a href="#test_continuous_integration">test_continuous_integration</a>]</sup><dl><dt><i>Rationale</i>:<dt> <dd>See <a href="http://martinfowler.com/articles/continuousIntegration.html">Martin Fowler</a> There has been some shift in the meaning of the term continuous integration. Historically the term continuous integration focused on the first part - the frequent integration - and not on its testing.  However, over time the emphasis has shifted to include the notion of running automated tests as soon as the code is integrated.  We realize that this can be difficult for some projects to apply, which is why it is only SUGGESTED at the passing level.
+</dd></dl></li>
 </ul>
 
 <b><i>New functionality testing</i></b>
@@ -450,7 +452,7 @@ There is an implied criterion that we should mention here:
  (N/A allowed.) <sup>[<a href="#static_analysis_common_vulnerabilities">static_analysis_common_vulnerabilities</a>]</sup></li>
 
 <li><a name="static_analysis_fixed"></a>All medium and high severity exploitable vulnerabilities discovered with static code analysis MUST be fixed in a timely way after they are confirmed.
- (N/A allowed.) (Justification required for "N/A".) <sup>[<a href="#static_analysis_fixed">static_analysis_fixed</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>A vulnerability is medium to high severity if its <a href="https://nvd.nist.gov/cvss.cfm">CVSS 2.0</a> is 4 or higher.
+ (N/A allowed.) <sup>[<a href="#static_analysis_fixed">static_analysis_fixed</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>A vulnerability is medium to high severity if its <a href="https://nvd.nist.gov/cvss.cfm">CVSS 2.0</a> is 4 or higher.
 </dd></dl></li>
 
 <li><a name="static_analysis_often"></a>It is SUGGESTED that static source code analysis occur on every commit or at least daily.
@@ -489,7 +491,8 @@ There is an implied criterion that we should mention here:
 </dd></dl></li>
 
 <li><a name="build_reproducible"></a>(Future criterion) It is SUGGESTED that the project have a <a href="https://reproducible-builds.org/">reproducible build</a>.
- (N/A allowed.) <sup>[<a href="#build_reproducible">build_reproducible</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>With reproducible builds, multiple parties can independently redo the process of generating information from source files and get exactly the same result. The <a href="https://reproducible-builds.org/docs/">reproducible builds project has documentation on how to do this</a>. This criterion does not apply if no building occurs (e.g., scripting languages where the source code is used directly instead of being compiled).
+ (N/A allowed.) <sup>[<a href="#build_reproducible">build_reproducible</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>A reproducible build means that multiple parties can independently redo the process of generating information from source files and get exactly the same bit-for-bit result.  If no building occurs (e.g., scripting languages where the source code is used directly instead of being compiled), select "N/A". In some cases, this can resolved by forcing some sort order. JavaScript developers may consider using npm shrinkwrap and webpack OccurenceOrderPlugin.  GCC and clang users may find the -frandom-seed option useful.  The build environment (including the toolset) can often be defined for external parties by specifying the cryptographic hash of a specific container or virtual machine that they can use for rebuilding. The <a href="https://reproducible-builds.org/docs/">reproducible builds project has documentation on how to do this</a>.
+</dd><dt><i>Rationale</i>:<dt> <dd>If a project needs to be built but there is no working build system, then potential co-developers will not be able to easily contribute and many security analysis tools will be ineffective. Reproduceable builds counter malicious attacks that generate malicious executables, by making it easy to recreate the executable to determine if the result is correct. By itself, reproducible builds do not counter malicious compilers, but they can be extended to counter malicious compilers using processes such as diverse double-compiling (DDC).
 </dd></dl></li>
 
 <li><a name="crypto_used_network"></a>(Future criterion) The project SHOULD NOT use unencrypted network communication protocols (such as HTTP and telnet) if there an encrypted equivalent (e.g., HTTPS/TLS and SSH), unless the user specifically requests or configures it.

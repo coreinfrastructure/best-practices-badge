@@ -1,0 +1,150 @@
+Loading development environment (Rails 5.0.1)
+Switch to inspect mode.
+
+Rails.logger.level = :warn # Reduce log noise
+:warn
+
+# Print analysis for projects at least "min_percentage"
+def analyze(min_percentage)
+  puts
+  puts "Reporting on projects #{min_percentage}% or better but NOT 100%."
+  results = []
+  # Show only "MUST" since those aren't easily justified.  To show all, use:
+  # my_criteria = Project::ALL_CRITERIA_STATUS
+  my_criteria = Criteria.select { |c| c.must? }
+  # puts my_criteria
+  my_criteria = my_criteria.map { |c| c.name.to_s + '_status' }
+  # puts my_criteria
+  project_count=Project.where("badge_percentage >= #{min_percentage} AND badge_percentage < 100").count
+  puts "Number of projects with minimum percentage = #{project_count}"
+  my_criteria.each do |criterion|
+    data=Project.where("badge_percentage >= #{min_percentage} AND badge_percentage < 100").select(criterion.to_s).group(criterion.to_s).unscope(:order).count
+    results.append([criterion.to_s, data.fetch('Met',0),
+      data.fetch('Unmet',0), data.fetch('?',0), data.fetch('N/A',0)])
+  end
+  # Sort by total "unmet+?", because "Met" and "N/A" are okay.
+  # Negate to reverse search ("largest first") - start with most unmet+?
+  results.sort! { |x,y| -(x[2]+x[3]) <=> -(y[2]+y[3]) }
+  puts 'criterion,Met,Unmet,?,N/A,Unmet+?'
+  results.each do |row|
+    totaluq=row[2].to_i+row[3].to_i # Unmet + ?
+    percentuq=(totaluq*100.0/project_count).round
+    print row.join(',')
+    print ",#{totaluq}"
+    print ",#{percentuq}%"
+    puts
+  end
+  nil # Don't return the results
+end
+:analyze
+
+puts "Total number of projects = #{Project.count}"
+Total number of projects = 528
+nil
+puts "Total number of passing projects = #{Project.where('badge_percentage >= 100').count}"
+Total number of passing projects = 59
+nil
+analyze(90)
+
+Reporting on projects 90% or better but NOT 100%.
+Number of projects with minimum percentage = 52
+criterion,Met,Unmet,?,N/A,Unmet+?
+tests_are_added_status,39,11,2,0,13,25%
+vulnerability_report_process_status,40,4,8,0,12,23%
+sites_https_status,43,8,1,0,9,17%
+test_policy_status,44,7,1,0,8,15%
+static_analysis_status,42,5,3,2,8,15%
+dynamic_analysis_fixed_status,42,4,4,2,8,15%
+crypto_certificate_verification_status,11,1,7,33,8,15%
+vulnerability_report_private_status,28,4,3,17,7,13%
+know_common_errors_status,46,3,3,0,6,12%
+know_secure_design_status,47,2,3,0,5,10%
+documentation_interface_status,48,3,1,0,4,8%
+release_notes_status,48,4,0,0,4,8%
+vulnerability_report_response_status,45,2,2,3,4,8%
+test_status,49,3,0,0,3,6%
+warnings_status,42,2,1,7,3,6%
+delivery_unsigned_status,49,1,2,0,3,6%
+vulnerabilities_fixed_60_days_status,49,3,0,0,3,6%
+static_analysis_fixed_status,37,1,2,12,3,6%
+version_unique_status,50,1,1,0,2,4%
+release_notes_vulns_status,50,1,1,0,2,4%
+report_responses_status,50,2,0,0,2,4%
+report_archive_status,50,1,1,0,2,4%
+warnings_fixed_status,45,1,1,5,2,4%
+crypto_password_storage_status,8,1,1,42,2,4%
+delivery_mitm_status,50,1,1,0,2,4%
+description_good_status,51,1,0,0,1,2%
+repo_interim_status,51,0,1,0,1,2%
+crypto_published_status,25,1,0,26,1,2%
+crypto_working_status,21,1,0,30,1,2%
+no_leaked_credentials_status,51,0,1,0,1,2%
+interact_status,52,0,0,0,0,0%
+contribution_status,52,0,0,0,0,0%
+floss_license_status,52,0,0,0,0,0%
+license_location_status,52,0,0,0,0,0%
+documentation_basics_status,52,0,0,0,0,0%
+discussion_status,52,0,0,0,0,0%
+repo_public_status,52,0,0,0,0,0%
+repo_track_status,52,0,0,0,0,0%
+report_process_status,52,0,0,0,0,0%
+build_status,43,0,0,9,0,0%
+crypto_floss_status,26,0,0,26,0,0%
+crypto_keylength_status,16,0,0,36,0,0%
+crypto_random_status,15,0,0,37,0,0%
+nil
+analyze(75)
+
+Reporting on projects 75% or better but NOT 100%.
+Number of projects with minimum percentage = 81
+criterion,Met,Unmet,?,N/A,Unmet+?
+tests_are_added_status,56,16,9,0,25,31%
+vulnerability_report_process_status,58,9,14,0,23,28%
+dynamic_analysis_fixed_status,56,6,17,2,23,28%
+crypto_certificate_verification_status,13,3,18,47,21,26%
+static_analysis_status,57,8,12,4,20,25%
+test_policy_status,62,11,8,0,19,23%
+vulnerability_report_private_status,40,6,12,23,18,22%
+sites_https_status,67,13,1,0,14,17%
+static_analysis_fixed_status,52,3,11,15,14,17%
+warnings_fixed_status,61,3,10,7,13,16%
+know_common_errors_status,68,5,8,0,13,16%
+release_notes_vulns_status,69,4,8,0,12,15%
+vulnerability_report_response_status,66,4,8,3,12,15%
+warnings_status,59,5,7,10,12,15%
+know_secure_design_status,69,4,8,0,12,15%
+release_notes_status,70,11,0,0,11,14%
+delivery_unsigned_status,72,3,6,0,9,11%
+documentation_interface_status,73,6,2,0,8,10%
+crypto_password_storage_status,13,3,5,60,8,10%
+test_status,74,6,1,0,7,9%
+crypto_keylength_status,24,1,6,50,7,9%
+crypto_working_status,30,3,4,44,7,9%
+repo_interim_status,75,2,4,0,6,7%
+delivery_mitm_status,75,2,4,0,6,7%
+version_unique_status,76,3,2,0,5,6%
+report_responses_status,76,2,3,0,5,6%
+crypto_random_status,24,0,5,52,5,6%
+contribution_status,78,1,2,0,3,4%
+license_location_status,78,2,1,0,3,4%
+report_archive_status,78,2,1,0,3,4%
+vulnerabilities_fixed_60_days_status,78,3,0,0,3,4%
+description_good_status,79,2,0,0,2,2%
+crypto_published_status,40,1,1,39,2,2%
+no_leaked_credentials_status,79,0,2,0,2,2%
+interact_status,80,1,0,0,1,1%
+documentation_basics_status,80,1,0,0,1,1%
+discussion_status,80,0,1,0,1,1%
+crypto_floss_status,40,0,1,40,1,1%
+floss_license_status,81,0,0,0,0,0%
+repo_public_status,81,0,0,0,0,0%
+repo_track_status,81,0,0,0,0,0%
+report_process_status,81,0,0,0,0,0%
+build_status,67,0,0,14,0,0%
+nil
+puts 'Done.'
+Done.
+nil
+
+
+

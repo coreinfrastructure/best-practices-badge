@@ -284,8 +284,9 @@ class ProjectsController < ApplicationController
     # Sort, if there is a requested order (otherwise use default created_at)
     return unless params[:sort].present? && ALLOWED_SORT.include?(params[:sort])
     sort_direction = params[:sort_direction] == 'desc' ? ' desc' : ' asc'
+    sort_index = ALLOWED_SORT.index(params[:sort])
     @projects = @projects
-                .reorder(params[:sort] + sort_direction)
+                .reorder(ALLOWED_SORT[sort_index] + sort_direction)
                 .order('created_at' + sort_direction)
   end
   # rubocop:enable Metrics/AbcSize
@@ -295,7 +296,12 @@ class ProjectsController < ApplicationController
     purge_cdn_badge
     # @project.purge
     format.html do
-      redirect_to @project, success: 'Project was successfully updated.'
+      if params[:continue]
+        flash[:success] = 'Project was successfully updated.'
+        redirect_to edit_project_path(@project)
+      else
+        redirect_to @project, success: 'Project was successfully updated.'
+      end
     end
     format.json { render :show, status: :ok, location: @project }
     new_badge_level = @project.badge_level

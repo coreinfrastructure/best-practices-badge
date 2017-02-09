@@ -1,7 +1,7 @@
 <% badge_hostname = (ENV['PUBLIC_HOSTNAME'] || 'localhost') %>
 <% content_for :insert_progress_bar do %>
     <div id="progress-mobile" class="progress">
-      <div id="badge-progress" class="progress-bar progress-bar-success badge-progress" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+      <div id="badge-progress" class="progress-bar progress-bar-success badge-progress" role="progressbar" aria-valuenow="<%= project.badge_percentage %>" aria-valuemin="0" aria-valuemax="100">0%</div>
     </div>
 <% end %>
 <div>
@@ -82,8 +82,8 @@ There is also a
 
 <div class="row">
   <div class="col-md-12">
- <div> 
-  <%= bootstrap_form_for(project) do |f| %>
+ <div>
+  <%= bootstrap_form_for project, url: put_project_path(project) do |f| %>
     <%= render 'shared/error_messages', object: f.object %>
     <%= f.hidden_field :lock_version %>
 
@@ -595,9 +595,12 @@ provided by the delivered project's software.
 
 </div>
       <br>
+      <div class="center">
       <% if ! is_disabled %>
-        <%= f.submit 'Submit', class:"btn btn-primary" %>
+        <%= f.submit 'Save (and continue)', name: 'continue', class:"btn btn-primary btn-submit" %>
+        <%= f.submit 'Submit (and exit)', class:"btn btn-primary btn-submit" %>
       <% end %>
+      </div>
     <% end %>
   </div>
 </div>

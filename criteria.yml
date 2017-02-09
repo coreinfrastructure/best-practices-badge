@@ -6,6 +6,7 @@
 #   category: MUST|SHOULD|SUGGESTED # required
 #   future: true|false # optional, default false
 #   na_allowed: true|false # optional, default false
+#   na_justification_required: true|false # optional, default false
 #   met_url_required: true|false # optional, default false
 #   description: ...HTML description... # required
 #   details: ...HTML description... # optional
@@ -116,8 +117,7 @@
           GNU General Public License (LGPL)</a>, and the <a
           href="https://opensource.org/licenses/gpl-license">GNU General Public
           License (GPL)</a>.
-          For our purposes, this means that the license MUST be:
-          <ul>
+          For our purposes, this means that the license MUST be: <ul>
           <li><a href="https://opensource.org/licenses">an approved license
           by the Open Source Initiative (OSI)</a>, or</li>
           <li><a href="https://www.gnu.org/licenses/license-list.html">a free
@@ -213,10 +213,21 @@
         category: MUST
         description: >
           The project MUST include reference documentation that describes
-          its interface.
+          its external interface (both input and output).
         details: >
-          The project MAY use hypertext links to
-          non-project material as documentation.
+          The project MAY use hypertext links to non-project material
+          as documentation.
+          Documentation MAY be automatically generated
+          (where practical this is often the best way to do so).
+          Documentation of a REST interface may be generated using
+          Swagger/OpenAPI.
+          Code interface documentation MAY be generated using
+          tools such as <a href="http://usejsdoc.org/">JSDoc</a>
+          (JavaScript), <a href="https://esdoc.org/">ESDoc</a> (JavaScript),
+          pydoc (Python), and Doxygen (many).  Merely having comments in
+          implementation code is not sufficient to satisfy this criterion;
+          there needs to be an easy way to see the information without
+          reading through all the source code.
         autofill: >
           Look for a "docs" or "doc" directory, or the main site, with
           .txt, .html, .md, .tex extension and uses the word "interface".
@@ -466,8 +477,14 @@
     - enhancement_responses:
         category: SHOULD
         description: >
-          The project SHOULD respond to most enhancement requests in the last
-          2-12 months (inclusive). The project MAY choose not to respond.
+          The project SHOULD respond to a majority (&gt;50%)
+          of enhancement requests in the last 2-12 months (inclusive).
+        details: >
+          The response MAY be 'no' or a discussion about its merits.
+          The goal is simply that there be some response to some requests,
+          which indicates that the project is still alive.
+          For purposes of this criterion, projects need not count fake requests
+          (e.g., from spammers or automated systems).
         autofill: >
           Examine issue tracker, and see what is marked as an "enhancement".
           Exclude the top contributor(s) as reported by the repo changes.
@@ -635,6 +652,17 @@
           It is SUGGESTED that the project implement continuous integration
           (where new or changed code is frequently integrated into a central
           code repository and automated tests are run on the result).
+        rationale: >
+          See
+          <a href="http://martinfowler.com/articles/continuousIntegration.html">Martin Fowler</a>
+          There has been some shift in the meaning of the term
+          continuous integration. Historically the term continuous
+          integration focused on the first part - the frequent
+          integration - and not on its testing.  However, over time the
+          emphasis has shifted to include the notion of running automated tests
+          as soon as the code is integrated.  We realize that this
+          can be difficult for some projects to apply, which is why it
+          is only SUGGESTED at the passing level.
         autofill: >
           Look for a .travis.yml or circle.yml file.
           We also see if it has a badge from CircleCI or Travis.
@@ -1053,7 +1081,6 @@
     - static_analysis_fixed:
         category: MUST
         na_allowed: true
-        na_justification_required: true
         description: >
           All medium and high severity exploitable vulnerabilities
           discovered with static code analysis MUST be fixed
@@ -1178,13 +1205,30 @@
           the project have a
           <a href="https://reproducible-builds.org/">reproducible build</a>.
         details: >
-          With reproducible builds, multiple parties can independently redo the
-          process of generating information from source files and get exactly
-          the same result.
-          The <a href="https://reproducible-builds.org/docs/">reproducible builds project has documentation on how to do this</a>.
-          This criterion does not apply if no building occurs
-          (e.g., scripting languages where the source code
-          is used directly instead of being compiled).
+          A reproducible build means that multiple parties can
+          independently redo the process of generating information from
+          source files and get exactly the same bit-for-bit result.  If no
+          building occurs (e.g., scripting languages where the source
+          code is used directly instead of being compiled), select "N/A".
+          In some cases, this can resolved by forcing some sort order.
+          JavaScript developers may consider using npm shrinkwrap and
+          webpack OccurenceOrderPlugin.  GCC and clang users may find
+          the -frandom-seed option useful.  The build environment
+          (including the toolset) can often be defined for external
+          parties by specifying the cryptographic hash of a specific
+          container or virtual machine that they can use for rebuilding.
+          The <a href="https://reproducible-builds.org/docs/">reproducible
+          builds project has documentation on how to do this</a>.
+        rationale: >
+          If a project needs to be built but there is no working
+          build system, then potential co-developers will not be able to easily
+          contribute and many security analysis tools will be ineffective.
+          Reproduceable builds counter malicious attacks that generate malicious
+          executables, by making it easy to recreate the executable to determine
+          if the result is correct.
+          By itself, reproducible builds do not counter malicious compilers,
+          but they can be extended to counter malicious compilers using
+          processes such as diverse double-compiling (DDC).
         autofill: >
           If the project seems to only have scripting language code,
           prefill it as N/A.

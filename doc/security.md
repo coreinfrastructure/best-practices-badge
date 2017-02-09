@@ -67,8 +67,10 @@ design, implementation,
 verification, supply chain (reuse), and deployment/operations.
 This is followed by a discussion about security in the
 development environment and our people.
-Note that receive our own badge, the CII best practices badge,
-which provides additional evidence that we've covered key areas.
+Note that the project receives its own badge
+(the CII best practices badge),
+which provides additional evidence that it applies best practices
+that can lead to more secure software.
 
 (Note to editors: to edit the figures above, edit the .odg file, then
 export to .png so that it can viewed on GitHub.)
@@ -79,10 +81,11 @@ Here is what BadgeApp must do to be secure (and a few comments about
 how we implement these requirements):
 
 * Confidentiality:
-    - Almost all data is considered public, e.g., all project data
-      and who owns the records, so we don't need to keep those confidential.
-    - Non-public data is kept confidential.  Non-public data is currently
-      unencrypted user passwords and user email addresses,
+    - Almost all data we collect is considered public, e.g., all project data,
+      who owns the project information, and GitHub user names,
+      so we don't need to keep those confidential.
+    - Non-public data is kept confidential.
+      User passwords and user email addresses are non-public data,
       which we do protect specially:
         - User passwords are only stored on the server as
           iterated salted hashes (using bcrypt).
@@ -109,7 +112,8 @@ how we implement these requirements):
           administrators. We do store email addresses;
           we need those for various purposes
           (e.g., contact badge entry owners for clarification).
-          We will strive to not reveal user email addresses to others
+          We also user email addresses as the user id for "local" accounts.
+          We strive to not reveal user email addresses to others
           (with the exception of administrators, who can see them).
         - HTTPS is used to encrypt all communications between users
           and the application; this protects the confidentiality of
@@ -143,28 +147,28 @@ how we implement these requirements):
       That way, the system is not permanently "stuck" on a request.
     - The system can return to operation quickly after
       a DDoS attack has ended.
+    - We routinely backup the database and retain multiple versions.
+      That way, if the project data is corrupted, we can restore the
+      database to a previous state.
 
 Here are a few other notes about the security requirements.
 
-BadgeApp must avoid being taken over by other applications, and
-must avoid being a conduit for others' attacks
+BadgeApp must avoid being taken over by attackers, since this
+could cause lead to failure in confidentiality, integrity, or availability.
+In addition, it must avoid being a conduit for others' attacks
 (e.g., not be vulnerable to cross-site scripting).
 We do this by focusing on having a secure design and countering the
 most common kinds of attacks (as described below).
 
-The application must not have any behaviors or features designed
-to allow authorized access, exposure of sensitive information, or allow
-bypass of security features or restrictions.
-In particular, it must not have backdoors that allow unauthorized control.
-We search for this, and since it is open source software, others can
-verify that the custom code does not include these problems.
-
 It is difficult to implement truly secure software.
-An additional problem for BadgeApp is that it not only must accept,
-store, and retrieve data from untrusted users... it must also go out
+One challenge is that BadgeApp must accept, store, and retrieve data from
+untrusted (non-admin) users.
+In addition, BadgeApp must also go out
 to untrusted websites with untrusted contents,
 using URLs provided by untrusted users,
 to gather data about those projects (so it can automatically fill in data).
+By "untrusted" we mean sites that might attempt to attack BadgeApp, e.g.,
+by providing malicious data or by being unresponsive.
 We have taken a number of steps to reduce the likelihood
 of vulnerabilities, and to reduce the impact of vulnerabilities
 where they exist.
@@ -172,10 +176,6 @@ In particular, retrieval of external information is subject to a timeout,
 we use Ruby (a memory-safe language),
 and exceptions halt automated processing for that entry (which merely
 disables automated data gathering for that entry).
-
-We have a mechanism for downloading (and backing up) the database of projects.
-That way, if the project data is corrupted, we can restore the database to
-a previous state.
 
 The permissions system is intentionally simple.
 Every user has an account, either a 'local' account or an external
@@ -193,12 +193,9 @@ Anyone can see the project entry results once they are saved.
 We do require, in the case of a GitHub project entry, that the
 entry creator be logged in via GitHub *and* be someone who can edit that
 project.
-Anyone can create a project entry about a project not on GitHub,
-however, nothing makes the project refer to that data...
-which makes entering nonsense data have much less value.
 We may in the future add support for groups (e.g., where the owner
 can designate other users who can edit that entry) and
-a way to 'validate' project entries for projects not on GitHub.
+a way for others to edit project entries when they are not on GitHub.
 
 Here we have identified the key security requirements and why we believe
 they've been met overall.  However, there is always the possibility that
@@ -347,7 +344,7 @@ including all 8 principles from
   some kinds of attacks.
   When project data (new or edited) is provided, all proposed status values
   are checked to ensure they are one of the legal criteria values for
-  that criterion.
+  that criterion (Met, Unmet, ?, or N/A depending on the criterion).
   Once project data is received, the application tries to get some
   values from the project itself; this data may be malevolent, but the
   application is just looking for the presence or absence of certain
@@ -361,8 +358,10 @@ Our primary approach is to ensure that the design scales.
 As a Ruby on Rails application, it is designed so each request can
 be processed separately on separate processes.
 We use the 'puma' web server to serve multiple processes
-(so at least attackers have to cause multiple requests simultaneously),
-and timeouts so recovery is automatic after a request.
+(so attackers must have many multiple simultaneous requests to keep
+them all busy),
+and timeouts are used (once a request times out, the process is
+automatically killed and the server can process a new request).
 The system is designed to be easily scalable (just add more worker
 processes), so we can quickly purchase additional computing resources
 to handle requests if needed.
@@ -373,7 +372,8 @@ time limit for each request; thus, if a request gets stuck
 eventually the timeout will cause the response to stop and the
 system will become ready for another request.
 
-We use a CDN (Fastly) to provide cached values of badges.
+We use a Content Delivery Network (CDN), specifically Fastly,
+to provide cached values of badges.
 These are the most resource-intense kind of request.
 As long as the CDN is up, even if the application crashes the
 then-current data will stay available until the system recovers.
@@ -388,7 +388,8 @@ by an attacker with signficant resources.
 
 ### Memory-safe languages
 
-All of the custom code is written in memory-safe languages
+All the code we have written (aka the custom code)
+is written in memory-safe languages
 (Ruby and JavaScript), so the vulnerabilities of memory-unsafe
 languages (such as C and C++) cannot occur in the custom code.
 This also applies to most of the code in the directly depended libraries.
@@ -433,7 +434,7 @@ and how we attempt to reduce their risks in BadgeApp.
    built-in protection against SQL injection.  SQL commands are not used
    directly, instead Rails includes Active Record, which implements an
    Object Relational Mapping (ORM) with parameterized commands.
-   SQL commands are never used directly by the custom code.
+   SQL commands are never issued directly by the custom code.
    The shell is not used to download or process file contents (e.g., from
    repositories), instead, various Ruby APIs acquire and process it directly.
 2. Broken Authentication and Session Management.
@@ -447,8 +448,11 @@ and how we attempt to reduce their risks in BadgeApp.
    [SafeBuffers and Rails 3.0](http://yehudakatz.com/2010/02/01/safebuffers-and-rails-3-0/)
    discusses this in more detail.
    This greatly reduces the risk of mistakes leading to XSS vulnerabilities.
-   In addition, we use a restrictive Content Security Policy (CSP),
-   which makes damage more difficult even if an attacker gets something in.
+   In addition, we use a restrictive Content Security Policy (CSP).
+   Our CSP, for example, tells web browsers to not execute any JavaScript
+   included in HTML (JavaScript must be in separate JavaScript files).
+   This makes limits damage even if an attacker gets something into
+   the generated HTML.
 4. Insecure Direct Object References.
    The only supported direct object references are for publicly available
    objects (stylesheets, etc.).
@@ -457,11 +461,16 @@ and how we attempt to reduce their risks in BadgeApp.
 5. Security Misconfiguration.
    See the section on [countering misconfiguration](#misconfiguration).
 6. Sensitive Data Exposure.
-   We generally do not store sensitive data; the data about projects
-   is intended to be public.  The only sensitive data we centrally store are
-   local passwords, and those are encrypted and hashed with bcrypt
-   (this is a well-known iterated salted hash algorithm).
-   We use HTTPS to establish an encrypted link between the server and users.
+   We generally do not store sensitive data; most of the data about projects
+   is intended to be public.  We do store email addresses, and work to
+   prevent them from exposure.
+   The local passwords are potentially the most sensitive; stolen passwords
+   allow others to masquerade as that user, possibly on other sites
+   if the user reuses the password on other sites.
+   Local passwords are encrypted with bcrypt
+   (this is a well-known iterated salted hash algorithm) using a per-user salt.
+   We use HTTPS to establish an encrypted link between the server and users,
+   to prevent sensitive data (like passwords) from being disclosed in motion.
 7. Missing Function Level Access Control.
    The system depends on server-side routers and controllers for
    access control.  There is some client-side JavaScript, but no
@@ -478,7 +487,7 @@ and how we attempt to reduce their risks in BadgeApp.
    These use the Gemfile* and National Vulnerability Database (NVD) data.
    For more information, see the "[supply chain](#supply-chain)" section.
 10. Unvalidated Redirects and Forwards.
-   Redirects and forwards are not used significantly, and they are validated.
+   Redirects and forwards are used sparingly, and they are validated.
 
 ### <a name="misconfiguration"></a>Common misconfiguration errors countered: Ruby on Rails Security Guide
 
@@ -997,6 +1006,8 @@ applying practices expected in a well-run FLOSS project.
 Security is hard; we welcome your help.
 We welcome hardening in general, particularly pull requests
 that actually do the work of hardening.
+We thank many, including Reg Meeson, for reviewing and providing feedback
+on this assurance case.
 
 Please report potential vulnerabilities you find.
 See [CONTRIBUTING.md](../CONTRIBUTING.md) for how to submit

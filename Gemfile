@@ -6,10 +6,10 @@ gem 'bcrypt', '3.1.11' # Security - for salted hashed interated passwords
 gem 'bootstrap-sass', '3.3.7'
 gem 'bootstrap-social-rails', '4.12.0'
 gem 'bootstrap-will_paginate', '0.0.10'
-gem 'bootstrap_form', '2.5.3'
+gem 'bootstrap_form', '2.6.0'
 gem 'chartkick', '2.2.2' # Chart project_stats
 gem 'coffee-rails', '4.2.1' # Support CoffeeScript (Javascript preprocessor)
-gem 'faker', '1.7.2'
+gem 'faker', '1.7.3'
 # Fastly master is locked to a railties version
 gem 'fastly-rails', git: 'https://github.com/dankohn/fastly-rails',
                     ref: 'a909d09'
@@ -73,7 +73,7 @@ group :test do
   gem 'minitest-retry', '0.1.8', require: false # Avoid Capybara false positives
   gem 'poltergeist', '1.13.0', require: false
   gem 'rails-controller-testing', '1.0.1'
-  gem 'selenium-webdriver', '3.0.5', require: false
+  gem 'selenium-webdriver', '3.0.8', require: false
   gem 'simplecov', '0.13.0', require: false
   gem 'webmock', '2.3.2', require: false
 end

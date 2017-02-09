@@ -2,10 +2,10 @@
 # Rake tasks for BadgeApp
 
 task(:default).clear.enhance %w(
-  generate_criteria_doc
   rbenv_rvm_setup
   bundle
   bundle_audit
+  generate_criteria_doc
   rubocop
   markdownlint
   rails_best_practices

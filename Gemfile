@@ -9,7 +9,7 @@ gem 'bootstrap-will_paginate', '0.0.10'
 gem 'bootstrap_form', '2.5.3'
 gem 'chartkick', '2.2.2' # Chart project_stats
 gem 'coffee-rails', '4.2.1' # Support CoffeeScript (Javascript preprocessor)
-gem 'faker', '1.7.2'
+gem 'faker', '1.7.3'
 # Fastly master is locked to a railties version
 gem 'fastly-rails', git: 'https://github.com/dankohn/fastly-rails',
                     ref: 'a909d09'

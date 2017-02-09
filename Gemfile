@@ -6,10 +6,10 @@ gem 'bcrypt', '3.1.11' # Security - for salted hashed interated passwords
 gem 'bootstrap-sass', '3.3.7'
 gem 'bootstrap-social-rails', '4.12.0'
 gem 'bootstrap-will_paginate', '0.0.10'
-gem 'bootstrap_form', '2.5.3'
+gem 'bootstrap_form', '2.6.0'
 gem 'chartkick', '2.2.2' # Chart project_stats
 gem 'coffee-rails', '4.2.1' # Support CoffeeScript (Javascript preprocessor)
-gem 'faker', '1.7.2'
+gem 'faker', '1.7.3'
 # Fastly master is locked to a railties version
 gem 'fastly-rails', git: 'https://github.com/dankohn/fastly-rails',
                     ref: 'a909d09'
@@ -21,7 +21,7 @@ gem 'jquery-rails', '4.2.2' # JavaScript jQuery library (for Rails)
 # gem 'jquery-turbolinks' # Make turbolinks work with jQuery
 gem 'jquery-ui-rails', '6.0.1' # JavaScript jQueryUI library (for Rails)
 gem 'octokit', '4.6.2' # GitHub's official Ruby API
-gem 'omniauth-github', '1.1.2' # Authentication to GitHub (get project info)
+gem 'omniauth-github', '1.2.1' # Authentication to GitHub (get project info)
 gem 'paper_trail', '6.0.2' # Record previous versions of project data
 gem 'pg', '0.19.0' # PostgreSQL database, used for data storage
 gem 'pg_search', '2.0.1' # PostgreSQL full-text search

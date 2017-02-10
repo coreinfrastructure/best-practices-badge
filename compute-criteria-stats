@@ -5,6 +5,16 @@ rails console <<CONSOLE_END
 
 Rails.logger.level = :warn # Reduce log noise
 
+def database_stats()
+  p = Project.order(:created_at).last
+  puts "Last project created: #{p.created_at} (project #{p.id})"
+  p = Project.order(:updated_at).last
+  puts "Last project update: #{p.updated_at} (project #{p.id})"
+  puts "Total number of projects = #{Project.count}"
+  puts "Total number of passing projects = #{Project.where('badge_percentage >= 100').count}"
+  puts "Total number of 90%+ projects (INCLUDING 100%) = #{Project.where('badge_percentage >= 100').count}"
+end
+
 # Print analysis for projects at least "min_percentage"
 def analyze(min_percentage)
   puts
@@ -38,8 +48,7 @@ def analyze(min_percentage)
   nil # Don't return the results
 end
 
-puts "Total number of projects = #{Project.count}"
-puts "Total number of passing projects = #{Project.where('badge_percentage >= 100').count}"
+database_stats()
 analyze(90)
 analyze(75)
 puts 'Done.'

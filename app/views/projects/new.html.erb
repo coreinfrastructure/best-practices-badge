@@ -45,7 +45,7 @@
       <span>What is the URL for the version control repository
             (it may the same as the project home page)? Start with http(s):// (many characters are not allowed, including "?")</span>
       <%= f.text_field :repo_url, class:"form-control",
-            type: 'url', 
+            type: 'url',
             pattern: url_pattern,
             placeholder:'http(s)://... for project repo URL' %>
      <%= f.submit 'Submit URL', class: 'btn btn-primary',

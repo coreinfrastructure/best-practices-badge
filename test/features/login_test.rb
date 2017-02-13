@@ -13,18 +13,18 @@ class LoginTest < CapybaraFeatureTest
     @project = projects(:one)
   end
 
-  scenario 'Has link to GitHub Login', js: true do
-    visit login_path
-    assert has_content? 'Log in with GitHub'
-  end
-
   # rubocop:disable Metrics/BlockLength
   scenario 'Can Login and edit using custom account', js: true do
-    visit login_path
+    visit projects_path
+    click_on 'Login'
     fill_in 'Email', with: @user.email
     fill_in 'Password', with: 'password'
     click_button 'Log in using custom account'
     assert has_content? 'Signed in!'
+    assert_equal current_path, projects_path
+    # Check we are redirected back to root if we try to get login again
+    visit login_path
+    assert_equal current_path, root_path
 
     visit edit_project_path(@project)
     kill_sticky_headers # This is necessary for Chrome and Firefox

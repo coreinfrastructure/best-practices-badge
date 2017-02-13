@@ -78,8 +78,9 @@ module SessionsHelper
   # Stores the URL trying to be accessed
   def store_location
     session.delete(:forwarding_url)
+    return if request.referer.nil? || !request.get?
     return unless refered_from_our_site?
-    url = request.referer if request.get?
+    url = request.referer
     session[:forwarding_url] = url unless url == login_url
   end
 
@@ -101,14 +102,8 @@ module SessionsHelper
 
   private
 
-  def http_referer_uri
-    return if request.env['HTTP_REFERER'].nil?
-    URI.parse(request.env['HTTP_REFERER'])
-  end
-
   def refered_from_our_site?
-    uri = http_referer_uri
-    return false if uri.nil?
-    uri.host == request.host
+    return false if request.referer.nil?
+    URI.parse(request.referer).host == request.host
   end
 end

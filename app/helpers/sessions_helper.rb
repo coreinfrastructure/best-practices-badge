@@ -104,6 +104,7 @@ module SessionsHelper
 
   private
 
+  # Check if refering url is internal, if so, save it.
   def store_internal_referer
     return if request.referer.nil?
     ref_url = request.referer

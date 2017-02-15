@@ -75,13 +75,15 @@ module SessionsHelper
     session.delete(:forwarding_url)
   end
 
-  # Stores the URL trying to be accessed
+  # Stores the URL trying to be accessed (if its a new project) or a referer
   def store_location
     session.delete(:forwarding_url)
-    return if request.referer.nil? || !request.get?
-    return unless refered_from_our_site?
-    url = request.referer
-    session[:forwarding_url] = url unless url == login_url
+    return unless request.get?
+    if request.url == new_project_url
+      session[:forwarding_url] = new_project_url
+    else
+      store_internal_referer
+    end
   end
 
   def session_expired
@@ -102,8 +104,11 @@ module SessionsHelper
 
   private
 
-  def refered_from_our_site?
-    return false if request.referer.nil?
-    URI.parse(request.referer).host == request.host
+  # Check if refering url is internal, if so, save it.
+  def store_internal_referer
+    return if request.referer.nil?
+    ref_url = request.referer
+    return unless URI.parse(ref_url).host == request.host
+    session[:forwarding_url] = ref_url unless ref_url == login_url
   end
 end

@@ -52,6 +52,11 @@ class GithubLoginTest < CapybaraFeatureTest
       click_on 'Projects'
       click_on 'Pathfinder OS'
       refute has_content? 'Edit'
+      click_on 'Account'
+      # Regression test, make sure GitHub users can logout
+      assert has_content? 'Logout'
+      click_on 'Logout'
+      assert_equal current_path, root_path
 
       if ENV['GITHUB_PASSWORD'] # revoke OAuth authorization
         visit 'https://github.com/settings/applications'

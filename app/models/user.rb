@@ -96,7 +96,7 @@ class User < ActiveRecord::Base
   # Forgets a user
   def forget
     self.remember_digest = nil
-    save!(touch: false)
+    save!(validate: false, touch: false)
   end
 
   # Returns true if a password reset has expired.

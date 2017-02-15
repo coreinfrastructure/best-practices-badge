@@ -21,7 +21,6 @@ module SessionsHelper
 
   # Returns true if the user is logged in, false otherwise.
   def logged_in?
-    store_location
     !current_user.nil?
   end
 
@@ -78,7 +77,10 @@ module SessionsHelper
 
   # Stores the URL trying to be accessed
   def store_location
-    url = request.url if request.get?
+    session.delete(:forwarding_url)
+    return if request.referer.nil? || !request.get?
+    return unless refered_from_our_site?
+    url = request.referer
     session[:forwarding_url] = url unless url == login_url
   end
 
@@ -96,5 +98,12 @@ module SessionsHelper
 
   def persist_session_timestamp
     session[:time_last_used] = Time.now.utc if logged_in?
+  end
+
+  private
+
+  def refered_from_our_site?
+    return false if request.referer.nil?
+    URI.parse(request.referer).host == request.host
   end
 end

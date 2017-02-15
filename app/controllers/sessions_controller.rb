@@ -2,10 +2,15 @@
 class SessionsController < ApplicationController
   include SessionsHelper
 
-  def new; end
+  def new
+    store_location
+    return unless logged_in?
+    flash[:success] = 'You are already logged in.'
+    redirect_back_or root_url
+  end
 
   def create
-    reset_session # Counter session fixation
+    counter_fixation # Counter session fixation (but save forwarding url)
     if request.env['omniauth.auth'].present?
       omniauth_login
     elsif params[:session][:provider] == 'local'
@@ -23,6 +28,14 @@ class SessionsController < ApplicationController
   end
 
   private
+
+  # We want to save the forwarding url of a session but
+  # still need to counter session fixation,  this does it
+  def counter_fixation
+    ref_url = session[:forwarding_url] # Save forwarding url
+    reset_session # Counter session fixation
+    session[:forwarding_url] = ref_url # Reload forwarding url
+  end
 
   def local_login
     user = User.find_by provider: 'local',

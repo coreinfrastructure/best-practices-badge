@@ -30,6 +30,7 @@ class GithubLoginTest < CapybaraFeatureTest
 
       assert_equal num + 1, ActionMailer::Base.deliveries.size
       assert has_content? 'Signed in!'
+      # Regression test, make sure redirected correctly after login
       assert_equal current_path, new_project_path
       assert find(
         "option[value='https://github.com/ciitest/test-repo']"

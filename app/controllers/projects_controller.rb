@@ -65,6 +65,7 @@ class ProjectsController < ApplicationController
 
   # GET /projects/new
   def new
+    store_location
     @project = Project.new
   end
 

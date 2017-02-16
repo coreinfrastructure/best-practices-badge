@@ -11,8 +11,7 @@ gem 'chartkick', '2.2.2' # Chart project_stats
 gem 'coffee-rails', '4.2.1' # Support CoffeeScript (Javascript preprocessor)
 gem 'faker', '1.7.3'
 # Fastly master is locked to a railties version
-gem 'fastly-rails', git: 'https://github.com/dankohn/fastly-rails',
-                    ref: 'a909d09'
+gem 'fastly-rails', '0.8.0'
 gem 'font-awesome-rails', '4.7.0.1'
 gem 'github_api', '0.14.5'
 gem 'imagesLoaded_rails', '4.1.0' # JavaScript - enable wait for image load

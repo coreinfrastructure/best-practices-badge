@@ -7,7 +7,10 @@ test:
     - "[[ ! -s \"$(git rev-parse --git-dir)/shallow\" ]] || git fetch --unshallow"
     - sudo curl --output /usr/local/bin/phantomjs https://s3.amazonaws.com/circle-downloads/phantomjs-2.1.1
   post:
-    - bundle exec pronto run -f github text -c=$(git log --pretty=format:%H | tail -1) --exit-code
+# Split up: bundle exec pronto run -f github text -c=$(git log --pretty=format:%H | tail -1) --exit-code
+# because the exit-code appears to not be provided in the combined command.
+    - bundle exec pronto run -f github text -c=$(git log --pretty=format:%H | tail -1)
+    - bundle exec pronto run text -c=$(git log --pretty=format:%H | tail -1) --exit-code
     - bundle exec rake ci
 deployment:
   master:

@@ -596,7 +596,25 @@ provided by the delivered project's software.
 </div>
       <br>
       <div class="center">
-      <% if ! is_disabled %>
+      <% if is_disabled %>
+        <% if project.show_entry_license? %>
+          This data is available under the
+          <a href="https://creativecommons.org/licenses/by/3.0/us"
+          target="_blank">Creative Commons Attribution version 3.0 or later
+          license (CC-BY-3.0+)</a>; all are free to share
+          and adapt the data, but must give appropriate credit.
+          Please credit <%= project.user.name %> and
+          the CII Best Practices badge contributors.<br><br>
+        <% end %>
+      <% else %>
+        By submitting this data about the project you agree to release it
+        under at least the
+        <a href="https://creativecommons.org/licenses/by/3.0/us"
+        target="_blank">Creative Commons Attribution version 3.0 or later
+        license (CC-BY-3.0+)</a>. This means that all are free to share
+        and adapt the data, but they must give appropriate credit.
+        You retain copyright (if any), and the project
+        license is unaffected.<br><br>
         <%= f.submit 'Save (and continue)', name: 'continue', class:"btn btn-primary btn-submit" %>
         <%= f.submit 'Submit (and exit)', class:"btn btn-primary btn-submit" %>
       <% end %>

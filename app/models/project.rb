@@ -293,6 +293,14 @@ class Project < ActiveRecord::Base
     ReportMailer.email_new_project_owner(self).deliver_now
   end
 
+  # Return true if we should show an explicit license for the data.
+  # Old entries did not set a license; we only want to show entry licenses
+  # if the updated_at field indicates there was agreement to it.
+  ENTRY_LICENSE_EXPLICIT_DATE = DateTime.iso8601('2017-02-20T12:00Z')
+  def show_entry_license?
+    updated_at >= ENTRY_LICENSE_EXPLICIT_DATE
+  end
+
   private
 
   def all_active_criteria_passing?

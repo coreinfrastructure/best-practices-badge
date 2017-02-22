@@ -24,7 +24,7 @@ gem 'omniauth-github', '1.1.2' # Authentication to GitHub (get project info)
 gem 'paper_trail', '6.0.2' # Record previous versions of project data
 gem 'pg', '0.19.0' # PostgreSQL database, used for data storage
 gem 'pg_search', '2.0.1' # PostgreSQL full-text search
-gem 'puma', '3.7.0' # Faster webserver; recommended by Heroku
+gem 'puma', '3.7.1' # Faster webserver; recommended by Heroku
 gem 'rails', '5.0.1' # Our web framework
 gem 'redcarpet', '3.4.0' # Process markdown in form textareas (justifications)
 gem 'sass-rails', '5.0.6'

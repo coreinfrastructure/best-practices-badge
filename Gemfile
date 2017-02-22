@@ -67,7 +67,7 @@ end
 group :test do
   gem 'capybara-slow_finder_errors', '0.1.4' # warn if test waits for timeout
   gem 'chromedriver-helper', '1.0.0'
-  gem 'codecov', '0.1.9', require: false
+  gem 'codecov', '0.1.10', require: false
   gem 'minitest-rails-capybara', '3.0.0', require: false
   gem 'minitest-retry', '0.1.8', require: false # Avoid Capybara false positives
   gem 'poltergeist', '1.13.0', require: false

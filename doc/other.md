@@ -5,9 +5,12 @@
 ## Introduction
 
 This document lists the draft potential criteria for badges
-beyond the "passing" level.
-We initially launched with a single badge level called "passing".
-We're currently in the process of developing higher level badges.
+beyond the "passing" level; we'd really like feedback on this.
+Please
+[post an issue](https://github.com/linuxfoundation/cii-best-practices-badge/issues)
+if you have comments on these criteria.
+These criteria build on the
+<a href="./criteria.md">criteria for the current "passing" level</a>.
 
 For now, we use the terms "passing+1" and "passing+2" to refer to the
 two levels above the current "passing" level.
@@ -1517,10 +1520,12 @@ point to guidelines to follow (like CERT's).
 
 We are hoping to get good suggestions and feedback from the public;
 please contribute!
+Please
+[post an issue](https://github.com/linuxfoundation/cii-best-practices-badge/issues)
+if you have comments on these criteria.
 
 See <a href="./criteria.md">criteria</a> for the main current set of criteria.
 You may also want to see the "<a href="./background.md">background</a>" file
 for more information about these criteria,
 and the "<a href="./implementation.md">implementation</a>" notes
 about the BadgeApp application.
-

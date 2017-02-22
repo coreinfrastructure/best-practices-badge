@@ -37,11 +37,13 @@ These best practices have been created to:
 
 We are currently focused on identifying best practices
 that well-run projects typically already follow.
-We are capturing other practices so that we can create
-[more advanced badges](./other.md) later.
 The best practices, and the more detailed criteria
 specifically defining them, are inspired by a variety of sources.
 See the separate "[background](./background.md)" page for more information.
+
+See the
+[draft criteria for higher/more advanced badges](./other.md) if you
+are interested in possible future criteria.
 
 We expect that these practices and their detailed criteria will be updated,
 even after badges are released.

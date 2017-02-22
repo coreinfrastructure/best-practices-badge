@@ -688,6 +688,11 @@ Mozilla's Open Badges project at <http://openbadges.org/>
 is interesting, however, it is focused on giving badges to
 individuals not projects.
 
+## CircleCI
+
+The CircleCI build execution is configured to use Ubuntu 14.04 (Trusty);
+it was Ubuntu 12.04 (Precise).
+
 ## License detection
 
 Some information on how to detect licenses in projects

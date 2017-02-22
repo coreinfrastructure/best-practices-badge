@@ -20,7 +20,7 @@ gem 'jquery-rails', '4.2.2' # JavaScript jQuery library (for Rails)
 # gem 'jquery-turbolinks' # Make turbolinks work with jQuery
 gem 'jquery-ui-rails', '6.0.1' # JavaScript jQueryUI library (for Rails)
 gem 'octokit', '4.6.2' # GitHub's official Ruby API
-gem 'omniauth-github', '1.1.2' # Authentication to GitHub (get project info)
+gem 'omniauth-github', '1.2.3' # Authentication to GitHub (get project info)
 gem 'paper_trail', '6.0.2' # Record previous versions of project data
 gem 'pg', '0.19.0' # PostgreSQL database, used for data storage
 gem 'pg_search', '2.0.1' # PostgreSQL full-text search

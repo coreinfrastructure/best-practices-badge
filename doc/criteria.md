@@ -227,7 +227,7 @@ There is an implied criterion that we should mention here:
  <sup>[<a href="#version_tags">version_tags</a>]</sup></li>
 </ul>
 
-<b><i>Release notes (ChangeLog)</i></b>
+<b><i>Release notes</i></b>
 
 <ul>
 

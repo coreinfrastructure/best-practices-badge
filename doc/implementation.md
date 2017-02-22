@@ -128,6 +128,18 @@ heroku config:set --app production-bestpractices BADGEAPP_MAX_REMINDERS=5
 On Heroku, using config:set to set a value will automatically restart the
 application (causing it to take effect).
 
+The TZ (timezone) environment variable is set to ":/usr/share/zoneinfo/UTC"
+on all tiers.  We want all logging to be done in UTC (because then moving
+the servers has no affect on logs).  Using leading-colon helps performance
+on many systems, especially many Rails systems (because it skips
+many system calls), and it's easy enough to do.  More information is at
+[How setting the TZ environment variable avoids thousands of system calls](https://blog.packagecloud.io/eng/2017/02/21/set-environment-variable-save-thousands-of-system-calls/).
+This was implemented with:
+
+~~~~
+heroku config:set --app production-bestpractices TZ=:/usr/share/zoneinfo/UTC
+~~~~
+
 ## Terminology
 
 This section describes key application-specific terminology.

@@ -1,10 +1,25 @@
 # Change Log
 
 All notable changes to this project will be documented in this file.
-This project adheres to [Semantic Versioning](http://semver.org/).
 
 This Change Log format is suggested by
 <https://github.com/olivierlacan/keep-a-changelog/blob/master/CHANGELOG.md>
+
+## dcb21c8e - 2017-02-22
+
+- Upgraded to Rails 5
+- Upgraded to Ruby 2.4.0
+- Increased password complexity rules
+  - Minimum length of 8 characters for new passwords
+  - Added a password blacklist for commonly used passwords
+- Users can once again change their repo_url, but only from http to https
+  (or vice versa).
+- Fixed redirects on login: If a user clicks login from a page other
+  than the front page, they will be redirected back to that page after
+  they log in.
+- Added na_justification_required option for criteria, where a justification
+  can be required for "N/A" selections.
+- Added autogeneration script for criteria.md.
 
 ## 0.8.0 - 2016-04-19
 

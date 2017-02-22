@@ -406,12 +406,15 @@
         na_allowed: true
         na_justification_required: true
         description: >
-          The project MUST provide, in each release, release notes that are
-          a human-readable <i>summary</i> of major changes in that release.
-          The release notes MUST NOT be the output of a version control log
-          (e.g., the "git log" command results are not release notes).
-          Projects whose results are unlikely to be reused (such as websites)
-          AND employ continuous delivery MAY select "N/A".
+          The project MUST provide, in each release, release notes that
+          are a human-readable summary of major changes in that release
+          to help users determine if they should upgrade and what the
+          upgrade impact will be. The release notes MUST NOT be the raw
+          output of a version control log (e.g., the "git log" command
+          results are not release notes). Projects whose results are not
+          intended for reuse in multiple locations (such as the software
+          for a single website or service) AND employ continuous delivery
+          MAY select "N/A".
         details: >
           The release notes MAY be implemented in a variety of ways.
           Many projects provide them in a file named "NEWS", "CHANGELOG",
@@ -439,7 +442,8 @@
         na_justification_required: true
         description: >
           The release notes MUST identify every publicly known vulnerability
-          that is fixed in each new release.
+          that is fixed in each new release. This is "N/A" if there are no
+          release notes or there have been no publicly known vulnerabilities.
         autofill: >
           Examine the release notes (per above) to see if they include
           CVE identifiers.  Also,

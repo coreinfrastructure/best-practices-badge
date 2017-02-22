@@ -231,13 +231,13 @@ There is an implied criterion that we should mention here:
 
 <ul>
 
-<li><a name="release_notes"></a>The project MUST provide, in each release, release notes that are a human-readable <i>summary</i> of major changes in that release. The release notes MUST NOT be the output of a version control log (e.g., the "git log" command results are not release notes).
- (URL required for "met".) <sup>[<a href="#release_notes">release_notes</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>The release notes MAY be implemented in a variety of ways. Many projects provide them in a file named "NEWS", "CHANGELOG", or "ChangeLog", optionally with extensions such as ".txt", ".md", or ".html".  Historically the term "change log" meant a log of <i>every</i> change, but to meet these criteria what is needed is a human-readable summary.  The release notes MAY instead be provided by version control system mechanisms such as the <a href="https://github.com/blog/1547-release-your-software">GitHub Releases workflow</a>.
-</dd><dt><i>Rationale</i>:<dt> <dd>Release notes are important because they help users decide whether or not they will want to update, and what the impact would be (e.g., if the new release fixes vulnerabilities).
+<li><a name="release_notes"></a>The project MUST provide, in each release, release notes that are a human-readable summary of major changes in that release to help users determine if they should upgrade and what the upgrade impact will be. The release notes MUST NOT be the raw output of a version control log (e.g., the "git log" command results are not release notes). Projects whose results are not intended for reuse in multiple locations (such as the software for a single website or service) AND employ continuous delivery MAY select "N/A".
+ (N/A allowed.) (Justification required for "N/A".) (URL required for "met".) <sup>[<a href="#release_notes">release_notes</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>The release notes MAY be implemented in a variety of ways. Many projects provide them in a file named "NEWS", "CHANGELOG", or "ChangeLog", optionally with extensions such as ".txt", ".md", or ".html".  Historically the term "change log" meant a log of <i>every</i> change, but to meet these criteria what is needed is a human-readable summary.  The release notes MAY instead be provided by version control system mechanisms such as the <a href="https://github.com/blog/1547-release-your-software">GitHub Releases workflow</a>.
+</dd><dt><i>Rationale</i>:<dt> <dd>Release notes are important because they help users decide whether or not they will want to update, and what the impact would be (e.g., if the new release fixes vulnerabilities).  We realize this may not apply to projects whose main results are continuously updated and are deployed to primarily one place and so allow "N/A" from such projects.
 </dd></dl></li>
 
-<li><a name="release_notes_vulns"></a>The release notes MUST identify every publicly known vulnerability that is fixed in each new release.
- <sup>[<a href="#release_notes_vulns">release_notes_vulns</a>]</sup></li>
+<li><a name="release_notes_vulns"></a>The release notes MUST identify every publicly known vulnerability that is fixed in each new release. This is "N/A" if there are no release notes or there have been no publicly known vulnerabilities.
+ (N/A allowed.) (Justification required for "N/A".) <sup>[<a href="#release_notes_vulns">release_notes_vulns</a>]</sup></li>
 </ul>
 
 ### Reporting

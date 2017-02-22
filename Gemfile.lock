@@ -361,7 +361,7 @@ GEM
       faraday (~> 0.8, < 1.0)
     secure_headers (3.6.1)
       useragent
-    selenium-webdriver (3.0.8)
+    selenium-webdriver (3.1.0)
       childprocess (~> 0.5)
       rubyzip (~> 1.0)
       websocket (~> 1.0)
@@ -475,7 +475,7 @@ DEPENDENCIES
   ruby-graphviz (= 1.2.2)
   sass-rails (= 5.0.6)
   secure_headers (= 3.6.1)
-  selenium-webdriver (= 3.0.8)
+  selenium-webdriver (= 3.1.0)
   simplecov (= 0.13.0)
   spring (= 2.0.1)
   traceroute (= 0.5.0)

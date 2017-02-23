@@ -349,8 +349,13 @@
     - version_unique:
         category: MUST
         description: >
-          The project MUST have a unique version number for each
+          The project MUST have a unique version identifier for each
           release intended to be used by users.
+        details: >
+          This MAY be met in a variety of ways including
+          a commit IDs (such as git commit id or mercurial changeset id)
+          or a version number (including version numbers that use
+          semantic versioning or date-based schemes like YYYYMMDD).
         autofill: >
           Look for downloads with version numbers in the filename, or
           version tags in a git repo.
@@ -362,7 +367,8 @@
           be used for releases.
         details: >
           Other version numbering schemes, such as commit IDs (such as
-          git's) or date-based schemes like YYYYMMDD, MAY be used as
+          git commit id or mercurial changeset id)
+          or date-based schemes like YYYYMMDD, MAY be used as
           version numbers, since they are unique.
           Some alternatives can cause problems, because
           users may not be able to easily determine if they are up-to-date.

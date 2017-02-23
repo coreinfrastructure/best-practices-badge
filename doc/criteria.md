@@ -217,11 +217,12 @@ There is an implied criterion that we should mention here:
 
 <ul>
 
-<li><a name="version_unique"></a>The project MUST have a unique version number for each release intended to be used by users.
- <sup>[<a href="#version_unique">version_unique</a>]</sup></li>
+<li><a name="version_unique"></a>The project MUST have a unique version identifier for each release intended to be used by users.
+ <sup>[<a href="#version_unique">version_unique</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>This MAY be met in a variety of ways including a commit IDs (such as git commit id or mercurial changeset id) or a version number (including version numbers that use semantic versioning or date-based schemes like YYYYMMDD).
+</dd></dl></li>
 
 <li><a name="version_semver"></a>It is SUGGESTED that the <a href="http://semver.org">Semantic Versioning (SemVer) format</a> be used for releases.
- <sup>[<a href="#version_semver">version_semver</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>Other version numbering schemes, such as commit IDs (such as git's) or date-based schemes like YYYYMMDD, MAY be used as version numbers, since they are unique. Some alternatives can cause problems, because users may not be able to easily determine if they are up-to-date. SemVer may be less helpful for identifying software releases if all recipients only run the latest version (e.g., it is the code for a single website or internet service that is constantly updated via continuous delivery).
+ <sup>[<a href="#version_semver">version_semver</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>Other version numbering schemes, such as commit IDs (such as git commit id or mercurial changeset id) or date-based schemes like YYYYMMDD, MAY be used as version numbers, since they are unique. Some alternatives can cause problems, because users may not be able to easily determine if they are up-to-date. SemVer may be less helpful for identifying software releases if all recipients only run the latest version (e.g., it is the code for a single website or internet service that is constantly updated via continuous delivery).
 </dd><dt><i>Rationale</i>:<dt> <dd>SemVer is widely used to communicate what an update is (e.g., if it involves incompatible API changes), whether something is newer or older.  The scheme is simple, supports multiple simultaneous branches, and because it uses at least three numbers it can be distinguished from floating point. However, many find SemVer less useful for identifying software versions if only one version of the component is run (e.g., it is the code for a single website or internet service that is constantly updated via continuous delivery). For more discussion of the pros and cons of SemVer, see <a href="https://news.ycombinator.com/item?id=13378637">Hacker News' Is Semantic Versioning an Anti-Pattern?</a> and <a href="https://surfingthe.cloud/semantic-versioning-anti-pattern/">The Semantic Versioning Anti-Pattern</a>.
 </dd></dl></li>
 

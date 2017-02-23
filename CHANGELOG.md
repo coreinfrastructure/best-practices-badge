@@ -46,6 +46,18 @@ This Change Log format is suggested by
 - Lots of code restructurings/simplifications
 - Search in projects
 
+## fdb83380 - 2015-11-26
+
+- Update gem nokogiri 1.6.6.2 -> 1.6.6.4 due to potential vulnerability
+  as reported in CVE-2015-1819.
+  We indirectly depend on the gem nokogiri, which is a
+  HTML, XML, SAX, and Reader parser.  This is turn depends on
+  libxml2 and libxslt.  A vulnerability was found (CVE-2015-1819),
+  so we immediately upgraded, ran our regression tests, and pushed to
+  production.  It's not clear if this program was vulnerable, but
+  it's much better to quickly fix the problem and be sure we've taken care
+  of it (it would have taken longer to do the analysis!).
+
 ## 2015-10-15
 
 ### Added

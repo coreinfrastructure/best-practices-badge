@@ -349,8 +349,13 @@
     - version_unique:
         category: MUST
         description: >
-          The project MUST have a unique version number for each
+          The project MUST have a unique version identifier for each
           release intended to be used by users.
+        details: >
+          This MAY be met in a variety of ways including
+          a commit IDs (such as git commit id or mercurial changeset id)
+          or a version number (including version numbers that use
+          semantic versioning or date-based schemes like YYYYMMDD).
         autofill: >
           Look for downloads with version numbers in the filename, or
           version tags in a git repo.
@@ -362,7 +367,8 @@
           be used for releases.
         details: >
           Other version numbering schemes, such as commit IDs (such as
-          git's) or date-based schemes like YYYYMMDD, MAY be used as
+          git commit id or mercurial changeset id)
+          or date-based schemes like YYYYMMDD, MAY be used as
           version numbers, since they are unique.
           Some alternatives can cause problems, because
           users may not be able to easily determine if they are up-to-date.
@@ -399,15 +405,22 @@
           Again, look for git tags (at least on GitHub) that have
           version format, e.g., v?[0-9]+\.[0-9]+\.[0-9]+.*   The
           prefixed 'v' is sometimes used in tags.
-  - Release notes (ChangeLog): !!omap
+  - Release notes: !!omap
     - release_notes:
         category: MUST
         met_url_required: true
+        na_allowed: true
+        na_justification_required: true
         description: >
-          The project MUST provide, in each release, release notes that are
-          a human-readable <i>summary</i> of major changes in that release.
-          The release notes MUST NOT be the output of a version control log
-          (e.g., the "git log" command results are not release notes).
+          The project MUST provide, in each release, release notes that
+          are a human-readable summary of major changes in that release
+          to help users determine if they should upgrade and what the
+          upgrade impact will be. The release notes MUST NOT be the raw
+          output of a version control log (e.g., the "git log" command
+          results are not release notes). Projects whose results are not
+          intended for reuse in multiple locations (such as the software
+          for a single website or service) AND employ continuous delivery
+          MAY select "N/A".
         details: >
           The release notes MAY be implemented in a variety of ways.
           Many projects provide them in a file named "NEWS", "CHANGELOG",
@@ -421,16 +434,22 @@
         rationale: >
           Release notes are important because they help users decide whether
           or not they will want to update, and what the impact would be (e.g.,
-          if the new release fixes vulnerabilities).
+          if the new release fixes vulnerabilities).  We realize this may not
+          apply to projects whose main results are continuously updated and
+          are deployed to primarily one place and so allow "N/A" from
+          such projects.
         autofill: >
           Look for version-controlled files named NEWS, CHANGELOG, or ChangeLog
           (optionally with an extension .txt, .md, or .html).
           Also check to see if it uses a GitHub Releases workflow.
     - release_notes_vulns:
         category: MUST
+        na_allowed: true
+        na_justification_required: true
         description: >
           The release notes MUST identify every publicly known vulnerability
-          that is fixed in each new release.
+          that is fixed in each new release. This is "N/A" if there are no
+          release notes or there have been no publicly known vulnerabilities.
         autofill: >
           Examine the release notes (per above) to see if they include
           CVE identifiers.  Also,

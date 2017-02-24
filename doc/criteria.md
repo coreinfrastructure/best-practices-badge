@@ -37,11 +37,13 @@ These best practices have been created to:
 
 We are currently focused on identifying best practices
 that well-run projects typically already follow.
-We are capturing other practices so that we can create
-[more advanced badges](./other.md) later.
 The best practices, and the more detailed criteria
 specifically defining them, are inspired by a variety of sources.
 See the separate "[background](./background.md)" page for more information.
+
+See the
+[draft criteria for higher/more advanced badges](./other.md) if you
+are interested in possible future criteria.
 
 We expect that these practices and their detailed criteria will be updated,
 even after badges are released.
@@ -215,11 +217,12 @@ There is an implied criterion that we should mention here:
 
 <ul>
 
-<li><a name="version_unique"></a>The project MUST have a unique version number for each release intended to be used by users.
- <sup>[<a href="#version_unique">version_unique</a>]</sup></li>
+<li><a name="version_unique"></a>The project MUST have a unique version identifier for each release intended to be used by users.
+ <sup>[<a href="#version_unique">version_unique</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>This MAY be met in a variety of ways including a commit IDs (such as git commit id or mercurial changeset id) or a version number (including version numbers that use semantic versioning or date-based schemes like YYYYMMDD).
+</dd></dl></li>
 
 <li><a name="version_semver"></a>It is SUGGESTED that the <a href="http://semver.org">Semantic Versioning (SemVer) format</a> be used for releases.
- <sup>[<a href="#version_semver">version_semver</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>Other version numbering schemes, such as commit IDs (such as git's) or date-based schemes like YYYYMMDD, MAY be used as version numbers, since they are unique. Some alternatives can cause problems, because users may not be able to easily determine if they are up-to-date. SemVer may be less helpful for identifying software releases if all recipients only run the latest version (e.g., it is the code for a single website or internet service that is constantly updated via continuous delivery).
+ <sup>[<a href="#version_semver">version_semver</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>Other version numbering schemes, such as commit IDs (such as git commit id or mercurial changeset id) or date-based schemes like YYYYMMDD, MAY be used as version numbers, since they are unique. Some alternatives can cause problems, because users may not be able to easily determine if they are up-to-date. SemVer may be less helpful for identifying software releases if all recipients only run the latest version (e.g., it is the code for a single website or internet service that is constantly updated via continuous delivery).
 </dd><dt><i>Rationale</i>:<dt> <dd>SemVer is widely used to communicate what an update is (e.g., if it involves incompatible API changes), whether something is newer or older.  The scheme is simple, supports multiple simultaneous branches, and because it uses at least three numbers it can be distinguished from floating point. However, many find SemVer less useful for identifying software versions if only one version of the component is run (e.g., it is the code for a single website or internet service that is constantly updated via continuous delivery). For more discussion of the pros and cons of SemVer, see <a href="https://news.ycombinator.com/item?id=13378637">Hacker News' Is Semantic Versioning an Anti-Pattern?</a> and <a href="https://surfingthe.cloud/semantic-versioning-anti-pattern/">The Semantic Versioning Anti-Pattern</a>.
 </dd></dl></li>
 
@@ -227,17 +230,17 @@ There is an implied criterion that we should mention here:
  <sup>[<a href="#version_tags">version_tags</a>]</sup></li>
 </ul>
 
-<b><i>Release notes (ChangeLog)</i></b>
+<b><i>Release notes</i></b>
 
 <ul>
 
-<li><a name="release_notes"></a>The project MUST provide, in each release, release notes that are a human-readable <i>summary</i> of major changes in that release. The release notes MUST NOT be the output of a version control log (e.g., the "git log" command results are not release notes).
- (URL required for "met".) <sup>[<a href="#release_notes">release_notes</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>The release notes MAY be implemented in a variety of ways. Many projects provide them in a file named "NEWS", "CHANGELOG", or "ChangeLog", optionally with extensions such as ".txt", ".md", or ".html".  Historically the term "change log" meant a log of <i>every</i> change, but to meet these criteria what is needed is a human-readable summary.  The release notes MAY instead be provided by version control system mechanisms such as the <a href="https://github.com/blog/1547-release-your-software">GitHub Releases workflow</a>.
-</dd><dt><i>Rationale</i>:<dt> <dd>Release notes are important because they help users decide whether or not they will want to update, and what the impact would be (e.g., if the new release fixes vulnerabilities).
+<li><a name="release_notes"></a>The project MUST provide, in each release, release notes that are a human-readable summary of major changes in that release to help users determine if they should upgrade and what the upgrade impact will be. The release notes MUST NOT be the raw output of a version control log (e.g., the "git log" command results are not release notes). Projects whose results are not intended for reuse in multiple locations (such as the software for a single website or service) AND employ continuous delivery MAY select "N/A".
+ (N/A allowed.) (Justification required for "N/A".) (URL required for "met".) <sup>[<a href="#release_notes">release_notes</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>The release notes MAY be implemented in a variety of ways. Many projects provide them in a file named "NEWS", "CHANGELOG", or "ChangeLog", optionally with extensions such as ".txt", ".md", or ".html".  Historically the term "change log" meant a log of <i>every</i> change, but to meet these criteria what is needed is a human-readable summary.  The release notes MAY instead be provided by version control system mechanisms such as the <a href="https://github.com/blog/1547-release-your-software">GitHub Releases workflow</a>.
+</dd><dt><i>Rationale</i>:<dt> <dd>Release notes are important because they help users decide whether or not they will want to update, and what the impact would be (e.g., if the new release fixes vulnerabilities).  We realize this may not apply to projects whose main results are continuously updated and are deployed to primarily one place and so allow "N/A" from such projects.
 </dd></dl></li>
 
-<li><a name="release_notes_vulns"></a>The release notes MUST identify every publicly known vulnerability that is fixed in each new release.
- <sup>[<a href="#release_notes_vulns">release_notes_vulns</a>]</sup></li>
+<li><a name="release_notes_vulns"></a>The release notes MUST identify every publicly known vulnerability that is fixed in each new release. This is "N/A" if there are no release notes or there have been no publicly known vulnerabilities.
+ (N/A allowed.) (Justification required for "N/A".) <sup>[<a href="#release_notes_vulns">release_notes_vulns</a>]</sup></li>
 </ul>
 
 ### Reporting

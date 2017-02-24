@@ -406,7 +406,7 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
 
       <%= render_status 'version_tags', f, project, is_disabled, true %>
 
-      <h3>Release Notes (ChangeLog)</h3>
+      <h3>Release Notes</h3>
 
       <%= render_status 'release_notes', f, project, is_disabled %>
 
@@ -598,12 +598,27 @@ provided by the delivered project's software.
       <div class="center">
       <% if is_disabled %>
         <% if project.show_entry_license? %>
+          <!-- The user agreed to "3.0 or later", not just 3.0 -->
           This data is available under the
           <a href="https://creativecommons.org/licenses/by/3.0/us"
           target="_blank">Creative Commons Attribution version 3.0 or later
-          license (CC-BY-3.0+)</a>; all are free to share
+          license (CC-BY-3.0+)</a>. All are free to share
           and adapt the data, but must give appropriate credit.
-          Please credit <%= project.user.name %> and
+          Please credit <%= project.user_name %> and
+          the CII Best Practices badge contributors.<br><br>
+        <% else %>
+          <!-- This is older data and the user didn't indicate anything,
+               so the "terms of use" of CII apply, which said that unless
+               otherwise noted it's released under CC-BY-3.0 only. -->
+          This data is available under the
+          <a href="https://creativecommons.org/licenses/by/3.0/us"
+          target="_blank">Creative Commons Attribution version 3.0
+          license (CC-BY-3.0)</a> per the
+          <a href="https://www.coreinfrastructure.org/" target="_blank">Core Infrastructure Initiative</a>
+          <a href="https://www.linuxfoundation.org/terms" target="_blank">terms of use</a>.
+          All are free to share
+          and adapt the data, but must give appropriate credit.
+          Please credit <%= project.user_name %> and
           the CII Best Practices badge contributors.<br><br>
         <% end %>
       <% else %>

@@ -20,11 +20,11 @@ gem 'jquery-rails', '4.2.2' # JavaScript jQuery library (for Rails)
 # gem 'jquery-turbolinks' # Make turbolinks work with jQuery
 gem 'jquery-ui-rails', '6.0.1' # JavaScript jQueryUI library (for Rails)
 gem 'octokit', '4.6.2' # GitHub's official Ruby API
-gem 'omniauth-github', '1.1.2' # Authentication to GitHub (get project info)
+gem 'omniauth-github', '1.2.3' # Authentication to GitHub (get project info)
 gem 'paper_trail', '6.0.2' # Record previous versions of project data
 gem 'pg', '0.19.0' # PostgreSQL database, used for data storage
 gem 'pg_search', '2.0.1' # PostgreSQL full-text search
-gem 'puma', '3.7.0' # Faster webserver; recommended by Heroku
+gem 'puma', '3.7.1' # Faster webserver; recommended by Heroku
 gem 'rails', '5.0.1' # Our web framework
 gem 'redcarpet', '3.4.0' # Process markdown in form textareas (justifications)
 gem 'sass-rails', '5.0.6'
@@ -67,12 +67,12 @@ end
 group :test do
   gem 'capybara-slow_finder_errors', '0.1.4' # warn if test waits for timeout
   gem 'chromedriver-helper', '1.0.0'
-  gem 'codecov', '0.1.9', require: false
+  gem 'codecov', '0.1.10', require: false
   gem 'minitest-rails-capybara', '3.0.0', require: false
   gem 'minitest-retry', '0.1.8', require: false # Avoid Capybara false positives
   gem 'poltergeist', '1.13.0', require: false
   gem 'rails-controller-testing', '1.0.1'
-  gem 'selenium-webdriver', '3.0.8', require: false
+  gem 'selenium-webdriver', '3.1.0', require: false
   gem 'simplecov', '0.13.0', require: false
   gem 'webmock', '2.3.2', require: false
 end

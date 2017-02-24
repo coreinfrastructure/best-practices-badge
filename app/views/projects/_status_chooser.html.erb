@@ -1,3 +1,4 @@
+<% cache criterion do %>
     <div id="<%= criterion.to_s %>" class="row">
     <% # raise unless criterion.to_s && criterion.name %>
       <% status_symbol = (criterion.to_s + "_status").to_sym %>
@@ -111,3 +112,4 @@
       <% end %>
       </div>
     </div>
+<% end %>

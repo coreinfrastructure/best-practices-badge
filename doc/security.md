@@ -213,6 +213,10 @@ applying secure design principles,
 limiting memory-unsafe language use, and
 increasing availability through scaleability.
 
+See the [implementation][./implementation.md] file to
+see a more detailed discussion of the software design, including a
+diagram of its high-level architecture and its trust boundary.
+
 ### <a name="simple-design"></a>Simple design
 
 This web application has a simple design.

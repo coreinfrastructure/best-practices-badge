@@ -478,6 +478,8 @@ and how we attempt to reduce their risks in BadgeApp.
 8. Cross-Site Request Forgery (CSRF).
    We use the built-in Rails CSRF countermeasure, where csrf tokens
    are included in replies and checked on POST inputs.
+   We also set cookies with SameSite=Lax, which automatically counters
+   CSRF on supported browsers (such as Chrome).
    Our restrictive Content Security Policy (CSP) helps here, too.
    For more information, see the page on
    [request forgery protection](http://api.rubyonrails.org/classes/ActionController/RequestForgeryProtection.html).
@@ -653,6 +655,12 @@ these attempt to thwart or slow attack even if the system has a vulnerability.
   The HTTP headers are hardened via the
   [secure_headers](https://github.com/twitter/secureheaders) gem,
   developed by Twitter to enable a number of HTTP headers for hardening.
+* Cookies have various restrictions (also via the
+  [secure_headers](https://github.com/twitter/secureheaders) gem).
+  They have httponly=true (which counters many JavaScript-based attacks),
+  secure=true (which is irrelevant because we always use HTTPS but it
+  can't hurt), and SameSite=Lax (which counters CSRF attacks on
+  web browsers that support it).
 * We force the use of HTTPS, including via HSTS.
   The "coreinfrastructure.org" domain is included in
   [Chrome's HTTP Strict Transport Security (HSTS) preload list](https://hstspreload.org/?domain=coreinfrastructure.org).

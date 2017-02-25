@@ -19,6 +19,18 @@ SecureHeaders::Configuration.default do |config|
     object_src: normal_src,
     style_src: normal_src
   }
+  config.cookies = {
+    secure: true, # mark all cookies as Secure
+    # NOTE: The following marks all cookies as HttpOnly.  This will need
+    # need to change if there's more JavaScript-based interaction.
+    httponly: true,
+    # Use SameSite to counter CSRF attacks when browser supports it
+    # https://www.sjoerdlangkemper.nl/2016/04/14/
+    # preventing-csrf-with-samesite-cookie-attribute/
+    samesite: {
+      strict: false # mark all cookies as SameSite=Lax (not Strict)
+    }
+  }
   # Not using Public Key Pinning Extension for HTTP (HPKP).
   # Yes, it can counter some attacks, but it can also cause a lot of problems;
   # one wrong move can render the site useless, and it makes it hard to

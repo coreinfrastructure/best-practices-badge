@@ -600,6 +600,14 @@ as of 2015-12-14:
    uses email; that has its weaknesses,
    but the data is sufficiently low value, and there aren't
    good alternatives for low value data like this.
+   This isn't as bad as it might appear, because we prefer encrypted
+   channels for transmitting all emails. Our application attempts to send
+   messages to its MTA using TLS (using enable_starttls_auto: true),
+   and that MTA (SendGrid) then attempts to transfer the email the rest
+   of the way using TLS if the recipient's email system supports it
+   (see <https://sendgrid.com/docs/Glossary/tls.html>).
+   Many widely-used 
+   This is decent protection against passive attacks.
    If users don't like that, they can log in via GitHub and use GitHub's
    forgotten password system.
    The file config/initializers/filter_parameter_logging.rb

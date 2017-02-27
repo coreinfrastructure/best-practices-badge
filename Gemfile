@@ -15,7 +15,7 @@ gem 'fastly-rails', '0.8.0'
 gem 'font-awesome-rails', '4.7.0.1'
 gem 'github_api', '0.14.5'
 gem 'imagesLoaded_rails', '4.1.0' # JavaScript - enable wait for image load
-gem 'jbuilder', '2.6.1'
+gem 'jbuilder', '2.6.3'
 gem 'jquery-rails', '4.2.2' # JavaScript jQuery library (for Rails)
 # gem 'jquery-turbolinks' # Make turbolinks work with jQuery
 gem 'jquery-ui-rails', '6.0.1' # JavaScript jQueryUI library (for Rails)

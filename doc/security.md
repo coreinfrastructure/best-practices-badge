@@ -643,7 +643,7 @@ as of 2015-12-14:
    and that MTA (SendGrid) then attempts to transfer the email the rest
    of the way using TLS if the recipient's email system supports it
    (see <https://sendgrid.com/docs/Glossary/tls.html>).
-   Many widely-used 
+   Many widely-used
    This is decent protection against passive attacks.
    If users don't like that, they can log in via GitHub and use GitHub's
    forgotten password system.

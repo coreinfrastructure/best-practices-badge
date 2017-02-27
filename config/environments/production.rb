@@ -115,6 +115,10 @@ Rails.application.configure do
       'Cache-Control' => 'public, s-maxage=3600, max-age=3600'
     }
 
+  # Enable Rack's built-in compression mechanism; this is important for people
+  # with slow network connections
+  config.middleware.use Rack::Deflater
+
   # As a failsafe, trigger an exception if the response just hangs for
   # too long.  We only do this in production, because it's not
   # supposed to happen in normal use - this is simply an automatic

@@ -384,6 +384,12 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
       <% else %>
         <%= f.text_area :general_comments, class:"form-control",  hide_label: true, placeholder:'Additional Comments (in markdown)', disabled: is_disabled %>
       <% end %>
+      <% unless is_disabled %>
+        <div class="panel-footer text-center">
+          <%= f.submit 'Save (and continue)', name: 'continue', class:"btn btn-primary btn-submit" %>
+          <%= f.submit 'Submit (and exit)', class:"btn btn-primary btn-submit" %>
+        </div>
+      <% end %>
      </div>
     </div>
 
@@ -424,6 +430,12 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
             <%= render_status 'release_notes_vulns', f, project, is_disabled, true %>
           </li>
         </ul>
+        <% unless is_disabled %>
+          <div class="panel-footer text-center">
+            <%= f.submit 'Save (and continue)', name: 'continue', class:"btn btn-primary btn-submit" %>
+            <%= f.submit 'Submit (and exit)', class:"btn btn-primary btn-submit" %>
+          </div>
+        <% end %>
       </div>
     </div>
 
@@ -461,6 +473,12 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
                               f, project, is_disabled, true %>
           </li>
         </ul>
+        <% unless is_disabled %>
+          <div class="panel-footer text-center">
+            <%= f.submit 'Save (and continue)', name: 'continue', class:"btn btn-primary btn-submit" %>
+            <%= f.submit 'Submit (and exit)', class:"btn btn-primary btn-submit" %>
+          </div>
+        <% end %>
       </div>
     </div>
 
@@ -514,6 +532,12 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
             <%= render_status 'warnings_strict', f, project, is_disabled, true %>
           </li>
         </ul>
+        <% unless is_disabled %>
+          <div class="panel-footer text-center">
+            <%= f.submit 'Save (and continue)', name: 'continue', class:"btn btn-primary btn-submit" %>
+            <%= f.submit 'Submit (and exit)', class:"btn btn-primary btn-submit" %>
+          </div>
+        <% end %>
       </div>
     </div>
 
@@ -587,6 +611,12 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
 
           </li>
         </ul>
+        <% unless is_disabled %>
+          <div class="panel-footer text-center">
+            <%= f.submit 'Save (and continue)', name: 'continue', class:"btn btn-primary btn-submit" %>
+            <%= f.submit 'Submit (and exit)', class:"btn btn-primary btn-submit" %>
+          </div>
+        <% end %>
       </div>
     </div>
 
@@ -625,6 +655,12 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
 
           </li>
         </ul>
+        <% unless is_disabled %>
+          <div class="panel-footer text-center">
+            <%= f.submit 'Save (and continue)', name: 'continue', class:"btn btn-primary btn-submit" %>
+            <%= f.submit 'Submit (and exit)', class:"btn btn-primary btn-submit" %>
+          </div>
+        <% end %>
       </div>
     </div>
 
@@ -657,6 +693,13 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
         <%= render_status 'hardened_site', f, project, is_disabled %>
 
         <%= render_status 'hardening', f, project, is_disabled, true %>
+
+        <% unless is_disabled %>
+          <div class="panel-footer text-center">
+            <%= f.submit 'Save (and continue)', name: 'continue', class:"btn btn-primary btn-submit" %>
+            <%= f.submit 'Submit (and exit)', class:"btn btn-primary btn-submit" %>
+          </div>
+        <% end %>
       </div>
     </div>
   </div>

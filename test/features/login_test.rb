@@ -30,7 +30,7 @@ class LoginTest < CapybaraFeatureTest
     kill_sticky_headers # This is necessary for Chrome and Firefox
 
     fill_in 'project_name', with: 'It doesnt matter'
-    click_on 'Save (and continue)'
+    click_on('Save (and continue)', match: :first)
     assert_equal current_path, edit_project_path(@project)
     assert has_content? 'Project was successfully updated.'
     ensure_choice 'project_discussion_status_unmet'
@@ -60,7 +60,7 @@ class LoginTest < CapybaraFeatureTest
     ensure_choice 'project_report_process_status_unmet'
     assert_match X, find('#report_process_enough')['src']
 
-    click_on 'Submit'
+    click_on('Submit', match: :first)
     assert_match X, find('#discussion_enough')['src']
   end
   # rubocop:enable Metrics/BlockLength

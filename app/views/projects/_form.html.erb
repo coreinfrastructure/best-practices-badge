@@ -89,72 +89,66 @@ There is also a
 
 <br><br><br>
 
-  <!-- Nav tabs -->
-  <ul class="nav nav-tabs subnav">
-    <li class="active"><a href="#projectbasics" data-toggle="tab"><h3 class="tab-title">Basics</h3></a></li>
-    <li><a href="#changecontrol" data-toggle="tab"><h3 class="tab-title">Change Control</h3></a></li>
-    <li><a href="#reporting" data-toggle="tab"><h3 class="tab-title">Reporting</h3></a></li>
-    <li><a href="#quality" data-toggle="tab"><h3 class="tab-title">Quality</h3></a></li>
-    <li><a href="#security" data-toggle="tab"><h3 class="tab-title">Security</h3></a></li>
-    <li><a href="#analysis" data-toggle="tab"><h3 class="tab-title">Analysis</h3></a></li>
-    <li><a href="#future" data-toggle="tab"><h3 class="tab-title">Future</h3></a></li>
-  </ul>
-
-  <div class="tab-content well well-lg well-color">
-  <div class="tab-pane active" id="projectbasics">
-<br>
-    <h3>Identification</h3>
-
-      <div class="hidable-text-entry">
-      <span>What is the human-readable name of the project?</span>
-<%= render(partial: "details", locals: {
-           criterion: "project_name", details: %{
+  <div class="panel-group well well-lg well-color">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 class="panel-title">
+          <a class="open-by-default" href="#projectbasics">Basics</a>
+        </h4>
+      </div>
+      <div class="panel-collapse collapse in" id="projectbasics">
+        <ul class="list-group">
+          <li class="list-group-item"><h3>Identification</h3>
+            <div class="hidable-text-entry">
+            <span>What is the human-readable name of the project?</span>
+            <%= render(partial: "details", locals: {
+                       criterion: "project_name", details: %{
 Note that other projects may use the same name.
 }}) %>
-      <%= f.text_field :name, hide_label: true, class:"form-control", placeholder:'FLOSS Project Name', disabled: is_disabled %>
-      </div>
+            <%= f.text_field :name, hide_label: true, class:"form-control", placeholder:'FLOSS Project Name', disabled: is_disabled %>
+            </div>
 
-      <div class="hidable-text-entry">
-      <span>What is a brief description of the project?</span>
-      <% if is_disabled %>
-        <div class="discussion-markdown">
-          <%= markdown(project[:description]) %>
-        </div>
-      <% else %>
-        <%= render(partial: "details", locals: {
-           criterion: "description", details: %{
+            <div class="hidable-text-entry">
+            <span>What is a brief description of the project?</span>
+            <% if is_disabled %>
+              <div class="discussion-markdown">
+                <%= markdown(project[:description]) %>
+              </div>
+            <% else %>
+              <%= render(partial: "details", locals: {
+                   criterion: "description", details: %{
 Include key comments about the project.  Use markdown.
 This information is used when displaying badge information.
 }}) %>
-      <%= f.text_area :description, class:"form-control", hide_label: true, placeholder:'Project Description', disabled: is_disabled %>
-      <% end %>
-      </div>
+            <%= f.text_area :description, class:"form-control", hide_label: true, placeholder:'Project Description', disabled: is_disabled %>
+            <% end %>
+            </div>
 
-      <div class="hidable-text-entry">
-      <span>What is the URL for the project (as a whole)?</span>
-      <% if is_disabled %>
-        <div class="discussion-markdown">
-           <%= link_to_if project.contains_url?(project.homepage_url), project.homepage_url, project.homepage_url, rel: 'nofollow' %>
-        </div>
-      <% else %>
-        <%= f.text_field :homepage_url, hide_label: true, class: "form-control", placeholder:'Project Website URL', label: "Project URL", disabled: is_disabled %>
-      <% end %>
-      </div>
+            <div class="hidable-text-entry">
+            <span>What is the URL for the project (as a whole)?</span>
+            <% if is_disabled %>
+              <div class="discussion-markdown">
+                 <%= link_to_if project.contains_url?(project.homepage_url), project.homepage_url, project.homepage_url, rel: 'nofollow' %>
+              </div>
+            <% else %>
+              <%= f.text_field :homepage_url, hide_label: true, class: "form-control", placeholder:'Project Website URL', label: "Project URL", disabled: is_disabled %>
+            <% end %>
+            </div>
 
-      <div class="hidable-text-entry">
-      <span>What is the URL for the version control repository
-            (it may be the same as the project URL)?</span>
-      <% if is_disabled %>
-        <div class="discussion-markdown">
-           <%= link_to_if project.contains_url?(project.repo_url), project.repo_url, project.repo_url, rel: 'nofollow' %>
-        </div>
-      <% else %>
-        <%= f.text_field :repo_url, class:"form-control", hide_label: true, placeholder:'Project Repo URL', disabled: is_disabled %>
-      <% end %>
-      </div>
+            <div class="hidable-text-entry">
+            <span>What is the URL for the version control repository
+                  (it may be the same as the project URL)?</span>
+            <% if is_disabled %>
+              <div class="discussion-markdown">
+                 <%= link_to_if project.contains_url?(project.repo_url), project.repo_url, project.repo_url, rel: 'nofollow' %>
+              </div>
+            <% else %>
+              <%= f.text_field :repo_url, class:"form-control", hide_label: true, placeholder:'Project Repo URL', disabled: is_disabled %>
+            <% end %>
+            </div>
 
-      <div class="hidable-text-entry">
-      <span>What programming language(s) are used to implement the project?</span>
+            <div class="hidable-text-entry">
+            <span>What programming language(s) are used to implement the project?</span>
 <%= render(partial: "details", locals: {
            criterion: "implementation_languages", details: %{
 If there is more than one language, list them as comma-separated values
@@ -164,205 +158,211 @@ If there is no language (e.g., this is a documentation-only or test-only
 project), use the single character "-".
 Please use a conventional capitalization for each language, e.g., "JavaScript".
 }}) %>
-      <%= f.text_field :implementation_languages, hide_label: true, class:"form-control", placeholder:'Implementation language(s) used as a comma-separated list, sorted by amount of use', list: 'implementation_language_list', disabled: is_disabled %>
-     <!-- Some examples from http://wiki.spdx.org/view/FileNoticeExamples -->
-     <div class="hidden">
-     <datalist id="implementation_language_list">
-      <select>
-        <option value="-">- (None)</option>
-        <option value="4th Dimension/4D">4th Dimension/4D</option>
-        <option value="ABAP">ABAP</option>
-        <option value="ABC">ABC</option>
-        <option value="ActionScript">ActionScript</option>
-        <option value="Ada">Ada</option>
-        <option value="Alice">Alice</option>
-        <option value="Apex">Apex</option>
-        <option value="APL">APL</option>
-        <option value="Assembly language">Assembly language</option>
-        <option value="AutoLISP">AutoLISP</option>
-        <option value="Awk">Awk</option>
-        <option value="Bash">Bash (bash-specific)</option>
-        <option value="bc">bc</option>
-        <option value="BlitzMax">BlitzMax</option>
-        <option value="Bourne shell">Bourne shell (portable)</option>
-        <option value="C">C</option>
-        <option value="C#">C#</option>
-        <option value="C++">C++</option>
-        <option value="CFML">CFML</option>
-        <option value="cg">cg</option>
-        <option value="Clojure">Clojure</option>
-        <option value="CL (OS/400)">CL (OS/400)</option>
-        <option value="COBOL">COBOL</option>
-        <option value="Common Lisp">Common Lisp</option>
-        <option value="Crystal">Crystal</option>
-        <option value="C shell">C shell</option>
-        <option value="D">D</option>
-        <option value="Dart">Dart</option>
-        <option value="Delphi">Delphi</option>
-        <option value="Eiffel">Eiffel</option>
-        <option value="Elixir">Elixir</option>
-        <option value="Elm">Elm</option>
-        <option value="Emacs Lisp">Emacs Lisp</option>
-        <option value="Erlang">Erlang</option>
-        <option value="F#">F#</option>
-        <option value="Factor">Factor</option>
-        <option value="Forth">Forth</option>
-        <option value="Fortran">Fortran</option>
-        <option value="FoxPro">FoxPro</option>
-        <option value="Go">Go</option>
-        <option value="Groovy">Groovy</option>
-        <option value="Hack">Hack</option>
-        <option value="Haskell">Haskell</option>
-        <option value="Icon">Icon</option>
-        <option value="IDL">IDL</option>
-        <option value="Inform 6">Inform 6</option>
-        <option value="Inform 7">Inform 7</option>
-        <option value="Io">Io</option>
-        <option value="J">J</option>
-        <option value="Java">Java</option>
-        <option value="JavaScript">JavaScript</option>
-        <option value="Julia">Julia</option>
-        <option value="Korn shell">Korn shell</option>
-        <option value="Kotlin">Kotlin</option>
-        <option value="LabVIEW">LabVIEW</option>
-        <option value="Ladder Logic">Ladder Logic</option>
-        <option value="Lisp">Lisp (other than Common Lisp, Scheme, Emacs Lisp, or Clojure)</option>
-        <option value="Logo">Logo</option>
-        <option value="Lua">Lua</option>
-        <option value="Maple">Maple</option>
-        <option value="MATLAB">MATLAB</option>
-        <option value="ML">ML</option>
-        <option value="MQL4">MQL4</option>
-        <option value="NATURAL">NATURAL</option>
-        <option value="NXT-G">NXT-G</option>
-        <option value="Objective-C">Objective-C</option>
-        <option value="OCaml">OCaml</option>
-        <option value="OpenCL">OpenCL</option>
-        <option value="Oz">Oz</option>
-        <option value="Perl">Perl</option>
-        <option value="PHP">PHP</option>
-        <option value="PL/I">PL/I</option>
-        <option value="PL/SQL">PL/SQL</option>
-        <option value="PostScript">PostScript</option>
-        <option value="PowerShell">PowerShell</option>
-        <option value="Prolog">Prolog</option>
-        <option value="Python">Python</option>
-        <option value="Q">Q</option>
-        <option value="R">R</option>
-        <option value="REXX">REXX</option>
-        <option value="RPG (OS/400)">RPG (OS/400)</option>
-        <option value="Ruby">Ruby</option>
-        <option value="Rust">Rust</option>
-        <option value="SAS">SAS</option>
-        <option value="Scala">Scala</option>
-        <option value="Scheme">Scheme</option>
-        <option value="Scratch">Scratch</option>
-        <option value="Simulink">Simulink</option>
-        <option value="Smalltalk">Smalltalk</option>
-        <option value="SPARK">SPARK</option>
-        <option value="SPSS">SPSS</option>
-        <option value="Standard ML">Standard ML</option>
-        <option value="Stata">Stata</option>
-        <option value="Swift">Swift</option>
-        <option value="Tcl">Tcl</option>
-        <option value="Transact-SQL">Transact-SQL</option>
-        <option value="VBScript">VBScript</option>
-        <option value="Verilog ">Verilog </option>
-        <option value="VHDL">VHDL</option>
-        <option value="Visual Basic">Visual Basic (not .NET)</option>
-        <option value="Visual Basic .NET">Visual Basic .NET</option>
-      </select>
-     </datalist></div>
-      <br>
-      <hr>
-      </div>
+            <%= f.text_field :implementation_languages, hide_label: true, class:"form-control", placeholder:'Implementation language(s) used as a comma-separated list, sorted by amount of use', list: 'implementation_language_list', disabled: is_disabled %>
+           <!-- Some examples from http://wiki.spdx.org/view/FileNoticeExamples -->
+           <div class="hidden">
+           <datalist id="implementation_language_list">
+            <select>
+              <option value="-">- (None)</option>
+              <option value="4th Dimension/4D">4th Dimension/4D</option>
+              <option value="ABAP">ABAP</option>
+              <option value="ABC">ABC</option>
+              <option value="ActionScript">ActionScript</option>
+              <option value="Ada">Ada</option>
+              <option value="Alice">Alice</option>
+              <option value="Apex">Apex</option>
+              <option value="APL">APL</option>
+              <option value="Assembly language">Assembly language</option>
+              <option value="AutoLISP">AutoLISP</option>
+              <option value="Awk">Awk</option>
+              <option value="Bash">Bash (bash-specific)</option>
+              <option value="bc">bc</option>
+              <option value="BlitzMax">BlitzMax</option>
+              <option value="Bourne shell">Bourne shell (portable)</option>
+              <option value="C">C</option>
+              <option value="C#">C#</option>
+              <option value="C++">C++</option>
+              <option value="CFML">CFML</option>
+              <option value="cg">cg</option>
+              <option value="Clojure">Clojure</option>
+              <option value="CL (OS/400)">CL (OS/400)</option>
+              <option value="COBOL">COBOL</option>
+              <option value="Common Lisp">Common Lisp</option>
+              <option value="Crystal">Crystal</option>
+              <option value="C shell">C shell</option>
+              <option value="D">D</option>
+              <option value="Dart">Dart</option>
+              <option value="Delphi">Delphi</option>
+              <option value="Eiffel">Eiffel</option>
+              <option value="Elixir">Elixir</option>
+              <option value="Elm">Elm</option>
+              <option value="Emacs Lisp">Emacs Lisp</option>
+              <option value="Erlang">Erlang</option>
+              <option value="F#">F#</option>
+              <option value="Factor">Factor</option>
+              <option value="Forth">Forth</option>
+              <option value="Fortran">Fortran</option>
+              <option value="FoxPro">FoxPro</option>
+              <option value="Go">Go</option>
+              <option value="Groovy">Groovy</option>
+              <option value="Hack">Hack</option>
+              <option value="Haskell">Haskell</option>
+              <option value="Icon">Icon</option>
+              <option value="IDL">IDL</option>
+              <option value="Inform 6">Inform 6</option>
+              <option value="Inform 7">Inform 7</option>
+              <option value="Io">Io</option>
+              <option value="J">J</option>
+              <option value="Java">Java</option>
+              <option value="JavaScript">JavaScript</option>
+              <option value="Julia">Julia</option>
+              <option value="Korn shell">Korn shell</option>
+              <option value="Kotlin">Kotlin</option>
+              <option value="LabVIEW">LabVIEW</option>
+              <option value="Ladder Logic">Ladder Logic</option>
+              <option value="Lisp">Lisp (other than Common Lisp, Scheme, Emacs Lisp, or Clojure)</option>
+              <option value="Logo">Logo</option>
+              <option value="Lua">Lua</option>
+              <option value="Maple">Maple</option>
+              <option value="MATLAB">MATLAB</option>
+              <option value="ML">ML</option>
+              <option value="MQL4">MQL4</option>
+              <option value="NATURAL">NATURAL</option>
+              <option value="NXT-G">NXT-G</option>
+              <option value="Objective-C">Objective-C</option>
+              <option value="OCaml">OCaml</option>
+              <option value="OpenCL">OpenCL</option>
+              <option value="Oz">Oz</option>
+              <option value="Perl">Perl</option>
+              <option value="PHP">PHP</option>
+              <option value="PL/I">PL/I</option>
+              <option value="PL/SQL">PL/SQL</option>
+              <option value="PostScript">PostScript</option>
+              <option value="PowerShell">PowerShell</option>
+              <option value="Prolog">Prolog</option>
+              <option value="Python">Python</option>
+              <option value="Q">Q</option>
+              <option value="R">R</option>
+              <option value="REXX">REXX</option>
+              <option value="RPG (OS/400)">RPG (OS/400)</option>
+              <option value="Ruby">Ruby</option>
+              <option value="Rust">Rust</option>
+              <option value="SAS">SAS</option>
+              <option value="Scala">Scala</option>
+              <option value="Scheme">Scheme</option>
+              <option value="Scratch">Scratch</option>
+              <option value="Simulink">Simulink</option>
+              <option value="Smalltalk">Smalltalk</option>
+              <option value="SPARK">SPARK</option>
+              <option value="SPSS">SPSS</option>
+              <option value="Standard ML">Standard ML</option>
+              <option value="Stata">Stata</option>
+              <option value="Swift">Swift</option>
+              <option value="Tcl">Tcl</option>
+              <option value="Transact-SQL">Transact-SQL</option>
+              <option value="VBScript">VBScript</option>
+              <option value="Verilog ">Verilog </option>
+              <option value="VHDL">VHDL</option>
+              <option value="Visual Basic">Visual Basic (not .NET)</option>
+              <option value="Visual Basic .NET">Visual Basic .NET</option>
+            </select>
+           </datalist></div>
+            <br>
+            <hr>
+            </div>
 
 <!-- TODO: MUST have a project or repo URL, SUGGESTED to use HTTPS.
      However, first is implied by "description_good",
      and the MITM stuff notes https as a way to implement it. -->
 
-      <div class="hidable-text-entry">
-      <span>What is the
-            <a href="https://nvd.nist.gov/cpe.cfm">Common Platform Enumeration (CPE)</a>
-            name for the project (if it has one)?</span>
-       <%= render(partial: "details", locals: {
-           criterion: "cpe", details: %{
-            The <a href="https://nvd.nist.gov/cpe.cfm">Common Platform Enumeration (CPE)</a>
-            is a structured naming scheme for information technology systems,
-            software, and packages.  It is used in a number of systems and
-            databases when reporting vulnerabilities.
+            <div class="hidable-text-entry">
+            <span>What is the
+                  <a href="https://nvd.nist.gov/cpe.cfm">Common Platform Enumeration (CPE)</a>
+                  name for the project (if it has one)?</span>
+            <%= render(partial: "details", locals: {
+                 criterion: "cpe", details: %{
+The <a href="https://nvd.nist.gov/cpe.cfm">Common Platform Enumeration (CPE)</a>
+is a structured naming scheme for information technology systems,
+software, and packages.  It is used in a number of systems and
+databases when reporting vulnerabilities.
 }}) %>
-      <%= f.text_field :cpe, hide_label: true, class:"form-control", placeholder:'(Optional) CPE name', disabled: is_disabled %>
-      </div>
+            <%= f.text_field :cpe, hide_label: true, class:"form-control", placeholder:'(Optional) CPE name', disabled: is_disabled %>
+            </div>
+          </li>
 
-  <br>
    <%# Note: render() accepts met_suppress: ..., unmet_placeholder:  ... %>
 
-    <h3>Basic Project Website Content</h3>
-      <%= render_status 'description_good', f, project, is_disabled %>
+          <li class="list-group-item"><h3>Basic Project Website Content</h3>
+            <%= render_status 'description_good', f, project, is_disabled %>
 
-      <%= render_status 'interact', f, project, is_disabled %>
+            <%= render_status 'interact', f, project, is_disabled %>
 
-      <%= render_status 'contribution', f, project, is_disabled %>
+            <%= render_status 'contribution', f, project, is_disabled %>
 
-      <%= render_status 'contribution_requirements', f, project, is_disabled, true %>
+            <%= render_status 'contribution_requirements', f, project, is_disabled, true %>
+          </li>
+          <li class="list-group-item"><h3>FLOSS License</h3>
 
-      <h3>FLOSS License</h3>
-
-      <div class="hidable-text-entry">
-      <span>What license(s) is the project released under?</span>
-      <%= render(partial: "details", locals: {
-           criterion: "license", details: %{
+            <div class="hidable-text-entry">
+            <span>What license(s) is the project released under?</span>
+            <%= render(partial: "details", locals: {
+                 criterion: "license", details: %{
 Please use <a href="https://spdx.org/licenses/">SPDX license expression format</a>; examples include "Apache-2.0", "BSD-2-Clause", "BSD-3-Clause", "GPL-2.0+", "LGPL-3.0+", "MIT", and "(BSD-2-Clause OR Ruby)".
 }}) %>
-      <%= f.text_field :license, class:"form-control", hide_label: true, placeholder:'FLOSS License', list: "license_list", disabled: is_disabled %>
-     <!-- Some examples from http://wiki.spdx.org/view/FileNoticeExamples -->
-     <div class="hidden">
-     <datalist id="license_list">
-      <select>
-        <option value="Apache-2.0">Apache-2.0 {Apache License 2.0}</option>
-        <option value="BSD-3-Clause">BSD-3-Clause {BSD 3-clause "New" or "Revised" License}</option>
-        <option value="BSD-2-Clause">BSD-2-Clause {BSD 2-clause "Simplified" License}</option>
-        <option value="BSD-2-Clause-FreeBSD">BSD-2-Clause-FreeBSD {BSD 2-clause FreeBSD License}</option>
-        <option value="CC0-1.0">CC0-1.0 {Creative Commons Zero v1.0 Universal}</option>
-        <option value="GPL-2.0">GPL-2.0 {GNU General Public License version 2.0 only}</option>
-        <option value="GPL-2.0+">GPL-2.0+ {GNU General Public License version 2.0 or later}</option>
-        <option value="GPL-3.0">GPL-3.0 {GNU General Public License version 3.0 only}</option>
-        <option value="GPL-3.0+">GPL-3.0+ {GNU General Public License version 3.0 or later}</option>
-        <option value="LGPL-2.1+">LGPL-2.1 {GNU Lesser General Public License version 2.1 only}</option>
-        <option value="LGPL-2.1+">LGPL-2.1+ {GNU Lesser General Public License version 2.1 or later}</option>
-        <option value="LGPL-3.0+">LGPL-3.0 {GNU Lesser General Public License version 3.0 only}</option>
-        <option value="LGPL-3.0+">LGPL-3.0+ {GNU Lesser General Public License version 3.0 or later}</option>
-        <option value="MIT">MIT</option>
-        <option value="(GPL-3.0+ WITH Bison-Exception)">(GPL-3.0+ WITH Bison-Exception)</option>
-        <option value="(LGPL-2.0+ AND AML)">(LGPL-2.0+ AND AML) {must meet both the GNU Lesser General Public License version 2.1 or later AND the Apple MIT License}</option>
-        <option value="(MPL-1.1 OR GPL-2.0+ OR LGPL-2.1+)">(MPL-1.1 OR GPL-2.0+ OR LGPL-2.1+)</option>
-        <option value="(Ruby OR BSD-2-Clause)">(Ruby OR BSD-2-Clause)</option>
-      </select>
-     </datalist></div>
-      <br>
-      <hr>
-     </div>
+            <%= f.text_field :license, class:"form-control", hide_label: true, placeholder:'FLOSS License', list: "license_list", disabled: is_disabled %>
+           <!-- Some examples from http://wiki.spdx.org/view/FileNoticeExamples -->
+           <div class="hidden">
+           <datalist id="license_list">
+            <select>
+              <option value="Apache-2.0">Apache-2.0 {Apache License 2.0}</option>
+              <option value="BSD-3-Clause">BSD-3-Clause {BSD 3-clause "New" or "Revised" License}</option>
+              <option value="BSD-2-Clause">BSD-2-Clause {BSD 2-clause "Simplified" License}</option>
+              <option value="BSD-2-Clause-FreeBSD">BSD-2-Clause-FreeBSD {BSD 2-clause FreeBSD License}</option>
+              <option value="CC0-1.0">CC0-1.0 {Creative Commons Zero v1.0 Universal}</option>
+              <option value="GPL-2.0">GPL-2.0 {GNU General Public License version 2.0 only}</option>
+              <option value="GPL-2.0+">GPL-2.0+ {GNU General Public License version 2.0 or later}</option>
+              <option value="GPL-3.0">GPL-3.0 {GNU General Public License version 3.0 only}</option>
+              <option value="GPL-3.0+">GPL-3.0+ {GNU General Public License version 3.0 or later}</option>
+              <option value="LGPL-2.1+">LGPL-2.1 {GNU Lesser General Public License version 2.1 only}</option>
+              <option value="LGPL-2.1+">LGPL-2.1+ {GNU Lesser General Public License version 2.1 or later}</option>
+              <option value="LGPL-3.0+">LGPL-3.0 {GNU Lesser General Public License version 3.0 only}</option>
+              <option value="LGPL-3.0+">LGPL-3.0+ {GNU Lesser General Public License version 3.0 or later}</option>
+              <option value="MIT">MIT</option>
+              <option value="(GPL-3.0+ WITH Bison-Exception)">(GPL-3.0+ WITH Bison-Exception)</option>
+              <option value="(LGPL-2.0+ AND AML)">(LGPL-2.0+ AND AML) {must meet both the GNU Lesser General Public License version 2.1 or later AND the Apple MIT License}</option>
+              <option value="(MPL-1.1 OR GPL-2.0+ OR LGPL-2.1+)">(MPL-1.1 OR GPL-2.0+ OR LGPL-2.1+)</option>
+              <option value="(Ruby OR BSD-2-Clause)">(Ruby OR BSD-2-Clause)</option>
+            </select>
+           </datalist></div>
+            <br>
+            <hr>
+           </div>
 
-      <%= render_status 'floss_license', f, project, is_disabled %>
+            <%= render_status 'floss_license', f, project, is_disabled %>
 
-      <%= render_status 'floss_license_osi', f, project, is_disabled %>
+            <%= render_status 'floss_license_osi', f, project, is_disabled %>
 
-      <%= render_status 'license_location', f, project, is_disabled, true %>
+            <%= render_status 'license_location', f, project, is_disabled, true %>
+          </li>
 
-      <h3>Documentation</h3>
+          <li class="list-group-item"><h3>Documentation</h3>
 
-      <%= render_status 'documentation_basics', f, project, is_disabled %>
+            <%= render_status 'documentation_basics', f, project, is_disabled %>
 
-      <%= render_status 'documentation_interface', f, project, is_disabled, true %>
+            <%= render_status 'documentation_interface', f, project, is_disabled, true %>
 
-      <h3>Other</h3>
+          </li>
 
-      <%= render_status 'sites_https', f, project, is_disabled %>
+          <li class="list-group-item"><h3>Other</h3>
 
-      <%= render_status 'discussion', f, project, is_disabled %>
+            <%= render_status 'sites_https', f, project, is_disabled %>
 
-      <%= render_status 'english', f, project, is_disabled, true %>
+            <%= render_status 'discussion', f, project, is_disabled %>
+
+            <%= render_status 'english', f, project, is_disabled, true %>
+
+          </li>
+        </ul>
 
       <div class="row">
       <div class="col-xs-12">
@@ -384,216 +384,282 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
       <% else %>
         <%= f.text_area :general_comments, class:"form-control",  hide_label: true, placeholder:'Additional Comments (in markdown)', disabled: is_disabled %>
       <% end %>
-</div>
-
-      <div class="tab-pane" id="changecontrol">
-      <br>
-      <h3>Public version-controlled source repository</h3>
-
-      <%= render_status 'repo_public', f, project, is_disabled %>
-
-      <%= render_status 'repo_track', f, project, is_disabled %>
-
-      <%= render_status 'repo_interim', f, project, is_disabled %>
-
-      <%= render_status 'repo_distributed', f, project, is_disabled, true %>
-
-      <h3>Version numbering</h3>
-
-      <%= render_status 'version_unique', f, project, is_disabled %>
-
-      <%= render_status 'version_semver', f, project, is_disabled %>
-
-      <%= render_status 'version_tags', f, project, is_disabled, true %>
-
-      <h3>Release Notes</h3>
-
-      <%= render_status 'release_notes', f, project, is_disabled %>
-
-      <%= render_status 'release_notes_vulns', f, project, is_disabled, true %>
-</div>
-
-      <div class="tab-pane" id="reporting">
-      <br>
-      <h3>Bug reporting process</h3>
-
-      <!-- TODO: Add report_url to model and database.
-      <span>If an issue tracker is used, please provide its URL.
-      </span>
-      \<\% = f.text_field :report_url , class:"form-control", placeholder:'Issue tracker URL (if any)', disabled: is_disabled % >
-      -->
-
-      <%= render_status 'report_process', f, project, is_disabled %>
-
-      <%= render_status 'report_tracker', f, project, is_disabled %>
-
-      <%= render_status 'report_responses', f, project, is_disabled %>
-
-      <%= render_status 'enhancement_responses', f, project, is_disabled %>
-
-      <%= render_status 'report_archive', f, project, is_disabled, true %>
-
-      <h3>Vulnerability reporting process</h3>
-
-      <%= render_status 'vulnerability_report_process',
-                        f, project, is_disabled %>
-
-      <%= render_status 'vulnerability_report_private',
-                        f, project, is_disabled %>
-
-      <%= render_status 'vulnerability_report_response',
-                        f, project, is_disabled, true %>
-</div>
-
-     <div class="tab-pane" id="quality">
-     <br>
-     <h3>Working build system</h3>
-
-      <%= render_status 'build', f, project, is_disabled %>
-
-      <%= render_status 'build_common_tools', f, project, is_disabled %>
-
-      <%= render_status 'build_floss_tools', f, project, is_disabled, true %>
-
-      <h3>Automated test suite</h3>
-
-      <%= render_status 'test', f, project, is_disabled %>
-
-      <%= render_status 'test_invocation', f, project, is_disabled %>
-
-      <%= render_status 'test_most', f, project, is_disabled %>
-
-      <%= render_status 'test_continuous_integration',
-                        f, project, is_disabled, true %>
-
-    <h3>New functionality testing</h3>
-
-      <%= render_status 'test_policy', f, project, is_disabled %>
-
-      <%= render_status 'tests_are_added', f, project, is_disabled %>
-
-      <%= render_status 'tests_documented_added', f, project, is_disabled, true %>
-
-    <h3>Warning flags</h3>
-
-      <%= render_status 'warnings', f, project, is_disabled %>
-
-      <%= render_status 'warnings_fixed', f, project, is_disabled %>
-
-      <%= render_status 'warnings_strict', f, project, is_disabled, true %>
-</div>
-
-    <div class="tab-pane" id="security">
-    <br>
-    <h3>Secure development knowledge</h3>
-
-      <%= render_status 'know_secure_design', f, project, is_disabled %>
-
-      <%= render_status 'know_common_errors', f, project, is_disabled, true %>
-
-    <h3>Good cryptographic practices</h3>
-
-<span class="criteria-desc">
-Note that some software does not need to directly use cryptographic capabilities.
-A "project security mechanism" is a security mechanism
-provided by the delivered project's software.
-</span>
-<% if (!is_disabled) %>
-  <br><br>
-  <button class="btn btn-default hidden-print" type="button" id='all_crypto_na'>Press here if the project does not use or need cryptographic mechanisms</button>
-  <br>
-<% end %>
-      <%= render_status 'crypto_published', f, project, is_disabled %>
-
-      <%= render_status 'crypto_call', f, project, is_disabled %>
-
-      <%= render_status 'crypto_floss', f, project, is_disabled %>
-
-      <%= render_status 'crypto_keylength', f, project, is_disabled %>
-
-      <%= render_status 'crypto_working', f, project, is_disabled %>
-
-      <%= render_status 'crypto_weaknesses', f, project, is_disabled %>
-
-      <%= render_status 'crypto_pfs', f, project, is_disabled %>
-
-      <%= render_status 'crypto_password_storage', f, project, is_disabled %>
-
-      <%= render_status 'crypto_random', f, project, is_disabled, true %>
-
-    <h3>Secured delivery against man-in-the-middle (MITM) attacks</h3>
-
-      <%= render_status 'delivery_mitm', f, project, is_disabled %>
-
-      <%= render_status 'delivery_unsigned', f, project, is_disabled, true %>
-
-    <h3>Publicly-known vulnerabilities fixed</h3>
-
-      <%= render_status 'vulnerabilities_fixed_60_days',
-                        f, project, is_disabled %>
-
-      <%= render_status 'vulnerabilities_critical_fixed',
-                        f, project, is_disabled, true %>
-
-    <h3>Other security</h3>
-
-      <%= render_status 'no_leaked_credentials', f, project, is_disabled, true %>
-</div>
-
-    <div class="tab-pane" id="analysis">
-    <br>
-    <h3>Static code analysis</h3>
-
-      <%= render_status 'static_analysis', f, project, is_disabled %>
-
-      <%= render_status 'static_analysis_common_vulnerabilities',
-                        f, project, is_disabled %>
-
-      <%= render_status 'static_analysis_fixed',
-                        f, project, is_disabled %>
-
-      <%= render_status 'static_analysis_often', f, project, is_disabled, true %>
-
-     <h3>Dynamic analysis</h3>
-
-      <%= render_status 'dynamic_analysis', f, project, is_disabled %>
-
-      <%= render_status 'dynamic_analysis_unsafe', f, project, is_disabled %>
-
-      <%= render_status 'dynamic_analysis_enable_assertions',
-                        f, project, is_disabled %>
-
-      <%= render_status 'dynamic_analysis_fixed',
-                        f, project, is_disabled, true %>
+     </div>
     </div>
 
-    <div class="tab-pane" id="future">
-     <br>
-     These are criteria we intend to add in the near future, but are
-     <i>not</i> currently required for a badge.
-     This grace period allows projects to update to changed criteria
-     and retain their badge as best practices improve.
-     <br>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 class="panel-title">
+          <a class="close-by-default" href="#changecontrol">Change Control</a>
+        </h4>
+      </div>
+      <div class="panel-collapse collapse in remove-in" id="changecontrol">
+        <ul class="list-group">
+          <li class="list-group-item"><h3>Public version-controlled source repository</h3>
 
-      <%= render_status 'installation_common', f, project, is_disabled %>
+            <%= render_status 'repo_public', f, project, is_disabled %>
 
-      <%= render_status 'build_reproducible', f, project, is_disabled %>
+            <%= render_status 'repo_track', f, project, is_disabled %>
 
-      <%= render_status 'crypto_used_network', f, project, is_disabled %>
+            <%= render_status 'repo_interim', f, project, is_disabled %>
 
-      <%= render_status 'crypto_tls12', f, project, is_disabled %>
+            <%= render_status 'repo_distributed', f, project, is_disabled, true %>
 
-      <%= render_status 'crypto_certificate_verification', f, project, is_disabled %>
+          </li>
 
-      <%= render_status 'crypto_verification_private', f, project, is_disabled %>
+          <li class="list-group-item"><h3>Version numbering</h3>
 
-      <%= render_status 'hardened_site', f, project, is_disabled %>
+            <%= render_status 'version_unique', f, project, is_disabled %>
 
-      <%= render_status 'hardening', f, project, is_disabled, true %>
+            <%= render_status 'version_semver', f, project, is_disabled %>
 
+            <%= render_status 'version_tags', f, project, is_disabled, true %>
+
+          </li>
+
+          <li class="list-group-item"><h3>Release Notes</h3>
+
+            <%= render_status 'release_notes', f, project, is_disabled %>
+
+            <%= render_status 'release_notes_vulns', f, project, is_disabled, true %>
+          </li>
+        </ul>
+      </div>
     </div>
 
-</div>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 class="panel-title">
+          <a class="close-by-default" href="#reporting">Reporting</a>
+        </h4>
+      </div>
+      <div class="panel-collapse collapse in remove-in" id="reporting">
+        <ul class="list-group">
+          <li class="list-group-item"><h3>Bug reporting process</h3>
+
+            <%= render_status 'report_process', f, project, is_disabled %>
+
+            <%= render_status 'report_tracker', f, project, is_disabled %>
+
+            <%= render_status 'report_responses', f, project, is_disabled %>
+
+            <%= render_status 'enhancement_responses', f, project, is_disabled %>
+
+            <%= render_status 'report_archive', f, project, is_disabled, true %>
+
+          </li>
+
+          <li class="list-group-item"><h3>Vulnerability reporting process</h3>
+
+            <%= render_status 'vulnerability_report_process',
+                              f, project, is_disabled %>
+
+            <%= render_status 'vulnerability_report_private',
+                              f, project, is_disabled %>
+
+            <%= render_status 'vulnerability_report_response',
+                              f, project, is_disabled, true %>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 class="panel-title">
+          <a class="close-by-default" href="#quality">Quality</a>
+        </h4>
+      </div>
+      <div class="panel-collapse collapse in remove-in" id="quality">
+        <ul class="list-group">
+          <li class="list-group-item"><h3>Working build system</h3>
+
+            <%= render_status 'build', f, project, is_disabled %>
+
+            <%= render_status 'build_common_tools', f, project, is_disabled %>
+
+            <%= render_status 'build_floss_tools', f, project, is_disabled, true %>
+
+          </li>
+
+          <li class="list-group-item"><h3>Automated test suite</h3>
+
+            <%= render_status 'test', f, project, is_disabled %>
+
+            <%= render_status 'test_invocation', f, project, is_disabled %>
+
+            <%= render_status 'test_most', f, project, is_disabled %>
+
+            <%= render_status 'test_continuous_integration',
+                              f, project, is_disabled, true %>
+
+          </li>
+
+          <li class="list-group-item"><h3>New functionality testing</h3>
+
+            <%= render_status 'test_policy', f, project, is_disabled %>
+
+            <%= render_status 'tests_are_added', f, project, is_disabled %>
+
+            <%= render_status 'tests_documented_added', f, project, is_disabled, true %>
+
+          </li>
+
+          <li class="list-group-item"><h3>Warning flags</h3>
+
+            <%= render_status 'warnings', f, project, is_disabled %>
+
+            <%= render_status 'warnings_fixed', f, project, is_disabled %>
+
+            <%= render_status 'warnings_strict', f, project, is_disabled, true %>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 class="panel-title">
+          <a class="close-by-default" href="#security">Security</a>
+        </h4>
+      </div>
+      <div class="panel-collapse collapse in remove-in" id="security">
+        <ul class="list-group">
+          <li class="list-group-item"><h3>Secure development knowledge</h3>
+
+            <%= render_status 'know_secure_design', f, project, is_disabled %>
+
+            <%= render_status 'know_common_errors', f, project, is_disabled, true %>
+
+          </li>
+          <li class="list-group-item"><h3>Good cryptographic practices</h3>
+
+            <span class="criteria-desc">
+            Note that some software does not need to directly use cryptographic capabilities.
+            A "project security mechanism" is a security mechanism
+            provided by the delivered project's software.
+            </span>
+            <% if (!is_disabled) %>
+              <br><br>
+              <button class="btn btn-default hidden-print" type="button" id='all_crypto_na'>
+                Press here if the project does not use or need cryptographic mechanisms
+              </button>
+              <br>
+            <% end %>
+            <%= render_status 'crypto_published', f, project, is_disabled %>
+
+            <%= render_status 'crypto_call', f, project, is_disabled %>
+
+            <%= render_status 'crypto_floss', f, project, is_disabled %>
+
+            <%= render_status 'crypto_keylength', f, project, is_disabled %>
+
+            <%= render_status 'crypto_working', f, project, is_disabled %>
+
+            <%= render_status 'crypto_weaknesses', f, project, is_disabled %>
+
+            <%= render_status 'crypto_pfs', f, project, is_disabled %>
+
+            <%= render_status 'crypto_password_storage', f, project, is_disabled %>
+
+            <%= render_status 'crypto_random', f, project, is_disabled, true %>
+
+          </li>
+          <li class="list-group-item"><h3>Secured delivery against man-in-the-middle (MITM) attacks</h3>
+
+            <%= render_status 'delivery_mitm', f, project, is_disabled %>
+
+            <%= render_status 'delivery_unsigned', f, project, is_disabled, true %>
+
+          </li>
+          <li class="list-group-item"><h3>Publicly-known vulnerabilities fixed</h3>
+
+            <%= render_status 'vulnerabilities_fixed_60_days',
+                              f, project, is_disabled %>
+
+            <%= render_status 'vulnerabilities_critical_fixed',
+                              f, project, is_disabled, true %>
+
+          </li>
+          <li class="list-group-item"><h3>Other security</h3>
+
+            <%= render_status 'no_leaked_credentials', f, project, is_disabled, true %>
+
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 class="panel-title">
+          <a class="close-by-default" href="#analysis">Analysis</a>
+        </h4>
+      </div>
+      <div class="panel-collapse collapse in remove-in" id="analysis">
+        <ul class="list-group">
+          <li class="list-group-item"><h3>Static code analysis</h3>
+
+            <%= render_status 'static_analysis', f, project, is_disabled %>
+
+            <%= render_status 'static_analysis_common_vulnerabilities',
+                              f, project, is_disabled %>
+
+            <%= render_status 'static_analysis_fixed',
+                              f, project, is_disabled %>
+
+            <%= render_status 'static_analysis_often', f, project, is_disabled, true %>
+
+          </li>
+          <li class="list-group-item"><h3>Dynamic analysis</h3>
+
+            <%= render_status 'dynamic_analysis', f, project, is_disabled %>
+
+            <%= render_status 'dynamic_analysis_unsafe', f, project, is_disabled %>
+
+            <%= render_status 'dynamic_analysis_enable_assertions',
+                              f, project, is_disabled %>
+
+            <%= render_status 'dynamic_analysis_fixed',
+                              f, project, is_disabled, true %>
+
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 class="panel-title">
+          <a class="close-by-default" href="#future">Future</a>
+        </h4>
+      </div>
+      <div class="panel-collapse collapse in remove-in" id="future">
+        <br>
+        These are criteria we intend to add in the near future, but are
+        <i>not</i> currently required for a badge.
+        This grace period allows projects to update to changed criteria
+        and retain their badge as best practices improve.
+        <br>
+
+        <%= render_status 'installation_common', f, project, is_disabled %>
+
+        <%= render_status 'build_reproducible', f, project, is_disabled %>
+
+        <%= render_status 'crypto_used_network', f, project, is_disabled %>
+
+        <%= render_status 'crypto_tls12', f, project, is_disabled %>
+
+        <%= render_status 'crypto_certificate_verification', f, project, is_disabled %>
+
+        <%= render_status 'crypto_verification_private', f, project, is_disabled %>
+
+        <%= render_status 'hardened_site', f, project, is_disabled %>
+
+        <%= render_status 'hardening', f, project, is_disabled, true %>
+      </div>
+    </div>
+  </div>
       <br>
       <div class="center">
       <% if is_disabled %>

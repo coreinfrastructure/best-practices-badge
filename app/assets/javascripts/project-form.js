@@ -343,6 +343,13 @@ $(document).ready(function() {
     $('.details-toggler').html('Show details');
   });
 
+  // By default all panels are collapsed.  We do the collapsing in
+  // in JavaScript, so users who disable JS will still see the sections.
+  $('.remove-in').removeClass('in');
+  // Only show open indicators if JS is enabled
+  $('.close-by-default').attr('data-toggle', 'collapse').addClass('collapsed');
+  $('.open-by-default').attr('data-toggle', 'collapse');
+
   // Force these values on page reload
   globalLastSelectedMet = '';
   globalHideMetnaCriteria = false;

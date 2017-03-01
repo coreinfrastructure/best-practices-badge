@@ -11,6 +11,7 @@ var MIN_SHOULD_LENGTH = 5;
 // Don't hide this criterion (yet), so that users can enter a justification.
 var globalLastSelectedMet = '';
 var globalHideMetnaCriteria = false;
+var globalExpandPanels = false;
 
 // Do a polyfill for datalist if it's not already supported
 // (e.g., Safari fails to support polyfill at the time of this writing).
@@ -271,6 +272,28 @@ function ToggleHideMet(e) {
   hideMetNA();
 }
 
+function ExpandPanels() {
+  if (globalExpandPanels) {
+    $('.collapse').collapse('show');
+  } else {
+    $('.collapse').collapse('hide');
+  }
+}
+
+function ToggleExpandPanels(e) {
+  globalExpandPanels = !globalExpandPanels;
+  // Note that button text shows what WILL happen on click, so it
+  // shows the REVERSED state (not the current state).
+  if (globalExpandPanels) {
+    $('#toggle-expand-all-panels')
+      .addClass('active').html('Collapse all panels');
+  } else {
+    $('#toggle-expand-all-panels')
+      .removeClass('active').html('Expand all panels');
+  }
+  ExpandPanels();
+}
+
 function setupProjectField(criteria) {
   updateCriteriaDisplay(criteria);
   $('input[name="project[' + criteria + '_status]"]').click(
@@ -369,6 +392,11 @@ $(document).ready(function() {
   globalHideMetnaCriteria = false;
   $('#toggle-hide-metna-criteria').click(function(e) {
     ToggleHideMet(e);
+  });
+
+  globalExpandPanels = false;
+  $('#toggle-expand-all-panels').click(function(e) {
+    ToggleExpandPanels(e);
   });
 
   $('[data-toggle="tooltip"]').tooltip(); // Enable bootstrap tooltips

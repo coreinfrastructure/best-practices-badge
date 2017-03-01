@@ -299,7 +299,7 @@ class ProjectsController < ApplicationController
     format.html do
       if params[:continue]
         flash[:success] = 'Project was successfully updated.'
-        redirect_to edit_project_path(@project)
+        redirect_to edit_project_path(@project) + url_anchor
       else
         redirect_to @project, success: 'Project was successfully updated.'
       end
@@ -323,4 +323,9 @@ class ProjectsController < ApplicationController
     end
   end
   # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
+
+  def url_anchor
+    return '' if params[:continue] == ''
+    '#' + params[:continue]
+  end
 end

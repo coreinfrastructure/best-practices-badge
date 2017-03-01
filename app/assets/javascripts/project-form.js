@@ -350,12 +350,18 @@ $(document).ready(function() {
   $('.close-by-default').attr('data-toggle', 'collapse').addClass('collapsed');
   $('.open-by-default').attr('data-toggle', 'collapse');
 
+  // Open the correct panel when hash in url
   if (location.hash !== null && location.hash !== '' &&
       $(location.hash).length !== 0) {
     $('.collapse').removeClass('in');
     $('.open-by-default').addClass('collapsed');
     $(location.hash + '.collapse').collapse('show');
   }
+
+  // Add location-hash on opening of a panel
+  $('.collapse').on('show.bs.collapse', function(e) {
+    location.hash = '#' + this.getAttribute('id');
+  });
 
   // Force these values on page reload
   globalLastSelectedMet = '';

@@ -350,6 +350,13 @@ $(document).ready(function() {
   $('.close-by-default').attr('data-toggle', 'collapse').addClass('collapsed');
   $('.open-by-default').attr('data-toggle', 'collapse');
 
+  if (location.hash !== null && location.hash !== '' &&
+      $(location.hash).length !== 0) {
+    $('.collapse').removeClass('in');
+    $('.open-by-default').addClass('collapsed');
+    $(location.hash + '.collapse').collapse('show');
+  }
+
   // Force these values on page reload
   globalLastSelectedMet = '';
   globalHideMetnaCriteria = false;

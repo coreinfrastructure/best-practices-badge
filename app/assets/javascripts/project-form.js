@@ -274,9 +274,11 @@ function ToggleHideMet(e) {
 
 function ExpandPanels() {
   if (globalExpandPanels) {
-    $('.collapse').collapse('show');
+    $('.collapse').addClass('in');
+    $('.can-collapse').removeClass('collapsed');
   } else {
-    $('.collapse').collapse('hide');
+    $('.collapse').removeClass('in');
+    $('.can-collapse').addClass('collapsed');
   }
 }
 
@@ -367,8 +369,8 @@ $(document).ready(function() {
   });
 
   // Only show open indicators if JS is enabled
-  $('.close-by-default').attr('data-toggle', 'collapse').addClass('collapsed');
-  $('.open-by-default').attr('data-toggle', 'collapse');
+  $('.can-collapse').attr('data-toggle', 'collapse');
+  $('.close-by-default').addClass('collapsed');
 
   // Open the correct panel when hash in url
   if (location.hash !== null && location.hash !== '' &&

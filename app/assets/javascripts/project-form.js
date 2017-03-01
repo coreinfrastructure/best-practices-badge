@@ -343,12 +343,26 @@ $(document).ready(function() {
     $('.details-toggler').html('Show details');
   });
 
-  // By default all panels are collapsed.  We do the collapsing in
-  // in JavaScript, so users who disable JS will still see the sections.
-  $('.remove-in').removeClass('in');
   // Only show open indicators if JS is enabled
   $('.close-by-default').attr('data-toggle', 'collapse').addClass('collapsed');
   $('.open-by-default').attr('data-toggle', 'collapse');
+
+  // Open the correct panel when hash in url
+  if (location.hash !== null && location.hash !== '' &&
+      $(location.hash).length !== 0) {
+    $('.collapse').removeClass('in');
+    $('.open-by-default').addClass('collapsed');
+    $(location.hash + '.collapse').collapse('show');
+  } else {
+  // By default all panels are collapsed.  We do the collapsing in
+  // in JavaScript, so users who disable JS will still see the sections.
+    $('.remove-in').removeClass('in');
+  }
+
+  // Add location-hash on opening of a panel
+  $('.collapse').on('show.bs.collapse', function(e) {
+    location.hash = '#' + this.getAttribute('id');
+  });
 
   // Force these values on page reload
   globalLastSelectedMet = '';

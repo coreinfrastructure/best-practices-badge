@@ -276,9 +276,11 @@ function ExpandPanels() {
   if (globalExpandPanels) {
     $('.collapse').addClass('in');
     $('.can-collapse').removeClass('collapsed');
+    location.hash = '#all';
   } else {
     $('.collapse').removeClass('in');
     $('.can-collapse').addClass('collapsed');
+    location.hash = '';
   }
 }
 
@@ -368,6 +370,11 @@ $(document).ready(function() {
     $('.details-toggler').html('Show details');
   });
 
+  globalExpandPanels = false;
+  $('#toggle-expand-all-panels').click(function(e) {
+    ToggleExpandPanels(e);
+  });
+
   // Only show open indicators if JS is enabled
   $('.can-collapse').attr('data-toggle', 'collapse');
   $('.close-by-default').addClass('collapsed');
@@ -378,6 +385,10 @@ $(document).ready(function() {
     $('.collapse').removeClass('in');
     $('.open-by-default').addClass('collapsed');
     $(location.hash + '.collapse').collapse('show');
+  } else if (location.hash !== null && location.hash === '#all') {
+    $(function(e) {
+      ToggleExpandPanels(e);
+    });
   } else {
   // By default all panels are collapsed.  We do the collapsing in
   // in JavaScript, so users who disable JS will still see the sections.
@@ -394,11 +405,6 @@ $(document).ready(function() {
   globalHideMetnaCriteria = false;
   $('#toggle-hide-metna-criteria').click(function(e) {
     ToggleHideMet(e);
-  });
-
-  globalExpandPanels = false;
-  $('#toggle-expand-all-panels').click(function(e) {
-    ToggleExpandPanels(e);
   });
 
   $('[data-toggle="tooltip"]').tooltip(); // Enable bootstrap tooltips

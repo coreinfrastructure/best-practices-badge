@@ -6,7 +6,7 @@
       <% is_crypto = criterion.to_s.match(/^crypto_/) %>
       <% crypto_class = is_crypto ? ' criterion-is-crypto' : '' %>
 
-      <div class="col-md-2 col-xs-3 criteria-radio<%= crypto_class %>">
+     <div class="col-md-2 col-sm-3 col-xs-4 criteria-radio<%= crypto_class %>">
        <div class="row status-chooser">
        <span class="criterion-name hidden"><%= criterion.to_s %></span>
        <span class="criterion-category hidden"><%= criterion.category %></span>
@@ -16,10 +16,10 @@
        <span class="criterion-na-justification-required hidden"><%=
           criterion.na_justification_required? %></span>
        <%= f.form_group status_symbol do %>
-         <div class="col-xs-4 text-center block-center">
+         <div class="col-xs-4 text-left block-left">
           <br><%= image_tag("Clear.gif", size: "40x40", id: criterion.to_s + "_enough", alt: "") %>
          </div>
-         <div class="col-xs-3 text-center block-center">
+          <div class="col-xs-4 col-xs-offset-2 col-sm-offset-1 text-left block-left">
              <%= f.radio_button status_symbol, 'Met', label: 'Met', disabled: is_disabled %>
              <%= f.radio_button status_symbol, 'Unmet', label: 'Unmet', disabled: is_disabled  %>
          <% if criterion.na_allowed? %>
@@ -31,7 +31,7 @@
        </div>
       </div>
 
-      <div class='col-md-10 col-xs-9 criteria-desc'>
+      <div class='col-md-10 col-sm-9 col-xs-12 criteria-desc'>
           <br>
           <% if criterion.future? %>
           (Future criterion)

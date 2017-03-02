@@ -77,6 +77,8 @@ export to .png so that it can viewed on GitHub.)
 
 ## Security Requirements
 
+## Basic Security Requirements and Assets
+
 Here is what BadgeApp must do to be secure (and a few comments about
 how we implement these requirements):
 
@@ -85,8 +87,8 @@ how we implement these requirements):
       who owns the project information, and GitHub user names,
       so we don't need to keep those confidential.
     - Non-public data is kept confidential.
-      User passwords and user email addresses are non-public data,
-      which we do protect specially:
+      User passwords and user email addresses are non-public data.
+      We *do* consider them higher-value assets and protect specially:
         - User passwords are only stored on the server as
           iterated salted hashes (using bcrypt).
         - Users may choose to "remember me" to automatically re-login on
@@ -114,19 +116,22 @@ how we implement these requirements):
           (e.g., contact badge entry owners for clarification).
           We also user email addresses as the user id for "local" accounts.
           We strive to not reveal user email addresses to others
-          (with the exception of administrators, who can see them).
+          (with the exception of administrators, who are trusted and thus
+          can see them).  Most of the rest of this document describes the
+          measures we take to prevent turning unintentional mistakes
+          into exposures of this data.
         - HTTPS is used to encrypt all communications between users
           and the application; this protects the confidentiality of
           all data in motion.
           There's no need to worry about covert channels.
 * Integrity:
-    - HTTPS is used to protect the integrity of all communications between users
-      and the application, as well as to authenticate the server
+    - HTTPS is used to protect the integrity of all communications between
+      users and the application, as well as to authenticate the server
       to the user.
     - Edits require a logged-in user with authorization.
       Edits may be performed by the data owner, anyone GitHub reports as
       being authorized to edit the project (if it's on GitHub), or
-      BadgeApp administrator ("admin").
+      a BadgeApp administrator ("admin").
       The badge owner is whoever created the badge entry.
     - Modifications to the official BadgeApp application require
       authentication via GitHub.
@@ -151,14 +156,46 @@ how we implement these requirements):
       That way, if the project data is corrupted, we can restore the
       database to a previous state.
 
-Here are a few other notes about the security requirements.
-
 BadgeApp must avoid being taken over by attackers, since this
 could cause lead to failure in confidentiality, integrity, or availability.
 In addition, it must avoid being a conduit for others' attacks
 (e.g., not be vulnerable to cross-site scripting).
 We do this by focusing on having a secure design and countering the
 most common kinds of attacks (as described below).
+
+## Threat Agents
+
+We have few insiders, and they are fully trusted to *not*
+perform intentionally-hostile actions.
+
+Thus, the threat agents we're primarily concerned about are outsiders,
+and the most concerning ones fit in one of these categories:
+
+*  people who enjoy taking over systems (without monetary benefit)
+*  criminal organizations who want to take emails and/or passwords
+   as a way to take over others' accounts (to break confidentiality).
+   Note that our one-way iterated salted hashes counter easy access
+   to passwords, so the most sensitive data is more difficult to obtain.
+*  criminal organizations who want destroy all our data and hold it for
+   ransom (i.e., "ransomware" organizations).  Note that our backups
+   help counter this.
+
+Criminal organizations may try to DDoS us for money, but there's no
+strong reason for us to pay the extortion fee.
+We expect that people will be willing to come back to the site later
+if it's down, and we have scaleability countermeasures to reduce their
+effectivenes.  If the attack is ongoing, several of the services we use
+would have a finantial incentive to help us counter the attacks.
+This makes the attacks themselves less likely
+(since there would be no financial benefit to them).
+
+There's no reason a state actor would attack the site
+(we don't store anything that valuable), so while many are very capable,
+we do not expect them to be a threat to this site.
+
+## Other Notes on Security Requirements
+
+Here are a few other notes about the security requirements.
 
 It is difficult to implement truly secure software.
 One challenge is that BadgeApp must accept, store, and retrieve data from

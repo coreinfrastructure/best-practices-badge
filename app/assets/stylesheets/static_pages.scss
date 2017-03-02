@@ -153,6 +153,10 @@ label.required:after {
   }
 }
 
+input[type=checkbox][disabled]{
+   width: initial;
+}
+
 #session_remember_me {
   width: auto;
   margin-left: 0;

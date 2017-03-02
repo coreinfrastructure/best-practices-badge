@@ -382,22 +382,31 @@ $(document).ready(function() {
   // Open the correct panel when hash in url
   if (location.hash !== null && location.hash !== '' &&
       $(location.hash).length !== 0) {
+    var loc_hash = location.hash.substring(1);
+    var parentPane = document.getElementById(loc_hash).closest('div.panel');
+    var loc = parentPane.getElementsByClassName('can-collapse')[0];
     $('.collapse').removeClass('in');
     $('.open-by-default').addClass('collapsed');
-    $(location.hash + '.collapse').collapse('show');
+    $(loc).click();
   } else if (location.hash !== null && location.hash === '#all') {
     $(function(e) {
       ToggleExpandPanels(e);
     });
   } else {
-  // By default all panels are collapsed.  We do the collapsing in
-  // in JavaScript, so users who disable JS will still see the sections.
+    // By default all but top panel are collapsed.  We do the collapsing in
+    // in JavaScript, so users who disable JS will still see the sections.
     $('.remove-in').removeClass('in');
   }
 
   // Add location-hash on opening of a panel
   $('.collapse').on('show.bs.collapse', function(e) {
-    location.hash = '#' + this.getAttribute('id');
+    var parentPane = this.closest('div.panel');
+    var parentHeading = parentPane.getElementsByClassName('can-collapse')[0];
+    var orig_id = parentHeading.getAttribute('id');
+    // prevent scrolling on panel open
+    parentHeading.id = orig_id + '-tmp';
+    location.hash = '#' + orig_id;
+    parentHeading.id = orig_id;
   });
 
   // Force these values on page reload

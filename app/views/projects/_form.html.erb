@@ -7,10 +7,10 @@
 <div>
   <span id="project_entry_form"></span>
   <div class="hidden-print">
-    <button id="toggle-expand-all-panels" class="btn btn-simple" title="Expand all panels"type="button">Expand all panels</button>
-    <button id="show-all-details" class="btn btn-simple" title="Show all detailed text" type="button">Show all detailed text</button>
-    <button id="hide-all-details" class="btn btn-simple" title="Hide all detailed text" type="button">Hide all detailed text</button>
-    <button id="toggle-hide-metna-criteria" class="btn btn-simple" title="Hide met or N/A criteria" type="button">Hide met or N/A criteria</button>
+    <button id="toggle-expand-all-panels" class="btn btn-info btn-sm" title="Expand all panels"type="button">Expand all panels</button>
+    <button id="show-all-details" class="btn btn-info btn-sm" title="Show all detailed text" type="button">Show all detailed text</button>
+    <button id="hide-all-details" class="btn btn-info btn-sm" title="Hide all detailed text" type="button">Hide all detailed text</button>
+    <button id="toggle-hide-metna-criteria" class="btn btn-info btn-sm" title="Hide met or N/A criteria" type="button">Hide met or N/A criteria</button>
   </div>
   <div class="hidden">
     <%= image_tag "result_symbol_check.png", id: "result_symbol_check_img" %>
@@ -94,7 +94,7 @@ There is also a
     <div class="panel panel-primary">
       <div class="panel-heading">
         <h4 class="panel-title">
-          <a class="open-by-default can-collapse" href="#projectbasics">Basics</a>
+          <a class="open-by-default can-collapse btn-block" href="#projectbasics">Basics</a>
         </h4>
       </div>
       <div class="panel-collapse collapse in" id="projectbasics">
@@ -396,8 +396,8 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
           You retain copyright (if any), and the project
           license is unaffected.<br><br>
           <%= f.button 'Save (and continue)', type: 'submit', name: 'continue',
-              value: 'projectbasics', class:"btn btn-primary btn-submit" %>
-          <%= f.submit 'Submit (and exit)', class:"btn btn-primary btn-submit" %>
+              value: 'projectbasics', class:"btn btn-success btn-submit" %>
+          <%= f.submit 'Submit (and exit)', class:"btn btn-success btn-submit" %>
         </div>
       <% end %>
      </div>
@@ -406,7 +406,7 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
     <div class="panel panel-primary">
       <div class="panel-heading">
         <h4 class="panel-title">
-          <a class="close-by-default can-collapse" href="#changecontrol">Change Control</a>
+          <a class="close-by-default can-collapse btn-block" href="#changecontrol">Change Control</a>
         </h4>
       </div>
       <div class="panel-collapse collapse in remove-in" id="changecontrol">
@@ -451,8 +451,8 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
             You retain copyright (if any), and the project
             license is unaffected.<br><br>
             <%= f.button 'Save (and continue)', type: 'submit', name: 'continue',
-              value: 'changecontrol', class:"btn btn-primary btn-submit" %>
-            <%= f.submit 'Submit (and exit)', class:"btn btn-primary btn-submit" %>
+              value: 'changecontrol', class:"btn btn-success btn-submit" %>
+            <%= f.submit 'Submit (and exit)', class:"btn btn-success btn-submit" %>
           </div>
         <% end %>
       </div>
@@ -461,7 +461,7 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
     <div class="panel panel-primary">
       <div class="panel-heading">
         <h4 class="panel-title">
-          <a class="close-by-default can-collapse" href="#reporting">Reporting</a>
+          <a class="close-by-default can-collapse btn-block" href="#reporting">Reporting</a>
         </h4>
       </div>
       <div class="panel-collapse collapse in remove-in" id="reporting">
@@ -503,8 +503,8 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
             You retain copyright (if any), and the project
             license is unaffected.<br><br>
             <%= f.button 'Save (and continue)', type: 'submit', name: 'continue',
-              value: 'reporting', class:"btn btn-primary btn-submit" %>
-            <%= f.submit 'Submit (and exit)', class:"btn btn-primary btn-submit" %>
+              value: 'reporting', class:"btn btn-success btn-submit" %>
+            <%= f.submit 'Submit (and exit)', class:"btn btn-success btn-submit" %>
           </div>
         <% end %>
       </div>
@@ -513,7 +513,7 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
     <div class="panel panel-primary">
       <div class="panel-heading">
         <h4 class="panel-title">
-          <a class="close-by-default can-collapse" href="#quality">Quality</a>
+          <a class="close-by-default can-collapse btn-block" href="#quality">Quality</a>
         </h4>
       </div>
       <div class="panel-collapse collapse in remove-in" id="quality">
@@ -571,8 +571,8 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
             You retain copyright (if any), and the project
             license is unaffected.<br><br>
             <%= f.button 'Save (and continue)', type: 'submit', name: 'continue',
-              value: 'quality', class:"btn btn-primary btn-submit" %>
-            <%= f.submit 'Submit (and exit)', class:"btn btn-primary btn-submit" %>
+              value: 'quality', class:"btn btn-success btn-submit" %>
+            <%= f.submit 'Submit (and exit)', class:"btn btn-success btn-submit" %>
           </div>
         <% end %>
       </div>
@@ -581,7 +581,7 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
     <div class="panel panel-primary">
       <div class="panel-heading">
         <h4 class="panel-title">
-          <a class="close-by-default can-collapse" href="#security">Security</a>
+          <a class="close-by-default can-collapse btn-block" href="#security">Security</a>
         </h4>
       </div>
       <div class="panel-collapse collapse in remove-in" id="security">
@@ -659,8 +659,8 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
             You retain copyright (if any), and the project
             license is unaffected.<br><br>
             <%= f.button 'Save (and continue)', type: 'submit', name: 'continue',
-              value: 'security', class:"btn btn-primary btn-submit" %>
-            <%= f.submit 'Submit (and exit)', class:"btn btn-primary btn-submit" %>
+              value: 'security', class:"btn btn-success btn-submit" %>
+            <%= f.submit 'Submit (and exit)', class:"btn btn-success btn-submit" %>
           </div>
         <% end %>
       </div>
@@ -669,7 +669,7 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
     <div class="panel panel-primary">
       <div class="panel-heading">
         <h4 class="panel-title">
-          <a class="close-by-default can-collapse" href="#analysis">Analysis</a>
+          <a class="close-by-default can-collapse btn-block" href="#analysis">Analysis</a>
         </h4>
       </div>
       <div class="panel-collapse collapse in remove-in" id="analysis">
@@ -712,8 +712,8 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
             You retain copyright (if any), and the project
             license is unaffected.<br><br>
             <%= f.button 'Save (and continue)', type: 'submit', name: 'continue',
-              value: 'analysis', class:"btn btn-primary btn-submit" %>
-            <%= f.submit 'Submit (and exit)', class:"btn btn-primary btn-submit" %>
+              value: 'analysis', class:"btn btn-success btn-submit" %>
+            <%= f.submit 'Submit (and exit)', class:"btn btn-success btn-submit" %>
           </div>
         <% end %>
       </div>
@@ -722,7 +722,7 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
     <div class="panel panel-primary">
       <div class="panel-heading">
         <h4 class="panel-title">
-          <a class="close-by-default can-collapse" href="#future">Future</a>
+          <a class="close-by-default can-collapse btn-block" href="#future">Future</a>
         </h4>
       </div>
       <div class="panel-collapse collapse in remove-in" id="future">
@@ -760,8 +760,8 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
             You retain copyright (if any), and the project
             license is unaffected.<br><br>
             <%= f.button 'Save (and continue)', type: 'submit', name: 'continue',
-              value: 'future', class:"btn btn-primary btn-submit" %>
-            <%= f.submit 'Submit (and exit)', class:"btn btn-primary btn-submit" %>
+              value: 'future', class:"btn btn-success btn-submit" %>
+            <%= f.submit 'Submit (and exit)', class:"btn btn-success btn-submit" %>
           </div>
         <% end %>
       </div>
@@ -803,8 +803,8 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
         and adapt the data, but they must give appropriate credit.
         You retain copyright (if any), and the project
         license is unaffected.<br><br>
-        <%= f.button 'Save (and continue)', type: 'submit', name: 'continue', value: '', class:"btn btn-primary btn-submit" %>
-        <%= f.submit 'Submit (and exit)', class:"btn btn-primary btn-submit" %>
+        <%= f.button 'Save (and continue)', type: 'submit', name: 'continue', value: '', class:"btn btn-success btn-submit" %>
+        <%= f.submit 'Submit (and exit)', class:"btn btn-success btn-submit" %>
       <% end %>
       </div>
     <% end %>

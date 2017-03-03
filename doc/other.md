@@ -19,7 +19,7 @@ We are currently leaning towards using the silver/gold/platinum naming system,
 which is similar to the
 <a href="http://www.usgbc.org/leed">LEED certification naming system of certified, silver, gold, platinum</a>
 and how the
-<a href="http://www.linuxfoundation.org/about/members">Linux Foundation ranks membership (silver, gold, platinum)</a>
+<a href="http://www.linuxfoundation.org/about/members">Linux Foundation ranks membership (silver, gold, platinum)</a>.
 An alternative is the Olympic system naming (bronze, silver, gold).
 
 To help organize these potential criteria, they are currently grouped
@@ -115,12 +115,14 @@ Upgrade some "passing" level SHOULD and SUGGESTED:
     - test_most -
       "It is SUGGESTED that the test suite cover most (or ideally all)
       the code branches, input fields, and functionality."
+      
       *NOTE*: Statement/branch coverage is covered separately; they are
       increased, so we are not changing the level of this one.
     - test_continuous_integration -
       "It is SUGGESTED that the project implement continuous integration
       (where new or changed code is frequently integrated into a central
       code repository and automated tests are run on the result)."
+      
       *NOTE*: This is upgraded to MUST in passing+2, and passing+1 adds
       an intermediate criterion called <a
       href="#automated_integration_testing">automated_integration_testing</a>.
@@ -145,6 +147,7 @@ Upgrade some "passing" level SHOULD and SUGGESTED:
     - vulnerabilities_critical_fixed -
       "Projects SHOULD fix all critical vulnerabilities rapidly after
       they are reported."
+      
       *NOTE*: We'd like this to always be true, but some vulnerabilities
       are hard to fix, so it's difficult to mandate this.
       We *could* require activities to actively work to fix it, and
@@ -181,7 +184,7 @@ Upgrade some "passing" level SHOULD and SUGGESTED:
     *NOTE*:
     This would mean that C/C++ would be required to use something like
     ASAN during some testing and/or fuzz testing. See:
-    <https://github.com/linuxfoundation/cii-best-practices-badge/issues/256>
+    <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/256">consider giving links to asan/msan/tsan/ubsan and libFuzzer</a>
 
 *   Unchanged:
 
@@ -258,7 +261,8 @@ as described below.
 
 *   <a name="governance"></a>The project MUST clearly define and document
     its project governance model (the way it makes decisions,
-    including key roles). <sup>[<a href="#governance">governance</a>]</sup>
+    including key roles). 
+    <sup>[<a href="#governance">governance</a>]</sup>
 
     *Details*: There needs to be some well-established documented way
     to make decisions and resolve disputes.
@@ -367,7 +371,7 @@ as described below.
     <a href="https://developer.android.com/guide/topics/ui/accessibility/">Android</a>,
     <a href="https://developer.apple.com/accessibility/ios/">iOS</a>,
     <a href="http://www.apple.com/accessibility/osx/voiceover/">Mac</a>, and
-    <a href="https://msdn.microsoft.com/en-us/windows/uwp/accessibility/accessibility-overview)">Windows</a>.
+    <a href="https://msdn.microsoft.com/en-us/windows/uwp/accessibility/accessibility-overview)">Windows</a>).
     Some TUI applications (e.g. `ncurses` programs) can do
     certain things to make themselves more accessible (such as `alpine`'s
     `force-arrow-cursor` setting).
@@ -424,13 +428,14 @@ as described below.
     <sup>[<a href="#maintenance_or_update">maintenance_or_update</a>]</sup>
 
     *Rationale*:
-    This was inspired by <https://projects.ow2.org/bin/view/ow2/OMM DFCT-1.2>
+    This was inspired by <a href="https://projects.ow2.org/bin/view/ow2/OMM">DFCT-1.2</a>
 
 ### Reporting
 
 *   <a name="vulnerability_report_credit"></a>The project MUST give credit
     to the reporter(s) of all vulnerability reports resolved in the last 12
-    months, except for the reporter(s) who request anonymity. (N/A allowed.)
+    months, except for the reporter(s) who request anonymity. 
+    (N/A allowed).
     <sup>[<a href="#vulnerability_report_credit">vulnerability_report_credit</a>]</sup>
 
     *Details*: If there have been no vulnerabilities resolved in the last 12 months,
@@ -539,7 +544,7 @@ as described below.
     Bad test suites could also meet this requirement, but it's generally
     agreed that any good test suite will meet this requirement, so it
     provides a useful way to filter out clearly-bad test suites.
-    After all, if your tests aren't even *running*   many of the program's
+    After all, if your tests aren't even *running* many of the program's
     statements, you don't have very good tests.
     Only FLOSS test suites are considered, to ensure that the test
     suite can be examined and improved over time.
@@ -558,17 +563,18 @@ as described below.
     during testing, and the return-on-investment to get those last few
     percentages is arguably not worth it.  The time working to get 100%
     statement coverage might be much better spent on checking the results
-    more thoroughly (which statement coverage does *not*   measure).
+    more thoroughly (which statement coverage does *not* measure).
 
     The 80% suggested here is supported by various sources.
-    The defaults of codecov.io
-    <http://docs.codecov.io/docs/coverage-configuration.>  They define
+    The defaults of 
+    <a href="http://docs.codecov.io/docs/coverage-configuration">codecov.io</a>.  They define
     70% and below as red, 100% as perfectly green, and anything between
     70..100 as a range between red and green. This renders ~80% as yellow,
     and somewhere between ~85% and 90% it starts looking pretty green.
 
-    The paper "Minimum Acceptable Code Coverage" by Steve
-    Cornett <http://www.bullseye.com/minimum.html> claims, "Code
+    The paper 
+    <a href="http://www.bullseye.com/minimum.html">"Minimum Acceptable Code Coverage" by Steve Cornett</a> 
+    claims, "Code
     coverage of 70-80% is a reasonable goal for system test of most
     projects with most coverage metrics. Use a higher goal for projects
     specifically organized for high testability or that have high failure
@@ -582,8 +588,8 @@ as described below.
     faults in a system. Low code coverage indicates inadequate testing,
     but high code coverage guarantees nothing."
 
-    "TestCoverage" by Martin Fowler (17 April 2012)
-    <http://martinfowler.com/bliki/TestCoverage.html> points out the
+    <a href="http://martinfowler.com/bliki/TestCoverage.html">"TestCoverage" by Martin Fowler (17 April 2012)</a>
+    points out the
     problems with coverage measures.  he states that "Test coverage is
     a useful tool for finding untested parts of a codebase. Test coverage
     is of little use as a numeric statement of how good your tests are...
@@ -646,8 +652,8 @@ as described below.
 
 *   <a name="updateable_reused_components"></a>
     The project MUST make it easy to either
-    (1) identify and update reused externally-maintained components or (2)
-    use the standard components provided by the system or programming language.
+    (1) identify and update reused externally-maintained components or 
+    (2) use the standard components provided by the system or programming language.
     Then, if a vulnerability is found in a reused component, it will be
     easy to update that component.
     <sup>[<a href="#updateable_reused_components">updateable_reused_components</a>]</sup>
@@ -657,7 +663,7 @@ as described below.
     Many FLOSS programs are distributed with "convenience libraries"
     that are local copies of standard libraries (possibly forked).
     By itself, that's fine.
-    However, if the program *must*   use these local (forked) copies,
+    However, if the program *must* use these local (forked) copies,
     then updating the "standard" libraries as a security update will
     leave these additional copies still vulnerable.
     This is especially an issue for cloud-based systems;
@@ -670,7 +676,8 @@ as described below.
     known vulnerabilities.  This is OWASP Top 10 (2013) number A9
     (using known vulnerable components).  See also
     <a href="http://www.aspectsecurity.com/research-presentations/the-unfortunate-reality-of-insecure-libraries">The Unfortunate Reality of Insecure Libraries</a>.
-    TODO: What about vendoring, where code is copied in with the
+    
+    *TODO*: What about vendoring, where code is copied in with the
     express intent of *only* using that copied version?
     (These are intentional forks.)  There's a risk of divergence
     and failure to apply security fixes both ways.
@@ -699,7 +706,7 @@ as described below.
     If no native binaries are being generated, select "N/A".
 
     *Rationale*: See
-    <https://github.com/linuxfoundation/cii-best-practices-badge/issues/453>
+    <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/453">Build system should honor CC, CFLAGS, CXX, CXXFLAGS</a>
 
 *   <a name="build_preserve_debug"></a>
     The build and installation system SHOULD preserve debugging information if
@@ -792,11 +799,11 @@ as described below.
     *Rationale*   : This supports capturing the artifacts (e.g., for analysis)
     without interfering with the build or installation system due to
     system-wide changes. See
-    <https://github.com/linuxfoundation/cii-best-practices-badge/issues/455>
+    <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/455">DESTDIR honored at install time</a>
     This doesn't apply when there's no "installation" process, or
     when POSIX filesystems aren't supported during installation (e.g.,
     Windows-only programs).  See
-    <https://github.com/linuxfoundation/cii-best-practices-badge/issues/453>
+    <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/453">Build system should honor CC, CFLAGS, CXX, CXXFLAGS</a>
 
 *   <a name="installation_development_quick"></a>
     The project MUST provide a way for potential developers to quickly install all
@@ -879,7 +886,8 @@ as described below.
     letting any user or researcher know what to expect.
     Many sources discuss the rationale for an "assurance case".
     This was inspired by
-    <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/502">issue #502</a> and by the
+    <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/502">Security specification and facilitation of bug bounties</a> 
+    and by the
     <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/473">NYC 2016 brainstorming session</a>.
 
 #### Cryptography
@@ -902,24 +910,26 @@ as described below.
     people should instead simply choose and stay with with one good algorithm.
     The problem with this position is that no one can be certain about
     what that "one good algorithm" is; a new attack could be found at any time.
-    See the discussion per
-    <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/215">issue #215</a>
+    See the discussion at
+    <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/215">Remove requirement for supporting alternative crypto algorithms (crypto_alternatives)?</a>
 
 *   <a name="crypto_used_network"></a>(Future) The project
     SHOULD NOT use unencrypted network communication protocols (such as HTTP
     and telnet) if there is an encrypted equivalent (e.g., HTTPS/TLS and SSH),
-    unless the user specifically requests or configures it. (N/A allowed.)
+    unless the user specifically requests or configures it. 
+    (N/A allowed).
     <sup>[<a href="#crypto_used_network">crypto_used_network</a>]</sup>
 
 *   <a name="crypto_tls12"></a>(Future)
     The project SHOULD, if it supports TLS, support at least TLS version 1.2.
-    Note that the predecessor of TLS was called SSL (N/A allowed).
+    Note that the predecessor of TLS was called SSL.
+    (N/A allowed).
     <sup>[<a href="#crypto_tls12">crypto_tls12</a>]</sup>
 
 *   <a name="crypto_certificate_verification"></a>(Future)
     The project MUST, if it supports TLS, perform TLS certificate verification
     by default when using TLS, including on subresources.
-    (N/A allowed.)
+    (N/A allowed).
     <sup>[<a href="#crypto_certificate_verification">crypto_certificate_verification</a>]</sup>
 
     *Details*: Note that having incorrect TLS certificate
@@ -932,7 +942,7 @@ as described below.
 *   <a name="crypto_verification_private"></a>(Future) The project
     MUST, if it supports TLS, perform certificate verification before sending
     HTTP headers with private information (such as secure cookies).
-    (N/A allowed.)
+    (N/A allowed).
     <sup>[<a href="#crypto_verification_private">crypto_verification_private</a>]</sup>
 
 #### Secure Release

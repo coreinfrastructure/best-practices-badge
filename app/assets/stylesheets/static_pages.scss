@@ -485,3 +485,11 @@ input[type="text"].form-control, .inputbox-look, textarea.form-control  {
     -o-transform:      rotate(90deg);
     transform:         rotate(90deg);
 }
+
+/* This solves the strange offset because of our fixed headers */
+:target:before {
+content:"";
+display:block;
+height:100px; /* fixed header height*/
+margin:-100px 0 0; /* negative fixed header height */
+}

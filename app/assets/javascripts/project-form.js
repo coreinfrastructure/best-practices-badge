@@ -12,6 +12,7 @@ var MIN_SHOULD_LENGTH = 5;
 var globalLastSelectedMet = '';
 var globalHideMetnaCriteria = false;
 var globalExpandPanels = false;
+var globalIgnoreHashChange = false;
 
 // Do a polyfill for datalist if it's not already supported
 // (e.g., Safari fails to support polyfill at the time of this writing).
@@ -274,12 +275,12 @@ function ToggleHideMet(e) {
 
 function ExpandPanels() {
   if (globalExpandPanels) {
-    $('.collapse').addClass('in');
-    $('.can-collapse').removeClass('collapsed');
+    globalIgnoreHashChange = true;
+    $('.can-collapse.collapsed').click();
     location.hash = '#all';
+    globalIgnoreHashChange = false;
   } else {
-    $('.collapse').removeClass('in');
-    $('.can-collapse').addClass('collapsed');
+    $('.can-collapse:not(.collapsed)').click();
     location.hash = '';
   }
 }
@@ -296,6 +297,30 @@ function ToggleExpandPanels(e) {
       .removeClass('active').html('Expand all panels');
   }
   ExpandPanels();
+}
+
+function hashParentPanel() {
+  var hashId = window.location.hash.substring(1);
+  var targetElement = document.getElementById(hashId);
+  return targetElement.closest('div.panel') || 0;
+}
+
+function showHash() {
+  var parentPane = hashParentPanel();
+  if (parentPane !== 0) {
+    var loc = parentPane.getElementsByClassName('can-collapse')[0];
+    globalIgnoreHashChange = true;
+    if ($(loc).hasClass('collapsed')) {
+      $(loc).click();
+    }
+    globalIgnoreHashChange = false;
+    if ($(window.location.hash).length) {
+      // We need to wait a bit for animations to finish before scrolling.
+      setTimeout(function() {
+        $(window.location.hash).get(0).scrollIntoView(true);
+      }, 200);
+    }
+  }
 }
 
 function setupProjectField(criteria) {
@@ -370,36 +395,6 @@ $(document).ready(function() {
     $('.details-toggler').html('Show details');
   });
 
-  globalExpandPanels = false;
-  $('#toggle-expand-all-panels').click(function(e) {
-    ToggleExpandPanels(e);
-  });
-
-  // Only show open indicators if JS is enabled
-  $('.can-collapse').attr('data-toggle', 'collapse');
-  $('.close-by-default').addClass('collapsed');
-
-  // Open the correct panel when hash in url
-  if (location.hash !== null && location.hash !== '' &&
-      $(location.hash).length !== 0) {
-    $('.collapse').removeClass('in');
-    $('.open-by-default').addClass('collapsed');
-    $(location.hash + '.collapse').collapse('show');
-  } else if (location.hash !== null && location.hash === '#all') {
-    $(function(e) {
-      ToggleExpandPanels(e);
-    });
-  } else {
-  // By default all panels are collapsed.  We do the collapsing in
-  // in JavaScript, so users who disable JS will still see the sections.
-    $('.remove-in').removeClass('in');
-  }
-
-  // Add location-hash on opening of a panel
-  $('.collapse').on('show.bs.collapse', function(e) {
-    location.hash = '#' + this.getAttribute('id');
-  });
-
   // Force these values on page reload
   globalLastSelectedMet = '';
   globalHideMetnaCriteria = false;
@@ -439,6 +434,42 @@ $(document).ready(function() {
       resetProgressBar();
     });
   }
+
+  globalExpandPanels = false;
+  $('#toggle-expand-all-panels').click(function(e) {
+    ToggleExpandPanels(e);
+  });
+
+  // Only show open indicators if JS is enabled
+  $('.can-collapse').attr('data-toggle', 'collapse');
+  $('.close-by-default').addClass('collapsed');
+  $('.remove-in').removeClass('in');
+
+  // Open the correct panel when hash in url
+  if (location.hash !== null && location.hash !== '' &&
+      $(location.hash).length !== 0) {
+    $('.collapse').removeClass('in');
+    $('.open-by-default').addClass('collapsed');
+    showHash();
+  } else if (location.hash !== null && location.hash === '#all') {
+    $(function(e) {
+      ToggleExpandPanels(e);
+    });
+  }
+
+  // Add location.hash on opening of a panel
+  $('.collapse').on('show.bs.collapse', function(e) {
+    //Only change location.hash if we need to.
+    if (!globalIgnoreHashChange) {
+      var pPanel = this.closest('div.panel');
+      var pHeading = pPanel.getElementsByClassName('can-collapse')[0];
+      var origId = pHeading.getAttribute('id');
+      // prevent scrolling on panel open
+      pHeading.id = origId + '-tmp';
+      location.hash = '#' + origId;
+      pHeading.id = origId;
+    }
+  });
 
   // Polyfill datalist (for Safari users)
   polyfillDatalist();

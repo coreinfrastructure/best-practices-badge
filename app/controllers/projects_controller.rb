@@ -325,7 +325,7 @@ class ProjectsController < ApplicationController
   # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
   def url_anchor
-    return '' if params[:continue] == ''
-    '#' + params[:continue]
+    return '#' + params[:continue] unless params[:continue] == 'Save'
+    ''
   end
 end

@@ -1,4 +1,4 @@
-<% cache criterion do %>
+<% cache [criterion.to_s,project.to_s, @result] do %>
     <div id="<%= criterion.to_s %>" class="row">
     <% # raise unless criterion.to_s && criterion.name %>
       <% status_symbol = (criterion.to_s + "_status").to_sym %>
@@ -16,6 +16,7 @@
           criterion.met_url_required? %></span>
        <span class="criterion-na-justification-required hidden"><%=
           criterion.na_justification_required? %></span>
+
        <%= f.form_group status_symbol do %>
          <div class="col-xs-4 text-center block-center">
           <br><%= image_tag("Clear.gif", size: "40x40", id: criterion.to_s + "_enough", alt: "") %>
@@ -110,6 +111,7 @@
       <% else %>
         <hr>
       <% end %>
+
       </div>
     </div>
 <% end %>

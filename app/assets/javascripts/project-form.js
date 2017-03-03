@@ -317,7 +317,9 @@ function showHash() {
     if ($(window.location.hash).length) {
       // We need to wait a bit for animations to finish before scrolling.
       setTimeout(function() {
-        $(window.location.hash).get(0).scrollIntoView(true);
+        var offset = $(window.location.hash).offset();
+        var scrollto = offset.top - 100; // minus fixed header height
+        $('html, body').animate({scrollTop:scrollto}, 0);
       }, 200);
     }
   }
@@ -385,6 +387,7 @@ $(document).ready(function() {
   $('.details-text').hide('fast');
   $('.details-toggler').html('Show details');
   $('.details-toggler').click(ToggleDetailsDisplay);
+
 
   $('#show-all-details').click(function(e) {
     $('.details-text').show('fast');
@@ -458,16 +461,20 @@ $(document).ready(function() {
   }
 
   // Add location.hash on opening of a panel
-  $('.collapse').on('show.bs.collapse', function(e) {
+  $('.can-collapse').on('click', function(e) {
     //Only change location.hash if we need to.
-    if (!globalIgnoreHashChange) {
-      var pPanel = this.closest('div.panel');
-      var pHeading = pPanel.getElementsByClassName('can-collapse')[0];
-      var origId = pHeading.getAttribute('id');
+    if (!globalIgnoreHashChange && $(this).hasClass('collapsed')) {
+      var origId = this.getAttribute('id');
       // prevent scrolling on panel open
-      pHeading.id = origId + '-tmp';
+      this.id = origId + '-tmp';
       location.hash = '#' + origId;
-      pHeading.id = origId;
+      this.id = origId;
+    }
+  });
+
+  $(window).on('hashchange', function(e) {
+    if (!globalIgnoreHashChange && $(window.location.hash).length) {
+      showHash();
     }
   });
 

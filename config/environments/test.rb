@@ -46,6 +46,11 @@ Rails.application.configure do
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
 
+  # Enable Rack's built-in compression mechanism; this is important for people
+  # with slow network connections.  Enable during tests to make test
+  # more like production
+  config.middleware.use Rack::Deflater
+
   config.after_initialize do
     # The 'bullet' gem watches application queries and notifies
     # when you should add eager loading (N+1 queries),

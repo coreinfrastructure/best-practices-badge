@@ -77,6 +77,8 @@ export to .png so that it can viewed on GitHub.)
 
 ## Security Requirements
 
+## Basic Security Requirements and Assets
+
 Here is what BadgeApp must do to be secure (and a few comments about
 how we implement these requirements):
 
@@ -85,8 +87,8 @@ how we implement these requirements):
       who owns the project information, and GitHub user names,
       so we don't need to keep those confidential.
     - Non-public data is kept confidential.
-      User passwords and user email addresses are non-public data,
-      which we do protect specially:
+      User passwords and user email addresses are non-public data.
+      We *do* consider them higher-value assets and protect specially:
         - User passwords are only stored on the server as
           iterated salted hashes (using bcrypt).
         - Users may choose to "remember me" to automatically re-login on
@@ -114,19 +116,22 @@ how we implement these requirements):
           (e.g., contact badge entry owners for clarification).
           We also user email addresses as the user id for "local" accounts.
           We strive to not reveal user email addresses to others
-          (with the exception of administrators, who can see them).
+          (with the exception of administrators, who are trusted and thus
+          can see them).  Most of the rest of this document describes the
+          measures we take to prevent turning unintentional mistakes
+          into exposures of this data.
         - HTTPS is used to encrypt all communications between users
           and the application; this protects the confidentiality of
           all data in motion.
           There's no need to worry about covert channels.
 * Integrity:
-    - HTTPS is used to protect the integrity of all communications between users
-      and the application, as well as to authenticate the server
+    - HTTPS is used to protect the integrity of all communications between
+      users and the application, as well as to authenticate the server
       to the user.
     - Edits require a logged-in user with authorization.
       Edits may be performed by the data owner, anyone GitHub reports as
       being authorized to edit the project (if it's on GitHub), or
-      BadgeApp administrator ("admin").
+      a BadgeApp administrator ("admin").
       The badge owner is whoever created the badge entry.
     - Modifications to the official BadgeApp application require
       authentication via GitHub.
@@ -151,14 +156,46 @@ how we implement these requirements):
       That way, if the project data is corrupted, we can restore the
       database to a previous state.
 
-Here are a few other notes about the security requirements.
-
 BadgeApp must avoid being taken over by attackers, since this
 could cause lead to failure in confidentiality, integrity, or availability.
 In addition, it must avoid being a conduit for others' attacks
 (e.g., not be vulnerable to cross-site scripting).
 We do this by focusing on having a secure design and countering the
 most common kinds of attacks (as described below).
+
+## Threat Agents
+
+We have few insiders, and they are fully trusted to *not*
+perform intentionally-hostile actions.
+
+Thus, the threat agents we're primarily concerned about are outsiders,
+and the most concerning ones fit in one of these categories:
+
+*  people who enjoy taking over systems (without monetary benefit)
+*  criminal organizations who want to take emails and/or passwords
+   as a way to take over others' accounts (to break confidentiality).
+   Note that our one-way iterated salted hashes counter easy access
+   to passwords, so the most sensitive data is more difficult to obtain.
+*  criminal organizations who want destroy all our data and hold it for
+   ransom (i.e., "ransomware" organizations).  Note that our backups
+   help counter this.
+
+Criminal organizations may try to DDoS us for money, but there's no
+strong reason for us to pay the extortion fee.
+We expect that people will be willing to come back to the site later
+if it's down, and we have scaleability countermeasures to reduce their
+effectivenes.  If the attack is ongoing, several of the services we use
+would have a finantial incentive to help us counter the attacks.
+This makes the attacks themselves less likely
+(since there would be no financial benefit to them).
+
+There's no reason a state actor would attack the site
+(we don't store anything that valuable), so while many are very capable,
+we do not expect them to be a threat to this site.
+
+## Other Notes on Security Requirements
+
+Here are a few other notes about the security requirements.
 
 It is difficult to implement truly secure software.
 One challenge is that BadgeApp must accept, store, and retrieve data from
@@ -212,6 +249,10 @@ We emphasize security in design by using a simple design,
 applying secure design principles,
 limiting memory-unsafe language use, and
 increasing availability through scaleability.
+
+See the [implementation][./implementation.md] file to
+see a more detailed discussion of the software design, including a
+diagram of its high-level architecture and its trust boundary.
 
 ### <a name="simple-design"></a>Simple design
 
@@ -478,6 +519,8 @@ and how we attempt to reduce their risks in BadgeApp.
 8. Cross-Site Request Forgery (CSRF).
    We use the built-in Rails CSRF countermeasure, where csrf tokens
    are included in replies and checked on POST inputs.
+   We also set cookies with SameSite=Lax, which automatically counters
+   CSRF on supported browsers (such as Chrome).
    Our restrictive Content Security Policy (CSP) helps here, too.
    For more information, see the page on
    [request forgery protection](http://api.rubyonrails.org/classes/ActionController/RequestForgeryProtection.html).
@@ -594,6 +637,14 @@ as of 2015-12-14:
    uses email; that has its weaknesses,
    but the data is sufficiently low value, and there aren't
    good alternatives for low value data like this.
+   This isn't as bad as it might appear, because we prefer encrypted
+   channels for transmitting all emails. Our application attempts to send
+   messages to its MTA using TLS (using enable_starttls_auto: true),
+   and that MTA (SendGrid) then attempts to transfer the email the rest
+   of the way using TLS if the recipient's email system supports it
+   (see <https://sendgrid.com/docs/Glossary/tls.html>).
+   Many widely-used
+   This is decent protection against passive attacks.
    If users don't like that, they can log in via GitHub and use GitHub's
    forgotten password system.
    The file config/initializers/filter_parameter_logging.rb
@@ -653,6 +704,12 @@ these attempt to thwart or slow attack even if the system has a vulnerability.
   The HTTP headers are hardened via the
   [secure_headers](https://github.com/twitter/secureheaders) gem,
   developed by Twitter to enable a number of HTTP headers for hardening.
+* Cookies have various restrictions (also via the
+  [secure_headers](https://github.com/twitter/secureheaders) gem).
+  They have httponly=true (which counters many JavaScript-based attacks),
+  secure=true (which is irrelevant because we always use HTTPS but it
+  can't hurt), and SameSite=Lax (which counters CSRF attacks on
+  web browsers that support it).
 * We force the use of HTTPS, including via HSTS.
   The "coreinfrastructure.org" domain is included in
   [Chrome's HTTP Strict Transport Security (HSTS) preload list](https://hstspreload.org/?domain=coreinfrastructure.org).

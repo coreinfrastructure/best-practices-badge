@@ -7,7 +7,7 @@ gem 'bootstrap-sass', '3.3.7'
 gem 'bootstrap-social-rails', '4.12.0'
 gem 'bootstrap-will_paginate', '0.0.10'
 gem 'bootstrap_form', '2.6.0'
-gem 'chartkick', '2.2.2' # Chart project_stats
+gem 'chartkick', '2.2.3' # Chart project_stats
 gem 'coffee-rails', '4.2.1' # Support CoffeeScript (Javascript preprocessor)
 gem 'faker', '1.7.3'
 # Fastly master is locked to a railties version
@@ -15,7 +15,7 @@ gem 'fastly-rails', '0.8.0'
 gem 'font-awesome-rails', '4.7.0.1'
 gem 'github_api', '0.14.5'
 gem 'imagesLoaded_rails', '4.1.0' # JavaScript - enable wait for image load
-gem 'jbuilder', '2.6.1'
+gem 'jbuilder', '2.6.3'
 gem 'jquery-rails', '4.2.2' # JavaScript jQuery library (for Rails)
 # gem 'jquery-turbolinks' # Make turbolinks work with jQuery
 gem 'jquery-ui-rails', '6.0.1' # JavaScript jQueryUI library (for Rails)
@@ -79,8 +79,10 @@ end
 
 group :production do
   gem 'rails_12factor', '0.0.3'
-  # gem 'heroku_rails_deflate', '1.0.3' # Compress (reduces network load)
+  # Historically we used this gem to compress (to reduce network load):
+  # gem 'heroku_rails_deflate', '1.0.3'
   # Removed according to http://stackoverflow.com/a/39550697/1935918
-  # (it has not yet been updated to work with Rails 5).
+  # (it has not yet been updated to work with Rails 5).  Rack has a
+  # built-in compression mechanism, which we use in production instead.
   gem 'rack-timeout', '0.4.2' # Timeout; https://github.com/heroku/rack-timeout
 end

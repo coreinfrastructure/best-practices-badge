@@ -1,4 +1,4 @@
-# Security
+# BadgeApp Security: Its Assurance Case
 
 <!-- SPDX-License-Identifier: (MIT OR CC-BY-3.0+) -->
 
@@ -22,7 +22,7 @@ For more technical information on the implementation, see
 ## Assurance case summary
 
 The following figures summarize why we think this application
-is adequately secure:
+is adequately secure (more detail is provided in the rest of this document):
 
 ![Assurance case summary](./assurance-case.png)
 ![Assurance case in lifecycle](./assurance-case-lifecycle.png)
@@ -83,6 +83,8 @@ Note that the project receives its own badge
 (the CII best practices badge),
 which provides additional evidence that it applies best practices
 that can lead to more secure software.
+We conclude with a short discussion of residual risks, and a final
+appeal to report to us if you find a vulnerability.
 
 (Note to editors: to edit the figures above, edit the .odg file, then
 export to .png so that it can viewed on GitHub.)
@@ -260,11 +262,13 @@ a way for others to edit project entries when they are not on GitHub.
 Here we have identified the key security requirements and why we believe
 they've been met overall.  However, there is always the possibility that
 a mistake could lead to failure to meet these requirements.
-We manage this risk by
+It is not possible to eliminate all possible risks; instead,
+we focus on *managing* risks.
+We manage our security risks by
 implementing security in all our software development processes.
 We also protect our development environment and choose people
 who will help support this.
-The following sections describe how we've managed this risk.
+The following sections describe how we've managed our security-related risks.
 
 ## Security in Design
 
@@ -287,7 +291,7 @@ The following figure shows a high-level design of the implementation:
 
 ![Design](./design.png)
 
-See the [implementation][./implementation.md] file to
+See the [implementation](./implementation.md) file to
 see a more detailed discussion of the software design.
 
 ### Threat model focusing on design
@@ -644,7 +648,7 @@ and how we attempt to reduce their risks in BadgeApp.
    The system depends on server-side routers and controllers for
    access control.  There is some client-side JavaScript, but no
    access control depends on it.
-8. Cross-Site Request Forgery (CSRF).
+8. Cross-Site Request Forgery (CSRF or XSRF).
    We use the built-in Rails CSRF countermeasure, where csrf tokens
    are included in replies and checked on POST inputs.
    We also set cookies with SameSite=Lax, which automatically counters
@@ -1186,6 +1190,39 @@ The BadgeApp application achieves its own badge.
 This is evidence that the BadgeApp application is
 applying practices expected in a well-run FLOSS project.
 
+## Residual risks
+
+It is not possible to eliminate all risks.
+Here are a few of the more-prominent residual risks, and why we
+believe they are acceptable:
+
+*   *External service dependencies.*
+    We depend on several external services, and if they are subverted
+    (externally or by an insider) then our service might be subverted as well.
+    The most obvious services we depend on are GitHub, Heroku, and
+    Amazon Web Services.
+    We use GitHub to maintain the code, and we depend on GitHub to
+    authenticate GitHub users.  The website itself runs on Heroku, and
+    Heroku in turn depends on Amazon Web Services.
+    However, these services have generally good reputations, are
+    professionally-managed, and have a history of careful monitoring and
+    rapid response to any issue.  It's not obvious that we would do
+    better if we did it ourselves.
+*   *Third party components.*
+    As discussed earlier, like all real systems we depend on a large number
+    of third party components we did not develop.  These components
+    could have a unintentional or even intentional vulnerabilities.
+    However, recreating them would cost far more time, and since we can make
+    mistakes too it's unlikely that the result would be better. Instead,
+    as discussed above, we apply a variety of techniques to manage our risks.
+*   *DDoS.*
+    We use a variety of techniques, as discussed above, to redue the
+    impact of DDoS attacks.  However,
+    DDoS attacks are fundamentally resource-on-resource attacks, so
+    at some point we simply cannot counter them short of pouring many
+    resources into countering them.
+    The same is true for almost any other website.
+
 ## Your help is welcome!
 
 Security is hard; we welcome your help.
@@ -1194,6 +1231,5 @@ that actually do the work of hardening.
 We thank many, including Reg Meeson, for reviewing and providing feedback
 on this assurance case.
 
-Please report potential vulnerabilities you find.
-See [CONTRIBUTING.md](../CONTRIBUTING.md) for how to submit
-a vulnerability report.
+Please report potential vulnerabilities you find; see
+[CONTRIBUTING.md](../CONTRIBUTING.md) for how to submit a vulnerability report.

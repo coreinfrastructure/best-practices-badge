@@ -4,13 +4,22 @@
 
 Security is important and challenging.
 This document describes why we think this software (the "BadgeApp")
-is adequately secure (i.e., its "assurance case").
+is adequately secure.
+In other words, this document is the "assurance case" for the BadgeApp.
+This document is the result of continuous threat/attack modeling
+while the system is developed and maintained, and it is modified
+as the situation changes.
+For simplicity, this document also serves as detailed documentation of
+the security requirements, since in this case we found it
+easier to put them all in one document.
 
 Sadly, perfection is rare; we really want your help.
 If you find a vulnerability, please see
 [CONTRIBUTING.md](../CONTRIBUTING.md) for how to submit a vulnerability report.
 For more technical information on the implementation, see
 [implementation.md](implementation.md).
+
+## Assurance case summary
 
 The following figures summarize why we think this application
 is adequately secure:
@@ -24,6 +33,9 @@ which is a simple notation often used for assurance cases.
 Ovals are claims or sub-claims, while rounded rectangles are the supporting
 arguments justifying the claims.
 The figures are simply a summary; the text below provides the details.
+We do not show evidence in the figures, but provide the evidence in
+the supporting text below instead, because large figures are time-consuming
+to edit.
 
 Our overall security approach is called
 defense-in-breadth, that is, we consider
@@ -77,7 +89,7 @@ export to .png so that it can viewed on GitHub.)
 
 ## Security Requirements
 
-## Basic Security Requirements and Assets
+### Basic Security Requirements
 
 Here is what BadgeApp must do to be secure (and a few comments about
 how we implement these requirements):
@@ -163,7 +175,18 @@ In addition, it must avoid being a conduit for others' attacks
 We do this by focusing on having a secure design and countering the
 most common kinds of attacks (as described below).
 
-## Threat Agents
+### Assets
+
+As should be clear from the basic requirements above, our assets are:
+
+*   User passwords, especially for confidentiality.
+    Unencrypted user passwords are the most critical
+    to protect (which we protect with bcrypt).
+*   User email addresses, especially for confidentiality.
+*   Project data, primarily for integrity and availability.
+    We back these up to support availability.
+
+### Threat Agents
 
 We have few insiders, and they are fully trusted to *not*
 perform intentionally-hostile actions.
@@ -193,7 +216,7 @@ There's no reason a state actor would attack the site
 (we don't store anything that valuable), so while many are very capable,
 we do not expect them to be a threat to this site.
 
-## Other Notes on Security Requirements
+### Other Notes on Security Requirements
 
 Here are a few other notes about the security requirements.
 
@@ -245,14 +268,119 @@ The following sections describe how we've managed this risk.
 
 ## Security in Design
 
-We emphasize security in design by using a simple design,
+We emphasize security in the architectural design.
+
+We first present a brief summary of the high-level design,
+followed by the results of threat modeling that are based on the design
+(this entire document is the result of threat modeling in the
+broader sense).
+The then discuss approaches we are using in the design
+to improve security:
+using a simple design,
 applying secure design principles,
 limiting memory-unsafe language use, and
 increasing availability through scaleability.
 
+### High-level Design
+
+The following figure shows a high-level design of the implementation:
+
+![Design](./design.png)
+
 See the [implementation][./implementation.md] file to
-see a more detailed discussion of the software design, including a
-diagram of its high-level architecture and its trust boundary.
+see a more detailed discussion of the software design.
+
+### Threat model focusing on design
+
+There are many approaches for threat (attack) modeling, e.g., a
+focus on attackers, assets, or the design.
+We have already discussed attackers and assets; here we focus on the design.
+
+Here we have decided to apply a simplified version of
+Microsoft's STRIDE approach for threat modeling.  
+As explained in
+[The STRIDE Threat Model](https://msdn.microsoft.com/en-us/library/ee823878%28v=cs.20%29.aspx), each major design component is examined for:
+
+*   Spoofing identity. An example of identity spoofing is illegally accessing and then using another user's authentication information, such as username and password.
+*   Tampering with data. Data tampering involves the malicious modification of data. Examples include unauthorized changes made to persistent data, such as that held in a database, and the alteration of data as it flows between two computers over an open network, such as the Internet.
+*   Repudiation. Repudiation threats are associated with users who deny performing an action without other parties having any way to prove otherwise—for example, a user performs an illegal operation in a system that lacks the ability to trace the prohibited operations. Nonrepudiation refers to the ability of a system to counter repudiation threats. For example, a user who purchases an item might have to sign for the item upon receipt. The vendor can then use the signed receipt as evidence that the user did receive the package.
+*   Information disclosure. Information disclosure threats involve the exposure of information to individuals who are not supposed to have access to it—for example, the ability of users to read a file that they were not granted access to, or the ability of an intruder to read data in transit between two computers.
+*   Denial of service. Denial of service (DoS) attacks deny service to valid users—for example, by making a Web server temporarily unavailable or unusable. You must protect against certain types of DoS threats simply to improve system availability and reliability.
+*   Elevation of privilege. In this type of threat, an unprivileged user gains privileged access and thereby has sufficient access to compromise or destroy the entire system. Elevation of privilege threats include those situations in which an attacker has effectively penetrated all system defenses and become part of the trusted system itself, a dangerous situation indeed.
+
+The diagram shown earlier is not a data flow diagram
+(DFD), but it can be interpreted as one by interpreting
+the arrows as two-way data flows.
+This is frankly too detailed for such a simple system, so we will
+group rectangles together into a smaller set of processes as shown below.
+
+#### Web server, Web App Interface, and Router
+
+The web server and webapp interface accept untrusted data and deliver
+it to the appropriate controller.
+
+*   Spoofing identity. N/A, identity is irrelevant because it's untrusted.
+*   Tampering with data. Data is only accepted by the web server via HTTPS.
+*   Repudiation. N/A.
+*   Information disclosure. These simply deliver untrusted data to components
+    we trust to handle it properly.
+*   Denial of service. We use scaleability, caching, a CDN,
+    and rapid recovery to help deal with denial of service attacks.
+    Large denial of service attacks are hard to counter, and we don't claim
+    to be able to prevent them.
+*   Elevation of privilege. By itself these components provide no privilege.
+
+#### Controllers, Models, Views
+
+*   Spoofing identity. Identities are authenticated before they are used.
+    Session values are sent back to the user, but stored in an encrypted
+    container and only the server has the encryption key.
+*   Tampering with data.
+    User authorization is checked before changes are permitted.
+*   Repudiation. N/A.
+*   Information disclosure.  Sensitive data (passwords and email addresses)
+    is not displayed in any view unless the user is an authorized admin.
+*   Denial of service. See earlier comments on DoS.
+*   Elevation of privilege.  These are written in a memory-safe language,
+    and written defensively (since normal users are untrusted).
+    There's no known way to use an existing
+    privilege to gain more privileges.
+    In addition, the application has no built-in mechanism
+    for turning normal users into administrators; this must be done using
+    the SQL interface that is only available to those who have admin rights
+    to access the SQL database.  That's no guarantee of invulnerability,
+    but it means that there's no pre-existing code that can be triggered
+    to cause the change.
+
+#### DBMS
+
+There is no direct access for normal users to the DBMS;
+in production, access requires special Heroku keys.
+
+The DBMS does not know which user the BadgeApp
+is operating on behalf of, and does not have separate privileges.
+However, the BadgeApp uses ActiveRecord and prepared statements,
+making it unlikely that an attacker can use SQL injections to
+insert malicious queries.
+
+*   Spoofing identity. N/A, the database doesn't track identities.
+*   Tampering with data. The BadgeApp is trusted to make correct requests.
+*   Repudiation. N/A.
+*   Information disclosure.  The BadgeApp is trusted to make correct requests.
+*   Denial of service. See earlier comments on DoS.
+*   Elevation of privilege.  N/A, the DBMS doesn't separate privileges.
+
+#### Chief and Detectives
+
+*   Spoofing identity. N/A, these simply collect data.
+*   Tampering with data. These use HTTPS when provided HTTPS URLs.
+*   Repudiation. N/A.
+*   Information disclosure.  These simply retrieve and summarize
+    information that is publicly available, using URLs provided by users.
+*   Denial of service.  Timeouts are in place so that if the project
+    isn't responsive, eventually the system automatically recovers.
+*   Elevation of privilege.  These are written in a memory-safe language,
+    and written defensively (since the project sites are untrusted).
 
 ### <a name="simple-design"></a>Simple design
 
@@ -870,7 +998,7 @@ and how it helps make the software more secure:
   custom software is released as Free/Libre and open source software (FLOSS)
   using a well-known FLOSS license (MIT).
 * The software has a strong test suite; our policy requires
-  at least 90% statement coverage (and in practice our coverage is higher).
+  at least 90% statement coverage (and in practice our coverage is much higher).
   This makes it easier to update components (e.g., if a third-party component
   has a publicly disclosed vulnerability).
   The test suite also makes it easier to make other fixes (e.g., to harden

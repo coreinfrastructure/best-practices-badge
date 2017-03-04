@@ -1,4 +1,6 @@
 # frozen_string_literal: true
+
+# rubocop:disable Metrics/BlockLength
 SecureHeaders::Configuration.default do |config|
   normal_src = ["'self'"]
   if ENV['PUBLIC_HOSTNAME']
@@ -12,6 +14,7 @@ SecureHeaders::Configuration.default do |config|
   config.x_xss_protection = '1; mode=block'
   config.x_download_options = 'noopen'
   config.x_permitted_cross_domain_policies = 'none'
+  config.referrer_policy = 'no-referrer-when-downgrade'
   # Configure CSP
   config.csp = {
     default_src: normal_src,
@@ -36,3 +39,4 @@ SecureHeaders::Configuration.default do |config|
   # one wrong move can render the site useless, and it makes it hard to
   # switch CAs if the CA behaves badly.
 end
+# rubocop:enable Metrics/BlockLength

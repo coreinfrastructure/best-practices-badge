@@ -297,7 +297,7 @@ focus on attackers, assets, or the design.
 We have already discussed attackers and assets; here we focus on the design.
 
 Here we have decided to apply a simplified version of
-Microsoft's STRIDE approach for threat modeling.  
+Microsoft's STRIDE approach for threat modeling.
 As explained in
 [The STRIDE Threat Model](https://msdn.microsoft.com/en-us/library/ee823878%28v=cs.20%29.aspx), each major design component is examined for:
 

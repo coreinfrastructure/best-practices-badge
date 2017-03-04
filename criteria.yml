@@ -248,9 +248,10 @@
           href="https://sourceforge.net/blog/introducing-https-for-project-websites/">SourceForge
           project pages</a>.  If you are using GitHub pages with
           custom domains, you MAY use a content delivery network
-          (CDN) as a proxy to support HTTPS, such as described in this <a
-          href=”https://blog.cloudflare.com/secure-and-fast-github-pages-with-cloudflare/”>blog
-          post</a>, to satisfy this criterion. If you support HTTP,
+          (CDN) as a proxy to support HTTPS, such as described in the <a
+          href="https://blog.cloudflare.com/secure-and-fast-github-pages-with-cloudflare/">blog
+          post "Secure and fast GitHub Pages with CloudFlare"</a>,
+          to satisfy this criterion. If you support HTTP,
           we urge you to redirect the HTTP traffic to HTTPS.
         autofill: >
           Look at project, repo, and download URLs. https is okay, http is not.

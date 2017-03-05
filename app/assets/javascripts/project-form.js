@@ -11,6 +11,8 @@ var MIN_SHOULD_LENGTH = 5;
 // Don't hide this criterion (yet), so that users can enter a justification.
 var globalLastSelectedMet = '';
 var globalHideMetnaCriteria = false;
+var globalExpandPanels = false;
+var globalIgnoreHashChange = false;
 
 // Do a polyfill for datalist if it's not already supported
 // (e.g., Safari fails to support polyfill at the time of this writing).
@@ -271,6 +273,58 @@ function ToggleHideMet(e) {
   hideMetNA();
 }
 
+function ExpandPanels() {
+  if (globalExpandPanels) {
+    globalIgnoreHashChange = true;
+    $('.can-collapse.collapsed').click();
+    location.hash = '#all';
+    globalIgnoreHashChange = false;
+  } else {
+    $('.can-collapse:not(.collapsed)').click();
+    location.hash = '';
+  }
+}
+
+function ToggleExpandPanels(e) {
+  globalExpandPanels = !globalExpandPanels;
+  // Note that button text shows what WILL happen on click, so it
+  // shows the REVERSED state (not the current state).
+  if (globalExpandPanels) {
+    $('#toggle-expand-all-panels')
+      .addClass('active').html('Collapse all panels');
+  } else {
+    $('#toggle-expand-all-panels')
+      .removeClass('active').html('Expand all panels');
+  }
+  ExpandPanels();
+}
+
+function hashParentPanel() {
+  var hashId = window.location.hash.substring(1);
+  var targetElement = document.getElementById(hashId);
+  return targetElement.closest('div.panel') || 0;
+}
+
+function showHash() {
+  var parentPane = hashParentPanel();
+  if (parentPane !== 0) {
+    var loc = parentPane.getElementsByClassName('can-collapse')[0];
+    globalIgnoreHashChange = true;
+    if ($(loc).hasClass('collapsed')) {
+      $(loc).click();
+    }
+    globalIgnoreHashChange = false;
+    if ($(window.location.hash).length) {
+      // We need to wait a bit for animations to finish before scrolling.
+      setTimeout(function() {
+        var offset = $(window.location.hash).offset();
+        var scrollto = offset.top - 100; // minus fixed header height
+        $('html, body').animate({scrollTop:scrollto}, 0);
+      }, 200);
+    }
+  }
+}
+
 function setupProjectField(criteria) {
   updateCriteriaDisplay(criteria);
   $('input[name="project[' + criteria + '_status]"]').click(
@@ -334,6 +388,7 @@ $(document).ready(function() {
   $('.details-toggler').html('Show details');
   $('.details-toggler').click(ToggleDetailsDisplay);
 
+
   $('#show-all-details').click(function(e) {
     $('.details-text').show('fast');
     $('.details-toggler').html('Hide details');
@@ -382,6 +437,46 @@ $(document).ready(function() {
       resetProgressBar();
     });
   }
+
+  globalExpandPanels = false;
+  $('#toggle-expand-all-panels').click(function(e) {
+    ToggleExpandPanels(e);
+  });
+
+  // Only show open indicators if JS is enabled
+  $('.can-collapse').attr('data-toggle', 'collapse');
+  $('.close-by-default').addClass('collapsed');
+  $('.remove-in').removeClass('in');
+
+  // Open the correct panel when hash in url
+  if (location.hash !== null && location.hash !== '' &&
+      $(location.hash).length !== 0) {
+    $('.collapse').removeClass('in');
+    $('.open-by-default').addClass('collapsed');
+    showHash();
+  } else if (location.hash !== null && location.hash === '#all') {
+    $(function(e) {
+      ToggleExpandPanels(e);
+    });
+  }
+
+  // Add location.hash on opening of a panel
+  $('.can-collapse').on('click', function(e) {
+    //Only change location.hash if we need to.
+    if (!globalIgnoreHashChange && $(this).hasClass('collapsed')) {
+      var origId = this.getAttribute('id');
+      // prevent scrolling on panel open
+      this.id = origId + '-tmp';
+      location.hash = '#' + origId;
+      this.id = origId;
+    }
+  });
+
+  $(window).on('hashchange', function(e) {
+    if (!globalIgnoreHashChange && $(window.location.hash).length) {
+      showHash();
+    }
+  });
 
   // Polyfill datalist (for Safari users)
   polyfillDatalist();

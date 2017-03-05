@@ -29,6 +29,17 @@ class LoginTest < CapybaraFeatureTest
     visit edit_project_path(@project)
     kill_sticky_headers # This is necessary for Chrome and Firefox
 
+    fill_in 'project_name', with: 'It doesnt matter'
+    # Below we are clicking the final save button, it has a value of ''
+    click_button('Save', exact: true)
+    assert_equal current_path, edit_project_path(@project)
+    assert has_content? 'Project was successfully updated.'
+    # TODO: Get the clicking working again with capybara.
+    # Details: If we expand all panels first and dont click this test passes.
+    #          If we instead click each section, Capybara has issues not seen
+    #          in real world scenarios, mainly it doesn't correctly identify
+    #          an elements parents, leading to errors.
+    click_on('Expand all panels')
     ensure_choice 'project_discussion_status_unmet'
     assert_match X, find('#discussion_enough')['src']
 
@@ -41,7 +52,7 @@ class LoginTest < CapybaraFeatureTest
     ensure_choice 'project_contribution_requirements_status_unmet' # No URL
     assert_match X, find('#contribution_requirements_enough')['src']
 
-    click_on 'Change Control'
+    # click_on 'Change Control'
     assert has_content? 'repo_public'
     ensure_choice 'project_repo_public_status_unmet'
     assert_match X, find('#repo_public_enough')['src']
@@ -51,14 +62,12 @@ class LoginTest < CapybaraFeatureTest
     assert find('#project_repo_distributed_status_unmet')['checked']
     assert_match DASH, find('#repo_distributed_enough')['src']
 
-    click_on 'Reporting'
+    # click_on 'Reporting'
     assert has_content? 'report_process'
     ensure_choice 'project_report_process_status_unmet'
     assert_match X, find('#report_process_enough')['src']
 
-    click_on 'Save (and continue)'
-    assert_equal current_path, edit_project_path(@project)
-    click_on 'Submit'
+    click_on('Submit', match: :first)
     assert_match X, find('#discussion_enough')['src']
   end
   # rubocop:enable Metrics/BlockLength

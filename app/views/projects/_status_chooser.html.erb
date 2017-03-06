@@ -3,12 +3,9 @@
 <% project_criterion_status = project[status_symbol] %>
 <% project_criterion_justification = project[justification_symbol] %>
 
-<% cache [criterion, is_disabled, project_criterion_status, project_criterion_justification ] do %>
+<% cache [criterion.to_s, is_disabled, project_criterion_status, project_criterion_justification ] do %>
     <div id="<%= criterion.to_s %>" class="row">
     <% # raise unless criterion.to_s && criterion.name %>
-      <% status_symbol = (criterion.to_s + "_status").to_sym %>
-      <% justification_symbol = (criterion.to_s + "_justification").to_sym %>
-
       <% is_crypto = criterion.to_s.match(/^crypto_/) %>
       <% crypto_class = is_crypto ? ' criterion-is-crypto' : '' %>
 

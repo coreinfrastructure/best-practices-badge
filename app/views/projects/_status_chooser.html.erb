@@ -1,4 +1,9 @@
-<% cache [criterion.to_s,project.to_s, @result] do %>
+<% status_symbol = (criterion.to_s + "_status").to_sym %>
+<% justification_symbol = (criterion.to_s + "_justification").to_sym %>
+<% project_criterion_status = project[status_symbol] %>
+<% project_criterion_justification = project[justification_symbol] %>
+
+<% cache [criterion, is_disabled, project_criterion_status, project_criterion_justification ] do %>
     <div id="<%= criterion.to_s %>" class="row">
     <% # raise unless criterion.to_s && criterion.name %>
       <% status_symbol = (criterion.to_s + "_status").to_sym %>
@@ -84,22 +89,22 @@
            <div id="<%= criterion.to_s + '_na_suppress' %>" class="hidden"></div>
          <% end %>
          <% if (is_disabled) %>
-           <% if project[justification_symbol] %>
+           <% if project_criterion_justification %>
              <div class="justification-markdown">
-               <%= markdown(project[justification_symbol]) %>
+               <%= markdown(project_criterion_justification) %>
              </div>
            <% end %>
-           <% if project[status_symbol] == 'Met' &&
+           <% if project_criterion_status == 'Met' &&
                  criterion.met_url_required? &&
-                 !project.contains_url?(project[justification_symbol]) %>
+                 !project.contains_url?(project_criterion_justification) %>
              <p class="bg-warning">Warning: URL required, but no URL found.</p>
-           <% elsif project[status_symbol] == 'Unmet' &&
+           <% elsif project_criterion_status == 'Unmet' &&
                       criterion.category == 'SHOULD' &&
-                      project[justification_symbol].length < Project::MIN_SHOULD_LENGTH %>
+                      project_criterion_justification.length < Project::MIN_SHOULD_LENGTH %>
              <p class="bg-warning">Warning: Requires lengthier justification.</p>
            <% elsif criterion.na_allowed? &&
-                      project[status_symbol] == 'N/A' &&
-                      project[justification_symbol].length < Project::MIN_SHOULD_LENGTH %>
+                      project_criterion_status == 'N/A' &&
+                      project_criterion_justification.length < Project::MIN_SHOULD_LENGTH %>
              <p class="bg-warning">Warning: Requires lengthier justification.</p>
            <% end %>
            <%= f.text_area justification_symbol, class:"form-control hidden", hide_label: true, placeholder:'Please explain', disabled: is_disabled  %>

@@ -11,6 +11,7 @@ var MIN_SHOULD_LENGTH = 5;
 // Don't hide this criterion (yet), so that users can enter a justification.
 var globalLastSelectedMet = '';
 var globalHideMetnaCriteria = false;
+var globalShowAllDetails = false;
 var globalExpandPanels = false;
 var globalIgnoreHashChange = false;
 
@@ -360,6 +361,23 @@ function ToggleDetailsDisplay(e) {
     });
 }
 
+function ToggleAllDetails(e) {
+  globalShowAllDetails = !globalShowAllDetails;
+  // Note that button text shows what WILL happen on click, so it
+  // shows the REVERSED state (not the current state).
+  if (globalShowAllDetails) {
+    $('#toggle-show-all-details')
+      .addClass('active').html('Hide all detailed text');
+    $('.details-text').show('fast');
+    $('.details-toggler').html('Hide details');
+  } else {
+    $('#toggle-show-all-details')
+      .removeClass('active').html('Show all detailed text');
+    $('.details-text').hide('fast');
+    $('.details-toggler').html('Show details');
+  }
+}
+
 // Create mappings from criteria name to category and met_url_required.
 // Eventually replace with just accessing classes directly via JavaScript.
 function SetupCriteriaStructures() {
@@ -389,13 +407,9 @@ $(document).ready(function() {
   $('.details-toggler').click(ToggleDetailsDisplay);
 
 
-  $('#show-all-details').click(function(e) {
-    $('.details-text').show('fast');
-    $('.details-toggler').html('Hide details');
-  });
-  $('#hide-all-details').click(function(e) {
-    $('.details-text').hide('fast');
-    $('.details-toggler').html('Show details');
+  globalShowAllDetails = false;
+  $('#toggle-show-all-details').click(function(e) {
+    ToggleAllDetails(e);
   });
 
   // Force these values on page reload

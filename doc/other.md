@@ -52,20 +52,20 @@ Upgrade some "passing" level SHOULD and SUGGESTED:
     "The information on how to contribute MUST include the
     requirements for acceptable contributions (e.g., a reference to
     any required coding standard)."
-    
+
 *   Upgrade report_tracker from SHOULD to MUST -
     "The project MUST use an issue tracker for tracking individual issues."
-    
+
     Note: The Linux kernel project has indicated that using an issue
     tracker is difficult at their scale.
-    
+
 *   Unchanged:
 
     - floss_license_osi -
       "It is SUGGESTED that any required license(s) be <a
       href="https://opensource.org/licenses">approved by the Open Source
       Initiative (OSI).</a>"
-      
+
     - english -
       "The project SHOULD include documentation in English and be able
       to accept bug reports and comments about code in English."
@@ -77,11 +77,11 @@ Upgrade some "passing" level SHOULD and SUGGESTED:
     - repo_distributed -
       "It is SUGGESTED that common distributed version control software
       be used (e.g., git)."
-      
+
     - version_semver -
       "It is SUGGESTED that the <a href="http://semver.org">Semantic
       Versioning (SemVer) format</a> be used for releases."
-      
+
     - version_tags -
       "It is SUGGESTED that projects identify each release within
       their version control system. For example, it is SUGGESTED
@@ -104,7 +104,7 @@ Upgrade some "passing" level SHOULD and SUGGESTED:
     This is a change from, "It is SUGGESTED that this policy on
     adding tests be <i>documented</i> in the instructions for change
     proposals."
-    
+
 *   <a name="warnings_strict"></a>
     warnings_strict -
     Projects MUST be maximally strict with warnings, where practical.
@@ -119,25 +119,25 @@ Upgrade some "passing" level SHOULD and SUGGESTED:
 
     - build_common_tools -
       "It is SUGGESTED that common tools be used for building the software."
-      
+
     - build_floss_tools -
       "The project SHOULD be buildable using only FLOSS tools."
-      
+
     - test_invocation -
       "A test suite SHOULD be invocable in a standard way for that language."
-      
+
     - test_most -
       "It is SUGGESTED that the test suite cover most (or ideally all)
       the code branches, input fields, and functionality."
-      
+
       *NOTE*: Statement/branch coverage is covered separately; they are
       increased, so we are not changing the level of this one.
-      
+
     - test_continuous_integration -
       "It is SUGGESTED that the project implement continuous integration
       (where new or changed code is frequently integrated into a central
       code repository and automated tests are run on the result)."
-      
+
       *NOTE*: This is upgraded to MUST in passing+2, and passing+1 adds
       an intermediate criterion called <a
       href="#automated_integration_testing">automated_integration_testing</a>.
@@ -155,17 +155,17 @@ Upgrade some "passing" level SHOULD and SUGGESTED:
       its primary purpose is not to implement cryptography, then it
       SHOULD only call on software specifically designed to implement
       cryptographic functions; it SHOULD NOT re-implement its own."
-      
+
     - crypto_pfs -
       "The project SHOULD implement perfect forward secrecy for key
       agreement protocols so a session key derived from a set of
       long-term keys cannot be compromised if one of the long-term keys
       is compromised in the future."
-      
+
     - vulnerabilities_critical_fixed -
       "Projects SHOULD fix all critical vulnerabilities rapidly after
       they are reported."
-      
+
       *NOTE*: We'd like this to always be true, but some vulnerabilities
       are hard to fix, so it's difficult to mandate this.
       We *could* require activities to actively work to fix it, and
@@ -279,7 +279,7 @@ as described below.
 
 *   <a name="governance"></a>The project MUST clearly define and document
     its project governance model (the way it makes decisions,
-    including key roles). 
+    including key roles).
     <sup>[<a href="#governance">governance</a>]</sup>
 
     *Details*: There needs to be some well-established documented way
@@ -452,7 +452,7 @@ as described below.
 
 *   <a name="vulnerability_report_credit"></a>The project MUST give credit
     to the reporter(s) of all vulnerability reports resolved in the last 12
-    months, except for the reporter(s) who request anonymity. 
+    months, except for the reporter(s) who request anonymity.
     (N/A allowed).
     <sup>[<a href="#vulnerability_report_credit">vulnerability_report_credit</a>]</sup>
 
@@ -584,14 +584,14 @@ as described below.
     more thoroughly (which statement coverage does *not* measure).
 
     The 80% suggested here is supported by various sources.
-    The defaults of 
+    The defaults of
     <a href="http://docs.codecov.io/docs/coverage-configuration">codecov.io</a>.  They define
     70% and below as red, 100% as perfectly green, and anything between
     70..100 as a range between red and green. This renders ~80% as yellow,
     and somewhere between ~85% and 90% it starts looking pretty green.
 
-    The paper 
-    <a href="http://www.bullseye.com/minimum.html">"Minimum Acceptable Code Coverage" by Steve Cornett</a> 
+    The paper
+    <a href="http://www.bullseye.com/minimum.html">"Minimum Acceptable Code Coverage" by Steve Cornett</a>
     claims, "Code
     coverage of 70-80% is a reasonable goal for system test of most
     projects with most coverage metrics. Use a higher goal for projects
@@ -670,7 +670,7 @@ as described below.
 
 *   <a name="updateable_reused_components"></a>
     The project MUST make it easy to either
-    (1) identify and update reused externally-maintained components or 
+    (1) identify and update reused externally-maintained components or
     (2) use the standard components provided by the system or programming language.
     Then, if a vulnerability is found in a reused component, it will be
     easy to update that component.
@@ -694,7 +694,7 @@ as described below.
     known vulnerabilities.  This is OWASP Top 10 (2013) number A9
     (using known vulnerable components).  See also
     <a href="http://www.aspectsecurity.com/research-presentations/the-unfortunate-reality-of-insecure-libraries">The Unfortunate Reality of Insecure Libraries</a>.
-    
+
     *TODO*: What about vendoring, where code is copied in with the
     express intent of *only* using that copied version?
     (These are intentional forks.)  There's a risk of divergence
@@ -904,7 +904,7 @@ as described below.
     letting any user or researcher know what to expect.
     Many sources discuss the rationale for an "assurance case".
     This was inspired by
-    <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/502">Security specification and facilitation of bug bounties</a> 
+    <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/502">Security specification and facilitation of bug bounties</a>
     and by the
     <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/473">NYC 2016 brainstorming session</a>.
 
@@ -934,7 +934,7 @@ as described below.
 *   <a name="crypto_used_network"></a>(Future) The project
     SHOULD NOT use unencrypted network communication protocols (such as HTTP
     and telnet) if there is an encrypted equivalent (e.g., HTTPS/TLS and SSH),
-    unless the user specifically requests or configures it. 
+    unless the user specifically requests or configures it.
     (N/A allowed).
     <sup>[<a href="#crypto_used_network">crypto_used_network</a>]</sup>
 
@@ -1024,14 +1024,14 @@ as described below.
 *   FIXME - list of upgrades of SHOULD and SUGGESTED from passing and passing+1.
 
     - E.g., MUST have bus factor of 2 or more.
-    
+
     - Change "report_tracker" to MUST, to require issue tracking.
       Using GitHub issues meets this.
       Note that the Linux kernel project has reported that this is very
       hard to do at their scale.
-      
+
       NOTE: Kevin Wall thinks this should be at passing+1, not passing+2.
-      
+
     - We've done this specially for test_continuous_integration
 
 #### Upgrade: Basics
@@ -1042,7 +1042,7 @@ as described below.
       "It is SUGGESTED that any required license(s) be <a
       href="https://opensource.org/licenses">approved by the Open Source
       Initiative (OSI).</a>"
-      
+
     - english -
       "The project SHOULD include documentation in English and be able
       to accept bug reports and comments about code in English."
@@ -1058,7 +1058,7 @@ as described below.
     - version_semver -
       "It is SUGGESTED that the <a href="http://semver.org">Semantic
       Versioning (SemVer) format</a> be used for releases."
-      
+
     - version_tags -
       "It is SUGGESTED that projects identify each release within
       their version control system. For example, it is SUGGESTED
@@ -1087,14 +1087,14 @@ as described below.
 
     - build_common_tools -
       "It is SUGGESTED that common tools be used for building the software."
-      
+
     - build_floss_tools -
       "The project SHOULD be buildable using only FLOSS tools."
-      
+
     - test_most -
       "It is SUGGESTED that the test suite cover most (or ideally all)
       the code branches, input fields, and functionality."
-      
+
       *NOTE*: Statement/branch coverage is covered separately; they are
       increased, so we are not changing the level of this one.
 
@@ -1107,17 +1107,17 @@ as described below.
       its primary purpose is not to implement cryptography, then it
       SHOULD only call on software specifically designed to implement
       cryptographic functions; it SHOULD NOT re-implement its own."
-      
+
     - crypto_pfs -
       "The project SHOULD implement perfect forward secrecy for key
       agreement protocols so a session key derived from a set of
       long-term keys cannot be compromised if one of the long-term keys
       is compromised in the future."
-      
+
     - vulnerabilities_critical_fixed -
       "Projects SHOULD fix all critical vulnerabilities rapidly after
       they are reported."
-      
+
       *NOTE*: We'd like this to always be true, but some vulnerabilities
       are hard to fix, so it's difficult to mandate this.
       We *could* require activities to actively work to fix it, and
@@ -1170,14 +1170,14 @@ as described below.
     "The project MUST NOT use
     unencrypted network communication protocols (such as HTTP
     and telnet) if there is an encrypted equivalent (e.g., HTTPS/TLS and SSH),
-    unless the user specifically requests or configures it. 
+    unless the user specifically requests or configures it.
     (N/A allowed).
     <sup>[<a href="#crypto_used_network">crypto_used_network</a>]</sup>
 
 *   Upgrade crypto_tls12 from SHOULD to MUST.
     (Future)
     The project MUST, if it supports TLS, support at least TLS version 1.2.
-    Note that the predecessor of TLS was called SSL. 
+    Note that the predecessor of TLS was called SSL.
     (N/A allowed).
     <sup>[<a href="#crypto_tls12">crypto_tls12</a>]</sup>
 
@@ -1318,11 +1318,11 @@ as described below.
 
 *   <a name="build_reproducible"></a>
     (Future criterion) The project MUST have a
-    <a href="https://reproducible-builds.org/">reproducible build</a>.  
+    <a href="https://reproducible-builds.org/">reproducible build</a>.
     (N/A allowed).
     <sup>[<a href="#build_reproducible">build_reproducible</a>]</sup>
-    
-    *Details*: 
+
+    *Details*:
     A reproducible build means that multiple parties can independently
     redo the process of generating information from source files and
     get exactly the same bit-for-bit result.  If no building occurs
@@ -1333,12 +1333,12 @@ as described below.
     GCC and clang users may find the -frandom-seed option useful.
     The build environment (including the toolset) can often be defined for
     external parties by specifying the cryptographic hash of a specific
-    container or virtual machine that they can use for rebuilding. The 
+    container or virtual machine that they can use for rebuilding. The
     <a href="https://reproducible-builds.org/docs/">reproducible builds project
-    has documentation</a> 
+    has documentation</a>
     on how to do this.
-    
-    *Rationale*: 
+
+    *Rationale*:
     If a project needs to be built but there is no working build system,
     then potential co-developers will not be able to easily contribute
     and many security analysis tools will be ineffective. Reproduceable
@@ -1383,7 +1383,7 @@ as described below.
     (N/A allowed).
     <sup>[<a href="#security_review">security_review</a>]</sup>
 
-    *Details*: 
+    *Details*:
     This can be by the project members and/or an independent evaluation.
     This evaluation MAY be supported by static and dynamic analysis tools,
     but there also must be human review to identify problems (paricularly
@@ -1436,7 +1436,7 @@ Review these larger criteria sets for things to add:
     "provides a basis for testing web application technical security
     controls and also provides developers with a list of requirements
     for secure development."
-    
+
     - SANS' Securing Web Application Technologies (SWAT) criteria.
 
     In the future we might add some criteria that a project has to meet
@@ -1461,7 +1461,7 @@ Review these larger criteria sets for things to add:
 
 *   Automated regression test suite includes at least one check for
     rejection of invalid data for each input field.
-    
+
     *Rationale*:   Many regression test suites check only for perfect data;
     attackers will instead provide invalid data, and programs need to
     protect themselves against it.

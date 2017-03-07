@@ -5,7 +5,7 @@ class Criteria
     name category future
     description details rationale
     met_suppress na_suppress unmet_suppress
-    met_url_required met_url
+    met_justification_required met_url_required met_url
     na_allowed na_justification_required
     autofill met_placeholder unmet_placeholder na_placeholder
     major minor unmet
@@ -69,6 +69,10 @@ class Criteria
   def met_url_required?
     # Is a URL required in the justification to be passing with met?
     met_url_required == true
+  end
+
+  def met_justification_required?
+    met_justification_required == true
   end
 
   def must?

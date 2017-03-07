@@ -3,6 +3,7 @@
 
 var criterionCategoryValue = {};
 var criteriaMetUrlRequired = {};
+var criteriaMetJustificationRequired = {};
 var criteriaNAJustificationRequired = {};
 var criterionFuture = {};
 var MIN_SHOULD_LENGTH = 5;
@@ -61,7 +62,9 @@ function criterionResult(criterion) {
       return 'question';
     }
   } else if ($(criterionStatus + '_met').is(':checked')) {
-    if (criteriaMetUrlRequired[criterion] && !containsURL(justification)) {
+    if ((criteriaMetUrlRequired[criterion] && !containsURL(justification)) ||
+        (criteriaMetJustificationRequired[criterion] &&
+         justification.length <= MIN_SHOULD_LENGTH)) {
       // Odd case: met is claimed, but we're still missing information.
       return 'question';
     } else {
@@ -139,8 +142,10 @@ function changedJustificationText(criteria) {
        ($(criteriaJust).val().length < MIN_SHOULD_LENGTH)) {
     $(criteriaJust).addClass('required-data');
   } else if ($(criteriaStatus + '_met').is(':checked') &&
-           criteriaMetUrlRequired[criteria] &&
-           !containsURL($(criteriaJust).val())) {
+             ((criteriaMetUrlRequired[criteria] &&
+               !containsURL($(criteriaJust).val())) ||
+              (criteriaMetJustificationRequired[criteria] &&
+               $(criteriaJust).val().length < MIN_SHOULD_LENGTH))) {
     $(criteriaJust).addClass('required-data');
   } else if ($(criteriaStatus + '_na').is(':checked') &&
        (criteriaNAJustificationRequired[criteria]) &&
@@ -384,9 +389,11 @@ function SetupCriteriaStructures() {
   $('.status-chooser').each(
     function(index) {
       var criterionName = $(this).find('.criterion-name').text();
-      var res = $(this).find('.criterion-met-url-required').text();
+      var res = $(this).find('.criterion-met-justification-required').text();
       var val = 'true' === res;
-      criteriaMetUrlRequired[criterionName] = val;
+      criteriaMetJustificationRequired[criterionName] = val;
+      criteriaMetUrlRequired[criterionName] =
+        $(this).find('.criterion-met-url-required').text() === 'true';
       criterionCategoryValue[criterionName] =
         $(this).find('.criterion-category').text();
       criterionFuture[criterionName] =

@@ -21,9 +21,10 @@ class CriteriaTest < ActiveSupport::TestCase
 
   test 'Ensure that only allowed fields are in Criteria' do
     allowed_set = Set.new %i(
-      category future na_allowed met_url_required na_justification_required
-      description details met_placeholder unmet_placeholder na_placeholder
-      met_suppress unmet_suppress autofill major minor rationale
+      category future na_allowed met_url_required met_justification_required
+      na_justification_required description details met_placeholder
+      unmet_placeholder na_placeholder met_suppress unmet_suppress autofill
+      major minor rationale
     )
     Criteria.to_h.each do |_criterion, values|
       values.each do |key, _value|
@@ -54,7 +55,15 @@ class CriteriaTest < ActiveSupport::TestCase
     end
   end
 
-  test 'If justification required, do not suppress justification' do
+  # TODO: Uncomment these lines when we have a
+  #       criterion that requires justification.
+  test 'If Met justification required, do not suppress justification' do
+    Criteria.to_h.each do |_criterion, values|
+      assert_not values[:met_justification_required] && values[:met_suppress]
+    end
+  end
+
+  test 'If N/A justification required, do not suppress justification' do
     Criteria.to_h.each do |_criterion, values|
       assert_not values[:na_justification_required] && values[:met_suppress]
     end

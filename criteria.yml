@@ -7,6 +7,7 @@
 #   future: true|false # optional, default false
 #   na_allowed: true|false # optional, default false
 #   na_justification_required: true|false # optional, default false
+#   met_justification_required: true|false # optional, default false
 #   met_url_required: true|false # optional, default false
 #   description: ...HTML description... # required
 #   details: ...HTML description... # optional

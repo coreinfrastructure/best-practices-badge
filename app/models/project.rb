@@ -312,23 +312,40 @@ class Project < ActiveRecord::Base
     errors.add :base, 'Need at least a home page or repository URL'
   end
 
-  # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
-  # rubocop:disable Metrics/PerceivedComplexity
   def passing?(criterion)
     status = self[criterion.name.status]
     justification = self[criterion.name.justification]
 
-    return true if status.na? && !criterion.na_justification_required?
-    return true if status.na? && justification.length >= MIN_SHOULD_LENGTH
-    return true if status.met? && !criterion.met_url_required?
-    return true if status.met? && contains_url?(justification)
-    return true if criterion.should? && status.unmet? &&
-                   justification.length >= MIN_SHOULD_LENGTH
-    return true if criterion.suggested? && !status.unknown?
-    false
+    na_satisfied?(criterion, status, justification) ||
+      met_satisfied?(criterion, status, justification) ||
+      should_satisfied?(criterion, status, justification) ||
+      suggested_satisfied?(criterion, status)
   end
-  # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity
-  # rubocop:enable Metrics/PerceivedComplexity
+
+  def na_satisfied?(criterion, status, justification)
+    status.na? && (!criterion.na_justification_required? ||
+                   justification_good?(justification))
+  end
+
+  def met_satisfied?(criterion, status, justification)
+    return true if status.met? && !criterion.met_url_required? &&
+                   (!criterion.met_justification_required? ||
+                    justification_good?(justification))
+    status.met? && contains_url?(justification)
+  end
+
+  def should_satisfied?(criterion, status, justification)
+    criterion.should? && status.unmet? && justification_good?(justification)
+  end
+
+  def suggested_satisfied?(criterion, status)
+    criterion.suggested? && !status.unknown?
+  end
+
+  def justification_good?(justification)
+    return false if justification.nil?
+    justification.length >= MIN_SHOULD_LENGTH
+  end
 
   def to_percentage(portion, total)
     return 0 if portion.zero?

@@ -101,6 +101,7 @@
              <p class="bg-warning">Warning: Requires lengthier justification.</p>
            <% elsif criterion.na_allowed? &&
                       project_criterion_status == 'N/A' &&
+                      criterion.na_justification_required? &&
                       project_criterion_justification.length < Project::MIN_SHOULD_LENGTH %>
              <p class="bg-warning">Warning: Requires lengthier justification.</p>
            <% end %>

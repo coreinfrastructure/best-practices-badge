@@ -19,7 +19,7 @@ We are currently leaning towards using the silver/gold/platinum naming system,
 which is similar to the
 <a href="http://www.usgbc.org/leed">LEED certification naming system of certified, silver, gold, platinum</a>
 and how the
-<a href="http://www.linuxfoundation.org/about/members">Linux Foundation ranks membership (silver, gold, platinum)</a>
+<a href="http://www.linuxfoundation.org/about/members">Linux Foundation ranks membership (silver, gold, platinum)</a>.
 An alternative is the Olympic system naming (bronze, silver, gold).
 
 To help organize these potential criteria, they are currently grouped
@@ -52,15 +52,20 @@ Upgrade some "passing" level SHOULD and SUGGESTED:
     "The information on how to contribute MUST include the
     requirements for acceptable contributions (e.g., a reference to
     any required coding standard)."
+    
 *   Upgrade report_tracker from SHOULD to MUST -
     "The project MUST use an issue tracker for tracking individual issues."
+    
     Note: The Linux kernel project has indicated that using an issue
     tracker is difficult at their scale.
+    
 *   Unchanged:
+
     - floss_license_osi -
       "It is SUGGESTED that any required license(s) be <a
       href="https://opensource.org/licenses">approved by the Open Source
       Initiative (OSI).</a>"
+      
     - english -
       "The project SHOULD include documentation in English and be able
       to accept bug reports and comments about code in English."
@@ -68,12 +73,15 @@ Upgrade some "passing" level SHOULD and SUGGESTED:
 #### Upgrade: Change Control
 
 *   Unchanged:
+
     - repo_distributed -
       "It is SUGGESTED that common distributed version control software
       be used (e.g., git)."
+      
     - version_semver -
       "It is SUGGESTED that the <a href="http://semver.org">Semantic
       Versioning (SemVer) format</a> be used for releases."
+      
     - version_tags -
       "It is SUGGESTED that projects identify each release within
       their version control system. For example, it is SUGGESTED
@@ -82,6 +90,7 @@ Upgrade some "passing" level SHOULD and SUGGESTED:
 #### Upgrade: Reporting
 
 *   Upgrade
+
     - enhancement_responses: SHOULD to MUST.
       "The project MUST respond to a majority of enhancement requests in the
       last 2-12 months (inclusive)."
@@ -95,6 +104,7 @@ Upgrade some "passing" level SHOULD and SUGGESTED:
     This is a change from, "It is SUGGESTED that this policy on
     adding tests be <i>documented</i> in the instructions for change
     proposals."
+    
 *   <a name="warnings_strict"></a>
     warnings_strict -
     Projects MUST be maximally strict with warnings, where practical.
@@ -106,21 +116,28 @@ Upgrade some "passing" level SHOULD and SUGGESTED:
     warning flags where it can, so that errors are detected early.
 
 *   Unchanged:
+
     - build_common_tools -
       "It is SUGGESTED that common tools be used for building the software."
+      
     - build_floss_tools -
       "The project SHOULD be buildable using only FLOSS tools."
+      
     - test_invocation -
       "A test suite SHOULD be invocable in a standard way for that language."
+      
     - test_most -
       "It is SUGGESTED that the test suite cover most (or ideally all)
       the code branches, input fields, and functionality."
+      
       *NOTE*: Statement/branch coverage is covered separately; they are
       increased, so we are not changing the level of this one.
+      
     - test_continuous_integration -
       "It is SUGGESTED that the project implement continuous integration
       (where new or changed code is frequently integrated into a central
       code repository and automated tests are run on the result)."
+      
       *NOTE*: This is upgraded to MUST in passing+2, and passing+1 adds
       an intermediate criterion called <a
       href="#automated_integration_testing">automated_integration_testing</a>.
@@ -132,19 +149,23 @@ Upgrade some "passing" level SHOULD and SUGGESTED:
     cryptographic algorithms with known serious weaknesses (e.g., SHA-1)."
 
 *   Unchanged:
+
     - crypto_call -
       "If the project software is an application or library, and
       its primary purpose is not to implement cryptography, then it
       SHOULD only call on software specifically designed to implement
       cryptographic functions; it SHOULD NOT re-implement its own."
+      
     - crypto_pfs -
       "The project SHOULD implement perfect forward secrecy for key
       agreement protocols so a session key derived from a set of
       long-term keys cannot be compromised if one of the long-term keys
       is compromised in the future."
+      
     - vulnerabilities_critical_fixed -
       "Projects SHOULD fix all critical vulnerabilities rapidly after
       they are reported."
+      
       *NOTE*: We'd like this to always be true, but some vulnerabilities
       are hard to fix, so it's difficult to mandate this.
       We *could* require activities to actively work to fix it, and
@@ -181,7 +202,7 @@ Upgrade some "passing" level SHOULD and SUGGESTED:
     *NOTE*:
     This would mean that C/C++ would be required to use something like
     ASAN during some testing and/or fuzz testing. See:
-    <https://github.com/linuxfoundation/cii-best-practices-badge/issues/256>
+    <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/256">consider giving links to asan/msan/tsan/ubsan and libFuzzer</a>
 
 *   Unchanged:
 
@@ -258,7 +279,8 @@ as described below.
 
 *   <a name="governance"></a>The project MUST clearly define and document
     its project governance model (the way it makes decisions,
-    including key roles). <sup>[<a href="#governance">governance</a>]</sup>
+    including key roles). 
+    <sup>[<a href="#governance">governance</a>]</sup>
 
     *Details*: There needs to be some well-established documented way
     to make decisions and resolve disputes.
@@ -367,7 +389,7 @@ as described below.
     <a href="https://developer.android.com/guide/topics/ui/accessibility/">Android</a>,
     <a href="https://developer.apple.com/accessibility/ios/">iOS</a>,
     <a href="http://www.apple.com/accessibility/osx/voiceover/">Mac</a>, and
-    <a href="https://msdn.microsoft.com/en-us/windows/uwp/accessibility/accessibility-overview)">Windows</a>.
+    <a href="https://msdn.microsoft.com/en-us/windows/uwp/accessibility/accessibility-overview)">Windows</a>).
     Some TUI applications (e.g. `ncurses` programs) can do
     certain things to make themselves more accessible (such as `alpine`'s
     `force-arrow-cursor` setting).
@@ -424,13 +446,14 @@ as described below.
     <sup>[<a href="#maintenance_or_update">maintenance_or_update</a>]</sup>
 
     *Rationale*:
-    This was inspired by <https://projects.ow2.org/bin/view/ow2/OMM DFCT-1.2>
+    This was inspired by <a href="https://projects.ow2.org/bin/view/ow2/OMM">DFCT-1.2</a>
 
 ### Reporting
 
 *   <a name="vulnerability_report_credit"></a>The project MUST give credit
     to the reporter(s) of all vulnerability reports resolved in the last 12
-    months, except for the reporter(s) who request anonymity. (N/A allowed.)
+    months, except for the reporter(s) who request anonymity. 
+    (N/A allowed).
     <sup>[<a href="#vulnerability_report_credit">vulnerability_report_credit</a>]</sup>
 
     *Details*: If there have been no vulnerabilities resolved in the last 12 months,
@@ -539,7 +562,7 @@ as described below.
     Bad test suites could also meet this requirement, but it's generally
     agreed that any good test suite will meet this requirement, so it
     provides a useful way to filter out clearly-bad test suites.
-    After all, if your tests aren't even *running*   many of the program's
+    After all, if your tests aren't even *running* many of the program's
     statements, you don't have very good tests.
     Only FLOSS test suites are considered, to ensure that the test
     suite can be examined and improved over time.
@@ -558,17 +581,18 @@ as described below.
     during testing, and the return-on-investment to get those last few
     percentages is arguably not worth it.  The time working to get 100%
     statement coverage might be much better spent on checking the results
-    more thoroughly (which statement coverage does *not*   measure).
+    more thoroughly (which statement coverage does *not* measure).
 
     The 80% suggested here is supported by various sources.
-    The defaults of codecov.io
-    <http://docs.codecov.io/docs/coverage-configuration.>  They define
+    The defaults of 
+    <a href="http://docs.codecov.io/docs/coverage-configuration">codecov.io</a>.  They define
     70% and below as red, 100% as perfectly green, and anything between
     70..100 as a range between red and green. This renders ~80% as yellow,
     and somewhere between ~85% and 90% it starts looking pretty green.
 
-    The paper "Minimum Acceptable Code Coverage" by Steve
-    Cornett <http://www.bullseye.com/minimum.html> claims, "Code
+    The paper 
+    <a href="http://www.bullseye.com/minimum.html">"Minimum Acceptable Code Coverage" by Steve Cornett</a> 
+    claims, "Code
     coverage of 70-80% is a reasonable goal for system test of most
     projects with most coverage metrics. Use a higher goal for projects
     specifically organized for high testability or that have high failure
@@ -582,8 +606,8 @@ as described below.
     faults in a system. Low code coverage indicates inadequate testing,
     but high code coverage guarantees nothing."
 
-    "TestCoverage" by Martin Fowler (17 April 2012)
-    <http://martinfowler.com/bliki/TestCoverage.html> points out the
+    <a href="http://martinfowler.com/bliki/TestCoverage.html">"TestCoverage" by Martin Fowler (17 April 2012)</a>
+    points out the
     problems with coverage measures.  he states that "Test coverage is
     a useful tool for finding untested parts of a codebase. Test coverage
     is of little use as a numeric statement of how good your tests are...
@@ -646,8 +670,8 @@ as described below.
 
 *   <a name="updateable_reused_components"></a>
     The project MUST make it easy to either
-    (1) identify and update reused externally-maintained components or (2)
-    use the standard components provided by the system or programming language.
+    (1) identify and update reused externally-maintained components or 
+    (2) use the standard components provided by the system or programming language.
     Then, if a vulnerability is found in a reused component, it will be
     easy to update that component.
     <sup>[<a href="#updateable_reused_components">updateable_reused_components</a>]</sup>
@@ -657,7 +681,7 @@ as described below.
     Many FLOSS programs are distributed with "convenience libraries"
     that are local copies of standard libraries (possibly forked).
     By itself, that's fine.
-    However, if the program *must*   use these local (forked) copies,
+    However, if the program *must* use these local (forked) copies,
     then updating the "standard" libraries as a security update will
     leave these additional copies still vulnerable.
     This is especially an issue for cloud-based systems;
@@ -670,7 +694,8 @@ as described below.
     known vulnerabilities.  This is OWASP Top 10 (2013) number A9
     (using known vulnerable components).  See also
     <a href="http://www.aspectsecurity.com/research-presentations/the-unfortunate-reality-of-insecure-libraries">The Unfortunate Reality of Insecure Libraries</a>.
-    TODO: What about vendoring, where code is copied in with the
+    
+    *TODO*: What about vendoring, where code is copied in with the
     express intent of *only* using that copied version?
     (These are intentional forks.)  There's a risk of divergence
     and failure to apply security fixes both ways.
@@ -699,7 +724,7 @@ as described below.
     If no native binaries are being generated, select "N/A".
 
     *Rationale*: See
-    <https://github.com/linuxfoundation/cii-best-practices-badge/issues/453>
+    <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/453">Build system should honor CC, CFLAGS, CXX, CXXFLAGS</a>
 
 *   <a name="build_preserve_debug"></a>
     The build and installation system SHOULD preserve debugging information if
@@ -792,11 +817,11 @@ as described below.
     *Rationale*   : This supports capturing the artifacts (e.g., for analysis)
     without interfering with the build or installation system due to
     system-wide changes. See
-    <https://github.com/linuxfoundation/cii-best-practices-badge/issues/455>
+    <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/455">DESTDIR honored at install time</a>
     This doesn't apply when there's no "installation" process, or
     when POSIX filesystems aren't supported during installation (e.g.,
     Windows-only programs).  See
-    <https://github.com/linuxfoundation/cii-best-practices-badge/issues/453>
+    <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/453">Build system should honor CC, CFLAGS, CXX, CXXFLAGS</a>
 
 *   <a name="installation_development_quick"></a>
     The project MUST provide a way for potential developers to quickly install all
@@ -879,7 +904,8 @@ as described below.
     letting any user or researcher know what to expect.
     Many sources discuss the rationale for an "assurance case".
     This was inspired by
-    <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/502">issue #502</a> and by the
+    <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/502">Security specification and facilitation of bug bounties</a> 
+    and by the
     <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/473">NYC 2016 brainstorming session</a>.
 
 #### Cryptography
@@ -902,24 +928,26 @@ as described below.
     people should instead simply choose and stay with with one good algorithm.
     The problem with this position is that no one can be certain about
     what that "one good algorithm" is; a new attack could be found at any time.
-    See the discussion per
-    <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/215">issue #215</a>
+    See the discussion at
+    <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/215">Remove requirement for supporting alternative crypto algorithms (crypto_alternatives)?</a>
 
 *   <a name="crypto_used_network"></a>(Future) The project
     SHOULD NOT use unencrypted network communication protocols (such as HTTP
     and telnet) if there is an encrypted equivalent (e.g., HTTPS/TLS and SSH),
-    unless the user specifically requests or configures it. (N/A allowed.)
+    unless the user specifically requests or configures it. 
+    (N/A allowed).
     <sup>[<a href="#crypto_used_network">crypto_used_network</a>]</sup>
 
 *   <a name="crypto_tls12"></a>(Future)
     The project SHOULD, if it supports TLS, support at least TLS version 1.2.
-    Note that the predecessor of TLS was called SSL (N/A allowed).
+    Note that the predecessor of TLS was called SSL.
+    (N/A allowed).
     <sup>[<a href="#crypto_tls12">crypto_tls12</a>]</sup>
 
 *   <a name="crypto_certificate_verification"></a>(Future)
     The project MUST, if it supports TLS, perform TLS certificate verification
     by default when using TLS, including on subresources.
-    (N/A allowed.)
+    (N/A allowed).
     <sup>[<a href="#crypto_certificate_verification">crypto_certificate_verification</a>]</sup>
 
     *Details*: Note that having incorrect TLS certificate
@@ -932,7 +960,7 @@ as described below.
 *   <a name="crypto_verification_private"></a>(Future) The project
     MUST, if it supports TLS, perform certificate verification before sending
     HTTP headers with private information (such as secure cookies).
-    (N/A allowed.)
+    (N/A allowed).
     <sup>[<a href="#crypto_verification_private">crypto_verification_private</a>]</sup>
 
 #### Secure Release
@@ -960,7 +988,7 @@ as described below.
     could be in the project README.
     Node.js implements this via GPG keys in the README, but note that
     in the criterion we are intentionally more general:
-    <https://github.com/nodejs/node#release-team>
+    <a href="https://github.com/nodejs/node#release-team">Node.js Release Team</a>
 
 ### Analysis
 
@@ -996,20 +1024,25 @@ as described below.
 *   FIXME - list of upgrades of SHOULD and SUGGESTED from passing and passing+1.
 
     - E.g., MUST have bus factor of 2 or more.
+    
     - Change "report_tracker" to MUST, to require issue tracking.
       Using GitHub issues meets this.
       Note that the Linux kernel project has reported that this is very
       hard to do at their scale.
+      
       NOTE: Kevin Wall thinks this should be at passing+1, not passing+2.
+      
     - We've done this specially for test_continuous_integration
 
 #### Upgrade: Basics
 
 *   Unchanged:
+
     - floss_license_osi -
       "It is SUGGESTED that any required license(s) be <a
       href="https://opensource.org/licenses">approved by the Open Source
       Initiative (OSI).</a>"
+      
     - english -
       "The project SHOULD include documentation in English and be able
       to accept bug reports and comments about code in English."
@@ -1021,9 +1054,11 @@ as described below.
     (e.g., git or mercurial)."
 
 *   Unchanged:
+
     - version_semver -
       "It is SUGGESTED that the <a href="http://semver.org">Semantic
       Versioning (SemVer) format</a> be used for releases."
+      
     - version_tags -
       "It is SUGGESTED that projects identify each release within
       their version control system. For example, it is SUGGESTED
@@ -1049,32 +1084,40 @@ as described below.
     the project integrates at least daily.
 
 *   Unchanged:
+
     - build_common_tools -
       "It is SUGGESTED that common tools be used for building the software."
+      
     - build_floss_tools -
       "The project SHOULD be buildable using only FLOSS tools."
+      
     - test_most -
       "It is SUGGESTED that the test suite cover most (or ideally all)
       the code branches, input fields, and functionality."
+      
       *NOTE*: Statement/branch coverage is covered separately; they are
       increased, so we are not changing the level of this one.
 
 #### Upgrade: Security
 
 *   Unchanged:
+
     - crypto_call -
       "If the project software is an application or library, and
       its primary purpose is not to implement cryptography, then it
       SHOULD only call on software specifically designed to implement
       cryptographic functions; it SHOULD NOT re-implement its own."
+      
     - crypto_pfs -
       "The project SHOULD implement perfect forward secrecy for key
       agreement protocols so a session key derived from a set of
       long-term keys cannot be compromised if one of the long-term keys
       is compromised in the future."
+      
     - vulnerabilities_critical_fixed -
       "Projects SHOULD fix all critical vulnerabilities rapidly after
       they are reported."
+      
       *NOTE*: We'd like this to always be true, but some vulnerabilities
       are hard to fix, so it's difficult to mandate this.
       We *could* require activities to actively work to fix it, and
@@ -1127,13 +1170,15 @@ as described below.
     "The project MUST NOT use
     unencrypted network communication protocols (such as HTTP
     and telnet) if there is an encrypted equivalent (e.g., HTTPS/TLS and SSH),
-    unless the user specifically requests or configures it. (N/A allowed.)
+    unless the user specifically requests or configures it. 
+    (N/A allowed).
     <sup>[<a href="#crypto_used_network">crypto_used_network</a>]</sup>
 
 *   Upgrade crypto_tls12 from SHOULD to MUST.
     (Future)
     The project MUST, if it supports TLS, support at least TLS version 1.2.
-    Note that the predecessor of TLS was called SSL (N/A allowed).
+    Note that the predecessor of TLS was called SSL. 
+    (N/A allowed).
     <sup>[<a href="#crypto_tls12">crypto_tls12</a>]</sup>
 
 *   Unchanged - crypto_agility
@@ -1271,11 +1316,14 @@ as described below.
     organizations to review each others' work, but in many situations
     that is not practical.
 
-*   <a name="build_reproducible"></a>(Future criterion) The project MUST
-    have a <a href="https://reproducible-builds.org/">reproducible
-    build</a>.  (N/A allowed.) <sup>[<a
-    href="#build_reproducible">build_reproducible</a>]</sup><dl><dt><i>Details</i>:<dt>
-    <dd>A reproducible build means that multiple parties can independently
+*   <a name="build_reproducible"></a>
+    (Future criterion) The project MUST have a
+    <a href="https://reproducible-builds.org/">reproducible build</a>.  
+    (N/A allowed).
+    <sup>[<a href="#build_reproducible">build_reproducible</a>]</sup>
+    
+    *Details*: 
+    A reproducible build means that multiple parties can independently
     redo the process of generating information from source files and
     get exactly the same bit-for-bit result.  If no building occurs
     (e.g., scripting languages where the source code is used directly
@@ -1285,10 +1333,13 @@ as described below.
     GCC and clang users may find the -frandom-seed option useful.
     The build environment (including the toolset) can often be defined for
     external parties by specifying the cryptographic hash of a specific
-    container or virtual machine that they can use for rebuilding. The <a
-    href="https://reproducible-builds.org/docs/">reproducible builds project
-    has documentation on how to do this</a>.  </dd><dt><i>Rationale</i>:<dt>
-    <dd>If a project needs to be built but there is no working build system,
+    container or virtual machine that they can use for rebuilding. The 
+    <a href="https://reproducible-builds.org/docs/">reproducible builds project
+    has documentation</a> 
+    on how to do this.
+    
+    *Rationale*: 
+    If a project needs to be built but there is no working build system,
     then potential co-developers will not be able to easily contribute
     and many security analysis tools will be ineffective. Reproduceable
     builds counter malicious attacks that generate malicious executables,
@@ -1296,7 +1347,6 @@ as described below.
     is correct. By itself, reproducible builds do not counter malicious
     compilers, but they can be extended to counter malicious compilers using
     processes such as diverse double-compiling (DDC).
-    </dd></dl>
 
 #### Testing
 
@@ -1330,10 +1380,11 @@ as described below.
 
 *   <a name="security_review"></a>
     The project MUST have performed a security review within the last 5 years.
+    (N/A allowed).
     <sup>[<a href="#security_review">security_review</a>]</sup>
 
-    *Details*: This can be by the project members and/or an
-    independent evaluation.
+    *Details*: 
+    This can be by the project members and/or an independent evaluation.
     This evaluation MAY be supported by static and dynamic analysis tools,
     but there also must be human review to identify problems (paricularly
     in design) that tools cannot detect.
@@ -1355,8 +1406,8 @@ as described below.
     probably just fuzzing), where failed tests would have to be added
     to the regression test suite."
 
-*   <a name="hardened_site">
-    hardened_site (Future)
+*   <a name="hardened_site"></a>
+    hardened_site (Future)</br>
     "The project website, repository (if accessible
     via the web), and download site (if separate) MUST include key hardening
     headers with nonpermissive values."
@@ -1385,6 +1436,7 @@ Review these larger criteria sets for things to add:
     "provides a basis for testing web application technical security
     controls and also provides developers with a list of requirements
     for secure development."
+    
     - SANS' Securing Web Application Technologies (SWAT) criteria.
 
     In the future we might add some criteria that a project has to meet
@@ -1405,11 +1457,12 @@ Review these larger criteria sets for things to add:
     this could include advisories on the <https://SOMEWHERE/security> page
     and/or an "Announcement" mailing list for new versions
     (at least for security updates).
-    Often projects don't know (or are unsure) if they are vulnerabilities.
+    Often projects don't know (or are unsure) if they have vulnerabilities.
 
 *   Automated regression test suite includes at least one check for
     rejection of invalid data for each input field.
-    *Rationale:*   Many regression test suites check only for perfect data;
+    
+    *Rationale*:   Many regression test suites check only for perfect data;
     attackers will instead provide invalid data, and programs need to
     protect themselves against it.
     However, on many projects this would be a hard burden, and it's
@@ -1458,11 +1511,12 @@ Review these larger criteria sets for things to add:
 liujin28 proposed some specifics for security code review in
 <a href="https://github.com/linuxfoundation/cii-best-practices-badge/pull/536">PR 536</a>
 
-Response: We think this is too detailed, and too restrictive to
+*Response*: We think this is too detailed, and too restrictive to
 specific situations.  Instead, we would want to discuss review, and
 point to guidelines to follow (like CERT's).
 
-*   <a name="validate_the_tainted_array_index"></a>The direct data
+*   <a name="validate_the_tainted_array_index"></a>
+    The direct data
     or the indirect data from the untrusted sources which is used as
     the array index MUST be ensured within a legal range.
     Input validation is always the best practices of secure coding.
@@ -1472,7 +1526,8 @@ point to guidelines to follow (like CERT's).
     See the <a href="http://cwe.mitre.org/data/definitions/129.html">CWE</a>.
     <sup>[<a href="#validate_the_tainted_array_index">validate_the_tainted_array_index</a>]</sup>
 
-*   <a name="validate_the_tainted_buffer_length"></a>The direct data
+*   <a name="validate_the_tainted_buffer_length"></a>
+    The direct data
     or the indirect data from the untrusted sources which is used as
     the buffer length for read/write MUST be ensured within a legal range.
     Input validation is always the best practices of secure coding.
@@ -1483,16 +1538,18 @@ point to guidelines to follow (like CERT's).
     See the <a href="http://cwe.mitre.org/data/definitions/119.html">CWE</a>.
     <sup>[<a href="#validate_the_tainted_buffer_length">validate_the_tainted_buffer_length</a>]</sup>
 
-*   <a name="validate_the_tainted_loop_condiction"></a>The direct data
+*   <a name="validate_the_tainted_loop_condiction"></a>
+    The direct data
     or the indirect data from the untrusted sources which is used as
-    the loop ending condiction MUST be avoided infinite loop or other logic mistake.
+    the loop ending condition MUST be avoided infinite loop or other logic mistake.
     Input validation is always the best practices of secure coding.
     (e.g., <a href="http://www.cert.org/secure-coding/research/secure-coding-standards.cfm">CERT</a>,
     <a href="https://www.owasp.org/index.php/OWASP_Secure_Coding_Practices_-_Quick_Reference_Guide">OWASP</a>)
     See the <a href="http://cwe.mitre.org/data/definitions/606.html">CWE</a>.
     <sup>[<a href="#validate_the_tainted_loop_condiction">validate_the_tainted_loop_condiction</a>]</sup>
 
-*   <a name="validate_the_tainted_string"></a>When copying from a string
+*   <a name="validate_the_tainted_string"></a>
+    When copying from a string
     that is not a trusted source, it MUST ensure
     that there is enough space to hold the data and the end.
     Input validation is always the best practices of secure coding.
@@ -1501,14 +1558,16 @@ point to guidelines to follow (like CERT's).
     See the <a href="http://cwe.mitre.org/data/definitions/120.html">CWE</a>.
     <sup>[<a href="#validate_the_tainted_string">validate_the_tainted_string</a>]</sup>
 
-*   <a name="validate_the_tainted_integer_on_caculation"></a>The integer values
+*   <a name="validate_the_tainted_integer_on_caculation"></a>
+    The integer values
     from untrusted sources MUST be avoided the integer overflow or wraparound.
     (e.g., <a href="http://www.cert.org/secure-coding/research/secure-coding-standards.cfm">CERT</a>,
     <a href="https://www.owasp.org/index.php/OWASP_Secure_Coding_Practices_-_Quick_Reference_Guide)">OWASP</a>
     See the <a href="http://cwe.mitre.org/data/definitions/190.html">CWE</a>.
     <sup>[<a href="#validate_the_tainted_integer_on_caculation">validate_the_tainted_integer_on_caculation</a>]</sup>
 
-*   <a name="validate_the_malloc_size"></a>Appropriate size limits
+*   <a name="validate_the_malloc_size"></a>
+    Appropriate size limits
     SHOULD be used to allocate memory from an unreliable source, and
     MUST check the return value of the allocate function.
     (e.g., <a href="http://www.cert.org/secure-coding/research/secure-coding-standards.cfm">CERT</a>,

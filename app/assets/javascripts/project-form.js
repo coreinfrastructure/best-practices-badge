@@ -308,16 +308,17 @@ function ToggleExpandPanels(e) {
 function hashParentPanel() {
   var hashId = window.location.hash.substring(1);
   var targetElement = document.getElementById(hashId);
-  return targetElement.closest('div.panel') || 0;
+  return $(targetElement).parents('.panel') || 0;
 }
 
 function showHash() {
   var parentPane = hashParentPanel();
   if (parentPane !== 0) {
-    var loc = parentPane.getElementsByClassName('can-collapse')[0];
+    var loc = $(parentPane).find('.can-collapse');
     globalIgnoreHashChange = true;
     if ($(loc).hasClass('collapsed')) {
-      $(loc).click();
+      $(parentPane).find('.panel-collapse').collapse('show');
+      $(loc).removeClass('collapsed');
     }
     globalIgnoreHashChange = false;
     if ($(window.location.hash).length) {
@@ -465,9 +466,9 @@ $(document).ready(function() {
   });
 
   // Only show open indicators if JS is enabled
-  $('.can-collapse').attr('data-toggle', 'collapse');
-  $('.close-by-default').addClass('collapsed');
   $('.remove-in').removeClass('in');
+  $('.close-by-default').addClass('collapsed');
+
 
   // Open the correct panel when hash in url
   if (location.hash !== null && location.hash !== '' &&
@@ -481,15 +482,21 @@ $(document).ready(function() {
     });
   }
 
-  // Add location.hash on opening of a panel
-  $('.can-collapse').on('click', function(e) {
-    //Only change location.hash if we need to.
-    if (!globalIgnoreHashChange && $(this).hasClass('collapsed')) {
-      var origId = this.getAttribute('id');
-      // prevent scrolling on panel open
-      this.id = origId + '-tmp';
-      location.hash = '#' + origId;
-      this.id = origId;
+  $('.panel div.can-collapse').on('click', function (e) {
+    var $this = $(this);
+    if ($this.hasClass('collapsed')) {
+      $this.parents('.panel').find('.panel-collapse').collapse('show');
+      $this.removeClass('collapsed');
+      if (!globalIgnoreHashChange){
+        var origId = this.getAttribute('id');
+        // prevent scrolling on panel open
+        this.id = origId + '-tmp';
+        location.hash = '#' + origId;
+        this.id = origId;
+      }
+    } else {
+      $this.parents('.panel').find('.panel-collapse').collapse('hide');
+      $this.addClass('collapsed');
     }
   });
 

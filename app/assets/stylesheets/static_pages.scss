@@ -493,3 +493,10 @@ input[type="text"].form-control, .inputbox-look, textarea.form-control  {
 .btn-sm {
 margin: 2px;
 }
+
+.can-collapse {
+  cursor: pointer;
+}
+
+a.can-collapse { color: inherit; }
+a.can-collapse:hover { text-decoration:none; }

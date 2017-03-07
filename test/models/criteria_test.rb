@@ -55,8 +55,6 @@ class CriteriaTest < ActiveSupport::TestCase
     end
   end
 
-  # TODO: Uncomment these lines when we have a
-  #       criterion that requires justification.
   test 'If Met justification required, do not suppress justification' do
     Criteria.to_h.each do |_criterion, values|
       assert_not values[:met_justification_required] && values[:met_suppress]

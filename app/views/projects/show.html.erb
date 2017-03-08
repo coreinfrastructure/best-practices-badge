@@ -5,7 +5,6 @@
     <% end %>
 <% end %>
 
-<% cache @project do %>
 <div class="row">
   <div class="col-md-2 col-sm-3">
     <div class="main-badge-ques"></div>
@@ -28,9 +27,6 @@
 <% if ! @project.achieved_passing_at.nil? %>
   Last achieved passing badge on <%= @project.achieved_passing_at %>
   (<%= time_ago_in_words @project.achieved_passing_at %> ago).
-<% end %>
-
-<%# Here we end the cache. %>
 <% end %>
 
 <br><br>

@@ -462,33 +462,6 @@ input[type="text"].form-control, .inputbox-look, textarea.form-control  {
    margin-top: 0 !important;
  }
 
-/* Adding open/close symbols for panels; this code was obtained from bafromca's answer on:*/
-/* http://stackoverflow.com/questions/13778703/adding-open-closed-icon-to-twitter-bootstrap-collapsibles-accordions */
-.panel-heading [data-toggle="collapse"]:after
-{
-    font-family: 'Glyphicons Halflings';
-    content: "\e072"; /* "play" icon */
-    float: left;
-    color: #b0c5d8;
-    font-size: 18px;
-    line-height: 22px;
-
-    /* rotate "play" icon from > (right arrow) to down arrow */
-    -webkit-transform: rotate(-90deg);
-    -moz-transform:    rotate(-90deg);
-    -ms-transform:     rotate(-90deg);
-    -o-transform:      rotate(-90deg);
-    transform:         rotate(-90deg);
-}
-.panel-heading [data-toggle="collapse"].collapsed:after
-{
-    /* rotate "play" icon from > (right arrow) to ^ (up arrow) */
-    -webkit-transform: rotate(90deg);
-    -moz-transform:    rotate(90deg);
-    -ms-transform:     rotate(90deg);
-    -o-transform:      rotate(90deg);
-    transform:         rotate(90deg);
-}
 
 .btn-sm {
 margin: 2px;
@@ -501,6 +474,7 @@ margin: 2px;
 a.clickable {
 color: inherit;
 }
+
 a.clickable:hover {
 text-decoration:none;
 }

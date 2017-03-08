@@ -493,3 +493,14 @@ input[type="text"].form-control, .inputbox-look, textarea.form-control  {
 .btn-sm {
 margin: 2px;
 }
+
+.clickable {
+  cursor: pointer;
+}
+
+a.clickable {
+color: inherit;
+}
+a.clickable:hover {
+text-decoration:none;
+}

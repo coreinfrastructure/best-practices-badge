@@ -13,7 +13,7 @@ var MIN_SHOULD_LENGTH = 5;
 var globalLastSelectedMet = '';
 var globalHideMetnaCriteria = false;
 var globalShowAllDetails = false;
-var globalExpandPanels = false;
+var globalExpandAllPanels = false;
 var globalIgnoreHashChange = false;
 
 // Do a polyfill for datalist if it's not already supported
@@ -279,8 +279,8 @@ function ToggleHideMet(e) {
   hideMetNA();
 }
 
-function ExpandPanels() {
-  if (globalExpandPanels) {
+function expandAllPanels() {
+  if (globalExpandAllPanels) {
     globalIgnoreHashChange = true;
     $('.can-collapse.collapsed').click();
     location.hash = '#all';
@@ -291,43 +291,59 @@ function ExpandPanels() {
   }
 }
 
-function ToggleExpandPanels(e) {
-  globalExpandPanels = !globalExpandPanels;
+function ToggleExpandAllPanels(e) {
+  globalExpandAllPanels = !globalExpandAllPanels;
   // Note that button text shows what WILL happen on click, so it
   // shows the REVERSED state (not the current state).
-  if (globalExpandPanels) {
+  if (globalExpandAllPanels) {
     $('#toggle-expand-all-panels')
       .addClass('active').html('Collapse all panels');
   } else {
     $('#toggle-expand-all-panels')
       .removeClass('active').html('Expand all panels');
   }
-  ExpandPanels();
-}
-
-function hashParentPanel() {
-  var hashId = window.location.hash.substring(1);
-  var targetElement = document.getElementById(hashId);
-  return $(targetElement).parents('.panel') || 0;
+  expandAllPanels();
 }
 
 function showHash() {
-  var parentPane = hashParentPanel();
-  if (parentPane !== 0) {
-    var loc = $(parentPane).find('.can-collapse');
-    globalIgnoreHashChange = true;
-    if ($(loc).hasClass('collapsed')) {
-      $(parentPane).find('.panel-collapse').collapse('show');
-      $(loc).removeClass('collapsed');
-    }
-    globalIgnoreHashChange = false;
-    if ($(window.location.hash).length) {
+  if ($(window.location.hash).length) {
+    var parentPane = $(window.location.hash).parents('.panel');
+    if (parentPane) {
+      var loc = $(parentPane).find('.can-collapse');
+      globalIgnoreHashChange = true;
+      if ($(loc).hasClass('collapsed')) {
+        loc.click();
+      }
+      globalIgnoreHashChange = false;
       // We need to wait a bit for animations to finish before scrolling.
       setTimeout(function() {
         var offset = $(window.location.hash).offset();
         var scrollto = offset.top - 100; // minus fixed header height
         $('html, body').animate({scrollTop:scrollto}, 0);
       }, 200);
+    }
+  }
+}
+
+function getAllPanelsReady() {
+  $('.can-collapse').addClass('clickable');
+  $('.can-collapse').find('i.glyphicon').addClass('glyphicon-chevron-up');
+  var loc = window.location.hash;
+  if (loc !== '#all') {
+    if (loc !== null && loc !== '' && $(loc).length !== 0 &&
+        $(loc).parents('.panel') !== null) {
+      $('.collapse').removeClass('in');
+      $('.can-collapse').addClass('collapsed');
+      $('.can-collapse').find('i.glyphicon')
+        .addClass('glyphicon-chevron-down')
+        .removeClass('glyphicon-chevron-up');
+      showHash();
+    } else {
+      $('.remove-in').removeClass('in');
+      $('.close-by-default').addClass('collapsed');
+      $('.close-by-default').find('i.glyphicon')
+        .addClass('glyphicon-chevron-down')
+        .removeClass('glyphicon-chevron-up');
     }
   }
 }
@@ -460,34 +476,19 @@ $(document).ready(function() {
     });
   }
 
-  globalExpandPanels = false;
+  globalExpandAllPanels = false;
   $('#toggle-expand-all-panels').click(function(e) {
-    ToggleExpandPanels(e);
+    ToggleExpandAllPanels(e);
   });
 
-  // Only show open indicators if JS is enabled
-  $('.remove-in').removeClass('in');
-  $('.close-by-default').addClass('collapsed');
-
-
-  // Open the correct panel when hash in url
-  if (location.hash !== null && location.hash !== '' &&
-      $(location.hash).length !== 0) {
-    $('.collapse').removeClass('in');
-    $('.open-by-default').addClass('collapsed');
-    showHash();
-  } else if (location.hash !== null && location.hash === '#all') {
-    $(function(e) {
-      ToggleExpandPanels(e);
-    });
-  }
-
-  $('.panel div.can-collapse').on('click', function (e) {
+  $('.panel div.can-collapse').on('click', function(e) {
     var $this = $(this);
     if ($this.hasClass('collapsed')) {
       $this.parents('.panel').find('.panel-collapse').collapse('show');
       $this.removeClass('collapsed');
-      if (!globalIgnoreHashChange){
+      $this.find('i.glyphicon').removeClass('glyphicon-chevron-down')
+        .addClass('glyphicon-chevron-up');
+      if (!globalIgnoreHashChange) {
         var origId = this.getAttribute('id');
         // prevent scrolling on panel open
         this.id = origId + '-tmp';
@@ -497,8 +498,12 @@ $(document).ready(function() {
     } else {
       $this.parents('.panel').find('.panel-collapse').collapse('hide');
       $this.addClass('collapsed');
+      $this.find('i.glyphicon').removeClass('glyphicon-chevron-up')
+        .addClass('glyphicon-chevron-down');
     }
   });
+
+  getAllPanelsReady();
 
   $(window).on('hashchange', function(e) {
     if (!globalIgnoreHashChange && $(window.location.hash).length) {

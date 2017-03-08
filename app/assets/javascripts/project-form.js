@@ -90,6 +90,11 @@ function isEnough(criterion) {
   return (result === 'passing' || result === 'barely');
 }
 
+function resetSatisfactionLevel() {
+  var total = 0;
+  var enough = 0;
+}
+
 function resetProgressBar() {
   var total = 0;
   var enough = 0;

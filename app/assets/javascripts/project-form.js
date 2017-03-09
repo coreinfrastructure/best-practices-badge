@@ -543,7 +543,7 @@ $(document).ready(function() {
   });
 
   // Set the satisfaction level in each panel
-  $('.satisfaction-bullet').append('&nbsp;&#9899;');
+  $('.satisfaction-bullet').append('&#9679;');
   $('.panel').each(function(index) {
     setPanelSatisfactionLevel(this);
   });

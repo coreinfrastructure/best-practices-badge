@@ -114,9 +114,9 @@ function setPanelSatisfactionLevel(panel) {
     }
   });
   var satisfaction = $(panel).find('.satisfaction');
-  $(satisfaction).text(enough.toString() + '/' + total.toString());
-  $(satisfaction).append('&nbsp<i class="sat-light">&#9899;</i>');
-  $(satisfaction).find('.sat-light')
+  $(satisfaction).find('.satisfaction-text')
+                 .text(enough.toString() + '/' + total.toString());
+  $(satisfaction).find('.satisfaction-bullet')
                  .css({ 'color' : getColor(enough / total) });
 }
 
@@ -543,6 +543,7 @@ $(document).ready(function() {
   });
 
   // Set the satisfaction level in each panel
+  $('.satisfaction-bullet').append('&nbsp;&#9899;');
   $('.panel').each(function(index) {
     setPanelSatisfactionLevel(this);
   });

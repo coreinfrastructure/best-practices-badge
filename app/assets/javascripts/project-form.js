@@ -33,6 +33,18 @@ function polyfillDatalist() {
   }
 }
 
+// This gives a color based upon value from 0 to 1 going from
+// red to green.  Based upon code from user jongobar at
+// http://jsfiddle.net/jongobar/sNKWK/
+// See also jongo45's answer at:
+// http://stackoverflow.com/questions/7128675/
+// from-green-to-red-color-depend-on-percentage
+function getColor(value) {
+  //value from 0 to 1
+  var hue = (value * 120).toString(10);
+  return ['hsl(', hue, ', 100%, 50%)'].join('');
+}
+
 // Note: This regex needs to be logically the same as the one used in
 // the server-side badge calculation, or it may confuse some users.
 // See app/models/project.rb function "contains_url?".
@@ -90,9 +102,22 @@ function isEnough(criterion) {
   return (result === 'passing' || result === 'barely');
 }
 
-function resetSatisfactionLevel() {
+// Set a panel's satisfaction level.
+function setPanelSatisfactionLevel(panel) {
   var total = 0;
   var enough = 0;
+  $(panel).find('.criterion-name').each(function(index) {
+    var criterion = $(this).text();
+    total++;
+    if (isEnough(criterion)) {
+      enough++;
+    }
+  });
+  var satisfaction = $(panel).find('.satisfaction');
+  $(satisfaction).text(enough.toString() + '/' + total.toString());
+  $(satisfaction).append('&nbsp<i class="sat-light">&#9899;</i>');
+  $(satisfaction).find('.sat-light')
+                 .css({ 'color' : getColor(enough / total) });
 }
 
 function resetProgressBar() {
@@ -110,8 +135,8 @@ function resetProgressBar() {
   });
   percentage = enough / total;
   percentAsString = Math.round(percentage * 100).toString() + '%';
-  $('#badge-progress').attr('aria-valuenow', percentage).
-                      text(percentAsString).css('width', percentAsString);
+  $('#badge-progress').attr('aria-valuenow', percentage)
+                      .text(percentAsString).css('width', percentAsString);
 }
 
 function resetCriterionResult(criterion) {
@@ -160,6 +185,7 @@ function changedJustificationText(criteria) {
     $(criteriaJust).removeClass('required-data');
   }
   resetCriterionResult(criteria);
+  setPanelSatisfactionLevel($(criteriaJust).parents('.panel'));
   resetProgressBar();
 }
 
@@ -514,6 +540,11 @@ $(document).ready(function() {
     if (!globalIgnoreHashChange && $(window.location.hash).length) {
       showHash();
     }
+  });
+
+  // Set the satisfaction level in each panel
+  $('.panel').each(function(index) {
+    setPanelSatisfactionLevel(this);
   });
 
   // Polyfill datalist (for Safari users)

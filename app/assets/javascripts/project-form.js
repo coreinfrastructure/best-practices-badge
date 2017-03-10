@@ -377,6 +377,11 @@ function getAllPanelsReady() {
         .removeClass('glyphicon-chevron-up');
     }
   }
+  // Set the satisfaction level in each panel
+  $('.satisfaction-bullet').append('&#9679;');
+  $('.panel').each(function(index) {
+    setPanelSatisfactionLevel(this);
+  });
 }
 
 function setupProjectField(criteria) {
@@ -540,12 +545,6 @@ $(document).ready(function() {
     if (!globalIgnoreHashChange && $(window.location.hash).length) {
       showHash();
     }
-  });
-
-  // Set the satisfaction level in each panel
-  $('.satisfaction-bullet').append('&#9679;');
-  $('.panel').each(function(index) {
-    setPanelSatisfactionLevel(this);
   });
 
   // Polyfill datalist (for Safari users)

@@ -347,11 +347,14 @@ function showHash() {
       }
       globalIgnoreHashChange = false;
       // We need to wait a bit for animations to finish before scrolling.
-      setTimeout(function() {
-        var offset = $(window.location.hash).offset();
-        var scrollto = offset.top - 100; // minus fixed header height
-        $('html, body').animate({scrollTop:scrollto}, 0);
-      }, 200);
+      $(parentPane).find('.panel-collapse')
+        .on('shown.bs.collapse', function() {
+          var offset = $(window.location.hash).offset();
+          if (offset) {
+            var scrollto = offset.top - 100; // minus fixed header height
+            $('html, body').animate({scrollTop:scrollto}, 0);
+          }
+        });
     }
   }
 }

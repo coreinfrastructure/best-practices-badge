@@ -6,7 +6,7 @@
   </li>
 <% end %>
 
-<div class="center">
+<div class="center table-responsive">
 <h2><%= pluralize(@count, 'Project') %></h2>
   <%= form_for projects_path, method: 'get', enforce_utf8: false,
                html: { class: 'project_search' } do %>

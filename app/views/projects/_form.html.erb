@@ -50,7 +50,7 @@ There is also a
   If this is your project, please show your badge status
   on your project page!
   The badge status looks like this:
-  <img src='/projects/<%= project.id %>/badge' alt='Badge level for project <%= project.id %> is <%= project.badge_percentage %>%'>
+  <img src='/projects/<%= project.id %>/badge'  width='192' height='20' alt='Badge level for project <%= project.id %> is <%= project.badge_percentage %>%'>
   Here is how to embed it:
   <%= render(partial: "details", locals: {
          criterion: "got_badge", details: %{

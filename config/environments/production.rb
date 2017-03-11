@@ -111,7 +111,8 @@ Rails.application.configure do
   # Cache static content.  Cache for a long time; the asset cache is
   config.public_file_server.headers =
     {
-      'Cache-Control' => 'public, s-maxage=31536000, max-age=31536000'
+      'Cache-Control' =>
+        'public, s-maxage=31536000, max-age=31536000, immutable'
     }
 
   # Enable Rack's built-in compression mechanism; this is important for people

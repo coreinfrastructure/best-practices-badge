@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 This Change Log format is suggested by
 <https://github.com/olivierlacan/keep-a-changelog/blob/master/CHANGELOG.md>
 
+## 7945407b - 2017-03-09
+
+- Switch project page from tabs to collapisble panels
+- An anchor tag in the url will now open the panel containing
+  tagged content
+- Add a satisfaction level on each panel header
+
 ## dcb21c8e - 2017-02-22
 
 - Upgraded to Rails 5

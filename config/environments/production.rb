@@ -52,7 +52,7 @@ Rails.application.configure do
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use
   # secure cookies.
-  config.force_ssl = true
+  config.force_ssl = true unless ENV['DISABLE_FORCE_SSL']
 
   # Use the lowest log level to ensure availability of diagnostic information
   # when problems arise.
@@ -107,13 +107,12 @@ Rails.application.configure do
   # The documentation for Fastly suggests setting
   # "config.serve_static_assets = true".  However, this has since been
   # renamed to "config.serve_static_files", which we already conditionally set.
-  # Cache static content.  Until we're confident in the results, we'll
-  # use a relatively short caching time of 1 hour.
-  # config.static_cache_control = 'public, s-maxage=2592000, maxage=86400'
-  # config.static_cache_control = 'public, s-maxage=3600, maxage=3600'
+
+  # Cache static content.  Cache for a long time; the asset cache is
   config.public_file_server.headers =
     {
-      'Cache-Control' => 'public, s-maxage=3600, max-age=3600'
+      'Cache-Control' =>
+        'public, s-maxage=31536000, max-age=31536000, immutable'
     }
 
   # Enable Rack's built-in compression mechanism; this is important for people

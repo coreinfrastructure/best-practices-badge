@@ -12,10 +12,10 @@
     <button id="toggle-hide-metna-criteria" class="btn btn-info btn-sm" title="Hide met or N/A criteria" type="button">Hide met or N/A criteria</button>
   </div>
   <div class="hidden">
-    <%= image_tag "result_symbol_check.png", id: "result_symbol_check_img" %>
-    <%= image_tag "result_symbol_x.png", id: "result_symbol_x_img" %>
-    <%= image_tag "result_symbol_dash.png", id: "result_symbol_dash" %>
-    <%= image_tag "result_symbol_question.png", id: "result_symbol_question" %>
+    <%= image_tag "result_symbol_check.png", id: "result_symbol_check_img", size: "40x40" %>
+    <%= image_tag "result_symbol_x.png", id: "result_symbol_x_img", size: "40x40" %>
+    <%= image_tag "result_symbol_dash.png", id: "result_symbol_dash", size: "40x40" %>
+    <%= image_tag "result_symbol_question.png", id: "result_symbol_question", size: "40x40" %>
   </div>
 </div>
 <p class="no-padding padding-right main-subtext">
@@ -36,8 +36,6 @@ For example, some practices enable multi-person review before release,
 which can both help find otherwise hard-to-find technical vulnerabilities
 and help build trust and a desire for repeated interaction among developers
 from different companies.
-We plan to improve the page design later; for now, please focus on
-the criteria and how they're combined.
 To earn a badge,
 all MUST and MUST NOT criteria must be met,
 all SHOULD criteria must be met OR be unmet with justification, <i>and</i>
@@ -52,7 +50,7 @@ There is also a
   If this is your project, please show your badge status
   on your project page!
   The badge status looks like this:
-  <img src='/projects/<%= project.id %>/badge' alt='Badge level for project <%= project.id %> is <%= project.badge_percentage %>%'>
+  <img src='/projects/<%= project.id %>/badge'  width='192' height='20' alt='Badge level for project <%= project.id %> is <%= project.badge_percentage %>%'>
   Here is how to embed it:
   <%= render(partial: "details", locals: {
          criterion: "got_badge", details: %{
@@ -74,7 +72,7 @@ There is also a
 <%# End column started outside. %>
 </div>
 
-<div class="col-md-3 col-sm-3">
+<div class="col-sm-3">
 </div>
 <%# end row started outside %>
 </div>
@@ -94,6 +92,10 @@ There is also a
       <div class="open-by-default panel-heading can-collapse" id="projectbasics">
         <h4 class="panel-title">
           <i class="glyphicon"></i>&nbsp;Basics
+          <span class="pull-right satisfaction">
+            <span class="satisfaction-text"></span>
+            <span class="satisfaction-bullet"></span>
+          </span>
         </h4>
       </div>
       <div class="panel-collapse collapse in">
@@ -424,6 +426,10 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
       <div class="panel-heading close-by-default can-collapse" id="changecontrol">
         <h4 class="panel-title">
           <i class="glyphicon"></i>&nbsp;Change Control
+          <span class="pull-right satisfaction">
+            <span class="satisfaction-text"></span>
+            <span class="satisfaction-bullet"></span>
+          </span>
         </h4>
       </div>
       <div class="panel-collapse collapse in remove-in">
@@ -479,6 +485,10 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
       <div class="panel-heading close-by-default can-collapse" id="reporting">
         <h4 class="panel-title">
           <i class="glyphicon"></i>&nbsp;Reporting
+          <span class="pull-right satisfaction">
+            <span class="satisfaction-text"></span>
+            <span class="satisfaction-bullet"></span>
+          </span>
         </h4>
       </div>
       <div class="panel-collapse collapse in remove-in">
@@ -531,6 +541,10 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
       <div class="panel-heading close-by-default can-collapse" id="quality">
         <h4 class="panel-title">
           <i class="glyphicon"></i>&nbsp;Quality
+          <span class="pull-right satisfaction">
+            <span class="satisfaction-text"></span>
+            <span class="satisfaction-bullet"></span>
+          </span>
         </h4>
       </div>
       <div class="panel-collapse collapse in remove-in">
@@ -599,6 +613,10 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
       <div class="panel-heading close-by-default can-collapse" id="security">
         <h4 class="panel-title">
           <i class="glyphicon"></i>&nbsp;Security
+          <span class="pull-right satisfaction">
+            <span class="satisfaction-text"></span>
+            <span class="satisfaction-bullet"></span>
+          </span>
         </h4>
       </div>
       <div class="panel-collapse collapse in remove-in">
@@ -687,6 +705,10 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
       <div class="panel-heading close-by-default can-collapse" id="analysis">
         <h4 class="panel-title">
           <i class="glyphicon"></i>&nbsp;Analysis
+          <span class="pull-right satisfaction">
+            <span class="satisfaction-text"></span>
+            <span class="satisfaction-bullet"></span>
+          </span>
         </h4>
       </div>
       <div class="panel-collapse collapse in remove-in">
@@ -740,6 +762,10 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
       <div class="panel-heading close-by-default can-collapse" id="future">
         <h4 class="panel-title">
           <i class="glyphicon"></i>&nbsp;Future
+          <span class="pull-right satisfaction">
+            <span class="satisfaction-text"></span>
+            <span class="satisfaction-bullet"></span>
+          </span>
         </h4>
       </div>
       <div class="panel-collapse collapse in remove-in">

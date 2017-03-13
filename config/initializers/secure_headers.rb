@@ -17,10 +17,17 @@ SecureHeaders::Configuration.default do |config|
   config.referrer_policy = 'no-referrer-when-downgrade'
   # Configure CSP
   config.csp = {
+    # Control information sources
     default_src: normal_src,
     img_src: ['secure.gravatar.com', 'avatars.githubusercontent.com', "'self'"],
     object_src: normal_src,
-    style_src: normal_src
+    style_src: normal_src,
+    # Harden CSP against attacks in other ways
+    base_uri: ["'self'"],
+    block_all_mixed_content: true, # see http://www.w3.org/TR/mixed-content/
+    frame_ancestors: ["'none'"],
+    form_action: ["'self'"], # This counters some XSS busters
+    plugin_types: ["'none'"]
   }
   config.cookies = {
     secure: true, # mark all cookies as Secure

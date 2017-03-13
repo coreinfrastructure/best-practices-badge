@@ -33,6 +33,18 @@ function polyfillDatalist() {
   }
 }
 
+// This gives a color based upon value from 0 to 1 going from
+// red to green.  Based upon code from user jongobar at
+// http://jsfiddle.net/jongobar/sNKWK/
+// See also jongo45's answer at:
+// http://stackoverflow.com/questions/7128675/
+// from-green-to-red-color-depend-on-percentage
+function getColor(value) {
+  //value from 0 to 1
+  var hue = (value * 120).toString(10);
+  return ['hsl(', hue, ', 100%, 50%)'].join('');
+}
+
 // Note: This regex needs to be logically the same as the one used in
 // the server-side badge calculation, or it may confuse some users.
 // See app/models/project.rb function "contains_url?".
@@ -90,6 +102,24 @@ function isEnough(criterion) {
   return (result === 'passing' || result === 'barely');
 }
 
+// Set a panel's satisfaction level.
+function setPanelSatisfactionLevel(panel) {
+  var total = 0;
+  var enough = 0;
+  $(panel).find('.criterion-name').each(function(index) {
+    var criterion = $(this).text();
+    total++;
+    if (isEnough(criterion)) {
+      enough++;
+    }
+  });
+  var satisfaction = $(panel).find('.satisfaction');
+  $(satisfaction).find('.satisfaction-text')
+                 .text(enough.toString() + '/' + total.toString());
+  $(satisfaction).find('.satisfaction-bullet')
+                 .css({ 'color' : getColor(enough / total) });
+}
+
 function resetProgressBar() {
   var total = 0;
   var enough = 0;
@@ -105,8 +135,14 @@ function resetProgressBar() {
   });
   percentage = enough / total;
   percentAsString = Math.round(percentage * 100).toString() + '%';
-  $('#badge-progress').attr('aria-valuenow', percentage).
-                      text(percentAsString).css('width', percentAsString);
+  $('#badge-progress').attr('aria-valuenow', percentage)
+                      .text(percentAsString).css('width', percentAsString);
+}
+
+function resetProgressAndSatisfaction(criteria) {
+  var criteriaJust = '#project_' + criteria + '_justification';
+  setPanelSatisfactionLevel($(criteriaJust).parents('.panel'));
+  resetProgressBar();
 }
 
 function resetCriterionResult(criterion) {
@@ -155,7 +191,11 @@ function changedJustificationText(criteria) {
     $(criteriaJust).removeClass('required-data');
   }
   resetCriterionResult(criteria);
-  resetProgressBar();
+}
+
+function changedJustificationTextAndUpdate(criteria) {
+  changedJustificationText(criteria);
+  resetProgressAndSatisfaction(criteria);
 }
 
 // Do we have any text in this field region?  Handle the variations.
@@ -257,12 +297,18 @@ function updateCriteriaDisplay(criteria) {
   changedJustificationText(criteria);
 }
 
+function updateCriteriaDisplayAndUpdate(criteria) {
+  updateCriteriaDisplay(criteria);
+  resetProgressAndSatisfaction(criteria);
+}
+
+
 function changeCriterion(criterion) {
   var criterionStatus = '#project_' + criterion + '_status';
   if ($(criterionStatus + '_met').is(':checked')) {
     globalLastSelectedMet = criterion;
   }
-  updateCriteriaDisplay(criterion);
+  updateCriteriaDisplayAndUpdate(criterion);
 }
 
 function ToggleHideMet(e) {
@@ -316,11 +362,14 @@ function showHash() {
       }
       globalIgnoreHashChange = false;
       // We need to wait a bit for animations to finish before scrolling.
-      setTimeout(function() {
-        var offset = $(window.location.hash).offset();
-        var scrollto = offset.top - 100; // minus fixed header height
-        $('html, body').animate({scrollTop:scrollto}, 0);
-      }, 200);
+      $(parentPane).find('.panel-collapse')
+        .on('shown.bs.collapse', function() {
+          var offset = $(window.location.hash).offset();
+          if (offset) {
+            var scrollto = offset.top - 100; // minus fixed header height
+            $('html, body').animate({scrollTop:scrollto}, 0);
+          }
+        });
     }
   }
 }
@@ -346,6 +395,11 @@ function getAllPanelsReady() {
         .removeClass('glyphicon-chevron-up');
     }
   }
+  // Set the satisfaction level in each panel
+  $('.satisfaction-bullet').append('&#9679;');
+  $('.panel').each(function(index) {
+    setPanelSatisfactionLevel(this);
+  });
 }
 
 function setupProjectField(criteria) {
@@ -356,15 +410,15 @@ function setupProjectField(criteria) {
       });
   $('input[name="project[' + criteria + '_justification]"]').blur(
       function() {
-        updateCriteriaDisplay(criteria);
+        updateCriteriaDisplayAndUpdate(criteria);
       });
   $('#project_' + criteria + '_justification').on('input',
       function() {
-        changedJustificationText(criteria);
+        changedJustificationTextAndUpdate(criteria);
       });
   $('#project_' + criteria + '_justification').on('keyup',
       function() {
-        changedJustificationText(criteria);
+        changedJustificationTextAndUpdate(criteria);
       });
 }
 
@@ -421,8 +475,7 @@ function SetupCriteriaStructures() {
   );
 }
 
-// Setup display as soon as page is ready
-$(document).ready(function() {
+function setupProjectForm() {
   // By default, hide details.  We do the hiding in JavaScript, so
   // those who disable JavaScript will still see the text
   // (they'll have no way to later reveal it).
@@ -430,7 +483,7 @@ $(document).ready(function() {
   $('.details-toggler').html('Show details');
   $('.details-toggler').click(ToggleDetailsDisplay);
 
-
+  // Force these values on page reload
   globalShowAllDetails = false;
   $('#toggle-show-all-details').click(function(e) {
     ToggleAllDetails(e);
@@ -443,38 +496,29 @@ $(document).ready(function() {
     ToggleHideMet(e);
   });
 
-  $('[data-toggle="tooltip"]').tooltip(); // Enable bootstrap tooltips
+  SetupCriteriaStructures();
 
-  // A form element with class onchange-submit automatically submits its
-  // form whenever it is changed.
-  $('.onchange-submit').change(function() {
-    $(this).parents('form').submit();
+  // Implement "press this button to make all crypto N/A"
+  $('#all_crypto_na').click(function(e) {
+    $.each(criterionCategoryValue, function(key, value) {
+      if ((/^crypto/).test(key)) {
+        $('#project_' + key + '_status_na').prop('checked', true);
+      }
+      updateCriteriaDisplay(key);
+      resetCriterionResult(key);
+    });
+    setPanelSatisfactionLevel($('#all_crypto_na').parents('.panel'));
+    resetProgressBar();
   });
 
-  if ($('#project_entry_form').length) {
-
-    SetupCriteriaStructures();
-
-    // Implement "press this button to make all crypto N/A"
-    $('#all_crypto_na').click(function(e) {
-      $.each(criterionCategoryValue, function(key, value) {
-        if ((/^crypto/).test(key)) {
-          $('#project_' + key + '_status_na').prop('checked', true);
-        }
-        updateCriteriaDisplay(key);
-      });
-      resetProgressBar();
+  // Use "imagesloaded" to wait for image load before displaying them
+  imagesLoaded(document).on('always', function(instance) {
+    // Set up the interactive displays of "enough".
+    $.each(criterionCategoryValue, function(key, value) {
+      setupProjectField(key);
     });
-
-    // Use "imagesloaded" to wait for image load before displaying them
-    imagesLoaded(document).on('always', function(instance) {
-      // Set up the interactive displays of "enough".
-      $.each(criterionCategoryValue, function(key, value) {
-        setupProjectField(key);
-      });
-      resetProgressBar();
-    });
-  }
+    resetProgressBar();
+  });
 
   globalExpandAllPanels = false;
   $('#toggle-expand-all-panels').click(function(e) {
@@ -510,6 +554,21 @@ $(document).ready(function() {
       showHash();
     }
   });
+}
+
+// Setup display as soon as page is ready
+$(document).ready(function() {
+  $('[data-toggle="tooltip"]').tooltip(); // Enable bootstrap tooltips
+
+  // A form element with class onchange-submit automatically submits its
+  // form whenever it is changed.
+  $('.onchange-submit').change(function() {
+    $(this).parents('form').submit();
+  });
+
+  if ($('#project_entry_form').length) {
+    setupProjectForm();
+  }
 
   // Polyfill datalist (for Safari users)
   polyfillDatalist();

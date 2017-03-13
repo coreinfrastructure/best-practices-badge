@@ -374,7 +374,10 @@ function showHash() {
             scrollToHash();
           });
       } else {
-        scrollToHash();
+        // This helps Chrome scroll to the right place on page load
+        setTimeout(function() {
+          scrollToHash();
+        }, 0);
       }
     }
   }

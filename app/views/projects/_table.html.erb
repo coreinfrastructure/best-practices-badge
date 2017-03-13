@@ -14,7 +14,9 @@
   </thead>
 
   <tbody>
+
     <% projects.each do |project| %>
+    <% cache [project.id, @result] do %>
       <tr>
         <td><%= link_to project.id, project %></td>
         <td><%= link_to (project.name.presence || "(Name Unknown)"),
@@ -30,6 +32,7 @@
             <a rel='nofollow' href="<%= project.homepage_url %>"><%= project.homepage_url %></a>
           <% else %>
             <%= project.homepage_url %>
+          <% end %>
           <% end %>
         </td>
         <td><%= project.license %></td>

@@ -4,7 +4,7 @@
       <div class="main-badge-ques"></div>
     </div>
     <div class="col-md-7 col-sm-6">
-      <h2 class="text-uppercase m-t-0">Edit Project Badge Status</h2>
+      <h2 class="m-t-0">Edit Project Badge Status</h2>
   <%= render 'form', project: @project, is_disabled: false %>
 <% else %>
   <% flash.now[:danger] = "Please log in to edit a project!"%>

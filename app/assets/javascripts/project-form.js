@@ -517,7 +517,7 @@ function setupProjectForm() {
   });
 
   // Use "imagesloaded" to wait for image load before displaying them
-  $('.req-imgs').imagesLoaded().always(function(instance) {
+  imagesLoaded(document).on('always', function(instance) {
     // Set up the interactive displays of "enough".
     $.each(criterionCategoryValue, function(key, value) {
       setupProjectField(key);

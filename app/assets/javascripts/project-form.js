@@ -351,25 +351,31 @@ function ToggleExpandAllPanels(e) {
   expandAllPanels();
 }
 
+function scrollToHash() {
+  var offset = $(window.location.hash).offset();
+  if (offset) {
+    var scrollto = offset.top - 100; // minus fixed header height
+    $('html, body').animate({scrollTop:scrollto}, 0);
+  }
+}
+
 function showHash() {
   if ($(window.location.hash).length) {
     var parentPane = $(window.location.hash).parents('.panel');
-    if (parentPane) {
+    if (parentPane.length) {
       var loc = $(parentPane).find('.can-collapse');
-      globalIgnoreHashChange = true;
       if ($(loc).hasClass('collapsed')) {
+        globalIgnoreHashChange = true;
         loc.click();
+        globalIgnoreHashChange = false;
+        // We need to wait a bit for animations to finish before scrolling.
+        $(parentPane).find('.panel-collapse')
+          .on('shown.bs.collapse', function() {
+            scrollToHash();
+          });
+      } else {
+        scrollToHash();
       }
-      globalIgnoreHashChange = false;
-      // We need to wait a bit for animations to finish before scrolling.
-      $(parentPane).find('.panel-collapse')
-        .on('shown.bs.collapse', function() {
-          var offset = $(window.location.hash).offset();
-          if (offset) {
-            var scrollto = offset.top - 100; // minus fixed header height
-            $('html, body').animate({scrollTop:scrollto}, 0);
-          }
-        });
     }
   }
 }
@@ -379,11 +385,11 @@ function getAllPanelsReady() {
   $('.can-collapse').find('i.glyphicon').addClass('glyphicon-chevron-up');
   var loc = window.location.hash;
   if (loc !== '#all') {
-    if (loc !== null && loc !== '' && $(loc).length !== 0 &&
-        $(loc).parents('.panel') !== null) {
-      $('.collapse').removeClass('in');
-      $('.can-collapse').addClass('collapsed');
-      $('.can-collapse').find('i.glyphicon')
+    var parentPanel = $(loc).parents('.panel');
+    if (parentPanel.length) {
+      $('.panel').not(parentPanel).find('.collapse').removeClass('in');
+      $('.panel').not(parentPanel).find('.can-collapse').addClass('collapsed');
+      $('.panel').not(parentPanel).find('.can-collapse').find('i.glyphicon')
         .addClass('glyphicon-chevron-down')
         .removeClass('glyphicon-chevron-up');
       showHash();

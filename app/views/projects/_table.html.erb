@@ -16,7 +16,7 @@
   <tbody>
 
     <% projects.each do |project| %>
-    <% cache [project.id, @result] do %>
+    <% cache project do %>
       <tr>
         <td><%= link_to project.id, project %></td>
         <td><%= link_to (project.name.presence || "(Name Unknown)"),

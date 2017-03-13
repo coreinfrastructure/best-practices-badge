@@ -255,9 +255,9 @@ function updateCriteriaDisplay(criteria) {
        attr('placeholder',
          $('#' + criteriaMetPlaceholder).html().trim());
     if (document.getElementById(criteria + '_met_suppress')) {
-      $(criteriaJust).hide('fast');
+      $(criteriaJust).css({'display':'none'});
     } else {
-      $(criteriaJust).show('fast');
+      $(criteriaJust).css({'display':''});
     }
   } else if ($(criteriaStatus + '_unmet').is(':checked')) {
     var criteriaUnmetPlaceholder = criteria + '_unmet_placeholder';
@@ -265,9 +265,9 @@ function updateCriteriaDisplay(criteria) {
        attr('placeholder',
          $('#' + criteriaUnmetPlaceholder).html().trim());
     if (document.getElementById(criteria + '_unmet_suppress')) {
-      $(criteriaJust).hide('fast');
+      $(criteriaJust).css({'display':'none'});
     } else {
-      $(criteriaJust).show('fast');
+      $(criteriaJust).css({'display':''});
     }
   } else if ($(criteriaStatus + '_na').is(':checked')) {
     var criteriaNaPlaceholder = criteria + '_na_placeholder';
@@ -275,18 +275,18 @@ function updateCriteriaDisplay(criteria) {
        attr('placeholder',
          $('#' + criteriaNaPlaceholder).html().trim());
     if (document.getElementById(criteria + '_na_suppress')) {
-      $(criteriaJust).hide('fast');
+      $(criteriaJust).css({'display':'none'});
     } else {
-      $(criteriaJust).show('fast');
+      $(criteriaJust).css({'display':''});
     }
   } else if ($(criteriaStatus + '_').is(':checked')) {
     $(criteriaJust).attr('placeholder', 'Please explain');
-    $(criteriaJust).hide('fast');
+    $(criteriaJust).css({'display':'none'});
   }
   // If there's old justification text, force showing it even if it
   // no longer makes sense (so they can fix it or change their mind).
   if (justificationValue.length > 0) {
-    $(criteriaJust).show('fast');
+    $(criteriaJust).css({'display':''});
   }
   if (globalHideMetnaCriteria) {
     // If we're hiding met criteria, walk through and hide them.
@@ -425,16 +425,15 @@ function setupProjectField(criteria) {
 function ToggleDetailsDisplay(e) {
   var detailsTextID = e.target.id.
                         replace('_details_toggler', '_details_text');
-  $('#' + detailsTextID).toggle('fast',
-    function() {
-      var buttonText;
-      if ($('#' + detailsTextID).is(':hidden')) {
-        buttonText = 'Show details';
-      } else {
-        buttonText = 'Hide details';
-      }
-      $('#' + e.target.id).html(buttonText);
-    });
+  var buttonText;
+  if ($('#' + detailsTextID).css('display') !== 'none') {
+    buttonText = 'Show details';
+    $('#' + detailsTextID).css({'display':'none'});
+  } else {
+    buttonText = 'Hide details';
+    $('#' + detailsTextID).css({'display':''});
+  }
+  $('#' + e.target.id).html(buttonText);
 }
 
 function ToggleAllDetails(e) {
@@ -444,12 +443,12 @@ function ToggleAllDetails(e) {
   if (globalShowAllDetails) {
     $('#toggle-show-all-details')
       .addClass('active').html('Hide all detailed text');
-    $('.details-text').show('fast');
+    $('.details-text').css({'display':''});
     $('.details-toggler').html('Hide details');
   } else {
     $('#toggle-show-all-details')
       .removeClass('active').html('Show all detailed text');
-    $('.details-text').hide('fast');
+    $('.details-text').css({'display':'none'});
     $('.details-toggler').html('Show details');
   }
 }
@@ -479,7 +478,7 @@ function setupProjectForm() {
   // By default, hide details.  We do the hiding in JavaScript, so
   // those who disable JavaScript will still see the text
   // (they'll have no way to later reveal it).
-  $('.details-text').hide('fast');
+  $('.details-text').css({'display':'none'});
   $('.details-toggler').html('Show details');
   $('.details-toggler').click(ToggleDetailsDisplay);
 

@@ -4,6 +4,7 @@
       <div id="badge-progress" class="progress-bar progress-bar-success badge-progress" role="progressbar" aria-valuenow="<%= project.badge_percentage %>" aria-valuemin="0" aria-valuemax="100">0%</div>
     </div>
 <% end %>
+<% cache_if is_disabled, project do %>
 <div>
   <span id="project_entry_form"></span>
   <div class="hidden-print">
@@ -293,8 +294,6 @@ databases when reporting vulnerabilities.
           </li>
 
    <%# Note: render() accepts met_suppress: ..., unmet_placeholder:  ... %>
-      <% cache [project, is_disabled, @result] do %>
-
           <li class="list-group-item"><h3>Basic Project Website Content</h3>
             <%= render_status 'description_good', f, project, is_disabled %>
 
@@ -839,6 +838,6 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
       </div>
     <% end %>
   </div>
-  <% end %>
 </div>
 </div>
+<% end %>

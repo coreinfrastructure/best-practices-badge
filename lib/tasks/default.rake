@@ -376,6 +376,6 @@ end
 desc 'Send reminders to the oldest inactive project badge entries.'
 task reminders: :environment do
   puts 'Sending inactive project reminders. List of reminded project ids:'
-  p ProjectsController.send_reminders
+  p ProjectsController.send :send_reminders
   true
 end

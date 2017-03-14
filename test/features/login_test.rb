@@ -9,8 +9,17 @@ class LoginTest < CapybaraFeatureTest
   X = /result_symbol_x/
 
   setup do
+    FastlyRails.configure do |c|
+      c.purging_enabled = true
+    end
     @user = users(:test_user)
     @project = projects(:one)
+  end
+
+  teardown do
+    FastlyRails.configure do |c|
+      c.purging_enabled = false
+    end
   end
 
   # rubocop:disable Metrics/BlockLength

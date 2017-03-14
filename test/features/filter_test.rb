@@ -83,6 +83,24 @@ class FilterTest < CapybaraFeatureTest
     assert has_content? 'Mars Ascent Vehicle (MAV)'
     assert has_content? 'Unjustified perfect project'
     assert has_no_content? 'Justified perfect project'
+
+    # check that old search system is working and returns expected results
+    visit '/projects?pq=Pathfinder'
+    assert_equal 1, all('tbody tr').count
+    assert has_content? '1 Project'
+    assert has_content? 'Pathfinder OS'
+    assert has_no_content? 'Mars Ascent Vehicle (MAV)'
+    assert has_no_content? 'Unjustified perfect project'
+    assert has_no_content? 'Justified perfect project'
+
+    # check results from normal search system
+    visit '/projects?q=Pathfinder'
+    assert_equal 2, all('tbody tr').count
+    assert has_content? '2 Projects'
+    assert has_content? 'Pathfinder OS'
+    assert has_content? 'Mars Ascent Vehicle (MAV)'
+    assert has_no_content? 'Unjustified perfect project'
+    assert has_no_content? 'Justified perfect project'
   end
   # rubocop:enable Metrics/BlockLength
 end

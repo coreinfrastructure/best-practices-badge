@@ -319,10 +319,8 @@ class ProjectsControllerTest < ActionController::TestCase
     Rails.application.config.force_ssl = old
   end
 
-  test 'sanity test of reminders, with regression test' do
-    assert_equal 1, Project.projects_to_remind.size
-    result = system 'rake reminders >/dev/null'
-    assert result
-    assert_equal 0, Project.projects_to_remind.size
+  test 'sanity test of reminders' do
+    result = ProjectsController.send :send_reminders
+    assert_equal 1, result.size
   end
 end

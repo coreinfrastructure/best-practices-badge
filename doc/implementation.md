@@ -73,8 +73,7 @@ Some other key components we use are:
 - Imagesloaded <https://github.com/desandro/imagesloaded>
   (to ensure images are loaded before displaying them)
 - Puma as the webserver - not webrick, because Puma can handle multiple
-  processes and multiple threads.  We don't use multiple threads right
-  now, but that's desirable in the future. See:
+  processes and multiple threads.  See:
   <https://devcenter.heroku.com/articles/ruby-default-web-server>
 - A number of supporting Ruby gems (see the Gemfile)
 

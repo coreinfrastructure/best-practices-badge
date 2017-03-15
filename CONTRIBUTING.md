@@ -228,14 +228,18 @@ where the difference between symbols and strings is ignored,
 but JSON results use standard Ruby hashes where symbols and strings are
 considered different; be careful to use the correct type in these cases.
 
-Our goal is for the application to be thread-safe, so please
-follow the guidelines in
+We have designed the application to be thread-safe (Rails is itself
+thread-safe, including its caching mechanism).
+Please follow the guidelines in
 [How Do I Know Whether My Rails App Is Thread-safe or Not?](https://bearmetal.eu/theden/how-do-i-know-whether-my-rails-app-is-thread-safe-or-not/);
 see also
 [How to test multithreaded code](http://www.mikeperham.com/2015/12/14/how-to-test-multithreaded-code/).
-It's challenging to be certain an application is thread-safe,
-so we aren't currently running it with multiple threads,
-but we intend for it to be thread-safe and use that in the future.
+In short: Each concurrent request runs in its own thread.
+Threads typically create objects within their own thread; they may also
+read shared objects with impunity.
+However, be extremely cautious about *changing* shared objects.
+You should normally only change shared objects through mechanisms
+designed for the purpose (e.g., the database or internal Rails cache).
 
 In Ruby please prefer the String operations that do not have side-effects
 (e.g., "+", "sub", or "gsub"), and consider freezing strings.
@@ -246,7 +250,7 @@ There are current plans that
 [Ruby 3's string literals will be immutable](https://twitter.com/yukihiro_matz/status/634386185507311616).
 See [issue 11473](https://bugs.ruby-lang.org/issues/11473) for more.
 Even if this doesn't happen, freezing string literals is both faster and
-reduces the risk of accidentally modifying a string.
+reduces the risk of accidentally modifying a shared string.
 Use "dup" on a string literal to produce a mutable string;
 since "dup" is already permitted in the language,
 this provides a simple backwards-compatible way for us to indicate
@@ -479,6 +483,11 @@ For any reused software, here are a few general rules:
   The repackage will often help make it work more cleanly
   with the Rails application, and it also suggests that the package is
   a more common one (and thus more likely to be maintained).
+* Check if the gem is thread-safe, in particular, avoid gems that
+  don't control modifying objects shared between threads.
+  This is less of an issue today, because in many cases the objects
+  being modified are not being shared, and threaded implementations
+  have become common (Heroku encourages them).
 
 Someday we hope to add "have one of our badges" as a preference.
 

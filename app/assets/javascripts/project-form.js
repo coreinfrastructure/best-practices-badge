@@ -345,10 +345,10 @@ function ToggleExpandAllPanels(e) {
   // shows the REVERSED state (not the current state).
   if (globalExpandAllPanels) {
     $('#toggle-expand-all-panels')
-      .addClass('active').html('Collapse all panels');
+      .addClass('active').html('Collapse panels');
   } else {
     $('#toggle-expand-all-panels')
-      .removeClass('active').html('Expand all panels');
+      .removeClass('active').html('Expand panels');
   }
   expandAllPanels();
 }

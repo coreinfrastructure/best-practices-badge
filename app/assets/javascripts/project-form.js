@@ -317,10 +317,10 @@ function ToggleHideMet(e) {
   // shows the REVERSED state (not the current state).
   if (globalHideMetnaCriteria) {
     $('#toggle-hide-metna-criteria')
-      .addClass('active').html('Show met and N/A criteria');
+      .addClass('active').html('Show met and N/A');
   } else {
     $('#toggle-hide-metna-criteria')
-      .removeClass('active').html('Hide met or N/A criteria');
+      .removeClass('active').html('Hide met or N/A');
   }
   hideMetNA();
 }

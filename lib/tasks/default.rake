@@ -304,7 +304,8 @@ desc 'Copy production database to master, overwriting master database'
 task :production_to_master do
   sh 'heroku pg:backups:restore $(heroku pg:backups:public-url ' \
      '--app production-bestpractices) DATABASE_URL --app master-bestpractices'
-  sh 'heroku run bundle exec rake db:migrate --app master-bestpractices'
+  sh 'heroku run:detached bundle exec rake db:migrate ' \
+     '--app master-bestpractices'
 end
 
 desc 'Copy production database to staging, overwriting staging database'
@@ -312,7 +313,8 @@ task :production_to_staging do
   sh 'heroku pg:backups:restore $(heroku pg:backups:public-url ' \
      '--app production-bestpractices) DATABASE_URL ' \
      '--app staging-bestpractices --confirm staging-bestpractices'
-  sh 'heroku run bundle exec rake db:migrate --app staging-bestpractices'
+  sh 'heroku run:detached bundle exec rake db:migrate ' \
+     '--app staging-bestpractices'
 end
 
 # require 'rails/testtask.rb'

@@ -5,7 +5,7 @@ ruby File.open('.ruby-version', 'rb') { |f| f.read.chomp }
 gem 'bcrypt', '3.1.11' # Security - for salted hashed interated passwords
 gem 'bootstrap-sass', '3.3.7'
 gem 'bootstrap-social-rails', '4.12.0'
-gem 'bootstrap-will_paginate', '0.0.10'
+gem 'bootstrap-will_paginate', '0.0.11'
 gem 'bootstrap_form', '2.6.0'
 gem 'chartkick', '2.2.3' # Chart project_stats
 gem 'coffee-rails', '4.2.1' # Support CoffeeScript (Javascript preprocessor)
@@ -43,7 +43,7 @@ group :development, :test do
   gem 'json', '1.8.6'
   gem 'license_finder', '2.1.2'
   gem 'mdl', '0.4.0'
-  gem 'pronto', '0.8.0'
+  gem 'pronto', '0.8.2'
   gem 'pronto-brakeman', '0.8.0'
   gem 'pronto-eslint', '0.8.0'
   gem 'pronto-rails_best_practices', '0.8.0'
@@ -59,7 +59,7 @@ end
 group :development do
   # gem 'fasterer', '0.3.2' # Provide speed recommendations - run 'fasterer'
   # Waiting for Ruby 2.4 support: https://github.com/seattlerb/ruby_parser/issues/239
-  gem 'rails_db', '1.4.1' # Enable localhost:3000/rails/db debugging
+  gem 'rails_db', '1.5.0' # Enable localhost:3000/rails/db debugging
   gem 'traceroute', '0.5.0' # Adds 'rake traceroute' command to check routes
   gem 'web-console', '3.4.0'
 end
@@ -68,12 +68,12 @@ group :test do
   gem 'capybara-slow_finder_errors', '0.1.4' # warn if test waits for timeout
   gem 'chromedriver-helper', '1.0.0'
   gem 'codecov', '0.1.10', require: false
-  gem 'minitest-rails-capybara', '3.0.0', require: false
+  gem 'minitest-rails-capybara', '3.0.1', require: false
   gem 'minitest-retry', '0.1.8', require: false # Avoid Capybara false positives
   gem 'poltergeist', '1.13.0', require: false
   gem 'rails-controller-testing', '1.0.1'
-  gem 'selenium-webdriver', '3.1.0', require: false
-  gem 'simplecov', '0.13.0', require: false
+  gem 'selenium-webdriver', '3.3.0', require: false
+  gem 'simplecov', '0.14.0', require: false
   gem 'webmock', '2.3.2', require: false
 end
 

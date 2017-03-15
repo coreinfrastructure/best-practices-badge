@@ -43,7 +43,7 @@ end
 
 desc 'Run Rubocop with options'
 task :rubocop do
-  sh 'bundle exec rubocop -D --format offenses --format progress || true'
+  sh 'bundle exec rubocop -D --format offenses --format progress'
 end
 
 desc 'Run rails_best_practices with options'

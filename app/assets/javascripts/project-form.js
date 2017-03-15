@@ -317,10 +317,12 @@ function ToggleHideMet(e) {
   // shows the REVERSED state (not the current state).
   if (globalHideMetnaCriteria) {
     $('#toggle-hide-metna-criteria')
-      .addClass('active').html('Show met and N/A');
+      .addClass('active').html('Show met &amp; N/A')
+      .prop('title', 'Show met & N/A criteria'); // Use & not &amp;
   } else {
     $('#toggle-hide-metna-criteria')
-      .removeClass('active').html('Hide met or N/A');
+      .removeClass('active').html('Hide met &amp; N/A')
+      .prop('title', 'Hide met & N/A criteria (leaving unmet and unknown');
   }
   hideMetNA();
 }
@@ -453,12 +455,14 @@ function ToggleAllDetails(e) {
     $('#toggle-show-all-details')
       .addClass('active').html('Hide all details');
     $('.details-text').css({'display':''});
-    $('.details-toggler').html('Hide details');
+    $('.details-toggler').html('Hide details')
+      .prop('title', 'Hide all detailed text');
   } else {
     $('#toggle-show-all-details')
       .removeClass('active').html('Show all details');
     $('.details-text').css({'display':'none'});
-    $('.details-toggler').html('Show details');
+    $('.details-toggler').html('Show details')
+      .prop('title', 'Show all detailed text');
   }
 }
 

@@ -451,12 +451,12 @@ function ToggleAllDetails(e) {
   // shows the REVERSED state (not the current state).
   if (globalShowAllDetails) {
     $('#toggle-show-all-details')
-      .addClass('active').html('Hide all detailed text');
+      .addClass('active').html('Hide all details');
     $('.details-text').css({'display':''});
     $('.details-toggler').html('Hide details');
   } else {
     $('#toggle-show-all-details')
-      .removeClass('active').html('Show all detailed text');
+      .removeClass('active').html('Show all details');
     $('.details-text').css({'display':'none'});
     $('.details-toggler').html('Show details');
   }

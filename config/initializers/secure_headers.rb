@@ -26,7 +26,7 @@ SecureHeaders::Configuration.default do |config|
     base_uri: ["'self'"],
     block_all_mixed_content: true, # see http://www.w3.org/TR/mixed-content/
     frame_ancestors: ["'none'"],
-    # form_action: ["'self'"], # This counters some XSS busters
+    form_action: ['github.com', "'self'"], # This counters some XSS busters
     plugin_types: ["'none'"]
   }
   config.cookies = {

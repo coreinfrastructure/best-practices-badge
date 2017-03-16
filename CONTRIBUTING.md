@@ -279,6 +279,13 @@ test class, please use callbacks instead of overwrites; i.e.  use "setup do"
 instead of "def setup."  This preserves any changes to those methods that
 may have been made in test_helper.rb.
 
+*Never* include user email addresses in the internal Rails cache.
+Caches are stored for reuse later, and there's always the risk that
+they will accidentally presented to another user not authorized to see it.
+Otherwise, please *do* use caches to speed repeated responses where they
+make sense.  Caches are one of the key mechanisms we use to provide
+rapid responses to users.
+
 ### JavaScript
 
 There is a small amount of application-specific client-side JavaScript;

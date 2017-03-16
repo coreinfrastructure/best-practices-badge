@@ -344,6 +344,9 @@ it to the appropriate controller.
 *   Repudiation. N/A.
 *   Information disclosure.  Sensitive data (passwords and email addresses)
     is not displayed in any view unless the user is an authorized admin.
+    Our contributing documentation expressly forbids storing email addresses
+    in the Rails cache; that way, if we accidentally display the wrong
+    cache, no email address will be revealed.
 *   Denial of service. See earlier comments on DoS.
 *   Elevation of privilege.  These are written in a memory-safe language,
     and written defensively (since normal users are untrusted).
@@ -642,6 +645,8 @@ and how we attempt to reduce their risks in BadgeApp.
    if the user reuses the password on other sites.
    Local passwords are encrypted with bcrypt
    (this is a well-known iterated salted hash algorithm) using a per-user salt.
+   We don't store email addresses in the Rails cache, so if even if the
+   wrong cache is used an email address won't be exposed.
    We use HTTPS to establish an encrypted link between the server and users,
    to prevent sensitive data (like passwords) from being disclosed in motion.
 7. Missing Function Level Access Control.
@@ -775,8 +780,10 @@ as of 2015-12-14:
    and that MTA (SendGrid) then attempts to transfer the email the rest
    of the way using TLS if the recipient's email system supports it
    (see <https://sendgrid.com/docs/Glossary/tls.html>).
-   Many widely-used
-   This is decent protection against passive attacks.
+   This is good protection against passive attacks, and is relatively decent
+   protection against active attacks if the user chooses an email system
+   that supports TLS (an active attacker has to get between the email
+   MTAs, which is often not easy).
    If users don't like that, they can log in via GitHub and use GitHub's
    forgotten password system.
    The file config/initializers/filter_parameter_logging.rb

@@ -242,3 +242,20 @@ the *correct* way.
 
 You can use "bundle outdated" to show the gems that are outdated;
 be sure to test after updating any gems.
+
+## Testing the installer script
+
+It may be useful to occasionally test that our installer script is working
+as expected.  We have a branch set up on GitHub which is configured to do just
+that, test-dev-install.  In order to test the install script, you must have
+write priveleges to the GitHub git repository.  If you do, you can trigger a
+test by running
+
+---
+rake test_dev_install
+---
+
+This command will merge the current master branch into our test branch while
+conserving our custom circle.yml for testing our install script and then push
+these changes to GitHub. This will trigger a CircleCI build which will test
+the install script.

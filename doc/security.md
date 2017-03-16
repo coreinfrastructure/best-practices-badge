@@ -389,6 +389,21 @@ insert malicious queries.
 *   Elevation of privilege.  These are written in a memory-safe language,
     and written defensively (since the project sites are untrusted).
 
+#### Admin CLI
+
+There is a command line interface (CLI) for admins.
+This is the Heroku CLI.
+Admins must use their unique credentials to log in.
+[The channel between the admin and the Heroku site is encrypted using TLS](https://github.com/heroku/cli/blob/master/http.go).
+
+*   Spoofing identity. Every admin has a unique credential.
+*   Tampering with data. The communication channel is encrypted.
+*   Repudiation. Admins have unique credentials.
+*   Information disclosure.  The channel is encrypted in motion.
+*   Denial of service.  Heroku has a financial incentive to keep this
+    available, and takes steps to do so.
+*   Elevation of privilege.  N/A; anyone allowed to use this is privileged.
+
 ### <a name="simple-design"></a>Simple design
 
 This web application has a simple design.

@@ -7,7 +7,6 @@
 [![codecov](https://codecov.io/gh/linuxfoundation/cii-best-practices-badge/branch/master/graph/badge.svg)](https://codecov.io/gh/linuxfoundation/cii-best-practices-badge)
 [![Dependency Status](https://gemnasium.com/linuxfoundation/cii-best-practices-badge.svg)](https://gemnasium.com/linuxfoundation/cii-best-practices-badge)
 [![License](https://img.shields.io/:license-mit-blue.svg)](https://badges.mit-license.org)
-[![Changelog #215](https://img.shields.io/badge/changelog-%23215-lightgrey.svg)](https://changelog.com/215)
 
 This project identifies best practices for
 Free/Libre and Open Source Software (FLOSS)

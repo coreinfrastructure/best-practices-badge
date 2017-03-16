@@ -381,3 +381,18 @@ task reminders: :environment do
   p ProjectsController.send :send_reminders
   true
 end
+
+# Run this task periodically if we want to test the
+# install-badge-dev-environment script
+desc 'check that install-badge-dev-environment works'
+task :test_dev_install do
+  puts 'Updating test-dev-install branch'
+  sh <<-END
+    git checkout test-dev-install
+    git merge --no-commit master
+    git checkout HEAD circle.yml
+    git commit -a -s -m "Merge master into test-dev-install"
+    git push origin test-dev-install
+    git checkout master
+  END
+end

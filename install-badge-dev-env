@@ -21,7 +21,7 @@ fi
 # If you modify this script, please check it with the "shellcheck"
 # shell static analysis tool.
 # The following enables some run-time error detection:
-set -e -u
+set -e
 
 
 ######################################################################
@@ -72,7 +72,8 @@ find_command () {
 #         (1) otherwise
 add_to_path () {
   if [ -e "$1" ] ; then
-    local pattern="PATH=.*"$(echo "$3" | sed -e "s/\./\\\./g")
+    local pattern
+    pattern="PATH=.*"$(echo "$3" | sed -e "s/\./\\\./g")
     if ! grep "$pattern" "$1" > /dev/null ; then
       echo "Modifying $1 to add $3 to path. NOTE: Use this command:"
       echo "  . $1"
@@ -198,7 +199,8 @@ case "$manager" in
   yum|dnf)
     npm install phantomjs-prebuilt
     npm_path="node_modules/.bin"
-    export PATH="$(pwd)/$npm_path:$PATH"
+    PATH="$(pwd)/$npm_path:$PATH"
+    export PATH
     add_to_path "$shell_init" "$(pwd)" "$npm_path"
     sudo postgresql-setup initdb
     sudo systemctl enable postgresql
@@ -354,14 +356,24 @@ fi
 
 if ! git config user.name > /dev/null ; then
   echo 'What is your human-readable name (Example: David A. Wheeler)?'
-  read name
+  # Ensures CircleCI doesn't get stuck
+  if [ -z "$CIRCLECI" ]; then
+    read name
+  else
+    name="circleci"
+  fi
   git config --global user.name "$name"
   echo 'You may change it with: git config --global user.name "YOUR NAME"'
 fi
 
 if ! git config user.name > /dev/null ; then
   echo 'What is your email address?'
-  read email
+  # Ensures CircleCI doesn't get stuck
+  if [ -z "$CIRCLECI" ]; then
+    read email
+  else
+    email="circleci@circleci.com"
+  fi
   git config --global user.email "$email"
   echo 'You may change it with: git config --global user.email "EMAIL ADDRESS"'
 fi
@@ -380,8 +392,14 @@ fi
 # On initial setup the test in feed_test.rb will fail with an
 # ActiveRecord::EnvironmentMismatchError
 # Running db:migrate in the test environment fixes the error.
-bin/rake db:migrate RAILS_ENV=test 
-bin/rake
+bin/rake db:migrate RAILS_ENV=test
+
+# Run the correct rake on CircleCI
+if [ -z "$CIRCLECI" ]; then
+  bin/rake
+else
+  bin/rake ci
+fi
 
 echo 'All done! Please reopen your terminal or run'
 echo '"source ~/.bashrc" to adjust your PATH.'

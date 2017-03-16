@@ -393,5 +393,6 @@ task :test_dev_install do
     git checkout HEAD circle.yml
     git commit -a -s -m "Merge master into test-dev-install"
     git push origin test-dev-install
+    git checkout master
   END
 end

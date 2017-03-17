@@ -448,6 +448,21 @@ for continuous integration tools to check changes
 after they are checked into GitHub; if they find problems, please fix them.
 These run essentially the same set of checks as the default rake task.
 
+## Git commit messages
+
+When writing git commit messages, try to follow the guidelines in
+[How to Write a Git Commit Message](https://chris.beams.io/posts/git-commit/):
+
+1.  Separate subject from body with a blank line
+2.  Limit the subject line to 50 characters.
+    (We're flexible on this, but *do* limit it to 72 characters or less.)
+3.  Capitalize the subject line
+4.  Do not end the subject line with a period
+5.  Use the imperative mood in the subject line (*command* form)
+6.  Wrap the body at 72 characters ("<tt>fmt -w 72</tt>")
+7.  Use the body to explain what and why vs. how
+    (git tracks how it was changed in detail, don't repeat that)
+
 ## Reuse (supply chain)
 
 ### Requirements for reused components

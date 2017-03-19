@@ -26,4 +26,4 @@
 //= require Chart.bundle
 //= require chartkick
 //= require_tree .
-//= No longer used: = require turbolinks
+//  No longer used: = require turbolinks

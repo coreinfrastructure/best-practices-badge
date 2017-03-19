@@ -13,14 +13,6 @@
        <div class="status-chooser">
        <span class="criterion-name hidden"><%= criterion.to_s %></span>
        <span class="criterion-category hidden"><%= criterion.category %></span>
-       <span class="criterion-future hidden"><%= criterion.future? %></span>
-       <span class="criterion-met-url-required hidden"><%=
-          criterion.met_url_required? %></span>
-       <span class="criterion-met-justification-required hidden"><%=
-          criterion.met_justification_required? %></span>
-       <span class="criterion-na-justification-required hidden"><%=
-          criterion.na_justification_required? %></span>
-
        <%= f.form_group status_symbol do %>
          <div class="col-xs-4 text-left block-left">
           <br><%= image_tag("Clear.gif", size: "40x40", id: criterion.to_s + "_enough", alt: "") %>

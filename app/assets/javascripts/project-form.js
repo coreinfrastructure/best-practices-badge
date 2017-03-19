@@ -1,11 +1,9 @@
 // This JavaScript supporting implementing the per project form used
 // for showing and editing information about a project.
 
-var criterionCategoryValue = {};
-var criteriaMetUrlRequired = {};
-var criteriaMetJustificationRequired = {};
-var criteriaNAJustificationRequired = {};
-var criterionFuture = {};
+// This global constant is set in criteria.js ; let ESLint know about it.
+/* global CRITERIA_HASH */
+
 var MIN_SHOULD_LENGTH = 5;
 
 // Global - name of criterion we last selected as 'met'.
@@ -56,6 +54,11 @@ function containsURL(justification) {
   }
 }
 
+// Return if criterion's value for key is true in CRITERIA_HASH (default false)
+function criterionHashTrue(criterion, key) {
+  return CRITERIA_HASH[criterion][key] === true;
+}
+
 // Determine result for a given criterion, which is one of
 // passing, barely, failing, or question.
 // The result calculation here must match the equivalent routine
@@ -67,26 +70,27 @@ function criterionResult(criterion) {
     justification = '';
   }
   if ($(criterionStatus + '_na').is(':checked')) {
-    if (!criteriaNAJustificationRequired[criterion] ||
+    if (!criterionHashTrue(criterion, 'na_justification_required') ||
         justification.length >= MIN_SHOULD_LENGTH) {
       return 'passing';
     } else {
       return 'question';
     }
   } else if ($(criterionStatus + '_met').is(':checked')) {
-    if ((criteriaMetUrlRequired[criterion] && !containsURL(justification)) ||
-        (criteriaMetJustificationRequired[criterion] &&
+    if ((criterionHashTrue(criterion, 'met_url_required') &&
+          !containsURL(justification)) ||
+        (criterionHashTrue(criterion, 'met_justification_required') &&
          justification.length <= MIN_SHOULD_LENGTH)) {
       // Odd case: met is claimed, but we're still missing information.
       return 'question';
     } else {
       return 'passing';
     }
-  } else if (criterionCategoryValue[criterion] === 'SHOULD' &&
+  } else if (CRITERIA_HASH[criterion]['category'] === 'SHOULD' &&
              $(criterionStatus + '_unmet').is(':checked') &&
              justification.length >= MIN_SHOULD_LENGTH) {
     return 'barely';
-  } else if (criterionCategoryValue[criterion] === 'SUGGESTED' &&
+  } else if (CRITERIA_HASH[criterion]['category'] === 'SUGGESTED' &&
             !($(criterionStatus + '_').is(':checked'))) {
     return 'barely';
   } else if ($(criterionStatus + '_').is(':checked')) {
@@ -125,10 +129,10 @@ function resetProgressBar() {
   var enough = 0;
   var percentage;
   var percentAsString;
-  $.each(criterionCategoryValue, function(key, value) {
-    if (!criterionFuture[key]) { // Only include non-future values
+  $.each(CRITERIA_HASH, function(criterion, value) {
+    if (!criterionHashTrue(criterion, 'future')) { // Ignore "future" criteria
       total++;
-      if (isEnough(key)) {
+      if (isEnough(criterion)) {
         enough++;
       }
     }
@@ -174,17 +178,17 @@ function changedJustificationText(criteria) {
   var criteriaJust = '#project_' + criteria + '_justification';
   var criteriaStatus = '#project_' + criteria + '_status';
   if ($(criteriaStatus + '_unmet').is(':checked') &&
-       (criterionCategoryValue[criteria] === 'SHOULD') &&
+       (CRITERIA_HASH[criteria]['category'] === 'SHOULD') &&
        ($(criteriaJust).val().length < MIN_SHOULD_LENGTH)) {
     $(criteriaJust).addClass('required-data');
   } else if ($(criteriaStatus + '_met').is(':checked') &&
-             ((criteriaMetUrlRequired[criteria] &&
+             ((criterionHashTrue(criteria, 'met_url_required') &&
                !containsURL($(criteriaJust).val())) ||
-              (criteriaMetJustificationRequired[criteria] &&
+              (criterionHashTrue(criteria, 'met_justification_required') &&
                $(criteriaJust).val().length < MIN_SHOULD_LENGTH))) {
     $(criteriaJust).addClass('required-data');
   } else if ($(criteriaStatus + '_na').is(':checked') &&
-       (criteriaNAJustificationRequired[criteria]) &&
+       criterionHashTrue(criteria, 'na_justification_required') &&
        ($(criteriaJust).val().length < MIN_SHOULD_LENGTH)) {
     $(criteriaJust).addClass('required-data');
   } else {
@@ -221,14 +225,14 @@ function hasFieldTextInside(e) {
 // and do NOT hide the last-selected-met criterion (so users can enter/edit
 // justification text).
 function hideMetNA() {
-  $.each(criterionCategoryValue, function(key, value) {
-    if (globalHideMetnaCriteria && key !== globalLastSelectedMet &&
-        ($('#project_' + key + '_status_met').is(':checked') ||
-         $('#project_' + key + '_status_na').is(':checked')) &&
-        isEnough(key)) {
-      $('#' + key).addClass('hidden');
+  $.each(CRITERIA_HASH, function(criterion, value) {
+    if (globalHideMetnaCriteria && criterion !== globalLastSelectedMet &&
+        ($('#project_' + criterion + '_status_met').is(':checked') ||
+         $('#project_' + criterion + '_status_na').is(':checked')) &&
+        isEnough(criterion)) {
+      $('#' + criterion).addClass('hidden');
     } else {
-      $('#' + key).removeClass('hidden');
+      $('#' + criterion).removeClass('hidden');
     }
   });
   $('.hidable-text-entry').each(function() {
@@ -466,27 +470,6 @@ function ToggleAllDetails(e) {
   }
 }
 
-// Create mappings from criteria name to category and met_url_required.
-// Eventually replace with just accessing classes directly via JavaScript.
-function SetupCriteriaStructures() {
-  $('.status-chooser').each(
-    function(index) {
-      var criterionName = $(this).find('.criterion-name').text();
-      var res = $(this).find('.criterion-met-justification-required').text();
-      var val = 'true' === res;
-      criteriaMetJustificationRequired[criterionName] = val;
-      criteriaMetUrlRequired[criterionName] =
-        $(this).find('.criterion-met-url-required').text() === 'true';
-      criterionCategoryValue[criterionName] =
-        $(this).find('.criterion-category').text();
-      criterionFuture[criterionName] =
-        $(this).find('.criterion-future').text() === 'true';
-      criteriaNAJustificationRequired[criterionName] =
-        $(this).find('.criterion-na-justification-required').text() === 'true';
-    }
-  );
-}
-
 function setupProjectForm() {
   // By default, hide details.  We do the hiding in JavaScript, so
   // those who disable JavaScript will still see the text
@@ -508,16 +491,14 @@ function setupProjectForm() {
     ToggleHideMet(e);
   });
 
-  SetupCriteriaStructures();
-
   // Implement "press this button to make all crypto N/A"
   $('#all_crypto_na').click(function(e) {
-    $.each(criterionCategoryValue, function(key, value) {
-      if ((/^crypto/).test(key)) {
-        $('#project_' + key + '_status_na').prop('checked', true);
+    $.each(CRITERIA_HASH, function(criterion, value) {
+      if ((/^crypto/).test(criterion)) {
+        $('#project_' + criterion + '_status_na').prop('checked', true);
       }
-      updateCriteriaDisplay(key);
-      resetCriterionResult(key);
+      updateCriteriaDisplay(criterion);
+      resetCriterionResult(criterion);
     });
     setPanelSatisfactionLevel($('#all_crypto_na').parents('.panel'));
     resetProgressBar();
@@ -526,7 +507,7 @@ function setupProjectForm() {
   // Use "imagesloaded" to wait for image load before displaying them
   imagesLoaded(document).on('always', function(instance) {
     // Set up the interactive displays of "enough".
-    $.each(criterionCategoryValue, function(key, value) {
+    $.each(CRITERIA_HASH, function(key, value) {
       setupProjectField(key);
     });
     resetProgressBar();

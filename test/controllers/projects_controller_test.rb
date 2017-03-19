@@ -59,6 +59,15 @@ class ProjectsControllerTest < ActionController::TestCase
     assert_select 'a[href=?]'.dup, 'https://www.nasa.gov/pathfinder'
   end
 
+  test 'should show project JSON data' do
+    get :show, params: { id: @project, format: :json }
+    assert_response :success
+    body = JSON.parse(response.body)
+    assert_equal 'Pathfinder OS', body['name']
+    assert_equal 'Operating system for Pathfinder rover', body['description']
+    assert_equal 'https://www.nasa.gov', body['homepage_url']
+  end
+
   test 'should get edit' do
     log_in_as(@project.user)
     get :edit, params: { id: @project }

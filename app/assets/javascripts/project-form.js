@@ -197,9 +197,9 @@ function changedJustificationText(criteria) {
   resetCriterionResult(criteria);
 }
 
-function changedJustificationTextAndUpdate(criteria) {
-  changedJustificationText(criteria);
-  resetProgressAndSatisfaction(criteria);
+function changedJustificationTextAndUpdate(criterion) {
+  changedJustificationText(criterion);
+  resetProgressAndSatisfaction(criterion);
 }
 
 // Do we have any text in this field region?  Handle the variations.

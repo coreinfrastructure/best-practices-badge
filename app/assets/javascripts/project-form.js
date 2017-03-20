@@ -274,10 +274,14 @@ function updateCriteriaDisplay(criteria) {
       $(criteriaJust).css({'display':''});
     }
   } else if ($(criteriaStatus + '_unmet').is(':checked')) {
-    var criteriaUnmetPlaceholder = criteria + '_unmet_placeholder';
-    $(criteriaJust).
-       attr('placeholder',
-         $('#' + criteriaUnmetPlaceholder).html().trim());
+    var criteriaUnmetPlaceholder;
+    if (CRITERIA_HASH[criteria].hasOwnProperty('unmet_placeholder')) {
+      criteriaUnmetPlaceholder = CRITERIA_HASH[criteria]['unmet_placeholder'];
+    } else {
+      criteriaUnmetPlaceholder = 'Please explain why it\'s okay this ' +
+        'is unmet, including 1+ key URLs.';
+    }
+    $(criteriaJust).attr('placeholder', criteriaUnmetPlaceholder);
     if (document.getElementById(criteria + '_unmet_suppress')) {
       $(criteriaJust).css({'display':'none'});
     } else {

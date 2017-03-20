@@ -286,10 +286,17 @@ function updateCriteriaDisplay(criteria) {
       $(criteriaJust).css({'display':''});
     }
   } else if ($(criteriaStatus + '_na').is(':checked')) {
-    var criteriaNaPlaceholder = criteria + '_na_placeholder';
-    $(criteriaJust).
-       attr('placeholder',
-         $('#' + criteriaNaPlaceholder).html().trim());
+    var criteriaNaPlaceholder = CRITERIA_HASH[criteria]['na_placeholder'];
+    if (!criteriaNaPlaceholder) {
+      if (criterionHashTrue(criteria, 'na_justification_required')) {
+        criteriaNaPlaceholder = '(Required) Please explain why this ' +
+          'is not applicable (N/A), possibly including 1+ key URLs.';
+      } else {
+        criteriaNaPlaceholder = '(Optional) Please explain why this ' +
+          'is not applicable (N/A), possibly including 1+ key URLs.';
+      }
+    }
+    $(criteriaJust).attr('placeholder', criteriaNaPlaceholder);
     if (criterionHashTrue(criteria, 'na_suppress')) {
       $(criteriaJust).css({'display':'none'});
     } else {

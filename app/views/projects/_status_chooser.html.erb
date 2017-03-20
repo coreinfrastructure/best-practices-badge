@@ -12,7 +12,6 @@
      <div class="col-md-2 col-sm-3 col-xs-4 criteria-radio<%= crypto_class %>">
        <div class="status-chooser">
        <span class="criterion-name hidden"><%= criterion.to_s %></span>
-       <span class="criterion-category hidden"><%= criterion.category %></span>
        <%= f.form_group status_symbol do %>
          <div class="col-xs-4 text-left block-left">
           <br><%= image_tag("Clear.gif", size: "40x40", id: criterion.to_s + "_enough", alt: "") %>

@@ -251,6 +251,7 @@ function updateCriteriaDisplay(criterion) {
                            criterion + '_justification');
   var justificationValue = '';
   var criterionPlaceholder;
+  var suppressJustificationDisplay;
   if (justificationElement) {
     justificationValue = justificationElement.value;
   }
@@ -268,22 +269,15 @@ function updateCriteriaDisplay(criterion) {
           'is met, possibly including 1+ key URLs.';
       }
     }
-    if (criterionHashTrue(criterion, 'met_suppress')) {
-      $(criterionJust).css({'display':'none'});
-    } else {
-      $(criterionJust).css({'display':''});
-    }
+    suppressJustificationDisplay = criterionHashTrue(criterion, 'met_suppress');
   } else if ($(criterionStatus + '_unmet').is(':checked')) {
     criterionPlaceholder = CRITERIA_HASH[criterion]['unmet_placeholder'];
     if (!criterionPlaceholder) {
       criterionPlaceholder = 'Please explain why it\'s okay this ' +
         'is unmet, including 1+ key URLs.';
     }
-    if (criterionHashTrue(criterion, 'unmet_suppress')) {
-      $(criterionJust).css({'display':'none'});
-    } else {
-      $(criterionJust).css({'display':''});
-    }
+    suppressJustificationDisplay =
+      criterionHashTrue(criterion, 'unmet_suppress');
   } else if ($(criterionStatus + '_na').is(':checked')) {
     criterionPlaceholder = CRITERIA_HASH[criterion]['na_placeholder'];
     if (!criterionPlaceholder) {
@@ -295,20 +289,20 @@ function updateCriteriaDisplay(criterion) {
           'is not applicable (N/A), possibly including 1+ key URLs.';
       }
     }
-    if (criterionHashTrue(criterion, 'na_suppress')) {
-      $(criterionJust).css({'display':'none'});
-    } else {
-      $(criterionJust).css({'display':''});
-    }
+    suppressJustificationDisplay = criterionHashTrue(criterion, 'na_suppress');
   } else if ($(criterionStatus + '_').is(':checked')) {
     criterionPlaceholder = 'Please explain';
-    $(criterionJust).css({'display':'none'});
+    suppressJustificationDisplay = true;
   }
   $(criterionJust).attr('placeholder', criterionPlaceholder);
 
   // If there's old justification text, force showing it even if it
   // no longer makes sense (so they can fix it or change their mind).
   if (justificationValue.length > 0) {
+    $(criterionJust).css({'display':''});
+  } else if (suppressJustificationDisplay) {
+    $(criterionJust).css({'display':'none'});
+  } else {
     $(criterionJust).css({'display':''});
   }
   if (globalHideMetnaCriteria) {

@@ -250,62 +250,62 @@ function updateCriteriaDisplay(criteria) {
   var justificationElement = document.getElementById('project_' +
                            criteria + '_justification');
   var justificationValue = '';
+  var criteriaPlaceholder;
   if (justificationElement) {
     justificationValue = justificationElement.value;
   }
   if ($(criteriaStatus + '_met').is(':checked')) {
-    var criteriaMetPlaceholder = CRITERIA_HASH[criteria]['met_placeholder'];
-    if (!criteriaMetPlaceholder) {
+    criteriaPlaceholder = CRITERIA_HASH[criteria]['met_placeholder'];
+    if (!criteriaPlaceholder) {
       if (criterionHashTrue(criteria, 'met_url_required')) {
-        criteriaMetPlaceholder = '(URL required) Please explain how this ' +
+        criteriaPlaceholder = '(URL required) Please explain how this ' +
           'is met, including 1+ key URLs.';
       } else if (criterionHashTrue(criteria, 'met_justification_required')) {
-        criteriaMetPlaceholder = '(Required) Please explain how this ' +
+        criteriaPlaceholder = '(Required) Please explain how this ' +
           'is met, possibly including 1+ key URLs.';
       } else {
-        criteriaMetPlaceholder = '(Optional) Please explain how this ' +
+        criteriaPlaceholder = '(Optional) Please explain how this ' +
           'is met, possibly including 1+ key URLs.';
       }
     }
-    $(criteriaJust).attr('placeholder', criteriaMetPlaceholder);
     if (criterionHashTrue(criteria, 'met_suppress')) {
       $(criteriaJust).css({'display':'none'});
     } else {
       $(criteriaJust).css({'display':''});
     }
   } else if ($(criteriaStatus + '_unmet').is(':checked')) {
-    var criteriaUnmetPlaceholder = CRITERIA_HASH[criteria]['unmet_placeholder'];
-    if (!criteriaUnmetPlaceholder) {
-      criteriaUnmetPlaceholder = 'Please explain why it\'s okay this ' +
+    criteriaPlaceholder = CRITERIA_HASH[criteria]['unmet_placeholder'];
+    if (!criteriaPlaceholder) {
+      criteriaPlaceholder = 'Please explain why it\'s okay this ' +
         'is unmet, including 1+ key URLs.';
     }
-    $(criteriaJust).attr('placeholder', criteriaUnmetPlaceholder);
     if (criterionHashTrue(criteria, 'unmet_suppress')) {
       $(criteriaJust).css({'display':'none'});
     } else {
       $(criteriaJust).css({'display':''});
     }
   } else if ($(criteriaStatus + '_na').is(':checked')) {
-    var criteriaNaPlaceholder = CRITERIA_HASH[criteria]['na_placeholder'];
-    if (!criteriaNaPlaceholder) {
+    criteriaPlaceholder = CRITERIA_HASH[criteria]['na_placeholder'];
+    if (!criteriaPlaceholder) {
       if (criterionHashTrue(criteria, 'na_justification_required')) {
-        criteriaNaPlaceholder = '(Required) Please explain why this ' +
+        criteriaPlaceholder = '(Required) Please explain why this ' +
           'is not applicable (N/A), possibly including 1+ key URLs.';
       } else {
-        criteriaNaPlaceholder = '(Optional) Please explain why this ' +
+        criteriaPlaceholder = '(Optional) Please explain why this ' +
           'is not applicable (N/A), possibly including 1+ key URLs.';
       }
     }
-    $(criteriaJust).attr('placeholder', criteriaNaPlaceholder);
     if (criterionHashTrue(criteria, 'na_suppress')) {
       $(criteriaJust).css({'display':'none'});
     } else {
       $(criteriaJust).css({'display':''});
     }
   } else if ($(criteriaStatus + '_').is(':checked')) {
-    $(criteriaJust).attr('placeholder', 'Please explain');
+    criteriaPlaceholder = 'Please explain';
     $(criteriaJust).css({'display':'none'});
   }
+  $(criteriaJust).attr('placeholder', criteriaPlaceholder);
+
   // If there's old justification text, force showing it even if it
   // no longer makes sense (so they can fix it or change their mind).
   if (justificationValue.length > 0) {

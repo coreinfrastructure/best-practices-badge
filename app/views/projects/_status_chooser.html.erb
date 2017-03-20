@@ -49,15 +49,6 @@
          </div>
          <div id="<%= criterion.to_s + '_na_placeholder' %>" class="hidden">
          </div>
-         <% if criterion.met_suppress %>
-           <div id="<%= criterion.to_s + '_met_suppress' %>" class="hidden"></div>
-         <% end %>
-         <% if criterion.unmet_suppress %>
-           <div id="<%= criterion.to_s + '_unmet_suppress' %>" class="hidden"></div>
-         <% end %>
-         <% if criterion.na_suppress %>
-           <div id="<%= criterion.to_s + '_na_suppress' %>" class="hidden"></div>
-         <% end %>
          <% if (is_disabled) %>
            <% if project_criterion_justification %>
              <div class="justification-markdown">

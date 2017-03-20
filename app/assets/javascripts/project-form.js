@@ -274,10 +274,8 @@ function updateCriteriaDisplay(criteria) {
       $(criteriaJust).css({'display':''});
     }
   } else if ($(criteriaStatus + '_unmet').is(':checked')) {
-    var criteriaUnmetPlaceholder;
-    if (CRITERIA_HASH[criteria].hasOwnProperty('unmet_placeholder')) {
-      criteriaUnmetPlaceholder = CRITERIA_HASH[criteria]['unmet_placeholder'];
-    } else {
+    var criteriaUnmetPlaceholder = CRITERIA_HASH[criteria]['unmet_placeholder'];
+    if (!criteriaUnmetPlaceholder) {
       criteriaUnmetPlaceholder = 'Please explain why it\'s okay this ' +
         'is unmet, including 1+ key URLs.';
     }

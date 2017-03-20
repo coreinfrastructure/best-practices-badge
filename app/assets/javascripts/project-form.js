@@ -471,6 +471,11 @@ function ToggleAllDetails(e) {
 }
 
 function setupProjectForm() {
+  // We're told progress, so don't recalculate - just display it.
+  percentage_scaled = $('#badge-progress').attr('aria-valuenow');
+  percentAsString = percentage_scaled.toString() + '%';
+  $('#badge-progress').text(percentAsString).css('width', percentAsString);
+
   // By default, hide details.  We do the hiding in JavaScript, so
   // those who disable JavaScript will still see the text
   // (they'll have no way to later reveal it).
@@ -510,7 +515,6 @@ function setupProjectForm() {
     $.each(CRITERIA_HASH, function(key, value) {
       setupProjectField(key);
     });
-    resetProgressBar();
   });
 
   globalExpandAllPanels = false;

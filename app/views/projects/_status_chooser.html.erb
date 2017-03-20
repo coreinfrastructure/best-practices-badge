@@ -44,30 +44,10 @@
                        details: criterion.details})
              end %>
          <div id="<%= criterion.to_s + '_met_placeholder' %>" class="hidden">
-          <%= if criterion.met_placeholder
-                raw criterion.met_placeholder
-              else
-                if criterion.met_url_required?
-                  raw "(URL required) Please explain how this is met, including 1+ key URLs."
-                elsif criterion.met_justification_required?
-                  raw "(Required) Please explain how this is met, possibly including 1+ key URLs."
-                else
-                  raw "(Optional) Please explain how this is met, possibly including 1+ key URLs."
-                end
-              end %>
          </div>
          <div id="<%= criterion.to_s + '_unmet_placeholder' %>" class="hidden">
          </div>
          <div id="<%= criterion.to_s + '_na_placeholder' %>" class="hidden">
-          <%= if criterion.na_placeholder
-                sanitize (criterion.na_placeholder)
-              else
-                if criterion.na_justification_required?
-                  sanitize ("(Required) Please explain why this is not applicable (N/A), possibly including 1+ key URLs." )
-                else
-                  sanitize ("(Optional) Please explain why this is not applicable (N/A), possibly including 1+ key URLs." )
-                end
-              end %>
          </div>
          <% if criterion.met_suppress %>
            <div id="<%= criterion.to_s + '_met_suppress' %>" class="hidden"></div>

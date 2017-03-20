@@ -254,18 +254,18 @@ function updateCriteriaDisplay(criteria) {
     justificationValue = justificationElement.value;
   }
   if ($(criteriaStatus + '_met').is(':checked')) {
-    var criteriaMetPlaceholder;
-    if (CRITERIA_HASH[criteria].hasOwnProperty('met_placeholder')) {
-      criteriaMetPlaceholder = CRITERIA_HASH[criteria]['met_placeholder'];
-    } else if (criterionHashTrue(criteria, 'met_url_required')) {
-      criteriaMetPlaceholder = '(URL required) Please explain how this ' +
-        'is met, including 1+ key URLs.';
-    } else if (criterionHashTrue(criteria, 'met_justification_required')) {
-      criteriaMetPlaceholder = '(Required) Please explain how this ' +
-        'is met, possibly including 1+ key URLs.';
-    } else {
-      criteriaMetPlaceholder = '(Optional) Please explain how this ' +
-        'is met, possibly including 1+ key URLs.';
+    var criteriaMetPlaceholder = CRITERIA_HASH[criteria]['met_placeholder'];
+    if (!criteriaMetPlaceholder) {
+      if (criterionHashTrue(criteria, 'met_url_required')) {
+        criteriaMetPlaceholder = '(URL required) Please explain how this ' +
+          'is met, including 1+ key URLs.';
+      } else if (criterionHashTrue(criteria, 'met_justification_required')) {
+        criteriaMetPlaceholder = '(Required) Please explain how this ' +
+          'is met, possibly including 1+ key URLs.';
+      } else {
+        criteriaMetPlaceholder = '(Optional) Please explain how this ' +
+          'is met, possibly including 1+ key URLs.';
+      }
     }
     $(criteriaJust).attr('placeholder', criteriaMetPlaceholder);
     if (document.getElementById(criteria + '_met_suppress')) {

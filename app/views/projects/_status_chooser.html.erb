@@ -57,8 +57,6 @@
               end %>
          </div>
          <div id="<%= criterion.to_s + '_unmet_placeholder' %>" class="hidden">
-          <%= sanitize (criterion.unmet_placeholder ||
-                 "Please explain why it's okay this is unmet, including 1+ key URLs.") %>
          </div>
          <div id="<%= criterion.to_s + '_na_placeholder' %>" class="hidden">
           <%= if criterion.na_placeholder

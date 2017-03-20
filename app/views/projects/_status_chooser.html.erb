@@ -12,15 +12,6 @@
      <div class="col-md-2 col-sm-3 col-xs-4 criteria-radio<%= crypto_class %>">
        <div class="status-chooser">
        <span class="criterion-name hidden"><%= criterion.to_s %></span>
-       <span class="criterion-category hidden"><%= criterion.category %></span>
-       <span class="criterion-future hidden"><%= criterion.future? %></span>
-       <span class="criterion-met-url-required hidden"><%=
-          criterion.met_url_required? %></span>
-       <span class="criterion-met-justification-required hidden"><%=
-          criterion.met_justification_required? %></span>
-       <span class="criterion-na-justification-required hidden"><%=
-          criterion.na_justification_required? %></span>
-
        <%= f.form_group status_symbol do %>
          <div class="col-xs-4 text-left block-left">
           <br><%= image_tag("Clear.gif", size: "40x40", id: criterion.to_s + "_enough", alt: "") %>
@@ -53,42 +44,11 @@
                        details: criterion.details})
              end %>
          <div id="<%= criterion.to_s + '_met_placeholder' %>" class="hidden">
-          <%= if criterion.met_placeholder
-                raw criterion.met_placeholder
-              else
-                if criterion.met_url_required?
-                  raw "(URL required) Please explain how this is met, including 1+ key URLs."
-                elsif criterion.met_justification_required?
-                  raw "(Required) Please explain how this is met, possibly including 1+ key URLs."
-                else
-                  raw "(Optional) Please explain how this is met, possibly including 1+ key URLs."
-                end
-              end %>
          </div>
          <div id="<%= criterion.to_s + '_unmet_placeholder' %>" class="hidden">
-          <%= sanitize (criterion.unmet_placeholder ||
-                 "Please explain why it's okay this is unmet, including 1+ key URLs.") %>
          </div>
          <div id="<%= criterion.to_s + '_na_placeholder' %>" class="hidden">
-          <%= if criterion.na_placeholder
-                sanitize (criterion.na_placeholder)
-              else
-                if criterion.na_justification_required?
-                  sanitize ("(Required) Please explain why this is not applicable (N/A), possibly including 1+ key URLs." )
-                else
-                  sanitize ("(Optional) Please explain why this is not applicable (N/A), possibly including 1+ key URLs." )
-                end
-              end %>
          </div>
-         <% if criterion.met_suppress %>
-           <div id="<%= criterion.to_s + '_met_suppress' %>" class="hidden"></div>
-         <% end %>
-         <% if criterion.unmet_suppress %>
-           <div id="<%= criterion.to_s + '_unmet_suppress' %>" class="hidden"></div>
-         <% end %>
-         <% if criterion.na_suppress %>
-           <div id="<%= criterion.to_s + '_na_suppress' %>" class="hidden"></div>
-         <% end %>
          <% if (is_disabled) %>
            <% if project_criterion_justification %>
              <div class="justification-markdown">

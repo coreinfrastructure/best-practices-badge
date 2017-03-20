@@ -268,7 +268,7 @@ function updateCriteriaDisplay(criteria) {
       }
     }
     $(criteriaJust).attr('placeholder', criteriaMetPlaceholder);
-    if (document.getElementById(criteria + '_met_suppress')) {
+    if (criterionHashTrue(criteria, 'met_suppress')) {
       $(criteriaJust).css({'display':'none'});
     } else {
       $(criteriaJust).css({'display':''});
@@ -280,7 +280,7 @@ function updateCriteriaDisplay(criteria) {
         'is unmet, including 1+ key URLs.';
     }
     $(criteriaJust).attr('placeholder', criteriaUnmetPlaceholder);
-    if (document.getElementById(criteria + '_unmet_suppress')) {
+    if (criterionHashTrue(criteria, 'unmet_suppress')) {
       $(criteriaJust).css({'display':'none'});
     } else {
       $(criteriaJust).css({'display':''});
@@ -290,7 +290,7 @@ function updateCriteriaDisplay(criteria) {
     $(criteriaJust).
        attr('placeholder',
          $('#' + criteriaNaPlaceholder).html().trim());
-    if (document.getElementById(criteria + '_na_suppress')) {
+    if (criterionHashTrue(criteria, 'na_suppress')) {
       $(criteriaJust).css({'display':'none'});
     } else {
       $(criteriaJust).css({'display':''});

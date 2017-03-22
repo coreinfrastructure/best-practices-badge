@@ -151,26 +151,23 @@ function resetProgressAndSatisfaction(criteria) {
 
 function resetCriterionResult(criterion) {
   var result = criterionResult(criterion);
+  var destination = $('#' + criterion + '_enough');
   if (result === 'passing') {
-    $('#' + criterion + '_enough').
-        attr('src', $('#result_symbol_check_img').attr('src')).
-        attr('width', 40).attr('height', 40).
-        attr('alt', 'Enough for a badge!');
+    destination.attr('src', $('#result_symbol_check_img').attr('src')).
+      attr('width', 40).attr('height', 40).
+      attr('alt', 'Enough for a badge!');
   } else if (result === 'barely') {
-    $('#' + criterion + '_enough').
-        attr('src', $('#result_symbol_dash').attr('src')).
-        attr('width', 40).attr('height', 40).
-        attr('alt', 'Not enough for a badge.');
+    destination.attr('src', $('#result_symbol_dash').attr('src')).
+      attr('width', 40).attr('height', 40).
+      attr('alt', 'Barely enough for a badge.');
   } else if (result === 'question') {
-    $('#' + criterion + '_enough').
-        attr('src', $('#result_symbol_question').attr('src')).
-        attr('width', 40).attr('height', 40).
-        attr('alt', 'Not enough for a badge.');
+    destination.attr('src', $('#result_symbol_question').attr('src')).
+      attr('width', 40).attr('height', 40).
+      attr('alt', 'Unknown required information, not enough for a badge.');
   } else {
-    $('#' + criterion + '_enough').
-        attr('src', $('#result_symbol_x_img').attr('src')).
-        attr('width', 40).attr('height', 40).
-        attr('alt', 'Not enough for a badge.');
+    destination.attr('src', $('#result_symbol_x_img').attr('src')).
+      attr('width', 40).attr('height', 40).
+      attr('alt', 'Not enough for a badge.');
   }
 }
 

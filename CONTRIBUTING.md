@@ -424,8 +424,9 @@ problem is in the software under test, and not in our test framework).
 
 ### Other tools
 
-Here are some other tools we use, though they are not currently integrated into
-the default "rake" checking task:
+Here are some other tools we use for checking quality or security,
+though they are not currently integrated
+into the default "rake" checking task:
 
 * OWASP ZAP web application security scanner.
   You are encouraged to use this and other web application scanners to find and
@@ -434,6 +435,18 @@ the default "rake" checking task:
 * JSHint (JavaScript error detector)
 * W3C link checker <https://validator.w3.org/checklink>
 * W3C markup validation service <https://validator.w3.org/>
+
+Here are some online tools we sometimes use to check for performance issues:
+* [WebPageTest](https://www.webpagetest.org/)
+* [Varvy PageSpeed](https://varvy.com/pagespeed/)
+* [Yellow lab tools](http://yellowlab.tools/) - Examines performance.
+  It can notice issues like excessive accesses of the DOM from JavaScript.
+  It's OSS; see
+  ([YellowLabTools on GitHub](https://github.com/gmetais/YellowLabTools))
+
+This
+[article on Rails front end performance](https://www.viget.com/articles/rails-front-end-performance)
+may be of use to you if you're interested in performance.
 
 We sometimes run this to check if assets compile properly (see
 [heroku_rails_deflate](https://github.com/mattolson/heroku_rails_deflate)):

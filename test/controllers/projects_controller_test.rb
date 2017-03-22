@@ -320,6 +320,11 @@ class ProjectsControllerTest < ActionController::TestCase
     assert_redirected_to 'http://test.host/projects'
   end
 
+  test 'should remove invalid parameter' do
+    get :index, params: { role: 'admin', status: 'passing' }
+    assert_redirected_to 'http://test.host/projects?status=passing'
+  end
+
   test 'should redirect http to https' do
     old = Rails.application.config.force_ssl
     Rails.application.config.force_ssl = true

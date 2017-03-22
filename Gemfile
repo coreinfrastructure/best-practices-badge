@@ -50,7 +50,7 @@ group :development, :test do
   gem 'pronto-rubocop', '0.8.0'
   gem 'pry-byebug', '3.4.2'
   gem 'rubocop', '0.47.1' # Style checker.  Changes can cause test failure
-  gem 'ruby-graphviz', '1.2.2'
+  gem 'ruby-graphviz', '1.2.3' # This is used for bundle viz
   gem 'spring', '2.0.1'
   gem 'vcr', '3.0.3' # Record network responses for later test reuse
   gem 'yaml-lint', '0.0.9' # Check YAML file syntax

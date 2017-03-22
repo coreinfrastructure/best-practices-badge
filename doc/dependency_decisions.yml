@@ -232,4 +232,13 @@
   - bundler
   - :who: Dan Kohn
     :why: MIT
-    :when: 2016-05-11 16:50:00 Z
+    :when: 2016-05-11 16:50:00.000000000 Z
+- - :approve
+  - ruby-graphviz
+  - :who: Jason Dossett
+    :why: The Gem is actually GPL-2.0+ (as determined from examninging file headers)
+      and therefore is compatible with other common licenses including Apache-2.0.  It
+      is also used only to implement bundle viz, and thus isn't linked into the main
+      program but is instead linked only into bundler which is MIT.
+    :versions: []
+    :when: 2017-03-22 15:04:54.137880644 Z

@@ -73,7 +73,7 @@ group :test do
   gem 'poltergeist', '1.14.0', require: false
   gem 'rails-controller-testing', '1.0.1'
   gem 'selenium-webdriver', '3.3.0', require: false
-  gem 'simplecov', '0.14.0', require: false
+  gem 'simplecov', '0.14.1', require: false
   gem 'webmock', '2.3.2', require: false
 end
 

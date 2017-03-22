@@ -1,4 +1,13 @@
-<% cache ['project_stats', ProjectStat.all.size] do %>
+<%
+  # Force deletion of the obsolete cached information, if it exists.
+  # It will age out eventually anyway, but this is a large cache entry
+  # and we can easily determine what the previous one was. Immediately
+  # forcing its deletion provides more cache space for other (useful) things.
+  Rails.cache.delete ActiveSupport::Cache.expand_cache_key(
+    ['project_stats', ProjectStat.all.size-1]
+  )
+  cache ['project_stats', ProjectStat.all.size] do
+%>
 
 <p id="notice"><%= notice %></p>
 
@@ -142,51 +151,6 @@
   line_chart dataset, colors: ['green', 'blue'],
     library: date_chart_options, defer: true
 %>
-
-<br><br>
-<h2>Raw data</h2>
-<a class="btn btn-primary" role="button" data-toggle="collapse" href="#raw-project-data" aria-expanded="false" aria-controls="collapseExample">
-Show raw project data
-</a>
-<div class="collapse" id="raw-project-data">
-  <div class="well">
-<p>
-
-<table class='table-bordered table-striped'>
-  <thead>
-    <tr>
-      <th>When</th>
-      <th>All</th>
-      <th>&gt;= 25%</th>
-      <th>&gt;= 50%</th>
-      <th>&gt;= 75%</th>
-      <th>&gt;= 90%</th>
-      <th>&gt;= 100%</th>
-      <th>New in the last day</th>
-      <th>Updated in the last day</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @project_stats.each do |project_stat| %>
-      <tr>
-        <td><%= project_stat.created_at %></td>
-        <td><%= project_stat.percent_ge_0 %></td>
-        <td><%= project_stat.percent_ge_25 %></td>
-        <td><%= project_stat.percent_ge_50 %></td>
-        <td><%= project_stat.percent_ge_75 %></td>
-        <td><%= project_stat.percent_ge_90 %></td>
-        <td><%= project_stat.percent_ge_100 %></td>
-        <td><%= project_stat.created_since_yesterday %></td>
-        <td><%= project_stat.updated_since_yesterday %></td>
-        <td><%= link_to 'Show', project_stat %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-<br>
-  </div>
-</div>
 
 <%# End cache *before* showing any admin-specific data %>
 <% end %>

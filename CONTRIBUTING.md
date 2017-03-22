@@ -437,6 +437,7 @@ into the default "rake" checking task:
 * W3C markup validation service <https://validator.w3.org/>
 
 Here are some online tools we sometimes use to check for performance issues:
+
 * [WebPageTest](https://www.webpagetest.org/)
 * [Varvy PageSpeed](https://varvy.com/pagespeed/)
 * [Yellow lab tools](http://yellowlab.tools/) - Examines performance.

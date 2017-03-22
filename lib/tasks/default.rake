@@ -4,6 +4,7 @@
 task(:default).clear.enhance %w(
   rbenv_rvm_setup
   bundle
+  bundle_doctor
   bundle_audit
   generate_criteria_doc
   rubocop
@@ -23,6 +24,7 @@ task(:default).clear.enhance %w(
 
 task(:ci).clear.enhance %w(
   rbenv_rvm_setup
+  bundle_doctor
   bundle_audit
   markdownlint
   license_okay
@@ -60,6 +62,11 @@ end
 desc 'Run bundle if needed'
 task :bundle do
   sh 'bundle check || bundle install'
+end
+
+desc 'Run bundle doctor - check for some Ruby gem configuration problems'
+task :bundle_doctor do
+  sh 'bundle doctor'
 end
 
 # rubocop: disable Metrics/BlockLength

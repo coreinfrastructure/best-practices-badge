@@ -366,31 +366,33 @@ The specific list of tools run by default using 'rake' is listed in
 Currently these include at least the following rake tasks that
 check the software:
 
-1. *bundle* - use bundle to check dependencies
-   ("bundle check || bundle install")
-2. *bundle_audit* - check for transitive gem dependencies with
-   known vulnerabilities
-3. *rubocop* - runs Rubocop, which checks Ruby code style against the
-   [community Ruby style guide](https://github.com/bbatsov/ruby-style-guide)
-4. *markdownlint* - runs markdownlint, also known as mdl
-   (this checks for errors in the markdown text)
-5. *rails_best_practices* - check Ruby against rails best practices
-   using the gem
-   [rails_best_practices](http://rails-bestpractices.com/)
-6. *brakeman* - runs Brakeman, which is a static source code analyzer
-   to look for Ruby on Rails security vulnerabilities
-7. *license_okay* - runs license_finder to check the
-   OSS licenses of gem dependencies (transitively).
-   A separate dependency on file 'license_finder_report.html' generates
-   a detailed license report in HTML format.
-8. *whitespace_check* - runs "git diff --check" to detect
-   trailing whitespace in latest diff
-9. *yaml_syntax_check* - checks syntax of YAML (.yml) files.
-   Note that the automated test suite includes a number of specific
-   checks on the criteria.yml file.
-10. *fasterer* - report on Ruby constructs with poor performance (temporarily disabled until it supports Ruby 2.4)
-11. *eslint* - Perform code style check on JavaScript using eslint
-12. *test* - run the automated test suite
+*   *bundle* - use bundle to check dependencies
+    ("bundle check || bundle install")
+*   *bundle_doctor* - sanity check on Ruby gem configuration/installation
+*   *bundle_audit* - check for transitive gem dependencies with
+    known vulnerabilities
+*   *rubocop* - runs Rubocop, which checks Ruby code style against the
+    [community Ruby style guide](https://github.com/bbatsov/ruby-style-guide)
+*   *markdownlint* - runs markdownlint, also known as mdl
+    (this checks for errors in the markdown text)
+*   *rails_best_practices* - check Ruby against rails best practices
+    using the gem
+    [rails_best_practices](http://rails-bestpractices.com/)
+*   *brakeman* - runs Brakeman, which is a static source code analyzer
+    to look for Ruby on Rails security vulnerabilities
+*   *license_okay* - runs license_finder to check the
+    OSS licenses of gem dependencies (transitively).
+    A separate dependency on file 'license_finder_report.html' generates
+    a detailed license report in HTML format.
+*   *whitespace_check* - runs "git diff --check" to detect
+    trailing whitespace in latest diff
+    *yaml_syntax_check* - checks syntax of YAML (.yml) files.
+    Note that the automated test suite includes a number of specific
+    checks on the criteria.yml file.
+*   *fasterer* - report on Ruby constructs with poor performance
+    (temporarily disabled until it supports Ruby 2.4)
+*   *eslint* - Perform code style check on JavaScript using eslint
+*   *test* - run the automated test suite
 
 Running "rake test" (the automated test suite) will show
 "Run options: --seed ...", "# Running:", and a series of dots (passing tests).

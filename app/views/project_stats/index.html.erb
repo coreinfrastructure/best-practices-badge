@@ -194,4 +194,6 @@ next projects scheduled for inactive reminders:
 
 <br>
 <br>
-<a href="/project_stats.json">You can also get the raw data in JSON format</a>.
+You can see the raw data in
+<%= link_to 'JSON format', project_stats_path(format: :json) %> and
+<%= link_to 'downloadable CSV format', project_stats_path(format: :csv) %>.

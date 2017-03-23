@@ -13,6 +13,11 @@ class ProjectStatsControllerTest < ActionController::TestCase
     assert_not_nil assigns(:project_stats)
   end
 
+  test 'should get index, CSV format' do
+    get :index, format: :csv
+    assert_response :success
+  end
+
   test 'should get new' do
     assert_raises Object do
       get :new

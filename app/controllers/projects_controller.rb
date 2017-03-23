@@ -169,8 +169,14 @@ class ProjectsController < ApplicationController
   end
   # rubocop:enable Metrics/MethodLength
 
+  # The /feed only displays a small set of the project fields, so only
+  # extract the ones we use.  This optimization is worth it because
+  # users poll the feed *and* it can include many projects.
+  FEED_DISPLAY_FIELDS = 'id, name, updated_at, badge_level, ' \
+    'badge_percentage, homepage_url, repo_url, description, user_id'
+
   def feed
-    @projects = Project.recently_updated
+    @projects = Project.select(FEED_DISPLAY_FIELDS).recently_updated
     respond_to { |format| format.atom }
   end
 

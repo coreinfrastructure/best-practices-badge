@@ -172,10 +172,15 @@ class ProjectsController < ApplicationController
   # The /feed only displays a small set of the project fields, so only
   # extract the ones we use.  This optimization is worth it because
   # users poll the feed *and* it can include many projects.
-  FEED_DISPLAY_FIELDS = 'id, name, updated_at, badge_level, ' \
+  # These are the fields for *projects*; the .recently_updated scope
+  # forces loading of user data (where we get the user name/nickname).
+  FEED_DISPLAY_FIELDS = 'projects.id as id, projects.name as name, ' \
+    'projects.updated_at as updated_at, projects.created_at as created_at, ' \
     'badge_percentage, homepage_url, repo_url, description, user_id'
 
   def feed
+    # @projects = Project.select(FEED_DISPLAY_FIELDS).
+    #  limit(50).reorder(updated_at: :desc, id: :asc).includes(:user)
     @projects = Project.select(FEED_DISPLAY_FIELDS).recently_updated
     respond_to { |format| format.atom }
   end

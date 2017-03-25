@@ -55,7 +55,25 @@ class Project < ActiveRecord::Base
 
   scope :recently_updated, (
     lambda do
-      unscoped.limit(50).order(updated_at: :desc, id: :asc).eager_load(:user)
+      # The "includes" here isn't ideal.
+      # Originally we used "eager_load" on :user, but
+      # "eager_load" forces a load of *all* fields per a bug in Rails:
+      # https://github.com/rails/rails/issues/15185
+      # Switching to ".includes" fixes the bug, though it means we do 2
+      # database queries instead of just one.
+      # We could use the gem "rails_select_on_includes" to fix this bug:
+      # https://github.com/alekseyl/rails_select_on_includes
+      # but that's something of a hack.
+      # If a totally-cached feed is used, then the development environment
+      # will complain as follows:
+      # GET /feed
+      # AVOID eager loading detected
+      #   Project => [:user]
+      #   Remove from your finder: :includes => [:user]
+      # However, you *cannot* simply remove the includes, because
+      # when the feed is *not* completely cached, the code *does* need
+      # this user data.
+      limit(50).reorder(updated_at: :desc, id: :asc).includes(:user)
     end
   )
 
@@ -154,8 +172,9 @@ class Project < ActiveRecord::Base
               text: true
   end
 
+  # Return string representing badge level; assumes badge_percentage correct.
   def badge_level
-    return 'passing' if all_active_criteria_passing?
+    return 'passing' if badge_percentage >= 100
     'in_progress'
   end
 
@@ -303,9 +322,9 @@ class Project < ActiveRecord::Base
 
   private
 
-  def all_active_criteria_passing?
-    Criteria.active.all? { |criterion| passing? criterion }
-  end
+  # def all_active_criteria_passing?
+  #   Criteria.active.all? { |criterion| passing? criterion }
+  # end
 
   def need_a_base_url
     return unless repo_url.blank? && homepage_url.blank?

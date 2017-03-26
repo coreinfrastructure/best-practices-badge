@@ -284,7 +284,12 @@ class ProjectsController < ApplicationController
     end.compact
   end
 
-  # rubocop:disable Metrics/AbcSize
+  HTML_INDEX_FIELDS = 'projects.id, projects.name, description, ' \
+    'homepage_url, repo_url, license, user_id, achieved_passing_at, ' \
+    'updated_at, badge_percentage'
+
+  # rubocop:disable Metrics/MethodLength
+  # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
   def retrieve_projects
     @projects = Project.all
     # We had to keep this line the same to satisfy brakeman
@@ -298,9 +303,14 @@ class ProjectsController < ApplicationController
     # This will NOT match full URLs, but will match partial URLs.
     @projects = @projects.search_for(params[:q]) if params[:q].present?
     @count = @projects.count
+    # If we're supplying html (common case), select only needed fields
+    if request.format.symbol == :html
+      @projects = @projects.select(HTML_INDEX_FIELDS)
+    end
     @projects = @projects.includes(:user).paginate(page: params[:page])
   end
-  # rubocop:enable Metrics/AbcSize
+  # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity
+  # rubocop:enable Metrics/MethodLength
 
   def set_homepage_url
     # Assign to repo.homepage if it exists, and else repo_url

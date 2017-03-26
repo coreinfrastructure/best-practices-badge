@@ -52,11 +52,27 @@ class UsersController < ApplicationController
     end
   end
 
+  # rubocop: disable Metrics/MethodLength,Metrics/AbcSize
   def destroy
-    User.find(params[:id]).destroy
-    flash[:success] = 'User deleted'
+    # We don't do a lot of checking because only admins can run this,
+    # but we'll try to prevent some disasters.
+    id_to_delete = params[:id]
+    user_to_delete = User.find(id_to_delete) # Exception raised if not found
+    if current_user.id == user_to_delete.id
+      flash[:danger] = 'Cannot delete self.'
+    else
+      # Admin acquires ownership of remaining projects, if any,
+      # so projects always have an owner (maintain invariant).
+      # rubocop: disable Rails/SkipsModelValidations
+      Project.where('user_id = ?', id_to_delete)
+             .update_all(user_id: current_user.id)
+      # rubocop: enable Rails/SkipsModelValidations
+      user_to_delete.destroy
+      flash[:success] = 'User deleted'
+    end
     redirect_to users_url
   end
+  # rubocop: enable Metrics/MethodLength,Metrics/AbcSize
 
   def redirect_existing
     if @user.activated

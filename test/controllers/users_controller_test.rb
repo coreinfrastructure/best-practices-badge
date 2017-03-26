@@ -81,4 +81,12 @@ class UsersControllerTest < ActionController::TestCase
     end
     assert_not_empty flash
   end
+
+  test 'should not be able to destroy self' do
+    log_in_as(@admin)
+    assert_no_difference 'User.count' do
+      delete :destroy, params: { id: @admin }
+    end
+    assert_not_empty flash
+  end
 end

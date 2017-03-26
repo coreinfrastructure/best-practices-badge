@@ -191,11 +191,11 @@ function changedJustificationText(criteria) {
   } else {
     $(criteriaJust).removeClass('required-data');
   }
-  resetCriterionResult(criteria);
 }
 
 function changedJustificationTextAndUpdate(criterion) {
   changedJustificationText(criterion);
+  resetCriterionResult(criterion);
   resetProgressAndSatisfaction(criterion);
 }
 
@@ -313,6 +313,7 @@ function updateCriteriaDisplay(criterion) {
 
 function updateCriteriaDisplayAndUpdate(criterion) {
   updateCriteriaDisplay(criterion);
+  resetCriterionResult(criterion);
   resetProgressAndSatisfaction(criterion);
 }
 
@@ -481,11 +482,6 @@ function ToggleAllDetails(e) {
 }
 
 function setupProjectForm() {
-  // We're told progress, so don't recalculate - just display it.
-  var percentageScaled = $('#badge-progress').attr('aria-valuenow');
-  var percentAsString = percentageScaled.toString() + '%';
-  $('#badge-progress').text(percentAsString).css('width', percentAsString);
-
   // By default, hide details.  We do the hiding in JavaScript, so
   // those who disable JavaScript will still see the text
   // (they'll have no way to later reveal it).
@@ -519,12 +515,8 @@ function setupProjectForm() {
     resetProgressBar();
   });
 
-  // Use "imagesloaded" to wait for image load before displaying them
-  imagesLoaded(document).on('always', function(instance) {
-    // Set up the interactive displays of "enough".
-    $.each(CRITERIA_HASH, function(key, value) {
-      setupProjectField(key);
-    });
+  $.each(CRITERIA_HASH, function(key, value) {
+    setupProjectField(key);
   });
 
   globalExpandAllPanels = false;

@@ -320,6 +320,16 @@ class Project < ActiveRecord::Base
     updated_at >= ENTRY_LICENSE_EXPLICIT_DATE
   end
 
+  def passing?(criterion)
+    status = self[criterion.name.status]
+    justification = self[criterion.name.justification]
+
+    na_satisfied?(criterion, status, justification) ||
+      met_satisfied?(criterion, status, justification) ||
+      should_satisfied?(criterion, status, justification) ||
+      suggested_satisfied?(criterion, status)
+  end
+
   private
 
   # def all_active_criteria_passing?
@@ -329,16 +339,6 @@ class Project < ActiveRecord::Base
   def need_a_base_url
     return unless repo_url.blank? && homepage_url.blank?
     errors.add :base, 'Need at least a home page or repository URL'
-  end
-
-  def passing?(criterion)
-    status = self[criterion.name.status]
-    justification = self[criterion.name.justification]
-
-    na_satisfied?(criterion, status, justification) ||
-      met_satisfied?(criterion, status, justification) ||
-      should_satisfied?(criterion, status, justification) ||
-      suggested_satisfied?(criterion, status)
   end
 
   def na_satisfied?(criterion, status, justification)

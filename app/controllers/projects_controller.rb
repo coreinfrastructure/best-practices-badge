@@ -52,7 +52,9 @@ class ProjectsController < ApplicationController
 
   # GET /projects/1
   # GET /projects/1.json
-  def show; end
+  def show
+    use_secure_headers_override(:allow_inline_style)
+  end
 
   def badge
     set_surrogate_key_header @project.record_key + '/badge'
@@ -71,7 +73,9 @@ class ProjectsController < ApplicationController
   end
 
   # GET /projects/:id/edit(.:format)
-  def edit; end
+  def edit
+    use_secure_headers_override(:allow_inline_style)
+  end
 
   # POST /projects
   # POST /projects.json

@@ -14,10 +14,34 @@
       <span class="criterion-name hidden"><%= criterion.to_s %></span>
       <%= f.form_group status_symbol do %>
         <div class="col-xs-4 text-left block-left"><br>
-          <%= image_tag(
-                'Clear.gif', size: '40x40', id: criterion.to_s + '_enough',
-                             alt: ''
-              ) %>
+          <% if project.passing?(criterion) %>
+            <% if project_criterion_status == 'Unmet' %>
+              <%= image_tag(
+                    'result_symbol_dash.png', size: '40x40',
+                      id: criterion.to_s + '_enough',
+                      alt: 'Barely enough for a badge.'
+                  ) %>
+            <% else %>
+              <%= image_tag(
+                    'result_symbol_check.png', size: '40x40',
+                      id: criterion.to_s + '_enough',
+                      alt: 'Enough for a badge!'
+                  ) %>
+            <% end %>
+          <% elsif project_criterion_status == '?' %>
+            <%= image_tag(
+                  'result_symbol_question.png', size: '40x40',
+                    id: criterion.to_s + '_enough',
+                    alt: 'Unknown required information, not enough for a badge.'
+                ) %>
+          <% else %>
+            <%= image_tag(
+                  'result_symbol_x.png', size: '40x40',
+                    id: criterion.to_s + '_enough',
+                    alt: 'Not enough for a badge.'
+                ) %>
+          <% end %>
+
         </div>
         <div class="col-xs-4 col-xs-offset-2 col-sm-offset-1 text-left block-left">
           <%= f.radio_button status_symbol, 'Met', label: 'Met',

@@ -47,8 +47,3 @@ SecureHeaders::Configuration.default do |config|
   # switch CAs if the CA behaves badly.
 end
 # rubocop:enable Metrics/BlockLength
-
-# override default configuration
-SecureHeaders::Configuration.override(:allow_inline_style) do |config|
-  config.csp[:style_src] += ["'unsafe-inline'"]
-end

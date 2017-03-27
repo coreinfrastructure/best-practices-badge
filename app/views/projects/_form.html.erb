@@ -4,7 +4,7 @@
 <% badge_hostname = (ENV['PUBLIC_HOSTNAME'] || 'localhost') %>
 <% content_for :insert_progress_bar do %>
   <div id="progress-mobile" class="progress">
-    <div id="badge-progress" style="width:<%= project.badge_percentage %>%"
+    <div id="badge-progress"
          class="progress-bar progress-bar-success badge-progress"
          role="progressbar" aria-valuenow="<%= project.badge_percentage %>"
          aria-valuemin="0" aria-valuemax="100">

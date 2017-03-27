@@ -482,6 +482,11 @@ function ToggleAllDetails(e) {
 }
 
 function setupProjectForm() {
+  // We're told progress, so don't recalculate - just display it.
+  var percentageScaled = $('#badge-progress').attr('aria-valuenow');
+  var percentAsString = percentageScaled.toString() + '%';
+  $('#badge-progress').css('width', percentAsString);
+
   // By default, hide details.  We do the hiding in JavaScript, so
   // those who disable JavaScript will still see the text
   // (they'll have no way to later reveal it).

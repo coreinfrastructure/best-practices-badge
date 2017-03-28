@@ -918,13 +918,13 @@ as described below.
 
 #### Cryptography
 
-*   <a name="crypto_agility"></a>
+*   <a name="crypto_algorithm_agility"></a>
     The project SHOULD support multiple
     cryptographic algorithms, so users can quickly switch if one is broken.
     Common symmetric key algorithms include AES, Twofish, and Serpent.
     Common cryptographic hash algorithm alternatives include SHA-2
     (including SHA-224, SHA-256, SHA-384 AND SHA-512) and SHA-3.
-    <sup>[<a href="#crypto_agility">crypto_agility</a>]</sup>
+    <sup>[<a href="#crypto_algorithm_agility">crypto_algorithm_agility</a>]</sup>
 
     *Rationale*:
     The advantage of crypto agility is that if one crypto algorithm is
@@ -938,6 +938,16 @@ as described below.
     what that "one good algorithm" is; a new attack could be found at any time.
     See the discussion at
     <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/215">Remove requirement for supporting alternative crypto algorithms (crypto_alternatives)?</a>
+
+*   <a name="crypto_credential_agility"></a>
+    The project MUST support storing authentication credentials (such as
+    passwords and dynamic tokens) and private cryptographic keys in files
+    that are separate from other information (such as configuration files,
+    databases, and logs), and permit users to update and replacement
+    them without code recompilation. This is N/A if the project never
+    processes authentication credentials and private cryptographic keys.
+    (N/A allowed).
+    <sup>[<a href="#crypto_credential_agility">crypto_credential_agility</a>]</sup>
 
 *   <a name="crypto_used_network"></a>(Future, tweaked) The project
     SHOULD support secure protocols for all of its network

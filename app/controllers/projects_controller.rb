@@ -66,6 +66,7 @@ class ProjectsController < ApplicationController
 
   # GET /projects/new
   def new
+    use_secure_headers_override(:allow_github_form_action)
     store_location
     @project = Project.new
   end

@@ -3,6 +3,7 @@ class SessionsController < ApplicationController
   include SessionsHelper
 
   def new
+    use_secure_headers_override(:allow_github_form_action)
     store_location
     return unless logged_in?
     flash[:success] = 'You are already logged in.'

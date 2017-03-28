@@ -325,6 +325,16 @@ class ProjectsControllerTest < ActionController::TestCase
     assert_redirected_to 'http://test.host/projects?status=passing'
   end
 
+  test 'Check ids= projects index query' do
+    get :index, params: {
+      format: :json,
+      ids: "#{@project.id},#{@project_two.id}"
+    }
+    assert_response :success
+    body = JSON.parse(response.body)
+    assert_equal 2, body.length
+  end
+
   test 'should redirect http to https' do
     old = Rails.application.config.force_ssl
     Rails.application.config.force_ssl = true

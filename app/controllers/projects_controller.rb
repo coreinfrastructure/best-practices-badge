@@ -31,7 +31,7 @@ class ProjectsController < ApplicationController
 
   TEXT_QUERIES = %i(pq q).freeze
 
-  OTHER_QUERIES = %i(sort sort_direction status).freeze
+  OTHER_QUERIES = %i(sort sort_direction status ids).freeze
 
   ALLOWED_QUERY_PARAMS = (
     INTEGER_QUERIES + TEXT_QUERIES + OTHER_QUERIES
@@ -226,6 +226,7 @@ class ProjectsController < ApplicationController
     return ALLOWED_SORT.include?(value) if key == 'sort'
     return %w(desc asc).include?(value) if key == 'sort_direction'
     return ALLOWED_STATUS.include?(value) if key == 'status'
+    return integer_list?(value) if key == 'ids'
     false
   end
 
@@ -262,6 +263,10 @@ class ProjectsController < ApplicationController
     !(value =~ /\A[1-9][0-9]{0,15}\z/).nil?
   end
 
+  def integer_list?(value)
+    !(value =~ /\A[1-9][0-9]{0,15}( *, *[1-9][0-9]{0,15}){0,20}\z/).nil?
+  end
+
   # Purge the badge from the CDN (if any)
   def purge_cdn_badge
     cdn_badge_key = @project.record_key + '/badge'
@@ -288,7 +293,7 @@ class ProjectsController < ApplicationController
     'homepage_url, repo_url, license, user_id, achieved_passing_at, ' \
     'updated_at, badge_percentage'
 
-  # rubocop:disable Metrics/MethodLength
+  # rubocop:disable Metrics/MethodLength,Metrics/PerceivedComplexity
   # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
   def retrieve_projects
     @projects = Project.all
@@ -302,6 +307,11 @@ class ProjectsController < ApplicationController
     # "Normal query" - text search against URL, name, and description
     # This will NOT match full URLs, but will match partial URLs.
     @projects = @projects.search_for(params[:q]) if params[:q].present?
+    if params[:ids].present?
+      @projects = @projects.where(
+        'id in (?)', params[:ids].split(',').map { |x| Integer(x) }
+      )
+    end
     @count = @projects.count
     # If we're supplying html (common case), select only needed fields
     if request.format.symbol == :html
@@ -310,7 +320,7 @@ class ProjectsController < ApplicationController
     @projects = @projects.includes(:user).paginate(page: params[:page])
   end
   # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity
-  # rubocop:enable Metrics/MethodLength
+  # rubocop:enable Metrics/MethodLength,Metrics/PerceivedComplexity
 
   def set_homepage_url
     # Assign to repo.homepage if it exists, and else repo_url

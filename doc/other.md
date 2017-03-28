@@ -1194,20 +1194,62 @@ as described below.
 
 ### Basics
 
+*   <a name="copyright_per_file"></a>
+    The project MUST include a copyright statement in each source file,
+    identifying at least one relevant year and copyright holder.
+
+    *Details*:
+    This MAY be done by including the following inside a comment
+    near the beginning of each file:
+    "<tt>Copyright [year this project or content started] -
+    [most recent year modified],
+    [project founder] and the [project name] contributors.</tt>"
+
+    *Rationale*: This isn't legally required in most jurisdictions, per the
+    Berne Convention.  For example, copyright notices have not been required
+    in the US since 1979.
+    On the other hand, this is not hard to add.
+    <a href="http://ben.balter.com/2015/06/03/copyright-notices-for-websites-and-open-source-projects/">Ben Balter's "Copyright notices for open source projects"</a>
+    provides some good arguments for why it *should* be included:
+    "First, someone may want to use your work in ways not allowed
+    by your license; notices help them determine who to ask for
+    permission. Explicit notices can help you prove that you and your
+    collaborators really are the copyright holders. They can serve to put
+    a potential infringer on notice by providing an informal sniff test to
+    counter the “Oh yeah, well I didn’t know it was copyrighted”
+    defense. For some users the copyright notice may suggest higher
+    quality, as they expect that good software will include a notice...
+    Git can track these things, but people may receive software outside
+    of git or where the git history has not been retained."
+    In addition, we have been informed by the Linux Foundation's SPDX
+    community that having this information is extremely valuable for
+    relicensing and for checking to determine if a copyrighted work is
+    derived from another.  While version control systems do track versioning
+    within a project, when files are copied between projects this information
+    is often lost.  Having the copyright notice information helps
+    those researching sources, e.g., if they wish to try
+    to relicense something.
+
 *   <a name="license_per_file"></a>
     The project MUST include a license statement in each source file.
-    This may be done by including near the beginning
-    of each file the following in a comment:
-    <a href="https://spdx.org/using-spdx#identifiers">"SPDX-License-Identifier: [SPDX license expression]"</a>
-    (see
-    <a href="https://github.com/david-a-wheeler/spdx-tutorial">this tutorial</a>
-    for more information).
+    This MAY be done by including the following inside a comment
+    near the beginning of each file:
+    <a href="https://spdx.org/using-spdx#identifiers"><tt>SPDX-License-Identifier: [SPDX license expression for project]</tt></a>.
     <sup>[<a href="#license_per_file">license_per_file</a>]</sup>
 
-    *Details*: The project could also include, as a license statement, a stable URL
-    pointing to the license text, or could include the full license text.
+    *Details*:
+    This MAY also be done by including a statement in natural language
+    identifying the license.
+    The project MAY also include a stable URL
+    pointing to the license text, or the full license text.
     Note that the criterion license_location requires the
     project license be in a standard location.
+    See
+    <a href="https://github.com/david-a-wheeler/spdx-tutorial">this SPDX tutorial</a>
+    for more information about SPDX license expressions.
+    Note the relationship with
+    <a href="#copyright_per_file">copyright_per_file</a>, whose content
+    would typically precede the license information.
 
     *Rationale*: Files are sometimes individually copied from one
     project into another.  Per-file license information increases the
@@ -1494,26 +1536,6 @@ Review these larger criteria sets for things to add:
     "app stores" makes this kind of requirement untenable in
     many circumstances.  So we don't plan to add this.
     Maybe the EFF can help?!?
-
-*   Copyright notice in each file, e.g.,
-    "Copyright [year project started] - [current year], [project founder]
-    and the [project name] contributors."
-    *Rationale*: This isn't legally required.
-    On the other hand, this is not hard to add.
-    In addition,
-    <a href="http://ben.balter.com/2015/06/03/copyright-notices-for-websites-and-open-source-projects/">Ben Balter's "Copyright notices for open source projects"</a>
-    provides a good argument for why it *should*   be included:
-    "First, someone may want to use your work in ways not allowed
-    by your license; notices help them determine who to ask for
-    permission. Explicit notices can help you prove that you and your
-    collaborators really are the copyright holders. They can serve to put
-    a potential infringer on notice by providing an informal sniff test to
-    counter the “Oh yeah, well I didn’t know it was copyrighted”
-    defense. For some users the copyright notice may suggest higher
-    quality, as they expect that good software will include a notice...
-    Git can track these things, but people may receive software outside
-    of git or where the git history has not been retained."
-    The question is, is this really that important?
 
 ### Probably not: Security Code review ideas from liujin28
 

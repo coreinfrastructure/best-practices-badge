@@ -7,7 +7,7 @@
   <title>BadgeApp</title>
   <%= favicon_link_tag %>
   <%= stylesheet_link_tag    'application', media: 'all' %>
-  <%= javascript_include_tag 'application' %>
+  <%= javascript_include_tag 'application', defer: true %>
   <%= auto_discovery_link_tag :atom, { controller: 'projects', action: 'feed' }, { title: 'CII Best Practices BadgeApp Updated Projects' } %>
   <%= csrf_meta_tags %>
 </head>

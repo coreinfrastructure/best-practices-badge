@@ -59,6 +59,15 @@ class ProjectsControllerTest < ActionController::TestCase
     assert_select 'a[href=?]'.dup, 'https://www.nasa.gov/pathfinder'
   end
 
+  test 'should show project JSON data' do
+    get :show, params: { id: @project, format: :json }
+    assert_response :success
+    body = JSON.parse(response.body)
+    assert_equal 'Pathfinder OS', body['name']
+    assert_equal 'Operating system for Pathfinder rover', body['description']
+    assert_equal 'https://www.nasa.gov', body['homepage_url']
+  end
+
   test 'should get edit' do
     log_in_as(@project.user)
     get :edit, params: { id: @project }
@@ -309,6 +318,21 @@ class ProjectsControllerTest < ActionController::TestCase
   test 'should redirect with all query params removed' do
     get :index, params: { q: '', status: '' }
     assert_redirected_to 'http://test.host/projects'
+  end
+
+  test 'should remove invalid parameter' do
+    get :index, params: { role: 'admin', status: 'passing' }
+    assert_redirected_to 'http://test.host/projects?status=passing'
+  end
+
+  test 'Check ids= projects index query' do
+    get :index, params: {
+      format: :json,
+      ids: "#{@project.id},#{@project_two.id}"
+    }
+    assert_response :success
+    body = JSON.parse(response.body)
+    assert_equal 2, body.length
   end
 
   test 'should redirect http to https' do

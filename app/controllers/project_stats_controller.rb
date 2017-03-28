@@ -13,14 +13,22 @@ class ProjectStatsController < ApplicationController
 
   # GET /project_stats
   # GET /project_stats.json
+  # rubocop:disable Metrics/MethodLength
   def index
     use_secure_headers_override :headers_stats_index
     @project_stats = ProjectStat.all
-    # respond_to do |format|
-    #     format.json {
-    #        render :show, status: :created, location: @project_stat }
-    # end
+    respond_to do |format|
+      format.csv do
+        headers['Content-Disposition'] =
+          'attachment; filename="project_stats.csv"'
+        render csv: @project_stats, filename: @project_stats.name
+      end
+      format.json
+      # { render :show, status: :created, location: @project_stat }
+      format.html
+    end
   end
+  # rubocop:enable Metrics/MethodLength
 
   # GET /project_stats/1
   # GET /project_stats/1.json

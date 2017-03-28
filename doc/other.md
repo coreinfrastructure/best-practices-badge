@@ -338,17 +338,25 @@ as described below.
     The project MUST make an effort to
     keep the documentation consistent with the current version of the
     program and any known documentation defects making it inconsistent
-    MUST be fixed. Documentation of other versions may be included.
+    MUST be fixed.
+    If the documentation is generally current, but erroneously
+    includes some older information that is no longer true,
+    just treat that as a defect, then track and fix as usual.
     <sup>[<a href="#documentation_current">documentation_current</a>]</sup>
 
-    *Details*: If the documentation is generally current, but erroneously
-    includes some older information, just treat that as a defect, then
-    track and fix as usual.  The intent of this criterion is that the
-    documentation is kept consistent, not that the documentation
+    *Details*:
+    The documentation MAY include information about differences or changes
+    between versions of the software and/or link to older versions of
+    the documentation.
+    The intent of this criterion is that an effort is made to keep
+    the documentation consistent, not that the documentation
     must be perfect.
 
     *Rationale*: It's difficult to keep documentation up-to-date, so the
     criterion is worded this way to make it more practical.
+    Information on differences or changes between versions of the
+    software helps users of older versions
+    and users who are transitioning from older versions.
 
 *   <a name="documentation_achievements"></a>
     The project repository front page and/or website MUST
@@ -931,11 +939,12 @@ as described below.
     See the discussion at
     <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/215">Remove requirement for supporting alternative crypto algorithms (crypto_alternatives)?</a>
 
-*   <a name="crypto_used_network"></a>(Future) The project
-    SHOULD NOT use unencrypted network communication protocols (such as HTTP
-    and telnet) if there is an encrypted equivalent (e.g., HTTPS/TLS and SSH),
-    unless the user specifically requests or configures it.
-    (N/A allowed).
+*   <a name="crypto_used_network"></a>(Future, tweaked) The project
+    SHOULD support secure protocols for all of its network
+    communications, such as SSHv2 or later, TLS1.2 or later (HTTPS),
+    IPsec, SFTP, and SNMPv3. Insecure protocols such as FTP, HTTP, telnet,
+    SSLv3 or earlier, and SSHv1 SHOULD be disabled by default,
+    and only enabled if the user specifically configures it.  (N/A allowed).
     <sup>[<a href="#crypto_used_network">crypto_used_network</a>]</sup>
 
 *   <a name="crypto_tls12"></a>(Future)

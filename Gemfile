@@ -16,7 +16,7 @@ gem 'font-awesome-rails', '4.7.0.1'
 gem 'github_api', '0.14.5'
 gem 'imagesLoaded_rails', '4.1.0' # JavaScript - enable wait for image load
 gem 'jbuilder', '2.6.3'
-gem 'jquery-rails', '4.2.2' # JavaScript jQuery library (for Rails)
+gem 'jquery-rails', '4.3.1' # JavaScript jQuery library (for Rails)
 # gem 'jquery-turbolinks' # Make turbolinks work with jQuery
 gem 'jquery-ui-rails', '6.0.1' # JavaScript jQueryUI library (for Rails)
 gem 'octokit', '4.6.2' # GitHub's official Ruby API
@@ -30,7 +30,7 @@ gem 'redcarpet', '3.4.0' # Process markdown in form textareas (justifications)
 gem 'sass-rails', '5.0.6'
 gem 'secure_headers', '3.6.2' # Add hardening measures to HTTP headers
 # gem 'turbolinks', '5.0.1' # Speed UI access
-gem 'uglifier', '3.1.7'
+gem 'uglifier', '3.1.9'
 gem 'will_paginate', '3.1.5'
 
 group :development, :test do
@@ -41,7 +41,7 @@ group :development, :test do
   gem 'dotenv-rails', '2.2.0'
   gem 'eslintrb', '2.1.0'
   gem 'json', '1.8.6'
-  gem 'license_finder', '2.1.2'
+  gem 'license_finder', '3.0.0'
   gem 'mdl', '0.4.0'
   gem 'pronto', '0.8.2'
   gem 'pronto-brakeman', '0.8.0'
@@ -50,7 +50,7 @@ group :development, :test do
   gem 'pronto-rubocop', '0.8.0'
   gem 'pry-byebug', '3.4.2'
   gem 'rubocop', '0.47.1' # Style checker.  Changes can cause test failure
-  gem 'ruby-graphviz', '1.2.2'
+  gem 'ruby-graphviz', '1.2.3' # This is used for bundle viz
   gem 'spring', '2.0.1'
   gem 'vcr', '3.0.3' # Record network responses for later test reuse
   gem 'yaml-lint', '0.0.9' # Check YAML file syntax
@@ -66,14 +66,14 @@ end
 
 group :test do
   gem 'capybara-slow_finder_errors', '0.1.4' # warn if test waits for timeout
-  gem 'chromedriver-helper', '1.0.0'
+  gem 'chromedriver-helper', '1.1.0'
   gem 'codecov', '0.1.10', require: false
   gem 'minitest-rails-capybara', '3.0.1', require: false
   gem 'minitest-retry', '0.1.8', require: false # Avoid Capybara false positives
-  gem 'poltergeist', '1.13.0', require: false
+  gem 'poltergeist', '1.14.0', require: false
   gem 'rails-controller-testing', '1.0.1'
   gem 'selenium-webdriver', '3.3.0', require: false
-  gem 'simplecov', '0.14.0', require: false
+  gem 'simplecov', '0.14.1', require: false
   gem 'webmock', '2.3.2', require: false
 end
 

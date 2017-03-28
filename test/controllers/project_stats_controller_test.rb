@@ -13,6 +13,27 @@ class ProjectStatsControllerTest < ActionController::TestCase
     assert_not_nil assigns(:project_stats)
   end
 
+  test 'should get index, CSV format' do
+    get :index, format: :csv
+    assert_response :success
+    contents = CSV.parse(response.body, headers: true)
+    assert_equal 'id', contents.headers[0]
+    assert_equal %w(
+      id created_at percent_ge_0
+      percent_ge_25 percent_ge_50 percent_ge_75
+      percent_ge_90 percent_ge_100
+      created_since_yesterday updated_since_yesterday
+      updated_at reminders_sent
+      reactivated_after_reminder active_projects
+      active_in_progress projects_edited
+      active_edited_projects active_edited_in_progress
+    ), contents.headers
+    assert_equal 2, contents.size
+    assert_equal '13', contents[0]['percent_ge_50']
+    assert_equal '20', contents[0]['percent_ge_0']
+    assert_equal '19', contents[1]['percent_ge_0']
+  end
+
   test 'should get new' do
     assert_raises Object do
       get :new

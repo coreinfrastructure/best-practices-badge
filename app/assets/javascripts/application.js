@@ -23,7 +23,8 @@
 // This allows us to wait for image loading to complete:
 //= require imagesloaded
 // Chart creation via chartkick:
-//= require Chart.bundle
-//= require chartkick
+// Moved to project-stats.js: = require Chart.bundle
+// Moved to project-stats.js: = require chartkick
 //= require_tree .
-//= No longer used: = require turbolinks
+//= stub 'project-stats'
+//  No longer used: = require turbolinks

@@ -1,3 +1,8 @@
+# Generate /feed view.
+# If you add new fields to be displayed, be sure to modify
+# the calling controller(s) to retrieve those fields.  Typically the
+# callers will only retrieve the fields necessary for display.
+#
 # Disable cache for Rails.env.test?. There is a bug in the
 # test framework that doesn't handle caching correctly in tests.
 cache_if (!Rails.env.test? && @projects.length > 0),

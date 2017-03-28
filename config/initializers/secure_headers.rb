@@ -20,13 +20,13 @@ SecureHeaders::Configuration.default do |config|
     # Control information sources
     default_src: normal_src,
     img_src: ['secure.gravatar.com', 'avatars.githubusercontent.com', "'self'"],
-    object_src: normal_src,
+    object_src: ["'none'"],
     style_src: normal_src,
     # Harden CSP against attacks in other ways
     base_uri: ["'self'"],
     block_all_mixed_content: true, # see http://www.w3.org/TR/mixed-content/
     frame_ancestors: ["'none'"],
-    form_action: ['github.com', "'self'"], # This counters some XSS busters
+    form_action: ["'self'"], # This counters some XSS busters
     plugin_types: ["'none'"]
   }
   config.cookies = {
@@ -47,3 +47,8 @@ SecureHeaders::Configuration.default do |config|
   # switch CAs if the CA behaves badly.
 end
 # rubocop:enable Metrics/BlockLength
+
+# override default configuration
+SecureHeaders::Configuration.override(:allow_github_form_action) do |config|
+  config.csp[:form_action] += ['github.com']
+end

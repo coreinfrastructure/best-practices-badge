@@ -1,0 +1,26 @@
+<%
+  # Don't send to clients the fields they won't use.
+  # We *omit* fields, instead # of listing what we'll use.
+  # That way, when we add new fields, by default we'll provide them.
+  # This is a safer approach for later maintenance.  By doing it this way,
+  # if we add a new field and forget to omit them here,
+  # the application will still work correctly. This file might be
+  # slightly longer than necessary, but at least it won't be *wrong*.
+  omit_fields = {
+    'description' => 1,
+    'details' => 1,
+    'rationale' => 1,
+    'autofill' => 1
+  }
+  first = true
+  # We could just use "CriteriaHash.to_json" if we sent everything.
+  # The generated text is slightly longer than necessary, but that's
+  # irrelevant because it will be minified for production anyway.
+%>
+CRITERIA_HASH = {
+<% CriteriaHash.each do |k,v| %>
+  <%= "#{ first ? '' : ','} \"#{k}\" : " +
+      "#{v.select{|k,v| !omit_fields.has_key?(k)}.to_json}" %>
+<%   first=false %>
+<% end %>
+};

@@ -1,0 +1,15 @@
+id,created_at,percent_ge_0,percent_ge_25,percent_ge_50,percent_ge_75,percent_ge_90,percent_ge_100,created_since_yesterday,updated_since_yesterday,updated_at,reminders_sent,reactivated_after_reminder,active_projects,active_in_progress,projects_edited,active_edited_projects,active_edited_in_progress
+<%# See: http://nithinbekal.com/posts/rails-csv-export/ %>
+<% require 'csv' -%>
+<%- @project_stats.each do |stat| -%>
+<%= CSV.generate_line([
+      stat.id, stat.created_at,
+      stat.percent_ge_0, stat.percent_ge_25, stat.percent_ge_50,
+      stat.percent_ge_75, stat.percent_ge_90, stat.percent_ge_100,
+      stat.created_since_yesterday,stat.updated_since_yesterday,
+      stat.updated_at, stat.reminders_sent, stat.reactivated_after_reminder,
+      stat.active_projects, stat.active_in_progress,
+      stat.projects_edited, stat.active_edited_projects,
+      stat.active_edited_in_progress
+    ]) -%>
+<%- end -%>

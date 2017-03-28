@@ -12,7 +12,7 @@ MoveCodeIntoControllerCheck: { }
 MoveCodeIntoHelperCheck: { array_count: 3 }
 MoveCodeIntoModelCheck: { use_count: 4 }
 MoveFinderToNamedScopeCheck: { }
-MoveModelLogicIntoModelCheck: { use_count: 15 }
+MoveModelLogicIntoModelCheck: { use_count: 20 }
 NeedlessDeepNestingCheck: { nested_count: 2 }
 NotRescueExceptionCheck: { }
 NotUseDefaultRouteCheck: { }
@@ -28,6 +28,7 @@ RemoveUnusedMethodsInModelsCheck: { except_methods: [
   'Criteria#to_h', # Used by tests
   'Criteria#must?', # Used in ERB template; doesn't notice.
   'Criteria#should?', # Used in ERB template; doesn't notice.
+  'Criteria#keys',
   'Criteria#suggested?', # Used in ERB template; doesn't notice.
   'Project#created_since', # Scope called dynamincally
   'Project#updated_since', # Scope called dynamincally

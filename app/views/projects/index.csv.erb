@@ -1,0 +1,5 @@
+<% require 'csv' -%>
+<%= CSV.generate_line(Project.column_names) -%>
+<%- @projects.each do |project| -%>
+<%=   raw CSV.generate_line(Project.column_names.map {|c| project[c]}) -%>
+<%- end -%>

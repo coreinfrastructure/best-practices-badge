@@ -67,6 +67,20 @@ class CriteriaTest < ActiveSupport::TestCase
     end
   end
 
+  test 'Sample values correct for specific criteria' do
+    assert Criteria[:contribution].met_url_required?
+    assert_not Criteria[:floss_license_osi].met_url_required?
+
+    assert Criteria[:description_good].must?
+    assert_not Criteria[:contribution_requirements].must?
+
+    assert Criteria[:contribution_requirements].should?
+    assert_not Criteria[:description_good].should?
+
+    assert Criteria[:static_analysis].na_justification_required?
+    assert_not Criteria[:repo_distributed].na_justification_required?
+  end
+
   # The "badge_percentage" and related values are currently integers 0..100;
   # that won't work well if we have > 100 criteria.
   # We can change the code later to address this; for now, let's make sure

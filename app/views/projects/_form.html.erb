@@ -1,8 +1,16 @@
+<%# The "div"s here are not balanced within thi file.
+    That allows us to fill in and then end the current column & row,
+    followed by starting and finishing another full row. %>
 <% badge_hostname = (ENV['PUBLIC_HOSTNAME'] || 'localhost') %>
 <% content_for :insert_progress_bar do %>
-    <div id="progress-mobile" class="progress">
-      <div id="badge-progress" class="progress-bar progress-bar-success badge-progress" role="progressbar" aria-valuenow="<%= project.badge_percentage %>" aria-valuemin="0" aria-valuemax="100">0%</div>
+  <div id="progress-mobile" class="progress">
+    <div id="badge-progress"
+         class="progress-bar progress-bar-success badge-progress"
+         role="progressbar" aria-valuenow="<%= project.badge_percentage %>"
+         aria-valuemin="0" aria-valuemax="100">
+      <%= project.badge_percentage %>%
     </div>
+  </div>
 <% end %>
 <% cache_if is_disabled, project do %>
 <div>

@@ -25,29 +25,30 @@ class ProjectsController < ApplicationController
       homepage_url repo_url updated_at user_id created_at
     ).freeze
 
-  ALLOWED_QUERY_PARAMS = %i(gteq lteq pq q sort sort_direction status).freeze
+  ALLOWED_STATUS = %w(in_progress passing).freeze
+
+  INTEGER_QUERIES = %i(gteq lteq page).freeze
+
+  TEXT_QUERIES = %i(pq q).freeze
+
+  OTHER_QUERIES = %i(sort sort_direction status ids).freeze
+
+  ALLOWED_QUERY_PARAMS = (
+    INTEGER_QUERIES + TEXT_QUERIES + OTHER_QUERIES
+  ).freeze
 
   # GET /projects
   # GET /projects.json
-  # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
   def index
-    remove_empty_query_params
-    @projects = Project.all
-    @projects = @projects.send params[:status] if
-      %w(in_progress passing).include? params[:status]
-    @projects = @projects.gteq(params[:gteq]) if params[:gteq].present?
-    @projects = @projects.lteq(params[:lteq]) if params[:lteq].present?
-    # "Prefix query" - query against *prefix* of a URL or name
-    @projects = @projects.text_search(params[:pq]) if params[:pq].present?
-    # "Normal query" - text search against URL, name, and description
-    # This will NOT match full URLs, but will match partial URLs.
-    @projects = @projects.search_for(params[:q]) if params[:q].present?
-    @count = @projects.count
-    @projects = @projects.includes(:user).paginate(page: params[:page])
-    sort_projects
-    @projects
+    validated_url = set_valid_query_url
+    if validated_url != request.original_url
+      redirect_to validated_url
+    else
+      retrieve_projects
+      sort_projects
+      @projects
+    end
   end
-  # rubocop:enable Metrics/AbcSize,Metrics/MethodLength
 
   # GET /projects/1
   # GET /projects/1.json
@@ -65,6 +66,7 @@ class ProjectsController < ApplicationController
 
   # GET /projects/new
   def new
+    use_secure_headers_override(:allow_github_form_action)
     store_location
     @project = Project.new
   end
@@ -168,8 +170,19 @@ class ProjectsController < ApplicationController
   end
   # rubocop:enable Metrics/MethodLength
 
+  # The /feed only displays a small set of the project fields, so only
+  # extract the ones we use.  This optimization is worth it because
+  # users poll the feed *and* it can include many projects.
+  # These are the fields for *projects*; the .recently_updated scope
+  # forces loading of user data (where we get the user name/nickname).
+  FEED_DISPLAY_FIELDS = 'projects.id as id, projects.name as name, ' \
+    'projects.updated_at as updated_at, projects.created_at as created_at, ' \
+    'badge_percentage, homepage_url, repo_url, description, user_id'
+
   def feed
-    @projects = Project.recently_updated
+    # @projects = Project.select(FEED_DISPLAY_FIELDS).
+    #  limit(50).reorder(updated_at: :desc, id: :asc).includes(:user)
+    @projects = Project.select(FEED_DISPLAY_FIELDS).recently_updated
     respond_to { |format| format.atom }
   end
 
@@ -202,6 +215,22 @@ class ProjectsController < ApplicationController
   private_class_method :send_reminders
   # rubocop:enable Metrics/MethodLength
 
+  def allowed_query?(key, value)
+    return false if value.blank?
+    return positive_integer?(value) if INTEGER_QUERIES.include?(key.to_sym)
+    return TextValidator.new(attributes: %i(query)).text_acceptable?(value) if
+      TEXT_QUERIES.include?(key.to_sym)
+    allowed_other_query?(key, value)
+  end
+
+  def allowed_other_query?(key, value)
+    return ALLOWED_SORT.include?(value) if key == 'sort'
+    return %w(desc asc).include?(value) if key == 'sort_direction'
+    return ALLOWED_STATUS.include?(value) if key == 'status'
+    return integer_list?(value) if key == 'ids'
+    false
+  end
+
   def change_authorized
     return true if can_make_changes?
     redirect_to root_url
@@ -231,6 +260,14 @@ class ProjectsController < ApplicationController
       @project.repo_url.split('://', 2)[1]
   end
 
+  def positive_integer?(value)
+    !(value =~ /\A[1-9][0-9]{0,15}\z/).nil?
+  end
+
+  def integer_list?(value)
+    !(value =~ /\A[1-9][0-9]{0,15}( *, *[1-9][0-9]{0,15}){0,20}\z/).nil?
+  end
+
   # Purge the badge from the CDN (if any)
   def purge_cdn_badge
     cdn_badge_key = @project.record_key + '/badge'
@@ -240,20 +277,6 @@ class ProjectsController < ApplicationController
     rescue StandardError => e
       Rails.logger.error "FAILED TO PURGE #{cdn_badge_key} , #{e.class}: #{e}"
     end
-  end
-
-  def remove_empty_query_params
-    # Rewrites /projects?q=&status=failing to /projects?status=failing
-    original = request.original_url
-    parsed = Addressable::URI.parse(original)
-    return unless parsed.query_values.present?
-    queries_with_values = parsed.query_values.reject { |_k, v| v.blank? }
-    if queries_with_values.blank?
-      parsed.omit!(:query) # Removes trailing '?'
-    else
-      parsed.query_values = queries_with_values
-    end
-    redirect_to parsed.to_s unless parsed.to_s == original
   end
 
   def repo_data
@@ -267,6 +290,39 @@ class ProjectsController < ApplicationController
     end.compact
   end
 
+  HTML_INDEX_FIELDS = 'projects.id, projects.name, description, ' \
+    'homepage_url, repo_url, license, user_id, achieved_passing_at, ' \
+    'updated_at, badge_percentage'
+
+  # rubocop:disable Metrics/MethodLength,Metrics/PerceivedComplexity
+  # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
+  def retrieve_projects
+    @projects = Project.all
+    # We had to keep this line the same to satisfy brakeman
+    @projects = @projects.send params[:status] if
+       %w(in_progress passing).include? params[:status]
+    @projects = @projects.gteq(params[:gteq]) if params[:gteq].present?
+    @projects = @projects.lteq(params[:lteq]) if params[:lteq].present?
+    # "Prefix query" - query against *prefix* of a URL or name
+    @projects = @projects.text_search(params[:pq]) if params[:pq].present?
+    # "Normal query" - text search against URL, name, and description
+    # This will NOT match full URLs, but will match partial URLs.
+    @projects = @projects.search_for(params[:q]) if params[:q].present?
+    if params[:ids].present?
+      @projects = @projects.where(
+        'id in (?)', params[:ids].split(',').map { |x| Integer(x) }
+      )
+    end
+    @count = @projects.count
+    # If we're supplying html (common case), select only needed fields
+    if request.format.symbol == :html
+      @projects = @projects.select(HTML_INDEX_FIELDS)
+    end
+    @projects = @projects.includes(:user).paginate(page: params[:page])
+  end
+  # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity
+  # rubocop:enable Metrics/MethodLength,Metrics/PerceivedComplexity
+
   def set_homepage_url
     # Assign to repo.homepage if it exists, and else repo_url
     repo = repo_data.find { |r| @project.repo_url == r[3] }
@@ -277,6 +333,20 @@ class ProjectsController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_project
     @project = Project.find(params[:id])
+  end
+
+  def set_valid_query_url
+    # Rewrites /projects?q=&status=failing to /projects?status=failing
+    original = request.original_url
+    parsed = Addressable::URI.parse(original)
+    return original unless parsed.query_values.present?
+    valid_queries = parsed.query_values.reject { |k, v| !allowed_query?(k, v) }
+    if valid_queries.blank?
+      parsed.omit!(:query) # Removes trailing '?'
+    else
+      parsed.query_values = valid_queries
+    end
+    parsed.to_s
   end
 
   # If a valid "sort" parameter is provided, sort @projects in "sort_direction"

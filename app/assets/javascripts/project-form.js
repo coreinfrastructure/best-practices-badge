@@ -86,17 +86,18 @@ function criterionResult(criterion) {
     } else {
       return 'passing';
     }
-  } else if (CRITERIA_HASH[criterion]['category'] === 'SHOULD' &&
-             $(criterionStatus + '_unmet').is(':checked') &&
-             justification.length >= MIN_SHOULD_LENGTH) {
-    return 'barely';
-  } else if (CRITERIA_HASH[criterion]['category'] === 'SUGGESTED' &&
-            !($(criterionStatus + '_').is(':checked'))) {
-    return 'barely';
-  } else if ($(criterionStatus + '_').is(':checked')) {
-    return 'question';
+  } else if ($(criterionStatus + '_unmet').is(':checked')) {
+    if (CRITERIA_HASH[criterion]['category'] === 'SUGGESTED' ||
+        (CRITERIA_HASH[criterion]['category'] === 'SHOULD' &&
+         justification.length >= MIN_SHOULD_LENGTH)) {
+      return 'barely';
+    } else if (CRITERIA_HASH[criterion]['category'] === 'SHOULD') {
+      return 'question';
+    } else {
+      return 'failing';
+    }
   } else {
-    return 'failing';
+    return 'question';
   }
 }
 

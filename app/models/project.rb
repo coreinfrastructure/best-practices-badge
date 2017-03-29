@@ -320,14 +320,13 @@ class Project < ActiveRecord::Base
     updated_at >= ENTRY_LICENSE_EXPLICIT_DATE
   end
 
-  def passing?(criterion)
+  def get_criterion_status(criterion)
     status = self[criterion.name.status]
-    justification = self[criterion.name.justification]
-
-    na_satisfied?(criterion, status, justification) ||
-      met_satisfied?(criterion, status, justification) ||
-      should_satisfied?(criterion, status, justification) ||
-      suggested_satisfied?(criterion, status)
+    return get_passing_staus(status) if passing?(criterion)
+    return :criterion_justification_required if status.na?
+    return get_met_status(criterion) if status.met?
+    return get_unmet_status(criterion) if status.unmet?
+    :criterion_unknown
   end
 
   private
@@ -336,14 +335,20 @@ class Project < ActiveRecord::Base
   #   Criteria.active.all? { |criterion| passing? criterion }
   # end
 
-  def need_a_base_url
-    return unless repo_url.blank? && homepage_url.blank?
-    errors.add :base, 'Need at least a home page or repository URL'
+  def get_met_status(criterion)
+    return :criterion_justification_required if
+      criterion.met_justification_required?
+    :criterion_url_required
   end
 
-  def na_satisfied?(criterion, status, justification)
-    status.na? && (!criterion.na_justification_required? ||
-                   justification_good?(justification))
+  def get_passing_staus(status)
+    return :criterion_passing if status.met? || status.na?
+    :criterion_barely
+  end
+
+  def get_unmet_status(criterion)
+    return :criterion_justification_required if criterion.should?
+    :criterion_failing
   end
 
   def met_satisfied?(criterion, status, justification)
@@ -351,6 +356,26 @@ class Project < ActiveRecord::Base
                    (!criterion.met_justification_required? ||
                     justification_good?(justification))
     status.met? && contains_url?(justification)
+  end
+
+  def na_satisfied?(criterion, status, justification)
+    status.na? && (!criterion.na_justification_required? ||
+                   justification_good?(justification))
+  end
+
+  def need_a_base_url
+    return unless repo_url.blank? && homepage_url.blank?
+    errors.add :base, 'Need at least a home page or repository URL'
+  end
+
+  def passing?(criterion)
+    status = self[criterion.name.status]
+    justification = self[criterion.name.justification]
+
+    na_satisfied?(criterion, status, justification) ||
+      met_satisfied?(criterion, status, justification) ||
+      should_satisfied?(criterion, status, justification) ||
+      suggested_satisfied?(criterion, status)
   end
 
   def should_satisfied?(criterion, status, justification)

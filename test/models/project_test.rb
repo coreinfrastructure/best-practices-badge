@@ -8,6 +8,7 @@ class ProjectTest < ActiveSupport::TestCase
       homepage_url: 'https://www.example.org',
       repo_url: 'https://www.example.org/code'
     )
+    @unjustified_project = projects(:perfect_unjustified)
   end
 
   test 'should be valid' do
@@ -97,4 +98,35 @@ class ProjectTest < ActiveSupport::TestCase
     refute validator.text_acceptable?("The best practices badge\x0c")
     assert validator.text_acceptable?('The best practices badge.')
   end
+  # rubocop:disable Metrics/BlockLength
+  test 'test get_criterion_status returns correct values' do
+    assert_equal(
+      @unjustified_project.get_criterion_status(Criteria[:contribution]),
+      :criterion_url_required
+    )
+    assert_equal(
+      @unjustified_project.get_criterion_status(Criteria[:release_notes]),
+      :criterion_justification_required
+    )
+    assert_equal(
+      @unjustified_project.get_criterion_status(
+        Criteria[:installation_common]
+      ), :criterion_justification_required
+    )
+    assert_equal(
+      @unjustified_project.get_criterion_status(Criteria[:test_most]),
+      :criterion_barely
+    )
+    assert_equal(
+      @unjustified_project.get_criterion_status(
+        Criteria[:crypto_certificate_verification]
+      ), :criterion_failing
+    )
+    assert_equal(
+      @unjustified_project.get_criterion_status(
+        Criteria[:build_reproducible]
+      ), :criterion_unknown
+    )
+  end
+  # rubocop:enable Metrics/BlockLength
 end

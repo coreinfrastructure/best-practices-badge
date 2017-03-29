@@ -55,12 +55,11 @@ class LoginTest < CapybaraFeatureTest
     ensure_choice 'project_english_status_met'
     assert_match CHECK, find('#english_enough')['src']
 
-    # TODO: Fix this test; it fails even though it works in the real world
-    # ensure_choice 'project_contribution_status_met' # No URL given, so fails
-    # assert_match QUESTION, find('#contribution_enough')['src']
+    ensure_choice 'project_contribution_status_met' # No URL given, so fails
+    assert_match QUESTION, find('#contribution_enough')['src']
 
     ensure_choice 'project_contribution_requirements_status_unmet' # No URL
-    assert_match X, find('#contribution_requirements_enough')['src']
+    assert_match QUESTION, find('#contribution_requirements_enough')['src']
 
     # click_on 'Change Control'
     assert has_content? 'repo_public'
@@ -70,7 +69,7 @@ class LoginTest < CapybaraFeatureTest
     assert find('#project_repo_distributed_status_')['checked']
     ensure_choice 'project_repo_distributed_status_unmet' # SUGGESTED, so enough
     assert find('#project_repo_distributed_status_unmet')['checked']
-    # assert_match DASH, find('#repo_distributed_enough')['src']
+    assert_match DASH, find('#repo_distributed_enough')['src']
 
     # click_on 'Reporting'
     assert has_content? 'report_process'

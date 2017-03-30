@@ -199,6 +199,46 @@ class Project < ActiveRecord::Base
     text =~ %r{https?://[^ ]{5}}
   end
 
+  # Returns a symbol indicating a the status of an particular criterion
+  # in a project.  These are:
+  # :criterion_passing -
+  #   'Met' (or 'N/A' if applicable) has been selected for the criterion
+  #   and all requred justification text (including url's) have been entered  #
+  # :criterion_failing -
+  #   'Unmet' has been selected for a MUST criterion'.
+  # :criterion_barely -
+  #   'Unmet' has been selected for a SHOULD or SUGGESTED criterion and
+  #   ,if SHOULD, required justification text has been entered.
+  # :criterion_url_required -
+  #   'Met' has been selected, but a required url in the justification
+  #   text is missing.
+  # :criterion_justification_required -
+  #   Required justification for 'Met', 'N/A' or 'Unmet' selection is missing.
+  # :criterion_unknown -
+  #   The criterion has been left at it's default value and thus the status
+  #   is unknown.
+  def get_criterion_status(criterion)
+    status = self[criterion.name.status]
+    return get_passing_staus(status) if passing?(criterion)
+    return :criterion_justification_required if status.na?
+    return get_met_status(criterion) if status.met?
+    return get_unmet_status(criterion) if status.unmet?
+    :criterion_unknown
+  end
+
+  # Send owner an email they add a new project.
+  def send_new_project_email
+    ReportMailer.email_new_project_owner(self).deliver_now
+  end
+
+  # Return true if we should show an explicit license for the data.
+  # Old entries did not set a license; we only want to show entry licenses
+  # if the updated_at field indicates there was agreement to it.
+  ENTRY_LICENSE_EXPLICIT_DATE = DateTime.iso8601('2017-02-20T12:00Z')
+  def show_entry_license?
+    updated_at >= ENTRY_LICENSE_EXPLICIT_DATE
+  end
+
   # Update the badge percentage, and update relevant event datetime if needed.
   # This code will need to changed if there are multiple badge levels, or
   # if there are more than 100 criteria. (If > 100 criteria, switch
@@ -211,6 +251,11 @@ class Project < ActiveRecord::Base
     elsif badge_percentage < 100 && old_badge_percentage == 100
       self.lost_passing_at = Time.now.utc
     end
+  end
+
+  # Return owning user's name for purposes of display.
+  def user_display_name
+    user_name || user_nickname
   end
 
   # Update badge percentages for all project entries, and send emails
@@ -302,33 +347,6 @@ class Project < ActiveRecord::Base
   end
   # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
-  # Return owning user's name for purposes of display.
-  def user_display_name
-    user_name || user_nickname
-  end
-
-  # Send owner an email they add a new project.
-  def send_new_project_email
-    ReportMailer.email_new_project_owner(self).deliver_now
-  end
-
-  # Return true if we should show an explicit license for the data.
-  # Old entries did not set a license; we only want to show entry licenses
-  # if the updated_at field indicates there was agreement to it.
-  ENTRY_LICENSE_EXPLICIT_DATE = DateTime.iso8601('2017-02-20T12:00Z')
-  def show_entry_license?
-    updated_at >= ENTRY_LICENSE_EXPLICIT_DATE
-  end
-
-  def get_criterion_status(criterion)
-    status = self[criterion.name.status]
-    return get_passing_staus(status) if passing?(criterion)
-    return :criterion_justification_required if status.na?
-    return get_met_status(criterion) if status.met?
-    return get_unmet_status(criterion) if status.unmet?
-    :criterion_unknown
-  end
-
   private
 
   # def all_active_criteria_passing?
@@ -349,6 +367,11 @@ class Project < ActiveRecord::Base
   def get_unmet_status(criterion)
     return :criterion_justification_required if criterion.should?
     :criterion_failing
+  end
+
+  def justification_good?(justification)
+    return false if justification.nil?
+    justification.length >= MIN_SHOULD_LENGTH
   end
 
   def met_satisfied?(criterion, status, justification)
@@ -384,11 +407,6 @@ class Project < ActiveRecord::Base
 
   def suggested_satisfied?(criterion, status)
     criterion.suggested? && !status.unknown?
-  end
-
-  def justification_good?(justification)
-    return false if justification.nil?
-    justification.length >= MIN_SHOULD_LENGTH
   end
 
   def to_percentage(portion, total)

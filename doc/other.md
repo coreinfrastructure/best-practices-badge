@@ -361,6 +361,27 @@ as described below.
     the key properties of these components and relationships.
     <sup>[<a href="#documentation_architecture">documentation_architecture</a>]</sup>
 
+*   <a name="documentation_quick_start"></a>
+    The project MUST provide a "quick start" guide for new users
+    to help them quickly do something with the software.
+    <sup>[<a href="#documentation_quick_start">documentation_quick_start</a>]</sup>
+
+    *Details*:
+    The idea is to show users how to get started and make the software do
+    anything at all. This is critically important for potential users to
+    get started.
+
+    *Rationale*:
+    This is based on a conversation with Mike Milinkovich,
+    Executive Director of the Eclipse Foundation, about the OSS project
+    criteria and "what is important".
+    He believes, based on his long experience, that it is critically
+    important that any project have some sort of "quick start" guide to
+    help someone get started and do something with the software;
+    this feeling of accomplishment and demonstration that it works
+    builds understanding and confidence in the user.
+    https://github.com/linuxfoundation/cii-best-practices-badge/issues/645
+
 *   <a name="documentation_current"></a>
     The project MUST make an effort to
     keep the documentation consistent with the current version of the

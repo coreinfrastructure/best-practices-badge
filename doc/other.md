@@ -259,6 +259,10 @@ as described below.
     having CAA increases the risk that potential contributors
     will not contribute, especially if the receiver is
     a for-profit organization.
+    The
+    [Apache Software Foundation CLAs (the individual contributor license and the corporate CLA)](https://www.apache.org/licenses/)
+    are examples of CLAs, for projects which determine that the risks
+    of these kinds of CLAs to the project are less than their benefits.
 
 *   <a name="code_of_conduct"></a>The project MUST adopt a code of conduct and
     post it in a standard location.
@@ -289,6 +293,9 @@ as described below.
     There are various governance models, including benevolent dictator
     and formal meritocracy; for more details, see
     <a href="http://oss-watch.ac.uk/resources/governancemodels">Governance models</a>.
+    Both centralized (e.g., single-maintainer) and decentralized
+    (e.g., group maintainers) approaches have been successfully used
+    in projects.
     The governance information does not need to document the possibility
     of creating a project fork, since that is always possible
     for FLOSS projects.
@@ -303,6 +310,26 @@ as described below.
     This was inspired by the
     <a href="https://projects.ow2.org/bin/view/ow2/OMM">OW2 Open-source Maturity Model</a>,
     in particular RDMP-1 and STK-1.
+
+*   <a name="roles_responsibilities"></a>
+    The project MUST clearly define and publicly document the key roles in the
+    project and their responsibilities, including any tasks those roles
+    must perform.  It MUST be clear who has which role(s), though this
+    might not be documented in the same way.
+    <sup>[<a href="#roles_responsibilities">roles_responsibilities</a>]</sup>
+
+    *Details*: The documentation for
+    <a href="#governance">governance</a> and roles and responsibilities
+    may be in one place.
+
+    Rationale: Much knowledge about the project roles builds up
+    over the years, and is not sufficiently passed down to new people.
+    Documenting the roles can help recruit, train, and mentor new
+    project members.  Projects may choose document the roles
+    and responsibilities in one place, and identify who has the roles
+    separately, so that the project doesn't need to update the role
+    information when people change roles.
+    The goal is to make underlying assumptions clear.
 
 *   <a name="documentation_design"></a>The project MUST include documentation of
     its high-level design (aka architecture), that is, documentation that
@@ -1376,6 +1403,25 @@ as described below.
     to review each others' work; it is better to require different
     organizations to review each others' work, but in many situations
     that is not practical.
+
+*   <a name="#code_review_standards"></a>
+    The project MUST document its code review requirements, including
+    how code review is conducted, what must be checked,
+    and what is required to be acceptable.
+    <sup>[<a href="#code_review_standards">code_review_standards</a>]</sup>
+
+    *Details*: See also
+    <a href="#two_person_review">two_person_review</a> and
+    <a href="#contribution_requirements">contribution_requirements</a>
+
+    *Rationale*: Code review is a cornerstone of quality and
+    secure coding practices. Projects often seek new contributors but lack
+    training and documentation to increase the number of reviewers. An
+    increase in code reviewers lowers maintainer workload while aiding
+    in meeting the badge requirement two_person_review.
+    See
+    https://github.com/linuxfoundation/cii-best-practices-badge/issues/699
+    from GeorgLink.
 
 *   <a name="build_reproducible"></a>
     (Future criterion) The project MUST have a

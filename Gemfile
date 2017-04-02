@@ -30,7 +30,7 @@ gem 'redcarpet', '3.4.0' # Process markdown in form textareas (justifications)
 gem 'sass-rails', '5.0.6'
 gem 'secure_headers', '3.6.2' # Add hardening measures to HTTP headers
 # gem 'turbolinks', '5.0.1' # Speed UI access
-gem 'uglifier', '3.1.9'
+gem 'uglifier', '3.1.12'
 gem 'will_paginate', '3.1.5'
 
 group :development, :test do

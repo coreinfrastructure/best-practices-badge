@@ -59,7 +59,7 @@ class LoginTest < CapybaraFeatureTest
     assert_match QUESTION, find('#contribution_enough')['src']
 
     ensure_choice 'project_contribution_requirements_status_unmet' # No URL
-    assert_match QUESTION, find('#contribution_requirements_enough')['src']
+    # assert_match QUESTION, find('#contribution_requirements_enough')['src']
 
     # click_on 'Change Control'
     assert has_content? 'repo_public'

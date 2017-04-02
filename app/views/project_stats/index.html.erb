@@ -157,6 +157,12 @@
 <%# End cache *before* showing any admin-specific data %>
 <% end %>
 
+<% if current_user&.admin? %>
+<p>
+As an admin, you may also see the
+<a href="/reminders">detailed information about reminders</a>.
+<% end %>
+
 <br>
 <br>
 You can see the raw data in

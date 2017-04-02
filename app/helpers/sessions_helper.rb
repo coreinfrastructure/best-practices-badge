@@ -24,6 +24,10 @@ module SessionsHelper
     !current_user.nil?
   end
 
+  def current_user_is_admin?
+    logged_in? && current_user.admin?
+  end
+
   # Remembers a user in a persistent session.
   def remember(user)
     user.remember

@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   get 'criteria' => 'static_pages#criteria'
 
   get 'feed' => 'projects#feed', defaults: { format: 'atom' }
+  get 'reminders' => 'projects#reminders_summary'
 
   resources :projects do
     member do

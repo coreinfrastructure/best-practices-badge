@@ -347,6 +347,15 @@ class Project < ActiveRecord::Base
   end
   # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
+  def self.recently_reminded
+    Project
+      .select('projects.*, users.email as user_email')
+      .joins(:user).references(:user) # Need this to check email address
+      .where('last_reminder_at IS NOT NULL')
+      .where('last_reminder_at >= ?', 14.days.ago)
+      .reorder('last_reminder_at')
+  end
+
   private
 
   # def all_active_criteria_passing?

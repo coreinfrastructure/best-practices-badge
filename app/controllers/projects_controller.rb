@@ -186,6 +186,15 @@ class ProjectsController < ApplicationController
     respond_to { |format| format.atom }
   end
 
+  def reminders_summary
+    if current_user_is_admin?
+      respond_to { |format| format.html }
+    else
+      flash.now[:danger] = 'Admin only.'
+      redirect_to '/'
+    end
+  end
+
   private
 
   # Send reminders to users for inactivity. Return array of project ids

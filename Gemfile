@@ -61,7 +61,7 @@ group :development do
   # Waiting for Ruby 2.4 support: https://github.com/seattlerb/ruby_parser/issues/239
   gem 'rails_db', '1.5.0' # Enable localhost:3000/rails/db debugging
   gem 'traceroute', '0.5.0' # Adds 'rake traceroute' command to check routes
-  gem 'web-console', '3.4.0'
+  gem 'web-console', '3.5.0'
 end
 
 group :test do

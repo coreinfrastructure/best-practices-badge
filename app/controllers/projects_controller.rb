@@ -349,7 +349,7 @@ class ProjectsController < ApplicationController
     original = request.original_url
     parsed = Addressable::URI.parse(original)
     return original unless parsed.query_values.present?
-    valid_queries = parsed.query_values.reject { |k, v| !allowed_query?(k, v) }
+    valid_queries = parsed.query_values.select { |k, v| allowed_query?(k, v) }
     if valid_queries.blank?
       parsed.omit!(:query) # Removes trailing '?'
     else

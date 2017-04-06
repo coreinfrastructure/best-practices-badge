@@ -392,8 +392,10 @@ There is an implied criterion that we should mention here:
 <li><a name="crypto_working"></a>The default project security mechanisms MUST NOT depend on cryptographic algorithms/modes that are broken (e.g., MD4, MD5, single DES, RC4, Dual_EC_DRBG, or ECB mode).
  (N/A allowed.) <sup>[<a href="#crypto_working">crypto_working</a>]</sup></li>
 
-<li><a name="crypto_weaknesses"></a>The project security mechanisms SHOULD NOT by default depend on cryptographic algorithms with known serious weaknesses (e.g., SHA-1).
- (N/A allowed.) <sup>[<a href="#crypto_weaknesses">crypto_weaknesses</a>]</sup></li>
+<li><a name="crypto_weaknesses"></a>The project security mechanisms SHOULD NOT by default depend on cryptographic algorithms or modes with known serious weaknesses (e.g., the SHA-1 cryptographic hash algorithm or the CBC mode in SSH).
+ (N/A allowed.) <sup>[<a href="#crypto_weaknesses">crypto_weaknesses</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>Concerns about CBC mode in SSH are discussed in <a href="https://www.kb.cert.org/vuls/id/958563">CERT: SSH CBC vulnerability</a>.
+</dd><dt><i>Rationale</i>:<dt> <dd>SHA-1 has been known to be weak for many years; <a href="https://security.googleblog.com/2017/02/announcing-first-sha1-collision.html">In February 2017 Google demonstrated a SHA-1 collision</a>. There are a number of alternatives to SHA-1 that are not patent-encumbered, such as the SHA-2 suite (including SHA-256 and SHA-512) and SHA-3. There is some disagreement on how important it is to avoid CBC mode in SSH.  The <a href="http://www.openssh.com/txt/cbc.adv">OpenSSH cbc.adv</a> page argues that the attack on SSH CBC is not a practical attack. However, others clearly think it's more important; CERT notes it, as does <a href="https://developer.ibm.com/answers/questions/187318/faq-how-do-i-disable-cipher-block-chaining-cbc-mod.html">FAQ: Disable CBC in SSH</a>. It is also easy to use a different mode than CBC; generally when there are safer widely-available options, you should use the safe ones instead. This is a SHOULD, not a MUST; sometimes these weaker mechanisms need to be used for backwards compatibility.
+</dd></dl></li>
 
 <li><a name="crypto_pfs"></a>The project SHOULD implement perfect forward secrecy for key agreement protocols so a session key derived from a set of long-term keys cannot be compromised if one of the long-term keys is compromised in the future.
  (N/A allowed.) <sup>[<a href="#crypto_pfs">crypto_pfs</a>]</sup></li>

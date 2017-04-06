@@ -764,6 +764,14 @@ as described below.
     accepting a dependency on those projects - and
     LZ4 in the Linux kernel.
 
+*   <a name="interfaces_current"></a>
+    The project SHOULD avoid using deprecated or obsolete functions
+    and APIs where FLOSS alternatives are available in the set of
+    technology it uses (its "technology stack") and to a supermajority
+    of the users the project supports (so that users have ready access
+    to the alternative).
+    <sup>[<a href="#interfaces_current">interfaces_current</a>]</sup>
+
 #### Build
 
 *   <a name="build_standard_variables"></a>

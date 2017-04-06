@@ -1255,6 +1255,7 @@ as described below.
 *   <a name="copyright_per_file"></a>
     The project MUST include a copyright statement in each source file,
     identifying at least one relevant year and copyright holder.
+    <sup>[<a href="#copyright_per_file"> copyright_per_file </a>]</sup>
 
     *Details*:
     This MAY be done by including the following inside a comment

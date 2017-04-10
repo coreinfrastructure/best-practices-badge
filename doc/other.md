@@ -185,19 +185,16 @@ Upgrade some "passing" level SHOULD and SUGGESTED:
     proprietary (and some developers will therefore not use it).
 
 *   Upgrade dynamic_analysis_unsafe from SUGGESTED to MUST.
-    "<i>If</i> the software is application-level software
+    "<i>If</i> the project results include software
     written using a memory-unsafe language (e.g., C or C++),
     <i>then</i> the project MUST use
     at least one dynamic tool (e.g., a fuzzer or web application scanner)
-    routinely along with a mechanism to detect
-    memory safety problems such as buffer overwrites."
+    routinely in combination with a mechanism to detect
+    memory safety problems such as buffer overwrites.
+    If the project results do not include software written
+    in a memory-unsafe language, choose "not applicable" (N/A).
 
-    This reorders the "passing" level text, which reads as follows:
-    "It is SUGGESTED that if the software is application-level software
-    written using a memory-unsafe language (e.g., C or C++) then at
-    least one dynamic tool (e.g., a fuzzer or web application scanner)
-    be routinely used with a mechanism to detect memory safety problems
-    such as buffer overwrites.
+    This reorders the "passing" level text.
 
     *NOTE*:
     This would mean that C/C++ would be required to use something like

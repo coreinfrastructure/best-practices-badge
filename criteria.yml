@@ -1206,11 +1206,14 @@
         category: SUGGESTED
         na_allowed: true
         description: >
-          It is SUGGESTED that if the software is application-level software
-          written using a memory-unsafe language (e.g., C or C++) then at
-          least one dynamic tool (e.g., a fuzzer or web application scanner)
-          be routinely used with a mechanism to detect memory safety problems
-          such as buffer overwrites.
+          It is SUGGESTED that if the project results include
+          software written using a memory-unsafe language (e.g., C or C++),
+          then at least one dynamic tool (e.g., a fuzzer or web
+          application scanner) be routinely used in combination with
+          a mechanism to detect memory safety problems such as buffer
+          overwrites.
+          If the project results do not include software written
+          in a memory-unsafe language, choose "not applicable" (N/A).
         details: >
           Examples of mechanisms to detect memory safety problems include
           <a href="https://github.com/google/sanitizers/wiki/AddressSanitizer">Address Sanitizer (ASAN)</a>
@@ -1222,9 +1225,6 @@
           and
           <a href="http://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html">undefined behavior sanitizer</a>.
           Widespread assertions would also work.
-          If the software is not application-level,
-          or is not in a memory-unsafe language, then this criterion is
-          automatically met.
         autofill: >
           Look in build/test script for reference to invocation of
           valgrind or ASAN.

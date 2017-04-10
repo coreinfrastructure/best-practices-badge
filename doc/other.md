@@ -1041,16 +1041,25 @@ as described below.
 #### Secure Release
 
 *   <a name="signed_releases"></a>
-    Project releases of the software intended for widespread use
-    MUST be cryptographically signed, there MUST be a documented
+    The project MUST cryptographically sign
+    releases of the project results intended for widespread use, and
+    there MUST be a documented
     process explaining to users how they can obtain the public signing keys
-    and verify the signature. The private key for this signature MUST NOT
+    and verify the signature(s).
+    The private key for these signature(s) MUST NOT
     be on site(s) used to directly distribute the software to the public.
-    This includes both source code and executables (where applicable).
-    Executables MAY be signed separately from source code.
-    These may be implemented as signed git tags
-    (using cryptographic digital signatures).
     <sup>[<a href="#signed_releases">signed_releases</a>]</sup>
+
+    *Details*:
+    The project results include both source code and any
+    generated deliverables where applicable (e.g., executables,
+    packages, and containers).
+    Generated deliverables MAY be signed separately from source code.
+    These MAY be implemented as signed git tags
+    (using cryptographic digital signatures).
+    Projects MAY provide generated results separately
+    from tools like git, but in those cases, the separate results
+    MUST be separately signed.
 
     *Rationale*:
     This provides protection from compromised distribution systems.
@@ -1064,6 +1073,18 @@ as described below.
     Node.js implements this via GPG keys in the README, but note that
     in the criterion we are intentionally more general:
     <a href="https://github.com/nodejs/node#release-team">Node.js Release Team</a>
+
+*   <a name="version_tags_signed"></a>
+    It is SUGGESTED that in the version control system,
+    each important version tag (a tag that is part of a major
+    release, minor release, or fixes publicly noted vulnerabilities)
+    be cryptographically signed and verifiable as described in
+    <a href="#signed_releases">signed_releases</a>.
+    <sup>[<a href="#version_tags_signed">version_tags_signed</a>]</sup>
+
+    *Details*: See also
+    <a href="#signed_releases">signed_releases</a> and
+    <a href="#version_tags">version_tags</a>.
 
 ### Analysis
 

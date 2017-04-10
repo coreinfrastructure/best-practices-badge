@@ -1086,6 +1086,9 @@ as described below.
     <a href="#signed_releases">signed_releases</a> and
     <a href="#version_tags">version_tags</a>.
 
+    *Rationale*: This was suggested by Kevin W. Wall (@kwwall)
+    in issue #709.
+
 ### Analysis
 
 *   <a name="dependency_monitoring"></a>

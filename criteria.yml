@@ -916,8 +916,32 @@
         na_allowed: true
         description: >
           The default project security mechanisms MUST NOT depend on
-          cryptographic algorithms/modes that are broken
-          (e.g., MD4, MD5, single DES, RC4, Dual_EC_DRBG, or ECB mode).
+          broken cryptographic algorithms (e.g., MD4, MD5, single DES,
+          RC4, Dual_EC_DRBG) or use cipher modes that are inappropriate
+          to the context (e.g., ECB mode is almost never appropriate
+          because it reveals identical blocks within the ciphertext
+          as demonstrated by the
+          <a href="https://blog.filippo.io/the-ecb-penguin/">ECB penguin</a>,
+          and CTR mode is often inappropriate because it does not
+          perform authentication and causes duplicates if the input
+          state is repeated).
+        details: >
+          In many cases it's best to choose a block cipher algorithm
+          mode designed to combine secrecy and authentication, e.g.,
+          Galois/Counter Mode (GCM) and EAX.
+        rationale: >
+          If a cryptographic algorithm or mode is completely broken,
+          then it cannot provide a useful cryptographic service.
+          This is different from having a weakness;
+          many cryptographic algorithms have some weaknesses, yet for
+          backwards-compatibility it may sometimes be appropriate to use
+          the algororithm anyway.
+          "EAX" appears to be a name, not an abbrevation.
+          The paper describing EAX,
+          <a href="http://csrc.nist.gov/groups/ST/toolkit/BCM/documents/proposedmodes/eax/eax-spec.pdf">"A
+          Conventional Authenticated-Encryption Mode" by
+          M. Bellare, P.  Rogaway D.  Wagner (April 13, 2003)</a>,
+          does not give an expansion.
         # autofill: TODO
     - crypto_weaknesses:
         category: SHOULD

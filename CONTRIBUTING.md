@@ -350,6 +350,28 @@ the software works fine.  There may more than one cause of this.
 For now, if tests fail, restart to see if it's a problem with the software
 or the tests.  On CircleCI you can choose to rebuild.
 
+### Security, privacy, and performance
+
+Pay attention to security, and work *with* (not against) our
+security hardening mechanisms.  In particular, put JavaScript and CSS
+in *separate* files - this makes it possible to have very strong
+Content Security Policy (CSP) rules, which in turn greatly reduces
+the impact of a software defect.  Be sure to use prepared statements
+(including via Rails' ActiveRecord).
+Protect private information, in particular passwords and email addresses.
+Avoid mechanisms that could be used for tracking where possible
+(we do need to verify people are logged in for some operations),
+and ensure that third parties can't use interactions for tracking.
+For more about security, see [security](doc/security.md).
+
+We want the software to have decent performance for typical users.
+We have a goal of interaction in 1 second or less after making a request.
+Don't send megabytes of data for a request
+(see
+[The Website Obesity Crisis](http://idlewords.com/talks/website_obesity.htm)).
+Use caching (at the server, CDN, and user side) to improve performance
+in typical cases (while avoiding making the code too complicated).
+
 ## How to check proposed changes before submitting them
 
 Before submitting changes, you *must*

@@ -365,12 +365,18 @@ and ensure that third parties can't use interactions for tracking.
 For more about security, see [security](doc/security.md).
 
 We want the software to have decent performance for typical users.
-We have a goal of interaction in 1 second or less after making a request.
+[Our goal is interaction in 1 second or less after making a request](https://developers.google.com/web/fundamentals/performance/rail).
 Don't send megabytes of data for a request
 (see
 [The Website Obesity Crisis](http://idlewords.com/talks/website_obesity.htm)).
 Use caching (at the server, CDN, and user side) to improve performance
 in typical cases (while avoiding making the code too complicated).
+Moving all the JavaScripts to a long-lived cached page, for example,
+means that the user only needs to load that page once.
+See the "other tools" list below for some tools to help measure performance.
+There's always a trade-off between various attributes, in particular,
+don't make performance so fast that the software is hard to maintain.
+Instead, work to get "reasonable" performance in typical cases.
 
 ## How to check proposed changes before submitting them
 
@@ -458,7 +464,8 @@ into the default "rake" checking task:
 * W3C link checker <https://validator.w3.org/checklink>
 * W3C markup validation service <https://validator.w3.org/>
 
-Here are some online tools we sometimes use to check for performance issues:
+Here are some online tools we sometimes use to check for performance issues
+(including time to complete rendering, download size in bytes, etc.):
 
 * [WebPageTest](https://www.webpagetest.org/)
 * [Varvy PageSpeed](https://varvy.com/pagespeed/)
@@ -466,6 +473,7 @@ Here are some online tools we sometimes use to check for performance issues:
   It can notice issues like excessive accesses of the DOM from JavaScript.
   It's OSS; see
   ([YellowLabTools on GitHub](https://github.com/gmetais/YellowLabTools))
+* [Pingdom](https://tools.pingdom.com/)
 
 This
 [article on Rails front end performance](https://www.viget.com/articles/rails-front-end-performance)

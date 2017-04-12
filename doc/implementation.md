@@ -143,12 +143,12 @@ heroku config:set --app production-bestpractices TZ=:/usr/share/zoneinfo/UTC
 
 This section describes key application-specific terminology.
 
-The web application tracks data about many OSS *projects*,
+The web application tracks data about many FLOSS *projects*,
 as identified and entered by *users*.
 
 We hope that projects will (eventually) *achieve* a *badge*.
 A project must *satisfy* (or "pass") all *criteria*
-(singular: criterion) enough to achieve a badge.
+(singular: criterion) *enough* to achieve a badge.
 
 The *status* of each criterion, for a given project, can be one of:
 'Met', 'Unmet', 'N/A' (not applicable, a status that only some

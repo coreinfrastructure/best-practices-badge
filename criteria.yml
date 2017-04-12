@@ -84,6 +84,16 @@
           Look on the project website for words like
           "contribute|bug report|feedback|enhancement" and
           "contribute|pull request|merge request".
+        rationale: >
+          Contributors need to understand not only how to contribute,
+          but also the overall contribution process, so that they'll
+          understand how their work could be incorporated and what
+          the expectations are after the initial submission.
+          This means that wherever the project describes how to contribute,
+          the project must include (directly or by reference) information
+          on the contribution process.  Note that criterion "interact"
+          (listed earlier) requires that the contribution information
+          be on the project website.
     - contribution_requirements:
         category: SHOULD
         met_url_required: true
@@ -100,7 +110,7 @@
     - floss_license:
         category: MUST
         description: >
-          The software MUST be released as FLOSS.
+          The software produced by the project MUST be released as FLOSS.
         details: >
           FLOSS is software released in a way that meets the
           <a href="https://opensource.org/osd-annotated">Open Source Definition</a>
@@ -138,6 +148,10 @@
           are not (e.g., they might not have any license, in which case the
           defaults of the country's legal system apply, or they might use a
           non-FLOSS license).
+          We've added "produced by the project" as a clarification -
+          many projects use non-FLOSS software/services in the process of
+          creating software, or depend on them to run,
+          and that is allowed.
         autofill: >
           We currently use GitHub's API to request license information.
           This API examines the LICENSE file using the gem licensee.
@@ -159,7 +173,8 @@
     - floss_license_osi:
         category: SUGGESTED
         description: >
-          It is SUGGESTED that any required license(s) be
+          It is SUGGESTED that any required license(s)
+          for the software produced by the project be
           <a href="https://opensource.org/licenses">approved by the
           Open Source Initiative (OSI).</a>
         details: >
@@ -169,6 +184,9 @@
         rationale: >
           Unusual licenses can cause long-term problems
           for FLOSS projects and are more difficult for tools to handle.
+          That said, there are FLOSS licenses that are not OSI-approved,
+          e.g., the CC0 license is used by many projects but is not
+          OSI-approved at the time of this writing.
           We expect that more advanced badges would set a higher bar (e.g.,
           that it <em>must</em> be released under an OSI-approved license).
         autofill: >
@@ -180,11 +198,17 @@
         category: MUST
         met_url_required: true
         description: >
-          The project MUST post license(s) in a standard location.
+          The project MUST post the license(s) of its results
+          in a standard location in their source repository.
         details: >
           E.g., as a top-level file named LICENSE or COPYING.
           License filenames MAY be followed by an extension
           such as ".txt" or ".md".
+        rationale: >
+          The goal is to make the license very clear and connected with
+          the project results it applies to.  It is a good idea to also
+          make the license clear on the project website, but there isn't
+          a widely-accepted way to do that today.
         autofill: >
           Look for files with the name LICENSE, COPYING, or COPYING-(name)
           optionally extensions .txt or .md.  Name could include
@@ -205,6 +229,13 @@
           non-project material as documentation.
         met_placeholder: >
           (Optional) What URL(s) are the starting points to for documentation?
+        rationale: >
+          Potential users need documentation so that they can learn how to
+          use the software.
+          This documentation could be provided
+          via the project website or repository, or even
+          via hyperlink to some external information, so we do not specify
+          exactly where this information is.
         autofill: >
           Look for the project web page,
           or a direct links from it on the same site,
@@ -213,7 +244,7 @@
     - documentation_interface:
         category: MUST
         description: >
-          The project MUST include reference documentation that describes
+          The project MUST provide reference documentation that describes
           its external interface (both input and output).
         details: >
           The project MAY use hypertext links to non-project material
@@ -283,7 +314,7 @@
     - english:
         category: SHOULD
         description: >
-          The project SHOULD include documentation in English and be able
+          The project SHOULD provide documentation in English and be able
           to accept bug reports and comments about code in English.
         details: >
           English is currently the <a
@@ -316,7 +347,8 @@
     - repo_track:
         category: MUST
         description: >
-          The source repository MUST track what changes were made, who made
+          The project's source repository MUST track
+          what changes were made, who made
           the changes, and when the changes were made.
         autofill: >
           If it uses git, subversion (svn), mercurial (hg), or even CVS
@@ -340,7 +372,7 @@
         category: SUGGESTED
         description: >
           It is SUGGESTED that common distributed version control software
-          be used (e.g., git).
+          be used (e.g., git) for the project's source repository.
         details: >
           Git is not specifically required and projects
           can use centralized version control software
@@ -351,7 +383,7 @@
     - version_unique:
         category: MUST
         description: >
-          The project MUST have a unique version identifier for each
+          The project results MUST have a unique version identifier for each
           release intended to be used by users.
         details: >
           This MAY be met in a variety of ways including
@@ -579,7 +611,7 @@
         category: MUST
         na_allowed: true
         description: >
-          If the software requires building for use,
+          If the software produced by the project requires building for use,
           the project MUST provide a working build system that can
           automatically rebuild the software from source code.
         details: >
@@ -588,14 +620,20 @@
           For example, it can invoke a compiler to compile the source code.
           If an executable is created from source code, it must be possible
           to modify the project's source code and then generate
-          an updated executable with those modifications. If there is
-          no need to build anything to use the software after its source
-          code is modified, select "not applicable" (N/A).
+          an updated executable with those modifications.
+          If the software produced by the project depends on external
+          libraries, the build system does <i>not</i> need
+          to build those external libraries.
+          If there is no need to build anything to use the software after
+          its source code is modified, select "not applicable" (N/A).
         rationale: >
           If a project needs to be built but there is no
           working build system, then potential co-developers will not be
           able to easily contribute and many security analysis tools will be
           ineffective.
+          This is related to
+          <a href="https://www.joelonsoftware.com/2000/08/09/the-joel-test-12-steps-to-better-code/">Joel Test</a>
+          point 2, "Can you make a build in one step?"
         autofill: >
           See build_common_tools.
     - build_common_tools:
@@ -629,12 +667,11 @@
     - test:
         category: MUST
         description: >
-          The project MUST have at least one automated test suite
-          that is publicly
-          released as FLOSS (this test suite may be maintained as a
-          separate FLOSS project).
+          The project MUST use at least one automated test suite
+          that is publicly released as FLOSS (this test suite may be
+          maintained as a separate FLOSS project).
         details: >
-          The project MAY have multiple automated test suites (e.g., one
+          The project MAY use multiple automated test suites (e.g., one
           that runs quickly, vs. another that is more thorough but requires
           special equipment).
         rationale: >
@@ -697,7 +734,8 @@
         category: MUST
         description: >
           The project MUST have a general policy (formal or not) that as major
-          new functionality is added, tests of that functionality SHOULD
+          new functionality is added to the software produced by the project,
+          tests of that functionality should
           be added to an automated test suite.
         details: >
           As long as a policy is in place, even by word of mouth,
@@ -710,12 +748,16 @@
     - tests_are_added:
         category: MUST
         description: >
-          The project MUST have evidence that such tests are being added in
-          the most recent major changes to the project.
+          The project MUST have evidence that the
+          <a href="#test_policy">test_policy</a> for adding tests
+          has been adhered to in
+          the most recent major changes to the software produced by the project.
         details: >
-          Major functionality would typically be mentioned in the ChangeLog.
-          (Perfection is not required, merely evidence
-          that tests are typically being added in practice.)
+          Major functionality would typically be mentioned in the release notes.
+          Perfection is not required, merely evidence
+          that tests are typically being added in practice to the automated
+          test suite when new major functionality is added to the
+          software produced by the project.
         autofill: >
           Look for evidence that new tests are created.
           E.G., do at least some contributions include new tests
@@ -724,7 +766,8 @@
     - tests_documented_added:
         category: SUGGESTED
         description: >
-          It is SUGGESTED that this policy on adding tests be
+          It is SUGGESTED that this policy on adding tests
+          (see <a href="#test_policy">test_policy</a>) be
           <i>documented</i> in the instructions for change proposals.
         details: >
           However, even an informal rule is acceptable as long as the tests
@@ -748,6 +791,8 @@
           and perl5's "use warnings".
           A separate "linter" tool is simply a tool that examines the
           source code to look for code quality errors or common simple mistakes.
+          These are typically enabled within the source code or
+          build instructions.
         autofill: >
           See the "details" - search the build script and source code for these.
     - warnings_fixed:
@@ -756,6 +801,8 @@
         description: >
           The project MUST address warnings.
         details: >
+          These are the warnings identified by the implementation
+          of the <a href="#warnings">warnings</a> criterion.
           The project should fix warnings or mark them in the source code
           as false positives.  Ideally there would be no warnings, but a project
           MAY accept some warnings (typically less than 1 warning per 100
@@ -835,7 +882,8 @@
     - know_common_errors:
         category: MUST
         description: >
-          At least one of the primary developers MUST know of common kinds of
+          At least one of the project's
+          primary developers MUST know of common kinds of
           errors that lead to vulnerabilities in this kind of software,
           as well as at least one method to counter or mitigate each of them.
         details: >
@@ -856,9 +904,10 @@
         category: MUST
         na_allowed: true
         description: >
-          The project's cryptographic software MUST use by default
+          The software produced by the project MUST use, by default,
           only cryptographic protocols
-          and algorithms that are publicly published and reviewed by experts.
+          and algorithms that are publicly published and reviewed by experts
+          (if cryptographic protocols and algorithms are used).
         details: >
           These cryptographic
           criteria do not always apply because some software has no
@@ -868,7 +917,8 @@
         category: SHOULD
         na_allowed: true
         description: >
-          If the project software is an application or library, and its primary
+          If the software produced by the project
+          is an application or library, and its primary
           purpose is not to implement cryptography, then it SHOULD only call on
           software specifically designed to implement cryptographic functions;
           it SHOULD NOT re-implement its own.
@@ -877,18 +927,23 @@
         category: MUST
         na_allowed: true
         description: >
-          All functionality that depends on cryptography MUST be implementable
-          using FLOSS.
+          All functionality in the software produced by the project
+          that depends on cryptography MUST be implementable using FLOSS.
         details: >
           See the
           <a href="https://opensource.org/osr">Open Standards Requirement
           for Software by the Open Source Initiative</a>.
+        rationale: >
+          Software must interoperate with other software. If the
+          functionality cannot be implemented with FLOSS, e.g., because
+          of patents, then this can set a trap for others who depend on
+          the software.
         # autofill: TODO
     - crypto_keylength:
         category: MUST
         na_allowed: true
         description: >
-          The project security mechanisms
+          The security mechanisms within the software produced by the project
           MUST use default keylengths that at least
           meet the NIST minimum requirements
           through the year 2030 (as stated in 2012).
@@ -908,14 +963,13 @@
           The software MAY allow smaller keylengths in some configurations
           (ideally it would not, since this allows downgrade attacks,
           but shorter keylengths are sometimes necessary for interoperability).
-          A "project security mechanism" is a security mechanism provided
-          by the delivered project's software.
         # autofill: TODO
     - crypto_working:
         category: MUST
         na_allowed: true
         description: >
-          The default project security mechanisms MUST NOT depend on
+          The default security mechanisms within the software produced
+          by the project MUST NOT depend on
           broken cryptographic algorithms (e.g., MD4, MD5, single DES,
           RC4, Dual_EC_DRBG) or use cipher modes that are inappropriate
           to the context (e.g., ECB mode is almost never appropriate
@@ -929,6 +983,8 @@
           In many cases it's best to choose a block cipher algorithm
           mode designed to combine secrecy and authentication, e.g.,
           Galois/Counter Mode (GCM) and EAX.
+          Projects MAY allow users to enable broken mechanisms where
+          necessary for compatibility, but then users know they're doing it.
         rationale: >
           If a cryptographic algorithm or mode is completely broken,
           then it cannot provide a useful cryptographic service.
@@ -947,7 +1003,8 @@
         category: SHOULD
         na_allowed: true
         description: >
-          The project security mechanisms SHOULD NOT by default depend on
+          The default security mechanisms within the software produced
+          by the project MUST NOT depend on
           cryptographic algorithms or modes with known serious weaknesses
           (e.g., the SHA-1 cryptographic hash algorithm or the CBC mode in SSH).
         details: >
@@ -977,7 +1034,9 @@
         category: SHOULD
         na_allowed: true
         description: >
-          The project SHOULD implement perfect forward secrecy for key agreement
+          The security mechanisms within the software produced
+          by the project SHOULD implement
+          perfect forward secrecy for key agreement
           protocols so a session key derived from a set of long-term keys cannot
           be compromised if one of the long-term keys is compromised
           in the future.
@@ -986,25 +1045,38 @@
         category: MUST
         na_allowed: true
         description: >
-          If passwords are stored for authentication of external users, the
-          project MUST store them as iterated hashes with a per-user salt by
+          If the software produced by the project causes the storing of
+          passwords for authentication of external users, the passwords
+          MUST be stored as iterated hashes with a per-user salt by
           using a key stretching (iterated) algorithm (e.g., PBKDF2, Bcrypt
           or Scrypt).
+        rationale: >
+          This is a bare minimum today when storing passwords.
+          Sometimes software needs to have a credential, such as a password,
+          to authenticate it to other systems; those are intentionally
+          out of scope for this criterion, because in many cases it's not
+          possible to store them as iterated hashes using per-user salt.
         # autofill: TODO
     - crypto_random:
         category: MUST
         na_allowed: true
         description: >
-          The project MUST generate all cryptographic keys and nonces
+          The security mechanisms within the software produced
+          by the project MUST generate all cryptographic keys and nonces
           using a cryptographically secure random number generator,
-          and MUST NOT do so using generators that are not
-          cryptographically secure.
+          and MUST NOT do so using generators that are
+          cryptographically insecure.
         details: >
           A cryptographically secure random number generator may be a
           hardware random number generator, or it may be
           a cryptographically secure pseudo-random number generator (CSPRNG)
           using an algorithm such as Hash_DRBG, HMAC_DRBG, CTR_DRBG,
           Yarrow, or Fortuna.
+          Examples of calls to <i>secure</i> random number generators include
+          Java's java.security.SecureRandom and JavaScript's
+          window.crypto.getRandomValues.
+          Examples of calls to <i>insecure</i> random number generators include
+          Java's java.util.Random and JavaScript's Math.random.
         # autofill: TODO
   - Secured delivery against man-in-the-middle (MITM) attacks: !!omap
     - delivery_mitm:

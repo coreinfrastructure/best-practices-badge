@@ -93,6 +93,39 @@ software development and running a FLOSS project;
 if not, see introductory materials such as
 [*Producing Open Source Software* by Karl Fogel](http://producingoss.com/).
 
+## Terminology
+
+A *project* is an active entity that has project member(s) and produces
+project result(s).
+Its member(s) use project sites to coordinate and disseminate result(s).
+A project does not need to be a formal legal entity.
+Key terms relating to project are:
+
+*   Project *members* are the
+    group of one or more people or companies who work together
+    to attempt to produce project results.
+    Some FLOSS projects may have different kinds of members, with different
+    roles, but that's outside our scope.
+*   Project *results* are what the project members work together
+    to produce as their end goal. Normally this is software,
+    but project results may include other things as well.
+    Criteria that refer to "software produced by the project"
+    are referring project results.
+*   Project *sites* are the sites dedicated to supporting the development
+    and dissemination of project results, and include
+    the project website, repository, and download sites where applicable
+    (see <a href="#sites_https">sites_https</a>).
+*   The project *website*, aka project homepage, is the main page
+    on the world wide web (WWW) that a new user would typically visit to see
+    information about the project; it may be the same as the project's
+    repository site (this is often true on GitHub).
+*   The project *repository* manages and stores the project results
+    and revision history of the project results.
+    This is also referred to as the project *source repository*,
+    because we only require managing and storing of the editable versions,
+    not of automatically generated results
+    (in many cases generated results are not stored in a repository).
+
 ## Current criteria: Best Practices for FLOSS
 
 Here are the current criteria.  Note that:

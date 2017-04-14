@@ -639,14 +639,12 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
           <li class="list-group-item"><h3>Good cryptographic practices</h3>
 
             <span class="criteria-desc">
-            Note that some software does not need to directly use cryptographic capabilities.
-            A "project security mechanism" is a security mechanism
-            provided by the delivered project's software.
+            Note that some software does not need to use cryptographic mechanisms.
             </span>
             <% if (!is_disabled) %>
               <br><br>
               <button class="btn btn-default hidden-print" type="button" id='all_crypto_na'>
-                Press here if the project does not use or need cryptographic mechanisms
+                Press here if the software produced by the project does not use cryptographic mechanisms
               </button>
               <br>
             <% end %>

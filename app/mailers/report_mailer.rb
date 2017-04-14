@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-# rubocop:disable Metrics/MethodLength
+# rubocop:disable Metrics/MethodLength, Metrics/ClassLength
 class ReportMailer < ApplicationMailer
   REPORT_EMAIL_DESTINATION = 'cii-badge-log@lists.coreinfrastructure.org'
 
@@ -87,6 +87,18 @@ class ReportMailer < ApplicationMailer
     mail(
       to: @report_destination,
       subject: 'Summary of reminders sent'
+    )
+  end
+
+  def report_monthly_announcement(projects, month)
+    @report_destination = REPORT_EMAIL_DESTINATION
+    return if projects.nil?
+    @projects = projects
+    @month = month
+    set_headers
+    mail(
+      to: @report_destination,
+      subject: 'Projects that received badges (monthly summary)'
     )
   end
 

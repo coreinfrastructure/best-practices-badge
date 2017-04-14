@@ -1,0 +1,10 @@
+<p>
+This is an automated list of the projects that have achieved
+a passing badge in <% @month %>.  We congratulate them all!
+
+<ol>
+<% @projects.each do |project| %>
+<li><a href="https://bestpractices.coreinfrastructure.org/projects/<%= project.id %>"><%= project.name %> at <%= project.achieved_passing_at %></a>
+<% end %>
+</ol>
+

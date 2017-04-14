@@ -389,6 +389,13 @@ task reminders: :environment do
   true
 end
 
+desc 'Send monthly announcement of passing projects'
+task monthly_announcement: :environment do
+  puts 'Sending monthly announcement. List of reminded project ids:'
+  p ProjectsController.send :send_monthly_announcement
+  true
+end
+
 # Run this task periodically if we want to test the
 # install-badge-dev-environment script
 desc 'check that install-badge-dev-environment works'

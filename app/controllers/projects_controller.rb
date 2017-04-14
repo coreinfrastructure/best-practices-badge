@@ -224,6 +224,22 @@ class ProjectsController < ApplicationController
   private_class_method :send_reminders
   # rubocop:enable Metrics/MethodLength
 
+  # Send announcement about projects that achieved a badge last month
+  # You should only invoke this in a test environment (where mailers are
+  # disabled & the data is forged anyway) or the "real" production site.
+  # Do *not* call this on the "master" or "staging" tiers,
+  # because we don't want to bother our users.
+  def self.send_monthly_announcement
+    consider_today = Time.zone.today
+    month = consider_today.prev_month.strftime('%Y-%m')
+    projects = Project.projects_to_announce_passing(consider_today)
+    unless projects.empty?
+      ReportMailer.report_monthly_announcement(projects, month).deliver_now
+    end
+    projects.map(&:id) # Return a list of project ids that were reminded.
+  end
+  private_class_method :send_monthly_announcement
+
   def allowed_query?(key, value)
     return false if value.blank?
     return positive_integer?(value) if INTEGER_QUERIES.include?(key.to_sym)

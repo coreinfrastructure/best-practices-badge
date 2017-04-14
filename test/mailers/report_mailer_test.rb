@@ -20,4 +20,17 @@ class ReportMailerTest < ActionMailer::TestCase
     assert_predicate email.to, :present?
     assert_predicate email.subject, :present?
   end
+
+  test 'Does the monthly announcement run?' do
+    email = ReportMailer
+            .report_monthly_announcement([@perfect_project], '2015-02')
+            .deliver_now
+    assert_not ActionMailer::Base.deliveries.empty?
+    # We don't want to modify the test when we reconfigure things.
+    # So instead of insisting on specific values, we'll just
+    # do a 'smoke test' to quickly check that it's sane.
+    assert_predicate email.from, :present?
+    assert_predicate email.to, :present?
+    assert_predicate email.subject, :present?
+  end
 end

@@ -6,13 +6,12 @@
 
 <% cache [criterion.to_s, is_disabled, project_criterion_status,
           project_criterion_justification ] do %>
-  <div id="<%= criterion.to_s %>" class="row">
+  <div id="<%= criterion.to_s %>" class="row criterion-data">
     <% is_crypto = criterion.to_s.match(/^crypto_/) %>
     <% crypto_class = is_crypto ? ' criterion-is-crypto' : '' %>
 
     <div class="col-md-2 col-sm-3 col-xs-4 criteria-radio<%= crypto_class %>">
       <div class="status-chooser">
-      <span class="criterion-name hidden"><%= criterion.to_s %></span>
       <%= f.form_group status_symbol do %>
         <div class="col-xs-4 text-left block-left"><br>
           <% if criterion_status == :criterion_passing %>

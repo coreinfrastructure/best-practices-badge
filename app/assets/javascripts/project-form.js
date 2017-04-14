@@ -111,8 +111,8 @@ function isEnough(criterion) {
 function setPanelSatisfactionLevel(panel) {
   var total = 0;
   var enough = 0;
-  $(panel).find('.criterion-name').each(function(index) {
-    var criterion = $(this).text();
+  $(panel).find('.criterion-data').each(function(index) {
+    var criterion = $(this).attr('id');
     total++;
     if (isEnough(criterion)) {
       enough++;
@@ -431,10 +431,6 @@ function getAllPanelsReady() {
 
 function setupProjectField(criteria) {
   updateCriteriaDisplay(criteria);
-  $('input[name="project[' + criteria + '_status]"]').click(
-      function() {
-        changeCriterion(criteria);
-      });
   $('input[name="project[' + criteria + '_justification]"]').blur(
       function() {
         updateCriteriaDisplayAndUpdate(criteria);
@@ -519,6 +515,11 @@ function setupProjectForm() {
     });
     setPanelSatisfactionLevel($('#all_crypto_na').parents('.panel'));
     resetProgressBar();
+  });
+
+  $('.edit_project').on('click','input[type=radio]', function() {
+      var criterion = $(this).closest('.criterion-data').attr('id');
+        changeCriterion(criterion);
   });
 
   $.each(CRITERIA_HASH, function(key, value) {

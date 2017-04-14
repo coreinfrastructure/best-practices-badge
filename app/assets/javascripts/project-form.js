@@ -435,11 +435,7 @@ function setupProjectField(criterion) {
       function() {
         updateCriteriaDisplayAndUpdate(criterion);
       });
-  $('#project_' + criterion + '_justification').on('input',
-      function() {
-        changedJustificationTextAndUpdate(criterion);
-      });
-  $('#project_' + criterion + '_justification').on('keyup',
+  $('#project_' + criterion + '_justification').on('input keyup',
       function() {
         changedJustificationTextAndUpdate(criterion);
       });

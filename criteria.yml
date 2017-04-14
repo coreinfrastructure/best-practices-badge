@@ -815,7 +815,12 @@
         na_allowed: true
         description: >
           It is SUGGESTED that projects be maximally strict with warnings,
-          but this is not always practical.
+          where practical.
+        details: >
+           Some warnings cannot be effectively enabled on some projects.
+           What is needed is evidence that the project is striving
+           to enable warning flags where it can, so that errors are
+           detected early.
         autofill: >
           If we find "-Wall -Wextra" in the build that's pretty strict.
 - Security: !!omap
@@ -1004,7 +1009,7 @@
         na_allowed: true
         description: >
           The default security mechanisms within the software produced
-          by the project MUST NOT depend on
+          by the project SHOULD NOT depend on
           cryptographic algorithms or modes with known serious weaknesses
           (e.g., the SHA-1 cryptographic hash algorithm or the CBC mode in SSH).
         details: >
@@ -1278,13 +1283,13 @@
         category: SUGGESTED
         na_allowed: true
         description: >
-          It is SUGGESTED that if the project results include
+          It is SUGGESTED that if the software produced by the project includes
           software written using a memory-unsafe language (e.g., C or C++),
           then at least one dynamic tool (e.g., a fuzzer or web
           application scanner) be routinely used in combination with
           a mechanism to detect memory safety problems such as buffer
           overwrites.
-          If the project results do not include software written
+          If the project does not produce software written
           in a memory-unsafe language, choose "not applicable" (N/A).
         details: >
           Examples of mechanisms to detect memory safety problems include
@@ -1303,7 +1308,8 @@
     - dynamic_analysis_enable_assertions:
         category: SUGGESTED
         description: >
-          It is SUGGESTED that the software include many run-time assertions
+          It is SUGGESTED that the software produced by the project
+          include many run-time assertions
           that are checked during dynamic analysis.
         autofill: >
           Perhaps look in source code for many asserts.
@@ -1327,8 +1333,8 @@
         future: true
         description: >
           The project SHOULD
-          provide a way to easily install and uninstall the software using a
-          commonly-used convention.
+          provide a way to easily install and uninstall the software
+          produced by the project using a commonly-used convention.
         details: >
           Examples include using a package manager (at
           the system or language level), "make install/uninstall" (supporting
@@ -1383,26 +1389,35 @@
         future: true
         na_allowed: true
         description: >
-          The project SHOULD NOT use
-          unencrypted network communication protocols (such as HTTP and telnet)
-          if there an encrypted equivalent (e.g., HTTPS/TLS and SSH),
-          unless the user specifically requests or configures it.
+          The software produced by the project SHOULD
+          support secure protocols for all of its network
+          communications, such as SSHv2 or later, TLS1.2 or later (HTTPS),
+          IPsec, SFTP, and SNMPv3.
+          Insecure protocols such as FTP, HTTP, telnet,
+          SSLv3 or earlier, and SSHv1 SHOULD be disabled by default,
+          and only enabled if the user specifically configures it.
+          If the software produced by the project does not support
+          network comunications, select "not applicable" (N/A).
     - crypto_tls12:
         category: SHOULD
         future: true
         na_allowed: true
         description: >
-          The project SHOULD,
-          if it supports TLS, support at least TLS version 1.2.
+          The software produced by the project SHOULD,
+          if it supports or uses TLS, support at least TLS version 1.2.
           Note that the predecessor of TLS was called SSL.
+          If the software does not use TLS,
+          select "not applicable" (N/A).
     - crypto_certificate_verification:
         category: MUST
         future: true
         na_allowed: true
         description: >
-          The project MUST,
+          The software produced by the project MUST,
           if it supports TLS, perform TLS certificate verification by default
           when using TLS, including on subresources.
+          If the software does not use TLS,
+          select "not applicable" (N/A).
         details: >
           Note that incorrect TLS certificate verification is a common mistake.
           For more information, see
@@ -1414,10 +1429,12 @@
         future: true
         na_allowed: true
         description: >
-          The project SHOULD,
+          The software produced by the project SHOULD,
           if it supports TLS, perform certificate verification
           before sending HTTP headers with private information
           (such as secure cookies).
+          If the software does not use TLS,
+          select "not applicable" (N/A).
     - hardened_site: # After delivery_mitm?
         category: SUGGESTED
         future: true
@@ -1440,7 +1457,8 @@
         category: SUGGESTED
         future: true
         description: >
-          It is SUGGESTED that hardening mechanisms be used so software defects
+          It is SUGGESTED that hardening mechanisms be used
+          in the software produced by the project so that software defects
           are less likely to result in security vulnerabilities.
         details: >
           Hardening mechanisms may include

@@ -387,8 +387,9 @@ There is an implied criterion that we should mention here:
  (N/A allowed.) <sup>[<a href="#warnings_fixed">warnings_fixed</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>These are the warnings identified by the implementation of the <a href="#warnings">warnings</a> criterion. The project should fix warnings or mark them in the source code as false positives.  Ideally there would be no warnings, but a project MAY accept some warnings (typically less than 1 warning per 100 lines or less than 10 warnings).
 </dd></dl></li>
 
-<li><a name="warnings_strict"></a>It is SUGGESTED that projects be maximally strict with warnings, but this is not always practical.
- (N/A allowed.) <sup>[<a href="#warnings_strict">warnings_strict</a>]</sup></li>
+<li><a name="warnings_strict"></a>It is SUGGESTED that projects be maximally strict with warnings, where practical.
+ (N/A allowed.) <sup>[<a href="#warnings_strict">warnings_strict</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>Some warnings cannot be effectively enabled on some projects. What is needed is evidence that the project is striving to enable warning flags where it can, so that errors are detected early.
+</dd></dl></li>
 </ul>
 
 ### Security
@@ -431,7 +432,7 @@ There is an implied criterion that we should mention here:
 </dd><dt><i>Rationale</i>:<dt> <dd>If a cryptographic algorithm or mode is completely broken, then it cannot provide a useful cryptographic service. This is different from having a weakness; many cryptographic algorithms have some weaknesses, yet for backwards-compatibility it may sometimes be appropriate to use the algororithm anyway. "EAX" appears to be a name, not an abbrevation. The paper describing EAX, <a href="http://csrc.nist.gov/groups/ST/toolkit/BCM/documents/proposedmodes/eax/eax-spec.pdf">"A Conventional Authenticated-Encryption Mode" by M. Bellare, P.  Rogaway D.  Wagner (April 13, 2003)</a>, does not give an expansion.
 </dd></dl></li>
 
-<li><a name="crypto_weaknesses"></a>The default security mechanisms within the software produced by the project MUST NOT depend on cryptographic algorithms or modes with known serious weaknesses (e.g., the SHA-1 cryptographic hash algorithm or the CBC mode in SSH).
+<li><a name="crypto_weaknesses"></a>The default security mechanisms within the software produced by the project SHOULD NOT depend on cryptographic algorithms or modes with known serious weaknesses (e.g., the SHA-1 cryptographic hash algorithm or the CBC mode in SSH).
  (N/A allowed.) <sup>[<a href="#crypto_weaknesses">crypto_weaknesses</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>Concerns about CBC mode in SSH are discussed in <a href="https://www.kb.cert.org/vuls/id/958563">CERT: SSH CBC vulnerability</a>.
 </dd><dt><i>Rationale</i>:<dt> <dd>SHA-1 has been known to be weak for many years; <a href="https://security.googleblog.com/2017/02/announcing-first-sha1-collision.html">In February 2017 Google demonstrated a SHA-1 collision</a>. There are a number of alternatives to SHA-1 that are not patent-encumbered, such as the SHA-2 suite (including SHA-256 and SHA-512) and SHA-3. There is some disagreement on how important it is to avoid CBC mode in SSH.  The <a href="http://www.openssh.com/txt/cbc.adv">OpenSSH cbc.adv</a> page argues that the attack on SSH CBC is not a practical attack. However, others clearly think it's more important; CERT notes it, as does <a href="https://developer.ibm.com/answers/questions/187318/faq-how-do-i-disable-cipher-block-chaining-cbc-mod.html">FAQ: Disable CBC in SSH</a>. It is also easy to use a different mode than CBC; generally when there are safer widely-available options, you should use the safe ones instead. This is a SHOULD, not a MUST; sometimes these weaker mechanisms need to be used for backwards compatibility.
 </dd></dl></li>
@@ -513,11 +514,11 @@ There is an implied criterion that we should mention here:
 </dd><dt><i>Rationale</i>:<dt> <dd>Static source code analysis and dynamic analysis tend to find different kinds of defects (including defects that lead to vulnerabilities), so combining them is more likely to be effective.
 </dd></dl></li>
 
-<li><a name="dynamic_analysis_unsafe"></a>It is SUGGESTED that if the project results include software written using a memory-unsafe language (e.g., C or C++), then at least one dynamic tool (e.g., a fuzzer or web application scanner) be routinely used in combination with a mechanism to detect memory safety problems such as buffer overwrites. If the project results do not include software written in a memory-unsafe language, choose "not applicable" (N/A).
+<li><a name="dynamic_analysis_unsafe"></a>It is SUGGESTED that if the software produced by the project includes software written using a memory-unsafe language (e.g., C or C++), then at least one dynamic tool (e.g., a fuzzer or web application scanner) be routinely used in combination with a mechanism to detect memory safety problems such as buffer overwrites. If the project does not produce software written in a memory-unsafe language, choose "not applicable" (N/A).
  (N/A allowed.) <sup>[<a href="#dynamic_analysis_unsafe">dynamic_analysis_unsafe</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>Examples of mechanisms to detect memory safety problems include <a href="https://github.com/google/sanitizers/wiki/AddressSanitizer">Address Sanitizer (ASAN)</a> (available in GCC and LLVM), <a href="http://clang.llvm.org/docs/MemorySanitizer.html">Memory Sanitizer</a>, and <a href="http://valgrind.org/">valgrind</a>. Other potentially-used tools include <a href="http://clang.llvm.org/docs/ThreadSanitizer.html">thread sanitizer</a> and <a href="http://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html">undefined behavior sanitizer</a>. Widespread assertions would also work.
 </dd></dl></li>
 
-<li><a name="dynamic_analysis_enable_assertions"></a>It is SUGGESTED that the software include many run-time assertions that are checked during dynamic analysis.
+<li><a name="dynamic_analysis_enable_assertions"></a>It is SUGGESTED that the software produced by the project include many run-time assertions that are checked during dynamic analysis.
  <sup>[<a href="#dynamic_analysis_enable_assertions">dynamic_analysis_enable_assertions</a>]</sup></li>
 
 <li><a name="dynamic_analysis_fixed"></a>All medium and high severity exploitable vulnerabilities discovered with dynamic code analysis MUST be fixed in a timely way after they are confirmed.
@@ -531,7 +532,7 @@ There is an implied criterion that we should mention here:
 
 <ul>
 
-<li><a name="installation_common"></a>(Future criterion) The project SHOULD provide a way to easily install and uninstall the software using a commonly-used convention.
+<li><a name="installation_common"></a>(Future criterion) The project SHOULD provide a way to easily install and uninstall the software produced by the project using a commonly-used convention.
  <sup>[<a href="#installation_common">installation_common</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>Examples include using a package manager (at the system or language level), "make install/uninstall" (supporting DESTDIR), a container in a standard format, or a virtual machine image in a standard format. The installation and uninstallation process (e.g., its packaging) MAY be implemented by a third party as long as it is FLOSS.
 </dd></dl></li>
 
@@ -540,24 +541,24 @@ There is an implied criterion that we should mention here:
 </dd><dt><i>Rationale</i>:<dt> <dd>If a project needs to be built but there is no working build system, then potential co-developers will not be able to easily contribute and many security analysis tools will be ineffective. Reproduceable builds counter malicious attacks that generate malicious executables, by making it easy to recreate the executable to determine if the result is correct. By itself, reproducible builds do not counter malicious compilers, but they can be extended to counter malicious compilers using processes such as diverse double-compiling (DDC).
 </dd></dl></li>
 
-<li><a name="crypto_used_network"></a>(Future criterion) The project SHOULD NOT use unencrypted network communication protocols (such as HTTP and telnet) if there an encrypted equivalent (e.g., HTTPS/TLS and SSH), unless the user specifically requests or configures it.
+<li><a name="crypto_used_network"></a>(Future criterion) The software produced by the project SHOULD support secure protocols for all of its network communications, such as SSHv2 or later, TLS1.2 or later (HTTPS), IPsec, SFTP, and SNMPv3. Insecure protocols such as FTP, HTTP, telnet, SSLv3 or earlier, and SSHv1 SHOULD be disabled by default, and only enabled if the user specifically configures it. If the software produced by the project does not support network comunications, select "not applicable" (N/A).
  (N/A allowed.) <sup>[<a href="#crypto_used_network">crypto_used_network</a>]</sup></li>
 
-<li><a name="crypto_tls12"></a>(Future criterion) The project SHOULD, if it supports TLS, support at least TLS version 1.2. Note that the predecessor of TLS was called SSL.
+<li><a name="crypto_tls12"></a>(Future criterion) The software produced by the project SHOULD, if it supports or uses TLS, support at least TLS version 1.2. Note that the predecessor of TLS was called SSL. If the software does not use TLS, select "not applicable" (N/A).
  (N/A allowed.) <sup>[<a href="#crypto_tls12">crypto_tls12</a>]</sup></li>
 
-<li><a name="crypto_certificate_verification"></a>(Future criterion) The project MUST, if it supports TLS, perform TLS certificate verification by default when using TLS, including on subresources.
+<li><a name="crypto_certificate_verification"></a>(Future criterion) The software produced by the project MUST, if it supports TLS, perform TLS certificate verification by default when using TLS, including on subresources. If the software does not use TLS, select "not applicable" (N/A).
  (N/A allowed.) <sup>[<a href="#crypto_certificate_verification">crypto_certificate_verification</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>Note that incorrect TLS certificate verification is a common mistake. For more information, see <a href="http://crypto.stanford.edu/~dabo/pubs/abstracts/ssl-client-bugs.html">"The Most Dangerous Code in the World: Validating SSL Certificates in Non-Browser Software" by Martin Georgiev et al.</a> and <a href="https://blogs.gnome.org/mcatanzaro/2016/03/12/do-you-trust-this-application/">"Do you trust this application?" by Michael Catanzaro</a>.
 </dd></dl></li>
 
-<li><a name="crypto_verification_private"></a>(Future criterion) The project SHOULD, if it supports TLS, perform certificate verification before sending HTTP headers with private information (such as secure cookies).
+<li><a name="crypto_verification_private"></a>(Future criterion) The software produced by the project SHOULD, if it supports TLS, perform certificate verification before sending HTTP headers with private information (such as secure cookies). If the software does not use TLS, select "not applicable" (N/A).
  (N/A allowed.) <sup>[<a href="#crypto_verification_private">crypto_verification_private</a>]</sup></li>
 
 <li><a name="hardened_site"></a>(Future criterion) It is SUGGESTED that the project website, repository (if accessible via the web), and download site (if separate) include key hardening headers with nonpermissive values.
  <sup>[<a href="#hardened_site">hardened_site</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>Note that GitHub is known to meet this. Sites such as https://securityheaders.io/ can quickly check this. The key hardening headers are: Content Security Policy (CSP), HTTP Strict Transport Security (HSTS), X-Content-Type-Options (as "nosniff"), X-Frame-Options, and X-XSS-Protection.
 </dd></dl></li>
 
-<li><a name="hardening"></a>(Future criterion) It is SUGGESTED that hardening mechanisms be used so software defects are less likely to result in security vulnerabilities.
+<li><a name="hardening"></a>(Future criterion) It is SUGGESTED that hardening mechanisms be used in the software produced by the project so that software defects are less likely to result in security vulnerabilities.
  <sup>[<a href="#hardening">hardening</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>Hardening mechanisms may include HTTP headers like Content Security Policy (CSP), compiler flags to mitigate attacks (such as -fstack-protector), or compiler flags to eliminate undefined behavior. For our purposes least privilege is not considered a hardening mechanism (least privilege is important, but separate).
 </dd></dl></li>
 </ul>

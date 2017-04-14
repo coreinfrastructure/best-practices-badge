@@ -110,8 +110,7 @@ Upgrade some "passing" level SHOULD and SUGGESTED:
     Projects MUST be maximally strict with warnings, where practical.
     <sup>[<a href="#warnings_strict">warnings_strict</a>]</sup>
 
-    *Details*: Some warnings cannot be effectively enabled on some projects,
-    or specific exceptions must be given.
+    *Details*: Some warnings cannot be effectively enabled on some projects.
     What is needed is evidence that the project is striving to enable
     warning flags where it can, so that errors are detected early.
 
@@ -145,24 +144,18 @@ Upgrade some "passing" level SHOULD and SUGGESTED:
 #### Upgrade: Security
 
 *   Upgrade crypto_weaknesses from SHOULD to MUST.
-    "The project security mechanisms MUST NOT by default depend on
-    cryptographic algorithms with known serious weaknesses (e.g., SHA-1)."
+    The default security mechanisms within the software produced
+    by the project MUST NOT depend on
+    cryptographic algorithms or modes with known serious weaknesses
+    (e.g., the SHA-1 cryptographic hash algorithm or the CBC mode in SSH).
 
 *   Unchanged:
 
-    - crypto_call -
-      "If the project software is an application or library, and
-      its primary purpose is not to implement cryptography, then it
-      SHOULD only call on software specifically designed to implement
-      cryptographic functions; it SHOULD NOT re-implement its own."
+    - crypto_call
 
-    - crypto_pfs -
-      "The project SHOULD implement perfect forward secrecy for key
-      agreement protocols so a session key derived from a set of
-      long-term keys cannot be compromised if one of the long-term keys
-      is compromised in the future."
+    - crypto_pfs
 
-    - vulnerabilities_critical_fixed -
+    - vulnerabilities_critical_fixed
       "Projects SHOULD fix all critical vulnerabilities rapidly after
       they are reported."
 
@@ -185,16 +178,15 @@ Upgrade some "passing" level SHOULD and SUGGESTED:
     proprietary (and some developers will therefore not use it).
 
 *   Upgrade dynamic_analysis_unsafe from SUGGESTED to MUST.
-    "<i>If</i> the project results include software
-    written using a memory-unsafe language (e.g., C or C++),
+    <i>If</i> the software produced by the project includes
+    software written using a memory-unsafe language (e.g., C or C++),
     <i>then</i> the project MUST use
-    at least one dynamic tool (e.g., a fuzzer or web application scanner)
-    routinely in combination with a mechanism to detect
-    memory safety problems such as buffer overwrites.
-    If the project results do not include software written
+    at least one dynamic tool (e.g., a fuzzer or web
+    application scanner) be routinely used in combination with
+    a mechanism to detect memory safety problems such as buffer
+    overwrites.
+    If the project does not produce software written
     in a memory-unsafe language, choose "not applicable" (N/A).
-
-    This reorders the "passing" level text.
 
     *NOTE*:
     This would mean that C/C++ would be required to use something like
@@ -265,11 +257,12 @@ as described below.
     post it in a standard location.
     <sup>[<a href="#code_of_conduct">code_of_conduct</a>]</sup>
 
-    *Rationale*: Projects may be able to improve the civility of their
+    *Details*: Projects may be able to improve the civility of their
     community and to set expectations about acceptable conduct by adopting a
     code of conduct. This can help avoid problems before they occur and make
-    the project a more welcoming place to encourage contributions. Example
-    codes of conduct are the
+    the project a more welcoming place to encourage contributions.
+    This should focus only on behavior within the community/workplace of the
+    project.  Example codes of conduct are the
     <a href="http://contributor-covenant.org/">Contributor Covenant Code of Conduct</a>
     and the Linux kernel
     <a href="https://www.kernel.org/doc/html/latest/process/code-of-conflict.html">Code of Conflict</a>.
@@ -328,16 +321,6 @@ as described below.
     information when people change roles.
     The goal is to make underlying assumptions clear.
 
-*   <a name="documentation_design"></a>The project MUST include documentation of
-    its high-level design (aka architecture), that is, documentation that
-    identifies its major components and how they interact.
-    <sup>[<a href="#documentation_design">documentation_design</a>]</sup>
-
-    *Rationale*: Documenting the basic design makes it easier for potential
-    new developers to understand its basics.
-    This is related to know_secure_design, as well
-    as implement_secure_design and proposed documentation_security.
-
 #### Documentation
 
 *   <a name ="documentation_roadmap"></a>The project MUST have a documented
@@ -351,18 +334,27 @@ as described below.
     project. It need not be detailed.
 
 *   <a name="documentation_architecture"></a>
-    The project MUST include reference documentation that describes
-    its software architecture.
+    The project MUST include documentation
+    of the architecture (aka high-level design) of the software
+    produced by the project.
+    If the project does not produce software,
+    select "not applicable" (N/A).
+    <sup>[<a href="#documentation_architecture">documentation_architecture</a>]</sup>
+
+    *Details*:
     A software architecture explains a program's fundamental structures,
     i.e., the program's major components, the relationships among them, and
     the key properties of these components and relationships.
-    <sup>[<a href="#documentation_architecture">documentation_architecture</a>]</sup>
+
+    *Rationale*: Documenting the basic design makes it easier for potential
+    new developers to understand its basics.
+    This is related to know_secure_design, as well
+    as implement_secure_design and proposed documentation_security.
 
 *   <a name="documentation_quick_start"></a>
     The project MUST provide a "quick start" guide for new users
     to help them quickly do something with the software.
     <sup>[<a href="#documentation_quick_start">documentation_quick_start</a>]</sup>
-
     *Details*:
     The idea is to show users how to get started and make the software do
     anything at all. This is critically important for potential users to
@@ -382,7 +374,8 @@ as described below.
 *   <a name="documentation_current"></a>
     The project MUST make an effort to
     keep the documentation consistent with the current version of the
-    program and any known documentation defects making it inconsistent
+    project results (including software produced by the project).
+    Any <i>known</i> documentation defects making it inconsistent
     MUST be fixed.
     If the documentation is generally current, but erroneously
     includes some older information that is no longer true,
@@ -426,13 +419,18 @@ as described below.
 #### Accessibility
 
 *   <a name ="accessibility_best_practices"></a>
-    Accessibility best practices SHOULD be followed so that
+    The project (both project sites and project results) SHOULD
+    follow accessibility best practices so that
     persons with disabilities can still participate in the project and
     use the project results where it is reasonable to do so.
     <sup>[<a href="#accessibility_best_practices">accessibility_best_practices</a>]</sup>
 
     *Details*:
     For web applications, see the
+    <a href="https://www.w3.org/TR/WCAG20/">Web Content Accessibility
+    Guidelines (WCAG 2.0)</a> and its supporting document
+    <a href="https://www.w3.org/TR/UNDERSTANDING-WCAG20/Overview.html">Understanding WCAG 2.0</a>;
+    see also
     <a href="https://www.w3.org/standards/webdesign/accessibility">W3C accessibility information</a>.
     For GUI applications, consider using the environment-specific
     accessibility guidelines (such as
@@ -450,17 +448,29 @@ as described below.
     This criterion is often N/A, e.g., for program libraries.
     Here are some examples of actions to take or issues to consider:
 
-    - Neither color nor sound SHOULD be used as the only way information
-      is conveyed
-    - Color combinations SHOULD be tested in a high-contrast environment
-    - If the software uses flashing or animation it SHOULD grant the user
-      control to disable it
-    - All applications SHOULD be tested for keyboard-only navigation
-    - A GUI or web-based project SHOULD test with at least one
+    <ul>
+    <li>Provide text alternatives for any non-text content so
+      that it can be changed into other forms people need, such as
+      large print, braille, speech, symbols or simpler language (<a
+      href="https://www.w3.org/TR/UNDERSTANDING-WCAG20/text-equiv.html">WCAG
+      2.0 guideline 1.1</a>)
+    <li>Color is not used as the only visual means of conveying
+      information, indicating an action, prompting a response, or
+      distinguishing a visual element. (<a
+      href="https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast-without-color.html">WCAG
+      2.0 guideline 1.4.1</a>)
+    <li>The visual presentation of text and images of text has a contrast
+      ratio of at least 4.5:1, except for large text, incidental text,
+      and logotypes (<a
+      href="https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast-contrast.html">WCAG
+      2.0 guideline 1.4.3</a>)
+    <li>Make all functionality available from a keyboard (WCAG guideline 2.1)
+    <li>A GUI or web-based project SHOULD test with at least one
       screen-reader on the target platform(s) (e.g. NVDA, Jaws, or WindowEyes
       on Windows; VoiceOver on Mac & iOS; Orca on Linux/BSD; TalkBack on
       Android). TUI programs MAY work to reduce overdraw to prevent redundant
       reading by screen-readers.
+    </ul>
 
 #### Continuity
 
@@ -856,7 +866,8 @@ as described below.
 
 *   <a name="installation_common"></a>(Future criterion)
     The project MUST provide a way for end-users to easily install and
-    uninstall the software using a commonly-used convention.
+    uninstall the software produced by the project
+    using a commonly-used convention.
     <sup>[<a href="#installation_common">installation_common</a>]</sup>
 
     *Details*: Examples include using a language-level package manager (such as npm,
@@ -942,7 +953,8 @@ as described below.
     (e.g., a file uploader), but these would typically be rare.
 
 *   <a name="hardening"></a>(Future criterion) Hardening mechanisms
-    SHOULD be used so software defects are less likely to result in security
+    SHOULD be used in the software produced by the project
+    so that software defects are less likely to result in security
     vulnerabilities.<sup>[<a href="#hardening">hardening</a>]</sup>
 
     *Details*: Hardening mechanisms may include HTTP headers like Content
@@ -1002,7 +1014,8 @@ as described below.
     (N/A allowed).
     <sup>[<a href="#crypto_credential_agility">crypto_credential_agility</a>]</sup>
 
-*   <a name="crypto_used_network"></a>(Future, tweaked) The project
+*   <a name="crypto_used_network"></a>(Future) The
+    software produced by the project
     SHOULD support secure protocols for all of its network
     communications, such as SSHv2 or later, TLS1.2 or later (HTTPS),
     IPsec, SFTP, and SNMPv3. Insecure protocols such as FTP, HTTP, telnet,
@@ -1011,14 +1024,20 @@ as described below.
     <sup>[<a href="#crypto_used_network">crypto_used_network</a>]</sup>
 
 *   <a name="crypto_tls12"></a>(Future)
-    The project SHOULD, if it supports TLS, support at least TLS version 1.2.
+    The software produced by the project SHOULD,
+    if it supports or uses TLS, support at least TLS version 1.2.
     Note that the predecessor of TLS was called SSL.
+    If the software does not use TLS,
+    select "not applicable" (N/A).
     (N/A allowed).
     <sup>[<a href="#crypto_tls12">crypto_tls12</a>]</sup>
 
 *   <a name="crypto_certificate_verification"></a>(Future)
-    The project MUST, if it supports TLS, perform TLS certificate verification
+    The software produced by the
+    project MUST, if it supports TLS, perform TLS certificate verification
     by default when using TLS, including on subresources.
+    If the software does not use TLS,
+    select "not applicable" (N/A).
     (N/A allowed).
     <sup>[<a href="#crypto_certificate_verification">crypto_certificate_verification</a>]</sup>
 
@@ -1029,7 +1048,8 @@ as described below.
     and
     <a href="https://blogs.gnome.org/mcatanzaro/2016/03/12/do-you-trust-this-application/">"Do you trust this application?" by Michael Catanzaro</a>.
 
-*   <a name="crypto_verification_private"></a>(Future) The project
+*   <a name="crypto_verification_private"></a>(Future)
+    The software produced by the project
     MUST, if it supports TLS, perform certificate verification before sending
     HTTP headers with private information (such as secure cookies).
     (N/A allowed).

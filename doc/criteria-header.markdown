@@ -110,7 +110,7 @@ Key terms relating to project are:
     to produce as their end goal. Normally this is software,
     but project results may include other things as well.
     Criteria that refer to "software produced by the project"
-    are referring project results.
+    are referring to project results.
 *   Project *sites* are the sites dedicated to supporting the development
     and dissemination of project results, and include
     the project website, repository, and download sites where applicable

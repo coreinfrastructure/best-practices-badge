@@ -217,13 +217,13 @@ class Project < ActiveRecord::Base
   # :criterion_unknown -
   #   The criterion has been left at it's default value and thus the status
   #   is unknown.
-  def get_criterion_status(criterion)
+  def get_criterion_result(criterion)
     status = self[criterion.name.status]
-    return get_passing_staus(status) if passing?(criterion)
-    return :criterion_justification_required if status.na?
-    return get_met_status(criterion) if status.met?
-    return get_unmet_status(criterion) if status.unmet?
-    :criterion_unknown
+    justification = self[criterion.name.justification]
+    return :criterion_unknown if status.unknown?
+    return get_met_result(criterion, justification) if status.met?
+    return get_unmet_result(criterion, justification) if status.unmet?
+    get_na_result(criterion, justification)
   end
 
   # Send owner an email they add a new project.
@@ -376,37 +376,26 @@ class Project < ActiveRecord::Base
   #   Criteria.active.all? { |criterion| passing? criterion }
   # end
 
-  def get_met_status(criterion)
+  def get_met_result(criterion, justification)
+    return :criterion_url_required if criterion.met_url_required? &&
+                                      !contains_url?(justification)
     return :criterion_justification_required if
-      criterion.met_justification_required?
-    :criterion_url_required
+      criterion.met_justification_required? &&
+      justification_good?(justification)
+    :criterion_passing
   end
 
-  def get_passing_staus(status)
-    return :criterion_passing if status.met? || status.na?
-    :criterion_barely
-  end
-
-  def get_unmet_status(criterion)
+  def get_unmet_result(criterion, justification)
+    return :criterion_barely if criterion.suggested? || (criterion.should? &&
+                               justification_good?(justification))
     return :criterion_justification_required if criterion.should?
     :criterion_failing
   end
 
-  def justification_good?(justification)
-    return false if justification.nil?
-    justification.length >= MIN_SHOULD_LENGTH
-  end
-
-  def met_satisfied?(criterion, status, justification)
-    return true if status.met? && !criterion.met_url_required? &&
-                   (!criterion.met_justification_required? ||
-                    justification_good?(justification))
-    status.met? && contains_url?(justification)
-  end
-
-  def na_satisfied?(criterion, status, justification)
-    status.na? && (!criterion.na_justification_required? ||
-                   justification_good?(justification))
+  def get_na_result(criterion, justification)
+    return :criterion_passing if !criterion.na_justification_required? ||
+                                 justification_good?(justification)
+    :criterion_justification_required
   end
 
   def need_a_base_url
@@ -415,21 +404,8 @@ class Project < ActiveRecord::Base
   end
 
   def passing?(criterion)
-    status = self[criterion.name.status]
-    justification = self[criterion.name.justification]
-
-    na_satisfied?(criterion, status, justification) ||
-      met_satisfied?(criterion, status, justification) ||
-      should_satisfied?(criterion, status, justification) ||
-      suggested_satisfied?(criterion, status)
-  end
-
-  def should_satisfied?(criterion, status, justification)
-    criterion.should? && status.unmet? && justification_good?(justification)
-  end
-
-  def suggested_satisfied?(criterion, status)
-    criterion.suggested? && !status.unknown?
+    result = get_criterion_result(criterion)
+    result == :criterion_passing || result == :criterion_barely
   end
 
   def to_percentage(portion, total)

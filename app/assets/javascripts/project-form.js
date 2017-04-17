@@ -63,7 +63,7 @@ function criterionHashTrue(criterion, key) {
 // passing, barely, failing, or question.
 // The result calculation here must match the equivalent routine
 // implemented on the server to prevent confusion.
-function criterionResult(criterion) {
+function getCriterionResult(criterion) {
   var criterionStatus = '#project_' + criterion + '_status';
   var justification;
   if ($('#project_name').is(':not(:disabled)')) {
@@ -77,39 +77,53 @@ function criterionResult(criterion) {
     justification = '';
   }
   if ($(criterionStatus + '_').is(':checked')) {
-    return 'question';
+    return 'criterion_unknown';
   } else if ($(criterionStatus + '_met').is(':checked')) {
-    if ((criterionHashTrue(criterion, 'met_url_required') &&
-          !containsURL(justification)) ||
-        (criterionHashTrue(criterion, 'met_justification_required') &&
-         justification.length <= MIN_SHOULD_LENGTH)) {
-      // Odd case: met is claimed, but we're still missing information.
-      return 'question';
-    } else {
-      return 'passing';
-    }
+    return getMetResult(criterion, justification);
   } else if ($(criterionStatus + '_unmet').is(':checked')) {
-    if (CRITERIA_HASH[criterion]['category'] === 'SUGGESTED' ||
-        (CRITERIA_HASH[criterion]['category'] === 'SHOULD' &&
-         justification.length >= MIN_SHOULD_LENGTH)) {
-      return 'barely';
-    } else if (CRITERIA_HASH[criterion]['category'] === 'SHOULD') {
-      return 'question';
-    } else {
-      return 'failing';
-    }
-  } else if (!criterionHashTrue(criterion, 'na_justification_required') ||
-             justification.length >= MIN_SHOULD_LENGTH) {
-    return 'passing';
+    return getUnmetResult(criterion,justification);
   } else {
-    return 'question';
+    return getNAResult(criterion, justification);
+  }
+}
+
+function getMetResult(criterion,justification) {
+  if (criterionHashTrue(criterion, 'met_url_required') &&
+      !containsURL(justification)) {
+    return 'criterion_url_required';
+  } else if (criterionHashTrue(criterion, 'met_justification_required') &&
+         justification.length <= MIN_SHOULD_LENGTH) {
+    return 'criterion_justification_required';
+  } else {
+    return 'criterion_passing';
+  }
+}
+
+function getUnmetResult(criterion,justification) {
+  if (CRITERIA_HASH[criterion]['category'] === 'SUGGESTED' ||
+      (CRITERIA_HASH[criterion]['category'] === 'SHOULD' &&
+       justification.length >= MIN_SHOULD_LENGTH)) {
+    return 'criterion_barely';
+  } else if (CRITERIA_HASH[criterion]['category'] === 'SHOULD') {
+    return 'criterion_justification_required';
+  } else {
+    return 'criterion_failing';
+  }
+}
+
+function getNAResult(criterion, justification) {
+  if (!criterionHashTrue(criterion, 'na_justification_required') ||
+          justification.length >= MIN_SHOULD_LENGTH){
+    return 'criterion_passing';
+  } else {
+    return 'criterion_url_required';
   }
 }
 
 // This must match the criteria implemented in Ruby to prevent confusion.
 function isEnough(criterion) {
-  var result = criterionResult(criterion);
-  return (result === 'passing' || result === 'barely');
+  var result = getCriterionResult(criterion);
+  return (result === 'criterion_passing' || result === 'criterion_barely');
 }
 
 // Set a panel's satisfaction level.
@@ -155,17 +169,19 @@ function resetProgressAndSatisfaction(criterion) {
 }
 
 function resetCriterionResult(criterion) {
-  var result = criterionResult(criterion);
+  var result = getCriterionResult(criterion);
   var destination = $('#' + criterion + '_enough');
-  if (result === 'passing') {
+  if (result === 'criterion_passing') {
     destination.attr('src', $('#result_symbol_check_img').attr('src')).
       attr('width', 40).attr('height', 40).
       attr('alt', 'Enough for a badge!');
-  } else if (result === 'barely') {
+  } else if (result === 'criterion_barely') {
     destination.attr('src', $('#result_symbol_dash').attr('src')).
       attr('width', 40).attr('height', 40).
       attr('alt', 'Barely enough for a badge.');
-  } else if (result === 'question') {
+  } else if (result === 'criterion_url_required' ||
+             result === 'criterion_justification_required' ||
+             result === 'criterion_unknown') {
     destination.attr('src', $('#result_symbol_question').attr('src')).
       attr('width', 40).attr('height', 40).
       attr('alt', 'Unknown required information, not enough for a badge.');

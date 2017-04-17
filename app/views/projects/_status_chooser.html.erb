@@ -78,12 +78,9 @@
       <% elsif criterion_status == :criterion_justification_required %>
         <p class="bg-warning">Warning: Requires lengthier justification.</p>
       <% end %>
-      <%= f.text_area justification_symbol,
-                      class: 'form-control hidden', hide_label: true,
-                      placeholder:'Please explain', disabled: is_disabled %>
     <% else %>
       <%= f.text_area justification_symbol,
-                      class: 'form-control', hide_label: true,
+                      class: 'justification-text', hide_label: true,
                       placeholder:'Please explain', disabled: is_disabled %>
     <% end %>
     <% if is_last %>

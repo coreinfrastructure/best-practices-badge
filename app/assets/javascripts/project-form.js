@@ -65,7 +65,14 @@ function criterionHashTrue(criterion, key) {
 // implemented on the server to prevent confusion.
 function criterionResult(criterion) {
   var criterionStatus = '#project_' + criterion + '_status';
-  var justification = $('#project_' + criterion + '_justification').val();
+  var justification;
+  if ($('#project_name').is(':not(:disabled)')) {
+    justification = $('#project_' + criterion + '_justification').val();
+  } else {
+    justification = $.trim(
+      $('#' + criterion).find('.justification-markdown', 'p').text()
+    );
+  }
   if (!justification) {
     justification = '';
   }
@@ -145,8 +152,7 @@ function resetProgressBar() {
 }
 
 function resetProgressAndSatisfaction(criterion) {
-  var criterionJust = '#project_' + criterion + '_justification';
-  setPanelSatisfactionLevel($(criterionJust).parents('.panel'));
+  setPanelSatisfactionLevel($('#' + criterion).closest('.panel'));
   resetProgressBar();
 }
 
@@ -379,7 +385,7 @@ function scrollToHash() {
 
 function showHash() {
   if ($(window.location.hash).length) {
-    var parentPane = $(window.location.hash).parents('.panel');
+    var parentPane = $(window.location.hash).closest('.panel');
     if (parentPane.length) {
       var loc = $(parentPane).find('.can-collapse');
       if ($(loc).hasClass('collapsed')) {
@@ -406,7 +412,7 @@ function getAllPanelsReady() {
   $('.can-collapse').find('i.glyphicon').addClass('glyphicon-chevron-up');
   var loc = window.location.hash;
   if (loc !== '#all') {
-    var parentPanel = $(loc).parents('.panel');
+    var parentPanel = $(loc).closest('.panel');
     if (parentPanel.length) {
       $('.panel').not(parentPanel).find('.collapse').removeClass('in');
       $('.panel').not(parentPanel).find('.can-collapse').addClass('collapsed');
@@ -429,16 +435,22 @@ function getAllPanelsReady() {
   });
 }
 
-function setupProjectField(criterion) {
-  updateCriteriaDisplay(criterion);
-  $('input[name="project[' + criterion + '_justification]"]').blur(
-      function() {
-        updateCriteriaDisplayAndUpdate(criterion);
-      });
-  $('#project_' + criterion + '_justification').on('input keyup',
-      function() {
-        changedJustificationTextAndUpdate(criterion);
-      });
+function setupProjectFields() {
+  $.each(CRITERIA_HASH, function(key, value) {
+    updateCriteriaDisplay(key);
+  });
+  $('.edit_project').on('click', 'input[type=radio]', function() {
+    var criterion = $(this).closest('.criterion-data').attr('id');
+    changeCriterion(criterion);
+  });
+  $('.edit_project').on('blur', '.justification-text', function() {
+    var criterion = $(this).closest('.criterion-data').attr('id');
+    updateCriteriaDisplayAndUpdate(criterion);
+  });
+  $('.edit_project').on('input keyup', '.justification-text', function() {
+    var criterion = $(this).closest('.criterion-data').attr('id');
+    changedJustificationTextAndUpdate(criterion);
+  });
 }
 
 function ToggleDetailsDisplay(e) {
@@ -509,18 +521,13 @@ function setupProjectForm() {
       updateCriteriaDisplay(criterion);
       resetCriterionResult(criterion);
     });
-    setPanelSatisfactionLevel($('#all_crypto_na').parents('.panel'));
+    setPanelSatisfactionLevel($('#all_crypto_na').closest('.panel'));
     resetProgressBar();
   });
 
-  $('.edit_project').on('click','input[type=radio]', function() {
-      var criterion = $(this).closest('.criterion-data').attr('id');
-        changeCriterion(criterion);
-  });
-
-  $.each(CRITERIA_HASH, function(key, value) {
-    setupProjectField(key);
-  });
+  if ($('#project_name').is(':not(:disabled)')) {
+    setupProjectFields();
+  }
 
   globalExpandAllPanels = false;
   $('#toggle-expand-all-panels').click(function(e) {
@@ -530,7 +537,7 @@ function setupProjectForm() {
   $('.panel div.can-collapse').on('click', function(e) {
     var $this = $(this);
     if ($this.hasClass('collapsed')) {
-      $this.parents('.panel').find('.panel-collapse').collapse('show');
+      $this.closest('.panel').find('.panel-collapse').collapse('show');
       $this.removeClass('collapsed');
       $this.find('i.glyphicon').removeClass('glyphicon-chevron-down')
         .addClass('glyphicon-chevron-up');
@@ -542,7 +549,7 @@ function setupProjectForm() {
         this.id = origId;
       }
     } else {
-      $this.parents('.panel').find('.panel-collapse').collapse('hide');
+      $this.closest('.panel').find('.panel-collapse').collapse('hide');
       $this.addClass('collapsed');
       $this.find('i.glyphicon').removeClass('glyphicon-chevron-up')
         .addClass('glyphicon-chevron-down');

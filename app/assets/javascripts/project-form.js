@@ -383,7 +383,7 @@ function scrollToHash() {
 
 function showHash() {
   if ($(window.location.hash).length) {
-    var parentPane = $(window.location.hash).closest('.panel');
+    var parentPane = $(window.location.hash).parents('.panel');
     if (parentPane.length) {
       var loc = $(parentPane).find('.can-collapse');
       if ($(loc).hasClass('collapsed')) {
@@ -410,7 +410,7 @@ function getAllPanelsReady() {
   $('.can-collapse').find('i.glyphicon').addClass('glyphicon-chevron-up');
   var loc = window.location.hash;
   if (loc !== '#all') {
-    var parentPanel = $(loc).closest('.panel');
+    var parentPanel = $(loc).parents('.panel');
     if (parentPanel.length) {
       $('.panel').not(parentPanel).find('.collapse').removeClass('in');
       $('.panel').not(parentPanel).find('.can-collapse').addClass('collapsed');
@@ -433,21 +433,38 @@ function getAllPanelsReady() {
   });
 }
 
+// Implement "press this button to make all crypto N/A"
+function setAllCryptoNA() {
+  $.each(CRITERIA_HASH, function(criterion, value) {
+    if ((/^crypto/).test(criterion)) {
+      $('#project_' + criterion + '_status_na').prop('checked', true);
+    }
+    updateCriteriaDisplay(criterion);
+    resetCriterionResult(criterion);
+  });
+  setPanelSatisfactionLevel($('#all_crypto_na').closest('.panel'));
+  resetProgressBar();
+}
+
 function setupProjectFields() {
   $.each(CRITERIA_HASH, function(key, value) {
     updateCriteriaDisplay(key);
   });
   $('.edit_project').on('click', 'input[type=radio]', function() {
-    var criterion = $(this).closest('.criterion-data').attr('id');
+    var criterion = $(this).parents('.criterion-data').attr('id');
     changeCriterion(criterion);
   });
-  $('.edit_project').on('blur', '.justification-text', function() {
-    var criterion = $(this).closest('.criterion-data').attr('id');
-    updateCriteriaDisplayAndUpdate(criterion);
+  $('.edit_project').on('blur', function(e) {
+    if ($(e.target).hasClass('justification-text')) {
+      var criterion = $(e.target).parents('.criterion-data').attr('id');
+      updateCriteriaDisplayAndUpdate(criterion);
+    }
   });
-  $('.edit_project').on('input keyup', '.justification-text', function() {
-    var criterion = $(this).closest('.criterion-data').attr('id');
-    changedJustificationTextAndUpdate(criterion);
+  $('.edit_project').on('input keyup', function(e) {
+    if ($(e.target).hasClass('justification-text')) {
+      var criterion = $(e.target).parents('.criterion-data').attr('id');
+      changedJustificationTextAndUpdate(criterion);
+    }
   });
 }
 
@@ -484,75 +501,77 @@ function ToggleAllDetails(e) {
   }
 }
 
+function TogglePanel(e) {
+  var target = $(e.target);
+  var $this;
+  if (target.hasClass('can-collapse')) {
+    $this = target;
+  } else {
+    $this = target.closest('.can-collapse');
+  }
+  if ($this.hasClass('collapsed')) {
+    $this.closest('.panel').find('.panel-collapse').collapse('show');
+    $this.removeClass('collapsed');
+    $this.find('i.glyphicon').removeClass('glyphicon-chevron-down')
+      .addClass('glyphicon-chevron-up');
+    if (!globalIgnoreHashChange) {
+      var origId = $this.attr('id');
+      // prevent scrolling on panel open
+      $this.attr('id', origId + '-tmp');
+      location.hash = '#' + origId;
+      $this.attr('id', origId);
+    }
+  } else {
+    $this.closest('.panel').find('.panel-collapse').collapse('hide');
+    $this.addClass('collapsed');
+    $this.find('i.glyphicon').removeClass('glyphicon-chevron-up')
+      .addClass('glyphicon-chevron-down');
+  }
+}
+
 function setupProjectForm() {
   // We're told progress, so don't recalculate - just display it.
   var percentageScaled = $('#badge-progress').attr('aria-valuenow');
   var percentAsString = percentageScaled.toString() + '%';
   $('#badge-progress').css('width', percentAsString);
 
+
   // By default, hide details.  We do the hiding in JavaScript, so
   // those who disable JavaScript will still see the text
   // (they'll have no way to later reveal it).
   $('.details-text').css({'display':'none'});
   $('.details-toggler').html('Show details');
-  $('.details-toggler').click(ToggleDetailsDisplay);
 
   // Force these values on page reload
   globalShowAllDetails = false;
-  $('#toggle-show-all-details').click(function(e) {
-    ToggleAllDetails(e);
-  });
-
-  // Force these values on page reload
   globalLastSelectedMet = '';
   globalHideMetnaCriteria = false;
-  $('#toggle-hide-metna-criteria').click(function(e) {
-    ToggleHideMet(e);
-  });
+  globalExpandAllPanels = false;
 
-  // Implement "press this button to make all crypto N/A"
-  $('#all_crypto_na').click(function(e) {
-    $.each(CRITERIA_HASH, function(criterion, value) {
-      if ((/^crypto/).test(criterion)) {
-        $('#project_' + criterion + '_status_na').prop('checked', true);
-      }
-      updateCriteriaDisplay(criterion);
-      resetCriterionResult(criterion);
-    });
-    setPanelSatisfactionLevel($('#all_crypto_na').closest('.panel'));
-    resetProgressBar();
+
+  // Set up click event listeners
+  $('body').on('click', function(e) {
+    var target = $(e.target);
+    if (target.hasClass('details-toggler')) {
+      ToggleDetailsDisplay(e);
+    } else if (target.hasClass('can-collapse') ||
+               target.parents('.can-collapse').length) {
+      TogglePanel(e);
+    // Implement "press this button to make all crypto N/A"
+    } else if (e.target.id === 'all_crypto_na') {
+      setAllCryptoNA();
+    } else if (e.target.id === 'toggle-show-all-details') {
+      ToggleAllDetails(e);
+    } else if (e.target.id === 'toggle-hide-metna-criteria') {
+      ToggleHideMet(e);
+    } else if (e.target.id === 'toggle-expand-all-panels') {
+      ToggleExpandAllPanels(e);
+    }
   });
 
   if ($('#project_name').is(':not(:disabled)')) {
     setupProjectFields();
   }
-
-  globalExpandAllPanels = false;
-  $('#toggle-expand-all-panels').click(function(e) {
-    ToggleExpandAllPanels(e);
-  });
-
-  $('.panel div.can-collapse').on('click', function(e) {
-    var $this = $(this);
-    if ($this.hasClass('collapsed')) {
-      $this.closest('.panel').find('.panel-collapse').collapse('show');
-      $this.removeClass('collapsed');
-      $this.find('i.glyphicon').removeClass('glyphicon-chevron-down')
-        .addClass('glyphicon-chevron-up');
-      if (!globalIgnoreHashChange) {
-        var origId = this.getAttribute('id');
-        // prevent scrolling on panel open
-        this.id = origId + '-tmp';
-        location.hash = '#' + origId;
-        this.id = origId;
-      }
-    } else {
-      $this.closest('.panel').find('.panel-collapse').collapse('hide');
-      $this.addClass('collapsed');
-      $this.find('i.glyphicon').removeClass('glyphicon-chevron-up')
-        .addClass('glyphicon-chevron-down');
-    }
-  });
 
   getAllPanelsReady();
 

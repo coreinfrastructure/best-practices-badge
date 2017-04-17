@@ -450,9 +450,11 @@ function setupProjectFields() {
   $.each(CRITERIA_HASH, function(key, value) {
     updateCriteriaDisplay(key);
   });
-  $('.edit_project').on('click', 'input[type=radio]', function() {
-    var criterion = $(this).parents('.criterion-data').attr('id');
-    changeCriterion(criterion);
+  $('.edit_project').on('click', function(e) {
+    if ($(e.target).is(':radio')) {
+      var criterion = $(e.target).parents('.criterion-data').attr('id');
+      changeCriterion(criterion);
+    }
   });
   $('.edit_project').on('blur', function(e) {
     if ($(e.target).hasClass('justification-text')) {
@@ -535,7 +537,6 @@ function setupProjectForm() {
   var percentAsString = percentageScaled.toString() + '%';
   $('#badge-progress').css('width', percentAsString);
 
-
   // By default, hide details.  We do the hiding in JavaScript, so
   // those who disable JavaScript will still see the text
   // (they'll have no way to later reveal it).
@@ -547,7 +548,6 @@ function setupProjectForm() {
   globalLastSelectedMet = '';
   globalHideMetnaCriteria = false;
   globalExpandAllPanels = false;
-
 
   // Set up click event listeners
   $('body').on('click', function(e) {

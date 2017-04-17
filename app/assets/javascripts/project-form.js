@@ -76,13 +76,8 @@ function criterionResult(criterion) {
   if (!justification) {
     justification = '';
   }
-  if ($(criterionStatus + '_na').is(':checked')) {
-    if (!criterionHashTrue(criterion, 'na_justification_required') ||
-        justification.length >= MIN_SHOULD_LENGTH) {
-      return 'passing';
-    } else {
-      return 'question';
-    }
+  if ($(criterionStatus + '_').is(':checked')) {
+    return 'question';
   } else if ($(criterionStatus + '_met').is(':checked')) {
     if ((criterionHashTrue(criterion, 'met_url_required') &&
           !containsURL(justification)) ||
@@ -103,6 +98,9 @@ function criterionResult(criterion) {
     } else {
       return 'failing';
     }
+  } else if (!criterionHashTrue(criterion, 'na_justification_required') ||
+             justification.length >= MIN_SHOULD_LENGTH) {
+    return 'passing';
   } else {
     return 'question';
   }

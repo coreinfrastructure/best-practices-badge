@@ -89,10 +89,10 @@ Upgrade some "passing" level SHOULD and SUGGESTED:
 
 #### Upgrade: Reporting
 
-*   Upgrade
+*   Unchanged:
 
-    - enhancement_responses: SHOULD to MUST.
-      "The project MUST respond to a majority of enhancement requests in the
+    - enhancement_responses:
+      "The project SHOULD respond to a majority of enhancement requests in the
       last 2-12 months (inclusive)."
 
 #### Upgrade: Quality

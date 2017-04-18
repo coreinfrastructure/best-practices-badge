@@ -538,6 +538,10 @@
           which indicates that the project is still alive.
           For purposes of this criterion, projects need not count fake requests
           (e.g., from spammers or automated systems).
+          If a project is no longer making enhancements, please select "unmet"
+          and include the URL that makes this situation clear to users.
+          If a project tends to be overwhelmed by the number of enhancement
+          requests, please select "unmet" and explain.
         autofill: >
           Examine issue tracker, and see what is marked as an "enhancement".
           Exclude the top contributor(s) as reported by the repo changes.

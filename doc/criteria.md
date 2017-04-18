@@ -305,7 +305,7 @@ There is an implied criterion that we should mention here:
  <sup>[<a href="#report_responses">report_responses</a>]</sup></li>
 
 <li><a name="enhancement_responses"></a>The project SHOULD respond to a majority (&gt;50%) of enhancement requests in the last 2-12 months (inclusive).
- <sup>[<a href="#enhancement_responses">enhancement_responses</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>The response MAY be 'no' or a discussion about its merits. The goal is simply that there be some response to some requests, which indicates that the project is still alive. For purposes of this criterion, projects need not count fake requests (e.g., from spammers or automated systems).
+ <sup>[<a href="#enhancement_responses">enhancement_responses</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>The response MAY be 'no' or a discussion about its merits. The goal is simply that there be some response to some requests, which indicates that the project is still alive. For purposes of this criterion, projects need not count fake requests (e.g., from spammers or automated systems). If a project is no longer making enhancements, please select "unmet" and include the URL that makes this situation clear to users. If a project tends to be overwhelmed by the number of enhancement requests, please select "unmet" and explain.
 </dd></dl></li>
 
 <li><a name="report_archive"></a>The project MUST have a publicly available archive for reports and responses for later searching.

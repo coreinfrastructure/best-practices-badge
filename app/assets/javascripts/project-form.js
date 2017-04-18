@@ -99,7 +99,7 @@ function getNAResult(criterion, justification) {
 function getUnmetResult(criterion, justification) {
   if (CRITERIA_HASH[criterion]['category'] === 'SUGGESTED' ||
       (CRITERIA_HASH[criterion]['category'] === 'SHOULD' &&
-       justification.length >= MIN_SHOULD_LENGTH)) {
+       justificationGood(justification) {
     return 'criterion_barely';
   } else if (CRITERIA_HASH[criterion]['category'] === 'SHOULD') {
     return 'criterion_justification_required';

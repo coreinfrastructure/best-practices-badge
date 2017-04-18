@@ -44,11 +44,11 @@ perfect_unjustified:
   <%= criterion_status %>: Met
 <% end %>
   release_notes_status: N/A
+  vulnerability_report_private_status: N/A
   installation_common_status: Unmet
   test_most_status: Unmet
   crypto_certificate_verification_status: Unmet
   build_reproducible_status: '?'
-
 
 # TODO: Generate list of status fields from central location.
 perfect:

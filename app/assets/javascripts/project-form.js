@@ -86,11 +86,11 @@ function getMetResult(criterion, justification) {
 // This function is mirrored in app/models/project.rb by "get_na_result"
 // If you change this function change "get_na_result" accordingly.
 function getNAResult(criterion, justification) {
-  if (!criterionHashTrue(criterion, 'na_justification_required') ||
-          justificationGood(justification)) {
-    return 'criterion_passing';
+  if (criterionHashTrue(criterion, 'na_justification_required') &&
+      !justificationGood(justification)) {
+    return 'criterion_justification_required';
   } else {
-    return 'criterion_url_required';
+    return 'criterion_passing';
   }
 }
 
@@ -99,7 +99,7 @@ function getNAResult(criterion, justification) {
 function getUnmetResult(criterion, justification) {
   if (CRITERIA_HASH[criterion]['category'] === 'SUGGESTED' ||
       (CRITERIA_HASH[criterion]['category'] === 'SHOULD' &&
-       justificationGood(justification) {
+       justificationGood(justification))) {
     return 'criterion_barely';
   } else if (CRITERIA_HASH[criterion]['category'] === 'SHOULD') {
     return 'criterion_justification_required';

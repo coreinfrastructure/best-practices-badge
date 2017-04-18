@@ -392,9 +392,10 @@ class Project < ActiveRecord::Base
   # This method is mirrored in assets/project-form.js as getNAResult
   # If you change this method, change getNAResult accordingly.
   def get_na_result(criterion, justification)
-    return :criterion_passing if !criterion.na_justification_required? ||
-                                 justification_good?(justification)
-    :criterion_justification_required
+    return :criterion_justification_required if
+      criterion.na_justification_required? &&
+      !justification_good?(justification)
+    :criterion_passing
   end
 
   # This method is mirrored in assets/project-form.js as getUnmetResult

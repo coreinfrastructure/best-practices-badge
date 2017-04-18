@@ -100,6 +100,7 @@ class ProjectTest < ActiveSupport::TestCase
     refute validator.text_acceptable?("The best practices badge\x0c")
     assert validator.text_acceptable?('The best practices badge.')
   end
+
   # rubocop:disable Metrics/BlockLength
   test 'test get_criterion_result returns correct values' do
     assert_equal(
@@ -128,6 +129,12 @@ class ProjectTest < ActiveSupport::TestCase
       @unjustified_project.get_criterion_result(
         Criteria[:build_reproducible]
       ), :criterion_unknown
+    )
+    assert_equal(
+      :criterion_passing,
+      @unjustified_project.get_criterion_result(
+        Criteria[:vulnerability_report_private]
+      )
     )
   end
   # rubocop:enable Metrics/BlockLength

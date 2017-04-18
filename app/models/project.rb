@@ -217,6 +217,8 @@ class Project < ActiveRecord::Base
   # :criterion_unknown -
   #   The criterion has been left at it's default value and thus the status
   #   is unknown.
+  # This method is mirrored in assets/project-form.js as getCriterionResult
+  # If you change this method, change getCriterionResult accordingly.
   def get_criterion_result(criterion)
     status = self[criterion.name.status]
     justification = self[criterion.name.justification]
@@ -376,12 +378,8 @@ class Project < ActiveRecord::Base
   #   Criteria.active.all? { |criterion| enough? criterion }
   # end
 
-  def get_na_result(criterion, justification)
-    return :criterion_passing if !criterion.na_justification_required? ||
-                                 justification_good?(justification)
-    :criterion_justification_required
-  end
-
+  # This method is mirrored in assets/project-form.js as getMetResult
+  # If you change this method, change getMetResult accordingly.
   def get_met_result(criterion, justification)
     return :criterion_url_required if criterion.met_url_required? &&
                                       !contains_url?(justification)
@@ -391,6 +389,16 @@ class Project < ActiveRecord::Base
     :criterion_passing
   end
 
+  # This method is mirrored in assets/project-form.js as getNAResult
+  # If you change this method, change getNAResult accordingly.
+  def get_na_result(criterion, justification)
+    return :criterion_passing if !criterion.na_justification_required? ||
+                                 justification_good?(justification)
+    :criterion_justification_required
+  end
+
+  # This method is mirrored in assets/project-form.js as getUnmetResult
+  # If you change this method, change getUnmetResult accordingly.
   def get_unmet_result(criterion, justification)
     return :criterion_barely if criterion.suggested? || (criterion.should? &&
                                justification_good?(justification))
@@ -408,6 +416,8 @@ class Project < ActiveRecord::Base
     errors.add :base, 'Need at least a home page or repository URL'
   end
 
+  # This method is mirrored in assets/project-form.js as isEnough
+  # If you change this method, change isEnough accordingly.
   def enough?(criterion)
     result = get_criterion_result(criterion)
     result == :criterion_passing || result == :criterion_barely

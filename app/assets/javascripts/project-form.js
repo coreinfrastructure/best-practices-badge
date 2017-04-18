@@ -59,6 +59,21 @@ function criterionHashTrue(criterion, key) {
   return CRITERIA_HASH[criterion][key] === true;
 }
 
+function criterionStatus(criterion) {
+  var statusPrefix = '#project_' + criterion + '_status';
+  if ($(statusPrefix + '_').is(':checked')) {
+    return '?';
+  } else if ($(statusPrefix + '_met').is(':checked')) {
+    return 'Met';
+  } else if ($(statusPrefix + '_unmet').is(':checked')) {
+    return 'Unmet';
+  } else {
+    return 'N/A';
+  }
+}
+
+// This function is mirrored in app/models/project.rb by "get_met_result"
+// If you change this function change "get_met_result" accordingly.
 function getMetResult(criterion, justification) {
   if (criterionHashTrue(criterion, 'met_url_required') &&
       !containsURL(justification)) {
@@ -71,6 +86,8 @@ function getMetResult(criterion, justification) {
   }
 }
 
+// This function is mirrored in app/models/project.rb by "get_na_result"
+// If you change this function change "get_na_result" accordingly.
 function getNAResult(criterion, justification) {
   if (!criterionHashTrue(criterion, 'na_justification_required') ||
           justification.length >= MIN_SHOULD_LENGTH) {
@@ -80,6 +97,8 @@ function getNAResult(criterion, justification) {
   }
 }
 
+// This function is mirrored in app/models/project.rb by "get_unmet_result"
+// If you change this function change "get_unmet_result" accordingly.
 function getUnmetResult(criterion, justification) {
   if (CRITERIA_HASH[criterion]['category'] === 'SUGGESTED' ||
       (CRITERIA_HASH[criterion]['category'] === 'SHOULD' &&
@@ -92,12 +111,14 @@ function getUnmetResult(criterion, justification) {
   }
 }
 
-// Determine result for a given criterion, which is one of
-// passing, barely, failing, or question.
-// The result calculation here must match the equivalent routine
-// implemented on the server to prevent confusion.
+// Determine result for a given criterion, which is one of the following:
+//  criterion_passing, criterion_barely, criterion_justification_required
+//  criterion_url_requrired, criterion_unknown, criterion_failing
+//
+// This function is mirrored in app/models/project.rb by "get_criterion_result"
+// If you change this function change "get_criterion_result" accordingly.
 function getCriterionResult(criterion) {
-  var criterionStatus = '#project_' + criterion + '_status';
+  var status = criterionStatus(criterion);
   var justification;
   if ($('#project_name').is(':not(:disabled)')) {
     justification = $('#project_' + criterion + '_justification').val();
@@ -109,18 +130,19 @@ function getCriterionResult(criterion) {
   if (!justification) {
     justification = '';
   }
-  if ($(criterionStatus + '_').is(':checked')) {
+  if (status === '?') {
     return 'criterion_unknown';
-  } else if ($(criterionStatus + '_met').is(':checked')) {
+  } else if (status === 'Met') {
     return getMetResult(criterion, justification);
-  } else if ($(criterionStatus + '_unmet').is(':checked')) {
+  } else if (status === 'Unmet') {
     return getUnmetResult(criterion, justification);
   } else {
     return getNAResult(criterion, justification);
   }
 }
 
-// This must match the criteria implemented in Ruby to prevent confusion.
+// This function is mirrored in app/models/project.rb by "enough?"
+// If you change this function change "enough?" accordingly.
 function isEnough(criterion) {
   var result = getCriterionResult(criterion);
   return (result === 'criterion_passing' || result === 'criterion_barely');
@@ -168,6 +190,9 @@ function resetProgressAndSatisfaction(criterion) {
   resetProgressBar();
 }
 
+// The functionality of this function is mirrored in
+// app/views/_status_chooser.html.erb
+// If you change this function change that view accordingly.
 function resetCriterionResult(criterion) {
   var result = getCriterionResult(criterion);
   var destination = $('#' + criterion + '_enough');
@@ -179,16 +204,14 @@ function resetCriterionResult(criterion) {
     destination.attr('src', $('#result_symbol_dash').attr('src')).
       attr('width', 40).attr('height', 40).
       attr('alt', 'Barely enough for a badge.');
-  } else if (result === 'criterion_url_required' ||
-             result === 'criterion_justification_required' ||
-             result === 'criterion_unknown') {
-    destination.attr('src', $('#result_symbol_question').attr('src')).
-      attr('width', 40).attr('height', 40).
-      attr('alt', 'Unknown required information, not enough for a badge.');
-  } else {
+  } else if (result === 'criterion_failing') {
     destination.attr('src', $('#result_symbol_x_img').attr('src')).
       attr('width', 40).attr('height', 40).
       attr('alt', 'Not enough for a badge.');
+  } else {
+    destination.attr('src', $('#result_symbol_question').attr('src')).
+      attr('width', 40).attr('height', 40).
+      attr('alt', 'Unknown required information, not enough for a badge.');
   }
 }
 
@@ -196,7 +219,7 @@ function changedJustificationText(criterion) {
   var criterionJust = '#project_' + criterion + '_justification';
   var result = getCriterionResult(criterion);
   if (result === 'criterion_justification_required' ||
-      result === 'criterion_url_required) {
+      result === 'criterion_url_required') {
     $(criterionJust).addClass('required-data');
   } else {
     $(criterionJust).removeClass('required-data');
@@ -251,16 +274,11 @@ function hideMetNA() {
 
 function updateCriteriaDisplay(criterion) {
   var criterionJust = '#project_' + criterion + '_justification';
-  var criterionStatus = '#project_' + criterion + '_status';
-  var justificationElement = document.getElementById('project_' +
-                           criterion + '_justification');
-  var justificationValue = '';
+  var status = criterionStatus(criterion);
+  var justification = $(criterionJust) ? $(criterionJust).val() : '';
   var criterionPlaceholder;
   var suppressJustificationDisplay;
-  if (justificationElement) {
-    justificationValue = justificationElement.value;
-  }
-  if ($(criterionStatus + '_met').is(':checked')) {
+  if (status === 'Met') {
     criterionPlaceholder = CRITERIA_HASH[criterion]['met_placeholder'];
     if (!criterionPlaceholder) {
       if (criterionHashTrue(criterion, 'met_url_required')) {
@@ -275,7 +293,7 @@ function updateCriteriaDisplay(criterion) {
       }
     }
     suppressJustificationDisplay = criterionHashTrue(criterion, 'met_suppress');
-  } else if ($(criterionStatus + '_unmet').is(':checked')) {
+  } else if (status === 'Unmet') {
     criterionPlaceholder = CRITERIA_HASH[criterion]['unmet_placeholder'];
     if (!criterionPlaceholder) {
       criterionPlaceholder = 'Please explain why it\'s okay this ' +
@@ -283,7 +301,7 @@ function updateCriteriaDisplay(criterion) {
     }
     suppressJustificationDisplay =
       criterionHashTrue(criterion, 'unmet_suppress');
-  } else if ($(criterionStatus + '_na').is(':checked')) {
+  } else if (status === 'N/A') {
     criterionPlaceholder = CRITERIA_HASH[criterion]['na_placeholder'];
     if (!criterionPlaceholder) {
       if (criterionHashTrue(criterion, 'na_justification_required')) {
@@ -295,7 +313,7 @@ function updateCriteriaDisplay(criterion) {
       }
     }
     suppressJustificationDisplay = criterionHashTrue(criterion, 'na_suppress');
-  } else if ($(criterionStatus + '_').is(':checked')) {
+  } else {
     criterionPlaceholder = 'Please explain';
     suppressJustificationDisplay = true;
   }
@@ -303,13 +321,12 @@ function updateCriteriaDisplay(criterion) {
 
   // If there's old justification text, force showing it even if it
   // no longer makes sense (so they can fix it or change their mind).
-  if (justificationValue.length > 0) {
+  if (justification.length > 0 || !suppressJustificationDisplay) {
     $(criterionJust).css({'display':''});
-  } else if (suppressJustificationDisplay) {
-    $(criterionJust).css({'display':'none'});
   } else {
-    $(criterionJust).css({'display':''});
+    $(criterionJust).css({'display':'none'});
   }
+
   if (globalHideMetnaCriteria) {
     // If we're hiding met criterion, walk through and hide them.
     // We don't need to keep running this if we are NOT hiding them,
@@ -325,10 +342,11 @@ function updateCriteriaDisplayAndUpdate(criterion) {
   resetProgressAndSatisfaction(criterion);
 }
 
-
 function changeCriterion(criterion) {
-  var criterionStatus = '#project_' + criterion + '_status';
-  if ($(criterionStatus + '_met').is(':checked')) {
+  // We could use criterionStatus here, but this is faster since
+  // we do not care about any status except "Met".
+  var statusPrefix = '#project_' + criterion + '_status';
+  if ($(statusPrefix + '_met').is(':checked')) {
     globalLastSelectedMet = criterion;
   }
   updateCriteriaDisplayAndUpdate(criterion);
@@ -459,7 +477,7 @@ function setupProjectFields() {
       changeCriterion(criterion);
     }
   });
-  $('.edit_project').on('blur', function(e) {
+  $('.edit_project').on('focusout', function(e) {
     if ($(e.target).hasClass('justification-text')) {
       var criterion = $(e.target).parents('.criterion-data').attr('id');
       updateCriteriaDisplayAndUpdate(criterion);
@@ -507,12 +525,11 @@ function ToggleAllDetails(e) {
 }
 
 function TogglePanel(e) {
-  var target = $(e.target);
   var $this;
-  if (target.hasClass('can-collapse')) {
-    $this = target;
+  if ($(e.target).hasClass('can-collapse')) {
+    $this = $(e.target);
   } else {
-    $this = target.closest('.can-collapse');
+    $this = $(e.target).closest('.can-collapse');
   }
   if ($this.hasClass('collapsed')) {
     $this.closest('.panel').find('.panel-collapse').collapse('show');

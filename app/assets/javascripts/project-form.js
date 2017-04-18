@@ -64,6 +64,11 @@ function criterionStatus(criterion) {
   return $('input[name="project[' + statusPrefix + ']"]:checked').val();
 }
 
+// Return true if the justification is good enough for a SHOULD criterion.
+function justificationGood(justification) {
+  return justification.length >= MIN_SHOULD_LENGTH;
+}
+
 // This function is mirrored in app/models/project.rb by "get_met_result"
 // If you change this function change "get_met_result" accordingly.
 function getMetResult(criterion, justification) {
@@ -71,7 +76,7 @@ function getMetResult(criterion, justification) {
       !containsURL(justification)) {
     return 'criterion_url_required';
   } else if (criterionHashTrue(criterion, 'met_justification_required') &&
-         justification.length <= MIN_SHOULD_LENGTH) {
+         !justificationGood(justification)) {
     return 'criterion_justification_required';
   } else {
     return 'criterion_passing';
@@ -82,7 +87,7 @@ function getMetResult(criterion, justification) {
 // If you change this function change "get_na_result" accordingly.
 function getNAResult(criterion, justification) {
   if (!criterionHashTrue(criterion, 'na_justification_required') ||
-          justification.length >= MIN_SHOULD_LENGTH) {
+          justificationGood(justification)) {
     return 'criterion_passing';
   } else {
     return 'criterion_url_required';

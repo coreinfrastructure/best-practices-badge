@@ -385,7 +385,7 @@ class Project < ActiveRecord::Base
                                       !contains_url?(justification)
     return :criterion_justification_required if
       criterion.met_justification_required? &&
-      justification_good?(justification)
+      !justification_good?(justification)
     :criterion_passing
   end
 

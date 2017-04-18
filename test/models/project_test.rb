@@ -104,31 +104,30 @@ class ProjectTest < ActiveSupport::TestCase
   # rubocop:disable Metrics/BlockLength
   test 'test get_criterion_result returns correct values' do
     assert_equal(
-      @unjustified_project.get_criterion_result(Criteria[:contribution]),
-      :criterion_url_required
+      :criterion_url_required,
+      @unjustified_project.get_criterion_result(Criteria[:contribution])
     )
     assert_equal(
-      @unjustified_project.get_criterion_result(Criteria[:release_notes]),
-      :criterion_justification_required
+      :criterion_justification_required,
+      @unjustified_project.get_criterion_result(Criteria[:release_notes])
     )
     assert_equal(
-      @unjustified_project.get_criterion_result(
-        Criteria[:installation_common]
-      ), :criterion_justification_required
+      :criterion_justification_required,
+      @unjustified_project.get_criterion_result(Criteria[:installation_common])
     )
     assert_equal(
-      @unjustified_project.get_criterion_result(Criteria[:test_most]),
-      :criterion_barely
+      :criterion_barely,
+      @unjustified_project.get_criterion_result(Criteria[:test_most])
     )
     assert_equal(
+      :criterion_failing,
       @unjustified_project.get_criterion_result(
         Criteria[:crypto_certificate_verification]
-      ), :criterion_failing
+      )
     )
     assert_equal(
-      @unjustified_project.get_criterion_result(
-        Criteria[:build_reproducible]
-      ), :criterion_unknown
+      :criterion_unknown,
+      @unjustified_project.get_criterion_result(Criteria[:build_reproducible])
     )
     assert_equal(
       :criterion_passing,

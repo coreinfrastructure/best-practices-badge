@@ -60,16 +60,8 @@ function criterionHashTrue(criterion, key) {
 }
 
 function criterionStatus(criterion) {
-  var statusPrefix = '#project_' + criterion + '_status';
-  if ($(statusPrefix + '_').is(':checked')) {
-    return '?';
-  } else if ($(statusPrefix + '_met').is(':checked')) {
-    return 'Met';
-  } else if ($(statusPrefix + '_unmet').is(':checked')) {
-    return 'Unmet';
-  } else {
-    return 'N/A';
-  }
+  var statusPrefix = criterion + '_status';
+  return $('input[name="project[' + statusPrefix + ']"]:checked').val();
 }
 
 // This function is mirrored in app/models/project.rb by "get_met_result"
@@ -345,8 +337,8 @@ function updateCriteriaDisplayAndUpdate(criterion) {
 function changeCriterion(criterion) {
   // We could use criterionStatus here, but this is faster since
   // we do not care about any status except "Met".
-  var statusPrefix = '#project_' + criterion + '_status';
-  if ($(statusPrefix + '_met').is(':checked')) {
+  var status = criterionStatus(criterion);
+  if (status === 'Met') {
     globalLastSelectedMet = criterion;
   }
   updateCriteriaDisplayAndUpdate(criterion);

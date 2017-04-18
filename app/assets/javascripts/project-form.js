@@ -194,20 +194,9 @@ function resetCriterionResult(criterion) {
 
 function changedJustificationText(criterion) {
   var criterionJust = '#project_' + criterion + '_justification';
-  var criterionStatus = '#project_' + criterion + '_status';
-  if ($(criterionStatus + '_unmet').is(':checked') &&
-       (CRITERIA_HASH[criterion]['category'] === 'SHOULD') &&
-       ($(criterionJust).val().length < MIN_SHOULD_LENGTH)) {
-    $(criterionJust).addClass('required-data');
-  } else if ($(criterionStatus + '_met').is(':checked') &&
-             ((criterionHashTrue(criterion, 'met_url_required') &&
-               !containsURL($(criterionJust).val())) ||
-              (criterionHashTrue(criterion, 'met_justification_required') &&
-               $(criterionJust).val().length < MIN_SHOULD_LENGTH))) {
-    $(criterionJust).addClass('required-data');
-  } else if ($(criterionStatus + '_na').is(':checked') &&
-       criterionHashTrue(criterion, 'na_justification_required') &&
-       ($(criterionJust).val().length < MIN_SHOULD_LENGTH)) {
+  var result = getCriterionResult(criterion);
+  if (result === 'criterion_justification_required' ||
+      result === 'criterion_url_required) {
     $(criterionJust).addClass('required-data');
   } else {
     $(criterionJust).removeClass('required-data');
@@ -245,9 +234,7 @@ function hasFieldTextInside(e) {
 function hideMetNA() {
   $.each(CRITERIA_HASH, function(criterion, value) {
     if (globalHideMetnaCriteria && criterion !== globalLastSelectedMet &&
-        ($('#project_' + criterion + '_status_met').is(':checked') ||
-         $('#project_' + criterion + '_status_na').is(':checked')) &&
-        isEnough(criterion)) {
+        getCriterionResult(criterion) === 'criterion_passing') {
       $('#' + criterion).addClass('hidden');
     } else {
       $('#' + criterion).removeClass('hidden');

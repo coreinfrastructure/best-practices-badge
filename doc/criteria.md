@@ -45,6 +45,16 @@ See the
 [draft criteria for higher/more advanced badges](./other.md) if you
 are interested in possible future criteria.
 
+The Linux Foundation also sponsors the
+[OpenChain Project](https://www.openchainproject.org/), which
+identifies criteria for a "high quality Free
+and Open Source Software (FOSS) compliance program."
+OpenChain focuses on how organizations can best use FLOSS and contribute
+back to FLOSS projects, while the CII Best Practices badge
+focuses on the FLOSS projects themselves.
+The CII Best Practices badge and OpenChain work together to help
+improve FLOSS and how FLOSS is used.
+
 We expect that these practices and their detailed criteria will be updated,
 even after badges are released.
 Thus, criteria (and badges) probably will have a year identifier

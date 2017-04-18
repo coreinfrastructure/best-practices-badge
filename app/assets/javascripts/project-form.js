@@ -59,6 +59,39 @@ function criterionHashTrue(criterion, key) {
   return CRITERIA_HASH[criterion][key] === true;
 }
 
+function getMetResult(criterion, justification) {
+  if (criterionHashTrue(criterion, 'met_url_required') &&
+      !containsURL(justification)) {
+    return 'criterion_url_required';
+  } else if (criterionHashTrue(criterion, 'met_justification_required') &&
+         justification.length <= MIN_SHOULD_LENGTH) {
+    return 'criterion_justification_required';
+  } else {
+    return 'criterion_passing';
+  }
+}
+
+function getNAResult(criterion, justification) {
+  if (!criterionHashTrue(criterion, 'na_justification_required') ||
+          justification.length >= MIN_SHOULD_LENGTH) {
+    return 'criterion_passing';
+  } else {
+    return 'criterion_url_required';
+  }
+}
+
+function getUnmetResult(criterion, justification) {
+  if (CRITERIA_HASH[criterion]['category'] === 'SUGGESTED' ||
+      (CRITERIA_HASH[criterion]['category'] === 'SHOULD' &&
+       justification.length >= MIN_SHOULD_LENGTH)) {
+    return 'criterion_barely';
+  } else if (CRITERIA_HASH[criterion]['category'] === 'SHOULD') {
+    return 'criterion_justification_required';
+  } else {
+    return 'criterion_failing';
+  }
+}
+
 // Determine result for a given criterion, which is one of
 // passing, barely, failing, or question.
 // The result calculation here must match the equivalent routine
@@ -81,42 +114,9 @@ function getCriterionResult(criterion) {
   } else if ($(criterionStatus + '_met').is(':checked')) {
     return getMetResult(criterion, justification);
   } else if ($(criterionStatus + '_unmet').is(':checked')) {
-    return getUnmetResult(criterion,justification);
+    return getUnmetResult(criterion, justification);
   } else {
     return getNAResult(criterion, justification);
-  }
-}
-
-function getMetResult(criterion,justification) {
-  if (criterionHashTrue(criterion, 'met_url_required') &&
-      !containsURL(justification)) {
-    return 'criterion_url_required';
-  } else if (criterionHashTrue(criterion, 'met_justification_required') &&
-         justification.length <= MIN_SHOULD_LENGTH) {
-    return 'criterion_justification_required';
-  } else {
-    return 'criterion_passing';
-  }
-}
-
-function getUnmetResult(criterion,justification) {
-  if (CRITERIA_HASH[criterion]['category'] === 'SUGGESTED' ||
-      (CRITERIA_HASH[criterion]['category'] === 'SHOULD' &&
-       justification.length >= MIN_SHOULD_LENGTH)) {
-    return 'criterion_barely';
-  } else if (CRITERIA_HASH[criterion]['category'] === 'SHOULD') {
-    return 'criterion_justification_required';
-  } else {
-    return 'criterion_failing';
-  }
-}
-
-function getNAResult(criterion, justification) {
-  if (!criterionHashTrue(criterion, 'na_justification_required') ||
-          justification.length >= MIN_SHOULD_LENGTH){
-    return 'criterion_passing';
-  } else {
-    return 'criterion_url_required';
   }
 }
 

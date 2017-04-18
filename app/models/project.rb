@@ -179,7 +179,7 @@ class Project < ActiveRecord::Base
   end
 
   def calculate_badge_percentage
-    met = Criteria.active.count { |criterion| passing? criterion }
+    met = Criteria.active.count { |criterion| enough? criterion }
     to_percentage met, Criteria.active.length
   end
 
@@ -373,8 +373,14 @@ class Project < ActiveRecord::Base
   private
 
   # def all_active_criteria_passing?
-  #   Criteria.active.all? { |criterion| passing? criterion }
+  #   Criteria.active.all? { |criterion| enough? criterion }
   # end
+
+  def get_na_result(criterion, justification)
+    return :criterion_passing if !criterion.na_justification_required? ||
+                                 justification_good?(justification)
+    :criterion_justification_required
+  end
 
   def get_met_result(criterion, justification)
     return :criterion_url_required if criterion.met_url_required? &&
@@ -392,10 +398,9 @@ class Project < ActiveRecord::Base
     :criterion_failing
   end
 
-  def get_na_result(criterion, justification)
-    return :criterion_passing if !criterion.na_justification_required? ||
-                                 justification_good?(justification)
-    :criterion_justification_required
+  def justification_good?(justification)
+    return false if justification.nil?
+    justification.length >= MIN_SHOULD_LENGTH
   end
 
   def need_a_base_url
@@ -403,7 +408,7 @@ class Project < ActiveRecord::Base
     errors.add :base, 'Need at least a home page or repository URL'
   end
 
-  def passing?(criterion)
+  def enough?(criterion)
     result = get_criterion_result(criterion)
     result == :criterion_passing || result == :criterion_barely
   end

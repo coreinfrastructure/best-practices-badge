@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 require 'test_helper'
 
+# rubocop:disable Metrics/ClassLength
 class ProjectTest < ActiveSupport::TestCase
+  using StringRefinements
   setup do
     @user = users(:test_user)
     @project = @user.projects.build(
@@ -99,34 +101,39 @@ class ProjectTest < ActiveSupport::TestCase
     assert validator.text_acceptable?('The best practices badge.')
   end
   # rubocop:disable Metrics/BlockLength
-  test 'test get_criterion_status returns correct values' do
+  test 'test get_criterion_result returns correct values' do
     assert_equal(
-      @unjustified_project.get_criterion_status(Criteria[:contribution]),
+      @unjustified_project.get_criterion_result(Criteria[:contribution]),
       :criterion_url_required
     )
     assert_equal(
-      @unjustified_project.get_criterion_status(Criteria[:release_notes]),
+      @unjustified_project.get_criterion_result(Criteria[:release_notes]),
       :criterion_justification_required
     )
     assert_equal(
-      @unjustified_project.get_criterion_status(
+      @unjustified_project.get_criterion_result(
         Criteria[:installation_common]
       ), :criterion_justification_required
     )
     assert_equal(
-      @unjustified_project.get_criterion_status(Criteria[:test_most]),
+      @unjustified_project.get_criterion_result(Criteria[:test_most]),
       :criterion_barely
     )
     assert_equal(
-      @unjustified_project.get_criterion_status(
+      @unjustified_project.get_criterion_result(
         Criteria[:crypto_certificate_verification]
       ), :criterion_failing
     )
     assert_equal(
-      @unjustified_project.get_criterion_status(
+      @unjustified_project.get_criterion_result(
         Criteria[:build_reproducible]
       ), :criterion_unknown
     )
   end
   # rubocop:enable Metrics/BlockLength
+
+  # We had to add this test for coverage.
+  test 'unit test string_refinements na?' do
+    assert @unjustified_project.release_notes_status.na?
+  end
 end

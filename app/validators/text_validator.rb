@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class TextValidator < ActiveModel::EachValidator
   ENCODING_MESSAGE =  'must be have a valid  UTF-8 encoding and ' \
                       'no invalid control characters'

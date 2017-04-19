@@ -7,9 +7,9 @@
 
 class RepoFilesExamineDetective < Detective
   INPUTS = [:repo_files].freeze
-  OUTPUTS = %i(
+  OUTPUTS = %i[
     contribution_status license_location_status release_notes_status
-  ).freeze
+  ].freeze
 
   # Minimum file sizes (in bytes) before they are considered useful.
   # Empty files, in particular, clearly do NOT have enough content.

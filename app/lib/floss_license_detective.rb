@@ -8,7 +8,7 @@
 class FlossLicenseDetective < Detective
   # Individual detectives must identify their inputs, outputs
   INPUTS = [:license].freeze
-  OUTPUTS = %i(floss_license_osi_status floss_license_status).freeze
+  OUTPUTS = %i[floss_license_osi_status floss_license_status].freeze
 
   # From: http://opensource.org/licenses/alphabetical
   OSI_LICENSES_FROM_OSI_WEBSITE = [

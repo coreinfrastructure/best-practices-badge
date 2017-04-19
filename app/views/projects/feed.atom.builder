@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Generate /feed view.
 # If you add new fields to be displayed, be sure to modify
 # the calling controller(s) to retrieve those fields.  Typically the

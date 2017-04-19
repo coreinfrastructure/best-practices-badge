@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 source 'https://rubygems.org'
 ruby File.open('.ruby-version', 'rb') { |f| f.read.chomp }
 
@@ -47,9 +48,9 @@ group :development, :test do
   gem 'pronto-brakeman', '0.8.0'
   gem 'pronto-eslint', '0.8.0'
   gem 'pronto-rails_best_practices', '0.8.0'
-  gem 'pronto-rubocop', '0.8.0'
+  gem 'pronto-rubocop', '0.8.1'
   gem 'pry-byebug', '3.4.2'
-  gem 'rubocop', '0.47.1' # Style checker.  Changes can cause test failure
+  gem 'rubocop', '0.48.1' # Style checker.  Changes can cause test failure
   gem 'ruby-graphviz', '1.2.3' # This is used for bundle viz
   gem 'spring', '2.0.1'
   gem 'vcr', '3.0.3' # Record network responses for later test reuse

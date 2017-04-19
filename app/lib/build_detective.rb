@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # require 'json' # uncomment if you need to access GitHub
 # require 'nokogiri'  # For future use to search more thoroughly
 # require 'open-uri'  # For future use to search more thoroughly
@@ -8,8 +9,8 @@
 # rubocop:disable Metrics/MethodLength
 class BuildDetective < Detective
   # Individual detectives must identify their inputs, outputs
-  INPUTS = %i(repo_url repo_files).freeze # repo_url for future use
-  OUTPUTS = %i(build_status build_common_tools_status).freeze
+  INPUTS = %i[repo_url repo_files].freeze # repo_url for future use
+  OUTPUTS = %i[build_status build_common_tools_status].freeze
   def files_named(name_pattern)
     @top_level.select do |fso|
       fso['type'] == 'file' && fso['name'].match(name_pattern)

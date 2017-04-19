@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # rubocop:disable Metrics/ClassLength
 class Project < ActiveRecord::Base
   using StringRefinements
@@ -14,16 +15,16 @@ class Project < ActiveRecord::Base
     ['In Progress (75% or more)', 75],
     ['In Progress (90% or more)', 90]
   ].freeze
-  STATUS_CHOICE = %w(? Met Unmet).freeze
-  STATUS_CHOICE_NA = (STATUS_CHOICE + %w(N/A)).freeze
+  STATUS_CHOICE = %w[? Met Unmet].freeze
+  STATUS_CHOICE_NA = (STATUS_CHOICE + %w[N/A]).freeze
   MIN_SHOULD_LENGTH = 5
   MAX_TEXT_LENGTH = 8192 # Arbitrary maximum to reduce abuse
   MAX_SHORT_STRING_LENGTH = 254 # Arbitrary maximum to reduce abuse
 
-  PROJECT_OTHER_FIELDS = %i(
+  PROJECT_OTHER_FIELDS = %i[
     name description homepage_url repo_url cpe implementation_languages
     license general_comments user_id disabled_reminders lock_version
-  ).freeze
+  ].freeze
   ALL_CRITERIA_STATUS = Criteria.map { |c| c.name.status }.freeze
   ALL_CRITERIA_JUSTIFICATION = Criteria.map { |c| c.name.justification }.freeze
   PROJECT_PERMITTED_FIELDS = (PROJECT_OTHER_FIELDS + ALL_CRITERIA_STATUS +
@@ -43,6 +44,10 @@ class Project < ActiveRecord::Base
     end
   )
 
+  # TODO: re-enable this in rubocop > 0.48.1.
+  #       This is erroneous and been fixed in the upstream
+  #       version of rubocop see bbatso/rubocop PR #4237.
+  # rubocop:disable Lint/AmbiguousBlockAssociation
   scope :in_progress, -> { lteq(99) }
 
   scope :lteq, (
@@ -52,6 +57,7 @@ class Project < ActiveRecord::Base
   )
 
   scope :passing, -> { gteq(100) }
+  # rubocop:enable Lint/AmbiguousBlockAssociation
 
   scope :recently_updated, (
     lambda do
@@ -96,7 +102,7 @@ class Project < ActiveRecord::Base
   # https://github.com/Casecommons/pg_search
   pg_search_scope(
     :search_for,
-    against: %i(name homepage_url repo_url description)
+    against: %i[name homepage_url repo_url description]
     # using: { tsearch: { any_word: true } }
   )
 

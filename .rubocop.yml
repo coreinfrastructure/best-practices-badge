@@ -53,6 +53,9 @@ Style/FirstMethodParameterLineBreak:
   Enabled: true
 Style/MultilineAssignmentLayout:
   Enabled: true
+Style/NegatedIf:
+  Enabled: true
+  EnforcedStyle: postfix
 Style/OptionHash:
   Enabled: true
 Style/StringMethods:

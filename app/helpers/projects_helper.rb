@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module ProjectsHelper
   MARKDOWN_RENDERER = Redcarpet::Render::HTML.new(
     filter_html: true, no_images: true,

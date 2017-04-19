@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class PasswordValidator < ActiveModel::EachValidator
   def validate_each(record, attribute, value)
     return unless BadPasswordSet.include?(value.downcase)

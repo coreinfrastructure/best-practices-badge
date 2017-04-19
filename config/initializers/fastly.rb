@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # See https://github.com/fastly/fastly-rails
 
 if !ENV['FASTLY_API_KEY'] && !Rails.env.testing?

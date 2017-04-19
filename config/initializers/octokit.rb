@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 Octokit.configure do |c|
   if Rails.env.test?
     # Test app OAuth returns to a different port

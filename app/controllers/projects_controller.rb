@@ -1,13 +1,14 @@
 # frozen_string_literal: true
+
 require 'addressable/uri'
 require 'net/http'
 
 # rubocop:disable Metrics/ClassLength
 class ProjectsController < ApplicationController
   include ProjectsHelper
-  before_action :set_project, only: %i(edit update destroy show badge)
+  before_action :set_project, only: %i[edit update destroy show badge]
   before_action :logged_in?, only: :create
-  before_action :change_authorized, only: %i(destroy edit update)
+  before_action :change_authorized, only: %i[destroy edit update]
 
   # Cache with Fastly CDN.  We can't use this header, because logged-in
   # and not-logged-in users see different things (and thus we can't
@@ -20,18 +21,18 @@ class ProjectsController < ApplicationController
 
   # These are the only allowed values for "sort" (if a value is provided)
   ALLOWED_SORT =
-    %w(
+    %w[
       id name achieved_passing_at badge_percentage
       homepage_url repo_url updated_at user_id created_at
-    ).freeze
+    ].freeze
 
-  ALLOWED_STATUS = %w(in_progress passing).freeze
+  ALLOWED_STATUS = %w[in_progress passing].freeze
 
-  INTEGER_QUERIES = %i(gteq lteq page).freeze
+  INTEGER_QUERIES = %i[gteq lteq page].freeze
 
-  TEXT_QUERIES = %i(pq q).freeze
+  TEXT_QUERIES = %i[pq q].freeze
 
-  OTHER_QUERIES = %i(sort sort_direction status ids).freeze
+  OTHER_QUERIES = %i[sort sort_direction status ids].freeze
 
   ALLOWED_QUERY_PARAMS = (
     INTEGER_QUERIES + TEXT_QUERIES + OTHER_QUERIES
@@ -243,14 +244,14 @@ class ProjectsController < ApplicationController
   def allowed_query?(key, value)
     return false if value.blank?
     return positive_integer?(value) if INTEGER_QUERIES.include?(key.to_sym)
-    return TextValidator.new(attributes: %i(query)).text_acceptable?(value) if
+    return TextValidator.new(attributes: %i[query]).text_acceptable?(value) if
       TEXT_QUERIES.include?(key.to_sym)
     allowed_other_query?(key, value)
   end
 
   def allowed_other_query?(key, value)
     return ALLOWED_SORT.include?(value) if key == 'sort'
-    return %w(desc asc).include?(value) if key == 'sort_direction'
+    return %w[desc asc].include?(value) if key == 'sort_direction'
     return ALLOWED_STATUS.include?(value) if key == 'status'
     return integer_list?(value) if key == 'ids'
     false
@@ -325,7 +326,7 @@ class ProjectsController < ApplicationController
     @projects = Project.all
     # We had to keep this line the same to satisfy brakeman
     @projects = @projects.send params[:status] if
-       %w(in_progress passing).include? params[:status]
+       %w[in_progress passing].include? params[:status]
     @projects = @projects.gteq(params[:gteq]) if params[:gteq].present?
     @projects = @projects.lteq(params[:lteq]) if params[:lteq].present?
     # "Prefix query" - query against *prefix* of a URL or name
@@ -364,7 +365,7 @@ class ProjectsController < ApplicationController
     # Rewrites /projects?q=&status=failing to /projects?status=failing
     original = request.original_url
     parsed = Addressable::URI.parse(original)
-    return original unless parsed.query_values.present?
+    return original if parsed.query_values.blank?
     valid_queries = parsed.query_values.select { |k, v| allowed_query?(k, v) }
     if valid_queries.blank?
       parsed.omit!(:query) # Removes trailing '?'

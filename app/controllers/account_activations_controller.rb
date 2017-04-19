@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class AccountActivationsController < ApplicationController
   # rubocop:disable Metrics/AbcSize
   def edit

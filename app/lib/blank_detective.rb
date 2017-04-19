@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # require 'json' # uncomment if you need to access GitHub
 
 # WARNING: The JSON parser generates a 'normal' Ruby hash.

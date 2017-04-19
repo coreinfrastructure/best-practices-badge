@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'test_helper'
 require 'set'
 
@@ -20,12 +21,12 @@ class CriteriaTest < ActiveSupport::TestCase
   end
 
   test 'Ensure that only allowed fields are in Criteria' do
-    allowed_set = Set.new %i(
+    allowed_set = Set.new %i[
       category future na_allowed met_url_required met_justification_required
       na_justification_required description details met_placeholder
       unmet_placeholder na_placeholder met_suppress unmet_suppress autofill
       major minor rationale
-    )
+    ]
     Criteria.to_h.each do |_criterion, values|
       values.each do |key, _value|
         assert_includes allowed_set, key.to_sym
@@ -34,7 +35,7 @@ class CriteriaTest < ActiveSupport::TestCase
   end
 
   test 'Ensure that required fields are in Criteria' do
-    required_set = Set.new %i(category description)
+    required_set = Set.new %i[category description]
     Criteria.to_h.each do |_criterion, values|
       required_set.each do |required_field|
         assert_includes values.keys, required_field.to_s
@@ -44,7 +45,7 @@ class CriteriaTest < ActiveSupport::TestCase
 
   test 'Ensure only valid categories in Criteria' do
     Criteria.to_h.each do |_criterion, values|
-      allowed_field_values = %w(MUST SHOULD SUGGESTED)
+      allowed_field_values = %w[MUST SHOULD SUGGESTED]
       assert_includes allowed_field_values, values['category']
     end
   end

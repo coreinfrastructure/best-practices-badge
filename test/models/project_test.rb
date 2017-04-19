@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'test_helper'
 
 # rubocop:disable Metrics/ClassLength
@@ -48,7 +49,7 @@ class ProjectTest < ActiveSupport::TestCase
 
     # Here we use the full validator.  We stub out the info necessary
     # to create a validator instance to test (we won't really use them).
-    validator = UrlValidator.new(attributes: %i(repo_url project_url))
+    validator = UrlValidator.new(attributes: %i[repo_url project_url])
     assert validator.url_acceptable?(my_url)
     assert validator.url_acceptable?('https://kernel.org')
     assert validator.url_acceptable?('') # Empty allowed.
@@ -90,7 +91,7 @@ class ProjectTest < ActiveSupport::TestCase
   # rubocop:enable Metrics/BlockLength
 
   test 'UTF-8 validator should refute non-UTF-8 encoding' do
-    validator = TextValidator.new(attributes: %i(name description))
+    validator = TextValidator.new(attributes: %i[name description])
     # Don't accept non-UTF-8, even if the individual bytes are acceptable.
     refute validator.text_acceptable?("The best practices badge\255")
     refute validator.text_acceptable?("The best practices badge\xff\xff")

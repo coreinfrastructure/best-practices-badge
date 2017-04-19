@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # We use DatabaseCleaner to clean up database between capybara tests.
 require 'test_helper'
 require 'database_cleaner'

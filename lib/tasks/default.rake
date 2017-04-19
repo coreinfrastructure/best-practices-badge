@@ -1,7 +1,8 @@
 # frozen_string_literal: true
+
 # Rake tasks for BadgeApp
 
-task(:default).clear.enhance %w(
+task(:default).clear.enhance %w[
   rbenv_rvm_setup
   bundle
   bundle_doctor
@@ -18,11 +19,11 @@ task(:default).clear.enhance %w(
   html_from_markdown
   eslint
   test
-)
+]
 # Temporarily removed fasterer
 # Waiting for Ruby 2.4 support: https://github.com/seattlerb/ruby_parser/issues/239
 
-task(:ci).clear.enhance %w(
+task(:ci).clear.enhance %w[
   rbenv_rvm_setup
   bundle_doctor
   bundle_audit
@@ -31,7 +32,7 @@ task(:ci).clear.enhance %w(
   license_finder_report.html
   whitespace_check
   yaml_syntax_check
-)
+]
 # Temporarily removed fasterer
 
 # Simple smoke test to avoid development environment misconfiguration

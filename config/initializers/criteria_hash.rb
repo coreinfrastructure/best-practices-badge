@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'yaml'
 # Load in entire criteria.yml, which keys off the major/minor groups
 FullCriteriaHash = YAML.load_file('criteria.yml').with_indifferent_access.freeze

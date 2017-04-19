@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'capybara_feature_test'
 
 class FilterTest < CapybaraFeatureTest

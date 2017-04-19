@@ -6,7 +6,7 @@ ruby File.open('.ruby-version', 'rb') { |f| f.read.chomp }
 gem 'bcrypt', '3.1.11' # Security - for salted hashed interated passwords
 gem 'bootstrap-sass', '3.3.7'
 gem 'bootstrap-social-rails', '4.12.0'
-gem 'bootstrap-will_paginate', '0.0.11'
+gem 'bootstrap-will_paginate', '1.0.0'
 gem 'bootstrap_form', '2.6.0'
 gem 'chartkick', '2.2.3' # Chart project_stats
 gem 'coffee-rails', '4.2.1' # Support CoffeeScript (Javascript preprocessor)
@@ -14,15 +14,15 @@ gem 'faker', '1.7.3'
 # Fastly master is locked to a railties version
 gem 'fastly-rails', '0.8.0'
 gem 'font-awesome-rails', '4.7.0.1'
-gem 'github_api', '0.14.5'
+gem 'github_api', '0.17.0'
 gem 'imagesLoaded_rails', '4.1.0' # JavaScript - enable wait for image load
 gem 'jbuilder', '2.6.3'
 gem 'jquery-rails', '4.3.1' # JavaScript jQuery library (for Rails)
 # gem 'jquery-turbolinks' # Make turbolinks work with jQuery
 gem 'jquery-ui-rails', '6.0.1' # JavaScript jQueryUI library (for Rails)
-gem 'octokit', '4.6.2' # GitHub's official Ruby API
+gem 'octokit', '4.7.0' # GitHub's official Ruby API
 gem 'omniauth-github', '1.2.3' # Authentication to GitHub (get project info)
-gem 'paper_trail', '7.0.0' # Record previous versions of project data
+gem 'paper_trail', '7.0.1' # Record previous versions of project data
 gem 'pg', '0.20.0' # PostgreSQL database, used for data storage
 gem 'pg_search', '2.0.1' # PostgreSQL full-text search
 gem 'puma', '3.8.2' # Faster webserver; recommended by Heroku
@@ -31,7 +31,7 @@ gem 'redcarpet', '3.4.0' # Process markdown in form textareas (justifications)
 gem 'sass-rails', '5.0.6'
 gem 'secure_headers', '3.6.2' # Add hardening measures to HTTP headers
 # gem 'turbolinks', '5.0.1' # Speed UI access
-gem 'uglifier', '3.1.12'
+gem 'uglifier', '3.2.0'
 gem 'will_paginate', '3.1.5'
 
 group :development, :test do
@@ -75,7 +75,7 @@ group :test do
   gem 'rails-controller-testing', '1.0.1'
   gem 'selenium-webdriver', '3.3.0', require: false
   gem 'simplecov', '0.14.1', require: false
-  gem 'webmock', '2.3.2', require: false
+  gem 'webmock', '3.0.1', require: false
 end
 
 group :production do

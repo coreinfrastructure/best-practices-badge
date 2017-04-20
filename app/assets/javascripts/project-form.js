@@ -13,7 +13,7 @@ var globalHideMetnaCriteria = false;
 var globalShowAllDetails = false;
 var globalExpandAllPanels = false;
 var globalIgnoreHashChange = false;
-var globalCriteriaResulHash = {};
+var globalCriteriaResultHash = {};
 
 // Do a polyfill for datalist if it's not already supported
 // (e.g., Safari fails to support polyfill at the time of this writing).
@@ -142,7 +142,7 @@ function getCriterionResult(criterion) {
 // This function is mirrored in app/models/project.rb by "enough?"
 // If you change this function change "enough?" accordingly.
 function isEnough(criterion) {
-  var result = globalCriteriaResulHash[criterion]['result'];
+  var result = globalCriteriaResultHash[criterion]['result'];
   return (result === 'criterion_passing' || result === 'criterion_barely');
 }
 
@@ -151,7 +151,7 @@ function setPanelSatisfactionLevel(panelID) {
   var total = 0;
   var enough = 0;
   $.each(CRITERIA_HASH, function(criterion, value) {
-    if (panelID === globalCriteriaResulHash[criterion]['panelID']) {
+    if (panelID === globalCriteriaResultHash[criterion]['panelID']) {
       total++;
       if (isEnough(criterion)) {
         enough++;
@@ -185,7 +185,7 @@ function resetProgressBar() {
 }
 
 function resetProgressAndSatisfaction(criterion) {
-  setPanelSatisfactionLevel(globalCriteriaResulHash[criterion]['panelID']);
+  setPanelSatisfactionLevel(globalCriteriaResultHash[criterion]['panelID']);
   resetProgressBar();
 }
 
@@ -193,7 +193,7 @@ function resetProgressAndSatisfaction(criterion) {
 // app/views/_status_chooser.html.erb
 // If you change this function change that view accordingly.
 function resetCriterionResult(criterion) {
-  var result = globalCriteriaResulHash[criterion]['result'];
+  var result = globalCriteriaResultHash[criterion]['result'];
   var destination = $('#' + criterion + '_enough');
   if (result === 'criterion_passing') {
     destination.attr('src', $('#result_symbol_check_img').attr('src')).
@@ -216,7 +216,7 @@ function resetCriterionResult(criterion) {
 
 function changedJustificationText(criterion) {
   var criterionJust = '#project_' + criterion + '_justification';
-  var result = globalCriteriaResulHash[criterion]['result'];
+  var result = globalCriteriaResultHash[criterion]['result'];
   if (result === 'criterion_justification_required' ||
       result === 'criterion_url_required') {
     $(criterionJust).addClass('required-data');
@@ -255,7 +255,7 @@ function hasFieldTextInside(e) {
 // justification text).
 function hideMetNA() {
   $.each(CRITERIA_HASH, function(criterion, value) {
-    var result = globalCriteriaResulHash[criterion]['result'];
+    var result = globalCriteriaResultHash[criterion]['result'];
     if (globalHideMetnaCriteria && criterion !== globalLastSelectedMet &&
         result === 'criterion_passing') {
       $('#' + criterion).addClass('hidden');
@@ -459,7 +459,7 @@ function setAllCryptoNA() {
   $.each(CRITERIA_HASH, function(criterion, value) {
     if ((/^crypto/).test(criterion)) {
       $('#project_' + criterion + '_status_na').prop('checked', true);
-      globalCriteriaResulHash[criterion]['result'] =
+      globalCriteriaResultHash[criterion]['result'] =
         getCriterionResult(criterion);
       updateCriterionDisplay(criterion);
       resetCriterionResult(criterion);
@@ -476,7 +476,7 @@ function setAllCryptoNA() {
 function getCriterionAndResult(event) {
   var criterion = $(event.target).parents('.criterion-data').attr('id');
   var result = getCriterionResult(criterion);
-  globalCriteriaResulHash[criterion]['result'] = result;
+  globalCriteriaResultHash[criterion]['result'] = result;
   return criterion;
 }
 
@@ -569,9 +569,9 @@ function fillCriteriaResultHash() {
     var panelID = $('#' + key).closest('.panel')
                               .find('.can-collapse').attr('id');
     var result = getCriterionResult(key);
-    globalCriteriaResulHash[key] = {};
-    globalCriteriaResulHash[key]['result'] = result;
-    globalCriteriaResulHash[key]['panelID'] = panelID;
+    globalCriteriaResultHash[key] = {};
+    globalCriteriaResultHash[key]['result'] = result;
+    globalCriteriaResultHash[key]['panelID'] = panelID;
   });
   $('#project_entry_form').trigger('CriterionResultHashComplete');
 }
@@ -593,7 +593,7 @@ function setupProjectForm() {
   globalLastSelectedMet = '';
   globalHideMetnaCriteria = false;
   globalExpandAllPanels = false;
-  globalCriteriaResulHash = {};
+  globalCriteriaResultHash = {};
 
   // Set up click event listeners
   $('body').on('click', function(e) {

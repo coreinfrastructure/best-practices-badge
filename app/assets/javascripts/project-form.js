@@ -574,7 +574,7 @@ function fillCriteriaResultHash() {
                                               .toLowerCase()
                                               .replace(/\s+/g, '');
   });
-  $('#project_entry_form').trigger('CriterionResultHashComplete');
+  $('#project_entry_form').trigger('criteriaResultHashComplete');
 }
 
 function setupProjectForm() {
@@ -617,7 +617,7 @@ function setupProjectForm() {
     }
   });
 
-  $('#project_entry_form').on('CriterionResultHashComplete', function(e) {
+  $('#project_entry_form').on('criteriaResultHashComplete', function(e) {
     if (globalisEditing) {
       setupProjectFields();
     }

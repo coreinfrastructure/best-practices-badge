@@ -190,8 +190,7 @@ function resetProgressAndSatisfaction(criterion) {
 // The functionality of this function is mirrored in
 // app/views/_status_chooser.html.erb
 // If you change this function change that view accordingly.
-function resetCriterionResult(criterion) {
-  var result = getCriterionResult(criterion);
+function resetCriterionResult(criterion, result) {
   var destination = $('#' + criterion + '_enough');
   if (result === 'criterion_passing') {
     destination.attr('src', $('#result_symbol_check_img').attr('src')).
@@ -212,9 +211,8 @@ function resetCriterionResult(criterion) {
   }
 }
 
-function changedJustificationText(criterion) {
+function changedJustificationText(criterion, result) {
   var criterionJust = '#project_' + criterion + '_justification';
-  var result = getCriterionResult(criterion);
   if (result === 'criterion_justification_required' ||
       result === 'criterion_url_required') {
     $(criterionJust).addClass('required-data');
@@ -223,9 +221,9 @@ function changedJustificationText(criterion) {
   }
 }
 
-function changedJustificationTextAndUpdate(criterion) {
-  changedJustificationText(criterion);
-  resetCriterionResult(criterion);
+function changedJustificationTextAndUpdate(criterion, result) {
+  changedJustificationText(criterion, result);
+  resetCriterionResult(criterion, result);
   resetProgressAndSatisfaction(criterion);
 }
 
@@ -269,7 +267,7 @@ function hideMetNA() {
   });
 }
 
-function updateCriteriaDisplay(criterion) {
+function updateCriterionDisplay(criterion, result) {
   var criterionJust = '#project_' + criterion + '_justification';
   var status = criterionStatus(criterion);
   var justification = $(criterionJust) ? $(criterionJust).val() : '';
@@ -330,12 +328,12 @@ function updateCriteriaDisplay(criterion) {
     // which is the normal case.
     hideMetNA();
   }
-  changedJustificationText(criterion);
+  changedJustificationText(criterion, result);
 }
 
-function updateCriteriaDisplayAndUpdate(criterion) {
-  updateCriteriaDisplay(criterion);
-  resetCriterionResult(criterion);
+function updateCriterionDisplayAndUpdate(criterion, result) {
+  updateCriterionDisplay(criterion, result);
+  resetCriterionResult(criterion, result);
   resetProgressAndSatisfaction(criterion);
 }
 
@@ -343,10 +341,11 @@ function changeCriterion(criterion) {
   // We could use criterionStatus here, but this is faster since
   // we do not care about any status except "Met".
   var status = criterionStatus(criterion);
+  var result = getCriterionResult(criterion);
   if (status === 'Met') {
     globalLastSelectedMet = criterion;
   }
-  updateCriteriaDisplayAndUpdate(criterion);
+  updateCriterionDisplayAndUpdate(criterion, result);
 }
 
 function ToggleHideMet(e) {
@@ -455,35 +454,49 @@ function getAllPanelsReady() {
 function setAllCryptoNA() {
   $.each(CRITERIA_HASH, function(criterion, value) {
     if ((/^crypto/).test(criterion)) {
+      var result;
       $('#project_' + criterion + '_status_na').prop('checked', true);
+      result = getCriterionResult(criterion);
+      updateCriterionDisplay(criterion, result);
+      resetCriterionResult(criterion, result);
     }
-    updateCriteriaDisplay(criterion);
-    resetCriterionResult(criterion);
   });
   setPanelSatisfactionLevel($('#all_crypto_na').closest('.panel'));
   resetProgressBar();
 }
 
+// For a given event, return the criterion on which that event was
+// triggered and the criterionResult for that criterion.
+function getCriterionAndResult(event) {
+  var criterion = $(event.target).parents('.criterion-data').attr('id');
+  var result = getCriterionResult(criterion);
+  return {
+    criterion: criterion,
+    result: result
+  };
+}
+
 function setupProjectFields() {
   $.each(CRITERIA_HASH, function(key, value) {
-    updateCriteriaDisplay(key);
+    var result = getCriterionResult(key);
+    updateCriterionDisplay(key, result);
   });
   $('.edit_project').on('click', function(e) {
     if ($(e.target).is(':radio')) {
-      var criterion = $(e.target).parents('.criterion-data').attr('id');
-      changeCriterion(criterion);
+      var criterion = getCriterionAndResult(e);
+      changeCriterion(criterion.criterion, criterion.result);
     }
   });
   $('.edit_project').on('focusout', function(e) {
     if ($(e.target).hasClass('justification-text')) {
-      var criterion = $(e.target).parents('.criterion-data').attr('id');
-      updateCriteriaDisplayAndUpdate(criterion);
+      var criterion = getCriterionAndResult(e);
+      updateCriterionDisplayAndUpdate(criterion.criterion, criterion.result);
     }
   });
   $('.edit_project').on('input keyup', function(e) {
     if ($(e.target).hasClass('justification-text')) {
-      var criterion = $(e.target).parents('.criterion-data').attr('id');
-      changedJustificationTextAndUpdate(criterion);
+      var criterion = getCriterionAndResult(e);
+      changedJustificationTextAndUpdate(criterion.criterion, criterion.result);
     }
   });
 }

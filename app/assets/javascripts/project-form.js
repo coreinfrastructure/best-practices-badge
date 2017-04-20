@@ -566,12 +566,12 @@ function TogglePanel(e) {
 
 function fillCriteriaResultHash() {
   $.each(CRITERIA_HASH, function(key, value) {
-    var panelID = $('#' + key).closest('.panel')
-                              .find('.can-collapse').attr('id');
     var result = getCriterionResult(key);
     globalCriteriaResultHash[key] = {};
     globalCriteriaResultHash[key]['result'] = result;
-    globalCriteriaResultHash[key]['panelID'] = panelID;
+    globalCriteriaResultHash[key]['panelID'] = value['major']
+                                              .toLowerCase()
+                                              .replace(/\s+/g, '');
   });
   $('#project_entry_form').trigger('CriterionResultHashComplete');
 }

@@ -14,6 +14,7 @@ var globalShowAllDetails = false;
 var globalExpandAllPanels = false;
 var globalIgnoreHashChange = false;
 var globalCriteriaResultHash = {};
+var globalisEditing = false;
 
 // Do a polyfill for datalist if it's not already supported
 // (e.g., Safari fails to support polyfill at the time of this writing).
@@ -118,7 +119,7 @@ function getUnmetResult(criterion, justification) {
 function getCriterionResult(criterion) {
   var status = criterionStatus(criterion);
   var justification;
-  if ($('#project_name').is(':not(:disabled)')) {
+  if (globalisEditing) {
     justification = $('#project_' + criterion + '_justification').val();
   } else {
     justification = $.trim(
@@ -594,6 +595,7 @@ function setupProjectForm() {
   globalHideMetnaCriteria = false;
   globalExpandAllPanels = false;
   globalCriteriaResultHash = {};
+  globalisEditing = $('#project_name').is(':not(:disabled)');
 
   // Set up click event listeners
   $('body').on('click', function(e) {
@@ -616,7 +618,7 @@ function setupProjectForm() {
   });
 
   $('#project_entry_form').on('CriterionResultHashComplete', function(e) {
-    if ($('#project_name').is(':not(:disabled)')) {
+    if (globalisEditing) {
       setupProjectFields();
     }
     getAllPanelsReady();

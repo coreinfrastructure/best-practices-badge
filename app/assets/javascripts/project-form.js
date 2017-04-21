@@ -62,7 +62,7 @@ function criterionHashTrue(criterion, key) {
 }
 
 function criterionStatus(criterion) {
-  return globalCriteriaResultHash[criterion]['status']
+  return globalCriteriaResultHash[criterion]['status'];
 }
 
 // Return true if the justification is good enough for a SHOULD criterion.

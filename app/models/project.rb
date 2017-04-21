@@ -234,6 +234,18 @@ class Project < ActiveRecord::Base
     get_na_result(criterion, justification)
   end
 
+  def get_satisfaction_data(panel)
+    total = 0
+    passing = 0
+    Criteria.each do |k|
+      if k.major.downcase.delete(' ') == panel
+        total += 1
+        passing += 1 if enough?(k)
+      end
+    end
+    { text: passing.to_s + '/' + total.to_s, color: get_color(total, passing) }
+  end
+
   # Send owner an email they add a new project.
   def send_new_project_email
     ReportMailer.email_new_project_owner(self).deliver_now
@@ -383,6 +395,13 @@ class Project < ActiveRecord::Base
   # def all_active_criteria_passing?
   #   Criteria.active.all? { |criterion| enough? criterion }
   # end
+
+  # This method is mirrored in assets/project-form.js as getColor
+  # If you change this method, change getColor accordingly.
+  def get_color(total, passing)
+    hue = (passing.to_f / total * 120).round.to_s
+    'hsl(' + hue + ', 100%, 50%)'
+  end
 
   # This method is mirrored in assets/project-form.js as getMetResult
   # If you change this method, change getMetResult accordingly.

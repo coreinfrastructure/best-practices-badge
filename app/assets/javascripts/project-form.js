@@ -117,14 +117,7 @@ function getUnmetResult(criterion, justification) {
 // If you change this function change "get_criterion_result" accordingly.
 function getCriterionResult(criterion) {
   var status = criterionStatus(criterion);
-  var justification;
-  if (globalisEditing) {
-    justification = $('#project_' + criterion + '_justification')[0].value;
-  } else {
-    justification = $.trim(
-      $('#' + criterion).find('.justification-markdown', 'p').text()
-    );
-  }
+  var justification = $('#project_' + criterion + '_justification')[0].value;
   if (!justification) {
     justification = '';
   }
@@ -448,9 +441,8 @@ function getAllPanelsReady() {
     }
   }
   // Set the satisfaction level in each panel
-  $('.satisfaction-bullet').append('&#9679;');
-  $('.can-collapse').each(function(index) {
-    setPanelSatisfactionLevel($(this).attr('id'));
+  $('.satisfaction-bullet').each(function(index) {
+    $(this).css({ 'color' : $(this).attr('data-color')});
   });
 }
 
@@ -466,8 +458,7 @@ function setAllCryptoNA() {
     }
   });
   setPanelSatisfactionLevel($('#all_crypto_na').closest('.panel')
-                                               .find('.can-collapse')
-                                               .attr('id'));
+                                               .find('.can-collapse')[0].id);
   resetProgressBar();
 }
 
@@ -620,14 +611,14 @@ function setupProjectForm() {
     }
   });
 
-  $('#project_entry_form').on('criteriaResultHashComplete', function(e) {
-    if (globalisEditing) {
+  if (globalisEditing) {
+    $('#project_entry_form').on('criteriaResultHashComplete', function(e) {
       setupProjectFields();
-    }
-    getAllPanelsReady();
-  });
+    });
+    fillCriteriaResultHash();
+  }
 
-  fillCriteriaResultHash();
+  getAllPanelsReady();
 
   $(window).on('hashchange', function(e) {
     if (!globalIgnoreHashChange && $(window.location.hash).length) {

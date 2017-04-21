@@ -62,8 +62,7 @@ function criterionHashTrue(criterion, key) {
 }
 
 function criterionStatus(criterion) {
-  var statusPrefix = criterion + '_status';
-  return $('input[name="project[' + statusPrefix + ']"]:checked').val();
+  return globalCriteriaResultHash[criterion]['status']
 }
 
 // Return true if the justification is good enough for a SHOULD criterion.
@@ -120,7 +119,7 @@ function getCriterionResult(criterion) {
   var status = criterionStatus(criterion);
   var justification;
   if (globalisEditing) {
-    justification = $('#project_' + criterion + '_justification').val();
+    justification = $('#project_' + criterion + '_justification')[0].value;
   } else {
     justification = $.trim(
       $('#' + criterion).find('.justification-markdown', 'p').text()
@@ -276,7 +275,7 @@ function hideMetNA() {
 function updateCriterionDisplay(criterion) {
   var criterionJust = '#project_' + criterion + '_justification';
   var status = criterionStatus(criterion);
-  var justification = $(criterionJust) ? $(criterionJust).val() : '';
+  var justification = $(criterionJust) ? $(criterionJust)[0].value : '';
   var criterionPlaceholder;
   var suppressJustificationDisplay;
   if (status === 'Met') {
@@ -476,6 +475,9 @@ function setAllCryptoNA() {
 // triggered and the criterionResult for that criterion.
 function getCriterionAndResult(event) {
   var criterion = $(event.target).parents('.criterion-data').attr('id');
+  if (event.target.name === 'project[' + criterion + '_status]') {
+    globalCriteriaResultHash[criterion]['status'] = event.target.value;
+  }
   var result = getCriterionResult(criterion);
   globalCriteriaResultHash[criterion]['result'] = result;
   return criterion;
@@ -567,9 +569,10 @@ function TogglePanel(e) {
 
 function fillCriteriaResultHash() {
   $.each(CRITERIA_HASH, function(key, value) {
-    var result = getCriterionResult(key);
     globalCriteriaResultHash[key] = {};
-    globalCriteriaResultHash[key]['result'] = result;
+    globalCriteriaResultHash[key]['status'] = $('input[name="project[' + key +
+                                                '_status]"]:checked')[0].value;
+    globalCriteriaResultHash[key]['result'] = getCriterionResult(key);
     globalCriteriaResultHash[key]['panelID'] = value['major']
                                               .toLowerCase()
                                               .replace(/\s+/g, '');

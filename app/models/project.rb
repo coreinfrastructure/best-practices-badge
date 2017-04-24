@@ -235,15 +235,15 @@ class Project < ActiveRecord::Base
   end
 
   def get_satisfaction_data(panel)
-    total = 0
-    passing = 0
-    Criteria.each do |k|
-      if k.major.downcase.delete(' ') == panel
-        total += 1
-        passing += 1 if enough?(k)
+    total =
+      Criteria.select do |criterion|
+        criterion.major.downcase.delete(' ') == panel
       end
-    end
-    { text: passing.to_s + '/' + total.to_s, color: get_color(total, passing) }
+    passing = total.count { |criterion| enough?(criterion) }
+    {
+      text: "#{passing}/#{total.size}",
+      color: get_color(passing / total.size.to_f)
+    }
   end
 
   # Send owner an email they add a new project.
@@ -398,9 +398,9 @@ class Project < ActiveRecord::Base
 
   # This method is mirrored in assets/project-form.js as getColor
   # If you change this method, change getColor accordingly.
-  def get_color(total, passing)
-    hue = (passing.to_f / total * 120).round.to_s
-    'hsl(' + hue + ', 100%, 50%)'
+  def get_color(value)
+    hue = (value * 120).round
+    "hsl(#{hue}, 100%, 50%)"
   end
 
   # This method is mirrored in assets/project-form.js as getMetResult

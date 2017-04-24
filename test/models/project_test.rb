@@ -143,4 +143,16 @@ class ProjectTest < ActiveSupport::TestCase
   test 'unit test string_refinements na?' do
     assert @unjustified_project.release_notes_status.na?
   end
+
+  test 'test get_satisfaction_data' do
+    basics = @unjustified_project.get_satisfaction_data('basics')
+    assert_equal '9/12', basics[:text]
+    assert_equal 'hsl(90, 100%, 50%)', basics[:color]
+    reporting = @unjustified_project.get_satisfaction_data('reporting')
+    assert_equal '5/8', reporting[:text]
+    assert_equal 'hsl(75, 100%, 50%)', reporting[:color]
+    quality = @unjustified_project.get_satisfaction_data('quality')
+    assert_equal '13/13', quality[:text]
+    assert_equal 'hsl(120, 100%, 50%)', quality[:color]
+  end
 end

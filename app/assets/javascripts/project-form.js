@@ -448,17 +448,24 @@ function getAllPanelsReady() {
 
 // Implement "press this button to make all crypto N/A"
 function setAllCryptoNA() {
+  var panelsToSet = [];
   $.each(CRITERIA_HASH, function(criterion, value) {
     if ((/^crypto/).test(criterion)) {
+      var major = value.major.toLowerCase().replace(/\s+/g, '');
+      if ($.inArray(major, panelsToSet) === -1) {
+        panelsToSet.push(major);
+      }
       $('#project_' + criterion + '_status_na').prop('checked', true);
+      globalCriteriaResultHash[criterion]['status'] = 'N/A';
       globalCriteriaResultHash[criterion]['result'] =
         getCriterionResult(criterion);
       updateCriterionDisplay(criterion);
       resetCriterionResult(criterion);
     }
   });
-  setPanelSatisfactionLevel($('#all_crypto_na').closest('.panel')
-                                               .find('.can-collapse')[0].id);
+  $.each(panelsToSet, function(index, panelID) {
+    setPanelSatisfactionLevel(panelID);
+  });
   resetProgressBar();
 }
 

@@ -41,14 +41,14 @@ group :development, :test do
   gem 'database_cleaner', '1.5.3' # Cleans up database between tests
   gem 'dotenv-rails', '2.2.0'
   gem 'eslintrb', '2.1.0'
-  gem 'json', '1.8.6'
+  gem 'json', '2.1.0'
   gem 'license_finder', '3.0.0'
   gem 'mdl', '0.4.0'
-  gem 'pronto', '0.8.2'
-  gem 'pronto-brakeman', '0.8.0'
-  gem 'pronto-eslint', '0.8.0'
-  gem 'pronto-rails_best_practices', '0.8.0'
-  gem 'pronto-rubocop', '0.8.1'
+  gem 'pronto', '0.9.1'
+  gem 'pronto-brakeman', '0.9.0'
+  gem 'pronto-eslint', '0.9.0'
+  gem 'pronto-rails_best_practices', '0.9.0'
+  gem 'pronto-rubocop', '0.9.0'
   gem 'pry-byebug', '3.4.2'
   gem 'rubocop', '0.48.1' # Style checker.  Changes can cause test failure
   gem 'ruby-graphviz', '1.2.3' # This is used for bundle viz

@@ -246,6 +246,18 @@ class Project < ActiveRecord::Base
     }
   end
 
+  # Flash a message to update static_analysis if the user is updating
+  # for the first time since we added met_justification_required that
+  # criterion
+  STATIC_ANALYSIS_JUSTIFICATION_REQUIRED_DATE =
+    DateTime.iso8601('2017-04-25T00:00Z')
+  def notify_for_static_analysis?
+    status = self[Criteria[:static_analysis].name.status]
+    result = get_criterion_result(Criteria[:static_analysis])
+    updated_at < STATIC_ANALYSIS_JUSTIFICATION_REQUIRED_DATE &&
+      status.met? && result == :criterion_justification_required
+  end
+
   # Send owner an email they add a new project.
   def send_new_project_email
     ReportMailer.email_new_project_owner(self).deliver_now

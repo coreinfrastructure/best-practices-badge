@@ -37,6 +37,9 @@ class LoginTest < CapybaraFeatureTest
     assert_equal current_path, root_path
 
     visit edit_project_path(@project)
+    assert has_content? 'We have updated our requirements for the criterion ' \
+                        'static_analysis. Please add a justification for '\
+                        'this criterion.'
 
     fill_in 'project_name', with: 'It doesnt matter'
     # Below we are clicking the final save button, it has a value of ''

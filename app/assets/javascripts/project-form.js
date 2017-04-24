@@ -621,6 +621,7 @@ function setupProjectForm() {
   if (globalisEditing) {
     $('#project_entry_form').on('criteriaResultHashComplete', function(e) {
       setupProjectFields();
+      resetProgressBar();
     });
     fillCriteriaResultHash();
   }

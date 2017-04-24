@@ -1175,6 +1175,7 @@
     - static_analysis:
         category: MUST
         na_allowed: true
+        met_justification_required: true
         na_justification_required: true
         description: >
           At least one static code analysis tool MUST be applied to any proposed

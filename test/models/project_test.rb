@@ -117,6 +117,10 @@ class ProjectTest < ActiveSupport::TestCase
       @unjustified_project.get_criterion_result(Criteria[:installation_common])
     )
     assert_equal(
+      :criterion_justification_required,
+      @unjustified_project.get_criterion_result(Criteria[:static_analysis])
+    )
+    assert_equal(
       :criterion_barely,
       @unjustified_project.get_criterion_result(Criteria[:test_most])
     )

@@ -73,6 +73,7 @@ class ProjectsControllerTest < ActionController::TestCase
     log_in_as(@project.user)
     get :edit, params: { id: @project }
     assert_response :success
+    assert_not_empty flash
   end
 
   test 'should fail to edit due to old session' do

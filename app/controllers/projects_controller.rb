@@ -73,7 +73,17 @@ class ProjectsController < ApplicationController
   end
 
   # GET /projects/:id/edit(.:format)
-  def edit; end
+  def edit
+    return unless @project.notify_for_static_analysis?
+    # rubocop:disable Rails/OutputSafety
+    message = (
+      'We have updated our requirements for the criterion ' \
+      '<a href="#static_analysis">static_analysis</a>. '.html_safe +
+      'Please add a justification for this criterion.'
+    )
+    flash.now[:danger] = message
+    # rubocop:enable Rails/OutputSafety
+  end
 
   # POST /projects
   # POST /projects.json

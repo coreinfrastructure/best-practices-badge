@@ -78,10 +78,10 @@ The additional term SUGGESTED is added, as follows:
 
 - The term MUST is an absolute requirement, and MUST NOT
   is an absolute prohibition.
-- The term SHOULD indicates a criterion that should be implemented, but
-  valid reasons may exist to not do so in particular circumstances.
-  The full implications must be considered,
-  understood, and carefully weighed before choosing a different course.
+- The term SHOULD indicates a criterion that is normally required,
+  but there may exist valid reasons in particular circumstances to ignore it.
+  However, the full implications must be understood and carefully weighed
+  before choosing a different course.
 - The term SUGGESTED is used instead of SHOULD when the criterion must
   be considered, but valid reasons
   to not do so are even more common than for SHOULD.

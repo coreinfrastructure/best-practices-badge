@@ -1475,6 +1475,13 @@ as described below.
     2FA, by itself, does not meet this criterion, since it is not encrypted.
     <sup>[<a href="#secure_2FA">secure_2FA</a>]</sup>
 
+    *Details*: A 2FA mechanism that meets this criterion would be a
+    Time-based One-Time Password (TOTP) application that
+    automatically generates an authentication code that changes
+    after a certain period of time.
+    Note that
+    <a href="https://help.github.com/articles/configuring-two-factor-authentication-via-a-totp-mobile-app/">GitHub supports TOTP</a>.
+
     *Rationale*: SMS is easier and lower cost for many people,
     but it also provides much weaker security.  It has been argued
     that SMS isn't really 2FA at all; we permit it, because it's better

@@ -243,10 +243,24 @@
           and "security|secure".
     - documentation_interface:
         category: MUST
+        na_allowed: true
+        na_justification_required: true
         description: >
           The project MUST provide reference documentation that describes
-          its external interface (both input and output).
+          the external interface (both input and output) of the
+          software produced by the project.
         details: >
+          The documentation of an external interface explains to an
+          end-user or developer how to use it.  This would include its
+          application program interface (API) if the software has one.
+          If it is a library, document the major classes/types and
+          methods/functions that can be called. If it is a
+          web application, define its URL interface (often its REST
+          interface). If it is a command-line interface, document the
+          parameters and options it supports. In many cases it's best
+          if most of this documentation is automatically generated, so
+          that this documentation stays synchronized with the software
+          as it changes, but this isn't required.
           The project MAY use hypertext links to non-project material
           as documentation.
           Documentation MAY be automatically generated
@@ -260,6 +274,8 @@
           implementation code is not sufficient to satisfy this criterion;
           there needs to be an easy way to see the information without
           reading through all the source code.
+          If the project does not produce software,
+          choose "not applicable" (N/A).
         autofill: >
           Look for a "docs" or "doc" directory, or the main site, with
           .txt, .html, .md, .tex extension and uses the word "interface".

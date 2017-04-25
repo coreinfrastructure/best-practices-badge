@@ -427,7 +427,7 @@ as described below.
     If the project sites do not store passwords for this purpose,
     select N/A.
 
-    *Details*: 
+    *Details*:
     Note that the use of
     <a href="https://help.github.com/articles/github-security/">GitHub</a>
     meets this criterion.
@@ -504,7 +504,7 @@ as described below.
     doesn't sort human-readable text), select "not applicable" (N/A).
     <sup>[<a href="#internationalization">internationalization</a>]</sup>
 
-    Details: 
+    Details:
     Localization "refers to the adaptation of a product, application or
     document content to meet the language, cultural and other requirements
     of a specific target market (a locale)."

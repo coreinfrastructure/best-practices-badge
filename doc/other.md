@@ -1019,10 +1019,27 @@ as described below.
 
 *   <a name="documentation_security"></a>
     The project MUST document what the user can and cannot expect
-    in terms of security.  This MUST identify the security requirements
-    that the software is intended to meet and a justification
-    ("assurance case") for why they are believed to have been met.
+    in terms of security from the software produced by the project.
+    The project MUST identify the security requirements
+    that the software is intended to meet and an
+    assurance case that justifies why these requirements are met.
+    The assurance case MUST include: a description of the threat model,
+    clear identification of trust boundaries, and
+    evidence that common security weaknesses have been countered.
     <sup>[<a href="#documentation_security">documentation_security</a>]</sup>
+
+    *Details*:
+    An assurance case is
+    "a documented body of evidence that provides a convincing and valid
+    argument that a specified set of critical claims regarding a system’s
+    properties are adequately justified for a given application in a given
+    environment"
+    (<a href="http://nvlpubs.nist.gov/nistpubs/ir/2009/ir7608.pdf">"Software
+    Assurance Using Structured Assurance Case Models", Thomas Rhodes et al,
+    NIST Interagency Report 7608</a>).
+    Trust boundaries are
+    boundaries where data or execution changes its level of trust, e.g.,
+    a server's boundaries in a typical web application.
 
     *Rationale*: Writing the specification helps the developers think about the
     interface (including the API) the developers are providing, as well
@@ -1617,16 +1634,15 @@ as described below.
 
 *   <a name="security_review"></a>
     The project MUST have performed a security review within the last 5 years.
-    (N/A allowed).
+    This review MUST consider the security requirements and security
+    boundary.
     <sup>[<a href="#security_review">security_review</a>]</sup>
 
     *Details*:
-    This can be by the project members and/or an independent evaluation.
+    This MAY be done by the project members and/or an independent evaluation.
     This evaluation MAY be supported by static and dynamic analysis tools,
-    but there also must be human review to identify problems (paricularly
+    but there also must be human review to identify problems (particularly
     in design) that tools cannot detect.
-    Projects that do not have any results that have security implications
-    may select N/A.
 
     *Rationale*:
     Security review is important, because security problems often come from
@@ -1642,6 +1658,9 @@ as described below.
     SAST assisted), and when applicable, some sort of DAST (for APIs,
     probably just fuzzing), where failed tests would have to be added
     to the regression test suite."
+    It's difficult to get agreement on the details of what a security
+    review must include, but we believe that the stated criteria would
+    be agreed on.
 
 *   <a name="hardened_site"></a>
     hardened_site (Future)</br>

@@ -543,6 +543,9 @@ Here are guidelines for adding Ruby gems:
 * For Ruby gems, look at its data at <https://rubygems.org/> to learn
   more about it. E.G., is it still actively maintained?
   (e.g., it uses semantic versioning and have a ChangeLog).
+* For some tips on how to evaluate gems, see
+  <a href="https://evilmartians.com/chronicles/open-source-software-whats-in-a-poke">"Back-end Open-Source Software: What is in a poke?"
+  by Sergey Dolganov (January 26, 2017)</a>.
 * All required reused components MUST be open source software (OSS).
   It is *not* acceptable to insert a dependency
   that *requires* proprietary software; making it portable so it *can* use

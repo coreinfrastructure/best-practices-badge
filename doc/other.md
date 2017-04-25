@@ -416,6 +416,29 @@ as described below.
     other projects will be encouraged to follow suit and also make those
     achievements, benefitting everyone.
 
+#### Other
+
+*   <a name ="sites_password_security"></a>
+    If the project sites (website, repository, and download URLs)
+    store passwords for authentication of external users, the passwords
+    MUST be stored as iterated hashes with a per-user salt by
+    using a key stretching (iterated) algorithm (e.g., PBKDF2, Bcrypt
+    or Scrypt).
+    If the project sites do not store passwords for this purpose,
+    select N/A.
+
+    *Details*: 
+    Note that the use of
+    <a href="https://help.github.com/articles/github-security/">GitHub</a>
+    meets this criterion.
+    This criterion only applies to passwords used for authentication of
+    external users into the project sites.
+    If the project sites must log in to other sites, they may need to store
+    passwords for that purpose differently (since using an algorithm like
+    Bcrypt would make those passwords useless).
+    This applies criterion crypto_password_storage
+    to the project sites, similar to sites_https.
+
 #### Accessibility and Internationalization
 
 *   <a name ="accessibility_best_practices"></a>
@@ -471,7 +494,6 @@ as described below.
       Android). TUI programs MAY work to reduce overdraw to prevent redundant
       reading by screen-readers.
     </ul>
-
 
 *   <a name="internationalization"></a>
     The software produced by the project SHOULD be internationalized to enable
@@ -958,7 +980,7 @@ as described below.
     Note that in some cases principles will conflict, in which case
     a choice must be made
     (e.g., many mechanisms can make things more complex, contravening
-    "economy of mechanism" / keep it simple)
+    "economy of mechanism" / keep it simple).
     If the project is not producing software, this may be N/A.
 
     *Rationale*:

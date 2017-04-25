@@ -216,8 +216,11 @@
   - Documentation: !!omap
     - documentation_basics:
         category: MUST
+        na_allowed: true
+        na_justification_required: true
         description: >
-          The project MUST provide basic documentation for the software.
+          The project MUST provide basic documentation for the
+          software produced by the project.
         details: >
           This documentation must be in some media (such as text or video)
           that includes:
@@ -227,6 +230,8 @@
           The security documentation need not be long.
           The project MAY use hypertext links to
           non-project material as documentation.
+          If the project does not produce software,
+          choose "not applicable" (N/A).
         met_placeholder: >
           (Optional) What URL(s) are the starting points to for documentation?
         rationale: >
@@ -241,6 +246,8 @@
           or a direct links from it on the same site,
           that includes words like "install(ation)?", "use|using",
           and "security|secure".
+          If examining the project repo discovers a nontrivial amount of code,
+          then this should not be N/A.
     - documentation_interface:
         category: MUST
         na_allowed: true
@@ -279,6 +286,8 @@
         autofill: >
           Look for a "docs" or "doc" directory, or the main site, with
           .txt, .html, .md, .tex extension and uses the word "interface".
+          If examining the project repo discovers a nontrivial amount of code,
+          then this should not be N/A.
   - Other: !!omap
     - sites_https:
         category: MUST

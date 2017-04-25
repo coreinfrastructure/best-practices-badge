@@ -210,8 +210,8 @@ There is an implied criterion that we should mention here:
 
 <ul>
 
-<li><a name="documentation_basics"></a>The project MUST provide basic documentation for the software.
- <sup>[<a href="#documentation_basics">documentation_basics</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>This documentation must be in some media (such as text or video) that includes: how to install it, how to start it, how to use it (possibly with a tutorial using examples), and how to use it securely (e.g., what to do and what not to do) if that is an appropriate topic for the software. The security documentation need not be long. The project MAY use hypertext links to non-project material as documentation.
+<li><a name="documentation_basics"></a>The project MUST provide basic documentation for the software produced by the project.
+ (N/A allowed.) (Justification required for "N/A".) <sup>[<a href="#documentation_basics">documentation_basics</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>This documentation must be in some media (such as text or video) that includes: how to install it, how to start it, how to use it (possibly with a tutorial using examples), and how to use it securely (e.g., what to do and what not to do) if that is an appropriate topic for the software. The security documentation need not be long. The project MAY use hypertext links to non-project material as documentation. If the project does not produce software, choose "not applicable" (N/A).
 </dd><dt><i>Rationale</i>:<dt> <dd>Potential users need documentation so that they can learn how to use the software. This documentation could be provided via the project website or repository, or even via hyperlink to some external information, so we do not specify exactly where this information is.
 </dd></dl></li>
 

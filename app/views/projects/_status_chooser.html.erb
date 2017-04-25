@@ -1,14 +1,14 @@
-<% criterion_result = project.get_criterion_result(criterion) %>
-<% status_symbol = (criterion.to_s + '_status').to_sym %>
-<% justification_symbol = (criterion.to_s + '_justification').to_sym %>
-<% project_criterion_status = project[status_symbol] %>
-<% project_criterion_justification = project[justification_symbol] %>
+<% criterion_result = project.get_criterion_result(criterion)
+   status_symbol = (criterion.to_s + '_status').to_sym
+   justification_symbol = (criterion.to_s + '_justification').to_sym
+   project_criterion_status = project[status_symbol]
+   project_criterion_justification = project[justification_symbol] %>
 
 <% cache [criterion.to_s, is_disabled, project_criterion_status,
           project_criterion_justification ] do %>
   <div id="<%= criterion.to_s %>" class="row criterion-data">
-    <% is_crypto = criterion.to_s.match(/^crypto_/) %>
-    <% crypto_class = is_crypto ? ' criterion-is-crypto' : '' %>
+    <% is_crypto = criterion.to_s.match(/^crypto_/)
+       crypto_class = is_crypto ? ' criterion-is-crypto' : '' %>
 
     <div class="col-md-2 col-sm-3 col-xs-4 criteria-radio<%= crypto_class %>">
       <div class="status-chooser">

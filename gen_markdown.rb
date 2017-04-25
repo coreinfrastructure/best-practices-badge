@@ -11,7 +11,7 @@
 require 'yaml'
 
 # Load in entire criteria.yml, which keys off the major/minor groups
-FullCriteriaHash = YAML.load_file('criteria.yml')
+FullCriteriaHash = YAML.load_file('criteria/criteria.yml')
 
 def print_file(filename)
   File.open(filename, 'r') do |file|

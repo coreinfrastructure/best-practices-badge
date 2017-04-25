@@ -205,7 +205,7 @@ task 'html_from_markdown' => markdown_files.ext('.html')
 
 file 'doc/criteria.md' =>
      [
-       'criteria.yml',
+       'criteria/criteria.yml',
        'doc/criteria-header.markdown', 'doc/criteria-footer.markdown',
        './gen_markdown.rb'
      ] do

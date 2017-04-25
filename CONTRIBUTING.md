@@ -429,7 +429,7 @@ check the software:
     trailing whitespace in latest diff
     *yaml_syntax_check* - checks syntax of YAML (.yml) files.
     Note that the automated test suite includes a number of specific
-    checks on the criteria.yml file.
+    checks on the criteria/criteria.yml file.
 *   *fasterer* - report on Ruby constructs with poor performance
     (temporarily disabled until it supports Ruby 2.4)
 *   *eslint* - Perform code style check on JavaScript using eslint

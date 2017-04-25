@@ -2,7 +2,7 @@
 
 <!-- SPDX-License-Identifier: (MIT OR CC-BY-3.0+) -->
 <!-- DO NOT EDIT generated file criteria.md !! -->
-<!-- The actual criteria are stored in criteria.yml . -->
+<!-- The actual criteria are stored in criteria/criteria.yml . -->
 <!-- See also files criteria-header.markdown and criteria-footer.markdown . -->
 
 ## Introduction
@@ -153,7 +153,7 @@ if the project follows standard conventions and
 is hosted on a site (e.g., GitHub) with decent API support.
 We intend to improve this automation in the future (improvements welcome!).
 
-The actual criteria are stored in the file "criteria.yml", including
+The actual criteria are stored in the file "criteria/criteria.yml", including
 details, rationale, and how it could be automated.
 
 There is an implied criterion that we should mention here:

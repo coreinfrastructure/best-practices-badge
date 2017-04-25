@@ -284,7 +284,7 @@ are implemented.
 To modify the text of the criteria, edit these files:
 
 - doc/criteria.md - Document
-- ./criteria.yml - YAML file used by BadgeApp for criteria information.
+- criteria/criteria.yml - YAML file used by BadgeApp for criteria information.
 
 If you're adding/removing fields (including criteria), be sure to also edit
 app/views/projects/\_form.html.erb

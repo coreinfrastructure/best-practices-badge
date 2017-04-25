@@ -416,7 +416,7 @@ as described below.
     other projects will be encouraged to follow suit and also make those
     achievements, benefitting everyone.
 
-#### Accessibility
+#### Accessibility and Internationalization
 
 *   <a name ="accessibility_best_practices"></a>
     The project (both project sites and project results) SHOULD
@@ -471,6 +471,36 @@ as described below.
       Android). TUI programs MAY work to reduce overdraw to prevent redundant
       reading by screen-readers.
     </ul>
+
+
+*   <a name="internationalization"></a>
+    The software produced by the project SHOULD be internationalized to enable
+    easy localization for the target audience's culture, region, or
+    language.
+    If internationalization (i18n) does not apply (e.g., the software
+    doesn't generate text intended for end-users and
+    doesn't sort human-readable text), select "not applicable" (N/A).
+    <sup>[<a href="#internationalization">internationalization</a>]</sup>
+
+    Details: 
+    Localization "refers to the adaptation of a product, application or
+    document content to meet the language, cultural and other requirements
+    of a specific target market (a locale)."
+    Internationalization is the "design and development of a product,
+    application or document content that enables easy localization for
+    target audiences that vary in culture, region, or language."
+    (See <a href="https://www.w3.org/International/questions/qa-i18n">W3C's "Localization vs. Internationalization"</a>.)
+    Software meets this criterion simply by being internationalized.
+    No localization for another specific language is required, since
+    once software has been internationalized it's possible for others
+    to work on localization.
+
+    Rationale:
+    When software is internationalized, the software can be used by far
+    more people.  By itself, that's valuable.
+    In addition, software that can be used by far more people is more
+    likely to lead to larger communities, which increases the likelihood
+    of contributions and reviews.
 
 #### Continuity
 

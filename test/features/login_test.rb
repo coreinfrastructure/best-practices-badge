@@ -60,6 +60,10 @@ class LoginTest < CapybaraFeatureTest
 
     ensure_choice 'project_contribution_status_met' # No URL given, so fails
     assert_match QUESTION, find('#contribution_enough')['src']
+    fill_in 'project_contribution_justification',
+            with: 'For more information see: http://www.example.org/'
+    wait_for_jquery
+    assert_match CHECK, find('#contribution_enough')['src']
 
     ensure_choice 'project_contribution_requirements_status_unmet' # No URL
     assert_match QUESTION, find('#contribution_requirements_enough')['src']

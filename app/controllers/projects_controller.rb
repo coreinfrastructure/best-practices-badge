@@ -6,7 +6,7 @@ require 'net/http'
 # rubocop:disable Metrics/ClassLength
 class ProjectsController < ApplicationController
   include ProjectsHelper
-  before_action :set_project, only: %i[edit update destroy show badge]
+  before_action :set_project, only: %i[edit update destroy show show_json badge]
   before_action :logged_in?, only: :create
   before_action :change_authorized, only: %i[destroy edit update]
 
@@ -15,7 +15,7 @@ class ProjectsController < ApplicationController
   # have a cached version that works for everyone):
   # before_action :set_cache_control_headers, only: [:index, :show, :badge]
   # We *can* cache the badge result, and that's what matters anyway.
-  before_action :set_cache_control_headers, only: [:badge]
+  before_action :set_cache_control_headers, only: %i[badge show_json]
 
   helper_method :repo_data
 
@@ -52,8 +52,12 @@ class ProjectsController < ApplicationController
   end
 
   # GET /projects/1
-  # GET /projects/1.json
   def show; end
+
+  # GET /projects/1.json
+  def show_json
+    set_surrogate_key_header @project.record_key + '/json'
+  end
 
   def badge
     set_surrogate_key_header @project.record_key + '/badge'
@@ -167,7 +171,7 @@ class ProjectsController < ApplicationController
   def destroy
     @project.destroy
     ReportMailer.report_project_deleted(@project, current_user).deliver_now
-    purge_cdn_badge
+    purge_cdn_project
     # @project.purge
     # @project.purge_all
     respond_to do |format|
@@ -305,11 +309,13 @@ class ProjectsController < ApplicationController
   end
 
   # Purge the badge from the CDN (if any)
-  def purge_cdn_badge
+  def purge_cdn_project
     cdn_badge_key = @project.record_key + '/badge'
+    cdn_json_key = @project.record_key + '/json'
     # If we can't authenticate to the CDN, complain but don't crash.
     begin
       FastlyRails.purge_by_key cdn_badge_key
+      FastlyRails.purge_by_key cdn_json_key
     rescue StandardError => e
       Rails.logger.error "FAILED TO PURGE #{cdn_badge_key} , #{e.class}: #{e}"
     end
@@ -400,7 +406,7 @@ class ProjectsController < ApplicationController
 
   # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   def successful_update(format, old_badge_level)
-    purge_cdn_badge
+    purge_cdn_project
     # @project.purge
     format.html do
       if params[:continue]

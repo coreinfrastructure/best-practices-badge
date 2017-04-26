@@ -61,7 +61,7 @@ class ProjectsControllerTest < ActionController::TestCase
   end
 
   test 'should show project JSON data' do
-    get :show, params: { id: @project, format: :json }
+    get :show_json, params: { id: @project, format: :json }
     assert_response :success
     body = JSON.parse(response.body)
     assert_equal 'Pathfinder OS', body['name']

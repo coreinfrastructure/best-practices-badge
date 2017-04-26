@@ -16,6 +16,8 @@ Rails.application.routes.draw do
   resources :projects do
     member do
       get 'badge', defaults: { format: 'svg' }
+      get '' => 'projects#show_json',
+          constraints: ->(req) { req.format == :json }
     end
   end
 

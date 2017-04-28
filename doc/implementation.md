@@ -469,6 +469,42 @@ heroku pg:backups capture
 curl -o latest.dump $(heroku pg:backups public-url)
 ~~~~
 
+## Recovering a deleted or mangled project entry
+
+If you want to restore a deleted project, or reset its values,
+we have some tools to help.
+
+Put the project data in JSON form in the file "project.json"
+(at the top of the tree, typically in "~/cii-best-practices-badge").
+If this was a recent deletion, then you can simply copy the JSON-formatted
+data from the email documenting the deletion.
+
+Then run:
+
+~~~~
+    rake create_project_insertion_command
+~~~~
+
+This will create a file "project.sql" that has SQL insertion command.
+
+You'll next need to delete the project if it already exists, because
+it's an insertion command.
+
+Now you need to execute the SQL command on the correct database.
+Locally you can do this (you may want to set RAILS_ENV to
+"production"):
+
+~~~~
+    rails db < project.sql
+~~~~
+
+If you want the data to be on the true production site, you'll need
+privileges to execute database commands, then run this:
+
+~~~~
+    heroku pg:psql --app production-bestpractices < project.sql
+~~~~
+
 ## Purging Fastly CDN cache
 
 If a change in the application causes any badge level(s) to change or

@@ -2,6 +2,8 @@
 
 # Rake tasks for BadgeApp
 
+require 'json'
+
 task(:default).clear.enhance %w[
   rbenv_rvm_setup
   bundle
@@ -360,6 +362,28 @@ task :fake_production do
   sh 'RAILS_ENV=fake_production bundle exec rake assets:precompile'
   sh 'RAILS_ENV=fake_production bundle check || bundle install'
   sh 'RAILS_ENV=fake_production rails server -p 4000'
+end
+
+# Convert project.json -> project.sql (a command to re-insert data).
+# This only *generates* a SQL command; I did it this way so that it's easy
+# to check the command to be run *before* executing it, and this also makes
+# it easy to separately determine the database to apply the command to.
+# Note that this depends on non-standard PostgreSQL extensions.
+desc 'Convert file "project.json" into SQL insertion command in "project.sql".'
+task :create_project_insertion_command do
+  puts 'Reading file project.json (this uses PostgreSQL extensions)'
+  file_contents = File.read('project.json')
+  data_hash = JSON.parse(file_contents)
+  project_id = data_hash['id']
+  puts "Inserting project id #{project_id}"
+  # Escape JSON using SQL escape ' -> '', so we can use it in a SQL command
+  escaped_json = "'" + file_contents.gsub(/'/, "''") + "'"
+  sql_command = 'insert into projects select * from ' \
+                "json_populate_record(NULL::projects, #{escaped_json});"
+  File.write('project.sql', sql_command)
+  puts 'File project.sql created. To use this, do the following (examples):'
+  puts 'Local:  rails db < project.sql'
+  puts 'Remote: heroku pg:psql --app production-bestpractices < project.sql'
 end
 
 # Use this if the badge rules change.  This will email those who

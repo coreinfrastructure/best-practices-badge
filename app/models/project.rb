@@ -380,15 +380,13 @@ class Project < ActiveRecord::Base
   # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
   # Return which projects should be announced as getting badges in the
-  # last month before date 'before'.
-  def self.projects_to_announce_passing(before)
+  # month target_month
+  def self.projects_first_passing_in(target_month)
     Project
       .select('id, name, achieved_passing_at')
       .where('badge_percentage = 100')
-      .where('achieved_passing_at >= ?',
-             before.prev_month.at_beginning_of_month)
-      .where('achieved_passing_at <= ?',
-             before.prev_month.at_end_of_month)
+      .where('achieved_passing_at >= ?', target_month.at_beginning_of_month)
+      .where('achieved_passing_at <= ?', target_month.at_end_of_month)
       .where('lost_passing_at IS NULL')
       .reorder('achieved_passing_at')
   end

@@ -23,8 +23,12 @@ class ReportMailerTest < ActionMailer::TestCase
   end
 
   test 'Does the monthly announcement run?' do
+    # This is a quick sanity test, not an in-depth test.
     email = ReportMailer
-            .report_monthly_announcement([@perfect_project], '2015-02')
+            .report_monthly_announcement(
+              [@perfect_project], '2015-02',
+              project_stats(:one), project_stats(:two)
+            )
             .deliver_now
     assert_not ActionMailer::Base.deliveries.empty?
     # We don't want to modify the test when we reconfigure things.

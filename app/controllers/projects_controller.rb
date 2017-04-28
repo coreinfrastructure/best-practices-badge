@@ -244,15 +244,22 @@ class ProjectsController < ApplicationController
   # disabled & the data is forged anyway) or the "real" production site.
   # Do *not* call this on the "master" or "staging" tiers,
   # because we don't want to bother our users.
+  # rubocop:disable Metrics/MethodLength
   def self.send_monthly_announcement
     consider_today = Time.zone.today
     month = consider_today.prev_month.strftime('%Y-%m')
-    projects = Project.projects_to_announce_passing(consider_today)
-    unless projects.empty?
-      ReportMailer.report_monthly_announcement(projects, month).deliver_now
-    end
+    last_stat_in_prev_month =
+      ProjectStat.last_in_month(consider_today.prev_month)
+    last_stat_in_prev_prev_month =
+      ProjectStat.last_in_month(consider_today.prev_month.prev_month)
+    projects = Project.projects_first_passing_in(consider_today.prev_month)
+    ReportMailer.report_monthly_announcement(
+      projects, month, last_stat_in_prev_month, last_stat_in_prev_prev_month
+    )
+                .deliver_now
     projects.map(&:id) # Return a list of project ids that were reminded.
   end
+  # rubocop:enble Metrics/MethodLength
   private_class_method :send_monthly_announcement
 
   def allowed_query?(key, value)
@@ -336,7 +343,7 @@ class ProjectsController < ApplicationController
     'homepage_url, repo_url, license, user_id, achieved_passing_at, ' \
     'updated_at, badge_percentage'
 
-  # rubocop:disable Metrics/MethodLength,Metrics/PerceivedComplexity
+  # rubocop:disable Metrics/PerceivedComplexity
   # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
   def retrieve_projects
     @projects = Project.all
@@ -363,7 +370,7 @@ class ProjectsController < ApplicationController
     @projects = @projects.includes(:user).paginate(page: params[:page])
   end
   # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity
-  # rubocop:enable Metrics/MethodLength,Metrics/PerceivedComplexity
+  # rubocop:enable Metrics/PerceivedComplexity
 
   def set_homepage_url
     # Assign to repo.homepage if it exists, and else repo_url
@@ -404,7 +411,7 @@ class ProjectsController < ApplicationController
   end
   # rubocop:enable Metrics/AbcSize
 
-  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+  # rubocop:disable Metrics/AbcSize
   def successful_update(format, old_badge_level)
     purge_cdn_project
     # @project.purge
@@ -434,7 +441,7 @@ class ProjectsController < ApplicationController
       ReportMailer.email_owner(@project, new_badge_level).deliver_now
     end
   end
-  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
+  # rubocop:enable Metrics/AbcSize
 
   def url_anchor
     return '#' + params[:continue] unless params[:continue] == 'Save'

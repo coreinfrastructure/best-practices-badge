@@ -94,7 +94,8 @@ class ReportMailer < ApplicationMailer
   def report_monthly_announcement(
     projects, month, last_stat_in_prev_month, last_stat_in_prev_prev_month
   )
-    @report_destination = REPORT_EMAIL_DESTINATION
+    @report_destination =
+      ENV['REPORT_MONTHLY_EMAIL'] || REPORT_EMAIL_DESTINATION
     @projects = projects
     @month = month
     @last_stat_in_prev_month = last_stat_in_prev_month

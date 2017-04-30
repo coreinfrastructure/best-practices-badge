@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'ipaddr'
+
 class ApplicationController < ActionController::Base
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
@@ -21,6 +23,28 @@ class ApplicationController < ActionController::Base
     true
   end
   before_action :redirect_https
+
+  # raise exception if text value client_ip isn't in valid_client_ips
+  def fail_if_invalid_client_ip(client_ip, allowed_ips)
+    return if client_ip.blank?
+    client_ip_data = IPAddr.new(client_ip)
+    return unless client_ip_data
+    return if allowed_ips.any? do |range|
+      range.include?(client_ip_data)
+    end
+    raise ActionController::RoutingError.new('Invalid client IP'),
+          'Invalid client IP'
+  end
+
+  # Validate client IP address if Rails.configuration.valid_client_ips
+  # and header value X-Forwarded-For.
+  # This can provide a defense against cloud piercing.
+  def validate_client_ip_address
+    return unless Rails.configuration.valid_client_ips
+    client_ip = request.headers['HTTP_x-FORWARDED-FOR']
+    fail_if_invalid_client_ip(client_ip, Rails.configuration.valid_client_ips)
+  end
+  before_action :validate_client_ip_address
 
   include SessionsHelper
 end

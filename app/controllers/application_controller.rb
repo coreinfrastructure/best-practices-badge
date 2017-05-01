@@ -42,7 +42,7 @@ class ApplicationController < ActionController::Base
   def validate_client_ip_address
     Rails.logger.info "DEBUG: ips: #{Rails.configuration.valid_client_ips}"
     return unless Rails.configuration.valid_client_ips
-    client_ip = request.headers['HTTP_x-FORWARDED-FOR']
+    client_ip = request.headers['HTTP_X-FORWARDED-FOR']
     Rails.logger.info "DEBUG: fwd: #{client_ip}"
     fail_if_invalid_client_ip(client_ip, Rails.configuration.valid_client_ips)
   end

@@ -39,7 +39,7 @@ group :development, :test do
   gem 'bullet', '5.5.1'
   gem 'bundler-audit', '0.5.0'
   gem 'database_cleaner', '1.5.3' # Cleans up database between tests
-  gem 'dotenv-rails', '2.2.0'
+  gem 'dotenv-rails', '2.2.1'
   gem 'eslintrb', '2.1.0'
   gem 'json', '2.1.0'
   gem 'license_finder', '3.0.0'

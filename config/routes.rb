@@ -1,40 +1,47 @@
 # frozen_string_literal: true
 
 # rubocop:disable Metrics/BlockLength
+
+ALLOWED_LOCALES = /en|fr|es|zh|ja/
+
 Rails.application.routes.draw do
-  resources :project_stats
-  get 'sessions/new'
+  scope "(:locale)", locale: ALLOWED_LOCALES do
+    resources :project_stats
 
-  get 'signup' => 'users#new'
-  get 'home' => 'static_pages#home'
-  get 'background' => 'static_pages#background'
-  get 'criteria' => 'static_pages#criteria'
+    get 'sessions/new'
 
-  get 'feed' => 'projects#feed', defaults: { format: 'atom' }
-  get 'reminders' => 'projects#reminders_summary'
+    get 'signup' => 'users#new'
+    get 'home' => 'static_pages#home'
+    get 'background' => 'static_pages#background'
+    get 'criteria' => 'static_pages#criteria'
 
-  resources :projects do
-    member do
-      get 'badge', defaults: { format: 'svg' }
-      get '' => 'projects#show_json',
-          constraints: ->(req) { req.format == :json }
+    get 'feed' => 'projects#feed', defaults: { format: 'atom' }
+    get 'reminders' => 'projects#reminders_summary'
+
+    resources :projects do
+      member do
+        get 'badge', defaults: { format: 'svg' }
+        get '' => 'projects#show_json',
+            constraints: ->(req) { req.format == :json }
+      end
     end
+
+    resources :users
+    resources :account_activations, only: [:edit]
+    resources :password_resets,     only: %i[new create edit update]
+
+    resources :projects
+    match(
+      'projects/:id/edit' => 'projects#update',
+      :via => %i[put patch], :as => :put_project
+    )
+    get 'login' => 'sessions#new'
+    post 'login' => 'sessions#create'
+    delete 'logout' => 'sessions#destroy'
+
+    get 'auth/:provider/callback' => 'sessions#create'
+    get '/signout' => 'sessions#destroy', as: :signout
   end
-
-  resources :users
-  resources :account_activations, only: [:edit]
-  resources :password_resets,     only: %i[new create edit update]
-  resources :projects
-  match(
-    'projects/:id/edit' => 'projects#update',
-    :via => %i[put patch], :as => :put_project
-  )
-  get 'login' => 'sessions#new'
-  post 'login' => 'sessions#create'
-  delete 'logout' => 'sessions#destroy'
-
-  get 'auth/:provider/callback' => 'sessions#create'
-  get '/signout' => 'sessions#destroy', as: :signout
 
   # The priority is based upon order of creation: first created ->
   # highest priority.

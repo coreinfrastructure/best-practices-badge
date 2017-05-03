@@ -14,6 +14,12 @@ class ApplicationController < ActionController::Base
   before_action :validate_session_timestamp
   after_action :persist_session_timestamp
 
+  # Set user's locale.
+  def set_locale
+    I18n.locale = params[:locale] || I18n.default_locale
+  end
+  before_action :set_locale
+
   # See: http://stackoverflow.com/questions/4329176/
   #   rails-how-to-redirect-from-http-example-com-to-https-www-example-com
   def redirect_https

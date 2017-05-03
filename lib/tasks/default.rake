@@ -401,6 +401,8 @@ Rake::Task['test:run'].enhance ['test:features']
 desc 'Run daily tasks used in any tier, e.g., record daily statistics'
 task daily: :environment do
   ProjectStat.create!
+  day_for_monthly = (ENV['BADGEAPP_DAY_FOR_MONTHLY'] || '5').to_i
+  Rake::Task['monthly'].invoke if Time.now.utc.day == day_for_monthly
 end
 
 # Run this task to email a limited set of reminders to inactive projects
@@ -419,6 +421,10 @@ task monthly_announcement: :environment do
   puts 'Sending monthly announcement. List of reminded project ids:'
   p ProjectsController.send :send_monthly_announcement
   true
+end
+
+desc 'Run monthly tasks (called from "daily")'
+task monthly: %i[environment monthly_announcement] do
 end
 
 # Run this task periodically if we want to test the

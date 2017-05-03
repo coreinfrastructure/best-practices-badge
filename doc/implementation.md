@@ -116,6 +116,8 @@ The application is configured by various environment variables:
   project was last sent a reminder
 * RAILS_ENV (default 'development'): Rails environment.
   The master, staging, and production systems set this to 'production'.
+* BADGEAPP_DAY_FOR_MONTHLY: Day of the month to monthly activities, e.g.,
+  send out monthly reminders.  Default 5.  Set to 0 to disable monthly acts.
 
 This can be set on Heroku.  For example, to change the maximum number
 of email reminders to inactive projects on production-bestpractices:

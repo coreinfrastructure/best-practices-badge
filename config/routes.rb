@@ -5,7 +5,7 @@
 ALLOWED_LOCALES = /en|fr|es|zh|ja/
 
 Rails.application.routes.draw do
-  scope "(:locale)", locale: ALLOWED_LOCALES do
+  scope '(:locale)', locale: ALLOWED_LOCALES do
     resources :project_stats
 
     get 'sessions/new'

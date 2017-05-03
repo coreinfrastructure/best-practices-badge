@@ -2,7 +2,7 @@
 
 <!-- SPDX-License-Identifier: (MIT OR CC-BY-3.0+) -->
 <!-- DO NOT EDIT generated file criteria.md !! -->
-<!-- The actual criteria are stored in criteria.yml . -->
+<!-- The actual criteria are stored in criteria/criteria.yml . -->
 <!-- See also files criteria-header.markdown and criteria-footer.markdown . -->
 
 ## Introduction
@@ -45,6 +45,16 @@ See the
 [draft criteria for higher/more advanced badges](./other.md) if you
 are interested in possible future criteria.
 
+The Linux Foundation also sponsors the
+[OpenChain Project](https://www.openchainproject.org/), which
+identifies criteria for a "high quality Free
+and Open Source Software (FOSS) compliance program."
+OpenChain focuses on how organizations can best use FLOSS and contribute
+back to FLOSS projects, while the CII Best Practices badge
+focuses on the FLOSS projects themselves.
+The CII Best Practices badge and OpenChain work together to help
+improve FLOSS and how FLOSS is used.
+
 We expect that these practices and their detailed criteria will be updated,
 even after badges are released.
 Thus, criteria (and badges) probably will have a year identifier
@@ -68,10 +78,10 @@ The additional term SUGGESTED is added, as follows:
 
 - The term MUST is an absolute requirement, and MUST NOT
   is an absolute prohibition.
-- The term SHOULD indicates a criterion that should be implemented, but
-  valid reasons may exist to not do so in particular circumstances.
-  The full implications must be considered,
-  understood, and carefully weighed before choosing a different course.
+- The term SHOULD indicates a criterion that is normally required,
+  but there may exist valid reasons in particular circumstances to ignore it.
+  However, the full implications must be understood and carefully weighed
+  before choosing a different course.
 - The term SUGGESTED is used instead of SHOULD when the criterion must
   be considered, but valid reasons
   to not do so are even more common than for SHOULD.
@@ -93,6 +103,39 @@ software development and running a FLOSS project;
 if not, see introductory materials such as
 [*Producing Open Source Software* by Karl Fogel](http://producingoss.com/).
 
+## Terminology
+
+A *project* is an active entity that has project member(s) and produces
+project result(s).
+Its member(s) use project sites to coordinate and disseminate result(s).
+A project does not need to be a formal legal entity.
+Key terms relating to project are:
+
+*   Project *members* are the
+    group of one or more people or companies who work together
+    to attempt to produce project results.
+    Some FLOSS projects may have different kinds of members, with different
+    roles, but that's outside our scope.
+*   Project *results* are what the project members work together
+    to produce as their end goal. Normally this is software,
+    but project results may include other things as well.
+    Criteria that refer to "software produced by the project"
+    are referring to project results.
+*   Project *sites* are the sites dedicated to supporting the development
+    and dissemination of project results, and include
+    the project website, repository, and download sites where applicable
+    (see <a href="#sites_https">sites_https</a>).
+*   The project *website*, aka project homepage, is the main page
+    on the world wide web (WWW) that a new user would typically visit to see
+    information about the project; it may be the same as the project's
+    repository site (this is often true on GitHub).
+*   The project *repository* manages and stores the project results
+    and revision history of the project results.
+    This is also referred to as the project *source repository*,
+    because we only require managing and storing of the editable versions,
+    not of automatically generated results
+    (in many cases generated results are not stored in a repository).
+
 ## Current criteria: Best Practices for FLOSS
 
 Here are the current criteria.  Note that:
@@ -110,7 +153,7 @@ if the project follows standard conventions and
 is hosted on a site (e.g., GitHub) with decent API support.
 We intend to improve this automation in the future (improvements welcome!).
 
-The actual criteria are stored in the file "criteria.yml", including
+The actual criteria are stored in the file "criteria/criteria.yml", including
 details, rationale, and how it could be automated.
 
 There is an implied criterion that we should mention here:

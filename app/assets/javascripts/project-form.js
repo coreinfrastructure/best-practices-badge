@@ -13,6 +13,8 @@ var globalHideMetnaCriteria = false;
 var globalShowAllDetails = false;
 var globalExpandAllPanels = false;
 var globalIgnoreHashChange = false;
+var globalCriteriaResultHash = {};
+var globalisEditing = false;
 
 // Do a polyfill for datalist if it's not already supported
 // (e.g., Safari fails to support polyfill at the time of this writing).
@@ -59,68 +61,100 @@ function criterionHashTrue(criterion, key) {
   return CRITERIA_HASH[criterion][key] === true;
 }
 
-// Determine result for a given criterion, which is one of
-// passing, barely, failing, or question.
-// The result calculation here must match the equivalent routine
-// implemented on the server to prevent confusion.
-function criterionResult(criterion) {
-  var criterionStatus = '#project_' + criterion + '_status';
-  var justification = $('#project_' + criterion + '_justification').val();
+function criterionStatus(criterion) {
+  return globalCriteriaResultHash[criterion]['status'];
+}
+
+// Return true if the justification is good enough for a SHOULD criterion.
+function justificationGood(justification) {
+  return justification.length >= MIN_SHOULD_LENGTH;
+}
+
+// This function is mirrored in app/models/project.rb by "get_met_result"
+// If you change this function change "get_met_result" accordingly.
+function getMetResult(criterion, justification) {
+  if (criterionHashTrue(criterion, 'met_url_required') &&
+      !containsURL(justification)) {
+    return 'criterion_url_required';
+  } else if (criterionHashTrue(criterion, 'met_justification_required') &&
+         !justificationGood(justification)) {
+    return 'criterion_justification_required';
+  } else {
+    return 'criterion_passing';
+  }
+}
+
+// This function is mirrored in app/models/project.rb by "get_na_result"
+// If you change this function change "get_na_result" accordingly.
+function getNAResult(criterion, justification) {
+  if (criterionHashTrue(criterion, 'na_justification_required') &&
+      !justificationGood(justification)) {
+    return 'criterion_justification_required';
+  } else {
+    return 'criterion_passing';
+  }
+}
+
+// This function is mirrored in app/models/project.rb by "get_unmet_result"
+// If you change this function change "get_unmet_result" accordingly.
+function getUnmetResult(criterion, justification) {
+  if (CRITERIA_HASH[criterion]['category'] === 'SUGGESTED' ||
+      (CRITERIA_HASH[criterion]['category'] === 'SHOULD' &&
+       justificationGood(justification))) {
+    return 'criterion_barely';
+  } else if (CRITERIA_HASH[criterion]['category'] === 'SHOULD') {
+    return 'criterion_justification_required';
+  } else {
+    return 'criterion_failing';
+  }
+}
+
+// Determine result for a given criterion, which is one of the following:
+//  criterion_passing, criterion_barely, criterion_justification_required
+//  criterion_url_requrired, criterion_unknown, criterion_failing
+//
+// This function is mirrored in app/models/project.rb by "get_criterion_result"
+// If you change this function change "get_criterion_result" accordingly.
+function getCriterionResult(criterion) {
+  var status = criterionStatus(criterion);
+  var justification = $('#project_' + criterion + '_justification')[0].value;
   if (!justification) {
     justification = '';
   }
-  if ($(criterionStatus + '_na').is(':checked')) {
-    if (!criterionHashTrue(criterion, 'na_justification_required') ||
-        justification.length >= MIN_SHOULD_LENGTH) {
-      return 'passing';
-    } else {
-      return 'question';
-    }
-  } else if ($(criterionStatus + '_met').is(':checked')) {
-    if ((criterionHashTrue(criterion, 'met_url_required') &&
-          !containsURL(justification)) ||
-        (criterionHashTrue(criterion, 'met_justification_required') &&
-         justification.length <= MIN_SHOULD_LENGTH)) {
-      // Odd case: met is claimed, but we're still missing information.
-      return 'question';
-    } else {
-      return 'passing';
-    }
-  } else if (CRITERIA_HASH[criterion]['category'] === 'SHOULD' &&
-             $(criterionStatus + '_unmet').is(':checked') &&
-             justification.length >= MIN_SHOULD_LENGTH) {
-    return 'barely';
-  } else if (CRITERIA_HASH[criterion]['category'] === 'SUGGESTED' &&
-            !($(criterionStatus + '_').is(':checked'))) {
-    return 'barely';
-  } else if ($(criterionStatus + '_').is(':checked')) {
-    return 'question';
+  if (status === '?') {
+    return 'criterion_unknown';
+  } else if (status === 'Met') {
+    return getMetResult(criterion, justification);
+  } else if (status === 'Unmet') {
+    return getUnmetResult(criterion, justification);
   } else {
-    return 'failing';
+    return getNAResult(criterion, justification);
   }
 }
 
-// This must match the criteria implemented in Ruby to prevent confusion.
+// This function is mirrored in app/models/project.rb by "enough?"
+// If you change this function change "enough?" accordingly.
 function isEnough(criterion) {
-  var result = criterionResult(criterion);
-  return (result === 'passing' || result === 'barely');
+  var result = globalCriteriaResultHash[criterion]['result'];
+  return (result === 'criterion_passing' || result === 'criterion_barely');
 }
 
 // Set a panel's satisfaction level.
-function setPanelSatisfactionLevel(panel) {
+function setPanelSatisfactionLevel(panelID) {
   var total = 0;
   var enough = 0;
-  $(panel).find('.criterion-name').each(function(index) {
-    var criterion = $(this).text();
-    total++;
-    if (isEnough(criterion)) {
-      enough++;
+  $.each(CRITERIA_HASH, function(criterion, value) {
+    if (panelID === globalCriteriaResultHash[criterion]['panelID']) {
+      total++;
+      if (isEnough(criterion)) {
+        enough++;
+      }
     }
   });
-  var satisfaction = $(panel).find('.satisfaction');
-  $(satisfaction).find('.satisfaction-text')
+  var panel = $('#' + panelID);
+  $(panel).find('.satisfaction-text')
                  .text(enough.toString() + '/' + total.toString());
-  $(satisfaction).find('.satisfaction-bullet')
+  $(panel).find('.satisfaction-bullet')
                  .css({ 'color' : getColor(enough / total) });
 }
 
@@ -143,53 +177,44 @@ function resetProgressBar() {
                       .text(percentAsString).css('width', percentAsString);
 }
 
-function resetProgressAndSatisfaction(criteria) {
-  var criteriaJust = '#project_' + criteria + '_justification';
-  setPanelSatisfactionLevel($(criteriaJust).parents('.panel'));
+function resetProgressAndSatisfaction(criterion) {
+  setPanelSatisfactionLevel(globalCriteriaResultHash[criterion]['panelID']);
   resetProgressBar();
 }
 
+// The functionality of this function is mirrored in
+// app/views/_status_chooser.html.erb
+// If you change this function change that view accordingly.
 function resetCriterionResult(criterion) {
-  var result = criterionResult(criterion);
+  var result = globalCriteriaResultHash[criterion]['result'];
   var destination = $('#' + criterion + '_enough');
-  if (result === 'passing') {
+  if (result === 'criterion_passing') {
     destination.attr('src', $('#result_symbol_check_img').attr('src')).
       attr('width', 40).attr('height', 40).
       attr('alt', 'Enough for a badge!');
-  } else if (result === 'barely') {
+  } else if (result === 'criterion_barely') {
     destination.attr('src', $('#result_symbol_dash').attr('src')).
       attr('width', 40).attr('height', 40).
       attr('alt', 'Barely enough for a badge.');
-  } else if (result === 'question') {
-    destination.attr('src', $('#result_symbol_question').attr('src')).
-      attr('width', 40).attr('height', 40).
-      attr('alt', 'Unknown required information, not enough for a badge.');
-  } else {
+  } else if (result === 'criterion_failing') {
     destination.attr('src', $('#result_symbol_x_img').attr('src')).
       attr('width', 40).attr('height', 40).
       attr('alt', 'Not enough for a badge.');
+  } else {
+    destination.attr('src', $('#result_symbol_question').attr('src')).
+      attr('width', 40).attr('height', 40).
+      attr('alt', 'Unknown required information, not enough for a badge.');
   }
 }
 
-function changedJustificationText(criteria) {
-  var criteriaJust = '#project_' + criteria + '_justification';
-  var criteriaStatus = '#project_' + criteria + '_status';
-  if ($(criteriaStatus + '_unmet').is(':checked') &&
-       (CRITERIA_HASH[criteria]['category'] === 'SHOULD') &&
-       ($(criteriaJust).val().length < MIN_SHOULD_LENGTH)) {
-    $(criteriaJust).addClass('required-data');
-  } else if ($(criteriaStatus + '_met').is(':checked') &&
-             ((criterionHashTrue(criteria, 'met_url_required') &&
-               !containsURL($(criteriaJust).val())) ||
-              (criterionHashTrue(criteria, 'met_justification_required') &&
-               $(criteriaJust).val().length < MIN_SHOULD_LENGTH))) {
-    $(criteriaJust).addClass('required-data');
-  } else if ($(criteriaStatus + '_na').is(':checked') &&
-       criterionHashTrue(criteria, 'na_justification_required') &&
-       ($(criteriaJust).val().length < MIN_SHOULD_LENGTH)) {
-    $(criteriaJust).addClass('required-data');
+function changedJustificationText(criterion) {
+  var criterionJust = '#project_' + criterion + '_justification';
+  var result = globalCriteriaResultHash[criterion]['result'];
+  if (result === 'criterion_justification_required' ||
+      result === 'criterion_url_required') {
+    $(criterionJust).addClass('required-data');
   } else {
-    $(criteriaJust).removeClass('required-data');
+    $(criterionJust).removeClass('required-data');
   }
 }
 
@@ -223,10 +248,9 @@ function hasFieldTextInside(e) {
 // justification text).
 function hideMetNA() {
   $.each(CRITERIA_HASH, function(criterion, value) {
+    var result = globalCriteriaResultHash[criterion]['result'];
     if (globalHideMetnaCriteria && criterion !== globalLastSelectedMet &&
-        ($('#project_' + criterion + '_status_met').is(':checked') ||
-         $('#project_' + criterion + '_status_na').is(':checked')) &&
-        isEnough(criterion)) {
+        result === 'criterion_passing') {
       $('#' + criterion).addClass('hidden');
     } else {
       $('#' + criterion).removeClass('hidden');
@@ -241,18 +265,13 @@ function hideMetNA() {
   });
 }
 
-function updateCriteriaDisplay(criterion) {
+function updateCriterionDisplay(criterion) {
   var criterionJust = '#project_' + criterion + '_justification';
-  var criterionStatus = '#project_' + criterion + '_status';
-  var justificationElement = document.getElementById('project_' +
-                           criterion + '_justification');
-  var justificationValue = '';
+  var status = criterionStatus(criterion);
+  var justification = $(criterionJust) ? $(criterionJust)[0].value : '';
   var criterionPlaceholder;
   var suppressJustificationDisplay;
-  if (justificationElement) {
-    justificationValue = justificationElement.value;
-  }
-  if ($(criterionStatus + '_met').is(':checked')) {
+  if (status === 'Met') {
     criterionPlaceholder = CRITERIA_HASH[criterion]['met_placeholder'];
     if (!criterionPlaceholder) {
       if (criterionHashTrue(criterion, 'met_url_required')) {
@@ -267,7 +286,7 @@ function updateCriteriaDisplay(criterion) {
       }
     }
     suppressJustificationDisplay = criterionHashTrue(criterion, 'met_suppress');
-  } else if ($(criterionStatus + '_unmet').is(':checked')) {
+  } else if (status === 'Unmet') {
     criterionPlaceholder = CRITERIA_HASH[criterion]['unmet_placeholder'];
     if (!criterionPlaceholder) {
       criterionPlaceholder = 'Please explain why it\'s okay this ' +
@@ -275,7 +294,7 @@ function updateCriteriaDisplay(criterion) {
     }
     suppressJustificationDisplay =
       criterionHashTrue(criterion, 'unmet_suppress');
-  } else if ($(criterionStatus + '_na').is(':checked')) {
+  } else if (status === 'N/A') {
     criterionPlaceholder = CRITERIA_HASH[criterion]['na_placeholder'];
     if (!criterionPlaceholder) {
       if (criterionHashTrue(criterion, 'na_justification_required')) {
@@ -287,7 +306,7 @@ function updateCriteriaDisplay(criterion) {
       }
     }
     suppressJustificationDisplay = criterionHashTrue(criterion, 'na_suppress');
-  } else if ($(criterionStatus + '_').is(':checked')) {
+  } else {
     criterionPlaceholder = 'Please explain';
     suppressJustificationDisplay = true;
   }
@@ -295,13 +314,12 @@ function updateCriteriaDisplay(criterion) {
 
   // If there's old justification text, force showing it even if it
   // no longer makes sense (so they can fix it or change their mind).
-  if (justificationValue.length > 0) {
+  if (justification.length > 0 || !suppressJustificationDisplay) {
     $(criterionJust).css({'display':''});
-  } else if (suppressJustificationDisplay) {
-    $(criterionJust).css({'display':'none'});
   } else {
-    $(criterionJust).css({'display':''});
+    $(criterionJust).css({'display':'none'});
   }
+
   if (globalHideMetnaCriteria) {
     // If we're hiding met criterion, walk through and hide them.
     // We don't need to keep running this if we are NOT hiding them,
@@ -311,19 +329,20 @@ function updateCriteriaDisplay(criterion) {
   changedJustificationText(criterion);
 }
 
-function updateCriteriaDisplayAndUpdate(criterion) {
-  updateCriteriaDisplay(criterion);
+function updateCriterionDisplayAndUpdate(criterion) {
+  updateCriterionDisplay(criterion);
   resetCriterionResult(criterion);
   resetProgressAndSatisfaction(criterion);
 }
 
-
 function changeCriterion(criterion) {
-  var criterionStatus = '#project_' + criterion + '_status';
-  if ($(criterionStatus + '_met').is(':checked')) {
+  // We could use criterionStatus here, but this is faster since
+  // we do not care about any status except "Met".
+  var status = criterionStatus(criterion);
+  if (status === 'Met') {
     globalLastSelectedMet = criterion;
   }
-  updateCriteriaDisplayAndUpdate(criterion);
+  updateCriterionDisplayAndUpdate(criterion);
 }
 
 function ToggleHideMet(e) {
@@ -422,30 +441,68 @@ function getAllPanelsReady() {
     }
   }
   // Set the satisfaction level in each panel
-  $('.satisfaction-bullet').append('&#9679;');
-  $('.panel').each(function(index) {
-    setPanelSatisfactionLevel(this);
+  $('.satisfaction-bullet').each(function(index) {
+    $(this).css({ 'color' : $(this).attr('data-color')});
   });
 }
 
-function setupProjectField(criteria) {
-  updateCriteriaDisplay(criteria);
-  $('input[name="project[' + criteria + '_status]"]').click(
-      function() {
-        changeCriterion(criteria);
-      });
-  $('input[name="project[' + criteria + '_justification]"]').blur(
-      function() {
-        updateCriteriaDisplayAndUpdate(criteria);
-      });
-  $('#project_' + criteria + '_justification').on('input',
-      function() {
-        changedJustificationTextAndUpdate(criteria);
-      });
-  $('#project_' + criteria + '_justification').on('keyup',
-      function() {
-        changedJustificationTextAndUpdate(criteria);
-      });
+// Implement "press this button to make all crypto N/A"
+function setAllCryptoNA() {
+  var panelsToSet = [];
+  $.each(CRITERIA_HASH, function(criterion, value) {
+    if ((/^crypto/).test(criterion)) {
+      var major = value.major.toLowerCase().replace(/\s+/g, '');
+      if ($.inArray(major, panelsToSet) === -1) {
+        panelsToSet.push(major);
+      }
+      $('#project_' + criterion + '_status_na').prop('checked', true);
+      globalCriteriaResultHash[criterion]['status'] = 'N/A';
+      globalCriteriaResultHash[criterion]['result'] =
+        getCriterionResult(criterion);
+      updateCriterionDisplay(criterion);
+      resetCriterionResult(criterion);
+    }
+  });
+  $.each(panelsToSet, function(index, panelID) {
+    setPanelSatisfactionLevel(panelID);
+  });
+  resetProgressBar();
+}
+
+// For a given event, return the criterion on which that event was
+// triggered and the criterionResult for that criterion.
+function getCriterionAndResult(event) {
+  var criterion = $(event.target).parents('.criterion-data').attr('id');
+  if (event.target.name === 'project[' + criterion + '_status]') {
+    globalCriteriaResultHash[criterion]['status'] = event.target.value;
+  }
+  var result = getCriterionResult(criterion);
+  globalCriteriaResultHash[criterion]['result'] = result;
+  return criterion;
+}
+
+function setupProjectFields() {
+  $.each(CRITERIA_HASH, function(key, value) {
+    updateCriterionDisplay(key);
+  });
+  $('.edit_project').on('click', function(e) {
+    if ($(e.target).is(':radio')) {
+      var criterion = getCriterionAndResult(e);
+      changeCriterion(criterion);
+    }
+  });
+  $('.edit_project').on('focusout', function(e) {
+    if ($(e.target).hasClass('justification-text')) {
+      var criterion = getCriterionAndResult(e);
+      updateCriterionDisplayAndUpdate(criterion);
+    }
+  });
+  $('.edit_project').on('input keyup', function(e) {
+    if ($(e.target).hasClass('justification-text')) {
+      var criterion = getCriterionAndResult(e);
+      changedJustificationTextAndUpdate(criterion);
+    }
+  });
 }
 
 function ToggleDetailsDisplay(e) {
@@ -481,6 +538,46 @@ function ToggleAllDetails(e) {
   }
 }
 
+function TogglePanel(e) {
+  var $this;
+  if ($(e.target).hasClass('can-collapse')) {
+    $this = $(e.target);
+  } else {
+    $this = $(e.target).closest('.can-collapse');
+  }
+  if ($this.hasClass('collapsed')) {
+    $this.closest('.panel').find('.panel-collapse').collapse('show');
+    $this.removeClass('collapsed');
+    $this.find('i.glyphicon').removeClass('glyphicon-chevron-down')
+      .addClass('glyphicon-chevron-up');
+    if (!globalIgnoreHashChange) {
+      var origId = $this.attr('id');
+      // prevent scrolling on panel open
+      $this.attr('id', origId + '-tmp');
+      location.hash = '#' + origId;
+      $this.attr('id', origId);
+    }
+  } else {
+    $this.closest('.panel').find('.panel-collapse').collapse('hide');
+    $this.addClass('collapsed');
+    $this.find('i.glyphicon').removeClass('glyphicon-chevron-up')
+      .addClass('glyphicon-chevron-down');
+  }
+}
+
+function fillCriteriaResultHash() {
+  $.each(CRITERIA_HASH, function(key, value) {
+    globalCriteriaResultHash[key] = {};
+    globalCriteriaResultHash[key]['status'] = $('input[name="project[' + key +
+                                                '_status]"]:checked')[0].value;
+    globalCriteriaResultHash[key]['result'] = getCriterionResult(key);
+    globalCriteriaResultHash[key]['panelID'] = value['major']
+                                              .toLowerCase()
+                                              .replace(/\s+/g, '');
+  });
+  $('#project_entry_form').trigger('criteriaResultHashComplete');
+}
+
 function setupProjectForm() {
   // We're told progress, so don't recalculate - just display it.
   var percentageScaled = $('#badge-progress').attr('aria-valuenow');
@@ -492,64 +589,42 @@ function setupProjectForm() {
   // (they'll have no way to later reveal it).
   $('.details-text').css({'display':'none'});
   $('.details-toggler').html('Show details');
-  $('.details-toggler').click(ToggleDetailsDisplay);
 
   // Force these values on page reload
   globalShowAllDetails = false;
-  $('#toggle-show-all-details').click(function(e) {
-    ToggleAllDetails(e);
-  });
-
-  // Force these values on page reload
   globalLastSelectedMet = '';
   globalHideMetnaCriteria = false;
-  $('#toggle-hide-metna-criteria').click(function(e) {
-    ToggleHideMet(e);
-  });
-
-  // Implement "press this button to make all crypto N/A"
-  $('#all_crypto_na').click(function(e) {
-    $.each(CRITERIA_HASH, function(criterion, value) {
-      if ((/^crypto/).test(criterion)) {
-        $('#project_' + criterion + '_status_na').prop('checked', true);
-      }
-      updateCriteriaDisplay(criterion);
-      resetCriterionResult(criterion);
-    });
-    setPanelSatisfactionLevel($('#all_crypto_na').parents('.panel'));
-    resetProgressBar();
-  });
-
-  $.each(CRITERIA_HASH, function(key, value) {
-    setupProjectField(key);
-  });
-
   globalExpandAllPanels = false;
-  $('#toggle-expand-all-panels').click(function(e) {
-    ToggleExpandAllPanels(e);
-  });
+  globalCriteriaResultHash = {};
+  globalisEditing = $('#project_name').is(':not(:disabled)');
 
-  $('.panel div.can-collapse').on('click', function(e) {
-    var $this = $(this);
-    if ($this.hasClass('collapsed')) {
-      $this.parents('.panel').find('.panel-collapse').collapse('show');
-      $this.removeClass('collapsed');
-      $this.find('i.glyphicon').removeClass('glyphicon-chevron-down')
-        .addClass('glyphicon-chevron-up');
-      if (!globalIgnoreHashChange) {
-        var origId = this.getAttribute('id');
-        // prevent scrolling on panel open
-        this.id = origId + '-tmp';
-        location.hash = '#' + origId;
-        this.id = origId;
-      }
-    } else {
-      $this.parents('.panel').find('.panel-collapse').collapse('hide');
-      $this.addClass('collapsed');
-      $this.find('i.glyphicon').removeClass('glyphicon-chevron-up')
-        .addClass('glyphicon-chevron-down');
+  // Set up click event listeners
+  $('body').on('click', function(e) {
+    var target = $(e.target);
+    if (target.hasClass('details-toggler')) {
+      ToggleDetailsDisplay(e);
+    } else if (target.hasClass('can-collapse') ||
+               target.parents('.can-collapse').length) {
+      TogglePanel(e);
+    // Implement "press this button to make all crypto N/A"
+    } else if (e.target.id === 'all_crypto_na') {
+      setAllCryptoNA();
+    } else if (e.target.id === 'toggle-show-all-details') {
+      ToggleAllDetails(e);
+    } else if (e.target.id === 'toggle-hide-metna-criteria') {
+      ToggleHideMet(e);
+    } else if (e.target.id === 'toggle-expand-all-panels') {
+      ToggleExpandAllPanels(e);
     }
   });
+
+  if (globalisEditing) {
+    $('#project_entry_form').on('criteriaResultHashComplete', function(e) {
+      setupProjectFields();
+      resetProgressBar();
+    });
+    fillCriteriaResultHash();
+  }
 
   getAllPanelsReady();
 

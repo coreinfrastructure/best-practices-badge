@@ -11,7 +11,7 @@
 require 'yaml'
 
 # Load in entire criteria.yml, which keys off the major/minor groups
-FullCriteriaHash = YAML.load_file('criteria.yml')
+FullCriteriaHash = YAML.load_file('criteria/criteria.yml')
 
 def print_file(filename)
   File.open(filename, 'r') do |file|
@@ -27,13 +27,16 @@ def show_extra(key, header_text, criterion)
 end
 
 # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
-# rubocop:disable Metrics/CyclomaticComplexity
+# rubocop:disable Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
 def puts_criterion(key, criterion)
   print "\n<li><a name=\"#{key}\"></a>"
   print '(Future criterion) ' if criterion.key?('future')
   print criterion['description']
   # print " (N/A #{criterion.key?('na_allowed') ? '' : 'not '}allowed.)"
   print ' (N/A allowed.)' if criterion.key?('na_allowed')
+  if criterion.key('met_justification_required')
+    print ' (Justification required for "Met".)'
+  end
   if criterion.key?('na_justification_required')
     print ' (Justification required for "N/A".)'
   end
@@ -48,7 +51,7 @@ def puts_criterion(key, criterion)
   puts '</li>'
 end
 # rubocop:enable Metrics/AbcSize,Metrics/MethodLength
-# rubocop:enable Metrics/CyclomaticComplexity
+# rubocop:enable Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
 
 # Generate results
 $stdout.reopen('doc/criteria.md', 'w') || abort('Cannot write')

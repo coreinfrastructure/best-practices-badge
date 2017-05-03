@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module SymbolRefinements
   refine Symbol do
     def status

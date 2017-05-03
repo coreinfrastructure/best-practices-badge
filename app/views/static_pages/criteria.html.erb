@@ -4,10 +4,7 @@
   <p>
   <a href='https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/doc/criteria.md'>The detailed criteria are on GitHub</a>.</p>
   <p>
-  <%
-    active_criteria = Criteria.reject(&:future?)
-    future_criteria = Criteria.select(&:future?)
-  %>
+  <% future_criteria, active_criteria = Criteria.partition(&:future?) %>
   Current number of criteria:
     <%= active_criteria.count %> (active)
     + <%= future_criteria.count %> (future)

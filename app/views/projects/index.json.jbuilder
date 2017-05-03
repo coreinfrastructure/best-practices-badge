@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Show all projects in @projects as a single JSON file.
 
 # We intentionally do *NOT* cache this result, since it's large

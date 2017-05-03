@@ -3,7 +3,7 @@
 # frozen_string_literal: true
 
 class ProjectSitesHttpsDetective < Detective
-  INPUTS = %i(repo_url homepage_url).freeze
+  INPUTS = %i[repo_url homepage_url].freeze
   OUTPUTS = [:sites_https_status].freeze
 
   # rubocop:disable Metrics/MethodLength

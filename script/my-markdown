@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
+
 # Processor for Github flavored markdown, using redcarpet version 2.
 #
 # Inspired by:
@@ -49,18 +50,18 @@ end
 
 title = ARGV[0]
 
-puts <<-END
-<!DOCTYPE html>
-<html>
-<head>
-<title>#{title}</title>
-</head>
-<body>
+puts <<~END
+  <!DOCTYPE html>
+  <html>
+  <head>
+  <title>#{title}</title>
+  </head>
+  <body>
 END
 
 puts markdown(ARGF.read)
 
-puts <<-END
-</body>
-</html>
+puts <<~END
+  </body>
+  </html>
 END

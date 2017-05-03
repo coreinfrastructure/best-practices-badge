@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # rubocop:disable Metrics/ClassLength
 class Project < ActiveRecord::Base
   using StringRefinements
@@ -14,16 +15,16 @@ class Project < ActiveRecord::Base
     ['In Progress (75% or more)', 75],
     ['In Progress (90% or more)', 90]
   ].freeze
-  STATUS_CHOICE = %w(? Met Unmet).freeze
-  STATUS_CHOICE_NA = (STATUS_CHOICE + %w(N/A)).freeze
+  STATUS_CHOICE = %w[? Met Unmet].freeze
+  STATUS_CHOICE_NA = (STATUS_CHOICE + %w[N/A]).freeze
   MIN_SHOULD_LENGTH = 5
   MAX_TEXT_LENGTH = 8192 # Arbitrary maximum to reduce abuse
   MAX_SHORT_STRING_LENGTH = 254 # Arbitrary maximum to reduce abuse
 
-  PROJECT_OTHER_FIELDS = %i(
+  PROJECT_OTHER_FIELDS = %i[
     name description homepage_url repo_url cpe implementation_languages
     license general_comments user_id disabled_reminders lock_version
-  ).freeze
+  ].freeze
   ALL_CRITERIA_STATUS = Criteria.map { |c| c.name.status }.freeze
   ALL_CRITERIA_JUSTIFICATION = Criteria.map { |c| c.name.justification }.freeze
   PROJECT_PERMITTED_FIELDS = (PROJECT_OTHER_FIELDS + ALL_CRITERIA_STATUS +
@@ -43,6 +44,10 @@ class Project < ActiveRecord::Base
     end
   )
 
+  # TODO: re-enable this in rubocop > 0.48.1.
+  #       This is erroneous and been fixed in the upstream
+  #       version of rubocop see bbatso/rubocop PR #4237.
+  # rubocop:disable Lint/AmbiguousBlockAssociation
   scope :in_progress, -> { lteq(99) }
 
   scope :lteq, (
@@ -52,6 +57,7 @@ class Project < ActiveRecord::Base
   )
 
   scope :passing, -> { gteq(100) }
+  # rubocop:enable Lint/AmbiguousBlockAssociation
 
   scope :recently_updated, (
     lambda do
@@ -96,7 +102,7 @@ class Project < ActiveRecord::Base
   # https://github.com/Casecommons/pg_search
   pg_search_scope(
     :search_for,
-    against: %i(name homepage_url repo_url description)
+    against: %i[name homepage_url repo_url description]
     # using: { tsearch: { any_word: true } }
   )
 
@@ -179,7 +185,7 @@ class Project < ActiveRecord::Base
   end
 
   def calculate_badge_percentage
-    met = Criteria.active.count { |criterion| passing? criterion }
+    met = Criteria.active.count { |criterion| enough? criterion }
     to_percentage met, Criteria.active.length
   end
 
@@ -199,6 +205,72 @@ class Project < ActiveRecord::Base
     text =~ %r{https?://[^ ]{5}}
   end
 
+  # Returns a symbol indicating a the status of an particular criterion
+  # in a project.  These are:
+  # :criterion_passing -
+  #   'Met' (or 'N/A' if applicable) has been selected for the criterion
+  #   and all requred justification text (including url's) have been entered  #
+  # :criterion_failing -
+  #   'Unmet' has been selected for a MUST criterion'.
+  # :criterion_barely -
+  #   'Unmet' has been selected for a SHOULD or SUGGESTED criterion and
+  #   ,if SHOULD, required justification text has been entered.
+  # :criterion_url_required -
+  #   'Met' has been selected, but a required url in the justification
+  #   text is missing.
+  # :criterion_justification_required -
+  #   Required justification for 'Met', 'N/A' or 'Unmet' selection is missing.
+  # :criterion_unknown -
+  #   The criterion has been left at it's default value and thus the status
+  #   is unknown.
+  # This method is mirrored in assets/project-form.js as getCriterionResult
+  # If you change this method, change getCriterionResult accordingly.
+  def get_criterion_result(criterion)
+    status = self[criterion.name.status]
+    justification = self[criterion.name.justification]
+    return :criterion_unknown if status.unknown?
+    return get_met_result(criterion, justification) if status.met?
+    return get_unmet_result(criterion, justification) if status.unmet?
+    get_na_result(criterion, justification)
+  end
+
+  def get_satisfaction_data(panel)
+    total =
+      Criteria.select do |criterion|
+        criterion.major.downcase.delete(' ') == panel
+      end
+    passing = total.count { |criterion| enough?(criterion) }
+    {
+      text: "#{passing}/#{total.size}",
+      color: get_color(passing / total.size.to_f)
+    }
+  end
+
+  # Flash a message to update static_analysis if the user is updating
+  # for the first time since we added met_justification_required that
+  # criterion
+  STATIC_ANALYSIS_JUSTIFICATION_REQUIRED_DATE =
+    DateTime.iso8601('2017-04-25T00:00Z')
+  def notify_for_static_analysis?
+    status = self[Criteria[:static_analysis].name.status]
+    result = get_criterion_result(Criteria[:static_analysis])
+    updated_at < STATIC_ANALYSIS_JUSTIFICATION_REQUIRED_DATE &&
+      status.met? && result == :criterion_justification_required
+  end
+
+  # Send owner an email they add a new project.
+  def send_new_project_email
+    ReportMailer.email_new_project_owner(self).deliver_now
+  end
+
+  # Return true if we should show an explicit license for the data.
+  # Old entries did not set a license; we only want to show entry licenses
+  # if the updated_at field indicates there was agreement to it.
+  ENTRY_LICENSE_EXPLICIT_DATE = DateTime.iso8601('2017-02-20T12:00Z')
+  def show_entry_license?
+    updated_at >= ENTRY_LICENSE_EXPLICIT_DATE
+  end
+
   # Update the badge percentage, and update relevant event datetime if needed.
   # This code will need to changed if there are multiple badge levels, or
   # if there are more than 100 criteria. (If > 100 criteria, switch
@@ -211,6 +283,11 @@ class Project < ActiveRecord::Base
     elsif badge_percentage < 100 && old_badge_percentage == 100
       self.lost_passing_at = Time.now.utc
     end
+  end
+
+  # Return owning user's name for purposes of display.
+  def user_display_name
+    user_name || user_nickname
   end
 
   # Update badge percentages for all project entries, and send emails
@@ -302,68 +379,84 @@ class Project < ActiveRecord::Base
   end
   # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
-  # Return owning user's name for purposes of display.
-  def user_display_name
-    user_name || user_nickname
+  # Return which projects should be announced as getting badges in the
+  # month target_month
+  def self.projects_first_passing_in(target_month)
+    Project
+      .select('id, name, achieved_passing_at')
+      .where('badge_percentage = 100')
+      .where('achieved_passing_at >= ?', target_month.at_beginning_of_month)
+      .where('achieved_passing_at <= ?', target_month.at_end_of_month)
+      .where('lost_passing_at IS NULL')
+      .reorder('achieved_passing_at')
   end
 
-  # Send owner an email they add a new project.
-  def send_new_project_email
-    ReportMailer.email_new_project_owner(self).deliver_now
-  end
-
-  # Return true if we should show an explicit license for the data.
-  # Old entries did not set a license; we only want to show entry licenses
-  # if the updated_at field indicates there was agreement to it.
-  ENTRY_LICENSE_EXPLICIT_DATE = DateTime.iso8601('2017-02-20T12:00Z')
-  def show_entry_license?
-    updated_at >= ENTRY_LICENSE_EXPLICIT_DATE
-  end
-
-  def passing?(criterion)
-    status = self[criterion.name.status]
-    justification = self[criterion.name.justification]
-
-    na_satisfied?(criterion, status, justification) ||
-      met_satisfied?(criterion, status, justification) ||
-      should_satisfied?(criterion, status, justification) ||
-      suggested_satisfied?(criterion, status)
+  def self.recently_reminded
+    Project
+      .select('projects.*, users.email as user_email')
+      .joins(:user).references(:user) # Need this to check email address
+      .where('last_reminder_at IS NOT NULL')
+      .where('last_reminder_at >= ?', 14.days.ago)
+      .reorder('last_reminder_at')
   end
 
   private
 
   # def all_active_criteria_passing?
-  #   Criteria.active.all? { |criterion| passing? criterion }
+  #   Criteria.active.all? { |criterion| enough? criterion }
   # end
+
+  # This method is mirrored in assets/project-form.js as getColor
+  # If you change this method, change getColor accordingly.
+  def get_color(value)
+    hue = (value * 120).round
+    "hsl(#{hue}, 100%, 50%)"
+  end
+
+  # This method is mirrored in assets/project-form.js as getMetResult
+  # If you change this method, change getMetResult accordingly.
+  def get_met_result(criterion, justification)
+    return :criterion_url_required if criterion.met_url_required? &&
+                                      !contains_url?(justification)
+    return :criterion_justification_required if
+      criterion.met_justification_required? &&
+      !justification_good?(justification)
+    :criterion_passing
+  end
+
+  # This method is mirrored in assets/project-form.js as getNAResult
+  # If you change this method, change getNAResult accordingly.
+  def get_na_result(criterion, justification)
+    return :criterion_justification_required if
+      criterion.na_justification_required? &&
+      !justification_good?(justification)
+    :criterion_passing
+  end
+
+  # This method is mirrored in assets/project-form.js as getUnmetResult
+  # If you change this method, change getUnmetResult accordingly.
+  def get_unmet_result(criterion, justification)
+    return :criterion_barely if criterion.suggested? || (criterion.should? &&
+                               justification_good?(justification))
+    return :criterion_justification_required if criterion.should?
+    :criterion_failing
+  end
+
+  def justification_good?(justification)
+    return false if justification.nil?
+    justification.length >= MIN_SHOULD_LENGTH
+  end
 
   def need_a_base_url
     return unless repo_url.blank? && homepage_url.blank?
     errors.add :base, 'Need at least a home page or repository URL'
   end
 
-  def na_satisfied?(criterion, status, justification)
-    status.na? && (!criterion.na_justification_required? ||
-                   justification_good?(justification))
-  end
-
-  def met_satisfied?(criterion, status, justification)
-    return true if status.met? && !criterion.met_url_required? &&
-                   (!criterion.met_justification_required? ||
-                    justification_good?(justification))
-    status.met? && contains_url?(justification)
-  end
-
-  def should_satisfied?(criterion, status, justification)
-    criterion.should? && status.unmet? && justification_good?(justification)
-  end
-
-  def suggested_satisfied?(criterion, status)
-    criterion.suggested? && !status.unknown?
-  end
-
-  def justification_good?(justification)
-    return false if justification.nil?
-    justification.length >= MIN_SHOULD_LENGTH
+  # This method is mirrored in assets/project-form.js as isEnough
+  # If you change this method, change isEnough accordingly.
+  def enough?(criterion)
+    result = get_criterion_result(criterion)
+    result == :criterion_passing || result == :criterion_barely
   end
 
   def to_percentage(portion, total)

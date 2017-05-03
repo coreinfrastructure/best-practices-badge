@@ -1,7 +1,7 @@
 <% content_for :nav_extras do %>
     <% if can_make_changes? %>
       <li><%= link_to 'Edit', edit_project_path(@project) %></li>
-      <li><%= link_to 'Delete',  { action: :destroy, id: @project.id }, method: :delete, data: { confirm: 'Are you sure?' } %></li>
+      <li><%= link_to 'Delete',  { action: :destroy, id: @project.id }, method: :delete, data: { confirm: "Are you SURE you want to DELETE the ENTIRE project ##{@project.id}?" } %></li>
     <% end %>
 <% end %>
 
@@ -10,7 +10,7 @@
     <div class="main-badge-ques"></div>
   </div>
   <div class="col-md-7 col-sm-6">
-    <h2 class="m-t-0">Badge Status for <%=@project.try(:name).presence || '(Name Unknown)' %></h2>
+    <h2 class="m-t-0"><%=@project.try(:name).presence || '(Name Unknown)' %></h2>
     <%= render 'form', project: @project, is_disabled: true %>
 <div class="row">
 <div class="col-md-12">
@@ -34,7 +34,7 @@
 <%= link_to 'Back', projects_path %>
 <% if can_make_changes? %>
   <%= link_to 'Edit', edit_project_path(@project) %>
-  <%= link_to 'Delete',  { action: :destroy, id: @project.id }, method: :delete, data: { confirm: 'Are you sure?' } %>
+  <%= link_to 'Delete',  { action: :destroy, id: @project.id }, method: :delete, data: { confirm: "Are you SURE you want to DELETE the ENTIRE project ##{@project.id}?" } %>
 <% end %>
 </p>
 </div>

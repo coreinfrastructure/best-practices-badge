@@ -27,7 +27,7 @@ class Chief
     # Determine what exceptions to intercept - if we're in
     # test or development, we will only intercept an exception we don't use.
     current_environment = (ENV['RAILS_ENV'] || 'development').to_sym
-    if %i(test development).include?(current_environment)
+    if %i[test development].include?(current_environment)
       @intercept_exception = NoSuchException
     else
       @intercept_exception = StandardError

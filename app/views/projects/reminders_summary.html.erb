@@ -1,0 +1,92 @@
+<%# This isn't strictly necessary, but it's a useful hardening mechanism: %>
+<% if current_user&.admin? %>
+
+<%# DO NOT cache this page server side. We have a policy of NEVER doing
+    server side caching if it includes email addresses.
+    That way, if a server-side cache leaks,
+    email addresses can't leak with it. %>
+
+<h1>Reminders</h1>
+
+Here is reminder-related detailed information (for admins).
+If the column "&gt; 180 days old" says "OLD", that
+means that it has been more than 180 days since this
+project entry has been updated.
+<b>Please protect the information on this page</b>, because it includes
+email addresses.
+This report was created at <%= Time.now.utc %>.
+
+<h2>Upcoming inactive reminders</h2>
+
+Here are the next projects scheduled for inactive reminders:
+<p>
+
+<table class='table-bordered table-striped'>
+  <thead>
+    <tr>
+      <th>id</th>
+      <th>Name</th>
+      <th>Updated at</th>
+      <th>Last reminder at</th>
+      <th>%</th>
+      <th>Email</th>
+      <th>&gt; 180 days old?</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% Project.projects_to_remind.each do |project| %>
+      <tr>
+        <td><a href="/projects/<%= project.id %>"><%= project.id %></a></td>
+        <td><%= project.name %></td>
+        <td><%= project.updated_at %></td>
+        <td><%= project.last_reminder_at %></td>
+        <td><%= project.badge_percentage %>%</td>
+        <td><a href="mailto:<%= project.user_email %>"><%= project.user_email %></a></td>
+        <td><%= 'OLD' if project.updated_at < 180.days.ago %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<h2>Past reminders</h2>
+
+Here are the projects that have recently received reminders:
+<p>
+
+<table class='table-bordered table-striped'>
+  <thead>
+    <tr>
+      <th>id</th>
+      <th>Name</th>
+      <th>Updated at</th>
+      <th>Last reminder at</th>
+      <th>%</th>
+      <th>Email</th>
+      <th>&gt; 180 days old?</th>
+      <th>Updated Since?</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% Project.recently_reminded.each do |project| %>
+      <tr>
+        <td><a href="/projects/<%= project.id %>"><%= project.id %></a></td>
+        <td><%= project.name %></td>
+        <td><%= project.updated_at %></td>
+        <td><%= project.last_reminder_at %></td>
+        <td><%= project.badge_percentage %>%</td>
+        <td><a href="mailto:<%= project.user_email %>"><%= project.user_email %></a></td>
+        <td><%= 'OLD' if project.updated_at < 180.days.ago %></td>
+        <td><%= 'YES' if project.last_reminder_at < project.updated_at %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<p>
+See the
+<a href="/project_stats">project_stats</a> page for publicly-viewable
+summary graphs, including a graph about reminders.
+
+<% end %>

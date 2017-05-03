@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module UsersHelper
   # Returns avatar image tag for the given user.
   def avatar_for(user)

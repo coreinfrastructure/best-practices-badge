@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Generate /feed view.
 # If you add new fields to be displayed, be sure to modify
 # the calling controller(s) to retrieve those fields.  Typically the
@@ -5,7 +7,7 @@
 #
 # Disable cache for Rails.env.test?. There is a bug in the
 # test framework that doesn't handle caching correctly in tests.
-cache_if (!Rails.env.test? && @projects.length > 0),
+cache_if (!Rails.env.test? && !@projects.empty?),
          ['feed-index', @projects[0]] do
   atom_feed do |feed|
     feed.title('CII Best Practices BadgeApp Updated Projects')

@@ -116,6 +116,8 @@ The application is configured by various environment variables:
   project was last sent a reminder
 * RAILS_ENV (default 'development'): Rails environment.
   The master, staging, and production systems set this to 'production'.
+* BADGEAPP_DAY_FOR_MONTHLY: Day of the month to monthly activities, e.g.,
+  send out monthly reminders.  Default 5.  Set to 0 to disable monthly acts.
 
 This can be set on Heroku.  For example, to change the maximum number
 of email reminders to inactive projects on production-bestpractices:
@@ -143,12 +145,12 @@ heroku config:set --app production-bestpractices TZ=:/usr/share/zoneinfo/UTC
 
 This section describes key application-specific terminology.
 
-The web application tracks data about many OSS *projects*,
+The web application tracks data about many FLOSS *projects*,
 as identified and entered by *users*.
 
 We hope that projects will (eventually) *achieve* a *badge*.
 A project must *satisfy* (or "pass") all *criteria*
-(singular: criterion) enough to achieve a badge.
+(singular: criterion) *enough* to achieve a badge.
 
 The *status* of each criterion, for a given project, can be one of:
 'Met', 'Unmet', 'N/A' (not applicable, a status that only some
@@ -284,7 +286,7 @@ are implemented.
 To modify the text of the criteria, edit these files:
 
 - doc/criteria.md - Document
-- ./criteria.yml - YAML file used by BadgeApp for criteria information.
+- criteria/criteria.yml - YAML file used by BadgeApp for criteria information.
 
 If you're adding/removing fields (including criteria), be sure to also edit
 app/views/projects/\_form.html.erb
@@ -469,12 +471,49 @@ heroku pg:backups capture
 curl -o latest.dump $(heroku pg:backups public-url)
 ~~~~
 
+## Recovering a deleted or mangled project entry
+
+If you want to restore a deleted project, or reset its values,
+we have some tools to help.
+
+Put the project data in JSON form in the file "project.json"
+(at the top of the tree, typically in "~/cii-best-practices-badge").
+If this was a recent deletion, then you can simply copy the JSON-formatted
+data from the email documenting the deletion.
+
+Then run:
+
+~~~~
+    rake create_project_insertion_command
+~~~~
+
+This will create a file "project.sql" that has SQL insertion command.
+
+You'll next need to delete the project if it already exists, because
+it's an insertion command.
+
+Now you need to execute the SQL command on the correct database.
+Locally you can do this (you may want to set RAILS_ENV to
+"production"):
+
+~~~~
+    rails db < project.sql
+~~~~
+
+If you want the data to be on the true production site, you'll need
+privileges to execute database commands, then run this:
+
+~~~~
+    heroku pg:psql --app production-bestpractices < project.sql
+~~~~
+
 ## Purging Fastly CDN cache
 
-If a change in the application causes any badge level(s) to change,
+If a change in the application causes any badge level(s) to change or
+changes the output of a projects json file,
 you need to purge the Fastly CDN cache after pushing.
 Otherwise, the Fastly CDN cache will continue to serve the old badge
-images (until they time out).
+images as well as project json files (until they time out).
 
 You can purge the Fastly CDN cache this way (assuming you're
 allowed to log in to the relevant Heroku app):

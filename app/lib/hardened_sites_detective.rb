@@ -30,7 +30,7 @@ class HardenedSitesDetective < Detective
       explanation: 'X-Content-Type-Options was not set to "nosniff".'
     }.freeze
 
-  INPUTS = %i(repo_url homepage_url).freeze
+  INPUTS = %i[repo_url homepage_url].freeze
   OUTPUTS = [:hardened_site_status].freeze
 
   # Check the given list of header hashes to make sure that all expected
@@ -64,7 +64,7 @@ class HardenedSitesDetective < Detective
   # Internal method that does the inspection work for the 'analyze' method.
   def check_urls(evidence, homepage_url, repo_url)
     @results = {}
-    if !homepage_url.blank? && !repo_url.blank?
+    if homepage_url.present? && repo_url.present?
       homepage_headers = get_headers(evidence, homepage_url)
       repo_headers = get_headers(evidence, repo_url)
       hardened = security_fields_present?([homepage_headers, repo_headers])

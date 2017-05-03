@@ -569,6 +569,24 @@ These are the most resource-intense kind of request.
 As long as the CDN is up, even if the application crashes the
 then-current data will stay available until the system recovers.
 
+The system is configured so all requests go through the CDN (Fastly),
+then through Heroku; each provides us with some DDoS protections.
+If the system starts up with Fastly configured, then the software
+loads the set of valid Fastly IP addresses, and rejects any requests
+from other IPs.  This prevents "cloud piercing".
+This does use the value of the header X-Forwarded-For, which could
+be provided by an attacker, but Heroku guarantees a particular order
+so we only retrieve the value that we can trust (through Heroku).
+This has been verified to work, because all of the following are rejected:
+
+~~~~
+curl https://master-bestpractices.herokuapp.com/
+curl -H "X-Forwarded-For: 23.235.32.1" \
+     https://master-bestpractices.herokuapp.com/
+curl -H "X-Forwarded-For: 23.235.32.1,23.235.32.1" \
+     https://master-bestpractices.herokuapp.com/
+~~~~
+
 A determined attacker with significant resources could disable the
 system through a distributed denial-of-service (DDoS) attack.
 However, this site doesn't have any particular political agenda,

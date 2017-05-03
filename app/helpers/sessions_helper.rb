@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module SessionsHelper
   SESSION_TTL = 48.hours # Automatically log off session if inactive this long
 
@@ -22,6 +23,10 @@ module SessionsHelper
   # Returns true if the user is logged in, false otherwise.
   def logged_in?
     !current_user.nil?
+  end
+
+  def current_user_is_admin?
+    logged_in? && current_user.admin?
   end
 
   # Remembers a user in a persistent session.

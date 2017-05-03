@@ -345,10 +345,51 @@ However, each git commit should have both
 the test and improvement in the *same* commit,
 because 'git bisect' will then work well.
 
-*WARNING*: Currently some tests intermittently fail, even though
-the software works fine.  There may more than one cause of this.
-For now, if tests fail, restart to see if it's a problem with the software
+*WARNING*: It is possible that some tests may intermittently fail, even though
+the software works fine.
+If tests fail, restart to see if it's a problem with the software
 or the tests.  On CircleCI you can choose to rebuild.
+Where possible, try to find and fix the problem; we have worked to
+eliminate this, and at this point believe we have fixed it.
+
+If you use an old version of PhantomJS (e.g., if you use
+Ubuntu 14.04 and install PhantomJS via apt-get), you'll see this
+message during tests:
+
+> You're running an old version of PhantomJS,
+> update to >= 2.1.1 for a better experience.
+
+You can eliminate the warnings about old versions of PhantomJS
+by uninstalling the old version and installing a
+[current version of PhantomJS](http://phantomjs.org/download.html).
+
+### Security, privacy, and performance
+
+Pay attention to security, and work *with* (not against) our
+security hardening mechanisms.  In particular, put JavaScript and CSS
+in *separate* files - this makes it possible to have very strong
+Content Security Policy (CSP) rules, which in turn greatly reduces
+the impact of a software defect.  Be sure to use prepared statements
+(including via Rails' ActiveRecord).
+Protect private information, in particular passwords and email addresses.
+Avoid mechanisms that could be used for tracking where possible
+(we do need to verify people are logged in for some operations),
+and ensure that third parties can't use interactions for tracking.
+For more about security, see [security](doc/security.md).
+
+We want the software to have decent performance for typical users.
+[Our goal is interaction in 1 second or less after making a request](https://developers.google.com/web/fundamentals/performance/rail).
+Don't send megabytes of data for a request
+(see
+[The Website Obesity Crisis](http://idlewords.com/talks/website_obesity.htm)).
+Use caching (at the server, CDN, and user side) to improve performance
+in typical cases (while avoiding making the code too complicated).
+Moving all the JavaScripts to a long-lived cached page, for example,
+means that the user only needs to load that page once.
+See the "other tools" list below for some tools to help measure performance.
+There's always a trade-off between various attributes, in particular,
+don't make performance so fast that the software is hard to maintain.
+Instead, work to get "reasonable" performance in typical cases.
 
 ## How to check proposed changes before submitting them
 
@@ -388,7 +429,7 @@ check the software:
     trailing whitespace in latest diff
     *yaml_syntax_check* - checks syntax of YAML (.yml) files.
     Note that the automated test suite includes a number of specific
-    checks on the criteria.yml file.
+    checks on the criteria/criteria.yml file.
 *   *fasterer* - report on Ruby constructs with poor performance
     (temporarily disabled until it supports Ruby 2.4)
 *   *eslint* - Perform code style check on JavaScript using eslint
@@ -436,7 +477,8 @@ into the default "rake" checking task:
 * W3C link checker <https://validator.w3.org/checklink>
 * W3C markup validation service <https://validator.w3.org/>
 
-Here are some online tools we sometimes use to check for performance issues:
+Here are some online tools we sometimes use to check for performance issues
+(including time to complete rendering, download size in bytes, etc.):
 
 * [WebPageTest](https://www.webpagetest.org/)
 * [Varvy PageSpeed](https://varvy.com/pagespeed/)
@@ -444,6 +486,7 @@ Here are some online tools we sometimes use to check for performance issues:
   It can notice issues like excessive accesses of the DOM from JavaScript.
   It's OSS; see
   ([YellowLabTools on GitHub](https://github.com/gmetais/YellowLabTools))
+* [Pingdom](https://tools.pingdom.com/)
 
 This
 [article on Rails front end performance](https://www.viget.com/articles/rails-front-end-performance)
@@ -500,6 +543,9 @@ Here are guidelines for adding Ruby gems:
 * For Ruby gems, look at its data at <https://rubygems.org/> to learn
   more about it. E.G., is it still actively maintained?
   (e.g., it uses semantic versioning and have a ChangeLog).
+* For some tips on how to evaluate gems, see
+  <a href="https://evilmartians.com/chronicles/open-source-software-whats-in-a-poke">"Back-end Open-Source Software: What is in a poke?"
+  by Sergey Dolganov (January 26, 2017)</a>.
 * All required reused components MUST be open source software (OSS).
   It is *not* acceptable to insert a dependency
   that *requires* proprietary software; making it portable so it *can* use

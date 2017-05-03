@@ -1,4 +1,4 @@
-<%# The "div"s here are not balanced within thi file.
+<%# The "div"s here are not balanced within the file.
     That allows us to fill in and then end the current column & row,
     followed by starting and finishing another full row. %>
 <% badge_hostname = (ENV['PUBLIC_HOSTNAME'] || 'localhost') %>
@@ -16,9 +16,9 @@
 <div>
   <span id="project_entry_form"></span>
   <div class="hidden-print">
-    <button id="toggle-expand-all-panels" class="btn btn-info btn-xs" title="Expand all panels"type="button">Expand panels</button>
-    <button id="toggle-show-all-details" class="btn btn-info btn-xs" title="Show all details" type="button">Show all details</button>
-    <button id="toggle-hide-metna-criteria" class="btn btn-info btn-xs" title="Hide met &amp; N/A criteria (leaving unmet and unknown)" type="button">Hide met &amp; N/A</button>
+      <button id="toggle-expand-all-panels" class="btn btn-info btn-xs btn-stack" title="Expand all panels"type="button">Expand panels</button>
+      <button id="toggle-show-all-details" class="btn btn-info btn-xs btn-stack" title="Show all details" type="button">Show all details</button>
+      <button id="toggle-hide-metna-criteria" class="btn btn-info btn-xs btn-stack" title="Hide met &amp; N/A criteria (leaving unmet and unknown)" type="button">Hide met &amp; N/A</button>
   </div>
   <div class="hidden">
     <%= image_tag "result_symbol_check.png", id: "result_symbol_check_img", size: "40x40" %>
@@ -98,12 +98,13 @@ There is also a
 
   <div class="panel-group well well-lg well-color">
     <div class="panel panel-primary">
-      <div class="open-by-default panel-heading can-collapse" id="projectbasics">
+      <div class="open-by-default panel-heading can-collapse" id="basics">
+        <% satisfaction_data = project.get_satisfaction_data('basics') %>
         <h4 class="panel-title">
           <i class="glyphicon"></i>&nbsp;Basics
           <span class="pull-right satisfaction">
-            <span class="satisfaction-text"></span>
-            <span class="satisfaction-bullet"></span>
+            <span class="satisfaction-text"><%= satisfaction_data[:text] %></span>
+            <span class="satisfaction-bullet" data-color="<%= satisfaction_data[:color] %>">&#9679;</span>
           </span>
         </h4>
       </div>
@@ -432,11 +433,12 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
 
     <div class="panel panel-primary">
       <div class="panel-heading close-by-default can-collapse" id="changecontrol">
+        <% satisfaction_data = project.get_satisfaction_data('changecontrol') %>
         <h4 class="panel-title">
           <i class="glyphicon"></i>&nbsp;Change Control
           <span class="pull-right satisfaction">
-            <span class="satisfaction-text"></span>
-            <span class="satisfaction-bullet"></span>
+            <span class="satisfaction-text"><%= satisfaction_data[:text] %></span>
+            <span class="satisfaction-bullet" data-color="<%= satisfaction_data[:color] %>">&#9679;</span>
           </span>
         </h4>
       </div>
@@ -491,11 +493,12 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
 
     <div class="panel panel-primary">
       <div class="panel-heading close-by-default can-collapse" id="reporting">
+        <% satisfaction_data = project.get_satisfaction_data('reporting') %>
         <h4 class="panel-title">
           <i class="glyphicon"></i>&nbsp;Reporting
           <span class="pull-right satisfaction">
-            <span class="satisfaction-text"></span>
-            <span class="satisfaction-bullet"></span>
+            <span class="satisfaction-text"><%= satisfaction_data[:text] %></span>
+            <span class="satisfaction-bullet" data-color="<%= satisfaction_data[:color] %>">&#9679;</span>
           </span>
         </h4>
       </div>
@@ -547,11 +550,12 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
 
     <div class="panel panel-primary">
       <div class="panel-heading close-by-default can-collapse" id="quality">
+        <% satisfaction_data = project.get_satisfaction_data('quality') %>
         <h4 class="panel-title">
           <i class="glyphicon"></i>&nbsp;Quality
           <span class="pull-right satisfaction">
-            <span class="satisfaction-text"></span>
-            <span class="satisfaction-bullet"></span>
+            <span class="satisfaction-text"><%= satisfaction_data[:text] %></span>
+            <span class="satisfaction-bullet" data-color="<%= satisfaction_data[:color] %>">&#9679;</span>
           </span>
         </h4>
       </div>
@@ -619,11 +623,12 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
 
     <div class="panel panel-primary">
       <div class="panel-heading close-by-default can-collapse" id="security">
+        <% satisfaction_data = project.get_satisfaction_data('security') %>
         <h4 class="panel-title">
           <i class="glyphicon"></i>&nbsp;Security
           <span class="pull-right satisfaction">
-            <span class="satisfaction-text"></span>
-            <span class="satisfaction-bullet"></span>
+            <span class="satisfaction-text"><%= satisfaction_data[:text] %></span>
+            <span class="satisfaction-bullet" data-color="<%= satisfaction_data[:color] %>">&#9679;</span>
           </span>
         </h4>
       </div>
@@ -639,14 +644,12 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
           <li class="list-group-item"><h3>Good cryptographic practices</h3>
 
             <span class="criteria-desc">
-            Note that some software does not need to directly use cryptographic capabilities.
-            A "project security mechanism" is a security mechanism
-            provided by the delivered project's software.
+            Note that some software does not need to use cryptographic mechanisms.
             </span>
             <% if (!is_disabled) %>
               <br><br>
               <button class="btn btn-default hidden-print" type="button" id='all_crypto_na'>
-                Press here if the project does not use or need cryptographic mechanisms
+                Press here if the software produced by the project does not use cryptographic mechanisms
               </button>
               <br>
             <% end %>
@@ -711,11 +714,12 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
 
     <div class="panel panel-primary">
       <div class="panel-heading close-by-default can-collapse" id="analysis">
+        <% satisfaction_data = project.get_satisfaction_data('analysis') %>
         <h4 class="panel-title">
           <i class="glyphicon"></i>&nbsp;Analysis
           <span class="pull-right satisfaction">
-            <span class="satisfaction-text"></span>
-            <span class="satisfaction-bullet"></span>
+            <span class="satisfaction-text"><%= satisfaction_data[:text] %></span>
+            <span class="satisfaction-bullet" data-color="<%= satisfaction_data[:color] %>">&#9679;</span>
           </span>
         </h4>
       </div>
@@ -768,11 +772,12 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
 
     <div class="panel panel-primary">
       <div class="panel-heading close-by-default can-collapse" id="future">
+        <% satisfaction_data = project.get_satisfaction_data('future') %>
         <h4 class="panel-title">
           <i class="glyphicon"></i>&nbsp;Future
           <span class="pull-right satisfaction">
-            <span class="satisfaction-text"></span>
-            <span class="satisfaction-bullet"></span>
+            <span class="satisfaction-text"><%= satisfaction_data[:text] %></span>
+            <span class="satisfaction-bullet" data-color="<%= satisfaction_data[:color] %>">&#9679;</span>
           </span>
         </h4>
       </div>

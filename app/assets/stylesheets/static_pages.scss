@@ -302,6 +302,14 @@ nav {
   width: 40%
 }
 
+@media only screen and (max-width: 480px) {
+  .btn-stack {
+    display: block;
+    float: none;
+    width: 100%;
+  }
+}
+
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
   .home-badge {
     background: image-url('home_badge@2x.png') no-repeat top left;

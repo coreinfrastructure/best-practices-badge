@@ -1,7 +1,8 @@
 # frozen_string_literal: true
+
 # rubocop:disable Rails/FindEach
 class Criteria
-  ACCESSORS = %i(
+  ACCESSORS = %i[
     name category future
     description details rationale
     met_suppress na_suppress unmet_suppress
@@ -9,7 +10,7 @@ class Criteria
     na_allowed na_justification_required
     autofill met_placeholder unmet_placeholder na_placeholder
     major minor unmet
-  ).freeze
+  ].freeze
 
   include ActiveModel::Model
   attr_accessor(*ACCESSORS)

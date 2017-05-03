@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # Determine how to open the development files in the repository,
 # and set an appropriate :repo_files accessor.
 # Currently we only handle GitHub; extend this to support other ways.

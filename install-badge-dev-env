@@ -253,6 +253,7 @@ if [ $DO_LOCAL_RBENV = 'yes' ] ; then
   # Following performed in subshell so as not to change working directory.
   (
   cd ~/.rbenv
+  git fetch
   git checkout 3997a394d975136f468be196941492d3d0ef5143
   )
 fi

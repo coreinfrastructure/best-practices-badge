@@ -1,37 +1,38 @@
 # frozen_string_literal: true
+
 require 'addressable/uri'
 require 'net/http'
 
 # rubocop:disable Metrics/ClassLength
 class ProjectsController < ApplicationController
   include ProjectsHelper
-  before_action :set_project, only: %i(edit update destroy show badge)
+  before_action :set_project, only: %i[edit update destroy show show_json badge]
   before_action :logged_in?, only: :create
-  before_action :change_authorized, only: %i(destroy edit update)
+  before_action :change_authorized, only: %i[destroy edit update]
 
   # Cache with Fastly CDN.  We can't use this header, because logged-in
   # and not-logged-in users see different things (and thus we can't
   # have a cached version that works for everyone):
   # before_action :set_cache_control_headers, only: [:index, :show, :badge]
   # We *can* cache the badge result, and that's what matters anyway.
-  before_action :set_cache_control_headers, only: [:badge]
+  before_action :set_cache_control_headers, only: %i[badge show_json]
 
   helper_method :repo_data
 
   # These are the only allowed values for "sort" (if a value is provided)
   ALLOWED_SORT =
-    %w(
+    %w[
       id name achieved_passing_at badge_percentage
       homepage_url repo_url updated_at user_id created_at
-    ).freeze
+    ].freeze
 
-  ALLOWED_STATUS = %w(in_progress passing).freeze
+  ALLOWED_STATUS = %w[in_progress passing].freeze
 
-  INTEGER_QUERIES = %i(gteq lteq page).freeze
+  INTEGER_QUERIES = %i[gteq lteq page].freeze
 
-  TEXT_QUERIES = %i(pq q).freeze
+  TEXT_QUERIES = %i[pq q].freeze
 
-  OTHER_QUERIES = %i(sort sort_direction status ids).freeze
+  OTHER_QUERIES = %i[sort sort_direction status ids].freeze
 
   ALLOWED_QUERY_PARAMS = (
     INTEGER_QUERIES + TEXT_QUERIES + OTHER_QUERIES
@@ -51,8 +52,12 @@ class ProjectsController < ApplicationController
   end
 
   # GET /projects/1
-  # GET /projects/1.json
   def show; end
+
+  # GET /projects/1.json
+  def show_json
+    set_surrogate_key_header @project.record_key + '/json'
+  end
 
   def badge
     set_surrogate_key_header @project.record_key + '/badge'
@@ -72,7 +77,17 @@ class ProjectsController < ApplicationController
   end
 
   # GET /projects/:id/edit(.:format)
-  def edit; end
+  def edit
+    return unless @project.notify_for_static_analysis?
+    # rubocop:disable Rails/OutputSafety
+    message = (
+      'We have updated our requirements for the criterion ' \
+      '<a href="#static_analysis">static_analysis</a>. '.html_safe +
+      'Please add a justification for this criterion.'
+    )
+    flash.now[:danger] = message
+    # rubocop:enable Rails/OutputSafety
+  end
 
   # POST /projects
   # POST /projects.json
@@ -156,7 +171,7 @@ class ProjectsController < ApplicationController
   def destroy
     @project.destroy
     ReportMailer.report_project_deleted(@project, current_user).deliver_now
-    purge_cdn_badge
+    purge_cdn_project
     # @project.purge
     # @project.purge_all
     respond_to do |format|
@@ -184,6 +199,15 @@ class ProjectsController < ApplicationController
     #  limit(50).reorder(updated_at: :desc, id: :asc).includes(:user)
     @projects = Project.select(FEED_DISPLAY_FIELDS).recently_updated
     respond_to { |format| format.atom }
+  end
+
+  def reminders_summary
+    if current_user_is_admin?
+      respond_to { |format| format.html }
+    else
+      flash.now[:danger] = 'Admin only.'
+      redirect_to '/'
+    end
   end
 
   private
@@ -215,17 +239,40 @@ class ProjectsController < ApplicationController
   private_class_method :send_reminders
   # rubocop:enable Metrics/MethodLength
 
+  # Send announcement about projects that achieved a badge last month
+  # You should only invoke this in a test environment (where mailers are
+  # disabled & the data is forged anyway) or the "real" production site.
+  # Do *not* call this on the "master" or "staging" tiers,
+  # because we don't want to bother our users.
+  # rubocop:disable Metrics/MethodLength
+  def self.send_monthly_announcement
+    consider_today = Time.zone.today
+    month = consider_today.prev_month.strftime('%Y-%m')
+    last_stat_in_prev_month =
+      ProjectStat.last_in_month(consider_today.prev_month)
+    last_stat_in_prev_prev_month =
+      ProjectStat.last_in_month(consider_today.prev_month.prev_month)
+    projects = Project.projects_first_passing_in(consider_today.prev_month)
+    ReportMailer.report_monthly_announcement(
+      projects, month, last_stat_in_prev_month, last_stat_in_prev_prev_month
+    )
+                .deliver_now
+    projects.map(&:id) # Return a list of project ids that were reminded.
+  end
+  # rubocop:enble Metrics/MethodLength
+  private_class_method :send_monthly_announcement
+
   def allowed_query?(key, value)
     return false if value.blank?
     return positive_integer?(value) if INTEGER_QUERIES.include?(key.to_sym)
-    return TextValidator.new(attributes: %i(query)).text_acceptable?(value) if
+    return TextValidator.new(attributes: %i[query]).text_acceptable?(value) if
       TEXT_QUERIES.include?(key.to_sym)
     allowed_other_query?(key, value)
   end
 
   def allowed_other_query?(key, value)
     return ALLOWED_SORT.include?(value) if key == 'sort'
-    return %w(desc asc).include?(value) if key == 'sort_direction'
+    return %w[desc asc].include?(value) if key == 'sort_direction'
     return ALLOWED_STATUS.include?(value) if key == 'status'
     return integer_list?(value) if key == 'ids'
     false
@@ -269,11 +316,13 @@ class ProjectsController < ApplicationController
   end
 
   # Purge the badge from the CDN (if any)
-  def purge_cdn_badge
+  def purge_cdn_project
     cdn_badge_key = @project.record_key + '/badge'
+    cdn_json_key = @project.record_key + '/json'
     # If we can't authenticate to the CDN, complain but don't crash.
     begin
       FastlyRails.purge_by_key cdn_badge_key
+      FastlyRails.purge_by_key cdn_json_key
     rescue StandardError => e
       Rails.logger.error "FAILED TO PURGE #{cdn_badge_key} , #{e.class}: #{e}"
     end
@@ -294,13 +343,13 @@ class ProjectsController < ApplicationController
     'homepage_url, repo_url, license, user_id, achieved_passing_at, ' \
     'updated_at, badge_percentage'
 
-  # rubocop:disable Metrics/MethodLength,Metrics/PerceivedComplexity
+  # rubocop:disable Metrics/PerceivedComplexity
   # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
   def retrieve_projects
     @projects = Project.all
     # We had to keep this line the same to satisfy brakeman
     @projects = @projects.send params[:status] if
-       %w(in_progress passing).include? params[:status]
+       %w[in_progress passing].include? params[:status]
     @projects = @projects.gteq(params[:gteq]) if params[:gteq].present?
     @projects = @projects.lteq(params[:lteq]) if params[:lteq].present?
     # "Prefix query" - query against *prefix* of a URL or name
@@ -321,7 +370,7 @@ class ProjectsController < ApplicationController
     @projects = @projects.includes(:user).paginate(page: params[:page])
   end
   # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity
-  # rubocop:enable Metrics/MethodLength,Metrics/PerceivedComplexity
+  # rubocop:enable Metrics/PerceivedComplexity
 
   def set_homepage_url
     # Assign to repo.homepage if it exists, and else repo_url
@@ -339,8 +388,8 @@ class ProjectsController < ApplicationController
     # Rewrites /projects?q=&status=failing to /projects?status=failing
     original = request.original_url
     parsed = Addressable::URI.parse(original)
-    return original unless parsed.query_values.present?
-    valid_queries = parsed.query_values.reject { |k, v| !allowed_query?(k, v) }
+    return original if parsed.query_values.blank?
+    valid_queries = parsed.query_values.select { |k, v| allowed_query?(k, v) }
     if valid_queries.blank?
       parsed.omit!(:query) # Removes trailing '?'
     else
@@ -362,9 +411,9 @@ class ProjectsController < ApplicationController
   end
   # rubocop:enable Metrics/AbcSize
 
-  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+  # rubocop:disable Metrics/AbcSize
   def successful_update(format, old_badge_level)
-    purge_cdn_badge
+    purge_cdn_project
     # @project.purge
     format.html do
       if params[:continue]
@@ -392,7 +441,7 @@ class ProjectsController < ApplicationController
       ReportMailer.email_owner(@project, new_badge_level).deliver_now
     end
   end
-  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
+  # rubocop:enable Metrics/AbcSize
 
   def url_anchor
     return '#' + params[:continue] unless params[:continue] == 'Save'

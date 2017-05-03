@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'test_helper'
 
 # rubocop:disable Metrics/ClassLength
@@ -60,7 +61,7 @@ class ProjectsControllerTest < ActionController::TestCase
   end
 
   test 'should show project JSON data' do
-    get :show, params: { id: @project, format: :json }
+    get :show_json, params: { id: @project, format: :json }
     assert_response :success
     body = JSON.parse(response.body)
     assert_equal 'Pathfinder OS', body['name']
@@ -72,6 +73,7 @@ class ProjectsControllerTest < ActionController::TestCase
     log_in_as(@project.user)
     get :edit, params: { id: @project }
     assert_response :success
+    assert_not_empty flash
   end
 
   test 'should fail to edit due to old session' do
@@ -207,7 +209,7 @@ class ProjectsControllerTest < ActionController::TestCase
   test 'Achievement datetimes set' do
     log_in_as(@admin)
     assert_nil @perfect_project.lost_passing_at
-    assert_nil @perfect_project.achieved_passing_at
+    assert_not_nil @perfect_project.achieved_passing_at
     patch :update, params: {
       id: @perfect_project, project: {
         interact_status: 'Unmet'
@@ -216,7 +218,7 @@ class ProjectsControllerTest < ActionController::TestCase
     @perfect_project.reload
     assert_not_nil @perfect_project.lost_passing_at
     assert @perfect_project.lost_passing_at > 5.minutes.ago.utc
-    assert_nil @perfect_project.achieved_passing_at
+    assert_not_nil @perfect_project.achieved_passing_at
     patch :update, params: {
       id: @perfect_project, project: {
         interact_status: 'Met'

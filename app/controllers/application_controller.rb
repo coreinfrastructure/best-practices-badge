@@ -20,6 +20,13 @@ class ApplicationController < ActionController::Base
   end
   before_action :set_locale
 
+  def default_url_options
+    # Include "/:locale" in URL unless it's en (we omit en to keep URLs stable)
+    # http://stackoverflow.com/questions/5261521/
+    # how-to-avoid-adding-the-default-locale-in-generated-urls
+    { locale: I18n.locale == I18n.default_locale ? nil : I18n.locale }
+  end
+
   # See: http://stackoverflow.com/questions/4329176/
   #   rails-how-to-redirect-from-http-example-com-to-https-www-example-com
   def redirect_https

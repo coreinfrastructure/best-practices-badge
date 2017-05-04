@@ -2,10 +2,15 @@
 
 # rubocop:disable Metrics/BlockLength
 
-ALLOWED_LOCALES = /en|fr|es|zh|ja/
+# The priority is based upon order of creation:
+# first created -> highest priority.
+# See how all your routes lay out with "rake routes".
 
 Rails.application.routes.draw do
-  scope '(:locale)', locale: ALLOWED_LOCALES do
+  # Root of site
+  root 'static_pages#home'
+
+  scope '(:locale)' do
     resources :project_stats
 
     get 'sessions/new'
@@ -43,18 +48,28 @@ Rails.application.routes.draw do
     get '/signout' => 'sessions#destroy', as: :signout
   end
 
+  # If no route found in some cases, just redirect to a 404 page.
+  # The production site is constantly hit by nonsense paths,
+  # and while Rails has a built-in mechanism to handle nonsense,
+  # Rails' built-in mechanism creates noisy logs.
+  # Ideally we'd redirect all no-match cases quickly to a 404 handler.
+  # Unfortunately, the noise-reduction approach for Rails 4 noted here:
+  # http://rubyjunky.com/cleaning-up-rails-4-production-logging.html
+  # works in development but does NOT work in production.
+  # So instead, we'll select a few common cases where we have nothing
+  # and there's no possible security problem, and fast-path its rejection
+  # by redirecting to a 404 (without a lengthy log of the cause).
+  # wp-login.php queries are evidences of WordPress brute-force attacks:
+  # http://www.inmotionhosting.com/support/edu/wordpress/
+  # wp-login-brute-force-attack
+  match 'wp-login.php', via: :all, to: 'static_pages#error_404'
+  match '.well-known/*path', via: :all, to: 'static_pages#error_404'
+
   # Interpret a bare locale as going to the homepage with that locale.
   # This requires special handling.
-  get '/:locale',
-      to: 'static_pages#home',
-      constraints: { locale: ALLOWED_LOCALES }
+  get '/:locale', to: 'static_pages#home'
 
-  # The priority is based upon order of creation: first created ->
-  # highest priority.
-  # See how all your routes lay out with "rake routes".
-
-  # You can have the root of your site routed with "root"
-  root 'static_pages#home'
+  # Here are some examples of routes.
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
@@ -105,22 +120,5 @@ Rails.application.routes.draw do
   #     # (app/controllers/admin/products_controller.rb)
   #     resources :products
   #   end
-
-  # If no route found in some cases, just redirect to a 404 page.
-  # The production site is constantly hit by nonsense paths,
-  # and while Rails has a built-in mechanism to handle nonsense,
-  # Rails' built-in mechanism creates very noisy logs.
-  # Ideally we'd redirect all no-match cases quickly to a 404 handler.
-  # Unfortunately, the noise-reduction approach for Rails 4 noted here:
-  # http://rubyjunky.com/cleaning-up-rails-4-production-logging.html
-  # works in development but does NOT work in production.
-  # So instead, we'll select a few common cases where we have nothing
-  # and there's no possible security problem, and fast-path its rejection
-  # by redirecting to a 404 (without a lengthy log of the cause).
-  # wp-login.php queries are evidences of WordPress brute-force attacks:
-  # http://www.inmotionhosting.com/support/edu/wordpress/
-  # wp-login-brute-force-attack
-  match 'wp-login.php', via: :all, to: 'static_pages#error_404'
-  match '.well-known/*path', via: :all, to: 'static_pages#error_404'
 end
 # rubocop:enable Metrics/BlockLength

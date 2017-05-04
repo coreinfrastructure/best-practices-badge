@@ -36,7 +36,7 @@ class LoginTest < CapybaraFeatureTest
     visit login_path
     assert_equal current_path, root_path
 
-    visit edit_project_path(@project)
+    visit edit_project_path(@project, locale: nil)
     assert has_content? 'We have updated our requirements for the criterion ' \
                         'static_analysis. Please add a justification for '\
                         'this criterion.'
@@ -44,7 +44,7 @@ class LoginTest < CapybaraFeatureTest
     fill_in 'project_name', with: 'It doesnt matter'
     # Below we are clicking the final save button, it has a value of ''
     click_button('Save', exact: true)
-    assert_equal current_path, edit_project_path(@project)
+    assert_equal current_path, edit_project_path(@project, locale: nil)
     assert has_content? 'Project was successfully updated.'
     # TODO: Get the clicking working again with capybara.
     # Details: If we expand all panels first and dont click this test passes.

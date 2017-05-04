@@ -14,7 +14,13 @@ class ApplicationController < ActionController::Base
   before_action :validate_session_timestamp
   after_action :persist_session_timestamp
 
-  # Set user's locale.
+  # Set user's locale; see <http://guides.rubyonrails.org/i18n.html>.
+  # This *looks* like a global variable setting, and setting a global
+  # variable would be bad since we're multi-threaded.
+  # However, this is *not* setting a global variable, it's setting a
+  # per-Thread value (which is safe). Per the i18n guide,
+  # "The locale can be either set pseudo-globally to I18n.locale
+  # (which uses Thread.current like, e.g., Time.zone)...".
   def set_locale
     I18n.locale = params[:locale] || I18n.default_locale
   end

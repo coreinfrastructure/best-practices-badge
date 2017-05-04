@@ -43,6 +43,12 @@ Rails.application.routes.draw do
     get '/signout' => 'sessions#destroy', as: :signout
   end
 
+  # Interpret a bare locale as going to the homepage with that locale.
+  # This requires special handling.
+  get '/:locale',
+      to: 'static_pages#home',
+      constraints: { locale: ALLOWED_LOCALES }
+
   # The priority is based upon order of creation: first created ->
   # highest priority.
   # See how all your routes lay out with "rake routes".

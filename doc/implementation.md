@@ -118,6 +118,10 @@ The application is configured by various environment variables:
   The master, staging, and production systems set this to 'production'.
 * BADGEAPP_DAY_FOR_MONTHLY: Day of the month to monthly activities, e.g.,
   send out monthly reminders.  Default 5.  Set to 0 to disable monthly acts.
+* FASTLY_CLIENT_IP_REQUIRED: If present, download the Fastly list of
+  client IPs, and only let those IPs make requests.  Enabling this
+  counters cloud piercing.  This isn't on by default, but the environment
+  variables are set on our tiers.
 
 This can be set on Heroku.  For example, to change the maximum number
 of email reminders to inactive projects on production-bestpractices:

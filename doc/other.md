@@ -818,7 +818,7 @@ as described below.
     <a href="https://lwn.net/Articles/713175/">"LZ4: vendoring in the kernel"
     by Jonathan Corbet (LWN, February 1, 2017)</a>, based on a
     2017 linux.conf.au talk by Robert Lefkowitz.
-    Lefkowitz talked about the process of "vendoring" — the copying
+    Lefkowitz talked about the process of "vendoring" - the copying
     of code from other projects into one's own repository rather than
     accepting a dependency on those projects - and
     LZ4 in the Linux kernel.
@@ -1373,7 +1373,7 @@ as described below.
 *   <a name="copyright_per_file"></a>
     The project MUST include a copyright statement in each source file,
     identifying at least one relevant year and copyright holder.
-    <sup>[<a href="#copyright_per_file"> copyright_per_file </a>]</sup>
+    <sup>[<a href="#copyright_per_file">copyright_per_file</a>]</sup>
 
     *Details*:
     This MAY be done by including the following inside a comment
@@ -1393,7 +1393,7 @@ as described below.
     permission. Explicit notices can help you prove that you and your
     collaborators really are the copyright holders. They can serve to put
     a potential infringer on notice by providing an informal sniff test to
-    counter the “Oh yeah, well I didn’t know it was copyrighted”
+    counter the 'Oh yeah, well I didn’t know it was copyrighted'
     defense. For some users the copyright notice may suggest higher
     quality, as they expect that good software will include a notice...
     Git can track these things, but people may receive software outside

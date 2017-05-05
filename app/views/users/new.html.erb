@@ -1,18 +1,10 @@
 <!--div class="center jumbotron"-->
  <br>
- <h1 class="center">Sign up</h1>
+ <h1 class="center"><%= t '.signup_header' %></h1>
 
  <br>
  <div class="row">
-   <div class="col-md-6 col-md-offset-3">
-   <a href="/login">If you have GitHub account, you can just use that to
-   log in</a>.
-   If you don't want to log in with a GitHub account, you can sign up
-   here instead.
-   <br><br>
-   If you didn't receive your activation link, please sign up again and we
-   will send you a new one.
-   </div>
+   <div class="col-md-6 col-md-offset-3"><%= t '.intro_html' %></div>
  </div>
  <br><br>
 
@@ -21,19 +13,19 @@
    <div class="col-md-6 col-md-offset-3">
      <%= form_for(@user) do |f| %>
        <%= render 'shared/error_messages', object: f.object %>
-       <%= f.label :name %>
+       <%= f.label :name, t('.name') %>
        <%= f.text_field :name, class:"form-control" %>
 
-       <%= f.label :email %>
+       <%= f.label :email, t('.email') %>
        <%= f.email_field :email, class:"form-control" %>
 
-       <%= f.label :password %>
+       <%= f.label :password, t('.password') %>
        <%= f.password_field :password, autocomplete: "off", class:"form-control", required: true, minlength: User::MIN_PASSWORD_LENGTH %>
 
-       <%= f.label :password_confirmation, "Confirm Password" %>
+       <%= f.label :password_confirmation, t('.password_confirmation') %>
        <%= f.password_field :password_confirmation, autocomplete: "off", class:"form-control", required: true, minlength: User::MIN_PASSWORD_LENGTH %>
        <%= f.hidden_field :provider, value: "local" %>
-       <%= f.submit "Create my account", class: "btn btn-primary" %>
+       <%= f.submit t('.create_account'), class: "btn btn-primary" %>
      <% end %>
    </div>
  </div>

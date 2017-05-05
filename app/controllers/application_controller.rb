@@ -14,6 +14,25 @@ class ApplicationController < ActionController::Base
   before_action :validate_session_timestamp
   after_action :persist_session_timestamp
 
+  # Set user's locale; see <http://guides.rubyonrails.org/i18n.html>.
+  # This *looks* like a global variable setting, and setting a global
+  # variable would be bad since we're multi-threaded.
+  # However, this is *not* setting a global variable, it's setting a
+  # per-Thread value (which is safe). Per the i18n guide,
+  # "The locale can be either set pseudo-globally to I18n.locale
+  # (which uses Thread.current like, e.g., Time.zone)...".
+  def set_locale
+    I18n.locale = params[:locale] || I18n.default_locale
+  end
+  before_action :set_locale
+
+  def default_url_options
+    # Include "/:locale" in URL unless it's en (we omit en to keep URLs stable)
+    # http://stackoverflow.com/questions/5261521/
+    # how-to-avoid-adding-the-default-locale-in-generated-urls
+    { locale: I18n.locale == I18n.default_locale ? nil : I18n.locale }
+  end
+
   # See: http://stackoverflow.com/questions/4329176/
   #   rails-how-to-redirect-from-http-example-com-to-https-www-example-com
   def redirect_https

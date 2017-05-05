@@ -6,16 +6,16 @@
   # and we can easily determine what the previous one was. Immediately
   # forcing its deletion provides more cache space for other (useful) things.
   Rails.cache.delete ActiveSupport::Cache.expand_cache_key(
-    ['project_stats', ProjectStat.all.size-1]
+    ['project_stats', locale, ProjectStat.all.size-1]
   )
-  cache ['project_stats', ProjectStat.all.size] do
+  cache ['project_stats', locale, ProjectStat.all.size] do
 %>
 
 <p id="notice"><%= notice %></p>
 
-<h1>Project Stats</h1>
+<h1><%= t('.project_stats_header') %></h1>
 
-<h2>All projects</h2>
+<h2><%= t '.all_projects' %></h2>
 
 <%
   date_chart_options = {
@@ -43,7 +43,7 @@
 
 <br><br><br>
 
-<h2>Projects with non-trivial progress</h2>
+<h2><%= t '.projects_nontrivial' %></h2>
 <%=
   # Show project counts, but skip <25% because that makes chart scale unusable
   gt0_stats = ProjectStat::STAT_VALUES.select do |e|
@@ -62,7 +62,7 @@
 
 <br><br><br>
 
-<h2>Projects with badge entry activity in last 30 days</h2>
+<h2><%= t '.projects_activity_30' %></h2>
 <%=
   dataset = []
   # Active projects
@@ -95,7 +95,7 @@
 
 <br><br><br>
 
-<h2>Daily badge entry activity</h2>
+<h2><%= t '.daily_activity' %></h2>
 <%=
   # Show new and edited projects, reminders sent, reactivated after reminders
   # These are expected to be smaller numbers, and show detailed activity,
@@ -133,7 +133,7 @@
 
 <br><br><br>
 
-<h2>Reminders</h2>
+<h2><%= t '.reminders' %></h2>
 <%=
   # Show reminders sent, reactivated after reminders
   dataset = []
@@ -159,12 +159,13 @@
 
 <% if current_user&.admin? %>
 <p>
-As an admin, you may also see the
-<a href="/reminders">detailed information about reminders</a>.
+<%= t '.admin' %>
 <% end %>
 
 <br>
 <br>
-You can see the raw data in
-<%= link_to 'JSON format', project_stats_path(format: :json) %> and
-<%= link_to 'downloadable CSV format', project_stats_path(format: :csv) %>.
+<%= t '.raw_data' %>
+<ul>
+<li><%= link_to t('.json_format'), project_stats_path(format: :json) %>
+<li><%= link_to t('.csv_format'), project_stats_path(format: :csv) %>.
+</ul>

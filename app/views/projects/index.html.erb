@@ -28,6 +28,6 @@
 <%= link_to 'Add New Project', new_project_path, class: 'btn btn-success' %>
 <br>
 <br>
-  <%= render 'table', projects: @projects %>
+  <%= render 'table', projects: @projects, locale: locale %>
   <%= will_paginate @projects %>
 </div>

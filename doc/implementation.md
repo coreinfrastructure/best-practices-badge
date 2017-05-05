@@ -365,6 +365,88 @@ modify the autofill code in the app/lib/ directory.
 Be sure to "git add" all new files, including any migration files,
 and then use "git commit" and "git push".
 
+## Internationalization (i18n) and localization (l10n)
+
+This application is "internationalized", that is, it allows
+users to select their locale, and then presents information
+(such as human-readable text) in the selected locale.
+If no locale is indicated, 'en' (English) is used.
+
+To learn more about Rails and internationalization, please read the
+[Rails Internationalization guide](http://guides.rubyonrails.org/i18n.html).
+
+We can *always* use help in localizing (that is, in providing translations
+of text to various locales) - please help!
+
+### Requesting the locale at run-time
+
+Users indicate the locale via the URL.
+The recommended form is at the beginning of that path, e.g.,
+<https://bestpractices.coreinfrastructure.org/fr/projects/>
+selects the locale "fr" (French) when displaying "/projects".
+This even works at the top page, e.g.,
+<https://bestpractices.coreinfrastructure.org/fr/>.
+It also supports the locale as a query parameter, e.g.,
+<https://bestpractices.coreinfrastructure.org/projects?locale=fr>
+
+### Fixing locale data
+
+Almost all locale-specific data is stored in the "config/locales"
+directory (one file for each locale, named LOCALE.yml). This data is
+automatically loaded by Rails.  A few of the static files are served
+directly, with a separate file for each locale;
+see the "app/views/static_pages" directory.
+If you need to fix a translation, that's where the data is.
+
+### Adding a new locale
+
+To add a new locale, modify the file "config/initializers/i18n.rb"
+and edit the assignment of "I18n.available_locales" to add
+the new locale.  The system will now permit users to request it.
+
+Next, create a stub locale file in the "config/locales" directory
+named LOCALE.yml.  A decent way to start is:
+
+~~~~
+cd config/locales
+sed -e '/GENERIC LOCALE INFORMATION/,$d' en.yml > NEW_LOCALE.yml
+~~~~
+
+Edit the top of the file to change "en:" to your locale name.
+
+Next, go to
+<https://github.com/svenfuchs/rails-i18n/blob/master/rails/locale/>
+and append its contents to your local file
+(eliminating any leading "---" and the re-declaration of locale).
+
+Now create the matching static pages in the
+the "app/views/static_pages"  (cd "../..", then cd "app/views/static_pages",
+then create the files using the new locale name).
+
+Now the hard part: actually translating.
+
+### Programmatically accessing a locale
+
+To learn more about Rails and internationalization, please read the
+[Rails Internationalization guide](http://guides.rubyonrails.org/i18n.html).
+
+Inside views you can use the 't' helper, e.g.,
+
+~~~~
+    <%= t('hello') %>
+    <%= t('.current_scope') %>
+~~~~
+
+Inside other code (e.g., in a flash message), use `I18n.t`:
+
+~~~~
+    I18n.t 'hello'
+~~~~
+
+You can access 'I18n.locale' to see the current locale's value
+(this is a thread-local query, so this works fine when multiple
+threads are active).
+
 ## App authentication via GitHub
 
 The BadgeApp needs to authenticate itself through OAuth2 on

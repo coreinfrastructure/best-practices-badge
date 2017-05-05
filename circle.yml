@@ -30,9 +30,9 @@ deployment:
       - heroku run rake db:migrate --app production-bestpractices:
           timeout: 400 # if your deploys take a long time
 general:
-  branches:
-    ignore:
-      - i18n # TODO Remove this; Don't build for now, as build will be broken
+# branches:
+#   ignore:
+#     - BRANCH_NAME # do this if you need to ignore a branch.
   artifacts:
     - 'coverage'
     - 'license_finder_report.html'

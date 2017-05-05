@@ -5,4 +5,26 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 fr:
-  hello: "Hello world"
+  hello: "Bonjour le monde"
+  layouts:
+    cii_best_practices: Meilleures pratiques de la CII
+    projects: Projets
+    users: Utilisateurs
+    profile: Profil
+    settings: Paramètres
+    logout_html: <span class="glyphicon glyphicon-log-out"></span> Connectez - Out
+    signup_html: <span class="glyphicon glyphicon-user"></span> S'inscrire
+    login_html: <span class="glyphicon glyphicon-log-in"></span> S'identifier
+    footer_text_html: >
+      <small>
+      <b>Besoin d'aide? Avoir une question?
+      Vous voyez un problème? S'il vous plaît
+      <i><a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">envoyer un email</a></i> ou
+      <i><a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues" target="_blank">déposer un problème</a></i>.</b>
+      © 2015-2017 <a href="https://www.coreinfrastructure.org/ target="_blank"> Core Infrastructure Initiative</a>,
+      <a href="https://www.linuxfoundation.org/" target="_blank">Linux
+      Foundation</a> Projet collaboratif. Tous droits réservés.
+      S'il vous plaît voir notre
+      <a href="https://www.linuxfoundation.org/privacy" target="_blank">politique de confidentialité</a> et
+      <a href="https://www.linuxfoundation.org/terms" target="_blank">termes d'utilisation </a>.
+      </small>

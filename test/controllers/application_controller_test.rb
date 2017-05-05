@@ -10,13 +10,13 @@ class ApplicationControllerTest < ActionController::TestCase
     range1 = IPAddr.new('23.235.32.0/20')
     range2 = IPAddr.new('43.249.72.0/22')
 
-    assert_nothing_raised { a.fail_if_invalid_client_ip('', []) }
-    assert_raises { a.fail_if_invalid_client_ip(client_ip, []) }
+    assert_nothing_raised { a.send(:fail_if_invalid_client_ip, '', []) }
+    assert_raises { a.send(:fail_if_invalid_client_ip, client_ip, []) }
     assert_nothing_raised do
-      a.fail_if_invalid_client_ip(client_ip, [range1, range2])
+      a.send(:fail_if_invalid_client_ip, client_ip, [range1, range2])
     end
     assert_raises do
-      a.fail_if_invalid_client_ip(client_ip, [range1, range1])
+      a.send(:fail_if_invalid_client_ip, client_ip, [range1, range1])
     end
   end
 

@@ -15,6 +15,26 @@ class ApplicationController < ActionController::Base
   after_action :persist_session_timestamp
 
   # Set user's locale; see <http://guides.rubyonrails.org/i18n.html>.
+  before_action :set_locale
+
+  # Force http -> https
+  before_action :redirect_https
+
+  # Validate client IP address (if only some IP addresses are allowed);
+  # counters cloud piercing.
+  before_action :validate_client_ip_address
+
+  # Validate client IP address if Rails.configuration.valid_client_ips
+  # and header value X-Forwarded-For.
+  # This can provide a defense against cloud piercing.
+  def validate_client_ip_address
+    return unless Rails.configuration.valid_client_ips
+    client_ip = request.remote_ip
+    fail_if_invalid_client_ip(client_ip, Rails.configuration.valid_client_ips)
+  end
+
+  private
+
   # This *looks* like a global variable setting, and setting a global
   # variable would be bad since we're multi-threaded.
   # However, this is *not* setting a global variable, it's setting a
@@ -24,7 +44,6 @@ class ApplicationController < ActionController::Base
   def set_locale
     I18n.locale = params[:locale] || I18n.default_locale
   end
-  before_action :set_locale
 
   def default_url_options
     # Include "/:locale" in URL unless it's en (we omit en to keep URLs stable)
@@ -41,7 +60,6 @@ class ApplicationController < ActionController::Base
     end
     true
   end
-  before_action :redirect_https
 
   # raise exception if text value client_ip isn't in valid_client_ips
   def fail_if_invalid_client_ip(client_ip, allowed_ips)
@@ -54,16 +72,6 @@ class ApplicationController < ActionController::Base
     raise ActionController::RoutingError.new('Invalid client IP'),
           'Invalid client IP'
   end
-
-  # Validate client IP address if Rails.configuration.valid_client_ips
-  # and header value X-Forwarded-For.
-  # This can provide a defense against cloud piercing.
-  def validate_client_ip_address
-    return unless Rails.configuration.valid_client_ips
-    client_ip = request.remote_ip
-    fail_if_invalid_client_ip(client_ip, Rails.configuration.valid_client_ips)
-  end
-  before_action :validate_client_ip_address
 
   include SessionsHelper
 end

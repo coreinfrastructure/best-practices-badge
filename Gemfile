@@ -32,7 +32,8 @@ gem 'sass-rails', '5.0.6'
 gem 'secure_headers', '3.6.3' # Add hardening measures to HTTP headers
 # gem 'turbolinks', '5.0.1' # Speed UI access
 gem 'uglifier', '3.2.0'
-gem 'will_paginate', '3.1.5'
+gem 'will_paginate', '3.1.5' # Paginate results (next/previous)
+gem 'will-paginate-i18n', '0.1.15' # Provide will-paginate translations
 
 group :development, :test do
   gem 'awesome_print', '1.7.0'

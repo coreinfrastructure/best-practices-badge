@@ -413,6 +413,7 @@ GEM
     websocket-driver (0.6.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.2)
+    will-paginate-i18n (0.1.15)
     will_paginate (3.1.5)
     with_env (1.1.0)
     xml-simple (1.1.5)
@@ -484,6 +485,7 @@ DEPENDENCIES
   vcr (= 3.0.3)
   web-console (= 3.5.0)
   webmock (= 3.0.1)
+  will-paginate-i18n (= 0.1.15)
   will_paginate (= 3.1.5)
   yaml-lint (= 0.0.9)
 

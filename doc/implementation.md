@@ -415,15 +415,16 @@ named LOCALE.yml.  A decent way to start is:
 
 ~~~~
 cd config/locales
-sed -e '/GENERIC LOCALE INFORMATION/,$d' en.yml > NEW_LOCALE.yml
+cp en.yml NEW_LOCALE.yml
 ~~~~
 
 Edit the top of the file to change "en:" to your locale name.
 
-Next, go to
+At one time we suggested going to this page to get locale information
+for Rails built-ins, and including that:
 <https://github.com/svenfuchs/rails-i18n/blob/master/rails/locale/>
-and append its contents to your local file
-(eliminating any leading "---" and the re-declaration of locale).
+However, we now include the gem 'rails-i18n', and that provides
+the same kind of functionality while being easier to maintain.
 
 Now create the matching static pages in the
 the "app/views/static_pages"  (cd "../..", then cd "app/views/static_pages",

@@ -27,13 +27,14 @@ gem 'pg', '0.20.0' # PostgreSQL database, used for data storage
 gem 'pg_search', '2.0.1' # PostgreSQL full-text search
 gem 'puma', '3.8.2' # Faster webserver; recommended by Heroku
 gem 'rails', '5.0.2' # Our web framework
+gem 'rails-i18n', '5.0.3' # Localizations for Rails built-ins
 gem 'redcarpet', '3.4.0' # Process markdown in form textareas (justifications)
 gem 'sass-rails', '5.0.6'
 gem 'secure_headers', '3.6.3' # Add hardening measures to HTTP headers
 # gem 'turbolinks', '5.0.1' # Speed UI access
 gem 'uglifier', '3.2.0'
-gem 'will_paginate', '3.1.5' # Paginate results (next/previous)
 gem 'will-paginate-i18n', '0.1.15' # Provide will-paginate translations
+gem 'will_paginate', '3.1.5' # Paginate results (next/previous)
 
 group :development, :test do
   gem 'awesome_print', '1.7.0'

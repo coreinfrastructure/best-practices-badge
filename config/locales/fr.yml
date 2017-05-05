@@ -56,3 +56,19 @@ fr:
       password: Mot de passe
       password_confirmation: Confirmez le mot de passe
       create_account: Créer mon compte
+  project_stats:
+    index:
+      project_stats_header: Statistiques du projet
+      all_projects: Tous les projets
+      projects_nontrivial: Projets avec des progrès non triviaux
+      projects_activity_30: >
+        Projets avec activité d'entrée de badge au cours des 30 derniers jours
+      daily_activity: Activité journalière de badge
+      reminders: Rappels
+      admin: >
+        En tant qu'administrateur, vous pouvez également voir le
+        <a href="/fr/reminders"> informations détaillées sur les rappels</a>.
+      raw_data: >
+        Vous pouvez également voir les données brutes:
+      json_format: format JSON
+      csv_format: format CSV téléchargeable

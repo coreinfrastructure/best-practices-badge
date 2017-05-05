@@ -6,6 +6,11 @@
 #
 en:
   hello: "Hello world"
+  activerecord:
+    models:
+      project:
+        one: Project
+        other: Projects
   layouts:
     cii_best_practices: CII Best Practices
     projects: Projects
@@ -68,3 +73,6 @@ en:
         You can also see the raw data:
       json_format: JSON format
       csv_format: downloadable CSV format
+  projects:
+    index:
+      add_link: Add

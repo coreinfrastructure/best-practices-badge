@@ -1,13 +1,13 @@
 <% content_for :nav_extras do %>
   <li>
     <% if logged_in? %>
-      <%= link_to 'Add', new_project_path %>
+      <%= link_to t('.add_link'), new_project_path %>
     <% end %>
   </li>
 <% end %>
 
 <div class="center">
-<h2><%= pluralize(@count, 'Project') %></h2>
+<h2><%= @count.to_s + ' ' + Project.model_name.human(count: @count) %></h2>
   <%= form_for projects_path, method: 'get', enforce_utf8: false,
                html: { class: 'project_search' } do %>
     <label for="gteq">Badge status</label>

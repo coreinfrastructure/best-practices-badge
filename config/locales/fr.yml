@@ -40,3 +40,19 @@ fr:
       remember_me: Se souvenir de moi
       login_custom: Connectez-vous en utilisant un compte personnalisé
       no_custom: Aucun compte personnalisé? S'inscrire maintenant!
+  users:
+    new:
+      signup_header: S'inscrire
+      intro_html: >
+        <a href="/fr/login">Si vous avez un compte GitHub, vous pouvez
+        simplement l'utiliser pour connectez-vous</a>.
+        Si vous ne souhaitez pas vous connecter à un compte GitHub,
+        vous pouvez vous inscrire ici à la place.
+        <br> <br>
+        Si vous n'avez pas reçu votre lien d'activation, veuillez vous
+        inscrire à nouveau et nous vous enverra un nouveau.
+      name: Prénom
+      email: Email
+      password: Mot de passe
+      password_confirmation: Confirmez le mot de passe
+      create_account: Créer mon compte

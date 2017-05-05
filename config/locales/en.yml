@@ -40,3 +40,15 @@ en:
       <a href="https://www.linuxfoundation.org/privacy" target="_blank">privacy policy</a> and
       <a href="https://www.linuxfoundation.org/terms" target="_blank">terms of use</a>.
       </small>
+  sessions:
+    new:
+      login_header: Log in
+      login_with_github_html: >
+        <span class="fa fa-github"></span> Log in with GitHub
+      or: or
+      email: Email
+      password: Password
+      forgot_password: Forgot your password?
+      remember_me: Remember me
+      login_custom: Log in using custom account
+      no_custom: No custom account? Sign up now!

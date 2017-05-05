@@ -28,3 +28,15 @@ fr:
       <a href="https://www.linuxfoundation.org/privacy" target="_blank">politique de confidentialité</a> et
       <a href="https://www.linuxfoundation.org/terms" target="_blank">termes d'utilisation </a>.
       </small>
+  sessions:
+    new:
+      login_header: S'identifier
+      login_with_github_html: >
+        <span class="fa fa-github"></span> Connectez-vous avec GitHub
+      or: ou
+      email: Email
+      password: Mot de passe
+      forgot_password: Vous avez oublié votre mot de passe?
+      remember_me: Se souvenir de moi
+      login_custom: Connectez-vous en utilisant un compte personnalisé
+      no_custom: Aucun compte personnalisé? S'inscrire maintenant!

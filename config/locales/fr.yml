@@ -75,3 +75,11 @@ fr:
         Vous pouvez également voir les données brutes:
       json_format: format JSON
       csv_format: format CSV téléchargeable
+  projects:
+    index:
+      add_link: Ajouter
+      add_new: Ajouter un nouveau projet
+      badge_status: Statut de badge
+      exclude_passing: Exclure le passage
+      text_search: Recherche de texte
+      name_or_description: Nom ou texte de description

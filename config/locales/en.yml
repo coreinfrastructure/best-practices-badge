@@ -74,3 +74,9 @@ en:
   projects:
     index:
       add_link: Add
+      add_new: Add new project
+      badge_status: Badge status
+      exclude_passing: Exclude passing
+      text_search: Text search
+      name_or_description: Name or description text
+      search: Search

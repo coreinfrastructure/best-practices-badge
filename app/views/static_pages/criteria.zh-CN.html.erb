@@ -5,7 +5,7 @@
   <a href='https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/doc/criteria.md'>The detailed criteria are on GitHub</a>.</p>
   <p>
   <% future_criteria, active_criteria = Criteria.partition(&:future?) %>
-  当前数量的标准:
+  当前标准的数量:
     <%= active_criteria.count %> (active)
     + <%= future_criteria.count %> (future)
     = <%= Criteria.count %> (total).

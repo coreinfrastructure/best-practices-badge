@@ -223,7 +223,7 @@ Symbols are typically faster, with no loss of readability.
 There is one big exception:
 Data from JSON should normally be accessed with strings,
 since that's how Ruby normally reads it.
-Rails normally uses the type HashWithIndifferentAccess,
+Rails normally uses the type ActiveSupport::HashWithIndifferentAccess,
 where the difference between symbols and strings is ignored,
 but JSON results use standard Ruby hashes where symbols and strings are
 considered different; be careful to use the correct type in these cases.

@@ -1,4 +1,5 @@
 <table class="table table-bordered table-striped table-responsive">
+  <%# Can't cache, because user selection could invert them %>
   <thead>
     <tr>
       <th><%= sortable_header t('.id'), 'id' %></th>
@@ -47,11 +48,18 @@
   </tbody>
 </table>
 
+<%# Can't cache, because user selection could invert them %>
 <p>
-You can also sort by
-<%= sortable_header 'repository URL', 'repo_url' %>,
-<%= sortable_header 'create time (for the badge entry)', 'created_at' %>,
-<%= sortable_header 'last update time (for the badge entry)', 'updated_at' %>,
-and
-<%= sortable_header 'user id', 'user_id' %>.
+<%= t '.can_also_sort' %>
+<%=
+  # Create a list.
+  # The *only* user input used here is locale, which we validate, so
+  # it's secure to use html_safe here.
+  [
+    sortable_header(t('.repository_url'), 'repo_url'),
+    sortable_header(t('.create_time'), 'created_at'),
+    sortable_header(t('.update_time'), 'updated_at'),
+    sortable_header(t('.user_id'), 'user_id')
+  ].to_sentence.html_safe # to_sentence has built-in 18n support
+%>
 </p>

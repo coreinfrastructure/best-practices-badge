@@ -93,3 +93,8 @@ fr:
       owner: Propriétaire
       last_achieved: Dernière réalisation à
       pachieved: "% Achieved"
+      can_also_sort: "Vous pouvez également trier par la suite:"
+      repository_url: URL du référentiel
+      create_time: create time (pour l'entrée du badge)
+      update_time: dernier temps de mise à jour (pour la saisie du badge)
+      user_id: id utilisateur

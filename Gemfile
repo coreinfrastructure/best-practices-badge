@@ -46,7 +46,7 @@ group :development, :test do
   gem 'json', '2.1.0'
   gem 'license_finder', '3.0.0'
   gem 'mdl', '0.4.0'
-  gem 'pronto', '0.9.1'
+  gem 'pronto', '0.9.2'
   gem 'pronto-brakeman', '0.9.0'
   gem 'pronto-eslint', '0.9.1'
   gem 'pronto-rails_best_practices', '0.9.0'

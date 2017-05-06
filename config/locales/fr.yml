@@ -83,3 +83,13 @@ fr:
       exclude_passing: Exclure le passage
       text_search: Recherche de texte
       name_or_description: Nom ou texte de description
+      search: Search
+    table:
+      id: Id
+      name: Nom
+      description: Description
+      website: Site web
+      license: License
+      owner: Propriétaire
+      last_achieved: Dernière réalisation à
+      pachieved: "% Achieved"

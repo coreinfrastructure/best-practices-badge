@@ -1,14 +1,14 @@
 <table class="table table-bordered table-striped table-responsive">
   <thead>
     <tr>
-      <th><%= sortable_header 'Id', 'id' %></th>
-      <th><%= sortable_header 'Name', 'name' %></th>
-      <th>Description</th>
-      <th><%= sortable_header 'Website', 'homepage_url' %></th>
-      <th>License</th>
-      <th>Owner</th>
-      <th><%= sortable_header 'Last Achieved at', 'achieved_passing_at' %></th>
-      <th><%= sortable_header '% Achieved', 'badge_percentage' %></th>
+      <th><%= sortable_header t('.id'), 'id' %></th>
+      <th><%= sortable_header t('.name'), 'name' %></th>
+      <th><%= t '.description' %></th>
+      <th><%= sortable_header t('.website'), 'homepage_url' %></th>
+      <th><%= t '.license' %></th>
+      <th><%= t '.owner' %></th>
+      <th><%= sortable_header t('.last_achieved'), 'achieved_passing_at' %></th>
+      <th><%= sortable_header t('.pachieved'), 'badge_percentage' %></th>
       <th>Badge</th>
     </tr>
   </thead>

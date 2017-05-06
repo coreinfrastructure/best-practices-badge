@@ -429,8 +429,17 @@ the same kind of functionality while being easier to maintain.
 Now create the matching static pages in the
 the "app/views/static_pages"  (cd "../..", then cd "app/views/static_pages",
 then create the files using the new locale name).
+Be sure all hypertext links to locations within the application
+include the locale (e.g., use "/fr/projects" not "/projects" as the URL);
+automatically-generated URLs include the locale, but constant strings do not.
 
 Now the hard part: actually translating.
+Edit the '.yml' (YAML) file to create the translations.
+As always, you need to conform to YAML syntax.
+For example,
+strings that end in a colon (":") *must* be escaped (e.g., by
+surrounding them with double-quotes).
+Keys are *only* in lower case and never use dash (they use underscore).
 
 ### Programmatically accessing a locale
 

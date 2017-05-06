@@ -30,7 +30,7 @@ gem 'rails', '5.0.2' # Our web framework
 gem 'rails-i18n', '5.0.4' # Localizations for Rails built-ins
 gem 'redcarpet', '3.4.0' # Process markdown in form textareas (justifications)
 gem 'sass-rails', '5.0.6'
-gem 'secure_headers', '3.6.3' # Add hardening measures to HTTP headers
+gem 'secure_headers', '3.6.4' # Add hardening measures to HTTP headers
 # gem 'turbolinks', '5.0.1' # Speed UI access
 gem 'uglifier', '3.2.0'
 gem 'will-paginate-i18n', '0.1.15' # Provide will-paginate translations

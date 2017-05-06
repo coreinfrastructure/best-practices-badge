@@ -25,11 +25,11 @@ class ApplicationControllerTest < ActionController::TestCase
     a = ApplicationController.new
     a.request = ActionDispatch::Request.new({})
     a.request.env['REMOTE_ADDR'] = '1.2.3.4' # Not valid!
-    assert_raises { a.validate_client_ip_address }
+    assert_raises { a.send(:validate_client_ip_address) }
 
     a.request = ActionDispatch::Request.new({})
     a.request.env['REMOTE_ADDR'] = '23.235.32.1' # Valid!
-    assert_nothing_raised { a.validate_client_ip_address }
+    assert_nothing_raised { a.send(:validate_client_ip_address) }
     Rails.configuration.valid_client_ips = nil # Clean up.
   end
 end

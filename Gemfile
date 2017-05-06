@@ -13,7 +13,7 @@ gem 'coffee-rails', '4.2.1' # Support CoffeeScript (Javascript preprocessor)
 gem 'faker', '1.7.3'
 # Fastly master is locked to a railties version
 gem 'fastly-rails', '0.8.0'
-gem 'font-awesome-rails', '4.7.0.1'
+gem 'font-awesome-rails', '4.7.0.2'
 gem 'github_api', '0.17.0'
 gem 'imagesLoaded_rails', '4.1.0' # JavaScript - enable wait for image load
 gem 'jbuilder', '2.6.3'

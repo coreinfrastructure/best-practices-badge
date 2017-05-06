@@ -59,6 +59,8 @@ fr:
       password: Mot de passe
       password_confirmation: Confirmez le mot de passe
       create_account: Créer mon compte
+    show:
+      see_external: Voir la page externe de cet utilisateur.
   project_stats:
     index:
       project_stats_header: Statistiques du projet

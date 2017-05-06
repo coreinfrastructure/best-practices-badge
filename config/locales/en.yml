@@ -56,7 +56,9 @@ en:
       password: Password
       password_confirmation: Confirm Password
       create_account: Create my account
-  project_stats:
+    show:
+      see_external: See this user's external page.
+  project_stat:
     index:
       project_stats_header: Project Statistics
       all_projects: All projects

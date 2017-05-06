@@ -28,8 +28,8 @@
   <% if @user.provider == 'github' && @user.nickname? %>
    <br><br>
    <p>
-   See <a href="https://github.com/<%= @user.nickname %>">this user's
-   external page</a>.
+   <a href="https://github.com/<%= @user.nickname %>"><%=
+   t ('.see_external') %></a>
   <% end %>
   <% if current_user&.admin? %>
     As an admin, you may also:

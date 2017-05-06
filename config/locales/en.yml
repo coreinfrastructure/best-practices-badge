@@ -6,11 +6,9 @@
 #
 en:
   hello: "Hello world"
-  activerecord:
-    models:
-      project:
-        one: Project
-        other: Projects
+  projects_count:
+    one:  "%{count} Project"
+    other:  "%{count} Projects"
   layouts:
     cii_best_practices: CII Best Practices
     projects: Projects

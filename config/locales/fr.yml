@@ -6,6 +6,9 @@
 
 fr:
   hello: "Bonjour le monde"
+  projects_count:
+    one:  "%{count} Projet"
+    other:  "%{count} Projets"
   layouts:
     cii_best_practices: Meilleures pratiques de la CII
     projects: Projets

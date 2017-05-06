@@ -7,7 +7,7 @@
 <% end %>
 
 <div class="center">
-<h2><%= @count.to_s + ' ' + Project.model_name.human(count: @count) %></h2>
+<h2><%= t 'projects_count', count: @count %></h2>
   <%= form_for projects_path, method: 'get', enforce_utf8: false,
                html: { class: 'project_search' } do %>
     <label for="gteq">Badge status</label>

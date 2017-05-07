@@ -9,6 +9,7 @@ fr:
   projects_count:
     one:  "%{count} Projet"
     other:  "%{count} Projets"
+  feed_title: CII Meilleures pratiques BadgeApp Projets mis à jour
   layouts:
     cii_best_practices: Meilleures pratiques de la CII
     projects: Projets

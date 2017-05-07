@@ -97,6 +97,30 @@ en:
       create_time: create time (for the badge entry)
       update_time: last update time (for the badge entry)
       user_id: user id
+    new:
+      post_delay_warning: >
+        There may be a significant delay after submitting
+        as we try to automatically fill in information.
+      new_badge: New badge
+      may_select: >
+        You may select from one of your GitHub repos <i>OR</i>
+        provide information about some other project.
+      select_one_github: Select one of your GitHub repos
+      submit_github: Submit GitHub Repository
+      url_of_homepage: >
+        What is the URL for the project home page (the URL for the
+        project as a whole)? Start with http(s):// (many characters are
+        not allowed, including "?")
+      placeholder_of_homepage: >
+        http(s)://... for project home page URL
+      url_of_repo: >
+        What is the URL for the version control repository (it may
+        the same as the project home page)? Start with http(s)://
+        (many characters are not allowed, including "?")
+      placeholder_of_repo: >
+        http(s)://... for project repo URL
+      submit_urls: Submit URL
+      sign_in_first: Please sign in to add a project!
   user_mailer:
     account_activation:
       before_html: |

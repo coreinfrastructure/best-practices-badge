@@ -102,7 +102,7 @@ en:
         There may be a significant delay after submitting
         as we try to automatically fill in information.
       new_badge: New badge
-      may_select: >
+      may_select_html: >
         You may select from one of your GitHub repos <i>OR</i>
         provide information about some other project.
       select_one_github: Select one of your GitHub repos

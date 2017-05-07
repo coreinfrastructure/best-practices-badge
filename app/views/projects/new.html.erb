@@ -17,7 +17,7 @@
   <h2 class='center'><%= t('.new_badge') %></h2>
   <br>
   <% if current_user.provider == 'github'%>
-     <h4><%= t '.may_select' %></h4>
+     <h4><%= t '.may_select_html' %></h4>
      <br>
      <%= form_for(@project) do |f| %>
        <%= render 'shared/error_messages', object: f.object %>

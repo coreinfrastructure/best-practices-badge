@@ -101,6 +101,31 @@ fr:
       create_time: create time (pour l'entrée du badge)
       update_time: dernier temps de mise à jour (pour la saisie du badge)
       user_id: id utilisateur
+    new:
+      post_delay_warning: >
+        Il peut y avoir un délai important après la soumission
+        car nous essayons de remplir automatiquement les informations.
+      new_badge: Nouveau badge
+      may_select_html: >
+        Vous pouvez choisir parmi l'un de vos GitHub repos <i>OU</ i>
+        fournir des informations sur un autre projet.
+      select_one_github: Sélectionnez l'un de vos reposeurs GitHub
+      submit_github: Submit GitHub Repository
+      url_of_homepage: >
+        Quel est l'URL de la page d'accueil du projet (l'URL pour le
+        Projet dans son ensemble)? Commencez par
+        http(s):// (plusieurs caractères sont
+        Non autorisé, y compris "?")
+      placeholder_of_homepage: >
+        http(s)://... pour l'URL de la page d'accueil du projet
+      url_of_repo: >
+        Quelle est l'URL du référentiel de contrôle de version (peut-être?
+        La même que la page d'accueil du projet)? Commencez par http(s)://
+        (Plusieurs caractères ne sont pas autorisés, y compris "?")
+      placeholder_of_repo: >
+        http(s)://... pour l'URL du repo du projet
+      submit_urls: Envoyer URL
+      sign_in_first: Connectez-vous pour ajouter un projet!
   user_mailer:
     account_activation:
       before_html: |

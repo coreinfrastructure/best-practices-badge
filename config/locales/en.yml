@@ -96,3 +96,67 @@ en:
       create_time: create time (for the badge entry)
       update_time: last update time (for the badge entry)
       user_id: user id
+  user_mailer:
+    account_activation:
+      before_html: |
+        <h1>CII Best Practices Badging Program</h1>
+        <p>Hello,</p>
+        <p>
+        Welcome to the Badging Program!
+        Click on the link below to activate your account:
+        </p>
+      before_text: |
+        Hello,
+
+        Welcome to the CII Best Practices Badging Program!
+
+        Select the link below to activate your account:
+
+      activate: Activate
+    github_welcome:
+      before_html: |
+        <h1>CII Best Practices Badging Program</h1>
+
+        <p>Hello,</p>
+
+        <p>
+        Thank you for connecting your GitHub account and welcome
+        to the CII Best Practices Badging Program!
+        </p>
+
+        <p>
+        If you did not initiate this action, please check your GitHub
+        security log under Settings&gt;Security.
+        </p>
+      before_text: |
+        Hello,
+
+        Thank you for connecting your GitHub account and welcome to the
+        CII Best Practices Badging Program!
+
+        If you did not initiate this action, please check your GitHub security
+        log on GitHub under Settings>Security.
+    password_reset:
+      before_html: |
+        <h1>Password reset</h1>
+
+        <p>To reset your password click the link below:</p>
+
+      before_text: |
+        To reset your password click the link below:
+      after_html: |
+        <p>This link will expire in two hours.</p>
+
+        <p>
+        If you did not request your password to be reset,
+        please ignore this email and
+        your password will stay as it is.
+        </p>
+      after_text: |
+        This link will expire in two hours.
+
+        If you did not request your password to be reset,
+        please ignore this email and
+        your password will stay as it is.
+
+      reset_password: Reset password

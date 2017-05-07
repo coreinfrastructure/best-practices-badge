@@ -100,3 +100,65 @@ fr:
       create_time: create time (pour l'entrée du badge)
       update_time: dernier temps de mise à jour (pour la saisie du badge)
       user_id: id utilisateur
+  user_mailer:
+    account_activation:
+      before_html: |
+        <h1>Programme de badging des meilleures pratiques CII</h1>
+        <p>Bonjour,</p>
+        <p>
+        Bienvenue dans le programme Badging!
+        Cliquez sur le lien ci-dessous pour activer votre compte:
+      before_text: |
+        Bonjour,
+
+        Bienvenue dans le programme Badging!
+
+        Cliquez sur le lien ci-dessous pour activer votre compte:
+
+      activate: Activer
+    github_welcome:
+      before_html: |
+        <h1>Programme de badging des meilleures pratiques CII</h1>
+
+        <p>Bonjour,</p>
+
+        <p>
+        Merci d'avoir relié votre compte GitHub et de bienvenue
+        au programme de badging des meilleures pratiques de la CII!
+        </p>
+
+        <p>
+        Si vous n'avez pas lancé cette action, vérifiez votre GitHub
+        journal de sécurité sous Paramètres&gt;Sécurité.
+        </p>
+      before_text: |
+        Bonjour,
+
+        Merci d'avoir relié votre compte GitHub et de bienvenue
+        au programme de badging des meilleures pratiques de la CII!
+
+        Si vous n'avez pas lancé cette action, vérifiez votre GitHub
+        journal de sécurité sous Paramètres>Sécurité.
+    password_reset:
+      before_html: |
+        <h1>Password reset</h1>
+
+        <p>To reset your password click the link below:</p>
+
+      before_text: |
+        To reset your password click the link below:
+      after_html: |
+        <p>Ce lien expirera en deux heures.</p>
+
+        <p>
+        Si vous n'avez pas demandé de réinitialiser votre mot de passe,
+        ignorez ce courriel et votre mot de passe restera tel quel.
+        </p>
+
+      after_text: |
+        Ce lien expirera en deux heures.
+
+        Si vous n'avez pas demandé de réinitialiser votre mot de passe,
+        ignorez ce courriel et votre mot de passe restera tel quel.
+
+      reset_password: Réinitialiser le mot de passe

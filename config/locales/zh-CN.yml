@@ -7,3 +7,168 @@
 
 zh:
   hello: "你好，世界"
+  projects_count:
+    one:  "%{count} 项目"
+    other:  "%{count} 项目"
+  feed_title: CII 最佳实践徽章项目状态更新
+  layouts:
+    cii_best_practices: CII 最佳实践
+    projects: 项目
+    users: 用户
+    profile: 用户配置
+    settings: 选项
+    logout_html: <span class="glyphicon glyphicon-log-out"></span> 注销
+    signup_html: <span class="glyphicon glyphicon-user"></span> 注册
+    login_html: <span class="glyphicon glyphicon-log-in"></span> 登录
+    footer_text_html: >
+      <small>
+      <b>需要帮助？有疑问？发现问题？请
+      <i><a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">发送邮件</a> </i>或
+      <i><a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues" target="_blank">提出问题</a></i>.</b>
+      © 2015-2017 <a href="https://www.coreinfrastructure.org/ target="_blank">Core Infrastructure Initiative</a>, 一个 <a href="https://www.linuxfoundation.org/" target="_blank">Linux 基金会</a> 合作项目。版权所有。
+      请查阅我们的
+      <a href="https://www.linuxfoundation.org/privacy" target="_blank">隐私策略</a> 和
+      <a href="https://www.linuxfoundation.org/terms" target="_blank">使用条款</a>.
+      </small>
+  sessions:
+    new:
+      login_header: 登录
+      login_with_github_html: >
+        <span class="fa fa-github"></span> 使用GitHub登录
+      or: 或
+      email: Email
+      password: 密码
+      forgot_password: 忘记密码？
+      remember_me: 记住我
+      login_custom: 使用自定义账户登录
+      no_custom: 没有自定义账户？现在注册！
+  users:
+    new:
+      signup_header: 注册
+      intro_html: >
+        <a href="/login">如果你拥有GitHub账户，你可以直接
+        登录</a>.
+        如果不想使用GitHub账户，可以在此注册。
+        <br><br>
+        如果未收到激活链接，请重新注册，我们
+        将发送一个新的链接。
+      name: 名字
+      email: 邮箱
+      password: 密码
+      password_confirmation: 确认密码
+      create_account: 创建我的账户
+    show:
+      see_external: 查看该用户的外部页面。
+  project_stat:
+    index:
+      project_stats_header: 项目汇总
+      all_projects: 所有项目
+      projects_nontrivial: 具有显著进展的项目
+      projects_activity_30: 最近30天内有徽章相关活动的项目
+      daily_activity: 每日徽章项活动
+      reminders: 提醒
+      admin_html: >
+        作为管理员，你可以查看
+        <a href="/reminders">提醒的详细信息</a>.
+      raw_data: >
+        也可以查看原始数据：
+      json_format: JSON 格式
+      csv_format: 可下载的CSV格式
+  projects:
+    index:
+      add_link: 添加
+      add_new: 添加新项目
+      badge_status: 徽章状态
+      exclude_passing: 排除已通过的
+      text_search: 文本搜索
+      name_or_description: 名称或者描述文档
+      search: 搜索
+    table: # partial
+      id: Id
+      name: 名称
+      description: 描述
+      website: 网站
+      license: 授权
+      owner: 所有者
+      last_achieved: 最近活跃于
+      pachieved: "% 满足"
+      can_also_sort: "你也可以按照下述方式排序："
+      repository_url: 项目仓库 URL
+      create_time: 创建时间（徽章认证的）
+      update_time: 最后更新时间 (徽章认证的)
+      user_id: 用户id
+    new:
+      post_delay_warning: >
+        在提交后，因为我们试图自动填充相关信息，可能有显著的滞后。
+      new_badge: 新徽章
+      may_select_html: >
+        你可以从GitHub仓库中选择 <i>或</i>
+        直接提供另外的项目信息。
+      select_one_github: 从GitHub仓库中选择
+      submit_github: 提交GitHub仓库
+      url_of_homepage: >
+        项目主页的URL (for the
+        project as a whole)? Start with http(s):// (many characters are
+        not allowed, including "?")
+      placeholder_of_homepage: >
+        http(s)://... for project home page URL
+      url_of_repo: >
+        What is the URL for the version control repository (it may
+        the same as the project home page)? Start with http(s)://
+        (many characters are not allowed, including "?")
+      placeholder_of_repo: >
+        http(s)://... for project repo URL
+      submit_urls: Submit URL
+      sign_in_first: Please sign in to add a project!
+  user_mailer:
+    account_activation:
+      before_html: |
+        <h1>CII Best Practices Badging Program</h1>
+        <p>Hello,</p>
+        <p>
+        Welcome to the Badging Program!
+        Click on the link below to activate your account:
+        </p>
+      before_text: |
+        Hello,
+        Welcome to the CII Best Practices Badging Program!
+        Select the link below to activate your account:
+
+      activate: Activate
+    github_welcome:
+      before_html: |
+        <h1>CII Best Practices Badging Program</h1>
+        <p>Hello,</p>
+        <p>
+        Thank you for connecting your GitHub account and welcome
+        to the CII Best Practices Badging Program!
+        </p>
+        <p>
+        If you did not initiate this action, please check your GitHub
+        security log under Settings&gt;Security.
+        </p>
+      before_text: |
+        Hello,
+        Thank you for connecting your GitHub account and welcome to the
+        CII Best Practices Badging Program!
+        If you did not initiate this action, please check your GitHub security
+        log on GitHub under Settings>Security.
+    password_reset:
+      before_html: |
+        <h1>Password reset</h1>
+        <p>To reset your password click the link below:</p>
+      before_text: |
+        To reset your password click the link below:
+      after_html: |
+        <p>This link will expire in two hours.</p>
+        <p>
+        If you did not request your password to be reset,
+        please ignore this email and
+        your password will stay as it is.
+        </p>
+      after_text: |
+        This link will expire in two hours.
+        If you did not request your password to be reset,
+        please ignore this email and
+        your password will stay as it is.
+      reset_password: Reset password

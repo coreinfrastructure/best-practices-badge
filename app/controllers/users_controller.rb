@@ -53,7 +53,7 @@ class UsersController < ApplicationController
     end
   end
 
-  # rubocop: disable Metrics/MethodLength,Metrics/AbcSize
+  # rubocop: disable Metrics/MethodLength
   def destroy
     # We don't do a lot of checking because only admins can run this,
     # but we'll try to prevent some disasters.
@@ -73,7 +73,7 @@ class UsersController < ApplicationController
     end
     redirect_to users_url
   end
-  # rubocop: enable Metrics/MethodLength,Metrics/AbcSize
+  # rubocop: enable Metrics/MethodLength
 
   def redirect_existing
     if @user.activated

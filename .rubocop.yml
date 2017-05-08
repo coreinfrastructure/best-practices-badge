@@ -23,6 +23,7 @@ Lint/HandleExceptions:
   Exclude:
     - 'bin/*'
 Metrics/AbcSize:
+  Max: 17
   Exclude:
     - 'db/migrate/*'
 Metrics/ClassLength:

@@ -30,17 +30,27 @@ en:
       <a href="https://www.linuxfoundation.org/terms" target="_blank">terms of use</a>.
       </small>
   sessions:
-    new:
-      login_header: Log in
-      login_with_github_html: >
-        <span class="fa fa-github"></span> Log in with GitHub
-      or: or
-      email: Email
-      password: Password
-      forgot_password: Forgot your password?
-      remember_me: Remember me
-      login_custom: Log in using custom account
-      no_custom: No custom account? Sign up now!
+    # To reduce confusion, we put all "session" keys at this level.
+    login_header: Log in
+    login_with_github_html: >
+      <span class="fa fa-github"></span> Log in with GitHub
+    or: or
+    email: Email
+    password: Password
+    forgot_password: Forgot your password?
+    remember_me: Remember me
+    login_custom: Log in using custom account
+    no_custom: No custom account? Sign up now!
+    already_logged_in: You are already logged in.
+    # create:
+    incorrect_login_info: Incorrect login information
+    # during local login:
+    invalid_combo: Invalid email/password combination
+    signed_in: Signed in!
+    not_activated: >
+      Account not activated.
+      Check your email for the activation link.
+    signed_out: Signed out!
   users:
     new:
       signup_header: Sign up

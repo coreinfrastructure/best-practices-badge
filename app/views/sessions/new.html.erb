@@ -1,5 +1,5 @@
 <br>
-<h1 class='center'><%= t('.login_header') %></h1>
+<h1 class='center'><%= t('sessions.login_header') %></h1>
 
 <div class="row">
   <div class="col-md-6 col-md-offset-3">
@@ -7,11 +7,12 @@
     <br>
     <br>
     <br>
-    <%= link_to t('.login_with_github_html'), '/auth/github',
+    <%= link_to t('sessions.login_with_github_html'),
+                "/auth/github?locale=#{locale}",
                 class: 'btn btn-lg btn-social btn-github btn-block',
                 method: 'post' %>
     <br><br>
-    <div class='text-center h2'>- <%= t('.or') %> -</div>
+    <div class='text-center h2'>- <%= t('sessions.or') %> -</div>
     <br><br>
    </div>
   </div>
@@ -21,25 +22,25 @@
   <div class="col-md-6 col-md-offset-3">
     <%= form_for(:session, url: login_path) do |f| %>
 
-      <%= f.label :email, t('.email') %>
+      <%= f.label :email, t('sessions.email') %>
       <%= f.email_field :email, class: 'form-control' %>
 
-      <%= f.label :password, t('.password') %>
-      <%= link_to t('.forgot_password'), new_password_reset_path %>
+      <%= f.label :password, t('sessions.password') %>
+      <%= link_to t('sessions.forgot_password'), new_password_reset_path %>
       <%= f.password_field :password, autocomplete: 'off', class: 'form-control' %>
 
-      <%= f.label :remember_me, t('.remember_me'),
+      <%= f.label :remember_me, t('sessions.remember_me'),
                   class: "checkbox inline" do %>
         <%= f.check_box :remember_me %>
-        <span><%= t('.remember_me') %></span>
+        <span><%= t('sessions.remember_me') %></span>
       <% end %>
 
       <%= f.hidden_field :provider, value: "local" %>
-      <%= f.submit t('.login_custom'), class: "btn btn-lg btn-primary" %>
+      <%= f.submit t('sessions.login_custom'), class: "btn btn-lg btn-primary" %>
     <% end %>
 
     <br><br>
-    <%= link_to t('.no_custom'), signup_path %>
+    <%= link_to t('sessions.no_custom'), signup_path %>
     <br>
     <br>
   </div>

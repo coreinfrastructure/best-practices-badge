@@ -7,7 +7,7 @@ class SessionsController < ApplicationController
     use_secure_headers_override(:allow_github_form_action)
     store_location
     return unless logged_in?
-    flash[:success] = 'You are already logged in.'
+    flash[:success] = t('sessions.already_logged_in')
     redirect_back_or root_url
   end
 
@@ -18,7 +18,7 @@ class SessionsController < ApplicationController
     elsif params[:session][:provider] == 'local'
       local_login
     else
-      flash.now[:danger] = 'Incorrect login information'
+      flash.now[:danger] = t('sessions.incorrect_login_info')
       render 'new'
     end
   end
@@ -26,7 +26,7 @@ class SessionsController < ApplicationController
   def destroy
     log_out if logged_in?
     redirect_to root_url
-    flash[:success] = 'Signed out!'
+    flash[:success] = t('sessions.signed_out')
   end
 
   private
@@ -45,7 +45,7 @@ class SessionsController < ApplicationController
     if user && user.authenticate(params[:session][:password])
       local_login_procedure(user)
     else
-      flash.now[:danger] = 'Invalid email/password combination'
+      flash.now[:danger] = t('sessions.invalid_combo')
       render 'new'
     end
   end
@@ -57,18 +57,17 @@ class SessionsController < ApplicationController
     session[:user_token] = auth['credentials']['token']
     log_in user
     redirect_back_or root_url
-    flash[:success] = 'Signed in!'
+    flash[:success] = t('sessions.signed_in')
   end
 
   def local_login_procedure(user)
     if user.activated?
       log_in user
       redirect_back_or root_url
-      flash[:success] = 'Signed in!'
+      flash[:success] = t('sessions.signed_in')
       params[:session][:remember_me] == '1' ? remember(user) : forget(user)
     else
-      flash[:warning] = 'Account not activated.
-                         Check your email for the activation link.'
+      flash[:warning] = t('sessions.not_activated')
       redirect_to root_url
     end
   end

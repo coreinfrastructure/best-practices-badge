@@ -52,7 +52,7 @@ fr:
     not_activated: >
       Compte non activé.
       Vérifiez votre courrier électronique pour le lien d'activation.
-    Signed_out: Signé!
+    signed_out: Signé!
   users:
     new:
       signup_header: S'inscrire

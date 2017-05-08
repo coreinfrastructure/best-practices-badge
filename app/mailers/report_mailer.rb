@@ -91,11 +91,13 @@ class ReportMailer < ApplicationMailer
     )
   end
 
+  # Generate monthly announcement, but only if there's a destination
+  # email address environment varfiable REPORT_MONTHLY_EMAIL
   def report_monthly_announcement(
     projects, month, last_stat_in_prev_month, last_stat_in_prev_prev_month
   )
-    @report_destination =
-      ENV['REPORT_MONTHLY_EMAIL'] || REPORT_EMAIL_DESTINATION
+    @report_destination = ENV['REPORT_MONTHLY_EMAIL']
+    return nil if @report_destination.blank?
     @projects = projects
     @month = month
     @last_stat_in_prev_month = last_stat_in_prev_month

@@ -124,7 +124,7 @@ en:
       placeholder_of_homepage: >
         http(s)://... for project home page URL
       url_of_repo: >
-        What is the URL for the version control repository (it may
+        What is the URL for the version control repository (it may be
         the same as the project home page)? Start with http(s)://
         (many characters are not allowed, including "?")
       placeholder_of_repo: >

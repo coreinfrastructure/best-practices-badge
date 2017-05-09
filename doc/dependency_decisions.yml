@@ -242,3 +242,21 @@
       program but is instead linked only into bundler which is MIT.
     :versions: []
     :when: 2017-03-22 15:04:54.137880644 Z
+- - :approve
+  - gettext
+  - :who: David A. Wheeler
+    :why: License is "Ruby or LGPLv3+". Ruby license is compatible with rest of the
+      work.  In addition, LGPLv3+ is fine to include in larger works (even proprietary
+      works!) so it is not a problem.  Only one side of an "or" needs to be acceptable,
+      and in this case both sides are acceptable, so there is no license problem.
+    :versions: []
+    :when: 2017-05-09 17:51:30.490314988 Z
+- - :approve
+  - locale
+  - :who: David A. Wheeler
+    :why: License is "Ruby or LGPLv3+". Ruby license is compatible with rest of the
+      work.  In addition, LGPLv3+ is fine to include in larger works (even proprietary
+      works!) so it is not a problem.  Only one side of an "or" needs to be acceptable,
+      and in this case both sides are acceptable, so there is no license problem.
+    :versions: []
+    :when: 2017-05-09 17:52:32.770053521 Z

@@ -69,7 +69,7 @@ en:
       create_account: Create my account
     show:
       see_external: See this user's external page.
-  project_stat:
+  project_stats:
     index:
       project_stats_header: Project Statistics
       all_projects: All projects

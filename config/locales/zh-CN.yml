@@ -59,7 +59,7 @@ zh:
       create_account: 创建我的账户
     show:
       see_external: 查看该用户的外部页面。
-  project_stat:
+  project_stats:
     index:
       project_stats_header: 项目汇总
       all_projects: 所有项目

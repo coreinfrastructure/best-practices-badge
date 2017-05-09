@@ -17,5 +17,16 @@ if Rails.env.development? || Rails.env.testing?
 
     # Find other useful usage information here:
     # https://github.com/aurels/translation-gem/blob/master/README.md
+    config.ignored_key_prefixes = [
+      'rails.',
+      'number.human.',
+      'admin.',
+      'errors.messages.',
+      'activerecord.errors.messages.',
+      'will_paginate.',
+      'helpers.page_entries_info.',
+      'views.pagination.',
+      'enumerize.visibility.'
+    ]
   end
 end

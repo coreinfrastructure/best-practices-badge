@@ -24,7 +24,7 @@ zh-CN:
     - 周五
     - 周六
     month_names:
-    - 
+    -
     - 一月
     - 二月
     - 三月
@@ -38,7 +38,7 @@ zh-CN:
     - 十一月
     - 十二月
     abbr_month_names:
-    - 
+    -
     - 1月
     - 2月
     - 3月
@@ -65,8 +65,8 @@ zh-CN:
           mb: MB
           gb: GB
           tb: TB
-          pb: 
-          eb: 
+          pb:
+          eb:
       decimal_units:
         units:
           thousand: 千
@@ -112,9 +112,9 @@ zh-CN:
       header:
         one: 有 1 个错误发生导致「%{model}」无法被保存。
         other: 有 %{count} 个错误发生导致「%{model}」无法被保存。
-    unavailable_session: 
-    unacceptable_request: 
-    connection_refused: 
+    unavailable_session:
+    unacceptable_request:
+    connection_refused:
   activerecord:
     errors:
       messages:
@@ -159,8 +159,8 @@ zh-CN:
         one: 接近一年
         other: 接近 %{count} 年
       x_years:
-        one: 
-        other: 
+        one:
+        other:
     prompts:
       year: 年
       month: 月
@@ -177,14 +177,14 @@ zh-CN:
       submit: 储存%{model}
     page_entries_info:
       entry:
-        zero: 
-        one: 
-        other: 
+        zero:
+        one:
+        other:
       one_page:
         display_entries:
-          zero: 
-          one: 
-          other: 
+          zero:
+          one:
+          other:
       more_pages:
         display_entries: 显示 %{entry_name} <b>%{first} - %{last}</b>  共<b>%{total}</b>
           页
@@ -280,121 +280,121 @@ zh-CN:
       next: 下一页 &rsaquo;
       truncate: "&hellip;"
   simple_form:
-    'yes': 
-    'no': 
+    'yes':
+    'no':
     required:
-      text: 
-      mark: 
+      text:
+      mark:
     error_notification:
-      default_message: 
-  hello: 
+      default_message:
+  hello:
   projects_count:
-    one: 
-    other: 
-  feed_title: 
+    one:
+    other:
+  feed_title:
   layouts:
-    cii_best_practices: 
-    projects: 
-    users: 
-    profile: 
-    settings: 
-    logout_html: 
-    signup_html: 
-    login_html: 
-    footer_text_html: 
+    cii_best_practices:
+    projects:
+    users:
+    profile:
+    settings:
+    logout_html:
+    signup_html:
+    login_html:
+    footer_text_html:
   sessions:
-    login_header: 
-    login_with_github_html: 
-    or: 
-    email: 
-    password: 
-    forgot_password: 
-    remember_me: 
-    login_custom: 
-    no_custom: 
-    already_logged_in: 
-    incorrect_login_info: 
-    invalid_combo: 
-    signed_in: 
-    not_activated: 
-    signed_out: 
+    login_header:
+    login_with_github_html:
+    or:
+    email:
+    password:
+    forgot_password:
+    remember_me:
+    login_custom:
+    no_custom:
+    already_logged_in:
+    incorrect_login_info:
+    invalid_combo:
+    signed_in:
+    not_activated:
+    signed_out:
   users:
     new:
-      signup_header: 
-      intro_html: 
-      name: 
-      email: 
-      password: 
-      password_confirmation: 
-      create_account: 
+      signup_header:
+      intro_html:
+      name:
+      email:
+      password:
+      password_confirmation:
+      create_account:
     show:
-      see_external: 
+      see_external:
     update:
-      profile_updated: 
+      profile_updated:
     destroy:
-      cannot_delete_self: 
-      user_deleted: 
-    redirect_existing: 
-    new_activation_link_created: 
-    please_log_in: 
+      cannot_delete_self:
+      user_deleted:
+    redirect_existing:
+    new_activation_link_created:
+    please_log_in:
   project_stats:
     index:
-      project_stats_header: 
-      all_projects: 
-      projects_nontrivial: 
-      projects_activity_30: 
-      daily_activity: 
-      reminders: 
-      admin_html: 
-      raw_data: 
-      json_format: 
-      csv_format: 
+      project_stats_header:
+      all_projects:
+      projects_nontrivial:
+      projects_activity_30:
+      daily_activity:
+      reminders:
+      admin_html:
+      raw_data:
+      json_format:
+      csv_format:
   projects:
     index:
-      add_link: 
-      add_new: 
-      badge_status: 
-      exclude_passing: 
-      text_search: 
-      name_or_description: 
-      search: 
+      add_link:
+      add_new:
+      badge_status:
+      exclude_passing:
+      text_search:
+      name_or_description:
+      search:
     table:
-      id: 
-      name: 
-      description: 
-      website: 
-      license: 
-      owner: 
-      last_achieved: 
-      pachieved: 
-      can_also_sort: 
-      repository_url: 
-      create_time: 
-      update_time: 
-      user_id: 
+      id:
+      name:
+      description:
+      website:
+      license:
+      owner:
+      last_achieved:
+      pachieved:
+      can_also_sort:
+      repository_url:
+      create_time:
+      update_time:
+      user_id:
     new:
-      post_delay_warning: 
-      new_badge: 
-      may_select_html: 
-      select_one_github: 
-      submit_github: 
-      url_of_homepage: 
-      placeholder_of_homepage: 
-      url_of_repo: 
-      placeholder_of_repo: 
-      submit_urls: 
-      sign_in_first: 
+      post_delay_warning:
+      new_badge:
+      may_select_html:
+      select_one_github:
+      submit_github:
+      url_of_homepage:
+      placeholder_of_homepage:
+      url_of_repo:
+      placeholder_of_repo:
+      submit_urls:
+      sign_in_first:
   user_mailer:
     account_activation:
-      before_html: 
-      before_text: 
-      activate: 
+      before_html:
+      before_text:
+      activate:
     github_welcome:
-      before_html: 
-      before_text: 
+      before_html:
+      before_text:
     password_reset:
-      before_html: 
-      before_text: 
-      after_html: 
-      after_text: 
-      reset_password: 
+      before_html:
+      before_text:
+      after_html:
+      after_text:
+      reset_password:

@@ -24,7 +24,7 @@ fr:
     - ven
     - sam
     month_names:
-    - 
+    -
     - janvier
     - février
     - mars
@@ -38,7 +38,7 @@ fr:
     - novembre
     - décembre
     abbr_month_names:
-    - 
+    -
     - jan.
     - fév.
     - mar.
@@ -65,8 +65,8 @@ fr:
           mb: Mo
           gb: Go
           tb: To
-          pb: 
-          eb: 
+          pb:
+          eb:
       decimal_units:
         units:
           thousand: millier
@@ -112,9 +112,9 @@ fr:
       header:
         one: 'Impossible d''enregistrer ce(tte) %{model} : 1 erreur'
         other: 'Impossible d''enregistrer ce(tte) %{model} : %{count} erreurs'
-    unavailable_session: 
-    unacceptable_request: 
-    connection_refused: 
+    unavailable_session:
+    unacceptable_request:
+    connection_refused:
   activerecord:
     errors:
       messages:
@@ -161,8 +161,8 @@ fr:
         one: presqu'un an
         other: presque %{count} ans
       x_years:
-        one: 
-        other: 
+        one:
+        other:
     prompts:
       year: Année
       month: Mois
@@ -179,12 +179,12 @@ fr:
       submit: Enregistrer ce(tte) %{model}
     page_entries_info:
       entry:
-        zero: 
-        one: 
-        other: 
+        zero:
+        one:
+        other:
       one_page:
         display_entries:
-          zero: 
+          zero:
           one: "<b>%{count}</b> %{entry_name}"
           other: "<b>tous les %{count}</b> %{entry_name}"
       more_pages:
@@ -196,11 +196,11 @@ fr:
     page_gap: "&hellip;"
     page_entries_info:
       single_page:
-        zero: 
+        zero:
         one: "%{count} %{model} affiché(e)"
         other: "%{count} %{model} affiché(e)s"
       single_page_html:
-        zero: 
+        zero:
         one: "%{count} %{model} affiché(e)"
         other: "%{count} %{model} affiché(e)s"
       multi_page: "%{model} %{from} - %{to} sur %{count} au total"
@@ -283,13 +283,13 @@ fr:
       next: Suivant &rsaquo;
       truncate: "&hellip;"
   simple_form:
-    'yes': 
-    'no': 
+    'yes':
+    'no':
     required:
-      text: 
-      mark: 
+      text:
+      mark:
     error_notification:
-      default_message: 
+      default_message:
   hello: Bonjour le monde
   projects_count:
     one: "%{count} Projet"
@@ -355,13 +355,13 @@ fr:
     show:
       see_external: Voir la page externe de cet utilisateur.
     update:
-      profile_updated: 
+      profile_updated:
     destroy:
-      cannot_delete_self: 
-      user_deleted: 
-    redirect_existing: 
-    new_activation_link_created: 
-    please_log_in: 
+      cannot_delete_self:
+      user_deleted:
+    redirect_existing:
+    new_activation_link_created:
+    please_log_in:
   project_stats:
     index:
       project_stats_header: Statistiques du projet
@@ -373,7 +373,7 @@ fr:
 '
       daily_activity: Activité journalière de soumission
       reminders: Rappels
-      admin_html: 
+      admin_html:
       raw_data: 'Vous pouvez également voir les données brutes :
 
 '

@@ -116,58 +116,58 @@ zh:
         和项目主页相同）？ 以 http(s):// 开头
         （很多字符不允许，包含 "?"）
       placeholder_of_repo: >
-        http(s)://... for project repo URL
-      submit_urls: Submit URL
-      sign_in_first: Please sign in to add a project!
+        http(s)://... 项目仓库 URL
+      submit_urls: 提交 URL
+      sign_in_first: 请登录以添加项目！
   user_mailer:
     account_activation:
       before_html: |
-        <h1>CII Best Practices Badging Program</h1>
+        <h1>CII 最佳实践徽章计划</h1>
         <p>Hello,</p>
         <p>
-        Welcome to the Badging Program!
-        Click on the link below to activate your account:
+        欢迎来到徽章计划！
+        点击下面的链接来激活您的帐户：
         </p>
       before_text: |
-        Hello,
-        Welcome to the CII Best Practices Badging Program!
-        Select the link below to activate your account:
+        您好，
+        欢迎来到 CII 最佳实践徽章计划！
+        选择下面的链接来激活您的帐户：：
 
-      activate: Activate
+      activate: 激活
     github_welcome:
       before_html: |
-        <h1>CII Best Practices Badging Program</h1>
-        <p>Hello,</p>
+        <h1>CII 最佳实践徽章计划</h1>
+        <p>您好，</p>
         <p>
-        Thank you for connecting your GitHub account and welcome
-        to the CII Best Practices Badging Program!
+        感谢连接到您的GitHub账户，欢迎来到
+        CII最佳实践徽章计划！
         </p>
         <p>
-        If you did not initiate this action, please check your GitHub
-        security log under Settings&gt;Security.
+        如果该操作不是您本人做出，请检查您的 GitHub
+        安全日志：Settings&gt;Security.
         </p>
       before_text: |
-        Hello,
-        Thank you for connecting your GitHub account and welcome to the
-        CII Best Practices Badging Program!
-        If you did not initiate this action, please check your GitHub security
-        log on GitHub under Settings>Security.
+        您好，
+        感谢连接到您的GitHub账户，欢迎来到
+        CII最佳实践徽章计划！
+        如果该操作不是您本人做出，请检查您的 GitHub 安全
+        日志：GitHub 网站 Settings>Security.
     password_reset:
       before_html: |
-        <h1>Password reset</h1>
-        <p>To reset your password click the link below:</p>
+        <h1>重置密码</h1>
+        <p>点击下面的链接重置密码：</p>
       before_text: |
-        To reset your password click the link below:
+        点击下面的链接重置密码：
       after_html: |
-        <p>This link will expire in two hours.</p>
+        <p>该链接将在两个小时后过期。</p>
         <p>
-        If you did not request your password to be reset,
-        please ignore this email and
-        your password will stay as it is.
+        如果您并没有请求重置密码，
+        请忽略该邮件，
+        您的密码将会维持原样。
         </p>
       after_text: |
-        This link will expire in two hours.
-        If you did not request your password to be reset,
-        please ignore this email and
-        your password will stay as it is.
-      reset_password: Reset password
+        该链接将在两个小时后过期。
+        如果您并没有请求重置密码，
+        请忽略该邮件，
+        您的密码将会维持原样。
+      reset_password: 重置密码

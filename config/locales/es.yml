@@ -1,9 +1,0 @@
----
-# Files in the config/locales directory are used for internationalization
-# and are automatically loaded by Rails.
-#
-# To learn more, please read the Rails Internationalization guide
-# available at http://guides.rubyonrails.org/i18n.html.
-
-es:
-  hello: "Hola mundo"

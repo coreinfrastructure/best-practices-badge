@@ -354,6 +354,14 @@ fr:
       create_account: Créer mon compte
     show:
       see_external: Voir la page externe de cet utilisateur.
+    update:
+      profile_updated: 
+    destroy:
+      cannot_delete_self: 
+      user_deleted: 
+    redirect_existing: 
+    new_activation_link_created: 
+    please_log_in: 
   project_stats:
     index:
       project_stats_header: Statistiques du projet

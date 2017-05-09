@@ -329,6 +329,14 @@ zh-CN:
       create_account: 
     show:
       see_external: 
+    update:
+      profile_updated: 
+    destroy:
+      cannot_delete_self: 
+      user_deleted: 
+    redirect_existing: 
+    new_activation_link_created: 
+    please_log_in: 
   project_stats:
     index:
       project_stats_header: 

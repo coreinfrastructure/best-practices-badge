@@ -28,6 +28,9 @@ Rails.application.configure do
   # Raise exceptions instead of rendering exception templates.
   config.action_dispatch.show_exceptions = false
 
+  # Raise exceptions during test if a translation is missing
+  config.action_view.raise_on_missing_translations = true
+
   # Disable request forgery protection in test environment.
   config.action_controller.allow_forgery_protection = false
 

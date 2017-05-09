@@ -107,15 +107,14 @@ zh:
       select_one_github: 从GitHub仓库中选择
       submit_github: 提交GitHub仓库
       url_of_homepage: >
-        项目主页的URL (for the
-        project as a whole)? Start with http(s):// (many characters are
-        not allowed, including "?")
+        项目主页的URL （项目整体的）？以 http(s):// 开头 （很多字符
+        不允许，包含 "?"）
       placeholder_of_homepage: >
-        http(s)://... for project home page URL
+        http(s)://... 项目主页 URL
       url_of_repo: >
-        What is the URL for the version control repository (it may
-        the same as the project home page)? Start with http(s)://
-        (many characters are not allowed, including "?")
+        版本控制仓库的URL （可以
+        和项目主页相同）？ 以 http(s):// 开头
+        （很多字符不允许，包含 "?"）
       placeholder_of_repo: >
         http(s)://... for project repo URL
       submit_urls: Submit URL

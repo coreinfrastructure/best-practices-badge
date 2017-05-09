@@ -61,6 +61,17 @@ en:
       create_account: Create my account
     show:
       see_external: See this user's external page.
+    update:
+      profile_updated: Profile updated
+    destroy:
+      cannot_delete_self: Cannot delete self.
+      user_deleted: User deleted.
+    redirect_existing: >
+      That user already exists. Did you mean to sign in?
+    new_activation_link_created: >
+      New activation link created.
+      Please check your email to activate your account.
+    please_log_in: Please log in.
   project_stats:
     index:
       project_stats_header: Project Statistics

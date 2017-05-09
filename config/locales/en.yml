@@ -25,6 +25,16 @@ en:
       of use</a>. </small>
 
 '
+  account_activations:
+    activated: Account activated!
+    failed_activation: Invalid activation link
+  password_resets:
+    email_not_found: Email address not found
+    password_empty: Password can't be empty
+    password_reset: Password has been reset
+    instructions_sent: Email sent with password reset instructions
+    cant_reset_nonlocal: Sorry, can't reset the password for a non-local user
+    reset_expired: Password reset has expired.
   sessions:
     login_header: Log in
     login_with_github_html: '<span class="fa fa-github"></span> Log in with GitHub

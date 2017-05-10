@@ -349,6 +349,14 @@ zh-CN:
       raw_data:
       json_format:
       csv_format:
+      active_projects:
+      active_in_progress:
+      active_edited:
+      active_edited_in_progress:
+      projects_created_since_yesterday:
+      projects_updated_since_yesterday:
+      reminders_sent_since_yesterday:
+      reactivated_projects:
   projects:
     index:
       add_link:

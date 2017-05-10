@@ -8,6 +8,7 @@ en:
     one: "%{count} Project"
     other: "%{count} Projects"
   feed_title: CII Best Practices BadgeApp Updated Projects
+  project_name_unknown: (Name unknown)
   #
   layouts:
     cii_best_practices: CII Best Practices

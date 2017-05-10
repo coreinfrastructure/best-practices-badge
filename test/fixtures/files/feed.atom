@@ -12,8 +12,8 @@
     <link rel="alternate" type="text/html" href="http://www.example.com/projects/298486374"/>
     <title>Mars Ascent Vehicle (MAV)</title>
     <content type="html">
-      <![CDATA[<p><b>In Progress: 0%</b></p><p><a href='https://www.nasa.gov'>https://www.nasa.gov</a></p><p>Operating system for Pathfinder rover</p>
-]]>
+      <![CDATA[<p><b>In Progress: 0%</b></p><p><a href='https://www.nasa.gov'>https://www.nasa.gov</a></p><span lang="en"><p>Operating system for Pathfinder rover</p>
+</span>]]>
     </content>
     <author>
       <name>Melissa Lewis</name>
@@ -26,8 +26,8 @@
     <link rel="alternate" type="text/html" href="http://www.example.com/projects/600182345"/>
     <title>Justified perfect project</title>
     <content type="html">
-      <![CDATA[<p><b>Passing: 100%</b></p><p><a href='https://www.example.org'>https://www.example.org</a></p><p>The perfect project</p>
-]]>
+      <![CDATA[<p><b>Passing: 100%</b></p><p><a href='https://www.example.org'>https://www.example.org</a></p><span lang="en"><p>The perfect project</p>
+</span>]]>
     </content>
     <author>
       <name>Test</name>
@@ -40,8 +40,8 @@
     <link rel="alternate" type="text/html" href="http://www.example.com/projects/832656895"/>
     <title>Unjustified perfect project</title>
     <content type="html">
-      <![CDATA[<p><b>In Progress: 88%</b></p><p><a href='https://www.example.org'>https://www.example.org</a></p><p>The perfect project</p>
-]]>
+      <![CDATA[<p><b>In Progress: 88%</b></p><p><a href='https://www.example.org'>https://www.example.org</a></p><span lang="en"><p>The perfect project</p>
+</span>]]>
     </content>
     <author>
       <name>Test</name>
@@ -54,8 +54,8 @@
     <link rel="alternate" type="text/html" href="http://www.example.com/projects/980190962"/>
     <title>Pathfinder OS</title>
     <content type="html">
-      <![CDATA[<p><b>In Progress: 0%</b></p><p><a href='https://www.nasa.gov'>https://www.nasa.gov</a></p><p>Operating system for Pathfinder rover</p>
-]]>
+      <![CDATA[<p><b>In Progress: 0%</b></p><p><a href='https://www.nasa.gov'>https://www.nasa.gov</a></p><span lang="en"><p>Operating system for Pathfinder rover</p>
+</span>]]>
     </content>
     <author>
       <name>Test</name>

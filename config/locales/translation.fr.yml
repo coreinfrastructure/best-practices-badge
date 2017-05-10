@@ -161,8 +161,8 @@ fr:
         one: presqu'un an
         other: presque %{count} ans
       x_years:
-        one:
-        other:
+        one: 1 année
+        other: "%{count} années"
     prompts:
       year: Année
       month: Mois
@@ -196,11 +196,11 @@ fr:
     page_gap: "&hellip;"
     page_entries_info:
       single_page:
-        zero:
+        zero: Non %{model} trouvé
         one: "%{count} %{model} affiché(e)"
         other: "%{count} %{model} affiché(e)s"
       single_page_html:
-        zero:
+        zero: Non %{model} trouvé
         one: "%{count} %{model} affiché(e)"
         other: "%{count} %{model} affiché(e)s"
       multi_page: "%{model} %{from} - %{to} sur %{count} au total"
@@ -289,7 +289,7 @@ fr:
       text:
       mark:
     error_notification:
-      default_message:
+      default_message: 'S''il vous plaît examiner les problèmes ci-dessous:'
   hello: Bonjour le monde
   projects_count:
     one: "%{count} Projet"
@@ -355,13 +355,18 @@ fr:
     show:
       see_external: Voir la page externe de cet utilisateur.
     update:
-      profile_updated:
+      profile_updated: Profil mis à jour
     destroy:
-      cannot_delete_self:
-      user_deleted:
-    redirect_existing:
-    new_activation_link_created:
-    please_log_in:
+      cannot_delete_self: Impossible de supprimer soi-même.
+      user_deleted: Utilisateur supprimé.
+    redirect_existing: 'Cet utilisateur existe déjà. Voulez-vous vous connecter?
+
+'
+    new_activation_link_created: 'Nouveau lien d''activation créé. Veuillez vérifier
+      votre courrier électronique pour activer votre compte.
+
+'
+    please_log_in: Connectez-vous.
   project_stats:
     index:
       project_stats_header: Statistiques du projet
@@ -373,20 +378,39 @@ fr:
 '
       daily_activity: Activité journalière de soumission
       reminders: Rappels
-      admin_html:
+      admin_html: 'En tant qu''administrateur, vous pouvez également voir les <a href="/fr/reminders">
+        informations détaillées sur les rappels </a>.
+
+'
       raw_data: 'Vous pouvez également voir les données brutes :
 
 '
       json_format: format JSON
       csv_format: format CSV téléchargeable
-      active_projects:
-      active_in_progress:
-      active_edited:
-      active_edited_in_progress:
-      projects_created_since_yesterday:
-      projects_updated_since_yesterday:
-      reminders_sent_since_yesterday:
-      reactivated_projects:
+      active_projects: Projets actifs (créés / mis à jour dans les 30 jours)
+      active_in_progress: 'Projets en cours en cours (créé / mis à jour dans les 30
+        jours)
+
+'
+      active_edited: 'Projets modifiés actifs (mis à jour dans les 30 jours)
+
+'
+      active_edited_in_progress: 'Projets en cours modifiés actifs (mis à jour dans
+        un délai de 30 jours)
+
+'
+      projects_created_since_yesterday: 'Projets créés depuis le jour précédent
+
+'
+      projects_updated_since_yesterday: 'Projets mis à jour depuis le jour précédent
+
+'
+      reminders_sent_since_yesterday: 'Rappels envoyés depuis hier
+
+'
+      reactivated_projects: 'Projets réactivés dans 14 jours après avoir reçu un rappel
+
+'
   projects:
     index:
       add_link: Ajouter
@@ -501,17 +525,19 @@ fr:
         Si vous n'avez pas demandé à réinitialiser votre mot de passe,
         ignorez cet email et votre mot de passe restera identique.
       reset_password: Réinitialiser le mot de passe
-  submit:
+  submit: Soumettre
   account_activations:
-    activated:
-    failed_activation:
+    activated: Compte activé!
+    failed_activation: Lien d'activation invalide
   password_resets:
-    forgot_password:
-    reset_password:
-    password_confirmation:
-    email_not_found:
-    password_empty:
-    password_reset:
-    instructions_sent:
-    cant_reset_nonlocal:
-    reset_expired:
+    forgot_password: Mot de passe oublié
+    reset_password: Réinitialiser le mot de passe
+    password_confirmation: Confirmation
+    email_not_found: Adresse e-mail introuvable
+    password_empty: Le mot de passe ne peut pas être vide
+    password_reset: Le mot de passe a été redémarré
+    instructions_sent: E-mail envoyé avec les instructions de réinitialisation du
+      mot de passe
+    cant_reset_nonlocal: Désolé, ne peut pas réinitialiser le mot de passe pour un
+      utilisateur non local
+    reset_expired: La réinitialisation du mot de passe est expirée.

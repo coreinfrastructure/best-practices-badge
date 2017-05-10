@@ -70,6 +70,7 @@ class ReportMailer < ApplicationMailer
     return unless user.email.include?('@')
     @project_info_url = project_info_url(@project.id)
     @email_destination = user.email
+    # TODO: Set locale based on the locale of the project text
     set_headers
     mail(
       to: @email_destination,

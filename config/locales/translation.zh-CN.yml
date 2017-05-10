@@ -81,7 +81,7 @@ zh-CN:
       inclusion: 不包含于列表中
       exclusion: 是保留关键字
       invalid: 是无效的
-      confirmation: 与确认值不匹配
+      confirmation: 不符合 %{attribute}
       accepted: 必须是可被接受的
       empty: 不能留空
       blank: 不能为空字符
@@ -114,7 +114,9 @@ zh-CN:
         other: 有 %{count} 个错误发生导致「%{model}」无法被保存。
     unavailable_session:
     unacceptable_request:
-    connection_refused:
+    connection_refused: |
+      哎呀！无法连接到Web控制台中间件。
+      请确保rails开发服务器正在运行。
   activerecord:
     errors:
       messages:
@@ -159,8 +161,8 @@ zh-CN:
         one: 接近一年
         other: 接近 %{count} 年
       x_years:
-        one:
-        other:
+        one: 1年
+        other: "%{count} 年"
     prompts:
       year: 年
       month: 月
@@ -408,8 +410,8 @@ zh-CN:
       reset_password:
   submit:
   account_activations:
-    activated:
-    failed_activation:
+    activated: 帐户已激活！
+    failed_activation: 激活链接无效
   password_resets:
     forgot_password:
     reset_password:

@@ -179,6 +179,58 @@ en:
 '
       submit_urls: Submit URL
       sign_in_first: Please sign in to add a project!
+  # report_mailer is for emails not relating to the user account.
+  # The following are not localized, because there's no need
+  # (they're only debug reports or reports sent to English mailing lists)
+  # project_status_change.*.erb
+  # report_monthly_announcement.*.erb
+  # report_project_deleted.*.erb
+  # report_reminder_summary.*.erb
+  report_mailer:
+    new_project_heading: >
+      Thanks for adding your project to the Best Practices Badging Program
+    new_project_part1: |
+      Thank you for adding your project
+      to the Best Practices Badging Program.
+      The current name we have for this project is:
+    new_project_part2: |
+      Please visit your badge entry at
+      to complete the information and get your badge!
+      Here is the URL for your badge entry:
+    new_project_part3_html: |
+      <p>
+      We encourage you to keep making progress.
+      </p>
+
+      <p>
+      If you want to see <i>only</i> what you're missing,
+      visit your badge entry, and
+      then click on the button near the top labelled "Hide met or N/A criteria"
+      If you have questions, or need help, please contact
+      <a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;</a>
+      or file an issue at
+      <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues">https://github.com/linuxfoundation/cii-best-practices-badge/issues</a>
+      (click on "new issue").
+      </p>
+
+      <p>
+      Thank you for your time.
+      </p>
+    new_project_part3_text: |
+      We encourage you to keep making progress.
+
+      If you want to see only what you're missing, visit your badge entry, and
+      then click on the button near the top labelled "Hide met or N/A criteria".
+      If you have questions, or need help, please contact
+      cii-badges-questions-owner@lists.coreinfrastructure.org
+      or file an issue at
+      https://github.com/linuxfoundation/cii-best-practices-badge/issues
+      (click on "new issue").
+
+      Thank you for your time.
+    new_project_ending: |
+      --- David A. Wheeler, CII Best Practices Badge Technical Lead
+  # user_mailer is for the emails relating to the user account
   user_mailer:
     account_activation:
       before_html: |

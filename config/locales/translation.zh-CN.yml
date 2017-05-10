@@ -398,3 +398,17 @@ zh-CN:
       after_html:
       after_text:
       reset_password:
+  submit:
+  account_activations:
+    activated:
+    failed_activation:
+  password_resets:
+    forgot_password:
+    reset_password:
+    password_confirmation:
+    email_not_found:
+    password_empty:
+    password_reset:
+    instructions_sent:
+    cant_reset_nonlocal:
+    reset_expired:

@@ -22,10 +22,9 @@
         <td><%= link_to project.id, project %></td>
         <td><%= link_to (project.name.presence || "(Name Unknown)"),
                 project %></td>
-        <td><%= markdown(
+        <td><span lang="en"><%= markdown(
                   (project.description || '').
-                  truncate(160, separator: ' ')) %></td>
-
+                  truncate(160, separator: ' ')) %></span></td>
         <td class='website'>
           <%# Defend against bad data - link only if plausible URL. %>
           <% if project.homepage_url.presence &&

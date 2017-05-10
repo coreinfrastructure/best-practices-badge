@@ -371,7 +371,7 @@ end
 # Problem already reported:
 # - https://github.com/aurels/translation-gem/issues/13
 # - https://github.com/yaml/libyaml/issues/46
-# We'll run this enhancement to solve the problem.
+# We will run this enhancement to solve the problem.
 Rake::Task['translation:sync'].enhance do
   puts 'Removing bogus trailing whitespace (bug workaround).'
   sh "cd config/locales/ && sed -i -e 's/ $//' *.yml && cd ../.."

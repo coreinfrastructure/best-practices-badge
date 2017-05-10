@@ -331,6 +331,12 @@ zh-CN:
       create_account:
     show:
       see_external:
+      other_projects_edit:
+      as_admin:
+      send_email_to:
+      profile_updated:
+      delete_link_name:
+      confirm_delete:
     update:
       profile_updated:
     destroy:

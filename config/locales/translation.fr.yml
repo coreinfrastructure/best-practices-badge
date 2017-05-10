@@ -283,7 +283,7 @@ fr:
       next: Suivant &rsaquo;
       truncate: "&hellip;"
   simple_form:
-    'yes':
+    'yes': Oui
     'no':
     required:
       text:
@@ -354,6 +354,12 @@ fr:
       create_account: Créer mon compte
     show:
       see_external: Voir la page externe de cet utilisateur.
+      other_projects_edit:
+      as_admin:
+      send_email_to:
+      profile_updated:
+      delete_link_name:
+      confirm_delete:
     update:
       profile_updated: Profil mis à jour
     destroy:

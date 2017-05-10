@@ -428,3 +428,16 @@ zh-CN:
     instructions_sent:
     cant_reset_nonlocal:
     reset_expired:
+  report_mailer:
+    new_project_heading:
+    new_project_part1:
+    new_project_part2:
+    new_project_part3_html:
+    new_project_part3_text:
+    passing_part1:
+    passing_part2:
+    passing_part3:
+    in_markdown_add:
+    in_html_add:
+    in_progress_message:
+    ending:

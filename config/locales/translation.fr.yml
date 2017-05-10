@@ -547,3 +547,16 @@ fr:
     cant_reset_nonlocal: Désolé, ne peut pas réinitialiser le mot de passe pour un
       utilisateur non local
     reset_expired: La réinitialisation du mot de passe est expirée.
+  report_mailer:
+    new_project_heading:
+    new_project_part1:
+    new_project_part2:
+    new_project_part3_html:
+    new_project_part3_text:
+    passing_part1:
+    passing_part2:
+    passing_part3:
+    in_markdown_add:
+    in_html_add:
+    in_progress_message:
+    ending:

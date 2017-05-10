@@ -228,6 +228,37 @@ en:
       (click on "new issue").
 
       Thank you for your time.
+    passing_part1: |
+      Congratulations!
+
+      According to the information that you've provided,
+      your project has earned the CII best practices 'passing' badge.
+      For more information, see this URL:
+    passing_part2: |
+      Please add your badge to your project and/or repository site;
+      you've earned it:
+    passing_part3: |
+      We strongly encourage you to add or improve justification text,
+      including adding URLs that point to more information.
+
+      If you have suggestions on how to improve the criteria or
+      badge web application, please file an issue at:
+      https://github.com/linuxfoundation/cii-best-practices-badge/issues
+
+      If you made changes to your project to get a badge, please let us know
+      via email at cii-badges-questions@lists.coreinfrastructure.org.
+      One of our goals is to encourage projects to make some improvements.
+      We put some of these reports on the public wiki; please let us know
+      if you do NOT want the changes publicly posted at
+      https://github.com/linuxfoundation/cii-best-practices-badge/wiki/Impacts
+
+      Thank you, and congratulations.
+    in_markdown_add: "In markdown you can add this:"
+    in_html_add: "In HTML you can add this:"
+    in_progress_message: |
+      We're sorry, but your project no longer has the "passing" badge
+       and is now "in progress".
+       Please see the following URL for more information:
     ending: |
       --- David A. Wheeler, CII Best Practices Badge Technical Lead
   # user_mailer is for the emails relating to the user account

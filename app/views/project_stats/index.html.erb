@@ -69,25 +69,25 @@
   active_dataset = ProjectStat.all.reduce({}) do |h,e|
     h.merge(e.created_at => e.active_projects)
   end
-  dataset << {name: 'Active projects (created/updated within 30 days)',
+  dataset << {name: t('.active_projects'),
               data: active_dataset}
   # Active in-progress projects
   active_in_progress_dataset = ProjectStat.all.reduce({}) do |h,e|
     h.merge(e.created_at => e.active_in_progress)
   end
-  dataset << {name: 'Active in-progress projects (created/updated within 30 days)',
+  dataset << {name: t('.active_in_progress'),
               data: active_in_progress_dataset}
   # Active edited projects
   active_edited_dataset = ProjectStat.all.reduce({}) do |h,e|
     h.merge(e.created_at => e.active_edited_projects)
   end
-  dataset << {name: 'Active edited projects (updated within 30 days)',
+  dataset << {name: t('.active_edited'),
               data: active_edited_dataset}
   # Active edited in-progress projects
   active_edited_in_progress_dataset = ProjectStat.all.reduce({}) do |h,e|
     h.merge(e.created_at => e.active_edited_in_progress)
   end
-  dataset << {name: 'Active edited in-progress projects (updated within 30 days)',
+  dataset << {name: t('.active_edited_in_progress'),
               data: active_edited_in_progress_dataset}
   # Done transforming data; display it.
   line_chart dataset, library: date_chart_options, defer: true
@@ -108,7 +108,7 @@
     series_dataset = ProjectStat.all.reduce({}) do |h,e|
       h.merge(e.created_at => e[desired_field])
     end
-    dataset << {name: 'projects ' + action + ' since day before',
+    dataset << {name: t(".projects_#{action}_since_yesterday"),
                 data: series_dataset}
     # Calculate moving average over ndays
     series_counts = ProjectStat.all.map { |e| e[desired_field] }
@@ -122,6 +122,7 @@
           series_moving_average[index-ndays]
       end
     end
+    # TODD: Internationalize (i18n)
     dataset << {name: 'projects ' + action + " average over #{ndays} days",
                 data: moving_average_dataset,
                 library: {borderDash: [5,5]}}
@@ -141,14 +142,14 @@
   reminders_dataset = ProjectStat.all.reduce({}) do |h,e|
     h.merge(e.created_at => e.reminders_sent)
   end
-  dataset << {name: 'Reminders sent since yesterday',
+  dataset << {name: t('.reminders_sent_since_yesterday'),
               data: reminders_dataset}
   # Reactivated after reminders
   reactivated_dataset = ProjectStat.all.reduce({}) do |h,e|
     h.merge(e.created_at => e.reactivated_after_reminder)
   end
   dataset <<
-    {name: 'Reactivated projects in 14 days after receiving reminder',
+    {name: t('.reactivated_projects'),
      data: reactivated_dataset}
   line_chart dataset, colors: ['green', 'blue'],
     library: date_chart_options, defer: true

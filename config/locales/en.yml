@@ -97,6 +97,21 @@ en:
       projects_activity_30: Projects with badge entry activity in last 30 days
       daily_activity: Daily badge entry activity
       reminders: Reminders
+      active_projects: Active projects (created/updated within 30 days)
+      active_in_progress: >
+        Active in-progress projects (created/updated within 30 days)
+      active_edited: >
+        Active edited projects (updated within 30 days)
+      active_edited_in_progress: >
+        Active edited in-progress projects (updated within 30 days)
+      projects_created_since_yesterday: >
+        projects created since day before
+      projects_updated_since_yesterday: >
+        projects updated since day before
+      reminders_sent_since_yesterday: >
+        Reminders sent since yesterday
+      reactivated_projects: >
+        Reactivated projects in 14 days after receiving reminder
       admin_html: 'As an admin, you may also see the <a href="/reminders">detailed
         information about reminders</a>.
 

@@ -228,7 +228,7 @@ en:
       (click on "new issue").
 
       Thank you for your time.
-    new_project_ending: |
+    ending: |
       --- David A. Wheeler, CII Best Practices Badge Technical Lead
   # user_mailer is for the emails relating to the user account
   user_mailer:

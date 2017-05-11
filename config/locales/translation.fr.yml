@@ -52,8 +52,8 @@ fr:
     - nov.
     - déc.
   time:
-    am: am
-    pm: pm
+    am: matin
+    pm: après-midi
   number:
     human:
       storage_units:
@@ -61,12 +61,12 @@ fr:
           byte:
             one: octet
             other: octets
-          kb: ko
+          kb: Ko
           mb: Mo
           gb: Go
           tb: To
-          pb:
-          eb:
+          pb: Po
+          eb: Eo
       decimal_units:
         units:
           thousand: millier
@@ -77,7 +77,7 @@ fr:
   errors:
     format: "%{attribute} %{message}"
     messages:
-      model_invalid: 'Validation échouée : %{errors}'
+      model_invalid: 'Échec de la validation : %{errors}'
       inclusion: n'est pas inclus(e) dans la liste
       exclusion: n'est pas disponible
       invalid: n'est pas valide
@@ -112,18 +112,27 @@ fr:
       header:
         one: 'Impossible d''enregistrer ce(tte) %{model} : 1 erreur'
         other: 'Impossible d''enregistrer ce(tte) %{model} : %{count} erreurs'
-    unavailable_session:
-    unacceptable_request:
-    connection_refused:
+    unavailable_session: |
+      La session %{id} n'est plus disponible en mémoire.
+
+      Si vous utilisez un serveur multi-processus (comme Unicorn ou Puma), le processus
+      atteint par cette requête ne possède pas %{id} en mémoire. Considérez la possibilité de changer le nombre de processus / tâches à un (1) ou d'utiliser un serveur différent durant le développement.
+    unacceptable_request: 'Une version prise en charge est attendue dans l''en-tête
+      Accept.
+
+'
+    connection_refused: |
+      Oups ! Impossible de se connecter à l'intergiciel de la console Web.
+      Veuillez vous assurer qu'un serveur de développement rails est en cours d'exécution.
   activerecord:
     errors:
       messages:
         record_invalid: 'La validation a échoué : %{errors}'
         restrict_dependent_destroy:
-          has_one: Vous ne pouvez pas supprimer l'enregistrement car un(e) %{record}
-            dépendant(e) existe
-          has_many: Vous ne pouvez pas supprimer l'enregistrement parce que les %{record}
-            dépendants existent
+          has_one: Impossible de supprimer l'enregistrement à cause de la dépendance
+            existante sur %{record}
+          has_many: Impossible de supprimer l'enregistrement à cause des dépendances
+            existantes sur %{record}
   datetime:
     distance_in_words:
       half_a_minute: une demi-minute
@@ -169,7 +178,7 @@ fr:
       day: Jour
       hour: Heure
       minute: Minute
-      second: Seconde
+      second: Secondes
   helpers:
     select:
       prompt: Veuillez sélectionner
@@ -179,33 +188,33 @@ fr:
       submit: Enregistrer ce(tte) %{model}
     page_entries_info:
       entry:
-        zero:
-        one:
-        other:
+        zero: soumissions
+        one: soumission
+        other: soumissions
       one_page:
         display_entries:
-          zero:
-          one: "<b>%{count}</b> %{entry_name}"
-          other: "<b>tous les %{count}</b> %{entry_name}"
+          zero: Aucun(e) %{entry_name} trouvé(e)
+          one: Affichage <b>1</b> %{entry_name}
+          other: Affichage <b>des %{count}</b> %{entry_name}
       more_pages:
-        display_entries: "%{entry_name}  <b>%{first} - %{last}</b> sur <b>%{total}</b>
-          au total"
+        display_entries: Affichage des %{entry_name} numérotées <b>%{first}&nbsp;-&nbsp;%{last}</b>
+          sur <b>%{total}</b> au total
   will_paginate:
-    previous_label: "← précédent"
-    next_label: suivant →
+    previous_label: "&#8592; Précédent"
+    next_label: Suivant &#8594;
     page_gap: "&hellip;"
     page_entries_info:
       single_page:
-        zero: Non %{model} trouvé
-        one: "%{count} %{model} affiché(e)"
-        other: "%{count} %{model} affiché(e)s"
+        zero: Aucun %{model} trouvé
+        one: Affichage 1 %{model}
+        other: Affichage de tous les %{count} %{model}
       single_page_html:
-        zero: Non %{model} trouvé
-        one: "%{count} %{model} affiché(e)"
-        other: "%{count} %{model} affiché(e)s"
-      multi_page: "%{model} %{from} - %{to} sur %{count} au total"
-      multi_page_html: "%{model} <strong>%{from} - %{to}</strong> sur <strong>%{count}</strong>
-        au total"
+        zero: Aucun %{model} trouvé
+        one: Affichage de <b>1</b> %{model}
+        other: Affichage <b>de&nbsp;%{count}</b> %{model}
+      multi_page: Affichage %{model} %{from} - %{to} sur %{count} au total
+      multi_page_html: Affichage %{model} <strong>%{from}&nbsp;-&nbsp;%{to}</strong>
+        sur <strong>%{count}</strong> au total
   ransack:
     search: recherche
     predicate: prédicat
@@ -272,7 +281,7 @@ fr:
       'true': est vrai
       'false': est faux
       present: est présent
-      blank: est blanc
+      blank: est vide
       'null': est null
       not_null: n'est pas null
   views:
@@ -284,12 +293,12 @@ fr:
       truncate: "&hellip;"
   simple_form:
     'yes': Oui
-    'no':
+    'no': Aucun
     required:
-      text:
-      mark:
+      text: requis
+      mark: "*"
     error_notification:
-      default_message: 'S''il vous plaît examiner les problèmes ci-dessous:'
+      default_message: 'Veuillez examiner les problèmes ci-dessous :'
   hello: Bonjour le monde
   projects_count:
     one: "%{count} Projet"
@@ -332,8 +341,7 @@ fr:
     incorrect_login_info: Informations de connexion incorrectes
     invalid_combo: Combinaison de messagerie / mot de passe invalide
     signed_in: Connecté !
-    not_activated: 'Compte non activé. Vérifiez votre courrier électronique pour le
-      lien d''activation.
+    not_activated: 'Compte non activé. Vérifiez votre email pour le lien d''activation.
 
 '
     signed_out: Déconnecté !
@@ -354,22 +362,22 @@ fr:
       create_account: Créer mon compte
     show:
       see_external: Voir la page externe de cet utilisateur.
-      other_projects_edit:
-      as_admin:
-      send_email_to:
-      profile_updated:
-      delete_link_name:
-      confirm_delete:
+      other_projects_edit: Autres projets que vous pouvez modifier
+      as_admin: 'en tant qu''administrateur, vous pouvez également :'
+      send_email_to: 'Envoyer un email à :'
+      profile_updated: Profil mis à jour
+      delete_link_name: supprimer
+      confirm_delete: Êtes-vous sûr(e) de vouloir supprimer cet utilisateur ?
     update:
       profile_updated: Profil mis à jour
     destroy:
-      cannot_delete_self: Impossible de supprimer soi-même.
+      cannot_delete_self: Impossible de se supprimer soi-même.
       user_deleted: Utilisateur supprimé.
-    redirect_existing: 'Cet utilisateur existe déjà. Voulez-vous vous connecter?
+    redirect_existing: 'Cet utilisateur existe déjà. Voulez-vous vous connecter ?
 
 '
     new_activation_link_created: 'Nouveau lien d''activation créé. Veuillez vérifier
-      votre courrier électronique pour activer votre compte.
+      votre email pour activer votre compte.
 
 '
     please_log_in: Connectez-vous.
@@ -384,8 +392,8 @@ fr:
 '
       daily_activity: Activité journalière de soumission
       reminders: Rappels
-      admin_html: 'En tant qu''administrateur, vous pouvez également voir les <a href="/fr/reminders">
-        informations détaillées sur les rappels </a>.
+      admin_html: 'En tant qu''administrateur, vous pouvez également voir les <a href="/fr/reminders">informations
+        détaillées sur les rappels</a>.
 
 '
       raw_data: 'Vous pouvez également voir les données brutes :
@@ -393,16 +401,16 @@ fr:
 '
       json_format: format JSON
       csv_format: format CSV téléchargeable
-      active_projects: Projets actifs (créés / mis à jour dans les 30 jours)
-      active_in_progress: 'Projets en cours en cours (créé / mis à jour dans les 30
-        jours)
+      active_projects: Projets actifs (créés / mis à jour dans les 30 derniers jours)
+      active_in_progress: 'Projets en cours actifs (créés / mis à jour dans les 30
+        derniers jours)
 
 '
-      active_edited: 'Projets modifiés actifs (mis à jour dans les 30 jours)
+      active_edited: 'Projets modifiés actifs (mis à jour dans les 30 derniers jours)
 
 '
       active_edited_in_progress: 'Projets en cours modifiés actifs (mis à jour dans
-        un délai de 30 jours)
+        les 30 derniers jours)
 
 '
       projects_created_since_yesterday: 'Projets créés depuis le jour précédent
@@ -414,7 +422,7 @@ fr:
       reminders_sent_since_yesterday: 'Rappels envoyés depuis hier
 
 '
-      reactivated_projects: 'Projets réactivés dans 14 jours après avoir reçu un rappel
+      reactivated_projects: 'Projets réactivés dans les 14 jours suivant un rappel
 
 '
   projects:
@@ -473,28 +481,29 @@ fr:
       sign_in_first: Connectez-vous pour ajouter un projet !
   user_mailer:
     account_activation:
-      before_html: |
-        <h1>Programme de badges des meilleures pratiques CII</h1>
+      before_html: |-
+        <h1>Programme de badges des Meilleures Pratiques de lq CII</h1>
         <p>Bonjour,</p>
         <p>
         Bienvenue dans le programme de badges !
         Cliquez sur le lien ci-dessous pour activer votre compte :
+        </p>
       before_text: |
         Bonjour,
 
-        Bienvenue dans le programme de badges !
+        Bienvenue dans le programme de badges des Meilleures Pratiques de la CII !
 
         Cliquez sur le lien ci-dessous pour activer votre compte :
       activate: Activer
     github_welcome:
       before_html: |
-        <h1>Programme de badges des meilleures pratiques CII</h1>
+        <h1>Programme de badges des Meilleures Pratiques de la CII</h1>
 
         <p>Bonjour,</p>
 
         <p>
         Merci d'avoir relié votre compte GitHub et bienvenue
-        au programme de badges des meilleures pratiques de la CII !
+        au programme de badges des Meilleures Pratiques de la CII !
         </p>
 
         <p>
@@ -505,7 +514,7 @@ fr:
         Bonjour,
 
         Merci d'avoir relié votre compte GitHub et bienvenue
-        au programme de badges des meilleures pratiques de la CII !
+        au programme de badges des Meilleures Pratiques de la CII !
 
         Si vous n'êtes pas à l'origine de cette action, vérifiez votre
         journal de sécurité GitHub sous Paramètres>Sécurité.
@@ -533,7 +542,7 @@ fr:
       reset_password: Réinitialiser le mot de passe
   submit: Soumettre
   account_activations:
-    activated: Compte activé!
+    activated: Compte activé !
     failed_activation: Lien d'activation invalide
   password_resets:
     forgot_password: Mot de passe oublié
@@ -541,23 +550,70 @@ fr:
     password_confirmation: Confirmation
     email_not_found: Adresse e-mail introuvable
     password_empty: Le mot de passe ne peut pas être vide
-    password_reset: Le mot de passe a été redémarré
+    password_reset: Le mot de passe a été réinitialisé
     instructions_sent: E-mail envoyé avec les instructions de réinitialisation du
       mot de passe
-    cant_reset_nonlocal: Désolé, ne peut pas réinitialiser le mot de passe pour un
-      utilisateur non local
+    cant_reset_nonlocal: Désolé, il n'est pas possible de réinitialiser le mot de
+      passe pour un utilisateur non local
     reset_expired: La réinitialisation du mot de passe est expirée.
   report_mailer:
-    new_project_heading:
-    new_project_part1:
-    new_project_part2:
-    new_project_part3_html:
-    new_project_part3_text:
-    passing_part1:
-    passing_part2:
-    passing_part3:
-    in_markdown_add:
-    in_html_add:
-    in_progress_message:
-    ending:
-  project_name_unknown:
+    new_project_heading: 'Merci d''avoir ajouté votre projet au programme de badge
+      des Meilleures Pratiques
+
+'
+    new_project_part1: |
+      Merci d'avoir ajouté votre projet au programme de badge des Meilleures Pratiques.
+      Le nom actuel que nous avons pour ce projet est :
+    new_project_part2: |
+      Veuillez visiter votre soumission pour compléter les informations et obtenir votre badge !
+      Voici l'URL de votre soumission :
+    new_project_part3_html: "<P>\nNous vous encourageons à continuer à progresser.\n</P>\n\n<P>\nSi
+      vous voulez voir <i>seulement</i> ce qui vous manque,\nvisitez votre soumission
+      \npuis cliquez sur le bouton près du haut étiqueté \"Hide met ou N/A criteria\"\nSi
+      vous avez des questions ou avez besoin d'aide, contactez-nous\n<a href=\"mailto:&#99;ii&#45;badges&#45;questions&#45.own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;\">&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;</a>
+      \nou reportez un problème à\n<a href=\"https://github.com/linuxfoundation/cii-best-practices-badge/issues\">
+      https://github.com/linuxfoundation/cii-best-practices-badge/issues </a>\n(cliquez
+      sur \"nouveau problème\").\n</p>\n\n<P>\nMerci pour votre temps.\n</P>\n"
+    new_project_part3_text: |
+      Nous vous encourageons à continuer à progresser.
+
+      Si vous voulez voir seulement ce qui vous manque, visitez votre soumission puis cliquez sur le bouton près du haut étiqueté "Hide met or N/A criteria".
+      Si vous avez des questions ou avez besoin d'aide, contactez-nous
+      cii-badges-questions-owner@lists.coreinfrastructure.org
+      ou reportez un problème à
+      https://github.com/linuxfoundation/cii-best-practices-badge/issues
+      (cliquez sur "nouveau problème").
+
+      Merci pour votre temps.
+    passing_part1: |
+      Toutes nos félicitations !
+
+      Selon les informations que vous avez fournies,
+      votre projet a obtenu le badge des meilleures pratiques de la CII.
+      Pour plus d'informations, consultez cette URL :
+    passing_part2: |
+      Ajoutez votre badge à votre site de projet et / ou dépôt ;
+      vous l'avez mérité :
+    passing_part3: |
+      Nous vous encourageons vivement à ajouter ou à améliorer le texte de justification,
+      y compris par l'ajout d'URL qui donnent plus d'informations.
+
+      Si vous avez des suggestions sur la façon d'améliorer les critères ou
+      l'application Web pour les badges, veuillez soumettre un problème à :
+      https://github.com/linuxfoundation/cii-best-practices-badge/issues
+
+      Si vous avez apporté des modifications à votre projet pour obtenir un badge, veuillez nous le faire savoir par e-mail à ci-badges-questions@lists.coreinfrastructure.org.
+      L'un de nos objectifs est d'encourager les projets à apporter des améliorations.
+      Nous mettons certains de ces rapports sur le wiki public ; veuillez nous informer
+      si vous ne souhaitez PAS que les changements soient publiés publiquement à
+      https://github.com/linuxfoundation/cii-best-practices-badge/wiki/Impacts
+
+      Merci et félicitations.
+    in_markdown_add: 'En markdown, vous pouvez ajouter ceci :'
+    in_html_add: 'En HTML, vous pouvez ajouter ceci :'
+    in_progress_message: |
+      Nous sommes désolés, mais votre projet n'obtient plus le badge et est maintenant "en cours d'obtention".
+      Consultez l'URL suivante pour plus d'informations :
+    ending: "--- David A. Wheeler, Directeur Technique du programme CII Best Practices
+      Badge\n"
+  project_name_unknown: "(Nom inconnu)"

@@ -13,7 +13,7 @@ gem 'coffee-rails', '4.2.1' # Support CoffeeScript (Javascript preprocessor)
 gem 'faker', '1.7.3'
 # Fastly master is locked to a railties version
 gem 'fastly-rails', '0.8.0'
-gem 'font-awesome-rails', '4.7.0.1'
+gem 'font-awesome-rails', '4.7.0.2'
 gem 'github_api', '0.17.0'
 gem 'imagesLoaded_rails', '4.1.0' # JavaScript - enable wait for image load
 gem 'jbuilder', '2.6.3'
@@ -27,32 +27,35 @@ gem 'pg', '0.20.0' # PostgreSQL database, used for data storage
 gem 'pg_search', '2.0.1' # PostgreSQL full-text search
 gem 'puma', '3.8.2' # Faster webserver; recommended by Heroku
 gem 'rails', '5.0.2' # Our web framework
+gem 'rails-i18n', '5.0.4' # Localizations for Rails built-ins
 gem 'redcarpet', '3.4.0' # Process markdown in form textareas (justifications)
 gem 'sass-rails', '5.0.6'
-gem 'secure_headers', '3.6.3' # Add hardening measures to HTTP headers
+gem 'secure_headers', '3.6.4' # Add hardening measures to HTTP headers
 # gem 'turbolinks', '5.0.1' # Speed UI access
 gem 'uglifier', '3.2.0'
-gem 'will_paginate', '3.1.5'
+gem 'will-paginate-i18n', '0.1.15' # Provide will-paginate translations
+gem 'will_paginate', '3.1.5' # Paginate results (next/previous)
 
 group :development, :test do
   gem 'awesome_print', '1.7.0'
   gem 'bullet', '5.5.1'
   gem 'bundler-audit', '0.5.0'
-  gem 'database_cleaner', '1.5.3' # Cleans up database between tests
+  gem 'database_cleaner', '1.6.0' # Cleans up database between tests
   gem 'dotenv-rails', '2.2.1'
   gem 'eslintrb', '2.1.0'
   gem 'json', '2.1.0'
   gem 'license_finder', '3.0.0'
   gem 'mdl', '0.4.0'
-  gem 'pronto', '0.9.1'
+  gem 'pronto', '0.9.2'
   gem 'pronto-brakeman', '0.9.0'
-  gem 'pronto-eslint', '0.9.0'
+  gem 'pronto-eslint', '0.9.1'
   gem 'pronto-rails_best_practices', '0.9.0'
   gem 'pronto-rubocop', '0.9.0'
   gem 'pry-byebug', '3.4.2'
   gem 'rubocop', '0.48.1' # Style checker.  Changes can cause test failure
   gem 'ruby-graphviz', '1.2.3' # This is used for bundle viz
   gem 'spring', '2.0.1'
+  gem 'translation', '1.9' # translation.io - translation service
   gem 'vcr', '3.0.3' # Record network responses for later test reuse
   gem 'yaml-lint', '0.0.9' # Check YAML file syntax
 end
@@ -71,7 +74,7 @@ group :test do
   gem 'codecov', '0.1.10', require: false
   gem 'minitest-rails-capybara', '3.0.1', require: false
   gem 'minitest-retry', '0.1.8', require: false # Avoid Capybara false positives
-  gem 'poltergeist', '1.14.0', require: false
+  gem 'poltergeist', '1.15.0', require: false
   gem 'rails-controller-testing', '1.0.1'
   gem 'selenium-webdriver', '3.4.0', require: false
   gem 'simplecov', '0.14.1', require: false

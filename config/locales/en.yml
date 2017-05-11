@@ -1,23 +1,327 @@
-# Files in the config/locales directory are used for internationalization
-# and are automatically loaded by Rails. If you want to use locales other
-# than English, add the necessary files in this directory.
-#
-# To use the locales, use `I18n.t`:
-#
-#     I18n.t 'hello'
-#
-# In views, this is aliased to just `t`:
-#
-#     <%= t('hello') %>
-#
-# To use a different locale, set it with `I18n.locale`:
-#
-#     I18n.locale = :es
-#
-# This would use the information in config/locales/es.yml.
-#
-# To learn more, please read the Rails Internationalization guide
-# available at http://guides.rubyonrails.org/i18n.html.
-
+---
 en:
-  hello: "Hello world"
+  # First, some top-level i18n keys
+  hello: Hello world
+  # This is the generic "Submit" button text for posting form information:
+  submit: Submit
+  projects_count:
+    one: "%{count} Project"
+    other: "%{count} Projects"
+  feed_title: CII Best Practices BadgeApp Updated Projects
+  project_name_unknown: (Name unknown)
+  #
+  layouts:
+    cii_best_practices: CII Best Practices
+    projects: Projects
+    users: Users
+    profile: Profile
+    settings: Settings
+    logout_html: <span class="glyphicon glyphicon-log-out"></span> Logout
+    signup_html: <span class="glyphicon glyphicon-user"></span> Sign Up
+    login_html: <span class="glyphicon glyphicon-log-in"></span> Login
+    footer_text_html: '<small> <b>Need help? Have a question? See a problem? Please
+      <i><a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">send
+      an email</a> </i>or <i><a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues"
+      target="_blank">file an issue</a></i>.</b> © 2015-2017 <a href="https://www.coreinfrastructure.org/
+      target="_blank">Core Infrastructure Initiative</a>, a <a href="https://www.linuxfoundation.org/"
+      target="_blank">Linux Foundation</a> Collaborative Project. All Rights Reserved.
+      Please see our <a href="https://www.linuxfoundation.org/privacy" target="_blank">privacy
+      policy</a> and <a href="https://www.linuxfoundation.org/terms" target="_blank">terms
+      of use</a>. </small>
+
+'
+  account_activations:
+    activated: Account activated!
+    failed_activation: Invalid activation link
+  password_resets:
+    forgot_password: Forgot password
+    reset_password: Reset password
+    password_confirmation: Confirmation
+    email_not_found: Email address not found
+    password_empty: Password can't be empty
+    password_reset: Password has been reset
+    instructions_sent: Email sent with password reset instructions
+    cant_reset_nonlocal: Sorry, can't reset the password for a non-local user
+    reset_expired: Password reset has expired.
+  sessions:
+    login_header: Log in
+    login_with_github_html: '<span class="fa fa-github"></span> Log in with GitHub
+
+'
+    or: or
+    email: Email
+    password: Password
+    forgot_password: Forgot your password?
+    remember_me: Remember me
+    login_custom: Log in using custom account
+    no_custom: No custom account? Sign up now!
+    already_logged_in: You are already logged in.
+    incorrect_login_info: Incorrect login information
+    invalid_combo: Invalid email/password combination
+    signed_in: Signed in!
+    not_activated: 'Account not activated. Check your email for the activation link.
+
+'
+    signed_out: Signed out!
+  users:
+    new:
+      signup_header: Sign up
+      intro_html: |
+        <a href="/login">If you have GitHub account, you can just use that
+        to log in</a>. If you don''t want to log in with a GitHub account, you can
+        sign up here instead. <br><br> If you didn''t receive your activation link,
+        please sign up again and we will send you a new one.
+
+      name: Name
+      email: Email
+      password: Password
+      password_confirmation: Confirm Password
+      create_account: Create my account
+    show:
+      other_projects_edit: Other Projects you can edit
+      see_external: >
+        See this user's external page.
+      as_admin: "as an admin, you may also:"
+      send_email_to: "send email to:"
+      profile_updated: Profile updated
+      delete_link_name: delete
+      confirm_delete: Are you sure you want to delete this user?
+    destroy:
+      cannot_delete_self: Cannot delete self.
+      user_deleted: User deleted.
+    redirect_existing: >
+      That user already exists. Did you mean to sign in?
+    new_activation_link_created: >
+      New activation link created.
+      Please check your email to activate your account.
+    please_log_in: Please log in.
+  project_stats:
+    index:
+      project_stats_header: Project Statistics
+      all_projects: All projects
+      projects_nontrivial: Projects with non-trivial progress
+      projects_activity_30: Projects with badge entry activity in last 30 days
+      daily_activity: Daily badge entry activity
+      reminders: Reminders
+      active_projects: Active projects (created/updated within 30 days)
+      active_in_progress: >
+        Active in-progress projects (created/updated within 30 days)
+      active_edited: >
+        Active edited projects (updated within 30 days)
+      active_edited_in_progress: >
+        Active edited in-progress projects (updated within 30 days)
+      projects_created_since_yesterday: >
+        projects created since day before
+      projects_updated_since_yesterday: >
+        projects updated since day before
+      reminders_sent_since_yesterday: >
+        Reminders sent since yesterday
+      reactivated_projects: >
+        Reactivated projects in 14 days after receiving reminder
+      admin_html: 'As an admin, you may also see the <a href="/reminders">detailed
+        information about reminders</a>.
+
+'
+      raw_data: 'You can also see the raw data:
+
+'
+      json_format: JSON format
+      csv_format: downloadable CSV format
+  projects:
+    index:
+      add_link: Add
+      add_new: Add New Project
+      badge_status: Badge status
+      exclude_passing: Exclude passing
+      text_search: Text search
+      name_or_description: Name or description text
+      search: Search
+    table:
+      id: Id
+      name: Name
+      description: Description
+      website: Website
+      license: License
+      owner: Owner
+      last_achieved: Last achieved at
+      pachieved: "% Achieved"
+      can_also_sort: 'You can also sort by the following:'
+      repository_url: repository URL
+      create_time: create time (for the badge entry)
+      update_time: last update time (for the badge entry)
+      user_id: user id
+    new:
+      post_delay_warning: 'There may be a significant delay after submitting as we
+        try to automatically fill in information.
+
+'
+      new_badge: New badge
+      may_select_html: 'You may select from one of your GitHub repos <i>OR</i> provide
+        information about some other project.
+
+'
+      select_one_github: Select one of your GitHub repos
+      submit_github: Submit GitHub Repository
+      url_of_homepage: 'What is the URL for the project home page (the URL for the
+        project as a whole)? Start with http(s):// (many characters are not allowed,
+        including "?")
+
+'
+      placeholder_of_homepage: 'http(s)://... for project home page URL
+
+'
+      url_of_repo: 'What is the URL for the version control repository (it may be
+        the same as the project home page)? Start with http(s):// (many characters
+        are not allowed, including "?")
+
+'
+      placeholder_of_repo: 'http(s)://... for project repo URL
+
+'
+      submit_urls: Submit URL
+      sign_in_first: Please sign in to add a project!
+  # report_mailer is for emails not relating to the user account.
+  # The following are not localized, because there's no need
+  # (they're only debug reports or reports sent to English mailing lists)
+  # project_status_change.*.erb
+  # report_monthly_announcement.*.erb
+  # report_project_deleted.*.erb
+  # report_reminder_summary.*.erb
+  report_mailer:
+    new_project_heading: >
+      Thanks for adding your project to the Best Practices Badging Program
+    new_project_part1: |
+      Thank you for adding your project
+      to the Best Practices Badging Program.
+      The current name we have for this project is:
+    new_project_part2: |
+      Please visit your badge entry at
+      to complete the information and get your badge!
+      Here is the URL for your badge entry:
+    new_project_part3_html: |
+      <p>
+      We encourage you to keep making progress.
+      </p>
+
+      <p>
+      If you want to see <i>only</i> what you're missing,
+      visit your badge entry, and
+      then click on the button near the top labelled "Hide met or N/A criteria"
+      If you have questions, or need help, please contact
+      <a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;</a>
+      or file an issue at
+      <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues">https://github.com/linuxfoundation/cii-best-practices-badge/issues</a>
+      (click on "new issue").
+      </p>
+
+      <p>
+      Thank you for your time.
+      </p>
+    new_project_part3_text: |
+      We encourage you to keep making progress.
+
+      If you want to see only what you're missing, visit your badge entry, and
+      then click on the button near the top labelled "Hide met or N/A criteria".
+      If you have questions, or need help, please contact
+      cii-badges-questions-owner@lists.coreinfrastructure.org
+      or file an issue at
+      https://github.com/linuxfoundation/cii-best-practices-badge/issues
+      (click on "new issue").
+
+      Thank you for your time.
+    passing_part1: |
+      Congratulations!
+
+      According to the information that you've provided,
+      your project has earned the CII best practices 'passing' badge.
+      For more information, see this URL:
+    passing_part2: |
+      Please add your badge to your project and/or repository site;
+      you've earned it:
+    passing_part3: |
+      We strongly encourage you to add or improve justification text,
+      including adding URLs that point to more information.
+
+      If you have suggestions on how to improve the criteria or
+      badge web application, please file an issue at:
+      https://github.com/linuxfoundation/cii-best-practices-badge/issues
+
+      If you made changes to your project to get a badge, please let us know
+      via email at cii-badges-questions@lists.coreinfrastructure.org.
+      One of our goals is to encourage projects to make some improvements.
+      We put some of these reports on the public wiki; please let us know
+      if you do NOT want the changes publicly posted at
+      https://github.com/linuxfoundation/cii-best-practices-badge/wiki/Impacts
+
+      Thank you, and congratulations.
+    in_markdown_add: "In markdown you can add this:"
+    in_html_add: "In HTML you can add this:"
+    in_progress_message: |
+      We're sorry, but your project no longer has the "passing" badge
+       and is now "in progress".
+       Please see the following URL for more information:
+    ending: |
+      --- David A. Wheeler, CII Best Practices Badge Technical Lead
+  # user_mailer is for the emails relating to the user account
+  user_mailer:
+    account_activation:
+      before_html: |
+        <h1>CII Best Practices Badging Program</h1>
+        <p>Hello,</p>
+        <p>
+        Welcome to the Badging Program!
+        Click on the link below to activate your account:
+        </p>
+      before_text: |
+        Hello,
+
+        Welcome to the CII Best Practices Badging Program!
+
+        Select the link below to activate your account:
+      activate: Activate
+    github_welcome:
+      before_html: |
+        <h1>CII Best Practices Badging Program</h1>
+
+        <p>Hello,</p>
+
+        <p>
+        Thank you for connecting your GitHub account and welcome
+        to the CII Best Practices Badging Program!
+        </p>
+
+        <p>
+        If you did not initiate this action, please check your GitHub
+        security log under Settings&gt;Security.
+        </p>
+      before_text: |
+        Hello,
+
+        Thank you for connecting your GitHub account and welcome to the
+        CII Best Practices Badging Program!
+
+        If you did not initiate this action, please check your GitHub security
+        log on GitHub under Settings>Security.
+    password_reset:
+      before_html: |
+        <h1>Password reset</h1>
+
+        <p>To reset your password click the link below:</p>
+      before_text: 'To reset your password click the link below:
+
+'
+      after_html: |
+        <p>This link will expire in two hours.</p>
+
+        <p>
+        If you did not request your password to be reset,
+        please ignore this email and
+        your password will stay as it is.
+        </p>
+      after_text: |
+        This link will expire in two hours.
+
+        If you did not request your password to be reset,
+        please ignore this email and
+        your password will stay as it is.
+      reset_password: Reset password

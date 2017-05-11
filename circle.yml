@@ -33,6 +33,9 @@ general:
   branches:
     ignore:
       - higher # TODO Remove this; Don't build for now, as build will be broken
+# branches:
+#   ignore:
+#     - BRANCH_NAME # do this if you need to ignore a branch.
   artifacts:
     - 'coverage'
     - 'license_finder_report.html'

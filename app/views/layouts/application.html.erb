@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<%= I18n.locale %>">
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -8,7 +8,7 @@
   <%= favicon_link_tag %>
   <%= stylesheet_link_tag    'application', media: 'all' %>
   <%= javascript_include_tag 'application', defer: true %>
-  <%= auto_discovery_link_tag :atom, { controller: 'projects', action: 'feed' }, { title: 'CII Best Practices BadgeApp Updated Projects' } %>
+  <%= auto_discovery_link_tag :atom, { controller: 'projects', action: 'feed' }, { title: t('feed_title') } %>
   <%= csrf_meta_tags %>
 </head>
 <body>

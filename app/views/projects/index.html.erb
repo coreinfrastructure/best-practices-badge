@@ -1,33 +1,33 @@
 <% content_for :nav_extras do %>
   <li>
     <% if logged_in? %>
-      <%= link_to 'Add', new_project_path %>
+      <%= link_to t('.add_link'), new_project_path %>
     <% end %>
   </li>
 <% end %>
 
 <div class="center">
-<h2><%= pluralize(@count, 'Project') %></h2>
+<h2><%= t 'projects_count', count: @count %></h2>
   <%= form_for projects_path, method: 'get', enforce_utf8: false,
                html: { class: 'project_search' } do %>
-    <label for="gteq">Badge status</label>
+    <label for="gteq"><%= t '.badge_status' %></label>
     <%= select_tag(:gteq, options_for_select(Project::BADGE_STATUSES,
                    params[:gteq]), class: 'onchange-submit') %>
     &nbsp; &nbsp; &nbsp;
-    <label for="lteq">Exclude passing</label>
+    <label for="lteq"><%= t '.exclude_passing' %></label>
     <%= check_box_tag :lteq, '99', params[:lteq], class: 'onchange-submit' %>
     &nbsp; &nbsp; &nbsp;
-    <label for="q">Text Search</label>
+    <label for="q"><%= t '.text_search' %></label>
     <%= text_field_tag :q, params[:q], size: 25,
-                       placeholder: 'Name or description text'%>
-    <%= submit_tag 'Search', name: nil %>
+                       placeholder: t('.name_or_description') %>
+    <%= submit_tag t('.text_search'), name: nil %>
     &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
     <%= link_to image_tag('feed-icon-28x28', width: '28', height: '28'), feed_path %>
   <% end %>
 <br>
-<%= link_to 'Add New Project', new_project_path, class: 'btn btn-success' %>
+<%= link_to t('.add_new'), new_project_path, class: 'btn btn-success' %>
 <br>
 <br>
-  <%= render 'table', projects: @projects %>
+  <%= render 'table', projects: @projects, locale: locale %>
   <%= will_paginate @projects %>
 </div>

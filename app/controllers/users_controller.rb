@@ -46,21 +46,21 @@ class UsersController < ApplicationController
   def update
     @user = User.find(params[:id])
     if @user.update_attributes(user_params)
-      flash[:success] = 'Profile updated'
+      flash[:success] = t('.profile_updated')
       redirect_to @user
     else
       render 'edit'
     end
   end
 
-  # rubocop: disable Metrics/MethodLength,Metrics/AbcSize
+  # rubocop: disable Metrics/MethodLength, Metrics/AbcSize
   def destroy
     # We don't do a lot of checking because only admins can run this,
     # but we'll try to prevent some disasters.
     id_to_delete = params[:id]
     user_to_delete = User.find(id_to_delete) # Exception raised if not found
     if current_user.id == user_to_delete.id
-      flash[:danger] = 'Cannot delete self.'
+      flash[:danger] = t('.cannot_delete_self')
     else
       # Admin acquires ownership of remaining projects, if any,
       # so projects always have an owner (maintain invariant).
@@ -69,16 +69,15 @@ class UsersController < ApplicationController
              .update_all(user_id: current_user.id)
       # rubocop: enable Rails/SkipsModelValidations
       user_to_delete.destroy
-      flash[:success] = 'User deleted'
+      flash[:success] = t('.user_deleted')
     end
     redirect_to users_url
   end
-  # rubocop: enable Metrics/MethodLength,Metrics/AbcSize
+  # rubocop: enable Metrics/MethodLength, Metrics/AbcSize
 
   def redirect_existing
     if @user.activated
-      flash[:info] = 'That user already exists. ' \
-                     'Did you mean to sign in?'
+      flash[:info] = t('users.redirect_existing')
       redirect_to login_url
     else
       regenerate_activation_digest
@@ -88,8 +87,7 @@ class UsersController < ApplicationController
 
   def send_activation
     @user.send_activation_email
-    flash[:info] = 'New activation link created. ' \
-                   'Please check your email to activate your account.'
+    flash[:info] = t('users.new_activation_link_created')
     redirect_to root_url
   end
 
@@ -109,7 +107,7 @@ class UsersController < ApplicationController
   # Confirms a logged-in user.
   def logged_in_user
     return if logged_in?
-    flash[:danger] = 'Please log in.'
+    flash[:danger] = t('users.please_log_in')
     redirect_to login_url
   end
 

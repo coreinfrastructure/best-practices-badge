@@ -117,7 +117,14 @@ function getUnmetResult(criterion, justification) {
 // If you change this function change "get_criterion_result" accordingly.
 function getCriterionResult(criterion) {
   var status = criterionStatus(criterion);
-  var justification = $('#project_' + criterion + '_justification')[0].value;
+  var justification;
+  if (globalisEditing) {
+    justification = $('#project_' + criterion + '_justification')[0].value;
+  } else {
+    justification = $.trim(
+      $('#' + criterion).find('.justification-markdown', 'p').text()
+    );
+  }
   if (!justification) {
     justification = '';
   }
@@ -242,11 +249,27 @@ function hasFieldTextInside(e) {
   return false;
 }
 
+function fillCriteriaResultHash() {
+  $.each(CRITERIA_HASH, function(key, value) {
+    globalCriteriaResultHash[key] = {};
+    globalCriteriaResultHash[key]['status'] = $('input[name="project[' + key +
+                                                '_status]"]:checked')[0].value;
+    globalCriteriaResultHash[key]['result'] = getCriterionResult(key);
+    globalCriteriaResultHash[key]['panelID'] = value['major']
+                                              .toLowerCase()
+                                              .replace(/\s+/g, '');
+  });
+  $('#project_entry_form').trigger('criteriaResultHashComplete');
+}
+
 // If we should, hide the criteria that are "Met" or N/A and are enough.
 // Do NOT hide 'met' criteria that aren't enough (e.g., missing required URL),
 // and do NOT hide the last-selected-met criterion (so users can enter/edit
 // justification text).
 function hideMetNA() {
+  if (Object.keys(globalCriteriaResultHash).length === 0) {
+    fillCriteriaResultHash();
+  }
   $.each(CRITERIA_HASH, function(criterion, value) {
     var result = globalCriteriaResultHash[criterion]['result'];
     if (globalHideMetnaCriteria && criterion !== globalLastSelectedMet &&
@@ -563,19 +586,6 @@ function TogglePanel(e) {
     $this.find('i.glyphicon').removeClass('glyphicon-chevron-up')
       .addClass('glyphicon-chevron-down');
   }
-}
-
-function fillCriteriaResultHash() {
-  $.each(CRITERIA_HASH, function(key, value) {
-    globalCriteriaResultHash[key] = {};
-    globalCriteriaResultHash[key]['status'] = $('input[name="project[' + key +
-                                                '_status]"]:checked')[0].value;
-    globalCriteriaResultHash[key]['result'] = getCriterionResult(key);
-    globalCriteriaResultHash[key]['panelID'] = value['major']
-                                              .toLowerCase()
-                                              .replace(/\s+/g, '');
-  });
-  $('#project_entry_form').trigger('criteriaResultHashComplete');
 }
 
 function setupProjectForm() {

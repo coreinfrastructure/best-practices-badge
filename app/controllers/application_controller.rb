@@ -14,15 +14,24 @@ class ApplicationController < ActionController::Base
   before_action :validate_session_timestamp
   after_action :persist_session_timestamp
 
-  # See: http://stackoverflow.com/questions/4329176/
-  #   rails-how-to-redirect-from-http-example-com-to-https-www-example-com
-  def redirect_https
-    if Rails.application.config.force_ssl && !request.ssl?
-      redirect_to protocol: 'https://', status: :moved_permanently
-    end
-    true
-  end
+  # Set user's locale; see <http://guides.rubyonrails.org/i18n.html>.
+  before_action :set_locale
+
+  # Force http -> https
   before_action :redirect_https
+
+  # Validate client IP address (if only some IP addresses are allowed);
+  # counters cloud piercing.
+  before_action :validate_client_ip_address
+
+  private
+
+  def default_url_options
+    # Include "/:locale" in URL unless it's en (we omit en to keep URLs stable)
+    # http://stackoverflow.com/questions/5261521/
+    # how-to-avoid-adding-the-default-locale-in-generated-urls
+    { locale: I18n.locale == I18n.default_locale ? nil : I18n.locale }
+  end
 
   # raise exception if text value client_ip isn't in valid_client_ips
   def fail_if_invalid_client_ip(client_ip, allowed_ips)
@@ -36,6 +45,25 @@ class ApplicationController < ActionController::Base
           'Invalid client IP'
   end
 
+  # See: http://stackoverflow.com/questions/4329176/
+  #   rails-how-to-redirect-from-http-example-com-to-https-www-example-com
+  def redirect_https
+    if Rails.application.config.force_ssl && !request.ssl?
+      redirect_to protocol: 'https://', status: :moved_permanently
+    end
+    true
+  end
+
+  # This *looks* like a global variable setting, and setting a global
+  # variable would be bad since we're multi-threaded.
+  # However, this is *not* setting a global variable, it's setting a
+  # per-Thread value (which is safe). Per the i18n guide,
+  # "The locale can be either set pseudo-globally to I18n.locale
+  # (which uses Thread.current like, e.g., Time.zone)...".
+  def set_locale
+    I18n.locale = params[:locale] || I18n.default_locale
+  end
+
   # Validate client IP address if Rails.configuration.valid_client_ips
   # and header value X-Forwarded-For.
   # This can provide a defense against cloud piercing.
@@ -44,7 +72,6 @@ class ApplicationController < ActionController::Base
     client_ip = request.remote_ip
     fail_if_invalid_client_ip(client_ip, Rails.configuration.valid_client_ips)
   end
-  before_action :validate_client_ip_address
 
   include SessionsHelper
 end

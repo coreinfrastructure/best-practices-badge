@@ -12,7 +12,7 @@ class PasswordResetsController < ApplicationController
     if @user
       reset_password(@user)
     else
-      flash.now[:danger] = 'Email address not found'
+      flash.now[:danger] = t('password_resets.email_not_found')
       render 'new'
     end
   end
@@ -21,11 +21,11 @@ class PasswordResetsController < ApplicationController
 
   def update
     if params[:user][:password].empty?
-      @user.errors.add(:password, 'can\'t be empty')
+      @user.errors.add(:password, t('password_resets.password_empty'))
       render 'edit'
     elsif @user.update_attributes(user_params)
       log_in @user
-      flash[:success] = 'Password has been reset'
+      flash[:success] = t('password_resets.password_reset')
       redirect_to @user
     else
       render 'edit'
@@ -38,10 +38,10 @@ class PasswordResetsController < ApplicationController
     if user.provider == 'local'
       @user.create_reset_digest
       @user.send_password_reset_email
-      flash[:info] = 'Email sent with password reset instructions'
+      flash[:info] = t('password_resets.instructions_sent')
       redirect_to root_url
     else
-      flash[:danger] = 'Sorry, can\'t reset password for non-local user'
+      flash[:danger] = t('password_resets.cant_reset_nonlocal')
       redirect_to login_url
     end
   end
@@ -65,7 +65,7 @@ class PasswordResetsController < ApplicationController
   # Checks expiration of reset token.
   def check_expiration
     return unless @user.password_reset_expired?
-    flash[:danger] = 'Password reset has expired.'
+    flash[:danger] = t('password_resets.reset_expired')
     redirect_to new_password_reset_url
   end
 end

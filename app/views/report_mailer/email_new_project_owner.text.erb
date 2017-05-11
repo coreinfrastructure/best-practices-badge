@@ -1,21 +1,9 @@
-Thank you for adding your project
-"<%= @project.name %>"
-to the Best Practices Badging Program.
+<%= t 'report_mailer.new_project_part1' %>
+<%= @project.name %>
 
-Please visit your badge entry at
+<%= t 'report_mailer.new_project_part2' %>
 <%= @project_info_url %>
-to complete the information and get your badge!
 
-We encourage you to keep making progress.
+<%= t 'report_mailer.new_project_part3_text' %>
 
-If you want to see only what you're missing, visit your badge entry, and
-then click on the button near the top labelled "Hide met or N/A criteria".
-If you have questions, or need help, please contact
-cii-badges-questions-owner@lists.coreinfrastructure.org
-or file an issue at
-https://github.com/linuxfoundation/cii-best-practices-badge/issues
-(click on "new issue").
-
-Thank you for your time.
-
---- David A. Wheeler, CII Best Practices Badge Technical Lead
+<%= t 'report_mailer.ending' %>

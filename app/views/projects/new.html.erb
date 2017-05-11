@@ -1,6 +1,4 @@
-
-<% post_delay_warning = 'There may be a significant delay after submitting ' \
-     'as we try to automatically fill in information.'
+<%
    # Quick check of project and repo URLs.  This check is for responsiveness,
    # not for security; they're checked more rigorously
    # at the server (see app/validators/url_validator.rb).
@@ -16,17 +14,20 @@
   <div class='row'>
   <div class="col-md-12">
   <br>
-  <h2 class='center'>New Badge</h2>
+  <h2 class='center'><%= t('.new_badge') %></h2>
   <br>
   <% if current_user.provider == 'github'%>
-     <h4>You may select from one of your GitHub repos <i>OR</i>
-           provide information about some other project.</h4>
+     <h4><%= t '.may_select_html' %></h4>
      <br>
      <%= form_for(@project) do |f| %>
        <%= render 'shared/error_messages', object: f.object %>
-       <%= f.collection_select :repo_url, github_select, :last, :first, { prompt: 'Select one of your GitHub repos', disabled: lambda{ |repo| repo.last == 'none' }} %>
-       <%= f.submit 'Submit GitHub Repository', class: 'btn btn-primary',
-                    'data-toggle' => 'tooltip', title: post_delay_warning %>
+       <%= f.collection_select :repo_url, github_select, :last, :first,
+                               { prompt: t('.select_one_github'),
+                                 disabled: lambda{ |repo| repo.last == 'none' }}
+       %>
+       <%= f.submit t('.submit_github'), class: 'btn btn-primary',
+                    'data-toggle' => 'tooltip',
+                    title: t('.post_delay_warning') %>
      <% end %>
 
      <br><h2 class='center'>OR</h2>
@@ -36,24 +37,23 @@
       <% if current_user.provider == 'local'%>
         <%= render 'shared/error_messages', object: f.object %>
       <% end %>
-      <span>What is the URL for the project home page (the URL for the project as a whole)? Start with http(s):// (many characters are not allowed, including "?")</span>
+      <span><%= t('.url_of_homepage') %></span>
       <!-- Note: Server tests URLs, this is just sanity checking -->
       <%= f.text_field :homepage_url, class:"form-control",
             type: 'url',
             pattern: url_pattern,
-            placeholder:'http(s)://... for project home page URL' %>
-      <span>What is the URL for the version control repository
-            (it may the same as the project home page)? Start with http(s):// (many characters are not allowed, including "?")</span>
+            placeholder: t('.placeholder_of_homepage') %>
+      <span><%= t('.url_of_repo') %></span>
       <%= f.text_field :repo_url, class:"form-control",
             type: 'url',
             pattern: url_pattern,
-            placeholder:'http(s)://... for project repo URL' %>
-     <%= f.submit 'Submit URL', class: 'btn btn-primary',
-                  'data-toggle' => 'tooltip', title: post_delay_warning %>
+            placeholder: t('.placeholder_of_repo') %>
+     <%= f.submit t('.submit_urls'), class: 'btn btn-primary',
+                  'data-toggle' => 'tooltip', title: t('.post_delay_warning') %>
   <% end %>
   </div>
   </div>
 <% else %>
-  <% flash.now[:danger] = "Please sign in to add a project!"%>
+  <% flash.now[:danger] = t('.sign_in_first') %>
   <%= render template: "sessions/new" %>
 <% end %>

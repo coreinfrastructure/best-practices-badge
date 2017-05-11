@@ -1,0 +1,31 @@
+<div class="center jumbotron">
+  <h1>Criteria</h1>
+  <!-- This page quickly shows some information about the Criteria. -->
+  <p>
+  <a href='https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/doc/criteria.md'>The detailed criteria are on GitHub</a>.</p>
+  <p>
+  <% future_criteria, active_criteria = Criteria.partition(&:future?) %>
+  当前标准的数量:
+    <%= active_criteria.count %> (active)
+    + <%= future_criteria.count %> (future)
+    = <%= Criteria.count %> (total).
+  <br>
+  Among active criteria, there are
+    <%= active_criteria.count(&:must?) %> MUST,
+    <%= active_criteria.count(&:should?) %> SHOULD, and
+    <%= active_criteria.count(&:suggested?) %>
+    SUGGESTED criteria.
+  Among active criteria,
+    <%= active_criteria.count(&:na_allowed?) %> allow N/A,
+    <%= active_criteria.count(&:met_url_required?) %>
+    require a URL when met, and
+    <%= active_criteria.count(&:details_present?) %>
+    have details in their description.
+  <p>
+  There are <%= Project.count %> project entries;
+  <%= Project.passing.count %> are passing and
+  <%= Project.in_progress.count %> are in progress.
+  <p>
+  You can see statistics about projects over time at the
+  <a href="/project_stats">project stats page</a>.
+</div>

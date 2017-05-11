@@ -1,10 +1,4 @@
-<h1>CII Best Practices Badging Program</h1>
-
-<p>Hello,</p>
-
-<p>
-Welcome to the Badging Program! Click on the link below to activate your account:
-</p>
-
-<%= link_to "Activate", edit_account_activation_url(@user.activation_token,
-                                                    email: @user.email) %>
+<%= t 'user_mailer.account_activation.before_html' %>
+<%= link_to t('.activate'),
+            edit_account_activation_url(id: @user.activation_token,
+                                        email: @user.email) %>

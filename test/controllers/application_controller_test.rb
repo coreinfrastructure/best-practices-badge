@@ -10,13 +10,13 @@ class ApplicationControllerTest < ActionController::TestCase
     range1 = IPAddr.new('23.235.32.0/20')
     range2 = IPAddr.new('43.249.72.0/22')
 
-    assert_nothing_raised { a.fail_if_invalid_client_ip('', []) }
-    assert_raises { a.fail_if_invalid_client_ip(client_ip, []) }
+    assert_nothing_raised { a.send(:fail_if_invalid_client_ip, '', []) }
+    assert_raises { a.send(:fail_if_invalid_client_ip, client_ip, []) }
     assert_nothing_raised do
-      a.fail_if_invalid_client_ip(client_ip, [range1, range2])
+      a.send(:fail_if_invalid_client_ip, client_ip, [range1, range2])
     end
     assert_raises do
-      a.fail_if_invalid_client_ip(client_ip, [range1, range1])
+      a.send(:fail_if_invalid_client_ip, client_ip, [range1, range1])
     end
   end
 
@@ -25,11 +25,11 @@ class ApplicationControllerTest < ActionController::TestCase
     a = ApplicationController.new
     a.request = ActionDispatch::Request.new({})
     a.request.env['REMOTE_ADDR'] = '1.2.3.4' # Not valid!
-    assert_raises { a.validate_client_ip_address }
+    assert_raises { a.send(:validate_client_ip_address) }
 
     a.request = ActionDispatch::Request.new({})
     a.request.env['REMOTE_ADDR'] = '23.235.32.1' # Valid!
-    assert_nothing_raised { a.validate_client_ip_address }
+    assert_nothing_raised { a.send(:validate_client_ip_address) }
     Rails.configuration.valid_client_ips = nil # Clean up.
   end
 end

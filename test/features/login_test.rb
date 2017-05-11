@@ -87,6 +87,11 @@ class LoginTest < CapybaraFeatureTest
     ensure_choice 'project_report_process_status_unmet'
     assert_match X, find('#report_process_enough')['src']
 
+    assert has_content? 'english'
+    find('#toggle-hide-metna-criteria').click
+    wait_for_jquery
+    refute has_content? 'english'
+
     click_on('Submit', match: :first)
     assert_match X, find('#discussion_enough')['src']
   end

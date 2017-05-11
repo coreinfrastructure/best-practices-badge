@@ -59,14 +59,14 @@ zh-CN:
       storage_units:
         units:
           byte:
-            one: Byte
-            other: Bytes
+            one: 字节
+            other: 字节
           kb: KB
           mb: MB
           gb: GB
           tb: TB
-          pb:
-          eb:
+          pb: PB
+          eb: EB
       decimal_units:
         units:
           thousand: 千
@@ -112,8 +112,11 @@ zh-CN:
       header:
         one: 有 1 个错误发生导致「%{model}」无法被保存。
         other: 有 %{count} 个错误发生导致「%{model}」无法被保存。
-    unavailable_session:
-    unacceptable_request:
+    unavailable_session: |-
+      会话 %{id} 在内存中不存在。
+
+      如果是在多进程服务器中运行（如Unicorn或Puma），本次请求命中的进程 %{id} 不在内存中存储 。尝试调整进程/任务数量到1，或者使用另一台服务器开发。
+    unacceptable_request: 消息头中包含不支持的版本。
     connection_refused: |
       哎呀！无法连接到Web控制台中间件。
       请确保rails开发服务器正在运行。
@@ -175,25 +178,25 @@ zh-CN:
       prompt: 请选择
     submit:
       create: 新增%{model}
-      update: 更新%{model}
-      submit: 储存%{model}
+      update: 更新 %{model}
+      submit: 保存 %{model}
     page_entries_info:
       entry:
-        zero:
-        one:
-        other:
+        zero: 项
+        one: 项
+        other: 项
       one_page:
         display_entries:
-          zero:
-          one:
-          other:
+          zero: "%{entry_name} 未找到"
+          one: 显示 <b>1</b> %{entry_name}
+          other: 显示 <b>所有 %{count}</b> %{entry_name}
       more_pages:
-        display_entries: 显示 %{entry_name} <b>%{first} - %{last}</b>  共<b>%{total}</b>
+        display_entries: 显示 %{entry_name} <b>%{first}&nbsp;-&nbsp;%{last}</b>  共<b>%{total}</b>
           页
   will_paginate:
-    previous_label: 上一页
+    previous_label: "&#8592; 上一页"
     next_label: 下一页
-    page_gap: "…"
+    page_gap: "&hellip;"
     page_entries_info:
       single_page:
         zero: 暂无%{model}记录
@@ -207,12 +210,12 @@ zh-CN:
       multi_page_html: 正显示%{model}的第<b>%{from}</b>至第<b>%{to}</b>条记录(共<b>%{count}</b>条记录)
   ransack:
     search: 搜索
-    predicate: 基于(predicate)
+    predicate: 基于
     and: 并且
     or: 或者
     any: 任意
     all: 所有
-    combinator: 条件组合(combinator)
+    combinator: 条件组合
     attribute: 属性
     value: 数值
     condition: 条件
@@ -256,24 +259,24 @@ zh-CN:
       not_cont: 不包含
       not_cont_any: 不包含任意一个值
       not_cont_all: 不包含所有值
-      start: 以改值开始
+      start: 以该值开始
       start_any: 以任意一个值开始
       start_all: 以所有值开始
-      not_start: 不以改值开始
+      not_start: 不以该值开始
       not_start_any: 不以任意一个值开始
       not_start_all: 不以所有值开始
-      end: 以改值结尾
+      end: 以该值结尾
       end_any: 以任意一个值结尾
       end_all: 以所有值结尾
-      not_end: 不以改值结尾
+      not_end: 不以该值结尾
       not_end_any: 不以任意一个值结尾
       not_end_all: 不以所有值结尾
       'true': 等于true
       'false': 等于false
       present: 有值
       blank: 为空
-      'null': 是null
-      not_null: 不是null
+      'null': 为空
+      not_null: 非空
   views:
     pagination:
       first: "&laquo; 第一页"
@@ -282,163 +285,291 @@ zh-CN:
       next: 下一页 &rsaquo;
       truncate: "&hellip;"
   simple_form:
-    'yes':
-    'no':
+    'yes': 是
+    'no': 否
     required:
-      text:
-      mark:
+      text: 必须
+      mark: "*"
     error_notification:
-      default_message:
-  hello:
+      default_message: 请查看以下问题：
+  hello: 你好，世界
   projects_count:
-    one:
-    other:
-  feed_title:
+    one: "%{count} 项目"
+    other: "%{count} 项目"
+  feed_title: CII最佳实践徽章计划更新项目
   layouts:
-    cii_best_practices:
-    projects:
-    users:
-    profile:
-    settings:
-    logout_html:
-    signup_html:
-    login_html:
-    footer_text_html:
+    cii_best_practices: CII最佳实践
+    projects: 项目
+    users: 用户
+    profile: 资料
+    settings: 设置
+    logout_html: "<span class =“glyphicon glyphicon-log-out”></span> 注销"
+    signup_html: <span class="glyphicon glyphicon-user"></span> 注册
+    login_html: <span class="glyphicon glyphicon-log-in"></span> 登录
+    footer_text_html: <small> <b>需要帮助？有疑问？发现问题？请 <i><a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">发送邮件</a>
+      </i>或 <i><a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues"
+      target="_blank">提出问题</a></i>.</b> © 2015-2017 <a href="https://www.coreinfrastructure.org/
+      target="_blank">Core Infrastructure Initiative （核心基础设施计划）</a>, 一个 <a href="https://www.linuxfoundation.org/"
+      target="_blank">Linux 基金会</a> 合作项目。版权所有。 请查阅我们的 <a href="https://www.linuxfoundation.org/privacy"
+      target="_blank">隐私策略</a> 和 <a href="https://www.linuxfoundation.org/terms" target="_blank">使用条款</a>.
+      </small>
   sessions:
-    login_header:
-    login_with_github_html:
-    or:
-    email:
-    password:
-    forgot_password:
-    remember_me:
-    login_custom:
-    no_custom:
-    already_logged_in:
-    incorrect_login_info:
-    invalid_combo:
-    signed_in:
-    not_activated:
-    signed_out:
+    login_header: 登录
+    login_with_github_html: <span class="fa fa-github"></span> 使用GitHub账户登录
+    or: 或
+    email: 电子邮件
+    password: 密码
+    forgot_password: 忘记密码了吗？
+    remember_me: 记住我
+    login_custom: 使用自定义帐户登录
+    no_custom: 没有自定义帐号？立即注册！
+    already_logged_in: 您已经登录。
+    incorrect_login_info: 登录信息不正确
+    invalid_combo: 电子邮件或者密码不正确
+    signed_in: 已登录！
+    not_activated: '帐户未激活。检查您的电子邮件中的激活链接。
+
+'
+    signed_out: 已退出！
   users:
     new:
-      signup_header:
-      intro_html:
-      name:
-      email:
-      password:
-      password_confirmation:
-      create_account:
+      signup_header: 注册
+      intro_html: <a href="/login">如果您有GitHub账户，可以使用该账户登录</a>. 如果您不想使用GitHub账户，您可以在此注册。<br><br>
+        如果您没有收到激活链接，请重新注册，我们将发送新的激活链接。
+      name: 名称
+      email: 电子邮件
+      password: 密码
+      password_confirmation: 确认密码
+      create_account: 创建我的账户
     show:
-      see_external:
-      other_projects_edit:
-      as_admin:
-      send_email_to:
-      profile_updated:
-      delete_link_name:
-      confirm_delete:
+      see_external: '查看此用户的外部页面。
+
+'
+      other_projects_edit: 其他您可以编辑的项目
+      as_admin: 作为管理员，您还可以：
+      send_email_to: 发送电子邮件至：
+      profile_updated: 资料已更新
+      delete_link_name: 删除
+      confirm_delete: 您确定要删除此用户吗？
     update:
-      profile_updated:
+      profile_updated: 资料已更新
     destroy:
-      cannot_delete_self:
-      user_deleted:
-    redirect_existing:
-    new_activation_link_created:
-    please_log_in:
+      cannot_delete_self: 不能删除自己。
+      user_deleted: 用户已被删除。
+    redirect_existing: '该用户已经存在。您的意思是登录吗？
+
+'
+    new_activation_link_created: '新的激活链接已经创建。请检查您的电子邮件以激活您的帐户。
+
+'
+    please_log_in: 请登录。
   project_stats:
     index:
-      project_stats_header:
-      all_projects:
-      projects_nontrivial:
-      projects_activity_30:
-      daily_activity:
-      reminders:
-      admin_html:
-      raw_data:
-      json_format:
-      csv_format:
-      active_projects:
-      active_in_progress:
-      active_edited:
-      active_edited_in_progress:
-      projects_created_since_yesterday:
-      projects_updated_since_yesterday:
-      reminders_sent_since_yesterday:
-      reactivated_projects:
+      project_stats_header: 项目统计
+      all_projects: 所有项目
+      projects_nontrivial: 具有显著进展的项目
+      projects_activity_30: 在过去30天内有徽章项活动的项目
+      daily_activity: 每日徽章项活动
+      reminders: 提醒
+      admin_html: '作为管理员，您还可以查看<a href="/reminders">有关提醒的详细信息</a>。
+
+'
+      raw_data: '您还可以查看原始数据：
+
+'
+      json_format: JSON格式
+      csv_format: 可下载的CSV格式
+      active_projects: 活跃项目（30天内创建/更新）
+      active_in_progress: 正在进行中的项目（在30天内创建/更新）
+      active_edited: 活跃编辑的项目（30天内有更新）
+      active_edited_in_progress: 活跃编辑的认证中项目（30天内有更新）
+      projects_created_since_yesterday: '自前一天创建的项目
+
+'
+      projects_updated_since_yesterday: 项目从前一天更新
+      reminders_sent_since_yesterday: '自昨天起发送的提醒
+
+'
+      reactivated_projects: '收到提醒后14天内重新启动的项目
+
+'
   projects:
     index:
-      add_link:
-      add_new:
-      badge_status:
-      exclude_passing:
-      text_search:
-      name_or_description:
-      search:
+      add_link: 添加
+      add_new: 添加新项目
+      badge_status: 徽章状态
+      exclude_passing: 排除已通过的
+      text_search: 文本搜索
+      name_or_description: 名称或说明文字
+      search: 搜索
     table:
-      id:
-      name:
-      description:
-      website:
-      license:
-      owner:
-      last_achieved:
-      pachieved:
-      can_also_sort:
-      repository_url:
-      create_time:
-      update_time:
-      user_id:
+      id: Id
+      name: 名称
+      description: 描述
+      website: 网站
+      license: 授权
+      owner: 所有者
+      last_achieved: 最后达成
+      pachieved: "% 已达成"
+      can_also_sort: 您也可以按以下方式排序：
+      repository_url: 仓库网址
+      create_time: 创建时间（徽章认证的）
+      update_time: 最后更新时间（徽章条目）
+      user_id: 用户名
     new:
-      post_delay_warning:
-      new_badge:
-      may_select_html:
-      select_one_github:
-      submit_github:
-      url_of_homepage:
-      placeholder_of_homepage:
-      url_of_repo:
-      placeholder_of_repo:
-      submit_urls:
-      sign_in_first:
+      post_delay_warning: 在提交后，因为我们试图自动填充相关信息，可能有显著的滞后。
+      new_badge: 新徽章
+      may_select_html: '您可以从GitHub仓库中选择<i>或</i>提供其他有关项目的信息。
+
+'
+      select_one_github: 从GitHub仓库中选择
+      submit_github: 提交GitHub仓库
+      url_of_homepage: 项目主页的URL （项目整体的）？以 http(s):// 开头 （很多字符不允许，包含 "?"）
+      placeholder_of_homepage: http(s)://... 项目主页 URL
+      url_of_repo: 版本控制仓库的URL （可以和项目主页相同）？ 以 http(s):// 开头（很多字符不允许，包含 "?"）
+      placeholder_of_repo: http(s)://... 项目仓库 URL
+      submit_urls: 提交网址
+      sign_in_first: 请登录以添加项目！
   user_mailer:
     account_activation:
-      before_html:
-      before_text:
-      activate:
+      before_html: |
+        <h1>CII 最佳实践徽章计划</h1>
+        <p>您好！</p>
+        <p>
+        欢迎来到徽章计划！
+        点击下面的链接激活帐户：
+        </p>
+      before_text: |
+        您好！
+
+        欢迎来到CII 最佳实践徽章计划！
+
+        点击下面的链接激活帐户：
+      activate: 启用
     github_welcome:
-      before_html:
-      before_text:
+      before_html: |-
+        <p>您好，</p>
+
+        <p>
+        感谢连接到您的GitHub账户，欢迎来到
+        CII最佳实践徽章计划！
+        </p>
+
+        <p>
+        如果该操作不是由您本人做出，请检查您的 GitHub
+        安全日志：Settings&gt;Security.
+        </p>
+      before_text: |-
+        您好，
+
+        感谢连接到您的GitHub账户，欢迎来到
+        CII最佳实践徽章计划！
+
+        如果该操作不是由您本人做出，请检查您的 GitHub
+        安全日志：Settings>Security。
     password_reset:
-      before_html:
-      before_text:
-      after_html:
-      after_text:
-      reset_password:
-  submit:
+      before_html: |-
+        <h1>重设密码</h1>
+
+        <p>要重设密码，请点击下面的链接：</p>
+      before_text: '要重设密码，请点击下面的链接：
+
+'
+      after_html: |
+        <p>此链接将在两个小时后过期。</ p>
+
+        <P>
+        如果您没有要求重置密码，
+        请忽略此电子邮件，
+        您的密码将保持原样。
+        </ p>
+      after_text: |
+        此链接将在两个小时后过期。
+
+        如果您没有要求重置密码，
+        请忽略此电子邮件，
+        您的密码将保持原样。
+      reset_password: 重设密码
+  submit: 提交
   account_activations:
     activated: 帐户已激活！
     failed_activation: 激活链接无效
   password_resets:
-    forgot_password:
-    reset_password:
-    password_confirmation:
-    email_not_found:
-    password_empty:
-    password_reset:
-    instructions_sent:
-    cant_reset_nonlocal:
-    reset_expired:
+    forgot_password: 忘记密码
+    reset_password: 重设密码
+    password_confirmation: 确认
+    email_not_found: 电子邮件地址未找到
+    password_empty: 密码不能为空
+    password_reset: 密码已重置
+    instructions_sent: 电子邮件发送密码重置说明
+    cant_reset_nonlocal: 对不起，无法重设非本地用户的密码
+    reset_expired: 密码重设已过期。
   report_mailer:
-    new_project_heading:
-    new_project_part1:
-    new_project_part2:
-    new_project_part3_html:
-    new_project_part3_text:
-    passing_part1:
-    passing_part2:
-    passing_part3:
-    in_markdown_add:
-    in_html_add:
-    in_progress_message:
-    ending:
-  project_name_unknown:
+    new_project_heading: '感谢您将项目添加到最佳实践徽章计划中
+
+'
+    new_project_part1: 感谢您将项目添加到最佳实践徽章计划中。项目的当前名称为：
+    new_project_part2: 请访问您的徽章项，完成相关信息，以获取徽章！您的徽章项的网址为：
+    new_project_part3_html: |-
+      <p>
+      我们鼓励持续性的进展。
+      </p>
+
+      <p>
+      如果您想 <i>仅</i> 查看遗漏的信息，
+      访问您的徽章项页面，
+      点击接近上方的按钮：“隐藏已满足或不涉及的条款”。
+      有问题，或者需要帮助，请联系：
+      <a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;</a>
+      或者提交问题：
+      <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues">https://github.com/linuxfoundation/cii-best-practices-badge/issues</a>
+      （点击“new issue”）。
+      </p>
+
+      <p>
+      感谢您的时间投入。
+      </p>
+    new_project_part3_text: |
+      我们鼓励持续性的进展。
+
+      如果您想仅查看遗漏的信息，
+      访问您的徽章项页面，
+      点击接近上方的按钮：“隐藏已满足或不涉及的条款”。
+      有问题，或者需要帮助，请联系：
+      cii-badges-questions-owner@lists.coreinfrastructure.org
+      或者提交问题：
+      https://github.com/linuxfoundation/cii-best-practices-badge/issues
+      （点击“new issue”）。
+
+      感谢您的时间投入。
+    passing_part1: |
+      恭喜！
+
+      根据您提供的信息，
+      您的项目已获得CII最佳实践“通过”徽章。
+      有关详细信息，请参阅此URL：
+    passing_part2: |
+      请将您的徽章添加到您的项目和/或仓库网站;
+      这是你应得的：
+    passing_part3: |
+      我们强烈建议您添加或改进解释文本，
+      包括添加指向更多信息的URL。
+
+      如果您有关于如何改进认证标准、徽章网络应用的建议，
+      请提出问题：
+      https://github.com/linuxfoundation/cii-best-practices-badge/issues
+
+      如果您对项目进行了更改以获得徽章，请通过电子邮件通知我们：
+      cii-badges-questions@lists.coreinfrastructure.org。
+      我们的目标之一是鼓励项目进行改进。
+      我们把这些报告放在公共维基上；如果您不想公开发布，请告诉我们：
+      https://github.com/linuxfoundation/cii-best-practices-badge/wiki/Impacts
+
+      谢谢！恭喜！
+    in_markdown_add: 在markdown标记文本中，您可以添加：
+    in_html_add: 在HTML中，您可以添加：
+    in_progress_message: |
+      很抱歉，您的项目不再具有“通过”徽章，现在正在“进行中”。
+      有关详细信息，请参阅以下URL：
+    ending: "--- David A. Wheeler，CII最佳实践徽章技术负责人\n"
+  project_name_unknown: "(未知名称)"

@@ -364,7 +364,6 @@ task :fake_production do
   sh 'RAILS_ENV=fake_production rails server -p 4000'
 end
 
-# TODO: Restore this, once we know why it's failing.
 # Remove trailing whitespace after running "translation:sync".
 # The "translation:sync" task syncs up the translations, but uses the usual
 # YAML writer, which writes out trailing whitespace.  It should not do that,
@@ -373,10 +372,13 @@ end
 # - https://github.com/aurels/translation-gem/issues/13
 # - https://github.com/yaml/libyaml/issues/46
 # We will run this enhancement to solve the problem.
-# Rake::Task['translation:sync'].enhance do
-#  puts 'Removing bogus trailing whitespace (bug workaround).'
-#  sh "cd config/locales/ && sed -i -e 's/ $//' *.yml && cd ../.."
-# end
+# Only do this in development, since the gem only exists then.
+if Rails.env.development?
+  Rake::Task['translation:sync'].enhance do
+    puts 'Removing bogus trailing whitespace (bug workaround).'
+    sh "cd config/locales/ && sed -i -e 's/ $//' *.yml && cd ../.."
+  end
+end
 
 # Convert project.json -> project.sql (a command to re-insert data).
 # This only *generates* a SQL command; I did it this way so that it's easy

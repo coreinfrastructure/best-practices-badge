@@ -55,7 +55,6 @@ group :development, :test do
   gem 'rubocop', '0.48.1' # Style checker.  Changes can cause test failure
   gem 'ruby-graphviz', '1.2.3' # This is used for bundle viz
   gem 'spring', '2.0.1'
-  gem 'translation', '1.9' # translation.io - translation service
   gem 'vcr', '3.0.3' # Record network responses for later test reuse
   gem 'yaml-lint', '0.0.9' # Check YAML file syntax
 end
@@ -65,6 +64,7 @@ group :development do
   # Waiting for Ruby 2.4 support: https://github.com/seattlerb/ruby_parser/issues/239
   gem 'rails_db', '1.5.0' # Enable localhost:3000/rails/db debugging
   gem 'traceroute', '0.5.0' # Adds 'rake traceroute' command to check routes
+  gem 'translation', '1.9' # translation.io - translation service
   gem 'web-console', '3.5.0'
 end
 

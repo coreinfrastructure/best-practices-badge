@@ -775,8 +775,8 @@ en:
           lines or less than 10 warnings).
       warnings_strict:
         description: >
-          It is SUGGESTED that projects be maximally strict with warnings,
-          where practical.
+          It is SUGGESTED that projects be maximally strict with warnings
+          in the software produced by the project, where practical.
         details: >
            Some warnings cannot be effectively enabled on some projects.
            What is needed is evidence that the project is striving
@@ -1227,4 +1227,485 @@ en:
           eliminate undefined behavior.
           For our purposes least privilege is not considered a hardening
           mechanism (least privilege is important, but separate).
+    '1':
+      contribution_requirements:
+        description: >
+          The information on how to contribute MUST include the
+          requirements for acceptable contributions
+          (e.g., a reference to any required coding standard).
+      dco:
+        description: >
+          The project SHOULD have a legal mechanism where
+          all developers of non-trivial amounts of project software assert that
+          they are legally authorized to make these contributions. The most
+          common and easily-implemented approach for doing this is by using a
+          <a href="http://developercertificate.org/">Developer Certificate of Origin (DCO)</a>,
+          where users add "signed-off-by" in their commits and
+          the project links to the DCO website.
+          However, this MAY be implemented as a
+          Contributor License Agreement (CLA), or other legal mechanism.
+        details: >
+          The DCO is the recommended mechanism because it's easy to implement,
+          tracked in the source code, and git directly supports a
+          "signed-off" feature using "commit -s".
+          To be most effective it is best if the project documentation
+          explains what "signed-off" means for that project.
+          A CLA is a legal agreement that defines
+          the terms under which intellectual works have been licensed to an
+          organization or project.  A contributor assignment agreement (CAA)
+          is a legal agreement that transfers rights in an intellectual work
+          to another party; projects are not required to have CAAs, since
+          having CAA increases the risk that potential contributors
+          will not contribute, especially if the receiver is
+          a for-profit organization.
+          The
+          <a href="https://www.apache.org/licenses/">Apache Software Foundation CLAs (the individual contributor license and the corporate CLA)</a>
+          are examples of CLAs, for projects which determine that the risks
+          of these kinds of CLAs to the project are less than their benefits.
+      governance:
+        description: >
+          The project MUST clearly define and document its
+          project governance model
+          (the way it makes decisions, including key roles).
+        details: >
+          There needs to be some well-established documented way
+          to make decisions and resolve disputes.
+          In small projects, this may be as simple as "the project owner and
+          lead makes all final decisions".
+          There are various governance models, including benevolent dictator
+          and formal meritocracy; for more details, see
+          <a href="http://oss-watch.ac.uk/resources/governancemodels">Governance models</a>.
+          Both centralized (e.g., single-maintainer) and decentralized
+          (e.g., group maintainers) approaches have been successfully used
+          in projects.
+          The governance information does not need to document the possibility
+          of creating a project fork, since that is always possible
+          for FLOSS projects.
+      code_of_conduct:
+        description: >
+          The project MUST adopt a code of conduct and post it in a
+          standard location.
+        details: >
+          Projects may be able to improve the civility of their
+          community and to set expectations about acceptable conduct by
+          adopting a code of conduct. This can help avoid problems before
+          they occur and make the project a more welcoming place to
+          encourage contributions. This should focus only on behavior
+          within the community/workplace of the project.  Example codes
+          of conduct are the
+          <a href="http://contributor-covenant.org/">Contributor Covenant Code of Conduct</a>
+          and the Linux kernel
+          <a href="https://www.kernel.org/doc/html/latest/process/code-of-conflict.html">
+      roles_responsibilities:
+        description: >
+          The project MUST clearly define and publicly document the key roles in the
+          project and their responsibilities, including any tasks those roles
+          must perform.  It MUST be clear who has which role(s), though this
+          might not be documented in the same way.
+        details: >
+          The documentation for <a href="#governance">governance</a>
+          and roles and responsibilities may be in one place.
+      access_continuity:
+        description: >
+          The project MUST be able to continue with
+          minimal interruption if any one person is incapacitated or killed.
+          In particular, the project MUST be able to create and close issues,
+          accept proposed changes, and release versions of software, within a
+          week of confirmation that an individual is incapacitated or killed.
+          This MAY be done by ensuring someone else has any necessary
+          keys, passwords, and legal rights to continue the project.
+          Individuals who run a FLOSS project MAY do this by providing keys in
+          a lockbox and a will providing any needed legal rights
+          (e.g., for DNS names).
+      bus_factor:
+        description: The project SHOULD have a "bus factor" of 2 or more.
+        details: >
+          A "bus factor" (aka "truck factor") is the
+          minimum number of project members that have to suddenly disappear
+          from a project ("hit by a bus") before the project stalls
+          due to lack of knowledgeable or competent personnel.
+          The <a href="https://github.com/mtov/truck-factor">truck-factor</a>
+          tool can estimate this for projects on GitHub.
+          For more information, see
+          <a href="https://www.researchgate.net/publication/272824568_assessing_the_bus_factor_of_git_repositories">Assessing the Bus Factor of Git Repositories</a>
+          by Cosentino et al.
+      documentation_roadmap:
+        description: >
+          The project MUST have a documented roadmap that describes
+          what the project intends to do and not do for at least the next year.
+        details: >
+          The project might not achieve the roadmap,
+          and that's fine; the purpose of the roadmap is to help potential
+          users and constributors understand the intended direction of the
+          project. It need not be detailed.
+      documentation_architecture:
+        description: >
+          The project MUST include documentation
+          of the architecture (aka high-level design) of the software
+          produced by the project.  If the project does not produce software,
+          select "not applicable" (N/A).
+        details: >
+          A software architecture explains a program's fundamental structures,
+          i.e., the program's major components, the relationships among them,
+          and the key properties of these components and relationships.
+      documentation_security:
+        description: >
+          The project MUST document what the user can and cannot expect
+          in terms of security from the software produced by the project.
+          The project MUST identify the security requirements
+          that the software is intended to meet and an
+          assurance case that justifies why these requirements are met.
+          The assurance case MUST include: a description of the threat model,
+          clear identification of trust boundaries, and
+          evidence that common security weaknesses have been countered.
+        details: >
+          An assurance case is
+          "a documented body of evidence that provides a convincing and valid
+          argument that a specified set of critical claims regarding a
+          system’s properties are adequately justified for a given
+          application in a given environment"
+          (<a href="http://nvlpubs.nist.gov/nistpubs/ir/2009/ir7608.pdf">
+          "Software Assurance Using Structured Assurance Case Models",
+          Thomas Rhodes et al, NIST Interagency Report 7608</a>).
+          Trust boundaries are
+          boundaries where data or execution changes its level of trust, e.g.,
+          a server's boundaries in a typical web application.
+      documentation_quick_start:
+        description: >
+          The project MUST provide a "quick start" guide for new users
+          to help them quickly do something with the software.
+        details: >
+          The idea is to show users how to get started and make the software do
+          anything at all. This is critically important for potential users to
+          get started.
+      documentation_current:
+        description: >
+          The project MUST make an effort to
+          keep the documentation consistent with the current version of the
+          project results (including software produced by the project).
+          Any <i>known</i> documentation defects making it inconsistent
+          MUST be fixed.
+          If the documentation is generally current, but erroneously
+          includes some older information that is no longer true,
+          just treat that as a defect, then track and fix as usual.
+        details: >
+          The documentation MAY include information about differences or
+          changes between versions of the software and/or link to older
+          versions of the documentation.
+          The intent of this criterion is that an effort is made to keep
+          the documentation consistent, not that the documentation
+          must be perfect.
+      documentation_achievements:
+        description: >
+          The project repository front page and/or website MUST
+          identify and hyperlink to any achievements,
+          including this best practices badge, within 48 hours
+          of public recognition that the achievement has been attained.
+        details: >
+          An achievement is any set of external criteria that the project
+          has specifically worked to meet, including some badges.
+          This information does not need to be on the project website front
+          page.  A project using GitHub can put achievements on the repository
+          front page by adding them to the README file.
+      accessibility_best_practices:
+        description: >
+          The project (both project sites and project results) SHOULD
+          follow accessibility best practices so that
+          persons with disabilities can still participate in the project and
+          use the project results where it is reasonable to do so.
+        details: >
+          For web applications, see the
+          <a href="https://www.w3.org/TR/WCAG20/">Web Content Accessibility
+          Guidelines (WCAG 2.0)</a> and its supporting document
+          <a href="https://www.w3.org/TR/UNDERSTANDING-WCAG20/Overview.html">Understanding WCAG 2.0</a>;
+          see also
+          <a href="https://www.w3.org/standards/webdesign/accessibility">W3C accessibility information</a>.
+          For GUI applications, consider using the environment-specific
+          accessibility guidelines (such as
+          <a href="https://developer.gnome.org/accessibility-devel-guide/stable/">Gnome</a>,
+          <a href="https://accessibility.kde.org/">KDE</a>,
+          <a href="http://docs.xfce.org/xfce/xfce4-settings/accessibility">XFCE</a>,
+          <a href="https://developer.android.com/guide/topics/ui/accessibility/">Android</a>,
+          <a href="https://developer.apple.com/accessibility/ios/">iOS</a>,
+          <a href="http://www.apple.com/accessibility/osx/voiceover/">Mac</a>,
+          and
+          <a href="https://msdn.microsoft.com/en-us/windows/uwp/accessibility/accessibility-overview)">Windows</a>).
+          Some TUI applications (e.g. `ncurses` programs) can do
+          certain things to make themselves more accessible (such as `alpine`'s
+          `force-arrow-cursor` setting).
+          Most command-line applications are fairly accessible as-is.
+          This criterion is often N/A, e.g., for program libraries.
+          Here are some examples of actions to take or issues to consider:
+          <ul>
+          <li>Provide text alternatives for any non-text content so
+            that it can be changed into other forms people need, such as
+            large print, braille, speech, symbols or simpler language (
+            <a href="https://www.w3.org/TR/UNDERSTANDING-WCAG20/text-equiv.html">WCAG 2.0 guideline 1.1</a>)
+          <li>Color is not used as the only visual means of conveying
+            information, indicating an action, prompting a response, or
+            distinguishing a visual element. (
+            <a href="https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast-without-color.html">WCAG 2.0 guideline 1.4.1</a>)
+          <li>The visual presentation of text and images of text has a contrast
+            ratio of at least 4.5:1, except for large text, incidental text,
+            and logotypes (
+            <a href="https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast-contrast.html">WCAG 2.0 guideline 1.4.3</a>)
+          <li>Make all functionality available from a keyboard (WCAG guideline 2.1)
+          <li>A GUI or web-based project SHOULD test with at least one
+            screen-reader on the target platform(s) (e.g. NVDA, Jaws, or
+            WindowEyes on Windows; VoiceOver on Mac & iOS; Orca on Linux/BSD;
+            TalkBack on Android). TUI programs MAY work to reduce overdraw
+            to prevent redundant reading by screen-readers.
+          </ul>
+      internationalization:
+        description: >
+          The software produced by the project SHOULD be internationalized to
+          enable easy localization for the target audience's culture,
+          region, or language.
+          If internationalization (i18n) does not apply (e.g., the software
+          doesn't generate text intended for end-users and
+          doesn't sort human-readable text), select "not applicable" (N/A).
+        details: >
+          Localization "refers to the adaptation of a product, application or
+          document content to meet the language, cultural and other
+          requirements of a specific target market (a locale)."
+          Internationalization is the "design and development of a product,
+          application or document content that enables easy localization for
+          target audiences that vary in culture, region, or language."
+          (See
+          <a href="https://www.w3.org/International/questions/qa-i18n">W3C's "Localization vs. Internationalization"</a>.)
+          Software meets this criterion simply by being internationalized.
+          No localization for another specific language is required, since
+          once software has been internationalized it's possible for others
+          to work on localization.
+      sites_password_security:
+        description: >
+          If the project sites (website, repository, and download URLs)
+          store passwords for authentication of external users, the passwords
+          MUST be stored as iterated hashes with a per-user salt by
+          using a key stretching (iterated) algorithm (e.g., PBKDF2, Bcrypt
+          or Scrypt).
+          If the project sites do not store passwords for this purpose,
+          select "not applicable" (N/A).
+        details: >
+          Note that the use of
+          <a href="https://help.github.com/articles/github-security/">GitHub</a>
+          meets this criterion.
+          This criterion only applies to passwords used for authentication of
+          external users into the project sites.
+          If the project sites must log in to other sites, they may need to
+          store passwords for that purpose differently (since using an
+          algorithm like Bcrypt would make those passwords useless).
+          This applies criterion crypto_password_storage
+          to the project sites, similar to sites_https.
+      maintenance_or_update:
+        description: >
+          The project MUST maintain the most often used older versions of
+          the product <i>or</i> provide an upgrade path to newer versions.
+          If the upgrade path is difficult, the project MUST document how
+          to perform the upgrade (e.g., the interfaces that have changed and
+          detailed suggested steps to help upgrade).
+      report_tracker:
+        description: >
+          The project MUST use an issue tracker for tracking individual issues.
+      vulnerability_report_credit:
+        description: >
+          The project MUST give credit to the reporter(s) of all
+          vulnerability reports resolved in the last 12 months, except for
+          the reporter(s) who request anonymity. If there have been no
+          vulnerabilities resolved in the last 12 months,
+          select "not applicable" (N/A).
+      vulnerability_response_process:
+        description: >
+          The project MUST have a documented process for
+          responding to vulnerability reports.
+        details: >
+          This is strongly related to vulnerability_report_process,
+          which requires that there be a documented way to report vulnerabilities.
+          It also related to vulnerability_report_response, which requires
+          response to vulnerability reports within a certain time frame.
+      coding_standards:
+        description: >
+          The project MUST identify the specific coding style guides
+          for the primary languages it uses, and require that contributions
+          generally comply with it.
+        details: >
+          In most cases this is done by referring to some existing style guide(s),
+          possibly listing differences.
+          These style guides can include ways to improve readability and
+          ways to reduce the likelihood of defects (including vulnerabilities).
+          Many programming languages have one or more widely-used style guides.
+          Examples of style guides include
+          <a href="https://github.com/google/styleguide">Google's style guides</a>
+          and
+          <a href="https://www.securecoding.cert.org/">SEI CERT Coding Standards</a>.
+      coding_standards_enforced:
+        description: >
+          The project MUST automatically enforce its selected coding style(s)
+          if there is at least one FLOSS tool that can do so in the selected
+          language(s).
+        details: >
+          This MAY be implemented using static analysis tool(s) and/or by
+          forcing the code through code reformatters.
+          In many cases the tool configuration is included in the project's
+          repository (since different projects may choose different
+          configurations).
+          Projects MAY allow style exceptions (and typically will);
+          where exceptions occur, they MUST be rare and documented
+          in the code at their locations, so that these exceptions can be
+          reviewed and so that tools can automatically handle them in the
+          future. Examples of such tools include
+          ESLint (JavaScript) and Rubocop (Ruby).
+      build_standard_variables:
+        description: >
+          Build systems for native binaries MUST honor the relevant compiler
+          and linker (environment) variables passed in to them (e.g., CC,
+          CFLAGS, CXX, CXXFLAGS, and LDFLAGS) and pass them to compiler
+          and linker invocations. A build system MAY extend them with
+          additional flags; it MUST NOT simply replace provided
+          values with its own. If no native binaries are being generated,
+          select "not applicable" (N/A).
+        details: >
+          It should be easy to enable special build features like
+          Address Sanitizer (ASAN), or to comply with distribution hardening
+          best practices (e.g., by easily turning on compiler flags to do so).
+      build_preserve_debug:
+        description: >
+          The build and installation system SHOULD preserve
+          debugging information if they are requested in the relevant
+          flags (e.g., "install -s" is not used).
+          If there is no build or installation system (e.g.,
+          typical JavaScript libraries), select "not applicable" (N/A).
+        details: >
+          E.G., setting CFLAGS (C) or CXXFLAGS (C++) should create the
+          relevant debugging information if those languages are used, and they
+          should not be stripped during installation. Debugging information
+          is needed for support and analysis, and also useful for measuring
+          the presence of hardening features in the compiled binaries.
+      external_dependencies:
+        description: >
+          The project MUST list external dependencies in a computer-processable
+          way.
+        details: >
+          Typically this is done using the conventions of package manager
+          and/or build system.
+          Note that this helps implement
+          <a href="#installation_development_quick">installation_development_quick</a>.
+      updateable_reused_components:
+        description: |
+          The project MUST make it easy to either:
+          <ol>
+          <li> identify and update reused externally-maintained components; <b>or</b></li>
+          <li> use the standard components provided by the system or programming language.</li>
+          </ol>
+          Then, if a vulnerability is found in a reused component, it will be
+          easy to update that component.
+        details: >
+          A typical way to meet this criterion is to use
+          system and programming language package management systems.
+          Many FLOSS programs are distributed with "convenience libraries"
+          that are local copies of standard libraries (possibly forked).
+          By itself, that's fine.
+          However, if the program *must* use these local (forked) copies,
+          then updating the "standard" libraries as a security update will
+          leave these additional copies still vulnerable.
+          This is especially an issue for cloud-based systems;
+          if the cloud provider updates their "standard" libaries but the program
+          won't use them, then the updates don't actually help.
+          See, e.g.,
+          <a href="http://spot.livejournal.com/312320.html">"Chromium: Why it isn't in Fedora yet as a proper package" by Tom Callaway</a>.
+      interfaces_current:
+        description: >
+          The project SHOULD avoid using deprecated or obsolete functions
+          and APIs where FLOSS alternatives are available in the set of
+          technology it uses (its "technology stack") and to a supermajority
+          of the users the project supports (so that users have ready access
+          to the alternative).
+      automated_integration_testing:
+        description: >
+          An automated test suite MUST be applied on each check-in to a shared
+          repository for at least one branch.  This test suite MUST
+          produce a report on test success or failure.
+        details: >
+          This requirement can be viewed as a subset of
+          test_continuous_integration, but focused on just testing,
+          without requiring continuous integration.
+      regression_tests_added50:
+        description: >
+          The project MUST add regression tests to an automated test suite
+          for at least 50% of the bugs fixed within the last six months.
+      test_statement_coverage80:
+        description: >
+          The project MUST have FLOSS automated test suite(s) that provide
+          at least 80% statement coverage if there is at least
+          one FLOSS tool that can measure this criterion in the
+          selected language.
+        details: >
+          Many FLOSS tools are available to measure test
+          coverage, including gcov/lcov, Blanket.js, Istanbul, and JCov.
+          Note that meeting this criterion is not a guarantee that the
+          test suite is thorough, instead, failing to meet this criterion is
+          a strong indicator of a poor test suite.
+      test_policy_mandated:
+        descritpion: >
+          The project MUST have a formal written policy that as major
+          new functionality is added, tests for tests for the new functionality
+          MUST be added to an automated test suite.
+      tests_documented_added:
+        description: >
+          The project MUST include, in its documented instructions for
+          change proposals, the policy that tests are to be added for major
+          new functionality.
+        details: >
+          However, even an informal rule is acceptable as long as the tests
+          are being added in practice.
+      warnings_strict:
+        description: >
+           Projects MUST be maximally strict with warnings
+           in the software produced by the project, where practical.
+        details: >
+           Some warnings cannot be effectively enabled on some projects.
+           What is needed is evidence that the project is striving
+           to enable warning flags where it can, so that errors are
+           detected early.
+      crypto_weaknesses:
+        description: >
+          The default security mechanisms within the software produced
+          by the project MUST NOT depend on
+          cryptographic algorithms or modes with known serious weaknesses
+          (e.g., the SHA-1 cryptographic hash algorithm or the CBC mode in SSH).
+        details: >
+          Concerns about CBC mode in SSH are discussed in
+          <a href="https://www.kb.cert.org/vuls/id/958563">CERT:
+          SSH CBC vulnerability</a>.
+      static_analysis_common_vulnerabilities:
+        description: >
+          The project MUST use at least one static analysis tool
+          with rules or approaches to look for common vulnerabilities
+          in the analyzed language or environment, if
+          there is at least one FLOSS tool that can implement this criterion
+          in the selected language.
+      dynamic_analysis_unsafe:
+        description: >
+          <i>If</i> the software produced by the project includes
+          software written using a memory-unsafe language (e.g., C or C++),
+          <i>then</i> the project MUST use
+          at least one dynamic tool (e.g., a fuzzer or web
+          application scanner) be routinely used in combination with
+          a mechanism to detect memory safety problems such as buffer
+          overwrites.
+          If the project does not produce software written
+          in a memory-unsafe language, select "not applicable" (N/A).
+        details: >
+          Examples of mechanisms to detect memory safety problems include
+          <a href="https://github.com/google/sanitizers/wiki/AddressSanitizer">Address Sanitizer (ASAN)</a>
+          (available in GCC and LLVM),
+          <a href="http://clang.llvm.org/docs/MemorySanitizer.html">Memory Sanitizer</a>,
+          and <a href="http://valgrind.org/">valgrind</a>.
+          Other potentially-used tools include
+          <a href="http://clang.llvm.org/docs/ThreadSanitizer.html">thread sanitizer</a>
+          and
+          <a href="http://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html">undefined behavior sanitizer</a>.
+          Widespread assertions would also work.
+
+
 

@@ -351,6 +351,39 @@ as described below.
     This is related to know_secure_design, as well
     as implement_secure_design and proposed documentation_security.
 
+*   <a name="documentation_security"></a>
+    The project MUST document what the user can and cannot expect
+    in terms of security from the software produced by the project.
+    The project MUST identify the security requirements
+    that the software is intended to meet and an
+    assurance case that justifies why these requirements are met.
+    The assurance case MUST include: a description of the threat model,
+    clear identification of trust boundaries, and
+    evidence that common security weaknesses have been countered.
+    <sup>[<a href="#documentation_security">documentation_security</a>]</sup>
+
+    *Details*:
+    An assurance case is
+    "a documented body of evidence that provides a convincing and valid
+    argument that a specified set of critical claims regarding a system’s
+    properties are adequately justified for a given application in a given
+    environment"
+    (<a href="http://nvlpubs.nist.gov/nistpubs/ir/2009/ir7608.pdf">"Software
+    Assurance Using Structured Assurance Case Models", Thomas Rhodes et al,
+    NIST Interagency Report 7608</a>).
+    Trust boundaries are
+    boundaries where data or execution changes its level of trust, e.g.,
+    a server's boundaries in a typical web application.
+
+    *Rationale*: Writing the specification helps the developers think about the
+    interface (including the API) the developers are providing, as well
+    letting any user or researcher know what to expect.
+    Many sources discuss the rationale for an "assurance case".
+    This was inspired by
+    <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/502">Security specification and facilitation of bug bounties</a>
+    and by the
+    <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/473">NYC 2016 brainstorming session</a>.
+
 *   <a name="documentation_quick_start"></a>
     The project MUST provide a "quick start" guide for new users
     to help them quickly do something with the software.
@@ -862,6 +895,8 @@ as described below.
     is needed for support and analysis, and also useful for measuring
     the presence of hardening features in the compiled binaries.
 
+WAKKA
+
 *   <a name="build_non_recursive"></a>
     The project's build system MUST NOT recursively build subdirectories
     if there are cross-dependencies in the subdirectories.
@@ -1014,41 +1049,6 @@ as described below.
     as -fstack-protector), or compiler flags to eliminate undefined
     behavior. For our purposes least privilege is not considered a hardening
     mechanism (least privilege is important, but separate).
-
-#### Assurance case
-
-*   <a name="documentation_security"></a>
-    The project MUST document what the user can and cannot expect
-    in terms of security from the software produced by the project.
-    The project MUST identify the security requirements
-    that the software is intended to meet and an
-    assurance case that justifies why these requirements are met.
-    The assurance case MUST include: a description of the threat model,
-    clear identification of trust boundaries, and
-    evidence that common security weaknesses have been countered.
-    <sup>[<a href="#documentation_security">documentation_security</a>]</sup>
-
-    *Details*:
-    An assurance case is
-    "a documented body of evidence that provides a convincing and valid
-    argument that a specified set of critical claims regarding a system’s
-    properties are adequately justified for a given application in a given
-    environment"
-    (<a href="http://nvlpubs.nist.gov/nistpubs/ir/2009/ir7608.pdf">"Software
-    Assurance Using Structured Assurance Case Models", Thomas Rhodes et al,
-    NIST Interagency Report 7608</a>).
-    Trust boundaries are
-    boundaries where data or execution changes its level of trust, e.g.,
-    a server's boundaries in a typical web application.
-
-    *Rationale*: Writing the specification helps the developers think about the
-    interface (including the API) the developers are providing, as well
-    letting any user or researcher know what to expect.
-    Many sources discuss the rationale for an "assurance case".
-    This was inspired by
-    <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/502">Security specification and facilitation of bug bounties</a>
-    and by the
-    <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/473">NYC 2016 brainstorming session</a>.
 
 #### Cryptography
 

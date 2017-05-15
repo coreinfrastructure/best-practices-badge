@@ -77,6 +77,8 @@ en:
       password: Password
       password_confirmation: Confirm Password
       create_account: Create my account
+    update:
+      profile_updated: Profile updated
     show:
       edit_user: Edit user
       other_projects_edit: Other Projects you can edit
@@ -84,7 +86,6 @@ en:
         See this user's external page.
       as_admin: "as an admin, you may also:"
       send_email_to: "send email to:"
-      profile_updated: Profile updated
       delete_link_name: delete
       confirm_delete: Are you sure you want to delete this user?
     destroy:

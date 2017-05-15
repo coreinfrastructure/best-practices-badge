@@ -1,6 +1,6 @@
 <!--div class="center jumbotron"-->
  <br>
- <h1 class="center">Update Information</h1>
+ <h1 class="center">Update User Information</h1>
 
  <div class="row">
    <div class="col-md-6 col-md-offset-3">
@@ -11,6 +11,10 @@
 
        <%= f.label :email %>
        <%= f.email_field :email, class:"form-control" %>
+
+       <%= f.label :preferred_locale %>
+       <%= locales = I18n.available_locales.map {|loc| [loc.to_s, loc.to_s]}
+           f.select :preferred_locale, locales, {}, {class: "form-control"} %>
 
        <% if @user.provider == 'local' %>
          <%= f.label :password %>

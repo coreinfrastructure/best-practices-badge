@@ -21,7 +21,7 @@ class User < ActiveRecord::Base
 
   # We don't allow nil. There's no need to, because the record has a
   # default value (and the default is used if we don't supply a value).
-  VALID_LOCALES_STRINGS = I18n.available_locales.map { |name| name.to_s }
+  VALID_LOCALES_STRINGS = I18n.available_locales.map(&:to_s)
   validates :preferred_locale, inclusion: { in: VALID_LOCALES_STRINGS }
 
   # Returns the hash digest of the given string.

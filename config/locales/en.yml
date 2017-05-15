@@ -114,6 +114,10 @@ en:
         projects created since day before
       projects_updated_since_yesterday: >
         projects updated since day before
+      projects_created_average_7_days: >
+        projects created average over 7 days
+      projects_updated_average_7_days: >
+        projects updated average over 7 days
       reminders_sent_since_yesterday: >
         Reminders sent since yesterday
       reactivated_projects: >

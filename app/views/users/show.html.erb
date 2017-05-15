@@ -8,6 +8,10 @@
        <h3>
          <%= avatar_for @user %>
          <%= @user.name || @user.nickname %>
+         <% if current_user && (@user == current_user || current_user.admin?) %>
+           <%= link_to t('.edit_user'),
+                       edit_user_path(@user), class: 'btn btn-primary' %>
+         <% end %>
        </h3>
      </section>
    </aside>

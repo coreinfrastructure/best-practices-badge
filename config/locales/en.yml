@@ -78,6 +78,7 @@ en:
       password_confirmation: Confirm Password
       create_account: Create my account
     show:
+      edit_user: Edit user
       other_projects_edit: Other Projects you can edit
       see_external: >
         See this user's external page.

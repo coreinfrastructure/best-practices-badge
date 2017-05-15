@@ -12,11 +12,13 @@
        <%= f.label :email %>
        <%= f.email_field :email, class:"form-control" %>
 
-       <%= f.label :password %>
-       <%= f.password_field :password, autocomplete: "off", class:"form-control" %>
+       <% if @user.provider == 'local' %>
+         <%= f.label :password %>
+         <%= f.password_field :password, autocomplete: "off", class:"form-control" %>
 
-       <%= f.label :password_confirmation, "Confirm Password" %>
-       <%= f.password_field :password_confirmation, autocomplete: "off", class:"form-control" %>
+         <%= f.label :password_confirmation, "Confirm Password" %>
+         <%= f.password_field :password_confirmation, autocomplete: "off", class:"form-control" %>
+       <% end %>
 
        <%= f.submit "Save Changes", class: "btn btn-primary" %>
      <% end %>

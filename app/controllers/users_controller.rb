@@ -40,12 +40,19 @@ class UsersController < ApplicationController
 
   def edit
     @user = User.find(params[:id])
-    redirect_to @user unless @user.provider == 'local'
+    # Force redirect if current_user cannot edit.  Otherwise, the process
+    # of displaying the edit fields (with their defaults) could cause an
+    # unauthorized exposure of an email address.
+    redirect_to @user unless current_user_can_edit(@user)
   end
 
   def update
     @user = User.find(params[:id])
     if @user.update_attributes(user_params)
+      # Changes in: @user.previous_changes which returns hash in this form:
+      # {"email"=>["karoldmunoz@BAD.gmail.com", "karoldmunoz@gmail.com"], ...}
+      # Don't share password_digest or updated_at.  Instead:
+      # name, email, locale; maybe the fact that password_digest changed.
       flash[:success] = t('.profile_updated')
       redirect_to @user
     else
@@ -111,10 +118,16 @@ class UsersController < ApplicationController
     redirect_to login_url
   end
 
+  # Return true if current_user can edit account 'user'
+  def current_user_can_edit(user)
+    return false if !current_user
+    user == current_user || current_user.admin?
+  end
+
   # Confirms the correct user.
   def correct_user
     @user = User.find(params[:id])
-    redirect_to(root_url) unless @user == current_user || current_user.admin?
+    redirect_to(root_url) unless current_user_can_edit(@user)
   end
 
   def regenerate_activation_digest

@@ -10,12 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161230160523) do
+ActiveRecord::Schema.define(version: 20170515182723) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-  enable_extension "pg_stat_statements"
   enable_extension "citext"
+  enable_extension "pg_stat_statements"
 
   create_table "pg_search_documents", force: :cascade do |t|
     t.text     "content"
@@ -248,6 +248,7 @@ ActiveRecord::Schema.define(version: 20161230160523) do
     t.datetime "activated_at"
     t.string   "reset_digest"
     t.datetime "reset_sent_at"
+    t.string   "preferred_locale",  default: "en"
     t.index ["email"], name: "index_users_on_email", using: :btree
     t.index ["uid"], name: "index_users_on_uid", using: :btree
   end

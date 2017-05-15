@@ -49,10 +49,10 @@ class UsersController < ApplicationController
   def update
     @user = User.find(params[:id])
     if @user.update_attributes(user_params)
-      # Changes in: @user.previous_changes which returns hash in this form:
-      # {"email"=>["karoldmunoz@BAD.gmail.com", "karoldmunoz@gmail.com"], ...}
-      # Don't share password_digest or updated_at.  Instead:
-      # name, email, locale; maybe the fact that password_digest changed.
+      # Email user on every change.  That way, if the user did *not* initiate
+      # the change (e.g., because it's by an admin or by someone who broke
+      # into their account), the user will know about it.
+      UserMailer.user_update(@user, @user.previous_changes).deliver_now
       flash[:success] = t('.profile_updated')
       redirect_to @user
     else
@@ -120,7 +120,7 @@ class UsersController < ApplicationController
 
   # Return true if current_user can edit account 'user'
   def current_user_can_edit(user)
-    return false if !current_user
+    return false unless current_user
     user == current_user || current_user.admin?
   end
 

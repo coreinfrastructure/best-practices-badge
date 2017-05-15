@@ -873,6 +873,63 @@
           category: SHOULD
           na_allowed: true
           na_justification_required: true
+          #autofill: TODO
+      - build_non_recursive:
+          category: MUST
+          na_allowed: true
+          na_justification_required: true
+          rationale: >
+            For more information, see
+            <a href="http://aegis.sourceforge.net/auug97.pdf">"Recursive Make Considered Harmful" by Peter Miller</a>
+            (note that this incorrect approach can be used in any build system,
+            not just <i>make</i>).
+            Note that
+            <a href="http://research.microsoft.com/en-us/um/people/simonpj/papers/ghc-shake/ghc-shake.pdf">"Non-recursive Make Considered Harmful"</a>
+            agrees that recursive builds are bad; its argument is that
+            for large projects you should use a tool other than make.
+            In many cases it is better to automatically determine the
+            dependencies, but this is not always accurate or practical,
+            so we did not require that dependencies be automatically generated.
+          #autofill: TODO
+      - build_repeatable:
+          category: MUST
+          na_allowed: true
+          na_justification_required: true
+          rationale: >
+            This is a step towards having a
+            <a href="https://reproducible-builds.org/">reproducible build</a>.
+            This criterion is much easier to meet, because it does not require
+            that external parties be able to reproduce the results - merely
+            that the project can.
+            Supporting full reproducible builds requires that projects provide
+            external parties enough information about their
+            build environment(s), which can be harder to do - so we have
+            split this requirement up.
+          #autofill: TODO
+    - Installation system: !!omap
+      - installation_common:
+          category: MUST
+          autofill: >
+            Look for a standard install format, or a build instruction for one.
+      - installation_standard_variables
+          category: MUST
+          na_allowed: true
+          rationale: >
+            This supports capturing the artifacts (e.g., for analysis)
+            without interfering with the build or installation system due to
+            system-wide changes. See
+            <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/455">DESTDIR honored at install time</a>
+            This doesn't apply when there's no "installation" process, or
+            when POSIX filesystems aren't supported during installation (e.g.,
+            Windows-only programs).  See
+            <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/453">Build system should honor CC, CFLAGS, CXX, CXXFLAGS</a>
+          #autofill: TODO
+      - installation_development_quick:
+          category: MUST
+          rationale: >
+            Recommended in the
+            <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/473">NYC 2016 brainstorming session</a>.
+          #autofill: TODO
     - Externally-maintained components: !!omap
       - external_dependencies:
           category: MUST
@@ -880,6 +937,12 @@
           rationale: >
             Inspired by the
             <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/473">NYC 2016 brainstorming session</a>.
+          #autofill: TODO
+      - dependency_monitoring:
+          category: MUST
+          rationale: >
+            This must be monitored or periodically checked, because
+            new vulnerabilities are continuously being discovered.
           #autofill: TODO
       - updateable_reused_components:
           category: MUST
@@ -892,6 +955,7 @@
       - interfaces_current:
           category: SHOULD
           #autofill: TODO
+      depen
     - Automated test suite: !!omap
       - automated_integration_testing:
           category: MUST
@@ -1020,6 +1084,21 @@
           autofill: >
             If we find "-Wall -Wextra" in the build that's pretty strict.
   - Security: !!omap
+    - Secure development knowledge: !!omap
+      - implement_secure_design:
+          category: MUST
+          rationale: >
+            This was inspired by the
+            <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/473">NYC 2016 brainstorming session</a>.
+          #autofill: TODO
+      - input validation:
+          category: MUST
+          #autofill: TODO
+      - hardening:
+          category: SHOULD
+          autofill: >
+            Look for gems like secure_headers, and
+            relevant compiler flags in build files.
     - Use basic good cryptographic practices: !!omap
       - crypto_weaknesses:
           category: MUST
@@ -1043,8 +1122,68 @@
             This is a SHOULD, not a MUST; sometimes these weaker
             mechanisms need to be used for backwards compatibility.
           # autofill: TODO
+      - crypto_algorithm_agility:
+          category: SHOULD
+          na_allowed: true
+          rationale: >
+            The advantage of crypto agility is that if one crypto algorithm is
+            broken, other algorithms can be used instead.
+            Many protocols, including TLS and IPSEC, are specifically designed
+            to support crypto agility.
+            There is disagreement by some experts who argue that this
+            negotiation can itself be a point of attack, and that people
+            should instead simply choose and stay with with one good algorithm.
+            The problem with this position is that no one can be certain about
+            what that "one good algorithm" is; a new attack could be found
+            at any time. See the discussion at
+            <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/215">Remove requirement for supporting alternative crypto algorithms (crypto_alternatives)?</a>
+          #autofill: TODO
+      - crypto_credential_agility:
+          category: MUST
+          na_allowd: true
+          #autofill: TODO
+      - crypto_used_network:
+          category: SHOULD
+          na_allowed: true
+          # autofill: TODO
+      - crypto_tls12:
+          category: SHOULD
+          na_allowed: true
+          # autofill: TODO
+      - crypto_certificate_verification:
+          category: MUST
+          na_allowed: true
+          # autofill: TODO
+      - crypto_verification_private:
+          category: MUST
+          na_allowed: true
+          # autofill: TODO
+    - Secure release: !!omap
+      - signed_releases:
+          category: MUST
+          rationale: >
+            This provides protection from compromised distribution systems.
+            The public key must be accessible so that recipients can check the
+            signature.  The private key must not be on sites(s) distributing the
+            software to the public; that way, even if those sites are
+            compromised, the signature cannot be altered.
+            This is sometimes called "code signing".
+            A common way to implement this is by using GPG to sign the code,
+            for example, the GPG keys of every person who signs releases
+            could be in the project README.
+            Node.js implements this via GPG keys in the README, but note that
+            in the criterion we are intentionally more general:
+            <a href="https://github.com/nodejs/node#release-team">Node.js Release Team</a>
+          # autofill: TODO
+      - version_tags_signed:
+          category: SUGGESTED
+          rationale: >
+            This was suggested by Kevin W. Wall (@kwwall)in
+            <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/709">issue #709</a>.
+          # autofill: TODO
   - Analysis: !!omap
     - Static code analysis: !!omap
+
       - static_analysis_common_vulnerabilities:
           category: MUST
           na_allowed: true

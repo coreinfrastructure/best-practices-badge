@@ -1581,6 +1581,68 @@ en:
           should not be stripped during installation. Debugging information
           is needed for support and analysis, and also useful for measuring
           the presence of hardening features in the compiled binaries.
+      build_non_recursive:
+        description: >
+          The build system for the software produced by the project MUST NOT
+          recursively build subdirectories if there are cross-dependencies
+          in the subdirectories. If there is no build or installation system
+          (e.g., typical JavaScript libraries), select "not applicable" (N/A).
+        details: >
+          The project build system's internal dependency information
+          needs to be accurate, otherwise, changes to the project may
+          not build correctly. Incorrect builds can lead to defects (including
+          vulnerabilities).
+          A common mistake in large build systems is to use a "recursive build"
+          or "recursive make", that is, a hierarchy of subdirectories
+          containing source files, where each subdirectory is independently
+          built. Unless each subdirectory is fully independent,
+          this is a mistake, because the dependency information is incorrect.
+      build_repeatable:
+        description: >
+          The project MUST be able to repeat the process of
+          generating information from source files and get exactly
+          the same bit-for-bit result.
+          If no building occurs (e.g., scripting languages where the source
+          code is used directly instead of being compiled),
+          select "not applicable" (N/A).
+        details: >
+          GCC and clang users may find the -frandom-seed option useful;
+          in some cases, this can resolved by forcing some sort order.
+          More suggestions can be found at the
+          <a href="https://reproducible-builds.org/">reproducible build</a>
+          site.
+      installation_common:
+        description: >
+          The project MUST
+          provide a way to easily install and uninstall the software
+          produced by the project using a commonly-used convention.
+        details: >
+          Examples include using a package manager (at
+          the system or language level), "make install/uninstall" (supporting
+          DESTDIR), a container in a standard format,
+          or a virtual machine image in a standard format.
+          The installation and uninstallation process (e.g., its packaging)
+          MAY be implemented by a third party as long as it is FLOSS.
+      installation_standard_variables:
+        description: >
+          The installation system for end-users MUST honor standard conventions for
+          selecting the location where built artifacts are written to
+          at installation time.  For example, if it installs files on a
+          POSIX system it MUST honor the DESTDIR environment variable.
+          If there is no installation system or no standard convention,
+          select "not applicable" (N/A).
+      installation_development_quick:
+        description: >
+          The project MUST provide a way for potential developers to
+          quickly install all the project results and support
+          environment necessary to make changes, including the tests
+          and test environment.
+          This MUST be performed with a commonly-used convention.
+        details: >
+          This MAY be implemented using a generated container and/or
+          installation script(s).
+          External dependencies would typically be installed by invoking
+          system and/or language package manager(s), per external_dependencies.
       external_dependencies:
         description: >
           The project MUST list external dependencies in a computer-processable
@@ -1590,6 +1652,24 @@ en:
           and/or build system.
           Note that this helps implement
           <a href="#installation_development_quick">installation_development_quick</a>.
+      dependency_monitoring:
+        description: >
+          Projects MUST monitor or periodically check their external
+          dependencies (including convenience copies) to detect known
+          vulnerabilities, and fix exploitable vulnerabilities or verify
+          them as unexploitable.
+        details: >
+          This can be done using an origin analyzer / dependency checking tool
+          such as
+          <a href="https://www.owasp.org/index.php/OWASP_Dependency_Check">OWASP's Dependency-Check</a>,
+          <a href="https://www.sonatype.com/nexus-auditor">Sonatype's Nexus Auditor</a>,
+          <a href="https://www.blackducksoftware.com/products/protex">Black Duck's Protex</a>,
+          <a href="http://www.protecode.com/">Synopsys' Protecode</a>, and
+          <a href="https://github.com/rubysec/bundler-audit">Bundler-audit (for Ruby)</a>.
+          Some package managers include mechanisms to do this.
+          It is acceptable if the components' vulnerability cannot be
+          exploited, but this analysis is difficult and it is sometimes
+          easier to simply update or fix the part.
       updateable_reused_components:
         description: |
           The project MUST make it easy to either:
@@ -1667,6 +1747,53 @@ en:
            What is needed is evidence that the project is striving
            to enable warning flags where it can, so that errors are
            detected early.
+      implement_secure_design:
+        description: >
+          The project MUST implement secure design principles
+          (from "know_secure_design"), where applicable.  If the project is
+          not producing software, select "not applicable" (N/A).
+        details: >
+          For example, the project results should have fail-safe defaults
+          (access decisions should deny by default,
+          and projects' installation should be secure by default).
+          They should also have
+          complete mediation (every access that might be limited must be
+          checked for authority and be non-bypassable).
+          Note that in some cases principles will conflict, in which case
+          a choice must be made
+          (e.g., many mechanisms can make things more complex, contravening
+          "economy of mechanism" / keep it simple).
+      input_validation:
+        description: >
+          The project results MUST check
+          all inputs from potentially untrusted sources to ensure
+          they are valid (a *whitelist*), and reject invalid inputs,
+          if there are any restrictions on the data at all.
+        details: >
+          Note that comparing input against a list of "bad formats"
+          (aka a *blacklist*) is normally not enough, because attackers can
+          often  work around a blacklist.
+          In particular, numbers are converted into internal formats
+          and then checked if they are between
+          their minimum and maximum (inclusive), and text strings are checked
+          to ensure that they are valid text patterns
+          (e.g., valid UTF-8, length, syntax, etc.).
+          Some data may need to be "anything at all" (e.g., a file uploader),
+          but these would typically be rare.
+      hardening: # In 'Other security issues'
+        description: >
+          Hardening mechanisms
+          SHOULD be used in the software produced by the project
+          so that software defects are less likely to result in security
+          vulnerabilities.
+        details: >
+          Hardening mechanisms may include
+          HTTP headers like Content Security Policy (CSP),
+          compiler flags to mitigate attacks
+          (such as -fstack-protector), or compiler flags to
+          eliminate undefined behavior.
+          For our purposes least privilege is not considered a hardening
+          mechanism (least privilege is important, but separate).
       crypto_weaknesses:
         description: >
           The default security mechanisms within the software produced
@@ -1677,6 +1804,87 @@ en:
           Concerns about CBC mode in SSH are discussed in
           <a href="https://www.kb.cert.org/vuls/id/958563">CERT:
           SSH CBC vulnerability</a>.
+      crypto_algorithm_agility:
+        description: >
+          The project SHOULD support multiple
+          cryptographic algorithms, so users can quickly switch if one is
+          broken. Common symmetric key algorithms include AES, Twofish,
+          and Serpent. Common cryptographic hash algorithm alternatives
+          include SHA-2 (including SHA-224, SHA-256, SHA-384 AND SHA-512)
+          and SHA-3.
+      crypto_credential_agility:
+        description: >
+          The project MUST support storing authentication credentials (such as
+          passwords and dynamic tokens) and private cryptographic keys in files
+          that are separate from other information (such as configuration
+          files, databases, and logs), and permit users to update and
+          replacement them without code recompilation.
+          If the project never processes authentication credentials and
+          private cryptographic keys, select "not applicable" (N/A).
+      crypto_used_network:
+        description: >
+          The software produced by the project SHOULD
+          support secure protocols for all of its network
+          communications, such as SSHv2 or later, TLS1.2 or later (HTTPS),
+          IPsec, SFTP, and SNMPv3.
+          Insecure protocols such as FTP, HTTP, telnet,
+          SSLv3 or earlier, and SSHv1 SHOULD be disabled by default,
+          and only enabled if the user specifically configures it.
+          If the software produced by the project does not support
+          network comunications, select "not applicable" (N/A).
+      crypto_tls12:
+        description: >
+          The software produced by the project SHOULD,
+          if it supports or uses TLS, support at least TLS version 1.2.
+          Note that the predecessor of TLS was called SSL.
+          If the software does not use TLS,
+          select "not applicable" (N/A).
+      crypto_certificate_verification:
+        description: >
+          The software produced by the project MUST,
+          if it supports TLS, perform TLS certificate verification by default
+          when using TLS, including on subresources.
+          If the software does not use TLS,
+          select "not applicable" (N/A).
+        details: >
+          Note that incorrect TLS certificate verification is a common mistake.
+          For more information, see
+          <a href="http://crypto.stanford.edu/~dabo/pubs/abstracts/ssl-client-bugs.html">"The Most Dangerous Code in the World: Validating SSL Certificates in Non-Browser Software" by Martin Georgiev et al.</a>
+          and
+          <a href="https://blogs.gnome.org/mcatanzaro/2016/03/12/do-you-trust-this-application/">"Do you trust this application?" by Michael Catanzaro</a>.
+      crypto_verification_private:
+        description: >
+          The software produced by the project MUST,
+          if it supports TLS, perform certificate verification
+          before sending HTTP headers with private information
+          (such as secure cookies).
+          If the software does not use TLS,
+          select "not applicable" (N/A).
+      signed_releases:
+        description: >
+          The project MUST cryptographically sign releases of the project
+          results intended for widespread use, and there MUST be a documented
+          process explaining to users how they can obtain the public signing
+          keys and verify the signature(s).
+          The private key for these signature(s) MUST NOT
+          be on site(s) used to directly distribute the software to the public.
+        details: >
+          The project results include both source code and any generated
+          deliverables where applicable (e.g., executables, packages,
+          and containers).
+          Generated deliverables MAY be signed separately from source code.
+          These MAY be implemented as signed git tags (using cryptographic
+          digital signatures).
+          Projects MAY provide generated results separately
+          from tools like git, but in those cases, the separate results
+          MUST be separately signed.
+      version_tags_signed:
+        description: >
+          It is SUGGESTED that in the version control system,
+          each important version tag (a tag that is part of a major
+          release, minor release, or fixes publicly noted vulnerabilities)
+          be cryptographically signed and verifiable as described in
+          <a href="#signed_releases">signed_releases</a>.
       static_analysis_common_vulnerabilities:
         description: >
           The project MUST use at least one static analysis tool

@@ -895,11 +895,10 @@ as described below.
     is needed for support and analysis, and also useful for measuring
     the presence of hardening features in the compiled binaries.
 
-WAKKA
-
 *   <a name="build_non_recursive"></a>
-    The project's build system MUST NOT recursively build subdirectories
-    if there are cross-dependencies in the subdirectories.
+    The build system for the software produced by the project MUST NOT
+    recursively build subdirectories if there are cross-dependencies
+    in the subdirectories.
     <sup>[<a href="#build_non_recursive">build_non_recursive</a>]</sup>
 
     *Details*: The project build system's internal dependency information
@@ -1029,15 +1028,10 @@ WAKKA
     if there are any restrictions on the data at all.
     <sup>[<a href="#input_validation">input_validation</a>]</sup>
 
-    *Details*: Note that comparing input against a list of "bad formats"
-    (aka a *blacklist*) is normally not enough, because attackers can often
-    work around a blacklist.
-    In particular, numbers are converted into internal formats
-    and then checked if they are between
-    their minimum and maximum (inclusive), and text strings are checked
-    to ensure that they are valid text patterns (e.g., valid UTF-8, length,
-    syntax, etc.).  Some data may need to be "anything at all"
-    (e.g., a file uploader), but these would typically be rare.
+    *Details*:The project results MUST check
+    all inputs from potentially untrusted sources to ensure
+    they are valid (a *whitelist*), and reject invalid inputs,
+    if there are any restrictions on the data at all.
 
 *   <a name="hardening"></a>(Future criterion) Hardening mechanisms
     SHOULD be used in the software produced by the project

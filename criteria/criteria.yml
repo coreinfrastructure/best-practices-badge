@@ -397,6 +397,17 @@
             Coveralls or Code prefer 90% or more statement coverage.
       - test_continuous_integration:
           category: SUGGESTED
+          rationale: >
+            See
+            <a href="http://martinfowler.com/articles/continuousIntegration.html">Martin Fowler</a>
+            There has been some shift in the meaning of the term
+            continuous integration. Historically the term continuous
+            integration focused on the first part - the frequent
+            integration - and not on its testing.  However, over time the
+            emphasis has shifted to include the notion of running automated
+            tests as soon as the code is integrated.  We realize that this
+            can be difficult for some projects to apply, which is why it
+            is only SUGGESTED at the passing level.
           autofill: >
             Look for a .travis.yml or circle.yml file.
             We also see if it has a badge from CircleCI or Travis.
@@ -911,7 +922,7 @@
           category: MUST
           autofill: >
             Look for a standard install format, or a build instruction for one.
-      - installation_standard_variables
+      - installation_standard_variables:
           category: MUST
           na_allowed: true
           rationale: >
@@ -955,7 +966,6 @@
       - interfaces_current:
           category: SHOULD
           #autofill: TODO
-      depen
     - Automated test suite: !!omap
       - automated_integration_testing:
           category: MUST

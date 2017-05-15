@@ -12,6 +12,7 @@ require 'yaml'
 
 # Load in entire criteria.yml, which keys off the major/minor groups
 FullCriteriaHash = YAML.load_file('criteria/criteria.yml')
+CriteriaText = YAML.load_file('config/locales/en.yml')['en']['criteria']['0']
 
 def print_file(filename)
   File.open(filename, 'r') do |file|
@@ -21,9 +22,14 @@ def print_file(filename)
   end
 end
 
-def show_extra(key, header_text, criterion)
-  return unless criterion.key?(key)
-  print "<dt><i>#{header_text}</i>:<dt> <dd>#{criterion[key]}</dd>"
+def show_details(key)
+  return unless CriteriaText[key].key?('details')
+  print "<dt><i>Details</i>:<dt> <dd>#{CriteriaText[key]['details']}</dd>"
+end
+
+def show_extra(criterion)
+  return unless criterion.key?('rationale')
+  print "<dt><i>Rationale</i>:<dt> <dd>#{criterion['rationale']}</dd>"
 end
 
 # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
@@ -31,7 +37,7 @@ end
 def puts_criterion(key, criterion)
   print "\n<li><a name=\"#{key}\"></a>"
   print '(Future criterion) ' if criterion.key?('future')
-  print criterion['description']
+  print CriteriaText[key]['description']
   # print " (N/A #{criterion.key?('na_allowed') ? '' : 'not '}allowed.)"
   print ' (N/A allowed.)' if criterion.key?('na_allowed')
   if criterion.key('met_justification_required')
@@ -42,10 +48,10 @@ def puts_criterion(key, criterion)
   end
   print ' (URL required for "met".)' if criterion.key?('met_url_required')
   print " <sup>[<a href=\"\##{key}\">#{key}</a>]</sup>"
-  if criterion.key?('details') || criterion.key?('rationale')
+  if CriteriaText[key].key?('details') || criterion.key?('rationale')
     print '<dl>' # Put details and rationale in a detail list
-    show_extra('details', 'Details', criterion)
-    show_extra('rationale', 'Rationale', criterion)
+    show_details(key)
+    show_extra(criterion)
     print '</dl>'
   end
   puts '</li>'
@@ -56,7 +62,7 @@ end
 # Generate results
 $stdout.reopen('doc/criteria.md', 'w') || abort('Cannot write')
 print_file('doc/criteria-header.markdown')
-FullCriteriaHash.each do |major, major_value|
+FullCriteriaHash['0'].each do |major, major_value|
   puts ''
   puts "### #{major}"
   major_value.each do |minor, criteria|

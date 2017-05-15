@@ -397,7 +397,7 @@ There is an implied criterion that we should mention here:
  (N/A allowed.) <sup>[<a href="#warnings_fixed">warnings_fixed</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>These are the warnings identified by the implementation of the <a href="#warnings">warnings</a> criterion. The project should fix warnings or mark them in the source code as false positives.  Ideally there would be no warnings, but a project MAY accept some warnings (typically less than 1 warning per 100 lines or less than 10 warnings).
 </dd></dl></li>
 
-<li><a name="warnings_strict"></a>It is SUGGESTED that projects be maximally strict with warnings, where practical.
+<li><a name="warnings_strict"></a>It is SUGGESTED that projects be maximally strict with warnings in the software produced by the project, where practical.
  (N/A allowed.) <sup>[<a href="#warnings_strict">warnings_strict</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>Some warnings cannot be effectively enabled on some projects. What is needed is evidence that the project is striving to enable warning flags where it can, so that errors are detected early.
 </dd></dl></li>
 </ul>
@@ -505,7 +505,8 @@ There is an implied criterion that we should mention here:
 </dd></dl></li>
 
 <li><a name="static_analysis_common_vulnerabilities"></a>It is SUGGESTED that at least one of the static analysis tools used for the static_analysis criterion include rules or approaches to look for common vulnerabilities in the analyzed language or environment.
- (N/A allowed.) <sup>[<a href="#static_analysis_common_vulnerabilities">static_analysis_common_vulnerabilities</a>]</sup></li>
+ (N/A allowed.) <sup>[<a href="#static_analysis_common_vulnerabilities">static_analysis_common_vulnerabilities</a>]</sup><dl><dt><i>Rationale</i>:<dt> <dd>We'd like all projects to use this kind of static analysis tool, but there may not be one in the chosen language, or it may only be proprietary (and some developers will therefore not use it).
+</dd></dl></li>
 
 <li><a name="static_analysis_fixed"></a>All medium and high severity exploitable vulnerabilities discovered with static code analysis MUST be fixed in a timely way after they are confirmed.
  (N/A allowed.) <sup>[<a href="#static_analysis_fixed">static_analysis_fixed</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>A vulnerability is medium to high severity if its <a href="https://nvd.nist.gov/cvss.cfm">CVSS 2.0</a> is 4 or higher.

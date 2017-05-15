@@ -393,6 +393,8 @@ zh-CN:
       reactivated_projects: '收到提醒后14天内重新启动的项目
 
 '
+      projects_created_average_7_days:
+      projects_updated_average_7_days:
   projects:
     index:
       add_link: 添加

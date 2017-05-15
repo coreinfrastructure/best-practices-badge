@@ -425,6 +425,8 @@ fr:
       reactivated_projects: 'Projets réactivés dans les 14 jours suivant un rappel
 
 '
+      projects_created_average_7_days:
+      projects_updated_average_7_days:
   projects:
     index:
       add_link: Ajouter

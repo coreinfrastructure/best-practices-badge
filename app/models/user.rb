@@ -14,12 +14,11 @@ class User < ActiveRecord::Base
   validates :name, presence: true, length: { maximum: 50 }
   validates :email, presence: true, length: { maximum: 255 },
                     uniqueness: { case_sensitive: false }, email: true
-  validates :password, presence: true,
-                       length: { minimum: MIN_PASSWORD_LENGTH },
-                       password: true,
-                       allow_nil: true
+  validates :password, length: { minimum: MIN_PASSWORD_LENGTH },
+                       password: true, # Apply special bad-password check
+                       allow_nil: true # Only use password for local accounts
 
-  # We don't allow nil. There's no need to, because the record has a
+  # We don't allow locale nil. There's no need to, because the record has a
   # default value (and the default is used if we don't supply a value).
   VALID_LOCALES_STRINGS = I18n.available_locales.map(&:to_s)
   validates :preferred_locale, inclusion: { in: VALID_LOCALES_STRINGS }

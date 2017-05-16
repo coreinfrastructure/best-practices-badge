@@ -54,12 +54,12 @@ class UsersController < ApplicationController
       # Email user on every change.  That way, if the user did *not* initiate
       # the change (e.g., because it's by an admin or by someone who broke
       # into their account), the user will know about it.
-      UserMailer.user_update(@user, @user.previous_changes).deliver_now
-      flash[:success] = t('.profile_updated')
       # If user changed his own locale, switch to it
       if current_user == @user && user_params[:preferred_locale]
         I18n.locale = user_params[:preferred_locale].to_sym
       end
+      UserMailer.user_update(@user, @user.previous_changes).deliver_now
+      flash[:success] = t('.profile_updated')
       locale_prefix = I18n.locale == :en ? '' : '/' + I18n.locale.to_s
       redirect_to "#{locale_prefix}/users/#{@user.id}"
     else

@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# rubocop: disable Metrics/ClassLength
 class UsersController < ApplicationController
   before_action :require_admin,  only: %i[index destroy]
   before_action :logged_in_user, only: %i[edit update]
@@ -46,6 +47,7 @@ class UsersController < ApplicationController
     redirect_to @user unless current_user_can_edit(@user)
   end
 
+  # rubocop: disable Metrics/AbcSize, Metrics/MethodLength
   def update
     @user = User.find(params[:id])
     if @user.update_attributes(user_params)
@@ -54,11 +56,17 @@ class UsersController < ApplicationController
       # into their account), the user will know about it.
       UserMailer.user_update(@user, @user.previous_changes).deliver_now
       flash[:success] = t('.profile_updated')
-      redirect_to @user
+      # If user changed his own locale, switch to it
+      if current_user == @user && user_params[:preferred_locale]
+        I18n.locale = user_params[:preferred_locale].to_sym
+      end
+      locale_prefix = I18n.locale == :en ? '' : '/' + I18n.locale.to_s
+      redirect_to "#{locale_prefix}/users/#{@user.id}"
     else
       render 'edit'
     end
   end
+  # rubocop: enable Metrics/AbcSize, Metrics/MethodLength
 
   # rubocop: disable Metrics/MethodLength, Metrics/AbcSize
   def destroy
@@ -136,3 +144,4 @@ class UsersController < ApplicationController
     @user.save!(touch: false)
   end
 end
+# rubocop: enable Metrics/ClassLength

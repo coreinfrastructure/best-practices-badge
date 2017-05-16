@@ -1078,7 +1078,7 @@
     - New functionality testing: !!omap
       - test_policy_mandated:
           category: MUST
-          ratonale: >
+          rationale: >
             This ensures that major new functionality is tested.
             This is related to the criterion test_policy, but is rewritten
             to be stronger.
@@ -1101,7 +1101,7 @@
             This was inspired by the
             <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/473">NYC 2016 brainstorming session</a>.
           #autofill: TODO
-      - input validation:
+      - input_validation:
           category: MUST
           #autofill: TODO
       - hardening:
@@ -1150,7 +1150,7 @@
           #autofill: TODO
       - crypto_credential_agility:
           category: MUST
-          na_allowd: true
+          na_allowed: true
           #autofill: TODO
       - crypto_used_network:
           category: SHOULD

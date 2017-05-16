@@ -25,8 +25,8 @@ class Project < ActiveRecord::Base
     name description homepage_url repo_url cpe implementation_languages
     license general_comments user_id disabled_reminders lock_version
   ].freeze
-  ALL_CRITERIA_STATUS = Criteria.map { |c| c.name.status }.freeze
-  ALL_CRITERIA_JUSTIFICATION = Criteria.map { |c| c.name.justification }.freeze
+  ALL_CRITERIA_STATUS = Criteria.all.map { |c| c.status }.freeze
+  ALL_CRITERIA_JUSTIFICATION = Criteria.all.map { |c| c.justification }.freeze
   PROJECT_PERMITTED_FIELDS = (PROJECT_OTHER_FIELDS + ALL_CRITERIA_STATUS +
                               ALL_CRITERIA_JUSTIFICATION).freeze
 
@@ -167,15 +167,30 @@ class Project < ActiveRecord::Base
   validates :user_id, presence: true
 
   # Validate all of the criteria-related inputs
-  Criteria.each do |criterion|
-    if criterion.na_allowed?
-      validates criterion.name.status, inclusion: { in: STATUS_CHOICE_NA }
-    else
-      validates criterion.name.status, inclusion: { in: STATUS_CHOICE }
+  #~ Criteria.each do |level, criterion|
+    #~ puts criterion
+    #~ if criterion.na_allowed?
+      #~ validates criterion.name.status, inclusion: { in: STATUS_CHOICE_NA }
+    #~ else
+      #~ validates criterion.name.status, inclusion: { in: STATUS_CHOICE }
+    #~ end
+    #~ validates criterion.name.justification,
+              #~ length: { maximum: MAX_TEXT_LENGTH },
+              #~ text: true
+  #~ end
+
+  Criteria.each do |level, criteria|
+    criteria.each do |key, criterion|
+      puts criterion.name
+      if criterion.na_allowed?
+        validates criterion.name.status, inclusion: { in: STATUS_CHOICE_NA }
+      else
+        validates criterion.name.status, inclusion: { in: STATUS_CHOICE }
+      end
+      validates criterion.name.justification,
+                length: { maximum: MAX_TEXT_LENGTH },
+                text: true
     end
-    validates criterion.name.justification,
-              length: { maximum: MAX_TEXT_LENGTH },
-              text: true
   end
 
   # Return string representing badge level; assumes badge_percentage correct.

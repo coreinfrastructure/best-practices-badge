@@ -122,8 +122,7 @@
           series_moving_average[index-ndays]
       end
     end
-    # TODD: Internationalize (i18n)
-    dataset << {name: t('.projects_' + action + '_average_7_days'),
+    dataset << {name: t(".projects_#{action}_average_7_days"),
                 data: moving_average_dataset,
                 library: {borderDash: [5,5]}}
   end

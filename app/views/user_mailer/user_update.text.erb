@@ -1,0 +1,19 @@
+<%= t 'user_mailer.user_update.before_text' %>
+
+<%= if @changes['name']
+      t('user_mailer.user_update.username_changed')+"\n"
+    end -%>
+<%= if @changes['email']
+      t('user_mailer.user_update.email_changed')+"\n"
+    end -%>
+<%= if @changes['locale']
+      t('user_mailer.user_update.locale_changed')+"\n"
+    end -%>
+<%= if @changes['password_digest']
+      t('user_mailer.user_update.password_changed')+"\n"
+    end -%>
+
+<%= t 'user_mailer.user_update.current_state' %>
+<%= users_url + '/' + @user.id.to_s %>
+
+<%= t 'user_mailer.user_update.after_text' %>

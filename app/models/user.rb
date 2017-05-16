@@ -1,7 +1,13 @@
 # frozen_string_literal: true
 
 class User < ActiveRecord::Base
+  # Use Rails' "has_secure_password" so that local accounts' password is
+  # is *only* stored as a bcrypt digest in password_digest
+  # (an iterated per-use salted hash).  This also requires that new (local)
+  # accounts *must* have a password and that setting a password requires
+  # an identical value in the password confirmation field.
   has_secure_password
+
   has_many :projects, dependent: :destroy
   attr_accessor :remember_token, :activation_token, :reset_token
   before_create :create_activation_digest
@@ -14,9 +20,17 @@ class User < ActiveRecord::Base
   validates :name, presence: true, length: { maximum: 50 }
   validates :email, presence: true, length: { maximum: 255 },
                     uniqueness: { case_sensitive: false }, email: true
+
+  # Validate passwords; this is obviously security-related.
+  # The "allow_nil" means that updates may have an empty "password" field,
+  # which will be interpreted as "do not change the password".  Non-nil
+  # passwords (which are *required* when creating a local account, and
+  # also occur on password changes) must pass these validations,
+  # including the bad-password check.  This doesn't allow new local accounts
+  # to have an empty password, because has_secure_password prevents that.
   validates :password, length: { minimum: MIN_PASSWORD_LENGTH },
                        password: true, # Apply special bad-password check
-                       allow_nil: true # Only use password for local accounts
+                       allow_nil: true
 
   # We don't allow locale nil. There's no need to, because the record has a
   # default value (and the default is used if we don't supply a value).

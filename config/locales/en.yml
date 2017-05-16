@@ -77,6 +77,9 @@ en:
       password: Password
       password_confirmation: Confirm Password
       create_account: Create my account
+    edit:
+      update_user_info: Update User Information
+      save_changes: Save changes
     update:
       profile_updated: Profile updated
     show:

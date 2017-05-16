@@ -368,6 +368,7 @@ fr:
       profile_updated: Profil mis à jour
       delete_link_name: supprimer
       confirm_delete: Êtes-vous sûr(e) de vouloir supprimer cet utilisateur ?
+      edit_user:
     update:
       profile_updated: Profil mis à jour
     destroy:
@@ -425,8 +426,12 @@ fr:
       reactivated_projects: 'Projets réactivés dans les 14 jours suivant un rappel
 
 '
-      projects_created_average_7_days:
-      projects_updated_average_7_days:
+      projects_created_average_7_days: 'projets créés en moyenne sur 7 jours
+
+'
+      projects_updated_average_7_days: 'projets mis à jour en moyenne sur 7 jours
+
+'
   projects:
     index:
       add_link: Ajouter
@@ -497,6 +502,7 @@ fr:
 
         Cliquez sur le lien ci-dessous pour activer votre compte :
       activate: Activer
+      subject:
     github_welcome:
       before_html: |
         <h1>Programme de badges des Meilleures Pratiques de la CII</h1>
@@ -520,6 +526,7 @@ fr:
 
         Si vous n'êtes pas à l'origine de cette action, vérifiez votre
         journal de sécurité GitHub sous Paramètres>Sécurité.
+      subject:
     password_reset:
       before_html: |
         <h1>Réinitialisation du mot de passe</h1>
@@ -542,6 +549,16 @@ fr:
         Si vous n'avez pas demandé à réinitialiser votre mot de passe,
         ignorez cet email et votre mot de passe restera identique.
       reset_password: Réinitialiser le mot de passe
+      subject:
+    user_update:
+      before_text:
+      username_changed:
+      email_changed:
+      password_changed:
+      locale_changed:
+      current_state:
+      after_text:
+      subject:
   submit: Soumettre
   account_activations:
     activated: Compte activé !

@@ -351,6 +351,7 @@ zh-CN:
       profile_updated: 资料已更新
       delete_link_name: 删除
       confirm_delete: 您确定要删除此用户吗？
+      edit_user:
     update:
       profile_updated: 资料已更新
     destroy:
@@ -393,8 +394,12 @@ zh-CN:
       reactivated_projects: '收到提醒后14天内重新启动的项目
 
 '
-      projects_created_average_7_days:
-      projects_updated_average_7_days:
+      projects_created_average_7_days: '项目创建平均超过7天
+
+'
+      projects_updated_average_7_days: '项目更新平均超过7天
+
+'
   projects:
     index:
       add_link: 添加
@@ -448,6 +453,7 @@ zh-CN:
 
         点击下面的链接激活帐户：
       activate: 启用
+      subject:
     github_welcome:
       before_html: |-
         <p>您好，</p>
@@ -469,6 +475,7 @@ zh-CN:
 
         如果该操作不是由您本人做出，请检查您的 GitHub
         安全日志：Settings>Security。
+      subject:
     password_reset:
       before_html: |-
         <h1>重设密码</h1>
@@ -492,6 +499,16 @@ zh-CN:
         请忽略此电子邮件，
         您的密码将保持原样。
       reset_password: 重设密码
+      subject:
+    user_update:
+      before_text:
+      username_changed:
+      email_changed:
+      password_changed:
+      locale_changed:
+      current_state:
+      after_text:
+      subject:
   submit: 提交
   account_activations:
     activated: 帐户已激活！

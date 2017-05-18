@@ -31,10 +31,10 @@ class LoginTest < CapybaraFeatureTest
     fill_in 'Password', with: 'password'
     click_button 'Log in using custom account'
     assert has_content? 'Signed in!'
-    assert_equal current_path, projects_path
+    assert_equal projects_path, current_path
     # Check we are redirected back to root if we try to get login again
     visit login_path
-    assert_equal current_path, root_path
+    assert_equal root_path, current_path
 
     visit edit_project_path(@project, locale: nil)
     assert has_content? 'We have updated our requirements for the criterion ' \
@@ -44,7 +44,7 @@ class LoginTest < CapybaraFeatureTest
     fill_in 'project_name', with: 'It doesnt matter'
     # Below we are clicking the final save button, it has a value of ''
     click_button('Save', exact: true)
-    assert_equal current_path, edit_project_path(@project, locale: nil)
+    assert_equal edit_project_path(@project, locale: nil), current_path
     assert has_content? 'Project was successfully updated.'
     # TODO: Get the clicking working again with capybara.
     # Details: If we expand all panels first and dont click this test passes.

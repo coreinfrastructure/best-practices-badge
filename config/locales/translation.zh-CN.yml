@@ -351,7 +351,7 @@ zh-CN:
       profile_updated: 资料已更新
       delete_link_name: 删除
       confirm_delete: 您确定要删除此用户吗？
-      edit_user:
+      edit_user: 编辑用户
     update:
       profile_updated: 资料已更新
     destroy:
@@ -364,6 +364,9 @@ zh-CN:
 
 '
     please_log_in: 请登录。
+    edit:
+      update_user_info:
+      save_changes:
   project_stats:
     index:
       project_stats_header: 项目统计
@@ -453,7 +456,7 @@ zh-CN:
 
         点击下面的链接激活帐户：
       activate: 启用
-      subject:
+      subject: 帐号激活
     github_welcome:
       before_html: |-
         <p>您好，</p>
@@ -475,7 +478,7 @@ zh-CN:
 
         如果该操作不是由您本人做出，请检查您的 GitHub
         安全日志：Settings>Security。
-      subject:
+      subject: 欢迎来到徽章计划
     password_reset:
       before_html: |-
         <h1>重设密码</h1>
@@ -499,16 +502,16 @@ zh-CN:
         请忽略此电子邮件，
         您的密码将保持原样。
       reset_password: 重设密码
-      subject:
+      subject: 重设密码
     user_update:
-      before_text:
-      username_changed:
-      email_changed:
-      password_changed:
-      locale_changed:
-      current_state:
-      after_text:
-      subject:
+      before_text: 您帐户的某些用户数据已更新。
+      username_changed: 用户名已更改。
+      email_changed: 电子邮件地址已更改。
+      password_changed: 密码已更改。
+      locale_changed: 区域设置已更改。
+      current_state: 对于当前状态，请参阅：
+      after_text: 如果有问题，请提醒我们。
+      subject: 用户数据已编辑
   submit: 提交
   account_activations:
     activated: 帐户已激活！

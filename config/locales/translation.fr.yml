@@ -368,7 +368,7 @@ fr:
       profile_updated: Profil mis à jour
       delete_link_name: supprimer
       confirm_delete: Êtes-vous sûr(e) de vouloir supprimer cet utilisateur ?
-      edit_user:
+      edit_user: Modifier l'utilisateur
     update:
       profile_updated: Profil mis à jour
     destroy:
@@ -382,6 +382,9 @@ fr:
 
 '
     please_log_in: Connectez-vous.
+    edit:
+      update_user_info:
+      save_changes:
   project_stats:
     index:
       project_stats_header: Statistiques du projet
@@ -502,7 +505,7 @@ fr:
 
         Cliquez sur le lien ci-dessous pour activer votre compte :
       activate: Activer
-      subject:
+      subject: Activation de compte
     github_welcome:
       before_html: |
         <h1>Programme de badges des Meilleures Pratiques de la CII</h1>
@@ -526,7 +529,7 @@ fr:
 
         Si vous n'êtes pas à l'origine de cette action, vérifiez votre
         journal de sécurité GitHub sous Paramètres>Sécurité.
-      subject:
+      subject: Bienvenue dans le programme de badge
     password_reset:
       before_html: |
         <h1>Réinitialisation du mot de passe</h1>
@@ -549,16 +552,17 @@ fr:
         Si vous n'avez pas demandé à réinitialiser votre mot de passe,
         ignorez cet email et votre mot de passe restera identique.
       reset_password: Réinitialiser le mot de passe
-      subject:
+      subject: Réinitialisation du mot de passe
     user_update:
-      before_text:
-      username_changed:
-      email_changed:
-      password_changed:
-      locale_changed:
-      current_state:
-      after_text:
-      subject:
+      before_text: Certaines des données utilisateur de votre compte ont été mises
+        à jour.
+      username_changed: Nom d'utilisateur modifié.
+      email_changed: Adresse email modifiée.
+      password_changed: Mot de passe modifié.
+      locale_changed: Langue modifiée.
+      current_state: 'Pour l''état actuel, voir :'
+      after_text: Veuillez nous avertir en cas de problème.
+      subject: Données utilisateur modifiées
   submit: Soumettre
   account_activations:
     activated: Compte activé !

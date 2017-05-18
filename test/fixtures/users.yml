@@ -63,3 +63,12 @@ github_user:
   preferred_locale: en
   activated: true
   activated_at: <%= Time.zone.now %>
+
+fr_user:
+  name: French Test
+  email: fr-test@example.org
+  password_digest: <%= User.digest('password') %>
+  provider: local
+  preferred_locale: fr
+  activated: true
+  activated_at: <%= Time.zone.now %>

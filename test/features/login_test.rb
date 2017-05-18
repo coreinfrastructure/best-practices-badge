@@ -97,6 +97,41 @@ class LoginTest < CapybaraFeatureTest
   end
   # rubocop:enable Metrics/BlockLength
 
+  # Test if we switch to user's preferred locale on login.
+  # Here we test on a path that isn't the root.
+  # We have to implement these tests in (slower) integration testing.
+  # That's because the test infrastructure normally takes shortcuts in the
+  # login functionality to speed login. Those shortcuts speed test execution
+  # in general, but they also mean that testing this specific functionality
+  # won't work because of its inadequate simulation of the real situation
+  # (and thus requires a full integration test instead).
+  scenario 'Can Login in fr locale to /projects', js: true do
+    @fr_user = users(:fr_user)
+    visit projects_path
+    click_on 'Login'
+    fill_in 'Email', with: @fr_user.email
+    fill_in 'Password', with: 'password'
+    click_button 'Log in using custom account'
+    wait_for_jquery
+    assert has_content? 'Connecté !'
+    assert_equal '/fr/projects', current_path
+    has_current_path? %r{\A/fr/projects/\Z}
+  end
+
+  # Test the root path.  Locale is handled differently at the root,
+  # and it's a common scenario for non-en users, so make sure it works.
+  scenario 'Can Login in fr locale to top', js: true do
+    @fr_user = users(:fr_user)
+    visit root_path
+    click_on 'Login'
+    fill_in 'Email', with: @fr_user.email
+    fill_in 'Password', with: 'password'
+    click_button 'Log in using custom account'
+    wait_for_jquery
+    assert has_content? 'Connecté !'
+    has_current_path? %r{/\?locale=fr\Z}, url: true
+  end
+
   def ensure_choice(radio_button_id)
     # Necessary because Capybara click doesn't always take the first time
     choose radio_button_id until find("##{radio_button_id}")['checked']

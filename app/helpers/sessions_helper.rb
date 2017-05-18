@@ -1,10 +1,41 @@
 # frozen_string_literal: true
 
+# rubocop:disable Metrics/ModuleLength
 module SessionsHelper
   SESSION_TTL = 48.hours # Automatically log off session if inactive this long
 
+  require 'uri'
+
+  # Add/change locale information in URL query if needed.  Modifies url.
+  def force_locale_url_query(url, locale)
+    return unless url.path == '' ||
+                  url.path == '/' || url.query =~ /\Alocale=.*\Z/
+    url.query = locale == :en ? nil : 'locale=' + locale.to_s
+  end
+
+  # Change locale of original_url.
+  # Presumes that query is empty or only has a locale.
+  # rubocop:disable Metrics/AbcSize
+  def force_locale_url(original_url, locale)
+    url = URI.parse(original_url)
+    # Clean up path
+    url.path.gsub!(%r{\A\/[a-z]{2}(-[A-Za-z0-9-]*)?\/}, '') # Remove old locale
+    url.path = '/' + url.path if url.path == '' || url.path[0] != '/'
+    if locale != :en && url.path.length > 1
+      url.path = '/' + locale.to_s + url.path
+    end
+    force_locale_url_query url, locale
+    url.to_s
+  end
+  # rubocop:enable Metrics/AbcSize
+
   def log_in(user)
     session[:user_id] = user.id
+    I18n.locale = user.preferred_locale.to_sym
+    return unless session[:forwarding_url]
+    session[:forwarding_url] = force_locale_url(
+      session[:forwarding_url], I18n.locale
+    )
   end
 
   # Returns the user corresponding to the remember token cookie
@@ -117,3 +148,4 @@ module SessionsHelper
     session[:forwarding_url] = ref_url unless ref_url == login_url
   end
 end
+# rubocop:enable Metrics/ModuleLength

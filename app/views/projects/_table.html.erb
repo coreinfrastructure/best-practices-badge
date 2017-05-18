@@ -39,8 +39,8 @@
         <td><%= link_to project.user_display_name, project.user %></td>
         <td><%= project.achieved_passing_at&.
                   to_formatted_s(:db) %></td>
-        <td><%= project.badge_percentage %>%</td>
-        <td><%= link_to "<img src='/projects/#{project.id}/badge' alt='Badge level for project #{project.id} is #{project.badge_percentage}%'>".html_safe,
+        <td><%= project.badge_percentage_0 %>%</td>
+        <td><%= link_to "<img src='/projects/#{project.id}/badge' alt='Badge level for project #{project.id} is #{project.badge_percentage_0}%'>".html_safe,
                         project %></td>
       </tr>
     <% end %>

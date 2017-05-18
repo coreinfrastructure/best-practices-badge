@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-# rubocop:disable Rails/FindEach
 class Criterion
   ACCESSORS = %i[
     name category future
@@ -48,7 +47,7 @@ class Criterion
     na_justification_required == true
   end
 
-  delegate :present?, to: :details, prefix: true
+  # delegate :present?, to: :details, prefix: true
 
   def should?
     category == 'SHOULD'

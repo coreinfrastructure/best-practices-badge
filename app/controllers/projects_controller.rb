@@ -22,7 +22,7 @@ class ProjectsController < ApplicationController
   # These are the only allowed values for "sort" (if a value is provided)
   ALLOWED_SORT =
     %w[
-      id name achieved_passing_at badge_percentage
+      id name achieved_passing_at badge_percentage_0
       homepage_url repo_url updated_at user_id created_at
     ].freeze
 
@@ -63,7 +63,7 @@ class ProjectsController < ApplicationController
     set_surrogate_key_header @project.record_key + '/badge'
     respond_to do |format|
       format.svg do
-        send_data Badge[@project.badge_percentage],
+        send_data Badge[@project.badge_percentage_0],
                   type: 'image/svg+xml', disposition: 'inline'
       end
     end
@@ -78,7 +78,7 @@ class ProjectsController < ApplicationController
 
   # GET /projects/:id/edit(.:format)
   def edit
-    return unless @project.notify_for_static_analysis?
+    return unless @project.notify_for_static_analysis?('0')
     # rubocop:disable Rails/OutputSafety
     message = (
       'We have updated our requirements for the criterion ' \
@@ -192,7 +192,7 @@ class ProjectsController < ApplicationController
   # forces loading of user data (where we get the user name/nickname).
   FEED_DISPLAY_FIELDS = 'projects.id as id, projects.name as name, ' \
     'projects.updated_at as updated_at, projects.created_at as created_at, ' \
-    'badge_percentage, homepage_url, repo_url, description, user_id'
+    'badge_percentage_0, homepage_url, repo_url, description, user_id'
 
   def feed
     # @projects = Project.select(FEED_DISPLAY_FIELDS).
@@ -341,7 +341,7 @@ class ProjectsController < ApplicationController
 
   HTML_INDEX_FIELDS = 'projects.id, projects.name, description, ' \
     'homepage_url, repo_url, license, user_id, achieved_passing_at, ' \
-    'updated_at, badge_percentage'
+    'updated_at, badge_percentage_0'
 
   # rubocop:disable Metrics/PerceivedComplexity
   # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity

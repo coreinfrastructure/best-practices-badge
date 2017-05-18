@@ -40,15 +40,18 @@ module ProjectsHelper
   # rubocop:enable Rails/OutputSafety
 
   # Use the status_chooser to render the given criterion.
-  def render_status(criterion, f, project, is_disabled, is_last = false)
+  # rubocop:disable Metrics/ParameterLists
+  def render_status(criterion, f, project, level, is_disabled, is_last = false)
     render(
       partial: 'status_chooser',
       locals: {
         f: f, project: project, is_disabled: is_disabled,
-        is_last: is_last, criterion: Criteria[criterion]
+        is_last: is_last,
+        criterion: Criteria[level][criterion.to_sym], level: level
       }
     )
   end
+  # rubocop:enable Metrics/ParameterLists
 
   # Return HTML for a sortable header.
   def sortable_header(title, field_name)

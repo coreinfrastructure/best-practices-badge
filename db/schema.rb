@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161230160523) do
+ActiveRecord::Schema.define(version: 20170518165036) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -210,7 +210,7 @@ ActiveRecord::Schema.define(version: 20161230160523) do
     t.text     "installation_common_justification"
     t.string   "build_reproducible_status",                            default: "?"
     t.text     "build_reproducible_justification"
-    t.integer  "badge_percentage"
+    t.integer  "badge_percentage_0"
     t.datetime "achieved_passing_at"
     t.datetime "lost_passing_at"
     t.datetime "last_reminder_at"
@@ -218,7 +218,7 @@ ActiveRecord::Schema.define(version: 20161230160523) do
     t.string   "implementation_languages",                             default: ""
     t.integer  "lock_version",                                         default: 0
     t.index ["achieved_passing_at"], name: "index_projects_on_achieved_passing_at", using: :btree
-    t.index ["badge_percentage"], name: "index_projects_on_badge_percentage", using: :btree
+    t.index ["badge_percentage_0"], name: "index_projects_on_badge_percentage_0", using: :btree
     t.index ["created_at"], name: "index_projects_on_created_at", using: :btree
     t.index ["homepage_url"], name: "index_projects_on_homepage_url", using: :btree
     t.index ["last_reminder_at"], name: "index_projects_on_last_reminder_at", using: :btree

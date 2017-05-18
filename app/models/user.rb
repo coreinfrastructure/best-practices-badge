@@ -30,7 +30,7 @@ class User < ActiveRecord::Base
   # to have an empty password, because has_secure_password prevents that.
   validates :password, length: { minimum: MIN_PASSWORD_LENGTH },
                        password: true, # Apply special bad-password check
-                       allow_nil: true
+                       allow_nil: true, allow_blank: true
 
   # We don't allow locale nil. There's no need to, because the record has a
   # default value (and the default is used if we don't supply a value).

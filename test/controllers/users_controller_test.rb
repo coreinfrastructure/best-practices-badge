@@ -5,7 +5,6 @@ require 'test_helper'
 class UsersControllerTest < ActionController::TestCase
   setup do
     @user = users(:test_user_melissa)
-    @github_user = users(:github_user)
     @other_user = users(:test_user_mark)
     @admin = users(:admin_user)
   end
@@ -61,27 +60,13 @@ class UsersControllerTest < ActionController::TestCase
     assert_equal @user.name, new_name
   end
 
-  test 'should be able to change locale as local user' do
+  test 'should be able to change locale' do
     log_in_as(@user)
-    assert_equal 'en', @user.preferred_locale
     patch :update, params: { id: @user, user: { preferred_locale: 'fr' } }
     assert_not_empty flash # Success message
     @user.reload
     assert_equal 'fr', @user.preferred_locale
     assert_redirected_to users_path(locale: 'fr') + "/#{@user.id}"
-  end
-
-  test 'should be able to change locale as github user' do
-    log_in_as(@github_user)
-    assert_equal 'en', @github_user.preferred_locale
-    patch :update, params: {
-      id: @github_user,
-      user: { preferred_locale: 'fr' }
-    }
-    assert_not_empty flash # Success message
-    @github_user.reload
-    assert_equal 'fr', @github_user.preferred_locale
-    assert_redirected_to users_path(locale: 'fr') + "/#{@github_user.id}"
   end
 
   test 'should redirect destroy when not logged in' do

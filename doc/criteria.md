@@ -536,6 +536,63 @@ There is an implied criterion that we should mention here:
 </dd></dl></li>
 </ul>
 
+### Code review
+
+*Security Code Review*
+
+- <a name="validate_the_tainted_array_index"></a>The direct data 
+  or the indirect data from the untrusted sources which is used as 
+  the array index MUST be ensured within a legal range.
+  Input validation is always the best practices of secure coding. 
+  (e.g., [CERT](http://www.cert.org/secure-coding/research/secure-coding-standards.cfm),
+  [OWASP](https://www.owasp.org/index.php/OWASP_Secure_Coding_Practices_-_Quick_Reference_Guide))
+  A lot of vulnerabilities related to this topic.
+  See the [CWE](http://cwe.mitre.org/data/definitions/129.html).
+  <sup>[<a href="#validate_the_tainted_array_index">validate_the_tainted_array_index</a>]</sup>
+
+- <a name="validate_the_tainted_buffer_length"></a>The direct data 
+  or the indirect data from the untrusted sources which is used as 
+  the buffer length for read/write MUST be ensured within a legal range.
+  Input validation is always the best practices of secure coding. 
+  (e.g., [CERT](http://www.cert.org/secure-coding/research/secure-coding-standards.cfm),
+  [OWASP](https://www.owasp.org/index.php/OWASP_Secure_Coding_Practices_-_Quick_Reference_Guide))
+  A lot of vulnerabilities related to this topic.
+  See the [CWE](http://cwe.mitre.org/data/definitions/119.html).
+  <sup>[<a href="#validate_the_tainted_buffer_length">validate_the_tainted_buffer_length</a>]</sup>
+  
+- <a name="validate_the_tainted_loop_condiction"></a>The direct data 
+  or the indirect data from the untrusted sources which is used as 
+  the loop ending condiction MUST be avoided infinite loop or other logic mistake.
+  Input validation is always the best practices of secure coding. 
+  (e.g., [CERT](http://www.cert.org/secure-coding/research/secure-coding-standards.cfm),
+  [OWASP](https://www.owasp.org/index.php/OWASP_Secure_Coding_Practices_-_Quick_Reference_Guide))
+  See the [CWE](http://cwe.mitre.org/data/definitions/606.html).
+  <sup>[<a href="#validate_the_tainted_loop_condiction">validate_the_tainted_loop_condiction</a>]</sup>
+  
+- <a name="validate_the_tainted_string"></a>When copying from a string 
+  that is not a trusted source, it MUST ensure 
+  that there is enough space to hold the data and the end.
+  Input validation is always the best practices of secure coding. 
+  (e.g., [CERT](http://www.cert.org/secure-coding/research/secure-coding-standards.cfm),
+  [OWASP](https://www.owasp.org/index.php/OWASP_Secure_Coding_Practices_-_Quick_Reference_Guide))
+  See the [CWE](http://cwe.mitre.org/data/definitions/120.html).
+  <sup>[<a href="#validate_the_tainted_string">validate_the_tainted_string</a>]</sup>
+  
+- <a name="validate_the_tainted_integer_on_caculation"></a>The integer values 
+  from untrusted sources MUST be avoided the integer overflow or wraparound.
+  (e.g., [CERT](http://www.cert.org/secure-coding/research/secure-coding-standards.cfm),
+  [OWASP](https://www.owasp.org/index.php/OWASP_Secure_Coding_Practices_-_Quick_Reference_Guide))
+  See the [CWE](http://cwe.mitre.org/data/definitions/190.html).
+  <sup>[<a href="#validate_the_tainted_integer_on_caculation">validate_the_tainted_integer_on_caculation</a>]</sup>
+
+- <a name="validate_the_malloc_size"></a>Appropriate size limits 
+  SHOULD be used to allocate memory from an unreliable source, and 
+  MUST check the return value of the allocate function.
+  (e.g., [CERT](http://www.cert.org/secure-coding/research/secure-coding-standards.cfm),
+  [OWASP](https://www.owasp.org/index.php/OWASP_Secure_Coding_Practices_-_Quick_Reference_Guide))
+  See the [CWE](http://cwe.mitre.org/data/definitions/789.html).
+  <sup>[<a href="#validate_the_malloc_size">validate_the_malloc_size</a>]</sup>
+  
 ### Future
 
 <b><i>future</i></b>

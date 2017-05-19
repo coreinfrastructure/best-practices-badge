@@ -31,7 +31,9 @@ module SessionsHelper
 
   def log_in(user)
     session[:user_id] = user.id
-    I18n.locale = user.preferred_locale.to_sym
+    # Switch to user's preferred locale, but only if the current locale is :en
+    # (any other locale is an intentional selection & thus should be retained)
+    I18n.locale = user.preferred_locale.to_sym if I18n.locale == :en
     return unless session[:forwarding_url]
     session[:forwarding_url] = force_locale_url(
       session[:forwarding_url], I18n.locale

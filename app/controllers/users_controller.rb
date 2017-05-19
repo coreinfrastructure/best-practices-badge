@@ -30,6 +30,7 @@ class UsersController < ApplicationController
     else
       @user = User.new(user_params)
       @user.provider = 'local'
+      @user.preferred_locale = I18n.locale.to_s
       if @user.save
         send_activation
       else

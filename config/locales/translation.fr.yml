@@ -324,6 +324,7 @@ fr:
       target="_blank">conditions d''utilisation </a>. </small>
 
 '
+    account:
   sessions:
     login_header: S'identifier
     login_with_github_html: '<span class="fa fa-github"></span> Connectez-vous avec
@@ -580,6 +581,7 @@ fr:
     cant_reset_nonlocal: Désolé, il n'est pas possible de réinitialiser le mot de
       passe pour un utilisateur non local
     reset_expired: La réinitialisation du mot de passe est expirée.
+    update_password:
   report_mailer:
     new_project_heading: 'Merci d''avoir ajouté votre projet au programme de badge
       des Meilleures Pratiques

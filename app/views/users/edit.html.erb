@@ -1,4 +1,6 @@
 <!--div class="center jumbotron"-->
+<%# Prefer the users.new locale text. That way, translators don't need to
+    translate more than onece, and in additoin we'll use consistent terms. %>
  <br>
  <h1 class="center"><%= t('.update_user_info') %></h1>
 
@@ -6,18 +8,22 @@
    <div class="col-md-6 col-md-offset-3">
      <%= form_for(@user) do |f| %>
        <%= render 'shared/error_messages', object: f.object %>
-       <%= f.label :name %>
+       <%= f.label :name, t('users.new.name') %>
        <%= f.text_field :name, class:"form-control" %>
 
-       <%= f.label :email %>
+       <%= f.label :email, t('users.new.email') %>
        <%= f.email_field :email, class:"form-control" %>
 
-       <%= f.label :preferred_locale %>
-       <%= locales = I18n.available_locales.map {|loc| [loc.to_s, loc.to_s]}
-           f.select :preferred_locale, locales, {}, {class: "form-control"} %>
+       <%= f.label :preferred_locale, t('users.new.preferred_locale') %>
+       <%=
+         locale_names = I18n.available_locales.map do |loc|
+           [t("locale_name.#{loc.to_s}"), loc.to_s]
+         end
+         f.select :preferred_locale, locale_names, {}, {class: "form-control"}
+       %>
 
        <% if @user.provider == 'local' %>
-         <%= f.label :password %>
+         <%= f.label :password, t('users.new.password') %>
          <%= f.password_field :password, autocomplete: "off", class:"form-control" %>
 
          <%= f.label :password_confirmation, t('users.new.password_confirmation') %>

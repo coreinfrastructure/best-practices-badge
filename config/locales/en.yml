@@ -47,6 +47,7 @@ en:
     instructions_sent: Email sent with password reset instructions
     cant_reset_nonlocal: Sorry, can't reset the password for a non-local user
     reset_expired: Password reset has expired.
+    update_password: Update password
   sessions:
     login_header: Log in
     login_with_github_html: '<span class="fa fa-github"></span> Log in with GitHub

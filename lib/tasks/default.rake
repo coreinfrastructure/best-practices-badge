@@ -37,6 +37,17 @@ task(:ci).clear.enhance %w[
 ]
 # Temporarily removed fasterer
 
+task(:ci).clear.enhance %w(
+  rbenv_rvm_setup
+  bundle_audit
+  markdownlint
+  license_okay
+  license_finder_report.html
+  whitespace_check
+  yaml_syntax_check
+  fasterer
+)
+
 # Simple smoke test to avoid development environment misconfiguration
 desc 'Ensure that rbenv or rvm are set up in PATH'
 task :rbenv_rvm_setup do

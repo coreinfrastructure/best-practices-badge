@@ -13,7 +13,7 @@
           <!--li><%= link_to t(:users, scope: :layouts), users_path %></li-->
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              Account <b class="caret"></b>
+              <%= t(:account, scope: :layouts) %><b class="caret"></b>
             </a>
             <ul class="dropdown-menu reverse-dropdown">
               <li><%= link_to t(:profile, scope: :layouts), current_user %></li>

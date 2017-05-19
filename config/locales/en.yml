@@ -18,6 +18,7 @@ en:
     cii_best_practices: CII Best Practices
     projects: Projects
     users: Users
+    account: Account
     profile: Profile
     settings: Settings
     logout_html: <span class="glyphicon glyphicon-log-out"></span> Logout

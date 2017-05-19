@@ -341,6 +341,7 @@ zh-CN:
       password: 密码
       password_confirmation: 确认密码
       create_account: 创建我的账户
+      preferred_locale:
     show:
       see_external: '查看此用户的外部页面。
 
@@ -595,3 +596,7 @@ zh-CN:
       有关详细信息，请参阅以下URL：
     ending: "--- David A. Wheeler，CII最佳实践徽章技术负责人\n"
   project_name_unknown: "(未知名称)"
+  locale_name:
+    en:
+    fr:
+    zh-CN:

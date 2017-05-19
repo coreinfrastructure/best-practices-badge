@@ -360,6 +360,7 @@ fr:
       password: Mot de passe
       password_confirmation: Confirmez le mot de passe
       create_account: Créer mon compte
+      preferred_locale:
     show:
       see_external: Voir la page externe de cet utilisateur.
       other_projects_edit: Autres projets que vous pouvez modifier
@@ -640,3 +641,7 @@ fr:
     ending: "--- David A. Wheeler, Directeur Technique du programme CII Best Practices
       Badge\n"
   project_name_unknown: "(Nom inconnu)"
+  locale_name:
+    en:
+    fr:
+    zh-CN:

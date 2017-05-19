@@ -22,10 +22,6 @@
 
          <%= f.label :password_confirmation, t('users.new.password_confirmation') %>
          <%= f.password_field :password_confirmation, autocomplete: "off", class:"form-control" %>
-       <% else %>
-         <input type="hidden" name="password" value="bogus--password">
-         <input type="hidden" name="password_confirmation"
-                                              value="bogus--password">
        <% end %>
 
        <%= f.submit t('.save_changes'), class: "btn btn-primary" %>

@@ -6,7 +6,7 @@ class User < ActiveRecord::Base
   # (an iterated per-use salted hash).  This also requires that new (local)
   # accounts *must* have a password and that setting a password requires
   # an identical value in the password confirmation field.
-  has_secure_password
+  has_secure_password validations: false
 
   has_many :projects, dependent: :destroy
   attr_accessor :remember_token, :activation_token, :reset_token

@@ -383,8 +383,8 @@ fr:
 '
     please_log_in: Connectez-vous.
     edit:
-      update_user_info:
-      save_changes:
+      update_user_info: Mettre à jour les informations de l'utilisateur
+      save_changes: Enregistrer les modifications
   project_stats:
     index:
       project_stats_header: Statistiques du projet

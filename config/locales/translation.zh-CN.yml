@@ -365,8 +365,8 @@ zh-CN:
 '
     please_log_in: 请登录。
     edit:
-      update_user_info:
-      save_changes:
+      update_user_info: 更新用户信息
+      save_changes: 保存更改
   project_stats:
     index:
       project_stats_header: 项目统计

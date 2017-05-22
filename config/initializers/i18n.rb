@@ -13,7 +13,7 @@
 # :de, :"en-au-ocker", :"en-NZ", :"zh-TW", :"pt-BR", :nep, :uk, :ro, :da,
 # :hu, :cs]
 
-I18n.available_locales = %i[en fr zh-CN]
+I18n.available_locales = %i[en fr zh-CN de ja]
 
 # If we don't have text, fall back to English.  That obviously isn't
 # ideal, but it's better to show *some* text to the user than leave it

@@ -8,7 +8,7 @@ gem 'bootstrap-sass', '3.3.7'
 gem 'bootstrap-social-rails', '4.12.0'
 gem 'bootstrap-will_paginate', '1.0.0'
 gem 'bootstrap_form', '2.7.0'
-gem 'chartkick', '2.2.3' # Chart project_stats
+gem 'chartkick', '2.2.4' # Chart project_stats
 gem 'coffee-rails', '4.2.1' # Support CoffeeScript (Javascript preprocessor)
 gem 'faker', '1.7.3'
 # Fastly master is locked to a railties version
@@ -54,7 +54,7 @@ group :development, :test do
   gem 'pry-byebug', '3.4.2'
   gem 'rubocop', '0.48.1' # Style checker.  Changes can cause test failure
   gem 'ruby-graphviz', '1.2.3' # This is used for bundle viz
-  gem 'spring', '2.0.1'
+  gem 'spring', '2.0.2' # Preloads app so console, rake, and tests run faster
   gem 'vcr', '3.0.3' # Record network responses for later test reuse
   gem 'yaml-lint', '0.0.9' # Check YAML file syntax
 end
@@ -75,7 +75,7 @@ group :test do
   gem 'minitest-rails-capybara', '3.0.1', require: false
   gem 'minitest-retry', '0.1.8', require: false # Avoid Capybara false positives
   gem 'poltergeist', '1.15.0', require: false
-  gem 'rails-controller-testing', '1.0.1'
+  gem 'rails-controller-testing', '1.0.2'
   gem 'selenium-webdriver', '3.4.0', require: false
   gem 'simplecov', '0.14.1', require: false
   gem 'webmock', '3.0.1', require: false

@@ -313,6 +313,7 @@ zh-CN:
       target="_blank">Linux 基金会</a> 合作项目。版权所有。 请查阅我们的 <a href="https://www.linuxfoundation.org/privacy"
       target="_blank">隐私策略</a> 和 <a href="https://www.linuxfoundation.org/terms" target="_blank">使用条款</a>.
       </small>
+    account: 帐户
   sessions:
     login_header: 登录
     login_with_github_html: <span class="fa fa-github"></span> 使用GitHub账户登录
@@ -341,6 +342,7 @@ zh-CN:
       password: 密码
       password_confirmation: 确认密码
       create_account: 创建我的账户
+      preferred_locale: 首选语言
     show:
       see_external: '查看此用户的外部页面。
 
@@ -351,6 +353,7 @@ zh-CN:
       profile_updated: 资料已更新
       delete_link_name: 删除
       confirm_delete: 您确定要删除此用户吗？
+      edit_user: 编辑用户
     update:
       profile_updated: 资料已更新
     destroy:
@@ -363,6 +366,9 @@ zh-CN:
 
 '
     please_log_in: 请登录。
+    edit:
+      update_user_info: 更新用户信息
+      save_changes: 保存更改
   project_stats:
     index:
       project_stats_header: 项目统计
@@ -391,6 +397,12 @@ zh-CN:
 
 '
       reactivated_projects: '收到提醒后14天内重新启动的项目
+
+'
+      projects_created_average_7_days: '项目创建平均超过7天
+
+'
+      projects_updated_average_7_days: '项目更新平均超过7天
 
 '
   projects:
@@ -446,6 +458,7 @@ zh-CN:
 
         点击下面的链接激活帐户：
       activate: 启用
+      subject: 帐号激活
     github_welcome:
       before_html: |-
         <p>您好，</p>
@@ -467,6 +480,7 @@ zh-CN:
 
         如果该操作不是由您本人做出，请检查您的 GitHub
         安全日志：Settings>Security。
+      subject: 欢迎来到徽章计划
     password_reset:
       before_html: |-
         <h1>重设密码</h1>
@@ -490,6 +504,16 @@ zh-CN:
         请忽略此电子邮件，
         您的密码将保持原样。
       reset_password: 重设密码
+      subject: 重设密码
+    user_update:
+      before_text: 您帐户的某些用户数据已更新。
+      username_changed: 用户名已更改。
+      email_changed: 电子邮件地址已更改。
+      password_changed: 密码已更改。
+      locale_changed: 区域设置已更改。
+      current_state: 对于当前状态，请参阅：
+      after_text: 如果有问题，请提醒我们。
+      subject: 用户数据已编辑
   submit: 提交
   account_activations:
     activated: 帐户已激活！
@@ -504,6 +528,7 @@ zh-CN:
     instructions_sent: 电子邮件发送密码重置说明
     cant_reset_nonlocal: 对不起，无法重设非本地用户的密码
     reset_expired: 密码重设已过期。
+    update_password: 更新密码
   report_mailer:
     new_project_heading: '感谢您将项目添加到最佳实践徽章计划中
 
@@ -573,3 +598,7 @@ zh-CN:
       有关详细信息，请参阅以下URL：
     ending: "--- David A. Wheeler，CII最佳实践徽章技术负责人\n"
   project_name_unknown: "(未知名称)"
+  locale_name:
+    en:
+    fr:
+    zh-CN:

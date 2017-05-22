@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# rubocop: disable Metrics/ClassLength
 class UsersController < ApplicationController
   before_action :require_admin,  only: %i[index destroy]
   before_action :logged_in_user, only: %i[edit update]
@@ -29,6 +30,7 @@ class UsersController < ApplicationController
     else
       @user = User.new(user_params)
       @user.provider = 'local'
+      @user.preferred_locale = I18n.locale.to_s
       if @user.save
         send_activation
       else
@@ -40,18 +42,33 @@ class UsersController < ApplicationController
 
   def edit
     @user = User.find(params[:id])
-    redirect_to @user unless @user.provider == 'local'
+    # Force redirect if current_user cannot edit.  Otherwise, the process
+    # of displaying the edit fields (with their defaults) could cause an
+    # unauthorized exposure of an email address.
+    redirect_to @user unless current_user_can_edit(@user)
   end
 
+  # rubocop: disable Metrics/AbcSize, Metrics/MethodLength
   def update
     @user = User.find(params[:id])
     if @user.update_attributes(user_params)
+      # If user changed his own locale, switch to it.  It's possible for an
+      # *admin* to change someone else's locale, in that case leave it alone.
+      if current_user == @user && user_params[:preferred_locale]
+        I18n.locale = user_params[:preferred_locale].to_sym
+      end
+      # Email user on every change.  That way, if the user did *not* initiate
+      # the change (e.g., because it's by an admin or by someone who broke
+      # into their account), the user will know about it.
+      UserMailer.user_update(@user, @user.previous_changes).deliver_now
       flash[:success] = t('.profile_updated')
-      redirect_to @user
+      locale_prefix = I18n.locale == :en ? '' : '/' + I18n.locale.to_s
+      redirect_to "#{locale_prefix}/users/#{@user.id}"
     else
       render 'edit'
     end
   end
+  # rubocop: enable Metrics/AbcSize, Metrics/MethodLength
 
   # rubocop: disable Metrics/MethodLength, Metrics/AbcSize
   def destroy
@@ -94,10 +111,15 @@ class UsersController < ApplicationController
   private
 
   def user_params
-    params.require(:user).permit(
+    user_params = params.require(:user).permit(
       :provider, :uid, :name, :email, :password,
-      :password_confirmation
+      :password_confirmation, :preferred_locale
     )
+    # Remove the password and password confirmation keys for empty values
+    user_params.delete(:password) if user_params[:password].blank?
+    user_params.delete(:password_confirmation) if
+      user_params[:password_confirmation].blank?
+    user_params
   end
 
   def require_admin
@@ -111,10 +133,16 @@ class UsersController < ApplicationController
     redirect_to login_url
   end
 
+  # Return true if current_user can edit account 'user'
+  def current_user_can_edit(user)
+    return false unless current_user
+    user == current_user || current_user.admin?
+  end
+
   # Confirms the correct user.
   def correct_user
     @user = User.find(params[:id])
-    redirect_to(root_url) unless @user == current_user || current_user.admin?
+    redirect_to(root_url) unless current_user_can_edit(@user)
   end
 
   def regenerate_activation_digest
@@ -123,3 +151,4 @@ class UsersController < ApplicationController
     @user.save!(touch: false)
   end
 end
+# rubocop: enable Metrics/ClassLength

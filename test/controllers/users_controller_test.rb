@@ -60,6 +60,15 @@ class UsersControllerTest < ActionController::TestCase
     assert_equal @user.name, new_name
   end
 
+  test 'should be able to change locale' do
+    log_in_as(@user)
+    patch :update, params: { id: @user, user: { preferred_locale: 'fr' } }
+    assert_not_empty flash # Success message
+    @user.reload
+    assert_equal 'fr', @user.preferred_locale
+    assert_redirected_to users_path(locale: 'fr') + "/#{@user.id}"
+  end
+
   test 'should redirect destroy when not logged in' do
     assert_no_difference 'User.count' do
       delete :destroy, params: { id: @user }

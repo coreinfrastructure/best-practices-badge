@@ -10,10 +10,15 @@ en:
   feed_title: CII Best Practices BadgeApp Updated Projects
   project_name_unknown: (Name unknown)
   #
+  locale_name: # Longer key name to reduce confusion
+    en: English (en)
+    fr: French / Français (fr)
+    zh-CN: Chinese (Simplified) / 简体中文 (zh-CN)
   layouts:
     cii_best_practices: CII Best Practices
     projects: Projects
     users: Users
+    account: Account
     profile: Profile
     settings: Settings
     logout_html: <span class="glyphicon glyphicon-log-out"></span> Logout
@@ -43,6 +48,7 @@ en:
     instructions_sent: Email sent with password reset instructions
     cant_reset_nonlocal: Sorry, can't reset the password for a non-local user
     reset_expired: Password reset has expired.
+    update_password: Update password
   sessions:
     login_header: Log in
     login_with_github_html: '<span class="fa fa-github"></span> Log in with GitHub
@@ -74,16 +80,22 @@ en:
 
       name: Name
       email: Email
+      preferred_locale: Preferred locale
       password: Password
       password_confirmation: Confirm Password
       create_account: Create my account
+    edit:
+      update_user_info: Update User Information
+      save_changes: Save changes
+    update:
+      profile_updated: Profile updated
     show:
+      edit_user: Edit user
       other_projects_edit: Other Projects you can edit
       see_external: >
         See this user's external page.
       as_admin: "as an admin, you may also:"
       send_email_to: "send email to:"
-      profile_updated: Profile updated
       delete_link_name: delete
       confirm_delete: Are you sure you want to delete this user?
     destroy:
@@ -114,6 +126,10 @@ en:
         projects created since day before
       projects_updated_since_yesterday: >
         projects updated since day before
+      projects_created_average_7_days: >
+        projects created average over 7 days
+      projects_updated_average_7_days: >
+        projects updated average over 7 days
       reminders_sent_since_yesterday: >
         Reminders sent since yesterday
       reactivated_projects: >
@@ -279,6 +295,7 @@ en:
 
         Select the link below to activate your account:
       activate: Activate
+      subject: Account activation
     github_welcome:
       before_html: |
         <h1>CII Best Practices Badging Program</h1>
@@ -302,6 +319,16 @@ en:
 
         If you did not initiate this action, please check your GitHub security
         log on GitHub under Settings>Security.
+      subject: Welcome to the Badging Program
+    user_update:
+      before_text: Some of the user data for your account has been updated.
+      username_changed: User name changed.
+      email_changed: Email address changed.
+      password_changed: Password changed.
+      locale_changed: Locale changed.
+      current_state: "For the current state, see:"
+      after_text: Please alert us if there is a problem.
+      subject: User data edited
     password_reset:
       before_html: |
         <h1>Password reset</h1>
@@ -324,6 +351,7 @@ en:
         If you did not request your password to be reset,
         please ignore this email and
         your password will stay as it is.
+      subject: Password reset
       reset_password: Reset password
   criteria:
     '0':
@@ -1903,6 +1931,3 @@ en:
           and
           <a href="http://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html">undefined behavior sanitizer</a>.
           Widespread assertions would also work.
-
-
-

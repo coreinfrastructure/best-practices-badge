@@ -5,6 +5,7 @@ test_user:
   email: test@example.org
   password_digest: <%= User.digest('password') %>
   provider: local
+  preferred_locale: en
   activated: true
   activated_at: <%= Time.zone.now %>
 
@@ -13,6 +14,7 @@ test_user_melissa:
   email: melissa@example.com
   password_digest: <%= User.digest('password1') %>
   provider: local
+  preferred_locale: en
   activated: true
   activated_at: <%= Time.zone.now %>
 
@@ -21,6 +23,7 @@ test_user_mark:
   email: mark@example.com
   password_digest: <%= User.digest('password') %>
   provider: local
+  preferred_locale: en
   activated: true
   activated_at: <%= Time.zone.now %>
 
@@ -29,6 +32,7 @@ test_user_not_active:
   email: forgetful@example.com
   password_digest: <%= User.digest('password') %>
   provider: local
+  preferred_locale: en
   activated: false
 
 test_user_cs:
@@ -36,6 +40,7 @@ test_user_cs:
   email: CaseSensitive@example.org
   password_digest: <%= User.digest('password') %>
   provider: local
+  preferred_locale: en
   activated: true
   activated_at: <%= Time.zone.now %>
 
@@ -44,6 +49,7 @@ admin_user:
   email: admin@example.com
   password_digest: <%= User.digest('password') %>
   provider: local
+  preferred_locale: en
   activated: true
   activated_at: <%= Time.zone.now %>
   role: admin
@@ -54,5 +60,15 @@ github_user:
   email: github-user@example.com
   password_digest: <%= User.digest('password') %>
   provider: github
+  preferred_locale: en
+  activated: true
+  activated_at: <%= Time.zone.now %>
+
+fr_user:
+  name: French Test
+  email: fr-test@example.org
+  password_digest: <%= User.digest('password') %>
+  provider: local
+  preferred_locale: fr
   activated: true
   activated_at: <%= Time.zone.now %>

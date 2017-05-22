@@ -8,6 +8,7 @@
     <li>
       <%= avatar_for user %>
       <%= link_to user.name, user %>
+    | <%= user.provider %>
       <% if current_user&.admin? %>
         <% if user.email? %>
     |     <a href="mailto:<%= CGI::escape(user.email).html_safe %>">email

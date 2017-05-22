@@ -31,10 +31,10 @@ class LoginTest < CapybaraFeatureTest
     fill_in 'Password', with: 'password'
     click_button 'Log in using custom account'
     assert has_content? 'Signed in!'
-    assert_equal current_path, projects_path
+    assert_equal projects_path, current_path
     # Check we are redirected back to root if we try to get login again
     visit login_path
-    assert_equal current_path, root_path
+    assert_equal root_path, current_path
 
     visit edit_project_path(@project, locale: nil)
     assert has_content? 'We have updated our requirements for the criterion ' \
@@ -44,7 +44,7 @@ class LoginTest < CapybaraFeatureTest
     fill_in 'project_name', with: 'It doesnt matter'
     # Below we are clicking the final save button, it has a value of ''
     click_button('Save', exact: true)
-    assert_equal current_path, edit_project_path(@project, locale: nil)
+    assert_equal edit_project_path(@project, locale: nil), current_path
     assert has_content? 'Project was successfully updated.'
     # TODO: Get the clicking working again with capybara.
     # Details: If we expand all panels first and dont click this test passes.
@@ -96,6 +96,41 @@ class LoginTest < CapybaraFeatureTest
     assert_match X, find('#discussion_enough')['src']
   end
   # rubocop:enable Metrics/BlockLength
+
+  # Test if we switch to user's preferred locale on login.
+  # Here we test on a path that isn't the root.
+  # We have to implement these tests in (slower) integration testing.
+  # That's because the test infrastructure normally takes shortcuts in the
+  # login functionality to speed login. Those shortcuts speed test execution
+  # in general, but they also mean that testing this specific functionality
+  # won't work because of its inadequate simulation of the real situation
+  # (and thus requires a full integration test instead).
+  scenario 'Can Login in fr locale to /projects', js: true do
+    @fr_user = users(:fr_user)
+    visit projects_path
+    click_on 'Login'
+    fill_in 'Email', with: @fr_user.email
+    fill_in 'Password', with: 'password'
+    click_button 'Log in using custom account'
+    wait_for_jquery
+    assert has_content? 'Connecté !'
+    assert_equal '/fr/projects', current_path
+    has_current_path? %r{\A/fr/projects/\Z}
+  end
+
+  # Test the root path.  Locale is handled differently at the root,
+  # and it's a common scenario for non-en users, so make sure it works.
+  scenario 'Can Login in fr locale to top', js: true do
+    @fr_user = users(:fr_user)
+    visit root_path
+    click_on 'Login'
+    fill_in 'Email', with: @fr_user.email
+    fill_in 'Password', with: 'password'
+    click_button 'Log in using custom account'
+    wait_for_jquery
+    assert has_content? 'Connecté !'
+    has_current_path? %r{/\?locale=fr\Z}, url: true
+  end
 
   def ensure_choice(radio_button_id)
     # Necessary because Capybara click doesn't always take the first time

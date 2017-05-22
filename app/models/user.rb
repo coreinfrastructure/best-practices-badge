@@ -1,7 +1,13 @@
 # frozen_string_literal: true
 
 class User < ActiveRecord::Base
-  has_secure_password
+  # Use Rails' "has_secure_password" so that local accounts' password is
+  # is *only* stored as a bcrypt digest in password_digest
+  # (an iterated per-use salted hash).  We want users to be able to edit
+  # their profiles later, so disable the default password validation
+  # since it interferes with editing (see "validates :password" below).
+  has_secure_password validations: false
+
   has_many :projects, dependent: :destroy
   attr_accessor :remember_token, :activation_token, :reset_token
   before_create :create_activation_digest
@@ -11,13 +17,41 @@ class User < ActiveRecord::Base
   # this requirement.
   MIN_PASSWORD_LENGTH = 8
 
+  # BCrypt hash function can handle maximum 72 characters, and if we pass
+  # password of length more than 72 characters it ignores extra characters.
+  # Hence there's a need to put a restriction on maximum password length.
+  # This is an unfortunate limitation, but 72 characters is enough entropy
+  # in practice.  See ActiveModel::SecurePassword.
+  MAX_PASSWORD_LENGTH = 72
+
   validates :name, presence: true, length: { maximum: 50 }
   validates :email, presence: true, length: { maximum: 255 },
                     uniqueness: { case_sensitive: false }, email: true
-  validates :password, presence: true,
-                       length: { minimum: MIN_PASSWORD_LENGTH },
-                       password: true,
-                       allow_nil: true
+
+  # Validate passwords; this is obviously security-related.
+  # We directly control validations instead of using the default
+  # validations in "has_secure_password", so that users can edit profiles.
+  # In particular, we have to enable "confirmation: true" since that is
+  # no longer checked by "has_secure_password".
+  # The "allow_nil" means that updates may have an empty "password" field,
+  # which will be interpreted as "do not change the password".
+  # This is important for GitHub users, who don't give us passwords.
+  # Non-nil passwords (which are *required* when creating a local account,
+  # and also occur on password changes) must pass these validations,
+  # including the bad-password check.
+  validates :password,
+            length: {
+              minimum: MIN_PASSWORD_LENGTH,
+              maximum: MAX_PASSWORD_LENGTH
+            },
+            password: true, # Apply special bad-password check
+            confirmation: true,
+            allow_nil: true
+
+  # We don't allow locale nil. There's no need to, because the record has a
+  # default value (and the default is used if we don't supply a value).
+  VALID_LOCALES_STRINGS = I18n.available_locales.map(&:to_s)
+  validates :preferred_locale, inclusion: { in: VALID_LOCALES_STRINGS }
 
   # Returns the hash digest of the given string.
   def self.digest(string)

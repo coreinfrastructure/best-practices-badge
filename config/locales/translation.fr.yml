@@ -324,7 +324,7 @@ fr:
       target="_blank">conditions d''utilisation </a>. </small>
 
 '
-    account:
+    account: Compte
   sessions:
     login_header: S'identifier
     login_with_github_html: '<span class="fa fa-github"></span> Connectez-vous avec
@@ -361,7 +361,7 @@ fr:
       password: Mot de passe
       password_confirmation: Confirmez le mot de passe
       create_account: Créer mon compte
-      preferred_locale:
+      preferred_locale: Langue préférée
     show:
       see_external: Voir la page externe de cet utilisateur.
       other_projects_edit: Autres projets que vous pouvez modifier
@@ -581,7 +581,7 @@ fr:
     cant_reset_nonlocal: Désolé, il n'est pas possible de réinitialiser le mot de
       passe pour un utilisateur non local
     reset_expired: La réinitialisation du mot de passe est expirée.
-    update_password:
+    update_password: Mise à jour du mot de passe
   report_mailer:
     new_project_heading: 'Merci d''avoir ajouté votre projet au programme de badge
       des Meilleures Pratiques
@@ -644,6 +644,6 @@ fr:
       Badge\n"
   project_name_unknown: "(Nom inconnu)"
   locale_name:
-    en:
-    fr:
-    zh-CN:
+    en: Anglais / English (en)
+    fr: Français (fr)
+    zh-CN: Chinois (simplifié) / 简体 中文 (zh-CN)

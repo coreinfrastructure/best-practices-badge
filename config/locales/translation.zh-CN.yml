@@ -313,7 +313,7 @@ zh-CN:
       target="_blank">Linux 基金会</a> 合作项目。版权所有。 请查阅我们的 <a href="https://www.linuxfoundation.org/privacy"
       target="_blank">隐私策略</a> 和 <a href="https://www.linuxfoundation.org/terms" target="_blank">使用条款</a>.
       </small>
-    account:
+    account: 帐户
   sessions:
     login_header: 登录
     login_with_github_html: <span class="fa fa-github"></span> 使用GitHub账户登录
@@ -342,7 +342,7 @@ zh-CN:
       password: 密码
       password_confirmation: 确认密码
       create_account: 创建我的账户
-      preferred_locale:
+      preferred_locale: 首选语言
     show:
       see_external: '查看此用户的外部页面。
 
@@ -528,7 +528,7 @@ zh-CN:
     instructions_sent: 电子邮件发送密码重置说明
     cant_reset_nonlocal: 对不起，无法重设非本地用户的密码
     reset_expired: 密码重设已过期。
-    update_password:
+    update_password: 更新密码
   report_mailer:
     new_project_heading: '感谢您将项目添加到最佳实践徽章计划中
 

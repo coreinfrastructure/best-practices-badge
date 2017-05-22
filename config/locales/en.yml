@@ -1715,7 +1715,7 @@ en:
           test suite is thorough, instead, failing to meet this criterion is
           a strong indicator of a poor test suite.
       test_policy_mandated:
-        descritpion: >
+        description: >
           The project MUST have a formal written policy that as major
           new functionality is added, tests for tests for the new functionality
           MUST be added to an automated test suite.

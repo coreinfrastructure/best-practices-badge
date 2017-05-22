@@ -23,7 +23,7 @@ cache_if (!Rails.env.test? && !@projects.empty?),
         feed.entry(project) do |entry|
           entry.title project.name.presence || t('project_name_unknown')
           status = "<p><b>#{project.badge_level.titleize}: " \
-                   "#{project.badge_percentage}%</b></p>"
+                   "#{project.badge_percentage_0}%</b></p>"
           url = project.homepage_url.presence || project.repo_url
           link = "<p><a href='#{url}'>#{url}</a></p>"
           description = '<span lang="en">' +

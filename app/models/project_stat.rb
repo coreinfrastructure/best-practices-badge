@@ -51,11 +51,11 @@ class ProjectStat < ActiveRecord::Base
                .where('created_at < updated_at').count
       self.active_in_progress =
         Project.updated_since(ACTIVE_PERIOD.day.ago)
-               .where('badge_percentage < 100').count
+               .where('badge_percentage_0 < 100').count
       self.active_edited_in_progress =
         Project.updated_since(ACTIVE_PERIOD.day.ago)
                .where('created_at < updated_at')
-               .where('badge_percentage < 100').count
+               .where('badge_percentage_0 < 100').count
     end
     self # Return self to support method chaining
   end

@@ -20,23 +20,27 @@ class CriteriaHash
     @criteria[key]
   end
 
-  def keys
-    @criteria.keys
-  end
-
   def all
-    @criteria.values.map(&:key).flatten.uniq
+    @criteria.values.map(&:keys).flatten.uniq
   end
 
   def each
     @criteria.each { |level| yield level }
   end
 
-  def to_h
-    @criteria_hash
+  def keys
+    @criteria.keys
   end
 
   def level_to_h(level)
     @criteria_hash[level] if @criteria_hash.key?(level)
+  end
+
+  def to_h
+    @criteria_hash
+  end
+
+  def values
+    @criteria.values
   end
 end

@@ -106,38 +106,44 @@ class ProjectTest < ActiveSupport::TestCase
   test 'test get_criterion_result returns correct values' do
     assert_equal(
       :criterion_url_required,
-      @unjustified_project.get_criterion_result(Criteria[:contribution])
+      @unjustified_project.get_criterion_result(Criteria['0'][:contribution])
     )
     assert_equal(
       :criterion_justification_required,
-      @unjustified_project.get_criterion_result(Criteria[:release_notes])
+      @unjustified_project.get_criterion_result(Criteria['0'][:release_notes])
     )
     assert_equal(
       :criterion_justification_required,
-      @unjustified_project.get_criterion_result(Criteria[:installation_common])
+      @unjustified_project.get_criterion_result(
+        Criteria['0'][:installation_common]
+      )
     )
     assert_equal(
       :criterion_justification_required,
-      @unjustified_project.get_criterion_result(Criteria[:static_analysis])
+      @unjustified_project.get_criterion_result(
+        Criteria['0'][:static_analysis]
+      )
     )
     assert_equal(
       :criterion_barely,
-      @unjustified_project.get_criterion_result(Criteria[:test_most])
+      @unjustified_project.get_criterion_result(Criteria['0'][:test_most])
     )
     assert_equal(
       :criterion_failing,
       @unjustified_project.get_criterion_result(
-        Criteria[:crypto_certificate_verification]
+        Criteria['0'][:crypto_certificate_verification]
       )
     )
     assert_equal(
       :criterion_unknown,
-      @unjustified_project.get_criterion_result(Criteria[:build_reproducible])
+      @unjustified_project.get_criterion_result(
+        Criteria['0'][:build_reproducible]
+      )
     )
     assert_equal(
       :criterion_passing,
       @unjustified_project.get_criterion_result(
-        Criteria[:vulnerability_report_private]
+        Criteria['0'][:vulnerability_report_private]
       )
     )
   end
@@ -149,13 +155,13 @@ class ProjectTest < ActiveSupport::TestCase
   end
 
   test 'test get_satisfaction_data' do
-    basics = @unjustified_project.get_satisfaction_data('basics')
+    basics = @unjustified_project.get_satisfaction_data('0', 'basics')
     assert_equal '9/12', basics[:text]
     assert_equal 'hsl(90, 100%, 50%)', basics[:color]
-    reporting = @unjustified_project.get_satisfaction_data('reporting')
+    reporting = @unjustified_project.get_satisfaction_data('0', 'reporting')
     assert_equal '5/8', reporting[:text]
     assert_equal 'hsl(75, 100%, 50%)', reporting[:color]
-    quality = @unjustified_project.get_satisfaction_data('quality')
+    quality = @unjustified_project.get_satisfaction_data('0', 'quality')
     assert_equal '13/13', quality[:text]
     assert_equal 'hsl(120, 100%, 50%)', quality[:color]
   end

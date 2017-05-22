@@ -187,7 +187,7 @@ class Project < ActiveRecord::Base
 
   def calculate_badge_percentage(level)
     active = Criteria[level].values.reject(&:future?)
-    met = active.count(&:enough?)
+    met = active.count { |criterion| enough?(criterion) }
     to_percentage met, active.size
   end
 
@@ -302,9 +302,9 @@ class Project < ActiveRecord::Base
     Project.find_each do |project|
       project.with_lock do
         old_badge_percentages =
-          Criteria.keys.mash do |level|
+          Criteria.keys.map do |level|
             [level, project["badge_percentage_#{level}".to_sym]]
-          end
+          end.to_h
         project.update_badge_percentages
         old_badge_percentages.each do |level, percentage|
           unless percentage ==

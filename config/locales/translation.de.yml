@@ -464,7 +464,9 @@ de:
         details:
       build_common_tools:
         description:
-        details:
+        details: 'Beispielsweise, Maven, Ant, cmake, die Autotools, make oder rake.
+
+'
       build_floss_tools:
         description:
       test:

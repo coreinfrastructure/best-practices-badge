@@ -65,7 +65,7 @@ group :development do
   gem 'rails_db', '1.5.0' # Enable localhost:3000/rails/db debugging
   gem 'traceroute', '0.5.0' # Adds 'rake traceroute' command to check routes
   gem 'translation', '1.9' # translation.io - translation service
-  gem 'web-console', '3.5.0'
+  gem 'web-console', '3.5.1' # Debugging tool for Ruby on Rails apps
 end
 
 group :test do

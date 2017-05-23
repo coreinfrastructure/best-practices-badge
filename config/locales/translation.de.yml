@@ -737,8 +737,32 @@ de:
         details:
   static_pages:
     home:
-      badge_program:
-      get_your_badge:
-      p1_html:
-      p2_html:
-      p3_html:
+      badge_program: CII Best Practices Badge Programm
+      get_your_badge: Jetzt Badge Holen!
+      p1_html: Die <a href="https://www.linuxfoundation.org/">Linux Foundation (LF)</a>
+        <a href="https://www.coreinfrastructure.org/">Core Infrastructure Initiative
+        (CII)</a> Best Practices Badge ist ein Weg für Free/Libre und Open Source
+        Software (FLOSS) Projekte zu zeigen, dass sie Best Practices folgen. Projekte
+        können sich freiwillig und kostenlos selbst zertifizieren, indem sie diese
+        Webapplikation benutzen, um zu zeigen, wie Sie Best Practices umsetzen. Die
+        CII Best Practices Badge wurde von den vielen Badges, die Projekten auf GitHub
+        zur Verfügung stehen, inspiriert. Benutzer der Badge können schnell erkennen
+        welche FLOSS Projekte Best Practices umsetzen und folglich mit Wahrscheinlichkeit
+        qualitative höherwertige und sicherere Software entwickeln.
+      p2_html: Weitere Informationen und Hintergründe zum CII Best Practices Badge
+        Programm, wie zum Beispiel die <a href='https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/doc/criteria.md'>Kriterien</a>,
+        sind <a href='https://github.com/linuxfoundation/cii-best-practices-badge'>auf
+        GitHub Verfügbar</a>. Ebenfalls verfügbar sind <a href="/project_stats">Projekt
+        Statistiken</a> und <a href="/criteria">Kriterien Statistiken</a>. Unter <a
+        href="/projects">Projekte</a> sind alle Projekte gelisted, die an dem Badge
+        Programm teilnehmen, und können gefiltert werden (z.B.  <a href="/projects?gteq=100">welche
+        Projekte haben sich das Badge verdient</a>).  Ein <a href='/projects/1'>Beispiel
+        ist unser eigenes Badge</a>, wo wir uns selbst zertifiziert haben.
+      p3_html: '<i>Datenschutz und Rechtliche Hinweise</i>: Bitte siehe unsere <a
+        href="https://www.linuxfoundation.org/privacy">Datenschutz Richtlinie</a>
+        und <a href="https://www.linuxfoundation.org/terms">Benutzungsbedingungen</a>.
+        Alle öffentlich zugänglichen nicht-Code Inhalte sind mindestens unter der  <a
+        href="https://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution
+        License version 3.0 (CC-BY-3.0)</a> lizensiert; neuere nicht-Code  Inhalte
+        sind unter CC-BY Version 3.0 oder später (CC-BY-3.0+) lizensiert. Bitte die
+        CII Best Practices Badge Mitwirkenden als Urheber angeben.'

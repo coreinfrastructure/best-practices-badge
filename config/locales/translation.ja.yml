@@ -347,6 +347,11 @@ ja:
     in_html_add:
     in_progress_message:
     ending:
+    subject_achieved_passing:
+    subject_no_longer_passing:
+    subject_new_project:
+    subject_reminder:
+    subject_project_deleted:
   user_mailer:
     account_activation:
       before_html:

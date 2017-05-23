@@ -597,6 +597,11 @@ zh-CN:
       很抱歉，您的项目不再具有“通过”徽章，现在正在“进行中”。
       有关详细信息，请参阅以下URL：
     ending: "--- David A. Wheeler，CII最佳实践徽章技术负责人\n"
+    subject_achieved_passing:
+    subject_no_longer_passing:
+    subject_new_project:
+    subject_reminder:
+    subject_project_deleted:
   project_name_unknown: "(未知名称)"
   locale_name:
     en:

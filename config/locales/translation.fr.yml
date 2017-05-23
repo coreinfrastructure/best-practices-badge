@@ -642,6 +642,11 @@ fr:
       Consultez l'URL suivante pour plus d'informations :
     ending: "--- David A. Wheeler, Directeur Technique du programme CII Best Practices
       Badge\n"
+    subject_achieved_passing:
+    subject_no_longer_passing:
+    subject_new_project:
+    subject_reminder:
+    subject_project_deleted:
   project_name_unknown: "(Nom inconnu)"
   locale_name:
     en: Anglais / English (en)

@@ -752,11 +752,11 @@ de:
       p2_html: Weitere Informationen und Hintergründe zum CII Best Practices Badge
         Programm, wie zum Beispiel die <a href='https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/doc/criteria.md'>Kriterien</a>,
         sind <a href='https://github.com/linuxfoundation/cii-best-practices-badge'>auf
-        GitHub Verfügbar</a>. Ebenfalls verfügbar sind <a href="/project_stats">Projekt
-        Statistiken</a> und <a href="/criteria">Kriterien Statistiken</a>. Unter <a
-        href="/projects">Projekte</a> sind alle Projekte gelisted, die an dem Badge
-        Programm teilnehmen, und können gefiltert werden (z.B.  <a href="/projects?gteq=100">welche
-        Projekte haben sich das Badge verdient</a>).  Ein <a href='/projects/1'>Beispiel
+        GitHub Verfügbar</a>. Ebenfalls verfügbar sind <a href="/de/project_stats">Projekt
+        Statistiken</a> und <a href="/de/criteria">Kriterien Statistiken</a>. Unter
+        <a href="/de/projects">Projekte</a> sind alle Projekte gelisted, die an dem
+        Badge Programm teilnehmen, und können gefiltert werden (z.B.  <a href="/de/projects?gteq=100">welche
+        Projekte haben sich das Badge verdient</a>).  Ein <a href='/de/projects/1'>Beispiel
         ist unser eigenes Badge</a>, wo wir uns selbst zertifiziert haben.
       p3_html: '<i>Datenschutz und Rechtliche Hinweise</i>: Bitte siehe unsere <a
         href="https://www.linuxfoundation.org/privacy">Datenschutz Richtlinie</a>

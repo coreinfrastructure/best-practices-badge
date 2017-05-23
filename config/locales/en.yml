@@ -253,6 +253,16 @@ en:
   # report_project_deleted.*.erb
   # report_reminder_summary.*.erb
   report_mailer:
+    subject_achieved_passing: >
+      CONGRATULATIONS on achieving a passing best practices badge!
+    subject_no_longer_passing: >
+      Your best practices badge is no longer passing
+    subject_new_project: >
+      You added a project to the CII Best Practices Badging Program
+    subject_reminder: >
+      Your project does not yet have the "best practices" badge
+    subject_project_deleted: >
+      Project %{project_id} named %{project_name} was deleted
     new_project_heading: >
       Thanks for adding your project to the Best Practices Badging Program
     new_project_part1: |

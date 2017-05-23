@@ -32,9 +32,6 @@ class LoginTest < CapybaraFeatureTest
     click_button 'Log in using custom account'
     assert has_content? 'Signed in!'
     assert_equal projects_path, current_path
-    # Check we are redirected back to root if we try to get login again
-    visit login_path
-    assert_equal root_path, current_path
 
     visit edit_project_path(@project, locale: nil)
     assert has_content? 'We have updated our requirements for the criterion ' \

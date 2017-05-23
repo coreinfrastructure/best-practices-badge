@@ -4,11 +4,13 @@ class SessionsController < ApplicationController
   include SessionsHelper
 
   def new
-    use_secure_headers_override(:allow_github_form_action)
-    store_location
-    return unless logged_in?
-    flash[:success] = t('sessions.already_logged_in')
-    redirect_back_or root_url
+    if logged_in?
+      flash[:success] = t('sessions.already_logged_in')
+      redirect_to root_url
+    else
+      use_secure_headers_override(:allow_github_form_action)
+      store_location
+    end
   end
 
   def create

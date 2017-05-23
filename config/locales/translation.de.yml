@@ -62,8 +62,12 @@ de:
         one: 'Konnte %{model} nicht speichern: ein Fehler.'
         other: 'Konnte %{model} nicht speichern: %{count} Fehler.'
     unavailable_session:
-    unacceptable_request:
-    connection_refused:
+    unacceptable_request: 'Eine unterstützte Version wird im Accept-Header erwartet.
+
+'
+    connection_refused: |
+      Hoppla! Konnte keine Verbindung zur Web Console-Middleware herstellen.
+      Bitte gewähleisten Sie, dass ein Rails-Entwicklungs-Server läuft.
   datetime:
     distance_in_words:
       half_a_minute: vor einer halben Minute
@@ -101,15 +105,15 @@ de:
         one: vor fast einem Jahr
         other: vor fast %{count} Jahren
       x_years:
-        one:
-        other:
+        one: 1 Jahr
+        other: "%{count} Jahre"
     prompts:
       year: Jahr //all are in singular now
       month: Monat
       day: Tag
       hour: Stunden
       minute: Minute
-      second: Sekunde
+      second: Sekunden
   helpers:
     select:
       prompt: Bitte wählen
@@ -118,213 +122,214 @@ de:
       update: "%{model} aktualisieren"
       submit: "%{model} speichern"
   ransack:
-    search:
-    predicate:
-    and:
-    or:
-    any:
-    all:
-    combinator:
-    attribute:
-    value:
-    condition:
-    sort:
-    asc:
-    desc:
+    search: Suche
+    predicate: Prädikat
+    and: und
+    or: oder
+    any: jeder
+    all: alle
+    combinator: Kombinator
+    attribute: Attribut
+    value: Wert
+    condition: Bedingung
+    sort: sortieren
+    asc: aufsteigend
+    desc: absteigend
     predicates:
-      eq:
-      eq_any:
-      eq_all:
+      eq: gleich
+      eq_any: gleich irgendeine
+      eq_all: gleich alle
       not_eq:
       not_eq_any:
       not_eq_all:
-      matches:
-      matches_any:
-      matches_all:
-      does_not_match:
-      does_not_match_any:
-      does_not_match_all:
-      lt:
-      lt_any:
-      lt_all:
+      matches: stimmt überein
+      matches_any: stimmt mit irgendeinem überein
+      matches_all: stimmt mit allen überein
+      does_not_match: stimmt nicht überein
+      does_not_match_any: stimmt nicht mit jedem überein
+      does_not_match_all: stimmt nicht mit allen überein
+      lt: weniger als
+      lt_any: weniger als irgendeine
+      lt_all: weniger als alle
       lteq:
       lteq_any:
       lteq_all:
-      gt:
-      gt_any:
-      gt_all:
+      gt: größer als
+      gt_any: größer als irgendeine
+      gt_all: größer als alle
       gteq:
       gteq_any:
       gteq_all:
-      in:
-      in_any:
-      in_all:
-      not_in:
-      not_in_any:
-      not_in_all:
-      cont:
-      cont_any:
-      cont_all:
-      not_cont:
-      not_cont_any:
-      not_cont_all:
-      start:
-      start_any:
-      start_all:
+      in: in
+      in_any: in irgendeinem
+      in_all: in allen
+      not_in: nicht in
+      not_in_any: nicht in irgendeine
+      not_in_all: nicht in allen
+      cont: enthält
+      cont_any: enthält irgendeine
+      cont_all: enthält alle
+      not_cont: enthält nicht
+      not_cont_any: enthält irgendeine nicht
+      not_cont_all: enthält alle nicht
+      start: beginnt mit
+      start_any: beginnt mit irgendeinem
+      start_all: beginnt mit allen
       not_start:
       not_start_any:
       not_start_all:
-      end:
-      end_any:
-      end_all:
-      not_end:
+      end: endet auf
+      end_any: endet auf irgendeinen
+      end_all: endet auf allen
+      not_end: endet nicht auf
       not_end_any:
       not_end_all:
-      'true':
-      'false':
-      present:
-      blank:
-      'null':
-      not_null:
+      'true': ist wahr
+      'false': ist falsch
+      present: ist vorhanden
+      blank: ist leer
+      'null': ist NULL
+      not_null: ist nicht NULL
   simple_form:
-    'yes':
-    'no':
+    'yes': Ja
+    'no': Nein
     required:
-      text:
-      mark:
+      text: erforderlich
+      mark: "*"
     error_notification:
       default_message:
-  hello:
-  submit:
+  hello: Hallo Welt
+  submit: Senden
   projects_count:
-    one:
-    other:
-  feed_title:
-  project_name_unknown:
+    one: "%{count} Projekt"
+    other: "%{count} Projekte"
+  feed_title: CII Best Practices BadgeApp Aktualisierte Projekte
+  project_name_unknown: "(Name unbekannt)"
   locale_name:
-    en:
-    de:
-    fr:
-    ja:
-    zh-CN:
+    en: Englisch / English (en)
+    de: Deutsch / German (de)
+    fr: Französisch / Français (fr)
+    ja: Japanisch / 日本語 (ja)
+    zh-CN: Chinesisch (vereinfacht) / 简体 中 文 (zh-CN)
   layouts:
-    cii_best_practices:
-    projects:
-    users:
-    account:
-    profile:
-    settings:
+    cii_best_practices: CII Best Practices
+    projects: Projekte
+    users: Benutzer
+    account: Konto
+    profile: Profil
+    settings: Einstellungen
     logout_html:
     signup_html:
     login_html:
     footer_text_html:
   account_activations:
-    activated:
-    failed_activation:
+    activated: Konto aktiviert!
+    failed_activation: Ungültiger Aktivierungslink
   password_resets:
-    forgot_password:
-    reset_password:
-    password_confirmation:
-    email_not_found:
-    password_empty:
-    password_reset:
-    instructions_sent:
-    cant_reset_nonlocal:
-    reset_expired:
-    update_password:
+    forgot_password: Passwort vergessen
+    reset_password: Passwort zurücksetzen
+    password_confirmation: Bestätigung
+    email_not_found: E-Mailadresse nicht gefunden
+    password_empty: Passwort darf nicht leer sein
+    password_reset: Passwort wurde zurückgesetzt
+    instructions_sent: E-Mail mit Anweisungen zum Passwortzurücksetzen verschickt
+    cant_reset_nonlocal: Sorry, kann das Passwort für einen Nicht-lokalen Benutzer
+      nicht zurücksetzen
+    reset_expired: Passwort zurücksetzen ist abgelaufen.
+    update_password: Passwort aktualisieren
   sessions:
-    login_header:
+    login_header: Einloggen
     login_with_github_html:
-    or:
+    or: oder
     email:
-    password:
+    password: Passwort
     forgot_password:
-    remember_me:
+    remember_me: Benutzer merken
     login_custom:
     no_custom:
     already_logged_in:
     incorrect_login_info:
     invalid_combo:
-    signed_in:
+    signed_in: Angemeldet!
     not_activated:
-    signed_out:
+    signed_out: Abgemeldet!
   users:
     new:
-      signup_header:
+      signup_header: Anmelden
       intro_html:
-      name:
-      email:
-      preferred_locale:
-      password:
-      password_confirmation:
-      create_account:
+      name: Name
+      email: E-Mail
+      preferred_locale: Bevorzugte Region
+      password: Passwort
+      password_confirmation: Bestätige Passwort
+      create_account: Erstelle meinen Account
     edit:
-      update_user_info:
-      save_changes:
+      update_user_info: Benutzerinformationen aktualisieren
+      save_changes: Änderungen speichern
     update:
-      profile_updated:
+      profile_updated: Profil aktualisiert
     show:
-      edit_user:
-      other_projects_edit:
+      edit_user: Benutzer bearbeiten
+      other_projects_edit: Andere Projekte die Sie bearbeiten können
       see_external:
       as_admin:
       send_email_to:
-      delete_link_name:
+      delete_link_name: löschen
       confirm_delete:
     destroy:
-      cannot_delete_self:
-      user_deleted:
+      cannot_delete_self: Kann nicht selbst löschen.
+      user_deleted: Benutzer gelöscht.
     redirect_existing:
     new_activation_link_created:
-    please_log_in:
+    please_log_in: Bitte anmelden.
   project_stats:
     index:
-      project_stats_header:
-      all_projects:
-      projects_nontrivial:
-      projects_activity_30:
-      daily_activity:
-      reminders:
+      project_stats_header: Projektstatistiken
+      all_projects: Alle Projekte
+      projects_nontrivial: Projekte mit nicht-trivialem Fortschritt
+      projects_activity_30: Projekte mit Badge Aktivitäten in den letzten 30 Tagen
+      daily_activity: Tägliche Badge Aktivitäten
+      reminders: Erinnerungen
       active_projects:
       active_in_progress:
       active_edited:
       active_edited_in_progress:
-      projects_created_since_yesterday:
+      projects_created_since_yesterday: Projekte angelegt vor Tag
       projects_updated_since_yesterday:
-      projects_created_average_7_days:
-      projects_updated_average_7_days:
+      projects_created_average_7_days: Projekte vor mehr als 7 Tagen angelegt
+      projects_updated_average_7_days: Projekte vor mehr als 7 Tagen aktualisiert
       reminders_sent_since_yesterday:
       reactivated_projects:
       admin_html:
       raw_data:
-      json_format:
-      csv_format:
+      json_format: JSON-Format
+      csv_format: Herunterladbares CSV-Format
   projects:
     index:
-      add_link:
-      add_new:
-      badge_status:
+      add_link: Hinzufügen
+      add_new: Neues Projekt hinzufügen
+      badge_status: Badge Status
       exclude_passing:
-      text_search:
-      name_or_description:
-      search:
+      text_search: Textsuche
+      name_or_description: Name oder Beschreibungstext
+      search: Suche
     table:
-      id:
-      name:
-      description:
-      website:
-      license:
-      owner:
-      last_achieved:
-      pachieved:
+      id: ID
+      name: Name
+      description: Beschreibung
+      website: Webseite
+      license: Lizenz
+      owner: Eigentümer
+      last_achieved: Zuletzt erreicht
+      pachieved: "% Erreicht"
       can_also_sort:
-      repository_url:
+      repository_url: Repository-URL
       create_time:
-      update_time:
-      user_id:
+      update_time: Letzte Aktualisierung (für Badge Eintrag)
+      user_id: Benutzer ID
     new:
       post_delay_warning:
-      new_badge:
+      new_badge: Neues Badge
       may_select_html:
       select_one_github:
       submit_github:
@@ -346,39 +351,40 @@ de:
     in_markdown_add:
     in_html_add:
     in_progress_message:
-    ending:
+    ending: "--- David A. Wheeler, CII Best Practices Badge Technical Lead"
   user_mailer:
     account_activation:
       before_html:
       before_text:
-      activate:
-      subject:
+      activate: Aktivieren
+      subject: Kontoaktivierung
     github_welcome:
       before_html:
       before_text:
-      subject:
+      subject: Willkommen beim Badge Programm
     user_update:
       before_text:
-      username_changed:
-      email_changed:
-      password_changed:
-      locale_changed:
+      username_changed: Benutzername geändert.
+      email_changed: E-Mail-Adresse geändert.
+      password_changed: Passwort geändert.
+      locale_changed: Region geändert.
       current_state:
-      after_text:
-      subject:
+      after_text: Bitte benachrichtigen Sie uns, wenn es ein Problem gibt.
+      subject: Benutzerdaten bearbeitet
     password_reset:
       before_html:
       before_text:
       after_html:
       after_text:
-      subject:
-      reset_password:
+      subject: Passwort zurückgesetzt
+      reset_password: Passwort Zurücksetzen
   criteria:
     '0':
       description_good:
         description:
         details:
-        met_placeholder:
+        met_placeholder: "(Optional) Wo befindet sich die Kurzbeschreibung? Gegebenenfalls
+          URL angeben."
       interact:
         description:
         met_placeholder:
@@ -401,7 +407,7 @@ de:
       documentation_basics:
         description:
         details:
-        met_placeholder:
+        met_placeholder: "(Optional) Welche URL(s) führen zur Dokumentation?"
       documentation_interface:
         description:
         details:
@@ -729,3 +735,10 @@ de:
       dynamic_analysis_unsafe:
         description:
         details:
+  static_pages:
+    home:
+      badge_program:
+      get_your_badge:
+      p1_html:
+      p2_html:
+      p3_html:

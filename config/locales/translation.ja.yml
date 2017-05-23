@@ -727,3 +727,10 @@ ja:
       dynamic_analysis_unsafe:
         description:
         details:
+  static_pages:
+    home:
+      badge_program:
+      get_your_badge:
+      p1_html:
+      p2_html:
+      p3_html:

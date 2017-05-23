@@ -1,0 +1,26 @@
+<% cache locale do %>
+<div class="row">
+    <div class="col-md-8 col-sm-7">
+      <h2 class="best-practices-banner"><%=
+        t('static_pages.home.badge_program') %></h2>
+      <%= link_to t('static_pages.home.get_your_badge'),
+                    new_project_path,
+                    class:"btn btn-success btn-main-getbadge btn-main-margin" %>
+      <p class="no-padding best-practices-main-text">
+        <%= t('static_pages.home.p1_html') %>
+      </p>
+
+      <p class="no-padding best-practices-main-text">
+        <%= t('static_pages.home.p2_html') %>
+      </p>
+
+      <p class="no-padding best-practices-main-text">
+        <%= t('static_pages.home.p3_html') %>
+      </p>
+    </div>
+    <div class="col-md-4 col-sm-5">
+      <div class="home-badge pull-right"></div>
+    </div>
+  </div>
+  <br>
+<% end %>

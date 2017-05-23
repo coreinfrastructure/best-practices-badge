@@ -346,6 +346,57 @@ fr:
 
 '
     signed_out: Déconnecté !
+  static_pages:
+    home:
+      badge_program: Programme de badges des meilleures pratiques de la CII
+      get_your_badge: 'Obtenez votre badge immédiatement !'
+      p1_html: >
+        Le programme de badges des meilleures pratiques de
+        la <a href="https://www.coreinfrastructure.org/">Core Infrastructure
+        Initiative (CII)</a> de
+        la <a href="https://www.linuxfoundation.org/">Fondation Linux</a> est un
+        moyen pour les projets de logiciel libre (FLOSS) de montrer qu'ils
+        suivent les meilleures pratiques de développement. Les projets peuvent
+        s'auto-évaluer de manière volontaire, sans frais, en utilisant cette
+        application Web pour expliquer comment ils suivent chacune
+        des meilleures
+        pratiques.  Le programme de badges des meilleures pratiques de la CII
+        s'inspire des nombreux badges disponibles aux projets sur GitHub. Les
+        consommateurs du badge pourront évaluer rapidement quels projets de
+        logiciel libre suivent les meilleures pratiques et, par conséquent, sont
+        plus susceptibles de produire des logiciels sûrs et
+        de meilleure qualité.
+      p2_html: >
+        Plus d'informations sur le programme de badges
+        des meilleures pratiques de la CII,
+        incluant des renseignements généraux et
+        <a href='https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/doc/criteria.md'>les
+        critères</a>, sont
+        <a href='https://github.com/linuxfoundation/cii-best-practices-badge'>disponibles sur GitHub</a>.
+        <a href="/fr/project_stats">Les statistiques du projet</a> et
+        <a href="/fr/criteria">des statistiques sur les critères</a> sont
+        disponibles.  La <a href="/fr/projects">page des projets</a> liste les
+        projets participants et permet des requêtes (par exemple, vous
+        pouvez y voir
+        <a href="/fr/projects?gteq=100">les projets ayant obtenu le
+        badge</a>). Vous pouvez également y voir
+        <a href='/fr/projects/1'>un exemple (où nous essayons
+        d'obtenir notre propre badge)</a>.
+      p3_html: >
+        <i>Confidentialité et problèmes juridiques </i>:
+        Consultez notre
+        <a href="https://www.linuxfoundation.org/privacy">politique
+        de confidentialité</a> et nos
+        <a href="https://www.linuxfoundation.org/terms">conditions
+        d'utilisation</a>.  Tout les contenus publiquement disponibles qui ne
+        sont pas sous forme de code sont publiés sous la license
+        <a href="https://creativecommons.org/licenses/by/3.0/">Creative Commons
+        Attribution License version 3.0 (CC-BY-3.0)</a> ou plus permissive ;
+        les contenus similaires plus récents sont diffusés sous la license
+        CC-BY version 3.0 ou ultérieure (CC-BY-3.0+).  Pour faire référence
+        globalement à ces contenus, ou en l'absence d'instructions spécifiques,
+        veuillez mentionner comme source les contributeurs du programme de
+        badges des meilleures pratiques de la CII.
   users:
     new:
       signup_header: S'inscrire

@@ -11,15 +11,6 @@
 #
 ---
 de:
-  date:
-    formats:
-      default: "%d.%m.%Y"
-      long: "%e. %B %Y"
-      short: "%e. %b"
-    order:
-    - :day
-    - :month
-    - :year
   number:
     currency:
       format:
@@ -60,11 +51,6 @@ de:
       last_word_connector: " und "
       two_words_connector: " und "
       words_connector: ", "
-  time:
-    formats:
-      default: "%A, %d. %B %Y, %H:%M Uhr"
-      long: "%A, %d. %B %Y, %H:%M Uhr"
-      short: "%d. %B, %H:%M Uhr"
   i18n:
     transliterate:
       rule:
@@ -81,3 +67,17 @@ de:
       first_day: 0
     say_no: false
     say_yes: true
+  date:
+    formats:
+      default: "%d.%m.%Y"
+      long: "%e. %B %Y"
+      short: "%e. %b"
+    order:
+    - :day
+    - :month
+    - :year
+  time:
+    formats:
+      default: "%A, %d. %B %Y, %H:%M Uhr"
+      long: "%A, %d. %B %Y, %H:%M Uhr"
+      short: "%d. %B, %H:%M Uhr"

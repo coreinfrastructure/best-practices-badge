@@ -20,6 +20,10 @@ if Rails.env.development? || Rails.env.testing?
     config.ignored_key_prefixes = [
       'rails.',
       'number.human.',
+      'date.',
+      'time.',
+      'errors.',
+      'datetime.',
       'admin.',
       'errors.messages.',
       'activerecord.errors.messages.',

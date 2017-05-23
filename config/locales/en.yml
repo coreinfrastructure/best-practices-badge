@@ -12,7 +12,7 @@ en:
   #
   locale_name: # Longer key name to reduce confusion.
     # Source locale
-    en: English / Deutsche (en)
+    en: English (en)
     # These locales are in POSIX order
     de: German / Deutsche (de)
     fr: French / Français (fr)

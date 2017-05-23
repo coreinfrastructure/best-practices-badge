@@ -942,6 +942,21 @@ rm -f raw-bad-passwords-lowercase.txt.gz
 gzip --best raw-bad-passwords-lowercase.txt
 ~~~~
 
+## Project stats omission on 2017-02-28
+
+The production site maintains a number of daily statistics and can
+[display the statistics graphically](https://bestpractices.coreinfrastructure.org/project_stats), but it is
+missing a report for 2017-02-28.
+This was due to a multi-hour downtime in
+Amazon’s S3 web-based storage service, part of
+Amazon Web Services (AWS), which took a large number of sites
+(not just ours).
+For more information you can see the story in
+[USA Today](https://www.usatoday.com/story/tech/news/2017/02/28/amazons-cloud-service-goes-down-sites-scramble/98530914/),
+[Zero Hedge](http://www.zerohedge.com/news/2017-02-28/amazon-cloud-reporting-increased-error-rates-secgov-possibly-impacted),
+and
+[Tech Crunch](https://techcrunch.com/2017/02/28/amazon-aws-s3-outage-is-breaking-things-for-a-lot-of-websites-and-apps/).
+
 ## See also
 
 See the separate "[background](./background.md)" and

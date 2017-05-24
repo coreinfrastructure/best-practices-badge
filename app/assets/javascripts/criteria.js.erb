@@ -1,4 +1,7 @@
-//=depend_on_asset criteria.yml
+//=depend_on criteria.yml
+//=depend_on en.yml
+//=depend_on translation.fr.yml
+//=depend_on translation.zh-CN.yml
 <%
   # Don't send to clients the fields they won't use.
   # We *omit* fields, instead # of listing what we'll use.
@@ -13,15 +16,20 @@
     'rationale' => 1,
     'autofill' => 1
   }
-  first = true
-  # We could just use "CriteriaHash.to_json" if we sent everything.
-  # The generated text is slightly longer than necessary, but that's
-  # irrelevant because it will be minified for production anyway.
+  criteria_for_js = Criteria.to_h
+  criteria_for_js.each do |level, criteria_set|
+    criteria_set.each do |criterion, fields|
+      fields.delete_if {|k,v| omit_fields.key?(k)}
+      translations = {}
+      I18n.available_locales.each do |locale|
+        I18n.t(".criteria.#{level}.#{criterion}", locale).each do |k,v|
+          next if omit_fields.key?(k.to_s)
+          translations[k.to_s] = {} unless translations.key?(k.to_s)
+          translations[k.to_s][locale.to_s] = v
+        end
+      end
+      fields.update(translations)
+    end
+  end
 %>
-CRITERIA_HASH = {
-<% Criteria.level_to_h('0').each do |k,v| %>
-  <%= "#{ first ? '' : ','} \"#{k}\" : " +
-      "#{v.select{|k,v| !omit_fields.has_key?(k)}.to_json}" %>
-<%   first=false %>
-<% end %>
-};
+CRITERIA_HASH = <%= criteria_for_js.to_json %>;

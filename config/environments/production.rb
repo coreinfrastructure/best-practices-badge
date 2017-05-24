@@ -127,6 +127,14 @@ Rails.application.configure do
   # development, because it interferes with their purposes.
   # The "use" form is preferred, but it doesn't actually work when placed
   # in this file, so we'll just set the timeout directly.
-  Rack::Timeout.service_timeout = 30 # seconds
+  # Ignore exceptions - in fake_production this will fail.  That's good,
+  # because we do *not* want timeouts during a debug session.
+  # rubocop:disable Lint/HandleExceptions
+  begin
+    Rack::Timeout.service_timeout = 30 # seconds
+  rescue NameError
+    # Do nothing if it's unavailable (this happens if we didn't load the gem)
+  end
+  # rubocop:enable Lint/HandleExceptions
 end
 # rubocop:enable Metrics/BlockLength

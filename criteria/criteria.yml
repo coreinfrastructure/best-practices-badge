@@ -691,528 +691,528 @@
           autofill: >
             Look for gems like secure_headers, and
             relevant compiler flags in build files.
-#~ - '1': !!omap
-  #~ - Basics: !!omap
-    #~ - Basic Project Website Content: !!omap
-      #~ - contribution_requirements:
-          #~ category: MUST
-          #~ met_url_required: true
-          #~ autofill: >
-            #~ Look for a CONTRIBUTING{,.md,.txt,.html} file.
-    #~ - Project Oversight: !!omap
-      #~ - dco:
-          #~ category: SHOULD
-          #~ met_url_required: true
-          #~ #autofill: TODO
-      #~ - governance:
-          #~ category: MUST
-          #~ met_url_required: true
-          #~ rationale: >
-            #~ There are many different governance models used by a wide array of
-            #~ successful projects.  Therefore, we do not believe that we should
-            #~ specify a particular governance model.  However, we do think
-            #~ it is important to have a governance model, and clearly define
-            #~ it, so that all participants and potential participants will
-            #~ know how decisions will be made. This was inspired by the
-            #~ <a href="https://projects.ow2.org/bin/view/ow2/OMM">OW2 Open-source Maturity Model</a>,
-            #~ in particular RDMP-1 and STK-1.
-          #~ #autofill: TODO
-      #~ - code_of_conduct:
-          #~ category: MUST
-          #~ met_url_required: true
-          #~ rationale: >
-            #~ Suggested in
-            #~ <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/608">issue#608</a>
-            #~ by Dan Kohn and in the NYC 2016 brainstorm session.
-          #~ #autofill: TODO
-      #~ - roles_responsibilities:
-          #~ category: MUST
-          #~ met_url_required: true
-          #~ rationale: >
-            #~ Much knowledge about the project roles builds up
-            #~ over the years, and is not sufficiently passed down to new people.
-            #~ Documenting the roles can help recruit, train, and mentor new
-            #~ project members.  Projects may choose document the roles
-            #~ and responsibilities in one place, and identify who has the roles
-            #~ separately, so that the project doesn't need to update the role
-            #~ information when people change roles.
-            #~ The goal is to make underlying assumptions clear.
-          #~ #autofill: TODO
-      #~ - access_continuity:
-          #~ category: MUST
-          #~ #autofill: TODO
-      #~ - bus_factor:
-          #~ category: SHOULD
-          #~ #autofill: TODO
-    #~ - Documentation: !!omap
-      #~ - documentation_roadmap:
-          #~ category: MUST
-          #~ met_url_required: true
-          #~ #autofill: TODO
-      #~ - documentation_architecture:
-          #~ category: MUST
-          #~ met_url_required: true
-          #~ na_allowed: true
-          #~ rationale: >
-            #~ Documenting the basic design makes it easier for potential
-            #~ new developers to understand its basics.
-            #~ This is related to know_secure_design, as well
-            #~ as implement_secure_design and proposed documentation_security.
-          #~ #autofill: TODO
-      #~ - documentation_security:
-          #~ category: MUST
-          #~ met_url_required: true
-          #~ rationale: >
-            #~ Writing the specification helps the developers think about the
-            #~ interface (including the API) the developers are providing, as well
-            #~ letting any user or researcher know what to expect.
-            #~ Many sources discuss the rationale for an "assurance case".
-            #~ This was inspired by
-            #~ <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/502">Security specification and facilitation of bug bounties</a>
-            #~ and by the
-            #~ <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/473">NYC 2016 brainstorming session</a>.
-          #~ #autofill: TODO
-      #~ - documentation_quick_start:
-          #~ category: MUST
-          #~ met_url_required: true
-          #~ rationale: >
-            #~ This is based on a conversation with Mike Milinkovich,
-            #~ Executive Director of the Eclipse Foundation, about the OSS project
-            #~ criteria and "what is important".
-            #~ He believes, based on his long experience, that it is critically
-            #~ important that any project have some sort of "quick start" guide to
-            #~ help someone get started and do something with the software;
-            #~ this feeling of accomplishment and demonstration that it works
-            #~ builds understanding and confidence in the user. See
-            #~ <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/645">issue#645</a>.
-      #~ - documentation_current:
-          #~ category: MUST
-          #~ rationale: >
-            #~ It's difficult to keep documentation up-to-date, so the
-            #~ criterion is worded this way to make it more practical.
-            #~ Information on differences or changes between versions of the
-            #~ software helps users of older versions
-            #~ and users who are transitioning from older versions.
-          #~ #autofill: TODO
-      #~ - documentation_achievemnets:
-          #~ category: MUST
-          #~ met_url_required: true
-          #~ rationale: >
-            #~ Users and potential co-developers need to be able to
-            #~ see what achievements have been attained by a project they are
-            #~ considering using or contributing to.  This information can
-            #~ help them determine if they should.  In addition, if projects
-            #~ identify their achievements, other projects will be encouraged to
-            #~ follow suit and also make those achievements, benefitting everyone.
-          #~ #autofill: TODO
-    #~ - Accessibility and Internationalization: !!omap
-      #~ - accessibility_best_practices:
-          #~ category: SHOULD
-          #~ #autofill:TODO
-      #~ - internationalization:
-          #~ category: SHOULD
-          #~ na_allowed: true
-          #~ rationale: >
-            #~ When software is internationalized, the software can be used by far
-            #~ more people.  By itself, that's valuable.
-            #~ In addition, software that can be used by far more people is more
-            #~ likely to lead to larger communities, which increases the
-            #~ likelihood of contributions and reviews.
-          #~ #autofill:TODO
-    #~ - Other: !!omap
-      #~ - sites_password_security:
-          #~ category: MUST
-          #~ na_allowed: true
-          #~ #autofill:TODO
-  #~ - 'Change Control': !!omap
-    #~ - Previous versions: !!omap
-      #~ - maintenance_or_update:
-          #~ category: MUST
-          #~ rationale: >
-            #~ This was inspired by
-            #~ <a href="https://projects.ow2.org/bin/view/ow2/OMM">DFCT-1.2</a>
-          #~ #autofill:TODO
-  #~ - Reporting: !!omap
-    #~ - Bug-reporting process: !!omap
-      #~ - report_tracker:
-          #~ category: MUST
-          #~ autofill: >
-            #~ On GitHub we presume that at least issue trackers can be used.
-            #~ Search CONTRIBUTING (if it exists) for a phrase like "issue tracker".
-    #~ - Vulnerability report process: !!omap
-      #~ - vulnerability_report_credit:
-          #~ category: MUST
-          #~ met_url_required: true
-          #~ na_allowed: true
-          #~ rationale: >
-            #~ It is only fair to credit those who provide vulnerability
-            #~ reports.  In many cases, the only reporter requirement is that
-            #~ they receive credit.  This is also important long-term, because
-            #~ giving credit encourages additional reporting.
-            #~ This was recommended in the
-            #~ <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/473">NYC 2016 brainstorming session</a>.
-          #~ #autofill:TODO
-      #~ - vulnerability_response_process:
-          #~ category: MUST
-          #~ met_url_required: true
-          #~ rationale: >
-            #~ This is inspired by
-            #~ <a href="http://community.apache.org/apache-way/apache-project-maturity-model.html">Apache Project Maturity Model</a>
-            #~ QU30.
-          #~ #autofill: TODO
-  #~ - Quality: !!omap
-    #~ - Coding standards: !!omap
-      #~ - coding_standards:
-          #~ category: MUST
-          #~ met_url_required: true
-          #~ #autofill: TODO
-      #~ - coding_standards_enforced:
-          #~ category: MUST
-          #~ na_allowed: true
-          #~ met_justification_required: true
-          #~ na_justification_required: true
-          #~ #autofill: TODO
-    #~ - Working build system: !!omap
-      #~ - build_standard_variables:
-          #~ category: MUST
-          #~ na_allowed: true
-          #~ na_justification_required: true
-          #~ rationale: >
-            #~ See
-            #~ <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/453">Build system should honor CC, CFLAGS, CXX, CXXFLAGS</a>
-      #~ - build_preserve_debug:
-          #~ category: SHOULD
-          #~ na_allowed: true
-          #~ na_justification_required: true
-          #~ #autofill: TODO
-      #~ - build_non_recursive:
-          #~ category: MUST
-          #~ na_allowed: true
-          #~ na_justification_required: true
-          #~ rationale: >
-            #~ For more information, see
-            #~ <a href="http://aegis.sourceforge.net/auug97.pdf">"Recursive Make Considered Harmful" by Peter Miller</a>
-            #~ (note that this incorrect approach can be used in any build system,
-            #~ not just <i>make</i>).
-            #~ Note that
-            #~ <a href="http://research.microsoft.com/en-us/um/people/simonpj/papers/ghc-shake/ghc-shake.pdf">"Non-recursive Make Considered Harmful"</a>
-            #~ agrees that recursive builds are bad; its argument is that
-            #~ for large projects you should use a tool other than make.
-            #~ In many cases it is better to automatically determine the
-            #~ dependencies, but this is not always accurate or practical,
-            #~ so we did not require that dependencies be automatically generated.
-          #~ #autofill: TODO
-      #~ - build_repeatable:
-          #~ category: MUST
-          #~ na_allowed: true
-          #~ na_justification_required: true
-          #~ rationale: >
-            #~ This is a step towards having a
-            #~ <a href="https://reproducible-builds.org/">reproducible build</a>.
-            #~ This criterion is much easier to meet, because it does not require
-            #~ that external parties be able to reproduce the results - merely
-            #~ that the project can.
-            #~ Supporting full reproducible builds requires that projects provide
-            #~ external parties enough information about their
-            #~ build environment(s), which can be harder to do - so we have
-            #~ split this requirement up.
-          #~ #autofill: TODO
-    #~ - Installation system: !!omap
-      #~ - installation_common:
-          #~ category: MUST
-          #~ autofill: >
-            #~ Look for a standard install format, or a build instruction for one.
-      #~ - installation_standard_variables:
-          #~ category: MUST
-          #~ na_allowed: true
-          #~ rationale: >
-            #~ This supports capturing the artifacts (e.g., for analysis)
-            #~ without interfering with the build or installation system due to
-            #~ system-wide changes. See
-            #~ <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/455">DESTDIR honored at install time</a>
-            #~ This doesn't apply when there's no "installation" process, or
-            #~ when POSIX filesystems aren't supported during installation (e.g.,
-            #~ Windows-only programs).  See
-            #~ <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/453">Build system should honor CC, CFLAGS, CXX, CXXFLAGS</a>
-          #~ #autofill: TODO
-      #~ - installation_development_quick:
-          #~ category: MUST
-          #~ rationale: >
-            #~ Recommended in the
-            #~ <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/473">NYC 2016 brainstorming session</a>.
-          #~ #autofill: TODO
-    #~ - Externally-maintained components: !!omap
-      #~ - external_dependencies:
-          #~ category: MUST
-          #~ met_url_required: true
-          #~ rationale: >
-            #~ Inspired by the
-            #~ <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/473">NYC 2016 brainstorming session</a>.
-          #~ #autofill: TODO
-      #~ - dependency_monitoring:
-          #~ category: MUST
-          #~ rationale: >
-            #~ This must be monitored or periodically checked, because
-            #~ new vulnerabilities are continuously being discovered.
-          #~ #autofill: TODO
-      #~ - updateable_reused_components:
-          #~ category: MUST
-          #~ rationale: >
-            #~ A very common problem is to have obsolete components with
-            #~ known vulnerabilities.  This is OWASP Top 10 (2013) number A9
-            #~ (using known vulnerable components).  See also
-            #~ <a href="http://www.aspectsecurity.com/research-presentations/the-unfortunate-reality-of-insecure-libraries">The Unfortunate Reality of Insecure Libraries</a>.
-          #~ #autofill: TODO
-      #~ - interfaces_current:
-          #~ category: SHOULD
-          #~ #autofill: TODO
-    #~ - Automated test suite: !!omap
-      #~ - automated_integration_testing:
-          #~ category: MUST
-          #~ rationale: >
-            #~ This is inspired by continuous integration.
-            #~ Continuous integration provides much more rapid feedback
-            #~ on whether or not changes will cause test failures,
-            #~ including regressions.  The term "continuous integration" (CI)
-            #~ is defined in Wikipedia as "merging all developer working copies
-            #~ to a shared mainline several times a day".
-            #~ <a href="http://martinfowler.com/articles/continuousIntegration.html">Martin Fowler</a>
-            #~ says that
-            #~ "Continuous Integration is a software development practice where
-            #~ members of a team integrate their work frequently, usually each
-            #~ person integrates at least daily - leading to multiple integrations
-            #~ per day. Each integration is verified by an automated build
-            #~ (including ) to detect integration errors as quickly as possible.
-            #~ Many teams find that this approach leads to significantly
-            #~ reduced integration problems and allows a team to develop
-            #~ cohesive software more rapidly."  However, while merging all
-            #~ developer working copies at this pace can be very useful, in
-            #~ practice many projects do not or cannot always do this.
-            #~ In practice, many developers maintain at least some branches that
-            #~ are not merged for longer than a day.
-          #~ #autofill: TODO
-      #~ - regression_tests_added50:
-          #~ category: MUST
-          #~ rationale: >
-            #~ Regression tests prevent undetected resurfacing of
-            #~ defects.  If a defect has happened before, there is an increased
-            #~ likelihood that it will happen again.  We only require 50% of
-            #~ bugs to have regression tests; not all bugs are equally likely
-            #~ to recur, and in some cases it is extremely difficult to build
-            #~ robust tests for them.  Thus, there is a diminishing point of
-            #~ return for adding regression tests.  The 50% value could be
-            #~ argued as being arbitrary, however, requiring less than 50% would
-            #~ mean that projects could get the badge even if a majority of their
-            #~ bugs in the time frame would not have regression tests.
-            #~ Projects may, of course, choose to have much larger percentages.
-            #~ We choose six months, as with other requirements, so that projects
-            #~ that have done nothing in the past (or recorded nothing in
-            #~ the past) can catch up in a reasonable period of time.
-          #~ #autofill: TODO
-      #~ - test_statement_coverage80:
-          #~ category: MUST
-          #~ na_allowed: true
-          #~ na_justification_required: true
-          #~ rationale: |
-            #~ Statement coverage is widely used as a test quality measure;
-            #~ it's often a first "starter" measure for test quality.
-            #~ It's well-supported, including by gcov/lcov and codecov.io.
-            #~ Bad test suites could also meet this requirement, but it's generally
-            #~ agreed that any good test suite will meet this requirement, so it
-            #~ provides a useful way to filter out clearly-bad test suites.
-            #~ After all, if your tests aren't even *running* many of the program's
-            #~ statements, you don't have very good tests.
-            #~ Only FLOSS test suites are considered, to ensure that the test
-            #~ suite can be examined and improved over time.
+- '1': !!omap
+  - Basics: !!omap
+    - Basic Project Website Content: !!omap
+      - contribution_requirements:
+          category: MUST
+          met_url_required: true
+          autofill: >
+            Look for a CONTRIBUTING{,.md,.txt,.html} file.
+    - Project Oversight: !!omap
+      - dco:
+          category: SHOULD
+          met_url_required: true
+          #autofill: TODO
+      - governance:
+          category: MUST
+          met_url_required: true
+          rationale: >
+            There are many different governance models used by a wide array of
+            successful projects.  Therefore, we do not believe that we should
+            specify a particular governance model.  However, we do think
+            it is important to have a governance model, and clearly define
+            it, so that all participants and potential participants will
+            know how decisions will be made. This was inspired by the
+            <a href="https://projects.ow2.org/bin/view/ow2/OMM">OW2 Open-source Maturity Model</a>,
+            in particular RDMP-1 and STK-1.
+          #autofill: TODO
+      - code_of_conduct:
+          category: MUST
+          met_url_required: true
+          rationale: >
+            Suggested in
+            <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/608">issue#608</a>
+            by Dan Kohn and in the NYC 2016 brainstorm session.
+          #autofill: TODO
+      - roles_responsibilities:
+          category: MUST
+          met_url_required: true
+          rationale: >
+            Much knowledge about the project roles builds up
+            over the years, and is not sufficiently passed down to new people.
+            Documenting the roles can help recruit, train, and mentor new
+            project members.  Projects may choose document the roles
+            and responsibilities in one place, and identify who has the roles
+            separately, so that the project doesn't need to update the role
+            information when people change roles.
+            The goal is to make underlying assumptions clear.
+          #autofill: TODO
+      - access_continuity:
+          category: MUST
+          #autofill: TODO
+      - bus_factor:
+          category: SHOULD
+          #autofill: TODO
+    - Documentation: !!omap
+      - documentation_roadmap:
+          category: MUST
+          met_url_required: true
+          #autofill: TODO
+      - documentation_architecture:
+          category: MUST
+          met_url_required: true
+          na_allowed: true
+          rationale: >
+            Documenting the basic design makes it easier for potential
+            new developers to understand its basics.
+            This is related to know_secure_design, as well
+            as implement_secure_design and proposed documentation_security.
+          #autofill: TODO
+      - documentation_security:
+          category: MUST
+          met_url_required: true
+          rationale: >
+            Writing the specification helps the developers think about the
+            interface (including the API) the developers are providing, as well
+            letting any user or researcher know what to expect.
+            Many sources discuss the rationale for an "assurance case".
+            This was inspired by
+            <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/502">Security specification and facilitation of bug bounties</a>
+            and by the
+            <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/473">NYC 2016 brainstorming session</a>.
+          #autofill: TODO
+      - documentation_quick_start:
+          category: MUST
+          met_url_required: true
+          rationale: >
+            This is based on a conversation with Mike Milinkovich,
+            Executive Director of the Eclipse Foundation, about the OSS project
+            criteria and "what is important".
+            He believes, based on his long experience, that it is critically
+            important that any project have some sort of "quick start" guide to
+            help someone get started and do something with the software;
+            this feeling of accomplishment and demonstration that it works
+            builds understanding and confidence in the user. See
+            <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/645">issue#645</a>.
+      - documentation_current:
+          category: MUST
+          rationale: >
+            It's difficult to keep documentation up-to-date, so the
+            criterion is worded this way to make it more practical.
+            Information on differences or changes between versions of the
+            software helps users of older versions
+            and users who are transitioning from older versions.
+          #autofill: TODO
+      - documentation_achievements:
+          category: MUST
+          met_url_required: true
+          rationale: >
+            Users and potential co-developers need to be able to
+            see what achievements have been attained by a project they are
+            considering using or contributing to.  This information can
+            help them determine if they should.  In addition, if projects
+            identify their achievements, other projects will be encouraged to
+            follow suit and also make those achievements, benefitting everyone.
+          #autofill: TODO
+    - Accessibility and Internationalization: !!omap
+      - accessibility_best_practices:
+          category: SHOULD
+          #autofill:TODO
+      - internationalization:
+          category: SHOULD
+          na_allowed: true
+          rationale: >
+            When software is internationalized, the software can be used by far
+            more people.  By itself, that's valuable.
+            In addition, software that can be used by far more people is more
+            likely to lead to larger communities, which increases the
+            likelihood of contributions and reviews.
+          #autofill:TODO
+    - Other: !!omap
+      - sites_password_security:
+          category: MUST
+          na_allowed: true
+          #autofill:TODO
+  - 'Change Control': !!omap
+    - Previous versions: !!omap
+      - maintenance_or_update:
+          category: MUST
+          rationale: >
+            This was inspired by
+            <a href="https://projects.ow2.org/bin/view/ow2/OMM">DFCT-1.2</a>
+          #autofill:TODO
+  - Reporting: !!omap
+    - Bug-reporting process: !!omap
+      - report_tracker:
+          category: MUST
+          autofill: >
+            On GitHub we presume that at least issue trackers can be used.
+            Search CONTRIBUTING (if it exists) for a phrase like "issue tracker".
+    - Vulnerability report process: !!omap
+      - vulnerability_report_credit:
+          category: MUST
+          met_url_required: true
+          na_allowed: true
+          rationale: >
+            It is only fair to credit those who provide vulnerability
+            reports.  In many cases, the only reporter requirement is that
+            they receive credit.  This is also important long-term, because
+            giving credit encourages additional reporting.
+            This was recommended in the
+            <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/473">NYC 2016 brainstorming session</a>.
+          #autofill:TODO
+      - vulnerability_response_process:
+          category: MUST
+          met_url_required: true
+          rationale: >
+            This is inspired by
+            <a href="http://community.apache.org/apache-way/apache-project-maturity-model.html">Apache Project Maturity Model</a>
+            QU30.
+          #autofill: TODO
+  - Quality: !!omap
+    - Coding standards: !!omap
+      - coding_standards:
+          category: MUST
+          met_url_required: true
+          #autofill: TODO
+      - coding_standards_enforced:
+          category: MUST
+          na_allowed: true
+          met_justification_required: true
+          na_justification_required: true
+          #autofill: TODO
+    - Working build system: !!omap
+      - build_standard_variables:
+          category: MUST
+          na_allowed: true
+          na_justification_required: true
+          rationale: >
+            See
+            <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/453">Build system should honor CC, CFLAGS, CXX, CXXFLAGS</a>
+      - build_preserve_debug:
+          category: SHOULD
+          na_allowed: true
+          na_justification_required: true
+          #autofill: TODO
+      - build_non_recursive:
+          category: MUST
+          na_allowed: true
+          na_justification_required: true
+          rationale: >
+            For more information, see
+            <a href="http://aegis.sourceforge.net/auug97.pdf">"Recursive Make Considered Harmful" by Peter Miller</a>
+            (note that this incorrect approach can be used in any build system,
+            not just <i>make</i>).
+            Note that
+            <a href="http://research.microsoft.com/en-us/um/people/simonpj/papers/ghc-shake/ghc-shake.pdf">"Non-recursive Make Considered Harmful"</a>
+            agrees that recursive builds are bad; its argument is that
+            for large projects you should use a tool other than make.
+            In many cases it is better to automatically determine the
+            dependencies, but this is not always accurate or practical,
+            so we did not require that dependencies be automatically generated.
+          #autofill: TODO
+      - build_repeatable:
+          category: MUST
+          na_allowed: true
+          na_justification_required: true
+          rationale: >
+            This is a step towards having a
+            <a href="https://reproducible-builds.org/">reproducible build</a>.
+            This criterion is much easier to meet, because it does not require
+            that external parties be able to reproduce the results - merely
+            that the project can.
+            Supporting full reproducible builds requires that projects provide
+            external parties enough information about their
+            build environment(s), which can be harder to do - so we have
+            split this requirement up.
+          #autofill: TODO
+    - Installation system: !!omap
+      - installation_common:
+          category: MUST
+          autofill: >
+            Look for a standard install format, or a build instruction for one.
+      - installation_standard_variables:
+          category: MUST
+          na_allowed: true
+          rationale: >
+            This supports capturing the artifacts (e.g., for analysis)
+            without interfering with the build or installation system due to
+            system-wide changes. See
+            <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/455">DESTDIR honored at install time</a>
+            This doesn't apply when there's no "installation" process, or
+            when POSIX filesystems aren't supported during installation (e.g.,
+            Windows-only programs).  See
+            <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/453">Build system should honor CC, CFLAGS, CXX, CXXFLAGS</a>
+          #autofill: TODO
+      - installation_development_quick:
+          category: MUST
+          rationale: >
+            Recommended in the
+            <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/473">NYC 2016 brainstorming session</a>.
+          #autofill: TODO
+    - Externally-maintained components: !!omap
+      - external_dependencies:
+          category: MUST
+          met_url_required: true
+          rationale: >
+            Inspired by the
+            <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/473">NYC 2016 brainstorming session</a>.
+          #autofill: TODO
+      - dependency_monitoring:
+          category: MUST
+          rationale: >
+            This must be monitored or periodically checked, because
+            new vulnerabilities are continuously being discovered.
+          #autofill: TODO
+      - updateable_reused_components:
+          category: MUST
+          rationale: >
+            A very common problem is to have obsolete components with
+            known vulnerabilities.  This is OWASP Top 10 (2013) number A9
+            (using known vulnerable components).  See also
+            <a href="http://www.aspectsecurity.com/research-presentations/the-unfortunate-reality-of-insecure-libraries">The Unfortunate Reality of Insecure Libraries</a>.
+          #autofill: TODO
+      - interfaces_current:
+          category: SHOULD
+          #autofill: TODO
+    - Automated test suite: !!omap
+      - automated_integration_testing:
+          category: MUST
+          rationale: >
+            This is inspired by continuous integration.
+            Continuous integration provides much more rapid feedback
+            on whether or not changes will cause test failures,
+            including regressions.  The term "continuous integration" (CI)
+            is defined in Wikipedia as "merging all developer working copies
+            to a shared mainline several times a day".
+            <a href="http://martinfowler.com/articles/continuousIntegration.html">Martin Fowler</a>
+            says that
+            "Continuous Integration is a software development practice where
+            members of a team integrate their work frequently, usually each
+            person integrates at least daily - leading to multiple integrations
+            per day. Each integration is verified by an automated build
+            (including ) to detect integration errors as quickly as possible.
+            Many teams find that this approach leads to significantly
+            reduced integration problems and allows a team to develop
+            cohesive software more rapidly."  However, while merging all
+            developer working copies at this pace can be very useful, in
+            practice many projects do not or cannot always do this.
+            In practice, many developers maintain at least some branches that
+            are not merged for longer than a day.
+          #autofill: TODO
+      - regression_tests_added50:
+          category: MUST
+          rationale: >
+            Regression tests prevent undetected resurfacing of
+            defects.  If a defect has happened before, there is an increased
+            likelihood that it will happen again.  We only require 50% of
+            bugs to have regression tests; not all bugs are equally likely
+            to recur, and in some cases it is extremely difficult to build
+            robust tests for them.  Thus, there is a diminishing point of
+            return for adding regression tests.  The 50% value could be
+            argued as being arbitrary, however, requiring less than 50% would
+            mean that projects could get the badge even if a majority of their
+            bugs in the time frame would not have regression tests.
+            Projects may, of course, choose to have much larger percentages.
+            We choose six months, as with other requirements, so that projects
+            that have done nothing in the past (or recorded nothing in
+            the past) can catch up in a reasonable period of time.
+          #autofill: TODO
+      - test_statement_coverage80:
+          category: MUST
+          na_allowed: true
+          na_justification_required: true
+          rationale: |
+            Statement coverage is widely used as a test quality measure;
+            it's often a first "starter" measure for test quality.
+            It's well-supported, including by gcov/lcov and codecov.io.
+            Bad test suites could also meet this requirement, but it's generally
+            agreed that any good test suite will meet this requirement, so it
+            provides a useful way to filter out clearly-bad test suites.
+            After all, if your tests aren't even *running* many of the program's
+            statements, you don't have very good tests.
+            Only FLOSS test suites are considered, to ensure that the test
+            suite can be examined and improved over time.
 
-            #~ A good automated test suite enables rapid response
-            #~ to vulnerability reports.  If a vulnerability is reported to a project,
-            #~ the project may be able to quickly repair it, but that is not enough.
-            #~ A good automated test suite is necessary so the project can rapidly
-            #~ gain confidence that the repair doesn't break anything else so it can
-            #~ field the update.
+            A good automated test suite enables rapid response
+            to vulnerability reports.  If a vulnerability is reported to a project,
+            the project may be able to quickly repair it, but that is not enough.
+            A good automated test suite is necessary so the project can rapidly
+            gain confidence that the repair doesn't break anything else so it can
+            field the update.
 
-            #~ It could be argued that anything less than 100% is unacceptable, but
-            #~ this is not a widely held belief.
-            #~ There are many ways to determine if a program is correct -
-            #~ testing is only one of them.  Some conditions are hard to create
-            #~ during testing, and the return-on-investment to get those last few
-            #~ percentages is arguably not worth it.  The time working to get 100%
-            #~ statement coverage might be much better spent on checking the results
-            #~ more thoroughly (which statement coverage does *not* measure).
+            It could be argued that anything less than 100% is unacceptable, but
+            this is not a widely held belief.
+            There are many ways to determine if a program is correct -
+            testing is only one of them.  Some conditions are hard to create
+            during testing, and the return-on-investment to get those last few
+            percentages is arguably not worth it.  The time working to get 100%
+            statement coverage might be much better spent on checking the results
+            more thoroughly (which statement coverage does *not* measure).
 
-            #~ The 80% suggested here is supported by various sources.
-            #~ The defaults of
-            #~ <a href="http://docs.codecov.io/docs/coverage-configuration">codecov.io</a>.  They define
-            #~ 70% and below as red, 100% as perfectly green, and anything between
-            #~ 70..100 as a range between red and green. This renders ~80% as yellow,
-            #~ and somewhere between ~85% and 90% it starts looking pretty green.
+            The 80% suggested here is supported by various sources.
+            The defaults of
+            <a href="http://docs.codecov.io/docs/coverage-configuration">codecov.io</a>.  They define
+            70% and below as red, 100% as perfectly green, and anything between
+            70..100 as a range between red and green. This renders ~80% as yellow,
+            and somewhere between ~85% and 90% it starts looking pretty green.
 
-            #~ The paper
-            #~ <a href="http://www.bullseye.com/minimum.html">"Minimum Acceptable Code Coverage" by Steve Cornett</a>
-            #~ claims, "Code
-            #~ coverage of 70-80% is a reasonable goal for system test of most
-            #~ projects with most coverage metrics. Use a higher goal for projects
-            #~ specifically organized for high testability or that have high failure
-            #~ costs. Minimum code coverage for unit testing can be 10-20% higher
-            #~ than for system testing... Empirical studies of real projects found
-            #~ that increasing code coverage above 70-80% is time consuming and
-            #~ therefore leads to a relatively slow bug detection rate. Your goal
-            #~ should depend on the risk assessment and economics of the project...
-            #~ Although 100% code coverage may appear like a best possible effort,
-            #~ even 100% code coverage is estimated to only expose about half the
-            #~ faults in a system. Low code coverage indicates inadequate testing,
-            #~ but high code coverage guarantees nothing."
+            The paper
+            <a href="http://www.bullseye.com/minimum.html">"Minimum Acceptable Code Coverage" by Steve Cornett</a>
+            claims, "Code
+            coverage of 70-80% is a reasonable goal for system test of most
+            projects with most coverage metrics. Use a higher goal for projects
+            specifically organized for high testability or that have high failure
+            costs. Minimum code coverage for unit testing can be 10-20% higher
+            than for system testing... Empirical studies of real projects found
+            that increasing code coverage above 70-80% is time consuming and
+            therefore leads to a relatively slow bug detection rate. Your goal
+            should depend on the risk assessment and economics of the project...
+            Although 100% code coverage may appear like a best possible effort,
+            even 100% code coverage is estimated to only expose about half the
+            faults in a system. Low code coverage indicates inadequate testing,
+            but high code coverage guarantees nothing."
 
-            #~ <a href="http://martinfowler.com/bliki/TestCoverage.html">"TestCoverage" by Martin Fowler (17 April 2012)</a>
-            #~ points out the
-            #~ problems with coverage measures.  he states that "Test coverage is
-            #~ a useful tool for finding untested parts of a codebase. Test coverage
-            #~ is of little use as a numeric statement of how good your tests are...
-            #~ The trouble is that high coverage numbers are too easy to reach with
-            #~ low quality testing... If you are testing thoughtfully and well,
-            #~ I would expect a coverage percentage in the upper 80s or 90s. I
-            #~ would be suspicious of anything like 100%... Certainly low coverage
-            #~ numbers, say below half, are a sign of trouble. But high numbers don't
-            #~ necessarily mean much, and lead to ignorance-promoting dashboards."
-    #~ - New functionality testing: !!omap
-      #~ - test_policy_mandated:
-          #~ category: MUST
-          #~ rationale: >
-            #~ This ensures that major new functionality is tested.
-            #~ This is related to the criterion test_policy, but is rewritten
-            #~ to be stronger.
-          #~ #autofill: TODO
-      #~ - tests_documented_added:
-          #~ category: MUST
-          #~ autofill: >
-            #~ Look in CONTRIBUTING and README.  See also test_policy.
-    #~ - Warning flags: !!omap
-      #~ - warnings_strict:
-          #~ category: MUST
-          #~ na_allowed: true
-          #~ autofill: >
-            #~ If we find "-Wall -Wextra" in the build that's pretty strict.
-  #~ - Security: !!omap
-    #~ - Secure development knowledge: !!omap
-      #~ - implement_secure_design:
-          #~ category: MUST
-          #~ rationale: >
-            #~ This was inspired by the
-            #~ <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/473">NYC 2016 brainstorming session</a>.
-          #~ #autofill: TODO
-      #~ - input_validation:
-          #~ category: MUST
-          #~ #autofill: TODO
-      #~ - hardening:
-          #~ category: SHOULD
-          #~ autofill: >
-            #~ Look for gems like secure_headers, and
-            #~ relevant compiler flags in build files.
-    #~ - Use basic good cryptographic practices: !!omap
-      #~ - crypto_weaknesses:
-          #~ category: MUST
-          #~ na_allowed: true
-          #~ rationale: >
-            #~ SHA-1 has been known to be weak for many years;
-            #~ <a href="https://security.googleblog.com/2017/02/announcing-first-sha1-collision.html">In February 2017 Google demonstrated a SHA-1 collision</a>.
-            #~ There are a number of alternatives to SHA-1 that are not
-            #~ patent-encumbered, such as the
-            #~ SHA-2 suite (including SHA-256 and SHA-512) and SHA-3.
-            #~ There is some disagreement on how important it is to avoid
-            #~ CBC mode in SSH.  The
-            #~ <a href="http://www.openssh.com/txt/cbc.adv">OpenSSH cbc.adv</a>
-            #~ page argues that the attack on SSH CBC is not a practical attack.
-            #~ However, others clearly think it's more important; CERT notes it,
-            #~ as does
-            #~ <a href="https://developer.ibm.com/answers/questions/187318/faq-how-do-i-disable-cipher-block-chaining-cbc-mod.html">FAQ: Disable CBC in SSH</a>.
-            #~ It is also easy to use a different mode than CBC; generally
-            #~ when there are safer widely-available options, you should use
-            #~ the safe ones instead.
-            #~ This is a SHOULD, not a MUST; sometimes these weaker
-            #~ mechanisms need to be used for backwards compatibility.
-          #~ # autofill: TODO
-      #~ - crypto_algorithm_agility:
-          #~ category: SHOULD
-          #~ na_allowed: true
-          #~ rationale: >
-            #~ The advantage of crypto agility is that if one crypto algorithm is
-            #~ broken, other algorithms can be used instead.
-            #~ Many protocols, including TLS and IPSEC, are specifically designed
-            #~ to support crypto agility.
-            #~ There is disagreement by some experts who argue that this
-            #~ negotiation can itself be a point of attack, and that people
-            #~ should instead simply choose and stay with with one good algorithm.
-            #~ The problem with this position is that no one can be certain about
-            #~ what that "one good algorithm" is; a new attack could be found
-            #~ at any time. See the discussion at
-            #~ <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/215">Remove requirement for supporting alternative crypto algorithms (crypto_alternatives)?</a>
-          #~ #autofill: TODO
-      #~ - crypto_credential_agility:
-          #~ category: MUST
-          #~ na_allowed: true
-          #~ #autofill: TODO
-      #~ - crypto_used_network:
-          #~ category: SHOULD
-          #~ na_allowed: true
-          #~ # autofill: TODO
-      #~ - crypto_tls12:
-          #~ category: SHOULD
-          #~ na_allowed: true
-          #~ # autofill: TODO
-      #~ - crypto_certificate_verification:
-          #~ category: MUST
-          #~ na_allowed: true
-          #~ # autofill: TODO
-      #~ - crypto_verification_private:
-          #~ category: MUST
-          #~ na_allowed: true
-          #~ # autofill: TODO
-    #~ - Secure release: !!omap
-      #~ - signed_releases:
-          #~ category: MUST
-          #~ rationale: >
-            #~ This provides protection from compromised distribution systems.
-            #~ The public key must be accessible so that recipients can check the
-            #~ signature.  The private key must not be on sites(s) distributing the
-            #~ software to the public; that way, even if those sites are
-            #~ compromised, the signature cannot be altered.
-            #~ This is sometimes called "code signing".
-            #~ A common way to implement this is by using GPG to sign the code,
-            #~ for example, the GPG keys of every person who signs releases
-            #~ could be in the project README.
-            #~ Node.js implements this via GPG keys in the README, but note that
-            #~ in the criterion we are intentionally more general:
-            #~ <a href="https://github.com/nodejs/node#release-team">Node.js Release Team</a>
-          #~ # autofill: TODO
-      #~ - version_tags_signed:
-          #~ category: SUGGESTED
-          #~ rationale: >
-            #~ This was suggested by Kevin W. Wall (@kwwall)in
-            #~ <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/709">issue #709</a>.
-          #~ # autofill: TODO
-  #~ - Analysis: !!omap
-    #~ - Static code analysis: !!omap
+            <a href="http://martinfowler.com/bliki/TestCoverage.html">"TestCoverage" by Martin Fowler (17 April 2012)</a>
+            points out the
+            problems with coverage measures.  he states that "Test coverage is
+            a useful tool for finding untested parts of a codebase. Test coverage
+            is of little use as a numeric statement of how good your tests are...
+            The trouble is that high coverage numbers are too easy to reach with
+            low quality testing... If you are testing thoughtfully and well,
+            I would expect a coverage percentage in the upper 80s or 90s. I
+            would be suspicious of anything like 100%... Certainly low coverage
+            numbers, say below half, are a sign of trouble. But high numbers don't
+            necessarily mean much, and lead to ignorance-promoting dashboards."
+    - New functionality testing: !!omap
+      - test_policy_mandated:
+          category: MUST
+          rationale: >
+            This ensures that major new functionality is tested.
+            This is related to the criterion test_policy, but is rewritten
+            to be stronger.
+          #autofill: TODO
+      - tests_documented_added:
+          category: MUST
+          autofill: >
+            Look in CONTRIBUTING and README.  See also test_policy.
+    - Warning flags: !!omap
+      - warnings_strict:
+          category: MUST
+          na_allowed: true
+          autofill: >
+            If we find "-Wall -Wextra" in the build that's pretty strict.
+  - Security: !!omap
+    - Secure development knowledge: !!omap
+      - implement_secure_design:
+          category: MUST
+          rationale: >
+            This was inspired by the
+            <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/473">NYC 2016 brainstorming session</a>.
+          #autofill: TODO
+      - input_validation:
+          category: MUST
+          #autofill: TODO
+      - hardening:
+          category: SHOULD
+          autofill: >
+            Look for gems like secure_headers, and
+            relevant compiler flags in build files.
+    - Use basic good cryptographic practices: !!omap
+      - crypto_weaknesses:
+          category: MUST
+          na_allowed: true
+          rationale: >
+            SHA-1 has been known to be weak for many years;
+            <a href="https://security.googleblog.com/2017/02/announcing-first-sha1-collision.html">In February 2017 Google demonstrated a SHA-1 collision</a>.
+            There are a number of alternatives to SHA-1 that are not
+            patent-encumbered, such as the
+            SHA-2 suite (including SHA-256 and SHA-512) and SHA-3.
+            There is some disagreement on how important it is to avoid
+            CBC mode in SSH.  The
+            <a href="http://www.openssh.com/txt/cbc.adv">OpenSSH cbc.adv</a>
+            page argues that the attack on SSH CBC is not a practical attack.
+            However, others clearly think it's more important; CERT notes it,
+            as does
+            <a href="https://developer.ibm.com/answers/questions/187318/faq-how-do-i-disable-cipher-block-chaining-cbc-mod.html">FAQ: Disable CBC in SSH</a>.
+            It is also easy to use a different mode than CBC; generally
+            when there are safer widely-available options, you should use
+            the safe ones instead.
+            This is a SHOULD, not a MUST; sometimes these weaker
+            mechanisms need to be used for backwards compatibility.
+          # autofill: TODO
+      - crypto_algorithm_agility:
+          category: SHOULD
+          na_allowed: true
+          rationale: >
+            The advantage of crypto agility is that if one crypto algorithm is
+            broken, other algorithms can be used instead.
+            Many protocols, including TLS and IPSEC, are specifically designed
+            to support crypto agility.
+            There is disagreement by some experts who argue that this
+            negotiation can itself be a point of attack, and that people
+            should instead simply choose and stay with with one good algorithm.
+            The problem with this position is that no one can be certain about
+            what that "one good algorithm" is; a new attack could be found
+            at any time. See the discussion at
+            <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/215">Remove requirement for supporting alternative crypto algorithms (crypto_alternatives)?</a>
+          #autofill: TODO
+      - crypto_credential_agility:
+          category: MUST
+          na_allowed: true
+          #autofill: TODO
+      - crypto_used_network:
+          category: SHOULD
+          na_allowed: true
+          # autofill: TODO
+      - crypto_tls12:
+          category: SHOULD
+          na_allowed: true
+          # autofill: TODO
+      - crypto_certificate_verification:
+          category: MUST
+          na_allowed: true
+          # autofill: TODO
+      - crypto_verification_private:
+          category: MUST
+          na_allowed: true
+          # autofill: TODO
+    - Secure release: !!omap
+      - signed_releases:
+          category: MUST
+          rationale: >
+            This provides protection from compromised distribution systems.
+            The public key must be accessible so that recipients can check the
+            signature.  The private key must not be on sites(s) distributing the
+            software to the public; that way, even if those sites are
+            compromised, the signature cannot be altered.
+            This is sometimes called "code signing".
+            A common way to implement this is by using GPG to sign the code,
+            for example, the GPG keys of every person who signs releases
+            could be in the project README.
+            Node.js implements this via GPG keys in the README, but note that
+            in the criterion we are intentionally more general:
+            <a href="https://github.com/nodejs/node#release-team">Node.js Release Team</a>
+          # autofill: TODO
+      - version_tags_signed:
+          category: SUGGESTED
+          rationale: >
+            This was suggested by Kevin W. Wall (@kwwall)in
+            <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/709">issue #709</a>.
+          # autofill: TODO
+  - Analysis: !!omap
+    - Static code analysis: !!omap
 
-      #~ - static_analysis_common_vulnerabilities:
-          #~ category: MUST
-          #~ na_allowed: true
-          #~ rationale: >
-            #~ We'd like all projects to use this kind of static analysis tool,
-            #~ but there may not be one in the chosen language, or it may only be
-            #~ proprietary (and some developers will therefore not use it).
-          #~ autofill: >
-            #~ We might start by looking primarily for tools that also meet this.
-            #~ E.g., brakeman for Ruby on Rails.
-    #~ - Dynamic code analysis: !!omap
-      #~ - dynamic_analysis_unsafe:
-          #~ category: MUST
-          #~ na_allowed: true
-          #~ rationale: >
-            #~ This would mean that C/C++ would be required to use something like
-            #~ ASAN during some testing and/or fuzz testing. See:
-            #~ <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/256">consider giving links to asan/msan/tsan/ubsan and libFuzzer</a>
-          #~ autofill: >
-            #~ Look in build/test script for reference to invocation of
-            #~ valgrind or ASAN.
+      - static_analysis_common_vulnerabilities:
+          category: MUST
+          na_allowed: true
+          rationale: >
+            We'd like all projects to use this kind of static analysis tool,
+            but there may not be one in the chosen language, or it may only be
+            proprietary (and some developers will therefore not use it).
+          autofill: >
+            We might start by looking primarily for tools that also meet this.
+            E.g., brakeman for Ruby on Rails.
+    - Dynamic code analysis: !!omap
+      - dynamic_analysis_unsafe:
+          category: MUST
+          na_allowed: true
+          rationale: >
+            This would mean that C/C++ would be required to use something like
+            ASAN during some testing and/or fuzz testing. See:
+            <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/256">consider giving links to asan/msan/tsan/ubsan and libFuzzer</a>
+          autofill: >
+            Look in build/test script for reference to invocation of
+            valgrind or ASAN.
 

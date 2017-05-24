@@ -6,15 +6,15 @@ class StaticPagesControllerTest < ActionController::TestCase
   test 'should get home' do
     get :home
     assert_response :success
-    assert_template 'home.en'
+    assert_template 'home'
 
     get :home, params: { locale: 'fr' }
     assert_response :success
-    assert_template 'home.fr'
+    assert_template 'home'
 
     get :home, params: { locale: 'zh-CN' }
     assert_response :success
-    assert_template 'home.zh-CN'
+    assert_template 'home'
   end
 
   test 'should get background' do

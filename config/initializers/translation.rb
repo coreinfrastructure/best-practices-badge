@@ -7,7 +7,7 @@ if Rails.env.development? || Rails.env.testing?
   TranslationIO.configure do |config|
     config.api_key        = 'b6086a4661ba47d79ec771236e298211'
     config.source_locale  = 'en'
-    config.target_locales = ['zh-CN', 'fr']
+    config.target_locales = %i[fr zh-CN de ja]
 
     # Uncomment this if you don't want to use gettext
     config.disable_gettext = true
@@ -20,6 +20,10 @@ if Rails.env.development? || Rails.env.testing?
     config.ignored_key_prefixes = [
       'rails.',
       'number.human.',
+      'date.',
+      'time.',
+      'errors.',
+      'datetime.',
       'admin.',
       'errors.messages.',
       'activerecord.errors.messages.',

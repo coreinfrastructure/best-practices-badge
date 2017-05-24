@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 class StaticPagesController < ApplicationController
-  def home
-    render "home.#{locale}"
-  end
+  def home; end
 
   def background; end
 

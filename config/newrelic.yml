@@ -45,5 +45,8 @@ staging:
   <<: *default_settings
   app_name: BadgeApp (Staging)
 
+fake_production:
+  <<: *default_settings
+
 production:
   <<: *default_settings

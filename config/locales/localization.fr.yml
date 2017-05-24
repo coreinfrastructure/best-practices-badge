@@ -11,15 +11,6 @@
 #
 ---
 fr:
-  date:
-    formats:
-      default: "%d/%m/%Y"
-      short: "%e %b"
-      long: "%e %B %Y"
-    order:
-    - :day
-    - :month
-    - :year
   number:
     currency:
       format:
@@ -60,11 +51,6 @@ fr:
       last_word_connector: " et "
       two_words_connector: " et "
       words_connector: ", "
-  time:
-    formats:
-      default: "%d %B %Y %Hh %Mmin %Ss"
-      long: "%A %d %B %Y %Hh%M"
-      short: "%d %b %Hh%M"
   i18n:
     transliterate:
       rule:
@@ -103,3 +89,17 @@ fr:
   spree:
     date_picker:
       first_day: 0
+  date:
+    formats:
+      default: "%d/%m/%Y"
+      short: "%e %b"
+      long: "%e %B %Y"
+    order:
+    - :day
+    - :month
+    - :year
+  time:
+    formats:
+      default: "%d %B %Y %Hh %Mmin %Ss"
+      long: "%A %d %B %Y %Hh%M"
+      short: "%d %b %Hh%M"

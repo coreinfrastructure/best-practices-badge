@@ -10,17 +10,17 @@
 # https://github.com/aurels/translation-gem#custom-localization-key-prefixes
 #
 ---
-zh-CN:
+ja:
   number:
     currency:
       format:
         delimiter: ","
-        format: "%u %n"
-        precision: 2
+        format: "%n%u"
+        precision: 0
         separator: "."
         significant: false
         strip_insignificant_zeros: false
-        unit: CN¥
+        unit: "円"
     format:
       delimiter: ","
       precision: 3
@@ -41,29 +41,27 @@ zh-CN:
           unit: ''
       format:
         delimiter: ''
-        precision: 1
-        significant: false
-        strip_insignificant_zeros: false
+        precision: 3
+        significant: true
+        strip_insignificant_zeros: true
       storage_units:
-        format: "%n %u"
+        format: "%n%u"
   support:
     array:
-      last_word_connector: ", 和 "
-      two_words_connector: " 和 "
-      words_connector: ", "
-  spree:
-    not: false
+      last_word_connector: "、"
+      two_words_connector: "、"
+      words_connector: "、"
   date:
     formats:
-      default: "%Y-%m-%d"
-      long: "%Y年%b%d日"
-      short: "%b%d日"
+      default: "%Y/%m/%d"
+      long: "%Y年%m月%d日(%a)"
+      short: "%m/%d"
     order:
     - :year
     - :month
     - :day
   time:
     formats:
-      default: "%Y年%b%d日 %A %H:%M:%S %Z"
-      long: "%Y年%b%d日 %H:%M"
-      short: "%b%d日 %H:%M"
+      default: "%Y/%m/%d %H:%M:%S"
+      long: "%Y年%m月%d日(%a) %H時%M分%S秒 %z"
+      short: "%y/%m/%d %H:%M"

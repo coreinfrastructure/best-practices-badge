@@ -114,8 +114,10 @@ The application is configured by various environment variables:
   since project last updated before sending reminder
 * LAST_SENT_REMINDER (default 60): Minimum number of days since
   project was last sent a reminder
-* RAILS_ENV (default 'development'): Rails environment.
+* RAILS_ENV (default 'development'): Rails environment, one of
+  'test', 'development', 'fake_production', and 'production'.
   The master, staging, and production systems set this to 'production'.
+  See the discussion below about fake_production.
 * BADGEAPP_DAY_FOR_MONTHLY: Day of the month to monthly activities, e.g.,
   send out monthly reminders.  Default 5.  Set to 0 to disable monthly acts.
 * FASTLY_CLIENT_IP_REQUIRED: If present, download the Fastly list of
@@ -950,6 +952,42 @@ cat ../bad-passwords/raw-mutated.txt | grep -E '^.{8}' | tr A-Z a-z | \
 rm -f raw-bad-passwords-lowercase.txt.gz
 gzip --best raw-bad-passwords-lowercase.txt
 ~~~~
+
+## Project stats omission on 2017-02-28
+
+The production site maintains a number of daily statistics and can
+[display the statistics graphically](https://bestpractices.coreinfrastructure.org/project_stats), but it is
+missing a report for 2017-02-28.
+This was due to a multi-hour downtime in
+Amazon’s S3 web-based storage service, part of
+Amazon Web Services (AWS), which took a large number of sites
+(not just ours).
+For more information you can see the story in
+[USA Today](https://www.usatoday.com/story/tech/news/2017/02/28/amazons-cloud-service-goes-down-sites-scramble/98530914/),
+[Zero Hedge](http://www.zerohedge.com/news/2017-02-28/amazon-cloud-reporting-increased-error-rates-secgov-possibly-impacted),
+and
+[Tech Crunch](https://techcrunch.com/2017/02/28/amazon-aws-s3-outage-is-breaking-things-for-a-lot-of-websites-and-apps/).
+
+## fake_production
+
+If you want to debug a problem that only appears in a production-like
+envionment, try the 'fake_production' environment.
+Here is how to enable it:
+
+~~~~
+RAILS_ENV=fake_production rails s
+~~~~
+
+This environment is almost exactly like production, with the
+following differences:
+
+* does not force HTTPS (TLS), so you can interact with it locally
+* enables byebug so that you can insert breakpoints
+* disables timeouts, so that you aren't rushed trying
+  to track down a problem before the timeout ends.
+
+Other environment variables might be usefully set in the command prefix,
+such as "DATABASE_URL=development".
 
 ## See also
 

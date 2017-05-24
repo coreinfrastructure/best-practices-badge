@@ -1,5 +1,10 @@
 # frozen_string_literal: true
 
+# This lists all gems we directly depend on.
+# We depend on explicit version numbers (so we can control upgrade times).
+# Any one gem is listed no more than once (to prevent referring to
+# different version numbers in different environments).
+
 source 'https://rubygems.org'
 ruby File.open('.ruby-version', 'rb') { |f| f.read.chomp }
 
@@ -51,12 +56,17 @@ group :development, :test do
   gem 'pronto-eslint', '0.9.1'
   gem 'pronto-rails_best_practices', '0.9.0'
   gem 'pronto-rubocop', '0.9.0'
-  gem 'pry-byebug', '3.4.2'
   gem 'rubocop', '0.48.1' # Style checker.  Changes can cause test failure
   gem 'ruby-graphviz', '1.2.3' # This is used for bundle viz
   gem 'spring', '2.0.2' # Preloads app so console, rake, and tests run faster
   gem 'vcr', '3.0.3' # Record network responses for later test reuse
   gem 'yaml-lint', '0.0.9' # Check YAML file syntax
+end
+
+# The "fake_production" environment is very much like production, however,
+# we enable a few debug tools to help us find "production-only" bugs.
+group :fake_production, :development, :test do
+  gem 'pry-byebug', '3.4.2'
 end
 
 group :development do
@@ -65,7 +75,7 @@ group :development do
   gem 'rails_db', '1.5.0' # Enable localhost:3000/rails/db debugging
   gem 'traceroute', '0.5.0' # Adds 'rake traceroute' command to check routes
   gem 'translation', '1.9' # translation.io - translation service
-  gem 'web-console', '3.5.0'
+  gem 'web-console', '3.5.1' # Debugging tool for Ruby on Rails apps
 end
 
 group :test do

@@ -4,7 +4,8 @@
   <p>
   <a href='https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/doc/criteria.md'>The detailed criteria are on GitHub</a>.</p>
   <p>
-  <% future_criteria, active_criteria = Criteria.partition(&:future?) %>
+  <% future_criteria, active_criteria =
+       Criteria['0'].values.partition(&:future?) %>
   Current number of criteria:
     <%= active_criteria.count %> (active)
     + <%= future_criteria.count %> (future)
@@ -19,7 +20,9 @@
     <%= active_criteria.count(&:na_allowed?) %> allow N/A,
     <%= active_criteria.count(&:met_url_required?) %>
     require a URL when met, and
-    <%= active_criteria.count(&:details_present?) %>
+    <%= active_criteria.count do |criterion|
+          I18n.exists?("criteria.0.#{criterion}.details")
+        end %>
     have details in their description.
   <p>
   There are <%= Project.count %> project entries;

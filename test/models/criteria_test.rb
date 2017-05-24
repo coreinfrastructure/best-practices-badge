@@ -32,8 +32,8 @@ class CriteriaTest < ActiveSupport::TestCase
       major minor rationale
     ]
     Criteria.to_h.each do |_level, criteria|
-      criteria.each do |criterion, values|
-        values.each do |key, value|
+      criteria.each do |_criterion, values|
+        values.each do |key, _value|
           assert_includes allowed_set, key.to_sym
         end
       end

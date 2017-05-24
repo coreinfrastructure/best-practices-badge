@@ -18,7 +18,7 @@
     'rationale' => 1,
     'autofill' => 1
   }
-  criteria_for_js = Criteria.to_h.dup
+  criteria_for_js = Criteria.to_h.clone
   criteria_for_js.each do |level, criteria_set|
     criteria_set.each do |criterion, fields|
       fields.delete_if {|k,v| omit_fields.key?(k)}

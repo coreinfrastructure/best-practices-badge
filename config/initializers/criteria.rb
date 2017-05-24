@@ -19,4 +19,3 @@ FullCriteriaHash.each do |level, level_value|
 end
 
 Criteria = CriteriaHash.new(criteria_hash.freeze)
-puts Criteria.to_h['0']['description_good']

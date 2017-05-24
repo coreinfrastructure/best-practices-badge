@@ -441,6 +441,15 @@ strings that end in a colon (":") *must* be escaped (e.g., by
 surrounding them with double-quotes).
 Keys are *only* in lower case and never use dash (they use underscore).
 
+Finally, you will need to update app/assets/javascripts/criteria.js.erb
+to depend on the new locale's yml file, this allows the precompiler to be
+to be notified if the contents of criteria.js should have changed.
+Simply add the following line to the top of criteria.js.erb
+
+~~~~
+depend_on NEW_LOCALE.yml
+~~~~
+
 ### Programmatically accessing a locale
 
 To learn more about Rails and internationalization, please read the

@@ -32,15 +32,7 @@ class CriteriaHash
     @criteria.keys
   end
 
-  def level_to_h(level)
-    @criteria_hash[level] if @criteria_hash.key?(level)
-  end
-
   def to_h
     @criteria_hash
-  end
-
-  def values
-    @criteria.values
   end
 end

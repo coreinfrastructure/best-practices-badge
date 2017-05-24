@@ -2,7 +2,7 @@
 // for showing and editing information about a project.
 
 // This global constant is set in criteria.js ; let ESLint know about it.
-/* global CRITERIA_HASH */
+/* global CRITERIA_HASH_FULL */
 
 var MIN_SHOULD_LENGTH = 5;
 
@@ -15,6 +15,7 @@ var globalExpandAllPanels = false;
 var globalIgnoreHashChange = false;
 var globalCriteriaResultHash = {};
 var globalisEditing = false;
+var CRITERIA_HASH = {};
 
 // Do a polyfill for datalist if it's not already supported
 // (e.g., Safari fails to support polyfill at the time of this writing).
@@ -31,6 +32,34 @@ function polyfillDatalist() {
       $(this).autocomplete({ source: availableTags });
     });
   }
+}
+
+// This gets the locale of the current page
+function getLocale() {
+  var localeFromUrl = location.pathname.split('/')[1];
+  if (localeFromUrl.length >= 2 &&
+      (localeFromUrl.length === 2 || localeFromUrl[2] === '-')) {
+    return localeFromUrl;
+  }
+  var searchString = location.search.match('locale=([^\#\&]*)');
+  if (searchString) {
+    return searchString[1];
+  } else {
+    return 'en';
+  }
+}
+
+// Return current level based upon parameters in location.search
+function getLevel() {
+  // TODO: Fix this when we are able to get levels from Url.
+  //       For now just fix to 0
+  // var searchString = location.search.match("level=([^\#\&]*)");
+  // if (!!searchString){
+  //   return searchString[1];
+  // } else {
+  //   return '0';
+  // }
+  return '0';
 }
 
 // This gives a color based upon value from 0 to 1 going from
@@ -294,8 +323,12 @@ function updateCriterionDisplay(criterion) {
   var justification = $(criterionJust) ? $(criterionJust)[0].value : '';
   var criterionPlaceholder;
   var suppressJustificationDisplay;
+  var locale = getLocale();
   if (status === 'Met') {
-    criterionPlaceholder = CRITERIA_HASH[criterion]['met_placeholder'];
+    if (CRITERIA_HASH[criterion]['met_placeholder']) {
+      criterionPlaceholder =
+        CRITERIA_HASH[criterion]['met_placeholder'][locale];
+    }
     if (!criterionPlaceholder) {
       if (criterionHashTrue(criterion, 'met_url_required')) {
         criterionPlaceholder = '(URL required) Please explain how this ' +
@@ -310,7 +343,10 @@ function updateCriterionDisplay(criterion) {
     }
     suppressJustificationDisplay = criterionHashTrue(criterion, 'met_suppress');
   } else if (status === 'Unmet') {
-    criterionPlaceholder = CRITERIA_HASH[criterion]['unmet_placeholder'];
+    if (CRITERIA_HASH[criterion]['unmet_placeholder']) {
+      criterionPlaceholder =
+        CRITERIA_HASH[criterion]['unmet_placeholder'][locale];
+    }
     if (!criterionPlaceholder) {
       criterionPlaceholder = 'Please explain why it\'s okay this ' +
         'is unmet, including 1+ key URLs.';
@@ -318,7 +354,10 @@ function updateCriterionDisplay(criterion) {
     suppressJustificationDisplay =
       criterionHashTrue(criterion, 'unmet_suppress');
   } else if (status === 'N/A') {
-    criterionPlaceholder = CRITERIA_HASH[criterion]['na_placeholder'];
+    if (CRITERIA_HASH[criterion]['na_placeholder']) {
+      criterionPlaceholder =
+        CRITERIA_HASH[criterion]['na_placeholder'][locale];
+    }
     if (!criterionPlaceholder) {
       if (criterionHashTrue(criterion, 'na_justification_required')) {
         criterionPlaceholder = '(Required) Please explain why this ' +
@@ -600,6 +639,7 @@ function setupProjectForm() {
   $('.details-text').css({'display':'none'});
   $('.details-toggler').html('Show details');
 
+  CRITERIA_HASH = CRITERIA_HASH_FULL[getLevel()];
   // Force these values on page reload
   globalShowAllDetails = false;
   globalLastSelectedMet = '';

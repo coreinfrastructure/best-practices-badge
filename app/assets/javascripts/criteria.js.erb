@@ -16,7 +16,7 @@
     'rationale' => 1,
     'autofill' => 1
   }
-  criteria_for_js = Criteria.to_h
+  criteria_for_js = Criteria.to_h.dup
   criteria_for_js.each do |level, criteria_set|
     criteria_set.each do |criterion, fields|
       fields.delete_if {|k,v| omit_fields.key?(k)}
@@ -32,4 +32,4 @@
     end
   end
 %>
-CRITERIA_HASH = <%= criteria_for_js.to_json %>;
+CRITERIA_HASH_FULL = <%= criteria_for_js.to_json %>;

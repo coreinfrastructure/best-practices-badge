@@ -34,7 +34,6 @@ class CriteriaTest < ActiveSupport::TestCase
     Criteria.to_h.each do |_level, criteria|
       criteria.each do |criterion, values|
         values.each do |key, value|
-          puts "#{criterion}, #{values}" unless allowed_set.include?(key.to_sym)
           assert_includes allowed_set, key.to_sym
         end
       end

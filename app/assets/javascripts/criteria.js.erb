@@ -12,20 +12,17 @@
   # if we add a new field and forget to omit them here,
   # the application will still work correctly. This file might be
   # slightly longer than necessary, but at least it won't be *wrong*.
-  omit_fields = {
-    'description' => 1,
-    'details' => 1,
-    'rationale' => 1,
-    'autofill' => 1
-  }
+
+  fields_to_omit = %w(description details rationale autofill).freeze
+
   criteria_for_js = Criteria.to_h.deep_dup
   criteria_for_js.each do |level, criteria_set|
     criteria_set.each do |criterion, fields|
-      fields.delete_if {|k,v| omit_fields.key?(k)}
+      fields.delete_if {|k,v| k.in? fields_to_omit}
       translations = {}
       I18n.available_locales.each do |locale|
         I18n.t(".criteria.#{level}.#{criterion}", locale).each do |k,v|
-          next if omit_fields.key?(k.to_s)
+          next if k.to_s.in? fields_to_omit
           translations[k.to_s] = {} unless translations.key?(k.to_s)
           translations[k.to_s][locale.to_s] = v
         end

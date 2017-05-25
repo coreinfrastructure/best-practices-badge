@@ -53,7 +53,7 @@ class ProjectsController < ApplicationController
 
   # GET /projects/1
   def show
-  # params contains "level" if one was provided
+    # params contains "level" if one was provided
   end
 
   # GET /projects/1.json

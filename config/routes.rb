@@ -23,7 +23,7 @@ Rails.application.routes.draw do
     get 'feed' => 'projects#feed', defaults: { format: 'atom' }
     get 'reminders' => 'projects#reminders_summary'
 
-    VALID_CRITERIA_LEVEL = /[0-2]/
+    VALID_CRITERIA_LEVEL = /[0-1]/
     resources :projects do
       member do
         get 'badge', defaults: { format: 'svg' }

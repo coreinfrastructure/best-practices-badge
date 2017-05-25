@@ -18,4 +18,4 @@ FullCriteriaHash.each do |level, level_value|
   end
 end
 
-Criteria = CriteriaHash.new(criteria_hash.freeze)
+CriteriaHash = criteria_hash.freeze

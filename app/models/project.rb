@@ -187,7 +187,7 @@ class Project < ActiveRecord::Base
   end
 
   def calculate_badge_percentage(level)
-    active = Criteria[level].values.reject(&:future?)
+    active = Criteria.active(level)
     met = active.count { |criterion| enough?(criterion) }
     to_percentage met, active.size
   end

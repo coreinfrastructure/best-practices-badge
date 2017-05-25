@@ -23,7 +23,8 @@
 <div class="row">
   <div class="col-md-12">
  <div>
-  <%= bootstrap_form_for project, url: put_project_path(project, criteria_level: '0') do |f| %>
+  <%# Don't provide criteria_level, as '0' is the default. %>
+  <%= bootstrap_form_for project, url: put_project_path(project) do |f| %>
     <%= render 'shared/error_messages', object: f.object %>
     <%= f.hidden_field :lock_version %>
 

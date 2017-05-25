@@ -421,19 +421,19 @@ class ProjectsController < ApplicationController
   end
   # rubocop:enable Metrics/AbcSize
 
-  # rubocop:disable Metrics/AbcSize
+  # rubocop:disable Metrics/AbcSize,Metrics/PerceivedComplexity
   def successful_update(format, old_badge_level, criteria_level)
     purge_cdn_project
+    criteria_level = nil if criteria_level == '0'
     # @project.purge
     format.html do
       if params[:continue]
         flash[:success] = 'Project was successfully updated.'
         redirect_to edit_project_path(
-          @project, { criteria_level: criteria_level }
-          ) + url_anchor
+          @project, criteria_level: criteria_level
+        ) + url_anchor
       else
-        redirect_to project_path(@project,
-                    { criteria_level: criteria_level }),
+        redirect_to project_path(@project, criteria_level: criteria_level),
                     success: 'Project was successfully updated.'
       end
     end
@@ -455,7 +455,7 @@ class ProjectsController < ApplicationController
       ReportMailer.email_owner(@project, new_badge_level).deliver_now
     end
   end
-  # rubocop:enable Metrics/AbcSize
+  # rubocop:enable Metrics/AbcSize,Metrics/PerceivedComplexity
 
   def url_anchor
     return '#' + params[:continue] unless params[:continue] == 'Save'

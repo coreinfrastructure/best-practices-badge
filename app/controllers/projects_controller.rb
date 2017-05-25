@@ -9,6 +9,7 @@ class ProjectsController < ApplicationController
   before_action :set_project, only: %i[edit update destroy show show_json badge]
   before_action :logged_in?, only: :create
   before_action :change_authorized, only: %i[destroy edit update]
+  before_action :set_criteria_level, only: %i[show edit update]
 
   # Cache with Fastly CDN.  We can't use this header, because logged-in
   # and not-logged-in users see different things (and thus we can't
@@ -52,9 +53,7 @@ class ProjectsController < ApplicationController
   end
 
   # GET /projects/1
-  def show
-    # params contains "level" if one was provided
-  end
+  def show; end
 
   # GET /projects/1.json
   def show_json
@@ -384,6 +383,10 @@ class ProjectsController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_project
     @project = Project.find(params[:id])
+  end
+
+  def set_criteria_level
+    @criteria_level = params[:criteria_level] || '0'
   end
 
   def set_valid_query_url

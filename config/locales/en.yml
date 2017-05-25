@@ -245,6 +245,12 @@ en:
 '
       submit_urls: Submit URL
       sign_in_first: Please sign in to add a project!
+    show:
+      edit: Edit
+      delete: Delete
+      confirm_delete: >
+        Are you SURE you want to DELETE the ENTIRE project %{project_id}?
+      back: Back
   # report_mailer is for emails not relating to the user account.
   # The following are not localized, because there's no need
   # (they're only debug reports or reports sent to English mailing lists)

@@ -52,7 +52,9 @@ class ProjectsController < ApplicationController
   end
 
   # GET /projects/1
-  def show; end
+  def show
+  # params contains "level" if one was provided
+  end
 
   # GET /projects/1.json
   def show_json

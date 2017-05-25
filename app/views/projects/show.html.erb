@@ -1,7 +1,7 @@
 <% content_for :nav_extras do %>
     <% if can_make_changes? %>
-      <li><%= link_to 'Edit', edit_project_path(@project) %></li>
-      <li><%= link_to 'Delete',  { action: :destroy, id: @project.id }, method: :delete, data: { confirm: "Are you SURE you want to DELETE the ENTIRE project ##{@project.id}?" } %></li>
+      <li><%= link_to t('.edit'), edit_project_path(@project) %></li>
+      <li><%= link_to t('.delete'), { action: :destroy, id: @project.id }, method: :delete, data: { confirm: t('.confirm_delete', project_id: @project.id) } %></li>
     <% end %>
 <% end %>
 
@@ -31,10 +31,10 @@
 
 <br><br>
 <p>
-<%= link_to 'Back', projects_path %>
+<%= link_to t('.back'), projects_path %>
 <% if can_make_changes? %>
-  <%= link_to 'Edit', edit_project_path(@project) %>
-  <%= link_to 'Delete',  { action: :destroy, id: @project.id }, method: :delete, data: { confirm: "Are you SURE you want to DELETE the ENTIRE project ##{@project.id}?" } %>
+  <%= link_to t('.edit'), edit_project_path(@project) %>
+  <%= link_to t('.delete'), { action: :destroy, id: @project.id }, method: :delete, data: { confirm: t('.confirm_delete', project_id: @project.id) } %>
 <% end %>
 </p>
 </div>

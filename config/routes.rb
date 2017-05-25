@@ -28,18 +28,22 @@ Rails.application.routes.draw do
         get 'badge', defaults: { format: 'svg' }
         get '' => 'projects#show_json',
             constraints: ->(req) { req.format == :json }
+        get ':level(.:format)' => 'projects#show',
+            constraints: { level: /[0-2]/ }
+        get ':level/edit(.:format)' => 'projects#edit',
+            constraints: { level: /[0-2]/ }
       end
     end
+    match(
+      'projects/:id/(:level/)edit' => 'projects#update',
+      via: %i[put patch], as: :put_project,
+      constraints: { level: /[0-2]/ }
+    )
 
     resources :users
     resources :account_activations, only: [:edit]
     resources :password_resets,     only: %i[new create edit update]
 
-    resources :projects
-    match(
-      'projects/:id/edit' => 'projects#update',
-      :via => %i[put patch], :as => :put_project
-    )
     get 'login' => 'sessions#new'
     post 'login' => 'sessions#create'
     delete 'logout' => 'sessions#destroy'

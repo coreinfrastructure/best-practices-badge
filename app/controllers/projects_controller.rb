@@ -65,7 +65,7 @@ class ProjectsController < ApplicationController
     set_surrogate_key_header @project.record_key + '/badge'
     respond_to do |format|
       format.svg do
-        send_data Badge[@project.badge_percentage_0],
+        send_data Badge[value_for_badge],
                   type: 'image/svg+xml', disposition: 'inline'
       end
     end
@@ -293,6 +293,20 @@ class ProjectsController < ApplicationController
         Octokit::Client.new access_token: session[:user_token]
       end
     end
+  end
+
+  # This needs to be modified each time you add a new badge level
+  # This method gives the percentage value to be passed to the Badge model
+  # when getting the svg badge for a project
+  def value_for_badge
+    return 'silver' if @project.badge_percentage_0 == 100 &&
+                       @project.badge_percentage_1 == 100
+    percentage = @project.badge_percentage_0
+    return percentage if @project.badge_percentage_0 < 100
+    'passing'
+    # percentage += @project.badge_percentage_1
+    # return 'passing' if percentage < 200
+    # 'silver'
   end
 
   # Never trust parameters from the scary internet,

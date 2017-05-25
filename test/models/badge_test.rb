@@ -3,8 +3,8 @@
 require 'test_helper'
 
 class BadgeTest < ActiveSupport::TestCase
-  test 'Badge should have 101 instances' do
-    assert_equal 101, Badge.count
+  test 'Badge should have 103 instances' do
+    assert_equal 103, Badge.count
   end
 
   test 'First badge should be 0%' do
@@ -15,11 +15,20 @@ class BadgeTest < ActiveSupport::TestCase
     assert_equal contents('badge-88.svg'), Badge[88].to_s
   end
 
-  test '100% Badge matches fixture file' do
-    assert_equal contents('badge-100.svg'), Badge[100].to_s
+  test 'passing Badge matches fixture file' do
+    assert_equal contents('badge-100.svg'), Badge['passing'].to_s
   end
 
-  test 'Badge requires integer parameters' do
+  test ' silver badge matches silver from fixture file' do
+    assert_equal contents('badge-silver.svg'), Badge['silver'].to_s
+  end
+
+  test ' gold badge matches gold from fixture file' do
+    assert_equal contents('badge-gold.svg'), Badge['gold'].to_s
+  end
+
+  test 'Badge requires integer < 100 parameters' do
     assert_raise(ArgumentError) { Badge[5.5] }
+    assert_raise(ArgumentError) { Badge[100] }
   end
 end

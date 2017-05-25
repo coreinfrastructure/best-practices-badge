@@ -32,9 +32,43 @@
            locals:
              {
                project: project, is_disabled: is_disabled,
-               badge_hostname: badge_hostname, f: f
+               badge_hostname: badge_hostname, f: f,
+               criteria_level: '1'
              }) %>
 
+          </li>
+
+          <li class="list-group-item"><h3>Upgrades</h3>
+            <%= render_status 'contribution_requirements', f, project, '1', is_disabled %>
+            <%= render_status 'report_tracker', f, project, '1', is_disabled %>
+ <% byebug %>
+          </li>
+          <li class="list-group-item"><h3>Structure</h3>
+            <%= render_status 'dco', f, project, '1', is_disabled %>
+            <%= render_status 'code_of_conduct', f, project, '1', is_disabled %>
+            <%= render_status 'governance', f, project, '1', is_disabled %>
+            <%= render_status 'roles_responsibilities', f, project, '1', is_disabled %>
+          </li>
+          <li class="list-group-item"><h3>Documentation</h3>
+            <%= render_status 'documentation_roadmap', f, project, '1', is_disabled %>
+            <%= render_status 'documentation_architecture', f, project, '1', is_disabled %>
+            <%= render_status 'documentation_security', f, project, '1', is_disabled %>
+            <%= render_status 'documentation_quick_start', f, project, '1', is_disabled %>
+            <%= render_status 'documentation_current', f, project, '1', is_disabled %>
+            <%= render_status 'documentation_achievements', f, project, '1', is_disabled %>
+          </li>
+          <li class="list-group-item"><h3>Accessibility and Internationalizatoin</h3>
+            <%= render_status 'accessibility_best_practices', f, project, '1', is_disabled %>
+            <%= render_status 'internationalization', f, project, '1', is_disabled %>
+          </li>
+          <li class="list-group-item"><h3>Continuity</h3>
+            <%= render_status 'access_continuity', f, project, '1', is_disabled %>
+            <%= render_status 'bus_factor', f, project, '1', is_disabled %>
+          </li>
+          <li class="list-group-item"><h3>Other</h3>
+            <%= render_status 'sites_password_security', f, project, '1', is_disabled %>
+          </li>
+          </ul>
 
       <% unless is_disabled %>
         <div class="panel-footer text-center">
@@ -56,7 +90,7 @@
 
     <div class="panel panel-primary">
       <div class="panel-heading close-by-default can-collapse" id="changecontrol">
-        <% satisfaction_data = project.get_satisfaction_data('0','changecontrol') %>
+        <% satisfaction_data = project.get_satisfaction_data('1','changecontrol') %>
         <h4 class="panel-title">
           <i class="glyphicon"></i>&nbsp;Change Control
           <span class="pull-right satisfaction">

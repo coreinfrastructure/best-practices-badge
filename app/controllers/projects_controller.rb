@@ -138,9 +138,9 @@ class ProjectsController < ApplicationController
       respond_to do |format|
         # Was project.update(project_params)
         if @project.save
-          successful_update(format, old_badge_level)
+          successful_update(format, old_badge_level, @criteria_level)
         else
-          format.html { render :edit }
+          format.html { render :edit, criteria_level: @criteria_level }
           format.json do
             render json: @project.errors, status: :unprocessable_entity
           end
@@ -422,15 +422,19 @@ class ProjectsController < ApplicationController
   # rubocop:enable Metrics/AbcSize
 
   # rubocop:disable Metrics/AbcSize
-  def successful_update(format, old_badge_level)
+  def successful_update(format, old_badge_level, criteria_level)
     purge_cdn_project
     # @project.purge
     format.html do
       if params[:continue]
         flash[:success] = 'Project was successfully updated.'
-        redirect_to edit_project_path(@project) + url_anchor
+        redirect_to edit_project_path(
+          @project, { criteria_level: criteria_level }
+          ) + url_anchor
       else
-        redirect_to @project, success: 'Project was successfully updated.'
+        redirect_to project_path(@project,
+                    { criteria_level: criteria_level }),
+                    success: 'Project was successfully updated.'
       end
     end
     format.json { render :show, status: :ok, location: @project }

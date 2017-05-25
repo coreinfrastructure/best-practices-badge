@@ -300,6 +300,10 @@ class ProjectsController < ApplicationController
     params.require(:project).permit(Project::PROJECT_PERMITTED_FIELDS)
   end
 
+  def criteria_level_params
+    params.permit([:criteria_level])
+  end
+
   def repo_url_change_allowed?
     return true unless @project.repo_url?
     return true if project_params[:repo_url].nil?
@@ -386,7 +390,8 @@ class ProjectsController < ApplicationController
   end
 
   def set_criteria_level
-    @criteria_level = params[:criteria_level] || '0'
+    @criteria_level = criteria_level_params[:criteria_level] || '0'
+    @criteria_level = '0' unless @criteria_level =~ /\A[0-2]\Z/
   end
 
   def set_valid_query_url

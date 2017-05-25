@@ -41,13 +41,15 @@ module ProjectsHelper
 
   # Use the status_chooser to render the given criterion.
   # rubocop:disable Metrics/ParameterLists
-  def render_status(criterion, f, project, level, is_disabled, is_last = false)
+  def render_status(
+    criterion, f, project, criteria_level, is_disabled, is_last = false
+  )
     render(
       partial: 'status_chooser',
       locals: {
-        f: f, project: project, is_disabled: is_disabled,
-        is_last: is_last,
-        criterion: Criteria[level][criterion.to_sym], level: level
+        f: f, project: project, criteria_level: criteria_level,
+        is_disabled: is_disabled, is_last: is_last,
+        criterion: Criteria[criteria_level][criterion.to_sym]
       }
     )
   end

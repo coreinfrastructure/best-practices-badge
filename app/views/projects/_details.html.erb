@@ -3,5 +3,8 @@
             details_text_id = criterion.to_s + "_details_text" %>
          <button class="btn btn-simple details-toggler hidden-print" title="Toggle details text" type="button" id='<%= details_toggler_id %>'>Details</button>
          <div class="details-text" id="<%= details_text_id %>">
-         <%= raw details %>
+         <%# Brakeman would normally complain, but in this case we
+             can trust that "details" is okay to send because it's only
+             provided by trustworthy sources (not arbitrary users) %>
+         <%= details %>
          </div>

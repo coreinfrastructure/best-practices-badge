@@ -253,11 +253,9 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
           </li>
 
           <li class="list-group-item"><h3>Documentation</h3>
-
-            <%= render_status 'documentation_basics', f, project, '0', is_disabled %>
-
-            <%= render_status 'documentation_interface', f, project, '0', is_disabled, true %>
-
+            <%= render_minor_status(
+                  '0', 'Basics', 'Documentation', f, project, is_disabled
+                ) %>
           </li>
 
           <li class="list-group-item"><h3>Other</h3>

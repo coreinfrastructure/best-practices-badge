@@ -55,6 +55,27 @@ module ProjectsHelper
   end
   # rubocop:enable Metrics/ParameterLists
 
+  # Render all the status_choosers in the given minor section.
+  # This takes a rediculous number of parameters, because we have to
+  # select the correct minor section & then pass the information the
+  # status_chooser needs (which also needs a rediculous number).
+  # rubocop:disable Metrics/ParameterLists
+  def render_minor_status(
+    criteria_level, major, minor, f, project, is_disabled
+  )
+    minor_criteria = FullCriteriaHash[criteria_level][major][minor].keys
+    raise NameError if minor_criteria.empty? # Should always be true
+    results = ActionView::OutputBuffer.new
+    minor_criteria.each do |criterion|
+      results << render_status(
+        criterion, f, project, criteria_level, is_disabled,
+        criterion == minor_criteria.last
+      )
+    end
+    results
+  end
+  # rubocop:enable Metrics/ParameterLists
+
   # Return HTML for a sortable header.
   def sortable_header(title, field_name)
     new_params = params.merge(sort: field_name)

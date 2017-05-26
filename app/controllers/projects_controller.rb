@@ -193,7 +193,8 @@ class ProjectsController < ApplicationController
   # forces loading of user data (where we get the user name/nickname).
   FEED_DISPLAY_FIELDS = 'projects.id as id, projects.name as name, ' \
     'projects.updated_at as updated_at, projects.created_at as created_at, ' \
-    'badge_percentage_0, homepage_url, repo_url, description, user_id'
+    'badge_percentage_0, badge_percentage_1, badge_percentage_2, ' \
+    'homepage_url, repo_url, description, user_id'
 
   def feed
     # @projects = Project.select(FEED_DISPLAY_FIELDS).
@@ -421,7 +422,7 @@ class ProjectsController < ApplicationController
   end
   # rubocop:enable Metrics/AbcSize
 
-  # rubocop:disable Metrics/AbcSize,Metrics/PerceivedComplexity
+  # rubocop:disable Metrics/AbcSize
   def successful_update(format, old_badge_level, criteria_level)
     purge_cdn_project
     criteria_level = nil if criteria_level == '0'
@@ -444,23 +445,22 @@ class ProjectsController < ApplicationController
     ReportMailer.project_status_change(
       @project, old_badge_level, new_badge_level
     ).deliver_now
-    if Project.BADGE_LEVELS.index(new_badge_level) >
-       Project.BADGE_LEVELS.index(old_badge_level)
+    if Project::BADGE_LEVELS.index(new_badge_level) >
+       Project::BADGE_LEVELS.index(old_badge_level)
       flash[:success] = "CONGRATULATIONS on earning a #{new_badge_level}" \
         ' badge! If you haven\'t already, please show your badge status on' \
         ' your project page (see the "how to embed it" text just below' \
         ' if you don\'t know how to do that).'
-      ReportMailer.email_owner(
-        @project, old_badge_level, new_badge_level
-      ).deliver_now
+      lost_level = false
     else
       flash[:danger] = 'Project has lost a badge.'
-      ReportMailer.email_owner(
-        @project, old_badge_level, new_badge_level, lost=true
-      ).deliver_now
+      lost_level = true
     end
+    ReportMailer.email_owner(
+      @project, old_badge_level, new_badge_level, lost_level
+    ).deliver_now
   end
-  # rubocop:enable Metrics/AbcSize,Metrics/PerceivedComplexity
+  # rubocop:enable Metrics/AbcSize
 
   def url_anchor
     return '#' + params[:continue] unless params[:continue] == 'Save'

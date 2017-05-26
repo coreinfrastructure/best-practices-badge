@@ -12,6 +12,9 @@ class ProjectTest < ActiveSupport::TestCase
       repo_url: 'https://www.example.org/code'
     )
     @unjustified_project = projects(:perfect_unjustified)
+    @project_passing = projects(:perfect_passing)
+    @project_silver = projects(:perfect_silver)
+    @project_gold = projects(:perfect)
   end
 
   test 'should be valid' do
@@ -152,6 +155,13 @@ class ProjectTest < ActiveSupport::TestCase
   # We had to add this test for coverage.
   test 'unit test string_refinements na?' do
     assert @unjustified_project.release_notes_status.na?
+  end
+
+  test 'check correct badge levels are returned' do
+    assert_equal 'in_progress', @unjustified_project.badge_level
+    assert_equal 'passing', @project_passing.badge_level
+    assert_equal 'silver', @project_silver.badge_level
+    assert_equal 'gold', @project_gold.badge_level
   end
 
   test 'test get_satisfaction_data' do

@@ -42,8 +42,8 @@ class ReportMailer < ApplicationMailer
   end
 
   # Return subject line for given badge status.  Uses current I18n.locale.
-  def subject_for(old_badge_level, new_badge_level, lost)
-    if lost
+  def subject_for(old_badge_level, new_badge_level, lost_level)
+    if lost_level
       t('report_mailer.subject_no_longer_passing', old_level: old_badge_level)
     else
       t('report_mailer.subject_achieved_passing', new_level: new_badge_level)
@@ -52,7 +52,8 @@ class ReportMailer < ApplicationMailer
 
   # Create email to badge entry owner about their new badge status
   # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
-  def email_owner(project, old_badge_level, new_badge_level, lost)
+  # rubocop:disable Metrics/PerceivedComplexity
+  def email_owner(project, old_badge_level, new_badge_level, lost_level)
     return if project.nil? || project.id.nil? || project.user_id.nil?
     @project = project
     user = User.find(project.user_id)
@@ -67,12 +68,13 @@ class ReportMailer < ApplicationMailer
     I18n.with_locale(user.preferred_locale.to_sym) do
       mail(
         to: @email_destination,
-        template_name: lost ? 'lost_level' : 'gained_level'
-        subject: subject_for(old_badge_level, new_badge_level, lost)
+        template_name: lost_level ? 'lost_level' : 'gained_level',
+        subject: subject_for(old_badge_level, new_badge_level, lost_level)
       )
     end
   end
   # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity
+  # rubocop:enable Metrics/PerceivedComplexity
 
   # Create reminder email to inactive badge entry owner
   # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity

@@ -26,7 +26,7 @@
     <link rel="alternate" type="text/html" href="http://www.example.com/projects/600182345"/>
     <title>Justified perfect project</title>
     <content type="html">
-      <![CDATA[<p><b>Passing: 100%</b></p><p><a href='https://www.example.org'>https://www.example.org</a></p><span lang="en"><p>The perfect project</p>
+      <![CDATA[<p><b>Gold</b></p><p><a href='https://www.example.org'>https://www.example.org</a></p><span lang="en"><p>The perfect project</p>
 </span>]]>
     </content>
     <author>
@@ -40,7 +40,7 @@
     <link rel="alternate" type="text/html" href="http://www.example.com/projects/690367815"/>
     <title>Justified perfect silver project</title>
     <content type="html">
-      <![CDATA[<p><b>Passing: 100%</b></p><p><a href='https://www.example.org'>https://www.example.org</a></p><span lang="en"><p>The perfect silver project</p>
+      <![CDATA[<p><b>Silver</b></p><p><a href='https://www.example.org'>https://www.example.org</a></p><span lang="en"><p>The perfect silver project</p>
 </span>]]>
     </content>
     <author>
@@ -68,7 +68,7 @@
     <link rel="alternate" type="text/html" href="http://www.example.com/projects/968496471"/>
     <title>Justified perfect passing project</title>
     <content type="html">
-      <![CDATA[<p><b>Passing: 100%</b></p><p><a href='https://www.example.org'>https://www.example.org</a></p><span lang="en"><p>The perfect passing project</p>
+      <![CDATA[<p><b>Passing</b></p><p><a href='https://www.example.org'>https://www.example.org</a></p><span lang="en"><p>The perfect passing project</p>
 </span>]]>
     </content>
     <author>

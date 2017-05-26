@@ -41,6 +41,8 @@ perfect_unjustified:
   repo_url: https://www.example.org/code2
   license: MIT
   badge_percentage_0: 88
+  badge_percentage_1: 0
+  badge_percentage_2: 0
 <% Project::ALL_CRITERIA_STATUS.each do |criterion_status| %>
   <%= criterion_status %>: Met
 <% end %>

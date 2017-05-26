@@ -547,30 +547,16 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
       <div class="panel-collapse collapse in remove-in">
         <ul class="list-group">
           <li class="list-group-item"><h3>Static code analysis</h3>
-
-            <%= render_status 'static_analysis', f, project, '0', is_disabled %>
-
-            <%= render_status 'static_analysis_common_vulnerabilities',
-                              f, project, '0', is_disabled %>
-
-            <%= render_status 'static_analysis_fixed',
-                              f, project, '0', is_disabled %>
-
-            <%= render_status 'static_analysis_often', f, project, '0', is_disabled, true %>
-
+            <%= render_minor_status(
+                  '0', 'Analysis', 'Static code analysis',
+                  f, project, is_disabled
+                ) %>
           </li>
           <li class="list-group-item"><h3>Dynamic analysis</h3>
-
-            <%= render_status 'dynamic_analysis', f, project, '0', is_disabled %>
-
-            <%= render_status 'dynamic_analysis_unsafe', f, project, '0', is_disabled %>
-
-            <%= render_status 'dynamic_analysis_enable_assertions',
-                              f, project, '0', is_disabled %>
-
-            <%= render_status 'dynamic_analysis_fixed',
-                              f, project, '0', is_disabled, true %>
-
+            <%= render_minor_status(
+                  '0', 'Analysis', 'Dynamic code analysis',
+                  f, project, is_disabled
+                ) %>
           </li>
         </ul>
         <% unless is_disabled %>
@@ -609,23 +595,10 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
         This grace period allows projects to update to changed criteria
         and retain their badge as best practices improve.
         <br>
-
-        <%= render_status 'installation_common', f, project, '0', is_disabled %>
-
-        <%= render_status 'build_reproducible', f, project, '0', is_disabled %>
-
-        <%= render_status 'crypto_used_network', f, project, '0', is_disabled %>
-
-        <%= render_status 'crypto_tls12', f, project, '0', is_disabled %>
-
-        <%= render_status 'crypto_certificate_verification', f, project, '0', is_disabled %>
-
-        <%= render_status 'crypto_verification_private', f, project, '0', is_disabled %>
-
-        <%= render_status 'hardened_site', f, project, '0', is_disabled %>
-
-        <%= render_status 'hardening', f, project, '0', is_disabled, true %>
-
+            <%= render_minor_status(
+                  '0', 'Future', 'future',
+                  f, project, is_disabled
+                ) %>
       </div>
     </div>
   </div>

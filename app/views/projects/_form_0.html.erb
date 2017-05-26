@@ -300,16 +300,14 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
     </div>
 
     <div class="panel panel-primary">
-      <div class="panel-heading close-by-default can-collapse" id="changecontrol">
-        <% satisfaction_data = project.get_satisfaction_data('0','changecontrol') %>
-        <h4 class="panel-title">
-          <i class="glyphicon"></i>&nbsp;Change Control
-          <span class="pull-right satisfaction">
-            <span class="satisfaction-text"><%= satisfaction_data[:text] %></span>
-            <span class="satisfaction-bullet" data-color="<%= satisfaction_data[:color] %>">&#9679;</span>
-          </span>
-        </h4>
-      </div>
+      <%= render(partial: 'panel_header',
+           locals:
+             {
+               panel_title: 'Change Control', anchor_id: 'changecontrol',
+               by_default: 'close',
+               satisfaction_data:
+                 project.get_satisfaction_data('0','changecontrol')
+             }) %>
       <div class="panel-collapse collapse in remove-in">
         <ul class="list-group">
           <%= render_minor_status(
@@ -317,12 +315,10 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
                 'Public version-controlled source repository',
                 f, project, is_disabled
               ) %>
-
           <%= render_minor_status(
                 '0', 'Change Control', 'Unique version numbering',
                 f, project, is_disabled
               ) %>
-
           <%= render_minor_status(
                 '0', 'Change Control', 'Release notes',
                 f, project, is_disabled

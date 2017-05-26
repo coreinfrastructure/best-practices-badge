@@ -442,6 +442,11 @@ zh-CN:
       placeholder_of_repo: http(s)://... 项目仓库 URL
       submit_urls: 提交网址
       sign_in_first: 请登录以添加项目！
+    show:
+      edit:
+      delete:
+      confirm_delete:
+      back:
   user_mailer:
     account_activation:
       before_html: |
@@ -963,6 +968,65 @@ zh-CN:
       dynamic_analysis_unsafe:
         description:
         details:
+    '2':
+      bus_factor:
+        description:
+        details:
+      contributors_unassociated:
+        description:
+        details:
+      copyright_per_file:
+        description:
+        details:
+      license_per_file:
+        description:
+        details:
+      repo_distributed:
+        description:
+        details:
+      small_tasks:
+        description:
+        details:
+      require_2FA:
+        description:
+      secure_2FA:
+        description:
+        details:
+      code_review_standards:
+        description:
+        details:
+      two_person_review:
+        description:
+      build_reproducible:
+        description:
+        details:
+      test_invocation:
+        description:
+        details:
+      test_continuous_integration:
+        description:
+        details:
+      test_statement_coverage90:
+        description:
+      test_branch_coverage80:
+        description:
+      crypto_used_network:
+        description:
+      crypto_tls12:
+        description:
+      hardened_site:
+        description:
+      security_review:
+        description:
+        details:
+      hardening:
+        description:
+        details:
+      dynamic_analysis:
+        description:
+        details:
+      dynamic_analysis_enable_assertions:
+        description:
   static_pages:
     home:
       badge_program: CII 最佳实践徽章计划

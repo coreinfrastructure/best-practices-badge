@@ -334,6 +334,11 @@ ja:
       placeholder_of_repo:
       submit_urls:
       sign_in_first:
+    show:
+      edit:
+      delete:
+      confirm_delete:
+      back:
   report_mailer:
     new_project_heading:
     new_project_part1:
@@ -732,6 +737,65 @@ ja:
       dynamic_analysis_unsafe:
         description:
         details:
+    '2':
+      bus_factor:
+        description:
+        details:
+      contributors_unassociated:
+        description:
+        details:
+      copyright_per_file:
+        description:
+        details:
+      license_per_file:
+        description:
+        details:
+      repo_distributed:
+        description:
+        details:
+      small_tasks:
+        description:
+        details:
+      require_2FA:
+        description:
+      secure_2FA:
+        description:
+        details:
+      code_review_standards:
+        description:
+        details:
+      two_person_review:
+        description:
+      build_reproducible:
+        description:
+        details:
+      test_invocation:
+        description:
+        details:
+      test_continuous_integration:
+        description:
+        details:
+      test_statement_coverage90:
+        description:
+      test_branch_coverage80:
+        description:
+      crypto_used_network:
+        description:
+      crypto_tls12:
+        description:
+      hardened_site:
+        description:
+      security_review:
+        description:
+        details:
+      hardening:
+        description:
+        details:
+      dynamic_analysis:
+        description:
+        details:
+      dynamic_analysis_enable_assertions:
+        description:
   static_pages:
     home:
       badge_program:

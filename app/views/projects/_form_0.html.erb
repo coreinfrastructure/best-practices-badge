@@ -259,13 +259,9 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
           </li>
 
           <li class="list-group-item"><h3>Other</h3>
-
-            <%= render_status 'sites_https', f, project, '0', is_disabled %>
-
-            <%= render_status 'discussion', f, project, '0', is_disabled %>
-
-            <%= render_status 'english', f, project, '0', is_disabled, true %>
-
+            <%= render_minor_status(
+                  '0', 'Basics', 'Other', f, project, is_disabled
+                ) %>
           </li>
         </ul>
 
@@ -321,32 +317,25 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
       <div class="panel-collapse collapse in remove-in">
         <ul class="list-group">
           <li class="list-group-item"><h3>Public version-controlled source repository</h3>
-
-            <%= render_status 'repo_public', f, project, '0', is_disabled %>
-
-            <%= render_status 'repo_track', f, project, '0', is_disabled %>
-
-            <%= render_status 'repo_interim', f, project, '0', is_disabled %>
-
-            <%= render_status 'repo_distributed', f, project, '0', is_disabled, true %>
-
+            <%= render_minor_status(
+                  '0', 'Change Control',
+                  'Public version-controlled source repository',
+                  f, project, is_disabled
+                ) %>
           </li>
 
-          <li class="list-group-item"><h3>Version numbering</h3>
-
-            <%= render_status 'version_unique', f, project, '0', is_disabled %>
-
-            <%= render_status 'version_semver', f, project, '0', is_disabled %>
-
-            <%= render_status 'version_tags', f, project, '0', is_disabled, true %>
-
+          <li class="list-group-item"><h3>Unique Version numbering</h3>
+            <%= render_minor_status(
+                  '0', 'Change Control', 'Unique version numbering',
+                  f, project, is_disabled
+                ) %>
           </li>
 
-          <li class="list-group-item"><h3>Release Notes</h3>
-
-            <%= render_status 'release_notes', f, project, '0', is_disabled %>
-
-            <%= render_status 'release_notes_vulns', f, project, '0', is_disabled, true %>
+          <li class="list-group-item"><h3>Release notes</h3>
+            <%= render_minor_status(
+                  '0', 'Change Control', 'Release notes',
+                  f, project, is_disabled
+                ) %>
           </li>
         </ul>
         <% unless is_disabled %>
@@ -380,30 +369,18 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
       </div>
       <div class="panel-collapse collapse in remove-in">
         <ul class="list-group">
-          <li class="list-group-item"><h3>Bug reporting process</h3>
-
-            <%= render_status 'report_process', f, project, '0', is_disabled %>
-
-            <%= render_status 'report_tracker', f, project, '0', is_disabled %>
-
-            <%= render_status 'report_responses', f, project, '0', is_disabled %>
-
-            <%= render_status 'enhancement_responses', f, project, '0', is_disabled %>
-
-            <%= render_status 'report_archive', f, project, '0', is_disabled, true %>
-
+          <li class="list-group-item"><h3>Bug-reporting process</h3>
+            <%= render_minor_status(
+                  '0', 'Reporting', 'Bug-reporting process',
+                  f, project, is_disabled
+                ) %>
           </li>
 
-          <li class="list-group-item"><h3>Vulnerability reporting process</h3>
-
-            <%= render_status 'vulnerability_report_process',
-                              f, project, '0', is_disabled %>
-
-            <%= render_status 'vulnerability_report_private',
-                              f, project, '0', is_disabled %>
-
-            <%= render_status 'vulnerability_report_response',
-                              f, project, '0', is_disabled, true %>
+          <li class="list-group-item"><h3>Vulnerability report process</h3>
+            <%= render_minor_status(
+                  '0', 'Reporting', 'Vulnerability report process',
+                  f, project, is_disabled
+                ) %>
           </li>
         </ul>
         <% unless is_disabled %>
@@ -438,45 +415,31 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
       <div class="panel-collapse collapse in remove-in">
         <ul class="list-group">
           <li class="list-group-item"><h3>Working build system</h3>
-
-            <%= render_status 'build', f, project, '0', is_disabled %>
-
-            <%= render_status 'build_common_tools', f, project, '0', is_disabled %>
-
-            <%= render_status 'build_floss_tools', f, project, '0', is_disabled, true %>
-
+            <%= render_minor_status(
+                  '0', 'Quality', 'Working build system',
+                  f, project, is_disabled
+                ) %>
           </li>
 
           <li class="list-group-item"><h3>Automated test suite</h3>
-
-            <%= render_status 'test', f, project, '0', is_disabled %>
-
-            <%= render_status 'test_invocation', f, project, '0', is_disabled %>
-
-            <%= render_status 'test_most', f, project, '0', is_disabled %>
-
-            <%= render_status 'test_continuous_integration',
-                              f, project, '0', is_disabled, true %>
-
+            <%= render_minor_status(
+                  '0', 'Quality', 'Automated test suite',
+                  f, project, is_disabled
+                ) %>
           </li>
 
           <li class="list-group-item"><h3>New functionality testing</h3>
-
-            <%= render_status 'test_policy', f, project, '0', is_disabled %>
-
-            <%= render_status 'tests_are_added', f, project, '0', is_disabled %>
-
-            <%= render_status 'tests_documented_added', f, project, '0', is_disabled, true %>
-
+            <%= render_minor_status(
+                  '0', 'Quality', 'New functionality testing',
+                  f, project, is_disabled
+                ) %>
           </li>
 
           <li class="list-group-item"><h3>Warning flags</h3>
-
-            <%= render_status 'warnings', f, project, '0', is_disabled %>
-
-            <%= render_status 'warnings_fixed', f, project, '0', is_disabled %>
-
-            <%= render_status 'warnings_strict', f, project, '0', is_disabled, true %>
+            <%= render_minor_status(
+                  '0', 'Quality', 'Warning flags',
+                  f, project, is_disabled
+                ) %>
           </li>
         </ul>
         <% unless is_disabled %>
@@ -511,13 +474,12 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
       <div class="panel-collapse collapse in remove-in">
         <ul class="list-group">
           <li class="list-group-item"><h3>Secure development knowledge</h3>
-
-            <%= render_status 'know_secure_design', f, project, '0', is_disabled %>
-
-            <%= render_status 'know_common_errors', f, project, '0', is_disabled, true %>
-
+            <%= render_minor_status(
+                  '0', 'Security', 'Secure development knowledge',
+                  f, project, is_disabled
+                ) %>
           </li>
-          <li class="list-group-item"><h3>Good cryptographic practices</h3>
+          <li class="list-group-item"><h3>Use basic good cryptographic practices</h3>
 
             <span class="criteria-desc">
             Note that some software does not need to use cryptographic mechanisms.
@@ -529,40 +491,23 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
               </button>
               <br>
             <% end %>
-            <%= render_status 'crypto_published', f, project, '0', is_disabled %>
-
-            <%= render_status 'crypto_call', f, project, '0', is_disabled %>
-
-            <%= render_status 'crypto_floss', f, project, '0', is_disabled %>
-
-            <%= render_status 'crypto_keylength', f, project, '0', is_disabled %>
-
-            <%= render_status 'crypto_working', f, project, '0', is_disabled %>
-
-            <%= render_status 'crypto_weaknesses', f, project, '0', is_disabled %>
-
-            <%= render_status 'crypto_pfs', f, project, '0', is_disabled %>
-
-            <%= render_status 'crypto_password_storage', f, project, '0', is_disabled %>
-
-            <%= render_status 'crypto_random', f, project, '0', is_disabled, true %>
-
+            <%= render_minor_status(
+                  '0', 'Security', 'Use basic good cryptographic practices',
+                  f, project, is_disabled
+                ) %>
           </li>
           <li class="list-group-item"><h3>Secured delivery against man-in-the-middle (MITM) attacks</h3>
-
-            <%= render_status 'delivery_mitm', f, project, '0', is_disabled %>
-
-            <%= render_status 'delivery_unsigned', f, project, '0', is_disabled, true %>
-
+            <%= render_minor_status(
+                  '0', 'Security',
+                  'Secured delivery against man-in-the-middle (MITM) attacks',
+                  f, project, is_disabled
+                ) %>
           </li>
           <li class="list-group-item"><h3>Publicly-known vulnerabilities fixed</h3>
-
-            <%= render_status 'vulnerabilities_fixed_60_days',
-                              f, project, '0', is_disabled %>
-
-            <%= render_status 'vulnerabilities_critical_fixed',
-                              f, project, '0', is_disabled, true %>
-
+            <%= render_minor_status(
+                  '0', 'Security', 'Publicly known Vulnerabilities fixed',
+                  f, project, is_disabled
+                ) %>
           </li>
           <li class="list-group-item"><h3>Other security</h3>
 

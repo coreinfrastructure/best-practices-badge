@@ -181,7 +181,7 @@ databases when reporting vulnerabilities.
           </li>
 
    <%# Note: render() accepts met_suppress: ..., unmet_placeholder:  ... %>
-          <li class="list-group-item"><h3>Basic Project Website Content</h3>
+          <li class="list-group-item"><h3>Basic project website content</h3>
             <%= render_status 'description_good', f, project, '0', is_disabled %>
 
             <%= render_status 'interact', f, project, '0', is_disabled %>
@@ -505,7 +505,7 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
           </li>
           <li class="list-group-item"><h3>Publicly-known vulnerabilities fixed</h3>
             <%= render_minor_status(
-                  '0', 'Security', 'Publicly known Vulnerabilities fixed',
+                  '0', 'Security', 'Publicly known vulnerabilities fixed',
                   f, project, is_disabled
                 ) %>
           </li>

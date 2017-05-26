@@ -166,7 +166,7 @@ There is an implied criterion that we should mention here:
 
 ### Basics
 
-<b><i>Basic Project Website Content</i></b>
+<b><i>Basic project website content</i></b>
 
 <ul>
 
@@ -472,7 +472,7 @@ There is an implied criterion that we should mention here:
 </dd></dl></li>
 </ul>
 
-<b><i>Publicly known Vulnerabilities fixed</i></b>
+<b><i>Publicly known vulnerabilities fixed</i></b>
 
 <ul>
 

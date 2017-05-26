@@ -2226,3 +2226,67 @@ en:
         description: >
           The project SHOULD include many run-time assertions in the software
           it produces and check those assertions during dynamic analysis.
+  # Headings displayed in project.  The keys must match criteria.yml
+  # and the keys used in the views.
+  headings:
+    ? "Accessibility and internationalization"
+    : "Accessibility and internationalization"
+    Analysis: Analysis
+    ? "Automated test suite"
+    : "Automated test suite"
+    ? "Basic project website content"
+    : "Basic project website content"
+    Basics: Basics
+    ? "Bug-reporting process"
+    : "Bug-reporting process"
+    ? "Change Control"
+    : "Change Control"
+    ? "Coding standards"
+    : "Coding standards"
+    Documentation: Documentation
+    ? "Dynamic code analysis"
+    : "Dynamic code analysis"
+    ? "Externally-maintained components"
+    : "Externally-maintained components"
+    Future: Future
+    future: future
+    ? "Installation system"
+    : "Installation system"
+    ? "New functionality testing"
+    : "New functionality testing"
+    ? "OSS License"
+    : "OSS License"
+    Other: Other
+    ? "Other security issues"
+    : "Other security issues"
+    ? "Previous versions"
+    : "Previous versions"
+    ? "Project oversight"
+    : "Project oversight"
+    ? "Public version-controlled source repository"
+    : "Public version-controlled source repository"
+    ? "Publicly known vulnerabilities fixed"
+    : "Publicly known vulnerabilities fixed"
+    Quality: Quality
+    ? "Release notes"
+    : "Release notes"
+    Reporting: Reporting
+    ? "Secure development knowledge"
+    : "Secure development knowledge"
+    ? "Secure release"
+    : "Secure release"
+    ? "Secured delivery against man-in-the-middle (MITM) attacks"
+    : "Secured delivery against man-in-the-middle (MITM) attacks"
+    Security: Security
+    ? "Static code analysis"
+    : "Static code analysis"
+    ? "Unique version numbering"
+    : "Unique version numbering"
+    ? "Use basic good cryptographic practices"
+    : "Use basic good cryptographic practices"
+    ? "Vulnerability report process"
+    : "Vulnerability report process"
+    ? "Warning flags"
+    : "Warning flags"
+    ? "Working build system"
+    : "Working build system"

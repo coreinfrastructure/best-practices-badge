@@ -23,21 +23,22 @@ Rails.application.routes.draw do
     get 'feed' => 'projects#feed', defaults: { format: 'atom' }
     get 'reminders' => 'projects#reminders_summary'
 
+    VALID_CRITERIA_LEVEL = /[0-1]/
     resources :projects do
       member do
         get 'badge', defaults: { format: 'svg' }
         get '' => 'projects#show_json',
             constraints: ->(req) { req.format == :json }
-        get ':level(.:format)' => 'projects#show',
-            constraints: { level: /[0-2]/ }
-        get ':level/edit(.:format)' => 'projects#edit',
-            constraints: { level: /[0-2]/ }
+        get ':criteria_level(.:format)' => 'projects#show',
+            constraints: { criteria_level: VALID_CRITERIA_LEVEL }
+        get ':criteria_level/edit(.:format)' => 'projects#edit',
+            constraints: { criteria_level: VALID_CRITERIA_LEVEL }
       end
     end
     match(
-      'projects/:id/(:level/)edit' => 'projects#update',
+      'projects/:id/(:criteria_level/)edit' => 'projects#update',
       via: %i[put patch], as: :put_project,
-      constraints: { level: /[0-2]/ }
+      constraints: { criteria_level: VALID_CRITERIA_LEVEL }
     )
 
     resources :users

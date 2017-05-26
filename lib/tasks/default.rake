@@ -54,7 +54,7 @@ end
 desc 'Run rails_best_practices with options'
 task :rails_best_practices do
   sh 'bundle exec rails_best_practices ' \
-      '--features --spec --without-color || true'
+      '--features --spec --without-color'
 end
 
 desc 'Run brakeman'

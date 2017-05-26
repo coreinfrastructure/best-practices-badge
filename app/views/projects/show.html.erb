@@ -1,6 +1,6 @@
 <% content_for :nav_extras do %>
     <% if can_make_changes? %>
-      <li><%= link_to t('.edit'), edit_project_path(@project) %></li>
+      <li><%= link_to t('.edit'), edit_project_path(@project, criteria_level: @criteria_level) %></li>
       <li><%= link_to t('.delete'), { action: :destroy, id: @project.id }, method: :delete, data: { confirm: t('.confirm_delete', project_id: @project.id) } %></li>
     <% end %>
 <% end %>
@@ -11,7 +11,7 @@
   </div>
   <div class="col-md-7 col-sm-6">
     <h2 class="m-t-0"><%=@project.try(:name).presence || '(Name Unknown)' %></h2>
-    <%= render 'form', project: @project, is_disabled: true %>
+    <%= render "form_#{@criteria_level}", project: @project, is_disabled: true %>
 <div class="row">
 <div class="col-md-12">
 <b>Project badge entry owned by:</b>

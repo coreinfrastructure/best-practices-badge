@@ -147,7 +147,7 @@ class Project < ActiveRecord::Base
   validate :need_a_base_url
 
   # Comma-separated list.  This is very generous in what characters it
-  # allows in a language name, but restricts it to ASCII and omits
+  # allows in a programming language name, but restricts it to ASCII and omits
   # problematic characters that are very unlikely in a name like
   # <, >, &, ", brackets, and braces.  This handles language names like
   # JavaScript, C++, C#, D-, and PL/I.  A space is optional after a comma.

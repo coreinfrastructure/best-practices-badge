@@ -60,6 +60,14 @@ class ProjectsControllerTest < ActionController::TestCase
     assert_select 'a[href=?]'.dup, 'https://www.nasa.gov/pathfinder'
   end
 
+  test 'should show project with criteria_level=1' do
+    # This is a quick test just to make sure that we don't fail on show.
+    get :show, params: { id: @project, criteria_level: '1' }
+    assert_response :success
+    assert_select 'a[href=?]'.dup, 'https://www.nasa.gov'
+    assert_select 'a[href=?]'.dup, 'https://www.nasa.gov/pathfinder'
+  end
+
   test 'should show project JSON data' do
     get :show_json, params: { id: @project, format: :json }
     assert_response :success

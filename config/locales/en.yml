@@ -1377,7 +1377,7 @@ en:
           of conduct are the
           <a href="http://contributor-covenant.org/">Contributor Covenant Code of Conduct</a>
           and the Linux kernel
-          <a href="https://www.kernel.org/doc/html/latest/process/code-of-conflict.html">
+          <a href="https://www.kernel.org/doc/html/latest/process/code-of-conflict.html">code of conflict</a>.
       roles_responsibilities:
         description: >
           The project MUST clearly define and publicly document the key roles in the

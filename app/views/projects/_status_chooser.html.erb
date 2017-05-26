@@ -4,8 +4,8 @@
    project_criterion_status = project[status_symbol]
    project_criterion_justification = project[justification_symbol] %>
 
-<% cache [criterion.to_s, level, is_disabled, project_criterion_status,
-          project_criterion_justification ] do %>
+<% cache [criterion.to_s, criteria_level, is_disabled,
+          project_criterion_status, project_criterion_justification ] do %>
   <div id="<%= criterion.to_s %>" class="row criterion-data">
     <% is_crypto = criterion.to_s.match(/^crypto_/)
        crypto_class = is_crypto ? ' criterion-is-crypto' : '' %>
@@ -72,7 +72,8 @@
     <sup>[<%= criterion %>]</sup>
     <%= if criterion.details
           render(partial: "details",
-            locals: {f: f, criterion: criterion, details: criterion.details})
+            locals: {f: f, criterion: criterion,
+                     details: criterion.details.html_safe})
         end %>
     <% if (is_disabled) %>
       <% if project_criterion_justification %>

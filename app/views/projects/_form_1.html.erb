@@ -1,0 +1,393 @@
+<%# The "div"s here are not balanced within the file.
+    That allows us to fill in and then end the current column & row,
+    followed by starting and finishing another full row. %>
+<% badge_hostname = (ENV['PUBLIC_HOSTNAME'] || 'localhost') %>
+<%# TODO: Use badge_percentage_1 %>
+<% content_for :insert_progress_bar do %>
+  <div id="progress-mobile" class="progress">
+    <div id="badge-progress"
+         class="progress-bar progress-bar-success badge-progress"
+         role="progressbar" aria-valuenow="<%= project.badge_percentage_0 %>"
+         aria-valuemin="0" aria-valuemax="100">
+      <%= project.badge_percentage_0 %>%
+    </div>
+  </div>
+<% end %>
+<% cache_if is_disabled, project do %>
+<%= render(partial: 'form_early',
+           locals:
+             {
+               project: project, is_disabled: is_disabled,
+               badge_hostname: badge_hostname
+             }) %>
+
+<div class="row">
+  <div class="col-md-12">
+ <div>
+  <%= bootstrap_form_for project, url: put_project_path(project, criteria_level: '1') do |f| %>
+    <%= render 'shared/error_messages', object: f.object %>
+    <%= f.hidden_field :lock_version %>
+
+<%= render(partial: 'form_basics',
+           locals:
+             {
+               project: project, is_disabled: is_disabled,
+               badge_hostname: badge_hostname, f: f,
+               criteria_level: '1'
+             }) %>
+
+          </li>
+
+          <li class="list-group-item"><h3>Upgrades</h3>
+            <%= render_status 'contribution_requirements', f, project, '1', is_disabled %>
+            <%= render_status 'report_tracker', f, project, '1', is_disabled %>
+          </li>
+          <li class="list-group-item"><h3>Structure</h3>
+            <%= render_status 'dco', f, project, '1', is_disabled %>
+            <%= render_status 'code_of_conduct', f, project, '1', is_disabled %>
+            <%= render_status 'governance', f, project, '1', is_disabled %>
+            <%= render_status 'roles_responsibilities', f, project, '1', is_disabled %>
+          </li>
+          <li class="list-group-item"><h3>Documentation</h3>
+            <%= render_status 'documentation_roadmap', f, project, '1', is_disabled %>
+            <%= render_status 'documentation_architecture', f, project, '1', is_disabled %>
+            <%= render_status 'documentation_security', f, project, '1', is_disabled %>
+            <%= render_status 'documentation_quick_start', f, project, '1', is_disabled %>
+            <%= render_status 'documentation_current', f, project, '1', is_disabled %>
+            <%= render_status 'documentation_achievements', f, project, '1', is_disabled %>
+          </li>
+          <li class="list-group-item"><h3>Accessibility and Internationalizatoin</h3>
+            <%= render_status 'accessibility_best_practices', f, project, '1', is_disabled %>
+            <%= render_status 'internationalization', f, project, '1', is_disabled %>
+          </li>
+          <li class="list-group-item"><h3>Continuity</h3>
+            <%= render_status 'access_continuity', f, project, '1', is_disabled %>
+            <%= render_status 'bus_factor', f, project, '1', is_disabled %>
+          </li>
+          <li class="list-group-item"><h3>Other</h3>
+            <%= render_status 'sites_password_security', f, project, '1', is_disabled %>
+          </li>
+          </ul>
+
+      <% unless is_disabled %>
+        <div class="panel-footer text-center">
+          By submitting this data about the project you agree to release it
+          under at least the
+          <a href="https://creativecommons.org/licenses/by/3.0/us"
+          target="_blank">Creative Commons Attribution version 3.0 or later
+          license (CC-BY-3.0+)</a>. This means that all are free to share
+          and adapt the data, but they must give appropriate credit.
+          You retain copyright (if any), and the project
+          license is unaffected.<br><br>
+          <%= f.button 'Save (and continue)', type: 'submit', name: 'continue',
+              value: 'changecontrol', class:"btn btn-success btn-submit" %>
+          <%= f.submit 'Submit (and exit)', class:"btn btn-success btn-submit" %>
+        </div>
+      <% end %>
+     </div>
+    </div>
+
+    <div class="panel panel-primary">
+      <div class="panel-heading close-by-default can-collapse" id="changecontrol">
+        <% satisfaction_data = project.get_satisfaction_data('1','changecontrol') %>
+        <h4 class="panel-title">
+          <i class="glyphicon"></i>&nbsp;Change Control
+          <span class="pull-right satisfaction">
+            <span class="satisfaction-text"><%= satisfaction_data[:text] %></span>
+            <span class="satisfaction-bullet" data-color="<%= satisfaction_data[:color] %>">&#9679;</span>
+          </span>
+        </h4>
+      </div>
+      <div class="panel-collapse collapse in remove-in">
+        <ul class="list-group">
+          <li class="list-group-item"><h3>Maintenance</h3>
+
+            <%# TODO: This is way too short. %>
+            <%= render_status 'maintenance_or_update', f, project, '1', is_disabled, true %>
+
+          </li>
+        </ul>
+        <% unless is_disabled %>
+          <div class="panel-footer text-center">
+            By submitting this data about the project you agree to release it
+            under at least the
+            <a href="https://creativecommons.org/licenses/by/3.0/us"
+            target="_blank">Creative Commons Attribution version 3.0 or later
+            license (CC-BY-3.0+)</a>. This means that all are free to share
+            and adapt the data, but they must give appropriate credit.
+            You retain copyright (if any), and the project
+            license is unaffected.<br><br>
+            <%= f.button 'Save (and continue)', type: 'submit', name: 'continue',
+              value: 'reporting', class:"btn btn-success btn-submit" %>
+            <%= f.submit 'Submit (and exit)', class:"btn btn-success btn-submit" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="panel panel-primary">
+      <div class="panel-heading close-by-default can-collapse" id="reporting">
+        <% satisfaction_data = project.get_satisfaction_data('1','reporting') %>
+        <h4 class="panel-title">
+          <i class="glyphicon"></i>&nbsp;Reporting
+          <span class="pull-right satisfaction">
+            <span class="satisfaction-text"><%= satisfaction_data[:text] %></span>
+            <span class="satisfaction-bullet" data-color="<%= satisfaction_data[:color] %>">&#9679;</span>
+          </span>
+        </h4>
+      </div>
+      <div class="panel-collapse collapse in remove-in">
+        <ul class="list-group">
+          <li class="list-group-item"><h3>Vulnerability reporting process</h3>
+
+            <%= render_status 'vulnerability_report_credit', f, project, '1', is_disabled %>
+
+            <%= render_status 'vulnerability_response_process', f, project, '1', is_disabled %>
+          </li>
+
+        </ul>
+        <% unless is_disabled %>
+          <div class="panel-footer text-center">
+            By submitting this data about the project you agree to release it
+            under at least the
+            <a href="https://creativecommons.org/licenses/by/3.0/us"
+            target="_blank">Creative Commons Attribution version 3.0 or later
+            license (CC-BY-3.0+)</a>. This means that all are free to share
+            and adapt the data, but they must give appropriate credit.
+            You retain copyright (if any), and the project
+            license is unaffected.<br><br>
+            <%= f.button 'Save (and continue)', type: 'submit', name: 'continue',
+              value: 'quality', class:"btn btn-success btn-submit" %>
+            <%= f.submit 'Submit (and exit)', class:"btn btn-success btn-submit" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="panel panel-primary">
+      <div class="panel-heading close-by-default can-collapse" id="quality">
+        <% satisfaction_data = project.get_satisfaction_data('1','quality') %>
+        <h4 class="panel-title">
+          <i class="glyphicon"></i>&nbsp;Quality
+          <span class="pull-right satisfaction">
+            <span class="satisfaction-text"><%= satisfaction_data[:text] %></span>
+            <span class="satisfaction-bullet" data-color="<%= satisfaction_data[:color] %>">&#9679;</span>
+          </span>
+        </h4>
+      </div>
+      <div class="panel-collapse collapse in remove-in">
+        <ul class="list-group">
+          <li class="list-group-item"><h3>Upgrades</h3>
+            <%= render_status 'tests_documented_added', f, project, '1', is_disabled %>
+            <%= render_status 'warnings_strict', f, project, '1', is_disabled %>
+
+          </li>
+          <li class="list-group-item"><h3>Test</h3>
+            <%= render_status 'automated_integration_testing', f, project, '1', is_disabled %>
+
+            <%= render_status 'test_policy_mandated', f, project, '1', is_disabled %>
+
+            <%= render_status 'regression_tests_added50', f, project, '1', is_disabled, true %>
+            <%= render_status 'test_statement_coverage80', f, project, '1', is_disabled, true %>
+          </li>
+
+          <li class="list-group-item"><h3>Coding standards</h3>
+            <%= render_status 'coding_standards', f, project, '1', is_disabled %>
+            <%= render_status 'coding_standards_enforced', f, project, '1', is_disabled %>
+          </li>
+
+          <li class="list-group-item"><h3>Externally-maintained components</h3>
+
+            <%= render_status 'external_dependencies', f, project, '1', is_disabled %>
+            <%= render_status 'updateable_reused_components', f, project, '1', is_disabled %>
+
+            <%= render_status 'interfaces_current', f, project, '1', is_disabled, true %>
+
+          </li>
+
+          <li class="list-group-item"><h3>Build</h3>
+            <%= render_status 'build_standard_variables', f, project, '1', is_disabled %>
+            <%= render_status 'build_preserve_debug', f, project, '1', is_disabled %>
+            <%= render_status 'build_non_recursive', f, project, '1', is_disabled, true %>
+            <%= render_status 'build_repeatable', f, project, '1', is_disabled, true %>
+          </li>
+          <li class="list-group-item"><h3>Installation</h3>
+            <%= render_status 'installation_common', f, project, '1', is_disabled, true %>
+            <%= render_status 'installation_standard_variables', f, project, '1', is_disabled, true %>
+            <%= render_status 'installation_development_quick', f, project, '1', is_disabled, true %>
+          </li>
+        </ul>
+        <% unless is_disabled %>
+          <div class="panel-footer text-center">
+            By submitting this data about the project you agree to release it
+            under at least the
+            <a href="https://creativecommons.org/licenses/by/3.0/us"
+            target="_blank">Creative Commons Attribution version 3.0 or later
+            license (CC-BY-3.0+)</a>. This means that all are free to share
+            and adapt the data, but they must give appropriate credit.
+            You retain copyright (if any), and the project
+            license is unaffected.<br><br>
+            <%= f.button 'Save (and continue)', type: 'submit', name: 'continue',
+              value: 'security', class:"btn btn-success btn-submit" %>
+            <%= f.submit 'Submit (and exit)', class:"btn btn-success btn-submit" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="panel panel-primary">
+      <div class="panel-heading close-by-default can-collapse" id="security">
+        <% satisfaction_data = project.get_satisfaction_data('1','security') %>
+        <h4 class="panel-title">
+          <i class="glyphicon"></i>&nbsp;Security
+          <span class="pull-right satisfaction">
+            <span class="satisfaction-text"><%= satisfaction_data[:text] %></span>
+            <span class="satisfaction-bullet" data-color="<%= satisfaction_data[:color] %>">&#9679;</span>
+          </span>
+        </h4>
+      </div>
+      <div class="panel-collapse collapse in remove-in">
+        <ul class="list-group">
+          <%# TODO: Maybe "upgrades" should be listed at the end %>
+          <li class="list-group-item"><h3>Upgrades</h3>
+            <%= render_status 'crypto_weaknesses', f, project, '1', is_disabled %>
+          </li>
+          <li class="list-group-item"><h3>Secure design</h3>
+
+            <%= render_status 'implement_secure_design', f, project, '1', is_disabled %>
+
+            <%= render_status 'input_validation', f, project, '1', is_disabled, true %>
+            <%= render_status 'hardening', f, project, '1', is_disabled, true %>
+
+          </li>
+          <li class="list-group-item"><h3>Good cryptographic practices</h3>
+
+            <span class="criteria-desc">
+            Note that some software does not need to use cryptographic mechanisms.
+            </span>
+            <% if (!is_disabled) %>
+              <br><br>
+              <button class="btn btn-default hidden-print" type="button" id='all_crypto_na'>
+                Press here if the software produced by the project does not use cryptographic mechanisms
+              </button>
+              <br>
+            <% end %>
+            <%= render_status 'crypto_algorithm_agility', f, project, '1', is_disabled %>
+            <%= render_status 'crypto_credential_agility', f, project, '1', is_disabled %>
+            <%= render_status 'crypto_used_network', f, project, '1', is_disabled %>
+            <%= render_status 'crypto_tls12', f, project, '1', is_disabled %>
+            <%= render_status 'crypto_certificate_verification', f, project, '1', is_disabled %>
+            <%= render_status 'crypto_verification_private', f, project, '1', is_disabled, true %>
+          </li>
+          <li class="list-group-item"><h3>Secure release</h3>
+
+            <%= render_status 'signed_releases', f, project, '1', is_disabled %>
+
+            <%= render_status 'version_tags_signed', f, project, '1', is_disabled, true %>
+
+          </li>
+        </ul>
+        <% unless is_disabled %>
+          <div class="panel-footer text-center">
+            By submitting this data about the project you agree to release it
+            under at least the
+            <a href="https://creativecommons.org/licenses/by/3.0/us"
+            target="_blank">Creative Commons Attribution version 3.0 or later
+            license (CC-BY-3.0+)</a>. This means that all are free to share
+            and adapt the data, but they must give appropriate credit.
+            You retain copyright (if any), and the project
+            license is unaffected.<br><br>
+            <%= f.button 'Save (and continue)', type: 'submit', name: 'continue',
+              value: 'analysis', class:"btn btn-success btn-submit" %>
+            <%= f.submit 'Submit (and exit)', class:"btn btn-success btn-submit" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="panel panel-primary">
+      <div class="panel-heading close-by-default can-collapse" id="analysis">
+        <% satisfaction_data = project.get_satisfaction_data('1','analysis') %>
+        <h4 class="panel-title">
+          <i class="glyphicon"></i>&nbsp;Analysis
+          <span class="pull-right satisfaction">
+            <span class="satisfaction-text"><%= satisfaction_data[:text] %></span>
+            <span class="satisfaction-bullet" data-color="<%= satisfaction_data[:color] %>">&#9679;</span>
+          </span>
+        </h4>
+      </div>
+      <div class="panel-collapse collapse in remove-in">
+        <ul class="list-group">
+          <li class="list-group-item"><h3>Upgrades</h3>
+            <%= render_status 'static_analysis_common_vulnerabilities', f, project, '1', is_disabled, true %>
+            <%= render_status 'dynamic_analysis_unsafe', f, project, '1', is_disabled, true %>
+          </li>
+          <li class="list-group-item"><h3>Dependencies</h3>
+            <%= render_status 'dependency_monitoring', f, project, '1', is_disabled, true %>
+          </li>
+        </ul>
+        <% unless is_disabled %>
+          <div class="panel-footer text-center">
+            By submitting this data about the project you agree to release it
+            under at least the
+            <a href="https://creativecommons.org/licenses/by/3.0/us"
+            target="_blank">Creative Commons Attribution version 3.0 or later
+            license (CC-BY-3.0+)</a>. This means that all are free to share
+            and adapt the data, but they must give appropriate credit.
+            You retain copyright (if any), and the project
+            license is unaffected.<br><br>
+            <%= f.button 'Save (and continue)', type: 'submit', name: 'continue',
+              value: 'future', class:"btn btn-success btn-submit" %>
+            <%= f.submit 'Submit (and exit)', class:"btn btn-success btn-submit" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+  </div>
+      <br>
+      <div class="center">
+      <% if is_disabled %>
+        <% if project.show_entry_license? %>
+          <!-- The user agreed to "3.0 or later", not just 3.0 -->
+          This data is available under the
+          <a href="https://creativecommons.org/licenses/by/3.0/us"
+          target="_blank">Creative Commons Attribution version 3.0 or later
+          license (CC-BY-3.0+)</a>. All are free to share
+          and adapt the data, but must give appropriate credit.
+          Please credit <%= project.user_name %> and
+          the CII Best Practices badge contributors.<br><br>
+        <% else %>
+          <!-- This is older data and the user didn't indicate anything,
+               so the "terms of use" of CII apply, which said that unless
+               otherwise noted it's released under CC-BY-3.0 only. -->
+          This data is available under the
+          <a href="https://creativecommons.org/licenses/by/3.0/us"
+          target="_blank">Creative Commons Attribution version 3.0
+          license (CC-BY-3.0)</a> per the
+          <a href="https://www.coreinfrastructure.org/" target="_blank">Core Infrastructure Initiative</a>
+          <a href="https://www.linuxfoundation.org/terms" target="_blank">terms of use</a>.
+          All are free to share
+          and adapt the data, but must give appropriate credit.
+          Please credit <%= project.user_name %> and
+          the CII Best Practices badge contributors.<br><br>
+        <% end %>
+      <% else %>
+        By submitting this data about the project you agree to release it
+        under at least the
+        <a href="https://creativecommons.org/licenses/by/3.0/us"
+        target="_blank">Creative Commons Attribution version 3.0 or later
+        license (CC-BY-3.0+)</a>. This means that all are free to share
+        and adapt the data, but they must give appropriate credit.
+        You retain copyright (if any), and the project
+        license is unaffected.<br><br>
+        <%= f.button 'Save (and continue)', type: 'submit', name: 'continue',
+          value: 'Save', class:"btn btn-success btn-submit" %>
+        <%= f.submit 'Submit (and exit)', class:"btn btn-success btn-submit" %>
+      <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>
+</div>
+<% end %>

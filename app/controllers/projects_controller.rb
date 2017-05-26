@@ -9,6 +9,7 @@ class ProjectsController < ApplicationController
   before_action :set_project, only: %i[edit update destroy show show_json badge]
   before_action :logged_in?, only: :create
   before_action :change_authorized, only: %i[destroy edit update]
+  before_action :set_criteria_level, only: %i[show edit update]
 
   # Cache with Fastly CDN.  We can't use this header, because logged-in
   # and not-logged-in users see different things (and thus we can't
@@ -52,9 +53,7 @@ class ProjectsController < ApplicationController
   end
 
   # GET /projects/1
-  def show
-    # params contains "level" if one was provided
-  end
+  def show; end
 
   # GET /projects/1.json
   def show_json
@@ -139,9 +138,9 @@ class ProjectsController < ApplicationController
       respond_to do |format|
         # Was project.update(project_params)
         if @project.save
-          successful_update(format, old_badge_level)
+          successful_update(format, old_badge_level, @criteria_level)
         else
-          format.html { render :edit }
+          format.html { render :edit, criteria_level: @criteria_level }
           format.json do
             render json: @project.errors, status: :unprocessable_entity
           end
@@ -315,6 +314,10 @@ class ProjectsController < ApplicationController
     params.require(:project).permit(Project::PROJECT_PERMITTED_FIELDS)
   end
 
+  def criteria_level_params
+    params.permit([:criteria_level])
+  end
+
   def repo_url_change_allowed?
     return true unless @project.repo_url?
     return true if project_params[:repo_url].nil?
@@ -400,6 +403,11 @@ class ProjectsController < ApplicationController
     @project = Project.find(params[:id])
   end
 
+  def set_criteria_level
+    @criteria_level = criteria_level_params[:criteria_level] || '0'
+    @criteria_level = '0' unless @criteria_level =~ /\A[0-2]\Z/
+  end
+
   def set_valid_query_url
     # Rewrites /projects?q=&status=failing to /projects?status=failing
     original = request.original_url
@@ -427,16 +435,20 @@ class ProjectsController < ApplicationController
   end
   # rubocop:enable Metrics/AbcSize
 
-  # rubocop:disable Metrics/AbcSize
-  def successful_update(format, old_badge_level)
+  # rubocop:disable Metrics/AbcSize,Metrics/PerceivedComplexity
+  def successful_update(format, old_badge_level, criteria_level)
     purge_cdn_project
+    criteria_level = nil if criteria_level == '0'
     # @project.purge
     format.html do
       if params[:continue]
         flash[:success] = 'Project was successfully updated.'
-        redirect_to edit_project_path(@project) + url_anchor
+        redirect_to edit_project_path(
+          @project, criteria_level: criteria_level
+        ) + url_anchor
       else
-        redirect_to @project, success: 'Project was successfully updated.'
+        redirect_to project_path(@project, criteria_level: criteria_level),
+                    success: 'Project was successfully updated.'
       end
     end
     format.json { render :show, status: :ok, location: @project }
@@ -457,7 +469,7 @@ class ProjectsController < ApplicationController
       ReportMailer.email_owner(@project, new_badge_level).deliver_now
     end
   end
-  # rubocop:enable Metrics/AbcSize
+  # rubocop:enable Metrics/AbcSize,Metrics/PerceivedComplexity
 
   def url_anchor
     return '#' + params[:continue] unless params[:continue] == 'Save'

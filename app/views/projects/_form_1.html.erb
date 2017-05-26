@@ -100,33 +100,11 @@
       </div>
       <div class="panel-collapse collapse in remove-in">
         <ul class="list-group">
-          <li class="list-group-item"><h3>Public version-controlled source repository</h3>
+          <li class="list-group-item"><h3>Maintenance</h3>
 
-            <%= render_status 'repo_public', f, project, '0', is_disabled %>
+            <%# TODO: This is way too short. %>
+            <%= render_status 'maintenance_or_update', f, project, '1', is_disabled, true %>
 
-            <%= render_status 'repo_track', f, project, '0', is_disabled %>
-
-            <%= render_status 'repo_interim', f, project, '0', is_disabled %>
-
-            <%= render_status 'repo_distributed', f, project, '0', is_disabled, true %>
-
-          </li>
-
-          <li class="list-group-item"><h3>Version numbering</h3>
-
-            <%= render_status 'version_unique', f, project, '0', is_disabled %>
-
-            <%= render_status 'version_semver', f, project, '0', is_disabled %>
-
-            <%= render_status 'version_tags', f, project, '0', is_disabled, true %>
-
-          </li>
-
-          <li class="list-group-item"><h3>Release Notes</h3>
-
-            <%= render_status 'release_notes', f, project, '0', is_disabled %>
-
-            <%= render_status 'release_notes_vulns', f, project, '0', is_disabled, true %>
           </li>
         </ul>
         <% unless is_disabled %>
@@ -160,31 +138,13 @@
       </div>
       <div class="panel-collapse collapse in remove-in">
         <ul class="list-group">
-          <li class="list-group-item"><h3>Bug reporting process</h3>
-
-            <%= render_status 'report_process', f, project, '0', is_disabled %>
-
-            <%= render_status 'report_tracker', f, project, '0', is_disabled %>
-
-            <%= render_status 'report_responses', f, project, '0', is_disabled %>
-
-            <%= render_status 'enhancement_responses', f, project, '0', is_disabled %>
-
-            <%= render_status 'report_archive', f, project, '0', is_disabled, true %>
-
-          </li>
-
           <li class="list-group-item"><h3>Vulnerability reporting process</h3>
 
-            <%= render_status 'vulnerability_report_process',
-                              f, project, '0', is_disabled %>
+            <%= render_status 'vulnerability_report_credit', f, project, '1', is_disabled %>
 
-            <%= render_status 'vulnerability_report_private',
-                              f, project, '0', is_disabled %>
-
-            <%= render_status 'vulnerability_report_response',
-                              f, project, '0', is_disabled, true %>
+            <%= render_status 'vulnerability_response_process', f, project, '1', is_disabled %>
           </li>
+
         </ul>
         <% unless is_disabled %>
           <div class="panel-footer text-center">
@@ -217,46 +177,39 @@
       </div>
       <div class="panel-collapse collapse in remove-in">
         <ul class="list-group">
-          <li class="list-group-item"><h3>Working build system</h3>
+          <li class="list-group-item"><h3>Test</h3>
+            <%= render_status 'automated_integration_testing', f, project, '1', is_disabled %>
 
-            <%= render_status 'build', f, project, '0', is_disabled %>
+            <%= render_status 'test_policy_mandated', f, project, '1', is_disabled %>
 
-            <%= render_status 'build_common_tools', f, project, '0', is_disabled %>
+            <%= render_status 'regression_tests_added50', f, project, '1', is_disabled, true %>
+            <%= render_status 'test_statement_coverage80', f, project, '1', is_disabled, true %>
+          </li>
 
-            <%= render_status 'build_floss_tools', f, project, '0', is_disabled, true %>
+          <li class="list-group-item"><h3>Coding standards</h3>
+            <%= render_status 'coding_standards', f, project, '1', is_disabled %>
+            <%= render_status 'coding_standards_enforced', f, project, '1', is_disabled %>
+          </li>
+
+          <li class="list-group-item"><h3>Externally-maintained components</h3>
+
+            <%= render_status 'external_dependencies', f, project, '1', is_disabled %>
+            <%= render_status 'updateable_reused_components', f, project, '1', is_disabled %>
+
+            <%= render_status 'interfaces_current', f, project, '1', is_disabled, true %>
 
           </li>
 
-          <li class="list-group-item"><h3>Automated test suite</h3>
-
-            <%= render_status 'test', f, project, '0', is_disabled %>
-
-            <%= render_status 'test_invocation', f, project, '0', is_disabled %>
-
-            <%= render_status 'test_most', f, project, '0', is_disabled %>
-
-            <%= render_status 'test_continuous_integration',
-                              f, project, '0', is_disabled, true %>
-
+          <li class="list-group-item"><h3>Build</h3>
+            <%= render_status 'build_standard_variables', f, project, '1', is_disabled %>
+            <%= render_status 'build_preserve_debug', f, project, '1', is_disabled %>
+            <%= render_status 'build_non_recursive', f, project, '1', is_disabled, true %>
+            <%= render_status 'build_repeatable', f, project, '1', is_disabled, true %>
           </li>
-
-          <li class="list-group-item"><h3>New functionality testing</h3>
-
-            <%= render_status 'test_policy', f, project, '0', is_disabled %>
-
-            <%= render_status 'tests_are_added', f, project, '0', is_disabled %>
-
-            <%= render_status 'tests_documented_added', f, project, '0', is_disabled, true %>
-
-          </li>
-
-          <li class="list-group-item"><h3>Warning flags</h3>
-
-            <%= render_status 'warnings', f, project, '0', is_disabled %>
-
-            <%= render_status 'warnings_fixed', f, project, '0', is_disabled %>
-
-            <%= render_status 'warnings_strict', f, project, '0', is_disabled, true %>
+          <li class="list-group-item"><h3>Installation</h3>
+            <%= render_status 'installation_common', f, project, '1', is_disabled, true %>
+            <%= render_status 'installation_standard_variables', f, project, '1', is_disabled, true %>
+            <%= render_status 'installation_development_quick', f, project, '1', is_disabled, true %>
           </li>
         </ul>
         <% unless is_disabled %>

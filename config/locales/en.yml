@@ -260,9 +260,9 @@ en:
   # report_reminder_summary.*.erb
   report_mailer:
     subject_achieved_passing: >
-      CONGRATULATIONS on achieving a passing best practices badge!
+      CONGRATULATIONS on achieving a %{new_level} best practices badge!
     subject_no_longer_passing: >
-      Your best practices badge is no longer passing
+      Your best practices badge is no longer %{old_level}
     subject_new_project: >
       You added a project to the CII Best Practices Badging Program
     subject_reminder: >
@@ -310,16 +310,16 @@ en:
       (click on "new issue").
 
       Thank you for your time.
-    passing_part1: |
+    gained_level_part1: |
       Congratulations!
 
       According to the information that you've provided,
-      your project has earned the CII best practices 'passing' badge.
+      your project has earned the CII best practices '%{new_level}' badge.
       For more information, see this URL:
-    passing_part2: |
+    gained_level_part2: |
       Please add your badge to your project and/or repository site;
       you've earned it:
-    passing_part3: |
+    gained_level_part3: |
       We strongly encourage you to add or improve justification text,
       including adding URLs that point to more information.
 
@@ -337,10 +337,10 @@ en:
       Thank you, and congratulations.
     in_markdown_add: "In markdown you can add this:"
     in_html_add: "In HTML you can add this:"
-    in_progress_message: |
-      We're sorry, but your project no longer has the "passing" badge
-       and is now "in progress".
-       Please see the following URL for more information:
+    lost_level_message: |
+      We're sorry, but your project no longer has the "%{old_level}" badge
+      and is now "%{new_level}".
+      Please see the following URL for more information:
     ending: |
       --- David A. Wheeler, CII Best Practices Badge Technical Lead
   # user_mailer is for the emails relating to the user account

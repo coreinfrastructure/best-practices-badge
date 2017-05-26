@@ -37,22 +37,22 @@ class ReportMailer < ApplicationMailer
     mail(
       to: @report_destination,
       subject: "Project #{project.id} status change to " \
-                        "passing=#{new_badge_status}"
+                        "#{new_badge_status}"
     )
   end
 
   # Return subject line for given badge status.  Uses current I18n.locale.
-  def subject_for(new_badge_status)
-    if new_badge_status == 'passing'
-      t('report_mailer.subject_achieved_passing')
+  def subject_for(old_badge_level, new_badge_level, lost)
+    if lost
+      t('report_mailer.subject_no_longer_passing', old_level: old_badge_level)
     else
-      t('report_mailer.subject_no_longer_passing')
+      t('report_mailer.subject_achieved_passing', new_level: new_badge_level)
     end
   end
 
   # Create email to badge entry owner about their new badge status
   # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
-  def email_owner(project, new_badge_status)
+  def email_owner(project, old_badge_level, new_badge_level, lost)
     return if project.nil? || project.id.nil? || project.user_id.nil?
     @project = project
     user = User.find(project.user_id)
@@ -61,12 +61,14 @@ class ReportMailer < ApplicationMailer
     return unless user.email.include?('@')
     @project_info_url = project_info_url(@project.id)
     @email_destination = user.email
+    @new_level = new_badge_level
+    @old_level = old_badge_level
     set_headers
     I18n.with_locale(user.preferred_locale.to_sym) do
       mail(
         to: @email_destination,
-        template_name: new_badge_status,
-        subject: subject_for(new_badge_status)
+        template_name: lost ? 'lost_level' : 'gained_level'
+        subject: subject_for(old_badge_level, new_badge_level, lost)
       )
     end
   end

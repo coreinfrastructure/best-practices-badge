@@ -12,8 +12,8 @@
         on <%= ENV['PUBLIC_HOSTNAME'] %>
       <% end %>
       has changed
-      from passing=<%= @old_badge_status %>
-      to passing=<%= @new_badge_status %>.
+      from <%= @old_badge_status %>
+      to <%= @new_badge_status %>.
       See <a href="<%= @project_info_url %>"><%= @project_info_url %></a>
       for more.
     </p>

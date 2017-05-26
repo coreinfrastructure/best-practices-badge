@@ -444,15 +444,20 @@ class ProjectsController < ApplicationController
     ReportMailer.project_status_change(
       @project, old_badge_level, new_badge_level
     ).deliver_now
-    if new_badge_level == 'passing'
-      flash[:success] = 'CONGRATULATIONS on earning a badge!' \
-        ' Please show your badge status on your project page (see the' \
-        ' "how to embed it" text just below if you don\'t' \
-        ' know how to do that).'
-      ReportMailer.email_owner(@project, new_badge_level).deliver_now
-    elsif new_badge_level == 'in_progress'
-      flash[:danger] = 'Project no longer has a badge.'
-      ReportMailer.email_owner(@project, new_badge_level).deliver_now
+    if Project.BADGE_LEVELS.index(new_badge_level) >
+       Project.BADGE_LEVELS.index(old_badge_level)
+      flash[:success] = "CONGRATULATIONS on earning a #{new_badge_level}" \
+        ' badge! If you haven\'t already, please show your badge status on' \
+        ' your project page (see the "how to embed it" text just below' \
+        ' if you don\'t know how to do that).'
+      ReportMailer.email_owner(
+        @project, old_badge_level, new_badge_level
+      ).deliver_now
+    else
+      flash[:danger] = 'Project has lost a badge.'
+      ReportMailer.email_owner(
+        @project, old_badge_level, new_badge_level, lost=true
+      ).deliver_now
     end
   end
   # rubocop:enable Metrics/AbcSize,Metrics/PerceivedComplexity
@@ -466,9 +471,7 @@ class ProjectsController < ApplicationController
   # This method gives the percentage value to be passed to the Badge model
   # when getting the svg badge for a project
   def value_for_badge
-    return @project.badge_percentage_0 if @project.badge_percentage_0 < 100
-    return 'passing' if @project.badge_percentage_1 < 100
-    return 'silver' if @project.badge_percentage_2 < 100
-    'gold'
+    return @project.badge_percentage_0 if @project.badge_level == 'in_progress'
+    @project.badge_level
   end
 end

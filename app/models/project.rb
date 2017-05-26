@@ -21,6 +21,8 @@ class Project < ActiveRecord::Base
   MAX_TEXT_LENGTH = 8192 # Arbitrary maximum to reduce abuse
   MAX_SHORT_STRING_LENGTH = 254 # Arbitrary maximum to reduce abuse
 
+  BADGE_LEVELS = %w[in_progress passing silver gold].freeze
+
   PROJECT_OTHER_FIELDS = %i[
     name description homepage_url repo_url cpe implementation_languages
     license general_comments user_id disabled_reminders lock_version
@@ -182,8 +184,10 @@ class Project < ActiveRecord::Base
 
   # Return string representing badge level; assumes badge_percentage correct.
   def badge_level
-    return 'passing' if badge_percentage_0 >= 100
-    'in_progress'
+    return 'in_progress' if badge_percentage_0 < 100
+    return 'passing' if badge_percentage_1 < 100
+    return 'silver' if badge_percentage_2 < 100
+    'gold'
   end
 
   def calculate_badge_percentage(level)

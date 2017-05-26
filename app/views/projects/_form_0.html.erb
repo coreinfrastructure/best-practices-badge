@@ -181,7 +181,7 @@ databases when reporting vulnerabilities.
           </li>
 
    <%# Note: render() accepts met_suppress: ..., unmet_placeholder:  ... %>
-          <li class="list-group-item"><h3>Basic Project Website Content</h3>
+          <li class="list-group-item"><h3>Basic project website content</h3>
             <%= render_status 'description_good', f, project, '0', is_disabled %>
 
             <%= render_status 'interact', f, project, '0', is_disabled %>
@@ -252,17 +252,13 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
             <%= render_status 'license_location', f, project, '0', is_disabled, true %>
           </li>
 
-          <li class="list-group-item"><h3>Documentation</h3>
-            <%= render_minor_status(
-                  '0', 'Basics', 'Documentation', f, project, is_disabled
-                ) %>
-          </li>
+          <%= render_minor_status(
+                '0', 'Basics', 'Documentation', f, project, is_disabled
+              ) %>
 
-          <li class="list-group-item"><h3>Other</h3>
-            <%= render_minor_status(
-                  '0', 'Basics', 'Other', f, project, is_disabled
-                ) %>
-          </li>
+          <%= render_minor_status(
+                '0', 'Basics', 'Other', f, project, is_disabled
+              ) %>
         </ul>
 
       <div class="row">
@@ -304,39 +300,29 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
     </div>
 
     <div class="panel panel-primary">
-      <div class="panel-heading close-by-default can-collapse" id="changecontrol">
-        <% satisfaction_data = project.get_satisfaction_data('0','changecontrol') %>
-        <h4 class="panel-title">
-          <i class="glyphicon"></i>&nbsp;Change Control
-          <span class="pull-right satisfaction">
-            <span class="satisfaction-text"><%= satisfaction_data[:text] %></span>
-            <span class="satisfaction-bullet" data-color="<%= satisfaction_data[:color] %>">&#9679;</span>
-          </span>
-        </h4>
-      </div>
+      <%= render(partial: 'panel_header',
+           locals:
+             {
+               panel_title: 'Change Control', anchor_id: 'changecontrol',
+               by_default: 'close',
+               satisfaction_data:
+                 project.get_satisfaction_data('0','changecontrol')
+             }) %>
       <div class="panel-collapse collapse in remove-in">
         <ul class="list-group">
-          <li class="list-group-item"><h3>Public version-controlled source repository</h3>
-            <%= render_minor_status(
-                  '0', 'Change Control',
-                  'Public version-controlled source repository',
-                  f, project, is_disabled
-                ) %>
-          </li>
-
-          <li class="list-group-item"><h3>Unique Version numbering</h3>
-            <%= render_minor_status(
-                  '0', 'Change Control', 'Unique version numbering',
-                  f, project, is_disabled
-                ) %>
-          </li>
-
-          <li class="list-group-item"><h3>Release notes</h3>
-            <%= render_minor_status(
-                  '0', 'Change Control', 'Release notes',
-                  f, project, is_disabled
-                ) %>
-          </li>
+          <%= render_minor_status(
+                '0', 'Change Control',
+                'Public version-controlled source repository',
+                f, project, is_disabled
+              ) %>
+          <%= render_minor_status(
+                '0', 'Change Control', 'Unique version numbering',
+                f, project, is_disabled
+              ) %>
+          <%= render_minor_status(
+                '0', 'Change Control', 'Release notes',
+                f, project, is_disabled
+              ) %>
         </ul>
         <% unless is_disabled %>
           <div class="panel-footer text-center">
@@ -357,31 +343,25 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
     </div>
 
     <div class="panel panel-primary">
-      <div class="panel-heading close-by-default can-collapse" id="reporting">
-        <% satisfaction_data = project.get_satisfaction_data('0','reporting') %>
-        <h4 class="panel-title">
-          <i class="glyphicon"></i>&nbsp;Reporting
-          <span class="pull-right satisfaction">
-            <span class="satisfaction-text"><%= satisfaction_data[:text] %></span>
-            <span class="satisfaction-bullet" data-color="<%= satisfaction_data[:color] %>">&#9679;</span>
-          </span>
-        </h4>
-      </div>
+      <%= render(partial: 'panel_header',
+           locals:
+             {
+               panel_title: 'Reporting', anchor_id: 'reporting',
+               by_default: 'close',
+               satisfaction_data:
+                 project.get_satisfaction_data('0','reporting')
+             }) %>
       <div class="panel-collapse collapse in remove-in">
         <ul class="list-group">
-          <li class="list-group-item"><h3>Bug-reporting process</h3>
-            <%= render_minor_status(
-                  '0', 'Reporting', 'Bug-reporting process',
-                  f, project, is_disabled
-                ) %>
-          </li>
+          <%= render_minor_status(
+                '0', 'Reporting', 'Bug-reporting process',
+                f, project, is_disabled
+              ) %>
 
-          <li class="list-group-item"><h3>Vulnerability report process</h3>
-            <%= render_minor_status(
-                  '0', 'Reporting', 'Vulnerability report process',
-                  f, project, is_disabled
-                ) %>
-          </li>
+          <%= render_minor_status(
+                '0', 'Reporting', 'Vulnerability report process',
+                f, project, is_disabled
+              ) %>
         </ul>
         <% unless is_disabled %>
           <div class="panel-footer text-center">
@@ -402,45 +382,35 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
     </div>
 
     <div class="panel panel-primary">
-      <div class="panel-heading close-by-default can-collapse" id="quality">
-        <% satisfaction_data = project.get_satisfaction_data('0','quality') %>
-        <h4 class="panel-title">
-          <i class="glyphicon"></i>&nbsp;Quality
-          <span class="pull-right satisfaction">
-            <span class="satisfaction-text"><%= satisfaction_data[:text] %></span>
-            <span class="satisfaction-bullet" data-color="<%= satisfaction_data[:color] %>">&#9679;</span>
-          </span>
-        </h4>
-      </div>
+      <%= render(partial: 'panel_header',
+           locals:
+             {
+               panel_title: 'Quality', anchor_id: 'quality',
+               by_default: 'close',
+               satisfaction_data:
+                 project.get_satisfaction_data('0','quality')
+             }) %>
       <div class="panel-collapse collapse in remove-in">
         <ul class="list-group">
-          <li class="list-group-item"><h3>Working build system</h3>
-            <%= render_minor_status(
-                  '0', 'Quality', 'Working build system',
-                  f, project, is_disabled
-                ) %>
-          </li>
+          <%= render_minor_status(
+                '0', 'Quality', 'Working build system',
+                f, project, is_disabled
+              ) %>
 
-          <li class="list-group-item"><h3>Automated test suite</h3>
-            <%= render_minor_status(
-                  '0', 'Quality', 'Automated test suite',
-                  f, project, is_disabled
-                ) %>
-          </li>
+          <%= render_minor_status(
+                '0', 'Quality', 'Automated test suite',
+                f, project, is_disabled
+              ) %>
 
-          <li class="list-group-item"><h3>New functionality testing</h3>
-            <%= render_minor_status(
-                  '0', 'Quality', 'New functionality testing',
-                  f, project, is_disabled
-                ) %>
-          </li>
+          <%= render_minor_status(
+                '0', 'Quality', 'New functionality testing',
+                f, project, is_disabled
+              ) %>
 
-          <li class="list-group-item"><h3>Warning flags</h3>
-            <%= render_minor_status(
-                  '0', 'Quality', 'Warning flags',
-                  f, project, is_disabled
-                ) %>
-          </li>
+          <%= render_minor_status(
+                '0', 'Quality', 'Warning flags',
+                f, project, is_disabled
+              ) %>
         </ul>
         <% unless is_disabled %>
           <div class="panel-footer text-center">
@@ -461,24 +431,20 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
     </div>
 
     <div class="panel panel-primary">
-      <div class="panel-heading close-by-default can-collapse" id="security">
-        <% satisfaction_data = project.get_satisfaction_data('0','security') %>
-        <h4 class="panel-title">
-          <i class="glyphicon"></i>&nbsp;Security
-          <span class="pull-right satisfaction">
-            <span class="satisfaction-text"><%= satisfaction_data[:text] %></span>
-            <span class="satisfaction-bullet" data-color="<%= satisfaction_data[:color] %>">&#9679;</span>
-          </span>
-        </h4>
-      </div>
+      <%= render(partial: 'panel_header',
+           locals:
+             {
+               panel_title: 'Security', anchor_id: 'security',
+               by_default: 'close',
+               satisfaction_data:
+                 project.get_satisfaction_data('0','security')
+             }) %>
       <div class="panel-collapse collapse in remove-in">
         <ul class="list-group">
-          <li class="list-group-item"><h3>Secure development knowledge</h3>
-            <%= render_minor_status(
-                  '0', 'Security', 'Secure development knowledge',
-                  f, project, is_disabled
-                ) %>
-          </li>
+          <%= render_minor_status(
+                '0', 'Security', 'Secure development knowledge',
+                f, project, is_disabled
+              ) %>
           <li class="list-group-item"><h3>Use basic good cryptographic practices</h3>
 
             <span class="criteria-desc">
@@ -491,29 +457,25 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
               </button>
               <br>
             <% end %>
+            <%# Do *NOT* wrap this with <li>...</li>, we did that already. %>
             <%= render_minor_status(
                   '0', 'Security', 'Use basic good cryptographic practices',
-                  f, project, is_disabled
+                  f, project, is_disabled, false
                 ) %>
           </li>
-          <li class="list-group-item"><h3>Secured delivery against man-in-the-middle (MITM) attacks</h3>
-            <%= render_minor_status(
-                  '0', 'Security',
-                  'Secured delivery against man-in-the-middle (MITM) attacks',
-                  f, project, is_disabled
-                ) %>
-          </li>
-          <li class="list-group-item"><h3>Publicly-known vulnerabilities fixed</h3>
-            <%= render_minor_status(
-                  '0', 'Security', 'Publicly known Vulnerabilities fixed',
-                  f, project, is_disabled
-                ) %>
-          </li>
-          <li class="list-group-item"><h3>Other security</h3>
-
-            <%= render_status 'no_leaked_credentials', f, project, '0', is_disabled, true %>
-
-          </li>
+          <%= render_minor_status(
+                '0', 'Security',
+                'Secured delivery against man-in-the-middle (MITM) attacks',
+                f, project, is_disabled
+              ) %>
+          <%= render_minor_status(
+                '0', 'Security', 'Publicly known vulnerabilities fixed',
+                f, project, is_disabled
+              ) %>
+          <%= render_minor_status(
+                '0', 'Security', 'Other security issues',
+                f, project, is_disabled
+              ) %>
         </ul>
         <% unless is_disabled %>
           <div class="panel-footer text-center">
@@ -534,30 +496,24 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
     </div>
 
     <div class="panel panel-primary">
-      <div class="panel-heading close-by-default can-collapse" id="analysis">
-        <% satisfaction_data = project.get_satisfaction_data('0','analysis') %>
-        <h4 class="panel-title">
-          <i class="glyphicon"></i>&nbsp;Analysis
-          <span class="pull-right satisfaction">
-            <span class="satisfaction-text"><%= satisfaction_data[:text] %></span>
-            <span class="satisfaction-bullet" data-color="<%= satisfaction_data[:color] %>">&#9679;</span>
-          </span>
-        </h4>
-      </div>
+      <%= render(partial: 'panel_header',
+           locals:
+             {
+               panel_title: 'Analysis', anchor_id: 'analysis',
+               by_default: 'close',
+               satisfaction_data:
+                 project.get_satisfaction_data('0','analysis')
+             }) %>
       <div class="panel-collapse collapse in remove-in">
         <ul class="list-group">
-          <li class="list-group-item"><h3>Static code analysis</h3>
-            <%= render_minor_status(
-                  '0', 'Analysis', 'Static code analysis',
-                  f, project, is_disabled
-                ) %>
-          </li>
-          <li class="list-group-item"><h3>Dynamic analysis</h3>
-            <%= render_minor_status(
-                  '0', 'Analysis', 'Dynamic code analysis',
-                  f, project, is_disabled
-                ) %>
-          </li>
+          <%= render_minor_status(
+                '0', 'Analysis', 'Static code analysis',
+                f, project, is_disabled
+              ) %>
+          <%= render_minor_status(
+                '0', 'Analysis', 'Dynamic code analysis',
+                f, project, is_disabled
+              ) %>
         </ul>
         <% unless is_disabled %>
           <div class="panel-footer text-center">
@@ -578,16 +534,14 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
     </div>
 
     <div class="panel panel-primary">
-      <div class="panel-heading close-by-default can-collapse" id="future">
-        <% satisfaction_data = project.get_satisfaction_data('0','future') %>
-        <h4 class="panel-title">
-          <i class="glyphicon"></i>&nbsp;Future
-          <span class="pull-right satisfaction">
-            <span class="satisfaction-text"><%= satisfaction_data[:text] %></span>
-            <span class="satisfaction-bullet" data-color="<%= satisfaction_data[:color] %>">&#9679;</span>
-          </span>
-        </h4>
-      </div>
+      <%= render(partial: 'panel_header',
+           locals:
+             {
+               panel_title: 'Future', anchor_id: 'future',
+               by_default: 'close',
+               satisfaction_data:
+                 project.get_satisfaction_data('0','future')
+             }) %>
       <div class="panel-collapse collapse in remove-in">
         <br>
         These are criteria we intend to add in the near future, but are
@@ -597,7 +551,7 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
         <br>
             <%= render_minor_status(
                   '0', 'Future', 'future',
-                  f, project, is_disabled
+                  f, project, is_disabled, false
                 ) %>
       </div>
     </div>

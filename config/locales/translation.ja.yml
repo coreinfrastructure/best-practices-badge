@@ -334,6 +334,11 @@ ja:
       placeholder_of_repo:
       submit_urls:
       sign_in_first:
+    show:
+      edit:
+      delete:
+      confirm_delete:
+      back:
   report_mailer:
     new_project_heading:
     new_project_part1:
@@ -732,6 +737,65 @@ ja:
       dynamic_analysis_unsafe:
         description:
         details:
+    '2':
+      bus_factor:
+        description:
+        details:
+      contributors_unassociated:
+        description:
+        details:
+      copyright_per_file:
+        description:
+        details:
+      license_per_file:
+        description:
+        details:
+      repo_distributed:
+        description:
+        details:
+      small_tasks:
+        description:
+        details:
+      require_2FA:
+        description:
+      secure_2FA:
+        description:
+        details:
+      code_review_standards:
+        description:
+        details:
+      two_person_review:
+        description:
+      build_reproducible:
+        description:
+        details:
+      test_invocation:
+        description:
+        details:
+      test_continuous_integration:
+        description:
+        details:
+      test_statement_coverage90:
+        description:
+      test_branch_coverage80:
+        description:
+      crypto_used_network:
+        description:
+      crypto_tls12:
+        description:
+      hardened_site:
+        description:
+      security_review:
+        description:
+        details:
+      hardening:
+        description:
+        details:
+      dynamic_analysis:
+        description:
+        details:
+      dynamic_analysis_enable_assertions:
+        description:
   static_pages:
     home:
       badge_program:
@@ -739,3 +803,39 @@ ja:
       p1_html:
       p2_html:
       p3_html:
+  headings:
+    Accessibility and internationalization:
+    Analysis:
+    Automated test suite:
+    Basic project website content:
+    Basics:
+    Bug-reporting process:
+    Change Control:
+    Coding standards:
+    Documentation:
+    Dynamic code analysis:
+    Externally-maintained components:
+    Future:
+    future:
+    Installation system:
+    New functionality testing:
+    OSS License:
+    Other:
+    Other security issues:
+    Previous versions:
+    Project oversight:
+    Public version-controlled source repository:
+    Publicly known vulnerabilities fixed:
+    Quality:
+    Release notes:
+    Reporting:
+    Secure development knowledge:
+    Secure release:
+    Secured delivery against man-in-the-middle (MITM) attacks:
+    Security:
+    Static code analysis:
+    Unique version numbering:
+    Use basic good cryptographic practices:
+    Vulnerability report process:
+    Warning flags:
+    Working build system:

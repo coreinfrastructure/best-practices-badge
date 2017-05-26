@@ -37,7 +37,7 @@
 --- !!omap
 - '0': !!omap
   - Basics: !!omap
-    - Basic Project Website Content: !!omap
+    - Basic project website content: !!omap
       - description_good:
           category: MUST
           autofill: >
@@ -553,7 +553,7 @@
           category: MUST
           autofill: >
             Again, look for a download site using https.
-    - Publicly known Vulnerabilities fixed: !!omap
+    - Publicly known vulnerabilities fixed: !!omap
       - vulnerabilities_fixed_60_days:
           category: MUST
           rationale: >
@@ -693,13 +693,13 @@
             relevant compiler flags in build files.
 - '1': !!omap
   - Basics: !!omap
-    - Basic Project Website Content: !!omap
+    - Basic project website content: !!omap
       - contribution_requirements:
           category: MUST
           met_url_required: true
           autofill: >
             Look for a CONTRIBUTING{,.md,.txt,.html} file.
-    - Project Oversight: !!omap
+    - Project oversight: !!omap
       - dco:
           category: SHOULD
           met_url_required: true
@@ -805,7 +805,7 @@
             identify their achievements, other projects will be encouraged to
             follow suit and also make those achievements, benefitting everyone.
           #autofill: TODO
-    - Accessibility and Internationalization: !!omap
+    - Accessibility and internationalization: !!omap
       - accessibility_best_practices:
           category: SHOULD
           #autofill:TODO

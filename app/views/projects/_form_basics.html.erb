@@ -2,16 +2,14 @@
 
   <div class="panel-group well well-lg well-color">
     <div class="panel panel-primary">
-      <div class="open-by-default panel-heading can-collapse" id="basics">
-        <% satisfaction_data = project.get_satisfaction_data(criteria_level,'basics') %>
-        <h4 class="panel-title">
-          <i class="glyphicon"></i>&nbsp;Basics
-          <span class="pull-right satisfaction">
-            <span class="satisfaction-text"><%= satisfaction_data[:text] %></span>
-            <span class="satisfaction-bullet" data-color="<%= satisfaction_data[:color] %>">&#9679;</span>
-          </span>
-        </h4>
-      </div>
+      <%= render(partial: 'panel_header',
+           locals:
+             {
+               panel_title: 'Basics', anchor_id: 'basics',
+               by_default: 'open',
+               satisfaction_data:
+                 project.get_satisfaction_data(criteria_level,'basics')
+             }) %>
       <div class="panel-collapse collapse in">
         <ul class="list-group">
           <li class="list-group-item"><h3>Identification</h3>

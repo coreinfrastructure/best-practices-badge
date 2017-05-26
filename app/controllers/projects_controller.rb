@@ -294,20 +294,6 @@ class ProjectsController < ApplicationController
     end
   end
 
-  # This needs to be modified each time you add a new badge level
-  # This method gives the percentage value to be passed to the Badge model
-  # when getting the svg badge for a project
-  def value_for_badge
-    return 'silver' if @project.badge_percentage_0 == 100 &&
-                       @project.badge_percentage_1 == 100
-    percentage = @project.badge_percentage_0
-    return percentage if @project.badge_percentage_0 < 100
-    'passing'
-    # percentage += @project.badge_percentage_1
-    # return 'passing' if percentage < 200
-    # 'silver'
-  end
-
   # Never trust parameters from the scary internet,
   # only allow the white list through.
   def project_params
@@ -474,5 +460,16 @@ class ProjectsController < ApplicationController
   def url_anchor
     return '#' + params[:continue] unless params[:continue] == 'Save'
     ''
+  end
+
+  # This needs to be modified each time you add a new badge level
+  # This method gives the percentage value to be passed to the Badge model
+  # when getting the svg badge for a project
+  def value_for_badge
+    percentage = @project.badge_percentage_0
+    return percentage if @project.badge_percentage_0 < 100
+    percentage += @project.badge_percentage_1
+    return 'passing' if percentage < 200
+    'silver'
   end
 end

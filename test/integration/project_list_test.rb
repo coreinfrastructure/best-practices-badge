@@ -16,7 +16,7 @@ class ProjectListTest < ActionDispatch::IntegrationTest
     get '/projects?sort=name'
     assert_response :success
     assert_select 'table>tbody>tr:first-child>td:nth-child(2)'.dup,
-                  'Justified perfect project'
+                  'Justified perfect passing project'
 
     get '/projects?sort=name&sort_direction=desc'
     assert_response :success

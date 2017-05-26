@@ -23,7 +23,11 @@ class MonthlyAnnouncementTest < ActionDispatch::IntegrationTest
       Rake::Task['db:fixtures:load'].invoke
 
       results = ProjectsController.send :send_monthly_announcement
-      assert_equal [projects(:perfect).id], results
+      results.each do |result|
+        assert result.in? [
+          projects(:perfect_passing).id, projects(:perfect).id
+        ]
+      end
     end
   end
 end

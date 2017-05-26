@@ -52,15 +52,33 @@ perfect_unjustified:
   build_reproducible_status: '?'
 
 # TODO: Generate list of status fields from central location.
-perfect:
+perfect_passing:
   user: test_user
-  name: Justified perfect project
-  description: The perfect project
+  name: Justified perfect passing project
+  description: The perfect passing project
   homepage_url: https://www.example.org
   repo_url: https://www.example.org/code3
   implementation_languages: JavaScript, Java, C++ # Handle multiple names
   license: MIT
   badge_percentage_0: 100
+  badge_percentage_1: 25
+  achieved_passing_at: 2015-02-15T12:00:00
+<% Criteria['0'].keys.each do |criterion| %>
+  <%= criterion.to_s + '_status' %>: Met
+  <%= criterion.to_s + '_justification' %>: >
+    For more information see <https://www.example.org/>
+<% end %>
+
+perfect:
+  user: test_user
+  name: Justified perfect project
+  description: The perfect project
+  homepage_url: https://www.example.org
+  repo_url: https://www.example.org/code4
+  implementation_languages: JavaScript, Java, C++ # Handle multiple names
+  license: MIT
+  badge_percentage_0: 100
+  badge_percentage_1: 100
   achieved_passing_at: 2015-02-15T12:00:00
 <% Project::ALL_CRITERIA_STATUS.each do |criterion_status| %>
   <%= criterion_status %>: Met

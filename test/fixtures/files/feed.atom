@@ -48,6 +48,20 @@
     </author>
   </entry>
   <entry>
+    <id>tag:www.example.com,2005:Project/968496471</id>
+    <published>2015-03-01T12:00:00Z</published>
+    <updated>2015-03-01T12:00:00Z</updated>
+    <link rel="alternate" type="text/html" href="http://www.example.com/projects/968496471"/>
+    <title>Justified perfect passing project</title>
+    <content type="html">
+      <![CDATA[<p><b>Passing: 100%</b></p><p><a href='https://www.example.org'>https://www.example.org</a></p><span lang="en"><p>The perfect passing project</p>
+</span>]]>
+    </content>
+    <author>
+      <name>Test</name>
+    </author>
+  </entry>
+  <entry>
     <id>tag:www.example.com,2005:Project/980190962</id>
     <published>2000-01-01T00:00:00Z</published>
     <updated>2000-01-01T00:00:00Z</updated>

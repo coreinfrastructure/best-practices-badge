@@ -7,11 +7,12 @@ class FilterTest < CapybaraFeatureTest
   scenario 'Can Filter Projects', js: true do
     visit '/projects'
     assert has_content? 'Add New Project'
-    assert_equal 4, all('tbody tr').count
-    assert has_content? '4 Projects'
+    assert_equal 5, all('tbody tr').count
+    assert has_content? '5 Projects'
     assert has_content? 'Pathfinder OS'
     assert has_content? 'Mars Ascent Vehicle (MAV)'
     assert has_content? 'Unjustified perfect project'
+    assert has_content? 'Justified perfect passing project'
     assert has_content? 'Justified perfect project'
 
     # We would *like* to be able to use the select... wait_for_url pattern to
@@ -26,21 +27,23 @@ class FilterTest < CapybaraFeatureTest
     # select 'Passing', from: 'gteq'
     # wait_for_url '/projects?gteq=100'
     visit '/projects?gteq=100'
-    assert_equal 1, all('tbody tr').count
-    assert has_content? '1 Project'
+    assert_equal 2, all('tbody tr').count
+    assert has_content? '2 Projects'
     assert has_no_content? 'Pathfinder OS'
     assert has_no_content? 'Mars Ascent Vehicle (MAV)'
     assert has_no_content? 'Unjustified perfect project'
+    assert has_content? 'Justified perfect passing project'
     assert has_content? 'Justified perfect project'
 
     # select 'In Progress (75% or more)', from: 'gteq'
     # wait_for_url '/projects?gteq=75'
     visit '/projects?gteq=75'
-    assert_equal 2, all('tbody tr').count
-    assert has_content? '2 Projects'
+    assert_equal 3, all('tbody tr').count
+    assert has_content? '3 Projects'
     assert has_no_content? 'Pathfinder OS'
     assert has_no_content? 'Mars Ascent Vehicle (MAV)'
     assert has_content? 'Unjustified perfect project'
+    assert has_content? 'Justified perfect passing project'
     assert has_content? 'Justified perfect project'
 
     # fill_in 'q', with: 'unjustified'
@@ -52,17 +55,19 @@ class FilterTest < CapybaraFeatureTest
     assert has_no_content? 'Pathfinder OS'
     assert has_no_content? 'Mars Ascent Vehicle (MAV)'
     assert has_content? 'Unjustified perfect project'
+    assert has_no_content? 'Justified perfect passing project'
     assert has_no_content? 'Justified perfect project'
 
     # fill_in 'q', with: ''
     # click_on 'Search'
     # wait_for_url '/projects?gteq=75'
     visit '/projects?gteq=75'
-    assert_equal 2, all('tbody tr').count
-    assert has_content? '2 Projects'
+    assert_equal 3, all('tbody tr').count
+    assert has_content? '3 Projects'
     assert has_no_content? 'Pathfinder OS'
     assert has_no_content? 'Mars Ascent Vehicle (MAV)'
     assert has_content? 'Unjustified perfect project'
+    assert has_content? 'Justified perfect passing project'
     assert has_content? 'Justified perfect project'
 
     # check 'lteq' # Click 'Exclude passing' checkbox
@@ -73,6 +78,7 @@ class FilterTest < CapybaraFeatureTest
     assert has_no_content? 'Pathfinder OS'
     assert has_no_content? 'Mars Ascent Vehicle (MAV)'
     assert has_content? 'Unjustified perfect project'
+    assert has_no_content? 'Justified perfect passing project'
     assert has_no_content? 'Justified perfect project'
 
     # No UI to use status params
@@ -83,6 +89,7 @@ class FilterTest < CapybaraFeatureTest
     assert has_content? 'Pathfinder OS'
     assert has_content? 'Mars Ascent Vehicle (MAV)'
     assert has_content? 'Unjustified perfect project'
+    assert has_no_content? 'Justified perfect passing project'
     assert has_no_content? 'Justified perfect project'
 
     # check that old search system is working and returns expected results
@@ -92,6 +99,7 @@ class FilterTest < CapybaraFeatureTest
     assert has_content? 'Pathfinder OS'
     assert has_no_content? 'Mars Ascent Vehicle (MAV)'
     assert has_no_content? 'Unjustified perfect project'
+    assert has_no_content? 'Justified perfect passing project'
     assert has_no_content? 'Justified perfect project'
 
     # check results from normal search system
@@ -101,6 +109,7 @@ class FilterTest < CapybaraFeatureTest
     assert has_content? 'Pathfinder OS'
     assert has_content? 'Mars Ascent Vehicle (MAV)'
     assert has_no_content? 'Unjustified perfect project'
+    assert has_no_content? 'Justified perfect passing project'
     assert has_no_content? 'Justified perfect project'
   end
   # rubocop:enable Metrics/BlockLength

@@ -16,7 +16,7 @@ class BadgeTest < ActiveSupport::TestCase
   end
 
   test 'passing Badge matches fixture file' do
-    assert_equal contents('badge-100.svg'), Badge['passing'].to_s
+    assert_equal contents('badge-passing.svg'), Badge['passing'].to_s
   end
 
   test ' silver badge matches silver from fixture file' do

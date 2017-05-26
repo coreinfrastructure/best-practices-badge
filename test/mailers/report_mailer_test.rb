@@ -5,7 +5,7 @@ require 'test_helper'
 
 class ReportMailerTest < ActionMailer::TestCase
   setup do
-    @perfect_project = projects(:perfect)
+    @perfect_project = projects(:perfect_passing)
     # @user = users(:test_user)
   end
 

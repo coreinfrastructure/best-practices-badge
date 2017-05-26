@@ -8,6 +8,7 @@ class ProjectsControllerTest < ActionController::TestCase
     @project = projects(:one)
     @project_two = projects(:two)
     @perfect_unjustified_project = projects(:perfect_unjustified)
+    @perfect_passing_project = projects(:perfect_passing)
     @perfect_project = projects(:perfect)
     @user = users(:test_user)
     @admin = users(:admin_user)
@@ -196,13 +197,19 @@ class ProjectsControllerTest < ActionController::TestCase
     assert_equal @project.name, new_name
   end
 
-  test 'A perfect project should have the badge' do
-    get :badge, params: { id: @perfect_project, format: 'svg' }
+  test 'A perfect project passing should have the passing badge' do
+    get :badge, params: { id: @perfect_passing_project, format: 'svg' }
     assert_response :success
-    assert_includes @response.body, 'passing'
+    assert_equal contents('badge-passing.svg'), @response.body
   end
 
-  test 'A perfect unjustified project should not have the badge' do
+  test 'A perfect project should have the silver badge' do
+    get :badge, params: { id: @perfect_project, format: 'svg' }
+    assert_response :success
+    assert_equal contents('badge-silver.svg'), @response.body
+  end
+
+  test 'A perfect unjustified project should have in progress badge' do
     get :badge, params: { id: @perfect_unjustified_project, format: 'svg' }
     assert_response :success
     assert_includes @response.body, 'in progress'
@@ -216,29 +223,29 @@ class ProjectsControllerTest < ActionController::TestCase
 
   test 'Achievement datetimes set' do
     log_in_as(@admin)
-    assert_nil @perfect_project.lost_passing_at
-    assert_not_nil @perfect_project.achieved_passing_at
+    assert_nil @perfect_passing_project.lost_passing_at
+    assert_not_nil @perfect_passing_project.achieved_passing_at
     patch :update, params: {
-      id: @perfect_project, project: {
+      id: @perfect_passing_project, project: {
         interact_status: 'Unmet'
       }
     }
-    @perfect_project.reload
-    assert_not_nil @perfect_project.lost_passing_at
-    assert @perfect_project.lost_passing_at > 5.minutes.ago.utc
-    assert_not_nil @perfect_project.achieved_passing_at
+    @perfect_passing_project.reload
+    assert_not_nil @perfect_passing_project.lost_passing_at
+    assert @perfect_passing_project.lost_passing_at > 5.minutes.ago.utc
+    assert_not_nil @perfect_passing_project.achieved_passing_at
     patch :update, params: {
-      id: @perfect_project, project: {
+      id: @perfect_passing_project, project: {
         interact_status: 'Met'
       }
     }
-    assert_not_nil @perfect_project.lost_passing_at
+    assert_not_nil @perfect_passing_project.lost_passing_at
     # These tests should work, but don't; it appears our workaround for
     # the inadequately reset database interferes with them.
-    # assert_not_nil @perfect_project.achieved_passing_at
-    # assert @perfect_project.achieved_passing_at > 5.minutes.ago.utc
-    # assert @perfect_project.achieved_passing_at >
-    #        @perfect_project.lost_passing_at
+    # assert_not_nil @perfect_passing_project.achieved_passing_at
+    # assert @perfect_passing_project.achieved_passing_at > 5.minutes.ago.utc
+    # assert @perfect_passing_project.achieved_passing_at >
+    #        @perfect_passing_project.lost_passing_at
   end
 
   test 'should destroy own project' do

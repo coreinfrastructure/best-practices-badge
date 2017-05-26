@@ -466,7 +466,7 @@ DEPENDENCIES
   jquery-ui-rails (= 6.0.1)
   json (= 2.1.0)
   license_finder (= 3.0.0)
-  lograge
+  lograge (= 0.5.1)
   mdl (= 0.4.0)
   minitest-rails-capybara (= 3.0.1)
   minitest-retry (= 0.1.8)

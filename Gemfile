@@ -67,6 +67,7 @@ end
 # The "fake_production" environment is very much like production, however,
 # we enable a few debug tools to help us find "production-only" bugs.
 group :fake_production, :development, :test do
+  gem 'lograge', '0.5.1' # Simplify logs
   gem 'pry-byebug', '3.4.2'
 end
 

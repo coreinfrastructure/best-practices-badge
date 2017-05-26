@@ -120,6 +120,11 @@ Rails.application.configure do
   # with slow network connections
   config.middleware.use Rack::Deflater
 
+  # In production and fake_production environments turn on "lograge".
+  # This makes the logs easier to read and removes cruft that, while useful
+  # in development, can be overwhelming in production.
+  config.lograge.enabled = true
+
   # As a failsafe, trigger an exception if the response just hangs for
   # too long.  We only do this in production, because it's not
   # supposed to happen in normal use - this is simply an automatic

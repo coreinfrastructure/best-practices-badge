@@ -55,26 +55,41 @@ module ProjectsHelper
   end
   # rubocop:enable Metrics/ParameterLists
 
+  # Generate HTML for minor heading
+  def minor_header_html(minor)
+    safe_join(
+      [
+        '<li class="list-group-item"><h3>'.html_safe,
+        t(minor, scope: [:headings]),
+        '</h3>'.html_safe
+      ]
+    )
+  end
+
   # Render all the status_choosers in the given minor section.
   # This takes a rediculous number of parameters, because we have to
   # select the correct minor section & then pass the information the
   # status_chooser needs (which also needs a rediculous number).
+  # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
   # rubocop:disable Metrics/ParameterLists
   def render_minor_status(
-    criteria_level, major, minor, f, project, is_disabled
+    criteria_level, major, minor, f, project, is_disabled, wrapped = true
   )
     minor_criteria = FullCriteriaHash[criteria_level][major][minor].keys
     raise NameError if minor_criteria.empty? # Should always be true
     results = ActionView::OutputBuffer.new
+    results << minor_header_html(minor) if wrapped
     minor_criteria.each do |criterion|
       results << render_status(
         criterion, f, project, criteria_level, is_disabled,
         criterion == minor_criteria.last
       )
     end
+    results << safe_join(['</li>'.html_safe]) if wrapped
     results
   end
   # rubocop:enable Metrics/ParameterLists
+  # rubocop:enable Metrics/MethodLength,Metrics/AbcSize
 
   # Return HTML for a sortable header.
   def sortable_header(title, field_name)

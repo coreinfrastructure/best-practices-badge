@@ -38,35 +38,23 @@
 
           </li>
 
-          <li class="list-group-item"><h3>Basic project website content</h3>
-            <%= render_minor_status(
-                  '1', 'Basics', 'Basic project website content',
-                  f, project, is_disabled
-                ) %>
-          </li>
-          <li class="list-group-item"><h3>Project oversight</h3>
-            <%= render_minor_status(
-                  '1', 'Basics', 'Project oversight',
-                  f, project, is_disabled
-                ) %>
-          </li>
-          <li class="list-group-item"><h3>Documentation</h3>
-            <%= render_minor_status(
-                  '1', 'Basics', 'Documentation',
-                  f, project, is_disabled
-                ) %>
-          </li>
-          <li class="list-group-item"><h3>Accessibility and internationalizatoin</h3>
-            <%= render_minor_status(
-                  '1', 'Basics', 'Accessibility and internationalization',
-                  f, project, is_disabled
-                ) %>
-          </li>
-          <li class="list-group-item"><h3>Other</h3>
-            <%= render_minor_status(
-                  '1', 'Basics', 'Other', f, project, is_disabled
-                ) %>
-          </li>
+          <%= render_minor_status(
+                '1', 'Basics', 'Basic project website content',
+                f, project, is_disabled
+              ) %>
+          <%= render_minor_status(
+                '1', 'Basics', 'Project oversight', f, project, is_disabled
+              ) %>
+          <%= render_minor_status(
+                '1', 'Basics', 'Documentation', f, project, is_disabled
+              ) %>
+          <%= render_minor_status(
+                '1', 'Basics', 'Accessibility and internationalization',
+                f, project, is_disabled
+              ) %>
+          <%= render_minor_status(
+                '1', 'Basics', 'Other', f, project, is_disabled
+              ) %>
           </ul>
 
       <% unless is_disabled %>
@@ -100,12 +88,10 @@
       </div>
       <div class="panel-collapse collapse in remove-in">
         <ul class="list-group">
-          <li class="list-group-item"><h3>Previous versions</h3>
-            <%= render_minor_status(
-                  '1', 'Change Control', 'Previous versions',
-                  f, project, is_disabled
-                ) %>
-          </li>
+          <%= render_minor_status(
+                '1', 'Change Control', 'Previous versions',
+                f, project, is_disabled
+              ) %>
         </ul>
         <% unless is_disabled %>
           <div class="panel-footer text-center">
@@ -138,19 +124,14 @@
       </div>
       <div class="panel-collapse collapse in remove-in">
         <ul class="list-group">
-          <li class="list-group-item"><h3>Bug-reporting process</h3>
-            <%= render_minor_status(
-                  '1', 'Reporting', 'Bug-reporting process',
-                  f, project, is_disabled
-                ) %>
-          </li>
-          <li class="list-group-item"><h3>Vulnerability report process</h3>
-            <%= render_minor_status(
-                  '1', 'Reporting', 'Vulnerability report process',
-                  f, project, is_disabled
-                ) %>
-          </li>
-
+          <%= render_minor_status(
+                '1', 'Reporting', 'Bug-reporting process',
+                f, project, is_disabled
+              ) %>
+          <%= render_minor_status(
+                '1', 'Reporting', 'Vulnerability report process',
+                f, project, is_disabled
+              ) %>
         </ul>
         <% unless is_disabled %>
           <div class="panel-footer text-center">
@@ -183,52 +164,32 @@
       </div>
       <div class="panel-collapse collapse in remove-in">
         <ul class="list-group">
-          <li class="list-group-item"><h3>Coding standards</h3>
-            <%= render_minor_status(
-                  '1', 'Quality', 'Coding standards',
-                  f, project, is_disabled
-                ) %>
-          </li>
-          <li class="list-group-item"><h3>Working build system</h3>
-            <%= render_minor_status(
-                  '1', 'Quality', 'Working build system',
-                  f, project, is_disabled
-                ) %>
-          </li>
-          <li class="list-group-item"><h3>Installation system</h3>
-            <%= render_minor_status(
-                  '1', 'Quality', 'Installation system',
-                  f, project, is_disabled
-                ) %>
-          </li>
-
-          <li class="list-group-item"><h3>Externally-maintained components</h3>
-            <%= render_minor_status(
-                  '1', 'Quality', 'Externally-maintained components',
-                  f, project, is_disabled
-                ) %>
-          </li>
-
-          <li class="list-group-item"><h3>Automated test suite</h3>
-            <%= render_minor_status(
-                  '1', 'Quality', 'Automated test suite',
-                  f, project, is_disabled
-                ) %>
-          </li>
-
-          <li class="list-group-item"><h3>New functionality testing</h3>
-            <%= render_minor_status(
-                  '1', 'Quality', 'New functionality testing',
-                  f, project, is_disabled
-                ) %>
-          </li>
-          <li class="list-group-item"><h3>Warning flags</h3>
-            <%= render_minor_status(
-                  '1', 'Quality', 'Warning flags',
-                  f, project, is_disabled
-                ) %>
-          </li>
-
+          <%= render_minor_status(
+                '1', 'Quality', 'Coding standards', f, project, is_disabled
+              ) %>
+          <%= render_minor_status(
+                '1', 'Quality', 'Working build system',
+                f, project, is_disabled
+              ) %>
+          <%= render_minor_status(
+                '1', 'Quality', 'Installation system',
+                f, project, is_disabled
+              ) %>
+          <%= render_minor_status(
+                '1', 'Quality', 'Externally-maintained components',
+                f, project, is_disabled
+              ) %>
+          <%= render_minor_status(
+                '1', 'Quality', 'Automated test suite',
+                f, project, is_disabled
+              ) %>
+          <%= render_minor_status(
+                '1', 'Quality', 'New functionality testing',
+                f, project, is_disabled
+              ) %>
+          <%= render_minor_status(
+                '1', 'Quality', 'Warning flags', f, project, is_disabled
+              ) %>
         </ul>
         <% unless is_disabled %>
           <div class="panel-footer text-center">
@@ -261,13 +222,10 @@
       </div>
       <div class="panel-collapse collapse in remove-in">
         <ul class="list-group">
-          <li class="list-group-item"><h3>Secure development knowledge</h3>
-            <%= render_minor_status(
-                  '1', 'Security', 'Secure development knowledge',
-                  f, project, is_disabled
-                ) %>
-          </li>
-
+          <%= render_minor_status(
+                '1', 'Security', 'Secure development knowledge',
+                f, project, is_disabled
+              ) %>
           <li class="list-group-item"><h3>Use basic good cryptographic practices</h3>
             <span class="criteria-desc">
             Note that some software does not need to use cryptographic mechanisms.
@@ -281,15 +239,13 @@
             <% end %>
             <%= render_minor_status(
                   '1', 'Security', 'Use basic good cryptographic practices',
-                  f, project, is_disabled
+                  f, project, is_disabled, false
                 ) %>
           </li>
-          <li class="list-group-item"><h3>Secure release</h3>
-            <%= render_minor_status(
-                  '1', 'Security', 'Secure release',
-                  f, project, is_disabled
-                ) %>
-          </li>
+          <%= render_minor_status(
+                '1', 'Security', 'Secure release',
+                f, project, is_disabled
+              ) %>
         </ul>
         <% unless is_disabled %>
           <div class="panel-footer text-center">
@@ -322,18 +278,14 @@
       </div>
       <div class="panel-collapse collapse in remove-in">
         <ul class="list-group">
-          <li class="list-group-item"><h3>Static code analysis</h3>
-            <%= render_minor_status(
-                  '1', 'Analysis', 'Static code analysis',
-                  f, project, is_disabled
-                ) %>
-          </li>
-          <li class="list-group-item"><h3>Dynamic code analysis</h3>
-            <%= render_minor_status(
-                  '1', 'Analysis', 'Dynamic code analysis',
-                  f, project, is_disabled
-                ) %>
-          </li>
+          <%= render_minor_status(
+                '1', 'Analysis', 'Static code analysis',
+                f, project, is_disabled
+              ) %>
+          <%= render_minor_status(
+                '1', 'Analysis', 'Dynamic code analysis',
+                f, project, is_disabled
+              ) %>
         </ul>
         <% unless is_disabled %>
           <div class="panel-footer text-center">

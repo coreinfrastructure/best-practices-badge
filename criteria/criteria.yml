@@ -1101,14 +1101,6 @@
             This was inspired by the
             <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/473">NYC 2016 brainstorming session</a>.
           #autofill: TODO
-      - input_validation:
-          category: MUST
-          #autofill: TODO
-      - hardening:
-          category: SHOULD
-          autofill: >
-            Look for gems like secure_headers, and
-            relevant compiler flags in build files.
     - Use basic good cryptographic practices: !!omap
       - crypto_weaknesses:
           category: MUST
@@ -1191,9 +1183,17 @@
             This was suggested by Kevin W. Wall (@kwwall)in
             <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/709">issue #709</a>.
           # autofill: TODO
+    - Other security issues: !!omap
+      - input_validation:
+          category: MUST
+          #autofill: TODO
+      - hardening:
+          category: SHOULD
+          autofill: >
+            Look for gems like secure_headers, and
+            relevant compiler flags in build files.
   - Analysis: !!omap
     - Static code analysis: !!omap
-
       - static_analysis_common_vulnerabilities:
           category: MUST
           na_allowed: true
@@ -1215,4 +1215,232 @@
           autofill: >
             Look in build/test script for reference to invocation of
             valgrind or ASAN.
-
+- '2': !!omap
+  - Basics: !!omap
+    - Project Oversight: !!omap
+      - bus_factor:
+          category: MUST
+          #autofill: TODO
+      - contributors_unassociated:
+          category: MUST
+          rationale: >
+            This reduces the risk of non-support if a single organization
+            stops supporting the project as FLOSS. It also reduces the risk of
+            malicious code insertion, since there is more independence between
+            contributors. This covers the case where "two people work for
+            company X, but only one is paid to work on this project" (because
+            the non-paid person could still have many of the same incentives).
+            It also covers the case where "two people got paid working for Red
+            Cross for a day, but Red Cross doesn't use the project".
+    - Other: !!omap
+      - copyright_per_file:
+          category: MUST
+          rationale: >
+            This isn't legally required in most jurisdictions, per the Berne
+            Convention.  For example, copyright notices have not been required
+            in the US since 1979. On the other hand, this is not hard to add.
+            <a href="http://ben.balter.com/2015/06/03/copyright-notices-for-websites-and-open-source-projects/">Ben Balter's "Copyright notices for open source projects"</a>
+            provides some good arguments for why it *should* be included:
+            "First, someone may want to use your work in ways not allowed by
+            your license; notices help them determine who to ask for
+            permission. Explicit notices can help you prove that you and your
+            collaborators really are the copyright holders. They can serve to
+            put a potential infringer on notice by providing an informal sniff
+            test to counter the 'Oh yeah, well I didn’t know it was
+            copyrighted' defense. For some users the copyright notice may
+            suggest higher quality, as they expect that good software will
+            include a notice... Git can track these things, but people may
+            receive software outside of git or where the git history has not
+            been retained." In addition, we have been informed by the Linux
+            Foundation's SPDX community that having this information is
+            extremely valuable for relicensing and for checking to determine
+            if a copyrighted work is derived from another.  While version
+            control systems do track versioning within a project, when files
+            are copied between projects this information is often lost. Having
+            the copyright notice information helps those researching sources,
+            e.g., if they wish to try to relicense something.
+      - license_per_file:
+          category: MUST
+          rationale: >
+            Files are sometimes individually copied from one project into
+            another.  Per-file license information increases the likelihood
+            that the original license will be honored. SPDX provides a simple
+            standard way to identify common licenses, without having to embed
+            the full license text in each file; since this makes the criterion
+            easier to do, we specifically mention it. Technically, the text
+            after "SPDX-License-Identifier" is a SPDX license expression, not
+            an identifier, but the tag "SPDX-License-Identifier" is what is
+            used for backwards-compatibility.
+  - 'Change Control': !!omap
+    - Public version-controlled source repository: !!omap
+      - repo_distributed:
+          category: MUST
+          autofill: >
+            Look for git, subversion (svn), and mercurial (hg).
+      - small_tasks:
+          category: MUST
+          rationale: >
+            Identified small tasks make it easier for new potential
+            contributors to become involved in a project, and projects with
+            more contributors have an increased likelihood of continuing.
+            <a href="http://www.alluxio.org/docs/master/en/Contributing-to-Alluxio.html">Alluxio uses SMALLFIX</a>
+            and
+            <a href="https://github.com/zaproxy/zaproxy/issues?q=is%3Aopen+is%3Aissue+label%3AIdealFirstBug">OWASP ZAP uses IdealFirstBug</a>.
+            This is related to criterion installation_development_quick.
+      - require_2FA:
+          category: MUST
+          rationale: >
+            2FA is used by Node.js and the Linux kernel projects.
+            See
+            <a href="https://www.linux.com/blog/linux-kernel-git-repositories-add-2-factor-authentication">"Linux Kernel Git Repositories Add 2-Factor Authentication" by Kontin Ryabitsev</a>
+            and
+            <a href="http://www.securityweek.com/linux-foundation-protects-kernel-git-repositories-2fa">"Linux Foundation Protects Kernel Git Repositories With 2FA" by Eduard Kovacs</a>.
+      - secure_2FA:
+          category: SHOULD
+          rationale: >
+            SMS is easier and lower cost for many people, but it also provides
+            much weaker security.  It has been argued that SMS isn't really
+            2FA at all; we permit it, because it's better than nothing, but we
+            don't recommend it because of its weaknesses.
+            <a href="https://www.wired.com/2016/06/hey-stop-using-texts-two-factor-authentication/">So Hey You Should Stop Using Texts for Two-Factor Authentication</a>
+  - Quality: !!omap
+    - Coding standards: !!omap
+      - code_review_standards:
+          category: MUST
+          rationale: >
+            Code review is a cornerstone of quality and secure coding
+            practices. Projects often seek new contributors but lack training
+            and documentation to increase the number of reviewers. An increase
+            in code reviewers lowers maintainer workload while aiding in
+            meeting the badge requirement two_person_review. See
+            <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/699">issue 699</a>
+            from GeorgLink.
+      - two_person_review:
+          category: MUST
+          rationale: >
+            Review can counter many problems. The percentage here could be
+            changed; 100% would be great but untenable for many projects.  We
+            have selected 50%, because anything less than 50% would mean that
+            most changes could go unreviewed. See, for example, the
+            <a href="https://www.kernel.org/doc/Documentation/SubmittingPatches">Linux Kernel's "Reviewer's statement of oversight"</a>.
+            Note that the set of criteria allow people within the same
+            organization to review each others' work; it is better to require
+            different organizations to review each others' work, but in many
+            situations that is not practical.
+    - Working build system: !!omap
+      - build_reproducible:
+          category: MUST
+          rationale: >
+            If a project needs to be built but there is no working build
+            system, then potential co-developers will not be able to easily
+            contribute and many security analysis tools will be ineffective.
+            Reproduceable builds counter malicious attacks that generate
+            malicious executables, by making it easy to recreate the
+            executable to determine if the result is correct. By itself,
+            reproducible builds do not counter malicious compilers, but they
+            can be extended to counter malicious compilers using processes
+            such as diverse double-compiling (DDC).
+    - Automated test suite: !!omap
+      - test_invocation:
+          category: MUST
+          autofill: >
+            Look in the build scripts for a non-empty test command.
+            E.g., look for a Makefile (including Makefile.am) with a non-empty
+            "check" or "test" entry.  Similarly look for an entry for
+            maven (mvn test) or rake (rake test).
+      - test_continuous_integration:
+          category: MUST
+          rationale: >
+            See
+            <a href="http://martinfowler.com/articles/continuousIntegration.html">Martin Fowler</a>
+            There has been some shift in the meaning of the term
+            continuous integration. Historically the term continuous
+            integration focused on the first part - the frequent
+            integration - and not on its testing.  However, over time the
+            emphasis has shifted to include the notion of running automated
+            tests as soon as the code is integrated.  This criterion is merely
+            SUGGESTED at passing level.
+            A subset of this criterion is required for passing+1; see
+            <a href="#automated_integration_testing">automated_integration_testing</a>.
+            Here, we require both the continuous check-in
+            <i>and</i> its testing.
+          autofill: >
+            Look for a .travis.yml or circle.yml file.
+            We also see if it has a badge from CircleCI or Travis.
+            Extra points: We could ask Travis or CircleCI if it's enabled.
+            We could look for evidence of pulls each of which are "relatively"
+            small (instead of rare massive changes being the norm), though
+            that by itself would give less confidence. Also, make this depend
+            on the "test" or "test_invocation" criterion.
+      - test_statement_coverage90:
+          category: MUST
+          rationale: >
+            This increases the statement coverage requirement from the
+            previous badge level, thus requiring even more thorough testing
+            (by this measure).
+      - test_branch_coverage80:
+          category: MUST
+          rationale: >
+            This adds another test coverage requirement, again requiring more
+            thorough testing. A program with many one-armed "if" statements
+            could achieve 100% statement coverage but only 50% branch coverage
+            (if the tests only checked the "true" branches). Branch coverage
+            is probably the second most common test coverage measure (after
+            statement coverage), and is often added when a stricter measure of
+            tests is used. Branch coverage is widely (but not universally)
+            implemented.
+  - Security: !!omap
+    - Use basic good cryptographic practices: !!omap
+      - crypto_used_network:
+          category: MUST
+          na_allowed: true
+          # autofill: TODO
+      - crypto_tls12:
+          category: MUST
+          na_allowed: true
+          # autofill: TODO
+    - Secured delivery against man-in-the-middle (MITM) attacks: !!omap
+      - hardened_site: # After delivery_mitm?
+          category: MUST
+          autofill: >
+            Load the URLs and look for those HTTP headers. In the future, we
+            may want to specify certain disallowed content security policies.
+            See http://content-security-policy.com/.
+    - Other security issues: !!omap
+      - security_review:
+          category: MUST
+          rationale: >
+            Security review is important, because security problems often come
+            from subtle interactions of components.  Reviewing the system as a
+            whole can help find these problems. Ideally this would be
+            independent, but that often requires a lot of money, and we would
+            rather have some review than none at all. We do not require a
+            specific level of review; this is difficult to quantify given the
+            different environments, requirements, and sizes of various
+            projects. Kevin Wall noted, "If passing+2 is going to be the
+            highest back level, I'd also like to see some sort of mandatory
+            code inspection (possibly SAST assisted), and when applicable,
+            some sort of DAST (for APIs, probably just fuzzing), where failed
+            tests would have to be added to the regression test suite." It's
+            difficult to get agreement on the details of what a security
+            review must include, but we believe that the stated criteria would
+            be agreed on.
+      - hardening:
+          category: MUST
+          autofill: >
+            Look for gems like secure_headers, and
+            relevant compiler flags in build files.
+  - Analysis: !!omap
+    - Dynamic code analysis: !!omap
+      - dynamic_analysis:
+          category: MUST
+          rationale: >
+            Static source code analysis and dynamic analysis tend
+            to find different kinds of defects (including defects that lead to
+            vulnerabilities), so combining them is more likely to be effective.
+          autofill: >
+            Look in documentation for references to such tools.
+      - dynamic_analysis_enable_assertions:
+          category: SHOULD
+          autofill: >
+            Perhaps look in source code for many asserts.

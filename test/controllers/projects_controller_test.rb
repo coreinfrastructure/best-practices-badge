@@ -9,6 +9,7 @@ class ProjectsControllerTest < ActionController::TestCase
     @project_two = projects(:two)
     @perfect_unjustified_project = projects(:perfect_unjustified)
     @perfect_passing_project = projects(:perfect_passing)
+    @perfect_silver_project = projects(:perfect_silver)
     @perfect_project = projects(:perfect)
     @user = users(:test_user)
     @admin = users(:admin_user)
@@ -197,16 +198,22 @@ class ProjectsControllerTest < ActionController::TestCase
     assert_equal @project.name, new_name
   end
 
-  test 'A perfect project passing should have the passing badge' do
+  test 'A perfect passing project should have the passing badge' do
     get :badge, params: { id: @perfect_passing_project, format: 'svg' }
     assert_response :success
     assert_equal contents('badge-passing.svg'), @response.body
   end
 
-  test 'A perfect project should have the silver badge' do
-    get :badge, params: { id: @perfect_project, format: 'svg' }
+  test 'A perfect silver project should have the silver badge' do
+    get :badge, params: { id: @perfect_silver_project, format: 'svg' }
     assert_response :success
     assert_equal contents('badge-silver.svg'), @response.body
+  end
+
+  test 'A perfect project should have the gold badge' do
+    get :badge, params: { id: @perfect_project, format: 'svg' }
+    assert_response :success
+    assert_equal contents('badge-gold.svg'), @response.body
   end
 
   test 'A perfect unjustified project should have in progress badge' do

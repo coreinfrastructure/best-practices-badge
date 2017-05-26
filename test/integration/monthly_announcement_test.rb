@@ -25,7 +25,8 @@ class MonthlyAnnouncementTest < ActionDispatch::IntegrationTest
       results = ProjectsController.send :send_monthly_announcement
       results.each do |result|
         assert result.in? [
-          projects(:perfect_passing).id, projects(:perfect).id
+          projects(:perfect_passing).id, projects(:perfect_silver).id,
+          projects(:perfect).id
         ]
       end
     end

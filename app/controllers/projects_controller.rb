@@ -466,10 +466,9 @@ class ProjectsController < ApplicationController
   # This method gives the percentage value to be passed to the Badge model
   # when getting the svg badge for a project
   def value_for_badge
-    percentage = @project.badge_percentage_0
-    return percentage if @project.badge_percentage_0 < 100
-    percentage += @project.badge_percentage_1
-    return 'passing' if percentage < 200
-    'silver'
+    return @project.badge_percentage_0 if @project.badge_percentage_0 < 100
+    return 'passing' if @project.badge_percentage_1 < 100
+    return 'silver' if @project.badge_percentage_2 < 100
+    'gold'
   end
 end

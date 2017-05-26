@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170524200702) do
+ActiveRecord::Schema.define(version: 20170526180109) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -298,6 +298,29 @@ ActiveRecord::Schema.define(version: 20170524200702) do
     t.text     "signed_releases_justification"
     t.string   "version_tags_signed_status",                           default: "?"
     t.text     "version_tags_signed_justification"
+    t.integer  "badge_percentage_2",                                   default: 0
+    t.string   "contributors_unassociated_status",                     default: "?"
+    t.text     "contributors_unassociated_justification"
+    t.string   "copyright_per_file_status",                            default: "?"
+    t.text     "copyright_per_file_justification"
+    t.string   "license_per_file_status",                              default: "?"
+    t.text     "license_per_file_justification"
+    t.string   "small_tasks_status",                                   default: "?"
+    t.text     "small_tasks_justification"
+    t.string   "require_2FA_status",                                   default: "?"
+    t.text     "require_2FA_justification"
+    t.string   "secure_2FA_status",                                    default: "?"
+    t.text     "secure_2FA_justification"
+    t.string   "code_review_standards_status",                         default: "?"
+    t.text     "code_review_standards_justification"
+    t.string   "two_person_review_status",                             default: "?"
+    t.text     "two_person_review_justification"
+    t.string   "test_statement_coverage90_status",                     default: "?"
+    t.text     "test_statement_coverage90_justification"
+    t.string   "test_branch_coverage80_status",                        default: "?"
+    t.text     "test_branch_coverage80_justification"
+    t.string   "security_review_status",                               default: "?"
+    t.text     "security_review_justification"
     t.index ["achieved_passing_at"], name: "index_projects_on_achieved_passing_at", using: :btree
     t.index ["badge_percentage_0"], name: "index_projects_on_badge_percentage_0", using: :btree
     t.index ["created_at"], name: "index_projects_on_created_at", using: :btree

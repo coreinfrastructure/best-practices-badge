@@ -1845,37 +1845,6 @@ en:
           a choice must be made
           (e.g., many mechanisms can make things more complex, contravening
           "economy of mechanism" / keep it simple).
-      input_validation:
-        description: >
-          The project results MUST check
-          all inputs from potentially untrusted sources to ensure
-          they are valid (a *whitelist*), and reject invalid inputs,
-          if there are any restrictions on the data at all.
-        details: >
-          Note that comparing input against a list of "bad formats"
-          (aka a *blacklist*) is normally not enough, because attackers can
-          often  work around a blacklist.
-          In particular, numbers are converted into internal formats
-          and then checked if they are between
-          their minimum and maximum (inclusive), and text strings are checked
-          to ensure that they are valid text patterns
-          (e.g., valid UTF-8, length, syntax, etc.).
-          Some data may need to be "anything at all" (e.g., a file uploader),
-          but these would typically be rare.
-      hardening: # In 'Other security issues'
-        description: >
-          Hardening mechanisms
-          SHOULD be used in the software produced by the project
-          so that software defects are less likely to result in security
-          vulnerabilities.
-        details: >
-          Hardening mechanisms may include
-          HTTP headers like Content Security Policy (CSP),
-          compiler flags to mitigate attacks
-          (such as -fstack-protector), or compiler flags to
-          eliminate undefined behavior.
-          For our purposes least privilege is not considered a hardening
-          mechanism (least privilege is important, but separate).
       crypto_weaknesses:
         description: >
           The default security mechanisms within the software produced
@@ -1967,6 +1936,37 @@ en:
           release, minor release, or fixes publicly noted vulnerabilities)
           be cryptographically signed and verifiable as described in
           <a href="#signed_releases">signed_releases</a>.
+      input_validation:
+        description: >
+          The project results MUST check
+          all inputs from potentially untrusted sources to ensure
+          they are valid (a *whitelist*), and reject invalid inputs,
+          if there are any restrictions on the data at all.
+        details: >
+          Note that comparing input against a list of "bad formats"
+          (aka a *blacklist*) is normally not enough, because attackers can
+          often  work around a blacklist.
+          In particular, numbers are converted into internal formats
+          and then checked if they are between
+          their minimum and maximum (inclusive), and text strings are checked
+          to ensure that they are valid text patterns
+          (e.g., valid UTF-8, length, syntax, etc.).
+          Some data may need to be "anything at all" (e.g., a file uploader),
+          but these would typically be rare.
+      hardening:
+        description: >
+          Hardening mechanisms
+          SHOULD be used in the software produced by the project
+          so that software defects are less likely to result in security
+          vulnerabilities.
+        details: >
+          Hardening mechanisms may include
+          HTTP headers like Content Security Policy (CSP),
+          compiler flags to mitigate attacks
+          (such as -fstack-protector), or compiler flags to
+          eliminate undefined behavior.
+          For our purposes least privilege is not considered a hardening
+          mechanism (least privilege is important, but separate).
       static_analysis_common_vulnerabilities:
         description: >
           The project MUST use at least one static analysis tool
@@ -1996,3 +1996,233 @@ en:
           and
           <a href="http://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html">undefined behavior sanitizer</a>.
           Widespread assertions would also work.
+    '2':
+      bus_factor:
+        description: The project MUST have a "bus factor" of 2 or more.
+        details: >
+          A "bus factor" (aka "truck factor") is the
+          minimum number of project members that have to suddenly disappear
+          from a project ("hit by a bus") before the project stalls
+          due to lack of knowledgeable or competent personnel.
+          The <a href="https://github.com/mtov/truck-factor">truck-factor</a>
+          tool can estimate this for projects on GitHub.
+          For more information, see
+          <a href="https://www.researchgate.net/publication/272824568_assessing_the_bus_factor_of_git_repositories">Assessing the Bus Factor of Git Repositories</a>
+          by Cosentino et al.
+      contributors_unassociated:
+        description: >
+          The project MUST have at least two unassociated significant
+          contributors.
+        details: >
+          Contributors are associated if they are paid to work by the same
+          organization (as an employee or contractor) and the organization
+          stands to benefit from the project's results. Financial grants do
+          not count as being from the same organization if they pass through
+          other organizations (e.g., science grants paid to different
+          organizations from a common government or NGO source do not cause
+          contributors to be associated). Someone is a significant contributor
+          if they have made non-trivial contributions to the project in the
+          past year. Examples of good indicators of a significant contributor
+          are: written at least 1,000 lines of code, contributed 50 commits,
+          or contributed at least 20 pages of documentation.
+      copyright_per_file:
+        description: >
+          The project MUST include a copyright statement in each source file,
+          identifying at least one relevant year and copyright holder.
+        details: >
+          This MAY be done by including the following inside a comment
+          near the beginning of each file:
+          "<tt>Copyright [year this project or content started] -
+          [most recent year modified],
+          [project founder] and the [project name] contributors.</tt>"
+      license_per_file:
+        description: >
+          The project MUST include a license statement in each source file.
+          This MAY be done by including the following inside a comment
+          near the beginning of each file:
+          <a href="https://spdx.org/using-spdx#identifiers"><tt>SPDX-License-Identifier: [SPDX license expression for project]</tt></a>.
+        details: >
+          This MAY also be done by including a statement in natural language
+          identifying the license. The project MAY also include a stable URL
+          pointing to the license text, or the full license text. Note that
+          the criterion license_location requires the project license be in a
+          standard location. See
+          <a href="https://github.com/david-a-wheeler/spdx-tutorial">this SPDX tutorial</a>
+          for more information about SPDX license expressions.
+          Note the relationship with
+          <a href="#copyright_per_file">copyright_per_file</a>, whose content
+          would typically precede the license information.
+      repo_distributed:
+        description: >
+          The project's source repository MUST use a common distributed
+          version control software (e.g., git or mercurial).
+        details: >
+          Git is not specifically required and projects
+          can use centralized version control software
+          (such as subversion) with justification.
+      small_tasks:
+        description: >
+          The project MUST clearly identify small tasks that can be performed
+          by new or casual contributors.
+        details: >
+          This identification is typically done by marking selected issues
+          in an issue tracker with one or more tags the project uses
+          for the purpose, e.g.,
+          <a href="http://up-for-grabs.net/#/">up-for-grabs</a>,
+          <a href="http://www.firsttimersonly.com/">first-timers-only</a>,
+          "Small fix", microtask, or IdealFirstBug. These new tasks need not
+          involve adding functionality; they can be improving documentation,
+          adding test cases, or anything else that aids the project and helps
+          the contributor understand more about the project.
+      require_2FA:
+        description: >
+          The project MUST require two-factor authentication (2FA) for
+          developers for changing a central repository or accessing sensitive
+          data (such as private vulnerability reports). This 2FA mechanism MAY
+          use mechanisms without cryptographic mechanisms such as SMS, though
+          that is not recommended.
+      secure_2FA:
+        description: >
+          The project's two-factor authentication (2FA) SHOULD use
+          cryptographic mechanisms to prevent impersonation.  Short Message
+          Service (SMS) based 2FA, by itself, does NOT meet this criterion,
+          since it is not encrypted.
+        details: >
+          A 2FA mechanism that meets this criterion would be a Time-based
+          One-Time Password (TOTP) application that automatically generates an
+          authentication code that changes after a certain period of time.
+          Note that
+          <a href="https://help.github.com/articles/configuring-two-factor-authentication-via-a-totp-mobile-app/">GitHub supports TOTP</a>.
+      code_review_standards:
+        description: >
+          The project MUST document its code review requirements, including
+          how code review is conducted, what must be checked, and what is
+          required to be acceptable.
+        details: >
+          See also <a href="#two_person_review">two_person_review</a> and
+          contribution_requirements.
+      two_person_review:
+        description: >
+          The project MUST have at least 50% of all proposed modifications
+          reviewed before release by a person other than the author, to
+          determine if it is a worthwhile modification and free of known
+          issues which would argue against its inclusion
+      build_reproducible:
+        description: >
+          The project MUST have a
+          <a href="https://reproducible-builds.org/">reproducible build</a>.
+          If no building occurs (e.g., scripting languages where the source
+          code is used directly instead of being compiled), select "not
+          applicable" (N/A).
+        details: >
+          A reproducible build means that multiple parties can independently
+          redo the process of generating information from source files and get
+          exactly the same bit-for-bit result.  In some cases, this can
+          resolved by forcing some sort order. JavaScript developers may
+          consider using npm shrinkwrap and webpack OccurenceOrderPlugin. GCC
+          and clang users may find the -frandom-seed option useful. The build
+          environment (including the toolset) can often be defined for
+          external parties by specifying the cryptographic hash of a specific
+          container or virtual machine that they can use for rebuilding. The
+          <a href="https://reproducible-builds.org/docs/">reproducible builds project has documentation</a>
+           on how to do this.
+      test_invocation:
+        description: >
+          A test suite MUST be invocable in a standard way for that language.
+        details: >
+          For example, "make check", "mvn test", or "rake test".
+      test_continuous_integration:
+        description: >
+          The project MUST implement continuous integration,
+          where new or changed code is frequently integrated into a central
+          code repository and automated tests are run on the result.
+        details: >
+          In most cases this means that each developer who works full-time on
+          the project integrates at least daily.
+      test_statement_coverage90:
+        description: >
+          The project MUST have FLOSS automated test suite(s) that provide at
+          least 90% statement coverage if there is at least one FLOSS tool
+          that can measure this criterion in the selected language.
+      test_branch_coverage80:
+        description: >
+          The project MUST have FLOSS automated test suite(s) that provide at
+          least 80% branch coverage if there is at least one FLOSS tool that
+          can measure this criterion in the selected language.
+      crypto_used_network:
+        description: >
+          The software produced by the project MUST
+          support secure protocols for all of its network
+          communications, such as SSHv2 or later, TLS1.2 or later (HTTPS),
+          IPsec, SFTP, and SNMPv3.
+          Insecure protocols such as FTP, HTTP, telnet,
+          SSLv3 or earlier, and SSHv1 MUST be disabled by default,
+          and only enabled if the user specifically configures it.
+          If the software produced by the project does not support
+          network comunications, select "not applicable" (N/A).
+      crypto_tls12:
+        description: >
+          The software produced by the project MUST,
+          if it supports or uses TLS, support at least TLS version 1.2.
+          Note that the predecessor of TLS was called SSL.
+          If the software does not use TLS,
+          select "not applicable" (N/A).
+      hardened_site:
+        description: >
+          The project website, repository (if accessible via the web), and
+          download site (if separate) MUST include key hardening headers with
+          nonpermissive values.
+      security_review:
+        description: >
+          The project MUST have performed a security review within the last 5
+          years. This review MUST consider the security requirements and
+          security boundary.
+        details: >
+          This MAY be done by the project members and/or an independent
+          evaluation. This evaluation MAY be supported by static and dynamic
+          analysis tools, but there also must be human review to identify
+          problems (particularly in design) that tools cannot detect.
+      hardening:
+        description: >
+          Hardening mechanisms
+          MUST be used in the software produced by the project
+          so that software defects are less likely to result in security
+          vulnerabilities.
+        details: >
+          Hardening mechanisms may include
+          HTTP headers like Content Security Policy (CSP),
+          compiler flags to mitigate attacks
+          (such as -fstack-protector), or compiler flags to
+          eliminate undefined behavior.
+          For our purposes least privilege is not considered a hardening
+          mechanism (least privilege is important, but separate).
+      dynamic_analysis:
+        description: >
+          The project MUST apply at least one dynamic analysis tool
+          to any proposed major production release of the software
+          produced by the project before its release.
+        details: >
+          A dynamic analysis tool examines the software
+          by executing it with specific inputs.
+          For example, the project MAY use a fuzzing tool (e.g.,
+          <a href="http://lcamtuf.coredump.cx/afl/">American
+          Fuzzy Lop</a>) or a web application scanner (e.g.,
+          <a href="https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project">OWASP
+          ZAP</a> or <a href="http://w3af.org/">w3af</a>).
+          In some cases the
+          <a href="https://github.com/google/oss-fuzz#introduction">OSS-Fuzz</a>
+          project may be willing to apply fuzz testing to your project.
+          For purposes of this criterion the dynamic analysis
+          tool needs to vary the inputs in some way to look for
+          various kinds of problems <em>or</em> be an automated
+          test suite with at least 80% branch coverage.  The
+          <a href="https://en.wikipedia.org/wiki/Dynamic_program_analysis">Wikipedia
+          page on dynamic analysis</a> and the
+          <a href="https://www.owasp.org/index.php/Fuzzing">OWASP page on
+          fuzzing</a> identify some dynamic analysis tools.
+          The analysis tool(s) MAY be focused on looking for security
+          vulnerabilities, but this is not required.
+      dynamic_analysis_enable_assertions:
+        description: >
+          The project SHOULD include many run-time assertions in the software
+          it produces and check those assertions during dynamic analysis.

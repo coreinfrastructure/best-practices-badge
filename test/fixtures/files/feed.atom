@@ -34,6 +34,20 @@
     </author>
   </entry>
   <entry>
+    <id>tag:www.example.com,2005:Project/690367815</id>
+    <published>2015-03-01T12:00:00Z</published>
+    <updated>2015-03-01T12:00:00Z</updated>
+    <link rel="alternate" type="text/html" href="http://www.example.com/projects/690367815"/>
+    <title>Justified perfect silver project</title>
+    <content type="html">
+      <![CDATA[<p><b>Passing: 100%</b></p><p><a href='https://www.example.org'>https://www.example.org</a></p><span lang="en"><p>The perfect silver project</p>
+</span>]]>
+    </content>
+    <author>
+      <name>Test</name>
+    </author>
+  </entry>
+  <entry>
     <id>tag:www.example.com,2005:Project/832656895</id>
     <published>2015-03-01T12:00:00Z</published>
     <updated>2015-03-01T12:00:00Z</updated>

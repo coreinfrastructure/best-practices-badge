@@ -38,34 +38,34 @@
 
           </li>
 
-          <li class="list-group-item"><h3>Upgrades</h3>
-            <%= render_status 'contribution_requirements', f, project, '1', is_disabled %>
-            <%= render_status 'report_tracker', f, project, '1', is_disabled %>
+          <li class="list-group-item"><h3>Basic Project Website Content</h3>
+            <%= render_minor_status(
+                  '1', 'Basics', 'Basic Project Website Content',
+                  f, project, is_disabled
+                ) %>
           </li>
-          <li class="list-group-item"><h3>Structure</h3>
-            <%= render_status 'dco', f, project, '1', is_disabled %>
-            <%= render_status 'code_of_conduct', f, project, '1', is_disabled %>
-            <%= render_status 'governance', f, project, '1', is_disabled %>
-            <%= render_status 'roles_responsibilities', f, project, '1', is_disabled %>
+          <li class="list-group-item"><h3>Project Oversight</h3>
+            <%= render_minor_status(
+                  '1', 'Basics', 'Project Oversight',
+                  f, project, is_disabled
+                ) %>
           </li>
           <li class="list-group-item"><h3>Documentation</h3>
-            <%= render_status 'documentation_roadmap', f, project, '1', is_disabled %>
-            <%= render_status 'documentation_architecture', f, project, '1', is_disabled %>
-            <%= render_status 'documentation_security', f, project, '1', is_disabled %>
-            <%= render_status 'documentation_quick_start', f, project, '1', is_disabled %>
-            <%= render_status 'documentation_current', f, project, '1', is_disabled %>
-            <%= render_status 'documentation_achievements', f, project, '1', is_disabled %>
+            <%= render_minor_status(
+                  '1', 'Basics', 'Documentation',
+                  f, project, is_disabled
+                ) %>
           </li>
           <li class="list-group-item"><h3>Accessibility and Internationalizatoin</h3>
-            <%= render_status 'accessibility_best_practices', f, project, '1', is_disabled %>
-            <%= render_status 'internationalization', f, project, '1', is_disabled %>
-          </li>
-          <li class="list-group-item"><h3>Continuity</h3>
-            <%= render_status 'access_continuity', f, project, '1', is_disabled %>
-            <%= render_status 'bus_factor', f, project, '1', is_disabled %>
+            <%= render_minor_status(
+                  '1', 'Basics', 'Accessibility and Internationalization',
+                  f, project, is_disabled
+                ) %>
           </li>
           <li class="list-group-item"><h3>Other</h3>
-            <%= render_status 'sites_password_security', f, project, '1', is_disabled %>
+            <%= render_minor_status(
+                  '1', 'Basics', 'Other', f, project, is_disabled
+                ) %>
           </li>
           </ul>
 
@@ -100,11 +100,11 @@
       </div>
       <div class="panel-collapse collapse in remove-in">
         <ul class="list-group">
-          <li class="list-group-item"><h3>Maintenance</h3>
-
-            <%# TODO: This is way too short. %>
-            <%= render_status 'maintenance_or_update', f, project, '1', is_disabled, true %>
-
+          <li class="list-group-item"><h3>Previous versions</h3>
+            <%= render_minor_status(
+                  '1', 'Change Control', 'Previous versions',
+                  f, project, is_disabled
+                ) %>
           </li>
         </ul>
         <% unless is_disabled %>
@@ -138,11 +138,17 @@
       </div>
       <div class="panel-collapse collapse in remove-in">
         <ul class="list-group">
-          <li class="list-group-item"><h3>Vulnerability reporting process</h3>
-
-            <%= render_status 'vulnerability_report_credit', f, project, '1', is_disabled %>
-
-            <%= render_status 'vulnerability_response_process', f, project, '1', is_disabled %>
+          <li class="list-group-item"><h3>Bug-reporting process</h3>
+            <%= render_minor_status(
+                  '1', 'Reporting', 'Bug-reporting process',
+                  f, project, is_disabled
+                ) %>
+          </li>
+          <li class="list-group-item"><h3>Vulnerability report process</h3>
+            <%= render_minor_status(
+                  '1', 'Reporting', 'Vulnerability report process',
+                  f, project, is_disabled
+                ) %>
           </li>
 
         </ul>
@@ -177,45 +183,52 @@
       </div>
       <div class="panel-collapse collapse in remove-in">
         <ul class="list-group">
-          <li class="list-group-item"><h3>Upgrades</h3>
-            <%= render_status 'tests_documented_added', f, project, '1', is_disabled %>
-            <%= render_status 'warnings_strict', f, project, '1', is_disabled %>
-
-          </li>
-          <li class="list-group-item"><h3>Test</h3>
-            <%= render_status 'automated_integration_testing', f, project, '1', is_disabled %>
-
-            <%= render_status 'test_policy_mandated', f, project, '1', is_disabled %>
-
-            <%= render_status 'regression_tests_added50', f, project, '1', is_disabled, true %>
-            <%= render_status 'test_statement_coverage80', f, project, '1', is_disabled, true %>
-          </li>
-
           <li class="list-group-item"><h3>Coding standards</h3>
-            <%= render_status 'coding_standards', f, project, '1', is_disabled %>
-            <%= render_status 'coding_standards_enforced', f, project, '1', is_disabled %>
+            <%= render_minor_status(
+                  '1', 'Quality', 'Coding standards',
+                  f, project, is_disabled
+                ) %>
+          </li>
+          <li class="list-group-item"><h3>Working build system</h3>
+            <%= render_minor_status(
+                  '1', 'Quality', 'Working build system',
+                  f, project, is_disabled
+                ) %>
+          </li>
+          <li class="list-group-item"><h3>Installation system</h3>
+            <%= render_minor_status(
+                  '1', 'Quality', 'Installation system',
+                  f, project, is_disabled
+                ) %>
           </li>
 
           <li class="list-group-item"><h3>Externally-maintained components</h3>
-
-            <%= render_status 'external_dependencies', f, project, '1', is_disabled %>
-            <%= render_status 'updateable_reused_components', f, project, '1', is_disabled %>
-
-            <%= render_status 'interfaces_current', f, project, '1', is_disabled, true %>
-
+            <%= render_minor_status(
+                  '1', 'Quality', 'Externally-maintained components',
+                  f, project, is_disabled
+                ) %>
           </li>
 
-          <li class="list-group-item"><h3>Build</h3>
-            <%= render_status 'build_standard_variables', f, project, '1', is_disabled %>
-            <%= render_status 'build_preserve_debug', f, project, '1', is_disabled %>
-            <%= render_status 'build_non_recursive', f, project, '1', is_disabled, true %>
-            <%= render_status 'build_repeatable', f, project, '1', is_disabled, true %>
+          <li class="list-group-item"><h3>Automated test suite</h3>
+            <%= render_minor_status(
+                  '1', 'Quality', 'Automated test suite',
+                  f, project, is_disabled
+                ) %>
           </li>
-          <li class="list-group-item"><h3>Installation</h3>
-            <%= render_status 'installation_common', f, project, '1', is_disabled, true %>
-            <%= render_status 'installation_standard_variables', f, project, '1', is_disabled, true %>
-            <%= render_status 'installation_development_quick', f, project, '1', is_disabled, true %>
+
+          <li class="list-group-item"><h3>New functionality testing</h3>
+            <%= render_minor_status(
+                  '1', 'Quality', 'New functionality testing',
+                  f, project, is_disabled
+                ) %>
           </li>
+          <li class="list-group-item"><h3>Warning flags</h3>
+            <%= render_minor_status(
+                  '1', 'Quality', 'Warning flags',
+                  f, project, is_disabled
+                ) %>
+          </li>
+
         </ul>
         <% unless is_disabled %>
           <div class="panel-footer text-center">
@@ -248,20 +261,14 @@
       </div>
       <div class="panel-collapse collapse in remove-in">
         <ul class="list-group">
-          <%# TODO: Maybe "upgrades" should be listed at the end %>
-          <li class="list-group-item"><h3>Upgrades</h3>
-            <%= render_status 'crypto_weaknesses', f, project, '1', is_disabled %>
+          <li class="list-group-item"><h3>Secure development knowledge</h3>
+            <%= render_minor_status(
+                  '1', 'Security', 'Secure development knowledge',
+                  f, project, is_disabled
+                ) %>
           </li>
-          <li class="list-group-item"><h3>Secure design</h3>
 
-            <%= render_status 'implement_secure_design', f, project, '1', is_disabled %>
-
-            <%= render_status 'input_validation', f, project, '1', is_disabled, true %>
-            <%= render_status 'hardening', f, project, '1', is_disabled, true %>
-
-          </li>
-          <li class="list-group-item"><h3>Good cryptographic practices</h3>
-
+          <li class="list-group-item"><h3>Use basic good cryptographic practices</h3>
             <span class="criteria-desc">
             Note that some software does not need to use cryptographic mechanisms.
             </span>
@@ -272,19 +279,16 @@
               </button>
               <br>
             <% end %>
-            <%= render_status 'crypto_algorithm_agility', f, project, '1', is_disabled %>
-            <%= render_status 'crypto_credential_agility', f, project, '1', is_disabled %>
-            <%= render_status 'crypto_used_network', f, project, '1', is_disabled %>
-            <%= render_status 'crypto_tls12', f, project, '1', is_disabled %>
-            <%= render_status 'crypto_certificate_verification', f, project, '1', is_disabled %>
-            <%= render_status 'crypto_verification_private', f, project, '1', is_disabled, true %>
+            <%= render_minor_status(
+                  '1', 'Security', 'Use basic good cryptographic practices',
+                  f, project, is_disabled
+                ) %>
           </li>
           <li class="list-group-item"><h3>Secure release</h3>
-
-            <%= render_status 'signed_releases', f, project, '1', is_disabled %>
-
-            <%= render_status 'version_tags_signed', f, project, '1', is_disabled, true %>
-
+            <%= render_minor_status(
+                  '1', 'Security', 'Secure release',
+                  f, project, is_disabled
+                ) %>
           </li>
         </ul>
         <% unless is_disabled %>
@@ -318,12 +322,17 @@
       </div>
       <div class="panel-collapse collapse in remove-in">
         <ul class="list-group">
-          <li class="list-group-item"><h3>Upgrades</h3>
-            <%= render_status 'static_analysis_common_vulnerabilities', f, project, '1', is_disabled, true %>
-            <%= render_status 'dynamic_analysis_unsafe', f, project, '1', is_disabled, true %>
+          <li class="list-group-item"><h3>Static code analysis</h3>
+            <%= render_minor_status(
+                  '1', 'Analysis', 'Static code analysis',
+                  f, project, is_disabled
+                ) %>
           </li>
-          <li class="list-group-item"><h3>Dependencies</h3>
-            <%= render_status 'dependency_monitoring', f, project, '1', is_disabled, true %>
+          <li class="list-group-item"><h3>Dynamic code analysis</h3>
+            <%= render_minor_status(
+                  '1', 'Analysis', 'Dynamic code analysis',
+                  f, project, is_disabled
+                ) %>
           </li>
         </ul>
         <% unless is_disabled %>

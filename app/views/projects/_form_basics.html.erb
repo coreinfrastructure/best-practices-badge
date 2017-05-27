@@ -12,51 +12,57 @@
              }) %>
       <div class="panel-collapse collapse in">
         <ul class="list-group">
-          <li class="list-group-item"><h3>Identification</h3>
+          <li class="list-group-item"><h3><%= t('projects.form_basics.id_heading') %></h3>
             <div class="hidable-text-entry">
-            <span>What is the human-readable name of the project?</span>
+            <span><%= t('projects.form_basics.project_name.description') %></span>
             <%= render(partial: "details", locals: {
-                       criterion: "project_name", details: %{
-Note that other projects may use the same name.
-}}) %>
-            <%= f.text_field :name, hide_label: true, class:"form-control", placeholder:'FLOSS Project Name', disabled: is_disabled %>
+                       criterion: "project_name",
+                       details: t('projects.form_basics.project_name.details')
+}) %>
+            <%= f.text_field :name, hide_label: true, class:"form-control",
+                             placeholder:t('projects.form_basics.project_name.placeholder'),
+                             disabled: is_disabled %>
             </div>
 
             <div class="hidable-text-entry">
-            <span>What is a brief description of the project?</span>
+            <span><%= t('projects.form_basics.description.description') %></span>
             <% if is_disabled %>
               <div class="discussion-markdown">
                 <%= markdown(project[:description]) %>
               </div>
             <% else %>
               <%= render(partial: "details", locals: {
-                   criterion: "description", details: %{
-Include key comments about the project.  Use markdown.
-This information is used when displaying badge information.
-}}) %>
-            <%= f.text_area :description, class:"form-control", hide_label: true, placeholder:'Project Description', disabled: is_disabled %>
+                   criterion: "description",
+                   details: t('projects.form_basics.description.details')
+}) %>
+            <%= f.text_area :description, class:"form-control", hide_label: true,
+                            placeholder: t('projects.form_basics.description.placeholder'),
+                            disabled: is_disabled %>
             <% end %>
             </div>
 
             <div class="hidable-text-entry">
-            <span>What is the URL for the project (as a whole)?</span>
+            <span><%= t('projects.form_basics.homepage_url.description') %></span>
             <% if is_disabled %>
               <div class="discussion-markdown">
                  <%= link_to_if project.contains_url?(project.homepage_url), project.homepage_url, project.homepage_url, rel: 'nofollow' %>
               </div>
             <% else %>
-              <%= f.text_field :homepage_url, hide_label: true, class: "form-control", placeholder:'Project Website URL', label: "Project URL", disabled: is_disabled %>
+              <%= f.text_field :homepage_url, hide_label: true, class: "form-control",
+                               placeholder: t('projects.form_basics.homepage_url.placeholder'),
+                               label: "Project URL", disabled: is_disabled %>
             <% end %>
             </div>
 
             <div class="hidable-text-entry">
-            <span>What is the URL for the version control repository
-                  (it may be the same as the project URL)?</span>
+            <span><%= t('projects.form_basics.repo_url.description') %></span>
             <% if is_disabled %>
               <div class="discussion-markdown">
                  <%= link_to_if project.contains_url?(project.repo_url), project.repo_url, project.repo_url, rel: 'nofollow' %>
               </div>
             <% else %>
-              <%= f.text_field :repo_url, class:"form-control", hide_label: true, placeholder:'Project Repo URL', disabled: is_disabled %>
+              <%= f.text_field :repo_url, class:"form-control", hide_label: true,
+                               placeholder:t('projects.form_basics.repo_url.placeholder'),
+                               disabled: is_disabled %>
             <% end %>
             </div>

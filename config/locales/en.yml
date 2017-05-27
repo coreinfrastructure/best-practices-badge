@@ -286,6 +286,26 @@ en:
         and adapt the data, but must give appropriate credit.
         Please credit %{user} and
         the CII Best Practices badge contributors.<br><br>
+    form_basics:
+      id_heading: Identification
+      project_name:
+        description: What is the human-readable name of the project?
+        details:  'Note that other projects may use the same name.'
+        placeholder: 'FLOSS Project Name'
+      description:
+        description: 'What is a brief description of the project?'
+        details: >
+          Include key comments about the project.  Use markdown. This
+          information is used when displaying badge information.
+        placeholder: 'Project Description'
+      homepage_url:
+        description: 'What is the URL for the project (as a whole)?'
+        placeholder: 'Project Website URL'
+      repo_url:
+        description: >
+          What is the URL for the version control repository (it may be the
+          same as the project URL)?
+        placeholder: 'Project Repo URL'
   report_mailer:
     subject_achieved_passing: 'CONGRATULATIONS on achieving a %{new_level} best practices
       badge!

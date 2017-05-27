@@ -197,7 +197,7 @@ databases when reporting vulnerabilities.
             <%= render(partial: "details", locals: {
                  criterion: "license", details: %{
 Please use <a href="https://spdx.org/licenses/">SPDX license expression format</a>; examples include "Apache-2.0", "BSD-2-Clause", "BSD-3-Clause", "GPL-2.0+", "LGPL-3.0+", "MIT", and "(BSD-2-Clause OR Ruby)".
-}}) %>
+}.html_safe}) %>
             <%= f.text_field :license, class:"form-control", hide_label: true, placeholder:'FLOSS License', list: "license_list", disabled: is_disabled %>
            <!-- Some examples from http://wiki.spdx.org/view/FileNoticeExamples -->
            <div class="hidden">

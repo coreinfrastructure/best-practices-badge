@@ -259,6 +259,13 @@ en:
 
 '
       back: Back
+      owned_by: "Project badge entry owned by:"
+      created_at_html: "<b>Entry created on</b> %{when} (%{time_ago} ago),"
+      updated_at_html: "<b>last updated on</b> %{when} (%{time_ago} ago)."
+      last_lost_html: >
+        Last lost passing badge on %{when} (%{time_ago} ago).
+      last_achieved_html: >
+        Last achieved passing badge on %{when} (%{time_ago} ago).
       # Show this when the user agreed to CC-BY-3.0+
       cc_by_3plus_html: >
         This data is available under the

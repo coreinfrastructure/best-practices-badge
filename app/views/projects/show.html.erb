@@ -14,19 +14,21 @@
     <%= render "form_#{@criteria_level}", project: @project, is_disabled: true %>
 <div class="row">
 <div class="col-md-12">
-<b>Project badge entry owned by:</b>
+<b><%= t '.owned_by' %></b>
 <%= link_to @project.user_display_name, user_path(@project.user) %>.<br>
-<b>Entry created on</b> <%= @project.created_at %>
-(<%= time_ago_in_words @project.created_at %> ago),
-<b>last updated on</b> <%= @project.updated_at %>
-(<%= time_ago_in_words @project.updated_at %> ago).
+<%= t '.created_at_html', when: @project.created_at,
+                          time_ago: time_ago_in_words(@project.created_at) %>
+<%= t '.updated_at_html', when: @project.updated_at,
+                          time_ago: time_ago_in_words(@project.updated_at) %>
 <% if ! @project.lost_passing_at.nil? %>
-  Last lost passing badge on <%= @project.lost_passing_at %>
-  (<%= time_ago_in_words @project.lost_passing_at %> ago).
+  <%= t '.last_lost_html',
+        when: @project.lost_passing_at,
+        time_ago: time_ago_in_words(@project.lost_passing_at) %>
 <% end %>
 <% if ! @project.achieved_passing_at.nil? %>
-  Last achieved passing badge on <%= @project.achieved_passing_at %>
-  (<%= time_ago_in_words @project.achieved_passing_at %> ago).
+  <%= t '.last_achieved_html',
+        when: @project.achieved_passing_at,
+        time_ago: time_ago_in_words(@project.achieved_passing_at) %>
 <% end %>
 
 <br><br>

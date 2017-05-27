@@ -184,10 +184,10 @@ class Project < ActiveRecord::Base
 
   # Return string representing badge level; assumes badge_percentage correct.
   def badge_level
-    return 'in_progress' if badge_percentage_0 < 100
-    return 'passing' if badge_percentage_1 < 100
-    return 'silver' if badge_percentage_2 < 100
-    'gold'
+    BADGE_LEVELS.each_with_index do |level, index|
+      return level if index == Criteria.count
+      return level if self["badge_percentage_#{index}".to_sym] < 100
+    end
   end
 
   def calculate_badge_percentage(level)

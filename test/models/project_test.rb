@@ -164,6 +164,12 @@ class ProjectTest < ActiveSupport::TestCase
     assert_equal 'gold', @project_gold.badge_level
   end
 
+  # The number of named badge levels must be equal to the number of
+  # criteria levels + 1, because projects can be "in_progress"
+  test 'test all possible badge "levels/statuses" are named' do
+    assert_equal Criteria.count + 1, Project::BADGE_LEVELS.size
+  end
+
   test 'test get_satisfaction_data' do
     basics = @unjustified_project.get_satisfaction_data('0', 'basics')
     assert_equal '9/12', basics[:text]

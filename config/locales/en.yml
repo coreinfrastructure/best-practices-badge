@@ -259,6 +259,26 @@ en:
 
 '
       back: Back
+      # Show this when the user agreed to CC-BY-3.0+
+      cc_by_3plus_html: >
+        This data is available under the
+        <a href="https://creativecommons.org/licenses/by/3.0/us"
+        target="_blank">Creative Commons Attribution version 3.0 or later
+        license (CC-BY-3.0+)</a>. All are free to share
+        and adapt the data, but must give appropriate credit.
+        Please credit %{user} and
+        the CII Best Practices badge contributors.<br><br>
+      cc_by_3only_html: >
+        This data is available under the
+        <a href="https://creativecommons.org/licenses/by/3.0/us"
+        target="_blank">Creative Commons Attribution version 3.0
+        license (CC-BY-3.0)</a> per the
+        <a href="https://www.coreinfrastructure.org/" target="_blank">Core Infrastructure Initiative</a>
+        <a href="https://www.linuxfoundation.org/terms" target="_blank">terms of use</a>.
+        All are free to share
+        and adapt the data, but must give appropriate credit.
+        Please credit %{user} and
+        the CII Best Practices badge contributors.<br><br>
   report_mailer:
     subject_achieved_passing: 'CONGRATULATIONS on achieving a %{new_level} best practices
       badge!

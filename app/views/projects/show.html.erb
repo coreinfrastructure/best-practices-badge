@@ -16,19 +16,13 @@
 <div class="col-md-12">
 <b><%= t '.owned_by' %></b>
 <%= link_to @project.user_display_name, user_path(@project.user) %>.<br>
-<%= t '.created_at_html', when: @project.created_at,
-                          time_ago: time_ago_in_words(@project.created_at) %>
-<%= t '.updated_at_html', when: @project.updated_at,
-                          time_ago: time_ago_in_words(@project.updated_at) %>
+<%= t '.created_at_html', when: @project.created_at %>
+<%= t '.updated_at_html', when: @project.updated_at %>
 <% if ! @project.lost_passing_at.nil? %>
-  <%= t '.last_lost_html',
-        when: @project.lost_passing_at,
-        time_ago: time_ago_in_words(@project.lost_passing_at) %>
+  <%= t '.last_lost_html', when: @project.lost_passing_at %>
 <% end %>
 <% if ! @project.achieved_passing_at.nil? %>
-  <%= t '.last_achieved_html',
-        when: @project.achieved_passing_at,
-        time_ago: time_ago_in_words(@project.achieved_passing_at) %>
+  <%= t '.last_achieved_html', when: @project.achieved_passing_at %>
 <% end %>
 
 <br><br>

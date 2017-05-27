@@ -283,14 +283,7 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
       <% end %>
       <% unless is_disabled %>
         <div class="panel-footer text-center">
-          By submitting this data about the project you agree to release it
-          under at least the
-          <a href="https://creativecommons.org/licenses/by/3.0/us"
-          target="_blank">Creative Commons Attribution version 3.0 or later
-          license (CC-BY-3.0+)</a>. This means that all are free to share
-          and adapt the data, but they must give appropriate credit.
-          You retain copyright (if any), and the project
-          license is unaffected.<br><br>
+          <%= t 'projects.edit.submit_cc_by_3plus_html' %>
           <%= f.button 'Save (and continue)', type: 'submit', name: 'continue',
               value: 'changecontrol', class:"btn btn-success btn-submit" %>
           <%= f.submit 'Submit (and exit)', class:"btn btn-success btn-submit" %>
@@ -326,14 +319,7 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
         </ul>
         <% unless is_disabled %>
           <div class="panel-footer text-center">
-            By submitting this data about the project you agree to release it
-            under at least the
-            <a href="https://creativecommons.org/licenses/by/3.0/us"
-            target="_blank">Creative Commons Attribution version 3.0 or later
-            license (CC-BY-3.0+)</a>. This means that all are free to share
-            and adapt the data, but they must give appropriate credit.
-            You retain copyright (if any), and the project
-            license is unaffected.<br><br>
+            <%= t 'projects.edit.submit_cc_by_3plus_html' %>
             <%= f.button 'Save (and continue)', type: 'submit', name: 'continue',
               value: 'reporting', class:"btn btn-success btn-submit" %>
             <%= f.submit 'Submit (and exit)', class:"btn btn-success btn-submit" %>
@@ -365,14 +351,7 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
         </ul>
         <% unless is_disabled %>
           <div class="panel-footer text-center">
-            By submitting this data about the project you agree to release it
-            under at least the
-            <a href="https://creativecommons.org/licenses/by/3.0/us"
-            target="_blank">Creative Commons Attribution version 3.0 or later
-            license (CC-BY-3.0+)</a>. This means that all are free to share
-            and adapt the data, but they must give appropriate credit.
-            You retain copyright (if any), and the project
-            license is unaffected.<br><br>
+            <%= t 'projects.edit.submit_cc_by_3plus_html' %>
             <%= f.button 'Save (and continue)', type: 'submit', name: 'continue',
               value: 'quality', class:"btn btn-success btn-submit" %>
             <%= f.submit 'Submit (and exit)', class:"btn btn-success btn-submit" %>
@@ -414,14 +393,7 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
         </ul>
         <% unless is_disabled %>
           <div class="panel-footer text-center">
-            By submitting this data about the project you agree to release it
-            under at least the
-            <a href="https://creativecommons.org/licenses/by/3.0/us"
-            target="_blank">Creative Commons Attribution version 3.0 or later
-            license (CC-BY-3.0+)</a>. This means that all are free to share
-            and adapt the data, but they must give appropriate credit.
-            You retain copyright (if any), and the project
-            license is unaffected.<br><br>
+            <%= t 'projects.edit.submit_cc_by_3plus_html' %>
             <%= f.button 'Save (and continue)', type: 'submit', name: 'continue',
               value: 'security', class:"btn btn-success btn-submit" %>
             <%= f.submit 'Submit (and exit)', class:"btn btn-success btn-submit" %>
@@ -479,14 +451,7 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
         </ul>
         <% unless is_disabled %>
           <div class="panel-footer text-center">
-            By submitting this data about the project you agree to release it
-            under at least the
-            <a href="https://creativecommons.org/licenses/by/3.0/us"
-            target="_blank">Creative Commons Attribution version 3.0 or later
-            license (CC-BY-3.0+)</a>. This means that all are free to share
-            and adapt the data, but they must give appropriate credit.
-            You retain copyright (if any), and the project
-            license is unaffected.<br><br>
+            <%= t 'projects.edit.submit_cc_by_3plus_html' %>
             <%= f.button 'Save (and continue)', type: 'submit', name: 'continue',
               value: 'analysis', class:"btn btn-success btn-submit" %>
             <%= f.submit 'Submit (and exit)', class:"btn btn-success btn-submit" %>
@@ -517,14 +482,7 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
         </ul>
         <% unless is_disabled %>
           <div class="panel-footer text-center">
-            By submitting this data about the project you agree to release it
-            under at least the
-            <a href="https://creativecommons.org/licenses/by/3.0/us"
-            target="_blank">Creative Commons Attribution version 3.0 or later
-            license (CC-BY-3.0+)</a>. This means that all are free to share
-            and adapt the data, but they must give appropriate credit.
-            You retain copyright (if any), and the project
-            license is unaffected.<br><br>
+            <%= t 'projects.edit.submit_cc_by_3plus_html' %>
             <%= f.button 'Save (and continue)', type: 'submit', name: 'continue',
               value: 'future', class:"btn btn-success btn-submit" %>
             <%= f.submit 'Submit (and exit)', class:"btn btn-success btn-submit" %>
@@ -584,14 +542,7 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
           the CII Best Practices badge contributors.<br><br>
         <% end %>
       <% else %>
-        By submitting this data about the project you agree to release it
-        under at least the
-        <a href="https://creativecommons.org/licenses/by/3.0/us"
-        target="_blank">Creative Commons Attribution version 3.0 or later
-        license (CC-BY-3.0+)</a>. This means that all are free to share
-        and adapt the data, but they must give appropriate credit.
-        You retain copyright (if any), and the project
-        license is unaffected.<br><br>
+        <%= t 'projects.edit.submit_cc_by_3plus_html' %>
         <%= f.button 'Save (and continue)', type: 'submit', name: 'continue',
           value: 'Save', class:"btn btn-success btn-submit" %>
         <%= f.submit 'Submit (and exit)', class:"btn btn-success btn-submit" %>

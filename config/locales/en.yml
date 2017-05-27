@@ -242,6 +242,16 @@ en:
 '
       submit_urls: Submit URL
       sign_in_first: Please sign in to add a project!
+    edit:
+      submit_cc_by_3plus_html: >
+        By submitting this data about the project you agree to release it
+        under at least the
+        <a href="https://creativecommons.org/licenses/by/3.0/us"
+        target="_blank">Creative Commons Attribution version 3.0 or later
+        license (CC-BY-3.0+)</a>. This means that all are free to share
+        and adapt the data, but they must give appropriate credit.
+        You retain copyright (if any), and the project
+        license is unaffected.<br><br>
     show:
       edit: Edit
       delete: Delete

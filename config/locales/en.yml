@@ -243,15 +243,14 @@ en:
       submit_urls: Submit URL
       sign_in_first: Please sign in to add a project!
     edit:
-      submit_cc_by_3plus_html: >
-        By submitting this data about the project you agree to release it
-        under at least the
-        <a href="https://creativecommons.org/licenses/by/3.0/us"
-        target="_blank">Creative Commons Attribution version 3.0 or later
-        license (CC-BY-3.0+)</a>. This means that all are free to share
-        and adapt the data, but they must give appropriate credit.
-        You retain copyright (if any), and the project
-        license is unaffected.<br><br>
+      submit_cc_by_3plus_html: 'By submitting this data about the project you agree
+        to release it under at least the <a href="https://creativecommons.org/licenses/by/3.0/us"
+        target="_blank">Creative Commons Attribution version 3.0 or later license
+        (CC-BY-3.0+)</a>. This means that all are free to share and adapt the data,
+        but they must give appropriate credit. You retain copyright (if any), and
+        the project license is unaffected.<br><br>
+
+'
     show:
       edit: Edit
       delete: Delete
@@ -259,53 +258,53 @@ en:
 
 '
       back: Back
-      owned_by: "Project badge entry owned by:"
+      owned_by: 'Project badge entry owned by:'
       created_at_html: "<b>Entry created on</b> %{when},"
       updated_at_html: "<b>last updated on</b> %{when}."
-      last_lost_html: >
-        Last lost passing badge on %{when}.
-      last_achieved_html: >
-        Last achieved passing badge on %{when}.
-      # Show this when the user agreed to CC-BY-3.0+
-      cc_by_3plus_html: >
-        This data is available under the
-        <a href="https://creativecommons.org/licenses/by/3.0/us"
-        target="_blank">Creative Commons Attribution version 3.0 or later
-        license (CC-BY-3.0+)</a>. All are free to share
-        and adapt the data, but must give appropriate credit.
-        Please credit %{user} and
-        the CII Best Practices badge contributors.<br><br>
-      cc_by_3only_html: >
-        This data is available under the
-        <a href="https://creativecommons.org/licenses/by/3.0/us"
-        target="_blank">Creative Commons Attribution version 3.0
-        license (CC-BY-3.0)</a> per the
-        <a href="https://www.coreinfrastructure.org/" target="_blank">Core Infrastructure Initiative</a>
-        <a href="https://www.linuxfoundation.org/terms" target="_blank">terms of use</a>.
-        All are free to share
-        and adapt the data, but must give appropriate credit.
-        Please credit %{user} and
-        the CII Best Practices badge contributors.<br><br>
+      last_lost_html: 'Last lost passing badge on %{when}.
+
+'
+      last_achieved_html: 'Last achieved passing badge on %{when}.
+
+'
+      cc_by_3plus_html: 'This data is available under the <a href="https://creativecommons.org/licenses/by/3.0/us"
+        target="_blank">Creative Commons Attribution version 3.0 or later license
+        (CC-BY-3.0+)</a>. All are free to share and adapt the data, but must give
+        appropriate credit. Please credit %{user} and the CII Best Practices badge
+        contributors.<br><br>
+
+'
+      cc_by_3only_html: 'This data is available under the <a href="https://creativecommons.org/licenses/by/3.0/us"
+        target="_blank">Creative Commons Attribution version 3.0 license (CC-BY-3.0)</a>
+        per the <a href="https://www.coreinfrastructure.org/" target="_blank">Core
+        Infrastructure Initiative</a> <a href="https://www.linuxfoundation.org/terms"
+        target="_blank">terms of use</a>. All are free to share and adapt the data,
+        but must give appropriate credit. Please credit %{user} and the CII Best Practices
+        badge contributors.<br><br>
+
+'
     form_basics:
       id_heading: Identification
       project_name:
         description: What is the human-readable name of the project?
-        details:  'Note that other projects may use the same name.'
-        placeholder: 'FLOSS Project Name'
+        details: Note that other projects may use the same name.
+        placeholder: FLOSS Project Name
       description:
-        description: 'What is a brief description of the project?'
-        details: >
-          Include key comments about the project.  Use markdown. This
-          information is used when displaying badge information.
-        placeholder: 'Project Description'
+        description: What is a brief description of the project?
+        details: 'Include key comments about the project.  Use markdown. This information
+          is used when displaying badge information.
+
+'
+        placeholder: Project Description
       homepage_url:
-        description: 'What is the URL for the project (as a whole)?'
-        placeholder: 'Project Website URL'
+        description: What is the URL for the project (as a whole)?
+        placeholder: Project Website URL
       repo_url:
-        description: >
-          What is the URL for the version control repository (it may be the
-          same as the project URL)?
-        placeholder: 'Project Repo URL'
+        description: 'What is the URL for the version control repository (it may be
+          the same as the project URL)?
+
+'
+        placeholder: Project Repo URL
   report_mailer:
     subject_achieved_passing: 'CONGRATULATIONS on achieving a %{new_level} best practices
       badge!

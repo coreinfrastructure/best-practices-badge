@@ -245,6 +245,22 @@ de:
       last_achieved_html:
     edit:
       submit_cc_by_3plus_html:
+    form_basics:
+      id_heading:
+      project_name:
+        description:
+        details:
+        placeholder:
+      description:
+        description:
+        details:
+        placeholder:
+      homepage_url:
+        description:
+        placeholder:
+      repo_url:
+        description:
+        placeholder:
   report_mailer:
     new_project_heading:
     new_project_part1:

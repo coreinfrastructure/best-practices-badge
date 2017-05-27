@@ -89,6 +89,7 @@
     <% else %>
       <%= f.text_area justification_symbol,
                       class: 'justification-text', hide_label: true,
+                      lang: 'en', spellcheck: true,
                       placeholder:'Please explain', disabled: is_disabled %>
     <% end %>
     <% if is_last %>

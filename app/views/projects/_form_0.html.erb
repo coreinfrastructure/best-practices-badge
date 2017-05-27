@@ -279,7 +279,11 @@ Please use <a href="https://spdx.org/licenses/">SPDX license expression format</
           <%= markdown(project[:general_comments]) %>
         </div>
       <% else %>
-        <%= f.text_area :general_comments, class:"form-control",  hide_label: true, placeholder:'Additional Comments (in markdown)', disabled: is_disabled %>
+        <%= f.text_area :general_comments,
+                        class:"form-control", hide_label: true,
+                        lang: 'en', spellcheck: true,
+                        placeholder:'Additional Comments (in markdown)',
+                        disabled: is_disabled %>
       <% end %>
       <% unless is_disabled %>
         <div class="panel-footer text-center">

@@ -288,6 +288,11 @@ fr:
       back:
       cc_by_3plus_html:
       cc_by_3only_html:
+      owned_by:
+      created_at_html:
+      updated_at_html:
+      last_lost_html:
+      last_achieved_html:
     edit:
       submit_cc_by_3plus_html:
   user_mailer:

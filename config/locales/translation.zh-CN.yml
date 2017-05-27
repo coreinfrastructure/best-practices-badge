@@ -240,10 +240,16 @@ zh-CN:
       submit_urls: 提交网址
       sign_in_first: 请登录以添加项目！
     show:
-      edit:
-      delete:
-      confirm_delete:
-      back:
+      edit: 编辑
+      delete: 删除
+      confirm_delete: '您确定要删除整个项目： %{project_id} 吗？
+
+'
+      back: 后退
+      cc_by_3plus_html:
+      cc_by_3only_html:
+    edit:
+      submit_cc_by_3plus_html:
   user_mailer:
     account_activation:
       before_html: |
@@ -372,15 +378,35 @@ zh-CN:
     in_markdown_add: 在markdown标记文本中，您可以添加：
     in_html_add: 在HTML中，您可以添加：
     ending: "--- David A. Wheeler，CII最佳实践徽章技术负责人\n"
-    subject_achieved_passing:
-    subject_no_longer_passing:
-    subject_new_project:
-    subject_reminder:
-    subject_project_deleted:
-    gained_level_part1:
-    gained_level_part2:
+    subject_achieved_passing: '恭喜获得新的%{new_level}最佳实践徽章！
+
+'
+    subject_no_longer_passing: '您的最佳实践徽章不再是%{old_level}
+
+'
+    subject_new_project: '您已将项目添加到CII最佳实践徽章计划
+
+'
+    subject_reminder: '您的项目还没有“最佳实践”徽章
+
+'
+    subject_project_deleted: '名为%{project_name}的项目%{project_id}已被删除
+
+'
+    gained_level_part1: |
+      恭喜！
+
+      根据您提供的信息，
+      您的项目获得了CII最佳实践“%{new_level}”徽章。
+      有关详细信息，请参阅此URL：
+    gained_level_part2: |
+      请将您的徽章添加到您的项目和/或代码仓库网站；
+      这是您应得的：
     gained_level_part3:
-    lost_level_message:
+    lost_level_message: |
+      很抱歉，您的项目不再具有“%{old_level}”徽章
+      现在是“%{new_level}”。
+      有关详细信息，请参阅以下URL：
   project_name_unknown: "(未知名称)"
   locale_name:
     en:
@@ -391,32 +417,51 @@ zh-CN:
   criteria:
     '0':
       description_good:
-        description:
+        description: '项目网站必须简明扼要地描述软件的作用（它解决了什么问题？）。
+
+'
         details:
         met_placeholder:
       interact:
-        description:
-        met_placeholder:
+        description: '项目网站必须提供有关如何获取和提供反馈（错误报告或增强功能）以及如何贡献的信息。
+
+'
+        met_placeholder: "（可选）此信息在哪里？考虑提供URL。\n"
       contribution:
-        description:
-        details:
-        met_placeholder:
+        description: '关于如何贡献的信息必须解释贡献流程（例如，是否使用 Pull 请求？）
+
+'
+        details: 除非另有说明，否则我们假定<a href="https://guides.github.com/activities/contributing-to-open-source/">
+          GitHub上的项目使用 Issues 和 Pull 请求</a>。这些信息可以简短，例如，说明项目使用 Pull 请求，问题跟踪器或邮寄到邮件列表中的哪一个。
+        met_placeholder: "（需要URL）流程是什么？在哪个URL有说明？\n"
       contribution_requirements:
-        description:
-        unmet_placeholder:
+        description: '关于如何贡献的信息应包括对可接受的贡献的要求（例如，引用任何所需的编码标准）。
+
+'
+        unmet_placeholder: '为什么需求很明显，不需要这些信息？
+
+'
       floss_license:
-        description:
+        description: '项目生产的软件必须作为FLOSS发布。
+
+'
         details:
       floss_license_osi:
         description:
-        details:
+        details: 'OSI （开放源代码促进会）使用严格的审批流程来确定哪些许可证是开源软件（OSS）。
+
+'
       license_location:
-        description:
-        details:
+        description: '项目必须将其许可证在其源代码存储库中的标准位置发布。
+
+'
+        details: '例如，作为名为LICENSE或COPYING的顶级文件。许可证文件名之后可以是扩展名，例如“.txt”或“.md”。
+
+'
       documentation_basics:
         description:
         details:
-        met_placeholder:
+        met_placeholder: "（可选）哪些URL是文档的入口点？\n"
       documentation_interface:
         description:
         details:
@@ -449,7 +494,10 @@ zh-CN:
       version_tags:
         description:
       release_notes:
-        description:
+        description: '该项目必须在每个版本中提供发布说明，这是该版本中主要变化的可读的摘要，以帮助用户确定是否应升级，升级影响将如何。发行说明不能是版本控制日志的原始输出（例如，“git
+          log”命令结果不是发行说明）。其产出不适用于多个地点的项目（如单个网站或服务的软件），并采用持续交付，可以选择“N / A”。
+
+'
         details:
       release_notes_vulns:
         description:
@@ -475,19 +523,29 @@ zh-CN:
         description:
         details:
       build:
-        description:
-        details:
+        description: '如果项目生成的软件需要构建使用，项目必须提供可以从源代码自动重新构建软件的可工作的构建系统。
+
+'
+        details: '构建系统确定重建软件（以及以什么顺序）需要执行哪些操作，然后执行这些步骤。例如，它可以调用编译器来编译源代码。如果从源代码创建可执行文件，则必须可以修改项目的源代码，然后通过这些修改生成更新的可执行文件。如果项目生成的软件取决于外部库，则构建系统<i>不必</i>构建那些外部库。如果在修改源代码之后不需要构建任何使用该软件的软件，请选择“不适用”（N/A）。
+
+'
       build_common_tools:
-        description:
-        details:
+        description: '建议使用通用工具来构建软件。
+
+'
+        details: '例如，Maven，Ant，cmake，autotools，make或rake。
+
+'
       build_floss_tools:
-        description:
+        description: 该项目应该仅使用FLOSS工具来构建。
       test:
         description:
         details:
       test_invocation:
         description:
-        details:
+        details: '例如“make check”，“mvn test”或“rake test”。
+
+'
       test_most:
         description:
       test_continuous_integration:
@@ -505,28 +563,48 @@ zh-CN:
         description:
         details:
       warnings_fixed:
-        description:
+        description: '该项目必须处理警告。
+
+'
         details:
       warnings_strict:
         description:
         details:
       know_secure_design:
-        description:
+        description: '该项目必须至少有一个主要开发人员知道如何设计安全软件。
+
+'
         details:
       know_common_errors:
         description:
         details:
       crypto_published:
-        description:
-        details:
+        description: '项目生成的软件默认情况下，只能使用由专家公开发布和审查的加密协议和算法（如果使用加密协议和算法）。
+
+'
+        details: '这些加密条款并不总是适用，因为某些软件不需要直接使用加密功能。
+
+'
       crypto_call:
-        description:
+        description: '如果项目生成的软件是应用程序或库，其主要目的不是实现加密，那么它应该只调用专门设计实现加密功能的软件，而不应该重新实现自己的。
+
+'
       crypto_floss:
-        description:
-        details:
+        description: '项目所产生的软件中，所有依赖于密码学的功能必须使用FLOSS实现。
+
+'
+        details: '请参阅<a href="https://opensource.org/osr">OSI （开放源代码促进会）发布的软件开放标准需求</a>。
+
+'
       crypto_keylength:
-        description:
-        details:
+        description: '项目生成的软件中的安全机制使用的默认密钥长度必须至少达到2030年（如2012年所述）的NIST最低要求。必须提供配置，以使较小的密钥长度被完全禁用。
+
+'
+        details: '这些最小位长度是：对称密钥112，因式分解模数2048，离散对数密钥224，离散对数组2048，椭圆曲线224和散列224（密码散列不涉及该位长度），关于密码散列的更多信息可以在<a
+          href="#crypto_password_storage"> crypto_password_storage </a> 条款）。请参阅<a
+          href="http://www.keylength.com"> http://www.keylength.com </a>以比较不同组织的密钥长度建议。在某些配置中，软件可能允许较小的密钥长度（理想情况下，它不会，因为这允许降级攻击，但是互操作性有时需要较短的密钥长度）。
+
+'
       crypto_working:
         description:
         details:
@@ -534,26 +612,49 @@ zh-CN:
         description:
         details:
       crypto_pfs:
-        description:
+        description: '项目产生的软件中的安全机制应该​​对密钥协商协议实施完美的前向保密（PFS），如果长期密钥集合中的一个长期密钥在将来泄露，也不能破坏从一组长期密钥导出的会话密钥。
+
+'
       crypto_password_storage:
-        description:
+        description: '如果项目产生的软件存储用于外部用户认证的密码，则必须使用密钥拉伸（迭代）算法（例如，PBKDF2，Bcrypt或Scrypt）将密码存储为每用户盐值不同的迭代散列
+          。
+
+'
       crypto_random:
-        description:
-        details:
+        description: '由项目生成的软件中的安全机制必须使用密码学安全的随机数生成器生成所有加密密钥和随机数，并且不得使用密码学不安全的生成器。
+
+'
+        details: '密码安全的随机数生成器可以是硬件随机数生成器，或者它可以是使用诸如Hash_DRBG，HMAC_DRBG，CTR_DRBG，Yarrow或Fortuna之类的算法的加密安全的伪随机数生成器（CSPRNG）。对<i>安全性</i>随机数生成器的调用示例包括Java的java.security.SecureRandom和JavaScript的window.crypto.getRandomValues。调用<i>不安全</i>随机数生成器的示例包括Java的java.util.Random和JavaScript的Math.random。
+
+'
       delivery_mitm:
-        description:
-        details:
+        description: '该项目必须使用一种针对MITM攻击的传递机制。使用https或ssh + scp是可以接受的。
+
+'
+        details: '一个更强大的机制是使用数字签名的软件包发布软件，因为这样可以减轻对分发系统的攻击，但只有在用户确信签名的公钥是否正确的情况下才可以确定。用户实际上会检查签名。
+
+'
       delivery_unsigned:
-        description:
-        details:
+        description: '不得通过http协议获取加密散列（例如，sha1sum）并直接使用，而不检查密码学签名。
+
+'
+        details: '这些散列可以在传输过程中修改。
+
+'
       vulnerabilities_fixed_60_days:
         description:
         details:
       vulnerabilities_critical_fixed:
-        description:
+        description: '项目在得到报告后应该迅速修复所有致命漏洞。
+
+'
       no_leaked_credentials:
-        description:
-        details:
+        description: '公共存储库不得泄漏旨在限制公众访问的有效私人凭证（例如，工作密码或私钥）。
+
+'
+        details: '项目可以泄漏测试和不重要数据库的“样本”凭据，只要它们不旨在限制公共访问。
+
+'
       static_analysis:
         description:
         details:
@@ -578,23 +679,40 @@ zh-CN:
         description:
         details:
       installation_common:
-        description:
+        description: '该项目应该提供一种方法，使用常用惯例轻松安装和卸载项目生成的软件。
+
+'
         details:
       build_reproducible:
-        description:
+        description: '建议该项目有一个<a href="https://reproducible-builds.org/">可重复构建</a>。
+
+'
         details:
       crypto_used_network:
-        description:
+        description: '该项目产生的软件应该支持所有网络通信的安全协议，如SSHv2或更高版本，TLS1.2或更高版本（HTTPS），IPsec，SFTP和SNMPv3。默认情况下，FTP，HTTP，Telnet，SSLv3或更早版本和SSHv1等不安全协议将被禁用，只有在用户专门配置时才启用。如果项目生成的软件不支持网络通信，请选择“不适用”（N/A）。
+
+'
       crypto_tls12:
-        description:
+        description: '项目生成的软件（如果支持或使用TLS）应该至少支持TLS版本1.2。请注意，TLS的前身称为SSL。如果软件不使用TLS，请选择“不适用”（N/A）。
+
+'
       crypto_certificate_verification:
-        description:
-        details:
+        description: '由项目生成的软件必须，如果它支持TLS，则在使用TLS（包括子资源）时默认执行TLS证书验证。如果软件不使用TLS，请选择“不适用”（N
+          / A）。
+
+'
+        details: '请注意，不正确的TLS证书验证是一个常见的错误。有关详细信息，请参阅<a href="http://crypto.stanford.edu/~dabo/pubs/abstracts/ssl-client-bugs.html">“世界上最危险的代码：在非浏览器软件中验证SSL证书“，Martin
+          Georgiev等</a>和<a href="https://blogs.gnome.org/mcatanzaro/2016/03/12/do-you-trust-this-application/">
+          “你信任这个应用程序吗？”作者Michael Catanzaro </a>
+
+'
       crypto_verification_private:
         description:
       hardened_site:
         description:
-        details:
+        details: '请注意，GitHub是已知满足的。 https://securityheaders.io/ 等网站可以快速查看。主要头加固包含：内容安全策略（CSP），HTTP严格传输安全性（HSTS），X-Content-Type-Options（“nosniff”），X-Frame-Options和X-XSS-Protection。
+
+'
       hardening:
         description:
         details:
@@ -648,7 +766,9 @@ zh-CN:
       maintenance_or_update:
         description:
       report_tracker:
-        description:
+        description: '项目必须使用问题跟踪器来跟踪每个问题。
+
+'
       vulnerability_report_credit:
         description:
       vulnerability_response_process:
@@ -744,7 +864,7 @@ zh-CN:
         details:
     '2':
       bus_factor:
-        description:
+        description: 项目必须具有2个或更多的“公交车因子”。
         details:
       contributors_unassociated:
         description:
@@ -775,8 +895,12 @@ zh-CN:
         description:
         details:
       test_invocation:
-        description:
-        details:
+        description: '测试套件必须以该语言的标准方式进行调用。
+
+'
+        details: '例如“make check”，“mvn test”或“rake test”。
+
+'
       test_continuous_integration:
         description:
         details:
@@ -839,38 +963,38 @@ zh-CN:
         如果集体引用，或不另外注明，
         请标明出处为CII最佳实践徽章贡献者。
   headings:
-    Accessibility and internationalization:
-    Analysis:
-    Automated test suite:
-    Basic project website content:
-    Basics:
-    Bug-reporting process:
-    Change Control:
-    Coding standards:
-    Documentation:
-    Dynamic code analysis:
-    Externally-maintained components:
-    Future:
-    future:
-    Installation system:
-    New functionality testing:
-    OSS License:
-    Other:
-    Other security issues:
-    Previous versions:
-    Project oversight:
-    Public version-controlled source repository:
-    Publicly known vulnerabilities fixed:
-    Quality:
-    Release notes:
-    Reporting:
-    Secure development knowledge:
-    Secure release:
-    Secured delivery against man-in-the-middle (MITM) attacks:
-    Security:
-    Static code analysis:
-    Unique version numbering:
-    Use basic good cryptographic practices:
-    Vulnerability report process:
-    Warning flags:
-    Working build system:
+    Accessibility and internationalization: 无障碍和国际化
+    Analysis: 分析
+    Automated test suite: 自动测试套件
+    Basic project website content: 基本项目网站内容
+    Basics: 基本
+    Bug-reporting process: 错误报告流程
+    Change Control: 变更控制
+    Coding standards: 编码标准
+    Documentation: 文档
+    Dynamic code analysis: 动态代码分析
+    Externally-maintained components: 外部维护的组件
+    Future: 未来
+    future: 未来
+    Installation system: 安装系统
+    New functionality testing: 新功能测试
+    OSS License: OSS许可证
+    Other: 其他
+    Other security issues: 其他安全问题
+    Previous versions: 之前的版本
+    Project oversight: 项目监督
+    Public version-controlled source repository: 公开的版本控制的源代码存储库
+    Publicly known vulnerabilities fixed: 修正公开的漏洞
+    Quality: 质量
+    Release notes: 发行说明
+    Reporting: 报告
+    Secure development knowledge: 安全开发知识
+    Secure release: 安全发布
+    Secured delivery against man-in-the-middle (MITM) attacks: 安全交付防御中间人（MITM）的攻击
+    Security: 安全
+    Static code analysis: 静态代码分析
+    Unique version numbering: 唯一版本编号
+    Use basic good cryptographic practices: 使用基础的良好加密实践
+    Vulnerability report process: 漏洞报告流程
+    Warning flags: 警告标志
+    Working build system: 可工作的构建系统

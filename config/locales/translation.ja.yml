@@ -235,6 +235,10 @@ ja:
       delete:
       confirm_delete:
       back:
+      cc_by_3plus_html:
+      cc_by_3only_html:
+    edit:
+      submit_cc_by_3plus_html:
   report_mailer:
     new_project_heading:
     new_project_part1:

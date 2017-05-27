@@ -25,6 +25,7 @@ gem 'jbuilder', '2.6.4'
 gem 'jquery-rails', '4.3.1' # JavaScript jQuery library (for Rails)
 # gem 'jquery-turbolinks' # Make turbolinks work with jQuery
 gem 'jquery-ui-rails', '6.0.1' # JavaScript jQueryUI library (for Rails)
+gem 'lograge', '0.5.1' # Simplify logs
 gem 'octokit', '4.7.0' # GitHub's official Ruby API
 gem 'omniauth-github', '1.2.3' # Authentication to GitHub (get project info)
 gem 'paleta', '0.3.0' # Color manipulation, used for badges
@@ -67,7 +68,6 @@ end
 # The "fake_production" environment is very much like production, however,
 # we enable a few debug tools to help us find "production-only" bugs.
 group :fake_production, :development, :test do
-  gem 'lograge', '0.5.1' # Simplify logs
   gem 'pry-byebug', '3.4.2'
 end
 

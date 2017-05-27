@@ -137,6 +137,9 @@ Rails.application.configure do
   # rubocop:disable Lint/HandleExceptions
   begin
     Rack::Timeout.service_timeout = 30 # seconds
+    # The timeout reports are really noisy, and don't seem to help debug
+    # typical problems (if anything they get in the way).  Disable them.
+    Rack::Timeout.unregister_state_change_observer(:logger)
   rescue NameError
     # Do nothing if it's unavailable (this happens if we didn't load the gem)
   end

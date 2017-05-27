@@ -38,7 +38,7 @@ Feedback is welcome via the
 <a href="https://github.com/linuxfoundation/cii-best-practices-badge">GitHub site as issues or pull requests</a>
 There is also a
 <a href="https://lists.coreinfrastructure.org/mailman/listinfo/cii-badges">mailing list for general discussion</a>.<br /><br />
-}}) %>
+}.html_safe}) %>
 
 <% if is_disabled %>
   If this is your project, please show your badge status
@@ -53,7 +53,7 @@ There is also a
  <code>[![CII Best Practices](https://#{ badge_hostname }/projects/#{ project.id }/badge)](https://#{ badge_hostname }/projects/#{ project.id })</code>
   or by embedding this in your HTML:<br />
   <code>&lt;a href="https://#{badge_hostname}/projects/#{ project.id }"&gt;&lt;img src="https://#{ badge_hostname }/projects/#{ project.id }/badge"&gt;&lt;/a&gt; </code><br />
-  }}) %>
+  }.html_safe}) %>
 <% else %>
   <b>Please 'submit' often</b> to save your work
   (you can always go back and edit more later).

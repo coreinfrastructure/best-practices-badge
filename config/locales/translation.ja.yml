@@ -6,110 +6,6 @@
 #
 ---
 ja:
-  date:
-    day_names:
-    - 日曜日
-    - 月曜日
-    - 火曜日
-    - 水曜日
-    - 木曜日
-    - 金曜日
-    - 土曜日
-    abbr_day_names:
-    - 日
-    - 月
-    - 火
-    - 水
-    - 木
-    - 金
-    - 土
-    month_names:
-    -
-    - 1月
-    - 2月
-    - 3月
-    - 4月
-    - 5月
-    - 6月
-    - 7月
-    - 8月
-    - 9月
-    - 10月
-    - 11月
-    - 12月
-    abbr_month_names:
-    -
-    - 1月
-    - 2月
-    - 3月
-    - 4月
-    - 5月
-    - 6月
-    - 7月
-    - 8月
-    - 9月
-    - 10月
-    - 11月
-    - 12月
-  time:
-    am: 午前
-    pm: 午後
-  errors:
-    format: "%{attribute}%{message}"
-    template:
-      body: 次の項目を確認してください。
-      header:
-        one: "%{model}にエラーが発生しました。"
-        other: "%{model}に%{count}個のエラーが発生しました。"
-    unavailable_session:
-    unacceptable_request:
-    connection_refused:
-  datetime:
-    distance_in_words:
-      half_a_minute: 30秒前後
-      less_than_x_seconds:
-        one: 1秒以内
-        other: "%{count}秒未満"
-      x_seconds:
-        one: 1秒
-        other: "%{count}秒"
-      less_than_x_minutes:
-        one: 1分以内
-        other: "%{count}分未満"
-      x_minutes:
-        one: 1分
-        other: "%{count}分"
-      about_x_hours:
-        one: 約1時間
-        other: 約%{count}時間
-      x_days:
-        one: 1日
-        other: "%{count}日"
-      about_x_months:
-        one: 約1ヶ月
-        other: 約%{count}ヶ月
-      x_months:
-        one: 1ヶ月
-        other: "%{count}ヶ月"
-      about_x_years:
-        one: 約1年
-        other: 約%{count}年
-      over_x_years:
-        one: 1年以上
-        other: "%{count}年以上"
-      almost_x_years:
-        one: 1年弱
-        other: "%{count}年弱"
-      x_years:
-        one:
-        other:
-    prompts:
-      year: 年
-      month: 月
-      day: 日
-      hour: 時
-      minute: 分
-      second: 秒
   helpers:
     select:
       prompt: 選択してください。
@@ -345,18 +241,18 @@ ja:
     new_project_part2:
     new_project_part3_html:
     new_project_part3_text:
-    passing_part1:
-    passing_part2:
-    passing_part3:
     in_markdown_add:
     in_html_add:
-    in_progress_message:
     ending:
     subject_achieved_passing:
     subject_no_longer_passing:
     subject_new_project:
     subject_reminder:
     subject_project_deleted:
+    gained_level_part1:
+    gained_level_part2:
+    gained_level_part3:
+    lost_level_message:
   user_mailer:
     account_activation:
       before_html:

@@ -6,173 +6,6 @@
 #
 ---
 zh-CN:
-  date:
-    day_names:
-    - 星期日
-    - 星期一
-    - 星期二
-    - 星期三
-    - 星期四
-    - 星期五
-    - 星期六
-    abbr_day_names:
-    - 周日
-    - 周一
-    - 周二
-    - 周三
-    - 周四
-    - 周五
-    - 周六
-    month_names:
-    -
-    - 一月
-    - 二月
-    - 三月
-    - 四月
-    - 五月
-    - 六月
-    - 七月
-    - 八月
-    - 九月
-    - 十月
-    - 十一月
-    - 十二月
-    abbr_month_names:
-    -
-    - 1月
-    - 2月
-    - 3月
-    - 4月
-    - 5月
-    - 6月
-    - 7月
-    - 8月
-    - 9月
-    - 10月
-    - 11月
-    - 12月
-  time:
-    am: 上午
-    pm: 下午
-  number:
-    human:
-      storage_units:
-        units:
-          byte:
-            one: 字节
-            other: 字节
-          kb: KB
-          mb: MB
-          gb: GB
-          tb: TB
-          pb: PB
-          eb: EB
-      decimal_units:
-        units:
-          thousand: 千
-          million: 百万
-          billion: 十亿
-          trillion: 兆
-          quadrillion: 千兆
-  errors:
-    format: "%{attribute}%{message}"
-    messages:
-      model_invalid: '验证失败: %{errors}'
-      inclusion: 不包含于列表中
-      exclusion: 是保留关键字
-      invalid: 是无效的
-      confirmation: 不符合 %{attribute}
-      accepted: 必须是可被接受的
-      empty: 不能留空
-      blank: 不能为空字符
-      present: 必须是空白
-      too_long:
-        one: 过长（最长为一个字符）
-        other: 过长（最长为 %{count} 个字符）
-      too_short:
-        one: 过短（最短为一个字符）
-        other: 过短（最短为 %{count} 个字符）
-      wrong_length:
-        one: 长度非法（必须为一个字符）
-        other: 长度非法（必须为 %{count} 个字符）
-      not_a_number: 不是数字
-      not_an_integer: 必须是整数
-      greater_than: 必须大于 %{count}
-      greater_than_or_equal_to: 必须大于或等于 %{count}
-      equal_to: 必须等于 %{count}
-      less_than: 必须小于 %{count}
-      less_than_or_equal_to: 必须小于或等于 %{count}
-      other_than: 长度非法（不可为 %{count} 个字符
-      odd: 必须为单数
-      even: 必须为双数
-      required: 必须存在
-      taken: 已经被使用
-    template:
-      body: 如下字段出现错误：
-      header:
-        one: 有 1 个错误发生导致「%{model}」无法被保存。
-        other: 有 %{count} 个错误发生导致「%{model}」无法被保存。
-    unavailable_session: |-
-      会话 %{id} 在内存中不存在。
-
-      如果是在多进程服务器中运行（如Unicorn或Puma），本次请求命中的进程 %{id} 不在内存中存储 。尝试调整进程/任务数量到1，或者使用另一台服务器开发。
-    unacceptable_request: 消息头中包含不支持的版本。
-    connection_refused: |
-      哎呀！无法连接到Web控制台中间件。
-      请确保rails开发服务器正在运行。
-  activerecord:
-    errors:
-      messages:
-        record_invalid: '验证失败: %{errors}'
-        restrict_dependent_destroy:
-          has_one: 由于 %{record} 需要此记录，所以无法移除记录
-          has_many: 由于 %{record} 需要此记录，所以无法移除记录
-  datetime:
-    distance_in_words:
-      half_a_minute: 半分钟
-      less_than_x_seconds:
-        one: 不到一秒
-        other: 不到 %{count} 秒
-      x_seconds:
-        one: 一秒
-        other: "%{count} 秒"
-      less_than_x_minutes:
-        one: 不到一分钟
-        other: 不到 %{count} 分钟
-      x_minutes:
-        one: 一分钟
-        other: "%{count} 分钟"
-      about_x_hours:
-        one: 大约一小时
-        other: 大约 %{count} 小时
-      x_days:
-        one: 一天
-        other: "%{count} 天"
-      about_x_months:
-        one: 大约一个月
-        other: 大约 %{count} 个月
-      x_months:
-        one: 一个月
-        other: "%{count} 个月"
-      about_x_years:
-        one: 大约一年
-        other: 大约 %{count} 年
-      over_x_years:
-        one: 一年多
-        other: "%{count} 年多"
-      almost_x_years:
-        one: 接近一年
-        other: 接近 %{count} 年
-      x_years:
-        one: 1年
-        other: "%{count} 年"
-    prompts:
-      year: 年
-      month: 月
-      day: 日
-      hour: 时
-      minute: 分
-      second: 秒
   helpers:
     select:
       prompt: 请选择
@@ -180,34 +13,6 @@ zh-CN:
       create: 新增%{model}
       update: 更新 %{model}
       submit: 保存 %{model}
-    page_entries_info:
-      entry:
-        zero: 项
-        one: 项
-        other: 项
-      one_page:
-        display_entries:
-          zero: "%{entry_name} 未找到"
-          one: 显示 <b>1</b> %{entry_name}
-          other: 显示 <b>所有 %{count}</b> %{entry_name}
-      more_pages:
-        display_entries: 显示 %{entry_name} <b>%{first}&nbsp;-&nbsp;%{last}</b>  共<b>%{total}</b>
-          页
-  will_paginate:
-    previous_label: "&#8592; 上一页"
-    next_label: 下一页
-    page_gap: "&hellip;"
-    page_entries_info:
-      single_page:
-        zero: 暂无%{model}记录
-        one: 正显示1条%{model}记录
-        other: 正显示所有共%{count}条%{model}记录
-      single_page_html:
-        zero: 暂无%{model}记录
-        one: 正显示<b>1</b>条%{model}记录
-        other: 正显示所有共<b>%{count}</b>条%{model}记录
-      multi_page: 正显示%{model}的第%{from}至第%{to}条记录(共%{count}条记录)
-      multi_page_html: 正显示%{model}的第<b>%{from}</b>至第<b>%{to}</b>条记录(共<b>%{count}</b>条记录)
   ransack:
     search: 搜索
     predicate: 基于
@@ -277,13 +82,6 @@ zh-CN:
       blank: 为空
       'null': 为空
       not_null: 非空
-  views:
-    pagination:
-      first: "&laquo; 第一页"
-      last: 最后一页 &raquo;
-      previous: "&lsaquo; 上一页"
-      next: 下一页 &rsaquo;
-      truncate: "&hellip;"
   simple_form:
     'yes': 是
     'no': 否
@@ -350,7 +148,6 @@ zh-CN:
       other_projects_edit: 其他您可以编辑的项目
       as_admin: 作为管理员，您还可以：
       send_email_to: 发送电子邮件至：
-      profile_updated: 资料已更新
       delete_link_name: 删除
       confirm_delete: 您确定要删除此用户吗？
       edit_user: 编辑用户
@@ -572,41 +369,18 @@ zh-CN:
       （点击“new issue”）。
 
       感谢您的时间投入。
-    passing_part1: |
-      恭喜！
-
-      根据您提供的信息，
-      您的项目已获得CII最佳实践“通过”徽章。
-      有关详细信息，请参阅此URL：
-    passing_part2: |
-      请将您的徽章添加到您的项目和/或仓库网站;
-      这是你应得的：
-    passing_part3: |
-      我们强烈建议您添加或改进解释文本，
-      包括添加指向更多信息的URL。
-
-      如果您有关于如何改进认证标准、徽章网络应用的建议，
-      请提出问题：
-      https://github.com/linuxfoundation/cii-best-practices-badge/issues
-
-      如果您对项目进行了更改以获得徽章，请通过电子邮件通知我们：
-      cii-badges-questions@lists.coreinfrastructure.org。
-      我们的目标之一是鼓励项目进行改进。
-      我们把这些报告放在公共维基上；如果您不想公开发布，请告诉我们：
-      https://github.com/linuxfoundation/cii-best-practices-badge/wiki/Impacts
-
-      谢谢！恭喜！
     in_markdown_add: 在markdown标记文本中，您可以添加：
     in_html_add: 在HTML中，您可以添加：
-    in_progress_message: |
-      很抱歉，您的项目不再具有“通过”徽章，现在正在“进行中”。
-      有关详细信息，请参阅以下URL：
     ending: "--- David A. Wheeler，CII最佳实践徽章技术负责人\n"
     subject_achieved_passing:
     subject_no_longer_passing:
     subject_new_project:
     subject_reminder:
     subject_project_deleted:
+    gained_level_part1:
+    gained_level_part2:
+    gained_level_part3:
+    lost_level_message:
   project_name_unknown: "(未知名称)"
   locale_name:
     en:

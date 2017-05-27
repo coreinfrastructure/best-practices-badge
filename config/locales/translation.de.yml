@@ -6,114 +6,6 @@
 #
 ---
 de:
-  date:
-    day_names:
-    - Sonntag
-    - Montag
-    - Dienstag
-    - Mittwoch
-    - Donnerstag
-    - Freitag
-    - Samstag
-    abbr_day_names:
-    - So
-    - Mo
-    - Di
-    - Mi
-    - Do
-    - Fr
-    - Sa
-    month_names:
-    -
-    - Januar
-    - Februar
-    - März
-    - April
-    - Mai
-    - Juni
-    - Juli
-    - August
-    - September
-    - Oktober
-    - November
-    - Dezember
-    abbr_month_names:
-    -
-    - Jan
-    - Feb
-    - Mär
-    - Apr
-    - Mai
-    - Jun
-    - Jul
-    - Aug
-    - Sep
-    - Okt
-    - Nov
-    - Dez
-  time:
-    am: vormittags
-    pm: nachmittags
-  errors:
-    format: "%{attribute} %{message}"
-    template:
-      body: 'Bitte überprüfen Sie die folgenden Felder:'
-      header:
-        one: 'Konnte %{model} nicht speichern: ein Fehler.'
-        other: 'Konnte %{model} nicht speichern: %{count} Fehler.'
-    unavailable_session:
-    unacceptable_request: 'Eine unterstützte Version wird im Accept-Header erwartet.
-
-'
-    connection_refused: |
-      Hoppla! Konnte keine Verbindung zur Web Console-Middleware herstellen.
-      Bitte gewähleisten Sie, dass ein Rails-Entwicklungs-Server läuft.
-  datetime:
-    distance_in_words:
-      half_a_minute: vor einer halben Minute
-      less_than_x_seconds:
-        one: vor weniger als eine Sekunde
-        other: vor weniger als %{count} Sekunden
-      x_seconds:
-        one: vor einer Sekunde
-        other: vor %{count} Sekunden
-      less_than_x_minutes:
-        one: vor weniger als einer Minute
-        other: vor weniger als %{count} Minuten
-      x_minutes:
-        one: vor einer Minute
-        other: vor %{count} Minuten
-      about_x_hours:
-        one: vor etwa einer Stunde
-        other: vor etwa %{count} Stunden
-      x_days:
-        one: vor einem Tag
-        other: vor %{count} Tagen
-      about_x_months:
-        one: vor etwa einem Monat
-        other: vor etwa %{count} Monaten
-      x_months:
-        one: vor einem Monat
-        other: vor %{count} Monaten
-      about_x_years:
-        one: vor etwa einem Jahr
-        other: vor etwa %{count} Jahren
-      over_x_years:
-        one: vor mehr als einem Jahr
-        other: vor mehr als %{count} Jahren
-      almost_x_years:
-        one: vor fast einem Jahr
-        other: vor fast %{count} Jahren
-      x_years:
-        one: 1 Jahr
-        other: "%{count} Jahre"
-    prompts:
-      year: Jahr //all are in singular now
-      month: Monat
-      day: Tag
-      hour: Stunden
-      minute: Minute
-      second: Sekunden
   helpers:
     select:
       prompt: Bitte wählen
@@ -350,18 +242,18 @@ de:
     new_project_part2:
     new_project_part3_html:
     new_project_part3_text:
-    passing_part1:
-    passing_part2:
-    passing_part3:
     in_markdown_add:
     in_html_add:
-    in_progress_message:
     ending: "--- David A. Wheeler, CII Best Practices Badge Technical Lead"
     subject_achieved_passing:
     subject_no_longer_passing:
     subject_new_project:
     subject_reminder:
     subject_project_deleted:
+    gained_level_part1:
+    gained_level_part2:
+    gained_level_part3:
+    lost_level_message:
   user_mailer:
     account_activation:
       before_html:

@@ -6,179 +6,6 @@
 #
 ---
 fr:
-  date:
-    day_names:
-    - dimanche
-    - lundi
-    - mardi
-    - mercredi
-    - jeudi
-    - vendredi
-    - samedi
-    abbr_day_names:
-    - dim
-    - lun
-    - mar
-    - mer
-    - jeu
-    - ven
-    - sam
-    month_names:
-    -
-    - janvier
-    - février
-    - mars
-    - avril
-    - mai
-    - juin
-    - juillet
-    - août
-    - septembre
-    - octobre
-    - novembre
-    - décembre
-    abbr_month_names:
-    -
-    - jan.
-    - fév.
-    - mar.
-    - avr.
-    - mai
-    - juin
-    - juil.
-    - août
-    - sept.
-    - oct.
-    - nov.
-    - déc.
-  time:
-    am: matin
-    pm: après-midi
-  number:
-    human:
-      storage_units:
-        units:
-          byte:
-            one: octet
-            other: octets
-          kb: Ko
-          mb: Mo
-          gb: Go
-          tb: To
-          pb: Po
-          eb: Eo
-      decimal_units:
-        units:
-          thousand: millier
-          million: million
-          billion: milliard
-          trillion: billion
-          quadrillion: million de milliards
-  errors:
-    format: "%{attribute} %{message}"
-    messages:
-      model_invalid: 'Échec de la validation : %{errors}'
-      inclusion: n'est pas inclus(e) dans la liste
-      exclusion: n'est pas disponible
-      invalid: n'est pas valide
-      confirmation: ne concorde pas avec %{attribute}
-      accepted: doit être accepté(e)
-      empty: doit être rempli(e)
-      blank: doit être rempli(e)
-      present: doit être vide
-      too_long:
-        one: est trop long (pas plus d'un caractère)
-        other: est trop long (pas plus de %{count} caractères)
-      too_short:
-        one: est trop court (au moins un caractère)
-        other: est trop court (au moins %{count} caractères)
-      wrong_length:
-        one: ne fait pas la bonne longueur (doit comporter un seul caractère)
-        other: ne fait pas la bonne longueur (doit comporter %{count} caractères)
-      not_a_number: n'est pas un nombre
-      not_an_integer: doit être un nombre entier
-      greater_than: doit être supérieur à %{count}
-      greater_than_or_equal_to: doit être supérieur ou égal à %{count}
-      equal_to: doit être égal à %{count}
-      less_than: doit être inférieur à %{count}
-      less_than_or_equal_to: doit être inférieur ou égal à %{count}
-      other_than: doit être différent de %{count}
-      odd: doit être impair
-      even: doit être pair
-      required: doit exister
-      taken: n'est pas disponible
-    template:
-      body: 'Veuillez vérifier les champs suivants : '
-      header:
-        one: 'Impossible d''enregistrer ce(tte) %{model} : 1 erreur'
-        other: 'Impossible d''enregistrer ce(tte) %{model} : %{count} erreurs'
-    unavailable_session: |
-      La session %{id} n'est plus disponible en mémoire.
-
-      Si vous utilisez un serveur multi-processus (comme Unicorn ou Puma), le processus
-      atteint par cette requête ne possède pas %{id} en mémoire. Considérez la possibilité de changer le nombre de processus / tâches à un (1) ou d'utiliser un serveur différent durant le développement.
-    unacceptable_request: 'Une version prise en charge est attendue dans l''en-tête
-      Accept.
-
-'
-    connection_refused: |
-      Oups ! Impossible de se connecter à l'intergiciel de la console Web.
-      Veuillez vous assurer qu'un serveur de développement rails est en cours d'exécution.
-  activerecord:
-    errors:
-      messages:
-        record_invalid: 'La validation a échoué : %{errors}'
-        restrict_dependent_destroy:
-          has_one: Impossible de supprimer l'enregistrement à cause de la dépendance
-            existante sur %{record}
-          has_many: Impossible de supprimer l'enregistrement à cause des dépendances
-            existantes sur %{record}
-  datetime:
-    distance_in_words:
-      half_a_minute: une demi-minute
-      less_than_x_seconds:
-        one: moins d'une seconde
-        other: moins de %{count} secondes
-      x_seconds:
-        one: 1 seconde
-        other: "%{count} secondes"
-      less_than_x_minutes:
-        one: moins d'une minute
-        other: moins de %{count} minutes
-      x_minutes:
-        one: 1 minute
-        other: "%{count} minutes"
-      about_x_hours:
-        one: environ une heure
-        other: environ %{count} heures
-      x_days:
-        one: 1 jour
-        other: "%{count} jours"
-      about_x_months:
-        one: environ un mois
-        other: environ %{count} mois
-      x_months:
-        one: 1 mois
-        other: "%{count} mois"
-      about_x_years:
-        one: environ un an
-        other: environ %{count} ans
-      over_x_years:
-        one: plus d'un an
-        other: plus de %{count} ans
-      almost_x_years:
-        one: presqu'un an
-        other: presque %{count} ans
-      x_years:
-        one: 1 année
-        other: "%{count} années"
-    prompts:
-      year: Année
-      month: Mois
-      day: Jour
-      hour: Heure
-      minute: Minute
-      second: Secondes
   helpers:
     select:
       prompt: Veuillez sélectionner
@@ -186,35 +13,6 @@ fr:
       create: Créer un(e) %{model}
       update: Modifier ce(tte) %{model}
       submit: Enregistrer ce(tte) %{model}
-    page_entries_info:
-      entry:
-        zero: soumissions
-        one: soumission
-        other: soumissions
-      one_page:
-        display_entries:
-          zero: Aucun(e) %{entry_name} trouvé(e)
-          one: Affichage <b>1</b> %{entry_name}
-          other: Affichage <b>des %{count}</b> %{entry_name}
-      more_pages:
-        display_entries: Affichage des %{entry_name} numérotées <b>%{first}&nbsp;-&nbsp;%{last}</b>
-          sur <b>%{total}</b> au total
-  will_paginate:
-    previous_label: "&#8592; Précédent"
-    next_label: Suivant &#8594;
-    page_gap: "&hellip;"
-    page_entries_info:
-      single_page:
-        zero: Aucun %{model} trouvé
-        one: Affichage 1 %{model}
-        other: Affichage de tous les %{count} %{model}
-      single_page_html:
-        zero: Aucun %{model} trouvé
-        one: Affichage de <b>1</b> %{model}
-        other: Affichage <b>de&nbsp;%{count}</b> %{model}
-      multi_page: Affichage %{model} %{from} - %{to} sur %{count} au total
-      multi_page_html: Affichage %{model} <strong>%{from}&nbsp;-&nbsp;%{to}</strong>
-        sur <strong>%{count}</strong> au total
   ransack:
     search: recherche
     predicate: prédicat
@@ -284,13 +82,6 @@ fr:
       blank: est vide
       'null': est null
       not_null: n'est pas null
-  views:
-    pagination:
-      first: "&laquo; Premier"
-      last: Dernier &raquo;
-      previous: "&lsaquo; Précédent"
-      next: Suivant &rsaquo;
-      truncate: "&hellip;"
   simple_form:
     'yes': Oui
     'no': Aucun
@@ -367,7 +158,6 @@ fr:
       other_projects_edit: Autres projets que vous pouvez modifier
       as_admin: 'en tant qu''administrateur, vous pouvez également :'
       send_email_to: 'Envoyer un email à :'
-      profile_updated: Profil mis à jour
       delete_link_name: supprimer
       confirm_delete: Êtes-vous sûr(e) de vouloir supprimer cet utilisateur ?
       edit_user: Modifier l'utilisateur
@@ -616,35 +406,8 @@ fr:
       (cliquez sur "nouveau problème").
 
       Merci pour votre temps.
-    passing_part1: |
-      Toutes nos félicitations !
-
-      Selon les informations que vous avez fournies,
-      votre projet a obtenu le badge des meilleures pratiques de la CII.
-      Pour plus d'informations, consultez cette URL :
-    passing_part2: |
-      Ajoutez votre badge à votre site de projet et / ou dépôt ;
-      vous l'avez mérité :
-    passing_part3: |
-      Nous vous encourageons vivement à ajouter ou à améliorer le texte de justification,
-      y compris par l'ajout d'URL qui donnent plus d'informations.
-
-      Si vous avez des suggestions sur la façon d'améliorer les critères ou
-      l'application Web pour les badges, veuillez soumettre un problème à :
-      https://github.com/linuxfoundation/cii-best-practices-badge/issues
-
-      Si vous avez apporté des modifications à votre projet pour obtenir un badge, veuillez nous le faire savoir par e-mail à ci-badges-questions@lists.coreinfrastructure.org.
-      L'un de nos objectifs est d'encourager les projets à apporter des améliorations.
-      Nous mettons certains de ces rapports sur le wiki public ; veuillez nous informer
-      si vous ne souhaitez PAS que les changements soient publiés publiquement à
-      https://github.com/linuxfoundation/cii-best-practices-badge/wiki/Impacts
-
-      Merci et félicitations.
     in_markdown_add: 'En markdown, vous pouvez ajouter ceci :'
     in_html_add: 'En HTML, vous pouvez ajouter ceci :'
-    in_progress_message: |
-      Nous sommes désolés, mais votre projet n'obtient plus le badge et est maintenant "en cours d'obtention".
-      Consultez l'URL suivante pour plus d'informations :
     ending: "--- David A. Wheeler, Directeur Technique du programme CII Best Practices
       Badge\n"
     subject_achieved_passing:
@@ -652,6 +415,10 @@ fr:
     subject_new_project:
     subject_reminder:
     subject_project_deleted:
+    gained_level_part1:
+    gained_level_part2:
+    gained_level_part3:
+    lost_level_message:
   project_name_unknown: "(Nom inconnu)"
   locale_name:
     en: Anglais / English (en)

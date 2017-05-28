@@ -375,6 +375,15 @@ en:
           It is used in a number of systems and databases when reporting
           vulnerabilities.
         placeholder: (Optional) CPE name
+      license:
+        description_html: >
+          What license(s) is the project released under?
+        details_html: >
+          Please use <a href="https://spdx.org/licenses/">SPDX license
+          expression format</a>; examples include "Apache-2.0",
+          "BSD-2-Clause", "BSD-3-Clause", "GPL-2.0+", "LGPL-3.0+",
+          "MIT", and "(BSD-2-Clause OR Ruby)".
+        placeholder: FLOSS License
   report_mailer:
     subject_achieved_passing: 'CONGRATULATIONS on achieving a %{new_level} best practices
       badge!

@@ -204,6 +204,9 @@ ja:
       text_search:
       name_or_description:
       search:
+      all:
+      passing_100:
+      in_progress_variable:
     table:
       id:
       name:
@@ -258,6 +261,18 @@ ja:
         placeholder:
       repo_url:
         description:
+        placeholder:
+      implementation_languages:
+        description:
+        details:
+        placeholder:
+      cpe:
+        description_html:
+        details_html:
+        placeholder:
+      license:
+        description_html:
+        details_html:
         placeholder:
     form_early:
       badge_intro:
@@ -461,6 +476,7 @@ ja:
         description:
       crypto_password_storage:
         description:
+        details:
       crypto_random:
         description:
         details:
@@ -769,3 +785,4 @@ ja:
     Warning flags:
     Working build system:
     Identification:
+  last_entry:

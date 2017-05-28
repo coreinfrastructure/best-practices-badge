@@ -236,6 +236,9 @@ fr:
       text_search: Recherche textuelle
       name_or_description: Nom ou texte de description
       search: Recherche
+      all:
+      passing_100:
+      in_progress_variable:
     table:
       id: Id
       name: Nom
@@ -309,6 +312,18 @@ fr:
         placeholder:
       repo_url:
         description:
+        placeholder:
+      implementation_languages:
+        description:
+        details:
+        placeholder:
+      cpe:
+        description_html:
+        details_html:
+        placeholder:
+      license:
+        description_html:
+        details_html:
         placeholder:
     form_early:
       badge_intro:
@@ -608,6 +623,7 @@ fr:
         description:
       crypto_password_storage:
         description:
+        details:
       crypto_random:
         description:
         details:
@@ -945,3 +961,4 @@ fr:
     Warning flags:
     Working build system:
     Identification:
+  last_entry:

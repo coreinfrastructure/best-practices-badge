@@ -211,6 +211,9 @@ zh-CN:
       text_search: 文本搜索
       name_or_description: 名称或说明文字
       search: 搜索
+      all:
+      passing_100:
+      in_progress_variable:
     table:
       id: Id
       name: 名称
@@ -269,6 +272,18 @@ zh-CN:
         placeholder:
       repo_url:
         description:
+        placeholder:
+      implementation_languages:
+        description:
+        details:
+        placeholder:
+      cpe:
+        description_html:
+        details_html:
+        placeholder:
+      license:
+        description_html:
+        details_html:
         placeholder:
     form_early:
       badge_intro:
@@ -649,6 +664,7 @@ zh-CN:
           。
 
 '
+        details:
       crypto_random:
         description: '由项目生成的软件中的安全机制必须使用密码学安全的随机数生成器生成所有加密密钥和随机数，并且不得使用密码学不安全的生成器。
 
@@ -1028,3 +1044,4 @@ zh-CN:
     Warning flags: 警告标志
     Working build system: 可工作的构建系统
     Identification:
+  last_entry:

@@ -446,12 +446,12 @@
               scope: :headings) %></h3>
 
             <span class="criteria-desc">
-            Note that some software does not need to use cryptographic mechanisms.
+              <%= t('projects.misc.some_not_crypto_html') %>
             </span>
             <% if (!is_disabled) %>
               <br><br>
               <button class="btn btn-default hidden-print" type="button" id='all_crypto_na'>
-                Press here if the software produced by the project does not use cryptographic mechanisms
+                <%= t('projects.misc.dont_use_crypto') %>
               </button>
               <br>
             <% end %>

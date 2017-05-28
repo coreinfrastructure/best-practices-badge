@@ -246,6 +246,8 @@ en:
       submit_urls: Submit URL
       sign_in_first: Please sign in to add a project!
     edit:
+      save_and_continue: Save (and continue)
+      save_and_exit: Submit (and exit)
       submit_cc_by_3plus_html: 'By submitting this data about the project you agree
         to release it under at least the <a href="https://creativecommons.org/licenses/by/3.0/us"
         target="_blank">Creative Commons Attribution version 3.0 or later license
@@ -393,9 +395,13 @@ en:
         (we recommend you leave this unchecked)
       general_comments:
         description: >
-          Other general comments about the project:<br>
-        placeholder: >
-          Additional Comments (in markdown)
+          Other general comments about the project:
+        placeholder: Additional Comments (in markdown)
+      some_not_crypto_html: >
+        Note that some software does not need to use cryptographic mechanisms.
+      dont_use_crypto: >
+        Press here if the software produced by the project does not use
+        cryptographic mechanisms
   report_mailer:
     subject_achieved_passing: 'CONGRATULATIONS on achieving a %{new_level} best practices
       badge!

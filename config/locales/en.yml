@@ -2292,3 +2292,6 @@ en:
     Vulnerability report process: Vulnerability report process
     Warning flags: Warning flags
     Working build system: Working build system
+  # Last translation entry, here for test purposes so that we can detect
+  # some problems in YAML formatting of this file.
+  last_entry: Last translation entry

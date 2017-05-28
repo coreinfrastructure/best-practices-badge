@@ -1,14 +1,43 @@
 # frozen_string_literal: true
 
-# rubocop:disable Rails/FindEach, Metrics/ClassLength
+# rubocop:disable Rails/FindEach
 class Badge
   ACCEPTABLE_PERCENTAGES = (0..99).map { |num| num }.freeze
   ACCEPTABLE_LEVELS = %w[passing silver gold].freeze
 
   ACCEPTABLE_INPUTS = (ACCEPTABLE_PERCENTAGES + ACCEPTABLE_LEVELS).freeze
 
-  BADGE_SIZES = {
-    'in_progress' => 204, 'passing' => 154, 'silver' => 142, 'gold' => 136
+  WHITE_TEXT_SPECS = {
+    color: 'fill="#000" ', shadow: 'fill="#fefefe" fill-opacity=".7"'
+  }.freeze
+
+  BLACK_TEXT_SPECS = {
+    color: '', shadow: 'fill="#010101" fill-opacity=".3"'
+  }.freeze
+
+  IN_PROGRESS_SPECS = {
+    width: 204, text: 'in progress', text_pos: 152.5,
+    text_colors: BLACK_TEXT_SPECS
+  }.freeze
+
+  PASSING_SPECS = {
+    width: 154, color: '#4c1', text: 'passing', text_pos: 127.5,
+    text_colors: BLACK_TEXT_SPECS
+  }.freeze
+
+  SILVER_SPECS = {
+    width: 142, color: '#C0C0C0', text: 'silver', text_pos: 121.5,
+    text_colors: WHITE_TEXT_SPECS
+  }.freeze
+
+  GOLD_SPECS = {
+    width: 136, color: '#ffd700', text: 'gold', text_pos: 118.5,
+    text_colors: WHITE_TEXT_SPECS
+  }.freeze
+
+  BADGE_SPECS = {
+    'in_progress' => IN_PROGRESS_SPECS, 'passing' => PASSING_SPECS,
+    'silver' => SILVER_SPECS, 'gold' => GOLD_SPECS
   }.freeze
 
   attr_accessor :svg
@@ -57,91 +86,33 @@ class Badge
 
   def create_svg(level)
     # svg badges generated from http://shields.io/
-    return in_progress_svg(level) if level.is_a?(Integer)
-    return passing_svg if level == 'passing'
-    return silver_svg if level == 'silver'
-    gold_svg
+    return badge_svg(BADGE_SPECS['in_progress'], level) if level.is_a?(Integer)
+    badge_svg(BADGE_SPECS[level], nil)
   end
 
-  def in_progress_svg(percentage)
-    color = Paleta::Color.new(:hsl, percentage * 0.45 + 15, 85, 43).hex
+  # rubocop:disable Metrics/AbcSize
+  def badge_svg(specs, percentage)
+    color = specs[:color] ||
+            '#' + Paleta::Color.new(:hsl, percentage * 0.45 + 15, 85, 43).hex
+    text = percentage ? specs[:text] + " #{percentage}%" : specs[:text]
     <<-ENDOFSTRING.squish
-    <svg xmlns="http://www.w3.org/2000/svg" width="#{BADGE_SIZES['in_progress']}"
-    height="20"><linearGradient id="b" x2="0" y2="100%"><stop
-    offset="0" stop-color="#bbb" stop-opacity=".1"/><stop
-    offset="1" stop-opacity=".1"/></linearGradient><mask
-    id="a"><rect width="204" height="20" rx="3"
-    fill="#fff"/></mask><g mask="url(#a)"><path fill="#555"
-    d="M0 0h103v20H0z"/><path fill="##{color}" d="M103
-    0h101v20H103z"/><path fill="url(#b)" d="M0
-    0h204v20H0z"/></g><g fill="#fff" text-anchor="middle"
+    <svg xmlns="http://www.w3.org/2000/svg" width="#{specs[:width]}"
+    height="20"><linearGradient id="b" x2="0" y2="100%"><stop offset="0"
+    stop-color="#bbb" stop-opacity=".1"/><stop offset="1"
+    stop-opacity=".1"/></linearGradient><mask id="a"><rect
+    width="#{specs[:width]}" height="20" rx="3" fill="#fff"/></mask><g
+    mask="url(#a)"><path fill="#555" d="M0 0h103v20H0z"/><path
+    fill="#{color}" d="M103 0h#{specs[:width] - 103}v20H103z"/><path
+    fill="url(#b)" d="M0 0h#{specs[:width]}v20H0z"/></g><g
+    fill="#fff" text-anchor="middle"
     font-family="DejaVu Sans,Verdana,Geneva,sans-serif"
     font-size="11"><text x="51.5" y="15" fill="#010101"
     fill-opacity=".3">cii best practices</text><text x="51.5"
-    y="14">cii best practices</text><text x="152.5" y="15"
-    fill="#010101" fill-opacity=".3">in progress
-    #{percentage}%</text><text x="152.5" y="14">in progress
-    #{percentage}%</text></g></svg>
+    y="14">cii best practices</text><text x="#{specs[:text_pos]}"
+    y="15" #{specs[:text_colors][:shadow]}>#{text}</text><text
+    #{specs[:text_colors][:color]}x="#{specs[:text_pos]}"
+    y="14">#{text}</text></g></svg>
     ENDOFSTRING
   end
-
-  def passing_svg
-    <<-ENDOFSTRING.squish
-    <svg xmlns="http://www.w3.org/2000/svg" width="#{BADGE_SIZES['passing']}"
-    height="20"><linearGradient id="b" x2="0" y2="100%"><stop
-    offset="0" stop-color="#bbb" stop-opacity=".1"/><stop
-    offset="1" stop-opacity=".1"/></linearGradient><mask
-    id="a"><rect width="154" height="20" rx="3"
-    fill="#fff"/></mask><g mask="url(#a)"><path fill="#555"
-    d="M0 0h103v20H0z"/><path fill="#4c1" d="M103
-    0h89v20h-89z"/><path fill="url(#b)" d="M0
-    0h192v20H0z"/></g><g fill="#fff" text-anchor="middle"
-    font-family="DejaVu Sans,Verdana,Geneva,sans-serif"
-    font-size="11"><text x="51.5" y="15" fill="#010101"
-    fill-opacity=".3">cii best practices</text><text x="51.5"
-    y="14">cii best practices</text><text x="127.5" y="15"
-    fill="#010101" fill-opacity=".3">passing</text>
-    <text x="127.5" y="14">passing</text></g></svg>
-    ENDOFSTRING
-  end
-
-  def silver_svg
-    <<-ENDOFSTRING.squish
-    <svg xmlns="http://www.w3.org/2000/svg" width="#{BADGE_SIZES['silver']}"
-    height="20"><linearGradient id="b" x2="0" y2="100%"><stop
-    offset="0" stop-color="#bbb" stop-opacity=".1"/><stop
-    offset="1" stop-opacity=".1"/></linearGradient><mask
-    id="a"><rect width="142" height="20" rx="3"
-    fill="#fff"/></mask><g mask="url(#a)"><path fill="#555"
-    d="M0 0h103v20H0z"/><path fill="#C0C0C0" d="M103
-    0h101v20H103z"/><path fill="url(#b)" d="M0
-    0h204v20H0z"/></g><g fill="#fff" text-anchor="middle"
-    font-family="DejaVu Sans,Verdana,Geneva,sans-serif"
-    font-size="11"><text x="51.5" y="15" fill="#010101"
-    fill-opacity=".3">cii best practices</text><text x="51.5"
-    y="14">cii best practices</text><text fill="#fefefe"
-    fill-opacity=".7" x="121.5" y="15">silver</text><text
-    fill="#000" x="121.5" y="14">silver</text></g></svg>
-    ENDOFSTRING
-  end
-
-  def gold_svg
-    <<-ENDOFSTRING.squish
-    <svg xmlns="http://www.w3.org/2000/svg" width="#{BADGE_SIZES['gold']}"
-    height="20"><linearGradient id="b" x2="0" y2="100%"><stop
-    offset="0" stop-color="#bbb" stop-opacity=".1"/><stop
-    offset="1" stop-opacity=".1"/></linearGradient><mask
-    id="a"><rect width="136" height="20" rx="3"
-    fill="#fff"/></mask><g mask="url(#a)"><path fill="#555"
-    d="M0 0h103v20H0z"/><path fill="#ffd700" d="M103
-    0h89v20h-89z"/><path fill="url(#b)" d="M0
-    0h192v20H0z"/></g><g fill="#fff" text-anchor="middle"
-    font-family="DejaVu Sans,Verdana,Geneva,sans-serif"
-    font-size="11"><text x="51.5" y="15" fill="#010101"
-    fill-opacity=".3">cii best practices</text><text x="51.5"
-    y="14">cii best practices</text><text fill="#fefefe"
-    fill-opacity=".7" x="118.5" y="15">gold</text><text
-    fill="#000" x="118.5" y="14">gold</text></g></svg>
-    ENDOFSTRING
-  end
+  # rubocop:enable Metrics/AbcSize
 end

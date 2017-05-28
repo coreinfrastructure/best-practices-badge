@@ -42,7 +42,7 @@
              }) %>
       <div class="panel-collapse collapse in">
         <ul class="list-group">
-          <li class="list-group-item"><h3><%= t('projects.form_basics.id_heading') %></h3>
+          <li class="list-group-item"><h3><%= t('projects.headings.Identification') %></h3>
             <%= render(partial: 'form_basics',
                  locals:
                    {
@@ -223,6 +223,10 @@
           </li>
           <%= render_minor_status(
                 '1', 'Security', 'Secure release',
+                f, project, is_disabled
+              ) %>
+          <%= render_minor_status(
+                '1', 'Security', 'Other security issues',
                 f, project, is_disabled
               ) %>
         </ul>

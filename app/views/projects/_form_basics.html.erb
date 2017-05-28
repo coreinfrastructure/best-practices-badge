@@ -1,18 +1,3 @@
-<br><br><br>
-
-  <div class="panel-group well well-lg well-color">
-    <div class="panel panel-primary">
-      <%= render(partial: 'panel_header',
-           locals:
-             {
-               panel_title: 'Basics', anchor_id: 'basics',
-               by_default: 'open',
-               satisfaction_data:
-                 project.get_satisfaction_data(criteria_level,'basics')
-             }) %>
-      <div class="panel-collapse collapse in">
-        <ul class="list-group">
-          <li class="list-group-item"><h3><%= t('projects.form_basics.id_heading') %></h3>
             <div class="hidable-text-entry">
             <span><%= t('projects.form_basics.project_name.description') %></span>
             <%= render(partial: "details", locals: {

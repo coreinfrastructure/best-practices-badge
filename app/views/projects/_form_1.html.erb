@@ -28,14 +28,28 @@
     <%= render 'shared/error_messages', object: f.object %>
     <%= f.hidden_field :lock_version %>
 
-<%= render(partial: 'form_basics',
+  <br><br><br>
+
+  <div class="panel-group well well-lg well-color">
+    <div class="panel panel-primary">
+      <%= render(partial: 'panel_header',
            locals:
              {
-               project: project, is_disabled: is_disabled,
-               badge_hostname: badge_hostname, f: f,
-               criteria_level: '1'
+               panel_title: 'Basics', anchor_id: 'basics',
+               by_default: 'open',
+               satisfaction_data:
+                 project.get_satisfaction_data('1','basics')
              }) %>
-
+      <div class="panel-collapse collapse in">
+        <ul class="list-group">
+          <li class="list-group-item"><h3><%= t('projects.form_basics.id_heading') %></h3>
+            <%= render(partial: 'form_basics',
+                 locals:
+                   {
+                     project: project, is_disabled: is_disabled,
+                     badge_hostname: badge_hostname, f: f,
+                     criteria_level: '1'
+                   }) %>
           </li>
 
           <%= render_minor_status(

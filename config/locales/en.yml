@@ -2273,44 +2273,46 @@ en:
 
 '
       hardening:
-        description: 'Hardening mechanisms MUST be used in the software produced by
-          the project so that software defects are less likely to result in security
-          vulnerabilities.
-
-'
-        details: 'Hardening mechanisms may include HTTP headers like Content Security
-          Policy (CSP), compiler flags to mitigate attacks (such as -fstack-protector),
-          or compiler flags to eliminate undefined behavior. For our purposes least
-          privilege is not considered a hardening mechanism (least privilege is important,
+        description: >
+          Hardening mechanisms MUST be used in the software produced by
+          the project so that software defects are less likely to
+          result in security vulnerabilities.
+        details: >
+          Hardening mechanisms may include HTTP headers like Content
+          Security Policy (CSP), compiler flags to mitigate attacks
+          (such as -fstack-protector), or compiler flags to eliminate
+          undefined behavior. For our purposes least privilege is not
+          considered a hardening mechanism (least privilege is important,
           but separate).
-
-'
       dynamic_analysis:
-        description: 'The project MUST apply at least one dynamic analysis tool to
-          any proposed major production release of the software produced by the project
-          before its release.
-
-'
-        details: 'A dynamic analysis tool examines the software by executing it with
-          specific inputs. For example, the project MAY use a fuzzing tool (e.g.,
-          <a href="http://lcamtuf.coredump.cx/afl/">American Fuzzy Lop</a>) or a web
-          application scanner (e.g., <a href="https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project">OWASP
-          ZAP</a> or <a href="http://w3af.org/">w3af</a>). In some cases the <a href="https://github.com/google/oss-fuzz#introduction">OSS-Fuzz</a>
-          project may be willing to apply fuzz testing to your project. For purposes
-          of this criterion the dynamic analysis tool needs to vary the inputs in
-          some way to look for various kinds of problems <em>or</em> be an automated
-          test suite with at least 80% branch coverage.  The <a href="https://en.wikipedia.org/wiki/Dynamic_program_analysis">Wikipedia
-          page on dynamic analysis</a> and the <a href="https://www.owasp.org/index.php/Fuzzing">OWASP
-          page on fuzzing</a> identify some dynamic analysis tools. The analysis tool(s)
-          MAY be focused on looking for security vulnerabilities, but this is not
-          required.
-
-'
+        description: >
+          The project MUST apply at least one dynamic analysis tool to
+          any proposed major production release of the software produced
+          by the project before its release.
+        details: >
+          A dynamic analysis tool examines the software by executing it
+          with specific inputs. For example, the project MAY use a fuzzing
+          tool (e.g., <a href="http://lcamtuf.coredump.cx/afl/">American
+          Fuzzy Lop</a>) or a web application scanner (e.g., <a
+          href="https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project">OWASP
+          ZAP</a> or <a
+          href="http://w3af.org/">w3af</a>). In some cases the <a
+          href="https://github.com/google/oss-fuzz#introduction">OSS-Fuzz</a>
+          project may be willing to apply fuzz testing to your
+          project. For purposes of this criterion the dynamic
+          analysis tool needs to vary the inputs in some way
+          to look for various kinds of problems <em>or</em> be an
+          automated test suite with at least 80% branch coverage.  The <a
+          href="https://en.wikipedia.org/wiki/Dynamic_program_analysis">Wikipedia
+          page on dynamic analysis</a> and the <a
+          href="https://www.owasp.org/index.php/Fuzzing">OWASP page on
+          fuzzing</a> identify some dynamic analysis tools. The analysis
+          tool(s) MAY be focused on looking for security vulnerabilities,
+          but this is not required.
       dynamic_analysis_enable_assertions:
-        description: 'The project SHOULD include many run-time assertions in the software
+        description: >
+          The project SHOULD include many run-time assertions in the software
           it produces and check those assertions during dynamic analysis.
-
-'
   headings:
     Accessibility and internationalization: Accessibility and internationalization
     Analysis: Analysis
@@ -2346,7 +2348,8 @@ en:
     Security: Security
     Static code analysis: Static code analysis
     Unique version numbering: Unique version numbering
-    Use basic good cryptographic practices: Use basic good cryptographic practices
+    'Use basic good cryptographic practices':
+      Use basic good cryptographic practices
     Vulnerability report process: Vulnerability report process
     Warning flags: Warning flags
     Working build system: Working build system

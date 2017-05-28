@@ -7,6 +7,10 @@ class Badge
 
   ACCEPTABLE_INPUTS = (ACCEPTABLE_PERCENTAGES + ACCEPTABLE_LEVELS).freeze
 
+  BADGE_SIZES = {
+    'in_progress' => 204, 'passing' => 154, 'silver' => 142, 'gold' => 136
+  }.freeze
+
   attr_accessor :svg
 
   class << self
@@ -62,7 +66,7 @@ class Badge
   def in_progress_svg(percentage)
     color = Paleta::Color.new(:hsl, percentage * 0.45 + 15, 85, 43).hex
     <<-ENDOFSTRING.squish
-    <svg xmlns="http://www.w3.org/2000/svg" width="204"
+    <svg xmlns="http://www.w3.org/2000/svg" width="#{BADGE_SIZES['in_progress']}"
     height="20"><linearGradient id="b" x2="0" y2="100%"><stop
     offset="0" stop-color="#bbb" stop-opacity=".1"/><stop
     offset="1" stop-opacity=".1"/></linearGradient><mask
@@ -83,7 +87,7 @@ class Badge
 
   def passing_svg
     <<-ENDOFSTRING.squish
-    <svg xmlns="http://www.w3.org/2000/svg" width="154"
+    <svg xmlns="http://www.w3.org/2000/svg" width="#{BADGE_SIZES['passing']}"
     height="20"><linearGradient id="b" x2="0" y2="100%"><stop
     offset="0" stop-color="#bbb" stop-opacity=".1"/><stop
     offset="1" stop-opacity=".1"/></linearGradient><mask
@@ -103,7 +107,7 @@ class Badge
 
   def silver_svg
     <<-ENDOFSTRING.squish
-    <svg xmlns="http://www.w3.org/2000/svg" width="142"
+    <svg xmlns="http://www.w3.org/2000/svg" width="#{BADGE_SIZES['silver']}"
     height="20"><linearGradient id="b" x2="0" y2="100%"><stop
     offset="0" stop-color="#bbb" stop-opacity=".1"/><stop
     offset="1" stop-opacity=".1"/></linearGradient><mask
@@ -123,7 +127,7 @@ class Badge
 
   def gold_svg
     <<-ENDOFSTRING.squish
-    <svg xmlns="http://www.w3.org/2000/svg" width="136"
+    <svg xmlns="http://www.w3.org/2000/svg" width="#{BADGE_SIZES['gold']}"
     height="20"><linearGradient id="b" x2="0" y2="100%"><stop
     offset="0" stop-color="#bbb" stop-opacity=".1"/><stop
     offset="1" stop-opacity=".1"/></linearGradient><mask

@@ -7,14 +7,6 @@ class Project < ActiveRecord::Base
 
   include PgSearch # PostgreSQL-specific text search
 
-  BADGE_STATUSES = [
-    ['All', nil],
-    ['Passing (100%)', 100],
-    ['In Progress (25% or more)', 25],
-    ['In Progress (50% or more)', 50],
-    ['In Progress (75% or more)', 75],
-    ['In Progress (90% or more)', 90]
-  ].freeze
   STATUS_CHOICE = %w[? Met Unmet].freeze
   STATUS_CHOICE_NA = (STATUS_CHOICE + %w[N/A]).freeze
   MIN_SHOULD_LENGTH = 5

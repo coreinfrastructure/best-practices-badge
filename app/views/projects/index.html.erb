@@ -1,3 +1,13 @@
+<%
+  badge_status_options = [
+    [t('.all'), nil],
+    [t('.passing_100'), 100],
+    [t('.in_progress_variable', percent: 25), 25],
+    [t('.in_progress_variable', percent: 50), 50],
+    [t('.in_progress_variable', percent: 75), 75],
+    [t('.in_progress_variable', percent: 90), 90]
+  ]
+%>
 <% content_for :nav_extras do %>
   <li>
     <% if logged_in? %>
@@ -11,7 +21,7 @@
   <%= form_for projects_path, method: 'get', enforce_utf8: false,
                html: { class: 'project_search' } do %>
     <label for="gteq"><%= t '.badge_status' %></label>
-    <%= select_tag(:gteq, options_for_select(Project::BADGE_STATUSES,
+    <%= select_tag(:gteq, options_for_select(badge_status_options,
                    params[:gteq]), class: 'onchange-submit') %>
     &nbsp; &nbsp; &nbsp;
     <label for="lteq"><%= t '.exclude_passing' %></label>

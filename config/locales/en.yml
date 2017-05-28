@@ -191,6 +191,9 @@ en:
       csv_format: downloadable CSV format
   projects:
     index:
+      all: All
+      passing_100: "Passing (100%)"
+      in_progress_variable: "In Progress (%{percent}% or more)"
       add_link: Add
       add_new: Add New Project
       badge_status: Badge status

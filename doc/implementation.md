@@ -124,6 +124,13 @@ The application is configured by various environment variables:
   client IPs, and only let those IPs make requests.  Enabling this
   counters cloud piercing.  This isn't on by default, but the environment
   variables are set on our tiers.
+* DB_POOL: Set the number of connections the app can hold to the database.
+  This is important for performance on Heroku; see:
+  <https://devcenter.heroku.com/articles/concurrency-and-database-connections>.
+  If unset, defaults to RAILS_MAX_THREADS + 1 for this app,
+  because in addition to every web thread we occasionally fire a task to
+  process occasional requests (such as the daily task).
+  If RAILS_MAX_THREADS is not set, presume it is 5.
 
 This can be set on Heroku.  For example, to change the maximum number
 of email reminders to inactive projects on production-bestpractices:

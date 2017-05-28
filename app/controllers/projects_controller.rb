@@ -429,7 +429,7 @@ class ProjectsController < ApplicationController
     # @project.purge
     format.html do
       if params[:continue]
-        flash[:success] = 'Project was successfully updated.'
+        flash[:info] = 'Project was successfully updated.'
         redirect_to edit_project_path(
           @project, criteria_level: criteria_level
         ) + url_anchor

@@ -256,7 +256,6 @@ zh-CN:
     edit:
       submit_cc_by_3plus_html:
     form_basics:
-      id_heading:
       project_name:
         description:
         details:
@@ -1028,3 +1027,4 @@ zh-CN:
     Vulnerability report process: 漏洞报告流程
     Warning flags: 警告标志
     Working build system: 可工作的构建系统
+    Identification:

@@ -296,7 +296,6 @@ fr:
     edit:
       submit_cc_by_3plus_html:
     form_basics:
-      id_heading:
       project_name:
         description:
         details:
@@ -945,3 +944,4 @@ fr:
     Vulnerability report process:
     Warning flags:
     Working build system:
+    Identification:

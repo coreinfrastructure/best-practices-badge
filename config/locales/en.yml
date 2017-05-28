@@ -326,7 +326,6 @@ en:
 
 
     form_basics:
-      id_heading: Identification
       project_name:
         description: What is the human-readable name of the project?
         details: Note that other projects may use the same name.
@@ -2258,6 +2257,7 @@ en:
     Accessibility and internationalization: Accessibility and internationalization
     Analysis: Analysis
     Automated test suite: Automated test suite
+    Identification: Identification
     Basic project website content: Basic project website content
     Basics: Basics
     Bug-reporting process: Bug-reporting process

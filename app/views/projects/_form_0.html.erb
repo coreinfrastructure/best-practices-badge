@@ -63,7 +63,7 @@ If there is no language (e.g., this is a documentation-only or test-only
 project), use the single character "-".
 Please use a conventional capitalization for each language, e.g., "JavaScript".
 }}) %>
-            <%= f.text_field :implementation_languages, hide_label: true, class:"form-control", placeholder:'Implementation language(s) used as a comma-separated list, sorted by amount of use', list: 'implementation_language_list', disabled: is_disabled %>
+            <%= f.text_field :implementation_languages, hide_label: true, class:"form-control", placeholder:'Implementation language(s) used as a comma-separated list, sorted by amount of use', spellcheck: false, list: 'implementation_language_list', disabled: is_disabled %>
            <!-- Some examples from http://wiki.spdx.org/view/FileNoticeExamples -->
            <div class="hidden">
            <datalist id="implementation_language_list">
@@ -187,7 +187,7 @@ is a structured naming scheme for information technology systems,
 software, and packages.  It is used in a number of systems and
 databases when reporting vulnerabilities.
 }.html_safe}) %>
-            <%= f.text_field :cpe, hide_label: true, class:"form-control", placeholder:'(Optional) CPE name', disabled: is_disabled %>
+            <%= f.text_field :cpe, hide_label: true, class:"form-control", placeholder:'(Optional) CPE name', spellcheck: false, disabled: is_disabled %>
             </div>
           </li>
 

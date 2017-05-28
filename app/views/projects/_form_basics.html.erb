@@ -5,7 +5,8 @@
                        details: t('projects.form_basics.project_name.details')
 }) %>
             <%= f.text_field :name, hide_label: true, class:"form-control",
-                             placeholder:t('projects.form_basics.project_name.placeholder'),
+                             placeholder: t('projects.form_basics.project_name.placeholder'),
+                             spellcheck: false,
                              disabled: is_disabled %>
             </div>
 

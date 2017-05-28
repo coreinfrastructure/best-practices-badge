@@ -271,6 +271,15 @@ zh-CN:
       repo_url:
         description:
         placeholder:
+    form_early:
+      badge_intro:
+        description:
+        details_html:
+      got_badge:
+        description_1:
+        description_2:
+        details_html:
+        editing_description_html:
   user_mailer:
     account_activation:
       before_html: |

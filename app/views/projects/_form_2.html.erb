@@ -1,0 +1,248 @@
+<%# The "div"s here are not balanced within the file.
+    That allows us to fill in and then end the current column & row,
+    followed by starting and finishing another full row. %>
+<% badge_hostname = (ENV['PUBLIC_HOSTNAME'] || 'localhost') %>
+<%# TODO: Use badge_percentage_1 %>
+<% content_for :insert_progress_bar do %>
+  <div id="progress-mobile" class="progress">
+    <div id="badge-progress"
+         class="progress-bar progress-bar-success badge-progress"
+         role="progressbar" aria-valuenow="<%= project.badge_percentage_0 %>"
+         aria-valuemin="0" aria-valuemax="100">
+      <%= project.badge_percentage_0 %>%
+    </div>
+  </div>
+<% end %>
+<% cache_if is_disabled, project do %>
+<%= render(partial: 'form_early',
+           locals:
+             {
+               project: project, is_disabled: is_disabled,
+               badge_hostname: badge_hostname
+             }) %>
+
+<div class="row">
+  <div class="col-md-12">
+ <div>
+  <%= bootstrap_form_for project, url: put_project_path(project, criteria_level: '2') do |f| %>
+    <%= render 'shared/error_messages', object: f.object %>
+    <%= f.hidden_field :lock_version %>
+
+  <br><br><br>
+
+  <div class="panel-group well well-lg well-color">
+    <div class="panel panel-primary">
+      <%= render(partial: 'panel_header',
+           locals:
+             {
+               panel_title: 'Basics', anchor_id: 'basics',
+               by_default: 'open',
+               satisfaction_data:
+                 project.get_satisfaction_data('2','basics')
+             }) %>
+      <div class="panel-collapse collapse in">
+        <ul class="list-group">
+          <li class="list-group-item"><h3><%= t('projects.form_basics.id_heading') %></h3>
+            <%= render(partial: 'form_basics',
+                 locals:
+                   {
+                     project: project, is_disabled: is_disabled,
+                     badge_hostname: badge_hostname, f: f,
+                     criteria_level: '2'
+                   }) %>
+          </li>
+
+          <%= render_minor_status(
+                '2', 'Basics', 'Project Oversight', f, project, is_disabled
+              ) %>
+          <%= render_minor_status(
+                '2', 'Basics', 'Other', f, project, is_disabled
+              ) %>
+          </ul>
+
+      <% unless is_disabled %>
+        <div class="panel-footer text-center">
+          <%= t 'projects.edit.submit_cc_by_3plus_html' %>
+          <%= f.button 'Save (and continue)', type: 'submit', name: 'continue',
+              value: 'changecontrol', class:"btn btn-success btn-submit" %>
+          <%= f.submit 'Submit (and exit)', class:"btn btn-success btn-submit" %>
+        </div>
+      <% end %>
+     </div>
+    </div>
+
+    <div class="panel panel-primary">
+      <%= render(partial: 'panel_header',
+           locals:
+             {
+               panel_title: 'Change Control', anchor_id: 'changecontrol',
+               by_default: 'close',
+               satisfaction_data:
+                 project.get_satisfaction_data('2','changecontrol')
+             }) %>
+
+      <div class="panel-collapse collapse in remove-in">
+        <ul class="list-group">
+          <%= render_minor_status(
+                '2', 'Change Control', 'Public version-controlled source repository',
+                f, project, is_disabled
+              ) %>
+        </ul>
+        <% unless is_disabled %>
+          <div class="panel-footer text-center">
+            <%= t 'projects.edit.submit_cc_by_3plus_html' %>
+            <%= f.button 'Save (and continue)', type: 'submit', name: 'continue',
+              value: 'reporting', class:"btn btn-success btn-submit" %>
+            <%= f.submit 'Submit (and exit)', class:"btn btn-success btn-submit" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="panel panel-primary">
+      <%= render(partial: 'panel_header',
+           locals:
+             {
+               panel_title: 'Reporting', anchor_id: 'reporting',
+               by_default: 'close',
+               satisfaction_data:
+                 project.get_satisfaction_data('2','reporting')
+             }) %>
+      <div class="panel-collapse collapse in remove-in">
+        <ul class="list-group">
+        </ul>
+        <% unless is_disabled %>
+          <div class="panel-footer text-center">
+            <%= t 'projects.edit.submit_cc_by_3plus_html' %>
+            <%= f.button 'Save (and continue)', type: 'submit', name: 'continue',
+              value: 'quality', class:"btn btn-success btn-submit" %>
+            <%= f.submit 'Submit (and exit)', class:"btn btn-success btn-submit" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="panel panel-primary">
+      <%= render(partial: 'panel_header',
+           locals:
+             {
+               panel_title: 'Quality', anchor_id: 'quality',
+               by_default: 'close',
+               satisfaction_data:
+                 project.get_satisfaction_data('2','quality')
+             }) %>
+      <div class="panel-collapse collapse in remove-in">
+        <ul class="list-group">
+          <%= render_minor_status(
+                '2', 'Quality', 'Coding standards', f, project, is_disabled
+              ) %>
+        </ul>
+        <% unless is_disabled %>
+          <div class="panel-footer text-center">
+            <%= t 'projects.edit.submit_cc_by_3plus_html' %>
+            <%= f.button 'Save (and continue)', type: 'submit', name: 'continue',
+              value: 'security', class:"btn btn-success btn-submit" %>
+            <%= f.submit 'Submit (and exit)', class:"btn btn-success btn-submit" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="panel panel-primary">
+      <%= render(partial: 'panel_header',
+           locals:
+             {
+               panel_title: 'Security', anchor_id: 'security',
+               by_default: 'close',
+               satisfaction_data:
+                 project.get_satisfaction_data('2','security')
+             }) %>
+      <div class="panel-collapse collapse in remove-in">
+        <ul class="list-group">
+          <li class="list-group-item"><h3>Use basic good cryptographic practices</h3>
+            <span class="criteria-desc">
+            Note that some software does not need to use cryptographic mechanisms.
+            </span>
+            <% if (!is_disabled) %>
+              <br><br>
+              <button class="btn btn-default hidden-print" type="button" id='all_crypto_na'>
+                Press here if the software produced by the project does not use cryptographic mechanisms
+              </button>
+              <br>
+            <% end %>
+            <%= render_minor_status(
+                  '2', 'Security', 'Use basic good cryptographic practices',
+                  f, project, is_disabled, false
+                ) %>
+          </li>
+          <%= render_minor_status(
+                '2', 'Security', 'Secured delivery against man-in-the-middle (MITM) attacks',
+                f, project, is_disabled
+              ) %>
+          <%= render_minor_status(
+                '2', 'Security', 'Other security issues',
+                f, project, is_disabled
+              ) %>
+        </ul>
+        <% unless is_disabled %>
+          <div class="panel-footer text-center">
+            <%= t 'projects.edit.submit_cc_by_3plus_html' %>
+            <%= f.button 'Save (and continue)', type: 'submit', name: 'continue',
+              value: 'analysis', class:"btn btn-success btn-submit" %>
+            <%= f.submit 'Submit (and exit)', class:"btn btn-success btn-submit" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="panel panel-primary">
+      <%= render(partial: 'panel_header',
+           locals:
+             {
+               panel_title: 'Analysis', anchor_id: 'analysis',
+               by_default: 'close',
+               satisfaction_data:
+                 project.get_satisfaction_data('2','analysis')
+             }) %>
+      <div class="panel-collapse collapse in remove-in">
+        <ul class="list-group">
+          <%= render_minor_status(
+                '2', 'Analysis', 'Dynamic code analysis',
+                f, project, is_disabled
+              ) %>
+        </ul>
+        <% unless is_disabled %>
+          <div class="panel-footer text-center">
+            <%= t 'projects.edit.submit_cc_by_3plus_html' %>
+            <%= f.button 'Save (and continue)', type: 'submit', name: 'continue',
+              value: 'future', class:"btn btn-success btn-submit" %>
+            <%= f.submit 'Submit (and exit)', class:"btn btn-success btn-submit" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+  </div>
+      <br>
+      <div class="center">
+      <% if is_disabled %>
+        <% if project.show_entry_license? %>
+          <%= t 'projects.show.cc_by_3plus_html', user: project.user_name %>
+        <% else %>
+          <!-- This is older data and the user didn't indicate anything,
+               so the "terms of use" of CII apply, which said that unless
+               otherwise noted it's released under CC-BY-3.0 only. -->
+          <%= t 'projects.show.cc_by_3only_html', user: project.user_name %>
+        <% end %>
+      <% else %>
+        <%= t 'projects.edit.submit_cc_by_3plus_html' %>
+        <%= f.button 'Save (and continue)', type: 'submit', name: 'continue',
+          value: 'Save', class:"btn btn-success btn-submit" %>
+        <%= f.submit 'Submit (and exit)', class:"btn btn-success btn-submit" %>
+      <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>
+</div>
+<% end %>

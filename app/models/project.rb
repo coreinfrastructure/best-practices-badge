@@ -249,7 +249,7 @@ class Project < ActiveRecord::Base
     passing = total.count { |criterion| enough?(criterion) }
     {
       text: "#{passing}/#{total.size}",
-      color: get_color(passing / total.size.to_f)
+      color: get_color(passing / [1, total.size.to_f].max)
     }
   end
 

@@ -323,8 +323,8 @@ en:
           If you need help, have a question, or see a problem, please
           <i><a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">send an email</a> </i>or
           <i><a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues" target="_blank">file an issue</a></i>.
-
-
+    # Other items in the "basic" section of the form, many of which
+    # need special handling
     form_basics:
       project_name:
         description: What is the human-readable name of the project?
@@ -346,6 +346,22 @@ en:
 
 '
         placeholder: Project Repo URL
+      implementation_languages:
+        description: >
+          What programming language(s) are used to implement
+          the project?
+        details: >
+          If there is more than one language, list them as comma-separated
+          values (spaces optional) and sort them from most to least used.
+          If there is a long list, please list at least the first three
+          most common ones.  If there is no language (e.g., this is
+          a documentation-only or test-only project), use the single
+          character "-".
+          Please use a conventional capitalization for
+          each language, e.g., "JavaScript".
+        placeholder: >
+          Implementation language(s) used as a comma-separated list,
+          sorted by amount of use
   report_mailer:
     subject_achieved_passing: 'CONGRATULATIONS on achieving a %{new_level} best practices
       badge!

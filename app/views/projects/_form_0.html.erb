@@ -53,17 +53,19 @@
                          }) %>
 
             <div class="hidable-text-entry">
-            <span>What programming language(s) are used to implement the project?</span>
-<%= render(partial: "details", locals: {
-           criterion: "implementation_languages", details: %{
-If there is more than one language, list them as comma-separated values
-(spaces optional) and sort them from most to least used.
-If there is a long list, please list at least the first three most common ones.
-If there is no language (e.g., this is a documentation-only or test-only
-project), use the single character "-".
-Please use a conventional capitalization for each language, e.g., "JavaScript".
-}}) %>
-            <%= f.text_field :implementation_languages, hide_label: true, class:"form-control", placeholder:'Implementation language(s) used as a comma-separated list, sorted by amount of use', spellcheck: false, list: 'implementation_language_list', disabled: is_disabled %>
+            <%= t 'projects.form_basics.implementation_languages.description' %>
+            <%= render(partial: "details", locals: {
+              criterion: "implementation_languages",
+              details:
+                t('projects.form_basics.implementation_languages.details') }) %>
+            <%= f.text_field :implementation_languages,
+                             hide_label: true, class:"form-control",
+                             placeholder:
+                               t('projects.form_basics.' +
+                                 'implementation_languages.placeholder'),
+                             spellcheck: false,
+                             list: 'implementation_language_list',
+                             disabled: is_disabled %>
            <!-- Some examples from http://wiki.spdx.org/view/FileNoticeExamples -->
            <div class="hidden">
            <datalist id="implementation_language_list">

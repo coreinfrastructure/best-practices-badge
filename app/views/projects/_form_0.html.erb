@@ -441,7 +441,9 @@
                 '0', 'Security', 'Secure development knowledge',
                 f, project, is_disabled
               ) %>
-          <li class="list-group-item"><h3>Use basic good cryptographic practices</h3>
+          <li class="list-group-item"><h3><%=
+            t('Use basic good cryptographic practices',
+              scope: :headings) %></h3>
 
             <span class="criteria-desc">
             Note that some software does not need to use cryptographic mechanisms.

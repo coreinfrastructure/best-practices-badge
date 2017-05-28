@@ -402,6 +402,11 @@ en:
       dont_use_crypto: >
         Press here if the software produced by the project does not use
         cryptographic mechanisms
+      future_header_html: >
+        These are criteria we intend to add in the near future, but are
+        <i>not</i> currently required for a badge.
+        This grace period allows projects to update to changed criteria
+        and retain their badge as best practices improve.
   report_mailer:
     subject_achieved_passing: 'CONGRATULATIONS on achieving a %{new_level} best practices
       badge!

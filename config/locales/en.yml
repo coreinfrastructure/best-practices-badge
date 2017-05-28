@@ -362,6 +362,19 @@ en:
         placeholder: >
           Implementation language(s) used as a comma-separated list,
           sorted by amount of use
+      cpe:
+        description_html: >
+          What is the
+          <a href="https://nvd.nist.gov/cpe.cfm">Common Platform
+          Enumeration (CPE)</a>
+          name for the project (if it has one)?
+        details_html: >
+          The <a href="https://nvd.nist.gov/cpe.cfm">Common Platform
+          Enumeration (CPE)</a> is a structured naming scheme for
+          information technology systems, software, and packages.
+          It is used in a number of systems and databases when reporting
+          vulnerabilities.
+        placeholder: (Optional) CPE name
   report_mailer:
     subject_achieved_passing: 'CONGRATULATIONS on achieving a %{new_level} best practices
       badge!

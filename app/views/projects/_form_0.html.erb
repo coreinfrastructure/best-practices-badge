@@ -179,17 +179,16 @@
      However, first is implied by "description_good",
      and the MITM stuff notes https as a way to implement it. -->
             <div class="hidable-text-entry">
-            <span>What is the
-                  <a href="https://nvd.nist.gov/cpe.cfm">Common Platform Enumeration (CPE)</a>
-                  name for the project (if it has one)?</span>
-            <%= render(partial: "details", locals: {
-                 criterion: "cpe", details: %{
-The <a href="https://nvd.nist.gov/cpe.cfm">Common Platform Enumeration (CPE)</a>
-is a structured naming scheme for information technology systems,
-software, and packages.  It is used in a number of systems and
-databases when reporting vulnerabilities.
-}.html_safe}) %>
-            <%= f.text_field :cpe, hide_label: true, class:"form-control", placeholder:'(Optional) CPE name', spellcheck: false, disabled: is_disabled %>
+            <%= t 'projects.form_basics.cpe.description_html' %>
+            <%= render(partial: "details",
+                       locals: {
+                         criterion: "cpe",
+                         details:
+                           t('projects.form_basics.cpe.details_html')}) %>
+            <%= f.text_field :cpe,
+                  hide_label: true, class:"form-control",
+                  placeholder: t('projects.form_basics.cpe.placeholder'),
+                  spellcheck: false, disabled: is_disabled %>
             </div>
           </li>
 

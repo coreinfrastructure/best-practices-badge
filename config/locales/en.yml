@@ -387,6 +387,15 @@ en:
           "BSD-2-Clause", "BSD-3-Clause", "GPL-2.0+", "LGPL-3.0+",
           "MIT", and "(BSD-2-Clause OR Ruby)".
         placeholder: FLOSS License
+    misc:
+      disabled_reminders: >
+        (Advanced) Disable inactivity reminder
+        (we recommend you leave this unchecked)
+      general_comments:
+        description: >
+          Other general comments about the project:<br>
+        placeholder: >
+          Additional Comments (in markdown)
   report_mailer:
     subject_achieved_passing: 'CONGRATULATIONS on achieving a %{new_level} best practices
       badge!

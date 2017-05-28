@@ -284,15 +284,15 @@
       <div class="col-xs-12">
         <br>
         <%= f.form_group :disabled_reminders do %>
-          <%= f.check_box :disabled_reminders, disabled: is_disabled do %>
-            (Advanced) Disable inactivity reminder (we recommend you leave this unchecked)
-          <% end %>
+          <%= f.check_box :disabled_reminders, disabled: is_disabled do
+                t('projects.misc.disabled_reminders')
+              end %>
         <% end %>
       </div>
       </div>
 
       <br><br>
-      Other general comments about the project:<br>
+      <%= t('projects.misc.general_comments.description') %><br>
       <% if is_disabled %>
         <div class="discussion-markdown">
           <%= markdown(project[:general_comments]) %>
@@ -301,7 +301,8 @@
         <%= f.text_area :general_comments,
                         class:"form-control", hide_label: true,
                         lang: 'en', spellcheck: true,
-                        placeholder:'Additional Comments (in markdown)',
+                        placeholder:
+                          t('projects.misc.general_comments.placeholder'),
                         disabled: is_disabled %>
       <% end %>
       <% unless is_disabled %>

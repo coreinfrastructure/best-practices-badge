@@ -1099,12 +1099,20 @@ en:
 
 '
       crypto_password_storage:
-        description: 'If the software produced by the project causes the storing of
-          passwords for authentication of external users, the passwords MUST be stored
-          as iterated hashes with a per-user salt by using a key stretching (iterated)
-          algorithm (e.g., PBKDF2, Bcrypt or Scrypt).
-
-'
+        description: >
+          If the software produced by the project causes the storing of
+          passwords for authentication of external users, the passwords
+          MUST be stored as iterated hashes with a per-user salt by
+          using a key stretching (iterated) algorithm (e.g., PBKDF2,
+          Bcrypt or Scrypt).
+        details: >
+          This criterion applies only when the software is enforcing
+          authentication of users using passwords, such as server-side
+          web applications. It does not apply in cases where the software
+          stores passwords for authenticating into other systems (e.g.,
+          the software implements a client for some other system), since
+          at least parts of that software must have often access to the
+          unhashed password.
       crypto_random:
         description: 'The security mechanisms within the software produced by the
           project MUST generate all cryptographic keys and nonces using a cryptographically

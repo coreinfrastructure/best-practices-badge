@@ -142,14 +142,18 @@
              }) %>
       <div class="panel-collapse collapse in remove-in">
         <ul class="list-group">
-          <li class="list-group-item"><h3>Use basic good cryptographic practices</h3>
+          <li class="list-group-item"><h3><%=
+            t('Use basic good cryptographic practices',
+              scope: :headings) %></h3>
+
             <span class="criteria-desc">
-            Note that some software does not need to use cryptographic mechanisms.
+              <%= t('projects.misc.some_not_crypto_html') %>
             </span>
             <% if (!is_disabled) %>
               <br><br>
-              <button class="btn btn-default hidden-print" type="button" id='all_crypto_na'>
-                Press here if the software produced by the project does not use cryptographic mechanisms
+              <button class="btn btn-default hidden-print"
+                      type="button" id='all_crypto_na'>
+                <%= t('projects.misc.dont_use_crypto') %>
               </button>
               <br>
             <% end %>

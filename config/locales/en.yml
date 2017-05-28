@@ -390,6 +390,14 @@ en:
           "MIT", and "(BSD-2-Clause OR Ruby)".
         placeholder: FLOSS License
     misc:
+      expand_all_title: Expand all panels
+      expand_all: Expand panels
+      show_all_details: Show all details
+      # Note: The "&" is escaped by Rails since it's not marked as HTML safe
+      hide_met_title: >
+        Hide met & N/A criteria (leaving unmet and unknown)
+      hide_met: >
+        Hide met & N/A
       disabled_reminders: >
         (Advanced) Disable inactivity reminder
         (we recommend you leave this unchecked)

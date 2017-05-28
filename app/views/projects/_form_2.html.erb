@@ -7,9 +7,9 @@
   <div id="progress-mobile" class="progress">
     <div id="badge-progress"
          class="progress-bar progress-bar-success badge-progress"
-         role="progressbar" aria-valuenow="<%= project.badge_percentage_0 %>"
+         role="progressbar" aria-valuenow="<%= project.badge_percentage_2 %>"
          aria-valuemin="0" aria-valuemax="100">
-      <%= project.badge_percentage_0 %>%
+      <%= project.badge_percentage_2 %>%
     </div>
   </div>
 <% end %>
@@ -103,29 +103,6 @@
       <%= render(partial: 'panel_header',
            locals:
              {
-               panel_title: 'Reporting', anchor_id: 'reporting',
-               by_default: 'close',
-               satisfaction_data:
-                 project.get_satisfaction_data('2','reporting')
-             }) %>
-      <div class="panel-collapse collapse in remove-in">
-        <ul class="list-group">
-        </ul>
-        <% unless is_disabled %>
-          <div class="panel-footer text-center">
-            <%= t 'projects.edit.submit_cc_by_3plus_html' %>
-            <%= f.button 'Save (and continue)', type: 'submit', name: 'continue',
-              value: 'quality', class:"btn btn-success btn-submit" %>
-            <%= f.submit 'Submit (and exit)', class:"btn btn-success btn-submit" %>
-          </div>
-        <% end %>
-      </div>
-    </div>
-
-    <div class="panel panel-primary">
-      <%= render(partial: 'panel_header',
-           locals:
-             {
                panel_title: 'Quality', anchor_id: 'quality',
                by_default: 'close',
                satisfaction_data:
@@ -135,6 +112,12 @@
         <ul class="list-group">
           <%= render_minor_status(
                 '2', 'Quality', 'Coding standards', f, project, is_disabled
+              ) %>
+          <%= render_minor_status(
+                '2', 'Quality', 'Working build system', f, project, is_disabled
+              ) %>
+          <%= render_minor_status(
+                '2', 'Quality', 'Automated test suite', f, project, is_disabled
               ) %>
         </ul>
         <% unless is_disabled %>

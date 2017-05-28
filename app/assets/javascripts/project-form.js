@@ -51,15 +51,12 @@ function getLocale() {
 
 // Return current level based upon parameters in location.search
 function getLevel() {
-  // TODO: Fix this when we are able to get levels from Url.
-  //       For now just fix to 0
-  // var searchString = location.search.match("level=([^\#\&]*)");
-  // if (!!searchString){
-  //   return searchString[1];
-  // } else {
-  //   return '0';
-  // }
-  return '0';
+  var searchString = location.search.match('criteria_level=([^\#\&]*)');
+  if (searchString) {
+    return searchString[1];
+  } else {
+    return '0';
+  }
 }
 
 // This gives a color based upon value from 0 to 1 going from

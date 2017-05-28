@@ -152,7 +152,7 @@ case "$manager" in
   brew)
     # We'll use the brew version. Install these to rebuild rbenv:
     # add_pkg openssl libyaml libffi
-    add_pkg phantomjs rbenv ruby-build graphviz ;;
+    add_pkg phantomjs rbenv ruby-build graphviz postgres ;;
   apt-get)
     # We'll use the system version.  If you want to use the latest one
     # on GitHub, instead install these system components first:
@@ -234,8 +234,8 @@ fi
 DO_LOCAL_RBENV='no'
 if is_command 'rbenv' ; then
   echo 'rbenv already installed.'
-  if ! rbenv --version | grep "1\.0\.0" > /dev/null 2>&1 ; then
-    echo '  Installed rbenv version != 1.0.0'
+  if ! rbenv --version | grep "1\..\.." > /dev/null 2>&1 ; then
+    echo '  Installed rbenv version != 1.x.x'
     DO_LOCAL_RBENV='yes'
   fi
 else

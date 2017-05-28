@@ -60,22 +60,32 @@ class ProjectsControllerTest < ActionController::TestCase
     assert_response :success
     assert_select 'a[href=?]'.dup, 'https://www.nasa.gov'
     assert_select 'a[href=?]'.dup, 'https://www.nasa.gov/pathfinder'
+    # Ensure that there's an id for all criteria.
+    Criteria['0'].keys.each do |criterion|
+      assert_select '#' + criterion.to_s
+    end
   end
 
   test 'should show project with criteria_level=1' do
-    # This is a quick test just to make sure that we don't fail on show.
     get :show, params: { id: @project, criteria_level: '1' }
     assert_response :success
     assert_select 'a[href=?]'.dup, 'https://www.nasa.gov'
     assert_select 'a[href=?]'.dup, 'https://www.nasa.gov/pathfinder'
+    # Ensure that there's an id for all criteria.
+    Criteria['1'].keys.each do |criterion|
+      assert_select '#' + criterion.to_s
+    end
   end
 
   test 'should show project with criteria_level=2' do
-    # This is a quick test just to make sure that we don't fail on show.
     get :show, params: { id: @project, criteria_level: '2' }
     assert_response :success
     assert_select 'a[href=?]'.dup, 'https://www.nasa.gov'
     assert_select 'a[href=?]'.dup, 'https://www.nasa.gov/pathfinder'
+    # Ensure that there's an id for all criteria.
+    Criteria['2'].keys.each do |criterion|
+      assert_select '#' + criterion.to_s
+    end
   end
 
   test 'should show project JSON data' do

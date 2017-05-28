@@ -1217,7 +1217,7 @@
             valgrind or ASAN.
 - '2': !!omap
   - Basics: !!omap
-    - Project Oversight: !!omap
+    - Project oversight: !!omap
       - bus_factor:
           category: MUST
           #autofill: TODO

@@ -260,6 +260,15 @@ ja:
       repo_url:
         description:
         placeholder:
+    form_early:
+      badge_intro:
+        description:
+        details_html:
+      got_badge:
+        description_1:
+        description_2:
+        details_html:
+        editing_description_html:
   report_mailer:
     new_project_heading:
     new_project_part1:

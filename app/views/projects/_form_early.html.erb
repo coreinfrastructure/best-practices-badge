@@ -13,54 +13,25 @@
   </div>
 </div>
 <p class="no-padding padding-right main-subtext">
-Projects that follow the best practices below
-will be able to voluntarily self-certify and show that they've
-achieved a Core Infrastructure Initiative (CII) badge.
+<%=t('projects.form_early.badge_intro.description') %>
 
 <%= render(partial: "details", locals: {
-           criterion: "badge_intro", details: %{
-There is no set of practices that can guarantee that software
-will never have defects or vulnerabilities;
-even formal methods can fail if the specifications or assumptions are wrong.
-Nor is there any set of practices that can guarantee that a project will
-sustain a healthy and well-functioning development community.
-However, following best practices can help improve the results
-of projects.
-For example, some practices enable multi-person review before release,
-which can both help find otherwise hard-to-find technical vulnerabilities
-and help build trust and a desire for repeated interaction among developers
-from different companies.
-To earn a badge,
-all MUST and MUST NOT criteria must be met,
-all SHOULD criteria must be met OR be unmet with justification, <i>and</i>
-all SUGGESTED criteria must be met OR unmet (we want them considered at least).
-Feedback is welcome via the
-<a href="https://github.com/linuxfoundation/cii-best-practices-badge">GitHub site as issues or pull requests</a>
-There is also a
-<a href="https://lists.coreinfrastructure.org/mailman/listinfo/cii-badges">mailing list for general discussion</a>.<br /><br />
-}.html_safe}) %>
+           criterion: "badge_intro",
+           details: t('projects.form_early.badge_intro.details_html')
+}) %>
 
 <% if is_disabled %>
-  If this is your project, please show your badge status
-  on your project page!
-  The badge status looks like this:
-  <img src='/projects/<%= project.id %>/badge'  width='192' height='20' alt='Badge level for project <%= project.id %> is <%= project.badge_percentage_0 %>%'>
-  Here is how to embed it:
+  <%= t('projects.form_early.got_badge.description_1') %>
+  <img src='/projects/<%= project.id %>/badge'  width='192' height='20' alt='Badge level for project <%= project.id %> is <%= project.badge_level %>'>
+  <%= t('projects.form_early.got_badge.description_2') %>
   <%= render(partial: "details", locals: {
-         criterion: "got_badge", details: %{
-  You can show your badge status
-  by embedding this in your markdown file:<br />
- <code>[![CII Best Practices](https://#{ badge_hostname }/projects/#{ project.id }/badge)](https://#{ badge_hostname }/projects/#{ project.id })</code>
-  or by embedding this in your HTML:<br />
-  <code>&lt;a href="https://#{badge_hostname}/projects/#{ project.id }"&gt;&lt;img src="https://#{ badge_hostname }/projects/#{ project.id }/badge"&gt;&lt;/a&gt; </code><br />
-  }.html_safe}) %>
+         criterion: "got_badge",
+         details: t('projects.form_early.got_badge.details_html',
+                    markdown_embedding: %{<code>[![CII Best Practices](https://#{ badge_hostname }/projects/#{ project.id }/badge)](https://#{ badge_hostname }/projects/#{ project.id })</code>}.html_safe,
+                    html_embedding: %{<code>&lt;a href="https://#{badge_hostname}/projects/#{ project.id }"&gt;&lt;img src="https://#{ badge_hostname }/projects/#{ project.id }/badge"&gt;&lt;/a&gt; </code>}.html_safe)
+}) %>
 <% else %>
-  <b>Please 'submit' often</b> to save your work
-  (you can always go back and edit more later).
-  <br><br>
-  If you need help, have a question, or see a problem, please
-  <i><a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">send an email</a> </i>or
-<i><a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues" target="_blank">file an issue</a></i>.
+<%= t('projects.form_early.got_badge.editing_description_html') %>
 <% end %>
 
 <%# End column started outside. %>

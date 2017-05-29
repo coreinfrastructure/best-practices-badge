@@ -338,6 +338,7 @@ en:
         description_1: >
           If this is your project, please show your badge status on your
           project page! The badge status looks like this:
+        badge_alt: Badge level for project %{id} is %{level}
         description_2: 'Here is how to embed it:'
         details_html: >
           You can show your badge status

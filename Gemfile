@@ -27,7 +27,7 @@ gem 'jquery-rails', '4.3.1' # JavaScript jQuery library (for Rails)
 gem 'jquery-ui-rails', '6.0.1' # JavaScript jQueryUI library (for Rails)
 gem 'lograge', '0.5.1' # Simplify logs
 gem 'octokit', '4.7.0' # GitHub's official Ruby API
-gem 'omniauth-github', '1.2.3' # Authentication to GitHub (get project info)
+gem 'omniauth-github', '1.3.0' # Authentication to GitHub (get project info)
 gem 'paleta', '0.3.0' # Color manipulation, used for badges
 gem 'paper_trail', '7.0.2' # Record previous versions of project data
 gem 'pg', '0.20.0' # PostgreSQL database, used for data storage
@@ -53,7 +53,7 @@ group :development, :test do
   gem 'json', '2.1.0'
   gem 'license_finder', '3.0.0'
   gem 'mdl', '0.4.0'
-  gem 'pronto', '0.9.2'
+  gem 'pronto', '0.9.3'
   gem 'pronto-brakeman', '0.9.0'
   gem 'pronto-eslint', '0.9.1'
   gem 'pronto-rails_best_practices', '0.9.0'

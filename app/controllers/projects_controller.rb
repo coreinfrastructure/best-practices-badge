@@ -437,13 +437,13 @@ class ProjectsController < ApplicationController
     ).deliver_now
     if Project::BADGE_LEVELS.index(new_badge_level) >
        Project::BADGE_LEVELS.index(old_badge_level)
-      flash[:success] = "CONGRATULATIONS on earning a #{new_badge_level}" \
-        ' badge! If you haven\'t already, please show your badge status on' \
-        ' your project page (see the "how to embed it" text just below' \
-        ' if you don\'t know how to do that).'
+      flash[:success] = t(
+        'projects.edit.congrats_new',
+        new_badge_level: new_badge_level
+      )
       lost_level = false
     else
-      flash[:danger] = 'Project has lost a badge.'
+      flash[:danger] = t('projects.edit.lost_badge')
       lost_level = true
     end
     ReportMailer.email_owner(

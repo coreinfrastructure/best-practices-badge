@@ -294,11 +294,6 @@ ja:
         details_html:
         editing_description_html:
     misc:
-      expand_all_title:
-      expand_all:
-      show_all_details:
-      hide_met_title:
-      hide_met:
       disabled_reminders:
       general_comments:
         description:
@@ -306,6 +301,36 @@ ja:
       some_not_crypto_html:
       dont_use_crypto:
       future_header_html:
+      in_javascript:
+        collapse_all_title:
+        collapse_all:
+        expand_all_title:
+        expand_all:
+        show_details:
+        hide_details:
+        show_all_details:
+        hide_all_details:
+        show_met_title:
+        show_met_html:
+        hide_met_title:
+        hide_met_html:
+        passing_alt:
+        barely_alt:
+        failing_alt:
+        unknown_alt:
+        met_url_placeholder:
+        met_justification_placeholder:
+        met_placeholder:
+        unmet_placeholder:
+        na_justification_placeholder:
+        na_placeholder:
+        unknown_placeholder:
+      toggle_details_title:
+      details:
+      url_required:
+      future_criterion:
+      url_required_warning:
+      justification_required_warning:
     delete:
       done:
   report_mailer:
@@ -812,3 +837,7 @@ ja:
     Identification:
   last_entry:
   admin_only:
+  criterion_status:
+    Met:
+    Unmet:
+    NA:

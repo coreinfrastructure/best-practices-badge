@@ -243,6 +243,7 @@ zh-CN:
       submit_urls: 提交网址
       sign_in_first: 请登录以添加项目！
       thanks_adding:
+      project_already_exists:
     show:
       edit: 编辑
       delete: 删除
@@ -266,6 +267,7 @@ zh-CN:
       successfully_updated:
       congrats_new:
       lost_badge:
+      static_analysis_updated_html:
     form_basics:
       project_name:
         description:

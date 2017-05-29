@@ -34,6 +34,7 @@ en:
       of use</a>. </small>
 
 '
+  admin_only: Admin only.
   account_activations:
     activated: Account activated!
     failed_activation: Invalid activation link
@@ -216,6 +217,9 @@ en:
       update_time: last update time (for the badge entry)
       user_id: user id
     new:
+      thanks_adding: >
+        Thanks for adding the Project!
+        Please fill out the rest of the information to get the Badge.
       post_delay_warning: 'There may be a significant delay after submitting as we
         try to automatically fill in information.
 
@@ -246,6 +250,14 @@ en:
       submit_urls: Submit URL
       sign_in_first: Please sign in to add a project!
     edit:
+      repo_url_limits: >
+        You may only change your repo_url from http to https
+      changed_since_html: >
+        Another user has made a change to that record since you
+        accessed the edit form. <br>Please open a new
+        <a href="%{edit_url}" target=_blank>edit form</a>
+        to transfer your changes.
+      successfully_updated: Project was successfully updated.
       save_and_continue: Save (and continue)
       submit_and_exit: Submit (and exit)
       submit_cc_by_3plus_html: 'By submitting this data about the project you agree
@@ -415,6 +427,8 @@ en:
         <i>not</i> currently required for a badge.
         This grace period allows projects to update to changed criteria
         and retain their badge as best practices improve.
+    delete:
+      done: Project was successfully deleted.
   report_mailer:
     subject_achieved_passing: 'CONGRATULATIONS on achieving a %{new_level} best practices
       badge!

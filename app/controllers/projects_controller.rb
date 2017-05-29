@@ -111,8 +111,7 @@ class ProjectsController < ApplicationController
       if @project.save
         @project.send_new_project_email
         # @project.purge_all
-        flash[:success] = "Thanks for adding the Project!   Please fill out
-                           the rest of the information to get the Badge."
+        flash[:success] = t('projects.new.thanks_adding')
         format.html { redirect_to edit_project_path(@project) }
         format.json { render :show, status: :created, location: @project }
       else
@@ -147,21 +146,12 @@ class ProjectsController < ApplicationController
         end
       end
     else
-      flash.now[:danger] = 'You may only change your repo_url from http to '\
-                           'https'
+      flash.now[:danger] = t('projects.edit.repo_url_limits')
       render :edit
     end
   rescue ActiveRecord::StaleObjectError
-    # rubocop:disable Rails/OutputSafety
-    message =
-      (
-        'Another user has made a change to that record since you ' \
-        'accessed the edit form. <br> Please open a new <a href="'.html_safe +
-        edit_project_url + # force escape
-        '" target=_blank>edit form</a> to transfer your changes.'.html_safe
-      )
+    message = t('projects.edit.changed_since_html', edit_url: edit_project_url)
     flash.now[:danger] = message
-    # rubocop:enable Rails/OutputSafety
     render :edit, status: :conflict
   end
   # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
@@ -179,7 +169,7 @@ class ProjectsController < ApplicationController
       @project.homepage_url ||= project_find_default_url
       format.html do
         redirect_to projects_url
-        flash[:success] = 'Project was successfully deleted.'
+        flash[:success] = t('projects.delete.done')
       end
       format.json { head :no_content }
     end
@@ -207,7 +197,7 @@ class ProjectsController < ApplicationController
     if current_user_is_admin?
       respond_to { |format| format.html }
     else
-      flash.now[:danger] = 'Admin only.'
+      flash.now[:danger] = t('admin_only')
       redirect_to '/'
     end
   end
@@ -429,13 +419,13 @@ class ProjectsController < ApplicationController
     # @project.purge
     format.html do
       if params[:continue]
-        flash[:info] = 'Project was successfully updated.'
+        flash[:info] = t('projects.edit.successfully_updated')
         redirect_to edit_project_path(
           @project, criteria_level: criteria_level
         ) + url_anchor
       else
         redirect_to project_path(@project, criteria_level: criteria_level),
-                    success: 'Project was successfully updated.'
+                    success: t('projects.edit.successfully_updated')
       end
     end
     format.json { render :show, status: :ok, location: @project }

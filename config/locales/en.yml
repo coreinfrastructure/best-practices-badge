@@ -408,14 +408,41 @@ en:
           "MIT", and "(BSD-2-Clause OR Ruby)".
         placeholder: FLOSS License
     misc:
-      expand_all_title: Expand all panels
-      expand_all: Expand panels
-      show_all_details: Show all details
-      # Note: The "&" is escaped by Rails since it's not marked as HTML safe
-      hide_met_title: >
-        Hide met & N/A criteria (leaving unmet and unknown)
-      hide_met: >
-        Hide met & N/A
+      in_javascript:
+        collapse_all_title: Collapse all panels
+        collapse_all: Collapse panels
+        expand_all_title: Expand all panels
+        expand_all: Expand panels
+        show_details: Show details
+        hide_details: Hide details
+        show_all_details: Show all details
+        hide_all_details: Hide all details
+        # Note: The "&" is escaped by Rails since it's not marked as HTML safe
+        show_met_title: Show met & N/A criteria
+        show_met_html: Show met &amp; N/A
+        hide_met_title: Hide met & N/A criteria (leaving unmet and unknown)
+        hide_met_html: Hide met &amp; N/A
+        passing_alt: Enough for a badge!
+        barely_alt: Barely enough for a badge.
+        failing_alt: Not enough for a badge.
+        unknown_alt: Unknown required information, not enough for a badge.
+        met_url_placeholder: >
+          (URL required) Please explain how this is met, including 1+ key URLs.
+        met_justification_placeholder: >
+          (Required) Please explain how this is met, possibly including 1+ key
+          URLs.
+        met_placeholder: >
+          (Optional) Please explain how this is met, possibly including 1+ key
+          URLs.
+        unmet_placeholder: >
+          Please explain why it\'s okay this is unmet, including 1+ key URLs.
+        na_justification_placeholder: >
+          (Required) Please explain why this is not applicable (N/A), possibly
+          including 1+ key URLs.
+        na_placeholder: >
+          (Optional) Please explain why this is not applicable (N/A), possibly
+          including 1+ key URLs.
+        unknown_placeholder: Please explain
       disabled_reminders: >
         (Advanced) Disable inactivity reminder
         (we recommend you leave this unchecked)
@@ -433,6 +460,14 @@ en:
         <i>not</i> currently required for a badge.
         This grace period allows projects to update to changed criteria
         and retain their badge as best practices improve.
+      toggle_details_title: Toggle details text
+      details: Details
+      url_required: URL required
+      future_criterion: Future criterion
+      url_required_warning: >
+        Warning: URL required, but no URL found.
+      justification_required_warning: >
+        Warning: Requires lengthier justification.
     delete:
       done: Project was successfully deleted.
   report_mailer:
@@ -2392,6 +2427,10 @@ en:
     Vulnerability report process: Vulnerability report process
     Warning flags: Warning flags
     Working build system: Working build system
+  criterion_status:
+    Met: Met
+    Unmet: Unmet
+    NA: N/A
   # Last translation entry, here for test purposes so that we can detect
   # some problems in YAML formatting of this file.
   last_entry: Last translation entry

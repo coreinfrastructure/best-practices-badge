@@ -3,6 +3,7 @@
 
 // This global constant is set in criteria.js ; let ESLint know about it.
 /* global CRITERIA_HASH_FULL */
+/* global TRANSLATION_HASH_FULL */
 
 var MIN_SHOULD_LENGTH = 5;
 
@@ -16,6 +17,8 @@ var globalIgnoreHashChange = false;
 var globalCriteriaResultHash = {};
 var globalisEditing = false;
 var CRITERIA_HASH = {};
+// Transllation hash for current locale.
+var T_HASH = {};
 
 // Do a polyfill for datalist if it's not already supported
 // (e.g., Safari fails to support polyfill at the time of this writing).
@@ -224,19 +227,19 @@ function resetCriterionResult(criterion) {
   if (result === 'criterion_passing') {
     destination.attr('src', $('#result_symbol_check_img').attr('src')).
       attr('width', 40).attr('height', 40).
-      attr('alt', 'Enough for a badge!');
+      attr('alt', T_HASH['passing_alt']);
   } else if (result === 'criterion_barely') {
     destination.attr('src', $('#result_symbol_dash').attr('src')).
       attr('width', 40).attr('height', 40).
-      attr('alt', 'Barely enough for a badge.');
+      attr('alt', T_HASH['barely_alt']);
   } else if (result === 'criterion_failing') {
     destination.attr('src', $('#result_symbol_x_img').attr('src')).
       attr('width', 40).attr('height', 40).
-      attr('alt', 'Not enough for a badge.');
+      attr('alt', T_HASH['failing_alt']);
   } else {
     destination.attr('src', $('#result_symbol_question').attr('src')).
       attr('width', 40).attr('height', 40).
-      attr('alt', 'Unknown required information, not enough for a badge.');
+      attr('alt', T_HASH['unknown_alt']);
   }
 }
 
@@ -328,14 +331,11 @@ function updateCriterionDisplay(criterion) {
     }
     if (!criterionPlaceholder) {
       if (criterionHashTrue(criterion, 'met_url_required')) {
-        criterionPlaceholder = '(URL required) Please explain how this ' +
-          'is met, including 1+ key URLs.';
+        criterionPlaceholder = T_HASH['met_url_placeholder'];
       } else if (criterionHashTrue(criterion, 'met_justification_required')) {
-        criterionPlaceholder = '(Required) Please explain how this ' +
-          'is met, possibly including 1+ key URLs.';
+        criterionPlaceholder = T_HASH['met_justification_placeholder'];
       } else {
-        criterionPlaceholder = '(Optional) Please explain how this ' +
-          'is met, possibly including 1+ key URLs.';
+        criterionPlaceholder = T_HASH['met_placeholder'];
       }
     }
     suppressJustificationDisplay = criterionHashTrue(criterion, 'met_suppress');
@@ -345,8 +345,7 @@ function updateCriterionDisplay(criterion) {
         CRITERIA_HASH[criterion]['unmet_placeholder'][locale];
     }
     if (!criterionPlaceholder) {
-      criterionPlaceholder = 'Please explain why it\'s okay this ' +
-        'is unmet, including 1+ key URLs.';
+      criterionPlaceholder = T_HASH['unmet_placeholder'];
     }
     suppressJustificationDisplay =
       criterionHashTrue(criterion, 'unmet_suppress');
@@ -357,16 +356,14 @@ function updateCriterionDisplay(criterion) {
     }
     if (!criterionPlaceholder) {
       if (criterionHashTrue(criterion, 'na_justification_required')) {
-        criterionPlaceholder = '(Required) Please explain why this ' +
-          'is not applicable (N/A), possibly including 1+ key URLs.';
+        criterionPlaceholder = T_HASH['na_justification_placeholder'];
       } else {
-        criterionPlaceholder = '(Optional) Please explain why this ' +
-          'is not applicable (N/A), possibly including 1+ key URLs.';
+        criterionPlaceholder = T_HASH['na_placeholder'];
       }
     }
     suppressJustificationDisplay = criterionHashTrue(criterion, 'na_suppress');
   } else {
-    criterionPlaceholder = 'Please explain';
+    criterionPlaceholder = T_HASH['unknown_placeholder'];
     suppressJustificationDisplay = true;
   }
   $(criterionJust).attr('placeholder', criterionPlaceholder);
@@ -410,12 +407,12 @@ function ToggleHideMet(e) {
   // shows the REVERSED state (not the current state).
   if (globalHideMetnaCriteria) {
     $('#toggle-hide-metna-criteria')
-      .addClass('active').html('Show met &amp; N/A')
-      .prop('title', 'Show met & N/A criteria'); // Use & not &amp;
+      .addClass('active').html(T_HASH['show_met_html'])
+      .prop('title', T_HASH['show_met_title']); // Use & not &amp;
   } else {
     $('#toggle-hide-metna-criteria')
-      .removeClass('active').html('Hide met &amp; N/A')
-      .prop('title', 'Hide met & N/A criteria (leaving unmet and unknown');
+      .removeClass('active').html(T_HASH['hide_met_html'])
+      .prop('title', T_HASH['hide_met_title']);
   }
   hideMetNA();
 }
@@ -438,10 +435,12 @@ function ToggleExpandAllPanels(e) {
   // shows the REVERSED state (not the current state).
   if (globalExpandAllPanels) {
     $('#toggle-expand-all-panels')
-      .addClass('active').html('Collapse panels');
+      .addClass('active').html(T_HASH['collapse_all'])
+      .prop('title', T_HASH['collapse_all_title']);
   } else {
     $('#toggle-expand-all-panels')
-      .removeClass('active').html('Expand panels');
+      .removeClass('active').html(T_HASH['expand_all'])
+      .prop('title', T_HASH['expand_all_title']);
   }
   expandAllPanels();
 }
@@ -569,10 +568,10 @@ function ToggleDetailsDisplay(e) {
                         replace('_details_toggler', '_details_text');
   var buttonText;
   if ($('#' + detailsTextID).css('display') !== 'none') {
-    buttonText = 'Show details';
+    buttonText = T_HASH['show_details'];
     $('#' + detailsTextID).css({'display':'none'});
   } else {
-    buttonText = 'Hide details';
+    buttonText = T_HASH['hide_details'];
     $('#' + detailsTextID).css({'display':''});
   }
   $('#' + e.target.id).html(buttonText);
@@ -584,16 +583,16 @@ function ToggleAllDetails(e) {
   // shows the REVERSED state (not the current state).
   if (globalShowAllDetails) {
     $('#toggle-show-all-details')
-      .addClass('active').html('Hide all details');
+      .addClass('active').html(T_HASH['hide_all_details']);
     $('.details-text').css({'display':''});
-    $('.details-toggler').html('Hide details')
-      .prop('title', 'Hide all detailed text');
+    $('.details-toggler').html(T_HASH['hide_details'])
+      .prop('title', T_HASH['hide_all_details']);
   } else {
     $('#toggle-show-all-details')
-      .removeClass('active').html('Show all details');
+      .removeClass('active').html(T_HASH['show_all_details']);
     $('.details-text').css({'display':'none'});
-    $('.details-toggler').html('Show details')
-      .prop('title', 'Show all detailed text');
+    $('.details-toggler').html(T_HASH['show_details'])
+      .prop('title', T_HASH['show_all_details']);
   }
 }
 
@@ -626,17 +625,19 @@ function TogglePanel(e) {
 
 function setupProjectForm() {
   // We're told progress, so don't recalculate - just display it.
+  T_HASH = TRANSLATION_HASH_FULL[getLocale()];
+  CRITERIA_HASH = CRITERIA_HASH_FULL[getLevel()];
   var percentageScaled = $('#badge-progress').attr('aria-valuenow');
   var percentAsString = percentageScaled.toString() + '%';
   $('#badge-progress').css('width', percentAsString);
+
 
   // By default, hide details.  We do the hiding in JavaScript, so
   // those who disable JavaScript will still see the text
   // (they'll have no way to later reveal it).
   $('.details-text').css({'display':'none'});
-  $('.details-toggler').html('Show details');
+  $('.details-toggler').html(T_HASH['show_details']);
 
-  CRITERIA_HASH = CRITERIA_HASH_FULL[getLevel()];
   // Force these values on page reload
   globalShowAllDetails = false;
   globalLastSelectedMet = '';

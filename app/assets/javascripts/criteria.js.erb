@@ -30,5 +30,10 @@
       fields.update(translations)
     end
   end
+  translations_for_js = {}
+  I18n.available_locales.each do |locale|
+    translations_for_js[locale] = I18n.t('.projects.misc.in_javascript', locale)
+  end
 %>
 CRITERIA_HASH_FULL = <%= criteria_for_js.to_json %>;
+TRANSLATION_HASH_FULL = <%= translations_for_js.to_json %>

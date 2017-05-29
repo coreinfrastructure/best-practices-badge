@@ -1174,6 +1174,18 @@ a compromise of the resulting system.
 The key developers use development environments
 specifically configured to be secure.
 
+Anyone who has direct commit rights to the repository
+*must not* allow other untrusted local users on the same (virtual) machine.
+This counters local vulnerabilities.
+E.g., the Rubocop vulnerability
+CVE-2017-8418 is /tmp file vulnerability, in which
+"Malicious local users could exploit this to tamper
+with cache files belonging to other users."
+Since we do not allow other untrusted local users on the (virtual) machine
+that has commit rights, a vulnerability cannot be easily exploited
+this way.  If someone without commit rights submits a proposal, we can
+separately review that change.
+
 As noted earlier, we are cautious about the components we use.
 The source code is managed on GitHub;
 [GitHub takes steps to keep itself secure](https://help.github.com/articles/github-security/).

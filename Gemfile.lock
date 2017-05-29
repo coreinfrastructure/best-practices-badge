@@ -90,9 +90,9 @@ GEM
     codemirror-rails (5.16.0)
       railties (>= 3.0, < 6.0)
     coderay (1.1.1)
-    coffee-rails (4.2.1)
+    coffee-rails (4.2.2)
       coffee-script (>= 2.2.0)
-      railties (>= 4.0.0, < 5.2.x)
+      railties (>= 4.0.0)
     coffee-script (2.4.1)
       coffee-script-source
       execjs
@@ -453,7 +453,7 @@ DEPENDENCIES
   chartkick (= 2.2.4)
   chromedriver-helper (= 1.1.0)
   codecov (= 0.1.10)
-  coffee-rails (= 4.2.1)
+  coffee-rails (= 4.2.2)
   database_cleaner (= 1.6.1)
   dotenv-rails (= 2.2.1)
   eslintrb (= 2.1.0)

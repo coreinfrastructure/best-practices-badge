@@ -284,15 +284,15 @@
       <div class="col-xs-12">
         <br>
         <%= f.form_group :disabled_reminders do %>
-          <%= f.check_box :disabled_reminders, disabled: is_disabled do %>
-            (Advanced) Disable inactivity reminder (we recommend you leave this unchecked)
-          <% end %>
+          <%= f.check_box :disabled_reminders, disabled: is_disabled do
+                t('projects.misc.disabled_reminders')
+              end %>
         <% end %>
       </div>
       </div>
 
       <br><br>
-      Other general comments about the project:<br>
+      <%= t('projects.misc.general_comments.description') %><br>
       <% if is_disabled %>
         <div class="discussion-markdown">
           <%= markdown(project[:general_comments]) %>
@@ -301,15 +301,16 @@
         <%= f.text_area :general_comments,
                         class:"form-control", hide_label: true,
                         lang: 'en', spellcheck: true,
-                        placeholder:'Additional Comments (in markdown)',
+                        placeholder:
+                          t('projects.misc.general_comments.placeholder'),
                         disabled: is_disabled %>
       <% end %>
       <% unless is_disabled %>
         <div class="panel-footer text-center">
           <%= t 'projects.edit.submit_cc_by_3plus_html' %>
-          <%= f.button 'Save (and continue)', type: 'submit', name: 'continue',
+          <%= f.button t('projects.edit.save_and_continue'), type: 'submit', name: 'continue',
               value: 'changecontrol', class:"btn btn-success btn-submit" %>
-          <%= f.submit 'Submit (and exit)', class:"btn btn-success btn-submit" %>
+          <%= f.submit t('projects.edit.submit_and_exit'), class:"btn btn-success btn-submit" %>
         </div>
       <% end %>
      </div>
@@ -343,9 +344,9 @@
         <% unless is_disabled %>
           <div class="panel-footer text-center">
             <%= t 'projects.edit.submit_cc_by_3plus_html' %>
-            <%= f.button 'Save (and continue)', type: 'submit', name: 'continue',
+            <%= f.button t('projects.edit.save_and_continue'), type: 'submit', name: 'continue',
               value: 'reporting', class:"btn btn-success btn-submit" %>
-            <%= f.submit 'Submit (and exit)', class:"btn btn-success btn-submit" %>
+            <%= f.submit t('projects.edit.submit_and_exit'), class:"btn btn-success btn-submit" %>
           </div>
         <% end %>
       </div>
@@ -375,9 +376,9 @@
         <% unless is_disabled %>
           <div class="panel-footer text-center">
             <%= t 'projects.edit.submit_cc_by_3plus_html' %>
-            <%= f.button 'Save (and continue)', type: 'submit', name: 'continue',
+            <%= f.button t('projects.edit.save_and_continue'), type: 'submit', name: 'continue',
               value: 'quality', class:"btn btn-success btn-submit" %>
-            <%= f.submit 'Submit (and exit)', class:"btn btn-success btn-submit" %>
+            <%= f.submit t('projects.edit.submit_and_exit'), class:"btn btn-success btn-submit" %>
           </div>
         <% end %>
       </div>
@@ -417,9 +418,9 @@
         <% unless is_disabled %>
           <div class="panel-footer text-center">
             <%= t 'projects.edit.submit_cc_by_3plus_html' %>
-            <%= f.button 'Save (and continue)', type: 'submit', name: 'continue',
+            <%= f.button t('projects.edit.save_and_continue'), type: 'submit', name: 'continue',
               value: 'security', class:"btn btn-success btn-submit" %>
-            <%= f.submit 'Submit (and exit)', class:"btn btn-success btn-submit" %>
+            <%= f.submit t('projects.edit.submit_and_exit'), class:"btn btn-success btn-submit" %>
           </div>
         <% end %>
       </div>
@@ -440,15 +441,17 @@
                 '0', 'Security', 'Secure development knowledge',
                 f, project, is_disabled
               ) %>
-          <li class="list-group-item"><h3>Use basic good cryptographic practices</h3>
+          <li class="list-group-item"><h3><%=
+            t('Use basic good cryptographic practices',
+              scope: :headings) %></h3>
 
             <span class="criteria-desc">
-            Note that some software does not need to use cryptographic mechanisms.
+              <%= t('projects.misc.some_not_crypto_html') %>
             </span>
             <% if (!is_disabled) %>
               <br><br>
               <button class="btn btn-default hidden-print" type="button" id='all_crypto_na'>
-                Press here if the software produced by the project does not use cryptographic mechanisms
+                <%= t('projects.misc.dont_use_crypto') %>
               </button>
               <br>
             <% end %>
@@ -475,9 +478,9 @@
         <% unless is_disabled %>
           <div class="panel-footer text-center">
             <%= t 'projects.edit.submit_cc_by_3plus_html' %>
-            <%= f.button 'Save (and continue)', type: 'submit', name: 'continue',
+            <%= f.button t('projects.edit.save_and_continue'), type: 'submit', name: 'continue',
               value: 'analysis', class:"btn btn-success btn-submit" %>
-            <%= f.submit 'Submit (and exit)', class:"btn btn-success btn-submit" %>
+            <%= f.submit t('projects.edit.submit_and_exit'), class:"btn btn-success btn-submit" %>
           </div>
         <% end %>
       </div>
@@ -506,9 +509,9 @@
         <% unless is_disabled %>
           <div class="panel-footer text-center">
             <%= t 'projects.edit.submit_cc_by_3plus_html' %>
-            <%= f.button 'Save (and continue)', type: 'submit', name: 'continue',
+            <%= f.button t('projects.edit.save_and_continue'), type: 'submit', name: 'continue',
               value: 'future', class:"btn btn-success btn-submit" %>
-            <%= f.submit 'Submit (and exit)', class:"btn btn-success btn-submit" %>
+            <%= f.submit t('projects.edit.submit_and_exit'), class:"btn btn-success btn-submit" %>
           </div>
         <% end %>
       </div>
@@ -525,10 +528,7 @@
              }) %>
       <div class="panel-collapse collapse in remove-in">
         <br>
-        These are criteria we intend to add in the near future, but are
-        <i>not</i> currently required for a badge.
-        This grace period allows projects to update to changed criteria
-        and retain their badge as best practices improve.
+        <%= t 'projects.misc.future_header_html' %>
         <br>
             <%= render_minor_status(
                   '0', 'Future', 'future',
@@ -550,9 +550,9 @@
         <% end %>
       <% else %>
         <%= t 'projects.edit.submit_cc_by_3plus_html' %>
-        <%= f.button 'Save (and continue)', type: 'submit', name: 'continue',
+        <%= f.button t('projects.edit.save_and_continue'), type: 'submit', name: 'continue',
           value: 'Save', class:"btn btn-success btn-submit" %>
-        <%= f.submit 'Submit (and exit)', class:"btn btn-success btn-submit" %>
+        <%= f.submit t('projects.edit.submit_and_exit'), class:"btn btn-success btn-submit" %>
       <% end %>
       </div>
     <% end %>

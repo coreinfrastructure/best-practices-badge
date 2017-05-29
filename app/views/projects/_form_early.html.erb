@@ -1,9 +1,18 @@
 <div>
   <span id="project_entry_form"></span>
   <div class="hidden-print">
-      <button id="toggle-expand-all-panels" class="btn btn-info btn-xs btn-stack" title="Expand all panels"type="button">Expand panels</button>
-      <button id="toggle-show-all-details" class="btn btn-info btn-xs btn-stack" title="Show all details" type="button">Show all details</button>
-      <button id="toggle-hide-metna-criteria" class="btn btn-info btn-xs btn-stack" title="Hide met &amp; N/A criteria (leaving unmet and unknown)" type="button">Hide met &amp; N/A</button>
+      <button id="toggle-expand-all-panels"
+              class="btn btn-info btn-xs btn-stack"
+              title="<%= t 'projects.misc.expand_all_title' %>"
+              type="button"><%= t 'projects.misc.expand_all' %></button>
+      <button id="toggle-show-all-details"
+              class="btn btn-info btn-xs btn-stack"
+              title="<%= t 'projects.misc.show_all_details' %>"
+              type="button"><%= t 'projects.misc.show_all_details' %></button>
+      <button id="toggle-hide-metna-criteria"
+              class="btn btn-info btn-xs btn-stack"
+              title="<%= t 'projects.misc.hide_met_title' %>"
+              type="button"><%= t 'projects.misc.hide_met' %></button>
   </div>
   <div class="hidden">
     <%= image_tag "result_symbol_check.png", id: "result_symbol_check_img", size: "40x40" %>
@@ -22,7 +31,7 @@
 
 <% if is_disabled %>
   <%= t('projects.form_early.got_badge.description_1') %>
-  <img src='/projects/<%= project.id %>/badge'  width='<%= Badge::BADGE_SIZES[project.badge_level] %>' height='20' alt='Badge level for project <%= project.id %> is <%= project.badge_level %>'>
+  <img src='/projects/<%= project.id %>/badge'  width='<%= Badge::BADGE_SPECS[project.badge_level][:width] %>' height='20' alt='Badge level for project <%= project.id %> is <%= project.badge_level %>'>
   <%= t('projects.form_early.got_badge.description_2') %>
   <%= render(partial: "details", locals: {
          criterion: "got_badge",

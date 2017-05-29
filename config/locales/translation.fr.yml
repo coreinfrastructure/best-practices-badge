@@ -285,6 +285,7 @@ fr:
       submit_urls: Envoyer l'URL
       sign_in_first: Connectez-vous pour ajouter un projet !
       thanks_adding:
+      project_already_exists:
     show:
       edit:
       delete:
@@ -306,6 +307,7 @@ fr:
       successfully_updated:
       congrats_new:
       lost_badge:
+      static_analysis_updated_html:
     form_basics:
       project_name:
         description:

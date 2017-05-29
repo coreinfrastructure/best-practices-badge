@@ -234,6 +234,7 @@ ja:
       submit_urls:
       sign_in_first:
       thanks_adding:
+      project_already_exists:
     show:
       edit:
       delete:
@@ -255,6 +256,7 @@ ja:
       successfully_updated:
       congrats_new:
       lost_badge:
+      static_analysis_updated_html:
     form_basics:
       project_name:
         description:

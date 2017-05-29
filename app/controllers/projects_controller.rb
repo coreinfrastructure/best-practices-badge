@@ -80,14 +80,8 @@ class ProjectsController < ApplicationController
   # GET /projects/:id/edit(.:format)
   def edit
     return unless @project.notify_for_static_analysis?('0')
-    # rubocop:disable Rails/OutputSafety
-    message = (
-      'We have updated our requirements for the criterion ' \
-      '<a href="#static_analysis">static_analysis</a>. '.html_safe +
-      'Please add a justification for this criterion.'
-    )
+    message = t('projects.edit.static_analysis_updated_html')
     flash.now[:danger] = message
-    # rubocop:enable Rails/OutputSafety
   end
 
   # POST /projects
@@ -97,7 +91,7 @@ class ProjectsController < ApplicationController
     @project = current_user.projects.build(project_params)
     project_repo_url = @project.repo_url
     if @project.repo_url? && Project.exists?(repo_url: project_repo_url)
-      flash[:info] = 'This project already exists!'
+      flash[:info] = t('projects.new.project_already_exists')
       return redirect_to Project.find_by(repo_url: project_repo_url)
     end
 

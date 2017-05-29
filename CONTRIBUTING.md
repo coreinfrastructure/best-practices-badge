@@ -138,6 +138,11 @@ and
 Marcus Streets <mstreets-NOSPAM@linuxfoundation.org>
 (remove the -NOSPAM markers).
 
+We will gladly give credit to anyone who reports a vulnerability
+so that we can fix it.
+If you want to remain anonymous or pseudonymous instead,
+please let us know that; we will gladly respect your wishes.
+
 ## Documentation changes
 
 Most of the documentation is in "markdown" format.

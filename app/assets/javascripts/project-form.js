@@ -7,9 +7,9 @@
 
 var MIN_SHOULD_LENGTH = 5;
 
-// Global - name of criterion we last selected as 'met'.
+// Global - name of criterion we last selected as 'met' or 'N/A'.
 // Don't hide this criterion (yet), so that users can enter a justification.
-var globalLastSelectedMet = '';
+var globalLastSelectedMetNA = '';
 var globalHideMetnaCriteria = false;
 var globalShowAllDetails = false;
 var globalExpandAllPanels = false;
@@ -301,7 +301,7 @@ function hideMetNA() {
   }
   $.each(CRITERIA_HASH, function(criterion, value) {
     var result = globalCriteriaResultHash[criterion]['result'];
-    if (globalHideMetnaCriteria && criterion !== globalLastSelectedMet &&
+    if (globalHideMetnaCriteria && criterion !== globalLastSelectedMetNA &&
         result === 'criterion_passing') {
       $('#' + criterion).addClass('hidden');
     } else {
@@ -393,10 +393,10 @@ function updateCriterionDisplayAndUpdate(criterion) {
 
 function changeCriterion(criterion) {
   // We could use criterionStatus here, but this is faster since
-  // we do not care about any status except "Met".
+  // we do not care about any status except "Met" or "N/A".
   var status = criterionStatus(criterion);
-  if (status === 'Met') {
-    globalLastSelectedMet = criterion;
+  if (status === 'Met' || status === 'N/A') {
+    globalLastSelectedMetNA = criterion;
   }
   updateCriterionDisplayAndUpdate(criterion);
 }
@@ -640,7 +640,7 @@ function setupProjectForm() {
 
   // Force these values on page reload
   globalShowAllDetails = false;
-  globalLastSelectedMet = '';
+  globalLastSelectedMetNA = '';
   globalHideMetnaCriteria = false;
   globalExpandAllPanels = false;
   globalCriteriaResultHash = {};

@@ -14,7 +14,7 @@ gem 'bootstrap-social-rails', '4.12.0'
 gem 'bootstrap-will_paginate', '1.0.0'
 gem 'bootstrap_form', '2.7.0'
 gem 'chartkick', '2.2.4' # Chart project_stats
-gem 'coffee-rails', '4.2.1' # Support CoffeeScript (Javascript preprocessor)
+gem 'coffee-rails', '4.2.2' # Support CoffeeScript (Javascript preprocessor)
 gem 'faker', '1.7.3'
 # Fastly master is locked to a railties version
 gem 'fastly-rails', '0.8.0'

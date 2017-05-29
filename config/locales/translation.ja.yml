@@ -247,6 +247,8 @@ ja:
       last_achieved_html:
     edit:
       submit_cc_by_3plus_html:
+      save_and_continue:
+      submit_and_exit:
     form_basics:
       project_name:
         description:
@@ -283,6 +285,19 @@ ja:
         description_2:
         details_html:
         editing_description_html:
+    misc:
+      expand_all_title:
+      expand_all:
+      show_all_details:
+      hide_met_title:
+      hide_met:
+      disabled_reminders:
+      general_comments:
+        description:
+        placeholder:
+      some_not_crypto_html:
+      dont_use_crypto:
+      future_header_html:
   report_mailer:
     new_project_heading:
     new_project_part1:

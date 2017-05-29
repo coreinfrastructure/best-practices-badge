@@ -35,7 +35,8 @@ class LoginTest < CapybaraFeatureTest
 
     visit edit_project_path(@project, locale: nil)
     assert has_content? 'We have updated our requirements for the criterion ' \
-                        'static_analysis. Please add a justification for '\
+                        '<a href="#static_analysis">static_analysis</a>. ' \
+                        'Please add a justification for '\
                         'this criterion.'
 
     fill_in 'project_name', with: 'It doesnt matter'

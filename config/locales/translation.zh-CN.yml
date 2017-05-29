@@ -242,6 +242,7 @@ zh-CN:
       placeholder_of_repo: http(s)://... 项目仓库 URL
       submit_urls: 提交网址
       sign_in_first: 请登录以添加项目！
+      thanks_adding:
     show:
       edit: 编辑
       delete: 删除
@@ -260,6 +261,11 @@ zh-CN:
       submit_cc_by_3plus_html:
       save_and_continue:
       submit_and_exit:
+      repo_url_limits:
+      changed_since_html:
+      successfully_updated:
+      congrats_new:
+      lost_badge:
     form_basics:
       project_name:
         description:
@@ -309,6 +315,8 @@ zh-CN:
       some_not_crypto_html:
       dont_use_crypto:
       future_header_html:
+    delete:
+      done:
   user_mailer:
     account_activation:
       before_html: |
@@ -1060,3 +1068,4 @@ zh-CN:
     Working build system: 可工作的构建系统
     Identification:
   last_entry:
+  admin_only:

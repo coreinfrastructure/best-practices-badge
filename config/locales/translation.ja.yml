@@ -233,6 +233,7 @@ ja:
       placeholder_of_repo:
       submit_urls:
       sign_in_first:
+      thanks_adding:
     show:
       edit:
       delete:
@@ -249,6 +250,11 @@ ja:
       submit_cc_by_3plus_html:
       save_and_continue:
       submit_and_exit:
+      repo_url_limits:
+      changed_since_html:
+      successfully_updated:
+      congrats_new:
+      lost_badge:
     form_basics:
       project_name:
         description:
@@ -298,6 +304,8 @@ ja:
       some_not_crypto_html:
       dont_use_crypto:
       future_header_html:
+    delete:
+      done:
   report_mailer:
     new_project_heading:
     new_project_part1:
@@ -801,3 +809,4 @@ ja:
     Working build system:
     Identification:
   last_entry:
+  admin_only:

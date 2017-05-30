@@ -441,7 +441,7 @@ en:
           (Optional) Please explain how this is met, possibly including 1+ key
           URLs.
         unmet_placeholder: >
-          Please explain why it\'s okay this is unmet, including 1+ key URLs.
+          Please explain why it's okay this is unmet, including 1+ key URLs.
         na_justification_placeholder: >
           (Required) Please explain why this is not applicable (N/A), possibly
           including 1+ key URLs.

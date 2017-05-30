@@ -1275,6 +1275,30 @@ believe they are acceptable:
     resources into countering them.
     The same is true for almost any other website.
 
+## Vulnerability report handling process
+
+As noted in CONTRIBUTING.md, if anyone finds a
+significant vulnerability, or evidence of one, we ask that they
+send that information to at least one of the security contacts.
+
+Whoever receives that report will share that information with the
+other security contacts, and one of them will analyze it:
+
+* If is not valid, one of the security contacts will reply back to
+  the reporter to explain that (if this is a misunderstanding,
+  the reporter can reply and start the process again).
+* If it is a bug but not security vulnerability, the security contact
+  will create an issue as usual for repair.
+* If it a security vulnerability, one of the security contacts will
+  fix it in a *local* git repository and *not* share it with the world
+  until the fix is ready.  An issue will *not* be filed, since those
+  are publc.  If it needs review, the review will not be public.
+  Once the fix is ready, it will be quickly moved through all tiers.
+
+Once the fix is in the final production system, credit will be
+publicly given to the vulneraibility reporter (unless the reporter
+requested otherwise).
+
 ## Your help is welcome!
 
 Security is hard; we welcome your help.

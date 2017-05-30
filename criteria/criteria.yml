@@ -1374,12 +1374,15 @@
             on the "test" or "test_invocation" criterion.
       - test_statement_coverage90:
           category: MUST
+          # There may not be any tools that can do this measurement
+          na_allowed: true
           rationale: >
             This increases the statement coverage requirement from the
             previous badge level, thus requiring even more thorough testing
             (by this measure).
       - test_branch_coverage80:
           category: MUST
+          na_allowed: true
           rationale: >
             This adds another test coverage requirement, again requiring more
             thorough testing. A program with many one-armed "if" statements

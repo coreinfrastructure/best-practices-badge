@@ -295,6 +295,10 @@ de:
         details_html:
         editing_description_html:
         badge_alt:
+      level:
+        0_html:
+        1_html:
+        2_html:
     misc:
       disabled_reminders:
       general_comments:
@@ -735,6 +739,9 @@ de:
       static_analysis_common_vulnerabilities:
         description:
       dynamic_analysis_unsafe:
+        description:
+        details:
+      assurance_case:
         description:
         details:
     '2':

@@ -1,7 +1,3 @@
-dependencies:
-  pre:
-    - rvm install rubygems current # 2.4.8 --force
-    - gem install bundler -v 1.14.3
 test:
   pre:
     - "[[ ! -s \"$(git rev-parse --git-dir)/shallow\" ]] || git fetch --unshallow"

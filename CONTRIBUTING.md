@@ -266,14 +266,6 @@ For example, if you want to build a string using append, do this:
 ''.dup << 'Hello, ' << 'World'
 ~~~~
 
-Please use
-[# frozen_string_literal: true](https://bugs.ruby-lang.org/issues/8976)
-near the beginning of each file.
-This 'magic comment' (added in Ruby 2.3.0) automatically freezes
-string literals, increasing speed, preventing accidental changes, and
-will help us get ready for the planned Ruby transition
-to immutable string literals.
-
 You may use the safe navigation operator '&amp;.' added in
 [Ruby version 2.3.0](https://www.ruby-lang.org/en/news/2015/12/25/ruby-2-3-0-released/).
 Our static analysis tools' parsers can now handle this syntax.
@@ -290,6 +282,25 @@ they will accidentally presented to another user not authorized to see it.
 Otherwise, please *do* use caches to speed repeated responses where they
 make sense.  Caches are one of the key mechanisms we use to provide
 rapid responses to users.
+
+Please use
+[# frozen_string_literal: true](https://bugs.ruby-lang.org/issues/8976)
+at the beginning of each file.
+This 'magic comment' (added in Ruby 2.3.0) automatically freezes
+string literals, increasing speed, preventing accidental changes, and
+will help us get ready for the planned Ruby transition
+to immutable string literals.
+
+Each source file should include a copyright and license statement
+the beginning.  Here is our standard header:
+
+~~~~ruby
+# frozen_string_literal: true
+
+# Copyright 2015-2017, the Linux Foundation, IDA, and the
+# CII Best Practices badge contributors
+# SPDX-License-Identifier: MIT
+~~~~
 
 ### JavaScript
 

@@ -1,6 +1,10 @@
-# Guess project name from URLs.
-
 # frozen_string_literal: true
+
+# Copyright 2015-2017, the Linux Foundation, IDA, and the
+# CII Best Practices badge contributors
+# SPDX-License-Identifier: MIT
+
+# Guess project name from URLs.
 
 class NameFromUrlDetective < Detective
   INPUTS = %i[repo_url homepage_url].freeze

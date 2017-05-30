@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+# Copyright 2015-2017, the Linux Foundation, IDA, and the
+# CII Best Practices badge contributors
+# SPDX-License-Identifier: MIT
+
 # Configure for markdownlint (mdl), a markdown style checker
 # Note: mdl 0.2.0 and 0.2.1 have a serious bug in command line parsing,
 # and thus you *have* to use a file to adjust rules.

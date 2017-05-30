@@ -1,4 +1,9 @@
 # frozen_string_literal: true
+
+# Copyright 2015-2017, the Linux Foundation, IDA, and the
+# CII Best Practices badge contributors
+# SPDX-License-Identifier: MIT
+
 # A 'chief' instance analyzes project data.  It does this by calling
 # 'Detectives' (analyzers) in the right order, each of which have
 # access to the evidence accumulated so far.
@@ -7,8 +12,6 @@
 # Currently it just runs sequentially, but the plan is for it to use
 # the Detective INPUTS and OUTPUTS to determine what order to run, and
 # run them in parallel in an appropriate order.
-
-# frozen_string_literal: true
 
 require 'set'
 

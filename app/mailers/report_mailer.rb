@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+# Copyright 2015-2017, the Linux Foundation, IDA, and the
+# CII Best Practices badge contributors
+# SPDX-License-Identifier: MIT
+
 # When sending emails to specific users we use I18n.with_locale do..end.
 # That's because it's possible that the current user is an administrator
 # or script, in which case the current I18n.locale is not necessarily

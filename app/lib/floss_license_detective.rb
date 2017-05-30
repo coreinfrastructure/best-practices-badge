@@ -1,8 +1,11 @@
 # frozen_string_literal: true
+
+# Copyright 2015-2017, the Linux Foundation, IDA, and the
+# CII Best Practices badge contributors
+# SPDX-License-Identifier: MIT
+
 # Examine software license (already determined), expressed with SPDX,
 # to report if it's open source software (OSS) and meets OSI requirements.
-
-# frozen_string_literal: true
 
 # rubocop:disable Metrics/ClassLength
 class FlossLicenseDetective < Detective

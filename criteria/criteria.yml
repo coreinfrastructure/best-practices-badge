@@ -740,9 +740,11 @@
           #autofill: TODO
       - access_continuity:
           category: MUST
+          met_url_required: true
           #autofill: TODO
       - bus_factor:
           category: SHOULD
+          met_url_required: true
           #autofill: TODO
     - Documentation: !!omap
       - documentation_roadmap:
@@ -751,8 +753,9 @@
           #autofill: TODO
       - documentation_architecture:
           category: MUST
-          met_url_required: true
           na_allowed: true
+          na_justification_required: true
+          met_url_required: true
           rationale: >
             Documenting the basic design makes it easier for potential
             new developers to understand its basics.
@@ -774,6 +777,8 @@
           #autofill: TODO
       - documentation_quick_start:
           category: MUST
+          na_allowed: true
+          na_justification_required: true
           met_url_required: true
           rationale: >
             This is based on a conversation with Mike Milinkovich,
@@ -787,6 +792,9 @@
             <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/645">issue#645</a>.
       - documentation_current:
           category: MUST
+          na_allowed: true
+          na_justification_required: true
+          met_justification_required: true
           rationale: >
             It's difficult to keep documentation up-to-date, so the
             criterion is worded this way to make it more practical.
@@ -808,10 +816,15 @@
     - Accessibility and internationalization: !!omap
       - accessibility_best_practices:
           category: SHOULD
+          na_allowed: true
+          na_justification_required: true
+          met_justification_required: true
           #autofill:TODO
       - internationalization:
           category: SHOULD
           na_allowed: true
+          na_justification_required: true
+          met_justification_required: true
           rationale: >
             When software is internationalized, the software can be used by far
             more people.  By itself, that's valuable.
@@ -823,11 +836,16 @@
       - sites_password_security:
           category: MUST
           na_allowed: true
+          na_justification_required: true
+          met_justification_required: true
           #autofill:TODO
   - 'Change Control': !!omap
     - Previous versions: !!omap
       - maintenance_or_update:
           category: MUST
+          na_allowed: true
+          na_justification_required: true
+          met_justification_required: true
           rationale: >
             This was inspired by
             <a href="https://projects.ow2.org/bin/view/ow2/OMM">DFCT-1.2</a>
@@ -836,14 +854,18 @@
     - Bug-reporting process: !!omap
       - report_tracker:
           category: MUST
+          na_allowed: true
+          na_justification_required: true
+          met_justification_required: true
           autofill: >
             On GitHub we presume that at least issue trackers can be used.
             Search CONTRIBUTING (if it exists) for a phrase like "issue tracker".
     - Vulnerability report process: !!omap
       - vulnerability_report_credit:
           category: MUST
-          met_url_required: true
           na_allowed: true
+          na_justification_required: true
+          met_url_required: true
           rationale: >
             It is only fair to credit those who provide vulnerability
             reports.  In many cases, the only reporter requirement is that
@@ -864,19 +886,22 @@
     - Coding standards: !!omap
       - coding_standards:
           category: MUST
+          na_allowed: true
+          na_justification_required: true
           met_url_required: true
           #autofill: TODO
       - coding_standards_enforced:
           category: MUST
           na_allowed: true
-          met_justification_required: true
           na_justification_required: true
+          met_justification_required: true
           #autofill: TODO
     - Working build system: !!omap
       - build_standard_variables:
           category: MUST
           na_allowed: true
           na_justification_required: true
+          met_justification_required: true
           rationale: >
             See
             <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/453">Build system should honor CC, CFLAGS, CXX, CXXFLAGS</a>
@@ -884,11 +909,13 @@
           category: SHOULD
           na_allowed: true
           na_justification_required: true
+          met_justification_required: true
           #autofill: TODO
       - build_non_recursive:
           category: MUST
           na_allowed: true
           na_justification_required: true
+          met_justification_required: true
           rationale: >
             For more information, see
             <a href="http://aegis.sourceforge.net/auug97.pdf">"Recursive Make Considered Harmful" by Peter Miller</a>
@@ -906,6 +933,7 @@
           category: MUST
           na_allowed: true
           na_justification_required: true
+          met_justification_required: true
           rationale: >
             This is a step towards having a
             <a href="https://reproducible-builds.org/">reproducible build</a>.
@@ -920,11 +948,16 @@
     - Installation system: !!omap
       - installation_common:
           category: MUST
+          na_allowed: true
+          na_justification_required: true
+          met_justification_required: true
           autofill: >
             Look for a standard install format, or a build instruction for one.
       - installation_standard_variables:
           category: MUST
           na_allowed: true
+          na_justification_required: true
+          met_justification_required: true
           rationale: >
             This supports capturing the artifacts (e.g., for analysis)
             without interfering with the build or installation system due to
@@ -937,6 +970,9 @@
           #autofill: TODO
       - installation_development_quick:
           category: MUST
+          na_allowed: true
+          na_justification_required: true
+          met_justification_required: true
           rationale: >
             Recommended in the
             <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/473">NYC 2016 brainstorming session</a>.
@@ -944,6 +980,9 @@
     - Externally-maintained components: !!omap
       - external_dependencies:
           category: MUST
+          na_allowed: true
+          na_justification_required: true
+          met_justification_required: true
           met_url_required: true
           rationale: >
             Inspired by the
@@ -951,12 +990,18 @@
           #autofill: TODO
       - dependency_monitoring:
           category: MUST
+          na_allowed: true
+          na_justification_required: true
+          met_justification_required: true
           rationale: >
             This must be monitored or periodically checked, because
             new vulnerabilities are continuously being discovered.
           #autofill: TODO
       - updateable_reused_components:
           category: MUST
+          na_allowed: true
+          na_justification_required: true
+          met_justification_required: true
           rationale: >
             A very common problem is to have obsolete components with
             known vulnerabilities.  This is OWASP Top 10 (2013) number A9
@@ -965,10 +1010,14 @@
           #autofill: TODO
       - interfaces_current:
           category: SHOULD
+          na_allowed: true
+          na_justification_required: true
+          met_justification_required: true
           #autofill: TODO
     - Automated test suite: !!omap
       - automated_integration_testing:
           category: MUST
+          met_justification_required: true
           rationale: >
             This is inspired by continuous integration.
             Continuous integration provides much more rapid feedback
@@ -993,6 +1042,9 @@
           #autofill: TODO
       - regression_tests_added50:
           category: MUST
+          na_allowed: true
+          na_justification_required: true
+          met_justification_required: true
           rationale: >
             Regression tests prevent undetected resurfacing of
             defects.  If a defect has happened before, there is an increased
@@ -1013,6 +1065,7 @@
           category: MUST
           na_allowed: true
           na_justification_required: true
+          met_justification_required: true
           rationale: |
             Statement coverage is widely used as a test quality measure;
             it's often a first "starter" measure for test quality.
@@ -1078,6 +1131,9 @@
     - New functionality testing: !!omap
       - test_policy_mandated:
           category: MUST
+          na_allowed: true
+          na_justification_required: true
+          met_justification_required: true
           rationale: >
             This ensures that major new functionality is tested.
             This is related to the criterion test_policy, but is rewritten
@@ -1085,18 +1141,24 @@
           #autofill: TODO
       - tests_documented_added:
           category: MUST
+          na_allowed: true
+          na_justification_required: true
+          met_justification_required: true
           autofill: >
             Look in CONTRIBUTING and README.  See also test_policy.
     - Warning flags: !!omap
       - warnings_strict:
           category: MUST
           na_allowed: true
+          na_justification_required: true
+          met_justification_required: true
           autofill: >
             If we find "-Wall -Wextra" in the build that's pretty strict.
   - Security: !!omap
     - Secure development knowledge: !!omap
       - implement_secure_design:
           category: MUST
+          met_justification_required: true
           rationale: >
             This was inspired by the
             <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/473">NYC 2016 brainstorming session</a>.
@@ -1105,6 +1167,7 @@
       - crypto_weaknesses:
           category: MUST
           na_allowed: true
+          met_justification_required: true
           rationale: >
             SHA-1 has been known to be weak for many years;
             <a href="https://security.googleblog.com/2017/02/announcing-first-sha1-collision.html">In February 2017 Google demonstrated a SHA-1 collision</a>.
@@ -1127,6 +1190,7 @@
       - crypto_algorithm_agility:
           category: SHOULD
           na_allowed: true
+          met_justification_required: true
           rationale: >
             The advantage of crypto agility is that if one crypto algorithm is
             broken, other algorithms can be used instead.
@@ -1143,26 +1207,32 @@
       - crypto_credential_agility:
           category: MUST
           na_allowed: true
+          met_justification_required: true
           #autofill: TODO
       - crypto_used_network:
           category: SHOULD
           na_allowed: true
+          met_justification_required: true
           # autofill: TODO
       - crypto_tls12:
           category: SHOULD
           na_allowed: true
+          met_justification_required: true
           # autofill: TODO
       - crypto_certificate_verification:
           category: MUST
           na_allowed: true
+          met_justification_required: true
           # autofill: TODO
       - crypto_verification_private:
           category: MUST
           na_allowed: true
+          met_justification_required: true
           # autofill: TODO
     - Secure release: !!omap
       - signed_releases:
           category: MUST
+          met_justification_required: true
           rationale: >
             This provides protection from compromised distribution systems.
             The public key must be accessible so that recipients can check the
@@ -1179,6 +1249,7 @@
           # autofill: TODO
       - version_tags_signed:
           category: SUGGESTED
+          met_justification_required: true
           rationale: >
             This was suggested by Kevin W. Wall (@kwwall)in
             <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/709">issue #709</a>.
@@ -1186,9 +1257,15 @@
     - Other security issues: !!omap
       - input_validation:
           category: MUST
+          na_allowed: true
+          na_justification_required: true
+          met_justification_required: true
           #autofill: TODO
       - hardening:
           category: SHOULD
+          na_allowed: true
+          na_justification_required: true
+          met_justification_required: true
           autofill: >
             Look for gems like secure_headers, and
             relevant compiler flags in build files.
@@ -1197,6 +1274,8 @@
       - static_analysis_common_vulnerabilities:
           category: MUST
           na_allowed: true
+          na_justification_required: true
+          met_justification_required: true
           rationale: >
             We'd like all projects to use this kind of static analysis tool,
             but there may not be one in the chosen language, or it may only be
@@ -1208,6 +1287,8 @@
       - dynamic_analysis_unsafe:
           category: MUST
           na_allowed: true
+          na_justification_required: true
+          met_justification_required: true
           rationale: >
             This would mean that C/C++ would be required to use something like
             ASAN during some testing and/or fuzz testing. See:
@@ -1220,9 +1301,11 @@
     - Project oversight: !!omap
       - bus_factor:
           category: MUST
+          met_justification_required: true
           #autofill: TODO
       - contributors_unassociated:
           category: MUST
+          met_justification_required: true
           rationale: >
             This reduces the risk of non-support if a single organization
             stops supporting the project as FLOSS. It also reduces the risk of
@@ -1235,6 +1318,7 @@
     - Other: !!omap
       - copyright_per_file:
           category: MUST
+          met_justification_required: true
           rationale: >
             This isn't legally required in most jurisdictions, per the Berne
             Convention.  For example, copyright notices have not been required
@@ -1261,6 +1345,7 @@
             e.g., if they wish to try to relicense something.
       - license_per_file:
           category: MUST
+          met_justification_required: true
           rationale: >
             Files are sometimes individually copied from one project into
             another.  Per-file license information increases the likelihood
@@ -1275,6 +1360,7 @@
     - Public version-controlled source repository: !!omap
       - repo_distributed:
           category: MUST
+          met_justification_required: true
           autofill: >
             Look for git, subversion (svn), and mercurial (hg).
       - small_tasks:
@@ -1289,6 +1375,7 @@
             This is related to criterion installation_development_quick.
       - require_2FA:
           category: MUST
+          met_justification_required: true
           rationale: >
             2FA is used by Node.js and the Linux kernel projects.
             See
@@ -1297,6 +1384,7 @@
             <a href="http://www.securityweek.com/linux-foundation-protects-kernel-git-repositories-2fa">"Linux Foundation Protects Kernel Git Repositories With 2FA" by Eduard Kovacs</a>.
       - secure_2FA:
           category: SHOULD
+          met_justification_required: true
           rationale: >
             SMS is easier and lower cost for many people, but it also provides
             much weaker security.  It has been argued that SMS isn't really
@@ -1307,6 +1395,10 @@
     - Coding standards: !!omap
       - code_review_standards:
           category: MUST
+          na_allowed: true
+          na_justification_required: true
+          met_justification_required: true
+          met_url_required: true
           rationale: >
             Code review is a cornerstone of quality and secure coding
             practices. Projects often seek new contributors but lack training
@@ -1317,6 +1409,7 @@
             from GeorgLink.
       - two_person_review:
           category: MUST
+          met_justification_required: true
           rationale: >
             Review can counter many problems. The percentage here could be
             changed; 100% would be great but untenable for many projects.  We
@@ -1330,6 +1423,10 @@
     - Working build system: !!omap
       - build_reproducible:
           category: MUST
+          na_allowed: true
+          na_justification_required: true
+          met_justification_required: true
+          met_url_required: true
           rationale: >
             If a project needs to be built but there is no working build
             system, then potential co-developers will not be able to easily
@@ -1343,6 +1440,7 @@
     - Automated test suite: !!omap
       - test_invocation:
           category: MUST
+          met_justification_required: true
           autofill: >
             Look in the build scripts for a non-empty test command.
             E.g., look for a Makefile (including Makefile.am) with a non-empty
@@ -1350,6 +1448,8 @@
             maven (mvn test) or rake (rake test).
       - test_continuous_integration:
           category: MUST
+          # No N/A, you can always have some sort of CI
+          met_justification_required: true
           rationale: >
             See
             <a href="http://martinfowler.com/articles/continuousIntegration.html">Martin Fowler</a>
@@ -1376,6 +1476,8 @@
           category: MUST
           # There may not be any tools that can do this measurement
           na_allowed: true
+          na_justification_required: true
+          met_justification_required: true
           rationale: >
             This increases the statement coverage requirement from the
             previous badge level, thus requiring even more thorough testing
@@ -1383,6 +1485,8 @@
       - test_branch_coverage80:
           category: MUST
           na_allowed: true
+          na_justification_required: true
+          met_justification_required: true
           rationale: >
             This adds another test coverage requirement, again requiring more
             thorough testing. A program with many one-armed "if" statements
@@ -1397,14 +1501,20 @@
       - crypto_used_network:
           category: MUST
           na_allowed: true
+          met_justification_required: true
           # autofill: TODO
       - crypto_tls12:
           category: MUST
           na_allowed: true
+          met_justification_required: true
           # autofill: TODO
     - Secured delivery against man-in-the-middle (MITM) attacks: !!omap
       - hardened_site: # After delivery_mitm?
           category: MUST
+          met_justification_required: true
+          # Technically met_url_required implies met_justification_required,
+          # but it can't hurt to have both
+          met_url_required: true
           autofill: >
             Load the URLs and look for those HTTP headers. In the future, we
             may want to specify certain disallowed content security policies.
@@ -1412,6 +1522,7 @@
     - Other security issues: !!omap
       - security_review:
           category: MUST
+          met_justification_required: true
           rationale: >
             Security review is important, because security problems often come
             from subtle interactions of components.  Reviewing the system as a
@@ -1430,6 +1541,9 @@
             be agreed on.
       - hardening:
           category: MUST
+          na_allowed: true
+          na_justification_required: true
+          met_justification_required: true
           autofill: >
             Look for gems like secure_headers, and
             relevant compiler flags in build files.
@@ -1437,6 +1551,9 @@
     - Dynamic code analysis: !!omap
       - dynamic_analysis:
           category: MUST
+          na_allowed: true
+          na_justification_required: true
+          met_justification_required: true
           rationale: >
             Static source code analysis and dynamic analysis tend
             to find different kinds of defects (including defects that lead to
@@ -1445,5 +1562,8 @@
             Look in documentation for references to such tools.
       - dynamic_analysis_enable_assertions:
           category: SHOULD
+          na_allowed: true
+          na_justification_required: true
+          met_justification_required: true
           autofill: >
             Perhaps look in source code for many asserts.

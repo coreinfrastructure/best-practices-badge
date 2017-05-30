@@ -769,12 +769,6 @@
             Writing the specification helps the developers think about the
             interface (including the API) the developers are providing, as well
             letting any user or researcher know what to expect.
-            Many sources discuss the rationale for an "assurance case".
-            This was inspired by
-            <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/502">Security specification and facilitation of bug bounties</a>
-            and by the
-            <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/473">NYC 2016 brainstorming session</a>.
-          #autofill: TODO
       - documentation_quick_start:
           category: MUST
           na_allowed: true
@@ -1269,6 +1263,16 @@
           autofill: >
             Look for gems like secure_headers, and
             relevant compiler flags in build files.
+      - assurance_case:
+          category: MUST
+          met_url_required: true
+          rationale: >
+            Many sources discuss the rationale for an "assurance case".
+            This was inspired by
+            <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/502">Security specification and facilitation of bug bounties</a>
+            and by the
+            <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/473">NYC 2016 brainstorming session</a>.
+          #autofill: TODO
   - Analysis: !!omap
     - Static code analysis: !!omap
       - static_analysis_common_vulnerabilities:

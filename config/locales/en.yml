@@ -1625,46 +1625,60 @@ en:
 
 '
       documentation_architecture:
-        description: 'The project MUST include documentation of the architecture (aka
-          high-level design) of the software produced by the project.  If the project
-          does not produce software, select "not applicable" (N/A).
-
-'
-        details: 'A software architecture explains a program''s fundamental structures,
-          i.e., the program''s major components, the relationships among them, and
-          the key properties of these components and relationships.
-
-'
+        description: >
+          The project MUST include documentation of the architecture
+          (aka high-level design) of the software produced by the
+          project.  If the project does not produce software, select
+          "not applicable" (N/A).
+        details: >
+          A software architecture explains a program's fundamental
+          structures, i.e., the program's major components, the
+          relationships among them, and the key properties of these
+          components and relationships.
       documentation_security:
-        description: 'The project MUST document what the user can and cannot expect
-          in terms of security from the software produced by the project. The project
-          MUST identify the security requirements that the software is intended to
-          meet and an assurance case that justifies why these requirements are met.
-          The assurance case MUST include: a description of the threat model, clear
-          identification of trust boundaries, and evidence that common security weaknesses
-          have been countered.
-
-'
-        details: 'An assurance case is "a documented body of evidence that provides
-          a convincing and valid argument that a specified set of critical claims
-          regarding a system’s properties are adequately justified for a given application
-          in a given environment" (<a href="http://nvlpubs.nist.gov/nistpubs/ir/2009/ir7608.pdf">
-          "Software Assurance Using Structured Assurance Case Models", Thomas Rhodes
-          et al, NIST Interagency Report 7608</a>). Trust boundaries are boundaries
-          where data or execution changes its level of trust, e.g., a server''s boundaries
-          in a typical web application.
-
-'
+        description: >
+          The project MUST document what the user can and cannot expect
+          in terms of security from the software produced by the project
+          (its "security requirements").
+        details: >
+          These are the security requirements that
+          the software is intended to meet.
       documentation_quick_start:
-        description: 'The project MUST provide a "quick start" guide for new users
+        description: >
+          The project MUST provide a "quick start" guide for new users
           to help them quickly do something with the software.
-
-'
-        details: 'The idea is to show users how to get started and make the software
-          do anything at all. This is critically important for potential users to
-          get started.
-
-'
+        details: >
+          The idea is to show users how to get started and make the
+          software do anything at all. This is critically important for
+          potential users to get started.
+      assurance_case:
+        description: >
+          The project MUST provide an assurance case that
+          justifies why its security requirements are met.
+          The assurance case MUST include: a description of the threat
+          model, clear identification of trust boundaries,
+          an argument that secure design principles have been applied,
+          and an argument
+          that common implementation security weaknesses have been countered.
+        details: >
+          An assurance case is "a documented body of evidence that
+          provides a convincing and valid argument that a specified set of
+          critical claims regarding a system’s properties are adequately
+          justified for a given application in a given environment" (<a
+          href="http://nvlpubs.nist.gov/nistpubs/ir/2009/ir7608.pdf">
+          "Software Assurance Using Structured Assurance Case Models",
+          Thomas Rhodes et al, NIST Interagency Report 7608</a>). Trust
+          boundaries are boundaries where data or execution changes
+          its level of trust, e.g., a server's boundaries in a typical
+          web application.
+          It's common to list secure design principles
+          (such as Saltzer and Schroeer) and common
+          implementation security weaknesses (such as the OWASP top 10
+          or CWE/SANS top 25), and show how each are countered.
+          The <a href="https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/doc/security.md">BadgeApp assurance case</a>
+          may be a useful example.
+          This is related to documentation_security,
+          documentation_architecture, and implement_secure_design.
       documentation_current:
         description: 'The project MUST make an effort to keep the documentation consistent
           with the current version of the project results (including software produced

@@ -5,7 +5,7 @@
 # SPDX-License-Identifier: MIT
 
 # rubocop:disable Metrics/ClassLength
-class Project < ActiveRecord::Base
+class Project < ApplicationRecord
   using StringRefinements
   using SymbolRefinements
 
@@ -43,10 +43,6 @@ class Project < ActiveRecord::Base
     end
   )
 
-  # TODO: re-enable this in rubocop > 0.48.1.
-  #       This is erroneous and been fixed in the upstream
-  #       version of rubocop see bbatso/rubocop PR #4237.
-  # rubocop:disable Lint/AmbiguousBlockAssociation
   scope :in_progress, -> { lteq(99) }
 
   scope :lteq, (

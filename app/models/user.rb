@@ -4,7 +4,7 @@
 # CII Best Practices badge contributors
 # SPDX-License-Identifier: MIT
 
-class User < ActiveRecord::Base
+class User < ApplicationRecord
   # Use Rails' "has_secure_password" so that local accounts' password is
   # is *only* stored as a bcrypt digest in password_digest
   # (an iterated per-use salted hash).  We want users to be able to edit

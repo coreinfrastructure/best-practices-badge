@@ -61,6 +61,7 @@ module ProjectsHelper
 
   # Generate HTML for minor heading
   def minor_header_html(minor)
+    # rubocop:disable Rails/OutputSafety
     safe_join(
       [
         '<li class="list-group-item"><h3>'.html_safe,
@@ -68,6 +69,7 @@ module ProjectsHelper
         '</h3>'.html_safe
       ]
     )
+    # rubocop:enable Rails/OutputSafety
   end
 
   # Render all the status_choosers in the given minor section.
@@ -89,7 +91,9 @@ module ProjectsHelper
         criterion == minor_criteria.last
       )
     end
+    # rubocop:disable Rails/OutputSafety
     results << safe_join(['</li>'.html_safe]) if wrapped
+    # rubocop:enable Rails/OutputSafety
     results
   end
   # rubocop:enable Metrics/ParameterLists

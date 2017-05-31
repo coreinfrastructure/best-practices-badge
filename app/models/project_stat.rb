@@ -4,7 +4,7 @@
 # CII Best Practices badge contributors
 # SPDX-License-Identifier: MIT
 
-class ProjectStat < ActiveRecord::Base
+class ProjectStat < ApplicationRecord
   STAT_VALUES = %w[0 25 50 75 90 100].freeze
 
   # Note: The constants below are for clarity.  Don't just change them,

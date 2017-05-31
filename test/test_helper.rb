@@ -178,7 +178,7 @@ module ActiveSupport
       Timeout.timeout(Capybara.default_max_wait_time) do
         loop do
           uri = URI.parse(current_url)
-          break if "#{uri.path}?#{uri.query}" == url
+          break if url == "#{uri.path}?#{uri.query}"
         end
       end
     end

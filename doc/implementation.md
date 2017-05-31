@@ -131,6 +131,10 @@ The application is configured by various environment variables:
   because in addition to every web thread we occasionally fire a task to
   process occasional requests (such as the daily task).
   If RAILS_MAX_THREADS is not set, presume it is 5.
+* RAILS_LOG_LEVEL: Rails log level used when RAILS_ENV is either
+  "production" or "fake_production". Plausible values are
+  "debug", "info", and "warn". Default is "info". See:
+  <http://guides.rubyonrails.org/debugging_rails_applications.html>
 
 This can be set on Heroku.  For example, to change the maximum number
 of email reminders to inactive projects on production-bestpractices:

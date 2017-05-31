@@ -59,9 +59,10 @@ Rails.application.configure do
   # secure cookies.
   config.force_ssl = true unless ENV['DISABLE_FORCE_SSL']
 
-  # Use the lowest log level to ensure availability of diagnostic information
-  # when problems arise.
-  config.log_level = :debug
+  # Use the :info log level by default, not the lowest (:debug);
+  # the site is now busy enough that ":debug" floods the logs.
+  # You can override this using RAILS_LOG_LEVEL
+  config.log_level = (ENV['RAILS_LOG_LEVEL'] || :info).to_sym
 
   # Prepend all log lines with the following tags.
   # config.log_tags = [ :subdomain, :uuid ]

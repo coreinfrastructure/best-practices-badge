@@ -392,20 +392,25 @@ de:
           URL angeben."
       interact:
         description:
-        met_placeholder:
+        met_placeholder: "(Optional) Wo ist diese Information? Gib eine oder mehrere
+          URLs an."
       contribution:
         description:
         details:
-        met_placeholder:
+        met_placeholder: "(URL gefordert) Was ist der Prozess? Welche URL erklärt
+          ihn?"
       contribution_requirements:
         description:
-        unmet_placeholder:
+        unmet_placeholder: Warum sind die Anforderungen so selbstverständlich, dass
+          keine Informationen erforderlich sind?
       floss_license:
-        description:
+        description: Die vom Projekt entwickelte Software MUSS als FLOSS lizensiert
+          veröffentlicht sein.
         details:
       floss_license_osi:
         description:
-        details:
+        details: Die OSI verwendet einen anspruchsvollen Genehmigungsprozess, um festzulegen,
+          welche Lizenzen OSS sind.
       license_location:
         description:
         details:
@@ -453,7 +458,7 @@ de:
         description:
       report_tracker:
         description:
-        unmet_placeholder:
+        unmet_placeholder: Warum gibt es keinen Issue Tracker?
       report_responses:
         description:
       enhancement_responses:
@@ -471,21 +476,25 @@ de:
         description:
         details:
       build:
-        description:
+        description: Falls die vom Projekt entwickelte Software vor Benutzung kompiliert
+          werden muss, MUSS das Projekt ein funktionierendes Buildsystem bereitstellen,
+          das den Source Code automatisch in Software übersetzt.
         details:
       build_common_tools:
-        description:
+        description: Es ist EMPFHOLEN, dass gewöhnliche Werkzeuge zum Kompiliren von
+          Software benutzt wird.
         details: 'Beispielsweise, Maven, Ant, cmake, die Autotools, make oder rake.
 
 '
       build_floss_tools:
-        description:
+        description: Das Projekt SOLLTE allein mit FLOSS Werkzeugen gebaut werden
+          können.
       test:
         description:
         details:
       test_invocation:
         description:
-        details:
+        details: Zum Beispiel, "make check", "mvn test", oder "rake test".
       test_most:
         description:
       test_continuous_integration:
@@ -521,7 +530,8 @@ de:
         description:
       crypto_floss:
         description:
-        details:
+        details: Siehe <a href="https://opensource.org/osr">Open Standards Requirement
+          for Software by the Open Source Initiative</a>.
       crypto_keylength:
         description:
         details:
@@ -544,7 +554,7 @@ de:
         details:
       delivery_unsigned:
         description:
-        details:
+        details: Diese Hashes können im Transit verändert werden.
       vulnerabilities_fixed_60_days:
         description:
         details:
@@ -556,8 +566,9 @@ de:
       static_analysis:
         description:
         details:
-        na_placeholder:
-        met_placeholder:
+        na_placeholder: Warum kann das nicht erfüllt werden (z.B. es gibt keine FLOSS
+          Werkzeuge für diese Programmiersprache)?
+        met_placeholder: Welche statischen Analysewerkzeuge werden verwendet?
       static_analysis_common_vulnerabilities:
         description:
       static_analysis_fixed:
@@ -872,7 +883,7 @@ de:
     Working build system:
     Identification:
   last_entry:
-  admin_only:
+  admin_only: Nur Administratoren.
   criterion_status:
     Met:
     Unmet:

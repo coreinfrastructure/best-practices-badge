@@ -211,9 +211,9 @@ zh-CN:
       text_search: 文本搜索
       name_or_description: 名称或说明文字
       search: 搜索
-      all:
-      passing_100:
-      in_progress_variable:
+      all: 所有
+      passing_100: 通过（100％）
+      in_progress_variable: 正在进行中（%{percent}％以上）
     table:
       id: Id
       name: 名称
@@ -243,7 +243,7 @@ zh-CN:
       submit_urls: 提交网址
       sign_in_first: 请登录以添加项目！
       thanks_adding:
-      project_already_exists:
+      project_already_exists: 这个项目已经存在！
     show:
       edit: 编辑
       delete: 删除
@@ -255,100 +255,127 @@ zh-CN:
       cc_by_3only_html:
       owned_by:
       created_at_html:
-      updated_at_html:
+      updated_at_html: "<b>最后更新于</ b> %{when}。"
       last_lost_html:
       last_achieved_html:
     edit:
       submit_cc_by_3plus_html:
-      save_and_continue:
-      submit_and_exit:
-      repo_url_limits:
-      changed_since_html:
-      successfully_updated:
+      save_and_continue: 保存（并继续）
+      submit_and_exit: 提交（并退出）
+      repo_url_limits: '您只能将repo_url从http更改为https
+
+'
+      changed_since_html: '您访问编辑表单后，另一位用户对该记录进行了更改。 <br>请打开一个新的<a href="%{edit_url}"
+        target = _blank>编辑表单</a>来转移您的更改。
+
+'
+      successfully_updated: 项目成功更新。
       congrats_new:
-      lost_badge:
+      lost_badge: 项目已经失去了徽章。
       static_analysis_updated_html:
     form_basics:
       project_name:
-        description:
+        description: 项目的人类可读的名称是什么？
         details:
-        placeholder:
+        placeholder: FLOSS项目名称
       description:
-        description:
+        description: 什么是项目的简要描述？
         details:
-        placeholder:
+        placeholder: 项目介绍
       homepage_url:
-        description:
-        placeholder:
+        description: 项目的URL（作为一个整体）是什么？
+        placeholder: 项目网站网址
       repo_url:
         description:
-        placeholder:
+        placeholder: 项目仓库URL
       implementation_languages:
-        description:
-        details:
+        description: '用什么编程语言实现项目？
+
+'
+        details: '如果有多种语言，请将它们列为逗号分隔值（可选空格），并将它们从最多到最少使用。如果有长列表，请至少列出前三个最常见的列表。如果没有语言（例如，这是仅文档或仅测试项目），请使用单个字符“
+          - ”。请使用每种语言的常规大小写，例如“JavaScript”。
+
+'
         placeholder:
       cpe:
         description_html:
         details_html:
-        placeholder:
+        placeholder: "（可选）CPE名称"
       license:
-        description_html:
+        description_html: '项目使用什么许可证发布？
+
+'
         details_html:
-        placeholder:
+        placeholder: FLOSS许可证
     form_early:
       badge_intro:
         description:
-        details_html:
+        details_html: '没有一套可以保证软件永远不会有缺陷或漏洞的做法；如果规范或假设是错误的，即使合适的方法也可能失败。也没有哪些做法可以保证一个项目能够维持健康和运作良好的开发者社区。但是，遵循最佳做法可以帮助改善项目的成果。例如，一些做法可以在发布之前进行多人评估，这可以帮助您找到其他难以找到的技术漏洞，并帮助建立信任，并希望不同公司的开发人员之间进行重复的交互。要获得徽章，必须满足所有“必须”和“禁止”的条款，满足所有“应该”条款或有合适的理由，<i>和</
+          i>所有“建议”条款必须满足或未满足（至少希望考虑）。欢迎通过<a href="https://github.com/linuxfoundation/cii-best-practices-badge">
+          GitHub网站创建问题或提出请求</a>进行反馈。另外还有一个<a href =“https ：//lists.coreinfrastructure.org/mailman/listinfo/cii-badges“>一般讨论邮件列表</a>。<br
+          /> <br />
+
+'
       got_badge:
         description_1:
-        description_2:
+        description_2: 这里是如何嵌入它：
         details_html:
         editing_description_html:
         badge_alt:
       level:
-        0_html:
-        1_html:
-        2_html:
+        0_html: 这些是通过级别的条款。
+        1_html: 这些是白银级别的条款。
+        2_html: 这些是黄金级别的条款。
     misc:
       disabled_reminders:
       general_comments:
-        description:
-        placeholder:
-      some_not_crypto_html:
-      dont_use_crypto:
+        description: '关于该项目的其他一般性意见：
+
+'
+        placeholder: 附加评论（MarkDown格式）
+      some_not_crypto_html: '请注意，某些软件不需要使用加密机制。
+
+'
+      dont_use_crypto: '如果项目生成的软件不使用加密机制，请按这里
+
+'
       future_header_html:
       in_javascript:
-        collapse_all_title:
-        collapse_all:
-        expand_all_title:
-        expand_all:
-        show_details:
-        hide_details:
-        show_all_details:
-        hide_all_details:
-        show_met_title:
-        show_met_html:
-        hide_met_title:
-        hide_met_html:
-        passing_alt:
-        barely_alt:
-        failing_alt:
-        unknown_alt:
-        met_url_placeholder:
-        met_justification_placeholder:
-        met_placeholder:
+        collapse_all_title: 折叠所有面板
+        collapse_all: 折叠面板
+        expand_all_title: 展开所有面板
+        expand_all: 展开面板
+        show_details: 显示详细资料
+        hide_details: 隐藏细节
+        show_all_details: 显示所有细节
+        hide_all_details: 隐藏所有细节
+        show_met_title: 显示满足和N/A的条款
+        show_met_html: 显示满足＆amp; N/A
+        hide_met_title: 隐藏满足和N/A条款（留下不满足和未知）
+        hide_met_html: 隐藏满足 &amp; N/A
+        passing_alt: 足够获得徽章！
+        barely_alt: 勉强够获得徽章。
+        failing_alt: 不足以获得徽章。
+        unknown_alt: 未知的所需信息，不足以用于徽章。
+        met_url_placeholder: "（需要URL）请说明如何满足，包括1+ 关键URL。\n"
+        met_justification_placeholder: "（必填）请说明如何满足这一点，可能包括1+ 关键URL。\n"
+        met_placeholder: "（可选）请解释如何满足这一点，可能包括1+ 关键URL。\n"
         unmet_placeholder:
-        na_justification_placeholder:
-        na_placeholder:
-        unknown_placeholder:
-      toggle_details_title:
-      details:
-      url_required:
-      future_criterion:
-      url_required_warning:
-      justification_required_warning:
+        na_justification_placeholder: "（必填）请说明为什么不适用（N/A），可能包括1+关键网址。\n"
+        na_placeholder: "（可选）请说明为什么不适用（N/A），可能包括1+关键网址。\n"
+        unknown_placeholder: 请解释
+      toggle_details_title: 切换细节文字
+      details: 详细信息
+      url_required: 需要网址
+      future_criterion: 未来条款
+      url_required_warning: '警告：需要URL，但找不到URL。
+
+'
+      justification_required_warning: '警告：需要更长的理由。
+
+'
     delete:
-      done:
+      done: 项目已成功删除。
   user_mailer:
     account_activation:
       before_html: |
@@ -519,19 +546,21 @@ zh-CN:
         description: '项目网站必须简明扼要地描述软件的作用（它解决了什么问题？）。
 
 '
-        details:
-        met_placeholder:
+        details: '必须采用潜在用户可以理解的语言（例如，它使用最少的术语/行话）。
+
+'
+        met_placeholder: "（可选）简洁描述在哪里？考虑提供一个URL。\n"
       interact:
         description: '项目网站必须提供有关如何获取和提供反馈（错误报告或增强功能）以及如何贡献的信息。
 
 '
         met_placeholder: "（可选）此信息在哪里？考虑提供URL。\n"
       contribution:
-        description: '关于如何贡献的信息必须解释贡献流程（例如，是否使用 Pull 请求？）
+        description: '关于如何贡献的信息必须解释贡献流程（例如，是否使用拉请求？）
 
 '
         details: 除非另有说明，否则我们假定<a href="https://guides.github.com/activities/contributing-to-open-source/">
-          GitHub上的项目使用 Issues 和 Pull 请求</a>。这些信息可以简短，例如，说明项目使用 Pull 请求，问题跟踪器或邮寄到邮件列表中的哪一个。
+          GitHub上的项目使用 Issues 和 Pull 请求</a>。这些信息可以简短，例如，说明项目使用 Pull （拉）请求，问题跟踪器或邮寄到邮件列表中的哪一个。
         met_placeholder: "（需要URL）流程是什么？在哪个URL有说明？\n"
       contribution_requirements:
         description: '关于如何贡献的信息应包括对可接受的贡献的要求（例如，引用任何所需的编码标准）。
@@ -544,9 +573,25 @@ zh-CN:
         description: '项目生产的软件必须作为FLOSS发布。
 
 '
-        details:
+        details: 'FLOSS是以符合<a href="https://opensource.org/osd-annotated">开源定义</a>或<a
+          href ="http://www.gnu.org/philosophy/free-sw.en.html">免费软件定义</a>。此类许可证的示例包括<a
+          href="http://creativecommons.org/publicdomain/zero/1.0/"> CC0 </a>，<a href
+          ="https://opensource.org/licenses/MIT"> MIT </a>，<a href="https://opensource.org/licenses/BSD-2-Clause">
+          BSD 2条款</a>，<a href ="https://opensource.org/licenses/BSD-3-Clause"> BSD
+          3条款修订版</a>，<a href="https://opensource.org/licenses/Apache-2.0"> Apache
+          2.0 </a>，<a href ="https://opensource.org/licenses/lgpl-license"> Lesser
+          GNU通用公共许可证（LGPL）</a>，以及<a href ="https://opensource.org/licenses/gpl-license">
+          GNU通用公共许可证（GPL）</a>。为了我们的目的，这意味着许可证必须是：<ul> <li> <a href="https://opensource.org/licenses">开放源码促进会（OSI）批准的许可证</a>，或</
+          li> <li> <a href="https://www.gnu.org/licenses/license-list.html">自由软件基金会（FSF）批准的免费许可证</a>，或</
+          li> <li> <a href="https://www.debian.org/legal/licenses/"> Debian 主流可接受的免费许可</a>，或</
+          li> <li><a href="https://fedoraproject.org/wiki/Licensing:Main?rd=Licensing">a
+          "good" license according to Fedora</a>。</li> </ul>该软件也可以用其他许可证（例如，“GPLv2或专有”是可以接受的）。
+
+'
       floss_license_osi:
-        description:
+        description: '建议由项目生成的软件的任何必需的许可证是<a href="https://opensource.org/licenses">由开放源码促进会（OSI）批准的。</a>
+
+'
         details: 'OSI （开放源代码促进会）使用严格的审批流程来确定哪些许可证是开源软件（OSS）。
 
 '
@@ -558,32 +603,67 @@ zh-CN:
 
 '
       documentation_basics:
-        description:
-        details:
+        description: '项目必须为项目生成的软件提供基本文档。
+
+'
+        details: '该文档必须在某些媒体（例如文本或视频）中，包括：如何安装它，如何启动它，如何使用它（可能使用教程使用示例）以及如何安全地使用它（例如，做什么和不做什么），如果这是软件的一个适当的话题。安全文档不需要太长篇幅。项目可以使用非项目内容的超文本链接作为文档。如果项目不生产软件，请选择“不适用”（N
+          / A）。
+
+'
         met_placeholder: "（可选）哪些URL是文档的入口点？\n"
       documentation_interface:
-        description:
-        details:
+        description: '项目必须提供描述项目生成的软件的外部接口（输入和输出）的参考文档。
+
+'
+        details: '外部接口的文档向最终用户或开发人员解释如何使用它。这将包括其应用程序接口（API），如果软件有。如果它是一个库，记录可以调用的主要类/类型和方法/函数。如果是Web应用程序，定义其URL接口（通常是其REST接口）。如果是命令行界面，请记录其支持的参数和选项。在许多情况下，最好是自动生成大部分文档，以便本文档随着软件的更改而保持同步，但这并不是必需的。项目可以使用非项目材料的超文本链接作为文档。文档可以自动生成（实际上这通常是最好的方法）。可以使用Swagger
+          / OpenAPI生成REST接口的文档。代码界面文档可以使用<a href="http://usejsdoc.org/"> JSDoc </a>（JavaScript），<a
+          href="https://esdoc.org/"> ESDoc </a>（JavaScript），pydoc（Python）和Doxygen（很多）。仅在实现代码中添加注释不足以满足这一标准；在没有阅读所有源代码的情况下，需要一个简单的方法来查看信息。如果项目不生产软件，请选择“不适用”（N
+          / A）。
+
+'
       sites_https:
-        description:
-        details:
+        description: '项目网站（网站，存储库和下载URL）必须使用TLS支持HTTPS。
+
+'
+        details: '您可以从<a href="https://letsencrypt.org/">Let''s Encrypt</a>获取免费证书。项目可以使用（例如）<a
+          href="https://help.github.com/articles/securing-your-github-pages-site-with-https/">
+          GitHub页面</a>实现此条款， <a href="https://about.gitlab.com/2016/12/24/were-bringing-gitlab-pages-to-community-edition/">
+          GitLab页面</a>，或<a href =" https://sourceforge.net/blog/introducing-https-for-project-websites/">
+          SourceForge项目页面</a>。如果您使用具有自定义域的GitHub页面，则可以使用内容传送网络（CDN）作为代理来支持HTTPS，例如<a
+          href ="https://blog.cloudflare.com/secure-and -fast-github-pages-with-cloudflare/">博客文章“使用CloudFlare安全快速的GitHub页面”</a>，以满足此标准。如果您支持HTTP，我们敦促您将HTTP流量重定向到HTTPS。
+
+'
       discussion:
-        description:
-        details:
+        description: '该项目必须有一个或多个讨论机制（包括建议的更改和问题），可搜索，允许通过URL访问消息和主题，使新人能够参与一些讨论，并且不需要客户端安装专有软件。
+
+'
+        details: '可接受机制的示例包括归档邮件列表，GitHub问题和拉请求讨论，Bugzilla，Mantis和Trac。如果满足这些标准，异步讨论机制（如IRC）是可以接受的；确保有一个URL可访问归档机制。允许专有JavaScript，但不鼓励。
+
+'
       english:
-        description:
-        details:
+        description: '项目应该提供英文文档，并能够接受英文的代码的错误报告和评论。
+
+'
+        details: '英语是计算机技术的<a href="https://en.wikipedia.org/wiki/Lingua_franca">通用语言</a>；支持英语增加了全球不同潜在开发者和检视者的数量。即使核心开发人员的主要语言不是英文，项目也可以达到这个标准。
+
+'
       repo_public:
         description:
         details:
       repo_track:
         description:
       repo_interim:
-        description:
+        description: '为了实现协作检视，项目的源代码存储库必须包括临时版本，以便检视版本之间的变化；它不得仅包括最终版本。
+
+'
         details:
       repo_distributed:
-        description:
-        details:
+        description: '建议使用通用分布式版本控制软件（例如，git）作为项目的源代码存储库。
+
+'
+        details: 'Git不是必须，项目在合适场景可以使用集中版本控制软件（如subversion）。
+
+'
       version_unique:
         description:
         details:
@@ -599,17 +679,29 @@ zh-CN:
 '
         details:
       release_notes_vulns:
-        description:
+        description: '发行说明必须列出每个新版本中修复的每个公开的漏洞。如果没有发行说明或者没有公开的漏洞，选择“不适用”。
+
+'
       report_process:
-        description:
+        description: '项目必须为用户提交错误报告（例如，使用问题跟踪器或邮件列表）提供相关流程。
+
+'
       report_tracker:
-        description:
-        unmet_placeholder:
+        description: '项目必须使用问题跟踪器来跟踪每个问题。
+
+'
+        unmet_placeholder: 为什么没有问题跟踪器？
       report_responses:
-        description:
+        description: '该项目必须响应过去2-12个月内（含）提交的大多数错误报告；响应不需要包括修复。
+
+'
       enhancement_responses:
-        description:
-        details:
+        description: '该项目应该对过去2-12个月内（包括）的大部分（> 50％）的增强请求作出回应。
+
+'
+        details: '答复可能是“不”或有关其价值的讨论。目的只是对某些请求有一些回应，这表明项目还活着。为了该条款的目的，项目不需要计数无效请求（例如，来自垃圾邮件发送者或自动系统）。如果项目不再进行增强，请选择“未满足”，并将介绍此情况的URL包含在内。如果一个项目有超出处理能力的增强需求数量，请选择“未满足”并解释。
+
+'
       report_archive:
         description:
       vulnerability_report_process:
@@ -705,11 +797,20 @@ zh-CN:
 
 '
       crypto_working:
-        description:
-        details:
+        description: '项目产生的软件中的默认安全机制不得取决于已被破解的密码算法（例如，MD4，MD5，单DES，RC4，Dual_EC_DRBG）或使用不适合上下文的密码模式（例如，ECB模式几乎不适当，因为它揭示了密文中相同的块，如<a
+          href="https://blog.filippo.io/the-ecb-penguin/"> ECB企鹅</a>所示。CTR模式通常是不合适的，因为如果重复输入状态，则它不执行认证并导致重复）。
+
+'
+        details: '在许多情况下，最好选择设计用于组合保密和认证的块密码算法模式，例如Galois / Counter Mode（GCM）和EAX。项目可以允许用户为必要的兼容性启用已被破解的加密机制，但是需要用户知道他们正在这么做。
+
+'
       crypto_weaknesses:
-        description:
-        details:
+        description: '由项目产生的软件中的默认安全机制不应该依赖于具有已知严重弱点的加密算法或模式（例如，SHA-1密码散列算法或SSH中的CBC模式）。
+
+'
+        details: '在<a href="https://www.kb.cert.org/vuls/id/958563"> CERT：SSH CBC漏洞</a>中讨论了SSH中CBC模式的问题。
+
+'
       crypto_pfs:
         description: '项目产生的软件中的安全机制应该​​对密钥协商协议实施完美的前向保密（PFS），如果长期密钥集合中的一个长期密钥在将来泄露，也不能破坏从一组长期密钥导出的会话密钥。
 
@@ -719,7 +820,9 @@ zh-CN:
           。
 
 '
-        details:
+        details: '此条款仅适用于软件强制使用密码验证用户身份的情况（如服务器端Web应用程序）。在软件存储用于认证到其他系统的密码（例如，该软件实现某个其他系统的客户端）的情况下，这是不适用的，因为该软件的至少某个部分必须经常访问未散列加密的密码。
+
+'
       crypto_random:
         description: '由项目生成的软件中的安全机制必须使用密码学安全的随机数生成器生成所有加密密钥和随机数，并且不得使用密码学不安全的生成器。
 
@@ -756,28 +859,60 @@ zh-CN:
 
 '
       static_analysis:
-        description:
+        description: '如果至少有一个FLOSS工具以所选择的语言实现此条款，则至少需要将一个静态代码分析工具应用于软件发布之前任何提议的主要生成版本。
+
+'
         details:
-        na_placeholder:
-        met_placeholder:
+        na_placeholder: '为什么不能满足（例如，该语言没有FLOSS工具）？
+
+'
+        met_placeholder: '使用什么静态分析工具？
+
+'
       static_analysis_common_vulnerabilities:
-        description:
+        description: '建议至少有一个用于static_analysis标准的静态分析工具包括在分析语言或环境中查找常见漏洞的规则或方法。
+
+'
       static_analysis_fixed:
         description:
         details:
       static_analysis_often:
         description:
       dynamic_analysis:
-        description:
-        details:
+        description: '建议在发布之前，至少将一个动态分析工具应用于软件任何发布的主要生产版本。
+
+'
+        details: '动态分析工具通过执行特定输入来检查软件。例如，项目可以使用模糊工具（例如，<a href="http://lcamt​​uf.coredump.cx/afl/">
+          American Fuzzy Lop </a>）或Web应用扫描程序（例如，<a href ="https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project">
+          OWASP ZAP </a>或<a href="http://w3af.org/"> w3af </a>）。在某些情况下，<a href="https://github.com/google/oss-fuzz#introduction">
+          OSS-Fuzz </a>项目可以对您的项目应用模糊测试。为满足此条款，动态分析工具需要以某种方式改变输入，以寻找各种问题，或者将其作为一个具有至少80％分支覆盖率的自动测试套件。
+          <a href="https://en.wikipedia.org/wiki/Dynamic_program_analysis">动态分析维基百科页面</a>和<a
+          href =“https://www.owasp.org/index.php/Fuzzing“> OWASP页面上的fuzzing </a>识别一些动态分析工具。分析工具可能专注于寻找安全漏洞，但这不是必需的。
+
+'
       dynamic_analysis_unsafe:
-        description:
-        details:
+        description: '建议如果项目生成的软件包含使用内存不安全语言编写的软件（例如C或C++），则至少有一个动态工具（例如，fuzzer或web应用扫描程序）与检测缓冲区覆盖等内存安全问题的机制例行应用。如果该项目生成的软件没有以内存不安全语言编写，请选择“不适用”（N
+          / A）。
+
+'
+        details: '检测内存安全问题的机制的示例包括<a href="https://github.com/google/sanitizers/wiki/AddressSanitizer">AddressSanitizer（ASAN）</a>（可在GCC和LLVM中使用），<a
+          href ="http://clang.llvm.org/docs/MemorySanitizer.html">“Memory Sanitizer”</a>和<a
+          href="http://valgrind.org/"> valgrind </a>。其他可能使用的工具包括<a href="http://clang.llvm.org/docs/ThreadSanitizer.html">ThreadSanitizer</a>和<a
+          href ="http://clang.llvm.org/docs /UndefinedBehaviorSanitizer.html">UndefinedBehaviorSanitizer</a>。广泛的断言也将起作用。
+
+'
       dynamic_analysis_enable_assertions:
-        description:
+        description: '建议由项目生成的软件包括许多运行时断言，在动态分析期间检查。
+
+'
       dynamic_analysis_fixed:
-        description:
-        details:
+        description: '通过动态代码分析发现的所有严重性为中，高的可利用漏洞必须在确认后及时修复。
+
+'
+        details: '如果<a href="https://nvd.nist.gov/cvss.cfm"> CVSS 2.0 </a>基本分数为4，那么一个漏洞是中等到高的严重性。如果您没有运行动态代码分析，没有发现任何这样的漏洞，选择“不适用”（N
+          / A）。
+
+'
       installation_common:
         description: '该项目应该提供一种方法，使用常用惯例轻松安装和卸载项目生成的软件。
 
@@ -787,7 +922,12 @@ zh-CN:
         description: '建议该项目有一个<a href="https://reproducible-builds.org/">可重复构建</a>。
 
 '
-        details:
+        details: '可复制的构建意味着多方可以独立地重做从源文件生成信息的过程，并获得每比特完全相同的结果。如果没有构建（例如，直接使用源代码而不是编译的脚本语言），请选择“N
+          / A”。在某些情况下，这可以通过强制某种排序来解决。 JavaScript开发人员可能会考虑使用npm shrinkwrap和webpack的OccurenceOrderPlugin。
+          GCC和clang用户可能会发现-frandom-seed选项有用。通常可以通过指定可用于重新构建的特定容器或虚拟机的加密散列来为外部方定义构建环境（包括工具集）。
+          <a href="https://reproducible-builds.org/docs/">可重复构建项目具有如何执行此操作的文档</a>。
+
+'
       crypto_used_network:
         description: '该项目产生的软件应该支持所有网络通信的安全协议，如SSHv2或更高版本，TLS1.2或更高版本（HTTPS），IPsec，SFTP和SNMPv3。默认情况下，FTP，HTTP，Telnet，SSLv3或更早版本和SSHv1等不安全协议将被禁用，只有在用户专门配置时才启用。如果项目生成的软件不支持网络通信，请选择“不适用”（N/A）。
 
@@ -807,14 +947,21 @@ zh-CN:
 
 '
       crypto_verification_private:
-        description:
+        description: '项目生成的软件（如果支持TLS）在发送带有私有信息的HTTP头（如安全Cookie）之前应该执行证书验证。如果软件不使用TLS，请选择“不适用”（N
+          / A）。
+
+'
       hardened_site:
-        description:
+        description: '建议项目网站，存储库（如果可通过网络访问）和下载站点（如果单独）包括具有非允许值的密钥加固头。
+
+'
         details: '请注意，GitHub是已知满足的。 https://securityheaders.io/ 等网站可以快速查看。主要头加固包含：内容安全策略（CSP），HTTP严格传输安全性（HSTS），X-Content-Type-Options（“nosniff”），X-Frame-Options和X-XSS-Protection。
 
 '
       hardening:
-        description:
+        description: '建议在项目生成的软件中使用加固机制，以便软件缺陷不太可能导致安全漏洞。
+
+'
         details:
     '1':
       contribution_requirements:
@@ -823,31 +970,45 @@ zh-CN:
         description:
         details:
       governance:
-        description:
+        description: '该项目必须明确定义和记录其项目治理模式（决策方式，包括关键角色）。
+
+'
         details:
       code_of_conduct:
         description:
         details:
       roles_responsibilities:
         description:
-        details:
+        details: '<a href="#governance">治理</a>和角色和职责的文档可以在一个地方。
+
+'
       access_continuity:
         description:
       bus_factor:
-        description:
+        description: 项目必须具有2个或更多的“公交车因子”。
         details:
       documentation_roadmap:
-        description:
-        details:
+        description: '该项目必须有一个文档化的路线图，描述项目打算做什么，至少在下一年做什么。
+
+'
+        details: '项目可能没有实现路线图，没关系。路线图的目的是帮助潜在的用户和贡献者了解项目的预期方向。它不需要特别详细。
+
+'
       documentation_architecture:
         description:
-        details:
+        details: '软件架构解释了程序的基本结构，即程序的主要组件，它们之间的关系以及这些组件和关系的关键属性。
+
+'
       documentation_security:
         description:
         details:
       documentation_quick_start:
-        description:
-        details:
+        description: '该项目必须为新用户提供“快速启动”指南，以帮助他们快速使用该软件。
+
+'
+        details: '这个想法是向用户展示如何入门，使软件完全可以做事情。这对于潜在用户是至关重要的。
+
+'
       documentation_current:
         description:
         details:
@@ -872,8 +1033,12 @@ zh-CN:
       vulnerability_report_credit:
         description:
       vulnerability_response_process:
-        description:
-        details:
+        description: '该项目必须有一个书面的流程来响应漏洞报告。
+
+'
+        details: '这与security_report_process有很强的相关性，它需要有一个书面的流程来报告漏洞。它还涉及到spam_report_response，它需要在一定时间内响应漏洞报告。
+
+'
       coding_standards:
         description:
         details:
@@ -893,7 +1058,9 @@ zh-CN:
         description:
         details:
       installation_common:
-        description:
+        description: '该项目必须提供一种使用常用惯例轻松安装和卸载由项目生成的软件的方法。
+
+'
         details:
       installation_standard_variables:
         description:
@@ -901,11 +1068,24 @@ zh-CN:
         description:
         details:
       external_dependencies:
-        description:
-        details:
+        description: '项目必须以计算机可处理的方式列出外部依赖关系。
+
+'
+        details: '通常这是使用包管理器和/或构建系统的约定完成的。请注意，这有助于实施<a href="#installation_development_quick">
+          installation_development_quick </a>。
+
+'
       dependency_monitoring:
-        description:
-        details:
+        description: '项目必须监视或定期检查其外部依赖（包括便利副本）以检测已知的漏洞，并修复可利用的漏洞或将其验证为不可利用的漏洞。
+
+'
+        details: '这可以使用来源分析器/依赖关系检查工具来完成，例如<a href="https://www.owasp.org/index.php/OWASP_Dependency_Check">
+          OWASP的依赖关系检查</a>，<a href =“ https://www.sonatype.com/nexus-auditor">SonaType''s
+          Nexus Auditor </a>，<a href="https://www.blackducksoftware.com/products/protex">
+          Black Duck''s Protex</a> ，<a href="http://www.protecode.com/"> Synopsys的Protecode
+          </a>和<a href="https://github.com/rubysec/bundler-audit"> Bundler-audit （适用于Ruby）</a>。一些包管理器也包括这类机制。如果组件的漏洞不能被利用，这是可以接受的，但这种分析是困难的，有时更新或修复该部件更容易。
+
+'
       updateable_reused_components:
         description:
         details:
@@ -925,36 +1105,73 @@ zh-CN:
         description:
         details:
       warnings_strict:
-        description:
-        details:
+        description: '在实际允许时，项目必须最大限度地严格修复项目生成的软件中的警告。
+
+'
+        details: '某些项目无法有效启用某些警告。需要证明的是，项目正在努力的启用警告标志，以便早期发现错误。
+
+'
       implement_secure_design:
-        description:
+        description: '该项目必须实施安全设计原则（来自“know_secure_design”）（如适用）。如果项目不生产软件，请选择“不适用”（N
+          / A）。
+
+'
         details:
       input_validation:
-        description:
-        details:
+        description: '项目结果必须检查来自潜在不受信任来源的所有输入，以确保它们有效（ *白名单*），如果对数据有限制，则拒绝无效输入。
+
+'
+        details: '请注意，将输入与“不良格式”（*黑名单*）的列表进行比较通常是不够的，因为攻击者通常可以绕过黑名单。例如，数字被转换成内部格式，然后检查它们是否在最小和最大（包括）之间，并且检查文本字符串以确保它们是有效的文本模式（例如，有效的UTF-8，长度，语法等）。一些数据可能需要是“任何东西”（例如，文件上传器），但这些数据通常是罕见的。
+
+'
       hardening:
-        description:
-        details:
+        description: '加固机制应该用于项目生产的软件，以便软件缺陷不太可能导致安全漏洞。
+
+'
+        details: '加固机制可能包括HTTP头，如内容安全策略（CSP），用于减轻攻击的编译器标志（如-fstack-protector）或用以消除未定义行为的编译器标志。对于此条款的目的，最小权限不被认为是一种加固机制（最少权限是重要的，但是另有条款）。
+
+'
       crypto_weaknesses:
-        description:
-        details:
+        description: '由项目产生的软件中的默认安全机制不得取决于具有已知严重弱点（例如，SHA-1密码散列算法或SSH中的CBC模式）的加密算法或模式。
+
+'
+        details: '在<a href="https://www.kb.cert.org/vuls/id/958563"> CERT：SSH CBC漏洞</a>中讨论了SSH中CBC模式的问题。
+
+'
       crypto_algorithm_agility:
         description:
       crypto_credential_agility:
         description:
       crypto_used_network:
-        description:
+        description: '该项目产生的软件应该支持所有网络通信的安全协议，如SSHv2或更高版本，TLS1.2或更高版本（HTTPS），IPsec，SFTP和SNMPv3。默认情况下，FTP，HTTP，Telnet，SSLv3或更早版本和SSHv1等不安全协议将被禁用，只有在用户专门配置时才启用。如果项目生成的软件不支持网络通信，请选择“不适用”（N
+          / A）。
+
+'
       crypto_tls12:
-        description:
+        description: '项目生成的软件（如果支持或使用TLS）应该至少支持TLS版本1.2。请注意，TLS的前身称为SSL。如果软件不使用TLS，请选择“不适用”（N
+          / A）。
+
+'
       crypto_certificate_verification:
-        description:
-        details:
+        description: '由项目生成的软件必须，如果它支持TLS，则在使用TLS（包括子资源）时默认执行TLS证书验证。如果软件不使用TLS，请选择“不适用”（N
+          / A）。
+
+'
+        details: '请注意，不正确的TLS证书验证是一个常见的错误。有关详细信息，请参阅<a href="http://crypto.stanford.edu/~dabo/pubs/abstracts/ssl-client-bugs.html">“世界上最危险的代码：在非浏览器软件中验证SSL证书“，Martin
+          Georgiev等人</a>和<a href="https://blogs.gnome.org/mcatanzaro/2016/03/12/do-you-trust-this-application/">
+          “你信任这个应用程序吗？”作者Michael Catanzaro </a>
+
+'
       crypto_verification_private:
-        description:
+        description: '项目生成的软件（如果支持TLS）必须在发送具有私有信息（如安全Cookie）的HTTP头之前执行证书验证。如果软件不使用TLS，请选择“不适用”（N
+          / A）。
+
+'
       signed_releases:
         description:
-        details:
+        details: '项目结果包括源代码和适用的任何生成的可交付成果（例如，可执行文件，包和容器）。生成的交付项可以单独签名源代码。可以用签名的git标签实现（使用加密数字签名）。项目可以从git类似的工具分别提供生成的结果，但在这些情况下，单独的结果必须单独签署。
+
+'
       version_tags_signed:
         description:
       static_analysis_common_vulnerabilities:
@@ -993,7 +1210,9 @@ zh-CN:
         description:
         details:
       two_person_review:
-        description:
+        description: '该项目必须至少有50％的修改（作者之外的人提出的）在发布之前审查，以确定是否是一个有价值的修改，并且没有已知的问题，会反对其包含
+
+'
       build_reproducible:
         description:
         details:
@@ -1005,16 +1224,30 @@ zh-CN:
 
 '
       test_continuous_integration:
-        description:
-        details:
+        description: '该项目必须实施持续集成，将新的或更改的代码经常集成到中央代码库中，并对结果进行自动化测试。
+
+'
+        details: '在大多数情况下，这意味着每个在项目上全职工作的开发人员至少每天都会整合。
+
+'
       test_statement_coverage90:
-        description:
+        description: '如果有至少一个FLOSS工具可以以所选语言度量此条款，该项目的FLOSS自动测试套件必须具有至少90％语句覆盖率。
+
+'
       test_branch_coverage80:
-        description:
+        description: '如果有至少一个FLOSS工具可以以所选语言度量此条款，该项目的FLOSS自动测试套件必须具有至少80％分支覆盖率。
+
+'
       crypto_used_network:
-        description:
+        description: '项目生成的软件必须支持所有网络通信的安全协议，如SSHv2或更高版本，TLS1.2或更高版本（HTTPS），IPsec，SFTP和SNMPv3。默认情况下，FTP，HTTP，Telnet，SSLv3或更早版本以及SSHv1等不安全协议必须被禁用，只有在用户专门配置时才启用。如果项目生成的软件不支持网络通信，请选择“不适用”（N
+          / A）。
+
+'
       crypto_tls12:
-        description:
+        description: '由项目生成的软件必须，如果支持或使用TLS，至少支持TLS版本1.2。请注意，TLS的前身称为SSL。如果软件不使用TLS，请选择“不适用”（N
+          / A）。
+
+'
       hardened_site:
         description:
       security_review:
@@ -1101,9 +1334,9 @@ zh-CN:
     Vulnerability report process: 漏洞报告流程
     Warning flags: 警告标志
     Working build system: 可工作的构建系统
-    Identification:
-  last_entry:
-  admin_only:
+    Identification: 识别
+  last_entry: 最后翻译条目
+  admin_only: 仅限管理员。
   criterion_status:
     Met: |2-
 
@@ -1111,4 +1344,4 @@ zh-CN:
     Unmet: |2-
 
       不完整
-    NA:
+    NA: N/A

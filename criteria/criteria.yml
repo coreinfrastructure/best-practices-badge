@@ -1226,6 +1226,8 @@
     - Secure release: !!omap
       - signed_releases:
           category: MUST
+          na_allowed: true
+          na_justification_required: true
           met_justification_required: true
           rationale: >
             This provides protection from compromised distribution systems.

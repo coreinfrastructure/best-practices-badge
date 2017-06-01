@@ -327,11 +327,7 @@ class ProjectsController < ApplicationController
     Octokit.auto_paginate = true
     return nil if github.repos.blank?
     github.repos.map do |repo|
-      if repo.blank?
-        nil
-      else
-        [repo.full_name, repo.fork, repo.homepage, repo.html_url]
-      end
+      [repo.full_name, repo.fork, repo.homepage, repo.html_url]
     end.compact
   end
 

@@ -49,8 +49,10 @@ class ProjectsControllerTest < ActionController::TestCase
 
   test 'should fail to create project' do
     log_in_as(@user)
-    stub_request(:get, 'https://api.github.com/user/repos')
-      .to_return(status: 200, body: '', headers: {})
+    url = 'https://api.github.com/user/repos?client_id=' \
+          "#{ENV['TEST_GITHUB_KEY']}&client_secret=" \
+          "#{ENV['TEST_GITHUB_SECRET']}&per_page=100"
+    stub_request(:get, url).to_return(status: 200, body: '', headers: {})
     assert_no_difference('Project.count') do
       post :create, params: { project: { name: @project.name } }
     end

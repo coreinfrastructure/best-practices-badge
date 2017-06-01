@@ -323,8 +323,10 @@ class ProjectsController < ApplicationController
   end
 
   def repo_data
-    github = Github.new oauth_token: session[:user_token], auto_pagination: true
-    github.repos.list.map do |repo|
+    github = Octokit::Client.new access_token: session[:user_token]
+    Octokit.auto_paginate = true
+    return nil if github.repos.blank?
+    github.repos.map do |repo|
       if repo.blank?
         nil
       else
@@ -367,6 +369,7 @@ class ProjectsController < ApplicationController
   # rubocop:enable Metrics/PerceivedComplexity
 
   def set_homepage_url
+    return nil if repo_data.nil?
     # Assign to repo.homepage if it exists, and else repo_url
     repo = repo_data.find { |r| @project.repo_url == r[3] }
     return nil if repo.nil?

@@ -336,6 +336,9 @@ en:
           <a href="https://github.com/linuxfoundation/cii-best-practices-badge">GitHub site as issues or pull requests</a>
           There is also a
           <a href="https://lists.coreinfrastructure.org/mailman/listinfo/cii-badges">mailing list for general discussion</a>.<br /><br />
+          We gladly provide the information in several locales, however,
+          if there is any conflict or inconsistency between the translations,
+          the English version is the authoritative version.
       level:
         '0_html': These are the passing level criteria.
         '1_html': These are the silver level criteria.

@@ -251,6 +251,9 @@ en:
 
 '
       submit_urls: Submit URL
+      final_text_html: >
+        Note - if your repository URL is on GitHub, anyone who can commit
+        to the repository will be able to edit the badge information.
       sign_in_first: Please sign in to add a project!
     edit:
       repo_url_limits: >

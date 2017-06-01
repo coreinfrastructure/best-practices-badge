@@ -30,7 +30,7 @@ class GithubLoginTest < CapybaraFeatureTest
         fill_in 'password', with: ENV['GITHUB_PASSWORD']
         click_on 'Sign in'
         assert has_content? 'Test BadgeApp (not for production use)'
-        click_on 'Authorize application'
+        click_on 'Authorize'
       end
 
       assert_equal num + 1, ActionMailer::Base.deliveries.size

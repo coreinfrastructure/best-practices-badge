@@ -20,7 +20,7 @@
     <% cache [project, locale] do %>
       <tr>
         <td><%= link_to project.id, project %></td>
-        <td><%= link_to (project.name.presence || "(Name Unknown)"),
+        <td><%= link_to (project.name.presence || t('.paren_name_unknown')),
                 project %></td>
         <td><span lang="en"><%= markdown(
                   (project.description || '').
@@ -40,8 +40,10 @@
         <td><%= project.achieved_passing_at&.
                   to_formatted_s(:db) %></td>
         <td><%= project.badge_percentage_0 %>%</td>
-        <td><%= link_to "<img src='/projects/#{project.id}/badge' alt='Badge level for project #{project.id} is #{project.badge_percentage_0}%'>".html_safe,
-                        project %></td>
+        <td><%= link_to "<img src='/projects/#{project.id}/badge'
+                  alt='#{t('.badge_level', id: project.id,
+                            percent: project.badge_percentage_0)}'>".html_safe,
+                  project %></td>
       </tr>
     <% end %>
   </tbody>

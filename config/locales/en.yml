@@ -193,8 +193,8 @@ en:
   projects:
     index:
       all: All
-      passing_100: "Passing (100%)"
-      in_progress_variable: "In Progress (%{percent}% or more)"
+      passing_100: Passing (100%)
+      in_progress_variable: In Progress (%{percent}% or more)
       add_link: Add
       add_new: Add New Project
       badge_status: Badge status
@@ -216,10 +216,13 @@ en:
       create_time: create time (for the badge entry)
       update_time: last update time (for the badge entry)
       user_id: user id
+      paren_name_unknown: "(Name Unknown)"
+      badge_level: Badge level for project %{id} is %{percent}%
     new:
-      thanks_adding: >
-        Thanks for adding the Project!
-        Please fill out the rest of the information to get the Badge.
+      thanks_adding: 'Thanks for adding the Project! Please fill out the rest of the
+        information to get the Badge.
+
+'
       post_delay_warning: 'There may be a significant delay after submitting as we
         try to automatically fill in information.
 
@@ -251,24 +254,26 @@ en:
       submit_urls: Submit URL
       sign_in_first: Please sign in to add a project!
     edit:
-      repo_url_limits: >
-        You may only change your repo_url from http to https
-      changed_since_html: >
-        Another user has made a change to that record since you
-        accessed the edit form. <br>Please open a new
-        <a href="%{edit_url}" target=_blank>edit form</a>
-        to transfer your changes.
+      repo_url_limits: 'You may only change your repo_url from http to https
+
+'
+      changed_since_html: 'Another user has made a change to that record since you
+        accessed the edit form. <br>Please open a new <a href="%{edit_url}" target=_blank>edit
+        form</a> to transfer your changes.
+
+'
       successfully_updated: Project was successfully updated.
-      congrats_new: >
-        CONGRATULATIONS on earning a %{new_badge_level}
-        badge! If you haven't already, please show your badge status on
-        your project page (see the "how to embed it" text just below
-        if you don't know how to do that).
+      congrats_new: 'CONGRATULATIONS on earning a %{new_badge_level} badge! If you
+        haven''t already, please show your badge status on your project page (see
+        the "how to embed it" text just below if you don''t know how to do that).
+
+'
       lost_badge: Project has lost a badge.
-      static_analysis_updated_html: >
-        We have updated our requirements for the criterion
-        <a href="#static_analysis">static_analysis</a>.
-        Please add a justification for this criterion.
+      static_analysis_updated_html: 'We have updated our requirements for the criterion
+        <a href="#static_analysis">static_analysis</a>. Please add a justification
+        for this criterion.
+
+'
       save_and_continue: Save (and continue)
       submit_and_exit: Submit (and exit)
       submit_cc_by_3plus_html: 'By submitting this data about the project you agree
@@ -313,51 +318,50 @@ en:
 '
     form_early:
       badge_intro:
-        description: >
-          Projects that follow the best practices below will be able to
-          voluntarily self-certify and show that they've achieved a Core
-          Infrastructure Initiative (CII) badge.
-        details_html: >
-          There is no set of practices that can guarantee that software will
-          never have defects or vulnerabilities; even formal methods can fail
-          if the specifications or assumptions are wrong. Nor is there any set
-          of practices that can guarantee that a project will sustain a healthy
-          and well-functioning development community. However, following best
-          practices can help improve the results of projects. For example, some
-          practices enable multi-person review before release, which can both
-          help find otherwise hard-to-find technical vulnerabilities and help
-          build trust and a desire for repeated interaction among developers
-          from different companies. To earn a badge, all MUST and MUST NOT
-          criteria must be met, all SHOULD criteria must be met OR be unmet
-          with justification, <i>and</i> all SUGGESTED criteria must be met OR
-          unmet (we want them considered at least). Feedback is welcome via the
-          <a href="https://github.com/linuxfoundation/cii-best-practices-badge">GitHub site as issues or pull requests</a>
-          There is also a
-          <a href="https://lists.coreinfrastructure.org/mailman/listinfo/cii-badges">mailing list for general discussion</a>.<br /><br />
+        description: 'Projects that follow the best practices below will be able to
+          voluntarily self-certify and show that they''ve achieved a Core Infrastructure
+          Initiative (CII) badge.
+
+'
+        details_html: 'There is no set of practices that can guarantee that software
+          will never have defects or vulnerabilities; even formal methods can fail
+          if the specifications or assumptions are wrong. Nor is there any set of
+          practices that can guarantee that a project will sustain a healthy and well-functioning
+          development community. However, following best practices can help improve
+          the results of projects. For example, some practices enable multi-person
+          review before release, which can both help find otherwise hard-to-find technical
+          vulnerabilities and help build trust and a desire for repeated interaction
+          among developers from different companies. To earn a badge, all MUST and
+          MUST NOT criteria must be met, all SHOULD criteria must be met OR be unmet
+          with justification, <i>and</i> all SUGGESTED criteria must be met OR unmet
+          (we want them considered at least). Feedback is welcome via the <a href="https://github.com/linuxfoundation/cii-best-practices-badge">GitHub
+          site as issues or pull requests</a> There is also a <a href="https://lists.coreinfrastructure.org/mailman/listinfo/cii-badges">mailing
+          list for general discussion</a>.<br /><br />
+
+'
       level:
-        '0_html': These are the passing level criteria.
-        '1_html': These are the silver level criteria.
-        '2_html': These are the gold level criteria.
+        0_html: These are the passing level criteria.
+        1_html: These are the silver level criteria.
+        2_html: These are the gold level criteria.
       got_badge:
-        description_1: >
-          If this is your project, please show your badge status on your
-          project page! The badge status looks like this:
+        description_1: 'If this is your project, please show your badge status on
+          your project page! The badge status looks like this:
+
+'
         badge_alt: Badge level for project %{id} is %{level}
         description_2: 'Here is how to embed it:'
-        details_html: >
-          You can show your badge status
-          by embedding this in your markdown file:<br />
-          %{markdown_embedding}<br />
-          or by embedding this in your HTML:<br />
-          %{html_embedding}<br />
-        editing_description_html: >
-          <b>Please 'submit' often</b> to save your work (you can always go
-          back and edit more later). <br><br>
-          If you need help, have a question, or see a problem, please
-          <i><a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">send an email</a> </i>or
-          <i><a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues" target="_blank">file an issue</a></i>.
-    # Other items in the "basic" section of the form, many of which
-    # need special handling
+        details_html: 'You can show your badge status by embedding this in your markdown
+          file:<br /> %{markdown_embedding}<br /> or by embedding this in your HTML:<br
+          /> %{html_embedding}<br />
+
+'
+        editing_description_html: '<b>Please ''submit'' often</b> to save your work
+          (you can always go back and edit more later). <br><br> If you need help,
+          have a question, or see a problem, please <i><a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">send
+          an email</a> </i>or <i><a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues"
+          target="_blank">file an issue</a></i>.
+
+'
     form_basics:
       project_name:
         description: What is the human-readable name of the project?
@@ -380,42 +384,42 @@ en:
 '
         placeholder: Project Repo URL
       implementation_languages:
-        description: >
-          What programming language(s) are used to implement
-          the project?
-        details: >
-          If there is more than one language, list them as comma-separated
-          values (spaces optional) and sort them from most to least used.
-          If there is a long list, please list at least the first three
-          most common ones.  If there is no language (e.g., this is
-          a documentation-only or test-only project), use the single
-          character "-".
-          Please use a conventional capitalization for
+        description: 'What programming language(s) are used to implement the project?
+
+'
+        details: 'If there is more than one language, list them as comma-separated
+          values (spaces optional) and sort them from most to least used. If there
+          is a long list, please list at least the first three most common ones.  If
+          there is no language (e.g., this is a documentation-only or test-only project),
+          use the single character "-". Please use a conventional capitalization for
           each language, e.g., "JavaScript".
-        placeholder: >
-          Implementation language(s) used as a comma-separated list,
-          sorted by amount of use
+
+'
+        placeholder: 'Implementation language(s) used as a comma-separated list, sorted
+          by amount of use
+
+'
       cpe:
-        description_html: >
-          What is the
-          <a href="https://nvd.nist.gov/cpe.cfm">Common Platform
-          Enumeration (CPE)</a>
-          name for the project (if it has one)?
-        details_html: >
-          The <a href="https://nvd.nist.gov/cpe.cfm">Common Platform
-          Enumeration (CPE)</a> is a structured naming scheme for
-          information technology systems, software, and packages.
-          It is used in a number of systems and databases when reporting
-          vulnerabilities.
-        placeholder: (Optional) CPE name
+        description_html: 'What is the <a href="https://nvd.nist.gov/cpe.cfm">Common
+          Platform Enumeration (CPE)</a> name for the project (if it has one)?
+
+'
+        details_html: 'The <a href="https://nvd.nist.gov/cpe.cfm">Common Platform
+          Enumeration (CPE)</a> is a structured naming scheme for information technology
+          systems, software, and packages. It is used in a number of systems and databases
+          when reporting vulnerabilities.
+
+'
+        placeholder: "(Optional) CPE name"
       license:
-        description_html: >
-          What license(s) is the project released under?
-        details_html: >
-          Please use <a href="https://spdx.org/licenses/">SPDX license
-          expression format</a>; examples include "Apache-2.0",
-          "BSD-2-Clause", "BSD-3-Clause", "GPL-2.0+", "LGPL-3.0+",
-          "MIT", and "(BSD-2-Clause OR Ruby)".
+        description_html: 'What license(s) is the project released under?
+
+'
+        details_html: 'Please use <a href="https://spdx.org/licenses/">SPDX license
+          expression format</a>; examples include "Apache-2.0", "BSD-2-Clause", "BSD-3-Clause",
+          "GPL-2.0+", "LGPL-3.0+", "MIT", and "(BSD-2-Clause OR Ruby)".
+
+'
         placeholder: FLOSS License
     misc:
       in_javascript:
@@ -427,7 +431,6 @@ en:
         hide_details: Hide details
         show_all_details: Show all details
         hide_all_details: Hide all details
-        # Note: The "&" is escaped by Rails since it's not marked as HTML safe
         show_met_title: Show met & N/A criteria
         show_met_html: Show met &amp; N/A
         hide_met_title: Hide met & N/A criteria (leaving unmet and unknown)
@@ -436,48 +439,52 @@ en:
         barely_alt: Barely enough for a badge.
         failing_alt: Not enough for a badge.
         unknown_alt: Unknown required information, not enough for a badge.
-        met_url_placeholder: >
-          (URL required) Please explain how this is met, including 1+ key URLs.
-        met_justification_placeholder: >
-          (Required) Please explain how this is met, possibly including 1+ key
-          URLs.
-        met_placeholder: >
-          (Optional) Please explain how this is met, possibly including 1+ key
-          URLs.
-        unmet_placeholder: >
-          Please explain why it's okay this is unmet, including 1+ key URLs.
-        na_justification_placeholder: >
-          (Required) Please explain why this is not applicable (N/A), possibly
-          including 1+ key URLs.
-        na_placeholder: >
-          (Optional) Please explain why this is not applicable (N/A), possibly
-          including 1+ key URLs.
+        met_url_placeholder: "(URL required) Please explain how this is met, including
+          1+ key URLs.\n"
+        met_justification_placeholder: "(Required) Please explain how this is met,
+          possibly including 1+ key URLs.\n"
+        met_placeholder: "(Optional) Please explain how this is met, possibly including
+          1+ key URLs.\n"
+        unmet_placeholder: 'Please explain why it''s okay this is unmet, including
+          1+ key URLs.
+
+'
+        na_justification_placeholder: "(Required) Please explain why this is not applicable
+          (N/A), possibly including 1+ key URLs.\n"
+        na_placeholder: "(Optional) Please explain why this is not applicable (N/A),
+          possibly including 1+ key URLs.\n"
         unknown_placeholder: Please explain
-      disabled_reminders: >
-        (Advanced) Disable inactivity reminder
-        (we recommend you leave this unchecked)
+      disabled_reminders: "(Advanced) Disable inactivity reminder (we recommend you
+        leave this unchecked)\n"
       general_comments:
-        description: >
-          Other general comments about the project:
+        description: 'Other general comments about the project:
+
+'
         placeholder: Additional Comments (in markdown)
-      some_not_crypto_html: >
-        Note that some software does not need to use cryptographic mechanisms.
-      dont_use_crypto: >
-        Press here if the software produced by the project does not use
-        cryptographic mechanisms
-      future_header_html: >
-        These are criteria we intend to add in the near future, but are
-        <i>not</i> currently required for a badge.
-        This grace period allows projects to update to changed criteria
-        and retain their badge as best practices improve.
+      some_not_crypto_html: 'Note that some software does not need to use cryptographic
+        mechanisms.
+
+'
+      dont_use_crypto: 'Press here if the software produced by the project does not
+        use cryptographic mechanisms
+
+'
+      future_header_html: 'These are criteria we intend to add in the near future,
+        but are <i>not</i> currently required for a badge. This grace period allows
+        projects to update to changed criteria and retain their badge as best practices
+        improve.
+
+'
       toggle_details_title: Toggle details text
       details: Details
       url_required: URL required
       future_criterion: Future criterion
-      url_required_warning: >
-        Warning: URL required, but no URL found.
-      justification_required_warning: >
-        Warning: Requires lengthier justification.
+      url_required_warning: 'Warning: URL required, but no URL found.
+
+'
+      justification_required_warning: 'Warning: Requires lengthier justification.
+
+'
     delete:
       done: Project was successfully deleted.
   report_mailer:
@@ -1233,20 +1240,20 @@ en:
 
 '
       crypto_password_storage:
-        description: >
-          If the software produced by the project causes the storing of
-          passwords for authentication of external users, the passwords
-          MUST be stored as iterated hashes with a per-user salt by
-          using a key stretching (iterated) algorithm (e.g., PBKDF2,
-          Bcrypt or Scrypt).
-        details: >
-          This criterion applies only when the software is enforcing
-          authentication of users using passwords, such as server-side
-          web applications. It does not apply in cases where the software
-          stores passwords for authenticating into other systems (e.g.,
-          the software implements a client for some other system), since
-          at least parts of that software must have often access to the
-          unhashed password.
+        description: 'If the software produced by the project causes the storing of
+          passwords for authentication of external users, the passwords MUST be stored
+          as iterated hashes with a per-user salt by using a key stretching (iterated)
+          algorithm (e.g., PBKDF2, Bcrypt or Scrypt).
+
+'
+        details: 'This criterion applies only when the software is enforcing authentication
+          of users using passwords, such as server-side web applications. It does
+          not apply in cases where the software stores passwords for authenticating
+          into other systems (e.g., the software implements a client for some other
+          system), since at least parts of that software must have often access to
+          the unhashed password.
+
+'
       crypto_random:
         description: 'The security mechanisms within the software produced by the
           project MUST generate all cryptographic keys and nonces using a cryptographically
@@ -1625,60 +1632,59 @@ en:
 
 '
       documentation_architecture:
-        description: >
-          The project MUST include documentation of the architecture
-          (aka high-level design) of the software produced by the
-          project.  If the project does not produce software, select
-          "not applicable" (N/A).
-        details: >
-          A software architecture explains a program's fundamental
-          structures, i.e., the program's major components, the
-          relationships among them, and the key properties of these
-          components and relationships.
+        description: 'The project MUST include documentation of the architecture (aka
+          high-level design) of the software produced by the project.  If the project
+          does not produce software, select "not applicable" (N/A).
+
+'
+        details: 'A software architecture explains a program''s fundamental structures,
+          i.e., the program''s major components, the relationships among them, and
+          the key properties of these components and relationships.
+
+'
       documentation_security:
-        description: >
-          The project MUST document what the user can and cannot expect
-          in terms of security from the software produced by the project
-          (its "security requirements").
-        details: >
-          These are the security requirements that
-          the software is intended to meet.
+        description: 'The project MUST document what the user can and cannot expect
+          in terms of security from the software produced by the project (its "security
+          requirements").
+
+'
+        details: 'These are the security requirements that the software is intended
+          to meet.
+
+'
       documentation_quick_start:
-        description: >
-          The project MUST provide a "quick start" guide for new users
+        description: 'The project MUST provide a "quick start" guide for new users
           to help them quickly do something with the software.
-        details: >
-          The idea is to show users how to get started and make the
-          software do anything at all. This is critically important for
-          potential users to get started.
+
+'
+        details: 'The idea is to show users how to get started and make the software
+          do anything at all. This is critically important for potential users to
+          get started.
+
+'
       assurance_case:
-        description: >
-          The project MUST provide an assurance case that
-          justifies why its security requirements are met.
-          The assurance case MUST include: a description of the threat
-          model, clear identification of trust boundaries,
-          an argument that secure design principles have been applied,
-          and an argument
-          that common implementation security weaknesses have been countered.
-        details: >
-          An assurance case is "a documented body of evidence that
-          provides a convincing and valid argument that a specified set of
-          critical claims regarding a system’s properties are adequately
-          justified for a given application in a given environment" (<a
-          href="http://nvlpubs.nist.gov/nistpubs/ir/2009/ir7608.pdf">
-          "Software Assurance Using Structured Assurance Case Models",
-          Thomas Rhodes et al, NIST Interagency Report 7608</a>). Trust
-          boundaries are boundaries where data or execution changes
-          its level of trust, e.g., a server's boundaries in a typical
-          web application.
-          It's common to list secure design principles
-          (such as Saltzer and Schroeer) and common
-          implementation security weaknesses (such as the OWASP top 10
-          or CWE/SANS top 25), and show how each are countered.
-          The <a href="https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/doc/security.md">BadgeApp assurance case</a>
-          may be a useful example.
-          This is related to documentation_security,
+        description: 'The project MUST provide an assurance case that justifies why
+          its security requirements are met. The assurance case MUST include: a description
+          of the threat model, clear identification of trust boundaries, an argument
+          that secure design principles have been applied, and an argument that common
+          implementation security weaknesses have been countered.
+
+'
+        details: 'An assurance case is "a documented body of evidence that provides
+          a convincing and valid argument that a specified set of critical claims
+          regarding a system’s properties are adequately justified for a given application
+          in a given environment" (<a href="http://nvlpubs.nist.gov/nistpubs/ir/2009/ir7608.pdf">
+          "Software Assurance Using Structured Assurance Case Models", Thomas Rhodes
+          et al, NIST Interagency Report 7608</a>). Trust boundaries are boundaries
+          where data or execution changes its level of trust, e.g., a server''s boundaries
+          in a typical web application. It''s common to list secure design principles
+          (such as Saltzer and Schroeer) and common implementation security weaknesses
+          (such as the OWASP top 10 or CWE/SANS top 25), and show how each are countered.
+          The <a href="https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/doc/security.md">BadgeApp
+          assurance case</a> may be a useful example. This is related to documentation_security,
           documentation_architecture, and implement_secure_design.
+
+'
       documentation_current:
         description: 'The project MUST make an effort to keep the documentation consistent
           with the current version of the project results (including software produced
@@ -2107,23 +2113,22 @@ en:
 
 '
       signed_releases:
-        description: >
-          The project MUST cryptographically sign releases of the project
-          results intended for widespread use, and there MUST be a
-          documented process explaining to users how they can obtain
-          the public signing keys and verify the signature(s). The
-          private key for these signature(s) MUST NOT be on site(s)
-          used to directly distribute the software to the public.
-          If releases are not intended for widespread use,
-          select "not applicable" (N/A).
-        details: >
-          The project results include both source code and any generated
-          deliverables where applicable (e.g., executables, packages, and
-          containers). Generated deliverables MAY be signed separately
-          from source code. These MAY be implemented as signed git tags
-          (using cryptographic digital signatures). Projects MAY provide
-          generated results separately from tools like git, but in those
-          cases, the separate results MUST be separately signed.
+        description: 'The project MUST cryptographically sign releases of the project
+          results intended for widespread use, and there MUST be a documented process
+          explaining to users how they can obtain the public signing keys and verify
+          the signature(s). The private key for these signature(s) MUST NOT be on
+          site(s) used to directly distribute the software to the public. If releases
+          are not intended for widespread use, select "not applicable" (N/A).
+
+'
+        details: 'The project results include both source code and any generated deliverables
+          where applicable (e.g., executables, packages, and containers). Generated
+          deliverables MAY be signed separately from source code. These MAY be implemented
+          as signed git tags (using cryptographic digital signatures). Projects MAY
+          provide generated results separately from tools like git, but in those cases,
+          the separate results MUST be separately signed.
+
+'
       version_tags_signed:
         description: 'It is SUGGESTED that in the version control system, each important
           version tag (a tag that is part of a major release, minor release, or fixes
@@ -2373,46 +2378,44 @@ en:
 
 '
       hardening:
-        description: >
-          Hardening mechanisms MUST be used in the software produced by
-          the project so that software defects are less likely to
-          result in security vulnerabilities.
-        details: >
-          Hardening mechanisms may include HTTP headers like Content
-          Security Policy (CSP), compiler flags to mitigate attacks
-          (such as -fstack-protector), or compiler flags to eliminate
-          undefined behavior. For our purposes least privilege is not
-          considered a hardening mechanism (least privilege is important,
+        description: 'Hardening mechanisms MUST be used in the software produced by
+          the project so that software defects are less likely to result in security
+          vulnerabilities.
+
+'
+        details: 'Hardening mechanisms may include HTTP headers like Content Security
+          Policy (CSP), compiler flags to mitigate attacks (such as -fstack-protector),
+          or compiler flags to eliminate undefined behavior. For our purposes least
+          privilege is not considered a hardening mechanism (least privilege is important,
           but separate).
+
+'
       dynamic_analysis:
-        description: >
-          The project MUST apply at least one dynamic analysis tool to
-          any proposed major production release of the software produced
-          by the project before its release.
-        details: >
-          A dynamic analysis tool examines the software by executing it
-          with specific inputs. For example, the project MAY use a fuzzing
-          tool (e.g., <a href="http://lcamtuf.coredump.cx/afl/">American
-          Fuzzy Lop</a>) or a web application scanner (e.g., <a
-          href="https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project">OWASP
-          ZAP</a> or <a
-          href="http://w3af.org/">w3af</a>). In some cases the <a
-          href="https://github.com/google/oss-fuzz#introduction">OSS-Fuzz</a>
-          project may be willing to apply fuzz testing to your
-          project. For purposes of this criterion the dynamic
-          analysis tool needs to vary the inputs in some way
-          to look for various kinds of problems <em>or</em> be an
-          automated test suite with at least 80% branch coverage.  The <a
-          href="https://en.wikipedia.org/wiki/Dynamic_program_analysis">Wikipedia
-          page on dynamic analysis</a> and the <a
-          href="https://www.owasp.org/index.php/Fuzzing">OWASP page on
-          fuzzing</a> identify some dynamic analysis tools. The analysis
-          tool(s) MAY be focused on looking for security vulnerabilities,
-          but this is not required.
+        description: 'The project MUST apply at least one dynamic analysis tool to
+          any proposed major production release of the software produced by the project
+          before its release.
+
+'
+        details: 'A dynamic analysis tool examines the software by executing it with
+          specific inputs. For example, the project MAY use a fuzzing tool (e.g.,
+          <a href="http://lcamtuf.coredump.cx/afl/">American Fuzzy Lop</a>) or a web
+          application scanner (e.g., <a href="https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project">OWASP
+          ZAP</a> or <a href="http://w3af.org/">w3af</a>). In some cases the <a href="https://github.com/google/oss-fuzz#introduction">OSS-Fuzz</a>
+          project may be willing to apply fuzz testing to your project. For purposes
+          of this criterion the dynamic analysis tool needs to vary the inputs in
+          some way to look for various kinds of problems <em>or</em> be an automated
+          test suite with at least 80% branch coverage.  The <a href="https://en.wikipedia.org/wiki/Dynamic_program_analysis">Wikipedia
+          page on dynamic analysis</a> and the <a href="https://www.owasp.org/index.php/Fuzzing">OWASP
+          page on fuzzing</a> identify some dynamic analysis tools. The analysis tool(s)
+          MAY be focused on looking for security vulnerabilities, but this is not
+          required.
+
+'
       dynamic_analysis_enable_assertions:
-        description: >
-          The project SHOULD include many run-time assertions in the software
+        description: 'The project SHOULD include many run-time assertions in the software
           it produces and check those assertions during dynamic analysis.
+
+'
   headings:
     Accessibility and internationalization: Accessibility and internationalization
     Analysis: Analysis
@@ -2448,8 +2451,7 @@ en:
     Security: Security
     Static code analysis: Static code analysis
     Unique version numbering: Unique version numbering
-    'Use basic good cryptographic practices':
-      Use basic good cryptographic practices
+    Use basic good cryptographic practices: Use basic good cryptographic practices
     Vulnerability report process: Vulnerability report process
     Warning flags: Warning flags
     Working build system: Working build system
@@ -2457,6 +2459,4 @@ en:
     Met: Met
     Unmet: Unmet
     NA: N/A
-  # Last translation entry, here for test purposes so that we can detect
-  # some problems in YAML formatting of this file.
   last_entry: Last translation entry

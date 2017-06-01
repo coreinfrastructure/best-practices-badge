@@ -368,7 +368,16 @@ task :fake_production do
   sh 'RAILS_ENV=fake_production rails server -p 4000'
 end
 
-# Remove trailing whitespace after running "translation:sync".
+desc 'Save English translation file as .ORIG file'
+task :save_en do
+  sh 'cp -p config/locales/en.yml config/locales/en.yml.ORIG'
+end
+
+# Fix up translation:sync.
+# First, translation:sync rewrites the source en.yml file, which it shouldn't
+# ever do, and in the process reformats it into garbage with overly-long lines.
+# We modify its behavior to save the en.yml file, and later restore it.
+# We also remove trailing whitespace after running "translation:sync".
 # The "translation:sync" task syncs up the translations, but uses the usual
 # YAML writer, which writes out trailing whitespace.  It should not do that,
 # and the trailing whitespace causes later failures in testing.
@@ -378,9 +387,11 @@ end
 # We will run this enhancement to solve the problem.
 # Only do this in development, since the gem only exists then.
 if Rails.env.development?
+  task 'translation:sync' => :save_en
   Rake::Task['translation:sync'].enhance do
     puts 'Removing bogus trailing whitespace (bug workaround).'
     sh "cd config/locales/ && sed -i -e 's/ $//' *.yml && cd ../.."
+    sh 'cp -p config/locales/en.yml.ORIG config/locales/en.yml'
   end
 end
 

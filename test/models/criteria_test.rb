@@ -33,6 +33,14 @@ class CriteriaTest < ActiveSupport::TestCase
 
   test 'Criteria#keys' do
     assert_includes Criteria.keys, '0'
+    assert_includes Criteria.keys, '1'
+    assert_includes Criteria.keys, '2'
+  end
+
+  test 'Reasonable number of criteria in each level' do
+    assert Criteria['0'].count > 40
+    assert Criteria['1'].count > 20
+    assert Criteria['2'].count > 10
   end
 
   test '#details_present?' do

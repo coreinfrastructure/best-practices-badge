@@ -19,6 +19,26 @@ class ProjectsControllerTest < ActionController::TestCase
     @admin = users(:admin_user)
   end
 
+  # Ensure that every criterion that is *supposed* to be in this level is
+  # selectable, and that every criterion that is *not* supposed to be in this
+  # level is not selectable.
+  # rubocop:disable Metrics/MethodLength
+  def only_correct_criteria_selectable(level)
+    Criteria.keys do |query_level|
+      Criteria[query_level].each do |criterion|
+        if query_level == level
+          assert_select '#' + criterion.to_s
+          assert_select "#project_#{criterion}_status_met"
+        elsif !Criteria[level].key?(criterion)
+          # This is criterion in another level, *not* this one
+          assert_select '#' + criterion.to_s, false
+          assert_select "#project_#{criterion}_status_met", false
+        end
+      end
+    end
+  end
+  # rubocop:enable Metrics/MethodLength
+
   test 'should get index' do
     get :index
     assert_response :success
@@ -66,10 +86,7 @@ class ProjectsControllerTest < ActionController::TestCase
     assert_response :success
     assert_select 'a[href=?]'.dup, 'https://www.nasa.gov'
     assert_select 'a[href=?]'.dup, 'https://www.nasa.gov/pathfinder'
-    # Ensure that there's an id for all criteria.
-    Criteria['0'].keys.each do |criterion|
-      assert_select '#' + criterion.to_s
-    end
+    only_correct_criteria_selectable('0')
   end
 
   test 'should show project with criteria_level=1' do
@@ -77,10 +94,7 @@ class ProjectsControllerTest < ActionController::TestCase
     assert_response :success
     assert_select 'a[href=?]'.dup, 'https://www.nasa.gov'
     assert_select 'a[href=?]'.dup, 'https://www.nasa.gov/pathfinder'
-    # Ensure that there's an id for all criteria.
-    Criteria['1'].keys.each do |criterion|
-      assert_select '#' + criterion.to_s
-    end
+    only_correct_criteria_selectable('1')
   end
 
   test 'should show project with criteria_level=2' do
@@ -88,10 +102,7 @@ class ProjectsControllerTest < ActionController::TestCase
     assert_response :success
     assert_select 'a[href=?]'.dup, 'https://www.nasa.gov'
     assert_select 'a[href=?]'.dup, 'https://www.nasa.gov/pathfinder'
-    # Ensure that there's an id for all criteria.
-    Criteria['2'].keys.each do |criterion|
-      assert_select '#' + criterion.to_s
-    end
+    only_correct_criteria_selectable('2')
   end
 
   test 'should show project JSON data' do

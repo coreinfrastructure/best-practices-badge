@@ -115,7 +115,7 @@ ja:
     login_html:
     footer_text_html:
   account_activations:
-    activated:
+    activated: アカウントが有効になりました！
     failed_activation:
   password_resets:
     forgot_password:
@@ -221,6 +221,8 @@ ja:
       create_time:
       update_time:
       user_id:
+      paren_name_unknown:
+      badge_level:
     new:
       post_delay_warning:
       new_badge:

@@ -228,6 +228,8 @@ zh-CN:
       create_time: 创建时间（徽章认证的）
       update_time: 最后更新时间（徽章条目）
       user_id: 用户名
+      paren_name_unknown:
+      badge_level:
     new:
       post_delay_warning: 在提交后，因为我们试图自动填充相关信息，可能有显著的滞后。
       new_badge: 新徽章

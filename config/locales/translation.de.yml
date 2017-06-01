@@ -187,10 +187,12 @@ de:
       active_edited:
       active_edited_in_progress:
       projects_created_since_yesterday: Projekte angelegt vor Tag
-      projects_updated_since_yesterday:
+      projects_updated_since_yesterday: Projekte aktualisiert seit
       projects_created_average_7_days: Projekte vor mehr als 7 Tagen angelegt
       projects_updated_average_7_days: Projekte vor mehr als 7 Tagen aktualisiert
-      reminders_sent_since_yesterday:
+      reminders_sent_since_yesterday: 'Seit gestern gesendete Erinnerungen
+
+'
       reactivated_projects:
       admin_html:
       raw_data:
@@ -201,12 +203,12 @@ de:
       add_link: Hinzufügen
       add_new: Neues Projekt hinzufügen
       badge_status: Badge Status
-      exclude_passing:
+      exclude_passing: Schließe "passing" aus
       text_search: Textsuche
       name_or_description: Name oder Beschreibungstext
       search: Suche
-      all:
-      passing_100:
+      all: Alle
+      passing_100: Passing (100%)
       in_progress_variable:
     table:
       id: ID
@@ -222,6 +224,8 @@ de:
       create_time:
       update_time: Letzte Aktualisierung (für Badge Eintrag)
       user_id: Benutzer ID
+      paren_name_unknown:
+      badge_level:
     new:
       post_delay_warning:
       new_badge: Neues Badge
@@ -232,15 +236,15 @@ de:
       placeholder_of_homepage:
       url_of_repo:
       placeholder_of_repo:
-      submit_urls:
+      submit_urls: Sende URL
       sign_in_first:
       thanks_adding:
       project_already_exists:
     show:
-      edit:
-      delete:
+      edit: Bearbeiten
+      delete: Löschen
       confirm_delete:
-      back:
+      back: Zurück
       cc_by_3plus_html:
       cc_by_3only_html:
       owned_by:
@@ -250,29 +254,29 @@ de:
       last_achieved_html:
     edit:
       submit_cc_by_3plus_html:
-      save_and_continue:
-      submit_and_exit:
+      save_and_continue: Speichern (und fortfahren)
+      submit_and_exit: Senden (und beenden)
       repo_url_limits:
       changed_since_html:
-      successfully_updated:
+      successfully_updated: Das Projekt wurde erfolgreich aktualisiert.
       congrats_new:
-      lost_badge:
+      lost_badge: Das Projekt hat ein Badge verloren.
       static_analysis_updated_html:
     form_basics:
       project_name:
         description:
         details:
-        placeholder:
+        placeholder: FLOSS Projektname
       description:
         description:
         details:
-        placeholder:
+        placeholder: Projektbeschreibung
       homepage_url:
         description:
-        placeholder:
+        placeholder: Projekt Website URL
       repo_url:
         description:
-        placeholder:
+        placeholder: Projekt Repo URL
       implementation_languages:
         description:
         details:
@@ -280,25 +284,25 @@ de:
       cpe:
         description_html:
         details_html:
-        placeholder:
+        placeholder: "(Optional) CPE-Name"
       license:
         description_html:
         details_html:
-        placeholder:
+        placeholder: FLOSS Lizenz
     form_early:
       badge_intro:
         description:
         details_html:
       got_badge:
         description_1:
-        description_2:
+        description_2: 'Hier ist, wie man es einbetten:'
         details_html:
         editing_description_html:
-        badge_alt:
+        badge_alt: Badgelevel für Projekt %{id} ist %{level}
       level:
-        0_html:
-        1_html:
-        2_html:
+        0_html: Dies sind die Kriterien für Badgelevel "passing".
+        1_html: Dies sind die Kriterien für Badgelevel "silver".
+        2_html: Dies sind die Kriterien für Badgelevel "gold".
     misc:
       disabled_reminders:
       general_comments:
@@ -308,21 +312,21 @@ de:
       dont_use_crypto:
       future_header_html:
       in_javascript:
-        collapse_all_title:
-        collapse_all:
-        expand_all_title:
-        expand_all:
+        collapse_all_title: Alle Panels falten
+        collapse_all: Panel falten
+        expand_all_title: Alle Panels erweitern
+        expand_all: Panel erweitern
         show_details:
-        hide_details:
+        hide_details: Details ausblenden
         show_all_details:
-        hide_all_details:
+        hide_all_details: Alle Details ausblenden
         show_met_title:
         show_met_html:
         hide_met_title:
         hide_met_html:
         passing_alt:
         barely_alt:
-        failing_alt:
+        failing_alt: Nicht genug für ein Badge.
         unknown_alt:
         met_url_placeholder:
         met_justification_placeholder:
@@ -331,10 +335,10 @@ de:
         na_justification_placeholder:
         na_placeholder:
         unknown_placeholder:
-      toggle_details_title:
-      details:
-      url_required:
-      future_criterion:
+      toggle_details_title: Toggle Details Text
+      details: Details
+      url_required: URL erforderlich
+      future_criterion: Zukünftiges Kriterium
       url_required_warning:
       justification_required_warning:
     delete:
@@ -479,7 +483,19 @@ de:
         description: Falls die vom Projekt entwickelte Software vor Benutzung kompiliert
           werden muss, MUSS das Projekt ein funktionierendes Buildsystem bereitstellen,
           das den Source Code automatisch in Software übersetzt.
-        details:
+        details: 'Ein Build-System bestimmt, welche Aktionen durchgeführt werden müssen,
+          um die Software neu zu bauen (und in welcher Reihenfolge) und führt dann
+          diese Schritte aus. Zum Beispiel kann es einen Compiler aufrufen, um den
+          Quellcode zu kompilieren. Wenn eine ausführbare Datei aus dem Quellcode
+          erstellt wird, muss es möglich sein, den Quellcode des Projekts zu ändern
+          und dann eine aktualisierte ausführbare Datei mit diesen Modifikationen
+          zu erzeugen. Wenn die vom Projekt produzierte Software von externen Bibliotheken
+          abhängt, muss das Build-System diese externen Bibliotheken <i>nicht</i>
+          bauen. Wenn es keine Notwendigkeit gibt, irgendetwas zu bauen, um die Software
+          zu verwenden, nachdem ihr Quellcode geändert wurde, wählen Sie "nicht anwendbar"
+          (N/A).
+
+'
       build_common_tools:
         description: Es ist EMPFHOLEN, dass gewöhnliche Werkzeuge zum Kompiliren von
           Software benutzt wird.
@@ -618,7 +634,8 @@ de:
         description:
         details:
       code_of_conduct:
-        description:
+        description: Das Projekt MUSS einen Code of Conduct etablieren und an einem
+          üblichen Ort veröffentlichen.
         details:
       roles_responsibilities:
         description:
@@ -626,7 +643,7 @@ de:
       access_continuity:
         description:
       bus_factor:
-        description:
+        description: Das Projekt SOLLTE einen Bus-Faktor von 2 oder mehr haben.
         details:
       documentation_roadmap:
         description:
@@ -760,7 +777,10 @@ de:
         description:
         details:
       contributors_unassociated:
-        description:
+        description: 'Das Projekt muss mindestens zwei bedeutende, nicht assoziierte
+          Mitwirkende haben.
+
+'
         details:
       copyright_per_file:
         description:
@@ -847,44 +867,44 @@ de:
         CII Best Practices Badge Mitwirkenden als Urheber angeben.'
   headings:
     Accessibility and internationalization:
-    Analysis:
+    Analysis: Analyse
     Automated test suite:
     Basic project website content:
-    Basics:
+    Basics: Grundlagen
     Bug-reporting process:
     Change Control:
     Coding standards:
-    Documentation:
+    Documentation: Dokumentation
     Dynamic code analysis:
     Externally-maintained components:
-    Future:
-    future:
-    Installation system:
+    Future: Zukunft
+    future: zukünftige
+    Installation system: Installationssystem
     New functionality testing:
-    OSS License:
-    Other:
-    Other security issues:
-    Previous versions:
-    Project oversight:
+    OSS License: OSS Lizenz
+    Other: Andere
+    Other security issues: Andere Sicherheitsissues
+    Previous versions: Vorherige Versionen
+    Project oversight: Projektüberwachung
     Public version-controlled source repository:
     Publicly known vulnerabilities fixed:
-    Quality:
-    Release notes:
-    Reporting:
+    Quality: Qualität
+    Release notes: Versionshinweise
+    Reporting: Berichterstattung
     Secure development knowledge:
-    Secure release:
+    Secure release: Sicheres Release
     Secured delivery against man-in-the-middle (MITM) attacks:
-    Security:
-    Static code analysis:
-    Unique version numbering:
+    Security: Sicherheit
+    Static code analysis: Statische Codeanalyse
+    Unique version numbering: Einzigartige Versionsnummerierung
     Use basic good cryptographic practices:
     Vulnerability report process:
-    Warning flags:
+    Warning flags: Warnhinweise
     Working build system:
-    Identification:
-  last_entry:
+    Identification: Identifizierung
+  last_entry: Letzter Übersetzungseintrag
   admin_only: Nur Administratoren.
   criterion_status:
-    Met:
-    Unmet:
-    NA:
+    Met: Erfüllt
+    Unmet: Nicht erfüllt
+    NA: keine Angabe

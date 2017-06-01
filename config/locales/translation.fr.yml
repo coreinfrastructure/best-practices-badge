@@ -253,6 +253,8 @@ fr:
       create_time: date de création (pour la soumission)
       update_time: dernière date de mise à jour (pour la soumission)
       user_id: id utilisateur
+      paren_name_unknown:
+      badge_level:
     new:
       post_delay_warning: 'Il peut y avoir un délai important après la soumission
         car nous essayons de remplir automatiquement les informations.
@@ -539,12 +541,30 @@ fr:
         description:
         met_placeholder:
       contribution:
-        description:
-        details:
-        met_placeholder:
+        description: 'L''information sur la façon de contribuer DOIT expliquer le
+          processus de contribution (par exemple, les pull requests sont-elles utilisées
+          ?)
+
+'
+        details: 'Nous supposons que <a href="https://guides.github.com/activities/contributing-to-open-source/">les
+          projets sur GitHub utilisent les rapports de problèmes et les pull requests</a>,
+          sauf indication contraire. Cette information peut être courte, par exemple,
+          en indiquant que le projet utilise les pull requests, un suivi de problème
+          ou des messages dans une liste de diffusion (laquelle ?)
+
+'
+        met_placeholder: "(URL requise) Quel est le processus ? Quelle URL l'explique
+          ?\n"
       contribution_requirements:
-        description:
-        unmet_placeholder:
+        description: 'Les informations sur la façon de contribuer DEVRAIENT inclure
+          les exigences pour des contributions acceptables (par exemple, une référence
+          à toute norme de codage requise).
+
+'
+        unmet_placeholder: 'Pourquoi les exigences sont-elles si évidentes que cette
+          information n''est pas nécessaire ?
+
+'
       floss_license:
         description:
         details:
@@ -616,13 +636,34 @@ fr:
         description:
         details:
       build:
-        description:
-        details:
+        description: 'Si le logiciel produit par le projet nécessite d''être construit,
+          le projet DOIT fournir un système de construction fonctionnel qui peut reconstruire
+          automatiquement le logiciel à partir du code source.
+
+'
+        details: 'Un système de construction détermine quelles actions doivent se
+          produire pour reconstruire le logiciel (et dans quel ordre), puis exécute
+          ces étapes. Par exemple, il peut invoquer un compilateur pour compiler le
+          code source. Si un exécutable est créé à partir du code source, il doit
+          être possible de modifier le code source du projet, puis de générer un exécutable
+          mis à jour avec ces modifications. Si le logiciel produit par le projet
+          dépend de bibliothèques externes, le système de construction n''a <i>pas</i>
+          besoin de construire ces bibliothèques externes. S''il n''est pas nécessaire
+          de construire quoi que ce soit pour utiliser le logiciel après la modification
+          de son code source, sélectionnez "non applicable" (N/A).
+
+'
       build_common_tools:
-        description:
-        details:
+        description: 'Il est PROPOSÉ d''utiliser des outils courants pour la construction
+          du logiciel.
+
+'
+        details: 'Par exemple, Maven, Ant, cmake, autotools, make ou rake.
+
+'
       build_floss_tools:
-        description:
+        description: Le projet DEVRAIT être constructible en utilisant uniquement
+          des outils FLOSS.
       test:
         description:
         details:
@@ -658,16 +699,57 @@ fr:
         description:
         details:
       crypto_published:
-        description:
-        details:
+        description: 'Le logiciel produit par le projet DOIT utiliser, par défaut,
+          uniquement les protocoles cryptographiques et les algorithmes publiés publiquement
+          et revus par des experts (si des protocoles et algorithmes cryptographiques
+          sont utilisés).
+
+'
+        details: 'Ces critères cryptographiques ne s''appliquent pas toujours car
+          certains logiciels n''ont pas besoin d''utiliser directement de capacités
+          cryptographiques.
+
+'
       crypto_call:
-        description:
+        description: 'Si le logiciel produit par le projet est une application ou
+          une bibliothèque, et si son objectif principal n''est pas d''implémenter
+          de la cryptographie, alors il DEVRAIT simplement appeler un logiciel spécialement
+          conçu pour implémenter des fonctions cryptographiques ; il ne DEVRAIT PAS
+          ré-implémenter les siennes.
+
+'
       crypto_floss:
-        description:
-        details:
+        description: 'Toutes les fonctionnalités du logiciel produit par le projet
+          qui dépendent de la cryptographie DOIVENT être réalisables à l''aide de
+          FLOSS.
+
+'
+        details: 'Consultez les <a href="https://opensource.org/osr">Exigences des
+          standards ouverts pour les logiciels par l''Open Source Initiative</a>.
+
+'
       crypto_keylength:
-        description:
-        details:
+        description: 'Les mécanismes de sécurité dans le logiciel produit par le projet
+          DOIVENT utiliser des longueurs de clés par défaut qui satisfont au moins
+          aux exigences minimales du NIST jusqu''à l''année 2030 (comme indiqué en
+          2012). Il DOIT être possible de configurer le logiciel afin que les plus
+          petites longueurs de clés soient complètement désactivées.
+
+'
+        details: 'Ces longueurs de bit minimales sont : pour une clé symétrique 112,
+          pour un modulo de factorisation 2048, pour une clé de logarithme discret
+          224, pour un groupe du logarithmique discret 2048, pour une courbe elliptique
+          224 et pour un hachage 224 (le hachage de mot de passe n''est pas couvert
+          par cette longueur de bit, plus d''informations sur le hachage de mot de
+          passe peuvent être trouvées dans le critère <a href="#crypto_password_storage">crypto_password_storage</a>).
+          Voir <a href="http://www.keylength.com">http://www.keylength.com</a> pour
+          une comparaison des recommandations sur les longueurs de clés de diverses
+          organisations. Le logiciel PEUT permettre de plus petites longueurs de clés
+          dans certaines configurations (idéalement non, car cela permet des attaques
+          de dégradation, mais des longueurs de clés plus courtes sont parfois nécessaires
+          pour l''interopérabilité).
+
+'
       crypto_working:
         description:
         details:
@@ -675,12 +757,38 @@ fr:
         description:
         details:
       crypto_pfs:
-        description:
+        description: 'Les mécanismes de sécurité dans le logiciel produit par le projet
+          DEVRAIENT implémenter la confidentialité persistante pour les protocoles
+          d''échange de clés afin qu''une clé de session dérivée d''un ensemble de
+          clés à long terme ne soit pas compromise si l''une des clés à long terme
+          est compromise dans le futur.
+
+'
       crypto_password_storage:
-        description:
-        details:
+        description: 'Si le logiciel produit par le projet entraîne l''entreposage
+          de mots de passe pour l''authentification d''utilisateurs externes, les
+          mots de passe DOIVENT être stockés comme hachages itérés avec un salage
+          par utilisateur en utilisant un algorithme d''étirement de clé (itéré) (par
+          exemple PBKDF2, Bcrypt ou Scrypt).
+
+'
+        details: 'Ce critère s''applique uniquement lorsque le logiciel applique l''authentification
+          des utilisateurs utilisant des mots de passe, telles que des applications
+          Web côté serveur. Il ne s''applique pas dans les cas où le logiciel entrepose
+          des mots de passe pour l''authentification dans d''autres systèmes (par
+          exemple, le logiciel implémente un client pour un autre système), car au
+          moins certaines parties de ce logiciel doivent avoir souvent accès au mot
+          de passe en clair.
+
+'
       crypto_random:
-        description:
+        description: 'Les mécanismes de sécurité dans le logiciel produit par le projet
+          DOIVENT générer toutes les clés cryptographiques et les nonces en utilisant
+          un générateur de nombres aléatoires cryptographiquement sécurisé, et NE
+          DOIVENT PAS le faire en utilisant des générateurs qui ne seraient pas cryptographiquement
+          sécurisés.
+
+'
         details:
       delivery_mitm:
         description:
@@ -723,15 +831,45 @@ fr:
         description:
         details:
       build_reproducible:
-        description:
-        details:
+        description: 'Il est PROPOSÉ que le projet possède une <a href="https://reproducible-builds.org/">construction
+          reproductible</a>.
+
+'
+        details: 'Une construction reproductible signifie que plusieurs parties peuvent
+          refaire indépendamment le processus de génération d''informations à partir
+          de fichiers source et obtenir exactement le même résultat bit-à-bit. Si
+          aucune construction ne se produit (par exemple, les langues de script où
+          le code source est utilisé directement au lieu d''être compilé), sélectionnez
+          "N/A". Dans certains cas, cela peut être résolu en forçant un ordre de tri.
+          Les développeurs JavaScript peuvent envisager d''utiliser npm shrinkwrap
+          et webpack OccurenceOrderPlugin. Les utilisateurs GGC et clang peuvent trouver
+          l''option -frandom-seed utile. L''environnement de construction (y compris
+          le jeu d''outils) peut souvent être défini pour les parties externes en
+          spécifiant le hachage cryptographique d''un conteneur spécifique ou d''une
+          machine virtuelle qu''ils peuvent utiliser pour la reconstruction. Le <a
+          href="https://reproducible-builds.org/docs/">projet de construction reproductible
+          dispose de documentation sur la façon de le faire</a>.
+
+'
       crypto_used_network:
         description:
       crypto_tls12:
         description:
       crypto_certificate_verification:
-        description:
-        details:
+        description: 'Le logiciel produit par le projet DOIT, s''il prend en charge
+          TLS, effectuer la vérification des certificats TLS par défaut lors de l''utilisation
+          de TLS, y compris sur les sous-ressources. Si le logiciel n''utilise pas
+          TLS, sélectionnez «non applicable» (N/A).
+
+'
+        details: 'Notez que la vérification incorrecte du certificat TLS est une erreur
+          courante. Pour plus d''informations, voir <a href="http://crypto.stanford.edu/~dabo/pubs/abstracts/ssl-client-bugs.html">
+          "Le code le plus dangereux dans le monde : la validation des certificats
+          SSL dans du logiciel qui ne vient pas d''un navigateur" de Martin Georgiev
+          et al.</a> et <a href="https://blogs.gnome.org/mcatanzaro/2016/03/12/do-you-trust-this-application/">
+          "Avez-vous confiance en cette application ?" Par Michael Catanzaro</a>.
+
+'
       crypto_verification_private:
         description:
       hardened_site:
@@ -1020,7 +1158,7 @@ fr:
     Working build system:
     Identification:
   last_entry:
-  admin_only:
+  admin_only: Admin seulement.
   criterion_status:
     Met:
     Unmet:

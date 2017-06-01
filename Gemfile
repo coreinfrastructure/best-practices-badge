@@ -25,6 +25,8 @@ gem 'jquery-rails', '4.3.1' # JavaScript jQuery library (for Rails)
 # gem 'jquery-turbolinks' # Make turbolinks work with jQuery
 gem 'jquery-ui-rails', '6.0.1' # JavaScript jQueryUI library (for Rails)
 gem 'lograge', '0.5.1' # Simplify logs
+# Hardcode mail rc1 until security issue in #750 is resolved
+gem 'mail', git: 'https://github.com/mikel/mail.git', ref: '21222e1'
 gem 'octokit', '4.7.0' # GitHub's official Ruby API
 gem 'omniauth-github', '1.3.0' # Authentication to GitHub (get project info)
 gem 'paleta', '0.3.0' # Color manipulation, used for badges

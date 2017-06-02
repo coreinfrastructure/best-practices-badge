@@ -4,6 +4,10 @@
          <button class="btn btn-simple details-toggler hidden-print" title="<%= t('projects.misc.toggle_details_title') %>" type="button" id='<%= details_toggler_id %>'><%= t('projects.misc.details') %></button>
          <div class="details-text" id="<%= details_text_id %>">
          <%# Although we provide details, sanitize here provides belt and
-             suspenders protection and shows brakeman that it's safe. %>
-         <%= sanitize details, tags: %w(strong em a), attributes: %w(href) %>
+             suspenders protection and shows brakeman that it's safe.
+             ONLY the tags and attributes listed below will be allowed
+             in "details". %>
+         <%= sanitize details,
+                      tags: %w(a strong em i b ol ul li br small p),
+                      attributes: %w(href) %>
          </div>

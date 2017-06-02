@@ -240,6 +240,7 @@ de:
       sign_in_first:
       thanks_adding:
       project_already_exists:
+      final_text_html:
     show:
       edit: Bearbeiten
       delete: Löschen

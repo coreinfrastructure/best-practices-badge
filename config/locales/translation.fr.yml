@@ -288,6 +288,7 @@ fr:
       sign_in_first: Connectez-vous pour ajouter un projet !
       thanks_adding:
       project_already_exists:
+      final_text_html:
     show:
       edit:
       delete:
@@ -534,9 +535,16 @@ fr:
   criteria:
     '0':
       description_good:
-        description:
-        details:
-        met_placeholder:
+        description: 'Le site du projet DOIT décrire succinctement ce que le logiciel
+          fait (quel problème résout-il ?).
+
+'
+        details: 'Cela DOIT être dans un langage que les utilisateurs potentiels peuvent
+          comprendre (par exemple, il utilise un jargon minimal).
+
+'
+        met_placeholder: "(Facultatif) Où est la description succincte ? Envisager
+          de fournir une URL.\n"
       interact:
         description:
         met_placeholder:
@@ -575,18 +583,70 @@ fr:
         description:
         details:
       documentation_basics:
-        description:
-        details:
-        met_placeholder:
+        description: 'Le projet DOIT fournir une documentation de base pour le logiciel
+          produit par le projet.
+
+'
+        details: 'Cette documentation doit se trouver dans un certain format (comme
+          le texte ou la vidéo) qui comprend : comment l''installer, comment le démarrer,
+          comment l''utiliser (éventuellement avec un tutoriel à l''aide d''exemples)
+          et comment l''utiliser en toute sécurité (par exemple, quoi faire et ne
+          pas faire) si c''est un sujet approprié pour le logiciel. La documentation
+          de sécurité n''a pas besoin d''être longue. Le projet PEUT utiliser des
+          liens hypertextes vers du matériel hors projet en tant que documentation.
+          Si le projet ne produit pas de logiciel, choisissez "non applicable" (N/A).
+
+'
+        met_placeholder: "(Facultatif) Quelle(s) URL(s) sont les points de départ
+          pour la documentation ?\n"
       documentation_interface:
-        description:
-        details:
+        description: 'Le projet DOIT fournir une documentation de référence qui décrit
+          l''interface externe (entrée et sortie) du logiciel produit par le projet.
+
+'
+        details: 'La documentation d''une interface externe explique à un utilisateur
+          final ou un développeur comment l''utiliser. Cela inclurait son interface
+          de programmation (API) si le logiciel en possède une. S''il s''agit d''une
+          bibliothèque, documentez les principales classes / types et méthodes / fonctions
+          pouvant être appelés. S''il s''agit d''une application Web, définissez son
+          interface URL (souvent son interface REST). S''il s''agit d''une interface
+          de ligne de commande, documentez les paramètres et les options qu''elle
+          supporte. Dans de nombreux cas, il est préférable que la plupart de cette
+          documentation soit générée automatiquement, de sorte que cette documentation
+          reste synchronisée avec le logiciel au fur et à mesure qu''il change, mais
+          cela n''est pas nécessaire. Le projet PEUT utiliser des liens hypertextes
+          vers du matériel hors projet en tant que documentation. La documentation
+          PEUT être générée automatiquement (quand c''est possible, c''est souvent
+          la meilleure façon de le faire). La documentation d''une interface REST
+          peut être générée à l''aide de Swagger / OpenAPI. La documentation de l''interface
+          de code PEUT être générée à l''aide d''outils tels que <a href="http://usejsdoc.org/">JSDoc</a>
+          (JavaScript), <a href="https://esdoc.org/">ESDoc</a> (JavaScript), pydoc
+          (Python) et Doxygen (plusieurs). Le simple fait d''avoir des commentaires
+          dans le code source n''est pas suffisant pour satisfaire ce critère ; il
+          doit y avoir un moyen simple de voir l''information sans lire l''intégralité
+          du code source. Si le projet ne produit pas de logiciel, choisissez "non
+          applicable" (N/A).
+
+'
       sites_https:
         description:
         details:
       discussion:
-        description:
-        details:
+        description: 'Le projet DOIT avoir un ou plusieurs mécanismes de discussion
+          (y compris les changements et les problèmes proposés) qui peuvent être recherchés,
+          permettent de désigner les messages et les sujets par une URL, permettent
+          aux nouvelles personnes de participer à certaines des discussions et ne
+          nécessitent pas d''installation côté client de logiciels propriétaires.
+
+'
+        details: 'Parmi les exemples de mécanismes acceptables figurent les listes
+          de diffusion archivées, les problèmes de GitHub et les discussions sur les
+          pull requests, Bugzilla, Mantis et Trac. Les mécanismes de discussion asynchrones
+          (comme IRC) sont acceptables s''ils répondent à ces critères ; assurez-vous
+          qu''il existe un mécanisme d''archivage adressable par URL. Une solution
+          propriétaire en JavaScript, tout en étant découragée, est autorisée.
+
+'
       english:
         description:
         details:
@@ -751,11 +811,35 @@ fr:
 
 '
       crypto_working:
-        description:
-        details:
+        description: 'Les mécanismes de sécurité par défaut dans le logiciel produit
+          par le projet NE DOIVENT PAS dépendre d''algorithmes cryptographiques brisés
+          (par exemple, MD4, MD5, DES unique, RC4, Dual_EC_DRBG) ou utiliser des modes
+          de chiffrement inappropriés dans le contexte (par exemple, le mode ECB n''est
+          presque jamais approprié car il révèle des blocs identiques dans le texte
+          chiffré comme en témoigne le <a href="https://blog.filippo.io/the-ecb-penguin/">pingouin
+          ECB</a>, et le mode CTR est souvent inapproprié car il n''effectue pas d''authentification
+          et provoque des doublons si l''état d''entrée est répété).
+
+'
+        details: 'Dans de nombreux cas, il est préférable de choisir un mode d''algorithme
+          de chiffrement de bloc conçu pour combiner le secret et l''authentification,
+          par exemple Galois / Counter Mode (GCM) et EAX. Les projets PEUVENT permettre
+          aux utilisateurs d''activer les mécanismes cassés si nécessaire pour la
+          compatibilité, mais les utilisateurs savent qu''ils le font.
+
+'
       crypto_weaknesses:
-        description:
-        details:
+        description: 'Les mécanismes de sécurité par défaut dans le logiciel produit
+          par le projet NE DEVRAIENT PAS dépendre d''algorithmes ou de modes cryptographiques
+          avec des faiblesses sérieuses connues (par exemple, l''algorithme de hachage
+          cryptographique SHA-1 ou le mode CBC en SSH).
+
+'
+        details: 'Les préoccupations concernant le mode CBC en SSH sont discutées
+          dans <a href="https://www.kb.cert.org/vuls/id/958563">CERT : vulnérabilité
+          SSH CBC</a>.
+
+'
       crypto_pfs:
         description: 'Les mécanismes de sécurité dans le logiciel produit par le projet
           DEVRAIENT implémenter la confidentialité persistante pour les protocoles
@@ -789,13 +873,36 @@ fr:
           sécurisés.
 
 '
-        details:
+        details: 'Un générateur de nombres aléatoires cryptographiquement sécurisé
+          peut être un générateur de nombres aléatoires matériel ou un générateur
+          de nombres pseudo-aléatoires cryptographiquement sécurisé (CSPRNG) utilisant
+          un algorithme tel que Hash_DRBG, HMAC_DRBG, CTR_DRBG, Yarrow ou Fortuna.
+          Des exemples d''appels de générateurs de nombres aléatoires <i>sûrs</i>
+          incluent java.security.SecureRandom en Java et window.crypto.getRandomValues
+          ​​de JavaScript. Des exemples d''appels de générateurs de nombres aléatoires
+          <i>non sûrs</i> incluent java.util.Random en Java et Math.random en JavaScript.
+
+'
       delivery_mitm:
-        description:
-        details:
+        description: 'Le projet DOIT utiliser un mécanisme de livraison qui contrecarre
+          les attaques MITM. L''utilisation de https ou ssh+scp est acceptable.
+
+'
+        details: 'Un mécanisme encore plus fort distribue le logiciel avec des paquets
+          signés numériquement, car cela atténue les attaques sur le système de distribution,
+          mais cela ne fonctionne que si les utilisateurs peuvent être convaincus
+          que les clés publiques pour les signatures sont correctes <i>et</i> si les
+          utilisateurs vérifient la signature.
+
+'
       delivery_unsigned:
-        description:
-        details:
+        description: 'Un hachage cryptographique (par exemple, un sha1sum) NE DOIT
+          PAS être récupéré par http et utilisé sans vérifier une signature cryptographique.
+
+'
+        details: 'Ces hachages peuvent être modifiés en transit.
+
+'
       vulnerabilities_fixed_60_days:
         description:
         details:
@@ -852,9 +959,22 @@ fr:
 
 '
       crypto_used_network:
-        description:
+        description: 'Le logiciel produit par le projet DEVRAIT supporter des protocoles
+          sécurisés pour toutes ses communications réseau, telles que SSHv2 ou ultérieur,
+          TLS1.2 ou ultérieur (HTTPS), IPsec, SFTP et SNMPv3. Les protocoles non sûrs
+          tels que FTP, HTTP, telnet, SSLv3 ou antérieur, et SSHv1 DEVRAIENT être
+          désactivés par défaut et uniquement activés si l''utilisateur le configure
+          spécifiquement. Si le logiciel produit par le projet ne prend pas en charge
+          les communications réseau, sélectionnez «non applicable» (N/A).
+
+'
       crypto_tls12:
-        description:
+        description: 'Le logiciel produit par le projet DEVRAIT, s''il prend en charge
+          ou utilise TLS, prendre en charge au moins TLS version 1.2. Notez que le
+          prédécesseur de TLS s''appelait SSL. Si le logiciel n''utilise pas TLS,
+          sélectionnez «non applicable» (N/A).
+
+'
       crypto_certificate_verification:
         description: 'Le logiciel produit par le projet DOIT, s''il prend en charge
           TLS, effectuer la vérification des certificats TLS par défaut lors de l''utilisation
@@ -871,7 +991,12 @@ fr:
 
 '
       crypto_verification_private:
-        description:
+        description: 'Le logiciel produit par le projet DEVRAIT, s''il supporte TLS,
+          effectuer une vérification de certificat avant d''envoyer des en-têtes HTTP
+          avec des informations privées (telles que des cookies sécurisés). Si le
+          logiciel n''utilise pas TLS, sélectionnez «non applicable» (N/A).
+
+'
       hardened_site:
         description:
         details:

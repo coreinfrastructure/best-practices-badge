@@ -246,6 +246,7 @@ zh-CN:
       sign_in_first: 请登录以添加项目！
       thanks_adding:
       project_already_exists: 这个项目已经存在！
+      final_text_html:
     show:
       edit: 编辑
       delete: 删除

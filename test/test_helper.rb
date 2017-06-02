@@ -37,6 +37,17 @@ if ENV['CI']
   Minitest::Retry.use!
 end
 
+require 'minitest/reporters'
+if ENV['CI'] || ENV['SLOW']
+  Minitest::Reporters.use! [
+    Minitest::Reporters::SpecReporter.new,
+    Minitest::Reporters::MeanTimeReporter.new,
+    Minitest::Reporters::HtmlReporter.new
+  ]
+else
+  Minitest::Reporters.use! Minitest::Reporters::DefaultReporter.new
+end
+
 require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'
 

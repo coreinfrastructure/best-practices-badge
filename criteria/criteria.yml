@@ -914,7 +914,7 @@
             For more information, see
             <a href="http://aegis.sourceforge.net/auug97.pdf">"Recursive Make Considered Harmful" by Peter Miller</a>
             (note that this incorrect approach can be used in any build system,
-            not just <i>make</i>).
+            not just <em>make</em>).
             Note that
             <a href="http://research.microsoft.com/en-us/um/people/simonpj/papers/ghc-shake/ghc-shake.pdf">"Non-recursive Make Considered Harmful"</a>
             agrees that recursive builds are bad; its argument is that
@@ -1469,7 +1469,7 @@
             A subset of this criterion is required for passing+1; see
             <a href="#automated_integration_testing">automated_integration_testing</a>.
             Here, we require both the continuous check-in
-            <i>and</i> its testing.
+            <em>and</em> its testing.
           autofill: >
             Look for a .travis.yml or circle.yml file.
             We also see if it has a badge from CircleCI or Travis.

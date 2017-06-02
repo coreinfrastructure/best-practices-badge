@@ -3,8 +3,7 @@
             details_text_id = criterion.to_s + "_details_text" %>
          <button class="btn btn-simple details-toggler hidden-print" title="<%= t('projects.misc.toggle_details_title') %>" type="button" id='<%= details_toggler_id %>'><%= t('projects.misc.details') %></button>
          <div class="details-text" id="<%= details_text_id %>">
-         <%# Brakeman would normally complain, but in this case we
-             can trust that "details" is okay to send because it's only
-             provided by trustworthy sources (not arbitrary users) %>
-         <%= details %>
+         <%# Although we provide details, sanitize here provides belt and
+             suspenders protection and shows brakeman that it's safe. %>
+         <%= sanitize details, tags: %w(strong em a), attributes: %w(href) %>
          </div>

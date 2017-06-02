@@ -248,16 +248,34 @@ few users are administrators.
 A user can create as many project entries as desired.
 Each project entry gets a new unique project id and is
 owned by the user who created the project entry.
-A project entry can only be edited (and deleted) by the entry creator,
-an administrator, or by others who can prove that they
-can edit that GitHub repository (if it is on GitHub).
+
+There are two kinds of rights: "control" rights and "edit" rights.
+
+"Control" rights mean you can delete the project AND
+change who else is allowed to edit (they control their projects'
+entry in the additional_rights table). Anyone with control rights
+also has edit rights.  The project owner has control
+rights to the projects they own,
+and admins have control rights over all projects.
+
+"Edit" rights mean you can edit the project entry. If you have
+control rights over a project you also have edit rights.
+In addition, fellow committers on GitHub for that project,
+and users in the additional_rights table
+who have their user_id listed for that project, get edit rights
+for that project.
+The additional_rights table adds support for groups so that they can
+edit project entries when the project is not on GitHub.
+
+This means that
+a project entry can only be edited (and deleted) by the entry creator,
+an administrator, by others who can prove that they
+can edit that GitHub repository (if it is on GitHub), and by those
+authorized to edit via the additional_rights table.
 Anyone can see the project entry results once they are saved.
 We do require, in the case of a GitHub project entry, that the
 entry creator be logged in via GitHub *and* be someone who can edit that
 project.
-We may in the future add support for groups (e.g., where the owner
-can designate other users who can edit that entry) and
-a way for others to edit project entries when they are not on GitHub.
 
 Here we have identified the key security requirements and why we believe
 they've been met overall.  However, there is always the possibility that

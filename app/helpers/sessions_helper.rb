@@ -94,6 +94,8 @@ module SessionsHelper
   end
 
   # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+  # rubocop:disable Metrics/CyclomaticComplexity,
+  # rubocop:disable Metrics/PerceivedComplexity
   def can_make_changes?
     project_id = params[:id]
     if current_user.nil?
@@ -101,6 +103,10 @@ module SessionsHelper
     elsif current_user.projects.exists?(id: project_id)
       true
     elsif current_user.admin?
+      true
+    elsif AdditionalRight.exists?(
+      project_id: project_id, user_id: current_user.id
+    )
       true
     elsif current_user.provider == 'github'
       project = Project.find_by(id: project_id)
@@ -110,6 +116,8 @@ module SessionsHelper
       false
     end
   end
+  # rubocop:enable Metrics/PerceivedComplexity
+  # rubocop:enable Metrics/CyclomaticComplexity,
   # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
   # Redirects to stored location (or to the default)

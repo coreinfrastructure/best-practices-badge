@@ -121,6 +121,32 @@ class ProjectsControllerTest < ActionController::TestCase
     assert_not_empty flash
   end
 
+  test 'should get edit as additional rights user' do
+    test_user = users(:test_user_mark)
+    # Create additional rights during test, not as a fixure.
+    # The fixture would require correct references to *other* fixture ids.
+    new_right = AdditionalRight.new(
+      user_id: test_user.id,
+      project_id: @project.id
+    )
+    new_right.save
+    log_in_as(test_user)
+    get :edit, params: { id: @project }
+    assert_response :success
+    assert_not_empty flash
+  end
+
+  test 'should not get edit as user without additional rights' do
+    # Without additional rights, can't log in.  This is paired with
+    # previous test, to ensure that *only* the additional right provides
+    # the necessary rights.
+    test_user = users(:test_user_mark)
+    log_in_as(test_user)
+    get :edit, params: { id: @project }
+    assert_response 302
+    assert_redirected_to root_path
+  end
+
   test 'should fail to edit due to old session' do
     log_in_as(@project.user, time_last_used: 1000.days.ago.utc)
     get :edit, params: { id: @project }

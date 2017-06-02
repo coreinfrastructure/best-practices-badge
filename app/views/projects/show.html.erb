@@ -1,6 +1,8 @@
 <% content_for :nav_extras do %>
-    <% if can_make_changes? %>
+    <% if can_edit? %>
       <li><%= link_to t('.edit'), edit_project_path(@project, criteria_level: @criteria_level) %></li>
+    <% end %>
+    <% if can_control? %>
       <li><%= link_to t('.delete'), { action: :destroy, id: @project.id }, method: :delete, data: { confirm: t('.confirm_delete', project_id: @project.id) } %></li>
     <% end %>
 <% end %>
@@ -28,8 +30,10 @@
 <br><br>
 <p>
 <%= link_to t('.back'), projects_path %>
-<% if can_make_changes? %>
+<% if can_edit? %>
   <%= link_to t('.edit'), edit_project_path(@project) %>
+<% end %>
+<% if can_control? %>
   <%= link_to t('.delete'), { action: :destroy, id: @project.id }, method: :delete, data: { confirm: t('.confirm_delete', project_id: @project.id) } %>
 <% end %>
 </p>

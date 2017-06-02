@@ -93,32 +93,33 @@ module SessionsHelper
     @current_user = nil
   end
 
-  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
-  # rubocop:disable Metrics/CyclomaticComplexity,
-  # rubocop:disable Metrics/PerceivedComplexity
-  def can_make_changes?
-    project_id = params[:id]
-    if current_user.nil?
-      false
-    elsif current_user.projects.exists?(id: project_id)
-      true
-    elsif current_user.admin?
-      true
-    elsif AdditionalRight.exists?(
-      project_id: project_id, user_id: current_user.id
-    )
-      true
-    elsif current_user.provider == 'github'
-      project = Project.find_by(id: project_id)
-      return false unless project.repo_url?
-      github_user_projects.include? project.repo_url
-    else
-      false
-    end
+  # Returns true iff the current_user can *control* the @project.
+  # This includes the right to delete & change users who can edit,
+  # in addition to being able to edit the project.
+  # Only the project badge entry owner or admins *control* the project entry.
+  def can_control?
+    return false if current_user.nil?
+    return true if current_user.admin?
+    return true if current_user.id == @project.user_id
+    false
   end
-  # rubocop:enable Metrics/PerceivedComplexity
-  # rubocop:enable Metrics/CyclomaticComplexity,
-  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
+
+  # Returns true iff the current_user can *edit* the @project data.
+  # This is a session helper because we use the session to ask GitHub
+  # for the list of projects the user can edit.
+  # rubocop:disable Metrics/CyclomaticComplexity
+  def can_edit?
+    return false if current_user.nil?
+    return true if can_control?
+    return true if AdditionalRight.exists?(
+      project_id: @project.id, user_id: current_user.id
+    )
+    return true if
+      current_user.provider == 'github' &&
+      @project.repo_url? && github_user_projects.include?(@project.repo_url)
+    false
+  end
+  # rubocop:enable Metrics/CyclomaticComplexity
 
   # Redirects to stored location (or to the default)
   def redirect_back_or(default)

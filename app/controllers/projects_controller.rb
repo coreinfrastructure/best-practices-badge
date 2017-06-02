@@ -12,7 +12,8 @@ class ProjectsController < ApplicationController
   include ProjectsHelper
   before_action :set_project, only: %i[edit update destroy show show_json badge]
   before_action :logged_in?, only: :create
-  before_action :change_authorized, only: %i[destroy edit update]
+  before_action :can_edit_or_redirect, only: %i[edit update]
+  before_action :can_control_or_redirect, only: :destroy
   before_action :set_criteria_level, only: %i[show edit update]
 
   # Cache with Fastly CDN.  We can't use this header, because logged-in
@@ -268,8 +269,15 @@ class ProjectsController < ApplicationController
     false
   end
 
-  def change_authorized
-    return true if can_make_changes?
+  # Returns true if current_user can edit, else redirect to a different URL
+  def can_edit_or_redirect
+    return true if can_edit?
+    redirect_to root_url
+  end
+
+  # Returns true if current_user can control, else redirect to a different URL
+  def can_control_or_redirect
+    return true if can_control?
     redirect_to root_url
   end
 

@@ -260,3 +260,9 @@
       and in this case both sides are acceptable, so there is no license problem.
     :versions: []
     :when: 2017-05-09 17:52:32.770053521 Z
+- - :approve
+  - ansi
+  - :who: Dan Kohn
+    :why: OSI-approved OSS license BSD-2-Clause, known compatible with MIT
+    :versions: []
+    :when: 2017-06-02 04:25:11.659354000 Z

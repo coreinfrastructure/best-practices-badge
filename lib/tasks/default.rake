@@ -391,7 +391,7 @@ if Rails.env.development?
   Rake::Task['translation:sync'].enhance do
     puts 'Removing bogus trailing whitespace (bug workaround).'
     sh "cd config/locales/ && sed -i -e 's/ $//' *.yml && cd ../.."
-    sh 'cp -p config/locales/en.yml.ORIG config/locales/en.yml'
+    sh 'mv config/locales/en.yml.ORIG config/locales/en.yml'
   end
 end
 

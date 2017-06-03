@@ -1,5 +1,5 @@
             <div class="hidable-text-entry">
-            <span><%= t('projects.form_basics.project_name.description') %></span>
+            <span><%= f.label :name, t('projects.form_basics.project_name.description') %></span>
             <%= render(partial: "details", locals: {
                        criterion: "project_name",
                        details: t('projects.form_basics.project_name.details')
@@ -11,7 +11,7 @@
             </div>
 
             <div class="hidable-text-entry">
-            <span><%= t('projects.form_basics.description.description') %></span>
+            <span><%= f.label :description, t('projects.form_basics.description.description') %></span>
             <% if is_disabled %>
               <div class="discussion-markdown">
                 <%= markdown(project[:description]) %>
@@ -29,7 +29,7 @@
             </div>
 
             <div class="hidable-text-entry">
-            <span><%= t('projects.form_basics.homepage_url.description') %></span>
+            <span><%= f.label :homepage_url, t('projects.form_basics.homepage_url.description') %></span>
             <% if is_disabled %>
               <div class="discussion-markdown">
                  <%= link_to_if project.contains_url?(project.homepage_url), project.homepage_url, project.homepage_url, rel: 'nofollow' %>
@@ -42,7 +42,7 @@
             </div>
 
             <div class="hidable-text-entry">
-            <span><%= t('projects.form_basics.repo_url.description') %></span>
+            <span><%= f.label :repo_url, t('projects.form_basics.repo_url.description') %></span>
             <% if is_disabled %>
               <div class="discussion-markdown">
                  <%= link_to_if project.contains_url?(project.repo_url), project.repo_url, project.repo_url, rel: 'nofollow' %>

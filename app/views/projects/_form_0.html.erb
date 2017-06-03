@@ -53,7 +53,7 @@
                          }) %>
 
             <div class="hidable-text-entry">
-            <%= t 'projects.form_basics.implementation_languages.description' %>
+            <strong><%= t 'projects.form_basics.implementation_languages.description' %></strong>
             <%= render(partial: "details", locals: {
               criterion: "implementation_languages",
               details:
@@ -176,7 +176,7 @@
      However, first is implied by "description_good",
      and the MITM stuff notes https as a way to implement it. -->
             <div class="hidable-text-entry">
-            <%= t 'projects.form_basics.cpe.description_html' %>
+            <%= f.label :cpe, t('projects.form_basics.cpe.description_html') %>
             <%= render(partial: "details",
                        locals: {
                          criterion: "cpe",
@@ -202,7 +202,7 @@
           <li class="list-group-item"><h3>FLOSS License</h3>
 
             <div class="hidable-text-entry">
-            <%= t('projects.form_basics.license.description_html') %>
+            <strong><%= t('projects.form_basics.license.description_html') %></strong>
             <%= render(partial: 'details',
                        locals: {
                          criterion: 'license',
@@ -286,7 +286,8 @@
       </div>
 
       <br><br>
-      <%= t('projects.misc.general_comments.description') %><br>
+      <%= f.label :general_comments,
+                  t('projects.misc.general_comments.description') %><br>
       <% if is_disabled %>
         <div class="discussion-markdown">
           <%= markdown(project[:general_comments]) %>

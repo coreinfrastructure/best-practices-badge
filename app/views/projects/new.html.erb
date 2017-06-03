@@ -40,12 +40,12 @@
       <span><%= f.label :homepage_url, t('.url_of_homepage') %></span>
       <!-- Note: Server tests URLs, this is just sanity checking -->
       <%= f.text_field :homepage_url, class:"form-control",
-            type: 'url',
+            type: 'url', skip_label: true,
             pattern: url_pattern,
             placeholder: t('.placeholder_of_homepage') %>
       <span><%= f.label :repo_url, t('.url_of_repo') %></span>
       <%= f.text_field :repo_url, class:"form-control",
-            type: 'url',
+            type: 'url', skip_label: true,
             pattern: url_pattern,
             placeholder: t('.placeholder_of_repo') %>
      <%= f.submit t('.submit_urls'), class: 'btn btn-primary',

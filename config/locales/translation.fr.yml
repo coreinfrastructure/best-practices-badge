@@ -104,10 +104,10 @@ fr:
     logout_html: <span class="glyphicon glyphicon-log-out"></span> Déconnection
     signup_html: <span class="glyphicon glyphicon-user"></span> S'inscrire
     login_html: <span class="glyphicon glyphicon-log-in"></span> S'identifier
-    footer_text_html: '<small> <b>Vous avez besoin d''aide ? Vous avez une question
-      ? Vous voyez un problème ? Merci d''<i><a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">envoyer
-      un email</a></i> ou de <i><a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues"
-      target="_blank">reporter un problème</a></i>.</b> © 2015-2017 <a href="https://www.coreinfrastructure.org/
+    footer_text_html: '<small> <strong>Vous avez besoin d''aide ? Vous avez une question
+      ? Vous voyez un problème ? Merci d''<em><a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">envoyer
+      un email</a></em> ou de <em><a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues"
+      target="_blank">reporter un problème</a></i>.</strong> © 2015-2017 <a href="https://www.coreinfrastructure.org/
       target="_blank"> Core Infrastructure Initiative</a>, un projet collaboratif
       de la <a href="https://www.linuxfoundation.org/" target="_blank">Fondation Linux</a>.
       Tous droits réservés. Consultez notre <a href="https://www.linuxfoundation.org/privacy"
@@ -261,8 +261,8 @@ fr:
 
 '
       new_badge: Nouveau badge
-      may_select_html: 'Vous pouvez choisir parmi l''un de vos dépôts GitHub <i>OU</
-        i> fournir des informations sur un autre projet.
+      may_select_html: 'Vous pouvez choisir parmi l''un de vos dépôts GitHub <em>OU</em>
+        fournir des informations sur un autre projet.
 
 '
       select_one_github: Sélectionnez l'un de vos dépôts GitHub
@@ -495,7 +495,7 @@ fr:
       Veuillez visiter votre soumission pour compléter les informations et obtenir votre badge !
       Voici l'URL de votre soumission :
     new_project_part3_html: "<P>\nNous vous encourageons à continuer à progresser.\n</P>\n\n<P>\nSi
-      vous voulez voir <i>seulement</i> ce qui vous manque,\nvisitez votre soumission
+      vous voulez voir <em>seulement</em> ce qui vous manque,\nvisitez votre soumission
       \npuis cliquez sur le bouton près du haut étiqueté \"Hide met ou N/A criteria\"\nSi
       vous avez des questions ou avez besoin d'aide, contactez-nous\n<a href=\"mailto:&#99;ii&#45;badges&#45;questions&#45.own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;\">&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;</a>
       \nou reportez un problème à\n<a href=\"https://github.com/linuxfoundation/cii-best-practices-badge/issues\">
@@ -756,13 +756,38 @@ fr:
 
 '
       version_unique:
-        description:
-        details:
+        description: 'Les résultats du projet DOIVENT avoir un identifiant de version
+          unique pour chaque version destinée à être utilisée par les utilisateurs.
+
+'
+        details: 'Cela PEUT être satisfait de diverses façons, y compris les identifiants
+          de commit (comme git commit id ou mercure changeset id) ou un numéro de
+          version (y compris les numéros de version qui utilisent la version sémantique
+          ou les systèmes basés sur la date comme YYYYMMDD).
+
+'
       version_semver:
-        description:
-        details:
+        description: 'Il est PROPOSÉ que le <a href="http://semver.org">format de
+          Versionage Sémantique (SemVer)</a> soit utilisé pour les numéros de versions.
+
+'
+        details: 'D''autres systèmes de numérotation de version, tels que les identifiants
+          de commit (tels que git commit id ou mercurial changeset id) ou les systèmes
+          basés sur la date comme YYYYMMDD, PEUVENT être utilisés comme numéros de
+          version, car ils sont uniques. Certaines alternatives peuvent causer des
+          problèmes, car les utilisateurs peuvent ne pas être en mesure de déterminer
+          facilement s''ils sont à jour. SemVer peut être moins utile pour identifier
+          les versions de logiciels si tous les destinataires n''exécutent que la
+          dernière version (par exemple, c''est le code d''un seul site Web ou d''un
+          service Internet qui est constamment mis à jour via une livraison continue).
+
+'
       version_tags:
-        description:
+        description: 'Il est PROPOSÉ que les projets identifient chaque version dans
+          leur système de contrôle de version. Par exemple, il est PROPOSÉ que ceux
+          qui utilisent git identifient chaque version à l''aide des tags de git.
+
+'
       release_notes:
         description: 'Le projet DOIT fournir, avec chaque distribution, des notes
           de version qui sont un résumé lisible par les humains des changements majeurs
@@ -780,7 +805,7 @@ fr:
           façons. De nombreux projets les fournissent dans un fichier nommé « NEWS
           », « CHANGELOG » ou « ChangeLog », éventuellement avec des extensions telles
           que « .txt », « .md » ou « .html ». Historiquement, le terme « journal des
-          modifications » signifiait un enregistrement de <i>chaque</i> changement,
+          modifications » signifiait un enregistrement de <em>chaque</em> changement,
           mais pour répondre à ces critères, il faut un résumé lisible par un humain.
           Les notes de version PEUVENT être fournies à la place par des mécanismes
           de système de contrôle de version tels que le <a href="https://github.com/blog/1547-release-your-software">GitHub
@@ -833,14 +858,38 @@ fr:
 
 '
       vulnerability_report_process:
-        description:
-        details:
+        description: 'Le projet DOIT publier le processus de signalement des vulnérabilités
+          sur le site du projet.
+
+'
+        details: 'Par exemple, une adresse postale clairement désignée sur https://PROJECTSITE/security,
+          souvent sous la forme security@example.org. Cela PEUT être identique à son
+          processus de signalement des bogues. Les rapports de vulnérabilité PEUVENT
+          toujours être publics, mais de nombreux projets disposent d''un mécanisme
+          privé de signalement des vulnérabilités.
+
+'
       vulnerability_report_private:
-        description:
-        details:
+        description: 'Si les rapports de vulnérabilité privés sont pris en charge,
+          le projet DOIT inclure la façon d''envoyer l''information de manière confidentielle.
+
+'
+        details: 'Des exemples incluent un rapport de défaut privé envoyé sur le Web
+          en utilisant HTTPS (TLS) ou un courrier électronique chiffré à l''aide d''OpenPGP.
+          Si les rapports de vulnérabilité sont toujours publics (donc il n''y a jamais
+          de rapports de vulnérabilité privés), choisissez « non applicable » (N/A).
+
+'
       vulnerability_report_response:
-        description:
-        details:
+        description: 'Le temps de réponse initial du projet pour tout signalement
+          de vulnérabilité reçu au cours des 6 derniers mois DOIT être inférieur ou
+          égal à 14 jours.
+
+'
+        details: 'S''il n''y a pas eu de vulnérabilité signalée au cours des 6 derniers
+          mois, choisissez « non applicable » (N/A).
+
+'
       build:
         description: 'Si le logiciel produit par le projet nécessite d''être construit,
           le projet DOIT fournir un système de construction fonctionnel qui peut reconstruire
@@ -853,7 +902,7 @@ fr:
           code source. Si un exécutable est créé à partir du code source, il doit
           être possible de modifier le code source du projet, puis de générer un exécutable
           mis à jour avec ces modifications. Si le logiciel produit par le projet
-          dépend de bibliothèques externes, le système de construction n''a <i>pas</i>
+          dépend de bibliothèques externes, le système de construction n''a <em>pas</em>
           besoin de construire ces bibliothèques externes. S''il n''est pas nécessaire
           de construire quoi que ce soit pour utiliser le logiciel après la modification
           de son code source, sélectionnez "non applicable" (N/A).
@@ -909,21 +958,52 @@ fr:
 '
         details: 'Dès qu''une politique est en place, même par le bouche à oreille,
           qui spécifie que les développeurs devraient ajouter des tests à une suite
-          de test automatisée pour toute nouvelle fonctionnalité importante, sélectionnez
+          de tests automatisée pour toute nouvelle fonctionnalité importante, sélectionnez
           « Atteint ».
 
 '
       tests_are_added:
-        description:
-        details:
+        description: 'Le projet DOIT avoir la preuve que la <a href="#test_policy">politique
+          de test</a> pour l''ajout de tests a été respectée dans les dernières modifications
+          majeures apportées au logiciel produit par le projet.
+
+'
+        details: 'Les principales fonctionnalités seraient généralement mentionnées
+          dans les notes de version. La perfection n''est pas nécessaire, il suffit
+          de prouver que les tests sont généralement ajoutés en pratique à la suite
+          de tests automatisée lorsque de nouvelles fonctionnalités majeures sont
+          ajoutées au logiciel produit par le projet.
+
+'
       tests_documented_added:
-        description:
-        details:
+        description: Il est PROPOSÉ que cette politique sur l'ajout de tests (voir
+          <a href="#test_policy">la politique de test</a>) soit <em>documentée</em>
+          dans les instructions pour les propositions de modification.
+        details: 'Cependant, même une règle informelle est acceptable tant que les
+          tests sont ajoutés dans la pratique.
+
+'
       warnings:
-        description:
-        details:
+        description: 'Le projet DOIT activer une ou plusieurs options d''avertissement
+          du compilateur, un mode du langage « sûr » ou utiliser un outil « linter
+          » séparé pour rechercher des erreurs de qualité de code ou des erreurs simples
+          courantes, s''il existe au moins un outil FLOSS qui peut implémenter ce
+          critère dans le langage sélectionné.
+
+'
+        details: 'Des exemples d''options d''avertissement du compilateur incluent
+          « -Wall » pour gcc/clang. Des exemples d''un mode de langage « sûr » incluent
+          « use strict » en JavaScript et « use warnings » de perl5. Un outil « linter
+          » distinct est simplement un outil qui examine le code source pour rechercher
+          des erreurs de qualité de code ou des erreurs simples courantes. Ceux-ci
+          sont généralement activés par le code source ou par les instructions de
+          construction.
+
+'
       warnings_fixed:
-        description:
+        description: 'Le projet DOIT résoudre les avertissements.
+
+'
         details:
       warnings_strict:
         description:
@@ -1109,10 +1189,10 @@ fr:
           peut être un générateur de nombres aléatoires matériel ou un générateur
           de nombres pseudo-aléatoires cryptographiquement sécurisé (CSPRNG) utilisant
           un algorithme tel que Hash_DRBG, HMAC_DRBG, CTR_DRBG, Yarrow ou Fortuna.
-          Des exemples d''appels de générateurs de nombres aléatoires <i>sûrs</i>
+          Des exemples d''appels de générateurs de nombres aléatoires <em>sûrs</em>
           incluent java.security.SecureRandom en Java et window.crypto.getRandomValues
           ​​de JavaScript. Des exemples d''appels de générateurs de nombres aléatoires
-          <i>non sûrs</i> incluent java.util.Random en Java et Math.random en JavaScript.
+          <em>non sûrs</em> incluent java.util.Random en Java et Math.random en JavaScript.
 
 '
       delivery_mitm:
@@ -1123,8 +1203,8 @@ fr:
         details: 'Un mécanisme encore plus fort distribue le logiciel avec des paquets
           signés numériquement, car cela atténue les attaques sur le système de distribution,
           mais cela ne fonctionne que si les utilisateurs peuvent être convaincus
-          que les clés publiques pour les signatures sont correctes <i>et</i> si les
-          utilisateurs vérifient la signature.
+          que les clés publiques pour les signatures sont correctes <em>et</em> si
+          les utilisateurs vérifient la signature.
 
 '
       delivery_unsigned:
@@ -1136,10 +1216,30 @@ fr:
 
 '
       vulnerabilities_fixed_60_days:
-        description:
-        details:
+        description: 'Il NE DOIT PAS y avoir de vulnérabilités non corrigées de gravité
+          moyenne ou élevée connues publiquement depuis plus de 60 jours.
+
+'
+        details: 'La vulnérabilité doit être corrigée et diffusée par le projet lui-même
+          (les correctifs peuvent être développés ailleurs). Une vulnérabilité devient
+          publique (à cet effet) une fois qu''il a un CVE avec des informations non
+          payantes publiquement publiées (signalé, par exemple, dans la <a href="https://nvd.nist.gov/">Base
+          de données Nationale des Vulnérabilités</a>) ou lorsque le projet a été
+          informé et que l''information a été diffusée au public (éventuellement par
+          le projet). Une vulnérabilité est de gravité moyenne à élevée si son score
+          de base <a href="https://nvd.nist.gov/cvss.cfm">CVSS 2.0</a> est 4 ou supérieur.
+          <strong>Note</strong> : cela signifie que les utilisateurs peuvent être
+          laissés vulnérables à tous les attaquants du monde entier jusqu''à 60 jours.
+          Ce critère est souvent beaucoup plus facile à rencontrer que ce que Google
+          recommande dans son <a href="https://security.googleblog.com/2010/07/rebooting-responsible-disclosure-focus.html">Redémarrage
+          de la divulgation responsable</a>, car Google recommande que la période
+          de 60 jours commence lorsque le projet est notifié <em>même</em> si le rapport
+          n''est pas public.'
       vulnerabilities_critical_fixed:
-        description:
+        description: 'Les projets DEVRAIENT corriger rapidement toutes les vulnérabilités
+          critiques après leur signalement.
+
+'
       no_leaked_credentials:
         description: 'Les dépôts publics NE DOIVENT PAS fuiter un certificat privé
           valide (par exemple, un mot de passe ou une clé privée) qui est destiné
@@ -1601,8 +1701,8 @@ fr:
         badge</a>). Vous pouvez également y voir
         <a href='/fr/projects/1'>un exemple (où nous essayons
         d'obtenir notre propre badge)</a>.
-      p3_html: '<i>Confidentialité et problèmes juridiques </i>: Consultez notre <a
-        href="https://www.linuxfoundation.org/privacy">politique de confidentialité</a>
+      p3_html: '<em>Confidentialité et problèmes juridiques </em>: Consultez notre
+        <a href="https://www.linuxfoundation.org/privacy">politique de confidentialité</a>
         et nos <a href="https://www.linuxfoundation.org/terms">conditions d''utilisation</a>.  Tout
         les contenus publiquement disponibles qui ne sont pas sous forme de code sont
         publiés sous la license <a href="https://creativecommons.org/licenses/by/3.0/">Creative
@@ -1657,3 +1757,9 @@ fr:
     Met:
     Unmet:
     NA:
+  comma_separated_list:
+  begin_with_cpe:
+  not_an_email:
+  known_bad_password:
+  valid_text:
+  url_message:

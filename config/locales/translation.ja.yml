@@ -852,3 +852,9 @@ ja:
     Met:
     Unmet:
     NA:
+  comma_separated_list:
+  begin_with_cpe:
+  not_an_email:
+  known_bad_password:
+  valid_text:
+  url_message:

@@ -491,7 +491,7 @@ de:
           erstellt wird, muss es möglich sein, den Quellcode des Projekts zu ändern
           und dann eine aktualisierte ausführbare Datei mit diesen Modifikationen
           zu erzeugen. Wenn die vom Projekt produzierte Software von externen Bibliotheken
-          abhängt, muss das Build-System diese externen Bibliotheken <i>nicht</i>
+          abhängt, muss das Build-System diese externen Bibliotheken <em>nicht</em>
           bauen. Wenn es keine Notwendigkeit gibt, irgendetwas zu bauen, um die Software
           zu verwenden, nachdem ihr Quellcode geändert wurde, wählen Sie "nicht anwendbar"
           (N/A).
@@ -858,7 +858,7 @@ de:
         Badge Programm teilnehmen, und können gefiltert werden (z.B.  <a href="/de/projects?gteq=100">welche
         Projekte haben sich das Badge verdient</a>).  Ein <a href='/de/projects/1'>Beispiel
         ist unser eigenes Badge</a>, wo wir uns selbst zertifiziert haben.
-      p3_html: '<i>Datenschutz und Rechtliche Hinweise</i>: Bitte siehe unsere <a
+      p3_html: '<em>Datenschutz und Rechtliche Hinweise</em>: Bitte siehe unsere <a
         href="https://www.linuxfoundation.org/privacy">Datenschutz Richtlinie</a>
         und <a href="https://www.linuxfoundation.org/terms">Benutzungsbedingungen</a>.
         Alle öffentlich zugänglichen nicht-Code Inhalte sind mindestens unter der  <a
@@ -909,3 +909,9 @@ de:
     Met: Erfüllt
     Unmet: Nicht erfüllt
     NA: keine Angabe
+  comma_separated_list:
+  begin_with_cpe:
+  not_an_email:
+  known_bad_password:
+  valid_text:
+  url_message:

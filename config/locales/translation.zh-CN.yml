@@ -104,9 +104,9 @@ zh-CN:
     logout_html: "<span class =“glyphicon glyphicon-log-out”></span> 注销"
     signup_html: <span class="glyphicon glyphicon-user"></span> 注册
     login_html: <span class="glyphicon glyphicon-log-in"></span> 登录
-    footer_text_html: <small> <b>需要帮助？有疑问？发现问题？请 <i><a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">发送邮件</a>
-      </i>或 <i><a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues"
-      target="_blank">提出问题</a></i>.</b> © 2015-2017 <a href="https://www.coreinfrastructure.org/
+    footer_text_html: <small> <strong>需要帮助？有疑问？发现问题？请 <em><a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">发送邮件</a>
+      </em>或 <em><a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues"
+      target="_blank">提出问题</a></em>.</strong> © 2015-2017 <a href="https://www.coreinfrastructure.org/
       target="_blank">Core Infrastructure Initiative （核心基础设施计划）</a>, 一个 <a href="https://www.linuxfoundation.org/"
       target="_blank">Linux 基金会</a> 合作项目。版权所有。 请查阅我们的 <a href="https://www.linuxfoundation.org/privacy"
       target="_blank">隐私策略</a> 和 <a href="https://www.linuxfoundation.org/terms" target="_blank">使用条款</a>.
@@ -258,7 +258,7 @@ zh-CN:
       cc_by_3only_html:
       owned_by:
       created_at_html:
-      updated_at_html: "<b>最后更新于</ b> %{when}。"
+      updated_at_html: "<strong>最后更新于</strong> %{when}。"
       last_lost_html:
       last_achieved_html:
     edit:
@@ -478,7 +478,7 @@ zh-CN:
       </p>
 
       <p>
-      如果您想 <i>仅</i> 查看遗漏的信息，
+      如果您想 <em>仅</em> 查看遗漏的信息，
       访问您的徽章项页面，
       点击接近上方的按钮：“隐藏已满足或不涉及的条款”。
       有问题，或者需要帮助，请联系：
@@ -1289,7 +1289,7 @@ zh-CN:
         你也可以查询
         <a href='/zh-CN/projects/1'>一个示例（我们是如何获取自己的徽章的）</a>。
       p3_html: |-
-        <i>隐私和法律问题</i>：
+        <em>隐私和法律问题</em>：
         请访问我们的
         <a href="https://www.linuxfoundation.org/privacy">隐私策略</a>
         和
@@ -1348,3 +1348,9 @@ zh-CN:
 
       不完整
     NA: N/A
+  comma_separated_list:
+  begin_with_cpe:
+  not_an_email:
+  known_bad_password:
+  valid_text:
+  url_message:

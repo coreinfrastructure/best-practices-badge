@@ -183,7 +183,7 @@
                          details:
                            t('projects.form_basics.cpe.details_html')}) %>
             <%= f.text_field :cpe,
-                  hide_label: true, class:"form-control",
+                  skip_label: true, class:"form-control",
                   placeholder: t('projects.form_basics.cpe.placeholder'),
                   spellcheck: false, disabled: is_disabled %>
             </div>
@@ -289,12 +289,12 @@
       <%= f.label :general_comments,
                   t('projects.misc.general_comments.description') %><br>
       <% if is_disabled %>
-        <div class="discussion-markdown">
+        <div class="discussion-markdown" id="project_general_comments">
           <%= markdown(project[:general_comments]) %>
         </div>
       <% else %>
         <%= f.text_area :general_comments,
-                        class:"form-control", hide_label: true,
+                        class:"form-control", skip_label: true,
                         lang: 'en', spellcheck: true,
                         placeholder:
                           t('projects.misc.general_comments.placeholder'),

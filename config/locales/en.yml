@@ -23,10 +23,10 @@ en:
     logout_html: <span class="glyphicon glyphicon-log-out"></span> Logout
     signup_html: <span class="glyphicon glyphicon-user"></span> Sign Up
     login_html: <span class="glyphicon glyphicon-log-in"></span> Login
-    footer_text_html: '<small> <b>Need help? Have a question? See a problem? Please
-      <i><a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">send
-      an email</a> </i>or <i><a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues"
-      target="_blank">file an issue</a></i>.</b> © 2015-2017 <a href="https://www.coreinfrastructure.org/
+    footer_text_html: '<small> <strong>Need help? Have a question? See a problem? Please
+      <em><a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">send
+      an email</a> </em>or <em><a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues"
+      target="_blank">file an issue</a></em>.</strong> © 2015-2017 <a href="https://www.coreinfrastructure.org/
       target="_blank">Core Infrastructure Initiative</a>, a <a href="https://www.linuxfoundation.org/"
       target="_blank">Linux Foundation</a> Collaborative Project. All Rights Reserved.
       Please see our <a href="https://www.linuxfoundation.org/privacy" target="_blank">privacy
@@ -94,7 +94,7 @@ en:
         example (where we try to get our own badge)</a>.
 
 '
-      p3_html: '<i>Privacy and legal issues</i>: Please see our <a href="https://www.linuxfoundation.org/privacy">privacy
+      p3_html: '<em>Privacy and legal issues</em>: Please see our <a href="https://www.linuxfoundation.org/privacy">privacy
         policy</a> and <a href="https://www.linuxfoundation.org/terms">terms of use</a>.
         All publicly-available non-code content is released under at least the <a
         href="https://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution
@@ -227,7 +227,7 @@ en:
 
 '
       new_badge: New badge
-      may_select_html: 'You may select from one of your GitHub repos <i>OR</i> provide
+      may_select_html: 'You may select from one of your GitHub repos <em>OR</em> provide
         information about some other project.
 
 '
@@ -292,8 +292,8 @@ en:
 '
       back: Back
       owned_by: 'Project badge entry owned by:'
-      created_at_html: "<b>Entry created on</b> %{when},"
-      updated_at_html: "<b>last updated on</b> %{when}."
+      created_at_html: "<strong>Entry created on</strong> %{when},"
+      updated_at_html: "<strong>last updated on</strong> %{when}."
       last_lost_html: 'Last lost passing badge on %{when}.
 
 '
@@ -334,7 +334,7 @@ en:
           build trust and a desire for repeated interaction among developers
           from different companies. To earn a badge, all MUST and MUST NOT
           criteria must be met, all SHOULD criteria must be met OR be unmet
-          with justification, <i>and</i> all SUGGESTED criteria must be met OR
+          with justification, <em>and</em> all SUGGESTED criteria must be met OR
           unmet (we want them considered at least). Feedback is welcome via the
           <a href="https://github.com/linuxfoundation/cii-best-practices-badge">GitHub site as issues or pull requests</a>
           There is also a
@@ -359,11 +359,11 @@ en:
           or by embedding this in your HTML:<br />
           %{html_embedding}<br />
         editing_description_html: >
-          <b>Please 'submit' often</b> to save your work (you can always go
+          <strong>Please 'submit' often</strong> to save your work (you can always go
           back and edit more later). <br><br>
           If you need help, have a question, or see a problem, please
-          <i><a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">send an email</a> </i>or
-          <i><a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues" target="_blank">file an issue</a></i>.
+          <em><a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">send an email</a> </em>or
+          <em><a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues" target="_blank">file an issue</a></em>.
     # Other items in the "basic" section of the form, many of which
     # need special handling
     form_basics:
@@ -475,7 +475,7 @@ en:
         cryptographic mechanisms
       future_header_html: >
         These are criteria we intend to add in the near future, but are
-        <i>not</i> currently required for a badge.
+        <em>not</em> currently required for a badge.
         This grace period allows projects to update to changed criteria
         and retain their badge as best practices improve.
       toggle_details_title: Toggle details text
@@ -523,7 +523,7 @@ en:
       </p>
 
       <p>
-      If you want to see <i>only</i> what you're missing,
+      If you want to see <em>only</em> what you're missing,
       visit your badge entry, and
       then click on the button near the top labelled "Hide met or N/A criteria"
       If you have questions, or need help, please contact
@@ -905,7 +905,7 @@ en:
         details: 'The release notes MAY be implemented in a variety of ways. Many
           projects provide them in a file named "NEWS", "CHANGELOG", or "ChangeLog",
           optionally with extensions such as ".txt", ".md", or ".html".  Historically
-          the term "change log" meant a log of <i>every</i> change, but to meet these
+          the term "change log" meant a log of <em>every</em> change, but to meet these
           criteria what is needed is a human-readable summary.  The release notes
           MAY instead be provided by version control system mechanisms such as the
           <a href="https://github.com/blog/1547-release-your-software">GitHub Releases
@@ -997,7 +997,7 @@ en:
           created from source code, it must be possible to modify the project''s source
           code and then generate an updated executable with those modifications. If
           the software produced by the project depends on external libraries, the
-          build system does <i>not</i> need to build those external libraries. If
+          build system does <em>not</em> need to build those external libraries. If
           there is no need to build anything to use the software after its source
           code is modified, select "not applicable" (N/A).
 
@@ -1065,7 +1065,7 @@ en:
 '
       tests_documented_added:
         description: 'It is SUGGESTED that this policy on adding tests (see <a href="#test_policy">test_policy</a>)
-          be <i>documented</i> in the instructions for change proposals.
+          be <em>documented</em> in the instructions for change proposals.
 
 '
         details: 'However, even an informal rule is acceptable as long as the tests
@@ -1265,9 +1265,9 @@ en:
         details: 'A cryptographically secure random number generator may be a hardware
           random number generator, or it may be a cryptographically secure pseudo-random
           number generator (CSPRNG) using an algorithm such as Hash_DRBG, HMAC_DRBG,
-          CTR_DRBG, Yarrow, or Fortuna. Examples of calls to <i>secure</i> random
+          CTR_DRBG, Yarrow, or Fortuna. Examples of calls to <em>secure</em> random
           number generators include Java''s java.security.SecureRandom and JavaScript''s
-          window.crypto.getRandomValues. Examples of calls to <i>insecure</i> random
+          window.crypto.getRandomValues. Examples of calls to <em>insecure</em> random
           number generators include Java''s java.util.Random and JavaScript''s Math.random.
 
 '
@@ -1279,7 +1279,7 @@ en:
         details: 'An even stronger mechanism is releasing the software with digitally
           signed packages, since that mitigates attacks on the distribution system,
           but this only works if the users can be confident that the public keys for
-          signatures are correct <i>and</i> if the users will actually check the signature.
+          signatures are correct <em>and</em> if the users will actually check the signature.
 
 '
       delivery_unsigned:
@@ -1302,7 +1302,7 @@ en:
           Vulnerability Database</a>) or when the project has been informed and the
           information has been released to the public (possibly by the project). A
           vulnerability is medium to high severity if its <a href="https://nvd.nist.gov/cvss.cfm">CVSS
-          2.0</a> base score is 4 or higher. <b>Note</b>: this means that users might
+          2.0</a> base score is 4 or higher. <strong>Note</strong>: this means that users might
           be left vulnerable to all attackers worldwide for up to 60 days.  This criterion
           is often much easier to meet than what Google recommends in <a href="https://security.googleblog.com/2010/07/rebooting-responsible-disclosure-focus.html">Rebooting
           responsible disclosure</a>, because Google recommends that the 60-day period
@@ -1690,7 +1690,7 @@ en:
       documentation_current:
         description: 'The project MUST make an effort to keep the documentation consistent
           with the current version of the project results (including software produced
-          by the project). Any <i>known</i> documentation defects making it inconsistent
+          by the project). Any <em>known</em> documentation defects making it inconsistent
           MUST be fixed. If the documentation is generally current, but erroneously
           includes some older information that is no longer true, just treat that
           as a defect, then track and fix as usual.
@@ -1780,7 +1780,7 @@ en:
 '
       maintenance_or_update:
         description: 'The project MUST maintain the most often used older versions
-          of the product <i>or</i> provide an upgrade path to newer versions. If the
+          of the product <em>or</em> provide an upgrade path to newer versions. If the
           upgrade path is difficult, the project MUST document how to perform the
           upgrade (e.g., the interfaces that have changed and detailed suggested steps
           to help upgrade).
@@ -1958,7 +1958,7 @@ en:
         description: |
           The project MUST make it easy to either:
           <ol>
-          <li> identify and update reused externally-maintained components; <b>or</b></li>
+          <li> identify and update reused externally-maintained components; <strong>or</strong></li>
           <li> use the standard components provided by the system or programming language.</li>
           </ol>
           Then, if a vulnerability is found in a reused component, it will be
@@ -2175,8 +2175,8 @@ en:
 
 '
       dynamic_analysis_unsafe:
-        description: '<i>If</i> the software produced by the project includes software
-          written using a memory-unsafe language (e.g., C or C++), <i>then</i> the
+        description: '<em>If</em> the software produced by the project includes software
+          written using a memory-unsafe language (e.g., C or C++), <em>then</em> the
           project MUST use at least one dynamic tool (e.g., a fuzzer or web application
           scanner) be routinely used in combination with a mechanism to detect memory
           safety problems such as buffer overwrites. If the project does not produce

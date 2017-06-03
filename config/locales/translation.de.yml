@@ -209,7 +209,7 @@ de:
       search: Suche
       all: Alle
       passing_100: Passing (100%)
-      in_progress_variable:
+      in_progress_variable: In Arbeit (%{percent}% oder mehr)
     table:
       id: ID
       name: Name
@@ -265,8 +265,8 @@ de:
       static_analysis_updated_html:
     form_basics:
       project_name:
-        description:
-        details:
+        description: Was ist der von Menschen lesbare Name des Projekts?
+        details: 'Hinweis: Andere Projekte können den selben Namen benutzen.'
         placeholder: FLOSS Projektname
       description:
         description:
@@ -287,7 +287,7 @@ de:
         details_html:
         placeholder: "(Optional) CPE-Name"
       license:
-        description_html:
+        description_html: Unter welcher Lizenz/welchen Lizenzen ist das Projekt veröffentlicht?
         details_html:
         placeholder: FLOSS Lizenz
     form_early:
@@ -307,7 +307,7 @@ de:
     misc:
       disabled_reminders:
       general_comments:
-        description:
+        description: Andere allgemeine Hinweise zum Projekt?
         placeholder:
       some_not_crypto_html:
       dont_use_crypto:
@@ -326,7 +326,7 @@ de:
         hide_met_title:
         hide_met_html:
         passing_alt:
-        barely_alt:
+        barely_alt: Gerade genug für ein Badge.
         failing_alt: Nicht genug für ein Badge.
         unknown_alt:
         met_url_placeholder:

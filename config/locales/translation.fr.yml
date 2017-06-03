@@ -670,8 +670,24 @@ fr:
 
 '
       sites_https:
-        description:
-        details:
+        description: 'Les sites du projet (site Web, dépôt et URLs de téléchargement)
+          DOIVENT supporter HTTPS en utilisant TLS.
+
+'
+        details: 'Vous pouvez obtenir des certificats gratuits de <a href="https://letsencrypt.org/">
+          Let''s Encrypt</a>. Les projets PEUVENT implémenter ce critère en utilisant
+          (par exemple) <a href="https://help.github.com/articles/securing-your-github-pages-site-with-https/">des
+          pages GitHub</a>, <a href="https://about.gitlab.com/2016/12/24/were-bringing-gitlab-pages-to-community-edition/">des
+          pages GitLab</a> ou <a href="https://sourceforge.net/blog/introducing-https-for-project-websites/">des
+          pages de projet SourceForge</a>. Si vous utilisez des pages GitHub avec
+          des domaines personnalisés, vous POUVEZ utiliser un réseau de distribution
+          de contenu (CDN) comme proxy pour prendre en charge HTTPS, tel que décrit
+          dans <a href="https://blog.cloudflare.com/secure-and-fast-github-pages-with-cloudflare/">le
+          post de blog « Secure and fast GitHub Pages with CloudFlare »</a>, pour
+          satisfaire ce critère. Si vous autorisez HTTP, nous vous invitons instamment
+          à rediriger le trafic HTTP vers HTTPS.
+
+'
       discussion:
         description: 'Le projet DOIT avoir un ou plusieurs mécanismes de discussion
           (y compris les changements et les problèmes proposés) qui peuvent être recherchés,
@@ -702,16 +718,43 @@ fr:
 
 '
       repo_public:
-        description:
-        details:
+        description: 'Le projet DOIT avoir un dépôt source sous contrôle de version
+          qui est publiquement lisible et possède une URL.
+
+'
+        details: 'L''URL PEUT être identique à l''URL du projet. Le projet PEUT utiliser
+          des branches privées (non publiques) dans des cas spécifiques alors que
+          la modification n''est pas diffusée publiquement (par exemple, pour la correction
+          d''une vulnérabilité avant qu''elle ne soit révélée au public).
+
+'
       repo_track:
-        description:
+        description: 'Le dépôt source du projet DOIT suivre les changements apportés,
+          qui a effectué les changements et quand les changements ont été effectués.
+
+'
       repo_interim:
-        description:
-        details:
+        description: 'Pour permettre une analyse collaborative, le dépôt source du
+          projet DOIT inclure des versions provisoires pour examen entre versions
+          officielles ; Il NE DOIT PAS inclure que les dernières versions.
+
+'
+        details: 'Les projets PEUVENT choisir d''omettre des versions intermédiaires
+          spécifiques dans leurs dépôts source publics (par exemple, celles qui corrigent
+          des vulnérabilités de sécurité non publiques spécifiques, ne peuvent jamais
+          être rendues publiques ou incluent des éléments qui ne peuvent être légalement
+          publiés et ne sont pas dans la version finale).
+
+'
       repo_distributed:
-        description:
-        details:
+        description: 'Il est PROPOSÉ qu''un logiciel reconnu de contrôle de version
+          distribué soit utilisé (par exemple, git) pour le dépôt source du projet.
+
+'
+        details: 'Git n''est pas spécifiquement requis et les projets peuvent utiliser
+          un logiciel de contrôle de version centralisé (comme subversion) avec justification.
+
+'
       version_unique:
         description:
         details:
@@ -733,16 +776,42 @@ fr:
           PEUVENT sélectionner « N/A ».
 
 '
-        details:
+        details: 'Les notes de version PEUVENT être mises en œuvre de différentes
+          façons. De nombreux projets les fournissent dans un fichier nommé « NEWS
+          », « CHANGELOG » ou « ChangeLog », éventuellement avec des extensions telles
+          que « .txt », « .md » ou « .html ». Historiquement, le terme « journal des
+          modifications » signifiait un enregistrement de <i>chaque</i> changement,
+          mais pour répondre à ces critères, il faut un résumé lisible par un humain.
+          Les notes de version PEUVENT être fournies à la place par des mécanismes
+          de système de contrôle de version tels que le <a href="https://github.com/blog/1547-release-your-software">GitHub
+          Releases workflow</a>.
+
+'
       release_notes_vulns:
-        description:
+        description: 'Les notes de version DOIVENT identifier toutes les vulnérabilités
+          publiquement connues qui sont résolues dans chaque nouvelle version. Il
+          s''agit de « N/A » s''il n''y a pas de notes de version ou qu''il n''y a
+          pas eu de vulnérabilité publique.
+
+'
       report_process:
-        description:
+        description: 'Le projet DOIT fournir un processus permettant aux utilisateurs
+          de soumettre des rapports de bogue (par exemple, en utilisant un suivi des
+          problèmes ou une liste de diffusion).
+
+'
       report_tracker:
-        description:
-        unmet_placeholder:
+        description: 'Le projet DEVRAIT utiliser un suivi des problèmes pour le suivi
+          des problèmes individuels.
+
+'
+        unmet_placeholder: Pourquoi n'y a-t-il pas de suivi des problèmes ?
       report_responses:
-        description:
+        description: 'Le projet DOIT confirmer une majorité des rapports de bogues
+          soumis au cours des 2 à 12 derniers mois (inclus) ; la réponse ne doit pas
+          nécessairement inclure une correction.
+
+'
       enhancement_responses:
         description: 'Le projet DEVRAIT répondre à une majorité (&gt;50%) des demandes
           d''amélioration au cours des 2 à 12 derniers mois (inclus).
@@ -759,7 +828,10 @@ fr:
 
 '
       report_archive:
-        description:
+        description: 'Le projet DOIT avoir une archive publique pour les rapports
+          et les réponses pour une recherche ultérieure.
+
+'
       vulnerability_report_process:
         description:
         details:
@@ -799,18 +871,48 @@ fr:
         description: Le projet DEVRAIT être constructible en utilisant uniquement
           des outils FLOSS.
       test:
-        description:
-        details:
+        description: 'Le projet DOIT utiliser au moins une suite de test automatisée
+          publiée publiquement comme FLOSS (cette suite de tests peut être maintenue
+          sous la forme d''un projet FLOSS distinct).
+
+'
+        details: 'Le projet PEUT utiliser plusieurs suites de tests automatisées (par
+          exemple, une qui s''exécute rapidement, par rapport à une autre qui est
+          plus approfondie, mais nécessite un équipement spécial).
+
+'
       test_invocation:
-        description:
-        details:
+        description: 'Une suite de test DEVRAIT être invocable d''une manière standard
+          pour ce langage.
+
+'
+        details: 'Par exemple, « make check », « mvn test » ou « rake test ».
+
+'
       test_most:
-        description:
+        description: 'Il est PROPOSÉ que la suite de tests couvre la plupart (ou idéalement
+          toutes) les branches du code, les champs de saisie et les fonctionnalités.
+
+'
       test_continuous_integration:
-        description:
+        description: 'Il est PROPOSÉ que le projet utilise une intégration continue
+          (où le code nouveau ou modifié est fréquemment intégré dans un dépôt de
+          code central et des tests automatisés sont exécutés sur le résultat).
+
+'
       test_policy:
-        description:
-        details:
+        description: 'Le projet DOIT avoir une politique générale (formelle ou non)
+          qui spécifie que, dès qu''une nouvelle fonctionnalité majeure est ajoutée
+          au logiciel produit par le projet, des tests de cette fonctionnalité devraient
+          être ajoutés à une suite de tests automatisée.
+
+'
+        details: 'Dès qu''une politique est en place, même par le bouche à oreille,
+          qui spécifie que les développeurs devraient ajouter des tests à une suite
+          de test automatisée pour toute nouvelle fonctionnalité importante, sélectionnez
+          « Atteint ».
+
+'
       tests_are_added:
         description:
         details:
@@ -1050,17 +1152,64 @@ fr:
 
 '
       static_analysis:
-        description:
-        details:
-        na_placeholder:
-        met_placeholder:
+        description: 'Au moins un outil d''analyse de code statique DOIT être appliqué
+          à toute distribution majeure proposée avant sa sortie s''il existe au moins
+          un outil FLOSS qui implémente ce critère dans la langue sélectionnée.
+
+'
+        details: 'Un outil d''analyse statique de code examine le code logiciel (au
+          niveau du code source, du code intermédiaire ou de l''exécutable) sans l''exécuter
+          avec des entrées spécifiques. Aux fins de ce critère, les avertissements
+          du compilateur et les modes de langage « sûrs » ne comptent pas comme des
+          outils d''analyse statique de code (ceux-ci évitent généralement une analyse
+          approfondie car la rapidité est vitale). Des exemples de ces outils d''analyse
+          statique de code incluent <a href="http://cppcheck.sourceforge.net/">cppcheck</a>,
+          <a href="http://clang-analyzer.llvm.org/">clang static analyzer</a>, <a
+          href="http://findbugs.sourceforge.net/">FindBugs</a> (y compris <a href="https://h3xstream.github.io/find-sec-bugs/">FindSecurityBugs</a>),
+          <a href="https://pmd.github.io/">PMD</a>, <a href="http://brakemanscanner.org/">Brakeman</a>,
+          <a href="https://scan.coverity.com/">Coverity Quality Analyzer</a>, et <a
+          href="http://www8.hp.com/au/en/software-solutions/static-code-analysis-sast/index.html">HP
+          Fortify Static Code Analyzer</a>. Des listes plus vastes d''outils peuvent
+          être trouvées dans des endroits tels que <a href="https://en.wikipedia.org/wiki/List_of_tools_for_static_code_analysis">la
+          liste Wikipedia d''outils pour l''analyse statique de code</a>, <a href="https://www.owasp.org/index.php/Static_Code_Analysis">l''information
+          OWASP sur l''analyse statique de code</a>, <a href="http://samate.nist.gov/index.php/Source_Code_Security_Analyzers.html">la
+          liste NIST des analyseurs de sécurité du code source</a> et <a href="http://www.dwheeler.com/essays/static-analysis-tools.html">la
+          liste des outils d''analyse statique de Wheeler</a >. <a href="https://continuousassurance.org/">SWAMP</a>
+          est une plate-forme gratuite pour évaluer les vulnérabilités dans les logiciels
+          utilisant une variété d''outils. S''il n''y a pas d''outil d''analyse statique
+          FLOSS disponible pour le(s) langage(s) d''implémentation utilisé(s), sélectionnez
+          « N/A ».
+
+'
+        na_placeholder: 'Pourquoi cela ne peut-il pas être satisfait (par exemple,
+          il n''existe pas d''outils FLOSS pour ce langage) ?
+
+'
+        met_placeholder: 'Quel(s) outil(s) d''analyse statique sont utilisés ?
+
+'
       static_analysis_common_vulnerabilities:
-        description:
+        description: 'Il est PROPOSÉ qu''au moins l''un des outils d''analyse statique
+          utilisés pour le critère d''analyse statique inclue des règles ou des approches
+          pour rechercher des vulnérabilités courantes dans le langage ou l''environnement
+          analysé.
+
+'
       static_analysis_fixed:
-        description:
-        details:
+        description: 'Toutes les vulnérabilités exploitables de gravité moyenne et
+          élevée découvertes avec une analyse statique de code DOIVENT être corrigées
+          en temps approprié après leur confirmation.
+
+'
+        details: 'Une vulnérabilité est de gravité moyenne à élevée si son <a href="https://nvd.nist.gov/cvss.cfm">CVSS
+          2.0</a> est 4 ou supérieur.
+
+'
       static_analysis_often:
-        description:
+        description: 'Il est PROPOSÉ que l''analyse statique du code source se produise
+          à chaque commit ou au moins quotidiennement.
+
+'
       dynamic_analysis:
         description: 'Il est PROPOSÉ qu''au moins un outil d''analyse dynamique soit
           appliqué à tout candidat pour une version majeure du logiciel avant sa distribution.

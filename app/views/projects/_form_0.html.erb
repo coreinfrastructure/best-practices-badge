@@ -67,9 +67,7 @@
                              list: 'implementation_language_list',
                              disabled: is_disabled %>
            <!-- Some examples from http://wiki.spdx.org/view/FileNoticeExamples -->
-           <div class="hidden">
-           <datalist id="implementation_language_list">
-            <select>
+           <datalist class="hidden" id="implementation_language_list">
               <option value="-">- (None)</option>
               <option value="4th Dimension/4D">4th Dimension/4D</option>
               <option value="ABAP">ABAP</option>
@@ -172,8 +170,7 @@
               <option value="VHDL">VHDL</option>
               <option value="Visual Basic">Visual Basic (not .NET)</option>
               <option value="Visual Basic .NET">Visual Basic .NET</option>
-            </select>
-           </datalist></div>
+           </datalist>
            </div>
 <!-- TODO: MUST have a project or repo URL, SUGGESTED to use HTTPS.
      However, first is implied by "description_good",
@@ -218,9 +215,7 @@
                                t('projects.form_basics.license.placeholder'),
                              list: 'license_list', disabled: is_disabled %>
            <!-- Some examples from http://wiki.spdx.org/view/FileNoticeExamples -->
-           <div class="hidden">
-           <datalist id="license_list">
-            <select>
+           <datalist class="hidden" id="license_list">
               <option value="AGPL-3.0">AGPL-3.0 {GNU Affero General Public License 3.0}</option>
               <option value="AGPL-3.0+">AGPL-3.0 {GNU Affero General Public License 3.0 or later}</option>
               <option value="Apache-2.0">Apache-2.0 {Apache License 2.0}</option>
@@ -257,8 +252,7 @@
               <option value="(LGPL-2.0+ AND AML)">(LGPL-2.0+ AND AML) {must meet both the GNU Lesser General Public License version 2.1 or later AND the Apple MIT License}</option>
               <option value="(MPL-1.1 OR GPL-2.0+ OR LGPL-2.1+)">(MPL-1.1 OR GPL-2.0+ OR LGPL-2.1+)</option>
               <option value="(Ruby OR BSD-2-Clause)">(Ruby OR BSD-2-Clause)</option>
-            </select>
-           </datalist></div>
+           </datalist>
             <br>
             <hr>
            </div>

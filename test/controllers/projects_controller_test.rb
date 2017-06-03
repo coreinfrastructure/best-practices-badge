@@ -125,11 +125,10 @@ class ProjectsControllerTest < ActionController::TestCase
     test_user = users(:test_user_mark)
     # Create additional rights during test, not as a fixure.
     # The fixture would require correct references to *other* fixture ids.
-    new_right = AdditionalRight.new(
+    AdditionalRight.new(
       user_id: test_user.id,
       project_id: @project.id
-    )
-    new_right.save
+    ).save!
     log_in_as(test_user)
     get :edit, params: { id: @project }
     assert_response :success
@@ -198,6 +197,55 @@ class ProjectsControllerTest < ActionController::TestCase
       id: @project, format: :json, project: new_project_data
     }
     assert_response :unprocessable_entity
+  end
+
+  # rubocop:disable Metrics/BlockLength
+  test 'can change users with additional rights' do
+    log_in_as(@project.user)
+    assert_not AdditionalRight.exists?(
+      project_id: @project.id,
+      user_id: users(:test_user_mark).id
+    )
+    assert_not AdditionalRight.exists?(
+      project_id: @project.id,
+      user_id: users(:test_user_melissa).id
+    )
+    assert_not AdditionalRight.exists?(
+      project_id: @project.id,
+      user_id: @admin.id
+    )
+    patch :update, params: {
+      id: @project, project: {
+        additional_rights:
+          "= #{users(:test_user_mark).id}, #{users(:test_user_melissa).id}"
+      }
+    }
+    assert_redirected_to project_path(assigns(:project))
+    assert AdditionalRight.exists?(
+      project_id: @project.id,
+      user_id: users(:test_user_mark).id
+    )
+    assert AdditionalRight.exists?(
+      project_id: @project.id,
+      user_id: users(:test_user_melissa).id
+    )
+  end
+  # rubocop:enable Metrics/BlockLength
+
+  test 'can remove additional rights with "="' do
+    AdditionalRight.new(
+      user_id: users(:test_user_melissa).id,
+      project_id: @project.id
+    ).save!
+    assert_equal 1, AdditionalRight.where(project_id: @project.id).count
+    log_in_as(@project.user)
+    patch :update, params: {
+      id: @project, project: {
+        additional_rights: '='
+      }
+    }
+    assert_redirected_to project_path(assigns(:project))
+    assert_equal 0, AdditionalRight.where(project_id: @project.id).count
   end
 
   test 'should fail to update stale project' do

@@ -174,6 +174,17 @@ class Project < ApplicationRecord
     end
   end
 
+  # Return a string representing the additional rights on this project.
+  # Currently it's just a (possibly empty) list of user ids from
+  # AdditionalRight.  If AdditionalRights gains different kinds of rights
+  # (e.g., to spec additional owners), this method will need to be tweaked.
+  def additional_rights
+    # "distinct" shouldn't be needed; it's purely defensive here
+    list = AdditionalRight.where(project_id: id).distinct.pluck(:user_id)
+    return '' if list.empty?
+    list.sort.to_s[1..-2] # Remove surrounding [ and ]
+  end
+
   # Return string representing badge level; assumes badge_percentage correct.
   def badge_level
     BADGE_LEVELS.each_with_index do |level, index|

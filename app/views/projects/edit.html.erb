@@ -4,7 +4,7 @@
       <div class="main-badge-ques"></div>
     </div>
     <div class="col-md-7 col-sm-6">
-      <h2 class="m-t-0">Edit Project Badge Status</h2>
+      <h1 class="m-t-0 h2">Edit Project Badge Status</h1>
   <%= render "form_#{@criteria_level}", project: @project, is_disabled: false %>
 <% else %>
   <% flash.now[:danger] = t('users.please_log_in') %>

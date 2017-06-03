@@ -5,21 +5,3 @@ td.website {
   word-wrap: break-word;
   max-width: 150px;
 }
-
-// Provide legends for accessibility, but don't show them normally.
-// There appear to be no good solutions.  These pages:
-// https://stackoverflow.com/questions/1097369/hide-html-form-legend-using-css
-// http://www.zeldman.com/2012/03/01/
-// replacing-the-9999px-hack-new-image-replacement/
-// recommend the following:
-// legend span {
-//   display: block;
-//   text-indent: 100%;
-//   white-space: nowrap;
-//   overflow: hidden;
-// }
-// but creates excess distracting whitespace - a problem for typical users.
-
-legend {
-  display: none !important;
-}

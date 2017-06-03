@@ -546,8 +546,13 @@ fr:
         met_placeholder: "(Facultatif) Où est la description succincte ? Envisager
           de fournir une URL.\n"
       interact:
-        description:
-        met_placeholder:
+        description: 'Le site Web du projet DOIT fournir des informations sur la façon
+          d''obtenir, de fournir des commentaires (comme des rapports de bogue ou
+          des demandes d''amélioration) et de contribuer au logiciel.
+
+'
+        met_placeholder: "(Facultatif) Où est cette information ? Envisager de fournir
+          des URL(s).\n"
       contribution:
         description: 'L''information sur la façon de contribuer DOIT expliquer le
           processus de contribution (par exemple, les pull requests sont-elles utilisées
@@ -574,14 +579,50 @@ fr:
 
 '
       floss_license:
-        description:
-        details:
+        description: 'Le logiciel produit par le projet DOIT être distribué en tant
+          que FLOSS.
+
+'
+        details: 'FLOSS est un logiciel distribué d''une manière qui répond à la <a
+          href="https://opensource.org/osd-annotated">Définition de l''Open Source</a>
+          ou <a href="http://www.gnu.org /philosophy/free-sw.fr.html">Définition du
+          Logiciel Libre</a>. Des exemples de ces licences incluent <a href="http://creativecommons.org/publicdomain/zero/1.0/">CC0</a>,
+          <a href="https://opensource.org/licenses/MIT">MIT</a>, <a href="https://opensource.org/licenses/BSD-2-Clause">BSD
+          2-clause</a>, <a href="https://opensource.org/licences/BSD-3-Clause">BSD
+          3-clause révisée</a>, <a href="https://opensource.org/licenses/Apache-2.0">Apache
+          2.0</a>, <a href="https://opensource.org/licenses/lgpl-license">Lesser GNU
+          General Public License (LGPL)</a>, et <a href="https://opensource.org/licenses/gpl-license">GNU
+          General Public License (GPL)</a>. Pour nos besoins, cela signifie que la
+          licence DOIT être : <ul> <li> <a href="https://opensource.org/licenses">une
+          licence approuvée par l''Open Source Initiative (OSI)</a>, ou </li> <li>
+          <a href="https://www.gnu.org/licenses/license-list.html">une licence libre
+          approuvée par la Free Software Foundation (FSF)</a>, ou </li> <li> <a href="https://www.debian.org/legal/licenses/">une
+          licence libre acceptable pour Debian main</a> ou </li> <li><a href="https://fedoraproject.org/wiki/Licensing:Main?rd=Licensing">une
+          "bonne" licence selon Fedora</a>. </li> </ul> Le logiciel PEUT également
+          être distribué avec d''autres licences (par exemple, "GPLv2 ou propriétaire"
+          est acceptable).
+
+'
       floss_license_osi:
-        description:
-        details:
+        description: 'Il est PROPOSÉ que toute licence(s) requise(s) pour le logiciel
+          produit par le projet soit <a href="https://opensource.org/licenses">approuvée
+          par l''Open Source Initiative (OSI).</a>
+
+'
+        details: 'L''OSI utilise un processus d''approbation rigoureux pour déterminer
+          quelles licences sont OSS.
+
+'
       license_location:
-        description:
-        details:
+        description: 'Le projet DOIT afficher la (les) licence(s) de ses résultats
+          dans un emplacement standard dans leur dépôt source.
+
+'
+        details: 'Par exemple, dans un fichier à la racine du dépôt appelé LICENSE
+          ou COPYING. Les noms de fichiers de licence PEUVENT être suivis d''une extension
+          telle que « .txt » ou « .md ».
+
+'
       documentation_basics:
         description: 'Le projet DOIT fournir une documentation de base pour le logiciel
           produit par le projet.
@@ -648,8 +689,18 @@ fr:
 
 '
       english:
-        description:
-        details:
+        description: 'Le projet DEVRAIT fournir de la documentation en anglais et
+          être en mesure d''accepter les rapports de bogues et les commentaires sur
+          le code en anglais.
+
+'
+        details: 'L''anglais est actuellement la <a href="https://fr.wikipedia.org/wiki/Langue_v%C3%A9hiculaire">langue
+          véhiculaire</a> des technologies informatiques ; l''utilisation de l''anglais
+          augmente le nombre de développeurs et de relecteurs potentiels dans le monde
+          entier. Un projet peut répondre à ce critère même si la langue principale
+          de ses principaux développeurs n''est pas l''anglais.
+
+'
       repo_public:
         description:
         details:
@@ -670,7 +721,18 @@ fr:
       version_tags:
         description:
       release_notes:
-        description:
+        description: 'Le projet DOIT fournir, avec chaque distribution, des notes
+          de version qui sont un résumé lisible par les humains des changements majeurs
+          dans cette version afin d''aider les utilisateurs à déterminer s''ils doivent
+          se mettre à niveau et quel sera l''impact de la mise à niveau. Les notes
+          de version NE DOIVENT PAS être la sortie brute d''un journal de contrôle
+          de version (par exemple, les résultats de la commande "git log" ne sont
+          pas des notes de version). Les projets dont les résultats ne sont pas destinés
+          à être réutilisés dans plusieurs emplacements (tels que le logiciel pour
+          un site Web ou un service unique) ET qui utilisent la livraison continue
+          PEUVENT sélectionner « N/A ».
+
+'
         details:
       release_notes_vulns:
         description:
@@ -682,8 +744,20 @@ fr:
       report_responses:
         description:
       enhancement_responses:
-        description:
-        details:
+        description: 'Le projet DEVRAIT répondre à une majorité (&gt;50%) des demandes
+          d''amélioration au cours des 2 à 12 derniers mois (inclus).
+
+'
+        details: 'La réponse PEUT être « non » ou une discussion sur ses mérites.
+          Le but est simplement qu''il y ait une réponse à certaines demandes, ce
+          qui indique que le projet est toujours en vie. Aux fins de ce critère, les
+          projets ne doivent pas compter les fausses demandes (par exemple, provenant
+          de spammeurs ou de systèmes automatisés). Si un projet ne fait plus d''améliorations,
+          sélectionnez « non satisfait » et incluez l''URL qui rend cette situation
+          claire pour les utilisateurs. Si un projet tend à être submergé par le nombre
+          de demandes d''amélioration, sélectionnez « non satisfait » et expliquez.
+
+'
       report_archive:
         description:
       vulnerability_report_process:
@@ -753,11 +827,67 @@ fr:
         description:
         details:
       know_secure_design:
-        description:
-        details:
+        description: 'Le projet DOIT avoir au moins un développeur principal qui sait
+          comment concevoir un logiciel sécurisé.
+
+'
+        details: 'Cela nécessite de comprendre les principes de conception suivants,
+          y compris les 8 principes de <a href="http://web.mit.edu/Saltzer/www/publications/protection/">Saltzer
+          et Schroeder</a> : <ul> < li>économie de moyens (maintenez la conception
+          aussi simple et petite que pratique, par exemple en adoptant des simplifications
+          conséquentes) <li>valeurs sûres par défaut (les décisions d''accès doivent
+          être refusées par défaut et l''installation des projets devrait être sécurisée
+          par défaut) <li>médiation complète (tous les accès qui pourraient être limités
+          doivent être vérifiés pour l''autorité et ne pas être contournables) <li>conception
+          ouverte (les mécanismes de sécurité ne doivent pas dépendre de l''ignorance
+          par l''attaquant de sa conception, mais plutôt d''informations plus facilement
+          protégées et modifiées comme des clés et des mots de passe) <li>séparation
+          des privilèges (idéalement, l''accès aux objets importants devrait dépendre
+          de plus d''une condition, de sorte que la défaillance d''un système de protection
+          n''autorisera pas l''accès complet. Par exemple, l''authentification multi-facteurs,
+          comme l''exigence d''un mot de passe et d''un jeton matériel, est plus forte
+          qu''une authentification à un seul facteur) <li>principe de plus faible
+          privilège (les processus doivent fonctionner avec le minimum de privilège
+          requis) <li>mécanisme de partage minimal (la conception devrait minimiser
+          les mécanismes communs à plus d''un utilisateur et nécessaires à tous les
+          utilisateurs, par exemple, les répertoires pour les fichiers temporaires)
+          <li>acceptabilité psychologique (l''interface humaine doit être conçue pour
+          faciliter l''utilisation - la conception pour « l''étonnement minimal »
+          peut aider) <li>surface d''attaque limitée (la surface d''attaque - l''ensemble
+          des différents points où un attaquant peut essayer d''entrer ou d''extraire
+          des données - devrait être limitée) <li>validation d''entrée avec des listes
+          blanches (les entrées devraient généralement être vérifiées pour déterminer
+          si elles sont valides avant qu''elles ne soient acceptées ; cette validation
+          devrait utiliser des listes blanches (qui n''acceptent que des bonnes valeurs
+          connues), et non des listes noires (qui tentent de répertorier les valeurs
+          mauvaises connues)). </ul> Un « développeur principal » dans un projet est
+          celui qui connaît la base de code du projet, est à l''aise pour faire des
+          modifications et est reconnu comme tel par la plupart des autres participants
+          au projet. Un développeur principal effectuerait généralement un certain
+          nombre de contributions au cours de l''année écoulée (du code, de la documentation
+          ou des réponses aux questions). Des développeurs seraient généralement considérés
+          comme des développeurs principaux s''ils ont lancé le projet (et n''ont
+          pas quitté le projet il y a plus de trois ans), ont la possibilité de recevoir
+          des informations sur un canal privé de déclaration de vulnérabilité (s''il
+          y en a un), peuvent accepter des contributions au nom du projet, ou effectuer
+          les distributions finales du logiciel du projet. S''il n''y a qu''un seul
+          développeur, cette personne est le développeur principal.
+
+'
       know_common_errors:
-        description:
-        details:
+        description: 'Au moins l''un des principaux développeurs du projet DOIT connaître
+          les types courants d''erreurs qui conduisent à des vulnérabilités dans ce
+          genre de logiciel, ainsi qu''au moins une méthode pour contrer ou atténuer
+          chacun d''eux.
+
+'
+        details: 'Des exemples (selon le type de logiciel) incluent l''injection SQL,
+          l''injection OS, le débordement mémoire classique, le cross-site scripting,
+          l''authentification manquante et l''autorisation manquante. Voir <a href="http://cwe.mitre.org/top25/">CWE/SANS
+          top 25</a> ou <a href="https://www.owasp.org/index.php/Category: OWASP_Top_Ten_Project">OWASP
+          Top 10</a> pour les listes couramment utilisées.
+
+'
       crypto_published:
         description: 'Le logiciel produit par le projet DOIT utiliser, par défaut,
           uniquement les protocoles cryptographiques et les algorithmes publiés publiquement
@@ -909,8 +1039,16 @@ fr:
       vulnerabilities_critical_fixed:
         description:
       no_leaked_credentials:
-        description:
-        details:
+        description: 'Les dépôts publics NE DOIVENT PAS fuiter un certificat privé
+          valide (par exemple, un mot de passe ou une clé privée) qui est destiné
+          à limiter l''accès public.
+
+'
+        details: 'Un projet PEUT fuiter des « échantillons » de certificats pour les
+          tests et pour des bases de données sans importance, pour autant qu''ils
+          ne soient pas destinés à limiter l''accès public.
+
+'
       static_analysis:
         description:
         details:
@@ -924,19 +1062,81 @@ fr:
       static_analysis_often:
         description:
       dynamic_analysis:
-        description:
-        details:
+        description: 'Il est PROPOSÉ qu''au moins un outil d''analyse dynamique soit
+          appliqué à tout candidat pour une version majeure du logiciel avant sa distribution.
+
+'
+        details: 'Un outil d''analyse dynamique examine le logiciel en l''exécutant
+          avec des entrées spécifiques. Par exemple, le projet PEUT utiliser un outil
+          de fuzzing (par exemple, <a href="http://lcamtuf.coredump.cx/afl/">American
+          Fuzzy Lop</a>) ou un scanner d''application Web (par exemple, <a href =
+          "https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project">OWASP ZAP</a>
+          ou <a href="http://w3af.org/">w3af</a>). Dans certains cas, le projet <a
+          href="https://github.com/google/oss-fuzz#introduction">OSS-Fuzz</a> peut
+          être prêt à appliquer des tests de fuzzing à votre projet. Aux fins de ce
+          critère, l''outil d''analyse dynamique doit varier les entrées d''une manière
+          ou d''une autre pour rechercher différents types de problèmes <em>ou</em>
+          être une suite de test automatisée avec au moins 80% de couverture de branche.
+          La <a href="https://en.wikipedia.org/wiki/Dynamic_program_analysis">page
+          Wikipedia sur l''analyse dynamique</a> et la <a href = "https://www.owasp.org/index.php/Fuzzing">page
+          OWASP sur le fuzzing</a> identifient certains outils d''analyse dynamique.
+          Le ou les outils d''analyse PEUVENT être axés sur la recherche de vulnérabilités
+          de sécurité, mais cela n''est pas nécessaire.
+
+'
       dynamic_analysis_unsafe:
-        description:
-        details:
+        description: 'Il est PROPOSÉ que, si le logiciel produit par le projet comprend
+          un logiciel écrit à l''aide d''un langage non sûr pour les accès mémoire
+          (par exemple, C ou C ++), au moins un outil dynamique (par exemple, un fuzzer
+          ou un scanner d''application Web) est utilisé de façon routinière en combinaison
+          avec un mécanisme pour détecter des problèmes de sécurité mémoire tels que
+          les dépassements de zone mémoire. Si le projet ne produit pas de logiciel
+          écrit dans un langage non sûr pour les accès mémoire, choisissez « non applicable
+          » (N/A).
+
+'
+        details: 'Des exemples de mécanismes pour détecter les problèmes de sécurité
+          de la mémoire comprennent <a href="https://github.com/google/sanitizers/wiki/AddressSanitizer">Address
+          Sanitizer (ASAN)</a> (disponible dans GCC et LLVM), <a href="http://clang.llvm.org/docs/MemorySanitizer.html">Memory
+          Sanitizer</a> et <a href="http://valgrind.org/">valgrind</a>. D''autres
+          outils potentiellement utilisés incluent <a href="http://clang.llvm.org/docs/ThreadSanitizer.html">thread
+          sanitizer</a> et <a href = "http://clang.llvm.org/ docs/UndefinedBehaviorSanitizer.html">undefined
+          behavior sanitizer</a>. La généralisation de l''utilisation des assertions
+          fonctionnera également.
+
+'
       dynamic_analysis_enable_assertions:
-        description:
+        description: 'Il est PROPOSÉ que le logiciel produit par le projet comprenne
+          de nombreuses assertions à l''exécution qui sont vérifiées lors d''une analyse
+          dynamique.
+
+'
       dynamic_analysis_fixed:
-        description:
-        details:
+        description: 'Toutes les vulnérabilités exploitables de gravité moyenne et
+          élevée découvertes avec une analyse de code dynamique DOIVENT être corrigées
+          en un temps approprié après leur confirmation.
+
+'
+        details: 'Une vulnérabilité est de gravité moyenne à élevée si son score de
+          base <a href="https://nvd.nist.gov/cvss.cfm">CVSS 2.0</a> est 4. Si vous
+          n''utilisez pas d''analyse de code dynamique et donc n''avez trouvé aucune
+          vulnérabilité de cette façon, choisissez « non applicable » (N/A).
+
+'
       installation_common:
-        description:
-        details:
+        description: 'Le projet DEVRAIT fournir un moyen d''installer et de désinstaller
+          facilement le logiciel produit par le projet en utilisant une convention
+          couramment utilisée.
+
+'
+        details: 'Des exemples comprennent l''utilisation d''un gestionnaire de paquets
+          (au niveau du système ou du langage), « make/install/uninstall » (supportant
+          DESTDIR), un conteneur dans un format standard ou une image de machine virtuelle
+          dans un format standard. Le processus d''installation et de désinstallation
+          (par exemple, son paquetage) PEUT être mis en œuvre par un tiers tant qu''il
+          est FLOSS.
+
+'
       build_reproducible:
         description: 'Il est PROPOSÉ que le projet possède une <a href="https://reproducible-builds.org/">construction
           reproductible</a>.
@@ -998,11 +1198,31 @@ fr:
 
 '
       hardened_site:
-        description:
-        details:
+        description: 'Il est PROPOSÉ que le site Web du projet, le dépôt (s''il est
+          accessible via le Web) et le site de téléchargement (si séparé) incluent
+          des en-têtes clés de durcissement avec des valeurs non admises.
+
+'
+        details: 'Notez que GitHub est connu pour le faire. Des sites tels que https://securityheaders.io/
+          peuvent le vérifier rapidement. Les en-têtes clés de durcissement sont :
+          Content Security Policy (CSP), HTTP Strict Transport Security (HSTS), X-Content-Type-Options
+          (comme « nosniff »), X-Frame-Options et X-XSS-Protection.
+
+'
       hardening:
-        description:
-        details:
+        description: 'Il est PROPOSÉ que des mécanismes de durcissement soient utilisés
+          dans le logiciel produit par le projet afin que les défauts du logiciel
+          soient moins susceptibles d''entraîner des vulnérabilités de sécurité.
+
+'
+        details: 'Les mécanismes de durcissement peuvent inclure des en-têtes HTTP
+          comme Content Security Policy (CSP), des options de compilation pour atténuer
+          les attaques (telles que -fstack-protector) ou des options de compilation
+          pour éliminer les comportements indéfinis. Pour nos besoins, la séparation
+          des privilèges n''est pas considérée comme un mécanisme de durcissement
+          (la séparation des privilèges est importante, mais séparée).
+
+'
     '1':
       contribution_requirements:
         description:

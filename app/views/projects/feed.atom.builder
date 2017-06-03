@@ -22,11 +22,11 @@ cache_if (!Rails.env.test? && !@projects.empty?),
       cache_if !Rails.env.test?, project do
         feed.entry(project) do |entry|
           entry.title project.name.presence || t('project_name_unknown')
-          status = "<p><b>#{project.badge_level.titleize}"
+          status = "<p><strong>#{project.badge_level.titleize}"
           if project.badge_level == 'in_progress'
             status += ": #{project.badge_percentage_0}%"
           end
-          status += '</b></p>'
+          status += '</strong></p>'
           url = project.homepage_url.presence || project.repo_url
           link = "<p><a href='#{url}'>#{url}</a></p>"
           description = '<span lang="en">' +

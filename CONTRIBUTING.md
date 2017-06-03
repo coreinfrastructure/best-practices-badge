@@ -492,6 +492,15 @@ into the default "rake" checking task:
 * JSHint (JavaScript error detector)
 * W3C link checker <https://validator.w3.org/checklink>
 * W3C markup validation service <https://validator.w3.org/>
+* AChecker, <https://achecker.ca/checker/index.php>, a web accessibility
+  checker.  This tool looks for web accessibility problems.
+  We typically check the following paths
+  (these are key forms in the system): "/", "/signup", "/login",
+  "/projects", and "/projects/1".
+  Our goal is to have no known problems and no likely problems per this tool
+  (this was true on 2017-06-03).
+  The "potential problems" list is very noisy, so we don't worry
+  about that list as much.
 
 Here are some online tools we sometimes use to check for performance issues
 (including time to complete rendering, download size in bytes, etc.):

@@ -487,21 +487,21 @@ function showHash() {
 
 function getAllPanelsReady() {
   $('.can-collapse').addClass('clickable');
-  $('.can-collapse').find('i.glyphicon').addClass('glyphicon-chevron-up');
+  $('.can-collapse').find('em.glyphicon').addClass('glyphicon-chevron-up');
   var loc = window.location.hash;
   if (loc !== '#all') {
     var parentPanel = $(loc).parents('.panel');
     if (parentPanel.length) {
       $('.panel').not(parentPanel).find('.collapse').removeClass('in');
       $('.panel').not(parentPanel).find('.can-collapse').addClass('collapsed');
-      $('.panel').not(parentPanel).find('.can-collapse').find('i.glyphicon')
+      $('.panel').not(parentPanel).find('.can-collapse').find('em.glyphicon')
         .addClass('glyphicon-chevron-down')
         .removeClass('glyphicon-chevron-up');
       showHash();
     } else {
       $('.remove-in').removeClass('in');
       $('.close-by-default').addClass('collapsed');
-      $('.close-by-default').find('i.glyphicon')
+      $('.close-by-default').find('em.glyphicon')
         .addClass('glyphicon-chevron-down')
         .removeClass('glyphicon-chevron-up');
     }
@@ -614,7 +614,7 @@ function TogglePanel(e) {
   if ($this.hasClass('collapsed')) {
     $this.closest('.panel').find('.panel-collapse').collapse('show');
     $this.removeClass('collapsed');
-    $this.find('i.glyphicon').removeClass('glyphicon-chevron-down')
+    $this.find('em.glyphicon').removeClass('glyphicon-chevron-down')
       .addClass('glyphicon-chevron-up');
     if (!globalIgnoreHashChange) {
       var origId = $this.attr('id');
@@ -626,7 +626,7 @@ function TogglePanel(e) {
   } else {
     $this.closest('.panel').find('.panel-collapse').collapse('hide');
     $this.addClass('collapsed');
-    $this.find('i.glyphicon').removeClass('glyphicon-chevron-up')
+    $this.find('em.glyphicon').removeClass('glyphicon-chevron-up')
       .addClass('glyphicon-chevron-down');
   }
 }

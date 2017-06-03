@@ -50,6 +50,10 @@ The BadgeApp web application MUST:
 8. Be secure.  See the separate
    [security](security.md) document for more about security, including
    its requirements.
+9. Be accessible.
+   We strive to comply with the
+   <a href="https://www.w3.org/TR/WCAG20/">Web Content Accessibility
+   Guidelines (WCAG 2.0)</a> (especially at the A and AA level).
 
 There are many specific requirements; instead of a huge requirements document,
 most specific requirements are proposed and processed via its

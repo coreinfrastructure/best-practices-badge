@@ -31,7 +31,7 @@ class UrlValidator < ActiveModel::EachValidator
           ([-A-Za-z0-9_.:/+!,#]|    # allow these ASCII chars.
            %(20|[89A-Ea-e][0-9A-Fa-f]|[Ff][0-7]))*  # Allow some %-encoded
         )?)\z}x
-  URL_MESSAGE = 'must begin with http: or https: and use a limited charset'
+  URL_MESSAGE = I18n.t('.url_message')
 
   # Return true if URL matches URL_REGEX and its decoding is valid UTF-8.
   def url_acceptable?(value)

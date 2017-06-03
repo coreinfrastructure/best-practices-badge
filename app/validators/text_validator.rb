@@ -5,8 +5,7 @@
 # SPDX-License-Identifier: MIT
 
 class TextValidator < ActiveModel::EachValidator
-  ENCODING_MESSAGE =  'must be have a valid  UTF-8 encoding and ' \
-                      'no invalid control characters'
+  ENCODING_MESSAGE =  I18n.t('.valid_text')
   INVALID_CONTROL = /[\x01-\x08\x0b\x0c\x0e-\x1f]/
   def text_acceptable?(value)
     return true if value.nil?

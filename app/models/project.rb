@@ -152,12 +152,15 @@ class Project < ApplicationRecord
             length: { maximum: MAX_SHORT_STRING_LENGTH },
             format: {
               with: VALID_LANGUAGE_LIST,
-              message: 'Must a comma-separated list of names'
+              message: I18n.t('.comma_separated_list')
             }
 
   validates :cpe,
             length: { maximum: MAX_SHORT_STRING_LENGTH },
-            format: { with: /\A(cpe:.*)?\Z/, message: 'Must begin with cpe:' }
+            format: {
+              with: /\A(cpe:.*)?\Z/,
+              message: I18n.t('.begin_with_cpe')
+            }
 
   validates :user_id, presence: true
 

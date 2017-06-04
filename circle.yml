@@ -33,3 +33,4 @@ general:
     - 'license_finder_report.html'
     - 'log/test.log'
     - 'tmp/capybara'
+    - 'test/html_reports' 

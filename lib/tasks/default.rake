@@ -386,11 +386,12 @@ end
 # - https://github.com/yaml/libyaml/issues/46
 # We will run this enhancement to solve the problem.
 # Only do this in development, since the gem only exists then.
+# Use Ruby for in place editing because sed isn't portable across Linux & OS X
 if Rails.env.development?
   task 'translation:sync' => :save_en
   Rake::Task['translation:sync'].enhance do
     puts 'Removing bogus trailing whitespace (bug workaround).'
-    sh "cd config/locales/ && sed -i'' -e 's/ $//' *.yml && cd ../.."
+    sh %q{ruby -pi -e "sub(/ $/, '')" ./config/locales/*.yml}
     sh 'mv config/locales/en.yml.ORIG config/locales/en.yml'
     puts "Now run: git commit -as -m 'rake translation:sync'"
   end

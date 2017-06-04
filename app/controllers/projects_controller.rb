@@ -135,6 +135,11 @@ class ProjectsController < ApplicationController
     end
   end
 
+  # "Additional rights" are only considered when they match this pattern.
+  # A leading "=" is required to make change.  This prevents accidental
+  # changes, and also eliminates the need to consult the additional rights
+  # table when updating a project where the rights aren't changing
+  # (the normal case).
   VALID_ADD_RIGHTS = /\A=(\d+(,\d+)*)?\z/
 
   # Set additional rights to params[:additional_rights], if desired

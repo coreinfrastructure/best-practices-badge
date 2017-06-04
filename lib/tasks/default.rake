@@ -390,7 +390,7 @@ if Rails.env.development?
   task 'translation:sync' => :save_en
   Rake::Task['translation:sync'].enhance do
     puts 'Removing bogus trailing whitespace (bug workaround).'
-    sh "cd config/locales/ && sed -i -e 's/ $//' *.yml && cd ../.."
+    sh "cd config/locales/ && sed -i'' -e 's/ $//' *.yml && cd ../.."
     sh 'mv config/locales/en.yml.ORIG config/locales/en.yml'
     puts "Now run: git commit -as -m 'rake translation:sync'"
   end

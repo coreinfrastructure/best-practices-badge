@@ -233,7 +233,7 @@ zh-CN:
     new:
       post_delay_warning: 在提交后，因为我们试图自动填充相关信息，可能有显著的滞后。
       new_badge: 新徽章
-      may_select_html: '您可以从GitHub仓库中选择<i>或</i>提供其他有关项目的信息。
+      may_select_html: '您可以从GitHub仓库中选择<em>或</em>提供其他有关项目的信息。
 
 '
       select_one_github: 从GitHub仓库中选择
@@ -313,9 +313,9 @@ zh-CN:
     form_early:
       badge_intro:
         description:
-        details_html: '没有一套可以保证软件永远不会有缺陷或漏洞的做法；如果规范或假设是错误的，即使合适的方法也可能失败。也没有哪些做法可以保证一个项目能够维持健康和运作良好的开发者社区。但是，遵循最佳做法可以帮助改善项目的成果。例如，一些做法可以在发布之前进行多人评估，这可以帮助您找到其他难以找到的技术漏洞，并帮助建立信任，并希望不同公司的开发人员之间进行重复的交互。要获得徽章，必须满足所有“必须”和“禁止”的条款，满足所有“应该”条款或有合适的理由，<i>和</
-          i>所有“建议”条款必须满足或未满足（至少希望考虑）。欢迎通过<a href="https://github.com/linuxfoundation/cii-best-practices-badge">
-          GitHub网站创建问题或提出请求</a>进行反馈。另外还有一个<a href =“https ：//lists.coreinfrastructure.org/mailman/listinfo/cii-badges“>一般讨论邮件列表</a>。<br
+        details_html: '没有一套可以保证软件永远不会有缺陷或漏洞的做法；如果规范或假设是错误的，即使合适的方法也可能失败。也没有哪些做法可以保证一个项目能够维持健康和运作良好的开发者社区。但是，遵循最佳做法可以帮助改善项目的成果。例如，一些做法可以在发布之前进行多人评估，这可以帮助您找到其他难以找到的技术漏洞，并帮助建立信任，并希望不同公司的开发人员之间进行重复的交互。要获得徽章，必须满足所有“必须”和“禁止”的条款，满足所有“应该”条款或有合适的理由，<em>和</em>所有“建议”条款必须满足或未满足（至少希望考虑）。欢迎通过<a
+          href="https://github.com/linuxfoundation/cii-best-practices-badge"> GitHub网站创建问题或提出请求</a>进行反馈。另外还有一个<a
+          href =“https ：//lists.coreinfrastructure.org/mailman/listinfo/cii-badges“>一般讨论邮件列表</a>。<br
           /> <br />
 
 '
@@ -720,7 +720,7 @@ zh-CN:
         description: '如果项目生成的软件需要构建使用，项目必须提供可以从源代码自动重新构建软件的可工作的构建系统。
 
 '
-        details: '构建系统确定重建软件（以及以什么顺序）需要执行哪些操作，然后执行这些步骤。例如，它可以调用编译器来编译源代码。如果从源代码创建可执行文件，则必须可以修改项目的源代码，然后通过这些修改生成更新的可执行文件。如果项目生成的软件取决于外部库，则构建系统<i>不必</i>构建那些外部库。如果在修改源代码之后不需要构建任何使用该软件的软件，请选择“不适用”（N/A）。
+        details: '构建系统确定重建软件（以及以什么顺序）需要执行哪些操作，然后执行这些步骤。例如，它可以调用编译器来编译源代码。如果从源代码创建可执行文件，则必须可以修改项目的源代码，然后通过这些修改生成更新的可执行文件。如果项目生成的软件取决于外部库，则构建系统<em>不必</em>构建那些外部库。如果在修改源代码之后不需要构建任何使用该软件的软件，请选择“不适用”（N/A）。
 
 '
       build_common_tools:
@@ -830,7 +830,7 @@ zh-CN:
         description: '由项目生成的软件中的安全机制必须使用密码学安全的随机数生成器生成所有加密密钥和随机数，并且不得使用密码学不安全的生成器。
 
 '
-        details: '密码安全的随机数生成器可以是硬件随机数生成器，或者它可以是使用诸如Hash_DRBG，HMAC_DRBG，CTR_DRBG，Yarrow或Fortuna之类的算法的加密安全的伪随机数生成器（CSPRNG）。对<i>安全性</i>随机数生成器的调用示例包括Java的java.security.SecureRandom和JavaScript的window.crypto.getRandomValues。调用<i>不安全</i>随机数生成器的示例包括Java的java.util.Random和JavaScript的Math.random。
+        details: '密码安全的随机数生成器可以是硬件随机数生成器，或者它可以是使用诸如Hash_DRBG，HMAC_DRBG，CTR_DRBG，Yarrow或Fortuna之类的算法的加密安全的伪随机数生成器（CSPRNG）。对<em>安全性</em>随机数生成器的调用示例包括Java的java.security.SecureRandom和JavaScript的window.crypto.getRandomValues。调用<em>不安全</em>随机数生成器的示例包括Java的java.util.Random和JavaScript的Math.random。
 
 '
       delivery_mitm:

@@ -26,6 +26,8 @@ SecureHeaders::Configuration.default do |config|
     img_src: ['secure.gravatar.com', 'avatars.githubusercontent.com', "'self'"],
     object_src: ["'none'"],
     style_src: normal_src,
+    script_src:
+      ["'self' https://js-agent.newrelic.com https://bam.nr-data.net"],
     # Harden CSP against attacks in other ways
     base_uri: ["'self'"],
     block_all_mixed_content: true, # see http://www.w3.org/TR/mixed-content/

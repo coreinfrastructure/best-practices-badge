@@ -22,7 +22,9 @@ ProtectMassAssignmentCheck: { }
 # RemoveEmptyHelpersCheck: { }
 RemoveTabCheck: { }
 RemoveTrailingWhitespaceCheck: { }
-RemoveUnusedMethodsInControllersCheck: { except_methods: [] }
+RemoveUnusedMethodsInControllersCheck: { except_methods: [
+  'ApplicationController#append_info_to_payload' # hook called by Rails
+  ] }
 RemoveUnusedMethodsInHelpersCheck: { except_methods: [] }
 RemoveUnusedMethodsInModelsCheck: { except_methods: [
   'Criteria#to_h', # Used by tests

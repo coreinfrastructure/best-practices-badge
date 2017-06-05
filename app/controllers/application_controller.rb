@@ -28,6 +28,13 @@ class ApplicationController < ActionController::Base
   # counters cloud piercing.
   before_action :validate_client_ip_address
 
+  # Record user_id, e.g., so it can be recorded in logs
+  # https://github.com/roidrage/lograge/issues/23
+  def append_info_to_payload(payload)
+    super
+    payload[:uid] = current_user.id if logged_in?
+  end
+
   private
 
   def default_url_options

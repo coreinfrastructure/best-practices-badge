@@ -130,6 +130,13 @@ Rails.application.configure do
   # in development, can be overwhelming in production.
   config.lograge.enabled = true
 
+  # Report user_id in logs
+  # https://github.com/roidrage/lograge/issues/23
+  config.lograge.custom_options =
+    lambda do |event|
+      { uid: event.payload[:uid] }
+    end
+
   # As a failsafe, trigger an exception if the response just hangs for
   # too long.  We only do this in production, because it's not
   # supposed to happen in normal use - this is simply an automatic

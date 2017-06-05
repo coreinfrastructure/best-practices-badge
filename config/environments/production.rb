@@ -134,7 +134,12 @@ Rails.application.configure do
   # https://github.com/roidrage/lograge/issues/23
   config.lograge.custom_options =
     lambda do |event|
-      { uid: event.payload[:uid] }
+      uid = event.payload[:uid]
+      if uid
+        { uid: uid }
+      else
+        {}
+      end
     end
 
   # As a failsafe, trigger an exception if the response just hangs for

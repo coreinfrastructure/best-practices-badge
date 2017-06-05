@@ -182,7 +182,7 @@ Upgrade some "passing" level SHOULD and SUGGESTED:
     software written using a memory-unsafe language (e.g., C or C++),
     <i>then</i> the project MUST use
     at least one dynamic tool (e.g., a fuzzer or web
-    application scanner) be routinely used in combination with
+    application scanner) routinely used in combination with
     a mechanism to detect memory safety problems such as buffer
     overwrites.
     If the project does not produce software written
@@ -496,7 +496,7 @@ as described below.
     <a href="https://developer.android.com/guide/topics/ui/accessibility/">Android</a>,
     <a href="https://developer.apple.com/accessibility/ios/">iOS</a>,
     <a href="http://www.apple.com/accessibility/osx/voiceover/">Mac</a>, and
-    <a href="https://msdn.microsoft.com/en-us/windows/uwp/accessibility/accessibility-overview)">Windows</a>).
+    <a href="https://msdn.microsoft.com/en-us/windows/uwp/accessibility/accessibility-overview">Windows</a>).
     Some TUI applications (e.g. `ncurses` programs) can do
     certain things to make themselves more accessible (such as `alpine`'s
     `force-arrow-cursor` setting).
@@ -817,8 +817,8 @@ as described below.
     <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues/473">NYC 2016 brainstorming session</a>.
 
 *   <a name="updateable_reused_components"></a>
-    The project MUST make it easy to either
-    (1) identify and update reused externally-maintained components or
+    The project MUST either
+    (1) make it easy to identify and update reused externally-maintained components or
     (2) use the standard components provided by the system or programming language.
     Then, if a vulnerability is found in a reused component, it will be
     easy to update that component.

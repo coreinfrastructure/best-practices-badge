@@ -16,13 +16,11 @@ gem 'bootstrap_form', '2.7.0'
 gem 'chartkick', '2.2.4' # Chart project_stats
 gem 'coffee-rails', '4.2.2' # Support CoffeeScript (Javascript preprocessor)
 gem 'faker', '1.7.3'
-# Fastly master is locked to a railties version
 gem 'fastly-rails', '0.8.0'
 gem 'font-awesome-rails', '4.7.0.2'
 gem 'imagesLoaded_rails', '4.1.0' # JavaScript - enable wait for image load
-gem 'jbuilder', '2.6.4'
+gem 'jbuilder', '2.7.0'
 gem 'jquery-rails', '4.3.1' # JavaScript jQuery library (for Rails)
-# gem 'jquery-turbolinks' # Make turbolinks work with jQuery
 gem 'jquery-ui-rails', '6.0.1' # JavaScript jQueryUI library (for Rails)
 gem 'lograge', '0.5.1' # Simplify logs
 # Hardcode mail rc1 until security issue in #750 is resolved
@@ -39,7 +37,6 @@ gem 'rails-i18n', '5.0.4' # Localizations for Rails built-ins
 gem 'redcarpet', '3.4.0' # Process markdown in form textareas (justifications)
 gem 'sass-rails', '5.0.6'
 gem 'secure_headers', '3.6.4' # Add hardening measures to HTTP headers
-# gem 'turbolinks', '5.0.1' # Speed UI access
 gem 'uglifier', '3.2.0'
 gem 'will-paginate-i18n', '0.1.15' # Provide will-paginate translations
 gem 'will_paginate', '3.1.5' # Paginate results (next/previous)

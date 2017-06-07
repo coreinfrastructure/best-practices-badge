@@ -342,7 +342,7 @@ task 'test:features' => 'test:prepare' do
 end
 
 # This gem isn't available in production
-if Rails.env.production?
+if Rails.env.production? || Rails.env.fake_production?
   task :eslint do
     puts 'Skipping eslint checking in production (libraries not available).'
   end

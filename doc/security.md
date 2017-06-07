@@ -1164,6 +1164,29 @@ We use the "rails_12factor" to ensure that all Rails logs go to
 standard out, and then use standard Heroku logging mechanisms.
 The logs then go out to other components for further analysis.
 
+System logs are expressly *not* publicly available.
+They are only shared with a small number of people authorized by the
+Linux Foundation, and are protected information.
+You must have administrator access to our Heroku site or our
+logging management system to gain access to the logs.
+That is because our system logs must include detailed information so that we
+can identify and fix problems (including attacks).
+For example, log entries record the IP address of the requestor,
+email addresses when we send email,
+and the user id (uid) making a request (if the user is logged in).
+We record this information so we can keep the system running properly.
+We also need to keep it for a period of time so we can identify trends,
+including slow-moving attacks.
+For more information, see the
+[Linux Foundation privacy policy](https://www.linuxfoundation.org/privacy).
+
+As an additional protection measure, we take steps to *not* include
+passwords in logs.
+That's because people sometimes reuse passwords, so we try to be
+especially careful with passwords.
+File config/initializers/filter_parameter_logging expressly
+filters out the "password" field.
+
 We intentionally omit here, in this public document, details about
 how logs are stored and how anomaly detection is done to
 detect and counter things.

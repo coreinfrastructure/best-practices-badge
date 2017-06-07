@@ -182,7 +182,7 @@ Upgrade some "passing" level SHOULD and SUGGESTED:
     software written using a memory-unsafe language (e.g., C or C++),
     <i>then</i> the project MUST use
     at least one dynamic tool (e.g., a fuzzer or web
-    application scanner) routinely used in combination with
+    application scanner) be routinely used in combination with
     a mechanism to detect memory safety problems such as buffer
     overwrites.
     If the project does not produce software written

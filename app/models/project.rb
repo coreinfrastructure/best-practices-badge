@@ -6,6 +6,12 @@
 
 # rubocop:disable Metrics/ClassLength
 class Project < ApplicationRecord
+  has_many :additional_rights
+  # We could add something like this:
+  # + has_many :users, through: :additional_rights
+  # but we don't, because we don't use the other information about those users.
+  # We only need the user_ids and the additional_rights table has that.
+
   using StringRefinements
   using SymbolRefinements
 

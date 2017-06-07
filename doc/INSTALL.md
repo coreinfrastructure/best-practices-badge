@@ -262,7 +262,7 @@ the install script.
 
 ## Uninstalling the Badge app's development environment
 
-In order to completely remove the Badge app, peform the following steps:
+In order to completely remove the Badge app, perform the following steps:
 
 1.  Remove the database entries Badge app.  This can be done by running
 
@@ -274,10 +274,11 @@ In order to completely remove the Badge app, peform the following steps:
     any and all local branches that have not been pushed to your remote git
     repository.
 
-3.  (Optional) If you do not use rbenv for any other applications, and would
-    like to remove it you can co so by first removing the directory:
-    `$HOME/.rbenv`.   Finally remove the any lines matching "rbenv" from any shell
-    startup files.  You can find these entries with the following command
+3.  (Optional) If you do not use rbenv for any other applications and would
+    like to remove it, you can co so by first removing the directory:
+    `$HOME/.rbenv`.   Finally remove the any lines matching "rbenv" from any
+    shell startup files.  You can find these entries with the following
+    command
 
     ~~~~sh
     grep rbenv ~/.bashrc ~/.bash_profile ~/.zshrc /etc/profile /etc/profile.d/*

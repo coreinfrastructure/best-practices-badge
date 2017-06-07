@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170602145609) do
+ActiveRecord::Schema.define(version: 20170607201552) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -18,11 +18,12 @@ ActiveRecord::Schema.define(version: 20170602145609) do
   enable_extension "pg_stat_statements"
 
   create_table "additional_rights", force: :cascade do |t|
-    t.integer "project_id"
-    t.integer "user_id"
+    t.integer "project_id", null: false
+    t.integer "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["project_id"], name: "index_additional_rights_on_project_id"
+    t.index ["user_id", "project_id"], name: "index_additional_rights_on_user_id_and_project_id", unique: true
     t.index ["user_id"], name: "index_additional_rights_on_user_id"
   end
 
@@ -378,5 +379,7 @@ ActiveRecord::Schema.define(version: 20170602145609) do
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 
+  add_foreign_key "additional_rights", "projects"
+  add_foreign_key "additional_rights", "users"
   add_foreign_key "projects", "users"
 end

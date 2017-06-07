@@ -236,9 +236,9 @@ fr:
       text_search: Recherche textuelle
       name_or_description: Nom ou texte de description
       search: Recherche
-      all:
-      passing_100:
-      in_progress_variable:
+      all: Tous
+      passing_100: Atteint (100%)
+      in_progress_variable: En cours (%{percent}% ou plus)
     table:
       id: Id
       name: Nom
@@ -302,7 +302,14 @@ fr:
       last_lost_html:
       last_achieved_html:
     edit:
-      submit_cc_by_3plus_html:
+      submit_cc_by_3plus_html: 'En soumettant ces données sur le projet, vous acceptez
+        de les publier sous au moins <a href="https://creativecommons.org/licenses/by/3.0/us"
+        target="_blank">une licence Creative Commons Attribution version 3.0 ou ultérieure
+        (CC-BY-3.0+)</a>. Cela signifie que tous sont libres de partager et d''adapter
+        les données, mais ils doivent créditer leur origine. Vous conservez le droit
+        d''auteur (le cas échéant) et la licence du projet n''est pas affectée.<br><br>
+
+'
       save_and_continue: Sauvegarder (et continuer)
       submit_and_exit: Soumettre (et quitter)
       repo_url_limits: 'Vous ne pouvez modifier votre repo_url que de http à https
@@ -314,7 +321,7 @@ fr:
         transférer vos modifications.
 
 '
-      successfully_updated:
+      successfully_updated: Le projet a été mis à jour avec succès.
       congrats_new: 'FÉLICITATIONS pour l''obtention d''un badge %{new_badge_level}
         ! Si vous ne l''avez pas encore fait, indiquez le statut de votre badge sur
         la page de votre projet (voir le texte « comment l''intégrer » ci-dessous
@@ -329,52 +336,134 @@ fr:
 '
     form_basics:
       project_name:
-        description:
-        details:
-        placeholder:
+        description: Quel est le nom lisible par un humain du projet ?
+        details: Notez que d'autres projets peuvent utiliser le même nom.
+        placeholder: Nom du projet FLOSS
       description:
-        description:
-        details:
-        placeholder:
+        description: Quelle est une brève description du projet ?
+        details: 'Inclure des commentaires clés sur le projet. Utiliser la syntaxe
+          markdown. Cette information est utilisée lors de l''affichage des informations
+          de badge.
+
+'
+        placeholder: Description du projet
       homepage_url:
-        description:
-        placeholder:
+        description: Quelle est l'URL du projet (dans son ensemble) ?
+        placeholder: 'URL du site Web du projet '
       repo_url:
-        description:
-        placeholder:
+        description: 'Quelle est l''URL du dépôt sous contrôle de version (qui peut
+          être la même que l''URL du projet) ?
+
+'
+        placeholder: URL du dépôt du projet
       implementation_languages:
-        description:
-        details:
-        placeholder:
+        description: 'Quel(s) langage(s) de programmation sont utilisés pour mettre
+          en œuvre le projet ?
+
+'
+        details: 'S''il y a plus d''un langage, listez-les en tant que valeurs séparées
+          par des virgules (espaces facultatifs) et triez-les du plus au moins utilisé.
+          S''il y a une longue liste, veuillez lister au moins les trois premiers.
+          S''il n''y a pas de langage (par exemple, il s''agit d''un projet uniquement
+          de documentation ou de test), utilisez le caractère unique « - ». Utilisez
+          une capitalisation conventionnelle pour chaque langage, par exemple, « JavaScript
+          ».
+
+'
+        placeholder: 'Langage(s) d''implémentation utilisé(s), présentés sous forme
+          d''une liste séparée par des virgules, triés par utilisation décroissante
+
+'
       cpe:
-        description_html:
-        details_html:
-        placeholder:
+        description_html: 'Quel est le nom de <a href="https://nvd.nist.gov/cpe.cfm">plate-forme
+          commune d''énumération (CPE)</a> pour le projet (s''il en a un) ?
+
+'
+        details_html: 'La <a href="https://nvd.nist.gov/cpe.cfm">plate-forme commune
+          d''énumération (CPE)</a> est un schéma de dénomination structuré pour les
+          systèmes, les logiciels et les paquetages des technologies de l''information.
+          Il est utilisé dans un certain nombre de systèmes et de bases de données
+          pour signaler des vulnérabilités.
+
+'
+        placeholder: "(Facultatif) nom CPE"
       license:
-        description_html:
-        details_html:
-        placeholder:
+        description_html: 'Sous quelle(s) licence(s) le projet est-il distribué ?
+
+'
+        details_html: 'Utilisez un <a href="https://spdx.org/licenses/">format d''expression
+          de licence SPDX</a>; des exemples incluent « Apache-2.0 », « BSD-2-Clause
+          », « BSD-3-Clause », « GPL-2.0+ », « LGPL-3.0+ », « MIT » et « (BSD-2-Clause
+          OU Ruby) ».
+
+'
+        placeholder: Licence FLOSS
     form_early:
       badge_intro:
-        description:
-        details_html:
+        description: 'Les projets qui suivent les meilleures pratiques ci-dessous
+          seront en mesure de s''auto-certifier et de montrer qu''ils ont obtenu le
+          badge de la Core Infrastructure Initiative (CII).
+
+'
+        details_html: 'Il n''existe aucun ensemble de pratiques qui garantissent que
+          ce logiciel n''aura jamais de défauts ou de vulnérabilités; même les méthodes
+          formelles peuvent échouer si les spécifications ou les hypothèses sont fausses.
+          Il n''y a pas non plus de pratiques qui peuvent garantir qu''un projet permettra
+          de maintenir une communauté de développement saine et qui fonctionne bien.
+          Toutefois, suivre les meilleures pratiques peut contribuer à améliorer les
+          résultats des projets. Par exemple, certaines pratiques permettent la revue
+          par plusieurs personnes avant publication, ce qui peut aider à trouver des
+          vulnérabilités techniques difficiles à trouver autrement et à renforcer
+          la confiance et un désir d''interaction répétée entre les développeurs de
+          différentes entreprises. Pour gagner un badge, tous les critères DOIT et
+          NE DOIT PAS doivent être satisfaits, tous les critères DEVRAIT doivent être
+          satisfaits OU non satisfaits avec justification, <em>et</em> tous les critères
+          PROPOSÉ doivent être satisfaits OU non satisfaits (nous voulons au moins
+          qu''ils soient considérés). Les commentaires sont les bienvenus via le <a
+          href="https://github.com/linuxfoundation/cii-best-practices-badge">site
+          GitHub en tant que problèmes ou pull requests</a>. Il existe également une
+          <a href="https://lists.coreinfrastructure.org/mailman/listinfo/cii-badges">liste
+          de diffusion pour discussion générale</a>. <br /> <br /> Nous fournissons
+          volontiers l''information dans plusieurs langues, cependant, s''il existe
+          un conflit ou une contradiction entre les traductions, la version anglaise
+          est la version qui fait autorité.
+
+'
       got_badge:
-        description_1:
-        description_2:
-        details_html:
-        editing_description_html:
-        badge_alt:
+        description_1: 'Si c''est votre projet, veuillez indiquer votre statut de
+          badge sur votre page de projet ! Le statut du badge ressemble à ceci :
+
+'
+        description_2: 'Voici comment l''intégrer :'
+        details_html: 'Vous pouvez afficher votre statut de badge en incorporant ceci
+          dans votre fichier markdown : <br />%{markdown_embedding}<br /> ou en incorporant
+          ceci dans votre HTML : <br />%{html_embedding}<br />
+
+'
+        editing_description_html: '<strong>Veuillez « soumettre » souvent</strong>
+          pour enregistrer votre travail (vous pouvez toujours revenir en arrière
+          et éditer plus tard). <br><br> Si vous avez besoin d''aide, voulez poser
+          une question ou voyez un problème, veuillez <em><a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">envoyer
+          un email</a> </em>ou<em> <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues"
+          target="_blank">signaler un problème</a></em>.
+
+'
+        badge_alt: Le niveau de badge pour le projet %{id} est %{level}
       level:
-        0_html:
-        1_html:
-        2_html:
+        0_html: Ce sont les critères du niveau atteint.
+        1_html: Ce sont les critères du niveau argent.
+        2_html: Ce sont les critères du niveau or.
     misc:
-      disabled_reminders:
+      disabled_reminders: "(Avancé) Désactiver le rappel d'inactivité (nous vous recommandons
+        de laisser ceci non sélectionné)\n"
       general_comments:
         description:
         placeholder:
       some_not_crypto_html:
-      dont_use_crypto:
+      dont_use_crypto: 'Appuyez ici si le logiciel produit par le projet n''utilise
+        pas de mécanismes cryptographiques
+
+'
       future_header_html:
       in_javascript:
         collapse_all_title:
@@ -401,9 +490,9 @@ fr:
         na_placeholder:
         unknown_placeholder:
       toggle_details_title:
-      details:
+      details: Détails
       url_required:
-      future_criterion:
+      future_criterion: Critère futur
       url_required_warning:
       justification_required_warning:
     delete:
@@ -2558,9 +2647,9 @@ fr:
     Met: Atteint
     Unmet: Non atteint
     NA: N/A
-  comma_separated_list:
-  begin_with_cpe:
-  not_an_email:
-  known_bad_password:
+  comma_separated_list: " doit être une liste de noms séparés par des virgules"
+  begin_with_cpe: " doit commencer par « cpe : »"
+  not_an_email: " n'est pas un email"
+  known_bad_password: " est un (mauvais) mot de passe bien connu"
   valid_text:
   url_message:

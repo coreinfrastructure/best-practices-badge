@@ -303,14 +303,30 @@ fr:
       last_achieved_html:
     edit:
       submit_cc_by_3plus_html:
-      save_and_continue:
-      submit_and_exit:
-      repo_url_limits:
-      changed_since_html:
+      save_and_continue: Sauvegarder (et continuer)
+      submit_and_exit: Soumettre (et quitter)
+      repo_url_limits: 'Vous ne pouvez modifier votre repo_url que de http à https
+
+'
+      changed_since_html: 'Un autre utilisateur a apporté une modification à cet enregistrement
+        depuis que vous avez accédé au formulaire d''édition. <br>Veuillez ouvrir
+        un nouveau <a href="%{edit_url} "target=_blank>formulaire d''édition</a> pour
+        transférer vos modifications.
+
+'
       successfully_updated:
-      congrats_new:
-      lost_badge:
-      static_analysis_updated_html:
+      congrats_new: 'FÉLICITATIONS pour l''obtention d''un badge %{new_badge_level}
+        ! Si vous ne l''avez pas encore fait, indiquez le statut de votre badge sur
+        la page de votre projet (voir le texte « comment l''intégrer » ci-dessous
+        si vous ne savez pas comment le faire).
+
+'
+      lost_badge: Le projet a perdu un badge.
+      static_analysis_updated_html: 'Nous avons mis à jour nos exigences pour le critère
+        <a href="#static_analysis">static_analysis</a>. Veuillez ajouter une justification
+        pour ce critère.
+
+'
     form_basics:
       project_name:
         description:
@@ -391,7 +407,7 @@ fr:
       url_required_warning:
       justification_required_warning:
     delete:
-      done:
+      done: Le projet a été supprimé avec succès.
   user_mailer:
     account_activation:
       before_html: |-
@@ -530,8 +546,8 @@ fr:
     en: Anglais / English (en)
     fr: Français (fr)
     zh-CN: Chinois (simplifié) / 简体 中文 (zh-CN)
-    de:
-    ja:
+    de: Allemand / Deutsche (de)
+    ja: Japonais / 日本語 (ja)
   criteria:
     '0':
       description_good:
@@ -1004,10 +1020,25 @@ fr:
         description: 'Le projet DOIT résoudre les avertissements.
 
 '
-        details:
+        details: 'Ce sont les avertissements identifiés par la mise en œuvre du critère
+          <a href="#warnings">avertissements</a>. Le projet doit corriger les avertissements
+          ou les marquer dans le code source comme faux positifs. Idéalement, il n''y
+          aurait pas d''avertissement, mais un projet PEUT accepter certains avertissements
+          (généralement moins de 1 avertissement pour 100 lignes ou moins de 10 avertissements).
+
+'
       warnings_strict:
-        description:
-        details:
+        description: 'Il est PROPOSÉ que les projets soient maximalement stricts avec
+          les avertissements dans le logiciel produit par le projet, quand cela est
+          approprié.
+
+'
+        details: 'Certains avertissements ne peuvent être efficacement activés sur
+          certains projets. Ce qui est nécessaire est la preuve que le projet s''efforce
+          d''activer les options d''avertissements où il peut, de sorte que les erreurs
+          soient détectées tôt.
+
+'
       know_secure_design:
         description: 'Le projet DOIT avoir au moins un développeur principal qui sait
           comment concevoir un logiciel sécurisé.
@@ -1474,210 +1505,976 @@ fr:
 '
     '1':
       contribution_requirements:
-        description:
+        description: 'Les informations sur la façon de contribuer DOIVENT inclure
+          les exigences pour des contributions acceptables (par exemple, une référence
+          à toute règle de codage requise).
+
+'
       dco:
-        description:
-        details:
+        description: 'Le projet DEVRAIT avoir un mécanisme juridique par lequel tous
+          les développeurs de quantités non triviales de logiciel du projet affirment
+          qu''ils sont légalement autorisés à effectuer ces contributions. L''approche
+          la plus commune et facilement mise en œuvre pour ce faire est d''utiliser
+          un <a href="http://developercertificate.org/">Certificat d''origine du développeur
+          (DCO)</a>, où les utilisateurs ajoutent une information « sign-off-by »
+          dans leurs commits et le projet pointe vers le site Web du DCO. Cependant,
+          cela PEUT être mis en œuvre en tant que contrat de licence de contributeur
+          (CLA), ou tout autre mécanisme juridique.
+
+'
+        details: 'Le DCO est le mécanisme recommandé, car il est facile à mettre en
+          œuvre, suivi dans le code source, et git prend directement en charge une
+          fonction « approuvé » en utilisant « commit -s ». Pour être plus efficace,
+          il est préférable que la documentation du projet explique ce que signifie
+          « approuvé » pour ce projet. Un CLA est un accord juridique qui définit
+          les termes en vertu desquels des travaux intellectuels ont été licenciés
+          à une organisation ou un projet. Un accord de cession (CAA) est un accord
+          légal qui transfère les droits dans un travail intellectuel à une autre
+          partie ; il n''est pas exigé d''avoir des CAA pour les projets, car un CAA
+          augmente le risque que les contributeurs potentiels ne contribuent pas,
+          en particulier si le destinataire est un organisme à but lucratif. Les <a
+          href="https://www.apache.org/licenses/">CLA de la Fondation Apache (la licence
+          de contributeur individuel et la CLA d''entreprise)</a> sont des exemples
+          de CLA pour des projets qui déterminent que les risques de ces types de
+          CLA au projet sont inférieurs à leurs avantages.
+
+'
       governance:
-        description:
-        details:
+        description: 'Le projet DOIT définir et documenter clairement son modèle de
+          gouvernance de projet (la façon dont il prend ses décisions, y compris les
+          rôles clés).
+
+'
+        details: 'Il doit y avoir une manière documentée bien établie de prendre des
+          décisions et de résoudre les différends. Dans les petits projets, cela peut
+          être aussi simple que « le propriétaire du projet et dirigeant prend toutes
+          les décisions finales ». Il existe différents modèles de gouvernance, y
+          compris le dictateur bienveillant et la méritocratie formelle ; pour plus
+          de détails, voir <a href="http://oss-watch.ac.uk/resources/governancemodels">Modèles
+          de gouvernance</a>. Les approches centralisées (par exemple, un seul mainteneur)
+          et décentralisées (par exemple, les groupes de mainteneurs) ont été utilisées
+          avec succès dans des projets. L''information sur la gouvernance n''a pas
+          besoin de documenter la possibilité de créer une duplication de projet,
+          car cela est toujours possible pour les projets FLOSS.
+
+'
       code_of_conduct:
-        description:
-        details:
+        description: 'Le projet DOIT adopter un code de conduite et le publier dans
+          un lieu standard.
+
+'
+        details: 'Les projets peuvent être en mesure d''améliorer la civilité de leur
+          communauté et d''établir des attentes quant à une conduite acceptable en
+          adoptant un code de conduite. Cela peut aider à éviter les problèmes avant
+          leur apparition et faire du projet un lieu plus accueillant pour encourager
+          les contributions. Cela devrait se concentrer uniquement sur le comportement
+          au sein de la communauté / lieu de travail du projet. Des exemples de codes
+          de conduite sont le <a href="http://contributor-covenant.org/">Code de conduite
+          du pacte de contributeur</a> et le <a href="https://www.kernel.org /doc/html/latest/process/code-of-conflict.html">code
+          de conflit</a> du noyau Linux.
+
+'
       roles_responsibilities:
-        description:
-        details:
+        description: 'Le projet DOIT clairement définir et documenter publiquement
+          les rôles clés dans le projet et leurs responsabilités, y compris les tâches
+          que ces rôles doivent accomplir. Il DOIT être clair qui a quel(s) rôle(s),
+          mais cela pourrait ne pas être documenté de la même manière.
+
+'
+        details: 'La documentation pour la <a href="#governance">gouvernance</a> et
+          les rôles et responsabilités peut être à un seul endroit.
+
+'
       access_continuity:
-        description:
+        description: 'Le projet DOIT pouvoir continuer avec une interruption minimale
+          si une personne est invalide ou tuée. En particulier, le projet DOIT être
+          en mesure de créer et de fermer des problèmes, d''accepter les modifications
+          proposées et de publier des versions du logiciel, dans un délai d''une semaine
+          après confirmation qu''un individu est invalide ou tué. Cela PEUT être fait
+          en s''assurant que quelqu''un d''autre possède les clés, les mots de passe
+          et les droits juridiques nécessaires pour poursuivre le projet. Les personnes
+          qui exécutent un projet FLOSS PEUVENT faire cela en fournissant des clés
+          dans un coffre-fort et un testament fournissant les droits légaux nécessaires
+          (par exemple, pour les noms DNS).
+
+'
       bus_factor:
-        description:
-        details:
+        description: Le projet DEVRAIT avoir un « bus factor » de 2 ou plus.
+        details: 'Un « bus factor » (aussi connu en tant que « truck factor ») est
+          le nombre minimum de membres du projet qui doivent disparaître soudainement
+          d''un projet (« écrasé par un bus ») avant que le projet ne se bloque en
+          raison du manque de personnel compétent. L''outil <a href="https://github.com/mtov/truck-factor">truck-factor</a>
+          peut l''estimer pour des projets sur GitHub. Pour plus d''informations,
+          voir <a href="https://www.researchgate.net/publication/272824568_assessing_the_bus_factor_of_git_repositories">Évaluation
+          du « bus factor » des dépôts Git</a> par Cosentino et al.
+
+'
       documentation_roadmap:
-        description:
-        details:
+        description: 'Le projet DOIT avoir une feuille de route documentée qui décrit
+          ce que le projet a l''intention de faire et ne pas faire pour au moins l''année
+          suivante.
+
+'
+        details: 'Le projet pourrait ne pas atteindre la feuille de route, et c''est
+          acceptable ; le but de la feuille de route est d''aider les utilisateurs
+          potentiels et les contributeurs à comprendre l''orientation prévue du projet.
+          Elle ne doit pas être détaillée.
+
+'
       documentation_architecture:
-        description:
-        details:
+        description: 'Le projet DOIT inclure la documentation de l''architecture (aussi
+          appelée conception de haut niveau) du logiciel produit par le projet. Si
+          le projet ne produit pas de logiciel, sélectionnez « non applicable » (N/A).
+
+'
+        details: 'Une architecture de logiciel explique les structures fondamentales
+          d''un programme, c''est-à-dire les principaux composants du programme, les
+          relations entre eux et les propriétés clés de ces composants et de ces relations.
+
+'
       documentation_security:
-        description:
-        details:
+        description: 'Le projet DOIT documenter ce à quoi l''utilisateur peut et ne
+          peut pas s''attendre en termes de sécurité à partir du logiciel produit
+          par le projet (ses « exigences de sécurité »).
+
+'
+        details: 'Ce sont les exigences de sécurité que le logiciel est supposé remplir.
+
+'
       documentation_quick_start:
-        description:
-        details:
+        description: 'Le projet DOIT fournir un guide de « démarrage rapide » pour
+          les nouveaux utilisateurs afin de les aider à faire rapidement quelque chose
+          avec le logiciel.
+
+'
+        details: 'L''idée est de montrer aux utilisateurs comment démarrer et de faire
+          en sorte que le logiciel fasse quelque chose. Ceci est d''une importance
+          cruciale pour les utilisateurs potentiels pour les aider à démarrer.
+
+'
       documentation_current:
-        description:
-        details:
+        description: 'Le projet DOIT faire un effort pour maintenir la documentation
+          conforme à la version actuelle des résultats du projet (y compris les logiciels
+          produits par le projet). Tous les défauts de la documentation <em>connus</em>
+          la rendant incohérente DOIVENT être corrigés. Si la documentation est généralement
+          à jour, mais inclut de manière erronée certaines informations antérieures
+          qui ne sont plus vraies, considérez cela comme un défaut, puis faites le
+          suivi et corrigez comme d''habitude.
+
+'
+        details: 'La documentation PEUT inclure des informations sur les différences
+          ou les modifications entre les versions du logiciel et/ou des liens vers
+          les anciennes versions de la documentation. L''objectif de ce critère est
+          de faire en sorte que la documentation soit cohérente et non pas que la
+          documentation soit parfaite.
+
+'
       documentation_achievements:
-        description:
-        details:
+        description: 'La page d''accueil et/ou le site Web du dépôt du projet DOIVENT
+          identifier et pointer tous les accomplissements, y compris ce badge sur
+          les meilleures pratiques, dans les 48 heures suivant la reconnaissance publique
+          que l''accomplissement a été atteint.
+
+'
+        details: 'Un accomplissement est un ensemble de critères externes que le projet
+          a spécifiquement cherché à atteindre, y compris certains badges. Cette information
+          ne doit pas nécessairement être sur la page d''accueil du site Web du projet.
+          Un projet utilisant GitHub peut mettre des accomplissements sur la page
+          d''accueil du dépôt en les ajoutant au fichier README.
+
+'
       accessibility_best_practices:
-        description:
-        details:
+        description: 'Le projet (à la fois les sites du projet et les résultats du
+          projet) DEVRAIT suivre les meilleures pratiques d''accessibilité afin que
+          les personnes handicapées puissent encore participer au projet et utiliser
+          les résultats du projet où il est raisonnable de le faire.
+
+'
+        details: |
+          Pour les applications Web, consultez les <a href="https://www.w3.org/TR/WCAG20/">Directives d'accessibilité des contenus Web (WCAG 2.0)</a> et son document à l'appui <a href="https: //www.w3.org/TR/UNDERSTANDING-WCAG20/Overview.html">Comprendre WCAG 2.0</a> ; voir aussi <a href="https://www.w3.org/standards/webdesign/accessibility">les informations d'accessibilité du W3C</a>. Pour les applications IHM, envisagez d'utiliser les directives d'accessibilité spécifiques à l'environnement (telles que <a href="https://developer.gnome.org/accessibility-devel-guide/stable/">Gnome</a>, <a href="https://accessibility.kde.org/">KDE</a>, <a href="http://docs.xfce.org/xfce/xfce4 -settings/accessibility">XFCE</a>, < a href="https://developer.android.com/guide/topics/ui/accessibility/">Android</a>, <a href="https://developer.apple.com/accessibility/ios/">IOS</a>, <a href="http://www.apple.com/accessibility/osx/voiceover/">Mac</a> et <a href="https://docs.microsoft.com/fr-fr/windows/uwp/accessibility/accessibility-overview">Windows</a>). Certaines applications IHM textuelles (par exemple, les programmes « ncurses ») peuvent faire certaines choses pour se rendre plus accessibles (par exemple, le paramètre « force-arrow-cursor » de « alpine »). La plupart des applications en ligne de commande sont assez accessibles telles quelles. Ce critère est souvent N/A, par exemple, pour les bibliothèques. Voici quelques exemples d'actions à prendre ou de questions à considérer : <ul> <li>Fournir des alternatives de texte pour tout contenu non textuel afin qu'il puisse être changé en d'autres formes dont les gens ont besoin, comme une plus grande taille, le braille, une sortie vocale, des symboles ou une langue plus simple (<a href="https://www.w3.org/TR/UNDERSTANDING-WCAG20/text-equiv.html">WCAG 2.0 directive 1.1</a>)
+          <li>La couleur n'est pas utilisée comme le seul moyen visuel de transmettre des informations, d'indiquer une action, de provoquer une réponse ou de distinguer un élément visuel. (<a href="https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast-withoutcolor.html">WCAG 2.0 directive 1.4.1</a>)
+          <li>La présentation visuelle du texte et des images du texte a un taux de contraste d'au moins 4,5:1, à l'exception du grand texte, du texte incident, et des logotypes (<a href="https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast-contrast.html">WCAG 2.0 directive 1.4.3</a>)
+          <li>Rendez toutes les fonctionnalités disponibles à partir d'un clavier (WCAG directive 2.1) <li>Une IHM ou un projet basé sur le Web DEVRAIT tester avec au moins un lecteur d'écran sur la (les) plate-forme(s) cible(s) (par exemple NVDA, Jaws ou WindowEyes sur Windows ; VoiceOver sur Mac & iOS ; Orca sous Linux/BSD ; TalkBack sur Android). Les programmes IHM textuels PEUVENT travailler à réduire le retrait excessif pour éviter la lecture redondante par les lecteurs d'écran.</ul>
       internationalization:
-        description:
-        details:
+        description: 'Le logiciel produit par le projet DEVRAIT être internationalisé
+          pour permettre une localisation facile pour la culture, la région ou la
+          langue du public cible. Si l''internationalisation (i18n) ne s''applique
+          pas (par exemple, le logiciel ne génère pas de texte destiné aux utilisateurs
+          finaux et ne trie pas de texte lisible par les humains), sélectionnez «
+          non applicable » (N/A).
+
+'
+        details: 'La localisation « réfère à l''adaptation du contenu d''un produit,
+          d''une application ou d''un document pour répondre aux exigences linguistiques,
+          culturelles et autres d''un marché cible spécifique (un lieu). » L''internationalisation
+          est la « conception et le développement du contenu d''un produit, d''une
+          application ou d''un document qui permette une localisation facile pour
+          les publics cibles qui varient en culture, en région ou en langue. » (Voir
+          <a href="https://www.w3.org/International/questions/qa-i18n">la page « Localisation
+          ou Internationalisation » du W3C</a>.) Le logiciel répond à ce critère simplement
+          en étant internationalisé. Aucune localisation pour une autre langue spécifique
+          n''est requise, car une fois que le logiciel a été internationalisé, d''autres
+          peuvent travailler sur la localisation.
+
+'
       sites_password_security:
-        description:
-        details:
+        description: 'Si les sites du projet (site Web, dépôt et URL de téléchargement)
+          entreposent des mots de passe pour l''authentification d''utilisateurs externes,
+          les mots de passe DOIVENT être entreposés comme hachages itérés avec salage
+          par utilisateur en utilisant un algorithme d''étirement des clés (itéré)
+          (par exemple, PBKDF2, Bcrypt ou Scrypt). Si les sites du projet n''entreposent
+          pas de mots de passe à cette fin, sélectionnez « non applicable » (N/A).
+
+'
+        details: 'Notez que l''utilisation de <a href="https://help.github.com/articles/github-security/">GitHub</a>
+          répond à ce critère. Ce critère s''applique uniquement aux mots de passe
+          utilisés pour l''authentification d''utilisateurs externes sur les sites
+          du projet. Si les sites du projet doivent se connecter à d''autres sites,
+          ils devront peut-être entreposer différemment des mots de passe à cette
+          fin (puisque l''utilisation d''un algorithme comme Bcrypt rendrait ces mots
+          de passe inutilisables). Ceci applique le critère crypto_password_storage
+          aux sites du projet, de manière similaire à sites_https.
+
+'
       maintenance_or_update:
-        description:
+        description: 'Le projet DOIT maintenir les anciennes versions les plus utilisées
+          du produit <em>ou</em> fournir un chemin de mise à niveau vers des versions
+          plus récentes. Si le chemin de mise à niveau est difficile, le projet DOIT
+          documenter comment effectuer la mise à niveau (par exemple, les interfaces
+          qui ont changé et une suggestion d''étapes détaillées pour aider la mise
+          à niveau).
+
+'
       report_tracker:
-        description:
+        description: 'Le projet DOIT utiliser un suivi des problèmes pour le suivi
+          des problèmes individuels.
+
+'
       vulnerability_report_credit:
-        description:
+        description: 'Le projet DOIT créditer les auteurs de tous les signalements
+          de vulnérabilité résolus au cours des 12 derniers mois, à l''exception des
+          auteurs qui demandent l''anonymat. S''il n''y a pas eu de vulnérabilité
+          résolue au cours des 12 derniers mois, sélectionnez « non applicable » (N/A).
+
+'
       vulnerability_response_process:
-        description:
-        details:
+        description: 'Le projet DOIT avoir un processus documenté pour répondre aux
+          signalements de vulnérabilité.
+
+'
+        details: 'Ceci est fortement lié à vulnerability_report_process, qui exige
+          qu''il existe un moyen documenté de signaler les vulnérabilités. Il a également
+          trait à la vulnerability_report_response, qui nécessite une réponse aux
+          signalements de vulnérabilité dans un certain laps de temps.
+
+'
       coding_standards:
-        description:
-        details:
+        description: 'Le projet DOIT identifier les guides de style de codage spécifiques
+          pour les langages principaux qu''il utilise, et exiger que les contributions
+          le respectent en général.
+
+'
+        details: 'Dans la plupart des cas, cela se fait en se référant à certains
+          guides de style existants, ce qui permet d''énumérer les différences. Ces
+          guides de style peuvent inclure des moyens d''améliorer la lisibilité et
+          les moyens de réduire la probabilité de défauts (y compris les vulnérabilités).
+          Beaucoup de langages de programmation ont un ou plusieurs guides de style
+          largement utilisés. Des exemples de guides de style incluent <a href="https://github.com/google/styleguide">les
+          guides de style de Google</a> et les <a href="https://www.securecoding.cert.org/">Règles
+          de codage du SEI CERT</a>.
+
+'
       coding_standards_enforced:
-        description:
-        details:
+        description: 'Le projet DOIT imposer automatiquement son ou ses styles de
+          codage sélectionnés s''il existe au moins un outil FLOSS qui peut le faire
+          dans le(s) langage(s) sélectionné(s).
+
+'
+        details: 'Cela PEUT être mis en œuvre en utilisant des outils d''analyse statique
+          et/ou en faisant passer le code à travers des outils de remise en forme.
+          Dans de nombreux cas, la configuration de l''outil est incluse dans le dépôt
+          du projet (car différents projets peuvent choisir différentes configurations).
+          Les projets PEUVENT permettre des exceptions de style (et le font habituellement)
+          ; là où les exceptions se produisent, elles DOIVENT être rares et documentées
+          dans le code à leur emplacement, afin que ces exceptions puissent être revues
+          et que les outils puissent les gérer automatiquement à l''avenir. Des exemples
+          de ces outils incluent ESLint (JavaScript) et Rubocop (Ruby).
+
+'
       build_standard_variables:
-        description:
-        details:
+        description: 'Les systèmes de construction pour les binaires natifs DOIVENT
+          honorer les variables (d''environnement) pertinentes du compilateur et du
+          lieur qui leur sont transmises (par exemple, CC, CFLAGS, CXX, CXXFLAGS et
+          LDFLAGS) et les transmettre aux invocations du compilateur et du lieur.
+          Un système de construction PEUT les étendre avec des options supplémentaires
+          ; il NE DOIT PAS simplement remplacer les valeurs fournies par les siennes.
+          Si aucun fichier binaire natif n''est généré, sélectionnez « non applicable
+          » (N/A).
+
+'
+        details: 'Il devrait être facile d''activer des fonctionnalités de construction
+          spéciales telles que Address Sanitizer (ASAN), ou de se conformer aux meilleures
+          pratiques de durcissement de la distribution (par exemple, en activant facilement
+          les options de compilation pour le faire).
+
+'
       build_preserve_debug:
-        description:
-        details:
+        description: 'Le système de construction et d''installation DEVRAIT préserver
+          les informations de débogage si elles sont demandées dans les options correspondants
+          (par exemple, « install -s » n''est pas utilisé). S''il n''y a pas de système
+          de construction ou d''installation (par exemple, les bibliothèques JavaScript
+          typiques), sélectionnez « non applicable » (N/A).
+
+'
+        details: 'Par exemple, la définition de CFLAGS (C) ou CXXFLAGS (C++) devrait
+          créer les informations de débogage pertinentes si ces langages sont utilisés
+          et elles ne devraient pas être retirées pendant l''installation. Des informations
+          de débogage sont nécessaires pour le support et l''analyse, et également
+          utiles pour mesurer la présence de fonctionnalités de durcissement dans
+          les binaires compilés.
+
+'
       build_non_recursive:
-        description:
-        details:
+        description: 'Le système de construction pour le logiciel produit par le projet
+          NE DOIT PAS reconstruire de manière récursive des sous-répertoires s''il
+          existe des dépendances croisées dans les sous-répertoires. S''il n''y a
+          pas de système de construction ou d''installation (par exemple, les bibliothèques
+          JavaScript typiques), sélectionnez « non applicable » (N/A).
+
+'
+        details: 'Les informations de dépendance internes du système de construction
+          du projet doivent être précises, sinon, les modifications apportées au projet
+          peuvent ne pas s''effectuer correctement. Des constructions incorrectes
+          peuvent entraîner des défauts (y compris des vulnérabilités). Une erreur
+          courante dans les grands systèmes de construction est d''utiliser une «
+          construction récursive », c''est-à-dire une hiérarchie de sous-répertoires
+          contenant des fichiers source, chaque sous-répertoire étant construit de
+          manière indépendante. Sauf si chaque sous-répertoire est entièrement indépendant,
+          ceci est une erreur, car les informations de dépendance sont incorrectes.
+
+'
       build_repeatable:
-        description:
-        details:
+        description: 'Le projet DOIT pouvoir répéter le processus de génération d''informations
+          à partir de fichiers source et obtenir exactement le même résultat bit-à-bit.
+          Si aucune construction ne se produit (par exemple, dans les langages de
+          script où le code source est utilisé directement au lieu d''être compilé),
+          sélectionnez « non applicable » (N/A).
+
+'
+        details: 'Les utilisateurs GCC et Clang peuvent trouver l''option -frandom-seed
+          utile ; dans certains cas, cela peut être résolu en forçant un ordre de
+          tri. Plus de suggestions peuvent être trouvées sur le site <a href="https://reproducible-builds.org/">pour
+          une construction reproductible</a>.
+
+'
       installation_common:
-        description:
-        details:
+        description: 'Le projet DOIT fournir un moyen d''installer et de désinstaller
+          facilement le logiciel produit par le projet en utilisant une convention
+          couramment utilisée.
+
+'
+        details: 'Des exemples comprennent l''utilisation d''un gestionnaire de paquets
+          (au niveau du système ou du langage), « make/install/uninstall » (supportant
+          DESTDIR), un conteneur dans un format standard ou une image de machine virtuelle
+          dans un format standard. Le processus d''installation et de désinstallation
+          (par exemple, son paquetage) PEUT être mis en œuvre par un tiers tant qu''il
+          est FLOSS.
+
+'
       installation_standard_variables:
-        description:
+        description: 'Le système d''installation pour les utilisateurs finaux DOIT
+          honorer les conventions standard pour sélectionner l''emplacement où les
+          artefacts construits sont écrits au moment de l''installation. Par exemple,
+          s''il installe des fichiers sur un système POSIX, il DOIT honorer la variable
+          d''environnement DESTDIR. S''il n''y a pas de système d''installation ou
+          pas de convention standard, sélectionnez « non applicable » (N/A).
+
+'
       installation_development_quick:
-        description:
-        details:
+        description: 'Le projet DOIT fournir un moyen pour les développeurs potentiels
+          d''installer rapidement tous les résultats du projet ainsi que l''environnement
+          nécessaire pour apporter des modifications, y compris les tests et l''environnement
+          de test. Cela DOIT être effectué avec une convention couramment utilisée.
+
+'
+        details: 'Cela PEUT être implémenté à l''aide d''un conteneur généré et/ou
+          d''un script d''installation. Les dépendances externes sont généralement
+          installées en invoquant des gestionnaires de paquets du système et/ou du
+          langage, comme précisé dans external_dependencies.
+
+'
       external_dependencies:
-        description:
-        details:
+        description: 'Le projet DOIT afficher ses dépendances externes de manière
+          analysable par ordinateur.
+
+'
+        details: 'Généralement, cela se fait en utilisant les conventions du gestionnaire
+          de paquets et/ou du système de construction. Notez que cela permet d''implémenter
+          <a href="#installation_development_quick">installation_development_quick</a>.
+
+'
       dependency_monitoring:
-        description:
-        details:
+        description: 'Les projets DOIVENT surveiller ou vérifier périodiquement leurs
+          dépendances externes (y compris les copies de commodité) pour détecter les
+          vulnérabilités connues, et corriger les vulnérabilités exploitables ou les
+          vérifier comme inexploitables.
+
+'
+        details: 'Cela peut se faire à l''aide d''un outil d''analyse d''origine ou
+          de vérification de dépendance tel que <a href="https://www.owasp.org/index.php/OWASP_Dependency_Check">Dependency-Check
+          d''OWASP</a>, <a href="https://www.sonatype.com/nexus-auditor">Nexus Auditeur
+          de Sonartype</a>, <a href="https://www.blackducksoftware.com/products/protex">Protex
+          de Black Duck</a> , <a href="http://www.protecode.com/">Protecode de Synopsys</a>,
+          et <a href="https://github.com/rubysec/bundler-audit">Bundler-audit (pour
+          Ruby)</a>. Certains gestionnaires de paquets comprennent des mécanismes
+          pour le faire. Il est acceptable que la vulnérabilité des composants ne
+          puisse pas être exploitée, mais cette analyse est difficile et il est parfois
+          plus simple de mettre à jour ou de corriger la dépendance.
+
+'
       updateable_reused_components:
-        description:
-        details:
+        description: |
+          Le projet DOIT :
+          <ol>
+          <li> rendre facile l'identification et la mise à jour des composants maintenus extérieurement au projet ; <strong>ou</ strong> </li>
+          <li> utiliser des composants standards fournis par le système ou le langage de programmation. </li>
+          </ol>
+          Ensuite, si une vulnérabilité se trouve dans un composant réutilisé, il sera
+          facile de mettre à jour ce composant.
+        details: 'Une façon typique de respecter ce critère est d''utiliser les systèmes
+          de gestion des paquets du système et du langage de programmation. De nombreux
+          programmes FLOSS sont distribués avec des « bibliothèques de commodité »
+          qui sont des copies locales de bibliothèques standard (éventuellement dupliquées).
+          En soi, c''est acceptable. Cependant, si le programme *doit* utiliser ces
+          copies locales (dupliquées), la mise à jour des bibliothèques « standard
+          » lors de mises à jour de sécurité laissera ces copies supplémentaires encore
+          vulnérables. C''est particulièrement un problème pour les systèmes basés
+          sur le cloud ; si le fournisseur du cloud met à jour ses librairies « standard
+          » mais que le programme ne les utilise pas, les mises à jour ne vous aideront
+          pas. Voir, par exemple, <a href="http://spot.livejournal.com/312320.html">«
+          Chromium : pourquoi il n''est pas encore un vrai paquet dans Fedora » par
+          Tom Callaway</a>.
+
+'
       interfaces_current:
-        description:
+        description: 'Le projet DEVRAIT éviter d''utiliser des fonctions et des API
+          obsolètes quand des alternatives FLOSS sont disponibles dans l''ensemble
+          de technologies qu''il utilise (sa « pile de technologies ») et disponibles
+          à une large majorité des utilisateurs supportés par le projet (afin que
+          les utilisateurs puissent avoir accès à l''alternative).
+
+'
       automated_integration_testing:
-        description:
-        details:
+        description: 'Une suite de tests automatisée DOIT être appliquée à chaque
+          commit dans un dépôt partagé pour au moins une branche. Cette suite de tests
+          DOIT produire un rapport sur le succès ou l''échec du test.
+
+'
+        details: 'Cette exigence peut être considérée comme un sous-ensemble de test_continuous_integration,
+          mais axée sur le simple test, sans nécessiter une intégration continue.
+
+'
       regression_tests_added50:
-        description:
+        description: 'Le projet DOIT ajouter des tests de régression à une suite de
+          tests automatisée pour au moins 50% des bogues corrigés au cours des six
+          derniers mois.
+
+'
       test_statement_coverage80:
-        description:
-        details:
+        description: 'Le projet DOIT avoir une ou des suites de tests automatisées
+          FLOSS qui fournissent une couverture d''instructions d''au moins 80% s''il
+          existe au moins un outil FLOSS qui peut mesurer ce critère dans le langage
+          sélectionné.
+
+'
+        details: 'De nombreux outils FLOSS sont disponibles pour mesurer la couverture
+          des tests, y compris gcov/lcov, Blanket.js, Istanbul et JCov. Notez que
+          respecter ce critère n''est pas une garantie que la suite de tests est complète,
+          mais, à l''inverse, ne pas respecter ce critère est un indicateur fort d''une
+          suite de tests insuffisante.
+
+'
       test_policy_mandated:
-        description:
+        description: 'Le projet DOIT avoir une politique écrite formelle, que dès
+          qu''une nouvelle fonctionnalité majeure est ajoutée, des tests pour la nouvelle
+          fonctionnalité DOIVENT être ajoutés à une suite de tests automatisée.
+
+'
       tests_documented_added:
-        description:
-        details:
+        description: 'Le projet DOIT inclure, dans ses instructions documentées pour
+          les propositions de changement, la politique selon laquelle des tests doivent
+          être ajoutés pour toute nouvelle fonctionnalité majeure.
+
+'
+        details: 'Cependant, même une règle informelle est acceptable tant que les
+          tests sont ajoutés dans la pratique.
+
+'
       warnings_strict:
-        description:
-        details:
+        description: 'Les projets DOIVENT être maximalement stricts avec les avertissements
+          dans le logiciel produit par le projet, quand cela est approprié.
+
+'
+        details: 'Certains avertissements ne peuvent être efficacement activés sur
+          certains projets. Ce qui est nécessaire est la preuve que le projet s''efforce
+          d''activer les options d''avertissements où il peut, de sorte que les erreurs
+          soient détectées tôt.
+
+'
       implement_secure_design:
-        description:
-        details:
+        description: 'Le projet DOIT implémenter des principes de conception sécurisés
+          (à partir de « know_secure_design »), quand cela est approprié. Si le projet
+          ne produit pas de logiciel, sélectionnez « non applicable » (N/A).
+
+'
+        details: 'Par exemple, les résultats du projet devraient avoir des valeurs
+          sécurisées par défaut (les décisions d''accès devraient être de refuser
+          par défaut et l''installation des projets devrait être sécurisée par défaut).
+          Ils devraient également avoir une médiation complète (tout accès qui pourrait
+          être limité doit être vérifié pour l''autorité et être non contournable).
+          Notez que, dans certains cas, ces principes entrent en conflit, auquel cas
+          un choix doit être fait (par exemple, de nombreux mécanismes peuvent rendre
+          les choses plus complexes, en contravention de « l''économie de mécanisme
+          » / principe KISS).
+
+'
       input_validation:
-        description:
-        details:
+        description: 'Les résultats du projet DOIVENT vérifier toutes les entrées
+          provenant de sources potentiellement non fiables pour s''assurer qu''elles
+          sont valides (une *liste blanche*) et rejeter les entrées non valides, en
+          cas de restrictions sur les données.
+
+'
+        details: 'Notez que la comparaison de l''entrée par rapport à une liste de
+          « mauvais formats » (aussi appelée *liste noire*) n''est normalement pas
+          suffisante, car les attaquants peuvent souvent contourner une liste noire.
+          En particulier, les nombres sont convertis en formats internes puis vérifiés
+          pour s''assurer s''ils se situent entre leur minimum et maximum (inclus),
+          et les chaînes de texte sont vérifiées pour s''assurer qu''elles sont des
+          motifs de texte valides (par exemple, UTF-8 valide, longueur valide, syntaxe
+          valide, etc.). Certaines données peuvent avoir besoin d''être « du tout
+          venant » (par exemple, un téléchargement de fichier), mais celles-ci sont
+          généralement rares.
+
+'
       hardening:
-        description:
-        details:
+        description: 'Les mécanismes de durcissement DOIVENT être utilisés dans le
+          logiciel produit par le projet afin que les défauts du logiciel soient moins
+          susceptibles d''entraîner des vulnérabilités de sécurité.
+
+'
+        details: 'Les mécanismes de durcissement peuvent inclure des en-têtes HTTP
+          comme Content Security Policy (CSP), des options de compilation pour atténuer
+          les attaques (telles que -fstack-protector) ou des options de compilation
+          pour éliminer les comportements indéfinis. Pour nos besoins, le principe
+          de moindre privilège n''est pas considéré comme un mécanisme de durcissement
+          (le principe de moindre privilège est important, mais séparé).
+
+'
       crypto_weaknesses:
-        description:
-        details:
+        description: 'Les mécanismes de sécurité par défaut dans le logiciel produit
+          par le projet NE DOIVENT PAS dépendre d''algorithmes ou de modes cryptographiques
+          avec des faiblesses sérieuses connues (par exemple, l''algorithme de hachage
+          cryptographique SHA-1 ou le mode CBC en SSH).
+
+'
+        details: 'Les préoccupations concernant le mode CBC en SSH sont discutées
+          dans <a href="https://www.kb.cert.org/vuls/id/958563">CERT : vulnérabilité
+          SSH CBC</a>.
+
+'
       crypto_algorithm_agility:
-        description:
+        description: 'Le projet DEVRAIT supporter plusieurs algorithmes cryptographiques,
+          afin que les utilisateurs puissent rapidement changer si l''un deux est
+          cassé. Les algorithmes à clés symétriques courants incluent AES, Twofish
+          et Serpent. Les alternatives d''algorithme de hachage cryptographique courantes
+          incluent SHA-2 (y compris SHA-224, SHA-256, SHA-384 ET SHA-512) et SHA-3.
+
+'
       crypto_credential_agility:
-        description:
+        description: 'Le projet DOIT supporter le stockage des informations d''authentification
+          (comme les mots de passe et les jetons dynamiques) et des clés cryptographiques
+          privées dans des fichiers distincts des autres informations (fichiers de
+          configuration, bases de données et journaux) et permettre aux utilisateurs
+          de les mettre à jour et de les remplacer sans recompilation de code. Si
+          le projet ne traite jamais d''informations d''authentification et de clés
+          cryptographiques privées, sélectionnez « non applicable » (N/A).
+
+'
       crypto_used_network:
-        description:
+        description: 'Le logiciel produit par le projet DEVRAIT supporter des protocoles
+          sécurisés pour toutes ses communications réseau, telles que SSHv2 ou ultérieur,
+          TLS1.2 ou ultérieur (HTTPS), IPsec, SFTP et SNMPv3. Les protocoles non sûrs
+          tels que FTP, HTTP, telnet, SSLv3 ou antérieur, et SSHv1 DEVRAIENT être
+          désactivés par défaut et uniquement activés si l''utilisateur le configure
+          spécifiquement. Si le logiciel produit par le projet ne prend pas en charge
+          les communications réseau, sélectionnez « non applicable » (N/A).
+
+'
       crypto_tls12:
-        description:
+        description: 'Le logiciel produit par le projet DEVRAIT, s''il prend en charge
+          ou utilise TLS, prendre en charge au moins TLS version 1.2. Notez que le
+          prédécesseur de TLS s''appelait SSL. Si le logiciel n''utilise pas TLS,
+          sélectionnez « non applicable » (N/A).
+
+'
       crypto_certificate_verification:
-        description:
-        details:
+        description: 'Le logiciel produit par le projet DOIT, s''il prend en charge
+          TLS, effectuer la vérification des certificats TLS par défaut lors de l''utilisation
+          de TLS, y compris sur les sous-ressources. Si le logiciel n''utilise pas
+          TLS, sélectionnez « non applicable » (N/A).
+
+'
+        details: 'Notez que la vérification incorrecte du certificat TLS est une erreur
+          courante. Pour plus d''informations, voir <a href="http://crypto.stanford.edu/~dabo/pubs/abstracts/ssl-client-bugs.html">«
+          Le code le plus dangereux du monde : la validation des certificats SSL dans
+          du logiciel qui ne vient pas d''un navigateur » de Martin Georgiev et al.</a>
+          et <a href="https://blogs.gnome.org/mcatanzaro/2016/03/12/do-you-trust-this-application/">«
+          Avez-vous confiance en cette application ? » par Michael Catanzaro</a>.
+
+'
       crypto_verification_private:
-        description:
+        description: 'Le logiciel produit par le projet DOIT, s''il supporte TLS,
+          effectuer une vérification de certificat avant d''envoyer des en-têtes HTTP
+          avec des informations privées (telles que des cookies sécurisés). Si le
+          logiciel n''utilise pas TLS, sélectionnez « non applicable » (N/A).
+
+'
       signed_releases:
-        description:
-        details:
+        description: 'Le projet DOIT signer cryptographiquement les versions des résultats
+          du projet destinées à une utilisation répandue, et il DOIT y avoir un processus
+          documenté expliquant aux utilisateurs comment ils peuvent obtenir les clés
+          de signature publique et vérifier la ou les signatures. La clé privée pour
+          ces signature(s) NE DOIT PAS être sur le(s) site(s) utilisé(s) pour distribuer
+          directement le logiciel au public. Si les versions ne sont pas destinées
+          à une utilisation répandue, sélectionnez « non applicable » (N/A).
+
+'
+        details: 'Les résultats du projet incluent à la fois le code source et les
+          produits livrés générés, le cas échéant (par exemple, les exécutables, les
+          paquetages et les conteneurs). Les livrables générés PEUVENT être signés
+          séparément du code source. Ces signatures PEUVENT être mises en œuvre sous
+          forme de tags git signées (utilisant des signatures numériques cryptographiques).
+          Les projets PEUVENT fournir des résultats générés séparément d''outils comme
+          git, mais dans ce cas, les résultats distincts DOIVENT être signés séparément.
+
+'
       version_tags_signed:
-        description:
+        description: 'Il est PROPOSÉ que, dans le système de contrôle de la version,
+          chaque tag d''une version importante (un tag faisant partie d''une version
+          majeure, d''une version mineure ou qui corrige des vulnérabilités notées
+          publiquement) soit cryptographiquement signé et vérifiable comme décrit
+          dans <a href="#signed_releases">signed_releases</a>.
+
+'
       static_analysis_common_vulnerabilities:
-        description:
+        description: 'Le projet DOIT utiliser au moins un outil d''analyse statique
+          avec des règles ou des approches pour rechercher des vulnérabilités courantes
+          dans le langage ou l''environnement analysé, s''il existe au moins un outil
+          FLOSS qui peut mettre en œuvre ce critère dans le langage sélectionné.
+
+'
       dynamic_analysis_unsafe:
-        description:
-        details:
+        description: "<em>Si</em> le logiciel produit par le projet inclut un logiciel
+          écrit à l'aide d'un langage non sûr pour les accès mémoire (par exemple
+          C ou C++), <em>alors</em> le projet DOIT utiliser au moins un outil dynamique
+          (par exemple, un fuzzer ou un scanneur d'application Web) utilisé de manière
+          routinière en combinaison avec un mécanisme permettant de détecter des problèmes
+          de sécurité mémoire tels que les dépassement mémoire. Si le projet ne produit
+          pas de logiciel écrit dans un langage non sûr pour les accès mémoire, sélectionnez
+          « non applicable » (N/A).\n"
+        details: 'Des exemples de mécanismes pour détecter les problèmes de sécurité
+          des accès mémoire comprennent <a href="https://github.com/google/sanitizers/wiki/AddressSanitizer">Address
+          Sanitizer (ASAN)</a> (disponible dans GCC et LLVM), <a href="http://clang.llvm.org/docs/MemorySanitizer.html">Memory
+          Sanitizer</a> et <a href="http://valgrind.org/">valgrind</a>. D''autres
+          outils potentiellement utilisés incluent <a href="http://clang.llvm.org/docs/ThreadSanitizer.html">thread
+          sanitizer</a> et <a href = "http://clang.llvm.org/ docs/UndefinedBehaviorSanitizer.html">undefined
+          behavior sanitizer</a>. La généralisation de l''utilisation des assertions
+          fonctionnera également.
+
+'
       assurance_case:
-        description:
-        details:
+        description: 'Le projet DOIT fournir une analyse de fiabilité qui justifie
+          pourquoi ses exigences de sécurité sont respectées. L''analyse de fiabilité
+          DOIT inclure : une description du modèle de menace, une identification claire
+          des limites de confiance, un argument selon lequel des principes de conception
+          sécurisés ont été appliqués et un argument selon lequel les faiblesses de
+          sécurité courantes de l''implémentation ont été contrées.
+
+'
+        details: 'Une analyse de fiabilité est « une preuve documentée qui fournit
+          un argumentaire convaincant et correct selon lequel un ensemble spécifié
+          de revendications critiques concernant les propriétés d''un système est
+          adéquatement justifié pour une application donnée dans un environnement
+          donné » (<a href="http://nvlpubs.nist.gov/nistpubs/ir/2009/ir7608.pdf">«
+          Software Assurance Using Structured Assurance Case Models », Thomas Rhodes
+          et al, NIST Interagency Report 7608</a>). Les limites de confiance sont
+          des limites où les données ou l''exécution modifient leur niveau de confiance,
+          par exemple, les limites d''un serveur dans une application Web typique.
+          Il est fréquent d''énumérer des principes de conception sécurisés (tels
+          que Saltzer et Schroeer) et des faiblesses de sécurité courantes de l''implémentation
+          (comme le OWASP top 10 ou le CWE/SANS top 25) et de montrer comment chacun
+          est contré. L''<a href="https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/doc/security.md">analyse
+          de fiabilité de BadgeApp</a> peut être un exemple utile. Ceci est lié à
+          documentation_security, documentation_architecture et implement_secure_design.
+
+'
     '2':
       bus_factor:
-        description:
-        details:
+        description: Le projet DOIT avoir un « facteur bus » de 2 ou plus.
+        details: 'Un « facteur bus » (aussi appelé « facteur camion ») est le nombre
+          minimum de membres du projet qui doivent disparaître soudainement d''un
+          projet (« écrasés par un bus ») avant que le projet ne se bloque en raison
+          du manque de personnel compétent. L''outil <a href="https://github.com/mtov/truck-factor">truck-factor</a>
+          peut l''estimer pour des projets sur GitHub. Pour plus d''informations,
+          voir <a href="https://www.researchgate.net/publication/272824568_assessing_the_bus_factor_of_git_repositories">Évaluation
+          du « facteur bus » des dépôts Git</a> par Cosentino et al.
+
+'
       contributors_unassociated:
-        description:
-        details:
+        description: 'Le projet DOIT avoir au moins deux contributeurs significatifs
+          non associés.
+
+'
+        details: 'Les contributeurs sont associés s''ils sont payés pour leur travail
+          par la même organisation (en tant qu''employé ou contractuel) et si l''organisation
+          bénéficie des résultats du projet. Les subventions financières ne comptent
+          pas comme provenant de la même organisation si elles passent par d''autres
+          organisations (par exemple, les subventions scientifiques versées à différentes
+          organisations par un même gouvernement ou ONG ne rendent pas les contributeurs
+          associés). Quelqu''un est un contributeur significatif s''il a apporté des
+          contributions non triviales au projet au cours de la dernière année. Des
+          exemples de bons indicateurs d''un contributeur significatif sont : écrit
+          au moins 1 000 lignes de code, a contribué à 50 commits ou au moins 20 pages
+          de documentation.
+
+'
       copyright_per_file:
-        description:
-        details:
+        description: 'Le projet DOIT inclure une déclaration de copyright dans chaque
+          fichier source, identifiant au moins une année pertinente et un titulaire
+          du droit d''auteur.
+
+'
+        details: 'Cela PEUT être fait en incluant ce qui suit dans un commentaire
+          près du début de chaque fichier : « <tt>Copyright [année où ce projet ou
+          contenu a commencé] - [dernière année de modification], [fondateur du projet]
+          et les contributeurs de [nom du projet].</tt> »
+
+'
       license_per_file:
-        description:
-        details:
+        description: 'Le projet DOIT inclure une déclaration de licence dans chaque
+          fichier source. Cela PEUT être fait en incluant ce qui suit dans un commentaire
+          près du début de chaque fichier : <a href="https://spdx.org/using-spdx#identifiers">
+          <tt>SPDX-License-Identifier : [expression d''une licence SPDX pour le projet]</
+          tt> </a>.
+
+'
+        details: 'Cela PEUT également être fait en incluant une déclaration en langage
+          naturel identifiant la licence. Le projet PEUT également inclure une URL
+          stable indiquant le texte de la licence ou directement le texte complet
+          de la licence. Notez que le critère license_location requiert que la licence
+          du projet soit dans un emplacement standard. Voir <a href="https://github.com/david-a-wheeler/spdx-tutorial">ce
+          didacticiel SPDX</a> pour plus d''informations sur les expressions de licence
+          SPDX. Notez la relation avec <a href="#copyright_per_file">copyright_per_file</a>,
+          dont le contenu devrait généralement précéder les informations sur la licence.
+
+'
       repo_distributed:
-        description:
-        details:
+        description: 'Le dépôt source du projet DOIT utiliser un logiciel courant
+          de contrôle de version distribué (par exemple, git ou mercurial).
+
+'
+        details: 'Git n''est pas spécifiquement requis et les projets peuvent utiliser
+          un logiciel de contrôle de version centralisé (comme subversion) avec justification.
+
+'
       small_tasks:
-        description:
-        details:
+        description: 'Le projet DOIT identifier clairement les petites tâches qui
+          peuvent être effectuées par des contributeurs nouveaux ou occasionnels.
+
+'
+        details: 'Cette identification se fait typiquement en marquant les problèmes
+          sélectionnés dans un outil de suivi de problèmes avec une ou plusieurs étiquettes
+          que le projet utilise à cet effet, par exemple <a href="http://up-for-grabs.net/#/">up-for-grabs</a>,
+          <a href="http://www.firsttimersonly.com/">first-timers-only</a>, « Small
+          fix », microtask ou IdealFirstBug. Ces nouvelles tâches n''ont pas besoin
+          d''ajouter des fonctionnalités ; elles peuvent améliorer la documentation,
+          ajouter des cas de test ou toute autre chose qui aide le projet et aide
+          le contributeur à en comprendre davantage sur le projet.
+
+'
       require_2FA:
-        description:
+        description: 'Le projet DOIT exiger l''authentification à deux facteurs (2FA)
+          des développeurs pour changer un dépôt central ou accéder à des données
+          sensibles (telles que des signalements de vulnérabilités privés). Ce mécanisme
+          2FA PEUT utiliser des mécanismes sans mécanismes cryptographiques tels que
+          SMS, mais cela n''est pas recommandé.
+
+'
       secure_2FA:
-        description:
-        details:
+        description: 'L''authentification à deux facteurs du projet (2FA) DOIT utiliser
+          des mécanismes cryptographiques pour empêcher l''emprunt d''identité. Une
+          2FA basée sur un service de messages courts (SMS), par elle-même, ne satisfait
+          PAS à ce critère, car elle n''est pas chiffrée.
+
+'
+        details: 'Un mécanisme 2FA qui répond à ce critère serait une application
+          de mot de passe à usage unique basé sur le temps (TOTP) qui génère automatiquement
+          un code d''authentification qui change après un certain laps de temps. Notez
+          que <a href="https://help.github.com/articles/configuring-two-factor-authentication-via-a-totp-mobile-app/">GitHub
+          prend en charge TOTP</a>.
+
+'
       code_review_standards:
-        description:
-        details:
+        description: 'Le projet DOIT documenter ses exigences en matière de revue
+          de code, y compris la façon dont la revue de code est menée, ce qui doit
+          être vérifié et ce qui est requis pour être acceptable.
+
+'
+        details: 'Voir aussi <a href="#two_person_review">two_person_review</a> et
+          contribution_requirements.
+
+'
       two_person_review:
-        description:
+        description: 'Le projet DOIT avoir au moins 50% de toutes les modifications
+          proposées revues avant la sortie par une personne autre que l''auteur, afin
+          de déterminer s''il s''agit d''une modification valable et sans problèmes
+          connus qui risqueraient de s''opposer à son inclusion.
+
+'
       build_reproducible:
-        description:
-        details:
+        description: 'Le projet DOIT avoir une <a href="https://reproducible-builds.org/">construction
+          reproductible</a>. Si aucune construction ne se produit (par exemple, les
+          langages de script où le code source est utilisé directement au lieu d''être
+          compilé), sélectionnez « non applicable » (N/A).
+
+'
+        details: 'Une construction reproductible signifie que plusieurs parties peuvent
+          refaire indépendamment le processus de génération d''informations à partir
+          de fichiers source et obtenir exactement le même résultat bit-à-bit. Dans
+          certains cas, cela peut être résolu en forçant un ordre de tri. Les développeurs
+          JavaScript peuvent envisager d''utiliser npm shrinkwrap et webpack OccurenceOrderPlugin.
+          Les utilisateurs GGC et clang peuvent trouver l''option -frandom-seed utile.
+          L''environnement de construction (y compris le jeu d''outils) peut souvent
+          être défini pour les parties externes en spécifiant le hachage cryptographique
+          d''un conteneur spécifique ou d''une machine virtuelle qu''ils peuvent utiliser
+          pour la reconstruction. Le <a href="https://reproducible-builds.org/docs/">projet
+          de construction reproductible dispose de documentation</a> sur la façon
+          de le faire.
+
+'
       test_invocation:
-        description:
-        details:
+        description: 'Une suite de test DOIT être invocable d''une manière standard
+          pour ce langage.
+
+'
+        details: 'Par exemple, « make check », « mvn test » ou « rake test ».
+
+'
       test_continuous_integration:
-        description:
-        details:
+        description: 'Le projet DOIT utiliser une intégration continue, où le code
+          nouveau ou modifié est fréquemment intégré dans un dépôt de code central
+          et des tests automatisés sont exécutés sur le résultat.
+
+'
+        details: 'Dans la plupart des cas, cela signifie que chaque développeur qui
+          travaille à plein temps sur le projet intègre son code au moins tous les
+          jours.
+
+'
       test_statement_coverage90:
-        description:
+        description: 'Le projet DOIT avoir une ou des suites de tests automatisées
+          FLOSS qui fournissent une couverture d''instructions d''au moins 90% s''il
+          existe au moins un outil FLOSS qui peut mesurer ce critère dans le langage
+          sélectionné.
+
+'
       test_branch_coverage80:
-        description:
+        description: 'Le projet DOIT avoir une ou des suites de tests automatisées
+          FLOSS qui fournissent une couverture de branche d''au moins 80% s''il existe
+          au moins un outil FLOSS qui peut mesurer ce critère dans le langage sélectionné.
+
+'
       crypto_used_network:
-        description:
+        description: 'Le logiciel produit par le projet DOIT supporter des protocoles
+          sécurisés pour toutes ses communications réseau, tels que SSHv2 ou ultérieur,
+          TLS1.2 ou ultérieur (HTTPS), IPsec, SFTP et SNMPv3. Les protocoles non sûrs
+          tels que FTP, HTTP, telnet, SSLv3 ou antérieur, et SSHv1 DOIVENT être désactivés
+          par défaut et uniquement activés si l''utilisateur le configure spécifiquement.
+          Si le logiciel produit par le projet ne prend pas en charge les communications
+          réseau, sélectionnez « non applicable » (N/A).
+
+'
       crypto_tls12:
-        description:
+        description: 'Le logiciel produit par le projet DOIT, s''il prend en charge
+          ou utilise TLS, prendre en charge au moins TLS version 1.2. Notez que le
+          prédécesseur de TLS s''appelait SSL. Si le logiciel n''utilise pas TLS,
+          sélectionnez « non applicable » (N/A).
+
+'
       hardened_site:
-        description:
+        description: 'Le site Web du projet, le dépôt (s''il est accessible via le
+          Web) et le site de téléchargement (si séparé) DOIVENT inclure des en-têtes
+          clés de durcissement avec des valeurs non admises.
+
+'
       security_review:
-        description:
-        details:
+        description: 'Le projet DOIT avoir effectué une évaluation de la sécurité
+          au cours des 5 dernières années. Cette revue DOIT prendre en considération
+          les exigences de sécurité et les limites de sécurité.
+
+'
+        details: 'Cela PEUT être fait par les membres du projet et/ou une évaluation
+          indépendante. Cette évaluation PEUT être soutenue par des outils d''analyse
+          statiques et dynamiques, mais il doit aussi y avoir une revue par des humains
+          pour identifier les problèmes (en particulier dans la conception) que les
+          outils ne peuvent pas détecter.
+
+'
       hardening:
-        description:
-        details:
+        description: 'Des mécanismes de durcissement DOIVENT être utilisés dans le
+          logiciel produit par le projet afin que les défauts du logiciel soient moins
+          susceptibles d''entraîner des vulnérabilités de sécurité.
+
+'
+        details: 'Les mécanismes de durcissement peuvent inclure des en-têtes HTTP
+          comme Content Security Policy (CSP), des options de compilation pour atténuer
+          les attaques (telles que -fstack-protector) ou des options de compilation
+          pour éliminer les comportements indéfinis. Pour nos besoins, le principe
+          de moindre privilège n''est pas considéré comme un mécanisme de durcissement
+          (le principe de moindre privilège est important, mais séparé).
+
+'
       dynamic_analysis:
-        description:
-        details:
+        description: 'Le projet DOIT appliquer au moins un outil d''analyse dynamique
+          à tout candidat pour une version majeure du logiciel produit par le projet
+          avant sa sortie.
+
+'
+        details: 'Un outil d''analyse dynamique examine le logiciel en l''exécutant
+          avec des entrées spécifiques. Par exemple, le projet PEUT utiliser un outil
+          de fuzzing (par exemple, <a href="http://lcamtuf.coredump.cx/afl/">American
+          Fuzzy Lop</a>) ou un scanner d''application Web (par exemple, <a href =
+          "https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project">OWASP ZAP</a>
+          ou <a href="http://w3af.org/">w3af</a>). Dans certains cas, le projet <a
+          href="https://github.com/google/oss-fuzz#introduction">OSS-Fuzz</a> peut
+          être prêt à appliquer des tests de fuzzing à votre projet. Aux fins de ce
+          critère, l''outil d''analyse dynamique doit varier les entrées d''une manière
+          ou d''une autre pour rechercher différents types de problèmes <em>ou</em>
+          être une suite de test automatisée avec au moins 80% de couverture de branche.
+          La <a href="https://en.wikipedia.org/wiki/Dynamic_program_analysis">page
+          Wikipedia sur l''analyse dynamique</a> et la <a href = "https://www.owasp.org/index.php/Fuzzing">page
+          OWASP sur le fuzzing</a> identifient certains outils d''analyse dynamique.
+          Le ou les outils d''analyse PEUVENT être axés sur la recherche de vulnérabilités
+          de sécurité, mais cela n''est pas nécessaire.
+
+'
       dynamic_analysis_enable_assertions:
-        description:
+        description: 'Le projet DEVRAIT inclure de nombreuses assertions à l''exécution
+          dans le logiciel qu''il produit, et vérifier ces assertions lors d''une
+          analyse dynamique.
+
+'
   static_pages:
     home:
       badge_program: Programme de badges des meilleures pratiques de la CII
@@ -1715,48 +2512,52 @@ fr:
 
 '
   headings:
-    Accessibility and internationalization:
-    Analysis:
-    Automated test suite:
-    Basic project website content:
-    Basics:
-    Bug-reporting process:
-    Change Control:
-    Coding standards:
-    Documentation:
-    Dynamic code analysis:
-    Externally-maintained components:
-    Future:
-    future:
-    Installation system:
-    New functionality testing:
-    OSS License:
-    Other:
-    Other security issues:
-    Previous versions:
-    Project oversight:
-    Public version-controlled source repository:
-    Publicly known vulnerabilities fixed:
-    Quality:
-    Release notes:
-    Reporting:
-    Secure development knowledge:
-    Secure release:
-    Secured delivery against man-in-the-middle (MITM) attacks:
-    Security:
-    Static code analysis:
-    Unique version numbering:
-    Use basic good cryptographic practices:
-    Vulnerability report process:
-    Warning flags:
-    Working build system:
-    Identification:
-  last_entry:
+    Accessibility and internationalization: Accessibilité et internationalisation
+    Analysis: Analyse
+    Automated test suite: Suite de tests automatisée
+    Basic project website content: Contenu basique du site Web du projet
+    Basics: Notions de base
+    Bug-reporting process: Procédure de signalement des bogues
+    Change Control: Contrôle des modifications
+    Coding standards: Normes de codage
+    Documentation: Documentation
+    Dynamic code analysis: Analyse dynamique de code
+    Externally-maintained components: Composants maintenus à l'extérieur
+    Future: Futur
+    future: futur
+    Installation system: Système d'installation
+    New functionality testing: Nouveau test de fonctionnalité
+    OSS License: Licence OSS
+    Other: Autre
+    Other security issues: Autres problèmes de sécurité
+    Previous versions: Versions précédentes
+    Project oversight: Supervision du projet
+    Public version-controlled source repository: 'Dépôt source public sous contrôle
+      de version '
+    Publicly known vulnerabilities fixed: Vulnérabilités publiquement identifiées
+      et corrigées
+    Quality: Qualité
+    Release notes: Notes de version
+    Reporting: Compte-rendu
+    Secure development knowledge: Connaissance du développement sécurisé
+    Secure release: Livraison sécurisée
+    Secured delivery against man-in-the-middle (MITM) attacks: Livraison sécurisée
+      contre les attaques man-in-the-middle (MITM)
+    Security: Sécurité
+    Static code analysis: 'Analyse statique de code '
+    Unique version numbering: Numérotation unique de la version
+    Use basic good cryptographic practices: Utiliser de bonnes pratiques de base de
+      cryptographie
+    Vulnerability report process: Processus de signalement de vulnérabilité
+    Warning flags: Options d'avertissement
+    Working build system: Système de construction opérationnel
+    Identification: Identification
+  last_entry: Dernière entrée de traduction
   admin_only: Admin seulement.
   criterion_status:
-    Met:
-    Unmet:
-    NA:
+    Met: Atteint
+    Unmet: Non atteint
+    NA: N/A
   comma_separated_list:
   begin_with_cpe:
   not_an_email:

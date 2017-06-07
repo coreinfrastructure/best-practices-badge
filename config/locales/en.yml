@@ -1962,9 +1962,9 @@ en:
 '
       updateable_reused_components:
         description: |
-          The project MUST make it easy to either:
+          The project MUST either:
           <ol>
-          <li> identify and update reused externally-maintained components; <strong>or</strong></li>
+          <li> make it easy to identify and update reused externally-maintained components; <strong>or</strong></li>
           <li> use the standard components provided by the system or programming language.</li>
           </ol>
           Then, if a vulnerability is found in a reused component, it will be
@@ -2017,7 +2017,7 @@ en:
 '
       test_policy_mandated:
         description: 'The project MUST have a formal written policy that as major
-          new functionality is added, tests for tests for the new functionality MUST
+          new functionality is added, tests for the new functionality MUST
           be added to an automated test suite.
 
 '

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddForeignKeyAdditionalRights < ActiveRecord::Migration[5.1]
   def change
     # Modify the additional_rights table to be much pickier about correct
@@ -17,6 +19,6 @@ class AddForeignKeyAdditionalRights < ActiveRecord::Migration[5.1]
     # Add other (narrower) constraints
     change_column_null :additional_rights, :user_id, false
     change_column_null :additional_rights, :project_id, false
-    add_index :additional_rights, [:user_id, :project_id], unique: true
+    add_index :additional_rights, %i[user_id project_id], unique: true
   end
 end

@@ -229,27 +229,22 @@ en:
       thanks_adding: >
         Thanks for adding the Project!
         Please fill out the rest of the information to get the Badge.
-      post_delay_warning: 'There may be a significant delay after submitting as we
+      post_delay_warning: >
+        There may be a significant delay after submitting as we
         try to automatically fill in information.
-
-'
       new_badge: New badge
-      may_select_html: 'You may select from one of your GitHub repos <em>OR</em> provide
+      may_select_html: >
+        You may select from one of your GitHub repos <em>OR</em> provide
         information about some other project.
       new_badge_or: OR
-
-'
       select_one_github: Select one of your GitHub repos
       submit_github: Submit GitHub Repository
       project_already_exists: This project already exists!
-      url_of_homepage: 'What is the URL for the project home page (the URL for the
-        project as a whole)? Start with http(s):// (many characters are not allowed,
-        including "?")
-
-'
-      placeholder_of_homepage: 'http(s)://... for project home page URL
-
-'
+      url_of_homepage: >
+        What is the URL for the project home page (the URL for the
+        project as a whole)? Start with http(s)://
+        (many characters are not allowed, including "?")
+      placeholder_of_homepage: 'http(s)://... for project home page URL'
       url_of_repo: 'What is the URL for the version control repository (it may be
         the same as the project home page)? Start with http(s):// (many characters
         are not allowed, including "?")

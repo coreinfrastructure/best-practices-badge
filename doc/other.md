@@ -4,39 +4,43 @@
 
 ## Introduction
 
-This document lists the draft potential criteria for badges
-beyond the "passing" level; we'd really like feedback on this.
+This document lists the planned potential criteria for badges
+beyond the "passing" level.
 Please
 [post an issue](https://github.com/linuxfoundation/cii-best-practices-badge/issues)
 if you have comments on these criteria.
 These criteria build on the
-<a href="./criteria.md">criteria for the current "passing" level</a>.
+<a href="./criteria.md">criteria for the "passing" level</a>.
+Note that passing is by itself an achievement; at the time of this writing
+only about 10% of projects that are pursuing a badge achieve the
+passing level.
 
-For now, we use the terms "passing+1" and "passing+2" to refer to the
-two levels above the current "passing" level.
-There are various options for naming higher level badges.
-We are currently leaning towards using the silver/gold/platinum naming system,
-which is similar to the
+These higher levels are named "silver" and "gold":
+
+* Silver (formerly "passing+1") is a more stringent set of criteria
+  than the passing level, but these criteria
+  are still expected to be achievable by small and
+  single-organization projects.
+* Gold (formerly "passing+2") is an even more stringent
+  set of criteria than the silver level, but
+  include criteria that are possibly not achievable by small or
+  single-organization projects.
+
+Historically we called these levels "passing+1" and "passing+2"
+so that we could create their names as a separate process.
+We considered naming systems such as the
 <a href="http://www.usgbc.org/leed">LEED certification naming system of certified, silver, gold, platinum</a>
 and how the
 <a href="http://www.linuxfoundation.org/about/members">Linux Foundation ranks membership (silver, gold, platinum)</a>.
 An alternative is the Olympic system naming (bronze, silver, gold).
+We chose these names in part because we could add yet another level
+later (presumably calling it platinum).
 
-To help organize these potential criteria, they are currently grouped
-in terms of a potential future passing+1, potential future passing+2, and
-other potential criteria.
-There is no guarantee that the final criteria will be the same,
-or even grouped the same way.
-Recommendations welcome.
-
-We expect a number of the SHOULD criteria to become MUST in higher level
-badges, and SUGGESTED criteria at lower levels to become SHOULD or MUST
+Note that in several cases SHOULD criteria become MUST in higher level
+badges, and SUGGESTED criteria at lower levels become SHOULD or MUST
 in higher level badges.
 
-Eventually these criteria will be worded per
-<a href="https://tools.ietf.org/html/rfc2119">RFC 2119</a>.
-
-## Potential passing+1 criteria
+## Silver (passing+1) criteria
 
 You must achieve the lower (passing) badge.  In addition,
 some SHOULD will become MUST, and some SUGGESTED will become
@@ -137,7 +141,7 @@ Upgrade some "passing" level SHOULD and SUGGESTED:
       (where new or changed code is frequently integrated into a central
       code repository and automated tests are run on the result)."
 
-      *NOTE*: This is upgraded to MUST in passing+2, and passing+1 adds
+      *NOTE*: This is upgraded to MUST in gold, and silver adds
       an intermediate criterion called <a
       href="#automated_integration_testing">automated_integration_testing</a>.
 
@@ -204,7 +208,7 @@ Upgrade some "passing" level SHOULD and SUGGESTED:
       to any proposed major production release of the software before
       its release."
 
-      *Note*: There are good arguments for increasing this at passing+1,
+      *Note*: There are good arguments for increasing this at silver,
       clearly using different kinds of tools can find different things.
       However, while these tools can find problems, they often miss many,
       and it's often harder to backtrack the problem to determine
@@ -219,7 +223,7 @@ Upgrade some "passing" level SHOULD and SUGGESTED:
 
 #### Upgrade: Future
 
-All the "future" criteria are moved into passing+1 or passing+2
+All the "future" criteria are moved into silver or gold
 as described below.
 
 ### Basics
@@ -1194,13 +1198,13 @@ as described below.
     This must be monitored or periodically checked, because
     new vulnerabilities are continuously being discovered.
 
-## Potential passing+2 criteria
+## Gold (passing+2) criteria
 
-*   Achieve the lower passing+1 badge.
+*   Achieve the lower silver (passing+1) badge.
 
 ### Upgrade of SHOULD and SUGGESTED
 
-*   FIXME - list of upgrades of SHOULD and SUGGESTED from passing and passing+1.
+*   FIXME - list of upgrades of SHOULD and SUGGESTED from passing and silver.
 
     - E.g., MUST have bus factor of 2 or more.
 
@@ -1209,7 +1213,7 @@ as described below.
       Note that the Linux kernel project has reported that this is very
       hard to do at their scale.
 
-      NOTE: Kevin Wall thinks this should be at passing+1, not passing+2.
+      NOTE: Kevin Wall thinks this should be at silver, not gold.
 
     - We've done this specially for test_continuous_integration
 
@@ -1256,7 +1260,7 @@ as described below.
     code repository and automated tests are run on the result."
 
     *Details*: This criterion is merely SUGGESTED at passing level.
-    A subset of this criterion is required for passing+1; see
+    A subset of this criterion is required for silver; see
     <a href="#automated_integration_testing">automated_integration_testing</a>.
     Here, we require both the continuous check-in <i>and</i> its testing.
     In most cases this means that each developer who works full-time on
@@ -1322,7 +1326,7 @@ as described below.
       "It is SUGGESTED that static source code analysis occur on every
       commit or at least daily."
 
-### Upgrade: passing+1 to passing+2
+### Upgrade: silver to gold
 
 #### Upgrade: Basics
 

@@ -934,7 +934,7 @@ as described below.
     <sup>[<a href="#build_repeatable">build_repeatable</a>]</sup>
 
     *Details*: GCC and clang users may find the -frandom-seed option useful;
-    in some cases, this can resolved by forcing some sort order.
+    in some cases, this can be resolved by forcing some sort order.
     More suggestions can be found at the
     <a href="https://reproducible-builds.org/">reproducible build</a> site.
 

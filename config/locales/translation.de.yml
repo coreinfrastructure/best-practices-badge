@@ -137,7 +137,7 @@ de:
     password: Passwort
     forgot_password: Passwort vergessen?
     remember_me: Benutzer merken
-    login_custom:
+    login_custom: Melden Sie sich mit benutzerdefiniertem Konto an
     no_custom: Noch kein Kundenkonto? Meld dich jetzt an!
     already_logged_in: Du bist bereits angemeldet.
     incorrect_login_info: Falsche Anmeldedaten
@@ -254,10 +254,17 @@ de:
 
 '
       new_badge: Neues Badge
-      may_select_html:
+      may_select_html: 'Sie können eines Ihrer GitHub Repositories <em>ODER</ em>
+        Informationen über ein anderes Projekt auswählen.
+
+'
       select_one_github: Wähle einer deiner GitHub-Repos
       submit_github: GitHub Repository einreichen
-      url_of_homepage:
+      url_of_homepage: 'Wie lautet die URL für die Projekt-Homepage (die URL für das
+        Projekt als Ganzes)? Start mit http(s):// (viele Zeichen sind nicht erlaubt,
+        einschließlich "?")
+
+'
       placeholder_of_homepage: 'http(s)://... für Projekt-Homepage URL
 
 '
@@ -323,7 +330,10 @@ de:
         description: Wie lautet die URL für das Projekt (vollständig)?
         placeholder: Projekt Website URL
       repo_url:
-        description:
+        description: 'Was ist die URL für das Versionskontroll-Repository (es kann
+          mit der Projekt-URL identisch sein)?
+
+'
         placeholder: Projekt Repo URL
       implementation_languages:
         description: 'Welche Programmiersprache wird verwendet, um das Projekt umzusetzen?
@@ -340,14 +350,21 @@ de:
         placeholder: "(Optional) CPE-Name"
       license:
         description_html: Unter welcher Lizenz/welchen Lizenzen ist das Projekt veröffentlicht?
-        details_html:
+        details_html: 'Bitte verwenden Sie das <a href="https://spdx.org/licenses/">SPDX
+          License Expression Format</a>; Beispiele sind "Apache-2.0", "BSD-2-Clause",
+          "BSD-3-Clause", "GPL-2.0+", "LGPL-3.0+", "MIT" und "(BSD-2-Clause OR Ruby)".
+
+'
         placeholder: FLOSS Lizenz
     form_early:
       badge_intro:
         description:
         details_html:
       got_badge:
-        description_1:
+        description_1: 'Wenn dies Ihr Projekt ist, zeigen Sie bitte Ihren Badge-Status
+          auf Ihrer Projektseite! Der Badge-Status sieht so aus:
+
+'
         description_2: 'Hier ist, wie man es einbetten:'
         details_html:
         editing_description_html:
@@ -357,7 +374,8 @@ de:
         1_html: Dies sind die Kriterien für Badgelevel "silver".
         2_html: Dies sind die Kriterien für Badgelevel "gold".
     misc:
-      disabled_reminders:
+      disabled_reminders: "(Fortgeschritten) Deaktiviere Inaktivitätserinnerung (wir
+        empfehlen Ihnen, diese unausgewählt zu lassen)\n"
       general_comments:
         description: Andere allgemeine Hinweise zum Projekt?
         placeholder: Zusätzliche Bemerkungen (in Markdown)
@@ -365,7 +383,10 @@ de:
         Mechanismen verwenden muss.
 
 '
-      dont_use_crypto:
+      dont_use_crypto: 'Drücken Sie hier, wenn die vom Projekt produzierte Software
+        keine kryptographischen Mechanismen verwendet
+
+'
       future_header_html:
       in_javascript:
         collapse_all_title: Alle Panels falten
@@ -415,20 +436,36 @@ de:
   report_mailer:
     new_project_heading: Vielen Dank das du dein Projekt dem Best Practices Badging
       Program hinzugefügt hast
-    new_project_part1:
+    new_project_part1: 'Vielen Dank für das Hinzufügen Ihres Projektes zum Best Practices
+      Badging Programm. Für dieses Projekte haben wir aktuell den Namen:
+
+'
     new_project_part2:
     new_project_part3_html:
     new_project_part3_text:
     in_markdown_add: 'Im Markdown kannst du dies hinzufügen:'
     in_html_add: 'In HTML kannst du das hinzufügen:'
     ending: "--- David A. Wheeler, CII Best Practices Badge Technical Lead"
-    subject_achieved_passing:
-    subject_no_longer_passing:
-    subject_new_project:
-    subject_reminder:
-    subject_project_deleted:
+    subject_achieved_passing: 'GLÜCKWÜNSCHE zur Erreichung eines %{new_level} Best
+      Practices Badge!
+
+'
+    subject_no_longer_passing: 'Ihr Best Practices Badge ist nicht mehr %{old_level}
+
+'
+    subject_new_project: Sie haben dem CII Best Practices Badging Programm ein Projekt
+      hinzugefügt
+    subject_reminder: 'Ihr Projekt hat noch kein "Best Practices" Badge
+
+'
+    subject_project_deleted: 'Projekt %{project_id} mit dem Namen %{project_name}
+      wurde gelöscht
+
+'
     gained_level_part1:
-    gained_level_part2:
+    gained_level_part2: |
+      Bitte fügen Sie Ihr Badge zu Ihrem Projekt und/oder Repository-Website hinzu.
+      Sie haben es sich verdient:
     gained_level_part3:
     lost_level_message:
   user_mailer:
@@ -470,7 +507,10 @@ de:
     '0':
       description_good:
         description:
-        details:
+        details: 'Dies MUSS in der Sprache sein, die potenzielle Nutzer verstehen
+          können (z.B. möglichst wenig Fachbegriffe verwenden).
+
+'
         met_placeholder: "(Optional) Wo befindet sich die Kurzbeschreibung? Gegebenenfalls
           URL angeben."
       interact:
@@ -478,12 +518,22 @@ de:
         met_placeholder: "(Optional) Wo ist diese Information? Gib eine oder mehrere
           URLs an."
       contribution:
-        description:
-        details:
+        description: Die Informationen darüber, wie jemand beitragen kann, MÜSSEN
+          den Prozess erklären (z.B. wie werden Pull-Requests verwendet?)
+        details: 'Wir nehmen an, dass <a href="https://guides.github.com/activities/contributing-to-open-source/">Projekte
+          auf GitHub Issues und Pull-Requests</a> verwenden, sofern nicht anders angegeben
+          ist. Diese Information kann kurz sein, z.B., dass das Projekt Pull-Requests,
+          einen Issue-Tracker, oder eine Mailing-Liste verwendet (welche?)
+
+'
         met_placeholder: "(URL gefordert) Was ist der Prozess? Welche URL erklärt
           ihn?"
       contribution_requirements:
-        description:
+        description: 'Die Informationen darüber, wie jemand beitragen können, SOLLTEN
+          die Anforderungen für akzeptable Beiträge (z.B. einen Hinweis auf jeden
+          erforderlichen Programmierstandard) enthalten.
+
+'
         unmet_placeholder: Warum sind die Anforderungen so selbstverständlich, dass
           keine Informationen erforderlich sind?
       floss_license:
@@ -525,7 +575,10 @@ de:
         description:
         details:
       version_unique:
-        description:
+        description: 'Die für Endbenutzer vorgesehenen Projektergebnisse MÜSSEN eine
+          eindeutige Versionskennung für jede Freigabe haben.
+
+'
         details:
       version_semver:
         description:
@@ -550,14 +603,20 @@ de:
       report_archive:
         description:
       vulnerability_report_process:
-        description:
+        description: 'Das Projekt MUSS den Prozess für die Meldung von Schwachstellen
+          auf der Projektseite veröffentlichen.
+
+'
         details:
       vulnerability_report_private:
         description:
         details:
       vulnerability_report_response:
         description:
-        details:
+        details: 'Wenn in den letzten 6 Monaten keine Schwachstellen gemeldet wurden,
+          wählen Sie "nicht anwendbar" (N/A).
+
+'
       build:
         description: Falls die vom Projekt entwickelte Software vor Benutzung kompiliert
           werden muss, MUSS das Projekt ein funktionierendes Buildsystem bereitstellen,
@@ -588,7 +647,10 @@ de:
         description:
         details:
       test_invocation:
-        description:
+        description: 'Eine Test-Suite SOLLTE in einer üblichen Weise für diese Programmiersprache
+          aufrufbar sein.
+
+'
         details: Zum Beispiel, "make check", "mvn test", oder "rake test".
       test_most:
         description:
@@ -602,7 +664,10 @@ de:
         details:
       tests_documented_added:
         description:
-        details:
+        details: 'Allerdings ist auch eine informelle Regel akzeptabel, solange die
+          Tests in der Praxis hinzugefügt werden.
+
+'
       warnings:
         description:
         details:
@@ -622,7 +687,13 @@ de:
         description:
         details:
       crypto_call:
-        description:
+        description: 'Wenn die Software, die durch das Projekt produziert wird, eine
+          Anwendung oder Bibliothek ist, und ihr Hauptzweck nicht die Kryptographie
+          ist, dann SOLLTE sie lediglich Software einbinden, die speziell für kryptographische
+          Funktionen  entworfen ist; Sie SOLLTE NICHT eine eigene Implementierung
+          vornehmen.
+
+'
       crypto_floss:
         description:
         details: Siehe <a href="https://opensource.org/osr">Open Standards Requirement
@@ -654,7 +725,10 @@ de:
         description:
         details:
       vulnerabilities_critical_fixed:
-        description:
+        description: 'Projekte SOLLTEN alle kritischen Schwachstellen schnell nachdem
+          sie gemeldet wurden beheben.
+
+'
       no_leaked_credentials:
         description:
         details:
@@ -670,7 +744,10 @@ de:
         description:
         details:
       static_analysis_often:
-        description:
+        description: 'Es wird EMPFOHLEN, dass eine statische Quellcode-Analyse bei
+          jedem Commit oder zumindest täglich ausgeführt wird.
+
+'
       dynamic_analysis:
         description:
         details:
@@ -686,14 +763,34 @@ de:
         description:
         details:
       build_reproducible:
-        description:
-        details:
+        description: Es ist EMPFHOLEN, dass das Projekt <a href="https://reproducible-builds.org/">Reproduzierbare
+          Builds</a> hat.
+        details: 'Eine reproduzierbares Build bedeutet, dass mehrere Parteien den
+          Prozess der Generierung von Informationen aus Quelldateien unabhängig voneinander
+          wiederholen und genau das gleiche Bit-für-Bit-Ergebnis erhalten können.
+          Wenn kein Build nötig ist (z.B. bei Skriptsprachen deren Quellcode direkt
+          verwendet wird, anstatt kompiliert zu werden), wählen Sie "N/A". In manchen
+          Fällen kann dies dadurch gelöst werden, dass man eine Sortierreihenfolge
+          erzwingt. JavaScript-Entwickler können erwägen npm shrinkwrap und webpack
+          OccurenceOrderPlugin zu verwenden. GCC und clang Benutzer können die Option
+          -frandom-seed nützlich finden. Die Buildumgebung (einschließlich des Toolsets)
+          kann oft für externe Teilnehmer definiert werden, indem der kryptografische
+          Hash eines bestimmten Containers oder einer virtuellen Maschine angegeben
+          wird, die sie für den Wiederaufbau verwenden können. Das <a href="https://reproducible-builds.org/docs/">Reproducible
+          Builds Projekt hat eine Dokumentation, wie dies erreicht werden kann</a>.
+
+'
       crypto_used_network:
         description:
       crypto_tls12:
         description:
       crypto_certificate_verification:
-        description:
+        description: 'Die Software, die vom Projekt produziert wird, MUSS, wenn sie
+          TLS unterstützt, die TLS-Zertifikatprüfung standardmäßig durchführen wenn
+          TLS verwendet wird, auch für Subresources, durchführen. Wenn die Software
+          TLS nicht verwendet, wählen Sie "nicht anwendbar" (N/A).
+
+'
         details:
       crypto_verification_private:
         description:
@@ -738,7 +835,9 @@ de:
         details:
       documentation_security:
         description:
-        details:
+        details: 'Dies sind Sicherheitsanforderungen, die die Software erfüllen soll.
+
+'
       documentation_quick_start:
         description:
         details:
@@ -772,7 +871,10 @@ de:
       vulnerability_report_credit:
         description:
       vulnerability_response_process:
-        description:
+        description: 'Das Projekt MUSS den Prozess für die Meldung von Schwachstellen
+          auf der Projektseite veröffentlichen.
+
+'
         details:
       coding_standards:
         description:
@@ -828,7 +930,10 @@ de:
         description:
       tests_documented_added:
         description:
-        details:
+        details: 'Allerdings ist auch eine informelle Regel akzeptabel, solange die
+          Tests in der Praxis hinzugefügt werden.
+
+'
       warnings_strict:
         description:
         details:

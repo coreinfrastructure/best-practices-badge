@@ -651,15 +651,23 @@ zh-CN:
 
 '
       repo_public:
-        description:
-        details:
+        description: '该项目必须有一个版本控制的源代码存储库。它必须是公开可读的并可通过URL访问。
+
+'
+        details: '该URL可以与项目URL相同。该项目可能在特定情况下使用私人（非公开）分支，而更改不会公开发布（例如，在向公众披露漏洞之前修复漏洞）。
+
+'
       repo_track:
-        description:
+        description: '项目的源代码存储库必须跟踪所做的更改，谁进行了更改，何时进行了更改。
+
+'
       repo_interim:
         description: '为了实现协作检视，项目的源代码存储库必须包括临时版本，以便检视版本之间的变化；它不得仅包括最终版本。
 
 '
-        details:
+        details: '项目可以选择从其公共源代码库中删除特定的临时版本（例如，修复特定的未公开安全漏洞，可能永远不会公开发布的内容，或者包括不能合法发布而且不是最终版本的内容）。
+
+'
       repo_distributed:
         description: '建议使用通用分布式版本控制软件（例如，git）作为项目的源代码存储库。
 
@@ -668,19 +676,32 @@ zh-CN:
 
 '
       version_unique:
-        description:
-        details:
+        description: '项目生成的用于每个用户使用的版本必须具有唯一版本标识符。
+
+'
+        details: '本条款可以通过各种方式来满足，包括提交ID（例如git提交ID或者Mercurial 更改列表id）或版本号（包括使用语义版本或基于日期的方案，如YYYYMMDD的版本号）。
+
+'
       version_semver:
-        description:
-        details:
+        description: '建议使用<a href="http://semver.org">语义版本控制（SemVer）格式</a>进行发布。
+
+'
+        details: '其他版本编号方案，如提交ID（例如git commit id或mercurial changeset id）或基于日期的方案，如YYYYMMDD，可以用作版本号，因为它们是唯一的。一些备选方案可能会导致问题，因为用户可能无法轻松确定是否是最新的。如果所有目标客户仅运行最新版本，则SemVer可能不太有助于识别软件版本（例如，它是通过持续交付不断更新的单个网站或互联网服务的代码）。
+
+'
       version_tags:
-        description:
+        description: '建议项目识别其版本控制系统中的每个版本。例如，建议使用git的项目，使用git标签识别每个版本。
+
+'
       release_notes:
         description: '该项目必须在每个版本中提供发布说明，这是该版本中主要变化的可读的摘要，以帮助用户确定是否应升级，升级影响将如何。发行说明不能是版本控制日志的原始输出（例如，“git
           log”命令结果不是发行说明）。其产出不适用于多个地点的项目（如单个网站或服务的软件），并采用持续交付，可以选择“N / A”。
 
 '
-        details:
+        details: '发行说明可以以各种方式实施。许多项目将它们添加到名为“NEWS”，“CHANGELOG”或“ChangeLog”的文件中，可选的包含“.txt”，“.md”或“.html”等扩展名。历史上，术语“更改日志”是指<em>每个</em>更改的日志，但为了满足这些条款，需要的是可读取的摘要。发行说明可以由版本控制系统机制提供，例如<a
+          href="https://github.com/blog/1547-release-your-software"> GitHub发布工作流程</a>。
+
+'
       release_notes_vulns:
         description: '发行说明必须列出每个新版本中修复的每个公开的漏洞。如果没有发行说明或者没有公开的漏洞，选择“不适用”。
 
@@ -706,16 +727,31 @@ zh-CN:
 
 '
       report_archive:
-        description:
+        description: '该项目必须有一个公开的报告和回复的档案供后续搜索。
+
+'
       vulnerability_report_process:
-        description:
-        details:
+        description: '项目必须在项目网站上发布报告漏洞的流程。
+
+'
+        details: '例如，https://PROJECTSITE/security 上的一个明确指定的邮箱地址，通常以 security@example.org
+          的形式。这可能与其错误报告流程相同。漏洞报告可能一直是公开的，但是许多项目都有一个私密漏洞报告机制。
+
+'
       vulnerability_report_private:
-        description:
-        details:
+        description: '如果支持私有漏洞报告，项目必须包括如何以保密的方式发送信息。
+
+'
+        details: '示例包括使用HTTPS（TLS）或使用OpenPGP加密的电子邮件在网络上提交的私密缺陷报告。如果漏洞报告总是公开的（从来没有私密漏洞报告），请选择“不适用”（N/A）。
+
+'
       vulnerability_report_response:
-        description:
-        details:
+        description: '该项目在过去6个月收到的任何漏洞报告的初始响应时间必须小于或等于14天。
+
+'
+        details: '如果过去6个月没有报告漏洞，请选择“不适用”（N/A）。
+
+'
       build:
         description: '如果项目生成的软件需要构建使用，项目必须提供可以从源代码自动重新构建软件的可工作的构建系统。
 
@@ -733,29 +769,56 @@ zh-CN:
       build_floss_tools:
         description: 该项目应该仅使用FLOSS工具来构建。
       test:
-        description:
-        details:
+        description: '该项目必须使用至少一个作为FLOSS公开发布的自动测试套件（该测试套件可以作为单独的FLOSS项目维护）。
+
+'
+        details: '该项目可以使用多个自动测试套件（例如，一个是快速运行的测试套件，而另一个更为彻底但需要特殊设备）。
+
+'
       test_invocation:
-        description:
+        description: '测试套件应该以该语言的标准方式进行调用。
+
+'
         details: '例如“make check”，“mvn test”或“rake test”。
 
 '
       test_most:
-        description:
+        description: '建议测试套件覆盖大部分（或理想情况下所有）代码分支，输入字段和功能。
+
+'
       test_continuous_integration:
-        description:
+        description: '建议项目实施持续集成，将新的或更改的代码经常集成到中央代码库中，并对结果进行自动化测试。
+
+'
       test_policy:
-        description:
-        details:
+        description: '该项目必须有通用的策略（正式或非正式），当主要的新功能被添加到项目生成的软件中，该功能的测试应该同时添加到自动测试套件。
+
+'
+        details: '只要有相应的策略，即使是通过口头传播，也就是说开发人员应该为主要的新功能在自动化测试套件中添加测试，选择“Met”。
+
+'
       tests_are_added:
-        description:
-        details:
+        description: '该项目必须有证据表明，在项目生成的软件的最近重大变化中，已经遵守了添加测试的条款：<a href="#test_policy">
+          test_policy </a>。
+
+'
+        details: '主要功能通常在发行说明中提及。不需要完美，只需证明，当新的主要功能添加到项目生成的软件时，测试通常会在实践中被添加到自动化测试套件中。
+
+'
       tests_documented_added:
-        description:
-        details:
+        description: '建议您在更改提案的说明<em>文档</em>中添加测试策略要求（请参阅<a href="#test_policy">test_policy</a>）。
+
+'
+        details: '但是，只要在实践中添加了测试，即使是非正式规则也是可以接受的。
+
+'
       warnings:
-        description:
-        details:
+        description: '该项目必须启用一个或多个编译器警告标志，“安全”语言模式，或者使用单独的“linter”工具查找代码质量错误或常见的简单错误，如果至少有一个FLOSS工具可以在所选择的语言实现此条款。
+
+'
+        details: '编译器警告标志的例子包括gcc/clang “-Wall”。 “安全”语言模式的示例包括JavaScript “use strict”和perl5的“使用警告”。一个单独的“linter”工具用于检查源代码以查找代码质量错误或常见的简单错误。这些通常在源代码或构建指令中启用。
+
+'
       warnings_fixed:
         description: '该项目必须处理警告。
 
@@ -768,10 +831,22 @@ zh-CN:
         description: '该项目必须至少有一个主要开发人员知道如何设计安全软件。
 
 '
-        details:
+        details: '这需要了解以下设计原则，包括<a href="http://web.mit.edu/Saltzer/www/publications/protection/">
+          Saltzer和Schroeder </a>中的8项原则：<ul> <li>机制经济（保持设计简单实用，例如采用彻底简化）<li>故障安全默认（默认情况下，访问决策应拒绝），项目安装应默认安全）<li
+          >完全仲裁（必须检查每个可能被限制的访问权限，并且不可绕过）<li>开放式设计（安全机制不应该依赖于攻击者对其设计的无知，而应该更容易地保护和更改信息，例如密钥和密码）<li>特权分离（理想情况下，对重要对象的访问应该取决于多个条件，从而破坏一个保护系统将无法实现完全访问。如，多因子身份验证，要求密码和硬件令牌，比单因子认证安全性更高）<li>最小权限（进程应该以最少的权限运行）<li>最少的公共机制（设计应该最大限度地减少所有用户所依赖的，涉及到多个用户的共同机制，如，临时文件的目录）<li>心理可接受性（人机接口必须设计为易于使用
+          —— 设计为“最不惊讶”）<li>有限的攻击面（攻击面 —— 一组不同的入口，其​​中攻击者可以尝试输入或提取数据 —— 应该受到限制）<li>输入验证与白名单（输入通常应该在被接受之前检查以确定是否有效；此验证应使用白名单（仅接受已知的有效值），而不是黑名单（尝试列出已知的非法值））。
+          </ul>项目中的“主要开发人员”的定义是熟悉项目代码的任何人，很乐意对其进行更改，并被项目中大多数其他参与者确认。主要开发人员通常会在过去一年中通过代码，文档或回答问题提供一些贡献。开发人员通常被认为是主要开发人员，如果他们启动项目（并且还没有离开项目满三年），可以选择在私人漏洞报告渠道（如果有的话）上接收信息，可以代表项目接受提交，或执行项目软件的最终版本发布。如果只有一个开发者，那个人是主要开发人员。
+
+'
       know_common_errors:
-        description:
-        details:
+        description: '该项目的主要开发人员中，至少有一个必须知道导致这类型软件漏洞的常见错误类型，以及至少有一种方法来对付或缓解这些漏洞。
+
+'
+        details: '示例（取决于软件的类型）包括SQL注入，操作系统注入，经典缓冲区溢出，跨站点脚本（XSS），缺少认证和缺少授权。请参阅<a href="http://cwe.mitre.org/top25/">
+          CWE/SANS 25种最常见漏洞</a>或<a href ="https://www.owasp.org/index.php/Category:OWASP_Top_Ten_Project">
+          OWASP十大漏洞类型项目</a>。
+
+'
       crypto_published:
         description: '项目生成的软件默认情况下，只能使用由专家公开发布和审查的加密协议和算法（如果使用加密协议和算法）。
 
@@ -848,8 +923,14 @@ zh-CN:
 
 '
       vulnerabilities_fixed_60_days:
-        description:
-        details:
+        description: '被公开了超过60天的中等或更高严重程度的漏洞，必须被修复。
+
+'
+        details: '该漏洞必须由项目本身修补和发布（修补程序可能在其他地方开发）。一旦漏洞具有公开发布的非付费信息的CVE（例如，在<a href="https://nvd.nist.gov/">国家漏洞数据库</a>）或项目已被通知，且信息已经发布给公众（可能是项目自己发布），则视为漏洞已经公众所知。如果其<a
+          href="https://nvd.nist.gov/cvss.cfm"> CVSS 2.0 </a>基本分数为4或更高，则漏洞是中等到高的严重性。
+          <strong>注意</strong>：这意味着全世界的所有攻击者可能会对用户造成长达60天的伤害。这个标准通常比Google在<a href="https://security.googleblog.com/2010/07/rebooting-responsible-disclosure-focus.html">重新启动负责任的披露</a>中所推荐的容易得多。因为Google建议，如果报告不是公开的，那么当项目得到通知，甚至报告<em>尚未公开</em>时，60天的时间段就会开始。
+
+'
       vulnerabilities_critical_fixed:
         description: '项目在得到报告后应该迅速修复所有致命漏洞。
 
@@ -865,7 +946,21 @@ zh-CN:
         description: '如果至少有一个FLOSS工具以所选择的语言实现此条款，则至少需要将一个静态代码分析工具应用于软件发布之前任何提议的主要生成版本。
 
 '
-        details:
+        details: '静态代码分析工具检查软件代码（源代码，中间代码或可执行文件），而不用特定输入执行。本条款中，编译器警告和“安全”语言模式不被视为静态代码分析工具（它们通常避免深入分析，因为速度至关重要）。此类静态代码分析工具的示例包括<a
+          href="http://cppcheck.sourceforge.net/"> cppcheck </a>，<a href="http://clang-analyzer.llvm.org/">
+          clang静态分析器</a>，<a href="http://findbugs.sourceforge.net/"> FindBugs </a>（包括<a
+          href =“https://h3xstream.github.io/find-sec-bugs/">FindSecurityBugs</a>），<a
+          href="https://pmd.github.io/"> PMD </a>，<a href="http://brakemanscanner.org/">
+          Brakeman </a>，<a href="https://scan.coverity.com/"> Coverity质量分析器</a>和<a
+          href =“http://www8.hp.com/au/en/software-solutions/static-code-analysis-sast/index.html">
+          HP Fortify静态代码分析器</a>。更多的工具列表可以在诸如<a href="https://en.wikipedia.org/wiki/List_of_tools_for_static_code_analysis">维基百科静态代码分析工具列表</a>，<a
+          href ="https://www.owasp.org/index.php/Static_Code_Analysis">关于静态代码分析的OWASP信息</a>，<a
+          href ="http://samate.nist.gov/index.php/Source_Code_Security_Analyzers.html">
+          NIST源代码安全分析器列表</a>和<a href="http://www.dwheeler.com/essays/static-analysis-tools.html">
+          Wheeler的静态分析工具列表</a >。 <a href="https://continuousassurance.org/"> SWAMP
+          </a>是使用各种工具评估软件漏洞的免费平台。如果没有可用于所使用的实现语言的FLOSS静态分析工具，请选择“N/A”。
+
+'
         na_placeholder: '为什么不能满足（例如，该语言没有FLOSS工具）？
 
 '
@@ -877,10 +972,16 @@ zh-CN:
 
 '
       static_analysis_fixed:
-        description:
-        details:
+        description: '使用静态代码分析发现的所有中，高严重性可利用漏洞必须在确认后及时修复。
+
+'
+        details: '如果其<a href="https://nvd.nist.gov/cvss.cfm"> CVSS 2.0 </a>评分为4或更高，则此漏洞是中等到高的严重性。
+
+'
       static_analysis_often:
-        description:
+        description: '建议每次提交或至少每天执行静态源代码分析。
+
+'
       dynamic_analysis:
         description: '建议在发布之前，至少将一个动态分析工具应用于软件任何发布的主要生产版本。
 
@@ -920,7 +1021,9 @@ zh-CN:
         description: '该项目应该提供一种方法，使用常用惯例轻松安装和卸载项目生成的软件。
 
 '
-        details:
+        details: '示例包括使用软件包管理器（在系统或语言级别），“make install/uninstall”（支持DESTDIR），标准格式的容器或标准格式的虚拟机映像。安装和卸载过程（例如，打包）可以由第三方FLOSS软件实现。
+
+'
       build_reproducible:
         description: '建议该项目有一个<a href="https://reproducible-builds.org/">可重复构建</a>。
 
@@ -965,7 +1068,9 @@ zh-CN:
         description: '建议在项目生成的软件中使用加固机制，以便软件缺陷不太可能导致安全漏洞。
 
 '
-        details:
+        details: '加固机制可能包括HTTP头，如内容安全策略（CSP），用于缓解攻击的编译器标志（如-fstack-protector）或用以消除未定义行为的编译器标志。对于此条款的目的，最小权限不被认为是一种加固机制（最小权限是重要的，但是另有条款）。
+
+'
     '1':
       contribution_requirements:
         description:
@@ -1348,8 +1453,8 @@ zh-CN:
 
       不完整
     NA: N/A
-  comma_separated_list:
-  begin_with_cpe:
+  comma_separated_list: " 必须是以逗号分隔的名称列表"
+  begin_with_cpe: " 必须以“cpe:”开头"
   not_an_email:
   known_bad_password:
   valid_text:

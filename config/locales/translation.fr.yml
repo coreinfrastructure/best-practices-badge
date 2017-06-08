@@ -253,8 +253,8 @@ fr:
       create_time: date de création (pour la soumission)
       update_time: dernière date de mise à jour (pour la soumission)
       user_id: id utilisateur
-      paren_name_unknown:
-      badge_level:
+      paren_name_unknown: "(Nom inconnu)"
+      badge_level: Le niveau de badge pour le projet %{id} est %{percent}%
     new:
       post_delay_warning: 'Il peut y avoir un délai important après la soumission
         car nous essayons de remplir automatiquement les informations.
@@ -286,21 +286,50 @@ fr:
 '
       submit_urls: Envoyer l'URL
       sign_in_first: Connectez-vous pour ajouter un projet !
-      thanks_adding:
-      project_already_exists:
-      final_text_html:
+      thanks_adding: 'Merci d''avoir ajouté le projet ! Remplissez le reste des informations
+        pour obtenir le badge.
+
+'
+      project_already_exists: Ce projet existe déjà !
+      final_text_html: 'Remarque : si votre URL de dépôt est sur GitHub, toute personne
+        qui a les droits de commit dans le dépôt pourra éditer les informations du
+        badge.
+
+'
     show:
-      edit:
-      delete:
-      confirm_delete:
-      back:
-      cc_by_3plus_html:
-      cc_by_3only_html:
-      owned_by:
-      created_at_html:
-      updated_at_html:
-      last_lost_html:
-      last_achieved_html:
+      edit: Modifier
+      delete: Supprimer
+      confirm_delete: 'Êtes-vous SÛR(E) de vouloir SUPPRIMER ENTIÈREMENT le projet
+        %{project_id} ?
+
+'
+      back: Retour
+      cc_by_3plus_html: 'Ces données sont disponibles sous <a href="https://creativecommons.org/licenses/by/3.0/us"
+        target="_blank">une licence Creative Commons Attribution version 3.0 ou ultérieure
+        (CC-BY-3.0+)</a>. Chacun peut librement partager et adapter les données, à
+        condition de créditer leur origine. Veuillez créditer %{user} et les contributeurs
+        du badge des meilleures pratiques de la CII.<br><br>
+
+'
+      cc_by_3only_html: 'Ces données sont disponibles sous <a href="https://creativecommons.org/licenses/by/3.0/us"
+        target="_blank">licence Creative Commons Attribution version 3.0 (CC-BY-3.0)
+        </a> comme indiqué dans les <a href="https://www.linuxfoundation.org/terms"
+        target="_blank">conditions d''utilisation</a> de la <a href="https://www.coreinfrastructure.org/"
+        target="_blank">Core Infrastructure Initiative</a>. Chacun peut librement
+        partager et adapter les données, à condition de créditer leur origine. Veuillez
+        créditer %{user} et les contributeurs du badge des meilleures pratiques de
+        la CII.<br><br>
+
+'
+      owned_by: 'Soumission du badge du projet appartenant à :'
+      created_at_html: "<strong>Soumission créée le</ strong> %{when},"
+      updated_at_html: "<strong>dernière mise à jour le</strong> %{when}."
+      last_lost_html: 'Le dernier badge perdu l''a été le %{when}.
+
+'
+      last_achieved_html: 'Le dernier badge obtenu l''a été le %{when}.
+
+'
     edit:
       submit_cc_by_3plus_html: 'En soumettant ces données sur le projet, vous acceptez
         de les publier sous au moins <a href="https://creativecommons.org/licenses/by/3.0/us"
@@ -457,72 +486,98 @@ fr:
       disabled_reminders: "(Avancé) Désactiver le rappel d'inactivité (nous vous recommandons
         de laisser ceci non sélectionné)\n"
       general_comments:
-        description:
-        placeholder:
-      some_not_crypto_html:
+        description: 'Autres commentaires généraux sur le projet :
+
+'
+        placeholder: Commentaires additionnels (en syntaxe markdown)
+      some_not_crypto_html: 'Notez que certains logiciels n''ont pas besoin d''utiliser
+        des mécanismes cryptographiques.
+
+'
       dont_use_crypto: 'Appuyez ici si le logiciel produit par le projet n''utilise
         pas de mécanismes cryptographiques
 
 '
-      future_header_html:
+      future_header_html: 'Ce sont des critères que nous avons l''intention d''ajouter
+        dans un proche avenir, mais qui ne sont <em>pas</em> actuellement requis pour
+        un badge. Cette période de grâce permet aux projets de se mettre à jour par
+        rapport aux critères modifiés et de conserver leur badge au fur et à mesure
+        que les meilleures pratiques s''améliorent.
+
+'
       in_javascript:
-        collapse_all_title:
-        collapse_all:
-        expand_all_title:
-        expand_all:
-        show_details:
-        hide_details:
-        show_all_details:
-        hide_all_details:
-        show_met_title:
-        show_met_html:
-        hide_met_title:
-        hide_met_html:
-        passing_alt:
-        barely_alt:
-        failing_alt:
-        unknown_alt:
-        met_url_placeholder:
-        met_justification_placeholder:
-        met_placeholder:
-        unmet_placeholder:
-        na_justification_placeholder:
-        na_placeholder:
-        unknown_placeholder:
-      toggle_details_title:
+        collapse_all_title: Réduire tous les panneaux
+        collapse_all: Réduire les panneaux
+        expand_all_title: Développer tous les panneaux
+        expand_all: Développer les panneaux
+        show_details: Afficher les détails
+        hide_details: Masquer les détails
+        show_all_details: Afficher tous les détails
+        hide_all_details: Masquer tous les détails
+        show_met_title: Afficher les critères atteints & N/A
+        show_met_html: Afficher atteints &amp; N/A
+        hide_met_title: Masquer les critères atteints & N/A (en laissant les critères
+          non satisfaits et inconnus)
+        hide_met_html: Masquer atteints &amp; N/A
+        passing_alt: Assez pour un badge !
+        barely_alt: À peine suffisant pour un badge.
+        failing_alt: Pas assez pour un badge.
+        unknown_alt: Informations inconnues requises, pas assez pour un badge.
+        met_url_placeholder: "(URL requise) Veuillez expliquer comment cela est atteint,
+          en incluant 1+ URL clés.\n"
+        met_justification_placeholder: "(Obligatoire) Veuillez expliquer comment cela
+          est atteint, en incluant peut-être 1+ URL clés.\n"
+        met_placeholder: "(Facultatif) Veuillez expliquer comment cela est atteint,
+          en incluant peut-être 1+ URL clés.\n"
+        unmet_placeholder: 'Expliquez pourquoi il est acceptable que cela ne soit
+          pas satisfait, en incluant 1+ URL clés.
+
+'
+        na_justification_placeholder: "(Obligatoire) Veuillez expliquer pourquoi cela
+          ne s'applique pas (N/A), en incluant peut-être 1+ URL clés.\n"
+        na_placeholder: "(Facultatif) Expliquez pourquoi cela ne s'applique pas (N/A),
+          en incluant peut-être 1+ URL clés.\n"
+        unknown_placeholder: Expliquez s'il vous plaît
+      toggle_details_title: Basculer le texte détaillé
       details: Détails
-      url_required:
+      url_required: URL requise
       future_criterion: Critère futur
-      url_required_warning:
-      justification_required_warning:
+      url_required_warning: 'Attention : une URL est requise, mais aucune URL n''a
+        été trouvée.
+
+'
+      justification_required_warning: 'Attention : cela nécessite une justification
+        plus longue.
+
+'
     delete:
       done: Le projet a été supprimé avec succès.
   user_mailer:
     account_activation:
       before_html: |-
-        <h1>Programme de badges des Meilleures Pratiques de lq CII</h1>
+        <h1>Programme de badge des Meilleures Pratiques de lq CII</h1>
         <p>Bonjour,</p>
         <p>
-        Bienvenue dans le programme de badges !
+        Bienvenue dans le programme de badge !
         Cliquez sur le lien ci-dessous pour activer votre compte :
         </p>
       before_text: |
         Bonjour,
 
-        Bienvenue dans le programme de badges des Meilleures Pratiques de la CII !
+        Bienvenue dans le programme de badge des Meilleures Pratiques de la CII !
 
         Cliquez sur le lien ci-dessous pour activer votre compte :
       activate: Activer
       subject: Activation de compte
     github_welcome:
       before_html: |
-        <h1>Programme de badges des Meilleures Pratiques de la CII</h1>
+        <h1>Programme de badge des Meilleures Pratiques de la CII</h1>
 
         <p>Bonjour,</p>
 
         <p>
         Merci d'avoir relié votre compte GitHub et bienvenue
-        au programme de badges des Meilleures Pratiques de la CII !
+        au programme de badge des Meilleures Pratiques de la CII !
         </p>
 
         <p>
@@ -533,7 +588,7 @@ fr:
         Bonjour,
 
         Merci d'avoir relié votre compte GitHub et bienvenue
-        au programme de badges des Meilleures Pratiques de la CII !
+        au programme de badge des Meilleures Pratiques de la CII !
 
         Si vous n'êtes pas à l'origine de cette action, vérifiez votre
         journal de sécurité GitHub sous Paramètres>Sécurité.
@@ -621,15 +676,54 @@ fr:
     in_html_add: 'En HTML, vous pouvez ajouter ceci :'
     ending: "--- David A. Wheeler, Directeur Technique du programme CII Best Practices
       Badge\n"
-    subject_achieved_passing:
-    subject_no_longer_passing:
-    subject_new_project:
-    subject_reminder:
-    subject_project_deleted:
-    gained_level_part1:
-    gained_level_part2:
-    gained_level_part3:
-    lost_level_message:
+    subject_achieved_passing: 'FÉLICITATIONS pour l''obtention d''un badge %{new_level}
+      des meilleures pratiques !
+
+'
+    subject_no_longer_passing: 'Votre badge des meilleures pratiques n''est plus %{old_level}
+
+'
+    subject_new_project: 'Vous avez ajouté un projet au programme de badge des meilleures
+      pratiques de la CII
+
+'
+    subject_reminder: 'Votre projet n''a pas encore le badge « meilleures pratiques
+      »
+
+'
+    subject_project_deleted: 'Le projet %{project_id} nommé %{project_name} a été
+      supprimé
+
+'
+    gained_level_part1: |
+      Toutes nos félicitations!
+
+      Selon les informations que vous avez fournies,
+      votre projet a obtenu le badge '%{new_level}' des meilleures pratiques de la CII.
+      Pour plus d'informations, consultez cette URL :
+    gained_level_part2: |
+      Ajoutez votre badge à votre projet et/ou site de dépôt ;
+      vous l'avez mérité :
+    gained_level_part3: |
+      Nous vous encourageons vivement à ajouter ou à améliorer le texte de justification,
+      y compris par l'ajout d'URL qui redirigent vers plus d'informations.
+
+      Si vous avez des suggestions sur la façon d'améliorer les critères ou
+      l'application Web du badge, veuillez soumettre un problème à :
+      https://github.com/linuxfoundation/cii-best-practices-badge/issues
+
+      Si vous avez apporté des modifications à votre projet pour obtenir un badge, veuillez nous le faire savoir
+      par email à cii-badges-questions@lists.coreinfrastructure.org.
+      L'un de nos objectifs est d'encourager les projets à apporter des améliorations.
+      Nous mettons certains de ces rapports sur le wiki public ; veuillez nous en informer
+      si vous ne souhaitez PAS que les changements soient publiés publiquement à
+      https://github.com/linuxfoundation/cii-best-practices-badge/wiki/Impacts
+
+      Merci et félicitations.
+    lost_level_message: |
+      Nous sommes désolés, mais votre projet n'a plus le badge « %{old_level} »
+      et est maintenant « %{new_level} ».
+      Consultez l'URL suivante pour plus d'informations :
   project_name_unknown: "(Nom inconnu)"
   locale_name:
     en: Anglais / English (en)
@@ -648,7 +742,7 @@ fr:
           comprendre (par exemple, il utilise un jargon minimal).
 
 '
-        met_placeholder: "(Facultatif) Où est la description succincte ? Envisager
+        met_placeholder: "(Facultatif) Où est la description succincte ? Envisagez
           de fournir une URL.\n"
       interact:
         description: 'Le site Web du projet DOIT fournir des informations sur la façon
@@ -656,18 +750,18 @@ fr:
           des demandes d''amélioration) et de contribuer au logiciel.
 
 '
-        met_placeholder: "(Facultatif) Où est cette information ? Envisager de fournir
+        met_placeholder: "(Facultatif) Où est cette information ? Envisagez de fournir
           des URL(s).\n"
       contribution:
         description: 'L''information sur la façon de contribuer DOIT expliquer le
-          processus de contribution (par exemple, les pull requests sont-elles utilisées
+          processus de contribution (par exemple, les pull requests sont-ils utilisés
           ?)
 
 '
         details: 'Nous supposons que <a href="https://guides.github.com/activities/contributing-to-open-source/">les
-          projets sur GitHub utilisent les rapports de problèmes et les pull requests</a>,
-          sauf indication contraire. Cette information peut être courte, par exemple,
-          en indiquant que le projet utilise les pull requests, un suivi de problème
+          projets sur GitHub utilisent les problèmes et les pull requests</a>, sauf
+          indication contraire. Cette information peut être courte, par exemple, en
+          indiquant que le projet utilise les pull requests, un suivi des problèmes
           ou des messages dans une liste de diffusion (laquelle ?)
 
 '
@@ -703,9 +797,9 @@ fr:
           <a href="https://www.gnu.org/licenses/license-list.html">une licence libre
           approuvée par la Free Software Foundation (FSF)</a>, ou </li> <li> <a href="https://www.debian.org/legal/licenses/">une
           licence libre acceptable pour Debian main</a> ou </li> <li><a href="https://fedoraproject.org/wiki/Licensing:Main?rd=Licensing">une
-          "bonne" licence selon Fedora</a>. </li> </ul> Le logiciel PEUT également
-          être distribué avec d''autres licences (par exemple, "GPLv2 ou propriétaire"
-          est acceptable).
+          « bonne » licence selon Fedora</a>. </li> </ul> Le logiciel PEUT également
+          être distribué avec d''autres licences (par exemple, « GPLv2 ou propriétaire
+          » est acceptable).
 
 '
       floss_license_osi:
@@ -740,7 +834,7 @@ fr:
           pas faire) si c''est un sujet approprié pour le logiciel. La documentation
           de sécurité n''a pas besoin d''être longue. Le projet PEUT utiliser des
           liens hypertextes vers du matériel hors projet en tant que documentation.
-          Si le projet ne produit pas de logiciel, choisissez "non applicable" (N/A).
+          Si le projet ne produit pas de logiciel, choisissez « non applicable » (N/A).
 
 '
         met_placeholder: "(Facultatif) Quelle(s) URL(s) sont les points de départ
@@ -751,8 +845,8 @@ fr:
 
 '
         details: 'La documentation d''une interface externe explique à un utilisateur
-          final ou un développeur comment l''utiliser. Cela inclurait son interface
-          de programmation (API) si le logiciel en possède une. S''il s''agit d''une
+          final ou un développeur comment l''utiliser. Cela inclut son interface de
+          programmation (API) si le logiciel en possède une. S''il s''agit d''une
           bibliothèque, documentez les principales classes / types et méthodes / fonctions
           pouvant être appelés. S''il s''agit d''une application Web, définissez son
           interface URL (souvent son interface REST). S''il s''agit d''une interface
@@ -770,8 +864,8 @@ fr:
           (Python) et Doxygen (plusieurs). Le simple fait d''avoir des commentaires
           dans le code source n''est pas suffisant pour satisfaire ce critère ; il
           doit y avoir un moyen simple de voir l''information sans lire l''intégralité
-          du code source. Si le projet ne produit pas de logiciel, choisissez "non
-          applicable" (N/A).
+          du code source. Si le projet ne produit pas de logiciel, choisissez « non
+          applicable » (N/A).
 
 '
       sites_https:
@@ -899,7 +993,7 @@ fr:
           dans cette version afin d''aider les utilisateurs à déterminer s''ils doivent
           se mettre à niveau et quel sera l''impact de la mise à niveau. Les notes
           de version NE DOIVENT PAS être la sortie brute d''un journal de contrôle
-          de version (par exemple, les résultats de la commande "git log" ne sont
+          de version (par exemple, les résultats de la commande « git log » ne sont
           pas des notes de version). Les projets dont les résultats ne sont pas destinés
           à être réutilisés dans plusieurs emplacements (tels que le logiciel pour
           un site Web ou un service unique) ET qui utilisent la livraison continue
@@ -926,8 +1020,8 @@ fr:
 '
       report_process:
         description: 'Le projet DOIT fournir un processus permettant aux utilisateurs
-          de soumettre des rapports de bogue (par exemple, en utilisant un suivi des
-          problèmes ou une liste de diffusion).
+          de soumettre des signalements de bogue (par exemple, en utilisant un suivi
+          des problèmes ou une liste de diffusion).
 
 '
       report_tracker:
@@ -958,7 +1052,7 @@ fr:
 
 '
       report_archive:
-        description: 'Le projet DOIT avoir une archive publique pour les rapports
+        description: 'Le projet DOIT avoir une archive publique pour les signalements
           et les réponses pour une recherche ultérieure.
 
 '
@@ -996,9 +1090,9 @@ fr:
 
 '
       build:
-        description: 'Si le logiciel produit par le projet nécessite d''être construit,
-          le projet DOIT fournir un système de construction fonctionnel qui peut reconstruire
-          automatiquement le logiciel à partir du code source.
+        description: 'Si le logiciel produit par le projet nécessite d''être construit
+          pour être utilisé, le projet DOIT fournir un système de construction fonctionnel
+          qui peut reconstruire automatiquement le logiciel à partir du code source.
 
 '
         details: 'Un système de construction détermine quelles actions doivent se
@@ -1010,7 +1104,7 @@ fr:
           dépend de bibliothèques externes, le système de construction n''a <em>pas</em>
           besoin de construire ces bibliothèques externes. S''il n''est pas nécessaire
           de construire quoi que ce soit pour utiliser le logiciel après la modification
-          de son code source, sélectionnez "non applicable" (N/A).
+          de son code source, sélectionnez « non applicable » (N/A).
 
 '
       build_common_tools:
@@ -1025,7 +1119,7 @@ fr:
         description: Le projet DEVRAIT être constructible en utilisant uniquement
           des outils FLOSS.
       test:
-        description: 'Le projet DOIT utiliser au moins une suite de test automatisée
+        description: 'Le projet DOIT utiliser au moins une suite de tests automatisée
           publiée publiquement comme FLOSS (cette suite de tests peut être maintenue
           sous la forme d''un projet FLOSS distinct).
 
@@ -1073,11 +1167,11 @@ fr:
           majeures apportées au logiciel produit par le projet.
 
 '
-        details: 'Les principales fonctionnalités seraient généralement mentionnées
-          dans les notes de version. La perfection n''est pas nécessaire, il suffit
-          de prouver que les tests sont généralement ajoutés en pratique à la suite
-          de tests automatisée lorsque de nouvelles fonctionnalités majeures sont
-          ajoutées au logiciel produit par le projet.
+        details: 'Les principales fonctionnalités sont généralement mentionnées dans
+          les notes de version. La perfection n''est pas nécessaire, il suffit de
+          prouver que les tests sont généralement ajoutés en pratique à la suite de
+          tests automatisée lorsque de nouvelles fonctionnalités majeures sont ajoutées
+          au logiciel produit par le projet.
 
 '
       tests_documented_added:
@@ -1165,12 +1259,12 @@ fr:
           mauvaises connues)). </ul> Un « développeur principal » dans un projet est
           celui qui connaît la base de code du projet, est à l''aise pour faire des
           modifications et est reconnu comme tel par la plupart des autres participants
-          au projet. Un développeur principal effectuerait généralement un certain
-          nombre de contributions au cours de l''année écoulée (du code, de la documentation
-          ou des réponses aux questions). Des développeurs seraient généralement considérés
+          au projet. Un développeur principal a effectué généralement un certain nombre
+          de contributions au cours de l''année écoulée (du code, de la documentation
+          ou des réponses aux questions). Des développeurs sont généralement considérés
           comme des développeurs principaux s''ils ont lancé le projet (et n''ont
           pas quitté le projet il y a plus de trois ans), ont la possibilité de recevoir
-          des informations sur un canal privé de déclaration de vulnérabilité (s''il
+          des informations sur un canal privé de déclaration de vulnérabilités (s''il
           y en a un), peuvent accepter des contributions au nom du projet, ou effectuer
           les distributions finales du logiciel du projet. S''il n''y a qu''un seul
           développeur, cette personne est le développeur principal.
@@ -1255,7 +1349,7 @@ fr:
 '
         details: 'Dans de nombreux cas, il est préférable de choisir un mode d''algorithme
           de chiffrement de bloc conçu pour combiner le secret et l''authentification,
-          par exemple Galois / Counter Mode (GCM) et EAX. Les projets PEUVENT permettre
+          par exemple Galois/Counter Mode (GCM) et EAX. Les projets PEUVENT permettre
           aux utilisateurs d''activer les mécanismes cassés si nécessaire pour la
           compatibilité, mais les utilisateurs savent qu''ils le font.
 
@@ -1281,16 +1375,16 @@ fr:
 
 '
       crypto_password_storage:
-        description: 'Si le logiciel produit par le projet entraîne l''entreposage
+        description: 'Si le logiciel produit par le projet entraîne la sauvegarde
           de mots de passe pour l''authentification d''utilisateurs externes, les
-          mots de passe DOIVENT être stockés comme hachages itérés avec un salage
+          mots de passe DOIVENT être sauvegardés comme hachages itérés avec un salage
           par utilisateur en utilisant un algorithme d''étirement de clé (itéré) (par
           exemple PBKDF2, Bcrypt ou Scrypt).
 
 '
         details: 'Ce critère s''applique uniquement lorsque le logiciel applique l''authentification
           des utilisateurs utilisant des mots de passe, telles que des applications
-          Web côté serveur. Il ne s''applique pas dans les cas où le logiciel entrepose
+          Web côté serveur. Il ne s''applique pas dans les cas où le logiciel sauvegarde
           des mots de passe pour l''authentification dans d''autres systèmes (par
           exemple, le logiciel implémente un client pour un autre système), car au
           moins certaines parties de ce logiciel doivent avoir souvent accès au mot
@@ -1320,11 +1414,11 @@ fr:
           les attaques MITM. L''utilisation de https ou ssh+scp est acceptable.
 
 '
-        details: 'Un mécanisme encore plus fort distribue le logiciel avec des paquets
-          signés numériquement, car cela atténue les attaques sur le système de distribution,
-          mais cela ne fonctionne que si les utilisateurs peuvent être convaincus
-          que les clés publiques pour les signatures sont correctes <em>et</em> si
-          les utilisateurs vérifient la signature.
+        details: 'Un mécanisme encore plus fort distribue le logiciel sous forme de
+          paquetages signés numériquement, car cela atténue les attaques sur le système
+          de distribution, mais cela ne fonctionne que si les utilisateurs peuvent
+          être convaincus que les clés publiques pour les signatures sont correctes
+          <em>et</em> si les utilisateurs vérifient la signature.
 
 '
       delivery_unsigned:
@@ -1397,7 +1491,7 @@ fr:
           liste des outils d''analyse statique de Wheeler</a >. <a href="https://continuousassurance.org/">SWAMP</a>
           est une plate-forme gratuite pour évaluer les vulnérabilités dans les logiciels
           utilisant une variété d''outils. S''il n''y a pas d''outil d''analyse statique
-          FLOSS disponible pour le(s) langage(s) d''implémentation utilisé(s), sélectionnez
+          FLOSS disponible pour le(s) langage(s) d''implémentation utilisés, sélectionnez
           « N/A ».
 
 '
@@ -1457,7 +1551,7 @@ fr:
         description: 'Il est PROPOSÉ que, si le logiciel produit par le projet comprend
           un logiciel écrit à l''aide d''un langage non sûr pour les accès mémoire
           (par exemple, C ou C ++), au moins un outil dynamique (par exemple, un fuzzer
-          ou un scanner d''application Web) est utilisé de façon routinière en combinaison
+          ou un scanner d''application Web) soit utilisé de façon routinière en combinaison
           avec un mécanisme pour détecter des problèmes de sécurité mémoire tels que
           les dépassements de zone mémoire. Si le projet ne produit pas de logiciel
           écrit dans un langage non sûr pour les accès mémoire, choisissez « non applicable
@@ -1514,10 +1608,10 @@ fr:
         details: 'Une construction reproductible signifie que plusieurs parties peuvent
           refaire indépendamment le processus de génération d''informations à partir
           de fichiers source et obtenir exactement le même résultat bit-à-bit. Si
-          aucune construction ne se produit (par exemple, les langues de script où
+          aucune construction ne se produit (par exemple, les langages de script où
           le code source est utilisé directement au lieu d''être compilé), sélectionnez
-          "N/A". Dans certains cas, cela peut être résolu en forçant un ordre de tri.
-          Les développeurs JavaScript peuvent envisager d''utiliser npm shrinkwrap
+          « N/A ». Dans certains cas, cela peut être résolu en forçant un ordre de
+          tri. Les développeurs JavaScript peuvent envisager d''utiliser npm shrinkwrap
           et webpack OccurenceOrderPlugin. Les utilisateurs GGC et clang peuvent trouver
           l''option -frandom-seed utile. L''environnement de construction (y compris
           le jeu d''outils) peut souvent être défini pour les parties externes en
@@ -1534,36 +1628,36 @@ fr:
           tels que FTP, HTTP, telnet, SSLv3 ou antérieur, et SSHv1 DEVRAIENT être
           désactivés par défaut et uniquement activés si l''utilisateur le configure
           spécifiquement. Si le logiciel produit par le projet ne prend pas en charge
-          les communications réseau, sélectionnez «non applicable» (N/A).
+          les communications réseau, sélectionnez « non applicable » (N/A).
 
 '
       crypto_tls12:
         description: 'Le logiciel produit par le projet DEVRAIT, s''il prend en charge
           ou utilise TLS, prendre en charge au moins TLS version 1.2. Notez que le
           prédécesseur de TLS s''appelait SSL. Si le logiciel n''utilise pas TLS,
-          sélectionnez «non applicable» (N/A).
+          sélectionnez « non applicable » (N/A).
 
 '
       crypto_certificate_verification:
         description: 'Le logiciel produit par le projet DOIT, s''il prend en charge
           TLS, effectuer la vérification des certificats TLS par défaut lors de l''utilisation
           de TLS, y compris sur les sous-ressources. Si le logiciel n''utilise pas
-          TLS, sélectionnez «non applicable» (N/A).
+          TLS, sélectionnez « non applicable » (N/A).
 
 '
         details: 'Notez que la vérification incorrecte du certificat TLS est une erreur
-          courante. Pour plus d''informations, voir <a href="http://crypto.stanford.edu/~dabo/pubs/abstracts/ssl-client-bugs.html">
-          "Le code le plus dangereux dans le monde : la validation des certificats
-          SSL dans du logiciel qui ne vient pas d''un navigateur" de Martin Georgiev
-          et al.</a> et <a href="https://blogs.gnome.org/mcatanzaro/2016/03/12/do-you-trust-this-application/">
-          "Avez-vous confiance en cette application ?" Par Michael Catanzaro</a>.
+          courante. Pour plus d''informations, voir <a href="http://crypto.stanford.edu/~dabo/pubs/abstracts/ssl-client-bugs.html">«
+          Le code le plus dangereux dans le monde : la validation des certificats
+          SSL dans du logiciel qui ne vient pas d''un navigateur » de Martin Georgiev
+          et al.</a> et <a href="https://blogs.gnome.org/mcatanzaro/2016/03/12/do-you-trust-this-application/">«
+          Avez-vous confiance en cette application ?» par Michael Catanzaro</a>.
 
 '
       crypto_verification_private:
         description: 'Le logiciel produit par le projet DEVRAIT, s''il supporte TLS,
           effectuer une vérification de certificat avant d''envoyer des en-têtes HTTP
           avec des informations privées (telles que des cookies sécurisés). Si le
-          logiciel n''utilise pas TLS, sélectionnez «non applicable» (N/A).
+          logiciel n''utilise pas TLS, sélectionnez « non applicable » (N/A).
 
 '
       hardened_site:
@@ -1587,9 +1681,9 @@ fr:
         details: 'Les mécanismes de durcissement peuvent inclure des en-têtes HTTP
           comme Content Security Policy (CSP), des options de compilation pour atténuer
           les attaques (telles que -fstack-protector) ou des options de compilation
-          pour éliminer les comportements indéfinis. Pour nos besoins, la séparation
-          des privilèges n''est pas considérée comme un mécanisme de durcissement
-          (la séparation des privilèges est importante, mais séparée).
+          pour éliminer les comportements indéfinis. Pour nos besoins, le principe
+          de moindre privilège n''est pas considéré comme un mécanisme de durcissement
+          (le principe de moindre privilège est important, mais séparé).
 
 '
     '1':
@@ -2566,13 +2660,13 @@ fr:
 '
   static_pages:
     home:
-      badge_program: Programme de badges des meilleures pratiques de la CII
+      badge_program: Programme de badge des meilleures pratiques de la CII
       get_your_badge: Obtenez votre badge immédiatement !
       p1_html: |-
-        Le programme de badges des meilleures pratiques de
-        la <a href="https://www.coreinfrastructure.org/">Core Infrastructure Initiative (CII)</a> de la <a href="https://www.linuxfoundation.org/">Fondation Linux</a> est un moyen pour les projets de logiciel libre (FLOSS) de montrer qu'ils suivent les meilleures pratiques de développement. Les projets peuvent s'auto-évaluer de manière volontaire, sans frais, en utilisant cette application Web pour expliquer comment ils suivent chacune des meilleures pratiques.  Le programme de badges des meilleures pratiques de la CII s'inspire des nombreux badges disponibles aux projets sur GitHub. Les consommateurs du badge pourront évaluer rapidement quels projets de logiciel libre suivent les meilleures pratiques et, par conséquent, sont plus susceptibles de produire des logiciels sûrs et de meilleure qualité.
+        Le programme de badge des meilleures pratiques de
+        la <a href="https://www.coreinfrastructure.org/">Core Infrastructure Initiative (CII)</a> de la <a href="https://www.linuxfoundation.org/">Fondation Linux</a> est un moyen pour les projets de logiciel libre (FLOSS) de montrer qu'ils suivent les meilleures pratiques de développement. Les projets peuvent s'auto-évaluer de manière volontaire, sans frais, en utilisant cette application Web pour expliquer comment ils suivent chacune des meilleures pratiques.  Le programme de badge des meilleures pratiques de la CII s'inspire des nombreux badges disponibles aux projets sur GitHub. Les consommateurs du badge pourront évaluer rapidement quels projets de logiciel libre suivent les meilleures pratiques et, par conséquent, sont plus susceptibles de produire des logiciels sûrs et de meilleure qualité.
       p2_html: |-
-        Plus d'informations sur le programme de badges
+        Plus d'informations sur le programme de badge
         des meilleures pratiques de la CII,
         incluant des renseignements généraux et
         <a href='https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/doc/criteria.md'>les
@@ -2596,7 +2690,7 @@ fr:
         ; les contenus similaires plus récents sont diffusés sous la license CC-BY
         version 3.0 ou ultérieure (CC-BY-3.0+).  Pour faire référence globalement
         à ces contenus, ou en l''absence d''instructions spécifiques, veuillez mentionner
-        comme source les contributeurs du programme de badges des meilleures pratiques
+        comme source les contributeurs du programme de badge des meilleures pratiques
         de la CII.
 
 '
@@ -2651,5 +2745,6 @@ fr:
   begin_with_cpe: " doit commencer par « cpe : »"
   not_an_email: " n'est pas un email"
   known_bad_password: " est un (mauvais) mot de passe bien connu"
-  valid_text:
-  url_message:
+  valid_text: " doit avoir un codage UTF-8 valide et aucun caractère de contrôle invalide"
+  url_message: " doit commencer par http: ou https: et utiliser un jeu de caractères
+    limité"

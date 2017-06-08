@@ -236,6 +236,7 @@ en:
       new_badge: New badge
       may_select_html: 'You may select from one of your GitHub repos <em>OR</em> provide
         information about some other project.
+      new_badge_or: OR
 
 '
       select_one_github: Select one of your GitHub repos

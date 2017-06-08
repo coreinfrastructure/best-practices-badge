@@ -14,8 +14,7 @@ gem 'bootstrap-social-rails', '4.12.0'
 gem 'bootstrap-will_paginate', '1.0.0'
 gem 'bootstrap_form', '2.7.0'
 gem 'chartkick', '2.2.4' # Chart project_stats
-gem 'coffee-rails', '4.2.2' # Support CoffeeScript (Javascript preprocessor)
-gem 'faker', '1.7.3'
+gem 'coffee-rails', '4.2.2', require: false # CoffeeScript Javascript preproc
 gem 'fastly-rails', '0.8.0'
 gem 'font-awesome-rails', '4.7.0.2'
 gem 'imagesLoaded_rails', '4.1.0' # JavaScript - enable wait for image load
@@ -36,9 +35,9 @@ gem 'puma', '3.9.1' # Faster webserver; recommended by Heroku
 gem 'rails', '5.1.1' # Our web framework
 gem 'rails-i18n', '5.0.4' # Localizations for Rails built-ins
 gem 'redcarpet', '3.4.0' # Process markdown in form textareas (justifications)
-gem 'sass-rails', '5.0.6'
+gem 'sass-rails', '5.0.6', require: false
 gem 'secure_headers', '3.6.4' # Add hardening measures to HTTP headers
-gem 'uglifier', '3.2.0'
+gem 'uglifier', '3.2.0', require: false # Minify JavaScript
 gem 'will-paginate-i18n', '0.1.15' # Provide will-paginate translations
 gem 'will_paginate', '3.1.6' # Paginate results (next/previous)
 
@@ -49,6 +48,7 @@ group :development, :test do
   gem 'database_cleaner', '1.6.1' # Cleans up database between tests
   gem 'dotenv-rails', '2.2.1'
   gem 'eslintrb', '2.1.0'
+  gem 'faker', '1.7.3' # Generate fake data
   gem 'json', '2.1.0'
   gem 'license_finder', '3.0.0'
   gem 'mdl', '0.4.0'

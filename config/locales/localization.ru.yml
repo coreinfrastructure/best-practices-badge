@@ -51,6 +51,9 @@ ru:
       last_word_connector: " и "
       two_words_connector: " и "
       words_connector: ", "
+  spree:
+    date_picker:
+      first_day: 1
   date:
     formats:
       default: "%d.%m.%Y"
@@ -65,6 +68,3 @@ ru:
       default: "%a, %d %b %Y, %H:%M:%S %z"
       long: "%d %B %Y, %H:%M"
       short: "%d %b, %H:%M"
-  spree:
-    date_picker:
-      first_day: 1

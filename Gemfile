@@ -40,7 +40,7 @@ gem 'sass-rails', '5.0.6'
 gem 'secure_headers', '3.6.4' # Add hardening measures to HTTP headers
 gem 'uglifier', '3.2.0'
 gem 'will-paginate-i18n', '0.1.15' # Provide will-paginate translations
-gem 'will_paginate', '3.1.5' # Paginate results (next/previous)
+gem 'will_paginate', '3.1.6' # Paginate results (next/previous)
 
 group :development, :test do
   gem 'awesome_print', '1.7.0'

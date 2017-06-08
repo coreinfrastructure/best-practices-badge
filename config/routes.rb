@@ -71,6 +71,7 @@ Rails.application.routes.draw do
   # wp-login.php queries are evidences of WordPress brute-force attacks:
   # http://www.inmotionhosting.com/support/edu/wordpress/
   # wp-login-brute-force-attack
+  match 'kk.php', via: :all, to: 'static_pages#error_404'
   match 'wp-login.php', via: :all, to: 'static_pages#error_404'
   match '.well-known/*path', via: :all, to: 'static_pages#error_404'
 

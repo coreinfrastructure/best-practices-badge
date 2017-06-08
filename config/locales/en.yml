@@ -428,6 +428,24 @@ en:
           "BSD-2-Clause", "BSD-3-Clause", "GPL-2.0+", "LGPL-3.0+",
           "MIT", and "(BSD-2-Clause OR Ruby)".
         placeholder: FLOSS License
+      additional_rights:
+        description: >
+          (Advanced) What users have additional
+          rights to edit this badge entry?
+        details_html: >
+          Most projects will want this blank.
+          Project badge entries can be edited by the owner (creator),
+          BadgeApp administrators, and anyone who can commit to the GitHub
+          repository (if it's on GitHub).  If you want someone else to be
+          able to edit this badge entry, modify this field to begin with
+          "=", followed by a comma-separated list of integer user ids.
+          Those users will also be allowed to edit this project entry.
+          This application uses optimistic locking
+          to prevent saving stale data if multiple users
+          try to edit simultaneously.
+          Only owners of this project entry and BadgeApp administrators
+          can change this field.
+        placeholder: User list (usually blank)
     misc:
       in_javascript:
         collapse_all_title: Collapse all panels

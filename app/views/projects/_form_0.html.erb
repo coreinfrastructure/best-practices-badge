@@ -285,6 +285,23 @@
       </div>
       </div>
 
+      <div class="row">
+      <div class="col-xs-12">
+        <%= t 'projects.form_basics.additional_rights.description' %>
+        <%= render(partial: "details", locals: {
+          criterion: "additional_rights",
+          details:
+            t('projects.form_basics.additional_rights.details_html') }) %>
+        <%= f.text_field :additional_rights,
+                           hide_label: true, class:"form-control",
+                           placeholder:
+                             t('projects.form_basics.' +
+                               'additional_rights.placeholder'),
+                           spellcheck: false,
+                           disabled: is_disabled %>
+      </div>
+      </div>
+
       <br><br>
       <%= f.label :general_comments,
                   t('projects.misc.general_comments.description') %><br>

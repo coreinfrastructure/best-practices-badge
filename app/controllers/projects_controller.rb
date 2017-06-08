@@ -123,6 +123,38 @@ class ProjectsController < ApplicationController
   end
   # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
+  # Forceably set additional rights given string description
+  def update_additional_rights_forced(new_additional_rights)
+    # Delete the current set, then write a new set.
+    AdditionalRight.where(project_id: @project.id).delete_all
+    new_list = new_additional_rights[1..-1].split(',').map(&:to_i).uniq.sort
+    new_list.each do |u|
+      if User.exists?(id: u)
+        AdditionalRight.create!(project_id: @project.id, user_id: u).save!
+      end
+    end
+  end
+
+  # "Additional rights" are only considered when they match this pattern.
+  # A leading "=" is required to make change.  This prevents accidental
+  # changes, and also eliminates the need to consult the additional rights
+  # table when updating a project where the rights aren't changing
+  # (the normal case).
+  VALID_ADD_RIGHTS = /\A=(\d+(,\d+)*)?\z/
+
+  # Set additional rights to params[:additional_rights], if desired
+  # and it's a valid request.  We ignore requests if user can't control.
+  def update_additional_rights
+    return unless can_control?
+    return unless params.key?(:project)
+    new_additional_rights = params[:project][:additional_rights]
+    return if new_additional_rights.blank?
+    return if new_additional_rights[0] != '='
+    new_additional_rights = new_additional_rights.delete(' ')
+    return unless VALID_ADD_RIGHTS.match(new_additional_rights)
+    update_additional_rights_forced(new_additional_rights)
+  end
+
   # PATCH/PUT /projects/1
   # PATCH/PUT /projects/1.json
   # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
@@ -132,6 +164,7 @@ class ProjectsController < ApplicationController
       project_params.each do |key, user_value| # mass assign
         @project[key] = user_value
       end
+      update_additional_rights
       Chief.new(@project, client_factory).autofill
       respond_to do |format|
         # Was project.update(project_params)

@@ -2,17 +2,17 @@
 # IF YOU UPDATE IT, YOUR CHANGES WILL BE LOST AT THE NEXT SYNC.
 #
 # To update this file, use this translation interface:
-# http://translation.io/david-a-wheeler/cii-best-practices-badge/ja
+# http://translation.io/david-a-wheeler/cii-best-practices-badge/ru
 #
 ---
-ja:
+ru:
   helpers:
     select:
-      prompt: 選択してください。
+      prompt: 'Выберите: '
     submit:
-      create: 登録する
-      update: 更新する
-      submit: 保存する
+      create: Создать %{model}
+      update: Сохранить %{model}
+      submit: Сохранить %{model}
   ransack:
     search:
     predicate:
@@ -92,6 +92,12 @@ ja:
       default_message:
   hello:
   submit:
+  comma_separated_list:
+  begin_with_cpe:
+  not_an_email:
+  known_bad_password:
+  valid_text:
+  url_message:
   projects_count:
     one:
     other:
@@ -102,8 +108,8 @@ ja:
     de:
     fr:
     ja:
-    zh-CN:
     ru:
+    zh-CN:
   layouts:
     cii_best_practices:
     projects:
@@ -115,8 +121,9 @@ ja:
     signup_html:
     login_html:
     footer_text_html:
+  admin_only:
   account_activations:
-    activated: アカウントが有効になりました！
+    activated:
     failed_activation:
   password_resets:
     forgot_password:
@@ -145,6 +152,13 @@ ja:
     signed_in:
     not_activated:
     signed_out:
+  static_pages:
+    home:
+      badge_program:
+      get_your_badge:
+      p1_html:
+      p2_html:
+      p3_html:
   users:
     new:
       signup_header:
@@ -198,6 +212,9 @@ ja:
       csv_format:
   projects:
     index:
+      all:
+      passing_100:
+      in_progress_variable:
       add_link:
       add_new:
       badge_status:
@@ -205,9 +222,6 @@ ja:
       text_search:
       name_or_description:
       search:
-      all:
-      passing_100:
-      in_progress_variable:
     table:
       id:
       name:
@@ -225,42 +239,56 @@ ja:
       paren_name_unknown:
       badge_level:
     new:
+      thanks_adding:
       post_delay_warning:
       new_badge:
       may_select_html:
       select_one_github:
       submit_github:
+      project_already_exists:
       url_of_homepage:
       placeholder_of_homepage:
       url_of_repo:
       placeholder_of_repo:
       submit_urls:
-      sign_in_first:
-      thanks_adding:
-      project_already_exists:
       final_text_html:
-    show:
-      edit:
-      delete:
-      confirm_delete:
-      back:
-      cc_by_3plus_html:
-      cc_by_3only_html:
-      owned_by:
-      created_at_html:
-      updated_at_html:
-      last_lost_html:
-      last_achieved_html:
+      sign_in_first:
     edit:
-      submit_cc_by_3plus_html:
-      save_and_continue:
-      submit_and_exit:
       repo_url_limits:
       changed_since_html:
       successfully_updated:
       congrats_new:
       lost_badge:
       static_analysis_updated_html:
+      save_and_continue:
+      submit_and_exit:
+      submit_cc_by_3plus_html:
+    show:
+      edit:
+      delete:
+      confirm_delete:
+      back:
+      owned_by:
+      created_at_html:
+      updated_at_html:
+      last_lost_html:
+      last_achieved_html:
+      cc_by_3plus_html:
+      cc_by_3only_html:
+    form_early:
+      badge_intro:
+        description:
+        details_html:
+      level:
+        0_html:
+        1_html:
+        2_html:
+      got_badge:
+        description_1:
+        badge_alt:
+        description_2:
+        details_html:
+        editing_description_html:
     form_basics:
       project_name:
         description:
@@ -288,28 +316,7 @@ ja:
         description_html:
         details_html:
         placeholder:
-    form_early:
-      badge_intro:
-        description:
-        details_html:
-      got_badge:
-        description_1:
-        description_2:
-        details_html:
-        editing_description_html:
-        badge_alt:
-      level:
-        0_html:
-        1_html:
-        2_html:
     misc:
-      disabled_reminders:
-      general_comments:
-        description:
-        placeholder:
-      some_not_crypto_html:
-      dont_use_crypto:
-      future_header_html:
       in_javascript:
         collapse_all_title:
         collapse_all:
@@ -334,6 +341,13 @@ ja:
         na_justification_placeholder:
         na_placeholder:
         unknown_placeholder:
+      disabled_reminders:
+      general_comments:
+        description:
+        placeholder:
+      some_not_crypto_html:
+      dont_use_crypto:
+      future_header_html:
       toggle_details_title:
       details:
       url_required:
@@ -343,23 +357,23 @@ ja:
     delete:
       done:
   report_mailer:
-    new_project_heading:
-    new_project_part1:
-    new_project_part2:
-    new_project_part3_html:
-    new_project_part3_text:
-    in_markdown_add:
-    in_html_add:
-    ending:
     subject_achieved_passing:
     subject_no_longer_passing:
     subject_new_project:
     subject_reminder:
     subject_project_deleted:
+    new_project_heading:
+    new_project_part1:
+    new_project_part2:
+    new_project_part3_html:
+    new_project_part3_text:
     gained_level_part1:
     gained_level_part2:
     gained_level_part3:
+    in_markdown_add:
+    in_html_add:
     lost_level_message:
+    ending:
   user_mailer:
     account_activation:
       before_html:
@@ -629,6 +643,9 @@ ja:
       documentation_quick_start:
         description:
         details:
+      assurance_case:
+        description:
+        details:
       documentation_current:
         description:
         details:
@@ -709,12 +726,6 @@ ja:
       implement_secure_design:
         description:
         details:
-      input_validation:
-        description:
-        details:
-      hardening:
-        description:
-        details:
       crypto_weaknesses:
         description:
         details:
@@ -736,12 +747,15 @@ ja:
         details:
       version_tags_signed:
         description:
+      input_validation:
+        description:
+        details:
+      hardening:
+        description:
+        details:
       static_analysis_common_vulnerabilities:
         description:
       dynamic_analysis_unsafe:
-        description:
-        details:
-      assurance_case:
         description:
         details:
     '2':
@@ -803,17 +817,11 @@ ja:
         details:
       dynamic_analysis_enable_assertions:
         description:
-  static_pages:
-    home:
-      badge_program:
-      get_your_badge:
-      p1_html:
-      p2_html:
-      p3_html:
   headings:
     Accessibility and internationalization:
     Analysis:
     Automated test suite:
+    Identification:
     Basic project website content:
     Basics:
     Bug-reporting process:
@@ -846,16 +854,8 @@ ja:
     Vulnerability report process:
     Warning flags:
     Working build system:
-    Identification:
-  last_entry:
-  admin_only:
   criterion_status:
     Met:
     Unmet:
     NA:
-  comma_separated_list:
-  begin_with_cpe:
-  not_an_email:
-  known_bad_password:
-  valid_text:
-  url_message:
+  last_entry:

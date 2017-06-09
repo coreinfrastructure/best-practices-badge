@@ -239,6 +239,7 @@ ja:
       thanks_adding:
       project_already_exists:
       final_text_html:
+      new_badge_or:
     show:
       edit:
       delete:
@@ -810,6 +811,13 @@ ja:
       p1_html:
       p2_html:
       p3_html:
+    criteria:
+      detailed_criteria_on_github:
+      current_criteria:
+      criteria_must_should_suggested:
+      criteria_na_met_details:
+      project_counts:
+      project_stats_html:
   headings:
     Accessibility and internationalization:
     Analysis:

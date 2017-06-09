@@ -281,6 +281,7 @@ de:
 '
       project_already_exists: Dieses Projekt existiert bereits!
       final_text_html:
+      new_badge_or:
     show:
       edit: Bearbeiten
       delete: Löschen
@@ -1108,6 +1109,13 @@ de:
         License version 3.0 (CC-BY-3.0)</a> lizensiert; neuere nicht-Code  Inhalte
         sind unter CC-BY Version 3.0 oder später (CC-BY-3.0+) lizensiert. Bitte die
         CII Best Practices Badge Mitwirkenden als Urheber angeben.'
+    criteria:
+      detailed_criteria_on_github:
+      current_criteria:
+      criteria_must_should_suggested:
+      criteria_na_met_details:
+      project_counts:
+      project_stats_html:
   headings:
     Accessibility and internationalization: Zugänglichkeit und Internationalisierung
     Analysis: Analyse

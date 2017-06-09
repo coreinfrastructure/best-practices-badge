@@ -244,9 +244,9 @@ fr:
       name: Nom
       description: Description
       website: Site Web
-      license: License
+      license: Licence
       owner: Propriétaire
-      last_achieved: Dernière réalisation à
+      last_achieved: Obtenu le
       pachieved: "% Atteint"
       can_also_sort: 'Vous pouvez également trier par les critères suivants :'
       repository_url: URL du dépôt
@@ -296,6 +296,7 @@ fr:
         badge.
 
 '
+      new_badge_or:
     show:
       edit: Modifier
       delete: Supprimer
@@ -365,11 +366,11 @@ fr:
 '
     form_basics:
       project_name:
-        description: Quel est le nom lisible par un humain du projet ?
+        description: Quel est le nom intelligible du projet ?
         details: Notez que d'autres projets peuvent utiliser le même nom.
         placeholder: Nom du projet FLOSS
       description:
-        description: Quelle est une brève description du projet ?
+        description: Pouvez-vous donner une brève description du projet ?
         details: 'Inclure des commentaires clés sur le projet. Utiliser la syntaxe
           markdown. Cette information est utilisée lors de l''affichage des informations
           de badge.
@@ -386,8 +387,8 @@ fr:
 '
         placeholder: URL du dépôt du projet
       implementation_languages:
-        description: 'Quel(s) langage(s) de programmation sont utilisés pour mettre
-          en œuvre le projet ?
+        description: 'Quel(s) langage(s) de programmation sont utilisés pour implémenter
+          le projet ?
 
 '
         details: 'S''il y a plus d''un langage, listez-les en tant que valeurs séparées
@@ -395,7 +396,7 @@ fr:
           S''il y a une longue liste, veuillez lister au moins les trois premiers.
           S''il n''y a pas de langage (par exemple, il s''agit d''un projet uniquement
           de documentation ou de test), utilisez le caractère unique « - ». Utilisez
-          une capitalisation conventionnelle pour chaque langage, par exemple, « JavaScript
+          une capitalisation conventionnelle pour chaque langage, par exemple « JavaScript
           ».
 
 '
@@ -421,8 +422,8 @@ fr:
 
 '
         details_html: 'Utilisez un <a href="https://spdx.org/licenses/">format d''expression
-          de licence SPDX</a>; des exemples incluent « Apache-2.0 », « BSD-2-Clause
-          », « BSD-3-Clause », « GPL-2.0+ », « LGPL-3.0+ », « MIT » et « (BSD-2-Clause
+          de licence SPDX</a> ; des exemples sont « Apache-2.0 », « BSD-2-Clause »,
+          « BSD-3-Clause », « GPL-2.0+ », « LGPL-3.0+ », « MIT » et « (BSD-2-Clause
           OU Ruby) ».
 
 '
@@ -435,7 +436,7 @@ fr:
 
 '
         details_html: 'Il n''existe aucun ensemble de pratiques qui garantissent que
-          ce logiciel n''aura jamais de défauts ou de vulnérabilités; même les méthodes
+          ce logiciel n''aura jamais de défauts ou de vulnérabilités ; même les méthodes
           formelles peuvent échouer si les spécifications ou les hypothèses sont fausses.
           Il n''y a pas non plus de pratiques qui peuvent garantir qu''un projet permettra
           de maintenir une communauté de développement saine et qui fonctionne bien.
@@ -479,7 +480,7 @@ fr:
 '
         badge_alt: Le niveau de badge pour le projet %{id} est %{level}
       level:
-        0_html: Ce sont les critères du niveau atteint.
+        0_html: Ce sont les critères du niveau basique.
         1_html: Ce sont les critères du niveau argent.
         2_html: Ce sont les critères du niveau or.
     misc:
@@ -747,8 +748,8 @@ fr:
           de fournir une URL.\n"
       interact:
         description: 'Le site Web du projet DOIT fournir des informations sur la façon
-          d''obtenir, de fournir des commentaires (comme des rapports de bogue ou
-          des demandes d''amélioration) et de contribuer au logiciel.
+          d''obtenir, de fournir des commentaires (comme des signalements de bogues
+          ou des demandes d''amélioration) et de contribuer au logiciel.
 
 '
         met_placeholder: "(Facultatif) Où est cette information ? Envisagez de fournir
@@ -785,8 +786,8 @@ fr:
 '
         details: 'FLOSS est un logiciel distribué d''une manière qui répond à la <a
           href="https://opensource.org/osd-annotated">Définition de l''Open Source</a>
-          ou <a href="http://www.gnu.org /philosophy/free-sw.fr.html">Définition du
-          Logiciel Libre</a>. Des exemples de ces licences incluent <a href="http://creativecommons.org/publicdomain/zero/1.0/">CC0</a>,
+          ou à la <a href="http://www.gnu.org /philosophy/free-sw.fr.html">Définition
+          du Logiciel Libre</a>. Des exemples de ces licences sont <a href="http://creativecommons.org/publicdomain/zero/1.0/">CC0</a>,
           <a href="https://opensource.org/licenses/MIT">MIT</a>, <a href="https://opensource.org/licenses/BSD-2-Clause">BSD
           2-clause</a>, <a href="https://opensource.org/licences/BSD-3-Clause">BSD
           3-clause révisée</a>, <a href="https://opensource.org/licenses/Apache-2.0">Apache
@@ -804,9 +805,9 @@ fr:
 
 '
       floss_license_osi:
-        description: 'Il est PROPOSÉ que toute licence(s) requise(s) pour le logiciel
-          produit par le projet soit <a href="https://opensource.org/licenses">approuvée
-          par l''Open Source Initiative (OSI).</a>
+        description: 'Il est PROPOSÉ que toute licence requise pour le logiciel produit
+          par le projet soit <a href="https://opensource.org/licenses">approuvée par
+          l''Open Source Initiative (OSI).</a>
 
 '
         details: 'L''OSI utilise un processus d''approbation rigoureux pour déterminer
@@ -814,7 +815,7 @@ fr:
 
 '
       license_location:
-        description: 'Le projet DOIT afficher la (les) licence(s) de ses résultats
+        description: 'Le projet DOIT afficher la ou les licences de ses résultats
           dans un emplacement standard dans leur dépôt source.
 
 '
@@ -906,8 +907,8 @@ fr:
 '
       english:
         description: 'Le projet DEVRAIT fournir de la documentation en anglais et
-          être en mesure d''accepter les rapports de bogues et les commentaires sur
-          le code en anglais.
+          être en mesure d''accepter les signalements de bogues et les commentaires
+          sur le code en anglais.
 
 '
         details: 'L''anglais est actuellement la <a href="https://fr.wikipedia.org/wiki/Langue_v%C3%A9hiculaire">langue
@@ -1032,7 +1033,7 @@ fr:
 '
         unmet_placeholder: Pourquoi n'y a-t-il pas de suivi des problèmes ?
       report_responses:
-        description: 'Le projet DOIT confirmer une majorité des rapports de bogues
+        description: 'Le projet DOIT confirmer une majorité des signalements de bogues
           soumis au cours des 2 à 12 derniers mois (inclus) ; la réponse ne doit pas
           nécessairement inclure une correction.
 
@@ -1064,20 +1065,21 @@ fr:
 '
         details: 'Par exemple, une adresse postale clairement désignée sur https://PROJECTSITE/security,
           souvent sous la forme security@example.org. Cela PEUT être identique à son
-          processus de signalement des bogues. Les rapports de vulnérabilité PEUVENT
-          toujours être publics, mais de nombreux projets disposent d''un mécanisme
-          privé de signalement des vulnérabilités.
+          processus de signalement des bogues. Les signalements de vulnérabilités
+          PEUVENT toujours être publics, mais de nombreux projets disposent d''un
+          mécanisme privé de signalement des vulnérabilités.
 
 '
       vulnerability_report_private:
-        description: 'Si les rapports de vulnérabilité privés sont pris en charge,
+        description: 'Si les signalements de vulnérabilités privés sont pris en charge,
           le projet DOIT inclure la façon d''envoyer l''information de manière confidentielle.
 
 '
-        details: 'Des exemples incluent un rapport de défaut privé envoyé sur le Web
-          en utilisant HTTPS (TLS) ou un courrier électronique chiffré à l''aide d''OpenPGP.
-          Si les rapports de vulnérabilité sont toujours publics (donc il n''y a jamais
-          de rapports de vulnérabilité privés), choisissez « non applicable » (N/A).
+        details: 'Des exemples incluent un signalement de défaut privé envoyé sur
+          le Web en utilisant HTTPS (TLS) ou un courrier électronique chiffré à l''aide
+          d''OpenPGP. Si les signalements de vulnérabilités sont toujours publics
+          (donc il n''y a jamais de signalements de vulnérabilités privés), choisissez
+          « non applicable » (N/A).
 
 '
       vulnerability_report_response:
@@ -1131,7 +1133,7 @@ fr:
 
 '
       test_invocation:
-        description: 'Une suite de test DEVRAIT être invocable d''une manière standard
+        description: 'Une suite de tests DEVRAIT être invocable d''une manière standard
           pour ce langage.
 
 '
@@ -1205,7 +1207,7 @@ fr:
 
 '
         details: 'Ce sont les avertissements identifiés par la mise en œuvre du critère
-          <a href="#warnings">avertissements</a>. Le projet doit corriger les avertissements
+          <a href="#warnings">warnings</a>. Le projet doit corriger les avertissements
           ou les marquer dans le code source comme faux positifs. Idéalement, il n''y
           aurait pas d''avertissement, mais un projet PEUT accepter certains avertissements
           (généralement moins de 1 avertissement pour 100 lignes ou moins de 10 avertissements).
@@ -1230,45 +1232,46 @@ fr:
 '
         details: 'Cela nécessite de comprendre les principes de conception suivants,
           y compris les 8 principes de <a href="http://web.mit.edu/Saltzer/www/publications/protection/">Saltzer
-          et Schroeder</a> : <ul> < li>économie de moyens (maintenez la conception
+          et Schroeder</a> : <ul> <li>économie de moyens (maintenez la conception
           aussi simple et petite que pratique, par exemple en adoptant des simplifications
-          conséquentes) <li>valeurs sûres par défaut (les décisions d''accès doivent
-          être refusées par défaut et l''installation des projets devrait être sécurisée
-          par défaut) <li>médiation complète (tous les accès qui pourraient être limités
-          doivent être vérifiés pour l''autorité et ne pas être contournables) <li>conception
-          ouverte (les mécanismes de sécurité ne doivent pas dépendre de l''ignorance
-          par l''attaquant de sa conception, mais plutôt d''informations plus facilement
-          protégées et modifiées comme des clés et des mots de passe) <li>séparation
-          des privilèges (idéalement, l''accès aux objets importants devrait dépendre
-          de plus d''une condition, de sorte que la défaillance d''un système de protection
-          n''autorisera pas l''accès complet. Par exemple, l''authentification multi-facteurs,
-          comme l''exigence d''un mot de passe et d''un jeton matériel, est plus forte
-          qu''une authentification à un seul facteur) <li>principe de plus faible
-          privilège (les processus doivent fonctionner avec le minimum de privilège
-          requis) <li>mécanisme de partage minimal (la conception devrait minimiser
-          les mécanismes communs à plus d''un utilisateur et nécessaires à tous les
-          utilisateurs, par exemple, les répertoires pour les fichiers temporaires)
-          <li>acceptabilité psychologique (l''interface humaine doit être conçue pour
-          faciliter l''utilisation - la conception pour « l''étonnement minimal »
-          peut aider) <li>surface d''attaque limitée (la surface d''attaque - l''ensemble
-          des différents points où un attaquant peut essayer d''entrer ou d''extraire
-          des données - devrait être limitée) <li>validation d''entrée avec des listes
-          blanches (les entrées devraient généralement être vérifiées pour déterminer
-          si elles sont valides avant qu''elles ne soient acceptées ; cette validation
-          devrait utiliser des listes blanches (qui n''acceptent que des bonnes valeurs
-          connues), et non des listes noires (qui tentent de répertorier les valeurs
-          mauvaises connues)). </ul> Un « développeur principal » dans un projet est
-          celui qui connaît la base de code du projet, est à l''aise pour faire des
-          modifications et est reconnu comme tel par la plupart des autres participants
-          au projet. Un développeur principal a effectué généralement un certain nombre
-          de contributions au cours de l''année écoulée (du code, de la documentation
-          ou des réponses aux questions). Des développeurs sont généralement considérés
-          comme des développeurs principaux s''ils ont lancé le projet (et n''ont
-          pas quitté le projet il y a plus de trois ans), ont la possibilité de recevoir
-          des informations sur un canal privé de déclaration de vulnérabilités (s''il
-          y en a un), peuvent accepter des contributions au nom du projet, ou effectuer
-          les distributions finales du logiciel du projet. S''il n''y a qu''un seul
-          développeur, cette personne est le développeur principal.
+          conséquentes) <li>valeurs sûres par défaut (les décisions d''accès par défaut
+          devraient être de refuser l''accès et l''installation des projets devrait
+          être sécurisée par défaut) <li>médiation complète (tous les accès qui pourraient
+          être limités doivent être vérifiés pour l''autorité et ne pas être contournables)
+          <li>conception ouverte (les mécanismes de sécurité ne doivent pas dépendre
+          de l''ignorance par l''attaquant de sa conception, mais plutôt d''informations
+          plus facilement protégées et modifiées comme des clés et des mots de passe)
+          <li>séparation des privilèges (idéalement, l''accès aux objets importants
+          devrait dépendre de plus d''une condition, de sorte que la défaillance d''un
+          système de protection n''autorisera pas l''accès complet. Par exemple, l''authentification
+          multi-facteurs, comme l''exigence d''un mot de passe et d''un jeton matériel,
+          est plus forte qu''une authentification à un seul facteur) <li>principe
+          de plus faible privilège (les processus doivent fonctionner avec le minimum
+          de privilège requis) <li>mécanisme de partage minimal (la conception devrait
+          minimiser les mécanismes communs à plus d''un utilisateur et nécessaires
+          à tous les utilisateurs, par exemple, les répertoires pour les fichiers
+          temporaires) <li>acceptabilité psychologique (l''interface humaine doit
+          être conçue pour faciliter l''utilisation - la conception pour « l''étonnement
+          minimal » peut aider) <li>surface d''attaque limitée (la surface d''attaque
+          - l''ensemble des différents points où un attaquant peut essayer d''entrer
+          ou d''extraire des données - devrait être limitée) <li>validation d''entrée
+          avec des listes blanches (les entrées devraient généralement être vérifiées
+          pour déterminer si elles sont valides avant qu''elles ne soient acceptées
+          ; cette validation devrait utiliser des listes blanches (qui n''acceptent
+          que des bonnes valeurs connues), et non des listes noires (qui tentent de
+          répertorier les valeurs mauvaises connues)). </ul> Un « développeur principal
+          » dans un projet est celui qui connaît la base de code du projet, est à
+          l''aise pour faire des modifications et est reconnu comme tel par la plupart
+          des autres participants au projet. Un développeur principal a effectué généralement
+          un certain nombre de contributions au cours de l''année écoulée (du code,
+          de la documentation ou des réponses aux questions). Des développeurs sont
+          généralement considérés comme des développeurs principaux s''ils ont lancé
+          le projet (et n''ont pas quitté le projet il y a plus de trois ans), ont
+          la possibilité de recevoir des informations sur un canal privé de déclaration
+          de vulnérabilités (s''il y en a un), peuvent accepter des contributions
+          au nom du projet, ou effectuer les distributions finales du logiciel du
+          projet. S''il n''y a qu''un seul développeur, cette personne est le développeur
+          principal.
 
 '
       know_common_errors:
@@ -1445,7 +1448,7 @@ fr:
           de base <a href="https://nvd.nist.gov/cvss.cfm">CVSS 2.0</a> est 4 ou supérieur.
           <strong>Note</strong> : cela signifie que les utilisateurs peuvent être
           laissés vulnérables à tous les attaquants du monde entier jusqu''à 60 jours.
-          Ce critère est souvent beaucoup plus facile à rencontrer que ce que Google
+          Ce critère est souvent beaucoup plus facile à atteindre que ce que Google
           recommande dans son <a href="https://security.googleblog.com/2010/07/rebooting-responsible-disclosure-focus.html">Redémarrage
           de la divulgation responsable</a>, car Google recommande que la période
           de 60 jours commence lorsque le projet est notifié <em>même</em> si le rapport
@@ -1469,7 +1472,7 @@ fr:
       static_analysis:
         description: 'Au moins un outil d''analyse de code statique DOIT être appliqué
           à toute distribution majeure proposée avant sa sortie s''il existe au moins
-          un outil FLOSS qui implémente ce critère dans la langue sélectionnée.
+          un outil FLOSS qui implémente ce critère dans le langage sélectionné.
 
 '
         details: 'Un outil d''analyse statique de code examine le code logiciel (au
@@ -1624,7 +1627,7 @@ fr:
 '
       crypto_used_network:
         description: 'Le logiciel produit par le projet DEVRAIT supporter des protocoles
-          sécurisés pour toutes ses communications réseau, telles que SSHv2 ou ultérieur,
+          sécurisés pour toutes ses communications réseau, tels que SSHv2 ou ultérieur,
           TLS1.2 ou ultérieur (HTTPS), IPsec, SFTP et SNMPv3. Les protocoles non sûrs
           tels que FTP, HTTP, telnet, SSLv3 ou antérieur, et SSHv1 DEVRAIENT être
           désactivés par défaut et uniquement activés si l''utilisateur le configure
@@ -1683,8 +1686,8 @@ fr:
           comme Content Security Policy (CSP), des options de compilation pour atténuer
           les attaques (telles que -fstack-protector) ou des options de compilation
           pour éliminer les comportements indéfinis. Pour nos besoins, le principe
-          de moindre privilège n''est pas considéré comme un mécanisme de durcissement
-          (le principe de moindre privilège est important, mais séparé).
+          de plus faible privilège n''est pas considéré comme un mécanisme de durcissement
+          (le principe de plus faible privilège est important, mais séparé).
 
 '
     '1':
@@ -2251,8 +2254,8 @@ fr:
           comme Content Security Policy (CSP), des options de compilation pour atténuer
           les attaques (telles que -fstack-protector) ou des options de compilation
           pour éliminer les comportements indéfinis. Pour nos besoins, le principe
-          de moindre privilège n''est pas considéré comme un mécanisme de durcissement
-          (le principe de moindre privilège est important, mais séparé).
+          de plus faible privilège n''est pas considéré comme un mécanisme de durcissement
+          (le principe de plus faible privilège est important, mais séparé).
 
 '
       crypto_weaknesses:
@@ -2287,7 +2290,7 @@ fr:
 '
       crypto_used_network:
         description: 'Le logiciel produit par le projet DEVRAIT supporter des protocoles
-          sécurisés pour toutes ses communications réseau, telles que SSHv2 ou ultérieur,
+          sécurisés pour toutes ses communications réseau, tels que SSHv2 ou ultérieur,
           TLS1.2 ou ultérieur (HTTPS), IPsec, SFTP et SNMPv3. Les protocoles non sûrs
           tels que FTP, HTTP, telnet, SSLv3 ou antérieur, et SSHv1 DEVRAIENT être
           désactivés par défaut et uniquement activés si l''utilisateur le configure
@@ -2548,7 +2551,7 @@ fr:
 
 '
       test_invocation:
-        description: 'Une suite de test DOIT être invocable d''une manière standard
+        description: 'Une suite de tests DOIT être invocable d''une manière standard
           pour ce langage.
 
 '
@@ -2625,8 +2628,8 @@ fr:
           comme Content Security Policy (CSP), des options de compilation pour atténuer
           les attaques (telles que -fstack-protector) ou des options de compilation
           pour éliminer les comportements indéfinis. Pour nos besoins, le principe
-          de moindre privilège n''est pas considéré comme un mécanisme de durcissement
-          (le principe de moindre privilège est important, mais séparé).
+          de plus faible privilège n''est pas considéré comme un mécanisme de durcissement
+          (le principe de plus faible privilège est important, mais séparé).
 
 '
       dynamic_analysis:
@@ -2645,7 +2648,7 @@ fr:
           être prêt à appliquer des tests de fuzzing à votre projet. Aux fins de ce
           critère, l''outil d''analyse dynamique doit varier les entrées d''une manière
           ou d''une autre pour rechercher différents types de problèmes <em>ou</em>
-          être une suite de test automatisée avec au moins 80% de couverture de branche.
+          être une suite de tests automatisée avec au moins 80% de couverture de branche.
           La <a href="https://en.wikipedia.org/wiki/Dynamic_program_analysis">page
           Wikipedia sur l''analyse dynamique</a> et la <a href = "https://www.owasp.org/index.php/Fuzzing">page
           OWASP sur le fuzzing</a> identifient certains outils d''analyse dynamique.
@@ -2695,6 +2698,13 @@ fr:
         de la CII.
 
 '
+    criteria:
+      detailed_criteria_on_github:
+      current_criteria:
+      criteria_must_should_suggested:
+      criteria_na_met_details:
+      project_counts:
+      project_stats_html:
   headings:
     Accessibility and internationalization: Accessibilité et internationalisation
     Analysis: Analyse

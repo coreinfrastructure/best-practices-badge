@@ -247,6 +247,7 @@ zh-CN:
       thanks_adding:
       project_already_exists: 这个项目已经存在！
       final_text_html:
+      new_badge_or:
     show:
       edit: 编辑
       delete: 删除
@@ -824,10 +825,16 @@ zh-CN:
         description: '该项目必须处理警告。
 
 '
-        details:
+        details: '告警是通过执行<a href="#warnings">warnings</a>条款确定的。该项目应该修复告警或在源代码中将其标记为误报。理想情况下，不会有告警，但项目可能会接受一些告警（通常每100行小于1个告警，或整体少于10个告警）。
+
+'
       warnings_strict:
-        description:
-        details:
+        description: '建议在实际情况下，项目以最严格方式对待项目生成的软件中的告警。
+
+'
+        details: '某些项目无法有效启用某些警告。需要证明的是，项目正在努力的启用警告标志，以便早期发现错误。
+
+'
       know_secure_design:
         description: '该项目必须至少有一个主要开发人员知道如何设计安全软件。
 
@@ -1092,7 +1099,9 @@ zh-CN:
 
 '
       access_continuity:
-        description:
+        description: '如果任何一个开发者丧失工作能力或丧生，该项目必须能够继续保持最小的中断。特别是，在确认个人无行为能力或死亡的一周内，项目必须能够创建和关闭问题，接受提议的更改和发布软件版本。这可以通过确保其他人有任何必要的密钥，密码和合法权利来继续该项目。运行FLOSS项目的个人可以通过在锁箱中提供密钥，并提供任何所需的合法权利（例如DNS名称）来实现。
+
+'
       bus_factor:
         description: 项目必须具有2个或更多的“公交车因子”。
         details:
@@ -1125,7 +1134,9 @@ zh-CN:
         description:
         details:
       accessibility_best_practices:
-        description:
+        description: '该项目（项目网站和项目成果）都应遵循无障碍最佳做法，使残疾人仍然可以参与项目，并在合理的情况下使用项目成果。
+
+'
         details:
       internationalization:
         description:
@@ -1155,17 +1166,32 @@ zh-CN:
         description:
         details:
       build_standard_variables:
-        description:
+        description: '本地二进制文件的构建系统必须遵守传递给它们的相关编译器和链接器（环境）变量（例如CC，CFLAGS，CXX，CXXFLAGS和LDFLAGS），并将它们传递给编译器和链接器。构建系统可以使用附加标志来扩展它们，但不能简单地用自己的替换提供的值。如果没有生成本地二进制文件，请选择“不适用”（N/A）。
+
+'
         details:
       build_preserve_debug:
-        description:
-        details:
+        description: '构建和安装系统在在相关标志中要求时，应该保留调试信息（例如，“install -s”未被使用）。如果没有构建或安装系统（例如典型的JavaScript库），请选择“不适用”（N/A）。
+
+'
+        details: '例如，如果使用这些语言，则应该设置CFLAGS（C）或CXXFLAGS（C ++）创建相关的调试信息，并且在安装过程中不应该剥离它们。支持和分析时，需要调试信息，也可用于测量编译二进制文件中加固特性的存在。
+
+'
       build_non_recursive:
-        description:
-        details:
+        description: '如果子目录中存在交叉依赖关系，则由项目生成的软件的构建系统必须不能递归地构建子目录。如果没有构建或安装系统（例如典型的JavaScript库），请选择“不适用”（N/A）。
+
+'
+        details: '项目构建系统的内部依赖关系信息需要准确，否则，对项目的更改可能无法正确构建。不正确的构建可能会导致缺陷（包括漏洞）。大型构建系统中的常见错误是使用“递归构建”或“递归生成”，即包含源文件的子目录的层次结构，其中每个子目录都是独立构建的。除非每个子目录完全独立，否则这是一个错误，因为依赖关系信息不正确。
+
+'
       build_repeatable:
-        description:
-        details:
+        description: '该项目必须能够重复从源代码文件生成的过程，并获得完全相同的比特位结果。如果没有发生构建（例如，直接使用源代码而不是编译使用的脚本语言），请选择“不适用”（N/A）。
+
+'
+        details: 'GCC和clang用户可能会发现-frandom-seed选项有用；在某些情况下，这可以通过强制某种排序来解决。更多建议可以在<a
+          href="https://reproducible-builds.org/">可重复构建（英文）</a>站点找到。
+
+'
       installation_common:
         description: '该项目必须提供一种使用常用惯例轻松安装和卸载由项目生成的软件的方法。
 
@@ -1201,8 +1227,12 @@ zh-CN:
       interfaces_current:
         description:
       automated_integration_testing:
-        description:
-        details:
+        description: '必须将自动测试套件应用于至少一个分支的共享代码库的每次签入。该测试套件必须生成关于测试成功或失败的报告。
+
+'
+        details: '这个要求可以被视为test_continuous_integration的一个子集，但是仅仅是测试，而不需要持续集成。
+
+'
       regression_tests_added50:
         description:
       test_statement_coverage80:
@@ -1407,6 +1437,13 @@ zh-CN:
         使用CC-BY 版本 3.0 或者更高 (CC-BY-3.0+)。
         如果集体引用，或不另外注明，
         请标明出处为CII最佳实践徽章贡献者。
+    criteria:
+      detailed_criteria_on_github:
+      current_criteria:
+      criteria_must_should_suggested:
+      criteria_na_met_details:
+      project_counts:
+      project_stats_html:
   headings:
     Accessibility and internationalization: 无障碍和国际化
     Analysis: 分析

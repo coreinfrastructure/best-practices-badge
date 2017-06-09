@@ -21,7 +21,6 @@ class StaticPagesControllerTest < ActionController::TestCase
     assert_template 'home'
   end
 
-
   test 'should get criteria' do
     get :criteria
     assert_response :success

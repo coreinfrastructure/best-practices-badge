@@ -267,6 +267,7 @@ en:
         to the repository will be able to edit the badge information.
       sign_in_first: Please sign in to add a project!
     edit:
+      edit_status: Edit Project Badge Status
       repo_url_limits: >
         You may only change your repo_url from http to https
       changed_since_html: >

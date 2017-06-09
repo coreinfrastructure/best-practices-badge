@@ -47,18 +47,30 @@ class Criteria
       @criteria.each { |level| yield level }
     end
 
+    # This returns an array of all levels where a particular criterion of
+    # a given name is present.
+    def get_levels(criterion)
+      instantiate if @criteria.blank?
+      @criteria_levels[criterion]
+    end
+
+    # rubocop:disable Metrics/MethodLength
     def instantiate
       # Creates class instances on first use and after reload! in rails console
       @criteria = {}
+      @criteria_levels = {}
       CriteriaHash.each do |level, level_hash|
         @criteria[level] = {}
         level_hash.each do |criterion|
           name = criterion[0].to_sym
           @criteria[level][name] =
             new({ name: name, level: level }.merge(criterion[1]))
+          @criteria_levels[name] ||= []
+          @criteria_levels[name].append(level)
         end
       end
     end
+    # rubocop:enable Metrics/MethodLength
 
     def keys
       instantiate if @criteria.blank?
@@ -131,16 +143,11 @@ class Criteria
   # it doesn't exist, nil is returned.
   def get_text_if_exists(field)
     return nil unless field.in? LOCALE_ACCESSORS
-    all_levels.select { |l| l.to_i <= level.to_i }.reverse.each do |l|
+    Criteria.get_levels(name).reverse.each do |l|
+      next if l.to_i > level.to_i
       t_key = "criteria.#{l}.#{name}.#{field}"
       return I18n.t(t_key) if I18n.exists?(t_key)
     end
     nil
-  end
-
-  # This returns an array of all criterion levels in where a criterion
-  # of a given name is present.
-  def all_levels
-    Criteria.keys.select { |l| Criteria[l].key?(name) }
   end
 end

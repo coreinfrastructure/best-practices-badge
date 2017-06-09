@@ -21,21 +21,18 @@ class StaticPagesControllerTest < ActionController::TestCase
     assert_template 'home'
   end
 
-  test 'should get background' do
-    get :background
-    assert_response :success
-  end
 
   test 'should get criteria' do
     get :criteria
     assert_response :success
+    assert_template 'criteria'
 
     get :criteria, params: { locale: 'fr' }
     assert_response :success
-    assert_template 'criteria.fr'
+    assert_template 'criteria'
 
     get :criteria, params: { locale: 'zh-CN' }
     assert_response :success
-    assert_template 'criteria.zh-CN'
+    assert_template 'criteria'
   end
 end

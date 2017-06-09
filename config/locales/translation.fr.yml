@@ -2633,13 +2633,21 @@ fr:
 
 '
     criteria:
-      criteria:
-      detailed_criteria_on_github:
-      current_criteria:
-      criteria_must_should_suggested:
-      criteria_na_met_details:
-      project_counts:
-      project_stats_html:
+      criteria: Critères
+      detailed_criteria_on_github: 'Les critères détaillés sont disponibles sur GitHub.
+
+'
+      current_criteria: 'Nombre actuel de critères: %{active} (actifs) + %{future}
+        (futurs) = %{total} (total).'
+      criteria_must_should_suggested: Les critères actifs se décomposent en %{must}
+        MUST, %{should} SHOULD, et %{suggested} SUGGESTED.
+      criteria_na_met_details: Parmi les critères actifs, %{na_allowed} autorisent
+        la mention N/A, %{met_url_required} nécessitent une URL pour être atteints,
+        et %{details_present} nécessitent des détails dans leur description.
+      project_counts: Il existe %{projects} soumissions de projets ; %{passing} ont
+        obtenu le badge et %{in_progress} sont en cours d'obtention.
+      project_stats_html: Vous pouvez voir des statistiques sur les projets au cours
+        du temps sur la <a href="/project_stats">page des statistiques du projet</a>.
   headings:
     Accessibility and internationalization: Accessibilité et internationalisation
     Analysis: Analyse

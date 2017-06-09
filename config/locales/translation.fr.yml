@@ -2193,19 +2193,9 @@ fr:
           être ajoutés pour toute nouvelle fonctionnalité majeure.
 
 '
-        details: 'Cependant, même une règle informelle est acceptable tant que les
-          tests sont ajoutés dans la pratique.
-
-'
       warnings_strict:
         description: 'Les projets DOIVENT être maximalement stricts avec les avertissements
           dans le logiciel produit par le projet, quand cela est approprié.
-
-'
-        details: 'Certains avertissements ne peuvent être efficacement activés sur
-          certains projets. Ce qui est nécessaire est la preuve que le projet s''efforce
-          d''activer les options d''avertissements où il peut, de sorte que les erreurs
-          soient détectées tôt.
 
 '
       implement_secure_design:
@@ -2263,11 +2253,6 @@ fr:
           par le projet NE DOIVENT PAS dépendre d''algorithmes ou de modes cryptographiques
           avec des faiblesses sérieuses connues (par exemple, l''algorithme de hachage
           cryptographique SHA-1 ou le mode CBC en SSH).
-
-'
-        details: 'Les préoccupations concernant le mode CBC en SSH sont discutées
-          dans <a href="https://www.kb.cert.org/vuls/id/958563">CERT : vulnérabilité
-          SSH CBC</a>.
 
 '
       crypto_algorithm_agility:
@@ -2370,16 +2355,6 @@ fr:
           de sécurité mémoire tels que les dépassement mémoire. Si le projet ne produit
           pas de logiciel écrit dans un langage non sûr pour les accès mémoire, sélectionnez
           « non applicable » (N/A).\n"
-        details: 'Des exemples de mécanismes pour détecter les problèmes de sécurité
-          des accès mémoire comprennent <a href="https://github.com/google/sanitizers/wiki/AddressSanitizer">Address
-          Sanitizer (ASAN)</a> (disponible dans GCC et LLVM), <a href="http://clang.llvm.org/docs/MemorySanitizer.html">Memory
-          Sanitizer</a> et <a href="http://valgrind.org/">valgrind</a>. D''autres
-          outils potentiellement utilisés incluent <a href="http://clang.llvm.org/docs/ThreadSanitizer.html">thread
-          sanitizer</a> et <a href = "http://clang.llvm.org/ docs/UndefinedBehaviorSanitizer.html">undefined
-          behavior sanitizer</a>. La généralisation de l''utilisation des assertions
-          fonctionnera également.
-
-'
       assurance_case:
         description: 'Le projet DOIT fournir une analyse de fiabilité qui justifie
           pourquoi ses exigences de sécurité sont respectées. L''analyse de fiabilité
@@ -2409,15 +2384,6 @@ fr:
     '2':
       bus_factor:
         description: Le projet DOIT avoir un « facteur bus » de 2 ou plus.
-        details: 'Un « facteur bus » (aussi appelé « facteur camion ») est le nombre
-          minimum de membres du projet qui doivent disparaître soudainement d''un
-          projet (« écrasés par un bus ») avant que le projet ne se bloque en raison
-          du manque de personnel compétent. L''outil <a href="https://github.com/mtov/truck-factor">truck-factor</a>
-          peut l''estimer pour des projets sur GitHub. Pour plus d''informations,
-          voir <a href="https://www.researchgate.net/publication/272824568_assessing_the_bus_factor_of_git_repositories">Évaluation
-          du « facteur bus » des dépôts Git</a> par Cosentino et al.
-
-'
       contributors_unassociated:
         description: 'Le projet DOIT avoir au moins deux contributeurs significatifs
           non associés.
@@ -2469,10 +2435,6 @@ fr:
       repo_distributed:
         description: 'Le dépôt source du projet DOIT utiliser un logiciel courant
           de contrôle de version distribué (par exemple, git ou mercurial).
-
-'
-        details: 'Git n''est pas spécifiquement requis et les projets peuvent utiliser
-          un logiciel de contrôle de version centralisé (comme subversion) avec justification.
 
 '
       small_tasks:
@@ -2555,9 +2517,6 @@ fr:
           pour ce langage.
 
 '
-        details: 'Par exemple, « make check », « mvn test » ou « rake test ».
-
-'
       test_continuous_integration:
         description: 'Le projet DOIT utiliser une intégration continue, où le code
           nouveau ou modifié est fréquemment intégré dans un dépôt de code central
@@ -2605,6 +2564,7 @@ fr:
           clés de durcissement avec des valeurs non admises.
 
 '
+        details:
       security_review:
         description: 'Le projet DOIT avoir effectué une évaluation de la sécurité
           au cours des 5 dernières années. Cette revue DOIT prendre en considération
@@ -2624,36 +2584,10 @@ fr:
           susceptibles d''entraîner des vulnérabilités de sécurité.
 
 '
-        details: 'Les mécanismes de durcissement peuvent inclure des en-têtes HTTP
-          comme Content Security Policy (CSP), des options de compilation pour atténuer
-          les attaques (telles que -fstack-protector) ou des options de compilation
-          pour éliminer les comportements indéfinis. Pour nos besoins, le principe
-          de plus faible privilège n''est pas considéré comme un mécanisme de durcissement
-          (le principe de plus faible privilège est important, mais séparé).
-
-'
       dynamic_analysis:
         description: 'Le projet DOIT appliquer au moins un outil d''analyse dynamique
           à tout candidat pour une version majeure du logiciel produit par le projet
           avant sa sortie.
-
-'
-        details: 'Un outil d''analyse dynamique examine le logiciel en l''exécutant
-          avec des entrées spécifiques. Par exemple, le projet PEUT utiliser un outil
-          de fuzzing (par exemple, <a href="http://lcamtuf.coredump.cx/afl/">American
-          Fuzzy Lop</a>) ou un scanner d''application Web (par exemple, <a href =
-          "https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project">OWASP ZAP</a>
-          ou <a href="http://w3af.org/">w3af</a>). Dans certains cas, le projet <a
-          href="https://github.com/google/oss-fuzz#introduction">OSS-Fuzz</a> peut
-          être prêt à appliquer des tests de fuzzing à votre projet. Aux fins de ce
-          critère, l''outil d''analyse dynamique doit varier les entrées d''une manière
-          ou d''une autre pour rechercher différents types de problèmes <em>ou</em>
-          être une suite de tests automatisée avec au moins 80% de couverture de branche.
-          La <a href="https://en.wikipedia.org/wiki/Dynamic_program_analysis">page
-          Wikipedia sur l''analyse dynamique</a> et la <a href = "https://www.owasp.org/index.php/Fuzzing">page
-          OWASP sur le fuzzing</a> identifient certains outils d''analyse dynamique.
-          Le ou les outils d''analyse PEUVENT être axés sur la recherche de vulnérabilités
-          de sécurité, mais cela n''est pas nécessaire.
 
 '
       dynamic_analysis_enable_assertions:
@@ -2698,13 +2632,6 @@ fr:
         de la CII.
 
 '
-    criteria:
-      detailed_criteria_on_github:
-      current_criteria:
-      criteria_must_should_suggested:
-      criteria_na_met_details:
-      project_counts:
-      project_stats_html:
   headings:
     Accessibility and internationalization: Accessibilité et internationalisation
     Analysis: Analyse

@@ -1242,12 +1242,8 @@ zh-CN:
         description:
       tests_documented_added:
         description:
-        details:
       warnings_strict:
         description: '在实际允许时，项目必须最大限度地严格修复项目生成的软件中的警告。
-
-'
-        details: '某些项目无法有效启用某些警告。需要证明的是，项目正在努力的启用警告标志，以便早期发现错误。
 
 '
       implement_secure_design:
@@ -1272,9 +1268,6 @@ zh-CN:
 '
       crypto_weaknesses:
         description: '由项目产生的软件中的默认安全机制不得取决于具有已知严重弱点（例如，SHA-1密码散列算法或SSH中的CBC模式）的加密算法或模式。
-
-'
-        details: '在<a href="https://www.kb.cert.org/vuls/id/958563"> CERT：SSH CBC漏洞</a>中讨论了SSH中CBC模式的问题。
 
 '
       crypto_algorithm_agility:
@@ -1317,14 +1310,12 @@ zh-CN:
         description:
       dynamic_analysis_unsafe:
         description:
-        details:
       assurance_case:
         description:
         details:
     '2':
       bus_factor:
         description: 项目必须具有2个或更多的“公交车因子”。
-        details:
       contributors_unassociated:
         description:
         details:
@@ -1336,7 +1327,6 @@ zh-CN:
         details:
       repo_distributed:
         description:
-        details:
       small_tasks:
         description:
         details:
@@ -1357,9 +1347,6 @@ zh-CN:
         details:
       test_invocation:
         description: '测试套件必须以该语言的标准方式进行调用。
-
-'
-        details: '例如“make check”，“mvn test”或“rake test”。
 
 '
       test_continuous_integration:
@@ -1389,15 +1376,14 @@ zh-CN:
 '
       hardened_site:
         description:
+        details:
       security_review:
         description:
         details:
       hardening:
         description:
-        details:
       dynamic_analysis:
         description:
-        details:
       dynamic_analysis_enable_assertions:
         description:
   static_pages:
@@ -1437,13 +1423,6 @@ zh-CN:
         使用CC-BY 版本 3.0 或者更高 (CC-BY-3.0+)。
         如果集体引用，或不另外注明，
         请标明出处为CII最佳实践徽章贡献者。
-    criteria:
-      detailed_criteria_on_github:
-      current_criteria:
-      criteria_must_should_suggested:
-      criteria_na_met_details:
-      project_counts:
-      project_stats_html:
   headings:
     Accessibility and internationalization: 无障碍和国际化
     Analysis: 分析

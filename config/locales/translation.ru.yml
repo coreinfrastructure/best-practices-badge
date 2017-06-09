@@ -159,13 +159,6 @@ ru:
       p1_html:
       p2_html:
       p3_html:
-    criteria:
-      detailed_criteria_on_github:
-      current_criteria:
-      criteria_must_should_suggested:
-      criteria_na_met_details:
-      project_counts:
-      project_stats_html:
   users:
     new:
       signup_header:
@@ -812,16 +805,13 @@ ru:
         description:
       tests_documented_added:
         description:
-        details:
       warnings_strict:
         description:
-        details:
       implement_secure_design:
         description:
         details:
       crypto_weaknesses:
         description:
-        details:
       crypto_algorithm_agility:
         description:
       crypto_credential_agility:
@@ -850,11 +840,9 @@ ru:
         description:
       dynamic_analysis_unsafe:
         description:
-        details:
     '2':
       bus_factor:
         description:
-        details:
       contributors_unassociated:
         description:
         details:
@@ -866,7 +854,6 @@ ru:
         details:
       repo_distributed:
         description:
-        details:
       small_tasks:
         description:
         details:
@@ -885,7 +872,6 @@ ru:
         details:
       test_invocation:
         description:
-        details:
       test_continuous_integration:
         description:
         details:
@@ -899,15 +885,14 @@ ru:
         description:
       hardened_site:
         description:
+        details:
       security_review:
         description:
         details:
       hardening:
         description:
-        details:
       dynamic_analysis:
         description:
-        details:
       dynamic_analysis_enable_assertions:
         description:
   headings:

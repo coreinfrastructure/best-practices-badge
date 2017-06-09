@@ -703,10 +703,8 @@ ja:
         description:
       tests_documented_added:
         description:
-        details:
       warnings_strict:
         description:
-        details:
       implement_secure_design:
         description:
         details:
@@ -718,7 +716,6 @@ ja:
         details:
       crypto_weaknesses:
         description:
-        details:
       crypto_algorithm_agility:
         description:
       crypto_credential_agility:
@@ -741,14 +738,12 @@ ja:
         description:
       dynamic_analysis_unsafe:
         description:
-        details:
       assurance_case:
         description:
         details:
     '2':
       bus_factor:
         description:
-        details:
       contributors_unassociated:
         description:
         details:
@@ -760,7 +755,6 @@ ja:
         details:
       repo_distributed:
         description:
-        details:
       small_tasks:
         description:
         details:
@@ -779,7 +773,6 @@ ja:
         details:
       test_invocation:
         description:
-        details:
       test_continuous_integration:
         description:
         details:
@@ -793,15 +786,14 @@ ja:
         description:
       hardened_site:
         description:
+        details:
       security_review:
         description:
         details:
       hardening:
         description:
-        details:
       dynamic_analysis:
         description:
-        details:
       dynamic_analysis_enable_assertions:
         description:
   static_pages:
@@ -811,13 +803,6 @@ ja:
       p1_html:
       p2_html:
       p3_html:
-    criteria:
-      detailed_criteria_on_github:
-      current_criteria:
-      criteria_must_should_suggested:
-      criteria_na_met_details:
-      project_counts:
-      project_stats_html:
   headings:
     Accessibility and internationalization:
     Analysis:

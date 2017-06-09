@@ -932,13 +932,8 @@ de:
         description:
       tests_documented_added:
         description:
-        details: 'Allerdings ist auch eine informelle Regel akzeptabel, solange die
-          Tests in der Praxis hinzugefügt werden.
-
-'
       warnings_strict:
         description:
-        details:
       implement_secure_design:
         description:
         details:
@@ -950,7 +945,6 @@ de:
         details:
       crypto_weaknesses:
         description:
-        details:
       crypto_algorithm_agility:
         description:
       crypto_credential_agility:
@@ -973,22 +967,12 @@ de:
         description:
       dynamic_analysis_unsafe:
         description:
-        details:
       assurance_case:
         description:
         details:
     '2':
       bus_factor:
         description: Das Projekt MUSS einen "Busfaktor" von 2 oder mehr haben.
-        details: 'Ein "Busfaktor" (auch "Truck-Faktor"/"LKW-Faktor") ist die Mindestanzahl
-          von Projektmitgliedern, die plötzlich aus einem Projekt verschwinden müssen
-          ("hit by a bus"), bevor das Projekt aufgrund fehlenden Wissens oder kompetenter
-          Mitarbeiter ins Stocken gerät. Das <a href="https://github.com/mtov/truck-factor">Truck-Faktor
-          Tool</a> kann diese Zahl für Projekte auf GitHub schätzen. Weitere Informationen
-          finden Sie unter <a href="https://www.researchgate.net/publication/272824568_assessing_the_bus_factor_of_git_repositories">Assessing
-          the Bus Factor of Git Repositories</a> von Cosentino et al.
-
-'
       contributors_unassociated:
         description: 'Das Projekt muss mindestens zwei bedeutende, nicht assoziierte
           Mitwirkende haben.
@@ -1006,7 +990,6 @@ de:
           Versionskontrollsoftware (z. B. git oder mercurial) verwenden.
 
 '
-        details: "\n"
       small_tasks:
         description: 'Das Projekt MUSS eindeutig kleine Aufgaben identifizieren, die
           von neuen oder gelegentlichen Mitwirkenden durchgeführt werden können.
@@ -1043,9 +1026,6 @@ de:
           Programmiersprache anrufbar sein.
 
 '
-        details: 'Zum Beispiel "make check", "mvn test" oder "rake test".
-
-'
       test_continuous_integration:
         description:
         details: 'In den meisten Fällen bedeutet dies, dass jeder Entwickler, der
@@ -1067,15 +1047,14 @@ de:
         description:
       hardened_site:
         description:
+        details:
       security_review:
         description:
         details:
       hardening:
         description:
-        details:
       dynamic_analysis:
         description:
-        details:
       dynamic_analysis_enable_assertions:
         description:
   static_pages:
@@ -1109,13 +1088,6 @@ de:
         License version 3.0 (CC-BY-3.0)</a> lizensiert; neuere nicht-Code  Inhalte
         sind unter CC-BY Version 3.0 oder später (CC-BY-3.0+) lizensiert. Bitte die
         CII Best Practices Badge Mitwirkenden als Urheber angeben.'
-    criteria:
-      detailed_criteria_on_github:
-      current_criteria:
-      criteria_must_should_suggested:
-      criteria_na_met_details:
-      project_counts:
-      project_stats_html:
   headings:
     Accessibility and internationalization: Zugänglichkeit und Internationalisierung
     Analysis: Analyse

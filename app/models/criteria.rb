@@ -54,23 +54,17 @@ class Criteria
       @criteria_levels[criterion]
     end
 
-    # rubocop:disable Metrics/MethodLength
     def instantiate
       # Creates class instances on first use and after reload! in rails console
-      @criteria = {}
-      @criteria_levels = {}
       CriteriaHash.each do |level, level_hash|
-        @criteria[level] = {}
         level_hash.each do |criterion|
           name = criterion[0].to_sym
-          @criteria[level][name] =
+          ((@criteria ||= {})[level] ||= {})[name] =
             new({ name: name, level: level }.merge(criterion[1]))
-          @criteria_levels[name] ||= []
-          @criteria_levels[name].append(level)
+          ((@criteria_levels ||= {})[name] ||= []).append(level)
         end
       end
     end
-    # rubocop:enable Metrics/MethodLength
 
     def keys
       instantiate if @criteria.blank?

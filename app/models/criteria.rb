@@ -69,6 +69,21 @@ class Criteria
     end
   end
 
+  # Instance methods
+  def description
+    return nil unless I18n.exists?(
+      "criteria.#{level}.#{name}.description", :en
+    )
+    I18n.t("criteria.#{level}.#{name}.description")
+  end
+
+  def details
+    return nil unless I18n.exists?(
+      "criteria.#{level}.#{name}.details", :en
+    )
+    I18n.t("criteria.#{level}.#{name}.details")
+  end
+
   def future?
     future == true
   end
@@ -97,20 +112,6 @@ class Criteria
 
   def na_justification_required?
     na_justification_required == true
-  end
-
-  def description
-    return nil unless I18n.exists?(
-      "criteria.#{level}.#{name}.description", :en
-    )
-    I18n.t("criteria.#{level}.#{name}.description")
-  end
-
-  def details
-    return nil unless I18n.exists?(
-      "criteria.#{level}.#{name}.details", :en
-    )
-    I18n.t("criteria.#{level}.#{name}.details")
   end
 
   delegate :present?, to: :details, prefix: true

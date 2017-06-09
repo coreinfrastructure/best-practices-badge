@@ -1,0 +1,26 @@
+<div class="center jumbotron">
+  <h1><%= t '.criteria' %></h1>
+  <!-- This page quickly shows some information about the Criteria. -->
+  <p><a href='https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/doc/criteria.md'>
+  <%= t '.detailed_criteria_on_github' %></a></p>
+  <p>
+  <% future_criteria, active_criteria =
+       Criteria['0'].values.partition(&:future?) %>
+  <%= t '.current_criteria', active: active_criteria.count,
+                             future: future_criteria.count,
+                             total: Criteria['0'].count %>
+  <br>
+  <%= t '.criteria_must_should_suggested',
+        must: active_criteria.count(&:must?),
+        should: active_criteria.count(&:should?),
+        suggested: active_criteria.count(&:suggested?) %>
+  <%= t '.criteria_na_met_details',
+        na_allowed: active_criteria.count(&:na_allowed?),
+        met_url_required: active_criteria.count(&:met_url_required?),
+        details_present: active_criteria.count(&:details_present?) %>
+  </p>
+  <p><%= t '.project_counts', projects: Project.count,
+                              passing: Project.passing.count,
+                              in_progress: Project.in_progress.count %></p>
+  <p><%= t '.project_stats_html' %></p>
+</div>

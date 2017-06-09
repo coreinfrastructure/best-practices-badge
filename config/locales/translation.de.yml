@@ -316,6 +316,7 @@ de:
       congrats_new:
       lost_badge: Das Projekt hat ein Badge verloren.
       static_analysis_updated_html:
+      edit_status:
     form_basics:
       project_name:
         description: Was ist der von Menschen lesbare Name des Projekts?

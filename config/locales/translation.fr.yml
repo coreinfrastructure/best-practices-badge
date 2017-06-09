@@ -364,6 +364,7 @@ fr:
         pour ce critère.
 
 '
+      edit_status:
     form_basics:
       project_name:
         description: Quel est le nom intelligible du projet ?

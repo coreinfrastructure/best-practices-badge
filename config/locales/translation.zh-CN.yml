@@ -277,6 +277,7 @@ zh-CN:
       congrats_new:
       lost_badge: 项目已经失去了徽章。
       static_analysis_updated_html:
+      edit_status:
     form_basics:
       project_name:
         description: 项目的人类可读的名称是什么？

@@ -4,6 +4,7 @@
 # CII Best Practices badge contributors
 # SPDX-License-Identifier: MIT
 
+# rubocop:disable Metrics/ClassLength
 class Criteria
   ACCESSORS = %i[
     name category level future
@@ -69,6 +70,18 @@ class Criteria
     end
   end
 
+  def description
+    key = "criteria.#{level}.#{name}.description"
+    return nil unless I18n.exists?(key)
+    I18n.t(key)
+  end
+
+  def details
+    get_text_if_exists(:details)
+  end
+
+  delegate :present?, to: :details, prefix: true
+
   def future?
     future == true
   end
@@ -99,22 +112,6 @@ class Criteria
     na_justification_required == true
   end
 
-  def description
-    return nil unless I18n.exists?(
-      "criteria.#{level}.#{name}.description", :en
-    )
-    I18n.t("criteria.#{level}.#{name}.description")
-  end
-
-  def details
-    return nil unless I18n.exists?(
-      "criteria.#{level}.#{name}.details", :en
-    )
-    I18n.t("criteria.#{level}.#{name}.details")
-  end
-
-  delegate :present?, to: :details, prefix: true
-
   def should?
     category == 'SHOULD'
   end
@@ -124,4 +121,26 @@ class Criteria
   end
 
   delegate :to_s, to: :name
+
+  private
+
+  # This method is used to grab text that is the same regardless of
+  # critera level. For example details of a criterion is almost always the
+  # same across criteria levels.  This routine searches the current level
+  # and all lower levels for a given text snippet until it is found.  If
+  # it doesn't exist, nil is returned.
+  def get_text_if_exists(field)
+    return nil unless field.in? LOCALE_ACCESSORS
+    all_levels.select { |l| l.to_i <= level.to_i }.reverse.each do |l|
+      t_key = "criteria.#{l}.#{name}.#{field}"
+      return I18n.t(t_key) if I18n.exists?(t_key)
+    end
+    nil
+  end
+
+  # This returns an array of all criterion levels in where a criterion
+  # of a given name is present.
+  def all_levels
+    Criteria.keys.select { |l| Criteria[l].key?(name) }
+  end
 end

@@ -48,6 +48,11 @@ class CriteriaTest < ActiveSupport::TestCase
     refute Criteria['0'][:version_tags].details_present?
   end
 
+  test 'Ensure details can be pulled from a lower level' do
+    refute I18n.exists?('criteria.2.bus_factor.details')
+    assert Criteria['2'][:bus_factor].details_present?
+  end
+
   test 'Ensure that only allowed fields are in Criteria' do
     allowed_set = Set.new %i[
       category future na_allowed met_url_required met_justification_required

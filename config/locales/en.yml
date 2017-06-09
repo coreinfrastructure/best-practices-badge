@@ -2023,18 +2023,9 @@ en:
           change proposals, the policy that tests are to be added for major new functionality.
 
 '
-        details: 'However, even an informal rule is acceptable as long as the tests
-          are being added in practice.
-
-'
       warnings_strict:
         description: 'Projects MUST be maximally strict with warnings in the software
           produced by the project, where practical.
-
-'
-        details: 'Some warnings cannot be effectively enabled on some projects. What
-          is needed is evidence that the project is striving to enable warning flags
-          where it can, so that errors are detected early.
 
 '
       implement_secure_design:
@@ -2057,10 +2048,6 @@ en:
           by the project MUST NOT depend on cryptographic algorithms or modes with
           known serious weaknesses (e.g., the SHA-1 cryptographic hash algorithm or
           the CBC mode in SSH).
-
-'
-        details: 'Concerns about CBC mode in SSH are discussed in <a href="https://www.kb.cert.org/vuls/id/958563">CERT:
-          SSH CBC vulnerability</a>.
 
 '
       crypto_algorithm_agility:
@@ -2186,26 +2173,9 @@ en:
           software written in a memory-unsafe language, select "not applicable" (N/A).
 
 '
-        details: 'Examples of mechanisms to detect memory safety problems include
-          <a href="https://github.com/google/sanitizers/wiki/AddressSanitizer">Address
-          Sanitizer (ASAN)</a> (available in GCC and LLVM), <a href="http://clang.llvm.org/docs/MemorySanitizer.html">Memory
-          Sanitizer</a>, and <a href="http://valgrind.org/">valgrind</a>. Other potentially-used
-          tools include <a href="http://clang.llvm.org/docs/ThreadSanitizer.html">thread
-          sanitizer</a> and <a href="http://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html">undefined
-          behavior sanitizer</a>. Widespread assertions would also work.
-
-'
     '2':
       bus_factor:
         description: The project MUST have a "bus factor" of 2 or more.
-        details: 'A "bus factor" (aka "truck factor") is the minimum number of project
-          members that have to suddenly disappear from a project ("hit by a bus")
-          before the project stalls due to lack of knowledgeable or competent personnel.
-          The <a href="https://github.com/mtov/truck-factor">truck-factor</a> tool
-          can estimate this for projects on GitHub. For more information, see <a href="https://www.researchgate.net/publication/272824568_assessing_the_bus_factor_of_git_repositories">Assessing
-          the Bus Factor of Git Repositories</a> by Cosentino et al.
-
-'
       contributors_unassociated:
         description: 'The project MUST have at least two unassociated significant
           contributors.
@@ -2253,10 +2223,6 @@ en:
       repo_distributed:
         description: 'The project''s source repository MUST use a common distributed
           version control software (e.g., git or mercurial).
-
-'
-        details: 'Git is not specifically required and projects can use centralized
-          version control software (such as subversion) with justification.
 
 '
       small_tasks:
@@ -2323,9 +2289,6 @@ en:
         description: 'A test suite MUST be invocable in a standard way for that language.
 
 '
-        details: 'For example, "make check", "mvn test", or "rake test".
-
-'
       test_continuous_integration:
         description: 'The project MUST implement continuous integration, where new
           or changed code is frequently integrated into a central code repository
@@ -2371,6 +2334,12 @@ en:
           nonpermissive values.
 
 '
+        details: 'Note that GitHub is known to meet this. Sites such as https://securityheaders.io/
+          can quickly check this. The key hardening headers are: Content Security
+          Policy (CSP), HTTP Strict Transport Security (HSTS), X-Content-Type-Options
+          (as "nosniff"), X-Frame-Options, and X-XSS-Protection.
+
+'
       security_review:
         description: 'The project MUST have performed a security review within the
           last 5 years. This review MUST consider the security requirements and security
@@ -2388,38 +2357,11 @@ en:
           Hardening mechanisms MUST be used in the software produced by
           the project so that software defects are less likely to
           result in security vulnerabilities.
-        details: >
-          Hardening mechanisms may include HTTP headers like Content
-          Security Policy (CSP), compiler flags to mitigate attacks
-          (such as -fstack-protector), or compiler flags to eliminate
-          undefined behavior. For our purposes least privilege is not
-          considered a hardening mechanism (least privilege is important,
-          but separate).
       dynamic_analysis:
         description: >
           The project MUST apply at least one dynamic analysis tool to
           any proposed major production release of the software produced
           by the project before its release.
-        details: >
-          A dynamic analysis tool examines the software by executing it
-          with specific inputs. For example, the project MAY use a fuzzing
-          tool (e.g., <a href="http://lcamtuf.coredump.cx/afl/">American
-          Fuzzy Lop</a>) or a web application scanner (e.g., <a
-          href="https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project">OWASP
-          ZAP</a> or <a
-          href="http://w3af.org/">w3af</a>). In some cases the <a
-          href="https://github.com/google/oss-fuzz#introduction">OSS-Fuzz</a>
-          project may be willing to apply fuzz testing to your
-          project. For purposes of this criterion the dynamic
-          analysis tool needs to vary the inputs in some way
-          to look for various kinds of problems <em>or</em> be an
-          automated test suite with at least 80% branch coverage.  The <a
-          href="https://en.wikipedia.org/wiki/Dynamic_program_analysis">Wikipedia
-          page on dynamic analysis</a> and the <a
-          href="https://www.owasp.org/index.php/Fuzzing">OWASP page on
-          fuzzing</a> identify some dynamic analysis tools. The analysis
-          tool(s) MAY be focused on looking for security vulnerabilities,
-          but this is not required.
       dynamic_analysis_enable_assertions:
         description: >
           The project SHOULD include many run-time assertions in the software

@@ -13,7 +13,7 @@
     </div>
   </div>
 <% end %>
-<% cache_if is_disabled, project do %>
+<% cache_if is_disabled, [project, locale] do %>
 <%= render(partial: 'form_early',
            locals:
              {

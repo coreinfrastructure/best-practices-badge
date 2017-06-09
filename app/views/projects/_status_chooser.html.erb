@@ -4,7 +4,7 @@
    project_criterion_status = project[status_symbol]
    project_criterion_justification = project[justification_symbol] %>
 
-<% cache [criterion.to_s, criteria_level, is_disabled,
+<% cache [criterion.to_s, criteria_level, is_disabled, locale,
           project_criterion_status, project_criterion_justification ] do %>
   <div id="<%= criterion.to_s %>" class="row criterion-data">
     <% is_crypto = criterion.to_s.match(/^crypto_/)

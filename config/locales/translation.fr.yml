@@ -2632,6 +2632,14 @@ fr:
         de la CII.
 
 '
+    criteria:
+      criteria:
+      detailed_criteria_on_github:
+      current_criteria:
+      criteria_must_should_suggested:
+      criteria_na_met_details:
+      project_counts:
+      project_stats_html:
   headings:
     Accessibility and internationalization: Accessibilité et internationalisation
     Analysis: Analyse

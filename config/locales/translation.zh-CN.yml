@@ -1423,6 +1423,14 @@ zh-CN:
         使用CC-BY 版本 3.0 或者更高 (CC-BY-3.0+)。
         如果集体引用，或不另外注明，
         请标明出处为CII最佳实践徽章贡献者。
+    criteria:
+      criteria:
+      detailed_criteria_on_github:
+      current_criteria:
+      criteria_must_should_suggested:
+      criteria_na_met_details:
+      project_counts:
+      project_stats_html:
   headings:
     Accessibility and internationalization: 无障碍和国际化
     Analysis: 分析

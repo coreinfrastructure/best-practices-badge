@@ -803,6 +803,14 @@ ja:
       p1_html:
       p2_html:
       p3_html:
+    criteria:
+      criteria:
+      detailed_criteria_on_github:
+      current_criteria:
+      criteria_must_should_suggested:
+      criteria_na_met_details:
+      project_counts:
+      project_stats_html:
   headings:
     Accessibility and internationalization:
     Analysis:

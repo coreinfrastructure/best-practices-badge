@@ -341,7 +341,8 @@ the type of the column, and then various options):
 ~~~~
 class MIGRATION_NAME < ActiveRecord::Migration
   def change
-    add_column :projects, :crypto_alternatives_status, :string, default: '?'
+    add_column :projects, :crypto_alternatives_status, :string,
+               null: false, default: '?'
     add_column :projects, :crypto_alternatives_justification, :text
   end
 end

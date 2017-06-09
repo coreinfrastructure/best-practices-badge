@@ -10,6 +10,7 @@ class UserTest < ActiveSupport::TestCase
   setup do
     @user = User.new(
       name: 'Example User', email: 'user@example.com',
+      provider: 'local',
       password: 'p@$$w0rd', password_confirmation: 'p@$$w0rd'
     )
   end

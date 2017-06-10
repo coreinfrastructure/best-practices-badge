@@ -278,3 +278,9 @@
     :why: Apache 2.0 is OSS; no problems detected
     :versions: []
     :when: 2017-06-10 16:31:40.705500086 Z
+- - :approve
+  - scout_apm
+  - :who: Dan Kohn
+    :why: Proprietary but available under license while we use service for debugging
+    :versions: []
+    :when: 2017-06-10 18:12:56.899860000 Z

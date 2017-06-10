@@ -24,7 +24,6 @@ gem 'jquery-ui-rails', '6.0.1' # JavaScript jQueryUI library (for Rails)
 gem 'lograge', '0.5.1' # Simplify logs
 # Hardcode mail rc1 until security issue in #750 is resolved
 gem 'mail', git: 'https://github.com/mikel/mail.git', ref: '21222e1'
-gem 'newrelic_rpm', '4.2.0.334'
 gem 'octokit', '4.7.0' # GitHub's official Ruby API
 gem 'omniauth-github', '1.3.0' # Authentication to GitHub (get project info)
 gem 'paleta', '0.3.0' # Color manipulation, used for badges
@@ -36,6 +35,7 @@ gem 'rails', '5.1.1' # Our web framework
 gem 'rails-i18n', '5.0.4' # Localizations for Rails built-ins
 gem 'redcarpet', '3.4.0' # Process markdown in form textareas (justifications)
 gem 'sass-rails', '5.0.6', require: false
+gem 'scout_apm', '2.1.24' # Monitor for memory leaks
 gem 'secure_headers', '3.6.4' # Add hardening measures to HTTP headers
 gem 'uglifier', '3.2.0', require: false # Minify JavaScript
 gem 'will-paginate-i18n', '0.1.15' # Provide will-paginate translations

@@ -190,6 +190,19 @@ en:
       projects_updated_average_7_days: 'projects updated average over 7 days
 
 '
+      projects_created_updated_daily: >
+        The dataset "projects created since day before" is a set of counts
+        of how many projects were created within 24 hours of the given
+        datetime (not including projects that were also deleted in the
+        same 24 hour period).
+        Similarly, the dataset
+        "projects edited since the day before" is a set of counts of how many
+        projects were edited within 24 hours of the given datetime
+        (not including projects that were created or deleted
+        in the same 24 hour period).
+        The 7 day averages show the corresponding averages for 7 days.
+        You may select colors in the legend
+        to hide and unhide the corresponding data.
       reminders_sent_since_yesterday: 'Reminders sent since yesterday
 
 '

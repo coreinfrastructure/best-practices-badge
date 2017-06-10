@@ -97,7 +97,7 @@
 
 <h2><%= t '.daily_activity' %></h2>
 <%=
-  # Show new and edited projects, reminders sent, reactivated after reminders
+  # Show new and edited projects
   # These are expected to be smaller numbers, and show detailed activity,
   # so showring them separately will let us use scales that show more info.
   dataset = []
@@ -130,6 +130,9 @@
                                'red', 'purple'],
     library: date_chart_options, defer: true
 %>
+
+<br>
+<%= t '.projects_created_updated_daily' %>
 
 <br><br><br>
 

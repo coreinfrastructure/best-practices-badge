@@ -2432,6 +2432,11 @@ en:
     Met: Met
     Unmet: Unmet
     NA: N/A
+  error_messages:
+    need_home_page_or_url: Need at least a home page or repository URL
+    form_contains:
+      one: The form contains 1 error.
+      other: The form contains %{count} errors.
   # Last translation entry, here for test purposes so that we can detect
   # some problems in YAML formatting of this file.
   last_entry: Last translation entry

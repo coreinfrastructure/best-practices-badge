@@ -241,6 +241,8 @@ ja:
       project_already_exists:
       final_text_html:
       new_badge_or:
+      original_repos:
+      fork_repos:
     show:
       edit:
       delete:

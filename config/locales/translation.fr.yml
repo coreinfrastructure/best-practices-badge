@@ -298,6 +298,8 @@ fr:
 
 '
       new_badge_or: OU
+      original_repos:
+      fork_repos:
     show:
       edit: Modifier
       delete: Supprimer

@@ -283,6 +283,8 @@ de:
       project_already_exists: Dieses Projekt existiert bereits!
       final_text_html:
       new_badge_or:
+      original_repos:
+      fork_repos:
     show:
       edit: Bearbeiten
       delete: Löschen

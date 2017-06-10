@@ -263,6 +263,8 @@ ru:
       final_text_html:
       sign_in_first:
       new_badge_or:
+      original_repos:
+      fork_repos:
     edit:
       repo_url_limits:
       changed_since_html:

@@ -27,11 +27,11 @@ module ProjectsHelper
   end
 
   def original_header(original_repos)
-    original_repos.blank? ? [] : [['=> Original Github Repos', '', 'none']]
+    original_repos.blank? ? [] : [[t('.original_repos'), '', 'none']]
   end
 
   def fork_header(fork_repos)
-    fork_repos.blank? ? [] : [['=> Forked Github Repos', '', 'none']]
+    fork_repos.blank? ? [] : [[t('.fork_repos'), '', 'none']]
   end
 
   # Render markdown.  This is safe because the markdown renderer in use is

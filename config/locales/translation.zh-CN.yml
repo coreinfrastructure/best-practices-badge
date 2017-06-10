@@ -249,6 +249,8 @@ zh-CN:
       project_already_exists: 这个项目已经存在！
       final_text_html:
       new_badge_or:
+      original_repos:
+      fork_repos:
     show:
       edit: 编辑
       delete: 删除

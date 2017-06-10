@@ -43,6 +43,7 @@ gem 'will_paginate', '3.1.6' # Paginate results (next/previous)
 
 group :development, :test do
   gem 'awesome_print', '1.7.0'
+  gem 'bootsnap', '1.0.0' # Speed up boot via caches
   gem 'bullet', '5.5.1'
   gem 'bundler-audit', '0.5.0'
   gem 'database_cleaner', '1.6.1' # Cleans up database between tests

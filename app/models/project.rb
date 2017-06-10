@@ -158,14 +158,14 @@ class Project < ApplicationRecord
             length: { maximum: MAX_SHORT_STRING_LENGTH },
             format: {
               with: VALID_LANGUAGE_LIST,
-              message: I18n.t('.comma_separated_list')
+              message: I18n.t('error_messages.comma_separated_list')
             }
 
   validates :cpe,
             length: { maximum: MAX_SHORT_STRING_LENGTH },
             format: {
               with: /\A(cpe:.*)?\Z/,
-              message: I18n.t('.begin_with_cpe')
+              message: I18n.t('error_messages.begin_with_cpe')
             }
 
   validates :user_id, presence: true
@@ -471,7 +471,7 @@ class Project < ApplicationRecord
 
   def need_a_base_url
     return unless repo_url.blank? && homepage_url.blank?
-    errors.add :base, error_messages.need_home_page_or_url
+    errors.add :base, I18n.t('error_messages.need_home_page_or_url')
   end
 
   def update_passing_times(old_badge_percentage)

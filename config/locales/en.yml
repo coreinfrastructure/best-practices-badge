@@ -2,12 +2,6 @@
 en:
   hello: Hello world
   submit: Submit
-  comma_separated_list: ' must be a comma-separated list of names'
-  begin_with_cpe: ' must begin with "cpe:"'
-  not_an_email: ' is not an email'
-  known_bad_password: ' is a well-known (bad) password'
-  valid_text: ' must have a valid UTF-8 encoding and no invalid control characters'
-  url_message: ' must begin with http: or https: and use a limited charset'
   projects_count:
     one: "%{count} Project"
     other: "%{count} Projects"
@@ -2437,6 +2431,12 @@ en:
     form_contains:
       one: The form contains 1 error.
       other: The form contains %{count} errors.
+    comma_separated_list: ' must be a comma-separated list of names'
+    begin_with_cpe: ' must begin with "cpe:"'
+    not_an_email: ' is not an email'
+    known_bad_password: ' is a well-known (bad) password'
+    valid_text: ' must have a valid UTF-8 encoding and no invalid control characters'
+    url_message: ' must begin with http: or https: and use a limited charset'
   # Last translation entry, here for test purposes so that we can detect
   # some problems in YAML formatting of this file.
   last_entry: Last translation entry

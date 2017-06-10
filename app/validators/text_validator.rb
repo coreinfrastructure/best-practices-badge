@@ -5,7 +5,6 @@
 # SPDX-License-Identifier: MIT
 
 class TextValidator < ActiveModel::EachValidator
-  ENCODING_MESSAGE =  I18n.t('.valid_text')
   INVALID_CONTROL = /[\x01-\x08\x0b\x0c\x0e-\x1f]/
   def text_acceptable?(value)
     return true if value.nil?
@@ -15,6 +14,7 @@ class TextValidator < ActiveModel::EachValidator
 
   def validate_each(record, attribute, value)
     return if text_acceptable?(value)
-    record.errors.add attribute, (options[:message] || ENCODING_MESSAGE)
+    record.errors.add attribute, (options[:message] ||
+                                  I18n.t('error_messages.valid_text'))
   end
 end

@@ -4,5 +4,6 @@
 # CII Best Practices badge contributors
 # SPDX-License-Identifier: MIT
 
-# Placeholder since we're not using SimpleForm except via Rails_db
-SimpleForm.setup {} if Rails.env.development?
+# Placeholder since we're not using SimpleForm except via rails_db,
+# and we've removed rails_db.
+# SimpleForm.setup {} if Rails.env.development?

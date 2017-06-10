@@ -272,3 +272,9 @@
     :why: This is a monitoring tool, not needed for execution
     :versions: []
     :when: 2017-06-05 21:56:32.298665472 Z
+- - :approve
+  - msgpack
+  - :who: David A. Wheeler
+    :why: Apache 2.0 is OSS; no problems detected
+    :versions: []
+    :when: 2017-06-10 16:31:40.705500086 Z

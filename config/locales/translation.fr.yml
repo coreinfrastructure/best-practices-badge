@@ -198,15 +198,15 @@ fr:
       json_format: format JSON
       csv_format: format CSV téléchargeable
       active_projects: Projets actifs (créés / mis à jour dans les 30 derniers jours)
-      active_in_progress: 'Projets en cours actifs (créés / mis à jour dans les 30
-        derniers jours)
+      active_in_progress: 'Projets en cours  (d''obtention) actifs (créés / mis à
+        jour dans les 30 derniers jours)
 
 '
       active_edited: 'Projets modifiés actifs (mis à jour dans les 30 derniers jours)
 
 '
-      active_edited_in_progress: 'Projets en cours modifiés actifs (mis à jour dans
-        les 30 derniers jours)
+      active_edited_in_progress: 'Projets en cours (d''obtention) modifiés actifs
+        (mis à jour dans les 30 derniers jours)
 
 '
       projects_created_since_yesterday: 'Projets créés depuis le jour précédent
@@ -227,6 +227,7 @@ fr:
       projects_updated_average_7_days: 'projets mis à jour en moyenne sur 7 jours
 
 '
+      projects_created_updated_daily:
   projects:
     index:
       add_link: Ajouter
@@ -296,7 +297,7 @@ fr:
         badge.
 
 '
-      new_badge_or:
+      new_badge_or: OU
     show:
       edit: Modifier
       delete: Supprimer
@@ -364,7 +365,7 @@ fr:
         pour ce critère.
 
 '
-      edit_status:
+      edit_status: Éditer le statut du badge du projet
     form_basics:
       project_name:
         description: Quel est le nom intelligible du projet ?
@@ -2565,7 +2566,12 @@ fr:
           clés de durcissement avec des valeurs non admises.
 
 '
-        details:
+        details: 'Notez que GitHub est connu pour le faire. Des sites tels que https://securityheaders.io/
+          peuvent le vérifier rapidement. Les en-têtes clés de durcissement sont :
+          Content Security Policy (CSP), HTTP Strict Transport Security (HSTS), X-Content-Type-Options
+          (comme « nosniff »), X-Frame-Options et X-XSS-Protection.
+
+'
       security_review:
         description: 'Le projet DOIT avoir effectué une évaluation de la sécurité
           au cours des 5 dernières années. Cette revue DOIT prendre en considération
@@ -2638,17 +2644,17 @@ fr:
       detailed_criteria_on_github: 'Les critères détaillés sont disponibles sur GitHub.
 
 '
-      current_criteria: 'Nombre actuel de critères: %{active} (actifs) + %{future}
+      current_criteria: 'Nombre actuel de critères : %{active} (actifs) + %{future}
         (futurs) = %{total} (total).'
       criteria_must_should_suggested: Les critères actifs se décomposent en %{must}
-        MUST, %{should} SHOULD, et %{suggested} SUGGESTED.
+        DOIT, %{should} DEVRAIT, et %{suggested} PROPOSÉ.
       criteria_na_met_details: Parmi les critères actifs, %{na_allowed} autorisent
         la mention N/A, %{met_url_required} nécessitent une URL pour être atteints,
         et %{details_present} nécessitent des détails dans leur description.
       project_counts: Il existe %{projects} soumissions de projets ; %{passing} ont
         obtenu le badge et %{in_progress} sont en cours d'obtention.
       project_stats_html: Vous pouvez voir des statistiques sur les projets au cours
-        du temps sur la <a href="/project_stats">page des statistiques du projet</a>.
+        du temps sur la <a href="/fr/project_stats">page des statistiques du projet</a>.
   headings:
     Accessibility and internationalization: Accessibilité et internationalisation
     Analysis: Analyse
@@ -2703,3 +2709,17 @@ fr:
   valid_text: " doit avoir un codage UTF-8 valide et aucun caractère de contrôle invalide"
   url_message: " doit commencer par http: ou https: et utiliser un jeu de caractères
     limité"
+  error_messages:
+    need_home_page_or_url:
+    form_contains:
+      one:
+      other:
+    comma_separated_list: " doit être une liste de noms séparés par des virgules"
+    begin_with_cpe: " doit commencer par « cpe : »"
+    not_an_email: " n'est pas un email"
+    known_bad_password: " est un (mauvais) mot de passe bien connu"
+    valid_text: " doit avoir un codage UTF-8 valide et aucun caractère de contrôle
+      invalide"
+    url_message: |2-
+       doit commencer par http: ou https: et utiliser un jeu de caractères
+          limité

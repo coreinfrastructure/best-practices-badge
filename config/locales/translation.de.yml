@@ -221,6 +221,7 @@ de:
 '
       json_format: JSON-Format
       csv_format: Herunterladbares CSV-Format
+      projects_created_updated_daily:
   projects:
     index:
       add_link: Hinzufügen
@@ -1152,3 +1153,14 @@ de:
     haben"
   url_message: " Muss mit http: oder https: beginnen und verwenden einen begrenzten
     Zeichensatz "
+  error_messages:
+    need_home_page_or_url:
+    form_contains:
+      one:
+      other:
+    comma_separated_list:
+    begin_with_cpe:
+    not_an_email:
+    known_bad_password:
+    valid_text:
+    url_message:

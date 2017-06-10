@@ -117,7 +117,7 @@ ja:
     footer_text_html:
   account_activations:
     activated: アカウントが有効になりました！
-    failed_activation:
+    failed_activation: 無効なアクティベーションリンク
   password_resets:
     forgot_password:
     reset_password:
@@ -196,6 +196,7 @@ ja:
       raw_data:
       json_format:
       csv_format:
+      projects_created_updated_daily:
   projects:
     index:
       add_link:
@@ -861,3 +862,14 @@ ja:
   known_bad_password:
   valid_text:
   url_message:
+  error_messages:
+    need_home_page_or_url:
+    form_contains:
+      one:
+      other:
+    comma_separated_list:
+    begin_with_cpe:
+    not_an_email:
+    known_bad_password:
+    valid_text:
+    url_message:

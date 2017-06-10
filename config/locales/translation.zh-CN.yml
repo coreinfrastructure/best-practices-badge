@@ -202,6 +202,7 @@ zh-CN:
       projects_updated_average_7_days: '项目更新平均超过7天
 
 '
+      projects_created_updated_daily:
   projects:
     index:
       add_link: 添加
@@ -1485,3 +1486,14 @@ zh-CN:
   known_bad_password:
   valid_text:
   url_message:
+  error_messages:
+    need_home_page_or_url:
+    form_contains:
+      one:
+      other:
+    comma_separated_list:
+    begin_with_cpe:
+    not_an_email:
+    known_bad_password:
+    valid_text:
+    url_message:

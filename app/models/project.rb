@@ -471,7 +471,7 @@ class Project < ApplicationRecord
 
   def need_a_base_url
     return unless repo_url.blank? && homepage_url.blank?
-    errors.add :base, 'Need at least a home page or repository URL'
+    errors.add :base, error_messages.need_home_page_or_url
   end
 
   def update_passing_times(old_badge_percentage)

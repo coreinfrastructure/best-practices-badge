@@ -10,7 +10,7 @@ require 'net/http'
 # rubocop:disable Metrics/ClassLength
 class ProjectsController < ApplicationController
   include ProjectsHelper
-  before_action :set_project, only: %i[edit update destroy show show_json badge]
+  before_action :set_project, only: %i[edit update destroy show show_json]
   before_action :logged_in?, only: :create
   before_action :can_edit_or_redirect, only: %i[edit update]
   before_action :can_control_or_redirect, only: :destroy
@@ -65,7 +65,18 @@ class ProjectsController < ApplicationController
     set_surrogate_key_header @project.record_key + '/json'
   end
 
+  BADGE_PROJECT_FIELDS =
+    'id, badge_percentage_0, badge_percentage_1, badge_percentage_2'
+
   def badge
+    # Don't use "set_project", but instead specifically find the project
+    # ourselves.  That way, we can select *only* the fields we need
+    # (there are very few!).  By selecting only what we actually use, we
+    # greatly reduce the number of objects created by ActiveRecord, which is
+    # important because this common request is supposed to be quick.
+    # Note: If the "find" fails this will raise an exception, which
+    # will eventually lead (correctly) to a failure report.
+    @project = Project.select(BADGE_PROJECT_FIELDS).find(params[:id])
     set_surrogate_key_header @project.record_key + '/badge'
     respond_to do |format|
       format.svg do

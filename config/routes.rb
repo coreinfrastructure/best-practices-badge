@@ -21,7 +21,6 @@ Rails.application.routes.draw do
 
     get 'signup' => 'users#new'
     get 'home' => 'static_pages#home'
-    get 'background' => 'static_pages#background'
     get 'criteria' => 'static_pages#criteria'
 
     get 'feed' => 'projects#feed', defaults: { format: 'atom' }

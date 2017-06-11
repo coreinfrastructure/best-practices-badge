@@ -23,10 +23,3 @@ Rails.application.config.assets.paths << Rails.root.join('config', 'locales')
 
 Rails.application.config.assets.precompile +=
   %w[project-form.js project-stats.js]
-
-# For /rails/db (used only in development, but no harm in just adding it here)
-Rails.application.config.assets.precompile +=
-  %w[
-    rails_db/logo.png rails_db/logo_mini.png
-    rails_db/data_table_code.png rails_db/data_table.png
-  ]

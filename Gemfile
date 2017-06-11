@@ -43,7 +43,6 @@ gem 'will_paginate', '3.1.6' # Paginate results (next/previous)
 
 group :development, :test do
   gem 'awesome_print', '1.7.0'
-  gem 'bootsnap', '1.0.0' # Speed up boot via caches
   gem 'bullet', '5.5.1'
   gem 'bundler-audit', '0.5.0'
   gem 'database_cleaner', '1.6.1' # Cleans up database between tests
@@ -72,6 +71,7 @@ group :fake_production, :development, :test do
 end
 
 group :development do
+  gem 'bootsnap', '1.0.0' # Speed up boot via caches
   # gem 'fasterer', '0.3.2' # Provide speed recommendations - run 'fasterer'
   # Waiting for Ruby 2.4 support: https://github.com/seattlerb/ruby_parser/issues/239
   gem 'traceroute', '0.5.0' # Adds 'rake traceroute' command to check routes

@@ -308,8 +308,8 @@ fr:
 
 '
       new_badge_or: OU
-      original_repos: "=> Dépôts Github Originaux"
-      fork_repos: "=> Dépôts Github Dupliqués"
+      original_repos: "=> Dépôts GitHub Originaux"
+      fork_repos: "=> Dépôts GitHub Dupliqués"
     show:
       edit: Modifier
       delete: Supprimer

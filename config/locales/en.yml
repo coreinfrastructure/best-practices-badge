@@ -273,8 +273,8 @@ en:
         Note - if your repository URL is on GitHub, anyone who can commit
         to the repository will be able to edit the badge information.
       sign_in_first: Please sign in to add a project!
-      original_repos: => Original Github Repos
-      fork_repos: => Forked Github Repos
+      original_repos: => Original GitHub Repos
+      fork_repos: => Forked GitHub Repos
     edit:
       edit_status: Edit Project Badge Status
       repo_url_limits: >

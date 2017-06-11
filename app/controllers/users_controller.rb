@@ -21,9 +21,10 @@ class UsersController < ApplicationController
 
   def show
     @user = User.find(params[:id])
-    @projects = @user.projects.paginate(page: params[:page])
+    @projects = select_needed(@user.projects).paginate(page: params[:page])
     return unless @user == current_user && @user.provider == 'github'
-    @edit_projects = Project.where(repo_url: github_user_projects) - @projects
+    @edit_projects =
+      select_needed(Project.where(repo_url: github_user_projects)) - @projects
   end
 
   # rubocop: disable Metrics/MethodLength
@@ -153,6 +154,13 @@ class UsersController < ApplicationController
     @user.activation_token = User.new_token
     @user.activation_digest = User.digest(@user.activation_token)
     @user.save!(touch: false)
+  end
+
+  # If we're sending an HTML project table, select only the fields needed.
+  # This significantly reduces memory allocations.
+  def select_needed(dataset)
+    return dataset unless request.format.symbol == :html
+    dataset.select(ProjectsController::HTML_INDEX_FIELDS)
   end
 end
 # rubocop: enable Metrics/ClassLength

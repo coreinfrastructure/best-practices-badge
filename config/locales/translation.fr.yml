@@ -227,7 +227,17 @@ fr:
       projects_updated_average_7_days: 'projets mis à jour en moyenne sur 7 jours
 
 '
-      projects_created_updated_daily:
+      projects_created_updated_daily: 'La donnée « projets créés depuis la veille
+        » est l''ensemble des nombres de projets créés dans les 24 heures précédent
+        la date donnée (en ignorant les projets qui ont également été supprimés dans
+        la même période de 24 heures). De même, la donnée « projets édités depuis
+        la veille » est un ensemble des nombres de projets édités dans les 24 heures
+        précédent la date donnée (en ignorant les projets créés ou supprimés dans
+        la même période de 24 heures). Les moyennes sur 7 jours montrent les moyennes
+        correspondantes sur 7 jours. Vous pouvez sélectionner des couleurs dans la
+        légende pour cacher et afficher les données correspondantes.
+
+'
   projects:
     index:
       add_link: Ajouter
@@ -298,8 +308,8 @@ fr:
 
 '
       new_badge_or: OU
-      original_repos:
-      fork_repos:
+      original_repos: "=> Dépôts Github Originaux"
+      fork_repos: "=> Dépôts Github Dupliqués"
     show:
       edit: Modifier
       delete: Supprimer
@@ -2712,10 +2722,10 @@ fr:
   url_message: " doit commencer par http: ou https: et utiliser un jeu de caractères
     limité"
   error_messages:
-    need_home_page_or_url:
+    need_home_page_or_url: Au minimum une page d'accueil ou une URL de dépôt est nécessaire
     form_contains:
-      one:
-      other:
+      one: Le formulaire contient 1 erreur.
+      other: Le formulaire contient %{count} erreurs.
     comma_separated_list: " doit être une liste de noms séparés par des virgules"
     begin_with_cpe: " doit commencer par « cpe : »"
     not_an_email: " n'est pas un email"

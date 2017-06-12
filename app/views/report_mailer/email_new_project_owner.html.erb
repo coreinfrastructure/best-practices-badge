@@ -4,40 +4,21 @@
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
     <meta name=viewport content="width=device-width, initial-scale=1">
   </head>
-  <body>
-<h1>Thanks for adding your project "<%= @project.name %>" to the Best Practices Badging Program</h1>
+<body>
+<h1><%= t 'report_mailer.new_project_heading' %></h1>
 <p>
-Thank you for adding your project
-"<%= @project.name %>"
-to the Best Practices Badging Program.
+<%= t 'report_mailer.new_project_part1' %>
+<%= @project.name %>
 </p>
 
 <p>
-Please visit your badge entry at
+<%= t 'report_mailer.new_project_part2' %>
 <a href="<%= @project_info_url %>"><%= @project_info_url %></a>
-to complete the information and get your badge!
 </p>
 
+<%= t 'report_mailer.new_project_part3_html' %>
 <p>
-We encourage you to keep making progress.
+<%= t 'report_mailer.ending' %>
 </p>
-
-<p>
-If you want to see <i>only</i> what you're missing, visit your badge entry, and
-then click on the button near the top labelled "Hide met or N/A criteria"
-If you have questions, or need help, please contact
-<a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;</a>
-or file an issue at
-<a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues">https://github.com/linuxfoundation/cii-best-practices-badge/issues</a>
-(click on "new issue").
-</p>
-
-<p>
-Thank you for your time.
-</p>
-
-<p>
---- David A. Wheeler, CII Best Practices Badge Technical Lead
-</p>
-  </body>
+</body>
 </html>

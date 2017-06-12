@@ -1,3 +1,8 @@
 # Ignore these in Heroku.
-test/
 coverage/
+doc/
+log/
+test/
+tmp/
+license_finder_report.html
+CONTRIBUTING.*

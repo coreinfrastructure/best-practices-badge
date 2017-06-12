@@ -166,7 +166,7 @@ There is an implied criterion that we should mention here:
 
 ### Basics
 
-<b><i>Basic Project Website Content</i></b>
+<b><i>Basic project website content</i></b>
 
 <ul>
 
@@ -281,7 +281,7 @@ There is an implied criterion that we should mention here:
 <ul>
 
 <li><a name="release_notes"></a>The project MUST provide, in each release, release notes that are a human-readable summary of major changes in that release to help users determine if they should upgrade and what the upgrade impact will be. The release notes MUST NOT be the raw output of a version control log (e.g., the "git log" command results are not release notes). Projects whose results are not intended for reuse in multiple locations (such as the software for a single website or service) AND employ continuous delivery MAY select "N/A".
- (N/A allowed.) (Justification required for "N/A".) (URL required for "met".) <sup>[<a href="#release_notes">release_notes</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>The release notes MAY be implemented in a variety of ways. Many projects provide them in a file named "NEWS", "CHANGELOG", or "ChangeLog", optionally with extensions such as ".txt", ".md", or ".html".  Historically the term "change log" meant a log of <i>every</i> change, but to meet these criteria what is needed is a human-readable summary.  The release notes MAY instead be provided by version control system mechanisms such as the <a href="https://github.com/blog/1547-release-your-software">GitHub Releases workflow</a>.
+ (N/A allowed.) (Justification required for "N/A".) (URL required for "met".) <sup>[<a href="#release_notes">release_notes</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>The release notes MAY be implemented in a variety of ways. Many projects provide them in a file named "NEWS", "CHANGELOG", or "ChangeLog", optionally with extensions such as ".txt", ".md", or ".html".  Historically the term "change log" meant a log of <em>every</em> change, but to meet these criteria what is needed is a human-readable summary.  The release notes MAY instead be provided by version control system mechanisms such as the <a href="https://github.com/blog/1547-release-your-software">GitHub Releases workflow</a>.
 </dd><dt><i>Rationale</i>:<dt> <dd>Release notes are important because they help users decide whether or not they will want to update, and what the impact would be (e.g., if the new release fixes vulnerabilities).  We realize this may not apply to projects whose main results are continuously updated and are deployed to primarily one place and so allow "N/A" from such projects.
 </dd></dl></li>
 
@@ -336,7 +336,7 @@ There is an implied criterion that we should mention here:
 <ul>
 
 <li><a name="build"></a>If the software produced by the project requires building for use, the project MUST provide a working build system that can automatically rebuild the software from source code.
- (N/A allowed.) <sup>[<a href="#build">build</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>A build system determines what actions need to occur to rebuild the software (and in what order), and then performs those steps. For example, it can invoke a compiler to compile the source code. If an executable is created from source code, it must be possible to modify the project's source code and then generate an updated executable with those modifications. If the software produced by the project depends on external libraries, the build system does <i>not</i> need to build those external libraries. If there is no need to build anything to use the software after its source code is modified, select "not applicable" (N/A).
+ (N/A allowed.) <sup>[<a href="#build">build</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>A build system determines what actions need to occur to rebuild the software (and in what order), and then performs those steps. For example, it can invoke a compiler to compile the source code. If an executable is created from source code, it must be possible to modify the project's source code and then generate an updated executable with those modifications. If the software produced by the project depends on external libraries, the build system does <em>not</em> need to build those external libraries. If there is no need to build anything to use the software after its source code is modified, select "not applicable" (N/A).
 </dd><dt><i>Rationale</i>:<dt> <dd>If a project needs to be built but there is no working build system, then potential co-developers will not be able to easily contribute and many security analysis tools will be ineffective. This is related to <a href="https://www.joelonsoftware.com/2000/08/09/the-joel-test-12-steps-to-better-code/">Joel Test</a> point 2, "Can you make a build in one step?"
 </dd></dl></li>
 
@@ -380,7 +380,7 @@ There is an implied criterion that we should mention here:
  <sup>[<a href="#tests_are_added">tests_are_added</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>Major functionality would typically be mentioned in the release notes. Perfection is not required, merely evidence that tests are typically being added in practice to the automated test suite when new major functionality is added to the software produced by the project.
 </dd></dl></li>
 
-<li><a name="tests_documented_added"></a>It is SUGGESTED that this policy on adding tests (see <a href="#test_policy">test_policy</a>) be <i>documented</i> in the instructions for change proposals.
+<li><a name="tests_documented_added"></a>It is SUGGESTED that this policy on adding tests (see <a href="#test_policy">test_policy</a>) be <em>documented</em> in the instructions for change proposals.
  <sup>[<a href="#tests_documented_added">tests_documented_added</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>However, even an informal rule is acceptable as long as the tests are being added in practice.
 </dd></dl></li>
 </ul>
@@ -397,7 +397,7 @@ There is an implied criterion that we should mention here:
  (N/A allowed.) <sup>[<a href="#warnings_fixed">warnings_fixed</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>These are the warnings identified by the implementation of the <a href="#warnings">warnings</a> criterion. The project should fix warnings or mark them in the source code as false positives.  Ideally there would be no warnings, but a project MAY accept some warnings (typically less than 1 warning per 100 lines or less than 10 warnings).
 </dd></dl></li>
 
-<li><a name="warnings_strict"></a>It is SUGGESTED that projects be maximally strict with warnings, where practical.
+<li><a name="warnings_strict"></a>It is SUGGESTED that projects be maximally strict with warnings in the software produced by the project, where practical.
  (N/A allowed.) <sup>[<a href="#warnings_strict">warnings_strict</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>Some warnings cannot be effectively enabled on some projects. What is needed is evidence that the project is striving to enable warning flags where it can, so that errors are detected early.
 </dd></dl></li>
 </ul>
@@ -451,11 +451,12 @@ There is an implied criterion that we should mention here:
  (N/A allowed.) <sup>[<a href="#crypto_pfs">crypto_pfs</a>]</sup></li>
 
 <li><a name="crypto_password_storage"></a>If the software produced by the project causes the storing of passwords for authentication of external users, the passwords MUST be stored as iterated hashes with a per-user salt by using a key stretching (iterated) algorithm (e.g., PBKDF2, Bcrypt or Scrypt).
- (N/A allowed.) <sup>[<a href="#crypto_password_storage">crypto_password_storage</a>]</sup><dl><dt><i>Rationale</i>:<dt> <dd>This is a bare minimum today when storing passwords. Sometimes software needs to have a credential, such as a password, to authenticate it to other systems; those are intentionally out of scope for this criterion, because in many cases it's not possible to store them as iterated hashes using per-user salt.
+ (N/A allowed.) <sup>[<a href="#crypto_password_storage">crypto_password_storage</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>This criterion applies only when the software is enforcing authentication of users using passwords, such as server-side web applications. It does not apply in cases where the software stores passwords for authenticating into other systems (e.g., the software implements a client for some other system), since at least parts of that software must have often access to the unhashed password.
+</dd><dt><i>Rationale</i>:<dt> <dd>This is a bare minimum today when storing passwords. Sometimes software needs to have a credential, such as a password, to authenticate it to other systems; those are intentionally out of scope for this criterion, because in many cases it's not possible to store them as iterated hashes using per-user salt.
 </dd></dl></li>
 
 <li><a name="crypto_random"></a>The security mechanisms within the software produced by the project MUST generate all cryptographic keys and nonces using a cryptographically secure random number generator, and MUST NOT do so using generators that are cryptographically insecure.
- (N/A allowed.) <sup>[<a href="#crypto_random">crypto_random</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>A cryptographically secure random number generator may be a hardware random number generator, or it may be a cryptographically secure pseudo-random number generator (CSPRNG) using an algorithm such as Hash_DRBG, HMAC_DRBG, CTR_DRBG, Yarrow, or Fortuna. Examples of calls to <i>secure</i> random number generators include Java's java.security.SecureRandom and JavaScript's window.crypto.getRandomValues. Examples of calls to <i>insecure</i> random number generators include Java's java.util.Random and JavaScript's Math.random.
+ (N/A allowed.) <sup>[<a href="#crypto_random">crypto_random</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>A cryptographically secure random number generator may be a hardware random number generator, or it may be a cryptographically secure pseudo-random number generator (CSPRNG) using an algorithm such as Hash_DRBG, HMAC_DRBG, CTR_DRBG, Yarrow, or Fortuna. Examples of calls to <em>secure</em> random number generators include Java's java.security.SecureRandom and JavaScript's window.crypto.getRandomValues. Examples of calls to <em>insecure</em> random number generators include Java's java.util.Random and JavaScript's Math.random.
 </dd></dl></li>
 </ul>
 
@@ -464,7 +465,7 @@ There is an implied criterion that we should mention here:
 <ul>
 
 <li><a name="delivery_mitm"></a>The project MUST use a delivery mechanism that counters MITM attacks. Using https or ssh+scp is acceptable.
- <sup>[<a href="#delivery_mitm">delivery_mitm</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>An even stronger mechanism is releasing the software with digitally signed packages, since that mitigates attacks on the distribution system, but this only works if the users can be confident that the public keys for signatures are correct <i>and</i> if the users will actually check the signature.
+ <sup>[<a href="#delivery_mitm">delivery_mitm</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>An even stronger mechanism is releasing the software with digitally signed packages, since that mitigates attacks on the distribution system, but this only works if the users can be confident that the public keys for signatures are correct <em>and</em> if the users will actually check the signature.
 </dd></dl></li>
 
 <li><a name="delivery_unsigned"></a>A cryptographic hash (e.g., a sha1sum) MUST NOT be retrieved over http and used without checking for a cryptographic signature.
@@ -472,12 +473,12 @@ There is an implied criterion that we should mention here:
 </dd></dl></li>
 </ul>
 
-<b><i>Publicly known Vulnerabilities fixed</i></b>
+<b><i>Publicly known vulnerabilities fixed</i></b>
 
 <ul>
 
 <li><a name="vulnerabilities_fixed_60_days"></a>There MUST be no unpatched vulnerabilities of medium or high severity that have been publicly known for more than 60 days.
- <sup>[<a href="#vulnerabilities_fixed_60_days">vulnerabilities_fixed_60_days</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>The vulnerability must be patched and released by the project itself (patches may be developed elsewhere).  A vulnerability becomes publicly known (for this purpose) once it has a CVE with publicly released non-paywalled information (reported, for example, in the <a href="https://nvd.nist.gov/">National Vulnerability Database</a>) or when the project has been informed and the information has been released to the public (possibly by the project). A vulnerability is medium to high severity if its <a href="https://nvd.nist.gov/cvss.cfm">CVSS 2.0</a> base score is 4 or higher. <b>Note</b>: this means that users might be left vulnerable to all attackers worldwide for up to 60 days.  This criterion is often much easier to meet than what Google recommends in <a href="https://security.googleblog.com/2010/07/rebooting-responsible-disclosure-focus.html">Rebooting responsible disclosure</a>, because Google recommends that the 60-day period start when the project is notified <em>even</em> if the report is not public.
+ <sup>[<a href="#vulnerabilities_fixed_60_days">vulnerabilities_fixed_60_days</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>The vulnerability must be patched and released by the project itself (patches may be developed elsewhere).  A vulnerability becomes publicly known (for this purpose) once it has a CVE with publicly released non-paywalled information (reported, for example, in the <a href="https://nvd.nist.gov/">National Vulnerability Database</a>) or when the project has been informed and the information has been released to the public (possibly by the project). A vulnerability is medium to high severity if its <a href="https://nvd.nist.gov/cvss.cfm">CVSS 2.0</a> base score is 4 or higher. <strong>Note</strong>: this means that users might be left vulnerable to all attackers worldwide for up to 60 days.  This criterion is often much easier to meet than what Google recommends in <a href="https://security.googleblog.com/2010/07/rebooting-responsible-disclosure-focus.html">Rebooting responsible disclosure</a>, because Google recommends that the 60-day period start when the project is notified <em>even</em> if the report is not public.
 </dd><dt><i>Rationale</i>:<dt> <dd>We intentionally chose to start measurement from the time of public knowledge, and not from the time reported to the project, because this is much easier to measure and verify by those outside the project.
 </dd></dl></li>
 
@@ -505,7 +506,8 @@ There is an implied criterion that we should mention here:
 </dd></dl></li>
 
 <li><a name="static_analysis_common_vulnerabilities"></a>It is SUGGESTED that at least one of the static analysis tools used for the static_analysis criterion include rules or approaches to look for common vulnerabilities in the analyzed language or environment.
- (N/A allowed.) <sup>[<a href="#static_analysis_common_vulnerabilities">static_analysis_common_vulnerabilities</a>]</sup></li>
+ (N/A allowed.) <sup>[<a href="#static_analysis_common_vulnerabilities">static_analysis_common_vulnerabilities</a>]</sup><dl><dt><i>Rationale</i>:<dt> <dd>We'd like all projects to use this kind of static analysis tool, but there may not be one in the chosen language, or it may only be proprietary (and some developers will therefore not use it).
+</dd></dl></li>
 
 <li><a name="static_analysis_fixed"></a>All medium and high severity exploitable vulnerabilities discovered with static code analysis MUST be fixed in a timely way after they are confirmed.
  (N/A allowed.) <sup>[<a href="#static_analysis_fixed">static_analysis_fixed</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>A vulnerability is medium to high severity if its <a href="https://nvd.nist.gov/cvss.cfm">CVSS 2.0</a> is 4 or higher.
@@ -547,7 +549,7 @@ There is an implied criterion that we should mention here:
 </dd></dl></li>
 
 <li><a name="build_reproducible"></a>(Future criterion) It is SUGGESTED that the project have a <a href="https://reproducible-builds.org/">reproducible build</a>.
- (N/A allowed.) <sup>[<a href="#build_reproducible">build_reproducible</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>A reproducible build means that multiple parties can independently redo the process of generating information from source files and get exactly the same bit-for-bit result.  If no building occurs (e.g., scripting languages where the source code is used directly instead of being compiled), select "N/A". In some cases, this can resolved by forcing some sort order. JavaScript developers may consider using npm shrinkwrap and webpack OccurenceOrderPlugin.  GCC and clang users may find the -frandom-seed option useful.  The build environment (including the toolset) can often be defined for external parties by specifying the cryptographic hash of a specific container or virtual machine that they can use for rebuilding. The <a href="https://reproducible-builds.org/docs/">reproducible builds project has documentation on how to do this</a>.
+ (N/A allowed.) <sup>[<a href="#build_reproducible">build_reproducible</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>A reproducible build means that multiple parties can independently redo the process of generating information from source files and get exactly the same bit-for-bit result.  If no building occurs (e.g., scripting languages where the source code is used directly instead of being compiled), select "N/A". In some cases, this can be resolved by forcing some sort order. JavaScript developers may consider using npm shrinkwrap and webpack OccurenceOrderPlugin.  GCC and clang users may find the -frandom-seed option useful.  The build environment (including the toolset) can often be defined for external parties by specifying the cryptographic hash of a specific container or virtual machine that they can use for rebuilding. The <a href="https://reproducible-builds.org/docs/">reproducible builds project has documentation on how to do this</a>.
 </dd><dt><i>Rationale</i>:<dt> <dd>If a project needs to be built but there is no working build system, then potential co-developers will not be able to easily contribute and many security analysis tools will be ineffective. Reproduceable builds counter malicious attacks that generate malicious executables, by making it easy to recreate the executable to determine if the result is correct. By itself, reproducible builds do not counter malicious compilers, but they can be extended to counter malicious compilers using processes such as diverse double-compiling (DDC).
 </dd></dl></li>
 

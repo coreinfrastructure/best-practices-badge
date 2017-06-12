@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+# Copyright 2015-2017, the Linux Foundation, IDA, and the
+# CII Best Practices badge contributors
+# SPDX-License-Identifier: MIT
+
 require 'test_helper'
 load 'Rakefile'
 
@@ -23,7 +27,12 @@ class MonthlyAnnouncementTest < ActionDispatch::IntegrationTest
       Rake::Task['db:fixtures:load'].invoke
 
       results = ProjectsController.send :send_monthly_announcement
-      assert_equal [projects(:perfect).id], results
+      results.each do |result|
+        assert result.in? [
+          projects(:perfect_passing).id, projects(:perfect_silver).id,
+          projects(:perfect).id
+        ]
+      end
     end
   end
 end

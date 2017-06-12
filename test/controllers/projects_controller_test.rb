@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+# Copyright 2015-2017, the Linux Foundation, IDA, and the
+# CII Best Practices badge contributors
+# SPDX-License-Identifier: MIT
+
 require 'test_helper'
 
 # rubocop:disable Metrics/ClassLength
@@ -8,10 +12,32 @@ class ProjectsControllerTest < ActionController::TestCase
     @project = projects(:one)
     @project_two = projects(:two)
     @perfect_unjustified_project = projects(:perfect_unjustified)
+    @perfect_passing_project = projects(:perfect_passing)
+    @perfect_silver_project = projects(:perfect_silver)
     @perfect_project = projects(:perfect)
     @user = users(:test_user)
     @admin = users(:admin_user)
   end
+
+  # Ensure that every criterion that is *supposed* to be in this level is
+  # selectable, and that every criterion that is *not* supposed to be in this
+  # level is not selectable.
+  # rubocop:disable Metrics/MethodLength
+  def only_correct_criteria_selectable(level)
+    Criteria.keys do |query_level|
+      Criteria[query_level].each do |criterion|
+        if query_level == level
+          assert_select '#' + criterion.to_s
+          assert_select "#project_#{criterion}_status_met"
+        elsif !Criteria[level].key?(criterion)
+          # This is criterion in another level, *not* this one
+          assert_select '#' + criterion.to_s, false
+          assert_select "#project_#{criterion}_status_met", false
+        end
+      end
+    end
+  end
+  # rubocop:enable Metrics/MethodLength
 
   test 'should get index' do
     get :index
@@ -43,8 +69,10 @@ class ProjectsControllerTest < ActionController::TestCase
 
   test 'should fail to create project' do
     log_in_as(@user)
-    stub_request(:get, 'https://api.github.com/user/repos')
-      .to_return(status: 200, body: '', headers: {})
+    url = 'https://api.github.com/user/repos?client_id=' \
+          "#{ENV['TEST_GITHUB_KEY']}&client_secret=" \
+          "#{ENV['TEST_GITHUB_SECRET']}&per_page=100"
+    stub_request(:get, url).to_return(status: 200, body: '', headers: {})
     assert_no_difference('Project.count') do
       post :create, params: { project: { name: @project.name } }
     end
@@ -58,6 +86,23 @@ class ProjectsControllerTest < ActionController::TestCase
     assert_response :success
     assert_select 'a[href=?]'.dup, 'https://www.nasa.gov'
     assert_select 'a[href=?]'.dup, 'https://www.nasa.gov/pathfinder'
+    only_correct_criteria_selectable('0')
+  end
+
+  test 'should show project with criteria_level=1' do
+    get :show, params: { id: @project, criteria_level: '1' }
+    assert_response :success
+    assert_select 'a[href=?]'.dup, 'https://www.nasa.gov'
+    assert_select 'a[href=?]'.dup, 'https://www.nasa.gov/pathfinder'
+    only_correct_criteria_selectable('1')
+  end
+
+  test 'should show project with criteria_level=2' do
+    get :show, params: { id: @project, criteria_level: '2' }
+    assert_response :success
+    assert_select 'a[href=?]'.dup, 'https://www.nasa.gov'
+    assert_select 'a[href=?]'.dup, 'https://www.nasa.gov/pathfinder'
+    only_correct_criteria_selectable('2')
   end
 
   test 'should show project JSON data' do
@@ -74,6 +119,32 @@ class ProjectsControllerTest < ActionController::TestCase
     get :edit, params: { id: @project }
     assert_response :success
     assert_not_empty flash
+  end
+
+  test 'should get edit as additional rights user' do
+    test_user = users(:test_user_mark)
+    # Create additional rights during test, not as a fixure.
+    # The fixture would require correct references to *other* fixture ids.
+    new_right = AdditionalRight.new(
+      user_id: test_user.id,
+      project_id: @project.id
+    )
+    new_right.save
+    log_in_as(test_user)
+    get :edit, params: { id: @project }
+    assert_response :success
+    assert_not_empty flash
+  end
+
+  test 'should not get edit as user without additional rights' do
+    # Without additional rights, can't log in.  This is paired with
+    # previous test, to ensure that *only* the additional right provides
+    # the necessary rights.
+    test_user = users(:test_user_mark)
+    log_in_as(test_user)
+    get :edit, params: { id: @project }
+    assert_response 302
+    assert_redirected_to root_path
   end
 
   test 'should fail to edit due to old session' do
@@ -188,13 +259,25 @@ class ProjectsControllerTest < ActionController::TestCase
     assert_equal @project.name, new_name
   end
 
-  test 'A perfect project should have the badge' do
-    get :badge, params: { id: @perfect_project, format: 'svg' }
+  test 'A perfect passing project should have the passing badge' do
+    get :badge, params: { id: @perfect_passing_project, format: 'svg' }
     assert_response :success
-    assert_includes @response.body, 'passing'
+    assert_equal contents('badge-passing.svg'), @response.body
   end
 
-  test 'A perfect unjustified project should not have the badge' do
+  test 'A perfect silver project should have the silver badge' do
+    get :badge, params: { id: @perfect_silver_project, format: 'svg' }
+    assert_response :success
+    assert_equal contents('badge-silver.svg'), @response.body
+  end
+
+  test 'A perfect project should have the gold badge' do
+    get :badge, params: { id: @perfect_project, format: 'svg' }
+    assert_response :success
+    assert_equal contents('badge-gold.svg'), @response.body
+  end
+
+  test 'A perfect unjustified project should have in progress badge' do
     get :badge, params: { id: @perfect_unjustified_project, format: 'svg' }
     assert_response :success
     assert_includes @response.body, 'in progress'
@@ -208,29 +291,29 @@ class ProjectsControllerTest < ActionController::TestCase
 
   test 'Achievement datetimes set' do
     log_in_as(@admin)
-    assert_nil @perfect_project.lost_passing_at
-    assert_not_nil @perfect_project.achieved_passing_at
+    assert_nil @perfect_passing_project.lost_passing_at
+    assert_not_nil @perfect_passing_project.achieved_passing_at
     patch :update, params: {
-      id: @perfect_project, project: {
+      id: @perfect_passing_project, project: {
         interact_status: 'Unmet'
       }
     }
-    @perfect_project.reload
-    assert_not_nil @perfect_project.lost_passing_at
-    assert @perfect_project.lost_passing_at > 5.minutes.ago.utc
-    assert_not_nil @perfect_project.achieved_passing_at
+    @perfect_passing_project.reload
+    assert_not_nil @perfect_passing_project.lost_passing_at
+    assert @perfect_passing_project.lost_passing_at > 5.minutes.ago.utc
+    assert_not_nil @perfect_passing_project.achieved_passing_at
     patch :update, params: {
-      id: @perfect_project, project: {
+      id: @perfect_passing_project, project: {
         interact_status: 'Met'
       }
     }
-    assert_not_nil @perfect_project.lost_passing_at
+    assert_not_nil @perfect_passing_project.lost_passing_at
     # These tests should work, but don't; it appears our workaround for
     # the inadequately reset database interferes with them.
-    # assert_not_nil @perfect_project.achieved_passing_at
-    # assert @perfect_project.achieved_passing_at > 5.minutes.ago.utc
-    # assert @perfect_project.achieved_passing_at >
-    #        @perfect_project.lost_passing_at
+    # assert_not_nil @perfect_passing_project.achieved_passing_at
+    # assert @perfect_passing_project.achieved_passing_at > 5.minutes.ago.utc
+    # assert @perfect_passing_project.achieved_passing_at >
+    #        @perfect_passing_project.lost_passing_at
   end
 
   test 'should destroy own project' do

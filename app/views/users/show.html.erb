@@ -8,6 +8,10 @@
        <h3>
          <%= avatar_for @user %>
          <%= @user.name || @user.nickname %>
+         <% if current_user && (@user == current_user || current_user.admin?) %>
+           <%= link_to t('.edit_user'),
+                       edit_user_path(@user), class: 'btn btn-primary' %>
+         <% end %>
        </h3>
      </section>
    </aside>
@@ -20,7 +24,7 @@
 
   <% if @edit_projects.present? %>
   <br>
-  <h2>Other Projects you can edit</h2>
+  <h2><%= t '.other_projects_edit' %></h2>
   <br>
    <%= render 'projects/table', projects: @edit_projects %>
   <% end %>
@@ -28,17 +32,17 @@
   <% if @user.provider == 'github' && @user.nickname? %>
    <br><br>
    <p>
-   See <a href="https://github.com/<%= @user.nickname %>">this user's
-   external page</a>.
+   <a href="https://github.com/<%= @user.nickname %>"><%=
+   t ('.see_external') %></a>
   <% end %>
   <% if current_user&.admin? %>
-    As an admin, you may also:
+    <%= t '.as_admin' %>
     <% if @user.email? %>
-      <a href="mailto:<%= CGI::escape(@user.email).html_safe %>">email
-        <%= @user.email %></a> |
+      <a href="mailto:<%= CGI::escape(@user.email).html_safe %>"><%=
+        t('.send_email_to') + @user.email.to_s %></a> |
     <% end %>
-    <%= link_to "delete", @user, method: :delete,
-                                 data: { confirm: "Are you sure?" } %>
+    <%= link_to t('.delete_link_name'), @user, method: :delete,
+                data: { confirm: t('.confirm_delete') } %>
   <% end %>
  </div>
 </div>

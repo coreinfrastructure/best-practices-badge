@@ -6,7 +6,7 @@ and its badge entry has not been updated in a while.
 Your best practices badge entry is at
 <%= @project_info_url %>
 and was last updated on <%= @project.updated_at %>.
-It is currently at <%= @project.badge_percentage %>% (out of 100%).
+It is currently at <%= @project.badge_percentage_0 %>% (out of 100%).
 
 We encourage you to keep making progress.
 Please visit your badge entry at
@@ -32,4 +32,4 @@ and eventually earn the badge.
 
 Thank you for your time.
 
---- David A. Wheeler, CII Best Practices Badge Technical Lead
+<%= t 'report_mailer.ending' %>

@@ -1,14 +1,20 @@
 # frozen_string_literal: true
 
+# Copyright 2015-2017, the Linux Foundation, IDA, and the
+# CII Best Practices badge contributors
+# SPDX-License-Identifier: MIT
+
 require 'addressable/uri'
 require 'net/http'
 
 # rubocop:disable Metrics/ClassLength
 class ProjectsController < ApplicationController
   include ProjectsHelper
-  before_action :set_project, only: %i[edit update destroy show show_json badge]
+  before_action :set_project, only: %i[edit update destroy show show_json]
   before_action :logged_in?, only: :create
-  before_action :change_authorized, only: %i[destroy edit update]
+  before_action :can_edit_or_redirect, only: %i[edit update]
+  before_action :can_control_or_redirect, only: :destroy
+  before_action :set_criteria_level, only: %i[show edit update]
 
   # Cache with Fastly CDN.  We can't use this header, because logged-in
   # and not-logged-in users see different things (and thus we can't
@@ -22,7 +28,7 @@ class ProjectsController < ApplicationController
   # These are the only allowed values for "sort" (if a value is provided)
   ALLOWED_SORT =
     %w[
-      id name achieved_passing_at badge_percentage
+      id name achieved_passing_at badge_percentage_0
       homepage_url repo_url updated_at user_id created_at
     ].freeze
 
@@ -59,11 +65,22 @@ class ProjectsController < ApplicationController
     set_surrogate_key_header @project.record_key + '/json'
   end
 
+  BADGE_PROJECT_FIELDS =
+    'id, badge_percentage_0, badge_percentage_1, badge_percentage_2'
+
   def badge
+    # Don't use "set_project", but instead specifically find the project
+    # ourselves.  That way, we can select *only* the fields we need
+    # (there are very few!).  By selecting only what we actually use, we
+    # greatly reduce the number of objects created by ActiveRecord, which is
+    # important because this common request is supposed to be quick.
+    # Note: If the "find" fails this will raise an exception, which
+    # will eventually lead (correctly) to a failure report.
+    @project = Project.select(BADGE_PROJECT_FIELDS).find(params[:id])
     set_surrogate_key_header @project.record_key + '/badge'
     respond_to do |format|
       format.svg do
-        send_data Badge[@project.badge_percentage],
+        send_data Badge[value_for_badge],
                   type: 'image/svg+xml', disposition: 'inline'
       end
     end
@@ -78,15 +95,9 @@ class ProjectsController < ApplicationController
 
   # GET /projects/:id/edit(.:format)
   def edit
-    return unless @project.notify_for_static_analysis?
-    # rubocop:disable Rails/OutputSafety
-    message = (
-      'We have updated our requirements for the criterion ' \
-      '<a href="#static_analysis">static_analysis</a>. '.html_safe +
-      'Please add a justification for this criterion.'
-    )
+    return unless @project.notify_for_static_analysis?('0')
+    message = t('projects.edit.static_analysis_updated_html')
     flash.now[:danger] = message
-    # rubocop:enable Rails/OutputSafety
   end
 
   # POST /projects
@@ -96,7 +107,7 @@ class ProjectsController < ApplicationController
     @project = current_user.projects.build(project_params)
     project_repo_url = @project.repo_url
     if @project.repo_url? && Project.exists?(repo_url: project_repo_url)
-      flash[:info] = 'This project already exists!'
+      flash[:info] = t('projects.new.project_already_exists')
       return redirect_to Project.find_by(repo_url: project_repo_url)
     end
 
@@ -110,8 +121,7 @@ class ProjectsController < ApplicationController
       if @project.save
         @project.send_new_project_email
         # @project.purge_all
-        flash[:success] = "Thanks for adding the Project!   Please fill out
-                           the rest of the information to get the Badge."
+        flash[:success] = t('projects.new.thanks_adding')
         format.html { redirect_to edit_project_path(@project) }
         format.json { render :show, status: :created, location: @project }
       else
@@ -137,30 +147,21 @@ class ProjectsController < ApplicationController
       respond_to do |format|
         # Was project.update(project_params)
         if @project.save
-          successful_update(format, old_badge_level)
+          successful_update(format, old_badge_level, @criteria_level)
         else
-          format.html { render :edit }
+          format.html { render :edit, criteria_level: @criteria_level }
           format.json do
             render json: @project.errors, status: :unprocessable_entity
           end
         end
       end
     else
-      flash.now[:danger] = 'You may only change your repo_url from http to '\
-                           'https'
+      flash.now[:danger] = t('projects.edit.repo_url_limits')
       render :edit
     end
   rescue ActiveRecord::StaleObjectError
-    # rubocop:disable Rails/OutputSafety
-    message =
-      (
-        'Another user has made a change to that record since you ' \
-        'accessed the edit form. <br> Please open a new <a href="'.html_safe +
-        edit_project_url + # force escape
-        '" target=_blank>edit form</a> to transfer your changes.'.html_safe
-      )
+    message = t('projects.edit.changed_since_html', edit_url: edit_project_url)
     flash.now[:danger] = message
-    # rubocop:enable Rails/OutputSafety
     render :edit, status: :conflict
   end
   # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
@@ -178,7 +179,7 @@ class ProjectsController < ApplicationController
       @project.homepage_url ||= project_find_default_url
       format.html do
         redirect_to projects_url
-        flash[:success] = 'Project was successfully deleted.'
+        flash[:success] = t('projects.delete.done')
       end
       format.json { head :no_content }
     end
@@ -192,7 +193,8 @@ class ProjectsController < ApplicationController
   # forces loading of user data (where we get the user name/nickname).
   FEED_DISPLAY_FIELDS = 'projects.id as id, projects.name as name, ' \
     'projects.updated_at as updated_at, projects.created_at as created_at, ' \
-    'badge_percentage, homepage_url, repo_url, description, user_id'
+    'badge_percentage_0, badge_percentage_1, badge_percentage_2, ' \
+    'homepage_url, repo_url, description, user_id'
 
   def feed
     # @projects = Project.select(FEED_DISPLAY_FIELDS).
@@ -205,7 +207,7 @@ class ProjectsController < ApplicationController
     if current_user_is_admin?
       respond_to { |format| format.html }
     else
-      flash.now[:danger] = 'Admin only.'
+      flash.now[:danger] = t('admin_only')
       redirect_to '/'
     end
   end
@@ -278,8 +280,15 @@ class ProjectsController < ApplicationController
     false
   end
 
-  def change_authorized
-    return true if can_make_changes?
+  # Returns true if current_user can edit, else redirect to a different URL
+  def can_edit_or_redirect
+    return true if can_edit?
+    redirect_to root_url
+  end
+
+  # Returns true if current_user can control, else redirect to a different URL
+  def can_control_or_redirect
+    return true if can_control?
     redirect_to root_url
   end
 
@@ -297,6 +306,10 @@ class ProjectsController < ApplicationController
   # only allow the white list through.
   def project_params
     params.require(:project).permit(Project::PROJECT_PERMITTED_FIELDS)
+  end
+
+  def criteria_level_params
+    params.permit([:criteria_level])
   end
 
   def repo_url_change_allowed?
@@ -329,19 +342,17 @@ class ProjectsController < ApplicationController
   end
 
   def repo_data
-    github = Github.new oauth_token: session[:user_token], auto_pagination: true
-    github.repos.list.map do |repo|
-      if repo.blank?
-        nil
-      else
-        [repo.full_name, repo.fork, repo.homepage, repo.html_url]
-      end
+    github = Octokit::Client.new access_token: session[:user_token]
+    Octokit.auto_paginate = true
+    return nil if github.repos.blank?
+    github.repos.map do |repo|
+      [repo.full_name, repo.fork, repo.homepage, repo.html_url]
     end.compact
   end
 
   HTML_INDEX_FIELDS = 'projects.id, projects.name, description, ' \
     'homepage_url, repo_url, license, user_id, achieved_passing_at, ' \
-    'updated_at, badge_percentage'
+    'updated_at, badge_percentage_0'
 
   # rubocop:disable Metrics/PerceivedComplexity
   # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
@@ -373,6 +384,7 @@ class ProjectsController < ApplicationController
   # rubocop:enable Metrics/PerceivedComplexity
 
   def set_homepage_url
+    return nil if repo_data.nil?
     # Assign to repo.homepage if it exists, and else repo_url
     repo = repo_data.find { |r| @project.repo_url == r[3] }
     return nil if repo.nil?
@@ -382,6 +394,11 @@ class ProjectsController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_project
     @project = Project.find(params[:id])
+  end
+
+  def set_criteria_level
+    @criteria_level = criteria_level_params[:criteria_level] || '0'
+    @criteria_level = '0' unless @criteria_level =~ /\A[0-2]\Z/
   end
 
   def set_valid_query_url
@@ -412,15 +429,19 @@ class ProjectsController < ApplicationController
   # rubocop:enable Metrics/AbcSize
 
   # rubocop:disable Metrics/AbcSize
-  def successful_update(format, old_badge_level)
+  def successful_update(format, old_badge_level, criteria_level)
     purge_cdn_project
+    criteria_level = nil if criteria_level == '0'
     # @project.purge
     format.html do
       if params[:continue]
-        flash[:success] = 'Project was successfully updated.'
-        redirect_to edit_project_path(@project) + url_anchor
+        flash[:info] = t('projects.edit.successfully_updated')
+        redirect_to edit_project_path(
+          @project, criteria_level: criteria_level
+        ) + url_anchor
       else
-        redirect_to @project, success: 'Project was successfully updated.'
+        redirect_to project_path(@project, criteria_level: criteria_level),
+                    success: t('projects.edit.successfully_updated')
       end
     end
     format.json { render :show, status: :ok, location: @project }
@@ -430,21 +451,33 @@ class ProjectsController < ApplicationController
     ReportMailer.project_status_change(
       @project, old_badge_level, new_badge_level
     ).deliver_now
-    if new_badge_level == 'passing'
-      flash[:success] = 'CONGRATULATIONS on earning a badge!' \
-        ' Please show your badge status on your project page (see the' \
-        ' "how to embed it" text just below if you don\'t' \
-        ' know how to do that).'
-      ReportMailer.email_owner(@project, new_badge_level).deliver_now
-    elsif new_badge_level == 'in_progress'
-      flash[:danger] = 'Project no longer has a badge.'
-      ReportMailer.email_owner(@project, new_badge_level).deliver_now
+    if Project::BADGE_LEVELS.index(new_badge_level) >
+       Project::BADGE_LEVELS.index(old_badge_level)
+      flash[:success] = t(
+        'projects.edit.congrats_new',
+        new_badge_level: new_badge_level
+      )
+      lost_level = false
+    else
+      flash[:danger] = t('projects.edit.lost_badge')
+      lost_level = true
     end
+    ReportMailer.email_owner(
+      @project, old_badge_level, new_badge_level, lost_level
+    ).deliver_now
   end
   # rubocop:enable Metrics/AbcSize
 
   def url_anchor
     return '#' + params[:continue] unless params[:continue] == 'Save'
     ''
+  end
+
+  # This needs to be modified each time you add a new badge level
+  # This method gives the percentage value to be passed to the Badge model
+  # when getting the svg badge for a project
+  def value_for_badge
+    return @project.badge_percentage_0 if @project.badge_level == 'in_progress'
+    @project.badge_level
   end
 end

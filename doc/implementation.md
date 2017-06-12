@@ -50,6 +50,10 @@ The BadgeApp web application MUST:
 8. Be secure.  See the separate
    [security](security.md) document for more about security, including
    its requirements.
+9. Be accessible.
+   We strive to comply with the
+   <a href="https://www.w3.org/TR/WCAG20/">Web Content Accessibility
+   Guidelines (WCAG 2.0)</a> (especially at the A and AA level).
 
 There are many specific requirements; instead of a huge requirements document,
 most specific requirements are proposed and processed via its
@@ -114,10 +118,27 @@ The application is configured by various environment variables:
   since project last updated before sending reminder
 * LAST_SENT_REMINDER (default 60): Minimum number of days since
   project was last sent a reminder
-* RAILS_ENV (default 'development'): Rails environment.
+* RAILS_ENV (default 'development'): Rails environment, one of
+  'test', 'development', 'fake_production', and 'production'.
   The master, staging, and production systems set this to 'production'.
+  See the discussion below about fake_production.
 * BADGEAPP_DAY_FOR_MONTHLY: Day of the month to monthly activities, e.g.,
   send out monthly reminders.  Default 5.  Set to 0 to disable monthly acts.
+* FASTLY_CLIENT_IP_REQUIRED: If present, download the Fastly list of
+  client IPs, and only let those IPs make requests.  Enabling this
+  counters cloud piercing.  This isn't on by default, but the environment
+  variables are set on our tiers.
+* DB_POOL: Set the number of connections the app can hold to the database.
+  This is important for performance on Heroku; see:
+  <https://devcenter.heroku.com/articles/concurrency-and-database-connections>.
+  If unset, defaults to RAILS_MAX_THREADS + 1 for this app,
+  because in addition to every web thread we occasionally fire a task to
+  process occasional requests (such as the daily task).
+  If RAILS_MAX_THREADS is not set, presume it is 5.
+* RAILS_LOG_LEVEL: Rails log level used when RAILS_ENV is either
+  "production" or "fake_production". Plausible values are
+  "debug", "info", and "warn". Default is "info". See:
+  <http://guides.rubyonrails.org/debugging_rails_applications.html>
 
 This can be set on Heroku.  For example, to change the maximum number
 of email reminders to inactive projects on production-bestpractices:
@@ -320,7 +341,8 @@ the type of the column, and then various options):
 ~~~~
 class MIGRATION_NAME < ActiveRecord::Migration
   def change
-    add_column :projects, :crypto_alternatives_status, :string, default: '?'
+    add_column :projects, :crypto_alternatives_status, :string,
+               null: false, default: '?'
     add_column :projects, :crypto_alternatives_justification, :text
   end
 end
@@ -366,6 +388,107 @@ modify the autofill code in the app/lib/ directory.
 
 Be sure to "git add" all new files, including any migration files,
 and then use "git commit" and "git push".
+
+## Internationalization (i18n) and localization (l10n)
+
+This application is "internationalized", that is, it allows
+users to select their locale, and then presents information
+(such as human-readable text) in the selected locale.
+If no locale is indicated, 'en' (English) is used.
+
+To learn more about Rails and internationalization, please read the
+[Rails Internationalization guide](http://guides.rubyonrails.org/i18n.html).
+
+We can *always* use help in localizing (that is, in providing translations
+of text to various locales) - please help!
+
+### Requesting the locale at run-time
+
+Users indicate the locale via the URL.
+The recommended form is at the beginning of that path, e.g.,
+<https://bestpractices.coreinfrastructure.org/fr/projects/>
+selects the locale "fr" (French) when displaying "/projects".
+This even works at the top page, e.g.,
+<https://bestpractices.coreinfrastructure.org/fr/>.
+It also supports the locale as a query parameter, e.g.,
+<https://bestpractices.coreinfrastructure.org/projects?locale=fr>
+
+### Fixing locale data
+
+Almost all locale-specific data is stored in the "config/locales"
+directory (one file for each locale, named LOCALE.yml). This data is
+automatically loaded by Rails.  A few of the static files are served
+directly, with a separate file for each locale;
+see the "app/views/static_pages" directory.
+If you need to fix a translation, that's where the data is.
+
+### Adding a new locale
+
+To add a new locale, modify the file "config/initializers/i18n.rb"
+and edit the assignment of "I18n.available_locales" to add
+the new locale.  The system will now permit users to request it.
+
+Next, create a stub locale file in the "config/locales" directory
+named LOCALE.yml.  A decent way to start is:
+
+~~~~
+cd config/locales
+cp en.yml NEW_LOCALE.yml
+~~~~
+
+Edit the top of the file to change "en:" to your locale name.
+
+At one time we suggested going to this page to get locale information
+for Rails built-ins, and including that:
+<https://github.com/svenfuchs/rails-i18n/blob/master/rails/locale/>
+However, we now include the gem 'rails-i18n', and that provides
+the same kind of functionality while being easier to maintain.
+
+Now create the matching static pages in the
+the "app/views/static_pages"  (cd "../..", then cd "app/views/static_pages",
+then create the files using the new locale name).
+Be sure all hypertext links to locations within the application
+include the locale (e.g., use "/fr/projects" not "/projects" as the URL);
+automatically-generated URLs include the locale, but constant strings do not.
+
+Now the hard part: actually translating.
+Edit the '.yml' (YAML) file to create the translations.
+As always, you need to conform to YAML syntax.
+For example,
+strings that end in a colon (":") *must* be escaped (e.g., by
+surrounding them with double-quotes).
+Keys are *only* in lower case and never use dash (they use underscore).
+
+Finally, you will need to update app/assets/javascripts/criteria.js.erb
+to depend on the new locale's yml file, this allows the precompiler to be
+to be notified if the contents of criteria.js should have changed.
+Simply add the following line to the top of criteria.js.erb
+
+~~~~
+depend_on NEW_LOCALE.yml
+~~~~
+
+### Programmatically accessing a locale
+
+To learn more about Rails and internationalization, please read the
+[Rails Internationalization guide](http://guides.rubyonrails.org/i18n.html).
+
+Inside views you can use the 't' helper, e.g.,
+
+~~~~
+    <%= t('hello') %>
+    <%= t('.current_scope') %>
+~~~~
+
+Inside other code (e.g., in a flash message), use `I18n.t`:
+
+~~~~
+    I18n.t 'hello'
+~~~~
+
+You can access 'I18n.locale' to see the current locale's value
+(this is a thread-local query, so this works fine when multiple
+threads are active).
 
 ## App authentication via GitHub
 
@@ -845,6 +968,42 @@ cat ../bad-passwords/raw-mutated.txt | grep -E '^.{8}' | tr A-Z a-z | \
 rm -f raw-bad-passwords-lowercase.txt.gz
 gzip --best raw-bad-passwords-lowercase.txt
 ~~~~
+
+## Project stats omission on 2017-02-28
+
+The production site maintains a number of daily statistics and can
+[display the statistics graphically](https://bestpractices.coreinfrastructure.org/project_stats), but it is
+missing a report for 2017-02-28.
+This was due to a multi-hour downtime in
+Amazon’s S3 web-based storage service, part of
+Amazon Web Services (AWS), which took a large number of sites
+(not just ours).
+For more information you can see the story in
+[USA Today](https://www.usatoday.com/story/tech/news/2017/02/28/amazons-cloud-service-goes-down-sites-scramble/98530914/),
+[Zero Hedge](http://www.zerohedge.com/news/2017-02-28/amazon-cloud-reporting-increased-error-rates-secgov-possibly-impacted),
+and
+[Tech Crunch](https://techcrunch.com/2017/02/28/amazon-aws-s3-outage-is-breaking-things-for-a-lot-of-websites-and-apps/).
+
+## fake_production
+
+If you want to debug a problem that only appears in a production-like
+envionment, try the 'fake_production' environment.
+Here is how to enable it:
+
+~~~~
+RAILS_ENV=fake_production rails s
+~~~~
+
+This environment is almost exactly like production, with the
+following differences:
+
+* does not force HTTPS (TLS), so you can interact with it locally
+* enables byebug so that you can insert breakpoints
+* disables timeouts, so that you aren't rushed trying
+  to track down a problem before the timeout ends.
+
+Other environment variables might be usefully set in the command prefix,
+such as "DATABASE_URL=development".
 
 ## See also
 

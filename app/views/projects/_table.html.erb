@@ -1,14 +1,15 @@
 <table class="table table-bordered table-striped table-responsive">
+  <%# Can't cache, because user selection could invert them %>
   <thead>
     <tr>
-      <th><%= sortable_header 'Id', 'id' %></th>
-      <th><%= sortable_header 'Name', 'name' %></th>
-      <th>Description</th>
-      <th><%= sortable_header 'Website', 'homepage_url' %></th>
-      <th>License</th>
-      <th>Owner</th>
-      <th><%= sortable_header 'Last Achieved at', 'achieved_passing_at' %></th>
-      <th><%= sortable_header '% Achieved', 'badge_percentage' %></th>
+      <th><%= sortable_header t('.id'), 'id' %></th>
+      <th><%= sortable_header t('.name'), 'name' %></th>
+      <th><%= t '.description' %></th>
+      <th><%= sortable_header t('.website'), 'homepage_url' %></th>
+      <th><%= t '.license' %></th>
+      <th><%= t '.owner' %></th>
+      <th><%= sortable_header t('.last_achieved'), 'achieved_passing_at' %></th>
+      <th><%= sortable_header t('.pachieved'), 'badge_percentage_0' %></th>
       <th>Badge</th>
     </tr>
   </thead>
@@ -16,15 +17,14 @@
   <tbody>
 
     <% projects.each do |project| %>
-    <% cache project do %>
+    <% cache [project, locale] do %>
       <tr>
         <td><%= link_to project.id, project %></td>
-        <td><%= link_to (project.name.presence || "(Name Unknown)"),
+        <td><%= link_to (project.name.presence || t('.paren_name_unknown')),
                 project %></td>
-        <td><%= markdown(
+        <td><span lang="en"><%= markdown(
                   (project.description || '').
-                  truncate(160, separator: ' ')) %></td>
-
+                  truncate(160, separator: ' ')) %></span></td>
         <td class='website'>
           <%# Defend against bad data - link only if plausible URL. %>
           <% if project.homepage_url.presence &&
@@ -35,23 +35,32 @@
           <% end %>
           <% end %>
         </td>
-        <td><%= project.license %></td>
+        <td class='license'><%= project.license %></td>
         <td><%= link_to project.user_display_name, project.user %></td>
         <td><%= project.achieved_passing_at&.
                   to_formatted_s(:db) %></td>
-        <td><%= project.badge_percentage %>%</td>
-        <td><%= link_to "<img src='/projects/#{project.id}/badge' alt='Badge level for project #{project.id} is #{project.badge_percentage}%'>".html_safe,
-                        project %></td>
+        <td><%= project.badge_percentage_0 %>%</td>
+        <td><%= link_to "<img src='/projects/#{project.id}/badge'
+                  alt='#{t('.badge_level', id: project.id,
+                            percent: project.badge_percentage_0)}'>".html_safe,
+                  project %></td>
       </tr>
     <% end %>
   </tbody>
 </table>
 
+<%# Can't cache, because user selection could invert them %>
 <p>
-You can also sort by
-<%= sortable_header 'repository URL', 'repo_url' %>,
-<%= sortable_header 'create time (for the badge entry)', 'created_at' %>,
-<%= sortable_header 'last update time (for the badge entry)', 'updated_at' %>,
-and
-<%= sortable_header 'user id', 'user_id' %>.
+<%= t '.can_also_sort' %>
+<%=
+  # Create a list.
+  # The *only* user input used here is locale, which we validate, so
+  # it's secure to use html_safe here.
+  [
+    sortable_header(t('.repository_url'), 'repo_url'),
+    sortable_header(t('.create_time'), 'created_at'),
+    sortable_header(t('.update_time'), 'updated_at'),
+    sortable_header(t('.user_id'), 'user_id')
+  ].to_sentence.html_safe # to_sentence has built-in 18n support
+%>
 </p>

@@ -19,7 +19,7 @@ one:
   repo_url: https://www.nasa.gov/pathfinder
   created_at: '2000-01-01'
   updated_at: '2000-01-01'
-  badge_percentage: 0
+  badge_percentage_0: 0
   static_analysis_status: Met
 
 two:
@@ -29,7 +29,7 @@ two:
   homepage_url: https://www.nasa.gov
   license: MIT
   repo_url: https://www.nasa.gov/mav
-  badge_percentage: 0
+  badge_percentage_0: 0
 
 # TODO: Generate list of status fields from central location.
 # No justifications means failing status.
@@ -40,7 +40,9 @@ perfect_unjustified:
   homepage_url: https://www.example.org
   repo_url: https://www.example.org/code2
   license: MIT
-  badge_percentage: 88
+  badge_percentage_0: 88
+  badge_percentage_1: 0
+  badge_percentage_2: 0
 <% Project::ALL_CRITERIA_STATUS.each do |criterion_status| %>
   <%= criterion_status %>: Met
 <% end %>
@@ -52,15 +54,53 @@ perfect_unjustified:
   build_reproducible_status: '?'
 
 # TODO: Generate list of status fields from central location.
+perfect_passing:
+  user: test_user
+  name: Justified perfect passing project
+  description: The perfect passing project
+  homepage_url: https://www.example.org
+  repo_url: https://www.example.org/code3
+  implementation_languages: JavaScript, Java, C++ # Handle multiple names
+  license: MIT
+  badge_percentage_0: 100
+  badge_percentage_1: 25
+  badge_percentage_2: 45
+  achieved_passing_at: 2015-02-15T12:00:00
+<% Criteria['0'].keys.each do |criterion| %>
+  <%= criterion.to_s + '_status' %>: Met
+  <%= criterion.to_s + '_justification' %>: >
+    For more information see <https://www.example.org/>
+<% end %>
+
+perfect_silver:
+  user: test_user
+  name: Justified perfect silver project
+  description: The perfect silver project
+  homepage_url: https://www.example.org
+  repo_url: https://www.example.org/code4
+  implementation_languages: JavaScript, Java, C++ # Handle multiple names
+  license: MIT
+  badge_percentage_0: 100
+  badge_percentage_1: 100
+  badge_percentage_2: 50
+  achieved_passing_at: 2015-02-15T12:00:00
+<% (Criteria['0'].keys + Criteria['1'].keys).each do |criterion| %>
+  <%= criterion.to_s + '_status' %>: Met
+  <%= criterion.to_s + '_justification' %>: >
+    For more information see <https://www.example.org/>
+<% end %>
+
 perfect:
   user: test_user
   name: Justified perfect project
   description: The perfect project
   homepage_url: https://www.example.org
-  repo_url: https://www.example.org/code3
+  repo_url: https://www.example.org/code5
   implementation_languages: JavaScript, Java, C++ # Handle multiple names
   license: MIT
-  badge_percentage: 100
+  badge_percentage_0: 100
+  badge_percentage_1: 100
+  badge_percentage_2: 100
   achieved_passing_at: 2015-02-15T12:00:00
 <% Project::ALL_CRITERIA_STATUS.each do |criterion_status| %>
   <%= criterion_status %>: Met

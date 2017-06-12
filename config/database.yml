@@ -3,10 +3,21 @@
 # but PostgreSQL is a better match for our production environment.
 # In addition, for debugging it's best to minimize the differences between
 # the development and production environments.
+#
+# The 'pool' parameter is important for performance on Heroku; see:
+# https://devcenter.heroku.com/articles/concurrency-and-database-connections
+# It can be controlled by setting the environment variable DB_POOL.
+# In practice, you typically will want RAILS_MAX_THREADS + 1 for this app,
+# because in addition to every web thread we occasionally fire a task to
+# process occasional requests (such as the daily task).
+# If RAILS_MAX_THREADS is not set, presume it is 5.
+# Note double quotes on env variables to work around issue #753
+#
 default: &default
   adapter: postgresql
   encoding: unicode
-  pool: 5
+  pool: <%= (ENV["DB_POOL"] ||
+             ((ENV["RAILS_MAX_THREADS"] || 5 ).to_i + 1)).to_i %>
   timeout: 5000
 
 development:

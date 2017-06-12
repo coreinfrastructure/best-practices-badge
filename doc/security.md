@@ -248,16 +248,34 @@ few users are administrators.
 A user can create as many project entries as desired.
 Each project entry gets a new unique project id and is
 owned by the user who created the project entry.
-A project entry can only be edited (and deleted) by the entry creator,
-an administrator, or by others who can prove that they
-can edit that GitHub repository (if it is on GitHub).
+
+There are two kinds of rights: "control" rights and "edit" rights.
+
+"Control" rights mean you can delete the project AND
+change who else is allowed to edit (they control their projects'
+entry in the additional_rights table). Anyone with control rights
+also has edit rights.  The project owner has control
+rights to the projects they own,
+and admins have control rights over all projects.
+
+"Edit" rights mean you can edit the project entry. If you have
+control rights over a project you also have edit rights.
+In addition, fellow committers on GitHub for that project,
+and users in the additional_rights table
+who have their user_id listed for that project, get edit rights
+for that project.
+The additional_rights table adds support for groups so that they can
+edit project entries when the project is not on GitHub.
+
+This means that
+a project entry can only be edited (and deleted) by the entry creator,
+an administrator, by others who can prove that they
+can edit that GitHub repository (if it is on GitHub), and by those
+authorized to edit via the additional_rights table.
 Anyone can see the project entry results once they are saved.
 We do require, in the case of a GitHub project entry, that the
 entry creator be logged in via GitHub *and* be someone who can edit that
 project.
-We may in the future add support for groups (e.g., where the owner
-can designate other users who can edit that entry) and
-a way for others to edit project entries when they are not on GitHub.
 
 Here we have identified the key security requirements and why we believe
 they've been met overall.  However, there is always the possibility that
@@ -1146,6 +1164,29 @@ We use the "rails_12factor" to ensure that all Rails logs go to
 standard out, and then use standard Heroku logging mechanisms.
 The logs then go out to other components for further analysis.
 
+System logs are expressly *not* publicly available.
+They are only shared with a small number of people authorized by the
+Linux Foundation, and are protected information.
+You must have administrator access to our Heroku site or our
+logging management system to gain access to the logs.
+That is because our system logs must include detailed information so that we
+can identify and fix problems (including attacks).
+For example, log entries record the IP address of the requestor,
+email addresses when we send email,
+and the user id (uid) making a request (if the user is logged in).
+We record this information so we can keep the system running properly.
+We also need to keep it for a period of time so we can identify trends,
+including slow-moving attacks.
+For more information, see the
+[Linux Foundation privacy policy](https://www.linuxfoundation.org/privacy).
+
+As an additional protection measure, we take steps to *not* include
+passwords in logs.
+That's because people sometimes reuse passwords, so we try to be
+especially careful with passwords.
+File config/initializers/filter_parameter_logging expressly
+filters out the "password" field.
+
 We intentionally omit here, in this public document, details about
 how logs are stored and how anomaly detection is done to
 detect and counter things.
@@ -1173,6 +1214,18 @@ Subversion of the development environment can easily lead to
 a compromise of the resulting system.
 The key developers use development environments
 specifically configured to be secure.
+
+Anyone who has direct commit rights to the repository
+*must not* allow other untrusted local users on the same (virtual) machine.
+This counters local vulnerabilities.
+E.g., the Rubocop vulnerability
+CVE-2017-8418 is /tmp file vulnerability, in which
+"Malicious local users could exploit this to tamper
+with cache files belonging to other users."
+Since we do not allow other untrusted local users on the (virtual) machine
+that has commit rights, a vulnerability cannot be easily exploited
+this way.  If someone without commit rights submits a proposal, we can
+separately review that change.
 
 As noted earlier, we are cautious about the components we use.
 The source code is managed on GitHub;
@@ -1262,6 +1315,30 @@ believe they are acceptable:
     at some point we simply cannot counter them short of pouring many
     resources into countering them.
     The same is true for almost any other website.
+
+## Vulnerability report handling process
+
+As noted in CONTRIBUTING.md, if anyone finds a
+significant vulnerability, or evidence of one, we ask that they
+send that information to at least one of the security contacts.
+
+Whoever receives that report will share that information with the
+other security contacts, and one of them will analyze it:
+
+* If is not valid, one of the security contacts will reply back to
+  the reporter to explain that (if this is a misunderstanding,
+  the reporter can reply and start the process again).
+* If it is a bug but not security vulnerability, the security contact
+  will create an issue as usual for repair.
+* If it a security vulnerability, one of the security contacts will
+  fix it in a *local* git repository and *not* share it with the world
+  until the fix is ready.  An issue will *not* be filed, since those
+  are publc.  If it needs review, the review will not be public.
+  Once the fix is ready, it will be quickly moved through all tiers.
+
+Once the fix is in the final production system, credit will be
+publicly given to the vulneraibility reporter (unless the reporter
+requested otherwise).
 
 ## Your help is welcome!
 

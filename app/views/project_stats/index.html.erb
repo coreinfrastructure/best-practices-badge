@@ -6,16 +6,16 @@
   # and we can easily determine what the previous one was. Immediately
   # forcing its deletion provides more cache space for other (useful) things.
   Rails.cache.delete ActiveSupport::Cache.expand_cache_key(
-    ['project_stats', ProjectStat.all.size-1]
+    ['project_stats', locale, ProjectStat.all.size-1]
   )
-  cache ['project_stats', ProjectStat.all.size] do
+  cache ['project_stats', locale, ProjectStat.all.size] do
 %>
 
 <p id="notice"><%= notice %></p>
 
-<h1>Project Stats</h1>
+<h1><%= t('.project_stats_header') %></h1>
 
-<h2>All projects</h2>
+<h2><%= t '.all_projects' %></h2>
 
 <%
   date_chart_options = {
@@ -43,7 +43,7 @@
 
 <br><br><br>
 
-<h2>Projects with non-trivial progress</h2>
+<h2><%= t '.projects_nontrivial' %></h2>
 <%=
   # Show project counts, but skip <25% because that makes chart scale unusable
   gt0_stats = ProjectStat::STAT_VALUES.select do |e|
@@ -62,32 +62,32 @@
 
 <br><br><br>
 
-<h2>Projects with badge entry activity in last 30 days</h2>
+<h2><%= t '.projects_activity_30' %></h2>
 <%=
   dataset = []
   # Active projects
   active_dataset = ProjectStat.all.reduce({}) do |h,e|
     h.merge(e.created_at => e.active_projects)
   end
-  dataset << {name: 'Active projects (created/updated within 30 days)',
+  dataset << {name: t('.active_projects'),
               data: active_dataset}
   # Active in-progress projects
   active_in_progress_dataset = ProjectStat.all.reduce({}) do |h,e|
     h.merge(e.created_at => e.active_in_progress)
   end
-  dataset << {name: 'Active in-progress projects (created/updated within 30 days)',
+  dataset << {name: t('.active_in_progress'),
               data: active_in_progress_dataset}
   # Active edited projects
   active_edited_dataset = ProjectStat.all.reduce({}) do |h,e|
     h.merge(e.created_at => e.active_edited_projects)
   end
-  dataset << {name: 'Active edited projects (updated within 30 days)',
+  dataset << {name: t('.active_edited'),
               data: active_edited_dataset}
   # Active edited in-progress projects
   active_edited_in_progress_dataset = ProjectStat.all.reduce({}) do |h,e|
     h.merge(e.created_at => e.active_edited_in_progress)
   end
-  dataset << {name: 'Active edited in-progress projects (updated within 30 days)',
+  dataset << {name: t('.active_edited_in_progress'),
               data: active_edited_in_progress_dataset}
   # Done transforming data; display it.
   line_chart dataset, library: date_chart_options, defer: true
@@ -95,9 +95,9 @@
 
 <br><br><br>
 
-<h2>Daily badge entry activity</h2>
+<h2><%= t '.daily_activity' %></h2>
 <%=
-  # Show new and edited projects, reminders sent, reactivated after reminders
+  # Show new and edited projects
   # These are expected to be smaller numbers, and show detailed activity,
   # so showring them separately will let us use scales that show more info.
   dataset = []
@@ -108,7 +108,7 @@
     series_dataset = ProjectStat.all.reduce({}) do |h,e|
       h.merge(e.created_at => e[desired_field])
     end
-    dataset << {name: 'projects ' + action + ' since day before',
+    dataset << {name: t(".projects_#{action}_since_yesterday"),
                 data: series_dataset}
     # Calculate moving average over ndays
     series_counts = ProjectStat.all.map { |e| e[desired_field] }
@@ -122,7 +122,7 @@
           series_moving_average[index-ndays]
       end
     end
-    dataset << {name: 'projects ' + action + " average over #{ndays} days",
+    dataset << {name: t(".projects_#{action}_average_7_days"),
                 data: moving_average_dataset,
                 library: {borderDash: [5,5]}}
   end
@@ -131,9 +131,12 @@
     library: date_chart_options, defer: true
 %>
 
+<br>
+<%= t '.projects_created_updated_daily' %>
+
 <br><br><br>
 
-<h2>Reminders</h2>
+<h2><%= t '.reminders' %></h2>
 <%=
   # Show reminders sent, reactivated after reminders
   dataset = []
@@ -141,14 +144,14 @@
   reminders_dataset = ProjectStat.all.reduce({}) do |h,e|
     h.merge(e.created_at => e.reminders_sent)
   end
-  dataset << {name: 'Reminders sent since yesterday',
+  dataset << {name: t('.reminders_sent_since_yesterday'),
               data: reminders_dataset}
   # Reactivated after reminders
   reactivated_dataset = ProjectStat.all.reduce({}) do |h,e|
     h.merge(e.created_at => e.reactivated_after_reminder)
   end
   dataset <<
-    {name: 'Reactivated projects in 14 days after receiving reminder',
+    {name: t('.reactivated_projects'),
      data: reactivated_dataset}
   line_chart dataset, colors: ['green', 'blue'],
     library: date_chart_options, defer: true
@@ -159,12 +162,13 @@
 
 <% if current_user&.admin? %>
 <p>
-As an admin, you may also see the
-<a href="/reminders">detailed information about reminders</a>.
+<%= t '.admin_html' %>
 <% end %>
 
 <br>
 <br>
-You can see the raw data in
-<%= link_to 'JSON format', project_stats_path(format: :json) %> and
-<%= link_to 'downloadable CSV format', project_stats_path(format: :csv) %>.
+<%= t '.raw_data' %>
+<ul>
+<li><%= link_to t('.json_format'), project_stats_path(format: :json) %>
+<li><%= link_to t('.csv_format'), project_stats_path(format: :csv) %>.
+</ul>

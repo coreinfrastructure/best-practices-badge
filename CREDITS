@@ -11,27 +11,33 @@ Doug Birdwell
 Alton(ius) Blom
 Hanno Böck
 enos-dandrea
-Jason Dossett
+Jason Dossett *
 David Drysdale
 Karl Fogel
 Alex Jordan (strugee)
 Sam Khakimov
 Greg Kroah-Hartman
-Dan Kohn
+Dan Kohn *
+Yannick Moy
 Charles Neill (cneill)
 Mark Rader
 Emily Ratliff
 Tom Ritter
 Nicko van Someren
 Daniel Stenberg (curl)
-Marcus Streets
+Marcus Streets *
 Trevor Vaughan
 Dale Visser
 Kevin W. Wall
 Florian Weimer
-David A. Wheeler
+David A. Wheeler *
 
 (Apologies in advance for anyone we've accidentally omitted.)
+
+Those marked with a "*" have all the necessary rights to
+create and close issues, accept proposed changes,
+and release versions of software, as well administrate the production system.
+This is enough to meet the "access_continuity" criterion.
 
 Karl Fogel not only provided us helpful inputs, but his book
 "Producing Open Secure Software" <http://producingoss.com/>

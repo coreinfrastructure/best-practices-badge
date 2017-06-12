@@ -5,6 +5,6 @@ Project <%= @project.id %> named <%= @project.name %>
 on <%= ENV['PUBLIC_HOSTNAME'] %>
 <% end %>
 has changed
-from passing=<%= @old_badge_status %>
-to passing=<%= @new_badge_status %>.
+from <%= @old_badge_status %>
+to <%= @new_badge_status %>.
 See <%= @project_info_url %> for more.

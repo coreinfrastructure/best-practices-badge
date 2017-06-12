@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+# Copyright 2015-2017, the Linux Foundation, IDA, and the
+# CII Best Practices badge contributors
+# SPDX-License-Identifier: MIT
+
 # rubocop:disable Metrics/BlockLength
 Rails.application.configure do
   # Settings specified here will take precedence over those in
@@ -35,7 +39,7 @@ Rails.application.configure do
 
   # Compress JavaScripts and CSS.
   config.assets.js_compressor = :uglifier
-  # config.assets.css_compressor = :sass
+  config.assets.css_compressor = :sass
 
   # Do not fallback to assets pipeline if a precompiled asset is missed.
   config.assets.compile = true
@@ -55,9 +59,10 @@ Rails.application.configure do
   # secure cookies.
   config.force_ssl = true unless ENV['DISABLE_FORCE_SSL']
 
-  # Use the lowest log level to ensure availability of diagnostic information
-  # when problems arise.
-  config.log_level = :debug
+  # Use the :info log level by default, not the lowest (:debug);
+  # the site is now busy enough that ":debug" floods the logs.
+  # You can override this using RAILS_LOG_LEVEL
+  config.log_level = (ENV['RAILS_LOG_LEVEL'] || :info).to_sym
 
   # Prepend all log lines with the following tags.
   # config.log_tags = [ :subdomain, :uuid ]
@@ -120,6 +125,23 @@ Rails.application.configure do
   # with slow network connections
   config.middleware.use Rack::Deflater
 
+  # In production and fake_production environments turn on "lograge".
+  # This makes the logs easier to read and removes cruft that, while useful
+  # in development, can be overwhelming in production.
+  config.lograge.enabled = true
+
+  # Report user_id in logs
+  # https://github.com/roidrage/lograge/issues/23
+  config.lograge.custom_options =
+    lambda do |event|
+      uid = event.payload[:uid]
+      if uid
+        { uid: uid }
+      else
+        {}
+      end
+    end
+
   # As a failsafe, trigger an exception if the response just hangs for
   # too long.  We only do this in production, because it's not
   # supposed to happen in normal use - this is simply an automatic
@@ -127,6 +149,17 @@ Rails.application.configure do
   # development, because it interferes with their purposes.
   # The "use" form is preferred, but it doesn't actually work when placed
   # in this file, so we'll just set the timeout directly.
-  Rack::Timeout.service_timeout = 30 # seconds
+  # Ignore exceptions - in fake_production this will fail.  That's good,
+  # because we do *not* want timeouts during a debug session.
+  # rubocop:disable Lint/HandleExceptions
+  begin
+    Rack::Timeout.service_timeout = 30 # seconds
+    # The timeout reports are really noisy, and don't seem to help debug
+    # typical problems (if anything they get in the way).  Disable them.
+    Rack::Timeout.unregister_state_change_observer(:logger)
+  rescue NameError
+    # Do nothing if it's unavailable (this happens if we didn't load the gem)
+  end
+  # rubocop:enable Lint/HandleExceptions
 end
 # rubocop:enable Metrics/BlockLength

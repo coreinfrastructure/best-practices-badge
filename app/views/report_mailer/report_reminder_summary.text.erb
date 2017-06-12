@@ -3,7 +3,7 @@ This is an automated summary of the badge reminders that are being sent.
 Reminders are being sent to the following projects:
 
 <% @projects.each do |project| %>
-* <%= project.id %>: <%= project.name %>, <%= project.badge_percentage %>%, updated <%= project.updated_at %><%=
+* <%= project.id %>: <%= project.name %>, <%= project.badge_percentage_0 %>%, updated <%= project.updated_at %><%=
   if project.last_reminder_at
     ", last reminder #{project.last_reminder_at}"
   else
@@ -16,4 +16,4 @@ To see other information, such as the relevant email addresses,
 please log into the website. (We don't include email addresses
 because others may see this emailed message.)
 
---- David A. Wheeler, CII Best Practices Badge Technical Lead
+<%= t 'report_mailer.ending' %>

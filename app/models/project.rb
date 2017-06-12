@@ -1,32 +1,37 @@
 # frozen_string_literal: true
 
+# Copyright 2015-2017, the Linux Foundation, IDA, and the
+# CII Best Practices badge contributors
+# SPDX-License-Identifier: MIT
+
 # rubocop:disable Metrics/ClassLength
-class Project < ActiveRecord::Base
+class Project < ApplicationRecord
+  has_many :additional_rights
+  # We could add something like this:
+  # + has_many :users, through: :additional_rights
+  # but we don't, because we don't use the other information about those users.
+  # We only need the user_ids and the additional_rights table has that.
+
   using StringRefinements
   using SymbolRefinements
 
   include PgSearch # PostgreSQL-specific text search
 
-  BADGE_STATUSES = [
-    ['All', nil],
-    ['Passing (100%)', 100],
-    ['In Progress (25% or more)', 25],
-    ['In Progress (50% or more)', 50],
-    ['In Progress (75% or more)', 75],
-    ['In Progress (90% or more)', 90]
-  ].freeze
   STATUS_CHOICE = %w[? Met Unmet].freeze
   STATUS_CHOICE_NA = (STATUS_CHOICE + %w[N/A]).freeze
   MIN_SHOULD_LENGTH = 5
   MAX_TEXT_LENGTH = 8192 # Arbitrary maximum to reduce abuse
   MAX_SHORT_STRING_LENGTH = 254 # Arbitrary maximum to reduce abuse
 
+  BADGE_LEVELS = %w[in_progress passing silver gold].freeze
+
   PROJECT_OTHER_FIELDS = %i[
     name description homepage_url repo_url cpe implementation_languages
     license general_comments user_id disabled_reminders lock_version
+    level
   ].freeze
-  ALL_CRITERIA_STATUS = Criteria.map { |c| c.name.status }.freeze
-  ALL_CRITERIA_JUSTIFICATION = Criteria.map { |c| c.name.justification }.freeze
+  ALL_CRITERIA_STATUS = Criteria.all.map(&:status).freeze
+  ALL_CRITERIA_JUSTIFICATION = Criteria.all.map(&:justification).freeze
   PROJECT_PERMITTED_FIELDS = (PROJECT_OTHER_FIELDS + ALL_CRITERIA_STATUS +
                               ALL_CRITERIA_JUSTIFICATION).freeze
 
@@ -40,19 +45,15 @@ class Project < ActiveRecord::Base
 
   scope :gteq, (
     lambda do |floor|
-      where(Project.arel_table[:badge_percentage].gteq(floor.to_i))
+      where(Project.arel_table[:badge_percentage_0].gteq(floor.to_i))
     end
   )
 
-  # TODO: re-enable this in rubocop > 0.48.1.
-  #       This is erroneous and been fixed in the upstream
-  #       version of rubocop see bbatso/rubocop PR #4237.
-  # rubocop:disable Lint/AmbiguousBlockAssociation
   scope :in_progress, -> { lteq(99) }
 
   scope :lteq, (
     lambda do |ceiling|
-      where(Project.arel_table[:badge_percentage].lteq(ceiling.to_i))
+      where(Project.arel_table[:badge_percentage_0].lteq(ceiling.to_i))
     end
   )
 
@@ -116,7 +117,7 @@ class Project < ActiveRecord::Base
   # We'll also record previous versions of information:
   has_paper_trail
 
-  before_save :update_badge_percentage
+  before_save :update_badge_percentages
 
   # A project is associated with a user
   belongs_to :user
@@ -146,7 +147,7 @@ class Project < ActiveRecord::Base
   validate :need_a_base_url
 
   # Comma-separated list.  This is very generous in what characters it
-  # allows in a language name, but restricts it to ASCII and omits
+  # allows in a programming language name, but restricts it to ASCII and omits
   # problematic characters that are very unlikely in a name like
   # <, >, &, ", brackets, and braces.  This handles language names like
   # JavaScript, C++, C#, D-, and PL/I.  A space is optional after a comma.
@@ -157,36 +158,43 @@ class Project < ActiveRecord::Base
             length: { maximum: MAX_SHORT_STRING_LENGTH },
             format: {
               with: VALID_LANGUAGE_LIST,
-              message: 'Must a comma-separated list of names'
+              message: I18n.t('error_messages.comma_separated_list')
             }
 
   validates :cpe,
             length: { maximum: MAX_SHORT_STRING_LENGTH },
-            format: { with: /\A(cpe:.*)?\Z/, message: 'Must begin with cpe:' }
+            format: {
+              with: /\A(cpe:.*)?\Z/,
+              message: I18n.t('error_messages.begin_with_cpe')
+            }
 
   validates :user_id, presence: true
 
-  # Validate all of the criteria-related inputs
-  Criteria.each do |criterion|
-    if criterion.na_allowed?
-      validates criterion.name.status, inclusion: { in: STATUS_CHOICE_NA }
-    else
-      validates criterion.name.status, inclusion: { in: STATUS_CHOICE }
+  Criteria.each do |_level, criteria|
+    criteria.each do |_name, criterion|
+      if criterion.na_allowed?
+        validates criterion.name.status, inclusion: { in: STATUS_CHOICE_NA }
+      else
+        validates criterion.name.status, inclusion: { in: STATUS_CHOICE }
+      end
+      validates criterion.name.justification,
+                length: { maximum: MAX_TEXT_LENGTH },
+                text: true
     end
-    validates criterion.name.justification,
-              length: { maximum: MAX_TEXT_LENGTH },
-              text: true
   end
 
   # Return string representing badge level; assumes badge_percentage correct.
   def badge_level
-    return 'passing' if badge_percentage >= 100
-    'in_progress'
+    BADGE_LEVELS.each_with_index do |level, index|
+      return level if index == Criteria.count
+      return level if self["badge_percentage_#{index}".to_sym] < 100
+    end
   end
 
-  def calculate_badge_percentage
-    met = Criteria.active.count { |criterion| enough? criterion }
-    to_percentage met, Criteria.active.length
+  def calculate_badge_percentage(level)
+    active = Criteria.active(level)
+    met = active.count { |criterion| enough?(criterion) }
+    to_percentage met, active.size
   end
 
   # Does this contain a URL *anywhere* in the (justification) text?
@@ -234,15 +242,15 @@ class Project < ActiveRecord::Base
     get_na_result(criterion, justification)
   end
 
-  def get_satisfaction_data(panel)
+  def get_satisfaction_data(level, panel)
     total =
-      Criteria.select do |criterion|
+      Criteria[level].values.select do |criterion|
         criterion.major.downcase.delete(' ') == panel
       end
     passing = total.count { |criterion| enough?(criterion) }
     {
       text: "#{passing}/#{total.size}",
-      color: get_color(passing / total.size.to_f)
+      color: get_color(passing / [1, total.size.to_f].max)
     }
   end
 
@@ -251,9 +259,9 @@ class Project < ActiveRecord::Base
   # criterion
   STATIC_ANALYSIS_JUSTIFICATION_REQUIRED_DATE =
     DateTime.iso8601('2017-04-25T00:00Z')
-  def notify_for_static_analysis?
-    status = self[Criteria[:static_analysis].name.status]
-    result = get_criterion_result(Criteria[:static_analysis])
+  def notify_for_static_analysis?(level)
+    status = self[Criteria[level][:static_analysis].name.status]
+    result = get_criterion_result(Criteria[level][:static_analysis])
     updated_at < STATIC_ANALYSIS_JUSTIFICATION_REQUIRED_DATE &&
       status.met? && result == :criterion_justification_required
   end
@@ -275,13 +283,12 @@ class Project < ActiveRecord::Base
   # This code will need to changed if there are multiple badge levels, or
   # if there are more than 100 criteria. (If > 100 criteria, switch
   # percentage to something like millipercentage.)
-  def update_badge_percentage
-    old_badge_percentage = badge_percentage
-    self.badge_percentage = calculate_badge_percentage
-    if badge_percentage == 100 && old_badge_percentage < 100
-      self.achieved_passing_at = Time.now.utc
-    elsif badge_percentage < 100 && old_badge_percentage == 100
-      self.lost_passing_at = Time.now.utc
+  def update_badge_percentages
+    Criteria.keys.each do |level|
+      old_badge_percentage = self["badge_percentage_#{level}".to_sym]
+      self["badge_percentage_#{level}".to_sym] =
+        calculate_badge_percentage(level)
+      update_passing_times(old_badge_percentage) if level == '0'
     end
   end
 
@@ -296,17 +303,25 @@ class Project < ActiveRecord::Base
   # We need this we precalculate and store percentages in the database;
   # this speeds up many actions, but it means that a change in the rules
   # doesn't automatically change the precalculated values.
+  # rubocop:disable Metrics/MethodLength
   def self.update_all_badge_percentages
     Project.find_each do |project|
       project.with_lock do
-        old_badge_percentage = project.badge_percentage
-        project.update_badge_percentage
-        unless old_badge_percentage == project.badge_percentage
-          project.save!(touch: false)
+        old_badge_percentages =
+          Criteria.keys.map do |level|
+            [level, project["badge_percentage_#{level}".to_sym]]
+          end.to_h
+        project.update_badge_percentages
+        old_badge_percentages.each do |level, percentage|
+          unless percentage ==
+                 project["badge_percentage_#{level}".to_sym]
+            project.save!(touch: false)
+          end
         end
       end
     end
   end
+  # rubocop:enable Metrics/MethodLength
 
   # The following configuration options are trusted.  Set them to
   # reasonable numbers or accept the defaults.
@@ -362,7 +377,7 @@ class Project < ActiveRecord::Base
     #   Use: projects.order("COALESCE(last_reminder_at, updated_at)")
     Project
       .select('projects.*, users.email as user_email')
-      .where('badge_percentage < 100')
+      .where('badge_percentage_0 < 100')
       .where('lost_passing_at IS NULL OR lost_passing_at < ?',
              LOST_PASSING_REMINDER.days.ago)
       .where('disabled_reminders = FALSE')
@@ -384,7 +399,7 @@ class Project < ActiveRecord::Base
   def self.projects_first_passing_in(target_month)
     Project
       .select('id, name, achieved_passing_at')
-      .where('badge_percentage = 100')
+      .where('badge_percentage_0 = 100')
       .where('achieved_passing_at >= ?', target_month.at_beginning_of_month)
       .where('achieved_passing_at <= ?', target_month.at_end_of_month)
       .where('lost_passing_at IS NULL')
@@ -405,6 +420,13 @@ class Project < ActiveRecord::Base
   # def all_active_criteria_passing?
   #   Criteria.active.all? { |criterion| enough? criterion }
   # end
+
+  # This method is mirrored in assets/project-form.js as isEnough
+  # If you change this method, change isEnough accordingly.
+  def enough?(criterion)
+    result = get_criterion_result(criterion)
+    result == :criterion_passing || result == :criterion_barely
+  end
 
   # This method is mirrored in assets/project-form.js as getColor
   # If you change this method, change getColor accordingly.
@@ -449,14 +471,15 @@ class Project < ActiveRecord::Base
 
   def need_a_base_url
     return unless repo_url.blank? && homepage_url.blank?
-    errors.add :base, 'Need at least a home page or repository URL'
+    errors.add :base, I18n.t('error_messages.need_home_page_or_url')
   end
 
-  # This method is mirrored in assets/project-form.js as isEnough
-  # If you change this method, change isEnough accordingly.
-  def enough?(criterion)
-    result = get_criterion_result(criterion)
-    result == :criterion_passing || result == :criterion_barely
+  def update_passing_times(old_badge_percentage)
+    if badge_percentage_0 == 100 && old_badge_percentage < 100
+      self.achieved_passing_at = Time.now.utc
+    elsif badge_percentage_0 < 100 && old_badge_percentage == 100
+      self.lost_passing_at = Time.now.utc
+    end
   end
 
   def to_percentage(portion, total)

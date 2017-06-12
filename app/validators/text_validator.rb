@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
+# Copyright 2015-2017, the Linux Foundation, IDA, and the
+# CII Best Practices badge contributors
+# SPDX-License-Identifier: MIT
+
 class TextValidator < ActiveModel::EachValidator
-  ENCODING_MESSAGE =  'must be have a valid  UTF-8 encoding and ' \
-                      'no invalid control characters'
   INVALID_CONTROL = /[\x01-\x08\x0b\x0c\x0e-\x1f]/
   def text_acceptable?(value)
     return true if value.nil?
@@ -12,6 +14,7 @@ class TextValidator < ActiveModel::EachValidator
 
   def validate_each(record, attribute, value)
     return if text_acceptable?(value)
-    record.errors.add attribute, (options[:message] || ENCODING_MESSAGE)
+    record.errors.add attribute, (options[:message] ||
+                                  I18n.t('error_messages.valid_text'))
   end
 end

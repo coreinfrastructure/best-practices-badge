@@ -17,7 +17,7 @@ and its badge entry has not been updated in a while.
 Your best practices badge entry is at
 <a href="<%= @project_info_url %>"><%= @project_info_url %></a>
 and was last updated on <%= @project.updated_at %>.
-It is currently at <%= @project.badge_percentage %>% (out of 100%).
+It is currently at <%= @project.badge_percentage_0 %>% (out of 100%).
 </p>
 
 <p>
@@ -28,7 +28,7 @@ to complete the information and get your badge!
 </p>
 
 <p>
-If you want to see <i>only</i> what you're missing, visit your badge entry,
+If you want to see <em>only</em> what you're missing, visit your badge entry,
 select the button near the top labelled "Expand all panels", and
 then select the button near the top labelled "Hide met or N/A criteria".
 If you have questions, or need help, please contact
@@ -53,7 +53,7 @@ Thank you for your time.
 </p>
 
 <p>
---- David A. Wheeler, CII Best Practices Badge Technical Lead
+<%= t 'report_mailer.ending' %>
 </p>
   </body>
 </html>

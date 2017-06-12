@@ -1,51 +1,21 @@
+<% cache locale do %>
 <div class="row">
     <div class="col-md-8 col-sm-7">
-      <h2 class="best-practices-banner">CII Best Practices Badge Program</h2>
-      <%= link_to 'Get Your Badge Now!', new_project_path, class:"btn btn-success btn-main-getbadge btn-main-margin" %>
-
+      <h2 class="best-practices-banner"><%=
+        t('static_pages.home.badge_program') %></h2>
+      <%= link_to t('static_pages.home.get_your_badge'),
+                    new_project_path,
+                    class:"btn btn-success btn-main-getbadge btn-main-margin" %>
       <p class="no-padding best-practices-main-text">
-        The <a href="https://www.linuxfoundation.org/">Linux Foundation (LF)</a>
-        <a href="https://www.coreinfrastructure.org/">Core Infrastructure
-        Initiative (CII)</a>
-        Best Practices badge is a way for Free/Libre and
-        Open Source Software (FLOSS) projects to
-        show that they follow best practices.
-        Projects can voluntarily self-certify, at no cost, by using this
-        web application to explain how they follow each best practice.
-        The CII Best Practices Badge is inspired by the many badges available
-        to projects on GitHub. Consumers of the badge will be able to
-        quickly assess which FLOSS projects are following best practices
-        and as a result are more likely to produce higher-quality secure
-        software.
+        <%= t('static_pages.home.p1_html') %>
       </p>
 
       <p class="no-padding best-practices-main-text">
-        More information on the CII Best Practices Badging program,
-        including background and
-        <a href='https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/doc/criteria.md'>criteria</a>, is
-        <a href='https://github.com/linuxfoundation/cii-best-practices-badge'>available on GitHub</a>.
-        <a href="/project_stats">Project statistics</a> and
-        <a href="/criteria">criteria statistics</a> are available.
-        The <a href="/projects">projects page</a> shows participating projects
-        and supports queries (e.g., you can see
-        <a href="/projects?gteq=100">projects that have a passing badge</a>).
-        You can also see
-        <a href='/projects/1'>an example (where we try to get our own badge)</a>.
+        <%= t('static_pages.home.p2_html') %>
       </p>
 
       <p class="no-padding best-practices-main-text">
-        <i>Privacy and legal issues</i>:
-        Please see our
-        <a href="https://www.linuxfoundation.org/privacy">privacy policy</a>
-        and
-        <a href="https://www.linuxfoundation.org/terms">terms of use</a>.
-        All publicly-available non-code content is released under at least the
-        <a href="https://creativecommons.org/licenses/by/3.0/">Creative
-        Commons Attribution License version 3.0 (CC-BY-3.0)</a>;
-        newer non-code content
-        is released under CC-BY version 3.0 or later (CC-BY-3.0+).
-        If referencing collectively or not otherwise noted,
-        please credit the CII Best Practices badge contributors.
+        <%= t('static_pages.home.p3_html') %>
       </p>
     </div>
     <div class="col-md-4 col-sm-5">
@@ -53,3 +23,4 @@
     </div>
   </div>
   <br>
+<% end %>

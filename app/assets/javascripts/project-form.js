@@ -1,20 +1,28 @@
-// This JavaScript supporting implementing the per project form used
+// Copyright 2015-2017, the Linux Foundation, IDA, and the
+// CII Best Practices badge contributors
+// SPDX-License-Identifier: MIT
+
+// This JavaScript implements the per-project form used
 // for showing and editing information about a project.
 
 // This global constant is set in criteria.js ; let ESLint know about it.
-/* global CRITERIA_HASH */
+/* global CRITERIA_HASH_FULL */
+/* global TRANSLATION_HASH_FULL */
 
 var MIN_SHOULD_LENGTH = 5;
 
-// Global - name of criterion we last selected as 'met'.
+// Global - name of criterion we last selected as 'met' or 'N/A'.
 // Don't hide this criterion (yet), so that users can enter a justification.
-var globalLastSelectedMet = '';
+var globalLastSelectedMetNA = '';
 var globalHideMetnaCriteria = false;
 var globalShowAllDetails = false;
 var globalExpandAllPanels = false;
 var globalIgnoreHashChange = false;
 var globalCriteriaResultHash = {};
 var globalisEditing = false;
+var CRITERIA_HASH = {};
+// Transllation hash for current locale.
+var T_HASH = {};
 
 // Do a polyfill for datalist if it's not already supported
 // (e.g., Safari fails to support polyfill at the time of this writing).
@@ -30,6 +38,35 @@ function polyfillDatalist() {
         }).get();
       $(this).autocomplete({ source: availableTags });
     });
+  }
+}
+
+// This gets the locale of the current page
+function getLocale() {
+  var localeFromUrl = location.pathname.split('/')[1];
+  if (localeFromUrl.length >= 2 &&
+      (localeFromUrl.length === 2 || localeFromUrl[2] === '-')) {
+    return localeFromUrl;
+  }
+  var searchString = location.search.match('locale=([^\#\&]*)');
+  if (searchString) {
+    return searchString[1];
+  } else {
+    return 'en';
+  }
+}
+
+// Return current level based upon parameters in location.search
+function getLevel() {
+  var levelFromUrl = location.pathname.match('projects/[0-9]*/([0-2])');
+  if (levelFromUrl) {
+    return levelFromUrl[1];
+  }
+  var searchString = location.search.match('criteria_level=([^\#\&]*)');
+  if (searchString) {
+    return searchString[1];
+  } else {
+    return '0';
   }
 }
 
@@ -117,7 +154,17 @@ function getUnmetResult(criterion, justification) {
 // If you change this function change "get_criterion_result" accordingly.
 function getCriterionResult(criterion) {
   var status = criterionStatus(criterion);
-  var justification = $('#project_' + criterion + '_justification')[0].value;
+  var justification;
+  if (globalisEditing) {
+    justification = $('#project_' + criterion + '_justification')[0].value;
+  } else {
+    justification = $.trim(
+      $('#' + criterion).find('.justification-markdown', 'p').html()
+    );
+    if (justification) {
+      justification = justification.replace(new RegExp('<\/?p>', 'g'), '');
+    }
+  }
   if (!justification) {
     justification = '';
   }
@@ -191,19 +238,19 @@ function resetCriterionResult(criterion) {
   if (result === 'criterion_passing') {
     destination.attr('src', $('#result_symbol_check_img').attr('src')).
       attr('width', 40).attr('height', 40).
-      attr('alt', 'Enough for a badge!');
+      attr('alt', T_HASH['passing_alt']);
   } else if (result === 'criterion_barely') {
     destination.attr('src', $('#result_symbol_dash').attr('src')).
       attr('width', 40).attr('height', 40).
-      attr('alt', 'Barely enough for a badge.');
+      attr('alt', T_HASH['barely_alt']);
   } else if (result === 'criterion_failing') {
     destination.attr('src', $('#result_symbol_x_img').attr('src')).
       attr('width', 40).attr('height', 40).
-      attr('alt', 'Not enough for a badge.');
+      attr('alt', T_HASH['failing_alt']);
   } else {
     destination.attr('src', $('#result_symbol_question').attr('src')).
       attr('width', 40).attr('height', 40).
-      attr('alt', 'Unknown required information, not enough for a badge.');
+      attr('alt', T_HASH['unknown_alt']);
   }
 }
 
@@ -242,14 +289,30 @@ function hasFieldTextInside(e) {
   return false;
 }
 
+function fillCriteriaResultHash() {
+  $.each(CRITERIA_HASH, function(key, value) {
+    globalCriteriaResultHash[key] = {};
+    globalCriteriaResultHash[key]['status'] = $('input[name="project[' + key +
+                                                '_status]"]:checked')[0].value;
+    globalCriteriaResultHash[key]['result'] = getCriterionResult(key);
+    globalCriteriaResultHash[key]['panelID'] = value['major']
+                                              .toLowerCase()
+                                              .replace(/\s+/g, '');
+  });
+  $('#project_entry_form').trigger('criteriaResultHashComplete');
+}
+
 // If we should, hide the criteria that are "Met" or N/A and are enough.
 // Do NOT hide 'met' criteria that aren't enough (e.g., missing required URL),
 // and do NOT hide the last-selected-met criterion (so users can enter/edit
 // justification text).
 function hideMetNA() {
+  if (Object.keys(globalCriteriaResultHash).length === 0) {
+    fillCriteriaResultHash();
+  }
   $.each(CRITERIA_HASH, function(criterion, value) {
     var result = globalCriteriaResultHash[criterion]['result'];
-    if (globalHideMetnaCriteria && criterion !== globalLastSelectedMet &&
+    if (globalHideMetnaCriteria && criterion !== globalLastSelectedMetNA &&
         result === 'criterion_passing') {
       $('#' + criterion).addClass('hidden');
     } else {
@@ -271,43 +334,47 @@ function updateCriterionDisplay(criterion) {
   var justification = $(criterionJust) ? $(criterionJust)[0].value : '';
   var criterionPlaceholder;
   var suppressJustificationDisplay;
+  var locale = getLocale();
   if (status === 'Met') {
-    criterionPlaceholder = CRITERIA_HASH[criterion]['met_placeholder'];
+    if (CRITERIA_HASH[criterion]['met_placeholder']) {
+      criterionPlaceholder =
+        CRITERIA_HASH[criterion]['met_placeholder'][locale];
+    }
     if (!criterionPlaceholder) {
       if (criterionHashTrue(criterion, 'met_url_required')) {
-        criterionPlaceholder = '(URL required) Please explain how this ' +
-          'is met, including 1+ key URLs.';
+        criterionPlaceholder = T_HASH['met_url_placeholder'];
       } else if (criterionHashTrue(criterion, 'met_justification_required')) {
-        criterionPlaceholder = '(Required) Please explain how this ' +
-          'is met, possibly including 1+ key URLs.';
+        criterionPlaceholder = T_HASH['met_justification_placeholder'];
       } else {
-        criterionPlaceholder = '(Optional) Please explain how this ' +
-          'is met, possibly including 1+ key URLs.';
+        criterionPlaceholder = T_HASH['met_placeholder'];
       }
     }
     suppressJustificationDisplay = criterionHashTrue(criterion, 'met_suppress');
   } else if (status === 'Unmet') {
-    criterionPlaceholder = CRITERIA_HASH[criterion]['unmet_placeholder'];
+    if (CRITERIA_HASH[criterion]['unmet_placeholder']) {
+      criterionPlaceholder =
+        CRITERIA_HASH[criterion]['unmet_placeholder'][locale];
+    }
     if (!criterionPlaceholder) {
-      criterionPlaceholder = 'Please explain why it\'s okay this ' +
-        'is unmet, including 1+ key URLs.';
+      criterionPlaceholder = T_HASH['unmet_placeholder'];
     }
     suppressJustificationDisplay =
       criterionHashTrue(criterion, 'unmet_suppress');
   } else if (status === 'N/A') {
-    criterionPlaceholder = CRITERIA_HASH[criterion]['na_placeholder'];
+    if (CRITERIA_HASH[criterion]['na_placeholder']) {
+      criterionPlaceholder =
+        CRITERIA_HASH[criterion]['na_placeholder'][locale];
+    }
     if (!criterionPlaceholder) {
       if (criterionHashTrue(criterion, 'na_justification_required')) {
-        criterionPlaceholder = '(Required) Please explain why this ' +
-          'is not applicable (N/A), possibly including 1+ key URLs.';
+        criterionPlaceholder = T_HASH['na_justification_placeholder'];
       } else {
-        criterionPlaceholder = '(Optional) Please explain why this ' +
-          'is not applicable (N/A), possibly including 1+ key URLs.';
+        criterionPlaceholder = T_HASH['na_placeholder'];
       }
     }
     suppressJustificationDisplay = criterionHashTrue(criterion, 'na_suppress');
   } else {
-    criterionPlaceholder = 'Please explain';
+    criterionPlaceholder = T_HASH['unknown_placeholder'];
     suppressJustificationDisplay = true;
   }
   $(criterionJust).attr('placeholder', criterionPlaceholder);
@@ -337,10 +404,10 @@ function updateCriterionDisplayAndUpdate(criterion) {
 
 function changeCriterion(criterion) {
   // We could use criterionStatus here, but this is faster since
-  // we do not care about any status except "Met".
+  // we do not care about any status except "Met" or "N/A".
   var status = criterionStatus(criterion);
-  if (status === 'Met') {
-    globalLastSelectedMet = criterion;
+  if (status === 'Met' || status === 'N/A') {
+    globalLastSelectedMetNA = criterion;
   }
   updateCriterionDisplayAndUpdate(criterion);
 }
@@ -351,12 +418,12 @@ function ToggleHideMet(e) {
   // shows the REVERSED state (not the current state).
   if (globalHideMetnaCriteria) {
     $('#toggle-hide-metna-criteria')
-      .addClass('active').html('Show met &amp; N/A')
-      .prop('title', 'Show met & N/A criteria'); // Use & not &amp;
+      .addClass('active').html(T_HASH['show_met_html'])
+      .prop('title', T_HASH['show_met_title']); // Use & not &amp;
   } else {
     $('#toggle-hide-metna-criteria')
-      .removeClass('active').html('Hide met &amp; N/A')
-      .prop('title', 'Hide met & N/A criteria (leaving unmet and unknown');
+      .removeClass('active').html(T_HASH['hide_met_html'])
+      .prop('title', T_HASH['hide_met_title']);
   }
   hideMetNA();
 }
@@ -379,10 +446,12 @@ function ToggleExpandAllPanels(e) {
   // shows the REVERSED state (not the current state).
   if (globalExpandAllPanels) {
     $('#toggle-expand-all-panels')
-      .addClass('active').html('Collapse panels');
+      .addClass('active').html(T_HASH['collapse_all'])
+      .prop('title', T_HASH['collapse_all_title']);
   } else {
     $('#toggle-expand-all-panels')
-      .removeClass('active').html('Expand panels');
+      .removeClass('active').html(T_HASH['expand_all'])
+      .prop('title', T_HASH['expand_all_title']);
   }
   expandAllPanels();
 }
@@ -421,21 +490,21 @@ function showHash() {
 
 function getAllPanelsReady() {
   $('.can-collapse').addClass('clickable');
-  $('.can-collapse').find('i.glyphicon').addClass('glyphicon-chevron-up');
+  $('.can-collapse').find('em.glyphicon').addClass('glyphicon-chevron-up');
   var loc = window.location.hash;
   if (loc !== '#all') {
     var parentPanel = $(loc).parents('.panel');
     if (parentPanel.length) {
       $('.panel').not(parentPanel).find('.collapse').removeClass('in');
       $('.panel').not(parentPanel).find('.can-collapse').addClass('collapsed');
-      $('.panel').not(parentPanel).find('.can-collapse').find('i.glyphicon')
+      $('.panel').not(parentPanel).find('.can-collapse').find('em.glyphicon')
         .addClass('glyphicon-chevron-down')
         .removeClass('glyphicon-chevron-up');
       showHash();
     } else {
       $('.remove-in').removeClass('in');
       $('.close-by-default').addClass('collapsed');
-      $('.close-by-default').find('i.glyphicon')
+      $('.close-by-default').find('em.glyphicon')
         .addClass('glyphicon-chevron-down')
         .removeClass('glyphicon-chevron-up');
     }
@@ -510,10 +579,10 @@ function ToggleDetailsDisplay(e) {
                         replace('_details_toggler', '_details_text');
   var buttonText;
   if ($('#' + detailsTextID).css('display') !== 'none') {
-    buttonText = 'Show details';
+    buttonText = T_HASH['show_details'];
     $('#' + detailsTextID).css({'display':'none'});
   } else {
-    buttonText = 'Hide details';
+    buttonText = T_HASH['hide_details'];
     $('#' + detailsTextID).css({'display':''});
   }
   $('#' + e.target.id).html(buttonText);
@@ -525,16 +594,16 @@ function ToggleAllDetails(e) {
   // shows the REVERSED state (not the current state).
   if (globalShowAllDetails) {
     $('#toggle-show-all-details')
-      .addClass('active').html('Hide all details');
+      .addClass('active').html(T_HASH['hide_all_details']);
     $('.details-text').css({'display':''});
-    $('.details-toggler').html('Hide details')
-      .prop('title', 'Hide all detailed text');
+    $('.details-toggler').html(T_HASH['hide_details'])
+      .prop('title', T_HASH['hide_all_details']);
   } else {
     $('#toggle-show-all-details')
-      .removeClass('active').html('Show all details');
+      .removeClass('active').html(T_HASH['show_all_details']);
     $('.details-text').css({'display':'none'});
-    $('.details-toggler').html('Show details')
-      .prop('title', 'Show all detailed text');
+    $('.details-toggler').html(T_HASH['show_details'])
+      .prop('title', T_HASH['show_all_details']);
   }
 }
 
@@ -548,7 +617,7 @@ function TogglePanel(e) {
   if ($this.hasClass('collapsed')) {
     $this.closest('.panel').find('.panel-collapse').collapse('show');
     $this.removeClass('collapsed');
-    $this.find('i.glyphicon').removeClass('glyphicon-chevron-down')
+    $this.find('em.glyphicon').removeClass('glyphicon-chevron-down')
       .addClass('glyphicon-chevron-up');
     if (!globalIgnoreHashChange) {
       var origId = $this.attr('id');
@@ -560,39 +629,29 @@ function TogglePanel(e) {
   } else {
     $this.closest('.panel').find('.panel-collapse').collapse('hide');
     $this.addClass('collapsed');
-    $this.find('i.glyphicon').removeClass('glyphicon-chevron-up')
+    $this.find('em.glyphicon').removeClass('glyphicon-chevron-up')
       .addClass('glyphicon-chevron-down');
   }
 }
 
-function fillCriteriaResultHash() {
-  $.each(CRITERIA_HASH, function(key, value) {
-    globalCriteriaResultHash[key] = {};
-    globalCriteriaResultHash[key]['status'] = $('input[name="project[' + key +
-                                                '_status]"]:checked')[0].value;
-    globalCriteriaResultHash[key]['result'] = getCriterionResult(key);
-    globalCriteriaResultHash[key]['panelID'] = value['major']
-                                              .toLowerCase()
-                                              .replace(/\s+/g, '');
-  });
-  $('#project_entry_form').trigger('criteriaResultHashComplete');
-}
-
 function setupProjectForm() {
   // We're told progress, so don't recalculate - just display it.
+  T_HASH = TRANSLATION_HASH_FULL[getLocale()];
+  CRITERIA_HASH = CRITERIA_HASH_FULL[getLevel()];
   var percentageScaled = $('#badge-progress').attr('aria-valuenow');
   var percentAsString = percentageScaled.toString() + '%';
   $('#badge-progress').css('width', percentAsString);
+
 
   // By default, hide details.  We do the hiding in JavaScript, so
   // those who disable JavaScript will still see the text
   // (they'll have no way to later reveal it).
   $('.details-text').css({'display':'none'});
-  $('.details-toggler').html('Show details');
+  $('.details-toggler').html(T_HASH['show_details']);
 
   // Force these values on page reload
   globalShowAllDetails = false;
-  globalLastSelectedMet = '';
+  globalLastSelectedMetNA = '';
   globalHideMetnaCriteria = false;
   globalExpandAllPanels = false;
   globalCriteriaResultHash = {};

@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+# Copyright 2015-2017, the Linux Foundation, IDA, and the
+# CII Best Practices badge contributors
+# SPDX-License-Identifier: MIT
+
 require 'test_helper'
 
 class AdminUsersShowTest < ActionDispatch::IntegrationTest
@@ -10,7 +14,7 @@ class AdminUsersShowTest < ActionDispatch::IntegrationTest
   end
 
   test 'non-logged-in show user' do
-    get user_path(@melissa)
+    get user_path(@melissa, locale: nil)
     assert_response :success
     assert_select 'a[href=?]'.dup, 'mailto:melissa%40example.com', false
   end

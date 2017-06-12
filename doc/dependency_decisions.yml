@@ -242,3 +242,45 @@
       program but is instead linked only into bundler which is MIT.
     :versions: []
     :when: 2017-03-22 15:04:54.137880644 Z
+- - :approve
+  - gettext
+  - :who: David A. Wheeler
+    :why: License is "Ruby or LGPLv3+". Ruby license is compatible with rest of the
+      work.  In addition, LGPLv3+ is fine to include in larger works (even proprietary
+      works!) so it is not a problem.  Only one side of an "or" needs to be acceptable,
+      and in this case both sides are acceptable, so there is no license problem.
+    :versions: []
+    :when: 2017-05-09 17:51:30.490314988 Z
+- - :approve
+  - locale
+  - :who: David A. Wheeler
+    :why: License is "Ruby or LGPLv3+". Ruby license is compatible with rest of the
+      work.  In addition, LGPLv3+ is fine to include in larger works (even proprietary
+      works!) so it is not a problem.  Only one side of an "or" needs to be acceptable,
+      and in this case both sides are acceptable, so there is no license problem.
+    :versions: []
+    :when: 2017-05-09 17:52:32.770053521 Z
+- - :approve
+  - ansi
+  - :who: Dan Kohn
+    :why: OSI-approved OSS license BSD-2-Clause, known compatible with MIT
+    :versions: []
+    :when: 2017-06-02 04:25:11.659354000 Z
+- - :approve
+  - newrelic_rpm
+  - :who: David A. Wheeler
+    :why: This is a monitoring tool, not needed for execution
+    :versions: []
+    :when: 2017-06-05 21:56:32.298665472 Z
+- - :approve
+  - msgpack
+  - :who: David A. Wheeler
+    :why: Apache 2.0 is OSS; no problems detected
+    :versions: []
+    :when: 2017-06-10 16:31:40.705500086 Z
+- - :approve
+  - scout_apm
+  - :who: Dan Kohn
+    :why: Proprietary but available under license while we use service for debugging
+    :versions: []
+    :when: 2017-06-10 18:12:56.899860000 Z

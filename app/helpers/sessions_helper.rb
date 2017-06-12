@@ -1,10 +1,47 @@
 # frozen_string_literal: true
 
+# Copyright 2015-2017, the Linux Foundation, IDA, and the
+# CII Best Practices badge contributors
+# SPDX-License-Identifier: MIT
+
+# rubocop:disable Metrics/ModuleLength
 module SessionsHelper
   SESSION_TTL = 48.hours # Automatically log off session if inactive this long
 
+  require 'uri'
+
+  # Add/change locale information in URL query if needed.  Modifies url.
+  def force_locale_url_query(url, locale)
+    return unless url.path == '' ||
+                  url.path == '/' || url.query =~ /\Alocale=.*\Z/
+    url.query = locale == :en ? nil : 'locale=' + locale.to_s
+  end
+
+  # Change locale of original_url.
+  # Presumes that query is empty or only has a locale.
+  # rubocop:disable Metrics/AbcSize
+  def force_locale_url(original_url, locale)
+    url = URI.parse(original_url)
+    # Clean up path
+    url.path.gsub!(%r{\A\/[a-z]{2}(-[A-Za-z0-9-]*)?\/}, '') # Remove old locale
+    url.path = '/' + url.path if url.path == '' || url.path[0] != '/'
+    if locale != :en && url.path.length > 1
+      url.path = '/' + locale.to_s + url.path
+    end
+    force_locale_url_query url, locale
+    url.to_s
+  end
+  # rubocop:enable Metrics/AbcSize
+
   def log_in(user)
     session[:user_id] = user.id
+    # Switch to user's preferred locale, but only if the current locale is :en
+    # (any other locale is an intentional selection & thus should be retained)
+    I18n.locale = user.preferred_locale.to_sym if I18n.locale == :en
+    return unless session[:forwarding_url]
+    session[:forwarding_url] = force_locale_url(
+      session[:forwarding_url], I18n.locale
+    )
   end
 
   # Returns the user corresponding to the remember token cookie
@@ -44,8 +81,9 @@ module SessionsHelper
   end
 
   def github_user_projects
-    github = Github.new oauth_token: session[:user_token], auto_pagination: true
-    github.repos.list.map(&:html_url).reject(&:blank?)
+    github = Octokit::Client.new access_token: session[:user_token]
+    Octokit.auto_paginate = true
+    github.repos.map(&:html_url).reject(&:blank?)
   end
 
   # Logs out the current user.
@@ -55,24 +93,33 @@ module SessionsHelper
     @current_user = nil
   end
 
-  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
-  def can_make_changes?
-    project_id = params[:id]
-    if current_user.nil?
-      false
-    elsif current_user.projects.exists?(id: project_id)
-      true
-    elsif current_user.admin?
-      true
-    elsif current_user.provider == 'github'
-      project = Project.find_by(id: project_id)
-      return false unless project.repo_url?
-      github_user_projects.include? project.repo_url
-    else
-      false
-    end
+  # Returns true iff the current_user can *control* the @project.
+  # This includes the right to delete & change users who can edit,
+  # in addition to being able to edit the project.
+  # Only the project badge entry owner or admins *control* the project entry.
+  def can_control?
+    return false if current_user.nil?
+    return true if current_user.admin?
+    return true if current_user.id == @project.user_id
+    false
   end
-  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
+
+  # Returns true iff the current_user can *edit* the @project data.
+  # This is a session helper because we use the session to ask GitHub
+  # for the list of projects the user can edit.
+  # rubocop:disable Metrics/CyclomaticComplexity
+  def can_edit?
+    return false if current_user.nil?
+    return true if can_control?
+    return true if AdditionalRight.exists?(
+      project_id: @project.id, user_id: current_user.id
+    )
+    return true if
+      current_user.provider == 'github' &&
+      @project.repo_url? && github_user_projects.include?(@project.repo_url)
+    false
+  end
+  # rubocop:enable Metrics/CyclomaticComplexity
 
   # Redirects to stored location (or to the default)
   def redirect_back_or(default)
@@ -117,3 +164,4 @@ module SessionsHelper
     session[:forwarding_url] = ref_url unless ref_url == login_url
   end
 end
+# rubocop:enable Metrics/ModuleLength

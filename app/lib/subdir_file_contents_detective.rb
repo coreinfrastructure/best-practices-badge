@@ -1,9 +1,12 @@
 # frozen_string_literal: true
+
+# Copyright 2015-2017, the Linux Foundation, IDA, and the
+# CII Best Practices badge contributors
+# SPDX-License-Identifier: MIT
+
 # Examine repository files at the top level and in key subdirectories
 # (those conventionally used for source and documentation).
 # Note that a key precondition is determining how to open repo files.
-
-# frozen_string_literal: true
 
 class SubdirFileContentsDetective < Detective
   INPUTS = [:repo_files].freeze

@@ -1,5 +1,19 @@
 # frozen_string_literal: true
 
+# Copyright 2015-2017, the Linux Foundation, IDA, and the
+# CII Best Practices badge contributors
+# SPDX-License-Identifier: MIT
+
+# When sending emails to specific users we use I18n.with_locale do..end.
+# That's because it's possible that the current user is an administrator
+# or script, in which case the current I18n.locale is not necessarily
+# the recipient's preferred_locale.  Where possible, we want to use
+# the recipient's preferred_locale when sending an email.
+
+# We have not internationalized debug/monthly reports, since they are
+# only sent in one language anyway (translators have enough work to do,
+# let's not ask them to translate unused text!).
+
 # rubocop:disable Metrics/MethodLength, Metrics/ClassLength
 class ReportMailer < ApplicationMailer
   REPORT_EMAIL_DESTINATION = 'cii-badge-log@lists.coreinfrastructure.org'
@@ -27,21 +41,23 @@ class ReportMailer < ApplicationMailer
     mail(
       to: @report_destination,
       subject: "Project #{project.id} status change to " \
-                        "passing=#{new_badge_status}"
+                        "#{new_badge_status}"
     )
   end
 
-  def subject_for(new_badge_status)
-    if new_badge_status == 'passing'
-      'CONGRATULATIONS on achieving a passing best practices badge!'
+  # Return subject line for given badge status.  Uses current I18n.locale.
+  def subject_for(old_badge_level, new_badge_level, lost_level)
+    if lost_level
+      t('report_mailer.subject_no_longer_passing', old_level: old_badge_level)
     else
-      'Your best practices badge is no longer passing'
+      t('report_mailer.subject_achieved_passing', new_level: new_badge_level)
     end
   end
 
   # Create email to badge entry owner about their new badge status
   # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
-  def email_owner(project, new_badge_status)
+  # rubocop:disable Metrics/PerceivedComplexity
+  def email_owner(project, old_badge_level, new_badge_level, lost_level)
     return if project.nil? || project.id.nil? || project.user_id.nil?
     @project = project
     user = User.find(project.user_id)
@@ -50,14 +66,19 @@ class ReportMailer < ApplicationMailer
     return unless user.email.include?('@')
     @project_info_url = project_info_url(@project.id)
     @email_destination = user.email
+    @new_level = new_badge_level
+    @old_level = old_badge_level
     set_headers
-    mail(
-      to: @email_destination,
-      template_name: new_badge_status,
-      subject: subject_for(new_badge_status)
-    )
+    I18n.with_locale(user.preferred_locale.to_sym) do
+      mail(
+        to: @email_destination,
+        template_name: lost_level ? 'lost_level' : 'gained_level',
+        subject: subject_for(old_badge_level, new_badge_level, lost_level)
+      )
+    end
   end
   # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity
+  # rubocop:enable Metrics/PerceivedComplexity
 
   # Create reminder email to inactive badge entry owner
   # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
@@ -71,15 +92,18 @@ class ReportMailer < ApplicationMailer
     @project_info_url = project_info_url(@project.id)
     @email_destination = user.email
     set_headers
-    mail(
-      to: @email_destination,
-      # bcc: REPORT_EMAIL_DESTINATION, # This would bcc individual reminders
-      subject: 'Your project does not yet have the "best practices" badge'
-    )
+    I18n.with_locale(user.preferred_locale.to_sym) do
+      mail(
+        to: @email_destination,
+        # bcc: REPORT_EMAIL_DESTINATION, # This would bcc individual reminders
+        subject: t('report_mailer.subject_reminder')
+      )
+    end
   end
   # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity
 
-  # Report on reminders sent
+  # Report on reminders sent.  This is internal, so we haven't bothered
+  # to internationalize this.
   def report_reminder_summary(projects)
     @report_destination = REPORT_EMAIL_DESTINATION
     return if projects.nil?
@@ -91,11 +115,15 @@ class ReportMailer < ApplicationMailer
     )
   end
 
+  # Generate monthly announcement, but only if there's a destination
+  # email address environment variable REPORT_MONTHLY_EMAIL
+  # We currently only send these out in English, so it's not internationalized
+  # (no point in asking the translators to do unnecessary work).
   def report_monthly_announcement(
     projects, month, last_stat_in_prev_month, last_stat_in_prev_prev_month
   )
-    @report_destination =
-      ENV['REPORT_MONTHLY_EMAIL'] || REPORT_EMAIL_DESTINATION
+    @report_destination = ENV['REPORT_MONTHLY_EMAIL']
+    return nil if @report_destination.blank?
     @projects = projects
     @month = month
     @last_stat_in_prev_month = last_stat_in_prev_month
@@ -107,7 +135,7 @@ class ReportMailer < ApplicationMailer
     )
   end
 
-  # Email user when they add a new project
+  # Email user when they add a new project.
   # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
   def email_new_project_owner(project)
     return if project.nil? || project.id.nil? || project.user_id.nil?
@@ -119,10 +147,12 @@ class ReportMailer < ApplicationMailer
     @project_info_url = project_info_url(@project.id)
     @email_destination = user.email
     set_headers
-    mail(
-      to: @email_destination,
-      subject: 'You added a project to the Best Practices Badging Program'
-    )
+    I18n.with_locale(user.preferred_locale.to_sym) do
+      mail(
+        to: @email_destination,
+        subject: t('report_mailer.subject_new_project')
+      )
+    end
   end
   # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity
 
@@ -132,9 +162,14 @@ class ReportMailer < ApplicationMailer
     @project = project
     @user = user
     set_headers
-    mail(
-      to: @report_destination,
-      subject: "Project #{project.id} named #{project.name} was deleted"
-    )
+    I18n.with_locale(@user.preferred_locale.to_sym) do
+      mail(
+        to: @report_destination,
+        subject: t(
+          'report_mailer.subject_project_deleted',
+          project_id: project.id, project_name: project.name
+        )
+      )
+    end
   end
 end

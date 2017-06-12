@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+# Copyright 2015-2017, the Linux Foundation, IDA, and the
+# CII Best Practices badge contributors
+# SPDX-License-Identifier: MIT
+
 require 'uri'
 
 class UrlValidator < ActiveModel::EachValidator
@@ -27,7 +31,6 @@ class UrlValidator < ActiveModel::EachValidator
           ([-A-Za-z0-9_.:/+!,#]|    # allow these ASCII chars.
            %(20|[89A-Ea-e][0-9A-Fa-f]|[Ff][0-7]))*  # Allow some %-encoded
         )?)\z}x
-  URL_MESSAGE = 'must begin with http: or https: and use a limited charset'
 
   # Return true if URL matches URL_REGEX and its decoding is valid UTF-8.
   def url_acceptable?(value)
@@ -40,6 +43,7 @@ class UrlValidator < ActiveModel::EachValidator
 
   def validate_each(record, attribute, value)
     return if url_acceptable?(value)
-    record.errors.add attribute, (options[:message] || URL_MESSAGE)
+    record.errors.add attribute, (options[:message] ||
+                                  I18n.t('error_messages.url_message'))
   end
 end

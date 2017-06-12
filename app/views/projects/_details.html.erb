@@ -1,7 +1,13 @@
          <% raise unless criterion
             details_toggler_id = criterion.to_s + "_details_toggler"
             details_text_id = criterion.to_s + "_details_text" %>
-         <button class="btn btn-simple details-toggler hidden-print" title="Toggle details text" type="button" id='<%= details_toggler_id %>'>Details</button>
+         <button class="btn btn-simple details-toggler hidden-print" title="<%= t('projects.misc.toggle_details_title') %>" type="button" id='<%= details_toggler_id %>'><%= t('projects.misc.details') %></button>
          <div class="details-text" id="<%= details_text_id %>">
-         <%= raw details %>
+         <%# Although we provide details, sanitize here provides belt and
+             suspenders protection and shows brakeman that it's safe.
+             ONLY the tags and attributes listed below will be allowed
+             in "details". %>
+         <%= sanitize details,
+                      tags: %w(a strong em i b ol ul li br small p),
+                      attributes: %w(href) %>
          </div>

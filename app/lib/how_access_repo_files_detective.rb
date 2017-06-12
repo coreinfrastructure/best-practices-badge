@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+# Copyright 2015-2017, the Linux Foundation, IDA, and the
+# CII Best Practices badge contributors
+# SPDX-License-Identifier: MIT
+
 # Determine how to open the development files in the repository,
 # and set an appropriate :repo_files accessor.
 # Currently we only handle GitHub; extend this to support other ways.

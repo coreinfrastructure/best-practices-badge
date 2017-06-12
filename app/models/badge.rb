@@ -1,27 +1,69 @@
 # frozen_string_literal: true
 
+# Copyright 2015-2017, the Linux Foundation, IDA, and the
+# CII Best Practices badge contributors
+# SPDX-License-Identifier: MIT
+
 # rubocop:disable Rails/FindEach
 class Badge
+  ACCEPTABLE_PERCENTAGES = (0..99).map { |num| num }.freeze
+  ACCEPTABLE_LEVELS = %w[passing silver gold].freeze
+
+  ACCEPTABLE_INPUTS = (ACCEPTABLE_PERCENTAGES + ACCEPTABLE_LEVELS).freeze
+
+  WHITE_TEXT_SPECS = {
+    color: 'fill="#000" ', shadow: 'fill="#fefefe" fill-opacity=".7"'
+  }.freeze
+
+  BLACK_TEXT_SPECS = {
+    color: '', shadow: 'fill="#010101" fill-opacity=".3"'
+  }.freeze
+
+  IN_PROGRESS_SPECS = {
+    width: 204, text: 'in progress', text_pos: 152.5,
+    text_colors: BLACK_TEXT_SPECS
+  }.freeze
+
+  PASSING_SPECS = {
+    width: 154, color: '#4c1', text: 'passing', text_pos: 127.5,
+    text_colors: BLACK_TEXT_SPECS
+  }.freeze
+
+  SILVER_SPECS = {
+    width: 142, color: '#C0C0C0', text: 'silver', text_pos: 121.5,
+    text_colors: WHITE_TEXT_SPECS
+  }.freeze
+
+  GOLD_SPECS = {
+    width: 136, color: '#ffd700', text: 'gold', text_pos: 118.5,
+    text_colors: WHITE_TEXT_SPECS
+  }.freeze
+
+  BADGE_SPECS = {
+    'in_progress' => IN_PROGRESS_SPECS, 'passing' => PASSING_SPECS,
+    'silver' => SILVER_SPECS, 'gold' => GOLD_SPECS
+  }.freeze
+
   attr_accessor :svg
 
   class << self
     # Class methods
     include Enumerable
 
-    def [](percentage)
-      valid? percentage
+    def [](level)
+      valid? level
       @badges ||= {}
-      @badges[percentage] ||= new(percentage)
+      @badges[level] ||= new(level)
     end
 
     def all
-      create_all unless @badges && @badges.length == 101
-      (0..100).map { |percentage| self[percentage] }
+      create_all unless @badges && @badges.length == 103
+      ACCEPTABLE_INPUTS.map { |level| self[level] }
     end
 
     def create_all
       @badges = {}
-      (0..100).each { |num| @badges[num] = new(num) }
+      ACCEPTABLE_INPUTS.each { |level| @badges[level] = new(level) }
     end
 
     def each
@@ -29,16 +71,15 @@ class Badge
       self
     end
 
-    def valid?(percentage)
-      raise ArgumentError unless percentage.is_a?(Integer) &&
-                                 (0..100).cover?(percentage)
+    def valid?(level)
+      raise ArgumentError unless level.in? ACCEPTABLE_INPUTS
     end
   end
 
   # Instance methods
-  def initialize(percentage)
-    self.class.valid? percentage
-    @svg = create_svg(percentage)
+  def initialize(level)
+    self.class.valid? level
+    @svg = create_svg(level)
   end
 
   def to_s
@@ -47,53 +88,35 @@ class Badge
 
   private
 
-  def create_svg(percentage)
+  def create_svg(level)
     # svg badges generated from http://shields.io/
-    return passing_svg if percentage == 100
-    in_progress_svg(percentage)
+    return badge_svg(BADGE_SPECS['in_progress'], level) if level.is_a?(Integer)
+    badge_svg(BADGE_SPECS[level], nil)
   end
 
-  def in_progress_svg(percentage)
+  # rubocop:disable Metrics/AbcSize
+  def badge_svg(specs, percentage)
+    color = specs[:color] ||
+            '#' + Paleta::Color.new(:hsl, percentage * 0.45 + 15, 85, 43).hex
+    text = percentage ? specs[:text] + " #{percentage}%" : specs[:text]
     <<-ENDOFSTRING.squish
-    <svg xmlns="http://www.w3.org/2000/svg" width="204"
-    height="20"><linearGradient id="b" x2="0" y2="100%"><stop
-    offset="0" stop-color="#bbb" stop-opacity=".1"/><stop
-    offset="1" stop-opacity=".1"/></linearGradient><mask
-    id="a"><rect width="204" height="20" rx="3"
-    fill="#fff"/></mask><g mask="url(#a)"><path fill="#555"
-    d="M0 0h103v20H0z"/><path fill="#dfb317" d="M103
-    0h101v20H103z"/><path fill="url(#b)" d="M0
-    0h204v20H0z"/></g><g fill="#fff" text-anchor="middle"
+    <svg xmlns="http://www.w3.org/2000/svg" width="#{specs[:width]}"
+    height="20"><linearGradient id="b" x2="0" y2="100%"><stop offset="0"
+    stop-color="#bbb" stop-opacity=".1"/><stop offset="1"
+    stop-opacity=".1"/></linearGradient><mask id="a"><rect
+    width="#{specs[:width]}" height="20" rx="3" fill="#fff"/></mask><g
+    mask="url(#a)"><path fill="#555" d="M0 0h103v20H0z"/><path
+    fill="#{color}" d="M103 0h#{specs[:width] - 103}v20H103z"/><path
+    fill="url(#b)" d="M0 0h#{specs[:width]}v20H0z"/></g><g
+    fill="#fff" text-anchor="middle"
     font-family="DejaVu Sans,Verdana,Geneva,sans-serif"
     font-size="11"><text x="51.5" y="15" fill="#010101"
     fill-opacity=".3">cii best practices</text><text x="51.5"
-    y="14">cii best practices</text><text x="152.5" y="15"
-    fill="#010101" fill-opacity=".3">in progress
-    #{percentage}%</text><text x="152.5" y="14">in progress
-    #{percentage}%</text></g></svg>
+    y="14">cii best practices</text><text x="#{specs[:text_pos]}"
+    y="15" #{specs[:text_colors][:shadow]}>#{text}</text><text
+    #{specs[:text_colors][:color]}x="#{specs[:text_pos]}"
+    y="14">#{text}</text></g></svg>
     ENDOFSTRING
   end
-
-  # rubocop:enable Metrics/MethodLength
-  def passing_svg
-    <<-ENDOFSTRING.squish
-    <svg xmlns="http://www.w3.org/2000/svg" width="192"
-    height="20"><linearGradient id="b" x2="0" y2="100%"><stop
-    offset="0" stop-color="#bbb" stop-opacity=".1"/><stop
-    offset="1" stop-opacity=".1"/></linearGradient><mask
-    id="a"><rect width="192" height="20" rx="3"
-    fill="#fff"/></mask><g mask="url(#a)"><path fill="#555"
-    d="M0 0h103v20H0z"/><path fill="#97CA00" d="M103
-    0h89v20h-89z"/><path fill="url(#b)" d="M0
-    0h192v20H0z"/></g><g fill="#fff" text-anchor="middle"
-    font-family="DejaVu Sans,Verdana,Geneva,sans-serif"
-    font-size="11"><text x="51.5" y="15" fill="#010101"
-    fill-opacity=".3">cii best practices</text><text x="51.5"
-    y="14">cii best practices</text><text x="145.5" y="15"
-    fill="#010101" fill-opacity=".3">passing
-    100%</text><text x="145.5" y="14">passing
-    100%</text></g></svg>
-    ENDOFSTRING
-  end
-  # rubocop:enable Metrics/MethodLength
+  # rubocop:enable Metrics/AbcSize
 end

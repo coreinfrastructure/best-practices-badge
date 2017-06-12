@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+# Copyright 2015-2017, the Linux Foundation, IDA, and the
+# CII Best Practices badge contributors
+# SPDX-License-Identifier: MIT
+
 # Rake tasks for BadgeApp
 
 require 'json'
@@ -54,7 +58,7 @@ end
 desc 'Run rails_best_practices with options'
 task :rails_best_practices do
   sh 'bundle exec rails_best_practices ' \
-      '--features --spec --without-color || true'
+      '--features --spec --without-color'
 end
 
 desc 'Run brakeman'
@@ -338,7 +342,7 @@ task 'test:features' => 'test:prepare' do
 end
 
 # This gem isn't available in production
-if Rails.env.production?
+if Rails.env.production? || Rails.env.fake_production?
   task :eslint do
     puts 'Skipping eslint checking in production (libraries not available).'
   end
@@ -362,6 +366,37 @@ task :fake_production do
   sh 'RAILS_ENV=fake_production bundle exec rake assets:precompile'
   sh 'RAILS_ENV=fake_production bundle check || bundle install'
   sh 'RAILS_ENV=fake_production rails server -p 4000'
+end
+
+desc 'Save English translation file as .ORIG file'
+task :save_en do
+  sh 'cp -p config/locales/en.yml config/locales/en.yml.ORIG'
+end
+
+# Fix up translation:sync.
+# First, translation:sync rewrites the source en.yml file, which it shouldn't
+# ever do, and in the process reformats it into garbage with overly-long lines.
+# We modify its behavior to save the en.yml file, and later restore it.
+# We also remove trailing whitespace after running "translation:sync".
+# The "translation:sync" task syncs up the translations, but uses the usual
+# YAML writer, which writes out trailing whitespace.  It should not do that,
+# and the trailing whitespace causes later failures in testing.
+# Problem already reported:
+# - https://github.com/aurels/translation-gem/issues/13
+# - https://github.com/yaml/libyaml/issues/46
+# We will run this enhancement to solve the problem.
+# Only do this in development, since the gem only exists then.
+# Use Ruby for in place editing because sed isn't portable across Linux & OS X
+if Rails.env.development?
+  task 'translation:sync' => :save_en
+  Rake::Task['translation:sync'].enhance do
+    puts 'Removing bogus trailing whitespace (bug workaround).'
+    files = './config/locales/localization*.yml ' \
+            './config/locales/translation*.yml'
+    sh %q{ruby -pi -e "sub(/ $/, '')" } + files
+    sh 'mv config/locales/en.yml.ORIG config/locales/en.yml'
+    puts "Now run: git commit -as -m 'rake translation:sync'"
+  end
 end
 
 # Convert project.json -> project.sql (a command to re-insert data).

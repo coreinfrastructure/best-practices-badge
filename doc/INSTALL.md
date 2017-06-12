@@ -259,3 +259,27 @@ This command will merge the current master branch into our test branch while
 conserving our custom circle.yml for testing our install script and then push
 these changes to GitHub. This will trigger a CircleCI build which will test
 the install script.
+
+## Uninstalling the Badge app's development environment
+
+In order to completely remove the Badge app, perform the following steps:
+
+1.  Remove the database entries Badge app.  This can be done by running
+
+    ~~~~
+    rake db:drop && RAILS_ENV=test rake db:drop
+    ~~~~
+
+2.  Remove the cii-best-practices-badge directory. (WARNING: This will remove
+    any and all local branches that have not been pushed to your remote git
+    repository.
+
+3.  (Optional) If you do not use rbenv for any other applications and would
+    like to remove it, you can co so by first removing the directory:
+    `$HOME/.rbenv`.   Finally remove the any lines matching "rbenv" from any
+    shell startup files.  You can find these entries with the following
+    command
+
+    ~~~~sh
+    grep rbenv ~/.bashrc ~/.bash_profile ~/.zshrc /etc/profile /etc/profile.d/*
+    ~~~~

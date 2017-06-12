@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+# Copyright 2015-2017, the Linux Foundation, IDA, and the
+# CII Best Practices badge contributors
+# SPDX-License-Identifier: MIT
+
 # *MUST* load 'simplecov' FIRST, before any other code is run.
 # See: https://github.com/colszowka/simplecov/issues/296
 require 'simplecov'
@@ -31,6 +35,17 @@ end
 if ENV['CI']
   require 'minitest/retry'
   Minitest::Retry.use!
+end
+
+require 'minitest/reporters'
+if ENV['CI'] || ENV['SLOW']
+  Minitest::Reporters.use! [
+    Minitest::Reporters::SpecReporter.new,
+    Minitest::Reporters::MeanTimeReporter.new,
+    Minitest::Reporters::HtmlReporter.new
+  ]
+else
+  Minitest::Reporters.use! Minitest::Reporters::DefaultReporter.new
 end
 
 require File.expand_path('../../config/environment', __FILE__)
@@ -174,7 +189,7 @@ module ActiveSupport
       Timeout.timeout(Capybara.default_max_wait_time) do
         loop do
           uri = URI.parse(current_url)
-          break if "#{uri.path}?#{uri.query}" == url
+          break if url == "#{uri.path}?#{uri.query}"
         end
       end
     end

@@ -138,6 +138,11 @@ and
 Marcus Streets <mstreets-NOSPAM@linuxfoundation.org>
 (remove the -NOSPAM markers).
 
+We will gladly give credit to anyone who reports a vulnerability
+so that we can fix it.
+If you want to remain anonymous or pseudonymous instead,
+please let us know that; we will gladly respect your wishes.
+
 ## Documentation changes
 
 Most of the documentation is in "markdown" format.
@@ -223,7 +228,7 @@ Symbols are typically faster, with no loss of readability.
 There is one big exception:
 Data from JSON should normally be accessed with strings,
 since that's how Ruby normally reads it.
-Rails normally uses the type HashWithIndifferentAccess,
+Rails normally uses the type ActiveSupport::HashWithIndifferentAccess,
 where the difference between symbols and strings is ignored,
 but JSON results use standard Ruby hashes where symbols and strings are
 considered different; be careful to use the correct type in these cases.
@@ -261,14 +266,6 @@ For example, if you want to build a string using append, do this:
 ''.dup << 'Hello, ' << 'World'
 ~~~~
 
-Please use
-[# frozen_string_literal: true](https://bugs.ruby-lang.org/issues/8976)
-near the beginning of each file.
-This 'magic comment' (added in Ruby 2.3.0) automatically freezes
-string literals, increasing speed, preventing accidental changes, and
-will help us get ready for the planned Ruby transition
-to immutable string literals.
-
 You may use the safe navigation operator '&amp;.' added in
 [Ruby version 2.3.0](https://www.ruby-lang.org/en/news/2015/12/25/ruby-2-3-0-released/).
 Our static analysis tools' parsers can now handle this syntax.
@@ -285,6 +282,25 @@ they will accidentally presented to another user not authorized to see it.
 Otherwise, please *do* use caches to speed repeated responses where they
 make sense.  Caches are one of the key mechanisms we use to provide
 rapid responses to users.
+
+Please use
+[# frozen_string_literal: true](https://bugs.ruby-lang.org/issues/8976)
+at the beginning of each file.
+This 'magic comment' (added in Ruby 2.3.0) automatically freezes
+string literals, increasing speed, preventing accidental changes, and
+will help us get ready for the planned Ruby transition
+to immutable string literals.
+
+Each source file should include a copyright and license statement
+the beginning.  Here is our standard header:
+
+~~~~ruby
+# frozen_string_literal: true
+
+# Copyright 2015-2017, the Linux Foundation, IDA, and the
+# CII Best Practices badge contributors
+# SPDX-License-Identifier: MIT
+~~~~
 
 ### JavaScript
 
@@ -476,6 +492,15 @@ into the default "rake" checking task:
 * JSHint (JavaScript error detector)
 * W3C link checker <https://validator.w3.org/checklink>
 * W3C markup validation service <https://validator.w3.org/>
+* AChecker, <https://achecker.ca/checker/index.php>, a web accessibility
+  checker.  This tool looks for web accessibility problems.
+  We typically check the following paths
+  (these are key forms in the system): "/", "/signup", "/login",
+  "/projects", and "/projects/1".
+  Our goal is to have no known problems and no likely problems per this tool
+  (this was true on 2017-06-03).
+  The "potential problems" list is very noisy, so we don't worry
+  about that list as much.
 
 Here are some online tools we sometimes use to check for performance issues
 (including time to complete rendering, download size in bytes, etc.):

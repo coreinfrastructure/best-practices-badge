@@ -4,8 +4,8 @@
    project_criterion_status = project[status_symbol]
    project_criterion_justification = project[justification_symbol] %>
 
-<% cache [criterion.to_s, is_disabled, project_criterion_status,
-          project_criterion_justification ] do %>
+<% cache [criterion.to_s, criteria_level, is_disabled, locale,
+          project_criterion_status, project_criterion_justification ] do %>
   <div id="<%= criterion.to_s %>" class="row criterion-data">
     <% is_crypto = criterion.to_s.match(/^crypto_/)
        crypto_class = is_crypto ? ' criterion-is-crypto' : '' %>
@@ -25,40 +25,43 @@
             <%= image_tag(
                   'result_symbol_check.png', size: '40x40',
                     id: criterion.to_s + '_enough',
-                    alt: 'Enough for a badge!'
+                    alt: t('projects.misc.in_javascript.passing_alt')
                 ) %>
           <% elsif criterion_result == :criterion_barely %>
             <%= image_tag(
                   'result_symbol_dash.png', size: '40x40',
                     id: criterion.to_s + '_enough',
-                    alt: 'Barely enough for a badge.'
+                    alt: t('projects.misc.in_javascript.barely_alt')
                 ) %>
           <% elsif criterion_result == :criterion_failing %>
             <%= image_tag(
                   'result_symbol_x.png', size: '40x40',
                     id: criterion.to_s + '_enough',
-                    alt: 'Not enough for a badge.'
+                    alt: t('projects.misc.in_javascript.failing_alt')
                 ) %>
           <% else %>
             <%= image_tag(
                   'result_symbol_question.png', size: '40x40',
                     id: criterion.to_s + '_enough',
-                    alt: 'Unknown required information, not enough for a badge.'
+                    alt: t('projects.misc.in_javascript.unknown_alt')
                 ) %>
           <% end %>
         <%#            !!!!!!!!!!!!!!!!!!!!!!!            %>
         </div>
         <div class="col-xs-4 col-xs-offset-2 col-sm-offset-1 text-left block-left">
-          <%= f.radio_button status_symbol, 'Met', label: 'Met',
+          <fieldset>
+          <legend class="hidden"><%= "Criterion [#{criterion}]" %></legend>
+          <%= f.radio_button status_symbol, 'Met', label: t('criterion_status.Met'),
                                                    disabled: is_disabled %>
-          <%= f.radio_button status_symbol, 'Unmet', label: 'Unmet',
+          <%= f.radio_button status_symbol, 'Unmet', label: t('criterion_status.Unmet'),
                                                      disabled: is_disabled  %>
           <% if criterion.na_allowed? %>
-            <%= f.radio_button status_symbol, 'N/A', label: 'N/A',
+            <%= f.radio_button status_symbol, 'N/A', label: t('criterion_status.NA'),
                                                      disabled: is_disabled  %>
           <% end %>
           <%= f.radio_button status_symbol, '?', label: '?',
                                                  disabled: is_disabled  %>
+          </fieldset>
         </div>
       <% end %>
     </div>
@@ -66,14 +69,14 @@
 
   <div class='col-md-10 col-sm-9 col-xs-12 criteria-desc'>
     <br>
-    <% if criterion.future? %>(Future criterion) <% end %>
+    <% if criterion.future? %>(<%= t('projects.misc.future_criterion') %>) <% end %>
     <%= sanitize criterion.description %>
-    <% if criterion.met_url_required? %>(URL required) <% end %>
+    <% if criterion.met_url_required? %>(<%= t('projects.misc.url_required') %>) <% end %>
     <sup>[<%= criterion %>]</sup>
     <%= if criterion.details
-           render(partial: "details", locals: {f: f,
-                    criterion: criterion,
-                    details: criterion.details})
+          render(partial: "details",
+            locals: {f: f, criterion: criterion,
+                     details: criterion.details.html_safe})
         end %>
     <% if (is_disabled) %>
       <% if project_criterion_justification %>
@@ -82,14 +85,16 @@
         </div>
       <% end %>
       <% if criterion_result == :criterion_url_required %>
-        <p class="bg-warning">Warning: URL required, but no URL found.</p>
+        <p class="bg-warning"><%= t('projects.misc.url_required_warning') %></p>
       <% elsif criterion_result == :criterion_justification_required %>
-        <p class="bg-warning">Warning: Requires lengthier justification.</p>
+        <p class="bg-warning"><%= t('projects.misc.justification_required_warning') %></p>
       <% end %>
     <% else %>
       <%= f.text_area justification_symbol,
                       class: 'justification-text', hide_label: true,
-                      placeholder:'Please explain', disabled: is_disabled %>
+                      lang: 'en', spellcheck: true,
+                      placeholder:t('projects.misc.in_javascript.unknown_placeholder'),
+                      disabled: is_disabled %>
     <% end %>
     <% if is_last %>
       <br>

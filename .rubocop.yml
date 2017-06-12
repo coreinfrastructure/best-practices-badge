@@ -23,6 +23,7 @@ Lint/HandleExceptions:
   Exclude:
     - 'bin/*'
 Metrics/AbcSize:
+  Max: 17
   Exclude:
     - 'db/migrate/*'
 Metrics/ClassLength:
@@ -43,15 +44,15 @@ Style/CollectionMethods:
   Enabled: true
 Style/Encoding:
   Enabled: true
-Style/FirstArrayElementLineBreak:
+Layout/FirstArrayElementLineBreak:
   Enabled: true
-Style/FirstHashElementLineBreak:
+Layout/FirstHashElementLineBreak:
   Enabled: true
-Style/FirstMethodArgumentLineBreak:
+Layout/FirstMethodArgumentLineBreak:
   Enabled: true
-Style/FirstMethodParameterLineBreak:
+Layout/FirstMethodParameterLineBreak:
   Enabled: true
-Style/MultilineAssignmentLayout:
+Layout/MultilineAssignmentLayout:
   Enabled: true
 Style/NegatedIf:
   Enabled: true

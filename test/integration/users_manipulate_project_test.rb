@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+# Copyright 2015-2017, the Linux Foundation, IDA, and the
+# CII Best Practices badge contributors
+# SPDX-License-Identifier: MIT
+
 require 'test_helper'
 
 class UsersManipulateProjectTest < ActionDispatch::IntegrationTest
@@ -32,7 +36,7 @@ class UsersManipulateProjectTest < ActionDispatch::IntegrationTest
 
       # Check to ensure that the form includes all the criteria, but only once.
       # This could fail if the view incorrectly omits or duplicates one.
-      Criteria.each do |criterion|
+      Criteria['0'].values.each do |criterion|
         assert_select "##{criterion}" # Check for existence
         assert_select "##{criterion}" do |elements|
           assert_equal 1, elements.count # Check for duplication

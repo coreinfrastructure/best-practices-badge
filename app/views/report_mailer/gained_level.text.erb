@@ -1,0 +1,12 @@
+<%= t('report_mailer.gained_level_part1', new_level: @new_level)  %>
+<%= @project_info_url %>
+
+<%= t 'report_mailer.gained_level_part2' %>
+* <%= t 'report_mailer.in_markdown_add' %>
+  [![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/<%= @project.id %>/badge)](https://bestpractices.coreinfrastructure.org/projects/<%= @project.id %>)
+* <%= t 'report_mailer.in_html_add' %>
+  <a href="https://bestpractices.coreinfrastructure.org/projects/<%= @project.id %>"><img src="https://bestpractices.coreinfrastructure.org/projects/<%= @project.id %>/badge"></a>
+
+<%= t 'report_mailer.gained_level_part3' %>
+
+<%= t 'report_mailer.ending' %>

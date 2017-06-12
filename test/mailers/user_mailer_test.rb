@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+# Copyright 2015-2017, the Linux Foundation, IDA, and the
+# CII Best Practices badge contributors
+# SPDX-License-Identifier: MIT
+
 require 'test_helper'
 class UserMailerTest < ActionMailer::TestCase
   test 'account_activation' do
@@ -22,7 +26,11 @@ class UserMailerTest < ActionMailer::TestCase
     assert_equal [user.email], mail.to
     assert_not_equal [user.email.downcase], mail.to
     assert_equal ['badgeapp@localhost'], mail.from
-    assert_match user.reset_token, mail.body.encoded
+    assert mail.multipart?
+    assert_equal ['text/plain; charset=UTF-8', 'text/html; charset=UTF-8'],
+                 mail.parts.map(&:content_type)
+    # Ensure that the reset token is actually being passed:
+    assert_match user.reset_token, mail.parts[0].body.to_s
     assert_match CGI.escape(user.email), mail.body.encoded
   end
 end

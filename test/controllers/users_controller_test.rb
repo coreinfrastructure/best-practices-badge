@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+# Copyright 2015-2017, the Linux Foundation, IDA, and the
+# CII Best Practices badge contributors
+# SPDX-License-Identifier: MIT
+
 require 'test_helper'
 
 class UsersControllerTest < ActionController::TestCase
@@ -58,6 +62,15 @@ class UsersControllerTest < ActionController::TestCase
     assert_not_empty flash
     @user.reload
     assert_equal @user.name, new_name
+  end
+
+  test 'should be able to change locale' do
+    log_in_as(@user)
+    patch :update, params: { id: @user, user: { preferred_locale: 'fr' } }
+    assert_not_empty flash # Success message
+    @user.reload
+    assert_equal 'fr', @user.preferred_locale
+    assert_redirected_to users_path(locale: 'fr') + "/#{@user.id}"
   end
 
   test 'should redirect destroy when not logged in' do

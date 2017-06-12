@@ -1,11 +1,15 @@
 # frozen_string_literal: true
 
+# Copyright 2015-2017, the Linux Foundation, IDA, and the
+# CII Best Practices badge contributors
+# SPDX-License-Identifier: MIT
+
 require 'test_helper'
 # See http://guides.rubyonrails.org/testing.html#testing-your-mailers
 
 class ReportMailerTest < ActionMailer::TestCase
   setup do
-    @perfect_project = projects(:perfect)
+    @perfect_project = projects(:perfect_passing)
     # @user = users(:test_user)
   end
 
@@ -24,12 +28,15 @@ class ReportMailerTest < ActionMailer::TestCase
 
   test 'Does the monthly announcement run?' do
     # This is a quick sanity test, not an in-depth test.
+    # Use 'example.org' per RFC 2606
+    ENV['REPORT_MONTHLY_EMAIL'] = 'mytest@example.org'
     email = ReportMailer
             .report_monthly_announcement(
               [@perfect_project], '2015-02',
               project_stats(:one), project_stats(:two)
             )
             .deliver_now
+    ENV['REPORT_MONTHLY_EMAIL'] = nil # Erase environment variable
     assert_not ActionMailer::Base.deliveries.empty?
     # We don't want to modify the test when we reconfigure things.
     # So instead of insisting on specific values, we'll just

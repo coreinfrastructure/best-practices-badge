@@ -1,0 +1,12 @@
+<%# given panel_title, anchor_id, by_default=open|close, and %>
+<%# satisfaction_data = project.get_satisfaction_data(level, anchor_id) %>
+<div class="<%= by_default %>-by-default panel-heading can-collapse"
+     id="<%= anchor_id %>">
+  <h2 class="panel-title h3">
+    <em class="glyphicon"></em>&nbsp;<%= t(panel_title, scope: :headings) %>
+    <span class="pull-right satisfaction">
+      <span class="satisfaction-text"><%= satisfaction_data[:text] %></span>
+      <span class="satisfaction-bullet" data-color="<%= satisfaction_data[:color] %>">&#9679;</span>
+    </span>
+  </h2>
+</div>

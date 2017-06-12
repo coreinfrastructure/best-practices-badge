@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+# Copyright 2015-2017, the Linux Foundation, IDA, and the
+# CII Best Practices badge contributors
+# SPDX-License-Identifier: MIT
+
 Rails.application.configure do
   # Settings specified here will take precedence over those in
   # config/application.rb.
@@ -28,6 +32,9 @@ Rails.application.configure do
   # Raise exceptions instead of rendering exception templates.
   config.action_dispatch.show_exceptions = false
 
+  # Raise exceptions during test if a translation is missing
+  config.action_view.raise_on_missing_translations = true
+
   # Disable request forgery protection in test environment.
   config.action_controller.allow_forgery_protection = false
 
@@ -45,7 +52,7 @@ Rails.application.configure do
   config.active_support.deprecation = :stderr
 
   # Raises error for missing translations
-  # config.action_view.raise_on_missing_translations = true
+  config.action_view.raise_on_missing_translations = true
 
   # Enable Rack's built-in compression mechanism; this is important for people
   # with slow network connections.  Enable during tests to make test

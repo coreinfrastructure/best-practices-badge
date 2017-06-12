@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+# Copyright 2015-2017, the Linux Foundation, IDA, and the
+# CII Best Practices badge contributors
+# SPDX-License-Identifier: MIT
+
 require 'test_helper'
 
 # rubocop:disable Metrics/ClassLength
@@ -12,6 +16,9 @@ class ProjectTest < ActiveSupport::TestCase
       repo_url: 'https://www.example.org/code'
     )
     @unjustified_project = projects(:perfect_unjustified)
+    @project_passing = projects(:perfect_passing)
+    @project_silver = projects(:perfect_silver)
+    @project_gold = projects(:perfect)
   end
 
   test 'should be valid' do
@@ -106,38 +113,44 @@ class ProjectTest < ActiveSupport::TestCase
   test 'test get_criterion_result returns correct values' do
     assert_equal(
       :criterion_url_required,
-      @unjustified_project.get_criterion_result(Criteria[:contribution])
+      @unjustified_project.get_criterion_result(Criteria['0'][:contribution])
     )
     assert_equal(
       :criterion_justification_required,
-      @unjustified_project.get_criterion_result(Criteria[:release_notes])
+      @unjustified_project.get_criterion_result(Criteria['0'][:release_notes])
     )
     assert_equal(
       :criterion_justification_required,
-      @unjustified_project.get_criterion_result(Criteria[:installation_common])
+      @unjustified_project.get_criterion_result(
+        Criteria['0'][:installation_common]
+      )
     )
     assert_equal(
       :criterion_justification_required,
-      @unjustified_project.get_criterion_result(Criteria[:static_analysis])
+      @unjustified_project.get_criterion_result(
+        Criteria['0'][:static_analysis]
+      )
     )
     assert_equal(
       :criterion_barely,
-      @unjustified_project.get_criterion_result(Criteria[:test_most])
+      @unjustified_project.get_criterion_result(Criteria['0'][:test_most])
     )
     assert_equal(
       :criterion_failing,
       @unjustified_project.get_criterion_result(
-        Criteria[:crypto_certificate_verification]
+        Criteria['0'][:crypto_certificate_verification]
       )
     )
     assert_equal(
       :criterion_unknown,
-      @unjustified_project.get_criterion_result(Criteria[:build_reproducible])
+      @unjustified_project.get_criterion_result(
+        Criteria['0'][:build_reproducible]
+      )
     )
     assert_equal(
       :criterion_passing,
       @unjustified_project.get_criterion_result(
-        Criteria[:vulnerability_report_private]
+        Criteria['0'][:vulnerability_report_private]
       )
     )
   end
@@ -148,14 +161,27 @@ class ProjectTest < ActiveSupport::TestCase
     assert @unjustified_project.release_notes_status.na?
   end
 
+  test 'check correct badge levels are returned' do
+    assert_equal 'in_progress', @unjustified_project.badge_level
+    assert_equal 'passing', @project_passing.badge_level
+    assert_equal 'silver', @project_silver.badge_level
+    assert_equal 'gold', @project_gold.badge_level
+  end
+
+  # The number of named badge levels must be equal to the number of
+  # criteria levels + 1, because projects can be "in_progress"
+  test 'test all possible badge "levels/statuses" are named' do
+    assert_equal Criteria.count + 1, Project::BADGE_LEVELS.size
+  end
+
   test 'test get_satisfaction_data' do
-    basics = @unjustified_project.get_satisfaction_data('basics')
+    basics = @unjustified_project.get_satisfaction_data('0', 'basics')
     assert_equal '9/12', basics[:text]
     assert_equal 'hsl(90, 100%, 50%)', basics[:color]
-    reporting = @unjustified_project.get_satisfaction_data('reporting')
+    reporting = @unjustified_project.get_satisfaction_data('0', 'reporting')
     assert_equal '5/8', reporting[:text]
     assert_equal 'hsl(75, 100%, 50%)', reporting[:color]
-    quality = @unjustified_project.get_satisfaction_data('quality')
+    quality = @unjustified_project.get_satisfaction_data('0', 'quality')
     assert_equal '13/13', quality[:text]
     assert_equal 'hsl(120, 100%, 50%)', quality[:color]
   end

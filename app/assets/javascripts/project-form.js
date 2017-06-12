@@ -154,17 +154,7 @@ function getUnmetResult(criterion, justification) {
 // If you change this function change "get_criterion_result" accordingly.
 function getCriterionResult(criterion) {
   var status = criterionStatus(criterion);
-  var justification;
-  if (globalisEditing) {
-    justification = $('#project_' + criterion + '_justification')[0].value;
-  } else {
-    justification = $.trim(
-      $('#' + criterion).find('.justification-markdown', 'p').html()
-    );
-    if (justification) {
-      justification = justification.replace(new RegExp('<\/?p>', 'g'), '');
-    }
-  }
+  var justification = $('#project_' + criterion + '_justification')[0].value;
   if (!justification) {
     justification = '';
   }
@@ -307,18 +297,21 @@ function fillCriteriaResultHash() {
 // and do NOT hide the last-selected-met criterion (so users can enter/edit
 // justification text).
 function hideMetNA() {
-  if (Object.keys(globalCriteriaResultHash).length === 0) {
-    fillCriteriaResultHash();
+  if (globalisEditing) {
+    $.each(CRITERIA_HASH, function(criterion, value) {
+      var result = globalCriteriaResultHash[criterion]['result'];
+      if (globalHideMetnaCriteria && criterion !== globalLastSelectedMetNA &&
+          result === 'criterion_passing') {
+        $('#' + criterion).addClass('hidden');
+      } else {
+        $('#' + criterion).removeClass('hidden');
+      }
+    });
+  } else if (globalHideMetnaCriteria) {
+    $('.criterion-data.criterion-passing').addClass('hidden');
+  } else {
+    $('.criterion-data.criterion-passing').removeClass('hidden');
   }
-  $.each(CRITERIA_HASH, function(criterion, value) {
-    var result = globalCriteriaResultHash[criterion]['result'];
-    if (globalHideMetnaCriteria && criterion !== globalLastSelectedMetNA &&
-        result === 'criterion_passing') {
-      $('#' + criterion).addClass('hidden');
-    } else {
-      $('#' + criterion).removeClass('hidden');
-    }
-  });
   $('.hidable-text-entry').each(function() {
     if (globalHideMetnaCriteria && hasFieldTextInside($(this))) {
       $(this).addClass('hidden');
@@ -637,7 +630,6 @@ function TogglePanel(e) {
 function setupProjectForm() {
   // We're told progress, so don't recalculate - just display it.
   T_HASH = TRANSLATION_HASH_FULL[getLocale()];
-  CRITERIA_HASH = CRITERIA_HASH_FULL[getLevel()];
   var percentageScaled = $('#badge-progress').attr('aria-valuenow');
   var percentAsString = percentageScaled.toString() + '%';
   $('#badge-progress').css('width', percentAsString);
@@ -678,6 +670,7 @@ function setupProjectForm() {
   });
 
   if (globalisEditing) {
+    CRITERIA_HASH = CRITERIA_HASH_FULL[getLevel()];
     $('#project_entry_form').on('criteriaResultHashComplete', function(e) {
       setupProjectFields();
       resetProgressBar();

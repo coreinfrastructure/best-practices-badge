@@ -159,8 +159,11 @@ function getCriterionResult(criterion) {
     justification = $('#project_' + criterion + '_justification')[0].value;
   } else {
     justification = $.trim(
-      $('#' + criterion).find('.justification-markdown', 'p').text()
+      $('#' + criterion).find('.justification-markdown', 'p').html()
     );
+    if (justification) {
+      justification = justification.replace(new RegExp('<\/?p>', 'g'), '');
+    }
   }
   if (!justification) {
     justification = '';

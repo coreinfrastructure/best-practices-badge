@@ -95,6 +95,7 @@ de:
   projects_count:
     one: "%{count} Projekt"
     other: "%{count} Projekte"
+    zero:
   feed_title: CII Best Practices BadgeApp Aktualisierte Projekte
   project_name_unknown: "(Name unbekannt)"
   locale_name:

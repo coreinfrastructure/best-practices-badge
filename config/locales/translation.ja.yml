@@ -95,6 +95,7 @@ ja:
   projects_count:
     one:
     other:
+    zero:
   feed_title:
   project_name_unknown:
   locale_name:

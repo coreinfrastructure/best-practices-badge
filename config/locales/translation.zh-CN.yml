@@ -94,6 +94,7 @@ zh-CN:
   projects_count:
     one: "%{count} 项目"
     other: "%{count} 项目"
+    zero:
   feed_title: CII最佳实践徽章计划更新项目
   layouts:
     cii_best_practices: CII最佳实践

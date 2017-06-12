@@ -282,9 +282,9 @@ de:
 '
       project_already_exists: Dieses Projekt existiert bereits!
       final_text_html:
-      new_badge_or:
-      original_repos:
-      fork_repos:
+      new_badge_or: ODER
+      original_repos: "=> Original GitHub Repos"
+      fork_repos: "=> Verstreutes GitHub Repos"
     show:
       edit: Bearbeiten
       delete: Löschen
@@ -319,7 +319,7 @@ de:
       congrats_new:
       lost_badge: Das Projekt hat ein Badge verloren.
       static_analysis_updated_html:
-      edit_status:
+      edit_status: Bearbeiten des Projekt Badge Status
     form_basics:
       project_name:
         description: Was ist der von Menschen lesbare Name des Projekts?
@@ -351,7 +351,10 @@ de:
 
 '
       cpe:
-        description_html:
+        description_html: 'Was ist die <a href="https://nvd.nist.gov/cpe.cfm"> Common
+          Platform Enumeration  (CPE) </a> Name für das Projekt (wenn es einen gibt)?
+
+'
         details_html:
         placeholder: "(Optional) CPE-Name"
       license:
@@ -1093,13 +1096,16 @@ de:
         sind unter CC-BY Version 3.0 oder später (CC-BY-3.0+) lizensiert. Bitte die
         CII Best Practices Badge Mitwirkenden als Urheber angeben.'
     criteria:
-      criteria:
-      detailed_criteria_on_github:
-      current_criteria:
+      criteria: Kriterien
+      detailed_criteria_on_github: Die detaillierten Kriterien sind auf GitHub.
+      current_criteria: 'Aktuelle Anzahl der Kriterien: %{active} (aktiv) + %{future}
+        (Zukunft) = %{total} (gesamt).'
       criteria_must_should_suggested:
       criteria_na_met_details:
-      project_counts:
-      project_stats_html:
+      project_counts: Es gibt %{projects} Projekteinträge; %{passing} sind vorbei
+        und %{in_progress} sind im Prozess.
+      project_stats_html: Sie können Statistiken über Projekte im Laufe der Zeit auf
+        der <a href="/project_stats"> Projektstatistik Seite </a> sehen.
   headings:
     Accessibility and internationalization: Zugänglichkeit und Internationalisierung
     Analysis: Analyse
@@ -1156,13 +1162,14 @@ de:
   url_message: " Muss mit http: oder https: beginnen und verwenden einen begrenzten
     Zeichensatz "
   error_messages:
-    need_home_page_or_url:
+    need_home_page_or_url: Benötige mindestens eine Homepage oder eine Repository-URL
     form_contains:
-      one:
-      other:
+      one: Das Formular enthält 1 Fehler.
+      other: Das Formular enthält %{count} Fehler.
     comma_separated_list:
     begin_with_cpe:
-    not_an_email:
-    known_bad_password:
+    not_an_email: " Ist keine E-Mail"
+    known_bad_password: " Ist ein weit verbreitetes (schlechtes) Passwort"
     valid_text:
-    url_message:
+    url_message: " Muss mit http: oder https: beginnen und verwende einen begrenzten
+      Zeichensatz "

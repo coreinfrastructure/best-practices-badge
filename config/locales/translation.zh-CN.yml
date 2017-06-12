@@ -1085,18 +1085,32 @@ zh-CN:
 '
     '1':
       contribution_requirements:
-        description:
+        description: '关于如何贡献的信息必须包括对可接受的贡献的要求（例如，引用任何所需的编码标准）。
+
+'
       dco:
-        description:
-        details:
+        description: '该项目应该有一个合法机制，所有对项目软件做出显著贡献的开发人员都声明他们有合法授权作出这些贡献。最常用且易于实施的方法是使用<a
+          href="http://developercertificate.org/">开发者原产地证书（DCO）</a>，用户可以在其提交中添加“signed-off-by”，另外，项目链接到DCO网站。本条款也可以使用贡献者许可协议（CLA）或其他法律机制实现。
+
+'
+        details: 'DCO是推荐的机制，因为它易于实现，在源代码中进行跟踪，并且git使用“commit -s”直接支持“签名”功能。更有效的是，项目文件解释了该项目的“签名”手段。
+          CLA是一项法律协议，用于定义知识产权许可给组织或项目的条款。捐助者转让协议（CAA）是将知识产权权利转让给另一方的法律协议；项目不必具备CAA，因为CAA增加了潜在贡献者不愿贡献的风险，特别是如果接收者是一个营利性组织。
+          <a href="https://www.apache.org/licenses/"> Apache Software Foundation CLA（个人贡献者许可证和公司CLA）</a>是CLA的示例，用于确定项目的这些CLA的风险对项目的影响小于其获益。
+
+'
       governance:
         description: '该项目必须明确定义和记录其项目治理模式（决策方式，包括关键角色）。
 
 '
         details:
       code_of_conduct:
-        description:
-        details:
+        description: '该项目必须采取行为守则，并将其发布在标准的位置。
+
+'
+        details: '项目可能能够提高社区的文明程度，并通过采取行为守则来规定对可接受的行为的期望。这可以帮助在发生问题之前避免问题，并使项目成为更加欢迎的地方来鼓励贡献。这应该只关注项目社区/工作场所的行为。行为规范的示例是<a
+          href="http://contributor-covenant.org/">贡献者约定行为准则</a>和Linux内核<a href =“https://www.kernel.org/doc/html/latest/process/code-of-conflict.html">代码冲突</a>。
+
+'
       roles_responsibilities:
         description:
         details: '<a href="#governance">治理</a>和角色和职责的文档可以在一个地方。
@@ -1108,7 +1122,11 @@ zh-CN:
 '
       bus_factor:
         description: 项目必须具有2个或更多的“公交车因子”。
-        details:
+        details: '“公交车系数”（又名“卡车因子”）是指最少数量的项目成员，如果突然离开项目（“被公交车撞了”），项目会由于缺乏具备知识的或有能力的人员而暂停。
+          <a href="https://github.com/mtov/truck-factor">卡车因子</a> 工具可以对GitHub上的项目进行估计。有关详细信息，请参阅Cosentino等人的<a
+          href="https://www.researchgate.net/publication/272824568_assessing_the_bus_factor_of_git_repositories">评估Git存储库的卡车因子</a>。
+
+'
       documentation_roadmap:
         description: '该项目必须有一个文档化的路线图，描述项目打算做什么，至少在下一年做什么。
 
@@ -1117,7 +1135,9 @@ zh-CN:
 
 '
       documentation_architecture:
-        description:
+        description: '该项目必须包括项目生成的软件的架构（也称为高级别设计）的文档。如果项目不产生软件，请选择“不适用”（N/A）。
+
+'
         details: '软件架构解释了程序的基本结构，即程序的主要组件，它们之间的关系以及这些组件和关系的关键属性。
 
 '
@@ -1132,16 +1152,29 @@ zh-CN:
 
 '
       documentation_current:
-        description:
+        description: '项目必须努力使文档与当前版本的项目结果（包括项目生成的软件）保持一致。任何<em>已知的</em>文档缺陷使其不一致必须修正。如果文档基本是最新的，但是错误地包括一些不再是真实的旧信息，那么将其视为缺陷，然后像往常一样进行跟踪和修复。
+
+'
         details:
       documentation_achievements:
-        description:
-        details:
+        description: '项目存储代码库首页和/或网站必须在获得成就的48小时内标识并超链接任何成就，包括此最佳实践徽章。
+
+'
+        details: '一个成就是项目致力于满足的任何外部条款，包括徽章。该信息不需要在项目网站首页上。使用GitHub的项目可以通过将其添加到README文件中，将成果放在存储代码库首页。
+
+'
       accessibility_best_practices:
         description: '该项目（项目网站和项目成果）都应遵循无障碍最佳做法，使残疾人仍然可以参与项目，并在合理的情况下使用项目成果。
 
 '
-        details:
+        details: |-
+          对于Web应用程序，请参阅 <a href="https://www.w3.org/TR/WCAG20/">Web 内容无障碍指导 (WCAG 2.0，英文)</a> 以及其支持文档 <a href="https://www.w3.org/TR/UNDERSTANDING-WCAG20/Overview.html">理解 WCAG 2.0（英文）</a>；或者 <a href="https://www.w3.org/standards/webdesign/accessibility">W3C 无障碍信息（英文）</a>. 图形界面（GUI）应用考虑使用环境特定的无障碍指导（例如 <a href="https://developer.gnome.org/accessibility-devel-guide/stable/">Gnome</a>, <a href="https://accessibility.kde.org/">KDE</a>, <a href="http://docs.xfce.org/xfce/xfce4-settings/accessibility">XFCE</a>, <a href="https://developer.android.com/guide/topics/ui/accessibility/">Android</a>, <a href="https://developer.apple.com/accessibility/ios/">iOS</a>, <a href="http://www.apple.com/accessibility/osx/voiceover/">Mac</a>, 以及 <a href="https://msdn.microsoft.com/en-us/windows/uwp/accessibility/accessibility-overview)">Windows</a>). 一些TUI应用 (例如，`ncurses` 程序) 可以做一些特定的工作，增强可访问性（例如，`alpine` 的 `force-arrow-cursor` 设置）。多数命令行应用没有特别的无障碍设置。本条款经常是不涉及（N/A），例如，对于组件库。以下是一些要采取的行动或需要考虑的问题的例子： <ul> <li>提供非文字内容的文字替代，以便于转换为其他需要的格式，如大字体、盲文、语音、符号或者简单文字（ <a href="https://www.w3.org/TR/UNDERSTANDING-WCAG20/text-equiv.html">WCAG 2.0 指导 1.1 （英文）</a>)
+          <li>颜色不被用作传达信息，指示动作，提示响应或区分视觉元素的唯一视觉方式。 (
+            <a href="https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast-without-color.html">WCAG 2.0 指导 1.4.1（英文）</a>)
+          <li>文本和文字图像的视觉呈现对比度至少为4.5：1，除了大文本，次要文本和标识符之外。 (
+            <a href="https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast-contrast.html">WCAG 2.0 指导 1.4.3（英文）</a>)
+          <li>使用键盘可访问所有功能 (WCAG 指导 2.1) <li>图形界面应用（GUI）或者Web应用在目标平台上，应该至少使用一种屏幕阅读器测试（例如，NVDA；Jaws；Windows上的WindowEyes；Mac & iOS上的VoiceOver；Linux/BSD上的Orca；Android上的TalkBack）。TUI程序可以减少过度渲染以防止屏幕阅读器的冗余读取。
+          </ul>
       internationalization:
         description:
         details:
@@ -1164,16 +1197,28 @@ zh-CN:
 
 '
       coding_standards:
-        description:
-        details:
+        description: '该项目必须确定其使用的主要语言的具体编码风格指南，并要求贡献一般情况下符合此要求。
+
+'
+        details: '在大多数情况下，这是通过参考一些现有的风格指南来完成的，可能列出差异。这些风格指南可以包括提高可读性的方法和减少缺陷可能性（包括漏洞）的方法。许多编程语言有一个或多个广泛使用的风格指南。样式指南的示例包括<a
+          href="https://github.com/google/styleguide"> Google风格指南（英文）</a>和<a href="https://www.securecoding.cert.org/">
+          SEI CERT编码标准（英文）</a>。
+
+'
       coding_standards_enforced:
-        description:
-        details:
+        description: '如果至少有一个FLOSS工具可以应用于所选择的语言，项目必须自动执行其选定的编码风格。
+
+'
+        details: '这可以使用静态分析工具和/或通过代码重新格式化强制代码实现。在许多情况下，工具配置包含在项目的存储库中（因为不同的项目可能会选择不同的配置）。项目可以允许风格例外（通常会）；在发生例外的情况下（应该很少），它们必须在其位置的代码中记录在案，以便可以对这些例外进行检视，并使工具能够在将来自动处理它们。这些工具的例子包括ESLint（JavaScript）和Rubocop（Ruby）。
+
+'
       build_standard_variables:
         description: '本地二进制文件的构建系统必须遵守传递给它们的相关编译器和链接器（环境）变量（例如CC，CFLAGS，CXX，CXXFLAGS和LDFLAGS），并将它们传递给编译器和链接器。构建系统可以使用附加标志来扩展它们，但不能简单地用自己的替换提供的值。如果没有生成本地二进制文件，请选择“不适用”（N/A）。
 
 '
-        details:
+        details: '应该很容易启用特殊的构建功能，如地址消毒剂（Address Sanitizer，ASAN），或符合发布加固最佳实践（例如，通过轻松打开编译器标志来实现）。
+
+'
       build_preserve_debug:
         description: '构建和安装系统在在相关标志中要求时，应该保留调试信息（例如，“install -s”未被使用）。如果没有构建或安装系统（例如典型的JavaScript库），请选择“不适用”（N/A）。
 
@@ -1275,9 +1320,13 @@ zh-CN:
 
 '
       crypto_algorithm_agility:
-        description:
+        description: '该项目应该支持多种加密算法，如果一个被破解，用户可以快速切换。普通的对称密钥算法包括AES，Twofish和Serpent。通用密码散列算法的选择包括SHA-2（包括SHA-224，SHA-256，SHA-384和SHA-512）和SHA-3。
+
+'
       crypto_credential_agility:
-        description:
+        description: '该项目必须支持在与其他信息（如配置文件，数据库和日志）分离的文件中存储身份验证凭据（如密码和动态令牌）以及私有加密密钥，并允许用户更新和替换它们，而无需重新编译代码。如果项目从不处理身份验证凭据和私有加密密钥，请选择“不适用”（N/A）。
+
+'
       crypto_used_network:
         description: '该项目产生的软件应该支持所有网络通信的安全协议，如SSHv2或更高版本，TLS1.2或更高版本（HTTPS），IPsec，SFTP和SNMPv3。默认情况下，FTP，HTTP，Telnet，SSLv3或更早版本和SSHv1等不安全协议将被禁用，只有在用户专门配置时才启用。如果项目生成的软件不支持网络通信，请选择“不适用”（N
           / A）。
@@ -1315,8 +1364,16 @@ zh-CN:
       dynamic_analysis_unsafe:
         description:
       assurance_case:
-        description:
-        details:
+        description: '该项目必须提供一个保证案例，证明其满足安全要求。保证案例必须包括：对威胁模型的描述，明确确定信任边界，确定设计原则得到适用，以及常见安全弱点已经被消减。
+
+'
+        details: '一个保证案例是“一个文献记录的证据体系，提供了一个有说服力和有效的论据，指出一组关于系统属性的关键权利要求在给定环境中给定应用程序是充分合理的”（<a
+          href ="http://nvlpubs.nist.gov/nistpubs/ir/2009/ir7608.pdf">使用结构化保证案例模型的软件保证，Thomas
+          Rhodes等人，NIST机构间报告7608）。信任边界是数据或执行改变其信任级别的边界，例如，典型Web应用程序中的服务器边界。常见做法是列出安全设计原则（例如Saltzer和Schroeer）和常见的实施安全漏洞（例如OWASP前10名或CWE
+          / SANS前25名），并显示每个方案如何抵御。 <a href="https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/doc/security.md">
+          BadgeApp保证案例</a>可能是一个有用的例子。本条款与documentation_security，documentation_architecture和implement_secure_design等条款有关。
+
+'
     '2':
       bus_factor:
         description: 项目必须具有2个或更多的“公交车因子”。

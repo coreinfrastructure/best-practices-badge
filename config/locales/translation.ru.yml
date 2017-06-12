@@ -100,8 +100,10 @@ ru:
   url_message:
   projects_count:
     one:
-    other:
+    other: "%{count} Проекты"
     zero:
+    few:
+    many:
   feed_title:
   project_name_unknown:
   locale_name:
@@ -1265,6 +1267,8 @@ ru:
     form_contains:
       one:
       other:
+      few:
+      many:
     comma_separated_list:
     begin_with_cpe:
     not_an_email:

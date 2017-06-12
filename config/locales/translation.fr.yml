@@ -95,6 +95,8 @@ fr:
     one: "%{count} Projet"
     other: "%{count} Projets"
     zero:
+    few:
+    many:
   feed_title: Mise à Jour des Projets de la BadgeApp Meilleures Pratiques de la CII
   layouts:
     cii_best_practices: Meilleures Pratiques de la CII
@@ -2727,6 +2729,8 @@ fr:
     form_contains:
       one: Le formulaire contient 1 erreur.
       other: Le formulaire contient %{count} erreurs.
+      few:
+      many:
     comma_separated_list: " doit être une liste de noms séparés par des virgules"
     begin_with_cpe: " doit commencer par « cpe : »"
     not_an_email: " n'est pas un email"

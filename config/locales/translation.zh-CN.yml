@@ -94,6 +94,9 @@ zh-CN:
   projects_count:
     one: "%{count} 项目"
     other: "%{count} 项目"
+    zero:
+    few:
+    many:
   feed_title: CII最佳实践徽章计划更新项目
   layouts:
     cii_best_practices: CII最佳实践
@@ -1726,6 +1729,8 @@ zh-CN:
     form_contains:
       one: 该表单包含1个错误。
       other: 该表单包含%{count}个错误。
+      few:
+      many:
     comma_separated_list: " 必须是以逗号分隔的名称列表"
     begin_with_cpe: " 必须以“cpe:”开头"
     not_an_email: " 不是电子邮件"

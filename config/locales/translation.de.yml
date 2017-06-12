@@ -95,6 +95,9 @@ de:
   projects_count:
     one: "%{count} Projekt"
     other: "%{count} Projekte"
+    zero:
+    few:
+    many:
   feed_title: CII Best Practices BadgeApp Aktualisierte Projekte
   project_name_unknown: "(Name unbekannt)"
   locale_name:
@@ -1166,6 +1169,8 @@ de:
     form_contains:
       one: Das Formular enthält 1 Fehler.
       other: Das Formular enthält %{count} Fehler.
+      few:
+      many:
     comma_separated_list:
     begin_with_cpe:
     not_an_email: " Ist keine E-Mail"

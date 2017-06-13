@@ -76,7 +76,11 @@ Rails.application.routes.draw do
 
   # Interpret a bare locale as going to the homepage with that locale.
   # This requires special handling.
+  # get '/:locale', constraints: IS_VALID_LOCALE, to: 'static_pages#home'
   get '/:locale', to: 'static_pages#home'
+  # get '/:locale',
+  #   constraints: lambda { |req| I18n.locale_available?(req.locale) },
+  #   to: 'static_pages#home'
 
   # Here are some examples of routes.
 

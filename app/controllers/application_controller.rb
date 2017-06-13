@@ -37,11 +37,15 @@ class ApplicationController < ActionController::Base
 
   private
 
+  # *Always* include the locale when generating a URL.
+  # Historically we omitted the locale when it was "en", but then we could
+  # not tell the difference between "use en" and "use the browser's locale".
+  # So, we now *always* generate the locale.  To omit the locale for "en",
+  # see this: http://stackoverflow.com/questions/5261521/
+  # how-to-avoid-adding-the-default-locale-in-generated-urls
+  # { locale: I18n.locale == I18n.default_locale ? nil : I18n.locale }
   def default_url_options
-    # Include "/:locale" in URL unless it's en (we omit en to keep URLs stable)
-    # http://stackoverflow.com/questions/5261521/
-    # how-to-avoid-adding-the-default-locale-in-generated-urls
-    { locale: I18n.locale == I18n.default_locale ? nil : I18n.locale }
+    { locale: I18n.locale }
   end
 
   # raise exception if text value client_ip isn't in valid_client_ips
@@ -65,6 +69,28 @@ class ApplicationController < ActionController::Base
     true
   end
 
+  # Find the best-matching locale, under the following rules:
+  # 1. Always choose the locale explicitly given.
+  # 2. Otherwise, use the browser's ACCEPT_LANGUAGE best-matching locale
+  # in automatic_locales (if the browser gives us a matching one).
+  # 3. Otherwise, fall back to the I18n.default_locale.
+  # Note that the user can *ALWAYS* express the preferred locale in the URL.
+  # We do *NOT* use geolocation (users may prefer something different),
+  # we do *NOT* use cookies (these aren't RESTful and thus cause problems),
+  # and users can always override with a URL even if their browser's locale
+  # is not configured correctly.
+  def find_best_locale
+    x = params[:locale]
+    return x if x
+    if request.env.key?(:http_accept_language)
+      x = request.env.http_accept_language.compatible_language_from(
+        Rails.application.config.automatic_locales
+      )
+      return x if x.present?
+    end
+    I18n.default_locale
+  end
+
   # This *looks* like a global variable setting, and setting a global
   # variable would be bad since we're multi-threaded.
   # However, this is *not* setting a global variable, it's setting a
@@ -72,7 +98,7 @@ class ApplicationController < ActionController::Base
   # "The locale can be either set pseudo-globally to I18n.locale
   # (which uses Thread.current like, e.g., Time.zone)...".
   def set_locale
-    I18n.locale = params[:locale] || I18n.default_locale
+    I18n.locale = find_best_locale
   end
 
   # Validate client IP address if Rails.configuration.valid_client_ips

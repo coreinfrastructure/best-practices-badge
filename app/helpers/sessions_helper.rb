@@ -10,34 +10,30 @@ module SessionsHelper
 
   require 'uri'
 
-  # Add/change locale information in URL query if needed.  Modifies url.
-  def force_locale_url_query(url, locale)
-    return unless url.path == '' ||
-                  url.path == '/' || url.query =~ /\Alocale=.*\Z/
-    url.query = locale == :en ? nil : 'locale=' + locale.to_s
+  # Remove locale information in URL query if needed.  Modifies url.
+  # This only handles the case where *only* the locale is in the query.
+  def remove_locale_url_query(url)
+    return if url.query.blank?
+    return unless url.query =~ /\Alocale=[a-z]{2}(-[A-Za-z0-9-]*)?\z/
+    url.query = '' # Remove locale, we already have it
   end
 
   # Change locale of original_url.
   # Presumes that query is empty or only has a locale.
-  # rubocop:disable Metrics/AbcSize
   def force_locale_url(original_url, locale)
     url = URI.parse(original_url)
     # Clean up path
     url.path.gsub!(%r{\A\/[a-z]{2}(-[A-Za-z0-9-]*)?\/}, '') # Remove old locale
     url.path = '/' + url.path if url.path == '' || url.path[0] != '/'
-    if locale != :en && url.path.length > 1
-      url.path = '/' + locale.to_s + url.path
-    end
-    force_locale_url_query url, locale
+    url.path = '/' + locale.to_s + url.path
+    remove_locale_url_query url
     url.to_s
   end
-  # rubocop:enable Metrics/AbcSize
 
   def log_in(user)
     session[:user_id] = user.id
-    # Switch to user's preferred locale, but only if the current locale is :en
-    # (any other locale is an intentional selection & thus should be retained)
-    I18n.locale = user.preferred_locale.to_sym if I18n.locale == :en
+    # Switch to user's preferred locale on login
+    I18n.locale = user.preferred_locale.to_sym
     return unless session[:forwarding_url]
     session[:forwarding_url] = force_locale_url(
       session[:forwarding_url], I18n.locale

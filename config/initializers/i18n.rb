@@ -19,6 +19,15 @@
 
 I18n.available_locales = %i[en fr zh-CN de ja ru]
 
+# Here are the locales we will *automatically* switch to.
+# This *may* be the same as I18n.available_locales, but if a locale's
+# translation isn't ready we should probably omit it here.
+Rails.application.config.automatic_locales = %i[en fr zh-CN de]
+
+# Automatic_locales must be a subset of I18n.available_locales - check it!
+raise InvalidLocale unless
+  (Rails.application.config.automatic_locales - I18n.available_locales).empty?
+
 # If we don't have text, fall back to English.  That obviously isn't
 # ideal, but it's better to show *some* text to the user than leave it
 # a mystery.

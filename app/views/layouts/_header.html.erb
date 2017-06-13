@@ -1,7 +1,7 @@
 <header class='navbar navbar-fixed-top navbar-inverse nav-color'>
   <div class='container container_padding'>
     <%# don't use root_path, it generates ugly URLs %>
-    <%= link_to t(:cii_best_practices, scope: :layouts), "/#{I18n.locale == I18n.default_locale ? '' : I18n.locale}", id: 'logo' %>
+    <%= link_to t(:cii_best_practices, scope: :layouts), "/#{I18n.locale}", id: 'logo' %>
     <%= yield :insert_progress_bar %>
     <nav>
       <div class='nav navbar-nav navbar-left'>

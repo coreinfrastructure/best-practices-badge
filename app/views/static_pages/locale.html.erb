@@ -1,0 +1,20 @@
+<%# This always goes to the home page %>
+<% cache locale do %>
+<div class="row">
+    <div class="col-md-8 col-sm-7">
+      <p class="no-padding best-practices-main-text">
+        <%= t('static_pages.locale.before_html') %>
+      </p>
+      <p class="no-padding best-practices-main-text">
+       <% locale_names = I18n.available_locales.map do |loc| %>
+         <p><a href="/<%= loc %>/">
+           <button type="button" class="btn btn-primary btn-lg">
+             <%= t("locale_name.#{loc.to_s}") %>
+           </button>
+         </a></p>
+       <% end %>
+      <p class="no-padding best-practices-main-text">
+        <%= t('static_pages.locale.after_html') %>
+      </p>
+    </div>
+<% end %>

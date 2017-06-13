@@ -22,6 +22,7 @@ Rails.application.routes.draw do
     get 'signup' => 'users#new'
     get 'home' => 'static_pages#home'
     get 'criteria' => 'static_pages#criteria'
+    get 'locale' => 'static_pages#locale'
 
     get 'feed' => 'projects#feed', defaults: { format: 'atom' }
     get 'reminders' => 'projects#reminders_summary'

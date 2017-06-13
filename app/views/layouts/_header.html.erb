@@ -31,7 +31,7 @@
           <li><%= link_to t(:signup_html, scope: :layouts), signup_path %></li>
           <li><%= link_to t(:login_html, scope: :layouts), login_path %></li>
         <% end %>
-
+        <li><a href="/<%= I18n.locale ? I18n.locale.to_s + '/' : '' %>locale"><span class="glyphicon glyphicon-globe" title="Choose locale"></span></a></li>
       </ul>
     </nav>
   </div>

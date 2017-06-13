@@ -94,9 +94,9 @@ zh-CN:
   projects_count:
     one: "%{count} 项目"
     other: "%{count} 项目"
-    zero:
-    few:
-    many:
+    zero: 零项目
+    few: "%{count}个项目"
+    many: "%{count}个项目"
   feed_title: CII最佳实践徽章计划更新项目
   layouts:
     cii_best_practices: CII最佳实践
@@ -616,7 +616,7 @@ zh-CN:
       有关详细信息，请参阅以下URL：
   project_name_unknown: "(未知名称)"
   locale_name:
-    en: 英文（en）
+    en: 英文 / English (en）
     fr: 法语 / Français (fr)
     zh-CN: 中文（简体）/简体中文（zh-CN）
     de: 德文 / Deutsche (de)
@@ -1729,8 +1729,8 @@ zh-CN:
     form_contains:
       one: 该表单包含1个错误。
       other: 该表单包含%{count}个错误。
-      few:
-      many:
+      few: 该表单包含%{count}个错误。
+      many: 该表单包含%{count}个错误。
     comma_separated_list: " 必须是以逗号分隔的名称列表"
     begin_with_cpe: " 必须以“cpe:”开头"
     not_an_email: " 不是电子邮件"

@@ -940,6 +940,58 @@ different RDBMS if necessary.
 Since PostgreSQL is itself OSS, this isn't as dangerous as becoming
 dependent on a single supplier whose product cannot be forked.
 
+## Accessing our analysis tools
+
+We have various analyzers.  Here are some hints of how to access them.
+
+If you don’t install the software, then you can use our REST interface
+– create a project & then query what we’ve learned.  That only
+provides *some* functionality.
+
+If you *install* software, then there are many more options.  The software
+was designed to be used as a website, so you can still use it that way,
+but then you can also directly invoke the functionality you want via
+Ruby and Rails.  It’s easy to integrate as a CLI that way.
+
+We’re big on testing, for example, we have 100% statement coverage.
+A side-effect of this is that a lot of functionality can be called
+separately (so it can be tested).  You can also look at our tests to see
+how to invoke something internally.  In particular, we have a number of
+tools that try to gather data about a project – each one is called a
+“Detective”, and they are managed by a “Chief” of Detectives.
+Here’s a quick example that may help:
+
+~~~~ruby
+# Start up
+rails console
+p = Project.new
+# Set values for project to evaluate.  We'll examine our own project.
+p[:repo_url] = 'https://github.com/linuxfoundation/cii-best-practices-badge'
+p[:homepage_url] = 'https://github.com/linuxfoundation/cii-best-practices-badge'
+# Setup chief to analyze things:
+new_chief = Chief.new(p, proc { Octokit::Client.new })
+# Ask chief to find probable values:
+results = new_chief.autofill
+
+# Now "results" shows the fields found.
+# For each field it has a value, confidence, and explanation.
+# In addition, "p" is changed where we have high confidence.
+results.keys
+# => [:name, :sites_https_status, :repo_public_status, :repo_track_status,
+# :repo_distributed_status, :contribution_status, :discussion_status,
+# :license, :repo_files, :license_location_status, :release_notes_status,
+# :floss_license_osi_status, :floss_license_status, :hardened_site_status,
+# :build_status, :build_common_tools_status, :documentation_basics_status]
+results[:name]
+# => {:value=>"Core Infrastructure Initiative Best Practices Badge",
+# :confidence=>3, :explanation=>"GitHub name"}
+results[:license]
+# => {:value=>"MIT", :confidence=>3,
+# :explanation=>"GitHub API license analysis"}
+p[:name]
+# => "Core Infrastructure Initiative Best Practices Badge"
+~~~~
+
 ## Forbidden Passwords
 
 [NIST has proposed draft password rules in 2016](https://nakedsecurity.sophos.com/2016/08/18/nists-new-password-rules-what-you-need-to-know/).

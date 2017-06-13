@@ -42,6 +42,8 @@ en:
     account: Account
     profile: Profile
     settings: Settings
+    choose_locale_html: >
+      <span class="glyphicon glyphicon-globe" title="Choose locale"></span>
     logout_html: <span class="glyphicon glyphicon-log-out"></span> Logout
     signup_html: <span class="glyphicon glyphicon-user"></span> Sign Up
     login_html: <span class="glyphicon glyphicon-log-in"></span> Login

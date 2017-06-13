@@ -23,7 +23,7 @@ module SessionsHelper
   def force_locale_url(original_url, locale)
     url = URI.parse(original_url)
     # Clean up path
-    url.path.gsub!(%r{\A\/[a-z]{2}(-[A-Za-z0-9-]*)?\/}, '') # Remove old locale
+    url.path.gsub!(%r{\A\/[a-z]{2}(-[A-Za-z0-9-]*)?(\/|\z)}, '')
     url.path = '/' + url.path if url.path == '' || url.path[0] != '/'
     if locale != :en && url.path.length > 1
       url.path = '/' + locale.to_s + url.path

@@ -31,7 +31,22 @@
           <li><%= link_to t(:signup_html, scope: :layouts), signup_path %></li>
           <li><%= link_to t(:login_html, scope: :layouts), login_path %></li>
         <% end %>
-        <li><a href="/<%= I18n.locale ? I18n.locale.to_s + '/' : '' %>locale"><%= t(:choose_locale_html, scope: :layouts) %></a></li>
+        <% cache [I18n.locale, request.original_fullpath] do %>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%=
+              t(:choose_locale_html, scope: :layouts)
+            %><b class="caret"></b></a>
+            <ul class="dropdown-menu reverse-dropdown">
+              <% I18n.available_locales.map do |loc| %>
+                <li><a href="<%=
+                  # TODO: This doesn't include the anchor.
+                  force_locale_url(request.original_url, loc)
+                  %>"><%= t("locale_name.#{loc}") %></a>
+                </li>
+              <% end %>
+            </ul>
+          </li>
+        <% end %>
       </ul>
     </nav>
   </div>

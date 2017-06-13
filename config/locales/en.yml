@@ -135,11 +135,6 @@ en:
       criteria_na_met_details: Among active criteria, %{na_allowed} allow N/A, %{met_url_required} require a URL when met, and %{details_present} have details in their description.
       project_counts: There are %{projects} project entries; %{passing} are passing and %{in_progress} are in progress.
       project_stats_html: You can see statistics about projects over time at the <a href="/project_stats">project stats page</a>.
-    locale:
-      before_html: 'Please choose your locale:'
-      after_html: >
-        Please note that some locale translations may be incomplete
-        (in those cases, we would welcome your help!).
   users:
     new:
       signup_header: Sign up

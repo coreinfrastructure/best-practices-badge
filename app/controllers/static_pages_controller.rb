@@ -9,8 +9,6 @@ class StaticPagesController < ApplicationController
 
   def criteria; end
 
-  def locale; end
-
   # Send a 404 ("not found") page.  Inspired by:
   # http://rubyjunky.com/cleaning-up-rails-4-production-logging.html
   def error_404

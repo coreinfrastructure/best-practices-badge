@@ -13,83 +13,6 @@ de:
       create: "%{model} erstellen"
       update: "%{model} aktualisieren"
       submit: "%{model} speichern"
-  ransack:
-    search: Suche
-    predicate: Prädikat
-    and: und
-    or: oder
-    any: jeder
-    all: alle
-    combinator: Kombinator
-    attribute: Attribut
-    value: Wert
-    condition: Bedingung
-    sort: sortieren
-    asc: aufsteigend
-    desc: absteigend
-    predicates:
-      eq: gleich
-      eq_any: gleich irgendeine
-      eq_all: gleich alle
-      not_eq: ungleich
-      not_eq_any: ungleich zu Irgendeinem
-      not_eq_all: ungleich zu Alle
-      matches: stimmt überein
-      matches_any: stimmt mit irgendeinem überein
-      matches_all: stimmt mit allen überein
-      does_not_match: stimmt nicht überein
-      does_not_match_any: stimmt nicht mit jedem überein
-      does_not_match_all: stimmt nicht mit allen überein
-      lt: weniger als
-      lt_any: weniger als irgendeine
-      lt_all: weniger als alle
-      lteq: weniger als oder gleich
-      lteq_any: kleiner als oder gleich zu Irgendeinem
-      lteq_all: kleiner als oder gleich zu allen
-      gt: größer als
-      gt_any: größer als irgendeine
-      gt_all: größer als alle
-      gteq: größer als oder gleich
-      gteq_any: größer als oder gleich zu Irgendeinem
-      gteq_all: größer als oder gleich zu allen
-      in: in
-      in_any: in irgendeinem
-      in_all: in allen
-      not_in: nicht in
-      not_in_any: nicht in irgendeine
-      not_in_all: nicht in allen
-      cont: enthält
-      cont_any: enthält irgendeine
-      cont_all: enthält alle
-      not_cont: enthält nicht
-      not_cont_any: enthält irgendeine nicht
-      not_cont_all: enthält alle nicht
-      start: beginnt mit
-      start_any: beginnt mit irgendeinem
-      start_all: beginnt mit allen
-      not_start: beginnt nicht mit
-      not_start_any: Beginnt nicht mit Irgendetwas
-      not_start_all: Beginnt nicht mit Alle
-      end: endet auf
-      end_any: endet auf irgendeinen
-      end_all: endet auf allen
-      not_end: endet nicht auf
-      not_end_any: Endet nicht mit Irgendetwas
-      not_end_all: Endet nicht mit Alle
-      'true': ist wahr
-      'false': ist falsch
-      present: ist vorhanden
-      blank: ist leer
-      'null': ist NULL
-      not_null: ist nicht NULL
-  simple_form:
-    'yes': Ja
-    'no': Nein
-    required:
-      text: erforderlich
-      mark: "*"
-    error_notification:
-      default_message: 'Bitte benachrichtige uns, wenn es ein Problem gibt:'
   hello: Hallo Welt
   submit: Senden
   projects_count:
@@ -118,7 +41,7 @@ de:
     signup_html: <span class="glyphicon glyphicon-user"></span> Registrieren
     login_html: <span class="glyphicon glyphicon-log-in"></span> Anmelden
     footer_text_html:
-    choose_locale_html:
+    choose_locale:
   account_activations:
     activated: Konto aktiviert!
     failed_activation: Ungültiger Aktivierungslink
@@ -1157,14 +1080,6 @@ de:
     Met: Erfüllt
     Unmet: Nicht erfüllt
     NA: keine Angabe
-  comma_separated_list: Es muss eine Komma separierte Liste von Namen sein
-  begin_with_cpe: Muss mit "cpe:" beginnen
-  not_an_email: Keine gültige E-Mail
-  known_bad_password: " Ist ein weit verbreitetes (schlechtes) Passwort"
-  valid_text: " Muss eine gültige UTF-8-Codierung und keine ungültigen Steuerzeichen
-    haben"
-  url_message: " Muss mit http: oder https: beginnen und verwenden einen begrenzten
-    Zeichensatz "
   error_messages:
     need_home_page_or_url: Benötige mindestens eine Homepage oder eine Repository-URL
     form_contains:

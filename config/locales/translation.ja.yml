@@ -13,83 +13,6 @@ ja:
       create: 登録する
       update: 更新する
       submit: 保存する
-  ransack:
-    search:
-    predicate:
-    and:
-    or:
-    any:
-    all:
-    combinator:
-    attribute:
-    value:
-    condition:
-    sort:
-    asc:
-    desc:
-    predicates:
-      eq:
-      eq_any:
-      eq_all:
-      not_eq:
-      not_eq_any:
-      not_eq_all:
-      matches:
-      matches_any:
-      matches_all:
-      does_not_match:
-      does_not_match_any:
-      does_not_match_all:
-      lt:
-      lt_any:
-      lt_all:
-      lteq:
-      lteq_any:
-      lteq_all:
-      gt:
-      gt_any:
-      gt_all:
-      gteq:
-      gteq_any:
-      gteq_all:
-      in:
-      in_any:
-      in_all:
-      not_in:
-      not_in_any:
-      not_in_all:
-      cont:
-      cont_any:
-      cont_all:
-      not_cont:
-      not_cont_any:
-      not_cont_all:
-      start:
-      start_any:
-      start_all:
-      not_start:
-      not_start_any:
-      not_start_all:
-      end:
-      end_any:
-      end_all:
-      not_end:
-      not_end_any:
-      not_end_all:
-      'true':
-      'false':
-      present:
-      blank:
-      'null':
-      not_null:
-  simple_form:
-    'yes':
-    'no':
-    required:
-      text:
-      mark:
-    error_notification:
-      default_message:
   hello:
   submit:
   projects_count:
@@ -118,7 +41,7 @@ ja:
     signup_html:
     login_html:
     footer_text_html:
-    choose_locale_html:
+    choose_locale:
   account_activations:
     activated: アカウントが有効になりました！
     failed_activation: 無効なアクティベーションリンク
@@ -862,12 +785,6 @@ ja:
     Met:
     Unmet:
     NA:
-  comma_separated_list:
-  begin_with_cpe:
-  not_an_email:
-  known_bad_password:
-  valid_text:
-  url_message:
   error_messages:
     need_home_page_or_url:
     form_contains:

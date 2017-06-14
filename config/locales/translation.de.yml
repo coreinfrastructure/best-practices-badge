@@ -118,6 +118,7 @@ de:
     signup_html: <span class="glyphicon glyphicon-user"></span> Registrieren
     login_html: <span class="glyphicon glyphicon-log-in"></span> Anmelden
     footer_text_html:
+    choose_locale_html:
   account_activations:
     activated: Konto aktiviert!
     failed_activation: Ungültiger Aktivierungslink

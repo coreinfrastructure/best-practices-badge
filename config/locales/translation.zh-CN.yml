@@ -115,6 +115,7 @@ zh-CN:
       target="_blank">隐私策略</a> 和 <a href="https://www.linuxfoundation.org/terms" target="_blank">使用条款</a>.
       </small>
     account: 帐户
+    choose_locale_html:
   sessions:
     login_header: 登录
     login_with_github_html: <span class="fa fa-github"></span> 使用GitHub账户登录

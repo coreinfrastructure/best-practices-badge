@@ -118,6 +118,7 @@ ja:
     signup_html:
     login_html:
     footer_text_html:
+    choose_locale_html:
   account_activations:
     activated: アカウントが有効になりました！
     failed_activation: 無効なアクティベーションリンク

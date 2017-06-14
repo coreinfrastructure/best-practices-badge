@@ -119,6 +119,7 @@ fr:
 
 '
     account: Compte
+    choose_locale_html:
   sessions:
     login_header: S'identifier
     login_with_github_html: '<span class="fa fa-github"></span> Connectez-vous avec

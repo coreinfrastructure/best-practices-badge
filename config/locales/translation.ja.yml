@@ -31,17 +31,25 @@ ja:
     zh-CN:
     ru:
   layouts:
-    cii_best_practices:
-    projects:
-    users:
-    account:
-    profile:
-    settings:
-    logout_html:
-    signup_html:
-    login_html:
-    footer_text_html:
-    choose_locale:
+    cii_best_practices: CIIベストプラクティス
+    projects: プロジェクト
+    users: ユーザー
+    account: アカウント
+    profile: プロフィール
+    settings: 設定
+    logout_html: <span class = "glyphicon glyphicon-log-out"> </ span>ログアウト
+    signup_html: <span class = "glyphicon glyphicon-log-in"> </ span>ログイン
+    login_html: <span class = "glyphicon glyphicon-log-in"> </ span>ログイン
+    footer_text_html: '<small> <strong>ヘルプが必要ですか？質問があります？問題がありますか？ <em> <a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">送信してください電子メール</a>
+      </ em>または<em> <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues"
+      target="_blank">問題を提出する</ em> a> </ em>。</ strong>©2015-2017 <a href="https://www.coreinfrastructure.org/
+      target="_blank">コアインフラストラクチャイニシアチブ</a> <a href = " <a href = "https://www.linuxfoundation.org/privacy"を参照してください<https://www.linuxfoundation.org/>
+      target = "_ blank"> Linux Foundation </a>コラボレーティブプロジェクト。 target = "_ blank">プライバシーポリシー</a>と<a
+      href="https://www.linuxfoundation.org/terms" target="_blank">利用規約</a>をご覧ください。</
+      small>
+
+'
+    choose_locale: ロケールを選択
   account_activations:
     activated: アカウントが有効になりました！
     failed_activation: 無効なアクティベーションリンク
@@ -730,11 +738,27 @@ ja:
         description:
   static_pages:
     home:
-      badge_program:
-      get_your_badge:
-      p1_html:
-      p2_html:
-      p3_html:
+      badge_program: CIIベストプラクティスバッジプログラム
+      get_your_badge: あなたのバッジを今すぐ手に入れよう！
+      p1_html: '<a href="https://www.linuxfoundation.org/"> Linux Foundation（LF）</a>
+        <a href="https://www.coreinfrastructure.org/">コアインフラストラクチャイニシアチブ（CII） </a>
+        Best Practicesバッジは、Free / LibreおよびOpen Source Software（FLOSS）プロジェクトがベストプラクティスに従うことを示すための方法です。プロジェクトは、このWebアプリケーションを使用して各ベストプラクティスに従う方法を説明することにより、無償で自主的に自己証明することができます。
+        CIIベストプラクティスのバッジは、GitHubのプロジェクトで利用可能な多くのバッジからインスピレーションを受けています。バッジの消費者は、どのFLOSSプロジェクトがベストプラクティスに従っているかを迅速に評価することができ、その結果、より高品質のセキュアなソフトウェアを生産する可能性が高まります。
+
+'
+      p2_html: 'バックグラウンドや<a href=''https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/doc/criteria.md''>基準を含むCIIベストプラクティスバッジプログラムの詳細については、
+        a>は、<a href=''https://github.com/linuxfoundation/cii-best-practices-badge''>
+        GitHubで利用可能</a>です。 <a href="/ja/project_stats">プロジェクトの統計情報</a>と<a href="/ja/criteria">基準の統計情報</a>が利用できます。
+        <a href="/ja/projects">プロジェクトページ</a>には、参加しているプロジェクトが表示され、クエリがサポートされています（例：<a
+        href="/ja/projects?gteq=100">合格バッジを持つプロジェクト</ a >）。また、<a href=''/ja/projects/1''>の例（自分のバッジを取得しようとする場所）</a>を見ることもできます。
+
+'
+      p3_html: '<em>プライバシーと法的問題</em>：<a href="https://www.linuxfoundation.org/privacy">プライバシーポリシー</a>と<a
+        href = "https://www.linuxfoundation.org/terms">利用規約</a>をご覧ください。公開されているすべての非コードコンテンツは、少なくとも<a
+        href="https://creativecommons.org/licenses/by/3.0/">クリエイティブコモンズアトリビューションライセンスバージョン3.0（CC-BY-3.0）</a>;より新しい非コードコンテンツは、CC-BYバージョン3.0以降（CC-BY-3.0
+        +）でリリースされています。集合的に言及している場合、または特に明記されていない場合は、CII Best Practicesバッジの寄稿者にご報告ください。
+
+'
     criteria:
       criteria:
       detailed_criteria_on_github:

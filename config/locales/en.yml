@@ -1493,7 +1493,9 @@ en:
 '
       build_reproducible:
         description: 'It is SUGGESTED that the project have a <a href="https://reproducible-builds.org/">reproducible
-          build</a>.
+          build</a>. If no building occurs (e.g., scripting languages where the source
+          code is used directly instead of being compiled), select "not applicable"
+          (N/A).
 
 '
         details: 'A reproducible build means that multiple parties can independently

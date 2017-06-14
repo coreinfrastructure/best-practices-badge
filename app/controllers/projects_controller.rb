@@ -89,7 +89,7 @@ class ProjectsController < ApplicationController
   # GET /projects/new
   def new
     use_secure_headers_override(:allow_github_form_action)
-    store_location
+    store_location_and_locale
     @project = Project.new
   end
 

@@ -39,6 +39,7 @@ module SessionsHelper
     # (any other locale is an intentional selection & thus should be retained)
     I18n.locale = user.preferred_locale.to_sym if I18n.locale == :en
     return unless session[:forwarding_url]
+
     session[:forwarding_url] = force_locale_url(
       session[:forwarding_url], I18n.locale
     )
@@ -123,13 +124,16 @@ module SessionsHelper
 
   # Redirects to stored location (or to the default)
   def redirect_back_or(default)
-    redirect_to(session[:forwarding_url] || default)
+    redirect_to(session[:forwarding_url] ||
+                force_locale_url(default, I18n.locale))
     session.delete(:forwarding_url)
   end
 
   # Stores the URL trying to be accessed (if its a new project) or a referer
-  def store_location
+  def store_location_and_locale
     session.delete(:forwarding_url)
+    session.delete(:locale)
+    session[:locale] = I18n.locale
     return unless request.get?
     if request.url == new_project_url
       session[:forwarding_url] = new_project_url
@@ -161,7 +165,8 @@ module SessionsHelper
     return if request.referer.nil?
     ref_url = request.referer
     return unless URI.parse(ref_url).host == request.host
-    session[:forwarding_url] = ref_url unless ref_url == login_url
+    return if [login_url, signup_url].include? ref_url
+    session[:forwarding_url] = ref_url
   end
 end
 # rubocop:enable Metrics/ModuleLength

@@ -84,6 +84,7 @@ de:
       password: Passwort
       password_confirmation: Bestätige Passwort
       create_account: Erstelle meinen Account
+      intro_github:
     edit:
       update_user_info: Benutzerinformationen aktualisieren
       save_changes: Änderungen speichern

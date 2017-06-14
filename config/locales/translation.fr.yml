@@ -42,7 +42,7 @@ fr:
 
 '
     account: Compte
-    choose_locale:
+    choose_locale: Choisir la langue
   sessions:
     login_header: S'identifier
     login_with_github_html: '<span class="fa fa-github"></span> Connectez-vous avec
@@ -80,6 +80,7 @@ fr:
       password_confirmation: Confirmez le mot de passe
       create_account: Créer mon compte
       preferred_locale: Langue préférée
+      intro_github:
     show:
       see_external: Voir la page externe de cet utilisateur.
       other_projects_edit: Autres projets que vous pouvez modifier

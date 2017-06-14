@@ -68,6 +68,7 @@ zh-CN:
       password_confirmation: 确认密码
       create_account: 创建我的账户
       preferred_locale: 首选语言
+      intro_github:
     show:
       see_external: '查看此用户的外部页面。
 

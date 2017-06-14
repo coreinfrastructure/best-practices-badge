@@ -82,6 +82,7 @@ ja:
       password:
       password_confirmation:
       create_account:
+      intro_github:
     edit:
       update_user_info:
       save_changes:

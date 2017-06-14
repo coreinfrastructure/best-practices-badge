@@ -33,9 +33,9 @@
         <% end %>
         <% cache [I18n.locale, request.original_fullpath] do %>
           <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%=
-              t(:choose_locale_html, scope: :layouts)
-            %><b class="caret"></b></a>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              <span class="fa fa-language fa-lg" title="<%= t(:choose_locale, scope: :layouts) %>"></span>
+              <b class="caret"></b></a>
             <ul class="dropdown-menu reverse-dropdown">
               <% I18n.available_locales.map do |loc| %>
                 <li><a href="<%=

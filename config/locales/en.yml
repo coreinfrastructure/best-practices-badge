@@ -42,8 +42,7 @@ en:
     account: Account
     profile: Profile
     settings: Settings
-    choose_locale_html: >
-      <span class="fa fa-language" title="Choose locale"></span>
+    choose_locale: Choose locale
     logout_html: <span class="glyphicon glyphicon-log-out"></span> Logout
     signup_html: <span class="glyphicon glyphicon-user"></span> Sign Up
     login_html: <span class="glyphicon glyphicon-log-in"></span> Login

@@ -10,11 +10,12 @@ module SessionsHelper
 
   require 'uri'
 
-  # Add/change locale information in URL query if needed.  Modifies url.
-  def force_locale_url_query(url, locale)
-    return unless url.path == '' ||
-                  url.path == '/' || url.query =~ /\Alocale=.*\Z/
-    url.query = locale == :en ? nil : 'locale=' + locale.to_s
+  def remove_locale_query(url_query)
+    return url_query if url_query.nil?
+    url_query.gsub!(/locale=[^&]*&?/, '')
+    url_query.gsub!(/&\Z/, '')
+    url_query = nil if url_query == ''
+    url_query
   end
 
   # Change locale of original_url.
@@ -22,13 +23,12 @@ module SessionsHelper
   # rubocop:disable Metrics/AbcSize
   def force_locale_url(original_url, locale)
     url = URI.parse(original_url)
+    # Clean up query
+    url.query = remove_locale_query(url.query)
     # Clean up path
     url.path.gsub!(%r{\A\/[a-z]{2}(-[A-Za-z0-9-]*)?(\/|\z)}, '')
     url.path = '/' + url.path if url.path == '' || url.path[0] != '/'
-    if locale != :en && url.path.length > 1
-      url.path = '/' + locale.to_s + url.path
-    end
-    force_locale_url_query url, locale
+    url.path = '/' + locale.to_s + url.path unless locale == :en
     url.to_s
   end
   # rubocop:enable Metrics/AbcSize

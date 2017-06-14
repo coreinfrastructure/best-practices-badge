@@ -4,8 +4,8 @@
 
 ## Introduction
 
-This document lists the planned potential criteria for badges
-beyond the "passing" level.
+This document describes the criteria for badges beyond the "passing" level
+(the "silver" and "gold" levels).
 Please
 [post an issue](https://github.com/linuxfoundation/cii-best-practices-badge/issues)
 if you have comments on these criteria.

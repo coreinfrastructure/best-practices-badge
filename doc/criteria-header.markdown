@@ -35,15 +35,22 @@ These best practices have been created to:
 3. help users know which projects are following best practices
    (so users can prefer such projects).
 
-We are currently focused on identifying best practices
-that well-run projects typically already follow.
-The best practices, and the more detailed criteria
-specifically defining them, are inspired by a variety of sources.
-See the separate "[background](./background.md)" page for more information.
+The idiom "best practices" means
+"a procedure or set of procedures that is preferred or considered
+standard within an organization, industry, etc."
+(source:
+<a href="http://www.dictionary.com/browse/best-practice">Dictionary.com</a>).
+These criteria are what we believe are
+widely "preferred or considered standard"
+in the wider FLOSS community.
 
+The "passing" criteria listed here focus on identifying best practices
+that well-run FLOSS projects typically already follow.
+The criteria are inspired by a variety of sources;
+see the separate "[background](./background.md)" page for more information.
 See the
-[draft criteria for higher/more advanced badges](./other.md) if you
-are interested in possible future criteria.
+[criteria for higher/more advanced badges](./other.md) if you
+are interested in the criteria for higher-level badges.
 
 The Linux Foundation also sponsors the
 [OpenChain Project](https://www.openchainproject.org/), which

@@ -84,7 +84,7 @@ class LoginTest < CapybaraFeatureTest
     assert_match DASH, find('#repo_distributed_enough')['src']
 
     refute_selector(:css, '#report_process')
-    find('#reporting').click
+    find('#toggle-expand-all-panels').click
     wait_for_jquery
     assert_selector(:css, '#report_process')
     ensure_choice 'project_report_process_status_unmet'

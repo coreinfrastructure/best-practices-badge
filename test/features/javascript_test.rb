@@ -6,7 +6,7 @@
 
 require 'capybara_feature_test'
 
-class LoginTest < CapybaraFeatureTest
+class JavascriptTest < CapybaraFeatureTest
   setup do
     @project_passing = projects(:perfect_passing)
   end

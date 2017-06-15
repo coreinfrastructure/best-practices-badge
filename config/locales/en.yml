@@ -390,15 +390,15 @@ en:
         '0': Passing
         '0_html': >
           These are the %{passing} level criteria. You can also view the
-          %{silver} or %{gold} level criteria
+          %{silver} or %{gold} level criteria.
         '1': Silver
         '1_html': >
           These are the %{silver} level criteria. You can also view the
-          %{passing} or %{gold} level criteria
+          %{passing} or %{gold} level criteria.
         '2': Gold
         '2_html': >
           These are the %{gold} level criteria. You can also view the
-          %{passing} or %{silver} level criteria
+          %{passing} or %{silver} level criteria.
       got_badge:
         description_1: >
           If this is your project, please show your badge status on your

@@ -30,6 +30,7 @@
 }) %>
 
 <% if is_disabled %>
+  <% next_level_prefix = project_path %>
   <%= t('projects.form_early.got_badge.description_1') %>
   <img src='/projects/<%= project.id %>/badge'  width='<%= Badge::BADGE_SPECS[project.badge_level][:width] %>' height='20' alt="<%= t('projects.form_early.got_badge.badge_alt', id: project.id, level: project.badge_level) %>">
   <%= t('projects.form_early.got_badge.description_2') %>
@@ -38,16 +39,17 @@
          details: t('projects.form_early.got_badge.details_html',
                     markdown_embedding: %{<code>[![CII Best Practices](https://#{ badge_hostname }/projects/#{ project.id }/badge)](https://#{ badge_hostname }/projects/#{ project.id })</code>}.html_safe,
                     html_embedding: %{<code>&lt;a href="https://#{badge_hostname}/projects/#{ project.id }"&gt;&lt;img src="https://#{ badge_hostname }/projects/#{ project.id }/badge"&gt;&lt;/a&gt; </code>}.html_safe)
-}) %>
+      }) %>
 <% else %>
-<%= t('projects.form_early.got_badge.editing_description_html') %>
+  <% next_level_prefix = edit_project_path %>
+  <%= t('projects.form_early.got_badge.editing_description_html') %>
 <% end %>
 
 <br><br>
 <%= t("#{criteria_level}_html", scope: 'projects.form_early.level',
-      passing: %{<a href='?criteria_level=0'>#{image_tag('passing.svg', size: '53x20', alt: t('projects.form_early.level.0'))}</a>}.html_safe,
-      silver: %{<a href='?criteria_level=1'>#{image_tag('silver.svg', size: '41x20', alt: t('projects.form_early.level.1'))}</a>}.html_safe,
-      gold: %{<a href='?criteria_level=2'>#{image_tag('gold.svg', size: '35x20', alt: t('projects.form_early.level.2'))}</a>}.html_safe,
+      passing: %{<a href='#{next_level_prefix}'>#{image_tag('passing.svg', size: '53x20', alt: t('projects.form_early.level.0'))}</a>}.html_safe,
+      silver: %{<a href='#{next_level_prefix}?criteria_level=1'>#{image_tag('silver.svg', size: '41x20', alt: t('projects.form_early.level.1'))}</a>}.html_safe,
+      gold: %{<a href='#{next_level_prefix}?criteria_level=2'>#{image_tag('gold.svg', size: '35x20', alt: t('projects.form_early.level.2'))}</a>}.html_safe,
       ) %>
 
 <%# End column started outside. %>

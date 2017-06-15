@@ -38,7 +38,7 @@ zh-CN:
       target="_blank">隐私策略</a> 和 <a href="https://www.linuxfoundation.org/terms" target="_blank">使用条款</a>.
       </small>
     account: 帐户
-    choose_locale:
+    choose_locale: 选择区域设置
   sessions:
     login_header: 登录
     login_with_github_html: <span class="fa fa-github"></span> 使用GitHub账户登录
@@ -314,6 +314,9 @@ zh-CN:
         0_html: 这些是通过级别的条款。
         1_html: 这些是白银级别的条款。
         2_html: 这些是黄金级别的条款。
+        '0':
+        '1':
+        '2':
     misc:
       disabled_reminders: "（高级）禁用不活动提醒（我们建议您取消选中此选项）\n"
       general_comments:

@@ -310,6 +310,9 @@ de:
         0_html: Dies sind die Kriterien für Badgelevel "passing".
         1_html: Dies sind die Kriterien für Badgelevel "silver".
         2_html: Dies sind die Kriterien für Badgelevel "gold".
+        '0':
+        '1':
+        '2':
     misc:
       disabled_reminders: "(Fortgeschritten) Deaktiviere Inaktivitätserinnerung (wir
         empfehlen Ihnen, diese unausgewählt zu lassen)\n"

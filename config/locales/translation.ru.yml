@@ -21,7 +21,7 @@ ru:
     zero:
     few:
     many:
-  feed_title:
+  feed_title: Значок CII "Передовая практика" - обновлённые проекты
   project_name_unknown:
   locale_name:
     en:
@@ -32,23 +32,23 @@ ru:
     zh-CN:
   layouts:
     cii_best_practices: Передовая практика CII
-    projects: проектов
-    users: пользователей
+    projects: Проекты
+    users: Пользователи
     account: Учётная запись активирована!
     profile: Профиль
     settings: Настройки
-    logout_html: <span class = "глификон-выход из глификона"> </span> Выход из системы
-    signup_html: <span class = "glyphicon-log-in"> </span> Вход в систему
-    login_html: <span class = "glyphicon-log-in"> </span> Вход в систему
-    footer_text_html: '<Small> <strong> Нужна помощь? Есть вопрос? См. Проблему? <Em>
-      <a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">
-      отправить Электронное письмо </a> </ em> или <em> <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues"
-      target="_blank"> файл проблемы </ A> </ em>. </ Strong> <2015> <a href="https://www.coreinfrastructure.org/
-      target="_blank"> Инициатива по базовой инфраструктуре </a>, a <a href = " Https://www.linuxfoundation.org/
-      «target =" _ blank "> Linux Foundation </a> Совместный проект. Все права защищены.
-      См. Наш <a href =" https://www.linuxfoundation.org/privacy " Target = "_ blank">
-      политика конфиденциальности </a> и <a href="https://www.linuxfoundation.org/terms"
-      target="_blank"> условия использования </a>. </ Small>
+    logout_html: <span class="glyphicon glyphicon-log-out"></span> Выйти
+    signup_html: <span class="glyphicon glyphicon-user"></ span> Зарегистрироваться
+    login_html: <span class="glyphicon-log-in"></span> Войти в систему
+    footer_text_html: '<small> <strong>Нужна помощь? Есть вопрос? Видите ошибку? Пожалуйста,
+      отправьте <em><a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">электронное
+      письмо</a></em> или <em><a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues"
+      target="_blank">вопрос на GitHub</a></em>.</strong> © 2015-2017 <a href="https://www.coreinfrastructure.org/
+      target="_blank">Core Infrastructure Initiative</a>, a <a href="https://www.linuxfoundation.org/"
+      target="_blank">Linux Foundation</a> Collaborative Project. All Rights Reserved.
+      Please see our <a href="https://www.linuxfoundation.org/privacy" target="_blank">privacy
+      policy</a> and <a href="https://www.linuxfoundation.org/terms" target="_blank">terms
+      of use</a>. </small>
 
 '
     choose_locale: Выберите язык
@@ -85,49 +85,57 @@ ru:
     signed_out:
   static_pages:
     home:
-      badge_program: Программа значков лучшей практики CII
+      badge_program: Программа значков CII "Передовая практика"
       get_your_badge: Получите ваш значок сейчас!
-      p1_html: '<a href="https://www.linuxfoundation.org/"> Linux Foundation (LF)
-        </a> <a href="https://www.coreinfrastructure.org/"> Инициатива по базовой
-        инфраструктуре (CII)</a> Значок Best Practices - это способ для проектов Free
-        / Libre и Open Source Software (FLOSS), чтобы показать, что они следуют передовым
-        методам. Проекты могут добровольно самостоятельно сертифицировать, без каких-либо
-        затрат, с помощью этого веб-приложения, чтобы объяснить, как они следуют каждой
-        лучшей практике. Значок Best Practices от CII вдохновлен многими значками,
-        доступными для проектов на GitHub. Потребители значка смогут быстро оценить,
-        какие проекты FLOSS соответствуют передовым методам, и, как результат, с большей
-        вероятностью создадут более качественное защищенное программное обеспечение.
+      p1_html: 'Значок "Передовая практика" от <a href="https://www.linuxfoundation.org/">Linux
+        Foundation (LF)</a> <a href="https://www.coreinfrastructure.org/">Core Infrastructure
+        Initiative (CII)</a> - это возможность для проектов свободного и открытого
+        ПО (Free/Libre and Open Source Software - FLOSS) показать, что они следуют
+        передовым наработкам в отрасли. С помощью данного веб-приложения проекты могут
+        добровольно и бесплатно оценить, насколько они используют передовые методы
+        организации разработки свободного и открытого ПО, и опубликовать результат.
+        Идея значка "Передовая практика" от CII навеяна многими другими значками,
+        доступными для проектов на GitHub. Видящие значок смогут быстро оценить, какие
+        проекты FLOSS используют передовые методы и в результате скорее всего создают
+        более качественное и защищенное программное обеспечение.
 
 '
-      p2_html: 'Более подробную информацию о программе CII Best Practices Badging,
-        в том числе о фоновых и <a href=''https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/doc/criteria.md''>
-        критериях </a>, <a href=''https://github.com/linuxfoundation/cii-best-practices-badge''>
-        доступен на GitHub </a>. <a href="/ru/project_stats"> Статистика проекта </a>
-        и <a href="/ru/criteria"> статистика критериев </a>. Страница <a href="/ru/projects">
-        проектов </a> показывает участвующие проекты и поддерживает запросы (например,
-        вы можете видеть <a href="/ru/projects?gteq=100"> проекты, имеющие пропускающий
-        значок </a>). Вы также можете увидеть <a href=''/ru/projects/1''> пример (где
-        мы пытаемся получить наш собственный значок) </a>.
+      p2_html: 'Более подробную информацию о программе значков CII "Передовая практика",
+        в том числе о происхождении программы и <a href=''https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/doc/criteria.md''>критериях</a>,
+        можно найти на <a href=''https://github.com/linuxfoundation/cii-best-practices-badge''>странице
+        проекта на GitHub</a>. Имеются <a href="/ru/project_stats">статистика проекта</a>
+        и <a href="/ru/criteria">статистика критериев</a>. <a href="/ru/projects">Страница
+        проектов</a> показывает участвующие проекты и позволяет делать запросы по
+        базе проектов (например, вы можете найти <a href="/ru/projects?gteq=100">проекты,
+        проходящие по всем критериям</a>). Вы также можете взглянуть на <a href=''/ru/projects/1''>пример
+        (в котором мы пытаемся получить наш собственный значок)</a>.
 
 '
-      p3_html: '<em> Конфиденциальность и юридические вопросы </em>: см. Нашу <a href="https://www.linuxfoundation.org/privacy">
-        политику конфиденциальности </a> и <a href="https://www.linuxfoundation.org/terms">
-        условия использования </a>. Все общедоступное содержимое без кода выпущено
-        по меньшей мере в <a href="https://creativecommons.org/licenses/by/3.0/">
-        лицензии Creative Commons Attribution версии 3.0 (CC-BY-3.0) </а>; Более новый
-        контент без кода выпущен под CC-BY версии 3.0 или новее (CC-BY-3.0 +). Если
-        вы указали коллективно или не указано иное, пожалуйста, зачислите вкладчиков
-        значков CII Best Practices.
+      p3_html: '<em>Конфиденциальность и юридические вопросы</em>: см. нашу <a href="https://www.linuxfoundation.org/privacy">политику
+        конфиденциальности</a> и <a href="https://www.linuxfoundation.org/terms">условия
+        использования</a>. Все общедоступное содержимое без кода выпущено под лицензией
+        как минимум <a href="https://creativecommons.org/licenses/by/3.0/">Creative
+        Commons Attribution версии 3.0 (CC-BY-3.0)</а>; более новый контент без кода
+        выпущен под CC-BY версии 3.0 или выше (CC-BY-3.0+). Для коллективной ссылки
+        или если не указано иное, пожалуйста, ссылайтесь на "CII Best Practices badge
+        contributors".
 
 '
     criteria:
-      criteria:
-      detailed_criteria_on_github:
-      current_criteria:
-      criteria_must_should_suggested:
-      criteria_na_met_details:
-      project_counts:
-      project_stats_html:
+      criteria: Критерии
+      detailed_criteria_on_github: Подробные критерии приведены на GitHub.
+      current_criteria: 'Текущее количество критериев: %{active} (действующие) + %{future}
+        (будущие) = %{total} (всего).'
+      criteria_must_should_suggested: 'В действующих критериях используются следующие
+        ключевые слова: %{must} ОБЯЗАН (антоним - ЗАПРЕЩЕНО), %{should} ДОЛЖЕН (антоним
+        - НЕ СЛЕДУЕТ), и %{suggested} РЕКОМЕНДУЕТСЯ (антоним - НЕ РЕКОМЕНДУЕТСЯ).'
+      criteria_na_met_details: В действующих критериях %{na_allowed} разрешает вариант
+        "неприменимо" (N/A), %{met_url_required} требует URL, для удовлетворения критерию,
+        %{details_present} содержит подробности в описании.
+      project_counts: 'Всего записей о проектах: %{projects}; %{passing} полностью
+        соответствуют критериям, и %{in_progress} в процессе.'
+      project_stats_html: Вы можете просмотреть статистику по проектам с течением
+        времени на странице со <a href="/project_stats">проектной статистикой</a>.
   users:
     new:
       signup_header:
@@ -258,6 +266,9 @@ ru:
         0_html:
         1_html:
         2_html:
+        '0':
+        '1':
+        '2':
       got_badge:
         description_1:
         badge_alt:

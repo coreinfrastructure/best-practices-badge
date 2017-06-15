@@ -243,6 +243,9 @@ ja:
         0_html:
         1_html:
         2_html:
+        '0':
+        '1':
+        '2':
     misc:
       disabled_reminders:
       general_comments:
@@ -414,13 +417,13 @@ ja:
         description:
         details:
       build:
-        description:
-        details:
+        description: プロジェクトによって作成されたソフトウェアを利用するためにビルドが必要となるならば、プロジェクトは、ソースコードからソフトウェアを自動的にリビルドできる作業ビルドシステムを提供しなければなりません。
+        details: ビルドシステムは、ソフトウェアをリビルドするのに必要なアクション（およびその順序）を決定し、それらのステップを実行します。たとえば、ビルドシステムは、ソースコードをコンパイルするためにコンパイラを呼び出すことができます。実行可能ファイルがソースコードから生成される場合、ビルドシステムは、プロジェクトのソースコードを変更でき、その変更を含む更新された実行ファイルを生成できなければなりません。プロジェクトによって生成されたソフトウェアが外部ライブラリに依存する場合、ビルドシステムはそれらの外部ライブラリをビルドする必要は<em>ありません</em>。ソースコードが変更されても、ソフトウェアを使用するためにビルドする必要がない場合、「該当なし」（N/A）を選択します。
       build_common_tools:
-        description:
-        details:
+        description: ソフトウエアをビルドするために、一般的なツールを使用することをお勧めします。
+        details: たとえば、Maven、Ant、cmake、rakeです。
       build_floss_tools:
-        description:
+        description: プロジェクトは、FLOSSツールだけを使用してビルドができるようにするべきです。
       test:
         description:
         details:
@@ -521,7 +524,7 @@ ja:
         description:
         details:
       build_reproducible:
-        description:
+        description: プロジェクトが<a href="https://reproducible-builds.org/">再現可能なビルド</a>を持つことが、推奨されています。ビルドが発生しない場合（たとえば、コンパイルされないでソースコードが直接使用されるスクリプト言語）、「該当なし」（N/A）を選択します。
         details:
       crypto_used_network:
         description:
@@ -805,7 +808,7 @@ ja:
     Working build system:
     Identification:
   last_entry:
-  admin_only:
+  admin_only: 管理者のみ。
   criterion_status:
     Met:
     Unmet:

@@ -425,6 +425,9 @@ fr:
         0_html: Ce sont les critères du niveau basique.
         1_html: Ce sont les critères du niveau argent.
         2_html: Ce sont les critères du niveau or.
+        '0':
+        '1':
+        '2':
     misc:
       disabled_reminders: "(Avancé) Désactiver le rappel d'inactivité (nous vous recommandons
         de laisser ceci non sélectionné)\n"

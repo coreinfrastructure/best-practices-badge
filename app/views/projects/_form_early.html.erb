@@ -44,7 +44,11 @@
 <% end %>
 
 <br><br>
-<%= t("#{criteria_level}_html", scope: 'projects.form_early.level') %>
+<%= t("#{criteria_level}_html", scope: 'projects.form_early.level',
+      passing: %{<a href='?criteria_level=0'>#{image_tag('passing.svg', size: '53x20', alt: t('projects.form_early.level.0'))}</a>}.html_safe,
+      silver: %{<a href='?criteria_level=1'>#{image_tag('silver.svg', size: '41x20', alt: t('projects.form_early.level.1'))}</a>}.html_safe,
+      gold: %{<a href='?criteria_level=2'>#{image_tag('gold.svg', size: '35x20', alt: t('projects.form_early.level.2'))}</a>}.html_safe,
+      ) %>
 
 <%# End column started outside. %>
 </div>

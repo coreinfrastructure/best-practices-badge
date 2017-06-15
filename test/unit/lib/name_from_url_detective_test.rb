@@ -41,7 +41,7 @@ class NameFromUrlDetectiveTest < ActiveSupport::TestCase
 
     assert results.key?(:name)
     assert results[:name].key?(:value)
-    assert_equal 'cii-best-practices-badge', results[:name][:value]
+    assert_equal 'best-practices-badge', results[:name][:value]
     assert_equal 1, results[:name][:confidence]
   end
 end

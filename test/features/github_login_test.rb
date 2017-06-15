@@ -25,12 +25,15 @@ class GithubLoginTest < CapybaraFeatureTest
       num = ActionMailer::Base.deliveries.size
       click_link 'Log in with GitHub'
 
+      # When re-recording cassetes you must use DRIVER=chrome
+      # Github has an anti bot mechanism that requires real mouse movement
+      # to authorize an application.
       if ENV['GITHUB_PASSWORD'] # for re-recording cassettes
         fill_in 'login_field', with: 'ciitest'
         fill_in 'password', with: ENV['GITHUB_PASSWORD']
         click_on 'Sign in'
         assert has_content? 'Test BadgeApp (not for production use)'
-        click_on 'Authorize'
+        click_on 'Authorize dankohn'
       end
 
       assert_equal num + 1, ActionMailer::Base.deliveries.size

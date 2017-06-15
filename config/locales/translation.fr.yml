@@ -80,7 +80,7 @@ fr:
       create_account: Créer mon compte
       preferred_locale: Langue préférée
       intro_github: Si vous avez un compte GitHub, vous pouvez simplement l'utiliser
-        pour vous connectez
+        pour vous connectez.
     show:
       see_external: Voir la page externe de cet utilisateur.
       other_projects_edit: Autres projets que vous pouvez modifier

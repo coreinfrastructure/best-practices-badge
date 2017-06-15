@@ -114,14 +114,11 @@ class LoginTest < CapybaraFeatureTest
     fill_in 'Email', with: @fr_user.email
     fill_in 'Password', with: 'password'
     click_button 'Log in using custom account'
-    wait_for_jquery
     assert has_content? 'Connecté !'
     assert_equal '/fr/projects', current_path
-    has_current_path? %r{\A/fr/projects/\Z}
   end
 
-  # Test the root path.  Locale is handled differently at the root,
-  # and it's a common scenario for non-en users, so make sure it works.
+  # Test login from root path.
   scenario 'Can Login in fr locale to top', js: true do
     @fr_user = users(:fr_user)
     visit root_path
@@ -129,9 +126,19 @@ class LoginTest < CapybaraFeatureTest
     fill_in 'Email', with: @fr_user.email
     fill_in 'Password', with: 'password'
     click_button 'Log in using custom account'
-    wait_for_jquery
     assert has_content? 'Connecté !'
-    has_current_path? %r{/\?locale=fr\Z}, url: true
+    assert_equal '/fr/', current_path
+  end
+
+  # Test login from non-english locale
+  scenario 'Prelogin non-en locale saved on login', js: true do
+    visit '/fr/'
+    click_on "S'identifier"
+    fill_in 'Email', with: @user.email
+    fill_in 'Mot de passe', with: 'password'
+    click_button 'Connectez-vous en utilisant un compte personnalisé'
+    assert has_content? 'Connecté !'
+    assert_equal '/fr/', current_path
   end
 
   def ensure_choice(radio_button_id)

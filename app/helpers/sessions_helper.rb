@@ -11,11 +11,7 @@ module SessionsHelper
   require 'uri'
 
   def remove_locale_query(url_query)
-    return url_query if url_query.nil?
-    url_query.gsub!(/locale=[^&]*&?/, '')
-    url_query.gsub!(/&\Z/, '')
-    url_query = nil if url_query == ''
-    url_query
+    (url_query || '').gsub(/\Alocale=[^&]*&?|&locale=[^&]*/, '').presence
   end
 
   # Change locale of original_url.

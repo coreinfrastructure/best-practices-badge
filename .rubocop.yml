@@ -1,7 +1,6 @@
-Rails:
-  Enabled: true
 AllCops:
-  TargetRubyVersion: 2.3
+  EnabledByDefault: true
+  TargetRubyVersion: 2.4
   DisplayCopNames: true
   DisplayStyleGuide: true
   Include:
@@ -38,31 +37,19 @@ Metrics/MethodLength:
 Rails/SkipsModelValidations:
   Exclude:
     - 'test/**/*.rb'
-Style/AutoResourceCleanup:
-  Enabled: true
-Style/CollectionMethods:
-  Enabled: true
-Style/Encoding:
-  Enabled: true
-Layout/FirstArrayElementLineBreak:
-  Enabled: true
-Layout/FirstHashElementLineBreak:
-  Enabled: true
-Layout/FirstMethodArgumentLineBreak:
-  Enabled: true
-Layout/FirstMethodParameterLineBreak:
-  Enabled: true
-Layout/MultilineAssignmentLayout:
-  Enabled: true
+Style/Copyright:
+  Enabled: false
+Style/InlineComment:
+  Enabled: false
+Style/DocumentationMethod:
+  Enabled: false
+Style/MethodCallWithArgsParentheses:
+  Enabled: false
+Style/MissingElse:
+  Enabled: false
 Style/NegatedIf:
   Enabled: true
   EnforcedStyle: postfix
-Style/OptionHash:
-  Enabled: true
-Style/StringMethods:
-  Enabled: true
-Style/SymbolArray:
-  Enabled: true
-Style/TrivialAccessors:
-  Enabled: true
-  ExactNameMatch: true
+Style/Send:
+  Exclude:
+    - 'test/**/*.rb'

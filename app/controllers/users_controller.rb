@@ -90,7 +90,7 @@ class UsersController < ApplicationController
       Project.where('user_id = ?', id_to_delete)
              .update_all(user_id: current_user.id)
       # rubocop: enable Rails/SkipsModelValidations
-      user_to_delete.destroy
+      user_to_delete.destroy!
       flash[:success] = t('.user_deleted')
     end
     redirect_to users_url

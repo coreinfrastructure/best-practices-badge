@@ -170,7 +170,7 @@ class ProjectsController < ApplicationController
   # DELETE /projects/1.json
   # rubocop:disable Metrics/MethodLength
   def destroy
-    @project.destroy
+    @project.destroy!
     ReportMailer.report_project_deleted(@project, current_user).deliver_now
     purge_cdn_project
     # @project.purge
@@ -341,6 +341,7 @@ class ProjectsController < ApplicationController
     end
   end
 
+  # rubocop:disable Style/MethodCalledOnDoEndBlock
   def repo_data
     github = Octokit::Client.new access_token: session[:user_token]
     Octokit.auto_paginate = true
@@ -349,6 +350,7 @@ class ProjectsController < ApplicationController
       [repo.full_name, repo.fork, repo.homepage, repo.html_url]
     end.compact
   end
+  # rubocop:enable Style/MethodCalledOnDoEndBlock
 
   HTML_INDEX_FIELDS = 'projects.id, projects.name, description, ' \
     'homepage_url, repo_url, license, user_id, achieved_passing_at, ' \
@@ -359,7 +361,7 @@ class ProjectsController < ApplicationController
   def retrieve_projects
     @projects = Project.all
     # We had to keep this line the same to satisfy brakeman
-    @projects = @projects.send params[:status] if
+    @projects = @projects.public_send params[:status] if
        %w[in_progress passing].include? params[:status]
     @projects = @projects.gteq(params[:gteq]) if params[:gteq].present?
     @projects = @projects.lteq(params[:lteq]) if params[:lteq].present?
@@ -398,7 +400,7 @@ class ProjectsController < ApplicationController
 
   def set_criteria_level
     @criteria_level = criteria_level_params[:criteria_level] || '0'
-    @criteria_level = '0' unless @criteria_level =~ /\A[0-2]\Z/
+    @criteria_level = '0' unless @criteria_level.match?(/\A[0-2]\Z/)
   end
 
   def set_valid_query_url

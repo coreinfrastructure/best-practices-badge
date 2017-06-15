@@ -129,7 +129,7 @@ class ProjectsControllerTest < ActionController::TestCase
       user_id: test_user.id,
       project_id: @project.id
     )
-    new_right.save
+    new_right.save!
     log_in_as(test_user)
     get :edit, params: { id: @project }
     assert_response :success

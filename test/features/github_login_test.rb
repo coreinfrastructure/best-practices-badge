@@ -76,4 +76,27 @@ class GithubLoginTest < CapybaraFeatureTest
     end
   end
   # rubocop:enable Metrics/BlockLength
+
+  # This is a regression test for problems seen by @yannickmoy in Issue #798
+  scenario 'Has link to GitHub Login', js: true do
+    # Clean up database here and restart DatabaseCleaner.
+    # This solves a transient issue if test restarts without running
+    # teardown meaning the database is dirty after restart.
+    DatabaseCleaner.clean
+    DatabaseCleaner.start
+    configure_omniauth_mock
+
+    visit '/fr/signup'
+    assert has_content? "S'inscrire"
+    click_on 'Si vous avez un compte GitHub, vous pouvez simplement ' \
+              + "l'utiliser pour vous connectez."
+    assert_equal '/fr' + login_path, current_path
+    assert has_content? 'Connectez-vous avec GitHub'
+    num = ActionMailer::Base.deliveries.size
+    click_link 'Connectez-vous avec GitHub'
+    assert_equal num + 1, ActionMailer::Base.deliveries.size
+    assert has_content? 'Connecté !'
+    # Regression test, make sure redirected correctly after login
+    assert_equal '/fr/', current_path
+  end
 end

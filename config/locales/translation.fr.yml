@@ -425,9 +425,9 @@ fr:
         0_html: Ce sont les critères du niveau basique.
         1_html: Ce sont les critères du niveau argent.
         2_html: Ce sont les critères du niveau or.
-        '0':
-        '1':
-        '2':
+        '0': Basique
+        '1': Argent
+        '2': Or
     misc:
       disabled_reminders: "(Avancé) Désactiver le rappel d'inactivité (nous vous recommandons
         de laisser ceci non sélectionné)\n"
@@ -604,8 +604,8 @@ fr:
       vous voulez voir <em>seulement</em> ce qui vous manque,\nvisitez votre soumission
       \npuis cliquez sur le bouton près du haut étiqueté \"Hide met ou N/A criteria\"\nSi
       vous avez des questions ou avez besoin d'aide, contactez-nous\n<a href=\"mailto:&#99;ii&#45;badges&#45;questions&#45.own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;\">&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;</a>
-      \nou reportez un problème à\n<a href=\"https://github.com/linuxfoundation/cii-best-practices-badge/issues\">
-      https://github.com/linuxfoundation/cii-best-practices-badge/issues </a>\n(cliquez
+      \nou reportez un problème à\n<a href=\"https://github.com/coreinfrastructure/best-practices-badge/issues\">
+      https://github.com/coreinfrastructure/best-practices-badge/issues </a>\n(cliquez
       sur \"nouveau problème\").\n</p>\n\n<P>\nMerci pour votre temps.\n</P>\n"
     new_project_part3_text: |
       Nous vous encourageons à continuer à progresser.
@@ -614,7 +614,7 @@ fr:
       Si vous avez des questions ou avez besoin d'aide, contactez-nous
       cii-badges-questions-owner@lists.coreinfrastructure.org
       ou reportez un problème à
-      https://github.com/linuxfoundation/cii-best-practices-badge/issues
+      https://github.com/coreinfrastructure/best-practices-badge/issues
       (cliquez sur "nouveau problème").
 
       Merci pour votre temps.
@@ -656,14 +656,14 @@ fr:
 
       Si vous avez des suggestions sur la façon d'améliorer les critères ou
       l'application Web du badge, veuillez soumettre un problème à :
-      https://github.com/linuxfoundation/cii-best-practices-badge/issues
+      https://github.com/coreinfrastructure/best-practices-badge/issues
 
       Si vous avez apporté des modifications à votre projet pour obtenir un badge, veuillez nous le faire savoir
       par email à cii-badges-questions@lists.coreinfrastructure.org.
       L'un de nos objectifs est d'encourager les projets à apporter des améliorations.
       Nous mettons certains de ces rapports sur le wiki public ; veuillez nous en informer
       si vous ne souhaitez PAS que les changements soient publiés publiquement à
-      https://github.com/linuxfoundation/cii-best-practices-badge/wiki/Impacts
+      https://github.com/coreinfrastructure/best-practices-badge/wiki/Impacts
 
       Merci et félicitations.
     lost_level_message: |

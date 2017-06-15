@@ -41,7 +41,7 @@ ja:
     signup_html: <span class = "glyphicon glyphicon-log-in"> </ span>ログイン
     login_html: <span class = "glyphicon glyphicon-log-in"> </ span>ログイン
     footer_text_html: '<small> <strong>ヘルプが必要ですか？質問があります？問題がありますか？ <em> <a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">送信してください電子メール</a>
-      </ em>または<em> <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues"
+      </ em>または<em> <a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
       target="_blank">問題を提出する</ em> a> </ em>。</ strong>©2015-2017 <a href="https://www.coreinfrastructure.org/
       target="_blank">コアインフラストラクチャイニシアチブ</a> <a href = " <a href = "https://www.linuxfoundation.org/privacy"を参照してください<https://www.linuxfoundation.org/>
       target = "_ blank"> Linux Foundation </a>コラボレーティブプロジェクト。 target = "_ blank">プライバシーポリシー</a>と<a
@@ -749,8 +749,8 @@ ja:
         CIIベストプラクティスのバッジは、GitHubのプロジェクトで利用可能な多くのバッジからインスピレーションを受けています。バッジの消費者は、どのFLOSSプロジェクトがベストプラクティスに従っているかを迅速に評価することができ、その結果、より高品質のセキュアなソフトウェアを生産する可能性が高まります。
 
 '
-      p2_html: 'バックグラウンドや<a href=''https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/doc/criteria.md''>基準を含むCIIベストプラクティスバッジプログラムの詳細については、
-        a>は、<a href=''https://github.com/linuxfoundation/cii-best-practices-badge''>
+      p2_html: 'バックグラウンドや<a href=''https://github.com/coreinfrastructure/best-practices-badge/blob/master/doc/criteria.md''>基準を含むCIIベストプラクティスバッジプログラムの詳細については、
+        a>は、<a href=''https://github.com/coreinfrastructure/best-practices-badge''>
         GitHubで利用可能</a>です。 <a href="/ja/project_stats">プロジェクトの統計情報</a>と<a href="/ja/criteria">基準の統計情報</a>が利用できます。
         <a href="/ja/projects">プロジェクトページ</a>には、参加しているプロジェクトが表示され、クエリがサポートされています（例：<a
         href="/ja/projects?gteq=100">合格バッジを持つプロジェクト</ a >）。また、<a href=''/ja/projects/1''>の例（自分のバッジを取得しようとする場所）</a>を見ることもできます。

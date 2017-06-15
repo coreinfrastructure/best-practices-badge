@@ -1010,8 +1010,8 @@ de:
         welche FLOSS Projekte Best Practices umsetzen und folglich mit Wahrscheinlichkeit
         qualitative höherwertige und sicherere Software entwickeln.
       p2_html: Weitere Informationen und Hintergründe zum CII Best Practices Badge
-        Programm, wie zum Beispiel die <a href='https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/doc/criteria.md'>Kriterien</a>,
-        sind <a href='https://github.com/linuxfoundation/cii-best-practices-badge'>auf
+        Programm, wie zum Beispiel die <a href='https://github.com/coreinfrastructure/best-practices-badge/blob/master/doc/criteria.md'>Kriterien</a>,
+        sind <a href='https://github.com/coreinfrastructure/best-practices-badge'>auf
         GitHub Verfügbar</a>. Ebenfalls verfügbar sind <a href="/de/project_stats">Projekt
         Statistiken</a> und <a href="/de/criteria">Kriterien Statistiken</a>. Unter
         <a href="/de/projects">Projekte</a> sind alle Projekte gelisted, die an dem

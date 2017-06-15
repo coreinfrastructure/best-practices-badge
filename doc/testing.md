@@ -2,7 +2,7 @@
 
 ## Workflow
 
-Please review documentation on [testing](http://guides.rubyonrails.org/testing.html). Pull requests should endeavor to increase, not decrease test coverage, as monitored in [Codecov](https://codecov.io/gh/linuxfoundation/cii-best-practices-badge).
+Please review documentation on [testing](http://guides.rubyonrails.org/testing.html). Pull requests should endeavor to increase, not decrease test coverage, as monitored in [Codecov](https://codecov.io/gh/coreinfrastructure/best-practices-badge).
 
 Running `rails t test/features/can_access_home_test.rb:4` will execute just the test from line 4. Removing the `:4` will run all tests in that file.
 
@@ -46,7 +46,7 @@ Do your best to avoid creating flapping tests; they slow development and test,
 cause unnecessary work (because they typically warn of the wrong things),
 and reduce confidence in the entire test suite.
 
-Flapping tests are a challenge, especially with browser automation that requires JavaScript. Examine the `until` loop in the `ensure_choice` method of [login_test.rb](https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/test/features/login_test.rb) for one approach to make sure that actions are occurring before testing for their impact.
+Flapping tests are a challenge, especially with browser automation that requires JavaScript. Examine the `until` loop in the `ensure_choice` method of [login_test.rb](https://github.com/coreinfrastructure/best-practices-badge/blob/master/test/features/login_test.rb) for one approach to make sure that actions are occurring before testing for their impact.
 
 It's quite helpful to debug a flapping test by running it multiple times. If you're using bash shell, you can run `repeat 10 rails t test/features/can_login_test.rb` by adding the following to your `~/.bash_profile`:
 

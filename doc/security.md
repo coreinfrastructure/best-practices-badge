@@ -993,7 +993,7 @@ These use the Gemfile* files and National Vulnerability Database (NVD) data:
   direct dependencies (Gemfile, not Gemfile.lock).
   The BadgeApp Gemnasium badge provides a quick view of the
   current state, and links to the
-  [Badgeapp Gemnasium page](https://gemnasium.com/linuxfoundation/cii-best-practices-badge)
+  [Badgeapp Gemnasium page](https://gemnasium.com/coreinfrastructure/best-practices-badge)
   for more information.
 
 We have also optimized the component update process through

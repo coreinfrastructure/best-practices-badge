@@ -62,7 +62,7 @@ class GithubBasicDetective < Detective
 
     results = {}
     # Has form https://github.com/:user/:name?
-    # e.g.: https://github.com/linuxfoundation/cii-best-practices-badge
+    # e.g.: https://github.com/coreinfrastructure/best-practices-badge
     # Note: this limits what's accepted, otherwise we'd have to worry
     # about URL escaping.
     # rubocop:disable Metrics/BlockLength

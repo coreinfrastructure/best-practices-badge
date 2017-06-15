@@ -57,7 +57,7 @@ The BadgeApp web application MUST:
 
 There are many specific requirements; instead of a huge requirements document,
 most specific requirements are proposed and processed via its
-[GitHub issue tracker](https://github.com/linuxfoundation/cii-best-practices-badge/issues).
+[GitHub issue tracker](https://github.com/coreinfrastructure/best-practices-badge/issues).
 See [CONTRIBUTING](../CONTRIBUTING.md) for more.
 
 ## Overall
@@ -912,7 +912,7 @@ You can then run, e.g.:
 
 ~~~~
 checklink-norobots -b -e \
-  https://github.com/linuxfoundation/cii-best-practices-badge | tee results
+  https://github.com/coreinfrastructure/best-practices-badge | tee results
 ~~~~
 
 ## PostgreSQL Dependencies
@@ -966,8 +966,8 @@ Here’s a quick example that may help:
 rails console
 p = Project.new
 # Set values for project to evaluate.  We'll examine our own project.
-p[:repo_url] = 'https://github.com/linuxfoundation/cii-best-practices-badge'
-p[:homepage_url] = 'https://github.com/linuxfoundation/cii-best-practices-badge'
+p[:repo_url] = 'https://github.com/coreinfrastructure/best-practices-badge'
+p[:homepage_url] = 'https://github.com/coreinfrastructure/best-practices-badge'
 # Setup chief to analyze things:
 new_chief = Chief.new(p, proc { Octokit::Client.new })
 # Ask chief to find probable values:

@@ -343,7 +343,7 @@ class Project < ApplicationRecord
   LAST_SENT_REMINDER = (ENV['BADGEAPP_LAST_SENT_REMINDER'] || 60).to_i
 
   # Return which projects should be reminded to work on their badges.  See:
-  # https://github.com/linuxfoundation/cii-best-practices-badge/issues/487
+  # https://github.com/coreinfrastructure/best-practices-badge/issues/487
   # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   def self.projects_to_remind
     # This is computed entirely using the ActiveRecord query interface

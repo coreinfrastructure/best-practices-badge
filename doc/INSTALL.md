@@ -76,7 +76,7 @@ You'll now need to fork the repo on GitHub.
 describe this in general.
 
 In our case, use your web browser to view
-<https://github.com/linuxfoundation/cii-best-practices-badge>,
+<https://github.com/coreinfrastructure/best-practices-badge>,
 log in to your account (or create one), and click on the "Fork" button on the
 top right.  On In the right sidebar of your new fork's repository page,
 click on the "to clipboard" symbol to copy the clone URL for your fork.
@@ -184,11 +184,11 @@ but that approach is not documented here.
 It also adds an "upstream" remote so that you can easily track it:
 
 ~~~~sh
-git remote add upstream https://github.com/linuxfoundation/cii-best-practices-badge.git
+git remote add upstream https://github.com/coreinfrastructure/best-practices-badge.git
 ~~~~
 
 <!-- If you have edit rights, do this instead:
-git clone <https://github.com/linuxfoundation/cii-best-practices-badge.git>
+git clone <https://github.com/coreinfrastructure/best-practices-badge.git>
 cd cii-best-practices-badge
 -->
 

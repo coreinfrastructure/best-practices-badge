@@ -42,7 +42,7 @@ ru:
     login_html: <span class="glyphicon-log-in"></span> Войти в систему
     footer_text_html: '<small> <strong>Нужна помощь? Есть вопрос? Видите ошибку? Пожалуйста,
       отправьте <em><a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">электронное
-      письмо</a></em> или <em><a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues"
+      письмо</a></em> или <em><a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
       target="_blank">вопрос на GitHub</a></em>.</strong> © 2015-2017 <a href="https://www.coreinfrastructure.org/
       target="_blank">Core Infrastructure Initiative</a>, a <a href="https://www.linuxfoundation.org/"
       target="_blank">Linux Foundation</a> Collaborative Project. All Rights Reserved.
@@ -101,8 +101,8 @@ ru:
 
 '
       p2_html: 'Более подробную информацию о программе значков CII "Передовая практика",
-        в том числе о происхождении программы и <a href=''https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/doc/criteria.md''>критериях</a>,
-        можно найти на <a href=''https://github.com/linuxfoundation/cii-best-practices-badge''>странице
+        в том числе о происхождении программы и <a href=''https://github.com/coreinfrastructure/best-practices-badge/blob/master/doc/criteria.md''>критериях</a>,
+        можно найти на <a href=''https://github.com/coreinfrastructure/best-practices-badge''>странице
         проекта на GitHub</a>. Имеются <a href="/ru/project_stats">статистика проекта</a>
         и <a href="/ru/criteria">статистика критериев</a>. <a href="/ru/projects">Страница
         проектов</a> показывает участвующие проекты и позволяет делать запросы по

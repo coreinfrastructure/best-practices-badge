@@ -44,7 +44,7 @@ class ProjectTest < ActiveSupport::TestCase
   # rubocop:disable Metrics/BlockLength
   test 'Rigorous project and repo URL checker' do
     regex = UrlValidator::URL_REGEX
-    my_url = 'https://github.com/linuxfoundation/cii-best-practices-badge'
+    my_url = 'https://github.com/coreinfrastructure/best-practices-badge'
     assert my_url =~ regex
 
     # Here we just the regex directly, to make sure it's okay.

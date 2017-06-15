@@ -93,7 +93,6 @@ class GithubLoginTest < CapybaraFeatureTest
     assert has_content? "S'inscrire"
     click_on 'Si vous avez un compte GitHub, vous pouvez simplement ' \
               + "l'utiliser pour vous connectez."
-    num = ActionMailer::Base.deliveries.size
     click_link 'Connectez-vous avec GitHub'
     assert has_content? 'Connecté !'
     # Regression test, make sure redirected correctly after login

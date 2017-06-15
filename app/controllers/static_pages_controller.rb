@@ -5,7 +5,12 @@
 # SPDX-License-Identifier: MIT
 
 class StaticPagesController < ApplicationController
-  def home; end
+  include SessionsHelper
+
+  def home
+    preferred_url = force_locale_url(request.original_url, I18n.locale)
+    redirect_to preferred_url unless request.original_url == preferred_url
+  end
 
   def criteria; end
 

@@ -15,8 +15,19 @@ class TranslationTest < ActionDispatch::IntegrationTest
   # keys for pluralization (Russian and Arabic have esp. complex requirements).
   test 'Can get common pages in all supported locales' do
     I18n.available_locales.each do |my_locale|
-      get "/#{my_locale}"
-      assert_response :success
+      if my_locale == :en
+        get "/#{my_locale}"
+        assert_redirected_to '/'
+
+        get "/#{my_locale}/"
+        assert_redirected_to '/'
+      else
+        get "/#{my_locale}/"
+        assert_response :success
+
+        get "/#{my_locale}"
+        assert_redirected_to "/#{my_locale}/"
+      end
 
       get "/#{my_locale}/projects"
       assert_response :success

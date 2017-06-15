@@ -7,6 +7,7 @@
 require 'capybara_feature_test'
 include ActionView::Helpers::TextHelper
 
+# rubocop:disable Metrics/ClassLength
 class LoginTest < CapybaraFeatureTest
   CHECK = /result_symbol_check/
   DASH = /result_symbol_dash/

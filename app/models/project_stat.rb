@@ -22,7 +22,7 @@ class ProjectStat < ApplicationRecord
     Project.transaction do
       # Count projects at different levels of completion
       STAT_VALUES.each do |completion|
-        send "percent_ge_#{completion}=", Project.gteq(completion).count
+        public_send "percent_ge_#{completion}=", Project.gteq(completion).count
       end
       self.projects_edited = Project.where('created_at < updated_at').count
 

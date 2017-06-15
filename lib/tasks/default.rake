@@ -46,7 +46,7 @@ desc 'Ensure that rbenv or rvm are set up in PATH'
 task :rbenv_rvm_setup do
   path = ENV['PATH']
   if !path.include?('.rbenv') && !path.include?('.rvm')
-    raise 'Must have rbenv or rvm in PATH'
+    raise RuntimeError 'Must have rbenv or rvm in PATH'
   end
 end
 
@@ -444,19 +444,23 @@ end
 # that do not have a badge.
 # Configure your system (e.g., Heroku) to run this daily.  If you're using
 # Heroku, see: https://devcenter.heroku.com/articles/scheduler
+# rubocop:disable Style/Send
 desc 'Send reminders to the oldest inactive project badge entries.'
 task reminders: :environment do
   puts 'Sending inactive project reminders. List of reminded project ids:'
   p ProjectsController.send :send_reminders
   true
 end
+# rubocop:enable Style/Send
 
+# rubocop:disable Style/Send
 desc 'Send monthly announcement of passing projects'
 task monthly_announcement: :environment do
   puts 'Sending monthly announcement. List of reminded project ids:'
   p ProjectsController.send :send_monthly_announcement
   true
 end
+# rubocop:enable Style/Send
 
 desc 'Run monthly tasks (called from "daily")'
 task monthly: %i[environment monthly_announcement] do

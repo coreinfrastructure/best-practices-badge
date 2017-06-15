@@ -8,39 +8,39 @@ require 'capybara_feature_test'
 
 class LoginTest < CapybaraFeatureTest
   setup do
-    @project = projects(:perfect_passing)
+    @project_passing = projects(:perfect_passing)
   end
 
   scenario 'Check show/hide Met on show for passing', js: true do
-    visit project_path(@project, locale: nil)
+    visit project_path(@project_passing, locale: nil)
     wait_for_jquery
     find('#toggle-expand-all-panels').click
     wait_for_jquery
-    assert has_content? 'discussion'
-    assert has_content? 'english'
-    assert has_content? 'contribution'
-    assert has_content? 'repo_public'
-    assert has_content? 'report_process'
+    assert_selector(:css, '#discussion')
+    assert_selector(:css, '#english')
+    assert_selector(:css, '#contribution')
+    assert_selector(:css, '#repo_public')
+    assert_selector(:css, '#report_process')
     find('#toggle-hide-metna-criteria').click
     wait_for_jquery
-    refute has_content? 'discussion'
-    refute has_content? 'english'
-    refute has_content? 'contribution'
-    refute has_content? 'repo_public'
-    refute has_content? 'report_process'
+    refute_selector(:css, '#discussion')
+    refute_selector(:css, '#english')
+    refute_selector(:css, '#contribution')
+    refute_selector(:css, '#repo_public')
+    refute_selector(:css, '#report_process')
   end
   scenario 'Check show/hide Met works for silver', js: true do
-    visit project_path(@project, locale: nil)
+    visit project_path(@project_passing, locale: nil, criterion_level: '1')
     wait_for_jquery
     find('#toggle-expand-all-panels').click
     wait_for_jquery
-    assert has_content? 'contribution_requirements'
-    assert has_content? 'report_tracker'
-    assert has_content? 'installation_common'
+    assert_selector(:css, '#contribution_requirements')
+    assert_selector(:css, '#report_tracker')
+    assert_selector(:css, '#installation_common')
     find('#toggle-hide-metna-criteria').click
     wait_for_jquery
-    refute has_content? 'contribution_requirements'
-    refute has_content? 'report_tracker'
-    refute has_content? 'installation_common'
+    refute_selector(:css, '#contribution_requirements')
+    refute_selector(:css, '#report_tracker')
+    refute_selector(:css, '#installation_common')
   end
 end

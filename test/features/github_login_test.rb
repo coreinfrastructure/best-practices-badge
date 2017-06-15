@@ -91,7 +91,6 @@ class GithubLoginTest < CapybaraFeatureTest
     click_on 'Si vous avez un compte GitHub, vous pouvez simplement ' \
               + "l'utiliser pour vous connectez."
     assert_equal '/fr' + login_path, current_path
-    assert has_content? 'Connectez-vous avec GitHub'
     num = ActionMailer::Base.deliveries.size
     click_link 'Connectez-vous avec GitHub'
     assert_equal num + 1, ActionMailer::Base.deliveries.size

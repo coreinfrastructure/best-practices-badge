@@ -71,10 +71,10 @@ class LoginTest < CapybaraFeatureTest
     ensure_choice 'project_contribution_requirements_status_unmet' # No URL
     assert_match QUESTION, find('#contribution_requirements_enough')['src']
 
-    refute has_content? 'repo_public'
+    refute_selector(:css, '#repo_public')
     find('#changecontrol').click
     wait_for_jquery
-    assert has_content? 'repo_public'
+    assert_selector(:css, '#repo_public')
     ensure_choice 'project_repo_public_status_unmet'
     assert_match X, find('#repo_public_enough')['src']
 
@@ -83,17 +83,17 @@ class LoginTest < CapybaraFeatureTest
     assert find('#project_repo_distributed_status_unmet')['checked']
     assert_match DASH, find('#repo_distributed_enough')['src']
 
-    refute has_content? 'report_process'
+    refute_selector(:css, '#report_process')
     find('#reporting').click
     wait_for_jquery
-    assert has_content? 'report_process'
+    assert_selector(:css, '#report_process')
     ensure_choice 'project_report_process_status_unmet'
     assert_match X, find('#report_process_enough')['src']
 
-    assert has_content? 'english'
+    assert_selector(:css, '#english')
     find('#toggle-hide-metna-criteria').click
     wait_for_jquery
-    refute has_content? 'english'
+    refute_selector(:css, '#english')
 
     click_on('Submit', match: :first)
     assert_match X, find('#discussion_enough')['src']

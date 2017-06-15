@@ -67,11 +67,10 @@ fr:
   users:
     new:
       signup_header: S'inscrire
-      intro_html: '<a href="/fr/login">Si vous avez un compte GitHub, vous pouvez
-        simplement l''utiliser pour vous connectez</a>. Si vous ne souhaitez pas vous
-        connecter en utilisant votre compte GitHub, vous pouvez vous inscrire ici
-        à la place. <br> <br> Si vous n''avez pas reçu votre lien d''activation, veuillez
-        vous inscrire à nouveau et nous vous enverrons un nouveau lien.
+      intro_html: 'Si vous ne souhaitez pas vous connecter en utilisant votre compte
+        GitHub, vous pouvez vous inscrire ici à la place. <br> <br> Si vous n''avez
+        pas reçu votre lien d''activation, veuillez vous inscrire à nouveau et nous
+        vous enverrons un nouveau lien.
 
 '
       name: Nom
@@ -80,7 +79,8 @@ fr:
       password_confirmation: Confirmez le mot de passe
       create_account: Créer mon compte
       preferred_locale: Langue préférée
-      intro_github:
+      intro_github: Si vous avez un compte GitHub, vous pouvez simplement l'utiliser
+        pour vous connectez
     show:
       see_external: Voir la page externe de cet utilisateur.
       other_projects_edit: Autres projets que vous pouvez modifier

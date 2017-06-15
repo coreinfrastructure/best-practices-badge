@@ -60,15 +60,14 @@ zh-CN:
   users:
     new:
       signup_header: 注册
-      intro_html: <a href="/login">如果您有GitHub账户，可以使用该账户登录</a>。如果您不想使用GitHub账户，您可以在此注册。<br><br>
-        如果您没有收到激活链接，请重新注册，我们将发送新的激活链接。
+      intro_html: 如果您不想使用GitHub账户，您可以在此注册。<br><br> 如果您没有收到激活链接，请重新注册，我们将发送新的激活链接。
       name: 名称
       email: 电子邮件
       password: 密码
       password_confirmation: 确认密码
       create_account: 创建我的账户
       preferred_locale: 首选语言
-      intro_github:
+      intro_github: 如果您有GitHub账户，可以使用该账户登录。
     show:
       see_external: '查看此用户的外部页面。
 

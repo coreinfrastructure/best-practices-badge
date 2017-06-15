@@ -1,0 +1,17 @@
+This directory contains vcr 'cassettes' for the gem named 'vcr' that
+is used during testing.
+
+The cassettes are just YAML (.yml) files that record network
+requests and responses.
+When a test needs network data, and there is no corresponding cassette,
+the responses go out to the network *AND* are recorded in the YAML file.
+From then on, no network requests occur - the cassette is used instead.
+This is better than manual mocking, because *real* network data is used...
+but once we capture the data, we don't re-request it.
+
+If the data is stale and need re-retrieving, just remove the YAML file
+and re-run 'rake test'; the YAML file will be recreated with the new data.
+
+These are fundamentally fixtures, but do NOT put vcr cassettes in the
+test/fixtures directory; Rails will try to auto-load, resulting in chaos.
+

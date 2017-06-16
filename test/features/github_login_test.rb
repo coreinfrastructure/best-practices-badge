@@ -25,12 +25,15 @@ class GithubLoginTest < CapybaraFeatureTest
       num = ActionMailer::Base.deliveries.size
       click_link 'Log in with GitHub'
 
+      # When re-recording cassetes you must use DRIVER=chrome
+      # Github has an anti bot mechanism that requires real mouse movement
+      # to authorize an application.
       if ENV['GITHUB_PASSWORD'] # for re-recording cassettes
         fill_in 'login_field', with: 'ciitest'
         fill_in 'password', with: ENV['GITHUB_PASSWORD']
         click_on 'Sign in'
         assert has_content? 'Test BadgeApp (not for production use)'
-        click_on 'Authorize'
+        click_on 'Authorize dankohn'
       end
 
       assert_equal num + 1, ActionMailer::Base.deliveries.size
@@ -76,4 +79,23 @@ class GithubLoginTest < CapybaraFeatureTest
     end
   end
   # rubocop:enable Metrics/BlockLength
+
+  # This is a regression test for problems seen by @yannickmoy in Issue #798
+  scenario 'Alternate locale has link to GitHub Login', js: true do
+    # Clean up database here and restart DatabaseCleaner.
+    # This solves a transient issue if test restarts without running
+    # teardown meaning the database is dirty after restart.
+    DatabaseCleaner.clean
+    DatabaseCleaner.start
+    configure_omniauth_mock
+
+    visit '/fr/signup'
+    assert has_content? "S'inscrire"
+    click_on 'Si vous avez un compte GitHub, vous pouvez simplement ' \
+              + "l'utiliser pour vous connectez."
+    click_link 'Connectez-vous avec GitHub'
+    assert has_content? 'Connecté !'
+    # Regression test, make sure redirected correctly after login
+    assert_equal '/fr/', current_path
+  end
 end

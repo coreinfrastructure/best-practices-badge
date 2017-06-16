@@ -13,87 +13,13 @@ fr:
       create: Créer un(e) %{model}
       update: Modifier ce(tte) %{model}
       submit: Enregistrer ce(tte) %{model}
-  ransack:
-    search: recherche
-    predicate: prédicat
-    and: et
-    or: ou
-    any: au moins un
-    all: tous
-    combinator: combinateur
-    attribute: attribut
-    value: valeur
-    condition: condition
-    sort: tri
-    asc: ascendant
-    desc: descendant
-    predicates:
-      eq: égal à
-      eq_any: égal à au moins un
-      eq_all: égal à tous
-      not_eq: différent de
-      not_eq_any: différent d'au moins un
-      not_eq_all: différent de tous
-      matches: correspond à
-      matches_any: correspond à au moins un
-      matches_all: correspond à tous
-      does_not_match: ne correspond pas à
-      does_not_match_any: ne correspond pas à au moins un
-      does_not_match_all: ne correspond à aucun
-      lt: inférieur à
-      lt_any: inférieur à au moins un
-      lt_all: inférieur à tous
-      lteq: inférieur ou égal à
-      lteq_any: inférieur ou égal à au moins un
-      lteq_all: inférieur ou égal à tous
-      gt: supérieur à
-      gt_any: supérieur à au moins un
-      gt_all: supérieur à tous
-      gteq: supérieur ou égal à
-      gteq_any: supérieur ou égal à au moins un
-      gteq_all: supérieur ou égal à tous
-      in: inclus dans
-      in_any: inclus dans au moins un
-      in_all: inclus dans tous
-      not_in: non inclus dans
-      not_in_any: non inclus dans au moins un
-      not_in_all: non inclus dans tous
-      cont: contient
-      cont_any: contient au moins un
-      cont_all: contient tous
-      not_cont: ne contient pas
-      not_cont_any: ne contient pas au moins un
-      not_cont_all: ne contient pas tous
-      start: commence par
-      start_any: commence par au moins un
-      start_all: commence par tous
-      not_start: ne commence pas par
-      not_start_any: ne commence pas par au moins un
-      not_start_all: ne commence pas par tous
-      end: finit par
-      end_any: finit par au moins un
-      end_all: finit par tous
-      not_end: ne finit pas par
-      not_end_any: ne finit pas par au moins un
-      not_end_all: ne finit pas par tous
-      'true': est vrai
-      'false': est faux
-      present: est présent
-      blank: est vide
-      'null': est null
-      not_null: n'est pas null
-  simple_form:
-    'yes': Oui
-    'no': Aucun
-    required:
-      text: requis
-      mark: "*"
-    error_notification:
-      default_message: 'Veuillez examiner les problèmes ci-dessous :'
   hello: Bonjour le monde
   projects_count:
     one: "%{count} Projet"
     other: "%{count} Projets"
+    zero: Aucun Projet
+    few: "%{count} Projets"
+    many: "%{count} Projets"
   feed_title: Mise à Jour des Projets de la BadgeApp Meilleures Pratiques de la CII
   layouts:
     cii_best_practices: Meilleures Pratiques de la CII
@@ -116,6 +42,7 @@ fr:
 
 '
     account: Compte
+    choose_locale: Choisir la langue
   sessions:
     login_header: S'identifier
     login_with_github_html: '<span class="fa fa-github"></span> Connectez-vous avec
@@ -140,11 +67,10 @@ fr:
   users:
     new:
       signup_header: S'inscrire
-      intro_html: '<a href="/fr/login">Si vous avez un compte GitHub, vous pouvez
-        simplement l''utiliser pour vous connectez</a>. Si vous ne souhaitez pas vous
-        connecter en utilisant votre compte GitHub, vous pouvez vous inscrire ici
-        à la place. <br> <br> Si vous n''avez pas reçu votre lien d''activation, veuillez
-        vous inscrire à nouveau et nous vous enverrons un nouveau lien.
+      intro_html: 'Si vous ne souhaitez pas vous connecter en utilisant votre compte
+        GitHub, vous pouvez vous inscrire ici à la place. <br> <br> Si vous n''avez
+        pas reçu votre lien d''activation, veuillez vous inscrire à nouveau et nous
+        vous enverrons un nouveau lien.
 
 '
       name: Nom
@@ -153,6 +79,8 @@ fr:
       password_confirmation: Confirmez le mot de passe
       create_account: Créer mon compte
       preferred_locale: Langue préférée
+      intro_github: Si vous avez un compte GitHub, vous pouvez simplement l'utiliser
+        pour vous connectez.
     show:
       see_external: Voir la page externe de cet utilisateur.
       other_projects_edit: Autres projets que vous pouvez modifier
@@ -497,6 +425,9 @@ fr:
         0_html: Ce sont les critères du niveau basique.
         1_html: Ce sont les critères du niveau argent.
         2_html: Ce sont les critères du niveau or.
+        '0': Basique
+        '1': Argent
+        '2': Or
     misc:
       disabled_reminders: "(Avancé) Désactiver le rappel d'inactivité (nous vous recommandons
         de laisser ceci non sélectionné)\n"
@@ -673,8 +604,8 @@ fr:
       vous voulez voir <em>seulement</em> ce qui vous manque,\nvisitez votre soumission
       \npuis cliquez sur le bouton près du haut étiqueté \"Hide met ou N/A criteria\"\nSi
       vous avez des questions ou avez besoin d'aide, contactez-nous\n<a href=\"mailto:&#99;ii&#45;badges&#45;questions&#45.own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;\">&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;</a>
-      \nou reportez un problème à\n<a href=\"https://github.com/linuxfoundation/cii-best-practices-badge/issues\">
-      https://github.com/linuxfoundation/cii-best-practices-badge/issues </a>\n(cliquez
+      \nou reportez un problème à\n<a href=\"https://github.com/coreinfrastructure/best-practices-badge/issues\">
+      https://github.com/coreinfrastructure/best-practices-badge/issues </a>\n(cliquez
       sur \"nouveau problème\").\n</p>\n\n<P>\nMerci pour votre temps.\n</P>\n"
     new_project_part3_text: |
       Nous vous encourageons à continuer à progresser.
@@ -683,7 +614,7 @@ fr:
       Si vous avez des questions ou avez besoin d'aide, contactez-nous
       cii-badges-questions-owner@lists.coreinfrastructure.org
       ou reportez un problème à
-      https://github.com/linuxfoundation/cii-best-practices-badge/issues
+      https://github.com/coreinfrastructure/best-practices-badge/issues
       (cliquez sur "nouveau problème").
 
       Merci pour votre temps.
@@ -725,14 +656,14 @@ fr:
 
       Si vous avez des suggestions sur la façon d'améliorer les critères ou
       l'application Web du badge, veuillez soumettre un problème à :
-      https://github.com/linuxfoundation/cii-best-practices-badge/issues
+      https://github.com/coreinfrastructure/best-practices-badge/issues
 
       Si vous avez apporté des modifications à votre projet pour obtenir un badge, veuillez nous le faire savoir
       par email à cii-badges-questions@lists.coreinfrastructure.org.
       L'un de nos objectifs est d'encourager les projets à apporter des améliorations.
       Nous mettons certains de ces rapports sur le wiki public ; veuillez nous en informer
       si vous ne souhaitez PAS que les changements soient publiés publiquement à
-      https://github.com/linuxfoundation/cii-best-practices-badge/wiki/Impacts
+      https://github.com/coreinfrastructure/best-practices-badge/wiki/Impacts
 
       Merci et félicitations.
     lost_level_message: |
@@ -2714,18 +2645,13 @@ fr:
     Met: Atteint
     Unmet: Non atteint
     NA: N/A
-  comma_separated_list: " doit être une liste de noms séparés par des virgules"
-  begin_with_cpe: " doit commencer par « cpe : »"
-  not_an_email: " n'est pas un email"
-  known_bad_password: " est un (mauvais) mot de passe bien connu"
-  valid_text: " doit avoir un codage UTF-8 valide et aucun caractère de contrôle invalide"
-  url_message: " doit commencer par http: ou https: et utiliser un jeu de caractères
-    limité"
   error_messages:
     need_home_page_or_url: Au minimum une page d'accueil ou une URL de dépôt est nécessaire
     form_contains:
       one: Le formulaire contient 1 erreur.
       other: Le formulaire contient %{count} erreurs.
+      few: Le formulaire contient %{count} erreurs.
+      many: Le formulaire contient %{count} erreurs.
     comma_separated_list: " doit être une liste de noms séparés par des virgules"
     begin_with_cpe: " doit commencer par « cpe : »"
     not_an_email: " n'est pas un email"

@@ -10,11 +10,8 @@ module SessionsHelper
 
   require 'uri'
 
-  # Add/change locale information in URL query if needed.  Modifies url.
-  def force_locale_url_query(url, locale)
-    return unless url.path == '' ||
-                  url.path == '/' || url.query =~ /\Alocale=.*\Z/
-    url.query = locale == :en ? nil : 'locale=' + locale.to_s
+  def remove_locale_query(url_query)
+    (url_query || '').gsub(/\Alocale=[^&]*&?|&locale=[^&]*/, '').presence
   end
 
   # Change locale of original_url.
@@ -22,13 +19,12 @@ module SessionsHelper
   # rubocop:disable Metrics/AbcSize
   def force_locale_url(original_url, locale)
     url = URI.parse(original_url)
+    # Clean up query
+    url.query = remove_locale_query(url.query)
     # Clean up path
-    url.path.gsub!(%r{\A\/[a-z]{2}(-[A-Za-z0-9-]*)?\/}, '') # Remove old locale
+    url.path.gsub!(%r{\A\/[a-z]{2}(-[A-Za-z0-9-]*)?(\/|\z)}, '')
     url.path = '/' + url.path if url.path == '' || url.path[0] != '/'
-    if locale != :en && url.path.length > 1
-      url.path = '/' + locale.to_s + url.path
-    end
-    force_locale_url_query url, locale
+    url.path = '/' + locale.to_s + url.path unless locale == :en
     url.to_s
   end
   # rubocop:enable Metrics/AbcSize
@@ -39,6 +35,7 @@ module SessionsHelper
     # (any other locale is an intentional selection & thus should be retained)
     I18n.locale = user.preferred_locale.to_sym if I18n.locale == :en
     return unless session[:forwarding_url]
+
     session[:forwarding_url] = force_locale_url(
       session[:forwarding_url], I18n.locale
     )
@@ -123,13 +120,16 @@ module SessionsHelper
 
   # Redirects to stored location (or to the default)
   def redirect_back_or(default)
-    redirect_to(session[:forwarding_url] || default)
+    redirect_to(session[:forwarding_url] ||
+                force_locale_url(default, I18n.locale))
     session.delete(:forwarding_url)
   end
 
   # Stores the URL trying to be accessed (if its a new project) or a referer
-  def store_location
+  def store_location_and_locale
     session.delete(:forwarding_url)
+    session.delete(:locale)
+    session[:locale] = I18n.locale
     return unless request.get?
     if request.url == new_project_url
       session[:forwarding_url] = new_project_url
@@ -161,7 +161,8 @@ module SessionsHelper
     return if request.referer.nil?
     ref_url = request.referer
     return unless URI.parse(ref_url).host == request.host
-    session[:forwarding_url] = ref_url unless ref_url == login_url
+    return if [login_url, signup_url].include? ref_url
+    session[:forwarding_url] = ref_url
   end
 end
 # rubocop:enable Metrics/ModuleLength

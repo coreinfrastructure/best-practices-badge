@@ -1,9 +1,30 @@
 ---
+# Pluralization is tricky in some languages.
+# Rails specially handles pluralization when the special field
+# "count" is used.  It then looks for keys which
+# in the general case can be {zero, one, two, few, many, other}.
+# The key "one" isn't necessarily used for just 1 (it might be used for
+# "ends in 1" depending on the language).
+# See Unicode plural rules:
+# http://cldr.unicode.org/index/cldr-spec/plural-rules
+# http://www.unicode.org/cldr/charts/latest/supplemental/
+# language_plural_rules.html
+# We include keys for the forms we don't use in some languages so that
+# translation.io will generate the keys in the translation files.
+# If the required keys are missing, an exception may be raised depending
+# on the count (this would lead to the inability to display a page).
+# Sadly, translation.io ignores empty keys. Thus, we can't add empty keys
+# and leave them untranslated, because then the locales that need the keys
+# (like Russian) don't have the keys they need for translation.
 en:
   hello: Hello world
   submit: Submit
   projects_count:
+    zero: Zero Projects
     one: "%{count} Project"
+    # We need need "few" and "many" for Russian.
+    few: "%{count} Projects"
+    many: "%{count} Projects"
     other: "%{count} Projects"
   feed_title: CII Best Practices BadgeApp Updated Projects
   project_name_unknown: "(Name unknown)"
@@ -21,12 +42,13 @@ en:
     account: Account
     profile: Profile
     settings: Settings
+    choose_locale: Choose locale
     logout_html: <span class="glyphicon glyphicon-log-out"></span> Logout
     signup_html: <span class="glyphicon glyphicon-user"></span> Sign Up
     login_html: <span class="glyphicon glyphicon-log-in"></span> Login
     footer_text_html: '<small> <strong>Need help? Have a question? See a problem? Please
       <em><a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">send
-      an email</a> </em>or <em><a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues"
+      an email</a> </em>or <em><a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
       target="_blank">file an issue</a></em>.</strong> © 2015-2017 <a href="https://www.coreinfrastructure.org/
       target="_blank">Core Infrastructure Initiative</a>, a <a href="https://www.linuxfoundation.org/"
       target="_blank">Linux Foundation</a> Collaborative Project. All Rights Reserved.
@@ -86,8 +108,8 @@ en:
 
 '
       p2_html: 'More information on the CII Best Practices Badging program, including
-        background and <a href=''https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/doc/criteria.md''>criteria</a>,
-        is <a href=''https://github.com/linuxfoundation/cii-best-practices-badge''>available
+        background and <a href=''https://github.com/coreinfrastructure/best-practices-badge/blob/master/doc/criteria.md''>criteria</a>,
+        is <a href=''https://github.com/coreinfrastructure/best-practices-badge''>available
         on GitHub</a>. <a href="/project_stats">Project statistics</a> and <a href="/criteria">criteria
         statistics</a> are available. The <a href="/projects">projects page</a> shows
         participating projects and supports queries (e.g., you can see <a href="/projects?gteq=100">projects
@@ -115,9 +137,10 @@ en:
   users:
     new:
       signup_header: Sign up
+      intro_github: >
+        If you have GitHub account, you can just use that to log in.
       intro_html: |
-        <a href="/login">If you have GitHub account, you can just use that
-        to log in</a>. If you don''t want to log in with a GitHub account, you can
+        If you don''t want to log in with a GitHub account, you can
         sign up here instead. <br><br> If you didn''t receive your activation link,
         please sign up again and we will send you a new one.
       name: Name
@@ -357,16 +380,25 @@ en:
           criteria must be met, all SHOULD criteria must be met OR be unmet
           with justification, <em>and</em> all SUGGESTED criteria must be met OR
           unmet (we want them considered at least). Feedback is welcome via the
-          <a href="https://github.com/linuxfoundation/cii-best-practices-badge">GitHub site as issues or pull requests</a>
+          <a href="https://github.com/coreinfrastructure/best-practices-badge">GitHub site as issues or pull requests</a>
           There is also a
           <a href="https://lists.coreinfrastructure.org/mailman/listinfo/cii-badges">mailing list for general discussion</a>.<br /><br />
           We gladly provide the information in several locales, however,
           if there is any conflict or inconsistency between the translations,
           the English version is the authoritative version.
       level:
-        '0_html': These are the passing level criteria.
-        '1_html': These are the silver level criteria.
-        '2_html': These are the gold level criteria.
+        '0': Passing
+        '0_html': >
+          These are the %{passing} level criteria. You can also view the
+          %{silver} or %{gold} level criteria.
+        '1': Silver
+        '1_html': >
+          These are the %{silver} level criteria. You can also view the
+          %{passing} or %{gold} level criteria.
+        '2': Gold
+        '2_html': >
+          These are the %{gold} level criteria. You can also view the
+          %{passing} or %{silver} level criteria.
       got_badge:
         description_1: >
           If this is your project, please show your badge status on your
@@ -384,7 +416,7 @@ en:
           back and edit more later). <br><br>
           If you need help, have a question, or see a problem, please
           <em><a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">send an email</a> </em>or
-          <em><a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues" target="_blank">file an issue</a></em>.
+          <em><a href="https://github.com/coreinfrastructure/best-practices-badge/issues" target="_blank">file an issue</a></em>.
     # Other items in the "basic" section of the form, many of which
     # need special handling
     form_basics:
@@ -550,7 +582,7 @@ en:
       If you have questions, or need help, please contact
       <a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;</a>
       or file an issue at
-      <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues">https://github.com/linuxfoundation/cii-best-practices-badge/issues</a>
+      <a href="https://github.com/coreinfrastructure/best-practices-badge/issues">https://github.com/coreinfrastructure/best-practices-badge/issues</a>
       (click on "new issue").
       </p>
 
@@ -565,7 +597,7 @@ en:
       If you have questions, or need help, please contact
       cii-badges-questions-owner@lists.coreinfrastructure.org
       or file an issue at
-      https://github.com/linuxfoundation/cii-best-practices-badge/issues
+      https://github.com/coreinfrastructure/best-practices-badge/issues
       (click on "new issue").
 
       Thank you for your time.
@@ -584,14 +616,14 @@ en:
 
       If you have suggestions on how to improve the criteria or
       badge web application, please file an issue at:
-      https://github.com/linuxfoundation/cii-best-practices-badge/issues
+      https://github.com/coreinfrastructure/best-practices-badge/issues
 
       If you made changes to your project to get a badge, please let us know
       via email at cii-badges-questions@lists.coreinfrastructure.org.
       One of our goals is to encourage projects to make some improvements.
       We put some of these reports on the public wiki; please let us know
       if you do NOT want the changes publicly posted at
-      https://github.com/linuxfoundation/cii-best-practices-badge/wiki/Impacts
+      https://github.com/coreinfrastructure/best-practices-badge/wiki/Impacts
 
       Thank you, and congratulations.
     in_markdown_add: 'In markdown you can add this:'
@@ -1470,7 +1502,9 @@ en:
 '
       build_reproducible:
         description: 'It is SUGGESTED that the project have a <a href="https://reproducible-builds.org/">reproducible
-          build</a>.
+          build</a>. If no building occurs (e.g., scripting languages where the source
+          code is used directly instead of being compiled), select "not applicable"
+          (N/A).
 
 '
         details: 'A reproducible build means that multiple parties can independently
@@ -1704,7 +1738,7 @@ en:
           (such as Saltzer and Schroeer) and common
           implementation security weaknesses (such as the OWASP top 10
           or CWE/SANS top 25), and show how each are countered.
-          The <a href="https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/doc/security.md">BadgeApp assurance case</a>
+          The <a href="https://github.com/coreinfrastructure/best-practices-badge/blob/master/doc/security.md">BadgeApp assurance case</a>
           may be a useful example.
           This is related to documentation_security,
           documentation_architecture, and implement_secure_design.
@@ -2432,6 +2466,8 @@ en:
     need_home_page_or_url: Need at least a home page or repository URL
     form_contains:
       one: The form contains 1 error.
+      few: The form contains %{count} errors.
+      many: The form contains %{count} errors.
       other: The form contains %{count} errors.
     comma_separated_list: ' must be a comma-separated list of names'
     begin_with_cpe: ' must begin with "cpe:"'

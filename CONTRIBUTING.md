@@ -17,11 +17,11 @@ Here's help on how to make contributions, divided into the following sections:
 ## General information
 
 For specific proposals, please provide them as
-[pull requests](https://github.com/linuxfoundation/cii-best-practices-badge/pulls)
+[pull requests](https://github.com/coreinfrastructure/best-practices-badge/pulls)
 or
-[issues](https://github.com/linuxfoundation/cii-best-practices-badge/issues)
+[issues](https://github.com/coreinfrastructure/best-practices-badge/issues)
 via our
-[GitHub site](https://github.com/linuxfoundation/cii-best-practices-badge).
+[GitHub site](https://github.com/coreinfrastructure/best-practices-badge).
 For general dicussion, feel free to use the
 [cii-badges mailing list](https://lists.coreinfrastructure.org/mailman/listinfo/cii-badges).
 
@@ -50,8 +50,8 @@ and
 ### How we handle proposals
 
 We use GitHub to track all changes via its
-[issue tracker](https://github.com/linuxfoundation/cii-best-practices-badge/issues) and
-[pull requests](https://github.com/linuxfoundation/cii-best-practices-badge/pulls).
+[issue tracker](https://github.com/coreinfrastructure/best-practices-badge/issues) and
+[pull requests](https://github.com/coreinfrastructure/best-practices-badge/pulls).
 Specific changes are proposed using those mechanisms.
 Issues are assigned to an individual, who works it and then marks it complete.
 If there are questions or objections, the conversation area of that
@@ -527,7 +527,7 @@ RAILS_ENV=production rake assets:precompile
 ### Testing during continuous integration
 
 Note that we also use
-[CircleCI](https://circleci.com/gh/linuxfoundation/cii-best-practices-badge)
+[CircleCI](https://circleci.com/gh/coreinfrastructure/best-practices-badge)
 for continuous integration tools to check changes
 after they are checked into GitHub; if they find problems, please fix them.
 These run essentially the same set of checks as the default rake task.
@@ -663,7 +663,7 @@ to update that gem.
 
 To find all outdated gems, use the 'bundle outdated' command.
 Our continuous integration suite (linked to from the README) also uses
-[Gemnasium](https://gemnasium.com/linuxfoundation/cii-best-practices-badge)
+[Gemnasium](https://gemnasium.com/coreinfrastructure/best-practices-badge)
 to identify all outdated dependencies, so you can also view its report
 to see what is outdated.
 Many of the gems named "action..." are part of rails, and thus, you should
@@ -806,7 +806,7 @@ You can reset this, if something has happened to it, using:
 
 ~~~~sh
 git remote add upstream \
-    https://github.com/linuxfoundation/cii-best-practices-badge.git
+    https://github.com/coreinfrastructure/best-practices-badge.git
 ~~~~
 
 If the version of Ruby has changed (in the Gemfile),

@@ -13,88 +13,14 @@ ja:
       create: 登録する
       update: 更新する
       submit: 保存する
-  ransack:
-    search:
-    predicate:
-    and:
-    or:
-    any:
-    all:
-    combinator:
-    attribute:
-    value:
-    condition:
-    sort:
-    asc:
-    desc:
-    predicates:
-      eq:
-      eq_any:
-      eq_all:
-      not_eq:
-      not_eq_any:
-      not_eq_all:
-      matches:
-      matches_any:
-      matches_all:
-      does_not_match:
-      does_not_match_any:
-      does_not_match_all:
-      lt:
-      lt_any:
-      lt_all:
-      lteq:
-      lteq_any:
-      lteq_all:
-      gt:
-      gt_any:
-      gt_all:
-      gteq:
-      gteq_any:
-      gteq_all:
-      in:
-      in_any:
-      in_all:
-      not_in:
-      not_in_any:
-      not_in_all:
-      cont:
-      cont_any:
-      cont_all:
-      not_cont:
-      not_cont_any:
-      not_cont_all:
-      start:
-      start_any:
-      start_all:
-      not_start:
-      not_start_any:
-      not_start_all:
-      end:
-      end_any:
-      end_all:
-      not_end:
-      not_end_any:
-      not_end_all:
-      'true':
-      'false':
-      present:
-      blank:
-      'null':
-      not_null:
-  simple_form:
-    'yes':
-    'no':
-    required:
-      text:
-      mark:
-    error_notification:
-      default_message:
   hello:
   submit:
   projects_count:
     one:
     other:
+    zero:
+    few:
+    many:
   feed_title:
   project_name_unknown:
   locale_name:
@@ -105,16 +31,25 @@ ja:
     zh-CN:
     ru:
   layouts:
-    cii_best_practices:
-    projects:
-    users:
-    account:
-    profile:
-    settings:
-    logout_html:
-    signup_html:
-    login_html:
-    footer_text_html:
+    cii_best_practices: CIIベストプラクティス
+    projects: プロジェクト
+    users: ユーザー
+    account: アカウント
+    profile: プロフィール
+    settings: 設定
+    logout_html: <span class = "glyphicon glyphicon-log-out"> </ span>ログアウト
+    signup_html: <span class = "glyphicon glyphicon-user"> </ span>ログイン
+    login_html: <span class = "glyphicon glyphicon-log-in"> </ span>ログイン
+    footer_text_html: '<small> <strong>ヘルプが必要ですか？質問があります？問題がありますか？ <em> <a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">送信してください電子メール</a>
+      </ em>または<em> <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues"
+      target="_blank">問題を提出する</ em> a> </ em>。</ strong>©2015-2017 <a href="https://www.coreinfrastructure.org/
+      target="_blank">コアインフラストラクチャイニシアチブ</a> <a href = " <a href = "https://www.linuxfoundation.org/privacy"を参照してください<https://www.linuxfoundation.org/>
+      target = "_ blank"> Linux Foundation </a>コラボレーティブプロジェクト。 target = "_ blank">プライバシーポリシー</a>と<a
+      href="https://www.linuxfoundation.org/terms" target="_blank">利用規約</a>をご覧ください。</
+      small>
+
+'
+    choose_locale: ロケールを選択
   account_activations:
     activated: アカウントが有効になりました！
     failed_activation: 無効なアクティベーションリンク
@@ -155,6 +90,7 @@ ja:
       password:
       password_confirmation:
       create_account:
+      intro_github:
     edit:
       update_user_info:
       save_changes:
@@ -307,6 +243,9 @@ ja:
         0_html:
         1_html:
         2_html:
+        '0':
+        '1':
+        '2':
     misc:
       disabled_reminders:
       general_comments:
@@ -401,12 +340,12 @@ ja:
         description:
         met_placeholder:
       contribution:
-        description:
-        details:
-        met_placeholder:
+        description: 貢献する方法に関する情報は、貢献プロセス（たとえばプル リクエストが使用されか、など）を説明する必要があります。
+        details: 別段の記載がない限り、<a href="https://guides.github.com/activities/contributing-to-open-source/">GitHub上のプロジェクトは、（GitHubが提供する）課題管理とプルリクエストを使用することを想定します</a>。この情報は不足しているかもしれません。すなわち、プロジェクトがプルリクエストと課題追跡ツールを使うことか、メーリングリストへの投稿を言及している。（どちら？）
+        met_placeholder: "（URLが必要です）プロセスとは何ですか？どのURLがそれを説明していますか？"
       contribution_requirements:
-        description:
-        unmet_placeholder:
+        description: 貢献する方法に関する情報は、貢献を受け入れるための要件（たとえば、必要なコーディング標準への参照）を含むべきです。
+        unmet_placeholder: この情報が必要ない位に、要件が明確であるのはなぜですか？
       floss_license:
         description:
         details:
@@ -478,13 +417,13 @@ ja:
         description:
         details:
       build:
-        description:
-        details:
+        description: プロジェクトによって作成されたソフトウェアを利用するためにビルドが必要となるならば、プロジェクトは、ソースコードからソフトウェアを自動的にリビルドできる作業ビルドシステムを提供しなければなりません。
+        details: ビルドシステムは、ソフトウェアをリビルドするのに必要なアクション（およびその順序）を決定し、それらのステップを実行します。たとえば、ビルドシステムは、ソースコードをコンパイルするためにコンパイラを呼び出すことができます。実行可能ファイルがソースコードから生成される場合、ビルドシステムは、プロジェクトのソースコードを変更でき、その変更を含む更新された実行ファイルを生成できなければなりません。プロジェクトによって生成されたソフトウェアが外部ライブラリに依存する場合、ビルドシステムはそれらの外部ライブラリをビルドする必要は<em>ありません</em>。ソースコードが変更されても、ソフトウェアを使用するためにビルドする必要がない場合、「該当なし」（N/A）を選択します。
       build_common_tools:
-        description:
-        details:
+        description: ソフトウエアをビルドするために、一般的なツールを使用することをお勧めします。
+        details: たとえば、Maven、Ant、cmake、rakeです。
       build_floss_tools:
-        description:
+        description: プロジェクトは、FLOSSツールだけを使用してビルドができるようにするべきです。
       test:
         description:
         details:
@@ -520,30 +459,36 @@ ja:
         description:
         details:
       crypto_published:
-        description:
-        details:
+        description: プロジェクトによって作成されたソフトウェアは、デフォルトで、一般に公開され、専門家によってレビューされている暗号プロトコルとアルゴリズムを使用しなければなりません。（暗号プロトコルとアルゴリズムが使用される場合）
+        details: ソフトウェアによっては暗号機能を直接使用する必要がないため、これらの暗号基準は常に適用されるわけではありません。
       crypto_call:
-        description:
+        description: プロジェクトによって作成されたソフトウェアがアプリケーションまたはライブラリであり、主な目的が暗号の実装でない場合、暗号機能を実装するために特別に設計されたソフトウェアを呼び出すだけにするべきです。自分用に（暗号機能を）再実装するべきではありません。
       crypto_floss:
-        description:
-        details:
+        description: 暗号に依存するプロジェクトによって作成されるソフトウェアのすべての機能は、FLOSSを使用して実装可能でなければなりません。
+        details: <a href="https://opensource.org/osr">オープン ソース イニシアチブによるオープン スタンダード要件</a>を参照して下さい。
       crypto_keylength:
-        description:
-        details:
+        description: プロジェクトによって作成されたソフトウェア内にあるセキュリティ メカニズムは、少なくとも、2030年までのNIST最小要件（2012年）を満たすデフォルト鍵長を使用しなければなりません。より小さな鍵長を完全に無効になるおうに、ソフトウェアを構成できなければなりません。
+        details: これらの最小ビット長は、対称鍵112、ファクタリング係数2018、離散対数鍵224、離散対数群2048、楕円曲線224、ハッシュ224（パスワードハッシュはこのビット長でカバーされません。パスワードハッシュに関する詳しい情報は
+          <a href="#crypto_password_storage">crypto_password_storage</a> 基準にあります）です。
+          <a href="http://www.keylength.com">http://www.keylength.com</a>にさまざまな機関が出している推奨鍵長の比較を参照して下さい。ソフトウェアは、
+          いくつかの構成ではより短い鍵長を許可するかもしれません。（これはダウングレード攻撃を許すので、理想的には正しくありません。しかし、短い鍵長は、相互運用性のために時に必要となります。）
       crypto_working:
         description:
         details:
       crypto_weaknesses:
-        description:
-        details:
+        description: プロジェクトによって作成されたソフトウェア内のデフォルトのセキュリティ メカニズムは、既知の重大な脆弱性を持つ暗号アルゴリズムやモード（たとえば、SHA-1暗号ハッシュ
+          アルゴリズムまたはSSHのCBC モード）に依存するべきではありません。
+        details: 'SSHのCBCモードに関する懸念事項は、 <a href="https://www.kb.cert.org/vuls/id/958563">CERT:
+          SSH CBC 脆弱性</a>にて議論されています。.'
       crypto_pfs:
         description:
       crypto_password_storage:
-        description:
-        details:
+        description: プロジェクトによって生成されたソフトウェアが外部ユーザーの認証に使われるパスワードの保存をする場合、パスワードは、鍵ストレッチ（反復）アルゴリズム（PBKDF2、BcryptまたはScryptなど）を使い、ユーザーごとの塩（乱数）を用いて反復ハッシュとして保存しなければなりません。
+        details: この基準は、サーバー側ウェブ アプリケーションなどのソフトウェアが、パスワードを使用してユーザー認証を行う場合のみに適用されます。ソフトウェアが他のシステムに認証のためのパスワードを保存するような場合（たとえばソフトウェアが他のシステムのクライアントを実現する場合）、少なくともそのソフトウェアの一部がハッシュされていないパスワードに頻繁にアクセスする必要があるため、この基準は適用されません。
       crypto_random:
-        description:
-        details:
+        description: プロジェクトによって作成されたソフトウェア内のセキュリティ メカニズムは、暗号学的にセキュアな乱数発生器を使用して、すべての暗号鍵とナンスを生成しなければなりません。暗号学的にセキュアでない発生器を使用してはいけません。
+        details: 暗号学的にセキュアな乱数発生器は、ハードウェアの乱数発生器でも、Hash_DRBG、HMAC_DRBG、 CTR_DRBG、Yarrow、
+          Fortuna.などのアルゴリズムを使用する暗号学的にセキュアな疑似乱数発生器（CSPRNG）でもよいです。<em>セキュアでない</em>乱数発生器には、Javaのjava.util.RandomとJavaScriptのMath.randomがあります。
       delivery_mitm:
         description:
         details:
@@ -585,15 +530,20 @@ ja:
         description:
         details:
       build_reproducible:
-        description:
-        details:
+        description: プロジェクトが<a href="https://reproducible-builds.org/">再現可能なビルド</a>を持つことが、推奨されています。ビルドが発生しない場合（たとえば、コンパイルされないでソースコードが直接使用されるスクリプト言語）、「該当なし」（N/A）を選択します。
+        details: 再現可能なビルドは、複数の当事者がソース ファイルから情報を生成するプロセスを独立にやり直し、ビット単位でまったく同じ結果を得られることを意味します。ビルドが発生しない場合（たとえば、コンパイルされる代わりに、ソースコードが直接使用されるスクリプト言語）、「該当なし」（N/A）を選択します。ある場合には、これ（再現可能なビルド）は、あるソート順を強いることで解決されます。Javaスクリプトの開発者は、npm
+          shrinkwrapとwebpack OccurenceOrderPluginの使用を検討するかもしれません。GCCとclangのユーザーは、-frandom-seedオプションが有用であることを見つけるかもしれません。ビルド環境（ツールセットを含む）は、リビルドに使用できる特定のコンテナや仮想マシンの暗号化ハッシュを指定することによって、外部パーティのために、しばしば定義可能です。<a
+          href="https://reproducible-builds.org/docs/">再現可能なビルド プロジェクトは、これを行う方法を記載したドキュメントを有します</a>。
       crypto_used_network:
-        description:
+        description: プロジェクトで作成されたソフトウェアは、ネットワーク通信すべてに対して、SSHv2以降、TLS1.2以降 (HTTPS)、IPsec、SFTP、SNMPv3などのセキュア
+          プロトコルをサポートするべきです。FTP、HTTP、telnet、SSLv3以前、SSHv1などのセキュアでないプロトコルは、デフォルトで無効にするべきで、ユーザーが特別に設定した亜場合のみ有効にします。プロジェクトによって作成されたソフトウェアがネットワーク通信をサポートしない場合、「該当なし」（N/A）を選択します。
       crypto_tls12:
-        description:
+        description: プロジェクトによって作成されたソフトウェアは、TLSをサポートあるいは使用する場合、少なくともTLSバージョン1.2をサポートするべきです。TLSの前身は、SSLと呼ばれていたことに注意して下さい。ソフトウェアがTLSを使用ない場合、「該当なし」（N/A）を選択します。
       crypto_certificate_verification:
-        description:
-        details:
+        description: TLSをサポートしている場合、プロジェクトで作成されたソフトウェアは、TLSを使う時には、サブリソースを含めて、デフォルトでTLS認証を受けなければなりません。ソフトウェアがTLSを使用しない場合、「該当なし」（N/A）を選択します。
+        details: 誤ったTLS認証の検証は、よくある間違いであることに注意して下さい。詳細については、<a href="http://crypto.stanford.edu/~dabo/pubs/abstracts/ssl-client-bugs.html">「世界でもっとも危険なコード：非ブラウザー
+          ソフトウェアでのSSL認証の検証」Martin Georgiev et al著</a> と <a href="https://blogs.gnome.org/mcatanzaro/2016/03/12/do-you-trust-this-application/">「このアプリケーションを信頼しますか？」Michael
+          Catanzaro著</a>.を参照して下さい。
       crypto_verification_private:
         description:
       hardened_site:
@@ -802,11 +752,27 @@ ja:
         description:
   static_pages:
     home:
-      badge_program:
-      get_your_badge:
-      p1_html:
-      p2_html:
-      p3_html:
+      badge_program: CIIベストプラクティスバッジプログラム
+      get_your_badge: あなたのバッジを今すぐ手に入れよう！
+      p1_html: '<a href="https://www.linuxfoundation.org/"> Linux Foundation（LF）</a>
+        <a href="https://www.coreinfrastructure.org/">コアインフラストラクチャイニシアチブ（CII） </a>
+        Best Practicesバッジは、Free / LibreおよびOpen Source Software（FLOSS）プロジェクトがベストプラクティスに従うことを示すための方法です。プロジェクトは、このWebアプリケーションを使用して各ベストプラクティスに従う方法を説明することにより、無償で自主的に自己証明することができます。
+        CIIベストプラクティスのバッジは、GitHubのプロジェクトで利用可能な多くのバッジからインスピレーションを受けています。バッジの消費者は、どのFLOSSプロジェクトがベストプラクティスに従っているかを迅速に評価することができ、その結果、より高品質のセキュアなソフトウェアを生産する可能性が高まります。
+
+'
+      p2_html: 'バックグラウンドや<a href=''https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/doc/criteria.md''>基準を含むCIIベストプラクティスバッジプログラムの詳細については、
+        a>は、<a href=''https://github.com/linuxfoundation/cii-best-practices-badge''>
+        GitHubで利用可能</a>です。 <a href="/ja/project_stats">プロジェクトの統計情報</a>と<a href="/ja/criteria">基準の統計情報</a>が利用できます。
+        <a href="/ja/projects">プロジェクトページ</a>には、参加しているプロジェクトが表示され、クエリがサポートされています（例：<a
+        href="/ja/projects?gteq=100">合格バッジを持つプロジェクト</ a >）。また、<a href=''/ja/projects/1''>の例（自分のバッジを取得しようとする場所）</a>を見ることもできます。
+
+'
+      p3_html: '<em>プライバシーと法的問題</em>：<a href="https://www.linuxfoundation.org/privacy">プライバシーポリシー</a>と<a
+        href = "https://www.linuxfoundation.org/terms">利用規約</a>をご覧ください。公開されているすべての非コードコンテンツは、少なくとも<a
+        href="https://creativecommons.org/licenses/by/3.0/">クリエイティブコモンズアトリビューションライセンスバージョン3.0（CC-BY-3.0）</a>;より新しい非コードコンテンツは、CC-BYバージョン3.0以降（CC-BY-3.0
+        +）でリリースされています。集合的に言及している場合、または特に明記されていない場合は、CII Best Practicesバッジの寄稿者にご報告ください。
+
+'
     criteria:
       criteria:
       detailed_criteria_on_github:
@@ -853,22 +819,18 @@ ja:
     Working build system:
     Identification:
   last_entry:
-  admin_only:
+  admin_only: 管理者のみ。
   criterion_status:
     Met:
     Unmet:
     NA:
-  comma_separated_list:
-  begin_with_cpe:
-  not_an_email:
-  known_bad_password:
-  valid_text:
-  url_message:
   error_messages:
     need_home_page_or_url:
     form_contains:
       one:
       other:
+      few:
+      many:
     comma_separated_list:
     begin_with_cpe:
     not_an_email:

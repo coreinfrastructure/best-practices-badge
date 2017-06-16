@@ -33,18 +33,18 @@ class ChiefTest < ActiveSupport::TestCase
     assert_equal mit_ok, results[:floss_license_osi_justification]
     assert_equal 'Met', results[:contribution_status]
     assert_equal 'Non-trivial contribution file in repository: ' \
-                 '<https://github.com/linuxfoundation/' \
-                 'cii-best-practices-badge/blob/master/CONTRIBUTING.md>.',
+                 '<https://github.com/coreinfrastructure/' \
+                 'best-practices-badge/blob/master/CONTRIBUTING.md>.',
                  results[:contribution_justification]
     assert_equal 'Met', results[:release_notes_status]
     assert_equal 'Non-trivial release notes file in repository: ' \
-                 '<https://github.com/linuxfoundation/' \
-                 'cii-best-practices-badge/blob/master/CHANGELOG.md>.',
+                 '<https://github.com/coreinfrastructure/' \
+                 'best-practices-badge/blob/master/CHANGELOG.md>.',
                  results[:release_notes_justification]
     assert_equal 'Met', results[:build_status]
     assert_equal 'Non-trivial build file in repository: ' \
-                 '<https://github.com/linuxfoundation/' \
-                 'cii-best-practices-badge/blob/master/Rakefile>.',
+                 '<https://github.com/coreinfrastructure/' \
+                 'best-practices-badge/blob/master/Rakefile>.',
                  results[:build_justification]
   end
   # rubocop:enable Metrics/BlockLength

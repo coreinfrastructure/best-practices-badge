@@ -7,35 +7,7 @@
 //=depend_on translation.zh-CN.yml
 //=depend_on translation.de.yml
 //=depend_on translation.ja.yml
-<%
-  # Don't send to clients the fields they won't use.
-  # We *omit* fields, instead # of listing what we'll use.
-  # That way, when we add new fields, by default we'll provide them.
-  # This is a safer approach for later maintenance.  By doing it this way,
-  # if we add a new field and forget to omit them here,
-  # the application will still work correctly. This file might be
-  # slightly longer than necessary, but at least it won't be *wrong*.
+//=depend_on translation.ru.yml
 
-  fields_to_omit = %w(description details rationale autofill).freeze
-
-  criteria_for_js = Criteria.to_h.deep_dup
-  criteria_for_js.each do |level, criteria_set|
-    criteria_set.each do |criterion, fields|
-      fields.delete_if {|k,v| k.in? fields_to_omit}
-      translations = {}
-      I18n.available_locales.each do |locale|
-        I18n.t(".criteria.#{level}.#{criterion}", locale: locale).each do |k,v|
-          next if k.to_s.in? fields_to_omit
-          translations[k.to_s] = {} unless translations.key?(k.to_s)
-          translations[k.to_s][locale.to_s] = v
-        end
-      end
-      fields.update(translations)
-    end
-  end
-  translations_for_js = I18n.available_locales.map do |locale|
-    [locale, I18n.t('.projects.misc.in_javascript', locale: locale)]
-  end.to_h
-%>
-CRITERIA_HASH_FULL = <%= criteria_for_js.to_json %>;
-TRANSLATION_HASH_FULL = <%= translations_for_js.to_json %>
+CRITERIA_HASH_FULL = <%= Criteria.for_js.to_json %>;
+TRANSLATION_HASH_FULL = <%= Translations.for_js.to_json %>

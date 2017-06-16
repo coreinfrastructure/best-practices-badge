@@ -7,6 +7,7 @@
 require 'capybara_feature_test'
 include ActionView::Helpers::TextHelper
 
+# rubocop:disable Metrics/ClassLength
 class LoginTest < CapybaraFeatureTest
   CHECK = /result_symbol_check/
   DASH = /result_symbol_dash/
@@ -70,10 +71,10 @@ class LoginTest < CapybaraFeatureTest
     ensure_choice 'project_contribution_requirements_status_unmet' # No URL
     assert_match QUESTION, find('#contribution_requirements_enough')['src']
 
-    refute has_content? 'repo_public'
+    refute_selector(:css, '#repo_public')
     find('#changecontrol').click
     wait_for_jquery
-    assert has_content? 'repo_public'
+    assert_selector(:css, '#repo_public')
     ensure_choice 'project_repo_public_status_unmet'
     assert_match X, find('#repo_public_enough')['src']
 
@@ -82,17 +83,17 @@ class LoginTest < CapybaraFeatureTest
     assert find('#project_repo_distributed_status_unmet')['checked']
     assert_match DASH, find('#repo_distributed_enough')['src']
 
-    refute has_content? 'report_process'
-    find('#reporting').click
+    refute_selector(:css, '#report_process')
+    find('#toggle-expand-all-panels').click
     wait_for_jquery
-    assert has_content? 'report_process'
+    assert_selector(:css, '#report_process')
     ensure_choice 'project_report_process_status_unmet'
     assert_match X, find('#report_process_enough')['src']
 
-    assert has_content? 'english'
+    assert_selector(:css, '#english')
     find('#toggle-hide-metna-criteria').click
     wait_for_jquery
-    refute has_content? 'english'
+    refute_selector(:css, '#english')
 
     click_on('Submit', match: :first)
     assert_match X, find('#discussion_enough')['src']
@@ -114,14 +115,11 @@ class LoginTest < CapybaraFeatureTest
     fill_in 'Email', with: @fr_user.email
     fill_in 'Password', with: 'password'
     click_button 'Log in using custom account'
-    wait_for_jquery
     assert has_content? 'Connecté !'
     assert_equal '/fr/projects', current_path
-    has_current_path? %r{\A/fr/projects/\Z}
   end
 
-  # Test the root path.  Locale is handled differently at the root,
-  # and it's a common scenario for non-en users, so make sure it works.
+  # Test login from root path.
   scenario 'Can Login in fr locale to top', js: true do
     @fr_user = users(:fr_user)
     visit root_path
@@ -129,9 +127,19 @@ class LoginTest < CapybaraFeatureTest
     fill_in 'Email', with: @fr_user.email
     fill_in 'Password', with: 'password'
     click_button 'Log in using custom account'
-    wait_for_jquery
     assert has_content? 'Connecté !'
-    has_current_path? %r{/\?locale=fr\Z}, url: true
+    assert_equal '/fr/', current_path
+  end
+
+  # Test login from non-english locale
+  scenario 'Prelogin non-en locale saved on login', js: true do
+    visit '/fr/'
+    click_on "S'identifier"
+    fill_in 'Email', with: @user.email
+    fill_in 'Mot de passe', with: 'password'
+    click_button 'Connectez-vous en utilisant un compte personnalisé'
+    assert has_content? 'Connecté !'
+    assert_equal '/fr/', current_path
   end
 
   def ensure_choice(radio_button_id)

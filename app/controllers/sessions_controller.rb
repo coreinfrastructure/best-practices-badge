@@ -13,7 +13,7 @@ class SessionsController < ApplicationController
       redirect_to root_url
     else
       use_secure_headers_override(:allow_github_form_action)
-      store_location
+      store_location_and_locale
     end
   end
 
@@ -41,6 +41,7 @@ class SessionsController < ApplicationController
   # still need to counter session fixation,  this does it
   def counter_fixation
     ref_url = session[:forwarding_url] # Save forwarding url
+    I18n.locale = session[:locale]
     reset_session # Counter session fixation
     session[:forwarding_url] = ref_url # Reload forwarding url
   end

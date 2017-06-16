@@ -28,7 +28,7 @@ gem 'octokit', '4.7.0' # GitHub's official Ruby API
 gem 'omniauth-github', '1.3.0' # Authentication to GitHub (get project info)
 gem 'paleta', '0.3.0' # Color manipulation, used for badges
 gem 'paper_trail', '7.0.3' # Record previous versions of project data
-gem 'pg', '0.20.0' # PostgreSQL database, used for data storage
+gem 'pg', '0.21.0' # PostgreSQL database, used for data storage
 gem 'pg_search', '2.0.1' # PostgreSQL full-text search
 gem 'puma', '3.9.1' # Faster webserver; recommended by Heroku
 gem 'rails', '5.1.1' # Our web framework
@@ -88,7 +88,7 @@ group :test do
   gem 'minitest-retry', '0.1.8', require: false # Avoid Capybara false positives
   gem 'poltergeist', '1.15.0', require: false
   gem 'rails-controller-testing', '1.0.2'
-  gem 'selenium-webdriver', '3.4.0', require: false
+  gem 'selenium-webdriver', '3.4.3', require: false
   gem 'simplecov', '0.14.1', require: false
   gem 'webmock', '3.0.1', require: false
 end

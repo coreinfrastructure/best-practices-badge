@@ -57,7 +57,7 @@ class SubdirFileContentsDetective < Detective
       patterns[:contents].each do |pattern|
         file_entry = repo_files.get_info(fso['path'])
         content = Base64.decode64(file_entry['content'])
-        return met_result description if content.match(pattern)
+        return met_result description if content.match?(pattern)
       end
     end
     unmet_result description

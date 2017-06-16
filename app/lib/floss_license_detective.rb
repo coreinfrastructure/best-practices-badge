@@ -126,7 +126,7 @@ class FlossLicenseDetective < Detective
                      'Open Source Initiative (OSI).'
           }
       }
-    elsif license =~ /\A[^(]/
+    elsif license.match?(/\A[^(]/)
       { floss_license_osi_status:
           {
             value: 'Unmet', confidence: 1,

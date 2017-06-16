@@ -303,7 +303,7 @@ class Project < ApplicationRecord
   # We need this we precalculate and store percentages in the database;
   # this speeds up many actions, but it means that a change in the rules
   # doesn't automatically change the precalculated values.
-  # rubocop:disable Metrics/MethodLength
+  # rubocop:disable Metrics/MethodLength, Style/MethodCalledOnDoEndBlock
   def self.update_all_badge_percentages
     Project.find_each do |project|
       project.with_lock do
@@ -321,7 +321,7 @@ class Project < ApplicationRecord
       end
     end
   end
-  # rubocop:enable Metrics/MethodLength
+  # rubocop:enable Metrics/MethodLength, Style/MethodCalledOnDoEndBlock
 
   # The following configuration options are trusted.  Set them to
   # reasonable numbers or accept the defaults.
@@ -343,7 +343,7 @@ class Project < ApplicationRecord
   LAST_SENT_REMINDER = (ENV['BADGEAPP_LAST_SENT_REMINDER'] || 60).to_i
 
   # Return which projects should be reminded to work on their badges.  See:
-  # https://github.com/linuxfoundation/cii-best-practices-badge/issues/487
+  # https://github.com/coreinfrastructure/best-practices-badge/issues/487
   # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   def self.projects_to_remind
     # This is computed entirely using the ActiveRecord query interface

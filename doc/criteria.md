@@ -35,15 +35,22 @@ These best practices have been created to:
 3. help users know which projects are following best practices
    (so users can prefer such projects).
 
-We are currently focused on identifying best practices
-that well-run projects typically already follow.
-The best practices, and the more detailed criteria
-specifically defining them, are inspired by a variety of sources.
-See the separate "[background](./background.md)" page for more information.
+The idiom "best practices" means
+"a procedure or set of procedures that is preferred or considered
+standard within an organization, industry, etc."
+(source:
+<a href="http://www.dictionary.com/browse/best-practice">Dictionary.com</a>).
+These criteria are what we believe are
+widely "preferred or considered standard"
+in the wider FLOSS community.
 
+The "passing" criteria listed here focus on identifying best practices
+that well-run FLOSS projects typically already follow.
+The criteria are inspired by a variety of sources;
+see the separate "[background](./background.md)" page for more information.
 See the
-[draft criteria for higher/more advanced badges](./other.md) if you
-are interested in possible future criteria.
+[criteria for higher/more advanced badges](./other.md) if you
+are interested in the criteria for higher-level badges.
 
 The Linux Foundation also sponsors the
 [OpenChain Project](https://www.openchainproject.org/), which
@@ -65,7 +72,7 @@ We plan to add new criteria but mark them as "future" criteria, so that
 projects can add that information and maintain their badge.
 
 Feedback is *very* welcome via the
-[GitHub site as issues or pull requests](https://github.com/linuxfoundation/cii-best-practices-badge).
+[GitHub site as issues or pull requests](https://github.com/coreinfrastructure/best-practices-badge).
 There is also a
 [mailing list for general discussion](https://lists.coreinfrastructure.org/mailman/listinfo/cii-badges).
 
@@ -548,7 +555,7 @@ There is an implied criterion that we should mention here:
  <sup>[<a href="#installation_common">installation_common</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>Examples include using a package manager (at the system or language level), "make install/uninstall" (supporting DESTDIR), a container in a standard format, or a virtual machine image in a standard format. The installation and uninstallation process (e.g., its packaging) MAY be implemented by a third party as long as it is FLOSS.
 </dd></dl></li>
 
-<li><a name="build_reproducible"></a>(Future criterion) It is SUGGESTED that the project have a <a href="https://reproducible-builds.org/">reproducible build</a>.
+<li><a name="build_reproducible"></a>(Future criterion) It is SUGGESTED that the project have a <a href="https://reproducible-builds.org/">reproducible build</a>. If no building occurs (e.g., scripting languages where the source code is used directly instead of being compiled), select "not applicable" (N/A).
  (N/A allowed.) <sup>[<a href="#build_reproducible">build_reproducible</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>A reproducible build means that multiple parties can independently redo the process of generating information from source files and get exactly the same bit-for-bit result.  If no building occurs (e.g., scripting languages where the source code is used directly instead of being compiled), select "N/A". In some cases, this can be resolved by forcing some sort order. JavaScript developers may consider using npm shrinkwrap and webpack OccurenceOrderPlugin.  GCC and clang users may find the -frandom-seed option useful.  The build environment (including the toolset) can often be defined for external parties by specifying the cryptographic hash of a specific container or virtual machine that they can use for rebuilding. The <a href="https://reproducible-builds.org/docs/">reproducible builds project has documentation on how to do this</a>.
 </dd><dt><i>Rationale</i>:<dt> <dd>If a project needs to be built but there is no working build system, then potential co-developers will not be able to easily contribute and many security analysis tools will be ineffective. Reproduceable builds counter malicious attacks that generate malicious executables, by making it easy to recreate the executable to determine if the result is correct. By itself, reproducible builds do not counter malicious compilers, but they can be extended to counter malicious compilers using processes such as diverse double-compiling (DDC).
 </dd></dl></li>

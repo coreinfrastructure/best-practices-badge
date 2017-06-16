@@ -31,7 +31,6 @@ SecureHeaders::Configuration.default do |config|
     block_all_mixed_content: true, # see http://www.w3.org/TR/mixed-content/
     frame_ancestors: ["'none'"],
     form_action: ["'self'"], # This counters some XSS busters
-    plugin_types: ["'none'"]
   }
   config.cookies = {
     secure: true, # mark all cookies as Secure

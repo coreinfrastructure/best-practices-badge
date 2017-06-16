@@ -36,12 +36,12 @@ class NameFromUrlDetectiveTest < ActiveSupport::TestCase
   test 'Simple name in repo URL tail is detected' do
     results = NameFromUrlDetective.new.analyze(
       @evidence,
-      repo_url: 'https://github.com/linuxfoundation/cii-best-practices-badge'
+      repo_url: 'https://github.com/coreinfrastructure/best-practices-badge'
     )
 
     assert results.key?(:name)
     assert results[:name].key?(:value)
-    assert_equal 'cii-best-practices-badge', results[:name][:value]
+    assert_equal 'best-practices-badge', results[:name][:value]
     assert_equal 1, results[:name][:confidence]
   end
 end

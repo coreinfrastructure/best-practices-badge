@@ -140,8 +140,8 @@ en:
       intro_github: >
         If you have GitHub account, you can just use that to log in.
       intro_html: |
-        If you don''t want to log in with a GitHub account, you can
-        sign up here instead. <br><br> If you didn''t receive your activation link,
+        If you don't want to log in with a GitHub account, you can
+        sign up here instead. <br><br> If you didn't receive your activation link,
         please sign up again and we will send you a new one.
       name: Name
       email: Email

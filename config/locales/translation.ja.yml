@@ -38,7 +38,7 @@ ja:
     profile: プロフィール
     settings: 設定
     logout_html: <span class = "glyphicon glyphicon-log-out"> </ span>ログアウト
-    signup_html: <span class = "glyphicon glyphicon-log-in"> </ span>ログイン
+    signup_html: <span class = "glyphicon glyphicon-user"> </ span>ログイン
     login_html: <span class = "glyphicon glyphicon-log-in"> </ span>ログイン
     footer_text_html: '<small> <strong>ヘルプが必要ですか？質問があります？問題がありますか？ <em> <a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">送信してください電子メール</a>
       </ em>または<em> <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues"

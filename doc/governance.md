@@ -1,11 +1,13 @@
-Governance
+# Governance
+
+<!-- SPDX-License-Identifier: (MIT OR CC-BY-3.0+) -->
 
 DRAFT - please comment!
 
 This document briefly describes "how we make decisions" in the
 CII Best Practices Badge Project.
 
-# Overall
+## Overall
 
 This project is a Linux Foundation (LF) Core Infrastructure Initiative (CII)
 project.
@@ -33,7 +35,7 @@ Those with commit rights can make changes
 (typically pull requests) submitted by others.
 These changes include changes to the process and contribution requirements.
 
-# Process
+## Process
 
 We generally use the GitHub issue tracker and pull requests for managing
 changes.
@@ -44,7 +46,7 @@ Issues that we have determined are especially important, particularly
 if they will take a while, are added to the "next" milestone
 (which identifies "what should be prioritized next").
 
-# Criteria changes
+## Criteria changes
 
 Changing *criteria* can have a much larger impact on participating
 projects than simply changing the supporting software, so we have special
@@ -72,7 +74,7 @@ In that 2-month time, the BadgeApp must provide the necessary mechanisms
 (e.g., using "future" criteria) so that projects can record their new answers
 and thus have ample time to prevent losing the badge.
 
-# Current people
+## Current people
 
 The current Badge Project technical lead is David A. Wheeler.
 Others with commit rights include Dan Kohn and Jason Dossett.

@@ -234,7 +234,6 @@ fi
 DO_LOCAL_RBENV='no'
 if is_command 'rbenv' ; then
   echo 'rbenv already installed.'
-  rbenv --version
   if ! rbenv --version | grep "1\..\.." > /dev/null 2>&1 ; then
     echo '  Installed rbenv version != 1.x.x'
     DO_LOCAL_RBENV='yes'

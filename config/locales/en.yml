@@ -129,9 +129,15 @@ en:
     criteria:
       criteria: Criteria
       detailed_criteria_on_github: The detailed criteria are on GitHub.
-      current_criteria: 'Current number of criteria: %{active} (active) + %{future} (future) = %{total} (total).'
-      criteria_must_should_suggested: Among active criteria, there are %{must} MUST, %{should} SHOULD, and %{suggested} SUGGESTED criteria.
-      criteria_na_met_details: Among active criteria, %{na_allowed} allow N/A, %{met_url_required} require a URL when met, and %{details_present} have details in their description.
+      level: Level
+      must: MUST
+      should: SHOULD
+      suggested: SUGGESTED
+      total_active: Total active
+      allow_na: Allow N/A
+      require_url: Require URL
+      details: Includes details
+      future: Future
       project_counts: There are %{projects} project entries; %{passing} are passing and %{in_progress} are in progress.
       project_stats_html: You can see statistics about projects over time at the <a href="/project_stats">project stats page</a>.
   users:

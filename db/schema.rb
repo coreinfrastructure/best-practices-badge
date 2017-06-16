@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170616200439) do
+ActiveRecord::Schema.define(version: 20170608192851) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -341,7 +341,6 @@ ActiveRecord::Schema.define(version: 20170616200439) do
     t.index ["lost_passing_at"], name: "index_projects_on_lost_passing_at"
     t.index ["name"], name: "index_projects_on_name"
     t.index ["repo_url"], name: "index_projects_on_repo_url"
-    t.index ["repo_url"], name: "nonempty_repo_urls", unique: true, where: "((repo_url IS NOT NULL) AND ((repo_url)::text <> ''::text))"
     t.index ["updated_at"], name: "index_projects_on_updated_at"
     t.index ["user_id", "created_at"], name: "index_projects_on_user_id_and_created_at"
     t.index ["user_id"], name: "index_projects_on_user_id"

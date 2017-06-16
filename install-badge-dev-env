@@ -238,6 +238,12 @@ if is_command 'rbenv' ; then
     echo '  Installed rbenv version != 1.x.x'
     DO_LOCAL_RBENV='yes'
   fi
+  # CircleCI has an environment which cause our tests to fail
+  # so force manual install of rbenv on CircleCI.
+  if [ -n "$CIRCLECI" ]; then
+    DO_LOCAL_RBENV='yes'
+    echo ' On CircleCI manually installing rbenv'
+  fi
 else
   DO_LOCAL_RBENV='yes'
   if [ "$MYINSTALL_RBENV" != 'yes' ] ; then

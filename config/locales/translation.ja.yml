@@ -459,8 +459,8 @@ ja:
         description:
         details:
       crypto_published:
-        description:
-        details:
+        description: プロジェクトによって作成されたソフトウェアは、デフォルトで、一般に公開され、専門家によってレビューされている暗号プロトコルとアルゴリズムを使用しなければなりません。（暗号プロトコルとアルゴリズムが使用される場合）
+        details: ソフトウェアによっては暗号機能を直接使用する必要がないため、これらの暗号基準は常に適用されるわけではありません。
       crypto_call:
         description: プロジェクトによって作成されたソフトウェアがアプリケーションまたはライブラリであり、主な目的が暗号の実装でない場合、暗号機能を実装するために特別に設計されたソフトウェアを呼び出すだけにするべきです。自分用に（暗号機能を）再実装するべきではありません。
       crypto_floss:
@@ -476,16 +476,19 @@ ja:
         description:
         details:
       crypto_weaknesses:
-        description:
-        details:
+        description: プロジェクトによって作成されたソフトウェア内のデフォルトのセキュリティ メカニズムは、既知の重大な脆弱性を持つ暗号アルゴリズムやモード（たとえば、SHA-1暗号ハッシュ
+          アルゴリズムまたはSSHのCBC モード）に依存するべきではありません。
+        details: 'SSHのCBCモードに関する懸念事項は、 <a href="https://www.kb.cert.org/vuls/id/958563">CERT:
+          SSH CBC 脆弱性</a>にて議論されています。.'
       crypto_pfs:
         description:
       crypto_password_storage:
-        description:
-        details:
+        description: プロジェクトによって生成されたソフトウェアが外部ユーザーの認証に使われるパスワードの保存をする場合、パスワードは、鍵ストレッチ（反復）アルゴリズム（PBKDF2、BcryptまたはScryptなど）を使い、ユーザーごとの塩（乱数）を用いて反復ハッシュとして保存しなければなりません。
+        details: この基準は、サーバー側ウェブ アプリケーションなどのソフトウェアが、パスワードを使用してユーザー認証を行う場合のみに適用されます。ソフトウェアが他のシステムに認証のためのパスワードを保存するような場合（たとえばソフトウェアが他のシステムのクライアントを実現する場合）、少なくともそのソフトウェアの一部がハッシュされていないパスワードに頻繁にアクセスする必要があるため、この基準は適用されません。
       crypto_random:
-        description:
-        details:
+        description: プロジェクトによって作成されたソフトウェア内のセキュリティ メカニズムは、暗号学的にセキュアな乱数発生器を使用して、すべての暗号鍵とナンスを生成しなければなりません。暗号学的にセキュアでない発生器を使用してはいけません。
+        details: 暗号学的にセキュアな乱数発生器は、ハードウェアの乱数発生器でも、Hash_DRBG、HMAC_DRBG、 CTR_DRBG、Yarrow、
+          Fortuna.などのアルゴリズムを使用する暗号学的にセキュアな疑似乱数発生器（CSPRNG）でもよいです。<em>セキュアでない</em>乱数発生器には、Javaのjava.util.RandomとJavaScriptのMath.randomがあります。
       delivery_mitm:
         description:
         details:
@@ -532,9 +535,10 @@ ja:
           shrinkwrapとwebpack OccurenceOrderPluginの使用を検討するかもしれません。GCCとclangのユーザーは、-frandom-seedオプションが有用であることを見つけるかもしれません。ビルド環境（ツールセットを含む）は、リビルドに使用できる特定のコンテナや仮想マシンの暗号化ハッシュを指定することによって、外部パーティのために、しばしば定義可能です。<a
           href="https://reproducible-builds.org/docs/">再現可能なビルド プロジェクトは、これを行う方法を記載したドキュメントを有します</a>。
       crypto_used_network:
-        description:
+        description: プロジェクトで作成されたソフトウェアは、ネットワーク通信すべてに対して、SSHv2以降、TLS1.2以降 (HTTPS)、IPsec、SFTP、SNMPv3などのセキュア
+          プロトコルをサポートするべきです。FTP、HTTP、telnet、SSLv3以前、SSHv1などのセキュアでないプロトコルは、デフォルトで無効にするべきで、ユーザーが特別に設定した亜場合のみ有効にします。プロジェクトによって作成されたソフトウェアがネットワーク通信をサポートしない場合、「該当なし」（N/A）を選択します。
       crypto_tls12:
-        description:
+        description: プロジェクトによって作成されたソフトウェアは、TLSをサポートあるいは使用する場合、少なくともTLSバージョン1.2をサポートするべきです。TLSの前身は、SSLと呼ばれていたことに注意して下さい。ソフトウェアがTLSを使用ない場合、「該当なし」（N/A）を選択します。
       crypto_certificate_verification:
         description: TLSをサポートしている場合、プロジェクトで作成されたソフトウェアは、TLSを使う時には、サブリソースを含めて、デフォルトでTLS認証を受けなければなりません。ソフトウェアがTLSを使用しない場合、「該当なし」（N/A）を選択します。
         details: 誤ったTLS認証の検証は、よくある間違いであることに注意して下さい。詳細については、<a href="http://crypto.stanford.edu/~dabo/pubs/abstracts/ssl-client-bugs.html">「世界でもっとも危険なコード：非ブラウザー

@@ -234,11 +234,12 @@ fi
 DO_LOCAL_RBENV='no'
 if is_command 'rbenv' ; then
   echo 'rbenv already installed.'
-  echo 'circleci:' $CIRCLECI
   if ! rbenv --version | grep "1\..\.." > /dev/null 2>&1 ; then
     echo '  Installed rbenv version != 1.x.x'
     DO_LOCAL_RBENV='yes'
   fi
+  # CircleCI has an environment which cause our tests to fail
+  # so force manual install of rbenv on CircleCI.
   if [ -n "$CIRCLECI" ]; then
     DO_LOCAL_RBENV='yes'
     echo ' On CircleCI manually installing rbenv'

@@ -226,5 +226,16 @@ module ActiveSupport
       url = y[:http_interactions][1][:request][:uri]
       Addressable::URI.parse(url).query_values['access_token']
     end
+
+    def key_with_nil_value(hash)
+      hash.each do |k, v|
+        return k.to_s if v.nil?
+        next unless v.is_a?(Hash)
+        nil_key = key_with_nil_value(v)
+        next if nil_key == ''
+        return "#{k}.#{nil_key}"
+      end
+      ''
+    end
   end
 end

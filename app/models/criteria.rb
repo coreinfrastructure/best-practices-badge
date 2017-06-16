@@ -19,6 +19,8 @@ class Criteria
     description details met_placeholder unmet_placeholder na_placeholder
   ].freeze
 
+  FIELDS_TO_OMIT = %w[description details rationale autofill].freeze
+
   include ActiveModel::Model
   attr_accessor(*ACCESSORS)
 
@@ -74,6 +76,26 @@ class Criteria
     def to_h
       CriteriaHash
     end
+
+    # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+    def for_js
+      CriteriaHash.deep_dup.each do |level, criteria_set|
+        criteria_set.each do |criterion, fields|
+          fields.delete_if { |k, _v| k.in? FIELDS_TO_OMIT }
+          translations = {}
+          I18n.available_locales.each do |locale|
+            I18n.t(".criteria.#{level}.#{criterion}").keys.each do |k|
+              next if k.to_s.in? FIELDS_TO_OMIT
+              translations[k.to_s] = {} unless translations.key?(k.to_s)
+              translations[k.to_s][locale.to_s] =
+                I18n.t(".criteria.#{level}.#{criterion}.#{k}", locale: locale)
+            end
+          end
+          fields.update(translations)
+        end
+      end
+    end
+    # rubocop:enable Metrics/AbcSize,Metrics/MethodLength
   end
 
   def description

@@ -155,4 +155,8 @@ class CriteriaTest < ActiveSupport::TestCase
       assert criteria_set.keys.length <= 100
     end
   end
+
+  test 'No nil values in Criteria.for_js' do
+    assert_equal '', key_with_nil_value(Criteria.for_js)
+  end
 end

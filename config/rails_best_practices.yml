@@ -35,6 +35,7 @@ RemoveUnusedMethodsInModelsCheck: { except_methods: [
   'Project#created_since', # Scope called dynamincally
   'Project#updated_since', # Scope called dynamincally
   'Project#in_progress', # Scope used for search & in test, but tool misses it
+  'Project#passing', # Scope used for search & in test, but tool misses it
   'Criterion#must?', # Used in ERB template; doesn't notice.
   'User#digest'
   ] }

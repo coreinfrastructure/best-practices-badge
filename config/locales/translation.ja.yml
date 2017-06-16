@@ -340,12 +340,12 @@ ja:
         description:
         met_placeholder:
       contribution:
-        description:
-        details:
-        met_placeholder:
+        description: 貢献する方法に関する情報は、貢献プロセス（たとえばプル リクエストが使用されか、など）を説明する必要があります。
+        details: 別段の記載がない限り、<a href="https://guides.github.com/activities/contributing-to-open-source/">GitHub上のプロジェクトは、（GitHubが提供する）課題管理とプルリクエストを使用することを想定します</a>。この情報は不足しているかもしれません。すなわち、プロジェクトがプルリクエストと課題追跡ツールを使うことか、メーリングリストへの投稿を言及している。（どちら？）
+        met_placeholder: "（URLが必要です）プロセスとは何ですか？どのURLがそれを説明していますか？"
       contribution_requirements:
-        description:
-        unmet_placeholder:
+        description: 貢献する方法に関する情報は、貢献を受け入れるための要件（たとえば、必要なコーディング標準への参照）を含むべきです。
+        unmet_placeholder: この情報が必要ない位に、要件が明確であるのはなぜですか？
       floss_license:
         description:
         details:
@@ -462,13 +462,16 @@ ja:
         description:
         details:
       crypto_call:
-        description:
+        description: プロジェクトによって作成されたソフトウェアがアプリケーションまたはライブラリであり、主な目的が暗号の実装でない場合、暗号機能を実装するために特別に設計されたソフトウェアを呼び出すだけにするべきです。自分用に（暗号機能を）再実装するべきではありません。
       crypto_floss:
-        description:
-        details:
+        description: 暗号に依存するプロジェクトによって作成されるソフトウェアのすべての機能は、FLOSSを使用して実装可能でなければなりません。
+        details: <a href="https://opensource.org/osr">オープン ソース イニシアチブによるオープン スタンダード要件</a>を参照して下さい。
       crypto_keylength:
-        description:
-        details:
+        description: プロジェクトによって作成されたソフトウェア内にあるセキュリティ メカニズムは、少なくとも、2030年までのNIST最小要件（2012年）を満たすデフォルト鍵長を使用しなければなりません。より小さな鍵長を完全に無効になるおうに、ソフトウェアを構成できなければなりません。
+        details: これらの最小ビット長は、対称鍵112、ファクタリング係数2018、離散対数鍵224、離散対数群2048、楕円曲線224、ハッシュ224（パスワードハッシュはこのビット長でカバーされません。パスワードハッシュに関する詳しい情報は
+          <a href="#crypto_password_storage">crypto_password_storage</a> 基準にあります）です。
+          <a href="http://www.keylength.com">http://www.keylength.com</a>にさまざまな機関が出している推奨鍵長の比較を参照して下さい。ソフトウェアは、
+          いくつかの構成ではより短い鍵長を許可するかもしれません。（これはダウングレード攻撃を許すので、理想的には正しくありません。しかし、短い鍵長は、相互運用性のために時に必要となります。）
       crypto_working:
         description:
         details:
@@ -525,14 +528,18 @@ ja:
         details:
       build_reproducible:
         description: プロジェクトが<a href="https://reproducible-builds.org/">再現可能なビルド</a>を持つことが、推奨されています。ビルドが発生しない場合（たとえば、コンパイルされないでソースコードが直接使用されるスクリプト言語）、「該当なし」（N/A）を選択します。
-        details:
+        details: 再現可能なビルドは、複数の当事者がソース ファイルから情報を生成するプロセスを独立にやり直し、ビット単位でまったく同じ結果を得られることを意味します。ビルドが発生しない場合（たとえば、コンパイルされる代わりに、ソースコードが直接使用されるスクリプト言語）、「該当なし」（N/A）を選択します。ある場合には、これ（再現可能なビルド）は、あるソート順を強いることで解決されます。Javaスクリプトの開発者は、npm
+          shrinkwrapとwebpack OccurenceOrderPluginの使用を検討するかもしれません。GCCとclangのユーザーは、-frandom-seedオプションが有用であることを見つけるかもしれません。ビルド環境（ツールセットを含む）は、リビルドに使用できる特定のコンテナや仮想マシンの暗号化ハッシュを指定することによって、外部パーティのために、しばしば定義可能です。<a
+          href="https://reproducible-builds.org/docs/">再現可能なビルド プロジェクトは、これを行う方法を記載したドキュメントを有します</a>。
       crypto_used_network:
         description:
       crypto_tls12:
         description:
       crypto_certificate_verification:
-        description:
-        details:
+        description: TLSをサポートしている場合、プロジェクトで作成されたソフトウェアは、TLSを使う時には、サブリソースを含めて、デフォルトでTLS認証を受けなければなりません。ソフトウェアがTLSを使用しない場合、「該当なし」（N/A）を選択します。
+        details: 誤ったTLS認証の検証は、よくある間違いであることに注意して下さい。詳細については、<a href="http://crypto.stanford.edu/~dabo/pubs/abstracts/ssl-client-bugs.html">「世界でもっとも危険なコード：非ブラウザー
+          ソフトウェアでのSSL認証の検証」Martin Georgiev et al著</a> と <a href="https://blogs.gnome.org/mcatanzaro/2016/03/12/do-you-trust-this-application/">「このアプリケーションを信頼しますか？」Michael
+          Catanzaro著</a>.を参照して下さい。
       crypto_verification_private:
         description:
       hardened_site:

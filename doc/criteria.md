@@ -48,9 +48,13 @@ The "passing" criteria listed here focus on identifying best practices
 that well-run FLOSS projects typically already follow.
 The criteria are inspired by a variety of sources;
 see the separate "[background](./background.md)" page for more information.
-See the
-[criteria for higher/more advanced badges](./other.md) if you
-are interested in the criteria for higher-level badges.
+
+[The criteria for higher/more advanced badges](./other.md)
+describe the criteria for the higher-level badges.
+These are known as the "silver" and "gold" levels, and sometimes also
+described as "other" criteria.
+You must achieve the "passing" criteria before you can achieve
+silver or gold.
 
 The Linux Foundation also sponsors the
 [OpenChain Project](https://www.openchainproject.org/), which

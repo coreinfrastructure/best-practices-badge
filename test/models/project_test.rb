@@ -174,6 +174,11 @@ class ProjectTest < ActiveSupport::TestCase
     assert_equal Criteria.count + 1, Project::BADGE_LEVELS.size
   end
 
+  test 'Project counts from fixtures are as expected' do
+    assert_equal 3, Project.in_progress.count
+    assert_equal 3, Project.passing.count
+  end
+
   test 'test get_satisfaction_data' do
     basics = @unjustified_project.get_satisfaction_data('0', 'basics')
     assert_equal '9/12', basics[:text]

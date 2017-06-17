@@ -26,12 +26,12 @@ class ProjectStat < ApplicationRecord
         next if completion.to_i.zero?
         public_send "percent_1_ge_#{completion}=",
                     Project.where(
-                      'badge_percentage_1 > ?',
+                      'badge_percentage_1 >= ?',
                       completion.to_i
                     ).count
         public_send "percent_2_ge_#{completion}=",
                     Project.where(
-                      'badge_percentage_2 > ?',
+                      'badge_percentage_2 >= ?',
                       completion.to_i
                     ).count
       end

@@ -28,7 +28,7 @@ ru:
     de:
     fr:
     ja:
-    ru:
+    ru: русский язык (ru)
     zh-CN:
   layouts:
     cii_best_practices: Передовая практика CII
@@ -42,7 +42,7 @@ ru:
     login_html: <span class="glyphicon-log-in"></span> Войти в систему
     footer_text_html: '<small> <strong>Нужна помощь? Есть вопрос? Видите ошибку? Пожалуйста,
       отправьте <em><a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">электронное
-      письмо</a></em> или <em><a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues"
+      письмо</a></em> или <em><a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
       target="_blank">вопрос на GitHub</a></em>.</strong> © 2015-2017 <a href="https://www.coreinfrastructure.org/
       target="_blank">Core Infrastructure Initiative</a>, a <a href="https://www.linuxfoundation.org/"
       target="_blank">Linux Foundation</a> Collaborative Project. All Rights Reserved.
@@ -101,8 +101,8 @@ ru:
 
 '
       p2_html: 'Более подробную информацию о программе значков CII "Передовая практика",
-        в том числе о происхождении программы и <a href=''https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/doc/criteria.md''>критериях</a>,
-        можно найти на <a href=''https://github.com/linuxfoundation/cii-best-practices-badge''>странице
+        в том числе о происхождении программы и <a href=''https://github.com/coreinfrastructure/best-practices-badge/blob/master/doc/criteria.md''>критериях</a>,
+        можно найти на <a href=''https://github.com/coreinfrastructure/best-practices-badge''>странице
         проекта на GitHub</a>. Имеются <a href="/ru/project_stats">статистика проекта</a>
         и <a href="/ru/criteria">статистика критериев</a>. <a href="/ru/projects">Страница
         проектов</a> показывает участвующие проекты и позволяет делать запросы по
@@ -1088,8 +1088,10 @@ ru:
 
 '
       build_reproducible:
-        description: 'Проекту РЕКОМЕНДУЕТСЯ обеспечивать <a href="https://reproducible-builds.org/">
-          воспроизводимую сборку </a>.
+        description: 'Проекту РЕКОМЕНДУЕТСЯ обеспечивать <a href="https://reproducible-builds.org/">воспроизводимую
+          сборку</a>.  Если сборка не требуется (например, в случае языков сценариев,
+          где исходный код используется непосредственно вместо компиляции), выберите
+          «N/A».
 
 '
         details: 'Воспроизводимая сборка означает, что несколько сторон могут независимо
@@ -1338,7 +1340,19 @@ ru:
         description:
       build_reproducible:
         description:
-        details:
+        details: 'Воспроизводимая сборка означает, что несколько сторон могут независимо
+          повторить процесс генерации информации из исходных файлов и получить аналогичный
+          результат с точностью до бита. В некоторых случаях воспроизводимости можно
+          достичь путем принудительного выставления окружения. Разработчики JavaScript
+          могут рассмотреть возможность использования npm shrinkwrap и webpack OccurenceOrderPlugin.
+          Пользователи GCC и clang могут найти полезной опцию -frandom-seed. Среда
+          сборки (включая набор инструментов) часто может быть определена для внешних
+          сторон путём указания криптографической суммы (hash) для конкретного контейнера
+          или виртуальной машины, которые они могут использовать для пересборки. <a
+          href="https://reproducible-builds.org/docs/">В проекте reproducible-builds.org
+          есть документация о том, как это сделать </a>.
+
+'
       test_invocation:
         description:
       test_continuous_integration:

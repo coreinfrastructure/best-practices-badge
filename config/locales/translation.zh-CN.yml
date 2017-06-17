@@ -307,11 +307,15 @@ zh-CN:
           target="_blank">提交问题</a></em>。
         badge_alt: 项目%{id}的徽章级别为%{level}
       level:
-        0_html: '这些是%{passing}级别标准。您还可以查看%{silver}或%{gold}级别条款。
+        0_html: '这些是%{passing}级别条款。您还可以查看%{silver}或%{gold}级别条款。
 
 '
-        1_html: 这些是白银级别的条款。
-        2_html: 这些是黄金级别的条款。
+        1_html: '这些是%{silver}级别条款。您还可以查看%{passing}或%{gold}级别条款。
+
+'
+        2_html: '这些是%{gold}级别条款。您还可以查看%{passing}或%{silver}级别条款。
+
+'
         '0': 通过
         '1': 白银
         '2': 黄金

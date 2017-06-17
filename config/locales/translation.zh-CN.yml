@@ -307,7 +307,9 @@ zh-CN:
           target="_blank">提交问题</a></em>。
         badge_alt: 项目%{id}的徽章级别为%{level}
       level:
-        0_html: 这些是通过级别的条款。
+        0_html: '这些是%{passing}级别标准。您还可以查看%{silver}或%{gold}级别条款。
+
+'
         1_html: 这些是白银级别的条款。
         2_html: 这些是黄金级别的条款。
         '0': 通过
@@ -1592,6 +1594,15 @@ zh-CN:
       criteria_na_met_details: 在活跃条款中，%{na_allowed}允许N/A，%{met_url_required}在满足时需要URL，而%{details_present}在其描述中具有详细信息。
       project_counts: 有%{projects}个项目条目; %{passing}个已经通过，%{in_progress}个正在进行中。
       project_stats_html: 您可以在<a href="/project_stats">项目统计信息页面</a>查看有关项目的统计信息。
+      level:
+      must:
+      should:
+      suggested:
+      total_active:
+      allow_na:
+      require_url:
+      details:
+      future:
   headings:
     Accessibility and internationalization: 无障碍和国际化
     Analysis: 分析

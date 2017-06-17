@@ -1560,18 +1560,16 @@ fr:
 '
         details: 'Une construction reproductible signifie que plusieurs parties peuvent
           refaire indépendamment le processus de génération d''informations à partir
-          de fichiers source et obtenir exactement le même résultat bit-à-bit. Si
-          aucune construction ne se produit (par exemple, les langages de script où
-          le code source est utilisé directement au lieu d''être compilé), sélectionnez
-          « N/A ». Dans certains cas, cela peut être résolu en forçant un ordre de
-          tri. Les développeurs JavaScript peuvent envisager d''utiliser npm shrinkwrap
-          et webpack OccurenceOrderPlugin. Les utilisateurs GGC et clang peuvent trouver
-          l''option -frandom-seed utile. L''environnement de construction (y compris
-          le jeu d''outils) peut souvent être défini pour les parties externes en
-          spécifiant le hachage cryptographique d''un conteneur spécifique ou d''une
-          machine virtuelle qu''ils peuvent utiliser pour la reconstruction. Le <a
-          href="https://reproducible-builds.org/docs/">projet de construction reproductible
-          dispose de documentation sur la façon de le faire</a>.
+          de fichiers source et obtenir exactement le même résultat bit-à-bit. Dans
+          certains cas, cela peut être résolu en forçant un ordre de tri. Les développeurs
+          JavaScript peuvent envisager d''utiliser npm shrinkwrap et webpack OccurenceOrderPlugin.
+          Les utilisateurs GGC et clang peuvent trouver l''option -frandom-seed utile.
+          L''environnement de construction (y compris le jeu d''outils) peut souvent
+          être défini pour les parties externes en spécifiant le hachage cryptographique
+          d''un conteneur spécifique ou d''une machine virtuelle qu''ils peuvent utiliser
+          pour la reconstruction. Le <a href="https://reproducible-builds.org/docs/">projet
+          de construction reproductible dispose de documentation sur la façon de le
+          faire</a>.
 
 '
       crypto_used_network:
@@ -2602,6 +2600,15 @@ fr:
         obtenu le badge et %{in_progress} sont en cours d'obtention.
       project_stats_html: Vous pouvez voir des statistiques sur les projets au cours
         du temps sur la <a href="/fr/project_stats">page des statistiques du projet</a>.
+      level:
+      must:
+      should:
+      suggested:
+      total_active:
+      allow_na:
+      require_url:
+      details:
+      future:
   headings:
     Accessibility and internationalization: Accessibilité et internationalisation
     Analysis: Analyse

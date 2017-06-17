@@ -782,6 +782,15 @@ ja:
       criteria_na_met_details:
       project_counts:
       project_stats_html:
+      level:
+      must:
+      should:
+      suggested:
+      total_active:
+      allow_na:
+      require_url:
+      details:
+      future:
   headings:
     Accessibility and internationalization:
     Analysis:

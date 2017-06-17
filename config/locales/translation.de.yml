@@ -704,13 +704,13 @@ de:
         details:
       build_reproducible:
         description: Es ist EMPFHOLEN, dass das Projekt <a href="https://reproducible-builds.org/">Reproduzierbare
-          Builds</a> hat.
+          Builds</a> hat.  Wenn kein Build nötig ist (z.B. bei Skriptsprachen deren
+          Quellcode direkt verwendet wird, anstatt kompiliert zu werden), wählen Sie
+          "N/A".
         details: 'Eine reproduzierbares Build bedeutet, dass mehrere Parteien den
           Prozess der Generierung von Informationen aus Quelldateien unabhängig voneinander
           wiederholen und genau das gleiche Bit-für-Bit-Ergebnis erhalten können.
-          Wenn kein Build nötig ist (z.B. bei Skriptsprachen deren Quellcode direkt
-          verwendet wird, anstatt kompiliert zu werden), wählen Sie "N/A". In manchen
-          Fällen kann dies dadurch gelöst werden, dass man eine Sortierreihenfolge
+          In manchen Fällen kann dies dadurch gelöst werden, dass man eine Sortierreihenfolge
           erzwingt. JavaScript-Entwickler können erwägen npm shrinkwrap und webpack
           OccurenceOrderPlugin zu verwenden. GCC und clang Benutzer können die Option
           -frandom-seed nützlich finden. Die Buildumgebung (einschließlich des Toolsets)
@@ -1037,6 +1037,15 @@ de:
         und %{in_progress} sind im Prozess.
       project_stats_html: Sie können Statistiken über Projekte im Laufe der Zeit auf
         der <a href="/project_stats"> Projektstatistik Seite </a> sehen.
+      level:
+      must:
+      should:
+      suggested:
+      total_active:
+      allow_na:
+      require_url:
+      details:
+      future:
   headings:
     Accessibility and internationalization: Zugänglichkeit und Internationalisierung
     Analysis: Analyse

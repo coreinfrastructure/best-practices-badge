@@ -136,6 +136,15 @@ ru:
         соответствуют критериям, и %{in_progress} в процессе.'
       project_stats_html: Вы можете просмотреть статистику по проектам с течением
         времени на странице со <a href="/project_stats">проектной статистикой</a>.
+      level:
+      must:
+      should:
+      suggested:
+      total_active:
+      allow_na:
+      require_url:
+      details:
+      future:
   users:
     new:
       signup_header:

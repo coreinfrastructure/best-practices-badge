@@ -1509,9 +1509,7 @@ en:
 '
         details: 'A reproducible build means that multiple parties can independently
           redo the process of generating information from source files and get exactly
-          the same bit-for-bit result.  If no building occurs (e.g., scripting languages
-          where the source code is used directly instead of being compiled), select
-          "N/A". In some cases, this can be resolved by forcing some sort order. JavaScript
+          the same bit-for-bit result.  In some cases, this can be resolved by forcing some sort order. JavaScript
           developers may consider using npm shrinkwrap and webpack OccurenceOrderPlugin.  GCC
           and clang users may find the -frandom-seed option useful.  The build environment
           (including the toolset) can often be defined for external parties by specifying

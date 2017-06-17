@@ -6,8 +6,8 @@
 
 # rubocop: disable Metrics/ClassLength
 class UsersController < ApplicationController
-  before_action :require_admin,  only: %i[index destroy]
-  before_action :logged_in_user, only: %i[edit update]
+  before_action :require_admin,  only: %i[destroy]
+  before_action :logged_in_user, only: %i[edit update index]
   before_action :correct_user,   only: %i[edit update]
   include SessionsHelper
 

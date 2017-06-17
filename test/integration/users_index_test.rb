@@ -12,16 +12,31 @@ class UsersIndexTest < ActionDispatch::IntegrationTest
     @admin_user = users(:admin_user)
   end
 
-  test 'unsuccessful index' do
-    log_in_as(@user)
+  test 'unsuccessful index without logging in' do
     get users_path
-    assert_redirected_to root_url
+    assert_redirected_to login_url
   end
 
-  test 'successful index' do
+  test 'Can request index, but non-admins do not get email addresses' do
+    log_in_as(@user)
+    get users_path
+    assert_response :success
+    assert_template 'index'
+    assert !@response.body.include?(@user.email)
+  end
+
+  test 'Can request index.json, but non-admins do not get email addresses' do
+    log_in_as(@user)
+    get users_path + '.json'
+    assert_response :success
+    assert !@response.body.include?(@user.email)
+  end
+
+  test 'successful index as admin, admins do get email addresses' do
     log_in_as(@admin_user)
     get users_path
     assert_response :success
     assert_template 'index'
+    assert @response.body.include?(@user.email)
   end
 end

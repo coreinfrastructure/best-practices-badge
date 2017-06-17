@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170617151458) do
+ActiveRecord::Schema.define(version: 20170617213336) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -335,6 +335,8 @@ ActiveRecord::Schema.define(version: 20170617151458) do
     t.text "assurance_case_justification"
     t.index ["achieved_passing_at"], name: "index_projects_on_achieved_passing_at"
     t.index ["badge_percentage_0"], name: "index_projects_on_badge_percentage_0"
+    t.index ["badge_percentage_1"], name: "index_projects_on_badge_percentage_1"
+    t.index ["badge_percentage_2"], name: "index_projects_on_badge_percentage_2"
     t.index ["created_at"], name: "index_projects_on_created_at"
     t.index ["homepage_url"], name: "index_projects_on_homepage_url"
     t.index ["last_reminder_at"], name: "index_projects_on_last_reminder_at"

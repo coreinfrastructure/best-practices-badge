@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170617213336) do
+ActiveRecord::Schema.define(version: 20170617215652) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -54,6 +54,16 @@ ActiveRecord::Schema.define(version: 20170617213336) do
     t.integer "projects_edited"
     t.integer "active_edited_projects"
     t.integer "active_edited_in_progress"
+    t.integer "percent_1_ge_25"
+    t.integer "percent_1_ge_50"
+    t.integer "percent_1_ge_75"
+    t.integer "percent_1_ge_90"
+    t.integer "percent_1_ge_100"
+    t.integer "percent_2_ge_25"
+    t.integer "percent_2_ge_50"
+    t.integer "percent_2_ge_75"
+    t.integer "percent_2_ge_90"
+    t.integer "percent_2_ge_100"
     t.index ["created_at"], name: "index_project_stats_on_created_at"
   end
 

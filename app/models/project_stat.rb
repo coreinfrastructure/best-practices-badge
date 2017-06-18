@@ -16,13 +16,24 @@ class ProjectStat < ApplicationRecord
   before_create :stamp
 
   # Stamp (fill in) the current values into a ProjectStat. Uses database.
-  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/BlockLength
   def stamp
     # Use a transaction to get values from a single consistent point in time.
     Project.transaction do
       # Count projects at different levels of completion
       STAT_VALUES.each do |completion|
         public_send "percent_ge_#{completion}=", Project.gteq(completion).count
+        next if completion.to_i.zero?
+        public_send "percent_1_ge_#{completion}=",
+                    Project.where(
+                      'badge_percentage_1 >= ?',
+                      completion.to_i
+                    ).count
+        public_send "percent_2_ge_#{completion}=",
+                    Project.where(
+                      'badge_percentage_2 >= ?',
+                      completion.to_i
+                    ).count
       end
       self.projects_edited = Project.where('created_at < updated_at').count
 
@@ -63,7 +74,7 @@ class ProjectStat < ApplicationRecord
     end
     self # Return self to support method chaining
   end
-  # rubocop:enable Metrics/AbcSize
+  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength, Metrics/BlockLength
 
   # Return the last ProjectStat value available in the month of "date";
   # returns nil if no ProjectStat is available in that month.

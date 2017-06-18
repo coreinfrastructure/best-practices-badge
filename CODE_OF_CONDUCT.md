@@ -1,5 +1,4 @@
-Code of Conduct
-----------------
+# Code of Conduct
 
 Your code and ideas behind it will be carefully reviewed, often resulting
 in critique and criticism.  The review will almost always require

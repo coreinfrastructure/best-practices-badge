@@ -42,6 +42,7 @@ for general discussion.
 * **[security](./doc/security.md)**  - notes about BadgeApp security
 * **[testing](./doc/testing.md)**  - notes about BadgeApp automated tests
 * **[Installation](./doc/INSTALL.md)**  - Installation and quick start
+* **[Roadmap](./doc/roadmap.md)**  - Roadmap (future plans)
 
 ## Summary of Best Practices Criteria
 

@@ -34,6 +34,7 @@ including [other.md](doc/other.md) and [background.md](doc/background.md).
 The [INSTALL.md](doc/INSTALL.md) file explains how to install the program
 locally (highly recommended if you're going to make code changes).
 It also provides a quick start guide.
+The [roadmap.md](doc/roadmap.md) file provides an overview of future plans.
 
 ### Pull requests and different branches recommended
 

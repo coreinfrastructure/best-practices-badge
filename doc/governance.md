@@ -2,8 +2,6 @@
 
 <!-- SPDX-License-Identifier: (MIT OR CC-BY-3.0+) -->
 
-DRAFT - please comment!
-
 This document briefly describes "how we make decisions" in the
 CII Best Practices Badge Project.
 

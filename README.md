@@ -31,10 +31,13 @@ There is also a
 [mailing list](https://lists.coreinfrastructure.org/mailman/listinfo/cii-badges)
 for general discussion.
 
-* Badging **[Criteria](./doc/criteria.md)**
+* Badging **[Criteria](./doc/criteria.md)** for the "passing" level
+* **[Other draft criteria](./doc/other.md)** (for higher-level badges)
 * Information on how to **[contribute](./CONTRIBUTING.md)**
   (including how to report vulnerabilities)
-* **[Other draft criteria](./doc/other.md)** (for higher-level badges)
+* [Up-for-grabs](https://github.com/coreinfrastructure/best-practices-badge/labels/up-for-grabs)
+  lists smaller tasks that may take 1-3 days, and are ideal for people
+  new to the project (or FLOSS in general)
 * **[Background](./doc/background.md)** on Badging
 * **[ChangeLog](./CHANGELOG.md)**
 * Current **[implementation](./doc/implementation.md)**  - notes about the

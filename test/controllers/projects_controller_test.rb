@@ -125,11 +125,14 @@ class ProjectsControllerTest < ActionController::TestCase
     test_user = users(:test_user_mark)
     # Create additional rights during test, not as a fixure.
     # The fixture would require correct references to *other* fixture ids.
+    assert_equal [], @project.additional_rights.as_json
     new_right = AdditionalRight.new(
       user_id: test_user.id,
       project_id: @project.id
     )
     new_right.save!
+    assert_equal [{ 'id' => 1, 'user_id' => test_user.id }],
+                 @project.additional_rights.select(:id, :user_id).as_json
     log_in_as(test_user)
     get :edit, params: { id: @project }
     assert_response :success

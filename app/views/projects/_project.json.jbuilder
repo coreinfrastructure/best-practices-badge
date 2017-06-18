@@ -3,6 +3,9 @@
 # Show project in JSON format.
 # This is a partial so "show" and "index" can share this.
 json.merge! project.attributes
+json.additional_rights project.additional_rights
+                              .select(:id, :user_id, :created_at, :updated_at)
+                              .as_json
 # rubocop:disable Rails/OutputSafety
 json.project_entry_attribution('Please credit '.html_safe +
                                project.user.name +

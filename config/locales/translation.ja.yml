@@ -31,7 +31,7 @@ ja:
     zh-CN:
     ru:
   layouts:
-    cii_best_practices: CIIベストプラクティス
+    cii_best_practices: CII Best Practices
     projects: プロジェクト
     users: ユーザー
     account: アカウント
@@ -40,14 +40,14 @@ ja:
     logout_html: <span class = "glyphicon glyphicon-log-out"> </ span>ログアウト
     signup_html: <span class = "glyphicon glyphicon-user"> </ span>ログイン
     login_html: <span class = "glyphicon glyphicon-log-in"> </ span>ログイン
-    footer_text_html: <small> <strong>ヘルプが必要ですか？質問があります？問題がありますか？ <em> <a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">送信してください電子メール</a>
-      </ em>または<em> <a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
-      target="_blank">問題を提出する</ em> a> </ em>。</ strong>©2015-2017 <a href="https://www.coreinfrastructure.org/
-      target="_blank">コアインフラストラクチャイニシアチブ</a> <a href = " <a href = "https://www.linuxfoundation.org/privacy"を参照してください<https://www.linuxfoundation.org/>
-      target = "_ blank"> Linux Foundation </a>コラボレーティブプロジェクト。 target = "_ blank">プライバシーポリシー</a>と<a
-      href="https://www.linuxfoundation.org/terms" target="_blank">利用規約</a>をご覧ください。</
-      small>
-    choose_locale: ロケールを選択
+    footer_text_html: <small> <strong>疑問、質問、または問題のある方は<em> <a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">電子メールでご連絡</a></
+      em>くださるか、<em> <a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
+      target="_blank">こちらから問題を提出</ em> a> </ em>してください。</ strong> © 2015-2017 <a href="https://www.coreinfrastructure.org/
+      target="_blank">Core Infrastructure Initiative</a>, a <a href="https://www.linuxfoundation.org/"
+      target="_blank">Linux Foundation</a> Collaborative Project. All Rights Reserved.
+      <a href="https://www.linuxfoundation.jp/privacy" target="_blank">プライバシー ポリシー</a>
+      と<a href="https://www.linuxfoundation.jp/terms" target="_blank">利用条件</a>を必ずお読みください。</small>
+    choose_locale: ロケールを選択する
   account_activations:
     activated: アカウントが有効になりました！
     failed_activation: 無効なアクティベーションリンク
@@ -63,21 +63,25 @@ ja:
     reset_expired:
     update_password:
   sessions:
-    login_header:
-    login_with_github_html:
-    or:
-    email:
-    password:
-    forgot_password:
-    remember_me:
-    login_custom:
-    no_custom:
-    already_logged_in:
-    incorrect_login_info:
-    invalid_combo:
-    signed_in:
-    not_activated:
-    signed_out:
+    login_header: ログイン
+    login_with_github_html: '<span class = "fa fa-github"> </ span> GitHubでログインする
+
+'
+    or: または
+    email: 電子メール
+    password: パスワード
+    forgot_password: パスワードを忘れたかたはこちら。
+    remember_me: この情報を保存する
+    login_custom: カスタムアカウントを使用してログインする
+    no_custom: カスタム アカウントをお持ちでない方はサインアップしてください。
+    already_logged_in: あなたは既にログインしています。
+    incorrect_login_info: ログイン情報がまちがっています
+    invalid_combo: 無効な電子メール・パスワードの組み合わせです
+    signed_in: サインインしました！
+    not_activated: 'アカウントが有効化されていません。電子メールでお伝えしたアクティベーションリンクを確認してください。
+
+'
+    signed_out: サインアウトしました！
   users:
     new:
       signup_header:
@@ -756,23 +760,23 @@ ja:
       get_your_badge: バッジを入手する
       p1_html: '<a href="https://www.linuxfoundation.org/">Linux Foundation (LF)</a>
         <a href="https://www.coreinfrastructure.org/">Core Infrastructure Initiative
-        (CII)</a>  Best Practices のバッジは、Free / Libre and Open Source Software（FLOSS）プロジェクトが、ベストプラクティスに従っていることを自ら示す方法です。プロジェクトは、このWebアプリケーションを使用して、それぞれのベストプラクティスに従っていることを説明することにより、無償で自主的に自己証明することができます。
+        (CII)</a>  Best Practices のバッジは、Free / Libre and Open Source Software（FLOSS）プロジェクトが、ベストプラクティスに従っていることを自ら示す方法です。プロジェクトは、このWebアプリケーションを使用して、それぞれのベストプラクティスに従っていることを説明することにより、自主的に無償で自己証明することができます。
         CII Best Practices Badgeは、GitHubのプロジェクトで利用可能な多くのバッジからインスピレーションを受けています。バッジの消費者は、どのFLOSSプロジェクトがベストプラクティスに従っているかを速やかに評価でき、その結果、より高品質で安全なソフトウェアを生産することができます。
 
 '
       p2_html: 'バックグラウンドや<a href=''https://github.com/coreinfrastructure/best-practices-badge/blob/master/doc/criteria.md''>基準</a>など、CII
         Best Practices Badge プログラムの詳細については、<a href=''https://github.com/coreinfrastructure/best-practices-badge''>
-        GitHubで公開</a>されています。 <a href="/ja/project_stats">プロジェクトの統計情報</a>と<a href="/ja/criteria">基準の統計情報</a>を利用できます。
-        <a href="/ja/projects">プロジェクト ページ</a>には、参加しているプロジェクトが表示され、クエリも使用できます (たとえば
-        <a href="/ja/projects?gteq=100">projects that have a passing badge (合格バッジを持つプロジェクトだけ表示する)</a
-        >など)。また、<a href=''/ja/projects/1''>その例 (当プロジェクトのバッジ取得サイト)</a> も見ることができます。
+        GitHubで公開</a>されています。 <a href="/ja/project_stats">プロジェクトの統計情報</a>や<a href="/ja/criteria">基準の統計情報</a>も確認できます。
+        <a href="/ja/projects">プロジェクト ページ</a>には、参加しているプロジェクトが表示され、クエリも使用できます (「<a
+        href="/ja/projects?gteq=100">合格バッジを持つプロジェクトだけ表示する</a >」クエリなど)。また、<a href=''/ja/projects/1''>その例
+        (当プロジェクトのバッジ取得サイト)</a> も見ることができます。
 
 '
       p3_html: <em>プライバシーと法的問題</em>：<a href="https://www.linuxfoundation.jp/privacy">プライバシーポリシー</a>と<a
-        href = "https://www.linuxfoundation.jp/terms">利用規約</a>をご覧ください。公開されているすべての非コード
+        href = "https://www.linuxfoundation.jp/terms">利用条件</a>をご覧ください。公開されているすべての非コード
         コンテンツは、少なくとも<a href="https://creativecommons.org/licenses/by/3.0/">Creative
-        Commons Attribution License version 3.0 (CC-BY-3.0)</a>のもとで、また比較的新しい非コードコンテンツは、CC-BY
-        version 3.0 以降 (CC-BY-3.0+) のもとでリリースされています。詳細または不足事項については、CII Best Practices
+        Commons Attribution License version 3.0 (CC-BY-3.0)</a> のもとで、より新しい非コードコンテンツは、CC-BY
+        version 3.0 以降 (CC-BY-3.0+) のもとでリリースされています。詳細や不足事項については、CII Best Practices
         Badgeのコントリビューターまでご連絡ください。
     criteria:
       criteria:

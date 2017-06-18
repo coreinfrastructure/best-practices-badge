@@ -2600,15 +2600,15 @@ fr:
         obtenu le badge et %{in_progress} sont en cours d'obtention.
       project_stats_html: Vous pouvez voir des statistiques sur les projets au cours
         du temps sur la <a href="/fr/project_stats">page des statistiques du projet</a>.
-      level:
-      must:
-      should:
-      suggested:
-      total_active:
-      allow_na:
-      require_url:
-      details:
-      future:
+      level: Niveau
+      must: DOIT
+      should: DEVRAIT
+      suggested: PROPOSÉ
+      total_active: Total actif
+      allow_na: Autoriser N/A
+      require_url: Exiger une URL
+      details: Comprend des détails
+      future: Futur
   headings:
     Accessibility and internationalization: Accessibilité et internationalisation
     Analysis: Analyse

@@ -41,6 +41,7 @@ for general discussion.
   BadgeApp implementation
 * **[security](./doc/security.md)**  - notes about BadgeApp security
 * **[testing](./doc/testing.md)**  - notes about BadgeApp automated tests
+* **[Installation](./doc/INSTALL.md)**  - Installation and quick start
 
 ## Summary of Best Practices Criteria
 

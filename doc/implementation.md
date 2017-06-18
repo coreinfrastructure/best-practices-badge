@@ -10,15 +10,12 @@ Our emphasis is on keeping the program relatively *simple*.
 This file provides information on how it's implemented, in the hopes that
 it will help people make improvements.
 See [CONTRIBUTING.md](../CONTRIBUTING.md) for information on how to
-contribute ot this project, and [INSTALL.md](INSTALL.md) for information
-on how to install this software (e.g., for development).
+contribute to this project, and [INSTALL.md](INSTALL.md) for information
+on both how to install this software (e.g., for development) and a
+"quick start" guide to getting something to happen.
 
 In this document we'll use the term "open source software" (OSS),
 and treat Free/Libre and Open Source Software (FLOSS) as a synonym.
-
-The following figure shows a high-level design of the implementation:
-
-![Design](./design.png)
 
 ## Requirements
 
@@ -60,7 +57,7 @@ most specific requirements are proposed and processed via its
 [GitHub issue tracker](https://github.com/coreinfrastructure/best-practices-badge/issues).
 See [CONTRIBUTING](../CONTRIBUTING.md) for more.
 
-## Overall
+## High-level architecture
 
 The web application is itself OSS, and we intend for the
 web application to meet its own criteria.
@@ -68,6 +65,14 @@ We have implemented it with Ruby on Rails; Rails is good for
 simple web applications like this one.
 We are currently using Rails version 4.
 The production system stores the data in Postgres.
+
+### High-level design figure
+
+The following figure shows a high-level design of the implementation:
+
+![Design](./design.png)
+
+### Key components
 
 Some other key components we use are:
 
@@ -80,6 +85,19 @@ Some other key components we use are:
   processes and multiple threads.  See:
   <https://devcenter.heroku.com/articles/ruby-default-web-server>
 - A number of supporting Ruby gems (see the Gemfile)
+
+### Key classes
+
+The software is designed as a traditional model/view/controller (MVC)
+architecture.  As is standard for Rails, under directory "app"
+(application) are directories for "models", "views", and "controllers".
+
+Central classes include:
+
+* "Project" (defined in file "app/models/project.rb")
+  defines the model that captures data about a project.
+* "User" (defined in file "app/models/user.rb")
+  defines the model that captures data about a user.
 
 ## Deployment
 

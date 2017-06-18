@@ -22,7 +22,7 @@ or
 [issues](https://github.com/coreinfrastructure/best-practices-badge/issues)
 via our
 [GitHub site](https://github.com/coreinfrastructure/best-practices-badge).
-For general dicussion, feel free to use the
+For general discussion, feel free to use the
 [cii-badges mailing list](https://lists.coreinfrastructure.org/mailman/listinfo/cii-badges).
 
 If you want to propose or discuss changes to the criteria,

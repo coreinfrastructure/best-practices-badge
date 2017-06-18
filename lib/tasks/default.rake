@@ -425,7 +425,11 @@ end
 # gain/lose a badge because of the changes.
 desc 'Run to recalculate all badge percentages for all projects'
 task :update_all_badge_percentages do
-  Project.update_all_badge_percentages
+  Project.update_all_badge_percentages(Criteria.keys)
+end
+
+task :update_higher_level_badge_percentages do
+  Project.update_all_badge_percentages(Criteria.keys - ['0'])
 end
 
 Rake::Task['test:run'].enhance ['test:features']

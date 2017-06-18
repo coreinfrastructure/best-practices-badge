@@ -190,4 +190,38 @@ class ProjectTest < ActiveSupport::TestCase
     assert_equal '13/13', quality[:text]
     assert_equal 'hsl(120, 100%, 50%)', quality[:color]
   end
+
+  # rubocop:disable Metrics/BlockLength
+  test 'test :skip_callbacks works as spected' do
+    project_one = projects(:one)
+    Project.skip_callbacks = true
+    # With skip_callbacks = true there should be
+    # no change to percentages on save.
+    assert_no_difference [
+      'Project.find(projects(:one).id).badge_percentage_0',
+      'Project.find(projects(:one).id).badge_percentage_1'
+    ] do
+      project_one.update_attributes!(
+        crypto_weaknesses_status: 'Met',
+        crypto_weaknesses_justification: 'It is good'
+      )
+    end
+    Project.skip_callbacks = false
+    old_percentage0 = Project.find(projects(:one).id).badge_percentage_0
+    old_percentage1 = Project.find(projects(:one).id).badge_percentage_1
+    project_one.update_attributes!(
+      warnings_strict_status: 'Met',
+      warnings_strict_justification: 'It is good'
+    )
+    # Check the badge percentage changed
+    assert_not_equal(
+      Project.find(projects(:one).id).badge_percentage_0,
+      old_percentage0
+    )
+    assert_not_equal(
+      Project.find(projects(:one).id).badge_percentage_1,
+      old_percentage1
+    )
+  end
+  # rubocop:enable Metrics/BlockLength
 end

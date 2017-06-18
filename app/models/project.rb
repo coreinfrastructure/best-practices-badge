@@ -7,6 +7,7 @@
 # rubocop:disable Metrics/ClassLength
 class Project < ApplicationRecord
   has_many :additional_rights
+  cattr_accessor :skip_callbacks
   # We could add something like this:
   # + has_many :users, through: :additional_rights
   # but we don't, because we don't use the other information about those users.
@@ -117,7 +118,7 @@ class Project < ApplicationRecord
   # We'll also record previous versions of information:
   has_paper_trail
 
-  before_save :update_badge_percentages
+  before_save :update_badge_percentages, unless: :skip_callbacks
 
   # A project is associated with a user
   belongs_to :user
@@ -279,16 +280,19 @@ class Project < ApplicationRecord
     updated_at >= ENTRY_LICENSE_EXPLICIT_DATE
   end
 
-  # Update the badge percentage, and update relevant event datetime if needed.
-  # This code will need to changed if there are multiple badge levels, or
-  # if there are more than 100 criteria. (If > 100 criteria, switch
-  # percentage to something like millipercentage.)
+  # Update the badge percentage for a given level,
+  # and update relevant event datetime if needed.
+  def update_badge_percentage(level)
+    old_badge_percentage = self["badge_percentage_#{level}".to_sym]
+    self["badge_percentage_#{level}".to_sym] =
+      calculate_badge_percentage(level)
+    update_passing_times(old_badge_percentage) if level == '0'
+  end
+
+  # Update the badge percentages for all levels.
   def update_badge_percentages
     Criteria.keys.each do |level|
-      old_badge_percentage = self["badge_percentage_#{level}".to_sym]
-      self["badge_percentage_#{level}".to_sym] =
-        calculate_badge_percentage(level)
-      update_passing_times(old_badge_percentage) if level == '0'
+      update_badge_percentage(level)
     end
   end
 
@@ -303,25 +307,28 @@ class Project < ApplicationRecord
   # We need this we precalculate and store percentages in the database;
   # this speeds up many actions, but it means that a change in the rules
   # doesn't automatically change the precalculated values.
-  # rubocop:disable Metrics/MethodLength, Style/MethodCalledOnDoEndBlock
-  def self.update_all_badge_percentages
+  # rubocop:disable Metrics/MethodLength
+  def self.update_all_badge_percentages(levels)
+    raise TypeError, 'levels must be an Array' unless levels.is_a?(Array)
+    levels.each do |l|
+      raise ArgumentError, "Invalid level: #{l}" unless l.in? Criteria.keys
+    end
+    Project.skip_callbacks = true
     Project.find_each do |project|
       project.with_lock do
-        old_badge_percentages =
-          Criteria.keys.map do |level|
-            [level, project["badge_percentage_#{level}".to_sym]]
-          end.to_h
-        project.update_badge_percentages
-        old_badge_percentages.each do |level, percentage|
-          unless percentage ==
-                 project["badge_percentage_#{level}".to_sym]
-            project.save!(touch: false)
-          end
+        need_to_save = false
+        levels.each do |level|
+          badge_percentage = "badge_percentage_#{level}".to_sym
+          old_badge_percentage = project[badge_percentage]
+          project.update_badge_percentage(level)
+          need_to_save ||= old_badge_percentage != project[badge_percentage]
         end
+        project.save!(touch: false) if need_to_save
       end
     end
+    Project.skip_callbacks = false
   end
-  # rubocop:enable Metrics/MethodLength, Style/MethodCalledOnDoEndBlock
+  # rubocop:enable Metrics/MethodLength
 
   # The following configuration options are trusted.  Set them to
   # reasonable numbers or accept the defaults.

@@ -2328,6 +2328,8 @@ fr:
           documentation_security, documentation_architecture et implement_secure_design.
 
 '
+      achieve_passing:
+        description:
     '2':
       bus_factor:
         description: Le projet DOIT avoir un « facteur bus » de 2 ou plus.
@@ -2548,6 +2550,8 @@ fr:
           analyse dynamique.
 
 '
+      achieve_silver:
+        description:
   static_pages:
     home:
       badge_program: Programme de badge des meilleures pratiques de la CII

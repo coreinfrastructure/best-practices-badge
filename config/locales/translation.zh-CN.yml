@@ -1426,6 +1426,8 @@ zh-CN:
           Rhodes等人，NIST机构间报告7608）。信任边界是数据或执行改变其信任级别的边界，例如，典型Web应用程序中的服务器边界。常见做法是列出安全设计原则（例如Saltzer和Schroeer）和常见的实施安全漏洞（例如OWASP前10名或CWE
           / SANS前25名），并显示每个方案如何抵御。 <a href="https://github.com/coreinfrastructure/best-practices-badge/blob/master/doc/security.md">
           BadgeApp保证案例</a>可能是一个有用的例子。本条款与documentation_security，documentation_architecture和implement_secure_design等条款有关。
+      achieve_passing:
+        description:
     '2':
       bus_factor:
         description: 项目必须具有2个或更多的“公交车因子”。
@@ -1553,6 +1555,8 @@ zh-CN:
         description: '项目应该在其生成的软件中包含许多运行时断言，并在动态分析期间检查这些断言。
 
 '
+      achieve_silver:
+        description:
   static_pages:
     home:
       badge_program: CII 最佳实践徽章计划

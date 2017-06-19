@@ -273,7 +273,15 @@ de:
         description: 'Welche Programmiersprache wird verwendet, um das Projekt umzusetzen?
 
 '
-        details:
+        details: 'Wenn es mehr als eine Programmiersprache gibt, liste sie als kommagetrennte
+          Werte (Leerzeichen sind optional) auf und sortiere sie von am häufigsten
+          zum am wenigsten verwendeten. Wenn es eine lange Liste gibt, bitte mindestens
+          die ersten drei häufigsten auflisten. Wenn es keine Programmiersprache gibt
+          (z.B. ist dies nur ein Dokumentations- oder Testprojekt), verwenden Sie
+          das einzelne Zeichen "-". Bitte verwenden Sie eine herkömmliche Großschreibung
+          für jede Sprache, z.B. "JavaScript".
+
+'
         placeholder: 'Verwendete Implementierungssprache(n) als kommagetrennte Liste,
           sortiert nach Gebrauch
 
@@ -283,7 +291,12 @@ de:
           Platform Enumeration  (CPE) </a> Name für das Projekt (wenn es einen gibt)?
 
 '
-        details_html:
+        details_html: 'Das <a href="https://nvd.nist.gov/cpe.cfm">Common Platform
+          Enumeration (CPE)</a> ist ein strukturiertes Namensschema für IT Systeme,
+          Software und Pakete. Es wird in diversen Systemen und Datenbanken bei der
+          Meldung von Schwachstellen verwendet.
+
+'
         placeholder: "(Optional) CPE-Name"
       license:
         description_html: Unter welcher Lizenz/welchen Lizenzen ist das Projekt veröffentlicht?
@@ -295,24 +308,67 @@ de:
         placeholder: FLOSS Lizenz
     form_early:
       badge_intro:
-        description:
-        details_html:
+        description: Projekte, die den nachfolgenden Best Practices folgen, können
+          sich freiwillig selbst zertifizieren und zeigen, dass sie einen Core-Infrastruktur-Initiative
+          (CII) Badge erhalten haben.
+        details_html: 'Es gibt keine Auswahl an Praktiken, die garantieren können,
+          dass Software niemals Fehler oder Schwachstellen hat. Selbst formale Methoden
+          können fehlschlagen, wenn die Spezifikationen oder Annahmen falsch sind.
+          Auch gibt es keine Auswahl an Praktiken, die garantieren können, dass ein
+          Projekt eine gesunde und gut funktionierende Entwicklungsgemeinschaft erhalten
+          wird. Allerdings können Best Practices dabei helfen, die Ergebnisse von
+          Projekten zu verbessern. Zum Beispiel ermöglichen einige Praktiken die Mehrpersonen-Überprüfung
+          vor der Freigabe, die sowohl helfen können ansonsten schwer zu findende
+          technische Schwachstellen zu finden und gleichzeitig dazu beitragen Vertrauen
+          und den Wunsch nach wiederholter Zusammenarbeit zwischen Entwicklern verschiedener
+          Unternehmen zu schaffen. Um ein Badge zu verdienen, müssen alle MÜSSEN und
+          MÜSSEN NICHT Kriterien erfüllt sein, alle SOLLTEN Kriterien müssen erfüllt
+          sein oder eine Rechtfertigung enthalten, <em>und</ em> alle EMPFHOLEN Kriterien
+          müssen erfüllt sein oder nicht (wir wollen sie zumindest berücksichtigt
+          wissen)). Feedback ist willkommen auf der<a href="https://github.com/coreinfrastructure/best-practices-badge">GitHub-Website
+          als Issue oder Pull-Request</a>. Es gibt auch eine <a href = "https://lists.coreinfrastructure.org/mailman/listinfo/cii-badges">E-Mail-Liste
+          für allgemeine Diskussionen</a><br /><br /> Wir stellen Ihnen gerne die
+          Informationen in mehreren Sprachen zur Verfügung, allerdings ist die Englische
+          Version maßgeblich, insbesondere wenn es Konflikte oder Inkonsistenzen zwischen
+          den Übersetzungen gibt.
+
+'
       got_badge:
         description_1: 'Wenn dies Ihr Projekt ist, zeigen Sie bitte Ihren Badge-Status
           auf Ihrer Projektseite! Der Badge-Status sieht so aus:
 
 '
         description_2: 'Hier ist, wie man es einbetten:'
-        details_html:
-        editing_description_html:
+        details_html: 'Sie können Ihren Badgestatus anzeigen, indem Sie folgendes
+          in Ihre Markdown-Datei einbetten:<br />%{markdown_embedding}<br /> oder
+          indem Sie folgendes in Ihr HTML einbetten: <br /> %{html_embedding} <br
+          />
+
+'
+        editing_description_html: '<Strong> Bitte ''submit'' oft </ strong>, um Ihre
+          Arbeit zu speichern (Sie können immer wieder zurückkehren und später bearbeiten).
+          <br> <br> Wenn Sie Hilfe benötigen, eine Frage haben, oder ein Problem sehen,
+          bitte <em><a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">Schicken
+          Sie uns eine E-Mail</a></ em>.
+
+'
         badge_alt: Badgelevel für Projekt %{id} ist %{level}
       level:
-        0_html: Dies sind die Kriterien für Badgelevel "passing".
-        1_html: Dies sind die Kriterien für Badgelevel "silver".
-        2_html: Dies sind die Kriterien für Badgelevel "gold".
-        '0':
-        '1':
-        '2':
+        0_html: 'Dies sind die Kriterien das Level %{passing}. Sie können auch die
+          Kriterien für die Level %{silver} oder %{gold} sehen.
+
+'
+        1_html: 'Dies sind die Kriterien das Level %{silver}. Sie können auch die
+          Kriterien für die Level %{passing} oder %{gold} sehen.
+
+'
+        2_html: 'Dies sind die Kriterien das Level %{gold}. Sie können auch die Kriterien
+          für die Level %{passing} oder %{silver} sehen.
+
+'
+        '0': Passing
+        '1': Silber
+        '2': Gold
     misc:
       disabled_reminders: "(Fortgeschritten) Deaktiviere Inaktivitätserinnerung (wir
         empfehlen Ihnen, diese unausgewählt zu lassen)\n"
@@ -624,8 +680,16 @@ de:
         description:
         details:
       crypto_published:
-        description:
-        details:
+        description: 'Die vom Projekt entwickelte Software MUSS standardmäßig nur
+          kryptografische Protokolle und Algorithmen verwenden, die öffentlich sind
+          und von Experten überprüft wurden (falls kryptographische Protokolle und
+          Algorithmen verwendet werden).
+
+'
+        details: 'Diese kryptographischen Kriterien gelten nicht immer, da einige
+          Software keine direkten kryptografischen Funktionen benötigt.
+
+'
       crypto_call:
         description: 'Wenn die Software, die durch das Projekt produziert wird, eine
           Anwendung oder Bibliothek ist, und ihr Hauptzweck nicht die Kryptographie
@@ -635,26 +699,102 @@ de:
 
 '
       crypto_floss:
-        description:
+        description: 'Alle Funktionalitäten in der vom Projekt entwickelten Software,
+          die von Kryptographie abhängigen, MÜSSEN mit FLOSS implementiert werden.
+
+'
         details: Siehe <a href="https://opensource.org/osr">Open Standards Requirement
           for Software by the Open Source Initiative</a>.
       crypto_keylength:
-        description:
-        details:
+        description: 'Die Sicherheitsmechanismen innerhalb der vom Projekt entwickelten
+          Software, MÜSSEN Standard-Keylängen verwenden, die die NIST-Mindestanforderungen
+          bis zum Jahr 2030 erfüllen (wie im Jahr 2012 festgelegt). Es MUSS möglich
+          sein, die Software so zu konfigurieren, dass kürzere Keylängen vollständig
+          deaktiviert werden können.
+
+'
+        details: 'Diese minimalen Bitlängen sind: symmetric key 112, factoring modulus
+          2048, discrete logarithm key 224, discrete logarithmic group 2048, elliptic
+          curve 224, and hash 224 (das Passworthashing ist nicht von dieser Bitlänge
+          abgedeckt, weitere Informationen zum Passworthashing finden sich im <a href="#crypto_password_storage">
+          crypto_password_storage </a> Kriterium). Siehe <a href="http://www.keylength.com">
+          http://www.keylength.com </a> für einen Vergleich von Keylängen Empfehlungen
+          von verschiedenen Organisationen. Die Software KANN kleinere Keylängen in
+          einigen Konfigurationen erlauben (idealerweise nicht, da dies Downgrade-Angriffe
+          erlaubt, aber kürzere Keylängen sind manchmal für die Interoperabilität
+          notwendig).
+
+'
       crypto_working:
-        description:
-        details:
+        description: 'Die Standard-Sicherheitsmechanismen innerhalb der vom Projekt
+          entwickelten Software MÜSSEN NICHT von defekten kryptographischen Algorithmen
+          abhängen (z.B. MD4, MD5, Single DES, RC4, Dual_EC_DRBG) oder Chiffre-Modi
+          verwenden, die dem Kontext unangemessen sind (z.B. EZB-Modus ist fast nie
+          geeignet, weil es identische Blöcke innerhalb des Chiffretextes enthüllt,
+          wie durch den <a href="https://blog.filippo.io/the-ecb-penguin/">EZB-Pinguin</a>
+          gezeigt wird und der CTR-Modus ist oft unangemessen, weil es keine Authentifizierung
+          durchführt und Duplikate verursacht, wenn der Eingangszustand wiederholt
+          wird).
+
+'
+        details: 'In vielen Fällen ist es am besten, einen Block-Chiffre-Algorithmus-Modus
+          zu wählen, der entworfen wurde, um Geheimhaltung und Authentifizierung zu
+          kombinieren, z.B. Galois/ Counter Mode (GCM) und EAX. Projekte KÖNNTEN Benutzern
+          erlauben, defekte Mechanismen zu ermöglichen, falls nötig für Kompatibilität,
+          aber dann wissen die Benutzer, dass sie es tun.
+
+'
       crypto_weaknesses:
-        description:
-        details:
+        description: 'Die Standard-Sicherheitsmechanismen innerhalb der vom Projekt
+          entwickelten Software SOLLTEN NICHT nicht von kryptographischen Algorithmen
+          oder Modi mit bekannten schweren Schwächen abhängen (z.B. SHA-1-Kryptographie-Hash-Algorithmus
+          oder CBC-Modus in SSH).
+
+'
+        details: 'Sorgen über den CBC-Modus in SSH werden in <a href="https://www.kb.cert.org/vuls/id/958563">CERT:
+          SSH CBC vulnerability</a> erläutert.
+
+'
       crypto_pfs:
-        description:
+        description: 'Die Sicherheitsmechanismen innerhalb der vom Projekt entwickelten
+          Software SOLLTEN ein perfektes Vorwärtsgeheimnis für wichtige Vereinbarungsprotokolle
+          implementieren, so dass ein Sitzungsschlüssel, der aus einer Reihe von Langzeitschlüsseln
+          abgeleitet wird, nicht beeinträchtigt werden kann, wenn einer der Langzeitschlüssel
+          in der Zukunft kompromittiert wird.
+
+'
       crypto_password_storage:
-        description:
-        details:
+        description: 'Wenn die vom Projekt erzeugte Software Passwörter für die Authentifizierung
+          von externen Benutzern speichert, MÜSSEN die Passwörter als iterierte Hashes
+          mit einem per-User-Salt unter Verwendung eines Key-Stretching (iterierten)
+          Algorithmus (z.B. PBKDF2, Bcrypt oder Scrypt) gespeichert werden.
+
+'
+        details: 'Dieses Kriterium gilt nur, wenn die Software die Authentifizierung
+          von Benutzern mit Passwörtern erzwingt, wie z.B. bei serverseitige Webanwendungen.
+          Es gilt nicht in Fällen, in denen die Software Kennwörter für die Authentifizierung
+          in andere Systeme speichert (z.B. die Software implementiert einen Client
+          für ein anderes System), da zumindest Teile dieser Software oft Zugriff
+          auf das Passwort im Klartext haben müssen.
+
+'
       crypto_random:
-        description:
-        details:
+        description: 'Die Sicherheitsmechanismen innerhalb der vom Projekt entwickelten
+          Software MÜSSEN alle kryptographischen Schlüssel und Nonces mit einem kryptographisch
+          sicheren Zufallszahlengenerator erzeugen und DARF NICHT mit Generatoren
+          arbeiten, die kryptographisch unsicher sind.
+
+'
+        details: 'Ein kryptographisch sicherer Zufallszahlengenerator kann ein Hardware-Zufallszahlengenerator
+          sein oder es kann ein kryptographisch sicherer Pseudozufallszahlengenerator
+          (CSPRNG) sein, der einen Algorithmus wie Hash_DRBG, HMAC_DRBG, CTR_DRBG,
+          Yarrow oder Fortuna verwendet. Beispiele für Aufrufe von <em>sicheren</
+          em> Zufallszahlengeneratoren umfassen Java''s java.security.SecureRandom
+          und JavaScript''s window.crypto.getRandomValues. Beispiele für Anrufe von
+          <em>unsicheren</ em> Zufallszahlengeneratoren sind Java''s java.util.Random
+          und JavaScript''s Math.random.
+
+'
       delivery_mitm:
         description:
         details:
@@ -721,9 +861,22 @@ de:
 
 '
       crypto_used_network:
-        description:
+        description: 'Die vom Projekt entwickelte Software SOLLTE sichere Protokolle
+          für alle Netzwerkkommunikationen wie SSHv2 oder neuer, TLS1.2 oder neuer
+          (HTTPS), IPsec, SFTP und SNMPv3 unterstützen. Unsichere Protokolle wie FTP,
+          HTTP, Telnet, SSLv3 oder älter, und SSHv1 sollte standardmäßig deaktiviert
+          werden und nur aktiviert werden, wenn der Benutzer es speziell konfiguriert.
+          Wenn die vom Projekt entwickelte Software keine Netzwerkkommunikation unterstützt,
+          wählen Sie "nicht anwendbar" (N/A).
+
+'
       crypto_tls12:
-        description:
+        description: 'Die vom Projekt entwickelte Software SOLLTE, wenn sie TLS unterstützt
+          oder verwendet, mindestens TLS Version 1.2 unterstützen. Beachten Sie, dass
+          der Vorgänger von TLS SSL genannt wurde. Wenn die Software TLS nicht verwendet,
+          wählen Sie "nicht anwendbar" (N/A).
+
+'
       crypto_certificate_verification:
         description: 'Die Software, die vom Projekt produziert wird, MUSS, wenn sie
           TLS unterstützt, die TLS-Zertifikatprüfung standardmäßig durchführen wenn
@@ -731,9 +884,20 @@ de:
           TLS nicht verwendet, wählen Sie "nicht anwendbar" (N/A).
 
 '
-        details:
+        details: 'Beachten Sie, dass eine falsche TLS-Zertifikatsüberprüfung ein häufiger
+          Fehler ist. Weitere Informationen finden Sie unter <a href="http://crypto.stanford.edu/~dabo/pubs/abstracts/ssl-client-bugs.html">
+          "The Most Dangerous Code in the World: Validating SSL Certificates in Non-Browser
+          Software" von Martin Georgiev et al.</a> und <a href="https://blogs.gnome.org/mcatanzaro/2016/03/12/do-you-trust-this-application/">
+          "Do you trust this application?" von Michael Catanzaro</a>.
+
+'
       crypto_verification_private:
-        description:
+        description: 'Die vom Projekt entwickelte Software, SOLLTE, wenn sie TLS unterstützt,
+          die TLS-Zertifikatprüfung standardmäßig durchführen wenn TLS verwendet wird,
+          auch für Subresources, durchführen. Wenn die Software TLS nicht verwendet,
+          wählen Sie "nicht anwendbar" (N/A).
+
+'
       hardened_site:
         description:
         details:
@@ -908,6 +1072,8 @@ de:
       assurance_case:
         description:
         details:
+      achieve_passing:
+        description:
     '2':
       bus_factor:
         description: Das Projekt MUSS einen "Busfaktor" von 2 oder mehr haben.
@@ -995,6 +1161,8 @@ de:
         description:
       dynamic_analysis_enable_assertions:
         description:
+      achieve_silver:
+        description:
   static_pages:
     home:
       badge_program: CII Best Practices Badge Programm
@@ -1050,7 +1218,7 @@ de:
     Accessibility and internationalization: Zugänglichkeit und Internationalisierung
     Analysis: Analyse
     Automated test suite: Automatisierte Test-Suite
-    Basic project website content: Einfacher Projektwebsiteninhalt
+    Basic project website content: Grundlegende Informationen auf der Projektwebseite
     Basics: Grundlagen
     Bug-reporting process: Bug-Report Prozess
     Change Control: Verbesserungs/Nacharbeits -Kontrolle

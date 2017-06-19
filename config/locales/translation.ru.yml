@@ -24,17 +24,17 @@ ru:
   feed_title: Значок CII "Передовая практика" - обновлённые проекты
   project_name_unknown:
   locale_name:
-    en:
-    de:
-    fr:
-    ja:
-    ru: русский язык (ru)
-    zh-CN:
+    en: Английский / English (en)
+    de: Немецкий / Deutsch (de)
+    fr: Французский / Français (fr)
+    ja: Японский / 日本語 (ja)
+    ru: Русский (ru)
+    zh-CN: Китайский (упрощенный) / 简体 中文 (zh-CN)
   layouts:
     cii_best_practices: Передовая практика CII
     projects: Проекты
     users: Пользователи
-    account: Учётная запись активирована!
+    account: Учётная запись
     profile: Профиль
     settings: Настройки
     logout_html: <span class="glyphicon glyphicon-log-out"></span> Выйти
@@ -1105,11 +1105,9 @@ ru:
 '
         details: 'Воспроизводимая сборка означает, что несколько сторон могут независимо
           повторить процесс генерации информации из исходных файлов и получить аналогичный
-          результат с точностью до бита. Если сборка не требуется (например, в случае
-          языков сценариев, где исходный код используется непосредственно вместо компиляции),
-          выберите «N/A». В некоторых случаях воспроизводимости можно достичь путем
-          принудительного выставления окружения. Разработчики JavaScript могут рассмотреть
-          возможность использования npm shrinkwrap и webpack OccurenceOrderPlugin.
+          результат с точностью до бита. В некоторых случаях воспроизводимости можно
+          достичь путем принудительного выставления окружения. Разработчики JavaScript
+          могут рассмотреть возможность использования npm shrinkwrap и webpack OccurenceOrderPlugin.
           Пользователи GCC и clang могут найти полезной опцию -frandom-seed. Среда
           сборки (включая набор инструментов) часто может быть определена для внешних
           сторон путём указания криптографической суммы (hash) для конкретного контейнера
@@ -1320,6 +1318,8 @@ ru:
         description:
       dynamic_analysis_unsafe:
         description:
+      achieve_passing:
+        description:
     '2':
       bus_factor:
         description:
@@ -1390,6 +1390,8 @@ ru:
 
 '
       dynamic_analysis_enable_assertions:
+        description:
+      achieve_silver:
         description:
   headings:
     Accessibility and internationalization:

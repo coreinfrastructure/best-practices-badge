@@ -1588,6 +1588,8 @@ en:
 
 '
     '1':
+      achieve_passing:
+        description: The project MUST achieve a passing level badge.
       contribution_requirements:
         description: 'The information on how to contribute MUST include the requirements
           for acceptable contributions (e.g., a reference to any required coding standard).
@@ -2230,6 +2232,8 @@ en:
 
 '
     '2':
+      achieve_silver:
+        description: The project MUST achieve a silver level badge.
       bus_factor:
         description: The project MUST have a "bus factor" of 2 or more.
       contributors_unassociated:

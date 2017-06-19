@@ -84,9 +84,11 @@
         end %>
     <% if (is_disabled) %>
       <% if project_criterion_justification %>
-        <div class="justification-markdown">
-          <%= markdown(project_criterion_justification) %>
-        </div>
+        <% cache ['markdown', project_criterion_justification] do %>
+          <div class="justification-markdown">
+            <%= markdown(project_criterion_justification) %>
+          </div>
+        <% end %>
       <% end %>
       <% if criterion_result == :criterion_url_required %>
         <p class="bg-warning"><%= t('projects.misc.url_required_warning') %></p>

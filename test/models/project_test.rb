@@ -192,7 +192,7 @@ class ProjectTest < ActiveSupport::TestCase
   end
 
   # rubocop:disable Metrics/BlockLength
-  test 'test :skip_callbacks works as spected' do
+  test 'test :skip_callbacks works as expected' do
     project_one = projects(:one)
     Project.skip_callbacks = true
     # With skip_callbacks = true there should be

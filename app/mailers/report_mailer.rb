@@ -16,6 +16,7 @@
 
 # rubocop:disable Metrics/MethodLength, Metrics/ClassLength
 class ReportMailer < ApplicationMailer
+  include SessionsHelper
   REPORT_EMAIL_DESTINATION = 'cii-badge-log@lists.coreinfrastructure.org'
 
   def set_headers
@@ -63,7 +64,9 @@ class ReportMailer < ApplicationMailer
     return if user.nil?
     return unless user.email?
     return unless user.email.include?('@')
-    @project_info_url = project_info_url(@project.id)
+    @project_info_url = force_locale_url(
+      project_info_url(@project.id), user.preferred_locale.to_sym
+    )
     @email_destination = user.email
     @new_level = new_badge_level
     @old_level = old_badge_level
@@ -90,7 +93,9 @@ class ReportMailer < ApplicationMailer
     return if user.nil?
     return unless user.email?
     return unless user.email.include?('@')
-    @project_info_url = project_info_url(@project.id)
+    @project_info_url = force_locale_url(
+      project_info_url(@project.id), user.preferred_locale.to_sym
+    )
     @email_destination = user.email
     set_headers
     I18n.with_locale(user.preferred_locale.to_sym) do
@@ -145,7 +150,9 @@ class ReportMailer < ApplicationMailer
     return if user.nil?
     return unless user.email?
     return unless user.email.include?('@')
-    @project_info_url = project_info_url(@project.id)
+    @project_info_url = force_locale_url(
+      project_info_url(@project.id), user.preferred_locale.to_sym
+    )
     @email_destination = user.email
     set_headers
     I18n.with_locale(user.preferred_locale.to_sym) do

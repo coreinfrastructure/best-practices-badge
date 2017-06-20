@@ -1,17 +1,15 @@
 <%
-   status_symbol = (criterion.to_s + '_status').to_sym
-   justification_symbol = (criterion.to_s + '_justification').to_sym
-   project_criterion_status = project[status_symbol]
-   project_criterion_justification = project[justification_symbol] %>
+ status_symbol = (criterion.to_s + '_status').to_sym
+ project_criterion_status = project[status_symbol]
+ criterion_result = project.get_criterion_result(criterion)
 
-<% cache [criterion.to_s, criteria_level, is_disabled, locale,
-          project_criterion_status, project_criterion_justification ] do
-     criterion_result = project.get_criterion_result(criterion)
-     passing_class = ''
-      if criterion_result == :criterion_passing && is_disabled
-       passing_class = ' criterion-passing'
-     end
-  %>
+ cache ['buttons', criterion.to_s, criteria_level, is_disabled, locale,
+        project_criterion_status ] do
+   passing_class = ''
+   if criterion_result == :criterion_passing && is_disabled
+     passing_class = ' criterion-passing'
+   end
+%>
   <div id="<%= criterion.to_s %>" class="row criterion-data<%= passing_class %>">
     <% is_crypto = criterion.to_s.match(/^crypto_/)
        crypto_class = is_crypto ? ' criterion-is-crypto' : '' %>
@@ -72,39 +70,55 @@
       <% end %>
     </div>
   </div>
-
+<% end # cache 'buttons' %>
   <div class='col-md-10 col-sm-9 col-xs-12 criteria-desc'>
+    <% cache ['desc', criterion.to_s, criteria_level, locale ] do
+       # Here we provide the description, details, and markings like
+       # "met_url_required?".  We cache this separately.
+       # Its cache needs fewer keys, so by caching this separately it
+       # can be shared across more projects. %>
     <br>
-    <% if criterion.future? %>(<%= t('projects.misc.future_criterion') %>) <% end %>
+    <%= if criterion.future?
+         '(' + t('projects.misc.future_criterion') + ')'
+       else
+          ''
+       end %>
     <%= criterion.description %>
-    <% if criterion.met_url_required? %>(<%= t('projects.misc.url_required') %>) <% end %>
+    <%= if criterion.met_url_required?
+          '(' + t('projects.misc.url_required') + ')'
+        else
+          ''
+       end %>
     <sup>[<%= criterion %>]</sup>
     <%= if criterion.details
           render(partial: "details",
             locals: {f: f, criterion: criterion,
                      details: criterion.details.html_safe})
         end %>
-    <% if (is_disabled) %>
-      <% if project_criterion_justification&.presence %>
-        <% cache ['markdown', project.id, criterion.to_s,
+    <% end # cache 'desc' %>
+    <% justification_symbol = (criterion.to_s + '_justification').to_sym
+       if (is_disabled)
+         project_criterion_justification = project[justification_symbol]
+         if project_criterion_justification&.presence
+           cache ['markdown', project.id, criterion.to_s,
                   project.lock_version] do %>
           <div class="justification-markdown">
             <%= markdown(project_criterion_justification) %>
           </div>
-        <% end %>
-      <% end %>
-      <% if criterion_result == :criterion_url_required %>
-        <p class="bg-warning"><%= t('projects.misc.url_required_warning') %></p>
-      <% elsif criterion_result == :criterion_justification_required %>
-        <p class="bg-warning"><%= t('projects.misc.justification_required_warning') %></p>
-      <% end %>
+        <% end # cache 'markdown'
+         end # if..presence
+         if criterion_result == :criterion_url_required %>
+           <p class="bg-warning"><%= t('projects.misc.url_required_warning') %></p>
+         <% elsif criterion_result == :criterion_justification_required %>
+          <p class="bg-warning"><%= t('projects.misc.justification_required_warning') %></p>
+         <% end # criterion_result %>
     <% else %>
       <%= f.text_area justification_symbol,
                       class: 'justification-text', hide_label: true,
                       lang: 'en', spellcheck: true,
                       placeholder:t('projects.misc.in_javascript.unknown_placeholder'),
                       disabled: is_disabled %>
-    <% end %>
+    <% end # is_disabled %>
     <% if is_last %>
       <br>
     <% else %>
@@ -112,4 +126,3 @@
     <% end %>
     </div>
   </div>
-<% end %>

@@ -16,11 +16,11 @@ ru:
   hello:
   submit:
   projects_count:
-    one:
-    other: "%{count} Проекты"
-    zero:
-    few:
-    many:
+    one: "%{count} проект"
+    other: "%{count} проекта"
+    zero: Нет проектов
+    few: "%{count} проекта"
+    many: "%{count} проектов"
   feed_title: Значок CII "Передовая практика" - обновлённые проекты
   project_name_unknown:
   locale_name:
@@ -39,7 +39,7 @@ ru:
     settings: Настройки
     logout_html: <span class="glyphicon glyphicon-log-out"></span> Выйти
     signup_html: <span class="glyphicon glyphicon-user"></ span> Зарегистрироваться
-    login_html: <span class="glyphicon-log-in"></span> Войти в систему
+    login_html: <span class="glyphicon glyphicon-log-in"></span> Войти в систему
     footer_text_html: '<small> <strong>Нужна помощь? Есть вопрос? Видите ошибку? Пожалуйста,
       отправьте <em><a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">электронное
       письмо</a></em> или <em><a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
@@ -85,7 +85,7 @@ ru:
     signed_out:
   static_pages:
     home:
-      badge_program: Программа значков CII "Передовая практика"
+      badge_program: Программа значков "Передовая практика CII"
       get_your_badge: Получите ваш значок сейчас!
       p1_html: 'Значок "Передовая практика" от <a href="https://www.linuxfoundation.org/">Linux
         Foundation (LF)</a> <a href="https://www.coreinfrastructure.org/">Core Infrastructure
@@ -136,15 +136,15 @@ ru:
         соответствуют критериям, и %{in_progress} в процессе.'
       project_stats_html: Вы можете просмотреть статистику по проектам с течением
         времени на странице со <a href="/project_stats">проектной статистикой</a>.
-      level:
-      must:
-      should:
-      suggested:
-      total_active:
-      allow_na:
-      require_url:
-      details:
-      future:
+      level: Уровень
+      must: '"ДОЛЖЕН"'
+      should: '"СЛЕДУЕТ"'
+      suggested: '"РЕКОМЕНДУЕТСЯ"'
+      total_active: Всего активных
+      allow_na: Допускают неприменимость (N/A)
+      require_url: Требует URL
+      details: С подробностями
+      future: Будущие
   users:
     new:
       signup_header:
@@ -642,8 +642,8 @@ ru:
 
 '
       report_tracker:
-        description: 'РЕКОМЕНДУЕТСЯ использовать трекер вопросов (issue tracker) для
-          отслеживания отдельных вопросов.
+        description: 'СЛЕДУЕТ использовать трекер вопросов (issue tracker) для отслеживания
+          отдельных вопросов.
 
 '
         unmet_placeholder: Почему нет трекера?
@@ -654,8 +654,8 @@ ru:
 
 '
       enhancement_responses:
-        description: 'Проект ДОЛЖЕН отвечать большинству (&gt;50%) запросов на улучшения
-          в течение последних 2-12 месяцев (включительно).
+        description: 'Проекту СЛЕДУЕТ реагировать на большинство (&gt;50%) запросов
+          на улучшения в течение последних 2-12 месяцев (включительно).
 
 '
         details: 'В качестве ответа МОЖЕТ быть «нет» или обсуждение выгод от данного
@@ -717,7 +717,7 @@ ru:
 
 '
       test_invocation:
-        description: 'Набор тестов ДОЛЖЕН запускаться стандартным способом для этого
+        description: 'Набор тестов СЛЕДУЕТ запускать стандартным способом для этого
           языка.
 
 '
@@ -773,7 +773,14 @@ ru:
         details:
       warnings_fixed:
         description:
-        details:
+        details: 'Это предупреждения, о которых упоминается при выполнении критерия
+          <a href="#warnings">warnings</a>. Проект должен исправлять предупреждения
+          или отмечать их в исходном коде как ложные срабатывания. В идеале не должно
+          быть никаких предупреждений, но проект МОЖЕТ принимать существование каких-то
+          предупреждений (обычно менее 1 предупреждения на 100 строк или менее 10
+          предупреждений).
+
+'
       warnings_strict:
         description:
         details:
@@ -952,7 +959,8 @@ ru:
         description:
         details:
       vulnerabilities_critical_fixed:
-        description:
+        description: Проектам СЛЕДУЕТ оперативно исправлять критические уязвимости
+          после сообщения о них.
       no_leaked_credentials:
         description: 'НЕДОПУСТИМА утечка действующих частных учетных данных (например,
           рабочий пароль или закрытый ключ), предназначенных для ограничения общего
@@ -1084,9 +1092,8 @@ ru:
 
 '
       installation_common:
-        description: 'Проект ДОЛЖЕН предоставлять возможность легко установить и удалить
-          программное обеспечение, создаваемое проектом, с использованием общепринятых
-          способов.
+        description: 'СЛЕДУЕТ предоставлять возможность легко установить и удалить
+          ПО, создаваемое проектом, с использованием общепринятых способов.
 
 '
         details: 'Примеры включают использование менеджера пакетов (на уровне системы
@@ -1217,7 +1224,12 @@ ru:
         description:
         details:
       accessibility_best_practices:
-        description:
+        description: 'Проекту (как на сайтах проекта, так и в результатах работы проекта)
+          СЛЕДУЕТ следовать передовой практике общедоступности, чтобы люди с ограниченными
+          возможностями могли участвовать в проекте и использовать результаты проекта,
+          где это имеет смысл.
+
+'
         details:
       internationalization:
         description:

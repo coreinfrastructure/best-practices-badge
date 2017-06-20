@@ -14,22 +14,22 @@ ja:
       update: 更新する
       submit: 保存する
   hello:
-  submit:
+  submit: 送信
   projects_count:
-    one:
-    other:
-    zero:
-    few:
-    many:
+    one: "%{count} プロジェクト"
+    other: "%{count} プロジェクト"
+    zero: 該当プロジェクトなし
+    few: "%{count} プロジェクト"
+    many: "%{count} プロジェクト"
   feed_title:
   project_name_unknown:
   locale_name:
-    en:
-    de: German / Deutsche (de)
-    fr:
+    en: 英語 / English (en)
+    de: ドイツ語 / Deutsche (de)
+    fr: フランス語 / Français (fr)
     ja: 日本語 (ja)
-    zh-CN:
-    ru:
+    zh-CN: 中国語 (簡体字) / 简体中文 (zh-CN)
+    ru: ロシア語 / русскийязык (ru)
   layouts:
     cii_best_practices: CII ベスト プラクティス
     projects: プロジェクト
@@ -50,12 +50,12 @@ ja:
     choose_locale: ロケールを選択する
   account_activations:
     activated: アカウントが有効になりました！
-    failed_activation: 無効なアクティベーションリンク
+    failed_activation: 無効なアクティベーション リンクです
   password_resets:
     forgot_password:
     reset_password:
     password_confirmation:
-    email_not_found:
+    email_not_found: 電子メール アドレスが見つかりません
     password_empty:
     password_reset:
     instructions_sent:
@@ -80,38 +80,47 @@ ja:
     signed_out: サインアウトしました！
   users:
     new:
-      signup_header:
-      intro_html:
-      name:
-      email:
-      preferred_locale:
-      password:
-      password_confirmation:
-      create_account:
-      intro_github:
+      signup_header: サインアップ
+      intro_html: |
+        GitHubアカウントでログインしたくない場合は、
+        ここからサインアップしてください。 <br> <br>アクティベーション リンクが届かない場合は、
+        もう一度サインアップしてください。新しいものをお送りします。
+      name: 名前
+      email: 電子メール
+      preferred_locale: 言語・地域
+      password: パスワード
+      password_confirmation: パスワード（確認のためにもう一度入力してください）
+      create_account: アカウントを作成する
+      intro_github: 'GitHubアカウントを持っている方は、それを使ってログインできます。
+
+'
     edit:
       update_user_info:
       save_changes:
     update:
       profile_updated:
     show:
-      edit_user:
-      other_projects_edit:
+      edit_user: ユーザーを編集する
+      other_projects_edit: 編集できるその他のプロジェクト
       see_external:
       as_admin:
       send_email_to:
-      delete_link_name:
-      confirm_delete:
+      delete_link_name: 削除
+      confirm_delete: このユーザーを削除してもよろしいですか？
     destroy:
       cannot_delete_self:
       user_deleted:
-    redirect_existing:
-    new_activation_link_created:
-    please_log_in:
+    redirect_existing: 'そのユーザーは既に存在しています。以前、サインインしたことはありませんか？
+
+'
+    new_activation_link_created: '新しいアクティベーションリンクが作成されました。電子メールを確認してアカウントを有効にしてください。
+
+'
+    please_log_in: ログインしてください。
   project_stats:
     index:
-      project_stats_header:
-      all_projects:
+      project_stats_header: プロジェクトの統計値
+      all_projects: すべてのプロジェクト
       projects_nontrivial:
       projects_activity_30:
       daily_activity:
@@ -129,59 +138,59 @@ ja:
       admin_html:
       raw_data:
       json_format:
-      csv_format:
+      csv_format: ダウンロード可能なCSV形式
       projects_created_updated_daily:
   projects:
     index:
-      add_link:
-      add_new:
-      badge_status:
-      exclude_passing:
-      text_search:
+      add_link: 追加
+      add_new: プロジェクトを追加
+      badge_status: バッジ ステータス
+      exclude_passing: 合格プロジェクト以外
+      text_search: テキスト検索
       name_or_description:
-      search:
-      all:
-      passing_100:
-      in_progress_variable:
+      search: 検索
+      all: すべて
+      passing_100: 合格（100％）
+      in_progress_variable: 進行中（%{percent}％以上）
     table:
-      id:
-      name:
-      description:
-      website:
-      license:
-      owner:
-      last_achieved:
-      pachieved:
+      id: ID
+      name: 名称
+      description: 概要
+      website: ウェブサイト
+      license: ライセンス
+      owner: オーナー
+      last_achieved: 最終達成日時
+      pachieved: 達成率
       can_also_sort:
-      repository_url:
-      create_time:
-      update_time:
-      user_id:
+      repository_url: リポジトリのURL
+      create_time: 作成日時 (バッジ エントリの)
+      update_time: 最終更新日時（バッジ エントリの）
+      user_id: ユーザーID
       paren_name_unknown:
       badge_level:
     new:
       post_delay_warning:
-      new_badge:
+      new_badge: 新しいバッジ
       may_select_html:
-      select_one_github:
-      submit_github:
+      select_one_github: GitHub リポジトリを選択してください
+      submit_github: GitHubリポジトリを送信する
       url_of_homepage:
       placeholder_of_homepage:
       url_of_repo:
       placeholder_of_repo:
-      submit_urls:
+      submit_urls: URLを送信する
       sign_in_first: プロジェクトを追加するにはログインしてください！
       thanks_adding:
-      project_already_exists:
+      project_already_exists: このプロジェクトは既に存在します！
       final_text_html:
-      new_badge_or:
+      new_badge_or: または
       original_repos:
       fork_repos:
     show:
-      edit:
-      delete:
+      edit: 編集
+      delete: 削除
       confirm_delete:
-      back:
+      back: もどる
       cc_by_3plus_html:
       cc_by_3only_html:
       owned_by:
@@ -202,11 +211,11 @@ ja:
       edit_status:
     form_basics:
       project_name:
-        description:
-        details:
-        placeholder:
+        description: プロジェクトの名前(判読可能な)は何ですか？
+        details: 他のプロジェクトが同じ名前を使用していないか注意してください。
+        placeholder: FLOSSプロジェクト名
       description:
-        description:
+        description: プロジェクトを簡単に説明してください。
         details:
         placeholder:
       homepage_url:
@@ -214,15 +223,20 @@ ja:
         placeholder:
       repo_url:
         description:
-        placeholder:
+        placeholder: プロジェクトのリポジトリURL
       implementation_languages:
         description:
         details:
         placeholder:
       cpe:
-        description_html:
-        details_html:
-        placeholder:
+        description_html: 'プロジェクトの<a href="https://nvd.nist.gov/cpe.cfm"> Common Platform
+          Enumeration（CPE）</a>名は何ですか？
+
+'
+        details_html: '<a href="https://nvd.nist.gov/cpe.cfm"> Common Platform Enumeration（CPE）</a>は、情報技術（IT）システム、ソフトウェア、およびパッケージのための構造化された命名体系です。脆弱性を報告する際に、多くのシステムやデータベースで使用されています。
+
+'
+        placeholder: "（オプション）CPE名"
       license:
         description_html:
         details_html:
@@ -236,14 +250,14 @@ ja:
         description_2:
         details_html:
         editing_description_html:
-        badge_alt:
+        badge_alt: プロジェクト %{id} のバッジ レベルは %{level} です
       level:
         0_html:
         1_html:
         2_html:
-        '0':
-        '1':
-        '2':
+        '0': 合格
+        '1': シルバー
+        '2': ゴールド
     misc:
       disabled_reminders:
       general_comments:
@@ -253,18 +267,18 @@ ja:
       dont_use_crypto:
       future_header_html:
       in_javascript:
-        collapse_all_title:
-        collapse_all:
-        expand_all_title:
-        expand_all:
-        show_details:
-        hide_details:
-        show_all_details:
-        hide_all_details:
-        show_met_title:
-        show_met_html:
-        hide_met_title:
-        hide_met_html:
+        collapse_all_title: すべてのパネルを折りたたむ
+        collapse_all: パネルを折りたたむ
+        expand_all_title: すべてのパネルを展開
+        expand_all: パネルを展開
+        show_details: 詳細を表示
+        hide_details: 詳細を非表示
+        show_all_details: 詳細をすべて表示
+        hide_all_details: 詳細をすべて非表示
+        show_met_title: 適合済みの基準と非該当の基準を表示
+        show_met_html: 適合済みと非該当を表示
+        hide_met_title: 適合済みと非該当の基準を非表示（不適合と不明なものは表示）
+        hide_met_html: 適合済みと非該当を非表示
         passing_alt:
         barely_alt:
         failing_alt:
@@ -277,7 +291,7 @@ ja:
         na_placeholder:
         unknown_placeholder:
       toggle_details_title:
-      details:
+      details: 詳細
       url_required:
       future_criterion:
       url_required_warning:
@@ -405,8 +419,18 @@ ja:
 
 '
       sites_https:
-        description:
-        details:
+        description: 'プロジェクトサイト（ウェブサイト、リポジトリ、およびダウンロードURL）は、TLSを使用したHTTPSをサポートしなければなりません。
+
+'
+        details: '<a href="https://letsencrypt.org/">暗号化しよう</a>からフリーの証明書を入手できます。プロジェクトは、（例えば）<a
+          href="https://help.github.com/articles/securing-your-github-pages-site-with-https/">
+          GitHubページ</a>、<a href="https://about.gitlab.com/2016/12/24/were-bringing-gitlab-pages-to-community-edition/">
+          GitLabページ</a>、または<a href = " https://sourceforge.net/blog/introducing-https-for-project-websites/">SourceForgeプロジェクトページ</a>を使ってこの基準を実装してもよいです。カスタムドメインでGitHubページを使用している場合は、<a
+          href = "https://blog.cloudflare.com/secure-and-fast-github-pages-with-cloudflare
+          /">ブログの投稿「このファイルを安全かつ高速にGitHub Pages with CloudFlare」</a>に記載されているように、HTTPSをサポートするプロキシとしてコンテンツ配信ネットワーク（CDN）を使用することができます。
+          HTTPをサポートしている場合は、HTTPトラフィックをHTTPSにリダイレクトすることを強くお勧めします。
+
+'
       discussion:
         description: プロジェクトは、議論（提案された変更や問題を含む）のための1つ以上の検索可能なメカニズムを持たなければならず、メッセージやトピックがURLでアドレス指定され、新しい人々がディスカッションのいくつかに参加できるようにしなければならず、クライアント側でプロプライエタリなソフトウェアのインストールを必要としないようにします。
         details: '受け入れ可能なメカニズムの例には、アーカイブされたメーリングリスト、GitHubのイシューとプルリクエストの議論、Bugzilla、Mantis、Tracなどがあります。非同期ディスカッション
@@ -422,36 +446,73 @@ ja:
 
 '
       repo_public:
-        description:
-        details:
+        description: 'プロジェクトには、公開され、URLを持つ、バージョン管理のソース リポジトリがなければなりません。
+
+'
+        details: 'URLはプロジェクトのURLと同じであってもよいです。プロジェクトは、変更が公開されていない間に（例えば、公開前に脆弱性を修正するため）、特定のケースでプライベート（非公開）ブランチを使用することができます。
+
+'
       repo_track:
-        description:
+        description: 'プロジェクトのソース リポジトリは、どのような変更が行われたのか、誰が変更を行ったのか、いつ変更が行われたのかを追跡しなければなりません。
+
+'
       repo_interim:
-        description:
-        details:
+        description: '共同レビューを可能にするために、プロジェクトのソースリポジトリには、リリース間のレビューのための中間バージョンが含まれなければなりません。最終リリースのみを含めることはできません。
+
+'
+        details: プロジェクトは、公開ソース リポジトリから特定の暫定版を省略することを選択することができます。（たとえば、特定の非公開のセキュリティ脆弱性を修正するものは、公開されないか、または、合法的に投稿できないか、最終リリースに入らないです）
       repo_distributed:
-        description:
-        details:
+        description: 'プロジェクトのソース リポジトリに共通の分散バージョン管理ソフトウェア（gitなど）を使用することを推奨します。
+
+'
+        details: 'Gitが特別に必要とされているわけでなく、プロジェクトでは、集中型バージョン管理ソフトウェア（例：subversion）を正当とする証拠を持って使用できます。
+
+'
       version_unique:
-        description:
-        details:
+        description: 'プロジェクトの結果には、ユーザーが使用することを意図されたリリースごとに固有のバージョン識別子が必要です。
+
+'
+        details: 'これはコミットID（git commit idやmercurial changeset idなど）やバージョン番号（YYYYMMDDのようなセマンティックバージョニングや日付ベースのスキームを使用するバージョン番号を含む）など、さまざまな方法で対応できます。
+
+'
       version_semver:
-        description:
+        description: 'リリースには<a href="http://semver.org"> Semantic Versioning（SemVer）形式</a>を使用することを推奨します。
+
+'
         details:
       version_tags:
-        description:
+        description: 'プロジェクトがバージョン管理システム内の各リリースを特定することが推奨されています。たとえば、gitを使用しているユーザーがgitタグを使用して各リリースを特定することが推奨されています。
+
+'
       release_notes:
-        description:
-        details:
+        description: 'プロジェクトは、各リリースにおいて、ユーザーがアップグレードすべきかどうか、また、アップグレードの影響を判断できるよう、そのリリースの主要な変更の要約を説明したリリースノートを提供しなければなりません（MUST）。リリースノートは、バージョン管理ログの生の出力であってはなりません（例えば、
+          "git log"コマンドの結果はリリースノートではない）。プロジェクトの成果物が複数の場所で再利用されることを意図していないプロジェクト（単独のウェブサイトやサービスのためのソフトウェアなど）で、かつ、継続的・断続的な配布を行う場合は、「該当なし」を選択することができます。
+
+'
+        details: 'リリースノートは様々な方法で実装できます（MAY）。多くのプロジェクトは、 "NEWS"、 "CHANGELOG"、または "ChangeLog"という名前のファイルでそれらを提供し、
+          ".txt"、 ".md"、 ".html"などの拡張子を付けることもあります。歴史的には、 "change log"という言葉は<em>すべての</
+          em>変更のログを意味していましたが、本基準を満たすために必要なものは、人間が読める要約です。リリースノートは代わりに、<a href="https://github.com/blog/1547-release-your-software">
+          GitHubリリースのワークフロー</a>などのバージョン管理システムのメカニズムによって提供してもよい（MAY）。
+
+'
       release_notes_vulns:
-        description:
+        description: 'リリースノートは、新しいリリースごとに修正された、既知の脆弱性をすべて特定しなければなりません。リリースノートがないか、または既知の脆弱性がない場合、これは
+          「該当なし」（N/A）です。
+
+'
       report_process:
-        description:
+        description: 'プロジェクトは、ユーザーが不具合報告を送信するプロセスを提供しなければなりません（たとえば、課題トラッカーやメーリングリストを使用します）。
+
+'
       report_tracker:
-        description:
-        unmet_placeholder:
+        description: 'プロジェクトは、個々の課題を追跡するための課題トラッカーを使用するべきです。
+
+'
+        unmet_placeholder: 課題トラッカーがないのはなぜですか？
       report_responses:
-        description:
+        description: 'このプロジェクトは、過去2〜12か月間に提出された多数のバグ報告の受領を認めなければなりません。応答に修正を含める必要はありません。
+
+'
       enhancement_responses:
         description: 'プロジェクトは、直近2〜12ヶ月（2ヶ月を含む）に増強要求の多数（> 50％）に対応すべきです。
 
@@ -460,49 +521,91 @@ ja:
 
 '
       report_archive:
-        description:
+        description: 'プロジェクトは、後で検索するために、レポートとレスポンスのアーカイブを公開する必要があります。
+
+'
       vulnerability_report_process:
-        description:
+        description: 'プロジェクトは、脆弱性を報告するプロセスをプロジェクト サイトに公開しなければなりません。
+
+'
         details:
       vulnerability_report_private:
-        description:
+        description: 'プライベート脆弱性報告がサポートされている場合、プロジェクトは、プライベートに保持された方法で情報を送信する方法を含んでいなくてはなりません。
+
+'
         details:
       vulnerability_report_response:
-        description:
-        details:
+        description: '過去6ヶ月間に受け取った脆弱性報告に対するプロジェクトの初期応答時間は、14日以下でなければなりません。
+
+'
+        details: '過去6か月間に脆弱性が報告されていない場合は、「該当なし」（N/A）を選択します。
+
+'
       build:
         description: プロジェクトによって作成されたソフトウェアを利用するためにビルドが必要な場合、プロジェクトは、ソース コードからソフトウェアを自動的にリビルドできる作業ビルド
           システムを提供しなければなりません。
         details: ビルドシステムは、ソフトウェアをリビルドするのに必要なアクション（およびその順序）を決定し、それらのステップを実行します。たとえば、ビルドシステムは、ソースコードをコンパイルするためにコンパイラを呼び出すことができます。実行可能ファイルがソースコードから生成される場合、ビルドシステムは、プロジェクトのソースコードを変更でき、その変更を含む更新された実行ファイルを生成できなければなりません。プロジェクトによって生成されたソフトウェアが外部ライブラリに依存する場合、ビルドシステムはそれらの外部ライブラリをビルドする必要は<em>ありません</em>。ソースコードが変更されても、ソフトウェアを使用するためにビルドする必要がない場合、「該当なし」（N/A）を選択します。
       build_common_tools:
         description: ソフトウエアをビルドするために、一般的なツールを使用することをお勧めします。
-        details: たとえば、Maven、Ant、cmake、rakeです。
+        details: 'たとえば、Maven、Ant、cmake、autotools、make、rakeなどです。
+
+'
       build_floss_tools:
         description: プロジェクトは、FLOSSツールだけを使用してビルドができるようにするべきです。
       test:
-        description:
-        details:
+        description: 'プロジェクトは、FLOSSとして公開されている少なくとも1つの自動化されたテスト スイートを使用しなければなりません（このテストスイートは、別のFLOSSプロジェクトとして維持することができます）。
+
+'
+        details: 'プロジェクトでは、複数の自動化されたテストスイートを使用することができます（たとえば、迅速に実行するもの、より完全であるが特別な装置が必要なもの）。
+
+'
       test_invocation:
-        description:
-        details:
+        description: 'テスト スイートは、その言語の標準的な方法で呼び出すことができるべきです。
+
+'
+        details: 'たとえば、「make check」、「mvn test」、「rake test」などです。
+
+'
       test_most:
-        description:
+        description: 'テスト スイートは、コードブランチ、入力フィールド、および機能のほとんど（または理想的にはすべて）をカバーすることが推奨されています。
+
+'
       test_continuous_integration:
-        description:
+        description: 'プロジェクトは、継続的インテグレーション（新しいコードまたは変更されたコードが頻繁に中央コードリポジトリに統合され、その結果に対して自動テストが実行される）を実装することを推奨されています。
+
+'
       test_policy:
-        description:
-        details:
+        description: 'プロジェクトは、プロジェクトで作成されたソフトウェアに主要な新機能が追加されたときに、その機能のテストを自動化されたテスト
+          スイートに追加する必要があるという一般的な方針（正式でも、正式でなくても構いません）を持っていなければなりません。
+
+'
+        details: '開発者はテストを自動テスト スイートに追加して、新しい機能を追加する必要があるというポリシーが、口頭でも（文書化されていなくても）、存在する限り、「満たしている」を選択してください。
+
+'
       tests_are_added:
-        description:
-        details:
+        description: 'プロジェクトによって作成されたソフトウェアの最新の大きな変更で、テストを追加するための<a href="#test_policy">
+          test_policy </a>が守られているという証拠がプロジェクトに存在しなければなりません。
+
+'
+        details: '主要な機能は、通常、リリースノートに記載されます。完璧は必要ないですが、プロジェクトによって生成されたソフトウェアに新しい主要機能が追加されたときに、自動テスト
+          スイートに実際にテストが追加されているという証拠となります。
+
+'
       tests_documented_added:
-        description:
-        details:
+        description: 'テストを追加するこのポリシー（<a href="#test_policy"> test_policy </a>を参照）を変更提案に関する手順で<em>文書化</
+          em>することを推奨します。
+
+'
+        details: 'しかし、実際にテストが追加されている限り、非公式の規則でも許容されます。
+
+'
       warnings:
         description:
         details:
       warnings_fixed:
-        description:
+        description: 'プロジェクトは警告を出さなければならない。
+
+'
         details:
       warnings_strict:
         description:
@@ -571,10 +674,14 @@ ja:
         description: 暗号ハッシュ（たとえばSHA1SUM）は、http経由で運んではならず、暗号署名をチェックすることなしに使用してはいけません。
         details: これらのハッシュは、送信中に変更することができます。
       vulnerabilities_fixed_60_days:
-        description:
+        description: '60日を超えて公的に知られている中程度または重大度のパッチされていない脆弱性は存在してはなりません。
+
+'
         details:
       vulnerabilities_critical_fixed:
-        description:
+        description: 'プロジェクトは、すべての重要な脆弱性を、報告された後迅速に修正するべきです。
+
+'
       no_leaked_credentials:
         description: '公開リポジトリは、パブリックアクセスを制限するための有効なプライベートクレデンシャル（たとえば、有効なパスワードやプライベートキー）を漏らしてはなりません。
 
@@ -583,17 +690,44 @@ ja:
 
 '
       static_analysis:
-        description:
-        details:
-        na_placeholder:
-        met_placeholder:
+        description: '選択した言語でこの基準を実装している少なくとも1つのFLOSSツールがある場合、少なくとも1つの静的コード解析ツールを、リリース前にソフトウェアの主要な製品リリースに適用する必要があります。
+
+'
+        details: '静的コード解析ツールは、ソフトウェアコードを実行せずに特定の入力を用いて（ソースコード、中間コード、または実行可能ファイルとして）調べます。この基準のために、コンパイラの警告と「安全な」言語モードは、静的コード解析ツールとしてカウントされません（これらは通常、速度が重要なため深い解析を行いません）。このような静的コード解析ツールの例には、<a
+          href="http://cppcheck.sourceforge.net/"> cppcheck </a>、<a href="http://clang-analyzer.llvm.org/">
+          clangスタティックアナライザ</a>、<a href="http://findbugs.sourceforge.net/"> FindBugs
+          </a>（<a href = "https://h3xstream.github.io/find-sec-bugs/">FindSecurityBugs</a>を含む）、<a
+          href="https://pmd.github.io/"> PMD </a>、<a href="http://brakemanscanner.org/">
+          Brakeman </a>、<a href="https://scan.coverity.com/"> Coverity Quality Analyzer
+          </a>、および<a href = "http://www8.hp.com/au/en /software-solutions/static-code-analysis-sast/index.html">
+          HP Fortify静的コードアナライザー</a>。大きなツールのリストは、<a href="https://en.wikipedia.org/wiki/List_of_tools_for_static_code_analysis">静的コード解析のためのWikipediaツール一覧</a>、<a
+          href = "https://www.owasp.org/index.php/Static_Code_Analysis">静的コード解析に関するOWASP情報</a>、<a
+          href = "http://samate.nist.gov/index.php/Source_Code_Security_Analyzers.html
+          "> NISTソースコードセキュリティアナライザのリスト</a>、<a href="http://www.dwheeler.com/essays/static-analysis-tools.html">ウィーラーの静的解析ツール一覧</
+          a >。 <a href="https://continuousassurance.org/"> SWAMP </a>は、さまざまなツールを使用してソフトウェアの脆弱性を評価する無償のプラットフォームです。使用する実装言語で使用できるFLOSS静的解析ツールがない場合は、「該当なし」（N/A）を選択します。
+
+'
+        na_placeholder: 'これが満たされないのはなぜですか（たとえば、その言語用のFLOSSツールがないから）？
+
+'
+        met_placeholder: 'どのような静的解析ツールを使用していますか？
+
+'
       static_analysis_common_vulnerabilities:
-        description:
+        description: 'static_analysis基準に使用される静的解析ツールの少なくとも1つが、分析された言語または環境における共通の脆弱性を探すためのルールまたはアプローチを含むことが、推奨されています。
+
+'
       static_analysis_fixed:
-        description:
-        details:
+        description: '静的コード解析で発見された中程度および重大度の悪用可能な脆弱性はすべて、それらが確認された後、適時に修正されなくてはなりません。
+
+'
+        details: '<a href="https://nvd.nist.gov/cvss.cfm"> CVSS 2.0 </a>が4以上の場合、脆弱性は中〜高程度です。
+
+'
       static_analysis_often:
-        description:
+        description: '静的ソースコード解析は、コミットごと、または少なくとも毎日実行することをお勧めします。
+
+'
       dynamic_analysis:
         description: 'リリース前に、ソフトウェアの主要な製品リリースに少なくとも1つの動的解析ツールを適用することが示唆されています。
 
@@ -816,7 +950,7 @@ ja:
         description:
         details:
       achieve_passing:
-        description:
+        description: プロジェクトは合格レベルバッジに達成しなければならない。
     '2':
       bus_factor:
         description:
@@ -924,28 +1058,30 @@ ja:
     Analysis:
     Automated test suite:
     Basic project website content:
-    Basics:
-    Bug-reporting process:
-    Change Control:
-    Coding standards:
-    Documentation:
-    Dynamic code analysis:
-    Externally-maintained components:
-    Future:
+    Basics: 基本的情報
+    Bug-reporting process: バグ報告プロセス
+    Change Control: 変更管理
+    Coding standards: コーディング標準
+    Documentation: ドキュメンテーション
+    Dynamic code analysis: 動的コード分析
+    Externally-maintained components: 外部で維持管理されるコンポーネント
+    Future: 今後予定される基準
     future:
-    Installation system:
-    New functionality testing:
-    OSS License:
-    Other:
-    Other security issues:
-    Previous versions:
-    Project oversight:
-    Public version-controlled source repository:
-    Publicly known vulnerabilities fixed:
-    Quality:
-    Release notes:
-    Reporting:
-    Secure development knowledge:
+    Installation system: インストールシステム
+    New functionality testing: 新機能テスト
+    OSS License: OSSライセンス
+    Other: その他
+    Other security issues: その他のセキュリティ上の課題
+    Previous versions: 以前のバージョン
+    Project oversight: プロジェクトの管理・運営
+    Public version-controlled source repository: 公開されたバージョン管理ソースリポジトリ
+    Publicly known vulnerabilities fixed: '広く知らた脆弱性を修正
+
+'
+    Quality: 品質
+    Release notes: リリースノート
+    Reporting: 報告
+    Secure development knowledge: セキュリティに関する開発知識
     Secure release:
     Secured delivery against man-in-the-middle (MITM) attacks:
     Security:
@@ -955,7 +1091,7 @@ ja:
     Vulnerability report process:
     Warning flags:
     Working build system:
-    Identification:
+    Identification: 識別
   last_entry:
   admin_only: 管理者のみ。
   criterion_status:

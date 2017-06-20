@@ -101,7 +101,10 @@ class Criteria
   def description
     key = "criteria.#{level}.#{name}.description"
     return nil unless I18n.exists?(key)
-    I18n.t(key)
+    # Descriptions only come from trusted data source, so we can safely disable
+    # rubocop:disable Rails/OutputSafety
+    I18n.t(key).html_safe
+    # rubocop:enable Rails/OutputSafety
   end
 
   def details

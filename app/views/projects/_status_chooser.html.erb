@@ -83,8 +83,9 @@
                      details: criterion.details.html_safe})
         end %>
     <% if (is_disabled) %>
-      <% if project_criterion_justification %>
-        <% cache ['markdown', project_criterion_justification] do %>
+      <% if project_criterion_justification&.presence %>
+        <% cache ['markdown', project.id, criterion.to_s,
+                  project.lock_version] do %>
           <div class="justification-markdown">
             <%= markdown(project_criterion_justification) %>
           </div>

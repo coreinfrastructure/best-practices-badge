@@ -132,13 +132,13 @@ Here is a summary of the silver criteria, with requirements in bold
 * *["Bus factor" of 2 or more](doc/other.md#bus_factor)*
 * **[Document security requirements](doc/other.md#security_requirements)**
 * **[Have an assurance case explaining why security requirements are met](doc/other.md#assurance_case)**
-* **[Have a "quick start" guide](doc/other.md#documentation_quick_start)**
+* **[Have a quick start guide](doc/other.md#documentation_quick_start)**
 * *[Follow accessibility best practices](doc/other.md#accessibility_best_practices)*
 * **[Pick & follow coding standards](doc/other.md#coding_standards)**
 * **[Monitor external dependencies to detect/fix known vulnerabilities](doc/other.md#dependency_monitoring)**
 * **[Tests have 80%+ statement coverage](doc/other.md#test_statement_coverage80)**
 * **[Project releases for widespread use are cryptographically signed](doc/other.md#signed_releases)**
-* **[Check all inputs from potentially untrusted sources for validity (a "whitelist")](doc/other.md#input_validation)**
+* **[Check all inputs from potentially untrusted sources for validity (using a whitelist)](doc/other.md#input_validation)**
 * *[Use hardening mechanisms](doc/other.md#hardening)*
 
 ### Gold

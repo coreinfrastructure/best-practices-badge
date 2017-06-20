@@ -41,7 +41,7 @@
                 <li><a href="<%=
                   # TODO: This doesn't include the anchor.
                   force_locale_url(request.original_url, loc)
-                  %>"><%= t("locale_name.#{loc}") %></a>
+                  %>"><%= t("locale_name.#{loc} (#{loc})") %></a>
                 </li>
               <% end %>
             </ul>

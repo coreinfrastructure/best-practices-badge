@@ -247,18 +247,29 @@ ja:
         placeholder: FLOSSプロジェクト名
       description:
         description: プロジェクトを簡単に説明してください。
-        details:
-        placeholder:
+        details: 'プロジェクトに関して鍵となるコメントを含めてください。Markdown書式を使用します。この情報は、バッジ情報を表示するときに使用されます。
+
+'
+        placeholder: プロジェクトの説明
       homepage_url:
-        description:
-        placeholder:
+        description: プロジェクト全体のURLは？
+        placeholder: プロジェクトWebサイトのURL
       repo_url:
-        description:
+        description: 'バージョン管理リポジトリのURLは何ですか（プロジェクトURLと同じでもかまいません）。
+
+'
         placeholder: プロジェクトのリポジトリURL
       implementation_languages:
-        description:
-        details:
-        placeholder:
+        description: 'どのようなプログラミング言語を使ってプロジェクトを実装していますか？
+
+'
+        details: '複数の言語がある場合は、コンマを区切り（スペースを入れてもよい）としてリストし、使用頻度の高いものから順に並べます。使用言語が多くある場合は、少なくとも最初の3つの最も多く使われるものをリストアップしてください。言語がない場合（例：ドキュメントだけ、またはテスト専用のプロジェクトの場合）、1文字
+          " - "を使用します。言語ごとにある大文字・小文字の慣用を踏襲してください（例：「JavaScript」）。
+
+'
+        placeholder: '使用された実装言語（コンマで区切られたリスト、使用量によってソート）
+
+'
       cpe:
         description_html: 'プロジェクトの<a href="https://nvd.nist.gov/cpe.cfm"> Common Platform
           Enumeration（CPE）</a>名は何ですか？
@@ -269,9 +280,15 @@ ja:
 '
         placeholder: "（オプション）CPE名"
       license:
-        description_html:
-        details_html:
-        placeholder:
+        description_html: 'プロジェクトのライセンスはどのようなものですか？
+
+'
+        details_html: '<a href="https://spdx.org/licenses/"> SPDXライセンスの表現形式</a>を使用してください。
+          例：「Apache-2.0」、「BSD-2-Clause」、「BSD-3-Clause」、「GPL-2.0 +」、「LGPL-3.0 +」、「MIT」、「(BSD-2-Clause
+          OR Ruby)」
+
+'
+        placeholder: FLOSSライセンス
     form_early:
       badge_intro:
         description:
@@ -562,12 +579,17 @@ ja:
         description: 'プロジェクトは、脆弱性を報告するプロセスをプロジェクト サイトに公開しなければなりません。
 
 '
-        details:
+        details: 'たとえば、https：// PROJECTSITE / securityの明示的に指定されたメール アドレスで、これはしばしばsecurity@example.orgの形式です。これはバグ報告プロセスと同じかもしれません。脆弱性レポートは常に公開される可能性がありますが、多くのプロジェクトでは、プライベート脆弱性を報告するメカニズムがあります。
+
+'
       vulnerability_report_private:
         description: 'プライベート脆弱性報告がサポートされている場合、プロジェクトは、プライベートに保持された方法で情報を送信する方法を含んでいなくてはなりません。
 
 '
-        details:
+        details: '例としては、HTTPS（TLS）を使用してWeb上に提出されたプライベート不具合報告や、OpenPGPを使用して暗号化された電子メールがあります。脆弱性報告が常に公開されている場合（プライベート脆弱性報告は存在しないため）、「該当なし」（N
+          / A）を選択します。
+
+'
       vulnerability_report_response:
         description: '過去6ヶ月間に受け取った脆弱性報告に対するプロジェクトの初期応答時間は、14日以下でなければなりません。
 
@@ -634,16 +656,27 @@ ja:
 
 '
       warnings:
-        description:
-        details:
+        description: |
+          プロジェクトは、選択した言語でこの基準を実装することができる少なくとも1つのFLOSSツールがあれば、1つまたは複数のコンパイラ警告フラグ、「安全」言語モードを使用可能にするか、分離
+          「リンター」ツールを使用してコード品質エラーまたは共通の単純なミスを検索しなければなりません。
+        details: 'コンパイラ警告フラグの例には、gcc / clang "-Wall"があります。 「安全」言語モードの例には、JavaScript「use
+          strict」とperl5の「use warnings」があります。分離「リンター」ツールは、ソースコードを調べてコード品質のエラーや一般的な単純なミスを探すツールです。これらは、通常、ソースコードまたはビルド命令内で有効になります。
+
+'
       warnings_fixed:
         description: 'プロジェクトは警告を出さなければならない。
 
 '
-        details:
+        details: 'これらは、<a href="#warnings">警告</a>基準の実装によって識別される警告です。プロジェクトは、警告を修正するか、ソースコード内で警告を誤検出としてマークするべきです。理想的には警告がないことがいいですが、プロジェクトはある程度の警告（通常100行あたり1警告未満または10警告未満）を受け入れることができます。
+
+'
       warnings_strict:
-        description:
-        details:
+        description: 'プロジェクトによって作成されたソフトウェアにある警告に、実際的な場合には、最大限に厳格になることを推奨されています。
+
+'
+        details: '一部の警告は、あるプロジェクトでは効果的に有効にすることはできません。必要なのは、プロジェクトが可能な限り警告フラグを有効にするように努力しており、エラーが早期に検出されるという証拠です。
+
+'
       know_secure_design:
         description: 'プロジェクトには、セキュアなソフトウェアを設計する方法を知っている少なくとも1人の主要開発者がいなければなりません。
 
@@ -711,7 +744,14 @@ ja:
         description: '60日を超えて公的に知られている中程度または重大度のパッチされていない脆弱性は存在してはなりません。
 
 '
-        details:
+        details: '脆弱性は、プロジェクト自体によってパッチされ、リリースされなければなりません（パッチは他の場所で開発される可能性があります）。脆弱性が無料情報と共にCVE（共通脆弱性識別子）を持つとき（例えば、<a
+          href="https://nvd.nist.gov/"> National Vulnerability Database </a>）、またはプロジェクトに情報が伝えられ、その情報が（おそらくプロジェクトによって）一般に公開されたとき、脆弱性は一般に知られるようになります。<a
+          href="https://nvd.nist.gov/cvss.cfm"> CVSS 2.0 </a>の基本スコアが4以上の場合、脆弱性は中〜高程度です。
+          <strong>注</ strong>：これは、世界中のすべての攻撃者にユーザーが60日間まで脆弱である可能性があることを意味します。この基準は、<a
+          href="https://security.googleblog.com/2010/07/rebooting-responsible-disclosure-focus.html">責任のある開示の再開</a>でGoogleが推奨するものよりも、しばしば満たすことが容易です。なぜなら、レポートが公開されていないとき<em>でも</
+          em>、プロジェクトに通知されてから60日間の期間が開始されるからです。
+
+'
       vulnerabilities_critical_fixed:
         description: 'プロジェクトは、すべての重要な脆弱性を、報告された後迅速に修正するべきです。
 
@@ -856,7 +896,10 @@ ja:
         description:
         details:
       access_continuity:
-        description:
+        description: 'いずれかの人が仕事を継続できなくなるまたは死亡した場合、プロジェクトは最小限の中断で継続することができなければなりません。特に、プロジェクトは、課題の作成と終了、提案された変更の受け入れ、およびバージョンのソフトウェアのリリース、1週間内に個人が仕事を継続できくなったことまたは死亡したことの確認、行うことができなければならない。これは、他の誰かがプロジェクトを継続するのに必要な鍵、パスワード、法的権利を持っていることを保証することによって行うことができます。
+          FLOSSプロジェクトを実行する個人は、ロックボックスにキーを提供し、必要な法的権利を提供する意志（例えば、DNS名のために）を提供することによって、これを行うことができます。
+
+'
       bus_factor:
         description:
         details:
@@ -879,7 +922,9 @@ ja:
         description:
         details:
       accessibility_best_practices:
-        description:
+        description: 'プロジェクト（プロジェクト サイトとプロジェクト結果の両方）は、アクセシビリティのベストプラクティスに従い、障害のある人が引き続きプロジェクトに参加し、プロジェクトの結果を合理的な範囲で使用することができるようにするべきです。
+
+'
         details:
       internationalization:
         description:
@@ -909,7 +954,10 @@ ja:
         description:
         details:
       build_non_recursive:
-        description:
+        description: 'プロジェクトによって作成されたソフトウェアのビルド システムは、サブディレクトリに相互依存関係がある場合、再帰的にサブディレクトリをビルドしてはなりません。ビルドやインストール
+          システムがない場合（例：一般的なJavaScriptライブラリ）は、「該当なし」（N/A）を選択します。
+
+'
         details:
       build_repeatable:
         description:
@@ -934,8 +982,13 @@ ja:
       interfaces_current:
         description:
       automated_integration_testing:
-        description:
-        details:
+        description: '少なくとも1つのブランチの共有リポジトリへの各チェックインに対して、自動テスト スイートが適用される必要があります。このテスト
+          スイートは、テストの成功または失敗に関するレポートを生成しなければなりません。
+
+'
+        details: 'この要件は、test_continuous_integrationのサブセットと見ることができますが、継続的な統合を範囲外として、テストだけに焦点を当てています。
+
+'
       regression_tests_added50:
         description:
       test_statement_coverage80:
@@ -981,7 +1034,9 @@ ja:
       dynamic_analysis_unsafe:
         description:
       assurance_case:
-        description:
+        description: 'プロジェクトは、そのセキュリティ要件が満たされていることを証明する保証ケースを提供しなければならない。保証ケースには、脅威モデルの説明、信頼境界の明確な識別、セキュアな設計原則が適用されていることの議論、共通の実装セキュリティの弱点が対処されたことの議論が含まれなければならない。
+
+'
         details:
       achieve_passing:
         description: プロジェクトは合格レベルバッジに達成しなければなりません。

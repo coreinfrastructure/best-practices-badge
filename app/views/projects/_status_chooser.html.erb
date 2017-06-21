@@ -5,10 +5,11 @@
 
  cache ['buttons', criterion.to_s, criteria_level, is_disabled, locale,
         project_criterion_status ] do
-   passing_class = ''
-   if criterion_result == :criterion_passing && is_disabled
-     passing_class = ' criterion-passing'
-   end
+   passing_class = if (criterion_result == :criterion_passing && is_disabled)
+                     ' criterion-passing'
+                   else
+                     ''
+                   end
 %>
   <div id="<%= criterion.to_s %>" class="row criterion-data<%= passing_class %>">
     <% is_crypto = criterion.to_s.match(/^crypto_/)

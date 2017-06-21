@@ -36,13 +36,20 @@ class TranslationsTest < ActiveSupport::TestCase
     Loofah.fragment(x).scrub!(regularizer).to_s
   end
 
-  # Return first unacceptable HTML in x (recursively), else nil
+  # Return true if x is a "simple" (non-compound) non-string type
+  def simple_type(x)
+    x.is_a?(Symbol) || x.is_a?(Numeric) || x.in?([true, false, nil]) ||
+      x.is_a?(Proc)
+  end
+
+  # Return first unacceptable HTML in x (recursively), else (nil|false)
   # To recurse we really want kind_of?, not is_a?, so disable rubocop rule
-  # rubocop:disable Style/ClassCheck
+  # rubocop:disable Style/ClassCheck, Metrics/MethodLength
   def find_unacceptable_html(x)
     if x.kind_of?(Array) || x.kind_of?(Hash)
       x.find { |part| find_unacceptable_html(part) }
     elsif x.kind_of?(String) # includes safe_html
+      return nil unless x.include?('<') # Can't be a problem, no '<'
       # Text considered okay if the results of "sanitizing" it are
       # same as when we simply "regularize" the text without sanitizing it.
       sanitized = sanitize_html(x)
@@ -51,12 +58,11 @@ class TranslationsTest < ActiveSupport::TestCase
         p "Unacceptable HTML.\nSan=<#{sanitized}>\nReg=<#{regularized}>"
       end
       sanitized != regularized
-      # else
-      # x.is_a?(Symbol) || x.is_a?(Numeric) || x.in?([true, false, nil]) ||
-      # x.is_a?(Proc)
+    else
+      !simple_type(x) # Require that it be simple: symbol, number, etc.
     end
   end
-  # rubocop:enable Style/ClassCheck
+  # rubocop:enable Style/ClassCheck, Metrics/MethodLength
 
   test 'All text values (all locales) include only acceptable HTML' do
     I18n.available_locales.each do |loc|

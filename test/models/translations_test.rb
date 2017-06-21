@@ -48,7 +48,7 @@ class TranslationsTest < ActiveSupport::TestCase
       sanitized = sanitize_html(x)
       regularized = regularize_html(x)
       if sanitized != regularized
-        p "Unacceptable HTML.\nSan=<#{sanitized}>\nReg=#{regularized}"
+        p "Unacceptable HTML.\nSan=<#{sanitized}>\nReg=<#{regularized}>"
       end
       sanitized != regularized
       # else

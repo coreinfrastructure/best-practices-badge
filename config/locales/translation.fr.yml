@@ -677,7 +677,7 @@ fr:
     en: Anglais / English (en)
     fr: Français (fr)
     zh-CN: Chinois (simplifié) / 简体 中文 (zh-CN)
-    de: Allemand / Deutsche (de)
+    de: Allemand / Deutsch (de)
     ja: Japonais / 日本語 (ja)
     ru: Russe / русский язык (ru)
   criteria:
@@ -2329,7 +2329,7 @@ fr:
 
 '
       achieve_passing:
-        description:
+        description: Le projet DOIT atteindre un badge de niveau basique.
     '2':
       bus_factor:
         description: Le projet DOIT avoir un « facteur bus » de 2 ou plus.
@@ -2551,7 +2551,7 @@ fr:
 
 '
       achieve_silver:
-        description:
+        description: Le projet DOIT atteindre un badge de niveau argent.
   static_pages:
     home:
       badge_program: Programme de badge des meilleures pratiques de la CII

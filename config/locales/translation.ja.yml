@@ -13,7 +13,7 @@ ja:
       create: 登録する
       update: 更新する
       submit: 保存する
-  hello:
+  hello: Hello world
   submit: 送信
   projects_count:
     one: "%{count} プロジェクト"
@@ -22,10 +22,10 @@ ja:
     few: "%{count} プロジェクト"
     many: "%{count} プロジェクト"
   feed_title:
-  project_name_unknown:
+  project_name_unknown: "（名前不明）"
   locale_name:
     en: 英語 / English (en)
-    de: ドイツ語 / Deutsche (de)
+    de: ドイツ語 / Deutsch (de)
     fr: フランス語 / Français (fr)
     ja: 日本語 (ja)
     zh-CN: 中国語 (簡体字) / 简体中文 (zh-CN)
@@ -40,28 +40,28 @@ ja:
     logout_html: <span class = "glyphicon glyphicon-log-out"></span> ログアウト
     signup_html: <span class = "glyphicon glyphicon-user"></span> サインアップ
     login_html: <span class = "glyphicon glyphicon-log-in"></span> ログイン
-    footer_text_html: <small> <strong>疑問、質問、または問題のある方は<em> <a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">電子メールで報告する</a></
+    footer_text_html: <small> <strong>疑問、質問、または問題がある場合は<em> <a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">電子メールで報告する</a></
       em>か、<em> <a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
       target="_blank">こちらから問題を提出</a></ em>してください。</strong>  © 2015-2017 <a href="https://www.coreinfrastructure.org/
       target="_blank">Core Infrastructure Initiative</a>, a <a href="https://www.linuxfoundation.org/"
       target="_blank">Linux Foundation</a> Collaborative Project. All Rights Reserved.
       <a href="https://www.linuxfoundation.jp/privacy" target="_blank">プライバシー ポリシー</a>
       と<a href="https://www.linuxfoundation.jp/terms" target="_blank">利用条件</a>を必ずお読みください。</small>
-    choose_locale: ロケールを選択する
+    choose_locale: 言語を選択する
   account_activations:
     activated: アカウントが有効になりました！
     failed_activation: 無効なアクティベーション リンクです
   password_resets:
-    forgot_password:
-    reset_password:
-    password_confirmation:
+    forgot_password: パスワードを忘れた方はこちら
+    reset_password: パスワードをリセットしてください
+    password_confirmation: 確認
     email_not_found: 電子メール アドレスが見つかりません
-    password_empty:
-    password_reset:
-    instructions_sent:
-    cant_reset_nonlocal:
-    reset_expired:
-    update_password:
+    password_empty: パスワードを空にすることはできません
+    password_reset: パスワードがリセットされました
+    instructions_sent: パスワードリセットの方法が電子メールで送信されました
+    cant_reset_nonlocal: 申し訳ありませんが、ローカル以外のユーザーのパスワードをリセットすることはできません
+    reset_expired: パスワードのリセットは期限切れです
+    update_password: パスワードを更新してください
   sessions:
     login_header: ログイン
     login_with_github_html: <span class="fa fa-github"></span> GitHub でログインする
@@ -119,33 +119,53 @@ ja:
     please_log_in: ログインしてください。
   project_stats:
     index:
-      project_stats_header: プロジェクトの統計値
+      project_stats_header: プロジェクトの統計
       all_projects: すべてのプロジェクト
-      projects_nontrivial:
-      projects_activity_30:
-      daily_activity:
-      reminders:
-      active_projects:
-      active_in_progress:
-      active_edited:
-      active_edited_in_progress:
-      projects_created_since_yesterday:
-      projects_updated_since_yesterday:
-      projects_created_average_7_days:
-      projects_updated_average_7_days:
-      reminders_sent_since_yesterday:
-      reactivated_projects:
-      admin_html:
-      raw_data:
-      json_format:
+      projects_nontrivial: 顕著な進捗状況のプロジェクト
+      projects_activity_30: 過去30日以内にバッジ申請を行ったプロジェクト
+      daily_activity: 毎日のバッジ申請状況
+      reminders: リマインダー
+      active_projects: 活動中プロジェクト（30日以内に登録/更新）
+      active_in_progress: '進行中のプロジェクト（30日以内に登録/更新）
+
+'
+      active_edited: '編集作業中プロジェクト（30日以内に更新）
+
+'
+      active_edited_in_progress: '編集作業中の進行中プロジェクト（30日以内に更新）
+
+'
+      projects_created_since_yesterday: 前日以降のプロジェクト登録数
+      projects_updated_since_yesterday: 前日以降のプロジェクト更新数
+      projects_created_average_7_days: 'プロジェクト登録数の7日間平均
+
+'
+      projects_updated_average_7_days: 'プロジェクト更新数の7日間平均
+
+'
+      reminders_sent_since_yesterday: '昨日以降に送信されたリマインダー
+
+'
+      reactivated_projects: 'リマインダー受信後14日以内に再活性化したプロジェクト
+
+'
+      admin_html: '管理者は、<a href="/reminders">リマインダーに関する詳細情報</a>も参照できます。
+
+'
+      raw_data: '生データを見ることもできます：
+
+'
+      json_format: JSON形式
       csv_format: ダウンロード可能なCSV形式
-      projects_created_updated_daily:
+      projects_created_updated_daily: "「前日以降のプロジェクト登録数」というデータは、指定された日時から24時間以内に登録されたプロジェクトの数です（同じ24時間内に削除されたプロジェクトは含まれません）。同様に、
+        「前日以降に編集されたプロジェクト」というデータは、指定された日時から24時間以内に編集されたプロジェクトの数です（24時間以内に作成または削除されたプロジェクトは含まれません）。
+        7日間平均は、対応するデータの7日間平均値を示す。凡例で色を選択して、対応するデータを非表示にすることができます。\n"
   projects:
     index:
       add_link: 追加
       add_new: プロジェクトを追加
       badge_status: バッジ ステータス
-      exclude_passing: 合格プロジェクト以外
+      exclude_passing: 合格プロジェクトを除外する
       text_search: テキスト検索
       name_or_description:
       search: 検索
@@ -161,13 +181,13 @@ ja:
       owner: オーナー
       last_achieved: 最終達成日時
       pachieved: 達成率
-      can_also_sort:
+      can_also_sort: 次の条件でソートすることもできます。
       repository_url: リポジトリのURL
       create_time: 作成日時 (バッジ エントリの)
       update_time: 最終更新日時（バッジ エントリの）
       user_id: ユーザーID
       paren_name_unknown:
-      badge_level:
+      badge_level: プロジェクト %{id} のバッジレベルは %{percent}％ です
     new:
       post_delay_warning:
       new_badge: 新しいバッジ
@@ -199,16 +219,27 @@ ja:
       last_lost_html:
       last_achieved_html:
     edit:
-      submit_cc_by_3plus_html:
-      save_and_continue:
-      submit_and_exit:
-      repo_url_limits:
-      changed_since_html:
-      successfully_updated:
-      congrats_new:
-      lost_badge:
-      static_analysis_updated_html:
-      edit_status:
+      submit_cc_by_3plus_html: 'プロジェクトに関するこのデータを送信することにより、少なくとも、<a href="https://creativecommons.org/licenses/by/3.0/us"
+        target="_blank">クリエイティブ・コモンズ帰属バージョン3.0以降（CC-BY-3.0 +）</a>のライセンス条件によって公開することに同意したことになります。つまり、すべての人が自由にデータを共有し、修正することができますが、適切なクレディットを表示します。あなたが保有する著作権に影響はありません。プロジェクトライセンスにも影響はありません。<br>
+        <br>
+
+'
+      save_and_continue: 保存する（そして続行する）
+      submit_and_exit: 送信（および終了）
+      repo_url_limits: 'repo_urlは、httpからhttpsに変更することしかできません
+
+'
+      changed_since_html: '別のユーザーが、編集フォームにアクセスして、そのレコードに変更を加えました。 <br>変更を送信するには、新しい<a
+        href="%{edit_url} "target = _blank>編集フォーム</a>を開いてください。
+
+'
+      successfully_updated: プロジェクトは正常に更新されました
+      congrats_new: "%{new_badge_level}バッジ獲得、おめでとうございます！まだ表示を行っていないければ、プロジェクトのバッジステータスをプロジェクトページに表示してください（その方法は、下の「表示の方法」のテキストをご覧ください）。\n"
+      lost_badge: プロジェクトはバッジを失いました
+      static_analysis_updated_html: '<a href="#static_analysis"> static_analysis </a>基準の要件を更新しました。この基準への適合性を追加してください。
+
+'
+      edit_status: プロジェクトのバッジステータスを表示する
     form_basics:
       project_name:
         description: プロジェクトの名前(判読可能な)は何ですか？
@@ -297,7 +328,7 @@ ja:
       url_required_warning:
       justification_required_warning:
     delete:
-      done:
+      done: プロジェクトは正常に削除されました
   report_mailer:
     new_project_heading:
     new_project_part1:
@@ -320,7 +351,7 @@ ja:
     account_activation:
       before_html:
       before_text:
-      activate:
+      activate: アクティベート
       subject:
     github_welcome:
       before_html:
@@ -479,7 +510,10 @@ ja:
         description: 'リリースには<a href="http://semver.org"> Semantic Versioning（SemVer）形式</a>を使用することを推奨します。
 
 '
-        details:
+        details: 'コミットID（git commit idやmercurial changeset idなど）やYYYYMMDDなどの日付ベースのスキームなどの他のバージョン番号付けスキームは、一意であるためバージョン番号として使用される場合があります。いくつかの選択肢は問題を引き起こす可能性があります。ユーザーは最新のものかどうかを簡単に判断できない可能性があるからです。
+          SemVerは、すべての受信者が最新のバージョンのみを実行している場合（たとえば、継続的な配信を介して常に更新されている単一のWebサイトまたはインターネットサービスのコード）ソフトウェアリリースを特定するのにはあまり役立ちません。
+
+'
       version_tags:
         description: 'プロジェクトがバージョン管理システム内の各リリースを特定することが推奨されています。たとえば、gitを使用しているユーザーがgitタグを使用して各リリースを特定することが推奨されています。
 
@@ -950,7 +984,7 @@ ja:
         description:
         details:
       achieve_passing:
-        description: プロジェクトは合格レベルバッジに達成しなければならない。
+        description: プロジェクトは合格レベルバッジに達成しなければなりません。
     '2':
       bus_factor:
         description:
@@ -1066,7 +1100,7 @@ ja:
     Dynamic code analysis: 動的コード分析
     Externally-maintained components: 外部で維持管理されるコンポーネント
     Future: 今後予定される基準
-    future:
+    future: 今後予定される基準
     Installation system: インストールシステム
     New functionality testing: 新機能テスト
     OSS License: OSSライセンス
@@ -1075,24 +1109,24 @@ ja:
     Previous versions: 以前のバージョン
     Project oversight: プロジェクトの管理・運営
     Public version-controlled source repository: 公開されたバージョン管理ソースリポジトリ
-    Publicly known vulnerabilities fixed: '広く知らた脆弱性を修正
+    Publicly known vulnerabilities fixed: '広く知られた脆弱性を修正
 
 '
     Quality: 品質
     Release notes: リリースノート
     Reporting: 報告
     Secure development knowledge: セキュリティに関する開発知識
-    Secure release:
-    Secured delivery against man-in-the-middle (MITM) attacks:
-    Security:
-    Static code analysis:
-    Unique version numbering:
-    Use basic good cryptographic practices:
-    Vulnerability report process:
-    Warning flags:
-    Working build system:
-    Identification: 識別
-  last_entry:
+    Secure release: 公開物の安全性
+    Secured delivery against man-in-the-middle (MITM) attacks: MITM（man-in-the-middle：中間者）攻撃に対応できる安全な配信
+    Security: セキュリティ
+    Static code analysis: 静的コード解析
+    Unique version numbering: 一意的なバージョン番号
+    Use basic good cryptographic practices: 優良な暗号手法を使用する
+    Vulnerability report process: 脆弱性報告プロセス
+    Warning flags: 警告フラグ
+    Working build system: 実動ビルドシステム
+    Identification: 識別情報
+  last_entry: 最後の翻訳エントリ
   admin_only: 管理者のみ。
   criterion_status:
     Met:

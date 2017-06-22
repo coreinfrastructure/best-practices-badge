@@ -1,36 +1,22 @@
+dependencies:
+  override:
+   - sudo apt-get update
+database:
+  override:
+    - echo "Skipping DB section"
 test:
   pre:
+    - ./install-badge-dev-env
     - "[[ ! -s \"$(git rev-parse --git-dir)/shallow\" ]] || git fetch --unshallow"
+    - sudo curl --output /usr/local/bin/phantomjs https://s3.amazonaws.com/circle-downloads/phantomjs-2.1.1
   post:
-    - bundle exec pronto run -f github text -c=$(git log --pretty=format:%H | tail -1) --exit-code
-    - bundle exec rake ci
-deployment:
-  master:
-    branch: master
-    commands:
-      - git push git@heroku.com:master-bestpractices.git $CIRCLE_SHA1:refs/heads/master
-      - heroku run rake db:migrate --app master-bestpractices:
-          timeout: 400 # if your deploys take a long time
-      - "sleep 5 && bundle exec rake fastly:test" # Is Fastly CDN working?
-  staging:
-    branch: staging
-    commands:
-      - git push git@heroku.com:staging-bestpractices.git $CIRCLE_SHA1:refs/heads/master
-      - heroku run rake db:migrate --app staging-bestpractices:
-          timeout: 400 # if your deploys take a long time
-  production:
-    branch: production
-    commands:
-      - git push git@heroku.com:production-bestpractices.git $CIRCLE_SHA1:refs/heads/master
-      - heroku run rake db:migrate --app production-bestpractices:
-          timeout: 400 # if your deploys take a long time
+# Split up: bundle exec pronto run -f github text -c=$(git log --pretty=format:%H | tail -1) --exit-code
+# because the exit-code appears to not be provided in the combined command.
+    - bundle exec pronto run -f github text -c=$(git log --pretty=format:%H | tail -1)
+    - bundle exec pronto run text -c=$(git log --pretty=format:%H | tail -1) --exit-code
 general:
-# branches:
-#   ignore:
-#     - BRANCH_NAME # do this if you need to ignore a branch.
   artifacts:
     - 'coverage'
     - 'license_finder_report.html'
     - 'log/test.log'
     - 'tmp/capybara'
-    - 'test/html_reports'

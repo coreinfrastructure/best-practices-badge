@@ -796,7 +796,11 @@ de:
 
 '
       delivery_mitm:
-        description:
+        description: 'Das Projekt MUSS einen Auslieferungsmechanismus verwenden, der
+          den MITM-Angriffen entgegenwirkt. Die Verwendung von https oder ssh + scp
+          ist akzeptabel.
+
+'
         details:
       delivery_unsigned:
         description:
@@ -1259,8 +1263,8 @@ de:
   admin_only: Nur Administratoren.
   criterion_status:
     Met: Erfüllt
-    Unmet: Nicht erfüllt
-    NA: keine Angabe
+    Unmet: Unerfüllt
+    NA: N/A
   error_messages:
     need_home_page_or_url: Benötige mindestens eine Homepage oder eine Repository-URL
     form_contains:

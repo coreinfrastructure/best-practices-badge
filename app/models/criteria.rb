@@ -165,7 +165,11 @@ class Criteria
     Criteria.get_levels(name).reverse.each do |l|
       next if l.to_i > level.to_i
       t_key = "criteria.#{l}.#{name}.#{field}"
-      return I18n.t(t_key) if I18n.exists?(t_key)
+      # Disable HTML output safety. I18n translations are internal data
+      # and are considered a trusted source.
+      # rubocop:disable Rails/OutputSafety
+      return I18n.t(t_key).html_safe if I18n.exists?(t_key)
+      # rubocop:enable Rails/OutputSafety
     end
     nil
   end

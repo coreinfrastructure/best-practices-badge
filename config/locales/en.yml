@@ -138,7 +138,6 @@ en:
       require_url: Require URL
       details: Includes details
       future: Future
-      project_counts: There are %{projects} project entries; %{passing} are passing and %{in_progress} are in progress.
       project_stats_html: You can see statistics about projects over time at the <a href="/project_stats">project stats page</a>.
   users:
     new:

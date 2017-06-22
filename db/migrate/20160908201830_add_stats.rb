@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AddStats < ActiveRecord::Migration
+class AddStats < ActiveRecord::Migration[4.2]
   def change
     # Number of reminders sent within 24 hours
     add_column :project_stats, :reminders_sent, :integer,

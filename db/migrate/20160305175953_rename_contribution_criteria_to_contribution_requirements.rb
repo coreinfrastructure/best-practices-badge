@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class RenameContributionCriteriaToContributionRequirements <
-      ActiveRecord::Migration
+      ActiveRecord::Migration[4.2]
   def change
     rename_column :projects,
                   :contribution_criteria_status,

@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class AddEnglish < ActiveRecord::Migration
+class AddEnglish < ActiveRecord::Migration[4.2]
   def change
     add_column :projects, :english_status, :string, default: '?'
     add_column :projects, :english_justification, :text

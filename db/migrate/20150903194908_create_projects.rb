@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class CreateProjects < ActiveRecord::Migration
+class CreateProjects < ActiveRecord::Migration[4.2]
   def change
     # rubocop:disable Metrics/BlockLength
     create_table :projects do |t|

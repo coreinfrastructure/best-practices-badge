@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class ChangeEmailColumnType < ActiveRecord::Migration
+class ChangeEmailColumnType < ActiveRecord::Migration[4.2]
   # Change user email to citext this is not reversible so must use
   # up/down instead of change.
   def up

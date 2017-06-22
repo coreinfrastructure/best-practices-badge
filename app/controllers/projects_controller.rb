@@ -377,7 +377,8 @@ class ProjectsController < ApplicationController
     end
     @count = @projects.count
     # If we're supplying html (common case), select only needed fields
-    if request.format.symbol == :html
+    format = request&.format&.symbol
+    if !format || format == :html
       @projects = @projects.select(HTML_INDEX_FIELDS)
     end
     @projects = @projects.includes(:user).paginate(page: params[:page])

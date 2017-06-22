@@ -13,177 +13,204 @@ ja:
       create: 登録する
       update: 更新する
       submit: 保存する
-  hello:
-  submit:
+  hello: Hello world
+  submit: 送信
   projects_count:
-    one:
-    other:
-    zero:
-    few:
-    many:
+    one: "%{count} プロジェクト"
+    other: "%{count} プロジェクト"
+    zero: 該当プロジェクトなし
+    few: "%{count} プロジェクト"
+    many: "%{count} プロジェクト"
   feed_title:
-  project_name_unknown:
+  project_name_unknown: "（名前不明）"
   locale_name:
-    en:
-    de:
-    fr:
-    ja:
-    zh-CN:
-    ru:
+    en: 英語 / English (en)
+    de: ドイツ語 / Deutsch (de)
+    fr: フランス語 / Français (fr)
+    ja: 日本語 (ja)
+    zh-CN: 中国語 (簡体字) / 简体中文 (zh-CN)
+    ru: ロシア語 / Русский (ru)
   layouts:
-    cii_best_practices: CIIベストプラクティス
+    cii_best_practices: CII ベスト プラクティス
     projects: プロジェクト
     users: ユーザー
     account: アカウント
     profile: プロフィール
     settings: 設定
-    logout_html: <span class = "glyphicon glyphicon-log-out"> </ span>ログアウト
-    signup_html: <span class = "glyphicon glyphicon-user"> </ span>ログイン
-    login_html: <span class = "glyphicon glyphicon-log-in"> </ span>ログイン
-    footer_text_html: '<small> <strong>ヘルプが必要ですか？質問があります？問題がありますか？ <em> <a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">送信してください電子メール</a>
-      </ em>または<em> <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues"
-      target="_blank">問題を提出する</ em> a> </ em>。</ strong>©2015-2017 <a href="https://www.coreinfrastructure.org/
-      target="_blank">コアインフラストラクチャイニシアチブ</a> <a href = " <a href = "https://www.linuxfoundation.org/privacy"を参照してください<https://www.linuxfoundation.org/>
-      target = "_ blank"> Linux Foundation </a>コラボレーティブプロジェクト。 target = "_ blank">プライバシーポリシー</a>と<a
-      href="https://www.linuxfoundation.org/terms" target="_blank">利用規約</a>をご覧ください。</
-      small>
-
-'
-    choose_locale: ロケールを選択
+    logout_html: <span class = "glyphicon glyphicon-log-out"></span> ログアウト
+    signup_html: <span class = "glyphicon glyphicon-user"></span> サインアップ
+    login_html: <span class = "glyphicon glyphicon-log-in"></span> ログイン
+    footer_text_html: <small> <strong>疑問、質問、または問題がある場合は<em> <a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">電子メールで報告する</a></
+      em>か、<em> <a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
+      target="_blank">こちらから問題を提出</a></ em>してください。</strong>  © 2015-2017 <a href="https://www.coreinfrastructure.org/
+      target="_blank">Core Infrastructure Initiative</a>, a <a href="https://www.linuxfoundation.org/"
+      target="_blank">Linux Foundation</a> Collaborative Project. All Rights Reserved.
+      <a href="https://www.linuxfoundation.jp/privacy" target="_blank">プライバシー ポリシー</a>
+      と<a href="https://www.linuxfoundation.jp/terms" target="_blank">利用条件</a>を必ずお読みください。</small>
+    choose_locale: 言語を選択する
   account_activations:
     activated: アカウントが有効になりました！
-    failed_activation: 無効なアクティベーションリンク
+    failed_activation: 無効なアクティベーション リンクです
   password_resets:
-    forgot_password:
-    reset_password:
-    password_confirmation:
-    email_not_found:
-    password_empty:
-    password_reset:
-    instructions_sent:
-    cant_reset_nonlocal:
-    reset_expired:
-    update_password:
+    forgot_password: パスワードを忘れた方はこちら
+    reset_password: パスワードをリセットしてください
+    password_confirmation: 確認
+    email_not_found: 電子メール アドレスが見つかりません
+    password_empty: パスワードを空にすることはできません
+    password_reset: パスワードがリセットされました
+    instructions_sent: パスワードリセットの方法が電子メールで送信されました
+    cant_reset_nonlocal: 申し訳ありませんが、ローカル以外のユーザーのパスワードをリセットすることはできません
+    reset_expired: パスワードのリセットは期限切れです
+    update_password: パスワードを更新してください
   sessions:
-    login_header:
-    login_with_github_html:
-    or:
-    email:
-    password:
-    forgot_password:
-    remember_me:
-    login_custom:
-    no_custom:
-    already_logged_in:
-    incorrect_login_info:
-    invalid_combo:
-    signed_in:
-    not_activated:
-    signed_out:
+    login_header: ログイン
+    login_with_github_html: <span class="fa fa-github"></span> GitHub でログインする
+    or: または
+    email: 電子メール
+    password: パスワード
+    forgot_password: パスワードを忘れた方はこちら。
+    remember_me: この情報を保存する
+    login_custom: カスタム アカウントを使用してログインする
+    no_custom: カスタム アカウントをお持ちでない方はサインアップしてください。
+    already_logged_in: あなたは既にログインしています。
+    incorrect_login_info: ログイン情報がまちがっています
+    invalid_combo: 無効な電子メール・パスワードの組み合わせです
+    signed_in: サインインしました！
+    not_activated: アカウントが有効化されていません。電子メールでお伝えしたアクティベーション リンクを確認してください。
+    signed_out: サインアウトしました！
   users:
     new:
-      signup_header:
-      intro_html:
-      name:
-      email:
-      preferred_locale:
-      password:
-      password_confirmation:
-      create_account:
-      intro_github:
+      signup_header: サインアップ
+      intro_html: |
+        GitHubアカウントでログインしたくない場合は、
+        ここからサインアップしてください。 <br> <br>アクティベーション リンクが届かない場合は、
+        もう一度サインアップしてください。新しいものをお送りします。
+      name: 名前
+      email: 電子メール
+      preferred_locale: 言語・地域
+      password: パスワード
+      password_confirmation: パスワード（確認のためにもう一度入力してください）
+      create_account: アカウントを作成する
+      intro_github: 'GitHubアカウントを持っている方は、それを使ってログインできます。
+
+'
     edit:
       update_user_info:
       save_changes:
     update:
       profile_updated:
     show:
-      edit_user:
-      other_projects_edit:
+      edit_user: ユーザーを編集する
+      other_projects_edit: 編集できるその他のプロジェクト
       see_external:
       as_admin:
       send_email_to:
-      delete_link_name:
-      confirm_delete:
+      delete_link_name: 削除
+      confirm_delete: このユーザーを削除してもよろしいですか？
     destroy:
       cannot_delete_self:
       user_deleted:
-    redirect_existing:
-    new_activation_link_created:
-    please_log_in:
+    redirect_existing: 'そのユーザーは既に存在しています。以前、サインインしたことはありませんか？
+
+'
+    new_activation_link_created: '新しいアクティベーションリンクが作成されました。電子メールを確認してアカウントを有効にしてください。
+
+'
+    please_log_in: ログインしてください。
   project_stats:
     index:
-      project_stats_header:
-      all_projects:
-      projects_nontrivial:
-      projects_activity_30:
-      daily_activity:
-      reminders:
-      active_projects:
-      active_in_progress:
-      active_edited:
-      active_edited_in_progress:
-      projects_created_since_yesterday:
-      projects_updated_since_yesterday:
-      projects_created_average_7_days:
-      projects_updated_average_7_days:
-      reminders_sent_since_yesterday:
-      reactivated_projects:
-      admin_html:
-      raw_data:
-      json_format:
-      csv_format:
-      projects_created_updated_daily:
+      project_stats_header: プロジェクトの統計
+      all_projects: すべてのプロジェクト
+      projects_nontrivial: 顕著な進捗状況のプロジェクト
+      projects_activity_30: 過去30日以内にバッジ申請を行ったプロジェクト
+      daily_activity: 毎日のバッジ申請状況
+      reminders: リマインダー
+      active_projects: 活動中プロジェクト（30日以内に登録/更新）
+      active_in_progress: '進行中のプロジェクト（30日以内に登録/更新）
+
+'
+      active_edited: '編集作業中プロジェクト（30日以内に更新）
+
+'
+      active_edited_in_progress: '編集作業中の進行中プロジェクト（30日以内に更新）
+
+'
+      projects_created_since_yesterday: 前日以降のプロジェクト登録数
+      projects_updated_since_yesterday: 前日以降のプロジェクト更新数
+      projects_created_average_7_days: 'プロジェクト登録数の7日間平均
+
+'
+      projects_updated_average_7_days: 'プロジェクト更新数の7日間平均
+
+'
+      reminders_sent_since_yesterday: '昨日以降に送信されたリマインダー
+
+'
+      reactivated_projects: 'リマインダー受信後14日以内に再活性化したプロジェクト
+
+'
+      admin_html: '管理者は、<a href="/reminders">リマインダーに関する詳細情報</a>も参照できます。
+
+'
+      raw_data: '生データを見ることもできます：
+
+'
+      json_format: JSON形式
+      csv_format: ダウンロード可能なCSV形式
+      projects_created_updated_daily: "「前日以降のプロジェクト登録数」というデータは、指定された日時から24時間以内に登録されたプロジェクトの数です（同じ24時間内に削除されたプロジェクトは含まれません）。同様に、
+        「前日以降に編集されたプロジェクト」というデータは、指定された日時から24時間以内に編集されたプロジェクトの数です（24時間以内に作成または削除されたプロジェクトは含まれません）。
+        7日間平均は、対応するデータの7日間平均値を示す。凡例で色を選択して、対応するデータを非表示にすることができます。\n"
   projects:
     index:
-      add_link:
-      add_new:
-      badge_status:
-      exclude_passing:
-      text_search:
+      add_link: 追加
+      add_new: プロジェクトを追加
+      badge_status: バッジ ステータス
+      exclude_passing: 合格プロジェクトを除外する
+      text_search: テキスト検索
       name_or_description:
-      search:
-      all:
-      passing_100:
-      in_progress_variable:
+      search: 検索
+      all: すべて
+      passing_100: 合格（100％）
+      in_progress_variable: 進行中（%{percent}％以上）
     table:
-      id:
-      name:
-      description:
-      website:
-      license:
-      owner:
-      last_achieved:
-      pachieved:
-      can_also_sort:
-      repository_url:
-      create_time:
-      update_time:
-      user_id:
+      id: ID
+      name: 名称
+      description: 概要
+      website: ウェブサイト
+      license: ライセンス
+      owner: オーナー
+      last_achieved: 最終達成日時
+      pachieved: 達成率
+      can_also_sort: 次の条件でソートすることもできます。
+      repository_url: リポジトリのURL
+      create_time: 作成日時 (バッジ エントリの)
+      update_time: 最終更新日時（バッジ エントリの）
+      user_id: ユーザーID
       paren_name_unknown:
-      badge_level:
+      badge_level: プロジェクト %{id} のバッジレベルは %{percent}％ です
     new:
       post_delay_warning:
-      new_badge:
+      new_badge: 新しいバッジ
       may_select_html:
-      select_one_github:
-      submit_github:
+      select_one_github: GitHub リポジトリを選択してください
+      submit_github: GitHubリポジトリを送信する
       url_of_homepage:
       placeholder_of_homepage:
       url_of_repo:
       placeholder_of_repo:
-      submit_urls:
-      sign_in_first:
+      submit_urls: URLを送信する
+      sign_in_first: プロジェクトを追加するにはログインしてください！
       thanks_adding:
-      project_already_exists:
+      project_already_exists: このプロジェクトは既に存在します！
       final_text_html:
-      new_badge_or:
+      new_badge_or: または
       original_repos:
       fork_repos:
     show:
-      edit:
-      delete:
+      edit: 編集
+      delete: 削除
       confirm_delete:
-      back:
+      back: もどる
       cc_by_3plus_html:
       cc_by_3only_html:
       owned_by:
@@ -192,43 +219,76 @@ ja:
       last_lost_html:
       last_achieved_html:
     edit:
-      submit_cc_by_3plus_html:
-      save_and_continue:
-      submit_and_exit:
-      repo_url_limits:
-      changed_since_html:
-      successfully_updated:
-      congrats_new:
-      lost_badge:
-      static_analysis_updated_html:
-      edit_status:
+      submit_cc_by_3plus_html: 'プロジェクトに関するこのデータを送信することにより、少なくとも、<a href="https://creativecommons.org/licenses/by/3.0/us"
+        target="_blank">クリエイティブ・コモンズ帰属バージョン3.0以降（CC-BY-3.0 +）</a>のライセンス条件によって公開することに同意したことになります。つまり、すべての人が自由にデータを共有し、修正することができますが、適切なクレディットを表示します。あなたが保有する著作権に影響はありません。プロジェクトライセンスにも影響はありません。<br>
+        <br>
+
+'
+      save_and_continue: 保存する（そして続行する）
+      submit_and_exit: 送信（および終了）
+      repo_url_limits: 'repo_urlは、httpからhttpsに変更することしかできません
+
+'
+      changed_since_html: '別のユーザーが、編集フォームにアクセスして、そのレコードに変更を加えました。 <br>変更を送信するには、新しい<a
+        href="%{edit_url} "target = _blank>編集フォーム</a>を開いてください。
+
+'
+      successfully_updated: プロジェクトは正常に更新されました
+      congrats_new: "%{new_badge_level}バッジ獲得、おめでとうございます！まだ表示を行っていないければ、プロジェクトのバッジステータスをプロジェクトページに表示してください（その方法は、下の「表示の方法」のテキストをご覧ください）。\n"
+      lost_badge: プロジェクトはバッジを失いました
+      static_analysis_updated_html: '<a href="#static_analysis"> static_analysis </a>基準の要件を更新しました。この基準への適合性を追加してください。
+
+'
+      edit_status: プロジェクトのバッジステータスを表示する
     form_basics:
       project_name:
-        description:
-        details:
-        placeholder:
+        description: プロジェクトの名前(判読可能な)は何ですか？
+        details: 他のプロジェクトが同じ名前を使用していないか注意してください。
+        placeholder: FLOSSプロジェクト名
       description:
-        description:
-        details:
-        placeholder:
+        description: プロジェクトを簡単に説明してください。
+        details: 'プロジェクトに関して鍵となるコメントを含めてください。Markdown書式を使用します。この情報は、バッジ情報を表示するときに使用されます。
+
+'
+        placeholder: プロジェクトの説明
       homepage_url:
-        description:
-        placeholder:
+        description: プロジェクト全体のURLは？
+        placeholder: プロジェクトWebサイトのURL
       repo_url:
-        description:
-        placeholder:
+        description: 'バージョン管理リポジトリのURLは何ですか（プロジェクトURLと同じでもかまいません）。
+
+'
+        placeholder: プロジェクトのリポジトリURL
       implementation_languages:
-        description:
-        details:
-        placeholder:
+        description: 'どのようなプログラミング言語を使ってプロジェクトを実装していますか？
+
+'
+        details: '複数の言語がある場合は、コンマを区切り（スペースを入れてもよい）としてリストし、使用頻度の高いものから順に並べます。使用言語が多くある場合は、少なくとも最初の3つの最も多く使われるものをリストアップしてください。言語がない場合（例：ドキュメントだけ、またはテスト専用のプロジェクトの場合）、1文字
+          " - "を使用します。言語ごとにある大文字・小文字の慣用を踏襲してください（例：「JavaScript」）。
+
+'
+        placeholder: '使用された実装言語（コンマで区切られたリスト、使用量によってソート）
+
+'
       cpe:
-        description_html:
-        details_html:
-        placeholder:
+        description_html: 'プロジェクトの<a href="https://nvd.nist.gov/cpe.cfm"> Common Platform
+          Enumeration（CPE）</a>名は何ですか？
+
+'
+        details_html: '<a href="https://nvd.nist.gov/cpe.cfm"> Common Platform Enumeration（CPE）</a>は、情報技術（IT）システム、ソフトウェア、およびパッケージのための構造化された命名体系です。脆弱性を報告する際に、多くのシステムやデータベースで使用されています。
+
+'
+        placeholder: "（オプション）CPE名"
       license:
-        description_html:
-        details_html:
-        placeholder:
+        description_html: 'プロジェクトのライセンスはどのようなものですか？
+
+'
+        details_html: '<a href="https://spdx.org/licenses/"> SPDXライセンスの表現形式</a>を使用してください。
+          例：「Apache-2.0」、「BSD-2-Clause」、「BSD-3-Clause」、「GPL-2.0 +」、「LGPL-3.0 +」、「MIT」、「(BSD-2-Clause
+          OR Ruby)」
+
+'
+        placeholder: FLOSSライセンス
     form_early:
       badge_intro:
         description:
@@ -238,14 +298,14 @@ ja:
         description_2:
         details_html:
         editing_description_html:
-        badge_alt:
+        badge_alt: プロジェクト %{id} のバッジ レベルは %{level} です
       level:
         0_html:
         1_html:
         2_html:
-        '0':
-        '1':
-        '2':
+        '0': 合格
+        '1': シルバー
+        '2': ゴールド
     misc:
       disabled_reminders:
       general_comments:
@@ -255,18 +315,18 @@ ja:
       dont_use_crypto:
       future_header_html:
       in_javascript:
-        collapse_all_title:
-        collapse_all:
-        expand_all_title:
-        expand_all:
-        show_details:
-        hide_details:
-        show_all_details:
-        hide_all_details:
-        show_met_title:
-        show_met_html:
-        hide_met_title:
-        hide_met_html:
+        collapse_all_title: すべてのパネルを折りたたむ
+        collapse_all: パネルを折りたたむ
+        expand_all_title: すべてのパネルを展開
+        expand_all: パネルを展開
+        show_details: 詳細を表示
+        hide_details: 詳細を非表示
+        show_all_details: 詳細をすべて表示
+        hide_all_details: 詳細をすべて非表示
+        show_met_title: 適合済みの基準と非該当の基準を表示
+        show_met_html: 適合済みと非該当を表示
+        hide_met_title: 適合済みと非該当の基準を非表示（不適合と不明なものは表示）
+        hide_met_html: 適合済みと非該当を非表示
         passing_alt:
         barely_alt:
         failing_alt:
@@ -279,13 +339,13 @@ ja:
         na_placeholder:
         unknown_placeholder:
       toggle_details_title:
-      details:
+      details: 詳細
       url_required:
       future_criterion:
       url_required_warning:
       justification_required_warning:
     delete:
-      done:
+      done: プロジェクトは正常に削除されました
   report_mailer:
     new_project_heading:
     new_project_part1:
@@ -308,7 +368,7 @@ ja:
     account_activation:
       before_html:
       before_text:
-      activate:
+      activate: アクティベート
       subject:
     github_welcome:
       before_html:
@@ -333,12 +393,16 @@ ja:
   criteria:
     '0':
       description_good:
-        description:
-        details:
-        met_placeholder:
+        description: プロジェクトのウェブサイトは、ソフトウェアが何をするのか（何の問題を解決するのか）を簡潔に記述しなければなりません。
+        details: 'これは、潜在的なユーザーが理解できる言語でなければなりません（例えば、それは最小限の専門用語を使用します）。
+
+'
+        met_placeholder: "（省略可能）簡潔な説明はどこですか？ URLを提供することを検討してください。"
       interact:
-        description:
-        met_placeholder:
+        description: 'プロジェクトのウェブサイトは、取得方法、フィードバックの提供方法（バグ報告や拡張機能）、ソフトウェアへの貢献方法に関する情報を提供しなければなりません。
+
+'
+        met_placeholder: "（オプション）この情報はどこにありますか？ URLを提供することを検討してください。\n"
       contribution:
         description: 貢献する方法に関する情報は、貢献プロセス（たとえばプル リクエストが使用されか、など）を説明する必要があります。
         details: 別段の記載がない限り、<a href="https://guides.github.com/activities/contributing-to-open-source/">GitHub上のプロジェクトは、（GitHubが提供する）課題管理とプルリクエストを使用することを想定します</a>。この情報は不足しているかもしれません。すなわち、プロジェクトがプルリクエストと課題追跡ツールを使うことか、メーリングリストへの投稿を言及している。（どちら？）
@@ -347,117 +411,294 @@ ja:
         description: 貢献する方法に関する情報は、貢献を受け入れるための要件（たとえば、必要なコーディング標準への参照）を含むべきです。
         unmet_placeholder: この情報が必要ない位に、要件が明確であるのはなぜですか？
       floss_license:
-        description:
-        details:
+        description: 'プロジェクトによって作成されたソフトウェアは、FLOSSとしてリリースされなければなりません。
+
+'
+        details: 'FLOSSは、<a href="https://opensource.org/osd-annotated">オープンソース定義</a>または<a
+          href = "http://www.gnu.org/philosophy/free-sw.en.html ">フリーソフトウェア定義</a>を満たす方法でリリースされたソフトウェアです。そのようなライセンスの例としては、<a
+          href="http://creativecommons.org/publicdomain/zero/1.0/"> CC0 </a>、<a href
+          = "https://opensource.org/licenses/MIT" > MIT </a>、<a href="https://opensource.org/licenses/BSD-2-Clause">
+          2項型BSD</a>、<a href = "https://opensource.org / licenses / BSD-3-Clause ">
+          3項型BSD</a>、<a href="https://opensource.org/licenses/Apache-2.0"> Apache
+          2.0 </a>、<a href = "https://opensource.org/licenses/lgpl-license"> Less
+          GNU General Public License（LGPL）</a>、および<a href = "https://opensource.org/licenses/gpl-license
+          "> GNU General Public License（GPL）</a>を参照してください。私たちの目的のためには、これはライセンスが以下のものでなければならないことを意味します：<ul>
+          <li> <a href="https://opensource.org/licenses">オープンソース・イニシアチブ（OSI）によって承認されたライセンス</a>、または</
+          li> <li> <a href="https://www.gnu.org/licenses/license-list.html">フリーソフトウェア財団（FSF）の承認を得たフリー
+          ライセンス</a>、または</ li> <li> <a href="https://www.debian.org/legal/licenses/">
+          Debianメインに受け入れられるフリー ライセンス</a>、または</ li> <li> <a href="https://fedoraproject.org/wiki/Licensing:Main?rd=Licensing">Fedoraによって「良い」ライセンス</a>.</li>
+          </ul> ソフトウェアは他の方法でライセンスされているかもしれません（たとえば、「GPLv2またはプロプライエタリ」は許容されます）。
+
+'
       floss_license_osi:
-        description:
-        details:
+        description: 'プロジェクトによって作成されたソフトウェアに必要なライセンスは、<a href="https://opensource.org/licenses">オープンソース・イニシアチブ（OSI）によって承認されている</a>ことが推奨されています。
+
+'
+        details: 'OSIは、厳格な承認プロセスを使用して、どのライセンスがOSSであるかを判断します。
+
+'
       license_location:
-        description:
-        details:
+        description: 'プロジェクトは、結果のライセンスをソースリポジトリの標準的な場所に投稿しなければなりません。
+
+'
+        details: 'たとえば、LICENSEまたはCOPYINGという名前の最上位ファイルです。ライセンスファイル名の後に ".txt"や ".md"などの拡張子を付けることができます。
+
+'
       documentation_basics:
-        description:
-        details:
-        met_placeholder:
+        description: 'プロジェクトは、プロジェクトによって作成されたソフトウェアに関する基本的なドキュメンテーションを提供しなければなりません。
+
+'
+        details: 'このドキュメントは、インストール方法、起動方法、使用方法（可能であれば例示したチュートリアル）、および、そのソフトウェアの適切なトピックであれば安全に使用する方法（たとえば何をするべきで、何をすべきでないか）を記述し、メディア（たとえば、テキストやビデオなど）に収められている必要があります。セキュリティの文書は必ずしも長文である必要はありません。プロジェクトは、ドキュメンテーションとしてプロジェクト以外の素材へのハイパーテキストリンクを使用してもよいです。プロジェクトがソフトウェアを作成しない場合は、「該当なし」（N
+          / A）を選択します。
+
+'
+        met_placeholder: "（オプション）どのURLがドキュメントの開始点を示していますか？"
       documentation_interface:
-        description:
-        details:
+        description: 'プロジェクトは、プロジェクトによって作成されたソフトウェアの外部インタフェース（入力と出力の両方）を記述する参照ドキュメントを提供しなければなりません。
+
+'
+        details: '外部インターフェイスのドキュメントは、エンドユーザーまたは開発者に、その使用方法を説明します。ドキュメントには、ソフトウェアにアプリケーション
+          プログラム インターフェイス（API）が含まれている場合、アプリケーション プログラム インターフェイスが含まれます。ライブラリの場合、呼び出すことができる主要なクラス/型とメソッド/関数を文書化します。ウェブ
+          アプリケーションの場合、URLインタフェース（多くの場合、RESTインタフェース）を定義します。コマンドラインインターフェイスの場合は、サポートするパラメータとオプションを文書化します。多くの場合、ドキュメントのほとんどを自動生成すると、ソフトウェアが変更されたときにドキュメントがソフトウェアと同期したままなので、最も良い方法ですが、これは必須ではありません。プロジェクトは、ドキュメンテーションとしてプロジェクト以外の素材へのハイパーテキストリンクを使用してもよいです。ドキュメンテーションは自動的に生成されるかもしれません（実際的に、しばしばこれを行う最良の方法です）。
+          RESTインタフェースのドキュメントは、Swagger / OpenAPIを使用して生成することができます。コード インタフェースのドキュメントは、<a
+          href="http://usejsdoc.org/"> JSDoc </a>（JavaScript）、<a href="https://esdoc.org/">
+          ESDoc </a>（JavaScript）、pydoc（Python）、およびDoxygen（多数）のいずれかです。実装コードにコメントがあるだけでは、この基準を満たすには不十分です。すべてのソースコードを読むことなく情報を見るための簡単な方法が必要です。プロジェクトがソフトウェアを作成しない場合は、「該当なし」（N
+          / A）を選択します。
+
+'
       sites_https:
-        description:
-        details:
+        description: 'プロジェクトサイト（ウェブサイト、リポジトリ、およびダウンロードURL）は、TLSを使用したHTTPSをサポートしなければなりません。
+
+'
+        details: '<a href="https://letsencrypt.org/">暗号化しよう</a>からフリーの証明書を入手できます。プロジェクトは、（例えば）<a
+          href="https://help.github.com/articles/securing-your-github-pages-site-with-https/">
+          GitHubページ</a>、<a href="https://about.gitlab.com/2016/12/24/were-bringing-gitlab-pages-to-community-edition/">
+          GitLabページ</a>、または<a href = " https://sourceforge.net/blog/introducing-https-for-project-websites/">SourceForgeプロジェクトページ</a>を使ってこの基準を実装してもよいです。カスタムドメインでGitHubページを使用している場合は、<a
+          href = "https://blog.cloudflare.com/secure-and-fast-github-pages-with-cloudflare
+          /">ブログの投稿「このファイルを安全かつ高速にGitHub Pages with CloudFlare」</a>に記載されているように、HTTPSをサポートするプロキシとしてコンテンツ配信ネットワーク（CDN）を使用することができます。
+          HTTPをサポートしている場合は、HTTPトラフィックをHTTPSにリダイレクトすることを強くお勧めします。
+
+'
       discussion:
-        description:
-        details:
+        description: プロジェクトは、議論（提案された変更や問題を含む）のための1つ以上の検索可能なメカニズムを持たなければならず、メッセージやトピックがURLでアドレス指定され、新しい人々がディスカッションのいくつかに参加できるようにしなければならず、クライアント側でプロプライエタリなソフトウェアのインストールを必要としないようにします。
+        details: '受け入れ可能なメカニズムの例には、アーカイブされたメーリングリスト、GitHubのイシューとプルリクエストの議論、Bugzilla、Mantis、Tracなどがあります。非同期ディスカッション
+          メカニズム（IRCなど）は、これらの基準を満たしていれば許容されます。 URLアドレス可能なアーカイブ機構があることを確認してください。独自のJavaScriptは、推奨されませんが、許可されています。
+
+'
       english:
-        description:
-        details:
+        description: 'プロジェクトは英語で文書を提供し、英語でコードに関するバグ報告とコメントを受け入れることができるべきです。
+
+'
+        details: '現在、英語はコンピュータ技術の<a href="https://en.wikipedia.org/wiki/Lingua_franca">リンガ
+          フランカ</a>です。英語をサポートすることで、世界中のさまざまな潜在的な開発者とレビュアーの数を増やします。コア開発者の主要言語が英語でなくても、プロジェクトはこの基準を満たすことができます。
+
+'
       repo_public:
-        description:
-        details:
+        description: 'プロジェクトには、公開され、URLを持つ、バージョン管理のソース リポジトリがなければなりません。
+
+'
+        details: 'URLはプロジェクトのURLと同じであってもよいです。プロジェクトは、変更が公開されていない間に（例えば、公開前に脆弱性を修正するため）、特定のケースでプライベート（非公開）ブランチを使用することができます。
+
+'
       repo_track:
-        description:
+        description: 'プロジェクトのソース リポジトリは、どのような変更が行われたのか、誰が変更を行ったのか、いつ変更が行われたのかを追跡しなければなりません。
+
+'
       repo_interim:
-        description:
-        details:
+        description: '共同レビューを可能にするために、プロジェクトのソースリポジトリには、リリース間のレビューのための中間バージョンが含まれなければなりません。最終リリースのみを含めることはできません。
+
+'
+        details: プロジェクトは、公開ソース リポジトリから特定の暫定版を省略することを選択することができます。（たとえば、特定の非公開のセキュリティ脆弱性を修正するものは、公開されないか、または、合法的に投稿できないか、最終リリースに入らないです）
       repo_distributed:
-        description:
-        details:
+        description: 'プロジェクトのソース リポジトリに共通の分散バージョン管理ソフトウェア（gitなど）を使用することを推奨します。
+
+'
+        details: 'Gitが特別に必要とされているわけでなく、プロジェクトでは、集中型バージョン管理ソフトウェア（例：subversion）を正当とする証拠を持って使用できます。
+
+'
       version_unique:
-        description:
-        details:
+        description: 'プロジェクトの結果には、ユーザーが使用することを意図されたリリースごとに固有のバージョン識別子が必要です。
+
+'
+        details: 'これはコミットID（git commit idやmercurial changeset idなど）やバージョン番号（YYYYMMDDのようなセマンティックバージョニングや日付ベースのスキームを使用するバージョン番号を含む）など、さまざまな方法で対応できます。
+
+'
       version_semver:
-        description:
-        details:
+        description: 'リリースには<a href="http://semver.org"> Semantic Versioning（SemVer）形式</a>を使用することを推奨します。
+
+'
+        details: 'コミットID（git commit idやmercurial changeset idなど）やYYYYMMDDなどの日付ベースのスキームなどの他のバージョン番号付けスキームは、一意であるためバージョン番号として使用される場合があります。いくつかの選択肢は問題を引き起こす可能性があります。ユーザーは最新のものかどうかを簡単に判断できない可能性があるからです。
+          SemVerは、すべての受信者が最新のバージョンのみを実行している場合（たとえば、継続的な配信を介して常に更新されている単一のWebサイトまたはインターネットサービスのコード）ソフトウェアリリースを特定するのにはあまり役立ちません。
+
+'
       version_tags:
-        description:
+        description: 'プロジェクトがバージョン管理システム内の各リリースを特定することが推奨されています。たとえば、gitを使用しているユーザーがgitタグを使用して各リリースを特定することが推奨されています。
+
+'
       release_notes:
-        description:
-        details:
+        description: 'プロジェクトは、各リリースにおいて、ユーザーがアップグレードすべきかどうか、また、アップグレードの影響を判断できるよう、そのリリースの主要な変更の要約を説明したリリースノートを提供しなければなりません（MUST）。リリースノートは、バージョン管理ログの生の出力であってはなりません（例えば、
+          "git log"コマンドの結果はリリースノートではない）。プロジェクトの成果物が複数の場所で再利用されることを意図していないプロジェクト（単独のウェブサイトやサービスのためのソフトウェアなど）で、かつ、継続的・断続的な配布を行う場合は、「該当なし」を選択することができます。
+
+'
+        details: 'リリースノートは様々な方法で実装できます（MAY）。多くのプロジェクトは、 "NEWS"、 "CHANGELOG"、または "ChangeLog"という名前のファイルでそれらを提供し、
+          ".txt"、 ".md"、 ".html"などの拡張子を付けることもあります。歴史的には、 "change log"という言葉は<em>すべての</
+          em>変更のログを意味していましたが、本基準を満たすために必要なものは、人間が読める要約です。リリースノートは代わりに、<a href="https://github.com/blog/1547-release-your-software">
+          GitHubリリースのワークフロー</a>などのバージョン管理システムのメカニズムによって提供してもよい（MAY）。
+
+'
       release_notes_vulns:
-        description:
+        description: 'リリースノートは、新しいリリースごとに修正された、既知の脆弱性をすべて特定しなければなりません。リリースノートがないか、または既知の脆弱性がない場合、これは
+          「該当なし」（N/A）です。
+
+'
       report_process:
-        description:
+        description: 'プロジェクトは、ユーザーが不具合報告を送信するプロセスを提供しなければなりません（たとえば、課題トラッカーやメーリングリストを使用します）。
+
+'
       report_tracker:
-        description:
-        unmet_placeholder:
+        description: 'プロジェクトは、個々の課題を追跡するための課題トラッカーを使用するべきです。
+
+'
+        unmet_placeholder: 課題トラッカーがないのはなぜですか？
       report_responses:
-        description:
+        description: 'このプロジェクトは、過去2〜12か月間に提出された多数のバグ報告の受領を認めなければなりません。応答に修正を含める必要はありません。
+
+'
       enhancement_responses:
-        description:
-        details:
+        description: 'プロジェクトは、直近2〜12ヶ月（2ヶ月を含む）に増強要求の多数（> 50％）に対応すべきです。
+
+'
+        details: '応答は、「いいえ」や、そのメリットについての議論であってもよいです。目標は、単にプロジェクトがまだ生きていることを示している、いくつかの要求に対する応答があることです。この基準のために、プロジェクトは偽のリクエスト（スパマーや自動システムなど）をカウントする必要はありません。プロジェクトで機能強化が行われていない場合は、「満足されない」（unmet）を選択し、この状況をユーザーに明確にするURLを含めてください。プロジェクトが強化要求の数によって圧倒される傾向がある場合は、「満足されない」（unmet）を選択して説明してください。
+
+'
       report_archive:
-        description:
+        description: 'プロジェクトは、後で検索するために、レポートとレスポンスのアーカイブを公開する必要があります。
+
+'
       vulnerability_report_process:
-        description:
-        details:
+        description: 'プロジェクトは、脆弱性を報告するプロセスをプロジェクト サイトに公開しなければなりません。
+
+'
+        details: 'たとえば、https：// PROJECTSITE / securityの明示的に指定されたメール アドレスで、これはしばしばsecurity@example.orgの形式です。これはバグ報告プロセスと同じかもしれません。脆弱性レポートは常に公開される可能性がありますが、多くのプロジェクトでは、プライベート脆弱性を報告するメカニズムがあります。
+
+'
       vulnerability_report_private:
-        description:
-        details:
+        description: 'プライベート脆弱性報告がサポートされている場合、プロジェクトは、プライベートに保持された方法で情報を送信する方法を含んでいなくてはなりません。
+
+'
+        details: '例としては、HTTPS（TLS）を使用してWeb上に提出されたプライベート不具合報告や、OpenPGPを使用して暗号化された電子メールがあります。脆弱性報告が常に公開されている場合（プライベート脆弱性報告は存在しないため）、「該当なし」（N
+          / A）を選択します。
+
+'
       vulnerability_report_response:
-        description:
-        details:
+        description: '過去6ヶ月間に受け取った脆弱性報告に対するプロジェクトの初期応答時間は、14日以下でなければなりません。
+
+'
+        details: '過去6か月間に脆弱性が報告されていない場合は、「該当なし」（N/A）を選択します。
+
+'
       build:
-        description: プロジェクトによって作成されたソフトウェアを利用するためにビルドが必要となるならば、プロジェクトは、ソースコードからソフトウェアを自動的にリビルドできる作業ビルドシステムを提供しなければなりません。
+        description: プロジェクトによって作成されたソフトウェアを利用するためにビルドが必要な場合、プロジェクトは、ソース コードからソフトウェアを自動的にリビルドできる作業ビルド
+          システムを提供しなければなりません。
         details: ビルドシステムは、ソフトウェアをリビルドするのに必要なアクション（およびその順序）を決定し、それらのステップを実行します。たとえば、ビルドシステムは、ソースコードをコンパイルするためにコンパイラを呼び出すことができます。実行可能ファイルがソースコードから生成される場合、ビルドシステムは、プロジェクトのソースコードを変更でき、その変更を含む更新された実行ファイルを生成できなければなりません。プロジェクトによって生成されたソフトウェアが外部ライブラリに依存する場合、ビルドシステムはそれらの外部ライブラリをビルドする必要は<em>ありません</em>。ソースコードが変更されても、ソフトウェアを使用するためにビルドする必要がない場合、「該当なし」（N/A）を選択します。
       build_common_tools:
         description: ソフトウエアをビルドするために、一般的なツールを使用することをお勧めします。
-        details: たとえば、Maven、Ant、cmake、rakeです。
+        details: 'たとえば、Maven、Ant、cmake、autotools、make、rakeなどです。
+
+'
       build_floss_tools:
         description: プロジェクトは、FLOSSツールだけを使用してビルドができるようにするべきです。
       test:
-        description:
-        details:
+        description: 'プロジェクトは、FLOSSとして公開されている少なくとも1つの自動化されたテスト スイートを使用しなければなりません（このテストスイートは、別のFLOSSプロジェクトとして維持することができます）。
+
+'
+        details: 'プロジェクトでは、複数の自動化されたテストスイートを使用することができます（たとえば、迅速に実行するもの、より完全であるが特別な装置が必要なもの）。
+
+'
       test_invocation:
-        description:
-        details:
+        description: 'テスト スイートは、その言語の標準的な方法で呼び出すことができるべきです。
+
+'
+        details: 'たとえば、「make check」、「mvn test」、「rake test」などです。
+
+'
       test_most:
-        description:
+        description: 'テスト スイートは、コードブランチ、入力フィールド、および機能のほとんど（または理想的にはすべて）をカバーすることが推奨されています。
+
+'
       test_continuous_integration:
-        description:
+        description: 'プロジェクトは、継続的インテグレーション（新しいコードまたは変更されたコードが頻繁に中央コードリポジトリに統合され、その結果に対して自動テストが実行される）を実装することを推奨されています。
+
+'
       test_policy:
-        description:
-        details:
+        description: 'プロジェクトは、プロジェクトで作成されたソフトウェアに主要な新機能が追加されたときに、その機能のテストを自動化されたテスト
+          スイートに追加する必要があるという一般的な方針（正式でも、正式でなくても構いません）を持っていなければなりません。
+
+'
+        details: '開発者はテストを自動テスト スイートに追加して、新しい機能を追加する必要があるというポリシーが、口頭でも（文書化されていなくても）、存在する限り、「満たしている」を選択してください。
+
+'
       tests_are_added:
-        description:
-        details:
+        description: 'プロジェクトによって作成されたソフトウェアの最新の大きな変更で、テストを追加するための<a href="#test_policy">
+          test_policy </a>が守られているという証拠がプロジェクトに存在しなければなりません。
+
+'
+        details: '主要な機能は、通常、リリースノートに記載されます。完璧は必要ないですが、プロジェクトによって生成されたソフトウェアに新しい主要機能が追加されたときに、自動テスト
+          スイートに実際にテストが追加されているという証拠となります。
+
+'
       tests_documented_added:
-        description:
-        details:
+        description: 'テストを追加するこのポリシー（<a href="#test_policy"> test_policy </a>を参照）を変更提案に関する手順で<em>文書化</
+          em>することを推奨します。
+
+'
+        details: 'しかし、実際にテストが追加されている限り、非公式の規則でも許容されます。
+
+'
       warnings:
-        description:
-        details:
+        description: |
+          プロジェクトは、選択した言語でこの基準を実装することができる少なくとも1つのFLOSSツールがあれば、1つまたは複数のコンパイラ警告フラグ、「安全」言語モードを使用可能にするか、分離
+          「リンター」ツールを使用してコード品質エラーまたは共通の単純なミスを検索しなければなりません。
+        details: 'コンパイラ警告フラグの例には、gcc / clang "-Wall"があります。 「安全」言語モードの例には、JavaScript「use
+          strict」とperl5の「use warnings」があります。分離「リンター」ツールは、ソースコードを調べてコード品質のエラーや一般的な単純なミスを探すツールです。これらは、通常、ソースコードまたはビルド命令内で有効になります。
+
+'
       warnings_fixed:
-        description:
-        details:
+        description: 'プロジェクトは警告を出さなければならない。
+
+'
+        details: 'これらは、<a href="#warnings">警告</a>基準の実装によって識別される警告です。プロジェクトは、警告を修正するか、ソースコード内で警告を誤検出としてマークするべきです。理想的には警告がないことがいいですが、プロジェクトはある程度の警告（通常100行あたり1警告未満または10警告未満）を受け入れることができます。
+
+'
       warnings_strict:
-        description:
-        details:
+        description: 'プロジェクトによって作成されたソフトウェアにある警告に、実際的な場合には、最大限に厳格になることを推奨されています。
+
+'
+        details: '一部の警告は、あるプロジェクトでは効果的に有効にすることはできません。必要なのは、プロジェクトが可能な限り警告フラグを有効にするように努力しており、エラーが早期に検出されるという証拠です。
+
+'
       know_secure_design:
-        description:
-        details:
+        description: 'プロジェクトには、セキュアなソフトウェアを設計する方法を知っている少なくとも1人の主要開発者がいなければなりません。
+
+'
+        details: 'これには、<a href="http://web.mit.edu/Saltzer/www/publications/protection/">
+          Saltzer and Schroeder </a>の8つの原則を含む以下の設計原則を理解する必要があります。<ul> <li>メカニズムの経済性（たとえば、スイーピング
+          シンプリフィケーションを採用して、メカニズムを実際的に単純化し小さくする）<li>フェイルセーフのデフォルト（アクセスの決定はデフォルトで拒否されるべきであり、プロジェクトのインストールはデフォルトで安全でなければならない）<li>完全なメディエーション（制限されたすべてのアクセスは権限がチェックされ、バイパスされない）<li>オープンな設計（セキュリティメカニズムは攻撃者の設計に対する無知に依存するべきではなく、
+          簡単に保護ができて変更ができる鍵やパスワードのような情報に依存すべきです。<li>特権の分離（理想的には、重要なオブジェクトへのアクセスは複数の条件に依存すべきで、1つの保護システムを破ることで完全なアクセスが可能にならないようにします。たとえば、パスワードとハードウェア
+          トークンを必要とする多因子認証は単因子認証より強いです。<li>最低限の権限（プロセスは最低限の権限で動作する必要がある）<li>最低限の共通メカニズム（設計は、複数のユーザに共通のメカニズムや全てのユーザーに依存するメカニズムを最小限に抑えるべきです。）
+          <li>心理学的受容性（ヒューマンインタフェースは、使いやすく設計されていなければならない - 「驚きが最小限になる」という設計が助けになる）<li>限られた攻撃面（攻撃面
+          - 攻撃者がデータを入力または抽出しようとする部分 - を制限する必要があります）<li>ホワイト リストで入力を検証します（入力は通常、この検証はブラックリスト（既知の不良値をリストする）ではなく、ホワイトリスト（既知の値のみを受け入れる）を使用する必要があります。
+          </ ul>プロジェクトの「主要な開発者」とは、プロジェクトのコードベースに精通していて、容易に変更を加えることができ、プロジェクトの他のほとんどの参加者によって認められている人です。主要な開発者は、通常、過去1年間に（コード、文書、または質問に回答して）多数の貢献を行います。ある開発者が、プロジェクトを開始している（3年以上プロジェクトから離れていない）、プライベート脆弱性報告チャネル（存在する場合）に関する情報を受け取る、プロジェクトを代表してコミットを受け入れる、最終リリースする、などを行う時主要な開発者とみなすことができます。開発者が1人だけの場合、その人物が主要開発者です。
+
+'
       know_common_errors:
-        description:
-        details:
+        description: 'プロジェクトの主要開発者の少なくとも1人は、この種のソフトウェアの脆弱性につながる一般的な種類のエラーを知っていなければならず、それぞれを対策または緩和する少なくとも1つの方法を知っていなければなりません。
+
+'
+        details: 例としては、（ソフトウェアのタイプに依存しますが）SQLインジェクション、OSインジェクション、古典的なバッファ オーバーフロー、クロスサイト
+          スクリプティング、認証欠落、権限欠落などがあります。 <a href="http://cwe.mitre.org/top25/"> CWE /
+          SANSトップ25 </a>または<a href = "https://www.owasp.org/index.php/カテゴリ：OWASP_Top_Ten_Project
+          "> OWASP Top 10 </a>を参照してください。
       crypto_published:
         description: プロジェクトによって作成されたソフトウェアは、デフォルトで、一般に公開され、専門家によってレビューされている暗号プロトコルとアルゴリズムを使用しなければなりません。（暗号プロトコルとアルゴリズムが使用される場合）
         details: ソフトウェアによっては暗号機能を直接使用する必要がないため、これらの暗号基準は常に適用されるわけではありません。
@@ -473,15 +714,17 @@ ja:
           <a href="http://www.keylength.com">http://www.keylength.com</a>にさまざまな機関が出している推奨鍵長の比較を参照して下さい。ソフトウェアは、
           いくつかの構成ではより短い鍵長を許可するかもしれません。（これはダウングレード攻撃を許すので、理想的には正しくありません。しかし、短い鍵長は、相互運用性のために時に必要となります。）
       crypto_working:
-        description:
-        details:
+        description: プロジェクトで作成したソフトウェア内のデフォルトのセキュリティ メカニズムは、破られた暗号アルゴリズム（たとえば、MD4、MD5、single
+          DES、RC4、Dual_EC_DRBGなど）に依存してはいけませんし、コンテキストに不適切な暗号モード(たとえば、ECBモードは、<a href="https://blog.filippo.io/the-ecb-penguin/">ECB
+          penguin</a>で明らかにされているように暗号文の中に同じブロックが存在するので、ほとんどの場合不適切です。CTRモードは、入力状態が繰り返されると、認証を実行せず重複が起こすので多くの場合不適切です。)を使用してもいけません。
+        details: 多くの場合、Galois/Counter Mode (GCM)やEAXなど、秘密と認証を組み合わせて設計されたブロック暗号アルゴリズムを選択するのが最善です。プロジェクトは、互換性の必要から破られたメカニズムを有効にするかもしれませんが、ユーザーはそれをしていることを認識しています。
       crypto_weaknesses:
         description: プロジェクトによって作成されたソフトウェア内のデフォルトのセキュリティ メカニズムは、既知の重大な脆弱性を持つ暗号アルゴリズムやモード（たとえば、SHA-1暗号ハッシュ
           アルゴリズムまたはSSHのCBC モード）に依存するべきではありません。
         details: 'SSHのCBCモードに関する懸念事項は、 <a href="https://www.kb.cert.org/vuls/id/958563">CERT:
           SSH CBC 脆弱性</a>にて議論されています。.'
       crypto_pfs:
-        description:
+        description: プロジェクトによって作成されたソフトウェア内のセキュリティ メカニズムは、鍵合意プロトコルのための完全な順方向秘密を実装するべきなので、もし長期鍵が将来侵害された場合でも、長期鍵のセットから導出されるセッション鍵は侵害されません。
       crypto_password_storage:
         description: プロジェクトによって生成されたソフトウェアが外部ユーザーの認証に使われるパスワードの保存をする場合、パスワードは、鍵ストレッチ（反復）アルゴリズム（PBKDF2、BcryptまたはScryptなど）を使い、ユーザーごとの塩（乱数）を用いて反復ハッシュとして保存しなければなりません。
         details: この基準は、サーバー側ウェブ アプリケーションなどのソフトウェアが、パスワードを使用してユーザー認証を行う場合のみに適用されます。ソフトウェアが他のシステムに認証のためのパスワードを保存するような場合（たとえばソフトウェアが他のシステムのクライアントを実現する場合）、少なくともそのソフトウェアの一部がハッシュされていないパスワードに頻繁にアクセスする必要があるため、この基準は適用されません。
@@ -490,45 +733,118 @@ ja:
         details: 暗号学的にセキュアな乱数発生器は、ハードウェアの乱数発生器でも、Hash_DRBG、HMAC_DRBG、 CTR_DRBG、Yarrow、
           Fortuna.などのアルゴリズムを使用する暗号学的にセキュアな疑似乱数発生器（CSPRNG）でもよいです。<em>セキュアでない</em>乱数発生器には、Javaのjava.util.RandomとJavaScriptのMath.randomがあります。
       delivery_mitm:
-        description:
-        details:
+        description: プロジェクトは、MITM攻撃に対抗する配信メカニズムを使用しなければならない。httpsまたはssh+scpを使用することは許容されます。
+        details: 'さらに強力な仕組みは、デジタル署名されたパッケージでソフトウェアをリリースすることです。配布システムへの攻撃を緩和するからです。しかし、これは、署名の公開鍵が正当なものであることをユーザーが確信でき、<em>かつ</em>ユーザーが実際に署名をチェックする場合にのみ有効です。
+
+'
       delivery_unsigned:
-        description:
-        details:
+        description: 暗号ハッシュ（たとえばSHA1SUM）は、http経由で運んではならず、暗号署名をチェックすることなしに使用してはいけません。
+        details: これらのハッシュは、送信中に変更することができます。
       vulnerabilities_fixed_60_days:
-        description:
-        details:
+        description: '60日を超えて公的に知られている中程度または重大度のパッチされていない脆弱性は存在してはなりません。
+
+'
+        details: '脆弱性は、プロジェクト自体によってパッチされ、リリースされなければなりません（パッチは他の場所で開発される可能性があります）。脆弱性が無料情報と共にCVE（共通脆弱性識別子）を持つとき（例えば、<a
+          href="https://nvd.nist.gov/"> National Vulnerability Database </a>）、またはプロジェクトに情報が伝えられ、その情報が（おそらくプロジェクトによって）一般に公開されたとき、脆弱性は一般に知られるようになります。<a
+          href="https://nvd.nist.gov/cvss.cfm"> CVSS 2.0 </a>の基本スコアが4以上の場合、脆弱性は中〜高程度です。
+          <strong>注</ strong>：これは、世界中のすべての攻撃者にユーザーが60日間まで脆弱である可能性があることを意味します。この基準は、<a
+          href="https://security.googleblog.com/2010/07/rebooting-responsible-disclosure-focus.html">責任のある開示の再開</a>でGoogleが推奨するものよりも、しばしば満たすことが容易です。なぜなら、レポートが公開されていないとき<em>でも</
+          em>、プロジェクトに通知されてから60日間の期間が開始されるからです。
+
+'
       vulnerabilities_critical_fixed:
-        description:
+        description: 'プロジェクトは、すべての重要な脆弱性を、報告された後迅速に修正するべきです。
+
+'
       no_leaked_credentials:
-        description:
-        details:
+        description: '公開リポジトリは、パブリックアクセスを制限するための有効なプライベートクレデンシャル（たとえば、有効なパスワードやプライベートキー）を漏らしてはなりません。
+
+'
+        details: 'プロジェクトは、パブリック アクセスを制限する意図がない限り、テスト用や重要でないデータベース用の「サンプル」資格情報を漏らす可能性があります。
+
+'
       static_analysis:
-        description:
-        details:
-        na_placeholder:
-        met_placeholder:
+        description: '選択した言語でこの基準を実装している少なくとも1つのFLOSSツールがある場合、少なくとも1つの静的コード解析ツールを、リリース前にソフトウェアの主要な製品リリースに適用する必要があります。
+
+'
+        details: '静的コード解析ツールは、ソフトウェアコードを実行せずに特定の入力を用いて（ソースコード、中間コード、または実行可能ファイルとして）調べます。この基準のために、コンパイラの警告と「安全な」言語モードは、静的コード解析ツールとしてカウントされません（これらは通常、速度が重要なため深い解析を行いません）。このような静的コード解析ツールの例には、<a
+          href="http://cppcheck.sourceforge.net/"> cppcheck </a>、<a href="http://clang-analyzer.llvm.org/">
+          clangスタティックアナライザ</a>、<a href="http://findbugs.sourceforge.net/"> FindBugs
+          </a>（<a href = "https://h3xstream.github.io/find-sec-bugs/">FindSecurityBugs</a>を含む）、<a
+          href="https://pmd.github.io/"> PMD </a>、<a href="http://brakemanscanner.org/">
+          Brakeman </a>、<a href="https://scan.coverity.com/"> Coverity Quality Analyzer
+          </a>、および<a href = "http://www8.hp.com/au/en /software-solutions/static-code-analysis-sast/index.html">
+          HP Fortify静的コードアナライザー</a>。大きなツールのリストは、<a href="https://en.wikipedia.org/wiki/List_of_tools_for_static_code_analysis">静的コード解析のためのWikipediaツール一覧</a>、<a
+          href = "https://www.owasp.org/index.php/Static_Code_Analysis">静的コード解析に関するOWASP情報</a>、<a
+          href = "http://samate.nist.gov/index.php/Source_Code_Security_Analyzers.html
+          "> NISTソースコードセキュリティアナライザのリスト</a>、<a href="http://www.dwheeler.com/essays/static-analysis-tools.html">ウィーラーの静的解析ツール一覧</
+          a >。 <a href="https://continuousassurance.org/"> SWAMP </a>は、さまざまなツールを使用してソフトウェアの脆弱性を評価する無償のプラットフォームです。使用する実装言語で使用できるFLOSS静的解析ツールがない場合は、「該当なし」（N/A）を選択します。
+
+'
+        na_placeholder: 'これが満たされないのはなぜですか（たとえば、その言語用のFLOSSツールがないから）？
+
+'
+        met_placeholder: 'どのような静的解析ツールを使用していますか？
+
+'
       static_analysis_common_vulnerabilities:
-        description:
+        description: 'static_analysis基準に使用される静的解析ツールの少なくとも1つが、分析された言語または環境における共通の脆弱性を探すためのルールまたはアプローチを含むことが、推奨されています。
+
+'
       static_analysis_fixed:
-        description:
-        details:
+        description: '静的コード解析で発見された中程度および重大度の悪用可能な脆弱性はすべて、それらが確認された後、適時に修正されなくてはなりません。
+
+'
+        details: '<a href="https://nvd.nist.gov/cvss.cfm"> CVSS 2.0 </a>が4以上の場合、脆弱性は中〜高程度です。
+
+'
       static_analysis_often:
-        description:
+        description: '静的ソースコード解析は、コミットごと、または少なくとも毎日実行することをお勧めします。
+
+'
       dynamic_analysis:
-        description:
-        details:
+        description: 'リリース前に、ソフトウェアの主要な製品リリースに少なくとも1つの動的解析ツールを適用することが示唆されています。
+
+'
+        details: '動的解析ツールは、ソフトウェアを特定の入力で実行して検査します。たとえば、プロジェクトは、ファジングツール（<a href="http://lcamt​​uf.coredump.cx/afl/">アメリカンファジーロップ</a>など）やウェブ
+          アプリケーション スキャナ（例：<a href = "https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project">
+          OWASP ZAP </a>または<a href="http://w3af.org/"> w3af </a>）です。場合によっては、<a href="https://github.com/google/oss-fuzz#introduction">
+          OSS-Fuzz </a>プロジェクトがプロジェクトにファズテストを適用する可能性があります。この基準のために、動的分析ツールは、様々な種類の問題を探すために何らかの方法で入力を変更するか<em>または</em>少なくとも80％のブランチ
+          カバレッジを持つ自動テスト スイートである必要があります。 <a href="https://en.wikipedia.org/wiki/Dynamic_program_analysis">動的解析に関するWikipediaのページ</a>と<a
+          href = "https://www.owasp.org/index.php / Fuzzing "> ファジングに関するOWASPページ</a>で、いくつかの動的解析ツールを特定しています。解析ツールは、セキュリティの脆弱性を探すことに重点を置くことができますが、これは必須ではありません。
+
+'
       dynamic_analysis_unsafe:
-        description:
-        details:
+        description: 'プロジェクトで作成されたソフトウェアにメモリ安全でない言語（CやC ++など）を使用して作成されたソフトウェアが含まれている場合、少なくとも1つの動的ツール（たとえば、ファジーまたはウェブ
+          アプリケーション スキャナ）を、バッファの上書きなどのメモリの安全性の問題を検出するメカニズムと一緒にいつも使用します。プロジェクトがメモリ安全でない言語で書かれたソフトウェアを作成しない場合は、「該当なし」（N/A）を選択します。
+
+'
+        details: 'メモリの安全性の問題を検出するメカニズムの例としては、<a href="https://github.com/google/sanitizers/wiki/AddressSanitizer">アドレスサニタイザー（ASAN）</a>（GCCおよびLLVMで利用可能）、<a
+          href = "http://clang.llvm.org/docs/MemorySanitizer.html"> Memory Sanitizer
+          </a>、および<a href="http://valgrind.org/"> valgrind </a>が含まれます。他に使用される可能性のあるツールには、<a
+          href="http://clang.llvm.org/docs/ThreadSanitizer.html">スレッドサニタイザ</a>と<a
+          href = "http://clang.llvm.org/ docs / UndefinedBehaviorSanitizer.html ">定義されていない動作サニタイザ</a>を参照してください。広範なアサーションも機能します。
+
+'
       dynamic_analysis_enable_assertions:
-        description:
+        description: 'プロジェクトによって作成されたソフトウェアには、動的解析中にチェックされる多くの実行時アサーションが含まれていることが推奨されます。
+
+'
       dynamic_analysis_fixed:
-        description:
-        details:
+        description: '動的コード分析で発見されたすべての中程度および重大度の悪用可能な脆弱性は、確認された後、適時に修正されなければなりません。
+
+'
+        details: '<a href="https://nvd.nist.gov/cvss.cfm"> CVSS 2.0 </a>ベース スコアが4の場合、脆弱性は中〜高程度です。動的コード分析を実行していないため、このように脆弱性を発見していない場合は、「該当なし」（N
+          / A）を選択します。
+
+'
       installation_common:
-        description:
-        details:
+        description: 'プロジェクトは、プロジェクトで作成されたソフトウェアを一般的に使用されているやり方で簡単にインストールおよびアンインストールする方法を提供するべきです。
+
+'
+        details: 'たとえば、パッケージマネージャー（システムまたは言語レベル）、「make install / uninstall」（DESTDIRをサポート）、標準形式のコンテナー、または標準形式の仮想マシンイメージを使用することが挙げられます。インストールとアンインストールのプロセス（たとえば、パッケージング）は、FLOSSである限り、サードパーティによって実装されてもよいです。
+
+'
       build_reproducible:
         description: プロジェクトが<a href="https://reproducible-builds.org/">再現可能なビルド</a>を持つことが、推奨されています。ビルドが発生しない場合（たとえば、コンパイルされないでソースコードが直接使用されるスクリプト言語）、「該当なし」（N/A）を選択します。
         details: 再現可能なビルドは、複数の当事者がソース ファイルから情報を生成するプロセスを独立にやり直し、ビット単位でまったく同じ結果を得られることを意味します。ビルドが発生しない場合（たとえば、コンパイルされる代わりに、ソースコードが直接使用されるスクリプト言語）、「該当なし」（N/A）を選択します。ある場合には、これ（再現可能なビルド）は、あるソート順を強いることで解決されます。Javaスクリプトの開発者は、npm
@@ -545,13 +861,25 @@ ja:
           ソフトウェアでのSSL認証の検証」Martin Georgiev et al著</a> と <a href="https://blogs.gnome.org/mcatanzaro/2016/03/12/do-you-trust-this-application/">「このアプリケーションを信頼しますか？」Michael
           Catanzaro著</a>.を参照して下さい。
       crypto_verification_private:
-        description:
+        description: 'TLSをサポートしている場合、プロジェクトによって作成されたソフトウェアは、（たとえばセキュアクッキーなど）プライベートな情報をHTTPヘッダと共に送信する前に、証明書の検証をするべきです。ソフトウェアがTLSを使用しない場合は、「該当なし」（N/A）を選択します。
+
+'
       hardened_site:
-        description:
-        details:
+        description: 'プロジェクトウェブサイト、リポジトリ（ウェブからアクセス可能な場合）、およびダウンロードサイト（別々の場合）には、許容できない値を持つキー強化ヘッダーが含まれていることが推奨されます。
+
+'
+        details: 'GitHubはこれを満たしています。 https://securityheaders.io/などのサイトでこれをすばやく確認できます。キーセキュリティ強化ヘッダーは、コンテンツ
+          セキュリティ ポリシー（CSP）、HTTP厳密トランスポート セキュリティ（HSTS）、X-Content-Type-Options（「nosniff」）、X-Frame-Options、X-XSS-Protectionです。
+
+'
       hardening:
-        description:
-        details:
+        description: 'プロジェクトによって作成されたソフトウェアで強化メカニズムを使用することが推奨されていますので、ソフトウェア欠陥がセキュリティ上の脆弱性を引き起こす可能性が低くなります。
+
+'
+        details: '強化メカニズムは、Content Security Policy（CSP）などのHTTPヘッダー、攻撃を緩和するコンパイラ フラグ（-fstack-protectorなど）、または未定義の動作を排除するためのコンパイラ
+          フラグを含みます。私たちの目的のために、最低限の特権は強化メカニズムとはみなされません（最低の特権は重要ですが、別の話です）。
+
+'
     '1':
       contribution_requirements:
         description:
@@ -568,7 +896,10 @@ ja:
         description:
         details:
       access_continuity:
-        description:
+        description: 'いずれかの人が仕事を継続できなくなるまたは死亡した場合、プロジェクトは最小限の中断で継続することができなければなりません。特に、プロジェクトは、課題の作成と終了、提案された変更の受け入れ、およびバージョンのソフトウェアのリリース、1週間内に個人が仕事を継続できくなったことまたは死亡したことの確認、行うことができなければならない。これは、他の誰かがプロジェクトを継続するのに必要な鍵、パスワード、法的権利を持っていることを保証することによって行うことができます。
+          FLOSSプロジェクトを実行する個人は、ロックボックスにキーを提供し、必要な法的権利を提供する意志（例えば、DNS名のために）を提供することによって、これを行うことができます。
+
+'
       bus_factor:
         description:
         details:
@@ -591,7 +922,9 @@ ja:
         description:
         details:
       accessibility_best_practices:
-        description:
+        description: 'プロジェクト（プロジェクト サイトとプロジェクト結果の両方）は、アクセシビリティのベストプラクティスに従い、障害のある人が引き続きプロジェクトに参加し、プロジェクトの結果を合理的な範囲で使用することができるようにするべきです。
+
+'
         details:
       internationalization:
         description:
@@ -621,7 +954,10 @@ ja:
         description:
         details:
       build_non_recursive:
-        description:
+        description: 'プロジェクトによって作成されたソフトウェアのビルド システムは、サブディレクトリに相互依存関係がある場合、再帰的にサブディレクトリをビルドしてはなりません。ビルドやインストール
+          システムがない場合（例：一般的なJavaScriptライブラリ）は、「該当なし」（N/A）を選択します。
+
+'
         details:
       build_repeatable:
         description:
@@ -646,8 +982,13 @@ ja:
       interfaces_current:
         description:
       automated_integration_testing:
-        description:
-        details:
+        description: '少なくとも1つのブランチの共有リポジトリへの各チェックインに対して、自動テスト スイートが適用される必要があります。このテスト
+          スイートは、テストの成功または失敗に関するレポートを生成しなければなりません。
+
+'
+        details: 'この要件は、test_continuous_integrationのサブセットと見ることができますが、継続的な統合を範囲外として、テストだけに焦点を当てています。
+
+'
       regression_tests_added50:
         description:
       test_statement_coverage80:
@@ -693,8 +1034,12 @@ ja:
       dynamic_analysis_unsafe:
         description:
       assurance_case:
-        description:
+        description: 'プロジェクトは、そのセキュリティ要件が満たされていることを証明する保証ケースを提供しなければならない。保証ケースには、脅威モデルの説明、信頼境界の明確な識別、セキュアな設計原則が適用されていることの議論、共通の実装セキュリティの弱点が対処されたことの議論が含まれなければならない。
+
+'
         details:
+      achieve_passing:
+        description: プロジェクトは合格レベルバッジに達成しなければなりません。
     '2':
       bus_factor:
         description:
@@ -724,7 +1069,9 @@ ja:
         description:
       build_reproducible:
         description:
-        details:
+        details: 再現可能なビルドは、複数の当事者がソース ファイルから情報を生成するプロセスを独立にやり直し、ビット単位でまったく同じ結果を得られることを意味します。ある場合には、これ（再現可能なビルド）は、あるソート順を強いることで解決されます。Javaスクリプトの開発者は、npm
+          shrinkwrapとwebpack OccurenceOrderPluginの使用を検討するかもしれません。GCCとclangのユーザーは、-frandom-seedオプションが有用であることを見つけるかもしれません。ビルド環境（ツールセットを含む）は、リビルドに使用できる特定のコンテナや仮想マシンの暗号化ハッシュを指定することによって、外部パーティのために、しばしば定義可能です。<a
+          href="https://reproducible-builds.org/docs/">再現可能なビルド プロジェクトは、これを行う方法を記載したドキュメントを有します</a>。
       test_invocation:
         description:
       test_continuous_integration:
@@ -750,29 +1097,34 @@ ja:
         description:
       dynamic_analysis_enable_assertions:
         description:
+      achieve_silver:
+        description:
   static_pages:
     home:
-      badge_program: CIIベストプラクティスバッジプログラム
-      get_your_badge: あなたのバッジを今すぐ手に入れよう！
-      p1_html: '<a href="https://www.linuxfoundation.org/"> Linux Foundation（LF）</a>
-        <a href="https://www.coreinfrastructure.org/">コアインフラストラクチャイニシアチブ（CII） </a>
-        Best Practicesバッジは、Free / LibreおよびOpen Source Software（FLOSS）プロジェクトがベストプラクティスに従うことを示すための方法です。プロジェクトは、このWebアプリケーションを使用して各ベストプラクティスに従う方法を説明することにより、無償で自主的に自己証明することができます。
-        CIIベストプラクティスのバッジは、GitHubのプロジェクトで利用可能な多くのバッジからインスピレーションを受けています。バッジの消費者は、どのFLOSSプロジェクトがベストプラクティスに従っているかを迅速に評価することができ、その結果、より高品質のセキュアなソフトウェアを生産する可能性が高まります。
+      badge_program: CII ベスト プラクティス バッジ プログラム
+      get_your_badge: バッジを入手する
+      p1_html: '<a href="https://www.linuxfoundation.org/">Linux Foundation (LF)</a>
+        <a href="https://www.coreinfrastructure.org/">Core Infrastructure Initiative
+        (CII)</a> ベスト プラクティス バッジは、Free / Libre and Open Source Software（FLOSS）プロジェクトが、ベスト
+        プラクティスに従っていることを自ら示す方法です。プロジェクトは、このWebアプリケーションを使用して、それぞれのベスト プラクティスに従っていることを説明することにより、自主的に無償で自己証明することができます。
+        CII ベスト プラクティス バッジは、GitHubのプロジェクトで利用可能な多くのバッジからインスピレーションを受けています。バッジの消費者は、どのFLOSSプロジェクトがベスト
+        プラクティスに従っているかを速やかに評価でき、その結果、より高品質で安全なソフトウェアを生産することができます。
 
 '
-      p2_html: 'バックグラウンドや<a href=''https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/doc/criteria.md''>基準を含むCIIベストプラクティスバッジプログラムの詳細については、
-        a>は、<a href=''https://github.com/linuxfoundation/cii-best-practices-badge''>
-        GitHubで利用可能</a>です。 <a href="/ja/project_stats">プロジェクトの統計情報</a>と<a href="/ja/criteria">基準の統計情報</a>が利用できます。
-        <a href="/ja/projects">プロジェクトページ</a>には、参加しているプロジェクトが表示され、クエリがサポートされています（例：<a
-        href="/ja/projects?gteq=100">合格バッジを持つプロジェクト</ a >）。また、<a href=''/ja/projects/1''>の例（自分のバッジを取得しようとする場所）</a>を見ることもできます。
+      p2_html: 'バックグラウンドや<a href=''https://github.com/coreinfrastructure/best-practices-badge/blob/master/doc/criteria.md''>基準</a>など、CII
+        ベスト プラクティス バッジ プログラムの詳細については、<a href=''https://github.com/coreinfrastructure/best-practices-badge''>
+        GitHubで公開</a>されています。 <a href="/ja/project_stats">プロジェクトの統計情報</a>や<a href="/ja/criteria">基準の統計情報</a>も確認できます。
+        <a href="/ja/projects">プロジェクト ページ</a>には、参加しているプロジェクトが表示され、クエリも使用できます (「<a
+        href="/ja/projects?gteq=100">合格バッジを持つプロジェクトだけ表示する</a >」クエリなど)。また、<a href=''/ja/projects/1''>その例
+        (当プロジェクトのバッジ取得サイト)</a> も見ることができます。
 
 '
-      p3_html: '<em>プライバシーと法的問題</em>：<a href="https://www.linuxfoundation.org/privacy">プライバシーポリシー</a>と<a
-        href = "https://www.linuxfoundation.org/terms">利用規約</a>をご覧ください。公開されているすべての非コードコンテンツは、少なくとも<a
-        href="https://creativecommons.org/licenses/by/3.0/">クリエイティブコモンズアトリビューションライセンスバージョン3.0（CC-BY-3.0）</a>;より新しい非コードコンテンツは、CC-BYバージョン3.0以降（CC-BY-3.0
-        +）でリリースされています。集合的に言及している場合、または特に明記されていない場合は、CII Best Practicesバッジの寄稿者にご報告ください。
-
-'
+      p3_html: <em>プライバシーと法的問題</em>：<a href="https://www.linuxfoundation.jp/privacy">プライバシーポリシー</a>と<a
+        href = "https://www.linuxfoundation.jp/terms">利用条件</a>をご覧ください。公開されているすべての非コード
+        コンテンツは、少なくとも<a href="https://creativecommons.org/licenses/by/3.0/">Creative
+        Commons Attribution License version 3.0 (CC-BY-3.0)</a> のもとでリリースされています。また、より新しい非コード
+        コンテンツは、CC-BY version 3.0 以降 (CC-BY-3.0+) のもとでリリースされています。詳細や不足事項については、CII ベスト
+        プラクティス バッジのコントリビューターまでご連絡ください。
     criteria:
       criteria:
       detailed_criteria_on_github:
@@ -781,44 +1133,55 @@ ja:
       criteria_na_met_details:
       project_counts:
       project_stats_html:
+      level:
+      must:
+      should:
+      suggested:
+      total_active:
+      allow_na:
+      require_url:
+      details:
+      future:
   headings:
     Accessibility and internationalization:
     Analysis:
     Automated test suite:
     Basic project website content:
-    Basics:
-    Bug-reporting process:
-    Change Control:
-    Coding standards:
-    Documentation:
-    Dynamic code analysis:
-    Externally-maintained components:
-    Future:
-    future:
-    Installation system:
-    New functionality testing:
-    OSS License:
-    Other:
-    Other security issues:
-    Previous versions:
-    Project oversight:
-    Public version-controlled source repository:
-    Publicly known vulnerabilities fixed:
-    Quality:
-    Release notes:
-    Reporting:
-    Secure development knowledge:
-    Secure release:
-    Secured delivery against man-in-the-middle (MITM) attacks:
-    Security:
-    Static code analysis:
-    Unique version numbering:
-    Use basic good cryptographic practices:
-    Vulnerability report process:
-    Warning flags:
-    Working build system:
-    Identification:
-  last_entry:
+    Basics: 基本的情報
+    Bug-reporting process: バグ報告プロセス
+    Change Control: 変更管理
+    Coding standards: コーディング標準
+    Documentation: ドキュメンテーション
+    Dynamic code analysis: 動的コード分析
+    Externally-maintained components: 外部で維持管理されるコンポーネント
+    Future: 今後予定される基準
+    future: 今後予定される基準
+    Installation system: インストールシステム
+    New functionality testing: 新機能テスト
+    OSS License: OSSライセンス
+    Other: その他
+    Other security issues: その他のセキュリティ上の課題
+    Previous versions: 以前のバージョン
+    Project oversight: プロジェクトの管理・運営
+    Public version-controlled source repository: 公開されたバージョン管理ソースリポジトリ
+    Publicly known vulnerabilities fixed: '広く知られた脆弱性を修正
+
+'
+    Quality: 品質
+    Release notes: リリースノート
+    Reporting: 報告
+    Secure development knowledge: セキュリティに関する開発知識
+    Secure release: 公開物の安全性
+    Secured delivery against man-in-the-middle (MITM) attacks: MITM（man-in-the-middle：中間者）攻撃に対応できる安全な配信
+    Security: セキュリティ
+    Static code analysis: 静的コード解析
+    Unique version numbering: 一意的なバージョン番号
+    Use basic good cryptographic practices: 優良な暗号手法を使用する
+    Vulnerability report process: 脆弱性報告プロセス
+    Warning flags: 警告フラグ
+    Working build system: 実動ビルドシステム
+    Identification: 識別情報
+  last_entry: 最後の翻訳エントリ
   admin_only: 管理者のみ。
   criterion_status:
     Met:

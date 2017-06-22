@@ -94,11 +94,6 @@ group :test do
 end
 
 group :production do
-  gem 'rails_12factor', '0.0.3'
-  # Historically we used this gem to compress (to reduce network load):
-  # gem 'heroku_rails_deflate', '1.0.3'
-  # Removed according to http://stackoverflow.com/a/39550697/1935918
-  # (it has not yet been updated to work with Rails 5).  Rack has a
-  # built-in compression mechanism, which we use in production instead.
   gem 'rack-timeout', '0.4.2' # Timeout; https://github.com/heroku/rack-timeout
+  gem 'rails_12factor', '0.0.3'
 end

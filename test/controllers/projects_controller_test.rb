@@ -86,7 +86,10 @@ class ProjectsControllerTest < ActionController::TestCase
     assert_response :success
     assert_select 'a[href=?]'.dup, 'https://www.nasa.gov'
     assert_select 'a[href=?]'.dup, 'https://www.nasa.gov/pathfinder'
-    only_correct_criteria_selectable('0')
+    # Check semver description, which has HTML - make sure it's not escaped:
+    assert @response.body.include?(
+      I18n.t('criteria.0.version_semver.description')
+    )
   end
 
   test 'should show project with criteria_level=1' do

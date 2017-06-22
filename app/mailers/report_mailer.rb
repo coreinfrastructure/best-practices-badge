@@ -16,6 +16,7 @@
 
 # rubocop:disable Metrics/MethodLength, Metrics/ClassLength
 class ReportMailer < ApplicationMailer
+  include SessionsHelper
   REPORT_EMAIL_DESTINATION = 'cii-badge-log@lists.coreinfrastructure.org'
 
   def set_headers
@@ -40,8 +41,7 @@ class ReportMailer < ApplicationMailer
     set_headers
     mail(
       to: @report_destination,
-      subject: "Project #{project.id} status change to " \
-                        "#{new_badge_status}"
+      subject: "Project #{project.id} status change to #{new_badge_status}"
     )
   end
 
@@ -64,7 +64,9 @@ class ReportMailer < ApplicationMailer
     return if user.nil?
     return unless user.email?
     return unless user.email.include?('@')
-    @project_info_url = project_info_url(@project.id)
+    @project_info_url = force_locale_url(
+      project_info_url(@project.id), user.preferred_locale.to_sym
+    )
     @email_destination = user.email
     @new_level = new_badge_level
     @old_level = old_badge_level
@@ -73,7 +75,9 @@ class ReportMailer < ApplicationMailer
       mail(
         to: @email_destination,
         template_name: lost_level ? 'lost_level' : 'gained_level',
-        subject: subject_for(old_badge_level, new_badge_level, lost_level)
+        subject: subject_for(
+          old_badge_level, new_badge_level, lost_level
+        ).strip
       )
     end
   end
@@ -89,14 +93,16 @@ class ReportMailer < ApplicationMailer
     return if user.nil?
     return unless user.email?
     return unless user.email.include?('@')
-    @project_info_url = project_info_url(@project.id)
+    @project_info_url = force_locale_url(
+      project_info_url(@project.id), user.preferred_locale.to_sym
+    )
     @email_destination = user.email
     set_headers
     I18n.with_locale(user.preferred_locale.to_sym) do
       mail(
         to: @email_destination,
         # bcc: REPORT_EMAIL_DESTINATION, # This would bcc individual reminders
-        subject: t('report_mailer.subject_reminder')
+        subject: t('report_mailer.subject_reminder').strip
       )
     end
   end
@@ -144,13 +150,15 @@ class ReportMailer < ApplicationMailer
     return if user.nil?
     return unless user.email?
     return unless user.email.include?('@')
-    @project_info_url = project_info_url(@project.id)
+    @project_info_url = force_locale_url(
+      project_info_url(@project.id), user.preferred_locale.to_sym
+    )
     @email_destination = user.email
     set_headers
     I18n.with_locale(user.preferred_locale.to_sym) do
       mail(
         to: @email_destination,
-        subject: t('report_mailer.subject_new_project')
+        subject: t('report_mailer.subject_new_project').strip
       )
     end
   end
@@ -168,7 +176,7 @@ class ReportMailer < ApplicationMailer
         subject: t(
           'report_mailer.subject_project_deleted',
           project_id: project.id, project_name: project.name
-        )
+        ).strip
       )
     end
   end

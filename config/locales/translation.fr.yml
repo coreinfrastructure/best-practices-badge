@@ -32,7 +32,7 @@ fr:
     login_html: <span class="glyphicon glyphicon-log-in"></span> S'identifier
     footer_text_html: '<small> <strong>Vous avez besoin d''aide ? Vous avez une question
       ? Vous voyez un problème ? Merci d''<em><a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">envoyer
-      un email</a></em> ou de <em><a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues"
+      un email</a></em> ou de <em><a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
       target="_blank">reporter un problème</a></i>.</strong> © 2015-2017 <a href="https://www.coreinfrastructure.org/
       target="_blank"> Core Infrastructure Initiative</a>, un projet collaboratif
       de la <a href="https://www.linuxfoundation.org/" target="_blank">Fondation Linux</a>.
@@ -392,9 +392,8 @@ fr:
           satisfaits OU non satisfaits avec justification, <em>et</em> tous les critères
           PROPOSÉ doivent être satisfaits OU non satisfaits (nous voulons au moins
           qu''ils soient considérés). Les commentaires sont les bienvenus via le <a
-          href="https://github.com/linuxfoundation/cii-best-practices-badge">site
-          GitHub en tant que problèmes ou pull requests</a>. Il existe également une
-          <a href="https://lists.coreinfrastructure.org/mailman/listinfo/cii-badges">liste
+          href="https://github.com/coreinfrastructure/best-practices-badge">site GitHub
+          en tant que problèmes ou pull requests</a>. Il existe également une <a href="https://lists.coreinfrastructure.org/mailman/listinfo/cii-badges">liste
           de diffusion pour discussion générale</a>. <br /> <br /> Nous fournissons
           volontiers l''information dans plusieurs langues, cependant, s''il existe
           un conflit ou une contradiction entre les traductions, la version anglaise
@@ -416,15 +415,18 @@ fr:
           pour enregistrer votre travail (vous pouvez toujours revenir en arrière
           et éditer plus tard). <br><br> Si vous avez besoin d''aide, voulez poser
           une question ou voyez un problème, veuillez <em><a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">envoyer
-          un email</a> </em>ou<em> <a href="https://github.com/linuxfoundation/cii-best-practices-badge/issues"
+          un email</a> </em>ou<em> <a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
           target="_blank">signaler un problème</a></em>.
 
 '
         badge_alt: Le niveau de badge pour le projet %{id} est %{level}
       level:
-        0_html: Ce sont les critères du niveau basique.
-        1_html: Ce sont les critères du niveau argent.
-        2_html: Ce sont les critères du niveau or.
+        0_html: Ce sont les critères du niveau %{passing}. Vous pouvez également afficher
+          les critères des niveaux %{silver} ou %{gold}.
+        1_html: Ce sont les critères du niveau %{silver}. Vous pouvez également afficher
+          les critères des niveaux %{passing} ou %{gold}.
+        2_html: Ce sont les critères du niveau %{gold}. Vous pouvez également afficher
+          les critères des niveaux %{passing} ou %{silver}.
         '0': Basique
         '1': Argent
         '2': Or
@@ -600,24 +602,24 @@ fr:
     new_project_part2: |
       Veuillez visiter votre soumission pour compléter les informations et obtenir votre badge !
       Voici l'URL de votre soumission :
-    new_project_part3_html: "<P>\nNous vous encourageons à continuer à progresser.\n</P>\n\n<P>\nSi
+    new_project_part3_html: "<p>\nNous vous encourageons à continuer à progresser.\n</p>\n\n<p>\nSi
       vous voulez voir <em>seulement</em> ce qui vous manque,\nvisitez votre soumission
-      \npuis cliquez sur le bouton près du haut étiqueté \"Hide met ou N/A criteria\"\nSi
-      vous avez des questions ou avez besoin d'aide, contactez-nous\n<a href=\"mailto:&#99;ii&#45;badges&#45;questions&#45.own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;\">&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;</a>
-      \nou reportez un problème à\n<a href=\"https://github.com/coreinfrastructure/best-practices-badge/issues\">
+      \npuis cliquez sur le bouton près du haut étiqueté « Masquer atteints & N/A
+      ».\nSi vous avez des questions ou avez besoin d'aide, contactez-nous à\n<a href=\"mailto:&#99;ii&#45;badges&#45;questions&#45.own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;\">&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;</a>
+      \nou reportez un problème sur\n<a href=\"https://github.com/coreinfrastructure/best-practices-badge/issues\">
       https://github.com/coreinfrastructure/best-practices-badge/issues </a>\n(cliquez
-      sur \"nouveau problème\").\n</p>\n\n<P>\nMerci pour votre temps.\n</P>\n"
+      sur « nouveau problème »).\n</p>\n\n<p>\nMerci pour vos efforts.\n</p>\n"
     new_project_part3_text: |
       Nous vous encourageons à continuer à progresser.
 
-      Si vous voulez voir seulement ce qui vous manque, visitez votre soumission puis cliquez sur le bouton près du haut étiqueté "Hide met or N/A criteria".
-      Si vous avez des questions ou avez besoin d'aide, contactez-nous
+      Si vous voulez voir seulement ce qui vous manque, visitez votre soumission puis cliquez sur le bouton près du haut étiqueté « Masquer atteints & N/A ».
+      Si vous avez des questions ou avez besoin d'aide, contactez-nous à
       cii-badges-questions-owner@lists.coreinfrastructure.org
-      ou reportez un problème à
+      ou reportez un problème sur
       https://github.com/coreinfrastructure/best-practices-badge/issues
-      (cliquez sur "nouveau problème").
+      (cliquez sur « nouveau problème »).
 
-      Merci pour votre temps.
+      Merci pour vos efforts.
     in_markdown_add: 'En markdown, vous pouvez ajouter ceci :'
     in_html_add: 'En HTML, vous pouvez ajouter ceci :'
     ending: "--- David A. Wheeler, Directeur Technique du programme CII Best Practices
@@ -655,7 +657,7 @@ fr:
       y compris par l'ajout d'URL qui redirigent vers plus d'informations.
 
       Si vous avez des suggestions sur la façon d'améliorer les critères ou
-      l'application Web du badge, veuillez soumettre un problème à :
+      l'application Web du badge, veuillez soumettre un problème sur :
       https://github.com/coreinfrastructure/best-practices-badge/issues
 
       Si vous avez apporté des modifications à votre projet pour obtenir un badge, veuillez nous le faire savoir
@@ -675,9 +677,9 @@ fr:
     en: Anglais / English (en)
     fr: Français (fr)
     zh-CN: Chinois (simplifié) / 简体 中文 (zh-CN)
-    de: Allemand / Deutsche (de)
+    de: Allemand / Deutsch (de)
     ja: Japonais / 日本語 (ja)
-    ru: Russe / русский язык (ru)
+    ru: Russe / Русский (ru)
   criteria:
     '0':
       description_good:
@@ -1551,23 +1553,23 @@ fr:
 '
       build_reproducible:
         description: 'Il est PROPOSÉ que le projet possède une <a href="https://reproducible-builds.org/">construction
-          reproductible</a>.
+          reproductible</a>. Si aucune construction ne se produit (par exemple, les
+          langages de script où le code source est utilisé directement au lieu d''être
+          compilé), sélectionnez « non applicable » (N/A)
 
 '
         details: 'Une construction reproductible signifie que plusieurs parties peuvent
           refaire indépendamment le processus de génération d''informations à partir
-          de fichiers source et obtenir exactement le même résultat bit-à-bit. Si
-          aucune construction ne se produit (par exemple, les langages de script où
-          le code source est utilisé directement au lieu d''être compilé), sélectionnez
-          « N/A ». Dans certains cas, cela peut être résolu en forçant un ordre de
-          tri. Les développeurs JavaScript peuvent envisager d''utiliser npm shrinkwrap
-          et webpack OccurenceOrderPlugin. Les utilisateurs GGC et clang peuvent trouver
-          l''option -frandom-seed utile. L''environnement de construction (y compris
-          le jeu d''outils) peut souvent être défini pour les parties externes en
-          spécifiant le hachage cryptographique d''un conteneur spécifique ou d''une
-          machine virtuelle qu''ils peuvent utiliser pour la reconstruction. Le <a
-          href="https://reproducible-builds.org/docs/">projet de construction reproductible
-          dispose de documentation sur la façon de le faire</a>.
+          de fichiers source et obtenir exactement le même résultat bit-à-bit. Dans
+          certains cas, cela peut être résolu en forçant un ordre de tri. Les développeurs
+          JavaScript peuvent envisager d''utiliser npm shrinkwrap et webpack OccurenceOrderPlugin.
+          Les utilisateurs GGC et clang peuvent trouver l''option -frandom-seed utile.
+          L''environnement de construction (y compris le jeu d''outils) peut souvent
+          être défini pour les parties externes en spécifiant le hachage cryptographique
+          d''un conteneur spécifique ou d''une machine virtuelle qu''ils peuvent utiliser
+          pour la reconstruction. Le <a href="https://reproducible-builds.org/docs/">projet
+          de construction reproductible dispose de documentation sur la façon de le
+          faire</a>.
 
 '
       crypto_used_network:
@@ -2321,11 +2323,13 @@ fr:
           Il est fréquent d''énumérer des principes de conception sécurisés (tels
           que Saltzer et Schroeer) et des faiblesses de sécurité courantes de l''implémentation
           (comme le OWASP top 10 ou le CWE/SANS top 25) et de montrer comment chacun
-          est contré. L''<a href="https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/doc/security.md">analyse
+          est contré. L''<a href="https://github.com/coreinfrastructure/best-practices-badge/blob/master/doc/security.md">analyse
           de fiabilité de BadgeApp</a> peut être un exemple utile. Ceci est lié à
           documentation_security, documentation_architecture et implement_secure_design.
 
 '
+      achieve_passing:
+        description: Le projet DOIT atteindre un badge de niveau basique.
     '2':
       bus_factor:
         description: Le projet DOIT avoir un « facteur bus » de 2 ou plus.
@@ -2546,6 +2550,8 @@ fr:
           analyse dynamique.
 
 '
+      achieve_silver:
+        description: Le projet DOIT atteindre un badge de niveau argent.
   static_pages:
     home:
       badge_program: Programme de badge des meilleures pratiques de la CII
@@ -2557,9 +2563,9 @@ fr:
         Plus d'informations sur le programme de badge
         des meilleures pratiques de la CII,
         incluant des renseignements généraux et
-        <a href='https://github.com/linuxfoundation/cii-best-practices-badge/blob/master/doc/criteria.md'>les
+        <a href='https://github.com/coreinfrastructure/cii-best-practices-badge/blob/master/doc/criteria.md'>les
         critères</a>, sont
-        <a href='https://github.com/linuxfoundation/cii-best-practices-badge'>disponibles sur GitHub</a>.
+        <a href='https://github.com/coreinfrastructure/cii-best-practices-badge'>disponibles sur GitHub</a>.
         <a href="/fr/project_stats">Les statistiques du projet</a> et
         <a href="/fr/criteria">des statistiques sur les critères</a> sont
         disponibles.  La <a href="/fr/projects">page des projets</a> liste les
@@ -2598,6 +2604,15 @@ fr:
         obtenu le badge et %{in_progress} sont en cours d'obtention.
       project_stats_html: Vous pouvez voir des statistiques sur les projets au cours
         du temps sur la <a href="/fr/project_stats">page des statistiques du projet</a>.
+      level: Niveau
+      must: DOIT
+      should: DEVRAIT
+      suggested: PROPOSÉ
+      total_active: Total actif
+      allow_na: Autoriser N/A
+      require_url: Exiger une URL
+      details: Comprend des détails
+      future: Futur
   headings:
     Accessibility and internationalization: Accessibilité et internationalisation
     Analysis: Analyse

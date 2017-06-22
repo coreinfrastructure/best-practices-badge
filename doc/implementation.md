@@ -10,15 +10,12 @@ Our emphasis is on keeping the program relatively *simple*.
 This file provides information on how it's implemented, in the hopes that
 it will help people make improvements.
 See [CONTRIBUTING.md](../CONTRIBUTING.md) for information on how to
-contribute ot this project, and [INSTALL.md](INSTALL.md) for information
-on how to install this software (e.g., for development).
+contribute to this project, and [INSTALL.md](INSTALL.md) for information
+on both how to install this software (e.g., for development) and a
+"quick start" guide to getting something to happen.
 
 In this document we'll use the term "open source software" (OSS),
 and treat Free/Libre and Open Source Software (FLOSS) as a synonym.
-
-The following figure shows a high-level design of the implementation:
-
-![Design](./design.png)
 
 ## Requirements
 
@@ -60,7 +57,7 @@ most specific requirements are proposed and processed via its
 [GitHub issue tracker](https://github.com/coreinfrastructure/best-practices-badge/issues).
 See [CONTRIBUTING](../CONTRIBUTING.md) for more.
 
-## Overall
+## High-level architecture
 
 The web application is itself OSS, and we intend for the
 web application to meet its own criteria.
@@ -68,6 +65,14 @@ We have implemented it with Ruby on Rails; Rails is good for
 simple web applications like this one.
 We are currently using Rails version 4.
 The production system stores the data in Postgres.
+
+### High-level design figure
+
+The following figure shows a high-level design of the implementation:
+
+![Design](./design.png)
+
+### Key components
 
 Some other key components we use are:
 
@@ -80,6 +85,19 @@ Some other key components we use are:
   processes and multiple threads.  See:
   <https://devcenter.heroku.com/articles/ruby-default-web-server>
 - A number of supporting Ruby gems (see the Gemfile)
+
+### Key classes
+
+The software is designed as a traditional model/view/controller (MVC)
+architecture.  As is standard for Rails, under directory "app"
+(application) are directories for "models", "views", and "controllers".
+
+Central classes include:
+
+* "Project" (defined in file "app/models/project.rb")
+  defines the model that captures data about a project.
+* "User" (defined in file "app/models/user.rb")
+  defines the model that captures data about a user.
 
 ## Deployment
 
@@ -301,6 +319,77 @@ The following search parameters are supported:
 
 See app/controllers/project_controllers.rb for how these
 are implemented.
+
+## Downloading the database
+
+We encourage analysis of OSS trends.
+We do provide some search capabilities, but for most analysis
+you will typically need to download the database.
+We can't anticipate all possible uses, and we're trying to keep the
+software relatively small & focused.
+
+You can download the project data in JSON and CSV format using typical
+Rails REST conventions.
+Just add ".json" or ".csv" to the URL (or include an Accept statement,
+like "Accept: application/json", in the HTTP header).
+You can even do this on a search if we already support the search (e.g.,
+by name).  Similarly, you can download user data in JSON format using
+".json" at the end of the URL.
+
+There is a current technical limitation in that you must
+request project and user data page-by-page.
+This isn't hard, just provide a page parameter (e.g., "page=2").
+This is because Rails does not stream JSON or CSV data by default,
+so if we allowed this the application would download
+the entire database into memory to process it.
+Rails applications *can* stream data (there are even web pages explaining
+how to do it), but the call for it is rare and there are some
+complications in its implementation, so we just haven't implemented it yet.
+
+So you can download the projects by repeatedly requesting this
+(changing "1" into 2, 3, etc. until all is loaded):
+
+> https://bestpractices.coreinfrastructure.org/projects.json?page=1
+
+You can similarly load the user data starting from here:
+
+> https://bestpractices.coreinfrastructure.org/users.json?page=1
+
+To directly download the user list you must be logged in, and we
+intentionally restrict the information we share about users.
+We only provide basic public information such as name, nickname, and such.
+In particular, we only provide email addresses to
+BadgeApp administrators, because we value the privacy of our users.
+
+As we note about privacy and legal issues,
+please see our <a href="https://www.linuxfoundation.org/privacy">privacy
+policy</a> and <a href="https://www.linuxfoundation.org/terms">terms of
+use</a>.
+All publicly-available non-code content is released under at least the
+<a href="https://creativecommons.org/licenses/by/3.0/">Creative Commons
+Attribution License version 3.0 (CC-BY-3.0)</a>;
+newer non-code content is released under
+CC-BY version 3.0 or later (CC-BY-3.0+).
+If referencing collectively or
+not otherwise noted, please credit the
+"CII Best Practices badge contributors" and note the license.
+You should also note the website URL as the data source, which is
+<https://bestpractices.coreinfrastructure.org>.
+
+If you are doing research, we urge you do to it responsibly and reproducibly.
+Please be sure to capture the date and time when you began and completed
+capturing this dataset
+(you need both, because the data could be changing
+while you're downloading it).
+Do what you can to ensure that your research can be
+[replicated](https://en.wikipedia.org/wiki/Replication_crisis).
+Consider the points in
+[Good Enough Practices in Scientific Computing](https://arxiv.org/pdf/1609.00037v2.pdf), a "set of computing tools and techniques
+that every researcher can and should adopt."
+For example, "Where possible, save data as originally generated (i.e.
+by an instrument or from a survey."
+These aren't requirements for using this data, but they are well
+worth considering.
 
 ## Changing criteria
 

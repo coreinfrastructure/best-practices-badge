@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170608192851) do
+ActiveRecord::Schema.define(version: 20170617215652) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -54,6 +54,16 @@ ActiveRecord::Schema.define(version: 20170608192851) do
     t.integer "projects_edited"
     t.integer "active_edited_projects"
     t.integer "active_edited_in_progress"
+    t.integer "percent_1_ge_25"
+    t.integer "percent_1_ge_50"
+    t.integer "percent_1_ge_75"
+    t.integer "percent_1_ge_90"
+    t.integer "percent_1_ge_100"
+    t.integer "percent_2_ge_25"
+    t.integer "percent_2_ge_50"
+    t.integer "percent_2_ge_75"
+    t.integer "percent_2_ge_90"
+    t.integer "percent_2_ge_100"
     t.index ["created_at"], name: "index_project_stats_on_created_at"
   end
 
@@ -335,12 +345,15 @@ ActiveRecord::Schema.define(version: 20170608192851) do
     t.text "assurance_case_justification"
     t.index ["achieved_passing_at"], name: "index_projects_on_achieved_passing_at"
     t.index ["badge_percentage_0"], name: "index_projects_on_badge_percentage_0"
+    t.index ["badge_percentage_1"], name: "index_projects_on_badge_percentage_1"
+    t.index ["badge_percentage_2"], name: "index_projects_on_badge_percentage_2"
     t.index ["created_at"], name: "index_projects_on_created_at"
     t.index ["homepage_url"], name: "index_projects_on_homepage_url"
     t.index ["last_reminder_at"], name: "index_projects_on_last_reminder_at"
     t.index ["lost_passing_at"], name: "index_projects_on_lost_passing_at"
     t.index ["name"], name: "index_projects_on_name"
     t.index ["repo_url"], name: "index_projects_on_repo_url"
+    t.index ["repo_url"], name: "nonempty_repo_urls", unique: true, where: "((repo_url IS NOT NULL) AND ((repo_url)::text <> ''::text))"
     t.index ["updated_at"], name: "index_projects_on_updated_at"
     t.index ["user_id", "created_at"], name: "index_projects_on_user_id_and_created_at"
     t.index ["user_id"], name: "index_projects_on_user_id"
@@ -366,6 +379,7 @@ ActiveRecord::Schema.define(version: 20170608192851) do
     t.datetime "reset_sent_at"
     t.string "preferred_locale", default: "en"
     t.index ["email"], name: "index_users_on_email"
+    t.index ["email"], name: "unique_local_email", unique: true, where: "((provider)::text = 'local'::text)"
     t.index ["uid"], name: "index_users_on_uid"
   end
 

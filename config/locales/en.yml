@@ -30,10 +30,10 @@ en:
   project_name_unknown: "(Name unknown)"
   locale_name:
     en: English (en)
-    de: German / Deutsche (de)
+    de: German / Deutsch (de)
     fr: French / Français (fr)
     ja: Japanese / 日本語 (ja)
-    ru: Russian / русский язык (ru)
+    ru: Russian / Русский (ru)
     zh-CN: Chinese (Simplified) / 简体中文 (zh-CN)
   layouts:
     cii_best_practices: CII Best Practices
@@ -129,10 +129,15 @@ en:
     criteria:
       criteria: Criteria
       detailed_criteria_on_github: The detailed criteria are on GitHub.
-      current_criteria: 'Current number of criteria: %{active} (active) + %{future} (future) = %{total} (total).'
-      criteria_must_should_suggested: Among active criteria, there are %{must} MUST, %{should} SHOULD, and %{suggested} SUGGESTED criteria.
-      criteria_na_met_details: Among active criteria, %{na_allowed} allow N/A, %{met_url_required} require a URL when met, and %{details_present} have details in their description.
-      project_counts: There are %{projects} project entries; %{passing} are passing and %{in_progress} are in progress.
+      level: Level
+      must: MUST
+      should: SHOULD
+      suggested: SUGGESTED
+      total_active: Total active
+      allow_na: Allow N/A
+      require_url: Require URL
+      details: Includes details
+      future: Future
       project_stats_html: You can see statistics about projects over time at the <a href="/project_stats">project stats page</a>.
   users:
     new:
@@ -140,8 +145,8 @@ en:
       intro_github: >
         If you have GitHub account, you can just use that to log in.
       intro_html: |
-        If you don''t want to log in with a GitHub account, you can
-        sign up here instead. <br><br> If you didn''t receive your activation link,
+        If you don't want to log in with a GitHub account, you can
+        sign up here instead. <br><br> If you didn't receive your activation link,
         please sign up again and we will send you a new one.
       name: Name
       email: Email
@@ -1509,9 +1514,7 @@ en:
 '
         details: 'A reproducible build means that multiple parties can independently
           redo the process of generating information from source files and get exactly
-          the same bit-for-bit result.  If no building occurs (e.g., scripting languages
-          where the source code is used directly instead of being compiled), select
-          "N/A". In some cases, this can be resolved by forcing some sort order. JavaScript
+          the same bit-for-bit result.  In some cases, this can be resolved by forcing some sort order. JavaScript
           developers may consider using npm shrinkwrap and webpack OccurenceOrderPlugin.  GCC
           and clang users may find the -frandom-seed option useful.  The build environment
           (including the toolset) can often be defined for external parties by specifying
@@ -1584,6 +1587,8 @@ en:
 
 '
     '1':
+      achieve_passing:
+        description: The project MUST achieve a passing level badge.
       contribution_requirements:
         description: 'The information on how to contribute MUST include the requirements
           for acceptable contributions (e.g., a reference to any required coding standard).
@@ -2226,6 +2231,8 @@ en:
 
 '
     '2':
+      achieve_silver:
+        description: The project MUST achieve a silver level badge.
       bus_factor:
         description: The project MUST have a "bus factor" of 2 or more.
       contributors_unassociated:

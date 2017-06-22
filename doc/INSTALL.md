@@ -1,10 +1,12 @@
-# Installation instructions
+# Installation and quick start instructions
 
 <!-- SPDX-License-Identifier: (MIT OR CC-BY-3.0+) -->
 
 Here is how to install the "BadgeApp" web application, for either a development
 environment or for deployment.
 On most systems this is a fairly quick and painless process.
+We also provide information on how to quickly get started so you
+can *do* something.
 
 We provide a simple script that does the work, and we emphasize using
 widely-used tools designed for the purpose.
@@ -99,6 +101,9 @@ So at the command line just run:
 ./install-badge-dev-env
 ~~~~
 
+This will automatically create a database and seed it with dummy data
+(by running "rake db:setup").
+
 If that fails, see the section later on "What does install-badge-dev-env do?"
 to manually do what it's trying to do.
 If it doesn't work, patches welcome.
@@ -119,7 +124,7 @@ git config --global user.name "YOUR NAME"
 git config --global user.email "YOUR EMAIL ADDRESS"
 ~~~~
 
-## Running locally
+## Starting the server locally
 
 Once your development environment is ready, you can run the application with:
 
@@ -129,7 +134,84 @@ rails s
 
 This will automatically set up what it needs to, and then run the
 web application.  You can press control-C at any time to stop it.
-Then point your web browser at "localhost:3000".
+
+## Accessing the local server
+
+Now start up your local web browser and have it open "http://localhost:3000".
+On Linux-like systems, you can do this by running this on a command line:
+
+~~~~
+xdg-open http://localhost:3000
+~~~~
+
+Within the web browser you can click on "sign in" to create a new acount,
+and "log in" later after you've created an account.
+You can also create your own projects.
+
+## Giving yourself admin privileges
+
+If you're maintaining it locally, you might want to give your account
+admin privileges.  First, note the user id of your account
+(it's the number after "/users/" in the URL when you display your own profile).
+You can do this by running this (replacing YOUR_USER_ID with the number):
+
+~~~~
+rails db
+UPDATE users SET role = 'admin' where id = YOUR_USER_ID ;
+~~~~
+
+Press control-D to exit "rails db".
+
+## Exploring
+
+Users normally interact with the web interface.
+In some cases you may find it helpful to
+interact directly with the software and examine its state.
+There are several easy ways: rails db (SQL), rails console, and "byebug".
+
+For more about how the program is structured, and other hints, see the
+[implementation](implementation.md) information.
+
+### Rails db
+
+Use "rails db" to interact directly with the database. E.G.:
+
+~~~~
+rails db
+SELECT id,name FROM users WHERE id < 5;
+SELECT id,name FROM projects WHERE id < 5;
+~~~~
+
+The file "db/schema.rb" describes the database schema.
+
+### Rails console
+
+The "rails console" can be a convenient way to access state;
+it starts a Ruby environment with Rails loaded.
+
+Here is a sample:
+
+~~~~
+rails console
+
+p = Project.new
+# Set values for project to evaluate.  We'll examine our own project.
+p[:repo_url] = 'https://github.com/coreinfrastructure/best-practices-badge'
+p[:homepage_url] = 'https://github.com/coreinfrastructure/best-practices-badge'
+# Setup chief to analyze things:
+new_chief = Chief.new(p, proc { Octokit::Client.new })
+# Ask chief to find probable values:
+results = new_chief.autofill
+results.keys
+results[:name]
+~~~~
+
+### byebug
+
+You can insert "byebug" anywhere in the code.
+When that runs, the program stops and provides an interactive
+command environment which lets you execute commands
+(such as showing you various states).
 
 ## Contributing in general
 

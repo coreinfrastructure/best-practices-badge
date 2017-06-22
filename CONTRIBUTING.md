@@ -22,7 +22,7 @@ or
 [issues](https://github.com/coreinfrastructure/best-practices-badge/issues)
 via our
 [GitHub site](https://github.com/coreinfrastructure/best-practices-badge).
-For general dicussion, feel free to use the
+For general discussion, feel free to use the
 [cii-badges mailing list](https://lists.coreinfrastructure.org/mailman/listinfo/cii-badges).
 
 If you want to propose or discuss changes to the criteria,
@@ -33,6 +33,13 @@ including [other.md](doc/other.md) and [background.md](doc/background.md).
 
 The [INSTALL.md](doc/INSTALL.md) file explains how to install the program
 locally (highly recommended if you're going to make code changes).
+It also provides a quick start guide.
+
+If you're new to the project (or FLOSS in general), the
+[Up-for-grabs](https://github.com/coreinfrastructure/best-practices-badge/labels/up-for-grabs)
+issues are smaller tasks that may typically take 1-3 days.
+You are welcome aboard!
+The [roadmap.md](doc/roadmap.md) file provides an overview of future plans.
 
 ### Pull requests and different branches recommended
 

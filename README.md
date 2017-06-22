@@ -31,20 +31,25 @@ There is also a
 [mailing list](https://lists.coreinfrastructure.org/mailman/listinfo/cii-badges)
 for general discussion.
 
-* Badging **[Criteria](./doc/criteria.md)**
+* Badging **[Criteria](./doc/criteria.md)** for the "passing" level
+* **[Other criteria for higher-level badges](./doc/other.md)**
 * Information on how to **[contribute](./CONTRIBUTING.md)**
   (including how to report vulnerabilities)
-* **[Other draft criteria](./doc/other.md)** (for higher-level badges)
+* [Up-for-grabs](https://github.com/coreinfrastructure/best-practices-badge/labels/up-for-grabs)
+  lists smaller tasks that may take 1-3 days, and are ideal for people
+  new to the project (or FLOSS in general)
 * **[Background](./doc/background.md)** on Badging
 * **[ChangeLog](./CHANGELOG.md)**
 * Current **[implementation](./doc/implementation.md)**  - notes about the
   BadgeApp implementation
 * **[security](./doc/security.md)**  - notes about BadgeApp security
 * **[testing](./doc/testing.md)**  - notes about BadgeApp automated tests
+* **[Installation](./doc/INSTALL.md)**  - Installation and quick start
+* **[Roadmap](./doc/roadmap.md)**  - Roadmap (future plans)
 
-## Summary of Best Practices Criteria
+## Summary of Best Practices Criteria "passing" level
 
-This is a summary of the criteria, with requirements in bold
+This is a summary of the passing criteria, with requirements in bold
 (for details, see the [full list of criteria](doc/criteria.md)):
 
 * **Have a [stable website](doc/criteria.md#homepage_url)**, which says:
@@ -105,6 +110,54 @@ This is a summary of the criteria, with requirements in bold
   - [Use algorithms with forward secrecy](doc/criteria.md#crypto_pfs)
   - **[Store any passwords with iterated, salted, hashes using a key-stretching algorithm](doc/criteria.md#crypto_password_storage)**
   - **[Use cryptographic random number sources](doc/criteria.md#crypto_random)**
+
+## Summary of Best Practices Criteria for higher levels
+
+Getting a passing badge is a significant achievement;
+on average only about 10% of pursuing projects have a passing badge.
+That said, some projects would like to meet even stronger criteria,
+and many users would like projects to do so.
+We have established two higher levels beyond passing: silver and gold.
+The higher levels strengthen some of the passing criteria and add new
+criteria of their own.
+
+### Silver
+
+Here is a summary of the silver criteria, with requirements in bold
+(for details, see the [full list of silver criteria](doc/other.md)):
+
+* **[Use a DCO or similar](doc/other.md#dco)**
+* **[Define/document project governance](doc/other.md#governance)**
+* **[Another will have the necessary access rights if someone dies](doc/other.md#access_continuity)**
+* *["Bus factor" of 2 or more](doc/other.md#bus_factor)*
+* **[Document security requirements](doc/other.md#security_requirements)**
+* **[Have an assurance case explaining why security requirements are met](doc/other.md#assurance_case)**
+* **[Have a quick start guide](doc/other.md#documentation_quick_start)**
+* *[Follow accessibility best practices](doc/other.md#accessibility_best_practices)*
+* **[Pick & follow coding standards](doc/other.md#coding_standards)**
+* **[Monitor external dependencies to detect/fix known vulnerabilities](doc/other.md#dependency_monitoring)**
+* **[Tests have 80%+ statement coverage](doc/other.md#test_statement_coverage80)**
+* **[Project releases for widespread use are cryptographically signed](doc/other.md#signed_releases)**
+* **[Check all inputs from potentially untrusted sources for validity (using a whitelist)](doc/other.md#input_validation)**
+* *[Use hardening mechanisms](doc/other.md#hardening)*
+
+### Gold
+
+Here is a summary of the gold criteria, with requirements in bold
+(for details, see the [full list of gold criteria](doc/other.md)):
+
+* **[At least 2 unassociated significant contributors](doc/other.md#contributors_unassociated)**
+* **[Per-file copyright and license](doc/other.md#copyright_per_file)**
+* **[Use 2FA](doc/other.md#require_2FA)**
+* **[At least 50% of all modifications are reviewed by another](doc/other.md#two_person_review)**
+* **[Have a reproducible build](doc/other.md#reproducible_build)**
+* **[Use continuous integration](doc/other.md#test_continuous_integration)**
+* **[Statement coverage 90%+](doc/other.md#test_statement_coverage90)**
+* **[Branch coverage 80%+](doc/other.md#test_branch_coverage80)**
+* **[Support secure protocols & disable insecure protocols by default](doc/other.md#crypto_used_network)**
+* **[Use TLS version 1.2 or higher](doc/other.md#crypto_tls12)**
+* **[Have a hardened project website, repo, and download site](doc/other.md#hardened_site)**
+* **[Have a security review (internal or external)](doc/other.md#security_review)**
 
 ## License
 

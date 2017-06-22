@@ -395,7 +395,7 @@ if Rails.env.development?
             './config/locales/translation*.yml'
     sh %q{ruby -pi -e "sub(/ $/, '')" } + files
     sh 'mv config/locales/en.yml.ORIG config/locales/en.yml'
-    puts "Now run: git commit -as -m 'rake translation:sync'"
+    puts "Now run: git commit -sam 'rake translation:sync'"
   end
 end
 
@@ -424,8 +424,12 @@ end
 # Use this if the badge rules change.  This will email those who
 # gain/lose a badge because of the changes.
 desc 'Run to recalculate all badge percentages for all projects'
-task :update_all_badge_percentages do
-  Project.update_all_badge_percentages
+task update_all_badge_percentages: :environment do
+  Project.update_all_badge_percentages(Criteria.keys)
+end
+
+task update_all_higher_level_badge_percentages: :environment do
+  Project.update_all_badge_percentages(Criteria.keys - ['0'])
 end
 
 Rake::Task['test:run'].enhance ['test:features']

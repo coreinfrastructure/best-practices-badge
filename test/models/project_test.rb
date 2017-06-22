@@ -174,6 +174,11 @@ class ProjectTest < ActiveSupport::TestCase
     assert_equal Criteria.count + 1, Project::BADGE_LEVELS.size
   end
 
+  test 'Project counts from fixtures are as expected' do
+    assert_equal 3, Project.in_progress.count
+    assert_equal 3, Project.passing.count
+  end
+
   test 'test get_satisfaction_data' do
     basics = @unjustified_project.get_satisfaction_data('0', 'basics')
     assert_equal '9/12', basics[:text]
@@ -185,4 +190,38 @@ class ProjectTest < ActiveSupport::TestCase
     assert_equal '13/13', quality[:text]
     assert_equal 'hsl(120, 100%, 50%)', quality[:color]
   end
+
+  # rubocop:disable Metrics/BlockLength
+  test 'test :skip_callbacks works as expected' do
+    project_one = projects(:one)
+    Project.skip_callbacks = true
+    # With skip_callbacks = true there should be
+    # no change to percentages on save.
+    assert_no_difference [
+      'Project.find(projects(:one).id).badge_percentage_0',
+      'Project.find(projects(:one).id).badge_percentage_1'
+    ] do
+      project_one.update_attributes!(
+        crypto_weaknesses_status: 'Met',
+        crypto_weaknesses_justification: 'It is good'
+      )
+    end
+    Project.skip_callbacks = false
+    old_percentage0 = Project.find(projects(:one).id).badge_percentage_0
+    old_percentage1 = Project.find(projects(:one).id).badge_percentage_1
+    project_one.update_attributes!(
+      warnings_strict_status: 'Met',
+      warnings_strict_justification: 'It is good'
+    )
+    # Check the badge percentage changed
+    assert_not_equal(
+      Project.find(projects(:one).id).badge_percentage_0,
+      old_percentage0
+    )
+    assert_not_equal(
+      Project.find(projects(:one).id).badge_percentage_1,
+      old_percentage1
+    )
+  end
+  # rubocop:enable Metrics/BlockLength
 end

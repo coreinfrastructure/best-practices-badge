@@ -882,7 +882,9 @@ ja:
 '
     '1':
       contribution_requirements:
-        description:
+        description: '貢献する方法に関する情報には、受け入れ可能な貢献の要件（例えば、必要なコーディング標準への言及）が含まれなければなりません。
+
+'
       dco:
         description:
         details:
@@ -890,7 +892,9 @@ ja:
         description:
         details:
       code_of_conduct:
-        description:
+        description: 'プロジェクトは、行動規範を採択し、標準的な場所に掲示しなければなりません。
+
+'
         details:
       roles_responsibilities:
         description:
@@ -901,31 +905,68 @@ ja:
 
 '
       bus_factor:
-        description:
-        details:
+        description: プロジェクトは2以上の "バス ファクタ"を持っているべきです。
+        details: '「バス ファクタ」（別名「トラック ファクタ」）は、知見があり有能な人材が離脱して、プロジェクトが停止に至る時に、プロジェクトから突然消失する（「バスに当たった」）プロジェクトメンバーの最小人数です。
+          <a href="https://github.com/mtov/truck-factor">トラック ファクタ</a>ツールは、GitHub上のプロジェクトに対してこれを見積もることができます。詳細については、Cosentino
+          et al。の<a href="https://www.researchgate.net/publication/272824568_assessing_the_bus_factor_of_git_repositories">
+          Gitリポジトリのバス ファクタの評価</a>を参照してください。
+
+'
       documentation_roadmap:
         description:
         details:
       documentation_architecture:
-        description:
-        details:
+        description: 'プロジェクトは、プロジェクトによって作成されたソフトウェアのアーキテクチャー（いわゆる高水準設計）の文書を含まなければなりません。プロジェクトでソフトウェアが作成されない場合は、「該当なし」（N
+          / A）を選択します。
+
+'
+        details: 'ソフトウェア アーキテクチャは、プログラムの基本的な構造、すなわちプログラムの主な構成要素、それらの間の関係、およびこれらの構成要素および関係の主要な特性を説明します。
+
+'
       documentation_security:
         description:
         details:
       documentation_quick_start:
-        description:
-        details:
+        description: 'プロジェクトでは、新規ユーザーがソフトウェアで何かをすばやく実行できるようにするための「クイックスタート」ガイドを提供する必要があります。
+
+'
+        details: 'このアイデアは、ユーザーにソフトウェアを始動させる方法と何かをさせる方法を示すことです。これは潜在的なユーザーが開始するために非常に重要です。
+
+'
       documentation_current:
         description:
         details:
       documentation_achievements:
-        description:
+        description: 'プロジェクトのリポジトリのフロントページおよび/またはウェブサイトは、このベストプラクティスのバッジを含め、成果が達成されたことを一般に認められてから48時間以内に特定し、ハイパーリンクする必要があります。
+
+'
         details:
       accessibility_best_practices:
         description: 'プロジェクト（プロジェクト サイトとプロジェクト結果の両方）は、アクセシビリティのベストプラクティスに従い、障害のある人が引き続きプロジェクトに参加し、プロジェクトの結果を合理的な範囲で使用することができるようにするべきです。
 
 '
-        details:
+        details: "ウェブアプリケーションについては、<a href=\"https://www.w3.org/TR/WCAG20/\">ウェブ コンテンツ
+          アクセシビリティ ガイドライン（WCAG 2.0）</a>とそのサポートドキュメント<a href = \"https： //www.w3.org/TR/UNDERSTANDING-WCAG20/Overview.html\">
+          WCAG 2.0の理解</a>; <a href=\"https://www.w3.org/standards/webdesign/accessibility\">
+          W3Cアクセシビリティ情報</a>を参照してください。 GUIアプリケーションの場合は、環境固有のアクセシビリティ ガイドラインの使用を検討して下さい（<a
+          href=\"https://developer.gnome.org/accessibility-devel-guide/stable/\">
+          Gnome </a>、<a href = \"https://accessibility.kde.org/\"> KDE </a>、<a href=\"http://docs.xfce.org/xfce/xfce4-settings/accessibility\">
+          XFCE </a>、 <a href = \"https://developer.android.com/guide/topics/ui/accessibility/\">
+          Android </a>、<a href = \"https://developer.apple.com/accessibility/ios/\"
+          > iOS </a>、<a href=\"http://www.apple.com/accessibility/osx/voiceover/\">
+          Mac </a>、<a href = \"https://msdn.microsoft.com/ja/ja/windows/uwp/accessibility/accessibility-overview）\">
+          Windows </a>）。いくつかのTUIアプリケーション（例えば、「ncurses」プログラム）は、「alpine」の 「force-arrow-cursor」設定のような、よりアクセスしやすくするためにいくつかのことを行うことができます。ほとんどのコマンドライン
+          アプリケーションは、そのままの状態でかなりアクセス可能です。この基準は、例えば、プログラムライブラリの場合、「該当なし」（N/A）であることが多いです。取り上げるべき行動や考慮すべき課題の例を以下に示します。\n<ul>
+          <li>テキスト以外のコンテンツの代替テキストを提供するkotode,\n人々が必要とする他の形式に変更することができます。大きな印刷物、点字、スピーチ、記号またはより単純な言語などです。（<a
+          href=\"https://www.w3.org/TR/UNDERSTANDING-WCAG20/text-equiv.html\"> WCAG
+          2.0ガイドライン1.1 </a>）\n<li>アクションを示したり、応答を促したり、または視覚的要素を区別するために、色が唯一の視覚的な伝達手段として使用されるわけではありません。（<a
+          href=\"https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast-without-color.html\">
+          WCAG 2.0ガイドライン1.4.1 </a>）\n<li>大文字、付随的なテキストとロゴタイプを除いて、テキストの視覚的提示とテキストのイメージには、少なくとも4.5：1の比率のコントラストがあります（<a
+          href=\"https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast-contrast.html\">
+          WCAG 2.0ガイドライン1.4.3 </a>）\n<li>キーボードからすべての機能を利用できるようにする（WCAGガイドライン2.1）\n<li>
+          GUIまたはウェブ ベースのプロジェクトは少なくとも1つターゲットプラットフォーム上のスクリーンリーダーでテストするべきです（例えば、NVDA、Jaws、またはWindows上のWindowEyes;
+          MacとiOSのVoiceOver Linux / BSDのOrca;AndroidのTalkBack）。 \nTUIプログラムは、スクリーンリーダーによる冗長な読み取りを防止するために、オーバードローを減らせるかもしれません。\n</
+          ul>"
       internationalization:
         description:
         details:
@@ -942,17 +983,29 @@ ja:
         description:
         details:
       coding_standards:
-        description:
+        description: |
+          プロジェクトは、使用する主要な言語のための特定のコーディング
+           スタイル ガイドを指定しなければなりませんし、貢献が一般にそれに準拠することを要求しなければなりません。
         details:
       coding_standards_enforced:
-        description:
+        description: '選択した言語において行うことができるFLOSSツールが少なくとも1つあれば、プロジェクトは自動的に選択したコーディングスタイルを適用しなければなりません。
+
+'
         details:
       build_standard_variables:
         description:
-        details:
+        details: 'Address Sanitizer（ASAN）などの特別なビルド機能を有効にするか、ディストリビューション ハードニングのベスト
+          プラクティス（コンパイラフラグを簡単にオンにするなど）を遵守するのが、簡単であるべきです。
+
+'
       build_preserve_debug:
-        description:
-        details:
+        description: 'ビルドとインストール システムは、関連するフラグ（例えば、 "install -s"が使用されていない）で要求されたデバッグ情報を保存しておくべきです。ビルドやインストール
+          システムがない場合（例：一般的なJavaScriptライブラリ）は、「該当なし」（N/A）を選択します。
+
+'
+        details: 'すなわち、CFLAGS（C）またはCXXFLAGS（C ++）を設定すると、それらの言語が使用されている場合に、関連デバッグ情報が作成されるべきですし、インストール時には削除するべきではありません。デバッグ情報は、サポートと分析のために必要であり、コンパイルされたバイナリのハードニング機能の存在を測定するのにも役立ちます。
+
+'
       build_non_recursive:
         description: 'プロジェクトによって作成されたソフトウェアのビルド システムは、サブディレクトリに相互依存関係がある場合、再帰的にサブディレクトリをビルドしてはなりません。ビルドやインストール
           システムがない場合（例：一般的なJavaScriptライブラリ）は、「該当なし」（N/A）を選択します。
@@ -961,7 +1014,10 @@ ja:
         details:
       build_repeatable:
         description:
-        details:
+        details: 'GCCとclangのユーザーには、-frandom-seedオプションが有用であるかもしれません。場合によっては、ソート順を強制することで解決できます。
+          <a href="https://reproducible-builds.org/">再現可能なビルド</a>サイトで、より多くの提案を見つけることができます。
+
+'
       installation_common:
         description:
         details:
@@ -974,7 +1030,10 @@ ja:
         description:
         details:
       dependency_monitoring:
-        description:
+        description: 'プロジェクトは、既知の脆弱性を検出し、悪用可能な脆弱性を修正したり、悪用できない脆弱性として確認するために、外部の依存先（コンビニエンス
+          コピーを含む）を監視または定期的にチェックしなければなりません。
+
+'
         details:
       updateable_reused_components:
         description:

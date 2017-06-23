@@ -502,7 +502,10 @@ de:
   criteria:
     '0':
       description_good:
-        description:
+        description: 'Die Projekt-Website MUSS prägnant beschreiben, was die Software
+          tut (welches Problem löst sie?).
+
+'
         details: 'Dies MUSS in der Sprache sein, die potenzielle Nutzer verstehen
           können (z.B. möglichst wenig Fachbegriffe verwenden).
 
@@ -544,7 +547,10 @@ de:
         description:
         details:
       documentation_basics:
-        description:
+        description: 'Das Projekt MUSS eine grundlegende Dokumentation für die vom
+          Projekt entwickelte Software liefern.
+
+'
         details:
         met_placeholder: "(Optional) Welche URL(s) führen zur Dokumentation?"
       documentation_interface:
@@ -554,7 +560,13 @@ de:
         description:
         details:
       discussion:
-        description:
+        description: 'Das Projekt MUSS einen oder mehrere Mechanismen zur Diskussion
+          (einschließlich der vorgeschlagenen Änderungen und Issues) haben, die durchsuchbar
+          sind, bei denen Nachrichten und Themen durch URL adressiert werden, neue
+          Personen an einigen der Diskussionen teilnehmen können und keine lokale
+          Installation von proprietärer Software erfordern.
+
+'
         details:
       english:
         description:
@@ -801,9 +813,19 @@ de:
           ist akzeptabel.
 
 '
-        details:
+        details: 'Ein noch stärkerer Mechanismus ist die Freigabe der Software mit
+          digital signierten Paketen, da dies Angriffe auf das Verteilungssystem verringert,
+          aber das funktioniert nur, wenn die Benutzer sicher sein können, dass die
+          öffentlichen Schlüssel für Signaturen korrekt sind <em> und </ em> wenn
+          die Benutzer die Signatur tatsächlich überprüfen.
+
+'
       delivery_unsigned:
-        description:
+        description: 'Ein kryptographischer Hash (z.B. sha1sum) MUSS NICHT über http
+          abgerufen und ohne Überprüfung einer kryptographischen Signatur verwendet
+          werden.
+
+'
         details: Diese Hashes können im Transit verändert werden.
       vulnerabilities_fixed_60_days:
         description:

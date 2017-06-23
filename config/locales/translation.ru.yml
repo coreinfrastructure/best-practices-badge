@@ -21,7 +21,7 @@ ru:
     zero: Нет проектов
     few: "%{count} проекта"
     many: "%{count} проектов"
-  feed_title: Значок "Передовая практика CII" - обновлённые проекты
+  feed_title: Значок "Передовая практика CII" - обновленные проекты
   project_name_unknown:
   locale_name:
     en: Английский / English (en)
@@ -34,11 +34,11 @@ ru:
     cii_best_practices: Передовая практика CII
     projects: Проекты
     users: Пользователи
-    account: Учётная запись
+    account: Учетная запись
     profile: Профиль
     settings: Настройки
     logout_html: <span class="glyphicon glyphicon-log-out"></span> Выйти
-    signup_html: <span class="glyphicon glyphicon-user"></ span> Зарегистрироваться
+    signup_html: <span class="glyphicon glyphicon-user"></span> Зарегистрироваться
     login_html: <span class="glyphicon glyphicon-log-in"></span> Войти в систему
     footer_text_html: '<small> <strong>Нужна помощь? Есть вопрос? Видите ошибку? Пожалуйста,
       отправьте <em><a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">электронное
@@ -54,7 +54,7 @@ ru:
     choose_locale: Выберите язык
   admin_only: Только администратор.
   account_activations:
-    activated: Учётная запись активирована!
+    activated: Учетная запись активирована!
     failed_activation: Недействительная ссылка активации
   password_resets:
     forgot_password:
@@ -72,9 +72,9 @@ ru:
     login_with_github_html:
     or:
     email:
-    password:
-    forgot_password:
-    remember_me:
+    password: Пароль
+    forgot_password: Забыли пароль?
+    remember_me: Помнить меня
     login_custom:
     no_custom:
     already_logged_in:
@@ -147,13 +147,13 @@ ru:
       future: Будущие
   users:
     new:
-      signup_header:
+      signup_header: Зарегистрироваться
       intro_html:
-      name:
+      name: Имя
       email:
-      preferred_locale:
-      password:
-      password_confirmation:
+      preferred_locale: Предпочтительная локаль
+      password: Пароль
+      password_confirmation: Пароль ещё раз
       create_account:
       intro_github:
     edit:
@@ -170,8 +170,8 @@ ru:
       delete_link_name:
       confirm_delete:
     destroy:
-      cannot_delete_self:
-      user_deleted:
+      cannot_delete_self: Удалить себя невозможно.
+      user_deleted: Пользователь удален.
     redirect_existing:
     new_activation_link_created:
     please_log_in:
@@ -255,12 +255,17 @@ ru:
       original_repos:
       fork_repos:
     edit:
-      repo_url_limits:
+      repo_url_limits: 'Можно изменить repo_url только с http на https
+
+'
       changed_since_html:
       successfully_updated: Проект был успешно обновлен.
       congrats_new:
       lost_badge: Проект потерял значок.
-      static_analysis_updated_html:
+      static_analysis_updated_html: 'Мы обновили наши требования к критерию <a href="#static_analysis">static_analysis</a>.
+        Пожалуйста, добавьте обоснование для этого критерия.
+
+'
       save_and_continue: Сохранить (и продолжить)
       submit_and_exit: Отправить (и выйти)
       submit_cc_by_3plus_html:
@@ -287,9 +292,9 @@ ru:
         0_html:
         1_html:
         2_html:
-        '0':
-        '1':
-        '2':
+        '0': Passing
+        '1': Silver
+        '2': Gold
       got_badge:
         description_1:
         badge_alt:
@@ -385,7 +390,7 @@ ru:
     account_activation:
       before_html:
       before_text:
-      activate:
+      activate: Активировать
       subject:
     github_welcome:
       before_html:
@@ -395,18 +400,35 @@ ru:
       before_text:
       username_changed:
       email_changed:
-      password_changed:
+      password_changed: Пароль изменен.
       locale_changed:
       current_state:
       after_text:
       subject:
     password_reset:
-      before_html:
-      before_text:
-      after_html:
-      after_text:
-      subject:
-      reset_password:
+      before_html: |
+        <h1>Сброс пароля</ h1>
+
+        <p>Чтобы сбросить пароль, перейдите по ссылке ниже:</p>
+      before_text: 'Чтобы сбросить свой пароль, перейдите по ссылке ниже:
+
+'
+      after_html: |
+        <p>Срок действия этой ссылки истечет через два часа.</p>
+
+        <p>
+        Если вы не запрашивали сброс пароля,
+        пожалуйста, проигнорируйте это письмо и
+        пароль останется таким, какой он есть.
+        </p>
+      after_text: |
+        Срок действия этой ссылки истечет через два часа.
+
+        Если вы не запрашивали сброс пароля,
+        пожалуйста, проигнорируйте это письмо и
+        пароль останется таким, какой он есть.
+      subject: Сброс пароля
+      reset_password: Сбросить пароль
   criteria:
     '0':
       description_good:
@@ -611,16 +633,39 @@ ru:
 
 '
       version_unique:
-        description:
-        details:
+        description: 'Результаты проекта ОБЯЗАНЫ иметь уникальный идентификатор версии
+          для каждой версии, предназначенной для конечных пользователей.
+
+'
+        details: 'Это МОЖНО выполнить различными способами, включая идентификаторы
+          коммита (например, идентификатор коммита git или идентификатор набора изменений
+          mercurial) или номер версии (включая номера версий, которые используют семантическое
+          версионирование или схемы на основе даты, такие как YYYYMMDD).
+
+'
       version_semver:
         description: 'РЕКОМЕНДУЕТСЯ использовать <a href="http://semver.org/lang/ru/">семантическое
           версионирование</a>.
 
 '
-        details:
+        details: 'МОЖНО использовать в качестве номеров версий другие схемы нумерации
+          версий, такие как идентификаторы коммитов (например, идентификатор коммита
+          в git или идентификатор набора изменений в mercurial) или схемы на основе
+          даты, такие как YYYYMMDD, поскольку они уникальны. Некоторые альтернативы
+          могут вызвать трудности, поскольку пользователи могут быть не в состоянии
+          легко определить, используют ли они последнюю версию. SemVer может оказаться
+          менее полезным для идентификации версий программного обеспечения, если все
+          получатели используют только последнюю версию (например, это код для одного
+          веб-сайта или интернет-сервиса, который постоянно обновляется с помощью
+          непрерывной доставки).
+
+'
       version_tags:
-        description:
+        description: 'Проектам РЕКОМЕНДУЕТСЯ идентифицировать каждый выпуск в своей
+          системе контроля версий. Например, при использовании git РЕКОМЕНДУЕТСЯ идентифицировать
+          каждую версию, используя теги git.
+
+'
       release_notes:
         description: 'Проект ОБЯЗАН предоставлять с каждой выпускаемой версией замечания
           к выпуску - удобочитаемые человеком сведения об основных изменениях в этом
@@ -688,11 +733,27 @@ ru:
 
 '
       vulnerability_report_process:
-        description:
-        details:
+        description: 'Проект ОБЯЗАН публиковать процесс уведомления об уязвимостях
+          на сайте проекта.
+
+'
+        details: 'Например, четко обозначенный почтовый адрес на https://PROJECTSITE/security,
+          часто в форме security@example.org. Процесс МОЖЕТ быть таким же, как и процесс
+          для отчетов об ошибках. Отчеты об уязвимостях МОГУТ быть всегда общедоступными,
+          но многие проекты имеют приватный механизм для отправки отчетов об уязвимостях.
+
+'
       vulnerability_report_private:
-        description:
-        details:
+        description: 'Если поддерживаются приватные отчеты об уязвимости, проект ОБЯЗАН
+          включить описание того, как отправлять сведения конфиденциальным способом.
+
+'
+        details: 'Примеры включают приватный отчет о дефектах, отправленный в Интернете
+          с использованием HTTPS (TLS) или электронной почты, зашифрованной с использованием
+          OpenPGP. Если отчеты об уязвимостях всегда являются общедоступными (поэтому
+          нет приватных отчетов об уязвимостях), выберите «неприменимо» (N/A).
+
+'
       vulnerability_report_response:
         description:
         details:
@@ -786,13 +847,14 @@ ru:
         description:
         details:
       warnings_fixed:
-        description:
-        details: 'Это предупреждения, о которых упоминается при выполнении критерия
-          <a href="#warnings">warnings</a>. Проект должен исправлять предупреждения
-          или отмечать их в исходном коде как ложные срабатывания. В идеале не должно
-          быть никаких предупреждений, но проект МОЖЕТ принимать существование каких-то
-          предупреждений (обычно менее 1 предупреждения на 100 строк или менее 10
-          предупреждений).
+        description: 'Проект ОБЯЗАН обращать внимание на предупреждения.
+
+'
+        details: 'Речь о предупреждениях, найденных при выполнении критерия <a href="#warnings">warnings</a>.
+          Проект должен исправлять предупреждения или отмечать их в исходном коде
+          как ложные срабатывания. В идеале не должно быть никаких предупреждений,
+          но проект МОЖЕТ принимать существование каких-то предупреждений (обычно
+          менее 1 предупреждения на 100 строк или менее 10 предупреждений).
 
 '
       warnings_strict:
@@ -923,7 +985,7 @@ ru:
       crypto_pfs:
         description: В механизмах безопасности в программном обеспечении, создаваемом
           проектом, СЛЕДУЕТ реализовать совершенную прямую секретность для протоколов
-          соглашений о ключах, чтобы ключ сеанса, произведённый из набора долгосрочных
+          соглашений о ключах, чтобы ключ сеанса, произведенный из набора долгосрочных
           ключей, не мог быть скомпрометирован, если один из долгосрочных ключей скомпрометирован
           в будущем.
       crypto_password_storage:
@@ -970,8 +1032,26 @@ ru:
           sha1sum) по HTTP и использовать их без проверки криптографической подписи.
         details: Эти хеши могут быть изменены при передаче.
       vulnerabilities_fixed_60_days:
-        description:
-        details:
+        description: 'НЕДОПУСТИМО оставлять незакрытыми уязвимости средней или высокой
+          степени серьезности, опубликованные более 60 дней назад.
+
+'
+        details: 'Уязвимость должна быть исправлена ​​и выпущена самим проектом (патчи
+          могут быть разработаны в другом месте). Уязвимость считается опубликованной
+          (для цели данного критерия) после того, как она имеет CVE с описанием, бесплатно
+          доступным для общественности, (например, в <a href="https://nvd.nist.gov/">National
+          Vulnerability Database</a>) или когда проект был проинформирован, и информация
+          была опубликована для общественности (возможно, самим проектом). Уязвимость
+          имеет среднюю и высокую степень серьезности, если ее базовая оценка по <a
+          href="https://nvd.nist.gov/cvss.cfm">CVSS 2.0</a> равна 4 или выше. <strong>
+          Примечание</strong>. Это означает, что пользователи могут оставаться уязвимыми
+          для всех злоумышленников по всему миру на срок до 60 дней. Этот критерий
+          часто намного легче удовлетворить, чем рекомендует Google в <a href="https://security.googleblog.com/2010/07/rebooting-responsible-disclosure-focus.html">Rebooting
+          responsible disclosure</a>, поскольку Google рекомендует, чтобы 60-дневный
+          период начинался, когда проект был уведомлен, <em>даже</em> если отчет не
+          является общедоступным.
+
+'
       vulnerabilities_critical_fixed:
         description: Проектам СЛЕДУЕТ оперативно исправлять критические уязвимости
           после сообщения о них.
@@ -988,7 +1068,7 @@ ru:
 '
       static_analysis:
         description: 'По крайней мере, один инструмент анализа статического кода ОБЯЗАН
-          применяться к любой предлагаемой основной версии создаваемого ПО до её выпуска,
+          применяться к любой предлагаемой основной версии создаваемого ПО до ее выпуска,
           если есть хотя бы один инструмент на свободном ПО, который реализует этот
           критерий на выбранном языке.
 
@@ -1032,12 +1112,12 @@ ru:
 
 '
       static_analysis_fixed:
-        description: 'Все уязвимости, связанные со средней и высокой степенью серьёзности,
+        description: 'Все уязвимости, связанные со средней и высокой степенью серьезности,
           обнаруженные при статическом анализе кода, ОБЯЗАНЫ своевременно исправляться
           после их подтверждения.
 
 '
-        details: 'Уязвимость имеет среднюю и высокую степень серьёзности, если ее
+        details: 'Уязвимость имеет среднюю и высокую степень серьезности, если ее
           оценка по <a href="https://nvd.nist.gov/cvss.cfm">CVSS 2.0</a> - 4 или выше.
 
 '
@@ -1048,7 +1128,7 @@ ru:
 '
       dynamic_analysis:
         description: 'РЕКОМЕНДУЕТСЯ, чтобы к любой предлагаемой основной (major) версии
-          программного обеспечения перед её выпуском применялся по крайней мере один
+          программного обеспечения перед ее выпуском применялся по крайней мере один
           инструмент динамического анализа.
 
 '
@@ -1095,7 +1175,7 @@ ru:
 '
       dynamic_analysis_fixed:
         description: 'Проект ОБЯЗАН своевременно исправлять все уязвимости средней
-          и высокой степени серьёзности, обнаруженные при динамическом анализе кода,
+          и высокой степени серьезности, обнаруженные при динамическом анализе кода,
           после их подтверждения.
 
 '
@@ -1345,10 +1425,10 @@ ru:
       dynamic_analysis_unsafe:
         description:
       achieve_passing:
-        description:
+        description: Проект ОБЯЗАН получить значок уровня passing.
     '2':
       bus_factor:
-        description:
+        description: Проект ОБЯЗАН иметь «автобусный коэффициент» 2 или более.
       contributors_unassociated:
         description:
         details:
@@ -1420,31 +1500,31 @@ ru:
       achieve_silver:
         description:
   headings:
-    Accessibility and internationalization:
-    Analysis:
-    Automated test suite:
+    Accessibility and internationalization: Общедоступность и интернационализация
+    Analysis: Анализ
+    Automated test suite: Набор автотестов
     Identification:
     Basic project website content:
-    Basics:
-    Bug-reporting process:
-    Change Control:
-    Coding standards:
-    Documentation:
-    Dynamic code analysis:
+    Basics: Основы
+    Bug-reporting process: Процесс сообщения об ошибках
+    Change Control: Управление изменениями
+    Coding standards: Стандарты кодирования
+    Documentation: Документация
+    Dynamic code analysis: Динамический анализ кода
     Externally-maintained components:
     Future:
     future:
-    Installation system:
+    Installation system: Система установки
     New functionality testing:
     OSS License:
     Other:
     Other security issues:
-    Previous versions:
+    Previous versions: Предыдущие версии
     Project oversight:
     Public version-controlled source repository:
     Publicly known vulnerabilities fixed:
-    Quality:
-    Release notes:
+    Quality: Качество
+    Release notes: Примечания к выпуску
     Reporting:
     Secure development knowledge:
     Secure release:
@@ -1462,7 +1542,7 @@ ru:
     NA: Неприменимо
   last_entry:
   error_messages:
-    need_home_page_or_url:
+    need_home_page_or_url: Требуется по крайней мере главная страница или URL репозитория
     form_contains:
       one: Форма содержит 1 ошибку.
       other: Форма содержит %{count} ошибки.

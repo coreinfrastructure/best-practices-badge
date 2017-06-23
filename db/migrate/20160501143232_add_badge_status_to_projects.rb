@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class AddBadgeStatusToProjects < ActiveRecord::Migration
+class AddBadgeStatusToProjects < ActiveRecord::Migration[4.2]
   def up
     add_column :projects, :badge_status, :string
     add_index :projects, :badge_status

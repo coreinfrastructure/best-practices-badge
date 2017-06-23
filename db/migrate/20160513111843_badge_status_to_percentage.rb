@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class BadgeStatusToPercentage < ActiveRecord::Migration
+class BadgeStatusToPercentage < ActiveRecord::Migration[4.2]
   def up
     rename_column :projects, :badge_status, :badge_percentage
     Project.find_each do |project|

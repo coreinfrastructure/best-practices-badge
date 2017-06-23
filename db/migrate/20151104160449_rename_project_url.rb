@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class RenameProjectUrl < ActiveRecord::Migration
+class RenameProjectUrl < ActiveRecord::Migration[4.2]
   def change
     # rename_column :projects, :old_column, :new_column
     rename_column :projects, :project_url, :project_homepage_url

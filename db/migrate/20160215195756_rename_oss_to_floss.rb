@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class RenameOssToFloss < ActiveRecord::Migration
+class RenameOssToFloss < ActiveRecord::Migration[4.2]
   def change
     rename_column :projects, :oss_license_status, :floss_license_status
     rename_column :projects,

@@ -13,7 +13,7 @@ ru:
       create: Создать %{model}
       update: Обновить %{model}
       submit: Сохранить %{model}
-  hello:
+  hello: Здравствуй, мир
   submit:
   projects_count:
     one: "%{count} проект"
@@ -64,7 +64,7 @@ ru:
     password_empty: Пароль не может быть пустым
     password_reset: Пароль был сброшен
     instructions_sent:
-    cant_reset_nonlocal:
+    cant_reset_nonlocal: К сожалению, сбросить пароль для другого пользователя невозможно.
     reset_expired: Истекло время на сброс пароля.
     update_password:
   sessions:
@@ -148,7 +148,10 @@ ru:
   users:
     new:
       signup_header: Зарегистрироваться
-      intro_html:
+      intro_html: |
+        Если вы не хотите входить в систему через учетную запись GitHub,
+        вы можете зарегистрироваться здесь. <br> <br> Если вы не получили свою ссылку активации,
+        пожалуйста, зарегистрируйтесь снова, и мы вышлем вам новую.
       name: Имя
       email:
       preferred_locale: Предпочтительная локаль
@@ -173,8 +176,11 @@ ru:
       cannot_delete_self: Удалить себя невозможно.
       user_deleted: Пользователь удален.
     redirect_existing:
-    new_activation_link_created:
-    please_log_in:
+    new_activation_link_created: 'Создана новая ссылка для активации. Проверьте свою
+      электронную почту, чтобы активировать учетную запись.
+
+'
+    please_log_in: Пожалуйста, войдите в систему.
   project_stats:
     index:
       project_stats_header: Статистика проектов
@@ -210,10 +216,10 @@ ru:
       projects_created_updated_daily:
   projects:
     index:
-      all:
+      all: Все
       passing_100:
       in_progress_variable:
-      add_link:
+      add_link: Добавить
       add_new: Добавить новый проект
       badge_status: Состояние значка
       exclude_passing:
@@ -403,11 +409,11 @@ ru:
       password_changed: Пароль изменен.
       locale_changed:
       current_state:
-      after_text:
+      after_text: Если у вас возникнут проблемы, сообщите нам об этом.
       subject:
     password_reset:
       before_html: |
-        <h1>Сброс пароля</ h1>
+        <h1>Сброс пароля</h1>
 
         <p>Чтобы сбросить пароль, перейдите по ссылке ниже:</p>
       before_text: 'Чтобы сбросить свой пароль, перейдите по ссылке ниже:
@@ -479,7 +485,7 @@ ru:
           стандартная общественная лицензия GNU (LGPL)</a> и <a href="https://opensource.org/licenses/gpl-license">Стандартная
           общественная лицензия GNU (GPL)</a>. Для наших целей это означает, что лицензия
           ОБЯЗАНА быть: <ul> <li><a href="https://opensource.org/licenses">одобренной
-          Open Source Initiative (OSI)</a>, или</ li> <li><a href="https://www.gnu.org/licenses/license-list.html">свободной
+          Open Source Initiative (OSI)</a>, или</li> <li><a href="https://www.gnu.org/licenses/license-list.html">свободной
           лицензией, одобренной Фондом Свободного Программного Обеспечения (FSF)</a>,
           или</li> <li><a href="https://www.debian.org/legal/licenses/">свободной
           лицензией, приемлемой для ветки main проекта Debian</a>, или</li> <li><a
@@ -755,8 +761,14 @@ ru:
 
 '
       vulnerability_report_response:
-        description:
-        details:
+        description: 'Время первоначального отклика проекта на любой отчет об уязвимости,
+          полученный за последние 6 месяцев, ДОЛЖНО быть 14 дней или меньше.
+
+'
+        details: 'Если за последние 6 месяцев не было обнаружено никаких уязвимостей,
+          выберите «неприменимо» (N/A).
+
+'
       build:
         description: Если программное обеспечение, создаваемое проектом, требует сборки
           для использования, проект ОБЯЗАН предоставить рабочую систему сборки, которая
@@ -844,8 +856,21 @@ ru:
 
 '
       warnings:
-        description:
-        details:
+        description: 'Проект ОБЯЗАН включать один или несколько предупреждающих флагов
+          компилятора, «безопасный» языковой режим или использовать отдельный инструмент
+          «linter» для поиска ошибок качества кода или типовых простых ошибок, если
+          есть хотя бы один инструмент на свободном ПО, который может реализовать
+          этот критерий на выбранном языке.
+
+'
+        details: 'Примером предупреждающего флага компилятора может служить "-Wall"
+          для gcc/clang. Примеры «безопасного» языкового режима включают «use strict»
+          в JavaScript и «use warnings» в perl5. Отдельный инструмент «linter» - это
+          просто инструмент, который исследует исходный код для поиска ошибок качества
+          кода или типовых простых ошибок. Всё это обычно включается в исходный код
+          или инструкции сборки.
+
+'
       warnings_fixed:
         description: 'Проект ОБЯЗАН обращать внимание на предупреждения.
 
@@ -858,8 +883,14 @@ ru:
 
 '
       warnings_strict:
-        description:
-        details:
+        description: ЖЕЛАТЕЛЬНО, чтобы проекты использовали наиболее жёсткий режим
+          предупреждений в производимом ПО там, где это целесообразно.
+        details: 'Некоторые предупреждения не могут быть эффективно задействованы
+          в некоторых проектах. Что необходимо в этом критерии - это доказательства
+          того, что проект стремится включать флаги предупреждений там, где это возможно,
+          чтобы ошибки обнаруживались на ранней стадии.
+
+'
       know_secure_design:
         description: 'По крайней мере один основной разработчик на проекте ОБЯЗАН
           знать, как проектировать безопасное программное обеспечение.
@@ -1142,7 +1173,7 @@ ru:
           критерия инструмент динамического анализа должен каким-то образом варьировать
           исходные данные, чтобы искать проблемы разного рода <em>или</em> быть автоматическим
           набором тестов с покрытием веток исполнения не менее 80%. Страница <a href="https://ru.wikipedia.org/wiki/%D0%94%D0%B8%D0%BD%D0%B0%D0%BC%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B9_%D0%B0%D0%BD%D0%B0%D0%BB%D0%B8%D0%B7_%D0%BA%D0%BE%D0%B4%D0%B0">Википедии
-          о динамическом анализе</a> и <a href = "https://www.owasp.org/index.php
+          о динамическом анализе</a> и <a href="https://www.owasp.org/index.php
           / Fuzzing ">cтраница OWASP о фаззинг-тестировании</a> указывают некоторые
           инструменты динамического анализа. Использование инструмента/ов анализа
           МОЖЕТ, но не обязано быть сосредоточено на поиске уязвимостей в безопасности.
@@ -1162,7 +1193,7 @@ ru:
           Sanitizer (ASAN)</a> (доступен в GCC и LLVM), <a Href = "http://clang.llvm.org/docs/MemorySanitizer.html">Memory
           Sanitizer</a> и <a href="http://valgrind.org/">valgrind</a>. Другие потенциально
           используемые инструменты включают <a href="http://clang.llvm.org/docs/ThreadSanitizer.html">Thread
-          Sanitizer</a> и <a href = "http://clang.llvm.org/ Docs / UndefinedBehaviorSanitizer.html
+          Sanitizer</a> и <a href="http://clang.llvm.org/ Docs / UndefinedBehaviorSanitizer.html
           ">Undefined Behavior Sanitizer</a>. Достаточно широкое использование утверждений
           (assertions) тоже может подходить.
 
@@ -1292,7 +1323,17 @@ ru:
         description:
         details:
       access_continuity:
-        description:
+        description: 'Проект ОБЯЗАН быть в состоянии продолжать работу с минимальным
+          прерыванием, если какой-либо человек окажется недееспособен или убит. В
+          частности, проект ОБЯЗАН быть в состоянии создавать и закрывать вопросы
+          в трекере, принимать предложенные изменения и выпускать версии программного
+          обеспечения через неделю после подтверждения того, что данный человек недееспособен
+          или убит. Это МОЖЕТ быть реализовано через обеспечение кого-то ещё необходимыми
+          ключами, паролами и законными правами для продолжения проекта. Лица, которые
+          запускают проект СПО, МОГУТ сделать это, оставив ключи в сейфе и завещание,
+          передающее все необходимые юридические права (например, для имен DNS).
+
+'
       bus_factor:
         description:
         details:
@@ -1309,8 +1350,29 @@ ru:
         description:
         details:
       assurance_case:
-        description:
-        details:
+        description: 'Проект ОБЯЗАН предоставить обоснование того, что требования
+          безопасности соблюдаются проектом. Обоснование ДОЛЖНО включать: описание
+          модели угроз, четкое указание границ доверия, доказательство того, что использовались
+          принципы безопасного дизайна, и доказательство того, что слабости в безопасности
+          реализации нейтрализованы.
+
+'
+        details: 'Обоснованием является «документальное подтверждение, которое дает
+          убедительное и обоснованное доказательство того, что указанный набор критических
+          заявлений относительно свойств системы адекватно оправдан для данного приложения
+          в данной среде» (перевод выдержки из <a href="http://nvlpubs.nist.gov/nistpubs/ir/2009/ir7608.pdf">"Software
+          Assurance Using Structured Assurance Case Models", Thomas Rhodes et al,
+          NIST Interagency Report 7608</a>). Границы доверия - это границы, где данные
+          или выполнение кода изменяют уровень доверия, например границы сервера в
+          типичном веб-приложении. В обосновании обычно перечисляются принципы безопасного
+          проектирования (такие как Saltzer and Schroeer) и общие слабости безопасности
+          в реализации (такие как OWASP Top 10 или CWE/SANS Top 25), и показывают,
+          как противодействовать каждой из них. Полезным примером может служить <a
+          href="https://github.com/coreinfrastructure/best-practices-badge/blob/master/doc/security.md">BadgeApp
+          assurance case</a>. Этот критерий связан с documentation_security, documentation_architecture
+          и implement_secure_design.
+
+'
       documentation_current:
         description:
         details:
@@ -1324,7 +1386,12 @@ ru:
           где это имеет смысл.
 
 '
-        details:
+        details: |
+          Для веб-приложений см. <a href="http://w3c.org.ru/wp-content/uploads/2011/10/%D1%80%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9-%D0%B0%D0%B2%D1%82%D0%BE%D1%80%D0%B8%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%BD%D1%8B%D0%B9-%D0%BF%D0%B5%D1%80%D0%B5%D0%B2%D0%BE%D0%B4-WCAG.pdf">Руководство по обеспечению доступности веб-контента (WCAG) 2.0</a> и его поддерживающий документ <a href="https://www.w3.org/TR/UNDERSTANDING-WCAG20/Overview.html">Understanding WCAG 2.0</a>; см. также <a href="https://www.w3.org/standards/webdesign/accessibility">W3C accessibility information</a>. Для приложений с графическим интерфейсом рассмотрите использование соответствующих вашему окружению рекомендаций по обеспечению доступности (таких как <a href="https://developer.gnome.org/accessibility-devel-guide/stable/">GNOME</a>, <a href="https://accessibility.kde.org/">KDE</a>, <a href="http://docs.xfce.org/xfce/xfce4-settings/accessibility">XFCE</a>, <href="https://developer.android.com/guide/topics/ui/accessibility/">Android</a>, <a href="https://developer.apple.com/accessibility/ios/">iOS</a>, <a href="https://developer.apple.com/accessibility/macos/">Mac</a> и <a href="https://docs.microsoft.com/ru-ru/windows/uwp/accessibility/accessibility-overview">Windows (на русском)</a>). Некоторые приложения с текстовым интерфейсом пользователя (например, программы на ncurses) могут сделать некоторые вещи, чтобы сделать себя более доступными (например, параметр `force-arrow-cursor` в `alpine`). Большинство приложений командной строки довольно общедоступны как они есть. Этот критерий часто неприменим, например, для библиотек программ. Вот несколько примеров действий или проблем, которые следует учитывать: <ul> <li>Должны предоставляться текстовые альтернативы для любого нетекстового контента, так чтобы его можно изменить на другие необходимые формы, например крупная печать, шрифт Брайля, озвучка текста, символы или упрощенный язык (<a href="https://www.w3.org/TR/UNDERSTANDING-WCAG20/text-equiv.html">Understanding WCAG 2.0 guideline 1.1</a>)
+          <li>Цвет не должен использоваться в качестве единственного визуального средства передачи информации, указания на действие, запрос реакции пользователя или выделения визуальных элементов. (<a href="https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast-without-color.html">WCAG 2.0 guideline 1.4.1</a>)
+          <li>Визуальное представление текста и изображений текста должно иметь контрастность не менее 4,5:1, за исключением большого текста, случайного текста и логотипов (<a href="https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast-contrast.html">WCAG 2.0 guideline 1.4.3</a>)
+          <li>Все функциональные возможности должны быть доступны с клавиатуры (WCAG guideline 2.1) <li>GUI или веб-проект ДОЛЖНЫ тестировать, по крайней мере, одно средство чтения экрана на целевой платформе(ах) (например, NVDA, Jaws или WindowEyes в Windows; VoiceOver на Mac и iOS; Orca на Linux/BSD; TalkBack на Android). Программы с текстовым интерфейсом пользователя МОГУТ по возможности сокращать переписывание текста на экране, чтобы предотвратить лишнее чтение средствами чтения экрана.
+          </ul>
       internationalization:
         description:
         details:
@@ -1378,8 +1445,15 @@ ru:
       interfaces_current:
         description:
       automated_integration_testing:
-        description:
-        details:
+        description: 'Автоматический набор тестов ДОЛЖЕН применяться к каждому коммиту
+          в общий репозиторий по крайней мере для одной ветки. Этот набор тестов ДОЛЖЕН
+          создавать отчет об успешном или неудачном тестировании.
+
+'
+        details: 'Это требование можно рассматривать как подмножество test_continuous_integration,
+          но сосредоточенное только на тестировании, без требования непрерывной интеграции.
+
+'
       regression_tests_added50:
         description:
       test_statement_coverage80:
@@ -1425,7 +1499,7 @@ ru:
       dynamic_analysis_unsafe:
         description:
       achieve_passing:
-        description: Проект ОБЯЗАН получить значок уровня passing.
+        description: Проект ОБЯЗАН получить значок уровня Passing.
     '2':
       bus_factor:
         description: Проект ОБЯЗАН иметь «автобусный коэффициент» 2 или более.
@@ -1503,39 +1577,41 @@ ru:
     Accessibility and internationalization: Общедоступность и интернационализация
     Analysis: Анализ
     Automated test suite: Набор автотестов
-    Identification:
-    Basic project website content:
+    Identification: Идентификация
+    Basic project website content: Основная информация на веб-сайте проекта
     Basics: Основы
     Bug-reporting process: Процесс сообщения об ошибках
     Change Control: Управление изменениями
     Coding standards: Стандарты кодирования
     Documentation: Документация
     Dynamic code analysis: Динамический анализ кода
-    Externally-maintained components:
-    Future:
+    Externally-maintained components: Компоненты, поддерживаемые извне
+    Future: Будущие критерии
     future:
     Installation system: Система установки
-    New functionality testing:
-    OSS License:
-    Other:
-    Other security issues:
+    New functionality testing: Тестирование новых функций
+    OSS License: Свободная лицензия
+    Other: Другое
+    Other security issues: Другие проблемы безопасности
     Previous versions: Предыдущие версии
     Project oversight:
-    Public version-controlled source repository:
-    Publicly known vulnerabilities fixed:
+    Public version-controlled source repository: Публичное хранилище исходного кода
+      с поддержкой версий
+    Publicly known vulnerabilities fixed: Общеизвестные уязвимости исправлены
     Quality: Качество
     Release notes: Примечания к выпуску
     Reporting:
-    Secure development knowledge:
+    Secure development knowledge: Знание безопасной разработки
     Secure release:
-    Secured delivery against man-in-the-middle (MITM) attacks:
-    Security:
-    Static code analysis:
-    Unique version numbering:
+    Secured delivery against man-in-the-middle (MITM) attacks: Доставка, защищенная
+      от атак посредника (MITM)
+    Security: Безопасность
+    Static code analysis: Статический анализ кода
+    Unique version numbering: Уникальная нумерация версий
     Use basic good cryptographic practices:
-    Vulnerability report process:
-    Warning flags:
-    Working build system:
+    Vulnerability report process: Процесс отчета об уязвимостях
+    Warning flags: Флаги предупреждений
+    Working build system: Рабочая система сборки
   criterion_status:
     Met: Соответствует
     Unmet: Не соответствует

@@ -184,7 +184,7 @@ de:
 
 '
       new_badge: Neues Badge
-      may_select_html: 'Sie können eines Ihrer GitHub Repositories <em>ODER</ em>
+      may_select_html: 'Sie können eines Ihrer GitHub Repositories <em>ODER</em>
         Informationen über ein anderes Projekt auswählen.
 
 '
@@ -323,10 +323,10 @@ de:
           und den Wunsch nach wiederholter Zusammenarbeit zwischen Entwicklern verschiedener
           Unternehmen zu schaffen. Um ein Badge zu verdienen, müssen alle MÜSSEN und
           MÜSSEN NICHT Kriterien erfüllt sein, alle SOLLTEN Kriterien müssen erfüllt
-          sein oder eine Rechtfertigung enthalten, <em>und</ em> alle EMPFHOLEN Kriterien
+          sein oder eine Rechtfertigung enthalten, <em>und</em> alle EMPFHOLEN Kriterien
           müssen erfüllt sein oder nicht (wir wollen sie zumindest berücksichtigt
           wissen)). Feedback ist willkommen auf der<a href="https://github.com/coreinfrastructure/best-practices-badge">GitHub-Website
-          als Issue oder Pull-Request</a>. Es gibt auch eine <a href = "https://lists.coreinfrastructure.org/mailman/listinfo/cii-badges">E-Mail-Liste
+          als Issue oder Pull-Request</a>. Es gibt auch eine <a href="https://lists.coreinfrastructure.org/mailman/listinfo/cii-badges">E-Mail-Liste
           für allgemeine Diskussionen</a><br /><br /> Wir stellen Ihnen gerne die
           Informationen in mehreren Sprachen zur Verfügung, allerdings ist die Englische
           Version maßgeblich, insbesondere wenn es Konflikte oder Inkonsistenzen zwischen
@@ -345,11 +345,11 @@ de:
           />
 
 '
-        editing_description_html: '<Strong> Bitte ''submit'' oft </ strong>, um Ihre
+        editing_description_html: '<strong> Bitte ''submit'' oft </strong>, um Ihre
           Arbeit zu speichern (Sie können immer wieder zurückkehren und später bearbeiten).
           <br> <br> Wenn Sie Hilfe benötigen, eine Frage haben, oder ein Problem sehen,
           bitte <em><a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">Schicken
-          Sie uns eine E-Mail</a></ em>.
+          Sie uns eine E-Mail</a></em>.
 
 '
         badge_alt: Badgelevel für Projekt %{id} ist %{level}
@@ -800,11 +800,11 @@ de:
         details: 'Ein kryptographisch sicherer Zufallszahlengenerator kann ein Hardware-Zufallszahlengenerator
           sein oder es kann ein kryptographisch sicherer Pseudozufallszahlengenerator
           (CSPRNG) sein, der einen Algorithmus wie Hash_DRBG, HMAC_DRBG, CTR_DRBG,
-          Yarrow oder Fortuna verwendet. Beispiele für Aufrufe von <em>sicheren</
-          em> Zufallszahlengeneratoren umfassen Java''s java.security.SecureRandom
-          und JavaScript''s window.crypto.getRandomValues. Beispiele für Anrufe von
-          <em>unsicheren</ em> Zufallszahlengeneratoren sind Java''s java.util.Random
-          und JavaScript''s Math.random.
+          Yarrow oder Fortuna verwendet. Beispiele für Aufrufe von <em>sicheren</em>
+          Zufallszahlengeneratoren umfassen Java''s java.security.SecureRandom und
+          JavaScript''s window.crypto.getRandomValues. Beispiele für Anrufe von <em>unsicheren</em>
+          Zufallszahlengeneratoren sind Java''s java.util.Random und JavaScript''s
+          Math.random.
 
 '
       delivery_mitm:
@@ -816,7 +816,7 @@ de:
         details: 'Ein noch stärkerer Mechanismus ist die Freigabe der Software mit
           digital signierten Paketen, da dies Angriffe auf das Verteilungssystem verringert,
           aber das funktioniert nur, wenn die Benutzer sicher sein können, dass die
-          öffentlichen Schlüssel für Signaturen korrekt sind <em> und </ em> wenn
+          öffentlichen Schlüssel für Signaturen korrekt sind <em> und </em> wenn
           die Benutzer die Signatur tatsächlich überprüfen.
 
 '

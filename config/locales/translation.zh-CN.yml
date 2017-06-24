@@ -30,8 +30,8 @@ zh-CN:
     logout_html: "<span class =“glyphicon glyphicon-log-out”></span> 注销"
     signup_html: <span class="glyphicon glyphicon-user"></span> 注册
     login_html: <span class="glyphicon glyphicon-log-in"></span> 登录
-    footer_text_html: <small> <strong>需要帮助？有疑问？发现问题？请 <em><a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">发送邮件</a>
-      </em>或 <em><a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
+    footer_text_html: <small> <strong>需要帮助？有疑问？发现问题？请 <a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">发送邮件</a>
+      或 <em><a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
       target="_blank">提出问题</a></em>.</strong> © 2015-2017 <a href="https://www.coreinfrastructure.org/
       target="_blank">Core Infrastructure Initiative （核心基础设施计划）</a>, 一个 <a href="https://www.linuxfoundation.org/"
       target="_blank">Linux 基金会</a> 合作项目。版权所有。 请查阅我们的 <a href="https://www.linuxfoundation.org/privacy"
@@ -421,13 +421,13 @@ zh-CN:
 
 '
       after_html: |
-        <p>此链接将在两个小时后过期。</ p>
+        <p>此链接将在两个小时后过期。</p>
 
         <P>
         如果您没有要求重置密码，
         请忽略此电子邮件，
         您的密码将保持原样。
-        </ p>
+        </p>
       after_text: |
         此链接将在两个小时后过期。
 
@@ -592,10 +592,10 @@ zh-CN:
           3条款修订版</a>，<a href="https://opensource.org/licenses/Apache-2.0"> Apache
           2.0 </a>，<a href ="https://opensource.org/licenses/lgpl-license"> Lesser
           GNU通用公共许可证（LGPL）</a>，以及<a href ="https://opensource.org/licenses/gpl-license">
-          GNU通用公共许可证（GPL）</a>。为了我们的目的，这意味着许可证必须是：<ul> <li> <a href="https://opensource.org/licenses">开放源码促进会（OSI）批准的许可证</a>，或</
-          li> <li> <a href="https://www.gnu.org/licenses/license-list.html">自由软件基金会（FSF）批准的免费许可证</a>，或</
-          li> <li> <a href="https://www.debian.org/legal/licenses/"> Debian 主流可接受的免费许可</a>，或</
-          li> <li><a href="https://fedoraproject.org/wiki/Licensing:Main?rd=Licensing">a
+          GNU通用公共许可证（GPL）</a>。为了我们的目的，这意味着许可证必须是：<ul> <li> <a href="https://opensource.org/licenses">开放源码促进会（OSI）批准的许可证</a>，或</li>
+          <li> <a href="https://www.gnu.org/licenses/license-list.html">自由软件基金会（FSF）批准的免费许可证</a>，或</li>
+          <li> <a href="https://www.debian.org/legal/licenses/"> Debian 主流可接受的免费许可</a>，或</li>
+          <li><a href="https://fedoraproject.org/wiki/Licensing:Main?rd=Licensing">a
           "good" license according to Fedora</a>。</li> </ul>该软件也可以用其他许可证（例如，“GPLv2或专有”是可以接受的）。
 
 '
@@ -1305,7 +1305,7 @@ zh-CN:
           该项目必须满足下述情况之一：
           <ol>
           <li>可以轻松识别和更新重用的外部维护组件; <strong>或</strong> </li>
-          <li>使用系统或编程语言提供的标准组件。</ li>
+          <li>使用系统或编程语言提供的标准组件。</li>
           </ol>
           这样，如果在重用的组件中发现了一个漏洞，将容易更新该组件。
         details: '符合这一条款的典型方法是使用系统和编程语言的包管理系统。许多FLOSS程序与“便利库”一起分发，这些库是标准库的本地副本（可能是分支）。一般没问题。但是，如果程序*必须*使用这些本地（分支）副本，则“标准”库的安全更新将使这些附加副本仍然易受攻击。这对于基于云的系统尤其是一个问题；如果云提供商更新他们的“标准”库，但程序不会使用它们，那么这些更新实际上不会有帮助。参见，例如，<a
@@ -1427,7 +1427,7 @@ zh-CN:
           / SANS前25名），并显示每个方案如何抵御。 <a href="https://github.com/coreinfrastructure/best-practices-badge/blob/master/doc/security.md">
           BadgeApp保证案例</a>可能是一个有用的例子。本条款与documentation_security，documentation_architecture和implement_secure_design等条款有关。
       achieve_passing:
-        description:
+        description: 项目必须拥有通过徽章。
     '2':
       bus_factor:
         description: 项目必须具有2个或更多的“公交车因子”。
@@ -1556,7 +1556,7 @@ zh-CN:
 
 '
       achieve_silver:
-        description:
+        description: 该项目必须拥有银级徽章。
   static_pages:
     home:
       badge_program: CII 最佳实践徽章计划
@@ -1602,15 +1602,15 @@ zh-CN:
       criteria_na_met_details: 在活跃条款中，%{na_allowed}允许N/A，%{met_url_required}在满足时需要URL，而%{details_present}在其描述中具有详细信息。
       project_counts: 有%{projects}个项目条目; %{passing}个已经通过，%{in_progress}个正在进行中。
       project_stats_html: 您可以在<a href="/project_stats">项目统计信息页面</a>查看有关项目的统计信息。
-      level:
-      must:
-      should:
-      suggested:
-      total_active:
-      allow_na:
-      require_url:
-      details:
-      future:
+      level: 等级
+      must: 必须
+      should: 应该
+      suggested: 建议
+      total_active: 总有效
+      allow_na: 允许N/A
+      require_url: 需要网址
+      details: 包括细节
+      future: 未来
   headings:
     Accessibility and internationalization: 无障碍和国际化
     Analysis: 分析

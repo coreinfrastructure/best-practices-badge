@@ -264,7 +264,7 @@ fr:
 
 '
       owned_by: 'Soumission du badge du projet appartenant à :'
-      created_at_html: "<strong>Soumission créée le</ strong> %{when},"
+      created_at_html: "<strong>Soumission créée le</strong> %{when},"
       updated_at_html: "<strong>dernière mise à jour le</strong> %{when}."
       last_lost_html: 'Le dernier badge perdu l''a été le %{when}.
 
@@ -1492,7 +1492,7 @@ fr:
           ou d''une autre pour rechercher différents types de problèmes <em>ou</em>
           être une suite de test automatisée avec au moins 80% de couverture de branche.
           La <a href="https://en.wikipedia.org/wiki/Dynamic_program_analysis">page
-          Wikipedia sur l''analyse dynamique</a> et la <a href = "https://www.owasp.org/index.php/Fuzzing">page
+          Wikipedia sur l''analyse dynamique</a> et la <a href="https://www.owasp.org/index.php/Fuzzing">page
           OWASP sur le fuzzing</a> identifient certains outils d''analyse dynamique.
           Le ou les outils d''analyse PEUVENT être axés sur la recherche de vulnérabilités
           de sécurité, mais cela n''est pas nécessaire.
@@ -1514,7 +1514,7 @@ fr:
           Sanitizer (ASAN)</a> (disponible dans GCC et LLVM), <a href="http://clang.llvm.org/docs/MemorySanitizer.html">Memory
           Sanitizer</a> et <a href="http://valgrind.org/">valgrind</a>. D''autres
           outils potentiellement utilisés incluent <a href="http://clang.llvm.org/docs/ThreadSanitizer.html">thread
-          sanitizer</a> et <a href = "http://clang.llvm.org/ docs/UndefinedBehaviorSanitizer.html">undefined
+          sanitizer</a> et <a href="http://clang.llvm.org/ docs/UndefinedBehaviorSanitizer.html">undefined
           behavior sanitizer</a>. La généralisation de l''utilisation des assertions
           fonctionnera également.
 
@@ -1825,7 +1825,7 @@ fr:
 
 '
         details: |
-          Pour les applications Web, consultez les <a href="https://www.w3.org/TR/WCAG20/">Directives d'accessibilité des contenus Web (WCAG 2.0)</a> et son document à l'appui <a href="https: //www.w3.org/TR/UNDERSTANDING-WCAG20/Overview.html">Comprendre WCAG 2.0</a> ; voir aussi <a href="https://www.w3.org/standards/webdesign/accessibility">les informations d'accessibilité du W3C</a>. Pour les applications IHM, envisagez d'utiliser les directives d'accessibilité spécifiques à l'environnement (telles que <a href="https://developer.gnome.org/accessibility-devel-guide/stable/">Gnome</a>, <a href="https://accessibility.kde.org/">KDE</a>, <a href="http://docs.xfce.org/xfce/xfce4 -settings/accessibility">XFCE</a>, < a href="https://developer.android.com/guide/topics/ui/accessibility/">Android</a>, <a href="https://developer.apple.com/accessibility/ios/">IOS</a>, <a href="http://www.apple.com/accessibility/osx/voiceover/">Mac</a> et <a href="https://docs.microsoft.com/fr-fr/windows/uwp/accessibility/accessibility-overview">Windows</a>). Certaines applications IHM textuelles (par exemple, les programmes « ncurses ») peuvent faire certaines choses pour se rendre plus accessibles (par exemple, le paramètre « force-arrow-cursor » de « alpine »). La plupart des applications en ligne de commande sont assez accessibles telles quelles. Ce critère est souvent N/A, par exemple, pour les bibliothèques. Voici quelques exemples d'actions à prendre ou de questions à considérer : <ul> <li>Fournir des alternatives de texte pour tout contenu non textuel afin qu'il puisse être changé en d'autres formes dont les gens ont besoin, comme une plus grande taille, le braille, une sortie vocale, des symboles ou une langue plus simple (<a href="https://www.w3.org/TR/UNDERSTANDING-WCAG20/text-equiv.html">WCAG 2.0 directive 1.1</a>)
+          Pour les applications Web, consultez les <a href="https://www.w3.org/TR/WCAG20/">Directives d'accessibilité des contenus Web (WCAG 2.0)</a> et son document à l'appui <a href="https: //www.w3.org/TR/UNDERSTANDING-WCAG20/Overview.html">Comprendre WCAG 2.0</a> ; voir aussi <a href="https://www.w3.org/standards/webdesign/accessibility">les informations d'accessibilité du W3C</a>. Pour les applications IHM, envisagez d'utiliser les directives d'accessibilité spécifiques à l'environnement (telles que <a href="https://developer.gnome.org/accessibility-devel-guide/stable/">Gnome</a>, <a href="https://accessibility.kde.org/">KDE</a>, <a href="http://docs.xfce.org/xfce/xfce4 -settings/accessibility">XFCE</a>, <a href="https://developer.android.com/guide/topics/ui/accessibility/">Android</a>, <a href="https://developer.apple.com/accessibility/ios/">IOS</a>, <a href="http://www.apple.com/accessibility/osx/voiceover/">Mac</a> et <a href="https://docs.microsoft.com/fr-fr/windows/uwp/accessibility/accessibility-overview">Windows</a>). Certaines applications IHM textuelles (par exemple, les programmes « ncurses ») peuvent faire certaines choses pour se rendre plus accessibles (par exemple, le paramètre « force-arrow-cursor » de « alpine »). La plupart des applications en ligne de commande sont assez accessibles telles quelles. Ce critère est souvent N/A, par exemple, pour les bibliothèques. Voici quelques exemples d'actions à prendre ou de questions à considérer : <ul> <li>Fournir des alternatives de texte pour tout contenu non textuel afin qu'il puisse être changé en d'autres formes dont les gens ont besoin, comme une plus grande taille, le braille, une sortie vocale, des symboles ou une langue plus simple (<a href="https://www.w3.org/TR/UNDERSTANDING-WCAG20/text-equiv.html">WCAG 2.0 directive 1.1</a>)
           <li>La couleur n'est pas utilisée comme le seul moyen visuel de transmettre des informations, d'indiquer une action, de provoquer une réponse ou de distinguer un élément visuel. (<a href="https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast-withoutcolor.html">WCAG 2.0 directive 1.4.1</a>)
           <li>La présentation visuelle du texte et des images du texte a un taux de contraste d'au moins 4,5:1, à l'exception du grand texte, du texte incident, et des logotypes (<a href="https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast-contrast.html">WCAG 2.0 directive 1.4.3</a>)
           <li>Rendez toutes les fonctionnalités disponibles à partir d'un clavier (WCAG directive 2.1) <li>Une IHM ou un projet basé sur le Web DEVRAIT tester avec au moins un lecteur d'écran sur la (les) plate-forme(s) cible(s) (par exemple NVDA, Jaws ou WindowEyes sur Windows ; VoiceOver sur Mac & iOS ; Orca sous Linux/BSD ; TalkBack sur Android). Les programmes IHM textuels PEUVENT travailler à réduire le retrait excessif pour éviter la lecture redondante par les lecteurs d'écran.</ul>
@@ -2070,7 +2070,7 @@ fr:
         description: |
           Le projet DOIT :
           <ol>
-          <li> rendre facile l'identification et la mise à jour des composants maintenus extérieurement au projet ; <strong>ou</ strong> </li>
+          <li> rendre facile l'identification et la mise à jour des composants maintenus extérieurement au projet ; <strong>ou</strong> </li>
           <li> utiliser des composants standards fournis par le système ou le langage de programmation. </li>
           </ol>
           Ensuite, si une vulnérabilité se trouve dans un composant réutilisé, il sera
@@ -2367,10 +2367,8 @@ fr:
         description: 'Le projet DOIT inclure une déclaration de licence dans chaque
           fichier source. Cela PEUT être fait en incluant ce qui suit dans un commentaire
           près du début de chaque fichier : <a href="https://spdx.org/using-spdx#identifiers">
-          <tt>SPDX-License-Identifier : [expression d''une licence SPDX pour le projet]</
-          tt> </a>.
-
-'
+          <tt>SPDX-License-Identifier : [expression d''une licence SPDX pour le projet]</tt>
+          </a>.'
         details: 'Cela PEUT également être fait en incluant une déclaration en langage
           naturel identifiant la licence. Le projet PEUT également inclure une URL
           stable indiquant le texte de la licence ou directement le texte complet

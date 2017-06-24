@@ -20,7 +20,22 @@ environment or for deployment. We have rearchitected the deployment to use Docke
 * `docker build -t demo .`
 * `docker run -p 3000:3000`
 
-# Old instructions
+## Docker Compose
+```
+docker-compose run --rm web bundle
+docker-compose up
+docker-compose run --rm web bin/rake db:setup RAILS_ENV=development
+```
+
+## Delete All Images
+
+#!/bin/bash
+# Delete all containers
+docker rm $(docker ps -a -q)
+# Delete all images
+docker rmi $(docker images -q)
+
+## Old instructions
 
 On most systems this is a fairly quick and painless process.
 We also provide information on how to quickly get started so you

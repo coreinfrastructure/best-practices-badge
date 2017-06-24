@@ -40,7 +40,7 @@ WORKDIR /tmp
 RUN bundle install --jobs 20 --retry 5
 
 # Copy the main application.
-COPY . ./
+COPY . $APP_HOME
 
 # The main command to run when the container starts. Also 
 # tell the Rails dev server to bind to all interfaces by 

@@ -1,11 +1,11 @@
 db:
-  image: postgres:9
+  image: postgres:9.6
 web:
   build: .
   links:
     - db
   ports:
-    - "3001:3000"
+    - "3000:3000"
   volumes:
     - .:/app
   volumes_from:

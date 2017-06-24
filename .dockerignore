@@ -1,0 +1,43 @@
+# Ignore git
+/.git
+
+# Ignore bundler config.
+/.bundle
+
+# Ignore simplecov output
+/coverage/
+
+# Ignore Minitest HTML reporter output
+/test/html_reports/
+
+# Ignore all logfiles and tempfiles.
+/log/*
+!/log/.keep
+/tmp
+
+# Don't include precompiled assets
+/public/assets
+
+# Dropbox
+.DS_Store
+
+# Rake output files
+/*.html
+doc/*.html
+license_okay
+
+# Temporary files
+,*
+*.temp
+*.TEMP
+*.tmp
+*.TMP
+*.old
+*.OLD
+*.BAD
+*.ALT
+
+# Some environments will have a node_modules file created by the install script.
+/node_modules/
+
+/doc/

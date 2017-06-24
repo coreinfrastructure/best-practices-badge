@@ -3,7 +3,25 @@
 <!-- SPDX-License-Identifier: (MIT OR CC-BY-3.0+) -->
 
 Here is how to install the "BadgeApp" web application, for either a development
-environment or for deployment.
+environment or for deployment. We have rearchitected the deployment to use Docker containers, which has the following benefits:
+* Improved (and hopefully near-perfect) interoperability between developers working on Linux, Mac and Windows.
+* Immutable infrastructure that specifies all prerequisites in version-controlled code.
+* The ability to unify dev and test environments to ensure identical behavior.
+* The ability to unify dev and production (other than the data store) to avoid deployment issues.
+
+## Install Docker CE
+
+* Install git if you don't already have it and clone this repo.
+* Follow the [directions](https://docs.docker.com/engine/installation/) to install the stable version of Docker CE on your OS.
+
+## Build and run the Docker image
+
+* `cd` to the `best-practices-badge` directory
+* `docker build -t demo .`
+* `docker run -p 3000:3000`
+
+# Old instructions
+
 On most systems this is a fairly quick and painless process.
 We also provide information on how to quickly get started so you
 can *do* something.

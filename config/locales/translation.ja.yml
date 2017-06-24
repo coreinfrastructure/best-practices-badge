@@ -40,9 +40,9 @@ ja:
     logout_html: <span class = "glyphicon glyphicon-log-out"></span> ログアウト
     signup_html: <span class = "glyphicon glyphicon-user"></span> サインアップ
     login_html: <span class = "glyphicon glyphicon-log-in"></span> ログイン
-    footer_text_html: <small> <strong>疑問、質問、または問題がある場合は<em> <a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">電子メールで報告する</a></
-      em>か、<em> <a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
-      target="_blank">こちらから問題を提出</a></ em>してください。</strong>  © 2015-2017 <a href="https://www.coreinfrastructure.org/
+    footer_text_html: <small> <strong>疑問、質問、または問題がある場合は<em> <a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">電子メールで報告する</a></em>か、<em>
+      <a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
+      target="_blank">こちらから問題を提出</a></em>してください。</strong>  © 2015-2017 <a href="https://www.coreinfrastructure.org/
       target="_blank">Core Infrastructure Initiative</a>, a <a href="https://www.linuxfoundation.org/"
       target="_blank">Linux Foundation</a> Collaborative Project. All Rights Reserved.
       <a href="https://www.linuxfoundation.jp/privacy" target="_blank">プライバシー ポリシー</a>
@@ -415,18 +415,17 @@ ja:
 
 '
         details: 'FLOSSは、<a href="https://opensource.org/osd-annotated">オープンソース定義</a>または<a
-          href = "http://www.gnu.org/philosophy/free-sw.en.html ">フリーソフトウェア定義</a>を満たす方法でリリースされたソフトウェアです。そのようなライセンスの例としては、<a
-          href="http://creativecommons.org/publicdomain/zero/1.0/"> CC0 </a>、<a href
-          = "https://opensource.org/licenses/MIT" > MIT </a>、<a href="https://opensource.org/licenses/BSD-2-Clause">
-          2項型BSD</a>、<a href = "https://opensource.org / licenses / BSD-3-Clause ">
-          3項型BSD</a>、<a href="https://opensource.org/licenses/Apache-2.0"> Apache
-          2.0 </a>、<a href = "https://opensource.org/licenses/lgpl-license"> Less
-          GNU General Public License（LGPL）</a>、および<a href = "https://opensource.org/licenses/gpl-license
+          href="http://www.gnu.org/philosophy/free-sw.en.html ">フリーソフトウェア定義</a>を満たす方法でリリースされたソフトウェアです。そのようなライセンスの例としては、<a
+          href="http://creativecommons.org/publicdomain/zero/1.0/">CC0</a>、<a href="https://opensource.org/licenses/MIT"
+          >MIT</a>、<a href="https://opensource.org/licenses/BSD-2-Clause">2項型BSD</a>、<a
+          href="https://opensource.org / licenses / BSD-3-Clause "> 3項型BSD</a>、<a
+          href="https://opensource.org/licenses/Apache-2.0"> Apache 2.0 </a>、<a href="https://opensource.org/licenses/lgpl-license">Less
+          GNU General Public License（LGPL）</a>、および<a href="https://opensource.org/licenses/gpl-license
           "> GNU General Public License（GPL）</a>を参照してください。私たちの目的のためには、これはライセンスが以下のものでなければならないことを意味します：<ul>
-          <li> <a href="https://opensource.org/licenses">オープンソース・イニシアチブ（OSI）によって承認されたライセンス</a>、または</
-          li> <li> <a href="https://www.gnu.org/licenses/license-list.html">フリーソフトウェア財団（FSF）の承認を得たフリー
-          ライセンス</a>、または</ li> <li> <a href="https://www.debian.org/legal/licenses/">
-          Debianメインに受け入れられるフリー ライセンス</a>、または</ li> <li> <a href="https://fedoraproject.org/wiki/Licensing:Main?rd=Licensing">Fedoraによって「良い」ライセンス</a>.</li>
+          <li> <a href="https://opensource.org/licenses">オープンソース・イニシアチブ（OSI）によって承認されたライセンス</a>、または</li>
+          <li> <a href="https://www.gnu.org/licenses/license-list.html">フリーソフトウェア財団（FSF）の承認を得たフリー
+          ライセンス</a>、または</li> <li> <a href="https://www.debian.org/legal/licenses/">
+          Debianメインに受け入れられるフリー ライセンス</a>、または</li> <li> <a href="https://fedoraproject.org/wiki/Licensing:Main?rd=Licensing">Fedoraによって「良い」ライセンス</a>.</li>
           </ul> ソフトウェアは他の方法でライセンスされているかもしれません（たとえば、「GPLv2またはプロプライエタリ」は許容されます）。
 
 '
@@ -473,8 +472,8 @@ ja:
         details: '<a href="https://letsencrypt.org/">暗号化しよう</a>からフリーの証明書を入手できます。プロジェクトは、（例えば）<a
           href="https://help.github.com/articles/securing-your-github-pages-site-with-https/">
           GitHubページ</a>、<a href="https://about.gitlab.com/2016/12/24/were-bringing-gitlab-pages-to-community-edition/">
-          GitLabページ</a>、または<a href = " https://sourceforge.net/blog/introducing-https-for-project-websites/">SourceForgeプロジェクトページ</a>を使ってこの基準を実装してもよいです。カスタムドメインでGitHubページを使用している場合は、<a
-          href = "https://blog.cloudflare.com/secure-and-fast-github-pages-with-cloudflare
+          GitLabページ</a>、または<a href=" https://sourceforge.net/blog/introducing-https-for-project-websites/">SourceForgeプロジェクトページ</a>を使ってこの基準を実装してもよいです。カスタムドメインでGitHubページを使用している場合は、<a
+          href="https://blog.cloudflare.com/secure-and-fast-github-pages-with-cloudflare
           /">ブログの投稿「このファイルを安全かつ高速にGitHub Pages with CloudFlare」</a>に記載されているように、HTTPSをサポートするプロキシとしてコンテンツ配信ネットワーク（CDN）を使用することができます。
           HTTPをサポートしている場合は、HTTPトラフィックをHTTPSにリダイレクトすることを強くお勧めします。
 
@@ -541,9 +540,8 @@ ja:
 
 '
         details: 'リリースノートは様々な方法で実装できます（MAY）。多くのプロジェクトは、 "NEWS"、 "CHANGELOG"、または "ChangeLog"という名前のファイルでそれらを提供し、
-          ".txt"、 ".md"、 ".html"などの拡張子を付けることもあります。歴史的には、 "change log"という言葉は<em>すべての</
-          em>変更のログを意味していましたが、本基準を満たすために必要なものは、人間が読める要約です。リリースノートは代わりに、<a href="https://github.com/blog/1547-release-your-software">
-          GitHubリリースのワークフロー</a>などのバージョン管理システムのメカニズムによって提供してもよい（MAY）。
+          ".txt"、 ".md"、 ".html"などの拡張子を付けることもあります。歴史的には、 "change log"という言葉は<em>すべての</em>変更のログを意味していましたが、本基準を満たすために必要なものは、人間が読める要約です。リリースノートは代わりに、<a
+          href="https://github.com/blog/1547-release-your-software"> GitHubリリースのワークフロー</a>などのバージョン管理システムのメカニズムによって提供してもよい（MAY）。
 
 '
       release_notes_vulns:
@@ -648,8 +646,7 @@ ja:
 
 '
       tests_documented_added:
-        description: 'テストを追加するこのポリシー（<a href="#test_policy"> test_policy </a>を参照）を変更提案に関する手順で<em>文書化</
-          em>することを推奨します。
+        description: 'テストを追加するこのポリシー（<a href="#test_policy">test_policy</a>を参照）を変更提案に関する手順で<em>文書化</em>することを推奨します。
 
 '
         details: 'しかし、実際にテストが追加されている限り、非公式の規則でも許容されます。
@@ -688,7 +685,7 @@ ja:
           トークンを必要とする多因子認証は単因子認証より強いです。<li>最低限の権限（プロセスは最低限の権限で動作する必要がある）<li>最低限の共通メカニズム（設計は、複数のユーザに共通のメカニズムや全てのユーザーに依存するメカニズムを最小限に抑えるべきです。）
           <li>心理学的受容性（ヒューマンインタフェースは、使いやすく設計されていなければならない - 「驚きが最小限になる」という設計が助けになる）<li>限られた攻撃面（攻撃面
           - 攻撃者がデータを入力または抽出しようとする部分 - を制限する必要があります）<li>ホワイト リストで入力を検証します（入力は通常、この検証はブラックリスト（既知の不良値をリストする）ではなく、ホワイトリスト（既知の値のみを受け入れる）を使用する必要があります。
-          </ ul>プロジェクトの「主要な開発者」とは、プロジェクトのコードベースに精通していて、容易に変更を加えることができ、プロジェクトの他のほとんどの参加者によって認められている人です。主要な開発者は、通常、過去1年間に（コード、文書、または質問に回答して）多数の貢献を行います。ある開発者が、プロジェクトを開始している（3年以上プロジェクトから離れていない）、プライベート脆弱性報告チャネル（存在する場合）に関する情報を受け取る、プロジェクトを代表してコミットを受け入れる、最終リリースする、などを行う時主要な開発者とみなすことができます。開発者が1人だけの場合、その人物が主要開発者です。
+          </ul>プロジェクトの「主要な開発者」とは、プロジェクトのコードベースに精通していて、容易に変更を加えることができ、プロジェクトの他のほとんどの参加者によって認められている人です。主要な開発者は、通常、過去1年間に（コード、文書、または質問に回答して）多数の貢献を行います。ある開発者が、プロジェクトを開始している（3年以上プロジェクトから離れていない）、プライベート脆弱性報告チャネル（存在する場合）に関する情報を受け取る、プロジェクトを代表してコミットを受け入れる、最終リリースする、などを行う時主要な開発者とみなすことができます。開発者が1人だけの場合、その人物が主要開発者です。
 
 '
       know_common_errors:
@@ -697,7 +694,7 @@ ja:
 '
         details: 例としては、（ソフトウェアのタイプに依存しますが）SQLインジェクション、OSインジェクション、古典的なバッファ オーバーフロー、クロスサイト
           スクリプティング、認証欠落、権限欠落などがあります。 <a href="http://cwe.mitre.org/top25/"> CWE /
-          SANSトップ25 </a>または<a href = "https://www.owasp.org/index.php/カテゴリ：OWASP_Top_Ten_Project
+          SANSトップ25 </a>または<a href="https://www.owasp.org/index.php/カテゴリ：OWASP_Top_Ten_Project
           "> OWASP Top 10 </a>を参照してください。
       crypto_published:
         description: プロジェクトによって作成されたソフトウェアは、デフォルトで、一般に公開され、専門家によってレビューされている暗号プロトコルとアルゴリズムを使用しなければなりません。（暗号プロトコルとアルゴリズムが使用される場合）
@@ -747,9 +744,8 @@ ja:
         details: '脆弱性は、プロジェクト自体によってパッチされ、リリースされなければなりません（パッチは他の場所で開発される可能性があります）。脆弱性が無料情報と共にCVE（共通脆弱性識別子）を持つとき（例えば、<a
           href="https://nvd.nist.gov/"> National Vulnerability Database </a>）、またはプロジェクトに情報が伝えられ、その情報が（おそらくプロジェクトによって）一般に公開されたとき、脆弱性は一般に知られるようになります。<a
           href="https://nvd.nist.gov/cvss.cfm"> CVSS 2.0 </a>の基本スコアが4以上の場合、脆弱性は中〜高程度です。
-          <strong>注</ strong>：これは、世界中のすべての攻撃者にユーザーが60日間まで脆弱である可能性があることを意味します。この基準は、<a
-          href="https://security.googleblog.com/2010/07/rebooting-responsible-disclosure-focus.html">責任のある開示の再開</a>でGoogleが推奨するものよりも、しばしば満たすことが容易です。なぜなら、レポートが公開されていないとき<em>でも</
-          em>、プロジェクトに通知されてから60日間の期間が開始されるからです。
+          <strong>注</strong>：これは、世界中のすべての攻撃者にユーザーが60日間まで脆弱である可能性があることを意味します。この基準は、<a
+          href="https://security.googleblog.com/2010/07/rebooting-responsible-disclosure-focus.html">責任のある開示の再開</a>でGoogleが推奨するものよりも、しばしば満たすことが容易です。なぜなら、レポートが公開されていないとき<em>でも</em>、プロジェクトに通知されてから60日間の期間が開始されるからです。
 
 '
       vulnerabilities_critical_fixed:
@@ -770,15 +766,15 @@ ja:
         details: '静的コード解析ツールは、ソフトウェアコードを実行せずに特定の入力を用いて（ソースコード、中間コード、または実行可能ファイルとして）調べます。この基準のために、コンパイラの警告と「安全な」言語モードは、静的コード解析ツールとしてカウントされません（これらは通常、速度が重要なため深い解析を行いません）。このような静的コード解析ツールの例には、<a
           href="http://cppcheck.sourceforge.net/"> cppcheck </a>、<a href="http://clang-analyzer.llvm.org/">
           clangスタティックアナライザ</a>、<a href="http://findbugs.sourceforge.net/"> FindBugs
-          </a>（<a href = "https://h3xstream.github.io/find-sec-bugs/">FindSecurityBugs</a>を含む）、<a
+          </a>（<a href="https://h3xstream.github.io/find-sec-bugs/">FindSecurityBugs</a>を含む）、<a
           href="https://pmd.github.io/"> PMD </a>、<a href="http://brakemanscanner.org/">
           Brakeman </a>、<a href="https://scan.coverity.com/"> Coverity Quality Analyzer
-          </a>、および<a href = "http://www8.hp.com/au/en /software-solutions/static-code-analysis-sast/index.html">
+          </a>、および<a href="http://www8.hp.com/au/en /software-solutions/static-code-analysis-sast/index.html">
           HP Fortify静的コードアナライザー</a>。大きなツールのリストは、<a href="https://en.wikipedia.org/wiki/List_of_tools_for_static_code_analysis">静的コード解析のためのWikipediaツール一覧</a>、<a
-          href = "https://www.owasp.org/index.php/Static_Code_Analysis">静的コード解析に関するOWASP情報</a>、<a
-          href = "http://samate.nist.gov/index.php/Source_Code_Security_Analyzers.html
-          "> NISTソースコードセキュリティアナライザのリスト</a>、<a href="http://www.dwheeler.com/essays/static-analysis-tools.html">ウィーラーの静的解析ツール一覧</
-          a >。 <a href="https://continuousassurance.org/"> SWAMP </a>は、さまざまなツールを使用してソフトウェアの脆弱性を評価する無償のプラットフォームです。使用する実装言語で使用できるFLOSS静的解析ツールがない場合は、「該当なし」（N/A）を選択します。
+          href="https://www.owasp.org/index.php/Static_Code_Analysis">静的コード解析に関するOWASP情報</a>、<a
+          href="http://samate.nist.gov/index.php/Source_Code_Security_Analyzers.html">
+          NISTソースコードセキュリティアナライザのリスト</a>、<a href="http://www.dwheeler.com/essays/static-analysis-tools.html">ウィーラーの静的解析ツール一覧</a>。
+          <a href="https://continuousassurance.org/">SWAMP</a>は、さまざまなツールを使用してソフトウェアの脆弱性を評価する無償のプラットフォームです。使用する実装言語で使用できるFLOSS静的解析ツールがない場合は、「該当なし」（N/A）を選択します。
 
 '
         na_placeholder: 'これが満たされないのはなぜですか（たとえば、その言語用のFLOSSツールがないから）？
@@ -807,11 +803,11 @@ ja:
 
 '
         details: '動的解析ツールは、ソフトウェアを特定の入力で実行して検査します。たとえば、プロジェクトは、ファジングツール（<a href="http://lcamt​​uf.coredump.cx/afl/">アメリカンファジーロップ</a>など）やウェブ
-          アプリケーション スキャナ（例：<a href = "https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project">
+          アプリケーション スキャナ（例：<a href="https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project">
           OWASP ZAP </a>または<a href="http://w3af.org/"> w3af </a>）です。場合によっては、<a href="https://github.com/google/oss-fuzz#introduction">
           OSS-Fuzz </a>プロジェクトがプロジェクトにファズテストを適用する可能性があります。この基準のために、動的分析ツールは、様々な種類の問題を探すために何らかの方法で入力を変更するか<em>または</em>少なくとも80％のブランチ
           カバレッジを持つ自動テスト スイートである必要があります。 <a href="https://en.wikipedia.org/wiki/Dynamic_program_analysis">動的解析に関するWikipediaのページ</a>と<a
-          href = "https://www.owasp.org/index.php / Fuzzing "> ファジングに関するOWASPページ</a>で、いくつかの動的解析ツールを特定しています。解析ツールは、セキュリティの脆弱性を探すことに重点を置くことができますが、これは必須ではありません。
+          href="https://www.owasp.org/index.php / Fuzzing "> ファジングに関するOWASPページ</a>で、いくつかの動的解析ツールを特定しています。解析ツールは、セキュリティの脆弱性を探すことに重点を置くことができますが、これは必須ではありません。
 
 '
       dynamic_analysis_unsafe:
@@ -820,10 +816,10 @@ ja:
 
 '
         details: 'メモリの安全性の問題を検出するメカニズムの例としては、<a href="https://github.com/google/sanitizers/wiki/AddressSanitizer">アドレスサニタイザー（ASAN）</a>（GCCおよびLLVMで利用可能）、<a
-          href = "http://clang.llvm.org/docs/MemorySanitizer.html"> Memory Sanitizer
+          href="http://clang.llvm.org/docs/MemorySanitizer.html"> Memory Sanitizer
           </a>、および<a href="http://valgrind.org/"> valgrind </a>が含まれます。他に使用される可能性のあるツールには、<a
           href="http://clang.llvm.org/docs/ThreadSanitizer.html">スレッドサニタイザ</a>と<a
-          href = "http://clang.llvm.org/ docs / UndefinedBehaviorSanitizer.html ">定義されていない動作サニタイザ</a>を参照してください。広範なアサーションも機能します。
+          href="http://clang.llvm.org/ docs / UndefinedBehaviorSanitizer.html ">定義されていない動作サニタイザ</a>を参照してください。広範なアサーションも機能します。
 
 '
       dynamic_analysis_enable_assertions:
@@ -953,7 +949,7 @@ ja:
 '
       documentation_current:
         description: 'プロジェクトは、現行バージョンのプロジェクト結果（プロジェクトによって作成されたソフトウェアを含む）とドキュメントの整合性を保つために努力しなければならない。
-          不一致を招く<em>既知の</ em>ドキュメントの欠陥は、修正しなければなりません。ドキュメントが一般的に最新のものですが、古い情報が誤って含まれて、もはや正しくない場合は、それを欠陥として扱い、通常どおりに追跡して修正してください。
+          不一致を招く<em>既知の</em>ドキュメントの欠陥は、修正しなければなりません。ドキュメントが一般的に最新のものですが、古い情報が誤って含まれて、もはや正しくない場合は、それを欠陥として扱い、通常どおりに追跡して修正してください。
 
 '
         details: 'ドキュメントには、ソフトウェアのバージョン間の相違点や変更点、および/またはドキュメントの古いバージョンへのリンクに関する情報が含まれていてもよいです。この基準の意図は、ドキュメントが完璧である必要があることではなく、ドキュメントの一貫性を保つための努力がなされていることです。
@@ -972,15 +968,15 @@ ja:
 
 '
         details: "ウェブアプリケーションについては、<a href=\"https://www.w3.org/TR/WCAG20/\">ウェブ コンテンツ
-          アクセシビリティ ガイドライン（WCAG 2.0）</a>とそのサポートドキュメント<a href = \"https： //www.w3.org/TR/UNDERSTANDING-WCAG20/Overview.html\">
+          アクセシビリティ ガイドライン（WCAG 2.0）</a>とそのサポートドキュメント<a href=\"https://www.w3.org/TR/UNDERSTANDING-WCAG20/Overview.html\">
           WCAG 2.0の理解</a>; <a href=\"https://www.w3.org/standards/webdesign/accessibility\">
           W3Cアクセシビリティ情報</a>を参照してください。 GUIアプリケーションの場合は、環境固有のアクセシビリティ ガイドラインの使用を検討して下さい（<a
-          href=\"https://developer.gnome.org/accessibility-devel-guide/stable/\">
-          Gnome </a>、<a href = \"https://accessibility.kde.org/\"> KDE </a>、<a href=\"http://docs.xfce.org/xfce/xfce4-settings/accessibility\">
-          XFCE </a>、 <a href = \"https://developer.android.com/guide/topics/ui/accessibility/\">
-          Android </a>、<a href = \"https://developer.apple.com/accessibility/ios/\"
+          href=\"https://developer.gnome.org/accessibility-devel-guide/stable/\">Gnome</a>、<a
+          href=\"https://accessibility.kde.org/\">KDE</a>、<a href=\"http://docs.xfce.org/xfce/xfce4-settings/accessibility\">XFCE</a>、
+          <a href=\"https://developer.android.com/guide/topics/ui/accessibility/\">
+          Android </a>、<a href=\"https://developer.apple.com/accessibility/ios/\"
           > iOS </a>、<a href=\"http://www.apple.com/accessibility/osx/voiceover/\">
-          Mac </a>、<a href = \"https://msdn.microsoft.com/ja/ja/windows/uwp/accessibility/accessibility-overview）\">
+          Mac </a>、<a href=\"https://msdn.microsoft.com/ja/ja/windows/uwp/accessibility/accessibility-overview）\">
           Windows </a>）。いくつかのTUIアプリケーション（例えば、「ncurses」プログラム）は、「alpine」の 「force-arrow-cursor」設定のような、よりアクセスしやすくするためにいくつかのことを行うことができます。ほとんどのコマンドライン
           アプリケーションは、そのままの状態でかなりアクセス可能です。この基準は、例えば、プログラムライブラリの場合、「該当なし」（N/A）であることが多いです。取り上げるべき行動や考慮すべき課題の例を以下に示します。\n<ul>
           <li>テキスト以外のコンテンツの代替テキストを提供するkotode,\n人々が必要とする他の形式に変更することができます。大きな印刷物、点字、スピーチ、記号またはより単純な言語などです。（<a
@@ -991,8 +987,7 @@ ja:
           href=\"https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast-contrast.html\">
           WCAG 2.0ガイドライン1.4.3 </a>）\n<li>キーボードからすべての機能を利用できるようにする（WCAGガイドライン2.1）\n<li>
           GUIまたはウェブ ベースのプロジェクトは少なくとも1つターゲットプラットフォーム上のスクリーンリーダーでテストするべきです（例えば、NVDA、Jaws、またはWindows上のWindowEyes;
-          MacとiOSのVoiceOver Linux / BSDのOrca;AndroidのTalkBack）。 \nTUIプログラムは、スクリーンリーダーによる冗長な読み取りを防止するために、オーバードローを減らせるかもしれません。\n</
-          ul>"
+          MacとiOSのVoiceOver Linux / BSDのOrca;AndroidのTalkBack）。 \nTUIプログラムは、スクリーンリーダーによる冗長な読み取りを防止するために、オーバードローを減らせるかもしれません。\n</ul>"
       internationalization:
         description:
         details:
@@ -1153,7 +1148,7 @@ ja:
 
 '
         details: '保証ケースは、「システムのプロパティに関する特定の一連の重大なクレームが、特定の環境とアプリケーションに対して適切に正当化されていることを説得力のある正当な議論で示す証拠」である（<a
-          href = "http：// nvlpubs.nist.gov/nistpubs/ir/2009/ir7608.pdf ">「構造化された保証ケースモデルを使用したソフトウェア保証」、Thomas
+          href="http：// nvlpubs.nist.gov/nistpubs/ir/2009/ir7608.pdf ">「構造化された保証ケースモデルを使用したソフトウェア保証」、Thomas
           Rhodes他、NIST Interagency Report 7608 </a>）。信頼境界は、データまたは実行がその信頼レベル、例えば、典型的なウェブアプリケーションにおけるサーバの境界、を変更する境界である。安全な設計原則（SaltzerやSchroeerなど）と一般的な実装セキュリティの弱点（OWASPトップ10やCWE
           / SANSトップ25など）をリストし、それぞれがどのように対抗しているかを示すのは一般的です。 <a href="https://github.com/coreinfrastructure/best-practices-badge/blob/master/doc/security.md">
           BadgeAppの保証ケース</a>は良い参考例になるかもしれません。これは、documentation_security、documentation_architecture、およびimplement_secure_designに関連しています。
@@ -1241,7 +1236,7 @@ ja:
 
 '
       p3_html: <em>プライバシーと法的問題</em>：<a href="https://www.linuxfoundation.jp/privacy">プライバシーポリシー</a>と<a
-        href = "https://www.linuxfoundation.jp/terms">利用条件</a>をご覧ください。公開されているすべての非コード
+        href="https://www.linuxfoundation.jp/terms">利用条件</a>をご覧ください。公開されているすべての非コード
         コンテンツは、少なくとも<a href="https://creativecommons.org/licenses/by/3.0/">Creative
         Commons Attribution License version 3.0 (CC-BY-3.0)</a> のもとでリリースされています。また、より新しい非コード
         コンテンツは、CC-BY version 3.0 以降 (CC-BY-3.0+) のもとでリリースされています。詳細や不足事項については、CII ベスト

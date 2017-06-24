@@ -42,31 +42,45 @@ class TranslationsTest < ActiveSupport::TestCase
       x.is_a?(Proc)
   end
 
-  # Return first unacceptable HTML in x (recursively), else (nil|false)
+  def acceptable_html_string(text)
+    # In the longer term we should probably only accept lower case, but
+    # HTML doesn't care about case, so don't worry about it for now.
+    return false if %r{<[^A-Za-z\/]}.match?(text)
+    return false if %r{<\/[^A-Za-z]}.match?(text)
+    return true unless text.include?('<') # Can't be a problem, no '<'
+    # Translation text is okay if the results of "sanitizing" it are
+    # same as when we simply "regularize" the text without sanitizing it.
+    sanitized = sanitize_html(text)
+    regularized = regularize_html(text)
+    if sanitized != regularized
+      p "Unacceptable HTML.\nSan=<#{sanitized}>\nReg=<#{regularized}>"
+    end
+    sanitized == regularized
+  end
+
+  # Recursively check locale text, e.g., ensure it has acceptable HTML
+  # We pass "from" so that if there's a problem we can report exactly
+  # where the problem comes from (making it easier to fix).
   # To recurse we really want kind_of?, not is_a?, so disable rubocop rule
   # rubocop:disable Style/ClassCheck, Metrics/MethodLength
-  def find_unacceptable_html(translation)
-    if translation.kind_of?(Array) || translation.kind_of?(Hash)
-      translation.find { |part| find_unacceptable_html(part) }
+  def check_text(translation, from)
+    if translation.kind_of?(Array)
+      translation.each_with_index { |i, part| check_text(part, from + [i]) }
+    elsif translation.kind_of?(Hash)
+      translation.each { |key, part| check_text(part, from + [key]) }
     elsif translation.kind_of?(String) # includes safe_html
-      return nil unless translation.include?('<') # Can't be a problem, no '<'
-      # Translation text is okay if the results of "sanitizing" it are
-      # same as when we simply "regularize" the text without sanitizing it.
-      sanitized = sanitize_html(translation)
-      regularized = regularize_html(translation)
-      if sanitized != regularized
-        p "Unacceptable HTML.\nSan=<#{sanitized}>\nReg=<#{regularized}>"
-      end
-      sanitized != regularized
+      assert acceptable_html_string(translation.to_s),
+             "Locale text failure in #{from}: #{translation}"
     else
-      !simple_type(translation) # else must be simple: symbol, number, etc.
+      assert simple_type(translation),
+             "Locale text type failure in #{from}: #{translation}"
     end
   end
   # rubocop:enable Style/ClassCheck, Metrics/MethodLength
 
   test 'All text values (all locales) include only acceptable HTML' do
     I18n.available_locales.each do |loc|
-      assert_not find_unacceptable_html(I18n.t('.', locale: loc))
+      check_text(I18n.t('.', locale: loc), [loc])
     end
   end
 end

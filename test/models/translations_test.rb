@@ -59,6 +59,7 @@ class TranslationsTest < ActiveSupport::TestCase
     return false if %r{<[^a-z\/]}.match?(text) || %r{<\/[^a-z]}.match?(text)
     return false if text.include?('href = ') || text.include?('class = ')
     return false if text.include?('target = ')
+    return false if %r{(href|class|target)=[^"']}.match?(text)
 
     # Now ensure that the HTML only has the tags and attributes we permit.
     # The translators are considered trusted, but nevertheless this

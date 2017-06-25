@@ -37,9 +37,9 @@ ja:
     account: アカウント
     profile: プロフィール
     settings: 設定
-    logout_html: <span class = "glyphicon glyphicon-log-out"></span> ログアウト
-    signup_html: <span class = "glyphicon glyphicon-user"></span> サインアップ
-    login_html: <span class = "glyphicon glyphicon-log-in"></span> ログイン
+    logout_html: <span class="glyphicon glyphicon-log-out"></span> ログアウト
+    signup_html: <span class="glyphicon glyphicon-user"></span> サインアップ
+    login_html: <span class="glyphicon glyphicon-log-in"></span> ログイン
     footer_text_html: <small> <strong>疑問、質問、または問題がある場合は<em> <a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">電子メールで報告する</a></em>か、<em>
       <a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
       target="_blank">こちらから問題を提出</a></em>してください。</strong>  © 2015-2017 <a href="https://www.coreinfrastructure.org/
@@ -230,7 +230,7 @@ ja:
 
 '
       changed_since_html: '別のユーザーが、編集フォームにアクセスして、そのレコードに変更を加えました。 <br>変更を送信するには、新しい<a
-        href="%{edit_url} "target = _blank>編集フォーム</a>を開いてください。
+        href="%{edit_url} target="_blank">編集フォーム</a>を開いてください。
 
 '
       successfully_updated: プロジェクトは正常に更新されました

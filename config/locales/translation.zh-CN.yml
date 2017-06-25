@@ -199,7 +199,7 @@ zh-CN:
       cc_by_3only_html: '此数据在<a href="https://creativecommons.org/licenses/by/3.0/us"
         target="_blank">知识共享署名3.0版本许可证（CC-BY-3.0）</a>下可用，并依据<a href="https://www.coreinfrastructure.org/"
         target="_blank">核心基础设施计划</a> <a href ="https://www.linuxfoundation.org/terms"
-        target = “_blank”>使用条款</a>。所有数据都可以自由分享和演绎，但必须给予适当的署名。请署名%{user}和CII最佳实践徽章贡献者。<br>
+        target="_blank">使用条款</a>。所有数据都可以自由分享和演绎，但必须给予适当的署名。请署名%{user}和CII最佳实践徽章贡献者。<br>
         <br>
 
 '
@@ -223,7 +223,7 @@ zh-CN:
 
 '
       changed_since_html: '您访问编辑表单后，另一位用户对该记录进行了更改。 <br>请打开一个新的<a href="%{edit_url}"
-        target = _blank>编辑表单</a>来转移您的更改。
+        target="_blank">编辑表单</a>来转移您的更改。
 
 '
       successfully_updated: 项目成功更新。

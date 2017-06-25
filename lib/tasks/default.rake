@@ -379,6 +379,20 @@ task :test_locale do
   system 'rails test test/models/translations_test.rb'
 end
 
+desc 'Fix locale text'
+task :fix_locale do
+  # Google Translate generates text that has predictable errors; here
+  # are ways to fix them automatically.  Commented out, instead of being
+  # removed entirely, so that we can quickly restore them in a pinch.
+  sh %q{ruby -pi -e "sub(/< a /, '<a ')" } + files
+  sh %q{ruby -pi -e "sub(/< \057/, '</')" } + files
+  sh %q{ruby -pi -e "sub(/<\057 /, '</')" } + files
+  sh %q{ruby -pi -e "sub(/<Strong>/, '<strong>')" } + files
+  sh %q{ruby -pi -e "sub(/<Em>/, '<em>')" } + files
+  sh %q{ruby -pi -e "sub(/href = /, 'href=')" } + files
+  Rake::Task['test_locale'].invoke
+end
+
 # Fix up translation:sync.
 # First, translation:sync rewrites the source en.yml file, which it shouldn't
 # ever do, and in the process reformats it into garbage with overly-long lines.
@@ -400,16 +414,8 @@ if Rails.env.development?
     files = './config/locales/localization*.yml ' \
             './config/locales/translation*.yml'
     sh %q{ruby -pi -e "sub(/ $/, '')" } + files
-    # Google translate generates text that has predictable errors; here
-    # are ways to fix them automatically.  Commented out, instead of being
-    # removed entirely, so that we can quickly restore them in a pinch.
-    # sh %q{ruby -pi -e "sub(/< a /, '<a ')" } + files
-    # sh %q{ruby -pi -e "sub(/< \057/, '</')" } + files
-    # sh %q{ruby -pi -e "sub(/<\057 /, '</')" } + files
-    # sh %q{ruby -pi -e "sub(/<Strong>/, '<strong>')" } + files
-    # sh %q{ruby -pi -e "sub(/<Em>/, '<em>')" } + files
-    # sh %q{ruby -pi -e "sub(/href = /, 'href=')" } + files
     sh 'mv config/locales/en.yml.ORIG config/locales/en.yml'
+    Rake::Task['test_locale'].invoke
     puts "Now run: git commit -sam 'rake translation:sync'"
   end
 end

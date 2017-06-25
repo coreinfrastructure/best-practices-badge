@@ -42,7 +42,7 @@ test:
 #
 production:
   <<: *default
-#  database: production
+ database: production
 
 fake_production:
   <<: *default

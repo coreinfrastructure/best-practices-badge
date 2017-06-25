@@ -373,31 +373,27 @@ task :save_en do
   sh 'cp -p config/locales/en.yml config/locales/en.yml.ORIG'
 end
 
-LOCALE_FILES = './config/locales/localization*.yml ' \
-               './config/locales/translation*.yml'
-
-TEST_LOCALE_COMMAND = 'rails test test/models/translations_test.rb'
-
-desc 'Test locale translation'
-task :test_locale do
-  # Use 'system' so we return the error code (error=0 is okay)
-  system TEST_LOCALE_COMMAND
-end
-
 desc 'Fix locale text'
 task :fix_locale do
   # Google Translate generates text that has predictable errors.
   # This task fixes some predictable errors automatically.
-  p 'Fixing locale text.'
+  puts "\nFixing locale text.\n"
+  # Rake won't let us define global constants, so we'll do what we can
+  locale_files = './config/locales/localization*.yml ' \
+                 './config/locales/translation*.yml'
   sh %q{ruby -pi -e "sub(/< a /, '<a ')" \
         -e "sub(/< \057/, '</')" -e "sub(/<\057 /, '</')" \
         -e "sub(/<Strong>/, '<strong>')" -e "sub(/<Em>/, '<em>')" \
         -e "sub(/ Href *=/, 'href=')" \
         -e "sub(/href = /, 'href=')" \
         -e "sub(/class = /, 'class=')" \
-        -e "sub(/target = /, 'target=')" } + LOCALE_FILES
+        -e "sub(/target = /, 'target=')" } + locale_files
   # Show whether or not there are known problems after it.
-  system TEST_LOCALE_COMMAND
+end
+
+# Test locale files; returns true if successful (no errors)
+def test_locale_files
+  system 'rails test test/models/translations_test.rb'
 end
 
 # Fix up translation:sync.
@@ -417,13 +413,16 @@ end
 if Rails.env.development?
   task 'translation:sync' => :save_en
   Rake::Task['translation:sync'].enhance do
-    puts 'Removing bogus trailing whitespace (bug workaround).'
-    sh %q{ruby -pi -e "sub(/ $/, '')" } + LOCALE_FILES
     # Don't let translation.io change the en.yml file:
     sh 'mv config/locales/en.yml.ORIG config/locales/en.yml'
+    puts 'Removing bogus trailing whitespace (bug workaround).'
+    sh %q{ruby -pi -e "sub(/ $/, '')" ./config/locales/*.yml}
     # Check text.  Use 'system' so we can get the success result.
-    success = system(TEST_LOCALE_COMMAND)
-    Rake::Task['fix_locale'].invoke unless success
+    success = test_locale_files
+    unless success
+      Rake::Task['fix_locale'].invoke
+      test_locale_files
+    end
     puts "Now run: git commit -sam 'rake translation:sync'"
   end
 end

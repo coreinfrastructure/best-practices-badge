@@ -373,6 +373,12 @@ task :save_en do
   sh 'cp -p config/locales/en.yml config/locales/en.yml.ORIG'
 end
 
+desc 'Test locale translation'
+task :test_locale do
+  # Use 'system' so we return the error code (error=0 is okay)
+  system 'rails test test/models/translations_test.rb'
+end
+
 # Fix up translation:sync.
 # First, translation:sync rewrites the source en.yml file, which it shouldn't
 # ever do, and in the process reformats it into garbage with overly-long lines.

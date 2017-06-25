@@ -288,8 +288,8 @@ fr:
 '
       changed_since_html: 'Un autre utilisateur a apporté une modification à cet enregistrement
         depuis que vous avez accédé au formulaire d''édition. <br>Veuillez ouvrir
-        un nouveau <a href="%{edit_url} "target=_blank>formulaire d''édition</a> pour
-        transférer vos modifications.
+        un nouveau <a href="%{edit_url}" target="_blank">formulaire d''édition</a>
+        pour transférer vos modifications.
 
 '
       successfully_updated: Le projet a été mis à jour avec succès.

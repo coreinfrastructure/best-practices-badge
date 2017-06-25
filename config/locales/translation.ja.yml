@@ -230,7 +230,7 @@ ja:
 
 '
       changed_since_html: '別のユーザーが、編集フォームにアクセスして、そのレコードに変更を加えました。 <br>変更を送信するには、新しい<a
-        href="%{edit_url} target="_blank">編集フォーム</a>を開いてください。
+        href="%{edit_url}" target="_blank">編集フォーム</a>を開いてください。
 
 '
       successfully_updated: プロジェクトは正常に更新されました

@@ -310,7 +310,7 @@ en:
       changed_since_html: >
         Another user has made a change to that record since you
         accessed the edit form. <br>Please open a new
-        <a href="%{edit_url}" target=_blank>edit form</a>
+        <a href="%{edit_url}" target="_blank">edit form</a>
         to transfer your changes.
       successfully_updated: Project was successfully updated.
       congrats_new: >

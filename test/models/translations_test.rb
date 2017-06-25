@@ -42,21 +42,35 @@ class TranslationsTest < ActiveSupport::TestCase
       x.is_a?(Proc)
   end
 
+  # Is the HTML string acceptable?  It needs to NOT have common mistakes,
+  # *and* have only the permitted HTML tags & attributes.
+  # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
   def acceptable_html_string(text)
-    # In the longer term we should probably only accept lower case, but
-    # HTML doesn't care about case, so don't worry about it for now.
-    return false if %r{<[^A-Za-z\/]}.match?(text)
-    return false if %r{<\/[^A-Za-z]}.match?(text)
     return true unless text.include?('<') # Can't be a problem, no '<'
-    # Translation text is okay if the results of "sanitizing" it are
+
+    # First, detect common mistakes.
+    # Require HTML tags to start in a lowercase Latin letter.
+    # This is in part a regression test; it prevents </a> where "a"
+    # is the Cyrillic letter instead of the Latin letter.
+    # HTML doesn't care about upper vs. lower case,
+    # but it's better to be consistent, and there's a minor
+    # compression advantage as described here:
+    # http://www.websiteoptimization.com/speed/tweak/lowercase/
+    return false if %r{<[^a-z\/]}.match?(text) || %r{<\/[^a-z]}.match?(text)
+    return false if text.include?('href = ') || text.include?('class = ')
+    return false if text.include?('target = ')
+    return false if /(href|class|target)=[^"']/.match?(text)
+
+    # Now ensure that the HTML only has the tags and attributes we permit.
+    # The translators are considered trusted, but nevertheless this
+    # limits problems if their accounts are subverted.
+    # Translation text is okay iff the results of "sanitizing" it are
     # same as when we simply "regularize" the text without sanitizing it.
     sanitized = sanitize_html(text)
     regularized = regularize_html(text)
-    if sanitized != regularized
-      p "Unacceptable HTML.\nSan=<#{sanitized}>\nReg=<#{regularized}>"
-    end
     sanitized == regularized
   end
+  # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
   # Recursively check locale text, e.g., ensure it has acceptable HTML
   # We pass "from" so that if there's a problem we can report exactly
@@ -70,10 +84,10 @@ class TranslationsTest < ActiveSupport::TestCase
       translation.each { |key, part| check_text(part, from + [key]) }
     elsif translation.kind_of?(String) # includes safe_html
       assert acceptable_html_string(translation.to_s),
-             "Locale text failure in #{from}: #{translation}"
+             "Locale text failure in #{from.join('.')} : #{translation}"
     else
       assert simple_type(translation),
-             "Locale text type failure in #{from}: #{translation}"
+             "Locale text type failure in #{from.join('.')} : #{translation}"
     end
   end
   # rubocop:enable Style/ClassCheck, Metrics/MethodLength

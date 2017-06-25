@@ -184,8 +184,8 @@ de:
 
 '
       new_badge: Neues Badge
-      may_select_html: 'Sie können eines Ihrer GitHub Repositories <em>ODER</em>
-        Informationen über ein anderes Projekt auswählen.
+      may_select_html: 'Sie können eines Ihrer GitHub Repositories <em>ODER</em> Informationen
+        über ein anderes Projekt auswählen.
 
 '
       select_one_github: Wähle einer deiner GitHub-Repos
@@ -241,7 +241,7 @@ de:
 '
       changed_since_html: Ein anderer Benutzer hat eine Änderung an diesem Datensatz
         vorgenommen, seit Sie das Bearbeitungsformular geladen haben. <br> Bitte öffnen
-        Sie ein neues <a href="%{edit_url} "target = _blank>Bearbeitungsformular</a>
+        Sie ein neues <a href="%{edit_url}" target="_blank">Bearbeitungsformular</a>
         und kopieren Sie ihre Änderungen dorthin.
       successfully_updated: Das Projekt wurde erfolgreich aktualisiert.
       congrats_new:
@@ -345,7 +345,7 @@ de:
           />
 
 '
-        editing_description_html: '<strong> Bitte ''submit'' oft </strong>, um Ihre
+        editing_description_html: '<strong>Bitte ''submit'' oft </strong>, um Ihre
           Arbeit zu speichern (Sie können immer wieder zurückkehren und später bearbeiten).
           <br> <br> Wenn Sie Hilfe benötigen, eine Frage haben, oder ein Problem sehen,
           bitte <em><a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">Schicken
@@ -551,11 +551,46 @@ de:
           Projekt entwickelte Software liefern.
 
 '
-        details:
+        details: 'Diese Dokumentation muss in irgendeinem Medium sein (z.B. Text oder
+          Video), das folgendes beinhaltet: wie man die Software installiert, wie
+          man sie started, wie man sie benutzt (evtl. ein Tutorial mit Beispielen)
+          und wie man sie sicher benutzt (z.B. was zu tun und zu lassen ist), wenn
+          das ein passendes Einsatzgebiet für die Software ist. Die Sicherheitsdokumentation
+          muss nicht lange sein. Das Projekt DARF Hypertext-Links zu Nicht-Projekt-Materialien
+          als Dokumentation verwenden. Wenn das Projekt keine Software entwickelt,
+          wählen Sie "nicht anwendbar" (N/A) aus.
+
+'
         met_placeholder: "(Optional) Welche URL(s) führen zur Dokumentation?"
       documentation_interface:
-        description:
-        details:
+        description: 'Das Projekt MUSS Referenzdokumentationen enthalten, die externe
+          Schnittstellen (beides, Eingabe und Ausgabe) der vom Projekt entwickelten
+          Software beschreiben.
+
+'
+        details: 'Die Dokumentation einer externen Schnittstelle erklärt einem Endbenutzer
+          oder Entwickler, wie man sie benutzt. Dies beinhaltet auch eine Programmierschnittstelle
+          (API), falls die Software eine hat. Wenn es sich um eine Bibliothek handelt,
+          dokumentieren Sie die wichtigsten Klassen/Typen und Methoden/Funktionen,
+          die aufgerufen werden können. Wenn es sich um eine Webanwendung handelt,
+          definieren Sie ihre URL-Schnittstelle (häufig eine REST-Schnittstelle).
+          Wenn es sich um eine Befehlszeilenschnittstelle handelt, dokumentieren Sie
+          die Parameter und Optionen, die sie unterstützt. In vielen Fällen ist es
+          am besten, wenn die meisten dieser Dokumente automatisch generiert werden,
+          so dass diese Dokumentation mit der sich ändernden Software synchronisiert
+          bleibt, aber dies ist nicht erforderlich. Das Projekt DARF Hypertext-Links
+          zu Nicht-Projekt-Materialien als Dokumentation verwenden. Dokumentation
+          DARF automatisch generiert werden (falls möglich ist dies oft der beste
+          Weg). Die Dokumentation einer REST-Schnittstelle kann mit Swagger/OpenAPI
+          erzeugt werden. Code-Interface-Dokumentation kann mit Werkzeugen wie <a
+          href="http://usejsdoc.org/"> JSDoc </a> (JavaScript), <a href="https://esdoc.org/">
+          ESDoc </a> (JavaScript), pydoc (Python) oder Doxygen (verschiedene)  generiert
+          werden. Nur Kommentare im Quelltext reicht nicht aus, um dieses Kriterium
+          zu erfüllen; Es muss einen einfacheren Weg geben, um die Informationen zu
+          sehen, ohne den ganzen Quellcode durchzulesen. Wenn das Projekt keine Software
+          entwickelt, wählen Sie "nicht anwendbar" (N/A) aus.
+
+'
       sites_https:
         description:
         details:
@@ -567,7 +602,14 @@ de:
           Installation von proprietärer Software erfordern.
 
 '
-        details:
+        details: 'Beispiele für akzeptable Mechanismen umfassen archivierte Mailingliste(n),
+          GitHub Issues und Pull-Request-Diskussionen, Bugzilla, Mantis und Trac.
+          Asynchrone Diskussionsmechanismen (wie IRC) sind akzeptabel, wenn sie diese
+          Kriterien erfüllen; Stellen Sie sicher, dass es einen URL-adressierbaren
+          Archivierungsmechanismus gibt. Proprietäres JavaScript ist ungern gesehen
+          aber erlaubt.
+
+'
       english:
         description:
         details:
@@ -816,8 +858,8 @@ de:
         details: 'Ein noch stärkerer Mechanismus ist die Freigabe der Software mit
           digital signierten Paketen, da dies Angriffe auf das Verteilungssystem verringert,
           aber das funktioniert nur, wenn die Benutzer sicher sein können, dass die
-          öffentlichen Schlüssel für Signaturen korrekt sind <em> und </em> wenn
-          die Benutzer die Signatur tatsächlich überprüfen.
+          öffentlichen Schlüssel für Signaturen korrekt sind <em> und </em> wenn die
+          Benutzer die Signatur tatsächlich überprüfen.
 
 '
       delivery_unsigned:
@@ -855,7 +897,11 @@ de:
 
 '
       dynamic_analysis:
-        description:
+        description: 'Es ist EMPFHOLEN, dass mindestens ein dynamisches Analyse-Tool
+          auf jede vorgeschlagene größere Veröffentlichung der Software vor seiner
+          Freigabe angewendet wird.
+
+'
         details:
       dynamic_analysis_unsafe:
         description:

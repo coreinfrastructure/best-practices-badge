@@ -13,8 +13,8 @@ RUN  apk --update --virtual build-dependencies add \
   libxml2-dev \
   # for JS support
   nodejs \
-  # for pg
-  postgresql-dev \
+  # for pg and pql client
+  postgresql-dev postgresql-client \
   # tzinfo data is required
   tzdata
 
@@ -37,9 +37,16 @@ RUN gem install bundler --no-document
 COPY Gemfile Gemfile.lock .ruby-version /tmp/
 WORKDIR /tmp
 RUN bundle install --jobs 20 --retry 5
-RUN apk del build-dependencies
+# RUN apk del build-dependencies
 
 # Copy the main application.
 COPY . $APP_HOME
+WORKDIR $APP_HOME
 
-RUN rails db:version || bundle exec rake db:setup
+RUN pwd
+RUN rails db:version
+# RUN rails db:version || rails db:setup
+
+# RUN if psql ${DB_NAME} -c '\q' 2>&1; then
+#    echo "database ${DB_NAME} exists"
+# fi

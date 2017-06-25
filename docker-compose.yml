@@ -1,28 +1,36 @@
-db:
-  image: postgres:9.6
-web:
-  build: .
-  links:
-    - db
-  ports:
-    - "3000:3000"
-  volumes:
-    - .:/app
-  volumes_from:
-    - gems
-  command: rails server -b 0.0.0.0 -p 3000
-  # Keeps the stdin open, so we can attach to our app container's process and
-  # do stuff such as `byebug` or `binding.pry`:
-  stdin_open: true
-  # Allows us to send signals (CTRL+C, CTRL+P + CTRL+Q) into the container:
-  tty: true
-  environment:
-    # Notice that this is the DB we'll use:
-    # DATABASE_URL: postgres://postgres:s0m3p455@db:5432/my_app_development
-    # We'll use this env variable to make the log output gets directed
-    # to Docker:
-    RAILS_LOG_TO_STDOUT: "true"
-gems:
-  image: busybox
-  volumes:
-    - /ruby_gems
+version: '3'
+volumes:
+  db:
+  gems:
+services:
+  db:
+    image: postgres:9.6
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - db
+    links:
+      - db
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - gems:/ruby_gems
+    command: rails server -b 0.0.0.0 -p 3000
+    # Keeps the stdin open, so we can attach to our app container's process and
+    # do stuff such as `byebug` or `binding.pry`:
+    stdin_open: true
+    # Allows us to send signals (CTRL+C, CTRL+P + CTRL+Q) into the container:
+    tty: true
+    environment:
+      # Notice that this is the DB we'll use:
+      # DATABASE_URL: postgres://postgres:s0m3p455@db:5432/my_app_development
+      # We'll use this env variable to make the log output gets directed
+      # to Docker:
+      RAILS_LOG_TO_STDOUT: "true"
+  gems:
+    image: busybox
+    volumes:
+      - /ruby_gems

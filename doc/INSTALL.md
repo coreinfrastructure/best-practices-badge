@@ -25,6 +25,7 @@ environment or for deployment. We have rearchitected the deployment to use Docke
 docker-compose run --rm web bundle
 docker-compose up
 docker-compose run --rm web bin/rake db:setup RAILS_ENV=development
+docker-compose up -d --no-deps --build  # rebuild web
 ```
 
 ## Delete All Images

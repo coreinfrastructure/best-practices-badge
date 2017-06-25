@@ -22,8 +22,7 @@ gem 'jbuilder', '2.7.0'
 gem 'jquery-rails', '4.3.1' # JavaScript jQuery library (for Rails)
 gem 'jquery-ui-rails', '6.0.1' # JavaScript jQueryUI library (for Rails)
 gem 'lograge', '0.5.1' # Simplify logs
-# Hardcode mail rc1 until security issue in #750 is resolved
-gem 'mail', git: 'https://github.com/mikel/mail.git', ref: '21222e1'
+gem 'mail', '2.6.6' # Ruby mail handler
 gem 'octokit', '4.7.0' # GitHub's official Ruby API
 gem 'omniauth-github', '1.3.0' # Authentication to GitHub (get project info)
 gem 'paleta', '0.3.0' # Color manipulation, used for badges
@@ -35,14 +34,14 @@ gem 'rails', '5.1.1' # Our web framework
 gem 'rails-i18n', '5.0.4' # Localizations for Rails built-ins
 gem 'redcarpet', '3.4.0' # Process markdown in form textareas (justifications)
 gem 'sass-rails', '5.0.6', require: false
-gem 'scout_apm', '2.1.24' # Monitor for memory leaks
-gem 'secure_headers', '3.6.4' # Add hardening measures to HTTP headers
+gem 'scout_apm', '2.1.26' # Monitor for memory leaks
+gem 'secure_headers', '3.6.5' # Add hardening measures to HTTP headers
 gem 'uglifier', '3.2.0', require: false # Minify JavaScript
 gem 'will-paginate-i18n', '0.1.15' # Provide will-paginate translations
 gem 'will_paginate', '3.1.6' # Paginate results (next/previous)
 
 group :development, :test do
-  gem 'awesome_print', '1.7.0'
+  gem 'awesome_print', '1.8.0' # Pretty print Ruby objects
   gem 'bullet', '5.5.1'
   gem 'bundler-audit', '0.5.0'
   gem 'database_cleaner', '1.6.1' # Cleans up database between tests
@@ -71,7 +70,7 @@ group :fake_production, :development, :test do
 end
 
 group :development do
-  gem 'bootsnap', '1.0.0' # Speed up boot via caches
+  gem 'bootsnap', '1.1.1' # Speed up boot via caches
   # gem 'fasterer', '0.3.2' # Provide speed recommendations - run 'fasterer'
   # Waiting for Ruby 2.4 support: https://github.com/seattlerb/ruby_parser/issues/239
   gem 'traceroute', '0.5.0' # Adds 'rake traceroute' command to check routes

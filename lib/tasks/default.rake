@@ -394,6 +394,17 @@ if Rails.env.development?
     files = './config/locales/localization*.yml ' \
             './config/locales/translation*.yml'
     sh %q{ruby -pi -e "sub(/ $/, '')" } + files
+    # Ideally we wouldn't fix common errors in locales, but Google
+    # translate generates text that has predictable errors, and it's better
+    # to fix them here for now so that *end-users* are more likely to have
+    # a good experience.
+    puts 'Fixing common easily-fixed errors'
+    sh %q{ruby -pi -e "sub(/< a /, '<a ')" } + files
+    sh %q{ruby -pi -e "sub(/< \057/, '</')" } + files
+    sh %q{ruby -pi -e "sub(/<\057 /, '</')" } + files
+    sh %q{ruby -pi -e "sub(/<Strong>/, '<strong>')" } + files
+    sh %q{ruby -pi -e "sub(/<Em>/, '<em>')" } + files
+    sh %q{ruby -pi -e "sub(/href = /, 'href=')" } + files
     sh 'mv config/locales/en.yml.ORIG config/locales/en.yml'
     puts "Now run: git commit -sam 'rake translation:sync'"
   end

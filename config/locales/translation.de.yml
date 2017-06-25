@@ -184,8 +184,8 @@ de:
 
 '
       new_badge: Neues Badge
-      may_select_html: 'Sie können eines Ihrer GitHub Repositories <em>ODER</em>
-        Informationen über ein anderes Projekt auswählen.
+      may_select_html: 'Sie können eines Ihrer GitHub Repositories <em>ODER</em> Informationen
+        über ein anderes Projekt auswählen.
 
 '
       select_one_github: Wähle einer deiner GitHub-Repos
@@ -345,7 +345,7 @@ de:
           />
 
 '
-        editing_description_html: '<strong> Bitte ''submit'' oft </strong>, um Ihre
+        editing_description_html: '<strong>Bitte ''submit'' oft </strong>, um Ihre
           Arbeit zu speichern (Sie können immer wieder zurückkehren und später bearbeiten).
           <br> <br> Wenn Sie Hilfe benötigen, eine Frage haben, oder ein Problem sehen,
           bitte <em><a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">Schicken
@@ -816,8 +816,8 @@ de:
         details: 'Ein noch stärkerer Mechanismus ist die Freigabe der Software mit
           digital signierten Paketen, da dies Angriffe auf das Verteilungssystem verringert,
           aber das funktioniert nur, wenn die Benutzer sicher sein können, dass die
-          öffentlichen Schlüssel für Signaturen korrekt sind <em> und </em> wenn
-          die Benutzer die Signatur tatsächlich überprüfen.
+          öffentlichen Schlüssel für Signaturen korrekt sind <em> und </em> wenn die
+          Benutzer die Signatur tatsächlich überprüfen.
 
 '
       delivery_unsigned:

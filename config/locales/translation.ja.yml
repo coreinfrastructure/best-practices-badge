@@ -898,8 +898,8 @@ ja:
 
 '
         details: 'プロジェクトは、地域社会の礼儀正しさを向上させることと、行動規範を採択することで受け入れられる行動についての期待を設定すること、ができるかもしれません。これにより、問題が発生する前に問題を回避し、プロジェクトをより貢献を促す場所にすることができます。これは、プロジェクトのコミュニティ/職場内の行動にのみ焦点を当てるべきです。行動規範の例としては、<a
-          href="http://contributor-covenant.org/">貢献者行動規範</a>およびLinuxカーネル<a href =
-          "https://www.kernel.org /doc/html/latest/process/code-of-conflict.html ">競争規範</a>を参照してください。
+          href="http://contributor-covenant.org/">貢献者行動規範</a>およびLinuxカーネル<a href="https://www.kernel.org
+          /doc/html/latest/process/code-of-conflict.html ">競争規範</a>を参照してください。
 
 '
       roles_responsibilities:

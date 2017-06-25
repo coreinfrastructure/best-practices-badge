@@ -45,8 +45,9 @@ class TranslationsTest < ActiveSupport::TestCase
   # Is the HTML string acceptable?  It needs to NOT have common mistakes,
   # *and* have only the permitted HTML tags & attributes.
   def acceptable_html_string(text)
-    # First, detect common mistakes.
+    return true unless text.include?('<') # Can't be a problem, no '<'
 
+    # First, detect common mistakes.
     # Require HTML tags to start in a lowercase Latin letter.
     # This is in part a regression test; it prevents </a> where "a"
     # is the Cyrillic letter instead of the Latin letter.
@@ -57,7 +58,6 @@ class TranslationsTest < ActiveSupport::TestCase
     return false if %r{<[^a-z\/]}.match?(text)
     return false if %r{<\/[^a-z]}.match?(text)
     return false if text.include?('href = ')
-    return true unless text.include?('<') # Can't be a problem, no '<'
 
     # Now ensure that the HTML only has the tags and attributes we permit.
     # The translators are considered trusted, but nevertheless this

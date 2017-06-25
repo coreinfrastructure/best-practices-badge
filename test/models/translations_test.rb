@@ -44,6 +44,7 @@ class TranslationsTest < ActiveSupport::TestCase
 
   # Is the HTML string acceptable?  It needs to NOT have common mistakes,
   # *and* have only the permitted HTML tags & attributes.
+  # rubocop:disable Metrics/CyclomaticComplexity
   def acceptable_html_string(text)
     return true unless text.include?('<') # Can't be a problem, no '<'
 
@@ -55,9 +56,9 @@ class TranslationsTest < ActiveSupport::TestCase
     # but it's better to be consistent, and there's a minor
     # compression advantage as described here:
     # http://www.websiteoptimization.com/speed/tweak/lowercase/
-    return false if %r{<[^a-z\/]}.match?(text)
-    return false if %r{<\/[^a-z]}.match?(text)
-    return false if text.include?('href = ')
+    return false if %r{<[^a-z\/]}.match?(text) || %r{<\/[^a-z]}.match?(text)
+    return false if text.include?('href = ') || text.include?('class = ')
+    return false if text.include?('target = ')
 
     # Now ensure that the HTML only has the tags and attributes we permit.
     # The translators are considered trusted, but nevertheless this
@@ -68,6 +69,7 @@ class TranslationsTest < ActiveSupport::TestCase
     regularized = regularize_html(text)
     sanitized == regularized
   end
+  # rubocop:enable Metrics/CyclomaticComplexity
 
   # Recursively check locale text, e.g., ensure it has acceptable HTML
   # We pass "from" so that if there's a problem we can report exactly

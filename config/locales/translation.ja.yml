@@ -472,7 +472,7 @@ ja:
         details: '<a href="https://letsencrypt.org/">暗号化しよう</a>からフリーの証明書を入手できます。プロジェクトは、（例えば）<a
           href="https://help.github.com/articles/securing-your-github-pages-site-with-https/">
           GitHubページ</a>、<a href="https://about.gitlab.com/2016/12/24/were-bringing-gitlab-pages-to-community-edition/">
-          GitLabページ</a>、または<a href=" https://sourceforge.net/blog/introducing-https-for-project-websites/">SourceForgeプロジェクトページ</a>を使ってこの基準を実装してもよいです。カスタムドメインでGitHubページを使用している場合は、<a
+          GitLabページ</a>、または<a href="https://sourceforge.net/blog/introducing-https-for-project-websites/">SourceForgeプロジェクトページ</a>を使ってこの基準を実装してもよいです。カスタムドメインでGitHubページを使用している場合は、<a
           href="https://blog.cloudflare.com/secure-and-fast-github-pages-with-cloudflare
           /">ブログの投稿「このファイルを安全かつ高速にGitHub Pages with CloudFlare」</a>に記載されているように、HTTPSをサポートするプロキシとしてコンテンツ配信ネットワーク（CDN）を使用することができます。
           HTTPをサポートしている場合は、HTTPトラフィックをHTTPSにリダイレクトすることを強くお勧めします。
@@ -887,7 +887,10 @@ ja:
           DCOのウェブサイトへのプロジェクトのリンクが表示されます。ただし、これはコントリビュータ ライセンス契約（CLA）またはその他の法的な仕組みとして実装することができます。
 
 '
-        details:
+        details: DCOは、実装が容易で、ソースコードで追跡され、gitが "commit -s"を使用して "サインオフ"機能を直接サポートするため、推奨されるメカニズムです。最も効果的であるためには、プロジェクト文書が、そのプロジェクトに対して「サインオフ」とは何を意味するのかを説明するのが最善です。
+          CLAは、知的著作物が組織またはプロジェクトにライセンスされている条件を定義する法的合意です。コントリビュータ アサイン  アグリーメント（CAA）は、知的著作物の権利を他の当事者に移転する法的合意です。プロジェクトはCAAを必ずしも持つ必要はありません。なぜなら、CAAは、特に受領者が営利目的の組織である場合には、潜在的な貢献者が貢献しないリスクを高めます。
+          <a href="https://www.apache.org/licenses/"> Apache Software Foundation CLA（個々のコントリビュータ
+          ライセンスと法人CLA）</a>は、この種のCLAのリスクを判断するプロジェクトにとって、リスクが便益よりも小さいのCLAの例です。
       governance:
         description: 'プロジェクトは、プロジェクト ガバナンス モデル（主要な役割を含む意思決定方法）を明確に定義し、文書化しなければなりません。
 

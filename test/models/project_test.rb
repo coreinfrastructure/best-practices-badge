@@ -168,6 +168,36 @@ class ProjectTest < ActiveSupport::TestCase
     assert_equal 'gold', @project_gold.badge_level
   end
 
+  # This test works because we don't set the higher level prereqs in the
+  # fixture files.  Make sure not to change this.
+  test 'check update_prereqs works correctly for level upgrades' do
+    assert_equal 'Unmet', @unjustified_project.achieve_passing_status
+    assert_equal 'Unmet', @project_passing.achieve_passing_status
+    assert_equal 'Unmet', @project_passing.achieve_silver_status
+    assert_equal 'Met', @project_silver.achieve_passing_status
+    assert_equal 'Unmet', @project_silver.achieve_silver_status
+    Project.update_all_badge_percentages(Criteria.keys)
+    assert_equal(
+      'Unmet', Project.find(@unjustified_project.id).achieve_passing_status
+    )
+    assert_equal(
+      'Met', Project.find(@project_passing.id).achieve_passing_status
+    )
+    assert_equal(
+      'Unmet', Project.find(@project_passing.id).achieve_silver_status
+    )
+    assert_equal 'Met', Project.find(@project_silver.id).achieve_passing_status
+    assert_equal 'Met', Project.find(@project_silver.id).achieve_silver_status
+  end
+
+  test 'update_prereqs works correctly for level downgrades' do
+    assert_equal 'Met', @project_silver.achieve_passing_status
+    @project_silver.update_attributes!(description_good_status: 'Unmet')
+    assert_equal(
+      'Unmet', Project.find(@project_silver.id).achieve_passing_status
+    )
+  end
+
   # The number of named badge levels must be equal to the number of
   # criteria levels + 1, because projects can be "in_progress"
   test 'test all possible badge "levels/statuses" are named' do

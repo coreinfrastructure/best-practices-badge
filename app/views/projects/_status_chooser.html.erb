@@ -64,8 +64,10 @@
             <%= f.radio_button status_symbol, 'N/A', label: t('criterion_status.NA'),
                                                      disabled: is_disabled  %>
           <% end %>
-          <%= f.radio_button status_symbol, '?', label: '?',
-                                                 disabled: is_disabled  %>
+          <% unless criterion.minor == 'Prerequisites' %>
+            <%= f.radio_button status_symbol, '?', label: '?',
+                                                   disabled: is_disabled  %>
+          <% end %>
           </fieldset>
         </div>
       <% end %>

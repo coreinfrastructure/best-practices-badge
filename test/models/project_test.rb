@@ -122,7 +122,7 @@ class ProjectTest < ActiveSupport::TestCase
     assert_equal(
       :criterion_justification_required,
       @unjustified_project.get_criterion_result(
-        Criteria['0'][:installation_common]
+        Criteria['0'][:test_invocation]
       )
     )
     assert_equal(
@@ -138,13 +138,13 @@ class ProjectTest < ActiveSupport::TestCase
     assert_equal(
       :criterion_failing,
       @unjustified_project.get_criterion_result(
-        Criteria['0'][:crypto_certificate_verification]
+        Criteria['1'][:crypto_certificate_verification]
       )
     )
     assert_equal(
       :criterion_unknown,
       @unjustified_project.get_criterion_result(
-        Criteria['0'][:build_reproducible]
+        Criteria['2'][:build_reproducible]
       )
     )
     assert_equal(
@@ -187,8 +187,8 @@ class ProjectTest < ActiveSupport::TestCase
     assert_equal '5/8', reporting[:text]
     assert_equal 'hsl(75, 100%, 50%)', reporting[:color]
     quality = @unjustified_project.get_satisfaction_data('0', 'quality')
-    assert_equal '13/13', quality[:text]
-    assert_equal 'hsl(120, 100%, 50%)', quality[:color]
+    assert_equal '12/13', quality[:text]
+    assert_equal 'hsl(111, 100%, 50%)', quality[:color]
   end
 
   # rubocop:disable Metrics/BlockLength

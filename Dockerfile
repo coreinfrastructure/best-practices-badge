@@ -1,6 +1,11 @@
 FROM ruby:2.4.1-alpine
 MAINTAINER Dan Kohn <dan@dankohn.com>
-RUN  apk --update --virtual build-dependencies add \
+
+# These are needed for the runtime (not just in build)
+RUN apk --no-cache add postgresql-client nodejs
+
+# Build dependencies will later be deleted after building gems
+RUN apk --no-cache --virtual build-dependencies add \
   # for bcrypt and other compilation
   build-base \
   # for nokogiri
@@ -11,10 +16,8 @@ RUN  apk --update --virtual build-dependencies add \
   graphviz \
   # for nokogiri
   libxml2-dev \
-  # for JS support
-  nodejs \
-  # for pg and pql client
-  postgresql-dev postgresql-client \
+  # for pg
+  postgresql-dev \
   # tzinfo data is required
   tzdata
 
@@ -22,11 +25,7 @@ ENV APP_HOME /app
 RUN mkdir -p $APP_HOME
 WORKDIR $APP_HOME
 
-# Expose port 3000 to the Docker host, so we can access it 
-# from the outside.
-EXPOSE 3000
-
-# This will enable caching gems
+# This enables caching gems in a separate container
 ENV BUNDLE_PATH /ruby_gems
 
 # Copy the Gemfile, Gemfile.lock and .ruby-version and install
@@ -37,16 +36,8 @@ RUN gem install bundler --no-document
 COPY Gemfile Gemfile.lock .ruby-version /tmp/
 WORKDIR /tmp
 RUN bundle install --jobs 20 --retry 5
-# RUN apk del build-dependencies
+RUN apk del build-dependencies
 
 # Copy the main application.
 COPY . $APP_HOME
 WORKDIR $APP_HOME
-
-RUN pwd
-RUN rails db:version
-# RUN rails db:version || rails db:setup
-
-# RUN if psql ${DB_NAME} -c '\q' 2>&1; then
-#    echo "database ${DB_NAME} exists"
-# fi

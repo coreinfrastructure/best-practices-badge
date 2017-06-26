@@ -4,6 +4,7 @@
 
 Here is how to install the "BadgeApp" web application, for either a development
 environment or for deployment. We have rearchitected the deployment to use Docker containers, which has the following benefits:
+
 * Improved (and hopefully near-perfect) interoperability between developers working on Linux, Mac and Windows.
 * Immutable infrastructure that specifies all prerequisites in version-controlled code.
 * The ability to unify dev and test environments to ensure identical behavior.
@@ -14,27 +15,19 @@ environment or for deployment. We have rearchitected the deployment to use Docke
 * Install git if you don't already have it and clone this repo.
 * Follow the [directions](https://docs.docker.com/engine/installation/) to install the stable version of Docker CE on your OS.
 
-## Build and run the Docker image
+## Build and run the Docker images
 
 * `cd` to the `best-practices-badge` directory
-* `docker build -t demo .`
-* `docker run -p 3000:3000`
+* `docker-compose up --build`  # build or rebuild containers
+* Ctrl-C to get back to shell
+* `docker-compose run --rm web rails db:setup`
 
-## Docker Compose
-```
-docker-compose run --rm web bundle
-docker-compose up
-docker-compose run --rm web bin/rake db:setup RAILS_ENV=development
-docker-compose up -d --no-deps --build  # rebuild web
-```
+## Special Docker Compose Commands
 
-## Delete All Images
-
-#!/bin/bash
-# Delete all containers
-docker rm $(docker ps -a -q)
-# Delete all images
-docker rmi $(docker images -q)
+* `docker-compose run --rm web sh` # Run a shell in the web container
+* `docker-compose run --rm web bundle exec rake fake_production` # Run a rake task
+* `docker-compose up` # Start all containers
+* `docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q) && docker rmi $(docker images -a -q)` # Delete everything
 
 ## Old instructions
 

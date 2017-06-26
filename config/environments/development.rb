@@ -55,6 +55,9 @@ Rails.application.configure do
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
 
+  # Whitelist Docker IP addresses https://stackoverflow.com/a/29417509/1935918
+  config.web_console.whitelisted_ips = '172.18.0.0/16'
+
   config.after_initialize do
     # The 'bullet' gem watches application queries and notifies
     # when you should add eager loading (N+1 queries),

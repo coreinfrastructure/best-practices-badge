@@ -2,7 +2,7 @@ FROM ruby:2.4.1-alpine
 MAINTAINER Dan Kohn <dan@dankohn.com>
 
 # These are needed for the runtime (not just in build)
-RUN apk --no-cache add postgresql-client nodejs
+RUN apk --no-cache add postgresql-client nodejs tzdata
 
 # Build dependencies will later be deleted after building gems
 RUN apk --no-cache --virtual build-dependencies add \
@@ -17,9 +17,7 @@ RUN apk --no-cache --virtual build-dependencies add \
   # for nokogiri
   libxml2-dev \
   # for pg
-  postgresql-dev \
-  # tzinfo data is required
-  tzdata
+  postgresql-dev
 
 ENV APP_HOME /app
 RUN mkdir -p $APP_HOME

@@ -693,6 +693,9 @@
             relevant compiler flags in build files.
 - '1': !!omap
   - Basics: !!omap
+    - Prerequisites: !!omap
+      - achieve_passing:
+          category: MUST
     - Basic project website content: !!omap
       - contribution_requirements:
           category: MUST
@@ -1304,6 +1307,9 @@
             valgrind or ASAN.
 - '2': !!omap
   - Basics: !!omap
+    - Prerequisites: !!omap
+      - achieve_silver:
+          category: MUST
     - Project oversight: !!omap
       - bus_factor:
           category: MUST

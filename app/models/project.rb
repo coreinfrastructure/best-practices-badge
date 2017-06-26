@@ -284,6 +284,7 @@ class Project < ApplicationRecord
   # and update relevant event datetime if needed.
   def update_badge_percentage(level)
     old_badge_percentage = self["badge_percentage_#{level}".to_sym]
+    update_prereqs(level) unless level == Criteria.keys[0]
     self["badge_percentage_#{level}".to_sym] =
       calculate_badge_percentage(level)
     update_passing_times(old_badge_percentage) if level == '0'
@@ -481,6 +482,11 @@ class Project < ApplicationRecord
     errors.add :base, I18n.t('error_messages.need_home_page_or_url')
   end
 
+  def to_percentage(portion, total)
+    return 0 if portion.zero?
+    ((portion * 100.0) / total).round
+  end
+
   def update_passing_times(old_badge_percentage)
     if badge_percentage_0 == 100 && old_badge_percentage < 100
       self.achieved_passing_at = Time.now.utc
@@ -489,8 +495,21 @@ class Project < ApplicationRecord
     end
   end
 
-  def to_percentage(portion, total)
-    return 0 if portion.zero?
-    ((portion * 100.0) / total).round
+  # When filling in the prerequisites, we do not fill in the justification
+  # for them. The justification is only there as it makes implementing this
+  # portion of the code simpler.
+  # rubocop:disable Metrics/AbcSize
+  def update_prereqs(level)
+    index = Criteria.keys.index(level)
+    return if index.zero?
+    if self["badge_percentage_#{Criteria.keys[index - 1]}".to_sym] >= 100
+      return if self["achieve_#{BADGE_LEVELS[index]}_status".to_sym] == 'Met'
+      status = 'Met'
+    else
+      return if self["achieve_#{BADGE_LEVELS[index]}_status".to_sym] == 'Unmet'
+      status = 'Unmet'
+    end
+    self["achieve_#{BADGE_LEVELS[index]}_status".to_sym] = status
   end
+  # rubocop:enable Metrics/AbcSize
 end

@@ -43,8 +43,8 @@ perfect_unjustified:
   badge_percentage_0: 88
   badge_percentage_1: 0
   badge_percentage_2: 0
-<% Project::ALL_CRITERIA_STATUS.each do |criterion_status| %>
-  <%= criterion_status %>: Met
+<% Criteria['0'].keys.each do |criterion| %>
+  <%= criterion.to_s + '_status' %>: Met
 <% end %>
   release_notes_status: N/A
   vulnerability_report_private_status: N/A

@@ -51,7 +51,10 @@
                      criteria_level: '1'
                    }) %>
           </li>
-
+          <%# Prerequisites is always disabled %>
+          <%= render_minor_status(
+                '1', 'Basics', 'Prerequisites', f, project, true
+              ) %>
           <%= render_minor_status(
                 '1', 'Basics', 'Basic project website content',
                 f, project, is_disabled

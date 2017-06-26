@@ -57,13 +57,13 @@ ru:
     activated: Учетная запись активирована!
     failed_activation: Недействительная ссылка активации
   password_resets:
-    forgot_password:
-    reset_password:
-    password_confirmation:
+    forgot_password: Забыли пароль?
+    reset_password: Сброс пароля
+    password_confirmation: Подтверждение
     email_not_found: Адрес электронной почты не найден
     password_empty: Пароль не может быть пустым
     password_reset: Пароль был сброшен
-    instructions_sent:
+    instructions_sent: Вам отправлено электронное письмо с инструкцией по сбросу пароля
     cant_reset_nonlocal: К сожалению, сбросить пароль для другого пользователя невозможно.
     reset_expired: Истекло время на сброс пароля.
     update_password:
@@ -71,7 +71,7 @@ ru:
     login_header:
     login_with_github_html:
     or:
-    email:
+    email: Электронная почта
     password: Пароль
     forgot_password: Забыли пароль?
     remember_me: Помнить меня
@@ -80,9 +80,9 @@ ru:
     already_logged_in:
     incorrect_login_info:
     invalid_combo:
-    signed_in:
+    signed_in: Вы вошли в систему!
     not_activated:
-    signed_out:
+    signed_out: Вы вышли из системы!
   static_pages:
     home:
       badge_program: Программа значков "Передовая практика CII"
@@ -153,29 +153,34 @@ ru:
         вы можете зарегистрироваться здесь. <br> <br> Если вы не получили свою ссылку активации,
         пожалуйста, зарегистрируйтесь снова, и мы вышлем вам новую.
       name: Имя
-      email:
+      email: Электронная почта
       preferred_locale: Предпочтительная локаль
       password: Пароль
       password_confirmation: Пароль ещё раз
-      create_account:
-      intro_github:
+      create_account: Создать мою учетную запись
+      intro_github: 'Если у вас есть учетная запись GitHub, вы можете просто использовать
+        ее для входа в систему.
+
+'
     edit:
-      update_user_info:
-      save_changes:
+      update_user_info: Обновление информации о пользователе
+      save_changes: Сохранить изменения
     update:
-      profile_updated:
+      profile_updated: Профиль обновлен
     show:
-      edit_user:
-      other_projects_edit:
+      edit_user: Изменить учетную запись
+      other_projects_edit: Другие проекты, которые вы можете изменять
       see_external:
       as_admin:
       send_email_to:
       delete_link_name:
-      confirm_delete:
+      confirm_delete: Вы уверены, что хотите удалить этого пользователя?
     destroy:
       cannot_delete_self: Удалить себя невозможно.
       user_deleted: Пользователь удален.
-    redirect_existing:
+    redirect_existing: 'Этот пользователь уже существует. Вы хотели зайти под ним?
+
+'
     new_activation_link_created: 'Создана новая ссылка для активации. Проверьте свою
       электронную почту, чтобы активировать учетную запись.
 
@@ -264,9 +269,15 @@ ru:
       repo_url_limits: 'Можно изменить repo_url только с http на https
 
 '
-      changed_since_html:
+      changed_since_html: Другой пользователь внес изменения в эту запись, пока вы
+        с ней работали. <br>Пожалуйста, откройте новую <a href="%{edit_url}" target="_blank">форму</a>
+        и перенесите в неё свои изменения.
       successfully_updated: Проект был успешно обновлен.
-      congrats_new:
+      congrats_new: 'ПОЗДРАВЛЯЕМ с получением значка %{new_badge_level}! Если вы еще
+        этого не сделали, пожалуйста, покажите свой значок на странице вашего проекта
+        (см. ниже текст «как вставить его», если вы не знаете, как это сделать).
+
+'
       lost_badge: Проект потерял значок.
       static_analysis_updated_html: 'Мы обновили наши требования к критерию <a href="#static_analysis">static_analysis</a>.
         Пожалуйста, добавьте обоснование для этого критерия.
@@ -394,18 +405,25 @@ ru:
     ending:
   user_mailer:
     account_activation:
-      before_html:
-      before_text:
+      before_html: |
+        <h1>Программа значков "Передовая практика CII"</h1>
+        <p>Здравствуйте, и добро пожаловать в Программу!
+        Пожалуйста, перейдите по ссылке внизу для активации учетной записи:
+        </p>
+      before_text: |
+        Здравствуйте, и добро пожаловать в Программу значков "Передовая практика CII"!
+
+        Чтобы активировать свою учетную запись, используйте ссылку ниже:
       activate: Активировать
       subject:
     github_welcome:
       before_html:
       before_text:
-      subject:
+      subject: Добро пожаловать в программу значков CII
     user_update:
       before_text:
-      username_changed:
-      email_changed:
+      username_changed: Имя пользователя изменено.
+      email_changed: Адрес электронной почты изменен.
       password_changed: Пароль изменен.
       locale_changed:
       current_state:
@@ -1190,7 +1208,7 @@ ru:
 '
         details: 'Примерами механизмов обнаружения проблем безопасности памяти являются
           <a href="https://github.com/google/sanitizers/wiki/AddressSanitizer">Address
-          Sanitizer (ASAN)</a> (доступен в GCC и LLVM), <a Href = "http://clang.llvm.org/docs/MemorySanitizer.html">Memory
+          Sanitizer (ASAN)</a> (доступен в GCC и LLVM), <a href="http://clang.llvm.org/docs/MemorySanitizer.html">Memory
           Sanitizer</a> и <a href="http://valgrind.org/">valgrind</a>. Другие потенциально
           используемые инструменты включают <a href="http://clang.llvm.org/docs/ThreadSanitizer.html">Thread
           Sanitizer</a> и <a href="http://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html">Undefined
@@ -1271,10 +1289,10 @@ ru:
           TLS, в том числе в подресурсах. Если программное обеспечение не использует
           TLS, выберите «неприменимо» (N/A).
         details: 'Обратите внимание, что неправильная проверка сертификата TLS является
-          распространенной ошибкой. Для дальнейших сведений см. <a href="http://crypto.stanford.edu/~dabo/pubs/abstracts/ssl-client-bugs.html">«Самый
-          опасный код в мире: проверка SSL-сертификатов в Non -Browser Software» Мартина
-          Георгиева и др. (на англ.)</a> и <a href="https://blogs.gnome.org/mcatanzaro/2016/03/12/do-you-trust-this-application/">«Вы
-          доверяете этому приложению?» Майклом Катанзаро (на англ.)</a>.'
+          распространенной ошибкой. Для дальнейших сведений см. <a href="http://crypto.stanford.edu/~dabo/pubs/abstracts/ssl-client-bugs.html">"The
+          Most Dangerous Code in the World: Validating SSL Certificates in Non-Browser
+          Software" Мартина Георгиева и др.</a> и <a href="https://blogs.gnome.org/mcatanzaro/2016/03/12/do-you-trust-this-application/">"Do
+          you trust this application?" Майкла Катанзаро</a>.'
       crypto_verification_private:
         description: Если ПО, создаваемое проектом, поддерживает TLS, ему СЛЕДУЕТ
           выполнять проверку сертификата TLS по умолчанию при использовании TLS, в
@@ -1309,7 +1327,10 @@ ru:
 '
     '1':
       contribution_requirements:
-        description:
+        description: 'Информация о том, как внести вклад, ОБЯЗАНА включать требования
+          к приемлемым взносам (например, ссылку на любой требуемый стандарт кодирования).
+
+'
       dco:
         description:
         details:
@@ -1317,8 +1338,20 @@ ru:
         description:
         details:
       code_of_conduct:
-        description:
-        details:
+        description: 'Проект ОБЯЗАН определить правила поведения и разместить эти
+          правила в стандартном месте.
+
+'
+        details: 'Проекты могут повысить цивилизованность их сообщества и установить
+          ожидания относительно приемлемого поведения, приняв правила поведения. Это
+          может помочь избежать проблем до их возникновения и сделать проект более
+          привлекательным местом, поощряющим участие. Правила должны быть сосредоточены
+          только на поведении в сообществе или на рабочем месте проекта. Примерами
+          правил поведения являются <a href="http://contributor-covenant.org/">Contributor
+          Covenant Code of Conduct</a> и <a href="https://www.kernel.org/doc/html/latest/process/code-of-conflict.html">правила
+          конфликта</a> для проекта ядра Linux.
+
+'
       roles_responsibilities:
         description:
         details:
@@ -1335,8 +1368,16 @@ ru:
 
 '
       bus_factor:
-        description:
-        details:
+        description: Проект ОБЯЗАН иметь «коэффициент автобуса» 2 или более.
+        details: '«Коэффициент автобуса» (или «коэффициент грузовика») - это минимальное
+          количество участников проекта, которые должны внезапно исчезнуть из проекта
+          («попасть под автобус») до того, как проект застрянет из-за отсутствия квалифицированного
+          или компетентного персонала. Инструмент <a href="https://github.com/mtov/truck-factor">truck-factor</a>
+          может оценить это для проектов на GitHub. Для получения дополнительной информации
+          см. статью Cosentino et al. <a href="https://www.researchgate.net/publication/272824568_assessing_the_bus_factor_of_git_repositories">Assessing
+          the Bus Factor of Git Repositories</a>.
+
+'
       documentation_roadmap:
         description:
         details:
@@ -1408,23 +1449,97 @@ ru:
         description:
         details:
       coding_standards:
-        description:
-        details:
+        description: 'Проект ОБЯЗАН определить определенное руководство по стилю кодирования
+          для основных языков, которые он использует, и требовать его соблюдения от
+          предлагаемого кода.
+
+'
+        details: 'В большинстве случаев это делается путем ссылки на некоторые существующие
+          руководства по стилю, возможно, с перечислением различий. Эти руководства
+          по стилю могут включать в себя способы повышения удобочитаемости и способы
+          снижения вероятности дефектов (включая уязвимости). Многие языки программирования
+          имеют один или несколько широко используемых руководств по стилю. Примеры
+          руководств по стилю включают <a href="https://github.com/google/styleguide">Руководство
+          по стилю Google</a> и <a href="https://www.securecoding.cert.org/">Стандарты
+          кодирования SEI CERT</a>.
+
+'
       coding_standards_enforced:
-        description:
-        details:
+        description: 'Проект ОБЯЗАН автоматически применять свой выбранный стиль(и)
+          кодирования, если есть хотя бы один инструмент на СПО, который может сделать
+          это на выбранном языке (языках).
+
+'
+        details: 'Это МОЖЕТ быть реализовано при помощи инструмента(ов) статического
+          анализа и/или путем пропускания кода через средства переформатирования.
+          Во многих случаях конфигурация инструмента включена в репозиторий проекта
+          (так как разные проекты могут выбирать разные конфигурации). Проекты МОГУТ
+          (и, как правило, будут) допускать исключения стиля; там, где происходят
+          исключения, они ОБЯЗАНЫ быть редки и документированы в соответствующих местах
+          кода, чтобы эти исключения можно было пересматривать и инструменты могли
+          автоматически обрабатывать их в будущем. Примеры таких инструментов включают
+          ESLint (JavaScript) и Rubocop (Ruby).
+
+'
       build_standard_variables:
-        description:
-        details:
+        description: 'Системы сборки для нативных двоичных файлов ОБЯЗАНЫ учитывать
+          соответствующие переменные (среды) для компилятора и компоновщика, переданные
+          им (например, CC, CFLAGS, CXX, CXXFLAGS и LDFLAGS) и передавать их на вызовы
+          компилятора и компоновщика. Система сборки МОЖЕТ расширять их дополнительными
+          флагами; НЕДОПУСТИМО просто заменять предоставленные значения своими. Выберите
+          «неприменимо» (N/A), если нативные двоичные файлы не создаются.
+
+'
+        details: 'Должно быть легко включить специальные функции сборки, такие как
+          Address Sanitizer (ASAN), или выполнить рекомендации по упрочнению от дистрибутивов
+          (например, путем простого включения флагов компилятора для этого).
+
+'
       build_preserve_debug:
-        description:
-        details:
+        description: 'Системам сборки и установки СЛЕДУЕТ сохранять информацию об
+          отладке, если передаваемые флаги требуют этого (например, не используется
+          «install -s»). Выберите «неприменимо» (N/A), если системы сборки или установки
+          нет (например, для типичных библиотек JavaScript), .
+
+'
+        details: 'Например, установка CFLAGS (C) или CXXFLAGS (C++) должна создавать
+          соответствующую информацию для отладки, если эти языки используются, и ее
+          не следует удалять во время установки. Отладочная информация необходима
+          для поддержки и анализа, а также полезна для того, чтобы определить наличие
+          упрочняющих функций в скомпилированных двоичных файлах.
+
+'
       build_non_recursive:
-        description:
-        details:
+        description: 'НЕДОПУСТИМО, чтобы система сборки ПО, создаваемого проектом,
+          рекурсивно собирала подкаталоги, если в подкаталогах есть кросс-зависимости.
+          Выберите «неприменимо» (N/A), если системы сборки или установки нет (например,
+          типичные библиотеки JavaScript).
+
+'
+        details: 'Информация о внутренних зависимостях системы сборки проекта должна
+          быть точной, в противном случае изменения в проекте могут быть включены
+          в сборку неправильно. Неправильные сборки могут привести к дефектам (включая
+          уязвимости). Общей ошибкой в ​​больших системах сборки является использование
+          «рекурсивной сборки» или «рекурсивного make», то есть иерархии подкаталогов,
+          содержащих исходные файлы, где каждый подкаталог собирается независимо.
+          Если только каждый из подкаталогов не является полностью независимым, это
+          ошибка, потому что информация о зависимостях неверна.
+
+'
       build_repeatable:
-        description:
-        details:
+        description: 'Проект ОБЯЗАН быть в состоянии повторить процесс генерации информации
+          из исходных файлов и получить такой же результат с точностью до бита. Выберите
+          «неприменимо» (N/A), если в проекте не используется сборка (например, языки
+          сценариев, в которых исходный код используется непосредственно вместо компиляции),
+          .
+
+'
+        details: 'Пользователи GCC и clang могут найти полезной опцию -frandom-seed;
+          в некоторых случаях это может быть разрешено путем задания определенного
+          порядка сортировки. Дополнительные предложения можно найти на сайте <a href="https://reproducible-builds.org/">Reproducible
+          builds</a>.
+
+'
       installation_common:
         description:
         details:
@@ -1471,7 +1586,13 @@ ru:
       crypto_weaknesses:
         description:
       crypto_algorithm_agility:
-        description:
+        description: 'Проекту СЛЕДУЕТ поддерживать несколько криптографических алгоритмов,
+          чтобы пользователи могли быстро переключиться, если один из них поврежден.
+          Общие симметричные ключевые алгоритмы включают AES, Twofish и Serpent. Общие
+          алгоритмы контрольных сумм (хешей) включают SHA-2 (SHA-224, SHA-256, SHA-384
+          и SHA-512) и SHA-3.
+
+'
       crypto_credential_agility:
         description:
       crypto_used_network:
@@ -1479,8 +1600,14 @@ ru:
       crypto_tls12:
         description:
       crypto_certificate_verification:
-        description:
-        details:
+        description: ПО, создаваемое проектом, ОБЯЗАНО выполнять проверку сертификата
+          TLS по умолчанию при использовании TLS, в том числе в подресурсах. Если
+          программное обеспечение не использует TLS, выберите «неприменимо» (N/A).
+        details: 'Обратите внимание, что неправильная проверка сертификата TLS является
+          распространенной ошибкой. Для дальнейших сведений см. <a href="http://crypto.stanford.edu/~dabo/pubs/abstracts/ssl-client-bugs.html">"The
+          Most Dangerous Code in the World: Validating SSL Certificates in Non-Browser
+          Software" Мартина Георгиева и др.</a> и <a href="https://blogs.gnome.org/mcatanzaro/2016/03/12/do-you-trust-this-application/">"Do
+          you trust this application?" Майкла Катанзаро</a>.'
       crypto_verification_private:
         description:
       signed_releases:
@@ -1587,7 +1714,7 @@ ru:
     Dynamic code analysis: Динамический анализ кода
     Externally-maintained components: Компоненты, поддерживаемые извне
     Future: Будущие критерии
-    future:
+    future: Будущее
     Installation system: Система установки
     New functionality testing: Тестирование новых функций
     OSS License: Свободная лицензия
@@ -1600,7 +1727,7 @@ ru:
     Publicly known vulnerabilities fixed: Общеизвестные уязвимости исправлены
     Quality: Качество
     Release notes: Примечания к выпуску
-    Reporting:
+    Reporting: Отчеты о проблемах
     Secure development knowledge: Знание безопасной разработки
     Secure release:
     Secured delivery against man-in-the-middle (MITM) attacks: Доставка, защищенная
@@ -1608,7 +1735,7 @@ ru:
     Security: Безопасность
     Static code analysis: Статический анализ кода
     Unique version numbering: Уникальная нумерация версий
-    Use basic good cryptographic practices:
+    Use basic good cryptographic practices: Основы правильного использования криптографии
     Vulnerability report process: Процесс отчета об уязвимостях
     Warning flags: Флаги предупреждений
     Working build system: Рабочая система сборки
@@ -1616,7 +1743,7 @@ ru:
     Met: Соответствует
     Unmet: Не соответствует
     NA: Неприменимо
-  last_entry:
+  last_entry: Последнее гнездо перевода
   error_messages:
     need_home_page_or_url: Требуется по крайней мере главная страница или URL репозитория
     form_contains:
@@ -1624,9 +1751,11 @@ ru:
       other: Форма содержит %{count} ошибки.
       few: Форма содержит %{count} ошибки.
       many: Форма содержит %{count} ошибок.
-    comma_separated_list:
-    begin_with_cpe:
-    not_an_email:
-    known_bad_password:
-    valid_text:
-    url_message:
+    comma_separated_list: "- должен быть список имен, разделенных запятой"
+    begin_with_cpe: '- текст должен начинаться с "cpe:"'
+    not_an_email: "- это не адрес электронной почты"
+    known_bad_password: "- хорошо известный (плохой) пароль"
+    valid_text: "- текст должен соответствовать кодировке UTF-8 и не содержать неверных
+      управляющих символов"
+    url_message: "- должен начинаться с http: либо https: и использовать ограниченный
+      набор символов"

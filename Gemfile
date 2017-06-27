@@ -30,7 +30,7 @@ gem 'paper_trail', '7.0.3' # Record previous versions of project data
 gem 'pg', '0.21.0' # PostgreSQL database, used for data storage
 gem 'pg_search', '2.0.1' # PostgreSQL full-text search
 gem 'puma', '3.9.1' # Faster webserver; recommended by Heroku
-gem 'rails', '5.1.1' # Our web framework
+gem 'rails', '5.1.2' # Our web framework
 gem 'rails-i18n', '5.0.4' # Localizations for Rails built-ins
 gem 'redcarpet', '3.4.0' # Process markdown in form textareas (justifications)
 gem 'sass-rails', '5.0.6', require: false
@@ -47,7 +47,6 @@ group :development, :test do
   gem 'database_cleaner', '1.6.1' # Cleans up database between tests
   gem 'dotenv-rails', '2.2.1'
   gem 'eslintrb', '2.1.0'
-  gem 'faker', '1.7.3' # Generate fake data
   gem 'json', '2.1.0'
   gem 'license_finder', '3.0.0'
   gem 'mdl', '0.4.0'

@@ -1,0 +1,47 @@
+FROM ruby:2.4.1-alpine
+MAINTAINER Dan Kohn <dan@dankohn.com>
+
+# These are needed for the runtime (not just in build)
+RUN apk --no-cache add libpq nodejs tzdata
+
+# Set Rails to run in production
+ENV RAILS_ENV production 
+ENV RACK_ENV production
+
+# This enables caching gems in a separate container
+ENV BUNDLE_PATH /ruby_gems
+
+RUN gem install bundler --no-document 
+
+WORKDIR /tmp
+
+COPY Gemfile Gemfile.lock .ruby-version /tmp/
+
+# Build dependencies are deleted after building gems
+RUN apk --no-cache --virtual build-dependencies add \
+  # for bcrypt and other compilation
+  build-base \
+  # for nokogiri
+  cmake \
+  # for gems fetched via git
+  git \
+  # for ruby-graphviz
+  graphviz \
+  # for nokogiri
+  libxml2-dev \
+  # for pg
+  postgresql-dev && \
+  # Install gems
+  bundle install --jobs 20 --retry 5 --without development test fake_production && \
+  # delete build-dependencies before they can be cached
+  apk del build-dependencies
+
+ENV APP_HOME /app
+RUN mkdir -p $APP_HOME
+WORKDIR $APP_HOME
+
+# Copy the main application.
+COPY . $APP_HOME
+WORKDIR $APP_HOME
+
+RUN bundle exec rake assets:precompile

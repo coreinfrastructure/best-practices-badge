@@ -427,6 +427,62 @@ if Rails.env.development?
   end
 end
 
+require 'open-uri'
+# Returns "true" if okay
+# rubocop:disable Metrics/MethodLength
+def validate_one_link(link)
+  puts "  <#{link}>"
+  return false if link.blank?
+  # '%{..}' is used when we generate URLs, presume they're okay.
+  return true if link.start_with?('mailto:', '/', '#', '%{')
+  # Shortcut: If we have anything other than http/https, it's wrong.
+  return false unless link.start_with?('https://', 'http://')
+  return false if link.include?(' ') # Common problem
+  begin
+    code = open(link).status[0]
+    return code == '200'
+  rescue
+    return false
+  end
+end
+# rubocop:enable Metrics/MethodLength
+
+require 'set'
+def validate_links_in_string(translation, from, seen)
+  translation.scan(/href=["'][^"']+["']/).each do |snippet|
+    link = snippet[6..-2]
+    next if seen.include?(link) # Already seen it, don't complain again.
+    seen.add(link)
+    unless validate_one_link(link)
+      puts "FAILED LINK IN #{from.join('.')} : <#{link}>"
+    end
+  end
+end
+
+# Recursive validate links.  "seen" refers to a set of links already seen.
+# To recurse we really want kind_of?, not is_a?, so disable rubocop rule
+# rubocop:disable Style/ClassCheck
+def validate_links(translation, from, seen)
+  if translation.kind_of?(Array)
+    translation.each_with_index do |i, part|
+      validate_links(part, from + [i], seen)
+    end
+  elsif translation.kind_of?(Hash)
+    translation.each { |key, part| validate_links(part, from + [key], seen) }
+  elsif translation.kind_of?(String) # includes safe_html
+    validate_links_in_string(translation.to_s, from, seen)
+  end
+end
+# rubocop:enable Style/ClassCheck
+
+desc 'Validate hypertext links'
+task validate_hypertext_links: :environment do
+  seen = Set.new # Track what we've already seen (we'll skip them)
+  I18n.available_locales.each do |loc|
+    validate_links I18n.t('.', locale: loc), [loc], seen
+  end
+end
+
 # Convert project.json -> project.sql (a command to re-insert data).
 # This only *generates* a SQL command; I did it this way so that it's easy
 # to check the command to be run *before* executing it, and this also makes

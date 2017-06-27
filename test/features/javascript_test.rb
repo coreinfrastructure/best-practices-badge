@@ -36,11 +36,11 @@ class JavascriptTest < CapybaraFeatureTest
     wait_for_jquery
     assert_selector(:css, '#contribution_requirements')
     assert_selector(:css, '#report_tracker')
-    assert_selector(:css, '#installation_common')
+    assert_selector(:css, '#warnings')
     find('#toggle-hide-metna-criteria').click
     wait_for_jquery
     refute_selector(:css, '#contribution_requirements')
     refute_selector(:css, '#report_tracker')
-    refute_selector(:css, '#installation_common')
+    refute_selector(:css, '#warnings')
   end
 end

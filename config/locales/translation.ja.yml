@@ -37,9 +37,9 @@ ja:
     account: アカウント
     profile: プロフィール
     settings: 設定
-    logout_html: <span class = "glyphicon glyphicon-log-out"></span> ログアウト
-    signup_html: <span class = "glyphicon glyphicon-user"></span> サインアップ
-    login_html: <span class = "glyphicon glyphicon-log-in"></span> ログイン
+    logout_html: <span class="glyphicon glyphicon-log-out"></span> ログアウト
+    signup_html: <span class="glyphicon glyphicon-user"></span> サインアップ
+    login_html: <span class="glyphicon glyphicon-log-in"></span> ログイン
     footer_text_html: <small> <strong>疑問、質問、または問題がある場合は<em> <a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">電子メールで報告する</a></em>か、<em>
       <a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
       target="_blank">こちらから問題を提出</a></em>してください。</strong>  © 2015-2017 <a href="https://www.coreinfrastructure.org/
@@ -230,7 +230,7 @@ ja:
 
 '
       changed_since_html: '別のユーザーが、編集フォームにアクセスして、そのレコードに変更を加えました。 <br>変更を送信するには、新しい<a
-        href="%{edit_url} "target = _blank>編集フォーム</a>を開いてください。
+        href="%{edit_url}" target="_blank">編集フォーム</a>を開いてください。
 
 '
       successfully_updated: プロジェクトは正常に更新されました
@@ -472,7 +472,7 @@ ja:
         details: '<a href="https://letsencrypt.org/">暗号化しよう</a>からフリーの証明書を入手できます。プロジェクトは、（例えば）<a
           href="https://help.github.com/articles/securing-your-github-pages-site-with-https/">
           GitHubページ</a>、<a href="https://about.gitlab.com/2016/12/24/were-bringing-gitlab-pages-to-community-edition/">
-          GitLabページ</a>、または<a href=" https://sourceforge.net/blog/introducing-https-for-project-websites/">SourceForgeプロジェクトページ</a>を使ってこの基準を実装してもよいです。カスタムドメインでGitHubページを使用している場合は、<a
+          GitLabページ</a>、または<a href="https://sourceforge.net/blog/introducing-https-for-project-websites/">SourceForgeプロジェクトページ</a>を使ってこの基準を実装してもよいです。カスタムドメインでGitHubページを使用している場合は、<a
           href="https://blog.cloudflare.com/secure-and-fast-github-pages-with-cloudflare
           /">ブログの投稿「このファイルを安全かつ高速にGitHub Pages with CloudFlare」</a>に記載されているように、HTTPSをサポートするプロキシとしてコンテンツ配信ネットワーク（CDN）を使用することができます。
           HTTPをサポートしている場合は、HTTPトラフィックをHTTPSにリダイレクトすることを強くお勧めします。
@@ -887,24 +887,33 @@ ja:
           DCOのウェブサイトへのプロジェクトのリンクが表示されます。ただし、これはコントリビュータ ライセンス契約（CLA）またはその他の法的な仕組みとして実装することができます。
 
 '
-        details:
+        details: DCOは、実装が容易で、ソースコードで追跡され、gitが "commit -s"を使用して "サインオフ"機能を直接サポートするため、推奨されるメカニズムです。最も効果的であるためには、プロジェクト文書が、そのプロジェクトに対して「サインオフ」とは何を意味するのかを説明するのが最善です。
+          CLAは、知的著作物が組織またはプロジェクトにライセンスされている条件を定義する法的合意です。コントリビュータ アサイン  アグリーメント（CAA）は、知的著作物の権利を他の当事者に移転する法的合意です。プロジェクトはCAAを必ずしも持つ必要はありません。なぜなら、CAAは、特に受領者が営利目的の組織である場合には、潜在的な貢献者が貢献しないリスクを高めます。
+          <a href="https://www.apache.org/licenses/"> Apache Software Foundation CLA（個々のコントリビュータ
+          ライセンスと法人CLA）</a>は、この種のCLAのリスクを判断するプロジェクトにとって、リスクが便益よりも小さいのCLAの例です。
       governance:
         description: 'プロジェクトは、プロジェクト ガバナンス モデル（主要な役割を含む意思決定方法）を明確に定義し、文書化しなければなりません。
 
 '
-        details:
+        details: '決定を下し、論争を解決するための十分に確立された文書化された方法が必要です。小規模なプロジェクトでは、これは「プロジェクトオーナーとリーダーがすべての最終決定を下す」という単純なものです。慈愛の強い独裁者や正式な能力主義を含む様々な統治モデルが存在します。詳細については、<a
+          href="http://oss-watch.ac.uk/resources/governancemodels">統治モデル</a>を参照してください。集中化された（例えば、単一メインテナー）および分散された（例えば、グループ
+          メインテナー）アプローチの両方が、プロジェクトにおいて成功のうちに使用されています。統治情報は、プロジェクトフォークを作成する可能性について文書化する必要はありません。なぜなら、これはFLOSSプロジェクトでは常に可能であるからです。
+
+'
       code_of_conduct:
         description: 'プロジェクトは、行動規範を採択し、標準的な場所に掲示しなければなりません。
 
 '
         details: 'プロジェクトは、地域社会の礼儀正しさを向上させることと、行動規範を採択することで受け入れられる行動についての期待を設定すること、ができるかもしれません。これにより、問題が発生する前に問題を回避し、プロジェクトをより貢献を促す場所にすることができます。これは、プロジェクトのコミュニティ/職場内の行動にのみ焦点を当てるべきです。行動規範の例としては、<a
-          href="http://contributor-covenant.org/">貢献者行動規範</a>およびLinuxカーネル<a href =
-          "https://www.kernel.org /doc/html/latest/process/code-of-conflict.html ">競争規範</a>を参照してください。
+          href="http://contributor-covenant.org/">貢献者行動規範</a>およびLinuxカーネル<a href="https://www.kernel.org
+          /doc/html/latest/process/code-of-conflict.html ">競争規範</a>を参照してください。
 
 '
       roles_responsibilities:
         description:
-        details:
+        details: '<a href="#governance">統治</a>と役割と責任に関する文章は1か所にあるのが良いでしょう。
+
+'
       access_continuity:
         description: 'いずれかの人が仕事を継続できなくなるまたは死亡した場合、プロジェクトは最小限の中断で継続することができなければなりません。特に、プロジェクトは、課題の作成と終了、提案された変更の受け入れ、およびバージョンのソフトウェアのリリース、1週間内に個人が仕事を継続できくなったことまたは死亡したことの確認、行うことができなければならない。これは、他の誰かがプロジェクトを継続するのに必要な鍵、パスワード、法的権利を持っていることを保証することによって行うことができます。
           FLOSSプロジェクトを実行する個人は、ロックボックスにキーを提供し、必要な法的権利を提供する意志（例えば、DNS名のために）を提供することによって、これを行うことができます。
@@ -989,15 +998,25 @@ ja:
           GUIまたはウェブ ベースのプロジェクトは少なくとも1つターゲットプラットフォーム上のスクリーンリーダーでテストするべきです（例えば、NVDA、Jaws、またはWindows上のWindowEyes;
           MacとiOSのVoiceOver Linux / BSDのOrca;AndroidのTalkBack）。 \nTUIプログラムは、スクリーンリーダーによる冗長な読み取りを防止するために、オーバードローを減らせるかもしれません。\n</ul>"
       internationalization:
-        description:
-        details:
+        description: 'プロジェクトによって作成されたソフトウェアは、ターゲット オーディエンスの文化、地域、または言語へのローカリゼーションを容易にするために国際化されるべきです。国際化（i18n）が適用されない場合（たとえば、ソフトウェアがエンドユーザー向けのテキストを生成せず、人間が読めるテキストを扱わない場合）、「該当なし」（N/A）を選択します。
+
+'
+        details: 'ローカリゼーションとは、「特定のターゲット市場（ロケール）の言語、文化、およびその他の要件を満たす、製品、アプリケーションまたはドキュメントのコンテンツの適合を指します」。国際化とは、「文化、地域、言語によって異なるターゲットオーディエンスに対してローカライズを容易にする製品、アプリケーション、またはドキュメントコンテンツの設計と開発」のことです。
+          （<a href="https://www.w3.org/International/questions/qa-i18n"> W3Cの「ローカリゼーションと国際化」</a>を参照してください。）ソフトウェアは国際化されるだけでこの基準を満たします。いったんソフトウェアが国際化されると、他の人がローカライゼーションに取り組むことができるので、別の特定の言語のローカリゼーションは必要ありません。
+
+'
       sites_password_security:
         description:
         details:
       maintenance_or_update:
-        description:
+        description: 'プロジェクトは、最も頻繁に使用される古いバージョンの製品を維持するか、<em>または</em>新しいバージョンへのアップ
+          グレードを提供しなければなりません。アップ グレード方法が困難な場合は、プロジェクトは、アップグレード方法（変更されたインターフェイスや、アップグレードに役立つ詳細な手順など）を記載しなければなりません。
+
+'
       report_tracker:
-        description:
+        description: 'プロジェクトは、個々の課題を追跡するための課題トラッカーを使用する必要があります。
+
+'
       vulnerability_report_credit:
         description:
       vulnerability_response_process:
@@ -1054,13 +1073,24 @@ ja:
 
 '
       installation_common:
-        description:
-        details:
+        description: 'プロジェクトは、プロジェクトで作成されたソフトウェアを一般的に使用されているやり方で簡単にインストールおよびアンインストールする方法を提供する必要があります。
+
+'
+        details: 'たとえば、パッケージマネージャー（システムまたは言語レベル）、「make install / uninstall」（DESTDIRをサポート）、標準形式のコンテナー、または標準形式の仮想マシンイメージを使用することが挙げられます。インストールとアンインストールのプロセス（たとえば、パッケージング）は、FLOSSである限り、サードパーティによって実装されてもよいです。
+
+'
       installation_standard_variables:
-        description:
+        description: 'エンドユーザ用のインストール システムは、インストール時にビルドされる生成物が書き込まれる場所を選択するための標準的な規則を守らなければなりません。たとえば、POSIXシステムにファイルをインストールする場合は、DESTDIR環境変数を守らなければなりません。インストール
+          システムがない場合や標準的な規約がない場合は、「該当なし」（N / A）を選択します。
+
+'
       installation_development_quick:
-        description:
-        details:
+        description: 'プロジェクトは、潜在的な開発者がすべてのプロジェクト結果を迅速にインストールし、テストやテスト環境を含む変更を行うために必要な環境を迅速にインストールする方法を提供しなければなりません。これは、一般に使用されている手法で実行する必要があります。
+
+'
+        details: 'これは生成されたコンテナおよび/またはインストール スクリプトを使用して実装できます。外部依存部分は、典型的には、external_dependenciesごとにシステムおよび/または言語パッケージマネージャを呼び出すことによってインストールされます。
+
+'
       external_dependencies:
         description: 'プロジェクトは、外部依存関係をコンピュータ処理可能な方法でリストしなければなりません。
 
@@ -1074,12 +1104,16 @@ ja:
           コピーを含む）を監視または定期的にチェックしなければなりません。
 
 '
-        details:
+        details: |
+          これは、<a href="https://www.owasp.org/index.php/OWASP_Dependency_Check"> OWASPのDependency-Check </a>、<a href="https://www.sonatype.com/nexus-auditor"> SinatypeのNexus Auditor </a>、<a href="https://www.blackducksoftware.com/products/protex"> Black Duck's Protex </a> 、<a href="http://www.protecode.com/"> SynopsysのProtecode </a>、<a href="https://github.com/rubysec/bundler-audit"> Bundler-audit （Rubyの場合）</a>
+          などのオリジンアナライザー/依存性検査ツールを使用して行うことができます。パッケージマネージャには、これを行うためのメカニズムが含まれています。コンポーネントの脆弱性を悪用することはできない場合、分析が難しいが、単に更新または修正する方が簡単なであれば、それは許容できます。
       updateable_reused_components:
         description:
         details:
       interfaces_current:
-        description:
+        description: 'プロジェクトは、使用するテクノロジ セット（その "テクノロジ スタック"）において、プロジェクトがサポートするユーザの超大多数がFLOSSの代替案を利用可能な（ユーザが代替手段にアクセスしている）場合には、評価の低いまたは時代遅れの機能とAPIの使用を避けるべきです。
+
+'
       automated_integration_testing:
         description: '少なくとも1つのブランチの共有リポジトリへの各チェックインに対して、自動テスト スイートが適用される必要があります。このテスト
           スイートは、テストの成功または失敗に関するレポートを生成しなければなりません。
@@ -1089,7 +1123,9 @@ ja:
 
 '
       regression_tests_added50:
-        description:
+        description: 'プロジェクトは、過去6ヶ月以内に修正されたバグの少なくとも50％について、自動テスト スイートに回帰テストを追加しなければなりません。
+
+'
       test_statement_coverage80:
         description:
         details:
@@ -1100,14 +1136,28 @@ ja:
       warnings_strict:
         description:
       implement_secure_design:
-        description:
-        details:
+        description: '適用できる場合、プロジェクトはセキュア設計原則（「know_secure_design」から）を実装しなければなりません。プロジェクトでソフトウェアが作成されていない場合は、「該当なし」（N
+          / A）を選択します。
+
+'
+        details: 'たとえば、プロジェクトの結果は、フェール セーフのデフォルト値を持つべきです（デフォルトではアクセスの決定は拒否されるべきで、プロジェクトのインストールはデフォルトでセキュリティ保護されているべきです）。また、完全なメディエーションであるべきです（制限されているすべてのアクセスは、権限がチェックされバイパス不可能でなければなりません）。原則が矛盾する場合があります。その場合、選択が必要です（たとえば、多くの仕組みは、「機構の節約」に反して複雑にすることも、単純にすることもできます）。
+
+'
       input_validation:
-        description:
-        details:
+        description: 'プロジェクトの結果は、潜在的に信頼できないソースからのすべての入力をチェックして有効であることを確認し（*ホワイトリスト*）、データに何らかの制限がある場合は無効な入力を拒否しなければなりません。
+
+'
+        details: '攻撃者はしばしばブラックリストを回避することができるので、入力を "不正な形式"（別名*ブラックリスト*）のリストと比較するのは、通常十分ではないことに注意してください。特に、数値は内部形式に変換され、最小値と最大値の間であるかがチェックされますし、文字列は、有効なテキストパターン（有効なUTF-8、長さ、構文など）であることを確認するためにチェックされます。一部のデータは「何でもよい」（たとえばファイルアップローダ）ことがありますが、通常はまれです。
+
+'
       hardening:
-        description:
-        details:
+        description: 'プロジェクトによって作成されたソフトウェアで強化メカニズムを使用するべきですので、ソフトウェア欠陥がセキュリティ上の脆弱性を引き起こす可能性が低くなります。
+
+'
+        details: '強化メカニズムは、Content Security Policy（CSP）などのHTTPヘッダー、攻撃を緩和するコンパイラ フラグ（-fstack-protectorなど）、または未定義の動作を排除するためのコンパイラ
+          フラグを含みます。私たちの目的のために、最低限の特権は強化メカニズムとはみなされません（最低の特権は重要ですが、別の話です）。
+
+'
       crypto_weaknesses:
         description: プロジェクトによって作成されたソフトウェア内のデフォルトのセキュリティ メカニズムは、既知の重大な脆弱性を持つ暗号アルゴリズムやモード（たとえば、SHA-1暗号ハッシュ
           アルゴリズムまたはSSHのCBC モード）に依存してはいけません。
@@ -1142,7 +1192,8 @@ ja:
       static_analysis_common_vulnerabilities:
         description:
       dynamic_analysis_unsafe:
-        description:
+        description: "<em>もし</em>プロジェクトで作成されたソフトウェアにメモリ安全でない言語（CやC ++など）を使用して作成されたソフトウェアが含まれているならば、<em>そのときには</em>
+          少なくとも1つの動的ツール（たとえば、ファジーまたはウェブ アプリケーション スキャナ）を、バッファの上書きなどのメモリの安全性の問題を検出するメカニズムと一緒にいつも使用します。プロジェクトがメモリ安全でない言語で書かれたソフトウェアを作成しない場合は、「該当なし」（N/A）を選択します。\n"
       assurance_case:
         description: 'プロジェクトは、そのセキュリティ要件が満たされていることを証明する保証ケースを提供しなければならない。保証ケースには、脅威モデルの説明、信頼境界の明確な識別、セキュアな設計原則が適用されていることの議論、共通の実装セキュリティの弱点が対処されたことの議論が含まれなければならない。
 
@@ -1158,7 +1209,7 @@ ja:
         description: プロジェクトは合格レベルバッジに達成しなければなりません。
     '2':
       bus_factor:
-        description:
+        description: プロジェクトは2以上の "バス ファクタ"を持つ必要があります。
       contributors_unassociated:
         description:
         details:

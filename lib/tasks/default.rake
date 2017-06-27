@@ -373,6 +373,29 @@ task :save_en do
   sh 'cp -p config/locales/en.yml config/locales/en.yml.ORIG'
 end
 
+desc 'Fix locale text'
+task :fix_locale do
+  # Google Translate generates text that has predictable errors.
+  # This task fixes some predictable errors automatically.
+  puts "\nFixing locale text.\n"
+  # Rake won't let us define global constants, so we'll do what we can
+  locale_files = './config/locales/localization*.yml ' \
+                 './config/locales/translation*.yml'
+  sh %q{ruby -pi -e "sub(/< a /, '<a ')" \
+        -e "sub(/< \057/, '</')" -e "sub(/<\057 /, '</')" \
+        -e "sub(/<Strong>/, '<strong>')" -e "sub(/<Em>/, '<em>')" \
+        -e "sub(/ Href *=/, 'href=')" \
+        -e "sub(/href = /, 'href=')" \
+        -e "sub(/class = /, 'class=')" \
+        -e "sub(/target = /, 'target=')" } + locale_files
+  # Show whether or not there are known problems after it.
+end
+
+# Test locale files; returns true if successful (no errors)
+def test_locale_files
+  system 'rails test test/models/translations_test.rb'
+end
+
 # Fix up translation:sync.
 # First, translation:sync rewrites the source en.yml file, which it shouldn't
 # ever do, and in the process reformats it into garbage with overly-long lines.
@@ -390,22 +413,16 @@ end
 if Rails.env.development?
   task 'translation:sync' => :save_en
   Rake::Task['translation:sync'].enhance do
-    puts 'Removing bogus trailing whitespace (bug workaround).'
-    files = './config/locales/localization*.yml ' \
-            './config/locales/translation*.yml'
-    sh %q{ruby -pi -e "sub(/ $/, '')" } + files
-    # Ideally we wouldn't fix common errors in locales, but Google
-    # translate generates text that has predictable errors, and it's better
-    # to fix them here for now so that *end-users* are more likely to have
-    # a good experience.
-    puts 'Fixing common easily-fixed errors'
-    sh %q{ruby -pi -e "sub(/< a /, '<a ')" } + files
-    sh %q{ruby -pi -e "sub(/< \057/, '</')" } + files
-    sh %q{ruby -pi -e "sub(/<\057 /, '</')" } + files
-    sh %q{ruby -pi -e "sub(/<Strong>/, '<strong>')" } + files
-    sh %q{ruby -pi -e "sub(/<Em>/, '<em>')" } + files
-    sh %q{ruby -pi -e "sub(/href = /, 'href=')" } + files
+    # Don't let translation.io change the en.yml file:
     sh 'mv config/locales/en.yml.ORIG config/locales/en.yml'
+    puts 'Removing bogus trailing whitespace (bug workaround).'
+    sh %q{ruby -pi -e "sub(/ $/, '')" ./config/locales/*.yml}
+    # Check text.  Use 'system' so we can get the success result.
+    success = test_locale_files
+    unless success
+      Rake::Task['fix_locale'].invoke
+      test_locale_files
+    end
     puts "Now run: git commit -sam 'rake translation:sync'"
   end
 end

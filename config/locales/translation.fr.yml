@@ -288,8 +288,8 @@ fr:
 '
       changed_since_html: 'Un autre utilisateur a apporté une modification à cet enregistrement
         depuis que vous avez accédé au formulaire d''édition. <br>Veuillez ouvrir
-        un nouveau <a href="%{edit_url} "target=_blank>formulaire d''édition</a> pour
-        transférer vos modifications.
+        un nouveau <a href="%{edit_url}" target="_blank">formulaire d''édition</a>
+        pour transférer vos modifications.
 
 '
       successfully_updated: Le projet a été mis à jour avec succès.
@@ -1483,10 +1483,9 @@ fr:
         details: 'Un outil d''analyse dynamique examine le logiciel en l''exécutant
           avec des entrées spécifiques. Par exemple, le projet PEUT utiliser un outil
           de fuzzing (par exemple, <a href="http://lcamtuf.coredump.cx/afl/">American
-          Fuzzy Lop</a>) ou un scanner d''application Web (par exemple, <a href =
-          "https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project">OWASP ZAP</a>
-          ou <a href="http://w3af.org/">w3af</a>). Dans certains cas, le projet <a
-          href="https://github.com/google/oss-fuzz#introduction">OSS-Fuzz</a> peut
+          Fuzzy Lop</a>) ou un scanner d''application Web (par exemple, <a href="https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project">OWASP
+          ZAP</a> ou <a href="http://w3af.org/">w3af</a>). Dans certains cas, le projet
+          <a href="https://github.com/google/oss-fuzz#introduction">OSS-Fuzz</a> peut
           être prêt à appliquer des tests de fuzzing à votre projet. Aux fins de ce
           critère, l''outil d''analyse dynamique doit varier les entrées d''une manière
           ou d''une autre pour rechercher différents types de problèmes <em>ou</em>

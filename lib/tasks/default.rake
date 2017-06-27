@@ -428,28 +428,24 @@ if Rails.env.development?
 end
 
 require 'net/http'
-# Request uri using HEAD, reply true if fetchable. Follow redirects.
+# Request uri, reply true if fetchable. Follow redirects 'limit' times.
 # See: https://docs.ruby-lang.org/en/2.0.0/Net/HTTP.html
 # rubocop:disable Metrics/MethodLength
 def fetchable?(uri_str, limit = 10)
   return false if limit <= 0
-  uri = URI(uri_str)
-  Net::HTTP.start(
-    uri.host, uri.port,
-    use_ssl: uri_str.starts_with?('https:')
-  ) do |http|
-    response = http.request_head(uri)
-    case response
-    when Net::HTTPSuccess then
-      return true
-    when Net::HTTPRedirection then
-      # Recurse, because redirection might be to a different site
-      location = response['location']
-      warn "    redirected to <#{location}>"
-      return fetchable?(location, limit - 1)
-    else
-      return false
-    end
+  # Use GET, not HEAD. Some websites will say a page doesn't exist when given
+  # a HEAD request, yet will redirect correctly on a GET request. Ugh.
+  response = Net::HTTP.get_response(URI.parse(uri_str))
+  case response
+  when Net::HTTPSuccess then
+    return true
+  when Net::HTTPRedirection then
+    # Recurse, because redirection might be to a different site
+    location = response['location']
+    warn "    redirected to <#{location}>"
+    return fetchable?(location, limit - 1)
+  else
+    return false
   end
 end
 # rubocop:enable Metrics/MethodLength
@@ -460,10 +456,10 @@ def link_okay?(link)
   return true if link.start_with?('mailto:', '/', '#', '%{')
   # Shortcut: If we have anything other than http/https, it's wrong.
   return false unless link.start_with?('https://', 'http://')
-  return false if link.include?(' ') # Common problem
   # Quick check - if there's a character other than URI-permitted, fail.
+  # Note that space isn't included (including space is a common error).
   return false if %r{[^-A-Za-z0-9_\.~!*'\(\);:@\&=+\$,\/\?#\[\]%]}.match?(link)
-  puts "  <#{link}>"
+  warn "  <#{link}>"
   fetchable?(link)
 end
 

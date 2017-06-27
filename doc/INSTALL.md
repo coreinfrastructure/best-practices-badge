@@ -19,12 +19,11 @@ environment or for deployment. We have rearchitected the deployment to use Docke
 
 * `cd` to the `best-practices-badge` directory
 * `docker-compose up --build`  # build or rebuild containers
-* Ctrl-C to get back to shell
-* `docker-compose run --rm web rails db:setup`
 
 ## Special Docker Compose Commands
 
 * `docker-compose run --rm web sh` # Run a shell in the web container
+* `docker-compose run --rm web rails db:setup` # Re-create database
 * `docker-compose run --rm web bundle exec rake fake_production` # Run a rake task
 * `docker-compose up` # Start all containers
 * `docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q) && docker rmi $(docker images -a -q)` # Delete everything

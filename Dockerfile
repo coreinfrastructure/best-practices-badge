@@ -2,7 +2,10 @@ FROM ruby:2.4.1-alpine
 MAINTAINER Dan Kohn <dan@dankohn.com>
 
 # These are needed for the runtime (not just in build)
-RUN apk --no-cache add postgresql-client nodejs tzdata
+RUN apk --no-cache add libpq tzdata
+
+# Needed for eslintrb in development
+RUN apk --no-cache add nodejs
 
 # Build dependencies will later be deleted after building gems
 RUN apk --no-cache --virtual build-dependencies add \
@@ -34,7 +37,7 @@ RUN gem install bundler --no-document
 COPY Gemfile Gemfile.lock .ruby-version /tmp/
 WORKDIR /tmp
 RUN bundle install --jobs 20 --retry 5
-RUN apk del build-dependencies
+# RUN apk del build-dependencies
 
 # Copy the main application.
 COPY . $APP_HOME

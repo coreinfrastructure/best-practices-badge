@@ -49,7 +49,7 @@ en:
     footer_text_html: '<small> <strong>Need help? Have a question? See a problem? Please
       <em><a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">send
       an email</a> </em>or <em><a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
-      target="_blank">file an issue</a></em>.</strong> © 2015-2017 <a href="https://www.coreinfrastructure.org/
+      target="_blank">file an issue</a></em>.</strong> © 2015-2017 <a href="https://www.coreinfrastructure.org/"
       target="_blank">Core Infrastructure Initiative</a>, a <a href="https://www.linuxfoundation.org/"
       target="_blank">Linux Foundation</a> Collaborative Project. All Rights Reserved.
       Please see our <a href="https://www.linuxfoundation.org/privacy" target="_blank">privacy
@@ -1399,7 +1399,7 @@ en:
           (including <a href="https://h3xstream.github.io/find-sec-bugs/">FindSecurityBugs</a>),
           <a href="https://pmd.github.io/">PMD</a>, <a href="http://brakemanscanner.org/">Brakeman</a>,
           <a href="https://scan.coverity.com/">Coverity Quality Analyzer</a>, and
-          <a href="http://www8.hp.com/au/en/software-solutions/static-code-analysis-sast/index.html">HP
+          <a href="https://saas.hpe.com/en-us/software/sca">HP Enterprise
           Fortify Static Code Analyzer</a>. Larger lists of tools can be found in
           places such as the <a href="https://en.wikipedia.org/wiki/List_of_tools_for_static_code_analysis">Wikipedia
           list of tools for static code analysis</a>, <a href="https://www.owasp.org/index.php/Static_Code_Analysis">OWASP
@@ -1783,7 +1783,7 @@ en:
 
 '
         details: |
-          For web applications, see the <a href="https://www.w3.org/TR/WCAG20/">Web Content Accessibility Guidelines (WCAG 2.0)</a> and its supporting document <a href="https://www.w3.org/TR/UNDERSTANDING-WCAG20/Overview.html">Understanding WCAG 2.0</a>; see also <a href="https://www.w3.org/standards/webdesign/accessibility">W3C accessibility information</a>. For GUI applications, consider using the environment-specific accessibility guidelines (such as <a href="https://developer.gnome.org/accessibility-devel-guide/stable/">Gnome</a>, <a href="https://accessibility.kde.org/">KDE</a>, <a href="http://docs.xfce.org/xfce/xfce4-settings/accessibility">XFCE</a>, <a href="https://developer.android.com/guide/topics/ui/accessibility/">Android</a>, <a href="https://developer.apple.com/accessibility/ios/">iOS</a>, <a href="http://www.apple.com/accessibility/osx/voiceover/">Mac</a>, and <a href="https://msdn.microsoft.com/en-us/windows/uwp/accessibility/accessibility-overview)">Windows</a>). Some TUI applications (e.g. `ncurses` programs) can do certain things to make themselves more accessible (such as `alpine`'s `force-arrow-cursor` setting). Most command-line applications are fairly accessible as-is. This criterion is often N/A, e.g., for program libraries. Here are some examples of actions to take or issues to consider: <ul> <li>Provide text alternatives for any non-text content so
+          For web applications, see the <a href="https://www.w3.org/TR/WCAG20/">Web Content Accessibility Guidelines (WCAG 2.0)</a> and its supporting document <a href="https://www.w3.org/TR/UNDERSTANDING-WCAG20/Overview.html">Understanding WCAG 2.0</a>; see also <a href="https://www.w3.org/standards/webdesign/accessibility">W3C accessibility information</a>. For GUI applications, consider using the environment-specific accessibility guidelines (such as <a href="https://developer.gnome.org/accessibility-devel-guide/stable/">Gnome</a>, <a href="https://accessibility.kde.org/">KDE</a>, <a href="http://docs.xfce.org/xfce/xfce4-settings/accessibility">XFCE</a>, <a href="https://developer.android.com/guide/topics/ui/accessibility/">Android</a>, <a href="https://developer.apple.com/accessibility/ios/">iOS</a>, <a href="http://www.apple.com/accessibility/osx/voiceover/">Mac</a>, and <a href="https://msdn.microsoft.com/en-us/windows/uwp/accessibility/accessibility-overview">Windows</a>). Some TUI applications (e.g. `ncurses` programs) can do certain things to make themselves more accessible (such as `alpine`'s `force-arrow-cursor` setting). Most command-line applications are fairly accessible as-is. This criterion is often N/A, e.g., for program libraries. Here are some examples of actions to take or issues to consider: <ul> <li>Provide text alternatives for any non-text content so
             that it can be changed into other forms people need, such as
             large print, braille, speech, symbols or simpler language (
             <a href="https://www.w3.org/TR/UNDERSTANDING-WCAG20/text-equiv.html">WCAG 2.0 guideline 1.1</a>)

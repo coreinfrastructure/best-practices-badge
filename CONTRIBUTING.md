@@ -486,6 +486,23 @@ Sometimes these full tests cause spurious failures, so we intentionally
 retry failing tests to eliminate false failure reports (to make sure the
 problem is in the software under test, and not in our test framework).
 
+### Handling test failures
+
+Tests may fail after certain kinds of asset changes,
+with odd messages such as:
+
+> Capybara::Poltergeist::JavascriptError: One or more errors were raised
+> in the Javascript code on the page. If you don't care about these errors,
+> you can ignore them by setting js_errors: false in your Poltergeist
+> configuration (see documentation for details).
+
+In many cases this is because you need to forcibly precompile the assets;
+just run this:
+
+~~~~
+RAILS_ENV=production rake assets:precompile
+~~~~
+
 ### Other tools
 
 Here are some other tools we use for checking quality or security,

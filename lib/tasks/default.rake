@@ -427,25 +427,45 @@ if Rails.env.development?
   end
 end
 
-require 'open-uri'
-# Returns "true" if okay
+require 'net/http'
+# Request uri using HEAD, reply true if fetchable. Follow redirects.
+# See: https://docs.ruby-lang.org/en/2.0.0/Net/HTTP.html
 # rubocop:disable Metrics/MethodLength
-def validate_one_link(link)
-  puts "  <#{link}>"
+def fetchable?(uri_str, limit = 10)
+  return false if limit <= 0
+  uri = URI(uri_str)
+  Net::HTTP.start(
+    uri.host, uri.port,
+    use_ssl: uri_str.starts_with?('https:')
+  ) do |http|
+    response = http.request_head(uri)
+    case response
+    when Net::HTTPSuccess then
+      return true
+    when Net::HTTPRedirection then
+      # Recurse, because redirection might be to a different site
+      location = response['location']
+      warn "    redirected to <#{location}>"
+      return fetchable?(location, limit - 1)
+    else
+      return false
+    end
+  end
+end
+# rubocop:enable Metrics/MethodLength
+
+def link_okay?(link)
   return false if link.blank?
   # '%{..}' is used when we generate URLs, presume they're okay.
   return true if link.start_with?('mailto:', '/', '#', '%{')
   # Shortcut: If we have anything other than http/https, it's wrong.
   return false unless link.start_with?('https://', 'http://')
   return false if link.include?(' ') # Common problem
-  begin
-    code = open(link).status[0]
-    return code == '200'
-  rescue
-    return false
-  end
+  # Quick check - if there's a character other than URI-permitted, fail.
+  return false if %r{[^-A-Za-z0-9_\.~!*'\(\);:@\&=+\$,\/\?#\[\]%]}.match?(link)
+  puts "  <#{link}>"
+  fetchable?(link)
 end
-# rubocop:enable Metrics/MethodLength
 
 require 'set'
 def validate_links_in_string(translation, from, seen)
@@ -453,8 +473,8 @@ def validate_links_in_string(translation, from, seen)
     link = snippet[6..-2]
     next if seen.include?(link) # Already seen it, don't complain again.
     seen.add(link)
-    unless validate_one_link(link)
-      puts "FAILED LINK IN #{from.join('.')} : <#{link}>"
+    unless link_okay?(link)
+      puts "\nFAILED LINK IN #{from.join('.')} : <#{link}>"
     end
   end
 end

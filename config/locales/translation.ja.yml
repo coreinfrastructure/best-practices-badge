@@ -415,13 +415,13 @@ ja:
 
 '
         details: 'FLOSSは、<a href="https://opensource.org/osd-annotated">オープンソース定義</a>または<a
-          href="http://www.gnu.org/philosophy/free-sw.en.html ">フリーソフトウェア定義</a>を満たす方法でリリースされたソフトウェアです。そのようなライセンスの例としては、<a
+          href="http://www.gnu.org/philosophy/free-sw.en.html">フリーソフトウェア定義</a>を満たす方法でリリースされたソフトウェアです。そのようなライセンスの例としては、<a
           href="http://creativecommons.org/publicdomain/zero/1.0/">CC0</a>、<a href="https://opensource.org/licenses/MIT"
           >MIT</a>、<a href="https://opensource.org/licenses/BSD-2-Clause">2項型BSD</a>、<a
-          href="https://opensource.org / licenses / BSD-3-Clause "> 3項型BSD</a>、<a
-          href="https://opensource.org/licenses/Apache-2.0"> Apache 2.0 </a>、<a href="https://opensource.org/licenses/lgpl-license">Less
-          GNU General Public License（LGPL）</a>、および<a href="https://opensource.org/licenses/gpl-license
-          "> GNU General Public License（GPL）</a>を参照してください。私たちの目的のためには、これはライセンスが以下のものでなければならないことを意味します：<ul>
+          href="https://opensource.org/licenses/BSD-3-Clause"> 3項型BSD</a>、<a href="https://opensource.org/licenses/Apache-2.0">
+          Apache 2.0 </a>、<a href="https://opensource.org/licenses/lgpl-license">Less
+          GNU General Public License（LGPL）</a>、および<a href="https://opensource.org/licenses/gpl-license">
+          GNU General Public License（GPL）</a>を参照してください。私たちの目的のためには、これはライセンスが以下のものでなければならないことを意味します：<ul>
           <li> <a href="https://opensource.org/licenses">オープンソース・イニシアチブ（OSI）によって承認されたライセンス</a>、または</li>
           <li> <a href="https://www.gnu.org/licenses/license-list.html">フリーソフトウェア財団（FSF）の承認を得たフリー
           ライセンス</a>、または</li> <li> <a href="https://www.debian.org/legal/licenses/">
@@ -473,8 +473,8 @@ ja:
           href="https://help.github.com/articles/securing-your-github-pages-site-with-https/">
           GitHubページ</a>、<a href="https://about.gitlab.com/2016/12/24/were-bringing-gitlab-pages-to-community-edition/">
           GitLabページ</a>、または<a href="https://sourceforge.net/blog/introducing-https-for-project-websites/">SourceForgeプロジェクトページ</a>を使ってこの基準を実装してもよいです。カスタムドメインでGitHubページを使用している場合は、<a
-          href="https://blog.cloudflare.com/secure-and-fast-github-pages-with-cloudflare
-          /">ブログの投稿「このファイルを安全かつ高速にGitHub Pages with CloudFlare」</a>に記載されているように、HTTPSをサポートするプロキシとしてコンテンツ配信ネットワーク（CDN）を使用することができます。
+          href="https://blog.cloudflare.com/secure-and-fast-github-pages-with-cloudflare/">ブログの投稿「このファイルを安全かつ高速にGitHub
+          Pages with CloudFlare」</a>に記載されているように、HTTPSをサポートするプロキシとしてコンテンツ配信ネットワーク（CDN）を使用することができます。
           HTTPをサポートしている場合は、HTTPトラフィックをHTTPSにリダイレクトすることを強くお勧めします。
 
 '
@@ -694,8 +694,8 @@ ja:
 '
         details: 例としては、（ソフトウェアのタイプに依存しますが）SQLインジェクション、OSインジェクション、古典的なバッファ オーバーフロー、クロスサイト
           スクリプティング、認証欠落、権限欠落などがあります。 <a href="http://cwe.mitre.org/top25/"> CWE /
-          SANSトップ25 </a>または<a href="https://www.owasp.org/index.php/カテゴリ：OWASP_Top_Ten_Project
-          "> OWASP Top 10 </a>を参照してください。
+          SANSトップ25 </a>または<a href="https://www.owasp.org/index.php/Category:OWASP_Top_Ten_Project">
+          OWASP Top 10 </a>を参照してください。
       crypto_published:
         description: プロジェクトによって作成されたソフトウェアは、デフォルトで、一般に公開され、専門家によってレビューされている暗号プロトコルとアルゴリズムを使用しなければなりません。（暗号プロトコルとアルゴリズムが使用される場合）
         details: ソフトウェアによっては暗号機能を直接使用する必要がないため、これらの暗号基準は常に適用されるわけではありません。
@@ -769,8 +769,8 @@ ja:
           </a>（<a href="https://h3xstream.github.io/find-sec-bugs/">FindSecurityBugs</a>を含む）、<a
           href="https://pmd.github.io/"> PMD </a>、<a href="http://brakemanscanner.org/">
           Brakeman </a>、<a href="https://scan.coverity.com/"> Coverity Quality Analyzer
-          </a>、および<a href="http://www8.hp.com/au/en /software-solutions/static-code-analysis-sast/index.html">
-          HP Fortify静的コードアナライザー</a>。大きなツールのリストは、<a href="https://en.wikipedia.org/wiki/List_of_tools_for_static_code_analysis">静的コード解析のためのWikipediaツール一覧</a>、<a
+          </a>、および<a href="https://saas.hpe.com/en-us/software/sca"> HPE Fortify静的コードアナライザー</a>。大きなツールのリストは、<a
+          href="https://en.wikipedia.org/wiki/List_of_tools_for_static_code_analysis">静的コード解析のためのWikipediaツール一覧</a>、<a
           href="https://www.owasp.org/index.php/Static_Code_Analysis">静的コード解析に関するOWASP情報</a>、<a
           href="http://samate.nist.gov/index.php/Source_Code_Security_Analyzers.html">
           NISTソースコードセキュリティアナライザのリスト</a>、<a href="http://www.dwheeler.com/essays/static-analysis-tools.html">ウィーラーの静的解析ツール一覧</a>。
@@ -807,7 +807,7 @@ ja:
           OWASP ZAP </a>または<a href="http://w3af.org/"> w3af </a>）です。場合によっては、<a href="https://github.com/google/oss-fuzz#introduction">
           OSS-Fuzz </a>プロジェクトがプロジェクトにファズテストを適用する可能性があります。この基準のために、動的分析ツールは、様々な種類の問題を探すために何らかの方法で入力を変更するか<em>または</em>少なくとも80％のブランチ
           カバレッジを持つ自動テスト スイートである必要があります。 <a href="https://en.wikipedia.org/wiki/Dynamic_program_analysis">動的解析に関するWikipediaのページ</a>と<a
-          href="https://www.owasp.org/index.php / Fuzzing "> ファジングに関するOWASPページ</a>で、いくつかの動的解析ツールを特定しています。解析ツールは、セキュリティの脆弱性を探すことに重点を置くことができますが、これは必須ではありません。
+          href="https://www.owasp.org/index.php/Fuzzing"> ファジングに関するOWASPページ</a>で、いくつかの動的解析ツールを特定しています。解析ツールは、セキュリティの脆弱性を探すことに重点を置くことができますが、これは必須ではありません。
 
 '
       dynamic_analysis_unsafe:
@@ -819,7 +819,7 @@ ja:
           href="http://clang.llvm.org/docs/MemorySanitizer.html"> Memory Sanitizer
           </a>、および<a href="http://valgrind.org/"> valgrind </a>が含まれます。他に使用される可能性のあるツールには、<a
           href="http://clang.llvm.org/docs/ThreadSanitizer.html">スレッドサニタイザ</a>と<a
-          href="http://clang.llvm.org/ docs / UndefinedBehaviorSanitizer.html ">定義されていない動作サニタイザ</a>を参照してください。広範なアサーションも機能します。
+          href="http://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html ">定義されていない動作サニタイザ</a>を参照してください。広範なアサーションも機能します。
 
 '
       dynamic_analysis_enable_assertions:
@@ -905,12 +905,13 @@ ja:
 
 '
         details: 'プロジェクトは、地域社会の礼儀正しさを向上させることと、行動規範を採択することで受け入れられる行動についての期待を設定すること、ができるかもしれません。これにより、問題が発生する前に問題を回避し、プロジェクトをより貢献を促す場所にすることができます。これは、プロジェクトのコミュニティ/職場内の行動にのみ焦点を当てるべきです。行動規範の例としては、<a
-          href="http://contributor-covenant.org/">貢献者行動規範</a>およびLinuxカーネル<a href="https://www.kernel.org
-          /doc/html/latest/process/code-of-conflict.html ">競争規範</a>を参照してください。
+          href="http://contributor-covenant.org/">貢献者行動規範</a>およびLinuxカーネル<a href="https://www.kernel.org/doc/html/latest/process/code-of-conflict.html">競争規範</a>を参照してください。
 
 '
       roles_responsibilities:
-        description:
+        description: 'プロジェクトは、プロジェクトでの重要な役割と役割が実行しなければならないタスクを含む責任を明確に定義し、公的に文書化しなければなりません。誰がどの役割を持っているかは明確でなければなりませんが、これは同じ方法で文書化されていない可能性があります。
+
+'
         details: '<a href="#governance">統治</a>と役割と責任に関する文章は1か所にあるのが良いでしょう。
 
 '
@@ -985,7 +986,7 @@ ja:
           <a href=\"https://developer.android.com/guide/topics/ui/accessibility/\">
           Android </a>、<a href=\"https://developer.apple.com/accessibility/ios/\"
           > iOS </a>、<a href=\"http://www.apple.com/accessibility/osx/voiceover/\">
-          Mac </a>、<a href=\"https://msdn.microsoft.com/ja/ja/windows/uwp/accessibility/accessibility-overview）\">
+          Mac </a>、<a href=\"https://msdn.microsoft.com/ja/ja/windows/uwp/accessibility/accessibility-overview\">
           Windows </a>）。いくつかのTUIアプリケーション（例えば、「ncurses」プログラム）は、「alpine」の 「force-arrow-cursor」設定のような、よりアクセスしやすくするためにいくつかのことを行うことができます。ほとんどのコマンドライン
           アプリケーションは、そのままの状態でかなりアクセス可能です。この基準は、例えば、プログラムライブラリの場合、「該当なし」（N/A）であることが多いです。取り上げるべき行動や考慮すべき課題の例を以下に示します。\n<ul>
           <li>テキスト以外のコンテンツの代替テキストを提供するkotode,\n人々が必要とする他の形式に変更することができます。大きな印刷物、点字、スピーチ、記号またはより単純な言語などです。（<a
@@ -1006,8 +1007,15 @@ ja:
 
 '
       sites_password_security:
-        description:
-        details:
+        description: 'プロジェクト サイト（ウェブサイト、リポジトリ、およびダウンロードURL）が外部ユーザーの認証用のパスワードを格納する場合、パスワードは、キーストレッチ（反復）アルゴリズム（PBKDF2、BcryptまたはScryptなど）を使用してユーザーごとの塩で反復ハッシュとして保存する必要があります。プロジェクトサイトがこの目的のためにパスワードを保存しない場合は、「該当なし」（N
+          / A）を選択します。
+
+'
+        details: '<a href="https://help.github.com/articles/github-security/"> GitHub
+          </a>の使用はこの基準を満たすことに注意してください。この基準は、外部ユーザーのプロジェクト サイトへの認証に使用されるパスワードにのみ適用されます。プロジェクト
+          サイトが他のサイトにログインする必要がある場合、Bcryptなどのアルゴリズムを使用するとパスワードが役に立たないため、その目的のためにパスワードを別々に保存する必要があります。これにより、crypto_password_storageの基準がsites_httpsと同様にプロジェクトサイトに適用されます。
+
+'
       maintenance_or_update:
         description: 'プロジェクトは、最も頻繁に使用される古いバージョンの製品を維持するか、<em>または</em>新しいバージョンへのアップ
           グレードを提供しなければなりません。アップ グレード方法が困難な場合は、プロジェクトは、アップグレード方法（変更されたインターフェイスや、アップグレードに役立つ詳細な手順など）を記載しなければなりません。
@@ -1018,10 +1026,17 @@ ja:
 
 '
       vulnerability_report_credit:
-        description:
+        description: 'プロジェクトは、匿名の報告者を除いて、過去12ヶ月間に解決されたすべての脆弱性の報告者に信用していることを伝えなければなりません。過去12ヶ月間に解決された脆弱性がない場合は、「該当なし」（N
+          / A）を選択します。
+
+'
       vulnerability_response_process:
-        description:
-        details:
+        description: 'プロジェクトには、脆弱性レポートに対応するための文書化されたプロセスがなければなりません。
+
+'
+        details: 'これはvulnerability_report_processに強く関連しており、脆弱性を報告するための文書化された方法が必要です。これは、特定の時間枠内の脆弱性レポートへの応答を必要とする、vulnerability_report_responseにも関連しています。
+
+'
       coding_standards:
         description: |
           プロジェクトは、使用する主要な言語のための特定のコーディング
@@ -1108,8 +1123,18 @@ ja:
           これは、<a href="https://www.owasp.org/index.php/OWASP_Dependency_Check"> OWASPのDependency-Check </a>、<a href="https://www.sonatype.com/nexus-auditor"> SinatypeのNexus Auditor </a>、<a href="https://www.blackducksoftware.com/products/protex"> Black Duck's Protex </a> 、<a href="http://www.protecode.com/"> SynopsysのProtecode </a>、<a href="https://github.com/rubysec/bundler-audit"> Bundler-audit （Rubyの場合）</a>
           などのオリジンアナライザー/依存性検査ツールを使用して行うことができます。パッケージマネージャには、これを行うためのメカニズムが含まれています。コンポーネントの脆弱性を悪用することはできない場合、分析が難しいが、単に更新または修正する方が簡単なであれば、それは許容できます。
       updateable_reused_components:
-        description:
-        details:
+        description: |
+          プロジェクトは
+          <ol>
+          <li>再使用された外部管理コンポーネントの識別と更新を容易にできるようにしている、 <strong>または</strong> </li><li>システムまたはプログラミング言語によって提供される標準コンポーネントを使用している</li>
+          </ol>
+          のどちらかでなければなりません。そうすれば、再利用されたコンポーネントに脆弱性が見つかった場合に、そのコンポーネントを簡単に更新することができます。
+        details: "この基準を満たす典型的な方法は、システムおよびプログラミング言語のパッケージ管理システムを使用することです。多くのFLOSSプログラムは、標準ライブラリーのローカルコピーである
+          \"コンビニエンス ライブラリー\"と一緒に頒布されます（フォークされている可能性があります）。それ自体は、それでいいです。しかし、プログラムがこれらのローカルな（フォークされた）コピーを使用しなければならない場合、
+          セキュリティ アップデートとして\"標準\"ライブラリをアップデートすると、これらの追加のコピーは依然として脆弱のままです。これは、特にクラウド
+          ベース システムの問題です。クラウド プロバイダが \"標準\"ライブラリを更新してもプログラムがそれらを使用しない場合、更新プログラムは実際には役に立ちません。たとえば、<a
+          href=\"http://spot.livejournal.com/312320.html\">「Chromium：適切なパッケージとしてFedoraにまだない理由は何ですか？」Tom
+          Callaway著</a>を参照してください。\n\n"
       interfaces_current:
         description: 'プロジェクトは、使用するテクノロジ セット（その "テクノロジ スタック"）において、プロジェクトがサポートするユーザの超大多数がFLOSSの代替案を利用可能な（ユーザが代替手段にアクセスしている）場合には、評価の低いまたは時代遅れの機能とAPIの使用を避けるべきです。
 
@@ -1127,14 +1152,25 @@ ja:
 
 '
       test_statement_coverage80:
-        description:
-        details:
+        description: 'プロジェクトは、選択された言語でこの基準を測定できる少なくとも1つのFLOSSツールがある場合、少なくとも80％のステートメントカバレッジを提供するFLOSS自動テストスイートを備えていなければなりません。
+
+'
+        details: 'gcov / lcov、Blanket.js、Istanbul、JCovなど、多くのFLOSSツールが、テストカバレッジを測定できます。この基準を満たすことは、テスト
+          スイートが徹底していることを保証するものではないですが、それよりも、この基準を満たさないことは、貧弱なテスト スイートであることを示す強い指標であることに注意してください。
+
+'
       test_policy_mandated:
-        description:
+        description: 'プロジェクトには、主要な新機能が追加されると、新しい機能のテストが自動化されたテスト スイートに追加されなければならないという正式な文書化されたポリシーがなければなりません。
+
+'
       tests_documented_added:
-        description:
+        description: 'プロジェクトは、変更提案のための文書化された手順に、重要な新機能用にテストを追加するという方針を含まなければなりません。
+
+'
       warnings_strict:
-        description:
+        description: 'プロジェクトによって作成されたソフトウェアにある警告に、実際的な場合には、最大限に厳格にならなければなりません。
+
+'
       implement_secure_design:
         description: '適用できる場合、プロジェクトはセキュア設計原則（「know_secure_design」から）を実装しなければなりません。プロジェクトでソフトウェアが作成されていない場合は、「該当なし」（N
           / A）を選択します。
@@ -1185,12 +1221,20 @@ ja:
 
 '
       signed_releases:
-        description:
-        details:
+        description: 'プロジェクトは、広く普及することを意図しているプロジェクト結果のリリースには暗号で署名しなければなりませんし、パブリック署名鍵を入手して署名を検証する方法をユーザに説明するプロセスがなければなりません。これらの署名の秘密鍵は、ソフトウェアを一般に直接配布するために使用されるサイトにあってはなりません。リリースが広く普及することを意図していない場合は、「該当なし」（N/A）を選択します。
+
+'
+        details: 'プロジェクトの結果には、ソースコードと生成された成果物（実行可能ファイル、パッケージ、コンテナなど）が含まれます。生成された成果物は、ソースコードとは別に署名することができます。これらは、（暗号デジタル署名を使用して）署名付きgitタグとして実装できます。プロジェクトはgitのようなツールとは別に生成された結果を提供するかもしれませんが、そのような場合、別々の結果を別々に署名しなければなりません。
+
+'
       version_tags_signed:
-        description:
+        description: 'バージョン管理システムでは、<a href="＃signed_releases"> signed_releases </a>で説明されているように、重要なバージョンタグ（メジャーリリース、マイナーリリース、または公開されている脆弱性の一部であるタグ）を暗号署名して検証することが推奨されています。
+
+'
       static_analysis_common_vulnerabilities:
-        description:
+        description: 'プロジェクトは、選択された言語でこの基準を実装できる少なくとも1つのFLOSSツールがある場合、解析された言語または環境で共通の脆弱性を探すためのルールまたはアプローチを備えた少なくとも1つの静的解析ツールを使用しなければならなりません。
+
+'
       dynamic_analysis_unsafe:
         description: "<em>もし</em>プロジェクトで作成されたソフトウェアにメモリ安全でない言語（CやC ++など）を使用して作成されたソフトウェアが含まれているならば、<em>そのときには</em>
           少なくとも1つの動的ツール（たとえば、ファジーまたはウェブ アプリケーション スキャナ）を、バッファの上書きなどのメモリの安全性の問題を検出するメカニズムと一緒にいつも使用します。プロジェクトがメモリ安全でない言語で書かれたソフトウェアを作成しない場合は、「該当なし」（N/A）を選択します。\n"
@@ -1199,7 +1243,7 @@ ja:
 
 '
         details: '保証ケースは、「システムのプロパティに関する特定の一連の重大なクレームが、特定の環境とアプリケーションに対して適切に正当化されていることを説得力のある正当な議論で示す証拠」である（<a
-          href="http：// nvlpubs.nist.gov/nistpubs/ir/2009/ir7608.pdf ">「構造化された保証ケースモデルを使用したソフトウェア保証」、Thomas
+          href="http://nvlpubs.nist.gov/nistpubs/ir/2009/ir7608.pdf">「構造化された保証ケースモデルを使用したソフトウェア保証」、Thomas
           Rhodes他、NIST Interagency Report 7608 </a>）。信頼境界は、データまたは実行がその信頼レベル、例えば、典型的なウェブアプリケーションにおけるサーバの境界、を変更する境界である。安全な設計原則（SaltzerやSchroeerなど）と一般的な実装セキュリティの弱点（OWASPトップ10やCWE
           / SANSトップ25など）をリストし、それぞれがどのように対抗しているかを示すのは一般的です。 <a href="https://github.com/coreinfrastructure/best-practices-badge/blob/master/doc/security.md">
           BadgeAppの保証ケース</a>は良い参考例になるかもしれません。これは、documentation_security、documentation_architecture、およびimplement_secure_designに関連しています。
@@ -1211,61 +1255,115 @@ ja:
       bus_factor:
         description: プロジェクトは2以上の "バス ファクタ"を持つ必要があります。
       contributors_unassociated:
-        description:
-        details:
+        description: 'プロジェクトには少なくとも2人の関係を持たない重要な貢献者がいなければなりません。
+
+'
+        details: '同じ組織によって作業に対しに支払われ（従業員または請負業者）、組織がプロジェクトの成果の恩恵を受ける場合、貢献者は関連します。財務補助金が他の組織を通過する場合、同じ組織のものであると見なされません（例えば、共通の政府やNGOのソースから異なる組織に支払われた科学補助金は、貢献者を関連させません）。過去1年間にプロジェクトに些細でない貢献をしていれば、その人は大きな貢献をしています。重要な貢献者の良い指標の例としては、少なくとも1,000行のコード、50個のコミット、または少なくとも20ページの文書化が挙げられます。
+
+'
       copyright_per_file:
-        description:
-        details:
+        description: 'プロジェクトは、少なくとも1つの関連する年と著作権者を特定する著作権記述書を各ソースファイルに含まなければなりません。
+
+'
+        details: 'これは、各ファイルの先頭近くに以下のコメントを含めることによって行うことができます： "<tt>Copyright[このプロジェクトまたはコンテンツの開始年]  -  [最近編集した年]、[プロジェクト創始者]と[プロジェクト名]
+          貢献者</tt> "
+
+'
       license_per_file:
-        description:
-        details:
+        description: 'プロジェクトは、各ソースファイルにライセンスステートメントを含まなければなりません。これは、各ファイルの先頭近くに次のコメントを含めることによって行うことができます：<a
+          href="https://spdx.org/using-spdx#identifiers"> <tt> SPDXライセンス識別子：[プロジェクトに対するSPDXライセンス表現]
+          </tt> </a>
+
+'
+        details: 'これは、ライセンスを特定する自然言語での記述を含めることによっても行うことができます。プロジェクトには、ライセンス テキストまたは完全なライセンステキストを指し示す安定したURLを含めることもできます。
+          license_location基準は、プロジェクトライセンスが標準の場所にあることを要求します。 SPDXライセンスの詳細については、<a href="https://github.com/david-a-wheeler/spdx-tutorial">このSPDXチュートリアル</a>を参照してください。
+          <a href="#copyright_per_file"> copyright_per_file </a>との関係に注意してください。その内容は通常、ライセンス情報に先行します。
+
+'
       repo_distributed:
-        description:
+        description: 'プロジェクトのソースリポジトリは、共通の分散バージョン管理ソフトウェア（gitやmercurialなど）を使用しなければなりません。
+
+'
       small_tasks:
-        description:
+        description: 'プロジェクトは、新規または偶に参加する貢献者によって実行できる小さなタスクを明確に識別しなければなりません。
+
+'
         details:
       require_2FA:
-        description:
+        description: 'プロジェクトは、中央リポジトリを変更したり、機密データ（プライベート脆弱性レポートなど）にアクセスするために、開発者に対して二要素認証（2FA）を要求する必要があります。推奨されませんが、2FAメカニズムは、SMSのような暗号化メカニズムを持たないメカニズムを使用することができます。
+
+'
       secure_2FA:
-        description:
+        description: 'プロジェクトの2要素認証（2FA）は、偽装を防ぐために暗号化メカニズムを使用すべきです。ショート メッセージ サービス（SMS）ベースの2FA自体は、暗号化されていないため、この基準を満たしていません。
+
+'
         details:
       code_review_standards:
-        description:
-        details:
+        description: 'プロジェクトは、コードレビューの実施方法、チェックする必要があるもの、受け入れられる必要があるものなど、コードレビュー要件を文書化しなければなりません。
+
+'
+        details: '<a href="#two_person_review"> two_person_review </a>とcontribution_requirementsも参照してください。
+
+'
       two_person_review:
         description:
       build_reproducible:
-        description:
+        description: プロジェクトが<a href="https://reproducible-builds.org/">再現可能なビルド</a>を持たなければなりません。ビルドが発生しない場合（たとえば、コンパイルされないでソースコードが直接使用されるスクリプト言語）、「該当なし」（N/A）を選択します。
         details: 再現可能なビルドは、複数の当事者がソース ファイルから情報を生成するプロセスを独立にやり直し、ビット単位でまったく同じ結果を得られることを意味します。ある場合には、これ（再現可能なビルド）は、あるソート順を強いることで解決されます。Javaスクリプトの開発者は、npm
           shrinkwrapとwebpack OccurenceOrderPluginの使用を検討するかもしれません。GCCとclangのユーザーは、-frandom-seedオプションが有用であることを見つけるかもしれません。ビルド環境（ツールセットを含む）は、リビルドに使用できる特定のコンテナや仮想マシンの暗号化ハッシュを指定することによって、外部パーティのために、しばしば定義可能です。<a
           href="https://reproducible-builds.org/docs/">再現可能なビルド プロジェクトは、これを行う方法を記載したドキュメントを有します</a>。
       test_invocation:
-        description:
+        description: 'テストスイートは、その言語の標準的な方法で呼び出すことができなければなりません。
+
+'
       test_continuous_integration:
-        description:
-        details:
+        description: 'プロジェクトは、新しいコードまたは変更されたコードが頻繁に中央コードリポジトリに統合され、その結果に対して自動化されたテストが実行される、継続的な統合を実装しなければなりません。
+
+'
+        details: 'ほとんどの場合、これは、プロジェクトでフルタイムで働く各開発者が少なくとも1日に1回統合作業をすることを意味します。
+
+'
       test_statement_coverage90:
-        description:
+        description: 'プロジェクトは、選択された言語でこの基準を測定できる少なくとも1つのFLOSSツールがある場合、少なくとも80％のステートメント
+          カバレッジを提供するFLOSS自動テストスイートを備えていなければなりません。
+
+'
       test_branch_coverage80:
-        description:
+        description: '選択された言語でこの基準を測定できる少なくとも1つのFLOSSツールがあれば、少なくとも80％のブランチカバレッジを提供するFLOSS自動テストスイートがプロジェクトに存在しなければなりません。
+
+'
       crypto_used_network:
-        description:
+        description: プロジェクトで作成されたソフトウェアは、ネットワーク通信すべてに対して、SSHv2以降、TLS1.2以降 (HTTPS)、IPsec、SFTP、SNMPv3などのセキュア
+          プロトコルをサポートしなければなりません。FTP、HTTP、telnet、SSLv3以前、SSHv1などのセキュアでないプロトコルは、デフォルトで無効にするべきで、ユーザーが特別に設定した亜場合のみ有効にします。プロジェクトによって作成されたソフトウェアがネットワーク通信をサポートしない場合、「該当なし」（N/A）を選択します。
       crypto_tls12:
-        description:
+        description: プロジェクトによって作成されたソフトウェアは、TLSをサポートあるいは使用する場合、少なくともTLSバージョン1.2をサポートしなければなりません。TLSの前身は、SSLと呼ばれていたことに注意して下さい。ソフトウェアがTLSを使用ない場合、「該当なし」（N/A）を選択します。
       hardened_site:
-        description:
-        details:
+        description: 'プロジェクトウェブサイト、リポジトリ（ウェブからアクセス可能な場合）、およびダウンロードサイト（別々の場合）には、許容できない値を持つキー強化ヘッダーが含まれていなければなりません。
+
+'
+        details: 'GitHubはこれを満たしています。 https://securityheaders.io/などのサイトでこれをすばやく確認できます。キーセキュリティ強化ヘッダーは、コンテンツ
+          セキュリティ ポリシー（CSP）、HTTP厳密トランスポート セキュリティ（HSTS）、X-Content-Type-Options（「nosniff」）、X-Frame-Options、X-XSS-Protectionです。
+
+'
       security_review:
-        description:
+        description: 'プロジェクトは過去5年間にセキュリティレビューを実施していなければなりません。このレビューは、セキュリティ要件とセキュリティ境界を考慮しなければならりません。
+
+'
         details:
       hardening:
-        description:
+        description: 'プロジェクトによって作成されたソフトウェアで強化メカニズムを使用しなければならないので、ソフトウェア欠陥がセキュリティ上の脆弱性を引き起こす可能性が低くなります。
+
+'
       dynamic_analysis:
-        description:
+        description: 'プロジェクトは、リリース前にプロジェクトによって作成されたソフトウェアの主要な製品リリースに対して、少なくとも1つの動的解析ツールを適用しなければなりません。
+
+'
       dynamic_analysis_enable_assertions:
-        description:
+        description: 'プロジェクトは、生成するソフトウェアに多くの実行時アサーションを含めるべきであり、動的分析中にそれらのアサーションをチェックするべきです。
+
+'
       achieve_silver:
-        description:
+        description: プロジェクトは、シルバー レベル バッジを達成しなければなりません。
   static_pages:
     home:
       badge_program: CII ベスト プラクティス バッジ プログラム
@@ -1348,6 +1446,7 @@ ja:
     Warning flags: 警告フラグ
     Working build system: 実動ビルドシステム
     Identification: 識別情報
+    Prerequisites:
   last_entry: 最後の翻訳エントリ
   admin_only: 管理者のみ。
   criterion_status:

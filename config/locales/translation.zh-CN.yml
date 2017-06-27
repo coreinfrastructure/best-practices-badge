@@ -996,7 +996,7 @@ zh-CN:
         description: '建议在发布之前，至少将一个动态分析工具应用于软件任何发布的主要生产版本。
 
 '
-        details: '动态分析工具通过执行特定输入来检查软件。例如，项目可以使用模糊工具（例如，<a href="http://lcamt​​uf.coredump.cx/afl/">
+        details: '动态分析工具通过执行特定输入来检查软件。例如，项目可以使用模糊工具（例如，<a href="http://lcamtuf.coredump.cx/afl/">
           American Fuzzy Lop </a>）或Web应用扫描程序（例如，<a href ="https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project">
           OWASP ZAP </a>或<a href="http://w3af.org/"> w3af </a>）。在某些情况下，<a href="https://github.com/google/oss-fuzz#introduction">
           OSS-Fuzz </a>项目可以对您的项目应用模糊测试。为满足此条款，动态分析工具需要以某种方式改变输入，以寻找各种问题，或者将其作为一个具有至少80％分支覆盖率的自动测试套件。
@@ -1648,6 +1648,7 @@ zh-CN:
     Warning flags: 警告标志
     Working build system: 可工作的构建系统
     Identification: 识别
+    Prerequisites:
   last_entry: 最后翻译条目
   admin_only: 仅限管理员。
   criterion_status:

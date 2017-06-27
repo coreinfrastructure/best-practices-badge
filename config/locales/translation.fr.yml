@@ -733,10 +733,10 @@ fr:
 '
         details: 'FLOSS est un logiciel distribué d''une manière qui répond à la <a
           href="https://opensource.org/osd-annotated">Définition de l''Open Source</a>
-          ou à la <a href="http://www.gnu.org /philosophy/free-sw.fr.html">Définition
+          ou à la <a href="http://www.gnu.org/philosophy/free-sw.fr.html">Définition
           du Logiciel Libre</a>. Des exemples de ces licences sont <a href="http://creativecommons.org/publicdomain/zero/1.0/">CC0</a>,
           <a href="https://opensource.org/licenses/MIT">MIT</a>, <a href="https://opensource.org/licenses/BSD-2-Clause">BSD
-          2-clause</a>, <a href="https://opensource.org/licences/BSD-3-Clause">BSD
+          2-clause</a>, <a href="https://opensource.org/licenses/BSD-3-Clause">BSD
           3-clause révisée</a>, <a href="https://opensource.org/licenses/Apache-2.0">Apache
           2.0</a>, <a href="https://opensource.org/licenses/lgpl-license">Lesser GNU
           General Public License (LGPL)</a>, et <a href="https://opensource.org/licenses/gpl-license">GNU
@@ -1231,7 +1231,7 @@ fr:
         details: 'Des exemples (selon le type de logiciel) incluent l''injection SQL,
           l''injection OS, le débordement mémoire classique, le cross-site scripting,
           l''authentification manquante et l''autorisation manquante. Voir <a href="http://cwe.mitre.org/top25/">CWE/SANS
-          top 25</a> ou <a href="https://www.owasp.org/index.php/Category: OWASP_Top_Ten_Project">OWASP
+          top 25</a> ou <a href="https://www.owasp.org/index.php/Category:OWASP_Top_Ten_Project">OWASP
           Top 10</a> pour les listes couramment utilisées.
 
 '
@@ -1703,7 +1703,7 @@ fr:
           les contributions. Cela devrait se concentrer uniquement sur le comportement
           au sein de la communauté / lieu de travail du projet. Des exemples de codes
           de conduite sont le <a href="http://contributor-covenant.org/">Code de conduite
-          du pacte de contributeur</a> et le <a href="https://www.kernel.org /doc/html/latest/process/code-of-conflict.html">code
+          du pacte de contributeur</a> et le <a href="https://www.kernel.org/doc/html/latest/process/code-of-conflict.html">code
           de conflit</a> du noyau Linux.
 
 '
@@ -1824,8 +1824,8 @@ fr:
 
 '
         details: |
-          Pour les applications Web, consultez les <a href="https://www.w3.org/TR/WCAG20/">Directives d'accessibilité des contenus Web (WCAG 2.0)</a> et son document à l'appui <a href="https: //www.w3.org/TR/UNDERSTANDING-WCAG20/Overview.html">Comprendre WCAG 2.0</a> ; voir aussi <a href="https://www.w3.org/standards/webdesign/accessibility">les informations d'accessibilité du W3C</a>. Pour les applications IHM, envisagez d'utiliser les directives d'accessibilité spécifiques à l'environnement (telles que <a href="https://developer.gnome.org/accessibility-devel-guide/stable/">Gnome</a>, <a href="https://accessibility.kde.org/">KDE</a>, <a href="http://docs.xfce.org/xfce/xfce4 -settings/accessibility">XFCE</a>, <a href="https://developer.android.com/guide/topics/ui/accessibility/">Android</a>, <a href="https://developer.apple.com/accessibility/ios/">IOS</a>, <a href="http://www.apple.com/accessibility/osx/voiceover/">Mac</a> et <a href="https://docs.microsoft.com/fr-fr/windows/uwp/accessibility/accessibility-overview">Windows</a>). Certaines applications IHM textuelles (par exemple, les programmes « ncurses ») peuvent faire certaines choses pour se rendre plus accessibles (par exemple, le paramètre « force-arrow-cursor » de « alpine »). La plupart des applications en ligne de commande sont assez accessibles telles quelles. Ce critère est souvent N/A, par exemple, pour les bibliothèques. Voici quelques exemples d'actions à prendre ou de questions à considérer : <ul> <li>Fournir des alternatives de texte pour tout contenu non textuel afin qu'il puisse être changé en d'autres formes dont les gens ont besoin, comme une plus grande taille, le braille, une sortie vocale, des symboles ou une langue plus simple (<a href="https://www.w3.org/TR/UNDERSTANDING-WCAG20/text-equiv.html">WCAG 2.0 directive 1.1</a>)
-          <li>La couleur n'est pas utilisée comme le seul moyen visuel de transmettre des informations, d'indiquer une action, de provoquer une réponse ou de distinguer un élément visuel. (<a href="https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast-withoutcolor.html">WCAG 2.0 directive 1.4.1</a>)
+          Pour les applications Web, consultez les <a href="https://www.w3.org/TR/WCAG20/">Directives d'accessibilité des contenus Web (WCAG 2.0)</a> et son document à l'appui <a href="https://www.w3.org/TR/UNDERSTANDING-WCAG20/Overview.html">Comprendre WCAG 2.0</a> ; voir aussi <a href="https://www.w3.org/standards/webdesign/accessibility">les informations d'accessibilité du W3C</a>. Pour les applications IHM, envisagez d'utiliser les directives d'accessibilité spécifiques à l'environnement (telles que <a href="https://developer.gnome.org/accessibility-devel-guide/stable/">Gnome</a>, <a href="https://accessibility.kde.org/">KDE</a>, <a href="http://docs.xfce.org/xfce/xfce4-settings/accessibility">XFCE</a>, <a href="https://developer.android.com/guide/topics/ui/accessibility/">Android</a>, <a href="https://developer.apple.com/accessibility/ios/">IOS</a>, <a href="http://www.apple.com/accessibility/osx/voiceover/">Mac</a> et <a href="https://docs.microsoft.com/fr-fr/windows/uwp/accessibility/accessibility-overview">Windows</a>). Certaines applications IHM textuelles (par exemple, les programmes « ncurses ») peuvent faire certaines choses pour se rendre plus accessibles (par exemple, le paramètre « force-arrow-cursor » de « alpine »). La plupart des applications en ligne de commande sont assez accessibles telles quelles. Ce critère est souvent N/A, par exemple, pour les bibliothèques. Voici quelques exemples d'actions à prendre ou de questions à considérer : <ul> <li>Fournir des alternatives de texte pour tout contenu non textuel afin qu'il puisse être changé en d'autres formes dont les gens ont besoin, comme une plus grande taille, le braille, une sortie vocale, des symboles ou une langue plus simple (<a href="https://www.w3.org/TR/UNDERSTANDING-WCAG20/text-equiv.html">WCAG 2.0 directive 1.1</a>)
+          <li>La couleur n'est pas utilisée comme le seul moyen visuel de transmettre des informations, d'indiquer une action, de provoquer une réponse ou de distinguer un élément visuel. (<a href="https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast-without-color.html">WCAG 2.0 directive 1.4.1</a>)
           <li>La présentation visuelle du texte et des images du texte a un taux de contraste d'au moins 4,5:1, à l'exception du grand texte, du texte incident, et des logotypes (<a href="https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast-contrast.html">WCAG 2.0 directive 1.4.3</a>)
           <li>Rendez toutes les fonctionnalités disponibles à partir d'un clavier (WCAG directive 2.1) <li>Une IHM ou un projet basé sur le Web DEVRAIT tester avec au moins un lecteur d'écran sur la (les) plate-forme(s) cible(s) (par exemple NVDA, Jaws ou WindowEyes sur Windows ; VoiceOver sur Mac & iOS ; Orca sous Linux/BSD ; TalkBack sur Android). Les programmes IHM textuels PEUVENT travailler à réduire le retrait excessif pour éviter la lecture redondante par les lecteurs d'écran.</ul>
       internationalization:
@@ -2651,6 +2651,7 @@ fr:
     Warning flags: Options d'avertissement
     Working build system: Système de construction opérationnel
     Identification: Identification
+    Prerequisites:
   last_entry: Dernière entrée de traduction
   admin_only: Admin seulement.
   criterion_status:

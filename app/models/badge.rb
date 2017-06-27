@@ -6,7 +6,7 @@
 
 # rubocop:disable Rails/FindEach
 class Badge
-  ACCEPTABLE_PERCENTAGES = (0..99).map { |num| num }.freeze
+  ACCEPTABLE_PERCENTAGES = (0..99).to_a.freeze
   ACCEPTABLE_LEVELS = %w[passing silver gold].freeze
 
   ACCEPTABLE_INPUTS = (ACCEPTABLE_PERCENTAGES + ACCEPTABLE_LEVELS).freeze

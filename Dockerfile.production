@@ -7,6 +7,8 @@ RUN apk --no-cache add libpq nodejs tzdata
 # Set Rails to run in production
 ENV RAILS_ENV production 
 ENV RACK_ENV production
+ENV SECRET_KEY_BASE 8645c4e1c9ec1c433666e93482888c6ac317de3f11e1cf52f49bbbd99eb87e71126831c5005e3385e9128a9fe2cc98c8f07f7db8e8d687a7e31b00f3a98355c1
+ENV FASTLY_API_KEY 62e6b55493b47840bbcc6d345a74fb1a
 
 # This enables caching gems in a separate container
 ENV BUNDLE_PATH /ruby_gems

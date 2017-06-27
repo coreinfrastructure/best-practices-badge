@@ -27,7 +27,7 @@ environment or for deployment. We have rearchitected the deployment to use Docke
 * `docker-compose run --rm web bundle exec rake fake_production` # Run a rake task
 * `docker-compose up` # Start all containers
 * `docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q) && docker rmi $(docker images -a -q)` # Delete everything
-* `docker-compose -f docker-compose.production.yml up --build` production version
+* `docker-compose -f docker-compose.production.yml up --build` # production version
 
 ## Old instructions
 

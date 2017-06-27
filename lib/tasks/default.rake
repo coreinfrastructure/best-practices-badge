@@ -468,8 +468,10 @@ def validate_links_in_string(translation, from, seen)
   translation.scan(/href=["'][^"']+["']/).each do |snippet|
     link = snippet[6..-2]
     next if seen.include?(link) # Already seen it, don't complain again.
-    seen.add(link)
-    unless link_okay?(link)
+    if link_okay?(link)
+      seen.add(link)
+    else
+      # Don't add failures to what we've seen, so that we report all failures
       puts "\nFAILED LINK IN #{from.join('.')} : <#{link}>"
     end
   end

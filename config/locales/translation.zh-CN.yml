@@ -32,7 +32,7 @@ zh-CN:
     login_html: <span class="glyphicon glyphicon-log-in"></span> 登录
     footer_text_html: <small> <strong>需要帮助？有疑问？发现问题？请 <a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">发送邮件</a>
       或 <em><a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
-      target="_blank">提出问题</a></em>.</strong> © 2015-2017 <a href="https://www.coreinfrastructure.org/
+      target="_blank">提出问题</a></em>.</strong> © 2015-2017 <a href="https://www.coreinfrastructure.org/"
       target="_blank">Core Infrastructure Initiative （核心基础设施计划）</a>, 一个 <a href="https://www.linuxfoundation.org/"
       target="_blank">Linux 基金会</a> 合作项目。版权所有。 请查阅我们的 <a href="https://www.linuxfoundation.org/privacy"
       target="_blank">隐私策略</a> 和 <a href="https://www.linuxfoundation.org/terms" target="_blank">使用条款</a>.
@@ -1012,7 +1012,7 @@ zh-CN:
         details: '检测内存安全问题的机制的示例包括<a href="https://github.com/google/sanitizers/wiki/AddressSanitizer">AddressSanitizer（ASAN）</a>（可在GCC和LLVM中使用），<a
           href ="http://clang.llvm.org/docs/MemorySanitizer.html">“Memory Sanitizer”</a>和<a
           href="http://valgrind.org/"> valgrind </a>。其他可能使用的工具包括<a href="http://clang.llvm.org/docs/ThreadSanitizer.html">ThreadSanitizer</a>和<a
-          href ="http://clang.llvm.org/docs /UndefinedBehaviorSanitizer.html">UndefinedBehaviorSanitizer</a>。广泛的断言也将起作用。
+          href ="http://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html">UndefinedBehaviorSanitizer</a>。广泛的断言也将起作用。
 
 '
       dynamic_analysis_enable_assertions:
@@ -1174,7 +1174,7 @@ zh-CN:
 
 '
         details: |-
-          对于Web应用程序，请参阅 <a href="https://www.w3.org/TR/WCAG20/">Web 内容无障碍指导 (WCAG 2.0，英文)</a> 以及其支持文档 <a href="https://www.w3.org/TR/UNDERSTANDING-WCAG20/Overview.html">理解 WCAG 2.0（英文）</a>；或者 <a href="https://www.w3.org/standards/webdesign/accessibility">W3C 无障碍信息（英文）</a>. 图形界面（GUI）应用考虑使用环境特定的无障碍指导（例如 <a href="https://developer.gnome.org/accessibility-devel-guide/stable/">Gnome</a>, <a href="https://accessibility.kde.org/">KDE</a>, <a href="http://docs.xfce.org/xfce/xfce4-settings/accessibility">XFCE</a>, <a href="https://developer.android.com/guide/topics/ui/accessibility/">Android</a>, <a href="https://developer.apple.com/accessibility/ios/">iOS</a>, <a href="http://www.apple.com/accessibility/osx/voiceover/">Mac</a>, 以及 <a href="https://msdn.microsoft.com/en-us/windows/uwp/accessibility/accessibility-overview)">Windows</a>). 一些TUI应用 (例如，`ncurses` 程序) 可以做一些特定的工作，增强可访问性（例如，`alpine` 的 `force-arrow-cursor` 设置）。多数命令行应用没有特别的无障碍设置。本条款经常是不涉及（N/A），例如，对于组件库。以下是一些要采取的行动或需要考虑的问题的例子： <ul> <li>提供非文字内容的文字替代，以便于转换为其他需要的格式，如大字体、盲文、语音、符号或者简单文字（ <a href="https://www.w3.org/TR/UNDERSTANDING-WCAG20/text-equiv.html">WCAG 2.0 指导 1.1 （英文）</a>)
+          对于Web应用程序，请参阅 <a href="https://www.w3.org/TR/WCAG20/">Web 内容无障碍指导 (WCAG 2.0，英文)</a> 以及其支持文档 <a href="https://www.w3.org/TR/UNDERSTANDING-WCAG20/Overview.html">理解 WCAG 2.0（英文）</a>；或者 <a href="https://www.w3.org/standards/webdesign/accessibility">W3C 无障碍信息（英文）</a>. 图形界面（GUI）应用考虑使用环境特定的无障碍指导（例如 <a href="https://developer.gnome.org/accessibility-devel-guide/stable/">Gnome</a>, <a href="https://accessibility.kde.org/">KDE</a>, <a href="http://docs.xfce.org/xfce/xfce4-settings/accessibility">XFCE</a>, <a href="https://developer.android.com/guide/topics/ui/accessibility/">Android</a>, <a href="https://developer.apple.com/accessibility/ios/">iOS</a>, <a href="http://www.apple.com/accessibility/osx/voiceover/">Mac</a>, 以及 <a href="https://msdn.microsoft.com/en-us/windows/uwp/accessibility/accessibility-overview">Windows</a>). 一些TUI应用 (例如，`ncurses` 程序) 可以做一些特定的工作，增强可访问性（例如，`alpine` 的 `force-arrow-cursor` 设置）。多数命令行应用没有特别的无障碍设置。本条款经常是不涉及（N/A），例如，对于组件库。以下是一些要采取的行动或需要考虑的问题的例子： <ul> <li>提供非文字内容的文字替代，以便于转换为其他需要的格式，如大字体、盲文、语音、符号或者简单文字（ <a href="https://www.w3.org/TR/UNDERSTANDING-WCAG20/text-equiv.html">WCAG 2.0 指导 1.1 （英文）</a>)
           <li>颜色不被用作传达信息，指示动作，提示响应或区分视觉元素的唯一视觉方式。 (
             <a href="https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast-without-color.html">WCAG 2.0 指导 1.4.1（英文）</a>)
           <li>文本和文字图像的视觉呈现对比度至少为4.5：1，除了大文本，次要文本和标识符之外。 (

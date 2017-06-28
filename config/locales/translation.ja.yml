@@ -42,7 +42,7 @@ ja:
     login_html: <span class="glyphicon glyphicon-log-in"></span> ログイン
     footer_text_html: <small> <strong>疑問、質問、または問題がある場合は<em> <a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">電子メールで報告する</a></em>か、<em>
       <a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
-      target="_blank">こちらから問題を提出</a></em>してください。</strong>  © 2015-2017 <a href="https://www.coreinfrastructure.org/
+      target="_blank">こちらから問題を提出</a></em>してください。</strong>  © 2015-2017 <a href="https://www.coreinfrastructure.org/"
       target="_blank">Core Infrastructure Initiative</a>, a <a href="https://www.linuxfoundation.org/"
       target="_blank">Linux Foundation</a> Collaborative Project. All Rights Reserved.
       <a href="https://www.linuxfoundation.jp/privacy" target="_blank">プライバシー ポリシー</a>
@@ -802,7 +802,7 @@ ja:
         description: 'リリース前に、ソフトウェアの主要な製品リリースに少なくとも1つの動的解析ツールを適用することが示唆されています。
 
 '
-        details: '動的解析ツールは、ソフトウェアを特定の入力で実行して検査します。たとえば、プロジェクトは、ファジングツール（<a href="http://lcamt​​uf.coredump.cx/afl/">アメリカンファジーロップ</a>など）やウェブ
+        details: '動的解析ツールは、ソフトウェアを特定の入力で実行して検査します。たとえば、プロジェクトは、ファジングツール（<a href="http://lcamtuf.coredump.cx/afl/">アメリカンファジーロップ</a>など）やウェブ
           アプリケーション スキャナ（例：<a href="https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project">
           OWASP ZAP </a>または<a href="http://w3af.org/"> w3af </a>）です。場合によっては、<a href="https://github.com/google/oss-fuzz#introduction">
           OSS-Fuzz </a>プロジェクトがプロジェクトにファズテストを適用する可能性があります。この基準のために、動的分析ツールは、様々な種類の問題を探すために何らかの方法で入力を変更するか<em>または</em>少なくとも80％のブランチ
@@ -819,7 +819,7 @@ ja:
           href="http://clang.llvm.org/docs/MemorySanitizer.html"> Memory Sanitizer
           </a>、および<a href="http://valgrind.org/"> valgrind </a>が含まれます。他に使用される可能性のあるツールには、<a
           href="http://clang.llvm.org/docs/ThreadSanitizer.html">スレッドサニタイザ</a>と<a
-          href="http://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html ">定義されていない動作サニタイザ</a>を参照してください。広範なアサーションも機能します。
+          href="http://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html">定義されていない動作サニタイザ</a>を参照してください。広範なアサーションも機能します。
 
 '
       dynamic_analysis_enable_assertions:
@@ -1228,7 +1228,7 @@ ja:
 
 '
       version_tags_signed:
-        description: 'バージョン管理システムでは、<a href="＃signed_releases"> signed_releases </a>で説明されているように、重要なバージョンタグ（メジャーリリース、マイナーリリース、または公開されている脆弱性の一部であるタグ）を暗号署名して検証することが推奨されています。
+        description: 'バージョン管理システムでは、<a href="#signed_releases"> signed_releases </a>で説明されているように、重要なバージョンタグ（メジャーリリース、マイナーリリース、または公開されている脆弱性の一部であるタグ）を暗号署名して検証することが推奨されています。
 
 '
       static_analysis_common_vulnerabilities:

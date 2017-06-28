@@ -43,7 +43,7 @@ ru:
     footer_text_html: '<small> <strong>Нужна помощь? Есть вопрос? Видите ошибку? Пожалуйста,
       отправьте <em><a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">электронное
       письмо</a></em> или <em><a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
-      target="_blank">вопрос на GitHub</a></em>.</strong> © 2015-2017 <a href="https://www.coreinfrastructure.org/
+      target="_blank">вопрос на GitHub</a></em>.</strong> © 2015-2017 <a href="https://www.coreinfrastructure.org/"
       target="_blank">Core Infrastructure Initiative</a>, a <a href="https://www.linuxfoundation.org/"
       target="_blank">Linux Foundation</a> Collaborative Project. All Rights Reserved.
       Please see our <a href="https://www.linuxfoundation.org/privacy" target="_blank">privacy
@@ -1185,12 +1185,12 @@ ru:
           (включая <a href="https://h3xstream.github.io/find-sec-bugs/">FindSecurityBugs</a>),
           <a href="https://pmd.github.io/">PMD</a>, <a href="http://brakemanscanner.org/">Brakeman</a>,
           <a href="https://scan.coverity.com/">Анализатор качества Coverity</a>, и
-          <a href="http://www8.hp.com/au/en/software-solutions/static-code-analysis-sast/index.html">статический
-          анализатор кода HP Fortify</a>. Более крупные списки инструментов можно
-          найти в таких местах, как <a href="https://en.wikipedia.org/wiki/List_of_tools_for_static_code_analysis">Wikipedia
+          <a href="https://saas.hpe.com/en-us/software/sca">статический анализатор
+          кода HP Fortify</a>. Более крупные списки инструментов можно найти в таких
+          местах, как <a href="https://en.wikipedia.org/wiki/List_of_tools_for_static_code_analysis">Wikipedia
           list of tools for static code analysis</a>, <a href="https://www.owasp.org/index.php/Static_Code_Analysis">OWASP
-          information on static code analysis</a>, <a href="http://samate.nist.gov/index.php/Source_Code_Security_Analyzers.html
-          ">NIST list of source code security analyzers</a> и <a href="http://www.dwheeler.com/essays/static-analysis-tools.html">Wheeler''s
+          information on static code analysis</a>, <a href="http://samate.nist.gov/index.php/Source_Code_Security_Analyzers.html">NIST
+          list of source code security analyzers</a> и <a href="http://www.dwheeler.com/essays/static-analysis-tools.html">Wheeler''s
           list of static analysis tools</a>. <a href="https://continuousassurance.org/">SWAMP</a>
           является бесплатной платформой для оценки уязвимостей в программном обеспечении
           с использованием различных инструментов. Если для используемого языка(ов)
@@ -1243,10 +1243,10 @@ ru:
           критерия инструмент динамического анализа должен каким-то образом варьировать
           исходные данные, чтобы искать проблемы разного рода <em>или</em> быть автоматическим
           набором тестов с покрытием веток исполнения не менее 80%. Страница <a href="https://ru.wikipedia.org/wiki/%D0%94%D0%B8%D0%BD%D0%B0%D0%BC%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B9_%D0%B0%D0%BD%D0%B0%D0%BB%D0%B8%D0%B7_%D0%BA%D0%BE%D0%B4%D0%B0">Википедии
-          о динамическом анализе</a> и <a href="https://www.owasp.org/index.php /
-          Fuzzing ">cтраница OWASP о фаззинг-тестировании</a> указывают некоторые
-          инструменты динамического анализа. Использование инструмента/ов анализа
-          МОЖЕТ, но не обязано быть сосредоточено на поиске уязвимостей в безопасности.
+          о динамическом анализе</a> и <a href="https://www.owasp.org/index.php/Fuzzing">cтраница
+          OWASP о фаззинг-тестировании</a> указывают некоторые инструменты динамического
+          анализа. Использование инструмента/ов анализа МОЖЕТ, но не обязано быть
+          сосредоточено на поиске уязвимостей в безопасности.
 
 '
       dynamic_analysis_unsafe:
@@ -1863,8 +1863,8 @@ ru:
           сборки (включая набор инструментов) часто может быть определена для внешних
           сторон путём указания криптографической суммы (hash) для конкретного контейнера
           или виртуальной машины, которые они могут использовать для пересборки. <a
-          href="https://reproducible-builds.org/docs/">В проекте reproducible-builds.org
-          есть документация о том, как это сделать </a>.
+          href="https://reproducible-builds.org/docs/">В проекте Reproducible Builds
+          есть документация о том, как это сделать</a>.
 
 '
       test_invocation:

@@ -33,7 +33,7 @@ fr:
     footer_text_html: '<small> <strong>Vous avez besoin d''aide ? Vous avez une question
       ? Vous voyez un problème ? Merci d''<em><a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">envoyer
       un email</a></em> ou de <em><a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
-      target="_blank">reporter un problème</a></i>.</strong> © 2015-2017 <a href="https://www.coreinfrastructure.org/
+      target="_blank">reporter un problème</a></i>.</strong> © 2015-2017 <a href="https://www.coreinfrastructure.org/"
       target="_blank"> Core Infrastructure Initiative</a>, un projet collaboratif
       de la <a href="https://www.linuxfoundation.org/" target="_blank">Fondation Linux</a>.
       Tous droits réservés. Consultez notre <a href="https://www.linuxfoundation.org/privacy"
@@ -1513,7 +1513,7 @@ fr:
           Sanitizer (ASAN)</a> (disponible dans GCC et LLVM), <a href="http://clang.llvm.org/docs/MemorySanitizer.html">Memory
           Sanitizer</a> et <a href="http://valgrind.org/">valgrind</a>. D''autres
           outils potentiellement utilisés incluent <a href="http://clang.llvm.org/docs/ThreadSanitizer.html">thread
-          sanitizer</a> et <a href="http://clang.llvm.org/ docs/UndefinedBehaviorSanitizer.html">undefined
+          sanitizer</a> et <a href="http://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html">undefined
           behavior sanitizer</a>. La généralisation de l''utilisation des assertions
           fonctionnera également.
 

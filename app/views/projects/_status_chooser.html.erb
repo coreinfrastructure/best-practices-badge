@@ -3,8 +3,8 @@
  project_criterion_status = project[status_symbol]
  criterion_result = project.get_criterion_result(criterion)
 
- cache ['buttons', criterion.to_s, criteria_level, is_disabled, locale,
-        project_criterion_status ] do
+ cache ['buttons', criterion.to_s, criteria_level, criterion_result,
+        is_disabled, locale, project_criterion_status ] do
    passing_class = if (criterion_result == :criterion_passing && is_disabled)
                      ' criterion-passing'
                    else

@@ -530,6 +530,7 @@ task update_all_badge_percentages: :environment do
   Project.update_all_badge_percentages(Criteria.keys)
 end
 
+desc 'Run to recalculate higher-level badge percentages for all projects'
 task update_all_higher_level_badge_percentages: :environment do
   Project.update_all_badge_percentages(Criteria.keys - ['0'])
 end

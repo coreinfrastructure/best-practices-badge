@@ -137,6 +137,7 @@ en:
       allow_na: Allow N/A
       require_url: Require URL
       details: Includes details
+      new_this_level: New at this level
       future: Future
       project_stats_html: You can see statistics about projects over time at the <a href="/project_stats">project stats page</a>.
   users:

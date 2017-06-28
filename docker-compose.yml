@@ -18,7 +18,7 @@ services:
       - "4000:4000"
     volumes:
       - .:/app
-      - gems:/ruby_gems
+      - gems:/gems_cache
     # Entrypoint for proper stopping: https://stackoverflow.com/a/38732187/1935918
     entrypoint: ["/app/lib/docker-entrypoint.sh"]
     command: ["rails","server","-b","0.0.0.0","-p","3000"]
@@ -36,4 +36,4 @@ services:
   gems:
     image: busybox
     volumes:
-      - /ruby_gems
+      - /gems_cache

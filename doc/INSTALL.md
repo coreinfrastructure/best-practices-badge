@@ -13,7 +13,7 @@ environment or for deployment. We have rearchitected the deployment to use Docke
 ## Install Docker CE
 
 * Install git if you don't already have it and clone this repo.
-* Follow the [directions](https://docs.docker.com/engine/installation/) to install the stable version of Docker CE on your OS.
+* Follow the [directions](https://docs.docker.com/engine/installation/) to install the ***edge*** version of Docker CE on your OS. We need edge (>=17.05) to get the very useful support for [multi-stage](https://docs.docker.com/engine/userguide/eng-image/multistage-build/) builds.
 
 ## Build and run the Docker images
 

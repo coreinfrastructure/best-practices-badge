@@ -4,6 +4,9 @@
 # Ignore bundler config.
 /.bundle
 
+# Ignore docs
+/doc
+
 # Ignore simplecov output
 /coverage/
 

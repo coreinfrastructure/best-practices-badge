@@ -218,7 +218,7 @@ en:
         datetime (not including projects that were also deleted in the
         same 24 hour period).
         Similarly, the dataset
-        "projects edited since the day before" is a set of counts of how many
+        "projects updated since the day before" is a set of counts of how many
         projects were edited within 24 hours of the given datetime
         (not including projects that were created or deleted
         in the same 24 hour period).

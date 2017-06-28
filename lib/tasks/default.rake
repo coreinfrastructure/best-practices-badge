@@ -427,6 +427,80 @@ if Rails.env.development?
   end
 end
 
+require 'net/http'
+# Request uri, reply true if fetchable. Follow redirects 'limit' times.
+# See: https://docs.ruby-lang.org/en/2.0.0/Net/HTTP.html
+# rubocop:disable Metrics/MethodLength
+def fetchable?(uri_str, limit = 10)
+  return false if limit <= 0
+  # Use GET, not HEAD. Some websites will say a page doesn't exist when given
+  # a HEAD request, yet will redirect correctly on a GET request. Ugh.
+  response = Net::HTTP.get_response(URI.parse(uri_str))
+  case response
+  when Net::HTTPSuccess then
+    return true
+  when Net::HTTPRedirection then
+    # Recurse, because redirection might be to a different site
+    location = response['location']
+    warn "    redirected to <#{location}>"
+    return fetchable?(location, limit - 1)
+  else
+    return false
+  end
+end
+# rubocop:enable Metrics/MethodLength
+
+def link_okay?(link)
+  return false if link.blank?
+  # '%{..}' is used when we generate URLs, presume they're okay.
+  return true if link.start_with?('mailto:', '/', '#', '%{')
+  # Shortcut: If we have anything other than http/https, it's wrong.
+  return false unless link.start_with?('https://', 'http://')
+  # Quick check - if there's a character other than URI-permitted, fail.
+  # Note that space isn't included (including space is a common error).
+  return false if %r{[^-A-Za-z0-9_\.~!*'\(\);:@\&=+\$,\/\?#\[\]%]}.match?(link)
+  warn "  <#{link}>"
+  fetchable?(link)
+end
+
+require 'set'
+def validate_links_in_string(translation, from, seen)
+  translation.scan(/href=["'][^"']+["']/).each do |snippet|
+    link = snippet[6..-2]
+    next if seen.include?(link) # Already seen it, don't complain again.
+    if link_okay?(link)
+      seen.add(link)
+    else
+      # Don't add failures to what we've seen, so that we report all failures
+      puts "\nFAILED LINK IN #{from.join('.')} : <#{link}>"
+    end
+  end
+end
+
+# Recursive validate links.  "seen" refers to a set of links already seen.
+# To recurse we really want kind_of?, not is_a?, so disable rubocop rule
+# rubocop:disable Style/ClassCheck
+def validate_links(translation, from, seen)
+  if translation.kind_of?(Array)
+    translation.each_with_index do |i, part|
+      validate_links(part, from + [i], seen)
+    end
+  elsif translation.kind_of?(Hash)
+    translation.each { |key, part| validate_links(part, from + [key], seen) }
+  elsif translation.kind_of?(String) # includes safe_html
+    validate_links_in_string(translation.to_s, from, seen)
+  end
+end
+# rubocop:enable Style/ClassCheck
+
+desc 'Validate hypertext links'
+task validate_hypertext_links: :environment do
+  seen = Set.new # Track what we've already seen (we'll skip them)
+  I18n.available_locales.each do |loc|
+    validate_links I18n.t('.', locale: loc), [loc], seen
+  end
+end
+
 # Convert project.json -> project.sql (a command to re-insert data).
 # This only *generates* a SQL command; I did it this way so that it's easy
 # to check the command to be run *before* executing it, and this also makes

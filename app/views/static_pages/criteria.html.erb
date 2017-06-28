@@ -14,9 +14,11 @@
       <th><%= t '.allow_na' %></th>
       <th><%= t '.require_url' %></th>
       <th><%= t '.details' %></th>
+      <th><%= t '.new_this_level' %></th>
       <th><%= t '.future' %></th>
     </tr>
-    <% ['0', '1', '2'].each do |level| %>
+    <% previous_criteria = [] # For counting "new this level"
+       ['0', '1', '2'].each do |level| %>
       <tr>
         <% future_criteria, active_criteria =
              Criteria[level].values.partition(&:future?) %>
@@ -28,6 +30,12 @@
         <td><%= active_criteria.count(&:na_allowed?) %></td>
         <td><%= active_criteria.count(&:met_url_required?) %></td>
         <td><%= active_criteria.count(&:details_present?) %></td>
+        <td><%=
+          # We *only* consider active criteria for "new this level".
+          new_criteria = active_criteria.map { |x| x.name } -
+            previous_criteria
+          new_criteria.length %></td>
+        <% previous_criteria += new_criteria %>
         <td><%= future_criteria.count %></td>
       </tr>
     <% end %>

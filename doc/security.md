@@ -430,7 +430,8 @@ All text used for display is in the directory "config/locales"; on the figure
 this is shown as I18n (internationalized) text.
 The source text specific to the application is in English
 in file config/locales/en.yml.
-The "rake translation:sync" command transmits the current version of en.yml
+The "rake translation:sync" command, which is executed within the
+*development* environment, transmits the current version of en.yml
 to the site translation.io, and loads the current text from translation.io into
 the various config/locales files.
 Only authorized translators are given edit rights to translations on

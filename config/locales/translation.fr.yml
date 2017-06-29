@@ -34,8 +34,8 @@ fr:
       ? Vous voyez un problème ? Merci d''<em><a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">envoyer
       un email</a></em> ou de <em><a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
       target="_blank">reporter un problème</a></i>.</strong> © 2015-2017 <a href="https://www.coreinfrastructure.org/"
-      target="_blank"> Core Infrastructure Initiative</a>, un projet collaboratif
-      de la <a href="https://www.linuxfoundation.org/" target="_blank">Fondation Linux</a>.
+      target="_blank">Core Infrastructure Initiative</a>, un projet collaboratif de
+      la <a href="https://www.linuxfoundation.org/" target="_blank">Fondation Linux</a>.
       Tous droits réservés. Consultez notre <a href="https://www.linuxfoundation.org/privacy"
       target="_blank">politique de confidentialité</a> et nos <a href="https://www.linuxfoundation.org/terms"
       target="_blank">conditions d''utilisation </a>. </small>
@@ -159,13 +159,17 @@ fr:
         » est l''ensemble des nombres de projets créés dans les 24 heures précédent
         la date donnée (en ignorant les projets qui ont également été supprimés dans
         la même période de 24 heures). De même, la donnée « projets édités depuis
-        la veille » est un ensemble des nombres de projets édités dans les 24 heures
-        précédent la date donnée (en ignorant les projets créés ou supprimés dans
-        la même période de 24 heures). Les moyennes sur 7 jours montrent les moyennes
-        correspondantes sur 7 jours. Vous pouvez sélectionner des couleurs dans la
-        légende pour cacher et afficher les données correspondantes.
+        la veille » est un ensemble des nombres de projets mis à jour dans les 24
+        heures précédent la date donnée (en ignorant les projets créés ou supprimés
+        dans la même période de 24 heures). Les moyennes sur 7 jours montrent les
+        moyennes correspondantes sur 7 jours. Vous pouvez sélectionner des couleurs
+        dans la légende pour cacher et afficher les données correspondantes.
 
 '
+      projects_silver:
+      projects_gold:
+      projects_completed_silver_and_gold:
+      percent_projects_earning_badges:
   projects:
     index:
       add_link: Ajouter
@@ -1433,9 +1437,9 @@ fr:
           href="http://findbugs.sourceforge.net/">FindBugs</a> (y compris <a href="https://h3xstream.github.io/find-sec-bugs/">FindSecurityBugs</a>),
           <a href="https://pmd.github.io/">PMD</a>, <a href="http://brakemanscanner.org/">Brakeman</a>,
           <a href="https://scan.coverity.com/">Coverity Quality Analyzer</a>, et <a
-          href="http://www8.hp.com/au/en/software-solutions/static-code-analysis-sast/index.html">HP
-          Fortify Static Code Analyzer</a>. Des listes plus vastes d''outils peuvent
-          être trouvées dans des endroits tels que <a href="https://en.wikipedia.org/wiki/List_of_tools_for_static_code_analysis">la
+          href="https://saas.hpe.com/en-us/software/sca">HP Enterprise Fortify Static
+          Code Analyzer</a>. Des listes plus vastes d''outils peuvent être trouvées
+          dans des endroits tels que <a href="https://en.wikipedia.org/wiki/List_of_tools_for_static_code_analysis">la
           liste Wikipedia d''outils pour l''analyse statique de code</a>, <a href="https://www.owasp.org/index.php/Static_Code_Analysis">l''information
           OWASP sur l''analyse statique de code</a>, <a href="http://samate.nist.gov/index.php/Source_Code_Security_Analyzers.html">la
           liste NIST des analyseurs de sécurité du code source</a> et <a href="http://www.dwheeler.com/essays/static-analysis-tools.html">la
@@ -2454,8 +2458,8 @@ fr:
           être défini pour les parties externes en spécifiant le hachage cryptographique
           d''un conteneur spécifique ou d''une machine virtuelle qu''ils peuvent utiliser
           pour la reconstruction. Le <a href="https://reproducible-builds.org/docs/">projet
-          de construction reproductible dispose de documentation</a> sur la façon
-          de le faire.
+          de construction reproductible dispose de documentation sur la façon de le
+          faire</a>.
 
 '
       test_invocation:
@@ -2610,6 +2614,7 @@ fr:
       require_url: Exiger une URL
       details: Comprend des détails
       future: Futur
+      new_this_level:
   headings:
     Accessibility and internationalization: Accessibilité et internationalisation
     Analysis: Analyse

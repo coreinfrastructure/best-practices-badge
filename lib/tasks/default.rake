@@ -373,24 +373,31 @@ task :save_en do
   sh 'cp -p config/locales/en.yml config/locales/en.yml.ORIG'
 end
 
+desc 'Restore English translation file from .ORIG file'
+task :restore_en do
+  sh 'mv config/locales/en.yml.ORIG config/locales/en.yml'
+end
+
 desc 'Fix locale text'
 task :fix_locale do
   # Google Translate generates text that has predictable errors.
   # This task fixes some predictable errors automatically.
   puts "\nFixing locale text.\n"
-  # Rake won't let us define global constants, so we'll do what we can
-  # Use Ruby for in place editing because sed isn't portable across Linux & OS X
-
-  locale_files = './config/locales/localization*.yml ' \
-                 './config/locales/translation*.yml'
-  sh %q{ruby -pi -e "sub(/< a /, '<a ')" \
-        -e "sub(/< \057/, '</')" -e "sub(/<\057 /, '</')" \
-        -e "sub(/<Strong>/, '<strong>')" -e "sub(/<Em>/, '<em>')" \
-        -e "sub(/ Href *=/, 'href=')" \
-        -e "sub(/href = /, 'href=')" \
-        -e "sub(/class = /, 'class=')" \
-        -e "sub(/target = /, 'target=')" } + locale_files
-  # Show whether or not there are known problems after it.
+  filenames = Dir[Rails.root.join('config', 'locales', 'translation.*.yml')]
+  filenames.each do |filename|
+    IO.write(
+      filename, IO.read(filename)
+                  .gsub(/< a /, '<a ')
+                  .gsub(/< \057/, '</')
+                  .gsub(/<\057 /, '</')
+                  .gsub(/<Strong>/, '<strong>')
+                  .gsub(/<Em>/, '<em>')
+                  .gsub(/ Href *=/, 'href=')
+                  .gsub(/href = /, 'href=')
+                  .gsub(/class = /, 'class=')
+                  .gsub(/target = /, 'target=')
+    )
+  end
 end
 
 # Test locale files; returns true if successful (no errors)
@@ -399,28 +406,26 @@ def locale_files_compliant?
   system 'rails test test/models/translations_test.rb'
 end
 
+require 'yaml'
 desc 'Fix translation whitespace'
 task :fix_i18n_whitespace do
-  # First, translation:sync rewrites the source en.yml file, which it
-  # shouldn't ever do, and in the process reformats it into garbage with
-  # overly-long lines. We modify its behavior to save the en.yml file, and
-  # later restore it. We also remove trailing whitespace and any whitespace
-  # before a closing single quote.
-  sh 'mv config/locales/en.yml.ORIG config/locales/en.yml'
-  sh %q{ruby -pi -e "sub(/ $/, '')" ./config/locales/*.yml}
-  puts 'Removing whitespace at the end of a quote'
-
-  command = 'ARGV.each { |filename| IO.write(filename,' \
-            "(IO.read(filename).gsub(/\s+'$/, %q(')))) }"
-  sh "ruby -e #{command} ./config/locales/*.yml"
-  # unless locale_files_compliant?
-  #   Rake::Task['fix_locale'].invoke
-  #   locale_files_compliant?
-  # end
+  # Reformat YAML with a line-wdith of 80, which also gets rid of the
+  # white space at the end of quotes and switches to the more readable
+  # YAML folding style. Separately, delete whitespace as the end of
+  # lines.
+  filenames = Dir[Rails.root.join('config', 'locales', 'translation.*.yml')]
+  filenames.each do |filename|
+    IO.write(
+      filename, YAML.load_file(filename).to_yaml(line_width: 80)
+                    .gsub(/ $/, '')
+    )
+  end
+  unless locale_files_compliant?
+    Rake::Task['fix_locale'].invoke
+    locale_files_compliant?
+  end
   puts "Now run: git commit -sam 'rake translation:sync'"
 end
-
-# Fix up translation:sync.
 
 # The "translation:sync" task syncs up the translations, but uses the usual
 # YAML writer, which writes out trailing whitespace.  It should not do that,
@@ -428,11 +433,15 @@ end
 # Problem already reported:
 # - https://github.com/aurels/translation-gem/issues/13
 # - https://github.com/yaml/libyaml/issues/46
-# We will run this enhancement to solve the problem.
-# Only do this in development, since the gem only exists then.
+# We save and restore the en version around the sync to resolve.
+# Ths task only runs in development, since the gem is only loaded then.
 if Rails.env.development?
-  task 'translation:sync' => :save_en
-  Rake::Task['translation:sync'].enhance['fix_i18n_whitespace']
+  Rake::Task['translation:sync'].enhance ['save_en'] do
+    at_exit do
+      Rake::Task['restore_en'].invoke
+      Rake::Task['fix_i18n_whitespace'].invoke
+    end
+  end
 end
 
 require 'net/http'

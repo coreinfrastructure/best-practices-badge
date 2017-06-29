@@ -474,6 +474,30 @@ en:
         placeholder: >
           Implementation language(s) used as a comma-separated list,
           sorted by amount of use
+      additional_rights_changes:
+        description: >
+          (Advanced) What other users have additional
+          rights to edit this badge entry? Currently: %{current_rights}
+        details_html: >
+          Most projects should ignore this field.
+          Project badge entries can always be edited by the badge entry owner
+          (creator),
+          BadgeApp administrators, and anyone who can commit to the GitHub
+          repository (if it's on GitHub).  If you want someone else to be
+          able to edit this badge entry, and you already have edit rights
+          to this project badge entry, you can additional users with edit rights.
+          Just enter "+" followed by a comma-separated list of integer user ids.
+          Those users will then also be allowed to edit this project entry.
+          If you're the owner of the badge entry or a BadgeApp administrator,
+          you can remove users from this list by entering "-" followed by a
+          comma-separated list of integer user ids.
+          This application uses optimistic locking
+          to prevent saving stale data if multiple users
+          try to edit simultaneously.
+          Only owners of this project entry and BadgeApp administrators
+          can change this field.
+        placeholder: >
+          Change using + or - followed by a comma-separated user id list
       cpe:
         description_html: >
           What is the

@@ -147,6 +147,7 @@ class ProjectsController < ApplicationController
       respond_to do |format|
         # Was project.update(project_params)
         if @project.save
+          update_additional_rights
           successful_update(format, old_badge_level, @criteria_level)
         else
           format.html { render :edit, criteria_level: @criteria_level }
@@ -291,6 +292,44 @@ class ProjectsController < ApplicationController
     return true if can_control?
     redirect_to root_url
   end
+
+  # Forceably set additional_rights on project "id" given string description
+  # Presumes permissions are granted & valid syntax in new_additional_rights
+  def update_additional_rights_forced(id, new_additional_rights)
+    command = new_additional_rights[0]
+    new_list = new_additional_rights[1..-1].split(',').map(&:to_i).uniq.sort
+    if command == '-'
+      AdditionalRight.where(project_id: id, user_id: new_list).destroy_all
+    else # '+'
+      new_list.each do |u|
+        # Add one-by-one; if a user doesn't exist, we can still do the others
+        if User.exists?(id: u)
+          AdditionalRight.create!(project_id: id, user_id: u).save!
+        end
+      end
+    end
+  end
+
+  VALID_ADD_RIGHTS_CHANGES = /\A[+-](\d+(,\d+)*)+\z/
+
+  # Examine proposed changes to additional rights - if okay, call
+  # update_additional_rights_forced to do them.
+  # rubocop:disable Metrics/CyclomaticComplexity
+  def update_additional_rights
+    return unless can_edit? # Double-check - must be able to edit
+    return unless params.key?(:project)
+    additional_rights_changes = params[:additional_rights_changes]
+    return if additional_rights_changes.blank? # Quietly return if blank
+    additional_rights_changes = additional_rights_changes.delete(' ')
+    # Do input validation.  This would generally only fail during an
+    # an attack or weird circumstance, since in the normal non-attack case
+    # the input will already have gone through client-side validation.
+    return unless VALID_ADD_RIGHTS_CHANGES.match?(additional_rights_changes)
+    # *Only* those who *control* the entry can remove additional editors
+    return if additional_rights_changes[0] == '-' && !can_control?
+    update_additional_rights_forced(@project.id, additional_rights_changes)
+  end
+  # rubocop:enable Metrics/CyclomaticComplexity
 
   def client_factory
     proc do

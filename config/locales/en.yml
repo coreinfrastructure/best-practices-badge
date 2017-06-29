@@ -139,7 +139,19 @@ en:
       details: Includes details
       new_this_level: New at this level
       future: Future
-      project_stats_html: You can see statistics about projects over time at the <a href="/project_stats">project stats page</a>.
+      project_stats_html: >
+        The "active" criteria are criteria that are included in the
+        percentage calculations (as opposed to "future" criteria).
+        The next columns identify the number of active criteria
+        in each level that are
+        MUST, SHOULD, SUGGESTED, allow a "N/A" as an answer, require a URL,
+        include details, or are new at this level.
+        "Future" criteria are shown on the form, and are expected to be
+        added as active criteria to some level in the future,
+        but are not included in completion calculations.
+        <br><br>
+        You can see statistics about projects over time at the
+        <a href="/project_stats">project stats page</a>.
   users:
     new:
       signup_header: Sign up

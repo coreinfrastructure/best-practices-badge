@@ -199,6 +199,10 @@ en:
       all_projects: All projects
       projects_nontrivial: Projects with non-trivial progress
       projects_activity_30: Projects with badge entry activity in last 30 days
+      projects_silver: Project progress towards silver
+      projects_gold: Project progress towards gold
+      projects_completed_silver_and_gold: Projects completing silver and gold
+      percent_projects_earning_badges: Percentage of projects earning badges
       daily_activity: Daily badge entry activity
       reminders: Reminders
       active_projects: Active projects (created/updated within 30 days)

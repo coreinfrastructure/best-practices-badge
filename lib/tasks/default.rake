@@ -409,7 +409,7 @@ end
 require 'yaml'
 desc 'Fix translation whitespace'
 task :fix_i18n_whitespace do
-  # Reformat YAML with a line-wdith of 80, which also gets rid of the
+  # Reformat YAML with a line-width of 80, which also gets rid of the
   # white space at the end of quotes and switches to the more readable
   # YAML folding style. Separately, delete whitespace as the end of
   # lines.

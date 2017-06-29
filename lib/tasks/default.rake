@@ -379,6 +379,8 @@ task :fix_locale do
   # This task fixes some predictable errors automatically.
   puts "\nFixing locale text.\n"
   # Rake won't let us define global constants, so we'll do what we can
+  # Use Ruby for in place editing because sed isn't portable across Linux & OS X
+
   locale_files = './config/locales/localization*.yml ' \
                  './config/locales/translation*.yml'
   sh %q{ruby -pi -e "sub(/< a /, '<a ')" \
@@ -392,15 +394,34 @@ task :fix_locale do
 end
 
 # Test locale files; returns true if successful (no errors)
-def test_locale_files
+def locale_files_compliant?
+  # Check text.  Use 'system' so we can get the success result.
   system 'rails test test/models/translations_test.rb'
 end
 
+desc 'Fix translation whitespace'
+task :fix_i18n_whitespace do
+  # First, translation:sync rewrites the source en.yml file, which it
+  # shouldn't ever do, and in the process reformats it into garbage with
+  # overly-long lines. We modify its behavior to save the en.yml file, and
+  # later restore it. We also remove trailing whitespace and any whitespace
+  # before a closing single quote.
+  sh 'mv config/locales/en.yml.ORIG config/locales/en.yml'
+  sh %q{ruby -pi -e "sub(/ $/, '')" ./config/locales/*.yml}
+  puts 'Removing whitespace at the end of a quote'
+
+  command = 'ARGV.each { |filename| IO.write(filename,' \
+            "(IO.read(filename).gsub(/\s+'$/, %q(')))) }"
+  sh "ruby -e #{command} ./config/locales/*.yml"
+  # unless locale_files_compliant?
+  #   Rake::Task['fix_locale'].invoke
+  #   locale_files_compliant?
+  # end
+  puts "Now run: git commit -sam 'rake translation:sync'"
+end
+
 # Fix up translation:sync.
-# First, translation:sync rewrites the source en.yml file, which it shouldn't
-# ever do, and in the process reformats it into garbage with overly-long lines.
-# We modify its behavior to save the en.yml file, and later restore it.
-# We also remove trailing whitespace after running "translation:sync".
+
 # The "translation:sync" task syncs up the translations, but uses the usual
 # YAML writer, which writes out trailing whitespace.  It should not do that,
 # and the trailing whitespace causes later failures in testing.
@@ -409,22 +430,9 @@ end
 # - https://github.com/yaml/libyaml/issues/46
 # We will run this enhancement to solve the problem.
 # Only do this in development, since the gem only exists then.
-# Use Ruby for in place editing because sed isn't portable across Linux & OS X
 if Rails.env.development?
   task 'translation:sync' => :save_en
-  Rake::Task['translation:sync'].enhance do
-    # Don't let translation.io change the en.yml file:
-    sh 'mv config/locales/en.yml.ORIG config/locales/en.yml'
-    puts 'Removing bogus trailing whitespace (bug workaround).'
-    sh %q{ruby -pi -e "sub(/ $/, '')" ./config/locales/*.yml}
-    # Check text.  Use 'system' so we can get the success result.
-    success = test_locale_files
-    unless success
-      Rake::Task['fix_locale'].invoke
-      test_locale_files
-    end
-    puts "Now run: git commit -sam 'rake translation:sync'"
-  end
+  Rake::Task['translation:sync'].enhance['fix_i18n_whitespace']
 end
 
 require 'net/http'

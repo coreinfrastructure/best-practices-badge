@@ -133,6 +133,10 @@ zh-CN:
         7天平均值显示7天的相应平均值。您可以在图例中选择颜色来隐藏和取消隐藏相应的数据。
 
 '
+      projects_silver:
+      projects_gold:
+      projects_completed_silver_and_gold:
+      percent_projects_earning_badges:
   projects:
     index:
       add_link: 添加
@@ -1611,6 +1615,7 @@ zh-CN:
       require_url: 需要网址
       details: 包括细节
       future: 未来
+      new_this_level:
   headings:
     Accessibility and internationalization: 无障碍和国际化
     Analysis: 分析
@@ -1648,7 +1653,7 @@ zh-CN:
     Warning flags: 警告标志
     Working build system: 可工作的构建系统
     Identification: 识别
-    Prerequisites:
+    Prerequisites: 先决条件
   last_entry: 最后翻译条目
   admin_only: 仅限管理员。
   criterion_status:

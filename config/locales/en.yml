@@ -2142,14 +2142,14 @@ en:
 
 '
       dynamic_analysis_unsafe:
-        description: '<em>If</em> the software produced by the project includes software
-          written using a memory-unsafe language (e.g., C or C++), <em>then</em> the
-          project MUST use at least one dynamic tool (e.g., a fuzzer or web application
-          scanner) be routinely used in combination with a mechanism to detect memory
-          safety problems such as buffer overwrites. If the project does not produce
-          software written in a memory-unsafe language, select "not applicable" (N/A).
-
-'
+        description: >
+          If the software produced by the project includes software
+          written using a memory-unsafe language (e.g., C or C++), then
+          at least one dynamic tool (e.g., a fuzzer or web application
+          scanner) MUST be routinely used in combination with a mechanism
+          to detect memory safety problems such as buffer overwrites.
+          If the project does not produce software written in a
+          memory-unsafe language, choose "not applicable" (N/A).
     '2':
       achieve_silver:
         description: The project MUST achieve a silver level badge.

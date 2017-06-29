@@ -150,6 +150,10 @@ de:
       json_format: JSON-Format
       csv_format: Herunterladbares CSV-Format
       projects_created_updated_daily:
+      projects_silver:
+      projects_gold:
+      projects_completed_silver_and_gold:
+      percent_projects_earning_badges:
   projects:
     index:
       add_link: Hinzufügen
@@ -902,7 +906,22 @@ de:
           Freigabe angewendet wird.
 
 '
-        details:
+        details: 'Ein dynamisches Analyse-Tool untersucht die Software, indem es sie
+          mit bestimmten Eingaben ausführt. Beispielsweise DARF das Projekt ein Fuzzing-Tool
+          verwenden (z.B. <a href="http://lcamtuf.coredump.cx/afl/">American Fuzzy
+          Lop</a>) oder einen Web Application Scanner (z.B. <a href="https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project">OWASP
+          ZAP</a> oder <a href="http://w3af.org/">w3af</a>). In einigen Fällen ist
+          das <a href="https://github.com/google/oss-fuzz#introduction">OSS-Fuzz</a>
+          Projekt bereit, Fuzz-Tests auf Ihr Projekt anzuwenden. Für die Zwecke dieses
+          Kriteriums muss das dynamische Analyse-Tool die Eingaben in irgendeiner
+          Weise variieren, um nach verschiedenen Arten von Problemen zu suchen <em>oder</em>
+          eine automatisierte Test-Suite mit mindestens 80% Abdeckung. Die <a href="https://de.wikipedia.org/wiki/Dynamic_program_analysis">Wikipedia-Seite
+          zur dynamischen Analysen</a> und die <a href="https://www.owasp.org/index.php/Fuzzing">OWASP
+          Seite auf Fuzzing</a> nennen einige dynamische Analyse-Tools. Das Analyse-Tool(s)
+          DARF für der Suche nach Sicherheitslücken eingesetzt werden, aber das ist
+          nicht erforderlich.
+
+'
       dynamic_analysis_unsafe:
         description:
         details:
@@ -1286,6 +1305,7 @@ de:
       require_url:
       details:
       future:
+      new_this_level:
   headings:
     Accessibility and internationalization: Zugänglichkeit und Internationalisierung
     Analysis: Analyse

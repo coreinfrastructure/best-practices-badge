@@ -8,7 +8,7 @@
 ja:
   helpers:
     select:
-      prompt: 選択してください。
+      prompt: 選択してください
     submit:
       create: 登録する
       update: 更新する
@@ -22,7 +22,7 @@ ja:
     few: "%{count} プロジェクト"
     many: "%{count} プロジェクト"
   feed_title: CIIベスト プラクティス バッジ更新プロジェクト
-  project_name_unknown: "（名前不明）"
+  project_name_unknown: "（名称不明）"
   locale_name:
     en: 英語 / English (en)
     de: ドイツ語 / Deutsch (de)
@@ -95,21 +95,23 @@ ja:
 
 '
     edit:
-      update_user_info:
-      save_changes:
+      update_user_info: ユーザー情報を更新します
+      save_changes: 変更内容を保存します
     update:
-      profile_updated:
+      profile_updated: プロフィールが更新されました
     show:
       edit_user: ユーザーを編集する
       other_projects_edit: 編集できるその他のプロジェクト
-      see_external:
-      as_admin:
-      send_email_to:
+      see_external: 'このユーザーの外部ページを参照してください。
+
+'
+      as_admin: 管理者として、次の操作を行うこともできます。
+      send_email_to: 電子メールを送ります：
       delete_link_name: 削除
       confirm_delete: このユーザーを削除してもよろしいですか？
     destroy:
-      cannot_delete_self:
-      user_deleted:
+      cannot_delete_self: 自分を削除することはできません。
+      user_deleted: ユーザーが削除されました。
     redirect_existing: 'そのユーザーは既に存在しています。以前、サインインしたことはありませんか？
 
 '
@@ -157,9 +159,12 @@ ja:
 '
       json_format: JSON形式
       csv_format: ダウンロード可能なCSV形式
-      projects_created_updated_daily: "「前日以降のプロジェクト登録数」というデータは、指定された日時から24時間以内に登録されたプロジェクトの数です（同じ24時間内に削除されたプロジェクトは含まれません）。同様に、
-        「前日以降に編集されたプロジェクト」というデータは、指定された日時から24時間以内に編集されたプロジェクトの数です（24時間以内に作成または削除されたプロジェクトは含まれません）。
+      projects_created_updated_daily: "「前日以降のプロジェクト登録数」というデータは、指定された日時から24時間以内に登録されたプロジェクトの数です（同じ24時間内に削除されたプロジェクトは含まれません）。同様に、「前日以降に編集されたプロジェクト」というデータは、指定された日時から24時間以内に編集されたプロジェクトの数です（24時間以内に作成または削除されたプロジェクトは含まれません）。
         7日間平均は、対応するデータの7日間平均値を示す。凡例で色を選択して、対応するデータを非表示にすることができます。\n"
+      projects_silver:
+      projects_gold:
+      projects_completed_silver_and_gold:
+      percent_projects_earning_badges:
   projects:
     index:
       add_link: 追加
@@ -239,7 +244,7 @@ ja:
         Best Practicesバッジ貢献者へのクレディットを表示願います。<br> <br>
 
 '
-      owned_by:
+      owned_by: プロジェクト バッジ登録の所有者：
       created_at_html: "<strong>エントリの作成日時</strong> %{when}、"
       updated_at_html: "<strong>最終更新日</strong> %{when}"
       last_lost_html: '最後に%{when}にバッジ合格できませんでした。
@@ -385,10 +390,10 @@ ja:
         hide_details: 詳細を非表示
         show_all_details: 詳細をすべて表示
         hide_all_details: 詳細をすべて非表示
-        show_met_title: 適合済みの基準と非該当の基準を表示
-        show_met_html: 適合済みと非該当を表示
-        hide_met_title: 適合済みと非該当の基準を非表示（不適合と不明なものは表示）
-        hide_met_html: 適合済みと非該当を非表示
+        show_met_title: 満足した基準と該当しない基準を表示
+        show_met_html: 満足したものと該当しないものを表示
+        hide_met_title: 満足した基準と該当しない基準を非表示（満足しないものと不明なものは表示）
+        hide_met_html: 満足したものと該当しないものを非表示
         passing_alt: バッジには十分です！
         barely_alt: かろうじてバッジには十分です。
         failing_alt: バッジには不十分です。
@@ -422,19 +427,55 @@ ja:
       ベスト プラクティス バッジ プログラムに
       あなたのプロジェクトを追加してくださいましてありがとうございます
       このプロジェクトの現在の名前は次のとおりです。
-    new_project_part2:
-    new_project_part3_html:
-    new_project_part3_text:
+    new_project_part2: |
+      バッジ エントリーにアクセスしてください。
+      情報を完成させてバッジを手に入れましょう！
+      バッジ エントリのURLは次のとおりです。
+    new_project_part3_html: |
+      <p>
+      私たちはあなたが進歩し続けることをお勧めします。
+      </p>
+
+      <p>
+      失敗しているものを<em>のみ</em>見たい場合は、
+      バッジのエントリにアクセスし、
+      上部にある「合格またはN / A基準を隠す」ボタンをクリックして、
+      ご不明な点がございましたら、お気軽にお問い合わせください。
+      <a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;</a>
+      または以下で課題を提出します
+      <a href="https://github.com/coreinfrastructure/best-practices-badge/issues"> https://github.com/coreinfrastructure/best-practices-badge/issues </a>
+      （「新しい課題」をクリックしてください）。
+      </p>
+
+      <p>
+      時間を取ってくださいさいまして、ありがとうございます。
+      </p>
+    new_project_part3_text: |
+      私たちはあなたが進歩し続けることをお勧めします。
+
+      失敗しているものだけを見たい場合は、バッジの項目にアクセスしてください。
+      次に、「合格またはN/A基準を隠す」というラベルの付いた上部のボタンをクリックします。
+      ご不明な点がございましたら、お気軽にお問い合わせください。
+      cii-badges-questions-owner@lists.coreinfrastructure.org
+      または以下で課題を提出してください
+      https://github.com/coreinfrastructure/best-practices-badge/issues
+      （「新しい課題」をクリックしてください）。
+
+      時間を取ってくださいまして、ありがとうございます。
     in_markdown_add: マークダウンでは、これを追加することができます：
     in_html_add: HTMLでは、これを追加することができます：
     ending: "--- David A. Wheeler、CIIベスト プラクティス バッジ テクニカル リード\n"
-    subject_achieved_passing:
-    subject_no_longer_passing:
-    subject_new_project:
+    subject_achieved_passing: "%{new_level}ベスト プラクティス バッジを達成したことをお祝いします！\n"
+    subject_no_longer_passing: 'あなたのベスト プラクティス バッジはもはや%{old_level}ではありません
+
+'
+    subject_new_project: 'あなたは、CIIベスト プラクティス バッジ プログラムにプロジェクトを追加しました
+
+'
     subject_reminder: 'あなたのプロジェクトはまだ「ベスト プラクティス」バッジを持っていません
 
 '
-    subject_project_deleted:
+    subject_project_deleted: "%{project_name}という名前のプロジェクト%{project_id}を削除されました\n"
     gained_level_part1: |
       おめでとう！
 
@@ -444,36 +485,98 @@ ja:
     gained_level_part2: |
       バッジをプロジェクトやリポジトリサイトに追加してください。
       あなたはそれを獲得しました：
-    gained_level_part3:
+    gained_level_part3: |
+      正当性についてのテキストを追加または改善することを強くお勧めします。
+      より多くの情報を指すURLを追加することも含まれます。
+
+      基準またはバッジ ウェブ アプリケーションを改善する方法の提案がある場合、
+      以下で課題を提出してください：
+      https://github.com/coreinfrastructure/best-practices-badge/issues
+
+      バッジを取得するためにプロジェクトを変更した場合は、お知らせください
+      電子メール：cii-badges-questions@lists.coreinfrastructure.org
+      私たちの目標の1つは、プロジェクトの改善を促すことです。
+      これらのレポートのいくつかを公開Wikiに載せます。
+      変更内容を以下のサイトで公開したくない場合はお知らせください。
+      https://github.com/coreinfrastructure/best-practices-badge/wiki/Impacts
+
+      ありがとうございます、そして、おめでとうございます。
     lost_level_message: |
       申し訳ありませんが、あなたのプロジェクトは「%{old_level}」バッジを有しておらず、現在は「%{new_level}」を有しています。
       詳細については、次のURLを参照してください。
   user_mailer:
     account_activation:
-      before_html:
-      before_text:
+      before_html: |
+        <h1> CIIベスト プラクティス バッジ プログラム</h1>
+        <p>こんにちは、</p>
+        <p>
+        バッジ プログラムへようこそ！
+        下のリンクをクリックしてアカウントを有効にしてください：
+        </p>
+      before_text: |
+        こんにちは、
+
+        CIIベスト プラクティス バッジ プログラムへようこそ！
+
+        アカウントを有効にするには、以下のリンクを選択してください：
       activate: アクティベート
-      subject:
+      subject: アカウントの有効化
     github_welcome:
-      before_html:
-      before_text:
-      subject:
+      before_html: |
+        <h1> CIIベストプラクティスバッジプログラム</h1>
+
+        <p>こんにちは、</p>
+
+        <p>
+        GitHubアカウントに接続してくださいまして、ありがとうございます
+        CIIベストプラクティスバージングプログラムにようこそ！
+        </p>
+
+        <p>
+        この操作を開始していない場合は、[設定]＆gt; [セキュリティ]の下にあるGitHubのセキュリティ ログを確認してください。
+        </p>
+      before_text: |+
+        こんにちは、
+
+        GitHubアカウントに接続してくださいまして、ありがとうございます
+        CIIベスト プラクティス バージ プログラムへようこそ！
+
+        この操作を開始していない場合は、GitHubの設定>セキュリティの下にあるセキュリティ ログをチェックしてください。
+
+      subject: バッジ プログラムへようこそ
     user_update:
-      before_text:
-      username_changed:
-      email_changed:
-      password_changed:
-      locale_changed:
-      current_state:
-      after_text:
-      subject:
+      before_text: アカウントのユーザー データの一部が更新されました。
+      username_changed: ユーザー名が変更されました。
+      email_changed: メールアドレスが変更されました。
+      password_changed: パスワードが変更されました
+      locale_changed: 場所が変更されました。
+      current_state: 現在の状態については、以下を参照してください。
+      after_text: 問題があればお知らせください。
+      subject: ユーザーデータが編集されました
     password_reset:
-      before_html:
-      before_text:
-      after_html:
-      after_text:
-      subject:
-      reset_password:
+      before_html: |
+        <h1>パスワード リセット</h1>
+
+        <p>パスワードをリセットするには、以下のリンクをクリックしてください：</p>
+      before_text: 'パスワードをリセットするには、以下のリンクをクリックしてください：
+
+'
+      after_html: |
+        <p>このリンクの有効期限は2時間です。</p>
+
+        <p>
+        パスワードの再設定を要求していない場合は、
+        このメールを無視してください
+        あなたのパスワードはそのままです。
+        </p>
+      after_text: |
+        このリンクの有効期限は2時間です。
+
+        パスワードの再設定を要求していない場合は、
+        このメールを無視してください
+        あなたのパスワードはそのままです。
+      subject: パスワードのリセット
+      reset_password: パスワードを再設定します
   criteria:
     '0':
       description_good:
@@ -849,11 +952,11 @@ ja:
 '
         details: '静的コード解析ツールは、ソフトウェアコードを実行せずに特定の入力を用いて（ソースコード、中間コード、または実行可能ファイルとして）調べます。この基準のために、コンパイラの警告と「安全な」言語モードは、静的コード解析ツールとしてカウントされません（これらは通常、速度が重要なため深い解析を行いません）。このような静的コード解析ツールの例には、<a
           href="http://cppcheck.sourceforge.net/"> cppcheck </a>、<a href="http://clang-analyzer.llvm.org/">
-          clangスタティックアナライザ</a>、<a href="http://findbugs.sourceforge.net/"> FindBugs
-          </a>（<a href="https://h3xstream.github.io/find-sec-bugs/">FindSecurityBugs</a>を含む）、<a
+          clang静的解析</a>、<a href="http://findbugs.sourceforge.net/"> FindBugs </a>（<a
+          href="https://h3xstream.github.io/find-sec-bugs/">FindSecurityBugs</a>を含む）、<a
           href="https://pmd.github.io/"> PMD </a>、<a href="http://brakemanscanner.org/">
           Brakeman </a>、<a href="https://scan.coverity.com/"> Coverity Quality Analyzer
-          </a>、および<a href="https://saas.hpe.com/en-us/software/sca"> HPE Fortify静的コードアナライザー</a>。大きなツールのリストは、<a
+          </a>、および<a href="https://saas.hpe.com/en-us/software/sca"> HPE Fortify静的コード解析</a>。大きなツールのリストは、<a
           href="https://en.wikipedia.org/wiki/List_of_tools_for_static_code_analysis">静的コード解析のためのWikipediaツール一覧</a>、<a
           href="https://www.owasp.org/index.php/Static_Code_Analysis">静的コード解析に関するOWASP情報</a>、<a
           href="http://samate.nist.gov/index.php/Source_Code_Security_Analyzers.html">
@@ -1062,7 +1165,7 @@ ja:
 
 '
         details: "ウェブアプリケーションについては、<a href=\"https://www.w3.org/TR/WCAG20/\">ウェブ コンテンツ
-          アクセシビリティ ガイドライン（WCAG 2.0）</a>とそのサポートドキュメント<a href=\"https://www.w3.org/TR/UNDERSTANDING-WCAG20/Overview.html\">
+          アクセシビリティ ガイドライン（WCAG 2.0）</a>とそのサポート ドキュメント<a href=\"https://www.w3.org/TR/UNDERSTANDING-WCAG20/Overview.html\">
           WCAG 2.0の理解</a>; <a href=\"https://www.w3.org/standards/webdesign/accessibility\">
           W3Cアクセシビリティ情報</a>を参照してください。 GUIアプリケーションの場合は、環境固有のアクセシビリティ ガイドラインの使用を検討して下さい（<a
           href=\"https://developer.gnome.org/accessibility-devel-guide/stable/\">Gnome</a>、<a
@@ -1072,7 +1175,7 @@ ja:
           > iOS </a>、<a href=\"http://www.apple.com/accessibility/osx/voiceover/\">
           Mac </a>、<a href=\"https://msdn.microsoft.com/ja/ja/windows/uwp/accessibility/accessibility-overview\">
           Windows </a>）。いくつかのTUIアプリケーション（例えば、「ncurses」プログラム）は、「alpine」の 「force-arrow-cursor」設定のような、よりアクセスしやすくするためにいくつかのことを行うことができます。ほとんどのコマンドライン
-          アプリケーションは、そのままの状態でかなりアクセス可能です。この基準は、例えば、プログラムライブラリの場合、「該当なし」（N/A）であることが多いです。取り上げるべき行動や考慮すべき課題の例を以下に示します。\n<ul>
+          アプリケーションは、そのままの状態でかなりアクセス可能です。この基準は、例えば、プログラム ライブラリの場合、「該当なし」（N/A）であることが多いです。取り上げるべき行動や考慮すべき課題の例を以下に示します。\n<ul>
           <li>テキスト以外のコンテンツの代替テキストを提供するkotode,\n人々が必要とする他の形式に変更することができます。大きな印刷物、点字、スピーチ、記号またはより単純な言語などです。（<a
           href=\"https://www.w3.org/TR/UNDERSTANDING-WCAG20/text-equiv.html\"> WCAG
           2.0ガイドライン1.1 </a>）\n<li>アクションを示したり、応答を促したり、または視覚的要素を区別するために、色が唯一の視覚的な伝達手段として使用されるわけではありません。（<a
@@ -1486,21 +1589,23 @@ ja:
         プラクティス バッジのコントリビューターまでご連絡ください。
     criteria:
       criteria: 基準
-      detailed_criteria_on_github:
-      current_criteria:
-      criteria_must_should_suggested:
-      criteria_na_met_details:
-      project_counts:
-      project_stats_html:
-      level:
-      must:
-      should:
-      suggested:
-      total_active:
+      detailed_criteria_on_github: 詳細の基準はGitHubにあります。
+      current_criteria: 現在の基準数：%{active}（アクティブ）+ %{future}（将来）= %{total}（合計）
+      criteria_must_should_suggested: アクティブ基準の中には、%{must} MUST、%{should} SHOULD、および%{suggested}
+        SUGGESTED基準があります。
+      criteria_na_met_details: アクティブな基準のうち、%{na_allowed}はN / Aを許可し、%{met_url_required}は満たされた場合にURLを要求し、%{details_present}は説明に詳細を持ちます。
+      project_counts: "%{projects}プロジェクト エントリがあります。 %{passing}は通過し、%{in_progress}は進行中です。"
+      project_stats_html: プロジェクトに関する統計は、<a href="/project_stats">プロジェクトの統計情報ページ</a>で確認できます。
+      level: レベル
+      must: 必要（MUST）
+      should: すべきです（SHOULD）
+      suggested: 推奨（SUGGESTED）
+      total_active: アクティブなものの合計
       allow_na: 該当なし（N/A）を許可します
-      require_url:
-      details:
-      future:
+      require_url: URLが必要です
+      details: 詳細を含みます
+      future: 将来
+      new_this_level:
   headings:
     Accessibility and internationalization: アクセシビリティと国際化
     Analysis: 分析
@@ -1544,8 +1649,8 @@ ja:
   last_entry: 最後の翻訳エントリ
   admin_only: 管理者のみ。
   criterion_status:
-    Met: 満足している
-    Unmet: 満足されない
+    Met: 満足
+    Unmet: 満足しない
     NA: 該当なし
   error_messages:
     need_home_page_or_url: 少なくともホームページかリポジトリのURLが必要です

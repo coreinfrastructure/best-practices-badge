@@ -368,6 +368,23 @@ task :fake_production do
   sh 'RAILS_ENV=fake_production rails server -p 4000'
 end
 
+require 'yaml'
+desc 'Reformat en.yml'
+task :reformat_en do
+  # Reformat en.yml with a line-width of 80, which mostly gets rid of the
+  # white space at the end of quotes and switches to the more readable
+  # YAML folding style. Separately, delete whitespace and \n newlines at
+  # the end of lines and remove any whitespace remaining at the end of quotes.
+  filename = Rails.root.join('config', 'locales', 'en.yml').to_s
+  IO.write(
+    filename, YAML.load_file(filename)
+                  .to_yaml(line_width: 80)
+                  .gsub(/\n$/, '')
+                  .gsub(/ $/, '')
+                  .gsub(/\s+'$/m, "'")
+  )
+end
+
 desc 'Save English translation file as .ORIG file'
 task :save_en do
   sh 'cp -p config/locales/en.yml config/locales/en.yml.ORIG'

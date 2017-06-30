@@ -406,8 +406,7 @@ def normalize_yaml(path)
   Dir[path].each do |filename|
     normalized = normalize_values(YAML.load_file(filename))
     IO.write(
-      filename, normalized.to_yaml(line_width: 80)
-                            .gsub(/\s+$/, '')
+      filename, normalized.to_yaml(line_width: 80).gsub(/\s+$/, '')
     )
   end
 end

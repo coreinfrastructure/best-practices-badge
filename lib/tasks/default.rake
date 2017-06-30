@@ -368,62 +368,87 @@ task :fake_production do
   sh 'RAILS_ENV=fake_production rails server -p 4000'
 end
 
-desc 'Save English translation file as .ORIG file'
-task :save_en do
-  sh 'cp -p config/locales/en.yml config/locales/en.yml.ORIG'
+def normalize_values(input)
+  input.transform_values! do |value|
+    if value.is_a?(Hash)
+      normalize_values value
+    elsif value.is_a?(String)
+      normalize_string value
+    elsif value.is_a?(NilClass)
+      value
+    else raise TypeError 'Not Hash, String or NilClass'
+    end
+  end
+end
+
+# rubocop:disable Metrics/MethodLength
+def normalize_string(value)
+  # Remove trailing whitespace
+  value.sub!(/\s+$/, '')
+  return value unless value.include?('<')
+  # Google Translate generates html text that has predictable errors.
+  value.gsub(/< a /, '<a ')
+       .gsub(/< \057/, '</')
+       .gsub(/<\057 /, '</')
+       .gsub(/<Strong>/, '<strong>')
+       .gsub(/<Em>/, '<em>')
+       .gsub(/ Href *=/, 'href=')
+       .gsub(/href = /, 'href=')
+       .gsub(/class = /, 'class=')
+       .gsub(/target = /, 'target=')
+end
+# rubocop:enable Metrics/MethodLength
+
+def normalize_yaml(path)
+  # Reformats with a line-width of 80, removes trailing whitespace from all
+  # values and fixes some predictable errors automatically.
+  require 'yaml'
+  Dir[path].each do |filename|
+    normalized = normalize_values(YAML.load_file(filename))
+    IO.write(
+      filename, normalized.to_yaml(line_width: 80).gsub(/\s+$/, '')
+    )
+  end
+end
+
+desc 'Reformat en.yml'
+task :reformat_en do
+  normalize_yaml Rails.root.join('config', 'locales', 'en.yml')
 end
 
 desc 'Fix locale text'
-task :fix_locale do
-  # Google Translate generates text that has predictable errors.
-  # This task fixes some predictable errors automatically.
-  puts "\nFixing locale text.\n"
-  # Rake won't let us define global constants, so we'll do what we can
-  locale_files = './config/locales/localization*.yml ' \
-                 './config/locales/translation*.yml'
-  sh %q{ruby -pi -e "sub(/< a /, '<a ')" \
-        -e "sub(/< \057/, '</')" -e "sub(/<\057 /, '</')" \
-        -e "sub(/<Strong>/, '<strong>')" -e "sub(/<Em>/, '<em>')" \
-        -e "sub(/ Href *=/, 'href=')" \
-        -e "sub(/href = /, 'href=')" \
-        -e "sub(/class = /, 'class=')" \
-        -e "sub(/target = /, 'target=')" } + locale_files
-  # Show whether or not there are known problems after it.
+task :fix_localizations do
+  normalize_yaml Rails.root.join('config', 'locales', 'translation.*.yml')
 end
 
-# Test locale files; returns true if successful (no errors)
-def test_locale_files
-  system 'rails test test/models/translations_test.rb'
+desc 'Save English translation file as .ORIG file'
+task :backup_en do
+  FileUtils.cp Rails.root.join('config', 'locales', 'en.yml'),
+               Rails.root.join('config', 'locales', 'en.yml.ORIG'),
+               preserve: true # this is the equivalent of cp -p
 end
 
-# Fix up translation:sync.
-# First, translation:sync rewrites the source en.yml file, which it shouldn't
-# ever do, and in the process reformats it into garbage with overly-long lines.
-# We modify its behavior to save the en.yml file, and later restore it.
-# We also remove trailing whitespace after running "translation:sync".
+desc 'Restore English translation file from .ORIG file'
+task :restore_en do
+  FileUtils.mv Rails.root.join('config', 'locales', 'en.yml.ORIG'),
+               Rails.root.join('config', 'locales', 'en.yml')
+end
+
 # The "translation:sync" task syncs up the translations, but uses the usual
 # YAML writer, which writes out trailing whitespace.  It should not do that,
-# and the trailing whitespace causes later failures in testing.
+# and the trailing whitespace causes later failures in testing, so we fix.
 # Problem already reported:
 # - https://github.com/aurels/translation-gem/issues/13
 # - https://github.com/yaml/libyaml/issues/46
-# We will run this enhancement to solve the problem.
-# Only do this in development, since the gem only exists then.
-# Use Ruby for in place editing because sed isn't portable across Linux & OS X
+# We save and restore the en version around the sync to resolve.
+# Ths task only runs in development, since the gem is only loaded then.
 if Rails.env.development?
-  task 'translation:sync' => :save_en
-  Rake::Task['translation:sync'].enhance do
-    # Don't let translation.io change the en.yml file:
-    sh 'mv config/locales/en.yml.ORIG config/locales/en.yml'
-    puts 'Removing bogus trailing whitespace (bug workaround).'
-    sh %q{ruby -pi -e "sub(/ $/, '')" ./config/locales/*.yml}
-    # Check text.  Use 'system' so we can get the success result.
-    success = test_locale_files
-    unless success
-      Rake::Task['fix_locale'].invoke
-      test_locale_files
+  Rake::Task['translation:sync'].enhance ['backup_en'] do
+    at_exit do
+      Rake::Task['restore_en'].invoke
+      Rake::Task['fix_localizations'].invoke
+      puts "Now run: git commit -sam 'rake translation:sync'"
     end
-    puts "Now run: git commit -sam 'rake translation:sync'"
   end
 end
 

@@ -35,7 +35,7 @@ gem 'rails-i18n', '5.0.4' # Localizations for Rails built-ins
 gem 'redcarpet', '3.4.0' # Process markdown in form textareas (justifications)
 gem 'sass-rails', '5.0.6', require: false
 gem 'scout_apm', '2.1.26' # Monitor for memory leaks
-gem 'secure_headers', '3.6.5' # Add hardening measures to HTTP headers
+gem 'secure_headers', '3.6.6' # Add hardening measures to HTTP headers
 gem 'uglifier', '3.2.0', require: false # Minify JavaScript
 gem 'will-paginate-i18n', '0.1.15' # Provide will-paginate translations
 gem 'will_paginate', '3.1.6' # Paginate results (next/previous)
@@ -83,7 +83,7 @@ group :test do
   gem 'codecov', '0.1.10', require: false
   gem 'minitest-rails-capybara', '3.0.1', require: false
   gem 'minitest-reporters', '1.1.14', require: false
-  gem 'minitest-retry', '0.1.8', require: false # Avoid Capybara false positives
+  gem 'minitest-retry', '0.1.9', require: false # Avoid Capybara false positives
   gem 'poltergeist', '1.15.0', require: false
   gem 'rails-controller-testing', '1.0.2'
   gem 'selenium-webdriver', '3.4.3', require: false

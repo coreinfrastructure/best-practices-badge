@@ -422,13 +422,16 @@ task :fix_localizations do
 end
 
 desc 'Save English translation file as .ORIG file'
-task :save_en do
-  sh 'cp -p config/locales/en.yml config/locales/en.yml.ORIG'
+task :backup_en do
+  FileUtils.cp Rails.root.join('config', 'locales', 'en.yml'),
+               Rails.root.join('config', 'locales', 'en.yml.ORIG'),
+               preserve: true # this is the equivalent of cp -p
 end
 
 desc 'Restore English translation file from .ORIG file'
 task :restore_en do
-  sh 'mv config/locales/en.yml.ORIG config/locales/en.yml'
+  FileUtils.mv Rails.root.join('config', 'locales', 'en.yml.ORIG'),
+               Rails.root.join('config', 'locales', 'en.yml')
 end
 
 # The "translation:sync" task syncs up the translations, but uses the usual
@@ -440,7 +443,7 @@ end
 # We save and restore the en version around the sync to resolve.
 # Ths task only runs in development, since the gem is only loaded then.
 if Rails.env.development?
-  Rake::Task['translation:sync'].enhance ['save_en'] do
+  Rake::Task['translation:sync'].enhance ['backup_en'] do
     at_exit do
       Rake::Task['restore_en'].invoke
       Rake::Task['fix_localizations'].invoke

@@ -368,6 +368,30 @@ task :fake_production do
   sh 'RAILS_ENV=fake_production rails server -p 4000'
 end
 
+def normalize_values(input)
+  input.each do |_key, value|
+    if value.is_a?(Hash)
+      normalize_values value
+    elsif value.is_a?(String)
+      value.sub!(/\s+$/, '')
+    else raise TypeError 'Not Hash or String'
+    end
+  end
+end
+
+require 'yaml'
+desc 'Reformat en.yml'
+task :reformat_en do
+  # Reformat en.yml with a line-width of 80. Remove trailing whitespace from
+  # all values.
+  filename = Rails.root.join('config', 'locales', 'en.yml').to_s
+  translations = normalize_values(YAML.load_file(filename))
+  IO.write(
+    filename, translations.to_yaml(line_width: 80)
+                          .gsub(/\s+$/, '')
+  )
+end
+
 desc 'Save English translation file as .ORIG file'
 task :save_en do
   sh 'cp -p config/locales/en.yml config/locales/en.yml.ORIG'

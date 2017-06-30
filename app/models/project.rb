@@ -29,7 +29,7 @@ class Project < ApplicationRecord
   PROJECT_OTHER_FIELDS = %i[
     name description homepage_url repo_url cpe implementation_languages
     license general_comments user_id disabled_reminders lock_version
-    level
+    level additional_rights_changes
   ].freeze
   ALL_CRITERIA_STATUS = Criteria.all.map(&:status).freeze
   ALL_CRITERIA_JUSTIFICATION = Criteria.all.map(&:justification).freeze
@@ -182,6 +182,16 @@ class Project < ApplicationRecord
                 length: { maximum: MAX_TEXT_LENGTH },
                 text: true
     end
+  end
+
+  # Return a string representing the additional rights on this project.
+  # Currently it's just a (possibly empty) list of user ids from
+  # AdditionalRight.  If AdditionalRights gains different kinds of rights
+  # (e.g., to spec additional owners), this method will need to be tweaked.
+  def additional_rights_to_s
+    # "distinct" shouldn't be needed; it's purely defensive here
+    list = AdditionalRight.where(project_id: id).distinct.pluck(:user_id)
+    list.sort.to_s # Use list.sort.to_s[1..-2] to remove surrounding [ and ]
   end
 
   # Return string representing badge level; assumes badge_percentage correct.

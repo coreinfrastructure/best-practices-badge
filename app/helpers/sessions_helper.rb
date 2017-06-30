@@ -91,9 +91,8 @@ module SessionsHelper
   end
 
   # Returns true iff the current_user can *control* the @project.
-  # This includes the right to delete & change users who can edit,
-  # in addition to being able to edit the project.
-  # Only the project badge entry owner or admins *control* the project entry.
+  # This includes the right to delete the entry & to remove users who can edit.
+  # Only the project badge entry owner and admins *control* the project entry.
   def can_control?
     return false if current_user.nil?
     return true if current_user.admin?

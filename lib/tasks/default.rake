@@ -411,6 +411,13 @@ def normalize_yaml(path)
   end
 end
 
+desc "Ensure you're on master branch"
+task :ensure_master do
+  raise StandardError, 'Must be on master branch to proceed' unless
+    `git rev-parse --abbrev-ref HEAD` == "master\n"
+  puts 'On master branch, proceeding...'
+end
+
 desc 'Reformat en.yml'
 task :reformat_en do
   normalize_yaml Rails.root.join('config', 'locales', 'en.yml')
@@ -443,7 +450,7 @@ end
 # We save and restore the en version around the sync to resolve.
 # Ths task only runs in development, since the gem is only loaded then.
 if Rails.env.development?
-  Rake::Task['translation:sync'].enhance ['backup_en'] do
+  Rake::Task['translation:sync'].enhance %w[ensure_master backup_en] do
     at_exit do
       Rake::Task['restore_en'].invoke
       Rake::Task['fix_localizations'].invoke

@@ -139,6 +139,81 @@ class ProjectsControllerTest < ActionController::TestCase
     assert_not_empty flash
   end
 
+  # rubocop:disable Metrics/BlockLength
+  test 'can add users with additional rights using "+"' do
+    log_in_as(@project.user)
+    assert_not AdditionalRight.exists?(
+      project_id: @project.id,
+      user_id: users(:test_user_mark).id
+    )
+    assert_not AdditionalRight.exists?(
+      project_id: @project.id,
+      user_id: users(:test_user_melissa).id
+    )
+    assert_not AdditionalRight.exists?(
+      project_id: @project.id,
+      user_id: @admin.id
+    )
+    patch :update, params: {
+      id: @project,
+      project: { name: @project.name }, # *Something* so not empty.
+      additional_rights_changes:
+        "+ #{users(:test_user_mark).id}, #{users(:test_user_melissa).id}"
+    }
+    assert_redirected_to project_path(assigns(:project))
+    assert AdditionalRight.exists?(
+      project_id: @project.id,
+      user_id: users(:test_user_mark).id
+    )
+    assert AdditionalRight.exists?(
+      project_id: @project.id,
+      user_id: users(:test_user_melissa).id
+    )
+  end
+  # rubocop:enable Metrics/BlockLength
+
+  test 'can remove a user with additional rights using "-"' do
+    AdditionalRight.new(
+      user_id: users(:test_user_melissa).id,
+      project_id: @project.id
+    ).save!
+    AdditionalRight.new(
+      user_id: users(:test_user_mark).id,
+      project_id: @project.id
+    ).save!
+    assert_equal 2, AdditionalRight.where(project_id: @project.id).count
+    log_in_as(@project.user)
+    patch :update, params: {
+      id: @project.id,
+      project: { name: @project.name }, # *Something* so not empty.
+      additional_rights_changes:
+        "- #{users(:test_user_melissa).id}, #{users(:test_user_mark).id}"
+    }
+    assert_redirected_to project_path(assigns(:project))
+    assert_equal 0, AdditionalRight.where(project_id: @project.id).count
+  end
+
+  test 'cannot remove a user with only additional rights using "-"' do
+    AdditionalRight.new(
+      user_id: users(:test_user_melissa).id,
+      project_id: @project.id
+    ).save!
+    AdditionalRight.new(
+      user_id: users(:test_user_mark).id,
+      project_id: @project.id
+    ).save!
+    assert_equal 2, AdditionalRight.where(project_id: @project.id).count
+    log_in_as(users(:test_user_melissa))
+    patch :update, params: {
+      id: @project.id,
+      project: { name: @project.name }, # *Something* so not empty.
+      additional_rights_changes:
+        "- #{users(:test_user_mark).id}"
+    }
+    assert_redirected_to project_path(assigns(:project))
+    assert_equal 2, AdditionalRight.where(project_id: @project.id).count
+  end
+
   test 'should not get edit as user without additional rights' do
     # Without additional rights, can't log in.  This is paired with
     # previous test, to ensure that *only* the additional right provides

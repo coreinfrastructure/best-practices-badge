@@ -1,4 +1,4 @@
-version: '3'
+version: '2'
 volumes:
   db:
   gems:
@@ -11,8 +11,10 @@ services:
       dockerfile: Dockerfile
     depends_on:
       - db
+      - gems
     links:
       - db
+      - gems
     ports:
       - "3000:3000"
       - "4000:4000"

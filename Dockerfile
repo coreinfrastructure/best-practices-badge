@@ -28,13 +28,13 @@ ENV BUNDLE_PATH /gems_cache
 # will be cached unless changes to one of those three files
 # are made.
 RUN gem install bundler --no-document 
-COPY Gemfile Gemfile.lock .ruby-version /tmp/
+COPY Gemfile* .ruby-version /tmp/
 WORKDIR /tmp
 RUN bundle install --jobs 20 --retry 5
 # RUN apk del build-dependencies
 
-FROM ruby:2.4.1-alpine
-MAINTAINER Dan Kohn <dan@dankohn.com>
+# FROM ruby:2.4.1-alpine
+# MAINTAINER Dan Kohn <dan@dankohn.com>
 
 # These are needed for the runtime (not in build)
 RUN apk --no-cache add libpq tzdata
@@ -42,14 +42,16 @@ RUN apk --no-cache add libpq tzdata
 # Needed for eslintrb in development
 RUN apk --no-cache add nodejs
 
-ENV BUNDLE_PATH /ruby_gems
 ENV APP_HOME /app
 RUN mkdir -p $APP_HOME
-COPY --from=builder /gems_cache $BUNDLE_PATH
+# ENV BUNDLE_PATH /ruby_gems
+# COPY --from=builder /gems_cache $BUNDLE_PATH
 
 # Copy the main application.
 ENV SECRET_KEY_BASE 8645c4e1c9ec1c433666e93482888c6ac317de3f11e1cf52f49bbbd99eb87e71126831c5005e3385e9128a9fe2cc98c8f07f7db8e8d687a7e31b00f3a98355c1
 ENV FASTLY_API_KEY 62e6b55493b47840bbcc6d345a74fb1a
 COPY . $APP_HOME
+# Copy Gemfile in case it was generated in the container
+RUN cp /tmp/Gemfile.lock $APP_HOME
 WORKDIR $APP_HOME
 # RUN bundle exec rails assets:precompile

@@ -26,7 +26,7 @@ gem 'mail', '2.6.6' # Ruby mail handler
 gem 'octokit', '4.7.0' # GitHub's official Ruby API
 gem 'omniauth-github', '1.3.0' # Authentication to GitHub (get project info)
 gem 'paleta', '0.3.0' # Color manipulation, used for badges
-gem 'paper_trail', '7.0.3' # Record previous versions of project data
+gem 'paper_trail', '7.1.0' # Record previous versions of project data
 gem 'pg', '0.21.0' # PostgreSQL database, used for data storage
 gem 'pg_search', '2.0.1' # PostgreSQL full-text search
 gem 'puma', '3.9.1' # Faster webserver; recommended by Heroku

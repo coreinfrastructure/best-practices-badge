@@ -35,22 +35,22 @@ gem 'rails-i18n', '5.0.4' # Localizations for Rails built-ins
 gem 'redcarpet', '3.4.0' # Process markdown in form textareas (justifications)
 gem 'sass-rails', '5.0.6', require: false
 gem 'scout_apm', '2.1.26' # Monitor for memory leaks
-gem 'secure_headers', '3.6.6' # Add hardening measures to HTTP headers
+gem 'secure_headers', '3.6.7' # Add hardening measures to HTTP headers
 gem 'uglifier', '3.2.0', require: false # Minify JavaScript
 gem 'will-paginate-i18n', '0.1.15' # Provide will-paginate translations
 gem 'will_paginate', '3.1.6' # Paginate results (next/previous)
 
 group :development, :test do
   gem 'awesome_print', '1.8.0' # Pretty print Ruby objects
-  gem 'bullet', '5.5.1'
+  gem 'bullet', '5.6.0'
   gem 'bundler-audit', '0.5.0'
   gem 'database_cleaner', '1.6.1' # Cleans up database between tests
   gem 'dotenv-rails', '2.2.1'
   gem 'eslintrb', '2.1.0'
   gem 'json', '2.1.0'
-  gem 'license_finder', '3.0.0'
+  gem 'license_finder', '3.0.1'
   gem 'mdl', '0.4.0'
-  gem 'pronto', '0.9.3'
+  gem 'pronto', '0.9.4'
   gem 'pronto-brakeman', '0.9.0'
   gem 'pronto-eslint', '0.9.1'
   gem 'pronto-rails_best_practices', '0.9.0'
@@ -69,7 +69,7 @@ group :fake_production, :development, :test do
 end
 
 group :development do
-  gem 'bootsnap', '1.1.1' # Speed up boot via caches
+  gem 'bootsnap', '1.1.2' # Speed up boot via caches
   # gem 'fasterer', '0.3.2' # Provide speed recommendations - run 'fasterer'
   # Waiting for Ruby 2.4 support: https://github.com/seattlerb/ruby_parser/issues/239
   gem 'traceroute', '0.5.0' # Adds 'rake traceroute' command to check routes
@@ -78,15 +78,15 @@ group :development do
 end
 
 group :test do
-  gem 'capybara-slow_finder_errors', '0.1.4' # warn if test waits for timeout
-  gem 'chromedriver-helper', '1.1.0'
+  gem 'capybara-slow_finder_errors', '0.1.4', require: false
+  gem 'chromedriver-helper', '1.1.0', require: false
   gem 'codecov', '0.1.10', require: false
   gem 'minitest-rails-capybara', '3.0.1', require: false
   gem 'minitest-reporters', '1.1.14', require: false
   gem 'minitest-retry', '0.1.9', require: false # Avoid Capybara false positives
   gem 'poltergeist', '1.15.0', require: false
-  gem 'rails-controller-testing', '1.0.2'
-  gem 'selenium-webdriver', '3.4.3', require: false
+  gem 'rails-controller-testing', '1.0.2', require: false
+  gem 'selenium-webdriver', '3.4.4', require: false
   gem 'simplecov', '0.14.1', require: false
   gem 'webmock', '3.0.1', require: false
 end

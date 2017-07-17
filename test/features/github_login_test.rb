@@ -17,7 +17,7 @@ class GithubLoginTest < CapybaraFeatureTest
     configure_omniauth_mock unless ENV['GITHUB_PASSWORD']
 
     VCR.use_cassette('github_login', allow_playback_repeats: true) do
-      visit '/'
+      visit '/en'
       assert has_content? 'CII Best Practices Badge Program'
       click_on 'Get Your Badge Now!'
       assert_equal new_project_path, current_path

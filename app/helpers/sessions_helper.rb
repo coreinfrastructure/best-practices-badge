@@ -24,7 +24,7 @@ module SessionsHelper
     # Clean up path
     url.path.gsub!(%r{\A\/[a-z]{2}(-[A-Za-z0-9-]*)?(\/|\z)}, '')
     url.path = '/' + url.path if url.path == '' || url.path[0] != '/'
-    url.path = '/' + locale.to_s + url.path unless locale == :en
+    url.path = '/' + locale.to_s + url.path # Forcibly include locale
     url.to_s
   end
   # rubocop:enable Metrics/AbcSize
@@ -33,9 +33,8 @@ module SessionsHelper
   # This doesn't set the last_login_at or forward elsewhere.
   def log_in(user)
     session[:user_id] = user.id
-    # Switch to user's preferred locale, but only if the current locale is :en
-    # (any other locale is an intentional selection & thus should be retained)
-    I18n.locale = user.preferred_locale.to_sym if I18n.locale == :en
+    # Switch to user's preferred locale
+    I18n.locale = user.preferred_locale.to_sym
     return unless session[:forwarding_url]
 
     session[:forwarding_url] = force_locale_url(

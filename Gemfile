@@ -17,6 +17,7 @@ gem 'chartkick', '2.3.2' # Chart project_stats
 gem 'coffee-rails', '4.2.2', require: false # CoffeeScript Javascript preproc
 gem 'fastly-rails', '0.8.0'
 gem 'font-awesome-rails', '4.7.0.3'
+gem 'http_accept_language', '2.1.1' # Determine user's preferred locale
 gem 'imagesLoaded_rails', '4.1.0' # JavaScript - enable wait for image load
 gem 'jbuilder', '2.7.0'
 gem 'jquery-rails', '4.3.1' # JavaScript jQuery library (for Rails)

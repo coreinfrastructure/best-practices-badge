@@ -25,7 +25,7 @@ class ProjectGetTest < ActionDispatch::IntegrationTest
     # because the secure_headers gem integrates at the Rack level
     # (thus a controller test does not invoke it).
 
-    get project_path(id: @project_one.id)
+    get project_path(id: @project_one.id, locale: 'en')
     assert_response :success
 
     # Check some normal headers

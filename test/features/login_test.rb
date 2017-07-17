@@ -54,7 +54,7 @@ class LoginTest < CapybaraFeatureTest
 
   # rubocop:disable Metrics/BlockLength
   scenario 'Can Login and edit using custom account', js: true do
-    visit projects_path
+    visit projects_path(locale: 'en')
     click_on 'Login'
     fill_in 'Email', with: @user.email
     fill_in 'Password', with: 'password'

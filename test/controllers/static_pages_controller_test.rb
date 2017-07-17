@@ -8,7 +8,7 @@ require 'test_helper'
 
 class StaticPagesControllerTest < ActionController::TestCase
   test 'should get home' do
-    get :home
+    get :home, params: { locale: 'en' }
     assert_response :success
     assert_template 'home'
     # Check that it has some content
@@ -27,7 +27,7 @@ class StaticPagesControllerTest < ActionController::TestCase
   end
 
   test 'should get cookie page' do
-    get :cookies
+    get :cookies, params: { locale: 'en' }
     assert_response :success
     assert_includes @response.body, 'About Cookies'
     assert_includes @response.body, 'small data files'
@@ -40,7 +40,7 @@ class StaticPagesControllerTest < ActionController::TestCase
   end
 
   test 'should get criteria' do
-    get :criteria
+    get :criteria, params: { locale: 'en' }
     assert_response :success
     assert_template 'criteria'
 

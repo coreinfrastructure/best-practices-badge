@@ -27,11 +27,11 @@ class SessionsHelperTest < ActionView::TestCase
   test 'check force_locale_url' do
     assert_equal 'https://a.b.c/fr/', force_locale_url('https://a.b.c/', :fr)
     assert_equal 'https://a.b.c/fr/', force_locale_url('https://a.b.c', :fr)
-    assert_equal 'https://a.b.c/',
+    assert_equal 'https://a.b.c/fr',
                  force_locale_url('https://a.b.c?locale=fr', :en)
-    assert_equal 'https://a.b.c/',
+    assert_equal 'https://a.b.c/en',
                  force_locale_url('https://a.b.c?locale=en', :en)
-    assert_equal 'https://a.b/', force_locale_url('https://a.b', :en)
+    assert_equal 'https://a.b/en', force_locale_url('https://a.b', :en)
     assert_equal 'https://a.b/fr/projects',
                  force_locale_url('https://a.b/zh-CN/projects', :fr)
     assert_equal 'https://a.b/zh-CN/projects',

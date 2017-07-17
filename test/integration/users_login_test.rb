@@ -13,7 +13,7 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
   end
 
   test 'login with invalid username and password' do
-    get login_path
+    get login_path, params: { locale: 'en' }
     assert_template 'sessions/new'
     post login_path, params: {
       session: {
@@ -28,7 +28,7 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
   end
 
   test 'login with no provider' do
-    get login_path
+    get login_path, params: { locale: 'en' }
     assert_template 'sessions/new'
     post login_path, params: {
       session: { email: 'unknown@example.org', password: 'bad_password' }
@@ -42,7 +42,7 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
   # See the comments on test_helper.rb method log_in_as()
   test 'login with valid information and then logout' do
     # To skip: skip('message')
-    get login_path
+    get login_path, params: { locale: 'en' }
     assert_template 'sessions/new'
 
     log_in_as @user
@@ -56,7 +56,7 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
     # assert_select 'a[href=?]', logout_path
     # assert_select 'a[href=?]', user_path(@user)
 
-    delete logout_path
+    delete logout_path, params: { locale: 'en' }
     assert_not user_logged_in?
     assert_redirected_to root_url
     follow_redirect!

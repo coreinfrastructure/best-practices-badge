@@ -241,7 +241,7 @@ class ProjectsController < ApplicationController
       respond_to { |format| format.html }
     else
       flash[:danger] = t('admin_only')
-      redirect_to '/'
+      redirect_to root_url
     end
   end
 

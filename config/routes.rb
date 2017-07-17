@@ -14,6 +14,9 @@ Rails.application.routes.draw do
   # Root of site
   root 'static_pages#home'
 
+  # TODO: /projects/NUMBER/badge
+  # TODO: Redirect no-locale to a locale
+
   scope '(:locale)' do
     resources :project_stats
 

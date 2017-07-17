@@ -88,7 +88,7 @@ class UsersController < ApplicationController
       # into their account), the user will know about it.
       UserMailer.user_update(@user, @user.previous_changes).deliver_now
       flash[:success] = t('.profile_updated')
-      locale_prefix = I18n.locale == :en ? '' : '/' + I18n.locale.to_s
+      locale_prefix = '/' + I18n.locale.to_s
       redirect_to "#{locale_prefix}/users/#{@user.id}"
     else
       render 'edit'

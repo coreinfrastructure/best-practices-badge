@@ -20,7 +20,16 @@
 # NOTICE: If you add a locale, also modify robots.txt to prevent crawling of
 # user accounts in that locale. See: app/views/static_pages/robots.text.erb
 
-I18n.available_locales = %i[en zh-CN fr de ja ru]
+I18n.available_locales = %i[en zh-CN fr de ja ru].freeze
+
+# Here are the locales we will *automatically* switch to.
+# This *may* be the same as I18n.available_locales, but if a locale's
+# translation isn't ready we should probably omit it here.
+Rails.application.config.automatic_locales = I18n.available_locales.dup.freeze
+
+# Automatic_locales must be a subset of I18n.available_locales - check it!
+raise InvalidLocale unless
+  (Rails.application.config.automatic_locales - I18n.available_locales).empty?
 
 # If we don't have text, fall back to English.  That obviously isn't
 # ideal, but it's better to show *some* text to the user than leave it

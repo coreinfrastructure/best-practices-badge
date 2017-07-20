@@ -40,15 +40,15 @@ perfect_unjustified:
   homepage_url: https://www.example.org
   repo_url: https://www.example.org/code2
   license: MIT
-  badge_percentage_0: 88
+  badge_percentage_0: 86
   badge_percentage_1: 0
-  badge_percentage_2: 0
-<% Project::ALL_CRITERIA_STATUS.each do |criterion_status| %>
-  <%= criterion_status %>: Met
+  badge_percentage_2: 5
+<% Criteria['0'].keys.each do |criterion| %>
+  <%= criterion.to_s + '_status' %>: Met
 <% end %>
   release_notes_status: N/A
   vulnerability_report_private_status: N/A
-  installation_common_status: Unmet
+  test_invocation_status: Unmet
   test_most_status: Unmet
   crypto_certificate_verification_status: Unmet
   build_reproducible_status: '?'
@@ -63,8 +63,8 @@ perfect_passing:
   implementation_languages: JavaScript, Java, C++ # Handle multiple names
   license: MIT
   badge_percentage_0: 100
-  badge_percentage_1: 25
-  badge_percentage_2: 45
+  badge_percentage_1: 13
+  badge_percentage_2: 23
   achieved_passing_at: 2015-02-15T12:00:00
 <% Criteria['0'].keys.each do |criterion| %>
   <%= criterion.to_s + '_status' %>: Met
@@ -82,7 +82,7 @@ perfect_silver:
   license: MIT
   badge_percentage_0: 100
   badge_percentage_1: 100
-  badge_percentage_2: 50
+  badge_percentage_2: 41
   achieved_passing_at: 2015-02-15T12:00:00
 <% (Criteria['0'].keys + Criteria['1'].keys).each do |criterion| %>
   <%= criterion.to_s + '_status' %>: Met

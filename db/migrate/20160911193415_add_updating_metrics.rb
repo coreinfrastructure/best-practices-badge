@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AddUpdatingMetrics < ActiveRecord::Migration
+class AddUpdatingMetrics < ActiveRecord::Migration[4.2]
   def change
     # Add metrics recording project counts where created_at < updated_at.
     # A lot of projects get started and don't edit later - we'd like to

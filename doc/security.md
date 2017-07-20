@@ -325,9 +325,9 @@ As explained in
 
 *   Spoofing identity. An example of identity spoofing is illegally accessing and then using another user's authentication information, such as username and password.
 *   Tampering with data. Data tampering involves the malicious modification of data. Examples include unauthorized changes made to persistent data, such as that held in a database, and the alteration of data as it flows between two computers over an open network, such as the Internet.
-*   Repudiation. Repudiation threats are associated with users who deny performing an action without other parties having any way to prove otherwise—for example, a user performs an illegal operation in a system that lacks the ability to trace the prohibited operations. Nonrepudiation refers to the ability of a system to counter repudiation threats. For example, a user who purchases an item might have to sign for the item upon receipt. The vendor can then use the signed receipt as evidence that the user did receive the package.
-*   Information disclosure. Information disclosure threats involve the exposure of information to individuals who are not supposed to have access to it—for example, the ability of users to read a file that they were not granted access to, or the ability of an intruder to read data in transit between two computers.
-*   Denial of service. Denial of service (DoS) attacks deny service to valid users—for example, by making a Web server temporarily unavailable or unusable. You must protect against certain types of DoS threats simply to improve system availability and reliability.
+*   Repudiation. Repudiation threats are associated with users who deny performing an action without other parties having any way to prove otherwise - for example, a user performs an illegal operation in a system that lacks the ability to trace the prohibited operations. Nonrepudiation refers to the ability of a system to counter repudiation threats. For example, a user who purchases an item might have to sign for the item upon receipt. The vendor can then use the signed receipt as evidence that the user did receive the package.
+*   Information disclosure. Information disclosure threats involve the exposure of information to individuals who are not supposed to have access to it-for example, the ability of users to read a file that they were not granted access to, or the ability of an intruder to read data in transit between two computers.
+*   Denial of service. Denial of service (DoS) attacks deny service to valid users-for example, by making a Web server temporarily unavailable or unusable. You must protect against certain types of DoS threats simply to improve system availability and reliability.
 *   Elevation of privilege. In this type of threat, an unprivileged user gains privileged access and thereby has sufficient access to compromise or destroy the entire system. Elevation of privilege threats include those situations in which an attacker has effectively penetrated all system defenses and become part of the trusted system itself, a dangerous situation indeed.
 
 The diagram shown earlier is not a data flow diagram
@@ -421,6 +421,71 @@ Admins must use their unique credentials to log in.
 *   Denial of service.  Heroku has a financial incentive to keep this
     available, and takes steps to do so.
 *   Elevation of privilege.  N/A; anyone allowed to use this is privileged.
+
+#### Translation service and I18n text
+
+This software is internationalized.
+
+All text used for display is in the directory "config/locales"; on the figure
+this is shown as I18n (internationalized) text.
+The source text specific to the application is in English
+in file config/locales/en.yml.
+The "rake translation:sync" command, which is executed within the
+*development* environment, transmits the current version of en.yml
+to the site translation.io, and loads the current text from translation.io into
+the various config/locales files.
+Only authorized translators are given edit rights to translations on
+translation.io.
+
+We consider translation.io and our translators as trusted.
+That said, we impose a variety of security safeguards as if they were not
+trusted.  That way, if something happens (e.g., someone's account is
+subverted), then the damage that can be done is limited.
+
+Here are the key security safeguards:
+
+* During "translation:sync" synchronization,
+  the "en.yml" file downloaded from translation.io is erased, and
+  the original "en.yml" is restored.  Thus, translation.io *cannot* modify
+  the English source text.
+* After synchronization, and on every test run (including deployment to a tier),
+  *every* text segment (including English) is checked, including to
+  ensure that *only* a whitelisted set of HTML tags and attributes (at most) are
+  included in every text.  The tests will fail, and the system will not be
+  deployed, if any other tags or attributes are used.
+  This set does not include dangerous tags such as &lt;script&gt;.
+  The test details are in <test/models/translations_test.rb>.
+  Thus, while a translation can be wrong or be defaced,
+  what it can include in the HTML (and thus attack users) is very limited.
+  Although not relevant to security, it's worth noting that these tests
+  also check for many errors in translation.  For example, only Latin
+  lowercase letters are allowed after "&lt;" and "&lt;/"; these protect
+  against following these sequences with whitespace or a Cyrillic "a".
+* Synchronization simply transfers the updated translations to the
+  directory config/locales.  This is then reviewed by a committer before
+  committing, and goes through tiers as usual.
+
+We don't want the text defaced, and take a number of steps to prevent it.
+That said, what's more important is ensuring that defaced text is unlikely
+to turn into an attack on our users, so we take *extra* cautions
+to prevent that.
+
+Given these safeguards, here is how we deal with STRIDE:
+
+*   Spoofing identity. Every translator has a unique credential.
+*   Tampering with data. Translators other than admins are only given edit
+    rights for a particular locale.  The damage is limited, because
+    the text must pass through an HTML sanitizer.
+*   Repudiation. Those authorized on translation.io have unique credentials.
+*   Information disclosure.  The channel is encrypted in motion, and in
+    any case other than passwords this is all public information.
+*   Denial of service.  Translation.io has a financial incentive to keep its
+    service available, and takes steps to do so.
+    At run-time the system uses its internal text copy, so if
+    translation.io stops working for a while, our site can continue working.
+    If it stayed down, we could switch to another service or do it ourselves.
+*   Elevation of privilege.  A translator cannot edit the source text files
+    by this mechanism.  Sanitization checks limit the damage that can be done.
 
 ### <a name="simple-design"></a>Simple design
 

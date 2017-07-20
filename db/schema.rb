@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170617215652) do
+ActiveRecord::Schema.define(version: 20170626143755) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -343,6 +343,10 @@ ActiveRecord::Schema.define(version: 20170617215652) do
     t.text "security_review_justification"
     t.string "assurance_case_status", default: "?", null: false
     t.text "assurance_case_justification"
+    t.string "achieve_passing_status", default: "Unmet", null: false
+    t.text "achieve_passing_justification"
+    t.string "achieve_silver_status", default: "Unmet", null: false
+    t.text "achieve_silver_justification"
     t.index ["achieved_passing_at"], name: "index_projects_on_achieved_passing_at"
     t.index ["badge_percentage_0"], name: "index_projects_on_badge_percentage_0"
     t.index ["badge_percentage_1"], name: "index_projects_on_badge_percentage_1"

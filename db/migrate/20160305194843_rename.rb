@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Rename < ActiveRecord::Migration
+class Rename < ActiveRecord::Migration[4.2]
   def change
     rename_column :projects,
                   :description_sufficient_status,

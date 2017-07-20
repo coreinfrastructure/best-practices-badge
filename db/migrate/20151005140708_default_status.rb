@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class DefaultStatus < ActiveRecord::Migration
+class DefaultStatus < ActiveRecord::Migration[4.2]
   def change
     change_column_default :projects, :project_url_status, '?'
     change_column_default :projects, :project_url_https_status, '?'

@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class RenameChangelogToReleaseNotes < ActiveRecord::Migration
+class RenameChangelogToReleaseNotes < ActiveRecord::Migration[4.2]
   def change
     rename_column :projects, :changelog_status,
                   :release_notes_status

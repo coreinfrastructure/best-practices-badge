@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class AddDiscussion < ActiveRecord::Migration
+class AddDiscussion < ActiveRecord::Migration[4.2]
   def change
     add_column :projects, :discussion_status, :string, default: '?'
     add_column :projects, :discussion_justification, :text

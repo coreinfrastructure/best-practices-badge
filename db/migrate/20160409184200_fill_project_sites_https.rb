@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class FillProjectSitesHttps < ActiveRecord::Migration
+class FillProjectSitesHttps < ActiveRecord::Migration[4.2]
   def change
     # Previous rename was misleading, change to follow conventions:
     rename_column :projects,

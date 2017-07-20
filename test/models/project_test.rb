@@ -122,7 +122,7 @@ class ProjectTest < ActiveSupport::TestCase
     assert_equal(
       :criterion_justification_required,
       @unjustified_project.get_criterion_result(
-        Criteria['0'][:installation_common]
+        Criteria['0'][:test_invocation]
       )
     )
     assert_equal(
@@ -138,13 +138,13 @@ class ProjectTest < ActiveSupport::TestCase
     assert_equal(
       :criterion_failing,
       @unjustified_project.get_criterion_result(
-        Criteria['0'][:crypto_certificate_verification]
+        Criteria['1'][:crypto_certificate_verification]
       )
     )
     assert_equal(
       :criterion_unknown,
       @unjustified_project.get_criterion_result(
-        Criteria['0'][:build_reproducible]
+        Criteria['2'][:build_reproducible]
       )
     )
     assert_equal(
@@ -168,6 +168,36 @@ class ProjectTest < ActiveSupport::TestCase
     assert_equal 'gold', @project_gold.badge_level
   end
 
+  # This test works because we don't set the higher level prereqs in the
+  # fixture files.  Make sure not to change this.
+  test 'check update_prereqs works correctly for level upgrades' do
+    assert_equal 'Unmet', @unjustified_project.achieve_passing_status
+    assert_equal 'Unmet', @project_passing.achieve_passing_status
+    assert_equal 'Unmet', @project_passing.achieve_silver_status
+    assert_equal 'Met', @project_silver.achieve_passing_status
+    assert_equal 'Unmet', @project_silver.achieve_silver_status
+    Project.update_all_badge_percentages(Criteria.keys)
+    assert_equal(
+      'Unmet', Project.find(@unjustified_project.id).achieve_passing_status
+    )
+    assert_equal(
+      'Met', Project.find(@project_passing.id).achieve_passing_status
+    )
+    assert_equal(
+      'Unmet', Project.find(@project_passing.id).achieve_silver_status
+    )
+    assert_equal 'Met', Project.find(@project_silver.id).achieve_passing_status
+    assert_equal 'Met', Project.find(@project_silver.id).achieve_silver_status
+  end
+
+  test 'update_prereqs works correctly for level downgrades' do
+    assert_equal 'Met', @project_silver.achieve_passing_status
+    @project_silver.update_attributes!(description_good_status: 'Unmet')
+    assert_equal(
+      'Unmet', Project.find(@project_silver.id).achieve_passing_status
+    )
+  end
+
   # The number of named badge levels must be equal to the number of
   # criteria levels + 1, because projects can be "in_progress"
   test 'test all possible badge "levels/statuses" are named' do
@@ -187,8 +217,8 @@ class ProjectTest < ActiveSupport::TestCase
     assert_equal '5/8', reporting[:text]
     assert_equal 'hsl(75, 100%, 50%)', reporting[:color]
     quality = @unjustified_project.get_satisfaction_data('0', 'quality')
-    assert_equal '13/13', quality[:text]
-    assert_equal 'hsl(120, 100%, 50%)', quality[:color]
+    assert_equal '12/13', quality[:text]
+    assert_equal 'hsl(111, 100%, 50%)', quality[:color]
   end
 
   # rubocop:disable Metrics/BlockLength

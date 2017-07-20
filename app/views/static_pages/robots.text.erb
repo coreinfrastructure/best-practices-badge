@@ -1,0 +1,6 @@
+User-Agent: *
+<% if ENV['PUBLIC_HOSTNAME'] == 'bestpractices.coreinfrastructure.org' %>
+Allow: /
+<% else %>
+Disallow: /
+<% end %>

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Add fields to support sending reminders to inactive badging projects.
-class Reminders < ActiveRecord::Migration
+class Reminders < ActiveRecord::Migration[4.2]
   def change
     add_column :projects, :last_reminder_at, :datetime
     add_index :projects, :last_reminder_at

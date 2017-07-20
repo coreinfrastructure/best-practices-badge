@@ -154,7 +154,10 @@ function getUnmetResult(criterion, justification) {
 // If you change this function change "get_criterion_result" accordingly.
 function getCriterionResult(criterion) {
   var status = criterionStatus(criterion);
-  var justification = $('#project_' + criterion + '_justification')[0].value;
+  var justification = $('#project_' + criterion + '_justification');
+  if (justification.length > 0) {
+    justification = $(justification)[0].value;
+  }
   if (!justification) {
     justification = '';
   }
@@ -324,7 +327,8 @@ function hideMetNA() {
 function updateCriterionDisplay(criterion) {
   var criterionJust = '#project_' + criterion + '_justification';
   var status = criterionStatus(criterion);
-  var justification = $(criterionJust) ? $(criterionJust)[0].value : '';
+  var justification = $(criterionJust).length > 0 ?
+    $(criterionJust)[0].value : '';
   var criterionPlaceholder;
   var suppressJustificationDisplay;
   var locale = getLocale();

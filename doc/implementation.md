@@ -491,6 +491,55 @@ To learn more about Rails and internationalization, please read the
 We can *always* use help in localizing (that is, in providing translations
 of text to various locales) - please help!
 
+The directory config/locales/ contains the text for various locales
+in YAML format.
+The en.yml (English) file is the source file, the rest of the locales
+are translations.
+
+Don't store comments in the en.yml file. The YAML format supports comments,
+but the reformatter we sometimes use removes comments.
+
+Pluralization is tricky in some languages.
+Rails specially handles pluralization when the special field
+"count" is used.  It then looks for keys which
+in the general case can be {zero, one, two, few, many, other}.
+The key "one" isn't necessarily used for just 1 in a language.
+For more information, see the Unicode plural rules:
+<http://cldr.unicode.org/index/cldr-spec/plural-rules>
+<http://www.unicode.org/cldr/charts/latest/supplemental/language_plural_rules.html>
+We include keys for the forms we don't use in some languages so that
+translation.io will generate the keys in the translation files.
+If the required keys are missing, an exception may be raised depending
+on the count (this would lead to the inability to display a page).
+Sadly, translation.io ignores empty keys. Thus, we can't add empty keys
+and leave them untranslated, because then the locales that need the keys
+(like Russian) don't have the keys they need for translation.
+
+Here is an example, where "few" and "many" are needed for Russian:
+
+~~~~yml
+  projects_count:
+    zero: Zero Projects
+    one: "%{count} Project"
+    few: "%{count} Projects"
+    many: "%{count} Projects"
+    other: "%{count} Projects"
+~~~~
+
+The key "misc.in_javascript.show_met_title" includes "&amp;".
+The "&amp;" is escaped by Rails since it's not marked as HTML safe.
+
+We include some entries for testing.
+The key "hello" is used in some tests to ensure that we get correct values
+for at least some specific keys.
+The last entry in en.yml is "last_entry", there for
+test purposes so that we can detect
+some problems in YAML formatting of this file.
+The test suite includes tests that check the value of every string segment
+for every locale, including checking for common errors and ensuring that
+only acceptable HTML tags and attributes are used.
+See [security.md](./security.md) for more information.
+
 ### Requesting the locale at run-time
 
 Users indicate the locale via the URL.

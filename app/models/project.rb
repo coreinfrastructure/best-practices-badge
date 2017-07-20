@@ -29,7 +29,7 @@ class Project < ApplicationRecord
   PROJECT_OTHER_FIELDS = %i[
     name description homepage_url repo_url cpe implementation_languages
     license general_comments user_id disabled_reminders lock_version
-    level
+    level additional_rights_changes
   ].freeze
   ALL_CRITERIA_STATUS = Criteria.all.map(&:status).freeze
   ALL_CRITERIA_JUSTIFICATION = Criteria.all.map(&:justification).freeze
@@ -184,6 +184,16 @@ class Project < ApplicationRecord
     end
   end
 
+  # Return a string representing the additional rights on this project.
+  # Currently it's just a (possibly empty) list of user ids from
+  # AdditionalRight.  If AdditionalRights gains different kinds of rights
+  # (e.g., to spec additional owners), this method will need to be tweaked.
+  def additional_rights_to_s
+    # "distinct" shouldn't be needed; it's purely defensive here
+    list = AdditionalRight.where(project_id: id).distinct.pluck(:user_id)
+    list.sort.to_s # Use list.sort.to_s[1..-2] to remove surrounding [ and ]
+  end
+
   # Return string representing badge level; assumes badge_percentage correct.
   def badge_level
     BADGE_LEVELS.each_with_index do |level, index|
@@ -284,6 +294,7 @@ class Project < ApplicationRecord
   # and update relevant event datetime if needed.
   def update_badge_percentage(level)
     old_badge_percentage = self["badge_percentage_#{level}".to_sym]
+    update_prereqs(level) unless level == Criteria.keys[0]
     self["badge_percentage_#{level}".to_sym] =
       calculate_badge_percentage(level)
     update_passing_times(old_badge_percentage) if level == '0'
@@ -481,6 +492,11 @@ class Project < ApplicationRecord
     errors.add :base, I18n.t('error_messages.need_home_page_or_url')
   end
 
+  def to_percentage(portion, total)
+    return 0 if portion.zero?
+    ((portion * 100.0) / total).round
+  end
+
   def update_passing_times(old_badge_percentage)
     if badge_percentage_0 == 100 && old_badge_percentage < 100
       self.achieved_passing_at = Time.now.utc
@@ -489,8 +505,21 @@ class Project < ApplicationRecord
     end
   end
 
-  def to_percentage(portion, total)
-    return 0 if portion.zero?
-    ((portion * 100.0) / total).round
+  # When filling in the prerequisites, we do not fill in the justification
+  # for them. The justification is only there as it makes implementing this
+  # portion of the code simpler.
+  # rubocop:disable Metrics/AbcSize
+  def update_prereqs(level)
+    index = Criteria.keys.index(level)
+    return if index.zero?
+    if self["badge_percentage_#{Criteria.keys[index - 1]}".to_sym] >= 100
+      return if self["achieve_#{BADGE_LEVELS[index]}_status".to_sym] == 'Met'
+      status = 'Met'
+    else
+      return if self["achieve_#{BADGE_LEVELS[index]}_status".to_sym] == 'Unmet'
+      status = 'Unmet'
+    end
+    self["achieve_#{BADGE_LEVELS[index]}_status".to_sym] = status
   end
+  # rubocop:enable Metrics/AbcSize
 end

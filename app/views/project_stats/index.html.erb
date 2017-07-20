@@ -8,7 +8,8 @@
   Rails.cache.delete ActiveSupport::Cache.expand_cache_key(
     ['project_stats', locale, ProjectStat.all.size-1]
   )
-  cache ['project_stats', locale, ProjectStat.all.size] do
+  cache ['project_stats', locale, ProjectStat.all.size,
+         !!current_user&.admin? ] do
 %>
 
 <p id="notice"><%= notice %></p>
@@ -59,6 +60,77 @@
   # Done transforming data; display it.
   line_chart dataset, library: date_chart_options, defer: true
 %>
+
+<% if current_user&.admin? %>
+<br><br><br>
+
+<h2><%= t '.projects_silver' %></h2>
+<%=
+  # Show project counts, but skip <25% because that makes chart scale unusable
+  # The 25% value is a little misleading (because of overlaps), and messes
+  # the scale, so show starting at 50%.
+  gt25_stats = ProjectStat::STAT_VALUES.select do |e|
+    e.to_i > 25
+  end.freeze
+  dataset = gt25_stats.map do |minimum|
+    desired_field = 'percent_1_ge_' + minimum.to_s
+    series_dataset = ProjectStat.all.reduce({}) do |h,e|
+     h.merge(e.created_at => e[desired_field])
+    end
+    {name: '>=' + minimum.to_s + '%', data: series_dataset}
+  end
+  # Done transforming data; display it.
+  line_chart dataset, library: date_chart_options, defer: true
+%>
+
+<br><br><br>
+
+<h2><%= t '.projects_gold' %></h2>
+<%=
+  # Show project counts, but skip <25% because that makes chart scale unusable
+  # We already calculated "gt25_stats", just reuse it.
+  dataset = gt25_stats.map do |minimum|
+    desired_field = 'percent_2_ge_' + minimum.to_s
+    series_dataset = ProjectStat.all.reduce({}) do |h,e|
+     h.merge(e.created_at => e[desired_field])
+    end
+    {name: '>=' + minimum.to_s + '%', data: series_dataset}
+  end
+  # Done transforming data; display it.
+  line_chart dataset, library: date_chart_options, defer: true
+%>
+
+<br><br><br>
+
+<h2><%= t '.projects_completed_silver_and_gold' %></h2>
+<%=
+  dataset = ['1', '2'].map do |level|
+    desired_field = "percent_#{level}_ge_100"
+    series_dataset = ProjectStat.all.reduce({}) do |h,e|
+     h.merge(e.created_at => e[desired_field])
+    end
+    {name: t("projects.form_early.level.#{level}"), data: series_dataset}
+  end
+  # Done transforming data; display it.
+  line_chart dataset, library: date_chart_options, defer: true
+%>
+
+<br><br><br>
+
+<h2><%= t '.percent_projects_earning_badges' %></h2>
+<%=
+  dataset = [0, 1, 2].map do |level|
+    desired_field = "percent#{level > 0 ? '_' + level.to_s : '' }_ge_100"
+    series_dataset = ProjectStat.all.reduce({}) do |h,e|
+     h.merge(e.created_at =>
+       e[desired_field].to_i*100.0/(e['percent_ge_0'].to_i))
+    end
+    {name: t("projects.form_early.level.#{level}"), data: series_dataset}
+  end
+  # Done transforming data; display it.
+  line_chart dataset, library: date_chart_options, defer: true
+%>
+<% end # if current_user&.admin? %>
 
 <br><br><br>
 

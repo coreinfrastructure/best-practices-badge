@@ -368,34 +368,168 @@ task :fake_production do
   sh 'RAILS_ENV=fake_production rails server -p 4000'
 end
 
-desc 'Save English translation file as .ORIG file'
-task :save_en do
-  sh 'cp -p config/locales/en.yml config/locales/en.yml.ORIG'
+def normalize_values(input)
+  input.transform_values! do |value|
+    if value.is_a?(Hash)
+      normalize_values value
+    elsif value.is_a?(String)
+      normalize_string value
+    elsif value.is_a?(NilClass)
+      value
+    else raise TypeError 'Not Hash, String or NilClass'
+    end
+  end
 end
 
-# Fix up translation:sync.
-# First, translation:sync rewrites the source en.yml file, which it shouldn't
-# ever do, and in the process reformats it into garbage with overly-long lines.
-# We modify its behavior to save the en.yml file, and later restore it.
-# We also remove trailing whitespace after running "translation:sync".
+# rubocop:disable Metrics/MethodLength
+def normalize_string(value)
+  # Remove trailing whitespace
+  value.sub!(/\s+$/, '')
+  return value unless value.include?('<')
+  # Google Translate generates html text that has predictable errors.
+  value.gsub(/< a /, '<a ')
+       .gsub(/< \057/, '</')
+       .gsub(/<\057 /, '</')
+       .gsub(/<Strong>/, '<strong>')
+       .gsub(/<Em>/, '<em>')
+       .gsub(/ Href *=/, 'href=')
+       .gsub(/href = /, 'href=')
+       .gsub(/class = /, 'class=')
+       .gsub(/target = /, 'target=')
+end
+# rubocop:enable Metrics/MethodLength
+
+def normalize_yaml(path)
+  # Reformats with a line-width of 80, removes trailing whitespace from all
+  # values and fixes some predictable errors automatically.
+  require 'yaml'
+  Dir[path].each do |filename|
+    normalized = normalize_values(YAML.load_file(filename))
+    IO.write(
+      filename, normalized.to_yaml(line_width: 60).gsub(/\s+$/, '')
+    )
+  end
+end
+
+desc "Ensure you're on master branch"
+task :ensure_master do
+  raise StandardError, 'Must be on master branch to proceed' unless
+    `git rev-parse --abbrev-ref HEAD` == "master\n"
+  puts 'On master branch, proceeding...'
+end
+
+desc 'Reformat en.yml'
+task :reformat_en do
+  normalize_yaml Rails.root.join('config', 'locales', 'en.yml')
+end
+
+desc 'Fix locale text'
+task :fix_localizations do
+  normalize_yaml Rails.root.join('config', 'locales', 'translation.*.yml')
+end
+
+desc 'Save English translation file as .ORIG file'
+task :backup_en do
+  FileUtils.cp Rails.root.join('config', 'locales', 'en.yml'),
+               Rails.root.join('config', 'locales', 'en.yml.ORIG'),
+               preserve: true # this is the equivalent of cp -p
+end
+
+desc 'Restore English translation file from .ORIG file'
+task :restore_en do
+  FileUtils.mv Rails.root.join('config', 'locales', 'en.yml.ORIG'),
+               Rails.root.join('config', 'locales', 'en.yml')
+end
+
 # The "translation:sync" task syncs up the translations, but uses the usual
 # YAML writer, which writes out trailing whitespace.  It should not do that,
-# and the trailing whitespace causes later failures in testing.
+# and the trailing whitespace causes later failures in testing, so we fix.
 # Problem already reported:
 # - https://github.com/aurels/translation-gem/issues/13
 # - https://github.com/yaml/libyaml/issues/46
-# We will run this enhancement to solve the problem.
-# Only do this in development, since the gem only exists then.
-# Use Ruby for in place editing because sed isn't portable across Linux & OS X
+# We save and restore the en version around the sync to resolve.
+# Ths task only runs in development, since the gem is only loaded then.
 if Rails.env.development?
-  task 'translation:sync' => :save_en
-  Rake::Task['translation:sync'].enhance do
-    puts 'Removing bogus trailing whitespace (bug workaround).'
-    files = './config/locales/localization*.yml ' \
-            './config/locales/translation*.yml'
-    sh %q{ruby -pi -e "sub(/ $/, '')" } + files
-    sh 'mv config/locales/en.yml.ORIG config/locales/en.yml'
-    puts "Now run: git commit -sam 'rake translation:sync'"
+  Rake::Task['translation:sync'].enhance %w[ensure_master backup_en] do
+    at_exit do
+      Rake::Task['restore_en'].invoke
+      Rake::Task['fix_localizations'].invoke
+      puts "Now run: git commit -sam 'rake translation:sync'"
+    end
+  end
+end
+
+require 'net/http'
+# Request uri, reply true if fetchable. Follow redirects 'limit' times.
+# See: https://docs.ruby-lang.org/en/2.0.0/Net/HTTP.html
+# rubocop:disable Metrics/MethodLength
+def fetchable?(uri_str, limit = 10)
+  return false if limit <= 0
+  # Use GET, not HEAD. Some websites will say a page doesn't exist when given
+  # a HEAD request, yet will redirect correctly on a GET request. Ugh.
+  response = Net::HTTP.get_response(URI.parse(uri_str))
+  case response
+  when Net::HTTPSuccess then
+    return true
+  when Net::HTTPRedirection then
+    # Recurse, because redirection might be to a different site
+    location = response['location']
+    warn "    redirected to <#{location}>"
+    return fetchable?(location, limit - 1)
+  else
+    return false
+  end
+end
+# rubocop:enable Metrics/MethodLength
+
+def link_okay?(link)
+  return false if link.blank?
+  # '%{..}' is used when we generate URLs, presume they're okay.
+  return true if link.start_with?('mailto:', '/', '#', '%{')
+  # Shortcut: If we have anything other than http/https, it's wrong.
+  return false unless link.start_with?('https://', 'http://')
+  # Quick check - if there's a character other than URI-permitted, fail.
+  # Note that space isn't included (including space is a common error).
+  return false if %r{[^-A-Za-z0-9_\.~!*'\(\);:@\&=+\$,\/\?#\[\]%]}.match?(link)
+  warn "  <#{link}>"
+  fetchable?(link)
+end
+
+require 'set'
+def validate_links_in_string(translation, from, seen)
+  translation.scan(/href=["'][^"']+["']/).each do |snippet|
+    link = snippet[6..-2]
+    next if seen.include?(link) # Already seen it, don't complain again.
+    if link_okay?(link)
+      seen.add(link)
+    else
+      # Don't add failures to what we've seen, so that we report all failures
+      puts "\nFAILED LINK IN #{from.join('.')} : <#{link}>"
+    end
+  end
+end
+
+# Recursive validate links.  "seen" refers to a set of links already seen.
+# To recurse we really want kind_of?, not is_a?, so disable rubocop rule
+# rubocop:disable Style/ClassCheck
+def validate_links(translation, from, seen)
+  if translation.kind_of?(Array)
+    translation.each_with_index do |i, part|
+      validate_links(part, from + [i], seen)
+    end
+  elsif translation.kind_of?(Hash)
+    translation.each { |key, part| validate_links(part, from + [key], seen) }
+  elsif translation.kind_of?(String) # includes safe_html
+    validate_links_in_string(translation.to_s, from, seen)
+  end
+end
+# rubocop:enable Style/ClassCheck
+
+desc 'Validate hypertext links'
+task validate_hypertext_links: :environment do
+  seen = Set.new # Track what we've already seen (we'll skip them)
+  I18n.available_locales.each do |loc|
+    validate_links I18n.t('.', locale: loc), [loc], seen
   end
 end
 
@@ -428,6 +562,7 @@ task update_all_badge_percentages: :environment do
   Project.update_all_badge_percentages(Criteria.keys)
 end
 
+desc 'Run to recalculate higher-level badge percentages for all projects'
 task update_all_higher_level_badge_percentages: :environment do
   Project.update_all_badge_percentages(Criteria.keys - ['0'])
 end

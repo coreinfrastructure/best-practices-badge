@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CreateProjectStats < ActiveRecord::Migration
+class CreateProjectStats < ActiveRecord::Migration[4.2]
   def change
     create_table :project_stats do |t|
       # The data columns can't be null.  This forces the data to be cleaner,

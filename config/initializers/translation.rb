@@ -7,7 +7,7 @@
 # Support translation.io.  See:
 # https://translation.io/david-a-wheeler/cii-best-practices-badge/
 
-if Rails.env.development? || Rails.env.testing?
+if Gem::Specification.find_all_by_name('translation').any?
   TranslationIO.configure do |config|
     config.api_key        = 'b6086a4661ba47d79ec771236e298211'
     config.source_locale  = 'en'

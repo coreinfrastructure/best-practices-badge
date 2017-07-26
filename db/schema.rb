@@ -14,8 +14,8 @@ ActiveRecord::Schema.define(version: 20170626143755) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-  enable_extension "citext"
   enable_extension "pg_stat_statements"
+  enable_extension "citext"
 
   create_table "additional_rights", force: :cascade do |t|
     t.integer "project_id", null: false
@@ -29,8 +29,8 @@ ActiveRecord::Schema.define(version: 20170626143755) do
 
   create_table "pg_search_documents", id: :serial, force: :cascade do |t|
     t.text "content"
-    t.integer "searchable_id"
     t.string "searchable_type"
+    t.integer "searchable_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["searchable_type", "searchable_id"], name: "index_pg_search_documents_on_searchable_type_and_searchable_id"

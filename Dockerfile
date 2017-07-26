@@ -21,7 +21,7 @@ RUN mkdir -p $APP_HOME
 WORKDIR $APP_HOME
 
 # This enables caching gems in a separate container
-ENV BUNDLE_PATH /gems_cache
+# ENV BUNDLE_PATH /gems_cache
 
 # Copy the Gemfile, Gemfile.lock and .ruby-version and install
 # the RubyGems. This is a separate step so the dependencies

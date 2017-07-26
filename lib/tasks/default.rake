@@ -342,17 +342,17 @@ task 'test:features' => 'test:prepare' do
 end
 
 # This gem isn't available in production
-if Rails.env.production? || Rails.env.fake_production?
-  task :eslint do
-    puts 'Skipping eslint checking in production (libraries not available).'
-  end
-else
+if Gem::Specification.find_all_by_name('eslintrb').any?
   require 'eslintrb/eslinttask'
   Eslintrb::EslintTask.new :eslint do |t|
     t.pattern = 'app/assets/javascripts/*.js'
     # If you modify the exclude_pattern, also modify file .eslintignore
     t.exclude_pattern = 'app/assets/javascripts/application.js'
     t.options = :eslintrc
+  end
+else
+  task :eslint do
+    puts 'Skipping eslint checking in production (libraries not available).'
   end
 end
 
@@ -449,7 +449,7 @@ end
 # - https://github.com/yaml/libyaml/issues/46
 # We save and restore the en version around the sync to resolve.
 # Ths task only runs in development, since the gem is only loaded then.
-if Rails.env.development?
+if Gem::Specification.find_all_by_name('eslintrb').any?
   Rake::Task['translation:sync'].enhance %w[ensure_master backup_en] do
     at_exit do
       Rake::Task['restore_en'].invoke

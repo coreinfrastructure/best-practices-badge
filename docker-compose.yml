@@ -1,10 +1,14 @@
-version: '2'
+version: '3'
 volumes:
   db:
   gems:
 services:
   db:
     image: postgres:9.6
+  gems:
+    image: busybox
+    volumes:
+      - /gems_cache
   web:
     build:
       context: .
@@ -35,7 +39,3 @@ services:
       # We'll use this env variable to make the log output gets directed
       # to Docker:
       RAILS_LOG_TO_STDOUT: "true"
-  gems:
-    image: busybox
-    volumes:
-      - /gems_cache

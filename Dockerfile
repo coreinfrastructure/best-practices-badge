@@ -27,10 +27,11 @@ ENV BUNDLE_PATH /gems_cache
 # the RubyGems. This is a separate step so the dependencies
 # will be cached unless changes to one of those three files
 # are made.
-RUN gem install bundler --no-document 
 COPY Gemfile* .ruby-version /tmp/
-WORKDIR /tmp
-RUN bundle install --jobs 20 --retry 5
+WORKDIR /tmp/
+# Install same version of bundler as specified in the Gemfile.lock
+RUN gem install bundler --no-document --version=$(tail -1 Gemfile.lock | xargs)
+RUN bundle install --without development test --jobs 20 --retry 5
 # RUN apk del build-dependencies
 
 # FROM ruby:2.4.1-alpine
@@ -54,4 +55,5 @@ COPY . $APP_HOME
 # Copy Gemfile in case it was generated in the container
 RUN cp /tmp/Gemfile.lock $APP_HOME
 WORKDIR $APP_HOME
+RUN printenv
 # RUN bundle exec rails assets:precompile

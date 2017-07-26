@@ -23,7 +23,7 @@ de:
     fr: Französisch / Français (fr)
     ja: Japanisch / 日本語 (ja)
     zh-CN: Chinesisch (vereinfacht) / 简体 中 文 (zh-CN)
-    ru:
+    ru: Russisch / Русский (ru)
   layouts:
     cii_best_practices: CII Best Practices
     projects: Projekte
@@ -131,7 +131,7 @@ de:
         Aktive bearbeitete Projekte (aktualisiert innerhalb von
         30 Tagen)
       active_edited_in_progress: >-
-        Aktive bearbeitete in-progress Projekte (aktualisiert
+        Aktive, bearbeitete, in-progress Projekte (aktualisiert
         innerhalb von 30 Tagen)
       projects_created_since_yesterday: Projekte angelegt vor
         Tag
@@ -461,8 +461,8 @@ de:
       --- David A. Wheeler, CII Best Practices Badge Technical
       Lead
     subject_achieved_passing: >-
-      GLÜCKWÜNSCHE zur Erreichung eines %{new_level} Best Practices
-      Badge!
+      HERZLICHEN GLÜCKWÜNSCH zur Erreichung des %{new_level} Best
+      Practices Badge!
     subject_no_longer_passing: Ihr Best Practices Badge ist nicht
       mehr %{old_level}
     subject_new_project: >-
@@ -473,11 +473,21 @@ de:
     subject_project_deleted: >-
       Projekt %{project_id} mit dem Namen %{project_name} wurde
       gelöscht
-    gained_level_part1:
+    gained_level_part1: |-
+      Herzlichen Glückwunsch!
+      Aufgrund der von Ihnen bereitgestellten Informationen hat Ihr Projekt den CII Best Practices '%{new_level}' Badge verdient.
+      Für weitere Informationen, siehe diese URL:
     gained_level_part2: |-
       Bitte fügen Sie Ihr Badge zu Ihrem Projekt und/oder Repository-Website hinzu.
       Sie haben es sich verdient:
-    gained_level_part3:
+    gained_level_part3: |-
+      Wir empfehlen Ihnen dringend, einen Rechtfertigungstext hinzuzufügen oder zu verbessern, einschließlich Hinzufügen von URLs, die auf weitere Informationen verweisen.
+      Wenn Sie Vorschläge haben, wie wir die Kriterien oder die Badge Web-Anwendung verbessern können, bitte erstellen Sie ein Issue unter:
+      https://github.com/coreinfrastruktur/best-praktiken-badge/issues
+      Wenn Sie Änderungen in Ihrem Projekt vorgenommen haben, um das Badge zu bekommen, lassen Sie es uns bitte per email an cii-badges-questions@lists.coreinfrastructure.org wissen.
+      Eines unserer Ziele ist es, Projekte zu ermutigen, Verbesserungen vorzunehmen.
+      Wir haben einige dieser Berichte in das öffentliche Wiki gestellt. informieren Sie uns bitte wenn Sie nicht wollen, dass die Änderungen veröffentlicht werden https://github.com/coreinfrastruktur/best-praktiken-badge/wiki/Impacts
+      Danke und Herzlichen Glückwünsch.
     lost_level_message:
   user_mailer:
     account_activation:
@@ -542,9 +552,9 @@ de:
         details: >-
           Wir nehmen an, dass <a href="https://guides.github.com/activities/contributing-to-open-source/">Projekte
           auf GitHub Issues und Pull-Requests</a> verwenden, sofern
-          nicht anders angegeben ist. Diese Information kann kurz
-          sein, z.B., dass das Projekt Pull-Requests, einen Issue-Tracker,
-          oder eine Mailing-Liste verwendet (welche?)
+          nichts anders angegeben ist. Diese Information kann
+          kurz sein, z.B., dass das Projekt Pull-Requests, einen
+          Issue-Tracker oder eine Mailing-Liste verwendet (welche?)
         met_placeholder: "(URL gefordert) Was ist der Prozess?
           Welche URL erklärt ihn?"
       contribution_requirements:
@@ -678,8 +688,22 @@ de:
       report_responses:
         description:
       enhancement_responses:
-        description:
-        details:
+        description: >-
+          Das Projekt SOLLTE auf eine Mehrheit (&gt;50%) der Verbesserungsvorschläge
+          in den letzten 2-12 Monaten (einschließlich) reagieren.
+        details: >-
+          Die Antwort DARF "nein" oder eine Diskussion über ihre
+          Vorzüge sein. Das Ziel ist einfach, dass es einige Antworten
+          auf einige Anfragen gibt, was darauf hinweist, dass
+          das Projekt noch am Leben ist. Für die Zwecke dieses
+          Kriteriums müssen die Projekte keine falschen Anfragen
+          (z.B. von Spammern oder automatisierten Systemen) zählen.
+          Wenn ein Projekt keine weiteren Verbesserungen vornimmt,
+          wählen Sie bitte "Unerfüllt" und geben Sie die URL ein,
+          die diesen Zustand den Benutzern klar macht. Wenn ein
+          Projekt von der Anzahl der Verbesserungsvorschläge überwältigt
+          wird, wählen Sie bitte "Unerfüllt" und erklären Sie
+          die Situation.
       report_archive:
         description:
       vulnerability_report_process:
@@ -756,7 +780,14 @@ de:
         details:
       warnings_fixed:
         description: Das Projekt MUSS auf Warnungen reagieren.
-        details:
+        details: >-
+          Dies sind die Warnungen, die durch die Umsetzung des
+          <a href="#warnings">warnings</a> Kriteriums identifiziert
+          wurden. Das Projekt sollte Warnungen beheben oder im
+          Quellcode als falsch positives Ergebnis markieren. Idealerweise
+          gibt es keine Warnungen, aber ein Projekt DARF einige
+          Warnungen akzeptieren (typischerweise weniger als 1
+          Warnung pro 100 Zeilen oder weniger als 10 Warnungen).
       warnings_strict:
         description:
         details:
@@ -909,7 +940,26 @@ de:
         details: Diese Hashes können im Transit verändert werden.
       vulnerabilities_fixed_60_days:
         description:
-        details:
+        details: >-
+          Die Sicherheitslücke, muss vom Projekt selbst gepatched
+          und freigegeben werden (Patches woanders entwickelt
+          werden). Eine Sicherheitsücke wird (für diesen Zweck)
+          öffentlich bekannt, sobald es einen CVE mit öffentlich
+          freigegebenen nicht bezahlten Informationen hat (veröffentlicht
+          beispielsweise in der <a href="https://nvd.nist.gov/">National
+          Vulnerability Database</a>) oder wenn das Projekt informiert
+          und die Informationen der Öffentlichkeit zugänglich
+          gemacht wurden (evtl. durch das Projekt). Eine Sicherheitslücke
+          ist mittel- bis scherwiegend, wenn ihr <a href="https://nvd.nist.gov/cvss.cfm">CVSS
+          2.0</a> Basis-Score 4 oder höher ist. <strong>Hinweis</strong>:
+          Das bedeutet, dass Benutzer bis zu 60 Tage für alle
+          Angreifer weltweit anfällig bleiben können. Dieses Kriterium
+          ist oft viel einfacher zu treffen als das, was Google
+          empfiehlt in <a href="https://security.googleblog.com/2010/07/rebooting-responsible-disclosure-focus.html">Rebooting
+          responsible disclosure</a>, weil Google empfiehlt, dass
+          die 60-Tage-Periode beginnen, wenn das Projekt benachrichtigt
+          wird <em>selbst dann</em> wenn der Bericht nicht öffentlich
+          ist.
       vulnerabilities_critical_fixed:
         description: >-
           Projekte SOLLTEN alle kritischen Schwachstellen schnell
@@ -959,13 +1009,34 @@ de:
           Das Analyse-Tool(s) DARF für der Suche nach Sicherheitslücken
           eingesetzt werden, aber das ist nicht erforderlich.
       dynamic_analysis_unsafe:
-        description:
+        description: >-
+          Es ist EMPFHOLEN, dass die vom Projekt entwickelte Software,
+          falls sie Software von einer Speicher-unsicheren Sprache
+          (z.B. C oder C ++) enthält, regelmäßig mindestens ein
+          dynamisches Werkzeug (z.B. ein Fuzzer oder ein Web-Anwendungs-Scanner)
+          in Kombination mit einem Mechanismus zur Erkennung von
+          Speichersicherheitsproblemen wie Puffer-Overwrites verwendet.
+          Wenn das Projekt keine Software entwickelt, die in einer
+          Speicher-unsicheren Sprache geschrieben ist, wählen
+          Sie "nicht anwendbar" (N/A).
         details:
       dynamic_analysis_enable_assertions:
-        description:
+        description: >-
+          Es ist EMPFHOLEN, dass die vom Projekt entwickelte Software
+          viele run-time assertions einbindet, die während der
+          dynamischen Analyse überprüft werden.
       dynamic_analysis_fixed:
-        description:
-        details:
+        description: >-
+          Alle mittel- und hochgradig ausnutzbaren Schwachstellen,
+          die mit dynamischer Codeanalyse entdeckt werden, MÜSSEN
+          zügig behoben werden, nachdem sie bestätigt wurden.
+        details: >-
+          Eine Sicherheitslücke ist von mittlerem bis hohem Schweregrad,
+          wenn ihr <a href="https://nvd.nist.gov/cvss.cfm">CVSS
+          2.0</a> Basis-Score 4 ist. Wenn Sie keine dynamische
+          Codeanalyse ausführen und somit keine Schwachstellen
+          auf diese Weise finden, wählen Sie "nicht anwendbar"
+          (N/A).
       installation_common:
         description:
         details:
@@ -1072,7 +1143,11 @@ de:
         description:
         details:
       documentation_architecture:
-        description:
+        description: >-
+          Das Projekt MUSS in der Dokumentation die Architektur
+          (alias High-Level-Design) der vom Projekt entwickelten
+          Software bereitstellen. Wenn das Projekt keine Software
+          produziert, wählen Sie "nicht anwendbar" (N/A).
         details:
       documentation_security:
         description:
@@ -1262,7 +1337,22 @@ de:
           würden
       build_reproducible:
         description:
-        details:
+        details: >-
+          Eine reproduzierbares Build bedeutet, dass mehrere Parteien
+          den Prozess der Generierung von Informationen aus Quelldateien
+          unabhängig voneinander wiederholen und genau das gleiche
+          Bit-für-Bit-Ergebnis erhalten können. In manchen Fällen
+          kann dies dadurch gelöst werden, dass man eine Sortierreihenfolge
+          erzwingt. JavaScript-Entwickler können erwägen npm shrinkwrap
+          und webpack OccurenceOrderPlugin zu verwenden. GCC und
+          clang Benutzer könnten die Option -frandom-seed nützlich
+          finden. Die Buildumgebung (einschließlich des Toolsets)
+          kann oft für externe Teilnehmer definiert werden, indem
+          der kryptografische Hash eines bestimmten Containers
+          oder einer virtuellen Maschine angegeben wird, die sie
+          für das Kompilieren verwenden können. Das <a href="https://reproducible-builds.org/docs/">Reproducible
+          Builds Projekt hat eine Dokumentation, wie dies erreicht
+          werden kann</a>.
       test_invocation:
         description: >-
           Eine Test-Suite MUSS in einer standardisierten Weise
@@ -1429,7 +1519,9 @@ de:
     not_an_email: " Ist keine E-Mail"
     known_bad_password: " Ist ein weit verbreitetes (schlechtes)
       Passwort"
-    valid_text:
+    valid_text: >-
+       muss eine gültige UTF-8-Kodierung und keine ungültige Steuerungszeichen
+      haben
     url_message: >-
        Muss mit http: oder https: beginnen und verwende einen
       begrenzten Zeichensatz

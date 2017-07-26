@@ -360,9 +360,37 @@ fr:
           OU Ruby) ».
         placeholder: Licence FLOSS
       additional_rights_changes:
-        description:
-        details_html:
-        placeholder:
+        description: >-
+          (Avancé) Quels autres utilisateurs ont les droits supplémentaires
+          pour modifier cette soumission de badge? Actuellement
+          : %{current_rights}
+        details_html: >-
+          La plupart des projets devraient ignorer ce champ. Les
+          soumissions de badge des projets peuvent toujours être
+          modifiées par le propriétaire de la soumission de badge
+          (créateur), les administrateurs de BadgeApp et toute
+          personne qui peut committer dans le dépôt GitHub (s'il
+          est sur GitHub). Si vous souhaitez que quelqu'un d'autre
+          puisse modifier cette soumission de badge et que vous
+          ayez déjà des droits d'édition sur cette soumission
+          de badge de projet, vous pouvez ajouter d'autres utilisateurs
+          avec des droits d'édition. Entrez simplement « + » suivi
+          d'une liste d'entiers d'identifiants utilisateur séparés
+          par des virgules. Ces utilisateurs seront également
+          autorisés à modifier cette soumission de projet. Si
+          vous êtes le propriétaire de la soumission du badge
+          ou un administrateur BadgeApp, vous pouvez supprimer
+          des utilisateurs de cette liste en entrant « - » suivi
+          d'une liste d'entiers d'identifiants utilisateur séparés
+          par des virgules. Cette application utilise un verrouillage
+          optimiste pour éviter de sauvegarder des données périmées
+          si plusieurs utilisateurs essaient de faire des modifications
+          simultanément. Seuls les propriétaires de cette soumission
+          de projet et les administrateurs BadgeApp peuvent modifier
+          ce champ.
+        placeholder: >-
+          Changer avec + ou - suivi d'une liste d'identifiants
+          utilisateur séparés par des virgules
     form_early:
       badge_intro:
         description: >-

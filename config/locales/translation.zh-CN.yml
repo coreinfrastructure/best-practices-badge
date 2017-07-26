@@ -233,9 +233,11 @@ zh-CN:
           +”，“MIT”和“(BSD-2-Clause OR Ruby)”。
         placeholder: FLOSS许可证
       additional_rights_changes:
-        description:
-        details_html:
-        placeholder:
+        description: "（高级）哪些用户还有额外权限编辑此徽章条目？目前：%{current_rights}"
+        details_html: >-
+          大多数项目应忽略此字段。项目徽章条目可以由徽章条目所有者（创建者），BadgeApp管理员以及任何可以提交给GitHub存储库（如果在GitHub上）的人员进行编辑。如果您希望其他人能够编辑此徽章条目，并且您已具有此项目徽章条目的编辑权限，则可以为其他用户提供编辑权限。只需输入“+”，后跟一个逗号分隔的整数用户ID列表。那么这些用户也将被允许编辑此项目条目。如果您是徽章条目的所有者或BadgeApp管理员，则可以通过输入“
+          - ”，后跟逗号分隔的整数用户ID列表，从该列表中删除用户。如果多个用户尝试同时编辑，此应用程序使用乐观锁定机制来防止保存过期数据。只有此项目条目的所有者和BadgeApp管理员才能更改此字段。
+        placeholder: 更改使用+或 - 后跟逗号分隔的用户标识列表
     form_early:
       badge_intro:
         description: 遵循以下最佳实践的项目将能够自愿的自我认证，并显示他们已经实现了核心基础设施计划（CII）徽章。

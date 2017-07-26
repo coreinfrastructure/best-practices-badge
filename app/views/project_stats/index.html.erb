@@ -8,7 +8,8 @@
   Rails.cache.delete ActiveSupport::Cache.expand_cache_key(
     ['project_stats', locale, ProjectStat.all.size-1]
   )
-  cache ['project_stats', locale, ProjectStat.all.size] do
+  cache ['project_stats', locale, ProjectStat.all.size,
+         !!current_user&.admin? ] do
 %>
 
 <p id="notice"><%= notice %></p>
@@ -60,6 +61,7 @@
   line_chart dataset, library: date_chart_options, defer: true
 %>
 
+<% if current_user&.admin? %>
 <br><br><br>
 
 <h2><%= t '.projects_silver' %></h2>
@@ -128,9 +130,9 @@
   # Done transforming data; display it.
   line_chart dataset, library: date_chart_options, defer: true
 %>
+<% end # if current_user&.admin? %>
 
 <br><br><br>
-
 
 <h2><%= t '.projects_activity_30' %></h2>
 <%=

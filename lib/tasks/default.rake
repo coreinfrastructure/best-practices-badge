@@ -293,7 +293,7 @@ task :pull_production do
 end
 
 # Don't use this one unless you need to
-desc 'Copy database from production into development (if normal one fails)'
+desc 'Copy active production database into development (if normal one fails)'
 task :pull_production_alternative do
   puts 'Getting production database (alternative)'
   sh 'heroku pg:backups:capture --app production-bestpractices && ' \
@@ -304,7 +304,7 @@ task :pull_production_alternative do
      '           -d development db/latest.dump'
 end
 
-desc 'Copy database from master into development (requires access privs)'
+desc 'Copy active master database into development (requires access privs)'
 task :pull_master do
   puts 'Getting master database'
   Rake::Task['drop_database'].reenable
@@ -314,7 +314,12 @@ task :pull_master do
   Rake::Task['db:migrate'].invoke
 end
 
-desc 'Copy production database to master, overwriting master database'
+# This just copies the most recent backup of production; in almost
+# all cases this is adequate, and this way we don't disturb production
+# unnecessarily.  If you want the current active database, you can
+# force a backup with:
+# heroku pg:backups:capture --app production-bestpractices
+desc 'Copy production database backup to master, overwriting master database'
 task :production_to_master do
   sh 'heroku pg:backups:restore $(heroku pg:backups:public-url ' \
      '--app production-bestpractices) DATABASE_URL --app master-bestpractices'
@@ -322,7 +327,7 @@ task :production_to_master do
      '--app master-bestpractices'
 end
 
-desc 'Copy production database to staging, overwriting staging database'
+desc 'Copy production database backup to staging, overwriting staging database'
 task :production_to_staging do
   sh 'heroku pg:backups:restore $(heroku pg:backups:public-url ' \
      '--app production-bestpractices) DATABASE_URL ' \

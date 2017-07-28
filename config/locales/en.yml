@@ -462,10 +462,12 @@ en:
           to edit this project entry. If you're the owner of the
           badge entry or a BadgeApp administrator, you can remove
           users from this list by entering "-" followed by a comma-separated
-          list of integer user ids. This application uses optimistic
-          locking to prevent saving stale data if multiple users
-          try to edit simultaneously. Only owners of this project
-          entry and BadgeApp administrators can change this field.
+          list of integer user ids. We expect that normally only one
+          person will edit a particular badge entry at a time.
+          This application uses optimistic locking to prevent saving stale
+          data if multiple users try to edit a badge entry simultaneously.
+          If you have multiple editors, we recommend saving badge entry
+          data incrementally and often (that is a wise practice anyway).
         placeholder: >-
           Change using + or - followed by a comma-separated user
           id list

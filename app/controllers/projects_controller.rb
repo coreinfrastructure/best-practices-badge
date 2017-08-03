@@ -146,8 +146,8 @@ class ProjectsController < ApplicationController
       Chief.new(@project, client_factory).autofill
       respond_to do |format|
         # Was project.update(project_params)
+        update_additional_rights
         if @project.save
-          update_additional_rights
           successful_update(format, old_badge_level, @criteria_level)
         else
           format.html { render :edit, criteria_level: @criteria_level }

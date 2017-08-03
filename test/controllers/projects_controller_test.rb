@@ -142,6 +142,7 @@ class ProjectsControllerTest < ActionController::TestCase
   # rubocop:disable Metrics/BlockLength
   test 'can add users with additional rights using "+"' do
     log_in_as(@project.user)
+    # Ensure that our test setup is correct & get current state
     assert_not AdditionalRight.exists?(
       project_id: @project.id,
       user_id: users(:test_user_mark).id
@@ -154,12 +155,15 @@ class ProjectsControllerTest < ActionController::TestCase
       project_id: @project.id,
       user_id: @admin.id
     )
+    previous_update = @project.updated_at
+    # Run patch (the point of the test)
     patch :update, params: {
       id: @project,
       project: { name: @project.name }, # *Something* so not empty.
       additional_rights_changes:
         "+ #{users(:test_user_mark).id}, #{users(:test_user_melissa).id}"
     }
+    # Check that results are what was expected
     assert_redirected_to project_path(assigns(:project))
     assert AdditionalRight.exists?(
       project_id: @project.id,
@@ -169,6 +173,9 @@ class ProjectsControllerTest < ActionController::TestCase
       project_id: @project.id,
       user_id: users(:test_user_melissa).id
     )
+    # Ensure that updated_at has changed
+    @project.reload
+    assert_not_equal previous_update, @project.updated_at
   end
   # rubocop:enable Metrics/BlockLength
 

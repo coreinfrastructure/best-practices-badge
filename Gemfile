@@ -30,11 +30,11 @@ gem 'paper_trail', '7.1.0' # Record previous versions of project data
 gem 'pg', '0.21.0' # PostgreSQL database, used for data storage
 gem 'pg_search', '2.1.0' # PostgreSQL full-text search
 gem 'puma', '3.9.1' # Faster webserver; recommended by Heroku
-gem 'rails', '5.1.2' # Our web framework
+gem 'rails', '5.1.3' # Our web framework
 gem 'rails-i18n', '5.0.4' # Localizations for Rails built-ins
 gem 'redcarpet', '3.4.0' # Process markdown in form textareas (justifications)
 gem 'sass-rails', '5.0.6', require: false
-gem 'scout_apm', '2.1.27' # Monitor for memory leaks
+gem 'scout_apm', '2.1.29' # Monitor for memory leaks
 gem 'secure_headers', '3.6.7' # Add hardening measures to HTTP headers
 gem 'uglifier', '3.2.0', require: false # Minify JavaScript
 gem 'will-paginate-i18n', '0.1.15' # Provide will-paginate translations
@@ -42,7 +42,7 @@ gem 'will_paginate', '3.1.6' # Paginate results (next/previous)
 
 group :development, :test do
   gem 'awesome_print', '1.8.0' # Pretty print Ruby objects
-  gem 'bullet', '5.6.0'
+  gem 'bullet', '5.6.1' # Avoid n+1 queries
   gem 'bundler-audit', '0.6.0'
   gem 'database_cleaner', '1.6.1' # Cleans up database between tests
   gem 'dotenv-rails', '2.2.1'

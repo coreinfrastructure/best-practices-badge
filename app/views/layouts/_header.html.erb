@@ -2,13 +2,13 @@
   <div class='container container_padding'>
     <%# don't use root_path, it generates ugly URLs %>
     <%= link_to t(:cii_best_practices, scope: :layouts), "/#{I18n.locale == I18n.default_locale ? '' : I18n.locale}", id: 'logo' %>
-    <%= yield :insert_progress_bar %>
     <nav>
       <div class='nav navbar-nav navbar-left'>
         <br>
       </div>
       <ul class='nav navbar-nav navbar-right'>
         <%= yield :nav_extras %>
+        <li><%= yield :insert_progress_bar %></li>
         <li><%= link_to t(:projects, scope: :layouts), projects_path %></li>
         <% if logged_in? %>
           <!--li><%= link_to t(:users, scope: :layouts), users_path %></li-->

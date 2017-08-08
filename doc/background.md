@@ -1114,6 +1114,19 @@ The Linux kernel developers intentionally do not use an issue tracker
 key developers do not believe
 that issue trackers are helpful for the large scale of their project.
 
+Git was originally designed for the Linux kernel,
+but the Linux kernel does not use a shared repository like GitHub
+to manage development.
+["Why Github can't host the Linux Kernel Community" by Daniel Vetter (August 8, 2017)](http://blog.ffwll.ch/2017/08/github-why-cant-host-the-kernel.html)
+describes how the kernel community scales and provides an argument
+for why he feels that the GitHub model is not as effective for the largest
+OSS projects:
+"Unfortunately github doesn’t support this workflow, at least not
+natively in the github UI... all huge
+projects on github in general ... struggle with scaling, because github
+doesn’t really give them the option to scale to multiple repositories,
+while sticking [to] a monotree."
+
 The Linux kernel has a standard coding style (though not all of the
 code meets it).
 The guidelines for code submission recommend that new code

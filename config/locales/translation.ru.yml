@@ -80,7 +80,8 @@ ru:
     no_custom:
     already_logged_in:
     incorrect_login_info:
-    invalid_combo:
+    invalid_combo: Недействительная комбинация электронной почты
+      и пароля
     signed_in: Вы вошли в систему!
     not_activated:
     signed_out: Вы вышли из системы!
@@ -161,7 +162,7 @@ ru:
         проектам с течением времени на странице <a href="/project_stats">статистики
         проектов</a>.
       level: Уровень
-      must: '"ОБЯЗАН"'
+      must: '"НЕОБХОДИМО"'
       should: '"СЛЕДУЕТ"'
       suggested: '"РЕКОМЕНДУЕТСЯ"'
       total_active: Всего активных
@@ -265,22 +266,22 @@ ru:
   projects:
     index:
       all: Все
-      passing_100:
-      in_progress_variable:
+      passing_100: Passing (100%)
+      in_progress_variable: In Progress (%{percent}% или больше)
       add_link: Добавить
       add_new: Добавить новый проект
       badge_status: Состояние значка
       exclude_passing: Исключить получившие значок
-      text_search:
+      text_search: Искать по тексту
       name_or_description: Название или описание
       search:
     table:
       id:
-      name:
-      description:
+      name: Название
+      description: Описание
       website:
-      license:
-      owner:
+      license: Лицензия
+      owner: Владелец
       last_achieved:
       pachieved:
       can_also_sort:
@@ -293,11 +294,12 @@ ru:
     new:
       thanks_adding:
       post_delay_warning:
-      new_badge:
+      new_badge: Новый значок
       may_select_html:
-      select_one_github:
+      select_one_github: Выберите один из ваших репозиториев на
+        GitHub
       submit_github:
-      project_already_exists:
+      project_already_exists: Этот проект уже существует!
       url_of_homepage:
       placeholder_of_homepage:
       url_of_repo:
@@ -305,7 +307,7 @@ ru:
       submit_urls:
       final_text_html:
       sign_in_first:
-      new_badge_or:
+      new_badge_or: ИЛИ
       original_repos:
       fork_repos:
     edit:
@@ -343,7 +345,7 @@ ru:
       confirm_delete: Вы УВЕРЕНЫ, что хотите УДАЛИТЬ ВЕСЬ проект
         %{project_id}?
       back: Назад
-      owned_by:
+      owned_by: 'Владелец анкеты на значок проекта:'
       created_at_html:
       updated_at_html:
       last_lost_html:
@@ -352,8 +354,39 @@ ru:
       cc_by_3only_html:
     form_early:
       badge_intro:
-        description:
-        details_html:
+        description: >-
+          Проекты, которые следуют приведенным ниже лучшим практикам,
+          смогут добровольно и самостоятельно оценить себя и продемонстрировать,
+          что они получили значок Core Infrastructure Initiative
+          (CII).
+        details_html: >-
+          Не существует набора практик, гарантирующего, что у
+          программного обеспечения никогда не будет недостатков
+          или уязвимостей; даже формальные методы могут не помочь,
+          если спецификации или допущения ошибочны. Также не существует
+          какой-либо практики, которая могла бы гарантировать,
+          что проект будет поддерживать здоровое и хорошо функционирующее
+          сообщество разработчиков. Однако следующие хорошие правила
+          могут помочь улучшить результаты проектов. Например,
+          некоторые правила описывают ревью несколькими участниками
+          перед выпуском, что может помочь найти технические уязвимости,
+          которые было бы сложно найти другим способом, и помочь
+          построить доверие и желание дальнейшего взаимодействия
+          между разработчиками из разных компаний. Чтобы получить
+          значок, нужно выполнить все критерии с ключевыми словами
+          "НЕОБХОДИМО"/"ОБЯЗАН" и "НЕДОПУСТИМО", все критерии
+          со словом "СЛЕДУЕТ" должны удовлетворяться либо быть
+          неудовлетворенными с обоснованием, <em>и</em> все критерии
+          со словом "РЕКОМЕНДУЕТСЯ" могут быть удовлетворены ИЛИ
+          неудовлетворены (желательно, чтобы они были хотя бы
+          рассмотрены). Приветствуется обратная связь через <a
+          href="https://github.com/coreinfrastructure/best-practices-badge">сайт
+          на GitHub в виде issues или pull requests</a>. Существует
+          также <a href="https://lists.coreinfrastructure.org/mailman/listinfo/cii-badges">список
+          рассылки для общих вопросов</a>.<br /><br />Мы с радостью
+          предоставляем информацию на нескольких языках, однако,
+          если есть какой-либо конфликт или несоответствие между
+          переводами, английская версия является авторитетной.
       level:
         0_html: >-
           Это критерии уровня %{passing}. Вы также можете просмотреть
@@ -403,7 +436,9 @@ ru:
         description: Какой URL у проекта (целиком)?
         placeholder: URL веб-сайта проекта
       repo_url:
-        description:
+        description: >-
+          Каков URL хранилища с управлением версиями (он может
+          быть таким же, как URL проекта)?
         placeholder: URL репозитория проекта
       implementation_languages:
         description: >-
@@ -444,49 +479,105 @@ ru:
           «MIT» и «(BSD-2-Clause OR Ruby) ".
         placeholder: Свободная лицензия
       additional_rights_changes:
-        description:
-        details_html:
-        placeholder:
+        description: >-
+          (Дополнительно) Какие другие пользователи имеют дополнительные
+          права на редактирование этой записи значка? В настоящее
+          время: %{current_rights}
+        details_html: >-
+          Большинство проектов должны игнорировать это поле. Анкеты
+          значков всегда могут быть отредактированы владельцем
+          (создателем), администраторами BadgeApp и всеми, кто
+          имеет права на коммит в проектный репозиторий на GitHub
+          (если проект находится на GitHub). Если вы хотите, чтобы
+          кто-то еще мог редактировать эту анкету, и у вас уже
+          есть права на редактирование этой анкеты, вы можете
+          добавить дополнительных пользователей с правами на редактирование.
+          Просто введите «+», а затем список целочисленных идентификаторов
+          пользователей через запятую. Указанным пользователям
+          также будет разрешено редактировать эту анкету. Если
+          вы являетесь владельцем анкеты или администратором BadgeApp,
+          вы можете удалить пользователей из этого списка, введя
+          «-», а затем список целочисленных идентификаторов пользователей
+          через запятую. Мы ожидаем, что, как правило, только
+          один человек будет редактировать конкретную анкету в
+          любой момент времени. Это приложение использует оптимистичную
+          блокировку, чтобы предотвратить сохранение устаревших
+          данных, если несколько пользователей пытаются одновременно
+          редактировать запись значка. Если у вас несколько редакторов,
+          мы рекомендуем сохранять данные ввода значка постепенно
+          и часто (это в любом случае разумная практика).
+        placeholder: >-
+          Изменить, указывая + или - с последующим списком идентификаторов
+          пользователя через запятую
     misc:
       in_javascript:
-        collapse_all_title:
-        collapse_all:
-        expand_all_title:
-        expand_all:
+        collapse_all_title: Свернуть все разделы
+        collapse_all: Свернуть разделы
+        expand_all_title: Развернуть все разделы
+        expand_all: Развернуть разделы
         show_details: Показать подробности
         hide_details: Скрыть подробности
-        show_all_details:
-        hide_all_details:
-        show_met_title:
-        show_met_html:
-        hide_met_title:
-        hide_met_html:
+        show_all_details: Показать все подробности
+        hide_all_details: Скрыть все подробности
+        show_met_title: Показать удовлетворенные и неприменимые
+          (N/A) критерии
+        show_met_html: Показать удовлетворенные и неприменимые
+          (N/A) критерии
+        hide_met_title: >-
+          Скрыть удовлетворенные и неприменимые (N/A) критерии
+          (оставив неудовлетворенные и незаполненные)
+        hide_met_html: Скрыть удовлетворенные и неприменимые (N/A)
+          критерии
         passing_alt: Достаточно для значка!
         barely_alt: Едва достаточно для значка.
         failing_alt: Недостаточно для значка.
-        unknown_alt:
-        met_url_placeholder:
-        met_justification_placeholder:
-        met_placeholder:
-        unmet_placeholder:
-        na_justification_placeholder:
-        na_placeholder:
-        unknown_placeholder:
-      disabled_reminders:
+        unknown_alt: Не хватает обязательной информации, недостаточно
+          для значка.
+        met_url_placeholder: >-
+          (Требуется URL) Пожалуйста, объясните, как это обеспечивается,
+          указав хотя бы 1 ключевой URL.
+        met_justification_placeholder: >-
+          (Обязательно) Пожалуйста, объясните, как это обеспечивается,
+          возможно, с указанием 1+ ключевых URL.
+        met_placeholder: >-
+          (Необязательно) Пожалуйста, объясните, как это обеспечивается,
+          возможно, с указанием 1+ ключевых URL.
+        unmet_placeholder: >-
+          Пожалуйста, объясните, почему неудовлетворение критерию
+          допустимо, с указанием хотя бы одного ключевого URL.
+        na_justification_placeholder: >-
+          (Обязательно) Пожалуйста, объясните, почему это неприменимо
+          (N/A), возможно, указав 1+ ключевых URL.
+        na_placeholder: >-
+          (Необязательно) Пожалуйста, объясните, почему это неприменимо
+          (N/A), возможно, указав 1+ ключевых URL.
+        unknown_placeholder: Пожалуйста, объясните
+      disabled_reminders: >-
+        (Дополнительно) Подавить напоминание о неактивности (мы
+        рекомендуем оставить эту настройку отключенной)
       general_comments:
-        description:
-        placeholder:
-      some_not_crypto_html:
+        description: 'Другие общие замечания по проекту:'
+        placeholder: Дополнительные комментарии (в формате Markdown)
+      some_not_crypto_html: >-
+        Обратите внимание, что некоторое ПО не нуждается в использовании
+        криптографических механизмов.
       dont_use_crypto: >-
         Нажмите здесь, если ПО, создаваемое проектом, не использует
         криптографические механизмы
-      future_header_html:
-      toggle_details_title:
+      future_header_html: >-
+        Это критерии, которые мы намерены добавить в ближайшем
+        будущем, но в настоящее время удовлетворение им <em>не</em>
+        требуется для получения значка. Этот льготный период позволяет
+        проектам обновлять свои записи под измененные критерии
+        и сохранять свой значок при развитии передовой практики.
+      toggle_details_title: Переключить подробный текст
       details: Подробности
       url_required: Требуется URL
       future_criterion: Будущий критерий
-      url_required_warning:
-      justification_required_warning:
+      url_required_warning: 'Предупреждение: требуется URL, но
+        URL не найден.'
+      justification_required_warning: 'Предупреждение: Нужно обоснование
+        подлиннее.'
     delete:
       done: Проект успешно удален.
   report_mailer:
@@ -494,7 +585,8 @@ ru:
     subject_no_longer_passing:
     subject_new_project:
     subject_reminder:
-    subject_project_deleted:
+    subject_project_deleted: Проект %{project_id} под названием
+      %{project_name} удален
     new_project_heading:
     new_project_part1:
     new_project_part2:
@@ -506,7 +598,9 @@ ru:
     in_markdown_add:
     in_html_add:
     lost_level_message:
-    ending:
+    ending: >-
+      --- David A. Wheeler, технический руководитель проекта CII
+      Best Practices Badge
   user_mailer:
     account_activation:
       before_html: |-
@@ -2469,7 +2563,7 @@ ru:
     Vulnerability report process: Процесс отчета об уязвимостях
     Warning flags: Флаги предупреждений
     Working build system: Рабочая система сборки
-    Prerequisites:
+    Prerequisites: Предварительные требования
   criterion_status:
     Met: Соответствует
     Unmet: Не соответствует

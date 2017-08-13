@@ -377,6 +377,9 @@
             variety of problems.  A large test suite can find more problems, but
             even a small test suite can detect problems and provide a framework
             to build on.
+            E.g., "Tip #62: Test Early, Test Often, Test Automatically"
+            ("The Pragmatic Programmer" by Andrew Hunt and David Thomas,
+            p. 237)
           autofill: >
             See test_invocation, and use its value here also.
       - test_invocation:
@@ -439,7 +442,20 @@
           category: MUST
           na_allowed: true
           autofill: >
-            See the "details" - search the build script and source code for these.
+            See the "details" - search the build script and source code
+            for these.
+          rationale: >
+            "We routinely set compiler warning levels as high as possible.
+            It doesn't make sense to waste time trying to find a problem
+            that the compiler could find for you!
+            We need to concentrate on the harder problems at hand."
+            ("The Pragmatic Programmer" by Andrew Hunt and David Thomas,
+            p. 91-92)
+            "Tip #23: Always use Source Code Control.
+            Always. Even if you are a single-person team on
+            a one-week project."
+            ("The Pragmatic Programmer" by Andrew Hunt and David Thomas,
+            p. 88)
       - warnings_fixed:
           category: MUST
           na_allowed: true
@@ -630,6 +646,14 @@
           category: SUGGESTED
           autofill: >
             Perhaps look in source code for many asserts.
+          rationale: >
+            "Tip #33: If it Can't happen,
+            use assertions to ensure that it won't."
+            ("The Pragmatic Programmer" by Andrew Hunt and David Thomas,
+            p. 122)
+            Assertions make dynamic analysis more effective, because they
+            increase the number of problems (including vulnerabilities)
+            that dynamic analysis can detect.
       - dynamic_analysis_fixed:
           category: MUST
           na_allowed: true

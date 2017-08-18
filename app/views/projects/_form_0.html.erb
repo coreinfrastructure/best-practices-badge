@@ -209,8 +209,19 @@
                          details:
                            t('projects.form_basics.license.details_html')
                        }) %>
-            <%= f.text_field :license,
+            <%=
+                # "Pattern" here is not a rigorous check of SPDX syntax.
+                # It only checks to ensure that only legal characters are
+                # allowed. Still, this can prevent some problems we've seen
+                # in some submissions, while permitting legal expressions like
+                # "(GPL-2.0+ WITH Bison-exception-2.2)".  See:
+                # https://spdx.org/spdx-specification-21-web-version
+                # Errors here do not cause *security* issues, so we're not
+                # too strict.
+                f.text_field :license,
                              class: 'form-control', hide_label: true,
+                             pattern: '(|[()A-Za-z0-9\-.+ ]*)',
+                             title: 'License in SPDX license expression format, e.g., "MIT" or "GPL-3.0+"',
                              placeholder:
                                t('projects.form_basics.license.placeholder'),
                              list: 'license_list', disabled: is_disabled %>

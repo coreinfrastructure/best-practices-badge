@@ -86,7 +86,7 @@ group :test do
   gem 'minitest-retry', '0.1.9', require: false # Avoid Capybara false positives
   gem 'poltergeist', '1.16.0', require: false
   gem 'rails-controller-testing', '1.0.2' # need to require this one
-  gem 'selenium-webdriver', '3.5.0', require: false
+  gem 'selenium-webdriver', '3.5.1', require: false
   gem 'simplecov', '0.15.0', require: false
   gem 'webmock', '3.0.1', require: false
 end

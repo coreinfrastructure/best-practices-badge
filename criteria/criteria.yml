@@ -647,13 +647,27 @@
           autofill: >
             Perhaps look in source code for many asserts.
           rationale: >
+            Assertions make dynamic analysis more effective, because they
+            increase the number of problems (including vulnerabilities)
+            that dynamic analysis can detect.
+            Other sources also recommend the use of assertions.
             "Tip #33: If it Can't happen,
             use assertions to ensure that it won't."
             ("The Pragmatic Programmer" by Andrew Hunt and David Thomas,
             p. 122)
-            Assertions make dynamic analysis more effective, because they
-            increase the number of problems (including vulnerabilities)
-            that dynamic analysis can detect.
+            The paper <a href="https://www.microsoft.com/en-us/research/publication/assessing-the-relationship-between-software-assertions-and-code-qualityan-empirical-investigation">"Assessing the Relationship between Software Assertions
+            and Code Quality: An Empirical Investigation" by
+            Gunnar Kudrjavets, Nachi Nagappan, and Tom Ball, May 1, 2006,
+            Technical report MSR-TR-2006-54</a>, presented
+            "... an empirical case study of two commercial software
+            components at Microsoft Corporation. The developers of these
+            components systematically employed assertions, which allowed
+            us to investigate the relationship between software assertions
+            and code quality... with an increase in the assertion density
+            in a file there is a statistically significant decrease in
+            fault density. Further, the usage of software assertions in
+            these components found a large percentage of the faults in
+            the bug database."
       - dynamic_analysis_fixed:
           category: MUST
           na_allowed: true

@@ -2,7 +2,8 @@
 
 <!-- SPDX-License-Identifier: (MIT OR CC-BY-3.0+) -->
 <!-- DO NOT EDIT generated file criteria.md !! -->
-<!-- The actual criteria are stored in criteria/criteria.yml . -->
+<!-- The actual criteria and detail text are in config/locales/en.yml -->
+<!-- while rationale and other info is in locale/criteria/criteria.yml . -->
 <!-- See also files criteria-header.markdown and criteria-footer.markdown . -->
 
 ## Introduction

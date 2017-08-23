@@ -25,11 +25,18 @@ via our
 For general discussion, feel free to use the
 [cii-badges mailing list](https://lists.coreinfrastructure.org/mailman/listinfo/cii-badges).
 
-If you want to propose or discuss changes to the criteria,
-the first step is proposing changes to the criteria text,
-which is in the file [criteria.md](doc/criteria.md).
-The "doc/" directory has information you may find helpful,
-including [other.md](doc/other.md) and [background.md](doc/background.md).
+The "doc/" directory has information you may find helpful, for example:
+
+-   [governance.md](doc/governance.md) describes our governance model
+    (how we decide things)
+-   [implementation.md](doc/implementation.md) provies implementation details
+-   [background.md](doc/background.md) provides background info on criteria
+
+You can see the entire set of "passing" criteria in the generated file
+[criteria.md](doc/criteria.md).
+The documentation for higher-level badge criteria is in
+[other.md](doc/other.md).
+If you want *change* the criteria, see below.
 
 The [INSTALL.md](doc/INSTALL.md) file explains how to install the program
 locally (highly recommended if you're going to make code changes).
@@ -40,6 +47,8 @@ If you're new to the project (or FLOSS in general), the
 issues are smaller tasks that may typically take 1-3 days.
 You are welcome aboard!
 The [roadmap.md](doc/roadmap.md) file provides an overview of future plans.
+See [CODE OF CONDUCT](./CODE_OF_CONDUCT.md) for our code of conduct;
+in short, "Be excellent to each other".
 
 ### Pull requests and different branches recommended
 
@@ -109,14 +118,6 @@ See the section on reuse for their license requirements
 (they don't need to be MIT, but all required components must be
 open source software).
 
-### No trailing whitespace
-
-Please do not use or include trailing whitespace
-(spaces or tabs at the end of a line).
-Since they are often not visible, they can cause silent problems
-and misleading unexpected changes.
-For example, some editors (e.g., Atom) quietly delete them by default.
-
 ### We are proactive
 
 In general we try to be proactive to detect and eliminate
@@ -131,6 +132,14 @@ Since early detection and impact reduction can never be perfect, we also try to
 detect and repair problems during deployment as quickly as possible.
 This is *especially* true for security issues; see our
 [security information](doc/security.md) for more.
+
+### No trailing whitespace
+
+Please do not use or include trailing whitespace
+(spaces or tabs at the end of a line).
+Since they are often not visible, they can cause silent problems
+and misleading unexpected changes.
+For example, some editors (e.g., Atom) quietly delete them by default.
 
 ## Vulnerability reporting (security issues)
 
@@ -190,6 +199,18 @@ check them that way.
 Do not use trailing two spaces for line breaks, since these cannot be
 seen and may be silently removed by some tools.
 Instead, use <tt>&lt;br&nbsp;/&gt;</tt> (an HTML break).
+
+## Criteria changes
+
+Changing *criteria* can have a much larger impact on participating
+projects than simply changing the supporting software, so we have special
+rules about them. For those rules, see
+[governance.md](doc/governance.md).
+
+For the technical details on how to implement new criteria,
+or modify existing criteria (including their text, details, rationale,
+and scoring criteria), see
+[implementation.md](doc/implementation.md).
 
 ## Code changes
 
@@ -330,19 +351,18 @@ Always put JavaScript (and CSS styles) in *separate* files, do not
 embed JavaScript in the HTML.  That way we can use CSP entries
 that harden the program against security attacks.
 
-If you edit the JavaScript, beware of ready events.
+Historically we used
+[jquery-turbolinks](https://github.com/kossnocorp/jquery.turbolinks)
+to try to make Rails' "turbolinks" mechanism work
+with standard JavaScript ready events.
 Rails' turbolinks gem claims that it
 ["works great with the jQuery framework"](https://github.com/rails/turbolinks),
 but this is misleading.
 [Turbolinks breaks $(document).ready](http://guides.rubyonrails.org/working_with_javascript_in_rails.html#page-change-events)
 (an extremely common construct)
 and by default requires you to use a nonstandard on..."page:change".
-To solve this botch in turbolinks we use
-[jquery-turbolinks](https://github.com/kossnocorp/jquery.turbolinks),
-which makes "ready" work correctly.
-Please do *not* use <tt>$(document).on('ready', function)</tt>,
-because jquery-turbolinks doesn't fix those;
-instead, use <tt>$(document).ready(function)</tt> or <tt>$(function)</tt>.
+These incompatibilities led to unreliability.
+We have abandoned turbolinks, and that made everything reliable.
 
 ### Shell
 

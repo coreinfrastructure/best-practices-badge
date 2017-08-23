@@ -210,6 +210,7 @@ application form for the current exact rules.
 A synonym for 'satifying' a criterion is 'passing' a criterion.
 
 We have an 'autofill' system that fills in some data automatically.
+
 In some cases the autofill data will *override* human-entered data
 (this happens where we're either confident in the data, and/or
 the data is not available using a common convention
@@ -393,10 +394,21 @@ worth considering.
 
 ## Changing criteria
 
+Remember: Changing criteria is special, see
+doc/governance.md for more.
+
 To modify the text of the criteria, edit these files:
 
-- doc/criteria.md - Document
-- criteria/criteria.yml - YAML file used by BadgeApp for criteria information.
+- config/locales/en.yml - YAML file that includes criteria and details text
+- criteria/criteria.yml - YAML file that includes other criteria information
+
+Note that the file "doc/criteria.md" (which reports the "passing" criteria)
+is a *generated* file, generated from those files, and is
+automatically regenerated when "rake" is run.
+This generated file is checked into git so that it's accessible via GitHub.
+The file "doc/other.md" is currently hand-edited; we intend for it to be
+automatically generated in the same way, but that isn't true at the
+time of this writing.
 
 If you're adding/removing fields (including criteria), be sure to also edit
 app/views/projects/\_form.html.erb
@@ -1194,6 +1206,16 @@ following differences:
 
 Other environment variables might be usefully set in the command prefix,
 such as "DATABASE_URL=development".
+
+## Natural Language Translation
+
+The primary text for the application is in English, and the English text
+presented to users is stored in "config/locales/en.yml".
+
+To send the English text to the translators for other languages, and
+copy those translations into the "config/locales" directory, run:
+
+    rake translation:sync
 
 ## See also
 

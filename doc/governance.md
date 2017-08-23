@@ -44,6 +44,10 @@ Issues that we have determined are especially important, particularly
 if they will take a while, are added to the "next" milestone
 (which identifies "what should be prioritized next").
 
+We expect people to focus on improving the project, not attacking other
+people.  Please strive to "Be excellent to each other."
+For more information, see our [Code of Conduct](../CODE_OF_CONDUCT.md).
+
 ## Criteria changes
 
 Changing *criteria* can have a much larger impact on participating

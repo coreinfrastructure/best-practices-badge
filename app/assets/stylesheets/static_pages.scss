@@ -371,34 +371,35 @@ nav {
 
 #progress-mobile
 {
-   position: relative;
-  //  position: absolute;
-  //  top: 22px;
-  //  width:80px;
-  // left:195px;
+  position: relative;
+  width:100px;
 
-  top: 4px;
-  width:120px;
-  left:15px;
+//Added this to harmonize with nav-list-element-anchor sytles in header css page
+ float: left;
+ display:inline-block;
+ font-size: 0.9em;
+ margin-left: 15px;
+ margin-right: 20px;
+ margin-bottom: 0px;
+ margin-top: -2px;
+
 }
 
 
 @media only screen and (min-width: 767px) {
   #progress-mobile
   {
-    //  position: absolute;
-    //  margin: auto;
-    //  margin-left: -10%;
-    //  width: 20%;
-    //  top: 30px;
-    //  left:40%;
-    //  height: 22px;
-    //  border-radius: 0;
-
     position: relative;
-    top: 5px;
-    left:-10px;
-    width:120px;
+    width:110px;
+
+//Added this to harmonize with nav-list-element-anchor sytles in header css page
+    float: left;
+    display:inline-block;
+    font-size: 0.9em;
+    margin-left: 10px;
+    margin-right: 20px;
+    margin-top: 5px;
+
   }
 }
 

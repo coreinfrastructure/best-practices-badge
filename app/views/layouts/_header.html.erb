@@ -9,9 +9,6 @@
       </div>
       <ul class='nav navbar-nav navbar-right'>
         <%= yield :nav_extras %>
-        <!-- <li><a> Hellow </a>  </li> -->
-                <!-- <li> Hellow </li> -->
-        <!-- <li> <a><%= yield :insert_progress_bar %></a></li> -->
                 <li><%= yield :insert_progress_bar %></li>
         <li><%= link_to t(:projects, scope: :layouts), projects_path %></li>
         <% if logged_in? %>

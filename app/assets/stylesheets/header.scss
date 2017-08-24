@@ -31,11 +31,23 @@
 
 #logo {
   background: image-url('cci-logo-header.png') no-repeat;
+  position: relative;
+  left: 15px;
+  top: -5px;
   padding: 5px 0 5px 40px;
   font-size: 1.2em;
   font-weight: bold;
   float: left;
   color: #fff;
+}
+
+@media only screen and (min-width: 767px) {
+  #logo
+  {
+    left: 0px;
+    top: 0px;
+    margin-bottom: 10px;
+  }
 }
 
 #logo:hover {
@@ -58,7 +70,8 @@
     float: left;
     display:inline-block;
     font-size: 0.9em;
-    margin-right: 10px;
+    margin-right: 0px;
+    margin-left: -5px;
     margin-top: -10px;
     // padding-bottom: 5px;
   }

@@ -355,7 +355,7 @@ GEM
       addressable (>= 2.3.5, < 2.6)
       faraday (~> 0.8, < 1.0)
     scout_apm (2.1.30)
-    secure_headers (3.6.7)
+    secure_headers (3.7.0)
       useragent
     selenium-webdriver (3.5.1)
       childprocess (~> 0.5)
@@ -474,7 +474,7 @@ DEPENDENCIES
   ruby-graphviz (= 1.2.3)
   sass-rails (= 5.0.6)
   scout_apm (= 2.1.30)
-  secure_headers (= 3.6.7)
+  secure_headers (= 3.7.0)
   selenium-webdriver (= 3.5.1)
   simplecov (= 0.15.0)
   spring (= 2.0.2)

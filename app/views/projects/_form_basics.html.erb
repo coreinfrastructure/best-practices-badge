@@ -14,7 +14,7 @@
             <div class="hidable-text-entry">
             <span><%= f.label :description, t('projects.form_basics.description.description') %></span>
             <% if is_disabled %>
-              <div class="discussion-markdown" id="project_description">
+              <div class="discussion-markdown" id="project_description" id="en">
                 <%= markdown(project[:description]) %>
               </div>
             <% else %>

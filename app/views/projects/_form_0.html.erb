@@ -199,7 +199,9 @@
 
             <%= render_status 'contribution_requirements', f, project, '0', is_disabled, true %>
           </li>
-          <li class="list-group-item"><h3>FLOSS License</h3>
+          <li class="list-group-item"><h3><%=
+            t('FLOSS license',
+              scope: :headings) %></h3>
 
             <div class="hidable-text-entry">
             <strong><%= t('projects.form_basics.license.description_html') %></strong>

@@ -2629,6 +2629,7 @@ ru:
     Warning flags: Флаги предупреждений
     Working build system: Рабочая система сборки
     Prerequisites: Предварительные требования
+    FLOSS license:
   criterion_status:
     Met: Соответствует
     Unmet: Не соответствует

@@ -190,7 +190,7 @@
           </li>
 
    <%# Note: render() accepts met_suppress: ..., unmet_placeholder:  ... %>
-          <li class="list-group-item"><h3>Basic project website content</h3>
+          <li class="list-group-item"><h3><%= t('headings.Basic project website content') %></h3>
             <%= render_status 'description_good', f, project, '0', is_disabled %>
 
             <%= render_status 'interact', f, project, '0', is_disabled %>

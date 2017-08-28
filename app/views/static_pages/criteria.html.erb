@@ -1,10 +1,10 @@
 <% cache locale do %>
-<div class="center jumbotron">
-  <h1><%= t '.criteria' %></h1>
+<div class="row"><div class="col-md-12">
+  <h1 class="center"><%= t '.criteria' %></h1>
   <!-- This page quickly shows some information about the Criteria. -->
   <p><a href='https://github.com/coreinfrastructure/best-practices-badge/blob/master/doc/criteria.md'>
   <%= t '.detailed_criteria_on_github' %></a></p>
-  <table class="table table-bordered table-striped table-responsive">
+  <table class="table table-bordered table-striped table-responsive table-condensed">
     <tr>
       <th><%= t '.level' %></th>
       <th><%= t '.total_active' %></th>
@@ -41,5 +41,5 @@
     <% end %>
   </table>
   <p><%= t '.project_stats_html' %></p>
-</div>
+</div></div>
 <% end %>

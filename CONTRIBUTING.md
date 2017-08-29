@@ -621,6 +621,27 @@ Here are guidelines for adding Ruby gems:
   some proprietary software is gratefully welcome.
   We also have to combine them legally in the way they are used.
 
+You can review the code of a specific version of a gem.
+You *must* review the code if you have any reason to believe that the
+gem might be malicious.
+That said, you need to be careful.
+If you simply install the gem using bundler, that will
+potentially run code, which is not what you want to do if it includes
+malicious code.
+For more information, see
+["Being paranoid with Ruby gems" (Gemnasium)](https://gemnasium.com/blog/being-paranoid-with-ruby-gems/)
+Instead, create a subdirectory ("mkdir temp"), run "cd temp", and then
+run this (you can omit "-v VERSION" if you're just getting the latest):
+
+~~~~
+gem fetch -v VERSION GEM_NAME
+gem unpack GEMNAME-VERSION
+~~~~
+
+Then "cd GEMNAME-VERSION" to review the code.
+We presume that the Rubygems site will not insert malicious code into what
+it distributes, but clearly individual gem writers can be malicious.
+
 If you add a Ruby gem, put its *fixed* version number in the Gemfile file,
 and please add a brief comment to explain what it is and/or why it's there.
 
@@ -712,6 +733,23 @@ to identify all outdated dependencies, so you can also view its report
 to see what is outdated.
 Many of the gems named "action..." are part of rails, and thus, you should
 update rails to update them.
+
+You *must* review gems if you have reason to believe they are malicious.
+For more information, see
+["Being paranoid with Ruby gems" (Gemnasium)](https://gemnasium.com/blog/being-paranoid-with-ruby-gems/)
+You can see the changes by doing the following.
+Create a subdirectory ("mkdir temp"), run "cd temp", and then
+run this (you can omit "-v VERSION" if you're just getting the latest):
+
+~~~~
+gem fetch -v OLD_VERSION GEM_NAME
+gem unpack GEMNAME-OLD_VERSION
+
+gem fetch -v NEW_VERSION GEM_NAME
+gem unpack GEMNAME-NEW_VERSION
+
+diff -u GEMNAME-OLD_VERSION GEMNAME-NEW_VERSION
+~~~~
 
 I recommend updating in stages (instead of all at once) since this
 makes it easier to debug problems (if any).  Here is a suggested order,

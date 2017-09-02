@@ -131,6 +131,10 @@ class Criteria
     met_justification_required == true
   end
 
+  def met_justification_or_url_required?
+    met_justification_required? || met_url_required?
+  end
+
   def must?
     category == 'MUST'
   end

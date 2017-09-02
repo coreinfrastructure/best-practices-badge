@@ -124,7 +124,9 @@ en:
       suggested: SUGGESTED
       total_active: Total active
       allow_na: Allow N/A
+      met_justification_required: Met justification required
       require_url: Require URL
+      met_justification_or_url_required: Met justification or URL required
       details: Includes details
       new_this_level: New at this level
       future: Future
@@ -133,7 +135,10 @@ en:
         the percentage calculations (as opposed to "future" criteria).
         The next columns identify the number of active criteria
         in each level that are MUST, SHOULD, SUGGESTED, allow
-        a "N/A" as an answer, require a URL, include details,
+        a "N/A" as an answer, require justification when "met" is the answer,
+        require a URL,
+        require justification when "met" is the answer or a URL,
+        include details,
         or are new at this level. "Future" criteria are shown
         on the form, and are expected to be added as active criteria
         to some level in the future, but are not included in completion

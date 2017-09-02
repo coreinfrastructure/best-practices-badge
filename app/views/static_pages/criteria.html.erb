@@ -12,7 +12,9 @@
       <th><%= t '.should' %></th>
       <th><%= t '.suggested' %></th>
       <th><%= t '.allow_na' %></th>
+      <th><%= t '.met_justification_required' %></th>
       <th><%= t '.require_url' %></th>
+      <th><%= t '.met_justification_or_url_required' %></th>
       <th><%= t '.details' %></th>
       <th><%= t '.new_this_level' %></th>
       <th><%= t '.future' %></th>
@@ -28,7 +30,9 @@
         <td><%= active_criteria.count(&:should?) %></td>
         <td><%= active_criteria.count(&:suggested?) %></td>
         <td><%= active_criteria.count(&:na_allowed?) %></td>
+        <td><%= active_criteria.count(&:met_justification_required?) %></td>
         <td><%= active_criteria.count(&:met_url_required?) %></td>
+        <td><%= active_criteria.count(&:met_justification_or_url_required?) %></td>
         <td><%= active_criteria.count(&:details_present?) %></td>
         <td><%=
           # We *only* consider active criteria for "new this level".

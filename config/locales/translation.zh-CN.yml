@@ -1191,6 +1191,8 @@ zh-CN:
       details: 包括细节
       future: 未来
       new_this_level: 在这个级别的新的
+      met_justification_required:
+      met_justification_or_url_required:
   headings:
     Accessibility and internationalization: 无障碍和国际化
     Analysis: 分析

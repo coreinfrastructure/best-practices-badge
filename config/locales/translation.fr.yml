@@ -2739,6 +2739,8 @@ fr:
       details: Comprend des détails
       future: Futur
       new_this_level: Nouveau à ce niveau
+      met_justification_required:
+      met_justification_or_url_required:
   headings:
     Accessibility and internationalization: Accessibilité et internationalisation
     Analysis: Analyse

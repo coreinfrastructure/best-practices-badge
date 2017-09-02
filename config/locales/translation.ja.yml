@@ -1335,6 +1335,8 @@ ja:
       details: 詳細を含みます
       future: 将来
       new_this_level: このレベルで新規
+      met_justification_required:
+      met_justification_or_url_required:
   headings:
     Accessibility and internationalization: アクセシビリティと国際化
     Analysis: 分析

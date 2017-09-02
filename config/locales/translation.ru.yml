@@ -174,6 +174,8 @@ ru:
       details: Есть подробности
       future: Будущие
       new_this_level: Новый на этом уровне
+      met_justification_required:
+      met_justification_or_url_required:
   users:
     new:
       signup_header: Зарегистрироваться

@@ -734,7 +734,8 @@ to see what is outdated.
 Many of the gems named "action..." are part of rails, and thus, you should
 update rails to update them.
 
-You *must* review gems if you have reason to believe they are malicious.
+You *must* review gems if you have reason to believe they might be malicious.
+Occasional spotchecks are encouraged.
 For more information, see
 ["Being paranoid with Ruby gems" (Gemnasium)](https://gemnasium.com/blog/being-paranoid-with-ruby-gems/)
 You can see the changes by doing the following.
@@ -743,12 +744,12 @@ run this (you can omit "-v VERSION" if you're just getting the latest):
 
 ~~~~
 gem fetch -v OLD_VERSION GEM_NAME
-gem unpack GEMNAME-OLD_VERSION
+gem unpack GEMNAME-OLD_VERSION.gem
 
 gem fetch -v NEW_VERSION GEM_NAME
-gem unpack GEMNAME-NEW_VERSION
+gem unpack GEMNAME-NEW_VERSION.gem
 
-diff -u GEMNAME-OLD_VERSION GEMNAME-NEW_VERSION
+diff -ur GEMNAME-OLD_VERSION GEMNAME-NEW_VERSION
 ~~~~
 
 I recommend updating in stages (instead of all at once) since this

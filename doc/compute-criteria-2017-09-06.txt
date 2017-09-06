@@ -1,0 +1,160 @@
+Loading development environment (Rails 5.1.3)
+Switch to inspect mode.
+
+Rails.logger.level = :warn # Reduce log noise
+:warn
+
+def database_stats()
+  p = Project.order(:created_at).last
+  puts "Last project created: #{p.created_at} (project #{p.id})"
+  p = Project.order(:updated_at).last
+  puts "Last project update: #{p.updated_at} (project #{p.id})"
+  puts "Total number of projects = #{Project.count}"
+  puts "Total number of passing projects = #{Project.where('badge_percentage_0 >= 100').count}"
+  puts "Total number of 90%+ projects (INCLUDING 100%) = #{Project.where('badge_percentage_0 >= 100').count}"
+end
+:database_stats
+
+# Print analysis for projects at least "min_percentage"
+def analyze(min_percentage)
+  puts
+  puts "Reporting on projects #{min_percentage}% or better but NOT 100%."
+  results = []
+  # Show only "MUST" since those aren't easily justified.  To show all, use:
+  # my_criteria = Project::ALL_CRITERIA_STATUS
+  my_criteria = Criteria['0'].select { |k,v| v.must? }
+  # puts my_criteria
+  my_criteria = my_criteria.map { |k,v| v.name.to_s + '_status' }
+  # puts my_criteria
+  project_count=Project.where("badge_percentage_0 >= #{min_percentage} AND badge_percentage_0 < 100").count
+  puts "Number of projects with minimum percentage = #{project_count}"
+  my_criteria.each do |criterion|
+    data=Project.where("badge_percentage_0 >= #{min_percentage} AND badge_percentage_0 < 100").select(criterion.to_s).group(criterion.to_s).unscope(:order).count
+    results.append([criterion.to_s, data.fetch('Met',0),
+      data.fetch('Unmet',0), data.fetch('?',0), data.fetch('N/A',0)])
+  end
+  # Sort by total "unmet+?", because "Met" and "N/A" are okay.
+  # Negate to reverse search ("largest first") - start with most unmet+?
+  results.sort! { |x,y| -(x[2]+x[3]) <=> -(y[2]+y[3]) }
+  puts 'criterion,Met,Unmet,?,N/A,Unmet+?'
+  results.each do |row|
+    totaluq=row[2].to_i+row[3].to_i # Unmet + ?
+    percentuq=(totaluq*100.0/project_count).round
+    print row.join(',')
+    print ",#{totaluq}"
+    print ",#{percentuq}%"
+    puts
+  end
+  nil # Don't return the results
+end
+:analyze
+
+database_stats()
+Last project created: 2017-09-06 09:40:39 UTC (project 1244)
+Last project update: 2017-09-06 09:47:06 UTC (project 1244)
+Total number of projects = 1013
+Total number of passing projects = 105
+Total number of 90%+ projects (INCLUDING 100%) = 105
+nil
+analyze(90)
+
+Reporting on projects 90% or better but NOT 100%.
+Number of projects with minimum percentage = 74
+criterion,Met,Unmet,?,N/A,Unmet+?
+vulnerability_report_process_status,58,9,7,0,16,22%
+sites_https_status,59,14,1,0,15,20%
+tests_are_added_status,60,13,1,0,14,19%
+vulnerability_report_private_status,33,7,4,30,11,15%
+test_policy_status,64,9,1,0,10,14%
+dynamic_analysis_fixed_status,53,5,5,11,10,14%
+know_common_errors_status,65,5,4,0,9,12%
+static_analysis_status,60,7,2,5,9,12%
+know_secure_design_status,66,4,4,0,8,11%
+delivery_unsigned_status,67,2,5,0,7,9%
+documentation_interface_status,68,4,1,1,5,7%
+release_notes_status,66,5,0,3,5,7%
+report_responses_status,69,2,3,0,5,7%
+crypto_keylength_status,23,4,1,46,5,7%
+vulnerability_report_response_status,54,2,2,16,4,5%
+crypto_password_storage_status,14,2,2,56,4,5%
+delivery_mitm_status,70,3,1,0,4,5%
+report_archive_status,71,1,2,0,3,4%
+test_status,71,3,0,0,3,4%
+warnings_status,66,2,1,5,3,4%
+static_analysis_fixed_status,56,1,2,15,3,4%
+warnings_fixed_status,68,1,1,4,2,3%
+crypto_working_status,33,2,0,39,2,3%
+vulnerabilities_fixed_60_days_status,72,2,0,0,2,3%
+description_good_status,73,1,0,0,1,1%
+interact_status,73,1,0,0,1,1%
+documentation_basics_status,73,0,1,0,1,1%
+version_unique_status,73,1,0,0,1,1%
+report_process_status,73,0,1,0,1,1%
+crypto_published_status,39,1,0,34,1,1%
+no_leaked_credentials_status,73,0,1,0,1,1%
+contribution_status,74,0,0,0,0,0%
+floss_license_status,74,0,0,0,0,0%
+license_location_status,74,0,0,0,0,0%
+discussion_status,74,0,0,0,0,0%
+repo_public_status,74,0,0,0,0,0%
+repo_track_status,74,0,0,0,0,0%
+repo_interim_status,74,0,0,0,0,0%
+release_notes_vulns_status,61,0,0,13,0,0%
+build_status,67,0,0,7,0,0%
+crypto_floss_status,40,0,0,34,0,0%
+crypto_random_status,25,0,0,49,0,0%
+nil
+analyze(75)
+
+Reporting on projects 75% or better but NOT 100%.
+Number of projects with minimum percentage = 136
+criterion,Met,Unmet,?,N/A,Unmet+?
+tests_are_added_status,91,27,18,0,45,33%
+vulnerability_report_process_status,97,23,16,0,39,29%
+dynamic_analysis_fixed_status,77,12,27,20,39,29%
+static_analysis_status,93,20,16,7,36,26%
+test_policy_status,101,21,14,0,35,26%
+know_common_errors_status,106,9,21,0,30,22%
+sites_https_status,107,28,1,0,29,21%
+know_secure_design_status,107,10,19,0,29,21%
+vulnerability_report_private_status,50,14,14,58,28,21%
+static_analysis_fixed_status,87,9,16,24,25,18%
+delivery_unsigned_status,112,6,18,0,24,18%
+release_notes_status,107,22,0,7,22,16%
+release_notes_vulns_status,91,6,14,25,20,15%
+repo_interim_status,119,4,13,0,17,13%
+warnings_fixed_status,110,4,13,9,17,13%
+warnings_status,108,7,9,12,16,12%
+documentation_interface_status,119,10,5,2,15,11%
+crypto_keylength_status,36,5,9,86,14,10%
+delivery_mitm_status,122,5,9,0,14,10%
+test_status,123,9,4,0,13,10%
+crypto_password_storage_status,23,5,8,100,13,10%
+vulnerability_report_response_status,84,4,8,40,12,9%
+crypto_working_status,48,5,6,77,11,8%
+vulnerabilities_fixed_60_days_status,125,4,7,0,11,8%
+report_responses_status,128,2,6,0,8,6%
+crypto_random_status,40,1,7,88,8,6%
+interact_status,129,3,4,0,7,5%
+version_unique_status,129,4,3,0,7,5%
+description_good_status,131,3,2,0,5,4%
+license_location_status,131,4,1,0,5,4%
+report_archive_status,131,3,2,0,5,4%
+documentation_basics_status,132,3,1,0,4,3%
+no_leaked_credentials_status,132,1,3,0,4,3%
+contribution_status,133,2,1,0,3,2%
+crypto_published_status,60,1,2,73,3,2%
+discussion_status,134,1,1,0,2,1%
+report_process_status,134,0,2,0,2,1%
+floss_license_status,135,1,0,0,1,1%
+repo_public_status,135,1,0,0,1,1%
+crypto_floss_status,64,0,1,71,1,1%
+repo_track_status,136,0,0,0,0,0%
+build_status,115,0,0,21,0,0%
+nil
+puts 'Done.'
+Done.
+nil
+
+
+

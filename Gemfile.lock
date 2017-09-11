@@ -357,7 +357,7 @@ GEM
     scout_apm (2.1.31)
     secure_headers (3.7.0)
       useragent
-    selenium-webdriver (3.5.1)
+    selenium-webdriver (3.5.2)
       childprocess (~> 0.5)
       rubyzip (~> 1.0)
     sexp_processor (4.10.0)
@@ -475,7 +475,7 @@ DEPENDENCIES
   sass-rails (= 5.0.6)
   scout_apm (= 2.1.31)
   secure_headers (= 3.7.0)
-  selenium-webdriver (= 3.5.1)
+  selenium-webdriver (= 3.5.2)
   simplecov (= 0.15.0)
   spring (= 2.0.2)
   traceroute (= 0.5.0)

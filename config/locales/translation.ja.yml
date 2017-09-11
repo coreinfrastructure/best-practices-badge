@@ -1335,8 +1335,8 @@ ja:
       details: 詳細を含みます
       future: 将来
       new_this_level: このレベルで新規
-      met_justification_required:
-      met_justification_or_url_required:
+      met_justification_required: 満足している正当な理由が必要
+      met_justification_or_url_required: 満足している正当な理由またはURLが必要
   headings:
     Accessibility and internationalization: アクセシビリティと国際化
     Analysis: 分析
@@ -1375,7 +1375,7 @@ ja:
     Working build system: 作業ビルドシステム
     Identification: 識別情報
     Prerequisites: 前提要件
-    FLOSS license:
+    FLOSS license: FLOSSライセンス
   last_entry: 最後の翻訳エントリ
   admin_only: 管理者のみ。
   criterion_status:

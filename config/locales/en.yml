@@ -375,7 +375,11 @@ en:
           and MUST NOT criteria must be met, all SHOULD criteria
           must be met OR be unmet with justification, <em>and</em>
           all SUGGESTED criteria must be met OR unmet (we want
-          them considered at least). Feedback is welcome via the
+          them considered at least).
+          If you want to enter justification text as a generic comment,
+          instead of being a rationale that the situation is acceptable,
+          start the text with '#'.
+          Feedback is welcome via the
           <a href="https://github.com/coreinfrastructure/best-practices-badge">GitHub
           site as issues or pull requests</a> There is also a
           <a href="https://lists.coreinfrastructure.org/mailman/listinfo/cii-badges">mailing

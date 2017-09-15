@@ -104,7 +104,11 @@ function criterionStatus(criterion) {
 
 // Return true if the justification is good enough for a SHOULD criterion.
 function justificationGood(justification) {
-  return justification.length >= MIN_SHOULD_LENGTH;
+  if (!justification || justification.startsWith('#')) {
+    return false;
+  } else {
+    return justification.length >= MIN_SHOULD_LENGTH;
+  }
 }
 
 // This function is mirrored in app/models/project.rb by "get_met_result"

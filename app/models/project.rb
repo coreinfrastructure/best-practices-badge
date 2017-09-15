@@ -483,7 +483,7 @@ class Project < ApplicationRecord
   end
 
   def justification_good?(justification)
-    return false if justification.nil?
+    return false if justification.nil? || justification.start_with?('#')
     justification.length >= MIN_SHOULD_LENGTH
   end
 

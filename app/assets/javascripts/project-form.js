@@ -86,7 +86,7 @@ function getColor(value) {
 // the server-side badge calculation, or it may confuse some users.
 // See app/models/project.rb function "contains_url?".
 function containsURL(justification) {
-  if (!justification) {
+  if (!justification || justification.startsWith('#')) {
     return false;
   } else {
     return !!justification.match(/https?:\/\/[^ ]{5}/);

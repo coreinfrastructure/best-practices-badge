@@ -86,7 +86,8 @@ function getColor(value) {
 // the server-side badge calculation, or it may confuse some users.
 // See app/models/project.rb function "contains_url?".
 function containsURL(justification) {
-  if (!justification || justification.startsWith('#')) {
+  if (!justification || justification === undefined ||
+      justification.startsWith('#')) {
     return false;
   } else {
     return !!justification.match(/https?:\/\/[^ ]{5}/);
@@ -104,7 +105,8 @@ function criterionStatus(criterion) {
 
 // Return true if the justification is good enough for a SHOULD criterion.
 function justificationGood(justification) {
-  if (!justification || justification.startsWith('#')) {
+  if (!justification || justification === undefined ||
+      justification.startsWith('#')) {
     return false;
   } else {
     return justification.length >= MIN_SHOULD_LENGTH;

@@ -28,7 +28,7 @@ gem 'omniauth-github', '1.3.0' # Authentication to GitHub (get project info)
 gem 'paleta', '0.3.0' # Color manipulation, used for badges
 gem 'paper_trail', '7.1.2' # Record previous versions of project data
 gem 'pg', '0.21.0' # PostgreSQL database, used for data storage
-gem 'pg_search', '2.1.0' # PostgreSQL full-text search
+gem 'pg_search', '2.1.1' # PostgreSQL full-text search
 gem 'puma', '3.10.0' # Faster webserver; recommended by Heroku
 gem 'rails', '5.1.4' # Our web framework
 gem 'rails-i18n', '5.0.4' # Localizations for Rails built-ins

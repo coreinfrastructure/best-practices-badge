@@ -617,6 +617,87 @@ en:
       https://github.com/coreinfrastructure/best-practices-badge/issues
       (click on "new issue").
       Thank you for your time.
+    reminder_body_html: |-
+      <h1>Automated Best Practices Badge Reminder for %{project_name}</h1>
+      <p>
+      This is an automated reminder that your project
+      "%{project_name}"
+      does not currently have a "best practices" badge,
+      and its badge entry has not been updated in a while.
+      </p>
+
+      <p>
+      Your best practices badge entry is at
+      <a href="%{project_info_url}">%{project_info_url}</a>
+      and was last updated on %{project_updated_at}.
+      It is currently at %{project_badge_percentage_0}% (out of 100%).
+      </p>
+
+      <p>
+      We encourage you to keep making progress.
+      Please visit your badge entry at
+      <a href="%{project_info_url}">%{project_info_url}</a>
+      to complete the information and get your badge!
+      </p>
+
+      <p>
+      If you want to see <em>only</em> what you're missing, visit your badge entry,
+      select the button near the top labelled "Expand all panels", and
+      then select the button near the top labelled "Hide met or N/A criteria".
+      If you have questions, or need help, please contact
+      <a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;</a>
+      or file an issue at
+      <a href="https://github.com/coreinfrastructure/best-practices-badge/issues">https://github.com/coreinfrastructure/best-practices-badge/issues</a>
+      (click on "new issue").
+      </p>
+
+      <p>
+      We don't send reminders if you continue to update your badge entry,
+      and we only send reminders approximately every 30-60 days.  However,
+      if you want to disable these reminder messages, edit your badge entry at
+      <a href="%{project_info_url}">%{project_info_url}</a>
+      to turn on "disable inactivity reminder".
+      We hope you'll instead keep working at it
+      and eventually earn the badge.
+      </p>
+
+      <p>
+      Thank you for your time.
+      </p>
+    reminder_body_text: |-
+      This is an automated reminder that your project
+      "%{project_name}"
+      does not currently have a "best practices" badge,
+      and its badge entry has not been updated in a while.
+
+      Your best practices badge entry is at
+      %{project_info_url}
+      and was last updated on %{project_updated_at}
+      It is currently at %{project_badge_percentage_0}% (out of 100%).
+
+      We encourage you to keep making progress.
+      Please visit your badge entry at
+      %{project_info_url}
+      to complete the information and get your badge!
+
+      If you want to see only what you're missing, visit your badge entry,
+      select the button near the top labelled "Expand all panels", and
+      then select the button near the top labelled "Hide met or N/A criteria".
+      If you have questions, or need help, please contact
+      cii-badges-questions-owner@lists.coreinfrastructure.org
+      or file an issue at
+      https://github.com/coreinfrastructure/best-practices-badge/issues
+      (click on "new issue").
+
+      We don't send reminders if you continue to update your badge entry,
+      and we only send reminders approximately every 30-60 days.  However,
+      if you want to disable these reminder messages, edit your badge entry at
+      %{project_info_url}
+      to turn on "disable inactivity reminder".
+      We hope you'll instead keep working at it
+      and eventually earn the badge.
+
+      Thank you for your time.
     gained_level_part1: |-
       Congratulations!
       According to the information that you've provided,

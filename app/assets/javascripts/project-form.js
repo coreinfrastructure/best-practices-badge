@@ -86,7 +86,10 @@ function getColor(value) {
 // the server-side badge calculation, or it may confuse some users.
 // See app/models/project.rb function "contains_url?".
 function containsURL(justification) {
-  if (!justification) {
+  // string.startsWith('#') was causing a test failure on circleCI.
+  // We are not sure why, but regex works fine so let's use that.
+  var possibleComment = /^\s*#/.exec(justification);
+  if (!justification || (!!possibleComment && possibleComment.index === 0)) {
     return false;
   } else {
     return !!justification.match(/https?:\/\/[^ ]{5}/);
@@ -104,7 +107,14 @@ function criterionStatus(criterion) {
 
 // Return true if the justification is good enough for a SHOULD criterion.
 function justificationGood(justification) {
-  return justification.length >= MIN_SHOULD_LENGTH;
+  // string.startsWith('#') was causing a test failure on circleCI.
+  // We are not sure why, but regex works fine so let's use that.
+  var possibleComment = /^\s*#/.exec(justification);
+  if (!justification || (!!possibleComment && possibleComment.index === 0)) {
+    return false;
+  } else {
+    return justification.length >= MIN_SHOULD_LENGTH;
+  }
 }
 
 // This function is mirrored in app/models/project.rb by "get_met_result"

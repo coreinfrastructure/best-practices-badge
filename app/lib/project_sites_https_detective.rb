@@ -24,7 +24,7 @@ class ProjectSitesHttpsDetective < Detective
       @results[:sites_https_status] =
         {
           value: 'Unmet', confidence: 5,
-          explanation: 'Given an http: URL.'
+          explanation: '# Given an http: URL.'
         }
     elsif homepage_url.blank? && repo_url.blank?
       # Do nothing.  Shouldn't happen.

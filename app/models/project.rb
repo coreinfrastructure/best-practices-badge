@@ -221,6 +221,7 @@ class Project < ApplicationRecord
   # which *are* traversed by BadgeApp and thus need to be much more strict.
   #
   def contains_url?(text)
+    return false if !text || text.start_with?('#')
     text =~ %r{https?://[^ ]{5}}
   end
 
@@ -483,7 +484,7 @@ class Project < ApplicationRecord
   end
 
   def justification_good?(justification)
-    return false if justification.nil?
+    return false if justification.nil? || justification.start_with?('#')
     justification.length >= MIN_SHOULD_LENGTH
   end
 

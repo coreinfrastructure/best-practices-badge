@@ -133,7 +133,7 @@ GEM
       terminal-table
     globalid (0.4.0)
       activesupport (>= 4.2.0)
-    hashdiff (0.3.6)
+    hashdiff (0.3.7)
     hashie (3.5.6)
     httparty (0.15.6)
       multi_xml (>= 0.5.2)
@@ -401,7 +401,7 @@ GEM
       activemodel (>= 5.0)
       bindex (>= 0.4.0)
       railties (>= 5.0)
-    webmock (3.0.1)
+    webmock (3.1.0)
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
       hashdiff
@@ -484,7 +484,7 @@ DEPENDENCIES
   uglifier (= 3.2.0)
   vcr (= 3.0.3)
   web-console (= 3.5.1)
-  webmock (= 3.0.1)
+  webmock (= 3.1.0)
   will-paginate-i18n (= 0.1.15)
   will_paginate (= 3.1.6)
   yaml-lint (= 0.0.9)

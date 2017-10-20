@@ -88,7 +88,7 @@ group :test do
   gem 'rails-controller-testing', '1.0.2' # need to require this one
   gem 'selenium-webdriver', '3.5.2', require: false
   gem 'simplecov', '0.15.1', require: false
-  gem 'webmock', '3.0.1', require: false
+  gem 'webmock', '3.1.0', require: false
 end
 
 group :production do

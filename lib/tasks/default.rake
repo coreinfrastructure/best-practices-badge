@@ -63,7 +63,8 @@ end
 
 desc 'Run brakeman'
 task :brakeman do
-  sh 'bundle exec brakeman --quiet'
+  # Disable pager, so that "rake" can keep running without halting.
+  sh 'bundle exec brakeman --quiet --no-pager'
 end
 
 desc 'Run bundle if needed'

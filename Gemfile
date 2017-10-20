@@ -51,7 +51,7 @@ group :development, :test do
   gem 'license_finder', '3.0.4'
   gem 'mdl', '0.4.0'
   gem 'pronto', '0.9.5'
-  gem 'pronto-brakeman', '0.9.0'
+  gem 'pronto-brakeman', '0.9.1'
   gem 'pronto-eslint', '0.9.1'
   gem 'pronto-rails_best_practices', '0.9.0'
   gem 'pronto-rubocop', '0.9.0'

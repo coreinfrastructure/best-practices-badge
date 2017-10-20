@@ -446,6 +446,8 @@ zh-CN:
       很抱歉，您的项目不再具有“%{old_level}”徽章
       现在是“%{new_level}”。
       有关详细信息，请参阅以下URL：
+    reminder_body_html:
+    reminder_body_text:
   project_name_unknown: "(未知名称)"
   locale_name:
     en: 英文 / English (en）

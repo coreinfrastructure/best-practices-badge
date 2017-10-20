@@ -689,6 +689,8 @@ fr:
       Nous sommes désolés, mais votre projet n'a plus le badge « %{old_level} »
       et est maintenant « %{new_level} ».
       Consultez l'URL suivante pour plus d'informations :
+    reminder_body_html:
+    reminder_body_text:
   project_name_unknown: "(Nom inconnu)"
   locale_name:
     en: Anglais / English (en)

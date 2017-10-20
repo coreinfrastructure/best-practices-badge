@@ -634,7 +634,7 @@ ru:
     subject_new_project: >-
       Вы добавили проект в программу значков Передовой практики
       CII
-    subject_reminder: У вашего проекта пока нет значка Передовой
+    subject_reminder: У вашего проекта все еще нет значка Передовой
       практики
     subject_project_deleted: Проект %{project_id} под названием
       %{project_name} удален
@@ -703,6 +703,8 @@ ru:
     ending: >-
       --- David A. Wheeler, технический руководитель проекта CII
       Best Practices Badge
+    reminder_body_html:
+    reminder_body_text:
   user_mailer:
     account_activation:
       before_html: |-

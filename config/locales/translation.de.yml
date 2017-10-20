@@ -489,6 +489,8 @@ de:
       Wir haben einige dieser Berichte in das öffentliche Wiki gestellt. informieren Sie uns bitte wenn Sie nicht wollen, dass die Änderungen veröffentlicht werden https://github.com/coreinfrastruktur/best-praktiken-badge/wiki/Impacts
       Danke und Herzlichen Glückwünsch.
     lost_level_message:
+    reminder_body_html:
+    reminder_body_text:
   user_mailer:
     account_activation:
       before_html: |-

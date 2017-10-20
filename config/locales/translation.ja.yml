@@ -417,6 +417,8 @@ ja:
     lost_level_message: |-
       申し訳ありませんが、あなたのプロジェクトは「%{old_level}」バッジを有しておらず、現在は「%{new_level}」を有しています。
       詳細については、次のURLを参照してください。
+    reminder_body_html:
+    reminder_body_text:
   user_mailer:
     account_activation:
       before_html: |-

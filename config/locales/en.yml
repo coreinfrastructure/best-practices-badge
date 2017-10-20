@@ -625,7 +625,7 @@ en:
       <p>
       Your best practices badge entry is at
       <a href="%{project_info_url}">%{project_info_url}</a>
-      and was last updated on %{project_updated_at%}.
+      and was last updated on %{project_updated_at}.
       It is currently at %{project_badge_percentage_0}% (out of 100%).
       </p>
 
@@ -662,7 +662,7 @@ en:
       </p>
     reminder_body_text: |-
       This is an automated reminder that your project
-      "%{project.name}"
+      "%{project_name}"
       does not currently have a "best practices" badge,
       and its badge entry has not been updated in a while.
 

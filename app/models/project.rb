@@ -171,8 +171,8 @@ class Project < ApplicationRecord
 
   validates :user_id, presence: true
 
-  Criteria.each do |_level, criteria|
-    criteria.each do |_name, criterion|
+  Criteria.each_value do |criteria|
+    criteria.each_value do |criterion|
       if criterion.na_allowed?
         validates criterion.name.status, inclusion: { in: STATUS_CHOICE_NA }
       else
@@ -303,7 +303,7 @@ class Project < ApplicationRecord
 
   # Update the badge percentages for all levels.
   def update_badge_percentages
-    Criteria.keys.each do |level|
+    Criteria.each_key do |level|
       update_badge_percentage(level)
     end
   end

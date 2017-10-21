@@ -36,7 +36,7 @@ class UsersManipulateProjectTest < ActionDispatch::IntegrationTest
 
       # Check to ensure that the form includes all the criteria, but only once.
       # This could fail if the view incorrectly omits or duplicates one.
-      Criteria['0'].values.each do |criterion|
+      Criteria['0'].each_value do |criterion|
         assert_select "##{criterion}" # Check for existence
         assert_select "##{criterion}" do |elements|
           assert_equal 1, elements.count # Check for duplication

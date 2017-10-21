@@ -49,6 +49,16 @@ class Criteria
       @criteria.each { |level| yield level }
     end
 
+    def each_value
+      instantiate if @criteria.blank?
+      @criteria.each_value { |level_data| yield level_data }
+    end
+
+    def each_key
+      instantiate if @criteria.blank?
+      @criteria.each_key { |level_key| yield level_key }
+    end
+
     # This returns an array of all levels where a particular criterion of
     # a given name is present.
     def get_levels(criterion)
@@ -84,7 +94,7 @@ class Criteria
           fields.delete_if { |k, _v| k.in? FIELDS_TO_OMIT }
           translations = {}
           I18n.available_locales.each do |locale|
-            I18n.t(".criteria.#{level}.#{criterion}").keys.each do |k|
+            I18n.t(".criteria.#{level}.#{criterion}").each_key do |k|
               next if k.to_s.in? FIELDS_TO_OMIT
               translations[k.to_s] = {} unless translations.key?(k.to_s)
               translations[k.to_s][locale.to_s] =

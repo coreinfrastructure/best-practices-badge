@@ -14,17 +14,23 @@ class ProjectListTest < ActionDispatch::IntegrationTest
   test 'get project list and sort by name' do
     get '/projects'
     assert_response :success
-    assert_select 'table>tbody>tr:first-child>td:nth-child(2)'.dup,
-                  'Pathfinder OS'
+    assert_select(
+      +'table>tbody>tr:first-child>td:nth-child(2)',
+      'Pathfinder OS'
+    )
 
     get '/projects?sort=name'
     assert_response :success
-    assert_select 'table>tbody>tr:first-child>td:nth-child(2)'.dup,
-                  'Justified perfect passing project'
+    assert_select(
+      +'table>tbody>tr:first-child>td:nth-child(2)',
+      'Justified perfect passing project'
+    )
 
     get '/projects?sort=name&sort_direction=desc'
     assert_response :success
-    assert_select 'table>tbody>tr:first-child>td:nth-child(2)'.dup,
-                  'Unjustified perfect project'
+    assert_select(
+      +'table>tbody>tr:first-child>td:nth-child(2)',
+      'Unjustified perfect project'
+    )
   end
 end

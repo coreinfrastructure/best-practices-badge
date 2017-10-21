@@ -73,8 +73,10 @@ class UsersManipulateProjectTest < ActionDispatch::IntegrationTest
 
       # Check that returned settings are correct.
       # Note: You can use byebug... css_select to interactively check things.
-      assert_select '#project_name[value=?]'.dup,
-                    'Core Infrastructure Initiative Best Practices Badge'
+      assert_select(
+        +'#project_name[value=?]',
+        'Core Infrastructure Initiative Best Practices Badge'
+      )
       assert_select '#project_discussion_status_met[checked]'
       assert_select '#project_contribution_status_met[checked]'
       assert_select '#project_floss_license_status_met[checked]'
@@ -160,7 +162,7 @@ class UsersManipulateProjectTest < ActionDispatch::IntegrationTest
 
       assert_response :success
       assert_template 'projects/edit'
-      assert_select '#project_name[value=?]'.dup, 'sendmail'
+      assert_select(+'#project_name[value=?]', 'sendmail')
     end
   end
 end

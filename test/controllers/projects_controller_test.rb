@@ -84,8 +84,8 @@ class ProjectsControllerTest < ActionController::TestCase
   test 'should show project' do
     get :show, params: { id: @project }
     assert_response :success
-    assert_select 'a[href=?]'.dup, 'https://www.nasa.gov'
-    assert_select 'a[href=?]'.dup, 'https://www.nasa.gov/pathfinder'
+    assert_select(+'a[href=?]', 'https://www.nasa.gov')
+    assert_select(+'a[href=?]', 'https://www.nasa.gov/pathfinder')
     # Check semver description, which has HTML - make sure it's not escaped:
     assert @response.body.include?(
       I18n.t('criteria.0.version_semver.description')
@@ -95,16 +95,16 @@ class ProjectsControllerTest < ActionController::TestCase
   test 'should show project with criteria_level=1' do
     get :show, params: { id: @project, criteria_level: '1' }
     assert_response :success
-    assert_select 'a[href=?]'.dup, 'https://www.nasa.gov'
-    assert_select 'a[href=?]'.dup, 'https://www.nasa.gov/pathfinder'
+    assert_select(+'a[href=?]', 'https://www.nasa.gov')
+    assert_select(+'a[href=?]', 'https://www.nasa.gov/pathfinder')
     only_correct_criteria_selectable('1')
   end
 
   test 'should show project with criteria_level=2' do
     get :show, params: { id: @project, criteria_level: '2' }
     assert_response :success
-    assert_select 'a[href=?]'.dup, 'https://www.nasa.gov'
-    assert_select 'a[href=?]'.dup, 'https://www.nasa.gov/pathfinder'
+    assert_select(+'a[href=?]', 'https://www.nasa.gov')
+    assert_select(+'a[href=?]', 'https://www.nasa.gov/pathfinder')
     only_correct_criteria_selectable('2')
   end
 

@@ -16,7 +16,7 @@ iplist_uri = 'https://api.fastly.com/public-ip-list'
 # Ensure that there's *a* value for valid_client_ips (nil=all allowed)
 Rails.configuration.valid_client_ips = nil
 
-if !ENV['FASTLY_API_KEY'] && !Rails.env.testing?
+if !ENV['FASTLY_API_KEY'] && !Rails.env.test?
   Rails.logger.warn 'FASTLY_API_KEY is not set.'
 end
 
@@ -24,7 +24,7 @@ FastlyRails.configure do |c|
   c.api_key = ENV['FASTLY_API_KEY'] # Fastly api key, required for it to work
   c.max_age = 86_400 # time in seconds, optional, default 2592000 (30 days)
   c.service_id = ENV['FASTLY_SERVICE_ID'] # The Fastly service, required
-  c.purging_enabled = !Rails.env.development? && !Rails.env.testing? &&
+  c.purging_enabled = !Rails.env.development? && !Rails.env.test? &&
                       ENV['FASTLY_API_KEY']
 end
 

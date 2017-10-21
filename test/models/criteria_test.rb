@@ -99,35 +99,18 @@ class CriteriaTest < ActiveSupport::TestCase
     end
   end
 
-  test 'Ensure only valid categories in Criteria' do
+  test 'Ensure Criteria data is sane' do
+    allowed_field_values = %w[MUST SHOULD SUGGESTED]
     Criteria.to_h.each_value do |criteria_set|
       criteria_set.each_value do |fields|
-        allowed_field_values = %w[MUST SHOULD SUGGESTED]
-        assert_includes allowed_field_values, fields['category']
-      end
-    end
-  end
-
-  test 'If URL required, do not suppress justification' do
-    Criteria.to_h.each_value do |criteria_set|
-      criteria_set.each_value do |fields|
-        assert_not fields[:met_url_required] && fields[:met_suppress]
-      end
-    end
-  end
-
-  test 'If Met justification required, do not suppress justification' do
-    Criteria.to_h.each_value do |criteria_set|
-      criteria_set.each_value do |fields|
-        assert_not fields[:met_justification_required] && fields[:met_suppress]
-      end
-    end
-  end
-
-  test 'If N/A justification required, do not suppress justification' do
-    Criteria.to_h.each_value do |criteria_set|
-      criteria_set.each_value do |fields|
-        assert_not fields[:na_justification_required] && fields[:met_suppress]
+        assert_includes allowed_field_values, fields['category'],
+                        'only valid categories may be in Criteria'
+        assert_not fields[:met_url_required] && fields[:met_suppress],
+                   'If URL required, do not suppress justification'
+        assert_not fields[:met_justification_required] && fields[:met_suppress],
+                   'If Met justification required, must allow justification'
+        assert_not fields[:na_justification_required] && fields[:met_suppress],
+                   'If N/A justification required, must allow justification'
       end
     end
   end

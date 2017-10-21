@@ -21,6 +21,12 @@ Documentation:
 Lint/HandleExceptions:
   Exclude:
     - 'bin/*'
+Lint/RescueWithoutErrorClass:
+  Exclude:
+    # When getting evidence from external sources there are
+    # many possible problems, and we don't care - if there's
+    # an error getting evidence, we treat it as no evidence.
+    - 'app/lib/evidence.rb'
 Metrics/AbcSize:
   Max: 17
   Exclude:

@@ -99,7 +99,7 @@ class Badge
     color = specs[:color] ||
             '#' + Paleta::Color.new(:hsl, percentage * 0.45 + 15, 85, 43).hex
     text = percentage ? specs[:text] + " #{percentage}%" : specs[:text]
-    <<-ENDOFSTRING.squish
+    <<-BADGE_AS_SVG.squish
     <svg xmlns="http://www.w3.org/2000/svg" width="#{specs[:width]}"
     height="20"><linearGradient id="b" x2="0" y2="100%"><stop offset="0"
     stop-color="#bbb" stop-opacity=".1"/><stop offset="1"
@@ -116,7 +116,7 @@ class Badge
     y="15" #{specs[:text_colors][:shadow]}>#{text}</text><text
     #{specs[:text_colors][:color]}x="#{specs[:text_pos]}"
     y="14">#{text}</text></g></svg>
-    ENDOFSTRING
+    BADGE_AS_SVG
   end
   # rubocop:enable Metrics/AbcSize
 end

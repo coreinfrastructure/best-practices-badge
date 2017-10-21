@@ -126,7 +126,7 @@ module ActiveSupport
     # rubocop:disable Metrics/MethodLength
     def kill_sticky_headers
       # https://alisdair.mcdiarmid.org/kill-sticky-headers/
-      script = <<-EOS
+      script = <<-JAVASCRIPT_KILL_STICKY_HEADERS
       (function () {
         var i, elements = document.querySelectorAll('body *');
 
@@ -136,7 +136,7 @@ module ActiveSupport
           }
         }
       })();
-      EOS
+      JAVASCRIPT_KILL_STICKY_HEADERS
       execute_script script
     end
     # rubocop:enable Metrics/MethodLength

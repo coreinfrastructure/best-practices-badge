@@ -81,7 +81,7 @@ end
 desc 'Run bundle-audit - check for known vulnerabilities in dependencies'
 task :bundle_audit do
   verbose(true) do
-    sh <<-END
+    sh <<-RETRY_BUNDLE_AUDIT_SHELL
       apply_bundle_audit=t
       if ping -q -c 1 github.com > /dev/null 2> /dev/null ; then
         echo "Have network access, trying to update bundle-audit database."
@@ -107,7 +107,7 @@ task :bundle_audit do
       else
         true
       fi
-    END
+    RETRY_BUNDLE_AUDIT_SHELL
   end
 end
 # rubocop: enable Metrics/BlockLength
@@ -251,7 +251,7 @@ namespace :fastly do
       'https://master.bestpractices.coreinfrastructure.org/projects/1/badge'
     puts 'Starting test of Fastly caching'
     verbose(false) do
-      sh <<-END
+      sh <<-PURGE_FASTLY_SHELL
         site_name="#{args.site_name}"
         echo "Purging Fastly cache of badge for ${site_name}"
         curl -X PURGE "$site_name" || exit 1
@@ -267,7 +267,7 @@ namespace :fastly do
           echo "Fastly failed to restore cache."
           exit 1
         fi
-      END
+      PURGE_FASTLY_SHELL
     end
   end
 end
@@ -616,12 +616,12 @@ end
 desc 'check that install-badge-dev-environment works'
 task :test_dev_install do
   puts 'Updating test-dev-install branch'
-  sh <<-END
+  sh <<-TEST_BRANCH_SHELL
     git checkout test-dev-install
     git merge --no-commit master
     git checkout HEAD circle.yml
     git commit -a -s -m "Merge master into test-dev-install"
     git push origin test-dev-install
     git checkout master
-  END
+  TEST_BRANCH_SHELL
 end

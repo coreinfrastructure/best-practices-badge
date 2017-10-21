@@ -32,12 +32,27 @@ class UrlValidator < ActiveModel::EachValidator
            %(20|[89A-Ea-e][0-9A-Fa-f]|[Ff][0-7]))*  # Allow some %-encoded
         )?)\z}x
 
+  # Unescape but do *not* force an encoding (so we can force it separately
+  # and check for validity).
+  # This used to be provided by URL.unescape, but that's obsolete and
+  # we want this to keep working *even* if URL.unescape is dropped.
+  # Based on Ruby's CGI "unescape" in cgi/util.rb
+  def unescape_unforced(string)
+    str =
+      string.tr('+', ' ').b.gsub(/((?:%[0-9a-fA-F]{2})+)/) do |m|
+        [m.delete('%')].pack('H*')
+      end
+    str
+  end
+
   # Return true if URL matches URL_REGEX and its decoding is valid UTF-8.
   def url_acceptable?(value)
     if value !~ URL_REGEX
       false
     else
-      URI.unescape(value).force_encoding('UTF-8').valid_encoding?
+      # The unescapes the *entire* URL, but that's okay because we've
+      # already confirmed that the domain name doesn't have "%"
+      unescape_unforced(value).force_encoding('UTF-8').valid_encoding?
     end
   end
 

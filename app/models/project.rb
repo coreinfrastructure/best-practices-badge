@@ -6,7 +6,7 @@
 
 # rubocop:disable Metrics/ClassLength
 class Project < ApplicationRecord
-  has_many :additional_rights
+  has_many :additional_rights, dependent: :destroy
   cattr_accessor :skip_callbacks
   # We could add something like this:
   # + has_many :users, through: :additional_rights

@@ -57,7 +57,7 @@ class Badge
     end
 
     def all
-      create_all unless @badges && @badges.length == 103
+      create_all unless @badges&.length == 103
       ACCEPTABLE_INPUTS.map { |level| self[level] }
     end
 

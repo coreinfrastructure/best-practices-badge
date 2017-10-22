@@ -28,6 +28,18 @@ class LoginTest < CapybaraFeatureTest
     end
   end
 
+  # Test this with larger integration, to increase confidence that
+  # we really do reject correct local usernames with wrong passwords
+  scenario 'Cannot with correct local username but wrong password', js: false do
+    visit projects_path
+    click_on 'Login'
+    fill_in 'Email', with: @user.email
+    fill_in 'Password', with: 'WRONG_PASSWORD'
+    click_button 'Log in using custom account'
+    assert has_content? 'Invalid email/password combination'
+    assert_equal login_path, current_path
+  end
+
   # rubocop:disable Metrics/BlockLength
   scenario 'Can Login and edit using custom account', js: true do
     visit projects_path

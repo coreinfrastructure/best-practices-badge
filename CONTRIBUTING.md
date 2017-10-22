@@ -838,19 +838,29 @@ You can change the Ruby version yourself, and
 when you use git pull the current version of Ruby in use could change.
 There are extra steps needed when Ruby is updated; here they are.
 
-In particular, if you try to run commands and you see errors like this,
-you need to update your local installation of Ruby:
+In particular, if you try to run commands and you see errors like this:
 
 ~~~~
 rbenv: version \`2.3.9' is not installed (set by .../.ruby-version)
 ~~~~
 
-The current version of Ruby used in the project is stored in
-the file `.ruby-version` in the project's top directory
-(for example, file Gemfile declares that the ruby version
-used is whatever is in ".ruby-version").
-The `.ruby-version` file is controlled by git.
+You *need* to update your local installation of Ruby.
+This typically happens after you've done a `git pull`;
+what has happened is that the Ruby version changed in file `.ruby-version`.
+To fix this, just run this command:
 
+~~~~sh
+./update-ruby
+~~~~
+
+In general, the current version of Ruby used in the project is stored in
+the file `.ruby-version` in the project's top directory.
+For example, file Gemfile declares that the ruby version
+used is whatever is in ".ruby-version".
+This `.ruby-version` file is controlled by git.
+
+It's wise to occasionally check the
+[Ruby site for the latest version of Ruby](https://www.ruby-lang.org/en/downloads/).
 If you want to change the current version of Ruby used in the project,
 use `cd` to go this project's top directory,
 and use 'git pull' to ensure this branch is up-to-date.
@@ -861,16 +871,9 @@ Then run the following command:
 ./update-ruby NEW_VERSION_NUMBER
 ~~~~
 
-Note at the end of this script a `git commit -as` will be initiated,
-but you will need to be sure to run `git push` after doing this.
-
-If you've done a `git pull` and the Ruby version has changed in file
-`.ruby-version` (e.g., you're seeing the rbenv: version... not installed
-error message), you need to run these similar steps:
-
-~~~~sh
-./update-ruby
-~~~~
+Note at the end of this script a `git commit -as` will be initiated
+if everything worked correctly.
+You will need to be sure to run `git push` after doing this.
 
 For more details about updating Ruby versions with rbenv, see
 <https://github.com/rbenv/ruby-build> and
@@ -879,7 +882,7 @@ Note that 'rbenv install 2.3.0' is equivalent to the longer
 <tt>ruby-build 2.3.0 $HOME/.rbenv/versions/2.3.0</tt>.
 
 If you update Ruby but don't update the parser gem
-(e.g., a new version may not be available yet), you'll get a number
+(e.g., a new version may not be available yet), you may get a number
 of warnings from the static analysis tools that we run via rake.
 Where possible, consider updating the parser gem as well.
 These warnings will look like these:

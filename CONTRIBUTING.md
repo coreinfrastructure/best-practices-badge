@@ -708,6 +708,11 @@ license_finder approval add --who=WHO --why=WHY GEM-NAME
 
 For stability we set fixed version numbers for Ruby and the Ruby gems.
 
+Please update only one or few components in each commit, instead of
+"everything at once".  This makes debugging problems much easier.
+In particular, if we find a problem later, we can
+use "git bisect" to easily and quickly find the cause.
+
 #### Updating Ruby gems
 
 We use the bundler Ruby gem package management system (<http://bundler.io>);
@@ -726,11 +731,12 @@ publicly known vulnerability in the version of a gem we use.
 Obviously, if there is a known vulnerability you *definitely* need
 to update that gem.
 
-To find all outdated gems, use the 'bundle outdated' command.
-Our continuous integration suite (linked to from the README) also uses
+Our continuous integration suite (linked to from the README) uses
 [Gemnasium](https://gemnasium.com/coreinfrastructure/best-practices-badge)
 to identify all outdated dependencies, so you can also view its report
 to see what is outdated.
+This makes it easy to see outdated *direct* dependencies.
+To find all outdated gems, use the 'bundle outdated' command.
 Many of the gems named "action..." are part of rails, and thus, you should
 update rails to update them.
 
@@ -755,45 +761,53 @@ diff -ur GEMNAME-OLD_VERSION GEMNAME-NEW_VERSION
 I recommend updating in stages (instead of all at once) since this
 makes it easier to debug problems (if any).  Here is a suggested order,
 though these are only suggestions.
+In general, update one or a few related things, use rake to check it,
+and then commit.
 
-First, update gems that are only indirectly depended on.
-(These are gems listed in Gemfile.lock, but *not* listed in Gemfile.)
-If you happen to know that a particular gem is large,
-or has a higher risk of problems, or just want to be more methodical,
-you can update a specific gem using "bundle update GEM".
-(Ignore the gems named as "action...".)
-You can just run "bundle update" to update them all at once.
-Then run "rake" to make sure it works;
-and if it does, use "git commit -a" to commit that change.
-
-Next, edit the file Gemfile to update versions of gems depended on directly.
-It's best to do this one line at a time if you can, though in some
+First, edit the file Gemfile to update a gem that is depended on directly.
+It's best to do this one line at a time if you can (to only update a
+single direct dependency), though in some
 cases it may be necessary to update several at the same time.
 If you see gems with names beginning with "active",
 those are gems in rails; update the Gemfile to change the version of
-the 'rails' gem instead.  Once edited, run:
+the 'rails' gem instead.  Once edited, run this to install the new
+gem version and also update all of its transitive dependencies:
 
 ~~~~
-bundle update && rake
+bundle update GEM_NAME && rake
 ~~~~
 
-If that works commit the change with a git comment with summary form
-'Update gem GEM_NAME'.
+If that works commit the change with a "git comment -as" with summary
+'Update gem GEM_NAME (OLD_VERSION_NUMBER-&gt;NEW_VERSION_NUMBER)'.
 
 Updates sometimes fail.  In particular, sometimes one gem has been
 update but a related gem is temporarily incompatible.
 
-It's important to occasionally try to update.
+You can also update gems that are only indirectly depended on.
+(These are gems listed in Gemfile.lock, but *not* listed in Gemfile.)
+You can just run "bundle update" to update them all at once.
+Then run "rake" to make sure it works;
+and if it does, use "git commit -a" to commit that change.
+When all the main dependencies are up-to-date, it's a good idea to
+do this occasionally.
+
+It's important to try to stay relatively up to date.
 However, it's usually not possible to keep
 everything perfectly up-to-date, because
 different gems' specifications forbid it.
-It's normal to have some gems that are not the latest.
+Also, the Ruby ecosystem is fairly fast-moving,
+so it doesn't take long at all for even a direct dependency to go out of date.
+In short, it's normal to have some gems that are not the latest.
 The key is to replace gem versions that have security vulnerabilities,
-and to not get *too* far behind (if it's too far back it's
-harder to update).
+and to not get *too* far behind, because if it's too far back then it's
+harder to update.
+If you are very far behind, it may be better to update in stages
+(using intermediate versions), but avoid needing to do that.
 
 Historically the gems that cause trouble updating in this app are
 github_api, octokit, and the various "pronto" gems.
+If you update Rubocop you're likely to need to make a number of changes
+(either to code or to disable a new checker).
 
 If an update fails, you can use this to undo it:
 

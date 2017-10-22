@@ -19,6 +19,12 @@ If you find a vulnerability, please see
 For more technical information on the implementation, see
 [implementation.md](implementation.md).
 
+You can see a video summarizing this assurance case (as of September 2017),
+along with some more general information about developing secure software:
+["How to Develop Secure Applications: The BadgeApp Example" by David A. Wheeler, 2017-09-18](https://www.youtube.com/watch?v=5a5D4d6hcEY).
+For more information on developing secure software, see
+["Secure Programming HOWTO" by David A. Wheeler](http://www.dwheeler.com/secure-programs/).
+
 ## Assurance case summary
 
 The following figures summarize why we think this application

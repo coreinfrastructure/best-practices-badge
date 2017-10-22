@@ -2,7 +2,7 @@
 # Update Ruby.  If you're initiating this for the project, pass the
 # new version as the first parameter - this will update and commit.
 # If you're not initiative this for the project, provide no parameters -
-# this will update as needed.
+# this will update as needed (to the version given in ".ruby-version").
 
 # The following enables some run-time error detection:
 set -e
@@ -35,8 +35,9 @@ bundle install
 # Update rbenv commands
 rbenv rehash
 
-# Commit with a standard upgrade message then sign and allow message change
-if [ "$1" ]; then
+# Commit with a standard upgrade message then sign and allow message change,
+# but only if local tests pass.
+if [ "$1" ] && rake; then
     git commit -am "Upgrade to ruby $ruby_version"
     git commit --amend -s
 fi

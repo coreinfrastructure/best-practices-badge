@@ -40,7 +40,7 @@ class ProjectGetTest < ActionDispatch::IntegrationTest
       "default-src 'self'; base-uri 'self'; block-all-mixed-content; " \
       "form-action 'self'; frame-ancestors 'none'; " \
       "img-src secure.gravatar.com avatars.githubusercontent.com 'self'; " \
-      "object-src 'none'; style-src 'self'",
+      "object-src 'none'; script-src 'self'; style-src 'self'",
       @response.headers['Content-Security-Policy']
     )
     assert_equal(

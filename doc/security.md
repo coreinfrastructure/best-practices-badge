@@ -951,7 +951,7 @@ as of 2015-12-14:
 We also use various mechanisms to harden the system against attack;
 these attempt to thwart or slow attack even if the system has a vulnerability.
 
-* We harden the HTTP headers, including the use of a
+* We harden the HTTP headers, in particular, we use a
   restrictive Content Security Policy (CSP) header with just
   "normal sources" (normal_src).
   CSP is perhaps one of the most important hardening items,
@@ -959,6 +959,22 @@ these attempt to thwart or slow attack even if the system has a vulnerability.
   The HTTP headers are hardened via the
   [secure_headers](https://github.com/twitter/secureheaders) gem,
   developed by Twitter to enable a number of HTTP headers for hardening.
+  We check that the HTTP headers are hardened in the test file
+  "test/integration/project_get_test.rb"; that way, when we upgrade
+  the secure_headers gem, we can be confident that the headers continue to
+  be restrictive.
+  The test checks for the HTTP header values when loading a project entry,
+  since that is the one most at risk from user-provided data.
+  That said, the hardening HTTP headers are basically the same for all
+  pages except for /project_stats, and that page doesn't display
+  any user-provided data.
+  We have separately checked the CSP values we use with
+  <https://csp-evaluator.withgoogle.com/>;
+  the only warning it mentioned is that the our "default-src" allows 'self',
+  and it notes that
+  "'self' can be problematic if you host JSONP, Angular
+  or user uploaded files."  That is true, but irrelevant, because we don't
+  host any of them.
 * Cookies have various restrictions (also via the
   [secure_headers](https://github.com/twitter/secureheaders) gem).
   They have httponly=true (which counters many JavaScript-based attacks),

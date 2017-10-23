@@ -222,9 +222,12 @@ class ProjectsControllerTest < ActionController::TestCase
   end
 
   test 'should not get edit as user without additional rights' do
-    # Without additional rights, can't log in.  This is paired with
+    # This *expressly* tests that a normal logged-in
+    # user cannot edit another project's data without authorization.
+    # Without additional rights, can't edit.  This is paired with
     # previous test, to ensure that *only* the additional right provides
-    # the necessary rights.
+    # the necessary rights.  This is a key test: we *prevent* users
+    # logged in with one normal account from editing others' data.
     test_user = users(:test_user_mark)
     log_in_as(test_user)
     get :edit, params: { id: @project }

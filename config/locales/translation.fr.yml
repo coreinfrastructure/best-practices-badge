@@ -689,8 +689,59 @@ fr:
       Nous sommes désolés, mais votre projet n'a plus le badge « %{old_level} »
       et est maintenant « %{new_level} ».
       Consultez l'URL suivante pour plus d'informations :
-    reminder_body_html:
-    reminder_body_text:
+    reminder_body_html: "<h1>Rappel automatique du badge des meilleures
+      pratiques pour %{project_name}</h1>\n<p>\nCeci est un rappel
+      automatisé que votre projet\n« %{project_name} »\nn'a pas
+      actuellement de badge « meilleures pratiques »,\net son
+      entrée de badge n'a pas été mise à jour depuis un moment.\n</p>\n<p>\nVotre
+      entrée de badge des meilleures pratiques est à\n<a href=\"%{project_info_url}\">%{project_info_url}</a>\net
+      a été mis à jour pour la dernière fois le %{project_updated_at}.\nIl
+      est actuellement à %{project_badge_percentage_0}% (sur 100%).\n</p>\n\n<p>\nNous
+      vous encourageons à continuer à progresser.\nVeuillez visiter
+      votre entrée de badge à\n<a href=\"%{project_info_url}\">%{project_info_url}</a>\npour
+      compléter l'information et obtenir votre badge !\n</p>\n\n<p>\nSi
+      vous voulez voir <em>seulement</em> ce qui vous manque,
+      visitez votre entrée de badge,\nsélectionnez le bouton près
+      du haut étiqueté « Développer les panneaux », \npuis sélectionnez
+      le bouton près du sommet étiqueté « Masquer atteints & N/A
+      ».\nSi vous avez des questions ou si vous avez besoin d'aide,
+      veuillez contacter\n<a href=\"mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;\">&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;</a>\nou
+      reporter un problème à\n<a href=\"https://github.com/coreinfrastructure/best-practices-badge/issues\">https://github.com/coreinfrastructure/best-practices-badge/issues</a>\n(cliquez
+      sur « nouveau problème »).\n</p>\n\n<p>\nNous n'envoyons
+      pas de rappels si vous continuez à mettre à jour votre entrée
+      de badge, et nous envoyons seulement des rappels environ
+      tous les 30-60 jours. Cependant, si vous souhaitez désactiver
+      ces messages de rappel, modifiez votre entrée de badge à
+      <a href=\"%{project_info_url}\">%{project_info_url}</a>\npour
+      activer « Désactiver le rappel d'inactivité ».\nNous espérons
+      que vous continuerez à travailler sur votre soumission pour
+      finalement obtenir le badge.\n</p>\n\n<p>\nMerci pour votre
+      attention.\n</p>"
+    reminder_body_text: "Ceci est un rappel automatisé que votre
+      projet\n« %{project_name} »\nn'a pas actuellement de badge
+      « meilleures pratiques »,\net son entrée de badge n'a pas
+      été mise à jour depuis un moment.\nVotre entrée de badge
+      des meilleures pratiques est à\n%{project_info_url}\net
+      a été mis à jour pour la dernière fois le %{project_updated_at}.\nIl
+      est actuellement à %{project_badge_percentage_0}% (sur 100%).\n\nNous
+      vous encourageons à continuer à progresser.\nVeuillez visiter
+      votre entrée de badge à\n%{project_info_url}\npour compléter
+      l'information et obtenir votre badge !\n\nSi vous voulez
+      voir seulement ce qui vous manque, visitez votre entrée
+      de badge,\nsélectionnez le bouton près du haut étiqueté
+      « Développer les panneaux », \npuis sélectionnez le bouton
+      près du sommet étiqueté « Masquer atteints & N/A ».\nSi
+      vous avez des questions ou si vous avez besoin d'aide, veuillez
+      contacter\ncii-badges-questions-owner@lists.coreinfrastructure.org\nou
+      reporter un problème à\nhttps://github.com/coreinfrastructure/best-practices-badge/issues\n(cliquez
+      sur « nouveau problème »).\n\nNous n'envoyons pas de rappels
+      si vous continuez à mettre à jour votre entrée de badge,
+      et nous envoyons seulement des rappels environ tous les
+      30-60 jours. Cependant, si vous souhaitez désactiver ces
+      messages de rappel, modifiez votre entrée de badge à %{project_info_url}\npour
+      activer « Désactiver le rappel d'inactivité ».\nNous espérons
+      que vous continuerez à travailler sur votre soumission pour
+      finalement obtenir le badge.\n\nMerci pour votre attention."
   project_name_unknown: "(Nom inconnu)"
   locale_name:
     en: Anglais / English (en)

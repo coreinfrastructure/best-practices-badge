@@ -115,7 +115,8 @@ how we implement these requirements):
           that specific browser if they use a local account.
           This is implemented using a
           cryptographically random nonce stored in the user's cookie store
-          which acts like a password, which is verified against a
+          as a permanent cookie.  This nonce
+          acts like a password, which is verified against a
           remember_digest value stored in the server
           that is an iterated salted hash (using bcrypt).
           This "remember me" functionality cannot reveal the user's
@@ -127,7 +128,10 @@ how we implement these requirements):
           weakness: if the user's system is compromised, others can log
           in as that user.  But this is fundamental to any "remember me"
           functionality, and users must opt in to enable "remember me"
-          (by default users must enter their password on each login).
+          (by default users must enter their password on each login,
+          and the login becomes invalid when the user logs out or when
+          the user exits the entire browser, because the cookie for login
+          is only a session cookie).
           The "remember me" box was originally implemented
           in commit e79decec67.
         - Email addresses are only revealed to the logged-in owner and

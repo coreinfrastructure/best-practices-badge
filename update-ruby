@@ -14,7 +14,11 @@ else
 fi
 
 # Update ruby-build list
-(cd "$HOME"/.rbenv/plugins/ruby-build && git pull)
+if [ "$(uname)" = 'Darwin' ] ; then
+    brew update && brew upgrade ruby-build
+else
+    (cd "$HOME"/.rbenv/plugins/ruby-build && git pull)
+fi
 # Install with ruby-build
 rbenv install "$ruby_version"
 # Use new Ruby version if you are doing the first

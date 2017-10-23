@@ -30,11 +30,23 @@ class LoginTest < CapybaraFeatureTest
 
   # Test this with larger integration, to increase confidence that
   # we really do reject correct local usernames with wrong passwords
-  scenario 'Cannot with correct local username but wrong password', js: false do
+  scenario 'Cannot login with local username and wrong password', js: false do
     visit projects_path
     click_on 'Login'
     fill_in 'Email', with: @user.email
     fill_in 'Password', with: 'WRONG_PASSWORD'
+    click_button 'Log in using custom account'
+    assert has_content? 'Invalid email/password combination'
+    assert_equal login_path, current_path
+  end
+
+  # Test this with larger integration, to increase confidence that
+  # we really do reject correct local usernames with blank passwords
+  scenario 'Cannot login with local username and blank password', js: false do
+    visit projects_path
+    click_on 'Login'
+    fill_in 'Email', with: @user.email
+    # Note: we do NOT fill in a password.
     click_button 'Log in using custom account'
     assert has_content? 'Invalid email/password combination'
     assert_equal login_path, current_path

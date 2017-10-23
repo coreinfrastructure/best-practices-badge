@@ -137,7 +137,15 @@ how we implement these requirements):
           We also user email addresses as the user id for "local" accounts.
           We strive to not reveal user email addresses to others
           (with the exception of administrators, who are trusted and thus
-          can see them).  Most of the rest of this document describes the
+          can see them).
+          We have specific tests to ensure that administrators can
+          see user email addresses (on the user page), but that
+          email addresses are not displayed when the user is not logged in
+          or is logged in as an ordinary user.
+          As documented in CONTRIBUTING.md, we forbid including email
+          addresses in server-sides caches, so that accidentally sharing the
+          wrong cache won't reveal email addresses.
+          Most of the rest of this document describes the
           measures we take to prevent turning unintentional mistakes
           into exposures of this data.
         - HTTPS is used to encrypt all communications between users
@@ -175,6 +183,9 @@ how we implement these requirements):
     - We routinely backup the database and retain multiple versions.
       That way, if the project data is corrupted, we can restore the
       database to a previous state.
+
+Identity, Authentication, and Authorization are handled in a traditional
+manner, as described below.
 
 BadgeApp must avoid being taken over by attackers, since this
 could cause lead to failure in confidentiality, integrity, or availability.
@@ -248,6 +259,13 @@ disables automated data gathering for that entry).
 The permissions system is intentionally simple.
 Every user has an account, either a 'local' account or an external
 system account (currently we support GitHub as an external account).
+We expressly include tests in our test suite
+to ensure that in 'local' accounts correct passwords allow login,
+while incorrect and unfilled passwords lead to login failure
+(it's important to test that certain actions that *must* fail for
+security reasons do indeed fail).
+We trust external systems to verify their external accounts (that means
+we trust GitHub to verify a GitHub account).
 Anyone can create an account.
 A user with role='admin' is an administator;
 few users are administrators.
@@ -1157,6 +1175,19 @@ and how it helps make the software more secure:
   <a href="http://www.dwheeler.com/essays/apple-goto-fail.html#coverage">Apple's
   goto fail vulnerability would have been detected had they
   checked statement coverage</a>.
+* The test suite specifically includes tests that should fail for
+  security reasons, sometimes called "negative testing".
+  A widespread mistake in test suites is to only test "things that should
+  succeed", and neglecting to test "things that should fail".
+  For an example of this, see
+  ["The Apple goto fail vulnerability: lessons learned" by David A. Wheeler](https://www.dwheeler.com/essays/apple-goto-fail.html).
+  For example, we test that:
+
+    - local logins with wrong or unfilled passwords will lead to login failure
+    - projects cannot be edited by timed-out sessions
+    - logged-in users cannot edit others' projects
+    - email addresses are not displayed on the user page when the user is
+      not logged in, or is logged in but not as an admin.
 
 We have briefly experimented with using the "dawnscanner" security scanner.
 We have decided to *not* add dawnscanner to the set of scanners that we

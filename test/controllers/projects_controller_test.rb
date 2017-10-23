@@ -16,6 +16,7 @@ class ProjectsControllerTest < ActionController::TestCase
     @perfect_silver_project = projects(:perfect_silver)
     @perfect_project = projects(:perfect)
     @user = users(:test_user)
+    @user2 = users(:test_user_melissa)
     @admin = users(:admin_user)
   end
 
@@ -267,14 +268,32 @@ class ProjectsControllerTest < ActionController::TestCase
     assert_equal @project.name, new_name
   end
 
-  test 'should fail to update project' do
+  test 'should fail to update project if not logged in' do
+    # Note: no log_in_as
+    old_name = @project.name
+    new_name = old_name + '_updated'
+    patch :update, params: {
+      id: @project, project: {
+        description: @project.description,
+        license: @project.license,
+        name: new_name,
+        repo_url: @project.repo_url,
+        homepage_url: @project.homepage_url
+      }
+    }
+    # Verify that we didn't really change the name
+    @project.reload
+    assert_equal @project.name, old_name
+  end
+
+  test 'should fail to update project if providing bad URL' do
+    log_in_as(@project.user)
     new_project_data = {
       description: '',
       license: '',
       name: '',
       homepage_url: 'example.org' # bad url
     }
-    log_in_as(@project.user)
     patch :update, params: { id: @project, project: new_project_data }
     # "Success" here only in the HTTP sense - we *do* get a form...
     assert_response :success
@@ -428,6 +447,13 @@ class ProjectsControllerTest < ActionController::TestCase
   end
 
   test 'should not destroy project if no one is logged in' do
+    log_in_as(@user2)
+    assert_no_difference('Project.count', ActionMailer::Base.deliveries.size) do
+      delete :destroy, params: { id: @project }
+    end
+  end
+
+  test 'should not destroy project if logged in as different user' do
     # Notice that we do *not* call log_in_as.
     assert_no_difference('Project.count', ActionMailer::Base.deliveries.size) do
       delete :destroy, params: { id: @project }

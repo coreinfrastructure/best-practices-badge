@@ -1164,8 +1164,56 @@ and how it helps make the software more secure:
   All the required reused components are FLOSS, and our
   custom software is released as Free/Libre and open source software (FLOSS)
   using a well-known FLOSS license (MIT).
+* Negative testing.
+  The test suite specifically includes tests that should fail for
+  security reasons, an approach sometimes called "negative testing".
+  A widespread mistake in test suites is to only test "things that should
+  succeed", and neglecting to test "things that should fail".
+  This is especially important in security, since for security it's
+  often more important to ensure that certain requests *fail* than to ensure
+  that certain requests *succeed*.
+  For an example of the need for negative testing, see
+  ["The Apple goto fail vulnerability: lessons learned" by David A. Wheeler](https://www.dwheeler.com/essays/apple-goto-fail.html).
+  Missing negative tests are also problematic because
+  statement and branch coverage test coverage requirements
+  cannot detect *missing* code, and "failure to fail" is often caused
+  by *missing* code (this wasn't the case for "goto fail", but it does happen
+  in other cases).
+  We do positive testing too, of course, but that's not usually forgotten.
+  For negative testing, we focus on ensuring that incorrect logins will
+  fail, that timeouts cause timeouts, that projects and users cannot be
+  edited by those unauthorized to do so, and that email addresses are not
+  revealed to unauthorized individuals.
+  Here are important examples of our negative testing:
+    - local logins with wrong or unfilled passwords will lead to login failure
+      (see "test/features/login_test.rb").
+    - projects cannot be edited ("patched") by a timed-out session
+      or a session lacking a signed timeout value
+      (see "test/controllers/projects_controller_test.rb")
+    - projects cannot be edited if the user is not logged in, or
+      by logged-in normal users
+      if they aren't authorized to edit that project
+      (see "test/controllers/projects_controller_test.rb")
+    - projects can't be destroyed (deleted) if the user isn't logged in,
+      or is logged as a user who does not control the project
+      (see "test/controllers/projects_controller_test.rb")
+    - user data cannot be edited ("patched") if the user isn't logged in,
+      or is logged in as another non-admin user
+      (see "test/controllers/users_controller_test.rb")
+    - users can't be destroyed if the user isn't logged in, or is logged
+      in as another non-admin user
+      (see "test/controllers/users_controller_test.rb")
+    - a request to show the edit user page is redirected away
+      if the user isn't logged in, or is logged as another non-admin user -
+      this prevents any information leak from the edit page
+      (see "test/controllers/users_controller_test.rb")
+    - a user page does not display its email address when the user is
+      either (1) not logged in or (2) is logged in but not as an admin.
+      (see "test/controllers/users_controller_test.rb")
 * The software has a strong test suite; our policy requires
-  at least 90% statement coverage (and in practice our coverage is much higher).
+  at least 90% statement coverage.
+  In practice our coverage is much higher, indeed it has been 100%
+  for a long time.
   This makes it easier to update components (e.g., if a third-party component
   has a publicly disclosed vulnerability).
   The test suite also makes it easier to make other fixes (e.g., to harden
@@ -1175,19 +1223,6 @@ and how it helps make the software more secure:
   <a href="http://www.dwheeler.com/essays/apple-goto-fail.html#coverage">Apple's
   goto fail vulnerability would have been detected had they
   checked statement coverage</a>.
-* The test suite specifically includes tests that should fail for
-  security reasons, sometimes called "negative testing".
-  A widespread mistake in test suites is to only test "things that should
-  succeed", and neglecting to test "things that should fail".
-  For an example of this, see
-  ["The Apple goto fail vulnerability: lessons learned" by David A. Wheeler](https://www.dwheeler.com/essays/apple-goto-fail.html).
-  For example, we test that:
-
-    - local logins with wrong or unfilled passwords will lead to login failure
-    - projects cannot be edited by timed-out sessions
-    - logged-in users cannot edit others' projects
-    - email addresses are not displayed on the user page when the user is
-      not logged in, or is logged in but not as an admin.
 
 We have briefly experimented with using the "dawnscanner" security scanner.
 We have decided to *not* add dawnscanner to the set of scanners that we

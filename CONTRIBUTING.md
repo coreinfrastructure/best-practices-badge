@@ -65,13 +65,35 @@ and
 
 ### How we handle proposals
 
-We use GitHub to track all changes via its
+We use GitHub to track proposed changes via its
 [issue tracker](https://github.com/coreinfrastructure/best-practices-badge/issues) and
 [pull requests](https://github.com/coreinfrastructure/best-practices-badge/pulls).
 Specific changes are proposed using those mechanisms.
 Issues are assigned to an individual, who works it and then marks it complete.
 If there are questions or objections, the conversation area of that
 issue or pull request is used to resolve it.
+
+### Two-person review
+
+Our policy is that at least 50% of all proposed modifications will be reviewed
+before release by a person other than the author,
+to determine if it is a worthwhile modification and free of known issues
+which would argue against its inclusion
+(per the Gold requirement two_person_review).
+
+We achieve this by splitting proposals into two kinds:
+
+1. Low-risk modifications.  These modifications are being proposed by
+   people authorized to commit directly, pass all tests, and are unlikely
+   to have problems.  These include documentation/text updates
+   (other than changes to the criteria) and/or updates to existing gems
+   (especially minor updates) where no risk (such as a security risk)
+   have been identified.  The project lead can decide that any particular
+   modification is low-risk.
+2. Other modifications.  These other modifications need to be
+   reviewed by someone else or the project lead can decide to accept
+   the modification.  Typically this is done by creating a branch and a
+   pull request so that it can be reviewed before accepting it.
 
 ### Developer Certificate of Origin (DCO)
 

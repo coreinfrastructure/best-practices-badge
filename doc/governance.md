@@ -39,6 +39,12 @@ We generally use the GitHub issue tracker and pull requests for managing
 changes.
 For details, including contribution requirements, see
 [CONTRIBUTING.md](../CONTRIBUTING.md).
+Note that we emphasize two-person review for anything other than
+low-risk contributions.
+
+CII requires two-factor authentication (2FA) for all projects,
+including this one.  In addition, this project does not accept SMS
+as the second factor.
 
 Issues that we have determined are especially important, particularly
 if they will take a while, are added to the "next" milestone

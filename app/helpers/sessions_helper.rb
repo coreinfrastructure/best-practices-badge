@@ -48,7 +48,9 @@ module SessionsHelper
     elsif (user_id = cookies.signed[:user_id])
       user = User.find_by(id: user_id)
       if user&.authenticated?(:remember, cookies[:remember_token])
+        # Automatically re-log back in, and set timestamp
         log_in user
+        persist_session_timestamp
         @current_user = user
       end
     end

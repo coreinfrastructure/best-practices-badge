@@ -91,7 +91,7 @@ en:
         web application to explain how they follow each best practice.
         The CII Best Practices Badge is inspired by the many badges
         available to projects on GitHub. Consumers of the badge
-        will be able to quickly assess which FLOSS projects are
+        can quickly assess which FLOSS projects are
         following best practices and as a result are more likely
         to produce higher-quality secure software.
       p2_html: >-
@@ -356,8 +356,8 @@ en:
     form_early:
       badge_intro:
         description: >-
-          Projects that follow the best practices below will be
-          able to voluntarily self-certify and show that they've
+          Projects that follow the best practices below can
+          voluntarily self-certify and show that they've
           achieved a Core Infrastructure Initiative (CII) badge.
         details_html: >-
           There is no set of practices that can guarantee that

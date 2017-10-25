@@ -392,8 +392,8 @@ class ProjectsController < ApplicationController
   # rubocop:enable Style/MethodCalledOnDoEndBlock
 
   HTML_INDEX_FIELDS = 'projects.id, projects.name, description, ' \
-    'homepage_url, repo_url, license, user_id, achieved_passing_at, ' \
-    'updated_at, badge_percentage_0'
+    'homepage_url, repo_url, license, projects.user_id, ' \
+    'achieved_passing_at, projects.updated_at, badge_percentage_0'
 
   # rubocop:disable Metrics/PerceivedComplexity
   # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity

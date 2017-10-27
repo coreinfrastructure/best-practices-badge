@@ -1476,7 +1476,8 @@ en:
           to limit public access.
       static_analysis:
         description: >-
-          At least one static code analysis tool MUST be applied
+          At least one static code analysis tool (beyond compiler warnings
+          and "safe" language modes) MUST be applied
           to any proposed major production release of the software
           before its release, if there is at least one FLOSS tool
           that implements this criterion in the selected language.
@@ -1493,7 +1494,10 @@ en:
           (including <a href="https://h3xstream.github.io/find-sec-bugs/">FindSecurityBugs</a>),
           <a href="https://pmd.github.io/">PMD</a>, <a href="http://brakemanscanner.org/">Brakeman</a>,
           <a href="https://scan.coverity.com/">Coverity Quality
-          Analyzer</a>, and <a href="https://saas.hpe.com/en-us/software/sca">HP
+          Analyzer</a>,
+          <a href="https://www.sonarqube.org/">SonarQube</a>,
+          <a href="https://www.codacy.com/">Codacy</a>,
+          and <a href="https://saas.hpe.com/en-us/software/sca">HP
           Enterprise Fortify Static Code Analyzer</a>. Larger
           lists of tools can be found in places such as the <a
           href="https://en.wikipedia.org/wiki/List_of_tools_for_static_code_analysis">Wikipedia
@@ -1515,6 +1519,12 @@ en:
           tools used for the static_analysis criterion include
           rules or approaches to look for common vulnerabilities
           in the analyzed language or environment.
+        details: >-
+          Static analysis tools that are specifically designed to look for
+          common vulnerabilities are more likely to find them.
+          That said, using any static tools will typically help find
+          some problems, so we are suggesting but not requiring this for
+          the 'passing' level badge.
       static_analysis_fixed:
         description: >-
           All medium and high severity exploitable vulnerabilities

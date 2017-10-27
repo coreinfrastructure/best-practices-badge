@@ -1294,11 +1294,11 @@
     - Project oversight: !!omap
       - bus_factor:
           category: MUST
-          met_justification_required: true
+          met_url_required: true
           #autofill: TODO
       - contributors_unassociated:
           category: MUST
-          met_justification_required: true
+          met_url_required: true
           rationale: >
             This reduces the risk of non-support if a single organization
             stops supporting the project as FLOSS. It also reduces the risk of
@@ -1358,6 +1358,7 @@
             Look for git, subversion (svn), and mercurial (hg).
       - small_tasks:
           category: MUST
+          met_url_required: true
           rationale: >
             Identified small tasks make it easier for new potential
             contributors to become involved in a project, and projects with
@@ -1390,7 +1391,6 @@
           category: MUST
           na_allowed: true
           na_justification_required: true
-          met_justification_required: true
           met_url_required: true
           rationale: >
             Code review is a cornerstone of quality and secure coding
@@ -1418,7 +1418,6 @@
           category: MUST
           na_allowed: true
           na_justification_required: true
-          met_justification_required: true
           met_url_required: true
           rationale: >
             If a project needs to be built but there is no working build
@@ -1433,7 +1432,7 @@
     - Automated test suite: !!omap
       - test_invocation:
           category: MUST
-          met_justification_required: true
+          met_url_required: true
           autofill: >
             Look in the build scripts for a non-empty test command.
             E.g., look for a Makefile (including Makefile.am) with a non-empty
@@ -1442,7 +1441,7 @@
       - test_continuous_integration:
           category: MUST
           # No N/A, you can always have some sort of CI
-          met_justification_required: true
+          met_url_required: true
           rationale: >
             See
             <a href="http://martinfowler.com/articles/continuousIntegration.html">Martin Fowler</a>
@@ -1504,9 +1503,6 @@
     - Secured delivery against man-in-the-middle (MITM) attacks: !!omap
       - hardened_site: # After delivery_mitm?
           category: MUST
-          met_justification_required: true
-          # Technically met_url_required implies met_justification_required,
-          # but it can't hurt to have both
           met_url_required: true
           autofill: >
             Load the URLs and look for those HTTP headers. In the future, we
@@ -1536,7 +1532,7 @@
           category: MUST
           na_allowed: true
           na_justification_required: true
-          met_justification_required: true
+          met_url_required: true
           autofill: >
             Look for gems like secure_headers, and
             relevant compiler flags in build files.

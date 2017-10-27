@@ -26,6 +26,63 @@ class UsersControllerTest < ActionController::TestCase
     assert_response :success
   end
 
+  test 'should show additional rights on user page when present' do
+    project = projects(:one)
+
+    get :show, params: { id: @other_user }
+    assert_response :success
+    refute_includes @response.body, project.name
+    refute_includes @response.body,
+                    I18n.t('users.show.projects_additional_rights')
+
+    # Create additional rights during test, not as a fixture.
+    # The fixture would require correct references to *other* fixture ids.
+    new_right = AdditionalRight.new(
+      user_id: @other_user.id,
+      project_id: project.id
+    )
+    new_right.save!
+
+    get :show, params: { id: @other_user }
+    assert_response :success
+    assert_includes @response.body, project.name
+    assert_includes @response.body,
+                    I18n.t('users.show.projects_additional_rights')
+  end
+
+  test 'indicate admin is admin to admin' do
+    log_in_as(@admin)
+    get :show, params: { id: @admin }
+    assert_response :success
+    assert I18n.t('users.show.is_admin').present?
+    assert_includes @response.body,
+                    I18n.t('users.show.is_admin')
+  end
+
+  test 'do NOT indicate non-admin is admin to admin' do
+    log_in_as(@admin)
+    get :show, params: { id: @user }
+    assert_response :success
+    refute_includes @response.body,
+                    I18n.t('users.show.is_admin')
+  end
+
+  test 'do NOT indicate admin is admin to non-admin' do
+    log_in_as(@user)
+    get :show, params: { id: @admin }
+    assert_response :success
+    refute_includes @response.body,
+                    I18n.t('users.show.is_admin')
+  end
+
+  test 'do NOT indicate admin is admin if not logged in' do
+    # No log_in_as
+    get :show, params: { id: @admin }
+    assert_response :success
+    refute_includes @response.body,
+                    I18n.t('users.show.is_admin')
+  end
+
   test 'should NOT show email address when not logged in' do
     get :show, params: { id: @user }
     assert_response :success

@@ -19,13 +19,27 @@ class UsersController < ApplicationController
     @users = User.all.paginate(page: params[:page])
   end
 
+  # rubocop: disable Metrics/AbcSize
   def show
     @user = User.find(params[:id])
+    # Use "select_needed" to minimize the fields we extract
     @projects = select_needed(@user.projects).paginate(page: params[:page])
+
+    # Don't bother paginating, we typically don't have that many and the
+    # interface would be confusing.
+    @projects_additional_rights =
+      select_needed(Project.joins(:additional_rights)
+        .where('additional_rights.user_id = ?', @user.id))
+
+    # *Separately* list edit_projects from projects_additional_rights.
+    # Jason Dossett thinks they should be combined, but David A. Wheeler
+    # thinks these are important to keep separate because how to *change*
+    # what is in these lists is radically different.
     return unless @user == current_user && @user.provider == 'github'
     @edit_projects =
       select_needed(Project.where(repo_url: github_user_projects)) - @projects
   end
+  # rubocop: enable Metrics/AbcSize
 
   # rubocop: disable Metrics/MethodLength
   def create

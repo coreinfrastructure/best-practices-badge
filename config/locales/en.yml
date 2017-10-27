@@ -167,8 +167,11 @@ en:
       profile_updated: Profile updated
     show:
       edit_user: Edit user
-      other_projects_edit: Other Projects you can edit
+      projects_owned: 'Projects owned:'
+      projects_additional_rights: 'Projects with additional rights:'
+      other_projects_edit: 'Other editable projects per GitHub:'
       see_external: See this user's external page.
+      is_admin: This user is a badge application administrator.
       as_admin: 'as an admin, you may also:'
       send_email_to: 'send email to:'
       delete_link_name: delete

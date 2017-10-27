@@ -1214,6 +1214,13 @@ and how it helps make the software more secure:
     - a user page does not display its email address when the user is
       either (1) not logged in or (2) is logged in but not as an admin.
       (see "test/controllers/users_controller_test.rb")
+    - a user page does not display if the user is an admin if
+      the user isn't logged in, or is logged in as a non-admin user
+      (see "test/controllers/users_controller_test.rb").
+      This makes it slightly harder for attackers to figure out
+      the individuals to target (they have additional privileges), while
+      still allowing *administrators* to easily see if a user has
+      administrator privileges.
 * The software has a strong test suite; our policy requires
   at least 90% statement coverage.
   In practice our coverage is much higher, indeed it has been 100%

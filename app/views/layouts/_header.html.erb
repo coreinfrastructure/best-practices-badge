@@ -3,10 +3,22 @@
     <%# don't use root_path, it generates ugly URLs %>
 
     <nav>
+      <div class="navbar-header">
+
+  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#collapsingRightNav">
+    <span class="icon-bar"></span>
+    <span class="icon-bar"></span>
+    <span class="icon-bar"></span>
+  </button>
       <div class='nav navbar-nav navbar-left'>
 <%= link_to t(:cii_best_practices, scope: :layouts), "/#{I18n.locale == I18n.default_locale ? '' : I18n.locale}", id: 'logo' %>
         <br>
       </div>
+
+      </div>
+
+      <div class="collapse navbar-collapse" id="collapsingRightNav">
+
       <ul class='nav navbar-nav navbar-right'>
         <%= yield :nav_extras %>
                 <li><%= yield :insert_progress_bar %></li>
@@ -49,6 +61,9 @@
           </li>
         <% end %>
       </ul>
+
+    </div>
+
     </nav>
   </div>
 </header>

@@ -83,6 +83,7 @@ en:
     home:
       badge_program: CII Best Practices Badge Program
       get_your_badge: Get Your Badge Now!
+      check_us_out: Check out the CII Best Practices Badge website!
       p1_html: >-
         The <a href="https://www.linuxfoundation.org/">Linux Foundation
         (LF)</a> <a href="https://www.coreinfrastructure.org/">Core
@@ -109,13 +110,27 @@ en:
       p3_html: >-
         <em>Privacy and legal issues</em>: Please see our <a href="https://www.linuxfoundation.org/privacy">privacy
         policy</a> and <a href="https://www.linuxfoundation.org/terms">terms
-        of use</a>. All publicly-available non-code content is
+        of use</a>.
+        The code for the badging application itself is released under the
+        <a href="https://opensource.org/licenses/MIT">MIT</a> license
+        (projects pursuing a badge are under their respective licenses).
+        All publicly-available non-code content
+        managed by the badging application is
         released under at least the <a href="https://creativecommons.org/licenses/by/3.0/">Creative
         Commons Attribution License version 3.0 (CC-BY-3.0)</a>;
         newer non-code content is released under CC-BY version
         3.0 or later (CC-BY-3.0+). If referencing collectively
         or not otherwise noted, please credit the CII Best Practices
         badge contributors.
+      share_header_html: >-
+        <p>
+        Please share this:
+        </p>
+      twitter: Twitter
+      reddit: Reddit
+      facebook: Facebook
+      linkedin: LinkedIn
+      googleplus: Google+
     cookies:
       cookies_header: About Cookies
       cookies_info_html: >

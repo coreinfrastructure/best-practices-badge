@@ -43,6 +43,14 @@
           googleplus_url =
             'https://plus.google.com/share?' +
             { url: request.original_url }.to_param.html_safe
+          mailto_url =
+            'mailto:?' +
+            {
+              subject: t('static_pages.home.check_us_out') + ' ' +
+                       request.original_url,
+              body: t('static_pages.home.check_us_out') + "\n" +
+                       request.original_url
+            }.to_param.html_safe
         %>
 
         <a href="<%= twitter_url %>" class="btn btn-primary btn-lg btn-main-margin"
@@ -59,6 +67,10 @@
 
         <a href="<%= googleplus_url %>" class="btn btn-primary btn-lg btn-main-margin"
         target="_blank"><i class="fa fa-google-plus" aria-hidden="true"></i>&nbsp;<%= t('static_pages.home.googleplus') %></a>
+
+        <a href="<%= mailto_url %>" class="btn btn-primary btn-lg btn-main-margin"
+        target="_blank"><i class="fa fa-envelope" aria-hidden="true"></i>&nbsp;<%= t('static_pages.home.email') %></a>
+
 
     </div>
     <div class="col-md-4 col-sm-5">

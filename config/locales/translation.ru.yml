@@ -89,6 +89,7 @@ ru:
       Учетная запись не активирована. Проверьте свою электронную
       почту для ссылки на активацию.
     signed_out: Вы вышли из системы!
+    cookie_details_html:
   static_pages:
     home:
       badge_program: Программа значков "Передовая практика CII"
@@ -133,6 +134,13 @@ ru:
         версии 3.0 или выше (CC-BY-3.0+). Для коллективной ссылки
         или если не указано иное, пожалуйста, ссылайтесь на "CII
         Best Practices badge contributors".
+      check_us_out:
+      share_header_html:
+      twitter:
+      reddit:
+      facebook:
+      linkedin:
+      googleplus:
     criteria:
       criteria: Критерии
       detailed_criteria_on_github: Подробные критерии приведены
@@ -178,6 +186,9 @@ ru:
       met_justification_required: Требующих обоснование
       met_justification_or_url_required: Требущих обоснование
         или URL
+    cookies:
+      cookies_header:
+      cookies_info_html:
   users:
     new:
       signup_header: Зарегистрироваться
@@ -207,6 +218,9 @@ ru:
       send_email_to: 'отправить письмо по адресу:'
       delete_link_name: удалить
       confirm_delete: Вы уверены, что хотите удалить этого пользователя?
+      projects_owned:
+      projects_additional_rights:
+      is_admin:
     destroy:
       cannot_delete_self: Удалить себя невозможно.
       user_deleted: Пользователь удален.
@@ -1579,6 +1593,7 @@ ru:
           статического анализа, используемых для критерия static_analysis,
           правила или подходы для поиска распространенных уязвимостей
           в анализируемом языке или среде.
+        details:
       static_analysis_fixed:
         description: >-
           Все уязвимости, связанные со средней и высокой степенью

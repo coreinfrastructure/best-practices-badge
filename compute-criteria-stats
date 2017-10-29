@@ -11,8 +11,8 @@ def database_stats()
   p = Project.order(:updated_at).last
   puts "Last project update: #{p.updated_at} (project #{p.id})"
   puts "Total number of projects = #{Project.count}"
-  puts "Total number of passing projects = #{Project.where('badge_percentage >= 100').count}"
-  puts "Total number of 90%+ projects (INCLUDING 100%) = #{Project.where('badge_percentage >= 100').count}"
+  puts "Total number of passing projects = #{Project.where('badge_percentage_0 >= 100').count}"
+  puts "Total number of 90%+ projects (INCLUDING 100%) = #{Project.where('badge_percentage_0 >= 100').count}"
 end
 
 # Print analysis for projects at least "min_percentage"
@@ -22,14 +22,14 @@ def analyze(min_percentage)
   results = []
   # Show only "MUST" since those aren't easily justified.  To show all, use:
   # my_criteria = Project::ALL_CRITERIA_STATUS
-  my_criteria = Criteria.select { |c| c.must? }
+  my_criteria = Criteria['0'].select { |k,v| v.must? }
   # puts my_criteria
-  my_criteria = my_criteria.map { |c| c.name.to_s + '_status' }
+  my_criteria = my_criteria.map { |k,v| v.name.to_s + '_status' }
   # puts my_criteria
-  project_count=Project.where("badge_percentage >= #{min_percentage} AND badge_percentage < 100").count
+  project_count=Project.where("badge_percentage_0 >= #{min_percentage} AND badge_percentage_0 < 100").count
   puts "Number of projects with minimum percentage = #{project_count}"
   my_criteria.each do |criterion|
-    data=Project.where("badge_percentage >= #{min_percentage} AND badge_percentage < 100").select(criterion.to_s).group(criterion.to_s).unscope(:order).count
+    data=Project.where("badge_percentage_0 >= #{min_percentage} AND badge_percentage_0 < 100").select(criterion.to_s).group(criterion.to_s).unscope(:order).count
     results.append([criterion.to_s, data.fetch('Met',0),
       data.fetch('Unmet',0), data.fetch('?',0), data.fetch('N/A',0)])
   end

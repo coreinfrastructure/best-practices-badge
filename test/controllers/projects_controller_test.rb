@@ -16,6 +16,7 @@ class ProjectsControllerTest < ActionController::TestCase
     @perfect_silver_project = projects(:perfect_silver)
     @perfect_project = projects(:perfect)
     @user = users(:test_user)
+    @user2 = users(:test_user_melissa)
     @admin = users(:admin_user)
   end
 
@@ -84,8 +85,8 @@ class ProjectsControllerTest < ActionController::TestCase
   test 'should show project' do
     get :show, params: { id: @project }
     assert_response :success
-    assert_select 'a[href=?]'.dup, 'https://www.nasa.gov'
-    assert_select 'a[href=?]'.dup, 'https://www.nasa.gov/pathfinder'
+    assert_select(+'a[href=?]', 'https://www.nasa.gov')
+    assert_select(+'a[href=?]', 'https://www.nasa.gov/pathfinder')
     # Check semver description, which has HTML - make sure it's not escaped:
     assert @response.body.include?(
       I18n.t('criteria.0.version_semver.description')
@@ -95,16 +96,16 @@ class ProjectsControllerTest < ActionController::TestCase
   test 'should show project with criteria_level=1' do
     get :show, params: { id: @project, criteria_level: '1' }
     assert_response :success
-    assert_select 'a[href=?]'.dup, 'https://www.nasa.gov'
-    assert_select 'a[href=?]'.dup, 'https://www.nasa.gov/pathfinder'
+    assert_select(+'a[href=?]', 'https://www.nasa.gov')
+    assert_select(+'a[href=?]', 'https://www.nasa.gov/pathfinder')
     only_correct_criteria_selectable('1')
   end
 
   test 'should show project with criteria_level=2' do
     get :show, params: { id: @project, criteria_level: '2' }
     assert_response :success
-    assert_select 'a[href=?]'.dup, 'https://www.nasa.gov'
-    assert_select 'a[href=?]'.dup, 'https://www.nasa.gov/pathfinder'
+    assert_select(+'a[href=?]', 'https://www.nasa.gov')
+    assert_select(+'a[href=?]', 'https://www.nasa.gov/pathfinder')
     only_correct_criteria_selectable('2')
   end
 
@@ -142,6 +143,7 @@ class ProjectsControllerTest < ActionController::TestCase
   # rubocop:disable Metrics/BlockLength
   test 'can add users with additional rights using "+"' do
     log_in_as(@project.user)
+    # Ensure that our test setup is correct & get current state
     assert_not AdditionalRight.exists?(
       project_id: @project.id,
       user_id: users(:test_user_mark).id
@@ -154,12 +156,15 @@ class ProjectsControllerTest < ActionController::TestCase
       project_id: @project.id,
       user_id: @admin.id
     )
+    previous_update = @project.updated_at
+    # Run patch (the point of the test)
     patch :update, params: {
       id: @project,
       project: { name: @project.name }, # *Something* so not empty.
       additional_rights_changes:
         "+ #{users(:test_user_mark).id}, #{users(:test_user_melissa).id}"
     }
+    # Check that results are what was expected
     assert_redirected_to project_path(assigns(:project))
     assert AdditionalRight.exists?(
       project_id: @project.id,
@@ -169,6 +174,9 @@ class ProjectsControllerTest < ActionController::TestCase
       project_id: @project.id,
       user_id: users(:test_user_melissa).id
     )
+    # Ensure that updated_at has changed
+    @project.reload
+    assert_not_equal previous_update, @project.updated_at
   end
   # rubocop:enable Metrics/BlockLength
 
@@ -215,9 +223,12 @@ class ProjectsControllerTest < ActionController::TestCase
   end
 
   test 'should not get edit as user without additional rights' do
-    # Without additional rights, can't log in.  This is paired with
+    # This *expressly* tests that a normal logged-in
+    # user cannot edit another project's data without authorization.
+    # Without additional rights, can't edit.  This is paired with
     # previous test, to ensure that *only* the additional right provides
-    # the necessary rights.
+    # the necessary rights.  This is a key test: we *prevent* users
+    # logged in with one normal account from editing others' data.
     test_user = users(:test_user_mark)
     log_in_as(test_user)
     get :edit, params: { id: @project }
@@ -257,14 +268,32 @@ class ProjectsControllerTest < ActionController::TestCase
     assert_equal @project.name, new_name
   end
 
-  test 'should fail to update project' do
+  test 'should fail to update project if not logged in' do
+    # Note: no log_in_as
+    old_name = @project.name
+    new_name = old_name + '_updated'
+    patch :update, params: {
+      id: @project, project: {
+        description: @project.description,
+        license: @project.license,
+        name: new_name,
+        repo_url: @project.repo_url,
+        homepage_url: @project.homepage_url
+      }
+    }
+    # Verify that we didn't really change the name
+    @project.reload
+    assert_equal @project.name, old_name
+  end
+
+  test 'should fail to update project if providing bad URL' do
+    log_in_as(@project.user)
     new_project_data = {
       description: '',
       license: '',
       name: '',
       homepage_url: 'example.org' # bad url
     }
-    log_in_as(@project.user)
     patch :update, params: { id: @project, project: new_project_data }
     # "Success" here only in the HTTP sense - we *do* get a form...
     assert_response :success
@@ -418,6 +447,13 @@ class ProjectsControllerTest < ActionController::TestCase
   end
 
   test 'should not destroy project if no one is logged in' do
+    log_in_as(@user2)
+    assert_no_difference('Project.count', ActionMailer::Base.deliveries.size) do
+      delete :destroy, params: { id: @project }
+    end
+  end
+
+  test 'should not destroy project if logged in as different user' do
     # Notice that we do *not* call log_in_as.
     assert_no_difference('Project.count', ActionMailer::Base.deliveries.size) do
       delete :destroy, params: { id: @project }

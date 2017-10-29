@@ -489,6 +489,8 @@ de:
       Wir haben einige dieser Berichte in das öffentliche Wiki gestellt. informieren Sie uns bitte wenn Sie nicht wollen, dass die Änderungen veröffentlicht werden https://github.com/coreinfrastruktur/best-praktiken-badge/wiki/Impacts
       Danke und Herzlichen Glückwünsch.
     lost_level_message:
+    reminder_body_html:
+    reminder_body_text:
   user_mailer:
     account_activation:
       before_html: |-
@@ -540,7 +542,11 @@ de:
           (Optional) Wo befindet sich die Kurzbeschreibung? Gegebenenfalls
           URL angeben.
       interact:
-        description:
+        description: >-
+          Die Projekt-Website MUSS Informationen darüber enthalten,
+          wie Feedback erhalten und gegeben werden kann (als Fehlerberichte
+          oder Verbesserungsvorschläge), und wie man zur Softwareentwicklung
+          beitragen kann.
         met_placeholder: >-
           (Optional) Wo ist diese Information? Gib eine oder mehrere
           URLs an.
@@ -572,13 +578,22 @@ de:
           lizensiert veröffentlicht sein.
         details:
       floss_license_osi:
-        description:
+        description: >-
+          Es wird EMPFHOLEN, dass alle erforderlichen Lizenz(en)
+          für die vom Projekt entwickelte Software von der <a
+          href="https://opensource.org/licenses">Open Source Initiative
+          (OSI)</a> anerkannt werden.
         details: >-
           Die OSI verwendet einen anspruchsvollen Genehmigungsprozess,
           um festzulegen, welche Lizenzen OSS sind.
       license_location:
-        description:
-        details:
+        description: >-
+          Das Projekt MUSS die Lizenz(en) seiner Erzeugnisse an
+          einem üblichen Ort in ihrem Quell-Repository veröffentlichen.
+        details: >-
+          Z.B. als Top-Level-Datei mit dem Namen LICENSE oder
+          COPYING. Der Dateiname der Lizenz DARF eine Dateiendung
+          wie ".txt" oder ".md" haben.
       documentation_basics:
         description: >-
           Das Projekt MUSS eine grundlegende Dokumentation für
@@ -632,7 +647,9 @@ de:
           das Projekt keine Software entwickelt, wählen Sie "nicht
           anwendbar" (N/A) aus.
       sites_https:
-        description:
+        description: >-
+          Die Projekt-Seiten (Website, Repository und Download-URLs)
+          MÜSSEN HTTPS mit TLS unterstützen.
         details:
       discussion:
         description: >-
@@ -652,10 +669,21 @@ de:
           Archivierungsmechanismus gibt. Proprietäres JavaScript
           ist ungern gesehen aber erlaubt.
       english:
-        description:
-        details:
+        description: >-
+          Das Projekt SOLLTE Dokumentationen in englischer Sprache
+          zur Verfügung stellen und in der Lage sein, Fehlerberichte
+          und Kommentare zum Code in Englisch zu akzeptieren.
+        details: >-
+          Englisch ist derzeit die <a href="https://de.wikipedia.org/wiki/Lingua_franca">Lingua
+          Franca</a> der Computertechnik; Wenn Englisch unterstützt
+          wird, erhöht das die Anzahl der verschiedenen potenziellen
+          Entwickler und Reviewer weltweit. Ein Projekt kann dieses
+          Kriterium auch dann erfüllen, wenn die Hauptsprache
+          der Kernentwickler nicht Englisch ist.
       repo_public:
-        description:
+        description: >-
+          Das Projekt MUSS ein versiongesteuertes Quell-Repository
+          haben, das öffentlich lesbar ist und eine URL hat.
         details:
       repo_track:
         description:
@@ -683,7 +711,9 @@ de:
       report_process:
         description:
       report_tracker:
-        description:
+        description: >-
+          Das Projekt SOLLTE einen Issue Tracker für die Nachverfolgung
+          einzelner Issues verwenden.
         unmet_placeholder: Warum gibt es keinen Issue Tracker?
       report_responses:
         description:
@@ -705,7 +735,9 @@ de:
           wird, wählen Sie bitte "Unerfüllt" und erklären Sie
           die Situation.
       report_archive:
-        description:
+        description: >-
+          Das Projekt MUSS ein öffentlich zugängliches Archiv
+          für Berichte und Antworten für die spätere Suche haben.
       vulnerability_report_process:
         description: >-
           Das Projekt MUSS den Prozess für die Meldung von Schwachstellen
@@ -795,7 +827,12 @@ de:
         description:
         details:
       know_common_errors:
-        description:
+        description: >-
+          Mindestens einer der primären Entwickler des Projekts
+          MUSS über weitläufige Arten von Fehlern, die zu Schwachstellen
+          in dieser Art von Software führen, Bescheid wissen sowie
+          mindestens eine Methode, um jede von ihnen zu beseitigen
+          oder zu mildern.
         details:
       crypto_published:
         description: >-
@@ -1019,7 +1056,16 @@ de:
           Wenn das Projekt keine Software entwickelt, die in einer
           Speicher-unsicheren Sprache geschrieben ist, wählen
           Sie "nicht anwendbar" (N/A).
-        details:
+        details: >-
+          Beispiele für Mechanismen zur Erkennung von Arbeitsspeicher
+          Sicherheitsproblemen sind <a href="https://github.com/google/sanitizers/wiki/AddressSanitizer">Adresse
+          Sanitizer (ASAN)</a> (verfügbar in GCC und LLVM), <a
+          href="http://clang.llvm.org/docs/MemorySanitizer.html">Memory
+          Sanitizer</a> und <a href="http://valgrind.org/">valgrind</a>.
+          Andere möglicherweise verwendete Werkzeuge sind <a href="http://clang.llvm.org/docs/ThreadSanitizer.html">Thread
+          Sanitizer</a> und <a href="http://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html">Undefined
+          Behavior Sanitizer</a>. Weit verbreitete Assertions
+          würden auch funktionieren.
       dynamic_analysis_enable_assertions:
         description: >-
           Es ist EMPFHOLEN, dass die vom Projekt entwickelte Software
@@ -1038,8 +1084,18 @@ de:
           auf diese Weise finden, wählen Sie "nicht anwendbar"
           (N/A).
       installation_common:
-        description:
-        details:
+        description: >-
+          Das Projekt SOLLTE eine Möglichkeit zur einfachen Installation
+          und Deinstallation der vom Projekt entwickelten Software
+          bereitstellen und dabei gängige Konventionen einhalten.
+        details: >-
+          Beispiele hierfür sind die Verwendung eines Paketmanagers
+          (auf dem System- oder Sprachniveaus), "make install
+          / uninstall" (unterstützt DESTDIR), ein Container im
+          Standardformat oder ein virtuelles Maschinenbild im
+          Standardformat. Der Installations- und Deinstallationsvorgang
+          (z.B. seine Verpackung) DARF von einem Drittenanbieter
+          implementiert werden, solange es FLOSS ist.
       build_reproducible:
         description: >-
           Es ist EMPFHOLEN, dass das Projekt <a href="https://reproducible-builds.org/">Reproduzierbare
@@ -1103,11 +1159,32 @@ de:
           durchführen. Wenn die Software TLS nicht verwendet,
           wählen Sie "nicht anwendbar" (N/A).
       hardened_site:
-        description:
-        details:
+        description: >-
+          Es wird EMPFHOLEN, dass die Projekt-Website, das Repository
+          (falls über das Internet zugänglich) und die Download-Seite
+          (falls separat) "key hardening headers with nonpermissive
+          values" enthalten.
+        details: >-
+          Beachten Sie, dass GitHub dies erfüllt. Websites wie
+          https://securityheaders.io/ können das schnell überprüfen.
+          Die wichtigsten " key hardening headers" sind: Content
+          Security Policy (CSP), HTTP Strict Transport Security
+          (HSTS), X-Content-Type-Optionen (als "nosniff"), X-Frame-Optionen
+          und X-XSS-Protection.
       hardening:
-        description:
-        details:
+        description: >-
+          Es wird EMPFHOLEN, dass "hardening mechanisms" in der
+          vom Projekt entwickelten Software verwendet werden,
+          so dass Softwarefehler weniger wahrscheinlich zu Sicherheitslücken
+          führen.
+        details: >-
+          "Hardening mechanisms" können HTTP-Header wie Content
+          Security Policy (CSP), Compiler-Flags zur Milderung
+          von Angriffes (beispielsweise -fstack-protector) oder
+          Compiler-Flags zu Vermeidung von undefiniertem Verhalten
+          enthalten. Für unsere Zwecke wird "least privilege"
+          nicht als ein "hardening mechanism" betrachtet (das
+          "hardening mechanism" ist wichtig, aber extra).
     '1':
       contribution_requirements:
         description:
@@ -1456,6 +1533,8 @@ de:
       details:
       future:
       new_this_level:
+      met_justification_required:
+      met_justification_or_url_required:
   headings:
     Accessibility and internationalization: Zugänglichkeit und
       Internationalisierung
@@ -1500,6 +1579,7 @@ de:
     Working build system: Produktivsystem
     Identification: Identifizierung
     Prerequisites:
+    FLOSS license:
   last_entry: Letzter Übersetzungseintrag
   admin_only: Nur Administratoren.
   criterion_status:

@@ -14,6 +14,7 @@ class SessionsHelperTest < ActionView::TestCase
 
   test 'current_user returns right user when session is nil' do
     assert_equal @user, current_user
+    assert_not session[:time_last_used].nil?
     assert user_logged_in?
   end
 

@@ -190,7 +190,7 @@
           </li>
 
    <%# Note: render() accepts met_suppress: ..., unmet_placeholder:  ... %>
-          <li class="list-group-item"><h3>Basic project website content</h3>
+          <li class="list-group-item"><h3><%= t('headings.Basic project website content') %></h3>
             <%= render_status 'description_good', f, project, '0', is_disabled %>
 
             <%= render_status 'interact', f, project, '0', is_disabled %>
@@ -199,7 +199,9 @@
 
             <%= render_status 'contribution_requirements', f, project, '0', is_disabled, true %>
           </li>
-          <li class="list-group-item"><h3>FLOSS License</h3>
+          <li class="list-group-item"><h3><%=
+            t('FLOSS license',
+              scope: :headings) %></h3>
 
             <div class="hidable-text-entry">
             <strong><%= t('projects.form_basics.license.description_html') %></strong>
@@ -209,8 +211,19 @@
                          details:
                            t('projects.form_basics.license.details_html')
                        }) %>
-            <%= f.text_field :license,
+            <%=
+                # "Pattern" here is not a rigorous check of SPDX syntax.
+                # It only checks to ensure that only legal characters are
+                # allowed. Still, this can prevent some problems we've seen
+                # in some submissions, while permitting legal expressions like
+                # "(GPL-2.0+ WITH Bison-exception-2.2)".  See:
+                # https://spdx.org/spdx-specification-21-web-version
+                # Errors here do not cause *security* issues, so we're not
+                # too strict.
+                f.text_field :license,
                              class: 'form-control', hide_label: true,
+                             pattern: '(|[()A-Za-z0-9\-.+ ]*)',
+                             title: 'License in SPDX license expression format, e.g., "MIT" or "GPL-3.0+"',
                              placeholder:
                                t('projects.form_basics.license.placeholder'),
                              list: 'license_list', disabled: is_disabled %>
@@ -226,12 +239,18 @@
               <option value="BSD-3-Clause">BSD-3-Clause {BSD 3-clause "New" or "Revised" License}</option>
               <option value="BSD-2-Clause">BSD-2-Clause {BSD 2-clause "Simplified" License}</option>
               <option value="BSD-2-Clause-FreeBSD">BSD-2-Clause-FreeBSD {BSD 2-clause FreeBSD License}</option>
+              <option value="BSL-1.0">BSL-1.0 {Boost Software License 1.0}</option>
               <option value="CC0-1.0">CC0-1.0 {Creative Commons Zero v1.0 Universal}</option>
               <option value="CC-BY-3.0">CC-BY-3.0 {Creative Commons Attribution 3.0}</option>
               <option value="CC-BY-4.0">CC-BY-4.0 {Creative Commons Attribution 4.0}</option>
               <option value="CC-BY-SA-3.0">CC-BY-SA-3.0 {Creative Commons Attribution ShareAlike 3.0}</option>
               <option value="CC-BY-SA-4.0">CC-BY-SA-4.0 {Creative Commons Attribution ShareAlike 4.0}</option>
+              <option value="CDDL-1.0">CDDL-1.0 {Common Development and Distribution License 1.0}</option>
+              <option value="CDDL-1.1">CDDL-1.1 {Common Development and Distribution License 1.1}</option>
+              <option value="CPL-1.0">CPL-1.0 {Common Public License 1.0}</option>
+              <option value="CECILL-B">CECILL-B {CeCILL-B Free Software License Agreement}</option>
               <option value="EPL-1.0">EPL-1.0 {Eclipse Public License 1.0}</option>
+              <option value="EPL-2.0">EPL-2.0 {Eclipse Public License 2.0}</option>
               <option value="GPL-2.0">GPL-2.0 {GNU General Public License version 2.0 only}</option>
               <option value="GPL-2.0+">GPL-2.0+ {GNU General Public License version 2.0 or later}</option>
               <option value="GPL-3.0">GPL-3.0 {GNU General Public License version 3.0 only}</option>
@@ -246,8 +265,10 @@
               <option value="MPL-1.0">MPL-1.0 {Mozilla Public License 1.0}</option>
               <option value="MPL-1.1">MPL-1.1 {Mozilla Public License 1.1}</option>
               <option value="MPL-2.0">MPL-2.0 {Mozilla Public License 2.0}</option>
-              <option value="MPL-2.0-no-copyleft-exceptoin">MPL-2.0-no-copyleft-exception {Mozilla Public License 2.0, no copyleft exception}</option>
+              <option value="MPL-2.0-no-copyleft-exception">MPL-2.0-no-copyleft-exception {Mozilla Public License 2.0, no copyleft exception}</option>
               <option value="Unlicense">Unlicense {The Unlicense}</option>
+              <option value="Zlib">Zlib {zlib License}</option>
+              <option value="zlib-acknowledgement">zlib-acknowledgement {zlib/libpng License with Acknowledgement}</option>
               <option value="(GPL-3.0+ WITH Bison-Exception)">(GPL-3.0+ WITH Bison-Exception)</option>
               <option value="(LGPL-2.0+ AND AML)">(LGPL-2.0+ AND AML) {must meet both the GNU Lesser General Public License version 2.1 or later AND the Apple MIT License}</option>
               <option value="(MPL-1.1 OR GPL-2.0+ OR LGPL-2.1+)">(MPL-1.1 OR GPL-2.0+ OR LGPL-2.1+)</option>

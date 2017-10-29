@@ -221,6 +221,21 @@ class ProjectTest < ActiveSupport::TestCase
     assert_equal 'hsl(111, 100%, 50%)', quality[:color]
   end
 
+  test 'Justification goodness' do
+    # Use "send" to do unit tests of a private method.
+    assert @unjustified_project.send(
+      :justification_good?,
+      'This is long enough.'
+    )
+    assert !@unjustified_project.send(
+      :justification_good?,
+      '# This is a comment.'
+    )
+    assert !@unjustified_project.send(:justification_good?, 'bah.')
+    assert !@unjustified_project.send(:justification_good?, '')
+    assert !@unjustified_project.send(:justification_good?, nil)
+  end
+
   # rubocop:disable Metrics/BlockLength
   test 'test :skip_callbacks works as expected' do
     project_one = projects(:one)

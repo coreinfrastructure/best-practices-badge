@@ -59,9 +59,9 @@ class CriteriaTest < ActiveSupport::TestCase
       na_justification_required met_suppress unmet_suppress autofill
       major minor rationale
     ]
-    Criteria.to_h.each do |_level, criteria_set|
-      criteria_set.each do |_criterion, fields|
-        fields.keys.each { |k| assert_includes allowed_set, k.to_sym }
+    Criteria.to_h.each_value do |criteria_set|
+      criteria_set.each_value do |fields|
+        fields.each_key { |k| assert_includes allowed_set, k.to_sym }
       end
     end
   end
@@ -70,9 +70,9 @@ class CriteriaTest < ActiveSupport::TestCase
     allowed_set = Set.new %i[
       description details met_placeholder unmet_placeholder na_placeholder
     ]
-    I18n.t('criteria').each do |_level, criteria_set|
-      criteria_set.each do |_criterion, fields|
-        fields.keys.each { |k| assert_includes allowed_set, k }
+    I18n.t('criteria').each_value do |criteria_set|
+      criteria_set.each_value do |fields|
+        fields.each_key { |k| assert_includes allowed_set, k }
       end
     end
   end
@@ -92,42 +92,25 @@ class CriteriaTest < ActiveSupport::TestCase
   end
 
   test 'All Criteria in each level have a description' do
-    Criteria.each do |_level, criteria_set|
-      criteria_set.values.each do |criterion|
+    Criteria.each_value do |criteria_set|
+      criteria_set.each_value do |criterion|
         assert criterion.description.present?
       end
     end
   end
 
-  test 'Ensure only valid categories in Criteria' do
-    Criteria.to_h.each do |_level, criteria_set|
-      criteria_set.each do |_criterion, fields|
-        allowed_field_values = %w[MUST SHOULD SUGGESTED]
-        assert_includes allowed_field_values, fields['category']
-      end
-    end
-  end
-
-  test 'If URL required, do not suppress justification' do
-    Criteria.to_h.each do |_level, criteria_set|
-      criteria_set.each do |_criterion, fields|
-        assert_not fields[:met_url_required] && fields[:met_suppress]
-      end
-    end
-  end
-
-  test 'If Met justification required, do not suppress justification' do
-    Criteria.to_h.each do |_level, criteria_set|
-      criteria_set.each do |_criterion, fields|
-        assert_not fields[:met_justification_required] && fields[:met_suppress]
-      end
-    end
-  end
-
-  test 'If N/A justification required, do not suppress justification' do
-    Criteria.to_h.each do |_level, criteria_set|
-      criteria_set.each do |_criterion, fields|
-        assert_not fields[:na_justification_required] && fields[:met_suppress]
+  test 'Ensure Criteria data is sane' do
+    allowed_field_values = %w[MUST SHOULD SUGGESTED]
+    Criteria.to_h.each_value do |criteria_set|
+      criteria_set.each_value do |fields|
+        assert_includes allowed_field_values, fields['category'],
+                        'only valid categories may be in Criteria'
+        assert_not fields[:met_url_required] && fields[:met_suppress],
+                   'If URL required, do not suppress justification'
+        assert_not fields[:met_justification_required] && fields[:met_suppress],
+                   'If Met justification required, must allow justification'
+        assert_not fields[:na_justification_required] && fields[:met_suppress],
+                   'If N/A justification required, must allow justification'
       end
     end
   end
@@ -151,7 +134,7 @@ class CriteriaTest < ActiveSupport::TestCase
   # We can change the code later to address this; for now, let's make sure
   # the software stays within the limitation
   test 'No more than 100 criteria in each level' do
-    Criteria.each do |_level, criteria_set|
+    Criteria.each_value do |criteria_set|
       assert criteria_set.keys.length <= 100
     end
   end

@@ -72,8 +72,8 @@ h1, h2, h3, h4, h5, h6 {
 p {
   font-size: 1.1em;
   line-height: 1.7em;
-  padding-left: 100px;
-  padding-right: 100px;
+  // padding-left: 100px;
+  // padding-right: 100px;
 }
 
 /* Project Display*/
@@ -371,24 +371,34 @@ nav {
 
 #progress-mobile
 {
-   position: absolute;
-   top: 22px;
-   left:195px;
-   width:80px;
+  position: relative;
+  width:100px;
+
+//Added this to harmonize with nav-list-element-anchor sytles in header css page
+ float: left;
+ display:inline-block;
+ font-size: 0.9em;
+ margin-left: 15px;
+ margin-right: 20px;
+ margin-bottom: 0px;
+ margin-top: -2px;
+
 }
 
 
 @media only screen and (min-width: 767px) {
   #progress-mobile
   {
-     position: absolute;
-     margin: auto;
-     margin-left: -10%;
-     width: 20%;
-     top: 30px;
-     left:40%;
-     height: 22px;
-     border-radius: 0;
+    position: relative;
+    width:110px;
+
+//Added this to harmonize with nav-list-element-anchor sytles in header css page
+    float: left;
+    display:inline-block;
+    font-size: 0.9em;
+    margin-left: 10px;
+    margin-right: 20px;
+    margin-top: 5px;
 
   }
 }
@@ -449,13 +459,13 @@ input[type="text"].form-control, .inputbox-look, textarea.form-control  {
 @media only screen and (max-width: 767px) {
   .main-badge-ques {
     position:relative;
-    top:-10px;
+    top:20px;
     margin-top: 0px;
     margin-bottom: 10px;
     width: 100px;
     height: 100px;
     background: image-url('questions_page_badge.png') no-repeat top left;
-    background-size: 100px 100px;
+    background-size: 80px 80px;
   }
 }
 

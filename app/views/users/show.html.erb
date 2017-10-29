@@ -16,17 +16,26 @@
      </section>
    </aside>
   <div class="col-md-12">
+
   <% if @user.projects.any? %>
-  <br><br>
+    <br><br>
+    <h2><%= t '.projects_owned' %></h2>
     <%= render 'projects/table', projects: @projects %>
     <%= will_paginate @projects %>
   <% end %>
 
+  <% if @projects_additional_rights.present? %>
+    <br>
+    <h2><%= t '.projects_additional_rights' %></h2>
+    <br>
+    <%= render 'projects/table', projects: @projects_additional_rights %>
+  <% end %>
+
   <% if @edit_projects.present? %>
-  <br>
-  <h2><%= t '.other_projects_edit' %></h2>
-  <br>
-   <%= render 'projects/table', projects: @edit_projects %>
+    <br>
+    <h2><%= t '.other_projects_edit' %></h2>
+    <br>
+    <%= render 'projects/table', projects: @edit_projects %>
   <% end %>
 
   <% if @user.provider == 'github' && @user.nickname? %>
@@ -43,6 +52,9 @@
     <% end %>
     <%= link_to t('.delete_link_name'), @user, method: :delete,
                 data: { confirm: t('.confirm_delete') } %>
+    <% if @user.admin? %>
+      <p><%= t '.is_admin' %></p>
+    <% end %>
   <% end %>
  </div>
 </div>

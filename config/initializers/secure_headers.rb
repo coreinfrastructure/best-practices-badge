@@ -25,6 +25,7 @@ SecureHeaders::Configuration.default do |config|
     default_src: normal_src,
     img_src: ['secure.gravatar.com', 'avatars.githubusercontent.com', "'self'"],
     object_src: ["'none'"],
+    script_src: normal_src,
     style_src: normal_src,
     # Harden CSP against attacks in other ways
     base_uri: ["'self'"],

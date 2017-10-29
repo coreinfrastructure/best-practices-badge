@@ -16,20 +16,20 @@ class AdminUsersShowTest < ActionDispatch::IntegrationTest
   test 'non-logged-in show user' do
     get user_path(@melissa, locale: nil)
     assert_response :success
-    assert_select 'a[href=?]'.dup, 'mailto:melissa%40example.com', false
+    assert_select(+'a[href=?]', 'mailto:melissa%40example.com', false)
   end
 
   test 'non-admin show user' do
     log_in_as(@user)
     get user_path(@melissa)
     assert_response :success
-    assert_select 'a[href=?]'.dup, 'mailto:melissa%40example.com', false
+    assert_select(+'a[href=?]', 'mailto:melissa%40example.com', false)
   end
 
   test 'admin show user' do
     log_in_as(@admin_user)
     get user_path(@melissa)
     assert_response :success
-    assert_select 'a[href=?]'.dup, 'mailto:melissa%40example.com'
+    assert_select(+'a[href=?]', 'mailto:melissa%40example.com')
   end
 end

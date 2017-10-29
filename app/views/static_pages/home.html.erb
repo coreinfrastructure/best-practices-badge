@@ -16,7 +16,50 @@
 
       <p class="no-padding best-practices-main-text">
         <%= t('static_pages.home.p3_html') %>
-      </p>
+        <%= t('static_pages.home.share_header_html') %>
+        <%
+          # See https://jonsuh.com/blog/social-share-links/#use-share-urls
+          # Make URLs for Twitter Reddit Facebook LinkedIn Google+
+          twitter_url = 'https://twitter.com/intent/tweet/?' +
+            {
+              text: t('static_pages.home.check_us_out'),
+              url: request.original_url
+            }.to_param.html_safe
+          reddit_url =
+            'http://www.reddit.com/submit/?' +
+            { url: request.original_url }.to_param.html_safe
+          facebook_url =
+            'https://www.facebook.com/sharer/sharer.php?' +
+            { u: request.original_url }.to_param.html_safe
+          linkedin_url =
+            'https://www.linkedin.com/shareArticle?' +
+            {
+              mini: true,
+              url: request.original_url,
+              title: t('static_pages.home.check_us_out'),
+              source: request.original_url,
+              summary: t('static_pages.home.check_us_out')
+            }.to_param.html_safe
+          googleplus_url =
+            'https://plus.google.com/share?' +
+            { url: request.original_url }.to_param.html_safe
+        %>
+
+        <a href="<%= twitter_url %>" class="btn btn-primary btn-lg btn-main-margin"
+        target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i>&nbsp;<%= t('static_pages.home.twitter') %></a>
+
+        <a href="<%= reddit_url %>" class="btn btn-primary btn-lg btn-main-margin"
+        target="_blank"><i class="fa fa-reddit-alien" aria-hidden="true"></i>&nbsp;<%= t('static_pages.home.reddit') %></a>
+
+        <a href="<%= facebook_url %>" class="btn btn-primary btn-lg btn-main-margin"
+        target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i>&nbsp;<%= t('static_pages.home.facebook') %></a>
+
+        <a href="<%= linkedin_url %>" class="btn btn-primary btn-lg btn-main-margin"
+        target="_blank"><i class="fa fa-linkedin" aria-hidden="true"></i>&nbsp;<%= t('static_pages.home.linkedin') %></a>
+
+        <a href="<%= googleplus_url %>" class="btn btn-primary btn-lg btn-main-margin"
+        target="_blank"><i class="fa fa-google-plus" aria-hidden="true"></i>&nbsp;<%= t('static_pages.home.googleplus') %></a>
+
     </div>
     <div class="col-md-4 col-sm-5">
       <div class="home-badge pull-right"></div>

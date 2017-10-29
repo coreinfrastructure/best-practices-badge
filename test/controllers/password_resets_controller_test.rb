@@ -42,7 +42,7 @@ class PasswordResetsControllerTest < ActionController::TestCase
     # Right email, right token
     get :edit, params: { id: user.reset_token, email: user.email }
     assert_template 'password_resets/edit'
-    assert_select 'input[name=email][type=hidden][value=?]'.dup, user.email
+    assert_select(+'input[name=email][type=hidden][value=?]', user.email)
     # Invalid password & confirmation
     patch :update, params: {
       id: user.reset_token,

@@ -49,6 +49,16 @@ class Criteria
       @criteria.each { |level| yield level }
     end
 
+    def each_value
+      instantiate if @criteria.blank?
+      @criteria.each_value { |level_data| yield level_data }
+    end
+
+    def each_key
+      instantiate if @criteria.blank?
+      @criteria.each_key { |level_key| yield level_key }
+    end
+
     # This returns an array of all levels where a particular criterion of
     # a given name is present.
     def get_levels(criterion)
@@ -84,7 +94,7 @@ class Criteria
           fields.delete_if { |k, _v| k.in? FIELDS_TO_OMIT }
           translations = {}
           I18n.available_locales.each do |locale|
-            I18n.t(".criteria.#{level}.#{criterion}").keys.each do |k|
+            I18n.t(".criteria.#{level}.#{criterion}").each_key do |k|
               next if k.to_s.in? FIELDS_TO_OMIT
               translations[k.to_s] = {} unless translations.key?(k.to_s)
               translations[k.to_s][locale.to_s] =
@@ -100,7 +110,7 @@ class Criteria
 
   def description
     key = "criteria.#{level}.#{name}.description"
-    return nil unless I18n.exists?(key)
+    return unless I18n.exists?(key)
     # Descriptions only come from trusted data source, so we can safely disable
     # rubocop:disable Rails/OutputSafety
     I18n.t(key).html_safe
@@ -129,6 +139,10 @@ class Criteria
 
   def met_justification_required?
     met_justification_required == true
+  end
+
+  def met_justification_or_url_required?
+    met_justification_required? || met_url_required?
   end
 
   def must?
@@ -161,7 +175,7 @@ class Criteria
   # and all lower levels for a given text snippet until it is found.  If
   # it doesn't exist, nil is returned.
   def get_text_if_exists(field)
-    return nil unless field.in? LOCALE_ACCESSORS
+    return unless field.in? LOCALE_ACCESSORS
     Criteria.get_levels(name).reverse.each do |l|
       next if l.to_i > level.to_i
       t_key = "criteria.#{l}.#{name}.#{field}"

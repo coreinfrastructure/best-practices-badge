@@ -19,6 +19,12 @@ If you find a vulnerability, please see
 For more technical information on the implementation, see
 [implementation.md](implementation.md).
 
+You can see a video summarizing this assurance case (as of September 2017),
+along with some more general information about developing secure software:
+["How to Develop Secure Applications: The BadgeApp Example" by David A. Wheeler, 2017-09-18](https://www.youtube.com/watch?v=5a5D4d6hcEY).
+For more information on developing secure software, see
+["Secure Programming HOWTO" by David A. Wheeler](http://www.dwheeler.com/secure-programs/).
+
 ## Assurance case summary
 
 The following figures summarize why we think this application
@@ -109,7 +115,8 @@ how we implement these requirements):
           that specific browser if they use a local account.
           This is implemented using a
           cryptographically random nonce stored in the user's cookie store
-          which acts like a password, which is verified against a
+          as a permanent cookie.  This nonce
+          acts like a password, which is verified against a
           remember_digest value stored in the server
           that is an iterated salted hash (using bcrypt).
           This "remember me" functionality cannot reveal the user's
@@ -121,7 +128,10 @@ how we implement these requirements):
           weakness: if the user's system is compromised, others can log
           in as that user.  But this is fundamental to any "remember me"
           functionality, and users must opt in to enable "remember me"
-          (by default users must enter their password on each login).
+          (by default users must enter their password on each login,
+          and the login becomes invalid when the user logs out or when
+          the user exits the entire browser, because the cookie for login
+          is only a session cookie).
           The "remember me" box was originally implemented
           in commit e79decec67.
         - Email addresses are only revealed to the logged-in owner and
@@ -131,7 +141,15 @@ how we implement these requirements):
           We also user email addresses as the user id for "local" accounts.
           We strive to not reveal user email addresses to others
           (with the exception of administrators, who are trusted and thus
-          can see them).  Most of the rest of this document describes the
+          can see them).
+          We have specific tests to ensure that administrators can
+          see user email addresses (on the user page), but that
+          email addresses are not displayed when the user is not logged in
+          or is logged in as an ordinary user.
+          As documented in CONTRIBUTING.md, we forbid including email
+          addresses in server-sides caches, so that accidentally sharing the
+          wrong cache won't reveal email addresses.
+          Most of the rest of this document describes the
           measures we take to prevent turning unintentional mistakes
           into exposures of this data.
         - HTTPS is used to encrypt all communications between users
@@ -169,6 +187,9 @@ how we implement these requirements):
     - We routinely backup the database and retain multiple versions.
       That way, if the project data is corrupted, we can restore the
       database to a previous state.
+
+Identity, Authentication, and Authorization are handled in a traditional
+manner, as described below.
 
 BadgeApp must avoid being taken over by attackers, since this
 could cause lead to failure in confidentiality, integrity, or availability.
@@ -242,6 +263,13 @@ disables automated data gathering for that entry).
 The permissions system is intentionally simple.
 Every user has an account, either a 'local' account or an external
 system account (currently we support GitHub as an external account).
+We expressly include tests in our test suite
+to ensure that in 'local' accounts correct passwords allow login,
+while incorrect and unfilled passwords lead to login failure
+(it's important to test that certain actions that *must* fail for
+security reasons do indeed fail).
+We trust external systems to verify their external accounts (that means
+we trust GitHub to verify a GitHub account).
 Anyone can create an account.
 A user with role='admin' is an administator;
 few users are administrators.
@@ -951,7 +979,7 @@ as of 2015-12-14:
 We also use various mechanisms to harden the system against attack;
 these attempt to thwart or slow attack even if the system has a vulnerability.
 
-* We harden the HTTP headers, including the use of a
+* We harden the HTTP headers, in particular, we use a
   restrictive Content Security Policy (CSP) header with just
   "normal sources" (normal_src).
   CSP is perhaps one of the most important hardening items,
@@ -959,6 +987,22 @@ these attempt to thwart or slow attack even if the system has a vulnerability.
   The HTTP headers are hardened via the
   [secure_headers](https://github.com/twitter/secureheaders) gem,
   developed by Twitter to enable a number of HTTP headers for hardening.
+  We check that the HTTP headers are hardened in the test file
+  "test/integration/project_get_test.rb"; that way, when we upgrade
+  the secure_headers gem, we can be confident that the headers continue to
+  be restrictive.
+  The test checks for the HTTP header values when loading a project entry,
+  since that is the one most at risk from user-provided data.
+  That said, the hardening HTTP headers are basically the same for all
+  pages except for /project_stats, and that page doesn't display
+  any user-provided data.
+  We have separately checked the CSP values we use with
+  <https://csp-evaluator.withgoogle.com/>;
+  the only warning it mentioned is that the our "default-src" allows 'self',
+  and it notes that
+  "'self' can be problematic if you host JSONP, Angular
+  or user uploaded files."  That is true, but irrelevant, because we don't
+  host any of them.
 * Cookies have various restrictions (also via the
   [secure_headers](https://github.com/twitter/secureheaders) gem).
   They have httponly=true (which counters many JavaScript-based attacks),
@@ -1124,8 +1168,63 @@ and how it helps make the software more secure:
   All the required reused components are FLOSS, and our
   custom software is released as Free/Libre and open source software (FLOSS)
   using a well-known FLOSS license (MIT).
+* Negative testing.
+  The test suite specifically includes tests that should fail for
+  security reasons, an approach sometimes called "negative testing".
+  A widespread mistake in test suites is to only test "things that should
+  succeed", and neglecting to test "things that should fail".
+  This is especially important in security, since for security it's
+  often more important to ensure that certain requests *fail* than to ensure
+  that certain requests *succeed*.
+  For an example of the need for negative testing, see
+  ["The Apple goto fail vulnerability: lessons learned" by David A. Wheeler](https://www.dwheeler.com/essays/apple-goto-fail.html).
+  Missing negative tests are also problematic because
+  statement and branch coverage test coverage requirements
+  cannot detect *missing* code, and "failure to fail" is often caused
+  by *missing* code (this wasn't the case for "goto fail", but it does happen
+  in other cases).
+  We do positive testing too, of course, but that's not usually forgotten.
+  For negative testing, we focus on ensuring that incorrect logins will
+  fail, that timeouts cause timeouts, that projects and users cannot be
+  edited by those unauthorized to do so, and that email addresses are not
+  revealed to unauthorized individuals.
+  Here are important examples of our negative testing:
+    - local logins with wrong or unfilled passwords will lead to login failure
+      (see "test/features/login_test.rb").
+    - projects cannot be edited ("patched") by a timed-out session
+      or a session lacking a signed timeout value
+      (see "test/controllers/projects_controller_test.rb")
+    - projects cannot be edited if the user is not logged in, or
+      by logged-in normal users
+      if they aren't authorized to edit that project
+      (see "test/controllers/projects_controller_test.rb")
+    - projects can't be destroyed (deleted) if the user isn't logged in,
+      or is logged as a user who does not control the project
+      (see "test/controllers/projects_controller_test.rb")
+    - user data cannot be edited ("patched") if the user isn't logged in,
+      or is logged in as another non-admin user
+      (see "test/controllers/users_controller_test.rb")
+    - users can't be destroyed if the user isn't logged in, or is logged
+      in as another non-admin user
+      (see "test/controllers/users_controller_test.rb")
+    - a request to show the edit user page is redirected away
+      if the user isn't logged in, or is logged as another non-admin user -
+      this prevents any information leak from the edit page
+      (see "test/controllers/users_controller_test.rb")
+    - a user page does not display its email address when the user is
+      either (1) not logged in or (2) is logged in but not as an admin.
+      (see "test/controllers/users_controller_test.rb")
+    - a user page does not display if the user is an admin if
+      the user isn't logged in, or is logged in as a non-admin user
+      (see "test/controllers/users_controller_test.rb").
+      This makes it slightly harder for attackers to figure out
+      the individuals to target (they have additional privileges), while
+      still allowing *administrators* to easily see if a user has
+      administrator privileges.
 * The software has a strong test suite; our policy requires
-  at least 90% statement coverage (and in practice our coverage is much higher).
+  at least 90% statement coverage.
+  In practice our coverage is much higher, indeed it has been 100%
+  for a long time.
   This makes it easier to update components (e.g., if a third-party component
   has a publicly disclosed vulnerability).
   The test suite also makes it easier to make other fixes (e.g., to harden

@@ -63,7 +63,8 @@ end
 
 desc 'Run brakeman'
 task :brakeman do
-  sh 'bundle exec brakeman --quiet'
+  # Disable pager, so that "rake" can keep running without halting.
+  sh 'bundle exec brakeman --quiet --no-pager'
 end
 
 desc 'Run bundle if needed'
@@ -80,7 +81,7 @@ end
 desc 'Run bundle-audit - check for known vulnerabilities in dependencies'
 task :bundle_audit do
   verbose(true) do
-    sh <<-END
+    sh <<-RETRY_BUNDLE_AUDIT_SHELL
       apply_bundle_audit=t
       if ping -q -c 1 github.com > /dev/null 2> /dev/null ; then
         echo "Have network access, trying to update bundle-audit database."
@@ -106,7 +107,7 @@ task :bundle_audit do
       else
         true
       fi
-    END
+    RETRY_BUNDLE_AUDIT_SHELL
   end
 end
 # rubocop: enable Metrics/BlockLength
@@ -250,7 +251,7 @@ namespace :fastly do
       'https://master.bestpractices.coreinfrastructure.org/projects/1/badge'
     puts 'Starting test of Fastly caching'
     verbose(false) do
-      sh <<-END
+      sh <<-PURGE_FASTLY_SHELL
         site_name="#{args.site_name}"
         echo "Purging Fastly cache of badge for ${site_name}"
         curl -X PURGE "$site_name" || exit 1
@@ -266,7 +267,7 @@ namespace :fastly do
           echo "Fastly failed to restore cache."
           exit 1
         fi
-      END
+      PURGE_FASTLY_SHELL
     end
   end
 end
@@ -293,7 +294,7 @@ task :pull_production do
 end
 
 # Don't use this one unless you need to
-desc 'Copy database from production into development (if normal one fails)'
+desc 'Copy active production database into development (if normal one fails)'
 task :pull_production_alternative do
   puts 'Getting production database (alternative)'
   sh 'heroku pg:backups:capture --app production-bestpractices && ' \
@@ -304,7 +305,7 @@ task :pull_production_alternative do
      '           -d development db/latest.dump'
 end
 
-desc 'Copy database from master into development (requires access privs)'
+desc 'Copy active master database into development (requires access privs)'
 task :pull_master do
   puts 'Getting master database'
   Rake::Task['drop_database'].reenable
@@ -314,7 +315,12 @@ task :pull_master do
   Rake::Task['db:migrate'].invoke
 end
 
-desc 'Copy production database to master, overwriting master database'
+# This just copies the most recent backup of production; in almost
+# all cases this is adequate, and this way we don't disturb production
+# unnecessarily.  If you want the current active database, you can
+# force a backup with:
+# heroku pg:backups:capture --app production-bestpractices
+desc 'Copy production database backup to master, overwriting master database'
 task :production_to_master do
   sh 'heroku pg:backups:restore $(heroku pg:backups:public-url ' \
      '--app production-bestpractices) DATABASE_URL --app master-bestpractices'
@@ -322,7 +328,7 @@ task :production_to_master do
      '--app master-bestpractices'
 end
 
-desc 'Copy production database to staging, overwriting staging database'
+desc 'Copy production database backup to staging, overwriting staging database'
 task :production_to_staging do
   sh 'heroku pg:backups:restore $(heroku pg:backups:public-url ' \
      '--app production-bestpractices) DATABASE_URL ' \
@@ -342,7 +348,8 @@ task 'test:features' => 'test:prepare' do
 end
 
 # This gem isn't available in production
-if Rails.env.production? || Rails.env.fake_production?
+# Use string comparison, because Rubocop doesn't know about fake_production
+if Rails.env.production? || Rails.env == 'fake_production'
   task :eslint do
     puts 'Skipping eslint checking in production (libraries not available).'
   end
@@ -610,12 +617,12 @@ end
 desc 'check that install-badge-dev-environment works'
 task :test_dev_install do
   puts 'Updating test-dev-install branch'
-  sh <<-END
+  sh <<-TEST_BRANCH_SHELL
     git checkout test-dev-install
     git merge --no-commit master
     git checkout HEAD circle.yml
     git commit -a -s -m "Merge master into test-dev-install"
     git push origin test-dev-install
     git checkout master
-  END
+  TEST_BRANCH_SHELL
 end

@@ -5,6 +5,6 @@
 # SPDX-License-Identifier: MIT
 
 class ApplicationMailer < ActionMailer::Base
-  default from: "badgeapp@#{ENV['PUBLIC_HOSTNAME'] || 'localhost'}"
+  default from: "badgeapp@#{ENV['PUBLIC_HOSTNAME'].presence || 'localhost'}"
   layout 'mailer'
 end

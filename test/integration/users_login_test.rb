@@ -60,9 +60,10 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
     assert_not user_logged_in?
     assert_redirected_to root_url
     follow_redirect!
-    assert_select 'a[href=?]'.dup, login_path
-    assert_select 'a[href=?]'.dup, logout_path,      count: 0
-    assert_select 'a[href=?]'.dup, user_path(@user), count: 0
+    # Parentheses necessary to avoid Rubocop Lint/AmbiguousOperator error
+    assert_select(+'a[href=?]', login_path)
+    assert_select(+'a[href=?]', logout_path, count: 0)
+    assert_select(+'a[href=?]', user_path(@user), count: 0)
   end
 
   test 'login with valid information but not activated' do

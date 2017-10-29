@@ -15,7 +15,7 @@
     <% is_crypto = criterion.to_s.match(/^crypto_/)
        crypto_class = is_crypto ? ' criterion-is-crypto' : '' %>
 
-    <div class="col-md-2 col-sm-3 col-xs-4 criteria-radio<%= crypto_class %>">
+    <div class="col-md-3 col-sm-3 col-xs-4 criteria-radio<%= crypto_class %>">
       <div class="status-chooser">
       <%= f.form_group status_symbol do %>
         <%#
@@ -74,30 +74,30 @@
     </div>
   </div>
 <% end # cache 'buttons' %>
-  <div class='col-md-10 col-sm-9 col-xs-12 criteria-desc'>
+  <div class='col-md-12 col-sm-12 col-xs-12 criteria-desc'>
     <% cache ['desc', criterion.to_s, criteria_level, locale ] do
        # Here we provide the description, details, and markings like
        # "met_url_required?".  We cache this separately.
        # Its cache needs fewer keys, so by caching this separately it
        # can be shared across more projects. %>
-    <br>
-    <%= if criterion.future?
-         '(' + t('projects.misc.future_criterion') + ')'
-       else
-          ''
-       end %>
-    <%= criterion.description %>
-    <%= if criterion.met_url_required?
-          '(' + t('projects.misc.url_required') + ')'
-        else
-          ''
-       end %>
-    <sup>[<%= criterion %>]</sup>
-    <%= if criterion.details
-          render(partial: "details",
-            locals: {f: f, criterion: criterion,
-                     details: criterion.details.html_safe})
-        end %>
+      <br>
+      <%= if criterion.future?
+           '(' + t('projects.misc.future_criterion') + ')'
+         else
+            ''
+         end %>
+      <%= criterion.description %>
+      <%= if criterion.met_url_required?
+            '(' + t('projects.misc.url_required') + ')'
+          else
+            ''
+         end %>
+      <sup>[<%= criterion %>]</sup>
+      <%= if criterion.details
+            render(partial: "details",
+              locals: {f: f, criterion: criterion,
+                       details: criterion.details.html_safe})
+          end %>
     <% end # cache 'desc' %>
     <% justification_symbol = (criterion.to_s + '_justification').to_sym
        if (is_disabled)
@@ -105,7 +105,7 @@
          if project_criterion_justification&.presence
            cache ['markdown', project.id, criterion.to_s,
                   project.lock_version] do %>
-          <div class="justification-markdown">
+          <div class="justification-markdown" lang="en">
             <%= markdown(project_criterion_justification) %>
           </div>
         <% end # cache 'markdown'

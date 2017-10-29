@@ -146,8 +146,8 @@ class ProjectsController < ApplicationController
       Chief.new(@project, client_factory).autofill
       respond_to do |format|
         # Was project.update(project_params)
+        update_additional_rights
         if @project.save
-          update_additional_rights
           successful_update(format, old_badge_level, @criteria_level)
         else
           format.html { render :edit, criteria_level: @criteria_level }
@@ -233,7 +233,7 @@ class ProjectsController < ApplicationController
       # Don't update the updated_at value either, since we interpret that
       # value as being an update of the project badge status information.
       inactive_project.paper_trail.without_versioning do
-        inactive_project.last_reminder_at = DateTime.now.utc
+        inactive_project.last_reminder_at = Time.now.utc
         inactive_project.save!(touch: false)
       end
     end
@@ -384,7 +384,7 @@ class ProjectsController < ApplicationController
   def repo_data
     github = Octokit::Client.new access_token: session[:user_token]
     Octokit.auto_paginate = true
-    return nil if github.repos.blank?
+    return if github.repos.blank?
     github.repos.map do |repo|
       [repo.full_name, repo.fork, repo.homepage, repo.html_url]
     end.compact
@@ -392,8 +392,8 @@ class ProjectsController < ApplicationController
   # rubocop:enable Style/MethodCalledOnDoEndBlock
 
   HTML_INDEX_FIELDS = 'projects.id, projects.name, description, ' \
-    'homepage_url, repo_url, license, user_id, achieved_passing_at, ' \
-    'updated_at, badge_percentage_0'
+    'homepage_url, repo_url, license, projects.user_id, ' \
+    'achieved_passing_at, projects.updated_at, badge_percentage_0'
 
   # rubocop:disable Metrics/PerceivedComplexity
   # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
@@ -426,10 +426,10 @@ class ProjectsController < ApplicationController
   # rubocop:enable Metrics/PerceivedComplexity
 
   def set_homepage_url
-    return nil if repo_data.nil?
+    return if repo_data.nil?
     # Assign to repo.homepage if it exists, and else repo_url
     repo = repo_data.find { |r| @project.repo_url == r[3] }
-    return nil if repo.nil?
+    return if repo.nil?
     repo[2].present? ? repo[2] : @project.repo_url
   end
 

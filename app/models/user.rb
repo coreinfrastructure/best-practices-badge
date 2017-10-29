@@ -16,7 +16,7 @@ class User < ApplicationRecord
   attr_accessor :remember_token, :activation_token, :reset_token
   before_create :create_activation_digest
 
-  has_many :additional_rights
+  has_many :additional_rights, dependent: :destroy
 
   # This is the minimum password length for *new* passwords. After increasing
   # this, users can log into existing user accounts even if they don't meet

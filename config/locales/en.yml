@@ -81,6 +81,7 @@ en:
     home:
       badge_program: CII Best Practices Badge Program
       get_your_badge: Get Your Badge Now!
+      check_us_out: Check out the CII Best Practices Badge website!
       p1_html: >-
         The <a href="https://www.linuxfoundation.org/">Linux Foundation
         (LF)</a> <a href="https://www.coreinfrastructure.org/">Core
@@ -91,7 +92,7 @@ en:
         web application to explain how they follow each best practice.
         The CII Best Practices Badge is inspired by the many badges
         available to projects on GitHub. Consumers of the badge
-        will be able to quickly assess which FLOSS projects are
+        can quickly assess which FLOSS projects are
         following best practices and as a result are more likely
         to produce higher-quality secure software.
       p2_html: >-
@@ -102,18 +103,32 @@ en:
         and <a href="/criteria">criteria statistics</a> are available.
         The <a href="/projects">projects page</a> shows participating
         projects and supports queries (e.g., you can see <a href="/projects?gteq=100">projects
-        that have a passing badge</a>). You can also see <a href='/projects/1'>an
+        that have a passing badge</a>). You can also see <a href='/projects/1/0'>an
         example (where we try to get our own badge)</a>.
       p3_html: >-
         <em>Privacy and legal issues</em>: Please see our <a href="https://www.linuxfoundation.org/privacy">privacy
         policy</a> and <a href="https://www.linuxfoundation.org/terms">terms
-        of use</a>. All publicly-available non-code content is
+        of use</a>.
+        The code for the badging application itself is released under the
+        <a href="https://opensource.org/licenses/MIT">MIT</a> license
+        (projects pursuing a badge are under their respective licenses).
+        All publicly-available non-code content
+        managed by the badging application is
         released under at least the <a href="https://creativecommons.org/licenses/by/3.0/">Creative
         Commons Attribution License version 3.0 (CC-BY-3.0)</a>;
         newer non-code content is released under CC-BY version
         3.0 or later (CC-BY-3.0+). If referencing collectively
         or not otherwise noted, please credit the CII Best Practices
         badge contributors.
+      share_header_html: >-
+        <p>
+        Please share this:
+        </p>
+      twitter: Twitter
+      reddit: Reddit
+      facebook: Facebook
+      linkedin: LinkedIn
+      googleplus: Google+
     criteria:
       criteria: Criteria
       detailed_criteria_on_github: The detailed criteria are on
@@ -124,7 +139,9 @@ en:
       suggested: SUGGESTED
       total_active: Total active
       allow_na: Allow N/A
+      met_justification_required: Met justification required
       require_url: Require URL
+      met_justification_or_url_required: Met justification or URL required
       details: Includes details
       new_this_level: New at this level
       future: Future
@@ -133,7 +150,10 @@ en:
         the percentage calculations (as opposed to "future" criteria).
         The next columns identify the number of active criteria
         in each level that are MUST, SHOULD, SUGGESTED, allow
-        a "N/A" as an answer, require a URL, include details,
+        a "N/A" as an answer, require justification when "met" is the answer,
+        require a URL,
+        require justification when "met" is the answer or a URL,
+        include details,
         or are new at this level. "Future" criteria are shown
         on the form, and are expected to be added as active criteria
         to some level in the future, but are not included in completion
@@ -162,8 +182,11 @@ en:
       profile_updated: Profile updated
     show:
       edit_user: Edit user
-      other_projects_edit: Other Projects you can edit
+      projects_owned: 'Projects owned:'
+      projects_additional_rights: 'Projects with additional rights:'
+      other_projects_edit: 'Other editable projects per GitHub:'
       see_external: See this user's external page.
+      is_admin: This user is a badge application administrator.
       as_admin: 'as an admin, you may also:'
       send_email_to: 'send email to:'
       delete_link_name: delete
@@ -351,8 +374,8 @@ en:
     form_early:
       badge_intro:
         description: >-
-          Projects that follow the best practices below will be
-          able to voluntarily self-certify and show that they've
+          Projects that follow the best practices below can
+          voluntarily self-certify and show that they've
           achieved a Core Infrastructure Initiative (CII) badge.
         details_html: >-
           There is no set of practices that can guarantee that
@@ -370,7 +393,11 @@ en:
           and MUST NOT criteria must be met, all SHOULD criteria
           must be met OR be unmet with justification, <em>and</em>
           all SUGGESTED criteria must be met OR unmet (we want
-          them considered at least). Feedback is welcome via the
+          them considered at least).
+          If you want to enter justification text as a generic comment,
+          instead of being a rationale that the situation is acceptable,
+          start the text with '#'.
+          Feedback is welcome via the
           <a href="https://github.com/coreinfrastructure/best-practices-badge">GitHub
           site as issues or pull requests</a> There is also a
           <a href="https://lists.coreinfrastructure.org/mailman/listinfo/cii-badges">mailing
@@ -462,10 +489,12 @@ en:
           to edit this project entry. If you're the owner of the
           badge entry or a BadgeApp administrator, you can remove
           users from this list by entering "-" followed by a comma-separated
-          list of integer user ids. This application uses optimistic
-          locking to prevent saving stale data if multiple users
-          try to edit simultaneously. Only owners of this project
-          entry and BadgeApp administrators can change this field.
+          list of integer user ids. We expect that normally only one
+          person will edit a particular badge entry at a time.
+          This application uses optimistic locking to prevent saving stale
+          data if multiple users try to edit a badge entry simultaneously.
+          If you have multiple editors, we recommend saving badge entry
+          data incrementally and often (that is a wise practice anyway).
         placeholder: >-
           Change using + or - followed by a comma-separated user
           id list
@@ -605,6 +634,87 @@ en:
       or file an issue at
       https://github.com/coreinfrastructure/best-practices-badge/issues
       (click on "new issue").
+      Thank you for your time.
+    reminder_body_html: |-
+      <h1>Automated Best Practices Badge Reminder for %{project_name}</h1>
+      <p>
+      This is an automated reminder that your project
+      "%{project_name}"
+      does not currently have a "best practices" badge,
+      and its badge entry has not been updated in a while.
+      </p>
+
+      <p>
+      Your best practices badge entry is at
+      <a href="%{project_info_url}">%{project_info_url}</a>
+      and was last updated on %{project_updated_at}.
+      It is currently at %{project_badge_percentage_0}% (out of 100%).
+      </p>
+
+      <p>
+      We encourage you to keep making progress.
+      Please visit your badge entry at
+      <a href="%{project_info_url}">%{project_info_url}</a>
+      to complete the information and get your badge!
+      </p>
+
+      <p>
+      If you want to see <em>only</em> what you're missing, visit your badge entry,
+      select the button near the top labelled "Expand all panels", and
+      then select the button near the top labelled "Hide met or N/A criteria".
+      If you have questions, or need help, please contact
+      <a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;</a>
+      or file an issue at
+      <a href="https://github.com/coreinfrastructure/best-practices-badge/issues">https://github.com/coreinfrastructure/best-practices-badge/issues</a>
+      (click on "new issue").
+      </p>
+
+      <p>
+      We don't send reminders if you continue to update your badge entry,
+      and we only send reminders approximately every 30-60 days.  However,
+      if you want to disable these reminder messages, edit your badge entry at
+      <a href="%{project_info_url}">%{project_info_url}</a>
+      to turn on "disable inactivity reminder".
+      We hope you'll instead keep working at it
+      and eventually earn the badge.
+      </p>
+
+      <p>
+      Thank you for your time.
+      </p>
+    reminder_body_text: |-
+      This is an automated reminder that your project
+      "%{project_name}"
+      does not currently have a "best practices" badge,
+      and its badge entry has not been updated in a while.
+
+      Your best practices badge entry is at
+      %{project_info_url}
+      and was last updated on %{project_updated_at}
+      It is currently at %{project_badge_percentage_0}% (out of 100%).
+
+      We encourage you to keep making progress.
+      Please visit your badge entry at
+      %{project_info_url}
+      to complete the information and get your badge!
+
+      If you want to see only what you're missing, visit your badge entry,
+      select the button near the top labelled "Expand all panels", and
+      then select the button near the top labelled "Hide met or N/A criteria".
+      If you have questions, or need help, please contact
+      cii-badges-questions-owner@lists.coreinfrastructure.org
+      or file an issue at
+      https://github.com/coreinfrastructure/best-practices-badge/issues
+      (click on "new issue").
+
+      We don't send reminders if you continue to update your badge entry,
+      and we only send reminders approximately every 30-60 days.  However,
+      if you want to disable these reminder messages, edit your badge entry at
+      %{project_info_url}
+      to turn on "disable inactivity reminder".
+      We hope you'll instead keep working at it
+      and eventually earn the badge.
+
       Thank you for your time.
     gained_level_part1: |-
       Congratulations!
@@ -2382,11 +2492,11 @@ en:
     Documentation: Documentation
     Dynamic code analysis: Dynamic code analysis
     Externally-maintained components: Externally-maintained components
+    FLOSS license: FLOSS license
     Future: Future
     future: future
     Installation system: Installation system
     New functionality testing: New functionality testing
-    OSS License: OSS License
     Other: Other
     Other security issues: Other security issues
     Previous versions: Previous versions

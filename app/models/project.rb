@@ -6,7 +6,7 @@
 
 # rubocop:disable Metrics/ClassLength
 class Project < ApplicationRecord
-  has_many :additional_rights
+  has_many :additional_rights, dependent: :destroy
   cattr_accessor :skip_callbacks
   # We could add something like this:
   # + has_many :users, through: :additional_rights
@@ -171,8 +171,8 @@ class Project < ApplicationRecord
 
   validates :user_id, presence: true
 
-  Criteria.each do |_level, criteria|
-    criteria.each do |_name, criterion|
+  Criteria.each_value do |criteria|
+    criteria.each_value do |criterion|
       if criterion.na_allowed?
         validates criterion.name.status, inclusion: { in: STATUS_CHOICE_NA }
       else
@@ -221,6 +221,7 @@ class Project < ApplicationRecord
   # which *are* traversed by BadgeApp and thus need to be much more strict.
   #
   def contains_url?(text)
+    return false if !text || text.start_with?('#')
     text =~ %r{https?://[^ ]{5}}
   end
 
@@ -269,7 +270,7 @@ class Project < ApplicationRecord
   # for the first time since we added met_justification_required that
   # criterion
   STATIC_ANALYSIS_JUSTIFICATION_REQUIRED_DATE =
-    DateTime.iso8601('2017-04-25T00:00Z')
+    Time.iso8601('2017-04-25T00:00:00Z')
   def notify_for_static_analysis?(level)
     status = self[Criteria[level][:static_analysis].name.status]
     result = get_criterion_result(Criteria[level][:static_analysis])
@@ -285,7 +286,7 @@ class Project < ApplicationRecord
   # Return true if we should show an explicit license for the data.
   # Old entries did not set a license; we only want to show entry licenses
   # if the updated_at field indicates there was agreement to it.
-  ENTRY_LICENSE_EXPLICIT_DATE = DateTime.iso8601('2017-02-20T12:00Z')
+  ENTRY_LICENSE_EXPLICIT_DATE = Time.iso8601('2017-02-20T12:00:00Z')
   def show_entry_license?
     updated_at >= ENTRY_LICENSE_EXPLICIT_DATE
   end
@@ -302,7 +303,7 @@ class Project < ApplicationRecord
 
   # Update the badge percentages for all levels.
   def update_badge_percentages
-    Criteria.keys.each do |level|
+    Criteria.each_key do |level|
       update_badge_percentage(level)
     end
   end
@@ -483,7 +484,7 @@ class Project < ApplicationRecord
   end
 
   def justification_good?(justification)
-    return false if justification.nil?
+    return false if justification.nil? || justification.start_with?('#')
     justification.length >= MIN_SHOULD_LENGTH
   end
 

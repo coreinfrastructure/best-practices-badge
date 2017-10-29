@@ -25,11 +25,18 @@ via our
 For general discussion, feel free to use the
 [cii-badges mailing list](https://lists.coreinfrastructure.org/mailman/listinfo/cii-badges).
 
-If you want to propose or discuss changes to the criteria,
-the first step is proposing changes to the criteria text,
-which is in the file [criteria.md](doc/criteria.md).
-The "doc/" directory has information you may find helpful,
-including [other.md](doc/other.md) and [background.md](doc/background.md).
+The "doc/" directory has information you may find helpful, for example:
+
+-   [governance.md](doc/governance.md) describes our governance model
+    (how we decide things)
+-   [implementation.md](doc/implementation.md) provies implementation details
+-   [background.md](doc/background.md) provides background info on criteria
+
+You can see the entire set of "passing" criteria in the generated file
+[criteria.md](doc/criteria.md).
+The documentation for higher-level badge criteria is in
+[other.md](doc/other.md).
+If you want *change* the criteria, see below.
 
 The [INSTALL.md](doc/INSTALL.md) file explains how to install the program
 locally (highly recommended if you're going to make code changes).
@@ -40,6 +47,8 @@ If you're new to the project (or FLOSS in general), the
 issues are smaller tasks that may typically take 1-3 days.
 You are welcome aboard!
 The [roadmap.md](doc/roadmap.md) file provides an overview of future plans.
+See [CODE OF CONDUCT](./CODE_OF_CONDUCT.md) for our code of conduct;
+in short, "Be excellent to each other".
 
 ### Pull requests and different branches recommended
 
@@ -56,13 +65,35 @@ and
 
 ### How we handle proposals
 
-We use GitHub to track all changes via its
+We use GitHub to track proposed changes via its
 [issue tracker](https://github.com/coreinfrastructure/best-practices-badge/issues) and
 [pull requests](https://github.com/coreinfrastructure/best-practices-badge/pulls).
 Specific changes are proposed using those mechanisms.
 Issues are assigned to an individual, who works it and then marks it complete.
 If there are questions or objections, the conversation area of that
 issue or pull request is used to resolve it.
+
+### Two-person review
+
+Our policy is that at least 50% of all proposed modifications will be reviewed
+before release by a person other than the author,
+to determine if it is a worthwhile modification and free of known issues
+which would argue against its inclusion
+(per the Gold requirement two_person_review).
+
+We achieve this by splitting proposals into two kinds:
+
+1. Low-risk modifications.  These modifications are being proposed by
+   people authorized to commit directly, pass all tests, and are unlikely
+   to have problems.  These include documentation/text updates
+   (other than changes to the criteria) and/or updates to existing gems
+   (especially minor updates) where no risk (such as a security risk)
+   have been identified.  The project lead can decide that any particular
+   modification is low-risk.
+2. Other modifications.  These other modifications need to be
+   reviewed by someone else or the project lead can decide to accept
+   the modification.  Typically this is done by creating a branch and a
+   pull request so that it can be reviewed before accepting it.
 
 ### Developer Certificate of Origin (DCO)
 
@@ -109,14 +140,6 @@ See the section on reuse for their license requirements
 (they don't need to be MIT, but all required components must be
 open source software).
 
-### No trailing whitespace
-
-Please do not use or include trailing whitespace
-(spaces or tabs at the end of a line).
-Since they are often not visible, they can cause silent problems
-and misleading unexpected changes.
-For example, some editors (e.g., Atom) quietly delete them by default.
-
 ### We are proactive
 
 In general we try to be proactive to detect and eliminate
@@ -131,6 +154,14 @@ Since early detection and impact reduction can never be perfect, we also try to
 detect and repair problems during deployment as quickly as possible.
 This is *especially* true for security issues; see our
 [security information](doc/security.md) for more.
+
+### No trailing whitespace
+
+Please do not use or include trailing whitespace
+(spaces or tabs at the end of a line).
+Since they are often not visible, they can cause silent problems
+and misleading unexpected changes.
+For example, some editors (e.g., Atom) quietly delete them by default.
 
 ## Vulnerability reporting (security issues)
 
@@ -190,6 +221,18 @@ check them that way.
 Do not use trailing two spaces for line breaks, since these cannot be
 seen and may be silently removed by some tools.
 Instead, use <tt>&lt;br&nbsp;/&gt;</tt> (an HTML break).
+
+## Criteria changes
+
+Changing *criteria* can have a much larger impact on participating
+projects than simply changing the supporting software, so we have special
+rules about them. For those rules, see
+[governance.md](doc/governance.md).
+
+For the technical details on how to implement new criteria,
+or modify existing criteria (including their text, details, rationale,
+and scoring criteria), see
+[implementation.md](doc/implementation.md).
 
 ## Code changes
 
@@ -330,19 +373,18 @@ Always put JavaScript (and CSS styles) in *separate* files, do not
 embed JavaScript in the HTML.  That way we can use CSP entries
 that harden the program against security attacks.
 
-If you edit the JavaScript, beware of ready events.
+Historically we used
+[jquery-turbolinks](https://github.com/kossnocorp/jquery.turbolinks)
+to try to make Rails' "turbolinks" mechanism work
+with standard JavaScript ready events.
 Rails' turbolinks gem claims that it
 ["works great with the jQuery framework"](https://github.com/rails/turbolinks),
 but this is misleading.
 [Turbolinks breaks $(document).ready](http://guides.rubyonrails.org/working_with_javascript_in_rails.html#page-change-events)
 (an extremely common construct)
 and by default requires you to use a nonstandard on..."page:change".
-To solve this botch in turbolinks we use
-[jquery-turbolinks](https://github.com/kossnocorp/jquery.turbolinks),
-which makes "ready" work correctly.
-Please do *not* use <tt>$(document).on('ready', function)</tt>,
-because jquery-turbolinks doesn't fix those;
-instead, use <tt>$(document).ready(function)</tt> or <tt>$(function)</tt>.
+These incompatibilities led to unreliability.
+We have abandoned turbolinks, and that made everything reliable.
 
 ### Shell
 
@@ -601,6 +643,27 @@ Here are guidelines for adding Ruby gems:
   some proprietary software is gratefully welcome.
   We also have to combine them legally in the way they are used.
 
+You can review the code of a specific version of a gem.
+You *must* review the code if you have any reason to believe that the
+gem might be malicious.
+That said, you need to be careful.
+If you simply install the gem using bundler, that will
+potentially run code, which is not what you want to do if it includes
+malicious code.
+For more information, see
+["Being paranoid with Ruby gems" (Gemnasium)](https://gemnasium.com/blog/being-paranoid-with-ruby-gems/)
+Instead, create a subdirectory ("mkdir temp"), run "cd temp", and then
+run this (you can omit "-v VERSION" if you're just getting the latest):
+
+~~~~
+gem fetch -v VERSION GEM_NAME
+gem unpack GEMNAME-VERSION
+~~~~
+
+Then "cd GEMNAME-VERSION" to review the code.
+We presume that the Rubygems site will not insert malicious code into what
+it distributes, but clearly individual gem writers can be malicious.
+
 If you add a Ruby gem, put its *fixed* version number in the Gemfile file,
 and please add a brief comment to explain what it is and/or why it's there.
 
@@ -667,6 +730,11 @@ license_finder approval add --who=WHO --why=WHY GEM-NAME
 
 For stability we set fixed version numbers for Ruby and the Ruby gems.
 
+Please update only one or few components in each commit, instead of
+"everything at once".  This makes debugging problems much easier.
+In particular, if we find a problem later, we can
+use "git bisect" to easily and quickly find the cause.
+
 #### Updating Ruby gems
 
 We use the bundler Ruby gem package management system (<http://bundler.io>);
@@ -685,56 +753,83 @@ publicly known vulnerability in the version of a gem we use.
 Obviously, if there is a known vulnerability you *definitely* need
 to update that gem.
 
-To find all outdated gems, use the 'bundle outdated' command.
-Our continuous integration suite (linked to from the README) also uses
+Our continuous integration suite (linked to from the README) uses
 [Gemnasium](https://gemnasium.com/coreinfrastructure/best-practices-badge)
 to identify all outdated dependencies, so you can also view its report
 to see what is outdated.
+This makes it easy to see outdated *direct* dependencies.
+To find all outdated gems, use the 'bundle outdated' command.
 Many of the gems named "action..." are part of rails, and thus, you should
 update rails to update them.
+
+You *must* review gems if you have reason to believe they might be malicious.
+Occasional spotchecks are encouraged.
+For more information, see
+["Being paranoid with Ruby gems" (Gemnasium)](https://gemnasium.com/blog/being-paranoid-with-ruby-gems/)
+You can see the changes by doing the following.
+Create a subdirectory ("mkdir temp"), run "cd temp", and then
+run this (you can omit "-v VERSION" if you're just getting the latest):
+
+~~~~
+gem fetch -v OLD_VERSION GEM_NAME
+gem unpack GEMNAME-OLD_VERSION.gem
+
+gem fetch -v NEW_VERSION GEM_NAME
+gem unpack GEMNAME-NEW_VERSION.gem
+
+diff -ur GEMNAME-OLD_VERSION GEMNAME-NEW_VERSION
+~~~~
 
 I recommend updating in stages (instead of all at once) since this
 makes it easier to debug problems (if any).  Here is a suggested order,
 though these are only suggestions.
+In general, update one or a few related things, use rake to check it,
+and then commit.
 
-First, update gems that are only indirectly depended on.
-(These are gems listed in Gemfile.lock, but *not* listed in Gemfile.)
-If you happen to know that a particular gem is large,
-or has a higher risk of problems, or just want to be more methodical,
-you can update a specific gem using "bundle update GEM".
-(Ignore the gems named as "action...".)
-You can just run "bundle update" to update them all at once.
-Then run "rake" to make sure it works;
-and if it does, use "git commit -a" to commit that change.
-
-Next, edit the file Gemfile to update versions of gems depended on directly.
-It's best to do this one line at a time if you can, though in some
+First, edit the file Gemfile to update a gem that is depended on directly.
+It's best to do this one line at a time if you can (to only update a
+single direct dependency), though in some
 cases it may be necessary to update several at the same time.
 If you see gems with names beginning with "active",
 those are gems in rails; update the Gemfile to change the version of
-the 'rails' gem instead.  Once edited, run:
+the 'rails' gem instead.  Once edited, run this to install the new
+gem version and also update all of its transitive dependencies:
 
 ~~~~
-bundle update && rake
+bundle update GEM_NAME && rake
 ~~~~
 
-If that works commit the change with a git comment with summary form
-'Update gem GEM_NAME'.
+If that works commit the change with a "git comment -as" with summary
+'Update gem GEM_NAME (OLD_VERSION_NUMBER-&gt;NEW_VERSION_NUMBER)'.
 
 Updates sometimes fail.  In particular, sometimes one gem has been
 update but a related gem is temporarily incompatible.
 
-It's important to occasionally try to update.
+You can also update gems that are only indirectly depended on.
+(These are gems listed in Gemfile.lock, but *not* listed in Gemfile.)
+You can just run "bundle update" to update them all at once.
+Then run "rake" to make sure it works;
+and if it does, use "git commit -a" to commit that change.
+When all the main dependencies are up-to-date, it's a good idea to
+do this occasionally.
+
+It's important to try to stay relatively up to date.
 However, it's usually not possible to keep
 everything perfectly up-to-date, because
 different gems' specifications forbid it.
-It's normal to have some gems that are not the latest.
+Also, the Ruby ecosystem is fairly fast-moving,
+so it doesn't take long at all for even a direct dependency to go out of date.
+In short, it's normal to have some gems that are not the latest.
 The key is to replace gem versions that have security vulnerabilities,
-and to not get *too* far behind (if it's too far back it's
-harder to update).
+and to not get *too* far behind, because if it's too far back then it's
+harder to update.
+If you are very far behind, it may be better to update in stages
+(using intermediate versions), but avoid needing to do that.
 
 Historically the gems that cause trouble updating in this app are
 github_api, octokit, and the various "pronto" gems.
+If you update Rubocop you're likely to need to make a number of changes
+(either to code or to disable a new checker).
 
 If an update fails, you can use this to undo it:
 
@@ -765,19 +860,29 @@ You can change the Ruby version yourself, and
 when you use git pull the current version of Ruby in use could change.
 There are extra steps needed when Ruby is updated; here they are.
 
-In particular, if you try to run commands and you see errors like this,
-you need to update your local installation of Ruby:
+In particular, if you try to run commands and you see errors like this:
 
 ~~~~
 rbenv: version \`2.3.9' is not installed (set by .../.ruby-version)
 ~~~~
 
-The current version of Ruby used in the project is stored in
-the file `.ruby-version` in the project's top directory
-(for example, file Gemfile declares that the ruby version
-used is whatever is in ".ruby-version").
-The `.ruby-version` file is controlled by git.
+You *need* to update your local installation of Ruby.
+This typically happens after you've done a `git pull`;
+what has happened is that the Ruby version changed in file `.ruby-version`.
+To fix this, just run this command:
 
+~~~~sh
+./update-ruby
+~~~~
+
+In general, the current version of Ruby used in the project is stored in
+the file `.ruby-version` in the project's top directory.
+For example, file Gemfile declares that the ruby version
+used is whatever is in ".ruby-version".
+This `.ruby-version` file is controlled by git.
+
+It's wise to occasionally check the
+[Ruby site for the latest version of Ruby](https://www.ruby-lang.org/en/downloads/).
 If you want to change the current version of Ruby used in the project,
 use `cd` to go this project's top directory,
 and use 'git pull' to ensure this branch is up-to-date.
@@ -788,16 +893,9 @@ Then run the following command:
 ./update-ruby NEW_VERSION_NUMBER
 ~~~~
 
-Note at the end of this script a `git commit -as` will be initiated,
-but you will need to be sure to run `git push` after doing this.
-
-If you've done a `git pull` and the Ruby version has changed in file
-`.ruby-version` (e.g., you're seeing the rbenv: version... not installed
-error message), you need to run these similar steps:
-
-~~~~sh
-./update-ruby
-~~~~
+Note at the end of this script a `git commit -as` will be initiated
+if everything worked correctly.
+You will need to be sure to run `git push` after doing this.
 
 For more details about updating Ruby versions with rbenv, see
 <https://github.com/rbenv/ruby-build> and
@@ -806,7 +904,7 @@ Note that 'rbenv install 2.3.0' is equivalent to the longer
 <tt>ruby-build 2.3.0 $HOME/.rbenv/versions/2.3.0</tt>.
 
 If you update Ruby but don't update the parser gem
-(e.g., a new version may not be available yet), you'll get a number
+(e.g., a new version may not be available yet), you may get a number
 of warnings from the static analysis tools that we run via rake.
 Where possible, consider updating the parser gem as well.
 These warnings will look like these:

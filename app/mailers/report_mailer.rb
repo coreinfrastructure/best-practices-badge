@@ -129,7 +129,7 @@ class ReportMailer < ApplicationMailer
     projects, month, last_stat_in_prev_month, last_stat_in_prev_prev_month
   )
     @report_destination = ENV['REPORT_MONTHLY_EMAIL']
-    return nil if @report_destination.blank?
+    return if @report_destination.blank?
     @projects = projects
     @month = month
     @last_stat_in_prev_month = last_stat_in_prev_month

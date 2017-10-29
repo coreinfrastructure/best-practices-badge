@@ -1325,6 +1325,7 @@ ja:
       facebook:
       linkedin:
       googleplus:
+      email:
     criteria:
       criteria: 基準
       detailed_criteria_on_github: 詳細の基準はGitHubにあります。

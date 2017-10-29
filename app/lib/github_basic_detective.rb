@@ -13,7 +13,6 @@ require 'json'
 # Be sure to use strings, NOT symbols, as a key when accessing JSON-parsed
 # results (because strings and symbols are distinct in basic Ruby).
 
-# rubocop:disable Metrics/ClassLength
 class GithubBasicDetective < Detective
   # Individual detectives must identify their inputs, outputs
   INPUTS = [:repo_url].freeze
@@ -108,26 +107,19 @@ class GithubBasicDetective < Detective
 
       return results unless basic_repo_data
 
-      if basic_repo_data[:description] &&
-         basic_repo_data[:description].to_s.length < 60
-        # Short description, it's probably really the name.
+      if basic_repo_data[:name]
         results[:name] = {
-          value: basic_repo_data[:description],
+          value: basic_repo_data[:name],
           confidence: 3, explanation: 'GitHub name'
         }
-      else
-        if basic_repo_data[:name]
-          results[:name] = {
-            value: basic_repo_data[:name],
-            confidence: 3, explanation: 'GitHub name'
-          }
-        end
-        if basic_repo_data[:description]
-          results[:description] = {
-            value: basic_repo_data[:description],
-            confidence: 3, explanation: 'GitHub description'
-          }
-        end
+      end
+      if basic_repo_data[:description]
+        results[:description] = {
+          value: basic_repo_data[:description].gsub(
+            /(\A|\s)\:[a-zA-Z]+\:\s/, ' '
+          ).strip,
+          confidence: 3, explanation: 'GitHub description'
+        }
       end
       # rubocop:enable Metrics/BlockLength
 

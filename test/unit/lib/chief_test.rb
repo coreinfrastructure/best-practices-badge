@@ -9,7 +9,8 @@ require 'test_helper'
 class ChiefTest < ActiveSupport::TestCase
   setup do
     @full_name = 'linuxfoundation/cii-best-practices-badge'
-    @human_name = 'Core Infrastructure Initiative Best Practices Badge'
+    @repo_name = 'best-practices-badge'
+    @description = 'Core Infrastructure Initiative Best Practices Badge'
 
     @sample_project = Project.new
     @sample_project[:repo_url] = "https://github.com/#{@full_name}"
@@ -26,7 +27,8 @@ class ChiefTest < ActiveSupport::TestCase
     # skip 'Temporarily skip while debugging website problem.'
     mit_ok = 'The MIT license is approved by the Open Source Initiative (OSI).'
     assert_equal 'MIT', results[:license]
-    assert_equal @human_name, results[:name]
+    assert_equal @repo_name, results[:name]
+    assert_equal @description, results[:description]
     assert_equal 'Met', results[:floss_license_status]
     assert_equal mit_ok, results[:floss_license_justification]
     assert_equal 'Met', results[:floss_license_osi_status]

@@ -75,7 +75,7 @@ class UsersManipulateProjectTest < ActionDispatch::IntegrationTest
       # Note: You can use byebug... css_select to interactively check things.
       assert_select(
         +'#project_name[value=?]',
-        'Core Infrastructure Initiative Best Practices Badge'
+        'best-practices-badge'
       )
       assert_select '#project_discussion_status_met[checked]'
       assert_select '#project_contribution_status_met[checked]'

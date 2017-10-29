@@ -66,7 +66,9 @@ en:
     email: Email
     password: Password
     forgot_password: Forgot your password?
-    remember_me: Remember me
+    remember_me: Keep me logged in (using a permanent cookie)
+    cookie_details_html: >
+      <a href="/cookies" target="_blank"><i>Learn more about cookies.</i></a>
     login_custom: Log in using custom account
     no_custom: No custom account? Sign up now!
     already_logged_in: You are already logged in.
@@ -129,6 +131,55 @@ en:
       facebook: Facebook
       linkedin: LinkedIn
       googleplus: Google+
+    cookies:
+      cookies_header: About Cookies
+      cookies_info_html: >
+        <p>
+        To make this site work properly, we sometimes place small data files
+        called cookies on your device. Many websites do this.
+        </p>
+        <p>
+        A cookie is a small text file that a website saves on your
+        computer (including your mobile device) when you visit the site.
+        It enables the website to remember your actions and preferences
+        (such as login, language, font size and other display preferences)
+        over a period of time, so you don’t have to keep re-entering
+        them whenever you come back to the site or browse from one page
+        to another.
+        Cookies are a standard part of the HTTP protocol that implements
+        the World Wide Web (WWW), and are specified in
+        <a href="https://tools.ietf.org/html/rfc6265">RFC 6265</a>.
+        </p>
+        <p>
+        We use first-party "session" cookies whenever you log in.
+        By definition, session cookies are designed to expire
+        when you exit your browser or log off.
+        If you enable "Keep me logged in" (aka "Remember me"),
+        we also store information in a first-party "permanent" cookie on your
+        browser so that we can automatically log you back in when you
+        visit our site even after you exit your browser.
+        If you choose to use other sites (such as GitHub) for
+        authentication to this site, then that other site will probably
+        use cookies (and thus what they do with cookies will also apply).
+        Please note that we can't control what other sites do.
+        </p>
+        <p>
+        The cookies we set are only used to support capabilities
+        related to this site. Consent can be withdrawn - just
+        delete the cookies on your browser. You can control
+        and/or delete cookies as you wish.  For details, see <a
+        href="https://www.aboutcookies.org">cookies.org</a>.  You can
+        delete all cookies that are already on your computer and you can
+        set most browsers to prevent them from being placed. If you do
+        this, however, you may have to manually adjust some preferences
+        every time you visit a site and some services and functionalities
+        may not work.
+        In particular, logging into this site depends on session cookies
+        (on this and many other sites).
+        </p>
+        <p>
+        This text is intended to comply with UK and EU "Cookie laws".
+        </p>
     criteria:
       criteria: Criteria
       detailed_criteria_on_github: The detailed criteria are on

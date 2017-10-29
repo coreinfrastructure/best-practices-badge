@@ -13,6 +13,13 @@ class StaticPagesControllerTest < ActionController::TestCase
     assert_template 'home'
   end
 
+  test 'should get cookie page' do
+    get :cookies
+    assert_response :success
+    assert_includes @response.body, 'About Cookies'
+    assert_includes @response.body, 'small data files'
+  end
+
   test 'should get robots.txt' do
     get :robots, format: :text
     assert_response :success

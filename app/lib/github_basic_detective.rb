@@ -116,7 +116,7 @@ class GithubBasicDetective < Detective
       if basic_repo_data[:description]
         results[:description] = {
           value: basic_repo_data[:description].gsub(
-            /(\A|\s)\:[a-zA-Z]+\:\s/, ' '
+            /(\A|\s)\:[a-zA-Z]+\:(\s|\Z)/, ' '
           ).strip,
           confidence: 3, explanation: 'GitHub description'
         }

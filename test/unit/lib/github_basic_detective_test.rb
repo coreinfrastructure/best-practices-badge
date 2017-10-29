@@ -8,14 +8,14 @@ require 'test_helper'
 
 class GithubBasicDetectiveTest < ActiveSupport::TestCase
   setup do
-    @full_name = 'linuxfoundation/cii-best-practices-badge'
-    @repo_name = 'best-practices-badge'
-    @description = 'Core Infrastructure Initiative Best Practices Badge'
+    @full_name = 'ciitest/test-repo'
+    @repo_name = 'test-repo'
+    @description = 'This is for testing the CII Best Practices BadgeApp'
     @evidence = Evidence.new({})
     @repo_url = "https://github.com/#{@full_name}"
   end
 
-  test 'Mocked GitHub retrieves our name, description, and license' do
+  test 'Mocked GitHub retrieves name, description (no emojis), and license' do
     VCR.use_cassette('unit_test_github_basic_detective') do
       results = GithubBasicDetective.new.analyze(@evidence, repo_url: @repo_url)
 

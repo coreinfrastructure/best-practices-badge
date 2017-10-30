@@ -292,6 +292,317 @@ nav {
   background-size: contain;
 }
 
+#user-badge1  {
+    background: image-url('UserLogos/linux.png') no-repeat top left;
+  display:block;
+  width: 100px;
+  height: 100px;
+  background-size: contain;
+  text-indent:-9999px;
+}
+
+
+// .user-badge1  {
+//   margin-top: 1em;
+//   background: image-url('UserLogos/linux.png') no-repeat top left;
+//   width: 100px;
+//   height: 100px;
+//   background-size: contain;
+// }
+#user-badge2  {
+    background: image-url('UserLogos/GitLab.png') no-repeat top left;
+  display:block;
+  width: 100px;
+  height: 100px;
+  background-size: contain;
+  text-indent:-9999px;
+}
+
+// .user-badge2  {
+//   margin-top: 1em;
+//   background: image-url('UserLogos/GitLab.png') no-repeat top left;
+//   width: 100px;
+//   height: 100px;
+//   background-size: contain;
+// }
+#user-badge3  {
+    background: image-url('UserLogos/Hyperledger.png') no-repeat top left;
+  display:block;
+  width: 100px;
+  height: 100px;
+  background-size: contain;
+  text-indent:-9999px;
+}
+#user-badge4  {
+    background: image-url('UserLogos/nodejs.png') no-repeat top left;
+  display:block;
+  width: 100px;
+  height: 100px;
+  background-size: contain;
+  text-indent:-9999px;
+}
+#user-badge5  {
+    background: image-url('UserLogos/libreOffice.png') no-repeat top left;
+  display:block;
+  width: 100px;
+  height: 100px;
+  background-size: contain;
+  text-indent:-9999px;
+}
+#user-badge6  {
+    background: image-url('UserLogos/curl.png') no-repeat top left;
+  display:block;
+  width: 100px;
+  height: 100px;
+  background-size: contain;
+  text-indent:-9999px;
+}
+#user-badge7  {
+    background: image-url('UserLogos/Kubernetes.png') no-repeat top left;
+  display:block;
+  width: 100px;
+  height: 100px;
+  background-size: contain;
+  text-indent:-9999px;
+}#user-badge8  {
+    background: image-url('UserLogos/Prometheus.png') no-repeat top left;
+  display:block;
+  width: 100px;
+  height: 100px;
+  background-size: contain;
+  text-indent:-9999px;
+}#user-badge9  {
+    background: image-url('UserLogos/pkgsrc.png') no-repeat top left;
+  display:block;
+  width: 100px;
+  height: 100px;
+  background-size: contain;
+  text-indent:-9999px;
+}#user-badge10  {
+    background: image-url('UserLogos/XenProject.png') no-repeat top left;
+  display:block;
+  width: 100px;
+  height: 100px;
+  background-size: contain;
+  text-indent:-9999px;
+}
+
+
+
+
+#user-badge11  {
+    background: image-url('UserLogos/Openstack.png') no-repeat top left;
+  display:block;
+  width: 100px;
+  height: 100px;
+  background-size: contain;
+  text-indent:-9999px;
+}
+
+#user-badge12  {
+    background: image-url('UserLogos/NVM.png') no-repeat top left;
+  display:block;
+  width: 100px;
+  height: 100px;
+  background-size: contain;
+  text-indent:-9999px;
+}
+#user-badge13  {
+    background: image-url('UserLogos/zephyr.png') no-repeat top left;
+  display:block;
+  width: 100px;
+  height: 100px;
+  background-size: contain;
+  text-indent:-9999px;
+}
+#user-badge14  {
+    background: image-url('UserLogos/Syncope.png') no-repeat top left;
+  display:block;
+  width: 100px;
+  height: 100px;
+  background-size: contain;
+  text-indent:-9999px;
+}
+#user-badge15  {
+    background: image-url('UserLogos/libcloud.png') no-repeat top left;
+  display:block;
+  width: 100px;
+  height: 100px;
+  background-size: contain;
+  text-indent:-9999px;
+}
+#user-badge16  {
+    background: image-url('UserLogos/OpenSSL.png') no-repeat top left;
+  display:block;
+  width: 100px;
+  height: 100px;
+  background-size: contain;
+  text-indent:-9999px;
+}
+#user-badge17  {
+    background: image-url('UserLogos/BRLCAD.png') no-repeat top left;
+  display:block;
+  width: 100px;
+  height: 100px;
+  background-size: contain;
+  text-indent:-9999px;
+}#user-badge18  {
+    background: image-url('UserLogos/nextcloud.png') no-repeat top left;
+  display:block;
+  width: 100px;
+  height: 100px;
+  background-size: contain;
+  text-indent:-9999px;
+}#user-badge19  {
+    background: image-url('UserLogos/GnuPG.png') no-repeat top left;
+  display:block;
+  width: 100px;
+  height: 100px;
+  background-size: contain;
+  text-indent:-9999px;
+}#user-badge20  {
+    background: image-url('UserLogos/OPNFV.png') no-repeat top left;
+  display:block;
+  width: 100px;
+  height: 100px;
+  background-size: contain;
+  text-indent:-9999px;
+}
+
+#LogosHeader {
+  text-align: center;
+  text-indent: 10%;
+}
+
+// .user-badge3  {
+//   margin-top: 1em;
+//   background: image-url('UserLogos/Hyperledger.png') no-repeat top left;
+//   width: 100px;
+//   height: 100px;
+//   background-size: contain;
+// }
+.user-badge4  {
+  margin-top: 1em;
+  background: image-url('UserLogos/nodejs.png') no-repeat top left;
+  width: 100px;
+  height: 100px;
+  background-size: contain;
+}
+.user-badge5  {
+  margin-top: 1em;
+  background: image-url('UserLogos/libreOffice.png') no-repeat top left;
+  width: 100px;
+  height: 100px;
+  background-size: contain;
+}
+.user-badge6  {
+  margin-top: 1em;
+  background: image-url('UserLogos/curl.png') no-repeat top left;
+  width: 100px;
+  height: 100px;
+  background-size: contain;
+}
+.user-badge7  {
+  margin-top: 1em;
+  background: image-url('UserLogos/Kubernetes.png') no-repeat top left;
+  width: 100px;
+  height: 100px;
+  background-size: contain;
+}
+.user-badge8  {
+  margin-top: 1em;
+  background: image-url('UserLogos/Prometheus.png') no-repeat top left;
+  width: 100px;
+  height: 100px;
+  background-size: contain;
+}
+.user-badge9  {
+  margin-top: 1em;
+  background: image-url('UserLogos/pkgsrc.png') no-repeat top left;
+  width: 100px;
+  height: 100px;
+  background-size: contain;
+}
+.user-badge10  {
+  margin-top: 1em;
+  background: image-url('UserLogos/XenProject.png') no-repeat top left;
+  width: 100px;
+  height: 100px;
+  background-size: contain;
+}
+
+.user-badge11  {
+  margin-top: 1em;
+  background: image-url('UserLogos/Openstack.png') no-repeat top left;
+  width: 100px;
+  height: 100px;
+  background-size: contain;
+}
+
+.user-badge12  {
+  margin-top: 1em;
+  background: image-url('UserLogos/NVM.png') no-repeat top left;
+  width: 100px;
+  height: 100px;
+  background-size: contain;
+}
+.user-badge13  {
+  margin-top: 1em;
+  background: image-url('UserLogos/zephyr.png') no-repeat top left;
+  width: 100px;
+  height: 100px;
+  background-size: contain;
+}
+.user-badge14  {
+  margin-top: 1em;
+  background: image-url('UserLogos/Syncope.png') no-repeat top left;
+  width: 100px;
+  height: 100px;
+  background-size: contain;
+}
+.user-badge15  {
+  margin-top: 1em;
+  background: image-url('UserLogos/libcloud.png') no-repeat top left;
+  width: 100px;
+  height: 100px;
+  background-size: contain;
+}
+.user-badge16  {
+  margin-top: 1em;
+  background: image-url('UserLogos/OpenSSL.png') no-repeat top left;
+  width: 100px;
+  height: 100px;
+  background-size: contain;
+}
+.user-badge17  {
+  margin-top: 1em;
+  background: image-url('UserLogos/BRLCAD.png') no-repeat top left;
+  width: 100px;
+  height: 100px;
+  background-size: contain;
+}
+.user-badge18  {
+  margin-top: 1em;
+  background: image-url('UserLogos/nextcloud.png') no-repeat top left;
+  width: 100px;
+  height: 100px;
+  background-size: contain;
+}
+.user-badge19  {
+  margin-top: 1em;
+  background: image-url('UserLogos/GnuPG.png') no-repeat top left;
+  width: 100px;
+  height: 100px;
+  background-size: contain;
+}
+.user-badge20  {
+  margin-top: 1em;
+  background: image-url('UserLogos/OPNFV.png') no-repeat top left;
+  width: 100px;
+  height: 100px;
+  background-size: contain;
+}
+
 .btn-main-getbadge {
   border-radius: 50px;
   padding: .5em;
@@ -480,6 +791,8 @@ input[type="text"].form-control, .inputbox-look, textarea.form-control  {
         float:none;
     }
 }
+
+
 /* bootstrap utilities */
  .m-t-0 {
    margin-top: 0 !important;

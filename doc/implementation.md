@@ -392,6 +392,38 @@ by an instrument or from a survey."
 These aren't requirements for using this data, but they are well
 worth considering.
 
+## Adding a logo on the home page
+
+It's not hard to add a logo to the home page.
+Put the image in "app/assets/images/project-logos-originals",
+copy it to "app/assets/images/project-logos" and rescale to 48 pixels high,
+and modify the home page text "app/views/static_pages/home.html.erb".
+
+Here's an example of how we got the OWASP ZAP logo into the originals
+directory:
+
+~~~sh
+    cd app/assets/images/project-logos-originals
+    wget https://www.owasp.org/images/1/11/Zap128x128.png
+    mv Zap128x128.png ZAP.png
+    git add ZAP.png
+    cp ZAP.png ../project-logos
+~~~
+
+Here's how we resized it to the standard height:
+
+~~~sh
+    cd ../project-logos
+    mogrify -geometry x48 ZAP.png # Rescale to 48 pixel height
+    optipng ZAP.png # Minimize number of bytes in file
+    git add ZAP.png
+    identify ZAP.png # Report width x height
+~~~
+
+Modify the home page text "app/views/static_pages/home.html.erb".
+Be sure to specify both the width and height (as reported by identify),
+otherwise the browser will delay page display until the image loads.
+
 ## Changing criteria
 
 Remember: Changing criteria is special, see

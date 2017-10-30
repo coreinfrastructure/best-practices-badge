@@ -28,9 +28,10 @@
       </div>
     </div>
     <%
-       projects_dir = '/projects'
        if (I18n.locale && I18n.locale != :en)
-         projects_dir = projects_dir + '/' + I18n.locale.to_s
+         projects_dir = '/' + I18n.locale.to_s + '/projects'
+       else
+         projects_dir = '/projects'
        end
     %>
     <div class="row">

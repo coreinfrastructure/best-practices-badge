@@ -634,6 +634,11 @@
             Static source code analysis and dynamic analysis tend
             to find different kinds of defects (including defects that lead to
             vulnerabilities), so combining them is more likely to be effective.
+            For example,
+            <a href="https://www.mail-archive.com/linux-kernel@vger.kernel.org/msg1513352.html">Linus Torvalds' "Linux 4.14-rc5" announcement
+            (October 15, 2017)</a>
+            notes that "(people are doing) random fuzzing...
+            and it's finding things...  Very nice to see."
           autofill: >
             Look in documentation for references to such tools.
       - dynamic_analysis_unsafe:

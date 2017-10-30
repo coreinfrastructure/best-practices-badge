@@ -79,6 +79,7 @@ ja:
     signed_in: サインインしました！
     not_activated: アカウントが有効化されていません。電子メールでお伝えしたアクティベーション リンクを確認してください。
     signed_out: サインアウトしました！
+    cookie_details_html:
   users:
     new:
       signup_header: サインアップ
@@ -106,6 +107,9 @@ ja:
       send_email_to: 電子メールを送ります：
       delete_link_name: 削除
       confirm_delete: このユーザーを削除してもよろしいですか？
+      projects_owned:
+      projects_additional_rights:
+      is_admin:
     destroy:
       cannot_delete_self: 自分を削除することはできません。
       user_deleted: ユーザーが削除されました。
@@ -809,6 +813,7 @@ ja:
       static_analysis_common_vulnerabilities:
         description: >-
           static_analysis基準に使用される静的解析ツールの少なくとも1つが、分析された言語または環境における共通の脆弱性を探すためのルールまたはアプローチを含むことが、推奨されています。
+        details:
       static_analysis_fixed:
         description: >-
           静的コード解析で発見された中程度および重大度の悪用可能な脆弱性はすべて、それらが確認された後、適時に修正されなくてはなりません。
@@ -1313,6 +1318,14 @@ ja:
         のもとでリリースされています。また、より新しい非コード コンテンツは、CC-BY version 3.0 以降
         (CC-BY-3.0+) のもとでリリースされています。詳細や不足事項については、CII ベスト プラクティス
         バッジのコントリビューターまでご連絡ください。
+      check_us_out:
+      share_header_html:
+      twitter:
+      reddit:
+      facebook:
+      linkedin:
+      googleplus:
+      email:
     criteria:
       criteria: 基準
       detailed_criteria_on_github: 詳細の基準はGitHubにあります。
@@ -1339,6 +1352,9 @@ ja:
       new_this_level: このレベルで新規
       met_justification_required: 満足している正当な理由が必要
       met_justification_or_url_required: 満足している正当な理由またはURLが必要
+    cookies:
+      cookies_header:
+      cookies_info_html:
   headings:
     Accessibility and internationalization: アクセシビリティと国際化
     Analysis: 分析

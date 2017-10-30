@@ -55,6 +55,7 @@ zh-CN:
     signed_in: 已登录！
     not_activated: 帐户未激活。检查您的电子邮件中的激活链接。
     signed_out: 已退出！
+    cookie_details_html:
   users:
     new:
       signup_header: 注册
@@ -75,6 +76,9 @@ zh-CN:
       delete_link_name: 删除
       confirm_delete: 您确定要删除此用户吗？
       edit_user: 编辑用户
+      projects_owned: 拥有的项目：
+      projects_additional_rights: 具有额外权力的项目：
+      is_admin: 该用户是徽章应用管理员。
     update:
       profile_updated: 资料已更新
     destroy:
@@ -446,8 +450,77 @@ zh-CN:
       很抱歉，您的项目不再具有“%{old_level}”徽章
       现在是“%{new_level}”。
       有关详细信息，请参阅以下URL：
-    reminder_body_html:
-    reminder_body_text:
+    reminder_body_html: |-
+      <h1>%{project_name} 最佳实践徽章自动邮件提醒</h1>
+      <p>
+      这是一个自动提醒，您的项目
+      "%{project_name}"
+      当前并没有“最佳实践”徽章，
+      并且徽章记录有一段时间未更新。
+      </p>
+      <p>
+      您的徽章记录在
+      <a href="%{project_info_url}">%{project_info_url}</a>
+      最后更新于 %{project_updated_at}。
+      当前完成度 %{project_badge_percentage_0}% (总计 100%)。
+      </p>
+      <p>
+      我们鼓励持续性的进展。
+      请访问您的徽章记录：
+      <a href="%{project_info_url}">%{project_info_url}</a>
+      以补充信息并获得徽章！
+      </p>
+      <p>
+      如果您想<em>仅查阅</em>当前不满足的情况，可访问您的徽章记录，
+      选择靠近上方的“展开所有面板”，并
+      选择“隐藏满足和N/A条款”。
+      如果您有疑问，或者需要帮助，请联系
+      <a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;</a>
+      或者在该链接创建问题：
+      <a href="https://github.com/coreinfrastructure/best-practices-badge/issues">https://github.com/coreinfrastructure/best-practices-badge/issues</a>
+      (点击 "new issue")。
+      </p>
+      <p>
+      如果您持续的更新徽章记录，我们将不会发送提醒邮件，
+      并且我们估计30~60天才会发送一次。当然，
+      如果您想完全禁用提醒邮件，请访问您的徽章记录：
+      <a href="%{project_info_url}">%{project_info_url}</a>
+      并且启用“禁用不活动提醒”。
+      我们希望您继续努力
+      并最终获得徽章。
+      </p>
+      <p>
+      感谢您的时间。
+      </p>
+    reminder_body_text: |-
+      这是一个自动提醒，您的项目
+      "%{project_name}"
+      当前并没有“最佳实践”徽章，
+      并且徽章记录有一段时间未更新。
+      您的徽章记录在
+      %{project_info_url}
+      最后更新于 %{project_updated_at}
+      当前完成度 %{project_badge_percentage_0}% (总计 100%).
+      我们鼓励持续性的进展。
+      请访问您的徽章记录：
+      %{project_info_url}
+      以补充信息并获得徽章！
+      如果您想仅查阅当前不满足的情况，可访问您的徽章记录，
+      选择靠近上方的“展开所有面板”，并
+      选择“隐藏满足和N/A条款”。
+      如果您有疑问，或者需要帮助，请联系
+      cii-badges-questions-owner@lists.coreinfrastructure.org
+      或者在该链接创建问题：
+      https://github.com/coreinfrastructure/best-practices-badge/issues
+      (点击 "new issue").
+      如果您持续的更新徽章记录，我们将不会发送提醒邮件，
+      并且我们估计30~60天才会发送一次。当然，
+      如果您想完全禁用提醒邮件，请访问您的徽章记录：
+      %{project_info_url}
+      并且启用“禁用不活动提醒”。
+      我们希望您继续努力
+      并最终获得徽章。
+      感谢您的时间。
   project_name_unknown: "(未知名称)"
   locale_name:
     en: 英文 / English (en）
@@ -733,6 +806,7 @@ zh-CN:
         met_placeholder: 使用什么静态分析工具？
       static_analysis_common_vulnerabilities:
         description: 建议至少有一个用于static_analysis标准的静态分析工具包括在分析语言或环境中查找常见漏洞的规则或方法。
+        details:
       static_analysis_fixed:
         description: 使用静态代码分析发现的所有中，高严重性可利用漏洞必须在确认后及时修复。
         details: >-
@@ -1173,6 +1247,14 @@ zh-CN:
         使用CC-BY 版本 3.0 或者更高 (CC-BY-3.0+)。
         如果集体引用，或不另外注明，
         请标明出处为CII最佳实践徽章贡献者。
+      check_us_out:
+      share_header_html:
+      twitter:
+      reddit:
+      facebook:
+      linkedin:
+      googleplus:
+      email:
     criteria:
       criteria: 条款
       detailed_criteria_on_github: 详细的条款在GitHub网站。
@@ -1193,8 +1275,11 @@ zh-CN:
       details: 包括细节
       future: 未来
       new_this_level: 在这个级别的新的
-      met_justification_required:
-      met_justification_or_url_required:
+      met_justification_required: 需要满足理由
+      met_justification_or_url_required: 满足理由或需要URL
+    cookies:
+      cookies_header:
+      cookies_info_html:
   headings:
     Accessibility and internationalization: 无障碍和国际化
     Analysis: 分析

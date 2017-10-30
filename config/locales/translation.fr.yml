@@ -63,6 +63,7 @@ fr:
     not_activated: >-
       Compte non activé. Vérifiez votre email pour le lien d'activation.
     signed_out: Déconnecté !
+    cookie_details_html:
   users:
     new:
       signup_header: S'inscrire
@@ -91,6 +92,12 @@ fr:
       confirm_delete: Êtes-vous sûr(e) de vouloir supprimer cet
         utilisateur ?
       edit_user: Modifier l'utilisateur
+      projects_owned: 'Projets possédés :'
+      projects_additional_rights: 'Projets avec des droits supplémentaires
+        :'
+      is_admin: >-
+        Cet utilisateur est un administrateur de l'application
+        de badge.
     update:
       profile_updated: Profil mis à jour
     destroy:
@@ -1567,6 +1574,7 @@ fr:
           inclue des règles ou des approches pour rechercher des
           vulnérabilités courantes dans le langage ou l'environnement
           analysé.
+        details:
       static_analysis_fixed:
         description: >-
           Toutes les vulnérabilités exploitables de gravité moyenne
@@ -2760,6 +2768,14 @@ fr:
         contenus, ou en l'absence d'instructions spécifiques,
         veuillez mentionner comme source les contributeurs du
         programme de badge des meilleures pratiques de la CII.
+      check_us_out:
+      share_header_html:
+      twitter:
+      reddit:
+      facebook:
+      linkedin:
+      googleplus:
+      email:
     criteria:
       criteria: Critères
       detailed_criteria_on_github: Les critères détaillés sont
@@ -2795,6 +2811,9 @@ fr:
       met_justification_required: Justification requise
       met_justification_or_url_required: Justification ou URL
         requise
+    cookies:
+      cookies_header:
+      cookies_info_html:
   headings:
     Accessibility and internationalization: Accessibilité et internationalisation
     Analysis: Analyse

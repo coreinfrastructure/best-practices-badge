@@ -32,7 +32,8 @@
       <%= f.label :remember_me, t('sessions.remember_me'),
                   class: "checkbox inline" do %>
         <%= f.check_box :remember_me %>
-        <span><%= t('sessions.remember_me') %></span>
+        <span><%= t('sessions.remember_me') %>
+              <%= t('sessions.cookie_details_html') %></span>
       <% end %>
 
       <%= f.hidden_field :provider, value: "local" %>

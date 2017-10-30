@@ -76,6 +76,7 @@ de:
       Das Konto ist noch nicht aktiviert. Überprüfe dein E-Mail
       Postfach und klicke auf den Bestätigungs-Link.
     signed_out: Abgemeldet!
+    cookie_details_html:
   users:
     new:
       signup_header: Anmelden
@@ -103,6 +104,9 @@ de:
       delete_link_name: löschen
       confirm_delete: Bist du dir sicher ob du diesen Benutzer
         löschen möchtest?
+      projects_owned:
+      projects_additional_rights:
+      is_admin:
     destroy:
       cannot_delete_self: Kann nicht selbst löschen.
       user_deleted: Benutzer gelöscht.
@@ -1014,6 +1018,7 @@ de:
           verwendet?
       static_analysis_common_vulnerabilities:
         description:
+        details:
       static_analysis_fixed:
         description:
         details:
@@ -1507,6 +1512,14 @@ de:
         Version 3.0 oder später (CC-BY-3.0+) lizensiert. Bitte
         die CII Best Practices Badge Mitwirkenden als Urheber
         angeben.
+      check_us_out:
+      share_header_html:
+      twitter:
+      reddit:
+      facebook:
+      linkedin:
+      googleplus:
+      email:
     criteria:
       criteria: Kriterien
       detailed_criteria_on_github: Die detaillierten Kriterien
@@ -1535,6 +1548,9 @@ de:
       new_this_level:
       met_justification_required:
       met_justification_or_url_required:
+    cookies:
+      cookies_header:
+      cookies_info_html:
   headings:
     Accessibility and internationalization: Zugänglichkeit und
       Internationalisierung

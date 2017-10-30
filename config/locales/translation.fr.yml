@@ -63,7 +63,9 @@ fr:
     not_activated: >-
       Compte non activé. Vérifiez votre email pour le lien d'activation.
     signed_out: Déconnecté !
-    cookie_details_html:
+    cookie_details_html: >-
+      <a href="/cookies" target="_blank"><i>En savoir plus sur
+      les cookies.</i></a>
   users:
     new:
       signup_header: S'inscrire
@@ -1574,7 +1576,13 @@ fr:
           inclue des règles ou des approches pour rechercher des
           vulnérabilités courantes dans le langage ou l'environnement
           analysé.
-        details:
+        details: >-
+          Les outils d'analyse statique spécialement conçus pour
+          détecter les vulnérabilités les plus courantes sont
+          plus susceptibles de les détecter. Cela dit, l'utilisation
+          d'outils statiques aidera généralement à trouver des
+          problèmes, nous suggérons donc, sans l'exiger, de le
+          faire pour le badge de niveau « passant ».
       static_analysis_fixed:
         description: >-
           Toutes les vulnérabilités exploitables de gravité moyenne
@@ -2768,14 +2776,17 @@ fr:
         contenus, ou en l'absence d'instructions spécifiques,
         veuillez mentionner comme source les contributeurs du
         programme de badge des meilleures pratiques de la CII.
-      check_us_out:
-      share_header_html:
-      twitter:
-      reddit:
-      facebook:
-      linkedin:
-      googleplus:
-      email:
+      check_us_out: >-
+        Consultez le site Web du badge des meilleures pratiques
+        de la CII !
+      share_header_html: "<p> Merci de partager ceci : </p>"
+      twitter: Twitter
+      reddit: Reddit
+      facebook: Facebook
+      linkedin: LinkedIn
+      googleplus: Google+
+      email: Email
+      projects_earned_badge:
     criteria:
       criteria: Critères
       detailed_criteria_on_github: Les critères détaillés sont
@@ -2812,8 +2823,54 @@ fr:
       met_justification_or_url_required: Justification ou URL
         requise
     cookies:
-      cookies_header:
-      cookies_info_html:
+      cookies_header: À propos des cookies
+      cookies_info_html: >-
+        <p>Pour que ce site fonctionne correctement, nous plaçons
+        parfois de petits fichiers de données appelés cookies
+        sur votre appareil. De nombreux sites font cela. </p>
+        <p>Un cookie est un petit fichier texte qu'un site Web
+        enregistre sur votre ordinateur (y compris votre appareil
+        mobile) lorsque vous visitez le site. Il permet au site
+        Web de se souvenir de vos actions et de vos préférences
+        (telles que l'identifiant de connexion, la langue, la
+        taille de la police et d'autres préférences d'affichage)
+        sur une période donnée. Vous n'avez donc pas à les saisir
+        à chaque fois que vous revenez sur le site ou que vous
+        naviguez d'une page à l'autre. Les cookies sont une partie
+        standard du protocole HTTP qui implémente le World Wide
+        Web (WWW) et sont spécifiés dans <a href="https://tools.ietf.org/html/rfc6265">RFC
+        6265</a>. </p> <p> Nous utilisons des cookies de « session
+        » propriétaires lorsque vous vous connectez. Par définition,
+        les cookies de session sont conçus pour expirer lorsque
+        vous quittez votre navigateur ou que vous vous déconnectez.
+        Si vous activez « Rester connecté » (alias « Se souvenir
+        de moi »), nous stockons également les informations dans
+        un cookie « permanent » de votre navigateur afin que nous
+        puissions vous reconnecter automatiquement lorsque vous
+        visitez notre site, même après que vous ayez quitter votre
+        navigateur. Si vous choisissez d'utiliser d'autres sites
+        (tels que GitHub) pour l'authentification sur ce site,
+        alors cet autre site utilisera probablement des cookies
+        (et donc ce qu'ils font avec les cookies s'appliquera
+        également). Veuillez noter que nous ne pouvons pas contrôler
+        ce que font les autres sites. </p> <p> Les cookies que
+        nous définissons ne sont utilisés que pour prendre en
+        charge les fonctionnalités liées à ce site. Le consentement
+        peut être retiré - il suffit de supprimer les cookies
+        sur votre navigateur. Vous pouvez contrôler et/ou supprimer
+        les cookies comme vous le souhaitez. Pour plus de détails,
+        voir <a href="https://www.aboutcookies.org">cookies.org</a>.
+        Vous pouvez supprimer tous les cookies qui sont déjà sur
+        votre ordinateur et vous pouvez configurer la plupart
+        des navigateurs pour les empêcher d'être placés. Si vous
+        faites cela, cependant, vous devrez peut-être ajuster
+        manuellement certaines préférences chaque fois que vous
+        visitez un site et certains services et fonctionnalités
+        peuvent ne pas fonctionner. En particulier, la connexion
+        à ce site dépend des cookies de session (sur ce site et
+        sur beaucoup d'autres sites). </p> <p> Ce texte est destiné
+        à être conforme aux « lois sur les cookies » du Royaume-Uni
+        et de l'UE. </p>
   headings:
     Accessibility and internationalization: Accessibilité et internationalisation
     Analysis: Analyse

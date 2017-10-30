@@ -73,20 +73,8 @@
 
 
     </div>
-    <%
-       projects_dir = '/projects'
-       if (I18n.locale && I18n.locale != :en)
-         projects_dir = projects_dir + '/' + I18n.locale.to_s
-       end
-    %>
     <div class="col-md-4 col-sm-5">
-      <!-- <div class="home-badge pull-right"></div> -->
       <div class="home-badge center-block"></div>
-      <!-- <div class="user-badge1 center-block"><a href="/projects/29">
-        <span class="link-spanner"></span>
-    </a></div> --></p>
-</p>
-</p>
     <div class="row">
       <div class="col-sm-12">
         <br><br>
@@ -94,9 +82,13 @@
           t('static_pages.home.projects_earned_badge') %></p>
       </div>
     </div>
-        <div class="row">
-      <!-- <div class="col-sm-1"></div> -->
-      <!-- <div class="col-xs-12 col-sm-4"> -->
+    <%
+       projects_dir = '/projects'
+       if (I18n.locale && I18n.locale != :en)
+         projects_dir = projects_dir + '/' + I18n.locale.to_s
+       end
+    %>
+    <div class="row">
       <div class="col-xs-12">
       <a href="<%= projects_dir %>/34" class="earner-logo">
         <%= image_tag 'project-logos/linux.png', width: 37, height: 48,
@@ -119,8 +111,6 @@
       <a href="<%= projects_dir %>/569" class="earner-logo">
         <%= image_tag 'project-logos/Kubernetes.png', width: 41, height: 48,
                       alt: 'Kubernetes', title: 'Kubernetes' %></a>
-      <!-- </div>
-      <div class="col-xs-12 col-sm-4"> -->
       <a href="<%= projects_dir %>/i486" class="earner-logo">
         <%= image_tag 'project-logos/Prometheus.png', width: 41, height: 48,
                       alt: 'Prometheus', title: 'Prometheus' %></a>
@@ -143,8 +133,6 @@
       <a href="<%= projects_dir %>/154" class="earner-logo">
         <%= image_tag 'project-logos/Syncope.png', width: 139, height: 48,
                       alt: 'Syncope', title: 'Syncope' %></a>
-    <!-- </div>
-    <div class="col-xs-12 col-sm-4"> -->
       <a href="<%= projects_dir %>/152" class="earner-logo">
         <%= image_tag 'project-logos/Libcloud.png', width: 44, height: 48,
                       alt: 'Apache Libcloud', title: 'Apache Libcloud' %></a>
@@ -163,8 +151,7 @@
       <a href="<%= projects_dir %>/164" class="earner-logo">
         <%= image_tag 'project-logos/OPNFV.png', width: 198, height: 48,
                       alt: 'OPNFV', title: 'OPNFV' %></a>
-    </div>
-    <!-- <div class="col-sm-1"></div> -->
+      </div>
     </div>
     </div>
   </div>

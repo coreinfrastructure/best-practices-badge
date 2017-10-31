@@ -138,7 +138,8 @@ label.required:after {
 }
 
 .criteria-radio {
-  padding-top: 5px;
+  // padding-top: 5px;
+  margin-top: -10px; // Compensate to ensure RHS text isn't too low
   padding-left: 20px;
 }
 

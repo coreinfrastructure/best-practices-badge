@@ -2786,7 +2786,7 @@ fr:
       linkedin: LinkedIn
       googleplus: Google+
       email: Email
-      projects_earned_badge:
+      projects_earned_badge: 'Quelques possesseurs de badges :'
     criteria:
       criteria: Critères
       detailed_criteria_on_github: Les critères détaillés sont

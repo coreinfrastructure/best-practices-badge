@@ -637,6 +637,10 @@ en:
         found.'
       justification_required_warning: 'Warning: Requires lengthier
         justification.'
+      in_development_warning_html: >-
+        <strong>Warning!</strong> This is not the production system;
+        this is a test tier.
+      close: Close
     delete:
       done: Project was successfully deleted.
   report_mailer:

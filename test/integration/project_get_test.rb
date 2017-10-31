@@ -63,6 +63,8 @@ class ProjectGetTest < ActionDispatch::IntegrationTest
       '1; mode=block',
       @response.headers['X-XSS-Protection']
     )
+    # Check warning on development system
+    assert_match 'This is not the production system', response.body
   end
   # rubocop:enable Metrics/BlockLength
 end

@@ -7,7 +7,7 @@
 # rubocop:disable Metrics/ModuleLength
 module SessionsHelper
   SESSION_TTL = 48.hours # Automatically log off session if inactive this long
-
+  PRODUCTION_HOSTNAME = 'bestpractices.coreinfrastructure.org'
   require 'uri'
 
   def remove_locale_query(url_query)
@@ -118,6 +118,12 @@ module SessionsHelper
     false
   end
   # rubocop:enable Metrics/CyclomaticComplexity
+
+  def in_development?
+    hostname = ENV['PUBLIC_HOSTNAME']
+    return true if hostname.nil?
+    hostname != PRODUCTION_HOSTNAME
+  end
 
   # Redirects to stored location (or to the default)
   def redirect_back_or(default)

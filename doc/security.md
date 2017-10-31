@@ -89,8 +89,12 @@ Note that the project receives its own badge
 (the CII best practices badge),
 which provides additional evidence that it applies best practices
 that can lead to more secure software.
-We conclude with a short discussion of residual risks, and a final
-appeal to report to us if you find a vulnerability.
+We then provide details about authentication (login); authentication
+is a cross-cutting and critical supporting security mechanism, so
+it's easier to describe it all in one place.
+We then include a short discussion of residual risks,
+describe the vulnerability report handling process, and make
+a final appeal to report to us if you find a vulnerability.
 
 (Note to editors: to edit the figures above, edit the .odg file, then
 export to .png so that it can viewed on GitHub.)
@@ -115,25 +119,9 @@ how we implement these requirements):
           that specific browser if they use a local account.
           This is implemented using a
           cryptographically random nonce stored in the user's cookie store
-          as a permanent cookie.  This nonce
-          acts like a password, which is verified against a
-          remember_digest value stored in the server
-          that is an iterated salted hash (using bcrypt).
-          This "remember me" functionality cannot reveal the user's
-          original password, and if the server's user database is
-          compromised an attacker cannot easily find the nonce.
-          The nonce is protected in transit by HTTPS (discussed elsewhere).
-          The user_id stored by the user is signed by the server.
-          As with any system, the "remember me" functionality has a
-          weakness: if the user's system is compromised, others can log
-          in as that user.  But this is fundamental to any "remember me"
-          functionality, and users must opt in to enable "remember me"
-          (by default users must enter their password on each login,
-          and the login becomes invalid when the user logs out or when
-          the user exits the entire browser, because the cookie for login
-          is only a session cookie).
-          The "remember me" box was originally implemented
-          in commit e79decec67.
+          as a permanent cookie, but does not actually include the
+          user's original password.
+          See the section on authentication for more information.
         - Email addresses are only revealed to the logged-in owner and
           administrators. We do store email addresses;
           we need those for various purposes
@@ -190,6 +178,7 @@ how we implement these requirements):
 
 Identity, Authentication, and Authorization are handled in a traditional
 manner, as described below.
+In particular, see the section on authentication.
 
 BadgeApp must avoid being taken over by attackers, since this
 could cause lead to failure in confidentiality, integrity, or availability.
@@ -877,6 +866,8 @@ as of 2015-12-14:
    protect_from_forgery built into the application-wide controller
    app/controllers/application_controller.rb
    (we do not use cookies.permanent or similar, a contra-indicator).
+   Also, we set cookies with SameSite=Lax; this is a useful hardening
+   countermeasure in browsers that support it.
 4. *Redirection and Files.*
    The application uses relatively few redirects; those that do involve
    the "id", which only works if it can find the value corresponding to
@@ -1447,6 +1438,73 @@ The BadgeApp application achieves its own badge.
 This is evidence that the BadgeApp application is
 applying practices expected in a well-run FLOSS project.
 
+## Details about authentication (login)
+
+As with most systems, it's important that authentication work correctly.
+The key code for authentication is the "sessions" controller file
+"app/controllers/sessions_controller.rb".
+In this section we only consider the login mechanism
+built into the BadgeApp.  Heroku has its own login mechanisms, which must
+be carefully controlled but are out of scope here.
+
+This system implements two kinds of users: local and remote.
+Local users log in using a password, but
+user passwords are only stored on the server as
+iterated salted hashes (using bcrypt).
+Remote users use a remote system (we currently only support GitHub).
+
+A user who views "/login" will be routed to GET sessions#new, which returns
+the login page.  From there:
+
+* A local user login will POST that information to /login, which is
+  routed to session#create along with parameters such as session[email]
+  and session[password].  If the bcrypt'ed hash of the password matches
+  the stored hash, the user is accepted.
+* A remote user login (pushing the "log in with GitHub" button) will
+  invoke GET "/auth/github".  The application then begin an omniauth
+  login, by redirecting the user to "https://github.com/login?"
+  with URL parameters of client_id and return_to.
+  When the GitHub login completes, then per the omniauth spec there's a
+  redirect back to our site to /auth/github/callback, which is
+  routed to session#create along with values such as
+  the parameter session[provider] set to 'GitHub', which we then check
+  by using the omniauth-github gem (this is the "callback phase").
+  If we confirm that GitHub asserts that the user is authenticated,
+  then we accept GitHub's ruling for that github user and log them in.
+  This interaction with GitHub uses GITHUB_KEY and GITHUB_SECRET.
+  For more information, see the documentation on omniauth-github.
+
+The first thing that session#create does is run "counter_fixation";
+this counters session fixation attacks
+(it also saves the forwarding url, in case we want to return to it).
+
+Local users may choose to "remember me" to automatically re-login on
+that specific browser if they use a local account.
+This is implemented using a
+cryptographically random nonce stored in the user's cookie store
+as a permanent cookie.  This nonce
+acts like a password, which is verified against a
+remember_digest value stored in the server
+that is an iterated salted hash (using bcrypt).
+This "remember me" functionality cannot reveal the user's
+original password, and if the server's user database is
+compromised an attacker cannot easily find the nonce.
+The nonce is protected in transit by HTTPS (discussed elsewhere).
+The user_id stored by the user is signed by the server.
+As with any system, the "remember me" functionality has a
+weakness: if the user's system is compromised, others can log
+in as that user.  But this is fundamental to any "remember me"
+functionality, and users must opt in to enable "remember me"
+(by default users must enter their password on each login,
+and the login becomes invalid when the user logs out or when
+the user exits the entire browser, because the cookie for login
+is only a session cookie).
+The "remember me" box was originally implemented
+in commit e79decec67.
+
+A session is created for each user who successfully logs in.
+See the discussion above for more information on how we handle sessions.
+
 ## Residual risks
 
 It is not possible to eliminate all risks.
@@ -1497,7 +1555,7 @@ other security contacts, and one of them will analyze it:
 * If it a security vulnerability, one of the security contacts will
   fix it in a *local* git repository and *not* share it with the world
   until the fix is ready.  An issue will *not* be filed, since those
-  are publc.  If it needs review, the review will not be public.
+  are public.  If it needs review, the review will not be public.
   Once the fix is ready, it will be quickly moved through all tiers.
 
 Once the fix is in the final production system, credit will be

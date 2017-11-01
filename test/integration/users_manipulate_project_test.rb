@@ -19,6 +19,7 @@ class UsersManipulateProjectTest < ActionDispatch::IntegrationTest
 
     get '/projects/new'
     assert_response :success
+    assert_match 'This is not the production system', response.body
     assert_template 'projects/new'
 
     repo_url = 'https://github.com/coreinfrastructure/best-practices-badge'

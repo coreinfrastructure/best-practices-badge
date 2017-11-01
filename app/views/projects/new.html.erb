@@ -12,6 +12,12 @@
 %>
 <% if logged_in? %>
   <div class='row'>
+    <% if in_development? %>
+      <div class="alert alert-danger alert-dismissable text-center">
+        <a href="#" class="close" data-dismiss="alert" aria-label="<%= t('projects.misc.close') %>">&times;</a>
+        <%= t('projects.misc.in_development_warning_html') %>
+      </div>
+    <% end %>
   <div class="col-md-12">
   <br>
   <h2 class='center'><%= t('.new_badge') %></h2>

@@ -63,6 +63,7 @@ class LoginTest < CapybaraFeatureTest
     assert_equal projects_path, current_path
 
     visit edit_project_path(@project, locale: nil)
+    assert has_content? 'This is not the production system'
     assert has_content? 'We have updated our requirements for the criterion ' \
                         '<a href="#static_analysis">static_analysis</a>. ' \
                         'Please add a justification for '\

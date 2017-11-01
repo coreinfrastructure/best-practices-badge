@@ -541,8 +541,10 @@ fr:
         trouvée.
       justification_required_warning: 'Attention : cela nécessite
         une justification plus longue.'
-      in_development_warning_html:
-      close:
+      in_development_warning_html: >-
+        <strong>Avertissement !</strong> Ceci n'est pas le système
+        de production ; c'est un niveau de test.
+      close: Fermer
     delete:
       done: Le projet a été supprimé avec succès.
   user_mailer:

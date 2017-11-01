@@ -310,8 +310,8 @@ zh-CN:
       future_criterion: 未来条款
       url_required_warning: 警告：需要URL，但找不到URL。
       justification_required_warning: 警告：需要更长的理由。
-      in_development_warning_html:
-      close:
+      in_development_warning_html: "<strong>警告！</strong>这不是生产系统;这是一个测试层。"
+      close: 关闭
     delete:
       done: 项目已成功删除。
   user_mailer:

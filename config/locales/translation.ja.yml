@@ -350,6 +350,8 @@ ja:
       future_criterion: 今後追加されるバッジ基準
       url_required_warning: 警告：URLが必要ですが、URLは見つかりません。
       justification_required_warning: 警告：もっと長い正当性が必要です。
+      in_development_warning_html:
+      close:
     delete:
       done: プロジェクトは正常に削除されました
   report_mailer:

@@ -446,6 +446,8 @@ de:
         URL gefunden.'
       justification_required_warning: 'Warnung: Erfordert eine
         längere Begründung.'
+      in_development_warning_html:
+      close:
     delete:
       done: Das Projekt wurde erfolgreich gelöscht.
   report_mailer:

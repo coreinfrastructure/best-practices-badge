@@ -642,6 +642,8 @@ ru:
         URL не найден.'
       justification_required_warning: 'Предупреждение: Нужно обоснование
         подлиннее.'
+      in_development_warning_html:
+      close:
     delete:
       done: Проект успешно удален.
   report_mailer:

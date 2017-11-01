@@ -541,6 +541,8 @@ fr:
         trouvée.
       justification_required_warning: 'Attention : cela nécessite
         une justification plus longue.'
+      in_development_warning_html:
+      close:
     delete:
       done: Le projet a été supprimé avec succès.
   user_mailer:

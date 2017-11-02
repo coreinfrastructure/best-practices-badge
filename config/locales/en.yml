@@ -1430,20 +1430,28 @@ en:
         description: >-
           The default security mechanisms within the software
           produced by the project MUST NOT depend on broken cryptographic
-          algorithms (e.g., MD4, MD5, single DES, RC4, Dual_EC_DRBG)
-          or use cipher modes that are inappropriate to the context
-          (e.g., ECB mode is almost never appropriate because
-          it reveals identical blocks within the ciphertext as
-          demonstrated by the <a href="https://blog.filippo.io/the-ecb-penguin/">ECB
-          penguin</a>, and CTR mode is often inappropriate because
-          it does not perform authentication and causes duplicates
-          if the input state is repeated).
+          algorithms (e.g., MD4, MD5, single DES, RC4, Dual_EC_DRBG),
+          or use cipher modes that are inappropriate to the context,
+          unless they are necessary to implement an interoperable protocol
+          (where the protocol implemented is the most recent version
+          of that standard broadly supported by the network ecosystem,
+          that ecosystem requires the use of such an algorithm or mode,
+          and that ecosystem does not offer any more secure alternative).
+          The documentation MUST describe any relevant security risks
+          and any known mitigations if these broken algorithms or modes
+          are necessary for an interoperable protocol.
         details: >-
-          In many cases it's best to choose a block cipher algorithm
-          mode designed to combine secrecy and authentication,
+          ECB mode is almost never appropriate because
+          it reveals identical blocks within the ciphertext as
+          demonstrated by the
+          <a href="https://blog.filippo.io/the-ecb-penguin/">ECB penguin</a>,
+          and CTR mode is often inappropriate because it does not
+          perform authentication and causes duplicates if the input state
+          is repeated.  In many cases it's best to choose a block cipher
+          algorithm mode designed to combine secrecy and authentication,
           e.g., Galois/Counter Mode (GCM) and EAX. Projects MAY
-          allow users to enable broken mechanisms where necessary
-          for compatibility, but then users know they're doing
+          allow users to enable broken mechanisms (e.g., during configuration)
+          where necessary for compatibility, but then users know they're doing
           it.
       crypto_weaknesses:
         description: >-

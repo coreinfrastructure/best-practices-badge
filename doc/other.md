@@ -266,14 +266,25 @@ as described below.
     code of conduct. This can help avoid problems before they occur and make
     the project a more welcoming place to encourage contributions.
     This should focus only on behavior within the community/workplace of the
-    project.  Example codes of conduct are the
-    <a href="http://contributor-covenant.org/">Contributor Covenant Code of Conduct</a>
-    and the Linux kernel
-    <a href="https://www.kernel.org/doc/html/latest/process/code-of-conflict.html">Code of Conflict</a>.
+    project.
+    Example codes of conduct are the
+    <a href="https://www.kernel.org/doc/html/latest/process/code-of-conflict.html">Linux kernel code of conflict</a>,
+    the <a href="http://contributor-covenant.org/">Contributor
+    Covenant Code of Conduct</a>,
+    the <a href="https://www.debian.org/code_of_conduct">Debian Code of Conduct</a>,
+    the <a href="https://www.ubuntu.com/about/about-ubuntu/conduct">Ubuntu Code of Conduct</a>,
+    the <a href="https://getfedora.org/code-of-conduct">Fedora Code of Conduct</a>,
+    the <a href="https://wiki.gnome.org/action/show/Foundation/CodeOfConduct">GNOME Code Of Conduct</a>,
+    the <a href="https://www.kde.org/code-of-conduct/">KDE Community Code of Conduct">,
+    the <a href="https://www.python.org/psf/codeofconduct/">Python Community Code of Conduct</a>,
+    the <a href="https://www.ruby-lang.org/en/conduct/">The Ruby Community Conduct Guideline</a>, and
+    the <a href="https://www.rust-lang.org/en-US/conduct.html">The Rust Code of Conduct</a>.
 
-    *Rationale*: Suggested in
+    *Rationale* Suggested in
     <a href="https://github.com/coreinfrastructure/best-practices-badge/issues/608">issue#608</a>
     by Dan Kohn and in the NYC 2016 brainstorm session.
+    The long list of examples shows that many widely-used FLOSS projects
+    have a code of conduct (obviously there's no way to list them all!).
 
 *   <a name="governance"></a>The project MUST clearly define and document
     its project governance model (the way it makes decisions,

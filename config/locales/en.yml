@@ -1134,9 +1134,19 @@ en:
       release_notes_vulns:
         description: >-
           The release notes MUST identify every publicly known
-          vulnerability that is fixed in each new release. This
-          is "N/A" if there are no release notes or there have
-          been no publicly known vulnerabilities.
+          vulnerability with a CVE assignment or similar
+          that is fixed in each new release,
+          unless users typically cannot practically update
+          the software themselves.
+          If there are no release notes or there have been
+          no publicly known vulnerabilities, choose "not applicable" (N/A).
+        details: >-
+          If users typically cannot practically update the software
+          themselves on their computers,
+          but must instead depend on a middleman to perform
+          the upgrade (as is often the case for a kernel and low-level
+          software that is intertwined with a kernel), the project may
+          choose "not applicable" (N/A).
       report_process:
         description: >-
           The project MUST provide a process for users to submit

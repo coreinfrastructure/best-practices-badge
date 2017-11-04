@@ -148,7 +148,7 @@
             {
               t: t('static_pages.home.check_us_out'),
               u: request.original_url
-            }.to_param.html_safe
+            }.to_param.gsub('+', '%20').html_safe
           mailto_url =
             'mailto:?' +
             {
@@ -156,7 +156,7 @@
                        request.original_url,
               body: t('static_pages.home.check_us_out') + "\n" +
                        request.original_url
-            }.to_param.gsub('+','%20').html_safe
+            }.to_param.gsub('+', '%20').html_safe
         %>
 
         <a href="<%= twitter_url %>" class="btn btn-primary btn-lg btn-main-margin"

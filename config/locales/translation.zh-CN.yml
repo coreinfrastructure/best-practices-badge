@@ -638,6 +638,7 @@ zh-CN:
           GitHub发布工作流程</a>。
       release_notes_vulns:
         description: 发行说明必须列出每个新版本中修复的每个公开的漏洞。如果没有发行说明或者没有公开的漏洞，选择“不适用”。
+        details:
       report_process:
         description: 项目必须为用户提交错误报告（例如，使用问题跟踪器或邮件列表）提供相关流程。
       report_tracker:

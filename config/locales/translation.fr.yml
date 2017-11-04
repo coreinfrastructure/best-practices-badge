@@ -1065,6 +1065,7 @@ fr:
           publiquement connues qui sont résolues dans chaque nouvelle
           version. Il s'agit de « N/A » s'il n'y a pas de notes
           de version ou qu'il n'y a pas eu de vulnérabilité publique.
+        details:
       report_process:
         description: >-
           Le projet DOIT fournir un processus permettant aux utilisateurs

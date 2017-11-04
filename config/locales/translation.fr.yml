@@ -2792,6 +2792,7 @@ fr:
       googleplus: Google+
       email: Email
       projects_earned_badge: 'Quelques possesseurs de badges :'
+      hacker_news:
     criteria:
       criteria: Critères
       detailed_criteria_on_github: Les critères détaillés sont

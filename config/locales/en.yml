@@ -109,7 +109,9 @@ en:
         example (where we try to get our own badge)</a>.
       p3_html: >-
         <em>Privacy and legal issues</em>: Please see our <a href="https://www.linuxfoundation.org/privacy">privacy
-        policy</a> and <a href="https://www.linuxfoundation.org/terms">terms
+        policy</a>,
+        <a href="/cookies">about cookies</a>, and
+        <a href="https://www.linuxfoundation.org/terms">terms
         of use</a>.
         The code for the badging application itself is released under the
         <a href="https://opensource.org/licenses/MIT">MIT</a> license

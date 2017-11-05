@@ -1065,7 +1065,13 @@ fr:
           publiquement connues qui sont résolues dans chaque nouvelle
           version. Il s'agit de « N/A » s'il n'y a pas de notes
           de version ou qu'il n'y a pas eu de vulnérabilité publique.
-        details:
+        details: >-
+          Si les utilisateurs ne peuvent généralement pas mettre
+          à jour le logiciel eux-mêmes sur leur ordinateur, mais
+          doivent plutôt dépendre d'un intermédiaire pour effectuer
+          la mise à niveau (comme c'est souvent le cas pour un
+          noyau et un logiciel de bas niveau associé à un noyau),
+          le projet peut choisir "non applicable" (N/A)
       report_process:
         description: >-
           Le projet DOIT fournir un processus permettant aux utilisateurs
@@ -2792,7 +2798,7 @@ fr:
       googleplus: Google+
       email: Email
       projects_earned_badge: 'Quelques possesseurs de badges :'
-      hacker_news:
+      hacker_news: Hacker News
     criteria:
       criteria: Critères
       detailed_criteria_on_github: Les critères détaillés sont

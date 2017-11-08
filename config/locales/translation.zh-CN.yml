@@ -71,7 +71,7 @@ zh-CN:
       intro_github: 如果您有GitHub账户，可以使用该账户登录。
     show:
       see_external: 查看此用户的外部页面。
-      other_projects_edit: 其他您可以编辑的项目
+      other_projects_edit: 其他您可以编辑的项目 (GitHub)：
       as_admin: 作为管理员，您还可以：
       send_email_to: 发送电子邮件至：
       delete_link_name: 删除
@@ -638,7 +638,8 @@ zh-CN:
           GitHub发布工作流程</a>。
       release_notes_vulns:
         description: 发行说明必须列出每个新版本中修复的每个公开的漏洞。如果没有发行说明或者没有公开的漏洞，选择“不适用”。
-        details:
+        details: >-
+          如果用户通常不能在自己的计算机上实际更新软件，而必须依靠中间人来执行升级（对于内核和与内核交织的底层软件通常是这种情况），项目可以选择“不适用”（N/A）。
       report_process:
         description: 项目必须为用户提交错误报告（例如，使用问题跟踪器或邮件列表）提供相关流程。
       report_tracker:
@@ -855,9 +856,9 @@ zh-CN:
         description: >-
           建议该项目有一个<a href="https://reproducible-builds.org/">可重复构建</a>。如果没有发生构建（例如，直接使用源代码而不是编译的脚本语言），请选择“不适用”（N/A）。
         details: >-
-          可复制的构建意味着多方可以独立地重做从源文件生成信息的过程，并获得每比特完全相同的结果。如果没有构建（例如，直接使用源代码而不是编译的脚本语言），请选择“N
-          / A”。在某些情况下，这可以通过强制某种排序来解决。 JavaScript开发人员可能会考虑使用npm
-          shrinkwrap和webpack的OccurenceOrderPlugin。 GCC和clang用户可能会发现-frandom-seed选项有用。通常可以通过指定可用于重新构建的特定容器或虚拟机的加密散列来为外部方定义构建环境（包括工具集）。
+          可复制的构建意味着多方可以独立地重做从源文件生成信息的过程，并获得每比特完全相同的结果。如果没有构建（例如，直接使用源代码而不是编译的脚本语言），请选择“N/A”。在某些情况下，这可以通过强制某种排序来解决。
+          JavaScript开发人员可能会考虑使用npm shrinkwrap和webpack的OccurenceOrderPlugin。
+          GCC和clang用户可能会发现-frandom-seed选项有用。通常可以通过指定可用于重新构建的特定容器或虚拟机的加密散列来为外部方定义构建环境（包括工具集）。
           <a href="https://reproducible-builds.org/docs/">可重复构建项目具有如何执行此操作的文档</a>。
       crypto_used_network:
         description: >-
@@ -1261,7 +1262,7 @@ zh-CN:
       googleplus: Google+
       email: 电子邮件
       projects_earned_badge: 一些徽章拥有者：
-      hacker_news:
+      hacker_news: Hacker News （黑客新闻）
     criteria:
       criteria: 条款
       detailed_criteria_on_github: 详细的条款在GitHub网站。

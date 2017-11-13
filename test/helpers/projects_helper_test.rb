@@ -34,9 +34,25 @@ class ProjectsHelperTest < ActionView::TestCase
   end
 
   test 'markdown - no script HTML' do
+    # Allowing <script> would be a big security vulnerability.
+    # This is a negative test to make sure we're filtering it out.
     assert_equal(
       "<p>Hello</p>\n",
       markdown('<script src="hi"></script>Hello')
+    )
+  end
+
+  test 'markdown - _target not included' do
+    # In the future we might permit <a href=...>, but we must NOT allow
+    # target="..." in it because that's a security vulnerability.
+    # This is a negative test to ensure that target="..." isn't allowed. See:
+    # "Target="_blank" - the most underestimated vulnerability ever"
+    # by Alexander "Alex" Yumashev, May 4 2016
+    # https://www.jitbit.com/alexblog/
+    # 256-targetblank---the-most-underestimated-vulnerability-ever/
+    assert_equal(
+      "<p>Hello</p>\n",
+      markdown('<a href="https://www.dwheeler.com" target="_blank">Hello</a>')
     )
   end
 end

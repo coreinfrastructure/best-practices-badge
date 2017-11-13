@@ -185,11 +185,14 @@
         alt="<%= t('static_pages.home.googleplus') %>"></i></a>
 
         <a href="<%= hacker_news_url %>" class="btn btn-primary btn-lg btn-main-margin"
-        target="_blank"><i class="fa fa-hacker-news" aria-hidden="true"></i>&nbsp;<%= t('static_pages.home.hacker_news') %></a>
+        target="_blank">&nbsp;<i class="fa fa-hacker-news" aria-hidden="true"
+        title="<%= t('static_pages.home.hacker_news') %>"
+        alt="<%= t('static_pages.home.hacker_news') %>"></i>&nbsp;</a>
 
         <a href="<%= mailto_url %>" class="btn btn-primary btn-lg btn-main-margin"
-        target="_blank"><i class="fa fa-envelope" aria-hidden="true"></i>&nbsp;<%= t('static_pages.home.email') %></a>
-
+        target="_blank">&nbsp;<i class="fa fa-envelope" aria-hidden="true"
+        title="<%= t('static_pages.home.email') %>"
+        alt="<%= t('static_pages.home.email') %>"></i>&nbsp;</a>
 
   </div>
 </div><%# end of "share this" row %>

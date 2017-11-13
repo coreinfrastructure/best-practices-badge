@@ -159,27 +159,40 @@
             }.to_param.gsub('+', '%20').html_safe
         %>
 
-        <a href="<%= twitter_url %>" class="btn btn-primary btn-lg btn-main-margin"
-        target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i>&nbsp;<%= t('static_pages.home.twitter') %></a>
+        <a href="<%= twitter_url %>" class="btn btn-lg btn-social-icon btn-twitter btn-main-margin"
+        target="_blank"><i class="fa fa-twitter" aria-hidden="true"
+        title="<%= t('static_pages.home.twitter') %>"
+        alt="<%= t('static_pages.home.twitter') %>"></i></a>
 
-        <a href="<%= reddit_url %>" class="btn btn-primary btn-lg btn-main-margin"
-        target="_blank"><i class="fa fa-reddit-alien" aria-hidden="true"></i>&nbsp;<%= t('static_pages.home.reddit') %></a>
+        <a href="<%= reddit_url %>" class="btn btn-lg btn-social-icon btn-reddit btn-main-margin"
+        target="_blank"><i class="fa fa-reddit-alien" aria-hidden="true"
+        title="<%= t('static_pages.home.reddit') %>"
+        alt="<%= t('static_pages.home.reddit') %>"></i></a>
 
-        <a href="<%= facebook_url %>" class="btn btn-primary btn-lg btn-main-margin"
-        target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i>&nbsp;<%= t('static_pages.home.facebook') %></a>
+        <a href="<%= facebook_url %>" class="btn btn-lg btn-social-icon btn-facebook btn-main-margin"
+        target="_blank"><i class="fa fa-facebook" aria-hidden="true"
+        title="<%= t('static_pages.home.facebook') %>"
+        alt="<%= t('static_pages.home.facebook') %>"></i></a>
 
-        <a href="<%= linkedin_url %>" class="btn btn-primary btn-lg btn-main-margin"
-        target="_blank"><i class="fa fa-linkedin" aria-hidden="true"></i>&nbsp;<%= t('static_pages.home.linkedin') %></a>
+        <a href="<%= linkedin_url %>" class="btn btn-lg btn-social-icon btn-linkedin btn-main-margin"
+        target="_blank"><i class="fa fa-linkedin" aria-hidden="true"
+        title="<%= t('static_pages.home.linkedin') %>"
+        alt="<%= t('static_pages.home.linkedin') %>"></i></a>
 
-        <a href="<%= googleplus_url %>" class="btn btn-primary btn-lg btn-main-margin"
-        target="_blank"><i class="fa fa-google-plus" aria-hidden="true"></i>&nbsp;<%= t('static_pages.home.googleplus') %></a>
+        <a href="<%= googleplus_url %>" class="btn btn-lg btn-social-icon btn-google btn-main-margin"
+        target="_blank"><i class="fa fa-google-plus" aria-hidden="true"
+        title="<%= t('static_pages.home.googleplus') %>"
+        alt="<%= t('static_pages.home.googleplus') %>"></i></a>
 
         <a href="<%= hacker_news_url %>" class="btn btn-primary btn-lg btn-main-margin"
-        target="_blank"><i class="fa fa-hacker-news" aria-hidden="true"></i>&nbsp;<%= t('static_pages.home.hacker_news') %></a>
+        target="_blank">&nbsp;<i class="fa fa-hacker-news" aria-hidden="true"
+        title="<%= t('static_pages.home.hacker_news') %>"
+        alt="<%= t('static_pages.home.hacker_news') %>"></i>&nbsp;</a>
 
         <a href="<%= mailto_url %>" class="btn btn-primary btn-lg btn-main-margin"
-        target="_blank"><i class="fa fa-envelope" aria-hidden="true"></i>&nbsp;<%= t('static_pages.home.email') %></a>
-
+        target="_blank">&nbsp;<i class="fa fa-envelope" aria-hidden="true"
+        title="<%= t('static_pages.home.email') %>"
+        alt="<%= t('static_pages.home.email') %>"></i>&nbsp;</a>
 
   </div>
 </div><%# end of "share this" row %>

@@ -243,8 +243,8 @@ de:
         Ein anderer Benutzer hat eine Änderung an diesem Datensatz
         vorgenommen, seit Sie das Bearbeitungsformular geladen
         haben. <br> Bitte öffnen Sie ein neues <a href="%{edit_url}"
-        target="_blank" rel="noopener">Bearbeitungsformular</a> und kopieren
-        Sie ihre Änderungen dorthin.
+        target="_blank" rel="noopener">Bearbeitungsformular</a>
+        und kopieren Sie ihre Änderungen dorthin.
       successfully_updated: Das Projekt wurde erfolgreich aktualisiert.
       congrats_new:
       lost_badge: Das Projekt hat ein Badge verloren.

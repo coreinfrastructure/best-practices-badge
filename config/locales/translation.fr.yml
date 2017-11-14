@@ -33,15 +33,15 @@ fr:
       <small> <strong>Vous avez besoin d'aide ? Vous avez une
       question ? Vous voyez un problème ? Merci d'<em><a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">envoyer
       un email</a></em> ou de <em><a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
-      target="_blank" rel="noopener">reporter un problème</a></i>.</strong> ©
-      2015-2017 <a href="https://www.coreinfrastructure.org/"
-      target="_blank" rel="noopener">Core Infrastructure Initiative</a>, un projet
-      collaboratif de la <a href="https://www.linuxfoundation.org/"
-      target="_blank" rel="noopener">Fondation Linux</a>. Tous droits réservés.
-      Consultez notre <a href="https://www.linuxfoundation.org/privacy"
-      target="_blank" rel="noopener">politique de confidentialité</a> et nos
-      <a href="https://www.linuxfoundation.org/terms" target="_blank" rel="noopener">conditions
-      d'utilisation </a>. </small>
+      target="_blank" rel="noopener">reporter un problème</a></i>.</strong>
+      © 2015-2017 <a href="https://www.coreinfrastructure.org/"
+      target="_blank" rel="noopener">Core Infrastructure Initiative</a>,
+      un projet collaboratif de la <a href="https://www.linuxfoundation.org/"
+      target="_blank" rel="noopener">Fondation Linux</a>. Tous
+      droits réservés. Consultez notre <a href="https://www.linuxfoundation.org/privacy"
+      target="_blank" rel="noopener">politique de confidentialité</a>
+      et nos <a href="https://www.linuxfoundation.org/terms" target="_blank"
+      rel="noopener">conditions d'utilisation </a>. </small>
     account: Compte
     choose_locale: Choisir la langue
   sessions:
@@ -64,8 +64,8 @@ fr:
       Compte non activé. Vérifiez votre email pour le lien d'activation.
     signed_out: Déconnecté !
     cookie_details_html: >-
-      <a href="/cookies" target="_blank" rel="noopener"><i>En savoir plus sur
-      les cookies.</i></a>
+      <a href="/cookies" target="_blank" rel="noopener"><i>En
+      savoir plus sur les cookies.</i></a>
   users:
     new:
       signup_header: S'inscrire
@@ -249,22 +249,24 @@ fr:
       back: Retour
       cc_by_3plus_html: >-
         Ces données sont disponibles sous <a href="https://creativecommons.org/licenses/by/3.0/us"
-        target="_blank" rel="noopener">une licence Creative Commons Attribution
-        version 3.0 ou ultérieure (CC-BY-3.0+)</a>. Chacun peut
-        librement partager et adapter les données, à condition
+        target="_blank" rel="noopener">une licence Creative Commons
+        Attribution version 3.0 ou ultérieure (CC-BY-3.0+)</a>.
+        Chacun peut librement partager et adapter les données,
+        à condition de créditer leur origine. Veuillez créditer
+        %{user} et les contributeurs du badge des meilleures pratiques
+        de la CII.<br><br>
+      cc_by_3only_html: >-
+        Ces données sont disponibles sous <a href="https://creativecommons.org/licenses/by/3.0/us"
+        target="_blank" rel="noopener">licence Creative Commons
+        Attribution version 3.0 (CC-BY-3.0) </a> comme indiqué
+        dans les <a href="https://www.linuxfoundation.org/terms"
+        target="_blank" rel="noopener">conditions d'utilisation</a>
+        de la <a href="https://www.coreinfrastructure.org/" target="_blank"
+        rel="noopener">Core Infrastructure Initiative</a>. Chacun
+        peut librement partager et adapter les données, à condition
         de créditer leur origine. Veuillez créditer %{user} et
         les contributeurs du badge des meilleures pratiques de
         la CII.<br><br>
-      cc_by_3only_html: >-
-        Ces données sont disponibles sous <a href="https://creativecommons.org/licenses/by/3.0/us"
-        target="_blank" rel="noopener">licence Creative Commons Attribution version
-        3.0 (CC-BY-3.0) </a> comme indiqué dans les <a href="https://www.linuxfoundation.org/terms"
-        target="_blank" rel="noopener">conditions d'utilisation</a> de la <a
-        href="https://www.coreinfrastructure.org/" target="_blank" rel="noopener">Core
-        Infrastructure Initiative</a>. Chacun peut librement partager
-        et adapter les données, à condition de créditer leur origine.
-        Veuillez créditer %{user} et les contributeurs du badge
-        des meilleures pratiques de la CII.<br><br>
       owned_by: 'Soumission du badge du projet appartenant à :'
       created_at_html: "<strong>Soumission créée le</strong> %{when},"
       updated_at_html: "<strong>dernière mise à jour le</strong>
@@ -275,12 +277,12 @@ fr:
       submit_cc_by_3plus_html: >-
         En soumettant ces données sur le projet, vous acceptez
         de les publier sous au moins <a href="https://creativecommons.org/licenses/by/3.0/us"
-        target="_blank" rel="noopener">une licence Creative Commons Attribution
-        version 3.0 ou ultérieure (CC-BY-3.0+)</a>. Cela signifie
-        que tous sont libres de partager et d'adapter les données,
-        mais ils doivent créditer leur origine. Vous conservez
-        le droit d'auteur (le cas échéant) et la licence du projet
-        n'est pas affectée.<br><br>
+        target="_blank" rel="noopener">une licence Creative Commons
+        Attribution version 3.0 ou ultérieure (CC-BY-3.0+)</a>.
+        Cela signifie que tous sont libres de partager et d'adapter
+        les données, mais ils doivent créditer leur origine. Vous
+        conservez le droit d'auteur (le cas échéant) et la licence
+        du projet n'est pas affectée.<br><br>
       save_and_continue: Sauvegarder (et continuer)
       submit_and_exit: Soumettre (et quitter)
       repo_url_limits: Vous ne pouvez modifier votre repo_url
@@ -289,8 +291,8 @@ fr:
         Un autre utilisateur a apporté une modification à cet
         enregistrement depuis que vous avez accédé au formulaire
         d'édition. <br>Veuillez ouvrir un nouveau <a href="%{edit_url}"
-        target="_blank" rel="noopener">formulaire d'édition</a> pour transférer
-        vos modifications.
+        target="_blank" rel="noopener">formulaire d'édition</a>
+        pour transférer vos modifications.
       successfully_updated: Le projet a été mis à jour avec succès.
       congrats_new: >-
         FÉLICITATIONS pour l'obtention d'un badge %{new_badge_level}

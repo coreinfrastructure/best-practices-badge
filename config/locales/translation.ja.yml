@@ -40,13 +40,13 @@ ja:
     footer_text_html: >-
       <small> <strong>疑問、質問、または問題がある場合は<em> <a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">電子メールで報告する</a></em>か、<em>
       <a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
-      target="_blank">こちらから問題を提出</a></em>してください。</strong>  © 2015-2017
-      <a href="https://www.coreinfrastructure.org/" target="_blank">Core
+      target="_blank" rel="noopener">こちらから問題を提出</a></em>してください。</strong>  © 2015-2017
+      <a href="https://www.coreinfrastructure.org/" target="_blank" rel="noopener">Core
       Infrastructure Initiative</a>, a <a href="https://www.linuxfoundation.org/"
-      target="_blank">Linux Foundation</a> Collaborative Project.
+      target="_blank" rel="noopener">Linux Foundation</a> Collaborative Project.
       All Rights Reserved. <a href="https://www.linuxfoundation.jp/privacy"
-      target="_blank">プライバシー ポリシー</a> と<a href="https://www.linuxfoundation.jp/terms"
-      target="_blank">利用条件</a>を必ずお読みください。</small>
+      target="_blank" rel="noopener">プライバシー ポリシー</a> と<a href="https://www.linuxfoundation.jp/terms"
+      target="_blank" rel="noopener">利用条件</a>を必ずお読みください。</small>
     choose_locale: 言語を選択する
   account_activations:
     activated: アカウントが有効になりました！
@@ -201,13 +201,13 @@ ja:
       back: もどる
       cc_by_3plus_html: >-
         プロジェクトに関するこのデータを送信することにより、少なくとも、<a href="https://creativecommons.org/licenses/by/3.0/us"
-        target="_blank">クリエイティブ・コモンズ帰属バージョン3.0以降（CC-BY-3.0 +）</a>のライセンス条件によって公開することに同意したことになります。つまり、すべての人が自由にデータを共有し、修正することができますが、適切なクレディットを表示します。あなたが保有する著作権に影響はありません。プロジェクトライセンスにも影響はありません。<br>
+        target="_blank" rel="noopener">クリエイティブ・コモンズ帰属バージョン3.0以降（CC-BY-3.0 +）</a>のライセンス条件によって公開することに同意したことになります。つまり、すべての人が自由にデータを共有し、修正することができますが、適切なクレディットを表示します。あなたが保有する著作権に影響はありません。プロジェクトライセンスにも影響はありません。<br>
         <br>
       cc_by_3only_html: >-
         本データは、<a href="https://creativecommons.org/licenses/by/3.0/us"
-        target="_blank">クリエイティブコモンズ表示バージョン3.0ライセンス（CC-BY-3.0）</a>の下で利用可能となります。
-        <a href="https://www.coreinfrastructure.org/" target="_blank">コアインフラストラクチャ・イニシアティブ</a>
-        <a href="https://www.linuxfoundation.org/terms" target="_blank">利用規約</a>をご覧ください。すべての人が自由にデータを共有し、修正することができますが、適切なクレディットを入れなければなりません。%{user}とCII
+        target="_blank" rel="noopener">クリエイティブコモンズ表示バージョン3.0ライセンス（CC-BY-3.0）</a>の下で利用可能となります。
+        <a href="https://www.coreinfrastructure.org/" target="_blank" rel="noopener">コアインフラストラクチャ・イニシアティブ</a>
+        <a href="https://www.linuxfoundation.org/terms" target="_blank" rel="noopener">利用規約</a>をご覧ください。すべての人が自由にデータを共有し、修正することができますが、適切なクレディットを入れなければなりません。%{user}とCII
         Best Practicesバッジ貢献者へのクレディットを表示願います。<br> <br>
       owned_by: プロジェクト バッジ登録の所有者：
       created_at_html: "<strong>エントリの作成日時</strong> %{when}、"
@@ -217,14 +217,14 @@ ja:
     edit:
       submit_cc_by_3plus_html: >-
         プロジェクトに関するこのデータを送信することにより、少なくとも、<a href="https://creativecommons.org/licenses/by/3.0/us"
-        target="_blank">クリエイティブ・コモンズ帰属バージョン3.0以降（CC-BY-3.0 +）</a>のライセンス条件によって公開することに同意したことになります。つまり、すべての人が自由にデータを共有し、修正することができますが、適切なクレディットを表示します。あなたが保有する著作権に影響はありません。プロジェクトライセンスにも影響はありません。<br>
+        target="_blank" rel="noopener">クリエイティブ・コモンズ帰属バージョン3.0以降（CC-BY-3.0 +）</a>のライセンス条件によって公開することに同意したことになります。つまり、すべての人が自由にデータを共有し、修正することができますが、適切なクレディットを表示します。あなたが保有する著作権に影響はありません。プロジェクトライセンスにも影響はありません。<br>
         <br>
       save_and_continue: 保存する（そして続行する）
       submit_and_exit: 送信（および終了）
       repo_url_limits: repo_urlは、httpからhttpsに変更することしかできません
       changed_since_html: >-
         別のユーザーが、編集フォームにアクセスして、そのレコードに変更を加えました。 <br>変更を送信するには、新しい<a
-        href="%{edit_url}" target="_blank">編集フォーム</a>を開いてください。
+        href="%{edit_url}" target="_blank" rel="noopener">編集フォーム</a>を開いてください。
       successfully_updated: プロジェクトは正常に更新されました
       congrats_new: >-
         %{new_badge_level}バッジ獲得、おめでとうございます！まだ表示を行っていないければ、プロジェクトのバッジステータスをプロジェクトページに表示してください（その方法は、下の「表示の方法」のテキストをご覧ください）。

@@ -394,6 +394,9 @@ def normalize_string(value)
   value.sub!(/\s+$/, '')
   return value unless value.include?('<')
   # Google Translate generates html text that has predictable errors.
+  # The last entry mitigates the target=... vulnerability.  We don't need
+  # to "counter" attacks from ourselves, but it does no harm and it's
+  # easier to protect against everything.
   value.gsub(/< a /, '<a ')
        .gsub(/< \057/, '</')
        .gsub(/<\057 /, '</')
@@ -403,6 +406,7 @@ def normalize_string(value)
        .gsub(/href = /, 'href=')
        .gsub(/class = /, 'class=')
        .gsub(/target = /, 'target=')
+       .gsub(/target="_blank" *>/, 'target="_blank" rel="noopener">')
 end
 # rubocop:enable Metrics/MethodLength
 

@@ -11,6 +11,9 @@ class StaticPagesControllerTest < ActionController::TestCase
     get :home
     assert_response :success
     assert_template 'home'
+    assert_includes @response.body, 'target='
+    # target=... better not end immediately, we need rel="noopener"
+    refute_includes @response.body, 'target=[^ >]+>'
   end
 
   test 'should get cookie page' do

@@ -722,6 +722,8 @@ have focused on countering the
 To counter common misconfigurations, we apply the
 [Ruby on Rails Security Guide](http://guides.rubyonrails.org/security.html).
 We have also taken steps to harden the application.
+Finally, we try to stay vigilant when new kinds of vulnerabilities are
+reported that apply to this application, and make adjustments.
 Below is how we've done each, in turn.
 
 ### Common implementation vulnerability types countered (OWASP top 10)
@@ -1031,6 +1033,52 @@ these attempt to thwart or slow attack even if the system has a vulnerability.
   a previously-reminded project.  We have a hard rate limit on the number
   of emails we will send out each time; this keeps us from looking like
   a spammer.
+
+### Making adjustments
+
+We want to counter all common vulnerabilities, not just those
+listed in the OWASP top 10 or those mentioned in the configuration guide.
+Therefore, we monitor information to learn about new types of vulnerabilities,
+and make adjustments as necessary.
+
+For example, a common vulnerability not reported in the 2013 OWASP top 10
+is the use of "target=" in the "a" tag that does not have "\_self"
+as its value.
+This is discussed in, for example,
+["Target="\_blank" - the most underestimated vulnerability ever" by Alex Yumashev, May 4, 2016](https://www.jitbit.com/alexblog/256-targetblank---the-most-underestimated-vulnerability-ever/).
+This was not noted in the OWASP top 10 of 2013,
+which is unsurprising, since the problem with target=
+was not widely known until 2016.
+Note that no one had to report the vulnerability about this particular
+application; we noticed it on our own.
+
+Today we discourage the use of target=, because removing target= completely
+eliminates the vulnerability.  When target= is used,
+which is sometimes valuable to avoid the risk of user data loss,
+we require that rel="noopener" always be used with target=
+(this is the standard mitigation for target=).
+
+We learned about this type of vulnerability after the application was
+originally developed, through our monitoring of sites that discuss
+general vulnerabilities.
+To address the target= vulnerability, we:
+
+* modified the application to counter the vulnerability,
+* documented in CONTRIBUTING.md that it's not acceptable to have bare target=
+  values (we discourage their use, and when they need to be used, they
+  must be used with rel="noopener")
+* modified the translation:sync routine to automatically insert the
+  rel="noopener" mitigations for all target= values when they aren't
+  already present
+* modified the test suite to try to detect unmitigated uses of target=
+  in key pages (the home page, project index, and single project page)
+* modified the test suit to examine all text managed by config/locales
+  (this is nearly all text) to detect use of target= with an immediate
+  termination (this is the common failure mode, since rel=... should
+  instead follow it).
+
+While this doesn't *guarantee* there is no vulnerability, this certainly
+reduces the risks.
 
 ## <a name="supply-chain"></a>Supply chain (reuse)
 

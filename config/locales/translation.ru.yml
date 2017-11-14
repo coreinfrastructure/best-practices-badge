@@ -42,13 +42,13 @@ ru:
       <small> <strong>Нужна помощь? Есть вопрос? Видите ошибку?
       Пожалуйста, отправьте <em><a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">электронное
       письмо</a></em> или <em><a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
-      target="_blank">вопрос на GitHub</a></em>.</strong> © 2015-2017
-      <a href="https://www.coreinfrastructure.org/" target="_blank">Core
+      target="_blank" rel="noopener">вопрос на GitHub</a></em>.</strong> © 2015-2017
+      <a href="https://www.coreinfrastructure.org/" target="_blank" rel="noopener">Core
       Infrastructure Initiative</a>, a <a href="https://www.linuxfoundation.org/"
-      target="_blank">Linux Foundation</a> Collaborative Project.
+      target="_blank" rel="noopener">Linux Foundation</a> Collaborative Project.
       All Rights Reserved. Please see our <a href="https://www.linuxfoundation.org/privacy"
-      target="_blank">privacy policy</a> and <a href="https://www.linuxfoundation.org/terms"
-      target="_blank">terms of use</a>. </small>
+      target="_blank" rel="noopener">privacy policy</a> and <a href="https://www.linuxfoundation.org/terms"
+      target="_blank" rel="noopener">terms of use</a>. </small>
     choose_locale: Выберите язык
   admin_only: Только администратор.
   account_activations:
@@ -360,7 +360,7 @@ ru:
       changed_since_html: >-
         Другой пользователь внес изменения в эту запись, пока
         вы с ней работали. <br>Пожалуйста, откройте новую <a href="%{edit_url}"
-        target="_blank">форму</a> и перенесите в неё свои изменения.
+        target="_blank" rel="noopener">форму</a> и перенесите в неё свои изменения.
       successfully_updated: Проект был успешно обновлен.
       congrats_new: >-
         ПОЗДРАВЛЯЕМ с получением значка %{new_badge_level}! Если
@@ -376,7 +376,7 @@ ru:
       submit_cc_by_3plus_html: >-
         Предоставляя эти данные о проекте, вы соглашаетесь на
         их публикацию как минимум под <a href="https://creativecommons.org/licenses/by/3.0/us/deed.ru"
-        target="_blank">лицензией Creative Commons Attribution
+        target="_blank" rel="noopener">лицензией Creative Commons Attribution
         версии 3.0 или новее (CC-BY-3.0+)</a>. Это означает, что
         все могут свободно распространять и адаптировать эти данные,
         но они обязаны указывать авторство. Авторские права (если
@@ -399,7 +399,7 @@ ru:
         %{when}.
       cc_by_3plus_html: >-
         Эти данные доступны под <a href="https://creativecommons.org/licenses/by/3.0/us"
-        target="_blank">лицензией Creative Commons Attribution
+        target="_blank" rel="noopener">лицензией Creative Commons Attribution
         версии 3.0 или более поздней (CC-BY-3.0+)</a>. Все могут
         свободно делиться и адаптировать эти данные, но должны
         указывать соответствующие ссылки. При распространении,
@@ -407,10 +407,10 @@ ru:
         badge contributors".<br><br>
       cc_by_3only_html: >-
         Эти данные доступны под <a href="https://creativecommons.org/licenses/by/3.0/us"
-        target="_blank">лицензией Creative Commons Attribution
+        target="_blank" rel="noopener">лицензией Creative Commons Attribution
         версии 3.0 (CC-BY-3.0)</a> в соответствии с <a href="https://www.linuxfoundation.org/terms"
-        target="_blank">условиями использования</a> <a href="https://www.coreinfrastructure.org/"
-        target="_blank">Core Infrastructure Initiative</a>. Все
+        target="_blank" rel="noopener">условиями использования</a> <a href="https://www.coreinfrastructure.org/"
+        target="_blank" rel="noopener">Core Infrastructure Initiative</a>. Все
         могут свободно делиться и адаптировать эти данные, но
         должны указывать соответствующие ссылки. При распространении,
         пожалуйста, указывайте "%{user} and the CII Best Practices
@@ -482,7 +482,7 @@ ru:
           <br><br> Если вам нужна помощь, у вас есть вопрос или
           вы видите проблему, пожалуйста, <em><a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">отправьте
           электронное письмо</a> </em> или <em><a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
-          target="_blank">опишите проблему в трекере</a></em>.
+          target="_blank" rel="noopener">опишите проблему в трекере</a></em>.
     form_basics:
       project_name:
         description: Какое у проекта человекочитаемое название?

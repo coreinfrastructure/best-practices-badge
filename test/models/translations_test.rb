@@ -21,7 +21,7 @@ class TranslationsTest < ActiveSupport::TestCase
   # What tags & attributes are allowed?
   ACCEPTABLE_TAGS = %w[h1 a strong em i b small tt ol ul li br p span].freeze
   # Class can cause trouble, but we need it for glyphicons, etc.
-  ACCEPTABLE_ATTRS = %w[href name class target].freeze
+  ACCEPTABLE_ATTRS = %w[href name class target rel].freeze
 
   def sanitize_html(text)
     html_sanitizer = Rails::Html::WhiteListSanitizer.new
@@ -61,6 +61,8 @@ class TranslationsTest < ActiveSupport::TestCase
     return false if text.include?('target = ')
     return false if /(href|class|target)=[^"']/.match?(text)
     return false if /(href|class|target)=["'] /.match?(text)
+    # target= must have rel="noopener"; just target= isn't enough.
+    return false if text.include?('target="_blank">')
 
     # Now ensure that the HTML only has the tags and attributes we permit.
     # The translators are considered trusted, but nevertheless this

@@ -393,6 +393,13 @@ There's a small amount of Bourne shell code
 If you modify it, make sure it passes shellcheck
 (a static analysis tool for shell).
 
+### HTML
+
+Try to avoid using "target=" in the "a" tag.  If you must use target=,
+always use rel="noopener" as well, for security reasons.
+For more information, see
+["Target="\_blank" - the most underestimated vulnerability ever" by Alex Yumashev, May 4, 2016](https://www.jitbit.com/alexblog/256-targetblank---the-most-underestimated-vulnerability-ever/).
+
 ### Automated tests
 
 When adding or changing functionality, please include new tests for them as

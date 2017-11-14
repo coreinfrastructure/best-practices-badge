@@ -44,6 +44,7 @@ class ProjectsControllerTest < ActionController::TestCase
     get :index
     assert_response :success
     assert_not_nil assigns(:projects)
+    refute_includes @response.body, 'target=[^ >]+>'
   end
 
   test 'should get new' do
@@ -91,6 +92,7 @@ class ProjectsControllerTest < ActionController::TestCase
     assert @response.body.include?(
       I18n.t('criteria.0.version_semver.description')
     )
+    refute_includes @response.body, 'target=[^ >]+>'
   end
 
   test 'should show project with criteria_level=1' do

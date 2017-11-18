@@ -284,3 +284,11 @@
     :why: Proprietary but available under license while we use service for debugging
     :versions: []
     :when: 2017-06-10 18:12:56.899860000 Z
+- - :approve
+  - blankslate
+  - :who: David A. Wheeler
+    :why: 'MIT license, which is already approved.  Unfortunately license_finder does
+      not detect this, probably because the license file has an unusual name. See:
+      https://github.com/masover/blankslate/blob/master/MIT-LICENSE'
+    :versions: []
+    :when: 2017-11-18 19:27:38.823188201 Z

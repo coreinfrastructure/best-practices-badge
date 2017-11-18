@@ -50,6 +50,7 @@ GEM
     awesome_print (1.8.0)
     bcrypt (3.1.11)
     bindex (0.5.0)
+    blankslate (2.1.2.4)
     bootsnap (1.1.5)
       msgpack (~> 1.0)
     bootstrap-sass (3.3.7)
@@ -154,11 +155,12 @@ GEM
     json (2.1.0)
     jwt (1.5.6)
     kramdown (1.15.0)
-    license_finder (3.0.4)
+    license_finder (4.0.2)
       bundler
       httparty
       rubyzip
       thor
+      toml (= 0.1.2)
       with_env (> 1.0)
       xml-simple
     locale (2.1.2)
@@ -234,6 +236,8 @@ GEM
     parallel (1.12.0)
     parser (2.4.0.0)
       ast (~> 2.2)
+    parslet (1.5.0)
+      blankslate (~> 2.0)
     pg (0.21.0)
     pg_search (2.1.1)
       activerecord (>= 4.2)
@@ -380,6 +384,8 @@ GEM
     thor (0.19.4)
     thread_safe (0.3.6)
     tilt (2.0.8)
+    toml (0.1.2)
+      parslet (~> 1.5.0)
     traceroute (0.5.0)
       rails (>= 3.0.0)
     translation (1.10)
@@ -441,7 +447,7 @@ DEPENDENCIES
   jquery-rails (= 4.3.1)
   jquery-ui-rails (= 6.0.1)
   json (= 2.1.0)
-  license_finder (= 3.0.4)
+  license_finder (= 4.0.2)
   lograge (= 0.7.1)
   mail (= 2.7.0)
   mdl (= 0.4.0)

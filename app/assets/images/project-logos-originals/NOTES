@@ -9,3 +9,7 @@ http://www.gnutls.org/graphics/gnutls-logo-large.png
 
 Kubernetes:
 https://raw.githubusercontent.com/cncf/artwork/master/kubernetes/name_logo_color.png
+
+wget https://raw.githubusercontent.com/theupdateframework/tuf/develop/docs/images/banner_readme.JPG
+mv banner_readme.JPG tuf.jpg
+convert tuf.jpg tuf.png

@@ -82,7 +82,7 @@ group :test do
   gem 'chromedriver-helper', '1.1.0', require: false
   gem 'codecov', '0.1.10', require: false
   gem 'minitest-rails-capybara', '3.0.1', require: false
-  gem 'minitest-reporters', '1.1.18', require: false
+  gem 'minitest-reporters', '1.1.19', require: false
   gem 'minitest-retry', '0.1.9', require: false # Avoid Capybara false positives
   gem 'poltergeist', '1.16.0', require: false
   gem 'rails-controller-testing', '1.0.2' # need to require this one

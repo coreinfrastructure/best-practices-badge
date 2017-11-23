@@ -44,12 +44,23 @@ class ProjectsControllerTest < ActionController::TestCase
     get :index
     assert_response :success
     assert_not_nil assigns(:projects)
+    assert_includes @response.body, 'Badge status'
     refute_includes @response.body, 'target=[^ >]+>'
   end
 
-  test 'should get new' do
+  test 'new but not logged in' do
     get :new
     assert_response :success
+    assert_includes @response.body, 'Log in with '
+  end
+
+  test 'should get new' do
+    log_in_as(@user)
+    get :new
+    assert_response :success
+    assert_includes @response.body,
+                    'What is the URL for the project home page ' \
+                    '(the URL for the project as a whole)'
   end
 
   test 'should create project' do
@@ -86,6 +97,8 @@ class ProjectsControllerTest < ActionController::TestCase
   test 'should show project' do
     get :show, params: { id: @project }
     assert_response :success
+    assert_includes @response.body,
+                    'What is the human-readable name of the project'
     assert_select(+'a[href=?]', 'https://www.nasa.gov')
     assert_select(+'a[href=?]', 'https://www.nasa.gov/pathfinder')
     # Check semver description, which has HTML - make sure it's not escaped:

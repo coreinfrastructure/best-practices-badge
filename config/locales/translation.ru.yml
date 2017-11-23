@@ -78,7 +78,7 @@ ru:
     email: Электронная почта
     password: Пароль
     forgot_password: Забыли пароль?
-    remember_me: Помнить меня
+    remember_me: Помнить меня (сохраняя постоянную запись cookie)
     login_custom: Войти через пользовательскую учетную запись
     no_custom: >-
       Нет пользовательской учетной записи? Зарегистрируйтесь сейчас!
@@ -91,7 +91,9 @@ ru:
       Учетная запись не активирована. Проверьте свою электронную
       почту для ссылки на активацию.
     signed_out: Вы вышли из системы!
-    cookie_details_html:
+    cookie_details_html: >-
+      <a href="/cookies" target="_blank" rel="noopener"><i>Подробнее
+      о файлах cookie.</i></a>
   static_pages:
     home:
       badge_program: Программа значков "Передовая практика CII"
@@ -107,7 +109,7 @@ ru:
         передовые методы организации разработки свободного и открытого
         ПО, и опубликовать результат. Идея значка "Передовая практика
         CII" навеяна многими другими значками, доступными для
-        проектов на GitHub. Видящие значок смогут быстро определить,
+        проектов на GitHub. Видящие значок могут быстро определить,
         какие проекты FLOSS используют передовые методы и в результате
         с большей вероятностью создают более качественное и защищенное
         программное обеспечение.
@@ -122,12 +124,13 @@ ru:
         показывает участвующие проекты и позволяет делать запросы
         по базе проектов (например, вы можете найти <a href="/ru/projects?gteq=100">проекты
         со значком Passing</a>). Вы также можете взглянуть на
-        <a href='/ru/projects/1'>пример (в котором мы пытаемся
+        <a href='/ru/projects/1/0'>пример (в котором мы пытаемся
         получить наш собственный значок)</a>.
       p3_html: >-
         <em>Конфиденциальность и юридические вопросы</em>: см.
         нашу <a href="https://www.linuxfoundation.org/privacy">политику
-        конфиденциальности</a> и <a href="https://www.linuxfoundation.org/terms">условия
+        конфиденциальности</a>, <a href="/cookies">замечание про
+        cookies</a> и <a href="https://www.linuxfoundation.org/terms">условия
         использования</a>. Все общедоступное содержимое, не являющееся
         программным кодом, выпущено под лицензией как минимум
         <a href="https://creativecommons.org/licenses/by/3.0/">Creative
@@ -137,15 +140,15 @@ ru:
         или если не указано иное, пожалуйста, ссылайтесь на "CII
         Best Practices badge contributors".
       check_us_out:
-      share_header_html:
-      twitter:
-      reddit:
-      facebook:
-      linkedin:
-      googleplus:
-      email:
-      projects_earned_badge:
-      hacker_news:
+      share_header_html: "<p>Поделиться: </p>"
+      twitter: Twitter
+      reddit: Reddit
+      facebook: Facebook
+      linkedin: LinkedIn
+      googleplus: Google+
+      email: Электронная почта
+      projects_earned_badge: 'Некоторые проекты со значками:'
+      hacker_news: Hacker News
     criteria:
       criteria: Критерии
       detailed_criteria_on_github: Подробные критерии приведены
@@ -192,7 +195,7 @@ ru:
       met_justification_or_url_required: Требущих обоснование
         или URL
     cookies:
-      cookies_header:
+      cookies_header: Про Cookies
       cookies_info_html:
   users:
     new:
@@ -217,14 +220,15 @@ ru:
       profile_updated: Профиль обновлен
     show:
       edit_user: Изменить учетную запись
-      other_projects_edit: Другие проекты, которые вы можете изменять
+      other_projects_edit: 'Другие проекты, которые вы можете
+        изменять:'
       see_external: См. внешнюю страницу этого пользователя.
       as_admin: 'как администратор, вы также можете:'
       send_email_to: 'отправить письмо по адресу:'
       delete_link_name: удалить
       confirm_delete: Вы уверены, что хотите удалить этого пользователя?
-      projects_owned:
-      projects_additional_rights:
+      projects_owned: 'Принадлежащие проекты:'
+      projects_additional_rights: 'Проекты с дополнительными правами:'
       is_admin:
     destroy:
       cannot_delete_self: Удалить себя невозможно.
@@ -403,11 +407,11 @@ ru:
       cc_by_3plus_html: >-
         Эти данные доступны под <a href="https://creativecommons.org/licenses/by/3.0/us"
         target="_blank" rel="noopener">лицензией Creative Commons
-        Attribution версии 3.0 или более поздней (CC-BY-3.0+)</a>.
-        Все могут свободно делиться и адаптировать эти данные,
-        но должны указывать соответствующие ссылки. При распространении,
-        пожалуйста, указывайте "%{user} and the CII Best Practices
-        badge contributors".<br><br>
+        Attribution версии 3.0 или более поздней (CC-BY-3.0+)</а>.
+        (CC-BY-3.0+)</a>. Все могут свободно делиться и адаптировать
+        эти данные, но должны указывать соответствующие ссылки.
+        При распространении, пожалуйста, указывайте "%{user} and
+        the CII Best Practices badge contributors".<br><br>
       cc_by_3only_html: >-
         Эти данные доступны под <a href="https://creativecommons.org/licenses/by/3.0/us"
         target="_blank" rel="noopener">лицензией Creative Commons
@@ -423,7 +427,7 @@ ru:
       badge_intro:
         description: >-
           Проекты, которые следуют приведенным ниже лучшим практикам,
-          смогут добровольно и самостоятельно оценить себя и продемонстрировать,
+          могут добровольно и самостоятельно оценить себя и продемонстрировать,
           что они получили значок Core Infrastructure Initiative
           (CII).
         details_html: >-
@@ -647,8 +651,10 @@ ru:
         URL не найден.'
       justification_required_warning: 'Предупреждение: Нужно обоснование
         подлиннее.'
-      in_development_warning_html:
-      close:
+      in_development_warning_html: >-
+        <strong>Предупреждение!</strong> Это не производственная
+        система; это тестовый уровень.
+      close: Закрыть
     delete:
       done: Проект успешно удален.
   report_mailer:
@@ -1105,10 +1111,13 @@ ru:
           GitHub Releases</a>.
       release_notes_vulns:
         description: >-
-          Замечания по выпуску ОБЯЗАНЫ упоминать каждую общеизвестную
-          уязвимость, исправленную ​​в каждой новой версии. Критерий
-          неприменим (N/A), если нет заметок о выпуске или не
-          было обнародованных уязвимостей.
+          Замечания о выпуске ОБЯЗАНЫ упоминать каждую общеизвестную
+          уязвимость, исправленную ​​в каждой новой версии, для
+          которой существует CVE или аналогичная публичная запись,
+          исключая случай, когда у пользователей обычно нет практической
+          возможности обновить ПО самостоятельно. Критерий неприменим
+          (N/A), если нет замечаний о выпуске или не было обнародованных
+          уязвимостей.
         details:
       report_process:
         description: >-
@@ -1431,22 +1440,32 @@ ru:
         description: >-
           Механизмы безопасности по умолчанию в программном обеспечении,
           создаваемом проектом, НЕДОПУСТИМО делать зависимыми
-          от сломанных криптографических алгоритмов (например,
+          от взломанных криптографических алгоритмов (например,
           MD4, MD5, single DES, RC4, Dual_EC_DRBG) или использовать
-          режимы шифрования, которые не подходят для контекста
-          (например, режим ECB почти никогда не подходит, потому
-          что внутри зашифрованного ECB текста обнаруживаются
-          идентичные блоки, как можно видеть на примере <a href="https://blog.filippo.io/the-ecb-penguin/">«пингвина
-          ECB»</a>, а режим CTR часто неприемлем, поскольку не
-          выполняет аутентификацию и приводит к дубликатам, если
-          состояние ввода повторяется).
+          режимы шифрования, которые не подходят для контекста,
+          если только они не требуются для интероперабельности
+          протокола (поддерживающего самую новую версию стандарта
+          на этот протокол, широко распространенного в сетевой
+          экосистеме, причем эта экосистема требует использования
+          данного алгоритма или режима, не предлагая более безопасных
+          альтернатив). В документации НЕОБХОДИМО описать все
+          связанные с этим риски безопасности и все известные
+          способы смягчения рисков, если данные алгоритмы или
+          режимы действительно нужны для совместимости с другими
+          реализациями этого протокола.
         details: >-
-          Во многих случаях лучше всего выбирать режим алгоритма
-          с блочным шифром, предназначенный для сочетания секретности
-          и аутентификации, например, Galois / Counter Mode (GCM)
-          и EAX. Проекты МОГУТ разрешать пользователям включать
-          сломанные механизмы, где это необходимо для совместимости,
-          но в таких случаях пользователи знают, что они это делают.
+          Режим ECB почти никогда не подходит, потому что внутри
+          зашифрованного ECB текста обнаруживаются идентичные
+          блоки, как можно видеть на примере <a href="https://blog.filippo.io/the-ecb-penguin/">«пингвина
+          ECB»</a>, а режим CTR часто неприемлем, поскольку не
+          выполняет аутентификацию и приводит к дубликатам, контекста,
+          если состояние ввода повторяется. Во многих случаях
+          лучше всего выбирать режим алгоритма с блочным шифром,
+          предназначенный для сочетания секретности и аутентификации,
+          например, Galois / Counter Mode (GCM) и EAX. Проекты
+          МОГУТ разрешать пользователям включать сломанные механизмы,
+          где это необходимо для совместимости, но в таких случаях
+          пользователи знают, что они это делают.
       crypto_weaknesses:
         description: >-
           Механизмы безопасности по умолчанию в программном обеспечении,
@@ -1561,7 +1580,8 @@ ru:
       static_analysis:
         description: >-
           НЕОБХОДИМО применять по крайней мере, один инструмент
-          анализа статического кода к любой предлагаемой основной
+          анализа статического кода (помимо предупреждений компилятора
+          и "безопасных" режимов языка) к любой предлагаемой основной
           версии создаваемого ПО до ее выпуска, если есть хотя
           бы один инструмент на свободном ПО, который реализует
           этот критерий на выбранном языке.
@@ -1579,7 +1599,8 @@ ru:
           (включая <a href="https://h3xstream.github.io/find-sec-bugs/">FindSecurityBugs</a>),
           <a href="https://pmd.github.io/">PMD</a>, <a href="http://brakemanscanner.org/">Brakeman</a>,
           <a href="https://scan.coverity.com/">Анализатор качества
-          Coverity</a>, и <a href="https://saas.hpe.com/en-us/software/sca">статический
+          Coverity</a>, <a href="https://www.sonarqube.org/">SonarQube</a>,
+          <a href="https://www.codacy.com/">Codacy</a> и <a href="https://saas.hpe.com/en-us/software/sca">статический
           анализатор кода HP Fortify</a>. Более крупные списки
           инструментов можно найти в таких местах, как <a href="https://en.wikipedia.org/wiki/List_of_tools_for_static_code_analysis">Wikipedia
           list of tools for static code analysis</a>, <a href="https://www.owasp.org/index.php/Static_Code_Analysis">OWASP
@@ -1849,9 +1870,17 @@ ru:
           проблем до их возникновения и сделать проект более привлекательным
           местом, поощряющим участие. Правила должны быть сосредоточены
           только на поведении в сообществе или на рабочем месте
-          проекта. Примерами правил поведения являются <a href="http://contributor-covenant.org/">Contributor
-          Covenant Code of Conduct</a> и <a href="https://www.kernel.org/doc/html/latest/process/code-of-conflict.html">правила
-          конфликта</a> для проекта ядра Linux.
+          проекта. Примерами правил поведения являются <a href="https://www.kernel.org/doc/html/latest/process/code-of-conflict.html">правила
+          конфликтов на проекте ядра Linux</a>, <a href="http://contributor-covenant.org/">Contributor
+          Covenant Code of Conduct</a>, <a href="https://www.debian.org/code_of_conduct">Кодекс
+          поведения Debian</a>, <a href="https://www.ubuntu.com/about/about-ubuntu/conduct">Ubuntu
+          Code of Conduct</a>, <a href="https://getfedora.org/code-of-conduct">Правила
+          поведения проекта Fedora</a>, <a href="https://wiki.gnome.org/action/show/Foundation/CodeOfConduct">GNOME
+          Code Of Conduct</a>, <a href="https://www.kde.org/code-of-conduct/">KDE
+          Community Code of Conduct">, <a href="https://www.python.org/psf/codeofconduct/">Python
+          Community Code of Conduct</a>, <a href="https://www.ruby-lang.org/en/conduct/">The
+          Ruby Community Conduct Guideline</a> и <a href="https://www.rust-lang.org/en-US/conduct.html">The
+          Rust Code of Conduct</a>.
       roles_responsibilities:
         description: >-
           Проект ОБЯЗАН четко определять и публично документировать

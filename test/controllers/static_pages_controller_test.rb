@@ -11,9 +11,19 @@ class StaticPagesControllerTest < ActionController::TestCase
     get :home
     assert_response :success
     assert_template 'home'
+    # Check that it has some content
+    assert_includes @response.body, 'Open Source Software'
     assert_includes @response.body, 'target='
     # target=... better not end immediately, we need rel="noopener"
     refute_includes @response.body, 'target=[^ >]+>'
+  end
+
+  test 'should get home in French' do
+    get :home, params: { locale: 'fr' }
+    assert_response :success
+    assert_template 'home'
+    # Check that it has some content
+    assert_includes @response.body, 'les projets de logiciel libre'
   end
 
   test 'should get cookie page' do

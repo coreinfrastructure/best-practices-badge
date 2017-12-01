@@ -154,7 +154,7 @@ GEM
       railties (>= 3.2.16)
     json (2.1.0)
     jwt (1.5.6)
-    kramdown (1.15.0)
+    kramdown (1.16.2)
     license_finder (4.0.2)
       bundler
       httparty

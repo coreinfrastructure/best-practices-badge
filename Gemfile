@@ -65,7 +65,7 @@ end
 # The "fake_production" environment is very much like production, however,
 # we enable a few debug tools to help us find "production-only" bugs.
 group :fake_production, :development, :test do
-  gem 'pry-byebug', '3.5.0'
+  gem 'pry-byebug', '3.5.1'
 end
 
 group :development do

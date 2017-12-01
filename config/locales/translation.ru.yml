@@ -139,7 +139,8 @@ ru:
         версии 3.0 или выше (CC-BY-3.0+). Для коллективной ссылки
         или если не указано иное, пожалуйста, ссылайтесь на "CII
         Best Practices badge contributors".
-      check_us_out:
+      check_us_out: Посетите веб-сайт значков "Передовая практика
+        CII"!
       share_header_html: "<p>Поделиться: </p>"
       twitter: Twitter
       reddit: Reddit
@@ -229,7 +230,8 @@ ru:
       confirm_delete: Вы уверены, что хотите удалить этого пользователя?
       projects_owned: 'Принадлежащие проекты:'
       projects_additional_rights: 'Проекты с дополнительными правами:'
-      is_admin:
+      is_admin: Этот пользователь является администратором заявки
+        на значок.
     destroy:
       cannot_delete_self: Удалить себя невозможно.
       user_deleted: Пользователь удален.

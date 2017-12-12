@@ -524,3 +524,4 @@ class Project < ApplicationRecord
   end
   # rubocop:enable Metrics/AbcSize
 end
+# rubocop:enable Metrics/ClassLength

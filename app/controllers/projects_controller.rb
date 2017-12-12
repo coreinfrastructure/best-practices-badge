@@ -262,7 +262,7 @@ class ProjectsController < ApplicationController
                 .deliver_now
     projects.map(&:id) # Return a list of project ids that were reminded.
   end
-  # rubocop:enble Metrics/MethodLength
+  # rubocop:enable Metrics/MethodLength
   private_class_method :send_monthly_announcement
 
   def allowed_query?(key, value)
@@ -295,6 +295,7 @@ class ProjectsController < ApplicationController
 
   # Forceably set additional_rights on project "id" given string description
   # Presumes permissions are granted & valid syntax in new_additional_rights
+  # rubocop:disable Metrics/MethodLength
   def update_additional_rights_forced(id, new_additional_rights)
     command = new_additional_rights[0]
     new_list = new_additional_rights[1..-1].split(',').map(&:to_i).uniq.sort
@@ -309,6 +310,7 @@ class ProjectsController < ApplicationController
       end
     end
   end
+  # rubocop:enable Metrics/MethodLength
 
   VALID_ADD_RIGHTS_CHANGES = /\A[+-](\d+(,\d+)*)+\z/
 
@@ -397,6 +399,7 @@ class ProjectsController < ApplicationController
 
   # rubocop:disable Metrics/PerceivedComplexity
   # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
+  # rubocop:disable Metrics/MethodLength
   def retrieve_projects
     @projects = Project.all
     # We had to keep this line the same to satisfy brakeman
@@ -422,6 +425,7 @@ class ProjectsController < ApplicationController
     end
     @projects = @projects.includes(:user).paginate(page: params[:page])
   end
+  # rubocop:enable Metrics/MethodLength
   # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity
   # rubocop:enable Metrics/PerceivedComplexity
 
@@ -470,7 +474,8 @@ class ProjectsController < ApplicationController
   end
   # rubocop:enable Metrics/AbcSize
 
-  # rubocop:disable Metrics/AbcSize
+  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  # TODO: Break this into smaller pieces
   def successful_update(format, old_badge_level, criteria_level)
     purge_cdn_project
     criteria_level = nil if criteria_level == '0'
@@ -508,7 +513,7 @@ class ProjectsController < ApplicationController
       @project, old_badge_level, new_badge_level, lost_level
     ).deliver_now
   end
-  # rubocop:enable Metrics/AbcSize
+  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
   def url_anchor
     return '#' + params[:continue] unless params[:continue] == 'Save'

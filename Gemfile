@@ -58,7 +58,7 @@ group :development, :test do
   gem 'rubocop', '0.51.0' # Style checker.  Changes can cause test failure
   gem 'ruby-graphviz', '1.2.3' # This is used for bundle viz
   gem 'spring', '2.0.2' # Preloads app so console, rake, and tests run faster
-  gem 'vcr', '3.0.3' # Record network responses for later test reuse
+  gem 'vcr', '4.0.0' # Record network responses for later test reuse
   gem 'yaml-lint', '0.0.9' # Check YAML file syntax
 end
 

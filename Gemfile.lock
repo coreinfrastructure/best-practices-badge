@@ -51,7 +51,7 @@ GEM
     bcrypt (3.1.11)
     bindex (0.5.0)
     blankslate (2.1.2.4)
-    bootsnap (1.1.6)
+    bootsnap (1.1.7)
       msgpack (~> 1.0)
     bootstrap-sass (3.3.7)
       autoprefixer-rails (>= 5.2.1)
@@ -425,7 +425,7 @@ PLATFORMS
 DEPENDENCIES
   awesome_print (= 1.8.0)
   bcrypt (= 3.1.11)
-  bootsnap (= 1.1.6)
+  bootsnap (= 1.1.7)
   bootstrap-sass (= 3.3.7)
   bootstrap-social-rails (= 4.12.0)
   bootstrap-will_paginate (= 1.0.0)

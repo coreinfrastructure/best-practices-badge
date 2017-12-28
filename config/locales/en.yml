@@ -356,14 +356,15 @@ en:
         What is the URL for the project home page (the URL for
         the project as a whole)? Start with http(s):// (many characters
         are not allowed, including "?")
-      placeholder_of_homepage: http(s)://... for project home
-        page URL
+      placeholder_of_homepage: >-
+        http(s)://... for project home page URL, use https:// if you can
       url_of_repo: >-
         What is the URL for the version control repository (it
         may be the same as the project home page)? Start with
         http(s):// (many characters are not allowed, including
         "?")
-      placeholder_of_repo: http(s)://... for project repo URL
+      placeholder_of_repo: >-
+        http(s)://... for project repo URL, use https:// if you can
       submit_urls: Submit URL
       final_text_html: >-
         Note - if your repository URL is on GitHub, anyone who
@@ -1006,6 +1007,8 @@ en:
           The project sites (website, repository, and download
           URLs) MUST support HTTPS using TLS.
         details: >-
+          This requires that the project home page URL and the version
+          control repository URL begin with "https:", not "http:".
           You can get free certificates from <a href="https://letsencrypt.org/">Let's
           Encrypt</a>. Projects MAY implement this criterion using
           (for example) <a href="https://help.github.com/articles/securing-your-github-pages-site-with-https/">GitHub

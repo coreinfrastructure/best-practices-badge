@@ -3,7 +3,7 @@
       <li><%= link_to t('.edit'), edit_project_path(@project, criteria_level: @criteria_level) %></li>
     <% end %>
     <% if can_control? %>
-      <li><%= link_to t('.delete'), { action: :destroy, id: @project.id }, method: :delete, data: { confirm: t('.confirm_delete', project_id: @project.id) } %></li>
+      <li><%= link_to t('.delete'), project_path(@project) + '/delete_form' %></li>
     <% end %>
 <% end %>
 

@@ -10,6 +10,9 @@ It was created at <%= @project.created_at %>, and was
 
 This action was carried out by user <%= @user.id %> named <%= @user.name %>.
 
+The deletion rationale provided was:
+<%= @deletion_rationale %>
+
 The project's JSON record at deletion was:
 
 <%= JSON.pretty_generate(@project.as_json) %>

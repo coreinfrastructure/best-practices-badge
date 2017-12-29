@@ -1,0 +1,28 @@
+<%# TODO: nav_extras? %>
+
+<div class="row">
+  <% if in_development? %>
+  <div class="alert alert-danger alert-dismissable text-center">
+    <a href="#" class="close" data-dismiss="alert" aria-label="<%= t('projects.misc.close') %>">&times;</a>
+    <%= t('projects.misc.in_development_warning_html') %>
+  </div>
+  <% end %>
+  <div class="col-md-2 col-sm-3">
+    <div class="main-badge-ques"></div>
+  </div>
+  <div class="col-md-7 col-sm-6">
+    <h1 class="m-t-0 h2"><%=@project.try(:name).presence || '(Name Unknown)' %></h2>
+    <%= bootstrap_form_for @project, url: project_path(@project) do |f| %>
+      <input type="hidden" name="_method" value="delete">
+      <%= t('projects.delete_form.info_html', project_name: @project.name) %>
+      <%# TODO: Create textarea for rationale, pass along to delete, which
+          would pass it on to the emailer. %>
+      <textarea name="deletion_rationale"
+          placeholder="<%= t('projects.delete_form.rationale_placeholder') %>"
+          autofocus="true" cols=70 rows=10
+          lang="en" spellcheck="true"
+          required="true"></textarea>
+      <%= f.submit t('projects.delete_form.delete_action') %>
+    <% end %>
+  </div>
+</div>

@@ -665,7 +665,8 @@ system will become ready for another request.
 
 We use a Content Delivery Network (CDN), specifically Fastly,
 to provide cached values of badges.
-These are the most resource-intense kind of request.
+These are the most resource-intense kind of request, simply because
+they happen so often.
 As long as the CDN is up, even if the application crashes the
 then-current data will stay available until the system recovers.
 
@@ -686,6 +687,12 @@ curl -H "X-Forwarded-For: 23.235.32.1" \
 curl -H "X-Forwarded-For: 23.235.32.1,23.235.32.1" \
      https://master-bestpractices.herokuapp.com/
 ~~~~
+
+The system implements a variety of server-side caches, in particular,
+it widely uses fragment caching.  This is primarily to improve performance,
+but it also helps with availability against a DDoS, because
+once a result has been cached it requires very little effort to
+serve the same information again.
 
 A determined attacker with significant resources could disable the
 system through a distributed denial-of-service (DDoS) attack.
@@ -972,67 +979,93 @@ as of 2015-12-14:
 We also use various mechanisms to harden the system against attack;
 these attempt to thwart or slow attack even if the system has a vulnerability.
 
-* We harden the HTTP headers, in particular, we use a
-  restrictive Content Security Policy (CSP) header with just
-  "normal sources" (normal_src).
-  CSP is perhaps one of the most important hardening items,
-  since it prevents execution of injected JavaScript).
-  The HTTP headers are hardened via the
-  [secure_headers](https://github.com/twitter/secureheaders) gem,
-  developed by Twitter to enable a number of HTTP headers for hardening.
-  We check that the HTTP headers are hardened in the test file
-  "test/integration/project_get_test.rb"; that way, when we upgrade
-  the secure_headers gem, we can be confident that the headers continue to
-  be restrictive.
-  The test checks for the HTTP header values when loading a project entry,
-  since that is the one most at risk from user-provided data.
-  That said, the hardening HTTP headers are basically the same for all
-  pages except for /project_stats, and that page doesn't display
-  any user-provided data.
-  We have separately checked the CSP values we use with
-  <https://csp-evaluator.withgoogle.com/>;
-  the only warning it mentioned is that the our "default-src" allows 'self',
-  and it notes that
-  "'self' can be problematic if you host JSONP, Angular
-  or user uploaded files."  That is true, but irrelevant, because we don't
-  host any of them.
-* Cookies have various restrictions (also via the
-  [secure_headers](https://github.com/twitter/secureheaders) gem).
-  They have httponly=true (which counters many JavaScript-based attacks),
-  secure=true (which is irrelevant because we always use HTTPS but it
-  can't hurt), and SameSite=Lax (which counters CSRF attacks on
-  web browsers that support it).
-* We force the use of HTTPS, including via HSTS.
-  The "coreinfrastructure.org" domain is included in
-  [Chrome's HTTP Strict Transport Security (HSTS) preload list](https://hstspreload.org/?domain=coreinfrastructure.org).
-  This is a list of sites that are hardcoded into Chrome as being HTTPS only
-  (some other browsers also use this list), so in many cases browsers
-  will automatically use HTTPS (even if HTTP is requested).
-  If the web brower uses HTTP anyway,
-  our CDN (Fastly) is configured to redirect HTTP to HTTPS.
-  If our CDN is misconfigured or skipped for some reason, the application
-  will also redirect the user from HTTP to HTTPS if queried directly.
-  This is because in production "config.force_ssl" is set to true,
-  which enables a number of hardening mechanisms in Rails, including
-  TLS redirection (which redirects HTTP to HTTPS), secure cookies,
-  and HTTP Strict Transport Security (HSTS).
-  HSTS tells browsers to always use HTTPS in the future for this site,
-  so once the user contacts the site once, it will use HTTPS in the future.
-  See
-  ["Rails, Secure Cookies, HSTS and friends" by Ilija Eftimov (2015-12-14)](http://eftimov.net/rails-tls-hsts-cookies)
-  for more about the impact of force_ssl.
-* We enable per-form CSRF tokens, a Rails 5 addition.
-  (Rails.application.config.action_controller.per_form_csrf_tokens)
-* We enable origin-checking CSRF mitigation, a Rails 5 addition.
-  (Rails.application.config.action_controller.forgery_protection_origin_check)
-* We enable rate limits on reminder emails.
-  We send reminder emails to projects that have not updated their
-  badge entry in a long time. The detailed algorithm that prioritizes projects
-  is in "app/models/project.rb" class method "self.projects_to_remind".
-  It sorts by reminder date, so we always cycle through before returning to
-  a previously-reminded project.  We have a hard rate limit on the number
-  of emails we will send out each time; this keeps us from looking like
-  a spammer.
+*   We harden the HTTP headers, in particular, we use a
+    restrictive Content Security Policy (CSP) header with just
+    "normal sources" (normal_src).  We do send a
+    Cross-Origin Resource Sharing (CORS) header when an origin is specified,
+    but the CORS header does *not* share credentials.
+
+    CSP is perhaps one of the most important hardening items,
+    since it prevents execution of injected JavaScript).
+    The HTTP headers are hardened via the
+    [secure_headers](https://github.com/twitter/secureheaders) gem,
+    developed by Twitter to enable a number of HTTP headers for hardening.
+    We check that the HTTP headers are hardened in the test file
+    "test/integration/project_get_test.rb"; that way, when we upgrade
+    the secure_headers gem, we can be confident that the headers continue to
+    be restrictive.
+    The test checks for the HTTP header values when loading a project entry,
+    since that is the one most at risk from user-provided data.
+    That said, the hardening HTTP headers are basically the same for all
+    pages except for /project_stats, and that page doesn't display
+    any user-provided data.
+    We have separately checked the CSP values we use with
+    <https://csp-evaluator.withgoogle.com/>;
+    the only warning it mentioned is that the our "default-src" allows 'self',
+    and it notes that
+    "'self' can be problematic if you host JSONP, Angular
+    or user uploaded files."  That is true, but irrelevant, because we don't
+    host any of them.
+
+    The HTTP headers *do* include a
+    Cross-Origin Resource Sharing (CORS) header when an origin is specified.
+    We do this so that client-side JavaScript served by other systems can
+    acquire data directly from our site (e.g., to download JSON data to
+    extract and display).
+    CORS disables the usual shared-origin policy, which is always a concern.
+    However, the CORS header expressly does *not* share credentials, and
+    our automated tests verify this (both when an origin is sent, and when
+    one is not).  The CORS header *only* allows GET; while an attacker *could*
+    set the method= attribute, that wouldn't have any useful effect, because
+    the attacker won't have credentials (except for themselves, and
+    attackers can always change the data they legitimately have rights to
+    on the BadgeApp).
+    A CORS header does make it *slightly* easier to perform
+    a DDoS attack (since JavaScript clients can make excessive data demands),
+    but a DDoS attack can be performed without it, and our usual DDoS
+    protection measures (including caching and scaling) still apply.
+
+*   Cookies have various restrictions (also via the
+    [secure_headers](https://github.com/twitter/secureheaders) gem).
+    They have httponly=true (which counters many JavaScript-based attacks),
+    secure=true (which is irrelevant because we always use HTTPS but it
+    can't hurt), and SameSite=Lax (which counters CSRF attacks on
+    web browsers that support it).
+
+*   We force the use of HTTPS, including via HSTS.
+    The "coreinfrastructure.org" domain is included in
+    [Chrome's HTTP Strict Transport Security (HSTS) preload list](https://hstspreload.org/?domain=coreinfrastructure.org).
+    This is a list of sites that are hardcoded into Chrome as being HTTPS only
+    (some other browsers also use this list), so in many cases browsers
+    will automatically use HTTPS (even if HTTP is requested).
+    If the web brower uses HTTP anyway,
+    our CDN (Fastly) is configured to redirect HTTP to HTTPS.
+    If our CDN is misconfigured or skipped for some reason, the application
+    will also redirect the user from HTTP to HTTPS if queried directly.
+    This is because in production "config.force_ssl" is set to true,
+    which enables a number of hardening mechanisms in Rails, including
+    TLS redirection (which redirects HTTP to HTTPS), secure cookies,
+    and HTTP Strict Transport Security (HSTS).
+    HSTS tells browsers to always use HTTPS in the future for this site,
+    so once the user contacts the site once, it will use HTTPS in the future.
+    See
+    ["Rails, Secure Cookies, HSTS and friends" by Ilija Eftimov (2015-12-14)](http://eftimov.net/rails-tls-hsts-cookies)
+    for more about the impact of force_ssl.
+
+*   We enable per-form CSRF tokens, a Rails 5 addition.
+    (Rails.application.config.action_controller.per_form_csrf_tokens)
+
+*   We enable origin-checking CSRF mitigation, a Rails 5 addition.
+    (Rails.application.config.action_controller.forgery_protection_origin_check)
+
+*   We enable rate limits on reminder emails.
+    We send reminder emails to projects that have not updated their
+    badge entry in a long time. The detailed algorithm that prioritizes projects
+    is in "app/models/project.rb" class method "self.projects_to_remind".
+    It sorts by reminder date, so we always cycle through before returning to
+    a previously-reminded project.  We have a hard rate limit on the number
+    of emails we will send out each time; this keeps us from looking like
+    a spammer.
 
 ### Making adjustments
 

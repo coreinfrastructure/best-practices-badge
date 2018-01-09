@@ -11,6 +11,7 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
     origins '*'
     # "credentials" is false (not sent) by default.
+
     # It should be fine to allow "GET" and "OPTIONS" on any request,
     # since we require credentials for anything non-public.  However,
     # we only allow CORS access for specific resources, out of an abundance
@@ -19,12 +20,14 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
     # in case a web browser decides to make a pre-flight request.
     # Typically CORS users will request the JSON files, e.g., by using
     # using the suffix ".json" on the resource.
+
     ALLOWED_METHODS = %i[get options].freeze
-    resource '/', headers: :any, methods: ALLOWED_METHODS
-    resource '/projects', headers: :any, methods: ALLOWED_METHODS
-    resource '/projects.json', headers: :any, methods: ALLOWED_METHODS
-    resource '/projects/*', headers: :any, methods: ALLOWED_METHODS
-    resource '/projects/**/*', headers: :any, methods: ALLOWED_METHODS
-    resource '/project_stats*', headers: :any, methods: ALLOWED_METHODS
+    RESOURCE_PATTERNS = [
+      '/', '/projects', '/projects.json', '/projects/*', '/projects/**/*',
+      '/project_stats*'
+    ].freeze
+    RESOURCE_PATTERNS.each do |resource_pattern|
+      resource resource_pattern, headers: :any, methods: ALLOWED_METHODS
+    end
   end
 end

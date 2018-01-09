@@ -89,5 +89,13 @@ class ProjectGetTest < ActionDispatch::IntegrationTest
     # sure it isn't true.  This test just ensures it's blank.
     # It would also be okay if this was false, but our code doesn't do that.
     assert_nil(@response.headers['Access-Control-Allow-Credentials'])
+
+    # It could be a security disaster if caches always served the same data
+    # to different CORS origins, because private information (e.g., to system
+    # admins) might leak in a cache.  The "rack-cors" gem already handles
+    # this by inserting "Vary: Origin", as is standard recommended behavior
+    # when using CORS.  However, it's important for security, so let's
+    # verify that caching varies depending on the Origin.
+    assert_equal('Accept-Encoding, Origin', @response.headers['Vary'])
   end
 end

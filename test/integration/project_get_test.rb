@@ -83,7 +83,10 @@ class ProjectGetTest < ActionDispatch::IntegrationTest
 
     # When there's an origin, we allow just GET from anywhere.
     assert_equal('*', @response.headers['Access-Control-Allow-Origin'])
-    assert_equal('GET', @response.headers['Access-Control-Allow-Methods'])
+    assert_equal(
+      'GET, OPTIONS',
+      @response.headers['Access-Control-Allow-Methods']
+    )
 
     # It would be a security disaster if this was true, so let's make
     # sure it isn't true.  This test just ensures it's blank.

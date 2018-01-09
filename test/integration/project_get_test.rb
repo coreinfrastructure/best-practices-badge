@@ -67,4 +67,19 @@ class ProjectGetTest < ActionDispatch::IntegrationTest
     assert_match 'This is not the production system', response.body
   end
   # rubocop:enable Metrics/BlockLength
+
+  test 'ensure CORS set when origin set' do
+    get project_path(id: @project_one.id),
+        headers: { 'Origin' => 'https://example.com' }
+    assert_response :success
+
+    # When there's an origin, we allow just GET from anywhere.
+    assert_equal('*', @response.headers['Access-Control-Allow-Origin'])
+    assert_equal('GET', @response.headers['Access-Control-Allow-Methods'])
+
+    # It would be a security disaster if this was true, so let's make
+    # sure it isn't true.  This test just ensures it's blank.
+    # It would also be okay if this was false, but our code doesn't do that.
+    assert_nil(@response.headers['Access-Control-Allow-Credentials'])
+  end
 end

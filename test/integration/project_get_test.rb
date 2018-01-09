@@ -65,6 +65,14 @@ class ProjectGetTest < ActionDispatch::IntegrationTest
     )
     # Check warning on development system
     assert_match 'This is not the production system', response.body
+
+    # We did NOT send an origin, so we don't send CORS headers
+    # such as 'Access-Control-Allow-Origin'; check that.
+    # If we send CORS headers "no matter what", change this, but be sure
+    # that the CORS header values are secure.
+    assert_nil(@response.headers['Access-Control-Allow-Origin'])
+    assert_nil(@response.headers['Access-Control-Allow-Methods'])
+    assert_nil(@response.headers['Access-Control-Allow-Credentials'])
   end
   # rubocop:enable Metrics/BlockLength
 

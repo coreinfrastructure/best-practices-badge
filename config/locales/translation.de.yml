@@ -64,7 +64,8 @@ de:
     email: E-Mail
     password: Passwort
     forgot_password: Passwort vergessen?
-    remember_me: Benutzer merken
+    remember_me: Lass mich angemeldet (verwendet ein langlebiges
+      Cookie)
     login_custom: Melden Sie sich mit benutzerdefiniertem Konto
       an
     no_custom: Noch kein Kundenkonto? Meld dich jetzt an!
@@ -95,8 +96,8 @@ de:
       profile_updated: Profil aktualisiert
     show:
       edit_user: Benutzer bearbeiten
-      other_projects_edit: Andere Projekte die Sie bearbeiten
-        können
+      other_projects_edit: 'Andere Projekte die per GitHub bearbeitet
+        werden können:'
       see_external: Schaue dir die externe Seite dieses Benutzers
         an.
       as_admin: 'Als admin können sie auch:'
@@ -205,7 +206,11 @@ de:
         sind nicht erlaubt, einschließlich "?")
       placeholder_of_homepage: http(s)://... für Projekt-Homepage
         URL
-      url_of_repo:
+      url_of_repo: >-
+        Was ist die URL für das Versionskontroll-Repository (es
+        kann die gleiche wie die Projekt-Homepage sein)? Beginnen
+        Sie mit http(s):// (viele Zeichen sind nicht erlaubt,
+        einschließlich "?")
       placeholder_of_repo: http(s)://... für Projekt-Repo URL
       submit_urls: Sende URL
       sign_in_first: Bitte melde dich an, um ein Projekt hinzuzufügen!
@@ -224,8 +229,30 @@ de:
         Bist du sicher, dass du das GESAMTE Projekt %{project_id}
         LÖSCHEN möchtest?
       back: Zurück
-      cc_by_3plus_html:
-      cc_by_3only_html:
+      cc_by_3plus_html: >-
+        Die Daten sind unter der <a href="https://creativecommons.org/licenses/by/3.0/us"
+        target="_blank" rel="noopener">Creative Commons Attribution
+        3.0-Lizenz oder Nachfolder (CC-BY-3.0+)</a> verfügbar,
+        bereitgestellt von der <a href="https://www.coreinfrastructure.org/"
+        target="_blank" rel="noopener">Core Infrastructure Initiative</a>
+        unter den <a href="https: // www.linuxfoundation.org/terms
+        "target =" _ blank "rel =" noopener ">Nutzungsbedingungen</a>.
+        Es ist allen erlaubt, die Daten zu teilen und anzupassen,
+        müssen aber einen angemessene Hinweis auf den Urheber
+        geben. Bitte geben Sie als Urheber %{user} und die CII
+        Best Practices Badge Mitwirkenden an. <br> <br>
+      cc_by_3only_html: >-
+        Die Daten sind unter der <a href="https://creativecommons.org/licenses/by/3.0/us"
+        target="_blank" rel="noopener">Creative Commons Attribution
+        3.0-Lizenz (CC-BY-3.0 )</a> verfügbar, bereitgestellt
+        von der <a href="https://www.coreinfrastructure.org/"
+        target="_blank" rel="noopener">Core Infrastructure Initiative</a>
+        unter den <a href="https: // www.linuxfoundation.org/terms
+        "target =" _ blank "rel =" noopener ">Nutzungsbedingungen</a>.
+        Es ist allen erlaubt, die Daten zu teilen und anzupassen,
+        müssen aber einen angemessene Hinweis auf den Urheber
+        geben. Bitte geben Sie als Urheber %{user} und die CII
+        Best Practices Badge Mitwirkenden an. <br> <br>
       owned_by: 'Projekt Badge Eintrag im Besitz von:'
       created_at_html: "<strong>Eintrag erstellt auf</strong>
         %{when},"
@@ -342,7 +369,10 @@ de:
           müssen erfüllt sein oder eine Rechtfertigung enthalten,
           <em>und</em> alle EMPFHOLEN Kriterien müssen erfüllt
           sein oder nicht (wir wollen sie zumindest berücksichtigt
-          wissen)). Feedback ist willkommen auf der<a href="https://github.com/coreinfrastructure/best-practices-badge">GitHub-Website
+          wissen). Wenn lediglich ein allgemeiner Kommentar angebeben
+          werden soll, keine direkte Begründung, dann ist das
+          erlaubt wenn der Text mit "#" beginnt. Feedback ist
+          willkommen auf der<a href="https://github.com/coreinfrastructure/best-practices-badge">GitHub-Website
           als Issue oder Pull-Request</a>. Es gibt auch eine <a
           href="https://lists.coreinfrastructure.org/mailman/listinfo/cii-badges">E-Mail-Liste
           für allgemeine Diskussionen</a><br /><br /> Wir stellen
@@ -366,7 +396,8 @@ de:
           später bearbeiten). <br> <br> Wenn Sie Hilfe benötigen,
           eine Frage haben, oder ein Problem sehen, bitte <em><a
           href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">Schicken
-          Sie uns eine E-Mail</a></em>.
+          Sie uns eine E-Mail</a></em> oder <em><a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
+          target="_blank" rel="noopener">erstellen Sie ein Issue</a>/em>.
         badge_alt: Badgelevel für Projekt %{id} ist %{level}
       level:
         0_html: >-
@@ -895,20 +926,28 @@ de:
           Projekt entwickelten Software MÜSSEN NICHT von defekten
           kryptographischen Algorithmen abhängen (z.B. MD4, MD5,
           Single DES, RC4, Dual_EC_DRBG) oder Chiffre-Modi verwenden,
-          die dem Kontext unangemessen sind (z.B. EZB-Modus ist
-          fast nie geeignet, weil es identische Blöcke innerhalb
-          des Chiffretextes enthüllt, wie durch den <a href="https://blog.filippo.io/the-ecb-penguin/">EZB-Pinguin</a>
-          gezeigt wird und der CTR-Modus ist oft unangemessen,
-          weil es keine Authentifizierung durchführt und Duplikate
-          verursacht, wenn der Eingangszustand wiederholt wird).
+          die dem Kontext unangemessen sind, außer sie sind notwendig,
+          um kompatible Protokolle bereit zu stellen (wenn das
+          Protokoll in der neusten Version in der Zielumgebung
+          zum Einsatz kommt, die Zielumgebung solch in Protokoll
+          erfordert und das Zielsystem keine sicherere Alternative
+          anbietet). Die Dokumentation MUSS auf jegliche Sicherheitsrisiken
+          hinweisen und bekannte Vorsichtsmaßnahmen beschreiben,
+          sollten unsichere Protokolle unumgäglich sein.
         details: >-
-          In vielen Fällen ist es am besten, einen Block-Chiffre-Algorithmus-Modus
+          Der EZB-Modus ist fast nie angemessen, da er identische
+          Blöcke innerhalb des Geheimtextes aufdeckt, wie der
+          <a href="https://blog.filippo.io/the-ecb-penguin/">
+          ECB-Pinguin </a> zeigt. Der CTR Modus ist oft unangemessen,
+          da er keine Authentifizierung durchführt und Duplikate
+          verursacht, wenn eine Eingabe wiederholt wird. In vielen
+          Fällen ist es am besten, einen Block-Chiffre-Algorithmus-Modus
           zu wählen, der entworfen wurde, um Geheimhaltung und
           Authentifizierung zu kombinieren, z.B. Galois/ Counter
           Mode (GCM) und EAX. Projekte KÖNNTEN Benutzern erlauben,
-          defekte Mechanismen zu ermöglichen, falls nötig für
-          Kompatibilität, aber dann wissen die Benutzer, dass
-          sie es tun.
+          defekte Mechanismen zu ermöglichen (z.B. während der
+          Einrichtung), falls nötig für Kompatibilität, aber dann
+          wissen die Benutzer, dass sie es tun.
       crypto_weaknesses:
         description: >-
           Die Standard-Sicherheitsmechanismen innerhalb der vom
@@ -1501,13 +1540,14 @@ de:
         Unter <a href="/de/projects">Projekte</a> sind alle Projekte
         gelisted, die an dem Badge Programm teilnehmen, und können
         gefiltert werden (z.B.  <a href="/de/projects?gteq=100">welche
-        Projekte haben sich das Badge verdient</a>).  Ein <a href='/de/projects/1'>Beispiel
+        Projekte haben sich das Badge verdient</a>).  Ein <a href='/de/projects/1/0'>Beispiel
         ist unser eigenes Badge</a>, wo wir uns selbst zertifiziert
         haben.
       p3_html: >-
         <em>Datenschutz und Rechtliche Hinweise</em>: Bitte siehe
         unsere <a href="https://www.linuxfoundation.org/privacy">Datenschutz
-        Richtlinie</a> und <a href="https://www.linuxfoundation.org/terms">Benutzungsbedingungen</a>.
+        Richtlinie</a>, <a href="/cookies">Hinweise zu Cookies</a>
+        und <a href="https://www.linuxfoundation.org/terms">Benutzungsbedingungen</a>.
         Alle öffentlich zugänglichen nicht-Code Inhalte sind mindestens
         unter der  <a href="https://creativecommons.org/licenses/by/3.0/">Creative
         Commons Attribution License version 3.0 (CC-BY-3.0)</a>
@@ -1515,16 +1555,17 @@ de:
         Version 3.0 oder später (CC-BY-3.0+) lizensiert. Bitte
         die CII Best Practices Badge Mitwirkenden als Urheber
         angeben.
-      check_us_out:
-      share_header_html:
-      twitter:
-      reddit:
-      facebook:
-      linkedin:
-      googleplus:
-      email:
-      projects_earned_badge:
-      hacker_news:
+      check_us_out: Schauen Sie sich die CII Best Practices Badge
+        Website an!
+      share_header_html: "<p> Bitte teilen Sie dies: </p>"
+      twitter: Twitter
+      reddit: Reddit
+      facebook: Facebook
+      linkedin: LinkedIn
+      googleplus: Google+
+      email: E-Mail
+      projects_earned_badge: 'Einige Badge Besitzer:'
+      hacker_news: Hacker News
     criteria:
       criteria: Kriterien
       detailed_criteria_on_github: Die detaillierten Kriterien
@@ -1538,9 +1579,20 @@ de:
         Es gibt %{projects} Projekteinträge; %{passing} sind vorbei
         und %{in_progress} sind im Prozess.
       project_stats_html: >-
-        Sie können Statistiken über Projekte im Laufe der Zeit
-        auf der <a href="/project_stats"> Projektstatistik Seite
-        </a> sehen.
+        Die "aktiven" Kriterien sind Kriterien, die in den Prozentberechnungen
+        enthalten sind (im Gegensatz zu "zukünftigen" Kriterien).
+        Die nächsten Spalten identifizieren die Anzahl aktiver
+        Kriterien in jeder Ebene, das sind MÜSSEN, SOLLTEN, EMPFOHLEN,
+        "N/A" als Antwort zulassen, eine Begründung erfordern
+        falls Antwort "erfüllt" ist, eine URL erfordern, eine
+        Begründung erfordern falls Antwort "erfüllt" ist. "Zukünfige"
+        Kriterien werden auf dem Formular angezeigt, und es wird
+        erwartet, dass sie in der Zukunft als aktive Kriterien
+        auf einer bestimmten Ebene hinzugefügt werden, aber nicht
+        in Abschlussberechnungen einbezogen werden. <br> <br>
+        Statistiken zu Projekten im Zeitverlauf können auf der
+        <a href="/project_stats"> Projektstatistikseite </a> angezeigt
+        werden.
       level:
       must:
       should:

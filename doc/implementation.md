@@ -241,25 +241,10 @@ Then point your web browser at "localhost:3000".
 See the separate
 [security](security.md) document for more about security.
 
-## Interface
+## Application Programming Interface (API)
 
-This is a relatively simple web application, so its
-external interface is simple too.
-
-It has a few common use cases:
-
-- Users who want to get a new badge.
-  They will log in (possibly creating an account first
-  if they don't use GitHub), select "add a project".
-  They will see a long HTML form, which they can edit and submit.
-  They can always go back, re-edit, and re-submit.
-- Others who want to see the project data.  They can just go to
-  the project page (they don't need to log in) to see the data.
-- Those who want to see the badge for a given project
-  (typically because this is transcluded).
-  They would 'get' the /projects/:id/badge(.:format);
-  by default, they would get an SVG file showing the status
-  (i.e., 'passing' or 'failing').
+See [api](api.md) for the application programming interface (API),
+including how to download data for analysis.
 
 Its interface supports the following interfaces, which is enough
 to programmatically create a new user, login and logout, create project
@@ -270,127 +255,6 @@ will retrieve HTML that shows the status for project number id.
 A URL with absolute path "/projects/:id.json"
 will retrieve just the status data in JSON format (useful for further
 programmatic processing).
-
-~~~~
-Verb   URI Pattern                        Controller#Action
-GET    /projects/:id(.:format)            projects#show # .json supported.
-GET    /projects/:id/badge(.:format)      projects#badge {:format=>"svg"}
-
-GET    /projects(.:format)                projects#index
-POST   /projects(.:format)                projects#create
-GET    /projects/new(.:format)            projects#new
-GET    /projects/:id/edit(.:format)       projects#edit
-PATCH  /projects/:id(.:format)            projects#update
-PUT    /projects/:id(.:format)            projects#update
-DELETE /projects/:id(.:format)            projects#destroy
-
-GET    /users/new(.:format)               users#new
-GET    /signup(.:format)                  users#new
-GET    /users/:id/edit(.:format)          users#edit
-GET    /users/:id(.:format)               users#show
-
-GET    /sessions/new(.:format)            sessions#new
-GET    /login(.:format)                   sessions#new
-POST   /login(.:format)                   sessions#create
-DELETE /logout(.:format)                  sessions#destroy
-GET    /signout(.:format)                 sessions#destroy
-~~~~
-
-This uses Rails' convention where
-a 'get' of /projects/:id/edit(.:format)' is considered an edit;
-this would normally create a CSRF vulnerability, but Rails automatiacally
-inserts and checks for a CSRF token, countering this potential vulnerability.
-
-## Search
-
-The "/projects" URL supports various searches.
-We reserve the right to change the details, but we do try
-to provide a reasonable interface.
-The following search parameters are supported:
-
-* status: "passing" or "in_progress"
-* gteq: Integer, % greater than or equal
-* lteq: Integer, % less than or equal.  Can be combined with gteq.
-* pq: Text, "prefix query" - matches against *prefix* of URL or name
-* q: Text, "normal query" - match against parsed name, description, URL.
-  This is implemented by PostgreSQL, so you can use "&amp;" (and),
-  "|" (or), and "'text...*'" (prefix).
-  This parses URLs into parts; you can't search on a whole URL (use pq).
-* page: Page to display
-
-See app/controllers/project_controllers.rb for how these
-are implemented.
-
-## Downloading the database
-
-We encourage analysis of OSS trends.
-We do provide some search capabilities, but for most analysis
-you will typically need to download the database.
-We can't anticipate all possible uses, and we're trying to keep the
-software relatively small & focused.
-
-You can download the project data in JSON and CSV format using typical
-Rails REST conventions.
-Just add ".json" or ".csv" to the URL (or include an Accept statement,
-like "Accept: application/json", in the HTTP header).
-You can even do this on a search if we already support the search (e.g.,
-by name).  Similarly, you can download user data in JSON format using
-".json" at the end of the URL.
-
-There is a current technical limitation in that you must
-request project and user data page-by-page.
-This isn't hard, just provide a page parameter (e.g., "page=2").
-This is because Rails does not stream JSON or CSV data by default,
-so if we allowed this the application would download
-the entire database into memory to process it.
-Rails applications *can* stream data (there are even web pages explaining
-how to do it), but the call for it is rare and there are some
-complications in its implementation, so we just haven't implemented it yet.
-
-So you can download the projects by repeatedly requesting this
-(changing "1" into 2, 3, etc. until all is loaded):
-
-> https://bestpractices.coreinfrastructure.org/projects.json?page=1
-
-You can similarly load the user data starting from here:
-
-> https://bestpractices.coreinfrastructure.org/users.json?page=1
-
-To directly download the user list you must be logged in, and we
-intentionally restrict the information we share about users.
-We only provide basic public information such as name, nickname, and such.
-In particular, we only provide email addresses to
-BadgeApp administrators, because we value the privacy of our users.
-
-As we note about privacy and legal issues,
-please see our <a href="https://www.linuxfoundation.org/privacy">privacy
-policy</a> and <a href="https://www.linuxfoundation.org/terms">terms of
-use</a>.
-All publicly-available non-code content is released under at least the
-<a href="https://creativecommons.org/licenses/by/3.0/">Creative Commons
-Attribution License version 3.0 (CC-BY-3.0)</a>;
-newer non-code content is released under
-CC-BY version 3.0 or later (CC-BY-3.0+).
-If referencing collectively or
-not otherwise noted, please credit the
-"CII Best Practices badge contributors" and note the license.
-You should also note the website URL as the data source, which is
-<https://bestpractices.coreinfrastructure.org>.
-
-If you are doing research, we urge you do to it responsibly and reproducibly.
-Please be sure to capture the date and time when you began and completed
-capturing this dataset
-(you need both, because the data could be changing
-while you're downloading it).
-Do what you can to ensure that your research can be
-[replicated](https://en.wikipedia.org/wiki/Replication_crisis).
-Consider the points in
-[Good Enough Practices in Scientific Computing](https://arxiv.org/pdf/1609.00037v2.pdf), a "set of computing tools and techniques
-that every researcher can and should adopt."
-For example, "Where possible, save data as originally generated (i.e.
-by an instrument or from a survey."
-These aren't requirements for using this data, but they are well
-worth considering.
 
 ## Adding a logo on the home page
 

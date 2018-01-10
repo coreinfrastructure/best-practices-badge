@@ -66,8 +66,9 @@ class ProjectsController < ApplicationController
   end
 
   BADGE_PROJECT_FIELDS =
-    'id, badge_percentage_0, badge_percentage_1, badge_percentage_2'
+    'id, updated_at, badge_percentage_0, badge_percentage_1, badge_percentage_2'
 
+  # rubocop:disable Metrics/MethodLength
   def badge
     # Don't use "set_project", but instead specifically find the project
     # ourselves.  That way, we can select *only* the fields we need
@@ -77,14 +78,18 @@ class ProjectsController < ApplicationController
     # Note: If the "find" fails this will raise an exception, which
     # will eventually lead (correctly) to a failure report.
     @project = Project.select(BADGE_PROJECT_FIELDS).find(params[:id])
-    set_surrogate_key_header @project.record_key + '/badge'
     respond_to do |format|
       format.svg do
+        set_surrogate_key_header @project.record_key + '/badge'
         send_data Badge[value_for_badge],
                   type: 'image/svg+xml', disposition: 'inline'
       end
+      format.json do
+        format.json { render :badge, status: :ok, location: @project }
+      end
     end
   end
+  # rubocop:enable Metrics/MethodLength
 
   # GET /projects/new
   def new

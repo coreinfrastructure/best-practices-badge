@@ -131,6 +131,7 @@ class ProjectsControllerTest < ActionController::TestCase
     assert_equal 'Pathfinder OS', body['name']
     assert_equal 'Operating system for Pathfinder rover', body['description']
     assert_equal 'https://www.nasa.gov', body['homepage_url']
+    assert_equal 'in_progress', body['badge_level']
   end
 
   test 'should get edit' do
@@ -393,6 +394,14 @@ class ProjectsControllerTest < ActionController::TestCase
     assert_equal contents('badge-silver.svg'), @response.body
   end
 
+  test 'A perfect silver project should have the silver badge in JSON' do
+    get :badge, params: { id: @perfect_silver_project, format: 'json' }
+    assert_response :success
+    json_data = JSON.parse(@response.body)
+    assert_equal 'silver', json_data['badge_level']
+    assert_equal @perfect_silver_project.id, json_data['id'].to_i
+  end
+
   test 'A perfect project should have the gold badge' do
     get :badge, params: { id: @perfect_project, format: 'svg' }
     assert_response :success
@@ -403,6 +412,14 @@ class ProjectsControllerTest < ActionController::TestCase
     get :badge, params: { id: @perfect_unjustified_project, format: 'svg' }
     assert_response :success
     assert_includes @response.body, 'in progress'
+  end
+
+  test 'An in-progress project must reply in_progress in JSON' do
+    get :badge, params: { id: @project, format: 'json' }
+    assert_response :success
+    json_data = JSON.parse(@response.body)
+    assert_equal 'in_progress', json_data['badge_level']
+    assert_equal @project.id, json_data['id'].to_i
   end
 
   test 'An empty project should not have the badge; it should be in progress' do

@@ -235,8 +235,8 @@ de:
         3.0-Lizenz oder Nachfolder (CC-BY-3.0+)</a> verfügbar,
         bereitgestellt von der <a href="https://www.coreinfrastructure.org/"
         target="_blank" rel="noopener">Core Infrastructure Initiative</a>
-        unter den <a href="https: // www.linuxfoundation.org/terms
-        "target =" _ blank "rel =" noopener ">Nutzungsbedingungen</a>.
+        unter den <a href="https://www.linuxfoundation.org/terms"
+        target="_blank" rel="noopener">Nutzungsbedingungen</a>.
         Es ist allen erlaubt, die Daten zu teilen und anzupassen,
         müssen aber einen angemessene Hinweis auf den Urheber
         geben. Bitte geben Sie als Urheber %{user} und die CII
@@ -244,15 +244,15 @@ de:
       cc_by_3only_html: >-
         Die Daten sind unter der <a href="https://creativecommons.org/licenses/by/3.0/us"
         target="_blank" rel="noopener">Creative Commons Attribution
-        3.0-Lizenz (CC-BY-3.0 )</a> verfügbar, bereitgestellt
-        von der <a href="https://www.coreinfrastructure.org/"
-        target="_blank" rel="noopener">Core Infrastructure Initiative</a>
-        unter den <a href="https: // www.linuxfoundation.org/terms
-        "target =" _ blank "rel =" noopener ">Nutzungsbedingungen</a>.
-        Es ist allen erlaubt, die Daten zu teilen und anzupassen,
-        müssen aber einen angemessene Hinweis auf den Urheber
-        geben. Bitte geben Sie als Urheber %{user} und die CII
-        Best Practices Badge Mitwirkenden an. <br> <br>
+        3.0-Lizenz (CC-BY-3.0)</a> verfügbar, bereitgestellt von
+        der <a href="https://www.coreinfrastructure.org/" target="_blank"
+        rel="noopener">Core Infrastructure Initiative</a> unter
+        den <a href="https://www.linuxfoundation.org/terms" target="_blank"
+        rel="noopener">Nutzungsbedingungen</a>. Es ist allen erlaubt,
+        die Daten zu teilen und anzupassen, müssen aber einen
+        angemessene Hinweis auf den Urheber geben. Bitte geben
+        Sie als Urheber %{user} und die CII Best Practices Badge
+        Mitwirkenden an. <br> <br>
       owned_by: 'Projekt Badge Eintrag im Besitz von:'
       created_at_html: "<strong>Eintrag erstellt auf</strong>
         %{when},"

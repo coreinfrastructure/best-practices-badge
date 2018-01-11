@@ -630,3 +630,24 @@ task :test_dev_install do
     git checkout master
   TEST_BRANCH_SHELL
 end
+
+# Run some slower tests. Doing this on *every* automated test run would be
+# slow things down, and the odds of them being problems are small enough
+# that the slowdown is less worthwhile.  Also, some of the tests (like the
+# CORS tests can interfere with the usual test setups, so again, they
+# aren't worth running in the "normal" automated tests run on each commit.
+desc 'Run slow tests (e.g., CORS middleware stack location)'
+task :slow_tests do
+  # Test CORS library middleware stack location check in environments.
+  # Because of the way it works, Rack::Cors *must* be first in the Rack
+  # middleware stack, as documented here: https://github.com/cyu/rack-cors
+  # This test verifies this precondition, because it'd be easy to
+  # accidentally cause this assumption to fail as code is changed and
+  # gems are added or updated.
+  # This is a slow test (we bring up a whole environment).
+  %w[production development test].each do |environment|
+    command = "RAILS_ENV=#{environment} rake middleware"
+    result = IO.popen(command).readlines.grep(/^use /).first.chomp
+    Kernel.abort("Misordered #{command}") unless result == 'use Rack::Cors'
+  end
+end

@@ -407,6 +407,7 @@ def normalize_string(value)
        .gsub(/class = /, 'class=')
        .gsub(/target = /, 'target=')
        .gsub(/target="_blank" *>/, 'target="_blank" rel="noopener">')
+       .gsub(%r{https: // }, 'https://')
 end
 # rubocop:enable Metrics/MethodLength
 

@@ -164,11 +164,13 @@ class ReportMailer < ApplicationMailer
   end
   # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity
 
-  # Report if a project is deleted
-  def report_project_deleted(project, user)
+  # Report if a project is deleted.  "deletion_rationale" is untrusted
+  # data from a user.
+  def report_project_deleted(project, user, deletion_rationale)
     @report_destination = REPORT_EMAIL_DESTINATION
     @project = project
     @user = user
+    @deletion_rationale = deletion_rationale
     set_headers
     I18n.with_locale(@user.preferred_locale.to_sym) do
       mail(

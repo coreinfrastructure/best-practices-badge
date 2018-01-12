@@ -10,9 +10,10 @@ require 'net/http'
 # rubocop:disable Metrics/ClassLength
 class ProjectsController < ApplicationController
   include ProjectsHelper
-  before_action :set_project, only: %i[edit update destroy show show_json]
+  before_action :set_project,
+                only: %i[edit update delete_form destroy show show_json]
   before_action :logged_in?, only: :create
-  before_action :can_edit_or_redirect, only: %i[edit update]
+  before_action :can_edit_or_redirect, only: %i[edit delete_form update]
   before_action :can_control_or_redirect, only: :destroy
   before_action :set_criteria_level, only: %i[show edit update]
 
@@ -64,6 +65,9 @@ class ProjectsController < ApplicationController
   def show_json
     set_surrogate_key_header @project.record_key + '/json'
   end
+
+  # GET /projects/:id/delete_form(.:format)
+  def delete_form; end
 
   BADGE_PROJECT_FIELDS =
     'id, badge_percentage_0, badge_percentage_1, badge_percentage_2'
@@ -169,10 +173,13 @@ class ProjectsController < ApplicationController
 
   # DELETE /projects/1
   # DELETE /projects/1.json
-  # rubocop:disable Metrics/MethodLength
+  # Form parameter "deletion_rationale" has the user-provided rationale.
+  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   def destroy
     @project.destroy!
-    ReportMailer.report_project_deleted(@project, current_user).deliver_now
+    ReportMailer.report_project_deleted(
+      @project, current_user, params[:deletion_rationale]
+    ).deliver_now
     purge_cdn_project
     # @project.purge
     # @project.purge_all
@@ -185,7 +192,7 @@ class ProjectsController < ApplicationController
       format.json { head :no_content }
     end
   end
-  # rubocop:enable Metrics/MethodLength
+  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
   # The /feed only displays a small set of the project fields, so only
   # extract the ones we use.  This optimization is worth it because

@@ -438,6 +438,13 @@ class ProjectsControllerTest < ActionController::TestCase
     #        @perfect_passing_project.lost_passing_at
   end
 
+  test 'Can display delete form' do
+    log_in_as(@project.user)
+    get :delete_form, params: { id: @project }
+    assert_response :success
+    assert_includes @response.body, 'Warning'
+  end
+
   test 'should destroy own project' do
     log_in_as(@project.user)
     num = ActionMailer::Base.deliveries.size

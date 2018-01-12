@@ -20,6 +20,9 @@ by retrieving (a GET) data from this URL:
 Note that you can ask for a particular result data format (where
 supported) by adding a period and its format (e.g., ".json", ".csv",
 and ".svg") to the URL before the parameters (if any).
+When using "." + format, the format name must be all lowercase.
+You can also request a data format by including an "Accept" statement
+in the requesting HTTP header.
 
 A GET just retrieves information, and since most information is public,
 in most cases you don't need to log in for a GET.
@@ -40,7 +43,8 @@ might request.
 
 *   <tt>GET /projects/:id(/:level)(.:format)</tt>
 
-    Request data for project :id in :format (default html).
+    Request data for project :id in :format (default html,
+    json also supported).
     External interfaces should normally request format "json".
     If "level" is given (0, 1, or 2), that level is shown
     (level is ignored if json format is requested, because we just
@@ -48,19 +52,25 @@ might request.
 
 *   <tt>GET /projects/:id/badge(.:format)</tt>
 
-    Request the badge display for project :id in :format (default SVG).
+    Request the badge display for project :id in :format (default SVG;
+    JSON is also supported).  If you just want to the badge status
+    of a project, retrieve this as JSON and look at badge_level.
+    The SVG badges are specially and rapidly served
+    by the Content Delivery Network (CDN) that we use,
+    so feel free to using "img src" to embed them, since they
+    will be returned especially rapidly.
 
 *   <tt>GET /projects(.:format)(?:query)</tt>
 
     Perform a query on the projects to return a list
     of the matching projects, up to the maximum number allowed in a page.
-    The format is html by default; json and csv are supported.
+    The format is html by default; json and csv are also supported.
     See below for more about the query.
 
 ## Query (Search)
 
 The "/projects" URL supports various searches.
-For example, retrieving this:
+For example, retrieving this URL:
 
     /projects.json?gteq=90&amp;lteq=99&amp;page=2
 
@@ -68,6 +78,8 @@ Will retrieve a list of project data in JSON format, but only for
 projects with 90% or better passing *and* less than or equal to 99%
 passing (that is, not completely passing), and will retrieve the second
 page of this list (by default the first page is returned).
+(Beware: If you embed the URL in an HTML document, you must as
+always write `&` as `&amp;`.
 
 We reserve the right to change the details, but we do try
 to provide a reasonable interface.
@@ -202,6 +214,43 @@ GET    /signout(.:format)                 sessions#destroy
 
 If you install the application you can have it report the routes
 by running "rake routes".
+
+## Rails \_method parameter in POST
+
+As explained in the
+Rails Guide [*Form Helpers*](http://guides.rubyonrails.org/form_helpers.html#how-do-forms-with-patch-put-or-delete-methods-work-questionmark):
+
+> The Rails framework encourages RESTful design of your applications, which means you'll be making a lot of "PATCH" and "DELETE" requests (besides "GET" and "POST"). However, most browsers don't support methods other than "GET" and "POST" when it comes to submitting forms.  Rails works around this issue by emulating other methods over POST with a hidden input named "\_method", which is set to reflect the desired method.
+
+This works in the BadgeApp application too.
+However, note that most requests other than GET (and a few GET requests)
+require a logged-in session, so while this is alternative way to
+*make* the request, for the request to succeed
+you still have to use a logged-in session
+with adequate authorization.
+
+## Cross-Origin Resource Sharing (CORS)
+
+The BadgeApp permits some access by client-side JavaScript programs
+that originate from other sites.
+
+Client-side JavaScript programs are, by default, subject to the
+"same origin" policy, which prevents them from arbitrarily accessing
+sites other than where they came from.
+The standard way to give a client-side JavaScript program additional
+privilege is through Cross-Origin Resource Sharing (CORS) HTTP headers.
+
+The BadgeApp provides CORS headers in certain cases when an
+"Origin" is provided.
+When a client-side JavaScript program
+makes a request to a different origin, it provides its "origin", and
+that allows the BadgeApp to decide what it wants to allow the client-side
+
+The CORS header expressly does *not* share credentials, and
+*only* allows GET (or OPTIONS) for a few specific resources.
+If someone provides a good reason to allow more accesses from
+JavaScript clients, we'll gladly consider it.
+For details, see the BadgeApp source code `config/initializers/cors.rb`.
 
 ## Locale
 

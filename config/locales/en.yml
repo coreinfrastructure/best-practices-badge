@@ -375,26 +375,27 @@ en:
       fork_repos: "=> Forked GitHub Repos"
     delete_form:
       info_html: >-
-        <b>Warning</b> - you are about to <b>permanently</b>
-        delete this badge entry for %{project_name}.
-        We recommend that you do <b>not</b> delete this badge entry,
-        instead, complete the badge requirements later.
+        <b>Warning</b> - you are about to <b>permanently delete</b>
+        the badge entry for %{project_name}.
+        This <b>cannot</b> be easily undone, so
+        we recommend that you do <b>not</b> delete this badge entry.
+        You don't need to complete badge criteria all at once;
+        most projects get the badge by identifying and meeting
+        missing criteria over time.
         If you think some criteria don't make any sense, cannot figure out
         how to meet some criteria, or have other questions, please contact us.
-        You don't need to complete the badge all at once; most projects
-        get the badge by meeting missing criteria over time.
-        Also, note that not all criteria must be met to get a badge
-        (some criteria are SHOULD be met or are SUGGESTED).
-        If you don't want badge reminders emailed to use,
-        edit the project entry and turn off email reminders.
-        However, if you are <i>certain</i> that you want to delete this
-        badge entry, please explain why you are deleting this badge entry
-        below.
+        Note that not all criteria must be met to get a badge
+        (some criteria SHOULD be met or are simply SUGGESTED).
+        If you don't want reminders emailed to you,
+        simply edit the project entry and turn off email reminders instead.
+        However, if you are <i>certain</i> that you want to
+        <i>permanently delete</i> this badge entry, please explain below
+        why you are permanently deleting it.
       rationale_placeholder: >-
-        (Required) Please explain why you are deleting
+        (Required) Please explain why you are permanently deleting
         this project badge entry
         (and, if applicable, what you wish we did instead)
-      delete_action: Permanently delete this project badge entry!
+      delete_action: PERMANENTLY DELETE this project badge entry!
     edit:
       edit_status: Edit Project Badge Status
       repo_url_limits: You may only change your repo_url from

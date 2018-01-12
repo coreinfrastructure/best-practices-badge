@@ -549,6 +549,10 @@ fr:
       close: Fermer
     delete:
       done: Le projet a été supprimé avec succès.
+    delete_form:
+      info_html:
+      rationale_placeholder:
+      delete_action:
   user_mailer:
     account_activation:
       before_html: |-

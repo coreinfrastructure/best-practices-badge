@@ -358,6 +358,10 @@ ja:
       close:
     delete:
       done: プロジェクトは正常に削除されました
+    delete_form:
+      info_html:
+      rationale_placeholder:
+      delete_action:
   report_mailer:
     new_project_heading: ベスト プラクティス バッジ プログラムにプロジェクトを追加してくださいましてありがとうございます
     new_project_part1: |-

@@ -319,6 +319,10 @@ zh-CN:
       close: 关闭
     delete:
       done: 项目已成功删除。
+    delete_form:
+      info_html:
+      rationale_placeholder:
+      delete_action:
   user_mailer:
     account_activation:
       before_html: |-

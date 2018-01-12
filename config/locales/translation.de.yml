@@ -481,6 +481,10 @@ de:
       close:
     delete:
       done: Das Projekt wurde erfolgreich gelöscht.
+    delete_form:
+      info_html:
+      rationale_placeholder:
+      delete_action:
   report_mailer:
     new_project_heading: >-
       Vielen Dank das du dein Projekt dem Best Practices Badging

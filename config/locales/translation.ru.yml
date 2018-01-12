@@ -659,6 +659,10 @@ ru:
       close: Закрыть
     delete:
       done: Проект успешно удален.
+    delete_form:
+      info_html:
+      rationale_placeholder:
+      delete_action:
   report_mailer:
     subject_achieved_passing: >-
       ПОЗДРАВЛЯЕМ с получением значка передовой практики %{new_level}!

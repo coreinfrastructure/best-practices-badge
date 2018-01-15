@@ -550,9 +550,34 @@ fr:
     delete:
       done: Le projet a été supprimé avec succès.
     delete_form:
-      info_html:
-      rationale_placeholder:
-      delete_action:
+      info_html: >-
+        <b>Avertissement</b> : vous êtes sur le point de <b>supprimer
+        définitivement</b> la soumission de badge %{project_name}.
+        Ce <b>ne peut pas</b> être facilement annulé, nous vous
+        recommandons donc de ne <b>pas</b> supprimer cette soumission
+        de badge. Vous n'avez pas besoin de remplir les critères
+        de badge en une fois ; la plupart des projets obtiennent
+        le badge en identifiant et répondant aux critères manquants
+        au fil du temps. Si vous pensez que certains critères
+        n'ont aucun sens, que vous ne savez pas comment répondre
+        à certains critères ou si vous avez d'autres questions,
+        n'hésitez pas à nous contacter. Notez que tous les critères
+        ne doivent pas être remplis pour obtenir un badge (certains
+        critères DEVRAIENT être satisfaits ou sont simplement
+        SUGGÉRÉS). Si vous ne souhaitez pas recevoir de rappels,
+        il vous suffit de modifier la soumission du projet et
+        de désactiver les rappels par e-mail. Cependant, si vous
+        êtes <i>certain(e)</i> que vous voulez <i>supprimer définitivement</i>
+        cette soumission de badge, veuillez expliquer ci-dessous
+        pourquoi vous la supprimez définitivement.
+      rationale_placeholder: >-
+        (Obligatoire) Veuillez expliquer pourquoi vous supprimez
+        définitivement cette soumission de projet de badge (et,
+        le cas échéant, ce que vous souhaitez que nous fassions
+        à la place)
+      delete_action: >-
+        SUPPRESSION PERMANENTE de cette soumission de projet de
+        badge !
   user_mailer:
     account_activation:
       before_html: |-

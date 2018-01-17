@@ -72,6 +72,35 @@ The following figure shows a high-level design of the implementation:
 
 ![Design](./design.png)
 
+### Traditional web app, not a single-page app (SPA)
+
+There are at least two ways to develop a web application:
+
+* a "traditional web application" where most user interactions (such
+  as form submission) involve loading an entirely new web page.
+* a [single-page application (SPA)](https://en.wikipedia.org/wiki/Single-page_application)
+  interacts with the user by dynamically rewriting the current page
+  (instead of loading new pages from a server).
+  SPAs typically provide a more fluid user experience, but also
+  incur a higher development and maintenance cost.
+
+We intentionally developed this application as a traditional web application,
+not as an SPA, because development and maintenance cost was very important
+when the project started.
+Indeed, the article
+[SPAs Are Just Harder, and Always Will Be](http://wgross.net/essays/spas-are-harder)
+argues that SPAs will *always* be harder to develop, even with
+frameworks to help.
+In addition, some security-conscious people disable JavaScript, and we want
+like this application to work even in those cases
+(with some graceful degradation).
+
+When the project started, our primary concerns were to determine the
+criteria, and try to get broad buy-in that those criteria were sensible.
+
+This approach can easily be revisited in the future, if it is decided
+that the costs are worthwhile.
+
 ### Key components
 
 Some other key components we use are:

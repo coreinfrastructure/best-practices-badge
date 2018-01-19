@@ -80,7 +80,9 @@ ja:
     signed_in: サインインしました！
     not_activated: アカウントが有効化されていません。電子メールでお伝えしたアクティベーション リンクを確認してください。
     signed_out: サインアウトしました！
-    cookie_details_html:
+    cookie_details_html: >-
+      <a href="/cookies" target="_blank" rel="noopener"> <i> Cookieの詳細をご確認ください</i>
+      </a>
   users:
     new:
       signup_header: サインアップ
@@ -102,15 +104,15 @@ ja:
       profile_updated: プロフィールが更新されました
     show:
       edit_user: ユーザーを編集する
-      other_projects_edit: 編集できるその他のプロジェクト
+      other_projects_edit: 編集できるその他のプロジェクト：
       see_external: このユーザーの外部ページを参照してください。
       as_admin: 管理者として、次の操作を行うこともできます。
       send_email_to: 電子メールを送ります：
       delete_link_name: 削除
       confirm_delete: このユーザーを削除してもよろしいですか？
-      projects_owned:
-      projects_additional_rights:
-      is_admin:
+      projects_owned: 所有プロジェクト：
+      projects_additional_rights: 追加の権利を持つプロジェクト：
+      is_admin: このユーザーはバッジ申請管理者です。
     destroy:
       cannot_delete_self: 自分を削除することはできません。
       user_deleted: ユーザーが削除されました。
@@ -354,14 +356,16 @@ ja:
       future_criterion: 今後追加されるバッジ基準
       url_required_warning: 警告：URLが必要ですが、URLは見つかりません。
       justification_required_warning: 警告：もっと長い正当性が必要です。
-      in_development_warning_html:
-      close:
+      in_development_warning_html: "<strong>警告！</strong>これは本番システムではありません。これはテスト段階です。"
+      close: クローズ
     delete:
       done: プロジェクトは正常に削除されました
     delete_form:
-      info_html:
-      rationale_placeholder:
-      delete_action:
+      info_html: >-
+        <b>警告</b>  -  %{project_name}のバッジエントリを<b>完全に削除</b>しようとしています。これは簡単に元に戻すことが<b>できない</b>ため、このバッジのエントリを削除<b>しない</b>ことをおすすめします。バッジ基準を一度に完了する必要はありません。ほとんどのプロジェクトでは、時間の経過とともに、達成していない基準を特定し、満たすことによってバッジを取得します。いくつかの基準が意味をなさないと思っている場合、いくつかの基準を満たす方法を理解できない、またはその他の質問がある場合は、お問い合わせください。（いくつかの基準は、満たされるべきであるか、単に提案されているだけのものであり、）バッジを取得するために、すべての基準が満たされている必要はありません。リマインダを電子メールで送信しないようにするには、単にプロジェクトエントリを編集し、電子メールリマインダーをオフにします。ただし、このバッジのエントリを<i>完全に削除</i>することを<i>確認</i>している場合は、永久に削除する理由を以下に説明してください。
+      rationale_placeholder: >-
+        （必須）このプロジェクトバッジのエントリを永久に削除する理由（該当する場合は、代わりに削除してほしいこと）を説明してください
+      delete_action: このプロジェクトバッジのエントリーを永久に削除してください！
   report_mailer:
     new_project_heading: ベスト プラクティス バッジ プログラムにプロジェクトを追加してくださいましてありがとうございます
     new_project_part1: |-
@@ -431,8 +435,90 @@ ja:
     lost_level_message: |-
       申し訳ありませんが、あなたのプロジェクトは「%{old_level}」バッジを有しておらず、現在は「%{new_level}」を有しています。
       詳細については、次のURLを参照してください。
-    reminder_body_html:
-    reminder_body_text:
+    reminder_body_html: |-
+      <h1>ベストプラクティス%{project_name}のバッジに関する自動通知</h1>
+      <p>
+      これは、あなたのプロジェクト
+      "%{project_name}"が、
+      現在、「ベストプラクティス」バッジを取得しておらず、
+      また、そのバッジエントリがしばらく更新されていないことへの自動通知です。
+      </p>
+      <p>
+      あなたのベストプラクティスのバッジエントリーは
+      <a href="%{project_info_url}">%{project_info_url}</a>
+      です。%{project_updated_at}に最後に更新されました。
+      現在、%{project_badge_percentage_0}％（100％のうち）です。
+      </p>
+      <p>
+      私たちはあなたが進歩し続けることをお勧めします。
+      バッジのエントリー
+      <a href="%{project_info_url}">%{project_info_url}</a>
+      にアクセスしてください。
+      情報を完成させてバッジを手に入れましょう！
+      </p>
+      <p>
+      欠落しているもの<em>のみ</em>を確認したい場合は、バッジのエントリーにアクセスし、
+      上部の「すべてのパネルを展開」と表示されているボタンを選択し、
+      次に、「適合またはN / A基準を表示しない」というラベルの付いた上部のボタンを選択します。
+      ご不明な点がございましたら、以下にお気軽にお問い合わせください。
+      <a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;</a>
+      または、以下で問題を提出してください
+      <a href="https://github.com/coreinfrastructure/best-practices-badge/issues"> https://github.com/coreinfrastructure/best-practices-badge/issues</a>
+      （「新しい問題」をクリックしてください）。
+      </p>
+      <p>
+      バッジエントリーの更新を続行してもリマインダーは送信されませんが、
+      おおよそ30〜60日おきにリマインダーを送信します。しかしながら、
+      これらのリマインダメッセージを無効にする場合は、以下でバッジエントリを編集してください。
+      <a href="%{project_info_url}">%{project_info_url}</a>
+      「非アクティブ通知を無効にする」をオンにします。
+      リマインダが無くても、あなたがそれに取り組み続け最終的にバッジを獲得することを願っています
+      </p>
+      <p>
+      お時間をありがとうございます。
+      </p>
+    reminder_body_text: |-
+      <h1>ベストプラクティス%{project_name}のバッジに関する自動通知</h1>
+      <p>
+      これは、あなたのプロジェクト
+      "%{project_name}"が、
+      現在、「ベストプラクティス」バッジを取得しておらず、
+      また、そのバッジエントリがしばらく更新されていないことへの自動通知です。
+      </p>
+      <p>
+      あなたのベストプラクティスのバッジエントリーは
+      <a href="%{project_info_url}">%{project_info_url}</a>
+      です。%{project_updated_at}に最後に更新されました。
+      現在、%{project_badge_percentage_0}％（100％のうち）です。
+      </p>
+      <p>
+      私たちはあなたが進歩し続けることをお勧めします。
+      バッジのエントリー
+      <a href="%{project_info_url}">%{project_info_url}</a>
+      にアクセスしてください。
+      情報を完成させてバッジを手に入れましょう！
+      </p>
+      <p>
+      欠落しているもの<em>のみ</em>を確認したい場合は、バッジのエントリーにアクセスし、
+      上部の「すべてのパネルを展開」と表示されているボタンを選択し、
+      次に、「適合またはN / A基準を表示しない」というラベルの付いた上部のボタンを選択します。
+      ご不明な点がございましたら、以下にお気軽にお問い合わせください。
+      <a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;</a>
+      または、以下で問題を提出してください
+      <a href="https://github.com/coreinfrastructure/best-practices-badge/issues"> https://github.com/coreinfrastructure/best-practices-badge/issues </a>
+      （「新しい問題」をクリックしてください）。
+      </p>
+      <p>
+      バッジエントリーの更新を続行してもリマインダーは送信されませんが、
+      おおよそ30〜60日おきにリマインダーを送信します。しかしながら、
+      これらのリマインダメッセージを無効にする場合は、以下でバッジエントリを編集してください。
+      <a href="%{project_info_url}">%{project_info_url}</a>
+      「非アクティブ通知を無効にする」をオンにします。
+      リマインダが無くても、あなたがそれに取り組み続け最終的にバッジを獲得することを願っています
+      </p>
+      <p>
+      お時間をありがとうございます。
+      </p>
   user_mailer:
     account_activation:
       before_html: |-
@@ -622,7 +708,8 @@ ja:
         description: >-
           リリースノートは、新しいリリースごとに修正された、既知の脆弱性をすべて特定しなければなりません。リリースノートがないか、または既知の脆弱性がない場合、これは
           「該当なし」（N/A）です。
-        details:
+        details: >-
+          ユーザーが一般的にコンピュータ上でソフトウェアを実際に更新することができず、代わりに仲介者に依存してアップグレードを実行する必要がある場合（カーネル、およびカーネルと絡み合う低レベルのソフトウェアではよくあるケース）、プロジェクトは"非該当"（該当なし）。
       report_process:
         description: >-
           プロジェクトは、ユーザーが不具合報告を送信するプロセスを提供しなければなりません（たとえば、課題トラッカーやメーリングリストを使用します）。
@@ -824,7 +911,8 @@ ja:
       static_analysis_common_vulnerabilities:
         description: >-
           static_analysis基準に使用される静的解析ツールの少なくとも1つが、分析された言語または環境における共通の脆弱性を探すためのルールまたはアプローチを含むことが、推奨されています。
-        details:
+        details: >-
+          一般的な脆弱性を探すために特別に設計された静的解析ツールは、それらを見つける可能性が高いです。つまり、静的ツールを使用すると、通常は問題を見つけるのに役立ちますので、利用を提案しますが、「合格」レベルのバッジには要求しません。
       static_analysis_fixed:
         description: >-
           静的コード解析で発見された中程度および重大度の悪用可能な脆弱性はすべて、それらが確認された後、適時に修正されなくてはなりません。
@@ -1329,16 +1417,16 @@ ja:
         のもとでリリースされています。また、より新しい非コード コンテンツは、CC-BY version 3.0 以降
         (CC-BY-3.0+) のもとでリリースされています。詳細や不足事項については、CII ベスト プラクティス
         バッジのコントリビューターまでご連絡ください。
-      check_us_out:
-      share_header_html:
-      twitter:
-      reddit:
-      facebook:
-      linkedin:
-      googleplus:
-      email:
-      projects_earned_badge:
-      hacker_news:
+      check_us_out: CII ベストプラクティスバッジWebサイトをご覧ください！
+      share_header_html: "<p>これを共有してください：</p>"
+      twitter: Twitter
+      reddit: Reddit
+      facebook: フェイスブック
+      linkedin: LinkedIn
+      googleplus: Google+
+      email: 電子メール
+      projects_earned_badge: バッジ獲得者(一部)：
+      hacker_news: ハッカーニュース
     criteria:
       criteria: 基準
       detailed_criteria_on_github: 詳細の基準はGitHubにあります。
@@ -1366,8 +1454,17 @@ ja:
       met_justification_required: 満足している正当な理由が必要
       met_justification_or_url_required: 満足している正当な理由またはURLが必要
     cookies:
-      cookies_header:
-      cookies_info_html:
+      cookies_header: クッキーについて
+      cookies_info_html: >-
+        <p>このサイトを適切に機能させるため、Cookieと呼ばれる小さなデータファイルを端末に配置することがあります。多くのウェブサイトがこれを行います。
+        </p> <p> Cookieは、サイトにアクセスしたときにWebサイトがコンピュータ（モバイルデバイスを含む）に保存する小さなテキストファイルです。それによって、ウェブサイトは、一定期間に渡ってあなたの行動や好み（ログイン、言語、フォントサイズ、その他の表示設定など）を覚えておくことができるので、サイトに戻ったときやあるページから別のページへブラウズするときに再入力する必要がありません。
+        Cookieは、World Wide Web（WWW）を実装するHTTPプロトコルの標準部分であり、<a href="https://tools.ietf.org/html/rfc6265">
+        RFC 6265 </a>で規定されています。 </p> <p>ログインするたびにファーストパーティの「セッション」Cookieが使用されます。定義によって、セッションCookieは、ブラウザを終了するかログオフするときに期限切れになるように設計されています。
+        「ログインしてください」（別名「私を覚えておいてください」）を有効にすると、ブラウザ上のファーストパーティの「永続的な」クッキーにも情報が保存されるため、ブラウザを終了した後でも、サイトを訪れたときに自動的にログインできます。このサイトへの認証に他のサイト（GitHubなど）を使用することを選択した場合、その別のサイトはおそらくCookieを使用します（したがって、Cookieを使用することも当てはまります）。私たちは他のサイトが何をするかを制御することはできないことに注意してください。
+        </p> <p>設定したCookieは、このサイトに関連する機能をサポートするためにのみ使用されます。同意は取り消すことができます
+        - ブラウザ上のCookieを削除するだけです。あなたはあなたが望むようにCookieを制御および/または削除することができます。詳細については、<a
+        href="https://www.aboutcookies.org"> cookies.org </a>を参照してください。既にコンピュータ上にあるすべてのCookieを削除することができます。また、ほとんどのブラウザを設定して、それらが配置されないようにすることができます。ただし、これを行う場合は、サイトにアクセスするたびにいくつかの設定を手動で調整する必要があり、一部のサービスや機能が動作しない可能性があります。特に、このサイトへのログインは、（このサイトおよび他の多くのサイトの）セッションCookieに依存します。
+        </p> <p>このテキストは、英国およびEUの「Cookie法」を遵守することを意図しています。 </p>
   headings:
     Accessibility and internationalization: アクセシビリティと国際化
     Analysis: 分析

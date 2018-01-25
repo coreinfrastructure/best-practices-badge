@@ -724,8 +724,11 @@ of implementation errors or common misconfigurations,
 so countering them greatly reduces security risks.
 
 To reduce the risk of security vulnerabilities in implementation we
-have focused on countering the
-[OWASP Top 10 (2013)](https://www.owasp.org/index.php/Top_10_2013-Top_10).
+have focused on countering the OWASP Top 10,
+both the
+[OWASP Top 10 (2013)](https://www.owasp.org/index.php/Top_10_2013-Top_10)
+and
+[OWASP Top 10 (2017)](https://www.owasp.org/index.php/Top_10-2017_Top_10).
 To counter common misconfigurations, we apply the
 [Ruby on Rails Security Guide](http://guides.rubyonrails.org/security.html).
 We have also taken steps to harden the application.
@@ -735,17 +738,24 @@ Below is how we've done each, in turn.
 
 ### Common implementation vulnerability types countered (OWASP top 10)
 
-The
-[OWASP Top 10 (2013)](https://www.owasp.org/index.php/Top_10_2013-Top_10)
+The OWASP Top 10
 ([details](https://www.owasp.org/index.php/Category:OWASP_Top_Ten_Project))
 represents "a broad consensus about what the most
 critical web application security flaws are."
-We address all of them.  By ensuring that we address all of them,
+When this application was originally developed, the current version was
+[OWASP Top 10 (2013)](https://www.owasp.org/index.php/Top_10_2013-Top_10).
+Since that time the 2017 version, aka
+[OWASP Top 10 (2017)](https://www.owasp.org/index.php/Top_10-2017_Top_10),
+has become available.
+We address all of the issues identified in both lists.
+By ensuring that we address all of them,
 we address all of the most critical and common flaws for
 this we application.
 
 Here are the OWASP top 10
 and how we attempt to reduce their risks in BadgeApp.
+We list them in order of the ten 2013 items, and then (starting at #11)
+list the additional items added since 2013.
 
 1. Injection.
    BadgeApp is implemented in Ruby on Rails, which has
@@ -810,6 +820,36 @@ and how we attempt to reduce their risks in BadgeApp.
    For more information, see the "[supply chain](#supply-chain)" section.
 10. Unvalidated Redirects and Forwards.
    Redirects and forwards are used sparingly, and they are validated.
+11. XML External Entities (XXE). This was added in 2017 as "A4".
+   Old versions of Rails were vulnerable to some XML external entity
+   attacks, but the XML parameters parser was removed from core in Rails 4.0,
+   and we do not re-add that optional feature.
+   Since we do not accept XML input from untrusted sources, we
+   cannot be vulnerable.
+   We do *generate* XML (for the Atom feed), but that's different.
+12. Insecure Deserialization. This was added in 2017 as "A8".
+   This vulnerability would permit remote code execution or
+   sensitive object manipulation on affected platforms.
+   The application itself only accepts JSON and HTML fields (POST or GET).
+   The JSON parser only deserializes to trusted standard objects
+   which are never executed.
+   A key component we use, Rails' Action Controller,
+   [does implement hash and array parameters](http://guides.rubyonrails.org/action_controller_overview.html#hash-and-array-parameters),
+   but these only generate hashes and arrays - there is no
+   general deserializer that could lead to an insecurity.
+13. Insufficient Logging and Monitoring. This was added in 2017 as "A10".
+   We do logging and monitoring, as discussed elsewhere.
+
+Broken Access Control was added in 2017 as "A5", but it's
+really just a merge of the
+2013's A4 (Insecure Direct Object References)
+2013's A7 (Missing Function Level Access Control), which we've
+covered as discussed above.
+Thus, we don't list that separately.
+
+We continue to cover the 2013 A8 (Cross-Site Request Forgery (CSRF))
+and 2013 A10 (Unvalidated Redirects and Forwards), even thought they are
+not listed in the 2017 edition of the OWASP top 10.
 
 ### <a name="misconfiguration"></a>Common misconfiguration errors countered: Ruby on Rails Security Guide
 
@@ -1354,17 +1394,19 @@ For the main bestpractices.coreinfrastructure.org site we have:
 * An "A+" rating from the
   <a href="https://www.ssllabs.com/ssltest/analyze.html?d=bestpractices.coreinfrastructure.org">Qualys SSL labs check of our TLS configuration</a>
   on 2017-01-14.
-* An "A" rating from the
+* An "A+" rating from the
   <a href="https://securityheaders.io/?q=https%3A%2F%2Fbestpractices.coreinfrastructure.org">securityheaders.io check of our HTTP security headers</a>
-  on 2017-01-14.
-  It gives us a slightly lower score because we do not include
+  on 2018-01-25.
+  Back in 2017-01-14 securityheaders.io
+  gave us a slightly lower score ("A") because we do not include
   "Public-Key-Pins".  This simply notes that
   we are do not implement HTTP Public Key Pinning (HPKP).
-  HPKP counters rogue certificate authorities (CAs), but it also has problems.
+  HPKP counters rogue certificate authorities (CAs), but it also has risks.
   HPKP makes it harder to switch CAs *and* any error in its configuration,
   at any time, risks serious access problems that are unfixable -
-  making it somewhat dangerous to use.
-  As a result, we have chosen to not add HPKP at this time.
+  making HPKP somewhat dangerous to use.
+  Many others have come to the same conclusion, and securityheaders.io
+  has stopped using HPKP as a grading criterion.
 * An all-pass report from the
   <a href="https://www.sslshopper.com/ssl-checker.html#hostname=bestpractices.coreinfrastructure.org">SSLShopper SSL checker</a>
   on 2017-01-14.

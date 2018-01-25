@@ -1185,35 +1185,60 @@ in later versions.
 
 ### Auto-detect vulnerabilities when publicly reported (and speedily respond)
 
-We have a process for automatically detecting when the components we use
-have publicly known vulnerabilities or are out-of-date, and
-can quickly respond to alerts that there are publicly known
-vulnerabilities.
+We use multiple processes for automatically detecting when the components we
+use have publicly known vulnerabilities or are out-of-date.
 We specifically focus on detecting all components with any publicly known
 vulnerability, both in our direct and indirect dependencies.
 
-The list of libraries used (transitively) is managed by bundler, so
+We also have a process for quickly responding to alerts
+of publicly known vulnerabilities, so that we can quickly update,
+automatically test, and ship to production once we've been
+alerted to a problem.  If a component we use has a known vulnerability
+we normally simply update and deploy quickly, instead of trying to determine
+if the vulnerability is exploitable in our system, because determining
+exploitability usually takes more effort than
+simply using our highly-automated update process.
+
+The list of libraries we use (transitively) is managed by bundler, so
 updating libraries or sets of libraries can be done quickly.
+Bundler is a Ruby package manager, and it uses the Node Package Manager (NPM)
+to manage JavaScript libraries.
 As noted earlier, our strong automated test suite makes it easy to test this
 updated set, so we can rapidly update libraries, test the result, and
 deploy it.
 
 We detect components with publicly known vulnerabilities
-using both bundle-audit and gemnasium.
-These use the Gemfile* files and National Vulnerability Database (NVD) data:
+using 3 different mechanisms: GitHub, bundle-audit, and gemnasium.
+Each approach has its advantages, and using multiple mechanisms
+increases the likelihood that we will be alerted quickly.
+These all use the Gemfile* files and
+National Vulnerability Database (NVD) data:
 
+* GitHub sends alerts to us for known security vulnerabilities found in
+  dependencies.  This is a GitHub configuration setting
+  (under settings, options, data services).
+  This provides us with an immediate warning of a vulnerability,
+  even if we are not currently modifying the system.
+  This analyzes both Gemfile (direct) and Gemfile.lock
+  (indirect) dependencies in Ruby.
+  For more information, see the
+  [GitHub page About Security Alerts for Vulnerable Dependencies](https://help.github.com/articles/about-security-alerts-for-vulnerable-dependencies/).
 * bundle-audit compares the entire set of gems (libraries),
   both direct and indirect dependencies, to a database
   of versions with known vulnerabilities.
   This is a more complete analysis compared to Gemnasium.
   The default 'rake' task invokes bundle-audit, so every time we run
-  "rake" we are alerted about publicly known vulnerabilities in the
+  "rake" (as part of our build or deploy process)
+  we are alerted about publicly known vulnerabilities in the
   components we depend on (directly or not).
-* Gemnasium warns us when there are vulnerable or
-  out-of-date direct dependencies.  Gemnasium only looks at the
-  direct dependencies (Gemfile, not Gemfile.lock).
-  The BadgeApp Gemnasium badge provides a quick view of the
-  current state, and links to the
+* Gemnasium badge provides us with a convenient
+  quick view of the current state, indicating both vulnerable and
+  out-of-date gems (the others only focus on vulnerable gems).
+  It also shows, on our project front page, if we have a vulnerable
+  direct dependency.  Note that Gemnasium only looks at the
+  direct dependencies (Gemfile, not Gemfile.lock), but our other
+  tools do look at indirect dependencies.
+  See the
   [Badgeapp Gemnasium page](https://gemnasium.com/coreinfrastructure/best-practices-badge)
   for more information.
 
@@ -1235,7 +1260,17 @@ several vulnerabilities in libxml2 and libxslt".
 When it was publicly reported we were alerted.
 In less than an hour from the time the vulnerability
 was publicly reported we were alerted,
-updated the library, ran the full test suite, and deployed the fixed version.
+updated the library, ran the full test suite, and deployed the fixed version
+to our production site.
+
+This automatic detection and remediation
+process does *not* cover the underlying execution
+platform (e.g., kernel, system packages such as the C and Ruby runtime,
+and the database system (PostgreSQL)).
+We depend on the underlying platform provider (Heroku)
+to update those components and restart as necessary when
+a vulnerability in those components is discovered
+(that service is one of the key reasons we pay them!).
 
 ### MITM countered when obtaining reused components
 

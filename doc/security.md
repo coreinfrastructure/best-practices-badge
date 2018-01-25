@@ -1649,17 +1649,32 @@ believe they are acceptable:
 *   *Third party components.*
     As discussed earlier, like all real systems we depend on a large number
     of third party components we did not develop.  These components
-    could have a unintentional or even intentional vulnerabilities.
+    could have unintentional or even intentional vulnerabilities.
     However, recreating them would cost far more time, and since we can make
     mistakes too it's unlikely that the result would be better. Instead,
     as discussed above, we apply a variety of techniques to manage our risks.
 *   *DDoS.*
-    We use a variety of techniques, as discussed above, to redue the
-    impact of DDoS attacks.  However,
-    DDoS attacks are fundamentally resource-on-resource attacks, so
-    at some point we simply cannot counter them short of pouring many
-    resources into countering them.
+    We use a variety of techniques to reduce the impact of DDoS attacks.
+    These include using a scaleable cloud service,
+    using a Content Delivery Network (CDN), and requiring
+    the system to return to operation quickly after
+    a DDoS attack has ended.
+    For more information, see the discussion on availability
+    in the requirements section (above).
+    However, DDoS attacks are fundamentally resource-on-resource attacks,
+    so if an attack is powerful enough, we can only counter it by also
+    pouring in lots of resources (which is expensive).
     The same is true for almost any other website.
+*   *A vulnerability we missed.*
+    Perfection is hard to achieve.
+    We have considered security throughout system development,
+    analyzed it for security issues, and documented what we've determined
+    in this assurance case.
+    That said, we could still have missed a vulnerability.
+    We have released the information so that others can review it,
+    and published a vulnerability report handling process so that
+    security analysts can report findings to us.
+    We believe we've addressed security enough to deploy the system.
 
 ## Vulnerability report handling process
 

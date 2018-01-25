@@ -1142,6 +1142,65 @@ copy those translations into the "config/locales" directory, run:
 
     rake translation:sync
 
+## Cleaning up development environment storage space
+
+If you develop for a period of time within an environment,
+you may start to run short of storage space.
+If so, here are some steps you can take:
+
+### Remove old logs
+
+The file log/test.log, in particular, gets huge if you
+routinely run tests locally.
+
+~~~~
+    rm log/*.log
+~~~~
+
+### Remove cached packages (if Debian/Ubuntu based)
+
+Debian/Ubuntu systems archive downloaded packages; you can see
+the space it takes by running:
+
+~~~~
+    du -sh /var/cache/apt/archives
+~~~~
+
+To clean the apt cache, run this:
+
+~~~~
+    sudo apt-get clean
+~~~~
+
+### Remove unused packages (if Debian/Ubuntu based)
+
+~~~~
+    sudo apt-get autoremove
+~~~~
+
+### Remove Ruby packages for Ruby versions you don't use
+
+~~~~
+    rm -fr ~/.rbenv/versions/RUBY_VERSION_YOU_DONT_USE
+~~~~
+
+### Reduce git repo size
+
+Running git's garbage collector manually may
+give you a few K, but is unlikely to help much,
+because git occasionally runs it automatically.
+That said, there's no harm in running it, here's how:
+
+~~~~
+    git gc
+~~~~
+
+git gc's has an "--aggressive" option, but I suggest avoiding it,
+as that is almost never what you want.
+
+If you are desparate for space you can make the repo a shallow copy
+instead, but then you do not have the full git history.
+
 ## See also
 
 See the separate "[background](./background.md)" and

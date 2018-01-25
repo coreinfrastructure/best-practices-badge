@@ -130,7 +130,7 @@ class FlossLicenseDetective < Detective
       { floss_license_osi_status:
           {
             value: 'Unmet', confidence: 1,
-            explanation: '# Did not find license in the OSI list.'
+            explanation: '// Did not find license in the OSI list.'
           } }
     else
       # We currently don't handle (...), so don't even guess.

@@ -477,7 +477,7 @@ en:
           them considered at least).
           If you want to enter justification text as a generic comment,
           instead of being a rationale that the situation is acceptable,
-          start the text with '#'.
+          start the text block with '//' followed by a space.
           Feedback is welcome via the
           <a href="https://github.com/coreinfrastructure/best-practices-badge">GitHub
           site as issues or pull requests</a> There is also a

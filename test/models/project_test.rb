@@ -229,7 +229,7 @@ class ProjectTest < ActiveSupport::TestCase
     )
     assert !@unjustified_project.send(
       :justification_good?,
-      '# This is a comment.'
+      '// This is a comment.'
     )
     assert !@unjustified_project.send(:justification_good?, 'bah.')
     assert !@unjustified_project.send(:justification_good?, '')

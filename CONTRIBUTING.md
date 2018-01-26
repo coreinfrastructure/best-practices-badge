@@ -624,10 +624,22 @@ When writing git commit messages, try to follow the guidelines in
 
 ### Requirements for reused components
 
-We like reusing components, but please evaluate all new components
-before adding them.
+We prefer reusing components instead of writing lots of code,
+but please evaluate all new components before adding them
+(including whether or not you need them).
 We want to reduce our risks of depending on software that is poorly
 maintained or has vulnerabilities (intentional or unintentional).
+
+Mike Perham's [Kill Your Dependencies](http://www.mikeperham.com/2016/02/09/kill-your-dependencies/)
+notes that, "every dependency in your application has the potential to
+bloat your app, to destabilize your app, to inject odd behavior...
+When you are considering adding a dependency to your Rails app,
+it's a good idea to do a quick sanity check...".
+So don't bring in gems you don't need
+(if it's trivial to re-implement the required function, consider doing it).
+Also, if the gem transitively depends on in many other gems,
+especially if they are new additions, look for simpler alternatives
+or help the upstream library remove the unnecessary dependencies.
 
 #### Requirements for reused Ruby gems
 

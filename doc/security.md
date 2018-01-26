@@ -827,6 +827,11 @@ list the additional items added since 2013.
    Since we do not accept XML input from untrusted sources, we
    cannot be vulnerable.
    We do *generate* XML (for the Atom feed), but that's different.
+   One area where we may *appear* to be vulnerable, but we
+   believe we are not, involves nokogiri, libxml2, and
+   [CVE-2016-9318](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2016-9318).
+   The analysis of Nokogiri is further discussed below in the section
+   on supply chain.
 12. Insecure Deserialization. This was added in 2017 as "A8".
    This vulnerability would permit remote code execution or
    sensitive object manipulation on affected platforms.
@@ -1277,6 +1282,90 @@ a vulnerability in those components is discovered
 We counter man-in-the-middle (MITM) attacks when downloading gems
 because the Gemfile configuration uses an HTTPS source to the
 standard place for loading gems (<https://rubygems.org>).
+
+### Special analysis
+
+Sometimes tools or reports suggest we may have vulnerabilities
+in how we reuse components.
+We are grateful for those tools and reports that help us identify
+places to us to examine further!
+Below are specialized analysis justifying why we believe we do not
+have vulnerabilities in these areas.
+
+#### XXE from Nokogiri / libxml2
+
+One area where we may *appear* to be vulnerable, but we
+believe we are not, involves nokogiri, libxml2, and
+[CVE-2016-9318](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2016-9318).
+This was identified as a potential issue in an
+[analysis by Snyk](https://snyk.io/test/github/coreinfrastructure/best-practices-badge?severity=high&severity=medium&severity=low).
+Here is our analysis justifying why we believe our use of
+nokogiri and libxml2 are not a vulnerability in our application.
+
+The Nokogiri gem is able to do analysis on HTML and XML documents.
+As noted in
+[Nokogiri #1582](https://github.com/sparklemotion/nokogiri/issues/1582),
+"applications using Nokogiri 1.5.4 (circa June 2012) and later
+are not vulnerable to this CVE (CVE-2016-9318)
+unless opting into the DTDLOAD option and opting out of the NONET option.
+Note that by default, Nokogiri turns off both DTD loading and
+network access, treating all docs as untrusted docs. This behavior
+is independent of the version of libxml2 used."
+
+Like practically all Rails applications, we use
+rails-html-sanitizer, which uses loofah, which uses nokogiri,
+which uses libxml.
+So we *do* use Nokogiri in production to process untrusted data.
+However, we do *not* use Nokogiri in production to process incoming XML,
+which is the only way this vulnerability can occur.
+In addition, loofah version 2.1.1 has been checked and it never opts
+into DTDLOAD nor does it opt out of NONET
+(as confirmed using "grep -Ri NONET" and "grep -Ri DTDLOAD" on
+the loofah source directory), so nokogiri is never configured in
+production in a way that could be vulnerable anyway.
+
+All other uses of nokogiri (as confirmed by checking Gemfile.lock)
+are only for the automated test suite
+(capybara, chromedriver-helper, rails-dom-testing, and xpath which in
+turn is only used by capybara).
+Nokogiri is extensively used by our automated testing system,
+but in that case we provide the test data to ourselves (so it is trusted).
+
+#### XSS from erubis / pronto-rails_best_practices
+
+The "erubis" module was identified as potentially vulnerable to
+cross-site scripting (XSS) as introduced through
+pronto-rails_best_practices.
+This was identified as a potential issue in an
+[analysis by Snyk](https://snyk.io/test/github/coreinfrastructure/best-practices-badge?severity=high&severity=medium&severity=low).
+
+However, rails_best_practices is only run in development and test,
+where the environment and input data are trusted,
+so we believe this is not a real vulnerability.
+
+#### Information Exposure from actioncable
+
+The "actioncable" module was identified as potentially vulnerable to
+information exposure.
+This module is introduced by rails and traceroute.
+This was identified as a potential issue in an
+[analysis by Snyk](https://snyk.io/test/github/coreinfrastructure/best-practices-badge?severity=high&severity=medium&severity=low).
+
+Actioncable structures channels over a single WebSocket connection,
+however, there is
+[no way to filter out any sensitive data from the logs](https://github.com/rails/rails/issues/25088).
+
+We don't currently use actioncable, and since we don't use it, there's
+no sensitive data going over it to worry about.
+
+We could remove actioncable as a dependency, but that turns out to be
+annoying.
+The solution would be to replace the "rails" dependency with a large set
+of its transitive dependencies and then removing actioncable.
+Traceroute could be requested in the development group, and then
+the development group could re-require rails.
+This would make later maintenance a little more difficult, with no
+obvious gain, so we have not done this.
 
 ## Security in Verification
 

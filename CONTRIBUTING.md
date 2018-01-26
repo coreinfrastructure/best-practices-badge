@@ -860,6 +860,10 @@ One exception: it's okay if the commit includes
 both a component update and the minimum set of code changes to
 make the update work.
 
+Specially check any update of nokogiri or loofah;
+we specially analyze those to prevent vulnerabilities in our
+[security assurance case](./doc/security.md).
+
 #### Updating Ruby (and handling Ruby updates)
 
 Ruby itself can be updated.

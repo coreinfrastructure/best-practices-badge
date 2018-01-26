@@ -561,6 +561,7 @@ into the default "rake" checking task:
 * OWASP ZAP web application security scanner.
   You are encouraged to use this and other web application scanners to find and
   fix problems.
+* [Snyk](https://snyk.io/test/github/coreinfrastructure/best-practices-badge?severity=high&severity=medium&severity=low)
 * JSCS (JavaScript style checker) using the Node.js format.
 * JSHint (JavaScript error detector)
 * W3C link checker <https://validator.w3.org/checklink>

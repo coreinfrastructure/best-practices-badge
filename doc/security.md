@@ -220,7 +220,7 @@ strong reason for us to pay the extortion fee.
 We expect that people will be willing to come back to the site later
 if it's down, and we have scaleability countermeasures to reduce their
 effectiveness.  If the attack is ongoing, several of the services we use
-would have a finantial incentive to help us counter the attacks.
+would have a financial incentive to help us counter the attacks.
 This makes the attacks themselves less likely
 (since there would be no financial benefit to them).
 
@@ -260,7 +260,7 @@ security reasons do indeed fail).
 We trust external systems to verify their external accounts (that means
 we trust GitHub to verify a GitHub account).
 Anyone can create an account.
-A user with role='admin' is an administator;
+A user with role='admin' is an administrator;
 few users are administrators.
 A user can create as many project entries as desired.
 Each project entry gets a new unique project id and is
@@ -342,7 +342,7 @@ As explained in
 
 *   Spoofing identity. An example of identity spoofing is illegally accessing and then using another user's authentication information, such as username and password.
 *   Tampering with data. Data tampering involves the malicious modification of data. Examples include unauthorized changes made to persistent data, such as that held in a database, and the alteration of data as it flows between two computers over an open network, such as the Internet.
-*   Repudiation. Repudiation threats are associated with users who deny performing an action without other parties having any way to prove otherwise - for example, a user performs an illegal operation in a system that lacks the ability to trace the prohibited operations. Nonrepudiation refers to the ability of a system to counter repudiation threats. For example, a user who purchases an item might have to sign for the item upon receipt. The vendor can then use the signed receipt as evidence that the user did receive the package.
+*   Repudiation. Repudiation threats are associated with users who deny performing an action without other parties having any way to prove otherwise - for example, a user performs an illegal operation in a system that lacks the ability to trace the prohibited operations. Non-repudiation refers to the ability of a system to counter repudiation threats. For example, a user who purchases an item might have to sign for the item upon receipt. The vendor can then use the signed receipt as evidence that the user did receive the package.
 *   Information disclosure. Information disclosure threats involve the exposure of information to individuals who are not supposed to have access to it-for example, the ability of users to read a file that they were not granted access to, or the ability of an intruder to read data in transit between two computers.
 *   Denial of service. Denial of service (DoS) attacks deny service to valid users-for example, by making a Web server temporarily unavailable or unusable. You must protect against certain types of DoS threats simply to improve system availability and reliability.
 *   Elevation of privilege. In this type of threat, an unprivileged user gains privileged access and thereby has sufficient access to compromise or destroy the entire system. Elevation of privilege threats include those situations in which an attacker has effectively penetrated all system defenses and become part of the trusted system itself, a dangerous situation indeed.
@@ -580,7 +580,7 @@ including all 8 principles from
   (it's almost entirely public data, and failures generally can be recovered
   through backups).
 * Least privilege (processes should operate with the
-  least privilege necesssary): The application runs as a normal user,
+  least privilege necessary): The application runs as a normal user,
   not a privileged user like "root".  It must have read/write access to
   its database, so it has that privilege.
 * Least common mechanism (the design should minimize the mechanisms
@@ -700,7 +700,7 @@ However, this site doesn't have any particular political agenda,
 and taking it down is unlikely to provide monetary gain.
 Thus, this site doesn't seem as likely a target for a long-term DDoS
 attack, and there is not much else we can do to counter DDoS
-by an attacker with signficant resources.
+by an attacker with significant resources.
 
 ### Memory-safe languages
 
@@ -899,7 +899,7 @@ as of 2015-12-14:
    Session data is intentionally kept small, because of the limited
    amount of data available in a cookie.
    To counteract session hijacking, we configure the production
-   environment to always communicate over an enrypted channel using TLS
+   environment to always communicate over an encrypted channel using TLS
    (see file config/environments/production.rb which sets
    "config.force_ssl" to true).
    The design allows users to drop cookies at any time
@@ -1000,11 +1000,11 @@ as of 2015-12-14:
    XSS, CSS injection, and Ajax injection are
    countered using Rails' HTML sanitization
    (by default strings are escaped when generating HTML).
-   The program doesn't call out ot the command line or use a routine
+   The program doesn't call out to the command line or use a routine
    that directly does so, e.g., there's no call
    to system()... so command injection won't work either.
    The software resists header injection including response splitting;
-   headers are typically not dynamicaly generated, most redirections
+   headers are typically not dynamically generated, most redirections
    (using redirect_to) are to static locations, and the rest are based
    on filtered locations.
    We use a restrictive CSP setting to limit damage if all those fail.
@@ -1083,7 +1083,7 @@ these attempt to thwart or slow attack even if the system has a vulnerability.
     This is a list of sites that are hardcoded into Chrome as being HTTPS only
     (some other browsers also use this list), so in many cases browsers
     will automatically use HTTPS (even if HTTP is requested).
-    If the web brower uses HTTP anyway,
+    If the web browser uses HTTP anyway,
     our CDN (Fastly) is configured to redirect HTTP to HTTPS.
     If our CDN is misconfigured or skipped for some reason, the application
     will also redirect the user from HTTP to HTTPS if queried directly.
@@ -1821,7 +1821,7 @@ other security contacts, and one of them will analyze it:
   Once the fix is ready, it will be quickly moved through all tiers.
 
 Once the fix is in the final production system, credit will be
-publicly given to the vulneraibility reporter (unless the reporter
+publicly given to the vulnerability reporter (unless the reporter
 requested otherwise).
 
 ## Your help is welcome!

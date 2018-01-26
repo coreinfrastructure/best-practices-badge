@@ -219,7 +219,7 @@ Criminal organizations may try to DDoS us for money, but there's no
 strong reason for us to pay the extortion fee.
 We expect that people will be willing to come back to the site later
 if it's down, and we have scaleability countermeasures to reduce their
-effectivenes.  If the attack is ongoing, several of the services we use
+effectiveness.  If the attack is ongoing, several of the services we use
 would have a finantial incentive to help us counter the attacks.
 This makes the attacks themselves less likely
 (since there would be no financial benefit to them).

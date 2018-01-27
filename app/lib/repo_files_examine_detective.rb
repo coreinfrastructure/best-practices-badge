@@ -32,7 +32,7 @@ class RepoFilesExamineDetective < Detective
   def unmet_result(result_description)
     {
       value: 'Unmet', confidence: 1,
-      explanation: "# No #{result_description} file found."
+      explanation: "// No #{result_description} file found."
     }
   end
 

@@ -20,14 +20,14 @@ class SubdirFileContentsDetective < Detective
   def unmet_result(result_description)
     {
       value: 'Unmet', confidence: 1,
-      explanation: "# No #{result_description} file(s) found."
+      explanation: "// No #{result_description} file(s) found."
     }
   end
 
   def unmet_result_folder(result_description)
     {
       value: 'Unmet', confidence: 3,
-      explanation: "# No appropriate folder found for #{result_description}."
+      explanation: "// No appropriate folder found for #{result_description}."
     }
   end
 

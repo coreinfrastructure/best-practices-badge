@@ -88,7 +88,7 @@ function getColor(value) {
 function containsURL(justification) {
   // string.startsWith('#') was causing a test failure on circleCI.
   // We are not sure why, but regex works fine so let's use that.
-  var possibleComment = /^\s*#/.exec(justification);
+  var possibleComment = /^\/\/ /.exec(justification);
   if (!justification || (!!possibleComment && possibleComment.index === 0)) {
     return false;
   } else {
@@ -109,7 +109,7 @@ function criterionStatus(criterion) {
 function justificationGood(justification) {
   // string.startsWith('#') was causing a test failure on circleCI.
   // We are not sure why, but regex works fine so let's use that.
-  var possibleComment = /^\s*#/.exec(justification);
+  var possibleComment = /^\/\/ /.exec(justification);
   if (!justification || (!!possibleComment && possibleComment.index === 0)) {
     return false;
   } else {

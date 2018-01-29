@@ -554,13 +554,17 @@ RAILS_ENV=production rake assets:precompile
 
 ### Other tools
 
-Here are some other tools we use for checking quality or security,
+Here are some other tools we sometimes use for checking quality or security,
 though they are not currently integrated
 into the default "rake" checking task:
 
 * OWASP ZAP web application security scanner.
   You are encouraged to use this and other web application scanners to find and
   fix problems.
+* Google Chrome auditor.  View a web page, then select menu / more tools /
+  developer tools / audits.  This runs a variety of tests and checks,
+  including some security checks of the code delivered to the browser.
+  Note that not all reports are relevant.
 * [Snyk](https://snyk.io/test/github/coreinfrastructure/best-practices-badge?severity=high&severity=medium&severity=low)
 * JSCS (JavaScript style checker) using the Node.js format.
 * JSHint (JavaScript error detector)

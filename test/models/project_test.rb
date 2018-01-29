@@ -270,3 +270,4 @@ class ProjectTest < ActiveSupport::TestCase
   end
   # rubocop:enable Metrics/BlockLength
 end
+# rubocop:enable Metrics/ClassLength

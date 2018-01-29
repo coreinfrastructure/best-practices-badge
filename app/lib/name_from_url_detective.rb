@@ -53,4 +53,7 @@ class NameFromUrlDetective < Detective
     end
     @results
   end
+  # rubocop:enable Metrics/MethodLength
+  # rubocop:enable Metrics/AbcSize
+  # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 end

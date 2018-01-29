@@ -22,6 +22,19 @@ class Chief
   # If the confidence is lower than this, we'll only override status '?'.
   CONFIDENCE_OVERRIDE = 4
 
+  # TODO: Identify classes automatically and do topological sort.
+  ALL_DETECTIVES =
+    [
+      NameFromUrlDetective, ProjectSitesHttpsDetective,
+      GithubBasicDetective, HowAccessRepoFilesDetective,
+      RepoFilesExamineDetective, FlossLicenseDetective,
+      HardenedSitesDetective, BlankDetective, BuildDetective,
+      SubdirFileContentsDetective
+    ].freeze
+
+  # List fields allowed to be written into Project (an ActiveRecord).
+  ALLOWED_FIELDS = Project::PROJECT_PERMITTED_FIELDS.to_set.freeze
+
   # rubocop:disable Style/ConditionalAssignment
   def initialize(project, client_factory)
     @evidence = Evidence.new(project)
@@ -37,19 +50,6 @@ class Chief
     end
   end
   # rubocop:enable Style/ConditionalAssignment
-
-  # TODO: Identify classes automatically and do topological sort.
-  ALL_DETECTIVES =
-    [
-      NameFromUrlDetective, ProjectSitesHttpsDetective,
-      GithubBasicDetective, HowAccessRepoFilesDetective,
-      RepoFilesExamineDetective, FlossLicenseDetective,
-      HardenedSitesDetective, BlankDetective, BuildDetective,
-      SubdirFileContentsDetective
-    ].freeze
-
-  # List fields allowed to be written into Project (an ActiveRecord).
-  ALLOWED_FIELDS = Project::PROJECT_PERMITTED_FIELDS.to_set.freeze
 
   # Given two changesets, produce merged "best" version
   # When confidence is the same, c1 wins.
@@ -162,6 +162,9 @@ class Chief
       end
     end
   end
+  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
+  # rubocop:enable Metrics/CyclomaticComplexity
+  # rubocop:enable Metrics/PerceivedComplexity
 
   # Given form data about a project, return an improved version.
   def autofill
@@ -169,3 +172,4 @@ class Chief
     apply_changes(@evidence.project, my_proposed_changes)
   end
 end
+# rubocop:enable Metrics/ClassLength

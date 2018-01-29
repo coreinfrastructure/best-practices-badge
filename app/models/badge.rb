@@ -120,3 +120,4 @@ class Badge
   end
   # rubocop:enable Metrics/AbcSize
 end
+# rubocop:enable Rails/FindEach

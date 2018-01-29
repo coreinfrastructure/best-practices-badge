@@ -87,4 +87,5 @@ class RepoFilesExamineDetective < Detective
 
     @results
   end
+  # rubocop:enable Metrics/MethodLength
 end

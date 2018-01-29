@@ -540,3 +540,4 @@ class ProjectsController < ApplicationController
     @project.badge_level
   end
 end
+# rubocop:enable Metrics/ClassLength

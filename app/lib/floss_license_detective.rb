@@ -137,4 +137,6 @@ class FlossLicenseDetective < Detective
       {}
     end
   end
+  # rubocop:enable Metrics/MethodLength
 end
+# rubocop:enable Metrics/ClassLength

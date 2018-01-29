@@ -172,3 +172,4 @@ class LoginTest < CapybaraFeatureTest
     choose radio_button_id until find("##{radio_button_id}")['checked']
   end
 end
+# rubocop:enable Metrics/ClassLength

@@ -142,4 +142,6 @@ class GithubBasicDetective < Detective
 
     results
   end
+  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
+  # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 end

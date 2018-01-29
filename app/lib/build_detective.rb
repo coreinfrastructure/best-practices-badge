@@ -76,3 +76,4 @@ class BuildDetective < Detective
     @results
   end
 end
+# rubocop:enable Metrics/MethodLength

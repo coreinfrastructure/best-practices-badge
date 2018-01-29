@@ -37,4 +37,6 @@ class ProjectSitesHttpsDetective < Detective
     end
     @results
   end
+  # rubocop:enable Metrics/MethodLength
+  # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 end

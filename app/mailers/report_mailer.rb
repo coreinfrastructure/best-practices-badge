@@ -183,3 +183,4 @@ class ReportMailer < ApplicationMailer
     end
   end
 end
+# rubocop:enable Metrics/MethodLength, Metrics/ClassLength

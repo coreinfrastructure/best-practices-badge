@@ -18,6 +18,14 @@ class Project < ApplicationRecord
 
   include PgSearch # PostgreSQL-specific text search
 
+  # When did we add met_justification_required?
+  STATIC_ANALYSIS_JUSTIFICATION_REQUIRED_DATE =
+    Time.iso8601('2017-04-25T00:00:00Z')
+
+  # When did we first show an explicit license for the data
+  # (CC-BY-3.0+)?
+  ENTRY_LICENSE_EXPLICIT_DATE = Time.iso8601('2017-02-20T12:00:00Z')
+
   STATUS_CHOICE = %w[? Met Unmet].freeze
   STATUS_CHOICE_NA = (STATUS_CHOICE + %w[N/A]).freeze
   MIN_SHOULD_LENGTH = 5
@@ -269,8 +277,7 @@ class Project < ApplicationRecord
   # Flash a message to update static_analysis if the user is updating
   # for the first time since we added met_justification_required that
   # criterion
-  STATIC_ANALYSIS_JUSTIFICATION_REQUIRED_DATE =
-    Time.iso8601('2017-04-25T00:00:00Z')
+
   def notify_for_static_analysis?(level)
     status = self[Criteria[level][:static_analysis].name.status]
     result = get_criterion_result(Criteria[level][:static_analysis])
@@ -286,7 +293,6 @@ class Project < ApplicationRecord
   # Return true if we should show an explicit license for the data.
   # Old entries did not set a license; we only want to show entry licenses
   # if the updated_at field indicates there was agreement to it.
-  ENTRY_LICENSE_EXPLICIT_DATE = Time.iso8601('2017-02-20T12:00:00Z')
   def show_entry_license?
     updated_at >= ENTRY_LICENSE_EXPLICIT_DATE
   end

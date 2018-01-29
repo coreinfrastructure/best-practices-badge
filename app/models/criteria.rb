@@ -6,6 +6,8 @@
 
 # rubocop:disable Metrics/ClassLength
 class Criteria
+  include ActiveModel::Model
+
   ACCESSORS = %i[
     name category level future
     rationale autofill
@@ -21,7 +23,6 @@ class Criteria
 
   FIELDS_TO_OMIT = %w[description details rationale autofill].freeze
 
-  include ActiveModel::Model
   attr_accessor(*ACCESSORS)
 
   class << self
@@ -188,3 +189,4 @@ class Criteria
     nil
   end
 end
+# rubocop:enable Metrics/ClassLength

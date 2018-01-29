@@ -586,3 +586,4 @@ class ProjectsControllerTest < ActionController::TestCase
     assert_equal 1, result.size
   end
 end
+# rubocop:enable Metrics/ClassLength

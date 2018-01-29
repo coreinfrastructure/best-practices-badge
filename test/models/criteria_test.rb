@@ -143,3 +143,4 @@ class CriteriaTest < ActiveSupport::TestCase
     assert_equal '', key_with_nil_value(Criteria.for_js)
   end
 end
+# rubocop:enable Metrics/ClassLength

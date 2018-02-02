@@ -17,6 +17,9 @@
 # :de, :"en-au-ocker", :"en-NZ", :"zh-TW", :"pt-BR", :nep, :uk, :ro, :da,
 # :hu, :cs]
 
+# NOTICE: If you add a locale, also modify robots.txt to prevent crawling of
+# user accounts in that locale. See: app/views/static_pages/robots.text.erb
+
 I18n.available_locales = %i[en zh-CN fr de ja ru]
 
 # If we don't have text, fall back to English.  That obviously isn't

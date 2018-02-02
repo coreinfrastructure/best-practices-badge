@@ -1,5 +1,13 @@
 User-Agent: *
 <% if ENV['PUBLIC_HOSTNAME'] == 'bestpractices.coreinfrastructure.org' %>
+<%# Tell crawlers to skip user data, to help privacy. %>
+Disallow: /users
+Disallow: /en/users
+Disallow: /fr/users
+Disallow: /ja/users
+Disallow: /ru/users
+Disallow: /zh-CN/users
+Disallow: /de/users
 Allow: /
 <% else %>
 Disallow: /

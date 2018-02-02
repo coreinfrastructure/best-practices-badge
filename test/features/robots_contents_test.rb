@@ -19,7 +19,15 @@ class RobotsProductionTest < CapybaraFeatureTest
     visit '/robots.txt'
     assert has_content? 'User-Agent: *'
     assert has_content? 'Allow: /'
-    refute has_content? 'Disallow: /'
+    assert has_content? 'Disallow: /users'
+    # Directly check for locales used by EU countries, ensure they're there
+    assert has_content? 'Disallow: /en/users'
+    assert has_content? 'Disallow: /fr/users'
+    assert has_content? 'Disallow: /de/users'
+    # Loop through all locales (make sure we didn't miss one)
+    I18n.available_locales.each do |loc|
+      assert has_content? "Disallow: /#{loc}/users"
+    end
   end
 end
 

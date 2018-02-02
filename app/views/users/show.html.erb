@@ -9,8 +9,11 @@
          <%= avatar_for @user %>
          <%= @user.name || @user.nickname %>
          <% if current_user && (@user == current_user || current_user.admin?) %>
-           <%= link_to t('.edit_user'),
-                       edit_user_path(@user), class: 'btn btn-primary' %>
+           <%= link_to t('.edit_user'), edit_user_path(@user),
+                       class: 'btn btn-primary', rel: 'nofollow' %>
+           <%= link_to t('.delete_link_name'), @user, method: :delete,
+                       data: { confirm: t('.confirm_delete') },
+                       rel: 'nofollow' %>
          <% end %>
        </h3>
      </section>
@@ -44,14 +47,13 @@
    <a href="https://github.com/<%= @user.nickname %>"><%=
    t ('.see_external') %></a>
   <% end %>
-  <% if current_user&.admin? %>
-    <%= t '.as_admin' %>
+  <% if current_user && (@user == current_user || current_user.admin?) %>
     <% if @user.email? %>
       <a href="mailto:<%= CGI::escape(@user.email).html_safe %>"><%=
         t('.send_email_to') + @user.email.to_s %></a> |
     <% end %>
-    <%= link_to t('.delete_link_name'), @user, method: :delete,
-                data: { confirm: t('.confirm_delete') } %>
+  <% end %>
+  <% if current_user&.admin? %>
     <% if @user.admin? %>
       <p><%= t '.is_admin' %></p>
     <% end %>

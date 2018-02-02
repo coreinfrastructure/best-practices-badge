@@ -6,9 +6,14 @@
 
 # rubocop: disable Metrics/ClassLength
 class UsersController < ApplicationController
-  before_action :require_admin,  only: %i[destroy]
-  before_action :logged_in_user, only: %i[edit update index]
-  before_action :correct_user,   only: %i[edit update]
+  # Note: If a "before" filter renders or redirects, the action will not run,
+  # and other additional filters scheduled to run after it are cancelled.
+  # See: http://guides.rubyonrails.org/action_controller_overview.html
+  # Require being logged in for "index" to slightly discourage enumeration
+  before_action :logged_in_user, only: %i[edit update destroy index]
+  before_action :redir_unless_current_user_can_edit,
+                only: %i[edit update destroy]
+  before_action :enable_maximum_privacy_headers
   include SessionsHelper
 
   def new
@@ -22,6 +27,8 @@ class UsersController < ApplicationController
   # rubocop: disable Metrics/AbcSize
   def show
     @user = User.find(params[:id])
+    respond_to :html, :json
+
     # Use "select_needed" to minimize the fields we extract
     @projects = select_needed(@user.projects).paginate(page: params[:page])
 
@@ -89,27 +96,22 @@ class UsersController < ApplicationController
   end
   # rubocop: enable Metrics/AbcSize, Metrics/MethodLength
 
-  # rubocop: disable Metrics/MethodLength, Metrics/AbcSize
   def destroy
-    # We don't do a lot of checking because only admins can run this,
-    # but we'll try to prevent some disasters.
     id_to_delete = params[:id]
     user_to_delete = User.find(id_to_delete) # Exception raised if not found
-    if current_user.id == user_to_delete.id
-      flash[:danger] = t('.cannot_delete_self')
+    # TODO: Create a transaction to make project count & user delete atomic.
+    if Project.exists?(user_id: id_to_delete)
+      flash[:danger] = t('.cannot_delete_user_with_projects')
     else
-      # Admin acquires ownership of remaining projects, if any,
-      # so projects always have an owner (maintain invariant).
-      # rubocop: disable Rails/SkipsModelValidations
-      Project.where('user_id = ?', id_to_delete)
-             .update_all(user_id: current_user.id)
-      # rubocop: enable Rails/SkipsModelValidations
+      # Use destroy! - raises exception on (unexpected) failure, and auto-
+      # removes associated ApplicationRecords via the has_many association.
+      # There may be ApplicationRecords on this user, because the user
+      # cannot necessarily control the rights granted to him by others.
       user_to_delete.destroy!
       flash[:success] = t('.user_deleted')
+      redirect_to users_url
     end
-    redirect_to users_url
   end
-  # rubocop: enable Metrics/MethodLength, Metrics/AbcSize
 
   def redirect_existing
     if @user.activated
@@ -129,6 +131,22 @@ class UsersController < ApplicationController
 
   private
 
+  def enable_maximum_privacy_headers
+    # Harden the response by maximizing HTTP headers of user data
+    # for privacy. We do this by inhibiting indexing and caching.
+    # Our primary goal is to ensure that we maintain the privacy of
+    # private data.  However, we also want to be prepared so that
+    # if there *is* a breach, we reduce its impact.
+    # These lines instruct others to disable indexing and caching of
+    # user data, so that if private data is inadvertantly reviewed,
+    # it is much less likely to be easily available to others via
+    # web-crawled data (such as from search engines) or via caches.
+    # The goal is to make it harder for adversaries to get leaked data.
+    # We do this as HTTP headers, so it applies to anything (HTML, JSON, etc.)
+    response.set_header('X-Robots-Tag', 'noindex')
+    response.set_header('Cache-Control', 'no-cache, no-store, must-revalidate')
+  end
+
   def user_params
     user_params = params.require(:user).permit(
       :provider, :uid, :name, :email, :password,
@@ -141,9 +159,9 @@ class UsersController < ApplicationController
     user_params
   end
 
-  def require_admin
-    redirect_to root_url unless current_user&.admin?
-  end
+  # def require_admin
+  #   redirect_to root_url unless current_user&.admin?
+  # end
 
   # Confirms a logged-in user.
   def logged_in_user
@@ -158,8 +176,8 @@ class UsersController < ApplicationController
     user == current_user || current_user.admin?
   end
 
-  # Confirms the correct user.
-  def correct_user
+  # Confirms that this user can edit; sets @user to the user to process
+  def redir_unless_current_user_can_edit
     @user = User.find(params[:id])
     redirect_to(root_url) unless current_user_can_edit(@user)
   end

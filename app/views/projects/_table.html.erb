@@ -36,7 +36,8 @@
           <% end %>
         </td>
         <td class='license'><%= project.license %></td>
-        <td><%= link_to project.user_display_name, project.user %></td>
+        <td><%= link_to project.user_display_name, project.user,
+                        rel: 'nofollow' %></td>
         <td><%= project.achieved_passing_at&.
                   to_formatted_s(:db) %></td>
         <td><%= project.badge_percentage_0 %>%</td>

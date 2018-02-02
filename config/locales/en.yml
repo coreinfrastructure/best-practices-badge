@@ -249,6 +249,8 @@ en:
       delete_link_name: delete
       confirm_delete: Are you sure you want to delete this user?
     destroy:
+      cannot_delete_user_with_projects: Cannot delete a user who owns projects.
+      # The following line is no longer used.
       cannot_delete_self: Cannot delete self.
       user_deleted: User deleted.
     redirect_existing: That user already exists. Did you mean

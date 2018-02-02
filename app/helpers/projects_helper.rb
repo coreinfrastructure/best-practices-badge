@@ -14,6 +14,7 @@ module ProjectsHelper
     no_intra_emphasis: true, autolink: true,
     space_after_headers: true, fenced_code_blocks: true
   )
+  NO_REPOS = [[], []].freeze # No forks and no originals
 
   def github_select
     # List original then forked Github projects, with headers
@@ -23,7 +24,7 @@ module ProjectsHelper
   end
 
   def fork_and_original
-    repo_data.partition { |repo| repo[1] } # partition on fork
+    repo_data.blank? ? NO_REPOS : repo_data.partition { |repo| repo[1] }
   end
 
   def original_header(original_repos)

@@ -18,7 +18,7 @@
 // (https://github.com/rails/sprockets#sprockets-directives) for details
 // about supported directives.
 //
-//= require jquery
+//= require jquery3
 //  No longer used: = require jquery.turbolinks
 //= require jquery_ujs
 //= require bootstrap

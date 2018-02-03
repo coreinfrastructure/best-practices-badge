@@ -86,26 +86,53 @@ class UsersControllerTest < ActionController::TestCase
   test 'should NOT show email address when not logged in' do
     get :show, params: { id: @user }
     assert_response :success
-    refute_includes @response.body, 'mailto:melissa%40example.com'
+    refute_includes @response.body, '%40example.com'
+    refute_includes @response.body, '@example.com'
+    assert_equal 'noindex', @response.headers['X-Robots-Tag']
+    assert_equal 'no-cache, no-store, must-revalidate',
+                 @response.headers['Cache-Control']
   end
 
-  test 'should NOT show email address when logged in as another normal user' do
+  test 'JSON should NOT show email address when not logged in' do
+    get :show, params: { id: @user, format: :json }
+    assert_response :success
+    refute_includes @response.body, 'example.com'
+  end
+
+  test 'JSON provides reasonable results when not logged in' do
+    get :show, params: { id: @user, format: :json }
+    assert_response :success
+    assert_equal '{', @response.body[0]
+    json_response = JSON.parse(@response.body)
+    assert_equal @user.id, json_response['id']
+  end
+
+  test 'should NOT show email address when logged in as another user' do
     log_in_as(@other_user)
     get :show, params: { id: @user }
     assert_response :success
-    refute_includes @response.body, 'mailto:melissa%40example.com'
+    refute_includes @response.body, '%40example.com'
+    refute_includes @response.body, '@example.com'
   end
 
-  # This is debatable.  It's not really a *problem* if we show users
-  # their own email addresses :-).  But the purpose of this display is to
-  # allow admins to know who to contact, and users don't need this way to
-  # get in touch with themselves.  This also lets us express the rule
-  # simply: "Only admins see user email addresses on this page".
-  test 'should NOT show email address when logged in as self' do
+  test 'JSON should NOT show email address when logged in as another user' do
+    log_in_as(@other_user)
+    get :show, params: { id: @user, format: :json }
+    assert_response :success
+    refute_includes @response.body, 'example.com'
+  end
+
+  # This is a change, due to the EU General Data Protection Regulation (GDPR)
+  # requirement to support "right of access" (users must be able to see
+  # the personal data we record about them).
+  # We originally didn't do this, since obviously users already know their
+  # email addresses, and we wanted to reduce the risk of leaks of this
+  # data.
+  test 'should show email address of self when logged in as self (GDPR)' do
     log_in_as(@user)
     get :show, params: { id: @user }
     assert_response :success
-    refute_includes @response.body, 'mailto:melissa%40example.com'
+    assert_includes @response.body, 'mailto:melissa%40example.com'
   end
 
   test 'should show email address when logged in as admin' do
@@ -113,6 +140,13 @@ class UsersControllerTest < ActionController::TestCase
     get :show, params: { id: @user }
     assert_response :success
     assert_includes @response.body, 'mailto:melissa%40example.com'
+  end
+
+  test 'JSON should show email address when logged in as admin' do
+    log_in_as(@admin)
+    get :show, params: { id: @user, format: :json }
+    assert_response :success
+    assert_includes @response.body, 'melissa@example.com'
   end
 
   test 'should redirect edit when not logged in' do
@@ -167,7 +201,7 @@ class UsersControllerTest < ActionController::TestCase
     assert_no_difference 'User.count' do
       delete :destroy, params: { id: @user }
     end
-    assert_redirected_to root_url
+    assert_redirected_to login_url
   end
 
   test 'should redirect destroy when logged in as a non-admin' do
@@ -178,7 +212,7 @@ class UsersControllerTest < ActionController::TestCase
     assert_redirected_to root_url
   end
 
-  test 'should destroy user when logged in as admin' do
+  test 'admin should be able to destroy a user without projects' do
     log_in_as(@admin)
     assert_difference('User.count', -1) do
       delete :destroy, params: { id: @other_user }
@@ -186,12 +220,35 @@ class UsersControllerTest < ActionController::TestCase
     assert_not_empty flash
   end
 
-  test 'should not be able to destroy self' do
-    log_in_as(@admin)
-    assert_no_difference 'User.count' do
-      delete :destroy, params: { id: @admin }
+  test 'should be able to destroy self without projects (GDPR)' do
+    # EU General Data Protection Regulation (GDPR) requires users be able to
+    # erase information about themselves.
+    log_in_as(@other_user)
+    assert_difference('User.count', -1) do
+      delete :destroy, params: { id: @other_user }
     end
     assert_not_empty flash
+  end
+
+  test 'should not be able to destroy self if have projects' do
+    log_in_as(@user)
+    assert_no_difference 'User.count' do
+      delete :destroy, params: { id: @user }
+    end
+  end
+
+  test 'admin should not be able to destroy user if have projects' do
+    log_in_as(@admin)
+    assert_no_difference 'User.count' do
+      delete :destroy, params: { id: @user }
+    end
+  end
+
+  test 'admin should be able to destroy self without projects' do
+    log_in_as(@admin)
+    assert_difference('User.count', -1) do
+      delete :destroy, params: { id: @admin }
+    end
   end
 end
 # rubocop:enable Metrics/ClassLength

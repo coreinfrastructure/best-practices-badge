@@ -4,6 +4,7 @@
 # CII Best Practices badge contributors
 # SPDX-License-Identifier: MIT
 
+# rubocop:disable Metrics/ClassLength
 class User < ApplicationRecord
   # Use Rails' "has_secure_password" so that local accounts' password is
   # is *only* stored as a bcrypt digest in password_digest
@@ -29,6 +30,18 @@ class User < ApplicationRecord
   # This is an unfortunate limitation, but 72 characters is enough entropy
   # in practice.  See ActiveModel::SecurePassword.
   MAX_PASSWORD_LENGTH = 72
+
+  scope :created_since, (
+    lambda do |time|
+      where(User.arel_table[:created_at].gteq(time))
+    end
+  )
+
+  scope :updated_since, (
+    lambda do |time|
+      where(User.arel_table[:created_at].gteq(time))
+    end
+  )
 
   validates :name, presence: true, length: { maximum: 50 }
   validates :email, presence: true, length: { maximum: 255 },
@@ -163,3 +176,4 @@ class User < ApplicationRecord
     self.activation_digest = User.digest(activation_token)
   end
 end
+# rubocop:enable Metrics/ClassLength

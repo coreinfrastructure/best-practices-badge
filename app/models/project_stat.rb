@@ -71,7 +71,49 @@ class ProjectStat < ApplicationRecord
         Project.updated_since(ACTIVE_PERIOD.day.ago)
                .where('created_at < updated_at')
                .where('badge_percentage_0 < 100').count
+
+      # The following nested transaction is defensive coding.
+      # We don't need to use a nested transaction today, because Project and
+      # User are implemented in a single database.  However, we ever
+      # implemented Project and User in multiple class-specific databases
+      # in the future, and did not nest them, we would silently be
+      # outside a transaction - and that bug would be hard to detect. See:
+      # http://api.rubyonrails.org/classes/ActiveRecord/Transactions/
+      # ClassMethods.html
+      User.transaction do
+        # Some of these values can be calculated from others, but it's
+        # convenient to provide them separately.
+        self.users = User.count
+        self.github_users = User.where(provider: 'github').count
+        self.local_users = User.where(provider: 'local').count
+        self.users_created_since_yesterday = User.created_since(1.day.ago).count
+        self.users_updated_since_yesterday = User.updated_since(1.day.ago).count
+        self.users_with_projects = Project.select(:user_id).distinct.count
+        self.users_without_projects = users - users_with_projects
+        self.users_with_multiple_projects =
+          Project.unscoped.group(:user_id).having('count(*) > 1').count.length
+        self.users_with_passing_projects =
+          Project.select(:user_id)
+                 .where('badge_percentage_0 >= 100')
+                 .distinct.count
+        self.users_with_silver_projects =
+          Project.select(:user_id)
+                 .where('badge_percentage_1 >= 100')
+                 .distinct.count
+        self.users_with_gold_projects =
+          Project.select(:user_id)
+                 .where('badge_percentage_2 >= 100')
+                 .distinct.count
+      end
+      AdditionalRight.transaction do
+        self.additional_rights_entries = AdditionalRight.count
+        self.projects_with_additional_rights =
+          AdditionalRight.select(:project_id).distinct.count
+        self.users_with_additional_rights =
+          AdditionalRight.select(:user_id).distinct.count
+      end
     end
+
     self # Return self to support method chaining
   end
   # rubocop:enable Metrics/AbcSize, Metrics/MethodLength, Metrics/BlockLength

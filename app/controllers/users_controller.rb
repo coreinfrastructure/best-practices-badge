@@ -96,22 +96,28 @@ class UsersController < ApplicationController
   end
   # rubocop: enable Metrics/AbcSize, Metrics/MethodLength
 
+  # rubocop: disable Metrics/MethodLength
   def destroy
     id_to_delete = params[:id]
     user_to_delete = User.find(id_to_delete) # Exception raised if not found
-    # TODO: Create a transaction to make project count & user delete atomic.
-    if Project.exists?(user_id: id_to_delete)
-      flash[:danger] = t('.cannot_delete_user_with_projects')
-    else
-      # Use destroy! - raises exception on (unexpected) failure, and auto-
-      # removes associated ApplicationRecords via the has_many association.
-      # There may be ApplicationRecords on this user, because the user
-      # cannot necessarily control the rights granted to him by others.
-      user_to_delete.destroy!
-      flash[:success] = t('.user_deleted')
-      redirect_to users_url
+    # Nest transaction to be *certain* we include all in the transaction
+    Project.transaction do
+      User.transaction do
+        if Project.exists?(user_id: id_to_delete)
+          flash[:danger] = t('.cannot_delete_user_with_projects')
+        else
+          # Use destroy! - raises exception on (unexpected) failure, and auto-
+          # removes associated ApplicationRecords via the has_many association.
+          # There may be ApplicationRecords on this user, because the user
+          # cannot necessarily control the rights granted to him by others.
+          user_to_delete.destroy!
+          flash[:success] = t('.user_deleted')
+          redirect_to users_url
+        end
+      end
     end
   end
+  # rubocop: Metrics/MethodLength
 
   def redirect_existing
     if @user.activated

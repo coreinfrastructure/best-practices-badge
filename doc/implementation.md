@@ -14,6 +14,11 @@ contribute to this project, and [INSTALL.md](INSTALL.md) for information
 on both how to install this software (e.g., for development) and a
 "quick start" guide to getting something to happen.
 
+If you have the privilege to access the production database directly,
+or any copy of it, be especially careful about protecting it.
+We want to ensure we comply with various laws about user privacy,
+including the EU General Data Protection Regulation (GDPR).
+
 In this document we'll use the term "open source software" (OSS),
 and treat Free/Libre and Open Source Software (FLOSS) as a synonym.
 
@@ -603,7 +608,7 @@ The authorization callback URL in GitHub is:
 [1] <https://github.com/settings/applications/new>
 [2] <https://devcenter.heroku.com/articles/config-vars>
 
-## Database content manipulation
+## Database content viewing and editing
 
 In some cases you may need to view or edit the database contents directly.
 For example, we don't currently have code to set a user to have the
@@ -612,10 +617,10 @@ to backup the database, or restore the database.
 Instead, we simply interact with the database software, which
 already has the functions to do this.
 
-In development mode, simply view 'localhost:3000/rails/db'
-in your web browser.
-You can select any table (on the left-hand side) so you can view
-or edit the database contents with a UI.
+As always, this require special administrative privileges.
+Be careful with the databases, since the include information on users.
+We want to ensure we comply with various laws about users, including
+EU General Data Protection Regulation (GDPR).
 
 You can directly connect to the database engine and run commands.
 On the local development system, run "rails db" as always.
@@ -660,6 +665,11 @@ echo "INSERT INTO users (provider,uid,name,nickname,email,role,activated,
 
 You can
 [import or export databases on Heroku](https://devcenter.heroku.com/articles/heroku-postgres-import-export)
+Those with enough authoritizations can run
+"rake pull_production" to copy the current production database
+into their development environment for testing;
+this will erase the current copy.
+
 For example, here's how to quickly back up the database
 (presuming that it's set up for the Heroku site and that you have
 the authorization keys to do this):
@@ -667,6 +677,17 @@ the authorization keys to do this):
 ~~~~sh
 heroku pg:backups capture
 curl -o latest.dump $(heroku pg:backups public-url)
+~~~~
+
+You can use this SQL command to see what projects have
+duplicate homepage_url values:
+
+~~~~sql
+SELECT id,LEFT(name,20) as name, user_id, homepage_url
+FROM projects
+WHERE homepage_url <> '' AND homepage_url IN
+  (SELECT homepage_url FROM projects GROUP BY homepage_url
+   HAVING COUNT(homepage_url) > 1);
 ~~~~
 
 ## Recovering a deleted or mangled project entry

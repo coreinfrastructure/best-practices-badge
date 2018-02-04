@@ -1,5 +1,11 @@
 # frozen_string_literal: true
 
+# If you modify this, also modify show.json.builder
+# We intentionally are non-DRY, and duplicate parts of these two files
+# for speed (in normal use people use "index" with a loop-in-loop).
+# It is also fairly unlikely that these files will be changed, because
+# they automatically include whatever fields are available.
+
 json.array!(@project_stats) do |project_stat|
   # Force "id" to be first
   json.id project_stat.id

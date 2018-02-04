@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180124232626) do
+ActiveRecord::Schema.define(version: 20180203201232) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -64,6 +64,20 @@ ActiveRecord::Schema.define(version: 20180124232626) do
     t.integer "percent_2_ge_75"
     t.integer "percent_2_ge_90"
     t.integer "percent_2_ge_100"
+    t.integer "users"
+    t.integer "github_users"
+    t.integer "local_users"
+    t.integer "users_created_since_yesterday"
+    t.integer "users_updated_since_yesterday"
+    t.integer "users_with_projects"
+    t.integer "users_without_projects"
+    t.integer "users_with_multiple_projects"
+    t.integer "users_with_passing_projects"
+    t.integer "users_with_silver_projects"
+    t.integer "users_with_gold_projects"
+    t.integer "additional_rights_entries"
+    t.integer "projects_with_additional_rights"
+    t.integer "users_with_additional_rights"
     t.index ["created_at"], name: "index_project_stats_on_created_at"
   end
 

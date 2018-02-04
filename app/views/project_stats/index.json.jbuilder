@@ -1,8 +1,20 @@
 # frozen_string_literal: true
 
+# If you modify this, also modify show.json.builder
+# We intentionally are non-DRY, and duplicate parts of these two files
+# for speed (in normal use people use "index" with a loop-in-loop).
+# It is also fairly unlikely that these files will be changed, because
+# they automatically include whatever fields are available.
+
 json.array!(@project_stats) do |project_stat|
-  # rubocop:disable Metrics/LineLength
-  json.extract! project_stat, :id, :percent_ge_0, :percent_ge_25, :percent_ge_50, :percent_ge_75, :percent_ge_90, :percent_ge_100, :created_since_yesterday, :updated_since_yesterday, :created_at, :updated_at, :reminders_sent, :reactivated_after_reminder, :active_projects, :active_in_progress, :projects_edited, :active_edited_projects, :active_edited_in_progress, :percent_1_ge_25, :percent_1_ge_50, :percent_1_ge_75, :percent_1_ge_90, :percent_1_ge_100, :percent_2_ge_25, :percent_2_ge_50, :percent_2_ge_75, :percent_2_ge_90, :percent_2_ge_100
-  # rubocop:enable Metrics/LineLength
+  # Force "id" to be first
+  json.id project_stat.id
+  # Include all the attributes of project_stat (if more are added, they
+  # are automatically included here).
+  # We cannot use "json.merge! project_stat.attributes" because that
+  # ignores the "json.ignore_nil!" setting.  Instead, do the loop by hand:
+  project_stat.attributes.each do |key, value|
+    json.set!(key, value) unless value.nil?
+  end
   json.url project_stat_url(project_stat, format: :json)
 end

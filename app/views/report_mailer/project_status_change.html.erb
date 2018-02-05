@@ -7,6 +7,16 @@
       has changed
       from <%= @old_badge_status %>
       to <%= @new_badge_status %>.
+      The project entry was created on <%= @project.created_at %>.
+      <% if @new_badge_status == 'passing' %>
+      Time from project entry creation to passing =
+      <%=
+        distance_of_time_in_words(
+          @project.created_at,
+          @project.achieved_passing_at
+        )
+      %>
+      <% end %>
       See <a href="<%= @project_info_url %>"><%= @project_info_url %></a>
       for more.
     </p>

@@ -13,8 +13,9 @@ class ProjectsController < ApplicationController
   before_action :set_project,
                 only: %i[edit update delete_form destroy show show_json]
   before_action :logged_in?, only: :create
-  before_action :can_edit_or_redirect, only: %i[edit delete_form update]
-  before_action :can_control_or_redirect, only: :destroy
+  before_action :can_edit_else_redirect, only: %i[edit update]
+  before_action :can_control_else_redirect, only: %i[destroy delete_form]
+  before_action :adequate_deletion_rationale, only: :destroy
   before_action :set_criteria_level, only: %i[show edit update]
 
   # Cache with Fastly CDN.  We can't use this header, because logged-in
@@ -44,6 +45,9 @@ class ProjectsController < ApplicationController
   ALLOWED_QUERY_PARAMS = (
     INTEGER_QUERIES + TEXT_QUERIES + OTHER_QUERIES
   ).freeze
+
+  # Used to validate deletion rationale.
+  AT_LEAST_15_NON_WHITESPACE = /\A\s*(\S\s*){15}.*/
 
   # GET /projects
   # GET /projects.json
@@ -294,16 +298,31 @@ class ProjectsController < ApplicationController
   end
 
   # Returns true if current_user can edit, else redirect to a different URL
-  def can_edit_or_redirect
+  def can_edit_else_redirect
     return true if can_edit?
     redirect_to root_url
   end
 
   # Returns true if current_user can control, else redirect to a different URL
-  def can_control_or_redirect
+  def can_control_else_redirect
     return true if can_control?
     redirect_to root_url
   end
+
+  # rubocop: disable Metrics/AbcSize
+  def adequate_deletion_rationale
+    return true if current_user&.admin?
+    deletion_rationale = params[:deletion_rationale]
+    deletion_rationale = '' if deletion_rationale.blank? # E.g., null
+    if deletion_rationale.length < 20
+      flash.now[:danger] = t('.projects.delete_form.too_short')
+      redirect_to delete_form_project_path(@project)
+    elsif AT_LEAST_15_NON_WHITESPACE !~ deletion_rationale
+      flash.now[:danger] = t('.projects.delete_form.more_non_whitespace')
+      redirect_to delete_form_project_path(@project)
+    end
+  end
+  # rubocop: enable Metrics/AbcSize
 
   # Forceably set additional_rights on project "id" given string description
   # Presumes permissions are granted & valid syntax in new_additional_rights

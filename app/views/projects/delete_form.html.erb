@@ -15,13 +15,17 @@
     <%= bootstrap_form_for @project, url: project_path(@project) do |f| %>
       <input type="hidden" name="_method" value="delete">
       <%= t('projects.delete_form.info_html', project_name: @project.name) %>
-      <%# TODO: Create textarea for rationale, pass along to delete, which
-          would pass it on to the emailer. %>
+      <%# We check the deletion_rationale on the server.
+          HTML textarea doesn't support pattern=, and minlength= support is
+          spotty. Server-side checking makes the deletion_rationale
+          checks non-bypassable (it's not a security property, but it's
+          nice to be sure), and it also makes it easier to
+          have different rules for admins vs. others. %>
       <textarea name="deletion_rationale"
           placeholder="<%= t('projects.delete_form.rationale_placeholder') %>"
           autofocus="true" cols=70 rows=10
           lang="en" spellcheck="true"
-          required="true"></textarea>
+          required="required"></textarea>
       <%= f.submit t('projects.delete_form.delete_action') %>
     <% end %>
   </div>

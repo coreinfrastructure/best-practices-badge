@@ -462,15 +462,48 @@ class ProjectsControllerTest < ActionController::TestCase
     assert_includes @response.body, 'Warning'
   end
 
-  test 'should destroy own project' do
+  test 'should destroy own project if rationale adequate' do
     log_in_as(@project.user)
     num = ActionMailer::Base.deliveries.size
     assert_difference('Project.count', -1) do
-      delete :destroy, params: { id: @project }
+      delete :destroy,
+             params:
+             {
+               id: @project,
+               deletion_rationale: 'The front page is not purple enough.'
+             }
     end
     assert_not_empty flash
     assert_redirected_to projects_path
     assert_equal num + 1, ActionMailer::Base.deliveries.size
+  end
+
+  test 'should NOT destroy own project if rationale too short' do
+    log_in_as(@project.user)
+    assert_no_difference('Project.count', ActionMailer::Base.deliveries.size) do
+      delete :destroy,
+             params:
+             {
+               id: @project,
+               deletion_rationale: 'Nah.'
+             }
+    end
+    assert_not_empty flash
+    assert_redirected_to delete_form_project_path(@project)
+  end
+
+  test 'should NOT destroy own project if rationale has few non-whitespace' do
+    log_in_as(@project.user)
+    assert_no_difference('Project.count', ActionMailer::Base.deliveries.size) do
+      delete :destroy,
+             params:
+             {
+               id: @project,
+               deletion_rationale: ' x y ' + ("\n" * 30)
+             }
+    end
+    assert_not_empty flash
+    assert_redirected_to delete_form_project_path(@project)
   end
 
   test 'Admin can destroy any project' do

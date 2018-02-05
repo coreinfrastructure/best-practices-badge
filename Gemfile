@@ -80,7 +80,7 @@ end
 
 group :test do
   gem 'capybara-slow_finder_errors', '0.1.4', require: false
-  gem 'chromedriver-helper', '1.1.0', require: false
+  gem 'chromedriver-helper', '1.2.0', require: false
   gem 'codecov', '0.1.10', require: false
   gem 'minitest-rails-capybara', '3.0.1', require: false
   gem 'minitest-reporters', '1.1.19', require: false

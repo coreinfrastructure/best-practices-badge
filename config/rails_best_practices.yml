@@ -1,3 +1,6 @@
+# Configuration file for tool rails_best_practices
+# Note: Inside { } you can use "except_methods:" and "ignored_files:" to omit
+# some checks.
 AddModelVirtualAttributeCheck: { }
 AlwaysAddDbIndexCheck: { }
 CheckSaveReturnValueCheck: { }

@@ -508,6 +508,9 @@ To add a new locale, modify the file "config/initializers/i18n.rb"
 and edit the assignment of "I18n.available_locales" to add
 the new locale.  The system will now permit users to request it.
 
+Also modify robots.txt to prevent crawling of
+user accounts in that locale. See: "app/views/static_pages/robots.text.erb".
+
 Next, create a stub locale file in the "config/locales" directory
 named LOCALE.yml.  A decent way to start is:
 

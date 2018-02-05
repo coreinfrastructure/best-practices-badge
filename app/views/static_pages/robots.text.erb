@@ -1,6 +1,33 @@
-User-Agent: *
 <% if ENV['PUBLIC_HOSTNAME'] == 'bestpractices.coreinfrastructure.org' %>
+# This is the real production system for the CII Best Practices badge.
+
+User-Agent: *
+#
+# Tell crawlers to skip public user data, to help maintain user privacy.
+# With these instructions, if users delete their accounts,
+# the user data will rapidly disappear elsewhere as well.
+# We don't use wildcards here, because some crawlers don't support wildcards;
+# instead we list every supported locale.
+Disallow: /users
+Disallow: /en/users
+Disallow: /fr/users
+Disallow: /ja/users
+Disallow: /ru/users
+Disallow: /zh-CN/users
+Disallow: /de/users
+#
+# Don't crawl project *.json files; the normal HTML files are usually
+# what people want and it takes time to crawl these JSON files.
+# We have to use wildcards for these, and these are merely an optimization
+# for us, not a way to help protect user privacy.
+Disallow: /projects.json$
+Disallow: /projects/*.json$
+Disallow: /*/projects/*.json$
+#
+# In most cases we *do* want this site to be crawled:
 Allow: /
 <% else %>
+# This is not the real production system, do not crawl this data at all.
+User-Agent: *
 Disallow: /
 <% end %>

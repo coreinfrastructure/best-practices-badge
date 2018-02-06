@@ -315,10 +315,10 @@ class ProjectsController < ApplicationController
     deletion_rationale = params[:deletion_rationale]
     deletion_rationale = '' if deletion_rationale.blank? # E.g., null
     if deletion_rationale.length < 20
-      flash.now[:danger] = t('.projects.delete_form.too_short')
+      flash[:danger] = t('projects.delete_form.too_short')
       redirect_to delete_form_project_path(@project)
     elsif AT_LEAST_15_NON_WHITESPACE !~ deletion_rationale
-      flash.now[:danger] = t('.projects.delete_form.more_non_whitespace')
+      flash[:danger] = t('projects.delete_form.more_non_whitespace')
       redirect_to delete_form_project_path(@project)
     end
   end

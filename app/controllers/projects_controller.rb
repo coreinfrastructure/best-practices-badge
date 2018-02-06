@@ -224,7 +224,7 @@ class ProjectsController < ApplicationController
     if current_user_is_admin?
       respond_to { |format| format.html }
     else
-      flash.now[:danger] = t('admin_only')
+      flash[:danger] = t('admin_only')
       redirect_to '/'
     end
   end

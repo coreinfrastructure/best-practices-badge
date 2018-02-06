@@ -26,7 +26,8 @@
           autofocus="true" cols=70 rows=10
           lang="en" spellcheck="true"
           required="required"></textarea>
-      <%= f.submit t('projects.delete_form.delete_action') %>
+      <%= f.submit t('projects.delete_form.delete_action'),
+                   class: 'btn btn-danger' %>
     <% end %>
   </div>
 </div>

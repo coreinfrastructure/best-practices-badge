@@ -235,6 +235,7 @@ ru:
     destroy:
       cannot_delete_self: Удалить себя невозможно.
       user_deleted: Пользователь удален.
+      cannot_delete_user_with_projects:
     redirect_existing: Этот пользователь уже существует. Вы хотели
       зайти под ним?
     new_activation_link_created: >-
@@ -663,6 +664,8 @@ ru:
       info_html:
       rationale_placeholder:
       delete_action:
+      too_short:
+      more_non_whitespace:
   report_mailer:
     subject_achieved_passing: >-
       ПОЗДРАВЛЯЕМ с получением значка передовой практики %{new_level}!

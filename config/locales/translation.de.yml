@@ -111,6 +111,7 @@ de:
     destroy:
       cannot_delete_self: Kann nicht selbst löschen.
       user_deleted: Benutzer gelöscht.
+      cannot_delete_user_with_projects:
     redirect_existing: >-
       Dieser Benutzer existiert bereits. Wolltest du dich anzumelden?
     new_activation_link_created: >-
@@ -485,6 +486,8 @@ de:
       info_html:
       rationale_placeholder:
       delete_action:
+      too_short:
+      more_non_whitespace:
   report_mailer:
     new_project_heading: >-
       Vielen Dank das du dein Projekt dem Best Practices Badging

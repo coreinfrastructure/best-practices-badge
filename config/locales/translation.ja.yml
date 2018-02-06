@@ -116,6 +116,7 @@ ja:
     destroy:
       cannot_delete_self: 自分を削除することはできません。
       user_deleted: ユーザーが削除されました。
+      cannot_delete_user_with_projects:
     redirect_existing: そのユーザーは既に存在しています。以前、サインインしたことはありませんか？
     new_activation_link_created: 新しいアクティベーションリンクが作成されました。電子メールを確認してアカウントを有効にしてください。
     please_log_in: ログインしてください。
@@ -366,6 +367,8 @@ ja:
       rationale_placeholder: >-
         （必須）このプロジェクトバッジのエントリを永久に削除する理由（該当する場合は、代わりに削除してほしいこと）を説明してください
       delete_action: このプロジェクトバッジのエントリーを永久に削除してください！
+      too_short:
+      more_non_whitespace:
   report_mailer:
     new_project_heading: ベスト プラクティス バッジ プログラムにプロジェクトを追加してくださいましてありがとうございます
     new_project_part1: |-

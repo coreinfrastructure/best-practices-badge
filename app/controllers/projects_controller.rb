@@ -309,7 +309,6 @@ class ProjectsController < ApplicationController
     redirect_to root_url
   end
 
-  # rubocop: disable Metrics/AbcSize
   def adequate_deletion_rationale
     return true if current_user&.admin?
     deletion_rationale = params[:deletion_rationale]
@@ -322,7 +321,6 @@ class ProjectsController < ApplicationController
       redirect_to delete_form_project_path(@project)
     end
   end
-  # rubocop: enable Metrics/AbcSize
 
   # Forceably set additional_rights on project "id" given string description
   # Presumes permissions are granted & valid syntax in new_additional_rights

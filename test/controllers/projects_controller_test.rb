@@ -618,5 +618,16 @@ class ProjectsControllerTest < ActionController::TestCase
     result = ProjectsController.send :send_reminders
     assert_equal 1, result.size
   end
+
+  # This is a unit test of a private method in ProjectsController.
+  test 'URL cleaning works' do
+    p = ProjectsController.new
+    # Use "send" to do unit test of private method.
+    assert_equal 'xyz', p.send(:clean_url, 'xyz')
+    assert_equal 'xyz', p.send(:clean_url, 'xyz/')
+    assert_equal 'xyz', p.send(:clean_url, 'xyz//')
+    assert_nil p.send(:clean_url, nil)
+    assert_equal 'x/z', p.send(:clean_url, 'x/z')
+  end
 end
 # rubocop:enable Metrics/ClassLength

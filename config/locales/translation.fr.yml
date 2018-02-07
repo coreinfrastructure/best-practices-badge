@@ -105,7 +105,9 @@ fr:
     destroy:
       cannot_delete_self: Impossible de se supprimer soi-même.
       user_deleted: Utilisateur supprimé.
-      cannot_delete_user_with_projects:
+      cannot_delete_user_with_projects: >-
+        Impossible de supprimer un utilisateur qui possède des
+        projets.
     redirect_existing: Cet utilisateur existe déjà. Voulez-vous
       vous connecter ?
     new_activation_link_created: >-
@@ -579,8 +581,9 @@ fr:
       delete_action: >-
         SUPPRESSION PERMANENTE de cette soumission de projet de
         badge !
-      too_short:
-      more_non_whitespace:
+      too_short: Doit avoir au moins 20 caractères.
+      more_non_whitespace: Doit avoir au moins 15 caractères non
+        blancs.
   user_mailer:
     account_activation:
       before_html: |-

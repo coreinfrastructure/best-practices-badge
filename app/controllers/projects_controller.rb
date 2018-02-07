@@ -116,12 +116,18 @@ class ProjectsController < ApplicationController
   # POST /projects
   # POST /projects.json
   # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+  # Try to create a new project entry.
+  # Clean up repo_url and homepage_url specially to make it easier to
+  # identify duplicates.
   def create
     @project = current_user.projects.build(project_params)
-    project_repo_url = @project.repo_url
-    if @project.repo_url? && Project.exists?(repo_url: project_repo_url)
-      flash[:info] = t('projects.new.project_already_exists')
-      return redirect_to Project.find_by(repo_url: project_repo_url)
+    project_repo_url = clean_url(@project.repo_url)
+    if project_repo_url
+      @project.repo_url = project_repo_url
+      if Project.exists?(repo_url: project_repo_url)
+        flash[:info] = t('projects.new.project_already_exists')
+        return redirect_to Project.find_by(repo_url: project_repo_url)
+      end
     end
 
     # Error out if homepage_url and repo_url are both empty... don't
@@ -129,6 +135,9 @@ class ProjectsController < ApplicationController
 
     @project.homepage_url ||= set_homepage_url
     Chief.new(@project, client_factory).autofill
+    if @project.homepage_url
+      @project.homepage_url = clean_url(@project.homepage_url)
+    end
 
     respond_to do |format|
       if @project.save
@@ -547,6 +556,12 @@ class ProjectsController < ApplicationController
   def url_anchor
     return '#' + params[:continue] unless params[:continue] == 'Save'
     ''
+  end
+
+  # Clean up url; returns nil if given nil.
+  def clean_url(url)
+    return url if url.nil?
+    url.gsub(%r{\/+\z}, '')
   end
 
   # This needs to be modified each time you add a new badge level

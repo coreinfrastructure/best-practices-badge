@@ -166,6 +166,13 @@ class ProjectsController < ApplicationController
         @project[key] = user_value
       end
       Chief.new(@project, client_factory).autofill
+
+      # Force cleanup of homepage_url so unintentional duplicates
+      # are easier to find.
+      if @project[:homepage_url].present?
+        @project[:homepage_url] = clean_url(@project[:homepage_url])
+      end
+
       respond_to do |format|
         # Was project.update(project_params)
         update_additional_rights
@@ -391,6 +398,8 @@ class ProjectsController < ApplicationController
     params.permit([:criteria_level])
   end
 
+  # Determine if there is a change in repo_url, and if there is,
+  # if it's allowed.
   def repo_url_change_allowed?
     return true unless @project.repo_url?
     return true if project_params[:repo_url].nil?

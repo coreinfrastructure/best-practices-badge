@@ -1,0 +1,23 @@
+#!/bin/sh
+
+# Run program on command line, but if it returns SIGTERM (termination signal) 
+# then return the status code 0 (no error) instead.
+# By convention SIGTERM is represented in an error code as
+# 128+SIGTERM = 128+15 = 143.
+# See signal(7).
+
+# Note: This script does *not* trap any signals, not even SIGTERM.
+
+# Without this mechanism, when Heroku restarts processes it is reported
+# as an error, even when it simply terminated cleanly.  This is annoying,
+# because we end up with lots of reports of problems that aren't problems.
+
+# Run the code provided on the command line.
+"$@"
+err="$?"
+
+if [ "$err" = 143 ] ; then
+  exit 0
+else
+  exit "$err"
+fi

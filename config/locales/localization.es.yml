@@ -68,6 +68,11 @@ es:
         "Ú": U
         "Ü": U
         "Ñ": N
+  spree:
+    date_picker:
+      first_day: 1
+    not: false
+    say_no: false
   date:
     formats:
       default: "%d/%m/%Y"
@@ -82,8 +87,3 @@ es:
       default: "%A, %d de %B de %Y %H:%M:%S %z"
       long: "%d de %B de %Y %H:%M"
       short: "%d de %b %H:%M"
-  spree:
-    date_picker:
-      first_day: 1
-    not: false
-    say_no: false

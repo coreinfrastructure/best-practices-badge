@@ -92,7 +92,12 @@ that can lead to more secure software.
 We then provide details about authentication (login); authentication
 is a cross-cutting and critical supporting security mechanism, so
 it's easier to describe it all in one place.
-We then include a short discussion of residual risks,
+
+After that we discuss controls, in the context of the
+[Center for Internet Security (CIS) Controls](https://www.cisecurity.org/controls/)
+(aka critical controls).
+
+We conclude with a short discussion of residual risks,
 describe the vulnerability report handling process, and make
 a final appeal to report to us if you find a vulnerability.
 
@@ -1751,6 +1756,86 @@ in commit e79decec67.
 
 A session is created for each user who successfully logs in.
 See the discussion above for more information on how we handle sessions.
+
+## Organizational Controls
+
+The
+[Center for Internet Security (CIS) Controls](https://www.cisecurity.org/controls/)
+are a "prioritized set of actions to protect your organization and data
+from known cyber attack vectors."
+They are used and supported in many places, e.g.,
+[SANS Supports the CIS Critical Security Controls](https://www.sans.org/critical-security-controls)
+through a number of resources and information security courses.
+
+Here we compare the CIS controls to the deployed BadgeApp application.
+The CIS controls are intended for an entire organization,
+while we are focusing on deployment of a single application,
+so many controls don't make sense in our context.
+Still, it's still useful to go through a set of
+controls to make sure we are covering what's important.
+
+For now we only examine the "first 5 CIS controls", as these
+"eliminate the vast majority of your organization's vulnerabilities".
+
+Here are the top CIS controls:
+
+1. Inventory of Authorized and Unauthorized Devices.
+   The application is deployed on Heroku, who perform the task to
+   actively manage (inventory, track, and correct)
+   all hardware devices on the network.
+2. Inventory of Authorized and Unauthorized Software.
+   The deployed system only has one main authorized program, and only
+   authorized administrators can deploy or change software on the system.
+   The operating system (including kernel and utilities) and
+   database system are managed by Heroku.
+   We manage the application; its subcomponents are managed by
+   package managers.
+   We do not use a whitelisting mechanism because it would be pointless;
+   at no time does the running system download software to run
+   (not even JavaScript), and only administrators can install software on it.
+3. Secure Configurations for Hardware and Software on
+   Mobile Devices, Laptops, Workstations, and Servers.
+   The hardware and the operating system (including kernel and utilities)
+   by Heroku; see [Heroku security](https://www.heroku.com/policy/security).
+   For the rest we follow strict configuration management processes;
+   images (builds) are created using CircleCI and deployed to Heroku
+   over an authenticated and encrypted channel.
+   These configurations are extensively hardened as described above, and we
+   use package management systems to rigorously manage and control updates.
+4. Continuous Vulnerability Assessment and Remediation.
+   We use automated vulnerability scanning tools to
+   alert us to publicly-known vulnerabilities in third-party
+   components via multiple mechanisms, as described above.
+   We remediate and minimize the opportunity for attack by using
+   package managers to rapidly perform controlled updates, combined
+   with a large automated test suite to rapidly check that the system
+   continues to work.
+   These scans focus on the reused software components in our application.
+   CIS recommends that you use a
+   [SCAP-validated vulnerability scanner](https://nvd.nist.gov/scap/validated-tools)
+   that looks for both code-based vulnerabilities (such as those described by
+   Common Vulnerabilities and Exposures entries) and configuration-based
+   vulnerabilities (as enumerated by the Common Configuration Enumeration
+   Project).  Our system runs on the widely-used Ubuntu OS,
+   and [Open SCAP](https://www.open-scap.org) is the only OSS scanner
+   of that kind that we know of - and it is only SCAP-validated
+   for Red Hat.  In addition, we do not control the operating system
+   (Heroku does), so it's not clear that such scanners would do us much good.
+   However, in the future, we may attempt to try to use Open SCAP
+   as an additional tool.
+5. Controlled Use of Administrative Privileges.
+   We minimize administrative privileges and only use administrative
+   accounts when they are required.
+   Administrative privileges are strictly limited to a very few
+   people who are authorized to do so.
+   We do not have "root" privileges on Heroku (Heroku handles that),
+   so we cannot give those privileges away, and that greatly reduces the
+   need to "implement focused auditing on the use of
+   administrative privileged functions and monitor for anomalous behavior."
+   We do not use automated tools to inventory all administrative
+   accounts and validate each person.
+   We have a single production system, with only a few administrators,
+   so automation is not useful in this situation.
 
 ## Residual risks
 

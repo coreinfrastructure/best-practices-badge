@@ -25,11 +25,11 @@ en:
     profile: Profile
     settings: Settings
     choose_locale: Choose locale
-    logout_html: <span class="glyphicon glyphicon-log-out"></span>
+    logout_html: <i class="fa fa-sign-out" aria-hidden="true"></i>
       Logout
-    signup_html: <span class="glyphicon glyphicon-user"></span>
+    signup_html: <i class="fa fa-user-plus" aria-hidden="true"></i>
       Sign Up
-    login_html: <span class="glyphicon glyphicon-log-in"></span>
+    login_html: <i class="fa fa-sign-in" aria-hidden="true"></i>
       Login
     footer_text_html: >-
       <small> <strong>Need help? Have a question? See a problem?
@@ -61,7 +61,7 @@ en:
   sessions:
     login_header: Log in
     login_with_github_html: <span class="fa fa-github"></span>
-      Log in with GitHub
+      Log in with GitHub (automatically signs up if necessary)
     or: or
     email: Email
     password: Password
@@ -221,10 +221,12 @@ en:
     new:
       signup_header: Sign up
       intro_github: If you have GitHub account, you can just use
-        that to log in.
+        that to log in (this automatically does a sign up).
       intro_html: |-
         If you don't want to log in with a GitHub account, you can
-        sign up here instead. <br><br> If you didn't receive your activation link,
+        sign up here instead (this creates a custom account using
+        your email address). <br><br> If you didn't receive
+        your activation link,
         please sign up again and we will send you a new one.
       name: Name
       email: Email

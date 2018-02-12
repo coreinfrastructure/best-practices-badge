@@ -59,7 +59,7 @@ class LoginTest < CapybaraFeatureTest
     fill_in 'Email', with: @user.email
     fill_in 'Password', with: 'password'
     click_button 'Log in using custom account'
-    assert has_content? 'Signed in!'
+    assert has_content? 'Logged in!'
     assert_equal projects_path, current_path
 
     visit edit_project_path(@project, locale: nil)

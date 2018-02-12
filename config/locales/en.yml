@@ -74,11 +74,11 @@ en:
     already_logged_in: You are already logged in.
     incorrect_login_info: Incorrect login information
     invalid_combo: Invalid email/password combination
-    signed_in: Signed in!
+    signed_in: Logged in!
     not_activated: >-
       Account not activated. Check your email for the activation
       link.
-    signed_out: Signed out!
+    signed_out: Logged out!
   static_pages:
     home:
       badge_program: CII Best Practices Badge Program

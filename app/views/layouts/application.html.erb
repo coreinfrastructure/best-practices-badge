@@ -5,13 +5,13 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <%= csrf_meta_tags %>
+<% cache locale do # do not cache csrf_meta_tags %>
   <title>BadgeApp</title>
   <%= favicon_link_tag %>
   <%= stylesheet_link_tag    'application', media: 'all' %>
   <%= javascript_include_tag 'application', defer: true %>
   <link rel="preload" href="<%=
-    stylesheet_path('application') %>" as="stylesheet"
-    type="text/css">
+    stylesheet_path('application') %>" as="stylesheet" type="text/css">
   <link rel="preload" href="<%=
     javascript_path('application') %>" as="script"
     type="application/javascript">
@@ -19,11 +19,11 @@
     font_path('fontawesome-webfont.woff2') %>" as="font"
     type="font/woff2" crossorigin>
   <link rel="preload" href="<%=
-    asset_path('cci-logo-header') %>" as="image"
-    type="image/png">
+    asset_path('cci-logo-header') %>" as="image" type="image/png">
   <%= auto_discovery_link_tag :atom, { controller: 'projects', action: 'feed' }, { title: t('feed_title') } %>
 </head>
 <body>
+<% end # cache %>
   <%= render 'layouts/header' %>
   <% flash.each do |message_type, message| %>
     <div class="alert alert-<%= message_type %>"><%= message %></div>

@@ -9,8 +9,9 @@
          <%= avatar_for @user %>
          <%= @user.name || @user.nickname %>
          <% if current_user && (@user == current_user || current_user.admin?) %>
-           <%= link_to '<i class="fa fa-edit" aria-hidden="true"></i>&nbsp;'.html_safe + t('.edit_user'), edit_user_path(@user),
-                       class: 'btn btn-primary', rel: 'nofollow' %>
+           <%= link_to my_icon_tag('fa-edit') + t('.edit_user'),
+                 edit_user_path(@user),
+                 class: 'btn btn-primary', rel: 'nofollow' %>
          <% end %>
        </h3>
      </section>

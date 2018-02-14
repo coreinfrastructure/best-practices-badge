@@ -825,6 +825,11 @@ or a local account (so people who don't want to use GitHub don't need to).
 We trust GitHub's answers about whether or not a user is who they say they
 are, and about which GitHub projects they can edit.
 
+Note: In the user interface we use the term "custom account"
+instead of "local account" or "local user account" or "local user";
+they are all the same thing.  These are accounts
+where the user directly logs into the system with a password.
+
 We currently can't be sure if a local user is actually allowed to
 edit a given project, but admins can override any claims if necessary.
 If this becomes a problem, we could make it possible for a

@@ -20,17 +20,17 @@
       <div class="collapse navbar-collapse" id="collapsingRightNav">
 
       <ul class='nav navbar-nav navbar-right'>
+        <li><%= yield :insert_progress_bar %></li>
         <%= yield :nav_extras %>
-                <li><%= yield :insert_progress_bar %></li>
-        <li><%= link_to t(:projects, scope: :layouts), projects_path %></li>
+        <li><%= link_to my_icon_tag('fa-list') + t(:projects, scope: :layouts), projects_path %></li>
+
         <% if logged_in? %>
-          <!--li><%= link_to t(:users, scope: :layouts), users_path %></li-->
           <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <%= t(:account, scope: :layouts) %><b class="caret"></b>
-            </a>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%=
+              my_icon_tag('fa-user')
+            %><%= t(:account, scope: :layouts) %><b class="caret"></b></a>
             <ul class="dropdown-menu reverse-dropdown">
-              <li><%= link_to t(:profile, scope: :layouts), current_user %></li>
+              <li><%= link_to my_icon_tag('fa-address-card') + t(:profile, scope: :layouts), current_user %></li>
               <% if current_user.provider == 'local' %>
                 <li><%= link_to t(:settings, scope: :layouts), edit_user_path(current_user) %></li>
               <% end %>

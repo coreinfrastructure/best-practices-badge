@@ -26,11 +26,11 @@ en:
     profile: Profile
     settings: Settings
     choose_locale: Choose locale
-    logout_html: <span class="glyphicon glyphicon-log-out"></span>
+    logout_html: <i class="fa fa-sign-out" aria-hidden="true"></i>
       Logout
-    signup_html: <span class="glyphicon glyphicon-user"></span>
+    signup_html: <i class="fa fa-user-plus" aria-hidden="true"></i>
       Sign Up
-    login_html: <span class="glyphicon glyphicon-log-in"></span>
+    login_html: <i class="fa fa-sign-in" aria-hidden="true"></i>
       Login
     footer_text_html: >-
       <small> <strong>Need help? Have a question? See a problem?
@@ -55,14 +55,14 @@ en:
     password_empty: Password can't be empty
     password_reset: Password has been reset
     instructions_sent: Email sent with password reset instructions
-    cant_reset_nonlocal: Sorry, can't reset the password for a
-      non-local user
+    cant_reset_nonlocal: Sorry, can only reset the password for a custom
+      (local) user
     reset_expired: Password reset has expired.
     update_password: Update password
   sessions:
     login_header: Log in
     login_with_github_html: <span class="fa fa-github"></span>
-      Log in with GitHub
+      Log in with GitHub (automatically signs up if necessary)
     or: or
     email: Email
     password: Password
@@ -221,18 +221,21 @@ en:
   users:
     new:
       signup_header: Sign up
-      intro_github: If you have GitHub account, you can just use
-        that to log in.
+      intro_github: If you have a GitHub account, you can just use
+        it to log in instead
+        (a first-time GitHub login will automatically sign you up).
       intro_html: |-
         If you don't want to log in with a GitHub account, you can
-        sign up here instead. <br><br> If you didn't receive your activation link,
+        sign up here instead (this creates a custom account using
+        your email address). <br><br> If you didn't receive
+        your activation link,
         please sign up again and we will send you a new one.
       name: Name
       email: Email
       preferred_locale: Preferred locale
       password: Password
       password_confirmation: Confirm Password
-      create_account: Create my account
+      create_account: Create my custom account
     edit:
       update_user_info: Update User Information
       save_changes: Save changes
@@ -246,8 +249,8 @@ en:
       see_external: See this user's external page.
       is_admin: This user is a badge application administrator.
       as_admin: 'as an admin, you may also:'
-      send_email_to: 'send email to:'
-      delete_link_name: delete
+      send_email_to: 'Send email to:'
+      delete_link_name: Delete user account
       confirm_delete: Are you sure you want to delete this user?
     destroy:
       cannot_delete_user_with_projects: Cannot delete a user who owns projects.

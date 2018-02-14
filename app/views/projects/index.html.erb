@@ -11,7 +11,7 @@
 <% content_for :nav_extras do %>
   <li>
     <% if logged_in? %>
-      <%= link_to t('.add_link'), new_project_path %>
+      <%= link_to my_icon_tag('fa-plus') + t('.add_link'), new_project_path %>
     <% end %>
   </li>
 <% end %>

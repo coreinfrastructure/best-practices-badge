@@ -18,23 +18,29 @@ es:
   feed_title:
   project_name_unknown:
   locale_name:
-    en: Inglés / English (en)
-    de:
-    fr:
-    ja:
-    ru:
-    zh-CN:
+    en: Inglés (en)
+    de: Alemán / Alemán (de)
+    fr: Francés / Français (fr)
+    ja: Japonés / 日本語 (ja)
+    ru: Ruso / Русский (ru)
+    zh-CN: Chino (Simplificado) / 简体中文 (zh-CN)
+    es:
   layouts:
-    cii_best_practices:
-    projects:
-    users:
-    account:
-    profile:
-    settings:
-    choose_locale:
-    logout_html:
-    signup_html:
-    login_html:
+    cii_best_practices: CII Best Practices
+    projects: Proyectos
+    users: Usuarios
+    account: Cuenta
+    profile: Perfil
+    settings: Ajustes
+    choose_locale: Elige la configuración regional
+    logout_html: >-
+      <span class="glyphicon glyphicon-log-out"></span> Cerrar
+      sesión
+    signup_html: <span class="glyphicon glyphicon-user"></span>
+      Registrarse
+    login_html: >-
+      <span class="glyphicon glyphicon-log-in"></span> Iniciar
+      sesión
     footer_text_html:
   admin_only:
   account_activations:
@@ -48,7 +54,9 @@ es:
     password_empty:
     password_reset:
     instructions_sent:
-    cant_reset_nonlocal:
+    cant_reset_nonlocal: >-
+      Lo sentimos, no se puede restablecer la contraseña para
+      un usuario no local
     reset_expired:
     update_password:
   sessions:
@@ -70,21 +78,22 @@ es:
     signed_out:
   static_pages:
     home:
-      badge_program:
-      get_your_badge:
-      check_us_out:
+      badge_program: Programa de CII Best Practices Badge
+      get_your_badge: "¡Obtenga su insignia ahora!"
+      check_us_out: "¡Mira el sitio web de CII Best Practices
+        Badge!"
       p1_html:
       p2_html:
       p3_html:
-      share_header_html:
-      twitter:
-      reddit:
-      facebook:
-      linkedin:
-      googleplus:
-      hacker_news:
-      email:
-      projects_earned_badge:
+      share_header_html: "<p> Comparta esto: </p>"
+      twitter: Twitter
+      reddit: Reddit
+      facebook: Facebook
+      linkedin: LinkedIn
+      googleplus: Google+
+      hacker_news: Hacker News
+      email: Correo electrónico
+      projects_earned_badge: 'Algunos ganadores de insignias:'
     cookies:
       cookies_header:
       cookies_info_html:
@@ -111,7 +120,7 @@ es:
       intro_html:
       name:
       email:
-      preferred_locale:
+      preferred_locale: Configuración regional preferente
       password:
       password_confirmation:
       create_account:
@@ -365,7 +374,7 @@ es:
       username_changed:
       email_changed:
       password_changed:
-      locale_changed:
+      locale_changed: La configuración regional ha cambiado.
       current_state:
       after_text:
       subject:

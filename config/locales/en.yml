@@ -220,8 +220,9 @@ en:
   users:
     new:
       signup_header: Sign up
-      intro_github: If you have GitHub account, you can just use
-        that to log in instead (this automatically does a sign up).
+      intro_github: If you have a GitHub account, you can just use
+        it to log in instead
+        (a first-time GitHub login will automatically sign you up).
       intro_html: |-
         If you don't want to log in with a GitHub account, you can
         sign up here instead (this creates a custom account using

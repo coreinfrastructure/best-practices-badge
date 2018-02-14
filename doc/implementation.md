@@ -504,15 +504,59 @@ If you need to fix a translation, that's where the data is.
 
 ### Adding a new locale
 
-To add a new locale, modify the file "config/initializers/i18n.rb"
-and edit the assignment of "I18n.available_locales" to add
-the new locale.  The system will now permit users to request it.
+We use the translation.io to help us translate text; those results
+are later stored in our git repo (so if we stopped using translation.io
+we would not lose our completed translations).
 
-Also modify robots.txt to prevent crawling of
-user accounts in that locale. See: "app/views/static_pages/robots.text.erb".
+To add a new locale so translation can begin:
 
-Next, create a stub locale file in the "config/locales" directory
-named LOCALE.yml.  A decent way to start is:
+* Modify file "config/initializers/translation.rb"
+  and edit the assignment of "config.target_locales" to add
+  the new locale.
+* Modify file "config/locales/en.yml" and look for "locale_name:";
+  add the new locale as a key. Its text should be
+  "English name of language / Language's name for itself (LOCALE)".
+* Run "rake translation:sync".
+  The system will now permit translators to request it.
+  You probably need to log into translation.io to add invite the
+  translators.
+
+Run "rake translation:sync" occasionally to sync the keys
+and get the new translations.  Spotcheck the new translation work.
+
+It's best if translators prioritize the translations for the front
+page first.  On the left-hand side of the screen, to the right of
+the word "Filters", is a text box.  Use that to search for the keys
+“static_pages.home.”, “layouts.” and "locale_name." - and
+translate those.  Once those are done, the front page would be
+(essentially) translated.
+
+To make it possible to *select* a new language (after non-trivial
+translation has gone on):
+
+* Modify the file "config/initializers/i18n.rb"
+  and edit the assignment of "I18n.available_locales" to add
+  the new locale.  The system will now permit users to request it.
+* Modify the robots.txt to prevent crawling of
+  user accounts in that locale. See: "app/views/static_pages/robots.text.erb".
+* Update app/assets/javascripts/criteria.js.erb
+  to depend on the new locale's yml file, this allows the precompiler to be
+  to be notified if the contents of criteria.js should have changed.
+  Simply add the following line to the top of criteria.js.erb:
+
+~~~~
+depend_on NEW_LOCALE.yml
+~~~~
+
+### Old approaches for handling locales directly (not used)
+
+Here are notes if you change the system to stop using
+current support mechanisms, and switch back to older approaches.
+The text in this section does not currently apply.
+
+We use the translation.io service.  You don't have to.
+You could instead create a stub locale file in the
+"config/locales" directory named LOCALE.yml.  A decent way to start is:
 
 ~~~~
 cd config/locales
@@ -520,19 +564,6 @@ cp en.yml NEW_LOCALE.yml
 ~~~~
 
 Edit the top of the file to change "en:" to your locale name.
-
-At one time we suggested going to this page to get locale information
-for Rails built-ins, and including that:
-<https://github.com/svenfuchs/rails-i18n/blob/master/rails/locale/>
-However, we now include the gem 'rails-i18n', and that provides
-the same kind of functionality while being easier to maintain.
-
-Now create the matching static pages in the
-the "app/views/static_pages"  (cd "../..", then cd "app/views/static_pages",
-then create the files using the new locale name).
-Be sure all hypertext links to locations within the application
-include the locale (e.g., use "/fr/projects" not "/projects" as the URL);
-automatically-generated URLs include the locale, but constant strings do not.
 
 Now the hard part: actually translating.
 Edit the '.yml' (YAML) file to create the translations.
@@ -542,14 +573,16 @@ strings that end in a colon (":") *must* be escaped (e.g., by
 surrounding them with double-quotes).
 Keys are *only* in lower case and never use dash (they use underscore).
 
-Finally, you will need to update app/assets/javascripts/criteria.js.erb
-to depend on the new locale's yml file, this allows the precompiler to be
-to be notified if the contents of criteria.js should have changed.
-Simply add the following line to the top of criteria.js.erb
+However, we find using a translation service to be easier.
 
-~~~~
-depend_on NEW_LOCALE.yml
-~~~~
+At one time we suggested going to this page to get locale information
+for Rails built-ins, and including that:
+<https://github.com/svenfuchs/rails-i18n/blob/master/rails/locale/>
+However, we now include the gem 'rails-i18n', and that provides
+the same kind of functionality while being easier to maintain.
+
+At one time we had to create new static pages in
+"app/views/static_pages/" for new locales, but that is no longer needed.
 
 ### Programmatically accessing a locale
 

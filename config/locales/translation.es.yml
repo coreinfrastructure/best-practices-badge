@@ -7,7 +7,7 @@ es:
       create: Crear %{model}
       update: Actualizar %{model}
       submit: Guardar %{model}
-  hello:
+  hello: Hola Mundo
   submit:
   projects_count:
     zero:
@@ -18,7 +18,7 @@ es:
   feed_title:
   project_name_unknown:
   locale_name:
-    en:
+    en: Inglés / English (en)
     de:
     fr:
     ja:
@@ -38,8 +38,8 @@ es:
     footer_text_html:
   admin_only:
   account_activations:
-    activated:
-    failed_activation:
+    activated: "¡Cuenta activada!"
+    failed_activation: Enlace de activación inválido
   password_resets:
     forgot_password:
     reset_password:
@@ -386,12 +386,24 @@ es:
         description:
         met_placeholder:
       contribution:
-        description:
-        details:
-        met_placeholder:
+        description: >-
+          La información sobre cómo contribuir DEBE explicar el
+          proceso de contribución (por ejemplo, ¿se utilizan "pull
+          requests" en el proyecto?)
+        details: >-
+          Se asume que los proyectos <a href="https://guides.github.com/activities/contributing-to-open-source/">
+          en GitHub usan "incidencias" y "pull requests"</a> a
+          menos que se indique lo contrario. Esta información
+          puede ser breve, por ejemplo, indicando que el proyecto
+          utiliza "pull requests", un gestor de incidencias o
+          publicaciones en una lista de correo (Indíquese cuál)
+        met_placeholder: "(URL requerida) ¿Cuál es el proceso?
+          ¿Qué URL lo explica?"
       contribution_requirements:
         description:
-        unmet_placeholder:
+        unmet_placeholder: >-
+          ¿Por qué los requisitos son tan obvios que esta información
+          no es necesaria?
       floss_license:
         description:
         details:
@@ -418,16 +430,30 @@ es:
         description:
         details:
       repo_public:
-        description:
-        details:
+        description: >-
+          El proyecto DEBE tener un repositorio público para el
+          control de versiones de código fuente que sea legible
+          públicamente y tenga URL.
+        details: >-
+          La URL PUEDE ser la misma que la URL del proyecto. El
+          proyecto PUEDE utilizar ramas privadas (no públicas)
+          en casos específicos, mientras que el cambio no se divulga
+          públicamente (por ejemplo, para corregir una vulnerabilidad
+          antes de que se revele al público).
       repo_track:
-        description:
+        description: >-
+          El repositorio fuente del proyecto DEBE rastrear qué
+          cambios se realizaron, quién realizó los cambios y cuándo
+          se realizaron los cambios.
       repo_interim:
         description:
         details:
       repo_distributed:
         description:
-        details:
+        details: >-
+          Git no se requiere específicamente y los proyectos pueden
+          usar un software de control de versiones centralizado
+          (como subversion) con justificación.
       version_unique:
         description:
         details:
@@ -453,7 +479,9 @@ es:
         description:
         details:
       report_archive:
-        description:
+        description: >-
+          El proyecto DEBE tener un archivo públicamente disponible
+          para informes y respuestas para búsquedas posteriores.
       vulnerability_report_process:
         description:
         details:
@@ -464,19 +492,31 @@ es:
         description:
         details:
       build:
-        description:
+        description: >-
+          Si el software generado por el proyecto requiere ser
+          construido para su uso, el proyecto DEBE proporcionar
+          un sistema de compilación que pueda satisfactoriamente
+          reconstruir automáticamente el software a partir del
+          código fuente.
         details:
       build_common_tools:
-        description:
-        details:
+        description: >-
+          Se SUGIERE que se utilicen herramientas comunes para
+          construir el software.
+        details: 'Por ejemplo: Maven, Ant, cmake, autotools, make
+          o rake.'
       build_floss_tools:
-        description:
+        description: >-
+          El proyecto DEBERÍA ser construible usando solo herramientas
+          FLOSS.
       test:
         description:
         details:
       test_invocation:
-        description:
-        details:
+        description: >-
+          Un conjunto de pruebas DEBERÍA ser invocable de forma
+          estándar para ese lenguaje.
+        details: 'Ejemplos: "make check", "mvn test" o "rake test".'
       test_most:
         description:
       test_continuous_integration:
@@ -494,7 +534,7 @@ es:
         description:
         details:
       warnings_fixed:
-        description:
+        description: El proyecto DEBE abordar las advertencias.
         details:
       warnings_strict:
         description:
@@ -509,7 +549,12 @@ es:
         description:
         details:
       crypto_call:
-        description:
+        description: >-
+          Si el software producido por el proyecto es una aplicación
+          o una librería, y su propósito principal no es implementar
+          criptografía, entonces DEBE SOLAMENTE invocar un software
+          específicamente diseñado para implementar funciones
+          criptográficas; NO DEBERÍA volver a implementar el suyo.
       crypto_floss:
         description:
         details:
@@ -535,7 +580,7 @@ es:
         details:
       delivery_unsigned:
         description:
-        details:
+        details: Estos "hash" se pueden modificar en tránsito.
       vulnerabilities_fixed_60_days:
         description:
         details:
@@ -547,8 +592,11 @@ es:
       static_analysis:
         description:
         details:
-        na_placeholder:
-        met_placeholder:
+        na_placeholder: >-
+          ¿Por qué no se puede cumplir esto (por ejemplo: no existen
+          herramientas FLOSS para ese idioma)?
+        met_placeholder: "¿Qué herramienta(s) de análisis estático
+          se utilizan?"
       static_analysis_common_vulnerabilities:
         description:
         details:
@@ -715,7 +763,8 @@ es:
         description:
     '2':
       achieve_silver:
-        description:
+        description: El proyecto DEBE lograr una insignia de nivel
+          plata.
       bus_factor:
         description:
       contributors_unassociated:
@@ -775,7 +824,7 @@ es:
     Analysis:
     Automated test suite:
     Identification:
-    Prerequisites:
+    Prerequisites: Prerrequisitos
     Basic project website content:
     Basics:
     Bug-reporting process:
@@ -790,23 +839,29 @@ es:
     Installation system:
     New functionality testing:
     Other:
-    Other security issues:
-    Previous versions:
-    Project oversight:
-    Public version-controlled source repository:
-    Publicly known vulnerabilities fixed:
-    Quality:
-    Release notes:
-    Reporting:
-    Secure development knowledge:
+    Other security issues: Otros problemas de seguridad
+    Previous versions: Versiones anteriores
+    Project oversight: Supervisión del proyecto
+    Public version-controlled source repository: >-
+      Repositorio público para el control de versiones de código
+      fuente
+    Publicly known vulnerabilities fixed: Vulnerabilidades públicamente
+      conocidas corregidas
+    Quality: Calidad
+    Release notes: Notas de lanzamiento
+    Reporting: Informes
+    Secure development knowledge: Conocimiento de desarrollo seguro
     Secure release:
-    Secured delivery against man-in-the-middle (MITM) attacks:
-    Security:
-    Static code analysis:
-    Unique version numbering:
-    Use basic good cryptographic practices:
-    Vulnerability report process:
-    Warning flags:
+    Secured delivery against man-in-the-middle (MITM) attacks: >-
+      Entrega garantizada contra ataques de hombre en el medio
+      (MITM)
+    Security: Seguridad
+    Static code analysis: Análisis estático de código
+    Unique version numbering: Numeración única de versión
+    Use basic good cryptographic practices: Use buenas prácticas
+      criptográficas
+    Vulnerability report process: Proceso de informe de vulnerabilidad
+    Warning flags: Banderas de advertencia
     Working build system:
   criterion_status:
     Met:
@@ -815,10 +870,10 @@ es:
   error_messages:
     need_home_page_or_url:
     form_contains:
-      one:
+      one: El formulario contiene 1 error.
       few:
       many:
-      other:
+      other: El formulario contiene %{count} errores.
     comma_separated_list:
     begin_with_cpe:
     not_an_email:

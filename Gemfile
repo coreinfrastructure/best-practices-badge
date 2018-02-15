@@ -31,7 +31,7 @@ gem 'pg', '0.21.0' # PostgreSQL database, used for data storage
 gem 'pg_search', '2.1.2' # PostgreSQL full-text search
 gem 'puma', '3.11.2' # Faster webserver; recommended by Heroku
 gem 'rack-cors', '1.0.2' # Enable CORS so JavaScript clients can get JSON
-gem 'rails', '5.1.4' # Our web framework
+gem 'rails', '5.1.5' # Our web framework
 gem 'rails-i18n', '5.0.4' # Localizations for Rails built-ins
 gem 'redcarpet', '3.4.0' # Process markdown in form textareas (justifications)
 gem 'sass-rails', '5.0.7', require: false

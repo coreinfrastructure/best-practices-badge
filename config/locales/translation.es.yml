@@ -496,7 +496,13 @@ es:
         details:
       vulnerability_report_private:
         description:
-        details:
+        details: >-
+          Los ejemplos incluyen un informe privado de defectos
+          enviado en la web usando HTTPS (TLS) o un correo electrónico
+          cifrado utilizando OpenPGP. Si los informes de vulnerabilidades
+          son siempre públicos (por lo que nunca hay informes
+          de vulnerabilidades privados), seleccione "no aplicable"
+          (N/A).
       vulnerability_report_response:
         description:
         details:

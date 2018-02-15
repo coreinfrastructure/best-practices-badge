@@ -135,7 +135,7 @@ GEM
       activesupport (>= 4.2.0)
     hashdiff (0.3.7)
     hashie (3.5.7)
-    httparty (0.15.7)
+    httparty (0.16.0)
       multi_xml (>= 0.5.2)
     i18n (0.9.5)
       concurrent-ruby (~> 1.0)
@@ -154,7 +154,7 @@ GEM
     json (2.1.0)
     jwt (1.5.6)
     kramdown (1.16.2)
-    license_finder (5.0.2)
+    license_finder (5.0.3)
       bundler
       httparty
       rubyzip
@@ -235,7 +235,7 @@ GEM
     parallel (1.12.1)
     parser (2.4.0.2)
       ast (~> 2.3)
-    parslet (1.8.1)
+    parslet (1.8.2)
     pg (0.21.0)
     pg_search (2.1.2)
       activerecord (>= 4.2)
@@ -447,7 +447,7 @@ DEPENDENCIES
   jquery-rails (= 4.3.1)
   jquery-ui-rails (= 6.0.1)
   json (= 2.1.0)
-  license_finder (= 5.0.2)
+  license_finder (= 5.0.3)
   lograge (= 0.9.0)
   mail (= 2.7.0)
   mdl (= 0.4.0)

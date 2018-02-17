@@ -88,6 +88,7 @@ The BadgeApp web application MUST:
    in less than 3 seconds on average on a high-speed link
    (e.g. as measured by https://www.webpagetest.org given Dulles, Virginia
    as the test location).  In practice we achieve much better than this.
+15. NOT require a large amount of effort to develop or maintain.
 
 ## Specific requirements
 

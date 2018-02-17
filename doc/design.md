@@ -8,7 +8,7 @@ The web application is itself OSS, and we intend for the
 web application to meet its own criteria.
 We have implemented it with Ruby on Rails; Rails is good for
 simple web applications like this one.
-The production system stores the data in PostgreSQL (aka Postgres).
+The system stores the data in PostgreSQL (aka Postgres).
 
 ### High-level design figure
 
@@ -47,17 +47,54 @@ that the costs are worthwhile.
 
 ### Key components
 
-Some other key components we use are:
+The key components we use are:
 
-- Bootstrap
-- Jquery
-- Jquery UI
-- Imagesloaded <https://github.com/desandro/imagesloaded>
-  (to ensure images are loaded before displaying them)
-- Puma as the webserver - not webrick, because Puma can handle multiple
+- Ruby on Rails.
+  This is our the primary programming language and web application framework.
+  Ruby on Rails is specifically designed to be easy to use and thus
+  is a good choice for simple web applications like this one.
+  Its ease-of-use enables us to avoid needing a large amount
+  of effort to develop or maintain the software.
+  Ruby is not a fast language, but standard Rails performance techniques
+  (such as fragment caching) make it fast enough.
+  Ruby doesn't have static typing, so it cannot detect errors a
+  statically-typed language can automatically detect; we use static tools
+  and strong test coverage to detect errors instead.
+  We also have some custom software written in client-side JavaScript.
+- PostgreSQL (aka Postgres).
+  This is a widely-used relational database system (RDBMS).
+  Our experience (and those of others) is that it is extremely
+  reliable, a key requirement for a DBMS.
+  It also doesn't require a lot of maintenance and tuning to be useful.
+- Bootstrap.  This is an extremely popular front-end component library.
+  One major advantage of using Bootstrap is that our site looks like many
+  other websites; as a result, our website is familiar and easy to use.
+  We want users to focus on getting their tasks done, instead
+  of trying to figure out how to use the site.
+- jQuery (jquery-rails).
+  This is a widely-used small JavaScript library to ease certain tasks
+  such as HTML document traversal in a portable way.
+- jQuery UI (jquery-ui-rails).
+  jQuery UI is a curated set of user interface interactions, effects,
+  widgets, and themes built on top of the jQuery JavaScript Library.
+  We use jQuery UI solely to use "jquery-ui/autocomplete"
+  as a polyfill for Safari.
+  [Most browsers support datalist](https://caniuse.com/#feat=datalist),
+  when entering data in a field, but Safari fails to support it.
+  We use a datalist in the projects form to help fill in the
+  implementation language and license.
+- Imagesloaded.
+  This is from <https://github.com/desandro/imagesloaded> - it's a JavaScript
+  library to ensure images are loaded before displaying them.
+- Puma.
+  This is our webserver.
+  We don't use webrick, because Puma can handle multiple
   processes and multiple threads.  See:
   <https://devcenter.heroku.com/articles/ruby-default-web-server>
-- A number of supporting Ruby gems (see the Gemfile)
+
+We use a number of supporting Ruby gems.
+See the file "Gemfile" to see all the gem direct dependencies;
+see the file "Gemfile.lock" to see all the gem dependencies (direct and not).
 
 ### Key classes
 
@@ -65,12 +102,14 @@ The software is designed as a traditional model/view/controller (MVC)
 architecture.  As is standard for Rails, under directory "app"
 (application) are directories for "models", "views", and "controllers".
 
-Central classes include:
+Central custom classes include:
 
 * "Project" (defined in file "app/models/project.rb")
   defines the model that captures data about a project.
 * "User" (defined in file "app/models/user.rb")
   defines the model that captures data about a user.
+* "AdditionalRight" (defined in file "app/models/additional_right.rb")
+  defines the model that captures the set of additional rights of users.
 
 ## Performance
 
@@ -90,6 +129,8 @@ Here is our approach to getting good performance:
 * Images are resized to their display size, and we provide width and height.
 * The web application HTML includes preloading commands to help
   web browsers request what they need relatively early.
+* The RDBMS has indexes for all built-in searches
+  (as is standard good practice).
 * We use the "bullet" gem to detect N+1 queries (a common yet subtle
   performance killer in web applications)
 * We use various tools, such as [webpagetest](https://www.webpagetest.org/),

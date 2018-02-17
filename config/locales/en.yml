@@ -315,6 +315,17 @@ en:
       raw_data: 'You can also see the raw data:'
       json_format: JSON format
       csv_format: downloadable CSV format
+      users: Users
+      github_users: GitHub Users
+      local_users: Custom (Local) Users
+      users_created_since_yesterday: Users Created since Yesterday
+      users_updated_since_yesterday: Users Updated since Yesterday
+      users_with_projects: Users with Projects
+      users_without_projects: Users without Projects
+      users_with_multiple_projects: Users with Multiple Projects
+      users_with_passing_projects: Users with Passing Projects
+      users_with_silver_projects: Users with Silver Projects
+      users_with_gold_projects: Users with Gold Projects
   projects:
     index:
       all: All

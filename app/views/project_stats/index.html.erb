@@ -130,6 +130,34 @@
   # Done transforming data; display it.
   line_chart dataset, library: date_chart_options, defer: true
 %>
+
+<br><br><br>
+
+<h2><%= t '.user_statistics' %></h2>
+<%=
+  dataset = []
+  ["users",
+  "github_users",
+  "local_users",
+  "users_created_since_yesterday",
+  "users_updated_since_yesterday",
+  "users_with_projects",
+  "users_without_projects",
+  "users_with_multiple_projects",
+  "users_with_passing_projects",
+  "users_with_silver_projects",
+  "users_with_gold_projects"].each do |field|
+    # Add "field" to dataset
+    active_dataset = ProjectStat.all.reduce({}) do |h,e|
+      h.merge(e.created_at => e[field])
+    end
+    dataset << {name: t('.' + field),
+                data: active_dataset}
+  end
+  # Done transforming data; display it.
+  line_chart dataset, library: date_chart_options, defer: true
+%>
+
 <% end # if current_user&.admin? %>
 
 <br><br><br>

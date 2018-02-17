@@ -9,6 +9,12 @@ Our emphasis is on keeping the program relatively *simple*.
 
 This file provides information on how it's implemented, in the hopes that
 it will help people make improvements.
+Many of these sections are notes on how to repeat some task in the future,
+or notes that may help future changes.
+This is named "implementation", but it also covers verification
+issues (including testing).
+
+See also [requirements.md](../requirements.md) and [design.md](../design.md).
 See [CONTRIBUTING.md](../CONTRIBUTING.md) for information on how to
 contribute to this project, and [INSTALL.md](INSTALL.md) for information
 on both how to install this software (e.g., for development) and a
@@ -22,138 +28,19 @@ including the EU General Data Protection Regulation (GDPR).
 In this document we'll use the term "open source software" (OSS),
 and treat Free/Libre and Open Source Software (FLOSS) as a synonym.
 
-## Requirements
+## Running locally
 
-The BadgeApp web application MUST:
+Once your development environment is ready, you can run the application with:
 
-1. Meet its own criteria.  This implies that it must be open source software
-   (OSS).
-2. Be capable of being developed and run using *only* OSS.
-   It may *run* on proprietary software; portability improvements welcome.
-   It's also fine if it can use proprietary services, as long as it can
-   *run* without them.
-3. Support users of modern widely used web browsers, including
-   Chrome, Firefox, Safari, and Internet Explorer version 10 and up.
-   We expect Internet Explorer pre-10 users will use a different browser.
-4. NOT require JavaScript to be enabled on the web browser (some
-   security-conscious people disable it) - instead, support graceful
-   degradation (many features will work much better if JavaScript is enabled).
-   Requiring CSS is fine.
-5. Support users of various laptops/desktops
-   (running Linux (Ubuntu, Debian, Fedora, Red Hat Enterprise Linus),
-   Microsoft Windows, or Apple MacOS) and mobile devices
-   (including at least Android and iOS).
-6. NOT require OSS projects to use GitHub or git.
-   We do use GitHub and git to *develop* BadgeApp (that's different).
-7. Automatically fill in some criteria where it can, at least if a
-   project is on GitHub.  Automating filling in data is a never-ending
-   process of refinement. Thus, we intend to fill a few to start, and then
-   add more automation over time.
-8. Be secure.  See the separate
-   [security](security.md) document for more about security, including
-   its requirements.
-9. Be accessible.
-   We strive to comply with the
-   <a href="https://www.w3.org/TR/WCAG20/">Web Content Accessibility
-   Guidelines (WCAG 2.0)</a> (especially at the A and AA level).
+~~~~
+rails s
+~~~~
 
-There are many specific requirements; instead of a huge requirements document,
-most specific requirements are proposed and processed via its
-[GitHub issue tracker](https://github.com/coreinfrastructure/best-practices-badge/issues).
-See [CONTRIBUTING](../CONTRIBUTING.md) for more.
+This will automatically set up what it needs to, and then run the
+web application.
+You can press control-C at any time to stop it.
 
-## High-level architecture
-
-The web application is itself OSS, and we intend for the
-web application to meet its own criteria.
-We have implemented it with Ruby on Rails; Rails is good for
-simple web applications like this one.
-We are currently using Rails version 4.
-The production system stores the data in Postgres.
-
-### High-level design figure
-
-The following figure shows a high-level design of the implementation:
-
-![Design](./design.png)
-
-### Traditional web app, not a single-page app (SPA)
-
-There are at least two ways to develop a web application:
-
-* a "traditional web application" where most user interactions (such
-  as form submission) involve loading an entirely new web page.
-* a [single-page application (SPA)](https://en.wikipedia.org/wiki/Single-page_application)
-  interacts with the user by dynamically rewriting the current page
-  (instead of loading new pages from a server).
-  SPAs typically provide a more fluid user experience, but also
-  incur a higher development and maintenance cost.
-
-We intentionally developed this application as a traditional web application,
-not as an SPA, because development and maintenance cost was very important
-when the project started.
-Indeed, the article
-[SPAs Are Just Harder, and Always Will Be](http://wgross.net/essays/spas-are-harder)
-argues that SPAs will *always* be harder to develop, even with
-frameworks to help.
-In addition, some security-conscious people disable JavaScript, and we want
-like this application to work even in those cases
-(with some graceful degradation).
-
-When the project started, our primary concerns were to determine the
-criteria, and try to get broad buy-in that those criteria were sensible.
-
-This approach can easily be revisited in the future, if it is decided
-that the costs are worthwhile.
-
-### Key components
-
-Some other key components we use are:
-
-- Bootstrap
-- Jquery
-- Jquery UI
-- Imagesloaded <https://github.com/desandro/imagesloaded>
-  (to ensure images are loaded before displaying them)
-- Puma as the webserver - not webrick, because Puma can handle multiple
-  processes and multiple threads.  See:
-  <https://devcenter.heroku.com/articles/ruby-default-web-server>
-- A number of supporting Ruby gems (see the Gemfile)
-
-### Key classes
-
-The software is designed as a traditional model/view/controller (MVC)
-architecture.  As is standard for Rails, under directory "app"
-(application) are directories for "models", "views", and "controllers".
-
-Central classes include:
-
-* "Project" (defined in file "app/models/project.rb")
-  defines the model that captures data about a project.
-* "User" (defined in file "app/models/user.rb")
-  defines the model that captures data about a user.
-
-## Deployment
-
-We have three publicly accessible tiers:
-
-* master - an instance of the master branch
-* staging
-* production
-
-These are currently executed on Heroku.
-If you have write authorization to the GitHub repository,
-the commands "rake deploy_staging" and "rake deploy_production"
-will update the staging and production branches (respectively).
-Those updates will trigger tests by CircleCI (via webhooks).
-If those tests pass, that updated branch is then deployed to
-its respective tier.
-
-Most administrative actions require logging into the relevant Heroku tier
-using the "heroku" command (this requires authorization).
-The one exception: the BadgeApp web application does support an 'admin'
-role for logged in users; admin users
-are allowed to edit and delete any project entry.
+Then point your web browser at "localhost:3000".
 
 ## Environment variables
 
@@ -214,81 +101,10 @@ This was implemented with:
 heroku config:set --app production-bestpractices TZ=:/usr/share/zoneinfo/UTC
 ~~~~
 
-## Terminology
-
-This section describes key application-specific terminology.
-
-The web application tracks data about many FLOSS *projects*,
-as identified and entered by *users*.
-
-We hope that projects will (eventually) *achieve* a *badge*.
-A project must *satisfy* (or "pass") all *criteria*
-(singular: criterion) *enough* to achieve a badge.
-
-The *status* of each criterion, for a given project, can be one of:
-'Met', 'Unmet', 'N/A' (not applicable, a status that only some
-criteria can have), and '?' (unknown, the initial state of all
-criteria for a project).
-Every criterion can also have a *justification*.
-For each project the system tracks the criteria status,
-criteria justification, and a few other data fields such as
-project name, project description, project home page URL, and
-project repository (repo) URL.
-
-Each criterion is in one of four *categories*:
-'MUST', 'SHOULD', 'SUGGESTED', and 'FUTURE'.
-In some cases, a criterion may require some justification
-or a URL in the justification to be enough to satisfy the criterion for
-a badge.  See the [criteria](./criteria.md) or
-application form for the current exact rules.
-A synonym for 'satifying' a criterion is 'passing' a criterion.
-
-We have an 'autofill' system that fills in some data automatically.
-
-In some cases the autofill data will *override* human-entered data
-(this happens where we're either confident in the data, and/or
-the data is not available using a common convention
-that are enforcing for purposes of the badge).
-The autofill system uses the metaphor of *Detectives* that need
-some inputs, analyze them,
-and produce outputs (including confidence levels).
-Detectives are managed by a *Chief* of detectives.
-
-See below for more detail.
-
-## Running locally
-
-Once your development environment is ready, you can run the application with:
-
-~~~~
-rails s
-~~~~
-
-This will automatically set up what it needs to, and then run the
-web application.
-You can press control-C at any time to stop it.
-
-Then point your web browser at "localhost:3000".
-
 ## Security
 
 See the separate
 [security](security.md) document for more about security.
-
-## Application Programming Interface (API)
-
-See [api](api.md) for the application programming interface (API),
-including how to download data for analysis.
-
-Its interface supports the following interfaces, which is enough
-to programmatically create a new user, login and logout, create project
-data, edit it, and delete it (subject to the authorization rules).
-In particular, viewing with a web browser (which by default emits 'GET')
-a URL with the absolute path "/projects/:id" (where :id is an id number)
-will retrieve HTML that shows the status for project number id.
-A URL with absolute path "/projects/:id.json"
-will retrieve just the status data in JSON format (useful for further
-programmatic processing).
 
 ## Adding a logo on the home page
 
@@ -1052,31 +868,6 @@ checklink-norobots -b -e \
   https://github.com/coreinfrastructure/best-practices-badge | tee results
 ~~~~
 
-## PostgreSQL Dependencies
-
-As a policy, we minimize the number of dependencies on any particular
-database implementation where we can.  Where possible, please
-prefer portable constructs (such as ActiveRecord).
-
-However, our current implementation requires PostgreSQL.  Our internal
-project search engine uses PostgreSQL specific commands.  Additionally,
-we are using the PostgreSQL specific citext character string type to
-store email addresses.  This allows us, within PostgreSQL, to store
-case sensitive emails but have a case insensitive index on them.
-
-We do this as we can foresee a case where a user's email requires case
-sensitivity to be received (Microsoft Exchange allows this).  We do not,
-however, want to allow for emails that are not case insensitive unique
-since this could possibly allow for a number of duplicate users to be
-created and the possibility of two users from the same domain having
-emails which differ only in case is exceedingly rare.
-
-Using these PostgreSQL-specific capabilities makes the software much
-smaller.  Limiting these dependencies makes it easier to port to a
-different RDBMS if necessary.
-Since PostgreSQL is itself OSS, this isn't as dangerous as becoming
-dependent on a single supplier whose product cannot be forked.
-
 ## Accessing our analysis tools
 
 We have various analyzers.  Here are some hints of how to access them.
@@ -1262,6 +1053,11 @@ as that is almost never what you want.
 
 If you are desparate for space you can make the repo a shallow copy
 instead, but then you do not have the full git history.
+
+## API
+
+See [api](api.md) for the application programming interface (API),
+including how to download data for analysis.
 
 ## See also
 

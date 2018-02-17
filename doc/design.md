@@ -142,6 +142,32 @@ Here is our approach to getting good performance:
 * We use various tools, such as [webpagetest](https://www.webpagetest.org/),
   to detect performance problems.
 
+At the moment we do not use
+[turbolinks](https://github.com/turbolinks/turbolinks).
+Turbolinks is a performance enhancer designed to make
+"navigating your web application faster".
+Turbolinks often used in Rails applications, because it's intended to provide
+"the performance benefits of a single-page application without the added
+complexity of a client-side JavaScript framework."
+
+However, you need to modify your application to work properly with turbolinks.
+[Turbolinks breaks $(document).ready](http://guides.rubyonrails.org/working_with_javascript_in_rails.html#page-change-events)
+(an extremely common construct)
+and by default requires you to use a nonstandard on..."page:change"
+construct.
+We used to use turbolinks, along with a gem called jquery-turbolinks
+that tried to work around the need for modifying software for turbolinks.
+In practice this setup was unreliable, especially with /project_stats.
+
+To use turbolinks properly we've determined that
+you really need to read its documentation
+carefully, and then modify your JavaScript to work with it.
+We might restore turbolinks in the future,
+but we would need to do it properly (and probably add a marking
+for /project_stats to disable turbolinks on that page).
+The current web application is so
+fast that we don't really need turbolinks.
+
 ## Handling concurrency
 
 The application is multi-user and multi-threaded.

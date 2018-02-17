@@ -106,3 +106,4 @@ See also:
 * [INSTALL.md](INSTALL.md) - how to install/quick start
 * [design.md](design.md) - Design information
 * [implementation.md](implementation.md) - Implementation notes
+* [governance.md](governance.md) - How the project is governed

@@ -11,7 +11,7 @@ This file provides information on how it's implemented, in the hopes that
 it will help people make improvements.
 Many of these sections are notes on how to repeat some task in the future,
 or notes that may help future changes.
-This is named "implementation", but it also covers verification
+This document is named "implementation", but it also covers verification
 issues (including testing).
 
 See also [requirements.md](../requirements.md) and [design.md](../design.md).
@@ -141,7 +141,7 @@ otherwise the browser will delay page display until the image loads.
 ## Changing criteria
 
 Remember: Changing criteria is special, see
-doc/governance.md for more.
+[governance](governance.md) for more.
 
 To modify the text of the criteria, edit these files:
 

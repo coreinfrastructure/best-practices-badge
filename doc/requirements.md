@@ -10,6 +10,7 @@ Our emphasis is on keeping the program relatively *simple*.
 This file provides information on the basic high-level requirements
 of the BadgeApp.  Putting them here will hopefully make certain choices
 clear, and also perhaps eliminate useless repeat arguments.
+In a few cases we briefly note how we currently meet the requirements.
 
 In this document we'll use the term "open source software" (OSS),
 and treat Free/Libre and Open Source Software (FLOSS) as a synonym.
@@ -18,8 +19,7 @@ and treat Free/Libre and Open Source Software (FLOSS) as a synonym.
 
 The BadgeApp web application MUST:
 
-1. Support basic functionality for logging in and editing
-   a project badge entry.
+1. **Support basic login and editing functionality.**
    The application MUST
    allow users to sign in/login using GitHub or an email account,
    create project badge entries, edit those entries (if authorized),
@@ -34,61 +34,80 @@ The BadgeApp web application MUST:
    in the normal case.
    Admins MUST be able to edit or remove projects (e.g., to deal with
    spam and false claims).
-2. Meet its own criteria.  This implies that it MUST be open source software
+2. **Meet its own criteria.**
+   This implies that it MUST be open source software
    (OSS).  We release the source code
    under the MIT license, which achieves this.
-3. Be capable of being developed and run using *only* OSS.
+3. **Be capable of being developed and run using *only* OSS.**
    This means that all *required* dependencies MUST be OSS
    (and we *strongly* prefer dependencies with OSI-approved licenses).
    It may *run* on proprietary software; portability improvements are welcome.
    It's also fine if it can use proprietary services, as long as it can
    *run* without them.
    See [CONTRIBUTING.md](../CONTRIBUTING.md) for more.
-4. Support users of relatively-modern widely used web browsers, including
+4. **Support modern web browsers.**
+   Support users of relatively-modern widely used web browsers, including
    Chrome, Firefox, Safari, and Internet Explorer version 10 and up.
    We expect Internet Explorer pre-10 users will use a different browser.
-5. NOT require JavaScript to be enabled on the web browser for basic
+5. **NOT require JavaScript to be enabled.**
+   JavaScript MUST NOT be required on the user web browser for basic
    functions, since some security-conscious people disable JavaScript.
    Instead, the system MUST support graceful degradation.
    Many features will work much better if JavaScript is enabled, but the
    basic functions MUST work without it (e.g., be able to see and
    edit project entries).  Requiring CSS is fine.
-6. Support users of various laptops/desktops
-   (running Linux (Ubuntu, Debian, Fedora, Red Hat Enterprise Linux),
-   Microsoft Windows, or Apple MacOS) and mobile devices
-   (including at least Android and iOS).
+6. **Support web browsers on laptops, desktops, and mobile.**
+   Users must be supported if they are running web browsers on
+   Linux (Ubuntu, Debian, Fedora, Red Hat Enterprise Linux),
+   Microsoft Windows, or Apple MacOS, Android, and iOS.
    This implies that it MUST have a responsive design.
    We expect users will *edit* information primarily on larger screens,
    but they need to be *able* to edit on small screens.
-7. NOT require OSS projects to use any particular hosting environment
-   or version control system. In particular, the system MUST NOT require that
+7. **NOT require use of a particular hosting environment or VCS.**
+   Here "VCS" means "version control system" (such as git).
+   In particular, the system MUST NOT require that
    projects or users use either GitHub or git.
    We do use GitHub and git to *develop* BadgeApp (that's different).
-8. Automatically fill in some criteria where it can, at least if a
-   project is on GitHub.  Automating filling in data is a never-ending
-   process of refinement. Thus, we intend to fill a few to start, and then
+8. **Automatically fill in some criteria where it can on GitHub projects.**
+   Automating filling in data is a never-ending
+   process of refinement.
+   Thus, we intend to fill a few to start, and then
    add more automation over time.
-9. Be secure.  See the separate
+   At a minimum we intend to automate projects hosted on GitHub, but
+   we welcome automation for projects hosted elsewhere.
+9. **Be secure.**  See the separate
    [security](security.md) document for more about security, including
    its requirements.
-10. Protect users and their privacy.  In particular, we MUST
+10. **Protect users and their privacy.**  In particular, we MUST
    comply with the EU General Data Protection Regulation (GDPR).
-11. Be accessible.
+   Don't expose user email addresses,
+   and don't expose user activities to unrelated sites
+   (including social media sites) without that user's consent.
+11. **Be accessible.**
    We strive to comply with the
    <a href="https://www.w3.org/TR/WCAG20/">Web Content Accessibility
    Guidelines (WCAG 2.0)</a> (especially at the A and AA level).
-12. Support internationalization/localization.
-13. Be reliable. As a matter of policy we require that our test suite
+12. **Support internationalization/localization.**
+13. **Be reliable.**
+   As a matter of policy we require that our test suite
    have at least 90% statement coverage (in practice we exceed that),
    the development process MUST use a variety of tools
    to help detect problems early, and there MUST be a continuous
    integration platform (to immediately test check-ins).
-14. Perform well.  Users avoid slow sites.
+14. **Perform well.**  Users avoid slow sites.
    The front page MUST get to "first interactive" use for a new user
    in less than 3 seconds on average on a high-speed link
    (e.g. as measured by https://www.webpagetest.org given Dulles, Virginia
-   as the test location).  In practice we achieve much better than this.
-15. NOT require a large amount of effort to develop or maintain.
+   as the test location).  In practice we achieve much better than this;
+   see the design document discussion about performance.
+15. **NOT require a large amount of effort to develop or maintain.**
+   We choose systems that easy to develop and maintain in, such as
+   Ruby on Rails, to do this.
+16. **Record aggregate statistics.**
+   We need these aggregate statistics to monitor the
+   status of the badging project, and focus primarily on projects.
+   These are aggregations, to help preserve user privacy.
+   See /project_stats and /criteria for these statistics.
 
 ## Specific requirements
 

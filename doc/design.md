@@ -2,6 +2,12 @@
 
 <!-- SPDX-License-Identifier: (MIT OR CC-BY-3.0+) -->
 
+This document describes the design of the BadgeApp.
+No single tehnology does everything well.
+Instead, design is all about making good choices between
+options that have different trade-offs to meet requirements.
+This document describes our key choices.
+
 ## High-level architecture
 
 The web application is itself OSS, and we intend for the
@@ -135,6 +141,37 @@ Here is our approach to getting good performance:
   performance killer in web applications)
 * We use various tools, such as [webpagetest](https://www.webpagetest.org/),
   to detect performance problems.
+
+## Handling concurrency
+
+The application is multi-user and multi-threaded.
+
+### Multi-user
+
+We use optimistic locking to prevent unexpected data loss from
+multiple people editing the same project at the same time.
+
+We use RDBMS transactions,
+[invoked via ActiveRecord](http://api.rubyonrails.org/classes/ActiveRecord/Transactions/ClassMethods.html),
+to counter problems that could happen without transactions.
+
+### Multi-threaded
+
+This is a multi-threaded application once it starts accepting web requests.
+Different requests may be started in different threads.
+We presume that Ruby and Rails (including its fragment caching system)
+implement threading correctly.
+
+This is one reason we enable frozen string literals.
+Since frozen string literals cannot be mutated, a thread cannot
+accidentally mutate one and affect a different thread.
+
+For the most part this is invisible, but be extremely careful if you
+create situations where a possibly-modifiable
+resource is *shared* between threads.
+For example, don't memoize unless you do thread-safe memoization.
+You can also pre-create all the instances you need during
+system initialization and then freeze them (sharing read-only data is fine).
 
 ## Deployment
 

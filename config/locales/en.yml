@@ -315,6 +315,7 @@ en:
       raw_data: 'You can also see the raw data:'
       json_format: JSON format
       csv_format: downloadable CSV format
+      user_statistics: User statistics
       users: Users
       github_users: GitHub Users
       local_users: Custom (Local) Users

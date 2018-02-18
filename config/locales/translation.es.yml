@@ -174,6 +174,17 @@ es:
       raw_data:
       json_format:
       csv_format:
+      users:
+      github_users:
+      local_users:
+      users_created_since_yesterday:
+      users_updated_since_yesterday:
+      users_with_projects:
+      users_without_projects:
+      users_with_multiple_projects:
+      users_with_passing_projects:
+      users_with_silver_projects:
+      users_with_gold_projects:
   projects:
     index:
       all:
@@ -252,7 +263,38 @@ es:
     form_early:
       badge_intro:
         description:
-        details_html:
+        details_html: >-
+          No existe un conjunto de prácticas que pueda garantizar
+          que el software nunca tendrá defectos o vulnerabilidades;
+          incluso los métodos formales pueden fallar si las especificaciones
+          o suposiciones son incorrectas. Tampoco existe ningún
+          conjunto de prácticas que pueda garantizar que un proyecto
+          mantenga una comunidad de desarrollo saludable y que
+          funcione bien. Sin embargo, seguir las mejores prácticas
+          puede ayudar a mejorar los resultados de los proyectos.
+          Por ejemplo, algunas prácticas permiten la revisión
+          por parte de múltiples personas antes del lanzamiento,
+          lo que puede ayudar a encontrar vulnerabilidades técnicas
+          que de otro modo serían difíciles de encontrar y ayudar
+          a generar confianza y un deseo repetido de interacción
+          entre desarrolladores de diferentes compañías. Para
+          obtener una insignia, se deben cumplir todos los criterios
+          DEBE y NO DEBE, se deben cumplir, así como todos los
+          criterios DEBERÍAN deben cumplirse o ser justificados,
+          <em>y</em> todos los criterios SUGERIDOS se pueden cumplir
+          o incumplir (queremos que se consideren al menos). Si
+          desea añadir texto como justificación mediante un comentario
+          genérico, en lugar de ser un razonamiento de que la
+          situación es aceptable, comience el bloque de texto
+          con '//' seguido de un espacio. Los comentarios son
+          bienvenidos a través del <a href="https://github.com/coreinfrastructure/best-practices-badge">sitio
+          de GitHub mediante "issues" o "pull requests"</a>. También
+          hay una <a href="https://lists.coreinfrastructure.org/mailman/listinfo/cii-badges">lista
+          de correo electrónico para el tema principal</a>.<br/><br/>Con
+          mucho gusto proporcionaríamos la información en varios
+          idiomas, sin embargo, si hay algún conflicto o inconsistencia
+          entre las traducciones, la versión en inglés es la versión
+          autorizada.
       level:
         '0':
         0_html:

@@ -341,6 +341,17 @@ ru:
       projects_completed_silver_and_gold: Проекты, выполняющие
         критерии на серебро и золото
       percent_projects_earning_badges: Процент проектов со значками
+      users:
+      github_users:
+      local_users:
+      users_created_since_yesterday:
+      users_updated_since_yesterday:
+      users_with_projects:
+      users_without_projects:
+      users_with_multiple_projects:
+      users_with_passing_projects:
+      users_with_silver_projects:
+      users_with_gold_projects:
   projects:
     index:
       all: Все

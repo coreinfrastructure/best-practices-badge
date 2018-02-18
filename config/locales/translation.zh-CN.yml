@@ -123,6 +123,17 @@ zh-CN:
       projects_gold: 有金级徽章进展的项目
       projects_completed_silver_and_gold: 完成银级徽章和金级徽章的项目
       percent_projects_earning_badges: 获取徽章的项目百分比
+      users:
+      github_users:
+      local_users:
+      users_created_since_yesterday:
+      users_updated_since_yesterday:
+      users_with_projects:
+      users_without_projects:
+      users_with_multiple_projects:
+      users_with_passing_projects:
+      users_with_silver_projects:
+      users_with_gold_projects:
   projects:
     index:
       add_link: 添加

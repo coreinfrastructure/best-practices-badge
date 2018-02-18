@@ -122,6 +122,8 @@ Central custom classes include:
 The BadgeApp doesn't need to be the fastest in the world,
 just fast enough for users to be happy.
 
+### How we get good performance
+
 Here is our approach to getting good performance:
 
 * Badge images are cached and served primarily by our CDN, not our server.
@@ -141,6 +143,8 @@ Here is our approach to getting good performance:
   performance killer in web applications)
 * We use various tools, such as [webpagetest](https://www.webpagetest.org/),
   to detect performance problems.
+
+### Not used: Turbolinks
 
 At the moment we do not use
 [turbolinks](https://github.com/turbolinks/turbolinks).
@@ -162,6 +166,7 @@ In practice this setup was unreliable, especially with /project_stats.
 To use turbolinks properly we've determined that
 you really need to read its documentation
 carefully, and then modify your JavaScript to work with it.
+
 We might restore turbolinks in the future,
 but we would need to do it properly (and probably add a marking
 for /project_stats to disable turbolinks on that page).

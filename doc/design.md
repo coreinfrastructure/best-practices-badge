@@ -97,10 +97,37 @@ The key components we use are:
   We don't use webrick, because Puma can handle multiple
   processes and multiple threads.  See:
   <https://devcenter.heroku.com/articles/ruby-default-web-server>
+- Minitest.
+  Minitest is our basic test framework.
+  Minitest is the default testing framework of Rails, however,
+  many people use RSpec instead.
+  Both are good frameworks used by many, and the most important thing
+  is to pick one, but we had to pick one.
+  We decided to use minitest because it is easier to pick up and use.
+  Minitest is fundamentally Ruby with a few extras, instead of being a
+  completely different DSL.
+  Minitest is also a simple and straightforward framework in general.
+  Minitest comes with Rails, so it's easier to get it started too.
+  Basically, we were able to quickly and efficiently build up our
+  tests with minitest.
+  We're well aware that many people happily use RSpec, and RSpec can
+  clearly do the job - but we have to pick one, and that's what we chose.
 
 We use a number of supporting Ruby gems.
 See the file "Gemfile" to see all the gem direct dependencies;
 see the file "Gemfile.lock" to see all the gem dependencies (direct and not).
+
+We do *not* use an authentication library such as
+[Devise](https://github.com/plataformatec/devise).
+At the time we started the project, the general advice was to
+*not* reuse authentication libraries in Rails
+(e.g., because the libraries were perceived by many as being
+inflexible, immature, and/or hard to use).
+We would probably use an authentication library if we restarted today.
+That said, this hasn't been too bad, because the underlying Rails primitives
+support implementation of authentication in relatively few lines of code,
+and we use standard authentication approaches for Rails applications.
+The effort to switch to such a library now would probably exceed the benefits.
 
 ### Key classes
 

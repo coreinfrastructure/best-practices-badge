@@ -41,6 +41,8 @@ for general discussion.
   new to the project (or FLOSS in general)
 * **[Background](./doc/background.md)** on Badging
 * **[ChangeLog](./CHANGELOG.md)**
+* **[Requirements](./doc/requirements.md)** - our overall requirements
+* **[Design](./doc/design.md)** - our basic design
 * Current **[implementation](./doc/implementation.md)**  - notes about the
   BadgeApp implementation
 * **[security](./doc/security.md)**  - notes about BadgeApp security

@@ -383,8 +383,9 @@ but this is misleading.
 [Turbolinks breaks $(document).ready](http://guides.rubyonrails.org/working_with_javascript_in_rails.html#page-change-events)
 (an extremely common construct)
 and by default requires you to use a nonstandard on..."page:change".
-These incompatibilities led to unreliability.
-We have abandoned turbolinks, and that made everything reliable.
+These incompatibilities led to unreliability, particularly on the
+/project_stats page.
+We have (for now) abandoned turbolinks, and that made everything reliable.
 
 ### Shell
 

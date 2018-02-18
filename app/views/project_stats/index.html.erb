@@ -95,6 +95,16 @@
   line_chart dataset, library: date_chart_options, defer: true
 %>
 
+<% end # cache %>
+
+<% if current_user&.admin?
+     # This data isn't sensitive, but it's probably uninteresting to
+     # non-admins, and all these charts take time to create.  Therefore,
+     # only show these to admins.  Non-admins can still get the data via JSON.
+     # We *separately* cache this from the non-admin charts to increase
+     # the likelihood for using at least one cache.
+     cache ['project_stats_admin', locale, ProjectStat.all.size] do -%>
+
 <br><br><br>
 
 <h2><%= t '.daily_activity' %></h2>
@@ -158,15 +168,6 @@
   line_chart dataset, colors: ['green', 'blue'],
     library: date_chart_options, defer: true
 %>
-<% end # cache %>
-
-<% if current_user&.admin?
-     # This data isn't sensitive, but it's probably uninteresting to
-     # non-admins, and all these charts take time to create.  Therefore,
-     # only show these to admins.  Non-admins can still get the data via JSON.
-     # We *separately* cache this from the non-admin charts to increase
-     # the likelihood for using at least one cache.
-     cache ['project_stats_admin', locale, ProjectStat.all.size] do -%>
 <br><br><br>
 <%
   date_chart_options = {

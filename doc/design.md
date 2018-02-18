@@ -173,6 +173,18 @@ for /project_stats to disable turbolinks on that page).
 The current web application is so
 fast that we don't really need turbolinks.
 
+### Not used: Rails Streaming
+
+One trick for improving Rails performance is to invoke streaming.
+[Streaming with Rails 4](https://www.sitepoint.com/streaming-with-rails-4/)
+and
+[ActionContoller:Streaming](http://api.rubyonrails.org/classes/ActionController/Streaming.html)
+explains the basics for streaming HTML content.
+[Streaming large data responses with Rails](https://coderwall.com/p/kad56a/streaming-large-data-responses-with-rails)
+discusses how to do this with other formats (e.g., JSON).
+The performance of this application is good enough
+that there hasn't been much reason to investigate this further.
+
 ## Handling concurrency
 
 The application is multi-user and multi-threaded.

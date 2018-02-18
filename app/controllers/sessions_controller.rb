@@ -37,6 +37,21 @@ class SessionsController < ApplicationController
 
   private
 
+  # Perform tasks for a user who just successfully logged in.
+  def successful_login(user)
+    log_in user
+    redirect_back_or root_url
+
+    # Report last login time (this can help users detect problems)
+    last_login = user.last_login_at
+    last_login = t('sessions.no_login_time') if last_login.blank?
+    flash[:success] = t('sessions.signed_in', last_login_at: last_login)
+
+    # Record last_login_at time
+    user.last_login_at = Time.now.utc
+    user.save!
+  end
+
   # We want to save the forwarding url of a session but
   # still need to counter session fixation,  this does it
   def counter_fixation
@@ -62,16 +77,12 @@ class SessionsController < ApplicationController
     user = User.find_by(provider: auth['provider'], uid: auth['uid']) ||
            User.create_with_omniauth(auth)
     session[:user_token] = auth['credentials']['token']
-    log_in user
-    redirect_back_or root_url
-    flash[:success] = t('sessions.signed_in')
+    successful_login(user)
   end
 
   def local_login_procedure(user)
     if user.activated?
-      log_in user
-      redirect_back_or root_url
-      flash[:success] = t('sessions.signed_in')
+      successful_login(user)
       params[:session][:remember_me] == '1' ? remember(user) : forget(user)
     else
       flash[:warning] = t('sessions.not_activated')

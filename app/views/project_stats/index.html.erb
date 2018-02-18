@@ -8,8 +8,9 @@
   Rails.cache.delete ActiveSupport::Cache.expand_cache_key(
     ['project_stats', locale, ProjectStat.all.size-1]
   )
-  cache ['project_stats', locale, ProjectStat.all.size,
-         !!current_user&.admin? ] do
+
+  # Cache the page, it's somewhat expensive to create.
+  cache ['project_stats', locale, ProjectStat.all.size] do
 %>
 
 <p id="notice"><%= notice %></p>
@@ -60,77 +61,6 @@
   # Done transforming data; display it.
   line_chart dataset, library: date_chart_options, defer: true
 %>
-
-<% if current_user&.admin? %>
-<br><br><br>
-
-<h2><%= t '.projects_silver' %></h2>
-<%=
-  # Show project counts, but skip <25% because that makes chart scale unusable
-  # The 25% value is a little misleading (because of overlaps), and messes
-  # the scale, so show starting at 50%.
-  gt25_stats = ProjectStat::STAT_VALUES.select do |e|
-    e.to_i > 25
-  end.freeze
-  dataset = gt25_stats.map do |minimum|
-    desired_field = 'percent_1_ge_' + minimum.to_s
-    series_dataset = ProjectStat.all.reduce({}) do |h,e|
-     h.merge(e.created_at => e[desired_field])
-    end
-    {name: '>=' + minimum.to_s + '%', data: series_dataset}
-  end
-  # Done transforming data; display it.
-  line_chart dataset, library: date_chart_options, defer: true
-%>
-
-<br><br><br>
-
-<h2><%= t '.projects_gold' %></h2>
-<%=
-  # Show project counts, but skip <25% because that makes chart scale unusable
-  # We already calculated "gt25_stats", just reuse it.
-  dataset = gt25_stats.map do |minimum|
-    desired_field = 'percent_2_ge_' + minimum.to_s
-    series_dataset = ProjectStat.all.reduce({}) do |h,e|
-     h.merge(e.created_at => e[desired_field])
-    end
-    {name: '>=' + minimum.to_s + '%', data: series_dataset}
-  end
-  # Done transforming data; display it.
-  line_chart dataset, library: date_chart_options, defer: true
-%>
-
-<br><br><br>
-
-<h2><%= t '.projects_completed_silver_and_gold' %></h2>
-<%=
-  dataset = ['1', '2'].map do |level|
-    desired_field = "percent_#{level}_ge_100"
-    series_dataset = ProjectStat.all.reduce({}) do |h,e|
-     h.merge(e.created_at => e[desired_field])
-    end
-    {name: t("projects.form_early.level.#{level}"), data: series_dataset}
-  end
-  # Done transforming data; display it.
-  line_chart dataset, library: date_chart_options, defer: true
-%>
-
-<br><br><br>
-
-<h2><%= t '.percent_projects_earning_badges' %></h2>
-<%=
-  dataset = [0, 1, 2].map do |level|
-    desired_field = "percent#{level > 0 ? '_' + level.to_s : '' }_ge_100"
-    series_dataset = ProjectStat.all.reduce({}) do |h,e|
-     h.merge(e.created_at =>
-       e[desired_field].to_i*100.0/(e['percent_ge_0'].to_i))
-    end
-    {name: t("projects.form_early.level.#{level}"), data: series_dataset}
-  end
-  # Done transforming data; display it.
-  line_chart dataset, library: date_chart_options, defer: true
-%>
-<% end # if current_user&.admin? %>
 
 <br><br><br>
 
@@ -228,14 +158,133 @@
   line_chart dataset, colors: ['green', 'blue'],
     library: date_chart_options, defer: true
 %>
+<% end # cache %>
 
-<%# End cache *before* showing any admin-specific data %>
-<% end %>
+<% if current_user&.admin?
+     # This data isn't sensitive, but it's probably uninteresting to
+     # non-admins, and all these charts take time to create.  Therefore,
+     # only show these to admins.  Non-admins can still get the data via JSON.
+     # We *separately* cache this from the non-admin charts to increase
+     # the likelihood for using at least one cache.
+     cache ['project_stats_admin', locale, ProjectStat.all.size] do -%>
+<br><br><br>
+<%
+  date_chart_options = {
+    scales: {
+      xAxes: [{
+        type: 'time',
+        unit: 'day',
+        unitStepSize: 1,
+        ticks: { minRotation: 20 },
+        time: {
+          displayFormats: {
+             'day': 'YYYY-MM-DD'
+          } } }]}
+  }
+%>
 
-<% if current_user&.admin? %>
+<h2><%= t '.projects_silver' %></h2>
+<%=
+  # Show project counts, but skip <25% because that makes chart scale unusable
+  # The 25% value is a little misleading (because of overlaps), and messes
+  # the scale, so show starting at 50%.
+  gt25_stats = ProjectStat::STAT_VALUES.select do |e|
+    e.to_i > 25
+  end.freeze
+  dataset = gt25_stats.map do |minimum|
+    desired_field = 'percent_1_ge_' + minimum.to_s
+    series_dataset = ProjectStat.all.reduce({}) do |h,e|
+     h.merge(e.created_at => e[desired_field])
+    end
+    {name: '>=' + minimum.to_s + '%', data: series_dataset}
+  end
+  # Done transforming data; display it.
+  line_chart dataset, library: date_chart_options, defer: true
+%>
+
+<br><br><br>
+
+<h2><%= t '.projects_gold' %></h2>
+<%=
+  # Show project counts, but skip <25% because that makes chart scale unusable
+  # We already calculated "gt25_stats", just reuse it.
+  dataset = gt25_stats.map do |minimum|
+    desired_field = 'percent_2_ge_' + minimum.to_s
+    series_dataset = ProjectStat.all.reduce({}) do |h,e|
+     h.merge(e.created_at => e[desired_field])
+    end
+    {name: '>=' + minimum.to_s + '%', data: series_dataset}
+  end
+  # Done transforming data; display it.
+  line_chart dataset, library: date_chart_options, defer: true
+%>
+
+<br><br><br>
+
+<h2><%= t '.projects_completed_silver_and_gold' %></h2>
+<%=
+  dataset = ['1', '2'].map do |level|
+    desired_field = "percent_#{level}_ge_100"
+    series_dataset = ProjectStat.all.reduce({}) do |h,e|
+     h.merge(e.created_at => e[desired_field])
+    end
+    {name: t("projects.form_early.level.#{level}"), data: series_dataset}
+  end
+  # Done transforming data; display it.
+  line_chart dataset, library: date_chart_options, defer: true
+%>
+
+<br><br><br>
+
+<h2><%= t '.percent_projects_earning_badges' %></h2>
+<%=
+  dataset = [0, 1, 2].map do |level|
+    desired_field = "percent#{level > 0 ? '_' + level.to_s : '' }_ge_100"
+    series_dataset = ProjectStat.all.reduce({}) do |h,e|
+     h.merge(e.created_at =>
+       e[desired_field].to_i*100.0/(e['percent_ge_0'].to_i))
+    end
+    {name: t("projects.form_early.level.#{level}"), data: series_dataset}
+  end
+  # Done transforming data; display it.
+  line_chart dataset, library: date_chart_options, defer: true
+%>
+
+<br><br><br>
+
+<h2><%= t '.user_statistics' %></h2>
+<%=
+  dataset = []
+  ["users",
+  "github_users",
+  "local_users",
+  "users_created_since_yesterday",
+  "users_updated_since_yesterday",
+  "users_with_projects",
+  "users_without_projects",
+  "users_with_multiple_projects",
+  "users_with_passing_projects",
+  "users_with_silver_projects",
+  "users_with_gold_projects"].each do |field|
+    # Add "field" to dataset
+    active_dataset = ProjectStat.all.reduce({}) do |h,e|
+      h.merge(e.created_at => e[field])
+    end
+    dataset << {name: t('.' + field),
+                data: active_dataset}
+  end
+  # Done transforming data; display it.
+  line_chart dataset, library: date_chart_options, defer: true
+%>
+
+<%# This links to admin-only information: %>
 <p>
 <%= t '.admin_html' %>
-<% end %>
+
+<%
+  end # cache (of admin)
+end # if current_user&.admin?
+%>
 
 <br>
 <br>

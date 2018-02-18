@@ -111,6 +111,8 @@ The BadgeApp web application MUST:
    These are aggregations, to help preserve user privacy.
    See /project_stats and /criteria for these statistics.
 
+We do *not* need to support offline editing of data.
+
 ## Specific requirements
 
 There are many specific requirements.

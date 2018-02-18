@@ -190,19 +190,39 @@ to counter problems that could happen without transactions.
 
 This is a multi-threaded application once it starts accepting web requests.
 Different requests may be started in different threads.
-We presume that Ruby and Rails (including its fragment caching system)
-implement threading correctly.
+Ruby supports multiple threads, but its default collection
+data structures are *not* thread-safe
+(this is true for many programming languages).
+The usual C implementation of Ruby does have a GIL, but that does
+not make code automatically thread-safe.
 
-This is one reason we enable frozen string literals.
-Since frozen string literals cannot be mutated, a thread cannot
-accidentally mutate one and affect a different thread.
+Rails handles multi-threading by using
+a "shared-nothing architecture", that is, different threads
+get different starting instances, which create their instances
+of everything else.
+For more information, see,
+["How Do I Know Whether My Rails App Is Thread-safe or Not?" by Jakko](https://bearmetal.eu/theden/how-do-i-know-whether-my-rails-app-is-thread-safe-or-not/).
 
 For the most part this is invisible, but be extremely careful if you
 create situations where a possibly-modifiable
 resource is *shared* between threads.
 For example, don't memoize unless you do thread-safe memoization.
-You can also pre-create all the instances you need during
+An alternative is to pre-create all the instances you need during
 system initialization and then freeze them (sharing read-only data is fine).
+
+This is one reason we enable frozen string literals.
+Since frozen string literals cannot be mutated, a thread cannot
+accidentally mutate one and affect a different thread.
+
+The main mutable construct shared in Rails during execution is the
+Rails ActiveSupport::Cache that we rely on for server-side caching.
+We use MemoryStore as the cache back-end, and
+[Rails ActiveSupport::Cache MemoryStore has been memory-safe since Rails 3.1](http://api.rubyonrails.org/v3.1.0/files/activesupport/CHANGELOG.html)
+as implemented by this
+[commit](https://github.com/rails/rails/commit/ee51b51b60f9e6cce9babed2c8a65a14d87790c8).
+This is explained as follows:
+"Make thread safe so that the default cache implementation used by Rails
+is thread safe."
 
 ## Deployment
 

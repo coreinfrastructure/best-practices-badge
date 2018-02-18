@@ -95,6 +95,8 @@ The BadgeApp web application MUST:
    to help detect problems early, and there MUST be a continuous
    integration platform (to immediately test check-ins).
 14. **Perform well.**  Users avoid slow sites.
+   Our primary pages (front page, login, project list, show or edit
+   project) must perform reasonably well.
    The front page MUST get to "first interactive" use for a new user
    in less than 3 seconds on average on a high-speed link
    (e.g. as measured by https://www.webpagetest.org given Dulles, Virginia

@@ -114,8 +114,9 @@ module ProjectsHelper
     # <a href...> to go through.  This *is* handled for security;
     # params.merge performs the URL encoding as required, and "title" is
     # trusted (it's provided by the code, not by a potential attacker).
+    # We use "nofollow" to discourage search engines from following it
     # rubocop:disable Rails/OutputSafety
-    "<a href=\"#{url_for(new_params)}\">#{title}</a>".html_safe
+    "<a href=\"#{url_for(new_params)}\" rel=\"nofollow\">#{title}</a>".html_safe
     # rubocop:enable Rails/OutputSafety
   end
 end

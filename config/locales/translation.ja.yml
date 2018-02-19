@@ -84,6 +84,7 @@ ja:
     cookie_details_html: >-
       <a href="/cookies" target="_blank" rel="noopener"> <i> Cookieの詳細をご確認ください</i>
       </a>
+    no_login_time:
   users:
     new:
       signup_header: サインアップ

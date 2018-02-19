@@ -59,6 +59,7 @@ zh-CN:
     signed_out: 已退出！
     cookie_details_html: >-
       <a href="/cookies" target="_blank" rel="noopener"><i>了解有关浏览器缓存的更多信息。</i></a>
+    no_login_time:
   users:
     new:
       signup_header: 注册

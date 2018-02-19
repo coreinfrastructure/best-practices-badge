@@ -66,6 +66,7 @@ fr:
     cookie_details_html: >-
       <a href="/cookies" target="_blank" rel="noopener"><i>En
       savoir plus sur les cookies.</i></a>
+    no_login_time:
   users:
     new:
       signup_header: S'inscrire
@@ -177,7 +178,7 @@ fr:
       percent_projects_earning_badges: Pourcentage de projets
         ayant obtenu un badge
       users:
-      github_users:
+      github_users: Utilisateurs de GitHub
       local_users:
       users_created_since_yesterday:
       users_updated_since_yesterday:

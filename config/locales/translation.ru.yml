@@ -95,6 +95,7 @@ ru:
     cookie_details_html: >-
       <a href="/cookies" target="_blank" rel="noopener"><i>Подробнее
       о файлах cookie.</i></a>
+    no_login_time:
   static_pages:
     home:
       badge_program: Программа значков "Передовая практика CII"

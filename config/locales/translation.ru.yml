@@ -87,7 +87,8 @@ ru:
     incorrect_login_info: Неверная информация для входа
     invalid_combo: Недействительная комбинация электронной почты
       и пароля
-    signed_in: Вы вошли в систему!
+    signed_in: >-
+      Вы вошли в систему! Дата и время предыдущего входа: %{last_login_at}
     not_activated: >-
       Учетная запись не активирована. Проверьте свою электронную
       почту для ссылки на активацию.
@@ -95,7 +96,7 @@ ru:
     cookie_details_html: >-
       <a href="/cookies" target="_blank" rel="noopener"><i>Подробнее
       о файлах cookie.</i></a>
-    no_login_time:
+    no_login_time: "(Время предыдущего входа не записано.)"
   static_pages:
     home:
       badge_program: Программа значков "Передовая практика CII"
@@ -342,17 +343,20 @@ ru:
       projects_completed_silver_and_gold: Проекты, выполняющие
         критерии на серебро и золото
       percent_projects_earning_badges: Процент проектов со значками
-      users:
-      github_users:
-      local_users:
-      users_created_since_yesterday:
-      users_updated_since_yesterday:
-      users_with_projects:
-      users_without_projects:
-      users_with_multiple_projects:
-      users_with_passing_projects:
-      users_with_silver_projects:
-      users_with_gold_projects:
+      users: Пользователи
+      github_users: Пользователи GitHub
+      local_users: Местные пользователи
+      users_created_since_yesterday: Пользователи, созданные за
+        последние сутки
+      users_updated_since_yesterday: Пользователи, обновленные
+        за последние сутки
+      users_with_projects: Пользователи с проектами
+      users_without_projects: Пользователи без проектов
+      users_with_multiple_projects: Пользователи с несколькими
+        проектами
+      users_with_passing_projects: Пользователи с простыми значками
+      users_with_silver_projects: Пользователи с серебряными значками
+      users_with_gold_projects: Пользователи с золотыми значками
   projects:
     index:
       all: Все
@@ -2905,8 +2909,8 @@ ru:
       other: Форма содержит %{count} ошибки.
       few: Форма содержит %{count} ошибки.
       many: Форма содержит %{count} ошибок.
-    comma_separated_list: "- должен быть список имен, разделенных
-      запятой"
+    comma_separated_list: "- должен быть список названий через
+      запятую"
     begin_with_cpe: '- текст должен начинаться с "cpe:"'
     not_an_email: не соответствует адресу электронной почты
     known_bad_password: "- хорошо известный (плохой) пароль"

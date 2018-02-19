@@ -17,15 +17,38 @@ Disallow: /zh-CN/users
 Disallow: /de/users
 Disallow: /es/users
 #
-# Don't crawl project *.json files; the normal HTML files are usually
+# For the moment,
+# don't crawl /project *.json files; the normal HTML files are usually
 # what people want and it takes time to crawl these JSON files.
 # We have to use wildcards for these, and these are merely an optimization
 # for us, not a way to help protect user privacy.
+# It's not that we *object* to people using JSON files (we support them),
+# we just don't anticipate that crawlers will want them.
+# In the future we may remove some of these rules, because if someone
+# *wants* the JSON files we want them to have them!
 Disallow: /projects.json$
 Disallow: /projects/*.json$
 Disallow: /*/projects/*.json$
 #
-# In most cases we *do* want this site to be crawled:
+# Note that we *do* permit crawling /project_stats/*.json.
+#
+# Don't crawl sorted pages. They have the same data as the unsorted ones,
+# and crawlers will bog down re-scanning all of them.
+Disallow: /projects/*&sort=
+Disallow: /*/projects/*&sort=
+Disallow: /projects/*&sort_direction=
+Disallow: /*/projects/*&sort_direction=
+#
+# Don't crawl "edit" pages. They require login, so attempting to crawl them
+# wastes everyone's time.  They should all end in "/edit", but
+# sometimes they end in "edit" instead - disallow them either way.
+Disallow: /projects/*edit$
+Disallow: /*/projects/*edit$
+Disallow: /projects/*edit?criteria_level=
+Disallow: /*/projects/*edit?criteria_level=
+#
+# Add an "allow" just to be clear - it will have lower priority than
+# any longer rule.  In most cases we *do* want this site to be crawled:
 Allow: /
 <% else %>
 # This is not the real production system, do not crawl this data at all.

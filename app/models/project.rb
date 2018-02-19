@@ -167,14 +167,14 @@ class Project < ApplicationRecord
             length: { maximum: MAX_SHORT_STRING_LENGTH },
             format: {
               with: VALID_LANGUAGE_LIST,
-              message: I18n.t('error_messages.comma_separated_list')
+              message: :comma_separated_list
             }
 
   validates :cpe,
             length: { maximum: MAX_SHORT_STRING_LENGTH },
             format: {
               with: /\A(cpe:.*)?\Z/,
-              message: I18n.t('error_messages.begin_with_cpe')
+              message: :begin_with_cpe
             }
 
   validates :user_id, presence: true

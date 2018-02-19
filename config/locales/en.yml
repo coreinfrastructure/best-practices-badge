@@ -2675,9 +2675,6 @@ en:
       few: The form contains %{count} errors.
       many: The form contains %{count} errors.
       other: The form contains %{count} errors.
-    comma_separated_list: " must be a comma-separated list of
-      names"
-    begin_with_cpe: ' must begin with "cpe:"'
     not_an_email: " is not an email"
     known_bad_password: " is a well-known (bad) password"
     valid_text: >2-
@@ -2685,4 +2682,10 @@ en:
       characters
     url_message: " must begin with http: or https: and use a limited
       charset"
+  activerecord:
+    errors:
+      messages:
+        comma_separated_list: " must be a comma-separated list of
+          names using only ASCII characters"
+        begin_with_cpe: ' must begin with "cpe:"'
   last_entry: Last translation entry

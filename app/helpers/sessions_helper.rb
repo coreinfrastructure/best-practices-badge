@@ -29,6 +29,8 @@ module SessionsHelper
   end
   # rubocop:enable Metrics/AbcSize
 
+  # Low-level route to set user as being logged in.
+  # This doesn't set the last_login_at or forward elsewhere.
   def log_in(user)
     session[:user_id] = user.id
     # Switch to user's preferred locale, but only if the current locale is :en

@@ -162,6 +162,7 @@ ja:
       users_with_passing_projects:
       users_with_silver_projects:
       users_with_gold_projects:
+      user_statistics:
   projects:
     index:
       add_link: 追加

@@ -17,15 +17,39 @@ Disallow: /zh-CN/users
 Disallow: /de/users
 Disallow: /es/users
 #
-# Don't crawl project *.json files; the normal HTML files are usually
-# what people want and it takes time to crawl these JSON files.
-# We have to use wildcards for these, and these are merely an optimization
-# for us, not a way to help protect user privacy.
-Disallow: /projects.json$
-Disallow: /projects/*.json$
-Disallow: /*/projects/*.json$
+# We want people to have access to the JSON files, so we (now) allow
+# crawling the norm /projects.json and /projects/*.json files.
+# However, it's pointless to get them in different locales, so prevent that.
+# We'll allow English (en) in case we force a language choice in the future.
+Disallow: /fr/projects*.json
+Disallow: /ja/projects*.json
+Disallow: /ru/projects*.json
+Disallow: /zh-CN/projects*.json
+Disallow: /de/projects*.json
+Disallow: /es/projects*.json
 #
-# In most cases we *do* want this site to be crawled:
+# Note that we *do* permit crawling /project_stats/*.json
+# and /*/project_stats/*.json.
+#
+# Don't crawl sorts or most queries.
+# They have the same data, and crawling all the variants will produce
+# slow crawl times.
+# Crawling via "status=", "page=", or "criteria_level=" is fine.
+Disallow: /*?*sort=
+Disallow: /*?*sort_direction=
+# This rule covers q=, pq=, lteq=, and gteq=:
+Disallow: /*?*q=
+#
+# Don't crawl "edit" pages. They require login, so attempting to crawl them
+# wastes everyone's time.  They should all end in "/edit", but
+# sometimes they end in "edit" instead - disallow them either way.
+Disallow: /projects/*edit$
+Disallow: /*/projects/*edit$
+Disallow: /projects/*edit?
+Disallow: /*/projects/*edit?
+#
+# Add an "allow" just to be clear - it will have lower priority than
+# any longer rule.  In most cases we *do* want this site to be crawled:
 Allow: /
 <% else %>
 # This is not the real production system, do not crawl this data at all.

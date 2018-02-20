@@ -15,6 +15,18 @@ class ProjectStatsControllerTest < ActionController::TestCase
     get :index
     assert_response :success
     assert_not_nil assigns(:project_stats)
+    assert @response.body.include?('All projects')
+    # This isn't normally shown:
+    refute @response.body.include?('Percentage of projects earning badges')
+  end
+
+  test 'should get index as admin' do
+    log_in_as(users(:admin_user))
+    get :index
+    assert_response :success
+    assert_not_nil assigns(:project_stats)
+    assert @response.body.include?('All projects')
+    assert @response.body.include?('Percentage of projects earning badges')
   end
 
   test 'should get index, CSV format' do

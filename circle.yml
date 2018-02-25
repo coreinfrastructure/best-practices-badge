@@ -5,7 +5,7 @@ dependencies:
     # than the version that created the lockfile (1.16.0).
     # We suggest you upgrade to the latest version of Bundler by
     # running `gem install bundler`."
-    - gem install bundler --no-document
+    - cd best-practices-badge ; gem install bundler --no-document
 test:
   pre:
     - "[[ ! -s \"$(git rev-parse --git-dir)/shallow\" ]] || git fetch --unshallow"

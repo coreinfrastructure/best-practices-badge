@@ -221,7 +221,9 @@ module ActiveSupport
     end
 
     def vcr_oauth_token
-      y = YAML.load_file('test/vcr_cassettes/github_login.yml')
+      github_login_vcr_file = 'test/vcr_cassettes/github_login.yml'
+      return Null unless File.exist?(github_login_vcr_file)
+      y = YAML.load_file(github_login_vcr_file)
               .with_indifferent_access
       url = y[:http_interactions][1][:request][:uri]
       Addressable::URI.parse(url).query_values['access_token']

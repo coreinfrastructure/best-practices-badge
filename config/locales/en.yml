@@ -61,8 +61,9 @@ en:
     update_password: Update password
   sessions:
     login_header: Log in
-    login_with_github_html: <span class="fa fa-github"></span>
-      Log in with GitHub (automatically signs up if necessary)
+    login_with_github_html: <span class="fa fa-github"></span> Log in with GitHub
+    login_automatic_signup: >-
+      Log in with GitHub will automatically perform a sign up if necessary.
     or: or
     email: Email
     password: Password

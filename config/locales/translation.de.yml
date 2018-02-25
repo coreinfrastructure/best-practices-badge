@@ -12,9 +12,9 @@ de:
   projects_count:
     one: "%{count} Projekt"
     other: "%{count} Projekte"
-    zero:
-    few:
-    many:
+    zero: Keine Projekte
+    few: "%{count} Projekte"
+    many: "%{count} Projekte"
   feed_title: CII Best Practices BadgeApp Aktualisierte Projekte
   project_name_unknown: "(Name unbekannt)"
   locale_name:
@@ -1614,7 +1614,7 @@ de:
         Statistiken zu Projekten im Zeitverlauf können auf der
         <a href="/project_stats"> Projektstatistikseite </a> angezeigt
         werden.
-      level:
+      level: Niveau
       must:
       should:
       suggested:
@@ -1622,7 +1622,7 @@ de:
       allow_na:
       require_url:
       details:
-      future:
+      future: Zukünftige
       new_this_level:
       met_justification_required:
       met_justification_or_url_required:

@@ -59,7 +59,7 @@ zh-CN:
     signed_out: 已退出！
     cookie_details_html: >-
       <a href="/cookies" target="_blank" rel="noopener"><i>了解有关浏览器缓存的更多信息。</i></a>
-    no_login_time:
+    no_login_time: "（没有先前记录的时间。）"
   users:
     new:
       signup_header: 注册
@@ -124,18 +124,18 @@ zh-CN:
       projects_gold: 有金级徽章进展的项目
       projects_completed_silver_and_gold: 完成银级徽章和金级徽章的项目
       percent_projects_earning_badges: 获取徽章的项目百分比
-      users:
-      github_users:
-      local_users:
-      users_created_since_yesterday:
-      users_updated_since_yesterday:
-      users_with_projects:
-      users_without_projects:
-      users_with_multiple_projects:
-      users_with_passing_projects:
-      users_with_silver_projects:
-      users_with_gold_projects:
-      user_statistics:
+      users: 用户
+      github_users: GitHub用户
+      local_users: 自定义（本地）用户
+      users_created_since_yesterday: 自昨天起创建的用户数
+      users_updated_since_yesterday: 自昨天起更新的用户数
+      users_with_projects: 具有项目的用户
+      users_without_projects: 没有项目的用户
+      users_with_multiple_projects: 拥有多个项目的用户
+      users_with_passing_projects: 拥有基础项目的用户
+      users_with_silver_projects: 拥有银牌项目的用户
+      users_with_gold_projects: 拥有金牌项目的用户
+      user_statistics: 用户统计
   projects:
     index:
       add_link: 添加
@@ -558,7 +558,7 @@ zh-CN:
     de: 德文 / Deutsch (de)
     ja: 日语 / 日本語 (ja)
     ru: 俄语 / Русский (ru)
-    es:
+    es: 西班牙语/西班牙文（es）
   criteria:
     '0':
       description_good:

@@ -66,7 +66,7 @@ fr:
     cookie_details_html: >-
       <a href="/cookies" target="_blank" rel="noopener"><i>En
       savoir plus sur les cookies.</i></a>
-    no_login_time:
+    no_login_time: "(Aucune heure précédente enregistrée.)"
   users:
     new:
       signup_header: S'inscrire
@@ -177,18 +177,24 @@ fr:
         le niveau argent ou or
       percent_projects_earning_badges: Pourcentage de projets
         ayant obtenu un badge
-      users:
+      users: Utilisateurs
       github_users: Utilisateurs de GitHub
-      local_users:
-      users_created_since_yesterday:
-      users_updated_since_yesterday:
-      users_with_projects:
-      users_without_projects:
-      users_with_multiple_projects:
-      users_with_passing_projects:
-      users_with_silver_projects:
-      users_with_gold_projects:
-      user_statistics:
+      local_users: Utilisateurs personnalisés (locaux)
+      users_created_since_yesterday: Utilisateurs créés depuis
+        hier
+      users_updated_since_yesterday: Utilisateurs mis à jour depuis
+        hier
+      users_with_projects: Utilisateurs avec des projets
+      users_without_projects: Utilisateurs sans projets
+      users_with_multiple_projects: Utilisateurs avec plusieurs
+        projets
+      users_with_passing_projects: Utilisateurs ayant des projets
+        avec badge
+      users_with_silver_projects: Utilisateurs avec des projets
+        Argent
+      users_with_gold_projects: Utilisateurs avec des projets
+        Or
+      user_statistics: Statistiques utilisateurs
   projects:
     index:
       add_link: Ajouter

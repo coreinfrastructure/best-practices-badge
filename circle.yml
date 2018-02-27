@@ -44,3 +44,4 @@ general:
     - 'log/test.log'
     - 'tmp/capybara'
     - 'test/html_reports'
+# Add this useless line to trigger a rebuild

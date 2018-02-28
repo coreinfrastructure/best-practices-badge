@@ -6,6 +6,7 @@ dependencies:
     # We suggest you upgrade to the latest version of Bundler by
     # running `gem install bundler`."
     - echo "Pre-dependency pwd=`pwd`"
+    - gem update --system
     - gem install bundler --no-document
     - bundle --version
 test:

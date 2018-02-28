@@ -24,7 +24,7 @@ de:
     ja: Japanisch / 日本語 (ja)
     zh-CN: Chinesisch (vereinfacht) / 简体 中 文 (zh-CN)
     ru: Russisch / Русский (ru)
-    es:
+    es: Spanisch / Español (es)
   layouts:
     cii_best_practices: CII Best Practices
     projects: Projekte
@@ -39,7 +39,7 @@ de:
     login_html: <span class="glyphicon glyphicon-log-in"></span>
       Anmelden
     footer_text_html:
-    choose_locale:
+    choose_locale: Wählen Sie lokale
   account_activations:
     activated: Konto aktiviert!
     failed_activation: Ungültiger Aktivierungslink
@@ -79,7 +79,8 @@ de:
       Postfach und klicke auf den Bestätigungs-Link.
     signed_out: Abgemeldet!
     cookie_details_html:
-    no_login_time:
+    no_login_time: "(Keine vorherige Zeit aufgezeichnet.)"
+    login_automatic_signup:
   users:
     new:
       signup_header: Anmelden
@@ -107,13 +108,16 @@ de:
       delete_link_name: löschen
       confirm_delete: Bist du dir sicher ob du diesen Benutzer
         löschen möchtest?
-      projects_owned:
-      projects_additional_rights:
-      is_admin:
+      projects_owned: 'Eigene Projekte:'
+      projects_additional_rights: 'Projekte mit zusätzlichen Rechten:'
+      is_admin: Dieser Benutzer ist ein Administrator für Badge
+        application.
     destroy:
       cannot_delete_self: Kann nicht selbst löschen.
       user_deleted: Benutzer gelöscht.
-      cannot_delete_user_with_projects:
+      cannot_delete_user_with_projects: >-
+        Ein Benutzer, der Projekte besitzt, kann nicht gelöscht
+        werden.
     redirect_existing: >-
       Dieser Benutzer existiert bereits. Wolltest du dich anzumelden?
     new_activation_link_created: >-
@@ -160,22 +164,24 @@ de:
       json_format: JSON-Format
       csv_format: Herunterladbares CSV-Format
       projects_created_updated_daily:
-      projects_silver:
-      projects_gold:
-      projects_completed_silver_and_gold:
-      percent_projects_earning_badges:
-      users:
-      github_users:
-      local_users:
-      users_created_since_yesterday:
-      users_updated_since_yesterday:
-      users_with_projects:
-      users_without_projects:
-      users_with_multiple_projects:
-      users_with_passing_projects:
-      users_with_silver_projects:
-      users_with_gold_projects:
-      user_statistics:
+      projects_silver: Projektfortschritt in Richtung Silber
+      projects_gold: Projektfortschritt in Richtung Gold
+      projects_completed_silver_and_gold: Projekte, die Silber
+        und Gold erreicht haben
+      percent_projects_earning_badges: Prozentsatz der Projekte,
+        die Gütesiegel erhalten
+      users: Benutzer
+      github_users: GitHub Benutzer
+      local_users: Erstelle (lokale) Benutzer
+      users_created_since_yesterday: Benutzer seit gestern erstellt
+      users_updated_since_yesterday: Benutzer seit gestern aktualisiert
+      users_with_projects: Benutzer mit Projekten
+      users_without_projects: Benutzer ohne Projekte
+      users_with_multiple_projects: Benutzer mit mehreren Projekten
+      users_with_passing_projects: Benutzer mit bestandenen Projekten
+      users_with_silver_projects: Benutzer mit Silberprojekten
+      users_with_gold_projects: Benutzer mit Goldprojekten
+      user_statistics: Benutzerstatistik
   projects:
     index:
       add_link: Hinzufügen
@@ -493,15 +499,16 @@ de:
       justification_required_warning: 'Warnung: Erfordert eine
         längere Begründung.'
       in_development_warning_html:
-      close:
+      close: Geschlossesn
     delete:
       done: Das Projekt wurde erfolgreich gelöscht.
     delete_form:
       info_html:
       rationale_placeholder:
-      delete_action:
-      too_short:
-      more_non_whitespace:
+      delete_action: LÖSCHEN Sie diesen Projektantrag PERMANENT!
+      too_short: Muss mindestens 20 Zeichen haben.
+      more_non_whitespace: Muss mindestens 15 Nicht-Leerzeichen
+        enthalten.
   report_mailer:
     new_project_heading: >-
       Vielen Dank das du dein Projekt dem Best Practices Badging
@@ -634,7 +641,30 @@ de:
         description: >-
           Die vom Projekt entwickelte Software MUSS als FLOSS
           lizensiert veröffentlicht sein.
-        details:
+        details: >-
+          FLOSS Software erfüllt die <a href="https://opensource.org/osd-annotated">Open
+          Source Definition</a> oder die <a href="http://www.gnu.org/philosoph/free-sw.en.html">Free
+          Software Definition</a>. Beispiele für solche Lizenzen
+          sind die <a href="http://creativecommons.org/publicdomain/zero/1.0/">
+          CC0 </a>, <a href="https://opensource.org/licenses/MIT">MIT</a>,
+          <a href="https://opensource.org/licenses/BSD-2-Clause">BSD
+          2-clause</a>, <a href="https://opensource.org/licenses/BSD-3-Clause">BSD
+          3-clause revised</a>, <a href="https://opensource.org/licenses/Apache-2.0">
+          Apache 2.0 </a>, <a href="https://opensource.org/licenses/lgpl-license">
+          Lesser GNU General Public License (LGPL) </a> und die
+          <a href="https://opensource.org/licenses/gpl-license
+          "> GNU General Public License (GPL) </a>. Für unsere
+          Zwecke bedeutet dies, dass die Lizenz: <ul> <li> <a
+          href="https://opensource.org/licenses"> eine genehmigte
+          Lizenz von der Open Source Initiative (OSI) </a>, oder
+          </li> <li> <a href="https://www.gnu.org/licenses/license-list.html">
+          eine freie Lizenz, die von der Free Software Foundation
+          (FSF) genehmigt wurde </a>, oder </li> <li> <a href="https://www.debian.org/legal/licenses/">
+          eine kostenlose Lizenz, akzeptabel für Debian main </a>
+          ,oder </li> <li> <a href="https://fedoraproject.org/wiki/Licensing:Main?rd=Licensing">
+          eine "gute" Lizenz nach Fedora </a> sein muss. </li>
+          </ul> Die Software kann auch über andere Wege lizenziert
+          werden (z.B. "GPLv2 oder proprietär" ist akzeptabel).
       floss_license_osi:
         description: >-
           Es wird EMPFHOLEN, dass alle erforderlichen Lizenz(en)
@@ -708,7 +738,9 @@ de:
         description: >-
           Die Projekt-Seiten (Website, Repository und Download-URLs)
           MÜSSEN HTTPS mit TLS unterstützen.
-        details:
+        details: |-
+          Dies setzt voraus, dass die Projekt-Homepage-URL und die URL des Versionskontroll-Repositories mit "https:", nicht "http:" beginnt. Sie können kostenlose Zertifikate von <a href="https://letsencrypt.org/"> Let's Encrypt </a> erhalten. Projekte KÖNNEN dieses Kriterium implementieren, indem Sie (z. B.) <a href="https://help.github.com/articles/securing-your-github-pages-site-with-https/"> GitHub-Pages </a> verwenden, <a href="https://about.gitlab.com/2016/12/24/were-bringing-gitlab-pages-to-community-edition/"> GitLab-Pages </a> oder <a href="https://sourceforge.net/blog/introducing-https-for-project-websites/"> SourceForge project pages</a>. Wenn Sie GitHub-Seiten mit benutzerdefinierten Domänen verwenden, können Sie ein Content Delivery Network (CDN) als Proxy zur Unterstützung von HTTPS verwenden, wie in <a href
+          ="https://blog.cloudflare.com/secure-and-fast-github-pages-with-cloudflare/"> Blogpost" Sichere und schnelle GitHub Pages mit CloudFlare "</a>, um dieses Kriterium zu erfüllen. Wenn Sie HTTP unterstützen, empfehlen wir Ihnen, den HTTP-Datenverkehr an HTTPS umzuleiten.
       discussion:
         description: >-
           Das Projekt MUSS einen oder mehrere Mechanismen zur
@@ -742,40 +774,130 @@ de:
         description: >-
           Das Projekt MUSS ein versiongesteuertes Quell-Repository
           haben, das öffentlich lesbar ist und eine URL hat.
-        details:
+        details: >-
+          Die URL KANN die gleiche wie die Projekt-URL sein. Das
+          Projekt KANN in bestimmten Fällen private (nichtöffentliche)
+          Zweige verwenden, während die Änderung nicht öffentlich
+          freigegeben wird (z. B. für die Behebung einer Sicherheitslücke,
+          bevor sie veröffentlicht wird).
       repo_track:
-        description:
+        description: >-
+          Das Quell-Repository des Projekts MUSS verfolgen, welche
+          Änderungen vorgenommen wurden, wer die Änderungen vorgenommen
+          hat und wann die Änderungen vorgenommen wurden.
       repo_interim:
-        description:
-        details:
+        description: >-
+          Um eine kollaborative Überprüfung zu ermöglichen, MUSS
+          das Quell-Repository des Projekts Zwischenversionen
+          für die Überprüfung zwischen Releases enthalten. Es
+          MUSS NICHT nur endgültige Veröffentlichungen enthalten.
+        details: >-
+          Projekte DÜRFEN sich entscheiden, bestimmte Zwischenversionen
+          aus ihren öffentlichen Quell-Repositories auszulassen
+          (z.B. diejenigen, die bestimmte nicht-öffentliche Sicherheitslücken
+          beheben, niemals öffentlich freigegeben werden können,
+          oder Material enthalten, das nicht legal veröffentlicht
+          werden kann und nicht in der endgültigen Version enthalten
+          ist).
       repo_distributed:
-        description:
-        details:
+        description: >-
+          Es ist EMPFOHLEN, dass eine gemeinsame genutzte Versionskontrollsoftware
+          (z.B. git oder mercurial)  für das Source-Repository
+          des Projekts verwendet wird.
+        details: >-
+          Git ist nicht speziell gefordert und Projekte können
+          andere zentralisierte Versionskontrollsoftware (wie
+          z.B. Subversion) mit Rechtfertigung verwenden.
       version_unique:
         description: >-
           Die für Endbenutzer vorgesehenen Projektergebnisse MÜSSEN
           eine eindeutige Versionskennung für jede Freigabe haben.
-        details:
+        details: >-
+          Dies DARF durch einer Vielzahl von Möglichkeiten, einschließlich
+          einer Commit-IDs (wie z. B. git commit id oder mercurial
+          changeset id) oder eine Versionsnummer, (einschließlich
+          Versionsnummern, die semantische oder datebasierte Systeme
+          wie YYYYMMDD verwenden) erfüllt werden.
       version_semver:
-        description:
-        details:
+        description: >-
+          Es wird erwartet, dass das Format <a href="http://semver.org">
+          Semantic Versioning (SemVer) </a> für Veröffentlichungen
+          verwendet wird.
+        details: >-
+          Andere Versionsnummerierungsschemata, wie z. B. Commit-IDs
+          (wie z. B. git commit id oder mercurial changeet id)
+          oder datebasierte Schemata wie YYYYMMDD, DÜRFEN als
+          Versionsnummern verwendet werden, da sie eindeutig sind.
+          Einige Alternativen können zu Problemen führen, denn
+          die Benutzer können nicht leicht feststellen, ob sie
+          aktuell sind. SemVer kann weniger hilfreich sein, um
+          Software-Releases zu identifizieren, wenn alle Empfänger
+          nur die neueste Version ausführen (z.B. ist es der Code
+          für eine einzelne Website oder Internet-Service, der
+          ständig durch kontinuierliche Updates aktualisiert wird).
       version_tags:
-        description:
+        description: >-
+          Es wird erwartet, dass Projekte jede Freigabe innerhalb
+          ihres Versionskontrollsystems identifizieren. Zum Beispiel
+          wird erwartet, dass die Projekte, die git verwenden,
+          jede Freigabe mit git-Tags identifizieren.
       release_notes:
-        description:
-        details:
+        description: >-
+          Das Projekt MUSS zu jedem Update Patchnotes enthalten,
+          die eine lesbare Zusammenfassung der wichtigsten Änderungen
+          der Version sind, damit Benutzer/innen sehen können,
+          ob sie aktualisieren sollten und was die Auswirkungen
+          des Updades sind. Die Patchnotes MÜSSEN NICHT die Rohausgabe
+          eines Versionskontrollprotokolls sein (z.B. die "git
+          log" Befehlsergebnisse sind keine Release Notes). Für
+          Projekte, deren Ergebnisse nicht für die Wiederverwendung
+          an mehreren Standorten bestimmt sind (z.B. die Software
+          für eine einzelne Website oder Dienstleistung) und eine
+          kontinuierliche Lieferung verwenden, können Sie "N/A"
+          auswählen.
+        details: >-
+          Die Release Notes DÜRFEN auf vielfältige Weise implementiert
+          werden. Viele Projekte bieten sie in einer Datei namens
+          "NEWS", "CHANGELOG" oder "ChangeLog", optional mit Erweiterungen
+          wie ".txt", ".md" oder ".html" an. Historisch bedeutete
+          der Begriff "Change Log" ein Protokoll in dem <em>jede</em>
+          Änderung festgehalten wird, aber um diese Kriterien
+          zu erfüllen, benötigt es eine menschlich lesbare Zusammenfassung.
+          Die Release Notes können stattdessen von Versionskontrollsystemmechanismen
+          wie dem <a href="https://github.com/blog/1547-release-your-software">GitHub
+          Release Workflow</a> zur Verfügung gestellt werden.
       release_notes_vulns:
-        description:
-        details:
+        description: >-
+          Die Release Notes MÜSSEN jede öffentlich bekannte Sicherheitslücke
+          mit einer CVE-Zuweisung oder ähnlichem kennzeichnen,
+          die in jeder neuen Version behoben sein wird, es sei
+          denn, Benutzer können nicht die Software selbst aktualisieren,
+          was normalerweise nicht der Fall ist. Wenn keine Release
+          Notes vorhanden sind oder keine öffentlich bekannten
+          Sicherheitslücken bekannt sind, wählen Sie "nicht anwendbar"
+          (N/A).
+        details: >-
+          Wenn Benutzer die Software normalerweise nicht selbst
+          auf ihren Computern aktualisieren können, sondern stattdessen
+          auf eine/n Mittelsfrau/mann angewiesen sind, um das
+          Upgrade durchzuführen (wie es bei einem Kernel und einer
+          Low-Level-Software häufig der Fall ist), wählen Sie
+          "nicht anwendbar" (N/A).
       report_process:
-        description:
+        description: >-
+          Das Projekt muss einen Prozess für Benutzer enthalten,
+          um Fehlerberichte zu senden (z. B. mit einem Issue Tracker
+          oder eine Mailing-Liste).
       report_tracker:
         description: >-
           Das Projekt SOLLTE einen Issue Tracker für die Nachverfolgung
           einzelner Issues verwenden.
         unmet_placeholder: Warum gibt es keinen Issue Tracker?
       report_responses:
-        description:
+        description: >-
+          Das Projekt MUSS eine Mehrheit der in den letzten 2-12
+          Monaten eingereichten Fehlerberichte berücksichtigen;
+          Die Antwort muss keine Korrektur enthalten.
       enhancement_responses:
         description: >-
           Das Projekt SOLLTE auf eine Mehrheit (&gt;50%) der Verbesserungsvorschläge
@@ -801,12 +923,30 @@ de:
         description: >-
           Das Projekt MUSS den Prozess für die Meldung von Schwachstellen
           auf der Projektseite veröffentlichen.
-        details:
+        details: >-
+          z.B., eine klar benannte Mailing-Adresse auf https://PROJECTSITE/security,
+          oft in der Form security@example.org. Dies KANN die
+          gleiche sein wie die für den Fehlerberichtsprozess.
+          Informationen über Schwachstellen können immer öffentlich
+          sein, aber viele Projekte verfügen über einen privaten
+          Schwachstellen-Berichtsmechanismus.
       vulnerability_report_private:
-        description:
-        details:
+        description: >-
+          Falls das Projekt einen Kanal zur Übertragung von Schwachstellen
+          besitzt, dann MUSS diese Informationsübertragung privat
+          ablaufen.
+        details: >-
+          Beispiele hierfür sind ein privater Defektbericht, der
+          im Internet über HTTPS (TLS) oder eine mit OpenPGP verschlüsselte
+          E-Mail verschickt wird. Wenn die Informationsübertragung
+          von Schwachstellen immer öffentlich sind (also gibt
+          es niemals private Informationsübertragung von Schwachstellen),
+          wählen Sie "nicht anwendbar" (N/A).
       vulnerability_report_response:
-        description:
+        description: >-
+          Das Projekts MUSS mindestens binnen 14 Tagen, auf jeden
+          in den letzten 6 Monaten erhaltenen Anfälligkeitsbericht,
+          reagieren.
         details: >-
           Wenn in den letzten 6 Monaten keine Schwachstellen gemeldet
           wurden, wählen Sie "nicht anwendbar" (N/A).
@@ -843,8 +983,15 @@ de:
           Das Projekt SOLLTE allein mit FLOSS Werkzeugen gebaut
           werden können.
       test:
-        description:
-        details:
+        description: >-
+          Das Projekt muss mindestens eine automatisierte Test-Suite
+          verwenden, die öffentlich als FLOSS veröffentlicht wird
+          (diese Test-Suite kann als separates FLOSS-Projekt gepflegt
+          werden).
+        details: >-
+          Das Projekt KANN mehrere automatisierte Test-Suiten
+          benutzen (z. B. eine, die schnell läuft, eine andere,
+          die gründlicher ist, aber spezielle Ausrüstung erfordert).
       test_invocation:
         description: >-
           Eine Test-Suite SOLLTE in einer üblichen Weise für diese
@@ -852,23 +999,68 @@ de:
         details: Zum Beispiel, "make check", "mvn test", oder
           "rake test".
       test_most:
-        description:
+        description: >-
+          Es wird erwartet, dass die Test-Suite die meisten (oder
+          idealerweise alle) Code-Zweige, Eingabefelder und Funktionalitäten
+          abdeckt.
       test_continuous_integration:
-        description:
+        description: >-
+          Es wird erwartet, dass das Projekt eine kontinuierliche
+          Integration durchführt (wo neuer oder geänderter Code
+          häufig in ein zentrales Code-Repository integriert wird
+          und automatisierte Tests auf diesen Ergebnissen durchgeführt
+          werden).
       test_policy:
-        description:
-        details:
+        description: >-
+          Das Projekt MUSS allgemeine Grundregeln (formal oder
+          nicht) haben, die als wesentliche neue Funktionalität
+          der Software des Projektes hinzugefügt werden. Tests
+          dieser Funktionalität sollten zu einer automatisierten
+          Test-Suite hinzugefügt werden.
+        details: >-
+          Solange Grundregeln vorhanden sind, selbst wenn durch
+          Mundpropaganda, sollten die Entwickler/innenTests für
+          die automatisierte Test-Suite für große neue Funktionalität
+          hinzufügen, wählen Sie "Met".
       tests_are_added:
-        description:
-        details:
+        description: >-
+          Das Projekt MUSS nachweisen, dass die <a href="#test_policy">
+          test_policy </a> für das Hinzufügen von Tests in den
+          jüngsten großen Änderungen an der Projektsoftware eingehalten
+          wurde.
+        details: >-
+          Wichtige Funktionalitäten würden typischerweise in den
+          Patchnotes erwähnt. Perfektion ist nicht erforderlich,
+          nur Beweise dafür, dass Tests in der Praxis in der Regel
+          der automatisierten Test-Suite hinzugefügt werden, wenn
+          neue Hauptfunktionalität der Projektsoftware hinzugefügt
+          wird.
       tests_documented_added:
-        description:
+        description: >-
+          Es wird erwartet, dass diese Richtlinien zum Hinzufügen
+          von Tests (siehe <a href="#test_policy"> test_policy
+          </a>) in den Anweisungen für Änderungsvorschläge <em>
+          dokumentiert </em> werden.
         details: >-
           Allerdings ist auch eine informelle Regel akzeptabel,
           solange die Tests in der Praxis hinzugefügt werden.
       warnings:
-        description:
-        details:
+        description: >-
+          Das Projekt MUSS einen oder mehrere Compiler-Warn-Flags,
+          einen "sicheren" Sprachmodus oder ein separates "Linter"
+          -Tool verwenden, um nach qualitativen Fehlern im Code
+          oder gängigen einfachen Fehlern zu suchen, wenn es mindestens
+          ein FLOSS-Tool gibt, das dieses Kriterium implementieren
+          kann in der gewählten sprache
+        details: >-
+          Beispiele für Compiler-Warn-Flags sind gcc / clang "-Wall".
+          Beispiele für einen "sicheren" Sprachmodus beinhalten
+          JavaScript "use strict" und perl5's "use warnings".
+          Ein separates "Linter" -Tool ist einfach ein Werkzeug,
+          das den Quellcode untersucht, um nach qualitativen Fehlern
+          im Code oder gängigen einfachen Fehlern zu suchen. Diese
+          werden in der Regel im Quellcode aktiviert oder in den
+          Einstellungen.
       warnings_fixed:
         description: Das Projekt MUSS auf Warnungen reagieren.
         details: >-
@@ -880,11 +1072,76 @@ de:
           Warnungen akzeptieren (typischerweise weniger als 1
           Warnung pro 100 Zeilen oder weniger als 10 Warnungen).
       warnings_strict:
-        description:
-        details:
+        description: >-
+          Es wird erwartet, dass Projekte Warnungen in der Software,
+          die durch das Projekt produziert wird, sorgfältig berücksichtigen.
+        details: >-
+          Bei manchen Projekten können einige Warnungen effektiv
+          nicht aktiviert werden. Was benötigt wird, ist ein Beleg
+          dafür, dass das Projekt danach strebt, Warnungen zu
+          aktivieren, wo es möglich ist, so dass Fehler frühzeitig
+          erkannt werden.
       know_secure_design:
-        description:
-        details:
+        description: >-
+          Das Projekt MUSS mindestens einen primären Entwickler
+          haben, der weiß wie man Sicherheitssoftware entwerfen
+          kann.
+        details: >-
+          Dies erfordert das Verständnis der folgenden Designprinzipien,
+          einschließlich der 8 Prinzipien von <a href="http://web.mit.edu/Saltzer/www/publications/protection/">Saltzer
+          und Schroeder</a>: <ul> <li>Wirtschaftlichkeit des Mechanismus
+          (halten Sie das Design so einfach und klein wie möglich,
+          z. B. durch umfassende Vereinfachungen)</li> <li>Fehlersichere
+          Vorgaben (Zugriffsentscheidungen sollten standardmäßig
+          verweigert werden und die Installation der Projekte
+          sollte standardmäßig sicher sein)</li> <li>Vollständige
+          Vermittlung (jeder Zugang, der begrenzt werden kann,
+          muss auf Autorität überprüft werden und nicht umgangen
+          werden können)</li> <li>Offenes Design (Sicherheitsmechanismen
+          sollten nicht von der Unkenntnis der Angreifer über
+          das Designs abhängig gemacht werden, sondern stattdessen
+          auf leichter geschützte und geänderte Informationen
+          wie Schlüssel und Passwörter)</li> <li>Trennung von
+          Privilegien (Idealerweise sollte der Zugriff auf wichtige
+          Objekte von mehr als einer Bedingung abhängen, so dass
+          die Beseitigung eines Schutzsystems keinen vollständigen
+          Zugriff ermöglicht. z.B., Multi-Faktor-Authentifizierung
+          wie die Erfordernis eines Passwortes und eines Hardware-Token
+          ist stärker als die Single-Faktor-Authentifizierung)</li>
+          <li>So wenige Privilegien wie möglich (Prozesse sollten
+          nur mit den geringsten Privilegien laufen)</li> <li>So
+          wenig gemeinsame Mechanismen wie möglich (Das Design
+          sollte die Mechanismen minimieren, die von mehreren
+          Benutzern gemeinsam verwendet werden und von allen Benutzern
+          abhängig sind, z.B. Verzeichnisse für temporäre Dateien)</li>
+          <li>Psychologische Akzeptanz (Die menschliche Schnittstelle
+          muss Benutzerfreundlichkeit entworfen werden - Design
+          für "geringes Erstaunen" kann dabei helfen)</li> <li>Begrenzte
+          Angriffsfläche (die Angriffsfläche - die Menge der verschiedenen
+          Punkte, wo ein Angreifer versuchen kann, Daten einzugeben
+          oder zu extrahieren - sollte begrenzt sein)</li> <li>Eingabevalidierung
+          mit Positivliste (Eingaben sollten in der Regel überprüft
+          werden, um festzustellen, ob sie gültig sind, bevor
+          sie akzeptiert werden; Diese Validierung sollte Postitivlisten
+          verwenden (die nur bekannte gute Werte akzeptieren),
+          nicht Negativlisten (die versuchen, bekannte schlechte
+          Werte aufzulisten)).</li></ul> Ein "Primärer Entwickler"
+          in einem Projekt ist jedermann, der mit der Codebasis
+          des Projekts vertraut ist, der in der Lage ist Änderungen
+          daran vorzunehmen und von den meisten anderen Teilnehmern
+          des Projekts als solches anerkannt wird. Ein primärer
+          Entwickler hat üblicherweise im vergangen Jahr eine
+          Reihe von Aufgaben übernommen (Code, Dokumentation oder
+          Beantwortung von Fragen). Die Entwickler würden typischerweise
+          als primäre Entwickler betrachtet, wenn sie das Projekt
+          initiiert haben (und das Projekt nicht vor mehr als
+          drei Jahre verlassen haben), die Möglichkeit haben,
+          Informationen zu Schwachstellen über einen privaten
+          Berichtskanal zu erhalten (falls vorhanden), neuen Code
+          zum Projekt entgegennehmen zu können, oder die endgültige
+          Freigaben der Projektsoftware durchzuführen. Wenn es
+          nur einen Entwickler gibt, ist diese Person der primäre
+          Entwickler.
       know_common_errors:
         description: >-
           Mindestens einer der primären Entwickler des Projekts
@@ -892,7 +1149,13 @@ de:
           in dieser Art von Software führen, Bescheid wissen sowie
           mindestens eine Methode, um jede von ihnen zu beseitigen
           oder zu mildern.
-        details:
+        details: >-
+          Beispiele (je nach Art der Software) beinhalten SQL-Injektion,
+          OS-Injektion, klassischer Pufferüberlauf, Cross-Site-Scripting,
+          fehlende Authentifizierung und fehlende Autorisierung.
+          Siehe die <a href="http://cwe.mitre.org/top25/">CWE/SANS
+          top 25</a> oder <a href="https://www.owasp.org/index.php/Category:OWASP_Top_Ten_Project">OWASP
+          Top 10</a> für häufig verwendete Listen.
       crypto_published:
         description: >-
           Die vom Projekt entwickelte Software MUSS standardmäßig
@@ -1043,7 +1306,10 @@ de:
           Signatur verwendet werden.
         details: Diese Hashes können im Transit verändert werden.
       vulnerabilities_fixed_60_days:
-        description:
+        description: >-
+          Es DARF KEINE ungepatchte Schwachstelle von mittlerer
+          oder höher Schwere enthalten sein, die seit mehr als
+          60 Tagen öffentlich bekannt ist.
         details: >-
           Die Sicherheitslücke, muss vom Projekt selbst gepatched
           und freigegeben werden (Patches woanders entwickelt
@@ -1069,22 +1335,83 @@ de:
           Projekte SOLLTEN alle kritischen Schwachstellen schnell
           nachdem sie gemeldet wurden beheben.
       no_leaked_credentials:
-        description:
-        details:
+        description: >-
+          Die öffentlichen Repositories MÜSSEN NICHT gültige private
+          Zugriffsdaten enthalten (z.B. ein funktionierendes Passwort
+          oder einen privaten Schlüssel), die den öffentlichen
+          Zugriff einschränken sollen.
+        details: >-
+          Ein Projekt DARF "Beispiel"-Zugriffsdaten für Tests
+          und unwichtige Datenbanken herausgeben, solange sie
+          nicht den öffentlichen Zugang einschränken sollen.
       static_analysis:
-        description:
-        details:
+        description: >-
+          Mindestens ein Tool zur Analyse statischer Codes (über
+          Compiler-Warnungen und "sichere" Sprachmodi hinaus)
+          MÜUSS vor der Veröffentlichung auf jede vorgeschlagene
+          größere Produktionsversion der Software angewendet werden,
+          wenn mindestens ein FLOSS-Tool dieses Kriterium in der
+          ausgewählten Sprache implementiert .
+        details: >-
+          Ein Tool zur statischen Codeanalyse untersucht den Softwarecode
+          (als Quellcode, Zwischencode oder ausführbare Datei),
+          ohne ihn mit bestimmten Eingaben auszuführen. Für dieses
+          Kriterium zählen Compilerwarnungen und "sichere" Sprachmodi
+          nicht als statische Codeanalyse-Tools (diese vermeiden
+          typischerweise eine tiefgreifende Analyse, da Geschwindigkeit
+          entscheidend ist). Beispiele für solche Tools zur statischen
+          Codeanalyse sind <a href="http://cppcheck.sourceforge.net/">
+          cppcheck </a>, <a href="http://clang-analyzer.llvm.org/">
+          clang static analyzer </a>, <a href="http://findbugs.sourceforge.net/">
+          FindBugs </a> (einschließlich <a href="https://h3xstream.github.io/find-sec-bugs/">
+          FindSecurityBugs </a>), <a href="https://pmd.github.io/">
+          PMD </a>, <a href="http://brakemanscanner.org/"> Brakeman
+          </a>, <a href="https://scan.coverity.com/"> Coverity
+          Quality Analyzer </a>, <a href="https://www.sonarqube.org/">
+          SonarQube </a>, <a href="https://www.codacy.com/"> Codacy
+          </a> und <a href="https://saas.hpe.com/de-de/software/sca">
+          HP Enterprise Fortific Static-Code-Analyzer </a>. Mehr
+          Tools finden Sie beispielsweise in der <a href="https://en.wikipedia.org/wiki/List_of_tools_for_static_code_analysis">
+          Wikipedia-Liste von Tools zur statischen Codeanalyse
+          </a>, <a href=" https://www.owasp.org/index.php/Static_Code_Analysis">OWASP
+          Informationen zur statischen Code-Analyse </a>, <a href="http://samate.nist.gov/index.php/Source_Code_Security_Analyzers.html">
+          NIST-Liste der Quellcode-Sicherheitsanalyse-Tools </a>
+          und <a href="http://www.dwheeler.com/essays/static-analysis-tools.html">
+          Wheelers Liste der statischen Analyse-Tools </a> >.
+          Das <a href="https://continuousassurance.org/"> SWAMP
+          </a> ist eine kostenlose Plattform zur Bewertung von
+          Schwachstellen in Software mit einer Vielzahl von Tools.
+          Wenn für die verwendete (n) Implementierungssprache
+          (n) keine statischen FLOSS-Analysewerkzeuge verfügbar
+          sind, wählen Sie "N/V".
         na_placeholder: >-
           Warum kann das nicht erfüllt werden (z.B. es gibt keine
           FLOSS Werkzeuge für diese Programmiersprache)?
         met_placeholder: Welche statischen Analysewerkzeuge werden
           verwendet?
       static_analysis_common_vulnerabilities:
-        description:
-        details:
+        description: >-
+          Es wird davon ausgegangen, dass mindestens eines der
+          statischen Analysewerkzeuge, die für das statische Analysekriterium
+          verwendet wurde, inklusive der Regeln oder Ansätze,
+          um nach gemeinsamen Schwachstellen in der analysierten
+          Sprache oder Umgebung zu suchen.
+        details: >-
+          Statische Analysetools, die speziell dafür entwickelt
+          wurden, nach Schwachstellen zu suchen, finden diese
+          eher. Das heißt, dass die Verwendung von statischen
+          Tools in der Regel helfen wird einige Probleme zu finden.
+          Wir schlagen dies vor, aber erwarten es für das "passing"
+          -Level-Badge nicht.
       static_analysis_fixed:
-        description:
-        details:
+        description: >-
+          Alle mittel- und hochgradig ausnutzbaren Schwachstellen,
+          die mit statischer Codeanalyse entdeckt wurden, MÜSSEN
+          nach der Entdeckung rechtzeitig behoben werden.
+        details: >-
+          Eine Sicherheitsanfälligkeit ist mittel- bis hochgradig
+          schwerwiegend, wenn ihr <a href="https://nvd.nist.gov/cvss.cfm">
+          CVSS 2.0 </a>Wert 4 oder höher ist.
       static_analysis_often:
         description: >-
           Es wird EMPFOHLEN, dass eine statische Quellcode-Analyse
@@ -1255,18 +1582,87 @@ de:
           "hardening mechanism" ist wichtig, aber extra).
     '1':
       contribution_requirements:
-        description:
+        description: >-
+          Die Informationen darüber, wie man mitwirken kann, MÜSSEN
+          die Anforderungen für akzeptable Beiträge (z.B. einen
+          Hinweis auf einen erforderlichen Codierungsstandard)
+          enthalten.
       dco:
-        description:
-        details:
+        description: >-
+          Das Projekt SOLLTE einen rechtlichen Mechanismus haben,
+          wo alle Entwickler von nicht-trivialen Mengen von Projekt-Software
+          behaupten, dass sie rechtlich ermächtigt sind, diese
+          Beiträge zu machen. Der häufigste und leicht umsetzbare
+          Ansatz, um dies zu tun, ist die Verwendung eines <a
+          href="http://developercertificate.org/"> Developer Certificate
+          of Origin (DCO) </a>, wo Benutzer "signed-off-by" in
+          ihren Commits und die Projektlinks zur DCO-Website hinzufügen.
+          Allerdings, dies DARF als Contributor License Agreement
+          (CLA) oder als  ein anderer rechtlicher Mechanismus
+          implementiert werden.
+        details: >-
+          Die DCO ist der empfohlene Mechanismus, weil er einfach
+          zu implementieren ist, im Quellcode verfolgt wird und
+          git direkt eine "signed-off" Funktion mit "commit-s"
+          unterstützt. Um am effektivsten zu sein, ist es am besten,
+          wenn die Projektdokumentation erklärt, was "signed-off"
+          für dieses Projekt bedeutet. Eine CLA ist eine rechtliche
+          Vereinbarung, die die Bedingungen definiert, unter denen
+          intellektuelle Werke an eine Organisation oder ein Projekt
+          lizenziert wurden. Ein Contributor assignment agreement
+          (CAA) ist eine gesetzliche Vereinbarung, die die Rechte
+          an einer intellektuellen Arbeit an eine andere Person
+          überträgt; Projekte müssen keine CAAs zu haben, da CAA
+          das Risiko erhöht, dass potenzielle Mitwirkende nicht
+          dazu beitragen werden, vor allem, wenn der Empfänger
+          eine gemeinnützige Organisation ist. Die <a href="https://www.apache.org/licenses/">
+          Apache Software Foundation CLAs (die individuelle Contributor-Lizenz
+          und die Corporate CLA) </a> sind Beispiele für CLAs,
+          für Projekte, die bestimmen, dass die Risiken dieser
+          CLAs für das Projekt geringen sind als ihre Vorteile.
       governance:
-        description:
-        details:
+        description: >-
+          Das Projekt MUSS eindeutig sein Projekt-Governance-Modell
+          (die Art, wie es Entscheidungen fällt, einschließlich
+          der wichtigsten Rollen) definieren und dokumentieren.
+        details: >-
+          Es muss einen gut dokumentierten, etablierten Weg geben,
+          Entscheidungen zu treffen und Streitigkeiten zu lösen.
+          In kleinen Projekten kann dies so einfach sein wie,
+          "der Projektinhaber und -Leiter trifft alle endgültigen
+          Entscheidungen". Es gibt verschiedene Führungs-Modelle,
+          darunter wohlwollender Diktator und formale Meritokratie;
+          Für weitere Details siehe <a href="http://oss-watch.ac.uk/resources/governancemodels">
+          Governance-Modelle </a>. Sowohl zentralisierte (z.B.
+          Single-Maintainer) als auch dezentrale (z.B. Gruppen-Maintainer)
+          Ansätze wurden erfolgreich in Projekten verwendet. Die
+          Governance-Informationen müssen nicht die Möglichkeit
+          einer Projektspaltung dokumentieren, da dies für FLOSS-Projekte
+          immer möglich ist.
       code_of_conduct:
         description: >-
           Das Projekt MUSS einen Code of Conduct etablieren und
           an einem üblichen Ort veröffentlichen.
-        details:
+        details: >-
+          Projekte können das Miteinander ihrer Gemeinschaft verbessern
+          und Erwartungen in Bezug auf akzeptables Verhalten setzen,
+          indem sie einen Verhaltenskodex verfassen. Dies kann
+          helfen, Probleme zu vermeiden, bevor sie auftreten,
+          und das Projekt zu einem einladenderen Ort zu machen.
+          Dies sollte sich nur auf das Verhalten innerhalb der
+          Gemeinschaft/ am Arbeitsplatz des Projekts konzentrieren.
+          Beispielhafte Verhaltenskodizes sind der <a href="https://www.kernel.org/doc/html/latest/process/code-of-conflict.html">
+          Linux-Kernel-Konfliktcode </a>, der <a href="http://contributor-covenant.org/">
+          Contributor Covenant Code of Conduct </a>, der <a href="https://www.debian.org/code_of_conduct">
+          Debian-Verhaltenskodex </a>, der <a href="https://www.ubuntu.com/about/ubu-untu/conduct">
+          Ubuntu-Verhaltenskodex </a>, der <a href="https://getfedora.org/code-of-conduct">
+          Verhaltenskodex von Fedora </a>, der <a href="https://wiki.gnome.org/action/show/Foundation/CodeOfConduct">
+          GNOME-Verhaltenskodex </a > der <a href="https://www.kde.org/code-of-conduct/">
+          KDE Community Code of Conduct ">, der <a href="https://www.python.org/psf/codeofconduct/">
+          Verhaltenskodex der Python-Community </a>, <a href="https://www.ruby-lang.org/en/conduct/">
+          Die Richtlinie zur Einhaltung der Ruby-Community </a>,
+          und der <a href="https://www.rust-lang.org/en-US/conduct.html">
+          Verhaltenskodex von Rust </a>.
       roles_responsibilities:
         description: >-
           Das Projekt MUSS klar und deutlich die Rollen- auf Aufgabenverteilung
@@ -1279,38 +1675,122 @@ de:
           und Rollen und Verantwortlichkeiten können an einem
           Ort sein.
       access_continuity:
-        description:
+        description: >-
+          Das Projekt MUSS in der Lage sein, mit minimaler Unterbrechung
+          fortzufahren, wenn eine Person nicht in der Lage ist
+          oder getötet wird. Insbesondere MUSS das Projekt in
+          der Lage sein, Probleme zu lösen, vorgeschlagene Änderungen
+          zu akzeptieren und Versionen der Software freizugeben,
+          innerhalb einer Woche nach der Bestätigung, dass eine
+          Person nicht in der Lage ist oder getötet wurde. Dies
+          DARF sichergestellt werden, indem man jemandem anderes
+          notwendige Schlüssel, Passwörter und gesetzliche Rechte
+          gibt, um das Projekt fortzusetzen. Einzelpersonen, die
+          ein FLOSS-Projekt ausführen, DÜRFEN dies durch die Bereitstellung
+          von Schlüsseln in einer Lockbox und einer Willenserklärung
+          zur Bereitstellung von erforderlichen gesetzlichen Rechten
+          (z. B. für DNS-Namen).
       bus_factor:
         description: Das Projekt SOLLTE einen Bus-Faktor von 2
           oder mehr haben.
-        details:
+        details: >-
+          Ein "bus factor" (aka "LKW-Faktor") ist die minimale
+          Anzahl von Projektmitgliedern, die plötzlich aus einem
+          Projekt ("hit by a bus") verschwinden müssen, bevor
+          das Projekt aufgrund fehlender kompetenter Mitarbeiter
+          sich verzögert. Das <a href="https://github.com/mtov/truck-factor">
+          truck-factor </a> Tool kann dies für Projekte auf GitHub
+          schätzen. Weitere Informationen finden Sie unter <a
+          href="https://www.researchgate.net/publication/272824568_assessing_the_bus_factor_of_git_repositories">
+          Bewertung des Busfaktors von Git-Repositories </a> von
+          Cosentino et al.
       documentation_roadmap:
-        description:
-        details:
+        description: >-
+          Das Projekt MUSS eine dokumentierte Roadmap, für mindestens
+          das nächste Jahr haben, die beschreibt, was das Projekt
+          beabsichtigt zu tun und nicht zu tun.
+        details: >-
+          Das Projekt könnte die Roadmap nicht umsetzen, das ist
+          ok; Der Zweck der Roadmap ist es, potenziellen Nutzern/innen
+          und Entwicklern/innen zu helfen, die beabsichtigte Richtung
+          des Projekts zu verstehen. Sie muss nicht detailliert
+          sein.
       documentation_architecture:
         description: >-
           Das Projekt MUSS in der Dokumentation die Architektur
           (alias High-Level-Design) der vom Projekt entwickelten
           Software bereitstellen. Wenn das Projekt keine Software
           produziert, wählen Sie "nicht anwendbar" (N/A).
-        details:
+        details: >-
+          Eine Softwarearchitektur erläutert die grundlegenden
+          Strukturen eines Programms, d.h. die Hauptkomponenten
+          des Programms, die Beziehungen zwischen ihnen und die
+          Schlüsseleigenschaften dieser Komponenten und Beziehungen.
       documentation_security:
-        description:
+        description: >-
+          Das Projekt MUSS dokumentieren, was der/die Benutzer/in
+          in Bezug auf die Sicherheit der Projektsoftware (seine
+          "Sicherheitsanforderungen") erwarten kann und nicht
+          erwarten kann.
         details: >-
           Dies sind Sicherheitsanforderungen, die die Software
           erfüllen soll.
       documentation_quick_start:
-        description:
-        details:
+        description: >-
+          Das Projekt MUSS eine "Quickstart"-Anleitung für neue
+          Benutzer/innen haben, um ihnen zu helfen, schnell mit
+          der Software umgehen zu können.
+        details: >-
+          Die Idee ist, den Benutzern/innen zu zeigen, wie man
+          anfängt und was die Software überhaupt macht. Dies ist
+          entscheidend für potenzielle Benutzer/innen, um loszulegen.
       documentation_current:
-        description:
-        details:
+        description: >-
+          Das Projekt MUSS sich bemühen, die Dokumentation mit
+          der aktuellen Version der Projektergebnisse (einschließlich
+          der vom Projekt produzierten Software) stehts zu aktualisieren.
+          Jegliche <em> bekannte </em> Dokumentationsfehler, die
+          es inkonsistent machen, MÜSSEN behoben werden. Wenn
+          die Dokumentation in der Regel aktuell ist, aber fälschlicherweise
+          einige ältere Informationen enthält, die nicht mehr
+          wahr sind, behandeln Sie diese als Störung, dann verfolgen
+          und beheben Sie diese wie üblich.
+        details: >-
+          Die Dokumentation DARF Informationen über Unterschiede
+          oder Änderungen zwischen Versionen der Software und/oder
+          Links zu älteren Versionen der Dokumentation enthalten.
+          Die Absicht dieses Kriteriums ist nicht, dass die Dokumentation
+          perfekt sein muss, vielmehr soll Arbeit investiert,
+          um die Dokumentation konsistent zu halten
       documentation_achievements:
-        description:
-        details:
+        description: >-
+          Die Projekt-Repository-Titelseite und / oder Website
+          MUSS alle Errungenschaften, die erreicht wurden, einschließlich
+          dieses Best Practices Abzeichens, innerhalb von 48 Stunden
+          nach der öffentlichen Anerkennung ausweisen und verlinken.
+        details: >-
+          Eine Errungenschaft ist jegliche Form von externen Kriterien,
+          auf die das Projekt speziell hingearbeitet hat, um diese
+          zu erreichen, einschließlich einiger Abzeichen. Diese
+          Informationen müssen nicht auf der ersten Seite der
+          Website des Projekts einzusehen sein. Ein Projekt, das
+          GitHub verwendet, kann Errungenschaften auf der Repository-Vorderseite
+          setzen, indem man sie der README-Datei hinzufügt.
       accessibility_best_practices:
-        description:
-        details:
+        description: >-
+          Das Projekt (beide Projektwebsite und Projektergebnisse)
+          SOLLTE den bewährten Praktiken der Erreichbarkeit folgen,
+          damit Personen mit Behinderungen noch an dem Projekt
+          teilnehmen und die Projektergebnisse nutzen können,
+          wo es vernünftig ist.
+        details: |-
+          Für Webanwendungen siehe <a href="https://www.w3.org/TR/WCAG20/"> Web Content Accessibility Guidelines (WCAG 2.0) </a> und dessen Beleg <a href="https://www.w3.org/TR/UNDERSTANDING-WCAG2/Overview.html">Unternehmen WCAG 2.0 </a>; Siehe auch <a href="https://www.w3.org/standards/webdesign/accessibility"> W3C accessibility </a>. Für GUI-Anwendungen sollten Sie die umweltbezogenen Barrierefreiheitsrichtlinien verwenden (z.B. <a href="https://developer.gnome.org/accessibility-devel-guide/stable/">Gnome</a>, <a href="https://accessibility.kde.org/">KDE </a>, <a href="http://docs.xfce.org/xfce/xfce4-settings/accessibility"> XFCE </a>, < A href="https://developer.android.com/guide/topics/ui/accessibility/"> Android </a>, <a href="https://developer.apple.com/accessibility/ios/" > IOS </a>, <a href="http://www.apple.com/accessibility/osx/voiceover/"> Mac </a> und <a href="https://msdn.microsoft.com/en-us/windows/uwp/accessibility/accessibility-overview"> Windows </a>). Einige TUI-Anwendungen (z.B. "ncurses"-Programme) können bestimmte Dinge ausführen, um sich selbst zugänglicher zu machen (z.B. "alpine"'s "force-arrow-cursor" -Einstellung). Die meisten Kommandozeilen-Anwendungen sind ziemlich unzugänglich. Dieses Kriterium ist oft N/A, z.B. für Programmbibliotheken. Hier sind einige Beispiele, welche Maßnahmen zu ergreifen oder Fragen zu berücksichtigen sind: <ul> <li> Stellen Sie Text Alternativen für alle Nicht-Text-Inhalte zur Verfügung so
+            Dass es dieser in andere Formen umgewandelt werden kann, wie z.B.
+            Großdruck, Blindenschrift, Sprache, Symbole oder einfachere Sprache (<a href="https://www.w3.org/TR/UNDERSTANDING-WCAG20/text-equiv.html"> WCAG 2.0-Richtlinie 1.1 </a>)
+          <Li> Farbe ist nicht das einzige Mittel um Informationen zu übermitteln, die eine Aktion angeben, eine Antwort auffordern oder in visuelles Element zu unterscheiden. (<a href="https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio contrast-without-color.html"> WCAG 2.0 Richtlinie 1.4.1 </a>)
+          <Li> Die visuelle Darstellung von Text und Textbildern hat einen Kontrast Verhältnis von mindestens 4,5: 1, außer für großen Text, nebensächlichen Text, und Logos(<a href="https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast-contrast.html"> WCAG 2.0 Richtlinie 1.4.3 </a>)
+          <Li> Machen Sie alle Funktionalitäten von einer Tastatur aus (WCAG-Richtlinie 2.1) <li> Ein GUI oder ein webbasiertes Projekt SOLLTE mit mindestens einem Screen-Reader auf der Zielplattform(en) testen (z.B. NVDA, Jaws, oder WindowEyes auf Windows; VoiceOver auf Mac & iOS; Orca auf Linux/BSD; TalkBack auf Android). TUI-Programme DÜRFEN arbeiten, um die Überziehung zu reduzieren, um eine redundante Lesung durch Screenreader zu verhindern.
+          </Ul>
       internationalization:
         description:
         details:
@@ -1338,23 +1818,107 @@ de:
           auf der Projektseite veröffentlichen.
         details:
       coding_standards:
-        description:
-        details:
+        description: >-
+          Das Projekt MUSS die spezifischen Codierungsstilrichtlinien
+          für die primären Programmierprachen, die es verwendet,
+          einhalten, und erfordern, dass die Beiträge die Bedingungen
+          generell erfüllen.
+        details: >-
+          In den meisten Fällen erfolgt dies durch Verweis auf
+          einige vorhandene Stilrichtlinien, möglicherweise Auflistung
+          Unterschiede. Diese Stilrichtlinien können Möglichkeiten
+          zur Verbesserung der Lesbarkeit und zur Verringerung
+          der Wahrscheinlichkeit von Mängeln (einschließlich Schwachstellen)
+          enthalten. Viele Programmiersprachen haben eine oder
+          mehrere weit verbreitete Stilrichtlinien. Beispiele
+          für Style Guides sind <a href="https://github.com/google/styleguide">
+          Google-Style-Guides </a> und <a href="https://www.securecoding.cert.org/">
+          SEI CERT Coding Standards </a>.
       coding_standards_enforced:
-        description:
-        details:
+        description: >-
+          Das Projekt MUSS automatisch dafür sorgen, dass die
+          ausgewählten Stilrichtlinien eingehalten werden, wenn
+          mindestens ein FLOSS tool vorhanden ist, welches das
+          in der gewählten Programmiersprache tun kann.
+        details: >-
+          Dies kann mit Hilfe von statischen Analysewerkzeugen
+          und/oder durch das Durchlaufen des Codes durch Code-Umformatierer
+          erreicht werden. In vielen Fällen ist die Werkzeugkonfiguration
+          im Projekt-Repository enthalten (da verschiedene Projekte
+          unterschiedliche Konfigurationen wählen können). Projekte
+          DÜRFEN Stil Ausnahmen erlauben (und werden es in der
+          Regel); Wo Ausnahmen getroffen werden, MÜSSEN sie selten
+          sein und MÜSSEN dokumentiert werden an der Stelle im
+          Code, wo sie auftreten, so dass diese Ausnahmen überprüft
+          werden können und so dass Werkzeuge sie automatisch
+          in der Zukunft bearbeiten können. Beispiele für solche
+          Werkzeuge sind ESLint (JavaScript) und Rubocop (Ruby).
       build_standard_variables:
-        description:
-        details:
+        description: >-
+          Build-Systeme für native Binärdateien MÜSSEN die relevanten
+          Compiler- und Linker- (Umgebungs-) Variablen, die an
+          sie übergeben werden (z.B. CC, CFLAGS, CXX, CXXFLAGS
+          und LDFLAGS), respektieren und an Compiler- und Linker-Aufrufe
+          weiterleiten. Ein Build-System DARF sie mit zusätzlichen
+          Flags erweitern; Es DARF NICHT einfach die mitgelieferten
+          Werte ersetzen. Wenn keine nativen Binärdateien erzeugt
+          werden, wählen Sie "nicht anwendbar" (N/A).
+        details: >-
+          Es sollte einfach sein, spezielle Build-Features wie
+          Address Sanitizer (ASAN) zu aktivieren, oder Verteilungshärtung
+          bewährte Verfahren einzuhalten (z.B. durch einfaches
+          Einschalten von Compiler-Flags, um dies zu tun).
       build_preserve_debug:
-        description:
-        details:
+        description: >-
+          Das Build- und Installationssystem SOLLTE Debugging-Informationen
+          beibehalten, wenn sie in den entsprechenden Flags angefordert
+          werden (z.B. "install -s" wird nicht verwendet). Wenn
+          kein Build- oder Installationssystem vorhanden ist (z.B.
+          typische JavaScript-Bibliotheken), wählen Sie "nicht
+          anwendbar" (N / A).
+        details: >-
+          Z.B., die Festlegung von CFLAGS (C) oder CXXFLAGS (C
+          ++) sollte die relevanten Debugging-Informationen erstellen,
+          wenn diese Sprachen verwendet werden, und sie sollten
+          während der Installation nicht ignoriert werden. Debugging-Informationen
+          werden für Unterstützung und Analyse benötigt und sind
+          auch nützlich, um das Vorhandensein von Härtungsmerkmalen
+          in den kompilierten Binärdateien zu messen.
       build_non_recursive:
-        description:
-        details:
+        description: >-
+          Das Build-System für die Software, die durch das Projekt
+          erzeugt wird, DARF NICHT rekursive Unterverzeichnisse
+          aufbauen, wenn es Querverweise in den Unterverzeichnissen
+          gibt. Wenn kein Build- oder Installationssystem vorhanden
+          ist (z.B. typische JavaScript-Bibliotheken), wählen
+          Sie "nicht anwendbar" (N / A).
+        details: >-
+          Die interne Abhängigkeitsvermerke des Build-Systems
+          des Projektes müssen genau sein, andernfalls können
+          Änderungen an dem Projekt nicht korrekt erfolgen. Falsche
+          Aufbaustrukturen können zu Defekten (einschließlich
+          Schwachstellen) führen. Ein häufiger Fehler bei großen
+          Build-Systemen ist die Verwendung eines "rekursiven
+          Builds" oder "rekursiven Make", d.h. einer Hierarchie
+          von Unterverzeichnissen, die Quelldateien enthalten,
+          wobei jedes Unterverzeichnis unabhängig aufgebaut ist.
+          Es sei denn, jedes Unterverzeichnis ist völlig unabhängig,
+          das ist ein Fehler, da die Abhängigvermerke nicht korrekt
+          sind.
       build_repeatable:
-        description:
-        details:
+        description: >-
+          Das Projekt MUSS in der Lage sein, den Prozess der Generierung
+          von Informationen aus Quelldateien zu wiederholen und
+          genau das gleiche Bit-für-Bit-Ergebnis zu erhalten.
+          Wenn kein Build auftritt (z. B. Skriptsprachen, in denen
+          der Quellcode direkt verwendet wird, anstatt kompiliert
+          zu werden), wählen Sie "nicht anwendbar" (N / A).
+        details: >-
+          GCC- und Clang-Benutzer dürfen die Option -frandom-seed
+          nützlich finden; In manchen Fällen kann dies dadurch
+          gelöst werden, dass man eine Sortierreihenfolge erzwingt.
+          Weitere Vorschläge finden Sie auf der <a href="https://reproducible-builds.org/">
+          reproducible Build </a> Seite.
       installation_common:
         description:
         details:
@@ -1373,16 +1937,40 @@ de:
           auch <a href="#installation_development_quick"> installation_development_quick</a>
           zu erfüllen.
       dependency_monitoring:
-        description:
-        details:
+        description: >-
+          Projekte MÜSSEN ihre externen Abhängigkeiten (einschließlich
+          Bequemlichkeitskopien) überwachen oder regelmäßig überprüfen,
+          um bekannte Schwachstellen zu erkennen und ausnutzbare
+          Schwachstellen zu beheben oder sie als unausweichlich
+          zu verifizieren.
+        details: >-
+          Dies kann mit einem Ursprungsanalysator / Abhängigkeitsüberprüfungswerkzeug
+          wie <a href="https://www.owasp.org/index.php/OWASP_Dependency_Check">
+          OWASP's Dependency-Check </a>, <a href=" Https://www.sonatype.com/nexus-auditor">Sonatype's
+          Nexus Auditor </a>, <a href="https://www.blackducksoftware.com/products/protex">
+          Black Duck's Protex </a> , <a href="http://www.protecode.com/">
+          Synopsys 'Schutzcode </a> und <a href="https://github.com/rubysec/bundler-audit">
+          Bundler-Audit (Für Ruby) </a>. Einige Paketmanager beinhalten
+          Mechanismen, um dies zu tun. Es ist akzeptabel, wenn
+          die Anfälligkeit der Komponenten nicht ausgenutzt werden
+          kann, aber diese Analyse ist schwierig und es ist manchmal
+          einfacher, den Part einfach zu aktualisieren oder zu
+          reparieren.
       updateable_reused_components:
         description:
         details:
       interfaces_current:
         description:
       automated_integration_testing:
-        description:
-        details:
+        description: >-
+          Eine automatisierte Test-Suite MUSS bei jedem Check-In
+          auf ein gemeinsames Repository für mindestens einen
+          Zweig angewendet werden. Diese Test-Suite muss einen
+          Bericht über Erfolg oder Misserfolg des Testes produzieren.
+        details: >-
+          Diese Anforderung kann als Teilmenge von test_continuous_integration
+          angesehen werden, konzentriert sich aber nur auf das
+          Testen, ohne eine kontinuierliche Integration zu fordern.
       regression_tests_added50:
         description:
       test_statement_coverage80:
@@ -1395,29 +1983,111 @@ de:
       warnings_strict:
         description:
       implement_secure_design:
-        description:
-        details:
+        description: >-
+          Das Projekt MUSS sichere Designprinzipien (von "know_secure_design"),
+          soweit anwendbar, umsetzen. Wenn das Projekt keine Software
+          produziert, wählen Sie "nicht anwendbar" (N/A).
+        details: >-
+          Beispielsweise sollten die Projektergebnisse fehlersichere
+          Vorgaben haben (Zugriffsentscheidungen sollten standardmäßig
+          verweigert werden und die Installation von Projekten
+          sollte standardmäßig sicher sein). Die Projektergebnisse
+          sollten auch eine vollständige Vermittlung haben (jeder
+          Zugang, der begrenzt werden kann, muss auf Autorität
+          überprüft werden und nicht umgangen werden können).
+          Beachten Sie, dass in einigen Fällen Prinzipien in Konflikt
+          geraten, in welchen eine Entscheidung getroffen werden
+          muss (z.B. viele Mechanismen können die Dinge komplexer
+          machen, gegen die "Wirtschaftlichkeit des Mechanismus"
+          verstoßen / halten Sie es einfach).
       input_validation:
-        description:
+        description: >-
+          Die Projektergebnisse MÜSSEN alle Eingaben aus potenziell
+          nicht vertrauenswürdigen Quellen überprüfen, um sicherzustellen,
+          dass sie gültig sind (eine *Whitelist*) und ungültige
+          Eingaben ablehnen, wenn überhaupt Einschränkungen für
+          die Daten vorliegen.
         details:
       hardening:
-        description:
-        details:
+        description: >-
+          Härtungsmechanismen SOLLTEN in der Projektsoftware verwendet
+          werden, so dass Softwarefehler weniger wahrscheinlich
+          zu Sicherheitslücken führen.
+        details: >-
+          Härtungsmechanismen können HTTP-Header enthalten wie
+          Content Security Policy (CSP), oder Compiler-Flags,
+          um Angriffe (wie -Fackerschutz) zu mildern, oder Compiler-Flags,
+          um undefiniertes Verhalten zu eliminieren. Für unsere
+          Zwecke wird das höchste Privileg nicht als Verhärtungsmechanismus
+          betrachtet (das kleinste Privileg ist wichtig, aber
+          getrennt).
       crypto_weaknesses:
-        description:
+        description: >-
+          Die Standard-Sicherheitsmechanismen innerhalb der Projektsoftware
+          DÜRFEN NICHT von kryptographischen Algorithmen oder
+          Modi mit bekannten schweren Mängeln abhängen (z.B. der
+          SHA-1-Kryptographie-Hash-Algorithmus oder der CBC-Modus
+          in SSH).
       crypto_algorithm_agility:
-        description:
+        description: >-
+          Das Projekt SOLLTE mehrere kryptographische Algorithmen
+          unterstützen, so dass Benutzer schnell wechseln können,
+          wenn eines defekt ist. Verbreitete symmetrische Schlüsselalgorithmen
+          umfassen AES, Twofish und Serpent. Verbreitete kryptographische
+          Hash-Algorithmus-Alternativen umfassen SHA-2 (einschließlich
+          SHA-224, SHA-256, SHA-384 UND SHA-512) und SHA-3.
       crypto_credential_agility:
-        description:
+        description: >-
+          Das Projekt MUSS die Speicherung von Anmeldeinformationen
+          (z.B. Passwörter und dynamische Token) und private kryptografische
+          Schlüssel in Dateien, die von anderen Informationen
+          getrennt sind (z.B. Konfigurationsdateien, Datenbanken
+          und Protokolle), unterstützen und den Benutzern erlauben,
+          sie ohne Code-Neukompilierung zu aktualisieren und zu
+          ersetzen . Wenn das Projekt keine Anmeldeinformationen
+          und private kryptographische Schlüssel verarbeitet,
+          wählen Sie "nicht anwendbar" (N/A).
       crypto_used_network:
-        description:
+        description: >-
+          Die vom Projekt produzierte Software SOLLTE sichere
+          Protokolle für alle Netzwerkkommunikationen unterstützen
+          , wie SSHv2 oder höher, TLS1.2 oder höher (HTTPS), IPsec,
+          SFTP und SNMPv3. Unsichere Protokolle wie FTP, HTTP,
+          Telnet, SSLv3 oder früher, und SSHv1 SOLLTEN standardmäßig
+          deaktiviert werden und nur aktiviert werden, wenn der/die
+          Benutzer/in es speziell konfiguriert. Wenn die vom Projekt
+          produzierte Software keine Netzwerkkommunikation verwendet,
+          wählen Sie "nicht anwendbar" (N/A).
       crypto_tls12:
-        description:
+        description: >-
+          Wenn die Software, die durch das Projekt produziert
+          wird, TLS unterstützt oder verwendet, SOLLTE sie mindestens
+          TLS Version 1.2 verweden. Beachten Sie, dass der Vorgänger
+          von TLS SSL genannt wurde. Wenn die Software TLS nicht
+          verwendet, wählen Sie "nicht anwendbar" (N/A).
       crypto_certificate_verification:
-        description:
-        details:
+        description: >-
+          Die Software, die vom Projekt produziert wird, muss,
+          wenn es TLS unterstützt, die TLS-Zertifikatsüberprüfung
+          standardmäßig bei der Verwendung von TLS, einschließlich
+          auf Subresources, durchführen. Wenn die Software TLS
+          nicht verwendet, wählen Sie "nicht anwendbar" (N/A).
+        details: >-
+          Beachten Sie, dass eine falsche TLS-Zertifikatsüberprüfung
+          ein häufiger Fehler ist. Weitere Informationen finden
+          Sie unter <a href="http://crypto.stanford.edu/~dabo/pubs/abstracts/ssl-client-bugs.html">
+          "The Most Dangerous Code in the World: Validating SSL
+          Certificates in Non-Browser Software" von Martin Georgiev
+          et al.</a> und <a href="https://blogs.gnome.org/mcatanzaro/2016/03/12/do-you-trust-this-application/">
+          "Do you trust this application?" von Michael Catanzaro</a>.
       crypto_verification_private:
-        description:
+        description: >-
+          Die Software, die vom Projekt produziert wird, MUSS,
+          wenn sie TLS unterstützt, eine Zertifikatsüberprüfung
+          durchführen, bevor HTTP-Header mit privaten Informationen
+          (wie z.B. sichere Cookies) versendet werden. Wenn die
+          Software TLS nicht verwendet, wählen Sie "nicht anwendbar"
+          (N/A).
       signed_releases:
         description:
         details:
@@ -1426,20 +2096,54 @@ de:
       static_analysis_common_vulnerabilities:
         description:
       dynamic_analysis_unsafe:
-        description:
+        description: >-
+          Wenn die Projektsoftware Software mit einer speicherunsicheren
+          Sprache (z.B. C oder C ++) enthält, MUSS mindestens
+          ein dynamisches Werkzeug (z.B. ein Fuzzer oder ein Web-Applikationsscanner)
+          routinemäßig in Kombination mit einem Mechanismus verwendet
+          werden, welche Speichersicherheitsproblemen wie Puffer-Cach
+          Überschreibe erkennen. Wenn das Projekt keine Software
+          verwendet, die in einer speicherunsicheren Sprache geschrieben
+          ist, wählen Sie "nicht anwendbar" (N/A).
       assurance_case:
-        description:
-        details:
+        description: >-
+          Das Projekt muss einen Versicherungsfall bereithalten,
+          der rechtfertigt, warum die Sicherheitsanforderungen
+          erfüllt sind. Der Versicherungsfall muss Folgendes beinhalten:
+          eine Beschreibung des Bedrohungsmodells, eine eindeutige
+          Identifizierung von Vertrauensgrenzen, ein Argument,
+          dass sichere Designprinzipien angewendet wurden, und
+          ein Argument, dass die üblichen Implementierungssicherheitsschwächen
+          beseitige wurden.
+        details: >-
+          Ein Versicherungsfall ist "ein dokumentierter Beweis,
+          der ein überzeugendes und gültiges Argument enthällt,
+          dass ein bestimmter Satz kritischer Ansprüche bezüglich
+          der Eigenschaften eines Systems für eine gegebene Anwendung
+          in einer gegebenen Umgebung hinreichend erfüllt ist"
+          (<a href="http://Nvlpubs.nist.gov/nistpubs/ir/2009/ir7608.pdf">"Software
+          Assurance Using Structured Assurance Case Models", Thomas
+          Rhodes et al., NIST Interagency Report 7608 </a>). Vertrauensgrenzen
+          sind Grenzen, in denen Daten oder Ausführung ihr Vertrauensniveau
+          ändern, z.B. die Grenzen eines Servers in einer typischen
+          Webanwendung. Es ist üblich, sichere Designprinzipien
+          (wie Saltzer und Schroeer) und gemeinsame Implementierungssicherheitsschwächen
+          (wie die OWASP Top 10 oder CWE/SANS Top 25) aufzurufen
+          und zu zeigen, wie dieser entgegengewirkt wird. Die
+          <a href="https://github.com/coreinfrastructure/best-practices-badge/blob/master/doc/security.md">
+          BadgeApp Assurance Case </a> kann ein nützliches Beispiel
+          sein. Dies bezieht sich auf documentation_security,
+          documentation_architecture und implement_secure_design.
       achieve_passing:
-        description:
+        description: Das Projekt MUSS ein bestimmtes Level erreichen.
     '2':
       bus_factor:
         description: Das Projekt MUSS einen "Busfaktor" von 2
           oder mehr haben.
       contributors_unassociated:
         description: >-
-          Das Projekt muss mindestens zwei bedeutende, nicht assoziierte
-          Mitwirkende haben.
+          Das Projekt MUSS mindestens zwei unabhängige bedeutende
+          Entwickler haben.
         details:
       copyright_per_file:
         description:
@@ -1503,7 +2207,11 @@ de:
           Eine Test-Suite MUSS in einer standardisierten Weise
           für diese Programmiersprache anrufbar sein.
       test_continuous_integration:
-        description:
+        description: >-
+          Das Projekt MUSS eine kontinuierliche Integration implementieren,
+          bei der neue oder geänderte Codes häufig in ein zentrales
+          Code-Repository integriert werden und automatisierte
+          Tests auf dem Ergebnis durchgeführt werden.
         details: >-
           In den meisten Fällen bedeutet dies, dass jeder Entwickler,
           der Vollzeit auf dem Projekt arbeitet, mindestens täglich
@@ -1533,7 +2241,7 @@ de:
       dynamic_analysis_enable_assertions:
         description:
       achieve_silver:
-        description:
+        description: Das Projekt MUSS ein Silber-Siegel erreichen.
   static_pages:
     home:
       badge_program: CII Best Practices Badge Programm
@@ -1615,19 +2323,19 @@ de:
         <a href="/project_stats"> Projektstatistikseite </a> angezeigt
         werden.
       level: Niveau
-      must:
-      should:
-      suggested:
-      total_active:
-      allow_na:
-      require_url:
-      details:
+      must: MUSS
+      should: SOLLTE
+      suggested: EMPFOHLEN
+      total_active: Insgesamt aktiv
+      allow_na: Erlauben N/A
+      require_url: URL erforderlich
+      details: Beinhaltet Details
       future: Zukünftige
-      new_this_level:
+      new_this_level: Neu auf diesem Level
       met_justification_required:
       met_justification_or_url_required:
     cookies:
-      cookies_header:
+      cookies_header: Über Cookies
       cookies_info_html:
   headings:
     Accessibility and internationalization: Zugänglichkeit und
@@ -1672,8 +2380,8 @@ de:
     Warning flags: Warnhinweise
     Working build system: Produktivsystem
     Identification: Identifizierung
-    Prerequisites:
-    FLOSS license:
+    Prerequisites: Voraussetzungen
+    FLOSS license: FLOSS Lizenz
   last_entry: Letzter Übersetzungseintrag
   admin_only: Nur Administratoren.
   criterion_status:
@@ -1686,10 +2394,11 @@ de:
     form_contains:
       one: Das Formular enthält 1 Fehler.
       other: Das Formular enthält %{count} Fehler.
-      few:
-      many:
-    comma_separated_list:
-    begin_with_cpe:
+      few: Das Formular enthält %{count} Fehler.
+      many: Das Formular enthält %{count} Fehler.
+    comma_separated_list: " Muss eine durch Kommas getrennte Namensliste
+      sein"
+    begin_with_cpe:  Muss mit "cpe:" beginnen
     not_an_email: " Ist keine E-Mail"
     known_bad_password: " Ist ein weit verbreitetes (schlechtes)
       Passwort"

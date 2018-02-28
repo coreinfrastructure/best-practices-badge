@@ -24,7 +24,7 @@ ja:
     ja: 日本語 (ja)
     zh-CN: 中国語 (簡体字) / 简体中文 (zh-CN)
     ru: ロシア語 / Русский (ru)
-    es:
+    es: スペイン語/スペイン語
   layouts:
     cii_best_practices: CII ベスト プラクティス
     projects: プロジェクト
@@ -84,7 +84,8 @@ ja:
     cookie_details_html: >-
       <a href="/cookies" target="_blank" rel="noopener"> <i> Cookieの詳細をご確認ください</i>
       </a>
-    no_login_time:
+    no_login_time: "（前の時間は記録されていません）"
+    login_automatic_signup:
   users:
     new:
       signup_header: サインアップ
@@ -118,7 +119,7 @@ ja:
     destroy:
       cannot_delete_self: 自分を削除することはできません。
       user_deleted: ユーザーが削除されました。
-      cannot_delete_user_with_projects:
+      cannot_delete_user_with_projects: プロジェクトを所有しているユーザーを削除することはできません。
     redirect_existing: そのユーザーは既に存在しています。以前、サインインしたことはありませんか？
     new_activation_link_created: 新しいアクティベーションリンクが作成されました。電子メールを確認してアカウントを有効にしてください。
     please_log_in: ログインしてください。
@@ -151,18 +152,18 @@ ja:
       projects_gold: ゴールドを目指すプロジェクト進捗状況
       projects_completed_silver_and_gold: シルバーとゴールドを達成したプロジェクト
       percent_projects_earning_badges: バッジを獲得したプロジェクトの割合
-      users:
-      github_users:
-      local_users:
-      users_created_since_yesterday:
-      users_updated_since_yesterday:
-      users_with_projects:
-      users_without_projects:
-      users_with_multiple_projects:
-      users_with_passing_projects:
-      users_with_silver_projects:
-      users_with_gold_projects:
-      user_statistics:
+      users: ユーザー
+      github_users: GitHubユーザー
+      local_users: カスタム（ローカル）ユーザー
+      users_created_since_yesterday: 昨日以降に作成されたユーザー
+      users_updated_since_yesterday: 昨日以降に更新されたユーザー
+      users_with_projects: プロジェクトのユーザー
+      users_without_projects: プロジェクトのないユーザー
+      users_with_multiple_projects: 複数のプロジェクトを持つユーザー
+      users_with_passing_projects: 合格プロジェクトのユーザー
+      users_with_silver_projects: シルバープロジェクトのユーザー
+      users_with_gold_projects: ゴールド・プロジェクトのユーザー
+      user_statistics: ユーザー統計
   projects:
     index:
       add_link: 追加
@@ -381,8 +382,8 @@ ja:
       rationale_placeholder: >-
         （必須）このプロジェクトバッジのエントリを永久に削除する理由（該当する場合は、代わりに削除してほしいこと）を説明してください
       delete_action: このプロジェクトバッジのエントリーを永久に削除してください！
-      too_short:
-      more_non_whitespace:
+      too_short: 少なくとも20文字以上必要です。
+      more_non_whitespace: 少なくとも15文字の空白以外の文字が必要です。
   report_mailer:
     new_project_heading: ベスト プラクティス バッジ プログラムにプロジェクトを追加してくださいましてありがとうございます
     new_project_part1: |-

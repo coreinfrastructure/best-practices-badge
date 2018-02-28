@@ -98,6 +98,7 @@ ru:
       <a href="/cookies" target="_blank" rel="noopener"><i>Подробнее
       о файлах cookie.</i></a>
     no_login_time: "(Время предыдущего входа не записано.)"
+    login_automatic_signup:
   static_pages:
     home:
       badge_program: Программа значков "Передовая практика CII"

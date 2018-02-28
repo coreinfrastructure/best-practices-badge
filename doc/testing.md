@@ -28,8 +28,17 @@ We use Webmock and VCR to record external API responses and test against them wi
 
 ```bash
 rm test/vcr_cassettes/github_login.yml
-GITHUB_PASSWORD=real_password rails t test/features/github_login_test.rb
+DRIVER=chrome GITHUB_PASSWORD=real_password rails t test/features/github_login_test.rb
 ```
+
+When re-recording cassettes involving the GitHub login
+you must use DRIVER=chrome (or similar).
+Github has an anti-bot mechanism that requires real mouse movement
+to authorize an application.
+
+Note: the robots.txt testing won't pass while you're doing this, because
+some tests have to be run in different modes.  Just capture the data in
+a VCR cassette, and then re-run the tests with the captured data.
 
 After completing the VCR recording, `github_login_test.rb` revokes the authorization of the oauth app so that Github doesn't complain about committing a live token to the repo. To manually walk through the login process with Github OAuth authentication, you can run the rails server with
 
@@ -38,6 +47,21 @@ RAILS_ENV=test rails s -p 31337 -b 0.0.0.0
 ```
 
 and then go to <http://127.0.0.1:31337> in your web browser.
+
+## VCR files and whitespace
+
+If you re-record the VCR files, the VCR gem may insert extra whitespace
+at the end of some YML lines.  That's not allowed by our rake task.
+
+You can remove the unacceptable trailing whitespace in the YML
+files created by VCR by running the following:
+
+~~~~sh
+cd test/vcr_cassettes
+sed -e 's/ $//' -i.bak *.yml
+rm *.bak
+cd ../..
+~~~~
 
 ## Troubleshooting
 

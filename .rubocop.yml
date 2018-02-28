@@ -21,7 +21,7 @@ Documentation:
 Lint/HandleExceptions:
   Exclude:
     - 'bin/*'
-Lint/RescueWithoutErrorClass:
+Style/RescueStandardError:
   Exclude:
     # When getting evidence from external sources there are
     # many possible problems, and we don't care - if there's
@@ -59,3 +59,24 @@ Style/NegatedIf:
 Style/Send:
   Exclude:
     - 'test/**/*.rb'
+#
+# The following are new cops in Rubocop 0.52 which have disabled because
+# we aren't ready for them right now. It's diffult to do things "all at once".
+# Instead, we'll get things running first (ignoring these cops), and
+# later try to slowly comply with them or reject them.
+# See issue #1069, which tracks this decision.
+#
+Style/StringHashKeys:
+  Enabled: false
+Naming/ConstantName:
+  Enabled: false
+Style/MixinUsage:
+  Enabled: false
+Rails/EnvironmentComparison:
+  Enabled: false
+Lint/MissingCopEnableDirective:
+  Enabled: false
+Layout/ClassStructure:
+  Enabled: false
+Rails/Presence:
+  Enabled: false

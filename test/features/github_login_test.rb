@@ -29,10 +29,11 @@ class GithubLoginTest < CapybaraFeatureTest
       # Github has an anti bot mechanism that requires real mouse movement
       # to authorize an application.
       if ENV['GITHUB_PASSWORD'] # for re-recording cassettes
+        find_field id: 'login_field' # Make sure field exists first
         fill_in 'login_field', with: 'ciitest'
         fill_in 'password', with: ENV['GITHUB_PASSWORD']
         click_on 'Sign in'
-        assert has_content? 'Test BadgeApp (not for production use)'
+        assert page.has_content?('Test BadgeApp (not for production use)')
         click_on 'Authorize dankohn'
       end
 

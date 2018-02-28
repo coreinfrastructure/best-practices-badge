@@ -62,7 +62,7 @@ en:
   sessions:
     login_header: Log in
     login_with_github_html: <span class="fa fa-github"></span>
-      Log in with GitHub (automatically signs up if necessary)
+      Log in with GitHub
     or: or
     email: Email
     password: Password

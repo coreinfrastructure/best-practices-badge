@@ -77,6 +77,24 @@ task :bundle_doctor do
   sh 'bundle doctor'
 end
 
+desc 'Report code statistics'
+task :report_code_statistics do
+  verbose(false) do
+    sh <<-REPORT_CODE_STATISTICS
+      echo
+      direct=$(sed -e '1,/^DEPENDENCIES/d' -e '/^RUBY VERSION/,$d' \
+                   -e '/^$/d' Gemfile.lock | wc -l)
+      indirect=$(bundle show | tail -n +2 | wc -l)
+      echo "Number of gems (direct dependencies only) = $direct"
+      echo "Number of gems (including indirect dependencies) = $indirect"
+      echo
+      rails stats
+      echo
+      true
+    REPORT_CODE_STATISTICS
+  end
+end
+
 # rubocop: disable Metrics/BlockLength
 desc 'Run bundle-audit - check for known vulnerabilities in dependencies'
 task :bundle_audit do

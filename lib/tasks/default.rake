@@ -24,6 +24,7 @@ task(:default).clear.enhance %w[
   yaml_syntax_check
   html_from_markdown
   eslint
+  report_code_statistics
   test
 ]
 # Temporarily removed fasterer
@@ -38,6 +39,7 @@ task(:ci).clear.enhance %w[
   license_finder_report.html
   whitespace_check
   yaml_syntax_check
+  report_code_statistics
 ]
 # Temporarily removed fasterer
 
@@ -653,7 +655,7 @@ end
 # Run some slower tests. Doing this on *every* automated test run would be
 # slow things down, and the odds of them being problems are small enough
 # that the slowdown is less worthwhile.  Also, some of the tests (like the
-# CORS tests can interfere with the usual test setups, so again, they
+# CORS tests) can interfere with the usual test setups, so again, they
 # aren't worth running in the "normal" automated tests run on each commit.
 desc 'Run slow tests (e.g., CORS middleware stack location)'
 task :slow_tests do

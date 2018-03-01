@@ -1360,30 +1360,25 @@ de:
           nicht als statische Codeanalyse-Tools (diese vermeiden
           typischerweise eine tiefgreifende Analyse, da Geschwindigkeit
           entscheidend ist). Beispiele für solche Tools zur statischen
-          Codeanalyse sind <a href="http://cppcheck.sourceforge.net/">
-          cppcheck </a>, <a href="http://clang-analyzer.llvm.org/">
-          clang static analyzer </a>, <a href="http://findbugs.sourceforge.net/">
-          FindBugs </a> (einschließlich <a href="https://h3xstream.github.io/find-sec-bugs/">
-          FindSecurityBugs </a>), <a href="https://pmd.github.io/">
-          PMD </a>, <a href="http://brakemanscanner.org/"> Brakeman
-          </a>, <a href="https://scan.coverity.com/"> Coverity
-          Quality Analyzer </a>, <a href="https://www.sonarqube.org/">
-          SonarQube </a>, <a href="https://www.codacy.com/"> Codacy
-          </a> und <a href="https://saas.hpe.com/de-de/software/sca">
-          HP Enterprise Fortific Static-Code-Analyzer </a>. Mehr
-          Tools finden Sie beispielsweise in der <a href="https://en.wikipedia.org/wiki/List_of_tools_for_static_code_analysis">
-          Wikipedia-Liste von Tools zur statischen Codeanalyse
-          </a>, <a href=" https://www.owasp.org/index.php/Static_Code_Analysis">OWASP
-          Informationen zur statischen Code-Analyse </a>, <a href="http://samate.nist.gov/index.php/Source_Code_Security_Analyzers.html">
-          NIST-Liste der Quellcode-Sicherheitsanalyse-Tools </a>
-          und <a href="http://www.dwheeler.com/essays/static-analysis-tools.html">
-          Wheelers Liste der statischen Analyse-Tools </a> >.
-          Das <a href="https://continuousassurance.org/"> SWAMP
-          </a> ist eine kostenlose Plattform zur Bewertung von
-          Schwachstellen in Software mit einer Vielzahl von Tools.
-          Wenn für die verwendete (n) Implementierungssprache
-          (n) keine statischen FLOSS-Analysewerkzeuge verfügbar
-          sind, wählen Sie "N/V".
+          Codeanalyse sind <a href="http://cppcheck.sourceforge.net/">cppcheck</a>,
+          <a href="http://clang-analyzer.llvm.org/">clang static
+          analyzer</a>, <a href="http://findbugs.sourceforge.net/">FindBugs</a>
+          (einschließlich <a href="https://h3xstream.github.io/find-sec-bugs/">FindSecurityBugs</a>),
+          <a href="https://pmd.github.io/">PMD</a>, <a href="http://brakemanscanner.org/">Brakeman</a>,
+          <a href="https://scan.coverity.com/">Coverity Quality
+          Analyzer</a>, <a href="https://www.sonarqube.org/">SonarQube</a>,
+          <a href="https://www.codacy.com/">Codacy</a> und <a
+          href="https://saas.hpe.com/de-de/software/sca">HP Enterprise
+          Fortific Static-Code-Analyzer</a>. Mehr Tools finden
+          Sie beispielsweise in der <a href="https://en.wikipedia.org/wiki/List_of_tools_for_static_code_analysis">Wikipedia-Liste
+          von Tools zur statischen Codeanalyse</a>, <a href="https://www.owasp.org/index.php/Static_Code_Analysis">OWASP
+          Informationen zur statischen Code-Analyse </a>, <a href="http://samate.nist.gov/index.php/Source_Code_Security_Analyzers.html">NIST-Liste
+          der Quellcode-Sicherheitsanalyse-Tools</a> und <a href="http://www.dwheeler.com/essays/static-analysis-tools.html">Wheelers
+          Liste der statischen Analyse-Tools</a>. Das <a href="https://continuousassurance.org/">SWAMP</a>
+          ist eine kostenlose Plattform zur Bewertung von Schwachstellen
+          in Software mit einer Vielzahl von Tools. Wenn für die
+          verwendete (n) Implementierungssprache (n) keine statischen
+          FLOSS-Analysewerkzeuge verfügbar sind, wählen Sie "N/V".
         na_placeholder: >-
           Warum kann das nicht erfüllt werden (z.B. es gibt keine
           FLOSS Werkzeuge für diese Programmiersprache)?
@@ -1920,8 +1915,18 @@ de:
           Weitere Vorschläge finden Sie auf der <a href="https://reproducible-builds.org/">
           reproducible Build </a> Seite.
       installation_common:
-        description:
-        details:
+        description: >-
+          Das Projekt MUSS eine Möglichkeit zur einfachen Installation
+          und Deinstallation der Software haben, unter Benutzung
+          einer häufig verwendeten Methode.
+        details: >-
+          Beispiele hierfür sind die Verwendung eines Paketmanagers
+          (auf der System- oder Sprachniveaus), "make install
+          / uninstall" (unterstützt DESTDIR), einem Container
+          im Standardformat oder ein virtuelles Maschinenbild
+          im Standardformat. Der Installations- und Deinstallationsvorgang
+          (z.B. seine Verpackung) DARF von einem/einer Dritten
+          implementiert werden, solange es FLOSS ist.
       installation_standard_variables:
         description:
       installation_development_quick:
@@ -2007,7 +2012,19 @@ de:
           dass sie gültig sind (eine *Whitelist*) und ungültige
           Eingaben ablehnen, wenn überhaupt Einschränkungen für
           die Daten vorliegen.
-        details:
+        details: >-
+          Beachten Sie, dass der Vergleich der Eingabe mit einer
+          Liste von "schlechten Formaten" (aka a *Blacklist*)
+          normalerweise nicht ausreicht, weil Angreifer oft um
+          eine schwarze Liste herum arbeiten können. Insbesondere
+          werden Zahlen in interne Formate konvertiert und dann
+          überprüft, ob sie zwischen ihrem Minimum und Maximum
+          (inklusive) liegen und Textstrings werden überprüft,
+          um sicherzustellen, dass sie gültige Textmuster haben
+          (z.B. gültige UTF-8, Länge, Syntax, etc.). Einige Daten
+          müssen möglicherweise "irgendetwas" (z.B. ein Datei-Uploader)
+          sein, aber diese würden typischerweise selten der Fall
+          sein.
       hardening:
         description: >-
           Härtungsmechanismen SOLLTEN in der Projektsoftware verwendet

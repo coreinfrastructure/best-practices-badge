@@ -1779,13 +1779,13 @@ de:
           teilnehmen und die Projektergebnisse nutzen können,
           wo es vernünftig ist.
         details: |-
-          Für Webanwendungen siehe <a href="https://www.w3.org/TR/WCAG20/"> Web Content Accessibility Guidelines (WCAG 2.0) </a> und dessen Beleg <a href="https://www.w3.org/TR/UNDERSTANDING-WCAG2/Overview.html">Unternehmen WCAG 2.0 </a>; Siehe auch <a href="https://www.w3.org/standards/webdesign/accessibility"> W3C accessibility </a>. Für GUI-Anwendungen sollten Sie die umweltbezogenen Barrierefreiheitsrichtlinien verwenden (z.B. <a href="https://developer.gnome.org/accessibility-devel-guide/stable/">Gnome</a>, <a href="https://accessibility.kde.org/">KDE </a>, <a href="http://docs.xfce.org/xfce/xfce4-settings/accessibility"> XFCE </a>, < A href="https://developer.android.com/guide/topics/ui/accessibility/"> Android </a>, <a href="https://developer.apple.com/accessibility/ios/" > IOS </a>, <a href="http://www.apple.com/accessibility/osx/voiceover/"> Mac </a> und <a href="https://msdn.microsoft.com/en-us/windows/uwp/accessibility/accessibility-overview"> Windows </a>). Einige TUI-Anwendungen (z.B. "ncurses"-Programme) können bestimmte Dinge ausführen, um sich selbst zugänglicher zu machen (z.B. "alpine"'s "force-arrow-cursor" -Einstellung). Die meisten Kommandozeilen-Anwendungen sind ziemlich unzugänglich. Dieses Kriterium ist oft N/A, z.B. für Programmbibliotheken. Hier sind einige Beispiele, welche Maßnahmen zu ergreifen oder Fragen zu berücksichtigen sind: <ul> <li> Stellen Sie Text Alternativen für alle Nicht-Text-Inhalte zur Verfügung so
+          Für Webanwendungen siehe <a href="https://www.w3.org/TR/WCAG20/">Web Content Accessibility Guidelines (WCAG 2.0)</a> und dessen Beleg <a href="https://www.w3.org/TR/UNDERSTANDING-WCAG2/Overview.html">Unternehmen WCAG 2.0</a>; Siehe auch <a href="https://www.w3.org/standards/webdesign/accessibility">W3C accessibility</a>. Für GUI-Anwendungen sollten Sie die umweltbezogenen Barrierefreiheitsrichtlinien verwenden (z.B. <a href="https://developer.gnome.org/accessibility-devel-guide/stable/">Gnome</a>, <a href="https://accessibility.kde.org/">KDE</a>, <a href="http://docs.xfce.org/xfce/xfce4-settings/accessibility">XFCE</a>, <a href="https://developer.android.com/guide/topics/ui/accessibility/">Android</a>, <a href="https://developer.apple.com/accessibility/ios/">iOS </a>, <a href="http://www.apple.com/accessibility/osx/voiceover/">Mac</a> und <a href="https://msdn.microsoft.com/en-us/windows/uwp/accessibility/accessibility-overview">Windows</a>). Einige TUI-Anwendungen (z.B. "ncurses"-Programme) können bestimmte Dinge ausführen, um sich selbst zugänglicher zu machen (z.B. "alpine"'s "force-arrow-cursor" -Einstellung). Die meisten Kommandozeilen-Anwendungen sind ziemlich unzugänglich. Dieses Kriterium ist oft N/A, z.B. für Programmbibliotheken. Hier sind einige Beispiele, welche Maßnahmen zu ergreifen oder Fragen zu berücksichtigen sind: <ul> <li> Stellen Sie Text Alternativen für alle Nicht-Text-Inhalte zur Verfügung so
             Dass es dieser in andere Formen umgewandelt werden kann, wie z.B.
-            Großdruck, Blindenschrift, Sprache, Symbole oder einfachere Sprache (<a href="https://www.w3.org/TR/UNDERSTANDING-WCAG20/text-equiv.html"> WCAG 2.0-Richtlinie 1.1 </a>)
-          <Li> Farbe ist nicht das einzige Mittel um Informationen zu übermitteln, die eine Aktion angeben, eine Antwort auffordern oder in visuelles Element zu unterscheiden. (<a href="https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio contrast-without-color.html"> WCAG 2.0 Richtlinie 1.4.1 </a>)
-          <Li> Die visuelle Darstellung von Text und Textbildern hat einen Kontrast Verhältnis von mindestens 4,5: 1, außer für großen Text, nebensächlichen Text, und Logos(<a href="https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast-contrast.html"> WCAG 2.0 Richtlinie 1.4.3 </a>)
-          <Li> Machen Sie alle Funktionalitäten von einer Tastatur aus (WCAG-Richtlinie 2.1) <li> Ein GUI oder ein webbasiertes Projekt SOLLTE mit mindestens einem Screen-Reader auf der Zielplattform(en) testen (z.B. NVDA, Jaws, oder WindowEyes auf Windows; VoiceOver auf Mac & iOS; Orca auf Linux/BSD; TalkBack auf Android). TUI-Programme DÜRFEN arbeiten, um die Überziehung zu reduzieren, um eine redundante Lesung durch Screenreader zu verhindern.
-          </Ul>
+            Großdruck, Blindenschrift, Sprache, Symbole oder einfachere Sprache (<a href="https://www.w3.org/TR/UNDERSTANDING-WCAG20/text-equiv.html"> WCAG 2.0-Richtlinie 1.1</a>)
+          <li>Farbe ist nicht das einzige Mittel um Informationen zu übermitteln, die eine Aktion angeben, eine Antwort auffordern oder in visuelles Element zu unterscheiden. (<a href="https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio contrast-without-color.html">WCAG 2.0 Richtlinie 1.4.1</a>)
+          <li> Die visuelle Darstellung von Text und Textbildern hat einen Kontrast Verhältnis von mindestens 4,5: 1, außer für großen Text, nebensächlichen Text, und Logos(<a href="https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast-contrast.html">WCAG 2.0 Richtlinie 1.4.3</a>)
+          <li>Machen Sie alle Funktionalitäten von einer Tastatur aus (WCAG-Richtlinie 2.1) <li>Ein GUI oder ein webbasiertes Projekt SOLLTE mit mindestens einem Screen-Reader auf der Zielplattform(en) testen (z.B. NVDA, Jaws, oder WindowEyes auf Windows; VoiceOver auf Mac & iOS; Orca auf Linux/BSD; TalkBack auf Android). TUI-Programme DÜRFEN arbeiten, um die Überziehung zu reduzieren, um eine redundante Lesung durch Screenreader zu verhindern.
+          </ul>
       internationalization:
         description:
         details:
@@ -1928,10 +1928,28 @@ de:
           (z.B. seine Verpackung) DARF von einem/einer Dritten
           implementiert werden, solange es FLOSS ist.
       installation_standard_variables:
-        description:
+        description: >-
+          Das Installationssystem für den/die Endbenutzer/in muss
+          Standardkonventionen zur Auswahl des Standorts, in dem
+          gebildete Artefakte zur Installationszeit geschrieben
+          werden, ehren. Zum Beispiel, wenn es Dateien auf einem
+          POSIX-System installiert, muss es die DESTDIR-Umgebungsvariable
+          ehren. Wenn es kein Installationssystem oder keine Standardkonvention
+          gibt, wählen Sie "nicht anwendbar" (N / A).
       installation_development_quick:
-        description:
-        details:
+        description: >-
+          Das Projekt MUSS einen Weg für potenzielle Entwickler
+          bereithalten, um schnell alle erforderlich Projektergebnisse
+          und Support-Umgebungen zu installieren, um Änderungen
+          vornehmen zu können, einschließlich der Tests und Test-Umgebung.
+          Dies MUSS mit einer gängigen Methode durchgeführt werden
+          können.
+        details: >-
+          Dies kann mit einem generierten Container- und/oder
+          Installationsskript(en) implementiert werden. Externe
+          Abhängigkeiten würden typischerweise durch das Aufrufen
+          von System- und/oder Sprachpaketmanager(n), per externen_dependenzen
+          installiert.
       external_dependencies:
         description: >-
           Das Projekt MUSS externe Abhängigkeiten in computerlesbarer
@@ -1951,16 +1969,15 @@ de:
         details: >-
           Dies kann mit einem Ursprungsanalysator / Abhängigkeitsüberprüfungswerkzeug
           wie <a href="https://www.owasp.org/index.php/OWASP_Dependency_Check">
-          OWASP's Dependency-Check </a>, <a href=" Https://www.sonatype.com/nexus-auditor">Sonatype's
-          Nexus Auditor </a>, <a href="https://www.blackducksoftware.com/products/protex">
-          Black Duck's Protex </a> , <a href="http://www.protecode.com/">
-          Synopsys 'Schutzcode </a> und <a href="https://github.com/rubysec/bundler-audit">
-          Bundler-Audit (Für Ruby) </a>. Einige Paketmanager beinhalten
-          Mechanismen, um dies zu tun. Es ist akzeptabel, wenn
-          die Anfälligkeit der Komponenten nicht ausgenutzt werden
-          kann, aber diese Analyse ist schwierig und es ist manchmal
-          einfacher, den Part einfach zu aktualisieren oder zu
-          reparieren.
+          OWASP's Dependency-Check</a>, <a href="https://www.sonatype.com/nexus-auditor">Sonatype's
+          Nexus Auditor</a>, <a href="https://www.blackducksoftware.com/products/protex">
+          Black Duck's Protex</a>, <a href="http://www.protecode.com/">Synopsys
+          'Schutzcode</a> und <a href="https://github.com/rubysec/bundler-audit">Bundler-Audit
+          (Für Ruby) </a>. Einige Paketmanager beinhalten Mechanismen,
+          um dies zu tun. Es ist akzeptabel, wenn die Anfälligkeit
+          der Komponenten nicht ausgenutzt werden kann, aber diese
+          Analyse ist schwierig und es ist manchmal einfacher,
+          den Part einfach zu aktualisieren oder zu reparieren.
       updateable_reused_components:
         description:
         details:

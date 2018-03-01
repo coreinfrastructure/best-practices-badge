@@ -122,7 +122,7 @@ GEM
     fastly-rails (0.8.0)
       fastly (~> 1.6)
       railties (> 2, < 6)
-    ffi (1.9.22)
+    ffi (1.9.23)
     font-awesome-rails (4.7.0.3)
       railties (>= 3.2, < 5.2)
     gettext (3.2.6)

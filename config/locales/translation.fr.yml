@@ -67,7 +67,9 @@ fr:
       <a href="/cookies" target="_blank" rel="noopener"><i>En
       savoir plus sur les cookies.</i></a>
     no_login_time: "(Aucune heure précédente enregistrée.)"
-    login_automatic_signup:
+    login_automatic_signup: >-
+      La connection avec GitHub effectuera automatiquement une
+      inscription si nécessaire.
   users:
     new:
       signup_header: S'inscrire

@@ -74,9 +74,8 @@ ru:
     update_password: Обновление пароля
   sessions:
     login_header: Войти
-    login_with_github_html: >-
-      <span class="fa fa-github"></span> Войти через GitHub (если
-      нужно, с автоматической регистрацией)
+    login_with_github_html: <span class="fa fa-github"></span>
+      Войти через GitHub
     or: или
     email: Электронная почта
     password: Пароль
@@ -98,7 +97,9 @@ ru:
       <a href="/cookies" target="_blank" rel="noopener"><i>Подробнее
       о файлах cookie.</i></a>
     no_login_time: "(Время предыдущего входа не записано.)"
-    login_automatic_signup:
+    login_automatic_signup: >-
+      Вход через GitHub при необходимости автоматически создаст
+      учетную запись.
   static_pages:
     home:
       badge_program: Программа значков "Передовая практика CII"

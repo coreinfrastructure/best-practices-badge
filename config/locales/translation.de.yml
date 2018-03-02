@@ -1787,8 +1787,29 @@ de:
           <li>Machen Sie alle Funktionalitäten von einer Tastatur aus (WCAG-Richtlinie 2.1) <li>Ein GUI oder ein webbasiertes Projekt SOLLTE mit mindestens einem Screen-Reader auf der Zielplattform(en) testen (z.B. NVDA, Jaws, oder WindowEyes auf Windows; VoiceOver auf Mac & iOS; Orca auf Linux/BSD; TalkBack auf Android). TUI-Programme DÜRFEN arbeiten, um die Überziehung zu reduzieren, um eine redundante Lesung durch Screenreader zu verhindern.
           </ul>
       internationalization:
-        description:
-        details:
+        description: >-
+          Die Projektsoftware SOLLTE internationalisiert werden,
+          um eine einfachen Zugang für die Kultur, Region oder
+          Sprache der Zielgruppe zu ermöglichen. Wenn die Internationalisierung
+          (i18n) nicht andzuwenden ist (z.B. die Software keine
+          für Endbenutzer beabsichtigte Texte erzeugt und keinen
+          menschlich lesbaren Text sortiert), wählen Sie "nicht
+          anwendbar" (N/A).
+        details: >-
+          Lokalisierung "bezieht sich auf die Anpassung eines
+          Produkt-, Applikations- oder Dokumentinhalts, um die
+          Sprache, kulturelle und andere Anforderungen eines bestimmten
+          Zielmarktes zu erfüllen." Internationalisierung ist
+          die "Gestaltung und Entwicklung eines Produkt-, Applikations-
+          oder Dokumentinhaltes, die eine einfache Lokalisierung
+          für Zielgruppen ermöglicht, die in Kultur, Region oder
+          Sprache variieren." (Siehe <a href="https://www.w3.org/International/questions/qa-i18n">
+          W3Cs "Lokalisierung vs. Internationalisierung" </a>.)
+          Software erfüllt dieses Kriterium einfach dadurch, dass
+          sie internationalisiert ist. Es ist keine Lokalisierung
+          für eine andere Sprache erforderlich, denn sobald Software
+          internationalisiert wurde, ist es möglich für andere,
+          an der Lokalisierung zu arbeiten.
       sites_password_security:
         description: >-
           Wenn die Projektseiten (Website, Repository und Download-URLs)
@@ -1798,9 +1819,26 @@ de:
           (iterierten) Algorithmus (z.B. PBKDF2, Bcrypt oder Scrypt).
           Wenn die Projektseiten hierfür keine Passwörter speichern,
           wählen Sie "nicht anwendbar" (N/A) aus.
-        details:
+        details: >-
+          Beachten Sie, dass die Verwendung von <a href="https://help.github.com/articles/github-security/">
+          GitHub </a> dieses Kriterium erfüllt. Dieses Kriterium
+          gilt nur für Passwörter, die für die Authentifizierung
+          von externen Benutzern in die Projektseiten verwendet
+          werden. Wenn sich die Projektseiten auf anderen Seiten
+          anmelden müssen, müssen sie eventuell Passwörter für
+          diesen Zweck anders speichern (da ein Algorithmus wie
+          Bcrypt diese Passwörter nutzlos machen würde). Dies
+          gilt für das Kriterium crypto_password_storage zu den
+          Projektseiten, ähnlich wie sites_https.
       maintenance_or_update:
-        description:
+        description: >-
+          Das Projekt MUSS die am häufigsten verwendeten älteren
+          Versionen des Produkts beibehalten <em>oder</em> einen
+          Upgrade-Pfad zu neueren Versionen bieten. Wenn der Upgrade-Pfad
+          schwierig durchzuführen ist, muss das Projekt dokumentieren,
+          wie das Upgrade durchgeführt werden kann (z. B. die
+          Interfaces, die sich geändert haben, detaillierte Anleitung
+          für die Aktualisierung des Upgrades).
       report_tracker:
         description: >-
           Das Projekt MUSS ein Issue-Tracking-System zur Verwaltung
@@ -1982,7 +2020,13 @@ de:
         description:
         details:
       interfaces_current:
-        description:
+        description: >-
+          Das Projekt SOLLTE vermeiden veraltete oder obsolete
+          Funktionen und APIs zu verwenden, für die FLOSS-Alternativen
+          in der eingesetzten Technologie verfügbar sind (ihr
+          "Technologie-Stack") und eine Supermajorität der Benutzer,
+          die das Projekt unterstützt (so dass die Benutzer den
+          Zugriff auf die Alternative haben ).
       automated_integration_testing:
         description: >-
           Eine automatisierte Test-Suite MUSS bei jedem Check-In
@@ -1994,14 +2038,35 @@ de:
           angesehen werden, konzentriert sich aber nur auf das
           Testen, ohne eine kontinuierliche Integration zu fordern.
       regression_tests_added50:
-        description:
+        description: >-
+          Das Projekt MUSS Regressionstests zu einer automatisierten
+          Test-Suite hinzufügen für mindestens 50% der, in den
+          letzten sechs Monaten, gefixten Bugs.
       test_statement_coverage80:
-        description:
-        details:
+        description: >-
+          Das Projekt MUSS FLOSS automatisierte Test-Suite(s)
+          haben, die mindestens 80% Aussage Berichterstattung
+          haben, wenn es mindestens ein FLOSS-Tool gibt, das dieses
+          Kriterium in der ausgewählten Sprache erfüllen kann.
+        details: >-
+          Viele FLOSS-Tools stehen zur Verfügung, um die Testdichte
+          zu beurteilen, einschließlich gcov/lcov, Blanket.js,
+          Istanbul und JCov. Beachten Sie, dass das Erfüllen dieses
+          Kriteriums keine Garantie dafür ist, dass die Test-Suite
+          gründlich ist, hingegen ist das Verfehlen dieses Kriterium,
+          ein starker Indikator für eine schlechte Test-Suite.
       test_policy_mandated:
-        description:
+        description: >-
+          Das Projekt MUSS eine formale schriftliche Richtlinie,
+          die als wichtige neue Funktionalität hinzugefügt wird,
+          Tests für die neue Funktionalität MÜSSEN zu einer automatisierten
+          Test-Suite hinzugefügt werden.
       tests_documented_added:
-        description:
+        description: >-
+          Das Projekt MUSS in seinen dokumentierten Anweisungen
+          für Änderungsvorschläge die Richtlinien enthalten, die
+          Tests für große neue Funktionalität hinzugefügt werden
+          sollen.
       warnings_strict:
         description:
       implement_secure_design:
@@ -2123,12 +2188,37 @@ de:
           Software TLS nicht verwendet, wählen Sie "nicht anwendbar"
           (N/A).
       signed_releases:
-        description:
-        details:
+        description: >-
+          Das Projekt MUSS kryptographisch Releases der Projektergebnisse
+          aufzeichnen, die für weit verbreitete Verwendung gedacht
+          sind, und dort muss ein dokumentierter Prozess sein,
+          der den Benutzern/innen erklärt, wie sie die öffentlichen
+          Signaturschlüssel erhalten und die Signatur(en) überprüfen
+          können. Der private Schlüssel für diese Signatur(en)
+          DARF NICHT vor Ort verwendet werden, um die Software
+          direkt an die Öffentlichkeit zu geben. Wenn Releases
+          nicht für eine weit verbreitete Verwendung bestimmt
+          sind, wählen Sie "nicht anwendbar" (N/A).
+        details: >-
+          Die Projektergebnisse umfassen sowohl Quellcode als
+          auch alle erzeugten Ergebnisse, falls zutreffend (z.B.
+          ausführbare Dateien, Pakete und Container). Generierte
+          Ergebnisse können separat vom Quellcode signiert werden.
+          Diese DÜRFEN als signierte git-Tags (mit kryptographischen
+          digitalen Signaturen) implementiert werden. Projekte
+          DÜRFEN generierte Ergebnisse getrennt von Werkzeugen
+          wie git behandeln, aber in diesen Fällen MÜSSEN die
+          separaten Ergebnisse separat unterzeichnet werden.
       version_tags_signed:
         description:
       static_analysis_common_vulnerabilities:
-        description:
+        description: >-
+          Das Projekt MUSS mindestens ein statisches Analyse-Tool
+          mit Regeln oder Ansätzen verwenden, um nach bekannten
+          Schwachstellen in der analysierten Sprache oder Umgebung
+          zu suchen, wenn es mindestens ein FLOSS-Tool gibt, das
+          dieses Kriterium in der ausgewählten Sprache implementieren
+          kann.
       dynamic_analysis_unsafe:
         description: >-
           Wenn die Projektsoftware Software mit einer speicherunsicheren

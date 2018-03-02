@@ -26,7 +26,7 @@ jobs:
       - run: bundle --version
       # Install the rest of the components we depend on
       # - run: bundle install
-      - run install-badge-dev-env
+      - run: install-badge-dev-env
       # test
       # - run: "[[ ! -s \"$(git rev-parse --git-dir)/shallow\" ]] || git fetch --unshallow"
       # These are duplicative for now

@@ -10,6 +10,7 @@ jobs:
   build:
     docker:
       - image: circleci/ruby:2.5
+    working_directory: ~/best-practices-badge
     steps:
       # TODO: Add fingerprints for add_ssh_keys
       - add_ssh_keys

@@ -24,6 +24,8 @@ jobs:
       - run: gem update --system
       - run: gem install bundler --no-document
       - run: bundle --version
+      # Install the rest of the components we depend on
+      - run: bundle install
       # test
       # - run: "[[ ! -s \"$(git rev-parse --git-dir)/shallow\" ]] || git fetch --unshallow"
       - run: rails tests

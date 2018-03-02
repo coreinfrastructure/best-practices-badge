@@ -25,9 +25,11 @@ jobs:
       - run: gem install bundler --no-document
       - run: bundle --version
       # Install the rest of the components we depend on
-      - run: bundle install
+      # - run: bundle install
+      - run install-badge-dev-env
       # test
       # - run: "[[ ! -s \"$(git rev-parse --git-dir)/shallow\" ]] || git fetch --unshallow"
+      # These are duplicative for now
       - run: rails tests
       # Pronto checks
       - run: bundle exec pronto run -f github text -c=$(git log --pretty=format:%H | tail -1) --exit-code

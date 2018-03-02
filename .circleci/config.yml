@@ -1,0 +1,63 @@
+# CircleCI configuration for BadgeApp application
+#
+# TODO:
+# - Implement deployment
+# - Use workflows
+# - May need to set 'working_directory:'
+# - Parallelize
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/ruby:2.5
+    steps:
+      # TODO: Add fingerprints for add_ssh_keys
+      - add_ssh_keys
+      - checkout
+      # These steps may not be necessary, but they ensure we're
+      # up-to-date and avoid CircleCI warnings like
+      # "Warning: the running version of Bundler (1.14.6) is older
+      # than the version that created the lockfile (1.16.0).
+      # We suggest you upgrade to the latest version of Bundler by
+      # running `gem install bundler`."
+      - run: gem update --system
+      - run: gem install bundler --no-document
+      - run: bundle --version
+      # test
+      # - run: "[[ ! -s \"$(git rev-parse --git-dir)/shallow\" ]] || git fetch --unshallow"
+      - run: rails tests
+      # Pronto checks
+      - run: bundle exec pronto run -f github text -c=$(git log --pretty=format:%H | tail -1) --exit-code
+      # Other checks
+      - run: bundle exec rake ci
+# deployment:
+#   master:
+#     branch: master
+#     commands:
+#       - git push git@heroku.com:master-bestpractices.git $CIRCLE_SHA1:refs/heads/master
+#       - heroku run rake db:migrate --app master-bestpractices:
+#           timeout: 400 # if your deploys take a long time
+#       - "sleep 5 && bundle exec rake fastly:test" # Is Fastly CDN working?
+#   staging:
+#     branch: staging
+#     commands:
+#       - git push git@heroku.com:staging-bestpractices.git $CIRCLE_SHA1:refs/heads/master
+#       - heroku run rake db:migrate --app staging-bestpractices:
+#           timeout: 400 # if your deploys take a long time
+#   production:
+#     branch: production
+#     commands:
+#       - git push git@heroku.com:production-bestpractices.git $CIRCLE_SHA1:refs/heads/master
+#       - heroku run rake db:migrate --app production-bestpractices:
+#           timeout: 400 # if your deploys take a long time
+# general:
+# # branches:
+# #   ignore:
+# #     - BRANCH_NAME # do this if you need to ignore a branch.
+#   artifacts:
+#     - 'coverage'
+#     - 'license_finder_report.html'
+#     - 'log/test.log'
+#     - 'tmp/capybara'
+#     - 'test/html_reports'
+# Add this useless line to trigger a rebuild

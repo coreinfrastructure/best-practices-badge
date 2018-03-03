@@ -38,7 +38,19 @@ de:
       Registrieren
     login_html: <span class="glyphicon glyphicon-log-in"></span>
       Anmelden
-    footer_text_html:
+    footer_text_html: >-
+      <small><strong>Brauchen Sie Hilfe? Haben Sie eine Frage?
+      Sehen Sie ein Problem? Bitte <em> <a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;"senden
+      Sie eine E-Mail</a> </em> oder <em><a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
+      target="_blank" rel="noopener"> reichen Sie ein Problem
+      ein </a></em>.</strong> © 2015-2017 <a href="https://www.coreinfrastructure.org/"
+      target="_blank" rel="noopener"> Core Infrastructure Initiative</a>,
+      ein <a href="https://www.linuxfoundation.org/" target="_blank"
+      rel="noopener">Linux Foundation</a> Kollaboratives Projekt.
+      Alle Rechte vorbehalten. Bitte beachten Sie unsere <a href="https://www.linuxfoundation.org/privacy"
+      target="_blank" rel="noopener"> Datenschutzrichtlinie</a>
+      und <a href="https://www.linuxfoundation.org/terms" target="_
+      blank" rel="noopener">Nutzungsbedingungen</a>.</small>
     choose_locale: Wählen Sie lokale
   account_activations:
     activated: Konto aktiviert!
@@ -1844,12 +1856,23 @@ de:
           Das Projekt MUSS ein Issue-Tracking-System zur Verwaltung
           einzelner Issues verwenden.
       vulnerability_report_credit:
-        description:
+        description: >-
+          Das Projekt MUSS dem/der Reporter/in alle in den letzten
+          12 Monaten beschlossenen Schwachstellenberichte mitteilen,
+          mit Ausnahme der Reporter, die Anonymität anfordern.
+          Wurde in den letzten 12 Monaten keine Schwachstelle
+          festgestellt, wählen Sie "nicht anwendbar" (N/A).
       vulnerability_response_process:
         description: >-
           Das Projekt MUSS den Prozess für die Meldung von Schwachstellen
           auf der Projektseite veröffentlichen.
-        details:
+        details: >-
+          Dies steht im Zusammenhang mit vulnerability_report_process,
+          welcher erfordert, dass es eine dokumentierte Möglichkeit
+          gibt, Schwachstellen zu melden. Es bezieht sich auch
+          auf vulnerability_report_response, welcher eine Antwort
+          auf Schwachstellenberichte innerhalb eines bestimmten
+          Zeitrahmens erfordert.
       coding_standards:
         description: >-
           Das Projekt MUSS die spezifischen Codierungsstilrichtlinien
@@ -2017,8 +2040,29 @@ de:
           Analyse ist schwierig und es ist manchmal einfacher,
           den Part einfach zu aktualisieren oder zu reparieren.
       updateable_reused_components:
-        description:
-        details:
+        description: |-
+          Das Projekt MUSS entweder:
+          <ol>
+          <li>Es einfach machen, wiederverwendbare extern gepflegte Komponenten zu identifizieren und zu aktualisieren;<strong>oder</strong></li>
+          <li>Die Standardkomponenten des Systems oder der Programmiersprache verwenden.</li>
+          </ol>
+          Dann, wenn eine Schwachstelle in einer wiederverwendeten Komponente gefunden wird, wird es einfach sein diese Komponente zu aktualisieren.
+        details: >-
+          Ein typischer Weg, um dieses Kriterium zu erfüllen,
+          ist die Verwendung von System- und Programmiersprachen-Paketverwaltungssystemen.
+          Viele FLOSS-Programme werden mit "Convenience-Bibliotheken"
+          ausgestattet, die lokale Kopien der Standardbibliotheken
+          (ggf. gegabelt) sind. Prinzipiell ist das gut. Wenn
+          jedoch das Programm diese lokalen (gegabelten) Kopien
+          verwenden *muss*, dann wird die Aktualisierung der "Standard"-Bibliotheken,
+          als Sicherheitsupdate, diese zusätzlichen Kopien immer
+          noch verwundbar lassen. Dies ist vor allem ein Problem
+          für Cloud-basierte Systeme; Wenn der Cloud-Provider
+          seine "Standard"-Bibliotheken aktualisiert, aber das
+          Programm sie nicht verwenden, dann helfen die Updates
+          nicht wirklich. Siehe z.B. <a href="http://spot.livejournal.com/312320.html">
+          "Chromium: Why it isn't in Fedora yet as a proper package"
+          von Tom Callaway </a>.
       interfaces_current:
         description: >-
           Das Projekt SOLLTE vermeiden veraltete oder obsolete
@@ -2068,7 +2112,9 @@ de:
           Tests für große neue Funktionalität hinzugefügt werden
           sollen.
       warnings_strict:
-        description:
+        description: >-
+          Projekte MÜSSEN praktischerweise sehr streng mit Warnungen
+          in der Projektsoftware sein.
       implement_secure_design:
         description: >-
           Das Projekt MUSS sichere Designprinzipien (von "know_secure_design"),
@@ -2210,7 +2256,12 @@ de:
           wie git behandeln, aber in diesen Fällen MÜSSEN die
           separaten Ergebnisse separat unterzeichnet werden.
       version_tags_signed:
-        description:
+        description: >-
+          Es wird empfohlen, dass in dem Versionskontrollsystem
+          jeder wichtige Versions-Tag (ein Tag, der Teil eines
+          Hauptrelease, eines kleineren Release, oder eines Fixes,
+          öffentlich gemeldeten Schwachstellen, ist) kryptographisch
+          signiert und verifizierbar ist, wie in <a href="#signed_releases">Signed_releases</a>.
       static_analysis_common_vulnerabilities:
         description: >-
           Das Projekt MUSS mindestens ein statisches Analyse-Tool
@@ -2268,13 +2319,53 @@ de:
         description: >-
           Das Projekt MUSS mindestens zwei unabhängige bedeutende
           Entwickler haben.
-        details:
+        details: >-
+          Die Mitwirkenden sind assoziiert, wenn sie von der gleichen
+          Organisation (als Angestellter oder Auftragnehmer) bezahlt
+          werden und die Organisation von den Ergebnissen des
+          Projekts profitieren wird. Finanzielle Zuschüsse aus
+          derselben Organisation zählen nicht, wenn sie durch
+          andere Organisationen gehen (z.B. werden wissenschaftliche
+          Zuschüsse, die an verschiedene Organisationen von einer
+          gemeinsamen Regierung oder NGO-Quelle gezahlt werden,
+          nicht dazu führen, dass die Mitwirkenden assoziiert
+          werden). Jemand ist ein/e wichtige/r Mitwirkende/r,
+          wenn sie/er im vergangenen Jahr nicht-triviale Beiträge
+          zum Projekt geleistet hat. Beispiele für gute Indikatoren
+          für einen bedeutenden Mitwirkenden sind: mindestens
+          1.000 Zeilen Code geschrieben, 50 Commits erarbeitet
+          oder mindestens 20 Seiten zur Dokumentation beigetragen.
       copyright_per_file:
-        description:
-        details:
+        description: >-
+          Das Projekt MUSS eine Copyright-Erklärung in jeder Quelldatei
+          enthalten, die mindestens ein bestimmtes Jahr und den
+          Urheberrechtsinhaber identifiziert.
+        details: >-
+          Dies DARF getan werden, indem man Folgendes innerhalb
+          eines Kommentars relativ am Anfangs jeder Datei einfügt:
+          "<tt> Copyright [Jahr, in dem dieses Projekt oder die
+          Arbeit begonnen hat] - [letztes Jahr, in dem es geändert
+          wurde], [Projekt Gründer] and the [Projektname] contributors.</tt>
+          "
       license_per_file:
-        description:
-        details:
+        description: >-
+          Das Projekt MUSS eine Lizenzerklärung in jeder Quelldatei
+          enthalten. Dies DARF getan werden, indem man Folgendes
+          in einen Kommentar relativ am Anfangs jeder Datei einfügt:
+          <a href="https://spdx.org/using-spdx#identifiers"> <tt>SPDX-License-Identifier:
+          [SPDX-Lizenz Ausdruck für das Projekt]</tt> </a>.
+        details: >-
+          Dies DARF auch durch die Einbeziehung einer Erklärung
+          in natürlicher Sprache geschehen, die die Lizenz kennzeichnet.
+          Das Projekt DARF auch eine stabile URL enthalten, die
+          auf den Lizenztext oder den vollständigen Lizenztext
+          hinweist. Beachten Sie, dass das Kriterium license_location
+          die Projektlizenz an einem Standardstandort benötigt.
+          Weitere Informationen zu SPDX-Lizenzausdrücken finden
+          Sie unter <a href="https://github.com/david-a-wheeler/spdx-tutorial">SPDX-Tutorial
+          </a>. Beachten Sie die Beziehung zu <a href="#copyright_per_file">
+          copyright_per_file </a>, deren Inhalt typischerweise
+          den Lizenzinformationen vorausgeht.
       repo_distributed:
         description: >-
           Das Source-Repository des Projekts MUSS eine gemeinsame
@@ -2285,12 +2376,40 @@ de:
           Das Projekt MUSS eindeutig kleine Aufgaben identifizieren,
           die von neuen oder gelegentlichen Mitwirkenden durchgeführt
           werden können.
-        details:
+        details: >-
+          Diese Identifizierung erfolgt in der Regel durch die
+          Markierung ausgewählter Ausgaben in einem Issue Tracker
+          mit einem oder mehreren Tags, die das Projekt für den
+          Zweck verwendet, z.B. <a href="http://up-for-grabs.net/#/">
+          up-for-Grabs </a>, <a href="http://www.firsttimersonly.com/">
+          First-Timers-only </a>, "Small fix", Microtask oder
+          IdealFirstBug. Diese neuen Aufgaben müssen nicht das
+          Hinzufügen von Funktionalität beinhalten. Sie können
+          die Dokumentation verbessern, Testfälle hinzufügen oder
+          irgendetwas anderes, das das Projekt unterstützt und
+          den Mitwirkenden hilft mehr über das Projekt zu verstehen.
       require_2FA:
-        description:
+        description: >-
+          Das Projekt MUSS eine zwei Faktor-Authentifizierung
+          (2FA) für Entwickler haben, um ein zentrales Repository
+          zu wechseln oder auf sensible Daten zugreifen zu können
+          (z.B. private Schwachstellen-Berichte). Dieser 2FA-Mechanismus
+          DARF Mechanismen ohne kryptographische Mechanismen wie
+          SMS verwenden, obwohl dies nicht empfohlen wird.
       secure_2FA:
-        description:
-        details:
+        description: >-
+          Die Zwei-Faktor-Authentifizierung des Projekts (2FA)
+          SOLLTE Kryptographie-Mechanismen verwenden, um Identitätswechsel
+          zu verhindern. Short Message Service (SMS) basierte
+          2FA's allein erfüllen dieses Kriterium nicht, da sie
+          nicht verschlüsselt sind.
+        details: >-
+          Ein 2FA-Mechanismus, der dieses Kriterium erfüllt, wäre
+          eine Time-Based One-Time Password (TOTP)-Anwendung,
+          die automatisch einen Authentifizierungscode generiert,
+          der sich nach einer gewissen Zeit ändert. Beachten Sie,
+          dass <a href="https://help.github.com/articles/configuring-two-factor-authentication-via-a-totp-mobile-app/">
+          GitHub TOTP unterstützt</a>.
       code_review_standards:
         description: >-
           Das Projekt MUSS seine Code-Review-Anforderungen dokumentieren,
@@ -2309,7 +2428,12 @@ de:
           Problemen ist, die gegen die Freigabe der Änderung sprechen
           würden
       build_reproducible:
-        description:
+        description: >-
+          Das Projekt MUSS ein <a href="https://reproducible-builds.org/">
+          repoducible Build </a> haben. Wenn kein Building auftritt
+          (z.B. Skriptsprachen, in denen der Quellcode direkt
+          verwendet wird, anstatt kompiliert zu werden), wählen
+          Sie "nicht anwendbar" (N/A).
         details: >-
           Eine reproduzierbares Build bedeutet, dass mehrere Parteien
           den Prozess der Generierung von Informationen aus Quelldateien
@@ -2347,23 +2471,71 @@ de:
           wenn es mindestens ein FLOSS-Tool gibt, das dieses Kriterium
           in der ausgewählten Programmiersprache messen kann.
       test_branch_coverage80:
-        description:
+        description: >-
+          Das Projekt MUSS FLOSS automatisierte Test-Suite(s),
+          die mindestens 80% Zweig-Abdeckung, wenn es mindestens
+          ein FLOSS-Tool, das dieses Kriterium in der ausgewählten
+          Sprache messen kann.
       crypto_used_network:
-        description:
+        description: >-
+          Die vom Projekt produzierte Software MUSS sichere Protokolle
+          für alle Netzwerkkommunikationen unterstützen , wie
+          SSHv2 oder höher, TLS1.2 oder höher (HTTPS), IPsec,
+          SFTP und SNMPv3. Unsichere Protokolle wie FTP, HTTP,
+          Telnet, SSLv3 oder früher, und SSHv1 MÜSSEN standardmäßig
+          deaktiviert werden und nur aktiviert werden, wenn der/die
+          Benutzer/in es speziell konfiguriert. Wenn die vom Projekt
+          produzierte Software keine Netzwerkkommunikation verwendet,
+          wählen Sie "nicht anwendbar" (N/A).
       crypto_tls12:
-        description:
+        description: >-
+          Die Projektsoftware MUSS, wenn sie TLS unterstützt oder
+          verwendet, mindestens TLS Version 1.2 unterstützen.
+          Beachten Sie, dass der Vorgänger von TLS SSL genannt
+          wurde. Wenn die Software TLS nicht verwendet, wählen
+          Sie "nicht anwendbar" (N/A).
       hardened_site:
-        description:
-        details:
+        description: >-
+          Die Projekt-Website, das Repository (wenn über das Internet
+          zugänglich) und die heruntergelandenen Seiten (falls
+          separat) MÜSSEN Key-Hardening-Headers mit nichtpermeablen
+          Werten enthalten.
+        details: >-
+          Beachten Sie, dass GitHub bekannt ist, dies zu erfüllen.
+          Websites wie https://securityheaders.io/ können dies
+          schnell überprüfen. Die wichtigsten Key-Hardening-Header
+          sind: Content Security Policy (CSP), HTTP Strict Transport
+          Security (HSTS), X-Content-Type-Options (als "nosniff"),
+          X-Frame-Options und X-XSS-Protection.
       security_review:
-        description:
-        details:
+        description: >-
+          Das Projekt MUSS innerhalb der letzten 5 Jahre eine
+          Sicherheitsüberprüfung durchgeführt haben. Diese Überprüfung
+          muss die Sicherheitsanforderungen und die Sicherheitsgrenze
+          berücksichtigen.
+        details: >-
+          Dies DARF durch die Projektmitglieder und/oder eine
+          unabhängige Bewertung geschehen. Diese Bewertung kann
+          durch statische und dynamische Analyse-Tools unterstützt
+          werden, aber es muss auch eine menschliche Überprüfung
+          sein, um Probleme zu identifizieren (insbesondere im
+          Design), die Werkzeuge nicht erkennen können.
       hardening:
-        description:
+        description: >-
+          Härtungsmechanismen müssen in der Projektsoftware verwendet
+          werden, so dass Softwarefehler weniger wahrscheinlich
+          zu Sicherheitslücken führen.
       dynamic_analysis:
-        description:
+        description: >-
+          Das Projekt MUSS mindestens ein dynamisches Analyse-Tool
+          auf jeden kommenden Hauptproduktionsrelease der Software,
+          die durch das Projekt vor seiner Freigabe produziert
+          wird, anwenden.
       dynamic_analysis_enable_assertions:
-        description:
+        description: >-
+          Das Projekt SOLLTE viele Laufzeit-Assertionen in der
+          Projektsoftware enthalten und diese Assertionen während
+          der dynamischen Analyse überprüfen.
       achieve_silver:
         description: Das Projekt MUSS ein Silber-Siegel erreichen.
   static_pages:

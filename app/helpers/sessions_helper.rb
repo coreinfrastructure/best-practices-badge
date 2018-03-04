@@ -10,20 +10,19 @@ module SessionsHelper
   PRODUCTION_HOSTNAME = 'bestpractices.coreinfrastructure.org'
   require 'uri'
 
+  # Remove the "locale=value", if any, from the url_query provided
   def remove_locale_query(url_query)
     (url_query || '').gsub(/\Alocale=[^&]*&?|&locale=[^&]*/, '').presence
   end
 
-  # Change locale of original_url.
-  # Presumes that query is empty or only has a locale.
+  # Reply with original_url modified so it has locale "locale"
   # rubocop:disable Metrics/AbcSize
   def force_locale_url(original_url, locale)
     url = URI.parse(original_url)
     # Clean up query
     url.query = remove_locale_query(url.query)
     # Clean up path
-    url.path.gsub!(%r{\A\/[a-z]{2}(-[A-Za-z0-9-]*)?(\/|\z)}, '')
-    url.path = '/' + url.path if url.path == '' || url.path[0] != '/'
+    url.path.gsub!(%r{\A\/[a-z]{2}(-[A-Za-z0-9-]*)?(\/|\z)}, '/')
     url.path = '/' + locale.to_s + url.path # Forcibly include locale
     url.to_s
   end

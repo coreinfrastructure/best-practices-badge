@@ -20,7 +20,7 @@ class GithubLoginTest < CapybaraFeatureTest
       visit '/en'
       assert has_content? 'CII Best Practices Badge Program'
       click_on 'Get Your Badge Now!'
-      assert_equal new_project_path, current_path
+      assert_equal new_project_path(locale: :en), current_path
       assert has_content? 'Log in with GitHub'
       num = ActionMailer::Base.deliveries.size
       click_link 'Log in with GitHub'
@@ -66,7 +66,7 @@ class GithubLoginTest < CapybaraFeatureTest
       # Regression test, make sure GitHub users can logout
       assert has_content? 'Logout'
       click_on 'Logout'
-      assert_equal root_path, current_path
+      assert_equal root_path(locale: :en), current_path
 
       if ENV['GITHUB_PASSWORD'] # revoke OAuth authorization
         visit 'https://github.com/settings/applications'

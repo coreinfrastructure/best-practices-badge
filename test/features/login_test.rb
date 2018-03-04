@@ -62,7 +62,7 @@ class LoginTest < CapybaraFeatureTest
     assert has_content? 'Logged in!'
     assert_equal projects_path(locale: :en), current_path
 
-    visit edit_project_path(@project, locale: nil)
+    visit edit_project_path(@project, locale: :en)
     assert has_content? 'This is not the production system'
     assert has_content? 'We have updated our requirements for the criterion ' \
                         '<a href="#static_analysis">static_analysis</a>. ' \
@@ -72,7 +72,8 @@ class LoginTest < CapybaraFeatureTest
     fill_in 'project_name', with: 'It doesnt matter'
     # Below we are clicking the final save button, it has a value of ''
     click_button('Save', exact: true)
-    assert_equal edit_project_path(@project, locale: :en), current_path
+    assert_equal controller.edit_project_path(@project, locale: :en),
+                 current_path
     assert has_content? 'Project was successfully updated.'
     # TODO: Get the clicking working again with capybara.
     # Details: If we expand all panels first and dont click this test passes.

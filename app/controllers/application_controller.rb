@@ -35,6 +35,10 @@ class ApplicationController < ActionController::Base
     payload[:uid] = current_user.id if logged_in?
   end
 
+  # NOTE: In tests use "controller.root_url(...)", not "root_url",
+  # and similarly for root_path, because we override those methods
+  # here in the application controller.
+
   # Return root path in form "/" + locale.  Rails prefers
   # "/?locale=LOCALE_NAME" which is general but ugly.
   # We can have cleaner and simpler URLs by simply never using

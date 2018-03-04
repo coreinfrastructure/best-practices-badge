@@ -241,7 +241,7 @@ class ProjectsController < ApplicationController
       respond_to { |format| format.html }
     else
       flash[:danger] = t('admin_only')
-      redirect_to root_url
+      redirect_to root_path
     end
   end
 
@@ -316,13 +316,13 @@ class ProjectsController < ApplicationController
   # Returns true if current_user can edit, else redirect to a different URL
   def can_edit_else_redirect
     return true if can_edit?
-    redirect_to root_url
+    redirect_to root_path
   end
 
   # Returns true if current_user can control, else redirect to a different URL
   def can_control_else_redirect
     return true if can_control?
-    redirect_to root_url
+    redirect_to root_path
   end
 
   def adequate_deletion_rationale

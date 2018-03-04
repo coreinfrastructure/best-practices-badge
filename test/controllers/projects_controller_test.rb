@@ -117,7 +117,7 @@ class ProjectsControllerTest < ActionController::TestCase
   end
 
   test 'should show project with criteria_level=2' do
-    get :show, params: { id: @project, criteria_level: '2' }
+    get :show, params: { id: @project, criteria_level: '2', locale: :en }
     assert_response :success
     assert_select(+'a[href=?]', 'https://www.nasa.gov')
     assert_select(+'a[href=?]', 'https://www.nasa.gov/pathfinder')
@@ -125,7 +125,7 @@ class ProjectsControllerTest < ActionController::TestCase
   end
 
   test 'should show project JSON data' do
-    get :show_json, params: { id: @project, format: :json }
+    get :show_json, params: { id: @project, format: :json, locale: :en }
     assert_response :success
     body = JSON.parse(response.body)
     assert_equal 'Pathfinder OS', body['name']
@@ -271,7 +271,7 @@ class ProjectsControllerTest < ActionController::TestCase
     log_in_as(@project.user)
     new_name = @project.name + '_updated'
     patch :update, params: {
-      id: @project, project: {
+      id: @project, locale: :en, project: {
         description: @project.description,
         license: @project.license,
         name: new_name,
@@ -395,7 +395,8 @@ class ProjectsControllerTest < ActionController::TestCase
   end
 
   test 'A perfect silver project should have the silver badge in JSON' do
-    get :badge, params: { id: @perfect_silver_project, format: 'json' }
+    get :badge,
+        params: { id: @perfect_silver_project, format: 'json', locale: :en }
     assert_response :success
     json_data = JSON.parse(@response.body)
     assert_equal 'silver', json_data['badge_level']
@@ -582,18 +583,18 @@ class ProjectsControllerTest < ActionController::TestCase
   end
 
   test 'should redirect with empty query params removed' do
-    get :index, params: { q: '', status: 'passing' }
-    assert_redirected_to 'http://test.host/projects?status=passing'
+    get :index, params: { q: '', status: 'passing', locale: :en }
+    assert_redirected_to 'http://test.host/en/projects?status=passing'
   end
 
   test 'should redirect with all query params removed' do
-    get :index, params: { q: '', status: '' }
-    assert_redirected_to 'http://test.host/projects'
+    get :index, params: { q: '', status: '', locale: :en }
+    assert_redirected_to 'http://test.host/en/projects'
   end
 
   test 'should remove invalid parameter' do
-    get :index, params: { role: 'admin', status: 'passing' }
-    assert_redirected_to 'http://test.host/projects?status=passing'
+    get :index, params: { role: 'admin', status: 'passing', locale: :en }
+    assert_redirected_to 'http://test.host/en/projects?status=passing'
   end
 
   test 'Check ids= projects index query' do
@@ -610,7 +611,7 @@ class ProjectsControllerTest < ActionController::TestCase
     old = Rails.application.config.force_ssl
     Rails.application.config.force_ssl = true
     get :index
-    assert_redirected_to 'https://test.host/projects'
+    assert_redirected_to 'https://test.host/en/projects'
     Rails.application.config.force_ssl = old
   end
 

@@ -35,7 +35,31 @@ class ApplicationController < ActionController::Base
     payload[:uid] = current_user.id if logged_in?
   end
 
+  # Return root path in form "/" + locale.  Rails prefers
+  # "/?locale=LOCALE_NAME" which is general but ugly.
+  # We can have cleaner and simpler URLs by simply never using
+  # a top-level component with the same syntax as a locale name.
+  def root_path(**args)
+    '/' + locale_path_component(args)
+  end
+
+  # Return root url in form "/" + locale.
+  # Where practical, use root_path instead of root_url.
+  # See comments on root_path for more information.
+  # This does NOT fully support the normal Rails args for root_url.
+  def root_url(**args)
+    super(locale: nil) + locale_path_component(args)
+  end
+
   private
+
+  # Return locale path component (as a string).  If the locale is in args,
+  # use that, otherwise use the current locale.
+  def locale_path_component(args)
+    locale = args[:locale]
+    locale = I18n.locale if locale.blank?
+    locale ? locale.to_s : ''
+  end
 
   # *Always* include the locale when generating a URL.
   # Historically we omitted the locale when it was "en", but then we could

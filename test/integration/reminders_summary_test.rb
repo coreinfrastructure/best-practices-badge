@@ -38,7 +38,7 @@ class RemindersSummaryTest < ActionDispatch::IntegrationTest
 
   test 'Reminders path redirects for non-admin' do
     log_in_as(@user)
-    get reminders_path, params: { locale: 'en' }
+    get reminders_path(locale: :en)
     assert_redirected_to root_url(locale: :en)
   end
 

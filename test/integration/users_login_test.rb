@@ -58,7 +58,7 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
 
     delete logout_path, params: { locale: 'en' }
     assert_not user_logged_in?
-    assert_redirected_to root_url
+    assert_redirected_to root_url(locale: :en)
     follow_redirect!
     # Parentheses necessary to avoid Rubocop Lint/AmbiguousOperator error
     assert_select(+'a[href=?]', login_path)
@@ -69,7 +69,7 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
   test 'login with valid information but not activated' do
     log_in_as @user2
     assert_not user_logged_in?
-    assert_redirected_to root_url
+    assert_redirected_to root_url(locale: :en)
     assert_not flash.empty?
   end
 

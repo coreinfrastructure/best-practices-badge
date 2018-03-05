@@ -95,6 +95,8 @@ class GithubLoginTest < CapybaraFeatureTest
     click_on 'Si vous avez un compte GitHub, vous pouvez simplement ' \
               + "l'utiliser pour vous connectez."
     click_link 'Connectez-vous avec GitHub'
+    # TODO: Fix, current_path should be '/fr/' but is currently '/en/'
+    # The link has the right URL, but is not getting redirected correctly.
     assert has_content? 'Connecté !'
     assert_equal '/fr/', current_path
     # Regression test, make sure redirected correctly after login

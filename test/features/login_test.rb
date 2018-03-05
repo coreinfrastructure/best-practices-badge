@@ -164,6 +164,7 @@ class LoginTest < CapybaraFeatureTest
     fill_in 'Email', with: @user.email
     fill_in 'Mot de passe', with: 'password'
     click_button 'Connectez-vous en utilisant un compte personnalisé'
+    # TODO: Fix, content not appearing correctly
     assert has_content? 'Connecté !'
     assert_equal '/fr/', current_path
   end

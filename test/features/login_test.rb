@@ -135,10 +135,10 @@ class LoginTest < CapybaraFeatureTest
   # won't work because of its inadequate simulation of the real situation
   # (and thus requires a full integration test instead).
   scenario 'Can Login in fr locale to /projects', js: true do
-    @fr_user = users(:fr_user)
+    fr_user = users(:fr_user)
     visit projects_path
     click_on 'Login'
-    fill_in 'Email', with: @fr_user.email
+    fill_in 'Email', with: fr_user.email
     fill_in 'Password', with: 'password'
     click_button 'Log in using custom account'
     assert has_content? 'Connecté !'
@@ -147,10 +147,10 @@ class LoginTest < CapybaraFeatureTest
 
   # Test login from root path.
   scenario 'Can Login in fr locale to top', js: true do
-    @fr_user = users(:fr_user)
+    fr_user = users(:fr_user)
     visit root_path
     click_on 'Login'
-    fill_in 'Email', with: @fr_user.email
+    fill_in 'Email', with: fr_user.email
     fill_in 'Password', with: 'password'
     click_button 'Log in using custom account'
     assert has_content? 'Connecté !'
@@ -159,12 +159,12 @@ class LoginTest < CapybaraFeatureTest
 
   # Test login from non-english locale
   scenario 'Prelogin non-en locale saved on login', js: true do
+    fr_user = users(:fr_user)
     visit '/fr/'
     click_on "S'identifier"
-    fill_in 'Email', with: @user.email
+    fill_in 'Email', with: fr_user.email
     fill_in 'Mot de passe', with: 'password'
     click_button 'Connectez-vous en utilisant un compte personnalisé'
-    # TODO: Fix, content not appearing correctly
     assert has_content? 'Connecté !'
     assert_equal '/fr/', current_path
   end

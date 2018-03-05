@@ -16,7 +16,6 @@ module SessionsHelper
   end
 
   # Reply with original_url modified so it has locale "locale"
-  # rubocop:disable Metrics/AbcSize
   def force_locale_url(original_url, locale)
     url = URI.parse(original_url)
     # Clean up query
@@ -26,7 +25,6 @@ module SessionsHelper
     url.path = '/' + locale.to_s + url.path # Forcibly include locale
     url.to_s
   end
-  # rubocop:enable Metrics/AbcSize
 
   # Low-level route to set user as being logged in.
   # This doesn't set the last_login_at or forward elsewhere.

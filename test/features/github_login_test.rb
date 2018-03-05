@@ -66,7 +66,7 @@ class GithubLoginTest < CapybaraFeatureTest
       # Regression test, make sure GitHub users can logout
       assert has_content? 'Logout'
       click_on 'Logout'
-      assert_equal controller.root_path(locale: :en), current_path
+      assert_equal '/en/', current_path
 
       if ENV['GITHUB_PASSWORD'] # revoke OAuth authorization
         visit 'https://github.com/settings/applications'
@@ -96,7 +96,7 @@ class GithubLoginTest < CapybaraFeatureTest
               + "l'utiliser pour vous connectez."
     click_link 'Connectez-vous avec GitHub'
     assert has_content? 'Connecté !'
-    # Regression test, make sure redirected correctly after login
     assert_equal '/fr/', current_path
+    # Regression test, make sure redirected correctly after login
   end
 end

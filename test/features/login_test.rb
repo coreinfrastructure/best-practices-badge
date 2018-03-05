@@ -72,7 +72,7 @@ class LoginTest < CapybaraFeatureTest
     fill_in 'project_name', with: 'It doesnt matter'
     # Below we are clicking the final save button, it has a value of ''
     click_button('Save', exact: true)
-    assert_equal controller.edit_project_path(@project, locale: :en),
+    assert_equal edit_project_path(@project, locale: :en),
                  current_path
     assert has_content? 'Project was successfully updated.'
     # TODO: Get the clicking working again with capybara.

@@ -125,7 +125,8 @@ class ApplicationController < ActionController::Base
   # "The locale can be either set pseudo-globally to I18n.locale
   # (which uses Thread.current like, e.g., Time.zone)...".
   def set_locale
-    I18n.locale = find_best_locale
+    best_locale = find_best_locale
+    I18n.locale = find_best_locale if best_locale.present?
   end
 
   # Validate client IP address if Rails.configuration.valid_client_ips

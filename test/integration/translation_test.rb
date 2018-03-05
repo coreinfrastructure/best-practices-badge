@@ -43,4 +43,14 @@ class TranslationTest < ActionDispatch::IntegrationTest
       # is unlikely to be a problem.
     end
   end
+
+  test 'Correctly switch to browser default locale' do
+    get '/', headers: { 'HTTP_ACCEPT_LANGUAGE': 'fr,en-US;q=0.7,en;q=0.3' }
+    assert_redirected_to controller.root_url(locale: :fr) + '/'
+  end
+
+  test 'Do not switch locale if one given' do
+    get '/en', headers: { 'HTTP_ACCEPT_LANGUAGE': 'fr,en-US;q=0.7,en;q=0.3' }
+    assert_redirected_to controller.root_url(locale: :en) + '/'
+  end
 end

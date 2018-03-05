@@ -9,7 +9,7 @@
     <id>tag:www.example.com,2005:Project/298486374</id>
     <published>2015-03-01T12:00:00Z</published>
     <updated>2015-03-01T12:00:00Z</updated>
-    <link rel="alternate" type="text/html" href="http://www.example.com/projects/298486374"/>
+    <link rel="alternate" type="text/html" href="http://www.example.com/en/projects/298486374"/>
     <title>Mars Ascent Vehicle (MAV)</title>
     <content type="html">
       <![CDATA[<p><strong>In Progress: 0%</strong></p><p><a href='https://www.nasa.gov'>https://www.nasa.gov</a></p><span lang="en"><p>Operating system for Pathfinder rover</p>
@@ -23,7 +23,7 @@
     <id>tag:www.example.com,2005:Project/600182345</id>
     <published>2015-03-01T12:00:00Z</published>
     <updated>2015-03-01T12:00:00Z</updated>
-    <link rel="alternate" type="text/html" href="http://www.example.com/projects/600182345"/>
+    <link rel="alternate" type="text/html" href="http://www.example.com/en/projects/600182345"/>
     <title>Justified perfect project</title>
     <content type="html">
       <![CDATA[<p><strong>Gold</strong></p><p><a href='https://www.example.org'>https://www.example.org</a></p><span lang="en"><p>The perfect project</p>
@@ -37,7 +37,7 @@
     <id>tag:www.example.com,2005:Project/690367815</id>
     <published>2015-03-01T12:00:00Z</published>
     <updated>2015-03-01T12:00:00Z</updated>
-    <link rel="alternate" type="text/html" href="http://www.example.com/projects/690367815"/>
+    <link rel="alternate" type="text/html" href="http://www.example.com/en/projects/690367815"/>
     <title>Justified perfect silver project</title>
     <content type="html">
       <![CDATA[<p><strong>Silver</strong></p><p><a href='https://www.example.org'>https://www.example.org</a></p><span lang="en"><p>The perfect silver project</p>
@@ -51,7 +51,7 @@
     <id>tag:www.example.com,2005:Project/832656895</id>
     <published>2015-03-01T12:00:00Z</published>
     <updated>2015-03-01T12:00:00Z</updated>
-    <link rel="alternate" type="text/html" href="http://www.example.com/projects/832656895"/>
+    <link rel="alternate" type="text/html" href="http://www.example.com/en/projects/832656895"/>
     <title>Unjustified perfect project</title>
     <content type="html">
       <![CDATA[<p><strong>In Progress: 86%</strong></p><p><a href='https://www.example.org'>https://www.example.org</a></p><span lang="en"><p>The perfect project</p>
@@ -65,7 +65,7 @@
     <id>tag:www.example.com,2005:Project/968496471</id>
     <published>2015-03-01T12:00:00Z</published>
     <updated>2015-03-01T12:00:00Z</updated>
-    <link rel="alternate" type="text/html" href="http://www.example.com/projects/968496471"/>
+    <link rel="alternate" type="text/html" href="http://www.example.com/en/projects/968496471"/>
     <title>Justified perfect passing project</title>
     <content type="html">
       <![CDATA[<p><strong>Passing</strong></p><p><a href='https://www.example.org'>https://www.example.org</a></p><span lang="en"><p>The perfect passing project</p>
@@ -79,7 +79,7 @@
     <id>tag:www.example.com,2005:Project/980190962</id>
     <published>2000-01-01T00:00:00Z</published>
     <updated>2000-01-01T00:00:00Z</updated>
-    <link rel="alternate" type="text/html" href="http://www.example.com/projects/980190962"/>
+    <link rel="alternate" type="text/html" href="http://www.example.com/en/projects/980190962"/>
     <title>Pathfinder OS</title>
     <content type="html">
       <![CDATA[<p><strong>In Progress: 0%</strong></p><p><a href='https://www.nasa.gov'>https://www.nasa.gov</a></p><span lang="en"><p>Operating system for Pathfinder rover</p>

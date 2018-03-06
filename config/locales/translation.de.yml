@@ -90,20 +90,31 @@ de:
       Das Konto ist noch nicht aktiviert. Überprüfe dein E-Mail
       Postfach und klicke auf den Bestätigungs-Link.
     signed_out: Abgemeldet!
-    cookie_details_html:
+    cookie_details_html: >-
+      <a href="/cookies" target="_blank" rel="noopener"> <i> Erfahren
+      Sie mehr über Cookies. </i> </a>
     no_login_time: "(Keine vorherige Zeit aufgezeichnet.)"
-    login_automatic_signup:
+    login_automatic_signup: >-
+      Wenn Sie sich mit GitHub einloggen wird automatisch bei
+      Bedarf eine Anmeldung durchgeführt.
   users:
     new:
       signup_header: Anmelden
-      intro_html:
+      intro_html: |-
+        Wenn Sie sich nicht mit einem GitHub-Konto anmelden möchten, können Sie
+        Sie sich stattdessen hier anmelden (dies erstellt ein benutzerdefiniertes Konto mit
+        Ihrer Emailadresse). <br> <br> Wenn Sie Ihren Aktivierungslink nicht erhalten haben,
+        melden Sie sich bitte erneut an und wir senden Ihnen einen neuen Link.
       name: Name
       email: E-Mail
       preferred_locale: Bevorzugte Region
       password: Passwort
       password_confirmation: Bestätige Passwort
       create_account: Erstelle meinen Account
-      intro_github:
+      intro_github: >-
+        Wenn Sie ein GitHub-Konto haben, können Sie es einfach
+        verwenden, um sich anzumelden (ein erstmaliger GitHub-Login
+        wird Sie automatisch anmelden).
     edit:
       update_user_info: Benutzerinformationen aktualisieren
       save_changes: Änderungen speichern
@@ -175,7 +186,19 @@ de:
       raw_data: 'Sie können auch die Rohdaten sehen:'
       json_format: JSON-Format
       csv_format: Herunterladbares CSV-Format
-      projects_created_updated_daily:
+      projects_created_updated_daily: >-
+        Der Datensatz "Projekte, die seit dem Tag zuvor erstellt
+        wurden" ist die Anzahl, wie viele Projekte innerhalb von
+        24 Stunden nach dem gegebenen Zeitpunkt erstellt wurden
+        (ohne Projekte, die auch in der gleichen 24 Stunden gelöscht
+        wurden). Ebenso, ist der Datensatz "Projekte, die seit
+        dem Tag zuvor aktualisiert wuden", die Anzahl an Projekten,
+        die innerhalb von 24 Stunden nach dem angegebenen Zeitpunkt
+        bearbeitet wurden (ohne Projekte, die im selben 24 Stunden
+        erstellt oder gelöscht wurden). Die 7-Tage-Durchschnittswerte
+        zeigen die entsprechenden Mittelwerte für 7 Tage. Sie
+        können Farben in der Legende auswählen, um die entsprechenden
+        Daten auszublenden und einzublenden.
       projects_silver: Projektfortschritt in Richtung Silber
       projects_gold: Projektfortschritt in Richtung Gold
       projects_completed_silver_and_gold: Projekte, die Silber
@@ -184,7 +207,7 @@ de:
         die Gütesiegel erhalten
       users: Benutzer
       github_users: GitHub Benutzer
-      local_users: Erstelle (lokale) Benutzer
+      local_users: Benutzerdefiniere (lokale) Benutzer
       users_created_since_yesterday: Benutzer seit gestern erstellt
       users_updated_since_yesterday: Benutzer seit gestern aktualisiert
       users_with_projects: Benutzer mit Projekten
@@ -251,7 +274,10 @@ de:
         Danke für das Hinzufügen des Projekts! Bitte fülle den
         Rest der Informationen aus, um ein Badge zu bekommen.
       project_already_exists: Dieses Projekt existiert bereits!
-      final_text_html:
+      final_text_html: >-
+        Hinweis - Wenn sich Ihre Repository-URL auf GitHub befindet,
+        kann jeder, der das Repository begehen kann, die Abzeicheninformationen
+        bearbeiten.
       new_badge_or: ODER
       original_repos: "=> Original GitHub Repos"
       fork_repos: "=> Verstreutes GitHub Repos"
@@ -294,7 +320,15 @@ de:
       last_lost_html: Letztes verlorenes Badge auf %{when}.
       last_achieved_html: Letztes erreichtes Badge auf %{when}.
     edit:
-      submit_cc_by_3plus_html:
+      submit_cc_by_3plus_html: >-
+        Indem Sie diese Daten über das Projekt einreichen, stimmen
+        Sie einer Veröffentlichung unter mindestens <a href="https://creativecommons.org/licenses/by/3.0/us"
+        target="_blank" rel="noopener">Creative Commons Attribution
+        version 3.0 or later license (CC-BY-3.0+)</a> zu. Das
+        bedeutet, dass es Allen erlaubt ist die Daten zu teilen
+        und anzupassen, aber sie müssen einen angemessenen Erwähnung
+        geben. Sie behalten das Urheberrecht (falls vorhanden)
+        und die Projektlizenz bleibt davon unberührt.<br><br>
       save_and_continue: Speichern (und fortfahren)
       submit_and_exit: Senden (und beenden)
       repo_url_limits: Sie können Ihre repo_url nur von http auf
@@ -306,9 +340,16 @@ de:
         target="_blank" rel="noopener">Bearbeitungsformular</a>
         und kopieren Sie ihre Änderungen dorthin.
       successfully_updated: Das Projekt wurde erfolgreich aktualisiert.
-      congrats_new:
+      congrats_new: >-
+        GLÜCKWÜNSCHE zum Erwerb eines %{new_badge_level} Abzeichens!
+        Wenn du noch nicht erledigt hast, zeig bitte deinen Abzeichenstatus
+        auf deiner Projektseite (siehe "Wie man das Siegel hinzufügt"
+        im Text unten, wenn man nicht weiß wie).
       lost_badge: Das Projekt hat ein Badge verloren.
-      static_analysis_updated_html:
+      static_analysis_updated_html: >-
+        Wir haben unsere Anforderungen für das Kriterium <a href="#static_analysis">
+        static_analysis </a> aktualisiert. Bitte fügen Sie eine
+        Rechtfertigung für dieses Kriterium hinzu.
       edit_status: Bearbeiten des Projekt Badge Status
     form_basics:
       project_name:
@@ -372,9 +413,38 @@ de:
           "MIT" und "(BSD-2-Clause OR Ruby)".
         placeholder: FLOSS Lizenz
       additional_rights_changes:
-        description:
-        details_html:
-        placeholder:
+        description: >-
+          (Erweitert) Welche anderen Benutzer haben zusätzliche
+          Rechte zum Bearbeiten dieses Badge-Antrag? Derzeit:
+          %{current_rights}
+        details_html: >-
+          Die meisten Projekte sollten dieses Feld ignorieren.
+          Badge-Projekt-Einträge können immer vom Besitzer des
+          Badge-Antrag-Besitzers (Ersteller), von den BadgeApp-Administratoren
+          und von allen Personen bearbeitet werden, die sich für
+          das GitHub-Repository anmelden können (wenn es sich
+          um GitHub handelt). Wenn Sie möchten, dass jemand anderes
+          diesen Eintrag bearbeiten kann und Sie bereits über
+          Bearbeitungsrechte für diesen Projektausweiseintrag
+          verfügen, können Sie zusätzlichen Benutzern Bearbeitungsrechte
+          zuweisen. Geben Sie einfach "+" gefolgt von einer durch
+          Kommas getrennten Liste von Integer-Benutzer-IDs ein.
+          Diese Benutzer dürfen dann auch diesen Projekteintrag
+          bearbeiten. Wenn Sie Inhaber des Badge-Antrags oder
+          ein BadgeApp-Administrators sind, können Sie Benutzer
+          aus dieser Liste entfernen, indem Sie "-" gefolgt von
+          einer durch Kommas getrennten Liste von Integer-Benutzer-IDs
+          eingeben. Wir erwarten, dass normalerweise nur jeweils
+          eine Person einen bestimmten Eintrag bearbeiten wird.
+          Diese App verwendet optimistische Sperren, um das Speichern
+          veralteter Daten zu verhindern, wenn mehrere Benutzer
+          gleichzeitig versuchen, einen Eintrag zu bearbeiten.
+          Wenn Sie mehrere Editoren haben, empfehlen wir Ihnen,
+          die Eintragsdaten inkrementell und oft zu speichern
+          (das ist sowieso ratsam).
+        placeholder: >-
+          Ändern Sie mit + oder - gefolgt von einer durch Kommas
+          getrennten Benutzer-ID-Liste
     form_early:
       badge_intro:
         description: >-
@@ -461,7 +531,12 @@ de:
       dont_use_crypto: >-
         Drücken Sie hier, wenn die vom Projekt produzierte Software
         keine kryptographischen Mechanismen verwendet
-      future_header_html:
+      future_header_html: >-
+        Dies sind die Kriterien, die wir in naher Zukunft hinzufügen
+        wollen, aber für sie <em> nicht </em> relevant sind. Diese
+        Gnadenfrist ermöglicht es, Projekte auf geänderte Kriterien
+        zu aktualisieren und ihr Abzeichen zu behalten, wie es
+        die besten Praktiken verbessern.
       in_javascript:
         collapse_all_title: Alle Panels falten
         collapse_all: Panel falten
@@ -510,13 +585,38 @@ de:
         URL gefunden.'
       justification_required_warning: 'Warnung: Erfordert eine
         längere Begründung.'
-      in_development_warning_html:
+      in_development_warning_html: >-
+        <strong>Warnung!</strong> Dies ist nicht das Produktionssystem.
+        Dies ist eine Teststufe.
       close: Geschlossesn
     delete:
       done: Das Projekt wurde erfolgreich gelöscht.
     delete_form:
-      info_html:
-      rationale_placeholder:
+      info_html: >-
+        <b>Warnung</b> - Sie sind dabei, das Projekt %{project_name}
+        <b>endgültig zu löschen</b>. Dieses <b>kann nicht</b>
+        einfach rückgängig gemacht werden. Daher empfehlen wir,
+        <b>nicht</b> diesen Badge-Eintrag zu löschen. Sie müssen
+        die Badge-Kriterien nicht auf einmal ausfüllen. Die meisten
+        Projekte erhalten das Abzeichen, indem sie im Laufe der
+        Zeit fehlende Kriterien identifizieren und erfüllen. Wenn
+        Sie der Meinung sind, dass einige Kriterien keinen Sinn
+        ergeben, Sie nicht herausfinden können, wie Sie bestimmte
+        Kriterien erfüllen können oder andere Fragen haben, kontaktieren
+        Sie uns bitte. Beachten Sie, dass nicht alle Kriterien
+        erfüllt sein müssen, um ein Abzeichen zu erhalten (einige
+        Kriterien SOLLTEN erfüllt werden oder werden einfach EMPFOHLEN).
+        Wenn Sie keine Erinnerungen per E-Mail erhalten möchten,
+        bearbeiten Sie einfach den Projekteintrag und deaktivieren
+        Sie die E-Mail-Erinnerungen. Wenn Sie jedoch <i>sicher</i>
+        sind, dass Sie diesen Badge-Eintrag <i>endgültig löschen</i>,
+        erläutern Sie bitte unten, warum Sie ihn endgültig löschen
+        wollen.
+      rationale_placeholder: >-
+        (Erforderlich) Bitte erklären Sie, warum Sie dieses Projekt
+        dauerhaft löschen und, falls zutreffend, was Sie sich
+        wünschen, was wir hätten besser machen können (20+ Zeichen,
+        15+ Nicht-Leerzeichen)
       delete_action: LÖSCHEN Sie diesen Projektantrag PERMANENT!
       too_short: Muss mindestens 20 Zeichen haben.
       more_non_whitespace: Muss mindestens 15 Nicht-Leerzeichen
@@ -529,9 +629,37 @@ de:
       Vielen Dank für das Hinzufügen Ihres Projektes zum Best
       Practices Badging Programm. Für dieses Projekte haben wir
       aktuell den Namen:
-    new_project_part2:
-    new_project_part3_html:
-    new_project_part3_text:
+    new_project_part2: |-
+      Bitte besuchen Sie Ihren Abzeicheneintrag
+      Um die Informationen zu vervollständigen und dein Abzeichen zu bekommen!
+      Hier ist die URL für Ihren Abzeicheneintrag:
+    new_project_part3_html: |-
+      <p>
+      Wir ermutigen euch, Fortschritte zu machen.
+      </p>
+      <p>
+      Wenn du <em>nur</em> sehen willst, was fehlt,
+      besuche deinen Abzeicheneintrag und
+      dann klicke auf die Schaltfläche in der Nähe der Oberseite mit der Überschrift "Hide met oder N/A Kriterien"
+      Wenn Sie Fragen haben oder Hilfe benötigen, wenden Sie sich bitte an
+      <a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;</a>
+      Oder ein Problem abgeben wollen
+      <a href="https://github.com/coreinfrastruktur/best-praktiken-badge/issues">https://github.com/coreinfrastruktur/best-praktiken-badge/issues</a>
+      (Klick auf "neue Angelegenheit").
+      </p>
+      <p>
+      Danke für deine Zeit.
+      </p>
+    new_project_part3_text: |-
+      Wir ermutigen euch, Fortschritte zu machen.
+      Wenn du nur sehen möchtest, was du vermisst, besuch deinen Abzeicheneintrag und
+      dann klicke auf die Schaltfläche in der Nähe der Oberseite mit der Überschrift "Hide met oder N/A Kriterien".
+      Wenn Sie Fragen haben oder Hilfe benötigen, wenden Sie sich bitte an
+      Cii-badges-questions-owner@lists.coreinfrastructure.org
+      Oder ein Problem abgeben wollen
+      Https://github.com/coreinfrastruktur/best-praktiken-badge/issues
+      (Klick auf "neue Angelegenheit").
+      Danke für deine Zeit.
     in_markdown_add: 'Im Markdown kannst du dies hinzufügen:'
     in_html_add: 'In HTML kannst du das hinzufügen:'
     ending: >-
@@ -565,9 +693,81 @@ de:
       Eines unserer Ziele ist es, Projekte zu ermutigen, Verbesserungen vorzunehmen.
       Wir haben einige dieser Berichte in das öffentliche Wiki gestellt. informieren Sie uns bitte wenn Sie nicht wollen, dass die Änderungen veröffentlicht werden https://github.com/coreinfrastruktur/best-praktiken-badge/wiki/Impacts
       Danke und Herzlichen Glückwünsch.
-    lost_level_message:
-    reminder_body_html:
-    reminder_body_text:
+    lost_level_message: |-
+      Es tut uns leid, aber dein Projekt hat nicht mehr das Abzeichen "%{old_level}"
+      Und ist jetzt "%{new_level}".
+      Bitte beachten Sie die folgende URL für weitere Informationen:
+    reminder_body_html: |-
+      <h1> Automatische Best Practices-Badge-Erinnerung für %{project_name} </h1>
+      <p>
+      Dies ist eine automatische Erinnerung, dass Ihr Projekt
+      "%{project_name}"
+      derzeit kein "Best Practices"-Abzeichen hat
+      und sein Eintrag wurde seit einiger Zeit nicht mehr aktualisiert.
+      </p>
+      <p>
+      Ihr Best Practices-Ausweiseintrag befindet sich bei
+      <a href="%{project_info_url}">%{project_info_url}</a>
+      und wurde zuletzt am %{project_updated_at} aktualisiert.
+      Er liegt derzeit bei %{project_badge_percentage_0}% (von 100%).
+      </p>
+      <p>
+      Wir ermutigen Sie, weitere Fortschritte zu machen.
+      Bitte besuchen Sie Ihren Eintrag unter
+      <a href="%{project_info_url}"> %{project_info_url} </a>
+      um die Informationen zu vervollständigen und Ihr Abzeichen zu erhalten!
+      </p>
+      <p>
+      Wenn Sie <em> nur </em> sehen möchten, was Ihnen noch fehlt, besuchen Sie Ihren Eintrag,
+      Wählen Sie die Schaltfläche im oberen Bereich mit der Aufschrift "Alle Felder einblenden" und
+      Wählen Sie dann die Schaltfläche oben mit der Aufschrift "Hide met or N/A criteria".
+      Wenn Sie Fragen haben oder Hilfe benötigen, wenden Sie sich bitte an
+      <a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;</a>
+      oder ein Problem melden wollen
+      <a href="https://github.com/coreinfrastructure/best-practices-badge/issues"> https://github.com/coreinfrastructure/best-practices-badge/issues </a>
+      (Klicken Sie auf "Neue Angelegenheit").
+      </p>
+      <p>
+      Wir senden keine Erinnerungen, wenn Sie weiterhin Ihren Badge-Eintrag aktualisieren.
+      und wir senden nur ungefähr alle 30-60 Tage Erinnerungen. Jedoch,
+      Wenn Sie diese Erinnerungsnachrichten deaktivieren möchten, bearbeiten Sie Ihren Eintrag unter
+      <a href="%{project_info_url}"> %{project_info_url} </a>
+      um "Inaktivitätsanzeige deaktivieren" zu aktivieren.
+      Wir hoffen, dass Sie stattdessen weiter daran arbeiten
+      und schließlich das Abzeichen sich verdienen.
+      </p>
+      <p>
+      Vielen Dank für Ihre Zeit.
+      </p>
+    reminder_body_text: |-
+      Dies ist eine automatische Erinnerung, dass Ihr Projekt
+      "%{project_name}"
+      derzeit kein "Best Practices" -Abzeichen hat
+      und sein Eintrag wurde seit einiger Zeit nicht mehr aktualisiert.
+      Ihr Best Practices Eintrag befindet sich bei
+      %{project_info_url}
+      und wurde zuletzt am %{project_updated_at} aktualisiert
+      Es ist derzeit bei %{project_badge_percentage_0}% (von 100%).
+      Wir ermutigen Sie, weitere Fortschritte zu machen.
+      Bitte besuchen Sie Ihren Eintrag unter
+      %{project_info_url}
+      um die Informationen zu vervollständigen und Ihr Abzeichen zu erhalten!
+      Wenn Sie nur sehen möchten, was Ihnen fehlt, besuchen Sie Ihren Eintrag,
+      wählen Sie die Schaltfläche im oberen Bereich mit der Aufschrift "Alle Felder einblenden" und
+      Wählen Sie dann die Schaltfläche oben mit der Aufschrift "Hide met or N/A criteria".
+      Wenn Sie Fragen haben oder Hilfe benötigen, wenden Sie sich bitte an
+      cii-badges-questions-owner@lists.coreinfrastructure.org
+      oder ein Problem melden wollen bei
+      https://github.com/coreinfrastructure/best-practices-badge/issues
+      (Klicken Sie auf "Neue Angelegenheit").
+      Wir senden keine Erinnerungen, wenn Sie weiterhin Ihren Badge-Eintrag aktualisieren.
+      und wir senden nur ungefähr alle 30-60 Tage Erinnerungen. Jedoch,
+      Wenn Sie diese Erinnerungsnachrichten deaktivieren möchten, bearbeiten Sie Ihren Eintrag unter
+      %{project_info_url}
+      um "Inaktivitätsanzeige deaktivieren" zu aktivieren.
+      Wir hoffen, dass Sie stattdessen weiter daran arbeiten
+      und schließlich das Abzeichen verdienen.
+      Vielen Dank für Ihre Zeit.
   user_mailer:
     account_activation:
       before_html: |-
@@ -577,12 +777,30 @@ de:
         Willkommen beim Badging Program!
         klicke auf den Link unten, um dein Konto zu aktivieren:
         </p>
-      before_text:
+      before_text: |-
+        Hallo,
+        Willkommen beim CII Best Practices Badging Programm!
+        Wählen Sie den Link unten aus, um Ihr Konto zu aktivieren:
       activate: Aktivieren
       subject: Kontoaktivierung
     github_welcome:
-      before_html:
-      before_text:
+      before_html: |-
+        <h1>CII Best Practices Badging Programm</h1>
+        <p> Hallo, </p>
+        <p>
+        Vielen Dank für die Verbindung deines GitHub-Kontos und willkommen
+        Zum CII Best Practices Badging Programm!
+        </p>
+        <p>
+        Wenn Sie diese Aktion nicht eingeleitet haben, überprüfen Sie bitte Ihre GitHub
+        Sicherheitsprotokoll unter Einstellungen&gt;Sicherheit.
+        </p>
+      before_text: |-
+        Hallo,
+        Vielen Dank für die Verbindung deines GitHub-Kontos und willkommen bei der
+        CII Best Practices Badging Programm!
+        Wenn Sie diese Aktion nicht eingeleitet haben, überprüfen Sie bitte Ihre GitHub Sicherheitseinstellungen
+        Bei GitHub anmelden und unter Einstellungen>Sicherheit suchen.
       subject: Willkommen beim Badge Programm
     user_update:
       before_text: Einige der Benutzerdaten für dein Konto wurden
@@ -601,8 +819,18 @@ de:
         <p>Um dein Passwort zurückzusetzen, klicke auf den Link unten:</p>
       before_text: 'Um dein Passwort zurückzusetzen, klicke auf
         den Link:'
-      after_html:
-      after_text:
+      after_html: |-
+        <p> Dieser Link läuft in zwei Stunden ab. </p>
+        <p>
+        Wenn Sie nicht aufgefordert haben, Ihr Passwort zurückzusetzen,
+        Bitte ignoriere diese E-Mail und
+        Ihr Passwort bleibt so wie es ist.
+        </p>
+      after_text: |-
+        Dieser Link läuft in zwei Stunden ab.
+        Wenn Sie nicht angefordert haben Ihr Passwort zurückzusetzen,
+        ignorieren Sie diese E-Mail bitte und
+        Ihr Passwort bleibt so wie es ist.
       subject: Passwort zurückgesetzt
       reset_password: Passwort Zurücksetzen
   criteria:
@@ -855,14 +1083,14 @@ de:
           jede Freigabe mit git-Tags identifizieren.
       release_notes:
         description: >-
-          Das Projekt MUSS zu jedem Update Patchnotes enthalten,
+          Das Projekt MUSS zu jedem Update Releasenotes enthalten,
           die eine lesbare Zusammenfassung der wichtigsten Änderungen
           der Version sind, damit Benutzer/innen sehen können,
           ob sie aktualisieren sollten und was die Auswirkungen
-          des Updades sind. Die Patchnotes MÜSSEN NICHT die Rohausgabe
-          eines Versionskontrollprotokolls sein (z.B. die "git
-          log" Befehlsergebnisse sind keine Release Notes). Für
-          Projekte, deren Ergebnisse nicht für die Wiederverwendung
+          des Updades sind. Die Releasenotes MÜSSEN NICHT die
+          Rohausgabe eines Versionskontrollprotokolls sein (z.B.
+          die "git log" Befehlsergebnisse sind keine Release Notes).
+          Für Projekte, deren Ergebnisse nicht für die Wiederverwendung
           an mehreren Standorten bestimmt sind (z.B. die Software
           für eine einzelne Website oder Dienstleistung) und eine
           kontinuierliche Lieferung verwenden, können Sie "N/A"
@@ -1597,35 +1825,34 @@ de:
       dco:
         description: >-
           Das Projekt SOLLTE einen rechtlichen Mechanismus haben,
-          wo alle Entwickler von nicht-trivialen Mengen von Projekt-Software
-          behaupten, dass sie rechtlich ermächtigt sind, diese
-          Beiträge zu machen. Der häufigste und leicht umsetzbare
-          Ansatz, um dies zu tun, ist die Verwendung eines <a
-          href="http://developercertificate.org/"> Developer Certificate
-          of Origin (DCO) </a>, wo Benutzer "signed-off-by" in
-          ihren Commits und die Projektlinks zur DCO-Website hinzufügen.
-          Allerdings, dies DARF als Contributor License Agreement
-          (CLA) oder als  ein anderer rechtlicher Mechanismus
-          implementiert werden.
+          wo alle Entwickler von nicht-trivialen Beiträgen versichern,
+          dass sie rechtlich ermächtigt sind, diese Beiträge zu
+          machen. Der häufigste und leicht umsetzbare Ansatz,
+          ist die Verwendung eines <a href="http://developercertificate.org/">
+          Developer Certificate of Origin (DCO) </a>, wo Benutzer
+          "signed-off-by" in ihren Commits und die Projektlinks
+          zur DCO-Website hinzufügen. Allerdings, dies DARF als
+          Contributor License Agreement (CLA) oder als  ein anderer
+          rechtlicher Mechanismus implementiert werden.
         details: >-
           Die DCO ist der empfohlene Mechanismus, weil er einfach
           zu implementieren ist, im Quellcode verfolgt wird und
-          git direkt eine "signed-off" Funktion mit "commit-s"
+          git direkt eine "signed-off" Funktion mit "commit -s"
           unterstützt. Um am effektivsten zu sein, ist es am besten,
           wenn die Projektdokumentation erklärt, was "signed-off"
           für dieses Projekt bedeutet. Eine CLA ist eine rechtliche
           Vereinbarung, die die Bedingungen definiert, unter denen
           intellektuelle Werke an eine Organisation oder ein Projekt
-          lizenziert wurden. Ein Contributor assignment agreement
+          lizenziert wurden. Ein Contributor Assignment Agreement
           (CAA) ist eine gesetzliche Vereinbarung, die die Rechte
           an einer intellektuellen Arbeit an eine andere Person
-          überträgt; Projekte müssen keine CAAs zu haben, da CAA
+          überträgt; Projekte müssen keine CAAs haben, da CAA
           das Risiko erhöht, dass potenzielle Mitwirkende nicht
           dazu beitragen werden, vor allem, wenn der Empfänger
-          eine gemeinnützige Organisation ist. Die <a href="https://www.apache.org/licenses/">
+          eine gewinnorientierte Organisation ist. Die <a href="https://www.apache.org/licenses/">
           Apache Software Foundation CLAs (die individuelle Contributor-Lizenz
           und die Corporate CLA) </a> sind Beispiele für CLAs,
-          für Projekte, die bestimmen, dass die Risiken dieser
+          für Projekte, die bestimmt haben, dass die Risiken dieser
           CLAs für das Projekt geringen sind als ihre Vorteile.
       governance:
         description: >-
@@ -1790,14 +2017,48 @@ de:
           damit Personen mit Behinderungen noch an dem Projekt
           teilnehmen und die Projektergebnisse nutzen können,
           wo es vernünftig ist.
-        details: |-
-          Für Webanwendungen siehe <a href="https://www.w3.org/TR/WCAG20/">Web Content Accessibility Guidelines (WCAG 2.0)</a> und dessen Beleg <a href="https://www.w3.org/TR/UNDERSTANDING-WCAG2/Overview.html">Unternehmen WCAG 2.0</a>; Siehe auch <a href="https://www.w3.org/standards/webdesign/accessibility">W3C accessibility</a>. Für GUI-Anwendungen sollten Sie die umweltbezogenen Barrierefreiheitsrichtlinien verwenden (z.B. <a href="https://developer.gnome.org/accessibility-devel-guide/stable/">Gnome</a>, <a href="https://accessibility.kde.org/">KDE</a>, <a href="http://docs.xfce.org/xfce/xfce4-settings/accessibility">XFCE</a>, <a href="https://developer.android.com/guide/topics/ui/accessibility/">Android</a>, <a href="https://developer.apple.com/accessibility/ios/">iOS </a>, <a href="http://www.apple.com/accessibility/osx/voiceover/">Mac</a> und <a href="https://msdn.microsoft.com/en-us/windows/uwp/accessibility/accessibility-overview">Windows</a>). Einige TUI-Anwendungen (z.B. "ncurses"-Programme) können bestimmte Dinge ausführen, um sich selbst zugänglicher zu machen (z.B. "alpine"'s "force-arrow-cursor" -Einstellung). Die meisten Kommandozeilen-Anwendungen sind ziemlich unzugänglich. Dieses Kriterium ist oft N/A, z.B. für Programmbibliotheken. Hier sind einige Beispiele, welche Maßnahmen zu ergreifen oder Fragen zu berücksichtigen sind: <ul> <li> Stellen Sie Text Alternativen für alle Nicht-Text-Inhalte zur Verfügung so
-            Dass es dieser in andere Formen umgewandelt werden kann, wie z.B.
-            Großdruck, Blindenschrift, Sprache, Symbole oder einfachere Sprache (<a href="https://www.w3.org/TR/UNDERSTANDING-WCAG20/text-equiv.html"> WCAG 2.0-Richtlinie 1.1</a>)
-          <li>Farbe ist nicht das einzige Mittel um Informationen zu übermitteln, die eine Aktion angeben, eine Antwort auffordern oder in visuelles Element zu unterscheiden. (<a href="https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio contrast-without-color.html">WCAG 2.0 Richtlinie 1.4.1</a>)
-          <li> Die visuelle Darstellung von Text und Textbildern hat einen Kontrast Verhältnis von mindestens 4,5: 1, außer für großen Text, nebensächlichen Text, und Logos(<a href="https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast-contrast.html">WCAG 2.0 Richtlinie 1.4.3</a>)
-          <li>Machen Sie alle Funktionalitäten von einer Tastatur aus (WCAG-Richtlinie 2.1) <li>Ein GUI oder ein webbasiertes Projekt SOLLTE mit mindestens einem Screen-Reader auf der Zielplattform(en) testen (z.B. NVDA, Jaws, oder WindowEyes auf Windows; VoiceOver auf Mac & iOS; Orca auf Linux/BSD; TalkBack auf Android). TUI-Programme DÜRFEN arbeiten, um die Überziehung zu reduzieren, um eine redundante Lesung durch Screenreader zu verhindern.
-          </ul>
+        details: >-
+          Für Webanwendungen siehe <a href="https://www.w3.org/TR/WCAG20/">Web
+          Content Accessibility Guidelines (WCAG 2.0)</a> und
+          dessen unterstützendes Dokument <a href="https://www.w3.org/TR/UNDERSTANDING-WCAG2/Overview.html">Understanding
+          WCAG 2.0</a>; Siehe auch <a href="https://www.w3.org/standards/webdesign/accessibility">W3C
+          accessibility information</a>. Für GUI-Anwendungen sollten
+          Sie die umweltbezogenen Barrierefreiheitsrichtlinien
+          verwenden (z.B. <a href="https://developer.gnome.org/accessibility-devel-guide/stable/">Gnome</a>,
+          <a href="https://accessibility.kde.org/">KDE</a>, <a
+          href="http://docs.xfce.org/xfce/xfce4-settings/accessibility">XFCE</a>,
+          <a href="https://developer.android.com/guide/topics/ui/accessibility/">Android</a>,
+          <a href="https://developer.apple.com/accessibility/ios/">iOS
+          </a>, <a href="http://www.apple.com/accessibility/osx/voiceover/">Mac</a>
+          und <a href="https://msdn.microsoft.com/en-us/windows/uwp/accessibility/accessibility-overview">Windows</a>).
+          Einige TUI-Anwendungen (z.B. `ncurses`-Programme) können
+          bestimmte Dinge ausführen, um sich selbst zugänglicher
+          zu machen (z.B. `alpine`'s `force-arrow-cursor`-Einstellung).
+          Die meisten Kommandozeilen-Anwendungen sind ziemlich
+          unzugänglich. Dieses Kriterium ist oft N/A, z.B. für
+          Programmbibliotheken. Hier sind einige Beispiele, welche
+          Maßnahmen zu ergreifen oder Fragen zu berücksichtigen
+          sind: <ul><li> Stellen Sie Text Alternativen für alle
+          Nicht-Text-Inhalte zur Verfügung, so dass dieser in
+          andere Formen umgewandelt werden kann, wie z.B. Großdruck,
+          Blindenschrift, Sprache, Symbole oder einfachere Sprache
+          (<a href="https://www.w3.org/TR/UNDERSTANDING-WCAG20/text-equiv.html">
+          WCAG 2.0-guideline 1.1</a>)</li><li>Farbe ist nicht
+          das einzige Mittel um Informationen zu übermitteln,
+          die eine Aktion anzeigen, zu einer Eingabe auffordern
+          oder visuelle Elemente unterscheiden. (<a href="https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast-without-color.html">WCAG
+          2.0 guideline 1.4.1</a>)</li><li> Die visuelle Darstellung
+          von Text und Textbildern hat einen Kontrast Verhältnis
+          von mindestens 4,5:1, außer für großen Text, nebensächlichen
+          Text, und Logos(<a href="https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast-contrast.html">WCAG
+          2.0 guideline 1.4.3</a>)</li><li>Machen Sie alle Funktionalitäten
+          von einer Tastatur aus erreichbar (WCAG guideline 2.1)
+          </li><li>Ein GUI oder ein webbasiertes Projekt SOLLTE
+          mit mindestens einen Screen-Reader auf der Zielplattform(en)
+          testen (z.B. NVDA, Jaws oder WindowEyes auf Windows;
+          VoiceOver auf Mac & iOS; Orca auf Linux/BSD; TalkBack
+          auf Android). TUI-Programme DÜRFEN die Übermalung reduzieren,
+          um eine redundante Lesung durch Screenreader zu verhindern.</li></ul>
       internationalization:
         description: >-
           Die Projektsoftware SOLLTE internationalisiert werden,
@@ -1857,11 +2118,11 @@ de:
           einzelner Issues verwenden.
       vulnerability_report_credit:
         description: >-
-          Das Projekt MUSS dem/der Reporter/in alle in den letzten
-          12 Monaten beschlossenen Schwachstellenberichte mitteilen,
-          mit Ausnahme der Reporter, die Anonymität anfordern.
-          Wurde in den letzten 12 Monaten keine Schwachstelle
-          festgestellt, wählen Sie "nicht anwendbar" (N/A).
+          Das Projekt MUSS die Reporter/in von allen in den letzten
+          12 Monaten bekanntgegebenen Schwachstellenberichte aufführen,
+          mit Ausnahme der Reporter, die Anonymität erbeten. Wurde
+          in den letzten 12 Monaten keine Schwachstelle festgestellt,
+          wählen Sie "nicht anwendbar" (N/A).
       vulnerability_response_process:
         description: >-
           Das Projekt MUSS den Prozess für die Meldung von Schwachstellen
@@ -1921,9 +2182,9 @@ de:
           werden, wählen Sie "nicht anwendbar" (N/A).
         details: >-
           Es sollte einfach sein, spezielle Build-Features wie
-          Address Sanitizer (ASAN) zu aktivieren, oder Verteilungshärtung
-          bewährte Verfahren einzuhalten (z.B. durch einfaches
-          Einschalten von Compiler-Flags, um dies zu tun).
+          Address Sanitizer (ASAN) zu aktivieren, oder verteilte
+          und bewährte Best Practices einzuhalten (z.B. durch
+          einfaches Einschalten von Compiler-Flags).
       build_preserve_debug:
         description: >-
           Das Build- und Installationssystem SOLLTE Debugging-Informationen
@@ -1949,18 +2210,17 @@ de:
           ist (z.B. typische JavaScript-Bibliotheken), wählen
           Sie "nicht anwendbar" (N / A).
         details: >-
-          Die interne Abhängigkeitsvermerke des Build-Systems
-          des Projektes müssen genau sein, andernfalls können
+          Die interne Abhängigkeitsinformationen des Build-Systems
+          des Projektes müssen präzise sein, andernfalls können
           Änderungen an dem Projekt nicht korrekt erfolgen. Falsche
-          Aufbaustrukturen können zu Defekten (einschließlich
-          Schwachstellen) führen. Ein häufiger Fehler bei großen
-          Build-Systemen ist die Verwendung eines "rekursiven
-          Builds" oder "rekursiven Make", d.h. einer Hierarchie
-          von Unterverzeichnissen, die Quelldateien enthalten,
-          wobei jedes Unterverzeichnis unabhängig aufgebaut ist.
-          Es sei denn, jedes Unterverzeichnis ist völlig unabhängig,
-          das ist ein Fehler, da die Abhängigvermerke nicht korrekt
-          sind.
+          Builds können zu Defekten (einschließlich Schwachstellen)
+          führen. Ein häufiger Fehler bei großen Build-Systemen
+          ist die Verwendung eines "rekursiven Builds" oder "rekursiven
+          Make", d.h. einer Hierarchie von Unterverzeichnissen,
+          die Quelldateien enthalten, wobei jedes Unterverzeichnis
+          unabhängig aufgebaut ist. Es sei denn, jedes Unterverzeichnis
+          ist völlig unabhängig, was ist ein Fehler ist, da die
+          Abhängigkeitsinformationen nicht korrekt sind.
       build_repeatable:
         description: >-
           Das Projekt MUSS in der Lage sein, den Prozess der Generierung
@@ -1982,21 +2242,22 @@ de:
           einer häufig verwendeten Methode.
         details: >-
           Beispiele hierfür sind die Verwendung eines Paketmanagers
-          (auf der System- oder Sprachniveaus), "make install
-          / uninstall" (unterstützt DESTDIR), einem Container
-          im Standardformat oder ein virtuelles Maschinenbild
-          im Standardformat. Der Installations- und Deinstallationsvorgang
-          (z.B. seine Verpackung) DARF von einem/einer Dritten
-          implementiert werden, solange es FLOSS ist.
+          (auf dem System- oder Sprachniveaus), "make install/uninstall"
+          (unterstützt DESTDIR), einem Container im Standardformat
+          oder ein virtuelles Maschinenbild im Standardformat.
+          Der Installations- und Deinstallationsvorgang (z.B.
+          seine Verpackung) DARF von einem/einer Dritten implementiert
+          werden, solange es FLOSS ist.
       installation_standard_variables:
         description: >-
-          Das Installationssystem für den/die Endbenutzer/in muss
-          Standardkonventionen zur Auswahl des Standorts, in dem
+          Das Installationssystem für den/die Endbenutzer/in MUSS
+          Standardkonventionen zur Auswahl des Zielortes, in dem
           gebildete Artefakte zur Installationszeit geschrieben
-          werden, ehren. Zum Beispiel, wenn es Dateien auf einem
+          werden, folgen. Zum Beispiel, wenn es Dateien auf einem
           POSIX-System installiert, muss es die DESTDIR-Umgebungsvariable
-          ehren. Wenn es kein Installationssystem oder keine Standardkonvention
-          gibt, wählen Sie "nicht anwendbar" (N / A).
+          verwenden. Wenn es kein Installationssystem oder keine
+          Standardkonvention gibt, wählen Sie "nicht anwendbar"
+          (N/A).
       installation_development_quick:
         description: >-
           Das Projekt MUSS einen Weg für potenzielle Entwickler
@@ -2006,10 +2267,10 @@ de:
           Dies MUSS mit einer gängigen Methode durchgeführt werden
           können.
         details: >-
-          Dies kann mit einem generierten Container- und/oder
+          Dies DARF mit einem generierten Container- und/oder
           Installationsskript(en) implementiert werden. Externe
           Abhängigkeiten würden typischerweise durch das Aufrufen
-          von System- und/oder Sprachpaketmanager(n), per externen_dependenzen
+          von System- und/oder Sprachpaketmanager(n), als external_dependencies,
           installiert.
       external_dependencies:
         description: >-
@@ -2052,8 +2313,8 @@ de:
           ist die Verwendung von System- und Programmiersprachen-Paketverwaltungssystemen.
           Viele FLOSS-Programme werden mit "Convenience-Bibliotheken"
           ausgestattet, die lokale Kopien der Standardbibliotheken
-          (ggf. gegabelt) sind. Prinzipiell ist das gut. Wenn
-          jedoch das Programm diese lokalen (gegabelten) Kopien
+          (ggf. geforkt) enthalten. Prinzipiell ist das gut. Wenn
+          jedoch das Programm diese lokalen (geforkten) Kopien
           verwenden *muss*, dann wird die Aktualisierung der "Standard"-Bibliotheken,
           als Sicherheitsupdate, diese zusätzlichen Kopien immer
           noch verwundbar lassen. Dies ist vor allem ein Problem
@@ -2101,10 +2362,10 @@ de:
           ein starker Indikator für eine schlechte Test-Suite.
       test_policy_mandated:
         description: >-
-          Das Projekt MUSS eine formale schriftliche Richtlinie,
-          die als wichtige neue Funktionalität hinzugefügt wird,
-          Tests für die neue Funktionalität MÜSSEN zu einer automatisierten
-          Test-Suite hinzugefügt werden.
+          Das Projekt MUSS eine formale schriftliche Richtlinie
+          dazu haben, wie wichtige neue Funktionalität hinzugefügt
+          werden. Tests für die neue Funktionalität MÜSSEN zu
+          einer automatisierten Test-Suite hinzugefügt werden.
       tests_documented_added:
         description: >-
           Das Projekt MUSS in seinen dokumentierten Anweisungen
@@ -2155,13 +2416,13 @@ de:
           sein.
       hardening:
         description: >-
-          Härtungsmechanismen SOLLTEN in der Projektsoftware verwendet
-          werden, so dass Softwarefehler weniger wahrscheinlich
-          zu Sicherheitslücken führen.
+          Härtungsmechanismen SOLLTEN in der Software, die das
+          Project entwickelt, verwendet werden, so dass Softwarefehler
+          weniger wahrscheinlich zu Sicherheitslücken führen.
         details: >-
           Härtungsmechanismen können HTTP-Header enthalten wie
-          Content Security Policy (CSP), oder Compiler-Flags,
-          um Angriffe (wie -Fackerschutz) zu mildern, oder Compiler-Flags,
+          Content Security Policy (CSP), oder Compiler-Flags (z.B.
+          -fstack-protector), um Angriffe zu mildern, oder Compiler-Flags,
           um undefiniertes Verhalten zu eliminieren. Für unsere
           Zwecke wird das höchste Privileg nicht als Verhärtungsmechanismus
           betrachtet (das kleinste Privileg ist wichtig, aber
@@ -2235,14 +2496,14 @@ de:
           (N/A).
       signed_releases:
         description: >-
-          Das Projekt MUSS kryptographisch Releases der Projektergebnisse
-          aufzeichnen, die für weit verbreitete Verwendung gedacht
-          sind, und dort muss ein dokumentierter Prozess sein,
-          der den Benutzern/innen erklärt, wie sie die öffentlichen
-          Signaturschlüssel erhalten und die Signatur(en) überprüfen
-          können. Der private Schlüssel für diese Signatur(en)
-          DARF NICHT vor Ort verwendet werden, um die Software
-          direkt an die Öffentlichkeit zu geben. Wenn Releases
+          Das Projekt MUSS kryptographisch unterschriebene Releases
+          der Projektergebnisse aufzeichnen, die für weit verbreitete
+          Verwendung gedacht sind, und es MUSS ein dokumentierter
+          Prozess sein, der den Benutzern/innen erklärt, wie sie
+          die öffentlichen Signaturschlüssel erhalten und die
+          Signatur(en) überprüfen können. Der private Schlüssel
+          für diese Signatur(en) MUSS NICHT auf der Seite(n) verwendet
+          werden, die öffentlich zugänglich sind. Wenn Releases
           nicht für eine weit verbreitete Verwendung bestimmt
           sind, wählen Sie "nicht anwendbar" (N/A).
         details: >-
@@ -2282,20 +2543,20 @@ de:
           ist, wählen Sie "nicht anwendbar" (N/A).
       assurance_case:
         description: >-
-          Das Projekt muss einen Versicherungsfall bereithalten,
-          der rechtfertigt, warum die Sicherheitsanforderungen
-          erfüllt sind. Der Versicherungsfall muss Folgendes beinhalten:
+          Das Projekt MUSS einen "Assurance Case" bereithalten,
+          der rechtfertigt, wie die Sicherheitsanforderungen erfüllt
+          werden. Der Assurance Case muss folgendes beinhalten:
           eine Beschreibung des Bedrohungsmodells, eine eindeutige
-          Identifizierung von Vertrauensgrenzen, ein Argument,
-          dass sichere Designprinzipien angewendet wurden, und
-          ein Argument, dass die üblichen Implementierungssicherheitsschwächen
+          Identifizierung von Vertrauensgrenzen, eine Beschreibung
+          wie sichere Designprinzipien angewendet wurden, und
+          eine Beschreibung wie die üblichen Implementierungssicherheitsschwächen
           beseitige wurden.
         details: >-
-          Ein Versicherungsfall ist "ein dokumentierter Beweis,
+          Ein "Assurance Case" ist ein dokumentierter Beweis,
           der ein überzeugendes und gültiges Argument enthällt,
           dass ein bestimmter Satz kritischer Ansprüche bezüglich
           der Eigenschaften eines Systems für eine gegebene Anwendung
-          in einer gegebenen Umgebung hinreichend erfüllt ist"
+          in einer gegebenen Umgebung hinreichend erfüllt ist
           (<a href="http://Nvlpubs.nist.gov/nistpubs/ir/2009/ir7608.pdf">"Software
           Assurance Using Structured Assurance Case Models", Thomas
           Rhodes et al., NIST Interagency Report 7608 </a>). Vertrauensgrenzen
@@ -2304,7 +2565,7 @@ de:
           Webanwendung. Es ist üblich, sichere Designprinzipien
           (wie Saltzer und Schroeer) und gemeinsame Implementierungssicherheitsschwächen
           (wie die OWASP Top 10 oder CWE/SANS Top 25) aufzurufen
-          und zu zeigen, wie dieser entgegengewirkt wird. Die
+          und zu zeigen, wie diesen entgegengewirkt wird. Die
           <a href="https://github.com/coreinfrastructure/best-practices-badge/blob/master/doc/security.md">
           BadgeApp Assurance Case </a> kann ein nützliches Beispiel
           sein. Dies bezieht sich auf documentation_security,
@@ -2430,8 +2691,8 @@ de:
       build_reproducible:
         description: >-
           Das Projekt MUSS ein <a href="https://reproducible-builds.org/">
-          repoducible Build </a> haben. Wenn kein Building auftritt
-          (z.B. Skriptsprachen, in denen der Quellcode direkt
+          reproducible Build </a> haben. Wenn kein Building erforderlich
+          ist (z.B. Skriptsprachen, in denen der Quellcode direkt
           verwendet wird, anstatt kompiliert zu werden), wählen
           Sie "nicht anwendbar" (N/A).
         details: >-
@@ -2472,9 +2733,9 @@ de:
           in der ausgewählten Programmiersprache messen kann.
       test_branch_coverage80:
         description: >-
-          Das Projekt MUSS FLOSS automatisierte Test-Suite(s),
-          die mindestens 80% Zweig-Abdeckung, wenn es mindestens
-          ein FLOSS-Tool, das dieses Kriterium in der ausgewählten
+          Das Projekt MUSS automatisierte FLOSS Test-Suite(s)
+          mit mindestens 80% Zweig-Abdeckung haben, wenn es mindestens
+          ein FLOSS-Tool gibt, das dieses Kriterium in der ausgewählten
           Sprache messen kann.
       crypto_used_network:
         description: >-
@@ -2598,8 +2859,14 @@ de:
       current_criteria: >-
         Aktuelle Anzahl der Kriterien: %{active} (aktiv) + %{future}
         (Zukunft) = %{total} (gesamt).
-      criteria_must_should_suggested:
-      criteria_na_met_details:
+      criteria_must_should_suggested: >-
+        Unter den aktiven Kriterien sind %{must} MUSS, %{should}
+        SOLL und %{suggested} EMPFOHLENE Kriterien.
+      criteria_na_met_details: >-
+        Unter den aktiven Kriterien ermöglichen %{na_allowed}
+        N/A, %{met_url_required} erfordern eine URL, wenn sie
+        erfüllt sind und %{details_present} haben Details in ihrer
+        Beschreibung.
       project_counts: >-
         Es gibt %{projects} Projekteinträge; %{passing} sind vorbei
         und %{in_progress} sind im Prozess.
@@ -2628,11 +2895,54 @@ de:
       details: Beinhaltet Details
       future: Zukünftige
       new_this_level: Neu auf diesem Level
-      met_justification_required:
-      met_justification_or_url_required:
+      met_justification_required: Kriterium erfüllen erforderlich
+      met_justification_or_url_required: Kriterium erfüllen oder
+        URL erforderlich
     cookies:
       cookies_header: Über Cookies
-      cookies_info_html:
+      cookies_info_html: >-
+        <p> Damit diese Seite richtig funktioniert, speichern
+        wir manchmal kleine Dateien namens Cookies auf Ihrem Gerät
+        ab. Viele Websites tun dies. </p> <p> Ein Cookie ist eine
+        kleine Textdatei, die eine Website beim Besuch der Website
+        auf Ihrem Computer (einschließlich Ihres mobilen Geräts)
+        speichert. Es erlaubt der Website, sich über einen bestimmten
+        Zeitraum an Ihre Aktionen und Präferenzen (wie Login,
+        Sprache, Schriftgröße und andere Anzeigeeinstellungen)
+        zu erinnern, sodass Sie sie nicht jedes Mal neu eingeben
+        müssen, wenn Sie auf die Website zurückkehren oder von
+        einer Seite zur anderen blättern. Cookies sind ein Standardbestandteil
+        des HTTP-Protokolls, das das World Wide Web (WWW) implementiert
+        und in <a href="https://tools.ietf.org/html/rfc6265">
+        RFC 6265 </a> spezifiziert ist. </p> <p> Wenn Sie sich
+        anmelden, verwenden wir "Sitzungs" -Cookies von Erstanbietern.
+        Sitzungscookies laufen per Definition ab, wenn Sie Ihren
+        Browser verlassen oder sich abmelden. Wenn Sie "Angemeldet
+        bleiben"  aktivieren, speichern wir auch Informationen
+        in einem "dauerhaften" Cookie in Ihrem Browser, damit
+        wir Sie auch nach Verlassen und Rückkehr zur Website wieder
+        automatisch anmelden können. Wenn Sie andere Websites
+        (wie GitHub) zur Authentifizierung für diese Website verwenden,
+        verwenden diese anderen Websiten wahrscheinlich Cookies
+        (und es betrifft Sie, was sie mit Cookies tun). Bitte
+        beachten Sie, dass wir nicht kontrollieren können, was
+        andere Websites tun. </p> <p> Die von uns gesetzten Cookies
+        werden nur zur Unterstützung von Funktionen verwendet,
+        die mit dieser Site in Verbindung stehen. Die Zustimmung
+        kann zurückgezogen werden - löschen Sie einfach die Cookies
+        in Ihrem Browser. Sie können Cookies nach Belieben steuern
+        und/oder löschen. Weitere Informationen finden Sie unter
+        <a href="https://www.aboutcookies.org"> cookies.org </a>.
+        Sie können alle Cookies löschen, die sich bereits auf
+        Ihrem Computer befinden, und Sie können die meisten Browser
+        so einstellen, dass sie nicht platziert werden. Wenn Sie
+        dies jedoch tun, müssen Sie möglicherweise bei jedem Besuch
+        einer Site einige Einstellungen manuell anpassen, und
+        einige Dienste und Funktionen funktionieren möglicherweise
+        nicht. Insbesondere ist die Anmeldung auf dieser Seite
+        von Sitzungscookies abhängig (auf dieser und vielen anderen
+        Seiten). </p> <p> Dieser Text soll den "Cookie-Gesetzen"
+        des Vereinigten Königreichs und der EU genügen. </p>
   headings:
     Accessibility and internationalization: Zugänglichkeit und
       Internationalisierung

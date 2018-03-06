@@ -24,6 +24,7 @@ task(:default).clear.enhance %w[
   yaml_syntax_check
   html_from_markdown
   eslint
+  report_code_statistics
   test
 ]
 # Temporarily removed fasterer
@@ -38,6 +39,7 @@ task(:ci).clear.enhance %w[
   license_finder_report.html
   whitespace_check
   yaml_syntax_check
+  report_code_statistics
 ]
 # Temporarily removed fasterer
 
@@ -75,6 +77,24 @@ end
 desc 'Run bundle doctor - check for some Ruby gem configuration problems'
 task :bundle_doctor do
   sh 'bundle doctor'
+end
+
+desc 'Report code statistics'
+task :report_code_statistics do
+  verbose(false) do
+    sh <<-REPORT_CODE_STATISTICS
+      echo
+      direct=$(sed -e '1,/^DEPENDENCIES/d' -e '/^RUBY VERSION/,$d' \
+                   -e '/^$/d' Gemfile.lock | wc -l)
+      indirect=$(bundle show | tail -n +2 | wc -l)
+      echo "Number of gems (direct dependencies only) = $direct"
+      echo "Number of gems (including indirect dependencies) = $indirect"
+      echo
+      rails stats
+      echo
+      true
+    REPORT_CODE_STATISTICS
+  end
 end
 
 # rubocop: disable Metrics/BlockLength
@@ -635,7 +655,7 @@ end
 # Run some slower tests. Doing this on *every* automated test run would be
 # slow things down, and the odds of them being problems are small enough
 # that the slowdown is less worthwhile.  Also, some of the tests (like the
-# CORS tests can interfere with the usual test setups, so again, they
+# CORS tests) can interfere with the usual test setups, so again, they
 # aren't worth running in the "normal" automated tests run on each commit.
 desc 'Run slow tests (e.g., CORS middleware stack location)'
 task :slow_tests do

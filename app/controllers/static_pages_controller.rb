@@ -28,6 +28,12 @@ class StaticPagesController < ApplicationController
     )
   end
 
+  # Given a URL without a locale, redirect to the correct locale URL
+  def redir_locale
+    preferred_url = force_locale_url(request.original_url, I18n.locale)
+    redirect_to preferred_url
+  end
+
   def robots
     respond_to :text
     expires_in 6.hours, public: true

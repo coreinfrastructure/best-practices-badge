@@ -11,13 +11,15 @@
 # See how all your routes lay out with "rake routes".
 
 Rails.application.routes.draw do
+  LEGAL_LOCALE = /#{I18n.available_locales.join("|")}/
+
   # Root of site
   root 'static_pages#home'
 
   # TODO: /projects/NUMBER/badge
   # TODO: Redirect no-locale to a locale
 
-  scope '(:locale)' do
+  scope ':locale', constraints: { locale: LEGAL_LOCALE } do
     resources :project_stats
 
     get 'sessions/new'
@@ -82,7 +84,9 @@ Rails.application.routes.draw do
 
   # Interpret a bare locale as going to the homepage with that locale.
   # This requires special handling.
-  get '/:locale', to: 'static_pages#home'
+  get '/:locale', constraints: { locale: LEGAL_LOCALE }, to: 'static_pages#home'
+
+  get '*path', to: 'static_pages#redir_locale'
 
   # Here are some examples of routes.
 

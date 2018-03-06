@@ -13,13 +13,22 @@
 Rails.application.routes.draw do
   LEGAL_LOCALE = /#{I18n.available_locales.join("|")}/
 
-  # Root of site
-  root 'static_pages#home'
+  # Root of site.  This redirects to a locale-specific root,
+  # which is then handled below in the "scope :locale" route.
+  root 'static_pages#redir_locale'
 
-  # TODO: /projects/NUMBER/badge
-  # TODO: Redirect no-locale to a locale
+  # The /projects/NUMBER/badge route needs speed and never depends
+  # on the locale, so instead of redirecting it to a locale, just
+  # serve it directly.  We will *also* serve it if a locale is provided,
+  # see below.
+  get '/projects/:id/badge' => 'projects#badge', defaults: { format: 'svg' }
 
   scope ':locale', constraints: { locale: LEGAL_LOCALE } do
+    # TODO: Force a canonical URL for the top (root) level
+    # with a locale, either "/LOCALE" or "/LOCALE/", and redirect the other.
+    # For now, we just accept either.
+    root to: 'static_pages#home'
+
     resources :project_stats
 
     get 'sessions/new'
@@ -62,9 +71,15 @@ Rails.application.routes.draw do
 
     get 'auth/:provider/callback' => 'sessions#create'
     get '/signout' => 'sessions#destroy', as: :signout
+
+    # If we got here, we have a locale but the path doesn't match anything.
+    # Redirect this to a 404 error code. If we don't do this, we'll be
+    # stuck in a redirection loop caused by the code that redirects the
+    # no-locale-in-URL case to a path with a prefixed locale.
+    match '*path', to: 'static_pages#error_404', via: :all
   end
 
-  # If no route found in some cases, just redirect to a 404 page.
+  # If no route found in some cases, redirect immediately to a 404 page.
   # The production site is constantly hit by nonsense paths,
   # and while Rails has a built-in mechanism to handle nonsense,
   # Rails' built-in mechanism creates noisy logs.
@@ -82,10 +97,8 @@ Rails.application.routes.draw do
   match 'wp-login.php', via: :all, to: 'static_pages#error_404'
   match '.well-known/*path', via: :all, to: 'static_pages#error_404'
 
-  # Interpret a bare locale as going to the homepage with that locale.
-  # This requires special handling.
-  get '/:locale', constraints: { locale: LEGAL_LOCALE }, to: 'static_pages#home'
-
+  # No locale, and it hasn't matched anything else.  Redirect to the
+  # best locale we can determine ('en' without other information).
   get '*path', to: 'static_pages#redir_locale'
 
   # Here are some examples of routes.

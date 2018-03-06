@@ -7,10 +7,7 @@
 class StaticPagesController < ApplicationController
   include SessionsHelper
 
-  def home
-    preferred_url = force_locale_url(request.original_url, I18n.locale)
-    redirect_to preferred_url unless request.original_url == preferred_url
-  end
+  def home; end
 
   def criteria; end
 
@@ -31,7 +28,12 @@ class StaticPagesController < ApplicationController
   # Given a URL without a locale, redirect to the correct locale URL
   def redir_locale
     preferred_url = force_locale_url(request.original_url, I18n.locale)
-    redirect_to preferred_url
+    # It's not clear what status code to provide on a locale-based redirect.
+    # However, we must avoid 301 (Moved Permanently), because it is certainly
+    # not a permanent move.  For the moment we'll use 300 (Multiple Choices),
+    # because that code indicates there's a redirect based on agent choices
+    # (which is certainly true).
+    redirect_to preferred_url, status: :multiple_choices # 300
   end
 
   def robots

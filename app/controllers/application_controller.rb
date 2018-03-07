@@ -72,8 +72,8 @@ class ApplicationController < ActionController::Base
   # see this: http://stackoverflow.com/questions/5261521/
   # how-to-avoid-adding-the-default-locale-in-generated-urls
   # { locale: I18n.locale == I18n.default_locale ? nil : I18n.locale }
-  def default_url_options
-    { locale: I18n.locale }
+  def default_url_options(options = {})
+    { locale: I18n.locale }.merge options
   end
 
   # raise exception if text value client_ip isn't in valid_client_ips

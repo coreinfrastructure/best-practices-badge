@@ -83,13 +83,14 @@ class PasswordResetsTest < ActionDispatch::IntegrationTest
   end
 
   test 'expired token' do
-    get new_password_reset_path
-    post password_resets_path, params: { password_reset:
-      { email: @user.email } }
+    get new_password_reset_path(locale: :en)
+    byebug
+    post password_resets_path(locale: :en), params: { password_reset:
+      { email: @user.email }, locale: 'en' }
 
     @user = assigns(:user)
     @user.update_attribute(:reset_sent_at, 3.hours.ago)
-    patch password_reset_path(@user.reset_token), params: {
+    patch password_reset_path(@user.reset_token, locale: :en), params: {
       email: @user.email,
       user: {
         password:              'foo1234',

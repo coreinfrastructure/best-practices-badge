@@ -77,7 +77,7 @@ class ProjectGetTest < ActionDispatch::IntegrationTest
   # rubocop:enable Metrics/BlockLength
 
   test 'ensure CORS set when origin set' do
-    get project_path(id: @project_one.id),
+    get project_path(@project_one, locale: :en),
         headers: { 'Origin' => 'https://example.com' }
     assert_response :success
 

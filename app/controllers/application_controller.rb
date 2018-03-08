@@ -108,16 +108,18 @@ class ApplicationController < ActionController::Base
   # See <http://guides.rubyonrails.org/i18n.html>.
   def redir_missing_locale
     explicit_locale = params[:locale]
-    if explicit_locale.blank?
-      best_locale = find_best_locale
-      preferred_url = force_locale_url(request.original_url, best_locale)
-      # It's not clear what status code to provide on a locale-based redirect.
-      # However, we must avoid 301 (Moved Permanently), because it is certainly
-      # not a permanent move.  For the moment we'll use 300 (Multiple Choices),
-      # because that code indicates there's a redirect based on agent choices
-      # (which is certainly true).
-      redirect_to preferred_url, status: :multiple_choices # 300
-    end
+    return if explicit_locale.present?
+    #
+    # No locale, determine the best locale and redirect.
+    #
+    best_locale = find_best_locale
+    preferred_url = force_locale_url(request.original_url, best_locale)
+    # It's not clear what status code to provide on a locale-based redirect.
+    # However, we must avoid 301 (Moved Permanently), because it is certainly
+    # not a permanent move.  For the moment we'll use 300 (Multiple Choices),
+    # because that code indicates there's a redirect based on agent choices
+    # (which is certainly true).
+    redirect_to preferred_url, status: :multiple_choices # 300
   end
 
   # Set the locale, based on best available information.

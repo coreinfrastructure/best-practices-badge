@@ -42,16 +42,19 @@ class PasswordResetsTest < ActionDispatch::IntegrationTest
     assert_redirected_to controller.root_url
     # Inactive user
     user.toggle!(:activated)
-    get edit_password_reset_path(user.reset_token,
-                                 email: user.email, locale: :en)
+    get edit_password_reset_path(
+      user.reset_token,
+      email: user.email, locale: :en
+    )
     assert_redirected_to root_url(locale: :en)
     user.toggle!(:activated)
     # Right email, wrong token
     get edit_password_reset_path('wrong token', email: user.email, locale: :en)
     assert_redirected_to root_url(locale: :en)
     # Right email, right token
-    get edit_password_reset_path(user.reset_token,
-      email: user.email, locale: :en)
+    get edit_password_reset_path(
+      user.reset_token, email: user.email, locale: :en
+    )
     assert_template 'password_resets/edit'
     assert_select(+'input[name=email][type=hidden][value=?]', user.email)
     # Invalid password & confirmation
@@ -71,7 +74,7 @@ class PasswordResetsTest < ActionDispatch::IntegrationTest
         password:              '',
         password_confirmation: ''
       },
-     locale: :en
+      locale: :en
     }
     assert_select 'div#error_explanation'
     # Valid password & confirmation

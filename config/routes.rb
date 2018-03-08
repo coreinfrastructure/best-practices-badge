@@ -96,8 +96,7 @@ Rails.application.routes.draw do
     # no-locale-in-URL case to this case (a path with a prefixed locale).
     match '*path',
           to: 'static_pages#error_404_no_locale_redir', via: :all,
-          constraints:
-            lambda { |req| req.path_parameters[:locale].present?  }
+          constraints: ->(req) { req.path_parameters[:locale].present? }
   end
 
   # Immediately stop processing some well-known garbage requests,

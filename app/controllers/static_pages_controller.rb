@@ -10,7 +10,7 @@ class StaticPagesController < ApplicationController
   # These paths don't get locale data in the URLs, so do *not* try to
   # redirect them to a URL based on locale.
   skip_before_action :redir_missing_locale,
-                     only: [:robots, :error_404_no_locale_redir]
+                     only: %i[robots error_404_no_locale_redir]
 
   def home; end
 

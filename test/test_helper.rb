@@ -11,10 +11,6 @@ require 'simplecov'
 # *MUST* state VERY EARLY that we're in the test environment.
 ENV['RAILS_ENV'] ||= 'test'
 
-# NOTE: In tests use "controller.root_url(...)", not "root_url",
-# and similarly for root_path, because we override those methods
-# in the application controller.
-
 # Configure SimpleCov formatting before we start it
 if ENV['CI']
   require 'codecov'

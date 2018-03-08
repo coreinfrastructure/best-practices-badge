@@ -13,20 +13,40 @@
 Rails.application.routes.draw do
   LEGAL_LOCALE = /#{I18n.available_locales.join("|")}/
 
-  # Root of site.  This redirects to a locale-specific root,
-  # which is then handled below in the "scope :locale" route.
-  root 'static_pages#redir_locale'
+  # First, handle routing of special cases.
+  # Warning: Routes that don't take a :locale value must include a
+  # "skip_before_action :redir_missing_locale ..." in their controller.
 
-  # The /projects/NUMBER/badge route needs speed and never depends
-  # on the locale, so instead of redirecting it to a locale, just
-  # serve it directly.  We will *also* serve it if a locale is provided,
-  # see below.
-  get '/projects/:id/badge' => 'projects#badge', defaults: { format: 'svg' }
+  # The "robots.txt" file is always at the root of the
+  # document tree, and locale is irrelevant to it. Handle it specially.
+  get '/robots.txt' => 'static_pages#robots',
+      defaults: { format: 'text' }
 
-  scope ':locale', constraints: { locale: LEGAL_LOCALE } do
-    # TODO: Force a canonical URL for the top (root) level
-    # with a locale, either "/LOCALE" or "/LOCALE/", and redirect the other.
+  # The /projects/NUMBER/badge image route needs speed and never depends
+  # on the locale. Perhaps most importantly, badge images need to have
+  # a single canonical name so that the CDN caches will work correctly.
+  # If we use a single canonical name for a badge image, we can then
+  # change or invalidate a single CDN cache to update a badge image.
+  # If we had different routes for each locale, there'd be much
+  # more work to change or invalidate them, with no purpose.
+  # Therefore, instead of redirecting the badge image to a locale if
+  # one is not listed, we do *NOT* support locale URLs in this case.
+  get '/projects/:id/badge' => 'projects#badge',
+      defaults: { format: 'svg' }
+
+  # Now handle the normal case: routes with an optional locale prefix.
+  # We include almost all routes inside a :locale header,
+  # where the locale is optional.  This approach (using an optional value)
+  # is easier to use in Rails than some alternatives.  For example,
+  # by doing this, helpers like root_path accept a locale parameter but work
+  # without one (as expected).
+  # If a locale is not provided, the ApplicationController will normally
+  # send the web browser a redirect to the best locale it can identify.
+  scope '(:locale)', locale: LEGAL_LOCALE do
+    # TODO: Force a canonical URL for the top (root) level (with or without
+    # a trailing slash), by redirecting the other.
     # For now, we just accept either.
+    # The system itself always generates root URLs *without* a trailing slash.
     root to: 'static_pages#home'
 
     resources :project_stats
@@ -37,7 +57,6 @@ Rails.application.routes.draw do
     get 'home' => 'static_pages#home'
     get 'criteria' => 'static_pages#criteria'
     get 'cookies' => 'static_pages#cookies'
-    get 'robots' => 'static_pages#robots', defaults: { format: 'text' }
 
     get 'feed' => 'projects#feed', defaults: { format: 'atom' }
     get 'reminders' => 'projects#reminders_summary'
@@ -45,7 +64,6 @@ Rails.application.routes.draw do
     VALID_CRITERIA_LEVEL = /[0-2]/
     resources :projects do
       member do
-        get 'badge', defaults: { format: 'svg' }
         get 'delete_form' => 'projects#delete_form'
         get '' => 'projects#show_json',
             constraints: ->(req) { req.format == :json }
@@ -67,39 +85,42 @@ Rails.application.routes.draw do
 
     get 'login' => 'sessions#new'
     post 'login' => 'sessions#create'
-    delete 'logout' => 'sessions#destroy'
-
     get 'auth/:provider/callback' => 'sessions#create'
     get '/signout' => 'sessions#destroy', as: :signout
+    delete 'logout' => 'sessions#destroy'
 
-    # If we got here, we have a locale but the path doesn't match anything.
+    # This route applies when we have a non-empty locale
+    # but the path doesn't match anything.
     # Redirect this to a 404 error code. If we don't do this, we'll be
     # stuck in a redirection loop caused by the code that redirects the
-    # no-locale-in-URL case to a path with a prefixed locale.
-    match '*path', to: 'static_pages#error_404', via: :all
+    # no-locale-in-URL case to this case (a path with a prefixed locale).
+    match '*path',
+          to: 'static_pages#error_404_no_locale_redir', via: :all,
+          constraints:
+            lambda { |req| req.path_parameters[:locale].present?  }
   end
 
-  # If no route found in some cases, redirect immediately to a 404 page.
-  # The production site is constantly hit by nonsense paths,
-  # and while Rails has a built-in mechanism to handle nonsense,
-  # Rails' built-in mechanism creates noisy logs.
-  # Ideally we'd redirect all no-match cases quickly to a 404 handler.
-  # Unfortunately, the noise-reduction approach for Rails 4 noted here:
-  # http://rubyjunky.com/cleaning-up-rails-4-production-logging.html
-  # works in development but does NOT work in production.
-  # So instead, we'll select a few common cases where we have nothing
-  # and there's no possible security problem, and fast-path its rejection
-  # by redirecting to a 404 (without a lengthy log of the cause).
+  # Immediately stop processing some well-known garbage requests,
+  # as a minor optimization, instead of processing their redirection later.
+  # There's no point in redirecting the locales in
+  # these cases, because a human is unlikely to read the error message.
   # wp-login.php queries are evidences of WordPress brute-force attacks:
   # http://www.inmotionhosting.com/support/edu/wordpress/
   # wp-login-brute-force-attack
-  match 'kk.php', via: :all, to: 'static_pages#error_404'
-  match 'wp-login.php', via: :all, to: 'static_pages#error_404'
-  match '.well-known/*path', via: :all, to: 'static_pages#error_404'
+  # Again, we provide a default locale to prevent locale redirection.
+  match 'kk.php',
+        via: :all, to: 'static_pages#error_404_no_locale_redir'
+  match 'wp-login.php',
+        via: :all, to: 'static_pages#error_404_no_locale_redir'
+  match '.well-known/*path',
+        via: :all, to: 'static_pages#error_404_no_locale_redir'
 
-  # No locale, and it hasn't matched anything else.  Redirect to the
-  # best locale we can determine ('en' without other information).
-  get '*path', to: 'static_pages#redir_locale'
+  # No other route and no (allowed) locale - send a 404 ("not found").
+  # This will be intercepted and turned into a web browser redirect
+  # to the best-matching locale. If the web browser follows the redirect
+  # we provide, that new request will match the locale-specific 404 above.
+  # That will enable us to send a locale-specific 404 message.
+  match '*path', via: :all, to: 'static_pages#error_404'
 
   # Here are some examples of routes.
 

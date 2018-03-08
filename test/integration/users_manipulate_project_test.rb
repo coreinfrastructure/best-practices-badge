@@ -14,10 +14,10 @@ class UsersManipulateProjectTest < ActionDispatch::IntegrationTest
   # rubocop:disable Metrics/BlockLength
   test 'logged-in user adds a project' do
     # Go to login_path to initialize the session
-    get login_path
+    get login_path(locale: :en)
     log_in_as @user
 
-    get '/projects/new'
+    get '/en/projects/new'
     assert_response :success
     assert_match 'This is not the production system', response.body
     assert_template 'projects/new'
@@ -25,7 +25,7 @@ class UsersManipulateProjectTest < ActionDispatch::IntegrationTest
     repo_url = 'https://github.com/coreinfrastructure/best-practices-badge'
 
     VCR.use_cassette('users_manipulate_test') do
-      post '/projects', params: {
+      post '/en/projects', params: {
         'project[homepage_url]' => repo_url,
         'project[repo_url]' => repo_url
       }
@@ -118,17 +118,17 @@ class UsersManipulateProjectTest < ActionDispatch::IntegrationTest
     # Regression test, see:
     # https://github.com/coreinfrastructure/best-practices-badge/issues/160
     # Go to login_path to initialize the session
-    get login_path
+    get login_path(locale: :en)
     log_in_as @user
 
-    get '/projects/new'
+    get '/en/projects/new'
     assert_response :success
     assert_template 'projects/new'
 
     repo_url = 'https://github.com/assimilation/assimilation-official'
 
     VCR.use_cassette('assimilation-official') do
-      post '/projects', params: {
+      post '/en/projects', params: {
         'project[homepage_url]' => repo_url,
         'project[repo_url]' => repo_url
       }
@@ -144,17 +144,17 @@ class UsersManipulateProjectTest < ActionDispatch::IntegrationTest
 
   test 'logged-in user adds www.sendmail.com' do
     # Go to login_path to initialize the session
-    get login_path
+    get login_path(locale: :en)
     log_in_as @user
 
-    get '/projects/new'
+    get '/en/projects/new'
     assert_response :success
     assert_template 'projects/new'
 
     project_url = 'https://www.sendmail.com/'
 
     VCR.use_cassette('sendmail') do
-      post '/projects', params: {
+      post '/en/projects', params: {
         'project[homepage_url]' => project_url,
         'project[repo_url]' => project_url
       }

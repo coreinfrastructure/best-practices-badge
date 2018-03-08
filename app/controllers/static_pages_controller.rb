@@ -7,6 +7,11 @@
 class StaticPagesController < ApplicationController
   include SessionsHelper
 
+  # These paths don't get locale data in the URLs, so do *not* try to
+  # redirect them to a URL based on locale.
+  skip_before_action :redir_missing_locale,
+                     only: [:robots, :error_404_no_locale_redir]
+
   def home; end
 
   def criteria; end
@@ -25,15 +30,8 @@ class StaticPagesController < ApplicationController
     )
   end
 
-  # Given a URL without a locale, redirect to the correct locale URL
-  def redir_locale
-    preferred_url = force_locale_url(request.original_url, I18n.locale)
-    # It's not clear what status code to provide on a locale-based redirect.
-    # However, we must avoid 301 (Moved Permanently), because it is certainly
-    # not a permanent move.  For the moment we'll use 300 (Multiple Choices),
-    # because that code indicates there's a redirect based on agent choices
-    # (which is certainly true).
-    redirect_to preferred_url, status: :multiple_choices # 300
+  def error_404_no_locale_redir
+    error_404
   end
 
   def robots

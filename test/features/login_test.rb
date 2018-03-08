@@ -31,7 +31,7 @@ class LoginTest < CapybaraFeatureTest
   # Test this with larger integration, to increase confidence that
   # we really do reject correct local usernames with wrong passwords
   scenario 'Cannot login with local username and wrong password', js: false do
-    visit projects_path
+    visit projects_path(locale: :en)
     click_on 'Login'
     fill_in 'Email', with: @user.email
     fill_in 'Password', with: 'WRONG_PASSWORD'
@@ -43,7 +43,7 @@ class LoginTest < CapybaraFeatureTest
   # Test this with larger integration, to increase confidence that
   # we really do reject correct local usernames with blank passwords
   scenario 'Cannot login with local username and blank password', js: false do
-    visit projects_path
+    visit projects_path(locale: :en)
     click_on 'Login'
     fill_in 'Email', with: @user.email
     # Note: we do NOT fill in a password.
@@ -128,15 +128,9 @@ class LoginTest < CapybaraFeatureTest
 
   # Test if we switch to user's preferred locale on login.
   # Here we test on a path that isn't the root.
-  # We have to implement these tests in (slower) integration testing.
-  # That's because the test infrastructure normally takes shortcuts in the
-  # login functionality to speed login. Those shortcuts speed test execution
-  # in general, but they also mean that testing this specific functionality
-  # won't work because of its inadequate simulation of the real situation
-  # (and thus requires a full integration test instead).
   scenario 'Can Login in fr locale to /projects', js: true do
     fr_user = users(:fr_user)
-    visit projects_path
+    visit projects_path(locale: :en)
     click_on 'Login'
     fill_in 'Email', with: fr_user.email
     fill_in 'Password', with: 'password'
@@ -148,25 +142,25 @@ class LoginTest < CapybaraFeatureTest
   # Test login from root path.
   scenario 'Can Login in fr locale to top', js: true do
     fr_user = users(:fr_user)
-    visit root_path
+    visit root_path(locale: :en)
     click_on 'Login'
     fill_in 'Email', with: fr_user.email
     fill_in 'Password', with: 'password'
     click_button 'Log in using custom account'
     assert has_content? 'Connecté !'
-    assert_equal '/fr/', current_path
+    assert_equal '/fr', current_path
   end
 
   # Test login from non-english locale
   scenario 'Prelogin non-en locale saved on login', js: true do
     fr_user = users(:fr_user)
-    visit '/fr/'
+    visit '/fr'
     click_on "S'identifier"
     fill_in 'Email', with: fr_user.email
     fill_in 'Mot de passe', with: 'password'
     click_button 'Connectez-vous en utilisant un compte personnalisé'
     assert has_content? 'Connecté !'
-    assert_equal '/fr/', current_path
+    assert_equal '/fr', current_path
   end
 
   def ensure_choice(radio_button_id)

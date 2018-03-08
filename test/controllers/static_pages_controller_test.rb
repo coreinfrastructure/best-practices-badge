@@ -35,21 +35,22 @@ class StaticPagesControllerTest < ActionController::TestCase
   end
 
   test 'should get robots.txt' do
-    get :robots, format: :text
+    # The locale: :en simulates how the router accesses this.
+    get :robots, format: :text, params: { locale: :en }
     assert_response :success
     assert_template 'robots'
   end
 
   test 'should get criteria' do
-    get :criteria, params: { locale: 'en' }
+    get :criteria, params: { locale: :en }
     assert_response :success
     assert_template 'criteria'
 
-    get :criteria, params: { locale: 'fr' }
+    get :criteria, params: { locale: :fr }
     assert_response :success
     assert_template 'criteria'
 
-    get :criteria, params: { locale: 'zh-CN' }
+    get :criteria, params: { locale: :'zh-CN' }
     assert_response :success
     assert_template 'criteria'
   end

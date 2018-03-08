@@ -66,7 +66,7 @@ class GithubLoginTest < CapybaraFeatureTest
       # Regression test, make sure GitHub users can logout
       assert has_content? 'Logout'
       click_on 'Logout'
-      assert_equal '/en/', current_path
+      assert_equal '/en', current_path
 
       if ENV['GITHUB_PASSWORD'] # revoke OAuth authorization
         visit 'https://github.com/settings/applications'
@@ -101,7 +101,7 @@ class GithubLoginTest < CapybaraFeatureTest
     # *all* locales are listed (English as "en"), the original test code
     # here doesn't work.
     # assert has_content? 'Connecté !'
-    # assert_equal '/fr/', current_path
+    # assert_equal '/fr', current_path
     # Regression test, make sure redirected correctly after login
   end
 end

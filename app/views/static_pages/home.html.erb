@@ -28,11 +28,8 @@
       </div>
     </div>
     <%
-       if (I18n.locale && I18n.locale != :en)
-         projects_dir = '/' + I18n.locale.to_s + '/projects'
-       else
-         projects_dir = '/projects'
-       end
+       # We'll use this a lot on this page, so calculate it just once.
+       projects_dir = projects_path
     %>
     <div class="row">
       <div class="col-xs-12">

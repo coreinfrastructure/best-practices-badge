@@ -25,7 +25,7 @@ class SessionsHelperTest < ActionView::TestCase
 
   # Unit test.  There are tricky cases, so try various forms
   test 'check force_locale_url' do
-    assert_equal 'https://a.b.c/fr/', force_locale_url('https://a.b.c/', :fr)
+    assert_equal 'https://a.b.c/fr', force_locale_url('https://a.b.c/', :fr)
     assert_equal 'https://a.b.c/fr', force_locale_url('https://a.b.c', :fr)
     assert_equal 'https://a.b.c/en',
                  force_locale_url('https://a.b.c?locale=fr', :en)

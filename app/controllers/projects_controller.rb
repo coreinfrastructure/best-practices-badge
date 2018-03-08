@@ -10,6 +10,10 @@ require 'net/http'
 # rubocop:disable Metrics/ClassLength
 class ProjectsController < ApplicationController
   include ProjectsHelper
+
+  # The 'badge' action is special and does NOT take a locale.
+  skip_before_action :redir_missing_locale, only: :badge
+
   before_action :set_project,
                 only: %i[edit update delete_form destroy show show_json]
   before_action :logged_in?, only: :create

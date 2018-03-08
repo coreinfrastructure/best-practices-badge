@@ -16,20 +16,20 @@ class UsersControllerTest < ActionController::TestCase
 
   test 'should get index' do
     log_in_as(@admin)
-    get :index
+    get :index, params: { locale: :en }
     assert_response :success
     assert_not_nil assigns(:users)
   end
 
   test 'should get new' do
-    get :new
+    get :new, params: { locale: :en }
     assert_response :success
   end
 
   test 'should show additional rights on user page when present' do
     project = projects(:one)
 
-    get :show, params: { id: @other_user }
+    get :show, params: { id: @other_user, locale: :en }
     assert_response :success
     refute_includes @response.body, project.name
     refute_includes @response.body,
@@ -43,7 +43,7 @@ class UsersControllerTest < ActionController::TestCase
     )
     new_right.save!
 
-    get :show, params: { id: @other_user }
+    get :show, params: { id: @other_user, locale: :en }
     assert_response :success
     assert_includes @response.body, project.name
     assert_includes @response.body,
@@ -52,7 +52,7 @@ class UsersControllerTest < ActionController::TestCase
 
   test 'indicate admin is admin to admin' do
     log_in_as(@admin)
-    get :show, params: { id: @admin }
+    get :show, params: { id: @admin, locale: :en }
     assert_response :success
     assert I18n.t('users.show.is_admin').present?
     assert_includes @response.body,
@@ -61,7 +61,7 @@ class UsersControllerTest < ActionController::TestCase
 
   test 'do NOT indicate non-admin is admin to admin' do
     log_in_as(@admin)
-    get :show, params: { id: @user }
+    get :show, params: { id: @user, locale: :en }
     assert_response :success
     refute_includes @response.body,
                     I18n.t('users.show.is_admin')
@@ -69,7 +69,7 @@ class UsersControllerTest < ActionController::TestCase
 
   test 'do NOT indicate admin is admin to non-admin' do
     log_in_as(@user)
-    get :show, params: { id: @admin }
+    get :show, params: { id: @admin, locale: :en }
     assert_response :success
     refute_includes @response.body,
                     I18n.t('users.show.is_admin')
@@ -77,14 +77,14 @@ class UsersControllerTest < ActionController::TestCase
 
   test 'do NOT indicate admin is admin if not logged in' do
     # No log_in_as
-    get :show, params: { id: @admin }
+    get :show, params: { id: @admin, locale: :en }
     assert_response :success
     refute_includes @response.body,
                     I18n.t('users.show.is_admin')
   end
 
   test 'should NOT show email address when not logged in' do
-    get :show, params: { id: @user }
+    get :show, params: { id: @user, locale: :en }
     assert_response :success
     refute_includes @response.body, '%40example.com'
     refute_includes @response.body, '@example.com'
@@ -94,13 +94,13 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test 'JSON should NOT show email address when not logged in' do
-    get :show, params: { id: @user, format: :json }
+    get :show, params: { id: @user, format: :json, locale: :en }
     assert_response :success
     refute_includes @response.body, 'example.com'
   end
 
   test 'JSON provides reasonable results when not logged in' do
-    get :show, params: { id: @user, format: :json }
+    get :show, params: { id: @user, format: :json, locale: :en }
     assert_response :success
     assert_equal '{', @response.body[0]
     json_response = JSON.parse(@response.body)
@@ -109,7 +109,7 @@ class UsersControllerTest < ActionController::TestCase
 
   test 'should NOT show email address when logged in as another user' do
     log_in_as(@other_user)
-    get :show, params: { id: @user }
+    get :show, params: { id: @user, locale: :en }
     assert_response :success
     refute_includes @response.body, '%40example.com'
     refute_includes @response.body, '@example.com'
@@ -117,7 +117,7 @@ class UsersControllerTest < ActionController::TestCase
 
   test 'JSON should NOT show email address when logged in as another user' do
     log_in_as(@other_user)
-    get :show, params: { id: @user, format: :json }
+    get :show, params: { id: @user, format: :json, locale: :en }
     assert_response :success
     refute_includes @response.body, 'example.com'
   end
@@ -130,34 +130,34 @@ class UsersControllerTest < ActionController::TestCase
   # data.
   test 'should show email address of self when logged in as self (GDPR)' do
     log_in_as(@user)
-    get :show, params: { id: @user }
+    get :show, params: { id: @user, locale: :en }
     assert_response :success
     assert_includes @response.body, 'mailto:melissa%40example.com'
   end
 
   test 'should show email address when logged in as admin' do
     log_in_as(@admin)
-    get :show, params: { id: @user }
+    get :show, params: { id: @user, locale: :en }
     assert_response :success
     assert_includes @response.body, 'mailto:melissa%40example.com'
   end
 
   test 'JSON should show email address when logged in as admin' do
     log_in_as(@admin)
-    get :show, params: { id: @user, format: :json }
+    get :show, params: { id: @user, format: :json, locale: :en }
     assert_response :success
     assert_includes @response.body, 'melissa@example.com'
   end
 
   test 'should redirect edit when not logged in' do
-    get :edit, params: { id: @user }
+    get :edit, params: { id: @user, locale: :en }
     assert_not flash.empty?
     assert_redirected_to login_url
   end
 
   test 'should redirect update when not logged in' do
     patch :update, params: {
-      id: @user, user: { name: @user.name, email: @user.email }
+      id: @user, user: { name: @user.name, email: @user.email }, locale: :en
     }
     assert_not flash.empty?
     assert_redirected_to login_url
@@ -165,7 +165,7 @@ class UsersControllerTest < ActionController::TestCase
 
   test 'should redirect edit when logged in as wrong user' do
     log_in_as(@other_user)
-    get :edit, params: { id: @user }
+    get :edit, params: { id: @user, locale: :en }
     assert flash.empty?
     assert_redirected_to root_url
   end
@@ -173,7 +173,7 @@ class UsersControllerTest < ActionController::TestCase
   test 'should redirect update when logged in as wrong user' do
     log_in_as(@other_user)
     patch :update, params: {
-      id: @user, user: { name: @user.name, email: @user.email }
+      id: @user, user: { name: @user.name, email: @user.email }, locale: :en
     }
     assert flash.empty?
     assert_redirected_to root_url
@@ -182,7 +182,7 @@ class UsersControllerTest < ActionController::TestCase
   test 'should  update user when logged in as admin' do
     new_name = @user.name + '_updated'
     log_in_as(@admin)
-    patch :update, params: { id: @user, user: { name: new_name } }
+    patch :update, params: { id: @user, user: { name: new_name }, locale: :en }
     assert_not_empty flash
     @user.reload
     assert_equal @user.name, new_name
@@ -190,7 +190,9 @@ class UsersControllerTest < ActionController::TestCase
 
   test 'should be able to change locale' do
     log_in_as(@user)
-    patch :update, params: { id: @user, user: { preferred_locale: 'fr' } }
+    patch :update, params: {
+      id: @user, user: { preferred_locale: 'fr' }, locale: :en
+    }
     assert_not_empty flash # Success message
     @user.reload
     assert_equal 'fr', @user.preferred_locale
@@ -199,7 +201,7 @@ class UsersControllerTest < ActionController::TestCase
 
   test 'should redirect destroy when not logged in' do
     assert_no_difference 'User.count' do
-      delete :destroy, params: { id: @user }
+      delete :destroy, params: { id: @user, locale: :en }
     end
     assert_redirected_to login_url
   end
@@ -207,7 +209,7 @@ class UsersControllerTest < ActionController::TestCase
   test 'should redirect destroy when logged in as a non-admin' do
     log_in_as(@other_user)
     assert_no_difference 'User.count' do
-      delete :destroy, params: { id: @user }
+      delete :destroy, params: { id: @user, locale: :en }
     end
     assert_redirected_to root_url
   end
@@ -215,7 +217,7 @@ class UsersControllerTest < ActionController::TestCase
   test 'admin should be able to destroy a user without projects' do
     log_in_as(@admin)
     assert_difference('User.count', -1) do
-      delete :destroy, params: { id: @other_user }
+      delete :destroy, params: { id: @other_user, locale: :en }
     end
     assert_not_empty flash
   end
@@ -225,7 +227,7 @@ class UsersControllerTest < ActionController::TestCase
     # erase information about themselves.
     log_in_as(@other_user)
     assert_difference('User.count', -1) do
-      delete :destroy, params: { id: @other_user }
+      delete :destroy, params: { id: @other_user, locale: :en }
     end
     assert_not_empty flash
   end
@@ -233,21 +235,21 @@ class UsersControllerTest < ActionController::TestCase
   test 'should not be able to destroy self if have projects' do
     log_in_as(@user)
     assert_no_difference 'User.count' do
-      delete :destroy, params: { id: @user }
+      delete :destroy, params: { id: @user, locale: :en }
     end
   end
 
   test 'admin should not be able to destroy user if have projects' do
     log_in_as(@admin)
     assert_no_difference 'User.count' do
-      delete :destroy, params: { id: @user }
+      delete :destroy, params: { id: @user, locale: :en }
     end
   end
 
   test 'admin should be able to destroy self without projects' do
     log_in_as(@admin)
     assert_difference('User.count', -1) do
-      delete :destroy, params: { id: @admin }
+      delete :destroy, params: { id: @admin, locale: :en }
     end
   end
 end

@@ -49,14 +49,14 @@ class ProjectsControllerTest < ActionController::TestCase
   end
 
   test 'new but not logged in' do
-    get :new, { locale: :en }
+    get :new, params: { locale: :en }
     assert_response :success
     assert_includes @response.body, 'Log in with '
   end
 
   test 'should get new' do
     log_in_as(@user)
-    get :new, { locale: :en }
+    get :new, params: { locale: :en }
     assert_response :success
     assert_includes @response.body,
                     'What is the URL for the project home page ' \
@@ -70,13 +70,16 @@ class ProjectsControllerTest < ActionController::TestCase
     assert_difference [
       'Project.count', 'ActionMailer::Base.deliveries.size'
     ] do
-      post :create, params: { project: {
-        description: @project.description,
-        license: @project.license,
-        name: @project.name,
-        repo_url: 'https://www.example.org/code',
-        homepage_url: @project.homepage_url
-      } }
+      post :create, params: {
+        project: {
+          description: @project.description,
+          license: @project.license,
+          name: @project.name,
+          repo_url: 'https://www.example.org/code',
+          homepage_url: @project.homepage_url
+        },
+        locale: :en
+      }
     end
   end
 
@@ -314,7 +317,9 @@ class ProjectsControllerTest < ActionController::TestCase
       name: '',
       homepage_url: 'example.org' # bad url
     }
-    patch :update, params: { id: @project, project: new_project_data }
+    patch :update, params: {
+      id: @project, project: new_project_data, locale: :en
+    }
     # "Success" here only in the HTTP sense - we *do* get a form...
     assert_response :success
     # ... but we just get the edit form.
@@ -322,7 +327,7 @@ class ProjectsControllerTest < ActionController::TestCase
 
     # Do the same thing, but as for JSON
     patch :update, params: {
-      id: @project, format: :json, project: new_project_data
+      id: @project, format: :json, project: new_project_data, locale: :en
     }
     assert_response :unprocessable_entity
   end
@@ -336,10 +341,14 @@ class ProjectsControllerTest < ActionController::TestCase
       lock_version: @project.lock_version
     }
     log_in_as(@project.user)
-    patch :update, params: { id: @project, project: new_project_data1 }
-    assert_redirected_to project_path(assigns(:project))
-    get :edit, params: { id: @project }
-    patch :update, params: { id: @project, project: new_project_data2 }
+    patch :update, params: {
+      id: @project, project: new_project_data1, locale: :en
+    }
+    assert_redirected_to project_path(@project, locale: :en)
+    get :edit, params: { id: @project, locale: :en }
+    patch :update, params: {
+      id: @project, project: new_project_data2, locale: :en
+    }
     assert_not_empty flash
     assert_template :edit
     assert_difference '@project.lock_version' do
@@ -359,7 +368,8 @@ class ProjectsControllerTest < ActionController::TestCase
         name: new_name,
         repo_url: @project.repo_url,
         homepage_url: @project.homepage_url
-      }
+      },
+      locale: :en
     }
     # "Success" here only in the HTTP sense - we *do* get a form...
     assert_response :success
@@ -372,15 +382,19 @@ class ProjectsControllerTest < ActionController::TestCase
     new_name = @project_two.name + '_updated'
     assert_not_equal @user, @project_two.user
     log_in_as(@user)
-    patch :update, params: { id: @project_two, project: { name: new_name } }
-    assert_redirected_to root_url
+    patch :update, params: {
+      id: @project_two, project: { name: new_name }, locale: :en
+    }
+    assert_redirected_to root_url(locale: :en)
   end
 
   test 'admin can update other users project' do
     new_name = @project.name + '_updated'
     log_in_as(@admin)
     assert_not_equal @admin, @project.user
-    patch :update, params: { id: @project, project: { name: new_name } }
+    patch :update, params: {
+      id: @project, project: { name: new_name }, locale: :en
+    }
     assert_redirected_to project_path(assigns(:project))
     @project.reload
     assert_equal @project.name, new_name
@@ -442,7 +456,8 @@ class ProjectsControllerTest < ActionController::TestCase
     patch :update, params: {
       id: @perfect_passing_project, project: {
         interact_status: 'Unmet'
-      }
+      },
+      locale: :en
     }
     @perfect_passing_project.reload
     assert_not_nil @perfect_passing_project.lost_passing_at
@@ -451,7 +466,8 @@ class ProjectsControllerTest < ActionController::TestCase
     patch :update, params: {
       id: @perfect_passing_project, project: {
         interact_status: 'Met'
-      }
+      },
+      locale: :en
     }
     assert_not_nil @perfect_passing_project.lost_passing_at
     # These tests should work, but don't; it appears our workaround for
@@ -464,7 +480,7 @@ class ProjectsControllerTest < ActionController::TestCase
 
   test 'Can display delete form' do
     log_in_as(@project.user)
-    get :delete_form, params: { id: @project }
+    get :delete_form, params: { id: @project, locale: :en }
     assert_response :success
     assert_includes @response.body, 'Warning'
   end
@@ -477,7 +493,8 @@ class ProjectsControllerTest < ActionController::TestCase
              params:
              {
                id: @project,
-               deletion_rationale: 'The front page is not purple enough.'
+               deletion_rationale: 'The front page is not purple enough.',
+               locale: :en
              }
     end
     assert_not_empty flash
@@ -492,7 +509,8 @@ class ProjectsControllerTest < ActionController::TestCase
              params:
              {
                id: @project,
-               deletion_rationale: 'Nah.'
+               deletion_rationale: 'Nah.',
+               locale: :en
              }
     end
     assert_not_empty flash
@@ -506,7 +524,8 @@ class ProjectsControllerTest < ActionController::TestCase
              params:
              {
                id: @project,
-               deletion_rationale: ' x y ' + ("\n" * 30)
+               deletion_rationale: ' x y ' + ("\n" * 30),
+               locale: :en
              }
     end
     assert_not_empty flash
@@ -518,33 +537,35 @@ class ProjectsControllerTest < ActionController::TestCase
     num = ActionMailer::Base.deliveries.size
     assert_not_equal @admin, @project.user
     assert_difference('Project.count', -1) do
-      delete :destroy, params: { id: @project }
+      delete :destroy, params: { id: @project, locale: :en }
     end
 
-    assert_redirected_to projects_path
+    assert_redirected_to projects_path(locale: :en)
     assert_equal num + 1, ActionMailer::Base.deliveries.size
   end
 
   test 'should not destroy project if no one is logged in' do
     log_in_as(@user2)
     assert_no_difference('Project.count', ActionMailer::Base.deliveries.size) do
-      delete :destroy, params: { id: @project }
+      delete :destroy, params: { id: @project, locale: :en }
     end
   end
 
   test 'should not destroy project if logged in as different user' do
     # Notice that we do *not* call log_in_as.
     assert_no_difference('Project.count', ActionMailer::Base.deliveries.size) do
-      delete :destroy, params: { id: @project }
+      delete :destroy, params: { id: @project, locale: :en }
     end
   end
 
   test 'should redirect to project page if project repo exists' do
     log_in_as(@user)
     assert_no_difference('Project.count') do
-      post :create, params: { project: { repo_url: @project.repo_url } }
+      post :create, params: {
+        project: { repo_url: @project.repo_url }, locale: :en
+      }
     end
-    assert_redirected_to project_path(@project)
+    assert_redirected_to project_path(@project, locale: :en)
   end
 
   test 'should fail to change tail of non-blank repo_url' do
@@ -553,7 +574,8 @@ class ProjectsControllerTest < ActionController::TestCase
     patch :update, params: {
       id: @project_two, project: {
         repo_url:  new_repo_url
-      }
+      },
+      locale: :en
     }
     assert_not_empty flash
     assert_template :edit
@@ -568,7 +590,8 @@ class ProjectsControllerTest < ActionController::TestCase
     patch :update, params: {
       id: @project_two, project: {
         repo_url:  new_repo_url
-      }
+      },
+      locale: :en
     }
     @project_two.reload
     assert_not_equal @project_two.repo_url, old_repo_url
@@ -582,7 +605,8 @@ class ProjectsControllerTest < ActionController::TestCase
     patch :update, params: {
       id: @project_two, project: {
         repo_url:  new_repo_url
-      }
+      },
+      locale: :en
     }
     @project_two.reload
     assert_equal @project_two.repo_url, new_repo_url
@@ -606,7 +630,8 @@ class ProjectsControllerTest < ActionController::TestCase
   test 'Check ids= projects index query' do
     get :index, params: {
       format: :json,
-      ids: "#{@project.id},#{@project_two.id}"
+      ids: "#{@project.id},#{@project_two.id}",
+      locale: :en
     }
     assert_response :success
     body = JSON.parse(response.body)
@@ -616,7 +641,7 @@ class ProjectsControllerTest < ActionController::TestCase
   test 'should redirect http to https' do
     old = Rails.application.config.force_ssl
     Rails.application.config.force_ssl = true
-    get :index
+    get :index, params: { locale: :en }
     assert_redirected_to 'https://test.host/en/projects'
     Rails.application.config.force_ssl = old
   end

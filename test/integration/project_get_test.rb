@@ -78,7 +78,7 @@ class ProjectGetTest < ActionDispatch::IntegrationTest
 
   test 'ensure CORS set when origin set' do
     get project_path(@project_one, locale: :en),
-        headers: { 'Origin' => 'https://example.com' }
+        headers: { 'Origin' => 'https://en/example.com' }
     assert_response :success
 
     # When there's an origin, we allow just GET from anywhere.

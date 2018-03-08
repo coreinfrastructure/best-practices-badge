@@ -110,6 +110,11 @@ class ApplicationController < ActionController::Base
     explicit_locale = params[:locale]
     return if explicit_locale.present?
     #
+    # Special case: If the requested format is JSON, don't bother
+    # redirecting, because JSON is the same in any locale.
+    #
+    return if params[:format] == 'json'
+    #
     # No locale, determine the best locale and redirect.
     #
     best_locale = find_best_locale

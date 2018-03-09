@@ -16,6 +16,7 @@ module SessionsHelper
   end
 
   # Reply with original_url modified so it has locale "locale".
+  # Locale may be nil.
   # Remove any query string or previously-specified locale to do this.
   # At the root, we do *not* include a trailing slash, so we
   # return ".../en", not ".../en/".
@@ -24,12 +25,14 @@ module SessionsHelper
     # Remove locale from query string and main path
     url.query = remove_locale_query(url.query)
     new_path = url.path.gsub(%r{\A\/[a-z]{2}(-[A-Za-z0-9-]+)?(/|\z)}, '')
-    # Force path to begin with '/'
+    # Force path to begin with '/' if it has content
     new_path.prepend('/') if new_path.present? && new_path[0] != '/'
     # Recreate path, but now forcibly include the locale.
     # If at top, no trailing slash, e.g., "/fr".
-    url.path = '/' + locale.to_s
-    url.path << new_path unless new_path.blank? || new_path == '/'
+    # url.path = locale.present? ? '/' + locale.to_s : ''
+    # url.path << new_path unless new_path.blank? || new_path == '/'
+    url.path = (locale ? '/' + locale.to_s : '') +
+               (new_path == '/' ? '' : new_path)
     url.to_s
   end
 

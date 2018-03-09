@@ -112,7 +112,7 @@ class UsersController < ApplicationController
           # cannot necessarily control the rights granted to him by others.
           user_to_delete.destroy!
           flash[:success] = t('.user_deleted')
-          redirect_to users_url
+          redirect_to root_path
         end
       end
     end
@@ -122,7 +122,7 @@ class UsersController < ApplicationController
   def redirect_existing
     if @user.activated
       flash[:info] = t('users.redirect_existing')
-      redirect_to login_url
+      redirect_to login_path
     else
       regenerate_activation_digest
       send_activation
@@ -132,7 +132,7 @@ class UsersController < ApplicationController
   def send_activation
     @user.send_activation_email
     flash[:info] = t('users.new_activation_link_created')
-    redirect_to root_url
+    redirect_to root_path
   end
 
   private
@@ -165,15 +165,11 @@ class UsersController < ApplicationController
     user_params
   end
 
-  # def require_admin
-  #   redirect_to root_url unless current_user&.admin?
-  # end
-
   # Confirms a logged-in user.
   def logged_in_user
     return if logged_in?
     flash[:danger] = t('users.please_log_in')
-    redirect_to login_url
+    redirect_to login_path
   end
 
   # Return true if current_user can edit account 'user'
@@ -185,7 +181,7 @@ class UsersController < ApplicationController
   # Confirms that this user can edit; sets @user to the user to process
   def redir_unless_current_user_can_edit
     @user = User.find(params[:id])
-    redirect_to(root_url) unless current_user_can_edit(@user)
+    redirect_to(root_path) unless current_user_can_edit(@user)
   end
 
   def regenerate_activation_digest

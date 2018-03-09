@@ -9,7 +9,7 @@ require 'capybara_feature_test'
 class FilterTest < CapybaraFeatureTest
   # rubocop:disable Metrics/BlockLength
   scenario 'Can Filter Projects', js: true do
-    visit '/projects'
+    visit '/en/projects'
     assert has_content? 'Add New Project'
     assert_equal 6, all('tbody tr').count
     assert has_content? '6 Projects'
@@ -31,7 +31,7 @@ class FilterTest < CapybaraFeatureTest
     #
     # select 'Passing', from: 'gteq'
     # wait_for_url '/projects?gteq=100'
-    visit '/projects?gteq=100'
+    visit '/en/projects?gteq=100'
     assert_equal 3, all('tbody tr').count
     assert has_content? '3 Projects'
     assert has_no_content? 'Pathfinder OS'
@@ -43,7 +43,7 @@ class FilterTest < CapybaraFeatureTest
 
     # select 'In Progress (75% or more)', from: 'gteq'
     # wait_for_url '/projects?gteq=75'
-    visit '/projects?gteq=75'
+    visit '/en/projects?gteq=75'
     assert_equal 4, all('tbody tr').count
     assert has_content? '4 Projects'
     assert has_no_content? 'Pathfinder OS'
@@ -56,7 +56,7 @@ class FilterTest < CapybaraFeatureTest
     # fill_in 'q', with: 'unjustified'
     # click_on 'Search'
     # wait_for_url '/projects?gteq=75&q=unjustified'
-    visit '/projects?gteq=75&q=unjustified'
+    visit '/en/projects?gteq=75&q=unjustified'
     assert_equal 1, all('tbody tr').count
     assert has_content? '1 Project'
     assert has_no_content? 'Pathfinder OS'
@@ -69,7 +69,7 @@ class FilterTest < CapybaraFeatureTest
     # fill_in 'q', with: ''
     # click_on 'Search'
     # wait_for_url '/projects?gteq=75'
-    visit '/projects?gteq=75'
+    visit '/en/projects?gteq=75'
     assert_equal 4, all('tbody tr').count
     assert has_content? '4 Projects'
     assert has_no_content? 'Pathfinder OS'
@@ -81,7 +81,7 @@ class FilterTest < CapybaraFeatureTest
 
     # check 'lteq' # Click 'Exclude passing' checkbox
     # wait_for_url '/projects?gteq=75&lteq=99'
-    visit '/projects?gteq=75&lteq=99'
+    visit '/en/projects?gteq=75&lteq=99'
     assert_equal 1, all('tbody tr').count
     assert has_content? '1 Project'
     assert has_no_content? 'Pathfinder OS'
@@ -92,7 +92,7 @@ class FilterTest < CapybaraFeatureTest
     assert has_no_content? 'Justified perfect project'
 
     # No UI to use status params
-    visit '/projects?status=in_progress'
+    visit '/en/projects?status=in_progress'
     # wait_for_url '/projects?status=in_progress'
     assert_equal 3, all('tbody tr').count
     assert has_content? '3 Projects'
@@ -104,7 +104,7 @@ class FilterTest < CapybaraFeatureTest
     assert has_no_content? 'Justified perfect project'
 
     # check that old search system is working and returns expected results
-    visit '/projects?pq=Pathfinder'
+    visit '/en/projects?pq=Pathfinder'
     assert_equal 1, all('tbody tr').count
     assert has_content? '1 Project'
     assert has_content? 'Pathfinder OS'
@@ -115,7 +115,7 @@ class FilterTest < CapybaraFeatureTest
     assert has_no_content? 'Justified perfect project'
 
     # check results from normal search system
-    visit '/projects?q=Pathfinder'
+    visit '/en/projects?q=Pathfinder'
     assert_equal 2, all('tbody tr').count
     assert has_content? '2 Projects'
     assert has_content? 'Pathfinder OS'

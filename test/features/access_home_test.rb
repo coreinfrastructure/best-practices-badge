@@ -8,17 +8,17 @@ require 'capybara_feature_test'
 
 class AccessHomeTest < CapybaraFeatureTest
   test 'sanity' do
-    visit root_path
+    visit root_path(locale: :en)
     assert has_content? 'CII Best Practices Badge Program'
   end
 
   scenario 'New Project link', js: true do
-    visit root_path
+    visit root_path(locale: :en)
     assert has_content? 'Get Your Badge Now!'
   end
 
   scenario 'Header has links', js: true do
-    visit root_path
+    visit root_path(locale: :en)
     assert find_link('Projects').visible?
     assert find_link('Sign Up').visible?
     assert find_link('Login').visible?

@@ -12,21 +12,21 @@ class ProjectListTest < ActionDispatch::IntegrationTest
   end
 
   test 'get project list and sort by name' do
-    get '/projects'
+    get '/en/projects'
     assert_response :success
     assert_select(
       +'table>tbody>tr:first-child>td:nth-child(2)',
       'Pathfinder OS'
     )
 
-    get '/projects?sort=name'
+    get '/en/projects?sort=name'
     assert_response :success
     assert_select(
       +'table>tbody>tr:first-child>td:nth-child(2)',
       'Justified perfect passing project'
     )
 
-    get '/projects?sort=name&sort_direction=desc'
+    get '/en/projects?sort=name&sort_direction=desc'
     assert_response :success
     assert_select(
       +'table>tbody>tr:first-child>td:nth-child(2)',

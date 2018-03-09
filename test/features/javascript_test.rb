@@ -12,7 +12,7 @@ class JavascriptTest < CapybaraFeatureTest
   end
 
   scenario 'Check show/hide Met on show for passing', js: true do
-    visit project_path(@project_passing, locale: nil)
+    visit project_path(@project_passing, locale: :en)
     wait_for_jquery
     find('#toggle-expand-all-panels').click
     wait_for_jquery
@@ -30,7 +30,7 @@ class JavascriptTest < CapybaraFeatureTest
     refute_selector(:css, '#report_process')
   end
   scenario 'Check show/hide Met works for silver', js: true do
-    visit project_path(@project_passing, locale: nil, criterion_level: '1')
+    visit project_path(@project_passing, locale: :en, criterion_level: '1')
     wait_for_jquery
     find('#toggle-expand-all-panels').click
     wait_for_jquery

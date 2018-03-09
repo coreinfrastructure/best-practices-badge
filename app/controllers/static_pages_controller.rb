@@ -7,10 +7,12 @@
 class StaticPagesController < ApplicationController
   include SessionsHelper
 
-  def home
-    preferred_url = force_locale_url(request.original_url, I18n.locale)
-    redirect_to preferred_url unless request.original_url == preferred_url
-  end
+  # These paths don't get locale data in the URLs, so do *not* try to
+  # redirect them to a URL based on locale.
+  skip_before_action :redir_missing_locale,
+                     only: %i[robots error_404_no_locale_redir]
+
+  def home; end
 
   def criteria; end
 
@@ -26,6 +28,10 @@ class StaticPagesController < ApplicationController
       layout: false,
       status: 404
     )
+  end
+
+  def error_404_no_locale_redir
+    error_404
   end
 
   def robots

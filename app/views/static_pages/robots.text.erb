@@ -10,23 +10,23 @@ User-Agent: *
 # instead we list every supported locale.
 Disallow: /users
 Disallow: /en/users
+Disallow: /zh-CN/users
+Disallow: /es/users
 Disallow: /fr/users
+Disallow: /de/users
 Disallow: /ja/users
 Disallow: /ru/users
-Disallow: /zh-CN/users
-Disallow: /de/users
-Disallow: /es/users
 #
 # We want people to have access to the JSON files, so we (now) allow
-# crawling the norm /projects.json and /projects/*.json files.
-# However, it's pointless to get them in different locales, so prevent that.
-# We'll allow English (en) in case we force a language choice in the future.
+# crawling the norm /en/projects.json and /en/projects/*.json files.
+# However, it's pointless to get them in different locales, so
+# only crawl one locale, namely English (en).
+Disallow: /zh-CN/projects*.json
+Disallow: /es/projects*.json
 Disallow: /fr/projects*.json
+Disallow: /de/projects*.json
 Disallow: /ja/projects*.json
 Disallow: /ru/projects*.json
-Disallow: /zh-CN/projects*.json
-Disallow: /de/projects*.json
-Disallow: /es/projects*.json
 #
 # Note that we *do* permit crawling /project_stats/*.json
 # and /*/project_stats/*.json.

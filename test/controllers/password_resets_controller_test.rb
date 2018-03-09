@@ -14,14 +14,16 @@ class PasswordResetsControllerTest < ActionController::TestCase
 
   # rubocop:disable Metrics/BlockLength
   test 'password resets' do
-    get :new
+    get :new, params: { locale: :en }
     assert_template 'password_resets/new'
     # Invalid email
-    post :create, params: { password_reset: { email: '' } }
+    post :create, params: { password_reset: { email: '' }, locale: :en }
     assert_not flash.empty?
     assert_template 'password_resets/new'
     # Valid email
-    post :create, params: { password_reset: { email: @user.email } }
+    post :create, params: {
+      password_reset: { email: @user.email }, locale: :en
+    }
     assert_not_equal @user.reset_digest, @user.reload.reset_digest
     assert_equal 1, ActionMailer::Base.deliveries.size
     assert_not flash.empty?
@@ -29,18 +31,18 @@ class PasswordResetsControllerTest < ActionController::TestCase
     # Password reset form
     user = assigns(:user)
     # Wrong email
-    get :edit, params: { id: user.reset_token, email: '' }
+    get :edit, params: { id: user.reset_token, email: '', locale: :en }
     assert_redirected_to root_url
     # Inactive user
     user.toggle!(:activated)
-    get :edit, params: { id: user.reset_token, email: user.email }
+    get :edit, params: { id: user.reset_token, email: user.email, locale: :en }
     assert_redirected_to root_url
     user.toggle!(:activated)
     # Right email, wrong token
-    get :edit, params: { id: 'wrong_token', email: user.email }
+    get :edit, params: { id: 'wrong_token', email: user.email, locale: :en }
     assert_redirected_to root_url
     # Right email, right token
-    get :edit, params: { id: user.reset_token, email: user.email }
+    get :edit, params: { id: user.reset_token, email: user.email, locale: :en }
     assert_template 'password_resets/edit'
     assert_select(+'input[name=email][type=hidden][value=?]', user.email)
     # Invalid password & confirmation
@@ -50,7 +52,8 @@ class PasswordResetsControllerTest < ActionController::TestCase
       user: {
         password:              '1235foo',
         password_confirmation: 'bar4567'
-      }
+      },
+      locale: :en
     }
     assert_select 'div#error_explanation'
     # Empty password
@@ -60,7 +63,8 @@ class PasswordResetsControllerTest < ActionController::TestCase
       user: {
         password:              '',
         password_confirmation: ''
-      }
+      },
+      locale: :en
     }
     assert_select 'div#error_explanation'
     # Valid password & confirmation
@@ -70,7 +74,8 @@ class PasswordResetsControllerTest < ActionController::TestCase
       user: {
         password:              'foo1234!',
         password_confirmation: 'foo1234!'
-      }
+      },
+      locale: :en
     }
     assert user_logged_in?
     assert_not flash.empty?
@@ -81,7 +86,9 @@ class PasswordResetsControllerTest < ActionController::TestCase
   # rubocop:enable Metrics/BlockLength
   test 'expired token' do
     get :new
-    post :create, params: { password_reset: { email: @user.email } }
+    post :create, params: {
+      password_reset: { email: @user.email }, locale: :en
+    }
 
     @user = assigns(:user)
     @user.update_attribute(:reset_sent_at, 3.hours.ago)

@@ -10,32 +10,35 @@ module SessionsHelper
   PRODUCTION_HOSTNAME = 'bestpractices.coreinfrastructure.org'
   require 'uri'
 
+  # Remove the "locale=value", if any, from the url_query provided
   def remove_locale_query(url_query)
     (url_query || '').gsub(/\Alocale=[^&]*&?|&locale=[^&]*/, '').presence
   end
 
-  # Change locale of original_url.
-  # Presumes that query is empty or only has a locale.
-  # rubocop:disable Metrics/AbcSize
+  # Reply with original_url modified so it has locale "locale".
+  # Remove any query string or previously-specified locale to do this.
+  # At the root, we do *not* include a trailing slash, so we
+  # return ".../en", not ".../en/".
   def force_locale_url(original_url, locale)
     url = URI.parse(original_url)
-    # Clean up query
+    # Remove locale from query string and main path
     url.query = remove_locale_query(url.query)
-    # Clean up path
-    url.path.gsub!(%r{\A\/[a-z]{2}(-[A-Za-z0-9-]*)?(\/|\z)}, '')
-    url.path = '/' + url.path if url.path == '' || url.path[0] != '/'
-    url.path = '/' + locale.to_s + url.path unless locale == :en
+    new_path = url.path.gsub(%r{\A\/[a-z]{2}(-[A-Za-z0-9-]+)?(/|\z)}, '')
+    # Force path to begin with '/'
+    new_path.prepend('/') if new_path.present? && new_path[0] != '/'
+    # Recreate path, but now forcibly include the locale.
+    # If at top, no trailing slash, e.g., "/fr".
+    url.path = '/' + locale.to_s
+    url.path << new_path unless new_path.blank? || new_path == '/'
     url.to_s
   end
-  # rubocop:enable Metrics/AbcSize
 
   # Low-level route to set user as being logged in.
   # This doesn't set the last_login_at or forward elsewhere.
   def log_in(user)
     session[:user_id] = user.id
-    # Switch to user's preferred locale, but only if the current locale is :en
-    # (any other locale is an intentional selection & thus should be retained)
-    I18n.locale = user.preferred_locale.to_sym if I18n.locale == :en
+    # Switch to user's preferred locale
+    I18n.locale = user.preferred_locale.to_sym
     return unless session[:forwarding_url]
 
     session[:forwarding_url] = force_locale_url(

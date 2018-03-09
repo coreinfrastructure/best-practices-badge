@@ -25,7 +25,7 @@ class ProjectGetTest < ActionDispatch::IntegrationTest
     # because the secure_headers gem integrates at the Rack level
     # (thus a controller test does not invoke it).
 
-    get project_path(id: @project_one.id)
+    get project_path(id: @project_one.id, locale: 'en')
     assert_response :success
 
     # Check some normal headers
@@ -77,8 +77,8 @@ class ProjectGetTest < ActionDispatch::IntegrationTest
   # rubocop:enable Metrics/BlockLength
 
   test 'ensure CORS set when origin set' do
-    get project_path(id: @project_one.id),
-        headers: { 'Origin' => 'https://example.com' }
+    get project_path(@project_one, locale: :en),
+        headers: { 'Origin' => 'https://en/example.com' }
     assert_response :success
 
     # When there's an origin, we allow just GET from anywhere.

@@ -28,7 +28,7 @@ class FeedTest < ActionDispatch::IntegrationTest
   end
 
   test 'feed matches fixture file' do
-    get feed_path
+    get feed_path(locale: :en)
     assert_equal contents('feed.atom'), response.body
   end
 end

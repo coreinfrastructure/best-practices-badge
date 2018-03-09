@@ -7,6 +7,10 @@
 class SessionsController < ApplicationController
   include SessionsHelper
 
+  # Do *NOT* redirect session creation, that will cause complicated failures
+  # because we don't really want the locale.
+  skip_before_action :redir_missing_locale, only: :create
+
   def new
     if logged_in?
       flash[:success] = t('sessions.already_logged_in')
@@ -31,8 +35,8 @@ class SessionsController < ApplicationController
 
   def destroy
     log_out if logged_in?
-    redirect_to root_url
     flash[:success] = t('sessions.signed_out')
+    redirect_to root_url
   end
 
   private

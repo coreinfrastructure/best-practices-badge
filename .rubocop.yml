@@ -60,6 +60,15 @@ Style/Send:
   Exclude:
     - 'test/**/*.rb'
 #
+# Historical systems could only reliably handle comments if they were ASCII.
+# But UTF-8 has essentially "taken over", so there's no reason to limit
+# ourselves to ASCII. Having ASCII-only comments makes it unnecessarily
+# difficult to discuss/describe locale issues.  *Code* handles UTF-8
+# without incident, so there's no reason to limit comments to ASCII.
+#
+Style/AsciiComments:
+  Enabled: false
+#
 # The following are new cops in Rubocop 0.52 which have disabled because
 # we aren't ready for them right now. It's diffult to do things "all at once".
 # Instead, we'll get things running first (ignoring these cops), and

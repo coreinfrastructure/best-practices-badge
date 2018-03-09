@@ -12,13 +12,13 @@ class SessionsControllerTest < ActionController::TestCase
   end
 
   test 'should get new' do
-    get :new
+    get :new, params: { locale: :en }
     assert_response :success
   end
 
   test 'should redirect logged in' do
     log_in_as(@user)
-    get :new
+    get :new, params: { locale: :en }
     assert_not flash.empty?
     assert_redirected_to root_url
   end

@@ -12,7 +12,7 @@ class ProjectStatsControllerTest < ActionController::TestCase
   end
 
   test 'should get index' do
-    get :index
+    get :index, params: { locale: :en }
     assert_response :success
     assert_not_nil assigns(:project_stats)
     assert @response.body.include?('All projects')
@@ -22,7 +22,7 @@ class ProjectStatsControllerTest < ActionController::TestCase
 
   test 'should get index as admin' do
     log_in_as(users(:admin_user))
-    get :index
+    get :index, params: { locale: :en }
     assert_response :success
     assert_not_nil assigns(:project_stats)
     assert @response.body.include?('All projects')
@@ -30,7 +30,7 @@ class ProjectStatsControllerTest < ActionController::TestCase
   end
 
   test 'should get index, CSV format' do
-    get :index, format: :csv
+    get :index, format: :csv, params: { locale: :en }
     assert_response :success
     contents = CSV.parse(response.body, headers: true)
     assert_equal 'id', contents.headers[0]
@@ -58,8 +58,8 @@ class ProjectStatsControllerTest < ActionController::TestCase
 
   test 'should NOT create project_stat' do
     assert_raises AbstractController::ActionNotFound do
-      post :create, params: { project_stat:
-        {
+      post :create, params: {
+        project_stat: {
           percent_ge_0: @project_stat.percent_ge_0,
           percent_ge_25: @project_stat.percent_ge_25,
           percent_ge_50: @project_stat.percent_ge_50,
@@ -68,18 +68,20 @@ class ProjectStatsControllerTest < ActionController::TestCase
           percent_ge_100: @project_stat.percent_ge_100,
           created_since_yesterday: @project_stat.created_since_yesterday,
           updated_since_yesterday: @project_stat.updated_since_yesterday
-        } }
+        },
+        locale: :en
+      }
     end
   end
 
   test 'should show project_stat' do
-    get :show, params: { id: @project_stat }
+    get :show, params: { id: @project_stat, locale: :de }
     assert_response :success
   end
 
   test 'should NOT get edit' do
     assert_raises Object do
-      get :edit, params: { id: @project_stat }
+      get :edit, params: { id: @project_stat, locale: :de }
     end
   end
 
@@ -104,7 +106,7 @@ class ProjectStatsControllerTest < ActionController::TestCase
 
   test 'should NOT destroy project_stat' do
     assert_raises AbstractController::ActionNotFound do
-      delete :destroy, params: { id: @project_stat }
+      delete :destroy, params: { id: @project_stat, locale: :en }
     end
   end
 end

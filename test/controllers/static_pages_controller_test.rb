@@ -1,57 +1,84 @@
 # frozen_string_literal: true
 
-# Copyright 2015-2017, the Linux Foundation, IDA, and the
+# copyright 2015-2017, the linux foundation, ida, and the
 # CII Best Practices badge contributors
 # SPDX-License-Identifier: MIT
 
 require 'test_helper'
 
-class StaticPagesControllerTest < ActionController::TestCase
+# class StaticPagesControllerTest < ActionController::TestCase
+class StaticPagesControllerTest < ActionDispatch::IntegrationTest
   test 'should get home' do
-    get :home, params: { locale: 'en' }
+    get root_path(locale: 'en')
     assert_response :success
-    assert_template 'home'
+    # assert_template 'home'
     # Check that it has some content
     assert_includes @response.body, 'Open Source Software'
     assert_includes @response.body, 'More information on the'
     assert_includes @response.body, 'target='
     # target=... better not end immediately, we need rel="noopener"
     refute_includes @response.body, 'target=[^ >]+>'
+    # Ensure locale cross-references are present, and that
+    # the home page URL doesn't have a trailing slash.
+    #
+    # There's a weird test environment artifact I haven't been
+    # able to track down.  The view response sometimes has an original url of
+    # http://127.0.0.1:31337 and other times it's http://www.example.com.
+    # Values such as "request.host" are consistently the second value.
+    # This doesn't happen when we only test this file, but instead happens
+    # when there's a full "rails test" - which means some other test
+    # causes this.  It seems to be an artifact of the test environment, and
+    # not actually a bug in the deployed code, so the test here will be
+    # flexible to handle the variations that occur in the test environment.
+    # See also: projects_controller_test.rb
+    #
+    assert_includes I18n.available_locales, :en
+    assert_includes I18n.available_locales, :fr
+    I18n.available_locales.each do |loc|
+      # Metadata about related pages (useful for search engines)
+      assert_match \
+        %r{<link\ rel="alternate"\ hreflang="#{loc}"
+         \ href="https?://[a-z0-9.:]+/#{loc}"\ />}x,
+        @response.body
+      # User locale selector (useful for users)
+      assert_match \
+        %r{<li><a\ href="https?://[a-z0-9.:]+/#{loc}">}x,
+        @response.body
+    end
+    assert_match \
+      %r{<link\ rel="alternate"\ hreflang="x-default"
+       \ href="https?://[a-z0-9.:]+"\ />}x,
+      @response.body
   end
 
   test 'should get home in French when fr locale in URL' do
-    get :home, params: { locale: :fr }
+    get root_path(locale: :fr)
     assert_response :success
-    assert_template 'home'
+    # assert_template 'home'
     # Check that it has some content
     assert_includes @response.body, 'les projets de logiciel libre'
   end
 
   test 'should get cookie page' do
-    get :cookies, params: { locale: :en }
+    get cookies_path(locale: :en)
     assert_response :success
     assert_includes @response.body, 'About Cookies'
     assert_includes @response.body, 'small data files'
   end
 
   test 'should get robots.txt' do
-    # The locale: :en simulates how the router accesses this.
-    get :robots, format: :text, params: { locale: :en }
+    get robots_path(locale: :en)
     assert_response :success
-    assert_template 'robots'
   end
 
   test 'should get criteria' do
-    get :criteria, params: { locale: :en }
+    get criteria_path(locale: :en)
     assert_response :success
-    assert_template 'criteria'
 
-    get :criteria, params: { locale: :fr }
+    get criteria_path(locale: :fr)
     assert_response :success
-    assert_template 'criteria'
 
-    get :criteria, params: { locale: :'zh-CN' }
+    get criteria_path(locale: :'zh-CN')
     assert_response :success
-    assert_template 'criteria'
   end
 end

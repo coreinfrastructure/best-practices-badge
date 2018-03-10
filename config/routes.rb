@@ -20,7 +20,7 @@ Rails.application.routes.draw do
   # The "robots.txt" file is always at the root of the
   # document tree, and locale is irrelevant to it. Handle it specially.
   get '/robots.txt' => 'static_pages#robots',
-      defaults: { format: 'text' }
+      defaults: { format: 'text' }, as: :robots
 
   # The /projects/NUMBER/badge image route needs speed and never depends
   # on the locale. Perhaps most importantly, badge images need to have

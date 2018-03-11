@@ -19,7 +19,8 @@ class StaticPagesControllerTest < ActionDispatch::IntegrationTest
     # target=... better not end immediately, we need rel="noopener"
     refute_includes @response.body, 'target=[^ >]+>'
     # Ensure locale cross-references are present, and that
-    # the home page URL doesn't have a trailing slash.
+    # the home page URL doesn't have a trailing slash UNLESS there's no locale.
+    # If there's no locale, include a '/' to be consistent with root_path.
     #
     # There's a weird test environment artifact I haven't been
     # able to track down.  The view response sometimes has an original url of
@@ -47,7 +48,7 @@ class StaticPagesControllerTest < ActionDispatch::IntegrationTest
     end
     assert_match \
       %r{<link\ rel="alternate"\ hreflang="x-default"
-       \ href="https?://[a-z0-9.:]+"\ />}x,
+       \ href="https?://[a-z0-9.:]+/"\ />}x,
       @response.body
   end
 

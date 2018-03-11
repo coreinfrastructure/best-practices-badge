@@ -422,6 +422,17 @@ You can access 'I18n.locale' to see the current locale's value
 (this is a thread-local query, so this works fine when multiple
 threads are active).
 
+### Canonical URLs
+
+We try to always refer to canonical URL forms.
+In some cases that can help search engine rankings, and in any case
+it's easier to understand.
+Rails' built-in "path" and "url" helpers add a trailing slash
+if it is at the root without locale (e.g., "https://x.com/"),
+but otherwise they do not add a trailing slash.
+We accept a locale setting in the query string, but we prefer to generate
+locales in the path (e.g., "https://x.com/en", not "https://x.com?locale=en").
+
 ## App authentication via GitHub
 
 The BadgeApp needs to authenticate itself through OAuth2 on

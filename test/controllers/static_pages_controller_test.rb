@@ -82,4 +82,12 @@ class StaticPagesControllerTest < ActionDispatch::IntegrationTest
     get criteria_path(locale: :'zh-CN')
     assert_response :success
   end
+
+  test 'should redirect criteria with trailing slash' do
+    get '/en/criteria/'
+    follow_redirect!
+    assert_response :success
+    # Notice that the trailing slash is now gone
+    assert_equal '/en/criteria', @request.fullpath
+  end
 end

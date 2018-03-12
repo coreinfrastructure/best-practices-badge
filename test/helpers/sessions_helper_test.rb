@@ -6,6 +6,7 @@
 
 require 'test_helper'
 
+# rubocop: disable Metrics/BlockLength
 class SessionsHelperTest < ActionView::TestCase
   setup do
     @user = users(:test_user)
@@ -25,6 +26,10 @@ class SessionsHelperTest < ActionView::TestCase
 
   # Unit test.  There are tricky cases, so try various forms
   test 'check force_locale_url' do
+    assert_equal 'https://a.b.c/',
+                 force_locale_url('https://a.b.c/', nil)
+    assert_equal 'https://a.b.c/',
+                 force_locale_url('https://a.b.c', nil)
     assert_equal 'https://a.b.c/fr', force_locale_url('https://a.b.c/', :fr)
     assert_equal 'https://a.b.c/fr', force_locale_url('https://a.b.c', :fr)
     assert_equal 'https://a.b.c/en',
@@ -50,3 +55,4 @@ class SessionsHelperTest < ActionView::TestCase
                  )
   end
 end
+# rubocop: enable Metrics/BlockLength

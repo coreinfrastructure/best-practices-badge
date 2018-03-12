@@ -127,8 +127,18 @@ class ProjectsControllerTest < ActionController::TestCase
     only_correct_criteria_selectable('2')
   end
 
-  test 'should show project JSON data' do
+  test 'should show project JSON data with locale' do
     get :show_json, params: { id: @project, format: :json, locale: :en }
+    assert_response :success
+    body = JSON.parse(response.body)
+    assert_equal 'Pathfinder OS', body['name']
+    assert_equal 'Operating system for Pathfinder rover', body['description']
+    assert_equal 'https://www.nasa.gov', body['homepage_url']
+    assert_equal 'in_progress', body['badge_level']
+  end
+
+  test 'should show project JSON data without locale' do
+    get :show_json, params: { id: @project, format: :json }
     assert_response :success
     body = JSON.parse(response.body)
     assert_equal 'Pathfinder OS', body['name']
@@ -625,6 +635,57 @@ class ProjectsControllerTest < ActionController::TestCase
   test 'should remove invalid parameter' do
     get :index, params: { role: 'admin', status: 'passing', locale: :en }
     assert_redirected_to 'http://test.host/en/projects?status=passing'
+  end
+
+  test 'query JSON for passing projects' do
+    get :index, params: { gteq: '100', format: 'json', locale: :en }
+    assert_response :success
+    body = JSON.parse(response.body)
+    # Current test fixtures have 3 cases - this test will need to be
+    # modified if new ones are added.
+    assert_equal 3, body.length
+    0.upto(body.length - 1) do |i|
+      assert_equal 100, body[i]['badge_percentage_0']
+    end
+  end
+
+  test 'query for passing projects has correct i18n query string' do
+    # It'd be easy to drop the query string in cross-referenced locale links,
+    # e.g., to refer to "/projects" when we should have "/projects?gteq=100".
+    # Many of the Rails url-querying methods intentionally
+    # *omit* the query string (which is often fine, but not in this case).
+    # Specifically test to ensure the query string is retained.
+    #
+    get :index, params: { gteq: '100', locale: :en }
+    assert_response :success
+
+    # There's a weird test environment artifact I haven't been
+    # able to track down.  The view response sometimes has an original url of
+    # http://127.0.0.1:31337 and other times it's http://www.example.com.
+    # Values such as "request.host" are consistently the second value.
+    # This doesn't happen when we only test this file, but instead happens
+    # when there's a full "rails test" - which means some other test
+    # causes this.  It seems to be an artifact of the test environment, and
+    # not actually a bug in the deployed code, so the test here will be
+    # flexible to handle the variations that occur in the test environment.
+    # See also: static_pages_controller_test.rb
+
+    assert_includes I18n.available_locales, :en
+    assert_includes I18n.available_locales, :fr
+    I18n.available_locales.each do |loc|
+      assert_match \
+        %r{<link\ rel="alternate"\ hreflang="#{loc}"
+         \ href="https?://[a-z0-9.:]+/#{loc}/projects\?gteq=100"\ />}x,
+        @response.body
+      # User locale selector (useful for users)
+      assert_match \
+        %r{<li><a\ href="https?://[a-z0-9.:]+/#{loc}/projects\?gteq=100">}x,
+        @response.body
+    end
+    assert_match \
+      %r{<link\ rel="alternate"\ hreflang="x-default"
+       \ href="https?://[a-z0-9.:]+/projects\?gteq=100"\ />}x,
+      @response.body
   end
 
   test 'Check ids= projects index query' do

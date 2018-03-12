@@ -215,7 +215,7 @@ class ProjectsController < ApplicationController
     respond_to do |format|
       @project.homepage_url ||= project_find_default_url
       format.html do
-        redirect_to projects_url
+        redirect_to projects_path
         flash[:success] = t('projects.delete.done')
       end
       format.json { head :no_content }

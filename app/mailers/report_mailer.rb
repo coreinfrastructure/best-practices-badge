@@ -4,7 +4,11 @@
 # CII Best Practices badge contributors
 # SPDX-License-Identifier: MIT
 
-# When sending emails to specific users we use I18n.with_locale do..end.
+# When sending emails we use I18n.with_locale do..end.
+# If the destination is user.email, use:
+# ... I18n.with_locale(user.preferred_locale.to_sym) do
+# If the destination is REPORT_EMAIL_DESTINATION, use:
+# ... I18n.with_locale(I18n.default_locale) do
 # That's because it's possible that the current user is an administrator
 # or script, in which case the current I18n.locale is not necessarily
 # the recipient's preferred_locale.  Where possible, we want to use
@@ -34,10 +38,12 @@ class ReportMailer < ApplicationMailer
     @project_info_url = projects_url(@project, locale: nil)
     @report_destination = REPORT_EMAIL_DESTINATION
     set_headers
-    mail(
-      to: @report_destination,
-      subject: "Project #{project.id} status change to #{new_badge_status}"
-    )
+    I18n.with_locale(I18n.default_locale) do
+      mail(
+        to: @report_destination,
+        subject: "Project #{project.id} status change to #{new_badge_status}"
+      )
+    end
   end
 
   # Return subject line for given badge status.  Uses current I18n.locale.
@@ -108,10 +114,12 @@ class ReportMailer < ApplicationMailer
     return if projects.nil?
     @projects = projects
     set_headers
-    mail(
-      to: @report_destination,
-      subject: 'Summary of reminders sent'
-    )
+    I18n.with_locale(I18n.default_locale) do
+      mail(
+        to: @report_destination,
+        subject: 'Summary of reminders sent'
+      )
+    end
   end
 
   # Generate monthly announcement, but only if there's a destination
@@ -128,10 +136,12 @@ class ReportMailer < ApplicationMailer
     @last_stat_in_prev_month = last_stat_in_prev_month
     @last_stat_in_prev_prev_month = last_stat_in_prev_prev_month
     set_headers
-    mail(
-      to: @report_destination,
-      subject: 'Projects that received badges (monthly summary)'
-    )
+    I18n.with_locale(I18n.default_locale) do
+      mail(
+        to: @report_destination,
+        subject: 'Projects that received badges (monthly summary)'
+      )
+    end
   end
 
   # Email user when they add a new project.
@@ -164,7 +174,7 @@ class ReportMailer < ApplicationMailer
     @user = user
     @deletion_rationale = deletion_rationale
     set_headers
-    I18n.with_locale(@user.preferred_locale.to_sym) do
+    I18n.with_locale(I18n.default_locale) do
       mail(
         to: @report_destination,
         subject: t(

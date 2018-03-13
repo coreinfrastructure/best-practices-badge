@@ -37,7 +37,7 @@ en:
       Please <em><a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">send
       an email</a> </em>or <em><a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
       target="_blank" rel="noopener">file an issue</a></em>.</strong> © 2015-2018
-      <a href="https://www.coreinfrastructure.org/" target="_blank" rel="noopener">Core
+      <a href="https://www.coreinfrastructure.org/en" target="_blank" rel="noopener">Core
       Infrastructure Initiative</a>, a <a href="https://www.linuxfoundation.org/"
       target="_blank" rel="noopener">Linux Foundation</a> Collaborative Project.
       All Rights Reserved. Please see our <a href="https://www.linuxfoundation.org/privacy"
@@ -70,7 +70,7 @@ en:
     forgot_password: Forgot your password?
     remember_me: Keep me logged in (using a permanent cookie)
     cookie_details_html: >
-      <a href="/cookies" target="_blank" rel="noopener"><i>Learn more about cookies.</i></a>
+      <a href="/cookies/en" target="_blank" rel="noopener"><i>Learn more about cookies.</i></a>
     login_custom: Log in using custom account
     no_custom: No custom account? Sign up now!
     already_logged_in: You are already logged in.
@@ -104,16 +104,16 @@ en:
         More information on the CII Best Practices Badging program,
         including background and <a href='https://github.com/coreinfrastructure/best-practices-badge/blob/master/doc/criteria.md'>criteria</a>,
         is <a href='https://github.com/coreinfrastructure/best-practices-badge'>available
-        on GitHub</a>. <a href="/project_stats">Project statistics</a>
-        and <a href="/criteria">criteria statistics</a> are available.
-        The <a href="/projects">projects page</a> shows participating
+        on GitHub</a>. <a href="/project_stats/en">Project statistics</a>
+        and <a href="/criteria/en">criteria statistics</a> are available.
+        The <a href="/projects/en">projects page</a> shows participating
         projects and supports queries (e.g., you can see <a href="/projects?gteq=100">projects
         that have a passing badge</a>). You can also see <a href='/projects/1/0'>an
         example (where we try to get our own badge)</a>.
       p3_html: >-
         <em>Privacy and legal issues</em>: Please see our <a href="https://www.linuxfoundation.org/privacy">privacy
         policy</a>,
-        <a href="/cookies">about cookies</a>, and
+        <a href="/cookies/en">about cookies</a>, and
         <a href="https://www.linuxfoundation.org/terms">terms
         of use</a>.
         The code for the badging application itself is released under the
@@ -218,7 +218,7 @@ en:
         on the form, and are expected to be added as active criteria
         to some level in the future, but are not included in completion
         calculations. <br><br> You can see statistics about projects
-        over time at the <a href="/project_stats">project stats
+        over time at the <a href="/project_stats/en">project stats
         page</a>.
   users:
     new:
@@ -312,7 +312,7 @@ en:
       reactivated_projects: Reactivated projects in 14 days after
         receiving reminder
       admin_html: >-
-        As an admin, you may also see the <a href="/reminders">detailed
+        As an admin, you may also see the <a href="/reminders/en">detailed
         information about reminders</a>.
       raw_data: 'You can also see the raw data:'
       json_format: JSON format

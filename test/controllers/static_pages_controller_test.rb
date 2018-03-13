@@ -85,6 +85,9 @@ class StaticPagesControllerTest < ActionDispatch::IntegrationTest
 
   test 'should redirect criteria with trailing slash' do
     get '/en/criteria/'
+    # As an emergency we disabled redirection to get production site
+    # running quickly.
+    skip 'Disabled redirection because of production site problem.'
     follow_redirect!
     assert_response :success
     # Notice that the trailing slash is now gone

@@ -165,6 +165,7 @@ zh-CN:
       user_id: 用户名
       paren_name_unknown: "(未知名称)"
       badge_level: 项目%{id}的徽章级别为%{percent}%
+      badge:
     new:
       post_delay_warning: 在提交后，因为我们试图自动填充相关信息，可能有显著的滞后。
       new_badge: 新徽章

@@ -192,6 +192,7 @@ ja:
       user_id: ユーザーID
       paren_name_unknown: "（名前不明）"
       badge_level: プロジェクト %{id} のバッジレベルは %{percent}％ です
+      badge:
     new:
       post_delay_warning: 自動的に情報を入力しようとするため、送信後にかなりの遅れが生じることがあります。
       new_badge: 新しいバッジ

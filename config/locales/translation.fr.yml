@@ -228,6 +228,7 @@ fr:
       paren_name_unknown: "(Nom inconnu)"
       badge_level: Le niveau de badge pour le projet %{id} est
         %{percent}%
+      badge:
     new:
       post_delay_warning: >-
         Il peut y avoir un délai important après la soumission

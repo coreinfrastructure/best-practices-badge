@@ -121,10 +121,15 @@ class ApplicationController < ActionController::Base
     preferred_url = force_locale_url(request.original_url, best_locale)
     # It's not clear what status code to provide on a locale-based redirect.
     # However, we must avoid 301 (Moved Permanently), because it is certainly
-    # not a permanent move.  For the moment we'll use 300 (Multiple Choices),
+    # not a permanent move.
+    # We previously used use 300 (Multiple Choices),
     # because that code indicates there's a redirect based on agent choices
-    # (which is certainly true).
-    redirect_to preferred_url, status: :multiple_choices # 300
+    # (which is certainly true), by doing this:
+    # redirect_to preferred_url, status: :multiple_choices # 300
+    # It worked on staging, but causes problems in production when trying
+    # to redirect the root path, so as emergency we're
+    # switching to "found" (302) which is supported by everyone.
+    redirect_to preferred_url, status: :found
   end
 
   # Set the locale, based on best available information.

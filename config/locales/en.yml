@@ -350,6 +350,7 @@ en:
       owner: Owner
       last_achieved: Last achieved at
       pachieved: "% Achieved"
+      badge: Badge
       can_also_sort: 'You can also sort by the following:'
       repository_url: repository URL
       create_time: create time (for the badge entry)

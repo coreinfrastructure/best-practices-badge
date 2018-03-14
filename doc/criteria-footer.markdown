@@ -113,3 +113,27 @@ You may also want to see the "[background](./background.md)" file
 for more information about these criteria,
 and the "[implementation](./implementation.md)" notes
 about the BadgeApp application.
+
+## See also
+
+Project participation and interface:
+
+* [CONTRIBUTING.md](../CONTRIBUTING.md) - How to contribute to this project
+* [INSTALL.md](INSTALL.md) - How to install/quick start
+* [governance.md](governance.md) - How the project is governed
+* [roadmap.md](roadmap.md) - Overall direction of the project
+* [background.md](background.md) - Background research
+* [api](api.md) - Application Programming Interface (API), inc. data downloads
+
+Criteria:
+
+* [criteria.md](criteria.md) - Criteria for "passing" badge
+* [other.md](other.md) - Criteria for other badges (silver and gold)
+
+Development processes and security:
+
+* [requirements.md](requirements.md) - Requirements (what's it supposed to do?)
+* [design.md](design.md) - Architectural design information
+* [implementation.md](implementation.md) - Implementation notes
+* [testing.md](testing.md) - Information on testing
+* [security.md](security.md) - Why it's adequately secure (assurance case)

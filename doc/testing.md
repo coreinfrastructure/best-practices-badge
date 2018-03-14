@@ -1,8 +1,15 @@
 # Testing
 
+This document briefly discusses details involved in testing
+(dynamically executing the code with specific inputs to see if expected
+behaviors are produced).
+We also use other techniques to detect problems ahead-of-time; see
+[CONTRIBUTING.md](../CONTRIBUTING.md) for more about the other
+analysis tools and processes we use.
+
 ## Workflow
 
-Please review documentation on [testing](http://guides.rubyonrails.org/testing.html). Pull requests should endeavor to increase, not decrease test coverage, as monitored in [Codecov](https://codecov.io/gh/coreinfrastructure/best-practices-badge).
+Please review the Rails documentation on [testing](http://guides.rubyonrails.org/testing.html). Pull requests should endeavor to increase, not decrease test coverage, as monitored in [Codecov](https://codecov.io/gh/coreinfrastructure/best-practices-badge).
 
 Running `rails t test/features/can_access_home_test.rb:4` will execute just the test from line 4. Removing the `:4` will run all tests in that file.
 
@@ -17,6 +24,8 @@ DRIVER=firefox rails t
 DRIVER=chrome rails t test/features/can_access_home_test.rb:4
 DRIVER=poltergeist rails s test/features/can_access_home_test.rb
 ```
+
+Note that adding chrome or firefox as a DRIVER will let you observe the test in real time. This slows down the test but can be very helpful in revealing the cause of test problems.
 
 Selenium tests for Safari require this [file](http://selenium-release.storage.googleapis.com/2.48/SafariDriver.safariextz) but still do not seem to be working currently.
 
@@ -98,3 +107,27 @@ If you didn't previously run `./install-badge-dev-env`, install phantomjs with `
 ### Binding.pry
 
 When debugging tests (or code!), it is very helpful to insert `binding.pry` where results are confusing. This will open the pry byebug debugger and allow you to access local variables in a REPL. `c` continues execution.
+
+## See also
+
+Project participation and interface:
+
+* [CONTRIBUTING.md](../CONTRIBUTING.md) - How to contribute to this project
+* [INSTALL.md](INSTALL.md) - How to install/quick start
+* [governance.md](governance.md) - How the project is governed
+* [roadmap.md](roadmap.md) - Overall direction of the project
+* [background.md](background.md) - Background research
+* [api](api.md) - Application Programming Interface (API), inc. data downloads
+
+Criteria:
+
+* [criteria.md](criteria.md) - Criteria for "passing" badge
+* [other.md](other.md) - Criteria for other badges (silver and gold)
+
+Development processes and security:
+
+* [requirements.md](requirements.md) - Requirements (what's it supposed to do?)
+* [design.md](design.md) - Architectural design information
+* [implementation.md](implementation.md) - Implementation notes
+* [testing.md](testing.md) - Information on testing
+* [security.md](security.md) - Why it's adequately secure (assurance case)

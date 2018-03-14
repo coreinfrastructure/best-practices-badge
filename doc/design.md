@@ -3,9 +3,16 @@
 <!-- SPDX-License-Identifier: (MIT OR CC-BY-3.0+) -->
 
 This document describes the design of the BadgeApp.
+
 No single tehnology does everything well.
 Instead, design is all about making good choices between
-options that have different trade-offs to meet requirements.
+options that have different trade-offs, so that together
+those choices will efficiently meet requirements.
+As explained in [You Are Not Google](https://blog.bradfieldcs.com/you-are-not-google-84912cf44afb),
+"if you’re using a technology that originated at a large company,
+but your use case is very different, it’s unlikely that you arrived
+there deliberately...
+what’s important is that you actually use the right tool for the job."
 This document describes our key choices.
 
 ## High-level architecture
@@ -13,8 +20,13 @@ This document describes our key choices.
 The web application is itself OSS, and we intend for the
 web application to meet its own criteria.
 We have implemented it with Ruby on Rails; Rails is good for
-simple web applications like this one.
-The system stores the data in PostgreSQL (aka Postgres).
+simple web applications like this one,
+particularly since it's easy to create, update, and maintain
+with a small team.
+The system stores the data in PostgreSQL (aka Postgres); the key
+is that we don't lose data, and our throughput needs are easily met
+by PostgreSQL, so selecting an RDBMS with a long track record of
+reliability made sense.
 
 ### High-level design figure
 
@@ -380,9 +392,24 @@ dependent on a single supplier whose product cannot be forked.
 
 ## See also
 
-See:
+Project participation and interface:
 
-* [requirements](./requirements.md)
-* [implementation](./implementation.md)
-* [background](./background.md)
-* [criteria](./criteria.md)
+* [CONTRIBUTING.md](../CONTRIBUTING.md) - How to contribute to this project
+* [INSTALL.md](INSTALL.md) - How to install/quick start
+* [governance.md](governance.md) - How the project is governed
+* [roadmap.md](roadmap.md) - Overall direction of the project
+* [background.md](background.md) - Background research
+* [api](api.md) - Application Programming Interface (API), inc. data downloads
+
+Criteria:
+
+* [criteria.md](criteria.md) - Criteria for "passing" badge
+* [other.md](other.md) - Criteria for other badges (silver and gold)
+
+Development processes and security:
+
+* [requirements.md](requirements.md) - Requirements (what's it supposed to do?)
+* [design.md](design.md) - Architectural design information
+* [implementation.md](implementation.md) - Implementation notes
+* [testing.md](testing.md) - Information on testing
+* [security.md](security.md) - Why it's adequately secure (assurance case)

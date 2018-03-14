@@ -1602,8 +1602,26 @@ Predicting Software Assurance Using Quality and Reliability Measures.
 December 2014. CMU/SEI-2014-TN-026.
 <http://resources.sei.cmu.edu/library/asset-view.cfm?assetid=428589>
 
-See [criteria](./criteria.md) for the current version of the criteria.
-See [implementation](./implementation.md)
-about the implementation of the BadgeApp web application that helps
-projects determine (and demonstrate) that they meet these criteria.
+## See also
 
+Project participation and interface:
+
+* [CONTRIBUTING.md](../CONTRIBUTING.md) - How to contribute to this project
+* [INSTALL.md](INSTALL.md) - How to install/quick start
+* [governance.md](governance.md) - How the project is governed
+* [roadmap.md](roadmap.md) - Overall direction of the project
+* [background.md](background.md) - Background research
+* [api](api.md) - Application Programming Interface (API), inc. data downloads
+
+Criteria:
+
+* [criteria.md](criteria.md) - Criteria for "passing" badge
+* [other.md](other.md) - Criteria for other badges (silver and gold)
+
+Development processes and security:
+
+* [requirements.md](requirements.md) - Requirements (what's it supposed to do?)
+* [design.md](design.md) - Architectural design information
+* [implementation.md](implementation.md) - Implementation notes
+* [testing.md](testing.md) - Information on testing
+* [security.md](security.md) - Why it's adequately secure (assurance case)

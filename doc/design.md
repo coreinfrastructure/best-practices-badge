@@ -9,10 +9,10 @@ Instead, design is all about making good choices between
 options that have different trade-offs, so that together
 those choices will efficiently meet requirements.
 As explained in [You Are Not Google](https://blog.bradfieldcs.com/you-are-not-google-84912cf44afb),
-"if you’re using a technology that originated at a large company,
-but your use case is very different, it’s unlikely that you arrived
+"if you're using a technology that originated at a large company,
+but your use case is very different, it's unlikely that you arrived
 there deliberately...
-what’s important is that you actually use the right tool for the job."
+what's important is that you actually use the right tool for the job."
 This document describes our key choices.
 
 ## High-level architecture

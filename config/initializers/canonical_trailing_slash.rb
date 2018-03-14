@@ -9,34 +9,31 @@
 # Rack Middleware" by Brent Ertz, 7/24/2012, https://quickleft.com/
 # blog/avoiding-seo-duplicate-content-issues-with-ruby-and-rack-middleware/
 
-# This is all temporarily disabled in an attempt to get the production
-# site back up.
+module Rack
+  # If we get a URL with a trailing slash other than "/", redirect to
+  # a page without the trailing slash so that we have a single
+  # canonical URL format.
+  class CanonicalizeTrailingSlash
+    def initialize(app)
+      @app = app
+    end
 
-# module Rack
-#   # If we get a URL with a trailing slash other than "/", redirect to
-#   # a page without the trailing slash so that we have a single
-#   # canonical URL format.
-#   class CanonicalizeTrailingSlash
-#     def initialize(app)
-#       @app = app
-#     end
-#
-#     def call(env)
-#       request = Rack::Request.new env
-#       if %r{^/(.*)/$}.match?(request.path_info)
-#         # Clean up URL and redirect a different URL
-#         url = request.base_url + request.path.chomp('/') +
-#               (request.query_string.empty? ? '' : '?' + request.query_string)
-#         [301, { 'Location' => url, 'Content-Type' => 'text/html' }, []]
-#       else
-#         # Nothing to do, continue chain.
-#         @app.call env
-#       end
-#     end
-#   end
-# end
-#
-# Rails.application.config.middleware.insert_before(
-#   0,
-#   Rack::CanonicalizeTrailingSlash
-# )
+    def call(env)
+      request = Rack::Request.new env
+      if %r{^/(.*)/$}.match?(request.path_info)
+        # Clean up URL and redirect a different URL
+        url = request.base_url + request.path.chomp('/') +
+              (request.query_string.empty? ? '' : '?' + request.query_string)
+        [301, { 'Location' => url, 'Content-Type' => 'text/html' }, []]
+      else
+        # Nothing to do, continue chain.
+        @app.call env
+      end
+    end
+  end
+end
+
+Rails.application.config.middleware.insert_before(
+  0,
+  Rack::CanonicalizeTrailingSlash
+)

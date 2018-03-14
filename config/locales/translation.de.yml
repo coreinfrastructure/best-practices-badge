@@ -245,7 +245,7 @@ de:
       user_id: Benutzer ID
       paren_name_unknown: "(Name unbekannt)"
       badge_level: Badge Level für das Projekt %{id} ist %{percent}%
-      badge:
+      badge: Badge
     new:
       post_delay_warning: >-
         Es kann nach dem Einreichen eine erhebliche Verzögerung

@@ -6,7 +6,9 @@
 
 require 'test_helper'
 
-# class StaticPagesControllerTest < ActionController::TestCase
+# Inherit from ActionDispatch::IntegrationTest because
+# ActionController::TestCase is now obsolete.
+# rubocop: disable Metrics/BlockLength
 class StaticPagesControllerTest < ActionDispatch::IntegrationTest
   test 'should get home' do
     get root_path(locale: 'en')
@@ -18,6 +20,15 @@ class StaticPagesControllerTest < ActionDispatch::IntegrationTest
     assert_includes @response.body, 'target='
     # target=... better not end immediately, we need rel="noopener"
     refute_includes @response.body, 'target=[^ >]+>'
+    # Check that our preload statements are present
+    assert_select(
+      'head link[rel="preload"][as="stylesheet"][type="text/css"]' \
+      '[href^="/assets/"]'
+    )
+    assert_select(
+      'head link[rel="preload"][as="script"][type="application/javascript"]' \
+      '[href^="/assets/"]'
+    )
     # Ensure locale cross-references are present, and that
     # the home page URL doesn't have a trailing slash UNLESS there's no locale.
     # If there's no locale, include a '/' to be consistent with root_path.
@@ -33,23 +44,31 @@ class StaticPagesControllerTest < ActionDispatch::IntegrationTest
     # flexible to handle the variations that occur in the test environment.
     # See also: projects_controller_test.rb
     #
+    # We'll use assert_select to check that it's being interpreted correctly.
+    # The Rails documentation is *terribly* outdated.  It claims this works:
+    # assert_select 'link[rel="alternate"][hreflang="x-default"][href=?]',
+    # but Rails 4.2 changed the required syntax to use ":match".  See:
+    # https://github.com/rails/rails/issues/19098
+    #
     assert_includes I18n.available_locales, :en
     assert_includes I18n.available_locales, :fr
     I18n.available_locales.each do |loc|
       # Metadata about related pages (useful for search engines)
-      assert_match \
-        %r{<link\ rel="alternate"\ hreflang="#{loc}"
-         \ href="https?://[a-z0-9.:]+/#{loc}"\ />}x,
-        @response.body
+      assert_select(
+        'head link[rel="alternate"][hreflang="' + loc.to_s +
+        '"]:match("href", ?)',
+        %r{\Ahttps?://[a-z0-9.:]+/#{loc}\z}
+      )
       # User locale selector (useful for users)
-      assert_match \
-        %r{<li><a\ href="https?://[a-z0-9.:]+/#{loc}">}x,
-        @response.body
+      assert_select(
+        'li a:match("href", ?)',
+        %r{\Ahttps?://[a-z0-9.:]+/#{loc}\z}
+      )
     end
-    assert_match \
-      %r{<link\ rel="alternate"\ hreflang="x-default"
-       \ href="https?://[a-z0-9.:]+/"\ />}x,
-      @response.body
+    assert_select(
+      'head link[rel="alternate"][hreflang="x-default"]:match("href", ?)',
+      %r{\Ahttps?://[a-z0-9.:]+/\z}
+    )
   end
 
   test 'should get home in French when fr locale in URL' do
@@ -75,12 +94,15 @@ class StaticPagesControllerTest < ActionDispatch::IntegrationTest
   test 'should get criteria' do
     get criteria_path(locale: :en)
     assert_response :success
+    assert_includes @response.body, 'included in the percentage calculations'
 
     get criteria_path(locale: :fr)
     assert_response :success
+    assert_includes @response.body, 'Vous pouvez voir des statistiques'
 
     get criteria_path(locale: :'zh-CN')
     assert_response :success
+    assert_includes @response.body, '条款'
   end
 
   test 'should redirect criteria with trailing slash' do
@@ -89,5 +111,7 @@ class StaticPagesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     # Notice that the trailing slash is now gone
     assert_equal '/en/criteria', @request.fullpath
+    assert_includes @response.body, 'included in the percentage calculations'
   end
 end
+# rubocop: enable Metrics/BlockLength

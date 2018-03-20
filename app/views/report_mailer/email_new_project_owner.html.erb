@@ -9,7 +9,8 @@
 <a href="<%= @project_info_url %>"><%= @project_info_url %></a>
 </p>
 
-<%= t 'report_mailer.new_project_part3_html' %>
+<%= t 'report_mailer.new_project_part3_html',
+      project_info_url: @project_info_url %>
 <p>
 <%= t 'report_mailer.ending' %>
 </p>

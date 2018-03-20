@@ -6,22 +6,24 @@
 
 require 'test_helper'
 
-class PasswordResetsControllerTest < ActionController::TestCase
+class PasswordResetsControllerTest < ActionDispatch::IntegrationTest
   def setup
     ActionMailer::Base.deliveries.clear
-    @user = users(:test_user)
+    @user = users(:test_user) # local user
   end
 
   # rubocop:disable Metrics/BlockLength
   test 'password resets' do
-    get :new, params: { locale: :en }
-    assert_template 'password_resets/new'
+    get '/en/password_resets/new'
+    assert_response :success
+    assert_includes @response.body, 'Forgot password'
+
     # Invalid email
-    post :create, params: { password_reset: { email: '' }, locale: :en }
+    post '/en/password_resets',
+         params: { password_reset: { email: '' }, locale: :en }
     assert_not flash.empty?
-    assert_template 'password_resets/new'
     # Valid email
-    post :create, params: {
+    post '/en/password_resets', params: {
       password_reset: { email: @user.email }, locale: :en
     }
     assert_not_equal @user.reset_digest, @user.reload.reset_digest
@@ -29,70 +31,95 @@ class PasswordResetsControllerTest < ActionController::TestCase
     assert_not flash.empty?
     assert_redirected_to root_url
     # Password reset form
-    user = assigns(:user)
+    # user = assigns(:user)
     # Wrong email
-    get :edit, params: { id: user.reset_token, email: '', locale: :en }
+    get edit_password_reset_path(id: @user.reset_digest, locale: :en),
+        params: { email: '' }
+    # TODO: DEBUG: replying with 404, not a redirect.
     assert_redirected_to root_url
     # Inactive user
-    user.toggle!(:activated)
-    get :edit, params: { id: user.reset_token, email: user.email, locale: :en }
+    @user.toggle!(:activated)
+    @user.reload
+    get edit_password_reset_path(id: @user.reset_digest, locale: :en),
+        params: { email: @user.email }
     assert_redirected_to root_url
-    user.toggle!(:activated)
+    @user.toggle!(:activated)
     # Right email, wrong token
-    get :edit, params: { id: 'wrong_token', email: user.email, locale: :en }
+    # get edit_password_reset_path(id: 'wrong_digest_value', locale: :en),
+    #    params: { email: @user.email }
+    get edit_password_reset_path(id: 'wrong_digest_value', locale: :en),
+        params: { email: @user.email }
     assert_redirected_to root_url
     # Right email, right token
-    get :edit, params: { id: user.reset_token, email: user.email, locale: :en }
-    assert_template 'password_resets/edit'
-    assert_select(+'input[name=email][type=hidden][value=?]', user.email)
+    @user.reload
+    get edit_password_reset_path(id: @user.reset_digest, locale: :en),
+        params: { email: @user.email, id: @user.reset_token }
+    assert_select(+'input[name=email][type=hidden][value=?]', @user.email)
     # Invalid password & confirmation
-    patch :update, params: {
-      id: user.reset_token,
-      email: user.email,
+    post password_reset_path(id: @user.reset_digest, locale: :en), params: {
+      email: @user.email,
       user: {
         password:              '1235foo',
         password_confirmation: 'bar4567'
-      },
-      locale: :en
+      }
     }
     assert_select 'div#error_explanation'
     # Empty password
-    patch :update, params: {
-      id: user.reset_token,
-      email: user.email,
+    patch password_reset_path(id: @user.reset_digest, locale: :en), params: {
+      email: @user.email,
       user: {
         password:              '',
         password_confirmation: ''
-      },
-      locale: :en
+      }
     }
     assert_select 'div#error_explanation'
-    # Valid password & confirmation
-    patch :update, params: {
-      id: user.reset_token,
-      email: user.email,
+    patch password_reset_path(id: 'wrong_reset_digest', locale: :en), params: {
+      email: @user.email,
       user: {
         password:              'foo1234!',
         password_confirmation: 'foo1234!'
-      },
-      locale: :en
+      }
+    }
+    assert_select 'div#error_explanation'
+    # Valid password & confirmation
+    patch password_reset_path(id: @user.reset_digest, locale: :en), params: {
+      email: @user.email,
+      user: {
+        password:              'foo1234!',
+        password_confirmation: 'foo1234!'
+      }
     }
     assert user_logged_in?
     assert_not flash.empty?
-    assert_redirected_to user
+    assert_redirected_to @user
   end
   # rubocop:enable Metrics/BlockLength
 
   # rubocop:enable Metrics/BlockLength
   test 'expired token' do
-    get :new
-    post :create, params: {
-      password_reset: { email: @user.email }, locale: :en
-    }
+    get new_password_reset_path(locale: :en)
+    assert_response :success
+    assert_includes @response.body, 'Forgot password'
 
-    @user = assigns(:user)
+    # post :create, params: {
+    # password_reset: { email: @user.email }, locale: :en
+
+    # Request password reset.
+    post password_resets_path(locale: :en), params: {
+      password_reset: { email: @user.email }
+    }
+    follow_redirect!
+    assert_response :success
+
+    # Simulate the user waiting too long.
+    # @user = assigns(:user)
+    @user.reload
     @user.update_attribute(:reset_sent_at, 3.hours.ago)
-    patch :update, params: {
+
+    get edit_password_reset_path(locale: :en, id: @user.reset_digest)
+    # patch "/en/password_resets/#{@user.reset_digest}", params: {
+    # post password_resets_path(locale: :en, id: @user.reset_digest), params: {
+    post "/en/password_resets/#{@user.reset_digest}", params: {
       id: @user.reset_token,
       email: @user.email,
       user: {
@@ -101,6 +128,6 @@ class PasswordResetsControllerTest < ActionController::TestCase
       }
     }
     assert_response :redirect
-    assert_redirected_to new_password_reset_path
+    assert_redirected_to root_path(locale: :en)
   end
 end

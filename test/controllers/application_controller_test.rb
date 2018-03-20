@@ -7,7 +7,7 @@
 require 'test_helper'
 require 'ipaddr'
 
-class ApplicationControllerTest < ActionController::TestCase
+class ApplicationControllerTest < ActionDispatch::IntegrationTest
   test 'fail_if_invalid_client_ip works correctly' do
     a = ApplicationController.new
     client_ip = '43.249.72.2'

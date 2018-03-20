@@ -9,8 +9,16 @@ class PasswordResetsController < ApplicationController
   before_action :valid_user, only: %i[edit update]
   before_action :check_expiration, only: %i[edit update]
 
+  # Show "Forgot password" screen, a form that lets the user
+  # enter an email address to begin the password reset process.
+  # GET (/:locale)/password_resets/new(.:format)
   def new; end
 
+  # User has entered an email address for a password reset.
+  # If the email address is a valid local account, create a reset digest
+  # and email the reset digest value to the account.  The "reset digest"
+  # is like a very temporary password.
+  # POST (/:locale)/password_resets(.:format)
   def create
     @user = User.find_by(email: params[:password_reset][:email])
     if @user
@@ -21,8 +29,26 @@ class PasswordResetsController < ApplicationController
     end
   end
 
+  # Show "Reset password" screen, a form that lets the user
+  # double-enter a new password.  Via valid_user
+  # we require an "id" (the reset_digest value) and matching email address
+  # (the email address would be in the query string).
+  # We won't even show this screen if the user doesn't have a valid
+  # reset_digest + email pair; that's not necessary for security, but there's
+  # no point in showing this screen if the action will be rejected later.
+  # An example of a URL that gets here would be: http://localhost:3000/
+  # password_resets/f_xAqrghtIkANa0HS_B0TA/edit?email=dwheele4%40gmu.edu
+  # GET (/:locale)/password_resets/:id/edit(.:format)
   def edit; end
 
+  # If authorized, change user password.
+  # The valid_user check ensures that we can only run this if the
+  # user knows (1) the email address and (2) the matching reset_digest
+  # we just sent to that email address.
+  # The "user" model will require that the new password is confirmed
+  # and meets various password requirements (e.g., has minimum length and
+  # isn't well-known).
+  # PATCH (/:locale)/password_resets/:id(.:format)
   def update
     if params[:user][:password].empty?
       @user.errors.add(:password, t('password_resets.password_empty'))
@@ -58,7 +84,12 @@ class PasswordResetsController < ApplicationController
     @user = User.find_by(email: params[:email])
   end
 
-  # Confirms a valid user.
+  # Confirms a valid user.  The "id" in this case is *NOT* the
+  # database primary key (e.g., "42"), but the claimed reset_digest value
+  # provided by the untrusted user.  We compare this provided reset_digest
+  # with the *actual* reset_digest stored on the user obtained via
+  # the email lookup - if they are the same, then we have a valid user
+  # who knows *both* the email address AND the reset_digest we just sent.
   def valid_user
     unless @user&.activated? &&
            @user&.authenticated?(:reset, params[:id])

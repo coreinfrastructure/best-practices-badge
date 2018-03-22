@@ -1070,6 +1070,22 @@ instead, but then you do not have the full git history.
 See [api](api.md) for the application programming interface (API),
 including how to download data for analysis.
 
+## Memory quota exceeded
+
+You may see error messages in the executing tiers in the following form:
+
+> heroku/web.1: Error R14 (Memory quota exceeded)
+
+This message is further explained in
+[R14 - Memory Quota Exceeded in Ruby (MRI)](https://devcenter.heroku.com/articles/ruby-memory-use).
+
+It simply means that normal memory has been exceeded, and
+that slower swap is being used instead.
+Services are still operating, just at a slightly lower performance
+than desired.
+So there is no reason to panic over these messages, but it is
+worth trying to fix.
+
 ## See also
 
 Project participation and interface:

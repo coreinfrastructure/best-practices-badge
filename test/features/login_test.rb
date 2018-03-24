@@ -126,6 +126,21 @@ class LoginTest < CapybaraFeatureTest
   end
   # rubocop:enable Metrics/BlockLength
 
+  scenario 'Can Login custom where GitHub account has same email', js: false do
+    # Make GitHub account have same email address as custom account
+    @github_user = users(:github_user)
+    @github_user.email = @user.email
+    @github_user.save!
+    # Now have custom account log in.
+    visit projects_path(locale: :en)
+    click_on 'Login'
+    fill_in 'Email', with: @user.email
+    fill_in 'Password', with: 'password'
+    click_button 'Log in using custom account'
+    assert has_content? 'Logged in!'
+    assert_equal projects_path(locale: :en), current_path
+  end
+
   # Test if we switch to user's preferred locale on login.
   # Here we test on a path that isn't the root.
   scenario 'Can Login in fr locale to /projects', js: true do

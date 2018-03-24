@@ -108,6 +108,7 @@ module SessionsHelper
     return false if current_user.nil?
     return true if current_user.admin?
     return true if current_user.id == @project.user_id
+
     false
   end
 
@@ -124,6 +125,7 @@ module SessionsHelper
     return true if
       current_user.provider == 'github' &&
       @project.repo_url? && github_user_projects.include?(@project.repo_url)
+
     false
   end
   # rubocop:enable Metrics/CyclomaticComplexity
@@ -131,6 +133,7 @@ module SessionsHelper
   def in_development?
     hostname = ENV['PUBLIC_HOSTNAME']
     return true if hostname.nil?
+
     hostname != PRODUCTION_HOSTNAME
   end
 
@@ -147,6 +150,7 @@ module SessionsHelper
     session.delete(:locale)
     session[:locale] = I18n.locale
     return unless request.get?
+
     if request.url == new_project_url
       session[:forwarding_url] = new_project_url
     else
@@ -156,11 +160,13 @@ module SessionsHelper
 
   def session_expired
     return true unless session.key?(:time_last_used)
+
     session[:time_last_used] < SESSION_TTL.ago.utc
   end
 
   def validate_session_timestamp
     return unless logged_in? && session_expired
+
     reset_session
     session[:current_user] = nil
     redirect_to login_path
@@ -175,9 +181,11 @@ module SessionsHelper
   # Check if refering url is internal, if so, save it.
   def store_internal_referer
     return if request.referer.nil?
+
     ref_url = request.referer
     return unless URI.parse(ref_url).host == request.host
     return if [login_url, signup_url].include? ref_url
+
     session[:forwarding_url] = ref_url
   end
 end

@@ -97,6 +97,7 @@ class Criteria
           I18n.available_locales.each do |locale|
             I18n.t(".criteria.#{level}.#{criterion}").each_key do |k|
               next if k.to_s.in? FIELDS_TO_OMIT
+
               translations[k.to_s] = {} unless translations.key?(k.to_s)
               translations[k.to_s][locale.to_s] =
                 I18n.t(".criteria.#{level}.#{criterion}.#{k}", locale: locale)
@@ -112,6 +113,7 @@ class Criteria
   def description
     key = "criteria.#{level}.#{name}.description"
     return unless I18n.exists?(key)
+
     # Descriptions only come from trusted data source, so we can safely disable
     # rubocop:disable Rails/OutputSafety
     I18n.t(key).html_safe
@@ -177,8 +179,10 @@ class Criteria
   # it doesn't exist, nil is returned.
   def get_text_if_exists(field)
     return unless field.in? LOCALE_ACCESSORS
+
     Criteria.get_levels(name).reverse.each do |l|
       next if l.to_i > level.to_i
+
       t_key = "criteria.#{l}.#{name}.#{field}"
       # Disable HTML output safety. I18n translations are internal data
       # and are considered a trusted source.

@@ -413,6 +413,7 @@ def normalize_string(value)
   # Remove trailing whitespace
   value.sub!(/\s+$/, '')
   return value unless value.include?('<')
+
   # Google Translate generates html text that has predictable errors.
   # The last entry mitigates the target=... vulnerability.  We don't need
   # to "counter" attacks from ourselves, but it does no harm and it's
@@ -447,6 +448,7 @@ desc "Ensure you're on master branch"
 task :ensure_master do
   raise StandardError, 'Must be on master branch to proceed' unless
     `git rev-parse --abbrev-ref HEAD` == "master\n"
+
   puts 'On master branch, proceeding...'
 end
 
@@ -497,6 +499,7 @@ require 'net/http'
 # rubocop:disable Metrics/MethodLength
 def fetchable?(uri_str, limit = 10)
   return false if limit <= 0
+
   # Use GET, not HEAD. Some websites will say a page doesn't exist when given
   # a HEAD request, yet will redirect correctly on a GET request. Ugh.
   response = Net::HTTP.get_response(URI.parse(uri_str))
@@ -523,6 +526,7 @@ def link_okay?(link)
   # Quick check - if there's a character other than URI-permitted, fail.
   # Note that space isn't included (including space is a common error).
   return false if %r{[^-A-Za-z0-9_\.~!*'\(\);:@\&=+\$,\/\?#\[\]%]}.match?(link)
+
   warn "  <#{link}>"
   fetchable?(link)
 end
@@ -532,6 +536,7 @@ def validate_links_in_string(translation, from, seen)
   translation.scan(/href=["'][^"']+["']/).each do |snippet|
     link = snippet[6..-2]
     next if seen.include?(link) # Already seen it, don't complain again.
+
     if link_okay?(link)
       seen.add(link)
     else

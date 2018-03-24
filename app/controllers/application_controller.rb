@@ -59,11 +59,13 @@ class ApplicationController < ActionController::Base
   # raise exception if text value client_ip isn't in valid_client_ips
   def fail_if_invalid_client_ip(client_ip, allowed_ips)
     return if client_ip.blank?
+
     client_ip_data = IPAddr.new(client_ip)
     return unless client_ip_data
     return if allowed_ips.any? do |range|
       range.include?(client_ip_data)
     end
+
     raise ActionController::RoutingError.new('Invalid client IP'),
           'Invalid client IP'
   end
@@ -100,6 +102,7 @@ class ApplicationController < ActionController::Base
         Rails.application.config.automatic_locales
       )
     return browser_locale if browser_locale.present?
+
     I18n.default_locale
   end
 
@@ -114,6 +117,7 @@ class ApplicationController < ActionController::Base
     # redirecting, because JSON is the same in any locale.
     #
     return if params[:format] == 'json'
+
     #
     # No locale, determine the best locale and redirect.
     #
@@ -153,6 +157,7 @@ class ApplicationController < ActionController::Base
   # This can provide a defense against cloud piercing.
   def validate_client_ip_address
     return unless Rails.configuration.valid_client_ips
+
     client_ip = request.remote_ip
     fail_if_invalid_client_ip(client_ip, Rails.configuration.valid_client_ips)
   end

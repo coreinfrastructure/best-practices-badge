@@ -58,6 +58,7 @@ class UrlValidator < ActiveModel::EachValidator
 
   def validate_each(record, attribute, value)
     return if url_acceptable?(value)
+
     record.errors.add attribute, (options[:message] ||
                                   I18n.t('error_messages.url_message'))
   end

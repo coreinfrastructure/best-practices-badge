@@ -40,6 +40,7 @@ module ProjectsHelper
   # rubocop:disable Rails/OutputSafety
   def markdown(content)
     return '' if content.nil?
+
     MARKDOWN_PROCESSOR.render(content).html_safe
   end
   # rubocop:enable Rails/OutputSafety
@@ -84,6 +85,7 @@ module ProjectsHelper
   )
     minor_criteria = FullCriteriaHash[criteria_level][major][minor].keys
     raise NameError if minor_criteria.empty? # Should always be true
+
     results = ActionView::OutputBuffer.new
     results << minor_header_html(minor) if wrapped
     minor_criteria.each do |criterion|

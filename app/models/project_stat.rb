@@ -24,6 +24,7 @@ class ProjectStat < ApplicationRecord
       STAT_VALUES.each do |completion|
         public_send "percent_ge_#{completion}=", Project.gteq(completion).count
         next if completion.to_i.zero?
+
         public_send "percent_1_ge_#{completion}=",
                     Project.where(
                       'badge_percentage_1 >= ?',

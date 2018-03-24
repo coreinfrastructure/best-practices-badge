@@ -108,6 +108,7 @@ class FlossLicenseDetective < Detective
   def analyze(_evidence, current)
     license = current[:license]
     return {} if license.blank?
+
     # Remove '+' - allowing later license versions is always fine.
     license = license.strip.chomp('+')
 

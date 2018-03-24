@@ -223,6 +223,7 @@ module ActiveSupport
     def vcr_oauth_token
       github_login_vcr_file = 'test/vcr_cassettes/github_login.yml'
       return Null unless File.exist?(github_login_vcr_file)
+
       y = YAML.load_file(github_login_vcr_file)
               .with_indifferent_access
       url = y[:http_interactions][1][:request][:uri]
@@ -233,8 +234,10 @@ module ActiveSupport
       hash.each do |k, v|
         return k.to_s if v.nil?
         next unless v.is_a?(Hash)
+
         nil_key = key_with_nil_value(v)
         next if nil_key == ''
+
         return "#{k}.#{nil_key}"
       end
       ''

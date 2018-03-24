@@ -60,11 +60,13 @@ class ReportMailer < ApplicationMailer
   # rubocop:disable Metrics/PerceivedComplexity
   def email_owner(project, old_badge_level, new_badge_level, lost_level)
     return if project.nil? || project.id.nil? || project.user_id.nil?
+
     @project = project
     user = User.find(project.user_id)
     return if user.nil?
     return unless user.email?
     return unless user.email.include?('@')
+
     @project_info_url =
       project_url(@project, locale: user.preferred_locale.to_sym)
     @email_destination = user.email
@@ -88,11 +90,13 @@ class ReportMailer < ApplicationMailer
   # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
   def email_reminder_owner(project)
     return if project.nil? || project.id.nil? || project.user_id.nil?
+
     @project = project
     user = User.find(project.user_id)
     return if user.nil?
     return unless user.email?
     return unless user.email.include?('@')
+
     @project_info_url =
       project_url(@project, locale: user.preferred_locale.to_sym)
     @email_destination = user.email
@@ -112,6 +116,7 @@ class ReportMailer < ApplicationMailer
   def report_reminder_summary(projects)
     @report_destination = REPORT_EMAIL_DESTINATION
     return if projects.nil?
+
     @projects = projects
     set_headers
     I18n.with_locale(I18n.default_locale) do
@@ -131,6 +136,7 @@ class ReportMailer < ApplicationMailer
   )
     @report_destination = ENV['REPORT_MONTHLY_EMAIL']
     return if @report_destination.blank?
+
     @projects = projects
     @month = month
     @last_stat_in_prev_month = last_stat_in_prev_month
@@ -148,11 +154,13 @@ class ReportMailer < ApplicationMailer
   # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
   def email_new_project_owner(project)
     return if project.nil? || project.id.nil? || project.user_id.nil?
+
     @project = project
     user = User.find(project.user_id)
     return if user.nil?
     return unless user.email?
     return unless user.email.include?('@')
+
     @project_info_url =
       project_url(@project, locale: user.preferred_locale.to_sym)
     @email_destination = user.email

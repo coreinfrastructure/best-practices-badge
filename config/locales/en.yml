@@ -713,7 +713,7 @@ en:
       to the Best Practices Badging Program.
       The current name we have for this project is:
     new_project_part2: |-
-      Please visit your badge entry at
+      Please visit your badge entry
       to complete the information and get your badge!
       Here is the URL for your badge entry:
     new_project_part3_html: |-
@@ -731,6 +731,24 @@ en:
       (click on "new issue").
       </p>
       <p>
+      We will never send you advertisements, and we will only rarely
+      send you email.
+      We will send you an email on important badge application events,
+      such as when you create a new project badge entry,
+      when your project gains or loses a badge,
+      or when someone requests a password reset on your user account.
+      If your project does not have a badge, and you haven't updated its badge
+      entry for at least 30 days, we'll normally send you an inactivity
+      reminder about every 30-60 days.
+      You can disable these inactivity reminder messages at any time;
+      just edit your badge entry at
+      <a href="%{project_info_url}">%{project_info_url}</a>
+      to turn on "disable inactivity reminder".
+      If your project has earned a passing badge, or its
+      badge entry has been edited within 30 days,
+      then no inactivity reminder will be sent.
+      </p>
+      <p>
       Thank you for your time.
       </p>
     new_project_part3_text: |-
@@ -742,6 +760,24 @@ en:
       or file an issue at
       https://github.com/coreinfrastructure/best-practices-badge/issues
       (click on "new issue").
+
+      We will never send you advertisements, and we will only rarely
+      send you email.
+      We will send you an email on important badge application events,
+      such as when you create a new project badge entry,
+      when your project gains or loses a badge,
+      or when someone requests a password reset on your user account.
+      If your project does not have a badge, and you haven't updated its badge
+      entry for at least 30 days, we'll normally send you an inactivity
+      reminder about every 30-60 days.
+      You can disable these inactivity reminder messages at any time;
+      just edit your badge entry at
+      %{project_info_url}
+      to turn on "disable inactivity reminder".
+      If your project has earned a passing badge, or its
+      badge entry has been edited within 30 days,
+      then no inactivity reminder will be sent.
+
       Thank you for your time.
     reminder_body_html: |-
       <h1>Automated Best Practices Badge Reminder for %{project_name}</h1>

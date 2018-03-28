@@ -1,4 +1,4 @@
-<% content_for :nav_extras do %>
+<% provide :nav_extras do %>
     <% if can_edit? %>
       <li><%= link_to Icon[:'fa-edit'] + t('.edit'), edit_project_path(@project, criteria_level: @criteria_level), rel: 'nofollow' %></li>
     <% end %>

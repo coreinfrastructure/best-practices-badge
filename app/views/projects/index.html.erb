@@ -8,7 +8,7 @@
     [t('.in_progress_variable', percent: 90), 90]
   ]
 %>
-<% content_for :nav_extras do %>
+<% provide :nav_extras do %>
   <li>
     <% if logged_in? %>
       <%= link_to Icon[:'fa-plus'] + t('.add_link'), new_project_path %>

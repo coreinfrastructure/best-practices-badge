@@ -3,7 +3,7 @@
     followed by starting and finishing another full row. %>
 <% badge_hostname = (ENV['PUBLIC_HOSTNAME'] || 'localhost') %>
 <%# TODO: Use badge_percentage_1 %>
-<% content_for :insert_progress_bar do %>
+<% provide :insert_progress_bar do %>
   <div id="progress-mobile" class="progress">
     <div id="badge-progress"
          class="progress-bar progress-bar-success badge-progress"

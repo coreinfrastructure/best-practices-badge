@@ -266,10 +266,11 @@ class ProjectsController < ApplicationController
     end
     projects.each do |inactive_project| # Send actual reminders
       ReportMailer.email_reminder_owner(inactive_project).deliver_now
-      # Save while disabling paper_trail's versioning through self.
-      # Don't update the updated_at value either, since we interpret that
-      # value as being an update of the project badge status information.
-      inactive_project.paper_trail.without_versioning do
+      # Save datetime while disabling paper_trail's versioning through self.
+      # Use "touch: false" to also prevent changing the updated_at value;
+      # we interpret the updated_at value as being an update of the
+      # project badge status information by users and admins.
+      PaperTrail.request(enabled: false) do
         inactive_project.last_reminder_at = Time.now.utc
         inactive_project.save!(touch: false)
       end

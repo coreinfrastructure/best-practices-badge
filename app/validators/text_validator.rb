@@ -9,11 +9,13 @@ class TextValidator < ActiveModel::EachValidator
   def text_acceptable?(value)
     return true if value.nil?
     return false unless value.valid_encoding?
+
     (value =~ INVALID_CONTROL).nil?
   end
 
   def validate_each(record, attribute, value)
     return if text_acceptable?(value)
+
     record.errors.add attribute, (options[:message] ||
                                   I18n.t('error_messages.valid_text'))
   end

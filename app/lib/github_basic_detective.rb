@@ -100,6 +100,7 @@ class GithubBasicDetective < Detective
       fullname = m[1] + '/' + m[2]
       client = Octokit::Client.new
       return results unless client
+
       # The special 'accept' value is required to get the GitHub-provided
       # license analysis
       accept_beta = 'application/vnd.github.drax-preview+json'

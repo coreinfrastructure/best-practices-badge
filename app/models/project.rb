@@ -230,6 +230,7 @@ class Project < ApplicationRecord
   #
   def contains_url?(text)
     return false if !text || text.start_with?('// ')
+
     text =~ %r{https?://[^ ]{5}}
   end
 
@@ -259,6 +260,7 @@ class Project < ApplicationRecord
     return :criterion_unknown if status.unknown?
     return get_met_result(criterion, justification) if status.met?
     return get_unmet_result(criterion, justification) if status.unmet?
+
     get_na_result(criterion, justification)
   end
 
@@ -328,6 +330,7 @@ class Project < ApplicationRecord
   # rubocop:disable Metrics/MethodLength
   def self.update_all_badge_percentages(levels)
     raise TypeError, 'levels must be an Array' unless levels.is_a?(Array)
+
     levels.each do |l|
       raise ArgumentError, "Invalid level: #{l}" unless l.in? Criteria.keys
     end
@@ -468,6 +471,7 @@ class Project < ApplicationRecord
     return :criterion_justification_required if
       criterion.met_justification_required? &&
       !justification_good?(justification)
+
     :criterion_passing
   end
 
@@ -477,6 +481,7 @@ class Project < ApplicationRecord
     return :criterion_justification_required if
       criterion.na_justification_required? &&
       !justification_good?(justification)
+
     :criterion_passing
   end
 
@@ -486,21 +491,25 @@ class Project < ApplicationRecord
     return :criterion_barely if criterion.suggested? || (criterion.should? &&
                                justification_good?(justification))
     return :criterion_justification_required if criterion.should?
+
     :criterion_failing
   end
 
   def justification_good?(justification)
     return false if justification.nil? || justification.start_with?('// ')
+
     justification.length >= MIN_SHOULD_LENGTH
   end
 
   def need_a_base_url
     return unless repo_url.blank? && homepage_url.blank?
+
     errors.add :base, I18n.t('error_messages.need_home_page_or_url')
   end
 
   def to_percentage(portion, total)
     return 0 if portion.zero?
+
     ((portion * 100.0) / total).round
   end
 
@@ -519,11 +528,14 @@ class Project < ApplicationRecord
   def update_prereqs(level)
     index = Criteria.keys.index(level)
     return if index.zero?
+
     if self["badge_percentage_#{Criteria.keys[index - 1]}".to_sym] >= 100
       return if self["achieve_#{BADGE_LEVELS[index]}_status".to_sym] == 'Met'
+
       status = 'Met'
     else
       return if self["achieve_#{BADGE_LEVELS[index]}_status".to_sym] == 'Unmet'
+
       status = 'Unmet'
     end
     self["achieve_#{BADGE_LEVELS[index]}_status".to_sym] = status

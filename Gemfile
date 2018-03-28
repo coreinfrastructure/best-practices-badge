@@ -38,7 +38,7 @@ gem 'redcarpet', '3.4.0' # Process markdown in form textareas (justifications)
 gem 'sass-rails', '5.0.7', require: false
 gem 'scout_apm', '2.4.9' # Monitor for memory leaks
 gem 'secure_headers', '5.0.5' # Add hardening measures to HTTP headers
-gem 'uglifier', '4.1.7', require: false # Minify JavaScript
+gem 'uglifier', '4.1.8', require: false # Minify JavaScript
 gem 'will-paginate-i18n', '0.1.15' # Provide will-paginate translations
 gem 'will_paginate', '3.1.6' # Paginate results (next/previous)
 
@@ -71,11 +71,11 @@ group :fake_production, :development, :test do
 end
 
 group :development do
-  gem 'bootsnap', '1.1.8' # Speed up boot via caches
+  gem 'bootsnap', '1.2.1' # Speed up boot via caches
   # gem 'fasterer', '0.3.2' # Provide speed recommendations - run 'fasterer'
   # Waiting for Ruby 2.4 support: https://github.com/seattlerb/ruby_parser/issues/239
   gem 'traceroute', '0.6.1' # Adds 'rake traceroute' command to check routes
-  gem 'translation', '1.13' # translation.io - translation service
+  gem 'translation', '1.14' # translation.io - translation service
   gem 'web-console', '3.5.1' # Debugging tool for Ruby on Rails apps
 end
 
@@ -84,12 +84,12 @@ group :test do
   gem 'chromedriver-helper', '1.2.0', require: false
   gem 'codecov', '0.1.10', require: false
   gem 'minitest-rails-capybara', '3.0.1', require: false
-  gem 'minitest-reporters', '1.1.19', require: false
+  gem 'minitest-reporters', '1.2.0', require: false
   gem 'minitest-retry', '0.1.9', require: false # Avoid Capybara false positives
   gem 'poltergeist', '1.17.0', require: false
   gem 'rails-controller-testing', '1.0.2' # need to require this one
-  gem 'selenium-webdriver', '3.9.0', require: false
-  gem 'simplecov', '0.15.1', require: false
+  gem 'selenium-webdriver', '3.11.0', require: false
+  gem 'simplecov', '0.16.1', require: false
   gem 'webmock', '3.3.0', require: false
 end
 

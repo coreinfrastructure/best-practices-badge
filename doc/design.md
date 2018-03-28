@@ -4,7 +4,7 @@
 
 This document describes the design of the BadgeApp.
 
-No single tehnology does everything well.
+No single technology does everything well.
 Instead, design is all about making good choices between
 options that have different trade-offs, so that together
 those choices will efficiently meet requirements.

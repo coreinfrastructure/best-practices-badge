@@ -113,6 +113,7 @@ class ProjectsController < ApplicationController
   # GET /projects/:id/edit(.:format)
   def edit
     return unless @project.notify_for_static_analysis?('0')
+
     message = t('projects.edit.static_analysis_updated_html')
     flash.now[:danger] = message
   end
@@ -306,6 +307,7 @@ class ProjectsController < ApplicationController
     return positive_integer?(value) if INTEGER_QUERIES.include?(key.to_sym)
     return TextValidator.new(attributes: %i[query]).text_acceptable?(value) if
       TEXT_QUERIES.include?(key.to_sym)
+
     allowed_other_query?(key, value)
   end
 
@@ -314,23 +316,27 @@ class ProjectsController < ApplicationController
     return %w[desc asc].include?(value) if key == 'sort_direction'
     return ALLOWED_STATUS.include?(value) if key == 'status'
     return integer_list?(value) if key == 'ids'
+
     false
   end
 
   # Returns true if current_user can edit, else redirect to a different URL
   def can_edit_else_redirect
     return true if can_edit?
+
     redirect_to root_path
   end
 
   # Returns true if current_user can control, else redirect to a different URL
   def can_control_else_redirect
     return true if can_control?
+
     redirect_to root_path
   end
 
   def adequate_deletion_rationale
     return true if current_user&.admin?
+
     deletion_rationale = params[:deletion_rationale]
     deletion_rationale = '' if deletion_rationale.blank? # E.g., null
     if deletion_rationale.length < 20
@@ -369,8 +375,10 @@ class ProjectsController < ApplicationController
   def update_additional_rights
     return unless can_edit? # Double-check - must be able to edit
     return unless params.key?(:project)
+
     additional_rights_changes = params[:additional_rights_changes]
     return if additional_rights_changes.blank? # Quietly return if blank
+
     additional_rights_changes = additional_rights_changes.delete(' ')
     # Do input validation.  This would generally only fail during an
     # an attack or weird circumstance, since in the normal non-attack case
@@ -378,6 +386,7 @@ class ProjectsController < ApplicationController
     return unless VALID_ADD_RIGHTS_CHANGES.match?(additional_rights_changes)
     # *Only* those who *control* the entry can remove additional editors
     return if additional_rights_changes[0] == '-' && !can_control?
+
     update_additional_rights_forced(@project.id, additional_rights_changes)
   end
   # rubocop:enable Metrics/CyclomaticComplexity
@@ -408,6 +417,7 @@ class ProjectsController < ApplicationController
     return true unless @project.repo_url?
     return true if project_params[:repo_url].nil?
     return true if current_user.admin?
+
     project_params[:repo_url].split('://', 2)[1] ==
       @project.repo_url.split('://', 2)[1]
   end
@@ -438,6 +448,7 @@ class ProjectsController < ApplicationController
     github = Octokit::Client.new access_token: session[:user_token]
     Octokit.auto_paginate = true
     return if github.repos.blank?
+
     github.repos.map do |repo|
       [repo.full_name, repo.fork, repo.homepage, repo.html_url]
     end.compact
@@ -482,9 +493,11 @@ class ProjectsController < ApplicationController
 
   def set_homepage_url
     return if repo_data.nil?
+
     # Assign to repo.homepage if it exists, and else repo_url
     repo = repo_data.find { |r| @project.repo_url == r[3] }
     return if repo.nil?
+
     repo[2].present? ? repo[2] : @project.repo_url
   end
 
@@ -503,6 +516,7 @@ class ProjectsController < ApplicationController
     original = request.original_url
     parsed = Addressable::URI.parse(original)
     return original if parsed.query_values.blank?
+
     valid_queries = parsed.query_values.select { |k, v| allowed_query?(k, v) }
     if valid_queries.blank?
       parsed.omit!(:query) # Removes trailing '?'
@@ -517,6 +531,7 @@ class ProjectsController < ApplicationController
   def sort_projects
     # Sort, if there is a requested order (otherwise use default created_at)
     return unless params[:sort].present? && ALLOWED_SORT.include?(params[:sort])
+
     sort_direction = params[:sort_direction] == 'desc' ? ' desc' : ' asc'
     sort_index = ALLOWED_SORT.index(params[:sort])
     @projects = @projects
@@ -545,6 +560,7 @@ class ProjectsController < ApplicationController
     format.json { render :show, status: :ok, location: @project }
     new_badge_level = @project.badge_level
     return unless new_badge_level != old_badge_level
+
     # TODO: Eventually deliver_later
     ReportMailer.project_status_change(
       @project, old_badge_level, new_badge_level
@@ -568,12 +584,14 @@ class ProjectsController < ApplicationController
 
   def url_anchor
     return '#' + params[:continue] unless params[:continue] == 'Save'
+
     ''
   end
 
   # Clean up url; returns nil if given nil.
   def clean_url(url)
     return url if url.nil?
+
     url.gsub(%r{\/+\z}, '')
   end
 
@@ -582,6 +600,7 @@ class ProjectsController < ApplicationController
   # when getting the svg badge for a project
   def value_for_badge
     return @project.badge_percentage_0 if @project.badge_level == 'in_progress'
+
     @project.badge_level
   end
 end

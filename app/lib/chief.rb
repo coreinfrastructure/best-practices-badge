@@ -146,10 +146,12 @@ class Chief
     changes.each do |key, data|
       next unless ALLOWED_FIELDS.include?(key)
       next unless update_value?(project, key, data)
+
       # Store change:
       project[key] = data[:value]
       # Now add the explanation, if we can.
       next unless key.to_s.end_with?('_status') && data.key?(:explanation)
+
       justification_key =
         (key.to_s.chomp('_status') + '_justification').to_sym
       if project.attribute_present?(justification_key)

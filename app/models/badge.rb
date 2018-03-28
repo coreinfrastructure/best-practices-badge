@@ -91,6 +91,7 @@ class Badge
   def create_svg(level)
     # svg badges generated from http://shields.io/
     return badge_svg(BADGE_SPECS['in_progress'], level) if level.is_a?(Integer)
+
     badge_svg(BADGE_SPECS[level], nil)
   end
 

@@ -43,6 +43,7 @@ class UsersController < ApplicationController
     # thinks these are important to keep separate because how to *change*
     # what is in these lists is radically different.
     return unless @user == current_user && @user.provider == 'github'
+
     @edit_projects =
       select_needed(Project.where(repo_url: github_user_projects)) - @projects
   end
@@ -168,6 +169,7 @@ class UsersController < ApplicationController
   # Confirms a logged-in user.
   def logged_in_user
     return if logged_in?
+
     flash[:danger] = t('users.please_log_in')
     redirect_to login_path
   end
@@ -175,6 +177,7 @@ class UsersController < ApplicationController
   # Return true if current_user can edit account 'user'
   def current_user_can_edit(user)
     return false unless current_user
+
     user == current_user || current_user.admin?
   end
 
@@ -194,6 +197,7 @@ class UsersController < ApplicationController
   # This significantly reduces memory allocations.
   def select_needed(dataset)
     return dataset unless request.format.symbol == :html
+
     dataset.select(ProjectsController::HTML_INDEX_FIELDS)
   end
 end

@@ -76,6 +76,7 @@ class SubdirFileContentsDetective < Detective
   def analyze(_evidence, current)
     repo_files = current[:repo_files]
     return {} if repo_files.blank?
+
     @results = {}
 
     # Top_level is iterable, contains a hash with name, size, type (file|dir).

@@ -24,11 +24,13 @@ end
 
 def show_details(key)
   return unless CriteriaText[key].key?('details')
+
   print "<dt><i>Details</i>:<dt> <dd>#{CriteriaText[key]['details']}</dd>"
 end
 
 def show_extra(criterion)
   return unless criterion.key?('rationale')
+
   print "<dt><i>Rationale</i>:<dt> <dd>#{criterion['rationale']}</dd>"
 end
 

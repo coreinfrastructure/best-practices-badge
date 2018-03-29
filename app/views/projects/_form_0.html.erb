@@ -2,7 +2,7 @@
     That allows us to fill in and then end the current column & row,
     followed by starting and finishing another full row. %>
 <% badge_hostname = (ENV['PUBLIC_HOSTNAME'] || 'localhost') %>
-<% content_for :insert_progress_bar do %>
+<% provide :insert_progress_bar do %>
   <div id="progress-mobile" class="progress">
     <div id="badge-progress"
          class="progress-bar progress-bar-success badge-progress"

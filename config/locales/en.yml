@@ -83,6 +83,10 @@ en:
     signed_out: Logged out!
     no_login_time: (No previous time recorded.)
   static_pages:
+    error_404:
+      heading: "Error 404: Page Not Found"
+      no_such_page: Sorry, no such page exists.
+      please_home: Please go to the home page.
     home:
       badge_program: CII Best Practices Badge Program
       get_your_badge: Get Your Badge Now!

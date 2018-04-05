@@ -64,6 +64,11 @@ en:
     login_with_github_html: <span class="fa fa-github"></span> Log in with GitHub
     login_automatic_signup: >-
       Log in with GitHub will automatically perform a sign up if necessary.
+      If you sign up, your name (as provided to GitHub) and GitHub nickname
+      will be shown publicly, and you can change your name at any time.
+      Your email address will be kept private and
+      only used for badging-related interactions; we will not provide it
+      to third parties unless it is legally required.
     or: or
     email: Email
     password: Password
@@ -233,8 +238,14 @@ en:
       intro_html: |-
         If you don't want to log in with a GitHub account, you can
         sign up here instead (this creates a custom account using
-        your email address). <br><br> If you didn't receive
-        your activation link,
+        your email address).
+        If you sign up, your name will be shown publicly,
+        and you can change your name at any time.
+        Your email address will be kept private and
+        only used for badging-related interactions; we will not provide it
+        to third parties unless it is legally required.
+        <br><br>
+        If you didn't receive your activation link,
         please sign up again and we will send you a new one.
       name: Name
       email: Email

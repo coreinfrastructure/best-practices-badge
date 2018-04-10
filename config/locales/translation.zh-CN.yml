@@ -1327,6 +1327,10 @@ zh-CN:
         您可以根据需要控制和/或删除Cookie。  细节请参考 <a href="https://www.aboutcookies.org">cookies.org</a>.
         您可以删除计算机上的所有浏览器缓存，也可以设置浏览器以阻止网站将内容放入缓存。如果这么做，您可能需要手工调整某些配置，一些服务或者功能可能出现异常。一般来说，登录到网站依赖于会话缓存。</p>
         <p> 本文旨在符合英国和欧盟“Cookie法”。 </p>
+    error_404:
+      heading:
+      no_such_page:
+      please_home:
   headings:
     Accessibility and internationalization: 无障碍和国际化
     Analysis: 分析

@@ -2944,6 +2944,10 @@ de:
         von Sitzungscookies abhängig (auf dieser und vielen anderen
         Seiten). </p> <p> Dieser Text soll den "Cookie-Gesetzen"
         des Vereinigten Königreichs und der EU genügen. </p>
+    error_404:
+      heading:
+      no_such_page:
+      please_home:
   headings:
     Accessibility and internationalization: Zugänglichkeit und
       Internationalisierung

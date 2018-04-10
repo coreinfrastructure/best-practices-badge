@@ -2944,6 +2944,10 @@ fr:
         sur beaucoup d'autres sites). </p> <p> Ce texte est destiné
         à être conforme aux « lois sur les cookies » du Royaume-Uni
         et de l'UE. </p>
+    error_404:
+      heading:
+      no_such_page:
+      please_home:
   headings:
     Accessibility and internationalization: Accessibilité et internationalisation
     Analysis: Analyse

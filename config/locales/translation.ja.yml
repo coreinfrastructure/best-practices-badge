@@ -1484,6 +1484,10 @@ ja:
         - ブラウザ上のCookieを削除するだけです。あなたはあなたが望むようにCookieを制御および/または削除することができます。詳細については、<a
         href="https://www.aboutcookies.org"> cookies.org </a>を参照してください。既にコンピュータ上にあるすべてのCookieを削除することができます。また、ほとんどのブラウザを設定して、それらが配置されないようにすることができます。ただし、これを行う場合は、サイトにアクセスするたびにいくつかの設定を手動で調整する必要があり、一部のサービスや機能が動作しない可能性があります。特に、このサイトへのログインは、（このサイトおよび他の多くのサイトの）セッションCookieに依存します。
         </p> <p>このテキストは、英国およびEUの「Cookie法」を遵守することを意図しています。 </p>
+    error_404:
+      heading:
+      no_such_page:
+      please_home:
   headings:
     Accessibility and internationalization: アクセシビリティと国際化
     Analysis: 分析

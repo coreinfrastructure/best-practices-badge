@@ -13,3 +13,14 @@ https://raw.githubusercontent.com/cncf/artwork/master/kubernetes/name_logo_color
 wget https://raw.githubusercontent.com/theupdateframework/tuf/develop/docs/images/banner_readme.JPG
 mv banner_readme.JPG tuf.jpg
 convert tuf.jpg tuf.png
+
+Apparmor:
+wget https://gitlab.com/apparmor/apparmor/raw/4ffcb2a8a990cea48fbfede9dbc7e20e1627ca47/documentation/toxie.png
+mv toxie.png apparmor-toxie.png
+git add apparmor-toxie.png
+cp apparmor-toxie.png ../project-logos
+cd ../project-logos
+mogrify -geometry x48 apparmor-toxie.png # Rescale to 48 pixel height
+optipng apparmor-toxie.png # Minimize number of bytes in file
+git add apparmor-toxie.png
+identify apparmor-toxie.png # Report width x height

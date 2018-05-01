@@ -20,7 +20,7 @@ gem 'font-awesome-rails', '4.7.0.4'
 gem 'http_accept_language', '2.1.1' # Determine user's preferred locale
 gem 'imagesLoaded_rails', '4.1.0' # JavaScript - enable wait for image load
 gem 'jbuilder', '2.7.0'
-gem 'jquery-rails', '4.3.1' # JavaScript jQuery library (for Rails)
+gem 'jquery-rails', '4.3.3' # JavaScript jQuery library (for Rails)
 gem 'jquery-ui-rails', '6.0.1' # JavaScript jQueryUI library (for Rails)
 gem 'lograge', '0.10.0' # Simplify logs
 gem 'mail', '2.7.0' # Ruby mail handler

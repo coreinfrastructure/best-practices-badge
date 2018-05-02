@@ -26,6 +26,11 @@ class ProjectStatsControllerTest < ActionController::TestCase
     assert_response :success
     assert_not_nil assigns(:project_stats)
     assert @response.body.include?('All projects')
+    assert @response.body.include?('As an admin, you may also see')
+  end
+
+  test 'should get less-common stats on request' do
+    get :index, params: { locale: :en, type: 'uncommon' }
     assert @response.body.include?('Percentage of projects earning badges')
   end
 

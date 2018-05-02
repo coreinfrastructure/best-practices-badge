@@ -384,6 +384,10 @@ en:
       may_select_html: >-
         You may select from one of your GitHub repos <em>OR</em>
         provide information about some other project.
+        If your project hasn't earned a passing badge and
+        you haven't made any edits for at least 30 days,
+        we'll send you a reminder email
+        (you can disable reminders at any time if you want to).
       new_badge_or: OR
       select_one_github: Select one of your GitHub repos
       submit_github: Submit GitHub Repository

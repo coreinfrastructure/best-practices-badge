@@ -679,7 +679,8 @@ en:
         unknown_placeholder: Please explain
       disabled_reminders: >-
         (Advanced) Disable inactivity reminder (we recommend you
-        leave this unchecked)
+        leave this unchecked; note that project entries
+        must be edited to change whether or not reminders are sent)
       general_comments:
         description: 'Other general comments about the project:'
         placeholder: Additional Comments (in markdown)
@@ -757,8 +758,9 @@ en:
       reminder about every 30-60 days.
       You can disable these inactivity reminder messages at any time;
       just edit your badge entry at
-      <a href="%{project_info_url}">%{project_info_url}</a>
+      <a href="%{project_info_url}#project_disabled_reminders">%{project_info_url}#project_disabled_reminders</a>
       to turn on "disable inactivity reminder".
+      Remember to <i>edit</i> the project entry if you want to change the value.
       If your project has earned a passing badge, or its
       badge entry has been edited within 30 days,
       then no inactivity reminder will be sent.
@@ -787,8 +789,10 @@ en:
       reminder about every 30-60 days.
       You can disable these inactivity reminder messages at any time;
       just edit your badge entry at
-      %{project_info_url}
+      %{project_info_url}#project_disabled_reminders
       to turn on "disable inactivity reminder".
+      Be sure to edit the project entry if you want to change whether
+      or not you receive inactivity reminders!
       If your project has earned a passing badge, or its
       badge entry has been edited within 30 days,
       then no inactivity reminder will be sent.
@@ -832,8 +836,10 @@ en:
       We don't send reminders if you continue to update your badge entry,
       and we only send reminders approximately every 30-60 days.  However,
       if you want to disable these reminder messages, edit your badge entry at
-      <a href="%{project_info_url}">%{project_info_url}</a>
+      <a href="%{project_info_url}#project_disabled_reminders">%{project_info_url}#project_disabled_reminders</a>
       to turn on "disable inactivity reminder".
+      Be sure to edit the project entry, don't just display it, if you
+      want to change whether or not you'll receive an inactivity reminder.
       We hope you'll instead keep working at it
       and eventually earn the badge.
       </p>
@@ -869,8 +875,10 @@ en:
       We don't send reminders if you continue to update your badge entry,
       and we only send reminders approximately every 30-60 days.  However,
       if you want to disable these reminder messages, edit your badge entry at
-      %{project_info_url}
+      %{project_info_url}#project_disabled_reminders
       to turn on "disable inactivity reminder".
+      Be sure to edit the project entry, don't just display it, if you
+      want to change whether or not you'll receive an inactivity reminder.
       We hope you'll instead keep working at it
       and eventually earn the badge.
 

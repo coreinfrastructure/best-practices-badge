@@ -71,7 +71,7 @@ group :fake_production, :development, :test do
 end
 
 group :development do
-  gem 'bootsnap', '1.2.1' # Speed up boot via caches
+  gem 'bootsnap', '1.3.0' # Speed up boot via caches
   # gem 'fasterer', '0.3.2' # Provide speed recommendations - run 'fasterer'
   # Waiting for Ruby 2.4 support: https://github.com/seattlerb/ruby_parser/issues/239
   gem 'traceroute', '0.6.1' # Adds 'rake traceroute' command to check routes

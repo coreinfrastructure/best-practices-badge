@@ -328,7 +328,9 @@ en:
         receiving reminder
       admin_html: >-
         As an admin, you may also see the <a href="/en/reminders">detailed
-        information about reminders</a>.
+        information about reminders</a> and
+        <a href="/en/project_stats?type=uncommon">graphs of less commonly-used
+        statistics</a>.
       raw_data: 'You can also see the raw data:'
       json_format: JSON format
       csv_format: downloadable CSV format

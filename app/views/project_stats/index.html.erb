@@ -5,15 +5,18 @@
   # It will age out eventually anyway, but this is a large cache entry
   # and we can easily determine what the previous one was. Immediately
   # forcing its deletion provides more cache space for other (useful) things.
+  is_normal = (params[:type] != 'uncommon')
   Rails.cache.delete ActiveSupport::Cache.expand_cache_key(
-    ['project_stats', locale, ProjectStat.all.size-1]
+    ['project_stats', locale, is_normal, ProjectStat.all.size-1]
   )
 
   # Cache the page, it's somewhat expensive to create.
-  cache ['project_stats', locale, ProjectStat.all.size] do
+  cache ['project_stats', locale, is_normal, ProjectStat.all.size] do
 %>
 
 <p id="notice"><%= notice %></p>
+
+<% if is_normal %>
 
 <h1><%= t('.project_stats_header') %></h1>
 
@@ -83,17 +86,7 @@
     library: ProjectStatsHelper::DATE_CHART_OPTIONS, defer: true
 %>
 
-<% end # cache %>
-
-<% if current_user&.admin?
-     # This data isn't sensitive, but it's probably uninteresting to
-     # non-admins, and all these charts take time to create.  Therefore,
-     # only show these to admins.  Non-admins can still get the data via JSON.
-     # We *separately* cache this from the non-admin charts to increase
-     # the likelihood for using at least one cache.
-     cache ['project_stats_admin', locale, ProjectStat.all.size] do -%>
-
-<br><br><br>
+<% else # show "non-normal" displays (less commonly used) %>
 
 <h2><%= t '.daily_activity' %></h2>
 <%=
@@ -250,14 +243,14 @@
   )
 %>
 
+<%   end # uncommon %>
+<% end # cache %>
+
+<% if current_user&.admin? %>
 <%# This links to admin-only information: %>
 <p>
 <%= t '.admin_html' %>
-
-<%
-  end # cache (of admin)
-end # if current_user&.admin?
-%>
+<% end # admin-specific info %>
 
 <br>
 <br>

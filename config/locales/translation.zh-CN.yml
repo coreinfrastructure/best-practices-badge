@@ -48,13 +48,13 @@ zh-CN:
     email: 电子邮件
     password: 密码
     forgot_password: 忘记密码了吗？
-    remember_me: 记住我
+    remember_me: 记住我（使用永久cookie）
     login_custom: 使用自定义帐户登录
     no_custom: 没有自定义帐号？立即注册！
     already_logged_in: 您已经登录。
     incorrect_login_info: 登录信息不正确
     invalid_combo: 电子邮件或者密码不正确
-    signed_in: 已登录！
+    signed_in: 已登录！上次登录：%{last_login_at}
     not_activated: 帐户未激活。检查您的电子邮件中的激活链接。
     signed_out: 已退出！
     cookie_details_html: >-
@@ -78,7 +78,7 @@ zh-CN:
       other_projects_edit: 其他您可以编辑的项目 (GitHub)：
       as_admin: 作为管理员，您还可以：
       send_email_to: 发送电子邮件至：
-      delete_link_name: 删除
+      delete_link_name: 删除用户帐户
       confirm_delete: 您确定要删除此用户吗？
       edit_user: 编辑用户
       projects_owned: 拥有的项目：
@@ -1328,9 +1328,9 @@ zh-CN:
         您可以删除计算机上的所有浏览器缓存，也可以设置浏览器以阻止网站将内容放入缓存。如果这么做，您可能需要手工调整某些配置，一些服务或者功能可能出现异常。一般来说，登录到网站依赖于会话缓存。</p>
         <p> 本文旨在符合英国和欧盟“Cookie法”。 </p>
     error_404:
-      heading:
-      no_such_page:
-      please_home:
+      heading: 错误404：找不到页面
+      no_such_page: 对不起，没有找到页面。
+      please_home: 请转到主页。
   headings:
     Accessibility and internationalization: 无障碍和国际化
     Analysis: 分析

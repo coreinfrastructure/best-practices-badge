@@ -2945,9 +2945,9 @@ fr:
         à être conforme aux « lois sur les cookies » du Royaume-Uni
         et de l'UE. </p>
     error_404:
-      heading:
-      no_such_page:
-      please_home:
+      heading: Erreur 404 - Page non trouvée
+      no_such_page: Désolé, cette page n'existe pas.
+      please_home: Allez s'il vous plaît à la page d'accueil.
   headings:
     Accessibility and internationalization: Accessibilité et internationalisation
     Analysis: Analyse

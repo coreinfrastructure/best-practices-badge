@@ -85,7 +85,8 @@ ja:
       <a href="/cookies" target="_blank" rel="noopener"> <i> Cookieの詳細をご確認ください</i>
       </a>
     no_login_time: "（前の時間は記録されていません）"
-    login_automatic_signup:
+    login_automatic_signup: >-
+      GitHubでログインすると、必要に応じてサインアップが自動的に実行されます。サインアップすると、あなたの名前（GitHubに提供されたもの）とGitHubのニックネームが公開され、いつでもあなたの名前を変更することができます。あなたのメールアドレスはプライベートに保たれ、バッジ関連のやりとりにのみ使用されます。法的に要求されている場合を除き、第三者に提供することはありません。
   users:
     new:
       signup_header: サインアップ
@@ -192,7 +193,7 @@ ja:
       user_id: ユーザーID
       paren_name_unknown: "（名前不明）"
       badge_level: プロジェクト %{id} のバッジレベルは %{percent}％ です
-      badge:
+      badge: バッジ
     new:
       post_delay_warning: 自動的に情報を入力しようとするため、送信後にかなりの遅れが生じることがあります。
       new_badge: 新しいバッジ
@@ -1485,9 +1486,9 @@ ja:
         href="https://www.aboutcookies.org"> cookies.org </a>を参照してください。既にコンピュータ上にあるすべてのCookieを削除することができます。また、ほとんどのブラウザを設定して、それらが配置されないようにすることができます。ただし、これを行う場合は、サイトにアクセスするたびにいくつかの設定を手動で調整する必要があり、一部のサービスや機能が動作しない可能性があります。特に、このサイトへのログインは、（このサイトおよび他の多くのサイトの）セッションCookieに依存します。
         </p> <p>このテキストは、英国およびEUの「Cookie法」を遵守することを意図しています。 </p>
     error_404:
-      heading:
-      no_such_page:
-      please_home:
+      heading: エラー404ページが見つかりません
+      no_such_page: 申し訳ありません、そのようなページは存在しません。
+      please_home: ホームページに行ってください。
   headings:
     Accessibility and internationalization: アクセシビリティと国際化
     Analysis: 分析

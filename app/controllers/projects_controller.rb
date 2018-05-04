@@ -16,10 +16,10 @@ class ProjectsController < ApplicationController
 
   before_action :set_project,
                 only: %i[edit update delete_form destroy show show_json]
-  before_action :logged_in?, only: :create
+  before_action :require_logged_in, only: :create
   before_action :can_edit_else_redirect, only: %i[edit update]
   before_action :can_control_else_redirect, only: %i[destroy delete_form]
-  before_action :adequate_deletion_rationale, only: :destroy
+  before_action :require_adequate_deletion_rationale, only: :destroy
   before_action :set_criteria_level, only: %i[show edit update]
 
   # Cache with Fastly CDN.  We can't use this header, because logged-in
@@ -335,7 +335,7 @@ class ProjectsController < ApplicationController
     redirect_to root_path
   end
 
-  def adequate_deletion_rationale
+  def require_adequate_deletion_rationale
     return true if current_user&.admin?
 
     deletion_rationale = params[:deletion_rationale]

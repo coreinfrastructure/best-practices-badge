@@ -85,7 +85,7 @@ de:
     already_logged_in: Du bist bereits angemeldet.
     incorrect_login_info: Falsche Anmeldedaten
     invalid_combo: Ungültige E-Mail oder Passwort kombination
-    signed_in: Angemeldet!
+    signed_in: 'Eingeloggt! Letzter Login: %{last_login_at}'
     not_activated: >-
       Das Konto ist noch nicht aktiviert. Überprüfe dein E-Mail
       Postfach und klicke auf den Bestätigungs-Link.
@@ -1589,7 +1589,7 @@ de:
         description: >-
           Mindestens ein Tool zur Analyse statischer Codes (über
           Compiler-Warnungen und "sichere" Sprachmodi hinaus)
-          MÜUSS vor der Veröffentlichung auf jede vorgeschlagene
+          MUSS vor der Veröffentlichung auf jede vorgeschlagene
           größere Produktionsversion der Software angewendet werden,
           wenn mindestens ein FLOSS-Tool dieses Kriterium in der
           ausgewählten Sprache implementiert .
@@ -2945,9 +2945,9 @@ de:
         Seiten). </p> <p> Dieser Text soll den "Cookie-Gesetzen"
         des Vereinigten Königreichs und der EU genügen. </p>
     error_404:
-      heading:
-      no_such_page:
-      please_home:
+      heading: 'Fehler 404: Seite nicht gefunden'
+      no_such_page: Verzeihung, diese Seite existiert nicht.
+      please_home: Bitte gehen Sie auf die Startseite.
   headings:
     Accessibility and internationalization: Zugänglichkeit und
       Internationalisierung

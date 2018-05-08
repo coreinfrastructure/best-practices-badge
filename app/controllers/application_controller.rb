@@ -19,6 +19,8 @@ class ApplicationController < ActionController::Base
   after_action :persist_session_timestamp
 
   # If locale is not provided in the URL, redirect to best option.
+  # Special URLs which do not have locales, such as "/robots.txt",
+  # must "skip_before_action :redir_missing_locale".
   before_action :redir_missing_locale
 
   # Set the locale, based on best available information.
@@ -139,7 +141,7 @@ class ApplicationController < ActionController::Base
   # Set the locale, based on best available information.
   # See <http://guides.rubyonrails.org/i18n.html>.
   def set_locale_to_best_available
-    best_locale = params[:locale]
+    best_locale = params[:locale] # Locale in URL always takes precedent
     best_locale = find_best_locale if best_locale.blank?
 
     # Assigning a value to I18n.locale *looks* like a

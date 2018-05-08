@@ -10,7 +10,7 @@ class UsersController < ApplicationController
   # and other additional filters scheduled to run after it are cancelled.
   # See: http://guides.rubyonrails.org/action_controller_overview.html
   # Require being logged in for "index" to slightly discourage enumeration
-  before_action :logged_in_user, only: %i[edit update destroy index]
+  before_action :redir_unless_logged_in, only: %i[edit update destroy index]
   before_action :redir_unless_current_user_can_edit,
                 only: %i[edit update destroy]
   before_action :enable_maximum_privacy_headers
@@ -145,7 +145,7 @@ class UsersController < ApplicationController
     # private data.  However, we also want to be prepared so that
     # if there *is* a breach, we reduce its impact.
     # These lines instruct others to disable indexing and caching of
-    # user data, so that if private data is inadvertantly reviewed,
+    # user data, so that if private data is inadvertantly released,
     # it is much less likely to be easily available to others via
     # web-crawled data (such as from search engines) or via caches.
     # The goal is to make it harder for adversaries to get leaked data.
@@ -167,7 +167,7 @@ class UsersController < ApplicationController
   end
 
   # Confirms a logged-in user.
-  def logged_in_user
+  def redir_unless_logged_in
     return if logged_in?
 
     flash[:danger] = t('users.please_log_in')

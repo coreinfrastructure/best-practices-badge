@@ -70,6 +70,10 @@ module SessionsHelper
     !current_user.nil?
   end
 
+  def require_logged_in
+    throw(:abort) unless logged_in?
+  end
+
   def current_user_is_admin?
     logged_in? && current_user.admin?
   end

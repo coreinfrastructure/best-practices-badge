@@ -810,14 +810,53 @@ list the additional items added since 2013.
    The system depends on server-side routers and controllers for
    access control.  There is some client-side JavaScript, but no
    access control depends on it.
-8. Cross-Site Request Forgery (CSRF or XSRF).
-   We use the built-in Rails CSRF countermeasure, where csrf tokens
-   are included in replies and checked on POST inputs.
-   We also set cookies with SameSite=Lax, which automatically counters
-   CSRF on supported browsers (such as Chrome).
-   Our restrictive Content Security Policy (CSP) helps here, too.
-   For more information, see the page on
-   [request forgery protection](http://api.rubyonrails.org/classes/ActionController/RequestForgeryProtection.html).
+8.  Cross-Site Request Forgery (CSRF or XSRF).
+    We use the built-in Rails CSRF countermeasure, where csrf tokens
+    are included in replies and checked on POST inputs.
+    We also set cookies with SameSite=Lax, which automatically counters
+    CSRF on supported browsers (such as Chrome).
+    Our restrictive Content Security Policy (CSP) helps here, too.
+    For more information, see the
+    [Ruby on Rails Guide on Security (CSRF)](http://guides.rubyonrails.org/security.html#cross-site-request-forgery-csrf) and
+    [ActionController request forgery protection](http://api.rubyonrails.org/classes/ActionController/RequestForgeryProtection.html).
+    We can walk through various cases to show that this problem cannot occur
+    with user Alice, attacker Mallory, and our server:
+    * If Alice is not logged in, Alice has no currently-active
+      privileges for CSRF to exploit.
+    * We'll assume Alice knows that logging into Mallory's
+      site is not the same as logging into our site,
+      that our anti-spoofing ("frame busting") techniques work, and that
+      TLS (with certificates) works correctly.
+      Thus, Mallory can't just show a "login here" page that Alice will use.
+      From here on, we'll assume that Alice is logged in normally through
+      our website, and that Mallory will try to convince Alice to click
+      on something on a website controlled by Mallory to create
+      a CSRF attack (which tries to fool our site through Alice).
+    * If Alice contacts Mallory's website, Alice won't send the session cookie
+      (so Mallory can't directly spoof Alice's session).
+      Mallory could create HTML (e.g., hyperlinks and forms) for Alice;
+      if Alice selects something on Mallory's HTML,
+      Alice will send a request to our server.
+      That request from Alice using Mallory's data could be either a GET/HEAD
+      or something else (such as POST).
+      So now, let's consider those two sub-cases:
+        * GET and HEAD are by design never dangerous requests;
+          our server merely shows data that Alice is already allowed to see.
+          So there is no problem in this case.
+        * If the request is something else (such as POST),
+          then there are two sub-sub-cases:
+            - If the request is something else (such as POST),
+              and Alice is using a browser with SameSite cookie support, Alice
+              will not send the cookie data - and thus on this request it
+              would be as if Alice was not logged in (which is safe).
+            - If the request is something else (such as POST),
+              and Alice is using
+              a browser without SameSite=Lax support, our server will check to
+              ensure that the form and cookie data provided by Alice match,
+              and only allow actions if they match.
+              In this final case, Mallory never got the cookie data,
+              so Mallory cannot create a form to match it, foiling Mallory.
+              Thus, our approach completely counters CSRF.
 9. Using Components with Known Vulnerabilities.
    We detect components with publicly known vulnerabilities
    using bundle-audit and gemnasium.

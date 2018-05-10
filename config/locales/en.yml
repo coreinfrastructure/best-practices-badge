@@ -1065,6 +1065,23 @@ en:
           E.g., as a top-level file named LICENSE or COPYING.
           License filenames MAY be followed by an extension such
           as ".txt" or ".md".
+          Note that this criterion is only a requirement on the source
+          repository.
+          You do NOT need to include the license file when generating
+          something from the source code
+          (such as an executable, package, or container).
+          For example, when generating an R package for the Comprehensive
+          R Archive Network (CRAN), follow standard CRAN practice:
+          if the license is a standard license, use the standard short
+          license specification (to avoid installing yet another copy
+          of the text) and list the LICENSE file in an exclusion file
+          such as .Rbuildignore. Similarly, when creating a Debian package,
+          you may put a link in the copyright file to the license text in
+          /usr/share/common-licenses, and exclude the license file from
+          the created package
+          (e.g., by deleting the file after calling dh_auto_install).
+          We do encourage including machine-readable
+          license information in generated formats where practical.
       documentation_basics:
         description: >-
           The project MUST provide basic documentation for the

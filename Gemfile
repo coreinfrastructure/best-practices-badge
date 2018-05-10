@@ -50,7 +50,7 @@ group :development, :test do
   gem 'dotenv-rails', '2.4.0'
   gem 'eslintrb', '2.1.0'
   gem 'json', '2.1.0'
-  gem 'license_finder', '5.1.1'
+  gem 'license_finder', '5.2.0'
   gem 'mdl', '0.4.0'
   gem 'pronto', '0.9.5'
   gem 'pronto-brakeman', '0.9.1'

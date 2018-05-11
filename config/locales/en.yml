@@ -1065,8 +1065,8 @@ en:
           E.g., as a top-level file named LICENSE or COPYING.
           License filenames MAY be followed by an extension such
           as ".txt" or ".md".
-          Note that this criterion is only a requirement on the source
-          repository.
+          Note that this criterion is only a requirement
+          on the source repository.
           You do NOT need to include the license file when generating
           something from the source code
           (such as an executable, package, or container).

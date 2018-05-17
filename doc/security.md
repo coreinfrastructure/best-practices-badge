@@ -859,8 +859,12 @@ list the additional items added since 2013.
               Thus, our approach completely counters CSRF.
 9. Using Components with Known Vulnerabilities.
    We detect components with publicly known vulnerabilities
-   using bundle-audit and gemnasium.
-   These use the Gemfile* and National Vulnerability Database (NVD) data.
+   using bundle-audit, which is part of our continuous integration
+   test suite.
+   Bundle-audit uses the Gemfile* and National Vulnerability Database (NVD)
+   data to report on libraries with publicly known vulnerabilities.
+   At one time we also used Gemnasium, but the service we used
+   closed in May 2018.
    For more information, see the "[supply chain](#supply-chain)" section.
 10. Unvalidated Redirects and Forwards.
    Redirects and forwards are used sparingly, and they are validated.
@@ -1257,7 +1261,7 @@ updated set, so we can rapidly update libraries, test the result, and
 deploy it.
 
 We detect components with publicly known vulnerabilities
-using 3 different mechanisms: GitHub, bundle-audit, and gemnasium.
+using 2 different mechanisms: GitHub and bundle-audit.
 Each approach has its advantages, and using multiple mechanisms
 increases the likelihood that we will be alerted quickly.
 These all use the Gemfile* files and
@@ -1275,21 +1279,10 @@ National Vulnerability Database (NVD) data:
 * bundle-audit compares the entire set of gems (libraries),
   both direct and indirect dependencies, to a database
   of versions with known vulnerabilities.
-  This is a more complete analysis compared to Gemnasium.
   The default 'rake' task invokes bundle-audit, so every time we run
   "rake" (as part of our build or deploy process)
   we are alerted about publicly known vulnerabilities in the
   components we depend on (directly or not).
-* Gemnasium badge provides us with a convenient
-  quick view of the current state, indicating both vulnerable and
-  out-of-date gems (the others only focus on vulnerable gems).
-  It also shows, on our project front page, if we have a vulnerable
-  direct dependency.  Note that Gemnasium only looks at the
-  direct dependencies (Gemfile, not Gemfile.lock), but our other
-  tools do look at indirect dependencies.
-  See the
-  [Badgeapp Gemnasium page](https://gemnasium.com/coreinfrastructure/best-practices-badge)
-  for more information.
 
 We have also optimized the component update process through
 using the package manager (bundler) and high test coverage.

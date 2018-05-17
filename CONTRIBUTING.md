@@ -675,8 +675,6 @@ That said, you need to be careful.
 If you simply install the gem using bundler, that will
 potentially run code, which is not what you want to do if it includes
 malicious code.
-For more information, see
-["Being paranoid with Ruby gems" (Gemnasium)](https://gemnasium.com/blog/being-paranoid-with-ruby-gems/)
 Instead, create a subdirectory ("mkdir temp"), run "cd temp", and then
 run this (you can omit "-v VERSION" if you're just getting the latest):
 
@@ -770,7 +768,8 @@ over the exact versions used for each gem, and we
 can easily update our dependencies.
 That's important, because we transitively depend on over 150 gems.
 
-The default 'rake' task includes the rake 'bundle_audit' task.
+The default 'rake' task and the variant used by our
+continuous integration (CI) suite includes the rake 'bundle_audit' task.
 This reports if a Ruby gem we use has a publicly known
 vulnerability listed in the National Vulnerability Database (NVD).
 Thus, simply running 'rake' will immediately warn you if there is a
@@ -778,19 +777,14 @@ publicly known vulnerability in the version of a gem we use.
 Obviously, if there is a known vulnerability you *definitely* need
 to update that gem.
 
-Our continuous integration suite (linked to from the README) uses
-[Gemnasium](https://gemnasium.com/coreinfrastructure/best-practices-badge)
-to identify all outdated dependencies, so you can also view its report
-to see what is outdated.
-This makes it easy to see outdated *direct* dependencies.
 To find all outdated gems, use the 'bundle outdated' command.
 Many of the gems named "action..." are part of rails, and thus, you should
 update rails to update them.
 
 You *must* review gems if you have reason to believe they might be malicious.
 Occasional spotchecks are encouraged.
-For more information, see
-["Being paranoid with Ruby gems" (Gemnasium)](https://gemnasium.com/blog/being-paranoid-with-ruby-gems/)
+For more information, see the archived blog article
+["Being paranoid with Ruby gems" (Gemnasium)](https://web.archive.org/web/20180130214924/https://gemnasium.com/blog/being-paranoid-with-ruby-gems/).
 You can see the changes by doing the following.
 Create a subdirectory ("mkdir temp"), run "cd temp", and then
 run this (you can omit "-v VERSION" if you're just getting the latest):

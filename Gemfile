@@ -8,7 +8,7 @@
 source 'https://rubygems.org'
 ruby File.open('.ruby-version', 'rb') { |f| f.read.chomp }
 
-gem 'bcrypt', '3.1.11' # Security - for salted hashed interated passwords
+gem 'bcrypt', '3.1.12' # Security - for salted hashed interated passwords
 gem 'bootstrap-sass', '3.3.7'
 gem 'bootstrap-social-rails', '4.12.0'
 gem 'bootstrap-will_paginate', '1.0.0'

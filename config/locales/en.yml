@@ -266,6 +266,7 @@ en:
       json_link: JSON
       in_json_format: User data in JSON format (a standard portable format)
       see_external: User's external page.
+      local_account: Custom (local) account
       is_admin: This user is a badge application administrator.
       as_admin: 'as an admin, you may also:'
       send_email_to: 'Send email to:'

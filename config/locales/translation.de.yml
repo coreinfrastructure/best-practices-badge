@@ -135,6 +135,9 @@ de:
       projects_additional_rights: 'Projekte mit zusätzlichen Rechten:'
       is_admin: Dieser Benutzer ist ein Administrator für Badge
         application.
+      json_link:
+      in_json_format:
+      local_account:
     destroy:
       cannot_delete_self: Kann nicht selbst löschen.
       user_deleted: Benutzer gelöscht.

@@ -117,6 +117,9 @@ ja:
       projects_owned: 所有プロジェクト：
       projects_additional_rights: 追加の権利を持つプロジェクト：
       is_admin: このユーザーはバッジ申請管理者です。
+      json_link:
+      in_json_format:
+      local_account:
     destroy:
       cannot_delete_self: 自分を削除することはできません。
       user_deleted: ユーザーが削除されました。

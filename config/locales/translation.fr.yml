@@ -104,6 +104,9 @@ fr:
       is_admin: >-
         Cet utilisateur est un administrateur de l'application
         de badge.
+      json_link:
+      in_json_format:
+      local_account:
     update:
       profile_updated: Profil mis à jour
     destroy:

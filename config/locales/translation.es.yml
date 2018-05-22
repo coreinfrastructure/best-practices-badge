@@ -146,6 +146,9 @@ es:
       send_email_to:
       delete_link_name:
       confirm_delete:
+      json_link:
+      in_json_format:
+      local_account:
     destroy:
       cannot_delete_user_with_projects:
       cannot_delete_self:

@@ -291,6 +291,9 @@ ru:
       projects_additional_rights: 'Проекты с дополнительными правами:'
       is_admin: Этот пользователь является администратором заявки
         на значок.
+      json_link:
+      in_json_format:
+      local_account:
     destroy:
       cannot_delete_self: Удалить себя невозможно.
       user_deleted: Пользователь удален.

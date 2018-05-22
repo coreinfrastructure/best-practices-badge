@@ -39,11 +39,13 @@
     <%= render 'projects/table', projects: @edit_projects %>
   <% end %>
 
+  <br><br>
+  <p>
   <% if @user.provider == 'github' && @user.nickname? %>
-   <br><br>
-   <p>
    <a href="https://github.com/<%= @user.nickname %>"><%=
-   t ('.see_external') %></a>
+   t('.see_external') %></a>
+  <% else %>
+   <%= t('.local_account') %>
   <% end %>
   <% if current_user && (@user == current_user || current_user.admin?) %>
     <% if @user.email? %>
@@ -54,6 +56,8 @@
                   @user, method: :delete,
                   data: { confirm: t('.confirm_delete') },
                   rel: 'nofollow' %>
+    | <a href="<%= user_path(@user, format: :json) %>"
+       title="<%= t '.in_json_format' %>"><%= t '.json_link' %></a>
   <% end %>
   <% if current_user&.admin? %>
     <% if @user.admin? %>

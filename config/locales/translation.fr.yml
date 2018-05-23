@@ -104,9 +104,11 @@ fr:
       is_admin: >-
         Cet utilisateur est un administrateur de l'application
         de badge.
-      json_link:
-      in_json_format:
-      local_account:
+      json_link: JSON
+      in_json_format: >-
+        Données de l'utilisateur au format JSON (un format portable
+        standard)
+      local_account: Compte personnalisé (local)
     update:
       profile_updated: Profil mis à jour
     destroy:
@@ -1470,15 +1472,18 @@ fr:
         description: >-
           Les mécanismes de sécurité par défaut dans le logiciel
           produit par le projet NE DOIVENT PAS dépendre d'algorithmes
-          cryptographiques brisés (par exemple, MD4, MD5, DES
+          cryptographiques cassés (par exemple, MD4, MD5, DES
           unique, RC4, Dual_EC_DRBG) ou utiliser des modes de
-          chiffrement inappropriés dans le contexte (par exemple,
-          le mode ECB n'est presque jamais approprié car il révèle
-          des blocs identiques dans le texte chiffré comme en
-          témoigne le <a href="https://blog.filippo.io/the-ecb-penguin/">pingouin
-          ECB</a>, et le mode CTR est souvent inapproprié car
-          il n'effectue pas d'authentification et provoque des
-          doublons si l'état d'entrée est répété).
+          chiffrement inappropriés dans le contexte, sauf si ils
+          sont nécessaires pour implémenter un protocole d'interopérabilité
+          (où le protocole implémenté est la version la plus récente
+          du standard supporté largement par l'écosystème du réseau,
+          l'écosystème requière l'utilisation de cet algorithme
+          ou mode, et cet écosystème n'offre pas d'alternative
+          plus sûre). La documentation DOIT décrire tous les risques
+          de sécurité appropriés et les parades connues si ces
+          algorithmes ou modes cassés sont nécessaires pour un
+          protocole d'interopérabilité.
         details: >-
           Dans de nombreux cas, il est préférable de choisir un
           mode d'algorithme de chiffrement de bloc conçu pour

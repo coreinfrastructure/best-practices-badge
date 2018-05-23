@@ -292,3 +292,12 @@
       https://github.com/masover/blankslate/blob/master/MIT-LICENSE'
     :versions: []
     :when: 2017-11-18 19:27:38.823188201 Z
+- - :approve
+  - openssl
+  - :who: David A. Wheeler
+    :why: OpenSSL is released under a nonstandard BSD-style OSS license.  OpenSSL
+      is a widely-used library, and its licensing oddities are well-known.  They are
+      in the process of relicensing to a more standard OSS license, but for the moment,
+      we must deal with its legacy circumstance.
+    :versions: []
+    :when: 2018-05-23 02:29:19.957869863 Z

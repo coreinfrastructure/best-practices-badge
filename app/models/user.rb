@@ -81,7 +81,7 @@ class User < ApplicationRecord
   VALID_LOCALES_STRINGS = I18n.available_locales.map(&:to_s)
   validates :preferred_locale, inclusion: { in: VALID_LOCALES_STRINGS }
 
-  # Returns the hash digest of the given string.
+  # Returns the password hash digest of the given string.
   def self.digest(string)
     cost =
       if ActiveModel::SecurePassword.min_cost
@@ -90,6 +90,18 @@ class User < ApplicationRecord
         BCrypt::Engine.cost
       end
     BCrypt::Password.create(string, cost: cost)
+  end
+
+  # Returns the email hash of the given string.
+  # Named as "compute..." to clearly distinguish from the column name.
+  def self.compute_email_hash(string)
+    # TODO!
+    'DEBUG: hash ' + string
+  end
+
+  def self.compute_email_encrypted(string)
+    # TODO!
+    'DEBUG: encrypted ' + string
   end
 
   def self.create_with_omniauth(auth)

@@ -2,7 +2,9 @@
 
 test_user:
   name: Test
-  email: test@example.org
+  email_unencrypted: test@example.org
+  email_encrypted: <%= User.compute_email_encrypted('test@example.org') %>
+  email_hash: <%= User.compute_email_hash('test@example.org') %>
   password_digest: <%= User.digest('password') %>
   provider: local
   preferred_locale: en
@@ -11,7 +13,9 @@ test_user:
 
 test_user_melissa:
   name: Melissa Lewis
-  email: melissa@example.com
+  email_unencrypted: melissa@example.com
+  email_encrypted: <%= User.compute_email_encrypted('melissa@example.com') %>
+  email_hash: <%= User.compute_email_hash('melissa@example.com') %>
   password_digest: <%= User.digest('password1') %>
   provider: local
   preferred_locale: en
@@ -20,7 +24,9 @@ test_user_melissa:
 
 test_user_mark:
   name: Mark Watney
-  email: mark@example.com
+  email_unencrypted: mark@example.com
+  email_encrypted: <%= User.compute_email_encrypted('mark@example.com') %>
+  email_hash: <%= User.compute_email_hash('mark@example.com') %>
   password_digest: <%= User.digest('password') %>
   provider: local
   preferred_locale: en
@@ -29,7 +35,9 @@ test_user_mark:
 
 test_user_not_active:
   name: Forgetful
-  email: forgetful@example.com
+  email_unencrypted: forgetful@example.com
+  email_encrypted: <%= User.compute_email_encrypted('forgetful@example.com') %>
+  email_hash: <%= User.compute_email_hash('forgetful@example.com') %>
   password_digest: <%= User.digest('password') %>
   provider: local
   preferred_locale: en
@@ -37,7 +45,9 @@ test_user_not_active:
 
 test_user_cs:
   name: Case Sensitive
-  email: CaseSensitive@example.org
+  email_unencrypted: CaseSensitive@example.org
+  email_encrypted: <%= User.compute_email_encrypted('CaseSensitive@example.com') %>
+  email_hash: <%= User.compute_email_hash('CaseSensitive@example.com') %>
   password_digest: <%= User.digest('password') %>
   provider: local
   preferred_locale: en
@@ -46,7 +56,9 @@ test_user_cs:
 
 admin_user:
   name: Admin
-  email: admin@example.com
+  email_unencrypted: admin@example.com
+  email_encrypted: <%= User.compute_email_encrypted('admin@example.com') %>
+  email_hash: <%= User.compute_email_hash('admin@example.com') %>
   password_digest: <%= User.digest('password') %>
   provider: local
   preferred_locale: en
@@ -57,7 +69,9 @@ admin_user:
 github_user:
   name: GitHub The User
   nickname: github-user
-  email: github-user@example.com
+  email_unencrypted: github-user@example.com
+  email_encrypted: <%= User.compute_email_encrypted('github-user@example.com') %>
+  email_hash: <%= User.compute_email_hash('github-user@example.com') %>
   password_digest: <%= User.digest('password') %>
   provider: github
   preferred_locale: en
@@ -66,7 +80,9 @@ github_user:
 
 fr_user:
   name: French Test
-  email: fr-test@example.org
+  email_unencrypted: fr-test@example.org
+  email_encrypted: <%= User.compute_email_encrypted('fr-test@example.com') %>
+  email_hash: <%= User.compute_email_hash('fr-test@example.com') %>
   password_digest: <%= User.digest('password') %>
   provider: local
   preferred_locale: fr

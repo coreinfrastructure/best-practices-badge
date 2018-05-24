@@ -26,6 +26,7 @@ gem 'lograge', '0.10.0' # Simplify logs
 gem 'mail', '2.7.0' # Ruby mail handler
 gem 'octokit', '4.9.0' # GitHub's official Ruby API
 gem 'omniauth-github', '1.3.0' # Authentication to GitHub (get project info)
+gem 'openssl', '2.1.1' # Encryption routines (e.g., for email addresses)
 gem 'paleta', '0.3.0' # Color manipulation, used for badges
 gem 'paper_trail', '9.0.1' # Record previous versions of project data
 gem 'pg', '1.0.0' # PostgreSQL database, used for data storage

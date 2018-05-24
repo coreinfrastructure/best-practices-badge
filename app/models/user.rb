@@ -92,17 +92,70 @@ class User < ApplicationRecord
     BCrypt::Password.create(string, cost: cost)
   end
 
-  # Returns the email hash of the given string.
+  # Returns a hex string which is the email hash of the given data.
+  # Note that data will be downcased before its hash is computed.
   # Named as "compute..." to clearly distinguish from the column name.
-  def self.compute_email_hash(string)
-    # TODO!
-    'DEBUG: hash ' + string
+  def self.compute_email_hash(data)
+    OpenSSL::HMAC.hexdigest(
+      'SHA256', Rails.application.config.assets.email_hash_key, data.downcase
+    )
   end
 
-  def self.compute_email_encrypted(string)
-    # TODO!
-    'DEBUG: encrypted ' + string
+  # These constants are used to support the AES GCM mode.
+  # The GCM mode *detects* if our decryption fails
+  # instead of returning jibberish.
+  # AUTH_DATA should be 16 bytes long, it doesn't need to be secret.
+  AUTH_DATA = 'BadgeApplication'
+  AUTH_TAG_LENGTH = 16 # Length of produced authentication tag
+
+  # Encrypt "data" using our email encryption algorithm and key.
+  # We'll use AES (a well-tested and supported encryption algorithm),
+  # a big key, and GCM mode (so we can detect if later decryption succeeds).
+  # We return string IV,AUTHENTICATION_TAG,ENCRYPTED_DATA
+  # where each part is hex encoded; that makes it easy to process
+  # and store on anything
+  # rubocop:disable Metrics/AbcSize,Rails/SaveBang
+  def self.compute_email_encrypted(data)
+    cipher = OpenSSL::Cipher.new('aes-256-gcm').encrypt
+    cipher.key = Rails.application.config.assets.email_encrypted_key
+    iv = cipher.random_iv
+    cipher.auth_data = AUTH_DATA
+    encrypted = cipher.update(data) + cipher.final
+    raise if cipher.auth_tag.length != AUTH_TAG_LENGTH # invariant check
+    iv_hex = iv.unpack('H*').first.to_s
+    auth_tag_hex = cipher.auth_tag.unpack('H*').first.to_s
+    encrypted_hex = encrypted.unpack('H*').first.to_s
+    "#{iv_hex},#{auth_tag_hex},#{encrypted_hex}"
   end
+  # rubocop:enable Metrics/AbcSize,Rails/SaveBang
+
+  # Decrypt "data" using our email encryption algorithm and key.
+  # "data" is what compute_email_encrypted provided earlier.
+  # If decryption fails, return nil.
+  # This a class method to make some kinds of testing easier
+  # rubocop:disable Metrics/AbcSize,Metrics/MethodLength,Rails/SaveBang
+  def self.compute_email_decrypted(data)
+    # Extract pieces of data for decryption
+    iv_hex, auth_tag_hex, encrypted_hex = data.split(',')
+    iv = [iv_hex].pack('H*')
+    auth_tag = [auth_tag_hex].pack('H*')
+    encrypted = [encrypted_hex].pack('H*')
+    # Sanity check - if this fails, we received bad data (not just wrong key)
+    raise if auth_tag.length != AUTH_TAG_LENGTH # invariant check
+    # Setup decryption
+    decipher = OpenSSL::Cipher.new('aes-256-gcm').decrypt
+    decipher.key = Rails.application.config.assets.email_encrypted_key
+    decipher.iv = iv
+    decipher.auth_tag = auth_tag
+    decipher.auth_data = AUTH_DATA
+    # Perform decryption and return result
+    begin
+      decipher.update(encrypted) + decipher.final
+    rescue OpenSSL::Cipher::CipherError
+      nil # Decryption failed, return nil.
+    end
+  end
+  # rubocop:enable Metrics/AbcSize,Metrics/MethodLength,Rails/SaveBang
 
   def self.create_with_omniauth(auth)
     @user = User.new(

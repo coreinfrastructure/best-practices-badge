@@ -115,4 +115,11 @@ class UserTest < ActiveSupport::TestCase
     assert_match(/\$2a\$/, User.digest('foobar'))
     ActiveModel::SecurePassword.min_cost = true
   end
+
+  test 'Trivial roundtrip for encryption' do
+    original = 'david@example.com'
+    encrypted = User.compute_email_encrypted(original)
+    decrypted = User.compute_email_decrypted(encrypted)
+    assert_equal original, decrypted
+  end
 end

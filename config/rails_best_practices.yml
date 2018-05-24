@@ -42,6 +42,7 @@ RemoveUnusedMethodsInModelsCheck: { except_methods: [
   'Project#passing', # Scope used for search & in test, but tool misses it
   'Criterion#must?', # Used in ERB template; doesn't notice.
   'User#digest',
+  'User#compute_email_decrypted', # STUB: Eventually we'll use it.
   'User#created_since', # Used by daily stamp (rake); doesn't notice
   'User#updated_since' # Used by daily stamp (rake); doesn't notice
   ] }

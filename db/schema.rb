@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180218221750) do
+ActiveRecord::Schema.define(version: 20180522234232) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -382,7 +382,7 @@ ActiveRecord::Schema.define(version: 20180218221750) do
     t.string "uid"
     t.string "name"
     t.string "nickname"
-    t.citext "email"
+    t.citext "email_unencrypted"
     t.string "password_digest"
     t.string "secret_token"
     t.string "validation_code"
@@ -397,8 +397,12 @@ ActiveRecord::Schema.define(version: 20180218221750) do
     t.datetime "reset_sent_at"
     t.string "preferred_locale", default: "en"
     t.datetime "last_login_at"
-    t.index ["email"], name: "index_users_on_email"
-    t.index ["email"], name: "unique_local_email", unique: true, where: "((provider)::text = 'local'::text)"
+    t.string "email_hash"
+    t.string "email_encrypted"
+    t.index ["email_hash"], name: "index_users_on_email_hash"
+    t.index ["email_hash"], name: "unique_local_email_hash", unique: true, where: "((provider)::text = 'local'::text)"
+    t.index ["email_unencrypted"], name: "index_users_on_email_unencrypted"
+    t.index ["email_unencrypted"], name: "unique_local_email", unique: true, where: "((provider)::text = 'local'::text)"
     t.index ["last_login_at"], name: "index_users_on_last_login_at"
     t.index ["uid"], name: "index_users_on_uid"
   end

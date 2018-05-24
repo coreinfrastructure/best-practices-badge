@@ -45,16 +45,18 @@ class User < ApplicationRecord
 
   validates :name, presence: true, length: { maximum: 50 }
 
-  validates :email, presence: true, length: { maximum: 255 }, email: true
+  # TODO: Need to validate "email" on input, but not in internal database.
+  # validates :email, presence: true, length: { maximum: 255 }, email: true
 
+  # TODO: Need to validate "email" on input, but not in internal database.
   # We check uniqueness of local account email addresses *both* here in
   # the model *and* also directly in the database (via unique_local_email).
   # The uniqueness check here in the model provides better error messages
   # and works regardless of the underlying RDBMS.  The RDBMS-level index
   # check, however, is immune to races where supported (PostgreSQL does),
   # because the RDBMS is the final arbiter).
-  validates :email, uniqueness: { scope: :provider }, case_sensitive: false,
-                    if: ->(u) { u.provider == 'local' }
+  # validates :email, uniqueness: { scope: :provider }, case_sensitive: false,
+  #                   if: ->(u) { u.provider == 'local' }
 
   # Validate passwords; this is obviously security-related.
   # We directly control validations instead of using the default

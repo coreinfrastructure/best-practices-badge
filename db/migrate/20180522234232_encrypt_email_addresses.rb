@@ -35,6 +35,8 @@ class EncryptEmailAddresses < ActiveRecord::Migration[5.1]
         # This loop only happens once, during the migration, so it's
         # not a big deal that it's slow, and find_each helps.
         User.find_each do |user|
+          next if user.email_unencrypted.blank?
+          user.name = '-' unless user.name? # Won't save otherwise
           user.email_hash = User.compute_email_hash(user.email_unencrypted)
           user.email_encrypted = User.compute_email_encrypted(
             user.email_unencrypted

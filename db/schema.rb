@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180218221750) do
+ActiveRecord::Schema.define(version: 20180525145445) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -382,7 +382,7 @@ ActiveRecord::Schema.define(version: 20180218221750) do
     t.string "uid"
     t.string "name"
     t.string "nickname"
-    t.citext "email"
+    t.citext "unencrypted_email"
     t.string "password_digest"
     t.string "secret_token"
     t.string "validation_code"
@@ -397,10 +397,15 @@ ActiveRecord::Schema.define(version: 20180218221750) do
     t.datetime "reset_sent_at"
     t.string "preferred_locale", default: "en"
     t.datetime "last_login_at"
-    t.index ["email"], name: "index_users_on_email"
-    t.index ["email"], name: "unique_local_email", unique: true, where: "((provider)::text = 'local'::text)"
+    t.string "encrypted_email"
+    t.string "encrypted_email_iv"
+    t.string "encrypted_email_bidx"
+    t.index ["encrypted_email_bidx"], name: "encrypted_email_local_unique_bidx", unique: true, where: "((provider)::text = 'local'::text)"
+    t.index ["encrypted_email_bidx"], name: "index_users_on_encrypted_email_bidx"
     t.index ["last_login_at"], name: "index_users_on_last_login_at"
     t.index ["uid"], name: "index_users_on_uid"
+    t.index ["unencrypted_email"], name: "index_users_on_unencrypted_email"
+    t.index ["unencrypted_email"], name: "unique_local_email", unique: true, where: "((provider)::text = 'local'::text)"
   end
 
   create_table "versions", id: :serial, force: :cascade do |t|

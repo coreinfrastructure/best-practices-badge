@@ -78,6 +78,16 @@ The application is configured by various environment variables:
   "production" or "fake_production". Plausible values are
   "debug", "info", and "warn". Default is "info". See:
   <http://guides.rubyonrails.org/debugging_rails_applications.html>
+* EMAIL_ENCRYPTION_KEY: Key to decrypt email addresses.
+  Hexadecimal string, must be 64 hex digits (==32 bytes==256 bits).
+  Used by aes-256-gcm (256-bit AES in GCM mode).
+* EMAIL_BLIND_INDEX_KEY: Key for blind index created for email
+  (used by PBKDF2-HMAC-SHA256).  Must be 64 hex digits (==32 bytes==256 bits).
+
+You can make cryptographically random values (such as keys)
+using "rails secret".  E.g., to create 64 random hexadecimal digits, use:
+
+>    rails secret | head -c64 ; echo
 
 This can be set on Heroku.  For example, to change the maximum number
 of email reminders to inactive projects on production-bestpractices:

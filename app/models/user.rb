@@ -31,6 +31,23 @@ class User < ApplicationRecord
   # in practice.  See ActiveModel::SecurePassword.
   MAX_PASSWORD_LENGTH = 72
 
+  # We use hexadecimal encoding (0010=\x00\x10), NOT Base64 or other
+  DIGITS_OF_EMAIL_ENCRYPTION_KEY = 256 / 8 * 2 # 256-bit AES key in hex
+  DIGITS_OF_EMAIL_BLIND_INDEX_KEY = 256 / 8 * 2 # 256-bit HMAC key in hex
+
+  # Email addresses are stored as encrypted values.
+  # If a key isn't provided, use a bogus one to make testing easy.
+  attr_encrypted :email, algorithm: 'aes-256-gcm', key: [(
+    ENV['EMAIL_ENCRYPTION_KEY'] || '1' * DIGITS_OF_EMAIL_ENCRYPTION_KEY
+  )].pack('H*')
+  # Email addresses are indexed as blind indexes of downcased email addresses,
+  # so we can efficiently search for them while keeping them encrypted.
+  # Usage: User.where(email: "test@example.org")
+  # or:    User.where(email: "test@example.org", provider: "local")
+  blind_index :email, key: [(
+    ENV['EMAIL_BLIND_INDEX_KEY'] || '2' * DIGITS_OF_EMAIL_BLIND_INDEX_KEY
+  )].pack('H*'), expression: ->(v) { v.try(:downcase) }
+
   scope :created_since, (
     lambda do |time|
       where(User.arel_table[:created_at].gteq(time))
@@ -52,7 +69,7 @@ class User < ApplicationRecord
   # The uniqueness check here in the model provides better error messages
   # and works regardless of the underlying RDBMS.  The RDBMS-level index
   # check, however, is immune to races where supported (PostgreSQL does),
-  # because the RDBMS is the final arbiter).
+  # because the RDBMS is the final arbiter.
   validates :email, uniqueness: { scope: :provider }, case_sensitive: false,
                     if: ->(u) { u.provider == 'local' }
 

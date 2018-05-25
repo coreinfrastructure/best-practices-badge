@@ -2,7 +2,10 @@
 
 test_user:
   name: Test
-  email: test@example.org
+  encrypted_email: <%= User.encrypt_email('test@example.org', iv: Base64.decode64('G4fbeClWL3aFMY9I')) %>
+  encrypted_email_iv: "G4fbeClWL3aFMY9I"
+  # Need to compute_email_bidx - this is ugly but works
+  encrypted_email_bidx: <%= x = User.new; x.email = 'test@example.org'; x.compute_email_bidx %>
   password_digest: <%= User.digest('password') %>
   provider: local
   preferred_locale: en
@@ -11,7 +14,9 @@ test_user:
 
 test_user_melissa:
   name: Melissa Lewis
-  email: melissa@example.com
+  encrypted_email: <%= User.encrypt_email('melissa@example.org', iv: Base64.decode64('G4fbeClWL3aFMY9I')) %>
+  encrypted_email_iv: "G4fbeClWL3aFMY9I"
+  encrypted_email_bidx: <%= x = User.new; x.email = 'melissa@example.org'; x.compute_email_bidx %>
   password_digest: <%= User.digest('password1') %>
   provider: local
   preferred_locale: en
@@ -20,7 +25,9 @@ test_user_melissa:
 
 test_user_mark:
   name: Mark Watney
-  email: mark@example.com
+  encrypted_email: <%= User.encrypt_email('mark@example.org', iv: Base64.decode64('G4fbeClWL3aFMY9I')) %>
+  encrypted_email_iv: "G4fbeClWL3aFMY9I"
+  encrypted_email_bidx: <%= x = User.new; x.email = 'mark@example.org'; x.compute_email_bidx %>
   password_digest: <%= User.digest('password') %>
   provider: local
   preferred_locale: en
@@ -29,7 +36,9 @@ test_user_mark:
 
 test_user_not_active:
   name: Forgetful
-  email: forgetful@example.com
+  encrypted_email: <%= User.encrypt_email('forgetful@example.org', iv: Base64.decode64('G4fbeClWL3aFMY9I')) %>
+  encrypted_email_iv: "G4fbeClWL3aFMY9I"
+  encrypted_email_bidx: <%= x = User.new; x.email = 'forgetful@example.org'; x.compute_email_bidx %>
   password_digest: <%= User.digest('password') %>
   provider: local
   preferred_locale: en
@@ -37,7 +46,9 @@ test_user_not_active:
 
 test_user_cs:
   name: Case Sensitive
-  email: CaseSensitive@example.org
+  encrypted_email: <%= User.encrypt_email('CaseSensitive@example.org', iv: Base64.decode64('G4fbeClWL3aFMY9I')) %>
+  encrypted_email_iv: "G4fbeClWL3aFMY9I"
+  encrypted_email_bidx: <%= x = User.new; x.email = 'CaseSensitive@example.org'; x.compute_email_bidx %>
   password_digest: <%= User.digest('password') %>
   provider: local
   preferred_locale: en
@@ -46,7 +57,9 @@ test_user_cs:
 
 admin_user:
   name: Admin
-  email: admin@example.com
+  encrypted_email: <%= User.encrypt_email('admin@example.org', iv: Base64.decode64('G4fbeClWL3aFMY9I')) %>
+  encrypted_email_iv: "G4fbeClWL3aFMY9I"
+  encrypted_email_bidx: <%= x = User.new; x.email = 'admin@example.org'; x.compute_email_bidx %>
   password_digest: <%= User.digest('password') %>
   provider: local
   preferred_locale: en
@@ -57,7 +70,9 @@ admin_user:
 github_user:
   name: GitHub The User
   nickname: github-user
-  email: github-user@example.com
+  encrypted_email: <%= User.encrypt_email('github-user@example.org', iv: Base64.decode64('G4fbeClWL3aFMY9I')) %>
+  encrypted_email_iv: "G4fbeClWL3aFMY9I"
+  encrypted_email_bidx: <%= x = User.new; x.email = 'github-user@example.org'; x.compute_email_bidx %>
   password_digest: <%= User.digest('password') %>
   provider: github
   preferred_locale: en
@@ -66,7 +81,9 @@ github_user:
 
 fr_user:
   name: French Test
-  email: fr-test@example.org
+  encrypted_email: <%= User.encrypt_email('fr-test@example.org', iv: Base64.decode64('G4fbeClWL3aFMY9I')) %>
+  encrypted_email_iv: "G4fbeClWL3aFMY9I"
+  encrypted_email_bidx: <%= x = User.new; x.email = 'fr-test@example.org'; x.compute_email_bidx %>
   password_digest: <%= User.digest('password') %>
   provider: local
   preferred_locale: fr

@@ -1160,6 +1160,46 @@ these attempt to thwart or slow attack even if the system has a vulnerability.
     of emails we will send out each time; this keeps us from looking like
     a spammer.
 
+#### Encrypted email addresses
+
+We encrypt email addresses within the database, and never
+send the descryption or index keys to the database.
+This provides protection of this data at rest, and also means that
+even if an attacker can view the data within the database, that attacker
+will not receive sensitive information.
+Passwords are specially encrypted as passwords (per above),
+email addresses are encrypted (as described here), and almost all other
+data is considered public.
+We try to not reveal a user's preferred locale on general principle
+(who needs to know?), but that is not
+personally-identifying information and we would not consider it a
+security violation if that information were leaked.
+
+We encrypt emails using the Rails-specific approach outlined in
+["Securing User Emails in Rails" by Andrew Kane (May 14, 2018)](https://shorts.dokkuapp.com/securing-user-emails-in-rails/).
+We use the gem 'attr_encrypted' to encrypt email addresses, and
+gem 'blind_index' to index encrypted email addresses.
+This approach builds on standard general-purpose approaches for
+encrypting data and indexing the data, e.g., see
+["How to Search on Securely Encrypted Database Fields" by By Scott Arciszewski](https://www.sitepoint.com/how-to-search-on-securely-encrypted-database-fields/).
+
+We encrypt the email addresses using AES with 256-bit keys in
+GCM mode ('aes-256-gcm').  We also hash the email addresses, so they
+can be indexed, using the hashed key algorithm PBKDF2-HMAC-SHA256.
+
+Note that 'attr_encrypted' depends on the gem 'encryptor'.
+Encryptor version 2.0.0 had a
+[major security bug when using AES-*-GCM algorithms](https://github.com/attr-encrypted/encryptor/pull/22).
+We do not use that version, but instead use
+a newer version that does not have that vulnerability.
+Some old documentation recommends using
+'attr_encryptor' instead because of this vulnerability, but the
+vulnerability has since been fixed and
+'attr_encryptor' is no longer maintained.
+Vulnerabilities are never a great sign, but we do take it as a good sign
+that the developers of encryptor were willing to make a breaking change
+to fix a security vulnerabilities.
+
 ### Making adjustments
 
 We want to counter all common vulnerabilities, not just those

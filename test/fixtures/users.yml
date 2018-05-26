@@ -1,65 +1,88 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+# Read about fixtures at:
+# http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+#
+# We encrypt user email addresses. For test purposes, we used a fixed
+# encryption IV (don't do this with real data), and provide precomputed
+# values for "encrypted_email" and "encrypted_email_bidx".  There's
+# lot of infrastructure that has to work to compute these values, and they
+# take time to compute, so providing precomputed values makes sense.
+# To find values for new email addresses, run "rails console" and then:
+# encrypted_email_iv: "G4fbeClWL3aFMY9I"
+# encrypted_email:
+#   User.encrypt_email('test@example.org',
+#                       iv: Base64.decode64('G4fbeClWL3aFMY9I'))
+# encrypted_email_bidx:
+#   BlindIndex.generate_bidx("test@example.org", User.blind_indexes[:email])
+# An alternative approach is to create a stub user:
+# x = User.new; x.email = 'test@example.org'; x.compute_email_bidx
+# This assumes that you're using the usual (default) test keys.
+#
 
+# current_email = 'test@example.org'
 test_user:
   name: Test
-  encrypted_email: <%= User.encrypt_email('test@example.org', iv: Base64.decode64('G4fbeClWL3aFMY9I')) %>
   encrypted_email_iv: "G4fbeClWL3aFMY9I"
-  # Need to compute_email_bidx - this is ugly but works
-  encrypted_email_bidx: <%= x = User.new; x.email = 'test@example.org'; x.compute_email_bidx %>
+  encrypted_email: "ybGkapP1iahMHmhaQwjU9qTfGB7w/KCFTiUGkIVZZ08=\n"
+  encrypted_email_bidx: "hEghi+qNCA63qDAuTIq8jBWtOweoQ33EstwMnvM3/gk=\n"
   password_digest: <%= User.digest('password') %>
   provider: local
   preferred_locale: en
   activated: true
   activated_at: <%= Time.zone.now %>
 
+# current_email = 'melissa@example.org'
 test_user_melissa:
   name: Melissa Lewis
-  encrypted_email: <%= User.encrypt_email('melissa@example.org', iv: Base64.decode64('G4fbeClWL3aFMY9I')) %>
+  encrypted_email: "0LG7d6DjkIlEFmVSHQvDv5abKJMMkBPFsdaOpyO/5Av6b1M=\n"
   encrypted_email_iv: "G4fbeClWL3aFMY9I"
-  encrypted_email_bidx: <%= x = User.new; x.email = 'melissa@example.org'; x.compute_email_bidx %>
+  encrypted_email_bidx: "YHiTbwhse+wm3w96DeNAXuKEeyt3dzlGV7BSjLjfUtg=\n"
   password_digest: <%= User.digest('password1') %>
   provider: local
   preferred_locale: en
   activated: true
   activated_at: <%= Time.zone.now %>
 
+# current_email = 'mark@example.org'
 test_user_mark:
   name: Mark Watney
-  encrypted_email: <%= User.encrypt_email('mark@example.org', iv: Base64.decode64('G4fbeClWL3aFMY9I')) %>
+  encrypted_email: "0LWldZP1iahMHmhaQwjU9g27hpaNo56iCfMNh+ZsERg=\n"
   encrypted_email_iv: "G4fbeClWL3aFMY9I"
-  encrypted_email_bidx: <%= x = User.new; x.email = 'mark@example.org'; x.compute_email_bidx %>
+  encrypted_email_bidx: "C/0XJyW8Xitx19MPv1j8B65iNOaykMLZnMZ/TctNp3U=\n"
   password_digest: <%= User.digest('password') %>
   provider: local
   preferred_locale: en
   activated: true
   activated_at: <%= Time.zone.now %>
 
+# current_email = 'forgetful@example.org'
 test_user_not_active:
   name: Forgetful
-  encrypted_email: <%= User.encrypt_email('forgetful@example.org', iv: Base64.decode64('G4fbeClWL3aFMY9I')) %>
+  encrypted_email: "27ulebbkl7xNLmFHDArW/ZzHIFjaYveE2hxJl2Kxdk2/rm4xXw==\n"
   encrypted_email_iv: "G4fbeClWL3aFMY9I"
-  encrypted_email_bidx: <%= x = User.new; x.email = 'forgetful@example.org'; x.compute_email_bidx %>
+  encrypted_email_bidx: "0SHo5Lc+XTrcY6HvouDwAIvEdy+8odILw9DP3MGXMfM=\n"
   password_digest: <%= User.digest('password') %>
   provider: local
   preferred_locale: en
   activated: false
 
+# current_email = 'CaseSensitive@example.org'
 test_user_cs:
   name: Case Sensitive
-  encrypted_email: <%= User.encrypt_email('CaseSensitive@example.org', iv: Base64.decode64('G4fbeClWL3aFMY9I')) %>
+  encrypted_email: "/rWke4D1n7pIGm1JCCfD6ZiEP0bY51bxymIp4AvOLZGyoX8ln1EALDc=\n"
   encrypted_email_iv: "G4fbeClWL3aFMY9I"
-  encrypted_email_bidx: <%= x = User.new; x.email = 'CaseSensitive@example.org'; x.compute_email_bidx %>
+  encrypted_email_bidx: "+rRkCLpeIVcfwtPu+Jy6YyXtksI/w3frgdSu8J4kR2M=\n"
   password_digest: <%= User.digest('password') %>
   provider: local
   preferred_locale: en
   activated: true
   activated_at: <%= Time.zone.now %>
 
+# current_email = 'admin@example.org'
 admin_user:
   name: Admin
-  encrypted_email: <%= User.encrypt_email('admin@example.org', iv: Base64.decode64('G4fbeClWL3aFMY9I')) %>
+  encrypted_email: "3LC6d73QlLFAA3RTCEnJ455qaUF28kYI7ZOGoIDUhkzm\n"
   encrypted_email_iv: "G4fbeClWL3aFMY9I"
-  encrypted_email_bidx: <%= x = User.new; x.email = 'admin@example.org'; x.compute_email_bidx %>
+  encrypted_email_bidx: "yspd41bZJvT9bn0MQXU2l2dnhpZTIKpf0u46w6+qf1U=\n"
   password_digest: <%= User.digest('password') %>
   provider: local
   preferred_locale: en
@@ -67,23 +90,25 @@ admin_user:
   activated_at: <%= Time.zone.now %>
   role: admin
 
+# current_email = 'github-user@example.org'
 github_user:
   name: GitHub The User
   nickname: github-user
-  encrypted_email: <%= User.encrypt_email('github-user@example.org', iv: Base64.decode64('G4fbeClWL3aFMY9I')) %>
+  encrypted_email: "2r2jdqby3LxSC3Z/CB/H/ImFKgTSu16xi1y/444M1k6yTn4sKLLl\n"
   encrypted_email_iv: "G4fbeClWL3aFMY9I"
-  encrypted_email_bidx: <%= x = User.new; x.email = 'github-user@example.org'; x.compute_email_bidx %>
+  encrypted_email_bidx: "8Eqc0l8ZjhA2Z6w/SIuZyWhZesmYiKZXgnTqqaKhWew=\n"
   password_digest: <%= User.digest('password') %>
   provider: github
   preferred_locale: en
   activated: true
   activated_at: <%= Time.zone.now %>
 
+# current_email = 'fr-test@example.org'
 fr_user:
   name: French Test
-  encrypted_email: <%= User.encrypt_email('fr-test@example.org', iv: Base64.decode64('G4fbeClWL3aFMY9I')) %>
+  encrypted_email: "26b6arbjhYlEFmVSHQvDv5abKOzHp6ZN4HPtuqnxJkbq84I=\n"
   encrypted_email_iv: "G4fbeClWL3aFMY9I"
-  encrypted_email_bidx: <%= x = User.new; x.email = 'fr-test@example.org'; x.compute_email_bidx %>
+  encrypted_email_bidx: "7e3Bzzf0T1HnQKICsDEqJGosonRFiZZNtN445wgNDYU=\n"
   password_digest: <%= User.digest('password') %>
   provider: local
   preferred_locale: fr

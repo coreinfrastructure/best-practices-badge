@@ -395,7 +395,7 @@ class Project < ApplicationRecord
     #   not_recently_reminded = last_reminder_at IS NULL OR
     #     more than 60 days ago. Notice that if recently_reminded is null
     #     (no reminders have been sent), only the other criteria matter.
-    #   valid_email = user_id.email (joined) is not null and includes "@"
+    #   valid_email = users.encrypted_email (joined) is not null
     # Prioritize. Sort by the last_reminder_at datetime
     #   (use updated_at if last_reminder_at is null), oldest first.
     #   Since last_reminder_at gets updated with a newer datetime when
@@ -403,8 +403,10 @@ class Project < ApplicationRecord
     #   priority. Thus we will eventually cycle through all inactive projects
     #   if none of them respond to reminders.
     #   Use: projects.order("COALESCE(last_reminder_at, updated_at)")
+    #   We cannot check if email includes "@" here, because they are
+    #   encrypted (the database does not have access to the keys, by intent).
     Project
-      .select('projects.*, users.email as user_email')
+      .select('projects.*, users.encrypted_email as user_encrypted_email')
       .where('badge_percentage_0 < 100')
       .where('lost_passing_at IS NULL OR lost_passing_at < ?',
              LOST_PASSING_REMINDER.days.ago)
@@ -415,8 +417,7 @@ class Project < ApplicationRecord
              LAST_SENT_REMINDER.days.ago)
       .joins(:user).references(:user) # Need this to check email address
       .where('user_id IS NOT NULL') # Safety check
-      .where('users.email IS NOT NULL')
-      .where('users.email LIKE \'%@%\'') # We can't send emails without '@'
+      .where('users.encrypted_email IS NOT NULL')
       .reorder('COALESCE(last_reminder_at, projects.updated_at)')
       .first(MAX_REMINDERS)
   end
@@ -436,7 +437,7 @@ class Project < ApplicationRecord
 
   def self.recently_reminded
     Project
-      .select('projects.*, users.email as user_email')
+      .select('projects.*, users.encrypted_email as user_encrypted_email')
       .joins(:user).references(:user) # Need this to check email address
       .where('last_reminder_at IS NOT NULL')
       .where('last_reminder_at >= ?', 14.days.ago)

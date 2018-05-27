@@ -3,7 +3,12 @@
 #
 # We vary the user email address domains (some have .com, some have .org)
 # on the general principle that we should vary test values;
-# they don't have any particular meaning.
+# they don't have any particular meaning.  Make sure they match the tests!
+#
+# WARNING: The encrypted_email_bidx *MUST* end in newline, because that
+# is the format created (and required) by the gem blind_index.
+# The encrypted_email also ends in newline, but that's just because the
+# gem attr_encrypted does that (it's not actually required).
 #
 # We encrypt user email addresses. For test purposes, we used a fixed
 # encryption IV (don't do this with real data), and provide precomputed

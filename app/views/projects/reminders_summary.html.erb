@@ -42,7 +42,8 @@ Here are the next projects scheduled for inactive reminders:
         <td><%= project.updated_at %></td>
         <td><%= project.last_reminder_at %></td>
         <td><%= project.badge_percentage_0 %>%</td>
-        <td><a href="mailto:<%= project.user_email %>"><%= project.user_email %></a></td>
+        <%# Email must be specially retrieved to decrypt it. %>
+        <td><%= User.find_by(id: project.user_id).email %></a></td>
         <td><%= 'OLD' if project.updated_at < 180.days.ago %></td>
       </tr>
     <% end %>
@@ -76,7 +77,7 @@ Here are the projects that have recently received reminders:
         <td><%= project.updated_at %></td>
         <td><%= project.last_reminder_at %></td>
         <td><%= project.badge_percentage_0 %>%</td>
-        <td><a href="mailto:<%= project.user_email %>"><%= project.user_email %></a></td>
+        <td><%= User(id: project.user_id).email %></a></td>
         <td><%= 'OLD' if project.updated_at < 180.days.ago %></td>
         <td><%= 'YES' if project.last_reminder_at < project.updated_at %></td>
       </tr>

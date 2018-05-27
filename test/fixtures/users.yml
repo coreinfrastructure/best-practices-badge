@@ -1,6 +1,10 @@
 # Read about fixtures at:
 # http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 #
+# We vary the user email address domains (some have .com, some have .org)
+# on the general principle that we should vary test values;
+# they don't have any particular meaning.
+#
 # We encrypt user email addresses. For test purposes, we used a fixed
 # encryption IV (don't do this with real data), and provide precomputed
 # values for "encrypted_email" and "encrypted_email_bidx".  There's
@@ -17,6 +21,28 @@
 # x = User.new; x.email = 'test@example.org'; x.compute_email_bidx
 # This assumes that you're using the usual (default) test keys.
 #
+# Here it is all together:
+# puts('  encrypted_email_iv: "G4fbeClWL3aFMY9I"')
+# puts('  encrypted_email: ' + User.encrypt_email(current_email,
+#      iv: Base64.decode64('G4fbeClWL3aFMY9I')).inspect)
+# puts('  encrypted_email_bidx: ' + BlindIndex.generate_bidx(
+#       current_email, User.blind_indexes[:email]).inspect)
+#
+# Here are some additional encryptions if you need them:
+# current_email = 'mark@example.org'
+# encrypted_email_iv: "G4fbeClWL3aFMY9I"
+# encrypted_email: "0LWldZP1iahMHmhaQwjU9g27hpaNo56iCfMNh+ZsERg=\n"
+# encrypted_email_bidx: "C/0XJyW8Xitx19MPv1j8B65iNOaykMLZnMZ/TctNp3U=\n"
+#
+# current_email = 'forgetful@example.org'
+# encrypted_email_iv: "G4fbeClWL3aFMY9I"
+# encrypted_email: "27ulebbkl7xNLmFHDArW/ZzHIFjaYveE2hxJl2Kxdk2/rm4xXw==\n"
+# encrypted_email_bidx: "0SHo5Lc+XTrcY6HvouDwAIvEdy+8odILw9DP3MGXMfM=\n"
+#
+# current_email = 'admin@example.org'
+# encrypted_email: "3LC6d73QlLFAA3RTCEnJ455qaUF28kYI7ZOGoIDUhkzm\n"
+# encrypted_email_iv: "G4fbeClWL3aFMY9I"
+# encrypted_email_bidx: "yspd41bZJvT9bn0MQXU2l2dnhpZTIKpf0u46w6+qf1U=\n"
 
 # current_email = 'test@example.org'
 test_user:
@@ -30,36 +56,36 @@ test_user:
   activated: true
   activated_at: <%= Time.zone.now %>
 
-# current_email = 'melissa@example.org'
+# current_email = 'melissa@example.com'
 test_user_melissa:
   name: Melissa Lewis
-  encrypted_email: "0LG7d6DjkIlEFmVSHQvDv5abKJMMkBPFsdaOpyO/5Av6b1M=\n"
   encrypted_email_iv: "G4fbeClWL3aFMY9I"
-  encrypted_email_bidx: "YHiTbwhse+wm3w96DeNAXuKEeyt3dzlGV7BSjLjfUtg=\n"
+  encrypted_email: "0LG7d6DjkIlEFmVSHQvDv5qGImt+oNOl9LLibPvLAwHeWmo=\n"
+  encrypted_email_bidx: "ip6E/EM+EYkbzsRm6ZTprRg4PTsN/T5xY9E80U3Hlfo=\n"
   password_digest: <%= User.digest('password1') %>
   provider: local
   preferred_locale: en
   activated: true
   activated_at: <%= Time.zone.now %>
 
-# current_email = 'mark@example.org'
+# current_email = 'mark@example.com'
 test_user_mark:
   name: Mark Watney
-  encrypted_email: "0LWldZP1iahMHmhaQwjU9g27hpaNo56iCfMNh+ZsERg=\n"
   encrypted_email_iv: "G4fbeClWL3aFMY9I"
-  encrypted_email_bidx: "C/0XJyW8Xitx19MPv1j8B65iNOaykMLZnMZ/TctNp3U=\n"
+  encrypted_email: "0LWldZP1iahMHmhaQwTJ/JxzMJME5stBTXCm7WcmYyg=\n"
+  encrypted_email_bidx: "aZpkg4oEr8KjacLrZINGN1JRGD1caIWoWUTM57KOePk=\n"
   password_digest: <%= User.digest('password') %>
   provider: local
   preferred_locale: en
   activated: true
   activated_at: <%= Time.zone.now %>
 
-# current_email = 'forgetful@example.org'
+# current_email = 'forgetful@example.com'
 test_user_not_active:
   name: Forgetful
-  encrypted_email: "27ulebbkl7xNLmFHDArW/ZzHIFjaYveE2hxJl2Kxdk2/rm4xXw==\n"
   encrypted_email_iv: "G4fbeClWL3aFMY9I"
-  encrypted_email_bidx: "0SHo5Lc+XTrcY6HvouDwAIvEdy+8odILw9DP3MGXMfM=\n"
+  encrypted_email: "27ulebbkl7xNLmFHDArW/ZzHLEXQQHbOqCyJ9yfVGoZn2ok7ew==\n"
+  encrypted_email_bidx: "nRtJqO5uutJ7Z/HcjLHM/jt3cA++pN1t85URKscQfsQ=\n"
   password_digest: <%= User.digest('password') %>
   provider: local
   preferred_locale: en
@@ -68,8 +94,8 @@ test_user_not_active:
 # current_email = 'CaseSensitive@example.org'
 test_user_cs:
   name: Case Sensitive
-  encrypted_email: "/rWke4D1n7pIGm1JCCfD6ZiEP0bY51bxymIp4AvOLZGyoX8ln1EALDc=\n"
   encrypted_email_iv: "G4fbeClWL3aFMY9I"
+  encrypted_email: "/rWke4D1n7pIGm1JCCfD6ZiEP0bY51bxymIp4AvOLZGyoX8ln1EALDc=\n"
   encrypted_email_bidx: "+rRkCLpeIVcfwtPu+Jy6YyXtksI/w3frgdSu8J4kR2M=\n"
   password_digest: <%= User.digest('password') %>
   provider: local
@@ -77,12 +103,12 @@ test_user_cs:
   activated: true
   activated_at: <%= Time.zone.now %>
 
-# current_email = 'admin@example.org'
+# current_email = 'admin@example.com'
 admin_user:
   name: Admin
-  encrypted_email: "3LC6d73QlLFAA3RTCEnJ455qaUF28kYI7ZOGoIDUhkzm\n"
   encrypted_email_iv: "G4fbeClWL3aFMY9I"
-  encrypted_email_bidx: "yspd41bZJvT9bn0MQXU2l2dnhpZTIKpf0u46w6+qf1U=\n"
+  encrypted_email: "3LC6d73QlLFAA3RTCEnF/pQPuTWBDzfZWpDX1TJ+bsBO\n"
+  encrypted_email_bidx: "PH39U8dihphvLTlLEwJWXdy2OLz477WOn/DNsZaHqfE=\n"
   password_digest: <%= User.digest('password') %>
   provider: local
   preferred_locale: en
@@ -90,13 +116,13 @@ admin_user:
   activated_at: <%= Time.zone.now %>
   role: admin
 
-# current_email = 'github-user@example.org'
+# current_email = 'github-user@example.com'
 github_user:
   name: GitHub The User
   nickname: github-user
-  encrypted_email: "2r2jdqby3LxSC3Z/CB/H/ImFKgTSu16xi1y/444M1k6yTn4sKLLl\n"
   encrypted_email_iv: "G4fbeClWL3aFMY9I"
-  encrypted_email_bidx: "8Eqc0l8ZjhA2Z6w/SIuZyWhZesmYiKZXgnTqqaKhWew=\n"
+  encrypted_email: "2r2jdqby3LxSC3Z/CB/H/ImFKgTeplS8IDY+qfw8Fi73KhLn8MYC\n"
+  encrypted_email_bidx: "Vyiu7EdbDXioCgMAVIWqLHyBH148S9JcSspSWq6nPN8=\n"
   password_digest: <%= User.digest('password') %>
   provider: github
   preferred_locale: en

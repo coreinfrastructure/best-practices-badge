@@ -1090,109 +1090,126 @@ as of 2015-12-14:
 We also use various mechanisms to harden the system against attack;
 these attempt to thwart or slow attack even if the system has a vulnerability.
 
-*   We harden the HTTP headers, in particular, we use a
-    restrictive Content Security Policy (CSP) header with just
-    "normal sources" (normal_src).  We do send a
-    Cross-Origin Resource Sharing (CORS) header when an origin is specified,
-    but the CORS header does *not* share credentials.
+#### Force the use of HTTPS, including via HSTS
 
-    CSP is perhaps one of the most important hardening items,
-    since it prevents execution of injected JavaScript).
-    The HTTP headers are hardened via the
-    [secure_headers](https://github.com/twitter/secureheaders) gem,
-    developed by Twitter to enable a number of HTTP headers for hardening.
-    We check that the HTTP headers are hardened in the test file
-    "test/integration/project_get_test.rb"; that way, when we upgrade
-    the secure_headers gem, we can be confident that the headers continue to
-    be restrictive.
-    The test checks for the HTTP header values when loading a project entry,
-    since that is the one most at risk from user-provided data.
-    That said, the hardening HTTP headers are basically the same for all
-    pages except for /project_stats, and that page doesn't display
-    any user-provided data.
-    We have separately checked the CSP values we use with
-    <https://csp-evaluator.withgoogle.com/>;
-    the only warning it mentioned is that the our "default-src" allows 'self',
-    and it notes that
-    "'self' can be problematic if you host JSONP, Angular
-    or user uploaded files."  That is true, but irrelevant, because we don't
-    host any of them.
+We take a number of steps to force the use of HTTPS instead of HTTP.
 
-    The HTTP headers *do* include a
-    Cross-Origin Resource Sharing (CORS) header when an origin is specified.
-    We do this so that client-side JavaScript served by other systems can
-    acquire data directly from our site (e.g., to download JSON data to
-    extract and display).
-    CORS disables the usual shared-origin policy, which is always a concern.
-    However, the CORS header expressly does *not* share credentials, and
-    our automated tests verify this (both when an origin is sent, and when
-    one is not).  The CORS header *only* allows GET; while an attacker *could*
-    set the method= attribute, that wouldn't have any useful effect, because
-    the attacker won't have credentials (except for themselves, and
-    attackers can always change the data they legitimately have rights to
-    on the BadgeApp).
-    A CORS header does make it *slightly* easier to perform
-    a DDoS attack (since JavaScript clients can make excessive data demands),
-    but a DDoS attack can be performed without it, and our usual DDoS
-    protection measures (including caching and scaling) still apply.
+The "coreinfrastructure.org" domain is included in
+[Chrome's HTTP Strict Transport Security (HSTS) preload list](https://hstspreload.org/?domain=coreinfrastructure.org).
+This is a list of sites that are hardcoded into Chrome as being HTTPS only
+(some other browsers also use this list), so in many cases browsers
+will automatically use HTTPS (even if HTTP is requested).
 
-*   Cookies have various restrictions (also via the
-    [secure_headers](https://github.com/twitter/secureheaders) gem).
-    They have httponly=true (which counters many JavaScript-based attacks),
-    secure=true (which is irrelevant because we always use HTTPS but it
-    can't hurt), and SameSite=Lax (which counters CSRF attacks on
-    web browsers that support it).
+If the web browser uses HTTP anyway,
+our CDN (Fastly) is configured to redirect HTTP to HTTPS.
+If our CDN is misconfigured or skipped for some reason, the application
+will also redirect the user from HTTP to HTTPS if queried directly.
+This is because in production "config.force_ssl" is set to true,
+which enables a number of hardening mechanisms in Rails, including
+TLS redirection (which redirects HTTP to HTTPS), secure cookies,
+and HTTP Strict Transport Security (HSTS).
+HSTS tells browsers to always use HTTPS in the future for this site,
+so once the user contacts the site once, it will use HTTPS in the future.
+See
+["Rails, Secure Cookies, HSTS and friends" by Ilija Eftimov (2015-12-14)](http://eftimov.net/rails-tls-hsts-cookies)
+for more about the impact of force_ssl.
 
-*   We force the use of HTTPS, including via HSTS.
-    The "coreinfrastructure.org" domain is included in
-    [Chrome's HTTP Strict Transport Security (HSTS) preload list](https://hstspreload.org/?domain=coreinfrastructure.org).
-    This is a list of sites that are hardcoded into Chrome as being HTTPS only
-    (some other browsers also use this list), so in many cases browsers
-    will automatically use HTTPS (even if HTTP is requested).
-    If the web browser uses HTTP anyway,
-    our CDN (Fastly) is configured to redirect HTTP to HTTPS.
-    If our CDN is misconfigured or skipped for some reason, the application
-    will also redirect the user from HTTP to HTTPS if queried directly.
-    This is because in production "config.force_ssl" is set to true,
-    which enables a number of hardening mechanisms in Rails, including
-    TLS redirection (which redirects HTTP to HTTPS), secure cookies,
-    and HTTP Strict Transport Security (HSTS).
-    HSTS tells browsers to always use HTTPS in the future for this site,
-    so once the user contacts the site once, it will use HTTPS in the future.
-    See
-    ["Rails, Secure Cookies, HSTS and friends" by Ilija Eftimov (2015-12-14)](http://eftimov.net/rails-tls-hsts-cookies)
-    for more about the impact of force_ssl.
+#### Hardened HTTP Headers
 
-*   We enable per-form CSRF tokens, a Rails 5 addition.
-    (Rails.application.config.action_controller.per_form_csrf_tokens)
+We harden the HTTP headers, in particular, we use a
+restrictive Content Security Policy (CSP) header with just
+"normal sources" (normal_src).  We do send a
+Cross-Origin Resource Sharing (CORS) header when an origin is specified,
+but the CORS header does *not* share credentials.
 
-*   We enable origin-checking CSRF mitigation, a Rails 5 addition.
-    (Rails.application.config.action_controller.forgery_protection_origin_check)
+CSP is perhaps one of the most important hardening items,
+since it prevents execution of injected JavaScript).
+The HTTP headers are hardened via the
+[secure_headers](https://github.com/twitter/secureheaders) gem,
+developed by Twitter to enable a number of HTTP headers for hardening.
+We check that the HTTP headers are hardened in the test file
+"test/integration/project_get_test.rb"; that way, when we upgrade
+the secure_headers gem, we can be confident that the headers continue to
+be restrictive.
+The test checks for the HTTP header values when loading a project entry,
+since that is the one most at risk from user-provided data.
+That said, the hardening HTTP headers are basically the same for all
+pages except for /project_stats, and that page doesn't display
+any user-provided data.
+We have separately checked the CSP values we use with
+<https://csp-evaluator.withgoogle.com/>;
+the only warning it mentioned is that the our "default-src" allows 'self',
+and it notes that
+"'self' can be problematic if you host JSONP, Angular
+or user uploaded files."  That is true, but irrelevant, because we don't
+host any of them.
 
-*   We enable rate limits on reminder emails.
-    We send reminder emails to projects that have not updated their
-    badge entry in a long time. The detailed algorithm that prioritizes projects
-    is in "app/models/project.rb" class method "self.projects_to_remind".
-    It sorts by reminder date, so we always cycle through before returning to
-    a previously-reminded project.  We have a hard rate limit on the number
-    of emails we will send out each time; this keeps us from looking like
-    a spammer.
+The HTTP headers *do* include a
+Cross-Origin Resource Sharing (CORS) header when an origin is specified.
+We do this so that client-side JavaScript served by other systems can
+acquire data directly from our site (e.g., to download JSON data to
+extract and display).
+CORS disables the usual shared-origin policy, which is always a concern.
+However, the CORS header expressly does *not* share credentials, and
+our automated tests verify this (both when an origin is sent, and when
+one is not).  The CORS header *only* allows GET; while an attacker *could*
+set the method= attribute, that wouldn't have any useful effect, because
+the attacker won't have credentials (except for themselves, and
+attackers can always change the data they legitimately have rights to
+on the BadgeApp).
+A CORS header does make it *slightly* easier to perform
+a DDoS attack (since JavaScript clients can make excessive data demands),
+but a DDoS attack can be performed without it, and our usual DDoS
+protection measures (including caching and scaling) still apply.
+
+#### Cookie limits
+
+Cookies have various restrictions (also via the
+[secure_headers](https://github.com/twitter/secureheaders) gem).
+They have httponly=true (which counters many JavaScript-based attacks),
+secure=true (which is irrelevant because we always use HTTPS but it
+can't hurt), and SameSite=Lax (which counters CSRF attacks on
+web browsers that support it).
+
+#### Per-form CSRF token
+
+We enable per-form CSRF tokens, a Rails 5 addition.
+(Rails.application.config.action_controller.per_form_csrf_tokens)
+This helps counter CSRF, in addition to our other measures.
+
+#### Origin-checking CSRF token
+
+We enable origin-checking CSRF mitigation, a Rails 5 addition.
+(Rails.application.config.action_controller.forgery_protection_origin_check)
+This helps counter CSRF, in addition to our other measures.
+
+#### Email rate limit
+
+We enable rate limits on reminder emails.
+We send reminder emails to projects that have not updated their
+badge entry in a long time. The detailed algorithm that prioritizes projects
+is in "app/models/project.rb" class method "self.projects_to_remind".
+It sorts by reminder date, so we always cycle through before returning to
+a previously-reminded project.  We have a hard rate limit on the number
+of emails we will send out each time; this keeps us from looking like
+a spammer.
 
 #### Encrypted email addresses
 
 We encrypt email addresses within the database, and never
-send the descryption or index keys to the database.
+send the decryption or index keys to the database.
 This provides protection of this data at rest, and also means that
 even if an attacker can view the data within the database, that attacker
 will not receive sensitive information.
-Passwords are specially encrypted as passwords (per above),
-email addresses are encrypted (as described here), and almost all other
-data is considered public or at least not sensitive.
+Email addresses are encrypted as described here, and almost all other
+data is considered public or at least not sensitive
+(Passwords are specially encrypted as described above).
 
+A little context may be useful here.
 We work hard to comply with various privacy-related regulations,
 including the European General Data Protection Regulation (GDPR).
 We do not believe that encrypting email addresses is strictly
-required by the GDPR; we just need to prefer releasing private information.
+required by the GDPR.
 Still, we want to not just meet requirements, we want to exceed them.
 Encrypting email addresses makes it even harder for attackers to get this
 information, because it's encrypted at rest and not available by extracting
@@ -1206,8 +1223,10 @@ the easy ways to encrypt data aren't available to us. Transparent Data
 Encryption (TDE) is not a capability of PostgreSQL. Whole-database
 encryption can be done with other tricks but it is extremely expensive
 on Heroku.
+Therefore, we encrypt data that is more sensitive, instead of
+encrypting everything.
 
-We encrypt emails using the Rails-specific approach outlined in
+We encrypt email addresses using the Rails-specific approach outlined in
 ["Securing User Emails in Rails" by Andrew Kane (May 14, 2018)](https://shorts.dokkuapp.com/securing-user-emails-in-rails/).
 We use the gem 'attr_encrypted' to encrypt email addresses, and
 gem 'blind_index' to index encrypted email addresses.
@@ -1221,10 +1240,39 @@ we can search on the data if we have the hash key).
 The latter value is called a "blind index".
 
 We encrypt the email addresses using AES with 256-bit keys in
-GCM mode ('aes-256-gcm').  We also hash the email addresses, so they
-can be indexed, using the hashed key algorithm PBKDF2-HMAC-SHA256.
+GCM mode ('aes-256-gcm').  AES is a well-accepted widely-used
+encryption algorithm.  A 256-bit key is especially strong.
+The GCM mode is a widely-used strong encryption mode; it provides
+integrity ("authentication") mechanism.
+Each separate encryption uses a separate long initialization vector (IV)
+created using a cryptographically-strong random number generator.
+
+We also hash the email addresses, so they can be indexed.
+Indexing is necessary so that we can quickly find matching email addresses
+(e.g., for local user login).
+We has them using the hashed key algorithm PBKDF2-HMAC-SHA256.
+SHA-256 is a widely-used cryptographic hash algorithm (in the SHA-2 family),
+and unlike SHA-1 it is not broken.
+Using sha256 directly is vulnerable to a length extension attack,
+but that appears to be irrelevant in this case.
+In any case, we counter this problem by using HMAC and PBKDF2.
+HMAC is defined in RFC 2104, which is the algorithm
+H(K XOR opad, H(K XOR ipad, text)).
+This enables us to use a private key on the hash, counters length
+extension, and is very well-studied.
+We also use PBKDF2 for key extension.  This is another well-studied
+and widely-accepted algorithm.
+For our purposes we believe PBKDF2-HMAC-SHA256 is
+far stronger than needed, and thus is quite sufficient
+to protect the information.
 The hashes are of email addresses after they've been downcased;
-that supports case-insensitive searching for email addresses.
+this supports case-insensitive searching for email addresses.
+
+The two keys used for email encryption are
+EMAIL_ENCRYPTION_KEY and EMAIL_BLIND_INDEX_KEY.
+Both are 256 bits long (aka 64 hexadecimal digits long).
+The production values for both keys were independently created as
+cryptographically random values using "rails secret".
 
 Implementation note: the indexes created by blind_index always
 end in a newline.  That doesn't matter for security, but it can cause
@@ -1242,6 +1290,38 @@ vulnerability has since been fixed and
 Vulnerabilities are never a great sign, but we do take it as a good sign
 that the developers of encryptor were willing to make a breaking change
 to fix a security vulnerabilities.
+
+#### Gravatar restricted
+
+We use gravatar to provide user icons for local (custom) accounts.
+Many users have created gravatar icons, and those who have
+created those icons have clearly consented to their use for them.
+
+However, accessing gravatar icons requires the MD5 cryptographic
+hash of downcased email addresses.
+Users who have created gravatar icons have already consented to
+this, but we want to hide even the MD5 cryptographic hashes of
+those who have not so consented.
+
+Therefore, we track for each user whether or not they should
+use a gravatar icon, as the boolean field "use_gravatar".
+Currently this is can only be true for
+local users (for GitHub users we use their GitHub icon).
+Whenever a new local user account is created or changed,
+we check if there is an active gravatar icon, and set use_gravatar
+accordingly.  We also intend to occasionally iterate through
+local users to reset this (so that users won't need to remember
+to manipulate their BadgeApp user account).
+We will then only use the gravatar MD5 when there is an
+actual gravatar icon to refer to; otherwise, we use a bogus
+MD5 value.
+Thus, local users who do not have a gravatar account will not
+even have the MD5 of their email address revealed.
+
+This is almost certainly not required by regulations such as the GDPR,
+since without this measure we would only expose MD5s of email addresses,
+and only in certain cases.  But we want to exceed expectations,
+and this is one way we do that.
 
 ### Making adjustments
 
@@ -1797,7 +1877,12 @@ Jason Dossett has a PhD in Physics from The University of Texas at Dallas,
 and has been involved in software development for many years.
 He has reviewed and is familiar with the security assurance case here.
 
-## Receive CII best practices badge
+## Certifications (receive CII best practices badge)
+
+One way to increase confidence in an application is to pass
+relevant certifcations.  In our case, the BadgeApp is the result
+of an OSS project, so a useful measure is to receive our own
+CII best practices badge.
 
 The CII best practices badging project was established to identify
 best practices that can lead to more secure software.

@@ -118,6 +118,7 @@ admin_user:
   provider: local
   preferred_locale: en
   activated: true
+  use_gravatar: true # So we can test for correct gravatar URL
   activated_at: <%= Time.zone.now %>
   role: admin
 

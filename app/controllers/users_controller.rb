@@ -58,6 +58,7 @@ class UsersController < ApplicationController
       @user = User.new(user_params)
       @user.provider = 'local'
       @user.preferred_locale = I18n.locale.to_s
+      @user.use_gravatar = @user.gravatar_exists # we know this is local
       if @user.save
         send_activation
       else
@@ -90,6 +91,7 @@ class UsersController < ApplicationController
       UserMailer.user_update(@user, @user.previous_changes).deliver_now
       flash[:success] = t('.profile_updated')
       locale_prefix = '/' + I18n.locale.to_s
+      @user.use_gravatar = @user.gravatar_exists if @user.provider == 'local'
       redirect_to "#{locale_prefix}/users/#{@user.id}"
     else
       render 'edit'

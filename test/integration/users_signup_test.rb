@@ -13,110 +13,120 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
   end
 
   test 'invalid signup information' do
-    assert_no_difference 'User.count' do
-      post users_path, params: {
-        user: {
-          name:  '',
-          email: 'user@invalid',
-          password:              'foo',
-          password_confirmation: 'bar'
-        },
-        locale: :en
-      }
-    end
-    assert_template 'users/new'
-  end
-
-  test 'reject bad passwords' do
-    assert_no_difference 'User.count' do
-      post users_path, params: {
-        user: {
-          name:  'Example User',
-          email: 'user@example.com',
-          password:              '1234567',
-          password_confirmation: '1234567'
-        },
-        locale: :en
-      }
-    end
-    assert_template 'users/new'
-    assert_no_difference 'User.count' do
-      post users_path, params: {
-        user: {
-          name:  'Example User',
-          email: 'user@example.com',
-          password:              'password',
-          password_confirmation: 'password'
-        },
-        locale: :en
-      }
+    VCR.use_cassette('invalid_signup_information') do
+      assert_no_difference 'User.count' do
+        post users_path, params: {
+          user: {
+            name:  '',
+            email: 'user@invalid',
+            password:              'foo',
+            password_confirmation: 'bar'
+          },
+          locale: :en
+        }
+      end
     end
     assert_template 'users/new'
   end
 
   # rubocop: disable Metrics/BlockLength
-  test 'valid signup information with account activation' do
-    get signup_path
-    assert_difference 'User.count', 1 do
-      post users_path, params: {
-        user: {
-          name:  'Example User',
-          email: 'user@example.com',
-          password:              'a-g00d!Xpassword',
-          password_confirmation: 'a-g00d!Xpassword'
-        },
-        locale: :en
-      }
+  test 'reject bad passwords' do
+    VCR.use_cassette('reject_bad_passwords') do
+      assert_no_difference 'User.count' do
+        post users_path, params: {
+          user: {
+            name:  'Example User',
+            email: 'user@example.com',
+            password:              '1234567',
+            password_confirmation: '1234567'
+          },
+          locale: :en
+        }
+      end
+      assert_template 'users/new'
+      assert_no_difference 'User.count' do
+        post users_path, params: {
+          user: {
+            name:  'Example User',
+            email: 'user@example.com',
+            password:              'password',
+            password_confirmation: 'password'
+          },
+          locale: :en
+        }
+      end
+      assert_template 'users/new'
     end
-    assert_equal 1, ActionMailer::Base.deliveries.size
-    user = assigns(:user)
-    assert_not user.activated?
-    # Try to log in before activation.
-    log_in_as(user)
-    assert_not user_logged_in?
-    # Invalid activation token
-    get edit_account_activation_path('invalid token', locale: :en)
-    assert_not user_logged_in?
-    # Valid token, wrong email
-    get edit_account_activation_path(
-      user.activation_token, email: 'wrong', locale: :en
-    )
-    assert_not user_logged_in?
-    # Valid activation token
-    get edit_account_activation_path(
-      user.activation_token, email: user.email, locale: :en
-    )
-    assert user.reload.activated?
-    follow_redirect!
-    assert_template 'users/show'
-    assert user_logged_in?
+  end
+  # rubocop: enable Metrics/BlockLength
+
+  # rubocop: disable Metrics/BlockLength
+  test 'valid signup information with account activation' do
+    VCR.use_cassette('valid_signup_information_with_account_activation') do
+      get signup_path
+      assert_difference 'User.count', 1 do
+        post users_path, params: {
+          user: {
+            name:  'Example User',
+            email: 'user@example.com',
+            password:              'a-g00d!Xpassword',
+            password_confirmation: 'a-g00d!Xpassword'
+          },
+          locale: :en
+        }
+      end
+      assert_equal 1, ActionMailer::Base.deliveries.size
+      user = assigns(:user)
+      assert_not user.activated?
+      # Try to log in before activation.
+      log_in_as(user)
+      assert_not user_logged_in?
+      # Invalid activation token
+      get edit_account_activation_path('invalid token', locale: :en)
+      assert_not user_logged_in?
+      # Valid token, wrong email
+      get edit_account_activation_path(
+        user.activation_token, email: 'wrong', locale: :en
+      )
+      assert_not user_logged_in?
+      # Valid activation token
+      get edit_account_activation_path(
+        user.activation_token, email: user.email, locale: :en
+      )
+      assert user.reload.activated?
+      follow_redirect!
+      assert_template 'users/show'
+      assert user_logged_in?
+    end
   end
   # rubocop: enable Metrics/BlockLength
 
   test 'resend account activation for unactivated account' do
-    get signup_path
-    login_params = { user: {
-      name: 'Example User',
-      email: 'user@example.com',
-      password:              'a-g00d!Xpassword',
-      password_confirmation: 'a-g00d!Xpassword'
-    } }
-    assert_difference 'User.count', 1 do
-      post users_path, params: login_params
+    VCR.use_cassette('resend_account_activation_for_unactivated_account') do
+      get signup_path
+      login_params = { user: {
+        name: 'Example User',
+        email: 'user@example.com',
+        password:              'a-g00d!Xpassword',
+        password_confirmation: 'a-g00d!Xpassword'
+      } }
+      assert_difference 'User.count', 1 do
+        post users_path, params: login_params
+      end
+      assert_equal 1, ActionMailer::Base.deliveries.size
+      assert_no_difference 'User.count' do
+        post users_path, params: login_params
+      end
+      assert_equal 2, ActionMailer::Base.deliveries.size
+      user = assigns(:user)
+      assert_not user.activated?
+      # Valid activation token
+      get edit_account_activation_path(user.activation_token, email: user.email)
+      assert user.reload.activated?
+      follow_redirect!
+      assert_template 'users/show'
+      assert user_logged_in?
     end
-    assert_equal 1, ActionMailer::Base.deliveries.size
-    assert_no_difference 'User.count' do
-      post users_path, params: login_params
-    end
-    assert_equal 2, ActionMailer::Base.deliveries.size
-    user = assigns(:user)
-    assert_not user.activated?
-    # Valid activation token
-    get edit_account_activation_path(user.activation_token, email: user.email)
-    assert user.reload.activated?
-    follow_redirect!
-    assert_template 'users/show'
-    assert user_logged_in?
   end
 
   test 'redirect activated user to login' do

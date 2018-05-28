@@ -43,12 +43,14 @@ class UsersEditTest < ActionDispatch::IntegrationTest
     assert_template 'users/edit'
     name  = 'Foo Bar'
     email = 'foo@bar.com'
-    patch user_path(@user), params: { user: {
-      name:  name,
-      email: email,
-      password:              '',
-      password_confirmation: ''
-    } }
+    VCR.use_cassette('successful_edit_-_name_email') do
+      patch user_path(@user), params: { user: {
+        name:  name,
+        email: email,
+        password:              '',
+        password_confirmation: ''
+      } }
+    end
     assert_not flash.empty?
     assert_redirected_to @user
     @user.reload
@@ -62,12 +64,14 @@ class UsersEditTest < ActionDispatch::IntegrationTest
     assert_template 'users/edit'
     name  = 'Foo Bar'
     email = 'foo@bar.com'
-    patch user_path(@user), params: { user: {
-      name:  name,
-      email: email,
-      password:              'Agoodp@$$word',
-      password_confirmation: 'Agoodp@$$word'
-    } }
+    VCR.use_cassette('successful_edit_-_password') do
+      patch user_path(@user), params: { user: {
+        name:  name,
+        email: email,
+        password:              'Agoodp@$$word',
+        password_confirmation: 'Agoodp@$$word'
+      } }
+    end
     assert_not flash.empty?
     assert_redirected_to @user
     @user.reload

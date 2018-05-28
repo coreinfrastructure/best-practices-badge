@@ -179,10 +179,14 @@ class UsersControllerTest < ActionController::TestCase
     assert_redirected_to root_url
   end
 
-  test 'should  update user when logged in as admin' do
+  test 'should update user when logged in as admin' do
     new_name = @user.name + '_updated'
     log_in_as(@admin)
-    patch :update, params: { id: @user, user: { name: new_name }, locale: :en }
+    VCR.use_cassette('should_update_user_when_logged_in_as_admin') do
+      patch :update, params: {
+        id: @user, user: { name: new_name }, locale: :en
+      }
+    end
     assert_not_empty flash
     @user.reload
     assert_equal @user.name, new_name
@@ -190,9 +194,11 @@ class UsersControllerTest < ActionController::TestCase
 
   test 'should be able to change locale' do
     log_in_as(@user)
-    patch :update, params: {
-      id: @user, user: { preferred_locale: 'fr' }, locale: :en
-    }
+    VCR.use_cassette('should_be_able_to_change_locale') do
+      patch :update, params: {
+        id: @user, user: { preferred_locale: 'fr' }, locale: :en
+      }
+    end
     assert_not_empty flash # Success message
     @user.reload
     assert_equal 'fr', @user.preferred_locale

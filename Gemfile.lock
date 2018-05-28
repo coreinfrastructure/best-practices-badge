@@ -451,6 +451,7 @@ DEPENDENCIES
   fastly-rails (= 0.8.0)
   font-awesome-rails (= 4.7.0.4)
   http_accept_language (= 2.1.1)
+  httparty (= 0.16.2)
   imagesLoaded_rails (= 4.1.0)
   jbuilder (= 2.7.0)
   jquery-rails (= 4.3.3)

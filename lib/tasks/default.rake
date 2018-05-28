@@ -493,6 +493,17 @@ if Rails.env.development?
   end
 end
 
+desc 'Fix Gravatar use_gravatar fields for local users'
+task fix_use_gravatar: :environment do
+  User.where(provider: 'local').find_each do |u|
+    actually_exists = u.gravatar_exists
+    if u.use_gravatar != actually_exists # Changed result - set and store
+      u.use_gravatar = actually_exists
+      u.save!
+    end
+  end
+end
+
 require 'net/http'
 # Request uri, reply true if fetchable. Follow redirects 'limit' times.
 # See: https://docs.ruby-lang.org/en/2.0.0/Net/HTTP.html

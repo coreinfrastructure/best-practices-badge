@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180525145445) do
+ActiveRecord::Schema.define(version: 20180527231839) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -400,6 +400,7 @@ ActiveRecord::Schema.define(version: 20180525145445) do
     t.string "encrypted_email"
     t.string "encrypted_email_iv"
     t.string "encrypted_email_bidx"
+    t.boolean "use_gravatar", default: false, null: false
     t.index ["encrypted_email_bidx"], name: "encrypted_email_local_unique_bidx", unique: true, where: "((provider)::text = 'local'::text)"
     t.index ["encrypted_email_bidx"], name: "index_users_on_encrypted_email_bidx"
     t.index ["last_login_at"], name: "index_users_on_last_login_at"

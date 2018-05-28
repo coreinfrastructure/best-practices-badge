@@ -185,14 +185,44 @@ class User < ApplicationRecord
     reset_sent_at < 2.hours.ago
   end
 
-  # Returns avatar URL
+  GRAVATAR_PREFIX = 'https://secure.gravatar.com/avatar/'
+
+  # Return URL for an image suitable for doing a lookup on gravatar
+  # (used for local users).  This is the *real* one based on the email MD5
+  def lookup_gravatar_url
+    GRAVATAR_PREFIX + Digest::MD5.hexdigest(email.downcase)
+  end
+
+  BOGUS_GRAVATAR_MD5 = '0' * 32
+
+  # Return URL for an image suitable for sharing to the public as a gravatar
+  # URL.  This will NOT share the MD5 unless we're to use it.
+  def revealable_gravatar_url
+    if use_gravatar
+      lookup_gravatar_url
+    else
+      GRAVATAR_PREFIX + BOGUS_GRAVATAR_MD5
+    end
+  end
+
+  # Returns avatar URL, for use in img src="...". This URL must
+  # return an image with the correct size.
   def avatar_url
     if provider == 'github'
       "https://avatars.githubusercontent.com/#{nickname}?size=80"
     else
-      avatar_id = Digest::MD5.hexdigest(email.downcase)
-      "https://secure.gravatar.com/avatar/#{avatar_id}?d=mm&size=80"
+      revealable_gravatar_url + '?d=mm&size=80'
     end
+  end
+
+  # Return true if there's a gravatar for this user
+  def gravatar_exists
+    # The ?d=404 forces "not found" error code if none is found.
+    # We use "head" because we don't need the full data at this point.
+    response = HTTParty.head(lookup_gravatar_url + '?d=404')
+    # Assume we won't be redirected if something is found, so the
+    # only thing we care about is if we get 200 (success) or not.
+    response.code == 200
   end
 
   private

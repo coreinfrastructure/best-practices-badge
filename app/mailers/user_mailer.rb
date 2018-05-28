@@ -25,16 +25,18 @@ class UserMailer < ApplicationMailer
     end
   end
 
-  # Compute an array of valid destination email addresses, given an
-  # "email" value and a change_list for email.
-  # We'll try to add whatever valid email addresses we can find.
+  # Compute an array of valid destination email addresses, given a
+  # new "email" value and the changes (which might
+  # include the original email value).
+  # Require that email addresses are non-null and include '@', and de-dup.
   def find_destinations(email, changes)
     destination = []
     destination << email if email&.include?('@')
-    changes&.each do |entry|
-      destination << entry if entry&.include?('@')
+    if changes && changes['email']
+      old_email = changes['email'][0]
+      destination << old_email if old_email&.include?('@')
     end
-    destination
+    destination.uniq
   end
 
   def user_update(user, changes)
@@ -42,7 +44,7 @@ class UserMailer < ApplicationMailer
     @changes = changes
     # If email changed, send to *all* email addresses (that way, if user
     # didn't approve this, the user will at least *see* the email change).
-    destination = find_destinations(user&.email, changes['email'])
+    destination = find_destinations(user&.email, changes)
     I18n.with_locale(user.preferred_locale.to_sym) do
       mail(
         to: destination,

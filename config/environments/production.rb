@@ -73,15 +73,20 @@ Rails.application.configure do
   # Use a different cache store in production.
   # config.cache_store = :mem_cache_store
 
+  # Figure out public hostname
+  host = (ENV['PUBLIC_HOSTNAME'] || 'public-hostname-not-configured')
+
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.action_controller.asset_host = 'http://assets.example.com'
+  # Set asset_host to help counter host header injection; see
+  # https://github.com/ankane/secure_rails
+  config.action_controller.asset_host = host
 
   # Configure email server.
   # For discussion about how to do this, see:
   # https://www.railstutorial.org/book/account_activation_password_reset
   config.action_mailer.raise_delivery_errors = true
   config.action_mailer.delivery_method = :smtp
-  host = (ENV['PUBLIC_HOSTNAME'] || 'public-hostname-not-configured')
   config.action_mailer.default_url_options = { host: host }
   ActionMailer::Base.smtp_settings = {
     address: 'smtp.sendgrid.net',

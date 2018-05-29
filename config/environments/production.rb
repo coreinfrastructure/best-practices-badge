@@ -125,6 +125,20 @@ Rails.application.configure do
   # with slow network connections
   config.middleware.use Rack::Deflater
 
+  # First thing, filter out bad HTTP headers (0 == first)
+  # By default this accepts the HTTP headers set by Heroku (and thus trusted),
+  # but otherwise removes some "dangerous" headers.  In particular, it
+  # removes the X-Forwarded-Host HTTP header, which in Rails is
+  # inexplicably trusted and is used in url_for, even though it comes
+  # from an untrusted user. See:
+  # https://github.com/rails/rails/issues/29893
+  # https://github.com/ankane/secure_rails
+  # http://carlos.bueno.org/2008/06/host-header-injection.html
+  # We generally want to implement whitelists, not blacklists, but
+  # this is an easy way to make sure that certain dangerous headers
+  # cannot be unintentionally used in the first place.
+  config.middleware.insert_before(0, Rack::HeadersFilter)
+
   # In production and fake_production environments turn on "lograge".
   # This makes the logs easier to read and removes cruft that, while useful
   # in development, can be overwhelming in production.

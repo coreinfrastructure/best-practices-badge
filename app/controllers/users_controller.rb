@@ -76,10 +76,27 @@ class UsersController < ApplicationController
     redirect_to @user unless current_user_can_edit(@user)
   end
 
+  # Produce a cleaned-up hash of changes.
+  # The key is the field that was changed, the value is [old, new]
+  # We must cleanup, because password_digest stores changes even when
+  # old and new have the same value (so we must remove it).
+  def cleanup_changes(changeset)
+    result = {}
+    changeset.each do |key, change|
+      # Only consider "change" if it is in the expected form [old, new]
+      if change.is_a?(Array) && change.length == 2
+        result[key] = change if change[0] != change[1]
+      end
+    end
+    result
+  end
+
   # rubocop: disable Metrics/AbcSize, Metrics/MethodLength
   def update
     @user = User.find(params[:id])
-    if @user.update_attributes(user_params)
+    @user.assign_attributes(user_params)
+    changes = cleanup_changes(@user.changes)
+    if @user.save
       # If user changed his own locale, switch to it.  It's possible for an
       # *admin* to change someone else's locale, in that case leave it alone.
       if current_user == @user && user_params[:preferred_locale]
@@ -88,10 +105,10 @@ class UsersController < ApplicationController
       # Email user on every change.  That way, if the user did *not* initiate
       # the change (e.g., because it's by an admin or by someone who broke
       # into their account), the user will know about it.
-      UserMailer.user_update(@user, @user.previous_changes).deliver_now
+      UserMailer.user_update(@user, changes).deliver_now
+      @user.use_gravatar = @user.gravatar_exists if @user.provider == 'local'
       flash[:success] = t('.profile_updated')
       locale_prefix = '/' + I18n.locale.to_s
-      @user.use_gravatar = @user.gravatar_exists if @user.provider == 'local'
       redirect_to "#{locale_prefix}/users/#{@user.id}"
     else
       render 'edit'

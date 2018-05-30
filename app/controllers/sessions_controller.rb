@@ -42,7 +42,6 @@ class SessionsController < ApplicationController
   private
 
   # Perform tasks for a user who just successfully logged in.
-  # rubocop: disable Metrics/MethodLength
   def successful_login(user)
     log_in user
     redirect_back_or root_url
@@ -56,7 +55,6 @@ class SessionsController < ApplicationController
     user.last_login_at = Time.now.utc
     user.save_skip_decryption_errors!
   end
-  # rubocop: enable Metrics/MethodLength
 
   # We want to save the forwarding url of a session but
   # still need to counter session fixation,  this does it

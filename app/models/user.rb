@@ -229,11 +229,9 @@ class User < ApplicationRecord
   # We do this so we can have functionality (though reduced) without
   # the email keys.
   def save_skip_decryption_errors!
-    begin
-      save!
-    rescue OpenSSL::Cipher::CipherError
-      logger.info("CipherError while saving user id #{id}")
-    end
+    save!
+  rescue OpenSSL::Cipher::CipherError
+    logger.info("CipherError while saving user id #{id}")
   end
 
   private

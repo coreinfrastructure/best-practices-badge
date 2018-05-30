@@ -498,8 +498,12 @@ task fix_use_gravatar: :environment do
   User.where(provider: 'local').find_each do |u|
     actually_exists = u.gravatar_exists
     if u.use_gravatar != actually_exists # Changed result - set and store
-      u.use_gravatar = actually_exists
-      u.save!
+      # Use "update_column" so that updated_at isn't changed, and also
+      # to do things more quickly.  There are no model validations that
+      # can be affected setting this boolean value, so let's skip them.
+      # rubocop: disable Rails/SkipsModelValidations
+      u.update_column(:use_gravatar, actually_exists)
+      # rubocop: enable Rails/SkipsModelValidations
     end
   end
 end

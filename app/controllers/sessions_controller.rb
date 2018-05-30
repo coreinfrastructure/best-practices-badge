@@ -54,11 +54,7 @@ class SessionsController < ApplicationController
 
     # Record last_login_at time
     user.last_login_at = Time.now.utc
-    begin
-      user.save!
-    rescue OpenSSL::Cipher::CipherError # Keep running if we can't decrypt
-      logger.info("CipherError while saving user id #{user.id}")
-    end
+    user.save_skip_decryption_errors!
   end
   # rubocop: enable Metrics/MethodLength
 

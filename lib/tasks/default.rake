@@ -654,7 +654,7 @@ end
 # rubocop:enable Style/Send
 
 desc 'Run monthly tasks (called from "daily")'
-task monthly: %i[environment monthly_announcement] do
+task monthly: %i[environment monthly_announcement fix_use_gravatar] do
 end
 
 # Run this task periodically if we want to test the

@@ -53,7 +53,7 @@ class SessionsController < ApplicationController
 
     # Record last_login_at time
     user.last_login_at = Time.now.utc
-    user.save!
+    user.save_skip_decryption_errors!
   end
 
   # We want to save the forwarding url of a session but

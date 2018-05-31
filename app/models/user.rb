@@ -225,6 +225,15 @@ class User < ApplicationRecord
     response.code == 200
   end
 
+  # Save, but skip errors caused by decryption key failures.
+  # We do this so we can have functionality (though reduced) without
+  # the email keys.
+  def save_skip_decryption_errors!
+    save!
+  rescue OpenSSL::Cipher::CipherError
+    logger.info("CipherError while saving user id #{id}")
+  end
+
   private
 
   # Creates and assigns the activation token and digest.

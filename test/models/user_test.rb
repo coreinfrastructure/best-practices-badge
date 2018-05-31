@@ -110,6 +110,30 @@ class UserTest < ActiveSupport::TestCase
                  users(:github_user).avatar_url
   end
 
+  # The purpose of this test is to ensure that we can keep going after
+  # a failed save in this method if the problem is that
+  # we don't have the right keys.
+  # This is a relatively unrealistic test; we really should switch
+  # to bad keys to test.  However, it's tricky to switch keys after
+  # initialization, and this situation should only occur in special
+  # cases in development - it doesn't happen in test or production.
+  # So we'll just use a quick test that the basic "skip this exception"
+  # functionality works, and call it a day.
+  test 'save_skip_decryption_errors will skip errors' do
+    # Create subclass stub for test
+    class UserNoSaving < User
+      def save!
+        raise OpenSSL::Cipher::CipherError
+      end
+    end
+    bogus_user = UserNoSaving.new
+    bogus_user.name = 'Bogus'
+    assert_raises(OpenSSL::Cipher::CipherError) { bogus_user.save! }
+    # The following shouldn't raise an exception - if it does, the
+    # test will auto-fail.
+    bogus_user.save_skip_decryption_errors!
+  end
+
   test 'Bcrypt of text with full rounds' do
     ActiveModel::SecurePassword.min_cost = false
     assert_match(/\$2a\$/, User.digest('foobar'))

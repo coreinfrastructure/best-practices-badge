@@ -1085,10 +1085,34 @@ as of 2015-12-14:
    For example, we use a restrictive Content Security Policy (CSP) header.
    For more information, see the hardening section.
 
+The
+[Ruby on Rails Security Guide](http://guides.rubyonrails.org/security.html)
+is the official Rails guide, so it is the primary guide we consult.
+That said, we do look for other sources for recommendations,
+and consider them where they make sense.
+
+In particular, the
+[ankane/secure_rails](https://github.com/ankane/secure_rails) guide
+has some interesting tips.
+Most of them were were already doing, but an especially important
+tip was to
+"Prevent host header injection -
+add the following to config/environments/production.rb":
+
+~~~~
+config.action_controller.default_url_options = {host: "www.yoursite.com"}
+config.action_controller.asset_host = "www.yoursite.com"
+~~~~
+
+We already did the first one, but we also added the second.
+This ensures that even if a user provides a "host" value,
+we will not use it, and will instead use a preset trusted value.
+
 ### Hardening
 
-We also use various mechanisms to harden the system against attack;
-these attempt to thwart or slow attack even if the system has a vulnerability.
+We also use various mechanisms to harden the system against attack.
+These attempt to thwart or slow attack even if the system has a vulnerability
+not countered by the main approaches described elsewhere in this document.
 
 #### Force the use of HTTPS, including via HSTS
 

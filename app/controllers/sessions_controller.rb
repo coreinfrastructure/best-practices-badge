@@ -51,9 +51,13 @@ class SessionsController < ApplicationController
     last_login = t('sessions.no_login_time') if last_login.blank?
     flash[:success] = t('sessions.signed_in', last_login_at: last_login)
 
-    # Record last_login_at time
-    user.last_login_at = Time.now.utc
-    user.save!
+    # Record last_login_at time.  We use update_columns because
+    # it works even if we don't have the correct email decryption keys,
+    # and so it won't change updated_at (so updated_at becomes more useful).
+    # We don't need the model validations, we're just setting a timestamp.
+    # rubocop: disable Rails/SkipsModelValidations
+    user.update_columns(last_login_at: Time.now.utc)
+    # rubocop: enable Rails/SkipsModelValidations
   end
 
   # We want to save the forwarding url of a session but

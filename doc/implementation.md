@@ -599,6 +599,70 @@ privileges to execute database commands, then run this:
     heroku pg:psql --app production-bestpractices < project.sql
 ~~~~
 
+## Server-side data cache store
+
+[Caching with Rails](http://guides.rubyonrails.org/caching_with_rails.html)
+discusses the various options for the server-side data cache store.
+This can be configured by setting "config.cache_store".
+
+The main options are:
+
+* ActiveSupport::Cache::MemoryStore (:memory_store),
+* ActiveSupport::Cache::FileStore (:file_store)
+* ActiveSupport::Cache::MemCacheStore (:mem_cache_store)
+* ActiveSupport::Cache::RedisCacheStore (:redis_cache_store)
+
+We intentionally use MemoryStore (:memory_store)
+with a larger-than-default memory size.
+This may seem to be a surprising choice; here's why we do that.
+
+As noted in the Rails documentation for MemoryStore,
+"This cache store keeps entries in memory in the same Ruby process...
+If you're running multiple Ruby on Rails server processes (which is the
+case if you're using Phusion Passenger or puma clustered mode), then your
+Rails server process instances won't be able to share cache data with
+each other. This cache store is not appropriate for large application
+deployments. However, it can work well for small, low traffic sites
+with only a couple of server processes..."
+
+The
+[MemoryStore documentation](http://api.rubyonrails.org/classes/ActiveSupport/Cache/MemoryStore.html) further explains that it is
+"A cache store implementation which stores everything into memory in the
+same process. If you're running multiple Ruby on Rails server processes
+(which is the case if you're using Phusion Passenger or puma clustered
+mode), then this means that Rails server process instances won't be
+able to share cache data with each other and this may not be the most
+appropriate cache in that scenario. ...
+MemoryStore is thread-safe."
+
+In practice, we run as a single process with multiple threads.
+MemoryStore is thread-safe, so the threads *can* share the cache store.
+MemoryStore is obviously fast, and we can easily configure it to 64MB
+with no problems.  This seems to be more than adequate for our
+current situation.
+
+We can use alternatives, but must consider how
+[Heroku impacts caching strategies](https://devcenter.heroku.com/articles/caching-strategies).
+
+Heroku has an
+[ephemeral filesystem](https://devcenter.heroku.com/articles/dynos#ephemeral-filesystem),
+so any files written are temporary.
+That said, it's no worse than a memory-only cache, and it would be a
+valid alternative.
+
+Heroku offers memcached, but the free tiers are only 25M-30M (smaller
+than easily available from memory), and they quickly get expensive
+(the next tier up is only 100M).
+Redis also gets expensive.
+
+We can always pay for different caching systems.
+However, currently the system is relatively lightly loaded,
+so up to this point we haven't needed more than we have
+currently configured for.
+If we need to increase our server-side cache store
+capability, it's a relatively quick purchase and reconfiguration,
+with no other code changes.
+
 ## Purging Fastly CDN cache
 
 If a change in the application causes any badge level(s) to change or

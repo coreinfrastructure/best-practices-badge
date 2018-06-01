@@ -84,9 +84,9 @@ zh-CN:
       projects_owned: 拥有的项目：
       projects_additional_rights: 具有额外权力的项目：
       is_admin: 该用户是徽章应用管理员。
-      json_link:
-      in_json_format:
-      local_account:
+      json_link: JSON
+      in_json_format: JSON格式的用户数据（一种可移植标准格式）
+      local_account: 自定义（本地）帐户
     update:
       profile_updated: 资料已更新
     destroy:

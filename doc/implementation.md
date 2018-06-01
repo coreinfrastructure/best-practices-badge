@@ -656,12 +656,36 @@ than easily available from memory), and they quickly get expensive
 Redis also gets expensive.
 
 We can always pay for different caching systems.
-However, currently the system is relatively lightly loaded,
-so up to this point we haven't needed more than we have
+However, up to this point we haven't needed more than we have
 currently configured for.
 If we need to increase our server-side cache store
 capability, it's a relatively quick purchase and reconfiguration,
 with no other code changes.
+
+## Scaling up
+
+This software is designed to scale up as needed.
+
+Up to this point we've only needed a single dyno to run the system.
+That may seem surprising, however:
+
+* The main main stress on the system is badge requests,
+  and we offload practically all of that work to our CDN.
+* We run multiple threads (so we can handle a number of simultaneous requests).
+* We agressively use fragment caching stored in our
+  server-side data cache store.
+* We ensure that JavaScript and such are set to cache
+  on the client side, so are normally sent only once to a given client.
+
+If more is needed, we can just pay for additional dynos, and they
+will just work.
+The system knows to work with the RDMBS database, PostgreSQL, and PostgreSQL
+already scales well.
+
+That said, if we switch to multiple dynos, the configuration of the
+ActiveSupport::Cache should probably be changed, e.g., to
+MemCached or Redis.
+Otherwise the caches won't be shared between the instances.
 
 ## Purging Fastly CDN cache
 

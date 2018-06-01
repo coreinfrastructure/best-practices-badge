@@ -13,6 +13,11 @@ json.call(
 if @user == current_user || current_user&.admin?
   json.preferred_locale @user.preferred_locale
   json.email @user.email
+  json.activated
+  json.activated_at
+  json.reset_sent_at
+  json.last_login_at
+  json.use_gravatar
 end
 # We currently don't show @projects, @projects_additional_rights, or
 # @edit_projects. That might change in the future.

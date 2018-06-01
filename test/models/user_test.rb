@@ -119,7 +119,7 @@ class UserTest < ActiveSupport::TestCase
   test 'Test user.email_if_decryptable when not decryptable' do
     class StubUser < User
       def email
-       raise OpenSSL::Cipher::CipherError
+        raise OpenSSL::Cipher::CipherError
       end
     end
     u = StubUser.new

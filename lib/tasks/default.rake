@@ -657,6 +657,23 @@ desc 'Run monthly tasks (called from "daily")'
 task monthly: %i[environment monthly_announcement fix_use_gravatar] do
 end
 
+# Send a mass email, subject MASS_EMAIL_SUBJECT, body MASS_EMAIL_BODY.
+# If you set MASS_EMAIL_WHERE, only matching records will be emailed.
+# We send *separate* emails for each user, so that users won't be able
+# to learn of each other's email addresses.
+# We do *NOT* try to localize, for speed.
+desc 'Send a mass email (e.g., a required GDPR notification)'
+task :mass_email do
+  subject = ENV['MASS_EMAIL_SUBJECT']
+  body = ENV['MASS_EMAIL_BODY']
+  where_condition = ENV['MASS_EMAIL_WHERE'] || 'true'
+  raise if !subject || !body
+  User.where(where_condition).find_each do |u|
+    UserMailer.direct_message(u, subject, body).deliver_now
+    Rails.logger.info "Mass notification sent to user id #{u.id}"
+  end
+end
+
 # Run this task periodically if we want to test the
 # install-badge-dev-environment script
 desc 'check that install-badge-dev-environment works'

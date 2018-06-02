@@ -33,4 +33,10 @@ class UserMailerTest < ActionMailer::TestCase
     assert_match user.reset_token, mail.parts[0].body.to_s
     assert_match CGI.escape(user.email), mail.body.encoded
   end
+
+  test 'direct_message' do
+    mail = UserMailer.direct_message(User.first, 'Dummy subject', 'Dummy body')
+    assert_equal 'Dummy subject', mail.subject
+    assert_equal [User.first.email], mail.to
+  end
 end

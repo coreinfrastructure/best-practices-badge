@@ -150,6 +150,12 @@ class User < ApplicationRecord
     UserMailer.github_welcome(self).deliver_now
   end
 
+  def email_if_decryptable
+    email
+  rescue OpenSSL::Cipher::CipherError
+    'CANNOT_DECRYPT'
+  end
+
   def admin?
     role == 'admin'
   end

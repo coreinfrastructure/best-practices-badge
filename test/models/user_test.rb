@@ -115,4 +115,14 @@ class UserTest < ActiveSupport::TestCase
     assert_match(/\$2a\$/, User.digest('foobar'))
     ActiveModel::SecurePassword.min_cost = true
   end
+
+  test 'Test user.email_if_decryptable when not decryptable' do
+    class StubUser < User
+      def email
+        raise OpenSSL::Cipher::CipherError
+      end
+    end
+    u = StubUser.new
+    assert_equal 'CANNOT_DECRYPT', u.email_if_decryptable
+  end
 end

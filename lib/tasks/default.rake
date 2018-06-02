@@ -619,6 +619,28 @@ task update_all_higher_level_badge_percentages: :environment do
   Project.update_all_badge_percentages(Criteria.keys - ['0'])
 end
 
+# To change the email encryption keys:
+# Set EMAIL_ENCRYPTION_KEY_OLD to old key,
+# set EMAIL_ENCRYPTION_KEY and EMAIL_BLIND_INDEX_KEY to new key, and run this.
+# THIS ASSUMES THAT THE DATABASE IS QUIESCENT (e.g., it's temporarily
+# unavailable to users).  If you don't like that assumption, put this
+# within a transaction, but you'll pay a performance price.
+# Note: You *CAN* re-invoke this if a previous pass only went partway;
+# we loop over all users, but ignore users where the rekey doesn't work.
+desc 'Rekey (change keys) of email addresses'
+task rekey: :environment do
+  old_key = [ENV['EMAIL_ENCRYPTION_KEY_OLD']].pack('H*')
+  User.find_each do |u|
+    begin
+      u.rekey(old_key) # Raises exception if there's a CipherError.
+      Rails.logger.info "Rekeyed email address of user id #{u.id}"
+      u.save! if u.email.present?
+    rescue OpenSSL::Cipher::CipherError
+      Rails.logger.info "Cannot rekey user #{u.id}"
+    end
+  end
+end
+
 Rake::Task['test:run'].enhance ['test:features']
 
 # This is the task to run every day, e.g., to record statistics

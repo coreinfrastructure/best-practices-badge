@@ -191,6 +191,26 @@ class User < ApplicationRecord
     reset_sent_at < 2.hours.ago
   end
 
+  # Rekey (change the key of) the email address of the user, given the old key.
+  # Note that this will reset the IV, since we do *NOT* want to reuse IVs.
+  # This does not SAVE the user data - do a save afterwards if you want that!
+  # This will raise an exception if the old key doesn't work.
+  def rekey(old_key)
+    return if encrypted_email_iv.blank? || encrypted_email.blank?
+    old_iv = Base64.decode64(encrypted_email_iv)
+    # Get the old email address; this will raise an exception if the
+    # given key is wrong.
+    old_email_address = User.decrypt_email(
+      encrypted_email, iv: old_iv, key: old_key
+    )
+    # Change to new email address; this creates a new IV, re-encrypts,
+    # and recalculates the blind index using the current blind index key.
+    # This deals with a quirk of attr_encrypted: You have to set the
+    # old encrypted_mail value to nil before you can force a re-encrypt.
+    self.encrypted_email = nil
+    self.email = old_email_address
+  end
+
   GRAVATAR_PREFIX = 'https://secure.gravatar.com/avatar/'
 
   # Return URL for an image suitable for doing a lookup on gravatar

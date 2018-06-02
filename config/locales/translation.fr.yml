@@ -69,16 +69,29 @@ fr:
     no_login_time: "(Aucune heure précédente enregistrée.)"
     login_automatic_signup: >-
       La connection avec GitHub effectuera automatiquement une
-      inscription si nécessaire.
+      inscription si nécessaire. Si vous vous inscrivez, votre
+      nom (tel que renseigné par GitHub) et votre identifiant
+      GitHub seront affichés publiquement, et vous pouvez changer
+      votre nom à tout moment. Votre adresse email sera maintenue
+      secrète et seulement utilisée pour les interactions relatives
+      aux badges ; nous ne la transmettrons pas à des parties
+      tierces à moins qu'il s'agisse d'une obligation légale.
   users:
     new:
       signup_header: S'inscrire
       intro_html: >-
         Si vous ne souhaitez pas vous connecter en utilisant votre
-        compte GitHub, vous pouvez vous inscrire ici à la place.
-        <br> <br> Si vous n'avez pas reçu votre lien d'activation,
-        veuillez vous inscrire à nouveau et nous vous enverrons
-        un nouveau lien.
+        compte GitHub, vous pouvez vous inscrire ici à la place
+        (cela créera un compte personnalisé en utilisant votre
+        adresse email). Si vous vous inscrivez, votre nom sera
+        affiché publiquement, et vous pouvez le changer à tout
+        moment. Votre adresse email sera maintenue secrète et
+        seulement utilisée pour les interactions liées au projet
+        de badge ; nous ne le transmettrons pas à des partie tierces
+        à moins qu'il s'agisse d'une obligation légale.  <br><br>
+        Si vous n'avez pas reçu votre lien d'activation, veuillez
+        vous inscrire à nouveau et nous vous enverrons un nouveau
+        lien.
       name: Nom
       email: Email
       password: Mot de passe
@@ -87,7 +100,8 @@ fr:
       preferred_locale: Langue préférée
       intro_github: >-
         Si vous avez un compte GitHub, vous pouvez simplement
-        l'utiliser pour vous connectez.
+        l'utiliser pour vous connectez (une première connexion
+        avec GitHub vous inscrira automatiquement).
     show:
       see_external: La page externe de l'utilisateur.
       other_projects_edit: 'Autres projets que vous pouvez modifier
@@ -243,7 +257,11 @@ fr:
       new_badge: Nouveau badge
       may_select_html: >-
         Vous pouvez choisir parmi l'un de vos dépôts GitHub <em>OU</em>
-        fournir des informations sur un autre projet.
+        fournir des informations sur un autre projet. Si votre
+        projet n'a pas obtenu un badge et si vous ne l'avez pas
+        édité dans les 30 derniers jours, nous vous enverrons
+        un rappel par email (vous pouvez désactiver les rappels
+        à tout moment si vous le souhaitez).
       select_one_github: Sélectionnez l'un de vos dépôts GitHub
       submit_github: Soumettre le dépôt GitHub
       url_of_homepage: >-
@@ -724,10 +742,26 @@ fr:
       sur le bouton près du haut étiqueté « Masquer atteints &
       N/A ».\nSi vous avez des questions ou avez besoin d'aide,
       contactez-nous à\n<a href=\"mailto:&#99;ii&#45;badges&#45;questions&#45.own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;\">&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;</a>
-      \nou reportez un problème sur\n<a href=\"https://github.com/coreinfrastructure/best-practices-badge/issues\">
-      https://github.com/coreinfrastructure/best-practices-badge/issues
-      </a>\n(cliquez sur « nouveau problème »).\n</p>\n\n<p>\nMerci
-      pour vos efforts.\n</p>\n"
+      \nou reportez un problème sur\n<a href=\"https://github.com/coreinfrastructure/best-practices-badge/issues\">https://github.com/coreinfrastructure/best-practices-badge/issues</a>\n(cliquez
+      sur « nouveau problème »).\n</p>\n<p>\nNous ne vous enverrons
+      jamais de publicité, et nous ne vous enverrons que rarement
+      des emails. Nous vous enverrons un email pour les évènements
+      importants de la soumission d'un projet de badge, comme
+      quand vous créez une nouvelle soumission de projet de badge,
+      quand votre projet gagne ou perd un badge, ou quand quelqu'un
+      demande la réinitialisation du mot de passe pour votre compte
+      utilisateur. Si votre projet n'a pas de badge, et que vous
+      n'avez pas mis à jour l'entrée du projet pendant au moins
+      30 jours, nous vous enverrons normalement un rappel d'inactivité
+      environ tous les 30-60 jours. Vous pouvez désactiver ces
+      rappels d'inactivité à tout moment ; il vous suffit d'éditer
+      votre entrée de badge à <a href=\"%{project_info_url}#project_disabled_reminders\">%{project_info_url}#project_disabled_reminders</a>
+      pour activer la « désactivation du rappel d'inactivité ».
+      Souvenez-vous d'<i>éditer</i> le projet pour lequel vous
+      souhaitez changer cette valeur. Si votre projet a gagné
+      un badge, ou que son entrée de badge a été éditée dans les
+      30 derniers jours, aucun rappel d'inactivité ne vous sera
+      envoyé.\n</p>\n<p>\nMerci pour vos efforts.\n</p>\n"
     new_project_part3_text: |
       Nous vous encourageons à continuer à progresser.
       Si vous voulez voir seulement ce qui vous manque, visitez votre soumission puis cliquez sur le bouton près du haut étiqueté « Masquer atteints & N/A ».
@@ -736,6 +770,7 @@ fr:
       ou reportez un problème sur
       https://github.com/coreinfrastructure/best-practices-badge/issues
       (cliquez sur « nouveau problème »).
+      Nous ne vous enverrons jamais de publicité, et nous ne vous enverrons que rarement des emails. Nous vous enverrons un email pour les évènements importants de la soumission d'un projet de badge, comme quand vous créez une nouvelle soumission de projet de badge, quand votre projet gagne ou perd un badge, ou quand quelqu'un demande la réinitialisation du mot de passe pour votre compte utilisateur. Si votre projet n'a pas de badge, et que vous n'avez pas mis à jour l'entrée du projet pendant au moins 30 jours, nous vous enverrons normalement un rappel d'inactivité environ tous les 30-60 jours. Vous pouvez désactiver ces rappels d'inactivité à tout moment ; il vous suffit d'éditer votre entrée de badge à %{project_info_url}#project_disabled_reminders pour activer la « désactivation du rappel d'inactivité ». Souvenez-vous d'éditer le projet pour lequel vous souhaitez changer cette valeur. Si votre projet a gagné un badge, ou que son entrée de badge a été éditée dans les 30 derniers jours, aucun rappel d'inactivité ne vous sera envoyé.
       Merci pour vos efforts.
     in_markdown_add: 'En markdown, vous pouvez ajouter ceci :'
     in_html_add: 'En HTML, vous pouvez ajouter ceci :'
@@ -794,11 +829,13 @@ fr:
       de badge, et nous envoyons seulement des rappels environ
       tous les 30-60 jours. Cependant, si vous souhaitez désactiver
       ces messages de rappel, modifiez votre entrée de badge à
-      <a href=\"%{project_info_url}\">%{project_info_url}</a>\npour
-      activer « Désactiver le rappel d'inactivité ».\nNous espérons
-      que vous continuerez à travailler sur votre soumission pour
-      finalement obtenir le badge.\n</p>\n\n<p>\nMerci pour votre
-      attention.\n</p>"
+      <a href=\"%{project_info_url}#project_disabled_reminder\">%{project_info_url}#project_disabled_reminder</a>\npour
+      activer la « désactivation du rappel d'inactivité ». Vérifiez
+      que vous éditez le projet de badge, au lieu de seulement
+      le consulter, pour pouvoir changer si vous voulez ou non
+      recevoir le rappel d'inactivité.\nNous espérons que vous
+      continuerez à travailler sur votre soumission pour finalement
+      obtenir le badge.\n</p>\n\n<p>\nMerci pour votre attention.\n</p>"
     reminder_body_text: "Ceci est un rappel automatisé que votre
       projet\n« %{project_name} »\nn'a pas actuellement de badge
       « meilleures pratiques »,\net son entrée de badge n'a pas
@@ -820,10 +857,13 @@ fr:
       si vous continuez à mettre à jour votre entrée de badge,
       et nous envoyons seulement des rappels environ tous les
       30-60 jours. Cependant, si vous souhaitez désactiver ces
-      messages de rappel, modifiez votre entrée de badge à %{project_info_url}\npour
-      activer « Désactiver le rappel d'inactivité ».\nNous espérons
-      que vous continuerez à travailler sur votre soumission pour
-      finalement obtenir le badge.\n\nMerci pour votre attention."
+      messages de rappel, modifiez votre entrée de badge à %{project_info_url}#project_disabled_reminder\npour
+      activer la « désactivation du rappel d'inactivité ». Vérifiez
+      que vous éditez le projet de badge, au lieu de seulement
+      le consulter, pour pouvoir changer si vous voulez ou non
+      recevoir le rappel d'inactivité.\n\nNous espérons que vous
+      continuerez à travailler sur votre soumission pour finalement
+      obtenir le badge.\n\nMerci pour votre attention."
   project_name_unknown: "(Nom inconnu)"
   locale_name:
     en: Anglais / English (en)
@@ -1961,9 +2001,17 @@ fr:
           les contributions. Cela devrait se concentrer uniquement
           sur le comportement au sein de la communauté / lieu
           de travail du projet. Des exemples de codes de conduite
-          sont le <a href="http://contributor-covenant.org/">Code
-          de conduite du pacte de contributeur</a> et le <a href="https://www.kernel.org/doc/html/latest/process/code-of-conflict.html">code
-          de conflit</a> du noyau Linux.
+          sont le <a href="https://www.kernel.org/doc/html/latest/process/code-of-conflict.html">code
+          de conflit</a> du noyau Linux, le <a href="http://contributor-covenant.org/">code
+          de conduite du pacte de contributeur</a>, le <a href="https://www.debian.org/code_of_conduct">code
+          de conduite du projet Debian</a>, le <a href="https://www.ubuntu.com/about/about-ubuntu/conduct">code
+          de conduite du projet Ubuntu</a>, le <a href="https://getfedora.org/code-of-conduct">code
+          de conduite du projet Fedora</a>, le <a href="https://wiki.gnome.org/action/show/Foundation/CodeOfConduct">code
+          de conduite du projet GNOME</a>, le <a href="https://www.kde.org/code-of-conduct/">code
+          de conduite de la communauté KDE"</a>, le <a href="https://www.python.org/psf/codeofconduct/">code
+          de conduite de la communauté Python</a>, le <a href="https://www.ruby-lang.org/en/conduct/">guide
+          de conduite de la communauté Ruby</a>, et le <a href="https://www.rust-lang.org/en-US/conduct.html">code
+          de conduite du projet Rust</a>.
       roles_responsibilities:
         description: >-
           Le projet DOIT clairement définir et documenter publiquement
@@ -2861,7 +2909,7 @@ fr:
       get_your_badge: Obtenez votre badge immédiatement !
       p1_html: |-
         Le programme de badge des meilleures pratiques de
-        la <a href="https://www.coreinfrastructure.org/">Core Infrastructure Initiative (CII)</a> de la <a href="https://www.linuxfoundation.org/">Fondation Linux</a> est un moyen pour les projets de logiciel libre (FLOSS) de montrer qu'ils suivent les meilleures pratiques de développement. Les projets peuvent s'auto-évaluer de manière volontaire, sans frais, en utilisant cette application Web pour expliquer comment ils suivent chacune des meilleures pratiques.  Le programme de badge des meilleures pratiques de la CII s'inspire des nombreux badges disponibles aux projets sur GitHub. Les consommateurs du badge pourront évaluer rapidement quels projets de logiciel libre suivent les meilleures pratiques et, par conséquent, sont plus susceptibles de produire des logiciels sûrs et de meilleure qualité.
+        la <a href="https://www.coreinfrastructure.org/">Core Infrastructure Initiative (CII)</a> de la <a href="https://www.linuxfoundation.org/">Fondation Linux</a> est un moyen pour les projets de logiciel libre (FLOSS) de montrer qu'ils suivent les meilleures pratiques de développement. Les projets peuvent s'auto-évaluer de manière volontaire, sans frais, en utilisant cette application Web pour expliquer comment ils suivent chacune des meilleures pratiques. Le programme de badge des meilleures pratiques de la CII s'inspire des nombreux badges disponibles aux projets sur GitHub. Les consommateurs du badge peuvent évaluer rapidement quels projets de logiciel libre suivent les meilleures pratiques et, par conséquent, sont plus susceptibles de produire des logiciels sûrs et de meilleure qualité.
       p2_html: |-
         Plus d'informations sur le programme de badge
         des meilleures pratiques de la CII,
@@ -2876,18 +2924,22 @@ fr:
         pouvez y voir
         <a href="/fr/projects?gteq=100">les projets ayant obtenu le
         badge</a>). Vous pouvez également y voir
-        <a href='/fr/projects/1'>un exemple (où nous essayons
+        <a href='/fr/projects/1/0'>un exemple (où nous essayons
         d'obtenir notre propre badge)</a>.
       p3_html: >-
-        <em>Confidentialité et problèmes juridiques </em>: Consultez
+        <em>Confidentialité et problèmes juridiques</em> : Consultez
         notre <a href="https://www.linuxfoundation.org/privacy">politique
-        de confidentialité</a> et nos <a href="https://www.linuxfoundation.org/terms">conditions
-        d'utilisation</a>.  Tout les contenus publiquement disponibles
-        qui ne sont pas sous forme de code sont publiés sous la
-        license <a href="https://creativecommons.org/licenses/by/3.0/">Creative
+        de confidentialité</a>,  <a href="/fr/cookies">à propos
+        des cookies</a> et nos <a href="https://www.linuxfoundation.org/terms">conditions
+        d'utilisation</a>. Le code de l'application de badge elle-même
+        est distribué sous licence <a href="https://opensource.org/licenses/MIT">MIT</a>
+        (les projets soumis pour un badge sont sous leur licence
+        respectives). Tous les contenus publiquement disponibles
+        de l'application de badge qui ne sont pas sous forme de
+        code sont publiés sous la license <a href="https://creativecommons.org/licenses/by/3.0/">Creative
         Commons Attribution License version 3.0 (CC-BY-3.0)</a>
         ou plus permissive ; les contenus similaires plus récents
-        sont diffusés sous la license CC-BY version 3.0 ou ultérieure
+        sont diffusés sous la licence CC-BY version 3.0 ou ultérieure
         (CC-BY-3.0+).  Pour faire référence globalement à ces
         contenus, ou en l'absence d'instructions spécifiques,
         veuillez mentionner comme source les contributeurs du
@@ -2922,10 +2974,9 @@ fr:
       project_counts: >-
         Il existe %{projects} soumissions de projets ; %{passing}
         ont obtenu le badge et %{in_progress} sont en cours d'obtention.
-      project_stats_html: >-
-        Vous pouvez voir des statistiques sur les projets au cours
-        du temps sur la <a href="/fr/project_stats">page des statistiques
-        du projet</a>.
+      project_stats_html: |-
+        Les critères « actifs » sont ceux qui sont inclus dans les calculs de pourcentages (contrairement aux critères « futurs »). Les colonnes suivantes identifient le nombre de critères actifs à chaque niveau qui DOIVENT, DEVRAIENT ou PEUVENT être respectés, qui autorisent « N/A » comme réponse, qui requièrent une URL, qui incluent des détails, ou qui sont nouveaux à ce niveau. Les critères « futurs » sont affichés sur le formulaire, et devraient être ajoutés comme critères actifs à un certain niveau dans le futur, mais ne sont pas inclus dans les calculs de complétion. <br><br>
+        Vous pouvez voir des statistiques sur les projets au cours du temps sur la <a href="/fr/project_stats">page des statistiques du projet</a>.
       level: Niveau
       must: DOIT
       should: DEVRAIT

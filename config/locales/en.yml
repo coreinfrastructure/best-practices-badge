@@ -1271,8 +1271,8 @@ en:
       release_notes_vulns:
         description: >-
           The release notes MUST identify every publicly known
-          vulnerability with a CVE assignment or similar
-          that is fixed in each new release,
+          vulnerability that is fixed in each new release
+          with a CVE assignment or similar,
           unless users typically cannot practically update
           the software themselves.
           If there are no release notes or there have been

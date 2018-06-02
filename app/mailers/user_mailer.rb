@@ -62,4 +62,16 @@ class UserMailer < ApplicationMailer
       )
     end
   end
+
+  def direct_message(user, subject, body)
+    @user = user
+    @subject = subject
+    @body = body
+    I18n.with_locale(user.preferred_locale.to_sym) do
+      mail(
+        to: user.email,
+        subject: subject
+      )
+    end
+  end
 end

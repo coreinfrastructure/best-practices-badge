@@ -79,6 +79,7 @@ en:
     login_custom: Log in using custom account
     no_custom: No custom account? Sign up now!
     already_logged_in: You are already logged in.
+    login_disabled: All logins temporarily disabled
     incorrect_login_info: Incorrect login information
     invalid_combo: Invalid email/password combination
     signed_in: "Logged in! Last login: %{last_login_at}"

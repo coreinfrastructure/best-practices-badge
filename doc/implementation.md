@@ -83,6 +83,25 @@ The application is configured by various environment variables:
   Used by aes-256-gcm (256-bit AES in GCM mode).
 * EMAIL_BLIND_INDEX_KEY: Key for blind index created for email
   (used by PBKDF2-HMAC-SHA256).  Must be 64 hex digits (==32 bytes==256 bits).
+* BADGEAPP_DENY_LOGIN: If a non-blank value is set ("true" is recommended),
+  then no on can log in, no one can create a new account (sign up),
+  and no one can do anything that requires being logged (users are always
+  treated as if they are not logged in).
+  This essentially prevents ANY changes by users (daily statistics
+  creates are unaffected).
+  From a security POV this is enforced by SessionsController#create (login),
+  UsersController#create (create new user/sign up), and
+  SessionsHelper#current_user (determine who current logged-in user is).
+  Some views disable the login and sign-in display, so that it's more
+  obvious to user what is going on.
+  This may be a useful mode to enable if there is a serious exploitable
+  security vulnerability, that can only be exploited by users who are
+  logged in or can appear to log in.  Unlike *completely* disabling the
+  site, this mode allows people to see current information
+  (such as badge status, project data, and public user data).
+  Note that application admins cannot log in, or use their privileges,
+  when this mode is enabled.  Only hosting site admins can turn this mode
+  on or off (since they're the only ones who can set environment variables).
 
 You can make cryptographically random values (such as keys)
 using "rails secret".  E.g., to create 64 random hexadecimal digits, use:

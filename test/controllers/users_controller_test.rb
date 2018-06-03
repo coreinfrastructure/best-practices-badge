@@ -155,6 +155,29 @@ class UsersControllerTest < ActionController::TestCase
     assert_redirected_to login_url
   end
 
+  test 'can create local user' do
+    VCR.use_cassette('can_create_local_user') do
+      patch :create, params: {
+        user: { name: 'Not here', email: 'nonsense@example.org' }, locale: :en
+      }
+    end
+    assert '302', response.code
+  end
+
+  test 'cannot create local user if login disabled' do
+    deny_login_old = Rails.application.config.deny_login
+    Rails.application.config.deny_login = true
+
+    VCR.use_cassette('cannot_create_local_user_if_login_disabled') do
+      patch :create, params: {
+        user: { name: 'Not here', email: 'nonsense@example.org' }, locale: :en
+      }
+    end
+    assert '403', response.code
+
+    Rails.application.config.deny_login = deny_login_old
+  end
+
   test 'should redirect update when not logged in' do
     patch :update, params: {
       id: @user, user: { name: @user.name, email: @user.email }, locale: :en

@@ -21,9 +21,13 @@ class SessionsController < ApplicationController
     end
   end
 
+  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   def create
     counter_fixation # Counter session fixation (but save forwarding url)
-    if request.env['omniauth.auth'].present?
+    if Rails.application.config.deny_login
+      flash.now[:danger] = t('sessions.login_disabled')
+      render 'new', status: :forbidden
+    elsif request.env['omniauth.auth'].present?
       omniauth_login
     elsif params[:session][:provider] == 'local'
       local_login
@@ -32,6 +36,7 @@ class SessionsController < ApplicationController
       render 'new'
     end
   end
+  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
   def destroy
     log_out if logged_in?

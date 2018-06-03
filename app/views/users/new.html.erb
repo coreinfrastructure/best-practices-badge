@@ -2,6 +2,18 @@
  <br>
  <h1 class="center"><%= t '.signup_header' %></h1>
 
+<% if Rails.application.config.deny_login %>
+
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+    <div class="center-block">
+       <%= t('sessions.login_disabled') %>
+    </div>
+  </div>
+</div>
+
+<% else %>
+
  <br>
  <div class="row">
    <div class="col-md-6 col-md-offset-3">
@@ -34,3 +46,4 @@
  </div>
 
 </div>
+<% end %>

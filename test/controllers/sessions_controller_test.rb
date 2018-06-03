@@ -22,4 +22,28 @@ class SessionsControllerTest < ActionController::TestCase
     assert_not flash.empty?
     assert_redirected_to root_url
   end
+
+  test 'login via session controller' do
+    post :create, params: {
+      session: {
+        provider: 'local', email: 'test@example.org', password: 'password'
+      }
+    }
+    assert flash && flash[:success]
+    assert flash[:success].include?('Logged in!')
+  end
+
+  test 'login via session controller fails if' do
+    old_deny = Rails.application.config.deny_login
+    Rails.application.config.deny_login = true # Not thread-safe
+    post :create, params: {
+      session: {
+        provider: 'local', email: 'test@example.org', password: 'password'
+      }
+    }
+    assert flash && flash[:danger]
+    assert flash[:danger].include?('logins temporarily disabled')
+    assert '403', response.code
+    Rails.application.config.deny_login = old_deny
+  end
 end

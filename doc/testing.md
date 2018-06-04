@@ -15,6 +15,31 @@ Running `rails t test/features/can_access_home_test.rb:4` will execute just the 
 
 Write regression tests and ensure that they fail without your fix and pass with it. Include a comment in the test with the Github issue # for context.
 
+## Parallel testing
+
+Our tests should be easily parallelizable *if* you use process
+parallelism. Tests will *not* work if you use threading to parallelize tests.
+
+[RailsConf 2018: Keynote: The Future of Rails 6: Scalable by Default by Eileen Uchitelle](https://www.youtube.com/watch?v=8evXWvM4oXM)
+discusses the parallel testing capabilities of Rails 6.
+Rails 6 is designed to support parallel testing with either processes
+or threads, with processes as the default.
+
+This *application* is thread-safe, but our *testing* is currently not.
+We use system tests, which are not thread safe (see the talk).
+In addition, during testing we sometimes mutate shared global values.
+For example, some tests modify Rails.application.config.deny_login
+so that they can test different configurations.
+That works fine if tests are executed in parallel using processes
+(because the mutations are not shared), but does not work if
+the tests are in threads.
+
+If you need the tests themselves to be thread-safe, then you'll need to
+modify something.  One way is to change some shared configuration values to be
+[thread-local](https://www.rubytapas.com/2016/11/20/ruby-thread-local-variables/).
+Another is to change some methods to take parameters, so that
+you can provide different parameters during testing.
+
 ## Features
 
 Features that don't need JavaScript should default to the headless rack-test driver, which is fastest. Features that need JavaScript should set `Capybara.current_driver = Capybara.javascript_driver` as described in this [blog post](http://www.rubytutorial.io/how-to-test-an-autocomplete-with-rails/). To debug features in a browser, preface the test with the driver in an environment variable, like:

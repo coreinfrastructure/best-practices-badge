@@ -76,6 +76,7 @@ fr:
       secrète et seulement utilisée pour les interactions relatives
       aux badges ; nous ne la transmettrons pas à des parties
       tierces à moins qu'il s'agisse d'une obligation légale.
+    login_disabled:
   users:
     new:
       signup_header: S'inscrire

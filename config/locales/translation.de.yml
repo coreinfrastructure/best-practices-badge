@@ -97,6 +97,7 @@ de:
     login_automatic_signup: >-
       Wenn Sie sich mit GitHub einloggen wird automatisch bei
       Bedarf eine Anmeldung durchgeführt.
+    login_disabled:
   users:
     new:
       signup_header: Anmelden

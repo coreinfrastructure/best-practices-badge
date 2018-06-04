@@ -78,6 +78,7 @@ es:
     signed_out:
     no_login_time:
     login_automatic_signup:
+    login_disabled:
   static_pages:
     home:
       badge_program: Programa de CII Best Practices Badge

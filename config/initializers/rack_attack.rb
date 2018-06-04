@@ -44,11 +44,25 @@ class Rack::Attack
   # In the future, we may make it so that only by DEFAULT testing is in
   # safelist, and an HTTP header during testing will cause the safelist to
   # skipped, so we can test the rest of the conditions more easily.
-  if Rails.env.test?
+  # TODO: We currently EXPRESSLY safelist everything for the real site,
+  # so that if this ends up on the main site nothing bad can happen.
+  if Rails.env.test? ||
+     ENV['PUBLIC_HOSTNAME'] == 'bestpractices.coreinfrastructure.org'
     Rack::Attack.safelist('allow from localhost') do |req|
       # Requests are allowed if the return value is truthy
       req.ip == '127.0.0.1' || req.ip == '::1'
     end
+  end
+
+  Rack::Attack.safelist('debug') do |req|
+    # Requests are allowed if the return value is truthy
+    if req.path == '/debug'
+      Rails.logger.error "DEBUG /debug req.ip=#{req.ip}, " \
+        "HTTP_X_FORWARDED_FOR=#{req.get_header('HTTP_X_FORWARDED_FOR')}, " \
+        "HTTP_X_REAL_IP= #{req.get_header('HTTP_X_REAL_IP')}, " \
+        "REMOTE_ADDR= #{req.get_header('REMOTE_ADDR')}"
+    end
+    nil
   end
 
   ### Throttle Spammy Clients ###

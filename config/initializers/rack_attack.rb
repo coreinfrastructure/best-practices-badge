@@ -56,11 +56,11 @@ class Rack::Attack
 
   Rack::Attack.safelist('debug') do |req|
     # Requests are allowed if the return value is truthy
-    if req.path == '/debug'
-      Rails.logger.error "DEBUG /debug req.ip=#{req.ip}, " \
-        "HTTP_X_FORWARDED_FOR=#{req.get_header('HTTP_X_FORWARDED_FOR')}, " \
-        "HTTP_X_REAL_IP= #{req.get_header('HTTP_X_REAL_IP')}, " \
-        "REMOTE_ADDR= #{req.get_header('REMOTE_ADDR')}"
+    if req.path == '/debug' || req.path == '/en/debug'
+      Rails.logger.error "DEBUG /debug req.ip=<#{req.ip}>, " \
+        "HTTP_X_FORWARDED_FOR=<#{req.get_header('HTTP_X_FORWARDED_FOR')}>, " \
+        "HTTP_X_REAL_IP=<#{req.get_header('HTTP_X_REAL_IP')}>, " \
+        "REMOTE_ADDR=<#{req.get_header('REMOTE_ADDR')}>"
     end
     nil
   end

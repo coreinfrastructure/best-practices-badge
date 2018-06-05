@@ -40,7 +40,7 @@ class Rack::Attack
 
   # Always allow requests from localhost if testing unless we say otherwise.
   # In this case, blocklists & throttles are skipped.
-  if Rails.env.test? && !req.get_header('HTTP_DO_NOT_SAFELIST_TEST')
+  if Rails.env.test?
     Rack::Attack.safelist('allow from localhost') do |req|
       # Requests are allowed if the return value is truthy
       remote_ip = ClientIp.acquire(req)

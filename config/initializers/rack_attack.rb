@@ -38,31 +38,14 @@ class Rack::Attack
 
   ### Safelists ###
 
-  # Always allow requests from localhost if testing.
-  # (blocklist & throttles are skipped)
-  # In the future, we may make it so that only by DEFAULT testing is in
-  # safelist, and an HTTP header during testing will cause the safelist to
-  # skipped, so we can test the rest of the conditions more easily.
-  # TODO: We currently EXPRESSLY safelist everything for the real site,
-  # so that if this ends up on the main site nothing bad can happen.
-  if Rails.env.test? ||
-     ENV['PUBLIC_HOSTNAME'] == 'bestpractices.coreinfrastructure.org'
+  # Always allow requests from localhost if testing unless we say otherwise.
+  # In this case, blocklists & throttles are skipped.
+  if Rails.env.test?
     Rack::Attack.safelist('allow from localhost') do |req|
       # Requests are allowed if the return value is truthy
       remote_ip = ClientIp.acquire(req)
       remote_ip == '127.0.0.1' || remote_ip == '::1'
     end
-  end
-
-  Rack::Attack.safelist('debug') do |req|
-    # Requests are allowed if the return value is truthy
-    if req.path == '/debug' || req.path == '/en/debug'
-      Rails.logger.error "DEBUG /debug req.ip=<#{req.ip}>, " \
-        "HTTP_X_FORWARDED_FOR=<#{req.get_header('HTTP_X_FORWARDED_FOR')}>, " \
-        "HTTP_X_REAL_IP=<#{req.get_header('HTTP_X_REAL_IP')}>, " \
-        "REMOTE_ADDR=<#{req.get_header('REMOTE_ADDR')}>"
-    end
-    nil
   end
 
   ### Throttle Spammy Clients ###
@@ -74,11 +57,16 @@ class Rack::Attack
   # Note: If you're serving assets through rack, those requests may be
   # counted by rack-attack and this throttle may be activated too
   # quickly. If so, enable the condition to exclude them from tracking.
+  # In the case of the BadgeApp, assets are NOT being served via rack.
 
   # Throttle all requests by IP (120rpm)
   #
   # Key: "rack::attack:#{Time.now.to_i/:period}:req/ip:#{req.ip}"
-  throttle('req/ip', limit: 600, period: 5.minutes) do |req|
+  throttle(
+    'req/ip',
+    limit: (ENV['RATE_REQ_IP_LIMIT'] || 600).to_i,
+    period: (ENV['RATE_REQ_IP_PERIOD'] || 5.minutes).to_i
+  ) do |req|
     ClientIp.acquire(req) # unless req.path.start_with?('/assets')
   end
 
@@ -94,7 +82,11 @@ class Rack::Attack
   # Throttle POST requests to /login by IP address
   #
   # Key: "rack::attack:#{Time.now.to_i/:period}:logins/ip:#{req.ip}"
-  throttle('logins/ip', limit: 20, period: 20.seconds) do |req|
+  throttle(
+    'logins/ip',
+    limit: (ENV['RATE_LOGINS_IP_LIMIT'] || 20).to_i,
+    period: (ENV['RATE_LOGINS_IP_PERIOD'] || 20.seconds).to_i
+  ) do |req|
     if LOGIN_PATHS.include?(req.path) && req.post?
       ClientIp.acquire(req)
     end
@@ -108,7 +100,11 @@ class Rack::Attack
   # throttle logins for another user and force their login requests to be
   # denied, but that's not very common and shouldn't happen to you. (Knock
   # on wood!)
-  throttle('logins/email', limit: 5, period: 20.seconds) do |req|
+  throttle(
+    'logins/email',
+    limit: (ENV['RATE_LOGINS_EMAIL_LIMIT'] || 5).to_i,
+    period: (ENV['RATE_LOGINS_EMAIL_PERIOD'] || 20.seconds).to_i
+  ) do |req|
     if LOGIN_PATHS.include?(req.path) && req.post? && req.params['session']
       # return the email to throttle logins on if present, nil otherwise
       req.params['session']['email']
@@ -125,7 +121,11 @@ class Rack::Attack
   # by email address; once an email address has been signed up, it
   # stays that way.
   #
-  throttle('signup/ip', limit: 20, period: 5.minutes) do |req|
+  throttle(
+    'signup/ip',
+    limit: (ENV['RATE_SIGNUP_IP_LIMIT'] || 20).to_i,
+    period: (ENV['RATE_SIGNUP_IP_PERIOD'] || 10.seconds).to_i
+  ) do |req|
     if SIGNUP_PATHS.include?(req.path) && req.post?
       ClientIp.acquire(req)
     end

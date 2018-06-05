@@ -102,6 +102,19 @@ The application is configured by various environment variables:
   Note that application admins cannot log in, or use their privileges,
   when this mode is enabled.  Only hosting site admins can turn this mode
   on or off (since they're the only ones who can set environment variables).
+* RATE_details - a rate limit setting.  Rate limits provide a partial
+  countermeasure against denial-of-service and password-guessing attacks.
+  These are implemented by Rack::Attack and have two parts, a
+  "LIMIT" (maximum count) and a "PERIOD" (length of period of time,
+  in seconds, where that limit is not to be exceeded).
+  If unspecified they have the default values specified in
+  config/initializers/rack_attack.rb.  These settings are
+  (where "IP" or "ip" means "client IP address", and "req" means "requests"):
+
+    - req/ip: RATE_REQ_IP_LIMIT, RATE_REQ_IP_PERIOD
+    - logins/ip: RATE_LOGINS_IP_LIMIT, RATE_LOGINS_IP_PERIOD
+    - logins/email: RATE_LOGINS_EMAIL_LIMIT, RATE_LOGINS_EMAIL_PERIOD
+    - signup/ip: RATE_SIGNUP_IP_LIMIT, RATE_SIGNUP_IP_PERIOD
 
 You can make cryptographically random values (such as keys)
 using "rails secret".  E.g., to create 64 random hexadecimal digits, use:

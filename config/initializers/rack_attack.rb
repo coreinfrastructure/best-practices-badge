@@ -79,7 +79,7 @@ class Rack::Attack
   #
   # Key: "rack::attack:#{Time.now.to_i/:period}:req/ip:#{req.ip}"
   throttle('req/ip', limit: 600, period: 5.minutes) do |req|
-    ClientIp.acquire(req.ip) # unless req.path.start_with?('/assets')
+    ClientIp.acquire(req) # unless req.path.start_with?('/assets')
   end
 
   ### Prevent Brute-Force Login Attacks ###
@@ -96,7 +96,7 @@ class Rack::Attack
   # Key: "rack::attack:#{Time.now.to_i/:period}:logins/ip:#{req.ip}"
   throttle('logins/ip', limit: 20, period: 20.seconds) do |req|
     if LOGIN_PATHS.include?(req.path) && req.post?
-      ClientIp.acquire(req.ip)
+      ClientIp.acquire(req)
     end
   end
 
@@ -127,7 +127,7 @@ class Rack::Attack
   #
   throttle('signup/ip', limit: 20, period: 5.minutes) do |req|
     if SIGNUP_PATHS.include?(req.path) && req.post?
-      ClientIp.acquire(req.ip)
+      ClientIp.acquire(req)
     end
   end
 

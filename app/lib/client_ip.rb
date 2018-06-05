@@ -4,10 +4,6 @@
 # CII Best Practices badge contributors
 # SPDX-License-Identifier: MIT
 
-# The priority is based upon order of creation:
-# first created -> highest priority.
-# See how all your routes lay out with "rake routes".
-
 module ClientIp
   # Compute the correct remote IP address for our environment.
   # We have done tests, and in our current environment this is the

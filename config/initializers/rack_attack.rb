@@ -6,11 +6,10 @@
 # However, much of this is instead from:
 # https://github.com/kickstarter/rack-attack/wiki/Example-Configuration
 
-# NOTE: This may need additional work to get the "real" client IP from Heroku
-# instead of the routing IP inside req.ip.
+# This assumes that "ClientIp.acquire" works correctly.
 
 # Use recommended format of Rack::Attack config
-# rubocop: disable Style/ClassAndModuleChildren, Style/SymbolProc
+# rubocop: disable Style/ClassAndModuleChildren
 # rubocop: disable Style/IfUnlessModifier, Style/MethodCalledOnDoEndBlock
 class Rack::Attack
   # Configure Rack::Attack to do rate limiting.
@@ -25,6 +24,28 @@ class Rack::Attack
   SIGNUP_PATHS = I18n.available_locales.map do |loc|
     "/#{loc}/users"
   end.append('/users').to_set
+
+  # Compute the correct remote IP address for our environment.
+  # We have done tests, and in our current environment this is the
+  # always the next-to-last value of the comma-space-separated value
+  # "HTTP_X_FORWARDED_FOR" (from the HTTP header X-Forwarded-For).
+  # That's because the last value of "HTTP_X_FORWARDED_FOR"
+  # is always our CDN (which intercepts it first), and the previous
+  # value is set by our CDN to whatever IP address the CDN got.
+  # A client can always set X-Forwarded-For and try to spoof something,
+  # but those entries are always earlier in the list
+  # (so we can easily ignore them).
+  # Use correct_remote_ip(req) instead of req.ip.
+  def correct_remote_ip(req)
+    forwarding = req.get_header('HTTP_X_FORWARDED_FOR')
+    if forwarding
+      # Production environment, pick next-to-last value
+      forwarding.split(', ')[-2]
+    else
+      # Test/development environment, do the best you can.
+      req.ip
+    end
+  end
 
   ### Configure Cache ###
 
@@ -50,7 +71,8 @@ class Rack::Attack
      ENV['PUBLIC_HOSTNAME'] == 'bestpractices.coreinfrastructure.org'
     Rack::Attack.safelist('allow from localhost') do |req|
       # Requests are allowed if the return value is truthy
-      req.ip == '127.0.0.1' || req.ip == '::1'
+      remote_ip = ClientIp.acquire(req)
+      remote_ip == '127.0.0.1' || remote_ip == '::1'
     end
   end
 
@@ -75,11 +97,11 @@ class Rack::Attack
   # counted by rack-attack and this throttle may be activated too
   # quickly. If so, enable the condition to exclude them from tracking.
 
-  # Throttle all requests by IP (60rpm)
+  # Throttle all requests by IP (120rpm)
   #
   # Key: "rack::attack:#{Time.now.to_i/:period}:req/ip:#{req.ip}"
-  throttle('req/ip', limit: 300, period: 5.minutes) do |req|
-    req.ip # unless req.path.start_with?('/assets')
+  throttle('req/ip', limit: 600, period: 5.minutes) do |req|
+    ClientIp.acquire(req.ip) # unless req.path.start_with?('/assets')
   end
 
   ### Prevent Brute-Force Login Attacks ###
@@ -94,9 +116,9 @@ class Rack::Attack
   # Throttle POST requests to /login by IP address
   #
   # Key: "rack::attack:#{Time.now.to_i/:period}:logins/ip:#{req.ip}"
-  throttle('logins/ip', limit: 5, period: 20.seconds) do |req|
+  throttle('logins/ip', limit: 20, period: 20.seconds) do |req|
     if LOGIN_PATHS.include?(req.path) && req.post?
-      req.ip
+      ClientIp.acquire(req.ip)
     end
   end
 
@@ -125,9 +147,9 @@ class Rack::Attack
   # by email address; once an email address has been signed up, it
   # stays that way.
   #
-  throttle('signup/ip', limit: 5, period: 5.minutes) do |req|
+  throttle('signup/ip', limit: 20, period: 5.minutes) do |req|
     if SIGNUP_PATHS.include?(req.path) && req.post?
-      req.ip
+      ClientIp.acquire(req.ip)
     end
   end
 
@@ -146,4 +168,4 @@ class Rack::Attack
   # end
 end
 # rubocop: enable Style/IfUnlessModifier, Style/MethodCalledOnDoEndBlock
-# rubocop: enable Style/ClassAndModuleChildren, Style/SymbolProc
+# rubocop: enable Style/ClassAndModuleChildren

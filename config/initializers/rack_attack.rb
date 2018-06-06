@@ -144,6 +144,32 @@ class Rack::Attack
   #    {},   # headers
   #    ['']] # body
   # end
+
+  ### Block an IP address that is repeatedly making suspicious requests.
+  # After FAIL2BAN_MAXRETRY blocked requests in FAIL2BAN_FINDTIME seconds,
+  # block all requests from that client IP for FAIL2BAN_BANTIME seconds.
+  # A request is blocked if req.path matches the regex FAIL2BAN_PATH or
+  # req.query_string matches the regex FAIL2BAN_QUERY.
+  FAIL2BAN_MAXRETRY = (ENV['FAIL2BAN_MAXRETRY'] || 3).to_i
+  FAIL2BAN_FINDTIME = (ENV['FAIL2BAN_FINDTIME'] || 10.minutes).to_i
+  FAIL2BAN_BANTIME = (ENV['FAIL2BAN_BANTIME'] || 20.minutes).to_i
+  FAIL2BAN_PATH = Regexp.compile(ENV['FAIL2BAN_PATH'] || '(admin|wp-login)')
+  FAIL2BAN_QUERY = Regexp.compile(ENV['FAIL2BAN_QUERY'] || '\/etc\/passwd')
+  Rack::Attack.blocklist('fail2ban pentesters') do |req|
+    # `filter` returns truthy value if request fails,
+    # or if it's from a previously banned IP
+    # so the request is blocked
+    Rack::Attack::Fail2Ban.filter(
+      "pentesters-#{ClientIp.acquire(req)}",
+      maxretry: FAIL2BAN_MAXRETRY,
+      findtime: FAIL2BAN_FINDTIME,
+      bantime: FAIL2BAN_BANTIME
+    ) do
+      # The count for the IP is incremented if the return value is truthy
+      FAIL2BAN_PATH.match(req.path) ||
+        FAIL2BAN_QUERY.match(CGI.unescape(req.query_string))
+    end
+  end
 end
 # rubocop: enable Style/IfUnlessModifier, Style/MethodCalledOnDoEndBlock
 # rubocop: enable Style/ClassAndModuleChildren

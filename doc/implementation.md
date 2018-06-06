@@ -102,8 +102,9 @@ The application is configured by various environment variables:
   Note that application admins cannot log in, or use their privileges,
   when this mode is enabled.  Only hosting site admins can turn this mode
   on or off (since they're the only ones who can set environment variables).
-* RATE_details - a rate limit setting.  Rate limits provide a partial
-  countermeasure against denial-of-service and password-guessing attacks.
+* RATE_details - a rate limit setting.  Rate limits provide an automated
+  partial countermeasure against denial-of-service and
+  password-guessing attacks.
   These are implemented by Rack::Attack and have two parts, a
   "LIMIT" (maximum count) and a "PERIOD" (length of period of time,
   in seconds, where that limit is not to be exceeded).

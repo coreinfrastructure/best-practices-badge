@@ -1094,7 +1094,7 @@ and consider them where they make sense.
 In particular, the
 [ankane/secure_rails](https://github.com/ankane/secure_rails) guide
 has some interesting tips.
-Most of them were were already doing, but an especially important
+Most of them were were already doing, but an especially interesting
 tip was to
 "Prevent host header injection -
 add the following to config/environments/production.rb":
@@ -1105,8 +1105,18 @@ config.action_controller.asset_host = "www.yoursite.com"
 ~~~~
 
 We already did the first one, but we also added the second.
+
+In many Rails configurations this is a critically-required configuration,
+and failing to follow these steps could lead in part
+to a potential compromise.
+In our particular configuration the host value is set
+by a trusted entity (Heroku), so we were never vulnerable,
+but there is no reason to depend on the value Heroku provides.
+We know the correct values, so we forcibly set them.
 This ensures that even if a user provides a "host" value,
-we will not use it, and will instead use a preset trusted value.
+and for some reason Heroku allows it to pass through or we
+switch to a different computation engine provider,
+we will not use this value; we will instead use a preset trusted value.
 
 ### Hardening
 
@@ -1138,9 +1148,9 @@ See
 ["Rails, Secure Cookies, HSTS and friends" by Ilija Eftimov (2015-12-14)](http://eftimov.net/rails-tls-hsts-cookies)
 for more about the impact of force_ssl.
 
-#### Hardened HTTP Headers
+#### Hardened outgoing HTTP headers, including restrictive CSP
 
-We harden the HTTP headers, in particular, we use a
+We harden the outgoing HTTP headers, in particular, we use a
 restrictive Content Security Policy (CSP) header with just
 "normal sources" (normal_src).  We do send a
 Cross-Origin Resource Sharing (CORS) header when an origin is specified,
@@ -1195,28 +1205,60 @@ secure=true (which is irrelevant because we always use HTTPS but it
 can't hurt), and SameSite=Lax (which counters CSRF attacks on
 web browsers that support it).
 
-#### Per-form CSRF token
+#### CSRF token hardening
 
-We enable per-form CSRF tokens, a Rails 5 addition.
-(Rails.application.config.action_controller.per_form_csrf_tokens)
-This helps counter CSRF, in addition to our other measures.
+We use two additional CSRF token hardening techniques
+to further harden the system against CSRF attacks.
+Both of these techniques are Rails 5 additions:
 
-#### Origin-checking CSRF token
+* We enable per-form CSRF tokens
+  (Rails.application.config.action_controller. per_form_csrf_tokens).
+* We enable origin-checking CSRF mitigation
+  (Rails.application.config.action_controller. forgery_protection_origin_check).
 
-We enable origin-checking CSRF mitigation, a Rails 5 addition.
-(Rails.application.config.action_controller.forgery_protection_origin_check)
-This helps counter CSRF, in addition to our other measures.
+These help counter CSRF, in addition to our other measures.
 
-#### Email rate limit
+#### Incoming rate limits
 
-We enable rate limits on reminder emails.
+Rate limits provide an automated partial
+countermeasure against denial-of-service and password-guessing attacks.
+These are implemented by Rack::Attack and have two parts, a
+"LIMIT" (maximum count) and a "PERIOD" (length of period of time,
+in seconds, where that limit is not to be exceeded).
+If unspecified they have the default values specified in
+config/initializers/rack_attack.rb.  These settings are
+(where "IP" or "ip" means "client IP address", and "req" means "requests"):
+
+- req/ip
+- logins/ip
+- logins/email
+- signup/ip
+
+To determine the remote client IP address (for our purposes) we use the
+the next-to-last value of the comma-space-separated value
+"HTTP_X_FORWARDED_FOR" (from the HTTP header X-Forwarded-For).
+That's because the last value of "HTTP_X_FORWARDED_FOR"
+is always our CDN (which intercepts it first), and the previous
+value is set by our CDN to whatever IP address the CDN got.
+The web server is configured so it will only accept connections from the
+CDN - this prevents web piercing, and means that we can trust that the
+client IP value we receive is only from the CDN (which we trust for
+this purpose).
+A client can always set X-Forwarded-For and try to spoof something,
+but those entries are always earlier in the list
+(so we can easily ignore them).
+
+#### Outgoing email rate limit
+
+We enable rate limits on outgoing reminder emails.
 We send reminder emails to projects that have not updated their
 badge entry in a long time. The detailed algorithm that prioritizes projects
 is in "app/models/project.rb" class method "self.projects_to_remind".
 It sorts by reminder date, so we always cycle through before returning to
-a previously-reminded project.  We have a hard rate limit on the number
-of emails we will send out each time; this keeps us from looking like
-a spammer.
+a previously-reminded project.
+
+We have a hard rate limit on the number of emails we will send out each
+time; this keeps us from looking like a spammer.
 
 #### Encrypted email addresses
 
@@ -1824,8 +1866,69 @@ We are also alerted if the website goes down.
 One of those mechanisms is uptime robot:
 <https://uptimerobot.com/dashboard>
 
-### Recovery
+### Recovery plan including backups
 
+Once we detect that there is a problem, we have plans
+and mechanisms in place to help us recover,
+including backups.
+
+Once we determine that there is a problem, we must
+determine to a first order the scale of the problem,
+what to do immediately, and what to do over time.
+
+If there is an ongoing security issue, we have a few immediate options
+(other just leaving the system running).
+We can shut down the system,
+disable internet access to it, or enable the
+application's BADGEAPP_DENY_LOGIN mode.
+The BADGEAPP_DENY_LOGIN mode is a capability we have pre-positioned
+to deal with many potential problems.
+If a non-blank value is set ("true" is recommended)
+in the environmental variable BADGEAPP_DENY_LOGIN,
+then no one can log in, no one can create a new account (sign up),
+and no one can do anything that requires being logged in (users are always
+treated as if they are not logged in).
+The BADGEAPP_DENY_LOGIN mode
+essentially prevents ANY changes by users (daily statistics
+creates are unaffected).
+
+The BADGEAPP_DENY_LOGIN mode
+may be a useful mode to enable if there is a serious exploitable
+security vulnerability that can only be exploited by users who are
+logged in or can appear to log in.  Unlike *completely* disabling the
+site, this mode allows people to see current information
+(such as badge status, project data, and public user data).
+This mode is useful because it can stop most attacks, while still providing
+some services.
+Note that application admins cannot log in, or use their privileges,
+when this mode is enabled.  Only hosting site admins can turn this mode
+on or off (since they're the only ones who can set environment variables).
+
+We will work with the LF data controller to determine if there has been
+a personal data breach, and help the data controller alert the
+supervisory authority where appropriate.
+The General Data Protection Regulation (GDPR) section 33 requires that
+in the case of a personal data breach, the controller shall
+"without undue delay, and, where feasible, not later than 72 hours
+after having become aware of it, notify the personal data breach to the
+supervisory authority... unless the personal data breach is unlikely to
+result in a risk to the rights and freedoms of natural persons."
+
+Once we have determined the cause, we would work to quickly determine
+how to fix the software or change the configuation to stop it.
+As shown elsewhere, we have a variety of tools and tests that help us
+rapidly update the software with confidence.
+
+Once the system is fixed, we would might need to alert users.
+We have a pre-created rake task "mass_email" that lets us quickly
+send email to the users (or a subset) if it strictly necessary.
+
+We might also need to re-encrypt the email addresses with a new key.
+We have pre-created a rake task "rekey" that performs rekeying of
+email addresses should that be necessary.
+
+Finally, we might need to restore from backups.
+We use the standard Rails and PostgreSQL mechanisms for loading backups.
 We backup the database daily, and archive many versions so
 we can restore from them.
 See the [Heroku site](https://devcenter.heroku.com/articles/heroku-postgres-backups#scheduled-backups-retention-limits) for retention times.

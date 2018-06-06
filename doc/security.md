@@ -193,11 +193,22 @@ how we implement these requirements):
       of resources when necessary.
     - All queries, including project data queries, have a timeout.
       That way, the system is not permanently "stuck" on a request.
+    - As noted later in the hardening section, we have rate limits on
+      incoming requests, including the number of requests a
+      client IP address can make in a given period.
+      This provides a small amount of automated protection against
+      being overwhelmed.
     - The system can return to operation quickly after
       a DDoS attack has ended.
     - We routinely backup the database and retain multiple versions.
       That way, if the project data is corrupted, we can restore the
       database to a previous state.
+    - We have implemented a "login disabled" degraded mode.
+      If there is a serious security problem, in many cases we can
+      switch to that mode.  This mode lets us continue to
+      provide read-only services until the vulnerability is fixed.
+    - We have a recovery plan (described below) that builds on our
+      ability to recover from backup.
 
 Identity, Authentication, and Authorization are handled in a traditional
 manner, as described below.

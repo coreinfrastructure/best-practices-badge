@@ -1888,7 +1888,7 @@ determine to a first order the scale of the problem,
 what to do immediately, and what to do over time.
 
 If there is an ongoing security issue, we have a few immediate options
-(other just leaving the system running).
+(other than just leaving the system running).
 We can shut down the system,
 disable internet access to it, or enable the
 application's BADGEAPP_DENY_LOGIN mode.

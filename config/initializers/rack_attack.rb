@@ -153,8 +153,15 @@ class Rack::Attack
   FAIL2BAN_MAXRETRY = (ENV['FAIL2BAN_MAXRETRY'] || 3).to_i
   FAIL2BAN_FINDTIME = (ENV['FAIL2BAN_FINDTIME'] || 10.minutes).to_i
   FAIL2BAN_BANTIME = (ENV['FAIL2BAN_BANTIME'] || 20.minutes).to_i
-  FAIL2BAN_PATH = Regexp.compile(ENV['FAIL2BAN_PATH'] || '(admin|wp-login)')
-  FAIL2BAN_QUERY = Regexp.compile(ENV['FAIL2BAN_QUERY'] || '\/etc\/passwd')
+  # Default regexp for paths to disallow.  Coordinate with "robots.txt"
+  # so that we don't ban properly-behaving web crawlers, see:
+  # https://www.ctrl.blog/entry/httpd-wordpress-deny
+  # "/admin" is a common admin URL. "/wp-" handles attacks on WordPress.
+  # "/cgi-bin" is the standard prefix for old-school CGI programs.
+  # (?:...) is a non-capturing regexp group - we don't need to capture it.
+  FAIL2BAN_PATH = Regexp.compile(ENV['FAIL2BAN_PATH'] ||
+    '^/(?:admin|cgi-bin|wp-)')
+  # FAIL2BAN_QUERY = Regexp.compile(ENV['FAIL2BAN_QUERY'] || '\/etc\/passwd')
   Rack::Attack.blocklist('fail2ban pentesters') do |req|
     # `filter` returns truthy value if request fails,
     # or if it's from a previously banned IP
@@ -166,8 +173,8 @@ class Rack::Attack
       bantime: FAIL2BAN_BANTIME
     ) do
       # The count for the IP is incremented if the return value is truthy
-      FAIL2BAN_PATH.match(req.path) ||
-        FAIL2BAN_QUERY.match(CGI.unescape(req.query_string))
+      FAIL2BAN_PATH.match(req.path)
+      # || FAIL2BAN_QUERY.match(CGI.unescape(req.query_string))
     end
   end
 end

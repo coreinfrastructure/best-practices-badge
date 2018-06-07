@@ -31,6 +31,14 @@ Disallow: /ru/projects*.json
 # Note that we *do* permit crawling /project_stats/*.json
 # and /*/project_stats/*.json.
 #
+#
+# The following often indicate attacks:
+#
+Disallow: /admin
+Disallow: /cgi-bin
+Disallow: /wp-
+#
+#
 # Don't crawl sorts or most queries.
 # They have the same data, and crawling all the variants will produce
 # slow crawl times.

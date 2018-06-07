@@ -107,11 +107,30 @@ class StaticPagesControllerTest < ActionDispatch::IntegrationTest
 
   test 'should redirect criteria with trailing slash' do
     get '/en/criteria/'
+    assert_redirected_to '/en/criteria'
     follow_redirect!
     assert_response :success
     # Notice that the trailing slash is now gone
     assert_equal '/en/criteria', @request.fullpath
     assert_includes @response.body, 'included in the percentage calculations'
+  end
+
+  # In most cases we attach a locale, redirect, and then fail on missing.
+  test 'Missing page should return 404' do
+    get '/asdfasdfasdf'
+    assert_redirected_to '/en/asdfasdfasdf'
+    follow_redirect!
+    assert_response :missing
+    assert_includes @response.body, 'Error 404: Page Not Found'
+    assert_includes @response.body, 'Sorry, no such page exists'
+  end
+
+  # In a few special cases we fail fast to minimize processing of it.
+  test 'wp-login.php gets a fastpath to error 404' do
+    get '/wp-login.php'
+    assert_response :missing
+    assert_includes @response.body, 'Error 404: Page Not Found'
+    assert_includes @response.body, 'Sorry, no such page exists'
   end
 end
 # rubocop: enable Metrics/BlockLength

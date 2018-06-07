@@ -18,13 +18,15 @@ class StaticPagesController < ApplicationController
 
   # Send a 404 ("not found") page.  Inspired by:
   # http://rubyjunky.com/cleaning-up-rails-4-production-logging.html
+  # This is intentionally short and does *NOT* use the standard layout,
+  # to minimize CPU and bandwidth use during an attack.
   def error_404
     # The default router already logs things, so we don't need to do more.
     # You can do something like this to log more information, but be sure
     # to escape attacker data to counter log forging:
     # logger.info 'Page not found'
     render(
-      template: 'static_pages/error_404',
+      template: '/static_pages/error_404.html.erb',
       layout: false,
       status: 404
     )

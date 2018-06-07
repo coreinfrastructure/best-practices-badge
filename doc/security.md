@@ -1926,11 +1926,13 @@ supervisory authority... unless the personal data breach is unlikely to
 result in a risk to the rights and freedoms of natural persons."
 
 Once we have determined the cause, we would work to quickly determine
-how to fix the software or change the configuation to stop it.
+how to fix the software and/or change the configuration to
+address the attack (at least to ensure that integrity and confidentiality
+are maintained).
 As shown elsewhere, we have a variety of tools and tests that help us
 rapidly update the software with confidence.
 
-Once the system is fixed, we would might need to alert users.
+Once the system is fixed, we might need to alert users.
 We have a pre-created rake task "mass_email" that lets us quickly
 send email to the users (or a subset) if it strictly necessary.
 
@@ -1946,7 +1948,7 @@ See the [Heroku site](https://devcenter.heroku.com/articles/heroku-postgres-back
 
 The update process to the "staging" site backs up the production site
 to the staging site.  This provides an additional backup, and also
-serves as a check to make sure the backup process is working.
+serves as a check to make sure the backup and restore processes are working.
 
 ## Security of the development environment
 

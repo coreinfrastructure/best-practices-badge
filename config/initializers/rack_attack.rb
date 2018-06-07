@@ -159,8 +159,11 @@ class Rack::Attack
   # "/admin" is a common admin URL. "/wp-" handles attacks on WordPress.
   # "/cgi-bin" is the standard prefix for old-school CGI programs.
   # (?:...) is a non-capturing regexp group - we don't need to capture it.
-  FAIL2BAN_PATH = Regexp.compile(ENV['FAIL2BAN_PATH'] ||
-    '^/(?:admin|cgi-bin|wp-)')
+  ALL_PREFIXES = I18n.available_locales.map { |loc| "/#{loc}" }.prepend('')
+  BAD_PATHS = ALL_PREFIXES.map do |prefix|
+    "#{prefix}/admin|#{prefix}/cgi-bin|#{prefix}/wp-"
+  end.join('|')
+  FAIL2BAN_PATH = Regexp.compile(ENV['FAIL2BAN_PATH'] || "^/(?:#{BAD_PATHS})")
   # FAIL2BAN_QUERY = Regexp.compile(ENV['FAIL2BAN_QUERY'] || '\/etc\/passwd')
   Rack::Attack.blocklist('fail2ban pentesters') do |req|
     # `filter` returns truthy value if request fails,

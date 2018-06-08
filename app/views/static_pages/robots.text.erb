@@ -35,14 +35,44 @@ Disallow: <%= prefix %>/projects*.json$
 Disallow: <%= prefix %>/project_stats/
 <% end %>
 #
+# Match with config/initialization
 #
-# The following often indicate attacks:
-#
-<% all_prefixes.each do |prefix| %>
-Disallow: <%= prefix %>/admin
-Disallow: <%= prefix %>/cgi-bin
-Disallow: <%= prefix %>/wp-
-<% end %>
+Disallow: /admin
+Disallow: /backup
+Disallow: /cgi
+Disallow: /command
+Disallow: /common
+Disallow: /config
+Disallow: /data
+Disallow: /dbadmin
+Disallow: /dump
+Disallow: /error_message
+Disallow: /install
+Disallow: /joomla
+Disallow: /muieblackcat
+Disallow: /myadmin
+Disallow: /mysql
+Disallow: /onvif
+Disallow: /options
+Disallow: /phpadmin
+Disallow: /phpmanager
+Disallow: /phpmyadmin
+Disallow: /phpMyAdmin
+Disallow: /PHPMYADMIN
+Disallow: /scripts
+Disallow: /setup
+Disallow: /sqladmin
+Disallow: /sql-admin
+Disallow: /submitticket
+Disallow: /temp
+Disallow: /upload
+Disallow: /w00tw00t
+Disallow: /webadmin
+Disallow: /wootwoot
+Disallow: /WootWoot
+Disallow: /WooTWooT
+Disallow: /wp-
+Disallow: /xmlrpc
 #
 #
 # Don't crawl sorts or most queries.

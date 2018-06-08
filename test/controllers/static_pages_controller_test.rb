@@ -113,5 +113,11 @@ class StaticPagesControllerTest < ActionDispatch::IntegrationTest
     assert_equal '/en/criteria', @request.fullpath
     assert_includes @response.body, 'included in the percentage calculations'
   end
+
+  test 'Ban WordPress admin request' do
+    get '/wp-admin'
+    assert_response :forbidden
+    assert_includes @response.body, 'Forbidden'
+  end
 end
 # rubocop: enable Metrics/BlockLength

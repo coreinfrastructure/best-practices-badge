@@ -4,10 +4,14 @@
 # CII Best Practices badge contributors
 # SPDX-License-Identifier: MIT
 
+# Robots.txt is cached, since it usually is unchanged in execution.
+# We must clear the cache so we can test under different circumstances.
+
 require 'capybara_feature_test'
 
 class RobotsProductionTest < CapybaraFeatureTest
   setup do
+    Rails.cache.clear
     ENV['PUBLIC_HOSTNAME'] = 'bestpractices.coreinfrastructure.org'
   end
 
@@ -33,6 +37,7 @@ end
 
 class RobotsNonproductionTest < CapybaraFeatureTest
   setup do
+    Rails.cache.clear
     ENV['PUBLIC_HOSTNAME'] = 'master.bestpractices.coreinfrastructure.org'
   end
 

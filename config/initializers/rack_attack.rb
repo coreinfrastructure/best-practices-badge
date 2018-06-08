@@ -36,18 +36,6 @@ class Rack::Attack
 
   # Rack::Attack.cache.store = ActiveSupport::Cache::MemoryStore.new
 
-  ### Safelists ###
-
-  # Always allow requests from localhost if testing unless we say otherwise.
-  # In this case, blocklists & throttles are skipped.
-  if Rails.env.test?
-    Rack::Attack.safelist('allow from localhost') do |req|
-      # Requests are allowed if the return value is truthy
-      remote_ip = ClientIp.acquire(req)
-      remote_ip == '127.0.0.1' || remote_ip == '::1'
-    end
-  end
-
   ### Throttle Spammy Clients ###
 
   # If any single client IP is making tons of requests, then they're
@@ -62,12 +50,14 @@ class Rack::Attack
   # Throttle all requests by IP (120rpm)
   #
   # Key: "rack::attack:#{Time.now.to_i/:period}:req/ip:#{req.ip}"
-  throttle(
-    'req/ip',
-    limit: (ENV['RATE_REQ_IP_LIMIT'] || 600).to_i,
-    period: (ENV['RATE_REQ_IP_PERIOD'] || 5.minutes).to_i
-  ) do |req|
-    ClientIp.acquire(req) # unless req.path.start_with?('/assets')
+  unless Rails.env.test?
+    throttle(
+      'req/ip',
+      limit: (ENV['RATE_REQ_IP_LIMIT'] || 600).to_i,
+      period: (ENV['RATE_REQ_IP_PERIOD'] || 5.minutes).to_i
+    ) do |req|
+      ClientIp.acquire(req) # unless req.path.start_with?('/assets')
+    end
   end
 
   ### Prevent Brute-Force Login Attacks ###
@@ -82,13 +72,15 @@ class Rack::Attack
   # Throttle POST requests to /login by IP address
   #
   # Key: "rack::attack:#{Time.now.to_i/:period}:logins/ip:#{req.ip}"
-  throttle(
-    'logins/ip',
-    limit: (ENV['RATE_LOGINS_IP_LIMIT'] || 20).to_i,
-    period: (ENV['RATE_LOGINS_IP_PERIOD'] || 20.seconds).to_i
-  ) do |req|
-    if LOGIN_PATHS.include?(req.path) && req.post?
-      ClientIp.acquire(req)
+  unless Rails.env.test?
+    throttle(
+      'logins/ip',
+      limit: (ENV['RATE_LOGINS_IP_LIMIT'] || 20).to_i,
+      period: (ENV['RATE_LOGINS_IP_PERIOD'] || 20.seconds).to_i
+    ) do |req|
+      if LOGIN_PATHS.include?(req.path) && req.post?
+        ClientIp.acquire(req)
+      end
     end
   end
 
@@ -100,14 +92,16 @@ class Rack::Attack
   # throttle logins for another user and force their login requests to be
   # denied, but that's not very common and shouldn't happen to you. (Knock
   # on wood!)
-  throttle(
-    'logins/email',
-    limit: (ENV['RATE_LOGINS_EMAIL_LIMIT'] || 5).to_i,
-    period: (ENV['RATE_LOGINS_EMAIL_PERIOD'] || 20.seconds).to_i
-  ) do |req|
-    if LOGIN_PATHS.include?(req.path) && req.post? && req.params['session']
-      # return the email to throttle logins on if present, nil otherwise
-      req.params['session']['email']
+  unless Rails.env.test?
+    throttle(
+      'logins/email',
+      limit: (ENV['RATE_LOGINS_EMAIL_LIMIT'] || 5).to_i,
+      period: (ENV['RATE_LOGINS_EMAIL_PERIOD'] || 20.seconds).to_i
+    ) do |req|
+      if LOGIN_PATHS.include?(req.path) && req.post? && req.params['session']
+        # return the email to throttle logins on if present, nil otherwise
+        req.params['session']['email']
+      end
     end
   end
 
@@ -121,13 +115,15 @@ class Rack::Attack
   # by email address; once an email address has been signed up, it
   # stays that way.
   #
-  throttle(
-    'signup/ip',
-    limit: (ENV['RATE_SIGNUP_IP_LIMIT'] || 20).to_i,
-    period: (ENV['RATE_SIGNUP_IP_PERIOD'] || 10.seconds).to_i
-  ) do |req|
-    if SIGNUP_PATHS.include?(req.path) && req.post?
-      ClientIp.acquire(req)
+  unless Rails.env.test?
+    throttle(
+      'signup/ip',
+      limit: (ENV['RATE_SIGNUP_IP_LIMIT'] || 20).to_i,
+      period: (ENV['RATE_SIGNUP_IP_PERIOD'] || 10.seconds).to_i
+    ) do |req|
+      if SIGNUP_PATHS.include?(req.path) && req.post?
+        ClientIp.acquire(req)
+      end
     end
   end
 
@@ -144,6 +140,53 @@ class Rack::Attack
   #    {},   # headers
   #    ['']] # body
   # end
+
+  ### Block an IP address that is repeatedly making suspicious requests.
+  # After FAIL2BAN_MAXRETRY blocked requests in FAIL2BAN_FINDTIME seconds,
+  # block all requests from that client IP for FAIL2BAN_BANTIME seconds.
+  # A request is blocked if req.path matches the regex FAIL2BAN_PATH or
+  # req.query_string matches the regex FAIL2BAN_QUERY.
+  FAIL2BAN_MAXRETRY = (ENV['FAIL2BAN_MAXRETRY'] || 3).to_i
+  FAIL2BAN_FINDTIME = (ENV['FAIL2BAN_FINDTIME'] || 10.minutes).to_i
+  FAIL2BAN_BANTIME = (ENV['FAIL2BAN_BANTIME'] || 20.minutes).to_i
+  # Default regexp for paths to disallow.  Coordinate with "robots.txt"
+  # so that we don't ban properly-behaving web crawlers, see:
+  # https://www.ctrl.blog/entry/httpd-wordpress-deny
+  # https://gist.github.com/cerlestes/1d6f1549f06350f7c4f4
+  # We don't need to make this locale-specific, because we'll reject
+  # these *before* we hit the "redirect to locale" code.
+  # Good attackers will make better attacks than these; the point here
+  # is to quickly squelch script kiddies with badly-written/old attacks,
+  # so we have more time to deal with other things.
+  # "/admin" is a common admin URL. "/wp-" handles attacks on WordPress.
+  # "/cgi" includes "cgi-bin", a standard prefix for old-school CGI programs.
+  # (?:...) is a non-capturing regexp group - we don't need to capture it.
+  FAIL2BAN_PATH = Regexp.compile(
+    ENV['FAIL2BAN_PATH'] ||
+    '^/(?:admin|backup|cgi|command|common|config|' \
+    'data|dbadmin|dump|error_message|install|joomla|' \
+    'muieblackcat|myadmin|mysql|onvif|options|' \
+    'phpadmin|phpmanager|phpmyadmin|phpMyAdmin|PHPMYADMIN|' \
+    'scripts|setup|sqladmin|sql-admin|submitticket|' \
+    'temp|upload|w00tw00t|webadmin|' \
+    'wootwoot|WootWoot|WooTWooT|wp-|xmlrpc)'
+  )
+  # FAIL2BAN_QUERY = Regexp.compile(ENV['FAIL2BAN_QUERY'] || '\/etc\/passwd')
+  Rack::Attack.blocklist('fail2ban pentesters') do |req|
+    # `filter` returns truthy value if request fails,
+    # or if it's from a previously banned IP
+    # so the request is blocked
+    Rack::Attack::Fail2Ban.filter(
+      "pentesters-#{ClientIp.acquire(req)}",
+      maxretry: FAIL2BAN_MAXRETRY,
+      findtime: FAIL2BAN_FINDTIME,
+      bantime: FAIL2BAN_BANTIME
+    ) do
+      # The count for the IP is incremented if the return value is truthy
+      FAIL2BAN_PATH.match(req.path)
+      # || FAIL2BAN_QUERY.match(CGI.unescape(req.query_string))
+    end
+  end
 end
 # rubocop: enable Style/IfUnlessModifier, Style/MethodCalledOnDoEndBlock
 # rubocop: enable Style/ClassAndModuleChildren

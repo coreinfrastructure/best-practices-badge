@@ -116,6 +116,18 @@ The application is configured by various environment variables:
     - logins/ip: RATE_LOGINS_IP_LIMIT, RATE_LOGINS_IP_PERIOD
     - logins/email: RATE_LOGINS_EMAIL_LIMIT, RATE_LOGINS_EMAIL_PERIOD
     - signup/ip: RATE_SIGNUP_IP_LIMIT, RATE_SIGNUP_IP_PERIOD
+* FAIL2BAN_details - fail2ban settings (where repeated failures can lead
+  to a temporary ban).  This blocks an IP address that is
+  repeatedly making suspicious requests.
+  After FAIL2BAN_MAXRETRY blocked requests in FAIL2BAN_FINDTIME seconds,
+  we block all requests from that client IP for FAIL2BAN_BANTIME seconds.
+  A request is blocked if req.path matches the regex FAIL2BAN_PATH.
+  The source code includes some plausible defaults in
+  "config/initializers/rack_attack.rb"; the production settings
+  are not public.  This isn't the same thing as having a *real*
+  web application firewall, but it's simple and counters some
+  trivial attacks.  This should be coordinated with robots.txt so that
+  robots won't be fooled into following a link to a banned page.
 
 You can make cryptographically random values (such as keys)
 using "rails secret".  E.g., to create 64 random hexadecimal digits, use:

@@ -1245,6 +1245,14 @@ config/initializers/rack_attack.rb.  These settings are
 - logins/email
 - signup/ip
 
+We also have a set of simple FAIL2BAN settings that temporarily
+bans an IP address if it makes too many "suspicious" requests.
+The exact production settings are not documented here, since we
+don't want to tell attackers what we look for.
+This isn't the same thing as having a *real*
+web application firewall, but it's simple and counters some
+trivial attacks.
+
 To determine the remote client IP address (for our purposes) we use the
 the next-to-last value of the comma-space-separated value
 "HTTP_X_FORWARDED_FOR" (from the HTTP header X-Forwarded-For).

@@ -115,8 +115,22 @@ class StaticPagesControllerTest < ActionDispatch::IntegrationTest
     assert_includes @response.body, 'included in the percentage calculations'
   end
 
+  test 'Ban WordPress admin request' do
+    get '/wp-admin'
+    assert_response :forbidden
+    assert_includes @response.body, 'Forbidden'
+  end
+
+  # In a few special cases we fail fast to minimize processing of it.
+  test 'No such page in well-known returns 404' do
+    get '/.well-known/i-do-not-exist'
+    assert_response :missing
+    assert_includes @response.body, 'Error 404: Page Not Found'
+    assert_includes @response.body, 'Sorry, no such page exists.'
+  end
+
   # In most cases we attach a locale, redirect, and then fail on missing.
-  test 'Missing page should return 404' do
+  test 'Missing page should redirect and then return 404' do
     get '/asdfasdfasdf'
     assert_redirected_to '/en/asdfasdfasdf'
     follow_redirect!
@@ -125,12 +139,11 @@ class StaticPagesControllerTest < ActionDispatch::IntegrationTest
     assert_includes @response.body, 'Sorry, no such page exists'
   end
 
-  # In a few special cases we fail fast to minimize processing of it.
-  test 'wp-login.php gets a fastpath to error 404' do
-    get '/wp-login.php'
+  test 'No such page in a locale returns 404' do
+    get '/en/i-do-not-exist'
     assert_response :missing
     assert_includes @response.body, 'Error 404: Page Not Found'
-    assert_includes @response.body, 'Sorry, no such page exists'
+    assert_includes @response.body, 'Sorry, no such page exists.'
   end
 end
 # rubocop: enable Metrics/BlockLength

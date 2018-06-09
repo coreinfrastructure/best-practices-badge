@@ -8,7 +8,7 @@ require 'test_helper'
 
 # Inherit from ActionDispatch::IntegrationTest because
 # ActionController::TestCase is now obsolete.
-# rubocop: disable Metrics/BlockLength
+# rubocop: disable Metrics/BlockLength, Metrics/ClassLength
 class StaticPagesControllerTest < ActionDispatch::IntegrationTest
   test 'should get home' do
     get root_path(locale: 'en')
@@ -129,11 +129,8 @@ class StaticPagesControllerTest < ActionDispatch::IntegrationTest
     assert_includes @response.body, 'Sorry, no such page exists.'
   end
 
-  # In most cases we attach a locale, redirect, and then fail on missing.
   test 'Missing page should redirect and then return 404' do
     get '/asdfasdfasdf'
-    assert_redirected_to '/en/asdfasdfasdf'
-    follow_redirect!
     assert_response :missing
     assert_includes @response.body, 'Error 404: Page Not Found'
     assert_includes @response.body, 'Sorry, no such page exists'
@@ -145,5 +142,41 @@ class StaticPagesControllerTest < ActionDispatch::IntegrationTest
     assert_includes @response.body, 'Error 404: Page Not Found'
     assert_includes @response.body, 'Sorry, no such page exists.'
   end
+
+  test 'No such page that looks like a locale returns 404' do
+    get '/no-such-page'
+    assert_response :missing
+    assert_includes @response.body, 'Error 404: Page Not Found'
+    assert_includes @response.body, 'Sorry, no such page exists.'
+  end
+
+  test 'No such page in fr locale returns 404 with fr messages' do
+    get '/fr/no-such-page'
+    assert_response :missing
+    assert_includes @response.body, 'Erreur 404 - Page non trouvée'
+    assert_includes @response.body, 'Désolé, cette page n&#39;existe pas.'
+  end
+
+  # Accept-Language is an HTTP header sent by the browser to tell us
+  # what locale to prefer.  Test to ensure that if we do NOT get a
+  # locale in the URL, we'll use the browser Accept-Language value.
+  test 'No such page with fr Accept-Language returns 404 with fr messages' do
+    get '/no-such-page', headers: {
+      'Accept-Language' => 'fr-CH, fr;q=0.9, en;q=0.8, de;q=0.7, *;q=0.5'
+    }
+    assert_response :missing
+    assert_includes @response.body, 'Erreur 404 - Page non trouvée'
+    assert_includes @response.body, 'Désolé, cette page n&#39;existe pas.'
+  end
+
+  # Accept-Language is overridden by a URL locale on an error message.
+  test 'Express locale overrides Accept-Language in no such page' do
+    get '/en/no-such-page', headers: {
+      'Accept-Language' => 'fr-CH, fr;q=0.9, en;q=0.8, de;q=0.7, *;q=0.5'
+    }
+    assert_response :missing
+    assert_includes @response.body, 'Error 404: Page Not Found'
+    assert_includes @response.body, 'Sorry, no such page exists.'
+  end
 end
-# rubocop: enable Metrics/BlockLength
+# rubocop: enable Metrics/BlockLength, Metrics/ClassLength

@@ -269,5 +269,23 @@ class ProjectTest < ActiveSupport::TestCase
     )
   end
   # rubocop:enable Metrics/BlockLength
+
+  test 'compute_tiered_percentage works' do
+    # Simple unit test of 'compute_tiered_percentage'
+    p = Project.new
+    # Very different numbers so correct answer unlikely to happen by chance
+    p.badge_percentage_0 = 31
+    p.badge_percentage_1 = 17
+    p.badge_percentage_2 = 4
+    assert_equal 31, p.compute_tiered_percentage
+    p.badge_percentage_0 = 100
+    assert_equal 117, p.compute_tiered_percentage
+    p.badge_percentage_1 = 100
+    assert_equal 204, p.compute_tiered_percentage
+    p.badge_percentage_2 = 100
+    assert_equal 300, p.compute_tiered_percentage
+    p.badge_percentage_0 = 85
+    assert_equal 85, p.compute_tiered_percentage
+  end
 end
 # rubocop:enable Metrics/ClassLength

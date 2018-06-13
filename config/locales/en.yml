@@ -353,8 +353,12 @@ en:
   projects:
     index:
       all: All
-      passing_100: Passing (100%)
-      in_progress_variable: In Progress (%{percent}% or more)
+      passing_100: Passing at least (100%+ tiered)
+      in_progress_variable: In Progress (%{percent}%+ tiered)
+      silver_in_progress_variable: Passing, partial silver (%{percent}%+ tiered)
+      silver_200: Silver (200%+ tiered)
+      gold_in_progress_variable: Silver, partial gold (%{percent}%+ tiered)
+      gold_300: Gold (300%)
       add_link: Add
       add_new: Add New Project
       badge_status: Badge status
@@ -370,9 +374,9 @@ en:
       license: License
       owner: Owner
       last_achieved: Last achieved at
-      pachieved: "% Achieved"
+      pachieved: "Tiered %"
       badge: Badge
-      can_also_sort: 'You can also sort by the following:'
+      can_also_sort: 'The "tiered %" field shows 300% for gold, 200% for silver, and 100% for passing, and adds progress after the highest-earned badge.  You can also sort by the following:'
       repository_url: repository URL
       create_time: create time (for the badge entry)
       update_time: last update time (for the badge entry)

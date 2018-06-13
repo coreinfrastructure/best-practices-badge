@@ -1,11 +1,21 @@
 <%
   badge_status_options = [
     [t('.all'), nil],
-    [t('.passing_100'), 100],
     [t('.in_progress_variable', percent: 25), 25],
     [t('.in_progress_variable', percent: 50), 50],
     [t('.in_progress_variable', percent: 75), 75],
-    [t('.in_progress_variable', percent: 90), 90]
+    [t('.in_progress_variable', percent: 90), 90],
+    [t('.passing_100'), 100],
+    [t('.silver_in_progress_variable', percent: 125), 125],
+    [t('.silver_in_progress_variable', percent: 150), 150],
+    [t('.silver_in_progress_variable', percent: 175), 175],
+    [t('.silver_in_progress_variable', percent: 190), 190],
+    [t('.silver_200'), 200],
+    [t('.gold_in_progress_variable', percent: 225), 225],
+    [t('.gold_in_progress_variable', percent: 250), 250],
+    [t('.gold_in_progress_variable', percent: 275), 275],
+    [t('.gold_in_progress_variable', percent: 290), 290],
+    [t('.gold_300'), 300],
   ]
 %>
 <% provide :nav_extras do %>

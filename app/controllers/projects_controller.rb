@@ -34,7 +34,7 @@ class ProjectsController < ApplicationController
   # These are the only allowed values for "sort" (if a value is provided)
   ALLOWED_SORT =
     %w[
-      id name achieved_passing_at badge_percentage_0
+      id name achieved_passing_at tiered_percentage
       homepage_url repo_url updated_at user_id created_at
     ].freeze
 
@@ -78,7 +78,8 @@ class ProjectsController < ApplicationController
   def delete_form; end
 
   BADGE_PROJECT_FIELDS =
-    'id, updated_at, badge_percentage_0, badge_percentage_1, badge_percentage_2'
+    'id, name, updated_at, tiered_percentage, ' \
+    'badge_percentage_0, badge_percentage_1, badge_percentage_2'
 
   # rubocop:disable Metrics/MethodLength
   def badge
@@ -231,6 +232,7 @@ class ProjectsController < ApplicationController
   # forces loading of user data (where we get the user name/nickname).
   FEED_DISPLAY_FIELDS = 'projects.id as id, projects.name as name, ' \
     'projects.updated_at as updated_at, projects.created_at as created_at, ' \
+    'tiered_percentage, ' \
     'badge_percentage_0, badge_percentage_1, badge_percentage_2, ' \
     'homepage_url, repo_url, description, user_id'
 
@@ -458,7 +460,8 @@ class ProjectsController < ApplicationController
 
   HTML_INDEX_FIELDS = 'projects.id, projects.name, description, ' \
     'homepage_url, repo_url, license, projects.user_id, ' \
-    'achieved_passing_at, projects.updated_at, badge_percentage_0'
+    'achieved_passing_at, projects.updated_at, badge_percentage_0, ' \
+    'tiered_percentage'
 
   # rubocop:disable Metrics/PerceivedComplexity
   # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity

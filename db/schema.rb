@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180527231839) do
+ActiveRecord::Schema.define(version: 20180612170808) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -361,6 +361,7 @@ ActiveRecord::Schema.define(version: 20180527231839) do
     t.text "achieve_passing_justification"
     t.string "achieve_silver_status", default: "Unmet", null: false
     t.text "achieve_silver_justification"
+    t.integer "tiered_percentage"
     t.index ["achieved_passing_at"], name: "index_projects_on_achieved_passing_at"
     t.index ["badge_percentage_0"], name: "index_projects_on_badge_percentage_0"
     t.index ["badge_percentage_1"], name: "index_projects_on_badge_percentage_1"
@@ -372,6 +373,7 @@ ActiveRecord::Schema.define(version: 20180527231839) do
     t.index ["name"], name: "index_projects_on_name"
     t.index ["repo_url"], name: "index_projects_on_repo_url"
     t.index ["repo_url"], name: "nonempty_repo_urls", unique: true, where: "((repo_url IS NOT NULL) AND ((repo_url)::text <> ''::text))"
+    t.index ["tiered_percentage"], name: "index_projects_on_tiered_percentage"
     t.index ["updated_at"], name: "index_projects_on_updated_at"
     t.index ["user_id", "created_at"], name: "index_projects_on_user_id_and_created_at"
     t.index ["user_id"], name: "index_projects_on_user_id"

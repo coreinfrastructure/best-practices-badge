@@ -153,6 +153,10 @@ zh-CN:
       all: 所有
       passing_100: 通过（100％）
       in_progress_variable: 正在进行中（%{percent}％以上）
+      silver_in_progress_variable:
+      silver_200:
+      gold_in_progress_variable:
+      gold_300:
     table:
       id: Id
       name: 名称

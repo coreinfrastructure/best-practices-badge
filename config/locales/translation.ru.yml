@@ -390,6 +390,10 @@ ru:
       text_search: Искать по тексту
       name_or_description: Название или описание
       search: Поиск
+      silver_in_progress_variable:
+      silver_200:
+      gold_in_progress_variable:
+      gold_300:
     table:
       id: Id
       name: Название

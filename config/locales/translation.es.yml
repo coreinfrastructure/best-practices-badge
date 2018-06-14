@@ -208,6 +208,10 @@ es:
       text_search:
       name_or_description:
       search:
+      silver_in_progress_variable:
+      silver_200:
+      gold_in_progress_variable:
+      gold_300:
     table:
       id:
       name:

@@ -181,6 +181,10 @@ ja:
       all: すべて
       passing_100: 合格（100％）
       in_progress_variable: 進行中（%{percent}％以上）
+      silver_in_progress_variable:
+      silver_200:
+      gold_in_progress_variable:
+      gold_300:
     table:
       id: ID
       name: 名称

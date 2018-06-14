@@ -232,6 +232,10 @@ fr:
       all: Tous
       passing_100: Atteint (100%)
       in_progress_variable: En cours (%{percent}% ou plus)
+      silver_in_progress_variable:
+      silver_200:
+      gold_in_progress_variable:
+      gold_300:
     table:
       id: Id
       name: Nom

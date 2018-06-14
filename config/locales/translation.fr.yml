@@ -230,8 +230,8 @@ fr:
       name_or_description: Nom ou texte de description
       search: Recherche
       all: Tous
-      passing_100: Atteint (100%)
-      in_progress_variable: En cours (%{percent}% ou plus)
+      passing_100: Atteint (niveau 100% ou plus)
+      in_progress_variable: En cours (niveau %{percent}% ou plus)
       silver_in_progress_variable:
       silver_200:
       gold_in_progress_variable:
@@ -244,9 +244,12 @@ fr:
       license: Licence
       owner: Propriétaire
       last_achieved: Obtenu le
-      pachieved: "% Atteint"
-      can_also_sort: 'Vous pouvez également trier par les critères
-        suivants :'
+      pachieved: Niveau %
+      can_also_sort: >-
+        Le « Niveau % » utilise 300% pour gold, 200% pour silver
+        et 100% pour atteint, et montre le progrès au-delà du
+        badge de plus haut niveau obtenu. Vous pouvez également
+        trier par les critères suivants :
       repository_url: URL du dépôt
       create_time: date de création (pour la soumission)
       update_time: dernière date de mise à jour (pour la soumission)

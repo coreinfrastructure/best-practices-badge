@@ -29,6 +29,7 @@ For more information on developing secure software, see
 
 The following figures summarize why we think this application
 is adequately secure (more detail is provided in the rest of this document):
+The figures are simply a summary; the text below provides the details.
 
 ![Assurance case summary](./assurance-case.png)
 ![Assurance case in lifecycle](./assurance-case-lifecycle.png)
@@ -38,10 +39,11 @@ These figures are in Claims, Arguments and Evidence (CAE) notation,
 which is a simple notation often used for assurance cases.
 Ovals are claims or sub-claims, while rounded rectangles are the supporting
 arguments justifying the claims.
-The figures are simply a summary; the text below provides the details.
-We do not show evidence in the figures, but provide the evidence in
+Evidence, where shown, are in rectangles.
+We do not show most evidence in the figures, but provide the evidence in
 the supporting text below instead, because large figures are time-consuming
-to edit.
+to edit and for purposes providing most evidence only in the supporting
+test is adequate.
 
 Our overall security approach is called
 defense-in-breadth, that is, we consider
@@ -106,10 +108,16 @@ export to .png so that it can viewed on GitHub.)
 
 ## Security Requirements
 
-### Basic Security Requirements
+We believe the basic security requirements have been identified and met.
 
-Here is what BadgeApp must do to be secure (and a few comments about
-how we implement these requirements):
+### Basic security requirements: Confidentiality, Integrity, and Availability
+
+Security requirements are often divided into three areas called the
+"CIA triad": confidentiality, integrity, and availability.
+We do the same here.
+
+Here are the BadgeApp security requirements in terms of the CIA triad
+(along with a few comments about how we implement these requirements):
 
 * Confidentiality:
     - Almost all data we collect is considered public, e.g., all project data,
@@ -221,6 +229,168 @@ In addition, it must avoid being a conduit for others' attacks
 We do this by focusing on having a secure design and countering the
 most common kinds of attacks (as described below).
 
+### Access Control
+
+Many of the CIA triad requirements address "authorized" users,
+and that requires knowing what "authorized" means.
+Thus, like nearly all systems, we must address access control,
+which we can divide into identification, authentication, and authorization.
+
+#### Identification
+
+Normal users must must first identify themselves in one of two ways:
+(1) as a GitHub user with their github account name, or
+(2) as a custom "local" user with their email address.
+
+The BadgeApp application runs on a deployment platform (Heroku),
+which has its own login mechanisms.
+Only those few administrators with deployment platform access have
+authorization to log in there, and those are protected by the
+deployment platform supplier (and thus we do not consider them further here).
+The login credentials in these cases are protected.
+
+#### Authentication
+
+As with most systems, it's critically
+important that authentication work correctly.
+Therefore, in this section we'll go into some detail about how
+authentication works within the BadgeApp application.
+
+This system implements two kinds of users: local and remote.
+Local users log in using a password, but
+user passwords are only stored on the server as
+iterated salted hashes (using bcrypt).
+Remote users use a remote system (we currently only support GitHub)
+using the widely-used OAUTH protocol.
+At the time the application was written, the recommendation
+was to *not* use libraries like Devise, because they were not mature at
+the time. Such libraries have become much more mature, but as of yet
+there hasn't been a good reason to change.
+
+The key code for authentication is the "sessions" controller file
+"app/controllers/sessions_controller.rb".
+In this section we only consider the login mechanism
+built into the BadgeApp.  Heroku has its own login mechanisms, which must
+be carefully controlled but are out of scope here.
+
+A user who views "/login" will be routed to GET sessions#new, which returns
+the login page.  From there:
+
+* A local user login will POST that information to /login, which is
+  routed to session#create along with parameters such as session[email]
+  and session[password].  If the bcrypt'ed hash of the password matches
+  the stored hash, the user is accepted.
+* A remote user login (pushing the "log in with GitHub" button) will
+  invoke GET "/auth/github".  The application then begin an omniauth
+  login, by redirecting the user to "https://github.com/login?"
+  with URL parameters of client_id and return_to.
+  When the GitHub login completes, then per the omniauth spec there's a
+  redirect back to our site to /auth/github/callback, which is
+  routed to session#create along with values such as
+  the parameter session[provider] set to 'GitHub', which we then check
+  by using the omniauth-github gem (this is the "callback phase").
+  If we confirm that GitHub asserts that the user is authenticated,
+  then we accept GitHub's ruling for that github user and log them in.
+  This interaction with GitHub uses GITHUB_KEY and GITHUB_SECRET.
+  For more information, see the documentation on omniauth-github.
+
+The first thing that session#create does is run "counter_fixation";
+this counters session fixation attacks
+(it also saves the forwarding url, in case we want to return to it).
+
+Local users may choose to "remember me" to automatically re-login on
+that specific browser if they use a local account.
+This is implemented using a
+cryptographically random nonce stored in the user's cookie store
+as a permanent cookie.  This nonce
+acts like a password, which is verified against a
+remember_digest value stored in the server
+that is an iterated salted hash (using bcrypt).
+This "remember me" functionality cannot reveal the user's
+original password, and if the server's user database is
+compromised an attacker cannot easily find the nonce.
+The nonce is protected in transit by HTTPS (discussed elsewhere).
+The user_id stored by the user is signed by the server.
+As with any system, the "remember me" functionality has a
+weakness: if the user's system is compromised, others can log
+in as that user.  But this is fundamental to any "remember me"
+functionality, and users must opt in to enable "remember me"
+(by default users must enter their password on each login,
+and the login becomes invalid when the user logs out or when
+the user exits the entire browser, because the cookie for login
+is only a session cookie).
+The "remember me" box was originally implemented
+in commit e79decec67.
+
+A session is created for each user who successfully logs in.
+
+We expressly include tests in our test suite
+of our authentication system
+to ensure that in 'local' accounts correct passwords allow login,
+while incorrect and unfilled passwords lead to login failure.
+It's important to test that certain actions that *must* fail for
+security reasons do indeed fail (testing to ensure that actions will
+fail when they should fail is termed "negative testing").
+We trust external systems to verify their external accounts (that means
+we trust GitHub to verify a GitHub account).
+
+#### Authorization
+
+Users who have not authenticated themselves can only perform
+actions allowed to anyone in the public (e.g., view the home page,
+view the list of projects, and view the information about each project).
+Once users are authenticated they are authorized to perform certain
+additional actions depending on their permissions.
+
+The permissions system is intentionally simple.
+As noted above,
+every user has an account, either a 'local' account or an external
+system account (currently we support GitHub as an external account).
+A user with role='admin' is an administrator;
+few users are administrators, and only those with direct platform (Heroku)
+access can set a user to be an administrator.
+
+Anyone can create a normal user account.
+A user can create as many project entries as desired.
+Each project entry gets a new unique project id and is
+owned by the user who created the project entry.
+
+There are two kinds of rights: "control" rights and "edit" rights.
+
+"Control" rights mean you can delete the project AND
+change who else is allowed to edit (they control their projects'
+entry in the additional_rights table). Anyone with control rights
+also has edit rights.  The project owner has control
+rights to the projects they own,
+and admins have control rights over all projects.
+
+"Edit" rights mean you can edit the project entry. If you have
+control rights over a project you also have edit rights.
+In addition, fellow committers on GitHub for that project,
+and users in the additional_rights table
+who have their user_id listed for that project, get edit rights
+for that project.
+The additional_rights table adds support for groups so that they can
+edit project entries when the project is not on GitHub.
+
+This means that
+a project entry can only be edited (and deleted) by the entry creator,
+an administrator, by others who can prove that they
+can edit that GitHub repository (if it is on GitHub), and by those
+authorized to edit via the additional_rights table.
+Anyone can see the project entry results once they are saved.
+We do require, in the case of a GitHub project entry, that the
+entry creator be logged in via GitHub *and* be someone who can edit that
+project.
+
+We expressly include tests in our test suite
+of our authorization system
+to check that accounts cannot perform actions they are not authorized
+to perform (e.g., edit a project that they do not have edit rights to,
+or delete a project they do not control).
+It's important to test that certain actions that *must* fail for
+security reasons do indeed fail.
+
 ### Assets
 
 As should be clear from the basic requirements above, our assets are:
@@ -258,7 +428,10 @@ would have a financial incentive to help us counter the attacks.
 This makes the attacks themselves less likely
 (since there would be no financial benefit to them).
 
-There's no reason a state actor would attack the site
+Like many commercial sites,
+we do not have the (substantial) resources necessary
+to counter a state actor who decided to directly attack our site.
+However, there's no reason a state actor would directly attack the site
 (we don't store anything that valuable), so while many are very capable,
 we do not expect them to be a threat to this site.
 
@@ -282,51 +455,6 @@ In particular, retrieval of external information is subject to a timeout,
 we use Ruby (a memory-safe language),
 and exceptions halt automated processing for that entry (which merely
 disables automated data gathering for that entry).
-
-The permissions system is intentionally simple.
-Every user has an account, either a 'local' account or an external
-system account (currently we support GitHub as an external account).
-We expressly include tests in our test suite
-to ensure that in 'local' accounts correct passwords allow login,
-while incorrect and unfilled passwords lead to login failure
-(it's important to test that certain actions that *must* fail for
-security reasons do indeed fail).
-We trust external systems to verify their external accounts (that means
-we trust GitHub to verify a GitHub account).
-Anyone can create an account.
-A user with role='admin' is an administrator;
-few users are administrators.
-A user can create as many project entries as desired.
-Each project entry gets a new unique project id and is
-owned by the user who created the project entry.
-
-There are two kinds of rights: "control" rights and "edit" rights.
-
-"Control" rights mean you can delete the project AND
-change who else is allowed to edit (they control their projects'
-entry in the additional_rights table). Anyone with control rights
-also has edit rights.  The project owner has control
-rights to the projects they own,
-and admins have control rights over all projects.
-
-"Edit" rights mean you can edit the project entry. If you have
-control rights over a project you also have edit rights.
-In addition, fellow committers on GitHub for that project,
-and users in the additional_rights table
-who have their user_id listed for that project, get edit rights
-for that project.
-The additional_rights table adds support for groups so that they can
-edit project entries when the project is not on GitHub.
-
-This means that
-a project entry can only be edited (and deleted) by the entry creator,
-an administrator, by others who can prove that they
-can edit that GitHub repository (if it is on GitHub), and by those
-authorized to edit via the additional_rights table.
-Anyone can see the project entry results once they are saved.
-We do require, in the case of a GitHub project entry, that the
-entry creator be logged in via GitHub *and* be someone who can edit that
-project.
 
 Here we have identified the key security requirements and why we believe
 they've been met overall.  However, there is always the possibility that
@@ -1744,9 +1872,12 @@ and how it helps make the software more secure:
       administrator privileges.
 * The software has a strong test suite; our policy requires
   at least 90% statement coverage.
-  In practice our coverage is much higher, indeed it has been 100%
-  for a long time.
-  This makes it easier to update components (e.g., if a third-party component
+  In practice our autoamted test suite coverage is much higher; it has achieved
+  100% statement coverage for a long time.
+  You can verify this by looking at the "CodeCov" value at the
+  [BadgeApp repository](https://github.com/coreinfrastructure/best-practices-badge).
+  This strong test suite
+  makes it easier to update components (e.g., if a third-party component
   has a publicly disclosed vulnerability).
   The test suite also makes it easier to make other fixes (e.g., to harden
   something) and have fairly high
@@ -2038,72 +2169,9 @@ The BadgeApp application achieves its own badge.
 This is evidence that the BadgeApp application is
 applying practices expected in a well-run FLOSS project.
 
-## Details about authentication (login)
-
-As with most systems, it's important that authentication work correctly.
-The key code for authentication is the "sessions" controller file
-"app/controllers/sessions_controller.rb".
-In this section we only consider the login mechanism
-built into the BadgeApp.  Heroku has its own login mechanisms, which must
-be carefully controlled but are out of scope here.
-
-This system implements two kinds of users: local and remote.
-Local users log in using a password, but
-user passwords are only stored on the server as
-iterated salted hashes (using bcrypt).
-Remote users use a remote system (we currently only support GitHub).
-
-A user who views "/login" will be routed to GET sessions#new, which returns
-the login page.  From there:
-
-* A local user login will POST that information to /login, which is
-  routed to session#create along with parameters such as session[email]
-  and session[password].  If the bcrypt'ed hash of the password matches
-  the stored hash, the user is accepted.
-* A remote user login (pushing the "log in with GitHub" button) will
-  invoke GET "/auth/github".  The application then begin an omniauth
-  login, by redirecting the user to "https://github.com/login?"
-  with URL parameters of client_id and return_to.
-  When the GitHub login completes, then per the omniauth spec there's a
-  redirect back to our site to /auth/github/callback, which is
-  routed to session#create along with values such as
-  the parameter session[provider] set to 'GitHub', which we then check
-  by using the omniauth-github gem (this is the "callback phase").
-  If we confirm that GitHub asserts that the user is authenticated,
-  then we accept GitHub's ruling for that github user and log them in.
-  This interaction with GitHub uses GITHUB_KEY and GITHUB_SECRET.
-  For more information, see the documentation on omniauth-github.
-
-The first thing that session#create does is run "counter_fixation";
-this counters session fixation attacks
-(it also saves the forwarding url, in case we want to return to it).
-
-Local users may choose to "remember me" to automatically re-login on
-that specific browser if they use a local account.
-This is implemented using a
-cryptographically random nonce stored in the user's cookie store
-as a permanent cookie.  This nonce
-acts like a password, which is verified against a
-remember_digest value stored in the server
-that is an iterated salted hash (using bcrypt).
-This "remember me" functionality cannot reveal the user's
-original password, and if the server's user database is
-compromised an attacker cannot easily find the nonce.
-The nonce is protected in transit by HTTPS (discussed elsewhere).
-The user_id stored by the user is signed by the server.
-As with any system, the "remember me" functionality has a
-weakness: if the user's system is compromised, others can log
-in as that user.  But this is fundamental to any "remember me"
-functionality, and users must opt in to enable "remember me"
-(by default users must enter their password on each login,
-and the login becomes invalid when the user logs out or when
-the user exits the entire browser, because the cookie for login
-is only a session cookie).
-The "remember me" box was originally implemented
-in commit e79decec67.
-
-A session is created for each user who successfully logs in.
-See the discussion above for more information on how we handle sessions.
+You can see the
+[CII Best Practices Badge entry for the BadgeApp](https://bestpractices.coreinfrastructure.org/en/projects/1/0).
+Note that we achieve a gold badge.
 
 ## Organizational Controls
 

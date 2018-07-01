@@ -81,23 +81,35 @@ feeding back as appropriate.
 Each process is (notionally) run in parallel;
 each receives inputs and produces outputs.
 
-Below are the overall security requirements, followed by how we approach
-security in the rest of the software development processes:
-design, implementation,
-verification, supply chain (reuse), and deployment/operations.
-This is followed by a discussion about security in the
-development environment and our people.
-Note that the project receives its own badge
-(the CII best practices badge),
-which provides additional evidence that it applies best practices
-that can lead to more secure software.
-We then provide details about authentication (login); authentication
-is a cross-cutting and critical supporting security mechanism, so
-it's easier to describe it all in one place.
+The following sections are organized like the assurance case figures:
 
-After that we discuss controls, in the context of the
-[Center for Internet Security (CIS) Controls](https://www.cisecurity.org/controls/)
-(aka critical controls).
+* We begin with the overall security requirements.
+  This includes not just the high-level requirements in terms
+  of confidentiality, integrity, and availability, but also
+  access control in terms of identification, authentication (login),
+  and authorization.  Authentication
+  is a cross-cutting and critical supporting security mechanism, so
+  it's easier to describe it all in one place.
+* This is followed by
+  security in the rest of the software development processes:
+  design, implementation,
+  verification, supply chain (reuse), and deployment/operations.
+* This is followed by a discussion about security in the
+  development environment and the people involved in development.
+* We close with a discussion of certifications and controls.
+  Certification processes
+  can help us find something we missed, as well as provide confidence
+  that we haven't missed anything important).
+  Note that the project receives its own badge
+  (the CII best practices badge),
+  which provides additional evidence that it applies best practices
+  that can lead to more secure software.
+  Similarly, selecting IA controls can help us review important issues
+  to ensure that the system will be adequately secure in its intended
+  environment (including any compensating controls added to its environment).
+  We controls in the context of the
+  [Center for Internet Security (CIS) Controls](https://www.cisecurity.org/controls/)
+  (aka critical controls).
 
 We conclude with a short discussion of residual risks,
 describe the vulnerability report handling process, and make
@@ -462,7 +474,7 @@ a mistake could lead to failure to meet these requirements.
 It is not possible to eliminate all possible risks; instead,
 we focus on *managing* risks.
 We manage our security risks by
-implementing security in all our software development processes.
+implementing security in our software development processes.
 We also protect our development environment and choose people
 who will help support this.
 The following sections describe how we've managed our security-related risks.
@@ -1807,8 +1819,13 @@ and how it helps make the software more secure:
   Our style checking tools detect misleading indentation;
   <a href="http://www.dwheeler.com/essays/apple-goto-fail.html#indentation">this
   counters the mistake in the Apple goto fail vulnerability</a>.
-* Security vulnerability scanner (for finding new vulnerabilities).
-  We use brakeman, a static source code analyzer that focuses
+* Source code weakness analyzer (for finding vulnerabilities in custom code).
+  A source code weakness analyzer, also known as a security vulnerability
+  scanner, examines the source code to identify vulnerabilities.
+  This is one of many kinds of "static analysis" tools, that is, a tool
+  that doesn't run the code (and thus is not limited to examining only the
+  cases of specific inputs).
+  We use brakeman, a source code weakness analyzer that focuses
   on finding security issues in Ruby on Rails applications.
   Note that this is separate from the automatic detection of
   third-party components with publicly-known vulnerabilities;
@@ -2156,7 +2173,9 @@ Jason Dossett has a PhD in Physics from The University of Texas at Dallas,
 and has been involved in software development for many years.
 He has reviewed and is familiar with the security assurance case here.
 
-## Certifications (receive CII best practices badge)
+## Certifications and Controls
+
+### Certifications (receive CII best practices badge)
 
 One way to increase confidence in an application is to pass
 relevant certifcations.  In our case, the BadgeApp is the result
@@ -2173,7 +2192,7 @@ You can see the
 [CII Best Practices Badge entry for the BadgeApp](https://bestpractices.coreinfrastructure.org/en/projects/1/0).
 Note that we achieve a gold badge.
 
-## Organizational Controls
+### Organizational Controls
 
 The
 [Center for Internet Security (CIS) Controls](https://www.cisecurity.org/controls/)
@@ -2306,6 +2325,8 @@ believe they are acceptable:
 As noted in CONTRIBUTING.md, if anyone finds a
 significant vulnerability, or evidence of one, we ask that they
 send that information to at least one of the security contacts.
+The CONTRIBUTING.md file explains how to report a vulnerability;
+below we describe what happens once vulnerability is reported.
 
 Whoever receives that report will share that information with the
 other security contacts, and one of them will analyze it:
@@ -2315,11 +2336,17 @@ other security contacts, and one of them will analyze it:
   the reporter can reply and start the process again).
 * If it is a bug but not security vulnerability, the security contact
   will create an issue as usual for repair.
-* If it a security vulnerability, one of the security contacts will
+* If it is a security vulnerability, one of the security contacts will
   fix it in a *local* git repository and *not* share it with the world
   until the fix is ready.  An issue will *not* be filed, since those
   are public.  If it needs review, the review will not be public.
+  Discussions will be held, as much as practical, using encrypted
+  channels (e.g., using email systems that support hop-to-hop encryption).
   Once the fix is ready, it will be quickly moved through all tiers.
+  The goal is to minimize the risk of attackers exploiting the problem
+  before it is fixed.  Our goal is to fix any real vulnerability within
+  two calendar weeks of a report (and do it faster if practical);
+  the actual time will depend on the difficulty of repair.
 
 Once the fix is in the final production system, credit will be
 publicly given to the vulnerability reporter (unless the reporter

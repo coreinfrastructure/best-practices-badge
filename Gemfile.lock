@@ -160,9 +160,8 @@ GEM
     json (2.1.0)
     jwt (1.5.6)
     kramdown (1.17.0)
-    license_finder (5.2.0)
+    license_finder (5.3.0)
       bundler
-      httparty
       rubyzip
       thor
       toml (= 0.2.0)
@@ -459,7 +458,7 @@ DEPENDENCIES
   jquery-rails (= 4.3.3)
   jquery-ui-rails (= 6.0.1)
   json (= 2.1.0)
-  license_finder (= 5.2.0)
+  license_finder (= 5.3.0)
   lograge (= 0.10.0)
   mail (= 2.7.0)
   mdl (= 0.4.0)

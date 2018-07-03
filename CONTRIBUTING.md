@@ -169,8 +169,8 @@ If you find a significant vulnerability, or evidence of one,
 please send an email to the security contacts that you have such
 information, and we'll tell you the next steps.
 For now, the security contacts are:
-David A. Wheeler <dwheelerNOSPAM@ida.org>,
-Jason Dossett <jdossettNOSPAM@ida.org>,
+David A. Wheeler <dwheelerNOSPAM@dwheeler.com>,
+Jason Dossett <jdossettNOSPAM@utdallas.edu>,
 and
 Dan Kohn <danNOSPAM@linuxfoundation.com>
 (remove the NOSPAM markers).

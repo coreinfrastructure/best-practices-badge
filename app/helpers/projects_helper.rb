@@ -7,7 +7,8 @@
 module ProjectsHelper
   MARKDOWN_RENDERER = Redcarpet::Render::HTML.new(
     filter_html: true, no_images: true,
-    no_styles: true, safe_links_only: true
+    no_styles: true, safe_links_only: true,
+    link_attributes: { rel: 'nofollow' }
   )
   MARKDOWN_PROCESSOR = Redcarpet::Markdown.new(
     MARKDOWN_RENDERER,

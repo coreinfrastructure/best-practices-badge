@@ -384,7 +384,6 @@ ActiveRecord::Schema.define(version: 20180612170808) do
     t.string "uid"
     t.string "name"
     t.string "nickname"
-    t.citext "unencrypted_email"
     t.string "password_digest"
     t.string "secret_token"
     t.string "validation_code"
@@ -407,8 +406,6 @@ ActiveRecord::Schema.define(version: 20180612170808) do
     t.index ["encrypted_email_bidx"], name: "index_users_on_encrypted_email_bidx"
     t.index ["last_login_at"], name: "index_users_on_last_login_at"
     t.index ["uid"], name: "index_users_on_uid"
-    t.index ["unencrypted_email"], name: "index_users_on_unencrypted_email"
-    t.index ["unencrypted_email"], name: "unique_local_email", unique: true, where: "((provider)::text = 'local'::text)"
   end
 
   create_table "versions", id: :serial, force: :cascade do |t|

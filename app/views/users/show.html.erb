@@ -49,11 +49,8 @@
   <% end %>
   <% if current_user && (@user == current_user || current_user.admin?) %>
     <% if @user.encrypted_email?
-         begin
-           user_email = @user.email
-         rescue
-           user_email = 'CANNOT_DECRYPT'
-         end %>
+         user_email = @user.email_if_decryptable
+    %>
       | <a href="mailto:<%= CGI::escape(user_email).html_safe %>"><%=
         t('.send_email_to') + user_email.to_s %></a>
     <% end %>
@@ -69,6 +66,8 @@
       <p><%= t '.is_admin' %></p>
     <% end %>
   <% end %>
+  <a class="hidden" href="/<%= I18n.locale
+    %>/admin">Admin link (do not use unless authorized)</a>
  </div>
 </div>
 </div>

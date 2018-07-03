@@ -54,7 +54,7 @@ class Project < ApplicationRecord
 
   scope :gteq, (
     lambda do |floor|
-      where(Project.arel_table[:badge_percentage_0].gteq(floor.to_i))
+      where(Project.arel_table[:tiered_percentage].gteq(floor.to_i))
     end
   )
 
@@ -62,7 +62,7 @@ class Project < ApplicationRecord
 
   scope :lteq, (
     lambda do |ceiling|
-      where(Project.arel_table[:badge_percentage_0].lteq(ceiling.to_i))
+      where(Project.arel_table[:tiered_percentage].lteq(ceiling.to_i))
     end
   )
 
@@ -309,11 +309,26 @@ class Project < ApplicationRecord
     update_passing_times(old_badge_percentage) if level == '0'
   end
 
+  def compute_tiered_percentage
+    if badge_percentage_0 < 100
+      badge_percentage_0
+    elsif badge_percentage_1 < 100
+      badge_percentage_1 + 100
+    else
+      badge_percentage_2 + 200
+    end
+  end
+
+  def update_tiered_percentage
+    self.tiered_percentage = compute_tiered_percentage
+  end
+
   # Update the badge percentages for all levels.
   def update_badge_percentages
     Criteria.each_key do |level|
       update_badge_percentage(level)
     end
+    update_tiered_percentage
   end
 
   # Return owning user's name for purposes of display.
@@ -324,10 +339,10 @@ class Project < ApplicationRecord
   # Update badge percentages for all project entries, and send emails
   # to any project where this causes loss or gain of a badge.
   # Use this after the badging rules have changed.
-  # We need this we precalculate and store percentages in the database;
+  # We precalculate and store percentages in the database;
   # this speeds up many actions, but it means that a change in the rules
   # doesn't automatically change the precalculated values.
-  # rubocop:disable Metrics/MethodLength
+  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   def self.update_all_badge_percentages(levels)
     raise TypeError, 'levels must be an Array' unless levels.is_a?(Array)
 
@@ -342,6 +357,7 @@ class Project < ApplicationRecord
           badge_percentage = "badge_percentage_#{level}".to_sym
           old_badge_percentage = project[badge_percentage]
           project.update_badge_percentage(level)
+          project.update_tiered_percentage
           need_to_save ||= old_badge_percentage != project[badge_percentage]
         end
         project.save!(touch: false) if need_to_save
@@ -349,7 +365,7 @@ class Project < ApplicationRecord
     end
     Project.skip_callbacks = false
   end
-  # rubocop:enable Metrics/MethodLength
+  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
   # The following configuration options are trusted.  Set them to
   # reasonable numbers or accept the defaults.

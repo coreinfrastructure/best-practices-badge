@@ -106,6 +106,7 @@ ru:
       только для оповещений, связанных с программой значков; мы
       не предоставляем его третьим сторонам, если не обязаны это
       сделать по закону.
+    login_disabled:
   static_pages:
     home:
       badge_program: Программа значков "Передовая практика CII"
@@ -282,7 +283,7 @@ ru:
       edit_user: Изменить учетную запись
       other_projects_edit: 'Другие проекты, которые вы можете
         изменять:'
-      see_external: См. внешнюю страницу этого пользователя.
+      see_external: Внешняя страница пользователя.
       as_admin: 'как администратор, вы также можете:'
       send_email_to: 'Отправить письмо по адресу:'
       delete_link_name: Удалить учетную запись
@@ -291,9 +292,11 @@ ru:
       projects_additional_rights: 'Проекты с дополнительными правами:'
       is_admin: Этот пользователь является администратором заявки
         на значок.
-      json_link:
-      in_json_format:
-      local_account:
+      json_link: JSON
+      in_json_format: >-
+        Данные пользователя в формате JSON (стандартный переносимый
+        формат)
+      local_account: Местная учетная запись
     destroy:
       cannot_delete_self: Удалить себя невозможно.
       user_deleted: Пользователь удален.
@@ -387,6 +390,10 @@ ru:
       text_search: Искать по тексту
       name_or_description: Название или описание
       search: Поиск
+      silver_in_progress_variable:
+      silver_200:
+      gold_in_progress_variable:
+      gold_300:
     table:
       id: Id
       name: Название

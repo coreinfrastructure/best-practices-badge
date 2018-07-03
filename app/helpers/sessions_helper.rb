@@ -51,7 +51,10 @@ module SessionsHelper
   end
 
   # Returns the user corresponding to the remember token cookie
+  # rubocop:disable Metrics/MethodLength
   def current_user
+    return if Rails.application.config.deny_login
+    # Extra parens used here to indicate safe assignment in condition
     if (user_id = session[:user_id])
       @current_user ||= User.find_by(id: user_id)
     elsif (user_id = cookies.signed[:user_id])
@@ -64,6 +67,7 @@ module SessionsHelper
       end
     end
   end
+  # rubocop:enable Metrics/MethodLength
 
   # Returns true if the user is logged in, false otherwise.
   def logged_in?

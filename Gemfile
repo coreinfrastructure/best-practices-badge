@@ -34,14 +34,15 @@ gem 'paper_trail', '9.0.1' # Record previous versions of project data
 gem 'pg', '1.0.0' # PostgreSQL database, used for data storage
 gem 'pg_search', '2.1.2' # PostgreSQL full-text search
 gem 'puma', '3.11.4' # Faster webserver; recommended by Heroku
+gem 'rack-attack', '5.2.0' # Implement rate limiting
 gem 'rack-cors', '1.0.2' # Enable CORS so JavaScript clients can get JSON
 gem 'rails', '5.1.6' # Our web framework
 gem 'rails-i18n', '5.1.1' # Localizations for Rails built-ins
 gem 'redcarpet', '3.4.0' # Process markdown in form textareas (justifications)
 gem 'sass-rails', '5.0.7', require: false
-gem 'scout_apm', '2.4.11' # Monitor for memory leaks
+gem 'scout_apm', '2.4.13' # Monitor for memory leaks
 gem 'secure_headers', '6.0.0' # Add hardening measures to HTTP headers
-gem 'uglifier', '4.1.10', require: false # Minify JavaScript
+gem 'uglifier', '4.1.13', require: false # Minify JavaScript
 gem 'will-paginate-i18n', '0.1.15' # Provide will-paginate translations
 gem 'will_paginate', '3.1.6' # Paginate results (next/previous)
 
@@ -53,7 +54,7 @@ group :development, :test do
   gem 'dotenv-rails', '2.4.0'
   gem 'eslintrb', '2.1.0'
   gem 'json', '2.1.0'
-  gem 'license_finder', '5.2.0'
+  gem 'license_finder', '5.3.0'
   gem 'mdl', '0.4.0'
   gem 'pronto', '0.9.5'
   gem 'pronto-brakeman', '0.9.1'
@@ -89,9 +90,9 @@ group :test do
   gem 'minitest-rails-capybara', '3.0.1', require: false
   gem 'minitest-reporters', '1.2.0', require: false
   gem 'minitest-retry', '0.1.9', require: false # Avoid Capybara false positives
-  gem 'poltergeist', '1.18.0', require: false
+  gem 'poltergeist', '1.18.1', require: false
   gem 'rails-controller-testing', '1.0.2' # need to require this one
-  gem 'selenium-webdriver', '3.12.0', require: false
+  gem 'selenium-webdriver', '3.13.0', require: false
   gem 'simplecov', '0.16.1', require: false
   gem 'webmock', '3.4.1', require: false
 end

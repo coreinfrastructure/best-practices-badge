@@ -12,7 +12,7 @@
     <link rel="alternate" type="text/html" href="http://www.example.com/en/projects/298486374"/>
     <title>Mars Ascent Vehicle (MAV)</title>
     <content type="html">
-      <![CDATA[<p><strong>In Progress: 0%</strong></p><p><a href='https://www.nasa.gov'>https://www.nasa.gov</a></p><span lang="en"><p>Operating system for Pathfinder rover</p>
+      <![CDATA[<p><strong>In Progress: 0%</strong> (Tiered 0%)</p><p><a href='https://www.nasa.gov'>https://www.nasa.gov</a></p><span lang="en"><p>Operating system for Pathfinder rover</p>
 </span>]]>
     </content>
     <author>
@@ -26,7 +26,7 @@
     <link rel="alternate" type="text/html" href="http://www.example.com/en/projects/600182345"/>
     <title>Justified perfect project</title>
     <content type="html">
-      <![CDATA[<p><strong>Gold</strong></p><p><a href='https://www.example.org'>https://www.example.org</a></p><span lang="en"><p>The perfect project</p>
+      <![CDATA[<p><strong>Gold</strong> (Tiered 300%)</p><p><a href='https://www.example.org'>https://www.example.org</a></p><span lang="en"><p>The perfect project</p>
 </span>]]>
     </content>
     <author>
@@ -40,7 +40,7 @@
     <link rel="alternate" type="text/html" href="http://www.example.com/en/projects/690367815"/>
     <title>Justified perfect silver project</title>
     <content type="html">
-      <![CDATA[<p><strong>Silver</strong></p><p><a href='https://www.example.org'>https://www.example.org</a></p><span lang="en"><p>The perfect silver project</p>
+      <![CDATA[<p><strong>Silver</strong> (Tiered 241%)</p><p><a href='https://www.example.org'>https://www.example.org</a></p><span lang="en"><p>The perfect silver project</p>
 </span>]]>
     </content>
     <author>
@@ -54,7 +54,7 @@
     <link rel="alternate" type="text/html" href="http://www.example.com/en/projects/832656895"/>
     <title>Unjustified perfect project</title>
     <content type="html">
-      <![CDATA[<p><strong>In Progress: 86%</strong></p><p><a href='https://www.example.org'>https://www.example.org</a></p><span lang="en"><p>The perfect project</p>
+      <![CDATA[<p><strong>In Progress: 86%</strong> (Tiered 86%)</p><p><a href='https://www.example.org'>https://www.example.org</a></p><span lang="en"><p>The perfect project</p>
 </span>]]>
     </content>
     <author>
@@ -68,7 +68,7 @@
     <link rel="alternate" type="text/html" href="http://www.example.com/en/projects/968496471"/>
     <title>Justified perfect passing project</title>
     <content type="html">
-      <![CDATA[<p><strong>Passing</strong></p><p><a href='https://www.example.org'>https://www.example.org</a></p><span lang="en"><p>The perfect passing project</p>
+      <![CDATA[<p><strong>Passing</strong> (Tiered 113%)</p><p><a href='https://www.example.org'>https://www.example.org</a></p><span lang="en"><p>The perfect passing project</p>
 </span>]]>
     </content>
     <author>
@@ -82,7 +82,7 @@
     <link rel="alternate" type="text/html" href="http://www.example.com/en/projects/980190962"/>
     <title>Pathfinder OS</title>
     <content type="html">
-      <![CDATA[<p><strong>In Progress: 0%</strong></p><p><a href='https://www.nasa.gov'>https://www.nasa.gov</a></p><span lang="en"><p>Operating system for Pathfinder rover</p>
+      <![CDATA[<p><strong>In Progress: 0%</strong> (Tiered 0%)</p><p><a href='https://www.nasa.gov'>https://www.nasa.gov</a></p><span lang="en"><p>Operating system for Pathfinder rover</p>
 </span>]]>
     </content>
     <author>

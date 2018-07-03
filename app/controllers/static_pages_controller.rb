@@ -7,10 +7,15 @@
 class StaticPagesController < ApplicationController
   include SessionsHelper
 
-  # These paths don't get locale data in the URLs, so do *not* try to
-  # redirect them to a URL based on locale.
+  # If a page is *invariant* regardless of locale, don't bother
+  # to figure out what the locale is.
+  skip_before_action :set_locale_to_best_available,
+                     only: %i[robots]
+
+  # There's no value in redirecting these pages to a locale,
+  # so do *not* redirect them to a URL based on locale.
   skip_before_action :redir_missing_locale,
-                     only: %i[robots error_404_no_locale_redir]
+                     only: %i[robots error_404]
 
   def home; end
 
@@ -18,20 +23,22 @@ class StaticPagesController < ApplicationController
 
   # Send a 404 ("not found") page.  Inspired by:
   # http://rubyjunky.com/cleaning-up-rails-4-production-logging.html
+  # This is intentionally short and does *NOT* use the standard layout,
+  # to minimize CPU and bandwidth use during an attack.
+  # Note that due to skip_before_action we don't redirect the URL,
+  # as there's no need to do so and skipping a redirect will save a roundtrip.
+  # We *do* try to guess the locale, since we can then provide a
+  # locale-specific error message.
   def error_404
     # The default router already logs things, so we don't need to do more.
     # You can do something like this to log more information, but be sure
     # to escape attacker data to counter log forging:
     # logger.info 'Page not found'
     render(
-      template: 'static_pages/error_404',
+      template: '/static_pages/error_404.html.erb',
       layout: false,
       status: 404
     )
-  end
-
-  def error_404_no_locale_redir
-    error_404
   end
 
   def robots

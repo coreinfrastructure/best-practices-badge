@@ -97,6 +97,7 @@ de:
     login_automatic_signup: >-
       Wenn Sie sich mit GitHub einloggen wird automatisch bei
       Bedarf eine Anmeldung durchgeführt.
+    login_disabled: Alle Logins sind vorübergehend deaktiviert
   users:
     new:
       signup_header: Anmelden
@@ -135,9 +136,9 @@ de:
       projects_additional_rights: 'Projekte mit zusätzlichen Rechten:'
       is_admin: Dieser Benutzer ist ein Administrator für Badge
         application.
-      json_link:
-      in_json_format:
-      local_account:
+      json_link: JSON
+      in_json_format: Benutzerdaten im JSON-Format (ein Standardformat)
+      local_account: Benutzerdefiniertes (lokales) Konto
     destroy:
       cannot_delete_self: Kann nicht selbst löschen.
       user_deleted: Benutzer gelöscht.
@@ -232,6 +233,12 @@ de:
       all: Alle
       passing_100: Passing (100%)
       in_progress_variable: In Arbeit (%{percent}% oder mehr)
+      silver_in_progress_variable: Passing, teilweises Silber
+        (%{percent}% + Fortschritt)
+      silver_200: Silber (200% + Fortschritt)
+      gold_in_progress_variable: Silber, teilweises Gold (%{percent}%
+        + Fortschritt)
+      gold_300: Gold (300%)
     table:
       id: ID
       name: Name

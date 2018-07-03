@@ -49,8 +49,13 @@ class UsersController < ApplicationController
   end
   # rubocop: enable Metrics/AbcSize
 
-  # rubocop: disable Metrics/MethodLength
+  # rubocop: disable Metrics/MethodLength, Metrics/AbcSize
   def create
+    if Rails.application.config.deny_login
+      flash.now[:danger] = t('sessions.login_disabled')
+      render 'new', status: :forbidden
+      return
+    end
     @user = User.find_by(email: user_params[:email])
     if @user
       redirect_existing
@@ -66,7 +71,7 @@ class UsersController < ApplicationController
       end
     end
   end
-  # rubocop: enable Metrics/MethodLength
+  # rubocop: enable Metrics/MethodLength, Metrics/AbcSize
 
   def edit
     @user = User.find(params[:id])

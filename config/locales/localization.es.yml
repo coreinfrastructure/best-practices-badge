@@ -54,20 +54,20 @@ es:
   i18n:
     transliterate:
       rule:
-        "á": a
-        "é": e
-        "í": i
-        "ó": o
-        "ú": u
-        "ü": u
-        "ñ": n
-        "Á": A
-        "É": E
-        "Í": I
-        "Ó": O
-        "Ú": U
-        "Ü": U
-        "Ñ": N
+        á: a
+        é: e
+        í: i
+        ó: o
+        ú: u
+        ü: u
+        ñ: n
+        Á: A
+        É: E
+        Í: I
+        Ó: O
+        Ú: U
+        Ü: U
+        Ñ: N
   spree:
     date_picker:
       first_day: 1

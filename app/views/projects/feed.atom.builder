@@ -26,7 +26,7 @@ cache_if (!Rails.env.test? && !@projects.empty?),
           if project.badge_level == 'in_progress'
             status += ": #{project.badge_percentage_0}%"
           end
-          status += '</strong></p>'
+          status += "</strong> (Tiered #{project.tiered_percentage}%)</p>"
           url = project.homepage_url.presence || project.repo_url
           link = "<p><a href='#{url}'>#{url}</a></p>"
           description = '<span lang="en">' +

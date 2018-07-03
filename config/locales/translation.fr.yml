@@ -24,24 +24,24 @@ fr:
     profile: Profil
     settings: Paramètres
     logout_html: >-
-      <span class="glyphicon glyphicon-log-out"></span> Déconnection
-    signup_html: <span class="glyphicon glyphicon-user"></span>
-      S'inscrire
+      <i class="fa fa-sign-out" aria-hidden="true"></i> Déconnection
+    signup_html: >-
+      <i class="fa fa-user-plus" aria-hidden="true"></i> S'inscrire
     login_html: >-
-      <span class="glyphicon glyphicon-log-in"></span> S'identifier
+      <i class="fa fa-sign-in" aria-hidden="true"></i> S'identifier
     footer_text_html: >-
       <small> <strong>Vous avez besoin d'aide ? Vous avez une
       question ? Vous voyez un problème ? Merci d'<em><a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">envoyer
       un email</a></em> ou de <em><a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
       target="_blank" rel="noopener">reporter un problème</a></i>.</strong>
-      © 2015-2017 <a href="https://www.coreinfrastructure.org/"
+      © 2015-2018 <a href="https://www.coreinfrastructure.org"
       target="_blank" rel="noopener">Core Infrastructure Initiative</a>,
       un projet collaboratif de la <a href="https://www.linuxfoundation.org/"
       target="_blank" rel="noopener">Fondation Linux</a>. Tous
       droits réservés. Consultez notre <a href="https://www.linuxfoundation.org/privacy"
       target="_blank" rel="noopener">politique de confidentialité</a>
       et nos <a href="https://www.linuxfoundation.org/terms" target="_blank"
-      rel="noopener">conditions d'utilisation </a>. </small>
+      rel="noopener">conditions d'utilisation</a>. </small>
     account: Compte
     choose_locale: Choisir la langue
   sessions:
@@ -52,49 +52,65 @@ fr:
     email: Email
     password: Mot de passe
     forgot_password: Vous avez oublié votre mot de passe ?
-    remember_me: Se souvenir de moi
+    remember_me: Rester connecté (en utilisant un cookie permanent)
     login_custom: Connectez-vous en utilisant un compte personnalisé
     no_custom: Aucun compte personnalisé ? Inscrivez-vous maintenant
       !
     already_logged_in: Vous êtes déjà connecté.
     incorrect_login_info: Informations de connexion incorrectes
     invalid_combo: Combinaison de messagerie / mot de passe invalide
-    signed_in: Connecté !
+    signed_in: 'Connecté ! Dernière connexion : %{last_login_at}'
     not_activated: >-
       Compte non activé. Vérifiez votre email pour le lien d'activation.
     signed_out: Déconnecté !
     cookie_details_html: >-
-      <a href="/cookies" target="_blank" rel="noopener"><i>En
+      <a href="/fr/cookies" target="_blank" rel="noopener"><i>En
       savoir plus sur les cookies.</i></a>
     no_login_time: "(Aucune heure précédente enregistrée.)"
     login_automatic_signup: >-
       La connection avec GitHub effectuera automatiquement une
-      inscription si nécessaire.
+      inscription si nécessaire. Si vous vous inscrivez, votre
+      nom (tel que renseigné par GitHub) et votre identifiant
+      GitHub seront affichés publiquement, et vous pouvez changer
+      votre nom à tout moment. Votre adresse email sera maintenue
+      secrète et seulement utilisée pour les interactions relatives
+      aux badges ; nous ne la transmettrons pas à des parties
+      tierces à moins qu'il s'agisse d'une obligation légale.
+    login_disabled:
   users:
     new:
       signup_header: S'inscrire
       intro_html: >-
         Si vous ne souhaitez pas vous connecter en utilisant votre
-        compte GitHub, vous pouvez vous inscrire ici à la place.
-        <br> <br> Si vous n'avez pas reçu votre lien d'activation,
-        veuillez vous inscrire à nouveau et nous vous enverrons
-        un nouveau lien.
+        compte GitHub, vous pouvez vous inscrire ici à la place
+        (cela créera un compte personnalisé en utilisant votre
+        adresse email). Si vous vous inscrivez, votre nom sera
+        affiché publiquement, et vous pouvez le changer à tout
+        moment. Votre adresse email sera maintenue secrète et
+        seulement utilisée pour les interactions liées au projet
+        de badge ; nous ne le transmettrons pas à des partie tierces
+        à moins qu'il s'agisse d'une obligation légale.  <br><br>
+        Si vous n'avez pas reçu votre lien d'activation, veuillez
+        vous inscrire à nouveau et nous vous enverrons un nouveau
+        lien.
       name: Nom
       email: Email
       password: Mot de passe
       password_confirmation: Confirmez le mot de passe
-      create_account: Créer mon compte
+      create_account: Créer mon compte personnalisé
       preferred_locale: Langue préférée
       intro_github: >-
         Si vous avez un compte GitHub, vous pouvez simplement
-        l'utiliser pour vous connectez.
+        l'utiliser pour vous connectez (une première connexion
+        avec GitHub vous inscrira automatiquement).
     show:
-      see_external: Voir la page externe de cet utilisateur.
-      other_projects_edit: Autres projets que vous pouvez modifier
+      see_external: La page externe de l'utilisateur.
+      other_projects_edit: 'Autres projets que vous pouvez modifier
+        d''après GitHub :'
       as_admin: 'en tant qu''administrateur, vous pouvez également
         :'
       send_email_to: 'Envoyer un email à :'
-      delete_link_name: supprimer
+      delete_link_name: Supprimer le compte utilisateur
       confirm_delete: Êtes-vous sûr(e) de vouloir supprimer cet
         utilisateur ?
       edit_user: Modifier l'utilisateur
@@ -139,7 +155,8 @@ fr:
       admin_html: >-
         En tant qu'administrateur, vous pouvez également voir
         les <a href="/fr/reminders">informations détaillées sur
-        les rappels</a>.
+        les rappels</a> et les <a href="/fr/project_stats?type=uncommon">graphiques
+        sur les statistiques moins communément utilisées</a>.
       raw_data: 'Vous pouvez également voir les données brutes
         :'
       json_format: format JSON
@@ -213,8 +230,12 @@ fr:
       name_or_description: Nom ou texte de description
       search: Recherche
       all: Tous
-      passing_100: Atteint (100%)
-      in_progress_variable: En cours (%{percent}% ou plus)
+      passing_100: Atteint (niveau 100% ou plus)
+      in_progress_variable: En cours (niveau %{percent}% ou plus)
+      silver_in_progress_variable:
+      silver_200:
+      gold_in_progress_variable:
+      gold_300:
     table:
       id: Id
       name: Nom
@@ -223,9 +244,12 @@ fr:
       license: Licence
       owner: Propriétaire
       last_achieved: Obtenu le
-      pachieved: "% Atteint"
-      can_also_sort: 'Vous pouvez également trier par les critères
-        suivants :'
+      pachieved: Niveau %
+      can_also_sort: >-
+        Le « Niveau % » utilise 300% pour gold, 200% pour silver
+        et 100% pour atteint, et montre le progrès au-delà du
+        badge de plus haut niveau obtenu. Vous pouvez également
+        trier par les critères suivants :
       repository_url: URL du dépôt
       create_time: date de création (pour la soumission)
       update_time: dernière date de mise à jour (pour la soumission)
@@ -241,7 +265,11 @@ fr:
       new_badge: Nouveau badge
       may_select_html: >-
         Vous pouvez choisir parmi l'un de vos dépôts GitHub <em>OU</em>
-        fournir des informations sur un autre projet.
+        fournir des informations sur un autre projet. Si votre
+        projet n'a pas obtenu un badge et si vous ne l'avez pas
+        édité dans les 30 derniers jours, nous vous enverrons
+        un rappel par email (vous pouvez désactiver les rappels
+        à tout moment si vous le souhaitez).
       select_one_github: Sélectionnez l'un de vos dépôts GitHub
       submit_github: Soumettre le dépôt GitHub
       url_of_homepage: >-
@@ -249,15 +277,17 @@ fr:
         pour le projet dans son ensemble) ? Commencez par http(s)://
         (plusieurs caractères ne sont pas autorisés, y compris
         "?")
-      placeholder_of_homepage: http(s)://... pour l'URL de la
-        page d'accueil du projet
+      placeholder_of_homepage: >-
+        http(s)://... pour l'URL de la page d'accueil du projet,
+        utilisez https:// si vous le pouvez
       url_of_repo: >-
         Quelle est l'URL du dépôt sous contrôle de version (qui
         peut être la même que la page d'accueil du projet) ? Commencez
         par http(s):// (plusieurs caractères ne sont pas autorisés,
         y compris "?")
-      placeholder_of_repo: http(s)://... pour l'URL du dépôt du
-        projet
+      placeholder_of_repo: >-
+        http(s)://... pour l'URL du dépôt du projet, utilisez
+        https:// si vous le pouvez
       submit_urls: Envoyer l'URL
       sign_in_first: Connectez-vous pour ajouter un projet !
       thanks_adding: >-
@@ -289,7 +319,7 @@ fr:
       cc_by_3only_html: >-
         Ces données sont disponibles sous <a href="https://creativecommons.org/licenses/by/3.0/us"
         target="_blank" rel="noopener">licence Creative Commons
-        Attribution version 3.0 (CC-BY-3.0) </a> comme indiqué
+        Attribution version 3.0 (CC-BY-3.0)</a> comme indiqué
         dans les <a href="https://www.linuxfoundation.org/terms"
         target="_blank" rel="noopener">conditions d'utilisation</a>
         de la <a href="https://www.coreinfrastructure.org/" target="_blank"
@@ -424,12 +454,15 @@ fr:
           ou un administrateur BadgeApp, vous pouvez supprimer
           des utilisateurs de cette liste en entrant « - » suivi
           d'une liste d'entiers d'identifiants utilisateur séparés
-          par des virgules. Cette application utilise un verrouillage
+          par des virgules. Nous nous attendons normalement à
+          ce qu'une seule personne édite une soumission de badge
+          spécifique à la fois. Cette application utilise un verrouillage
           optimiste pour éviter de sauvegarder des données périmées
-          si plusieurs utilisateurs essaient de faire des modifications
-          simultanément. Seuls les propriétaires de cette soumission
-          de projet et les administrateurs BadgeApp peuvent modifier
-          ce champ.
+          si plusieurs utilisateurs essaient de modifier une soumission
+          de badge simultanément. Si vous avez plusieurs éditeurs,
+          nous vous recommandons d'enregistrer les données de
+          votre soumission de badge de manière incrémentale et
+          régulière (c'est une bonne pratique en général).
         placeholder: >-
           Changer avec + ou - suivi d'une liste d'identifiants
           utilisateur séparés par des virgules
@@ -437,9 +470,8 @@ fr:
       badge_intro:
         description: >-
           Les projets qui suivent les meilleures pratiques ci-dessous
-          seront en mesure de s'auto-certifier et de montrer qu'ils
-          ont obtenu le badge de la Core Infrastructure Initiative
-          (CII).
+          peuvent s'auto-certifier et montrer qu'ils ont obtenu
+          le badge de la Core Infrastructure Initiative (CII).
         details_html: >-
           Il n'existe aucun ensemble de pratiques qui garantissent
           que ce logiciel n'aura jamais de défauts ou de vulnérabilités
@@ -460,7 +492,11 @@ fr:
           non satisfaits avec justification, <em>et</em> tous
           les critères PROPOSÉ doivent être satisfaits OU non
           satisfaits (nous voulons au moins qu'ils soient considérés).
-          Les commentaires sont les bienvenus via le <a href="https://github.com/coreinfrastructure/best-practices-badge">site
+          Si vous voulez entrer un texte de justification pour
+          un commentaire générique, au lieu d'une raison justifiant
+          que la situation est acceptable, commencez le bloc de
+          texte avec '//' suivi d'un espace. Les commentaires
+          sont les bienvenus via le <a href="https://github.com/coreinfrastructure/best-practices-badge">site
           GitHub en tant que problèmes ou pull requests</a>. Il
           existe également une <a href="https://lists.coreinfrastructure.org/mailman/listinfo/cii-badges">liste
           de diffusion pour discussion générale</a>. <br /> <br
@@ -508,7 +544,9 @@ fr:
     misc:
       disabled_reminders: >-
         (Avancé) Désactiver le rappel d'inactivité (nous vous
-        recommandons de laisser ceci non sélectionné)
+        recommandons de laisser ceci non sélectionné ; notez que
+        les soumissions de projet doivent être modifiées pour
+        que les rappels soient envoyés ou non)
       general_comments:
         description: 'Autres commentaires généraux sur le projet
           :'
@@ -603,9 +641,10 @@ fr:
         pourquoi vous la supprimez définitivement.
       rationale_placeholder: >-
         (Obligatoire) Veuillez expliquer pourquoi vous supprimez
-        définitivement cette soumission de projet de badge (et,
-        le cas échéant, ce que vous souhaitez que nous fassions
-        à la place)
+        définitivement cette soumission de projet de badge et,
+        le cas échéant, ce que vous auriez souhaité que nous fassions
+        à la place (au moins 20 caractères, au moins 15 caractères
+        non blancs).
       delete_action: >-
         SUPPRESSION PERMANENTE de cette soumission de projet de
         badge !
@@ -691,8 +730,8 @@ fr:
       E-mail envoyé avec les instructions de réinitialisation
       du mot de passe
     cant_reset_nonlocal: >-
-      Désolé, il n'est pas possible de réinitialiser le mot de
-      passe pour un utilisateur non local
+      Désolé, il n'est possible de réinitialiser le mot de passe
+      que pour un utilisateur personnalisé (local)
     reset_expired: La réinitialisation du mot de passe est expirée.
     update_password: Mise à jour du mot de passe
   report_mailer:
@@ -711,10 +750,26 @@ fr:
       sur le bouton près du haut étiqueté « Masquer atteints &
       N/A ».\nSi vous avez des questions ou avez besoin d'aide,
       contactez-nous à\n<a href=\"mailto:&#99;ii&#45;badges&#45;questions&#45.own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;\">&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;</a>
-      \nou reportez un problème sur\n<a href=\"https://github.com/coreinfrastructure/best-practices-badge/issues\">
-      https://github.com/coreinfrastructure/best-practices-badge/issues
-      </a>\n(cliquez sur « nouveau problème »).\n</p>\n\n<p>\nMerci
-      pour vos efforts.\n</p>\n"
+      \nou reportez un problème sur\n<a href=\"https://github.com/coreinfrastructure/best-practices-badge/issues\">https://github.com/coreinfrastructure/best-practices-badge/issues</a>\n(cliquez
+      sur « nouveau problème »).\n</p>\n<p>\nNous ne vous enverrons
+      jamais de publicité, et nous ne vous enverrons que rarement
+      des emails. Nous vous enverrons un email pour les évènements
+      importants de la soumission d'un projet de badge, comme
+      quand vous créez une nouvelle soumission de projet de badge,
+      quand votre projet gagne ou perd un badge, ou quand quelqu'un
+      demande la réinitialisation du mot de passe pour votre compte
+      utilisateur. Si votre projet n'a pas de badge, et que vous
+      n'avez pas mis à jour l'entrée du projet pendant au moins
+      30 jours, nous vous enverrons normalement un rappel d'inactivité
+      environ tous les 30-60 jours. Vous pouvez désactiver ces
+      rappels d'inactivité à tout moment ; il vous suffit d'éditer
+      votre entrée de badge à <a href=\"%{project_info_url}#project_disabled_reminders\">%{project_info_url}#project_disabled_reminders</a>
+      pour activer la « désactivation du rappel d'inactivité ».
+      Souvenez-vous d'<i>éditer</i> le projet pour lequel vous
+      souhaitez changer cette valeur. Si votre projet a gagné
+      un badge, ou que son entrée de badge a été éditée dans les
+      30 derniers jours, aucun rappel d'inactivité ne vous sera
+      envoyé.\n</p>\n<p>\nMerci pour vos efforts.\n</p>\n"
     new_project_part3_text: |
       Nous vous encourageons à continuer à progresser.
       Si vous voulez voir seulement ce qui vous manque, visitez votre soumission puis cliquez sur le bouton près du haut étiqueté « Masquer atteints & N/A ».
@@ -723,6 +778,7 @@ fr:
       ou reportez un problème sur
       https://github.com/coreinfrastructure/best-practices-badge/issues
       (cliquez sur « nouveau problème »).
+      Nous ne vous enverrons jamais de publicité, et nous ne vous enverrons que rarement des emails. Nous vous enverrons un email pour les évènements importants de la soumission d'un projet de badge, comme quand vous créez une nouvelle soumission de projet de badge, quand votre projet gagne ou perd un badge, ou quand quelqu'un demande la réinitialisation du mot de passe pour votre compte utilisateur. Si votre projet n'a pas de badge, et que vous n'avez pas mis à jour l'entrée du projet pendant au moins 30 jours, nous vous enverrons normalement un rappel d'inactivité environ tous les 30-60 jours. Vous pouvez désactiver ces rappels d'inactivité à tout moment ; il vous suffit d'éditer votre entrée de badge à %{project_info_url}#project_disabled_reminders pour activer la « désactivation du rappel d'inactivité ». Souvenez-vous d'éditer le projet pour lequel vous souhaitez changer cette valeur. Si votre projet a gagné un badge, ou que son entrée de badge a été éditée dans les 30 derniers jours, aucun rappel d'inactivité ne vous sera envoyé.
       Merci pour vos efforts.
     in_markdown_add: 'En markdown, vous pouvez ajouter ceci :'
     in_html_add: 'En HTML, vous pouvez ajouter ceci :'
@@ -742,27 +798,18 @@ fr:
       »
     subject_project_deleted: Le projet %{project_id} nommé %{project_name}
       a été supprimé
-    gained_level_part1: |
-      Toutes nos félicitations!
+    gained_level_part1: |-
+      Toutes nos félicitations !
       Selon les informations que vous avez fournies,
       votre projet a obtenu le badge '%{new_level}' des meilleures pratiques de la CII.
       Pour plus d'informations, consultez cette URL :
     gained_level_part2: |-
       Ajoutez votre badge à votre projet et/ou site de dépôt ;
       vous l'avez mérité :
-    gained_level_part3: |
+    gained_level_part3: |-
       Nous vous encourageons vivement à ajouter ou à améliorer le texte de justification,
-      y compris par l'ajout d'URL qui redirigent vers plus d'informations.
-      Si vous avez des suggestions sur la façon d'améliorer les critères ou
-      l'application Web du badge, veuillez soumettre un problème sur :
-      https://github.com/coreinfrastructure/best-practices-badge/issues
-      Si vous avez apporté des modifications à votre projet pour obtenir un badge, veuillez nous le faire savoir
-      par email à cii-badges-questions@lists.coreinfrastructure.org.
-      L'un de nos objectifs est d'encourager les projets à apporter des améliorations.
-      Nous mettons certains de ces rapports sur le wiki public ; veuillez nous en informer
-      si vous ne souhaitez PAS que les changements soient publiés publiquement à
-      https://github.com/coreinfrastructure/best-practices-badge/wiki/Impacts
-      Merci et félicitations.
+      y compris par l'ajout d'URL qui redirigent vers plus d'informations. Si vous avez des suggestions sur la façon d'améliorer les critères ou l'application Web du badge, veuillez soumettre un problème sur : https://github.com/coreinfrastructure/best-practices-badge/issues Si vous avez apporté des modifications à votre projet pour obtenir un badge, veuillez nous le faire savoir par email à cii-badges-questions@lists.coreinfrastructure.org. L'un de nos objectifs est d'encourager les projets à apporter des améliorations. Nous mettons certains de ces rapports sur le wiki public ; veuillez nous en informer si vous ne souhaitez PAS que les changements soient publiés publiquement à
+      https://github.com/coreinfrastructure/best-practices-badge/wiki/Impacts Merci et félicitations.
     lost_level_message: |-
       Nous sommes désolés, mais votre projet n'a plus le badge « %{old_level} »
       et est maintenant « %{new_level} ».
@@ -790,11 +837,13 @@ fr:
       de badge, et nous envoyons seulement des rappels environ
       tous les 30-60 jours. Cependant, si vous souhaitez désactiver
       ces messages de rappel, modifiez votre entrée de badge à
-      <a href=\"%{project_info_url}\">%{project_info_url}</a>\npour
-      activer « Désactiver le rappel d'inactivité ».\nNous espérons
-      que vous continuerez à travailler sur votre soumission pour
-      finalement obtenir le badge.\n</p>\n\n<p>\nMerci pour votre
-      attention.\n</p>"
+      <a href=\"%{project_info_url}#project_disabled_reminder\">%{project_info_url}#project_disabled_reminder</a>\npour
+      activer la « désactivation du rappel d'inactivité ». Vérifiez
+      que vous éditez le projet de badge, au lieu de seulement
+      le consulter, pour pouvoir changer si vous voulez ou non
+      recevoir le rappel d'inactivité.\nNous espérons que vous
+      continuerez à travailler sur votre soumission pour finalement
+      obtenir le badge.\n</p>\n\n<p>\nMerci pour votre attention.\n</p>"
     reminder_body_text: "Ceci est un rappel automatisé que votre
       projet\n« %{project_name} »\nn'a pas actuellement de badge
       « meilleures pratiques »,\net son entrée de badge n'a pas
@@ -816,10 +865,13 @@ fr:
       si vous continuez à mettre à jour votre entrée de badge,
       et nous envoyons seulement des rappels environ tous les
       30-60 jours. Cependant, si vous souhaitez désactiver ces
-      messages de rappel, modifiez votre entrée de badge à %{project_info_url}\npour
-      activer « Désactiver le rappel d'inactivité ».\nNous espérons
-      que vous continuerez à travailler sur votre soumission pour
-      finalement obtenir le badge.\n\nMerci pour votre attention."
+      messages de rappel, modifiez votre entrée de badge à %{project_info_url}#project_disabled_reminder\npour
+      activer la « désactivation du rappel d'inactivité ». Vérifiez
+      que vous éditez le projet de badge, au lieu de seulement
+      le consulter, pour pouvoir changer si vous voulez ou non
+      recevoir le rappel d'inactivité.\n\nNous espérons que vous
+      continuerez à travailler sur votre soumission pour finalement
+      obtenir le badge.\n\nMerci pour votre attention."
   project_name_unknown: "(Nom inconnu)"
   locale_name:
     en: Anglais / English (en)
@@ -919,7 +971,24 @@ fr:
           Par exemple, dans un fichier à la racine du dépôt appelé
           LICENSE ou COPYING. Les noms de fichiers de licence
           PEUVENT être suivis d'une extension telle que « .txt
-          » ou « .md ».
+          » ou « .md ». Notez que ce critère est requis uniquement
+          pour le dépôt de sources. Vous n'avez PAS besoin d'inclure
+          le fichier de licence lors de la génération d'un élément
+          à partir du code source (tel qu'un exécutable, un paquet
+          ou un conteneur). Par exemple, lors de la génération
+          d'un paquet R pour le réseau d'archives complet R (CRAN),
+          suivez la procédure standard CRAN : si la licence est
+          une licence standard, utilisez la spécification de standard
+          courte (pour éviter d'installer une autre copie du texte)
+          et listez le fichier LICENSE dans un fichier d'exclusion
+          tel que .Rbuildignore. De même, lors de la création
+          d'un paquet Debian, vous pouvez mettre un lien dans
+          le fichier de copyright vers le fichier de licence dans
+          /usr/share/common-licenses, et exclure le fichier de
+          licence du paquet créé (par exemple, en supprimant le
+          fichier après avoir appelé dh_auto_install). Nous encourageons
+          l'inclusion d'informations de licence lisibles automatiquement
+          dans des formats générés lorsque cela est possible.
       documentation_basics:
         description: >-
           Le projet DOIT fournir une documentation de base pour
@@ -979,9 +1048,12 @@ fr:
           Les sites du projet (site Web, dépôt et URLs de téléchargement)
           DOIVENT supporter HTTPS en utilisant TLS.
         details: >-
-          Vous pouvez obtenir des certificats gratuits de <a href="https://letsencrypt.org/">
-          Let's Encrypt</a>. Les projets PEUVENT implémenter ce
-          critère en utilisant (par exemple) <a href="https://help.github.com/articles/securing-your-github-pages-site-with-https/">des
+          Cela nécessite que l'URL de la page d'accueil du projet
+          et l'URL du dépôt sous contrôle de version commencent
+          par « https: » et non « http: ». Vous pouvez obtenir
+          des certificats gratuits de <a href="https://letsencrypt.org/">Let's
+          Encrypt</a>. Les projets PEUVENT implémenter ce critère
+          en utilisant (par exemple) <a href="https://help.github.com/articles/securing-your-github-pages-site-with-https/">des
           pages GitHub</a>, <a href="https://about.gitlab.com/2016/12/24/were-bringing-gitlab-pages-to-community-edition/">des
           pages GitLab</a> ou <a href="https://sourceforge.net/blog/introducing-https-for-project-websites/">des
           pages de projet SourceForge</a>. Si vous utilisez des
@@ -1128,9 +1200,12 @@ fr:
       release_notes_vulns:
         description: >-
           Les notes de version DOIVENT identifier toutes les vulnérabilités
-          publiquement connues qui sont résolues dans chaque nouvelle
-          version. Il s'agit de « N/A » s'il n'y a pas de notes
-          de version ou qu'il n'y a pas eu de vulnérabilité publique.
+          publiquement connues avec une affectation CVE ou similaire
+          qui est résolue dans chaque nouvelle version, sauf si
+          les utilisateurs ne peuvent pas en général mettre à
+          jour le logiciel eux-mêmes. S'il n'y a pas de notes
+          de version ou qu'il n'y a pas eu de vulnérabilité publiquement
+          connue, choisissez « non applicable » (N/A).
         details: >-
           Si les utilisateurs ne peuvent généralement pas mettre
           à jour le logiciel eux-mêmes sur leur ordinateur, mais
@@ -1485,13 +1560,19 @@ fr:
           algorithmes ou modes cassés sont nécessaires pour un
           protocole d'interopérabilité.
         details: >-
-          Dans de nombreux cas, il est préférable de choisir un
-          mode d'algorithme de chiffrement de bloc conçu pour
-          combiner le secret et l'authentification, par exemple
-          Galois/Counter Mode (GCM) et EAX. Les projets PEUVENT
-          permettre aux utilisateurs d'activer les mécanismes
-          cassés si nécessaire pour la compatibilité, mais les
-          utilisateurs savent qu'ils le font.
+          Le mode ECB n'est presque jamais approprié car il révèle
+          des blocs identiques dans le texte chiffré, comme le
+          montre le <a href="https://blog.filippo.io/the-ecb-penguin/">pingouin
+          ECB</a>, et le mode CTR est souvent inapproprié car
+          il n'effectue pas d'authentification et provoque des
+          doublons si l'état d'entrée est dupliqué. Dans de nombreux
+          cas, il est préférable de choisir un mode d'algorithme
+          de chiffrement de bloc conçu pour combiner le secret
+          et l'authentification, par exemple Galois/Counter Mode
+          (GCM) et EAX. Les projets PEUVENT permettre aux utilisateurs
+          d'activer les mécanismes cassés (par exemple pendant
+          la configuration) si nécessaire pour la compatibilité,
+          mais les utilisateurs savent alors qu'ils le font.
       crypto_weaknesses:
         description: >-
           Les mécanismes de sécurité par défaut dans le logiciel
@@ -1609,10 +1690,12 @@ fr:
           l'accès public.
       static_analysis:
         description: >-
-          Au moins un outil d'analyse de code statique DOIT être
-          appliqué à toute distribution majeure proposée avant
-          sa sortie s'il existe au moins un outil FLOSS qui implémente
-          ce critère dans le langage sélectionné.
+          Au moins un outil d'analyse statique de code (au-delà
+          des avertissements du compilateur et des modes « sûrs
+          » des languages) DOIT être appliqué à toute distribution
+          majeure proposée avant sa sortie s'il existe au moins
+          un outil FLOSS qui implémente ce critère dans le langage
+          sélectionné.
         details: >-
           Un outil d'analyse statique de code examine le code
           logiciel (au niveau du code source, du code intermédiaire
@@ -1628,7 +1711,8 @@ fr:
           (y compris <a href="https://h3xstream.github.io/find-sec-bugs/">FindSecurityBugs</a>),
           <a href="https://pmd.github.io/">PMD</a>, <a href="http://brakemanscanner.org/">Brakeman</a>,
           <a href="https://scan.coverity.com/">Coverity Quality
-          Analyzer</a>, et <a href="https://saas.hpe.com/en-us/software/sca">HP
+          Analyzer</a>, <a href="https://www.sonarqube.org/">SonarQube</a>,
+          <a href="https://www.codacy.com/">Codacy</a> et <a href="https://saas.hpe.com/en-us/software/sca">HP
           Enterprise Fortify Static Code Analyzer</a>. Des listes
           plus vastes d'outils peuvent être trouvées dans des
           endroits tels que <a href="https://en.wikipedia.org/wiki/List_of_tools_for_static_code_analysis">la
@@ -1925,9 +2009,17 @@ fr:
           les contributions. Cela devrait se concentrer uniquement
           sur le comportement au sein de la communauté / lieu
           de travail du projet. Des exemples de codes de conduite
-          sont le <a href="http://contributor-covenant.org/">Code
-          de conduite du pacte de contributeur</a> et le <a href="https://www.kernel.org/doc/html/latest/process/code-of-conflict.html">code
-          de conflit</a> du noyau Linux.
+          sont le <a href="https://www.kernel.org/doc/html/latest/process/code-of-conflict.html">code
+          de conflit</a> du noyau Linux, le <a href="http://contributor-covenant.org/">code
+          de conduite du pacte de contributeur</a>, le <a href="https://www.debian.org/code_of_conduct">code
+          de conduite du projet Debian</a>, le <a href="https://www.ubuntu.com/about/about-ubuntu/conduct">code
+          de conduite du projet Ubuntu</a>, le <a href="https://getfedora.org/code-of-conduct">code
+          de conduite du projet Fedora</a>, le <a href="https://wiki.gnome.org/action/show/Foundation/CodeOfConduct">code
+          de conduite du projet GNOME</a>, le <a href="https://www.kde.org/code-of-conduct/">code
+          de conduite de la communauté KDE"</a>, le <a href="https://www.python.org/psf/codeofconduct/">code
+          de conduite de la communauté Python</a>, le <a href="https://www.ruby-lang.org/en/conduct/">guide
+          de conduite de la communauté Ruby</a>, et le <a href="https://www.rust-lang.org/en-US/conduct.html">code
+          de conduite du projet Rust</a>.
       roles_responsibilities:
         description: >-
           Le projet DOIT clairement définir et documenter publiquement
@@ -2825,7 +2917,7 @@ fr:
       get_your_badge: Obtenez votre badge immédiatement !
       p1_html: |-
         Le programme de badge des meilleures pratiques de
-        la <a href="https://www.coreinfrastructure.org/">Core Infrastructure Initiative (CII)</a> de la <a href="https://www.linuxfoundation.org/">Fondation Linux</a> est un moyen pour les projets de logiciel libre (FLOSS) de montrer qu'ils suivent les meilleures pratiques de développement. Les projets peuvent s'auto-évaluer de manière volontaire, sans frais, en utilisant cette application Web pour expliquer comment ils suivent chacune des meilleures pratiques.  Le programme de badge des meilleures pratiques de la CII s'inspire des nombreux badges disponibles aux projets sur GitHub. Les consommateurs du badge pourront évaluer rapidement quels projets de logiciel libre suivent les meilleures pratiques et, par conséquent, sont plus susceptibles de produire des logiciels sûrs et de meilleure qualité.
+        la <a href="https://www.coreinfrastructure.org/">Core Infrastructure Initiative (CII)</a> de la <a href="https://www.linuxfoundation.org/">Fondation Linux</a> est un moyen pour les projets de logiciel libre (FLOSS) de montrer qu'ils suivent les meilleures pratiques de développement. Les projets peuvent s'auto-évaluer de manière volontaire, sans frais, en utilisant cette application Web pour expliquer comment ils suivent chacune des meilleures pratiques. Le programme de badge des meilleures pratiques de la CII s'inspire des nombreux badges disponibles aux projets sur GitHub. Les consommateurs du badge peuvent évaluer rapidement quels projets de logiciel libre suivent les meilleures pratiques et, par conséquent, sont plus susceptibles de produire des logiciels sûrs et de meilleure qualité.
       p2_html: |-
         Plus d'informations sur le programme de badge
         des meilleures pratiques de la CII,
@@ -2840,18 +2932,22 @@ fr:
         pouvez y voir
         <a href="/fr/projects?gteq=100">les projets ayant obtenu le
         badge</a>). Vous pouvez également y voir
-        <a href='/fr/projects/1'>un exemple (où nous essayons
+        <a href='/fr/projects/1/0'>un exemple (où nous essayons
         d'obtenir notre propre badge)</a>.
       p3_html: >-
-        <em>Confidentialité et problèmes juridiques </em>: Consultez
+        <em>Confidentialité et problèmes juridiques</em> : Consultez
         notre <a href="https://www.linuxfoundation.org/privacy">politique
-        de confidentialité</a> et nos <a href="https://www.linuxfoundation.org/terms">conditions
-        d'utilisation</a>.  Tout les contenus publiquement disponibles
-        qui ne sont pas sous forme de code sont publiés sous la
-        license <a href="https://creativecommons.org/licenses/by/3.0/">Creative
+        de confidentialité</a>,  <a href="/fr/cookies">à propos
+        des cookies</a> et nos <a href="https://www.linuxfoundation.org/terms">conditions
+        d'utilisation</a>. Le code de l'application de badge elle-même
+        est distribué sous licence <a href="https://opensource.org/licenses/MIT">MIT</a>
+        (les projets soumis pour un badge sont sous leur licence
+        respectives). Tous les contenus publiquement disponibles
+        de l'application de badge qui ne sont pas sous forme de
+        code sont publiés sous la license <a href="https://creativecommons.org/licenses/by/3.0/">Creative
         Commons Attribution License version 3.0 (CC-BY-3.0)</a>
         ou plus permissive ; les contenus similaires plus récents
-        sont diffusés sous la license CC-BY version 3.0 ou ultérieure
+        sont diffusés sous la licence CC-BY version 3.0 ou ultérieure
         (CC-BY-3.0+).  Pour faire référence globalement à ces
         contenus, ou en l'absence d'instructions spécifiques,
         veuillez mentionner comme source les contributeurs du
@@ -2886,10 +2982,9 @@ fr:
       project_counts: >-
         Il existe %{projects} soumissions de projets ; %{passing}
         ont obtenu le badge et %{in_progress} sont en cours d'obtention.
-      project_stats_html: >-
-        Vous pouvez voir des statistiques sur les projets au cours
-        du temps sur la <a href="/fr/project_stats">page des statistiques
-        du projet</a>.
+      project_stats_html: |-
+        Les critères « actifs » sont ceux qui sont inclus dans les calculs de pourcentages (contrairement aux critères « futurs »). Les colonnes suivantes identifient le nombre de critères actifs à chaque niveau qui DOIVENT, DEVRAIENT ou PEUVENT être respectés, qui autorisent « N/A » comme réponse, qui requièrent une URL, qui incluent des détails, ou qui sont nouveaux à ce niveau. Les critères « futurs » sont affichés sur le formulaire, et devraient être ajoutés comme critères actifs à un certain niveau dans le futur, mais ne sont pas inclus dans les calculs de complétion. <br><br>
+        Vous pouvez voir des statistiques sur les projets au cours du temps sur la <a href="/fr/project_stats">page des statistiques du projet</a>.
       level: Niveau
       must: DOIT
       should: DEVRAIT

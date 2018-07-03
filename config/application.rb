@@ -20,3 +20,7 @@ module BadgeApp
     # -- all .rb files in that directory are automatically loaded.
   end
 end
+
+Rails.application.configure do
+  config.middleware.use Rack::Attack
+end

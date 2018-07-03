@@ -78,6 +78,7 @@ es:
     signed_out:
     no_login_time:
     login_automatic_signup:
+    login_disabled:
   static_pages:
     home:
       badge_program: Programa de CII Best Practices Badge
@@ -207,6 +208,10 @@ es:
       text_search:
       name_or_description:
       search:
+      silver_in_progress_variable:
+      silver_200:
+      gold_in_progress_variable:
+      gold_300:
     table:
       id:
       name:

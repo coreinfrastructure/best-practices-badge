@@ -6,6 +6,7 @@
 
 require 'test_helper'
 
+# rubocop:disable Metrics/ClassLength
 class UserTest < ActiveSupport::TestCase
   setup do
     @user = User.new(
@@ -84,6 +85,31 @@ class UserTest < ActiveSupport::TestCase
     assert_not @user.valid?
   end
 
+  test 'rekey test' do
+    # This is a somewhat complicated setup to create a user with an old key.
+    # We don't bother setting up an old blind index, because we're going
+    # to just obliterate it anyway.
+    user1 = User.new
+    # Set a different email address to initialize attr_encrypted
+    user1.email = 'wrong_email'
+    # Now insert some encrypted data using an "old" key
+    old_key = ['ea' * 32].pack('H*')
+    old_iv = Base64.decode64(user1.encrypted_email_iv)
+    email_address = 'bogus@stuff.com'
+    user1.encrypted_email = User.encrypt_email(
+      email_address,
+      key: old_key, iv: old_iv
+    )
+    # Setup done, now invoke rekey to test rekeying the record.
+    user1.rekey(old_key)
+    # Check if rekey results are correct
+    assert email_address, user1.email
+    new_blind_index = BlindIndex.generate_bidx( # Recalc so test's less fragile
+      email_address, User.blind_indexes[:email]
+    )
+    assert new_blind_index, user1.encrypted_email_bidx
+  end
+
   test 'associated projects should be destroyed' do
     @user.save!
     @user.projects.create!(
@@ -115,4 +141,15 @@ class UserTest < ActiveSupport::TestCase
     assert_match(/\$2a\$/, User.digest('foobar'))
     ActiveModel::SecurePassword.min_cost = true
   end
+
+  test 'Test user.email_if_decryptable when not decryptable' do
+    class StubUser < User
+      def email
+        raise OpenSSL::Cipher::CipherError
+      end
+    end
+    u = StubUser.new
+    assert_equal 'CANNOT_DECRYPT', u.email_if_decryptable
+  end
 end
+# rubocop:enable Metrics/ClassLength

@@ -92,8 +92,7 @@ class GithubLoginTest < CapybaraFeatureTest
 
     visit '/fr/signup'
     assert has_content? "S'inscrire"
-    click_on 'Si vous avez un compte GitHub, vous pouvez simplement ' \
-              + "l'utiliser pour vous connectez."
+    click_on 'Si vous avez un compte GitHub, vous pouvez simplement'
     click_link 'Connectez-vous avec GitHub'
     # TODO: We should check to ensure that on login we switch to the
     # preferred_locale, no matter what it is.

@@ -61,6 +61,7 @@ zh-CN:
       <a href="/cookies" target="_blank" rel="noopener"><i>了解有关浏览器缓存的更多信息。</i></a>
     no_login_time: "（没有先前记录的时间。）"
     login_automatic_signup: 如果需要，使用GitHub登录会自动执行注册。
+    login_disabled:
   users:
     new:
       signup_header: 注册
@@ -84,9 +85,9 @@ zh-CN:
       projects_owned: 拥有的项目：
       projects_additional_rights: 具有额外权力的项目：
       is_admin: 该用户是徽章应用管理员。
-      json_link:
-      in_json_format:
-      local_account:
+      json_link: JSON
+      in_json_format: JSON格式的用户数据（一种可移植标准格式）
+      local_account: 自定义（本地）帐户
     update:
       profile_updated: 资料已更新
     destroy:
@@ -152,6 +153,10 @@ zh-CN:
       all: 所有
       passing_100: 通过（100％）
       in_progress_variable: 正在进行中（%{percent}％以上）
+      silver_in_progress_variable:
+      silver_200:
+      gold_in_progress_variable:
+      gold_300:
     table:
       id: Id
       name: 名称

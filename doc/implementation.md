@@ -83,6 +83,51 @@ The application is configured by various environment variables:
   Used by aes-256-gcm (256-bit AES in GCM mode).
 * EMAIL_BLIND_INDEX_KEY: Key for blind index created for email
   (used by PBKDF2-HMAC-SHA256).  Must be 64 hex digits (==32 bytes==256 bits).
+* BADGEAPP_DENY_LOGIN: If a non-blank value is set ("true" is recommended),
+  then no on can log in, no one can create a new account (sign up),
+  and no one can do anything that requires being logged (users are always
+  treated as if they are not logged in).
+  This essentially prevents ANY changes by users (daily statistics
+  creates are unaffected).
+  From a security POV this is enforced by SessionsController#create (login),
+  UsersController#create (create new user/sign up), and
+  SessionsHelper#current_user (determine who current logged-in user is).
+  Some views disable the login and sign-in display, so that it's more
+  obvious to user what is going on.
+  This may be a useful mode to enable if there is a serious exploitable
+  security vulnerability, that can only be exploited by users who are
+  logged in or can appear to log in.  Unlike *completely* disabling the
+  site, this mode allows people to see current information
+  (such as badge status, project data, and public user data).
+  Note that application admins cannot log in, or use their privileges,
+  when this mode is enabled.  Only hosting site admins can turn this mode
+  on or off (since they're the only ones who can set environment variables).
+* RATE_details - a rate limit setting.  Rate limits provide an automated
+  partial countermeasure against denial-of-service and
+  password-guessing attacks.
+  These are implemented by Rack::Attack and have two parts, a
+  "LIMIT" (maximum count) and a "PERIOD" (length of period of time,
+  in seconds, where that limit is not to be exceeded).
+  If unspecified they have the default values specified in
+  config/initializers/rack_attack.rb.  These settings are
+  (where "IP" or "ip" means "client IP address", and "req" means "requests"):
+
+    - req/ip: RATE_REQ_IP_LIMIT, RATE_REQ_IP_PERIOD
+    - logins/ip: RATE_LOGINS_IP_LIMIT, RATE_LOGINS_IP_PERIOD
+    - logins/email: RATE_LOGINS_EMAIL_LIMIT, RATE_LOGINS_EMAIL_PERIOD
+    - signup/ip: RATE_SIGNUP_IP_LIMIT, RATE_SIGNUP_IP_PERIOD
+* FAIL2BAN_details - fail2ban settings (where repeated failures can lead
+  to a temporary ban).  This blocks an IP address that is
+  repeatedly making suspicious requests.
+  After FAIL2BAN_MAXRETRY blocked requests in FAIL2BAN_FINDTIME seconds,
+  we block all requests from that client IP for FAIL2BAN_BANTIME seconds.
+  A request is blocked if req.path matches the regex FAIL2BAN_PATH.
+  The source code includes some plausible defaults in
+  "config/initializers/rack_attack.rb"; the production settings
+  are not public.  This isn't the same thing as having a *real*
+  web application firewall, but it's simple and counters some
+  trivial attacks.  This should be coordinated with robots.txt so that
+  robots won't be fooled into following a link to a banned page.
 
 You can make cryptographically random values (such as keys)
 using "rails secret".  E.g., to create 64 random hexadecimal digits, use:
@@ -598,6 +643,94 @@ privileges to execute database commands, then run this:
 ~~~~
     heroku pg:psql --app production-bestpractices < project.sql
 ~~~~
+
+## Server-side data cache store
+
+[Caching with Rails](http://guides.rubyonrails.org/caching_with_rails.html)
+discusses the various options for the server-side data cache store.
+This can be configured by setting "config.cache_store".
+
+The main options are:
+
+* ActiveSupport::Cache::MemoryStore (:memory_store),
+* ActiveSupport::Cache::FileStore (:file_store)
+* ActiveSupport::Cache::MemCacheStore (:mem_cache_store)
+* ActiveSupport::Cache::RedisCacheStore (:redis_cache_store)
+
+We intentionally use MemoryStore (:memory_store)
+with a larger-than-default memory size.
+This may seem to be a surprising choice; here's why we do that.
+
+As noted in the Rails documentation for MemoryStore,
+"This cache store keeps entries in memory in the same Ruby process...
+If you're running multiple Ruby on Rails server processes (which is the
+case if you're using Phusion Passenger or puma clustered mode), then your
+Rails server process instances won't be able to share cache data with
+each other. This cache store is not appropriate for large application
+deployments. However, it can work well for small, low traffic sites
+with only a couple of server processes..."
+
+The
+[MemoryStore documentation](http://api.rubyonrails.org/classes/ActiveSupport/Cache/MemoryStore.html) further explains that it is
+"A cache store implementation which stores everything into memory in the
+same process. If you're running multiple Ruby on Rails server processes
+(which is the case if you're using Phusion Passenger or puma clustered
+mode), then this means that Rails server process instances won't be
+able to share cache data with each other and this may not be the most
+appropriate cache in that scenario. ...
+MemoryStore is thread-safe."
+
+In practice, we run as a single process with multiple threads.
+MemoryStore is thread-safe, so the threads *can* share the cache store.
+MemoryStore is obviously fast, and we can easily configure it to 64MB
+with no problems.  This seems to be more than adequate for our
+current situation.
+
+We can use alternatives, but must consider how
+[Heroku impacts caching strategies](https://devcenter.heroku.com/articles/caching-strategies).
+
+Heroku has an
+[ephemeral filesystem](https://devcenter.heroku.com/articles/dynos#ephemeral-filesystem),
+so any files written are temporary.
+That said, it's no worse than a memory-only cache, and it would be a
+valid alternative.
+
+Heroku offers memcached, but the free tiers are only 25M-30M (smaller
+than easily available from memory), and they quickly get expensive
+(the next tier up is only 100M).
+Redis also gets expensive.
+
+We can always pay for different caching systems.
+However, up to this point we haven't needed more than we have
+currently configured for.
+If we need to increase our server-side cache store
+capability, it's a relatively quick purchase and reconfiguration,
+with no other code changes.
+
+## Scaling up
+
+This software is designed to scale up as needed.
+
+Up to this point we've only needed a single dyno to run the system.
+That may seem surprising, however:
+
+* The main main stress on the system is badge requests,
+  and we offload practically all of that work to our CDN.
+* We run multiple threads (so we can handle a number of simultaneous requests).
+* We agressively use fragment caching stored in our
+  server-side data cache store.
+* We ensure that JavaScript and such are set to cache
+  on the client side, so are normally sent only once to a given client.
+
+If more is needed, we can just pay for additional dynos, and they
+will just work.
+The system knows to work with the RDMBS database, PostgreSQL, and PostgreSQL
+already scales well.
+
+That said, if we switch to multiple dynos, the configuration of the
+ActiveSupport::Cache should probably be changed, e.g., to
+MemCached or Redis.
+Otherwise the caches won't be shared between the instances.
 
 ## Purging Fastly CDN cache
 

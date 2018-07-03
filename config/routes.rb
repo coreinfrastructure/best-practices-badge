@@ -11,7 +11,7 @@
 # See how all your routes lay out with "rake routes".
 
 Rails.application.routes.draw do
-  LEGAL_LOCALE = /#{I18n.available_locales.join("|")}/
+  LEGAL_LOCALE = /(?:#{I18n.available_locales.join("|")})/
 
   # First, handle routing of special cases.
   # Warning: Routes that don't take a :locale value must include a
@@ -89,36 +89,11 @@ Rails.application.routes.draw do
     get '/signout' => 'sessions#destroy', as: :signout
     delete 'logout' => 'sessions#destroy'
 
-    # This route applies when we have a non-empty locale
-    # but the path doesn't match anything.
-    # Redirect this to a 404 error code. If we don't do this, we'll be
-    # stuck in a redirection loop caused by the code that redirects the
-    # no-locale-in-URL case to this case (a path with a prefixed locale).
-    match '*path',
-          to: 'static_pages#error_404_no_locale_redir', via: :all,
-          constraints: ->(req) { req.path_parameters[:locale].present? }
+    # No other route, send a 404 ("not found").
+    match '*path', via: :all, to: 'static_pages#error_404'
   end
 
-  # Immediately stop processing some well-known garbage requests,
-  # as a minor optimization, instead of processing their redirection later.
-  # There's no point in redirecting the locales in
-  # these cases, because a human is unlikely to read the error message.
-  # wp-login.php queries are evidences of WordPress brute-force attacks:
-  # http://www.inmotionhosting.com/support/edu/wordpress/
-  # wp-login-brute-force-attack
-  # Again, we provide a default locale to prevent locale redirection.
-  match 'kk.php',
-        via: :all, to: 'static_pages#error_404_no_locale_redir'
-  match 'wp-login.php',
-        via: :all, to: 'static_pages#error_404_no_locale_redir'
-  match '.well-known/*path',
-        via: :all, to: 'static_pages#error_404_no_locale_redir'
-
-  # No other route and no (allowed) locale - send a 404 ("not found").
-  # This will be intercepted and turned into a web browser redirect
-  # to the best-matching locale. If the web browser follows the redirect
-  # we provide, that new request will match the locale-specific 404 above.
-  # That will enable us to send a locale-specific 404 message.
+  # No other route ("locale" wasn't allowed), so send a 404 ("not found").
   match '*path', via: :all, to: 'static_pages#error_404'
 
   # Here are some examples of routes.

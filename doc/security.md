@@ -29,6 +29,7 @@ For more information on developing secure software, see
 
 The following figures summarize why we think this application
 is adequately secure (more detail is provided in the rest of this document):
+The figures are simply a summary; the text below provides the details.
 
 ![Assurance case summary](./assurance-case.png)
 ![Assurance case in lifecycle](./assurance-case-lifecycle.png)
@@ -38,10 +39,11 @@ These figures are in Claims, Arguments and Evidence (CAE) notation,
 which is a simple notation often used for assurance cases.
 Ovals are claims or sub-claims, while rounded rectangles are the supporting
 arguments justifying the claims.
-The figures are simply a summary; the text below provides the details.
-We do not show evidence in the figures, but provide the evidence in
+Evidence, where shown, are in rectangles.
+We do not show most evidence in the figures, but provide the evidence in
 the supporting text below instead, because large figures are time-consuming
-to edit.
+to edit and for purposes providing most evidence only in the supporting
+test is adequate.
 
 Our overall security approach is called
 defense-in-breadth, that is, we consider
@@ -79,23 +81,35 @@ feeding back as appropriate.
 Each process is (notionally) run in parallel;
 each receives inputs and produces outputs.
 
-Below are the overall security requirements, followed by how we approach
-security in the rest of the software development processes:
-design, implementation,
-verification, supply chain (reuse), and deployment/operations.
-This is followed by a discussion about security in the
-development environment and our people.
-Note that the project receives its own badge
-(the CII best practices badge),
-which provides additional evidence that it applies best practices
-that can lead to more secure software.
-We then provide details about authentication (login); authentication
-is a cross-cutting and critical supporting security mechanism, so
-it's easier to describe it all in one place.
+The following sections are organized like the assurance case figures:
 
-After that we discuss controls, in the context of the
-[Center for Internet Security (CIS) Controls](https://www.cisecurity.org/controls/)
-(aka critical controls).
+* We begin with the overall security requirements.
+  This includes not just the high-level requirements in terms
+  of confidentiality, integrity, and availability, but also
+  access control in terms of identification, authentication (login),
+  and authorization.  Authentication
+  is a cross-cutting and critical supporting security mechanism, so
+  it's easier to describe it all in one place.
+* This is followed by
+  security in the rest of the software development processes:
+  design, implementation,
+  verification, supply chain (reuse), and deployment/operations.
+* This is followed by a discussion about security in the
+  development environment and the people involved in development.
+* We close with a discussion of certifications and controls.
+  Certification processes
+  can help us find something we missed, as well as provide confidence
+  that we haven't missed anything important).
+  Note that the project receives its own badge
+  (the CII best practices badge),
+  which provides additional evidence that it applies best practices
+  that can lead to more secure software.
+  Similarly, selecting IA controls can help us review important issues
+  to ensure that the system will be adequately secure in its intended
+  environment (including any compensating controls added to its environment).
+  We controls in the context of the
+  [Center for Internet Security (CIS) Controls](https://www.cisecurity.org/controls/)
+  (aka critical controls).
 
 We conclude with a short discussion of residual risks,
 describe the vulnerability report handling process, and make
@@ -106,10 +120,16 @@ export to .png so that it can viewed on GitHub.)
 
 ## Security Requirements
 
-### Basic Security Requirements
+We believe the basic security requirements have been identified and met.
 
-Here is what BadgeApp must do to be secure (and a few comments about
-how we implement these requirements):
+### Basic security requirements: Confidentiality, Integrity, and Availability
+
+Security requirements are often divided into three areas called the
+"CIA triad": confidentiality, integrity, and availability.
+We do the same here.
+
+Here are the BadgeApp security requirements in terms of the CIA triad
+(along with a few comments about how we implement these requirements):
 
 * Confidentiality:
     - Almost all data we collect is considered public, e.g., all project data,
@@ -193,11 +213,22 @@ how we implement these requirements):
       of resources when necessary.
     - All queries, including project data queries, have a timeout.
       That way, the system is not permanently "stuck" on a request.
+    - As noted later in the hardening section, we have rate limits on
+      incoming requests, including the number of requests a
+      client IP address can make in a given period.
+      This provides a small amount of automated protection against
+      being overwhelmed.
     - The system can return to operation quickly after
       a DDoS attack has ended.
     - We routinely backup the database and retain multiple versions.
       That way, if the project data is corrupted, we can restore the
       database to a previous state.
+    - We have implemented a "login disabled" degraded mode.
+      If there is a serious security problem, in many cases we can
+      switch to that mode.  This mode lets us continue to
+      provide read-only services until the vulnerability is fixed.
+    - We have a recovery plan (described below) that builds on our
+      ability to recover from backup.
 
 Identity, Authentication, and Authorization are handled in a traditional
 manner, as described below.
@@ -209,6 +240,168 @@ In addition, it must avoid being a conduit for others' attacks
 (e.g., not be vulnerable to cross-site scripting).
 We do this by focusing on having a secure design and countering the
 most common kinds of attacks (as described below).
+
+### Access Control
+
+Many of the CIA triad requirements address "authorized" users,
+and that requires knowing what "authorized" means.
+Thus, like nearly all systems, we must address access control,
+which we can divide into identification, authentication, and authorization.
+
+#### Identification
+
+Normal users must must first identify themselves in one of two ways:
+(1) as a GitHub user with their github account name, or
+(2) as a custom "local" user with their email address.
+
+The BadgeApp application runs on a deployment platform (Heroku),
+which has its own login mechanisms.
+Only those few administrators with deployment platform access have
+authorization to log in there, and those are protected by the
+deployment platform supplier (and thus we do not consider them further here).
+The login credentials in these cases are protected.
+
+#### Authentication
+
+As with most systems, it's critically
+important that authentication work correctly.
+Therefore, in this section we'll go into some detail about how
+authentication works within the BadgeApp application.
+
+This system implements two kinds of users: local and remote.
+Local users log in using a password, but
+user passwords are only stored on the server as
+iterated salted hashes (using bcrypt).
+Remote users use a remote system (we currently only support GitHub)
+using the widely-used OAUTH protocol.
+At the time the application was written, the recommendation
+was to *not* use libraries like Devise, because they were not mature at
+the time. Such libraries have become much more mature, but as of yet
+there hasn't been a good reason to change.
+
+The key code for authentication is the "sessions" controller file
+"app/controllers/sessions_controller.rb".
+In this section we only consider the login mechanism
+built into the BadgeApp.  Heroku has its own login mechanisms, which must
+be carefully controlled but are out of scope here.
+
+A user who views "/login" will be routed to GET sessions#new, which returns
+the login page.  From there:
+
+* A local user login will POST that information to /login, which is
+  routed to session#create along with parameters such as session[email]
+  and session[password].  If the bcrypt'ed hash of the password matches
+  the stored hash, the user is accepted.
+* A remote user login (pushing the "log in with GitHub" button) will
+  invoke GET "/auth/github".  The application then begin an omniauth
+  login, by redirecting the user to "https://github.com/login?"
+  with URL parameters of client_id and return_to.
+  When the GitHub login completes, then per the omniauth spec there's a
+  redirect back to our site to /auth/github/callback, which is
+  routed to session#create along with values such as
+  the parameter session[provider] set to 'GitHub', which we then check
+  by using the omniauth-github gem (this is the "callback phase").
+  If we confirm that GitHub asserts that the user is authenticated,
+  then we accept GitHub's ruling for that github user and log them in.
+  This interaction with GitHub uses GITHUB_KEY and GITHUB_SECRET.
+  For more information, see the documentation on omniauth-github.
+
+The first thing that session#create does is run "counter_fixation";
+this counters session fixation attacks
+(it also saves the forwarding url, in case we want to return to it).
+
+Local users may choose to "remember me" to automatically re-login on
+that specific browser if they use a local account.
+This is implemented using a
+cryptographically random nonce stored in the user's cookie store
+as a permanent cookie.  This nonce
+acts like a password, which is verified against a
+remember_digest value stored in the server
+that is an iterated salted hash (using bcrypt).
+This "remember me" functionality cannot reveal the user's
+original password, and if the server's user database is
+compromised an attacker cannot easily find the nonce.
+The nonce is protected in transit by HTTPS (discussed elsewhere).
+The user_id stored by the user is signed by the server.
+As with any system, the "remember me" functionality has a
+weakness: if the user's system is compromised, others can log
+in as that user.  But this is fundamental to any "remember me"
+functionality, and users must opt in to enable "remember me"
+(by default users must enter their password on each login,
+and the login becomes invalid when the user logs out or when
+the user exits the entire browser, because the cookie for login
+is only a session cookie).
+The "remember me" box was originally implemented
+in commit e79decec67.
+
+A session is created for each user who successfully logs in.
+
+We expressly include tests in our test suite
+of our authentication system
+to ensure that in 'local' accounts correct passwords allow login,
+while incorrect and unfilled passwords lead to login failure.
+It's important to test that certain actions that *must* fail for
+security reasons do indeed fail (testing to ensure that actions will
+fail when they should fail is termed "negative testing").
+We trust external systems to verify their external accounts (that means
+we trust GitHub to verify a GitHub account).
+
+#### Authorization
+
+Users who have not authenticated themselves can only perform
+actions allowed to anyone in the public (e.g., view the home page,
+view the list of projects, and view the information about each project).
+Once users are authenticated they are authorized to perform certain
+additional actions depending on their permissions.
+
+The permissions system is intentionally simple.
+As noted above,
+every user has an account, either a 'local' account or an external
+system account (currently we support GitHub as an external account).
+A user with role='admin' is an administrator;
+few users are administrators, and only those with direct platform (Heroku)
+access can set a user to be an administrator.
+
+Anyone can create a normal user account.
+A user can create as many project entries as desired.
+Each project entry gets a new unique project id and is
+owned by the user who created the project entry.
+
+There are two kinds of rights: "control" rights and "edit" rights.
+
+"Control" rights mean you can delete the project AND
+change who else is allowed to edit (they control their projects'
+entry in the additional_rights table). Anyone with control rights
+also has edit rights.  The project owner has control
+rights to the projects they own,
+and admins have control rights over all projects.
+
+"Edit" rights mean you can edit the project entry. If you have
+control rights over a project you also have edit rights.
+In addition, fellow committers on GitHub for that project,
+and users in the additional_rights table
+who have their user_id listed for that project, get edit rights
+for that project.
+The additional_rights table adds support for groups so that they can
+edit project entries when the project is not on GitHub.
+
+This means that
+a project entry can only be edited (and deleted) by the entry creator,
+an administrator, by others who can prove that they
+can edit that GitHub repository (if it is on GitHub), and by those
+authorized to edit via the additional_rights table.
+Anyone can see the project entry results once they are saved.
+We do require, in the case of a GitHub project entry, that the
+entry creator be logged in via GitHub *and* be someone who can edit that
+project.
+
+We expressly include tests in our test suite
+of our authorization system
+to check that accounts cannot perform actions they are not authorized
+to perform (e.g., edit a project that they do not have edit rights to,
+or delete a project they do not control).
+It's important to test that certain actions that *must* fail for
+security reasons do indeed fail.
 
 ### Assets
 
@@ -247,7 +440,10 @@ would have a financial incentive to help us counter the attacks.
 This makes the attacks themselves less likely
 (since there would be no financial benefit to them).
 
-There's no reason a state actor would attack the site
+Like many commercial sites,
+we do not have the (substantial) resources necessary
+to counter a state actor who decided to directly attack our site.
+However, there's no reason a state actor would directly attack the site
 (we don't store anything that valuable), so while many are very capable,
 we do not expect them to be a threat to this site.
 
@@ -272,58 +468,13 @@ we use Ruby (a memory-safe language),
 and exceptions halt automated processing for that entry (which merely
 disables automated data gathering for that entry).
 
-The permissions system is intentionally simple.
-Every user has an account, either a 'local' account or an external
-system account (currently we support GitHub as an external account).
-We expressly include tests in our test suite
-to ensure that in 'local' accounts correct passwords allow login,
-while incorrect and unfilled passwords lead to login failure
-(it's important to test that certain actions that *must* fail for
-security reasons do indeed fail).
-We trust external systems to verify their external accounts (that means
-we trust GitHub to verify a GitHub account).
-Anyone can create an account.
-A user with role='admin' is an administrator;
-few users are administrators.
-A user can create as many project entries as desired.
-Each project entry gets a new unique project id and is
-owned by the user who created the project entry.
-
-There are two kinds of rights: "control" rights and "edit" rights.
-
-"Control" rights mean you can delete the project AND
-change who else is allowed to edit (they control their projects'
-entry in the additional_rights table). Anyone with control rights
-also has edit rights.  The project owner has control
-rights to the projects they own,
-and admins have control rights over all projects.
-
-"Edit" rights mean you can edit the project entry. If you have
-control rights over a project you also have edit rights.
-In addition, fellow committers on GitHub for that project,
-and users in the additional_rights table
-who have their user_id listed for that project, get edit rights
-for that project.
-The additional_rights table adds support for groups so that they can
-edit project entries when the project is not on GitHub.
-
-This means that
-a project entry can only be edited (and deleted) by the entry creator,
-an administrator, by others who can prove that they
-can edit that GitHub repository (if it is on GitHub), and by those
-authorized to edit via the additional_rights table.
-Anyone can see the project entry results once they are saved.
-We do require, in the case of a GitHub project entry, that the
-entry creator be logged in via GitHub *and* be someone who can edit that
-project.
-
 Here we have identified the key security requirements and why we believe
 they've been met overall.  However, there is always the possibility that
 a mistake could lead to failure to meet these requirements.
 It is not possible to eliminate all possible risks; instead,
 we focus on *managing* risks.
 We manage our security risks by
-implementing security in all our software development processes.
+implementing security in our software development processes.
 We also protect our development environment and choose people
 who will help support this.
 The following sections describe how we've managed our security-related risks.
@@ -1085,10 +1236,44 @@ as of 2015-12-14:
    For example, we use a restrictive Content Security Policy (CSP) header.
    For more information, see the hardening section.
 
+The
+[Ruby on Rails Security Guide](http://guides.rubyonrails.org/security.html)
+is the official Rails guide, so it is the primary guide we consult.
+That said, we do look for other sources for recommendations,
+and consider them where they make sense.
+
+In particular, the
+[ankane/secure_rails](https://github.com/ankane/secure_rails) guide
+has some interesting tips.
+Most of them were were already doing, but an especially interesting
+tip was to
+"Prevent host header injection -
+add the following to config/environments/production.rb":
+
+~~~~
+config.action_controller.default_url_options = {host: "www.yoursite.com"}
+config.action_controller.asset_host = "www.yoursite.com"
+~~~~
+
+We already did the first one, but we also added the second.
+
+In many Rails configurations this is a critically-required configuration,
+and failing to follow these steps could lead in part
+to a potential compromise.
+In our particular configuration the host value is set
+by a trusted entity (Heroku), so we were never vulnerable,
+but there is no reason to depend on the value Heroku provides.
+We know the correct values, so we forcibly set them.
+This ensures that even if a user provides a "host" value,
+and for some reason Heroku allows it to pass through or we
+switch to a different computation engine provider,
+we will not use this value; we will instead use a preset trusted value.
+
 ### Hardening
 
-We also use various mechanisms to harden the system against attack;
-these attempt to thwart or slow attack even if the system has a vulnerability.
+We also use various mechanisms to harden the system against attack.
+These attempt to thwart or slow attack even if the system has a vulnerability
+not countered by the main approaches described elsewhere in this document.
 
 #### Force the use of HTTPS, including via HSTS
 
@@ -1114,9 +1299,9 @@ See
 ["Rails, Secure Cookies, HSTS and friends" by Ilija Eftimov (2015-12-14)](http://eftimov.net/rails-tls-hsts-cookies)
 for more about the impact of force_ssl.
 
-#### Hardened HTTP Headers
+#### Hardened outgoing HTTP headers, including restrictive CSP
 
-We harden the HTTP headers, in particular, we use a
+We harden the outgoing HTTP headers, in particular, we use a
 restrictive Content Security Policy (CSP) header with just
 "normal sources" (normal_src).  We do send a
 Cross-Origin Resource Sharing (CORS) header when an origin is specified,
@@ -1171,28 +1356,68 @@ secure=true (which is irrelevant because we always use HTTPS but it
 can't hurt), and SameSite=Lax (which counters CSRF attacks on
 web browsers that support it).
 
-#### Per-form CSRF token
+#### CSRF token hardening
 
-We enable per-form CSRF tokens, a Rails 5 addition.
-(Rails.application.config.action_controller.per_form_csrf_tokens)
-This helps counter CSRF, in addition to our other measures.
+We use two additional CSRF token hardening techniques
+to further harden the system against CSRF attacks.
+Both of these techniques are Rails 5 additions:
 
-#### Origin-checking CSRF token
+* We enable per-form CSRF tokens
+  (Rails.application.config.action_controller. per_form_csrf_tokens).
+* We enable origin-checking CSRF mitigation
+  (Rails.application.config.action_controller. forgery_protection_origin_check).
 
-We enable origin-checking CSRF mitigation, a Rails 5 addition.
-(Rails.application.config.action_controller.forgery_protection_origin_check)
-This helps counter CSRF, in addition to our other measures.
+These help counter CSRF, in addition to our other measures.
 
-#### Email rate limit
+#### Incoming rate limits
 
-We enable rate limits on reminder emails.
+Rate limits provide an automated partial
+countermeasure against denial-of-service and password-guessing attacks.
+These are implemented by Rack::Attack and have two parts, a
+"LIMIT" (maximum count) and a "PERIOD" (length of period of time,
+in seconds, where that limit is not to be exceeded).
+If unspecified they have the default values specified in
+config/initializers/rack_attack.rb.  These settings are
+(where "IP" or "ip" means "client IP address", and "req" means "requests"):
+
+- req/ip
+- logins/ip
+- logins/email
+- signup/ip
+
+We also have a set of simple FAIL2BAN settings that temporarily
+bans an IP address if it makes too many "suspicious" requests.
+The exact production settings are not documented here, since we
+don't want to tell attackers what we look for.
+This isn't the same thing as having a *real*
+web application firewall, but it's simple and counters some
+trivial attacks.
+
+To determine the remote client IP address (for our purposes) we use the
+the next-to-last value of the comma-space-separated value
+"HTTP_X_FORWARDED_FOR" (from the HTTP header X-Forwarded-For).
+That's because the last value of "HTTP_X_FORWARDED_FOR"
+is always our CDN (which intercepts it first), and the previous
+value is set by our CDN to whatever IP address the CDN got.
+The web server is configured so it will only accept connections from the
+CDN - this prevents web piercing, and means that we can trust that the
+client IP value we receive is only from the CDN (which we trust for
+this purpose).
+A client can always set X-Forwarded-For and try to spoof something,
+but those entries are always earlier in the list
+(so we can easily ignore them).
+
+#### Outgoing email rate limit
+
+We enable rate limits on outgoing reminder emails.
 We send reminder emails to projects that have not updated their
 badge entry in a long time. The detailed algorithm that prioritizes projects
 is in "app/models/project.rb" class method "self.projects_to_remind".
 It sorts by reminder date, so we always cycle through before returning to
-a previously-reminded project.  We have a hard rate limit on the number
-of emails we will send out each time; this keeps us from looking like
-a spammer.
+a previously-reminded project.
+
+We have a hard rate limit on the number of emails we will send out each
+time; this keeps us from looking like a spammer.
 
 #### Encrypted email addresses
 
@@ -1594,8 +1819,13 @@ and how it helps make the software more secure:
   Our style checking tools detect misleading indentation;
   <a href="http://www.dwheeler.com/essays/apple-goto-fail.html#indentation">this
   counters the mistake in the Apple goto fail vulnerability</a>.
-* Security vulnerability scanner (for finding new vulnerabilities).
-  We use brakeman, a static source code analyzer that focuses
+* Source code weakness analyzer (for finding vulnerabilities in custom code).
+  A source code weakness analyzer, also known as a security vulnerability
+  scanner, examines the source code to identify vulnerabilities.
+  This is one of many kinds of "static analysis" tools, that is, a tool
+  that doesn't run the code (and thus is not limited to examining only the
+  cases of specific inputs).
+  We use brakeman, a source code weakness analyzer that focuses
   on finding security issues in Ruby on Rails applications.
   Note that this is separate from the automatic detection of
   third-party components with publicly-known vulnerabilities;
@@ -1659,9 +1889,12 @@ and how it helps make the software more secure:
       administrator privileges.
 * The software has a strong test suite; our policy requires
   at least 90% statement coverage.
-  In practice our coverage is much higher, indeed it has been 100%
-  for a long time.
-  This makes it easier to update components (e.g., if a third-party component
+  In practice our autoamted test suite coverage is much higher; it has achieved
+  100% statement coverage for a long time.
+  You can verify this by looking at the "CodeCov" value at the
+  [BadgeApp repository](https://github.com/coreinfrastructure/best-practices-badge).
+  This strong test suite
+  makes it easier to update components (e.g., if a third-party component
   has a publicly disclosed vulnerability).
   The test suite also makes it easier to make other fixes (e.g., to harden
   something) and have fairly high
@@ -1800,15 +2033,78 @@ We are also alerted if the website goes down.
 One of those mechanisms is uptime robot:
 <https://uptimerobot.com/dashboard>
 
-### Recovery
+### Recovery plan including backups
 
+Once we detect that there is a problem, we have plans
+and mechanisms in place to help us recover,
+including backups.
+
+Once we determine that there is a problem, we must
+determine to a first order the scale of the problem,
+what to do immediately, and what to do over time.
+
+If there is an ongoing security issue, we have a few immediate options
+(other than just leaving the system running).
+We can shut down the system,
+disable internet access to it, or enable the
+application's BADGEAPP_DENY_LOGIN mode.
+The BADGEAPP_DENY_LOGIN mode is a capability we have pre-positioned
+to deal with many potential problems.
+If a non-blank value is set ("true" is recommended)
+in the environmental variable BADGEAPP_DENY_LOGIN,
+then no one can log in, no one can create a new account (sign up),
+and no one can do anything that requires being logged in (users are always
+treated as if they are not logged in).
+The BADGEAPP_DENY_LOGIN mode
+essentially prevents ANY changes by users (daily statistics
+creates are unaffected).
+
+The BADGEAPP_DENY_LOGIN mode
+may be a useful mode to enable if there is a serious exploitable
+security vulnerability that can only be exploited by users who are
+logged in or can appear to log in.  Unlike *completely* disabling the
+site, this mode allows people to see current information
+(such as badge status, project data, and public user data).
+This mode is useful because it can stop most attacks, while still providing
+some services.
+Note that application admins cannot log in, or use their privileges,
+when this mode is enabled.  Only hosting site admins can turn this mode
+on or off (since they're the only ones who can set environment variables).
+
+We will work with the LF data controller to determine if there has been
+a personal data breach, and help the data controller alert the
+supervisory authority where appropriate.
+The General Data Protection Regulation (GDPR) section 33 requires that
+in the case of a personal data breach, the controller shall
+"without undue delay, and, where feasible, not later than 72 hours
+after having become aware of it, notify the personal data breach to the
+supervisory authority... unless the personal data breach is unlikely to
+result in a risk to the rights and freedoms of natural persons."
+
+Once we have determined the cause, we would work to quickly determine
+how to fix the software and/or change the configuration to
+address the attack (at least to ensure that integrity and confidentiality
+are maintained).
+As shown elsewhere, we have a variety of tools and tests that help us
+rapidly update the software with confidence.
+
+Once the system is fixed, we might need to alert users.
+We have a pre-created rake task "mass_email" that lets us quickly
+send email to the users (or a subset) if it strictly necessary.
+
+We might also need to re-encrypt the email addresses with a new key.
+We have pre-created a rake task "rekey" that performs rekeying of
+email addresses should that be necessary.
+
+Finally, we might need to restore from backups.
+We use the standard Rails and PostgreSQL mechanisms for loading backups.
 We backup the database daily, and archive many versions so
 we can restore from them.
 See the [Heroku site](https://devcenter.heroku.com/articles/heroku-postgres-backups#scheduled-backups-retention-limits) for retention times.
 
 The update process to the "staging" site backs up the production site
 to the staging site.  This provides an additional backup, and also
-serves as a check to make sure the backup process is working.
+serves as a check to make sure the backup and restore processes are working.
 
 ## Security of the development environment
 
@@ -1877,7 +2173,9 @@ Jason Dossett has a PhD in Physics from The University of Texas at Dallas,
 and has been involved in software development for many years.
 He has reviewed and is familiar with the security assurance case here.
 
-## Certifications (receive CII best practices badge)
+## Certifications and Controls
+
+### Certifications (receive CII best practices badge)
 
 One way to increase confidence in an application is to pass
 relevant certifcations.  In our case, the BadgeApp is the result
@@ -1890,74 +2188,11 @@ The BadgeApp application achieves its own badge.
 This is evidence that the BadgeApp application is
 applying practices expected in a well-run FLOSS project.
 
-## Details about authentication (login)
+You can see the
+[CII Best Practices Badge entry for the BadgeApp](https://bestpractices.coreinfrastructure.org/en/projects/1/0).
+Note that we achieve a gold badge.
 
-As with most systems, it's important that authentication work correctly.
-The key code for authentication is the "sessions" controller file
-"app/controllers/sessions_controller.rb".
-In this section we only consider the login mechanism
-built into the BadgeApp.  Heroku has its own login mechanisms, which must
-be carefully controlled but are out of scope here.
-
-This system implements two kinds of users: local and remote.
-Local users log in using a password, but
-user passwords are only stored on the server as
-iterated salted hashes (using bcrypt).
-Remote users use a remote system (we currently only support GitHub).
-
-A user who views "/login" will be routed to GET sessions#new, which returns
-the login page.  From there:
-
-* A local user login will POST that information to /login, which is
-  routed to session#create along with parameters such as session[email]
-  and session[password].  If the bcrypt'ed hash of the password matches
-  the stored hash, the user is accepted.
-* A remote user login (pushing the "log in with GitHub" button) will
-  invoke GET "/auth/github".  The application then begin an omniauth
-  login, by redirecting the user to "https://github.com/login?"
-  with URL parameters of client_id and return_to.
-  When the GitHub login completes, then per the omniauth spec there's a
-  redirect back to our site to /auth/github/callback, which is
-  routed to session#create along with values such as
-  the parameter session[provider] set to 'GitHub', which we then check
-  by using the omniauth-github gem (this is the "callback phase").
-  If we confirm that GitHub asserts that the user is authenticated,
-  then we accept GitHub's ruling for that github user and log them in.
-  This interaction with GitHub uses GITHUB_KEY and GITHUB_SECRET.
-  For more information, see the documentation on omniauth-github.
-
-The first thing that session#create does is run "counter_fixation";
-this counters session fixation attacks
-(it also saves the forwarding url, in case we want to return to it).
-
-Local users may choose to "remember me" to automatically re-login on
-that specific browser if they use a local account.
-This is implemented using a
-cryptographically random nonce stored in the user's cookie store
-as a permanent cookie.  This nonce
-acts like a password, which is verified against a
-remember_digest value stored in the server
-that is an iterated salted hash (using bcrypt).
-This "remember me" functionality cannot reveal the user's
-original password, and if the server's user database is
-compromised an attacker cannot easily find the nonce.
-The nonce is protected in transit by HTTPS (discussed elsewhere).
-The user_id stored by the user is signed by the server.
-As with any system, the "remember me" functionality has a
-weakness: if the user's system is compromised, others can log
-in as that user.  But this is fundamental to any "remember me"
-functionality, and users must opt in to enable "remember me"
-(by default users must enter their password on each login,
-and the login becomes invalid when the user logs out or when
-the user exits the entire browser, because the cookie for login
-is only a session cookie).
-The "remember me" box was originally implemented
-in commit e79decec67.
-
-A session is created for each user who successfully logs in.
-See the discussion above for more information on how we handle sessions.
-
-## Organizational Controls
+### Organizational Controls
 
 The
 [Center for Internet Security (CIS) Controls](https://www.cisecurity.org/controls/)
@@ -2090,6 +2325,8 @@ believe they are acceptable:
 As noted in CONTRIBUTING.md, if anyone finds a
 significant vulnerability, or evidence of one, we ask that they
 send that information to at least one of the security contacts.
+The CONTRIBUTING.md file explains how to report a vulnerability;
+below we describe what happens once vulnerability is reported.
 
 Whoever receives that report will share that information with the
 other security contacts, and one of them will analyze it:
@@ -2099,11 +2336,17 @@ other security contacts, and one of them will analyze it:
   the reporter can reply and start the process again).
 * If it is a bug but not security vulnerability, the security contact
   will create an issue as usual for repair.
-* If it a security vulnerability, one of the security contacts will
+* If it is a security vulnerability, one of the security contacts will
   fix it in a *local* git repository and *not* share it with the world
   until the fix is ready.  An issue will *not* be filed, since those
   are public.  If it needs review, the review will not be public.
+  Discussions will be held, as much as practical, using encrypted
+  channels (e.g., using email systems that support hop-to-hop encryption).
   Once the fix is ready, it will be quickly moved through all tiers.
+  The goal is to minimize the risk of attackers exploiting the problem
+  before it is fixed.  Our goal is to fix any real vulnerability within
+  two calendar weeks of a report (and do it faster if practical);
+  the actual time will depend on the difficulty of repair.
 
 Once the fix is in the final production system, credit will be
 publicly given to the vulnerability reporter (unless the reporter

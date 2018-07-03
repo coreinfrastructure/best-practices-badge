@@ -498,8 +498,12 @@ task fix_use_gravatar: :environment do
   User.where(provider: 'local').find_each do |u|
     actually_exists = u.gravatar_exists
     if u.use_gravatar != actually_exists # Changed result - set and store
-      u.use_gravatar = actually_exists
-      u.save!
+      # Use "update_column" so that updated_at isn't changed, and also
+      # to do things more quickly.  There are no model validations that
+      # can be affected setting this boolean value, so let's skip them.
+      # rubocop: disable Rails/SkipsModelValidations
+      u.update_column(:use_gravatar, actually_exists)
+      # rubocop: enable Rails/SkipsModelValidations
     end
   end
 end
@@ -615,6 +619,28 @@ task update_all_higher_level_badge_percentages: :environment do
   Project.update_all_badge_percentages(Criteria.keys - ['0'])
 end
 
+# To change the email encryption keys:
+# Set EMAIL_ENCRYPTION_KEY_OLD to old key,
+# set EMAIL_ENCRYPTION_KEY and EMAIL_BLIND_INDEX_KEY to new key, and run this.
+# THIS ASSUMES THAT THE DATABASE IS QUIESCENT (e.g., it's temporarily
+# unavailable to users).  If you don't like that assumption, put this
+# within a transaction, but you'll pay a performance price.
+# Note: You *CAN* re-invoke this if a previous pass only went partway;
+# we loop over all users, but ignore users where the rekey doesn't work.
+desc 'Rekey (change keys) of email addresses'
+task rekey: :environment do
+  old_key = [ENV['EMAIL_ENCRYPTION_KEY_OLD']].pack('H*')
+  User.find_each do |u|
+    begin
+      u.rekey(old_key) # Raises exception if there's a CipherError.
+      Rails.logger.info "Rekeyed email address of user id #{u.id}"
+      u.save! if u.email.present?
+    rescue OpenSSL::Cipher::CipherError
+      Rails.logger.info "Cannot rekey user #{u.id}"
+    end
+  end
+end
+
 Rake::Task['test:run'].enhance ['test:features']
 
 # This is the task to run every day, e.g., to record statistics
@@ -650,7 +676,24 @@ end
 # rubocop:enable Style/Send
 
 desc 'Run monthly tasks (called from "daily")'
-task monthly: %i[environment monthly_announcement] do
+task monthly: %i[environment monthly_announcement fix_use_gravatar] do
+end
+
+# Send a mass email, subject MASS_EMAIL_SUBJECT, body MASS_EMAIL_BODY.
+# If you set MASS_EMAIL_WHERE, only matching records will be emailed.
+# We send *separate* emails for each user, so that users won't be able
+# to learn of each other's email addresses.
+# We do *NOT* try to localize, for speed.
+desc 'Send a mass email (e.g., a required GDPR notification)'
+task :mass_email do
+  subject = ENV['MASS_EMAIL_SUBJECT']
+  body = ENV['MASS_EMAIL_BODY']
+  where_condition = ENV['MASS_EMAIL_WHERE'] || 'true'
+  raise if !subject || !body
+  User.where(where_condition).find_each do |u|
+    UserMailer.direct_message(u, subject, body).deliver_now
+    Rails.logger.info "Mass notification sent to user id #{u.id}"
+  end
 end
 
 # Run this task periodically if we want to test the

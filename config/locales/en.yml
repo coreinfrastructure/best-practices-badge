@@ -2687,6 +2687,9 @@ en:
           The key hardening headers are: Content Security Policy
           (CSP), HTTP Strict Transport Security (HSTS), X-Content-Type-Options
           (as "nosniff"), X-Frame-Options, and X-XSS-Protection.
+          Static web sites with no ability to log in via the web pages
+          may omit the CSP and X-XSS-Protection HTTP hardening headers,
+          because in that situation those headers are less effective.
       security_review:
         description: >-
           The project MUST have performed a security review within

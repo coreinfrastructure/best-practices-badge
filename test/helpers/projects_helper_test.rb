@@ -17,6 +17,13 @@ class ProjectsHelperTest < ActionView::TestCase
     assert_equal "<p><em>hi</em></p>\n", markdown('*hi*')
   end
 
+  test 'markdown - Embedded HTML i filtered out' do
+    # In the future we might permit this, but if we do, we need to make
+    # sure only safe attributes are allowed.  Since users can just use
+    # markdown, there's no rush to support embedded HTML.
+    assert_equal "<p>hi</p>\n", markdown('<i>hi</i>')
+  end
+
   test 'markdown - bare URL' do
     assert_equal(
       '<p><a href="http://www.dwheeler.com" rel="nofollow">' \
@@ -46,6 +53,7 @@ class ProjectsHelperTest < ActionView::TestCase
     # so we don't allow the use of <a ...>.  People can insert a hyperlink,
     # but they have to use the markdown format [test](URL), and that format
     # gives us an opportunity to forcibly insert rel="nofollow".
+    # Negative test (security)
     assert_equal(
       "<p>Junk</p>\n",
       markdown('<a href="https://www.dwheeler.com">Junk</a>')
@@ -55,11 +63,20 @@ class ProjectsHelperTest < ActionView::TestCase
   test 'markdown - no script HTML' do
     # Allowing <script> would be a big security vulnerability.
     # This is a negative test to make sure we're filtering it out.
+    # Negative test (security)
     assert_equal(
       "<p>Hello</p>\n",
       markdown('<script src="hi"></script>Hello')
     )
   end
+
+  test 'markdown - Embedded onclick rejected' do
+    # In the future we might allow "i", but we must continue to
+    # reject attributes unless we are sure they are safe.
+    # Negative test (security)
+    assert_equal "<p>hi</p>\n", markdown('<i onclick="alert();">hi</i>')
+  end
+
 
   test 'markdown - _target not included' do
     # In the future we might permit <a href=...>, but we must NOT allow

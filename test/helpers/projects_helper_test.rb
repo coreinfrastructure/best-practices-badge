@@ -77,7 +77,6 @@ class ProjectsHelperTest < ActionView::TestCase
     assert_equal "<p>hi</p>\n", markdown('<i onclick="alert();">hi</i>')
   end
 
-
   test 'markdown - _target not included' do
     # In the future we might permit <a href=...>, but we must NOT allow
     # target="..." in it because that's a security vulnerability.

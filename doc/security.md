@@ -34,6 +34,7 @@ The figures are simply a summary; the text below provides the details.
 ![Assurance case summary](./assurance-case.png)
 ![Assurance case in lifecycle](./assurance-case-lifecycle.png)
 ![Assurance case in implementation](./assurance-case-implementation.png)
+![Assurance case in other processes](./assurance-case-other-lifecycle.png)
 
 These figures are in Claims, Arguments and Evidence (CAE) notation,
 which is a simple notation often used for assurance cases.
@@ -42,32 +43,30 @@ arguments justifying the claims.
 Evidence, where shown, are in rectangles.
 We do not show most evidence in the figures, but provide the evidence in
 the supporting text below instead, because large figures are time-consuming
-to edit and for purposes providing most evidence only in the supporting
+to edit and for our purposes providing most evidence only in the supporting
 test is adequate.
 
 Our overall security approach is called
 defense-in-breadth, that is, we consider
 security (including security countermeasures) in all
-our software development processes (including
-requirements, design, implementation, verification, and reuse from
-external suppliers).
-In each software development process we
+our relevant software life cycle processes (including
+requirements, design, implementation, and verification).
+In each software life cycle process we
 identify the specific issues that most need to be addressed,
 and then address them.
 
 We do *not* use a waterfall model for software development.
 It's important to note that when we use the word *process* it
-has a completely different meaning from a *phase*.
+has a completely different meaning from a *stage* (aka *phase*).
 Instead, we use the word "process" with its standard meaning in
 software and systems engineering, that is,
 a "process" is just a "set of interrelated or interacting activities
-which transforms inputs into outputs" (ISO ISO 9000:2005, quoted in
-ISO/IEEE 12207:2008).
+that transforms inputs into outputs" (ISO/IEC/IEEE 12207:2017).
 In a waterfall model, these processes are done to completion
-in a strict sequence of phases (where each phase occurs for some
+in a strict sequence of stages (where each stage occurs for some
 period of time).
 That is, you create all of the requirements in
-one phase, then do all the design in the next phase, and so on.
+one stage, then do all the design in the next stage, and so on.
 Winston Royce's paper "Managing the Development of Large Software Systems"
 (1970) notes that in software development this naive waterfall approach
 "is risky and invites failure" - in practice
@@ -81,7 +80,29 @@ feeding back as appropriate.
 Each process is (notionally) run in parallel;
 each receives inputs and produces outputs.
 
-The following sections are organized like the assurance case figures:
+To help make sure that we "cover all important cases", most of
+this assurance case is organized by the life cycle processes
+as defined by ISO/IEC/IEEE 12207:2017,
+<i>Systems and software engineering - Software life cycle processes</i>.
+We consider every process, and include in the assurance case every
+process important to it.
+We don't claim that we conform to this standard, instead, we simply
+use the 12207 structure to help ensure that we've considered
+all of the lifecycle processes.
+
+There are other ways to organize assurance cases, and we have taken
+steps to ensure that issues that would covered by them are indeed covered.
+An alternate way to view security issues is to discuss
+"process, product, and people";
+we evaluate the product in the verification process, and
+the people in the human resources process.
+It is important to secure the enabling environments, including the
+development environments and test environment; it may not be obvious,
+but that is covered by the infrastructure management process.
+At the end we cover certifications and controls, which also help us
+reduce the risk of failing to identify something important.
+
+The following sections are organized following the assurance case figures:
 
 * We begin with the overall security requirements.
   This includes not just the high-level requirements in terms
@@ -90,12 +111,23 @@ The following sections are organized like the assurance case figures:
   and authorization.  Authentication
   is a cross-cutting and critical supporting security mechanism, so
   it's easier to describe it all in one place.
-* This is followed by
-  security in the rest of the software development processes:
-  design, implementation,
-  verification, supply chain (reuse), and deployment/operations.
-* This is followed by a discussion about security in the
-  development environment and the people involved in development.
+* This is followed in the software life cycle processes, focusing on
+  the software lifecycle technical processes:
+  design, implementation, integration and verification,
+  transition (deployment) and operations, and maintenance.
+  We omit requirements, since that was covered earlier.
+  This is a merger of the second and third assurance case figures
+  (implementation is shown in a separate figure because there is so much
+  to it, but in the text we merge the contents of these two figures).
+* We then discuss securuity implemented by other life cycle processes,
+  broken into the main 12207 headings:
+  agreement processes, organizational project-enabling processes, and
+  technical management processes.
+  Note that the organizational project-enabling processes include
+  infrastructure management (where we discuss security of the
+  development and test environment)
+  and human resource management (where we discuss the knowledge of
+  the key people involved in development).
 * We close with a discussion of certifications and controls.
   Certification processes
   can help us find something we missed, as well as provide confidence
@@ -120,7 +152,13 @@ export to .png so that it can viewed on GitHub.)
 
 ## Security Requirements
 
-We believe the basic security requirements have been identified and met.
+We believe the basic security requirements have been identified and met,
+as described below.
+The security requirements identified here were developed through our
+requirements process, which merges
+three related processes in ISO/IEC/IEEE 12207
+(business or mission analysis, stakeholder needs and requirements definition,
+and systems/software requirements definition).
 
 ### Basic security requirements: Confidentiality, Integrity, and Availability
 
@@ -474,7 +512,7 @@ a mistake could lead to failure to meet these requirements.
 It is not possible to eliminate all possible risks; instead,
 we focus on *managing* risks.
 We manage our security risks by
-implementing security in our software development processes.
+implementing security in our software life cycle processes.
 We also protect our development environment and choose people
 who will help support this.
 The following sections describe how we've managed our security-related risks.
@@ -493,6 +531,15 @@ using a simple design,
 applying secure design principles,
 limiting memory-unsafe language use, and
 increasing availability through scaleability.
+
+The design, including the security-related items identified here,
+were developed through our
+design process, which merges
+three related processes in ISO/IEC/IEEE 12207
+(architecture definition process, design definition process, and
+system analysis process).
+In particular, the STRIDE analysis results (below) are the primary output
+of our system analysis process.
 
 ### High-level Design
 
@@ -1027,14 +1074,7 @@ list the additional items added since 2013.
               so Mallory cannot create a form to match it, foiling Mallory.
               Thus, our approach completely counters CSRF.
 9. Using Components with Known Vulnerabilities.
-   We detect components with publicly known vulnerabilities
-   using bundle-audit, which is part of our continuous integration
-   test suite.
-   Bundle-audit uses the Gemfile* and National Vulnerability Database (NVD)
-   data to report on libraries with publicly known vulnerabilities.
-   At one time we also used Gemnasium, but the service we used
-   closed in May 2018.
-   For more information, see the "[supply chain](#supply-chain)" section.
+   See the maintenance process.
 10. Unvalidated Redirects and Forwards.
    Redirects and forwards are used sparingly, and they are validated.
 11. XML External Entities (XXE). This was added in 2017 as "A4".
@@ -1594,7 +1634,7 @@ To address the target= vulnerability, we:
 While this doesn't *guarantee* there is no vulnerability, this certainly
 reduces the risks.
 
-## <a name="supply-chain"></a>Supply chain (reuse)
+### <a name="reuse"></a><a name="supply-chain"></a>Securely reuse (supply chain)
 
 Like all modern software, we reuse components developed by others.
 We can't eliminate all risks, and
@@ -1603,110 +1643,53 @@ we would risk creating vulnerabilities in own code.
 See [CONTRIBUTING.md](../CONTRIBUTING.md) for more about how we
 reduce the risks of reused code.
 
-### Review before use
+#### Review before use
 
 We consider the code we reuse
 (e.g., libraries and frameworks) before adding them, to reduce
 the risk of unintentional and intentional vulnerabilities from them.
-In particular, we prefer the use of popular components (where problems
-are more likely to be identified and addressed).
-In some cases we review the code ourselves.
+In particular:
+
+* We look at the website of any component we intend to add to our
+  direct dependencies to see if it appears to be relatively low risk
+  (does it have clear documentation, is there evidence of serious
+  security concerns, does it have multiple developers, who is the lead, etc.).
+* We prefer the use of popular components (where problems
+  are more likely to be identified and addressed).
+* We prefer software that self-proclaims a version number of 1.0 or higher.
+* We strongly prefer software that does not bring in a large number
+  of new dependencies (as determined by bundler).
+  If it is a large number, we consider even more carefully
+  and/or suggest that the developer reduce their dependencies
+  (often the dependencies are only for development and test).
+* In some cases we review the code ourselves.  This primarily happens
+  when there are concerns raised by one of the previous steps.
 
 We require that all components that are *required* for use
 have FLOSS licenses.  This enables review by us and by others.
-
 We prefer common FLOSS licenses.
 A FLOSS component with a rarely-used license, particularly a
 GPL-incompatible one, is less likely to be reviewed by others because
 in most cases fewer people will contribute to it.
-
 We use license_finder to ensure that the licenses are what we expect,
-and that the licenses do not change to something unexpected later
+and that the licenses do not change to an unusual license
 in later versions.
 
-### Auto-detect vulnerabilities when publicly reported (and speedily respond)
+### Get authentic version
 
-We use multiple processes for automatically detecting when the components we
-use have publicly known vulnerabilities or are out-of-date.
-We specifically focus on detecting all components with any publicly known
-vulnerability, both in our direct and indirect dependencies.
-
-We also have a process for quickly responding to alerts
-of publicly known vulnerabilities, so that we can quickly update,
-automatically test, and ship to production once we've been
-alerted to a problem.  If a component we use has a known vulnerability
-we normally simply update and deploy quickly, instead of trying to determine
-if the vulnerability is exploitable in our system, because determining
-exploitability usually takes more effort than
-simply using our highly-automated update process.
-
-The list of libraries we use (transitively) is managed by bundler, so
-updating libraries or sets of libraries can be done quickly.
-Bundler is a Ruby package manager, and it uses the Node Package Manager (NPM)
-to manage JavaScript libraries.
-As noted earlier, our strong automated test suite makes it easy to test this
-updated set, so we can rapidly update libraries, test the result, and
-deploy it.
-
-We detect components with publicly known vulnerabilities
-using 2 different mechanisms: GitHub and bundle-audit.
-Each approach has its advantages, and using multiple mechanisms
-increases the likelihood that we will be alerted quickly.
-These all use the Gemfile* files and
-National Vulnerability Database (NVD) data:
-
-* GitHub sends alerts to us for known security vulnerabilities found in
-  dependencies.  This is a GitHub configuration setting
-  (under settings, options, data services).
-  This provides us with an immediate warning of a vulnerability,
-  even if we are not currently modifying the system.
-  This analyzes both Gemfile (direct) and Gemfile.lock
-  (indirect) dependencies in Ruby.
-  For more information, see the
-  [GitHub page About Security Alerts for Vulnerable Dependencies](https://help.github.com/articles/about-security-alerts-for-vulnerable-dependencies/).
-* bundle-audit compares the entire set of gems (libraries),
-  both direct and indirect dependencies, to a database
-  of versions with known vulnerabilities.
-  The default 'rake' task invokes bundle-audit, so every time we run
-  "rake" (as part of our build or deploy process)
-  we are alerted about publicly known vulnerabilities in the
-  components we depend on (directly or not).
-
-We have also optimized the component update process through
-using the package manager (bundler) and high test coverage.
-The files Gemfile and Gemfile.lock
-identify the current versions of Ruby gems (Gemfile identifies direct
-dependencies; Gemfile.lock includes all transitive dependencies and
-the exact version numbers).  We can rapidly update libraries by
-updating those files, running "bundle install", and then using "rake"
-to run various automated checks including a robust test suite.
-Once those pass, we can immediately field the results.
-
-This approach is known to work.
-Commit fdb83380aa71352
-on 2015-11-26 updated nokogiri, in response to a bundle-audit
-report on advisory CVE-2015-1819, "Nokogiri gem contains
-several vulnerabilities in libxml2 and libxslt".
-When it was publicly reported we were alerted.
-In less than an hour from the time the vulnerability
-was publicly reported we were alerted,
-updated the library, ran the full test suite, and deployed the fixed version
-to our production site.
-
-This automatic detection and remediation
-process does *not* cover the underlying execution
-platform (e.g., kernel, system packages such as the C and Ruby runtime,
-and the database system (PostgreSQL)).
-We depend on the underlying platform provider (Heroku)
-to update those components and restart as necessary when
-a vulnerability in those components is discovered
-(that service is one of the key reasons we pay them!).
-
-### MITM countered when obtaining reused components
-
+We work to ensure that we are getting the authentic version of the software.
 We counter man-in-the-middle (MITM) attacks when downloading gems
 because the Gemfile configuration uses an HTTPS source to the
 standard place for loading gems (<https://rubygems.org>).
+We double-check names before we add them to the Gemfile to counter
+typosquatting attacks.
+
+### Use package manager
+
+We use package managers, primarily bundler, to download and track
+software with the correct version numbers.
+This makes it much easier to maintain the software later
+(see the maintenance process discussion).
 
 ### Special analysis
 
@@ -1792,7 +1775,7 @@ the development group could re-require rails.
 This would make later maintenance a little more difficult, with no
 obvious gain, so we have not done this.
 
-## Security in Verification
+## Security in integration and verification
 
 When software is modified, it is reviewed by the
 'rake' process, which performs a number of checks and tests.
@@ -1913,10 +1896,21 @@ See the [dawnscanner.md](./dawnscanner.md) file for more information.
 These steps cannot *guarantee* that there are no vulnerabilities,
 but we think they greatly reduce the risks.
 
-## Deployment and operations
+## Transition and operation
 
-To be secure, the software has to be secure as actually deployed.
-Our deployment provider takes steps to be secure.
+To be secure, the software has to be secure as actually transitioned
+(deployed) and operated securely.
+
+Our transition process has software normally go through
+three tiers: master, staging, and production.
+The "master" tier runs the software at the HEAD of the master branch.
+Software that runs fine there is promoted to staging; software that
+runs find there is promoted to production (the "real" system).
+In an emergency we can skip tiers or promote to them in parallel, but
+doing that is rare.
+
+Our operations process has a number of security measures.
+Our deployment provider and CDN provider take steps to be secure.
 Online checkers of our deployed site suggest that we have
 a secure site.
 In addition, we have detection and recovery processes
@@ -2106,7 +2100,124 @@ The update process to the "staging" site backs up the production site
 to the staging site.  This provides an additional backup, and also
 serves as a check to make sure the backup and restore processes are working.
 
-## Security of the development environment
+## Maintenance
+
+What many call the "maintenance" or "sustainment" process is simply
+continuous execution of all our processes.
+
+However, there is a special case related to security:
+detecting when publicly known vulnerabilities are reported in the
+components we use (in our direct or indirect dependencies),
+and then speedily fixing that (usually by updating the component).
+A component could have no publicly-known vulnerabilities when we selected it,
+yet one could be found later.
+
+We use a variety of techniques to detect vulnerabilities that have
+been newly reported to the public, and have a process for
+rapidly responding to them, as described below.
+In some cases a reused component might appear vulnerable but is not;
+for more discussion, including specific examples, see the
+section on [reuse](#reuse).
+
+### Auto-detect vulnerabilities
+
+We use multiple processes for automatically detecting when the components we
+use have publicly known vulnerabilities or are out-of-date.
+We specifically focus on detecting all components with any publicly known
+vulnerability, both in our direct and indirect dependencies.
+
+Bundle-audit uses the Gemfile* and National Vulnerability Database (NVD)
+data to report on libraries with publicly known vulnerabilities.
+
+We detect components with publicly known vulnerabilities
+using 2 different mechanisms: bundle-audit and GitHub.
+Each approach has its advantages, and using multiple mechanisms
+increases the likelihood that we will be alerted quickly.
+These both use the Gemfile* files and
+National Vulnerability Database (NVD) data:
+
+* bundle-audit compares the entire set of gems (libraries),
+  both direct and indirect dependencies, to a database
+  of versions with known vulnerabilities.
+  The default 'rake' task invokes bundle-audit, so every time we run
+  "rake" (as part of our build or deploy process)
+  we are alerted about publicly known vulnerabilities in the
+  components we depend on (directly or not).
+  In particular, this is part of our continuous integration test suite.
+* GitHub sends alerts to us for known security vulnerabilities found in
+  dependencies.  This is a GitHub configuration setting
+  (under settings, options, data services).
+  This provides us with an immediate warning of a vulnerability,
+  even if we are not currently modifying the system.
+  This analyzes both Gemfile (direct) and Gemfile.lock
+  (indirect) dependencies in Ruby.
+  For more information, see the
+  [GitHub page About Security Alerts for Vulnerable Dependencies](https://help.github.com/articles/about-security-alerts-for-vulnerable-dependencies/).
+
+At one time we also used Gemnasium, but the service we used
+closed in May 2018.  We have two other services, so that loss did not
+substantively impact us.
+
+### Rapid update
+
+We also have a process for quickly responding to alerts
+of publicly known vulnerabilities, so that we can quickly update,
+automatically test, and ship to production once we've been
+alerted to a problem.  If a component we use has a known vulnerability
+we normally simply update and deploy quickly, instead of trying to determine
+if the vulnerability is exploitable in our system, because determining
+exploitability usually takes more effort than
+simply using our highly-automated update process.
+
+The list of libraries we use (transitively) is managed by bundler, so
+updating libraries or sets of libraries can be done quickly.
+Bundler is a Ruby package manager, and it uses the Node Package Manager (NPM)
+to manage JavaScript libraries.
+As noted earlier, our strong automated test suite makes it easy to test this
+updated set, so we can rapidly update libraries, test the result, and
+deploy it.
+
+We have also optimized the component update process through
+using the package manager (bundler) and high test coverage.
+The files Gemfile and Gemfile.lock
+identify the current versions of Ruby gems (Gemfile identifies direct
+dependencies; Gemfile.lock includes all transitive dependencies and
+the exact version numbers).  We can rapidly update libraries by
+updating those files, running "bundle install", and then using "rake"
+to run various automated checks including a robust test suite.
+Once those pass, we can immediately field the results.
+
+This approach is known to work.
+Commit fdb83380aa71352
+on 2015-11-26 updated nokogiri, in response to a bundle-audit
+report on advisory CVE-2015-1819, "Nokogiri gem contains
+several vulnerabilities in libxml2 and libxslt".
+When it was publicly reported we were alerted.
+In less than an hour from the time the vulnerability
+was publicly reported we were alerted,
+updated the library, ran the full test suite, and deployed the fixed version
+to our production site.
+
+This automatic detection and remediation
+process does *not* cover the underlying execution
+platform (e.g., kernel, system packages such as the C and Ruby runtime,
+and the database system (PostgreSQL)).
+We depend on the underlying platform provider (Heroku)
+to update those components and restart as necessary when
+a vulnerability in those components is discovered
+(that service is one of the key reasons we pay them!).
+
+## Acquisition process
+
+The system depends on a deployment provider (Heroku) and
+content distribution network (CDN) (Fastly).
+We have contracts with them, which provide us with some leverage
+should they fail to do what they say and/or don't quickly fix
+security-related problems.
+
+## Infrastructure management
+
+### Security of the development environment
 
 Subversion of the development environment can easily lead to
 a compromise of the resulting system.
@@ -2136,8 +2247,17 @@ we use the git integrity recommendations from Eric Myhre that check all
 git objects transferred from an external site into our development environment.
 This sets "fsckObjects = true" for transfer (thus also for fetch and receive).
 
-## People
+### Test environment lacks protected data
 
+The continuous integration (CI) test environment runs on CircleCI,
+and does *not* have direct access to the real-world data.
+Thus, if someone can see the data available on the test environment,
+that does *not* mean that they will have access to the protected data.
+
+## Human resource management  (people)
+
+ISO/IEC/IEEE 12207 has a "human resource management" process;
+this is the process that focuses on the people involved.
 Of course, it's important to have developers who know how to develop software,
 with at least someone in the group who knows how to develop secure software.
 
@@ -2171,7 +2291,40 @@ He has long expertise in Ruby on Rails.
 
 Jason Dossett has a PhD in Physics from The University of Texas at Dallas,
 and has been involved in software development for many years.
-He has reviewed and is familiar with the security assurance case here.
+He has reviewed and is familiar with the security assurance case
+provided here.
+
+## Project planning
+
+We plan development, and always consider security as we develop new plans.
+
+## Risk management
+
+The primary risk we're concerned about is security, so we have developed
+the assurance case here to determine how to counter that risk.
+
+## Quality assurance
+
+We continously review our processes and their results to see if there
+are systemic problems, and if so, try to address them.
+In particular, we try to maximize automation, including automated tests
+and automated security analysis, to reduce the risk that the deployed
+system will produce incorrect results or will be insecure.
+
+## Configuration management
+
+See the [governance](./governance.md) document
+for information on how the project is governed, including
+how important changes are controlled.
+
+For version control we use git, a widely-used
+distributed version control system.
+
+As noted in the requirements section,
+modifications to the official BadgeApp application require
+authentication via GitHub.
+We use GitHub for managing the source code and issue tracker; it
+has an authentication system for this purpose.
 
 ## Certifications and Controls
 

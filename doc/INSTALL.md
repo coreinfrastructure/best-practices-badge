@@ -347,10 +347,7 @@ the install script.
 In order to completely remove the Badge app, perform the following steps:
 
 1.  Remove the database entries Badge app.  This can be done by running
-
-    ~~~~
-    rake db:drop && RAILS_ENV=test rake db:drop
-    ~~~~
+    "rake db:drop && RAILS_ENV=test rake db:drop"
 
 2.  Remove the cii-best-practices-badge directory. (WARNING: This will remove
     any and all local branches that have not been pushed to your remote git
@@ -359,12 +356,14 @@ In order to completely remove the Badge app, perform the following steps:
 3.  (Optional) If you do not use rbenv for any other applications and would
     like to remove it, you can co so by first removing the directory:
     `$HOME/.rbenv`.   Finally remove the any lines matching "rbenv" from any
-    shell startup files.  You can find these entries with the following
-    command
+    shell startup files.
 
-    ~~~~sh
-    grep rbenv ~/.bashrc ~/.bash_profile ~/.zshrc /etc/profile /etc/profile.d/*
-    ~~~~
+You can find lines matching "rbenv" in shell startup files
+with the following shell command:
+
+~~~~sh
+grep rbenv ~/.bashrc ~/.bash_profile ~/.zshrc /etc/profile /etc/profile.d/*
+~~~~
 
 ## See also
 

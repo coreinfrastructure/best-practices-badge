@@ -15,7 +15,9 @@ For example, you can get the JSON data for project #1 from the
 real production site (<https://bestpractices.coreinfrastructure.org>)
 by retrieving (a GET) data from this URL:
 
-    https://bestpractices.coreinfrastructure.org/projects/1.json
+````
+https://bestpractices.coreinfrastructure.org/projects/1.json
+````
 
 Note that you can ask for a particular result data format (where
 supported) by adding a period and its format (e.g., ".json", ".csv",
@@ -34,7 +36,9 @@ we'll indicate variables by beginning their name with ":" (colon).
 So the URL above is an example of this pattern, which retrieves
 information about project :id in a given :format (HTML by default):
 
-    GET /projects/:id(.:format)
+````
+GET /projects/:id(.:format)
+````
 
 ## Most common requests
 
@@ -72,7 +76,9 @@ might request.
 The "/projects" URL supports various searches.
 For example, retrieving this URL:
 
-    /projects.json?gteq=90&amp;lteq=99&amp;page=2
+````
+/projects.json?gteq=90&amp;lteq=99&amp;page=2
+````
 
 Will retrieve a list of project data in JSON format, but only for
 projects with 90% or better passing *and* less than or equal to 99%

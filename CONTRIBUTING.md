@@ -114,14 +114,18 @@ Another way to do this is to write the following at the end of the commit
 message, on a line by itself separated by a blank line from the body of
 the commit:
 
-    Signed-off-by: YOUR NAME <YOUR.EMAIL@EXAMPLE.COM>
+````
+Signed-off-by: YOUR NAME <YOUR.EMAIL@EXAMPLE.COM>
+````
 
 You can signoff by default in this project by creating a file
 (say "git-template") that contains
 some blank lines and the signed-off-by text above;
 then configure git to use that as a commit template.  For example:
 
-    git config commit.template ~/cii-best-practices-badge/git-template
+````sh
+git config commit.template ~/cii-best-practices-badge/git-template
+````
 
 It's not practical to fix old contributions in git, so if one is forgotten,
 do not try to fix them.  We presume that if someone sometimes used a DCO,

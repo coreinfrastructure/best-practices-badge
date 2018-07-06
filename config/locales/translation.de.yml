@@ -32,11 +32,11 @@ de:
     account: Konto
     profile: Profil
     settings: Einstellungen
-    logout_html: <span class="glyphicon glyphicon-log-out"></span>
+    logout_html: <i class="fa fa-sign-out" aria-hidden="true"></i>
       Abmelden
-    signup_html: <span class="glyphicon glyphicon-user"></span>
-      Registrieren
-    login_html: <span class="glyphicon glyphicon-log-in"></span>
+    signup_html: >-
+      <i class="fa fa-user-plus" aria-hidden="true"></i> Registrieren
+    login_html: <i class="fa fa-sign-in" aria-hidden="true"></i>
       Anmelden
     footer_text_html: >-
       <small><strong>Brauchen Sie Hilfe? Haben Sie eine Frage?
@@ -65,8 +65,8 @@ de:
     instructions_sent: E-Mail mit Anweisungen zum Passwortzurücksetzen
       verschickt
     cant_reset_nonlocal: >-
-      Sorry, kann das Passwort für einen Nicht-lokalen Benutzer
-      nicht zurücksetzen
+      Sorry, kann nur das Passwort für einen benutzerdefinierten
+      (lokalen) Benutzer zurücksetzen
     reset_expired: Passwort zurücksetzen ist abgelaufen.
     update_password: Passwort aktualisieren
   sessions:
@@ -91,12 +91,18 @@ de:
       Postfach und klicke auf den Bestätigungs-Link.
     signed_out: Abgemeldet!
     cookie_details_html: >-
-      <a href="/cookies" target="_blank" rel="noopener"> <i> Erfahren
-      Sie mehr über Cookies. </i> </a>
+      <a href="/de/cookies" target="_blank" rel="noopener"> <i>
+      Erfahren Sie mehr über Cookies. </i> </a>
     no_login_time: "(Keine vorherige Zeit aufgezeichnet.)"
     login_automatic_signup: >-
-      Wenn Sie sich mit GitHub einloggen wird automatisch bei
-      Bedarf eine Anmeldung durchgeführt.
+      Wenn du dich mit GitHub einloggst wird automatisch bei Bedarf
+      eine Anmeldung durchgeführt. Wenn du dich anmeldest, werden
+      dein Name (wie bei GitHub gespeichert) und dein GitHub Spitzname
+      öffentlich angezeigt und du kannst deinen Namen jederzeit
+      ändern. Deine E-Mail-Adresse wird privat gehalten und nur
+      für Badging Angelegenheiten verwendet; wir werden deine
+      Daten nicht an Dritte weitergeben, es sei denn, es ist gesetzlich
+      vorgeschrieben.
     login_disabled: Alle Logins sind vorübergehend deaktiviert
   users:
     new:
@@ -111,7 +117,7 @@ de:
       preferred_locale: Bevorzugte Region
       password: Passwort
       password_confirmation: Bestätige Passwort
-      create_account: Erstelle meinen Account
+      create_account: Erstelle meinen benutzerdefinierten Account
       intro_github: >-
         Wenn Sie ein GitHub-Konto haben, können Sie es einfach
         verwenden, um sich anzumelden (ein erstmaliger GitHub-Login
@@ -125,11 +131,10 @@ de:
       edit_user: Benutzer bearbeiten
       other_projects_edit: 'Andere Projekte die per GitHub bearbeitet
         werden können:'
-      see_external: Schaue dir die externe Seite dieses Benutzers
-        an.
+      see_external: Benutzers externe Seite.
       as_admin: 'Als admin können sie auch:'
       send_email_to: 'E-Mail senden an:'
-      delete_link_name: löschen
+      delete_link_name: Benutzerkonto löschen
       confirm_delete: Bist du dir sicher ob du diesen Benutzer
         löschen möchtest?
       projects_owned: 'Eigene Projekte:'
@@ -186,7 +191,8 @@ de:
         der Erinnerung
       admin_html: >-
         Als Administrator können Sie auch die <a href="/reminders">detaillierten
-        Informationen zu Erinnerungen</a> sehen.
+        Informationen zu Erinnerungen</a> und <a href="/en/project_stats?type=uncommon">weniger
+        oft genutzen Statistik Visualisierungen</a>. sehen.
       raw_data: 'Sie können auch die Rohdaten sehen:'
       json_format: JSON-Format
       csv_format: Herunterladbares CSV-Format
@@ -231,8 +237,8 @@ de:
       name_or_description: Name oder Beschreibungstext
       search: Suche
       all: Alle
-      passing_100: Passing (100%)
-      in_progress_variable: In Arbeit (%{percent}% oder mehr)
+      passing_100: Passing mindestens (100%+ Fortschritt)
+      in_progress_variable: In Arbeit (%{percent}%+ Fortschritt)
       silver_in_progress_variable: Passing, teilweises Silber
         (%{percent}% + Fortschritt)
       silver_200: Silber (200% + Fortschritt)
@@ -247,8 +253,12 @@ de:
       license: Lizenz
       owner: Eigentümer
       last_achieved: Zuletzt erreicht
-      pachieved: "% Erreicht"
-      can_also_sort: 'Du kannst auch nach folgendem sortieren:'
+      pachieved: Fortschritt %
+      can_also_sort: >-
+        Das Feld "Fortschritt %" zeigt 300% für Gold, 200% für
+        Silber und 100% für Passing Badge und fügt den Fortschritt
+        nach dem am höchsten verdienten Badge hinzu. Du kannst
+        danach sortieren:
       repository_url: Repository-URL
       create_time: Erstelltzeitpunkt (für den Badge Eintrag)
       update_time: Letzte Aktualisierung (für Badge Eintrag)
@@ -271,14 +281,17 @@ de:
         Wie lautet die URL für die Projekt-Homepage (die URL für
         das Projekt als Ganzes)? Start mit http(s):// (viele Zeichen
         sind nicht erlaubt, einschließlich "?")
-      placeholder_of_homepage: http(s)://... für Projekt-Homepage
-        URL
+      placeholder_of_homepage: >-
+        http(s)://... für Projekt-Homepage URL, verwende https://
+        wenn möglich
       url_of_repo: >-
         Was ist die URL für das Versionskontroll-Repository (es
         kann die gleiche wie die Projekt-Homepage sein)? Beginnen
         Sie mit http(s):// (viele Zeichen sind nicht erlaubt,
         einschließlich "?")
-      placeholder_of_repo: http(s)://... für Projekt-Repo URL
+      placeholder_of_repo: >-
+        http(s)://... für Projekt-Repo URL, verwende https://
+        wenn möglich
       submit_urls: Sende URL
       sign_in_first: Bitte melde dich an, um ein Projekt hinzuzufügen!
       thanks_adding: >-
@@ -332,7 +345,7 @@ de:
       last_achieved_html: Letztes erreichtes Badge auf %{when}.
     edit:
       submit_cc_by_3plus_html: >-
-        Indem Sie diese Daten über das Projekt einreichen, stimmen
+        Indem Sie diese Daten über das Projekt eingeben, stimmen
         Sie einer Veröffentlichung unter mindestens <a href="https://creativecommons.org/licenses/by/3.0/us"
         target="_blank" rel="noopener">Creative Commons Attribution
         version 3.0 or later license (CC-BY-3.0+)</a> zu. Das
@@ -531,8 +544,10 @@ de:
         '2': Gold
     misc:
       disabled_reminders: >-
-        (Fortgeschritten) Deaktiviere Inaktivitätserinnerung (wir
-        empfehlen Ihnen, diese unausgewählt zu lassen)
+        (Fortgeschritten) Inaktivierungserinnerung deaktivieren
+        (wir empfehlen, dies nicht zu aktivieren; beachten Sie,
+        dass Projekteinträge bearbeitet werden müssen, um sie
+        zu ändern, ob Erinnerungen gesendet werden oder nicht)
       general_comments:
         description: Andere allgemeine Hinweise zum Projekt?
         placeholder: Zusätzliche Bemerkungen (in Markdown)
@@ -646,31 +661,62 @@ de:
       Hier ist die URL für Ihren Abzeicheneintrag:
     new_project_part3_html: |-
       <p>
-      Wir ermutigen euch, Fortschritte zu machen.
+      Wir ermutigen dich, weiter Fortschritt zu machen.
       </p>
       <p>
-      Wenn du <em>nur</em> sehen willst, was fehlt,
-      besuche deinen Abzeicheneintrag und
-      dann klicke auf die Schaltfläche in der Nähe der Oberseite mit der Überschrift "Hide met oder N/A Kriterien"
+      Wenn du <em>nur</em> sehen willst was du verpasst,
+      besuche deinen Badge-Eintrag und
+      klicke auf den Button oben mit der Aufschrift "Verberge erfüllte oder N/A Kriterien".
       Wenn Sie Fragen haben oder Hilfe benötigen, wenden Sie sich bitte an
       <a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;</a>
-      Oder ein Problem abgeben wollen
-      <a href="https://github.com/coreinfrastruktur/best-praktiken-badge/issues">https://github.com/coreinfrastruktur/best-praktiken-badge/issues</a>
-      (Klick auf "neue Angelegenheit").
+      oder erstelle ein Issue unter
+      <a href="https://github.com/coreinfrastructure/best-practices-badge/issues">https://github.com/coreinfrastructure/best-practices-badge/issues</a>
+      (Klicken Sie auf "New Issue").
       </p>
       <p>
-      Danke für deine Zeit.
+      Wir werden dir niemals Werbung senden, und wir werden nur selten
+      eine E-Mail senden.
+      Wir senden dir eine E-Mail zu wichtigen Badge-Anwendungsereignissen,
+      wenn du beispielsweise einen neuen Badge Projekt Eintrag erstellst,
+      wenn dein Projekt ein Badge erhält oder verliert,
+      oder wenn jemand ein Passwort für dein Benutzerkonto anfordert.
+      Wenn dein Projekt kein Badge hat und du dein Abzeichen für mindestens 30 Tage nicht aktualisiert, senden wir dir normalerweise eine Inaktivitätserinnerung circa alle 30-60 Tage.
+      Du kannst diese Inaktivitätserinnerungsnachrichten jederzeit deaktivieren;
+      Ändere dazu deinen Badge Projekt Eintrag
+      <a href="%{project_info_url}#project_disabled_reminders">%{project_info_url}#project_disabled_reminders</a>
+      um "Inaktivitätsanzeige deaktivieren" zu aktivieren.
+      Denke daran, den Projekteintrag <i> zu bearbeiten </i>, wenn du den Wert ändern möchten.
+      Wenn dein Projekt ein passing Badge erhalten hat oder
+      der Badge Projekt Eintrage innerhalb von 30 Tagen bearbeitet wurde,
+      wird keine Inaktivitätserinnerung gesendet.
       </p>
-    new_project_part3_text: |-
-      Wir ermutigen euch, Fortschritte zu machen.
-      Wenn du nur sehen möchtest, was du vermisst, besuch deinen Abzeicheneintrag und
-      dann klicke auf die Schaltfläche in der Nähe der Oberseite mit der Überschrift "Hide met oder N/A Kriterien".
-      Wenn Sie Fragen haben oder Hilfe benötigen, wenden Sie sich bitte an
-      Cii-badges-questions-owner@lists.coreinfrastructure.org
-      Oder ein Problem abgeben wollen
-      Https://github.com/coreinfrastruktur/best-praktiken-badge/issues
-      (Klick auf "neue Angelegenheit").
-      Danke für deine Zeit.
+      <p>
+      Vielen Dank für deine Zeit.
+      </p>
+    new_project_part3_text: "Wir ermutigen dich, weiter Fortschritt
+      zu machen.\nWenn du nur sehen willst was du verpasst,\nbesuche
+      deinen Badge-Eintrag und\nklicke auf den Button oben mit
+      der Aufschrift \"Verberge erfüllte oder N/A Kriterien\".\nWenn
+      Sie Fragen haben oder Hilfe benötigen, wenden Sie sich bitte
+      an\ncii-badges-questions-owner@lists.coreinfrastructure.org\noder
+      erstelle ein Issue unter\nhttps://github.com/coreinfrastructure/best-practices-badge/issues\n(Klicken
+      Sie auf \"New Issue\").\nWir werden dir niemals Werbung
+      senden, und wir werden nur selten \neine E-Mail senden.\nWir
+      senden dir eine E-Mail zu wichtigen Badge-Anwendungsereignissen,\nwenn
+      du beispielsweise einen neuen Badge Projekt Eintrag erstellst,\nwenn
+      dein Projekt ein Badge erhält oder verliert,\noder wenn
+      jemand ein Passwort für dein Benutzerkonto anfordert.\nWenn
+      dein Projekt kein Badge hat und du dein Abzeichen für mindestens
+      30 Tage nicht aktualisiert, senden wir dir normalerweise
+      eine Inaktivitätserinnerung circa alle 30-60 Tage.\nDu kannst
+      diese Inaktivitätserinnerungsnachrichten jederzeit deaktivieren;\nÄndere
+      dazu deinen Badge Projekt Eintrag\n%{project_info_url}#project_disabled_reminders\num
+      \"Inaktivitätsanzeige deaktivieren\" zu aktivieren.\nDenke
+      daran, den Projekteintrag zu bearbeiten, wenn du den Wert
+      ändern möchten.\nWenn dein Projekt ein passing Badge erhalten
+      hat oder\nder Badge Projekt Eintrage innerhalb von 30 Tagen
+      bearbeitet wurde,\nwird keine Inaktivitätserinnerung gesendet.\n\nVielen
+      Dank für deine Zeit.\n"
     in_markdown_add: 'Im Markdown kannst du dies hinzufügen:'
     in_html_add: 'In HTML kannst du das hinzufügen:'
     ending: >-
@@ -930,9 +976,26 @@ de:
           Das Projekt MUSS die Lizenz(en) seiner Erzeugnisse an
           einem üblichen Ort in ihrem Quell-Repository veröffentlichen.
         details: >-
-          Z.B. als Top-Level-Datei mit dem Namen LICENSE oder
-          COPYING. Der Dateiname der Lizenz DARF eine Dateiendung
-          wie ".txt" oder ".md" haben.
+          Z.B. als eine Top-Level-Datei mit der Bezeichnung LICENSE
+          oder COPYING. Lizenzdateinamen DÜRFEN eine Erweiterung
+          wie ".txt" oder ".md" haben. Beachten Sie, dass dieses
+          Kriterium nur eine Voraussetzung für das Quell-Repository
+          ist. Sie müssen die Lizenzdatei NICHT hinzufügen, wenn
+          Sie etwas aus dem Quellcode generieren (z.B. eine ausführbare
+          Datei, ein Paket oder einen Container). Wenn Sie beispielsweise
+          ein R-Paket für das Comprehensive R Archive Network
+          (CRAN) generieren, befolgen Sie die Standard-CRAN-Praxis:
+          Wenn die Lizenz eine Standardlizenz ist, verwenden Sie
+          die Standard-Kurzlizenzspezifikation (um die Installation
+          einer weiteren Kopie des Textes zu vermeiden) die LICENSE-Datei
+          in einer Ausschlussdatei wie .Rbuildignore. Ebenso können
+          Sie beim Erstellen eines Debian-Pakets einen Link in
+          die Copyright-Datei zum Lizenztext in /usr/share/common-licenses
+          einfügen und die Lizenzdatei vom erstellten Paket ausschließen
+          (z.B. durch Löschen der Datei nach dem Aufruf von dh_auto_install).
+          Wir empfehlen, maschinenlesbare Lizenzinformationen
+          in generierten Formaten zu integrieren, wo dies praktisch
+          ist.
       documentation_basics:
         description: >-
           Das Projekt MUSS eine grundlegende Dokumentation für

@@ -76,7 +76,8 @@ fr:
       secrète et seulement utilisée pour les interactions relatives
       aux badges ; nous ne la transmettrons pas à des parties
       tierces à moins qu'il s'agisse d'une obligation légale.
-    login_disabled:
+    login_disabled: Toutes les connexions sont temporairement
+      désactivées
   users:
     new:
       signup_header: S'inscrire
@@ -232,10 +233,12 @@ fr:
       all: Tous
       passing_100: Atteint (niveau 100% ou plus)
       in_progress_variable: En cours (niveau %{percent}% ou plus)
-      silver_in_progress_variable:
-      silver_200:
-      gold_in_progress_variable:
-      gold_300:
+      silver_in_progress_variable: Badge obtenu, argent en cours
+        (niveau %{percent}% ou plus)
+      silver_200: Argent (niveau 200% ou plus)
+      gold_in_progress_variable: Argent obtenu, or en cours (niveau
+        %{percent}% ou plus)
+      gold_300: Or (300%)
     table:
       id: Id
       name: Nom
@@ -1674,6 +1677,22 @@ fr:
           de la divulgation responsable</a>, car Google recommande
           que la période de 60 jours commence lorsque le projet
           est notifié <em>même</em> si le rapport n'est pas public.
+          Notez que ce critère de badge, comme d'autres critères,
+          s'applique à un projet individuel. Certains projets
+          font parti d'organisations ou de projets englobants,
+          parfois à plusieurs niveaux, et de nombreux projets
+          fournissent leurs résultats à d'autres organisations
+          et projets au sein d'une chaîne approvisionnement potentiellement
+          complexe. Un projet individuel ne peut souvent pas contrôler
+          le reste, mais un projet individuel peut travailler
+          à fournir un correctif de vulnérabilité à temps. Pour
+          cette raison, nous nous concentrons seulement sur le
+          temps de réponse des projets individuels. Une fois qu'un
+          correctif est disponible de la part d'un projet individuel,
+          les autres projets peuvent déterminer comment appliquer
+          le correctif (par exemple, ils peuvent mettre à jour
+          la dernière version ou ils peuvent appliquer uniquement
+          le correctif).
       vulnerabilities_critical_fixed:
         description: >-
           Les projets DEVRAIENT corriger rapidement toutes les
@@ -2877,7 +2896,11 @@ fr:
           rapidement. Les en-têtes clés de durcissement sont :
           Content Security Policy (CSP), HTTP Strict Transport
           Security (HSTS), X-Content-Type-Options (comme « nosniff
-          »), X-Frame-Options et X-XSS-Protection.
+          »), X-Frame-Options et X-XSS-Protection. Les sites Web
+          statiques sans possibilité de se connecter à travers
+          les pages Web peuvent omettre les entêtes de durcissement
+          HTTP CSP et X-XSS-Protection, car ces entêtes sont moins
+          utiles dans ces situations.
       security_review:
         description: >-
           Le projet DOIT avoir effectué une évaluation de la sécurité

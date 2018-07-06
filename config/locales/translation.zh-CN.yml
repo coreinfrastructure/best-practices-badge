@@ -61,7 +61,7 @@ zh-CN:
       <a href="/cookies" target="_blank" rel="noopener"><i>了解有关浏览器缓存的更多信息。</i></a>
     no_login_time: "（没有先前记录的时间。）"
     login_automatic_signup: 如果需要，使用GitHub登录会自动执行注册。
-    login_disabled:
+    login_disabled: 所有登录暂时禁用
   users:
     new:
       signup_header: 注册
@@ -153,10 +153,10 @@ zh-CN:
       all: 所有
       passing_100: 通过（100％）
       in_progress_variable: 正在进行中（%{percent}％以上）
-      silver_in_progress_variable:
-      silver_200:
-      gold_in_progress_variable:
-      gold_300:
+      silver_in_progress_variable: 通过，部分银牌（%{percent}%+层级）
+      silver_200: 银（200%+层级）
+      gold_in_progress_variable: 银牌，部分金牌（%{percent}%+层级）
+      gold_300: 金牌（300％）
     table:
       id: Id
       name: 名称

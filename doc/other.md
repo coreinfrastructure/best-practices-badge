@@ -221,11 +221,6 @@ Upgrade some "passing" level SHOULD and SUGGESTED:
       "It is SUGGESTED that the software include many run-time assertions
       that are checked during dynamic analysis."
 
-#### Upgrade: Future
-
-All the "future" criteria are moved into silver or gold
-as described below.
-
 ### Basics
 
 *   <a name="dco"></a>The project SHOULD have a legal mechanism where
@@ -965,7 +960,7 @@ as described below.
 
 #### Installation
 
-*   <a name="installation_common"></a>(Future criterion)
+*   <a name="installation_common"></a>
     The project MUST provide a way for end-users to easily install and
     uninstall the software produced by the project
     using a commonly-used convention.
@@ -1048,7 +1043,7 @@ as described below.
     they are valid (a *whitelist*), and reject invalid inputs,
     if there are any restrictions on the data at all.
 
-*   <a name="hardening"></a>(Future criterion) Hardening mechanisms
+*   <a name="hardening"></a>Hardening mechanisms
     SHOULD be used in the software produced by the project
     so that software defects are less likely to result in security
     vulnerabilities.<sup>[<a href="#hardening">hardening</a>]</sup>
@@ -1092,7 +1087,7 @@ as described below.
     (N/A allowed).
     <sup>[<a href="#crypto_credential_agility">crypto_credential_agility</a>]</sup>
 
-*   <a name="crypto_used_network"></a>(Future) The
+*   <a name="crypto_used_network"></a>The
     software produced by the project
     SHOULD support secure protocols for all of its network
     communications, such as SSHv2 or later, TLS1.2 or later (HTTPS),
@@ -1101,7 +1096,7 @@ as described below.
     and only enabled if the user specifically configures it.  (N/A allowed).
     <sup>[<a href="#crypto_used_network">crypto_used_network</a>]</sup>
 
-*   <a name="crypto_tls12"></a>(Future)
+*   <a name="crypto_tls12"></a>
     The software produced by the project SHOULD,
     if it supports or uses TLS, support at least TLS version 1.2.
     Note that the predecessor of TLS was called SSL.
@@ -1110,7 +1105,7 @@ as described below.
     (N/A allowed).
     <sup>[<a href="#crypto_tls12">crypto_tls12</a>]</sup>
 
-*   <a name="crypto_certificate_verification"></a>(Future)
+*   <a name="crypto_certificate_verification"></a>
     The software produced by the
     project MUST, if it supports TLS, perform TLS certificate verification
     by default when using TLS, including on subresources.
@@ -1126,7 +1121,7 @@ as described below.
     and
     <a href="https://blogs.gnome.org/mcatanzaro/2016/03/12/do-you-trust-this-application/">"Do you trust this application?" by Michael Catanzaro</a>.
 
-*   <a name="crypto_verification_private"></a>(Future)
+*   <a name="crypto_verification_private"></a>
     The software produced by the project
     MUST, if it supports TLS, perform certificate verification before sending
     HTTP headers with private information (such as secure cookies).
@@ -1353,14 +1348,13 @@ as described below.
 
 #### Upgrade: Security
 
-*   Upgrade hardening from SHOULD to MUST.  (Future criterion)
+*   Upgrade hardening from SHOULD to MUST.
     "The project software MUST use hardening mechanisms
     so software defects are less likely to result in security
     vulnerabilities.  If the project does not produce software,
     choose N/A."
 
 *   Upgrade crypto_used_network from SHOULD (NOT) to MUST (NOT).
-    (Future)
     "The project MUST NOT use
     unencrypted network communication protocols (such as HTTP
     and telnet) if there is an encrypted equivalent (e.g., HTTPS/TLS and SSH),
@@ -1369,7 +1363,6 @@ as described below.
     <sup>[<a href="#crypto_used_network">crypto_used_network</a>]</sup>
 
 *   Upgrade crypto_tls12 from SHOULD to MUST.
-    (Future)
     The project MUST, if it supports TLS, support at least TLS version 1.2.
     Note that the predecessor of TLS was called SSL.
     (N/A allowed).
@@ -1580,7 +1573,7 @@ as described below.
     from GeorgLink.
 
 *   <a name="build_reproducible"></a>
-    (Future criterion) The project MUST have a
+    The project MUST have a
     <a href="https://reproducible-builds.org/">reproducible build</a>.
     (N/A allowed).
     <sup>[<a href="#build_reproducible">build_reproducible</a>]</sup>
@@ -1672,7 +1665,6 @@ as described below.
     be agreed on.
 
 *   <a name="hardened_site"></a>
-    hardened_site (Future)</br>
     "The project website, repository (if accessible
     via the web), and download site (if separate) MUST include key hardening
     headers with nonpermissive values."

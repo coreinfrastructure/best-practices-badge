@@ -122,4 +122,20 @@ module ProjectsHelper
     "<a href=\"#{url_for(new_params)}\" rel=\"nofollow\">#{title}</a>".html_safe
     # rubocop:enable Rails/OutputSafety
   end
+
+  # Given tiered percentage as integer value, return its string representation
+  # Returns nil if given blank value.
+  def tiered_percent_as_string(value)
+    return nil if value.blank?
+    partial = value % 100
+    if value < 100
+      I18n.t 'projects.index.in_progress_next', percent: partial
+    elsif value < 200
+      I18n.t 'projects.index.passing_next', percent: partial
+    elsif value < 300
+      I18n.t 'projects.index.silver_next', percent: partial
+    elsif value >= 300
+      I18n.t 'projects.form_early.level.2'
+    end
+  end
 end

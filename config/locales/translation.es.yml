@@ -212,6 +212,9 @@ es:
       silver_200:
       gold_in_progress_variable:
       gold_300:
+      in_progress_next:
+      passing_next:
+      silver_next:
     table:
       id:
       name:

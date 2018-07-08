@@ -157,6 +157,9 @@ zh-CN:
       silver_200: 银（200%+层级）
       gold_in_progress_variable: 银牌，部分金牌（%{percent}%+层级）
       gold_300: 金牌（300％）
+      in_progress_next:
+      passing_next:
+      silver_next:
     table:
       id: Id
       name: 名称

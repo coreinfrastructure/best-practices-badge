@@ -245,6 +245,9 @@ de:
       gold_in_progress_variable: Silber, teilweises Gold (%{percent}%
         + Fortschritt)
       gold_300: Gold (300%)
+      in_progress_next:
+      passing_next:
+      silver_next:
     table:
       id: ID
       name: Name

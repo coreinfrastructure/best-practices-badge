@@ -40,7 +40,9 @@
                         rel: 'nofollow' %></td>
         <td><%= project.achieved_passing_at&.
                   to_formatted_s(:db) %></td>
-        <td><%= project.tiered_percentage %>%</td>
+        <td><span data-toggle="tooltip" data-placement="bottom" title="<%=
+                    tiered_percent_as_string(project.tiered_percentage)
+             %>"><%= project.tiered_percentage %>%</span></td>
         <td><%= link_to "<img src='/projects/#{project.id}/badge'
                   alt='#{t('.badge_level', id: project.id,
                             percent: project.tiered_percentage)}'>".html_safe,

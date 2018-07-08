@@ -359,6 +359,9 @@ en:
       silver_200: Silver (200%+ tiered)
       gold_in_progress_variable: Silver, partial gold (%{percent}%+ tiered)
       gold_300: Gold (300%)
+      in_progress_next: In Progress, %{percent}% completed for passing
+      passing_next: Passing, %{percent}% completed for silver
+      silver_next: Silver, %{percent}% completed for gold
       add_link: Add
       add_new: Add New Project
       badge_status: Badge status

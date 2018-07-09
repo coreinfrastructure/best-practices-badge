@@ -1,6 +1,8 @@
 #!/bin/sh
 echo 'install-badge-dev-env: Auto-install development environment for BadgeApp.'
 echo 'See INSTALL.md for more information.'
+echo
+echo 'Make sure your system is up-to-date before running this!'
 
 # Set configure options defaults; set their values with environment variables.
 if [ "$(uname)" != 'Darwin' ] ; then  # NOT MacOS
@@ -321,11 +323,23 @@ echo 'STAGE 5: Install gems (including bundler and Rails)'
 
 gem sources --add https://rubygems.org  # Ensure you're getting gems here
 gem install bundler  # Install the "bundler" gem package manager.
+
+# If we're using rbenv, ensure it can find "bundle" and friends.
 if is_command rbenv ; then
   rbenv rehash
 fi
 
 bundle install       # Install gems we use in Gemfile.lock, including Rails
+
+# "bundle" installs additional commands - ensure we can find them,
+# by rehashing if we're using rbenv.
+# This is especially important because it appears that the
+# asset complation process needs some commands to work and it doesn't
+# always report unexpected failures.  Without this, later JavaScript
+# may mysteriously fail because the assets aren't quite correct.
+if is_command rbenv ; then
+  rbenv rehash
+fi
 
 echo
 echo 'STAGE 6: Set up database for development if necessary'

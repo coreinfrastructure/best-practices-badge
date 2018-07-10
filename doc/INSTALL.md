@@ -18,6 +18,8 @@ the production system stores the data in Postgres.
 
 ## Development environment prerequisites
 
+You need a working Internet connection to download everything to install.
+
 You need a Unix-like system.
 This includes a general-purpose Linux distribution
 (e.g., Ubuntu, Fedora, Debian, Red Hat Enterprise Linux, or SuSE) or MacOS.
@@ -25,12 +27,18 @@ If you're using Windows, install virtual machine software (such as VirtualBox)
 and install Linux on a virtual machine.
 We do not expect Windows to work directly.
 
+Make sure your system has up-to-date packages.
+For example, on Ubuntu and Debian, run this:
+
+~~~~
+sudo apt-get update && sudo apt-get upgrade
+~~~~
+
 If you use a virtual machine for development, maximize its memory.
 It will run in less memory, and in particular the production version uses less.
 However, we enable many monitoring tools during development and they consume a
 lot of memory.
 
-You need a working Internet connection.
 Some organizations use an SSL/TLS interception proxy, which intercepts all
 SSL/TLS traffic.
 If you must work with those, and you are willing to completely trust that proxy,

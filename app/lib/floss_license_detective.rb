@@ -14,6 +14,13 @@ class FlossLicenseDetective < Detective
   OUTPUTS = %i[floss_license_osi_status floss_license_status].freeze
 
   # From: http://opensource.org/licenses/alphabetical
+  # Note: We accept the older GNU license forms, e.g., "GPL-2.0", and
+  # the newer SPDX 3.0 license names, e.g.,
+  # "GPL-2.0-only" and "GPL-2.0-or-later".
+  # SPDX 3.0 does not provide a way to say, "GPL version 2.0 is acceptable,
+  # and I don't know if later versions are acceptable"; in practice,
+  # "GPL-2.0" is being used that way.
+  # See: https://spdx.org/news/news/2018/01/license-list-30-released
   OSI_LICENSES_FROM_OSI_WEBSITE = [
     'Academic Free License 3.0 (AFL-3.0)',
     'Adaptive Public License (APL-1.0)',
@@ -38,10 +45,24 @@ class FlossLicenseDetective < Detective
     'Fair License (Fair)',
     'Frameworx License (Frameworx-1.0)',
     'GNU Affero General Public License v3 (AGPL-3.0)',
+    'GNU Affero General Public License v3 only (AGPL-3.0-only)',
+    'GNU Affero General Public License v3 or later (AGPL-3.0-or-later)',
     'GNU General Public License version 2.0 (GPL-2.0)',
+    'GNU General Public License version 2.0 only (GPL-2.0-only)',
+    'GNU General Public License version 2.0 or later (GPL-2.0-or-later)',
     'GNU General Public License version 3.0 (GPL-3.0)',
+    'GNU General Public License version 3.0 only (GPL-3.0-only)',
+    'GNU General Public License version 3.0 or later (GPL-3.0-or-later)',
     'GNU Library or "Lesser" General Public License version 2.1 (LGPL-2.1)',
+    'GNU Library or "Lesser" General Public License version 2.1 only ' \
+      '(LGPL-2.1-only)',
+    'GNU Library or "Lesser" General Public License version 2.1 or later ' \
+      '(LGPL-2.1-or-later)',
     'GNU Library or "Lesser" General Public License version 3.0 (LGPL-3.0)',
+    'GNU Library or "Lesser" General Public License version 3.0 only ' \
+      '(LGPL-3.0-only)',
+    'GNU Library or "Lesser" General Public License version 3.0 or later ' \
+      '(LGPL-3.0-or-later)',
     'Historical Permission Notice and Disclaimer (HPND)',
     'IBM Public License 1.0 (IPL-1.0)',
     'IPA Font License (IPA)',

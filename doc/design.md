@@ -15,6 +15,11 @@ there deliberately...
 what's important is that you actually use the right tool for the job."
 This document describes our key choices.
 
+Our design is generally standard and straightforward.
+If you're not familiar with how web applications are typically
+designed, see introductory material such as
+["Web Architecture 101" by Jonathan Fulton](https://engineering.videoblocks.com/web-architecture-101-a3224e126947).
+
 ## High-level architecture
 
 The web application is itself OSS, and we intend for the

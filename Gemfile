@@ -85,15 +85,14 @@ group :development do
 end
 
 group :test do
+  gem 'capybara-selenium', '0.0.6', require: false
   gem 'capybara-slow_finder_errors', '0.1.4', require: false
-  gem 'chromedriver-helper', '1.2.0', require: false
+  gem 'chromedriver-helper', '1.2.0', require: false # for capybara-selenium
   gem 'codecov', '0.1.10', require: false
   gem 'minitest-rails-capybara', '3.0.1', require: false
   gem 'minitest-reporters', '1.2.0', require: false
   gem 'minitest-retry', '0.1.9', require: false # Avoid Capybara false positives
-  gem 'poltergeist', '1.18.1', require: false
   gem 'rails-controller-testing', '1.0.2' # need to require this one
-  gem 'selenium-webdriver', '3.13.0', require: false
   gem 'simplecov', '0.16.1', require: false
   gem 'webmock', '3.4.1', require: false
 end

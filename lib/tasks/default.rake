@@ -711,6 +711,15 @@ task :test_dev_install do
   TEST_BRANCH_SHELL
 end
 
+# JavaScript tests end up running .chromedriver-helper, which is downloaded
+# and cached.  Update the cached version.
+desc 'Update .chromedriver-helper'
+task :update_chromedriver_helper do
+  # force-upgrade to the latest version of chromedriver
+  sh 'rm -fr $HOME/.chromedriver-helper'
+  sh 'chromedriver-update'
+end
+
 # Run some slower tests. Doing this on *every* automated test run would be
 # slow things down, and the odds of them being problems are small enough
 # that the slowdown is less worthwhile.  Also, some of the tests (like the

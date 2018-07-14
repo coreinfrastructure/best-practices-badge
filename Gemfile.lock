@@ -80,6 +80,9 @@ GEM
       rack (>= 1.0.0)
       rack-test (>= 0.5.4)
       xpath (>= 2.0, < 4.0)
+    capybara-selenium (0.0.6)
+      capybara
+      selenium-webdriver
     capybara-slow_finder_errors (0.1.4)
       capybara (~> 2.5)
     chartkick (2.3.5)
@@ -88,7 +91,6 @@ GEM
     chromedriver-helper (1.2.0)
       archive-zip (~> 0.10)
       nokogiri (~> 1.8)
-    cliver (0.3.2)
     code_analyzer (0.4.8)
       sexp_processor
     codecov (0.1.10)
@@ -247,10 +249,6 @@ GEM
       activerecord (>= 4.2)
       activesupport (>= 4.2)
       arel (>= 6)
-    poltergeist (1.18.1)
-      capybara (>= 2.1, < 4)
-      cliver (~> 0.3.1)
-      websocket-driver (>= 0.2.0)
     powerpack (0.1.2)
     pronto (0.9.5)
       gitlab (~> 4.0, >= 4.0.0)
@@ -442,6 +440,7 @@ DEPENDENCIES
   bootstrap_form (= 2.7.0)
   bullet (= 5.7.5)
   bundler-audit (= 0.6.0)
+  capybara-selenium (= 0.0.6)
   capybara-slow_finder_errors (= 0.1.4)
   chartkick (= 2.3.5)
   chromedriver-helper (= 1.2.0)
@@ -472,7 +471,6 @@ DEPENDENCIES
   paper_trail (= 9.0.1)
   pg (= 1.0.0)
   pg_search (= 2.1.2)
-  poltergeist (= 1.18.1)
   pronto (= 0.9.5)
   pronto-brakeman (= 0.9.1)
   pronto-eslint (= 0.9.1)
@@ -494,7 +492,6 @@ DEPENDENCIES
   sass-rails (= 5.0.7)
   scout_apm (= 2.4.14)
   secure_headers (= 6.0.0)
-  selenium-webdriver (= 3.13.0)
   simplecov (= 0.16.1)
   spring (= 2.0.2)
   traceroute (= 0.6.1)
@@ -511,4 +508,4 @@ RUBY VERSION
    ruby 2.5.1p57
 
 BUNDLED WITH
-   1.16.1
+   1.16.2

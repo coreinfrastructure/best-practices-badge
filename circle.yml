@@ -10,6 +10,7 @@ dependencies:
     - gem install bundler --no-document
     - bundle --version
     # Force-update chromedriver - old versions do not work properly
+    - bundle install
     - bundle exec chromedriver-update
 test:
   pre:

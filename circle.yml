@@ -9,6 +9,8 @@ dependencies:
     - gem update --system
     - gem install bundler --no-document
     - bundle --version
+    # Force-update chromedriver - old versions do not work properly
+    - chromedriver-update
 test:
   pre:
     - "[[ ! -s \"$(git rev-parse --git-dir)/shallow\" ]] || git fetch --unshallow"

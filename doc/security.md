@@ -160,124 +160,284 @@ three related processes in ISO/IEC/IEEE 12207
 (business or mission analysis, stakeholder needs and requirements definition,
 and systems/software requirements definition).
 
-### Basic security requirements: Confidentiality, Integrity, and Availability
-
 Security requirements are often divided into three areas called the
 "CIA triad": confidentiality, integrity, and availability.
-We do the same here.
+We do the same here below, including a discussion of why we
+believe those requirements are met.
+These justifications depend on other processes
+(e.g., that the design is sound, the implementation is not vulnerable,
+verification is adequate), which we will justify later.
+This is followed by a discussion of access control, and then
+a discussion showing that the
+the assets & threat actors have been identified & addressed.
 
-Here are the BadgeApp security requirements in terms of the CIA triad
-(along with a few comments about how we implement these requirements):
+See the design section for discussion about why we believe is not possible
+to bypass the mechanisms discussed below.
 
-* Confidentiality:
-    - Almost all data we collect is considered public, e.g., all project data,
-      who owns the project information, and GitHub user names,
-      so we don't need to keep those confidential.
-    - Non-public data is kept confidential.
-      User passwords and user email addresses are non-public data.
-      We *do* consider them higher-value assets and protect them specially:
-        - User passwords are only stored on the server as
-          iterated per-user salted hashes (using bcrypt).
-        - Users may choose to "remember me" to automatically re-login on
-          that specific browser if they use a local account.
-          This is implemented using a
-          cryptographically random nonce stored in the user's cookie store
-          as a permanent cookie, but does not actually include the
-          user's original password.
-          See the section on authentication for more information.
-        - Email addresses are only revealed to the logged-in owner and
-          administrators. We do store email addresses;
-          we need those for various purposes
-          (e.g., contact badge entry owners for clarification).
-          We also user email addresses as the user id for "local" accounts.
-          We strive to not reveal user email addresses to others
-          (with the exception of administrators, who are trusted and thus
-          can see them).
-          We have specific tests to ensure that administrators can
-          see user email addresses (on the user page), but that
-          email addresses are not displayed when the user is not logged in
-          or is logged in as an ordinary user.
-          As documented in CONTRIBUTING.md, we forbid including email
-          addresses in server-sides caches, so that accidentally sharing the
-          wrong cache won't reveal email addresses.
-          Most of the rest of this document describes the
-          measures we take to prevent turning unintentional mistakes
-          into exposures of this data.
-        - We encrypt email addresses, to provide protection for data at rest,
-          and never provide the keys to the database system
-          (so someone who can only see what the database handles, or can
-          get a copy of it, will not see sensitive data including
-          raw passwords and unencrypted email addresses).
-          As discussed further in the section on "Encrypted email addresses",
-          we encrypt the email addresses using AES with 256-bit keys in
-          GCM mode ('aes-256-gcm').  We also hash the email addresses, so they
-          can be indexed, using the hashed key algorithm PBKDF2-HMAC-SHA256.
-          These are strong, well-tested algorithms.
-        - For each user account we store some other data.
-          Some we present to the public, such as creation and edit times.
-          We do not present the preferred locale to the public, under the
-          theory that we don't know of a reason someone else would
-          have a legitimate reason to know that.
-          However, this is not sensitive data and it is certainly
-          not identifying information, so we would not consider it a breach
-          if someone else got the "preferred locale" information.
-        - HTTPS is used to encrypt all communications between users
-          and the application; this protects the confidentiality of
-          all data in motion.
-          There's no need to worry about covert channels.
-* Integrity:
-    - HTTPS is used to protect the integrity of all communications between
-      users and the application, as well as to authenticate the server
-      to the user.
-    - Edits require a logged-in user with authorization.
-      Edits may be performed by the data owner, anyone GitHub reports as
-      being authorized to edit the project (if it's on GitHub), or
-      a BadgeApp administrator ("admin").
-      The badge owner is whoever created the badge entry.
-    - Modifications to the official BadgeApp application require
-      authentication via GitHub.
-      We use GitHub for managing the source code and issue tracker; it
-      has an authentication system for this purpose.
-* Availability:
-    - As with any publicly-accessible website,
-      we cannot prevent someone with significant
-      resources from overwhelming the system.
-      (This includes DDoS attacks,
-      since someone who controls many clients controls a lot of resources.)
-      So instead, we focus on various kinds of resilience.
-      See the design section "availability through scaleability" below
-      for more about how we handle scaling up.
-    - We use a cloud and CDN deployment, which allows quick scale-up
-      of resources when necessary.
-    - All queries, including project data queries, have a timeout.
-      That way, the system is not permanently "stuck" on a request.
-    - As noted later in the hardening section, we have rate limits on
-      incoming requests, including the number of requests a
-      client IP address can make in a given period.
-      This provides a small amount of automated protection against
-      being overwhelmed.
-    - The system can return to operation quickly after
-      a DDoS attack has ended.
-    - We routinely backup the database and retain multiple versions.
-      That way, if the project data is corrupted, we can restore the
-      database to a previous state.
-    - We have implemented a "login disabled" degraded mode.
-      If there is a serious security problem, in many cases we can
-      switch to that mode.  This mode lets us continue to
-      provide read-only services until the vulnerability is fixed.
-    - We have a recovery plan (described below) that builds on our
-      ability to recover from backup.
+### Confidentiality
 
-Identity, Authentication, and Authorization are handled in a traditional
-manner, as described below.
-In particular, see the section on authentication.
+Almost all data we collect is considered public, e.g., all project data,
+who owns the project information, and GitHub user names,
+so we don't need to keep those confidential.
+For each user account we store some other data.
+Some we present to the public, such as claimed user name,
+creation time, and edit times.
+We do not present the user's preferred locale to the public, under the
+theory that we don't know of a reason someone else would
+have a legitimate reason to know that.
+However, this is not sensitive data and it is certainly
+not identifying information, so we would not consider it a breach
+if someone else got the "preferred locale" information.
+We try to store as little information about users as we reasonably can,
+so that any breach cannot reveal very much.
 
-BadgeApp must avoid being taken over by attackers, since this
-could cause lead to failure in confidentiality, integrity, or availability.
-In addition, it must avoid being a conduit for others' attacks
-(e.g., not be vulnerable to cross-site scripting).
-We do this by focusing on having a secure design and countering the
-most common kinds of attacks (as described below).
+Non-public data is kept confidential.
+In our case, non-public data are the user passwords,
+the "remember me" token (login nonce)
+if the user has enabled remember me, and user email addresses.
+We *do* consider them higher-value assets and protect them specially,
+as described below.
+We protect their communication (data in motion) using HTTPS.
+
+#### User passwords
+
+User passwords for local accounts are only stored on the server as
+iterated per-user salted hashes (using bcrypt), and thus cannot
+be retrieved in an unencrypted form.
+
+Any user password sent to the system is sent by the application router
+to the "update" method of the user controller
+(`app/controllers/users_controller.rb`).  The update method invokes the
+"save" method of the user model (app/models/user.rb).
+The user model includes the standards Rails
+`has_secure_password` request, which tells the system to save
+the password after it has been encrypted with bcrypt
+(instead of storing it directly), and to later do comparisons using
+only the bcrypted value.
+
+Note that no normal request can later retrieve a password, because
+it is immediately encrypted on change or check and the original
+unencrypted password is discarded.
+The unencrypted email address may remain for a while in server memory
+until that memory is recycled, but we assume that the underlying
+system will protect memory during the time before it is garbage-collected
+and reused.
+
+#### Remember me token
+
+Users may choose to "remember me" to automatically re-login on
+that specific browser if they use a local account.
+This is done by enabling the "remember me" checkbox when logging in to
+a session.
+If a user does enable "remember me" we implement automatic
+login when the user makes later requests.  This is implemented using a
+cryptographically random nonce stored in the user's web browser
+cookie store as a permanent cookie.
+Note that this nonce does not include the user's original password.
+On the server side this nonce is encrypted via bcrypt just like
+user passwords are stored.
+
+Here is how we do this: Any attempt to login is routed to the
+"new" method of the sessions controller in
+`app/controllers/sessions_controller.rb`, which calls method
+`local_login`, and if login is successful it
+calls `local_login_procedure`.
+If the user selected `remember_me`, the
+`local_login_procedure` will call the `remember` method in
+the user model (in `app/models/user.rb`) to create and store the
+`remember_token` in the user's cookie store and the corresponding
+bcrypted value on the server.
+The user may log out later (often by having their log in session time out).
+
+Whenever the system needs to determine who the current user is,
+it calls method `current_user` (in `app/helpers/sessions_helper.rb`).
+If the user is not logged in, but has a `remember_me` token that
+matches the hashed token on the server, this method automatically
+logs the user back in.
+See the section on authentication for more information.
+
+The system does not have the unencrypted `remember_token` for any
+given user (only its bcrypted form), so the system cannot later reveal the
+`remember_token` to anyone else.
+
+#### Email addresses
+
+Email addresses are only revealed to the owner of the email address and to
+administrators. We must store email addresses,
+because we need those for various purposes.
+In particular, we must be able to contact badge entry owners
+to discuss badge issues (e.g., to ask for clarification).
+We also user email addresses as the user id for "local" accounts.
+We strive to not reveal user email addresses to others
+(with the exception of administrators, who are trusted and thus
+can see them).
+
+Here are the only ways that user email addresses can be revealed
+(use `grep -Ri 'user.*\.email' ./` to verify):
+
+- Mailers (in app/mailers/).  The application sometimes sends email, and
+  in all cases email is sent via mailers.  Unsurprisingly, we need destination
+  email addresses to send email.  However, in all cases we only
+  send emails to a single user, with possible "cc" or "bcc" to a
+  (trusted) administrator.  That way, user email addresses cannot leak
+  to other users via email.  This can be verified by examining the
+  mailers in directory `app/mailers/` and their corresponding views in
+  `app/views/*_mailer/`. Even the rake task `mass_email`
+  (defined in file lib/tasks/default.rake),
+  which can send a message such as "we have been breached" to
+  all users, sends a separate email to each user using a mailer.
+  A special case is when a user changes their email address: in that case,
+  information is sent to both email addresses, but technically that is still
+  an email to a single user, and this is only done when someone is logged
+  in with authorization to change the user email address.
+- The only *normal* way to display user email addresses is to invoke
+  a view of a user or a list of users.  However, these invoke
+  user views defined in "app/views/users/", and all of these views only
+  display a user email address if the current user is the user being displayed
+  or the current user is an administrator.  This is true for views in both
+  HTML and JSON formats.
+- The `reminders_summary` view in
+  `app/views/projects/reminders_summary.html.erb`
+  does display user email addresses, but this is only displayed when a
+  request is routed to the `reminders_summary` method of the projects controller
+  (`app/controllers/projects_controller.rb`), and this method only displays
+  that view to administrators.
+- As a special case, a user email address is included as a hidden field in
+  a local user password reset in `app/views/password_resets/edit.html.erb`.
+  However, this is only displayed if the user is routed to the "edit"
+  method of `app/controllers/password_resets_controller.rb` and successfully
+  meets two criterion (configured using `before_action`):
+  `require_valid_user` and `require_unexpired_reset`.
+  The first criterion requires that the user be activated and provide the
+  correct reset authentication token that was emailed to the user;
+  anyone who can do this can already receive or intercept that user's email.
+
+As documented in CONTRIBUTING.md, we forbid including email
+addresses in server-sides caches, so that accidentally sharing the
+wrong cache won't reveal email addresses.
+Most of the rest of this document describes the other
+measures we take to prevent turning unintentional mistakes
+into exposures of this data.
+
+Note: As discussed further in the later section on "Encrypted email addresses",
+we also encrypt the email addresses using AES with 256-bit keys in
+GCM mode ('aes-256-gcm').  We also hash the email addresses, so they
+can be indexed, using the hashed key algorithm PBKDF2-HMAC-SHA256.
+These are strong, well-tested algorithms.
+We encrypt email addresses, to provide protection for data at rest,
+and never provide the keys to the database system
+(so someone who can only see what the database handles, or can
+get a copy of it, will not see sensitive data including
+raw passwords and unencrypted email addresses).
+These are considered additional hardening measures, and so are
+discussed further in the section on hardening.
+
+#### HTTPS
+
+HTTPS (specifically the TLS protocol)
+is used to encrypt all communications between users
+and the application.
+This protects the confidentiality of all data in motion.
+There's no need to worry about covert channels.
+
+### Integrity
+
+HTTPS is used to protect the integrity of all communications between
+users and the application, as well as to authenticate the server
+to the user.
+
+Modification requires authorization.
+For more about the authorization rules, see the section on authorization.
+Note that authorization requires logging in.
+Data (either a project or user) can be modified, as described here:
+
+- Project:
+  Any project edit or deletion request is routed to the appropriate
+  method in the projects controller in
+  `app/controllers/projects_controller.rb`.
+  These cannot be executed unless the appropriate authentication check
+  has succeeded.
+  In the case of an `edit` or `update` request, there is a `before_action`
+  that verifies that the request is authorized using the check method
+  `can_edit_else_redirect`.
+  (Note: technically only `update` needs protection, since `edit` simply
+  displays a form to fill out.  However, to reduce user confusion, we
+  prevent *displaying* a form for editing data unless the user is authorized
+  to actually perform an update.)
+  Similarly, in the case of a `delete_form` or `destroy` request,
+  there is a `before_action`
+  that verifies that the request is authorized using the check method
+  `can_control_else_redirect`.
+  (Note: Again, technically only `destroy` needs authentication, but
+  to reduce user confusion we will not even display the form for destroying
+  a project unless the user is authorized to destroy it.)
+  Users cannot invoke any other method to modify a project.
+- User:
+  Any user edit or deletion request is routed to the appropriate
+  method in the user controller in
+  `app/controllers/users_controller.rb`.
+  These cannot be executed unless the appropriate authentication check
+  has succeeded.
+  In the case of an `edit` or `update` or `destroy` request,
+  there is a `before_action`
+  that verifies that the request is authorized using the check method
+  `redir_unless_current_user_can_edit`.
+  Users cannot invoke any other method to modify a user.
+
+The `additional_rights` table, described below, is edited as
+part of editing its corresponding project or deleting its
+corresponding user.
+No other data can be modified by normal users.
+
+Modifications to the official BadgeApp application require
+authentication via GitHub.
+We use GitHub for managing the source code and issue tracker; it
+has an authentication system for this purpose.
+
+### Availability
+
+As with any publicly-accessible website,
+we cannot prevent someone with significant
+resources from overwhelming the system.
+This includes DDoS attacks,
+since someone who controls many clients controls a lot of resources.
+So instead, we focus on various kinds of resilience against DDoS attacks.
+See the design section "availability through scaleability" below
+for more about how we handle scaling up.
+
+We also use backups to restore the system if its data is destroyed somehow.
+Thus, even if the system is taken down temporarily, we expect to be
+able to reconstitute it (including its data).
+
+Here are some approaches we use to support availability:
+
+- We use a cloud and CDN deployment, which allows quick scale-up
+  of resources when necessary.
+- All user requests have a timeout.
+  That way, the system is not permanently "stuck" on a request.
+- The system can return to operation quickly after
+  a DDoS attack has ended.
+- We have implemented a "login disabled mode" that we can
+  quickly enable.  If a vulnerability is found, but can only
+  be exploited by logged-in users, we can choose to quickly
+  enable this mode.  This mode will let us continue to
+  provide limited (read-only) services if certain kinds of
+  vulnerabilities are found until the vulnerability is fixed.
+- We routinely backup the database and retain multiple versions of
+  backups.
+  That way, if the project data is corrupted, we can restore the
+  database to a previous state.
+
+Later in this assurance case we'll note other
+capabilities that aid availability:
+
+- As noted later in the hardening section, we also have rate limits on
+  incoming requests, including the number of requests a
+  client IP address can make in a given period.
+  This provides a small amount of additional automated protection against
+  being overwhelmed.
+- As noted later in the "Recovery plan including backups",
+  we have a recovery plan that builds on our multiple backups.
 
 ### Access Control
 
@@ -285,6 +445,8 @@ Many of the CIA triad requirements address "authorized" users,
 and that requires knowing what "authorized" means.
 Thus, like nearly all systems, we must address access control,
 which we can divide into identification, authentication, and authorization.
+Identity, authentication, and authorization are handled in a traditional
+manner, as described below.
 
 #### Identification
 
@@ -401,15 +563,18 @@ few users are administrators, and only those with direct platform (Heroku)
 access can set a user to be an administrator.
 
 Anyone can create a normal user account.
+Only that user, or an administrator, can edit or delete a user account.
+
 A user can create as many project entries as desired.
 Each project entry gets a new unique project id and is
 owned by the user who created the project entry.
 
-There are two kinds of rights: "control" rights and "edit" rights.
+There are two kinds of rights over project data:
+"control" rights and "edit" rights.
 
 "Control" rights mean you can delete the project AND
 change who else is allowed to edit (they control their projects'
-entry in the additional_rights table). Anyone with control rights
+entry in the `additional_rights` table). Anyone with control rights
 also has edit rights.  The project owner has control
 rights to the projects they own,
 and admins have control rights over all projects.
@@ -441,18 +606,23 @@ or delete a project they do not control).
 It's important to test that certain actions that *must* fail for
 security reasons do indeed fail.
 
-### Assets
+### Assets & threat actors identified & addressed
+
+#### Assets
 
 As should be clear from the basic requirements above, our assets are:
 
 *   User passwords, especially for confidentiality.
     Unencrypted user passwords are the most critical
-    to protect (which we protect with bcrypt).
+    to protect. As noted above, we protect these with bcrypt;
+    we never store user passwords in an unencrypted or recoverable form.
+*   The "remember me" nonce if a user requests it - we protect
+    its confidentiality on the server side.
 *   User email addresses, especially for confidentiality.
 *   Project data, primarily for integrity and availability.
     We back these up to support availability.
 
-### Threat Agents
+#### Threat Agents
 
 We have few insiders, and they are fully trusted to *not*
 perform intentionally-hostile actions.

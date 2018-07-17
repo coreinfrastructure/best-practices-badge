@@ -435,39 +435,100 @@ has an authentication and authorization system for this purpose.
 ### Availability
 
 As with any publicly-accessible website,
-we cannot prevent someone with significant
-resources from overwhelming the system.
-This includes DDoS attacks,
-since someone who controls many clients controls a lot of resources.
-So instead, we focus on various kinds of resilience against DDoS attacks.
-See the design section "availability through scaleability" below
-for more about how we handle scaling up.
-
-We also use backups to restore the system if its data is destroyed somehow.
+we cannot prevent an attacker with significant
+resources from temporarily overwhelming the system through
+a distributed denial-of-service (DDos) attacks.
+So instead, we focus on various kinds of resilience against DDoS attacks,
+and use other measures (such as backups) to maximize availability.
 Thus, even if the system is taken down temporarily, we expect to be
 able to reconstitute it (including its data).
 
-Here are some approaches we use to support availability:
+#### Cloud & CDN deployment allow quick scale-up
 
-- We use a cloud and CDN deployment, which allows quick scale-up
-  of resources when necessary.
-- All user requests have a timeout.
-  That way, the system is not permanently "stuck" on a request.
-- The system can return to operation quickly after
-  a DDoS attack has ended.
-- We have implemented a "login disabled mode" that we can
-  quickly enable.  If a vulnerability is found, but can only
-  be exploited by logged-in users, we can choose to quickly
-  enable this mode.  This mode will let us continue to
-  provide limited (read-only) services if certain kinds of
-  vulnerabilities are found until the vulnerability is fixed.
-- We routinely backup the database and retain multiple versions of
-  backups.
-  That way, if the project data is corrupted, we can restore the
-  database to a previous state.
+We can quickly add more resources if more requests are made.
+See the design section "availability through scaleability" below
+for more about how we handle scaling up.
+
+#### Timeout
+
+All user requests have a timeout in production.
+That way, the system is not permanently "stuck" on a request.
+This is set by setting `Rack::Timeout.service_timeout`
+in file `config/environments/production.rb`.
+
+#### Can return to operation quickly after DDoS ended
+
+The system can return to operation quickly after
+a DDoS attack has ended.
+
+#### Login disabled mode
+
+We have implemented a "login disabled mode"
+(aka `BADGEAPP_DENY_LOGIN` mode) that we can quickly enable.
+
+This mode is an intentionally degraded mode of operation
+that prevents any changes by users (daily statistics
+creates are unaffected).
+More specifically, if this mode is enabled
+then no one can log in to the BadgeApp application,
+no one can create a new account (sign up),
+and no one can do anything that requires being logged in
+(users are always treated as if they are not logged in).
+
+This mode is intended to make some services available
+if there is a serious exploitable
+security vulnerability that can only be exploited by users who are
+logged in or can appear to be logged in.  Unlike *completely* disabling the
+site, this mode allows people to see current information
+(such as badge status, project data, and public user data).
+This mode is useful because it can stop many attacks, while still providing
+some services.
+
+This mode is enabled by setting the
+environmental variable `BADGEAPP_DENY_LOGIN` to a
+non-blank value (`true` is recommended).
+Note that application administrators cannot log in, or use their privileges,
+when this mode is enabled.
+Only hosting site administrators can turn this mode
+on or off (since they're the only ones who can set environment variables).
+
+This mode is checked on application startup by
+`config/initializers/deny_login.rb` which sets the boolean variable
+`Rails.application.config.deny_login`.
+Its effects can be verified by running
+`grep -R 'Rails.application.config.deny_login' app/`;
+they are as follows:
+
+* Users are never considered logged in, even if they already logged in.
+  This is enforced in the `current_user` method in
+  `app/helpers/sessions_helper.rb` - this always returns null (not logged in)
+  when this deny mode is enabled.
+* Attempts to login are rejected via the `create` method
+  of the session controller, per `app/controllers/sessions_controller.rb`.
+  Technically this isn't necessary, since being logged in is ignored,
+  but this rejection will alert users who start trying to log in before
+  this mode was enabled.
+* Attempts to create a new user account are rejected
+  via the `create` method of the user controller, per
+  `app/controllers/users_controller.rb`.
+  We do not want the user database to change while this mode is in effect.
+
+Some views are also changed when this view is enabled.
+These changes are not security-critical.
+Instead, these changes provide users immediate feedback
+to help them understand that this special mode has been enabled.
+
+#### Multiple backups
+
+We routinely backup the database every day
+and retain multiple versions of backups.
+That way, if the project data is corrupted, we can restore the
+database to a previous state.
+
+#### See also
 
 Later in this assurance case we'll note other
-capabilities that aid availability:
+capabilities that also aid availability:
 
 - As noted later in the hardening section, we also have rate limits on
   incoming requests, including the number of requests a
@@ -551,19 +612,24 @@ this counters session fixation attacks
 Local users may choose to "remember me" to automatically re-login on
 that specific browser if they use a local account.
 This is implemented using a
-cryptographically random nonce stored in the user's cookie store
-as a permanent cookie.  This nonce
-acts like a password, which is verified against a
+cryptographically random nonce called `remember_token` that is
+stored in the user's cookie store as a permanent cookie.
+It's cryptographically random because it is created by the user model
+method `self.new_token` which calls `SecureRandom.urlsafe_base64`.
+This `remember_token` acts like a password, which is verified against a
 `remember_digest` value stored in the server
 that is an iterated salted hash (using bcrypt).
 This "remember me" functionality cannot reveal the user's
 original password, and if the server's user database is
-compromised an attacker cannot easily find the nonce.
+compromised an attacker cannot easily determine the nonce used to log in.
 The nonce is protected in transit by HTTPS (discussed elsewhere).
 The `user_id` stored by the user is signed by the server.
-As with any system, the "remember me" functionality has a
-weakness: if the user's system is compromised, others can log
-in as that user.  But this is fundamental to any "remember me"
+
+As with any "remember me" system, this functionality has a
+weakness: if the user's system is compromised, others can copy the
+`remember_token` value and then log in as that user using the token
+if they use it before it expires.
+But this weakness is fundamental to any "remember me"
 functionality, and users must opt in to enable "remember me"
 (by default users must enter their password on each login,
 and the login becomes invalid when the user logs out or when
@@ -574,8 +640,8 @@ in commit e79decec67.
 
 A session is created for each user who successfully logs in.
 
-We expressly include tests in our test suite
-of our authentication system
+As discussed later in verification,
+we expressly include tests in our test suite of our authentication system
 to ensure that in 'local' accounts correct passwords allow login,
 while incorrect and unfilled passwords lead to login failure.
 It's important to test that certain actions that *must* fail for
@@ -1766,6 +1832,16 @@ Vulnerabilities are never a great sign, but we do take it as a good sign
 that the developers of encryptor were willing to make a breaking change
 to fix a security vulnerabilities.
 
+We could easily claim this as a way to support confidentiality,
+instead of simply as a hardening measure.
+We only claim email encryption
+as a hardening measure because we must still support
+two-way encryption and decryption, and the keys must remain available
+to the application.
+As a result, email encryption only counters some specific attack methods.
+That said, we believe this encryption adds an additional layer of defense
+to protect email addresses from being revealed.
+
 #### Gravatar restricted
 
 We use gravatar to provide user icons for local (custom) accounts.
@@ -2252,29 +2328,9 @@ If there is an ongoing security issue, we have a few immediate options
 We can shut down the system,
 disable internet access to it, or enable the
 application's `BADGEAPP_DENY_LOGIN` mode.
-The `BADGEAPP_DENY_LOGIN` mode is a capability we have pre-positioned
-to deal with many potential problems.
-
-If a non-blank value is set ("true" is recommended)
-in the environmental variable `BADGEAPP_DENY_LOGIN`,
-then no one can log in, no one can create a new account (sign up),
-and no one can do anything that requires being logged in (users are always
-treated as if they are not logged in).
-The `BADGEAPP_DENY_LOGIN` mode
-essentially prevents ANY changes by users (daily statistics
-creates are unaffected).
-
-The `BADGEAPP_DENY_LOGIN` mode
-may be a useful mode to enable if there is a serious exploitable
-security vulnerability that can only be exploited by users who are
-logged in or can appear to log in.  Unlike *completely* disabling the
-site, this mode allows people to see current information
-(such as badge status, project data, and public user data).
-This mode is useful because it can stop most attacks, while still providing
-some services.
-Note that application admins cannot log in, or use their privileges,
-when this mode is enabled.  Only hosting site admins can turn this mode
-on or off (since they're the only ones who can set environment variables).
+The `BADGEAPP_DENY_LOGIN` mode is a special degraded mode
+we have pre-positioned that enables key functionality while
+countering some attacks.
 
 We will work with the LF data controller to determine if there has been
 a personal data breach, and help the data controller alert the
@@ -2673,6 +2729,20 @@ believe they are acceptable:
     so if an attack is powerful enough, we can only counter it by also
     pouring in lots of resources (which is expensive).
     The same is true for almost any other website.
+*   *Keys are stored in environment variables and processed by the application.*
+    We use the very common approach of storing keys
+    (such as encryption keys) in environment variables, and use
+    the application software to apply them.
+    This means that an attacker who subverts the entire application or
+    underlying system could acquire copies of the keys.
+    This includes an attacker who could get a raw copy of a memory dump -
+    in such a case, the attacker could see the keys.
+    A stronger countermeasure would be to store keys in hardware devices,
+    or at least completely separate isolated applications, and then do
+    processing with keys in that separate execution environment.
+    However, this is more complex to deal with, and we've decided it
+    just isn't necessary in our circumstance.  We do partly counter this
+    by making it easy for us to change keys.
 *   *A vulnerability we missed.*
     Perfection is hard to achieve.
     We have considered security throughout system development,

@@ -210,7 +210,7 @@ be retrieved in an unencrypted form.
 Any user password sent to the system is sent by the application router
 to the "update" method of the user controller
 (`app/controllers/users_controller.rb`).  The update method invokes the
-"save" method of the user model (app/models/user.rb).
+"save" method of the user model (`app/models/user.rb`).
 The user model includes the standards Rails
 `has_secure_password` request, which tells the system to save
 the password after it has been encrypted with bcrypt
@@ -277,7 +277,7 @@ can see them).
 Here are the only ways that user email addresses can be revealed
 (use `grep -Ri 'user.*\.email' ./` to verify):
 
-- Mailers (in app/mailers/).  The application sometimes sends email, and
+- Mailers (in `app/mailers/`).  The application sometimes sends email, and
   in all cases email is sent via mailers.  Unsurprisingly, we need destination
   email addresses to send email.  However, in all cases we only
   send emails to a single user, with possible "cc" or "bcc" to a
@@ -294,7 +294,7 @@ Here are the only ways that user email addresses can be revealed
   in with authorization to change the user email address.
 - The only *normal* way to display user email addresses is to invoke
   a view of a user or a list of users.  However, these invoke
-  user views defined in "app/views/users/", and all of these views only
+  user views defined in `app/views/users/`, and all of these views only
   display a user email address if the current user is the user being displayed
   or the current user is an administrator.  This is true for views in both
   HTML and JSON formats.
@@ -339,7 +339,8 @@ discussed further in the section on hardening.
 HTTPS (specifically the TLS protocol)
 is used to encrypt all communications between users
 and the application.
-This protects the confidentiality (and integrity) of all data in motion.
+This protects the confidentiality and integrity of all data in motion,
+and provides confidence to users that they are contacting the correct server.
 
 We force the use of HTTPS by setting
 `config.force_ssl` to `true` in the
@@ -363,10 +364,21 @@ HTTPS is used to protect the integrity of all communications between
 users and the application, as well as to authenticate the server
 to the user.
 
-Modification requires authorization.
-For more about the authorization rules, see the section on authorization.
-Note that authorization requires logging in.
-Data (either a project or user) can be modified, as described here:
+#### Data modification requires authorization
+
+Data modification requires authorization.
+For more about the authorization rules themselves,
+see the section on authorization.
+Note that gaining authorization first requires logging in
+(which in turn requires both identification and authentication).
+
+Here we describe how these authorization rules are enforced.
+We first discuss how to modify data through the BadgeApp application,
+and then note that data can also be modified by modifying it via the
+underlying database and platform.
+
+Data (either a project or user) can only be modified through
+the BadgeApp application as follows:
 
 - Project:
   Any project edit or deletion request is routed to the appropriate
@@ -406,10 +418,19 @@ part of editing its corresponding project or deleting its
 corresponding user.
 No other data can be modified by normal users.
 
+It is also possible to directly modify the underlying database
+that records the data.
+However, only an administrator with deployment platform access
+is authorized to do that, and few people have that privilege.
+The deployment platform infrastructure verifies authentication and
+authorization.
+
+#### Modification to official application requires authorization via GitHub
+
 Modifications to the official BadgeApp application require
-authentication via GitHub.
+authorization via GitHub.
 We use GitHub for managing the source code and issue tracker; it
-has an authentication system for this purpose.
+has an authentication and authorization system for this purpose.
 
 ### Availability
 
@@ -497,7 +518,7 @@ the time. Such libraries have become much more mature, but as of yet
 there hasn't been a good reason to change.
 
 The key code for authentication is the "sessions" controller file
-"app/controllers/sessions_controller.rb".
+`app/controllers/sessions_controller.rb`.
 In this section we only consider the login mechanism
 built into the BadgeApp.  Heroku has its own login mechanisms, which must
 be carefully controlled but are out of scope here.
@@ -512,7 +533,7 @@ the login page.  From there:
 * A remote user login (pushing the "log in with GitHub" button) will
   invoke GET "/auth/github".  The application then begin an omniauth
   login, by redirecting the user to "https://github.com/login?"
-  with URL parameters of client_id and return_to.
+  with URL parameters of `client_id` and `return_to`.
   When the GitHub login completes, then per the omniauth spec there's a
   redirect back to our site to /auth/github/callback, which is
   routed to session#create along with values such as
@@ -520,10 +541,10 @@ the login page.  From there:
   by using the omniauth-github gem (this is the "callback phase").
   If we confirm that GitHub asserts that the user is authenticated,
   then we accept GitHub's ruling for that github user and log them in.
-  This interaction with GitHub uses GITHUB_KEY and GITHUB_SECRET.
+  This interaction with GitHub uses `GITHUB_KEY` and `GITHUB_SECRET`.
   For more information, see the documentation on omniauth-github.
 
-The first thing that session#create does is run "counter_fixation";
+The first thing that session#create does is run `counter_fixation`;
 this counters session fixation attacks
 (it also saves the forwarding url, in case we want to return to it).
 
@@ -533,13 +554,13 @@ This is implemented using a
 cryptographically random nonce stored in the user's cookie store
 as a permanent cookie.  This nonce
 acts like a password, which is verified against a
-remember_digest value stored in the server
+`remember_digest` value stored in the server
 that is an iterated salted hash (using bcrypt).
 This "remember me" functionality cannot reveal the user's
 original password, and if the server's user database is
 compromised an attacker cannot easily find the nonce.
 The nonce is protected in transit by HTTPS (discussed elsewhere).
-The user_id stored by the user is signed by the server.
+The `user_id` stored by the user is signed by the server.
 As with any system, the "remember me" functionality has a
 weakness: if the user's system is compromised, others can log
 in as that user.  But this is fundamental to any "remember me"
@@ -599,17 +620,17 @@ and admins have control rights over all projects.
 "Edit" rights mean you can edit the project entry. If you have
 control rights over a project you also have edit rights.
 In addition, fellow committers on GitHub for that project,
-and users in the additional_rights table
-who have their user_id listed for that project, get edit rights
+and users in the `additional_rights` table
+who have their `user_id` listed for that project, get edit rights
 for that project.
-The additional_rights table adds support for groups so that they can
+The `additional_rights` table adds support for groups so that they can
 edit project entries when the project is not on GitHub.
 
 This means that
 a project entry can only be edited (and deleted) by the entry creator,
 an administrator, by others who can prove that they
 can edit that GitHub repository (if it is on GitHub), and by those
-authorized to edit via the additional_rights table.
+authorized to edit via the `additional_rights` table.
 Anyone can see the project entry results once they are saved.
 We do require, in the case of a GitHub project entry, that the
 entry creator be logged in via GitHub *and* be someone who can edit that
@@ -879,7 +900,7 @@ Here are the key security safeguards:
   included in every text.  The tests will fail, and the system will not be
   deployed, if any other tags or attributes are used.
   This set does not include dangerous tags such as &lt;script&gt;.
-  The test details are in <test/models/translations_test.rb>.
+  The test details are in `test/models/translations_test.rb`.
   Thus, while a translation can be wrong or be defaced,
   what it can include in the HTML (and thus attack users) is very limited.
   Although not relevant to security, it's worth noting that these tests
@@ -1339,13 +1360,13 @@ as of 2015-12-14:
    secret key) to ensure that clients cannot undetectably change
    these cookies; a changed value is thrown away.
    Logged-in users have their user id stored in this authenticated cookie
-   (There is also a session_id, not currently used.)
+   (There is also a `session_id`, not currently used.)
    Session data is intentionally kept small, because of the limited
    amount of data available in a cookie.
    To counteract session hijacking, we configure the production
    environment to always communicate over an encrypted channel using TLS
-   (see file config/environments/production.rb which sets
-   "config.force_ssl" to true).
+   (see file `config/environments/production.rb` which sets
+   `config.force_ssl` to true).
    The design allows users to drop cookies at any time
    (at worse they may have to re-login to get another session cookie).
    One complaint about Rails' traditional CookieStore is that if someone
@@ -1353,7 +1374,7 @@ as of 2015-12-14:
    if the cookie is years old and the user logged out.
    (e.g., because someone got a backup copied).
    Our countermeasure is to time out inactive sessions, by
-   also storing a time_last_used in the session
+   also storing a `time_last_used` in the session
    cookie (the UTC time the cookie was last used).
    Once the time expires, then even if someone else later gets an old
    cookie value, it cannot be used to log into the system.
@@ -1361,8 +1382,8 @@ as of 2015-12-14:
    We use the standard REST operations with their standard meanings
    (GET, POST, etc., with the standard Rails method workaround).
    We have a CSRF required security token implemented using
-   protect_from_forgery built into the application-wide controller
-   app/controllers/application_controller.rb
+   `protect_from_forgery` built into the application-wide controller
+   `app/controllers/application_controller.rb`
    (we do not use cookies.permanent or similar, a contra-indicator).
    Also, we set cookies with SameSite=Lax; this is a useful hardening
    countermeasure in browsers that support it.
@@ -1409,7 +1430,7 @@ as of 2015-12-14:
    good alternatives for low value data like this.
    This isn't as bad as it might appear, because we prefer encrypted
    channels for transmitting all emails. Our application attempts to send
-   messages to its MTA using TLS (using enable_starttls_auto: true),
+   messages to its MTA using TLS (using `enable_starttls_auto: true`),
    and that MTA (SendGrid) then attempts to transfer the email the rest
    of the way using TLS if the recipient's email system supports it
    (see <https://sendgrid.com/docs/Glossary/tls.html>).
@@ -1419,7 +1440,7 @@ as of 2015-12-14:
    MTAs, which is often not easy).
    If users don't like that, they can log in via GitHub and use GitHub's
    forgotten password system.
-   The file config/initializers/filter_parameter_logging.rb
+   The file `config/initializers/filter_parameter_logging.rb`
    intentionally filters passwords so that they are not included in the log.
    We require that local user passwords have a minimum length
    (see the User model), and this is validated by the server
@@ -1449,17 +1470,18 @@ as of 2015-12-14:
    to system()... so command injection won't work either.
    The software resists header injection including response splitting;
    headers are typically not dynamically generated, most redirections
-   (using redirect_to) are to static locations, and the rest are based
+   (using `redirect_to`) are to static locations, and the rest are based
    on filtered locations.
    We use a restrictive CSP setting to limit damage if all those fail.
 8. *Unsafe Query Generation.*
    We use the default Rails behavior, in particular, we leave
-   deep_munge at its default value (which counters a number of vulnerabilities).
+   `deep_munge` at its default value
+   (this default value counters a number of vulnerabilities).
 9. *Default Headers.*
    We use at least the default security HTTP headers,
    which help counter some attacks.
    We harden the headers further, in particular via the
-   [secure_headers](https://github.com/twitter/secureheaders) gem.
+   [`secure_headers`](https://github.com/twitter/secureheaders) gem.
    For example, we use a restrictive Content Security Policy (CSP) header.
    For more information, see the hardening section.
 
@@ -1470,14 +1492,14 @@ That said, we do look for other sources for recommendations,
 and consider them where they make sense.
 
 In particular, the
-[ankane/secure_rails](https://github.com/ankane/secure_rails) guide
+[`ankane/secure_rails`](https://github.com/ankane/secure_rails) guide
 has some interesting tips.
 Most of them were were already doing, but an especially interesting
 tip was to
 "Prevent host header injection -
 add the following to config/environments/production.rb":
 
-~~~~
+~~~~ruby
 config.action_controller.default_url_options = {host: "www.yoursite.com"}
 config.action_controller.asset_host = "www.yoursite.com"
 ~~~~
@@ -1516,7 +1538,7 @@ If the web browser uses HTTP anyway,
 our CDN (Fastly) is configured to redirect HTTP to HTTPS.
 If our CDN is misconfigured or skipped for some reason, the application
 will also redirect the user from HTTP to HTTPS if queried directly.
-This is because in production "config.force_ssl" is set to true,
+This is because in production `config.force_ssl` is set to true,
 which enables a number of hardening mechanisms in Rails, including
 TLS redirection (which redirects HTTP to HTTPS), secure cookies,
 and HTTP Strict Transport Security (HSTS).
@@ -1524,29 +1546,29 @@ HSTS tells browsers to always use HTTPS in the future for this site,
 so once the user contacts the site once, it will use HTTPS in the future.
 See
 ["Rails, Secure Cookies, HSTS and friends" by Ilija Eftimov (2015-12-14)](http://eftimov.net/rails-tls-hsts-cookies)
-for more about the impact of force_ssl.
+for more about the impact of `force_ssl`.
 
 #### Hardened outgoing HTTP headers, including restrictive CSP
 
 We harden the outgoing HTTP headers, in particular, we use a
 restrictive Content Security Policy (CSP) header with just
-"normal sources" (normal_src).  We do send a
+"normal sources" (`normal_src`).  We do send a
 Cross-Origin Resource Sharing (CORS) header when an origin is specified,
 but the CORS header does *not* share credentials.
 
 CSP is perhaps one of the most important hardening items,
 since it prevents execution of injected JavaScript).
 The HTTP headers are hardened via the
-[secure_headers](https://github.com/twitter/secureheaders) gem,
+[`secure_headers`](https://github.com/twitter/secureheaders) gem,
 developed by Twitter to enable a number of HTTP headers for hardening.
 We check that the HTTP headers are hardened in the test file
-"test/integration/project_get_test.rb"; that way, when we upgrade
-the secure_headers gem, we can be confident that the headers continue to
+`test/integration/project_get_test.rb`; that way, when we upgrade
+the `secure_headers` gem, we can be confident that the headers continue to
 be restrictive.
 The test checks for the HTTP header values when loading a project entry,
 since that is the one most at risk from user-provided data.
 That said, the hardening HTTP headers are basically the same for all
-pages except for /project_stats, and that page doesn't display
+pages except for `/project_stats`, and that page doesn't display
 any user-provided data.
 We have separately checked the CSP values we use with
 <https://csp-evaluator.withgoogle.com/>;
@@ -1577,7 +1599,7 @@ protection measures (including caching and scaling) still apply.
 #### Cookie limits
 
 Cookies have various restrictions (also via the
-[secure_headers](https://github.com/twitter/secureheaders) gem).
+[`secure_headers`](https://github.com/twitter/secureheaders) gem).
 They have httponly=true (which counters many JavaScript-based attacks),
 secure=true (which is irrelevant because we always use HTTPS but it
 can't hurt), and SameSite=Lax (which counters CSRF attacks on
@@ -1590,9 +1612,10 @@ to further harden the system against CSRF attacks.
 Both of these techniques are Rails 5 additions:
 
 * We enable per-form CSRF tokens
-  (Rails.application.config.action_controller. per_form_csrf_tokens).
+  (`Rails.application.config.action_controller.` `per_form_csrf_tokens`).
 * We enable origin-checking CSRF mitigation
-  (Rails.application.config.action_controller. forgery_protection_origin_check).
+  (`Rails.application.config.action_controller.`
+  `forgery_protection_origin_check`).
 
 These help counter CSRF, in addition to our other measures.
 
@@ -1604,7 +1627,7 @@ These are implemented by Rack::Attack and have two parts, a
 "LIMIT" (maximum count) and a "PERIOD" (length of period of time,
 in seconds, where that limit is not to be exceeded).
 If unspecified they have the default values specified in
-config/initializers/rack_attack.rb.  These settings are
+`config/initializers/rack_attack.rb`.  These settings are
 (where "IP" or "ip" means "client IP address", and "req" means "requests"):
 
 - req/ip
@@ -1622,8 +1645,8 @@ trivial attacks.
 
 To determine the remote client IP address (for our purposes) we use the
 the next-to-last value of the comma-space-separated value
-"HTTP_X_FORWARDED_FOR" (from the HTTP header X-Forwarded-For).
-That's because the last value of "HTTP_X_FORWARDED_FOR"
+`HTTP_X_FORWARDED_FOR` (from the HTTP header X-Forwarded-For).
+That's because the last value of `HTTP_X_FORWARDED_FOR`
 is always our CDN (which intercepts it first), and the previous
 value is set by our CDN to whatever IP address the CDN got.
 The web server is configured so it will only accept connections from the
@@ -1639,7 +1662,7 @@ but those entries are always earlier in the list
 We enable rate limits on outgoing reminder emails.
 We send reminder emails to projects that have not updated their
 badge entry in a long time. The detailed algorithm that prioritizes projects
-is in "app/models/project.rb" class method "self.projects_to_remind".
+is in `app/models/project.rb` class method `self.projects_to_remind`.
 It sorts by reminder date, so we always cycle through before returning to
 a previously-reminded project.
 
@@ -1680,8 +1703,8 @@ encrypting everything.
 
 We encrypt email addresses using the Rails-specific approach outlined in
 ["Securing User Emails in Rails" by Andrew Kane (May 14, 2018)](https://shorts.dokkuapp.com/securing-user-emails-in-rails/).
-We use the gem 'attr_encrypted' to encrypt email addresses, and
-gem 'blind_index' to index encrypted email addresses.
+We use the gem `attr_encrypted` to encrypt email addresses, and
+gem `blind_index` to index encrypted email addresses.
 This approach builds on standard general-purpose approaches for
 encrypting data and indexing the data, e.g., see
 ["How to Search on Securely Encrypted Database Fields" by By Scott Arciszewski](https://www.sitepoint.com/how-to-search-on-securely-encrypted-database-fields/).
@@ -1721,24 +1744,24 @@ The hashes are of email addresses after they've been downcased;
 this supports case-insensitive searching for email addresses.
 
 The two keys used for email encryption are
-EMAIL_ENCRYPTION_KEY and EMAIL_BLIND_INDEX_KEY.
+`EMAIL_ENCRYPTION_KEY` and `EMAIL_BLIND_INDEX_KEY`.
 Both are 256 bits long (aka 64 hexadecimal digits long).
 The production values for both keys were independently created as
-cryptographically random values using "rails secret".
+cryptographically random values using `rails secret`.
 
-Implementation note: the indexes created by blind_index always
+Implementation note: the indexes created by `blind_index` always
 end in a newline.  That doesn't matter for security, but it can cause
 debugging problems if you weren't expecting that.
 
-Note that 'attr_encrypted' depends on the gem 'encryptor'.
+Note that `attr_encrypted` depends on the gem `encryptor`.
 Encryptor version 2.0.0 had a
 [major security bug when using AES-*-GCM algorithms](https://github.com/attr-encrypted/encryptor/pull/22).
 We do not use that version, but instead use
 a newer version that does not have that vulnerability.
 Some old documentation recommends using
-'attr_encryptor' instead because of this vulnerability, but the
+`attr_encryptor` instead because of this vulnerability, but the
 vulnerability has since been fixed and
-'attr_encryptor' is no longer maintained.
+`attr_encryptor` is no longer maintained.
 Vulnerabilities are never a great sign, but we do take it as a good sign
 that the developers of encryptor were willing to make a breaking change
 to fix a security vulnerabilities.
@@ -1756,7 +1779,7 @@ this, but we want to hide even the MD5 cryptographic hashes of
 those who have not so consented.
 
 Therefore, we track for each user whether or not they should
-use a gravatar icon, as the boolean field "use_gravatar".
+use a gravatar icon, as the boolean field `use_gravatar`.
 Currently this is can only be true for
 local users (for GitHub users we use their GitHub icon).
 Whenever a new local user account is created or changed,
@@ -1783,7 +1806,7 @@ Therefore, we monitor information to learn about new types of vulnerabilities,
 and make adjustments as necessary.
 
 For example, a common vulnerability not reported in the 2013 OWASP top 10
-is the use of "target=" in the "a" tag that does not have "\_self"
+is the use of `target=` in the "a" tag that does not have `_self`
 as its value.
 This is discussed in, for example,
 ["Target="\_blank" - the most underestimated vulnerability ever" by Alex Yumashev, May 4, 2016](https://www.jitbit.com/alexblog/256-targetblank---the-most-underestimated-vulnerability-ever/).
@@ -1796,20 +1819,20 @@ application; we noticed it on our own.
 Today we discourage the use of target=, because removing target= completely
 eliminates the vulnerability.  When target= is used,
 which is sometimes valuable to avoid the risk of user data loss,
-we require that rel="noopener" always be used with target=
-(this is the standard mitigation for target=).
+we require that `rel="noopener"` always be used with `target=`
+(this is the standard mitigation for `target=`).
 
 We learned about this type of vulnerability after the application was
 originally developed, through our monitoring of sites that discuss
 general vulnerabilities.
-To address the target= vulnerability, we:
+To address the `target=` vulnerability, we:
 
 * modified the application to counter the vulnerability,
 * documented in CONTRIBUTING.md that it's not acceptable to have bare target=
   values (we discourage their use, and when they need to be used, they
   must be used with rel="noopener")
 * modified the translation:sync routine to automatically insert the
-  rel="noopener" mitigations for all target= values when they aren't
+  `rel="noopener"` mitigations for all target= values when they aren't
   already present
 * modified the test suite to try to detect unmitigated uses of target=
   in key pages (the home page, project index, and single project page)
@@ -1858,7 +1881,7 @@ We prefer common FLOSS licenses.
 A FLOSS component with a rarely-used license, particularly a
 GPL-incompatible one, is less likely to be reviewed by others because
 in most cases fewer people will contribute to it.
-We use license_finder to ensure that the licenses are what we expect,
+We use `license_finder` to ensure that the licenses are what we expect,
 and that the licenses do not change to an unusual license
 in later versions.
 
@@ -1930,7 +1953,7 @@ but in that case we provide the test data to ourselves (so it is trusted).
 
 The "erubis" module was identified as potentially vulnerable to
 cross-site scripting (XSS) as introduced through
-pronto-rails_best_practices.
+`pronto-rails_best_practices`.
 This was identified as a potential issue in an
 [analysis by Snyk](https://snyk.io/test/github/coreinfrastructure/best-practices-badge?severity=high&severity=medium&severity=low).
 
@@ -2026,33 +2049,33 @@ and how it helps make the software more secure:
   revealed to unauthorized individuals.
   Here are important examples of our negative testing:
     - local logins with wrong or unfilled passwords will lead to login failure
-      (see "test/features/login_test.rb").
+      (see `test/features/login_test.rb`).
     - projects cannot be edited ("patched") by a timed-out session
       or a session lacking a signed timeout value
-      (see "test/controllers/projects_controller_test.rb")
+      (see `test/controllers/projects_controller_test.rb`)
     - projects cannot be edited if the user is not logged in, or
       by logged-in normal users
       if they aren't authorized to edit that project
-      (see "test/controllers/projects_controller_test.rb")
+      (see `test/controllers/projects_controller_test.rb`)
     - projects can't be destroyed (deleted) if the user isn't logged in,
       or is logged as a user who does not control the project
-      (see "test/controllers/projects_controller_test.rb")
+      (see `test/controllers/projects_controller_test.rb`)
     - user data cannot be edited ("patched") if the user isn't logged in,
       or is logged in as another non-admin user
-      (see "test/controllers/users_controller_test.rb")
+      (see `test/controllers/users_controller_test.rb`)
     - users can't be destroyed if the user isn't logged in, or is logged
       in as another non-admin user
-      (see "test/controllers/users_controller_test.rb")
+      (see `test/controllers/users_controller_test.rb`)
     - a request to show the edit user page is redirected away
       if the user isn't logged in, or is logged as another non-admin user -
       this prevents any information leak from the edit page
-      (see "test/controllers/users_controller_test.rb")
+      (see `test/controllers/users_controller_test.rb`)
     - a user page does not display its email address when the user is
       either (1) not logged in or (2) is logged in but not as an admin.
-      (see "test/controllers/users_controller_test.rb")
+      (see `test/controllers/users_controller_test.rb`)
     - a user page does not display if the user is an admin if
       the user isn't logged in, or is logged in as a non-admin user
-      (see "test/controllers/users_controller_test.rb").
+      (see `test/controllers/users_controller_test.rb`).
       This makes it slightly harder for attackers to figure out
       the individuals to target (they have additional privileges), while
       still allowing *administrators* to easily see if a user has
@@ -2200,7 +2223,7 @@ As an additional protection measure, we take steps to *not* include
 passwords in logs.
 That's because people sometimes reuse passwords, so we try to be
 especially careful with passwords.
-File config/initializers/filter_parameter_logging expressly
+File `config/initializers/filter_parameter_logging` expressly
 filters out the "password" field.
 
 We intentionally omit here, in this public document, details about
@@ -2228,19 +2251,20 @@ If there is an ongoing security issue, we have a few immediate options
 (other than just leaving the system running).
 We can shut down the system,
 disable internet access to it, or enable the
-application's BADGEAPP_DENY_LOGIN mode.
-The BADGEAPP_DENY_LOGIN mode is a capability we have pre-positioned
+application's `BADGEAPP_DENY_LOGIN` mode.
+The `BADGEAPP_DENY_LOGIN` mode is a capability we have pre-positioned
 to deal with many potential problems.
+
 If a non-blank value is set ("true" is recommended)
-in the environmental variable BADGEAPP_DENY_LOGIN,
+in the environmental variable `BADGEAPP_DENY_LOGIN`,
 then no one can log in, no one can create a new account (sign up),
 and no one can do anything that requires being logged in (users are always
 treated as if they are not logged in).
-The BADGEAPP_DENY_LOGIN mode
+The `BADGEAPP_DENY_LOGIN` mode
 essentially prevents ANY changes by users (daily statistics
 creates are unaffected).
 
-The BADGEAPP_DENY_LOGIN mode
+The `BADGEAPP_DENY_LOGIN` mode
 may be a useful mode to enable if there is a serious exploitable
 security vulnerability that can only be exploited by users who are
 logged in or can appear to log in.  Unlike *completely* disabling the
@@ -2270,7 +2294,7 @@ As shown elsewhere, we have a variety of tools and tests that help us
 rapidly update the software with confidence.
 
 Once the system is fixed, we might need to alert users.
-We have a pre-created rake task "mass_email" that lets us quickly
+We have a pre-created rake task `mass_email` that lets us quickly
 send email to the users (or a subset) if it strictly necessary.
 
 We might also need to re-encrypt the email addresses with a new key.

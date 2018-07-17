@@ -176,28 +176,30 @@ to bypass the mechanisms discussed below.
 
 ### Confidentiality
 
+#### Almost all data not confidential
+
+We try to store as little confidential information as we reasonably can,
+as this limits the impact of any confidentiality breach.
 Almost all data we collect is considered public, e.g., all project data,
-who owns the project information, and GitHub user names,
-so we don't need to keep those confidential.
+who owns the project information, and GitHub user names.
+Therefore, we don't need to keep those confidential.
+
 For each user account we store some other data.
 Some we present to the public, such as claimed user name,
-creation time, and edit times.
+creation time, and edit times; we present these as we consider that
+public information.
 We do not present the user's preferred locale to the public, under the
 theory that we don't know of a reason someone else would
 have a legitimate reason to know that.
-However, this is not sensitive data and it is certainly
+However, all of this is not considered sensitive data and it is certainly
 not identifying information, so we would not consider it a breach
-if someone else got the "preferred locale" information.
-We try to store as little information about users as we reasonably can,
-so that any breach cannot reveal very much.
+if someone else got this information (such as the preferred locale).
 
 Non-public data is kept confidential.
-In our case, non-public data are the user passwords,
-the "remember me" token (login nonce)
-if the user has enabled remember me, and user email addresses.
-We *do* consider them higher-value assets and protect them specially,
-as described below.
-We protect their communication (data in motion) using HTTPS.
+In our case, the non-public data that must be kept confidential
+are the user passwords, the "remember me" token (login nonce)
+if the user has enabled the remember me function, and user email addresses.
+We *do* consider this data higher-value and protect them specially.
 
 #### User passwords
 
@@ -337,11 +339,26 @@ discussed further in the section on hardening.
 HTTPS (specifically the TLS protocol)
 is used to encrypt all communications between users
 and the application.
-This protects the confidentiality of all data in motion.
-There's no need to worry about covert channels.
+This protects the confidentiality (and integrity) of all data in motion.
+
+We force the use of HTTPS by setting
+`config.force_ssl` to `true` in the
+`config/environments/production.rb` (the production configuration).
+This enables a number of hardening mechanisms in Rails, including
+TLS redirection (which redirects HTTP to HTTPS).
+(There is a debug mode to disable this, `DISABLE_FORCE_SSL`,
+but this is not normally set in production and can only be set by
+a system administrators with deployment platform access.)
+
+As discussed in the hardening section
+"Force the use of HTTPS, including via HSTS" (below), we take a number of
+additional steps to try to make users always use HTTPS.
+We also use [online checkers](#online-checkers) (discussed below)
+to verify that our TLS configuration is secure in production.
 
 ### Integrity
 
+As noted above,
 HTTPS is used to protect the integrity of all communications between
 users and the application, as well as to authenticate the server
 to the user.

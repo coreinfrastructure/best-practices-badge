@@ -265,12 +265,15 @@ given user (only its bcrypted form), so the system cannot later reveal the
 #### Email addresses
 
 Email addresses are only revealed to the owner of the email address and to
-administrators. We must store email addresses,
+administrators.
+
+We must store email addresses,
 because we need those for various purposes.
 In particular, we must be able to contact badge entry owners
 to discuss badge issues (e.g., to ask for clarification).
 We also user email addresses as the user id for "local" accounts.
-We strive to not reveal user email addresses to others
+Since we must store them,
+we strive to not reveal user email addresses to others
 (with the exception of administrators, who are trusted and thus
 can see them).
 
@@ -298,12 +301,20 @@ Here are the only ways that user email addresses can be revealed
   display a user email address if the current user is the user being displayed
   or the current user is an administrator.  This is true for views in both
   HTML and JSON formats.
+  The following automated tests verify that email addresses
+  are not provided without authorization:
+    - `should NOT show email address when not logged in`
+    - `JSON should NOT show email address when not logged in`
+    - `should NOT show email address when logged in as another user`
+    - `JSON should NOT show email address when logged in as another user`
 - The `reminders_summary` view in
   `app/views/projects/reminders_summary.html.erb`
   does display user email addresses, but this is only displayed when a
   request is routed to the `reminders_summary` method of the projects controller
   (`app/controllers/projects_controller.rb`), and this method only displays
   that view to administrators.
+  This is verified by the automated test
+  `Reminders path redirects for non-admin`.
 - As a special case, a user email address is included as a hidden field in
   a local user password reset in `app/views/password_resets/edit.html.erb`.
   However, this is only displayed if the user is routed to the "edit"
@@ -313,9 +324,11 @@ Here are the only ways that user email addresses can be revealed
   The first criterion requires that the user be activated and provide the
   correct reset authentication token that was emailed to the user;
   anyone who can do this can already receive or intercept that user's email.
+  The need for the correct authentication token
+  is verified by the automated test `password resets`.
 
 As documented in CONTRIBUTING.md, we forbid including email
-addresses in server-sides caches, so that accidentally sharing the
+addresses in server-side caches, so that accidentally sharing the
 wrong cache won't reveal email addresses.
 Most of the rest of this document describes the other
 measures we take to prevent turning unintentional mistakes
@@ -367,40 +380,49 @@ to the user.
 #### Data modification requires authorization
 
 Data modification requires authorization.
-For more about the authorization rules themselves,
-see the section on authorization.
-Note that gaining authorization first requires logging in
-(which in turn requires both identification and authentication).
 
 Here we describe how these authorization rules are enforced.
 We first discuss how to modify data through the BadgeApp application,
 and then note that data can also be modified by modifying it via the
 underlying database and platform.
+For more about the authorization rules themselves,
+see the section on authorization.
+Note that gaining authorization first requires logging in
+(which in turn requires both identification and authentication).
 
-Data (either a project or user) can only be modified through
-the BadgeApp application as follows:
+The only kinds of data that can be modified involve a project or a user,
+and this data can only be modified through the application as follows:
 
 - Project:
   Any project edit or deletion request is routed to the appropriate
   method in the projects controller in
   `app/controllers/projects_controller.rb`.
-  These cannot be executed unless the appropriate authentication check
-  has succeeded.
-  In the case of an `edit` or `update` request, there is a `before_action`
-  that verifies that the request is authorized using the check method
-  `can_edit_else_redirect`.
-  (Note: technically only `update` needs protection, since `edit` simply
-  displays a form to fill out.  However, to reduce user confusion, we
-  prevent *displaying* a form for editing data unless the user is authorized
-  to actually perform an update.)
-  Similarly, in the case of a `delete_form` or `destroy` request,
-  there is a `before_action`
-  that verifies that the request is authorized using the check method
-  `can_control_else_redirect`.
-  (Note: Again, technically only `destroy` needs authentication, but
-  to reduce user confusion we will not even display the form for destroying
-  a project unless the user is authorized to destroy it.)
-  Users cannot invoke any other method to modify a project.
+  Users cannot invoke any other method to modify a project other than
+  the four methods corresponding to the requests identified below, and
+  these cannot be executed unless the appropriate authentication check
+  has succeeded:
+    - In the case of an `edit` or `update` request, there is a `before_action`
+      that verifies that the request is authorized using the check method
+      `can_edit_else_redirect`.
+      (Note: technically only `update` needs authentication, since
+      `edit` simply displays a form to fill out.  However, to reduce
+      user confusion, we prevent *displaying* a form for editing data
+      unless the user is authorized to later perform an update.)
+      This inability to edit a project without authorization
+      is verified by automated tests
+      `should fail to update project if not logged in` and
+      `should fail to update other users project`.
+    - In the case of a `delete_form` or `destroy` request,
+      there is a `before_action`
+      that verifies that the request is authorized using the check method
+      `can_control_else_redirect`.
+      (Note: Again, technically only `destroy` needs authentication, but
+      to reduce user confusion we will not even display the form for destroying
+      a project unless the user is authorized to destroy it.)
+      This inability to destroy a project without authorization
+      is verified by automated tests
+      `should not destroy project if no one is logged in` and
+      `should not destroy project if logged in as different user`.
 - User:
   Any user edit or deletion request is routed to the appropriate
   method in the user controller in
@@ -412,10 +434,18 @@ the BadgeApp application as follows:
   that verifies that the request is authorized using the check method
   `redir_unless_current_user_can_edit`.
   Users cannot invoke any other method to modify a user.
+  This inability to edit or destroy a user without authorization
+  is verified by these automated tests:
+    - `should redirect edit when not logged in`
+    - `should redirect edit when logged in as wrong user`
+    - `should redirect update when not logged in`
+    - `should redirect update when logged in as wrong user`
+    - `should redirect destroy when not logged in`
+    - `should redirect destroy when logged in as wrong non-admin user`
 
 The `additional_rights` table, described below, is edited as
 part of editing its corresponding project or deleting its
-corresponding user.
+corresponding user, and so does not need to be discussed separately.
 No other data can be modified by normal users.
 
 It is also possible to directly modify the underlying database

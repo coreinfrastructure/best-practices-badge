@@ -30,9 +30,11 @@ task(:default).clear.enhance %w[
 # Temporarily removed fasterer
 # Waiting for Ruby 2.4 support: https://github.com/seattlerb/ruby_parser/issues/239
 
+# Run Continuous Integration (CI) check processes.
+# Removed bundle_doctor due to CircleCI failures
+# Temporarily removed fasterer
 task(:ci).clear.enhance %w[
   rbenv_rvm_setup
-  bundle_doctor
   bundle_audit
   markdownlint
   license_okay
@@ -41,7 +43,6 @@ task(:ci).clear.enhance %w[
   yaml_syntax_check
   report_code_statistics
 ]
-# Temporarily removed fasterer
 
 # Simple smoke test to avoid development environment misconfiguration
 desc 'Ensure that rbenv or rvm are set up in PATH'

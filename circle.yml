@@ -18,11 +18,11 @@ test:
     # Manually set CI processes, because this fails: - bundle exec rake ci
     - bundle doctor
     - rake bundle_audit
-    - rake markdownlint
-    - rake license_okay
-    - rake license_finder_report.html
+    - bundle exec rake markdownlint
+    - bundle exec rake license_okay
+    - bundle exec rake license_finder_report.html
     - rake whitespace_check
-    - rake yaml_syntax_check
+    - bundle exec rake yaml_syntax_check
     - rake report_code_statistics
 deployment:
   master:

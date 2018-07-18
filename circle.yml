@@ -14,6 +14,7 @@ test:
     - "[[ ! -s \"$(git rev-parse --git-dir)/shallow\" ]] || git fetch --unshallow"
   post:
     - bundle exec pronto run -f github text -c=$(git log --pretty=format:%H | tail -1) --exit-code
+    - bundle doctor
     - bundle exec rake ci
 deployment:
   master:

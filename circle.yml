@@ -14,8 +14,16 @@ test:
     - "[[ ! -s \"$(git rev-parse --git-dir)/shallow\" ]] || git fetch --unshallow"
   post:
     - bundle exec pronto run -f github text -c=$(git log --pretty=format:%H | tail -1) --exit-code
+    # TODO: This is a hack to try to get things to work at all on CircleCI.
+    # Manually set CI processes, because this fails: - bundle exec rake ci
     - bundle doctor
-    - bundle exec rake ci
+    - rake bundle_audit
+    - rake markdownlint
+    - rake license_okay
+    - rake license_finder_report.html
+    - rake whitespace_check
+    - rake yaml_syntax_check
+    - rake report_code_statistics
 deployment:
   master:
     branch: master

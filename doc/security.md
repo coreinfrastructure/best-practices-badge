@@ -533,15 +533,20 @@ they are as follows:
   This is enforced in the `current_user` method in
   `app/helpers/sessions_helper.rb` - this always returns null (not logged in)
   when this deny mode is enabled.
+  This is verified by test
+  `current_user returns nil when deny_login`.
 * Attempts to login are rejected via the `create` method
   of the session controller, per `app/controllers/sessions_controller.rb`.
   Technically this isn't necessary, since being logged in is ignored,
   but this rejection will alert users who start trying to log in before
   this mode was enabled.
+  This is verified by test `local login fails if deny_login`.
 * Attempts to create a new user account are rejected
   via the `create` method of the user controller, per
   `app/controllers/users_controller.rb`.
   We do not want the user database to change while this mode is in effect.
+  This is verified by test
+  `cannot create local user if login disabled`
 
 Some views are also changed when this view is enabled.
 These changes are not security-critical.
@@ -621,6 +626,11 @@ the login page.  From there:
   routed to session#create along with parameters such as session[email]
   and session[password].  If the bcrypt'ed hash of the password matches
   the stored hash, the user is accepted.
+  If password doesn't match, the login is rejected.
+  This is verified with these tests:
+    - `Can login and edit using custom account`
+    - `Cannot login with local username and wrong password`
+    - `Cannot login with local username and blank password`
 * A remote user login (pushing the "log in with GitHub" button) will
   invoke GET "/auth/github".  The application then begin an omniauth
   login, by redirecting the user to "https://github.com/login?"
@@ -634,6 +644,8 @@ the login page.  From there:
   then we accept GitHub's ruling for that github user and log them in.
   This interaction with GitHub uses `GITHUB_KEY` and `GITHUB_SECRET`.
   For more information, see the documentation on omniauth-github.
+  Note that we trust GitHub to verify a GitHub account (as we must).
+  This is verified as part of the test `Has link to GitHub Login`.
 
 The first thing that session#create does is run `counter_fixation`;
 this counters session fixation attacks
@@ -670,16 +682,6 @@ in commit e79decec67.
 
 A session is created for each user who successfully logs in.
 
-As discussed later in verification,
-we expressly include tests in our test suite of our authentication system
-to ensure that in 'local' accounts correct passwords allow login,
-while incorrect and unfilled passwords lead to login failure.
-It's important to test that certain actions that *must* fail for
-security reasons do indeed fail (testing to ensure that actions will
-fail when they should fail is termed "negative testing").
-We trust external systems to verify their external accounts (that means
-we trust GitHub to verify a GitHub account).
-
 #### Authorization
 
 Users who have not authenticated themselves can only perform
@@ -712,6 +714,7 @@ entry in the `additional_rights` table). Anyone with control rights
 also has edit rights.  The project owner has control
 rights to the projects they own,
 and admins have control rights over all projects.
+This is determined by the method `can_control?`.
 
 "Edit" rights mean you can edit the project entry. If you have
 control rights over a project you also have edit rights.
@@ -721,6 +724,7 @@ who have their `user_id` listed for that project, get edit rights
 for that project.
 The `additional_rights` table adds support for groups so that they can
 edit project entries when the project is not on GitHub.
+This is determined by the method `can_edit?`.
 
 This means that
 a project entry can only be edited (and deleted) by the entry creator,
@@ -739,6 +743,8 @@ to perform (e.g., edit a project that they do not have edit rights to,
 or delete a project they do not control).
 It's important to test that certain actions that *must* fail for
 security reasons do indeed fail.
+For more, see the earlier section justifying the claim that
+"Data modification requires authorization".
 
 ### Assets & threat actors identified & addressed
 

@@ -33,7 +33,7 @@ class SessionsControllerTest < ActionController::TestCase
     assert flash[:success].include?('Logged in!')
   end
 
-  test 'login via session controller fails if' do
+  test 'local login fails if deny_login' do
     old_deny = Rails.application.config.deny_login
     Rails.application.config.deny_login = true # Not thread-safe
     post :create, params: {

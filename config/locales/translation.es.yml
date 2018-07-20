@@ -85,9 +85,64 @@ es:
       get_your_badge: "¡Obtenga su insignia ahora!"
       check_us_out: "¡Mira el sitio web de CII Best Practices
         Badge!"
-      p1_html:
-      p2_html:
-      p3_html:
+      p1_html: >2-
+         La insignia de Mejores Pr&aacute;cticas [Best Practices
+        badge] de la <a href="https://www.coreinfrastructure.org/">Iniciativa
+        de Infraestructura N&uacute;cleo [Core Infrastructure
+        Initiative (CII)]</a> que es parte de la <a href="https://www.linuxfoundation.org/">Fundaci&oacute;n
+        Linux [Linux Foundation (LF)]</a> constituye una de las
+        maneras en la que proyectos de tipo Free/Libre y Open
+        Source Software (FLOSS) pueden mostrar que est&aacute;n
+        siguiendo las mejores pr&aacute;cticas de dicha comunidad.
+        Los proyectos pueden auto-certificarse voluntaria y gratuitamente
+        llenando el cuestionario que se ofrece en esta p&aacute;gina.
+        Con dicho cuestionario los proyectos pueden explicar como
+        est&aacute;n siendo creados de conformidad con las mejores
+        pr&aacute;cticas. La insignia de Mejores Pr&aacute;cticas
+        fue inspirada por las m&uacute;ltiples insignias que los
+        proyectos en Github tienen a su disposici&oacute;n. Los
+        consumidores de la insignia pueden evaluar r&aacute;pidamente
+        cuales son los proyectos de FLOSS que est&aacute;n siguiendo
+        las mejores pr&aacute;cticas y que por lo tanto tienen
+        una mayor probabilidad de producir c&oacute;digo que es
+        seguro y de alta calidad.
+      p2_html: >-
+        M&aacute;s informaci&oacute;n acerca del programa que
+        confiere la insignia de Mejores Pr&aacute;cticas, incluyendo
+        sus antecedentes y <a href='https://github.com/coreinfrastructure/best-practices-badge/blob/master/doc/criteria.md'>criterios</a>
+        aplicables se puede encontrar en <a href='https://github.com/coreinfrastructure/best-practices-badge'>GitHub</a>.
+        <a href="/es/project_stats">Las estad&iacute;sticas del
+        proyecto</a> y las <a href="/es/criteria">estad&iacute;sticas
+        de los criterios</a> tambi&eacute;n están disponibles.
+        La <a href="/es/projects">página de proyectos</a> tiene
+        una lista de los proyectos que est&aacute;n participando
+        y ofrece la posibilidad de ejecutar b&uacute;squedas (por
+        ejemplo, usted puede ver <a href="/es/projects?gteq=100">proyectos
+        que tienen una insignia aprobada</a>). Usted tambi&eacute;n
+        puede ver<a href='/es/projects/1/0'> un ejemplo en donde
+        nosotros tratamos de obtener nuestra propia insignia</a>.
+      p3_html: >-
+        <em>Privacidad y cuestiones jur&iacute;dicas</em>: Inspeccione
+        por favor nuestras <a href="https://www.linuxfoundation.org/privacy">normas
+        acerca de privacidad</a>, <a href="/es/cookies"> de cookies</a>,
+        y <a href="https://www.linuxfoundation.org/terms">las
+        condiciones de uso</a>. El código del cuestionario para
+        solicitar la insignia está publicado bajo la licencia
+        de <a href="https://opensource.org/licenses/MIT">MIT</a>
+        (los proyectos que buscan obtener la insignia est&aacute;n
+        controlados por sus respectivas licencias). Todo contenido
+        que no es de tipo c&oacute;digo, que es publicamente disponible
+        y que es manejado por la aplicaci&oacute;n para la obtenci&oacute;n
+        de la insignia es publicado como m&iacute;nimo bajo la
+        licencia <a href="https://creativecommons.org/licenses/by/3.0/">Creative
+        Commons Attribution License versi&oacute;n 3.0 (CC-BY-3.0)</a>;
+        el contenido m&aacute;s reciente que no es de tipo c&oacute;digo
+        es publicado bajo la licencia CC-BY versi&oacute;n 3.0
+        o versi&oacute;n posterior (CC-BY-3.0+). Si la informaci&oacute;n
+        en esta p&aacute;gina se cita colectivamente o sin anotaci&oacute;n
+        de otro tipo, se pide que se le d&eacute; el debido cr&eacute;dito
+        a los que han contribuido a la creaci&oacute;n de la insignia
+        CII de Mejores Pr&aacute;cticas.
       share_header_html: "<p> Comparta esto: </p>"
       twitter: Twitter
       reddit: Reddit

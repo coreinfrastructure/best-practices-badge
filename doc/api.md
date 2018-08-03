@@ -71,6 +71,16 @@ might request.
     The format is html by default; json and csv are also supported.
     See below for more about the query.
 
+## Sample program
+
+See the [best-practices.py](./best-practices.py) program to see an
+example of how to download and analyze data.
+Notice that since we supply JSON data in pages, you need to retrieve
+all the pages if you want the entire dataset.
+If you retrieve the entire database, store it locally
+(in a file or database system); it intentionally takes some time
+to download all of it.
+
 ## Query (Search)
 
 The "/projects" URL supports various searches.

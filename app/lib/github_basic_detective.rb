@@ -13,12 +13,13 @@ require 'json'
 # Be sure to use strings, NOT symbols, as a key when accessing JSON-parsed
 # results (because strings and symbols are distinct in basic Ruby).
 
+# rubocop:disable Metrics/ClassLength
 class GithubBasicDetective < Detective
   # Individual detectives must identify their inputs, outputs
   INPUTS = [:repo_url].freeze
   OUTPUTS = %i[
     name license discussion_status repo_public_status repo_track_status
-    repo_distributed_status contribution_status
+    repo_distributed_status contribution_status implementation_languages
   ].freeze
 
   # These are the 'correct' display case for SPDX for OSI-approved licenses.
@@ -47,9 +48,28 @@ class GithubBasicDetective < Detective
     'ZLIB' => 'Zlib'
   }.freeze
 
+  EXCLUDE_IMPLEMENTATION_LANGUAGES = [
+    :HTML, :CSS, :Roff, :"DIGITAL Command Language"
+  ].freeze
+
   # Clean up name of license to be like the SPDX display.
   def cleanup_license(license)
     LICENSE_CORRECT_CASE[license.upcase] || license.upcase
+  end
+
+  # Take JSON data of form {:language => lines_of_code, ...}
+  # and return a cleaned-up string representing it.  We forcibly sort
+  # it by LOC (GitHub returns it that way, but I don't see any guarantee,
+  # so we sort it to make sure).  We also exclude languages that most people
+  # wouldn't expect to see listed.
+  # Currently we include *all* languages listed; if it's a long list, the
+  # later ones are more likely to be a mistake, but it's hard to figure out
+  # where to cut things off.
+  def language_cleanup(raw_language_data)
+    return '' if raw_language_data.blank?
+    full_list = raw_language_data.sort_by(&:last).reverse.map(&:first)
+    shorter_list = full_list - EXCLUDE_IMPLEMENTATION_LANGUAGES
+    shorter_list.join(', ')
   end
 
   # Individual detectives must implement "analyze"
@@ -139,6 +159,15 @@ class GithubBasicDetective < Detective
           confidence: 3, explanation: 'GitHub API license analysis'
         }
       end
+
+      # Fill in programming languages
+      raw_language_data = client.languages(fullname) # Download
+      implementation_languages = language_cleanup(raw_language_data)
+      results[:implementation_languages] = {
+        value: implementation_languages,
+        confidence: 3,
+        explanation: 'GitHub API implementation language analysis'
+      }
     end
 
     results
@@ -146,3 +175,4 @@ class GithubBasicDetective < Detective
   # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
   # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 end
+# rubocop:enable Metrics/ClassLength

@@ -70,6 +70,15 @@ class GithubLoginTest < CapybaraFeatureTest
 
       if ENV['GITHUB_PASSWORD'] # revoke OAuth authorization
         visit 'https://github.com/settings/applications'
+        assert page.has_content?('Applications')
+        click_on 'Applications'
+        assert page.has_content?('Authorized OAuth Apps')
+        click_on 'Authorized OAuth Apps'
+        # Do it twice - sometimes it doesn't seem to work
+        assert page.has_content?('Authorized OAuth Apps')
+        click_on 'Authorized OAuth Apps'
+        assert page.has_content?('Test BadgeApp (not for production use)')
+        assert page.has_content?('Revoke')
         click_on 'Revoke'
         assert has_content? 'Are you sure you want to revoke authorization?'
         click_on 'I understand, revoke access'

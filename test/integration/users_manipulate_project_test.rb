@@ -6,6 +6,7 @@
 
 require 'test_helper'
 
+# rubocop:disable Metrics/ClassLength
 class UsersManipulateProjectTest < ActionDispatch::IntegrationTest
   setup do
     @user = users(:test_user)
@@ -139,6 +140,11 @@ class UsersManipulateProjectTest < ActionDispatch::IntegrationTest
       assert_template 'projects/edit'
 
       assert_select '#project_discussion_status_met[checked]'
+      assert_select '#project_implementation_languages'
+      assert_select(
+        '#project_implementation_languages[value=?]',
+        'Python, C, Shell, C++, CMake, C#, Ruby'
+      )
     end
   end
 
@@ -167,3 +173,4 @@ class UsersManipulateProjectTest < ActionDispatch::IntegrationTest
     end
   end
 end
+# rubocop:enable Metrics/ClassLength

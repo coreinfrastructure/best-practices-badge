@@ -33,7 +33,13 @@ class GithubBasicDetectiveTest < ActiveSupport::TestCase
       assert results[:license].key?(:value)
       assert_equal 'MIT', results[:license][:value]
 
+      # Did we correctly determine the implementation language of our
+      # stub test project by ciitest?
+      assert_equal 'Python', results[:implementation_languages][:value]
+
       # Do several unit tests of language_cleanup, it's more complex.
+      # This does not invoke network calls, we are directly providing
+      # test values to more thoroughly test the method language_cleanup.
       assert_equal '', detective.language_cleanup({})
       assert_equal 'C', detective.language_cleanup(C: 1000) # singleton
       # We need to use the older hash syntax to spell some names

@@ -48,6 +48,8 @@ class ChiefTest < ActiveSupport::TestCase
                  '<https://github.com/coreinfrastructure/' \
                  'best-practices-badge/blob/master/Rakefile>.',
                  results[:build_justification]
+    assert_equal 'Ruby, JavaScript, Shell, Makefile',
+                 results[:implementation_languages]
   end
   # rubocop:enable Metrics/BlockLength
 

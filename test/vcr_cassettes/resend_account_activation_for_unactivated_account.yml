@@ -46,6 +46,6 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
+    http_version:
   recorded_at: Mon, 28 May 2018 01:25:34 GMT
 recorded_with: VCR 4.0.0

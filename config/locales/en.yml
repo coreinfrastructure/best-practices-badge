@@ -1135,7 +1135,10 @@ en:
           Code interface documentation MAY be generated using
           tools such as <a href="http://usejsdoc.org/">JSDoc</a>
           (JavaScript), <a href="https://esdoc.org/">ESDoc</a>
-          (JavaScript), pydoc (Python), and Doxygen (many).  Merely
+          (JavaScript), pydoc (Python),
+          <a href="https://cran.r-project.org/web/packages/devtools/index.html">devtools</a> (R),
+          <a href="https://cran.r-project.org/web/packages/pkgdown/index.html">pkgdown</a> (R),
+          and Doxygen (many).  Merely
           having comments in implementation code is not sufficient
           to satisfy this criterion; there needs to be an easy
           way to see the information without reading through all
@@ -1380,7 +1383,8 @@ en:
           the software.
         details: >-
           For example, Maven, Ant, cmake, the autotools, make,
-          or rake.
+          rake (Ruby), or
+          <a href="https://cran.r-project.org/web/packages/devtools/index.html">devtools</a> (R).
       build_floss_tools:
         description: The project SHOULD be buildable using only
           FLOSS tools.
@@ -1393,12 +1397,19 @@ en:
           The project MAY use multiple automated test suites (e.g.,
           one that runs quickly, vs. another that is more thorough
           but requires special equipment).
+          There many test frameworks and test support systems available,
+          including
+          <a href="https://www.seleniumhq.org/">Selenium</a>
+          (web browser automation),
+          <a href="https://junit.org">Junit</a> (JVM, Java),
+          <a href="https://cran.r-project.org/web/packages/runit/index.html">RUnit</a> (R), 
+          <a href="https://cran.r-project.org/web/packages/testthat/index.html">testthat</a> (R).
       test_invocation:
         description: >-
           A test suite SHOULD be invocable in a standard way for
           that language.
         details: For example, "make check", "mvn test", or "rake
-          test".
+          test" (Ruby).
       test_most:
         description: >-
           It is SUGGESTED that the test suite cover most (or ideally
@@ -1737,12 +1748,21 @@ en:
           executing it with specific inputs. For purposes of this
           criterion, compiler warnings and "safe" language modes
           do not count as static code analysis tools (these typically
-          avoid deep analysis because speed is vital).  Examples
-          of such static code analysis tools include <a href="http://cppcheck.sourceforge.net/">cppcheck</a>,
+          avoid deep analysis because speed is vital).
+          Some static analysis tools focus on detecting generic defects,
+          others focus on finding specific kinds of defects (such as
+          vulnerabilities), and some do a combination.
+          Examples
+          of such static code analysis tools include <a href="http://cppcheck.sourceforge.net/">cppcheck</a> (C, C++),
           <a href="http://clang-analyzer.llvm.org/">clang static
-          analyzer</a>, <a href="http://findbugs.sourceforge.net/">FindBugs</a>
+          analyzer</a> (C, C++),
+          <a href="https://spotbugs.github.io/">SpotBugs</a> (Java),
+          <a href="http://findbugs.sourceforge.net/">FindBugs</a> (Java)
           (including <a href="https://h3xstream.github.io/find-sec-bugs/">FindSecurityBugs</a>),
-          <a href="https://pmd.github.io/">PMD</a>, <a href="http://brakemanscanner.org/">Brakeman</a>,
+          <a href="https://pmd.github.io/">PMD</a> (Java),
+          <a href="http://brakemanscanner.org/">Brakeman</a> (Ruby on Rails),
+          <a href="https://cran.r-project.org/web/packages/lintr/index.html">lintr</a> (R),
+          <a href="https://cran.r-project.org/web/packages/goodpractice/index.html">goodpractice</a> (R),
           <a href="https://scan.coverity.com/">Coverity Quality
           Analyzer</a>,
           <a href="https://www.sonarqube.org/">SonarQube</a>,
@@ -2183,8 +2203,9 @@ en:
           occur, they MUST be rare and documented in the code
           at their locations, so that these exceptions can be
           reviewed and so that tools can automatically handle
-          them in the future. Examples of such tools include ESLint
-          (JavaScript) and Rubocop (Ruby).
+          them in the future. Examples of such tools include
+          ESLint (JavaScript), Rubocop (Ruby), and
+          <a href="https://cran.r-project.org/web/packages/devtools/index.html">devtools check</a> (R).
       build_standard_variables:
         description: >-
           Build systems for native binaries MUST honor the relevant
@@ -2358,7 +2379,8 @@ en:
           in the selected language.
         details: >-
           Many FLOSS tools are available to measure test coverage,
-          including gcov/lcov, Blanket.js, Istanbul, and JCov.
+          including gcov/lcov, Blanket.js, Istanbul, JCov, and
+          <a href="https://cran.r-project.org/web/packages/covr/index.html">covr</a> (R).
           Note that meeting this criterion is not a guarantee
           that the test suite is thorough, instead, failing to
           meet this criterion is a strong indicator of a poor

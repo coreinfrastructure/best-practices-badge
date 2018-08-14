@@ -1397,12 +1397,12 @@ en:
           The project MAY use multiple automated test suites (e.g.,
           one that runs quickly, vs. another that is more thorough
           but requires special equipment).
-          There many test frameworks and test support systems available,
+          There are many test frameworks and test support systems available,
           including
           <a href="https://www.seleniumhq.org/">Selenium</a>
           (web browser automation),
           <a href="https://junit.org">Junit</a> (JVM, Java),
-          <a href="https://cran.r-project.org/web/packages/runit/index.html">RUnit</a> (R), 
+          <a href="https://cran.r-project.org/web/packages/runit/index.html">RUnit</a> (R),
           <a href="https://cran.r-project.org/web/packages/testthat/index.html">testthat</a> (R).
       test_invocation:
         description: >-

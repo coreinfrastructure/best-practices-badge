@@ -239,9 +239,9 @@ fr:
       gold_in_progress_variable: Argent obtenu, or en cours (niveau
         %{percent}% ou plus)
       gold_300: Or (300%)
-      in_progress_next:
-      passing_next:
-      silver_next:
+      in_progress_next: En cours, %{percent}% terminé pour l'obtention
+      passing_next: Obtenu, %{percent}% terminé pour l'argent
+      silver_next: Argent, %{percent}% terminé pour l'or
     table:
       id: Id
       name: Nom
@@ -1030,7 +1030,7 @@ fr:
           son interface REST). S'il s'agit d'une interface de
           ligne de commande, documentez les paramètres et les
           options qu'elle supporte. Dans de nombreux cas, il est
-          préférable que la plupart de cette documentation soit
+          préférable que la majorité de cette documentation soit
           générée automatiquement, de sorte que cette documentation
           reste synchronisée avec le logiciel au fur et à mesure
           qu'il change, mais cela n'est pas nécessaire. Le projet
@@ -1042,13 +1042,14 @@ fr:
           / OpenAPI. La documentation de l'interface de code PEUT
           être générée à l'aide d'outils tels que <a href="http://usejsdoc.org/">JSDoc</a>
           (JavaScript), <a href="https://esdoc.org/">ESDoc</a>
-          (JavaScript), pydoc (Python) et Doxygen (plusieurs).
-          Le simple fait d'avoir des commentaires dans le code
-          source n'est pas suffisant pour satisfaire ce critère
-          ; il doit y avoir un moyen simple de voir l'information
-          sans lire l'intégralité du code source. Si le projet
-          ne produit pas de logiciel, choisissez « non applicable
-          » (N/A).
+          (JavaScript), pydoc (Python), <a href="https://cran.r-project.org/web/packages/devtools/index.html">devtools</a>
+          (R), <a href="https://cran.r-project.org/web/packages/pkgdown/index.html">pkgdown</a>
+          (R) et Doxygen (plusieurs). Le simple fait d'avoir des
+          commentaires dans le code source n'est pas suffisant
+          pour satisfaire ce critère ; il doit y avoir un moyen
+          simple de voir l'information sans lire l'intégralité
+          du code source. Si le projet ne produit pas de logiciel,
+          choisissez « non applicable » (N/A).
       sites_https:
         description: >-
           Les sites du projet (site Web, dépôt et URLs de téléchargement)
@@ -1315,8 +1316,10 @@ fr:
         description: >-
           Il est PROPOSÉ d'utiliser des outils courants pour la
           construction du logiciel.
-        details: Par exemple, Maven, Ant, cmake, autotools, make
-          ou rake.
+        details: >-
+          Par exemple, Maven, Ant, cmake, autotools, make, rake
+          (Ruby) ou <a href="https://cran.r-project.org/web/packages/devtools/index.html">devtools</a>
+          (R).
       build_floss_tools:
         description: >-
           Le projet DEVRAIT être constructible en utilisant uniquement
@@ -1331,13 +1334,20 @@ fr:
           Le projet PEUT utiliser plusieurs suites de tests automatisées
           (par exemple, une qui s'exécute rapidement, par rapport
           à une autre qui est plus approfondie, mais nécessite
-          un équipement spécial).
+          un équipement spécial). De nombreuses plate-formes de
+          tests et environnements de tests sont disponibles, tels
+          que <a href="https://www.seleniumhq.org/">Selenium</a>
+          (automatisation de navigateur Web), <a href="https://junit.org">Junit</a>
+          (JVM, Java), <a href="https://cran.r-project.org/web/packages/runit/index.html">RUnit</a>
+          (R), <a href="https://cran.r-project.org/web/packages/testthat/index.html">testthat</a>
+          (R).
       test_invocation:
         description: >-
           Une suite de tests DEVRAIT être invocable d'une manière
           standard pour ce langage.
-        details: Par exemple, « make check », « mvn test » ou
-          « rake test ».
+        details: >-
+          Par exemple, « make check », « mvn test » ou « rake
+          test » (Ruby).
       test_most:
         description: >-
           Il est PROPOSÉ que la suite de tests couvre la plupart
@@ -1726,13 +1736,22 @@ fr:
           du compilateur et les modes de langage « sûrs » ne comptent
           pas comme des outils d'analyse statique de code (ceux-ci
           évitent généralement une analyse approfondie car la
-          rapidité est vitale). Des exemples de ces outils d'analyse
-          statique de code incluent <a href="http://cppcheck.sourceforge.net/">cppcheck</a>,
-          <a href="http://clang-analyzer.llvm.org/">clang static
-          analyzer</a>, <a href="http://findbugs.sourceforge.net/">FindBugs</a>
-          (y compris <a href="https://h3xstream.github.io/find-sec-bugs/">FindSecurityBugs</a>),
-          <a href="https://pmd.github.io/">PMD</a>, <a href="http://brakemanscanner.org/">Brakeman</a>,
-          <a href="https://scan.coverity.com/">Coverity Quality
+          rapidité est vitale). Certains outils d'analyse statique
+          se concentrent sur la détection de défauts génériques,
+          d'autres se concentrent sur la détection de défauts
+          spécifiques (tels que les vulnérabilités) et d'autres
+          encore proposent une combinaison de ces deux types d'outils.
+          Des exemples de tels outils d'analyse statique de code
+          incluent <a href="http://cppcheck.sourceforge.net/">cppcheck</a>
+          (C, C++), <a href="http://clang-analyzer.llvm.org/">clang
+          static analyzer</a> (C, C++), <a href="https://spotbugs.github.io/">SpotBugs</a>
+          (Java), <a href="http://findbugs.sourceforge.net/">FindBugs</a>
+          (Java) (y compris <a href="https://h3xstream.github.io/find-sec-bugs/">FindSecurityBugs</a>),
+          <a href="https://pmd.github.io/">PMD</a> (Java), <a
+          href="http://brakemanscanner.org/">Brakeman</a> (Ruby
+          on Rails), <a href="https://cran.r-project.org/web/packages/lintr/index.html">lintr</a>
+          (R), <a href="https://cran.r-project.org/web/packages/goodpractice/index.html">goodpractice</a>
+          (R), <a href="https://scan.coverity.com/">Coverity Quality
           Analyzer</a>, <a href="https://www.sonarqube.org/">SonarQube</a>,
           <a href="https://www.codacy.com/">Codacy</a> et <a href="https://saas.hpe.com/en-us/software/sca">HP
           Enterprise Fortify Static Code Analyzer</a>. Des listes
@@ -1748,7 +1767,7 @@ fr:
           est une plate-forme gratuite pour évaluer les vulnérabilités
           dans les logiciels utilisant une variété d'outils. S'il
           n'y a pas d'outil d'analyse statique FLOSS disponible
-          pour le(s) langage(s) d'implémentation utilisés, sélectionnez
+          pour le(s) langage(s) d'implémentation utilisé(s), sélectionnez
           « N/A ».
         na_placeholder: >-
           Pourquoi cela ne peut-il pas être satisfait (par exemple,
@@ -2277,8 +2296,9 @@ fr:
           être rares et documentées dans le code à leur emplacement,
           afin que ces exceptions puissent être revues et que
           les outils puissent les gérer automatiquement à l'avenir.
-          Des exemples de ces outils incluent ESLint (JavaScript)
-          et Rubocop (Ruby).
+          Des exemples de tels outils incluent ESLint (JavaScript),
+          Rubocop (Ruby) et <a href="https://cran.r-project.org/web/packages/devtools/index.html">devtools
+          check</a> (R).
       build_standard_variables:
         description: >-
           Les systèmes de construction pour les binaires natifs
@@ -2474,10 +2494,11 @@ fr:
         details: >-
           De nombreux outils FLOSS sont disponibles pour mesurer
           la couverture des tests, y compris gcov/lcov, Blanket.js,
-          Istanbul et JCov. Notez que respecter ce critère n'est
-          pas une garantie que la suite de tests est complète,
-          mais, à l'inverse, ne pas respecter ce critère est un
-          indicateur fort d'une suite de tests insuffisante.
+          Istanbul, JCov et <a href="https://cran.r-project.org/web/packages/covr/index.html">covr</a>
+          (R). Notez que respecter ce critère n'est pas une garantie
+          que la suite de tests est complète, mais, à l'inverse,
+          ne pas respecter ce critère est un indicateur fort d'une
+          suite de tests insuffisante.
       test_policy_mandated:
         description: >-
           Le projet DOIT avoir une politique écrite formelle,

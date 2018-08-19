@@ -129,3 +129,74 @@ jobs:
         path: test/html_reports
     - store_artifacts:
         path: /tmp/circleci-test-results
+  deploy-master:
+    docker:
+      - image: buildpack-deps:trusty
+    steps:
+      - checkout
+      - run:
+          name: Deploy Master to Heroku
+          command: |
+            git push git@heroku.com:master-bestpractices.git $CIRCLE_SHA1:refs/heads/master
+
+      - run:
+          name: Migrate DB for Master
+          command: |
+            heroku run rake db:migrate --app master-bestpractices
+          no_output_timeout: 400s
+      - run:
+          name: Test Fastly
+          command: "sleep 5 && bundle exec rake fastly:test"
+  deploy-staging:
+    docker:
+      - image: buildpack-deps:trusty
+    steps:
+      - checkout
+      - run:
+          name: Deploy Staging to Heroku
+          command: |
+            git push git@heroku.com:staging-bestpractices.git $CIRCLE_SHA1:refs/heads/master
+
+      - run:
+          name: Migrate DB for Staging
+          command: |
+            heroku run rake db:migrate --app staging-bestpractices
+          no_output_timeout: 400s
+  deploy-production:
+    docker:
+      - image: buildpack-deps:trusty
+    steps:
+      - checkout
+      - run:
+          name: Deploy Production to Heroku
+          command: |
+            git push git@heroku.com:production-bestpractices.git $CIRCLE_SHA1:refs/heads/master
+
+      - run:
+          name: Migrate DB for Production
+          command: |
+            heroku run rake db:migrate --app production-bestpractices
+          no_output_timeout: 400s
+workflows:
+  version: 2
+  build-deploy:
+    jobs:
+      - build
+      - deploy-master:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
+      - deploy-staging:
+          requires:
+            - build
+          filters:
+            branches:
+              only: staging
+      - deploy-production:
+          requires:
+            - build
+          filters:
+            branches:
+              only: production

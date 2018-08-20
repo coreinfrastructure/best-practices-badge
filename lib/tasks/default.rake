@@ -104,7 +104,7 @@ task :bundle_audit do
   verbose(true) do
     sh <<-RETRY_BUNDLE_AUDIT_SHELL
       apply_bundle_audit=t
-      if ping -q -c 1 github.com > /dev/null 2> /dev/null ; then
+      if [ -n "$CIRCLECI" ] || ping -q -c 1 github.com > /dev/null 2> /dev/null; then
         echo "Have network access, trying to update bundle-audit database."
         tries_left=10
         while [ "$tries_left" -gt 0 ] ; do

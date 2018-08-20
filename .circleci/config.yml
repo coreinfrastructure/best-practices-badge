@@ -173,7 +173,7 @@ jobs:
           name: Deploy Production to Heroku
           command: |
             echo '|1|/F4czxWHqmoWDc6yC9VkqKCFEmc=|twcEkxETmAe5hGT+1u9WOMJAFco= ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC4UEkQ8iPMfTEdGQolCn7xlug0jlvHpOmjO0erEUbMF9XkJoAlQs4b1iIh4PnLcxQ6qQQqbp3yH6nVpuQJClTZEnYRJ/UINFM+NCJAfYvdhSTtTQtqyTs+H0gcy6NPcca/CgXCCNG2KbLWQHN59Ded7gdNVbCyBP/qCcp8MRD8L7zgHxooDcZtDWy8W0LVOex4alnLMaFh8q9qhctffdFk0UttjUQvvRr4UxhkzoW8MaLrWk5HHGSxdpOyPA6m3COlCNWOezybhxkW73rDjgHxjexPjZa4wcos5mycggKQFi1YomsZ/imzyIB+6EdPXP5KkuXTzEi2hWstzYaHmmNj' >> ~/.ssh/known_hosts
-            printf 'Host heroku.com\n\tHostname ssh.heroku.com\n\tPort 443' >> ~/.ssh/config
+            printf 'Host heroku.com\n\tHostname ssh.heroku.com\n\tPort 443\n' >> ~/.ssh/config
             git push git@heroku.com:production-bestpractices.git $CIRCLE_SHA1:refs/heads/master
 
       - run:

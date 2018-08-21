@@ -150,11 +150,12 @@ jobs:
           no_output_timeout: 400s
       - run:
           name: Test Fastly
-          command: "sleep 5 && bundle exec rake fastly:test"
+          command: |
+            gem install bundler
+            "sleep 5 && bundle exec rake fastly:test"
   deploy-staging:
     docker:
-      - image: circleci/build-image:ubuntu-14.04-XXL-upstart-1189-5614f37
-        command: /sbin/init
+      - image: buildpack-deps:trusty
     steps:
       - checkout
       - run:
@@ -172,8 +173,7 @@ jobs:
           no_output_timeout: 400s
   deploy-production:
     docker:
-      - image: circleci/build-image:ubuntu-14.04-XXL-upstart-1189-5614f37
-        command: /sbin/init
+      - image: buildpack-deps:trusty
     steps:
       - checkout
       - run:

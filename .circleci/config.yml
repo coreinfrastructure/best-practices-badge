@@ -131,7 +131,8 @@ jobs:
         path: /tmp/circleci-test-results
   deploy-master:
     docker:
-      - image: buildpack-deps:trusty
+      - image: circleci/build-image:ubuntu-14.04-XXL-upstart-1189-5614f37
+        command: /sbin/init
     steps:
       - checkout
       - run:
@@ -152,7 +153,8 @@ jobs:
           command: "sleep 5 && bundle exec rake fastly:test"
   deploy-staging:
     docker:
-      - image: buildpack-deps:trusty
+      - image: circleci/build-image:ubuntu-14.04-XXL-upstart-1189-5614f37
+        command: /sbin/init
     steps:
       - checkout
       - run:
@@ -170,7 +172,8 @@ jobs:
           no_output_timeout: 400s
   deploy-production:
     docker:
-      - image: buildpack-deps:trusty
+      - image: circleci/build-image:ubuntu-14.04-XXL-upstart-1189-5614f37
+        command: /sbin/init
     steps:
       - checkout
       - run:

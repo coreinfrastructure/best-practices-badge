@@ -49,7 +49,7 @@ for general discussion.
 * **[Installation](./doc/INSTALL.md)**  - Installation and quick start
 * **[Roadmap](./doc/roadmap.md)**  - Roadmap (future plans)
 
-## Summary of Best Practices Criteria "passing" level
+## Summary of Best Practices Criteria for "Passing" Level
 
 This is a summary of the passing criteria, with requirements in bold
 (for details, see the [full list of criteria](doc/criteria.md)):
@@ -67,7 +67,7 @@ This is a summary of the passing criteria, with requirements in bold
   and [any API](doc/criteria.md#documentation_interface)**
 * **Have a** [distributed](doc/criteria.md#repo_distributed)
   **[public version control system](doc/criteria.md#repo_public),
-* including [changes between releases](doc/criteria.md#repo_interim)**:
+  including [changes between releases](doc/criteria.md#repo_interim)**:
   - **[Give each release a unique version](doc/criteria.md#version_unique)**, using
     [semantic versioning format](doc/criteria.md#version_semver)
   - **Give a [summary of changes for each release](doc/criteria.md#release_notes),
@@ -113,7 +113,7 @@ This is a summary of the passing criteria, with requirements in bold
   - **[Store any passwords with iterated, salted, hashes using a key-stretching algorithm](doc/criteria.md#crypto_password_storage)**
   - **[Use cryptographic random number sources](doc/criteria.md#crypto_random)**
 
-## Summary of Best Practices Criteria for higher levels
+## Summary of Best Practices Criteria for for Higher Levels
 
 Getting a passing badge is a significant achievement;
 on average only about 10% of pursuing projects have a passing badge.

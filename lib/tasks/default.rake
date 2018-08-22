@@ -83,18 +83,7 @@ end
 desc 'Report code statistics'
 task :report_code_statistics do
   verbose(false) do
-    sh <<-REPORT_CODE_STATISTICS
-      echo
-      direct=$(sed -e '1,/^DEPENDENCIES/d' -e '/^RUBY VERSION/,$d' \
-                   -e '/^$/d' Gemfile.lock | wc -l)
-      indirect=$(bundle show | tail -n +2 | wc -l)
-      echo "Number of gems (direct dependencies only) = $direct"
-      echo "Number of gems (including indirect dependencies) = $indirect"
-      echo
-      rails stats
-      echo
-      true
-    REPORT_CODE_STATISTICS
+    sh 'script/report_code_statistics'
   end
 end
 
@@ -104,27 +93,27 @@ task :bundle_audit do
   verbose(true) do
     sh <<-RETRY_BUNDLE_AUDIT_SHELL
       apply_bundle_audit=t
-      if [ -n "$CIRCLECI" ] || ping -q -c 1 github.com > /dev/null 2> /dev/null; then
+      if ping -q -c 1 github.com > /dev/null 2> /dev/null; then
         echo "Have network access, trying to update bundle-audit database."
         tries_left=10
         while [ "$tries_left" -gt 0 ] ; do
-          if bundle exec bundle-audit update ; then
-            echo 'Successful bundle-audit update.'
+          if bundle exec bundle audit update ; then
+            echo 'Successful bundle audit update.'
             break
           fi
           sleep 2
           tries_left=$((tries_left - 1))
-          echo "Bundle-audit update failed. Number of tries left=$tries_left"
+          echo "Bundle audit update failed. Number of tries left=$tries_left"
         done
         if [ "$tries_left" -eq 0 ] ; then
-          echo "Bundle-audit update failed after multiple attempts. Skipping."
+          echo "Bundle audit update failed after multiple attempts. Skipping."
           apply_bundle_audit=f
         fi
       else
         echo "Cannot update bundle-audit database; using current data."
       fi
       if [ "$apply_bundle_audit" = 't' ] ; then
-        bundle exec bundle-audit check
+        bundle exec bundle audit check
       else
         true
       fi
@@ -249,7 +238,6 @@ task :fasterer do
   sh 'fasterer'
 end
 
-# rubocop: disable Metrics/BlockLength
 # Tasks for Fastly including purging and testing the cache.
 namespace :fastly do
   # Implement full purge of Fastly CDN cache.  Invoke using:
@@ -272,27 +260,10 @@ namespace :fastly do
       'https://master.bestpractices.coreinfrastructure.org/projects/1/badge'
     puts 'Starting test of Fastly caching'
     verbose(false) do
-      sh <<-PURGE_FASTLY_SHELL
-        site_name="#{args.site_name}"
-        echo "Purging Fastly cache of badge for ${site_name}"
-        curl -X PURGE "$site_name" || exit 1
-        if curl -svo /dev/null "$site_name" 2>&1 | grep 'X-Cache: MISS' ; then
-          echo "Fastly cache of badge for project 1 successfully purged."
-        else
-          echo "Failed to purge badge for project 1 from Fastly cache."
-          exit 1
-        fi
-        if curl -svo /dev/null "$site_name" 2>&1 | grep 'X-Cache: HIT' ; then
-          echo "Fastly cache successfully restored."
-        else
-          echo "Fastly failed to restore cache."
-          exit 1
-        fi
-      PURGE_FASTLY_SHELL
+      sh "script/fastly_test #{args.site_name}"
     end
   end
 end
-# rubocop: enable Metrics/BlockLength
 
 desc 'Drop development database'
 task :drop_database do

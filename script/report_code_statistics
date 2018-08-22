@@ -1,0 +1,11 @@
+#!/bin/sh
+echo
+direct=$(sed -e '1,/^DEPENDENCIES/d' -e '/^RUBY VERSION/,$d' \
+             -e '/^$/d' Gemfile.lock | wc -l)
+indirect=$(bundle show | tail -n +2 | wc -l)
+echo "Number of gems (direct dependencies only) = $direct"
+echo "Number of gems (including indirect dependencies) = $indirect"
+echo
+bundle exec rails stats
+echo
+true

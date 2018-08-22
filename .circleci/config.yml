@@ -65,13 +65,7 @@ jobs:
         # This is a broad list of cache paths to include many possible development environments
         # You can probably delete some of these entries
         - vendor/bundle
-        - ~/virtualenvs
-        - ~/.m2
-        - ~/.ivy2
         - ~/.bundle
-        - ~/.go_workspace
-        - ~/.gradle
-        - ~/.cache/bower
     # The following line was run implicitly in your 1.0 builds based on what CircleCI inferred about the structure of your project. In 2.0 you need to be explicit about which commands should be run. In some cases you can discard inferred commands if they are not relevant to your project.
     - run: |-
         mkdir -p config && echo 'test:
@@ -101,16 +95,9 @@ jobs:
     # This is based on your 1.0 configuration file or project settings
     - run: bundle exec pronto run -f github text -c=$(git log --pretty=format:%H | tail -1) --exit-code
     - run: bundle doctor
-    - run: rake bundle_audit
-    - run: rake whitespace_check
-    - run: rake report_code_statistics
-    # Deployment
-    # Your existing circle.yml file contains deployment steps.
-    # The config translation tool does not support translating deployment steps
-    # since deployment in CircleCI 2.0 are better handled through workflows.
-    # See the documentation for more information https://circleci.com/docs/2.0/workflows/
-    # Teardown
-    #   If you break your build into multiple jobs with workflows, you will probably want to do the parts of this that are relevant in each
+    - run: bundle exec bundle audit check --update
+    - run: bundle exec rake whitespace_check
+    - run: script/report_code_statistics
     # Save test results
     - store_test_results:
         path: /tmp/circleci-test-results
@@ -147,11 +134,9 @@ jobs:
           command: |
             heroku run rake db:migrate --app master-bestpractices
           no_output_timeout: 400s
-      #- run:
-      #    name: Test Fastly
-      #    command: |
-      #      gem install bundler
-      #     "sleep 5 && bundle exec rake fastly:test"
+      - run:
+          name: Test Fastly
+          command: script/fastly_test
   deploy-staging:
     docker:
       - image: buildpack-deps:trusty

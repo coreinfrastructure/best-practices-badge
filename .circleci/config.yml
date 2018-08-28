@@ -95,7 +95,9 @@ jobs:
     # This is based on your 1.0 configuration file or project settings
     - run: bundle exec pronto run -f github text -c=$(git log --pretty=format:%H | tail -1) --exit-code
     - run: bundle doctor
-    - run: bundle exec bundle audit check --update
+    # Ignore CVE-2018-1000544 (rubyzip); it does not affect production.  See:
+    # https://github.com/coreinfrastructure/best-practices-badge/issues/1222
+    - run: bundle exec bundle audit check --update --ignore CVE-2018-1000544
     - run: bundle exec rake whitespace_check
     - run: script/report_code_statistics
     # Save test results

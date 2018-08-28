@@ -42,6 +42,7 @@ es:
       <span class="glyphicon glyphicon-log-in"></span> Iniciar
       sesión
     footer_text_html:
+    toggle_navigation:
   admin_only:
   account_activations:
     activated: "¡Cuenta activada!"

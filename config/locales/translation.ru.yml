@@ -53,6 +53,7 @@ ru:
       href="https://www.linuxfoundation.org/terms" target="_blank"
       rel="noopener">terms of use</a>. </small>
     choose_locale: Выберите язык
+    toggle_navigation:
   admin_only: Только администратор.
   account_activations:
     activated: Учетная запись активирована!

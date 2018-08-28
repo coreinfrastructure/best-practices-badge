@@ -52,6 +52,7 @@ de:
       und <a href="https://www.linuxfoundation.org/terms" target="_
       blank" rel="noopener">Nutzungsbedingungen</a>.</small>
     choose_locale: Wählen Sie lokale
+    toggle_navigation:
   account_activations:
     activated: Konto aktiviert!
     failed_activation: Ungültiger Aktivierungslink

@@ -50,6 +50,7 @@ ja:
       target="_blank" rel="noopener">プライバシー ポリシー</a> と<a href="https://www.linuxfoundation.jp/terms"
       target="_blank" rel="noopener">利用条件</a>を必ずお読みください。</small>
     choose_locale: 言語を選択する
+    toggle_navigation:
   account_activations:
     activated: アカウントが有効になりました！
     failed_activation: 無効なアクティベーション リンクです

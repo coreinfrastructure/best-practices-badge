@@ -44,6 +44,7 @@ fr:
       rel="noopener">conditions d'utilisation</a>. </small>
     account: Compte
     choose_locale: Choisir la langue
+    toggle_navigation:
   sessions:
     login_header: S'identifier
     login_with_github_html: >-

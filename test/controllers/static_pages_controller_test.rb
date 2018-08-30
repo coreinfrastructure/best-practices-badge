@@ -178,5 +178,13 @@ class StaticPagesControllerTest < ActionDispatch::IntegrationTest
     assert_includes @response.body, 'Error 404: Page Not Found'
     assert_includes @response.body, 'Sorry, no such page exists.'
   end
+
+  # Test Google verifier.  We need this so David A. Wheeler can get
+  # Google error messages.
+  test 'Google verifier' do
+    get '/google75f94b1182a77eb8.html'
+    assert_equal "google-site-verification: google75f94b1182a77eb8.html\n",
+                 @response.body
+  end
 end
 # rubocop: enable Metrics/BlockLength, Metrics/ClassLength

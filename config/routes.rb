@@ -34,6 +34,13 @@ Rails.application.routes.draw do
   get '/projects/:id/badge' => 'projects#badge',
       defaults: { format: 'svg' }
 
+  # Weird special case: for David A. Wheeler to get log issues from Google,
+  # we have to let Google verify this.  Locale is irrelevant.
+  # It isn't really HTML, even though the filename extension is .html. See:
+  # https://github.com/coreinfrastructure/best-practices-badge/issues/1223
+  get '/google75f94b1182a77eb8.html' => 'static_pages#google_verifier',
+      defaults: { format: 'text' }
+
   # Now handle the normal case: routes with an optional locale prefix.
   # We include almost all routes inside a :locale header,
   # where the locale is optional.  This approach (using an optional value)

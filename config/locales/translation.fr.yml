@@ -436,7 +436,8 @@ fr:
           d'expression de licence SPDX</a> ; des exemples sont
           « Apache-2.0 », « BSD-2-Clause », « BSD-3-Clause »,
           « GPL-2.0+ », « LGPL-3.0+ », « MIT » et « (BSD-2-Clause
-          OU Ruby) ».
+          OU Ruby) ». Ne <b>pas</b> inclure des guillemets simples
+          ou doubles.
         placeholder: Licence FLOSS
         title:
       additional_rights_changes:
@@ -1437,7 +1438,8 @@ fr:
       know_secure_design:
         description: >-
           Le projet DOIT avoir au moins un développeur principal
-          qui sait comment concevoir un logiciel sécurisé.
+          qui sait comment concevoir un logiciel sécurisé. (Voir
+          les « détails » pour les exigences exactes.)
         details: >-
           Cela nécessite de comprendre les principes de conception
           suivants, y compris les 8 principes de <a href="http://web.mit.edu/Saltzer/www/publications/protection/">Saltzer

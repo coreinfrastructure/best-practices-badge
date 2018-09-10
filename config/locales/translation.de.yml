@@ -52,7 +52,7 @@ de:
       und <a href="https://www.linuxfoundation.org/terms" target="_
       blank" rel="noopener">Nutzungsbedingungen</a>.</small>
     choose_locale: Wählen Sie lokale
-    toggle_navigation:
+    toggle_navigation: Klappbare Navigation umschalten
   account_activations:
     activated: Konto aktiviert!
     failed_activation: Ungültiger Aktivierungslink
@@ -441,7 +441,9 @@ de:
           "BSD-2-Clause", "BSD-3-Clause", "GPL-2.0+", "LGPL-3.0+",
           "MIT" und "(BSD-2-Clause OR Ruby)".
         placeholder: FLOSS Lizenz
-        title:
+        title: >-
+          Lizenz im SPDX-Lizenzausdruckformat, z.B. "MIT" oder
+          "GPL-3.0+", ohne einfache oder doppelte Anführungszeichen
       additional_rights_changes:
         description: >-
           (Erweitert) Welche anderen Benutzer haben zusätzliche
@@ -1045,15 +1047,16 @@ de:
           generiert werden (falls möglich ist dies oft der beste
           Weg). Die Dokumentation einer REST-Schnittstelle kann
           mit Swagger/OpenAPI erzeugt werden. Code-Interface-Dokumentation
-          kann mit Werkzeugen wie <a href="http://usejsdoc.org/">
-          JSDoc </a> (JavaScript), <a href="https://esdoc.org/">
-          ESDoc </a> (JavaScript), pydoc (Python) oder Doxygen
-          (verschiedene)  generiert werden. Nur Kommentare im
-          Quelltext reicht nicht aus, um dieses Kriterium zu erfüllen;
-          Es muss einen einfacheren Weg geben, um die Informationen
-          zu sehen, ohne den ganzen Quellcode durchzulesen. Wenn
-          das Projekt keine Software entwickelt, wählen Sie "nicht
-          anwendbar" (N/A) aus.
+          kann mit Werkzeugen wie <a href="http://usejsdoc.org/">JSDoc</a>
+          (JavaScript), <a href="https://esdoc.org/">ESDoc</a>
+          (JavaScript), pydoc (Python), <a href="https://cran.r-project.org/web/packages/devtools/index.html">devtools</a>
+          (R), <a href="https://cran.r-project.org/web/packages/pkgdown/index.html">pkgdown</a>
+          (R) und Doxygen (verschiedene)  generiert werden. Nur
+          Kommentare im Quelltext reicht nicht aus, um dieses
+          Kriterium zu erfüllen; Es muss einen einfacheren Weg
+          geben, um die Informationen zu sehen, ohne den ganzen
+          Quellcode durchzulesen. Wenn das Projekt keine Software
+          entwickelt, wählen Sie "nicht anwendbar" (N/A) aus.
       sites_https:
         description: >-
           Die Projekt-Seiten (Website, Repository und Download-URLs)
@@ -1296,8 +1299,9 @@ de:
           Es ist EMPFHOLEN, dass gewöhnliche Werkzeuge zum Kompiliren
           von Software benutzt wird.
         details: >-
-          Beispielsweise, Maven, Ant, cmake, die Autotools, make
-          oder rake.
+          Beispielsweise, Maven, Ant, cmake, die Autotools, make,
+          rake (Ruby) oder <a href="https://cran.r-project.org/web/packages/devtools/index.html">devtools</a>
+          (R).
       build_floss_tools:
         description: >-
           Das Projekt SOLLTE allein mit FLOSS Werkzeugen gebaut
@@ -1405,7 +1409,7 @@ de:
         description: >-
           Das Projekt MUSS mindestens einen primären Entwickler
           haben, der weiß wie man Sicherheitssoftware entwerfen
-          kann.
+          kann. (Siehe "Details" für spezifische Anforderungen.)
         details: >-
           Dies erfordert das Verständnis der folgenden Designprinzipien,
           einschließlich der 8 Prinzipien von <a href="http://web.mit.edu/Saltzer/www/publications/protection/">Saltzer

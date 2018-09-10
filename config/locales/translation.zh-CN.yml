@@ -40,7 +40,7 @@ zh-CN:
       target="_blank" rel="noopener">使用条款</a>. </small>
     account: 帐户
     choose_locale: 选择区域设置
-    toggle_navigation:
+    toggle_navigation: 切换可折叠导航
   sessions:
     login_header: 登录
     login_with_github_html: <span class="fa fa-github"></span>
@@ -158,9 +158,9 @@ zh-CN:
       silver_200: 银（200%+层级）
       gold_in_progress_variable: 银牌，部分金牌（%{percent}%+层级）
       gold_300: 金牌（300％）
-      in_progress_next:
-      passing_next:
-      silver_next:
+      in_progress_next: 正在进行中（%{percent}% 已完成）
+      passing_next: 通过，%{percent}% 已完成银牌
+      silver_next: 银牌， %{percent}% 已完成金牌
     table:
       id: Id
       name: 名称
@@ -270,7 +270,7 @@ zh-CN:
           请使用<a href="https://spdx.org/licenses/"> SPDX许可证表达格式</a>;例子包括“Apache-2.0”，“BSD-2-Clause”，“BSD-3-Clause”，“GPL-2.0+”，“LGPL-3.0
           +”，“MIT”和“(BSD-2-Clause OR Ruby)”。
         placeholder: FLOSS许可证
-        title:
+        title: SPDX许可证表达格式的许可证，例如“MIT”或“GPL-3.0 +”，没有单引号或双引号
       additional_rights_changes:
         description: "（高级）哪些用户还有额外权限编辑此徽章条目？目前：%{current_rights}"
         details_html: >-

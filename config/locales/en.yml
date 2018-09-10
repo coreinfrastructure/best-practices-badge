@@ -1488,6 +1488,7 @@ en:
         description: >-
           The project MUST have at least one primary developer
           who knows how to design secure software.
+          (See ‘details’ for the exact requirements.)
         details: >-
           This requires understanding the following design principles,
           including the 8 principles from <a href="http://web.mit.edu/Saltzer/www/publications/protection/">Saltzer

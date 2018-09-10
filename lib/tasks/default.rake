@@ -113,9 +113,7 @@ task :bundle_audit do
         echo "Cannot update bundle-audit database; using current data."
       fi
       if [ "$apply_bundle_audit" = 't' ] ; then
-        # Ignore CVE-2018-1000544 (rubyzip); it does not affect production. See:
-        # https://github.com/coreinfrastructure/best-practices-badge/issues/1222
-        bundle exec bundle audit check --ignore CVE-2018-1000544
+        bundle exec bundle audit check
       else
         true
       fi

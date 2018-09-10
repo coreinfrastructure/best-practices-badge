@@ -270,6 +270,7 @@ zh-CN:
           请使用<a href="https://spdx.org/licenses/"> SPDX许可证表达格式</a>;例子包括“Apache-2.0”，“BSD-2-Clause”，“BSD-3-Clause”，“GPL-2.0+”，“LGPL-3.0
           +”，“MIT”和“(BSD-2-Clause OR Ruby)”。
         placeholder: FLOSS许可证
+        title:
       additional_rights_changes:
         description: "（高级）哪些用户还有额外权限编辑此徽章条目？目前：%{current_rights}"
         details_html: >-

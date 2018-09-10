@@ -305,6 +305,7 @@ ja:
           例：「Apache-2.0」、「BSD-2-Clause」、「BSD-3-Clause」、「GPL-2.0
           +」、「LGPL-3.0 +」、「MIT」、「(BSD-2-Clause OR Ruby)」
         placeholder: FLOSSライセンス
+        title:
       additional_rights_changes:
         description: "（詳細）このバッジエントリを編集する権限を持つユーザーは？現在：%{current_rights}"
         details_html: >-

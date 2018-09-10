@@ -653,6 +653,7 @@ ru:
           «BSD-2-Clause», «BSD-3-Clause», «GPL-2.0+», «LGPL-3.0+»,
           «MIT» и «(BSD-2-Clause OR Ruby)».
         placeholder: Свободная лицензия
+        title:
       additional_rights_changes:
         description: >-
           (Дополнительно) Какие другие пользователи имеют дополнительные

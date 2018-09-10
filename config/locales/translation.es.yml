@@ -414,6 +414,7 @@ es:
         description_html:
         details_html:
         placeholder:
+        title:
     misc:
       in_javascript:
         collapse_all_title:

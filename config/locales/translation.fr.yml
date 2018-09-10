@@ -438,6 +438,7 @@ fr:
           « GPL-2.0+ », « LGPL-3.0+ », « MIT » et « (BSD-2-Clause
           OU Ruby) ».
         placeholder: Licence FLOSS
+        title:
       additional_rights_changes:
         description: >-
           (Avancé) Quels autres utilisateurs ont les droits supplémentaires

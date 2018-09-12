@@ -35,7 +35,7 @@ en:
       Login
     footer_text_html: >-
       <small> <strong>Need help? Have a question? See a problem?
-      Please <em><a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">send
+      Please <em><a href="mailto:&#99;ii&#45;badges&#45;questions&#64;lists&#46;coreinfrastructure&#46;or&#103;">send
       an email</a> </em>or <em><a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
       target="_blank" rel="noopener">file an issue</a></em>.</strong> © 2015-2018
       <a href="https://www.coreinfrastructure.org" target="_blank" rel="noopener">Core
@@ -795,7 +795,7 @@ en:
       If you want to see only what you're missing, visit your badge entry, and
       then click on the button near the top labelled "Hide met or N/A criteria".
       If you have questions, or need help, please contact
-      cii-badges-questions-owner@lists.coreinfrastructure.org
+      cii-badges-questions@lists.coreinfrastructure.org
       or file an issue at
       https://github.com/coreinfrastructure/best-practices-badge/issues
       (click on "new issue").
@@ -889,7 +889,7 @@ en:
       select the button near the top labelled "Expand all panels", and
       then select the button near the top labelled "Hide met or N/A criteria".
       If you have questions, or need help, please contact
-      cii-badges-questions-owner@lists.coreinfrastructure.org
+      cii-badges-questions@lists.coreinfrastructure.org
       or file an issue at
       https://github.com/coreinfrastructure/best-practices-badge/issues
       (click on "new issue").

@@ -41,7 +41,7 @@ gem 'rails', '5.1.6' # Our web framework
 gem 'rails-i18n', '5.1.1' # Localizations for Rails built-ins
 gem 'redcarpet', '3.4.0' # Process markdown in form textareas (justifications)
 gem 'sass-rails', '5.0.7', require: false
-gem 'scout_apm', '2.4.14' # Monitor for memory leaks
+gem 'scout_apm', '2.4.18' # Monitor for memory leaks
 gem 'secure_headers', '6.0.0' # Add hardening measures to HTTP headers
 gem 'uglifier', '4.1.19', require: false # Minify JavaScript
 gem 'will-paginate-i18n', '0.1.15' # Provide will-paginate translations

@@ -50,7 +50,7 @@ ja:
       target="_blank" rel="noopener">プライバシー ポリシー</a> と<a href="https://www.linuxfoundation.jp/terms"
       target="_blank" rel="noopener">利用条件</a>を必ずお読みください。</small>
     choose_locale: 言語を選択する
-    toggle_navigation:
+    toggle_navigation: 折りたたみ可能なナビゲーションを切り替える
   account_activations:
     activated: アカウントが有効になりました！
     failed_activation: 無効なアクティベーション リンクです
@@ -186,9 +186,9 @@ ja:
       silver_200: シルバー（200％+段階）
       gold_in_progress_variable: シルバー、部分的なゴールド（%{percent}％+段階）
       gold_300: ゴールド（300％）
-      in_progress_next:
-      passing_next:
-      silver_next:
+      in_progress_next: 進行中、合格に向けて%{percent}が完了しました
+      passing_next: 進行中、シルバーに向けて%{percent}が完了しました
+      silver_next: シルバー、ゴールドに向けて%{percent}が完了しました
     table:
       id: ID
       name: 名称
@@ -305,7 +305,8 @@ ja:
           例：「Apache-2.0」、「BSD-2-Clause」、「BSD-3-Clause」、「GPL-2.0
           +」、「LGPL-3.0 +」、「MIT」、「(BSD-2-Clause OR Ruby)」
         placeholder: FLOSSライセンス
-        title:
+        title: >-
+          SPDXライセンス表現形式のライセンス（例： "MIT"または "GPL-3.0 +"、シングル引用符や二重引用符を付けない）
       additional_rights_changes:
         description: "（詳細）このバッジエントリを編集する権限を持つユーザーは？現在：%{current_rights}"
         details_html: >-

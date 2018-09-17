@@ -160,9 +160,10 @@ class Project < ApplicationRecord
   # problematic characters that are very unlikely in a name like
   # <, >, &, ", brackets, and braces.  This handles language names like
   # JavaScript, C++, C#, D-, and PL/I.  A space is optional after a comma.
+  # We have to allow embedded spaces, e.g., "Jupyter Notebook".
   VALID_LANGUAGE_LIST = %r{\A(|-|
-                          ([A-Za-z0-9!\#$%'()*+.\/\:;=?@\[\]^~-]+
-                            (,\ ?[A-Za-z0-9!\#$%'()*+.\/\:;=?@\[\]^~-]+)*))\Z}x
+                          ([A-Za-z0-9!\#$%'()*+.\/\:;=?@\[\]^~ -]+
+                            (,\ ?[A-Za-z0-9!\#$%'()*+.\/\:;=?@\[\]^~ -]+)*))\Z}x
   validates :implementation_languages,
             length: { maximum: MAX_SHORT_STRING_LENGTH },
             format: {

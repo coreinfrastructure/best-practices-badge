@@ -468,8 +468,8 @@ en:
         below if you don't know how to do that).
       lost_badge: Project has lost a badge.
       static_analysis_updated_html: >-
-        We have updated our requirements for the criterion <a
-        href="#static_analysis">static_analysis</a>. Please add
+        We have updated our requirements for the criterion
+        static_analysis. Please add
         a justification for this criterion.
       save_and_continue: Save (and continue)
       submit_and_exit: Submit (and exit)

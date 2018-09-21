@@ -31,7 +31,7 @@ fr:
       <i class="fa fa-sign-in" aria-hidden="true"></i> S'identifier
     footer_text_html: >-
       <small> <strong>Vous avez besoin d'aide ? Vous avez une
-      question ? Vous voyez un problème ? Merci d'<em><a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">envoyer
+      question ? Vous voyez un problème ? Merci d'<em><a href="mailto:&#99;ii&#45;badges&#45;questions&#64;lists&#46;coreinfrastructure&#46;or&#103;">envoyer
       un email</a></em> ou de <em><a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
       target="_blank" rel="noopener">reporter un problème</a></i>.</strong>
       © 2015-2018 <a href="https://www.coreinfrastructure.org"
@@ -783,8 +783,7 @@ fr:
       Nous vous encourageons à continuer à progresser.
       Si vous voulez voir seulement ce qui vous manque, visitez votre soumission puis cliquez sur le bouton près du haut étiqueté « Masquer atteints & N/A ».
       Si vous avez des questions ou avez besoin d'aide, contactez-nous à
-      cii-badges-questions-owner@lists.coreinfrastructure.org
-      ou reportez un problème sur
+      cii-badges-questions@lists.coreinfrastructure.org ou reportez un problème sur
       https://github.com/coreinfrastructure/best-practices-badge/issues
       (cliquez sur « nouveau problème »).
       Nous ne vous enverrons jamais de publicité, et nous ne vous enverrons que rarement des emails. Nous vous enverrons un email pour les évènements importants de la soumission d'un projet de badge, comme quand vous créez une nouvelle soumission de projet de badge, quand votre projet gagne ou perd un badge, ou quand quelqu'un demande la réinitialisation du mot de passe pour votre compte utilisateur. Si votre projet n'a pas de badge, et que vous n'avez pas mis à jour l'entrée du projet pendant au moins 30 jours, nous vous enverrons normalement un rappel d'inactivité environ tous les 30-60 jours. Vous pouvez désactiver ces rappels d'inactivité à tout moment ; il vous suffit d'éditer votre entrée de badge à %{project_info_url}#project_disabled_reminders pour activer la « désactivation du rappel d'inactivité ». Souvenez-vous d'éditer le projet pour lequel vous souhaitez changer cette valeur. Si votre projet a gagné un badge, ou que son entrée de badge a été éditée dans les 30 derniers jours, aucun rappel d'inactivité ne vous sera envoyé.
@@ -868,8 +867,8 @@ fr:
       « Développer les panneaux », \npuis sélectionnez le bouton
       près du sommet étiqueté « Masquer atteints & N/A ».\nSi
       vous avez des questions ou si vous avez besoin d'aide, veuillez
-      contacter\ncii-badges-questions-owner@lists.coreinfrastructure.org\nou
-      reporter un problème à\nhttps://github.com/coreinfrastructure/best-practices-badge/issues\n(cliquez
+      contacter\ncii-badges-questions@lists.coreinfrastructure.org
+      ou reporter un problème à\nhttps://github.com/coreinfrastructure/best-practices-badge/issues\n(cliquez
       sur « nouveau problème »).\n\nNous n'envoyons pas de rappels
       si vous continuez à mettre à jour votre entrée de badge,
       et nous envoyons seulement des rappels environ tous les

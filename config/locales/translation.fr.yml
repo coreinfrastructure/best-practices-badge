@@ -370,9 +370,8 @@ fr:
         comment le faire).
       lost_badge: Le projet a perdu un badge.
       static_analysis_updated_html: >-
-        Nous avons mis à jour nos exigences pour le critère <a
-        href="#static_analysis">static_analysis</a>. Veuillez
-        ajouter une justification pour ce critère.
+        Nous avons mis à jour nos exigences pour le critère static_analysis.
+        Veuillez ajouter une justification pour ce critère.
       edit_status: Éditer le statut du badge du projet
     form_basics:
       project_name:
@@ -2053,8 +2052,8 @@ fr:
           les contributions. Cela devrait se concentrer uniquement
           sur le comportement au sein de la communauté / lieu
           de travail du projet. Des exemples de codes de conduite
-          sont le <a href="https://www.kernel.org/doc/html/latest/process/code-of-conflict.html">code
-          de conflit</a> du noyau Linux, le <a href="http://contributor-covenant.org/">code
+          sont le <a href="https://www.kernel.org/doc/html/latest/process/code-of-conduct.html">code
+          de conduite</a> du noyau Linux, le <a href="http://contributor-covenant.org/">code
           de conduite du pacte de contributeur</a>, le <a href="https://www.debian.org/code_of_conduct">code
           de conduite du projet Debian</a>, le <a href="https://www.ubuntu.com/about/about-ubuntu/conduct">code
           de conduite du projet Ubuntu</a>, le <a href="https://getfedora.org/code-of-conduct">code

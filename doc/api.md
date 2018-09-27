@@ -292,7 +292,7 @@ The BadgeApp provides CORS headers in certain cases when an
 "Origin" is provided.
 When a client-side JavaScript program
 makes a request to a different origin, it provides its "origin", and
-that allows the BadgeApp to decide what it wants to allow the client-side
+that allows the BadgeApp to decide what it wants to allow.
 
 The CORS header expressly does *not* share credentials, and
 *only* allows GET (or OPTIONS) for a few specific resources.

@@ -137,7 +137,12 @@ The following search parameters are supported:
 *   q: Text, "normal query" - match against parsed name, description, URL
     This is implemented by PostgreSQL, so you can use "&amp;" (and),
     "|" (or), and "'text...*'" (prefix).
-    This parses URLs into parts; you can't search on a whole URL (use pq).
+    Note that URLs cannot include spaces, and &amp;amp; has a special meaning,
+    so you typically will need to use URL encoding in a query.
+    For example, /en/projects?q=R%20%26%20analysis
+    is a search that requires both "R" and "analysis".
+    This search request system breaks URLs into parts, so you can't use "q" to
+    search on a whole URL (use pq instead).
 *   page: Page to display (starting at 1)
 
 See app/controllers/project\_controllers.rb if you want to see the

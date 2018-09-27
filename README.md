@@ -46,6 +46,7 @@ for general discussion.
   BadgeApp implementation
 * **[security](./doc/security.md)**  - notes about BadgeApp security
 * **[testing](./doc/testing.md)**  - notes about BadgeApp automated tests
+* **[api](./doc/api.md)** - Application Programming Interface (API), including data downloads
 * **[Installation](./doc/INSTALL.md)**  - Installation and quick start
 * **[Roadmap](./doc/roadmap.md)**  - Roadmap (future plans)
 

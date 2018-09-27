@@ -38,7 +38,7 @@ in the requesting HTTP header.
 A GET just retrieves information, and since most information is public,
 in most cases you don't need to log in for a GET.
 Other operations, like POST or DELETE, require logging in first
-(as is typical, cookiers are used to track logged-in sessions).
+(as is typical, cookies are used to track logged-in sessions).
 
 From here on we'll omit the scheme (https) and hostname, and
 we'll indicate variables by beginning their name with ":" (colon).

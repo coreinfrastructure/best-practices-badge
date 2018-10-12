@@ -438,6 +438,7 @@ There is an implied criterion that we should mention here:
 
 <li><a name="dynamic_analysis_fixed"></a>All medium and high severity exploitable vulnerabilities discovered with dynamic code analysis MUST be fixed in a timely way after they are confirmed. (N/A allowed.) <sup>[<a href="#dynamic_analysis_fixed">dynamic_analysis_fixed</a>]</sup><dl><dt><i>Details</i>:<dt> <dd>A vulnerability is medium to high severity if its <a href="https://nvd.nist.gov/cvss.cfm">CVSS 2.0</a> base score is 4. If you are not running dynamic code analysis and thus have not found any vulnerabilities in this way, choose "not applicable" (N/A).</dd></dl></li>
 </ul>
+
 ## A note on good cryptographic practices
 
 *Note*: These criteria do not always apply because some software has no

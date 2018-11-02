@@ -41,7 +41,7 @@ zh-CN:
           unit: ''
       format:
         delimiter: ''
-        precision: 1
+        precision: '1'
         significant: false
         strip_insignificant_zeros: false
       storage_units:
@@ -56,14 +56,14 @@ zh-CN:
   date:
     formats:
       default: "%Y-%m-%d"
-      long: "%Y年%b%d日"
-      short: "%b%d日"
+      long: "%Y年%m月%d日"
+      short: "%m月%d日"
     order:
     - :year
     - :month
     - :day
   time:
     formats:
-      default: "%Y年%b%d日 %A %H:%M:%S %Z"
-      long: "%Y年%b%d日 %H:%M"
-      short: "%b%d日 %H:%M"
+      default: "%Y年%m月%d日 %A %H:%M:%S %Z"
+      long: "%Y年%m月%d日 %H:%M"
+      short: "%m月%d日 %H:%M"

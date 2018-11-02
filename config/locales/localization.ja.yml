@@ -41,7 +41,7 @@ ja:
           unit: ''
       format:
         delimiter: ''
-        precision: 3
+        precision: '3'
         significant: true
         strip_insignificant_zeros: true
       storage_units:
@@ -62,6 +62,6 @@ ja:
     - :day
   time:
     formats:
-      default: "%Y/%m/%d %H:%M:%S"
-      long: "%Y年%m月%d日(%a) %H時%M分%S秒 %z"
-      short: "%y/%m/%d %H:%M"
+      default: "%Y年%m月%d日(%a) %H時%M分%S秒 %z"
+      long: "%Y/%m/%d %H:%M"
+      short: "%m/%d %H:%M"

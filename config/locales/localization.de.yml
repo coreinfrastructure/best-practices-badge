@@ -31,6 +31,7 @@ de:
       format:
         delimiter: ''
         format: "%n %"
+        precision: '1'
     precision:
       format:
         delimiter: ''
@@ -41,7 +42,7 @@ de:
           unit: ''
       format:
         delimiter: ''
-        precision: 3
+        precision: '3'
         significant: true
         strip_insignificant_zeros: true
       storage_units:

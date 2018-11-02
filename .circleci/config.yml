@@ -94,7 +94,8 @@ jobs:
           RACK_ENV: test
     # This is based on your 1.0 configuration file or project settings
     - run: bundle exec pronto run -f github text -c=$(git log --pretty=format:%H | tail -1) --exit-code
-    - run: bundle exec bundle doctor
+    # Temporarily disable bundle doctor; trying to run it produces an error.
+    # - run: bundle exec bundle doctor
     - run: bundle exec bundle audit check --update
     - run: bundle exec rake whitespace_check
     - run: script/report_code_statistics

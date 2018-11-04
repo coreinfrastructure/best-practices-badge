@@ -109,6 +109,7 @@ if [ "$(uname)" = 'Darwin' ] ; then  # MacOS.  Use 'brew'.
     echo 'Downloading and installing brew.'
     brew_url='https://raw.githubusercontent.com/Homebrew/install/master/install'
     ruby -e "$(curl -fsSL $brew_url)"
+    brew tap homebrew/cask
   fi
 else
   # apt-get : Debian, Ubuntu
@@ -154,7 +155,9 @@ case "$manager" in
   brew)
     # We'll use the brew version. Install these to rebuild rbenv:
     # add_pkg openssl libyaml libffi
-    add_pkg phantomjs rbenv ruby-build graphviz postgres cmake ;;
+    add_pkg rbenv ruby-build graphviz postgres cmake
+    brew cask install phantomjs ;;
+
   apt-get)
     # We'll use the system version.  If you want to use the latest one
     # on GitHub, instead install these system components first:

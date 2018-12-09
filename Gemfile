@@ -26,7 +26,7 @@ gem 'jbuilder', '2.7.0'
 gem 'jquery-rails', '4.3.3' # JavaScript jQuery library (for Rails)
 gem 'jquery-ui-rails', '6.0.1' # JavaScript jQueryUI library (for Rails)
 gem 'lograge', '0.10.0' # Simplify logs
-gem 'mail', '2.7.0' # Ruby mail handler
+gem 'mail', '2.7.1' # Ruby mail handler
 gem 'octokit', '4.9.0' # GitHub's official Ruby API
 gem 'omniauth-github', '1.3.0' # Authentication to GitHub (get project info)
 gem 'paleta', '0.3.0' # Color manipulation, used for badges

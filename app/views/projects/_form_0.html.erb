@@ -12,7 +12,12 @@
     </div>
   </div>
 <% end %>
-<% cache_if is_disabled, [project, locale] do %>
+<%
+   # If the additional rights list changes, invalidate the cache.
+   # If the performance is too slow, we could directly expire it instead,
+   # but that adds a maintenance headache.
+   additional_rights_list = project.additional_rights.pluck(:user_id).join(',')
+   cache_if is_disabled, [project, locale, additional_rights_list] do %>
 <%= render(partial: 'form_early',
            locals:
              {

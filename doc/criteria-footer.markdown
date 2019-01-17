@@ -1,3 +1,4 @@
+
 ## A note on good cryptographic practices
 
 *Note*: These criteria do not always apply because some software has no

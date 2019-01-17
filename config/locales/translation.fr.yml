@@ -1869,114 +1869,6 @@ fr:
           2.0</a> est 4. Si vous n'utilisez pas d'analyse de code
           dynamique et donc n'avez trouvé aucune vulnérabilité
           de cette façon, choisissez « non applicable » (N/A).
-      installation_common:
-        description: >-
-          Le projet DEVRAIT fournir un moyen d'installer et de
-          désinstaller facilement le logiciel produit par le projet
-          en utilisant une convention couramment utilisée.
-        details: >-
-          Des exemples comprennent l'utilisation d'un gestionnaire
-          de paquets (au niveau du système ou du langage), « make/install/uninstall
-          » (supportant DESTDIR), un conteneur dans un format
-          standard ou une image de machine virtuelle dans un format
-          standard. Le processus d'installation et de désinstallation
-          (par exemple, son paquetage) PEUT être mis en œuvre
-          par un tiers tant qu'il est FLOSS.
-      build_reproducible:
-        description: >-
-          Il est PROPOSÉ que le projet possède une <a href="https://reproducible-builds.org/">construction
-          reproductible</a>. Si aucune construction ne se produit
-          (par exemple, les langages de script où le code source
-          est utilisé directement au lieu d'être compilé), sélectionnez
-          « non applicable » (N/A)
-        details: >-
-          Une construction reproductible signifie que plusieurs
-          parties peuvent refaire indépendamment le processus
-          de génération d'informations à partir de fichiers source
-          et obtenir exactement le même résultat bit-à-bit. Dans
-          certains cas, cela peut être résolu en forçant un ordre
-          de tri. Les développeurs JavaScript peuvent envisager
-          d'utiliser npm shrinkwrap et webpack OccurenceOrderPlugin.
-          Les utilisateurs GGC et clang peuvent trouver l'option
-          -frandom-seed utile. L'environnement de construction
-          (y compris le jeu d'outils) peut souvent être défini
-          pour les parties externes en spécifiant le hachage cryptographique
-          d'un conteneur spécifique ou d'une machine virtuelle
-          qu'ils peuvent utiliser pour la reconstruction. Le <a
-          href="https://reproducible-builds.org/docs/">projet
-          de construction reproductible dispose de documentation
-          sur la façon de le faire</a>.
-      crypto_used_network:
-        description: >-
-          Le logiciel produit par le projet DEVRAIT supporter
-          des protocoles sécurisés pour toutes ses communications
-          réseau, tels que SSHv2 ou ultérieur, TLS1.2 ou ultérieur
-          (HTTPS), IPsec, SFTP et SNMPv3. Les protocoles non sûrs
-          tels que FTP, HTTP, telnet, SSLv3 ou antérieur, et SSHv1
-          DEVRAIENT être désactivés par défaut et uniquement activés
-          si l'utilisateur le configure spécifiquement. Si le
-          logiciel produit par le projet ne prend pas en charge
-          les communications réseau, sélectionnez « non applicable
-          » (N/A).
-      crypto_tls12:
-        description: >-
-          Le logiciel produit par le projet DEVRAIT, s'il prend
-          en charge ou utilise TLS, prendre en charge au moins
-          TLS version 1.2. Notez que le prédécesseur de TLS s'appelait
-          SSL. Si le logiciel n'utilise pas TLS, sélectionnez
-          « non applicable » (N/A).
-      crypto_certificate_verification:
-        description: >-
-          Le logiciel produit par le projet DOIT, s'il prend en
-          charge TLS, effectuer la vérification des certificats
-          TLS par défaut lors de l'utilisation de TLS, y compris
-          sur les sous-ressources. Si le logiciel n'utilise pas
-          TLS, sélectionnez « non applicable » (N/A).
-        details: >-
-          Notez que la vérification incorrecte du certificat TLS
-          est une erreur courante. Pour plus d'informations, voir
-          <a href="http://crypto.stanford.edu/~dabo/pubs/abstracts/ssl-client-bugs.html">«
-          Le code le plus dangereux dans le monde : la validation
-          des certificats SSL dans du logiciel qui ne vient pas
-          d'un navigateur » de Martin Georgiev et al.</a> et <a
-          href="https://blogs.gnome.org/mcatanzaro/2016/03/12/do-you-trust-this-application/">«
-          Avez-vous confiance en cette application ?» par Michael
-          Catanzaro</a>.
-      crypto_verification_private:
-        description: >-
-          Le logiciel produit par le projet DEVRAIT, s'il supporte
-          TLS, effectuer une vérification de certificat avant
-          d'envoyer des en-têtes HTTP avec des informations privées
-          (telles que des cookies sécurisés). Si le logiciel n'utilise
-          pas TLS, sélectionnez « non applicable » (N/A).
-      hardened_site:
-        description: >-
-          Il est PROPOSÉ que le site Web du projet, le dépôt (s'il
-          est accessible via le Web) et le site de téléchargement
-          (si séparé) incluent des en-têtes clés de durcissement
-          avec des valeurs non admises.
-        details: >-
-          Notez que GitHub est connu pour le faire. Des sites
-          tels que https://securityheaders.io/ peuvent le vérifier
-          rapidement. Les en-têtes clés de durcissement sont :
-          Content Security Policy (CSP), HTTP Strict Transport
-          Security (HSTS), X-Content-Type-Options (comme « nosniff
-          »), X-Frame-Options et X-XSS-Protection.
-      hardening:
-        description: >-
-          Il est PROPOSÉ que des mécanismes de durcissement soient
-          utilisés dans le logiciel produit par le projet afin
-          que les défauts du logiciel soient moins susceptibles
-          d'entraîner des vulnérabilités de sécurité.
-        details: >-
-          Les mécanismes de durcissement peuvent inclure des en-têtes
-          HTTP comme Content Security Policy (CSP), des options
-          de compilation pour atténuer les attaques (telles que
-          -fstack-protector) ou des options de compilation pour
-          éliminer les comportements indéfinis. Pour nos besoins,
-          le principe de plus faible privilège n'est pas considéré
-          comme un mécanisme de durcissement (le principe de plus
-          faible privilège est important, mais séparé).
     '1':
       contribution_requirements:
         description: >-
@@ -3017,20 +2909,6 @@ fr:
       criteria: Critères
       detailed_criteria_on_github: Les critères détaillés sont
         disponibles sur GitHub.
-      current_criteria: >-
-        Nombre actuel de critères : %{active} (actifs) + %{future}
-        (futurs) = %{total} (total).
-      criteria_must_should_suggested: >-
-        Les critères actifs se décomposent en %{must} DOIT, %{should}
-        DEVRAIT, et %{suggested} PROPOSÉ.
-      criteria_na_met_details: >-
-        Parmi les critères actifs, %{na_allowed} autorisent la
-        mention N/A, %{met_url_required} nécessitent une URL pour
-        être atteints, et %{details_present} nécessitent des détails
-        dans leur description.
-      project_counts: >-
-        Il existe %{projects} soumissions de projets ; %{passing}
-        ont obtenu le badge et %{in_progress} sont en cours d'obtention.
       project_stats_html: |-
         Les critères « actifs » sont ceux qui sont inclus dans les calculs de pourcentages (contrairement aux critères « futurs »). Les colonnes suivantes identifient le nombre de critères actifs à chaque niveau qui DOIVENT, DEVRAIENT ou PEUVENT être respectés, qui autorisent « N/A » comme réponse, qui requièrent une URL, qui incluent des détails, ou qui sont nouveaux à ce niveau. Les critères « futurs » sont affichés sur le formulaire, et devraient être ajoutés comme critères actifs à un certain niveau dans le futur, mais ne sont pas inclus dans les calculs de complétion. <br><br>
         Vous pouvez voir des statistiques sur les projets au cours du temps sur la <a href="/fr/project_stats">page des statistiques du projet</a>.
@@ -3117,7 +2995,6 @@ fr:
     future: futur
     Installation system: Système d'installation
     New functionality testing: Nouveau test de fonctionnalité
-    OSS License: Licence OSS
     Other: Autre
     Other security issues: Autres problèmes de sécurité
     Previous versions: Versions précédentes
@@ -3161,9 +3038,6 @@ fr:
       other: Le formulaire contient %{count} erreurs.
       few: Le formulaire contient %{count} erreurs.
       many: Le formulaire contient %{count} erreurs.
-    comma_separated_list: " doit être une liste de noms séparés
-      par des virgules"
-    begin_with_cpe: " doit commencer par « cpe : »"
     not_an_email: " n'est pas un email"
     known_bad_password: " est un (mauvais) mot de passe bien connu"
     valid_text: >2-

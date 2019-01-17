@@ -45,4 +45,9 @@ raise InvalidLocale unless
 # If we don't have text, fall back to English.  That obviously isn't
 # ideal, but it's better to show *some* text to the user than leave it
 # a mystery.
+# ALSO: Gem i18n 1.1 changed fallbacks to exclude default locale. It says:
+# > Please check your Rails app for 'config.i18n.fallbacks = true'.
+# > If you're using I18n (>= 1.1.0) and Rails (< 5.2.2), this should be
+# > 'config.i18n.fallbacks = [I18n.default_locale]'.
+# > If not, fallbacks will be broken in your app by I18n 1.1.x.
 Rails.application.config.i18n.fallbacks = [:en]

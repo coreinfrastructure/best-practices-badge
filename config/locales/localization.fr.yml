@@ -92,8 +92,8 @@ fr:
   date:
     formats:
       default: "%d/%m/%Y"
-      short: "%e %b"
       long: "%e %B %Y"
+      short: "%e %b"
     order:
     - :day
     - :month

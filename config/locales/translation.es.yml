@@ -1007,8 +1007,6 @@ es:
       few:
       many:
       other: El formulario contiene %{count} errores.
-    comma_separated_list:
-    begin_with_cpe:
     not_an_email:
     known_bad_password:
     valid_text:

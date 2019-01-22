@@ -80,7 +80,7 @@ group :development do
   # gem 'fasterer', '0.3.2' # Provide speed recommendations - run 'fasterer'
   # Waiting for Ruby 2.4 support: https://github.com/seattlerb/ruby_parser/issues/239
   gem 'traceroute', '0.6.2' # Adds 'rake traceroute' command to check routes
-  gem 'translation', '1.14' # translation.io - translation service
+  gem 'translation', '1.17' # translation.io - translation service
   gem 'web-console', '3.7.0' # Debugging tool for Ruby on Rails apps
 end
 

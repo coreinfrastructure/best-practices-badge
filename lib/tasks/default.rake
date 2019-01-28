@@ -31,12 +31,15 @@ task(:default).clear.enhance %w[
 # Waiting for Ruby 2.4 support: https://github.com/seattlerb/ruby_parser/issues/239
 
 # Run Continuous Integration (CI) check processes.
+# This is a shorter list; many checks are run by a separate "pronto" task.
+# Temporarily includes "railroader", we hope to move that to pronto.
 # Removed bundle_doctor due to CircleCI failures
 # Temporarily removed fasterer
 task(:ci).clear.enhance %w[
   rbenv_rvm_setup
   bundle_audit
   markdownlint
+  railroader
   license_okay
   license_finder_report.html
   whitespace_check

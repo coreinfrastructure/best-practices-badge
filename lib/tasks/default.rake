@@ -17,7 +17,7 @@ task(:default).clear.enhance %w[
   rubocop
   markdownlint
   rails_best_practices
-  brakeman
+  railroader
   license_okay
   license_finder_report.html
   whitespace_check
@@ -64,10 +64,10 @@ task :rails_best_practices do
       '--features --spec --without-color'
 end
 
-desc 'Run brakeman'
-task :brakeman do
+desc 'Run railroader'
+task :railroader do
   # Disable pager, so that "rake" can keep running without halting.
-  sh 'bundle exec brakeman --quiet --no-pager'
+  sh 'bundle exec railroader --quiet --no-pager'
 end
 
 desc 'Run bundle if needed'

@@ -49,7 +49,6 @@ gem 'will_paginate', '3.1.6' # Paginate results (next/previous)
 
 group :development, :test do
   gem 'awesome_print', '1.8.0' # Pretty print Ruby objects
-  gem 'brakeman', '4.3.1' # 4.4.0+ is not OSS, so force this version.
   gem 'bullet', '5.9.0' # Avoid n+1 queries
   gem 'bundler-audit', '0.6.1'
   gem 'database_cleaner', '1.7.0' # Cleans up database between tests
@@ -59,10 +58,12 @@ group :development, :test do
   gem 'license_finder', '5.6.0'
   gem 'mdl', '0.4.0'
   gem 'pronto', '0.9.5'
-  gem 'pronto-brakeman', '0.9.1'
+  # TODO: Use pronto-railroader, once there is one.
+  # gem 'pronto-brakeman', '0.9.1'
   gem 'pronto-eslint', '0.9.1'
   gem 'pronto-rails_best_practices', '0.9.0'
   gem 'pronto-rubocop', '0.9.0'
+  gem 'railroader', '4.3.4' # Security static analyzer. OSS fork of Brakeman
   gem 'rubocop', '0.52.1' # Style checker.  Changes can cause test failure
   gem 'ruby-graphviz', '1.2.4' # This is used for bundle viz
   gem 'spring', '2.0.2' # Preloads app so console, rake, and tests run faster

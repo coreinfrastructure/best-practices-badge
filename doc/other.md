@@ -853,8 +853,8 @@ Upgrade some "passing" level SHOULD and SUGGESTED:
     known vulnerabilities.  This is OWASP Top 10 (2013) number A9
     (using known vulnerable components).  See also
     <a href="http://www.aspectsecurity.com/research-presentations/the-unfortunate-reality-of-insecure-libraries">The Unfortunate Reality of Insecure Libraries</a>.
-
-    *TODO*: What about vendoring, where code is copied in with the
+    This partly deals with
+    vendoring, where code is copied in with the
     express intent of *only* using that copied version?
     (These are intentional forks.)  There's a risk of divergence
     and failure to apply security fixes both ways.

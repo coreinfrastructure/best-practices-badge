@@ -85,7 +85,9 @@ class UsersController < ApplicationController
   # The key is the field that was changed, the value is [old, new]
   # We must cleanup, because password_digest stores changes even when
   # old and new have the same value (so we must remove it).
-  def cleanup_changes(changeset)
+  # In addition, because email values are encrypted, we have to separately
+  # report the old and new values if they changed.
+  def cleanup_changes(changeset, old_email, new_email)
     result = {}
     changeset.each do |key, change|
       # Only consider "change" if it is in the expected form [old, new]
@@ -93,14 +95,18 @@ class UsersController < ApplicationController
         result[key] = change if change[0] != change[1]
       end
     end
+    result['email'] = [old_email, new_email] unless old_email == new_email
     result
   end
 
   # rubocop: disable Metrics/AbcSize, Metrics/MethodLength
   def update
     @user = User.find(params[:id])
+    old_email = @user&.email_if_decryptable
     @user.assign_attributes(user_params)
-    changes = cleanup_changes(@user.changes)
+    changes = cleanup_changes(
+      @user.changes, old_email, @user.email_if_decryptable
+    )
     if @user.save
       # If user changed his own locale, switch to it.  It's possible for an
       # *admin* to change someone else's locale, in that case leave it alone.

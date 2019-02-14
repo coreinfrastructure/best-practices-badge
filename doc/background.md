@@ -1490,6 +1490,142 @@ Some of the organizations who reported on the badging program included:
 See <https://www.coreinfrastructure.org/programs/badge-program>
 for a high-level introduction to the badging program.
 
+## Silver and Gold criteria
+
+Here are some potential sources for criteria that need to be reviewed.
+
+Review these larger criteria sets for things to add:
+
+*   It would be quite plausible to add many requirements specific to security.
+    for example, it would be plausible to require that a system meet the
+    requirements (or a specified subset) of the
+    <a href="https://www.owasp.org/index.php/category:owasp_application_security_verification_standard_project">owasp application security verification standard project</a>
+    or the
+    <a href="https://software-security.sans.org/resources/swat">securing web application technologies (swat) checklist</a>.
+    note that both of these focus only on web applications.
+    These are:
+    - OWASP Application Security Verification Standard (ASVS)
+    "provides a basis for testing web application technical security
+    controls and also provides developers with a list of requirements
+    for secure development."
+
+    - SANS' Securing Web Application Technologies (SWAT) criteria.
+
+    In the future we might add some criteria that a project has to meet
+    some subset of (e.g., it must meet at least 3 of 5 criteria).
+
+### Considering as criteria for silver/gold in the future
+
+*   Developers contributing a majority of the software
+    (over 50%) have learned how to develop secure software.
+    Kevin Wall asked this question: "Exactly how would you measure
+    that? Do you just except them to have some security-related
+    certification or take some specific course or what?"
+    Also, who are the "developers" - do they include drive-by contributions?
+
+### Probably not for silver/gold
+
+*   Public advisories issued for vulnerabilities,
+    this could include advisories on the <https://SOMEWHERE/security> page
+    and/or an "Announcement" mailing list for new versions
+    (at least for security updates).
+    Often projects don't know (or are unsure) if they have vulnerabilities.
+
+*   Automated regression test suite includes at least one check for
+    rejection of invalid data for each input field.
+
+    *Rationale*:   Many regression test suites check only for perfect data;
+    attackers will instead provide invalid data, and programs need to
+    protect themselves against it.
+    However, on many projects this would be a hard burden, and it's
+    not clear it's necessarily worth it (there are diminishing returns).
+
+*   (Node.js)
+    We're considering requiring GPG signing of all of their commits as well.
+    Response: This is helpful, but somewhat onerous to *require*,
+    especially for projects with a large number of commits.
+
+*   Standard security advisory template and a pre-notification process
+    (useful for big projects; see Xen project as an example).
+
+*   Privacy requirements.  The distribution system does not reveal to
+    third parties what software or version number is being distributed,
+    or to who.
+    The distribution system does not require users to identify
+    themselves nor does it perform passive machine fingerprinting.
+    Response: We'd like to add this, but the widespread use of
+    "app stores" makes this kind of requirement untenable in
+    many circumstances.  So we don't plan to add this.
+    Maybe the EFF can help?!?
+
+### Probably not: Security Code review ideas from liujin28
+
+liujin28 proposed some specifics for security code review in
+<a href="https://github.com/coreinfrastructure/best-practices-badge/pull/536">PR 536</a>
+
+*Response*: We think this is too detailed, and too restrictive to
+specific situations.  Instead, we would want to discuss review, and
+point to guidelines to follow (like CERT's).
+
+*   <a name="validate_the_tainted_array_index"></a>
+    The direct data
+    or the indirect data from the untrusted sources which is used as
+    the array index MUST be ensured within a legal range.
+    Input validation is always the best practices of secure coding.
+    (e.g., <a href="http://www.cert.org/secure-coding/research/secure-coding-standards.cfm">CERT</a>,
+    <a href="https://www.owasp.org/index.php/OWASP_Secure_Coding_Practices_-_Quick_Reference_Guide">OWASP</a>)
+    A lot of vulnerabilities related to this topic.
+    See the <a href="http://cwe.mitre.org/data/definitions/129.html">CWE</a>.
+    <sup>[<a href="#validate_the_tainted_array_index">validate_the_tainted_array_index</a>]</sup>
+
+*   <a name="validate_the_tainted_buffer_length"></a>
+    The direct data
+    or the indirect data from the untrusted sources which is used as
+    the buffer length for read/write MUST be ensured within a legal range.
+    Input validation is always the best practices of secure coding.
+    (e.g.,
+    <a href="http://www.cert.org/secure-coding/research/secure-coding-standards.cfm">CERT</a>,
+    <a href="https://www.owasp.org/index.php/OWASP_Secure_Coding_Practices_-_Quick_Reference_Guide">OWASP</a>)
+    A lot of vulnerabilities related to this topic.
+    See the <a href="http://cwe.mitre.org/data/definitions/119.html">CWE</a>.
+    <sup>[<a href="#validate_the_tainted_buffer_length">validate_the_tainted_buffer_length</a>]</sup>
+
+*   <a name="validate_the_tainted_loop_condiction"></a>
+    The direct data
+    or the indirect data from the untrusted sources which is used as
+    the loop ending condition MUST be avoided infinite loop or other logic mistake.
+    Input validation is always the best practices of secure coding.
+    (e.g., <a href="http://www.cert.org/secure-coding/research/secure-coding-standards.cfm">CERT</a>,
+    <a href="https://www.owasp.org/index.php/OWASP_Secure_Coding_Practices_-_Quick_Reference_Guide">OWASP</a>)
+    See the <a href="http://cwe.mitre.org/data/definitions/606.html">CWE</a>.
+    <sup>[<a href="#validate_the_tainted_loop_condiction">validate_the_tainted_loop_condiction</a>]</sup>
+*   <a name="validate_the_tainted_string"></a>
+    When copying from a string
+    that is not a trusted source, it MUST ensure
+    that there is enough space to hold the data and the end.
+    Input validation is always the best practices of secure coding.
+    (e.g., <a href="http://www.cert.org/secure-coding/research/secure-coding-standards.cfm">CERT</a>,
+    <a href="https://www.owasp.org/index.php/OWASP_Secure_Coding_Practices_-_Quick_Reference_Guide)">OWASP</a>
+    See the <a href="http://cwe.mitre.org/data/definitions/120.html">CWE</a>.
+    <sup>[<a href="#validate_the_tainted_string">validate_the_tainted_string</a>]</sup>
+
+*   <a name="validate_the_tainted_integer_on_caculation"></a>
+    The integer values
+    from untrusted sources MUST be avoided the integer overflow or wraparound.
+    (e.g., <a href="http://www.cert.org/secure-coding/research/secure-coding-standards.cfm">CERT</a>,
+    <a href="https://www.owasp.org/index.php/OWASP_Secure_Coding_Practices_-_Quick_Reference_Guide)">OWASP</a>
+    See the <a href="http://cwe.mitre.org/data/definitions/190.html">CWE</a>.
+    <sup>[<a href="#validate_the_tainted_integer_on_caculation">validate_the_tainted_integer_on_caculation</a>]</sup>
+
+*   <a name="validate_the_malloc_size"></a>
+    Appropriate size limits
+    SHOULD be used to allocate memory from an unreliable source, and
+    MUST check the return value of the allocate function.
+    (e.g., <a href="http://www.cert.org/secure-coding/research/secure-coding-standards.cfm">CERT</a>,
+    <a href="https://www.owasp.org/index.php/OWASP_Secure_Coding_Practices_-_Quick_Reference_Guide)">OWASP</a>
+    See the <a href="http://cwe.mitre.org/data/definitions/789.html">CWE</a>.
+    <sup>[<a href="#validate_the_malloc_size">validate_the_malloc_size</a>]</sup>
+
 ## Bibliography
 
 Not all of these items are referenced directly, but they may still

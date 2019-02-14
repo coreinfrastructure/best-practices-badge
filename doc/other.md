@@ -166,7 +166,8 @@ Upgrade some "passing" level SHOULD and SUGGESTED:
       *NOTE*: We'd like this to always be true, but some vulnerabilities
       are hard to fix, so it's difficult to mandate this.
       We *could* require activities to actively work to fix it, and
-      that is worth considering - but would that really help users?
+      that is worth considering, but are uncertain that would really help users.
+      So we have left it this way.
 
 #### Upgrade: Analysis
 
@@ -852,8 +853,8 @@ Upgrade some "passing" level SHOULD and SUGGESTED:
     known vulnerabilities.  This is OWASP Top 10 (2013) number A9
     (using known vulnerable components).  See also
     <a href="http://www.aspectsecurity.com/research-presentations/the-unfortunate-reality-of-insecure-libraries">The Unfortunate Reality of Insecure Libraries</a>.
-
-    *TODO*: What about vendoring, where code is copied in with the
+    This partly deals with
+    vendoring, where code is copied in with the
     express intent of *only* using that copied version?
     (These are intentional forks.)  There's a risk of divergence
     and failure to apply security fixes both ways.
@@ -1208,25 +1209,22 @@ Upgrade some "passing" level SHOULD and SUGGESTED:
 
 *   Achieve the lower silver (passing+1) badge.
 
-### Upgrade of SHOULD and SUGGESTED
+### Upgrade of SHOULD and SUGGESTED (or not)
 
-*   FIXME - list of upgrades of SHOULD and SUGGESTED from passing and silver.
-
-    - E.g., MUST have bus factor of 2 or more.
-
-    - Change "report_tracker" to MUST, to require issue tracking.
-      Using GitHub issues meets this.
-      Note that the Linux kernel project has reported that this is very
-      hard to do at their scale.
-
-      NOTE: Kevin Wall thinks this should be at silver, not gold.
-
-    - We've done this specially for test_continuous_integration
+Here we list upgrades from silver.
+We also identify criteria that were not upgraded,
+but we discussed possibly upgrading them.
 
 #### Upgrade: Basics
 
+*   Upgrade bus_factor from SHOULD to MUST.
+    "The project MUST have a "bus factor" of 2 or more.
+    <sup>[<a href="#bus_factor">bus_factor</a>]</sup>
+
 *   Unchanged:
 
+    - dco
+    - accessibility
     - floss_license_osi -
       "It is SUGGESTED that any required license(s) be <a
       href="https://opensource.org/licenses">approved by the Open Source
@@ -1287,9 +1285,33 @@ Upgrade some "passing" level SHOULD and SUGGESTED:
       *NOTE*: Statement/branch coverage is covered separately; they are
       increased, so we are not changing the level of this one.
 
+    - build_preserve_debug
+
 #### Upgrade: Security
 
-*   Unchanged:
+*   Upgrade hardening from SHOULD to MUST.
+    "The project software MUST use hardening mechanisms
+    so software defects are less likely to result in security
+    vulnerabilities.  If the project does not produce software,
+    choose N/A."
+
+*   Upgrade crypto_used_network from SHOULD (NOT) to MUST (NOT).
+    "The project MUST NOT use
+    unencrypted network communication protocols (such as HTTP
+    and telnet) if there is an encrypted equivalent (e.g., HTTPS/TLS and SSH),
+    unless the user specifically requests or configures it.
+    (N/A allowed).
+    <sup>[<a href="#crypto_used_network">crypto_used_network</a>]</sup>
+
+*   Upgrade crypto_tls12 from SHOULD to MUST.
+    The project MUST, if it supports TLS, support at least TLS version 1.2.
+    Note that the predecessor of TLS was called SSL.
+    (N/A allowed).
+    <sup>[<a href="#crypto_tls12">crypto_tls12</a>]</sup>
+
+* Unchanged:
+
+    - crypto_agility
 
     - crypto_call -
       "If the project software is an application or library, and
@@ -1331,44 +1353,6 @@ Upgrade some "passing" level SHOULD and SUGGESTED:
     - static_analysis_often -
       "It is SUGGESTED that static source code analysis occur on every
       commit or at least daily."
-
-### Upgrade: silver to gold
-
-#### Upgrade: Basics
-
-*   Unchanged - dco, accessibility
-
-*   Upgrade bus_factor from SHOULD to MUST.
-    "The project MUST have a "bus factor" of 2 or more.
-    <sup>[<a href="#bus_factor">bus_factor</a>]</sup>
-
-#### Upgrade: Quality
-
-*   Unchanged - build_preserve_debug
-
-#### Upgrade: Security
-
-*   Upgrade hardening from SHOULD to MUST.
-    "The project software MUST use hardening mechanisms
-    so software defects are less likely to result in security
-    vulnerabilities.  If the project does not produce software,
-    choose N/A."
-
-*   Upgrade crypto_used_network from SHOULD (NOT) to MUST (NOT).
-    "The project MUST NOT use
-    unencrypted network communication protocols (such as HTTP
-    and telnet) if there is an encrypted equivalent (e.g., HTTPS/TLS and SSH),
-    unless the user specifically requests or configures it.
-    (N/A allowed).
-    <sup>[<a href="#crypto_used_network">crypto_used_network</a>]</sup>
-
-*   Upgrade crypto_tls12 from SHOULD to MUST.
-    The project MUST, if it supports TLS, support at least TLS version 1.2.
-    Note that the predecessor of TLS was called SSL.
-    (N/A allowed).
-    <sup>[<a href="#crypto_tls12">crypto_tls12</a>]</sup>
-
-*   Unchanged - crypto_agility
 
 ### Basics
 
@@ -1673,144 +1657,6 @@ Upgrade some "passing" level SHOULD and SUGGESTED:
 ### Analysis
 
 (No new criteria)
-
-## Potential sources for other criteria
-
-Here are some potential sources for criteria that need to be reviewed.
-
-Review these larger criteria sets for things to add:
-
-*   It would be quite plausible to add many requirements specific to security.
-    for example, it would be plausible to require that a system meet the
-    requirements (or a specified subset) of the
-    <a href="https://www.owasp.org/index.php/category:owasp_application_security_verification_standard_project">owasp application security verification standard project</a>
-    or the
-    <a href="https://software-security.sans.org/resources/swat">securing web application technologies (swat) checklist</a>.
-    note that both of these focus only on web applications.
-    These are:
-
-    - OWASP Application Security Verification Standard (ASVS)
-    "provides a basis for testing web application technical security
-    controls and also provides developers with a list of requirements
-    for secure development."
-
-    - SANS' Securing Web Application Technologies (SWAT) criteria.
-
-    In the future we might add some criteria that a project has to meet
-    some subset of (e.g., it must meet at least 3 of 5 criteria).
-
-## Still considering as criteria
-
-*   Developers contributing a majority of the software
-    (over 50%) have learned how to develop secure software.
-    Kevin Wall asked this question: "Exactly how would you measure
-    that? Do you just except them to have some security-related
-    certification or take some specific course or what?"
-    Also, who are the "developers" - do they include drive-by contributions?
-
-## Probably not
-
-*   Public advisories issued for vulnerabilities,
-    this could include advisories on the <https://SOMEWHERE/security> page
-    and/or an "Announcement" mailing list for new versions
-    (at least for security updates).
-    Often projects don't know (or are unsure) if they have vulnerabilities.
-
-*   Automated regression test suite includes at least one check for
-    rejection of invalid data for each input field.
-
-    *Rationale*:   Many regression test suites check only for perfect data;
-    attackers will instead provide invalid data, and programs need to
-    protect themselves against it.
-    However, on many projects this would be a hard burden, and it's
-    not clear it's necessarily worth it (there are diminishing returns).
-
-*   (Node.js)
-    We're considering requiring GPG signing of all of their commits as well.
-    Response: This is helpful, but somewhat onerous to *require*,
-    especially for projects with a large number of commits.
-
-*   Standard security advisory template and a pre-notification process
-    (useful for big projects; see Xen project as an example).
-
-*   Privacy requirements.  The distribution system does not reveal to
-    third parties what software or version number is being distributed,
-    or to who.
-    The distribution system does not require users to identify
-    themselves nor does it perform passive machine fingerprinting.
-    Response: We'd like to add this, but the widespread use of
-    "app stores" makes this kind of requirement untenable in
-    many circumstances.  So we don't plan to add this.
-    Maybe the EFF can help?!?
-
-### Probably not: Security Code review ideas from liujin28
-
-liujin28 proposed some specifics for security code review in
-<a href="https://github.com/coreinfrastructure/best-practices-badge/pull/536">PR 536</a>
-
-*Response*: We think this is too detailed, and too restrictive to
-specific situations.  Instead, we would want to discuss review, and
-point to guidelines to follow (like CERT's).
-
-*   <a name="validate_the_tainted_array_index"></a>
-    The direct data
-    or the indirect data from the untrusted sources which is used as
-    the array index MUST be ensured within a legal range.
-    Input validation is always the best practices of secure coding.
-    (e.g., <a href="http://www.cert.org/secure-coding/research/secure-coding-standards.cfm">CERT</a>,
-    <a href="https://www.owasp.org/index.php/OWASP_Secure_Coding_Practices_-_Quick_Reference_Guide">OWASP</a>)
-    A lot of vulnerabilities related to this topic.
-    See the <a href="http://cwe.mitre.org/data/definitions/129.html">CWE</a>.
-    <sup>[<a href="#validate_the_tainted_array_index">validate_the_tainted_array_index</a>]</sup>
-
-*   <a name="validate_the_tainted_buffer_length"></a>
-    The direct data
-    or the indirect data from the untrusted sources which is used as
-    the buffer length for read/write MUST be ensured within a legal range.
-    Input validation is always the best practices of secure coding.
-    (e.g.,
-    <a href="http://www.cert.org/secure-coding/research/secure-coding-standards.cfm">CERT</a>,
-    <a href="https://www.owasp.org/index.php/OWASP_Secure_Coding_Practices_-_Quick_Reference_Guide">OWASP</a>)
-    A lot of vulnerabilities related to this topic.
-    See the <a href="http://cwe.mitre.org/data/definitions/119.html">CWE</a>.
-    <sup>[<a href="#validate_the_tainted_buffer_length">validate_the_tainted_buffer_length</a>]</sup>
-
-*   <a name="validate_the_tainted_loop_condiction"></a>
-    The direct data
-    or the indirect data from the untrusted sources which is used as
-    the loop ending condition MUST be avoided infinite loop or other logic mistake.
-    Input validation is always the best practices of secure coding.
-    (e.g., <a href="http://www.cert.org/secure-coding/research/secure-coding-standards.cfm">CERT</a>,
-    <a href="https://www.owasp.org/index.php/OWASP_Secure_Coding_Practices_-_Quick_Reference_Guide">OWASP</a>)
-    See the <a href="http://cwe.mitre.org/data/definitions/606.html">CWE</a>.
-    <sup>[<a href="#validate_the_tainted_loop_condiction">validate_the_tainted_loop_condiction</a>]</sup>
-
-*   <a name="validate_the_tainted_string"></a>
-    When copying from a string
-    that is not a trusted source, it MUST ensure
-    that there is enough space to hold the data and the end.
-    Input validation is always the best practices of secure coding.
-    (e.g., <a href="http://www.cert.org/secure-coding/research/secure-coding-standards.cfm">CERT</a>,
-    <a href="https://www.owasp.org/index.php/OWASP_Secure_Coding_Practices_-_Quick_Reference_Guide)">OWASP</a>
-    See the <a href="http://cwe.mitre.org/data/definitions/120.html">CWE</a>.
-    <sup>[<a href="#validate_the_tainted_string">validate_the_tainted_string</a>]</sup>
-
-*   <a name="validate_the_tainted_integer_on_caculation"></a>
-    The integer values
-    from untrusted sources MUST be avoided the integer overflow or wraparound.
-    (e.g., <a href="http://www.cert.org/secure-coding/research/secure-coding-standards.cfm">CERT</a>,
-    <a href="https://www.owasp.org/index.php/OWASP_Secure_Coding_Practices_-_Quick_Reference_Guide)">OWASP</a>
-    See the <a href="http://cwe.mitre.org/data/definitions/190.html">CWE</a>.
-    <sup>[<a href="#validate_the_tainted_integer_on_caculation">validate_the_tainted_integer_on_caculation</a>]</sup>
-
-*   <a name="validate_the_malloc_size"></a>
-    Appropriate size limits
-    SHOULD be used to allocate memory from an unreliable source, and
-    MUST check the return value of the allocate function.
-    (e.g., <a href="http://www.cert.org/secure-coding/research/secure-coding-standards.cfm">CERT</a>,
-    <a href="https://www.owasp.org/index.php/OWASP_Secure_Coding_Practices_-_Quick_Reference_Guide)">OWASP</a>
-    See the <a href="http://cwe.mitre.org/data/definitions/789.html">CWE</a>.
-    <sup>[<a href="#validate_the_malloc_size">validate_the_malloc_size</a>]</sup>
 
 ## Improving the criteria
 

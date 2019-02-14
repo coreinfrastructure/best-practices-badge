@@ -25,3 +25,11 @@ ActiveSupport.to_time_preserves_timezone = false
 
 # Require `belongs_to` associations by default. Previous versions had false.
 Rails.application.config.active_record.belongs_to_required_by_default = false
+
+# To improve security, Rails 5.2.* embeds the expiry information
+# also in encrypted or signed cookies value.
+# This new embed information make those cookies incompatible with
+# versions of Rails older than 5.2.
+# That would log off users who are trying to save values, so disable for now.
+Rails.application.config.action_dispatch.use_authenticated_cookie_encryption =
+  false

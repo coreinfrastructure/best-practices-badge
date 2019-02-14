@@ -422,6 +422,23 @@ class Project < ApplicationRecord
     #   Use: projects.order("COALESCE(last_reminder_at, updated_at)")
     #   We cannot check if email includes "@" here, because they are
     #   encrypted (the database does not have access to the keys, by intent).
+    #
+    # The "reorder" below uses "Arel.sql" to work around
+    # a deprecation warning from Rails 5.2, and
+    # is not expected to work in Rails 6.  The warning is as follows:
+    # DEPRECATION WARNING: Dangerous query method
+    # (method whose arguments are used as raw SQL) called with
+    # non-attribute argument(s): "COALESCE(last_reminder_at,
+    # projects.updated_at)". Non-attribute arguments will be
+    # disallowed in Rails 6.0. This method should not be called with
+    # user-provided values, such as request parameters or model
+    # attributes. Known-safe values can be passed by wrapping
+    # them in Arel.sql().
+    # For now we'll wrap them as required.  This is unfortunate; it would
+    # dangerous if user-provided data was used, but that is not the case.
+    # We're hoping Rails 6 will give us an alternative construct.
+    # If not, alternatives include creating a calculated field
+    # (e.g., one that does the coalescing).
     Project
       .select('projects.*, users.encrypted_email as user_encrypted_email')
       .where('badge_percentage_0 < 100')
@@ -435,7 +452,7 @@ class Project < ApplicationRecord
       .joins(:user).references(:user) # Need this to check email address
       .where('user_id IS NOT NULL') # Safety check
       .where('users.encrypted_email IS NOT NULL')
-      .reorder('COALESCE(last_reminder_at, projects.updated_at)')
+      .reorder(Arel.sql('COALESCE(last_reminder_at, projects.updated_at)'))
       .first(MAX_REMINDERS)
   end
   # rubocop:enable Metrics/AbcSize, Metrics/MethodLength

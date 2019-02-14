@@ -89,7 +89,7 @@ class UsersControllerTest < ActionController::TestCase
     refute_includes @response.body, '%40example.com'
     refute_includes @response.body, '@example.com'
     assert_equal 'noindex', @response.headers['X-Robots-Tag']
-    assert_equal 'no-cache, no-store, must-revalidate',
+    assert_equal 'no-cache, no-store',
                  @response.headers['Cache-Control']
   end
 

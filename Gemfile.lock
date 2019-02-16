@@ -213,7 +213,7 @@ GEM
       minitest-capybara (~> 0.8)
       minitest-metadata (~> 0.6)
       minitest-rails (~> 3.0)
-    minitest-reporters (1.3.4)
+    minitest-reporters (1.3.6)
       ansi
       builder
       minitest (>= 5.0)
@@ -487,7 +487,7 @@ DEPENDENCIES
   mail (= 2.7.1)
   mdl (= 0.4.0)
   minitest-rails-capybara (= 3.0.1)
-  minitest-reporters (= 1.3.4)
+  minitest-reporters (= 1.3.6)
   minitest-retry (= 0.1.9)
   octokit (= 4.9.0)
   omniauth-github (= 1.3.0)

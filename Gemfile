@@ -89,7 +89,7 @@ end
 group :test do
   gem 'capybara-slow_finder_errors', '0.1.4', require: false
   gem 'chromedriver-helper', '1.2.0', require: false
-  gem 'codecov', '0.1.10', require: false
+  gem 'codecov', '0.1.14', require: false
   gem 'minitest-rails-capybara', '3.0.1', require: false
   gem 'minitest-reporters', '1.3.4', require: false
   gem 'minitest-retry', '0.1.9', require: false # Avoid Capybara false positives

@@ -20,7 +20,7 @@ gem 'coffee-rails', '4.2.2', require: false # CoffeeScript Javascript preproc
 gem 'fastly-rails', '0.8.0'
 gem 'font-awesome-rails', '4.7.0.4'
 gem 'http_accept_language', '2.1.1' # Determine user's preferred locale
-gem 'httparty', '0.16.3' # HTTP convenience. rake fix_use_gravatar
+gem 'httparty', '0.16.4' # HTTP convenience. rake fix_use_gravatar
 gem 'imagesLoaded_rails', '4.1.0' # JavaScript - enable wait for image load
 gem 'jbuilder', '2.8.0' # Template mechanism for JSON format results
 gem 'jquery-rails', '4.3.3' # JavaScript jQuery library (for Rails)
@@ -57,12 +57,12 @@ group :development, :test do
   gem 'json', '2.1.0'
   gem 'license_finder', '5.6.0'
   gem 'mdl', '0.4.0'
-  gem 'pronto', '0.9.5'
+  gem 'pronto', '0.10.0'
   # TODO: Use pronto-railroader, once there is one.
   # gem 'pronto-brakeman', '0.9.1'
-  gem 'pronto-eslint', '0.9.1'
-  gem 'pronto-rails_best_practices', '0.9.0'
-  gem 'pronto-rubocop', '0.9.0'
+  gem 'pronto-eslint', '0.10.0'
+  gem 'pronto-rails_best_practices', '0.10.0'
+  gem 'pronto-rubocop', '0.10.0'
   gem 'railroader', '4.3.4' # Security static analyzer. OSS fork of Brakeman
   gem 'rubocop', '0.52.1' # Style checker.  Changes can cause test failure
   gem 'ruby-graphviz', '1.2.4' # This is used for bundle viz

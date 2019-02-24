@@ -11,7 +11,7 @@ ruby File.open('.ruby-version', 'rb') { |f| f.read.chomp }
 gem 'attr_encrypted', '3.1.0' # Encrypt email addresses
 gem 'bcrypt', '3.1.12' # Security - for salted hashed interated passwords
 gem 'blind_index', '0.3.4' # Index encrypted email addresses
-gem 'bootstrap-sass', '3.3.7'
+gem 'bootstrap-sass', '3.4.1'
 gem 'bootstrap-social-rails', '4.12.0'
 gem 'bootstrap-will_paginate', '1.0.0'
 gem 'bootstrap_form', '2.7.0'
@@ -95,7 +95,7 @@ group :test do
   gem 'minitest-retry', '0.1.9', require: false # Avoid Capybara false positives
   gem 'poltergeist', '1.18.1', require: false
   gem 'rails-controller-testing', '1.0.4' # need to require this one
-  gem 'selenium-webdriver', '3.14.0', require: false
+  gem 'selenium-webdriver', '3.141.0', require: false
   gem 'simplecov', '0.16.1', require: false
   gem 'webmock', '3.4.2', require: false
 end

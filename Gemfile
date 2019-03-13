@@ -37,7 +37,7 @@ gem 'puma', '3.12.0' # Faster webserver; recommended by Heroku
 gem 'rack-attack', '5.4.2' # Implement rate limiting
 gem 'rack-cors', '1.0.2' # Enable CORS so JavaScript clients can get JSON
 gem 'rack-headers_filter', '0.0.1' # Filter out "dangerous" headers
-gem 'rails', '5.2.2' # Our web framework
+gem 'rails', '5.2.2.1' # Our web framework
 gem 'rails-i18n', '5.1.3' # Localizations for Rails built-ins
 gem 'redcarpet', '3.4.0' # Process markdown in form textareas (justifications)
 gem 'sass-rails', '5.0.7', require: false

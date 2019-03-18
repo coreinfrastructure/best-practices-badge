@@ -449,10 +449,20 @@ class ProjectsController < ApplicationController
   # rubocop:disable Style/MethodCalledOnDoEndBlock
   def repo_data
     github = Octokit::Client.new access_token: session[:user_token]
-    Octokit.auto_paginate = true
-    return if github.repos.blank?
+    # If we enable auto_pagination we get a list of all the repos, but it
+    # appears that GitHub sometimes hangs in those cases if the user has
+    # a large number of repos.  GitHub itself uses Rails, and Rails doesn't
+    # normally stream JSON output, which is fine for small datasets but
+    # can lead timeouts on larger datasets.
+    # Thus, we no longer enable auto_paginate.
+    # This means that the call to github.repos will only return the first 30:
+    # https://developer.github.com/v3/#pagination
+    # We could set per_page to value other than 30 if we wanted to.
+    Octokit.auto_paginate = false
+    repos = github.repos
+    return if repos.blank?
 
-    github.repos.map do |repo|
+    repos.map do |repo|
       [repo.full_name, repo.fork, repo.homepage, repo.html_url]
     end.compact
   end

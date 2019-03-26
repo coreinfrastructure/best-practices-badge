@@ -24,6 +24,9 @@ along with some more general information about developing secure software:
 ["How to Develop Secure Applications: The BadgeApp Example" by David A. Wheeler, 2017-09-18](https://www.youtube.com/watch?v=5a5D4d6hcEY).
 For more information on developing secure software, see
 ["Secure Programming HOWTO" by David A. Wheeler](http://www.dwheeler.com/secure-programs/).
+[_A Sample Security Assurance Case Pattern_ by David A. Wheeler (2018)](https://www.ida.org/idamedia/Corporate/Files/Publications/IDA_Documents/ITSD/2019/P-9278.pdf)
+shows how to create an assurance case for your project, using
+a version of this assurance case as an example.
 
 ## Assurance case summary
 

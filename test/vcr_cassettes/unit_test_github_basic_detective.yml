@@ -144,4 +144,75 @@ http_interactions:
       string: '{"Python":43}'
     http_version: 
   recorded_at: Sun, 07 Apr 2019 00:32:56 GMT
+- request:
+    method: get
+    uri: https://api.github.com/repos/ciitest/test-repo/languages?client_id=3e90194c70b57b71188e&client_secret=d2e3f002838f611a514b84a1727bf6e500a67d2b
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/vnd.github.v3+json
+      User-Agent:
+      - Octokit Ruby Gem 4.9.0
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - GitHub.com
+      Date:
+      - Sun, 07 Apr 2019 22:36:32 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Content-Length:
+      - '13'
+      Status:
+      - 200 OK
+      X-Ratelimit-Limit:
+      - '5000'
+      X-Ratelimit-Remaining:
+      - '4999'
+      X-Ratelimit-Reset:
+      - '1554680192'
+      Cache-Control:
+      - public, max-age=60, s-maxage=60
+      Vary:
+      - Accept
+      Etag:
+      - '"bf576b13d7017f312a2ff759c9c7d512"'
+      Last-Modified:
+      - Mon, 06 Aug 2018 03:25:38 GMT
+      X-Github-Media-Type:
+      - github.v3; format=json
+      Access-Control-Expose-Headers:
+      - ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining,
+        X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval,
+        X-GitHub-Media-Type
+      Access-Control-Allow-Origin:
+      - "*"
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      X-Frame-Options:
+      - deny
+      X-Content-Type-Options:
+      - nosniff
+      X-Xss-Protection:
+      - 1; mode=block
+      Referrer-Policy:
+      - origin-when-cross-origin, strict-origin-when-cross-origin
+      Content-Security-Policy:
+      - default-src 'none'
+      X-Github-Request-Id:
+      - D526:5EF1:48F99F:990932:5CAA7B70
+    body:
+      encoding: UTF-8
+      string: '{"Python":43}'
+    http_version: 
+  recorded_at: Sun, 07 Apr 2019 22:36:32 GMT
 recorded_with: VCR 4.0.0

@@ -145,6 +145,7 @@ class ProjectsControllerTest < ActionController::TestCase
     assert_equal 'Operating system for Pathfinder rover', body['description']
     assert_equal 'https://www.nasa.gov', body['homepage_url']
     assert_equal 'in_progress', body['badge_level']
+    assert_equal [], body['additional_rights']
   end
 
   test 'should get edit' do

@@ -64,6 +64,16 @@ VCR.configure do |config|
   config.ignore_localhost = true
   config.cassette_library_dir = 'test/vcr_cassettes'
   config.hook_into :webmock
+  # Sometimes we have the "same" query but with and without per_page=...
+  # query values.  Record both variants by recording new_episodes:
+  config.default_cassette_options = { record: :new_episodes }
+  # Default :match_requests_on => [:method, :uri]
+  # You can also match on: scheme, port, method, host, path, query
+  # You can create new matchers like this:
+  # config.register_request_matcher :query_skip_changers do |r1, r2|
+  #   URI(r1.uri).query == URI(r2.uri).query
+  # end
+  # config.match_on [:skip_changers]
 end
 
 require 'minitest/rails/capybara'

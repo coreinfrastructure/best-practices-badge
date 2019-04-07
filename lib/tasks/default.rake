@@ -179,10 +179,11 @@ end
 
 desc 'Check for trailing whitespace in latest proposed (git) patch.'
 task :whitespace_check do
+  EXCEPTIONS = ':!test/vcr_cassettes/*.yml'
   if ENV['CI'] # CircleCI modifies database.yml
-    sh "git diff --check -- . ':!config/database.yml'"
+    sh "git diff --check -- . ':!config/database.yml' #{EXCEPTIONS}"
   else
-    sh 'git diff --check'
+    sh "git diff --check -- . #{EXCEPTIONS}"
   end
 end
 

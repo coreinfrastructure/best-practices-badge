@@ -446,13 +446,33 @@ class ProjectsController < ApplicationController
     end
   end
 
+  # Maximum number of GitHub repos to retrieve when retrieving a list of
+  # repos about a given user.  Limit this to prevent timeouts.
+  # We have had past reports of problems when 80 repos are available, so
+  # set this to a lower number.
+  MAX_GITHUB_REPOS_FROM_USER = 50
+
   # rubocop:disable Style/MethodCalledOnDoEndBlock
   def repo_data
     github = Octokit::Client.new access_token: session[:user_token]
-    Octokit.auto_paginate = true
-    return if github.repos.blank?
+    # Take extra steps to prevent a timeout when retrieving repo data.
+    # If we enable auto_pagination we get a list of all the repos, but it
+    # appears that GitHub sometimes hangs in those cases if the user has
+    # a large number of repos.  David A. Wheeler suspects that problem is that
+    # GitHub itself uses Rails and Rails doesn't stream JSON output by default;
+    # that is fine for small datasets but can lead timeouts on larger datasets.
+    # Thus, we no longer enable auto_paginate.
+    # By default a call to github.repos will only return the first 30;
+    # we pass a per_page value to control this.  For more information, see:
+    # https://developer.github.com/v3/#pagination
+    Octokit.auto_paginate = false
+    repos = github.repos(sort: 'pushed', per_page: MAX_GITHUB_REPOS_FROM_USER)
+    return if repos.blank?
 
-    github.repos.map do |repo|
+    # Sort by name for user convenience:
+    repos.sort_by! { |v| v['full_name'] }
+
+    repos.map do |repo|
       [repo.full_name, repo.fork, repo.homepage, repo.html_url]
     end.compact
   end

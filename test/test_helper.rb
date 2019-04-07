@@ -64,14 +64,15 @@ VCR.configure do |config|
   config.ignore_localhost = true
   config.cassette_library_dir = 'test/vcr_cassettes'
   config.hook_into :webmock
-  # GET https://api.github.com/repos/ciitest/test-repo/languages?
-  # client_id=3e90194c70b57b71188e&
-  # client_secret=d2e3f002838f611a514b84a1727bf6e500a67d2b&per_page=100
+  # Sometimes we have the "same" query but with and without per_page=...
+  # query values.  Record both variants by recording new_episodes:
+  config.default_cassette_options = { record: :new_episodes }
   # Default :match_requests_on => [:method, :uri]
-  # scheme, port, method, host, path, query
-  config.register_request_matcher :query_skip_changers do |request_1, request_2|
-    URI(request_1.uri).query == URI(request_2.uri).query
-  end
+  # You can also match on: scheme, port, method, host, path, query
+  # You can create new matchers like this:
+  # config.register_request_matcher :query_skip_changers do |r1, r2|
+  #   URI(r1.uri).query == URI(r2.uri).query
+  # end
   # config.match_on [:skip_changers]
 end
 

@@ -64,6 +64,15 @@ VCR.configure do |config|
   config.ignore_localhost = true
   config.cassette_library_dir = 'test/vcr_cassettes'
   config.hook_into :webmock
+  # GET https://api.github.com/repos/ciitest/test-repo/languages?
+  # client_id=3e90194c70b57b71188e&
+  # client_secret=d2e3f002838f611a514b84a1727bf6e500a67d2b&per_page=100
+  # Default :match_requests_on => [:method, :uri]
+  # scheme, port, method, host, path, query
+  config.register_request_matcher :query_skip_changers do |request_1, request_2|
+    URI(request_1.uri).query == URI(request_2.uri).query
+  end
+  # config.match_on [:skip_changers]
 end
 
 require 'minitest/rails/capybara'

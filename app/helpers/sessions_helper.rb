@@ -98,7 +98,7 @@ module SessionsHelper
 
   def github_user_projects
     github = Octokit::Client.new access_token: session[:user_token]
-    Octokit.auto_paginate = true
+    github.auto_paginate = true
     github.repos.map(&:html_url).reject(&:blank?)
   end
 

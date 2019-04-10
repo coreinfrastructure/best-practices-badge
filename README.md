@@ -68,7 +68,7 @@ This is a summary of the passing criteria, with requirements in bold
   and [any API](doc/criteria.md#documentation_interface)**
 * **Have a** [distributed](doc/criteria.md#repo_distributed)
   **[public version control system](doc/criteria.md#repo_public),
-* including [changes between releases](doc/criteria.md#repo_interim)**:
+ including [changes between releases](doc/criteria.md#repo_interim)**:
   - **[Give each release a unique version](doc/criteria.md#version_unique)**, using
     [semantic versioning format](doc/criteria.md#version_semver)
   - **Give a [summary of changes for each release](doc/criteria.md#release_notes),

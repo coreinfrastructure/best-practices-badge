@@ -110,4 +110,9 @@ class ProjectsHelperTest < ActionView::TestCase
     #    assert_equal 'WRONG', tiered_percent_as_string(74)
     # end
   end
+
+  test 'Empty repo list works' do
+    empty_result = fork_and_original([])
+    assert_equal [[], []], empty_result
+  end
 end

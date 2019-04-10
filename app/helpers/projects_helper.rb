@@ -17,15 +17,20 @@ module ProjectsHelper
   )
   NO_REPOS = [[], []].freeze # No forks and no originals
 
+  # List original then forked Github projects, with headers
   def github_select
-    # List original then forked Github projects, with headers
-    fork_repos, original_repos = fork_and_original
+    retrieved_repo_data = repo_data # Get external data
+    fork_repos, original_repos = fork_and_original(retrieved_repo_data)
     original_header(original_repos) + original_repos +
       fork_header(fork_repos) + fork_repos
   end
 
-  def fork_and_original
-    repo_data.blank? ? NO_REPOS : repo_data.partition { |repo| repo[1] }
+  def fork_and_original(retrieved_repo_data)
+    if retrieved_repo_data.blank?
+      NO_REPOS
+    else
+      retrieved_repo_data.partition { |repo| repo[1] }
+    end
   end
 
   def original_header(original_repos)

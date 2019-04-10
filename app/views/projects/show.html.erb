@@ -1,5 +1,9 @@
 <% provide :nav_extras do %>
-    <% if can_edit? %>
+    <%
+      # Cache the value of "can_edit?".  In some cases it will cause us
+      # to query GitHub, and we don't want to make duplicate external requests
+      @cached_can_edit = can_edit?
+      if @cacned_can_edit %>
       <li><%= link_to Icon[:'fa-edit'] + t('.edit'), edit_project_path(@project, criteria_level: @criteria_level), rel: 'nofollow' %></li>
     <% end %>
     <% if can_control? %>
@@ -37,7 +41,7 @@
 <br><br>
 <p>
 <%= link_to t('.back'), projects_path %>
-<% if can_edit? %>
+<% if @cacned_can_edit %>
   <%= link_to t('.edit'), edit_project_path(@project), rel: 'nofollow' %>
 <% end %>
 <% if can_control? %>

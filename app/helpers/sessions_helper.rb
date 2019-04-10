@@ -123,20 +123,26 @@ module SessionsHelper
   # Returns true iff the current_user can *edit* the @project data.
   # This is a session helper because we use the session to ask GitHub
   # for the list of projects the user can edit.
-  # rubocop:disable Metrics/CyclomaticComplexity
   def can_edit?
     return false if current_user.nil?
     return true if can_control?
     return true if AdditionalRight.exists?(
       project_id: @project.id, user_id: current_user.id
     )
-    return true if
-      current_user.provider == 'github' &&
-      @project.repo_url? && github_user_projects.include?(@project.repo_url)
+    return true if can_current_user_edit_on_github?(@project.repo_url)
 
     false
   end
-  # rubocop:enable Metrics/CyclomaticComplexity
+
+  # Returns true iff the current_user can *edit* the @project repo
+  # according to GitHub.  We try to avoid calling GitHub if it is
+  # is obviously unnecessary.
+  def can_current_user_edit_on_github?(url)
+    current_user.provider == 'github' &&
+      url.present? &&
+      url.starts_with?('https://github.com/') &&
+      github_user_projects.include?(url)
+  end
 
   def in_development?
     hostname = ENV['PUBLIC_HOSTNAME']

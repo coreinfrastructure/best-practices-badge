@@ -1,9 +1,4 @@
 <% if logged_in? %>
-  <% if can_control? %>
-    <% provide :nav_extras do %>
-      <li><%= link_to Icon[:'fa-times-circle'] + t('.delete'), project_path(@project) + '/delete_form', rel: 'nofollow' %></li>
-    <% end %>
-  <% end %>
   <div class="row">
     <% if in_development? %>
     <div class="alert alert-danger alert-dismissable text-center">
@@ -15,7 +10,14 @@
       <div class="main-badge-ques"></div>
     </div>
     <div class="col-md-7 col-sm-6">
-      <h1 class="m-t-0 h2"><%= t('.edit_status') %></h1>
+      <h1 class="m-t-0 h2"><%= t('.edit_status') %>
+    <% if can_control? %>
+      &nbsp;&nbsp;<%= link_to Icon[:'fa-times-circle'] +
+            t('projects.show.delete'),
+            project_path(@project) + '/delete_form', rel: 'nofollow',
+            class: 'btn btn-danger' %>
+    <% end %>
+    </h1>
   <%= render "form_#{@criteria_level}", project: @project, is_disabled: false %>
 <% else %>
   <% flash.now[:danger] = t('users.please_log_in') %>

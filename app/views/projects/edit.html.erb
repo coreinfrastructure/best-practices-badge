@@ -1,4 +1,9 @@
 <% if logged_in? %>
+  <% if can_control? %>
+    <% provide :nav_extras do %>
+      <li><%= link_to Icon[:'fa-times-circle'] + t('.delete'), project_path(@project) + '/delete_form', rel: 'nofollow' %></li>
+    <% end %>
+  <% end %>
   <div class="row">
     <% if in_development? %>
     <div class="alert alert-danger alert-dismissable text-center">

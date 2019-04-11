@@ -1,14 +1,7 @@
-<% provide :nav_extras do %>
-    <%
-      # Cache the value of "can_edit?".  In some cases it will cause us
-      # to query GitHub, and we don't want to make duplicate external requests
-      @cached_can_edit = can_edit?
-      if @cacned_can_edit %>
+<% if logged_in? %>
+  <% provide :nav_extras do %>
       <li><%= link_to Icon[:'fa-edit'] + t('.edit'), edit_project_path(@project, criteria_level: @criteria_level), rel: 'nofollow' %></li>
-    <% end %>
-    <% if can_control? %>
-      <li><%= link_to Icon[:'fa-times-circle'] + t('.delete'), project_path(@project) + '/delete_form', rel: 'nofollow' %></li>
-    <% end %>
+  <% end %>
 <% end %>
 
 <div class="row">
@@ -38,15 +31,5 @@
   <%= t '.last_achieved_html', when: @project.achieved_passing_at %>
 <% end %>
 
-<br><br>
-<p>
-<%= link_to t('.back'), projects_path %>
-<% if @cacned_can_edit %>
-  <%= link_to t('.edit'), edit_project_path(@project), rel: 'nofollow' %>
-<% end %>
-<% if can_control? %>
-  <%= link_to t('.delete'), { action: :destroy, id: @project.id }, method: :delete, data: { confirm: t('.confirm_delete', project_id: @project.id) } %>
-<% end %>
-</p>
 </div>
 </div>

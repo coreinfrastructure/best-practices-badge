@@ -23,12 +23,12 @@
         <%= yield :nav_extras %>
         <li><%= link_to Icon[:'fa-list'] + t(:projects, scope: :layouts), projects_path %></li>
 
-        <% if logged_in? %>
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%=
-              Icon[:'fa-user']
-            %><%= t(:account, scope: :layouts) %><b class="caret"></b></a>
-            <ul class="dropdown-menu reverse-dropdown">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%=
+            Icon[:'fa-user']
+          %><%= t(:account, scope: :layouts) %><b class="caret"></b></a>
+          <ul class="dropdown-menu reverse-dropdown">
+            <% if logged_in? %>
               <li><%= link_to Icon[:'fa-address-card'] + t(:profile, scope: :layouts), current_user %></li>
               <% if current_user.provider == 'local' %>
                 <li><%= link_to t(:settings, scope: :layouts), edit_user_path(current_user) %></li>
@@ -37,12 +37,12 @@
               <li>
                 <%= link_to t(:logout_html, scope: :layouts), logout_path, method: "delete" %>
               </li>
-            </ul>
-          </li>
-        <% else %>
-          <li><%= link_to t(:signup_html, scope: :layouts), signup_path %></li>
-          <li><%= link_to t(:login_html, scope: :layouts), login_path %></li>
-        <% end %>
+            <% else %>
+              <li><%= link_to t(:signup_html, scope: :layouts), signup_path %></li>
+              <li><%= link_to t(:login_html, scope: :layouts), login_path %></li>
+            <% end %>
+          </ul>
+        </li>
         <% cache [I18n.locale, request.original_fullpath] do %>
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">

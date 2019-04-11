@@ -98,7 +98,7 @@ module SessionsHelper
 
   # Return true iff an html_url in array repo_list is url.
   def repo_url_in?(repo_list, url)
-    repo_list.any? { |project| project.html_url == url }
+    repo_list.any? { |project| project[:html_url] == url }
   end
 
   # Return true iff the current user can edit the given url.
@@ -115,8 +115,9 @@ module SessionsHelper
   #
   # The only way we've found that works for us is to ask GitHub to list the
   # repos this user can control, and then return true if there's a match.
-  def github_user_projects_include?(url)
-    github = Octokit::Client.new access_token: session[:user_token]
+  # The "client" parameter exists to simplify (unit) testing.
+  def github_user_projects_include?(url, client = Octokit::Client)
+    github = client.new access_token: session[:user_token]
     github.auto_paginate = false
     page = 1
     repo_list = github.repos # Read first page of list

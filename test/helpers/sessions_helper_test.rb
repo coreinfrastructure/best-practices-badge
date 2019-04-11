@@ -66,5 +66,48 @@ class SessionsHelperTest < ActionView::TestCase
                    'https://a.b/projects/1?criteria_level=2&locale=ja', :fr
                  )
   end
+
+  # Test stub for testing github_user_projects_include?
+  class StubOctokitError < StandardError
+  end
+  # rubocop: disable Metrics/MethodLength
+  class StubOctokitClient
+    def initialize(**params); end
+
+    def auto_paginate=(value); end
+
+    def repos(_user = nil, **opts)
+      page = opts.fetch(:page, 1)
+      if page == 1
+        [
+          { id: 100, html_url: 'https://github.com/ciitest/junk' },
+          { id: 101, html_url: 'https://github.com/ciitest/foo' }
+        ]
+      elsif page == 2
+        [{ id: 105, html_url: 'https://github.com/ciitest/stuff' }]
+      elsif page == 3
+        []
+      else
+        raise StubOctokitError
+      end
+    end
+  end
+  # rubocop: enable Metrics/MethodLength
+
+  # Unit test 'github_user_projects_include?'.
+  # Doing integration tests with "real" data is a little dangerous
+  # because that requires a user with a *lot* of repos; our test user
+  # doesn't have that many, and we don't want to use real users for testing.
+  # So we'll stub things out just enough to do a unit test.
+  test 'unit test of github_user_projects_include?' do
+    assert github_user_projects_include?(
+      'https://github.com/ciitest/stuff',
+      StubOctokitClient
+    )
+    assert !github_user_projects_include?(
+      'https://github.com/not-here/not-found',
+      StubOctokitClient
+    )
+  end
 end
 # rubocop: enable Metrics/BlockLength

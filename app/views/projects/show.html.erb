@@ -1,7 +1,7 @@
-<% if logged_in? %>
-  <% provide :nav_extras do %>
-      <li><%= link_to Icon[:'fa-edit'] + t('.edit'), edit_project_path(@project, criteria_level: @criteria_level), rel: 'nofollow' %></li>
-  <% end %>
+<%# Always show this, logged in or not. This makes it possible to
+    serve the entire page from the CDN %>
+<% provide :nav_extras do %>
+    <li><%= link_to Icon[:'fa-edit'] + t('.edit'), edit_project_path(@project, criteria_level: @criteria_level), rel: 'nofollow' %></li>
 <% end %>
 
 <div class="row">

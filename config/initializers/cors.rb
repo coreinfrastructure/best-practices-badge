@@ -26,7 +26,8 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
       '/projects', '/projects.json', '/projects/*',
       '/projects/**/*', '/project_stats*',
       '/en/projects', '/en/projects.json', '/en/projects/*',
-      '/en/projects/**/*', '/en/project_stats*'
+      '/en/projects/**/*', '/en/project_stats*',
+      '/users/*.json', '/en/users/*.json'
     ].freeze
     RESOURCE_PATTERNS.each do |resource_pattern|
       resource resource_pattern, headers: :any, methods: ALLOWED_METHODS

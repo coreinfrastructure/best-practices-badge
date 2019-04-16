@@ -113,6 +113,8 @@ class UsersControllerTest < ActionController::TestCase
     assert_response :success
     refute_includes @response.body, '%40example.com'
     refute_includes @response.body, '@example.com'
+    assert_equal 'no-cache, no-store',
+                 @response.headers['Cache-Control']
   end
 
   test 'JSON should NOT show email address when logged in as another user' do
@@ -120,6 +122,8 @@ class UsersControllerTest < ActionController::TestCase
     get :show, params: { id: @user, format: :json, locale: :en }
     assert_response :success
     refute_includes @response.body, 'example.com'
+    assert_equal 'no-cache, no-store',
+                 @response.headers['Cache-Control']
   end
 
   # This is a change, due to the EU General Data Protection Regulation (GDPR)
@@ -133,6 +137,8 @@ class UsersControllerTest < ActionController::TestCase
     get :show, params: { id: @user, locale: :en }
     assert_response :success
     assert_includes @response.body, 'mailto:melissa%40example.com'
+    assert_equal 'no-cache, no-store',
+                 @response.headers['Cache-Control']
   end
 
   test 'should show email address when logged in as admin' do
@@ -140,6 +146,8 @@ class UsersControllerTest < ActionController::TestCase
     get :show, params: { id: @user, locale: :en }
     assert_response :success
     assert_includes @response.body, 'mailto:melissa%40example.com'
+    assert_equal 'no-cache, no-store',
+                 @response.headers['Cache-Control']
   end
 
   test 'JSON should show email address when logged in as admin' do
@@ -147,6 +155,8 @@ class UsersControllerTest < ActionController::TestCase
     get :show, params: { id: @user, format: :json, locale: :en }
     assert_response :success
     assert_includes @response.body, 'melissa@example.com'
+    assert_equal 'no-cache, no-store',
+                 @response.headers['Cache-Control']
   end
 
   test 'should redirect edit when not logged in' do

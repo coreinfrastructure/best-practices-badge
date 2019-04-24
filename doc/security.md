@@ -179,7 +179,86 @@ to bypass the mechanisms discussed below.
 
 ### Confidentiality
 
-#### Almost all data not confidential
+#### User privacy maintained
+
+One of our key requirements is to
+"protect users and their privacy".
+Here is a brief discussion on how we do that.
+
+First, the basics.
+We work hard to comply with the
+EU General Data Protection Regulation (GDPR), which has many requirements
+related to privacy.
+We have a separate document that details how we comply with the GDPR.
+As discussed later, non-public data is kept confidential
+both at rest and in motion
+(in particular, email addresses are protected).
+
+Part of our privacy requirement is that we
+"don't expose user activities to unrelated sites (including social media
+sites) without that user's consent";
+here is how we do that.
+
+We must first define what we mean by an unrelated site.
+A "related" site is a site that we are directly using to provide our service,
+in particular our cloud provider (Heroku which runs on
+Amazon's EC2 cloud-computing platform), CDN provider (Fastly),
+authorization services provider (GitHub), and logging / intrusion detection
+service.
+As a practical matter, related sites must (under various circumstances)
+receive some information about the user (at least that the user
+is trying to do something).
+In those cases we have selected partners we believe are trustworthy, and
+we have a direct relationship with them.
+
+However, there is no reason unrelated sites
+*must* see what our users are doing,
+so we take many steps to prevent unrelated sites from
+learning about our users' activities (and thus maintaining user privacy):
+
+* We directly serve all our assets ourselves,
+  including JavaScipt, images, and fonts.
+  Since we serve them ourselves, and never serve information via external
+  third parties,
+  external sites never receive any request from a user that might
+  impact that user's privacy.  This is enforced by our CSP policy.
+* We do not serve ads and do not currently plan to.
+  That said, if we did serve ads, we would also serve them from our site,
+  just like any other asset, to ensure that third parties did not receive
+  unauthorized information.
+* We do not use any web analytics service that uses tracking codes or
+  external assets.
+  We log and store logs using only services we control or have a direct
+  partnership with.
+* We do have links to social media sites (e.g., from the home page), but we
+  do this in a privacy-respecting manner.
+  It would be easy to use techniques like embedding images
+  from external (third party) social media sites,
+  but we intentionally do not do that, because that would expose to an
+  external unrelated site what our users are doing without their knowledge.
+  We instead use the approach described in
+  ["Responsible Social Share Links" by Jonathan Suh (March 26, 2015), specifically using share URLs](https://jonsuh.com/blog/social-share-links/#use-share-urls).
+  In this approach, if a user does not press the link,
+  the social media site never receives any information.
+  Instead, a social media site
+  *only* receives information when the user takes a direct action to
+  request it (e.g., a click), and that site only receives information from
+  the specific user who requested it.
+
+Of course, to access the Internet the user must use various services and
+computers, and some of those could be privacy-exposing.
+For example, the user must make a request to a DNS service to find our
+service, and user requests must transit multiple Internet routers.
+We cannot control what users choose to use; instead, we ensure that
+users can choose what services and computers they will trust.
+The BadgeApp does not filter out any particular source
+(other than temporary blocks if the source becomes a source of attack).
+Therefore, users who do not want their activities monitored
+could choose to use a network and computer they trust,
+a Virtual Private Network (VPN), or an anonymity network such as Tor
+to provide additional privacy when they interact with the BadgeApp.
+
+#### Almost all data is not confidential
 
 We try to store as little confidential information as we reasonably can,
 as this limits the impact of any confidentiality breach.
@@ -1812,7 +1891,7 @@ We use the gem `attr_encrypted` to encrypt email addresses, and
 gem `blind_index` to index encrypted email addresses.
 This approach builds on standard general-purpose approaches for
 encrypting data and indexing the data, e.g., see
-["How to Search on Securely Encrypted Database Fields" by By Scott Arciszewski](https://www.sitepoint.com/how-to-search-on-securely-encrypted-database-fields/).
+["How to Search on Securely Encrypted Database Fields" by Scott Arciszewski](https://www.sitepoint.com/how-to-search-on-securely-encrypted-database-fields/).
 The important aspect here is that we encrypt the data (so it cannot be
 revealed by those without the encryption key),
 and we also create cryptographic keyed hashes of the data (so

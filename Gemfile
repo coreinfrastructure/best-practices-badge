@@ -63,7 +63,7 @@ group :development, :test do
   gem 'pronto-eslint', '0.10.0'
   gem 'pronto-rails_best_practices', '0.10.0'
   gem 'pronto-rubocop', '0.10.0'
-  gem 'railroader', '4.3.4' # Security static analyzer. OSS fork of Brakeman
+  gem 'railroader', '4.3.5' # Security static analyzer. OSS fork of Brakeman
   gem 'rubocop', '0.52.1' # Style checker.  Changes can cause test failure
   gem 'ruby-graphviz', '1.2.4' # This is used for bundle viz
   gem 'spring', '2.0.2' # Preloads app so console, rake, and tests run faster

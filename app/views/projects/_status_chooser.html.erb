@@ -18,6 +18,7 @@
     <div class="col-md-3 col-sm-4 col-xs-4 criteria-radio<%= crypto_class %>">
       <div class="status-chooser">
       <%= f.form_group status_symbol do %>
+        <a href="#<%= criterion.to_s %>">
         <%#
                        !!!!!  IMPORTANT  !!!!!
           The functionality below is mirrored in assets/project-form.js
@@ -52,6 +53,7 @@
                 ) %>
           <% end %>
         <%#            !!!!!!!!!!!!!!!!!!!!!!!            %>
+        </a>
         </div>
         <div class="col-xs-4 col-xs-offset-2 col-sm-offset-1 text-left block-left">
           <fieldset>

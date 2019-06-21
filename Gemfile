@@ -29,6 +29,18 @@ gem 'lograge', '0.10.0' # Simplify logs
 gem 'mail', '2.7.1' # Ruby mail handler
 gem 'octokit', '4.9.0' # GitHub's official Ruby API
 gem 'omniauth-github', '1.3.0' # Authentication to GitHub (get project info)
+#
+# Counter CVE-2015-9284 in omniauth.  Unfortunately, at the time of this
+# writing the omniauth folks STILL have not fixed it (!). There is a shim
+# by a third party that *does* fix it. I don't know the person who created
+# this shim, but I reviewed the code and it looks okay.  I could do this:
+# gem 'omniauth-rails_csrf_protection', '0.1.2' # Counter CVE-2015-9284
+# But to provide a stronger guarantee that what I reviewed is what will
+# be loaded, I'm specifying a specific hash reference.  That's no
+# guarantee, but it does make attacks harder to perform.
+gem 'omniauth-rails_csrf_protection',
+    git: 'https://github.com/cookpad/omniauth-rails_csrf_protection.git',
+    ref: 'b33ff2e57f7c0530da76da6b4b358218f1e7f230'
 gem 'paleta', '0.3.0' # Color manipulation, used for badges
 gem 'paper_trail', '9.0.1' # Record previous versions of project data
 gem 'pg', '1.0.0' # PostgreSQL database, used for data storage
@@ -63,7 +75,7 @@ group :development, :test do
   gem 'pronto-eslint', '0.10.0'
   gem 'pronto-rails_best_practices', '0.10.0'
   gem 'pronto-rubocop', '0.10.0'
-  gem 'railroader', '4.3.4' # Security static analyzer. OSS fork of Brakeman
+  gem 'railroader', '4.3.8' # Security static analyzer. OSS fork of Brakeman
   gem 'rubocop', '0.52.1' # Style checker.  Changes can cause test failure
   gem 'ruby-graphviz', '1.2.4' # This is used for bundle viz
   gem 'spring', '2.0.2' # Preloads app so console, rake, and tests run faster

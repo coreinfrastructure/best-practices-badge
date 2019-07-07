@@ -74,6 +74,7 @@ find_command () {
 #         (1) otherwise
 add_to_path () {
   if [ -e "$1" ] ; then
+    # shellcheck disable=SC2039
     local pattern
     pattern="PATH=.*"$(echo "$3" | sed -e "s/\./\\\./g")
     if ! grep "$pattern" "$1" > /dev/null ; then
@@ -88,6 +89,10 @@ add_to_path () {
   fi
   false
   return
+}
+
+can_build_ruby () {
+  rbenv install -l | grep -q "^ *${ruby_version}\$"
 }
 
 ######################################################################
@@ -164,7 +169,9 @@ case "$manager" in
     # add_pkg autoconf bison build-essential libssl-dev libyaml-dev \
     #         libreadline6-dev zlib1g-dev libncurses5-dev libffi-dev \
     #         libgdbm3 libgdbm-dev
-    add_pkg ruby-build postgresql-server-dev-all postgresql \
+    add_pkg autoconf bison build-essential libssl-dev libyaml-dev \
+            libreadline6-dev zlib1g-dev libncurses5-dev libffi-dev \
+            libgdbm-dev postgresql-server-dev-all postgresql \
             postgresql-contrib cmake nodejs phantomjs graphviz \
             pkg-config;;
   yum|dnf)
@@ -259,7 +266,7 @@ else
   fi
 fi
 
-if [ $DO_LOCAL_RBENV = 'yes' ] ; then
+if [ "$DO_LOCAL_RBENV" = 'yes' ] ; then
   echo 'Downloading and installing rbenv from GitHub' >&2
   if ! [ -d ~/.rbenv ] ; then
     git clone git://github.com/rbenv/rbenv.git ~/.rbenv
@@ -268,7 +275,7 @@ if [ $DO_LOCAL_RBENV = 'yes' ] ; then
   (
   cd ~/.rbenv
   git fetch
-  git checkout 3997a394d975136f468be196941492d3d0ef5143
+  git checkout a3fa9b73b8e6907845bdf47d2c2924c187580bdc
   )
 fi
 
@@ -282,16 +289,6 @@ if [ "$DO_LOCAL_RBENV" = 'yes' ] ; then
   fi
   if [ ! -e "$shell_init" ] ; then
     echo 'Warning: rbenv PATH is not set up.' >&2
-  fi
-
-  # Install ruby-build, which lets "rbenv install" recompile versions of ruby.
-  # First, detect if ruby-build already exists.
-  if echo 'n' | LANG='en_US.UTF-8' rbenv install 2>&1 | grep -q 'already exists'
-  then
-    echo 'ruby-build already installed.'
-  else
-     git clone https://github.com/sstephenson/ruby-build.git \
-         "$HOME/.rbenv/plugins/ruby-build"
   fi
 fi
 
@@ -313,6 +310,13 @@ echo 'STAGE 4: For this project, force install fixed version of ruby'
 if [ "$MYINSTALL_RBENV" = 'yes' ] && is_command rbenv ; then
   # Get ruby version from Gemfile.
   ruby_version=$(cat .ruby-version)
+  if [ "$(uname)" != 'Darwin' ] && ! can_build_ruby; then
+    echo 'Updating ruby-build with GitHub version.'
+    git clone https://github.com/rbenv/ruby-build.git \
+        "$HOME/.rbenv/plugins/ruby-build"
+  else
+    echo 'ruby-build up to date.'
+  fi
   echo "Using rbenv to locally install ruby version ${ruby_version}"
   rbenv install --skip-existing "$ruby_version"
   rbenv local "$ruby_version" # In this directory AND BELOW, use this version.
@@ -325,13 +329,16 @@ echo
 echo 'STAGE 5: Install gems (including bundler and Rails)'
 
 gem sources --add https://rubygems.org  # Ensure you're getting gems here
+gem update --system
+# Tell rbenv about that
+if is_command rbenv ; then
+  rbenv rehash
+fi
 gem install bundler  # Install the "bundler" gem package manager.
-
 # If we're using rbenv, ensure it can find "bundle" and friends.
 if is_command rbenv ; then
   rbenv rehash
 fi
-
 bundle install       # Install gems we use in Gemfile.lock, including Rails
 
 # "bundle" installs additional commands - ensure we can find them,
@@ -385,7 +392,7 @@ if ! git config user.name > /dev/null ; then
   echo 'What is your human-readable name (Example: David A. Wheeler)?'
   # Ensures CircleCI doesn't get stuck
   if [ -z "$CIRCLECI" ]; then
-    read name
+    read -r name
   else
     name="circleci"
   fi
@@ -397,7 +404,7 @@ if ! git config user.name > /dev/null ; then
   echo 'What is your email address?'
   # Ensures CircleCI doesn't get stuck
   if [ -z "$CIRCLECI" ]; then
-    read email
+    read -r email
   else
     email="circleci@circleci.com"
   fi
@@ -420,6 +427,10 @@ fi
 # ActiveRecord::EnvironmentMismatchError
 # Running db:migrate in the test environment fixes the error.
 bin/rake db:migrate RAILS_ENV=test
+
+if [ -e "$shell_init" ] ; then
+  . "$shell_init"
+fi
 
 # Run the correct rake on CircleCI
 if [ -z "$CIRCLECI" ]; then

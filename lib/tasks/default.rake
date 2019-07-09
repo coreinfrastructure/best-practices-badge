@@ -116,7 +116,10 @@ task :bundle_audit do
         echo "Cannot update bundle-audit database; using current data."
       fi
       if [ "$apply_bundle_audit" = 't' ] ; then
-        bundle exec bundle audit check
+        # Ignore CVE-2015-9284 (omniauth); We have mitigated this with a
+        # third-party countermeasure (omniauth-rails_csrf_protection) in:
+        # https://github.com/coreinfrastructure/best-practices-badge/pull/1298
+        bundle exec bundle audit check --ignore CVE-2015-9284
       else
         true
       fi

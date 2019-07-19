@@ -125,6 +125,13 @@ having a single number represent broader progress, so we decided to
 implement this number as a "tiered percentage".
 We think it provides a useful measure of progress.
 
+If all you want is the badge level, we recommend using
+`badge_level` instead.
+This provides text that represents the currently earned badge level.
+Currently it is one of `in_progress`, `passing`, `silver`, or `gold`.
+If we add new badge levels (such as `platinum`) then it will provide
+that new value as appropriate.
+
 ## Sample program
 
 See the [best-practices.py](./best-practices.py) program to see an

@@ -25,6 +25,9 @@
   <% if current_user.provider == 'github'%>
      <h4><%= t '.may_select_html' %></h4>
      <br>
+     <!-- For convenience we provide a list of GitHub repos (sorted by
+          the datetime of their most recent push).  We limit the length
+          of this list to prevent a timeout.  -->
      <%= form_for(@project) do |f| %>
        <%= render 'shared/error_messages', object: f.object %>
        <%= f.collection_select :repo_url, github_select, :last, :first,

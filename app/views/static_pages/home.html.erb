@@ -145,9 +145,6 @@
               source: request.original_url,
               summary: t('static_pages.home.check_us_out')
             }.to_param.html_safe
-          googleplus_url =
-            'https://plus.google.com/share?' +
-            { url: request.original_url }.to_param.html_safe
           hacker_news_url = 'https://news.ycombinator.com/submitlink?' +
             {
               t: t('static_pages.home.check_us_out'),
@@ -178,10 +175,6 @@
         <a href="<%= linkedin_url %>" class="btn btn-lg btn-social-icon btn-linkedin btn-main-margin"><i class="fa fa-linkedin" aria-hidden="true"
         title="<%= t('static_pages.home.linkedin') %>"
         alt="<%= t('static_pages.home.linkedin') %>"></i></a>
-
-        <a href="<%= googleplus_url %>" class="btn btn-lg btn-social-icon btn-google btn-main-margin"><i class="fa fa-google-plus" aria-hidden="true"
-        title="<%= t('static_pages.home.googleplus') %>"
-        alt="<%= t('static_pages.home.googleplus') %>"></i></a>
 
         <a href="<%= hacker_news_url %>" class="btn btn-primary btn-lg btn-main-margin">&nbsp;<i class="fa fa-hacker-news" aria-hidden="true"
         title="<%= t('static_pages.home.hacker_news') %>"

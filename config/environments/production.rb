@@ -41,11 +41,25 @@ Rails.application.configure do
   config.assets.js_compressor = :uglifier
   config.assets.css_compressor = :sass
 
-  # Do not fallback to assets pipeline if a precompiled asset is missed.
-  config.assets.compile = true
+  # Do not allow "live compilation" using the assets pipeline
+  # if a precompiled asset is unavailable.  Instead, assets must be precompiled
+  # for the production environment.
+  # The Rails guide for the asset pipeline at
+  # https://guides.rubyonrails.org/asset_pipeline.html
+  # says that live compilation "uses more memory, performs more poorly
+  # than the default and is not recommended".
+  # Disabling live compilation is also recommended by Heroku's documentation
+  # at: https://devcenter.heroku.com/articles/rails-asset-pipeline#
+  # compile-set-to-true-in-production
+  # which says: "If you have enabled your application to config.assets.compile =
+  # true in production, your application might be very slow...
+  # This setting is also known to cause other run-time instabilities and is
+  # generally not recommended. Instead we recommend either precompiling all
+  # of your assets on deploy (which is the default)..."
+  config.assets.compile = false
 
   # Asset digests allow you to set far-future HTTP expiration dates on all
-  # assets, # yet still be able to expire them through the digest params.
+  # assets, yet still be able to expire them through the digest params.
   config.assets.digest = true
 
   # `config.assets.precompile` and `config.assets.version` have moved to
@@ -100,7 +114,8 @@ Rails.application.configure do
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).
-  config.i18n.fallbacks = true
+  # This is now handled by "initializers/i18n.rb"; see that file.
+  # config.i18n.fallbacks = true
 
   # Send deprecation notices to registered listeners.
   config.active_support.deprecation = :notify

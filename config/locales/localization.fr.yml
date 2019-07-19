@@ -7,7 +7,7 @@
 # You can edit and/or add new localization keys here, they won't be touched by Translation.io.
 #
 # If you want to add a new localization key prefix, use the option described here:
-# https://github.com/aurels/translation-gem#custom-localization-key-prefixes
+# https://github.com/translation/rails#custom-localization-key-prefixes
 #
 ---
 fr:
@@ -41,7 +41,7 @@ fr:
           unit: ''
       format:
         delimiter: ''
-        precision: 2
+        precision: '3'
         significant: true
         strip_insignificant_zeros: true
       storage_units:
@@ -92,8 +92,8 @@ fr:
   date:
     formats:
       default: "%d/%m/%Y"
-      short: "%e %b"
       long: "%e %B %Y"
+      short: "%e %b"
     order:
     - :day
     - :month

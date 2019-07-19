@@ -33,6 +33,10 @@ class ApplicationController < ActionController::Base
   # counters cloud piercing.
   before_action :validate_client_ip_address
 
+  # Use the new security header, "feature policy", to disable things
+  # we don't need.
+  before_action :add_feature_policy
+
   # Record user_id, e.g., so it can be recorded in logs
   # https://github.com/roidrage/lograge/issues/23
   def append_info_to_payload(payload)
@@ -162,6 +166,19 @@ class ApplicationController < ActionController::Base
 
     client_ip = request.remote_ip
     fail_if_invalid_client_ip(client_ip, Rails.configuration.valid_client_ips)
+  end
+
+  # Use the new security header, "feature policy", to disable things
+  # we don't need. It's already supported by Chrome and Safari.  See:
+  # https://scotthelme.co.uk/a-new-security-header-feature-policy/
+  def add_feature_policy
+    response.set_header(
+      'Feature-Policy',
+      "fullscreen 'none'; geolocation 'none'; midi 'none';" \
+      "notifications 'none'; push 'none'; sync-xhr 'none'; microphone 'none';" \
+      "camera 'none'; magnetometer 'none'; gyroscope 'none'; speaker 'none';" \
+      "vibrate 'none'; payment 'none'"
+    )
   end
 
   include SessionsHelper

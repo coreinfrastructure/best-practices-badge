@@ -64,6 +64,16 @@ VCR.configure do |config|
   config.ignore_localhost = true
   config.cassette_library_dir = 'test/vcr_cassettes'
   config.hook_into :webmock
+  # Sometimes we have the "same" query but with and without per_page=...
+  # query values.  Record both variants by recording new_episodes:
+  config.default_cassette_options = { record: :new_episodes }
+  # Default :match_requests_on => [:method, :uri]
+  # You can also match on: scheme, port, method, host, path, query
+  # You can create new matchers like this:
+  # config.register_request_matcher :query_skip_changers do |r1, r2|
+  #   URI(r1.uri).query == URI(r2.uri).query
+  # end
+  # config.match_on [:skip_changers]
 end
 
 require 'minitest/rails/capybara'
@@ -76,6 +86,7 @@ Capybara.server_port = 31_337
 # https://robots.thoughtbot.com/headless-feature-specs-with-chrome
 
 require 'selenium/webdriver'
+require 'webdrivers/chromedriver'
 
 # Register "chrome" driver - use it via Selenium.
 Capybara.register_driver :chrome do |app|
@@ -97,15 +108,6 @@ Capybara.register_driver :headless_chrome do |app|
   )
   driver.browser.download_path = Capybara.save_path
   driver
-end
-
-# Register "firefox" driver - use it via Selenium.
-# *Using* this firefox driver requires that Firefox and geckodriver
-# be installed on the PATH. For more on how to do this, see:
-# https://developer.mozilla.org/en-US/docs/Web/WebDriver
-# https://github.com/mozilla/geckodriver/releases
-Capybara.register_driver :firefox do |app|
-  Capybara::Selenium::Driver.new(app, browser: :firefox)
 end
 
 # Note that DRIVER only controls the Capybara javascript_driver.

@@ -446,17 +446,49 @@ class ProjectsController < ApplicationController
     end
   end
 
-  # rubocop:disable Style/MethodCalledOnDoEndBlock
+  # Maximum number of GitHub repos to retrieve when retrieving a list of
+  # repos about a given user.  Limit this to prevent timeouts.
+  # We have had past reports of problems when 80 repos are available, so
+  # set this to a lower number.
+  MAX_GITHUB_REPOS_FROM_USER = 50
+
+  # Retrieve a set of (GitHub) repositories managed by the current user.
+  # We intentionally retrieve a subset (to self-protect from overlong lists
+  # that might lead to a timeout), so we prioritize recently pushed repos.
+  # We omit repos that are already pursuing a badge.
+  # rubocop:disable Style/MethodCalledOnDoEndBlock, Metrics/MethodLength
   def repo_data
     github = Octokit::Client.new access_token: session[:user_token]
-    Octokit.auto_paginate = true
-    return if github.repos.blank?
+    # Take extra steps to prevent a timeout when retrieving repo data.
+    # If we enable auto_pagination we get a list of all the repos, but it
+    # appears that GitHub sometimes hangs in those cases if the user has
+    # a large number of repos.  David A. Wheeler suspects that problem is that
+    # GitHub itself uses Rails and Rails doesn't stream JSON output by default;
+    # that is fine for small datasets but can lead timeouts on larger datasets.
+    # Thus, we no longer enable auto_paginate.
+    # By default a call to github.repos will only return the first 30;
+    # we pass a per_page value to control this.  For more information, see:
+    # https://developer.github.com/v3/#pagination
+    github.auto_paginate = false
+    repos = github.repos(
+      nil,
+      sort: 'pushed', per_page: MAX_GITHUB_REPOS_FROM_USER
+    )
+    return if repos.blank?
 
-    github.repos.map do |repo|
+    # Only include repos not already in our database.  This willl cause
+    # a quick flurry of checks on the database, but they are indexed and
+    # limited by the number of records we request from GitHub.
+    # We do this to make the user's job easier.
+    repos = repos.reject { |repo| Project.exists?(repo_url: repo.html_url) }
+    # Sort by name for user convenience:
+    repos.sort_by! { |v| v['full_name'] }
+
+    repos.map do |repo|
       [repo.full_name, repo.fork, repo.homepage, repo.html_url]
     end.compact
   end
-  # rubocop:enable Style/MethodCalledOnDoEndBlock
+  # rubocop:enable Style/MethodCalledOnDoEndBlock, Metrics/MethodLength
 
   HTML_INDEX_FIELDS = 'projects.id, projects.name, description, ' \
     'homepage_url, repo_url, license, projects.user_id, ' \
@@ -496,10 +528,11 @@ class ProjectsController < ApplicationController
   # rubocop:enable Metrics/PerceivedComplexity
 
   def set_homepage_url
-    return if repo_data.nil?
+    retrieved_repo_data = repo_data
+    return if retrieved_repo_data.nil?
 
     # Assign to repo.homepage if it exists, and else repo_url
-    repo = repo_data.find { |r| @project.repo_url == r[3] }
+    repo = retrieved_repo_data.find { |r| @project.repo_url == r[3] }
     return if repo.nil?
 
     repo[2].present? ? repo[2] : @project.repo_url

@@ -41,6 +41,7 @@ class UsersEditTest < ActionDispatch::IntegrationTest
     log_in_as(@user)
     get edit_user_path(@user)
     assert_template 'users/edit'
+    ActionMailer::Base.deliveries.clear
     name  = 'Foo Bar'
     email = 'foo@bar.com'
     VCR.use_cassette('successful_edit_-_name_email') do
@@ -53,6 +54,18 @@ class UsersEditTest < ActionDispatch::IntegrationTest
     end
     assert_not flash.empty?
     assert_redirected_to @user
+    # Ensure that we sent one email:
+    assert_equal 1, ActionMailer::Base.deliveries.size
+    # Ensure that we sent the email to two destination addresses (old + new).
+    # This is an important check for security.  If an attacker temporarily
+    # gains control over a user account, this ensures that any change to the
+    # account's email address will alert the old email address.
+    # Obviously we don't want takeovers to happen in the first place, but
+    # always doing this reduces the potential damage.
+    assert_equal ['foo@bar.com', 'test@example.org'],
+                 ActionMailer::Base.deliveries[0]['To'].unparsed_value
+    # Forcibly load the data from the database, and ensure that we
+    # can retrieve from the database the values we supposedly just changed.
     @user.reload
     assert_equal name,  @user.name
     assert_equal email, @user.email

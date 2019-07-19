@@ -12,7 +12,12 @@
     </div>
   </div>
 <% end %>
-<% cache_if is_disabled, [project, locale] do %>
+<%
+   # If the additional rights list changes, invalidate the cache.
+   # If the performance is too slow, we could directly expire it instead,
+   # but that adds a maintenance headache.
+   additional_rights_list = project.additional_rights.pluck(:user_id).join(',')
+   cache_if is_disabled, [project, locale, additional_rights_list] do %>
 <%= render(partial: 'form_early',
            locals:
              {
@@ -219,11 +224,13 @@
                 # "(GPL-2.0+ WITH Bison-exception-2.2)".  See:
                 # https://spdx.org/spdx-specification-21-web-version
                 # Errors here do not cause *security* issues, so we're not
-                # too strict.
+                # too strict, but we want to check inputs so that our
+                # data is much more likely to be accurate.
                 f.text_field :license,
                              class: 'form-control', hide_label: true,
                              pattern: '(|[()A-Za-z0-9\-.+ ]*)',
-                             title: 'License in SPDX license expression format, e.g., "MIT" or "GPL-3.0+"',
+                             title:
+                               t('projects.form_basics.license.title'),
                              placeholder:
                                t('projects.form_basics.license.placeholder'),
                              list: 'license_list', disabled: is_disabled %>

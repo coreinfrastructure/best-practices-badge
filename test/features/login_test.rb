@@ -53,7 +53,7 @@ class LoginTest < CapybaraFeatureTest
   end
 
   # rubocop:disable Metrics/BlockLength
-  scenario 'Can Login and edit using custom account', js: true do
+  scenario 'Can login and edit using custom account', js: true do
     visit projects_path(locale: :en)
     click_on 'Login'
     fill_in 'Email', with: @user.email
@@ -65,8 +65,7 @@ class LoginTest < CapybaraFeatureTest
     visit edit_project_path(@project, locale: :en)
     assert has_content? 'This is not the production system'
     assert has_content? 'We have updated our requirements for the criterion ' \
-                        '<a href="#static_analysis">static_analysis</a>. ' \
-                        'Please add a justification for '\
+                        'static_analysis. Please add a justification for ' \
                         'this criterion.'
 
     fill_in 'project_name', with: 'It doesnt matter'

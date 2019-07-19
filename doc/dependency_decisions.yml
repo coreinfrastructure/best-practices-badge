@@ -292,3 +292,15 @@
       https://github.com/masover/blankslate/blob/master/MIT-LICENSE'
     :versions: []
     :when: 2017-11-18 19:27:38.823188201 Z
+- - :approve
+  - websocket-driver
+  - :who: David A. Wheeler
+    :why: Apache 2.0 fine
+    :versions: []
+    :when: 2019-06-21 15:44:20.445069226 Z
+- - :approve
+  - websocket-extensions
+  - :who: David A. Wheeler
+    :why: Apache 2.0 fine
+    :versions: []
+    :when: 2019-06-21 15:44:25.990437363 Z

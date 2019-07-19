@@ -50,6 +50,7 @@ ja:
       target="_blank" rel="noopener">プライバシー ポリシー</a> と<a href="https://www.linuxfoundation.jp/terms"
       target="_blank" rel="noopener">利用条件</a>を必ずお読みください。</small>
     choose_locale: 言語を選択する
+    toggle_navigation: 折りたたみ可能なナビゲーションを切り替える
   account_activations:
     activated: アカウントが有効になりました！
     failed_activation: 無効なアクティベーション リンクです
@@ -185,9 +186,9 @@ ja:
       silver_200: シルバー（200％+段階）
       gold_in_progress_variable: シルバー、部分的なゴールド（%{percent}％+段階）
       gold_300: ゴールド（300％）
-      in_progress_next:
-      passing_next:
-      silver_next:
+      in_progress_next: 進行中、合格に向けて%{percent}が完了しました
+      passing_next: 進行中、シルバーに向けて%{percent}が完了しました
+      silver_next: シルバー、ゴールドに向けて%{percent}が完了しました
     table:
       id: ID
       name: 名称
@@ -304,6 +305,8 @@ ja:
           例：「Apache-2.0」、「BSD-2-Clause」、「BSD-3-Clause」、「GPL-2.0
           +」、「LGPL-3.0 +」、「MIT」、「(BSD-2-Clause OR Ruby)」
         placeholder: FLOSSライセンス
+        title: >-
+          SPDXライセンス表現形式のライセンス（例： "MIT"または "GPL-3.0 +"、シングル引用符や二重引用符を付けない）
       additional_rights_changes:
         description: "（詳細）このバッジエントリを編集する権限を持つユーザーは？現在：%{current_rights}"
         details_html: >-
@@ -982,48 +985,6 @@ ja:
           <a href="https://nvd.nist.gov/cvss.cfm"> CVSS 2.0 </a>ベース
           スコアが4の場合、脆弱性は中〜高程度です。動的コード分析を実行していないため、このように脆弱性を発見していない場合は、「該当なし」（N
           / A）を選択します。
-      installation_common:
-        description: >-
-          プロジェクトは、プロジェクトで作成されたソフトウェアを一般的に使用されているやり方で簡単にインストールおよびアンインストールする方法を提供するべきです。
-        details: >-
-          たとえば、パッケージマネージャー（システムまたは言語レベル）、「make install / uninstall」（DESTDIRをサポート）、標準形式のコンテナー、または標準形式の仮想マシンイメージを使用することが挙げられます。インストールとアンインストールのプロセス（たとえば、パッケージング）は、FLOSSである限り、サードパーティによって実装されてもよいです。
-      build_reproducible:
-        description: >-
-          プロジェクトが<a href="https://reproducible-builds.org/">再現可能なビルド</a>を持つことが、推奨されています。ビルドが発生しない場合（たとえば、コンパイルされないでソースコードが直接使用されるスクリプト言語）、「該当なし」（N/A）を選択します。
-        details: >-
-          再現可能なビルドは、複数の当事者がソース ファイルから情報を生成するプロセスを独立にやり直し、ビット単位でまったく同じ結果を得られることを意味します。ビルドが発生しない場合（たとえば、コンパイルされる代わりに、ソースコードが直接使用されるスクリプト言語）、「該当なし」（N/A）を選択します。ある場合には、これ（再現可能なビルド）は、あるソート順を強いることで解決されます。Javaスクリプトの開発者は、npm
-          shrinkwrapとwebpack OccurenceOrderPluginの使用を検討するかもしれません。GCCとclangのユーザーは、-frandom-seedオプションが有用であることを見つけるかもしれません。ビルド環境（ツールセットを含む）は、リビルドに使用できる特定のコンテナや仮想マシンの暗号化ハッシュを指定することによって、外部パーティのために、しばしば定義可能です。<a
-          href="https://reproducible-builds.org/docs/">再現可能なビルド
-          プロジェクトは、これを行う方法を記載したドキュメントを有します</a>。
-      crypto_used_network:
-        description: >-
-          プロジェクトで作成されたソフトウェアは、ネットワーク通信すべてに対して、SSHv2以降、TLS1.2以降
-          (HTTPS)、IPsec、SFTP、SNMPv3などのセキュア プロトコルをサポートするべきです。FTP、HTTP、telnet、SSLv3以前、SSHv1などのセキュアでないプロトコルは、デフォルトで無効にするべきで、ユーザーが特別に設定した亜場合のみ有効にします。プロジェクトによって作成されたソフトウェアがネットワーク通信をサポートしない場合、「該当なし」（N/A）を選択します。
-      crypto_tls12:
-        description: >-
-          プロジェクトによって作成されたソフトウェアは、TLSをサポートあるいは使用する場合、少なくともTLSバージョン1.2をサポートするべきです。TLSの前身は、SSLと呼ばれていたことに注意して下さい。ソフトウェアがTLSを使用ない場合、「該当なし」（N/A）を選択します。
-      crypto_certificate_verification:
-        description: >-
-          TLSをサポートしている場合、プロジェクトで作成されたソフトウェアは、TLSを使う時には、サブリソースを含めて、デフォルトでTLS認証を受けなければなりません。ソフトウェアがTLSを使用しない場合、「該当なし」（N/A）を選択します。
-        details: >-
-          誤ったTLS認証の検証は、よくある間違いであることに注意して下さい。詳細については、<a href="http://crypto.stanford.edu/~dabo/pubs/abstracts/ssl-client-bugs.html">「世界でもっとも危険なコード：非ブラウザー
-          ソフトウェアでのSSL認証の検証」Martin Georgiev et al著</a> と <a href="https://blogs.gnome.org/mcatanzaro/2016/03/12/do-you-trust-this-application/">「このアプリケーションを信頼しますか？」Michael
-          Catanzaro著</a>.を参照して下さい。
-      crypto_verification_private:
-        description: >-
-          TLSをサポートしている場合、プロジェクトによって作成されたソフトウェアは、（たとえばセキュアクッキーなど）プライベートな情報をHTTPヘッダと共に送信する前に、証明書の検証をするべきです。ソフトウェアがTLSを使用しない場合は、「該当なし」（N/A）を選択します。
-      hardened_site:
-        description: >-
-          プロジェクトウェブサイト、リポジトリ（ウェブからアクセス可能な場合）、およびダウンロードサイト（別々の場合）には、許容できない値を持つキー強化ヘッダーが含まれていることが推奨されます。
-        details: >-
-          GitHubはこれを満たしています。 https://securityheaders.io/などのサイトでこれをすばやく確認できます。キーセキュリティ強化ヘッダーは、コンテンツ
-          セキュリティ ポリシー（CSP）、HTTP厳密トランスポート セキュリティ（HSTS）、X-Content-Type-Options（「nosniff」）、X-Frame-Options、X-XSS-Protectionです。
-      hardening:
-        description: >-
-          プロジェクトによって作成されたソフトウェアで強化メカニズムを使用することが推奨されていますので、ソフトウェア欠陥がセキュリティ上の脆弱性を引き起こす可能性が低くなります。
-        details: >-
-          強化メカニズムは、Content Security Policy（CSP）などのHTTPヘッダー、攻撃を緩和するコンパイラ
-          フラグ（-fstack-protectorなど）、または未定義の動作を排除するためのコンパイラ フラグを含みます。私たちの目的のために、最低限の特権は強化メカニズムとはみなされません（最低の特権は重要ですが、別の話です）。
     '1':
       contribution_requirements:
         description: >-
@@ -1461,15 +1422,6 @@ ja:
     criteria:
       criteria: 基準
       detailed_criteria_on_github: 詳細の基準はGitHubにあります。
-      current_criteria: 現在の基準数：%{active}（アクティブ）+ %{future}（将来）=
-        %{total}（合計）
-      criteria_must_should_suggested: >-
-        アクティブ基準の中には、%{must} MUST、%{should} SHOULD、および%{suggested}
-        SUGGESTED基準があります。
-      criteria_na_met_details: >-
-        アクティブな基準のうち、%{na_allowed}はN / Aを許可し、%{met_url_required}は満たされた場合にURLを要求し、%{details_present}は説明に詳細を持ちます。
-      project_counts: >-
-        %{projects}プロジェクト エントリがあります。 %{passing}は通過し、%{in_progress}は進行中です。
       project_stats_html: >-
         プロジェクトに関する統計は、<a href="/project_stats">プロジェクトの統計情報ページ</a>で確認できます。
       level: レベル
@@ -1516,7 +1468,6 @@ ja:
     future: 今後追加されるバッジ基準
     Installation system: インストールシステム
     New functionality testing: 新機能テスト
-    OSS License: OSSライセンス
     Other: その他
     Other security issues: その他のセキュリティ上の課題
     Previous versions: 以前のバージョン
@@ -1552,8 +1503,6 @@ ja:
       other: フォームは、%{count}エラーを含んでいます。
       few: フォームは、%{count}エラーを含んでいます。
       many: フォームは、%{count}エラーを含んでいます。
-    comma_separated_list: " コンマで区切られた名前のリストでなければなりません"
-    begin_with_cpe:  "cpe："で始まる必要があります
     not_an_email: " 電子メールではありません"
     known_bad_password: " よく知られている（悪い）パスワードです"
     valid_text: " 有効なUTF-8エンコーディングと無効でない制御文字を持たなければなりません"

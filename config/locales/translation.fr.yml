@@ -31,7 +31,7 @@ fr:
       <i class="fa fa-sign-in" aria-hidden="true"></i> S'identifier
     footer_text_html: >-
       <small> <strong>Vous avez besoin d'aide ? Vous avez une
-      question ? Vous voyez un problème ? Merci d'<em><a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">envoyer
+      question ? Vous voyez un problème ? Merci d'<em><a href="mailto:&#99;ii&#45;badges&#45;questions&#64;lists&#46;coreinfrastructure&#46;or&#103;">envoyer
       un email</a></em> ou de <em><a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
       target="_blank" rel="noopener">reporter un problème</a></i>.</strong>
       © 2015-2018 <a href="https://www.coreinfrastructure.org"
@@ -44,6 +44,7 @@ fr:
       rel="noopener">conditions d'utilisation</a>. </small>
     account: Compte
     choose_locale: Choisir la langue
+    toggle_navigation:
   sessions:
     login_header: S'identifier
     login_with_github_html: >-
@@ -239,9 +240,9 @@ fr:
       gold_in_progress_variable: Argent obtenu, or en cours (niveau
         %{percent}% ou plus)
       gold_300: Or (300%)
-      in_progress_next:
-      passing_next:
-      silver_next:
+      in_progress_next: En cours, %{percent}% terminé pour l'obtention
+      passing_next: Obtenu, %{percent}% terminé pour l'argent
+      silver_next: Argent, %{percent}% terminé pour l'or
     table:
       id: Id
       name: Nom
@@ -369,9 +370,8 @@ fr:
         comment le faire).
       lost_badge: Le projet a perdu un badge.
       static_analysis_updated_html: >-
-        Nous avons mis à jour nos exigences pour le critère <a
-        href="#static_analysis">static_analysis</a>. Veuillez
-        ajouter une justification pour ce critère.
+        Nous avons mis à jour nos exigences pour le critère static_analysis.
+        Veuillez ajouter une justification pour ce critère.
       edit_status: Éditer le statut du badge du projet
     form_basics:
       project_name:
@@ -435,8 +435,10 @@ fr:
           d'expression de licence SPDX</a> ; des exemples sont
           « Apache-2.0 », « BSD-2-Clause », « BSD-3-Clause »,
           « GPL-2.0+ », « LGPL-3.0+ », « MIT » et « (BSD-2-Clause
-          OU Ruby) ».
+          OU Ruby) ». Ne <b>pas</b> inclure des guillemets simples
+          ou doubles.
         placeholder: Licence FLOSS
+        title:
       additional_rights_changes:
         description: >-
           (Avancé) Quels autres utilisateurs ont les droits supplémentaires
@@ -780,8 +782,7 @@ fr:
       Nous vous encourageons à continuer à progresser.
       Si vous voulez voir seulement ce qui vous manque, visitez votre soumission puis cliquez sur le bouton près du haut étiqueté « Masquer atteints & N/A ».
       Si vous avez des questions ou avez besoin d'aide, contactez-nous à
-      cii-badges-questions-owner@lists.coreinfrastructure.org
-      ou reportez un problème sur
+      cii-badges-questions@lists.coreinfrastructure.org ou reportez un problème sur
       https://github.com/coreinfrastructure/best-practices-badge/issues
       (cliquez sur « nouveau problème »).
       Nous ne vous enverrons jamais de publicité, et nous ne vous enverrons que rarement des emails. Nous vous enverrons un email pour les évènements importants de la soumission d'un projet de badge, comme quand vous créez une nouvelle soumission de projet de badge, quand votre projet gagne ou perd un badge, ou quand quelqu'un demande la réinitialisation du mot de passe pour votre compte utilisateur. Si votre projet n'a pas de badge, et que vous n'avez pas mis à jour l'entrée du projet pendant au moins 30 jours, nous vous enverrons normalement un rappel d'inactivité environ tous les 30-60 jours. Vous pouvez désactiver ces rappels d'inactivité à tout moment ; il vous suffit d'éditer votre entrée de badge à %{project_info_url}#project_disabled_reminders pour activer la « désactivation du rappel d'inactivité ». Souvenez-vous d'éditer le projet pour lequel vous souhaitez changer cette valeur. Si votre projet a gagné un badge, ou que son entrée de badge a été éditée dans les 30 derniers jours, aucun rappel d'inactivité ne vous sera envoyé.
@@ -865,8 +866,8 @@ fr:
       « Développer les panneaux », \npuis sélectionnez le bouton
       près du sommet étiqueté « Masquer atteints & N/A ».\nSi
       vous avez des questions ou si vous avez besoin d'aide, veuillez
-      contacter\ncii-badges-questions-owner@lists.coreinfrastructure.org\nou
-      reporter un problème à\nhttps://github.com/coreinfrastructure/best-practices-badge/issues\n(cliquez
+      contacter\ncii-badges-questions@lists.coreinfrastructure.org
+      ou reporter un problème à\nhttps://github.com/coreinfrastructure/best-practices-badge/issues\n(cliquez
       sur « nouveau problème »).\n\nNous n'envoyons pas de rappels
       si vous continuez à mettre à jour votre entrée de badge,
       et nous envoyons seulement des rappels environ tous les
@@ -1030,7 +1031,7 @@ fr:
           son interface REST). S'il s'agit d'une interface de
           ligne de commande, documentez les paramètres et les
           options qu'elle supporte. Dans de nombreux cas, il est
-          préférable que la plupart de cette documentation soit
+          préférable que la majorité de cette documentation soit
           générée automatiquement, de sorte que cette documentation
           reste synchronisée avec le logiciel au fur et à mesure
           qu'il change, mais cela n'est pas nécessaire. Le projet
@@ -1042,13 +1043,14 @@ fr:
           / OpenAPI. La documentation de l'interface de code PEUT
           être générée à l'aide d'outils tels que <a href="http://usejsdoc.org/">JSDoc</a>
           (JavaScript), <a href="https://esdoc.org/">ESDoc</a>
-          (JavaScript), pydoc (Python) et Doxygen (plusieurs).
-          Le simple fait d'avoir des commentaires dans le code
-          source n'est pas suffisant pour satisfaire ce critère
-          ; il doit y avoir un moyen simple de voir l'information
-          sans lire l'intégralité du code source. Si le projet
-          ne produit pas de logiciel, choisissez « non applicable
-          » (N/A).
+          (JavaScript), pydoc (Python), <a href="https://cran.r-project.org/web/packages/devtools/index.html">devtools</a>
+          (R), <a href="https://cran.r-project.org/web/packages/pkgdown/index.html">pkgdown</a>
+          (R) et Doxygen (plusieurs). Le simple fait d'avoir des
+          commentaires dans le code source n'est pas suffisant
+          pour satisfaire ce critère ; il doit y avoir un moyen
+          simple de voir l'information sans lire l'intégralité
+          du code source. Si le projet ne produit pas de logiciel,
+          choisissez « non applicable » (N/A).
       sites_https:
         description: >-
           Les sites du projet (site Web, dépôt et URLs de téléchargement)
@@ -1315,8 +1317,10 @@ fr:
         description: >-
           Il est PROPOSÉ d'utiliser des outils courants pour la
           construction du logiciel.
-        details: Par exemple, Maven, Ant, cmake, autotools, make
-          ou rake.
+        details: >-
+          Par exemple, Maven, Ant, cmake, autotools, make, rake
+          (Ruby) ou <a href="https://cran.r-project.org/web/packages/devtools/index.html">devtools</a>
+          (R).
       build_floss_tools:
         description: >-
           Le projet DEVRAIT être constructible en utilisant uniquement
@@ -1331,13 +1335,20 @@ fr:
           Le projet PEUT utiliser plusieurs suites de tests automatisées
           (par exemple, une qui s'exécute rapidement, par rapport
           à une autre qui est plus approfondie, mais nécessite
-          un équipement spécial).
+          un équipement spécial). De nombreuses plate-formes de
+          tests et environnements de tests sont disponibles, tels
+          que <a href="https://www.seleniumhq.org/">Selenium</a>
+          (automatisation de navigateur Web), <a href="https://junit.org">Junit</a>
+          (JVM, Java), <a href="https://cran.r-project.org/web/packages/runit/index.html">RUnit</a>
+          (R), <a href="https://cran.r-project.org/web/packages/testthat/index.html">testthat</a>
+          (R).
       test_invocation:
         description: >-
           Une suite de tests DEVRAIT être invocable d'une manière
           standard pour ce langage.
-        details: Par exemple, « make check », « mvn test » ou
-          « rake test ».
+        details: >-
+          Par exemple, « make check », « mvn test » ou « rake
+          test » (Ruby).
       test_most:
         description: >-
           Il est PROPOSÉ que la suite de tests couvre la plupart
@@ -1425,7 +1436,8 @@ fr:
       know_secure_design:
         description: >-
           Le projet DOIT avoir au moins un développeur principal
-          qui sait comment concevoir un logiciel sécurisé.
+          qui sait comment concevoir un logiciel sécurisé. (Voir
+          les « détails » pour les exigences exactes.)
         details: >-
           Cela nécessite de comprendre les principes de conception
           suivants, y compris les 8 principes de <a href="http://web.mit.edu/Saltzer/www/publications/protection/">Saltzer
@@ -1726,13 +1738,22 @@ fr:
           du compilateur et les modes de langage « sûrs » ne comptent
           pas comme des outils d'analyse statique de code (ceux-ci
           évitent généralement une analyse approfondie car la
-          rapidité est vitale). Des exemples de ces outils d'analyse
-          statique de code incluent <a href="http://cppcheck.sourceforge.net/">cppcheck</a>,
-          <a href="http://clang-analyzer.llvm.org/">clang static
-          analyzer</a>, <a href="http://findbugs.sourceforge.net/">FindBugs</a>
-          (y compris <a href="https://h3xstream.github.io/find-sec-bugs/">FindSecurityBugs</a>),
-          <a href="https://pmd.github.io/">PMD</a>, <a href="http://brakemanscanner.org/">Brakeman</a>,
-          <a href="https://scan.coverity.com/">Coverity Quality
+          rapidité est vitale). Certains outils d'analyse statique
+          se concentrent sur la détection de défauts génériques,
+          d'autres se concentrent sur la détection de défauts
+          spécifiques (tels que les vulnérabilités) et d'autres
+          encore proposent une combinaison de ces deux types d'outils.
+          Des exemples de tels outils d'analyse statique de code
+          incluent <a href="http://cppcheck.sourceforge.net/">cppcheck</a>
+          (C, C++), <a href="http://clang-analyzer.llvm.org/">clang
+          static analyzer</a> (C, C++), <a href="https://spotbugs.github.io/">SpotBugs</a>
+          (Java), <a href="http://findbugs.sourceforge.net/">FindBugs</a>
+          (Java) (y compris <a href="https://h3xstream.github.io/find-sec-bugs/">FindSecurityBugs</a>),
+          <a href="https://pmd.github.io/">PMD</a> (Java), <a
+          href="http://brakemanscanner.org/">Brakeman</a> (Ruby
+          on Rails), <a href="https://cran.r-project.org/web/packages/lintr/index.html">lintr</a>
+          (R), <a href="https://cran.r-project.org/web/packages/goodpractice/index.html">goodpractice</a>
+          (R), <a href="https://scan.coverity.com/">Coverity Quality
           Analyzer</a>, <a href="https://www.sonarqube.org/">SonarQube</a>,
           <a href="https://www.codacy.com/">Codacy</a> et <a href="https://saas.hpe.com/en-us/software/sca">HP
           Enterprise Fortify Static Code Analyzer</a>. Des listes
@@ -1748,7 +1769,7 @@ fr:
           est une plate-forme gratuite pour évaluer les vulnérabilités
           dans les logiciels utilisant une variété d'outils. S'il
           n'y a pas d'outil d'analyse statique FLOSS disponible
-          pour le(s) langage(s) d'implémentation utilisés, sélectionnez
+          pour le(s) langage(s) d'implémentation utilisé(s), sélectionnez
           « N/A ».
         na_placeholder: >-
           Pourquoi cela ne peut-il pas être satisfait (par exemple,
@@ -1848,114 +1869,6 @@ fr:
           2.0</a> est 4. Si vous n'utilisez pas d'analyse de code
           dynamique et donc n'avez trouvé aucune vulnérabilité
           de cette façon, choisissez « non applicable » (N/A).
-      installation_common:
-        description: >-
-          Le projet DEVRAIT fournir un moyen d'installer et de
-          désinstaller facilement le logiciel produit par le projet
-          en utilisant une convention couramment utilisée.
-        details: >-
-          Des exemples comprennent l'utilisation d'un gestionnaire
-          de paquets (au niveau du système ou du langage), « make/install/uninstall
-          » (supportant DESTDIR), un conteneur dans un format
-          standard ou une image de machine virtuelle dans un format
-          standard. Le processus d'installation et de désinstallation
-          (par exemple, son paquetage) PEUT être mis en œuvre
-          par un tiers tant qu'il est FLOSS.
-      build_reproducible:
-        description: >-
-          Il est PROPOSÉ que le projet possède une <a href="https://reproducible-builds.org/">construction
-          reproductible</a>. Si aucune construction ne se produit
-          (par exemple, les langages de script où le code source
-          est utilisé directement au lieu d'être compilé), sélectionnez
-          « non applicable » (N/A)
-        details: >-
-          Une construction reproductible signifie que plusieurs
-          parties peuvent refaire indépendamment le processus
-          de génération d'informations à partir de fichiers source
-          et obtenir exactement le même résultat bit-à-bit. Dans
-          certains cas, cela peut être résolu en forçant un ordre
-          de tri. Les développeurs JavaScript peuvent envisager
-          d'utiliser npm shrinkwrap et webpack OccurenceOrderPlugin.
-          Les utilisateurs GGC et clang peuvent trouver l'option
-          -frandom-seed utile. L'environnement de construction
-          (y compris le jeu d'outils) peut souvent être défini
-          pour les parties externes en spécifiant le hachage cryptographique
-          d'un conteneur spécifique ou d'une machine virtuelle
-          qu'ils peuvent utiliser pour la reconstruction. Le <a
-          href="https://reproducible-builds.org/docs/">projet
-          de construction reproductible dispose de documentation
-          sur la façon de le faire</a>.
-      crypto_used_network:
-        description: >-
-          Le logiciel produit par le projet DEVRAIT supporter
-          des protocoles sécurisés pour toutes ses communications
-          réseau, tels que SSHv2 ou ultérieur, TLS1.2 ou ultérieur
-          (HTTPS), IPsec, SFTP et SNMPv3. Les protocoles non sûrs
-          tels que FTP, HTTP, telnet, SSLv3 ou antérieur, et SSHv1
-          DEVRAIENT être désactivés par défaut et uniquement activés
-          si l'utilisateur le configure spécifiquement. Si le
-          logiciel produit par le projet ne prend pas en charge
-          les communications réseau, sélectionnez « non applicable
-          » (N/A).
-      crypto_tls12:
-        description: >-
-          Le logiciel produit par le projet DEVRAIT, s'il prend
-          en charge ou utilise TLS, prendre en charge au moins
-          TLS version 1.2. Notez que le prédécesseur de TLS s'appelait
-          SSL. Si le logiciel n'utilise pas TLS, sélectionnez
-          « non applicable » (N/A).
-      crypto_certificate_verification:
-        description: >-
-          Le logiciel produit par le projet DOIT, s'il prend en
-          charge TLS, effectuer la vérification des certificats
-          TLS par défaut lors de l'utilisation de TLS, y compris
-          sur les sous-ressources. Si le logiciel n'utilise pas
-          TLS, sélectionnez « non applicable » (N/A).
-        details: >-
-          Notez que la vérification incorrecte du certificat TLS
-          est une erreur courante. Pour plus d'informations, voir
-          <a href="http://crypto.stanford.edu/~dabo/pubs/abstracts/ssl-client-bugs.html">«
-          Le code le plus dangereux dans le monde : la validation
-          des certificats SSL dans du logiciel qui ne vient pas
-          d'un navigateur » de Martin Georgiev et al.</a> et <a
-          href="https://blogs.gnome.org/mcatanzaro/2016/03/12/do-you-trust-this-application/">«
-          Avez-vous confiance en cette application ?» par Michael
-          Catanzaro</a>.
-      crypto_verification_private:
-        description: >-
-          Le logiciel produit par le projet DEVRAIT, s'il supporte
-          TLS, effectuer une vérification de certificat avant
-          d'envoyer des en-têtes HTTP avec des informations privées
-          (telles que des cookies sécurisés). Si le logiciel n'utilise
-          pas TLS, sélectionnez « non applicable » (N/A).
-      hardened_site:
-        description: >-
-          Il est PROPOSÉ que le site Web du projet, le dépôt (s'il
-          est accessible via le Web) et le site de téléchargement
-          (si séparé) incluent des en-têtes clés de durcissement
-          avec des valeurs non admises.
-        details: >-
-          Notez que GitHub est connu pour le faire. Des sites
-          tels que https://securityheaders.io/ peuvent le vérifier
-          rapidement. Les en-têtes clés de durcissement sont :
-          Content Security Policy (CSP), HTTP Strict Transport
-          Security (HSTS), X-Content-Type-Options (comme « nosniff
-          »), X-Frame-Options et X-XSS-Protection.
-      hardening:
-        description: >-
-          Il est PROPOSÉ que des mécanismes de durcissement soient
-          utilisés dans le logiciel produit par le projet afin
-          que les défauts du logiciel soient moins susceptibles
-          d'entraîner des vulnérabilités de sécurité.
-        details: >-
-          Les mécanismes de durcissement peuvent inclure des en-têtes
-          HTTP comme Content Security Policy (CSP), des options
-          de compilation pour atténuer les attaques (telles que
-          -fstack-protector) ou des options de compilation pour
-          éliminer les comportements indéfinis. Pour nos besoins,
-          le principe de plus faible privilège n'est pas considéré
-          comme un mécanisme de durcissement (le principe de plus
-          faible privilège est important, mais séparé).
     '1':
       contribution_requirements:
         description: >-
@@ -2031,8 +1944,8 @@ fr:
           les contributions. Cela devrait se concentrer uniquement
           sur le comportement au sein de la communauté / lieu
           de travail du projet. Des exemples de codes de conduite
-          sont le <a href="https://www.kernel.org/doc/html/latest/process/code-of-conflict.html">code
-          de conflit</a> du noyau Linux, le <a href="http://contributor-covenant.org/">code
+          sont le <a href="https://www.kernel.org/doc/html/latest/process/code-of-conduct.html">code
+          de conduite</a> du noyau Linux, le <a href="http://contributor-covenant.org/">code
           de conduite du pacte de contributeur</a>, le <a href="https://www.debian.org/code_of_conduct">code
           de conduite du projet Debian</a>, le <a href="https://www.ubuntu.com/about/about-ubuntu/conduct">code
           de conduite du projet Ubuntu</a>, le <a href="https://getfedora.org/code-of-conduct">code
@@ -2277,8 +2190,9 @@ fr:
           être rares et documentées dans le code à leur emplacement,
           afin que ces exceptions puissent être revues et que
           les outils puissent les gérer automatiquement à l'avenir.
-          Des exemples de ces outils incluent ESLint (JavaScript)
-          et Rubocop (Ruby).
+          Des exemples de tels outils incluent ESLint (JavaScript),
+          Rubocop (Ruby) et <a href="https://cran.r-project.org/web/packages/devtools/index.html">devtools
+          check</a> (R).
       build_standard_variables:
         description: >-
           Les systèmes de construction pour les binaires natifs
@@ -2474,10 +2388,11 @@ fr:
         details: >-
           De nombreux outils FLOSS sont disponibles pour mesurer
           la couverture des tests, y compris gcov/lcov, Blanket.js,
-          Istanbul et JCov. Notez que respecter ce critère n'est
-          pas une garantie que la suite de tests est complète,
-          mais, à l'inverse, ne pas respecter ce critère est un
-          indicateur fort d'une suite de tests insuffisante.
+          Istanbul, JCov et <a href="https://cran.r-project.org/web/packages/covr/index.html">covr</a>
+          (R). Notez que respecter ce critère n'est pas une garantie
+          que la suite de tests est complète, mais, à l'inverse,
+          ne pas respecter ce critère est un indicateur fort d'une
+          suite de tests insuffisante.
       test_policy_mandated:
         description: >-
           Le projet DOIT avoir une politique écrite formelle,
@@ -2994,20 +2909,6 @@ fr:
       criteria: Critères
       detailed_criteria_on_github: Les critères détaillés sont
         disponibles sur GitHub.
-      current_criteria: >-
-        Nombre actuel de critères : %{active} (actifs) + %{future}
-        (futurs) = %{total} (total).
-      criteria_must_should_suggested: >-
-        Les critères actifs se décomposent en %{must} DOIT, %{should}
-        DEVRAIT, et %{suggested} PROPOSÉ.
-      criteria_na_met_details: >-
-        Parmi les critères actifs, %{na_allowed} autorisent la
-        mention N/A, %{met_url_required} nécessitent une URL pour
-        être atteints, et %{details_present} nécessitent des détails
-        dans leur description.
-      project_counts: >-
-        Il existe %{projects} soumissions de projets ; %{passing}
-        ont obtenu le badge et %{in_progress} sont en cours d'obtention.
       project_stats_html: |-
         Les critères « actifs » sont ceux qui sont inclus dans les calculs de pourcentages (contrairement aux critères « futurs »). Les colonnes suivantes identifient le nombre de critères actifs à chaque niveau qui DOIVENT, DEVRAIENT ou PEUVENT être respectés, qui autorisent « N/A » comme réponse, qui requièrent une URL, qui incluent des détails, ou qui sont nouveaux à ce niveau. Les critères « futurs » sont affichés sur le formulaire, et devraient être ajoutés comme critères actifs à un certain niveau dans le futur, mais ne sont pas inclus dans les calculs de complétion. <br><br>
         Vous pouvez voir des statistiques sur les projets au cours du temps sur la <a href="/fr/project_stats">page des statistiques du projet</a>.
@@ -3094,7 +2995,6 @@ fr:
     future: futur
     Installation system: Système d'installation
     New functionality testing: Nouveau test de fonctionnalité
-    OSS License: Licence OSS
     Other: Autre
     Other security issues: Autres problèmes de sécurité
     Previous versions: Versions précédentes
@@ -3138,9 +3038,6 @@ fr:
       other: Le formulaire contient %{count} erreurs.
       few: Le formulaire contient %{count} erreurs.
       many: Le formulaire contient %{count} erreurs.
-    comma_separated_list: " doit être une liste de noms séparés
-      par des virgules"
-    begin_with_cpe: " doit commencer par « cpe : »"
     not_an_email: " n'est pas un email"
     known_bad_password: " est un (mauvais) mot de passe bien connu"
     valid_text: >2-

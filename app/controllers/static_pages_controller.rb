@@ -15,7 +15,7 @@ class StaticPagesController < ApplicationController
   # There's no value in redirecting these pages to a locale,
   # so do *not* redirect them to a URL based on locale.
   skip_before_action :redir_missing_locale,
-                     only: %i[robots error_404]
+                     only: %i[robots error_404 google_verifier]
 
   def home; end
 
@@ -38,6 +38,16 @@ class StaticPagesController < ApplicationController
       template: '/static_pages/error_404.html.erb',
       layout: false,
       status: 404
+    )
+  end
+
+  # Weird special case: For David A. Wheeler to get log issues from Google,
+  # we have to have a special file to let Google verify access.
+  def google_verifier
+    render(
+      template: '/static_pages/google_verifier.txt',
+      layout: false,
+      status: 200
     )
   end
 

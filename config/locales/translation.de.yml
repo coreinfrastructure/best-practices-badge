@@ -52,6 +52,7 @@ de:
       und <a href="https://www.linuxfoundation.org/terms" target="_
       blank" rel="noopener">Nutzungsbedingungen</a>.</small>
     choose_locale: Wählen Sie lokale
+    toggle_navigation: Klappbare Navigation umschalten
   account_activations:
     activated: Konto aktiviert!
     failed_activation: Ungültiger Aktivierungslink
@@ -245,9 +246,10 @@ de:
       gold_in_progress_variable: Silber, teilweises Gold (%{percent}%
         + Fortschritt)
       gold_300: Gold (300%)
-      in_progress_next:
-      passing_next:
-      silver_next:
+      in_progress_next: In Arbeit, %{percent}% Fortschritt für
+        Passing
+      passing_next: Passing, %{percent}% Fortschritt für Silber
+      silver_next: Silber, %{percent}% Fortschritt für Gold
     table:
       id: ID
       name: Name
@@ -439,6 +441,9 @@ de:
           "BSD-2-Clause", "BSD-3-Clause", "GPL-2.0+", "LGPL-3.0+",
           "MIT" und "(BSD-2-Clause OR Ruby)".
         placeholder: FLOSS Lizenz
+        title: >-
+          Lizenz im SPDX-Lizenzausdruckformat, z.B. "MIT" oder
+          "GPL-3.0+", ohne einfache oder doppelte Anführungszeichen
       additional_rights_changes:
         description: >-
           (Erweitert) Welche anderen Benutzer haben zusätzliche
@@ -1042,15 +1047,16 @@ de:
           generiert werden (falls möglich ist dies oft der beste
           Weg). Die Dokumentation einer REST-Schnittstelle kann
           mit Swagger/OpenAPI erzeugt werden. Code-Interface-Dokumentation
-          kann mit Werkzeugen wie <a href="http://usejsdoc.org/">
-          JSDoc </a> (JavaScript), <a href="https://esdoc.org/">
-          ESDoc </a> (JavaScript), pydoc (Python) oder Doxygen
-          (verschiedene)  generiert werden. Nur Kommentare im
-          Quelltext reicht nicht aus, um dieses Kriterium zu erfüllen;
-          Es muss einen einfacheren Weg geben, um die Informationen
-          zu sehen, ohne den ganzen Quellcode durchzulesen. Wenn
-          das Projekt keine Software entwickelt, wählen Sie "nicht
-          anwendbar" (N/A) aus.
+          kann mit Werkzeugen wie <a href="http://usejsdoc.org/">JSDoc</a>
+          (JavaScript), <a href="https://esdoc.org/">ESDoc</a>
+          (JavaScript), pydoc (Python), <a href="https://cran.r-project.org/web/packages/devtools/index.html">devtools</a>
+          (R), <a href="https://cran.r-project.org/web/packages/pkgdown/index.html">pkgdown</a>
+          (R) und Doxygen (verschiedene)  generiert werden. Nur
+          Kommentare im Quelltext reicht nicht aus, um dieses
+          Kriterium zu erfüllen; Es muss einen einfacheren Weg
+          geben, um die Informationen zu sehen, ohne den ganzen
+          Quellcode durchzulesen. Wenn das Projekt keine Software
+          entwickelt, wählen Sie "nicht anwendbar" (N/A) aus.
       sites_https:
         description: >-
           Die Projekt-Seiten (Website, Repository und Download-URLs)
@@ -1293,8 +1299,9 @@ de:
           Es ist EMPFHOLEN, dass gewöhnliche Werkzeuge zum Kompiliren
           von Software benutzt wird.
         details: >-
-          Beispielsweise, Maven, Ant, cmake, die Autotools, make
-          oder rake.
+          Beispielsweise, Maven, Ant, cmake, die Autotools, make,
+          rake (Ruby) oder <a href="https://cran.r-project.org/web/packages/devtools/index.html">devtools</a>
+          (R).
       build_floss_tools:
         description: >-
           Das Projekt SOLLTE allein mit FLOSS Werkzeugen gebaut
@@ -1402,7 +1409,7 @@ de:
         description: >-
           Das Projekt MUSS mindestens einen primären Entwickler
           haben, der weiß wie man Sicherheitssoftware entwerfen
-          kann.
+          kann. (Siehe "Details" für spezifische Anforderungen.)
         details: >-
           Dies erfordert das Verständnis der folgenden Designprinzipien,
           einschließlich der 8 Prinzipien von <a href="http://web.mit.edu/Saltzer/www/publications/protection/">Saltzer
@@ -1790,108 +1797,6 @@ de:
           Codeanalyse ausführen und somit keine Schwachstellen
           auf diese Weise finden, wählen Sie "nicht anwendbar"
           (N/A).
-      installation_common:
-        description: >-
-          Das Projekt SOLLTE eine Möglichkeit zur einfachen Installation
-          und Deinstallation der vom Projekt entwickelten Software
-          bereitstellen und dabei gängige Konventionen einhalten.
-        details: >-
-          Beispiele hierfür sind die Verwendung eines Paketmanagers
-          (auf dem System- oder Sprachniveaus), "make install
-          / uninstall" (unterstützt DESTDIR), ein Container im
-          Standardformat oder ein virtuelles Maschinenbild im
-          Standardformat. Der Installations- und Deinstallationsvorgang
-          (z.B. seine Verpackung) DARF von einem Drittenanbieter
-          implementiert werden, solange es FLOSS ist.
-      build_reproducible:
-        description: >-
-          Es ist EMPFHOLEN, dass das Projekt <a href="https://reproducible-builds.org/">Reproduzierbare
-          Builds</a> hat.  Wenn kein Build nötig ist (z.B. bei
-          Skriptsprachen deren Quellcode direkt verwendet wird,
-          anstatt kompiliert zu werden), wählen Sie "N/A".
-        details: >-
-          Eine reproduzierbares Build bedeutet, dass mehrere Parteien
-          den Prozess der Generierung von Informationen aus Quelldateien
-          unabhängig voneinander wiederholen und genau das gleiche
-          Bit-für-Bit-Ergebnis erhalten können. In manchen Fällen
-          kann dies dadurch gelöst werden, dass man eine Sortierreihenfolge
-          erzwingt. JavaScript-Entwickler können erwägen npm shrinkwrap
-          und webpack OccurenceOrderPlugin zu verwenden. GCC und
-          clang Benutzer können die Option -frandom-seed nützlich
-          finden. Die Buildumgebung (einschließlich des Toolsets)
-          kann oft für externe Teilnehmer definiert werden, indem
-          der kryptografische Hash eines bestimmten Containers
-          oder einer virtuellen Maschine angegeben wird, die sie
-          für den Wiederaufbau verwenden können. Das <a href="https://reproducible-builds.org/docs/">Reproducible
-          Builds Projekt hat eine Dokumentation, wie dies erreicht
-          werden kann</a>.
-      crypto_used_network:
-        description: >-
-          Die vom Projekt entwickelte Software SOLLTE sichere
-          Protokolle für alle Netzwerkkommunikationen wie SSHv2
-          oder neuer, TLS1.2 oder neuer (HTTPS), IPsec, SFTP und
-          SNMPv3 unterstützen. Unsichere Protokolle wie FTP, HTTP,
-          Telnet, SSLv3 oder älter, und SSHv1 sollte standardmäßig
-          deaktiviert werden und nur aktiviert werden, wenn der
-          Benutzer es speziell konfiguriert. Wenn die vom Projekt
-          entwickelte Software keine Netzwerkkommunikation unterstützt,
-          wählen Sie "nicht anwendbar" (N/A).
-      crypto_tls12:
-        description: >-
-          Die vom Projekt entwickelte Software SOLLTE, wenn sie
-          TLS unterstützt oder verwendet, mindestens TLS Version
-          1.2 unterstützen. Beachten Sie, dass der Vorgänger von
-          TLS SSL genannt wurde. Wenn die Software TLS nicht verwendet,
-          wählen Sie "nicht anwendbar" (N/A).
-      crypto_certificate_verification:
-        description: >-
-          Die Software, die vom Projekt produziert wird, MUSS,
-          wenn sie TLS unterstützt, die TLS-Zertifikatprüfung
-          standardmäßig durchführen wenn TLS verwendet wird, auch
-          für Subresources, durchführen. Wenn die Software TLS
-          nicht verwendet, wählen Sie "nicht anwendbar" (N/A).
-        details: >-
-          Beachten Sie, dass eine falsche TLS-Zertifikatsüberprüfung
-          ein häufiger Fehler ist. Weitere Informationen finden
-          Sie unter <a href="http://crypto.stanford.edu/~dabo/pubs/abstracts/ssl-client-bugs.html">
-          "The Most Dangerous Code in the World: Validating SSL
-          Certificates in Non-Browser Software" von Martin Georgiev
-          et al.</a> und <a href="https://blogs.gnome.org/mcatanzaro/2016/03/12/do-you-trust-this-application/">
-          "Do you trust this application?" von Michael Catanzaro</a>.
-      crypto_verification_private:
-        description: >-
-          Die vom Projekt entwickelte Software, SOLLTE, wenn sie
-          TLS unterstützt, die TLS-Zertifikatprüfung standardmäßig
-          durchführen wenn TLS verwendet wird, auch für Subresources,
-          durchführen. Wenn die Software TLS nicht verwendet,
-          wählen Sie "nicht anwendbar" (N/A).
-      hardened_site:
-        description: >-
-          Es wird EMPFHOLEN, dass die Projekt-Website, das Repository
-          (falls über das Internet zugänglich) und die Download-Seite
-          (falls separat) "key hardening headers with nonpermissive
-          values" enthalten.
-        details: >-
-          Beachten Sie, dass GitHub dies erfüllt. Websites wie
-          https://securityheaders.io/ können das schnell überprüfen.
-          Die wichtigsten " key hardening headers" sind: Content
-          Security Policy (CSP), HTTP Strict Transport Security
-          (HSTS), X-Content-Type-Optionen (als "nosniff"), X-Frame-Optionen
-          und X-XSS-Protection.
-      hardening:
-        description: >-
-          Es wird EMPFHOLEN, dass "hardening mechanisms" in der
-          vom Projekt entwickelten Software verwendet werden,
-          so dass Softwarefehler weniger wahrscheinlich zu Sicherheitslücken
-          führen.
-        details: >-
-          "Hardening mechanisms" können HTTP-Header wie Content
-          Security Policy (CSP), Compiler-Flags zur Milderung
-          von Angriffes (beispielsweise -fstack-protector) oder
-          Compiler-Flags zu Vermeidung von undefiniertem Verhalten
-          enthalten. Für unsere Zwecke wird "least privilege"
-          nicht als ein "hardening mechanism" betrachtet (das
-          "hardening mechanism" ist wichtig, aber extra).
     '1':
       contribution_requirements:
         description: >-
@@ -2933,20 +2838,6 @@ de:
       criteria: Kriterien
       detailed_criteria_on_github: Die detaillierten Kriterien
         sind auf GitHub.
-      current_criteria: >-
-        Aktuelle Anzahl der Kriterien: %{active} (aktiv) + %{future}
-        (Zukunft) = %{total} (gesamt).
-      criteria_must_should_suggested: >-
-        Unter den aktiven Kriterien sind %{must} MUSS, %{should}
-        SOLL und %{suggested} EMPFOHLENE Kriterien.
-      criteria_na_met_details: >-
-        Unter den aktiven Kriterien ermöglichen %{na_allowed}
-        N/A, %{met_url_required} erfordern eine URL, wenn sie
-        erfüllt sind und %{details_present} haben Details in ihrer
-        Beschreibung.
-      project_counts: >-
-        Es gibt %{projects} Projekteinträge; %{passing} sind vorbei
-        und %{in_progress} sind im Prozess.
       project_stats_html: >-
         Die "aktiven" Kriterien sind Kriterien, die in den Prozentberechnungen
         enthalten sind (im Gegensatz zu "zukünftigen" Kriterien).
@@ -3042,7 +2933,6 @@ de:
     future: zukünftige
     Installation system: Installationssystem
     New functionality testing: Neue Funktionalitäts-Überprüfung
-    OSS License: OSS Lizenz
     Other: Andere
     Other security issues: Andere Sicherheitsissues
     Previous versions: Vorherige Versionen
@@ -3083,9 +2973,6 @@ de:
       other: Das Formular enthält %{count} Fehler.
       few: Das Formular enthält %{count} Fehler.
       many: Das Formular enthält %{count} Fehler.
-    comma_separated_list: " Muss eine durch Kommas getrennte Namensliste
-      sein"
-    begin_with_cpe:  Muss mit "cpe:" beginnen
     not_an_email: " Ist keine E-Mail"
     known_bad_password: " Ist ein weit verbreitetes (schlechtes)
       Passwort"

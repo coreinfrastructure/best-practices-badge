@@ -7,6 +7,8 @@
 # Rake tasks for BadgeApp
 
 require 'json'
+require 'webdrivers'
+load 'webdrivers/Rakefile'
 
 task(:default).clear.enhance %w[
   rbenv_rvm_setup
@@ -17,7 +19,7 @@ task(:default).clear.enhance %w[
   rubocop
   markdownlint
   rails_best_practices
-  brakeman
+  railroader
   license_okay
   license_finder_report.html
   whitespace_check
@@ -25,23 +27,28 @@ task(:default).clear.enhance %w[
   html_from_markdown
   eslint
   report_code_statistics
+  update_chromedriver
   test
 ]
 # Temporarily removed fasterer
 # Waiting for Ruby 2.4 support: https://github.com/seattlerb/ruby_parser/issues/239
 
+# Run Continuous Integration (CI) check processes.
+# This is a shorter list; many checks are run by a separate "pronto" task.
+# Temporarily includes "railroader", we hope to move that to pronto.
+# Removed bundle_doctor due to CircleCI failures
+# Temporarily removed fasterer
 task(:ci).clear.enhance %w[
   rbenv_rvm_setup
-  bundle_doctor
   bundle_audit
   markdownlint
+  railroader
   license_okay
   license_finder_report.html
   whitespace_check
   yaml_syntax_check
   report_code_statistics
 ]
-# Temporarily removed fasterer
 
 # Simple smoke test to avoid development environment misconfiguration
 desc 'Ensure that rbenv or rvm are set up in PATH'
@@ -63,10 +70,10 @@ task :rails_best_practices do
       '--features --spec --without-color'
 end
 
-desc 'Run brakeman'
-task :brakeman do
+desc 'Run railroader'
+task :railroader do
   # Disable pager, so that "rake" can keep running without halting.
-  sh 'bundle exec brakeman --quiet --no-pager'
+  sh 'bundle exec railroader --quiet --no-pager'
 end
 
 desc 'Run bundle if needed'
@@ -82,18 +89,7 @@ end
 desc 'Report code statistics'
 task :report_code_statistics do
   verbose(false) do
-    sh <<-REPORT_CODE_STATISTICS
-      echo
-      direct=$(sed -e '1,/^DEPENDENCIES/d' -e '/^RUBY VERSION/,$d' \
-                   -e '/^$/d' Gemfile.lock | wc -l)
-      indirect=$(bundle show | tail -n +2 | wc -l)
-      echo "Number of gems (direct dependencies only) = $direct"
-      echo "Number of gems (including indirect dependencies) = $indirect"
-      echo
-      rails stats
-      echo
-      true
-    REPORT_CODE_STATISTICS
+    sh 'script/report_code_statistics'
   end
 end
 
@@ -103,27 +99,30 @@ task :bundle_audit do
   verbose(true) do
     sh <<-RETRY_BUNDLE_AUDIT_SHELL
       apply_bundle_audit=t
-      if ping -q -c 1 github.com > /dev/null 2> /dev/null ; then
+      if ping -q -c 1 github.com > /dev/null 2> /dev/null; then
         echo "Have network access, trying to update bundle-audit database."
         tries_left=10
         while [ "$tries_left" -gt 0 ] ; do
-          if bundle exec bundle-audit update ; then
-            echo 'Successful bundle-audit update.'
+          if bundle exec bundle audit update ; then
+            echo 'Successful bundle audit update.'
             break
           fi
           sleep 2
           tries_left=$((tries_left - 1))
-          echo "Bundle-audit update failed. Number of tries left=$tries_left"
+          echo "Bundle audit update failed. Number of tries left=$tries_left"
         done
         if [ "$tries_left" -eq 0 ] ; then
-          echo "Bundle-audit update failed after multiple attempts. Skipping."
+          echo "Bundle audit update failed after multiple attempts. Skipping."
           apply_bundle_audit=f
         fi
       else
         echo "Cannot update bundle-audit database; using current data."
       fi
       if [ "$apply_bundle_audit" = 't' ] ; then
-        bundle exec bundle-audit check
+        # Ignore CVE-2015-9284 (omniauth); We have mitigated this with a
+        # third-party countermeasure (omniauth-rails_csrf_protection) in:
+        # https://github.com/coreinfrastructure/best-practices-badge/pull/1298
+        bundle exec bundle audit check --ignore CVE-2015-9284
       else
         true
       fi
@@ -186,10 +185,11 @@ end
 
 desc 'Check for trailing whitespace in latest proposed (git) patch.'
 task :whitespace_check do
+  EXCEPTIONS = ':!test/vcr_cassettes/*.yml'
   if ENV['CI'] # CircleCI modifies database.yml
-    sh "git diff --check -- . ':!config/database.yml'"
+    sh "git diff --check -- . ':!config/database.yml' #{EXCEPTIONS}"
   else
-    sh 'git diff --check'
+    sh "git diff --check -- . #{EXCEPTIONS}"
   end
 end
 
@@ -248,7 +248,6 @@ task :fasterer do
   sh 'fasterer'
 end
 
-# rubocop: disable Metrics/BlockLength
 # Tasks for Fastly including purging and testing the cache.
 namespace :fastly do
   # Implement full purge of Fastly CDN cache.  Invoke using:
@@ -271,27 +270,10 @@ namespace :fastly do
       'https://master.bestpractices.coreinfrastructure.org/projects/1/badge'
     puts 'Starting test of Fastly caching'
     verbose(false) do
-      sh <<-PURGE_FASTLY_SHELL
-        site_name="#{args.site_name}"
-        echo "Purging Fastly cache of badge for ${site_name}"
-        curl -X PURGE "$site_name" || exit 1
-        if curl -svo /dev/null "$site_name" 2>&1 | grep 'X-Cache: MISS' ; then
-          echo "Fastly cache of badge for project 1 successfully purged."
-        else
-          echo "Failed to purge badge for project 1 from Fastly cache."
-          exit 1
-        fi
-        if curl -svo /dev/null "$site_name" 2>&1 | grep 'X-Cache: HIT' ; then
-          echo "Fastly cache successfully restored."
-        else
-          echo "Fastly failed to restore cache."
-          exit 1
-        fi
-      PURGE_FASTLY_SHELL
+      sh "script/fastly_test #{args.site_name}"
     end
   end
 end
-# rubocop: enable Metrics/BlockLength
 
 desc 'Drop development database'
 task :drop_database do
@@ -713,11 +695,10 @@ end
 
 # JavaScript tests end up running .chromedriver-helper, which is downloaded
 # and cached.  Update the cached version.
-desc 'Update .chromedriver-helper'
-task :update_chromedriver_helper do
+desc 'Update webdrivers/chromedriver'
+task :update_chromedriver do
   # force-upgrade to the latest version of chromedriver
-  sh 'rm -fr $HOME/.chromedriver-helper'
-  sh 'chromedriver-update'
+  Rake::Task['webdrivers:chromedriver:update'].invoke
 end
 
 # Run some slower tests. Doing this on *every* automated test run would be

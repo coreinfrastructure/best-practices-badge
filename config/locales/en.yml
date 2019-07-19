@@ -20,6 +20,7 @@ en:
     zh-CN: Chinese (Simplified) / 简体中文 (zh-CN)
   layouts:
     cii_best_practices: CII Best Practices
+    toggle_navigation: Toggle collapsible navigation
     projects: Projects
     users: Users
     account: Account
@@ -34,7 +35,7 @@ en:
       Login
     footer_text_html: >-
       <small> <strong>Need help? Have a question? See a problem?
-      Please <em><a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">send
+      Please <em><a href="mailto:&#99;ii&#45;badges&#45;questions&#64;lists&#46;coreinfrastructure&#46;or&#103;">send
       an email</a> </em>or <em><a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
       target="_blank" rel="noopener">file an issue</a></em>.</strong> © 2015-2018
       <a href="https://www.coreinfrastructure.org" target="_blank" rel="noopener">Core
@@ -145,7 +146,6 @@ en:
       reddit: Reddit
       facebook: Facebook
       linkedin: LinkedIn
-      googleplus: Google+
       hacker_news: Hacker News
       email: Email
       projects_earned_badge: >
@@ -467,8 +467,8 @@ en:
         below if you don't know how to do that).
       lost_badge: Project has lost a badge.
       static_analysis_updated_html: >-
-        We have updated our requirements for the criterion <a
-        href="#static_analysis">static_analysis</a>. Please add
+        We have updated our requirements for the criterion
+        static_analysis. Please add
         a justification for this criterion.
       save_and_continue: Save (and continue)
       submit_and_exit: Submit (and exit)
@@ -653,7 +653,11 @@ en:
           Please use <a href="https://spdx.org/licenses/">SPDX
           license expression format</a>; examples include "Apache-2.0",
           "BSD-2-Clause", "BSD-3-Clause", "GPL-2.0+", "LGPL-3.0+",
-          "MIT", and "(BSD-2-Clause OR Ruby)".
+          "MIT", and "(BSD-2-Clause OR Ruby)".  Do <b>not</b> include
+          single quotes or double quotes.
+        title: >-
+          License in SPDX license expression format, e.g., "MIT" or "GPL-3.0+",
+          without single quotes or double quotes
         placeholder: FLOSS License
     misc:
       in_javascript:
@@ -790,7 +794,7 @@ en:
       If you want to see only what you're missing, visit your badge entry, and
       then click on the button near the top labelled "Hide met or N/A criteria".
       If you have questions, or need help, please contact
-      cii-badges-questions-owner@lists.coreinfrastructure.org
+      cii-badges-questions@lists.coreinfrastructure.org
       or file an issue at
       https://github.com/coreinfrastructure/best-practices-badge/issues
       (click on "new issue").
@@ -884,7 +888,7 @@ en:
       select the button near the top labelled "Expand all panels", and
       then select the button near the top labelled "Hide met or N/A criteria".
       If you have questions, or need help, please contact
-      cii-badges-questions-owner@lists.coreinfrastructure.org
+      cii-badges-questions@lists.coreinfrastructure.org
       or file an issue at
       https://github.com/coreinfrastructure/best-practices-badge/issues
       (click on "new issue").
@@ -1135,7 +1139,10 @@ en:
           Code interface documentation MAY be generated using
           tools such as <a href="http://usejsdoc.org/">JSDoc</a>
           (JavaScript), <a href="https://esdoc.org/">ESDoc</a>
-          (JavaScript), pydoc (Python), and Doxygen (many).  Merely
+          (JavaScript), pydoc (Python),
+          <a href="https://cran.r-project.org/web/packages/devtools/index.html">devtools</a> (R),
+          <a href="https://cran.r-project.org/web/packages/pkgdown/index.html">pkgdown</a> (R),
+          and Doxygen (many).  Merely
           having comments in implementation code is not sufficient
           to satisfy this criterion; there needs to be an easy
           way to see the information without reading through all
@@ -1380,7 +1387,8 @@ en:
           the software.
         details: >-
           For example, Maven, Ant, cmake, the autotools, make,
-          or rake.
+          rake (Ruby), or
+          <a href="https://cran.r-project.org/web/packages/devtools/index.html">devtools</a> (R).
       build_floss_tools:
         description: The project SHOULD be buildable using only
           FLOSS tools.
@@ -1393,12 +1401,19 @@ en:
           The project MAY use multiple automated test suites (e.g.,
           one that runs quickly, vs. another that is more thorough
           but requires special equipment).
+          There are many test frameworks and test support systems available,
+          including
+          <a href="https://www.seleniumhq.org/">Selenium</a>
+          (web browser automation),
+          <a href="https://junit.org">Junit</a> (JVM, Java),
+          <a href="https://cran.r-project.org/web/packages/runit/index.html">RUnit</a> (R),
+          <a href="https://cran.r-project.org/web/packages/testthat/index.html">testthat</a> (R).
       test_invocation:
         description: >-
           A test suite SHOULD be invocable in a standard way for
           that language.
         details: For example, "make check", "mvn test", or "rake
-          test".
+          test" (Ruby).
       test_most:
         description: >-
           It is SUGGESTED that the test suite cover most (or ideally
@@ -1476,6 +1491,7 @@ en:
         description: >-
           The project MUST have at least one primary developer
           who knows how to design secure software.
+          (See ‘details’ for the exact requirements.)
         details: >-
           This requires understanding the following design principles,
           including the 8 principles from <a href="http://web.mit.edu/Saltzer/www/publications/protection/">Saltzer
@@ -1737,12 +1753,21 @@ en:
           executing it with specific inputs. For purposes of this
           criterion, compiler warnings and "safe" language modes
           do not count as static code analysis tools (these typically
-          avoid deep analysis because speed is vital).  Examples
-          of such static code analysis tools include <a href="http://cppcheck.sourceforge.net/">cppcheck</a>,
+          avoid deep analysis because speed is vital).
+          Some static analysis tools focus on detecting generic defects,
+          others focus on finding specific kinds of defects (such as
+          vulnerabilities), and some do a combination.
+          Examples
+          of such static code analysis tools include <a href="http://cppcheck.sourceforge.net/">cppcheck</a> (C, C++),
           <a href="http://clang-analyzer.llvm.org/">clang static
-          analyzer</a>, <a href="http://findbugs.sourceforge.net/">FindBugs</a>
+          analyzer</a> (C, C++),
+          <a href="https://spotbugs.github.io/">SpotBugs</a> (Java),
+          <a href="http://findbugs.sourceforge.net/">FindBugs</a> (Java)
           (including <a href="https://h3xstream.github.io/find-sec-bugs/">FindSecurityBugs</a>),
-          <a href="https://pmd.github.io/">PMD</a>, <a href="http://brakemanscanner.org/">Brakeman</a>,
+          <a href="https://pmd.github.io/">PMD</a> (Java),
+          <a href="http://brakemanscanner.org/">Brakeman</a> (Ruby on Rails),
+          <a href="https://cran.r-project.org/web/packages/lintr/index.html">lintr</a> (R),
+          <a href="https://cran.r-project.org/web/packages/goodpractice/index.html">goodpractice</a> (R),
           <a href="https://scan.coverity.com/">Coverity Quality
           Analyzer</a>,
           <a href="https://www.sonarqube.org/">SonarQube</a>,
@@ -1916,14 +1941,14 @@ en:
           place to encourage contributions. This should focus
           only on behavior within the community/workplace of the
           project.  Example codes of conduct are the
-          <a href="https://www.kernel.org/doc/html/latest/process/code-of-conflict.html">Linux kernel code of conflict</a>,
+          <a href="https://www.kernel.org/doc/html/latest/process/code-of-conduct.html">Linux kernel code of conduct</a>,
           the <a href="http://contributor-covenant.org/">Contributor
           Covenant Code of Conduct</a>,
           the <a href="https://www.debian.org/code_of_conduct">Debian Code of Conduct</a>,
           the <a href="https://www.ubuntu.com/about/about-ubuntu/conduct">Ubuntu Code of Conduct</a>,
           the <a href="https://getfedora.org/code-of-conduct">Fedora Code of Conduct</a>,
           the <a href="https://wiki.gnome.org/action/show/Foundation/CodeOfConduct">GNOME Code Of Conduct</a>,
-          the <a href="https://www.kde.org/code-of-conduct/">KDE Community Code of Conduct">,
+          the <a href="https://www.kde.org/code-of-conduct/">KDE Community Code of Conduct</a>,
           the <a href="https://www.python.org/psf/codeofconduct/">Python Community Code of Conduct</a>,
           <a href="https://www.ruby-lang.org/en/conduct/">The Ruby Community Conduct Guideline</a>, and
           <a href="https://www.rust-lang.org/en-US/conduct.html">The Rust Code of Conduct</a>.
@@ -2183,8 +2208,9 @@ en:
           occur, they MUST be rare and documented in the code
           at their locations, so that these exceptions can be
           reviewed and so that tools can automatically handle
-          them in the future. Examples of such tools include ESLint
-          (JavaScript) and Rubocop (Ruby).
+          them in the future. Examples of such tools include
+          ESLint (JavaScript), Rubocop (Ruby), and
+          <a href="https://cran.r-project.org/web/packages/devtools/index.html">devtools check</a> (R).
       build_standard_variables:
         description: >-
           Build systems for native binaries MUST honor the relevant
@@ -2358,7 +2384,8 @@ en:
           in the selected language.
         details: >-
           Many FLOSS tools are available to measure test coverage,
-          including gcov/lcov, Blanket.js, Istanbul, and JCov.
+          including gcov/lcov, Blanket.js, Istanbul, JCov, and
+          <a href="https://cran.r-project.org/web/packages/covr/index.html">covr</a> (R).
           Note that meeting this criterion is not a guarantee
           that the test suite is thorough, instead, failing to
           meet this criterion is a strong indicator of a poor

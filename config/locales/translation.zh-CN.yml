@@ -40,6 +40,7 @@ zh-CN:
       target="_blank" rel="noopener">使用条款</a>. </small>
     account: 帐户
     choose_locale: 选择区域设置
+    toggle_navigation: 切换可折叠导航
   sessions:
     login_header: 登录
     login_with_github_html: <span class="fa fa-github"></span>
@@ -157,9 +158,9 @@ zh-CN:
       silver_200: 银（200%+层级）
       gold_in_progress_variable: 银牌，部分金牌（%{percent}%+层级）
       gold_300: 金牌（300％）
-      in_progress_next:
-      passing_next:
-      silver_next:
+      in_progress_next: 正在进行中（%{percent}% 已完成）
+      passing_next: 通过，%{percent}% 已完成银牌
+      silver_next: 银牌， %{percent}% 已完成金牌
     table:
       id: Id
       name: 名称
@@ -269,6 +270,7 @@ zh-CN:
           请使用<a href="https://spdx.org/licenses/"> SPDX许可证表达格式</a>;例子包括“Apache-2.0”，“BSD-2-Clause”，“BSD-3-Clause”，“GPL-2.0+”，“LGPL-3.0
           +”，“MIT”和“(BSD-2-Clause OR Ruby)”。
         placeholder: FLOSS许可证
+        title: SPDX许可证表达格式的许可证，例如“MIT”或“GPL-3.0 +”，没有单引号或双引号
       additional_rights_changes:
         description: "（高级）哪些用户还有额外权限编辑此徽章条目？目前：%{current_rights}"
         details_html: >-
@@ -888,42 +890,6 @@ zh-CN:
         details: >-
           如果<a href="https://nvd.nist.gov/cvss.cfm"> CVSS 2.0
           </a>基本分数为4，那么一个漏洞是中等到高的严重性。如果您没有运行动态代码分析，没有发现任何这样的漏洞，选择“不适用”（N/A）。
-      installation_common:
-        description: 该项目应该提供一种方法，使用常用惯例轻松安装和卸载项目生成的软件。
-        details: >-
-          示例包括使用软件包管理器（在系统或语言级别），“make install/uninstall”（支持DESTDIR），标准格式的容器或标准格式的虚拟机映像。安装和卸载过程（例如，打包）可以由第三方FLOSS软件实现。
-      build_reproducible:
-        description: >-
-          建议该项目有一个<a href="https://reproducible-builds.org/">可重复构建</a>。如果没有发生构建（例如，直接使用源代码而不是编译的脚本语言），请选择“不适用”（N/A）。
-        details: >-
-          可复制的构建意味着多方可以独立地重做从源文件生成信息的过程，并获得每比特完全相同的结果。如果没有构建（例如，直接使用源代码而不是编译的脚本语言），请选择“N/A”。在某些情况下，这可以通过强制某种排序来解决。
-          JavaScript开发人员可能会考虑使用npm shrinkwrap和webpack的OccurenceOrderPlugin。
-          GCC和clang用户可能会发现-frandom-seed选项有用。通常可以通过指定可用于重新构建的特定容器或虚拟机的加密散列来为外部方定义构建环境（包括工具集）。
-          <a href="https://reproducible-builds.org/docs/">可重复构建项目具有如何执行此操作的文档</a>。
-      crypto_used_network:
-        description: >-
-          该项目产生的软件应该支持所有网络通信的安全协议，如SSHv2或更高版本，TLS1.2或更高版本（HTTPS），IPsec，SFTP和SNMPv3。默认情况下，FTP，HTTP，Telnet，SSLv3或更早版本和SSHv1等不安全协议将被禁用，只有在用户专门配置时才启用。如果项目生成的软件不支持网络通信，请选择“不适用”（N/A）。
-      crypto_tls12:
-        description: >-
-          项目生成的软件（如果支持或使用TLS）应该至少支持TLS版本1.2。请注意，TLS的前身称为SSL。如果软件不使用TLS，请选择“不适用”（N/A）。
-      crypto_certificate_verification:
-        description: >-
-          由项目生成的软件必须，如果它支持TLS，则在使用TLS（包括子资源）时默认执行TLS证书验证。如果软件不使用TLS，请选择“不适用”（N/A）。
-        details: >-
-          请注意，不正确的TLS证书验证是一个常见的错误。有关详细信息，请参阅<a href="http://crypto.stanford.edu/~dabo/pubs/abstracts/ssl-client-bugs.html">“世界上最危险的代码：在非浏览器软件中验证SSL证书“，Martin
-          Georgiev等</a>和<a href="https://blogs.gnome.org/mcatanzaro/2016/03/12/do-you-trust-this-application/">
-          “你信任这个应用程序吗？”作者Michael Catanzaro </a>
-      crypto_verification_private:
-        description: >-
-          项目生成的软件（如果支持TLS）在发送带有私有信息的HTTP头（如安全Cookie）之前应该执行证书验证。如果软件不使用TLS，请选择“不适用”（N/A）。
-      hardened_site:
-        description: 建议项目网站，存储库（如果可通过网络访问）和下载站点（如果单独）包括具有非允许值的密钥加固头。
-        details: >-
-          请注意，GitHub是已知满足的。 https://securityheaders.io/ 等网站可以快速检查。主要头加固包含：内容安全策略（CSP），HTTP严格传输安全性（HSTS），X-Content-Type-Options（“nosniff”），X-Frame-Options和X-XSS-Protection。
-      hardening:
-        description: 建议在项目生成的软件中使用加固机制，以便软件缺陷不太可能导致安全漏洞。
-        details: >-
-          加固机制可能包括HTTP头，如内容安全策略（CSP），用于缓解攻击的编译器标志（如-fstack-protector）或用以消除未定义行为的编译器标志。对于此条款的目的，最小权限不被认为是一种加固机制（最小权限是重要的，但是另有条款）。
     '1':
       contribution_requirements:
         description: 关于如何贡献的信息必须包括对可接受的贡献的要求（例如，引用任何所需的编码标准）。
@@ -1306,12 +1272,6 @@ zh-CN:
     criteria:
       criteria: 条款
       detailed_criteria_on_github: 详细的条款在GitHub网站。
-      current_criteria: 当前条款数量：%{active}（活跃）+ %{future}（未来）= %{total}（总计）。
-      criteria_must_should_suggested: 在活跃条款中，有%{must}个必须，%{should}
-        个应该和%{suggested}个建议条款。
-      criteria_na_met_details: >-
-        在活跃条款中，%{na_allowed}允许N/A，%{met_url_required}在满足时需要URL，而%{details_present}在其描述中具有详细信息。
-      project_counts: 有%{projects}个项目条目; %{passing}个已经通过，%{in_progress}个正在进行中。
       project_stats_html: 您可以在<a href="/project_stats">项目统计信息页面</a>查看有关项目的统计信息。
       level: 等级
       must: 必须
@@ -1358,7 +1318,6 @@ zh-CN:
     future: 未来
     Installation system: 安装系统
     New functionality testing: 新功能测试
-    OSS License: OSS许可证
     Other: 其他
     Other security issues: 其他安全问题
     Previous versions: 之前的版本
@@ -1396,8 +1355,6 @@ zh-CN:
       other: 该表单包含%{count}个错误。
       few: 该表单包含%{count}个错误。
       many: 该表单包含%{count}个错误。
-    comma_separated_list: " 必须是以逗号分隔的名称列表"
-    begin_with_cpe: " 必须以“cpe:”开头"
     not_an_email: " 不是电子邮件"
     known_bad_password: " 是一个众所周知的（坏）密码"
     valid_text: " 必须是有效的UTF-8编码，没有无效的控制字符"

@@ -96,9 +96,48 @@ module SessionsHelper
     cookies.delete(:remember_token)
   end
 
+  # Return true iff an html_url in array repo_list is url.
+  def repo_url_in?(repo_list, url)
+    repo_list.any? { |project| project[:html_url] == url }
+  end
+
+  # Return true iff the current user can edit the given url.
+  #
+  # The GitHub API documentation here:
+  # https://developer.github.com/v3/repos/collaborators/
+  # #review-a-users-permission-level
+  # says that if you retrieve:
+  # GET /repos/:owner/:repo/collaborators/:username/permission
+  # If "permission" is write or admin then that user can modify it.
+  # HOWEVER, to use that API you have to have a token that's the admin
+  # of the repo, otherwise you just get a "Bad credentials" message.
+  # So while that *looks* useful, it doesn't work for our situation.
+  #
+  # The only way we've found that works for us is to ask GitHub to list the
+  # repos this user can control, and then return true if there's a match.
+  # The "client" parameter exists to simplify (unit) testing.
+  def github_user_projects_include?(url, client = Octokit::Client)
+    github = client.new access_token: session[:user_token]
+    github.auto_paginate = false
+    page = 1
+    repo_list = github.repos # Read first page of list
+    loop do
+      return false if repo_list.blank?
+      return true if repo_url_in?(repo_list, url)
+      # We should be able to do this, but it doesn't work:
+      # return false if github.last_response.rels[:next].blank?
+      # repo_list = github.last_response.rels[:next].get.data
+      # So we'll retrieve by requesting page numbers instead.
+      page += 1
+      repo_list = github.repos(nil, page: page)
+    end
+  end
+
+  # Retrieve list of all GitHub projects, used when displaying
+  # user profile.
   def github_user_projects
     github = Octokit::Client.new access_token: session[:user_token]
-    Octokit.auto_paginate = true
+    github.auto_paginate = true
     github.repos.map(&:html_url).reject(&:blank?)
   end
 
@@ -123,20 +162,26 @@ module SessionsHelper
   # Returns true iff the current_user can *edit* the @project data.
   # This is a session helper because we use the session to ask GitHub
   # for the list of projects the user can edit.
-  # rubocop:disable Metrics/CyclomaticComplexity
   def can_edit?
     return false if current_user.nil?
     return true if can_control?
     return true if AdditionalRight.exists?(
       project_id: @project.id, user_id: current_user.id
     )
-    return true if
-      current_user.provider == 'github' &&
-      @project.repo_url? && github_user_projects.include?(@project.repo_url)
+    return true if can_current_user_edit_on_github?(@project.repo_url)
 
     false
   end
-  # rubocop:enable Metrics/CyclomaticComplexity
+
+  # Returns true iff the current_user can *edit* the @project repo
+  # according to GitHub.  We try to avoid calling GitHub if it is
+  # is obviously unnecessary.
+  def can_current_user_edit_on_github?(url)
+    current_user.provider == 'github' &&
+      url.present? &&
+      url.starts_with?('https://github.com/') &&
+      github_user_projects_include?(url)
+  end
 
   def in_development?
     hostname = ENV['PUBLIC_HOSTNAME']

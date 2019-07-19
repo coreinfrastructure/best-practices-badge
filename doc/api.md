@@ -2,10 +2,19 @@
 
 <!-- SPDX-License-Identifier: (MIT OR CC-BY-3.0+) -->
 
-BadgeApp is a relatively simple web application, so its
-external interface is simple too.
+BadgeApp is a relatively simple web application, and its
+external application programming interface (API) is simple too.
 The BadgeApp API is a simple REST API that follows
 Ruby on Rails conventions.
+We *want* people to use our data; please do so!
+
+This document provides a quickstart,
+legal information (the data is released under at least the
+[Creative Commons Attribution License version 3.0 (CC-BY-3.0)](https://creativecommons.org/licenses/by/3.0/)),
+a discussion of the most common requests,
+a pointer to a sample analysis program,
+how to query, how to download the database,
+and then various kinds of more specialized information.
 
 ## Quickstart
 
@@ -15,9 +24,9 @@ For example, you can get the JSON data for project #1 from the
 real production site (<https://bestpractices.coreinfrastructure.org>)
 by retrieving (a GET) data from this URL:
 
-````
+```
 https://bestpractices.coreinfrastructure.org/projects/1.json
-````
+```
 
 Note that you can ask for a particular result data format (where
 supported) by adding a period and its format (e.g., ".json", ".csv",
@@ -29,16 +38,34 @@ in the requesting HTTP header.
 A GET just retrieves information, and since most information is public,
 in most cases you don't need to log in for a GET.
 Other operations, like POST or DELETE, require logging in first
-(as is typical, cookiers are used to track logged-in sessions).
+(as is typical, cookies are used to track logged-in sessions).
 
 From here on we'll omit the scheme (https) and hostname, and
 we'll indicate variables by beginning their name with ":" (colon).
 So the URL above is an example of this pattern, which retrieves
 information about project :id in a given :format (HTML by default):
 
-````
+```
 GET /projects/:id(.:format)
-````
+```
+
+## Legal information
+
+We *want* people to use the data we supply, so please do so!
+The main requirement is that you provide attribution.
+
+More specifically: As noted on the website front page,
+all publicly-available non-code content managed by the badging application
+is released under at least the
+[Creative Commons Attribution License version 3.0 (CC-BY-3.0)](https://creativecommons.org/licenses/by/3.0/);
+newer non-code content is released under
+CC-BY version 3.0 or later (CC-BY-3.0+).
+If referencing collectively or not
+otherwise noted, please credit the CII Best Practices badge contributors.
+
+If you use the data for research, we'd love to hear about your results,
+so please do share the results with us if you can.
+That said, you are not legally required to share any results.
 
 ## Most common requests
 
@@ -71,14 +98,24 @@ might request.
     The format is html by default; json and csv are also supported.
     See below for more about the query.
 
+## Sample program
+
+See the [best-practices.py](./best-practices.py) program to see an
+example of how to download and analyze data.
+Notice that since we supply JSON data in pages, you need to retrieve
+all the pages if you want the entire dataset.
+If you retrieve the entire database, store it locally
+(in a file or database system); it intentionally takes some time
+to download all of it.
+
 ## Query (Search)
 
 The "/projects" URL supports various searches.
 For example, retrieving this URL:
 
-````
+```
 /projects.json?gteq=90&amp;lteq=99&amp;page=2
-````
+```
 
 Will retrieve a list of project data in JSON format, but only for
 projects with 90% or better passing *and* less than or equal to 99%
@@ -92,7 +129,7 @@ to provide a reasonable interface.
 Most parameters can be combined (in which case all criteria must be met).
 The following search parameters are supported:
 
-*   status: "passing", "in_progress", "silver", or "gold"
+*   status: "passing", "in\_progress", "silver", or "gold"
 *   gteq: Integer, % greater than or equal of passing criteria
 *   lteq: Integer, % less than or equal of passing criteria.
     Can be combined with gteq
@@ -100,10 +137,15 @@ The following search parameters are supported:
 *   q: Text, "normal query" - match against parsed name, description, URL
     This is implemented by PostgreSQL, so you can use "&amp;" (and),
     "|" (or), and "'text...*'" (prefix).
-    This parses URLs into parts; you can't search on a whole URL (use pq).
+    Note that URLs cannot include spaces, and &amp;amp; has a special meaning,
+    so you typically will need to use URL encoding in a query.
+    For example, /en/projects?q=R%20%26%20analysis
+    is a search that requires both "R" and "analysis".
+    This search request system breaks URLs into parts, so you can't use "q" to
+    search on a whole URL (use pq instead).
 *   page: Page to display (starting at 1)
 
-See app/controllers/project_controllers.rb if you want to see the
+See app/controllers/project\_controllers.rb if you want to see the
 implementation's source code.
 
 ## Downloading the database
@@ -193,7 +235,7 @@ The following shows the HTTP verb (e.g., GET), the URI pattern, and
 the controller#action in the code (important if you need to examine
 the source code itself which is in directory app/controllers/).
 
-~~~~
+```
 Verb   URI Pattern                        Controller#Action
 GET    /projects/:id(.:format)            projects#show # .json supported.
 GET    /projects/:id/badge(.:format)      projects#badge {:format=>"svg"}
@@ -216,7 +258,7 @@ GET    /login(.:format)                   sessions#new
 POST   /login(.:format)                   sessions#create
 DELETE /logout(.:format)                  sessions#destroy
 GET    /signout(.:format)                 sessions#destroy
-~~~~
+```
 
 If you install the application you can have it report the routes
 by running "rake routes".
@@ -250,7 +292,7 @@ The BadgeApp provides CORS headers in certain cases when an
 "Origin" is provided.
 When a client-side JavaScript program
 makes a request to a different origin, it provides its "origin", and
-that allows the BadgeApp to decide what it wants to allow the client-side
+that allows the BadgeApp to decide what it wants to allow.
 
 The CORS header expressly does *not* share credentials, and
 *only* allows GET (or OPTIONS) for a few specific resources.
@@ -288,7 +330,8 @@ Locales are always exactly 2 lowercase letters, or 2 lowercase letters
 followed by an dash and then more alphanumerics.
 For example, "fr" is French, while "zh-cn" is Chinese (Simplified).
 This convention lets you syntactically distinguish between
-locales and other possible meanings of a URL's prefix.
+locales and other possible meanings of a URL's prefix;
+non-locale pages never match the locale syntax.
 
 ## Canonical URLs
 

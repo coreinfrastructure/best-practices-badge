@@ -139,6 +139,12 @@ class UsersManipulateProjectTest < ActionDispatch::IntegrationTest
       assert_template 'projects/edit'
 
       assert_select '#project_discussion_status_met[checked]'
+      assert_select '#project_implementation_languages'
+      # TODO: Check updated list
+      # assert_select(
+      #   '#project_implementation_languages[value=?]',
+      #   'Python, C, Shell, C++, CMake, C#, Ruby'
+      # )
     end
   end
 

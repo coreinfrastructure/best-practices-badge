@@ -85,15 +85,19 @@ class ProjectsControllerTest < ActionController::TestCase
 
   test 'should fail to create project' do
     log_in_as(@user)
+    # We simplify this test by stubbing out the request to GitHub to
+    # retrieve information about user repositories.
     url = 'https://api.github.com/user/repos?client_id=' \
           "#{ENV['TEST_GITHUB_KEY']}&client_secret=" \
-          "#{ENV['TEST_GITHUB_SECRET']}&per_page=100"
+          "#{ENV['TEST_GITHUB_SECRET']}&per_page=50&sort=pushed"
     stub_request(:get, url).to_return(status: 200, body: '', headers: {})
     assert_no_difference('Project.count') do
       post :create, params: { project: { name: @project.name } }
     end
     assert_no_difference('Project.count') do
-      post :create, format: :json, params: { project: { name: @project.name } }
+      post :create, format: :json, params: {
+        project: { name: @project.name }
+      }
     end
   end
 
@@ -145,6 +149,7 @@ class ProjectsControllerTest < ActionController::TestCase
     assert_equal 'Operating system for Pathfinder rover', body['description']
     assert_equal 'https://www.nasa.gov', body['homepage_url']
     assert_equal 'in_progress', body['badge_level']
+    assert_equal [], body['additional_rights']
   end
 
   test 'should get edit' do

@@ -92,15 +92,27 @@ class ProjectsHelperTest < ActionView::TestCase
   end
 
   test 'Ensure tiered_percent_as_string works' do
-    assert_nil tiered_percent_as_string(nil)
-    assert_equal 'In Progress, 74% completed for passing',
-                 tiered_percent_as_string(74)
-    assert_equal 'Passing, 23% completed for silver',
-                 tiered_percent_as_string(123)
-    assert_equal 'Silver, 52% completed for gold', tiered_percent_as_string(252)
-    assert_equal 'Gold', tiered_percent_as_string(300)
+    I18n.with_locale(:en) do
+      assert_nil tiered_percent_as_string(nil)
+      assert_equal 'In Progress, 74% completed for passing',
+                   tiered_percent_as_string(74)
+      assert_equal 'Passing, 23% completed for silver',
+                   tiered_percent_as_string(123)
+      assert_equal 'Silver, 52% completed for gold',
+                   tiered_percent_as_string(252)
+      assert_equal 'Gold', tiered_percent_as_string(300)
+    end
+    I18n.with_locale(:de) do
+      assert_equal 'In Arbeit, 74% Fortschritt für Passing',
+                   tiered_percent_as_string(74)
+    end
     # I18n.with_locale(:fr) do
     #    assert_equal 'WRONG', tiered_percent_as_string(74)
     # end
+  end
+
+  test 'Empty repo list works' do
+    empty_result = fork_and_original([])
+    assert_equal [[], []], empty_result
   end
 end

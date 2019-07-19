@@ -2454,7 +2454,7 @@ en:
           telnet, SSLv3 or earlier, and SSHv1 SHOULD be disabled
           by default, and only enabled if the user specifically
           configures it. If the software produced by the project
-          does not support network comunications, select "not
+          does not support network communications, select "not
           applicable" (N/A).
       crypto_tls12:
         description: >-
@@ -2712,7 +2712,7 @@ en:
           SSLv3 or earlier, and SSHv1 MUST be disabled by default,
           and only enabled if the user specifically configures
           it. If the software produced by the project does not
-          support network comunications, select "not applicable"
+          support network communications, select "not applicable"
           (N/A).
       crypto_tls12:
         description: >-

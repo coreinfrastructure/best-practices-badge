@@ -58,6 +58,7 @@ jobs:
     - run: echo -e "export RAILS_ENV=test\nexport RACK_ENV=test" >> $BASH_ENV
     - run: 'bundle check --path=vendor/bundle || bundle install --path=vendor/bundle
         --jobs=4 --retry=3 '
+    -run: bundle exec rake update_chromedriver
     # Save dependency cache
     - save_cache:
         key: v1-dep-{{ .Branch }}-{{ epoch }}
@@ -66,6 +67,7 @@ jobs:
         # You can probably delete some of these entries
         - vendor/bundle
         - ~/.bundle
+        - ~/.webdrivers
     # The following line was run implicitly in your 1.0 builds based on what CircleCI inferred about the structure of your project. In 2.0 you need to be explicit about which commands should be run. In some cases you can discard inferred commands if they are not relevant to your project.
     - run: |-
         mkdir -p config && echo 'test:

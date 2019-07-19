@@ -98,6 +98,33 @@ might request.
     The format is html by default; json and csv are also supported.
     See below for more about the query.
 
+## Tiered percentage in CII Best Practices Badge
+
+The `tiered_percentage` field of a project
+(shown as the "tiered %" column on the projects page)
+is a number that should be interpreted as a percentage.
+As also explained at the bottom of the
+[projects page](https://bestpractices.coreinfrastructure.org/en/projects),
+this field is 300% (represented as 300) for gold,
+200% (represented as 200) for silver, and
+100% (represented as 100) for passing, plus any
+progress after the highest-earned badge.
+
+For example,
+a project that has earned a passing badge (100%), has completed 40% of the
+silver requirements, and has also completed 20% of the gold requirements,
+will have a value of 140 (meaning 140%).
+We intentionally don't give credit to much higher badge requirements
+until a previous lower badge is earned,
+because we are trying to encourage earning complete badges.
+
+When there was only a single badge level this represented progress toward
+earning the passing badge (earning it would show 100%).
+When we added higher-level badges, it was clear that there was value in
+having a single number represent broader progress, so we decided to
+implement this number as a "tiered percentage".
+We think it provides a useful measure of progress.
+
 ## Sample program
 
 See the [best-practices.py](./best-practices.py) program to see an

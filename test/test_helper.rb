@@ -99,7 +99,13 @@ end
 # https://github.com/teamcapybara/capybara/blob/master/spec/
 # selenium_spec_chrome.rb#L6
 Capybara.register_driver :headless_chrome do |app|
+  if ENV['CI']
+    Selenium::WebDriver::Chrome.path = ENV.fetch('GOOGLE_CHROME_BIN', nil)
+  end
   browser_options = Selenium::WebDriver::Chrome::Options.new
+  if ENV['CI']
+    browser_options.binary = ENV.fetch('GOOGLE_CHROME_SHIM', nil)
+  end
   browser_options.args << '--headless'
   browser_options.args << '--disable-gpu' if Gem.win_platform?
   driver = Capybara::Selenium::Driver.new(

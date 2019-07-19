@@ -428,18 +428,8 @@ fi
 # Running db:migrate in the test environment fixes the error.
 bin/rake db:migrate RAILS_ENV=test
 
-if [ -e "$shell_init" ] ; then
-  . "$shell_init"
-fi
-
-# Run the correct rake on CircleCI
-if [ -z "$CIRCLECI" ]; then
-  bin/rake
-else
-  bin/rake ci
-fi
-
 echo 'All done! Please reopen your terminal or run'
 echo '"source ~/.bashrc" to adjust your PATH.'
-echo 'Then run "rails server" and use a web browser'
+echo 'Then run "rake" to check the install.'
+echo 'Run "rails server" and use a web browser'
 echo 'to view localhost:3000 to see it run.'

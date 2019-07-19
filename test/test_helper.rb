@@ -86,7 +86,6 @@ Capybara.server_port = 31_337
 # https://robots.thoughtbot.com/headless-feature-specs-with-chrome
 
 require 'selenium/webdriver'
-require 'webdrivers/chromedriver'
 
 # Register "chrome" driver - use it via Selenium.
 Capybara.register_driver :chrome do |app|
@@ -100,7 +99,7 @@ end
 # https://github.com/teamcapybara/capybara/blob/master/spec/
 # selenium_spec_chrome.rb#L6
 Capybara.register_driver :headless_chrome do |app|
-  browser_options = ::Selenium::WebDriver::Chrome::Options.new
+  browser_options = Selenium::WebDriver::Chrome::Options.new
   browser_options.args << '--headless'
   browser_options.args << '--disable-gpu' if Gem.win_platform?
   driver = Capybara::Selenium::Driver.new(

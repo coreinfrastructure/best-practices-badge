@@ -164,9 +164,9 @@ case "$manager" in
     # add_pkg autoconf bison build-essential libssl-dev libyaml-dev \
     #         libreadline6-dev zlib1g-dev libncurses5-dev libffi-dev \
     #         libgdbm3 libgdbm-dev
-    add_pkg chromium-browser ruby-build postgresql-server-dev-all postgresql \
+    add_pkg ruby-build postgresql-server-dev-all postgresql \
             postgresql-contrib cmake nodejs phantomjs graphviz \
-            pkg-config ;;
+            pkg-config;;
   yum|dnf)
     add_pkg gcc openssl-devel libyaml-devel libffi-devel readline-devel \
             zlib-devel gdbm-devel ncurses-devel postgresql-devel cmake npm \

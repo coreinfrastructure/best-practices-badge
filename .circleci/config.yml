@@ -28,8 +28,8 @@ jobs:
     # https://circleci.com/docs/2.0/circleci-images/
     docker:
     - image: circleci/build-image:ubuntu-14.04-XXL-upstart-1189-5614f37
-      command: /sbin/init
     steps:
+    - run: sudo service postgresql start
     # Machine Setup
     #   If you break your build into multiple jobs with workflows, you will probably want to do the parts of this that are relevant in each
     # The following `checkout` command checks out your code to your working directory. In 1.0 we did this implicitly. In 2.0 you can choose where in the course of a job your code should be checked out.

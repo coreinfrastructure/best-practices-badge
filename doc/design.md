@@ -188,34 +188,66 @@ Here is our approach to getting good performance:
 * We use various tools, such as [webpagetest](https://www.webpagetest.org/),
   to detect performance problems.
 
-### Not used: Turbolinks
+### Turbolinks
 
-At the moment we do not use
-[turbolinks](https://github.com/turbolinks/turbolinks).
-Turbolinks is a performance enhancer designed to make
+[Turbolinks](https://github.com/turbolinks/turbolinks)
+is a performance enhancer designed to make
 "navigating your web application faster".
 Turbolinks often used in Rails applications, because it's intended to provide
 "the performance benefits of a single-page application without the added
 complexity of a client-side JavaScript framework."
 
-However, you need to modify your application to work properly with turbolinks.
+We currently use Turbolinks (we used it, removed it, and
+are now using it again).
+
+The key challenge with using Turbolinks is that
+you need to modify your application to work properly with turbolinks.
 [Turbolinks breaks $(document).ready](http://guides.rubyonrails.org/working_with_javascript_in_rails.html#page-change-events)
 (an extremely common construct)
-and by default requires you to use a nonstandard on..."page:change"
-construct.
-We used to use turbolinks, along with a gem called jquery-turbolinks
-that tried to work around the need for modifying software for turbolinks.
-In practice this setup was unreliable, especially with /project_stats.
-
+and requires you to use a nonstandard on..."page:change" construct.
 To use turbolinks properly we've determined that
 you really need to read its documentation
 carefully, and then modify your JavaScript to work with it.
 
-We might restore turbolinks in the future,
-but we would need to do it properly (and probably add a marking
-for /project_stats to disable turbolinks on that page).
-The current web application is so
-fast that we don't really need turbolinks.
+A key challenge for us is that Chartkick, used in `/project_stats`,
+does not work well with turbolinks.
+We once used the gem `jquery-turbolinks` to work around this, but
+in practice this setup was unreliable.
+Our new solution adds `data-turbolinks="false"` to every hyperlink to
+`/project_stats`, which disables turbolinks for that link.
+This requires every view text that might include such a hyperlink to call
+`disable_turbolinks` as defined in
+the DisableTurbolinksHelper module
+(see `app/helpers/disable_turbolinks_helper.rb`).
+This is an odd workaround, but references to `/project_stats` are not
+common, and this workaround lets us speed up performance for the
+common case.
+
+So: if you add new HTML fragments that link to `/project_stats` (in any locale
+or with any query), you *must* wrap it with a call to `disable_turbolinks`.
+If you add new pages that require disabling Turbolinks, you will need to
+modify `disable_turbolinks` and add additional calls as needed.
+
+At the time of this writing Turbolinks does not support the performance
+improvement "fetch on hover" aka "instantclick".
+This is a recommended enhancement as described in
+[Turbolinks issue #313](https://github.com/turbolinks/turbolinks/issues/313).
+Ideally we would have both turbolinks and instantclick,
+but there does not seem to be an easy way to have both.
+If we must pick only one, it appears that Turbolinks is the better choice.
+Turbolinks' speed improvement works on all systems with client-side JavaScript,
+while fetch on hover does not work on normal touchscreens
+(there is no "hover" to detect) and touchscreens (including
+smartphones) are generally the systems that most need a speed boost.
+In addition, Turbolinks may eventually add instantclick as well.
+So we have chosen Turbolinks and hope that turbolinks will eventually add
+support for instantclick.
+
+While the website works reasonably well without Turbolinks,
+users *like* high-performing websites.
+This approach (with Turbolinks) supports security or privacy conscious users
+who disable client-side JavaScript, while also providing
+faster response for those users who have client-side JavaScript enabled.
 
 ### Not used: Rails Streaming
 

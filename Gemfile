@@ -55,6 +55,7 @@ gem 'redcarpet', '3.4.0' # Process markdown in form textareas (justifications)
 gem 'sass-rails', '5.0.7', require: false
 gem 'scout_apm', '2.4.21' # Monitor for memory leaks
 gem 'secure_headers', '6.0.0' # Add hardening measures to HTTP headers
+gem 'turbolinks', '5.2.0' # Speed client if it permits client-side JavaScript
 gem 'uglifier', '4.1.20', require: false # Minify JavaScript
 gem 'will-paginate-i18n', '0.1.15' # Provide will-paginate translations
 gem 'will_paginate', '3.1.6' # Paginate results (next/previous)

@@ -249,7 +249,7 @@
 <% if current_user&.admin? %>
 <%# This links to admin-only information: %>
 <p>
-<%= t '.admin_html' %>
+<%= disable_turbolinks(t('.admin_html')) %>
 <% end # admin-specific info %>
 
 <br>

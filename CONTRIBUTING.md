@@ -932,8 +932,10 @@ Then run the following command:
 ~~~~
 
 Note at the end of this script a `git commit -as` will be initiated
-if everything worked correctly.
-You will need to be sure to run `git push` after doing this.
+if everything worked correctly. Next you should update the CircleCI build
+image and `.circleci/config.yml` as indicated in the dockerfiles
+[README](dockerfiles/README.md).  You will then need to commit those changes.
+and run `git push`.
 
 For more details about updating Ruby versions with rbenv, see
 <https://github.com/rbenv/ruby-build> and

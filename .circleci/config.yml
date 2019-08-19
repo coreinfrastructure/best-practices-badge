@@ -103,7 +103,7 @@ jobs:
         path: /tmp/circleci-test-results
   deploy-master:
     docker:
-      - image: buildpack-deps:trusty
+      - image: buildpack-deps:bionic
     steps:
       - checkout
       - run:
@@ -124,7 +124,7 @@ jobs:
           command: script/fastly_test
   deploy-staging:
     docker:
-      - image: buildpack-deps:trusty
+      - image: buildpack-deps:bionic
     steps:
       - checkout
       - run:
@@ -142,7 +142,7 @@ jobs:
           no_output_timeout: 400s
   deploy-production:
     docker:
-      - image: buildpack-deps:trusty
+      - image: buildpack-deps:bionic
     steps:
       - checkout
       - run:

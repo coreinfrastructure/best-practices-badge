@@ -48,6 +48,9 @@ jobs:
         command: >
           bundle check --path=vendor/bundle ||
           bundle install --path=vendor/bundle --jobs=4 --retry=3
+    - run:
+       name: Update Chromedriver
+       command: bundle exec rake update_chromedriver
     # Save dependency cache
     - save_cache:
         key: v2-dep-{{ checksum "Gemfile.lock" }}

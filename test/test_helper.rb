@@ -78,41 +78,41 @@ end
 
 require 'minitest/rails/capybara'
 
-driver = ENV['DRIVER'].try(:to_sym)
-
-setup_poltergeist =
-  lambda do
-    Capybara.register_driver :poltergeist do |app|
-      Capybara::Poltergeist::Driver.new(app, timeout: ENV['CI'] ? 30 : 60_000)
-    end
-  end
-
-Capybara.register_driver :chrome do |app|
-  Capybara::Selenium::Driver.new(app, browser: :chrome, args: ['no-sandbox'])
-end
-if driver == :poltergeist
-  require 'capybara/poltergeist'
-  setup_poltergeist.call
-  Capybara.default_driver = :poltergeist
-  Capybara.current_driver = :poltergeist
-  Capybara.javascript_driver = :poltergeist
-elsif driver.nil?
-  require 'capybara/poltergeist'
-  setup_poltergeist.call
-  Capybara.default_driver = :rack_test
-  Capybara.current_driver = :rack_test
-  Capybara.javascript_driver = :poltergeist
-else
-  Capybara.register_driver :selenium do |app|
-    Capybara::Selenium::Driver.new(app, browser: driver)
-  end
-  Capybara.default_driver = :selenium
-  Capybara.current_driver = :selenium
-  Capybara.javascript_driver = :selenium
-end
-
 Capybara.default_max_wait_time = 5
 Capybara.server_port = 31_337
+
+# Set up a test environment to run client-side JavaScript.
+# Setup Capybara -> selenium -> webdriver -> headless chrome/chromium. See:
+# https://robots.thoughtbot.com/headless-feature-specs-with-chrome
+
+require 'selenium/webdriver'
+
+# Register "chrome" driver - use it via Selenium.
+Capybara.register_driver :chrome do |app|
+  Capybara::Selenium::Driver.new(app, browser: :chrome)
+end
+
+# Register "headless_chrome" driver - use it via Selenium.
+# The configuration approach documented here isn't actually headless:
+# https://robots.thoughtbot.com/headless-feature-specs-with-chrome
+# So we instead use the approach documented in:
+# https://github.com/teamcapybara/capybara/blob/master/spec/
+# selenium_spec_chrome.rb#L6
+Capybara.register_driver :headless_chrome do |app|
+  browser_options = Selenium::WebDriver::Chrome::Options.new
+  browser_options.binary = ENV.fetch('GOOGLE_CHROME_SHIM', nil) if ENV['CI']
+  browser_options.args << '--headless'
+  browser_options.args << '--disable-gpu' if Gem.win_platform?
+  driver = Capybara::Selenium::Driver.new(
+    app, browser: :chrome, options: browser_options
+  )
+  driver.browser.download_path = Capybara.save_path
+  driver
+end
+
+# Note that DRIVER only controls the Capybara javascript_driver.
+driver = ENV['DRIVER'].try(:to_sym)
+Capybara.javascript_driver = driver.present? ? driver : :headless_chrome
 
 module ActiveSupport
   class TestCase

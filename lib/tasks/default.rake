@@ -7,8 +7,6 @@
 # Rake tasks for BadgeApp
 
 require 'json'
-require 'webdrivers'
-load 'webdrivers/Rakefile'
 
 task(:default).clear.enhance %w[
   rbenv_rvm_setup
@@ -696,9 +694,16 @@ end
 # JavaScript tests end up running .chromedriver-helper, which is downloaded
 # and cached.  Update the cached version.
 desc 'Update webdrivers/chromedriver'
-task :update_chromedriver do
-  # force-upgrade to the latest version of chromedriver
-  Rake::Task['webdrivers:chromedriver:update'].invoke
+if Rails.env.production? || Rails.env == 'fake_production'
+  task :update_chromedriver do
+    puts 'Skipping update_chromedriver (libraries not available).'
+  end
+else
+  task :update_chromedriver do
+    require 'webdrivers'
+    # force-upgrade to the latest version of chromedriver
+    Webdrivers::Chromedriver.update
+  end
 end
 
 # Run some slower tests. Doing this on *every* automated test run would be

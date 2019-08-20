@@ -86,6 +86,7 @@ Capybara.server_port = 31_337
 # https://robots.thoughtbot.com/headless-feature-specs-with-chrome
 
 require 'selenium/webdriver'
+require 'webdrivers'
 
 # Register "chrome" driver - use it via Selenium.
 Capybara.register_driver :chrome do |app|

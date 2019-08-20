@@ -1,3 +1,14 @@
+<%# Disable turbolinks-cache-control due to incompatibility with Chartkick.
+    Chartkick doesn't work well with Turbolinks, because it requires a
+    "load" event that turbolinks does not provide.
+    We disable turbolinks in hyperlinks *to* this page.
+    In addition, we disable turbolinks-cache-control so that when a user
+    goes *back* to this page, the page won't be handled by turoblinks
+    (and thus the load event will occur).  This is unfortunate, but
+    making it work is more important. %>
+<% content_for :special_head_values do %>
+  <meta name="turbolinks-cache-control" content="no-cache">
+<% end %>
 <%= javascript_include_tag 'project-stats', defer: true%>
 
 <%

@@ -5,6 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <%= csrf_meta_tags %>
+  <%= yield :special_head_values %>
 <%# The following are the same for a given locale, cache for speed -%>
 <% cache locale do # do not cache csrf_meta_tags -%>
   <title>BadgeApp</title>

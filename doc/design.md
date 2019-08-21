@@ -213,20 +213,13 @@ A key challenge for us is that Chartkick, used in `/project_stats`,
 does not work well with turbolinks.
 We once used the gem `jquery-turbolinks` to work around this, but
 in practice this setup was unreliable.
-Our new solution adds `data-turbolinks="false"` to every hyperlink to
-`/project_stats`, which disables turbolinks for that link.
-This requires every view text that might include such a hyperlink to call
-`disable_turbolinks` as defined in
-the DisableTurbolinksHelper module
-(see `app/helpers/disable_turbolinks_helper.rb`).
+Our new solution adds
+`<meta name="turbolinks-visit-control" content="reload">`
+to the HTML head of
+`/project_stats`, which disables turbolinks for that page.
 This is an odd workaround, but references to `/project_stats` are not
 common, and this workaround lets us speed up performance for the
 common case.
-
-So: if you add new HTML fragments that link to `/project_stats` (in any locale
-or with any query), you *must* wrap it with a call to `disable_turbolinks`.
-If you add new pages that require disabling Turbolinks, you will need to
-modify `disable_turbolinks` and add additional calls as needed.
 
 At the time of this writing Turbolinks does not support the performance
 improvement "fetch on hover" aka "instantclick".

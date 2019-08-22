@@ -27,14 +27,19 @@ jobs:
     - restore_cache:
         keys:
         # Find a cache corresponding to this particular Gemfile.lock checksum
-        - v4-dep-{{ checksum "Gemfile.lock" }}
+        - v3-dep-{{ checksum "Gemfile.lock" }}
         # Find the most recently generated cache used
-        - v4-dep-
+        - v3-dep-
     - run:
         name: Update Rubygems
         command: sudo gem update --system --silent
         environment:
           REALLY_GEM_UPDATE_SYSTEM: 1
+    - run:
+        name: Update bundler to match Gemfile.lock
+        command: >
+          sudo sh -c 'yes | gem install bundler --force --no-document
+          -v "$(cat Gemfile.lock | tail -1 | tr -d \\\\" \\\\")"'
     - run:
         name: Bundler Version
         command: bundle --version
@@ -48,7 +53,7 @@ jobs:
        command: bundle exec rake update_chromedriver
     # Save dependency cache
     - save_cache:
-        key: v4-dep-{{ checksum "Gemfile.lock" }}
+        key: v3-dep-{{ checksum "Gemfile.lock" }}
         paths:
           - vendor/bundle
           - ~/.bundle

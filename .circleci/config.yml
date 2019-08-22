@@ -36,11 +36,6 @@ jobs:
         environment:
           REALLY_GEM_UPDATE_SYSTEM: 1
     - run:
-        name: Update bundler to match Gemfile.lock
-        command: >
-          sudo sh -c 'yes | gem install bundler --no-document
-          -v "$(cat Gemfile.lock | tail -1 | tr -d \\\\" \\\\")"'
-    - run:
         name: Bundler Version
         command: bundle --version
     - run:

@@ -1,3 +1,7 @@
+<%# Disable Turbolinks. It + Chrome + GitHub + CSP don't cooperate. %>
+<% content_for :special_head_values do %>
+  <meta name="turbolinks-visit-control" content="reload">
+<% end %>
 <%
    # Quick check of project and repo URLs.  This check is for responsiveness,
    # not for security; they're checked more rigorously

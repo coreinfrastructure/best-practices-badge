@@ -702,11 +702,10 @@ function setupProjectForm() {
 }
 
 // Setup display as soon as page is ready
-// NOTE: Without turbolinks we'd do it using:
-// > $(document).ready(function() {
-// but Turbolinks uses turbolinks:load instead.
+// NOTE: With turbolinks we'd do:
+// > document.addEventListener('turbolinks:load', function() {
 // TODO: Instead of attaching many listeners, attach a few to the whole doc.
-document.addEventListener('turbolinks:load', function() {
+$(document).ready(function() {
   $('[data-toggle="tooltip"]').tooltip(); // Enable bootstrap tooltips
 
   // A form element with class onchange-submit automatically submits its

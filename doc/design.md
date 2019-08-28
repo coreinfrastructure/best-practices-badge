@@ -190,17 +190,38 @@ Here is our approach to getting good performance:
 
 ### Turbolinks
 
+At one time we used Turbolinks, and we've tried to re-enable it,
+but we've currently disabled it.
+Here's a discussion of why we would like to use Turbolinks but do not.
+
 [Turbolinks](https://github.com/turbolinks/turbolinks)
 is a performance enhancer designed to make
 "navigating your web application faster".
-Turbolinks often used in Rails applications, because it's intended to provide
+Turbolinks is often used in Rails applications, because it's intended to provide
 "the performance benefits of a single-page application without the added
 complexity of a client-side JavaScript framework."
+While our website works reasonably well without Turbolinks,
+users *like* high-performing websites.
+In August 2019 we found that some of our bigger pages dropped from 1100msec
+without Turbolinks to 700msec with Turbolinks
+(from request to completed paint).
+Using Turbolinks supports security or privacy conscious users
+who disable client-side JavaScript, while also providing
+faster response for those users who have client-side JavaScript enabled.
 
-We currently use Turbolinks (we used it, removed it, and
-are now using it again).
+In theory, enabling Turbolinks is easy:
 
-The key challenge with using Turbolinks is that
+* In `Gemfile` add `turbolinks` as a library
+* In `app/assets/javascripts/application.js` add
+  `//= require turbolinks`
+* In `app/assets/javascripts/project-form.js` replace
+  `$(document).ready(function() {` with
+  `document.addEventListener('turbolinks:load', function() {`
+  (our ready event resets everything and does
+   not presume a clean pristine starting environment,
+   so it works just fine with `turbolinks:load`).
+
+A key challenge with using Turbolinks is that
 you need to modify your application to work properly with turbolinks.
 [Turbolinks breaks $(document).ready](http://guides.rubyonrails.org/working_with_javascript_in_rails.html#page-change-events)
 (an extremely common construct)
@@ -209,17 +230,50 @@ To use turbolinks properly we've determined that
 you really need to read its documentation
 carefully, and then modify your JavaScript to work with it.
 
-A key challenge for us is that Chartkick, used in `/project_stats`,
-does not work well with turbolinks.
+But in our case this is not enough.
+
+The biggest problem is
+`app/views/project_stats/index.html.erb` viewed as `/project_stats`
+Currently this uses Chartkick, which requires inline JavaScript
+(the inline JavaScript code is generated server-side and sent to the client),
+so we have to permit inline JavaScript on (just) this file.
 We once used the gem `jquery-turbolinks` to work around this, but
 in practice this setup was unreliable.
-Our new solution adds
-`<meta name="turbolinks-visit-control" content="reload">`
-to the HTML head of
-`/project_stats`, which disables turbolinks for that page.
-This is an odd workaround, but references to `/project_stats` are not
-common, and this workaround lets us speed up performance for the
-common case.
+We can make it *run* with Turbolinks by adding this to the ERB file:
+
+~~~~
+    <% content_for :special_head_values do %>
+       <meta name="turbolinks-visit-control" content="reload">
+    <% end %>
+~~~~
+
+But that is not enough. Turbolinks works by merging all headings,
+*including* CSP permissions.
+So once a user views this page, the user's protection against inline
+JavaScript is *disabled* - and that is unacceptable.
+While we hope we have no XSS vulnerabilities, it always possible that
+we have missed something; our CSP settings limit the damage that
+can be caused if we have XSS vulnerabilities.
+
+The best solution is to eliminate all inline JavaScript from `/project_stats`.
+We could separately generate SVG, or modify the page so that
+externally-defined JavaScript is used to generate the chart
+(perhaps by calling ChartKick).
+However, that is more effort and we have not done that.
+
+Turbolinks also causes another problem: some pages require
+form actions to be allowed to go to GitHub.
+See `config/initializers/secure_headers.rb` which defines
+`:allow_github_form_action`, which is used in a few pages.
+Again, with Turbolinks, once these pages are seen the additional permission
+is granted everywhere.
+This isn't so bad; we could probably just allow GitHub form actions
+everywhere.
+Exploiting GitHub form actions would require an attacker to find a
+vulnerability in our system
+*and* a vulnerability in GitHub's form handling system.
+That isn't impossible,
+but it is less likely and we could probably live with that.
 
 At the time of this writing Turbolinks does not support the performance
 improvement "fetch on hover" aka "instantclick".
@@ -235,12 +289,6 @@ smartphones) are generally the systems that most need a speed boost.
 In addition, Turbolinks may eventually add instantclick as well.
 So we have chosen Turbolinks and hope that turbolinks will eventually add
 support for instantclick.
-
-While the website works reasonably well without Turbolinks,
-users *like* high-performing websites.
-This approach (with Turbolinks) supports security or privacy conscious users
-who disable client-side JavaScript, while also providing
-faster response for those users who have client-side JavaScript enabled.
 
 ### Not used: Rails Streaming
 

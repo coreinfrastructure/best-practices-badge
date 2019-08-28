@@ -31,5 +31,3 @@
 // Moved to project-stats.js: = require chartkick
 //= require_tree .
 //= stub 'project-stats'
-// This speeds up interactivity if client-side JavaScript is enabled:
-//= require turbolinks

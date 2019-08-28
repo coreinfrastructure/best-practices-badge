@@ -1,13 +1,3 @@
-<%# Force turbolinks to reload due to incompatibility with Chartkick.
-    Chartkick doesn't work well with Turbolinks, because it requires a
-    "load" event that turbolinks does not normally provide.
-    We disable turbolinks in hyperlinks *to* this page.
-    In addition, we require a reload when turbolinks visits this page
-    (and thus the load event will occur).  This is unfortunate, but
-    making this page work is more important. %>
-<% content_for :special_head_values do %>
-  <meta name="turbolinks-visit-control" content="reload">
-<% end %>
 <%= javascript_include_tag 'project-stats', defer: true%>
 
 <%

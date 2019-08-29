@@ -203,20 +203,21 @@ We must first define what we mean by an unrelated site.
 A "related" site is a site that we are directly using to provide our service,
 in particular our cloud provider (Heroku which runs on
 Amazon's EC2 cloud-computing platform), CDN provider (Fastly),
-authorization services provider (GitHub), and logging / intrusion detection
-service.
+authorization and avatar services provider (GitHub),
+external avatar services (Gravatar),
+and logging / intrusion detection service.
 As a practical matter, related sites must (under various circumstances)
 receive some information about the user (at least that the user
 is trying to do something).
 In those cases we have selected partners we believe are trustworthy, and
-we have a direct relationship with them.
+we have some kind of relationship with them.
 
 However, there is no reason unrelated sites
 *must* see what our users are doing,
 so we take many steps to prevent unrelated sites from
 learning about our users' activities (and thus maintaining user privacy):
 
-* We directly serve all our assets ourselves,
+* We directly serve all our own assets ourselves,
   including JavaScipt, images, and fonts.
   Since we serve them ourselves, and never serve information via external
   third parties,
@@ -244,6 +245,44 @@ learning about our users' activities (and thus maintaining user privacy):
   *only* receives information when the user takes a direct action to
   request it (e.g., a click), and that site only receives information from
   the specific user who requested it.
+* User avatars are handled specially. We consider
+  the few avatar-serving domains that we use as related sites.
+  This issue may not be obvious, so here we'll drill into it.
+  A user can choose a representative avatar
+  (currently via GitHub or Gravatar).
+  Anyone who views that user's information page will
+  receive an img reference to that avatar so that they can see it.
+  External avatar images are only shown from specific domains
+  ('secure.gravatar.com' or 'avatars.githubusercontent.com'), they are
+  only included if the user has an avatar, and they are only shown to
+  others if that user's information was requested.
+  This functionality is useful, because these images can help others remember
+  who the user is.
+  We have considered ways to further limit information sharing even
+  though they are related sites, but law and technology currently limit this.
+  We could download these images and re-serve them, but copying the images
+  into our own site could be considered a copyright violation
+  and would also impose significant extra resources.
+  Thus, since we cannot serve avatars ourselves,
+  at the very least the requestor's externally-visible IP address
+  will be visible to the external avatar server.
+  We would like to limit third-party cookies and requestor headers at least.
+  We have not found a *good* way to prevent third-party cookies from being
+  sent in this case;
+  [there are discussions on how to disable third party cookies for img tags](https://stackoverflow.com/questions/51549390/how-to-disable-third-party-cookie-for-img-tags),
+  but currently-known
+  mechanisms are complex, require inline CSS invocations,
+  and have dubious reliability.
+  As far as hiding the requestor header, we have added the experimental
+  `referrerpolicy="no-referrer"` attribute to the image
+  as discussed in the
+  [Mozilla img documentation](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img).
+
+For example, there is no reason that general-purpose social
+networking sites *must* see what our users are doing on our site, so we try to
+ensure that general-purpose social networking sites
+do not see what our users are doing unless the users
+take specific intentional actions to share information about themselves.
 
 Of course, to access the Internet the user must use various services and
 computers, and some of those could be privacy-exposing.

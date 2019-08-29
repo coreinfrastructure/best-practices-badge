@@ -80,9 +80,11 @@ The BadgeApp web application MUST:
    its requirements.
 10. **Protect users and their privacy.**  In particular, we MUST
    comply with the EU General Data Protection Regulation (GDPR).
-   Don't expose user email addresses,
-   and don't expose user activities to unrelated sites
+   We don't expose user email addresses,
+   and we don't expose user activities to unrelated sites
    (including social media sites) without that user's consent.
+   In particular, we do not include "like" buttons that reveal that the
+   user viewed that particular page.
 11. **Be accessible.**
    We strive to comply with the
    <a href="https://www.w3.org/TR/WCAG20/">Web Content Accessibility
@@ -109,7 +111,7 @@ The BadgeApp web application MUST:
    We need these aggregate statistics to monitor the
    status of the badging project, and focus primarily on projects.
    These are aggregations, to help preserve user privacy.
-   See /project_stats and /criteria for these statistics.
+   See `/project_stats` and `/criteria` for these statistics.
 
 We do *not* need to support offline editing of data.
 

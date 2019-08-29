@@ -261,28 +261,59 @@ learning about our users' activities (and thus maintaining user privacy):
   We have considered ways to further limit information sharing even
   though they are related sites, but law and technology currently limit this.
   We could download these images and re-serve them, but copying the images
-  into our own site could be considered a copyright violation
-  and would also impose significant extra resources.
-  Thus, since we cannot serve avatars ourselves,
-  at the very least the requestor's externally-visible IP address
+  into our own site might be considered a copyright violation
+  and would also impose the need for significant extra resources.
+  Thus, since we cannot serve avatars ourselves, we must direct requestors
+  to them, so at the very least the requestor's externally-visible IP address
   will be visible to the external avatar server.
-  We would like to limit third-party cookies and requestor headers at least.
-  We have not found a *good* way to prevent third-party cookies from being
-  sent in this case;
+  We would like to limit third-party cookies and requestor headers.
+  Unfortunately, we have not found a *good* way to prevent
+  third-party cookies from being sent in this case;
   [there are discussions on how to disable third party cookies for img tags](https://stackoverflow.com/questions/51549390/how-to-disable-third-party-cookie-for-img-tags),
   but currently-known
   mechanisms are complex, require inline CSS invocations,
   and have dubious reliability.
-  As far as hiding the requestor header, we have added the experimental
+  We hope that future web standards will add the ability to easily
+  prevent the unnecessary revelation of third-party cookies.
+  The story is somewhat better for requestor headers.
+  We have added the experimental
   `referrerpolicy="no-referrer"` attribute to the image
   as discussed in the
   [Mozilla img documentation](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img).
+  While this attribute is technically experimental,
+  [the referrerpolicy attribute on images is widely supported](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/referrerPolicy).
 
 For example, there is no reason that general-purpose social
 networking sites *must* see what our users are doing on our site, so we try to
 ensure that general-purpose social networking sites
 do not see what our users are doing unless the users
 take specific intentional actions to share information about themselves.
+In particular, we do not include "like" buttons that reveal that the
+user viewed that particular page.
+We do have "like" buttons, but they only reveal anything to a social networking
+site when a user actively selects the button, and *not* to other users
+who are simply viewing the page.
+Similarly, we do not embed any third-party analytics services.
+
+Note that this is different from what happens when a user actively
+clicks on a hypertext link to go to a different web site.
+In this case, the user *actively* selected to visit that different web site,
+and thus consented to the usual actions of visiting a different web site.
+The different web site must know the IP address of the user anyway
+(to send the data), and any cookies received by the different site
+will be a first-party cookie the site has previously sent
+(not the third-party cookies that are of bigger concern for privacy).
+In addition, we continue to allow referrer information to be sent in this case.
+When a user actively selects a hypertext link, it is normal web behavior
+for the receiving site to be provided with information on the referrer
+via the "referer" (sic) HTTP header as specified in
+[RFC 1945 (HTTP 1.0)](https://tools.ietf.org/html/rfc1945#page-44).
+This referrer information reports where the user "came from".
+This information is useful for many circmstances, including notifying
+recipients that people are discovering their site using our site.
+In short, our site merely continues to provide normal default web behavior.
+When users expressly choose to click on a link from our site, there is
+more express consent, so we do not see this an issue.
 
 Of course, to access the Internet the user must use various services and
 computers, and some of those could be privacy-exposing.

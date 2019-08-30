@@ -218,15 +218,23 @@ so we take many steps to prevent unrelated sites from
 learning about our users' activities (and thus maintaining user privacy):
 
 * We directly serve all our own assets ourselves,
-  including JavaScipt, images, and fonts.
-  Since we serve them ourselves, and never serve information via external
-  third parties,
-  external sites never receive any request from a user that might
-  impact that user's privacy.  This is enforced by our CSP policy.
-* We do not serve ads and do not currently plan to.
-  That said, if we did serve ads, we would also serve them from our site,
-  just like any other asset, to ensure that third parties did not receive
-  unauthorized information.
+  including JavaScript, images, and fonts.
+  In particular, we do not have *any* embedded automatically-downloaded
+  references (transclusions)
+  in our web pages to external JavaScript or fonts.
+  Since we serve these assets ourselves, and not via external
+  third parties, external sites never receive any request from a user
+  when they view our pages.
+  As a result, user privacy is maintained: what a user views on our site
+  is never revealed by our actions to unrelated sites.
+  This also aids security; even if an attacker subverts some other site's
+  JavaScript or font, that will not directly affect us because we do not embed
+  references some other site's JavaScript or font in our web pages.
+  This is enforced by our CSP policy.
+* We do not serve ads and we do not currently plan to.
+  That said, if we did serve ads, we expect that we
+  would also serve them from our site, just like any other asset, to
+  ensure that third parties did not receive unauthorized information.
 * We do not use any web analytics service that uses tracking codes or
   external assets.
   We log and store logs using only services we control or have a direct
@@ -245,81 +253,97 @@ learning about our users' activities (and thus maintaining user privacy):
   *only* receives information when the user takes a direct action to
   request it (e.g., a click), and that site only receives information from
   the specific user who requested it.
-* User avatars are handled specially. We consider
-  the few avatar-serving domains that we use as related sites.
-  This issue may not be obvious, so here we'll drill into it.
-  A user can choose a representative avatar
-  (currently via GitHub or Gravatar).
-  Anyone who views that user's information page will
-  receive an img reference to that avatar so that they can see it.
-  External avatar images are only shown from specific domains
-  ('secure.gravatar.com' or 'avatars.githubusercontent.com'), they are
-  only included if the user has an avatar, and they are only shown to
-  others if that user's information was requested.
-  This functionality is useful, because these images can help others remember
-  who the user is.
-  We have considered ways to further limit information sharing even
-  though they are related sites, but law and technology currently limit this.
-  We could download these images and re-serve them, but copying the images
-  into our own site might be considered a copyright violation
-  and would also impose the need for significant extra resources.
-  Thus, since we cannot serve avatars ourselves, we must direct requestors
-  to them, so at the very least the requestor's externally-visible IP address
-  will be visible to the external avatar server.
-  We would like to limit third-party cookies and requestor headers.
-  Unfortunately, we have not found a *good* way to prevent
-  third-party cookies from being sent in this case;
-  [there are discussions on how to disable third party cookies for img tags](https://stackoverflow.com/questions/51549390/how-to-disable-third-party-cookie-for-img-tags),
-  but currently-known
-  mechanisms are complex, require inline CSS invocations,
-  and have dubious reliability.
-  We hope that future web standards will add the ability to easily
-  prevent the unnecessary revelation of third-party cookies.
-  The story is somewhat better for requestor headers.
-  We have added the experimental
-  `referrerpolicy="no-referrer"` attribute to the image
+
+Note that user avatar images are handled specially. We consider
+the few avatar-serving domains that we use as related sites.
+This issue may not be obvious, so here we'll explain it further.
+A user can choose a representative avatar
+(currently via GitHub or Gravatar).
+Anyone who requests that user's information page will
+receive an `img` reference to that user-selected avatar so that
+the requestor can see it.
+External avatar images are only shown from specific domains
+('secure.gravatar.com' or 'avatars.githubusercontent.com'), they are
+only included if the user has an avatar, and they are only shown to
+others through this mechanism if that user's information was requested.
+This functionality is useful, because these images can help others remember
+who the user is.
+
+We have considered ways to further limit information sharing with avatar
+services even though they are related sites (and thus we do not *have*
+to limit information sharing any further).
+We have had some success, but current law and technology provide challenges.
+We could download these images and re-serve them (such as via a proxy),
+but copying or proxying the images
+using our own site might be considered a copyright violation
+and would also impose the need for significant extra resources.
+Thus, since we do not serve avatars ourselves, we must direct requestors
+to them, so at the very least the requestor's externally-visible IP address
+must be visible to the external avatar service (so the image can be provided).
+To provide additional privacy, we would like to also
+limit requestor headers and third-party cookies when using third-party
+avatar services
+(since these are the primary mechanisms that reveal more information
+about the requestor to the third party avatar service).
+Here is our current state:
+
+* We think we have a decent solution for limiting
+  requestor headers from being sent to avatar services.
+  We have added the `referrerpolicy="no-referrer"` attribute to the image
   as discussed in the
   [Mozilla img documentation](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img).
   While this attribute is technically experimental,
-  [the referrerpolicy attribute on images is widely supported](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/referrerPolicy).
+  [the referrerpolicy attribute on images is widely supported](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/referrerPolicy),
+  including by Chrome, Firefox, and Opera.
+* Unfortunately, we have not found a *good* way to prevent
+  third-party cookies from being sent to avatar services.
+  [There are discussions on how to disable third party cookies for img tags](https://stackoverflow.com/questions/51549390/how-to-disable-third-party-cookie-for-img-tags),
+  but currently-known mechanisms are very complex, require inline CSS
+  invocations, and have dubious reliability.
+  We hope that future web standards will add the ability to easily
+  prevent the unnecessary revelation of third-party cookies.
 
-For example, there is no reason that general-purpose social
-networking sites *must* see what our users are doing on our site, so we try to
-ensure that general-purpose social networking sites
-do not see what our users are doing unless the users
-take specific intentional actions to share information about themselves.
-In particular, we do not include "like" buttons that reveal that the
-user viewed that particular page.
-We do have "like" buttons, but they only reveal anything to a social networking
-site when a user actively selects the button, and *not* to other users
-who are simply viewing the page.
-Similarly, we do not embed any third-party analytics services.
-
-Note that this is different from what happens when a user actively
-clicks on a hypertext link to go to a different web site.
-In this case, the user *actively* selected to visit that different web site,
-and thus consented to the usual actions of visiting a different web site.
+Note that we consider that things are very different
+when a user actively clicks on a hypertext link to go to a different web site.
+In this case, the user has *actively* selected to visit that different web site,
+and thus expressly consented to the usual actions that occur when visiting
+a different web site.
 The different web site must know the IP address of the user anyway
-(to send the data), and any cookies received by the different site
-will be a first-party cookie the site has previously sent
-(not the third-party cookies that are of bigger concern for privacy).
-In addition, we continue to allow referrer information to be sent in this case.
+(to send the data), and any cookie communications with that site involve
+that other site.
+We do allow referrer information to be sent in this case.
 When a user actively selects a hypertext link, it is normal web behavior
 for the receiving site to be provided with information on the referrer
 via the "referer" (sic) HTTP header as specified in
-[RFC 1945 (HTTP 1.0)](https://tools.ietf.org/html/rfc1945#page-44).
+[RFC 1945 (HTTP 1.0) from May 1996](https://tools.ietf.org/html/rfc1945#page-44).
 This referrer information reports where the user "came from".
-This information is useful for many circmstances, including notifying
+This information is useful for many circumstances, including notifying
 recipients that people are discovering their site using our site.
-In short, our site merely continues to provide normal default web behavior.
-When users expressly choose to click on a link from our site, there is
-more express consent, so we do not see this an issue.
+It would be *possible* for us to
+[disable sending referrer information](https://geekthis.net/post/hide-http-referer-headers/)
+(e.g., by using `rel="noreferrer"` in hypertext links or
+by setting a referrer policy via HTTP or the meta tag), but this
+would inhibit normal default web behavior.
+However, when users expressly choose to click on a link from our site,
+there is express consent to visit the other site,
+so we do not see this an issue.
+In addition, users who do not want to share referrer information can
+configure their browser to omit referrer information; this would
+be a much better choice for users who do not want referrer information
+to be shared.
+Information on how to disable referrer heading information is
+available from multiple sources, e.g.,
+["How to Change Referer Header Settings: Why It’s Useful" by John Anthony](https://www.addictivetips.com/vpn/change-referer-header-settings/),
+["Turn Referrer Headers On or Off in Firefox" by Mitch Bartlet](https://www.technipages.com/firefox-enable-disable-referrer),
+and
+["Why Should you Change your Referer Header settings & How to do it" by Douglas Crawford](https://proprivacy.com/guides/change-referer-header-settings).
 
-Of course, to access the Internet the user must use various services and
+Of course, to access any site on the Internet
+the user must use various services and
 computers, and some of those could be privacy-exposing.
 For example, the user must make a request to a DNS service to find our
 service, and user requests must transit multiple Internet routers.
-We cannot control what users choose to use; instead, we ensure that
+We cannot control the systems that users choose to use; instead, we ensure that
 users can choose what services and computers they will trust.
 The BadgeApp does not filter out any particular source
 (other than temporary blocks if the source becomes a source of attack).

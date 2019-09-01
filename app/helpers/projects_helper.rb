@@ -4,6 +4,7 @@
 # CII Best Practices badge contributors
 # SPDX-License-Identifier: MIT
 
+# rubocop:disable Metrics/ModuleLength
 module ProjectsHelper
   MARKDOWN_RENDERER = Redcarpet::Render::HTML.new(
     filter_html: true, no_images: true,
@@ -145,4 +146,24 @@ module ProjectsHelper
     end
   end
   # rubocop:enable Metrics/MethodLength
+
+  # We sometimes insert <wbr> after sequences of these characters.
+  WORD_BREAK_DIVIDERS = /([,_\-.]+)/
+
+  # rubocop:disable Rails/OutputSafety
+  # This text is considered safe, so we can directly mark it as such.
+  SAFE_WORD_BREAK = '<wbr>'.html_safe
+  # rubocop:enable Rails/OutputSafety
+
+  # Insert wbr (HTML word break) after _ etc. per WORD_BREAK_DIVIDERS.
+  # The text is presumed to be unsafe.  We produce a safe (escaped) HTML result.
+  def word_breakdown(text)
+    safe_join(
+      text.split(WORD_BREAK_DIVIDERS).each_with_index.map do |fragment, i|
+        i.even? ? fragment : h(fragment) + SAFE_WORD_BREAK
+      end,
+      ''
+    )
+  end
 end
+# rubocop:enable Metrics/ModuleLength

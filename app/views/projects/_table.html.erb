@@ -20,8 +20,11 @@
     <% cache [project, locale] do %>
       <tr>
         <td><%= link_to project.id, project %></td>
-        <td><%= link_to (project.name.presence || t('.paren_name_unknown')),
-                project %></td>
+        <td class="project_name"><%=
+          link_to(
+            word_breakdown(project.name.presence || t('.paren_name_unknown')),
+            project
+          ) %></td>
         <td><span lang="en"><%= markdown(
                   (project.description || '').
                   truncate(160, separator: ' ')) %></span></td>
@@ -29,7 +32,7 @@
           <%# Defend against bad data - link only if plausible URL. %>
           <% if project.homepage_url.presence &&
                 project.homepage_url.match(/\Ahttps?:\/\//) %>
-            <a rel='nofollow' href="<%= project.homepage_url %>"><%= project.homepage_url %></a>
+            <a rel='nofollow' href="<%= project.homepage_url %>"><%= word_breakdown(project.homepage_url) %></a>
           <% else %>
             <%= project.homepage_url %>
           <% end %>

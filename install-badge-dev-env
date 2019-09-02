@@ -95,6 +95,31 @@ can_build_ruby () {
   rbenv install -l | grep -q "^ *${ruby_version}\$"
 }
 
+nodejs_yarn_config () {
+  if ! grep -q 'NAME=.*Ubuntu' /etc/os-release; then
+    echo 'WARNING: May need to specially set up Node.js and Yarn configuration.'
+    echo 'For nodejs setup, see: https://github.com/nodesource/distributions'
+    echo 'For yarn, see: https://yarnpkg.com/lang/en/docs/install'
+    return
+  fi
+  echo 'Setting up nodejs installation.'
+  # Store keys so that if things are dubious later we can verify that
+  # we got the expected key.
+  curl -sSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key > .nodejs.key
+  sudo apt-key add - < .nodejs.key
+  VERSION=node_10.x
+  DISTRO="$(lsb_release -s -c)"
+  echo "deb https://deb.nodesource.com/$VERSION $DISTRO main" | sudo tee /etc/apt/sources.list.d/nodesource.list
+  echo "deb-src https://deb.nodesource.com/$VERSION $DISTRO main" | sudo tee -a /etc/apt/sources.list.d/nodesource.list
+
+  echo 'Setting up yarn installation.'
+  curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg > .yarn.key
+  sudo apt-key add - < .yarn.key
+  echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+
+  sudo apt-get update
+}
+
 ######################################################################
 # Main line.
 ######################################################################
@@ -172,7 +197,7 @@ case "$manager" in
     add_pkg autoconf bison build-essential libssl-dev libyaml-dev \
             libreadline6-dev zlib1g-dev libncurses5-dev libffi-dev \
             libgdbm-dev postgresql-server-dev-all postgresql \
-            postgresql-contrib cmake nodejs phantomjs graphviz \
+            postgresql-contrib cmake nodejs yarn phantomjs graphviz \
             pkg-config;;
   yum|dnf)
     add_pkg gcc openssl-devel libyaml-devel libffi-devel readline-devel \
@@ -189,6 +214,9 @@ case "$manager" in
      echo 'Warning:  You may need additional packages to rebuild ruby.' >&2 ;;
 esac
 
+# Set up nodejs & yarn configuration.  We can install it using system packages,
+# but we have to configure things first.
+nodejs_yarn_config
 
 if [ "$MYINSTALL_SYSTEM_INSTALL_PACKAGES" = 'yes' ] ; then
   echo 'About to install system packages with the command:'

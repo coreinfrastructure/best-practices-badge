@@ -611,6 +611,8 @@ desc 'Rekey (change keys) of email addresses'
 task rekey: :environment do
   old_key = [ENV['EMAIL_ENCRYPTION_KEY_OLD']].pack('H*')
   User.find_each do |u|
+    # We need to use "begin" so "rescue" will work on older Rubies
+    # rubocop:disable Style/RedundantBegin
     begin
       u.rekey(old_key) # Raises exception if there's a CipherError.
       Rails.logger.info "Rekeyed email address of user id #{u.id}"
@@ -618,6 +620,7 @@ task rekey: :environment do
     rescue OpenSSL::Cipher::CipherError
       Rails.logger.info "Cannot rekey user #{u.id}"
     end
+    # rubocop:enable Style/RedundantBegin
   end
 end
 

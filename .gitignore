@@ -46,3 +46,10 @@ license_okay
 
 # Some environments will have a node_modules file created by the install script.
 /node_modules/
+
+/public/packs
+/public/packs-test
+/node_modules
+/yarn-error.log
+yarn-debug.log*
+.yarn-integrity

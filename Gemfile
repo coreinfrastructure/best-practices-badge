@@ -56,6 +56,7 @@ gem 'sass-rails', '5.0.7', require: false
 gem 'scout_apm', '2.4.21' # Monitor for memory leaks
 gem 'secure_headers', '6.0.0' # Add hardening measures to HTTP headers
 gem 'uglifier', '4.1.20', require: false # Minify JavaScript
+gem 'webpacker', '4.0.7' # JavaScript handling
 gem 'will-paginate-i18n', '0.1.15' # Provide will-paginate translations
 gem 'will_paginate', '3.1.6' # Paginate results (next/previous)
 

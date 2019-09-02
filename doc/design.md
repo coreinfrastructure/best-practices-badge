@@ -129,6 +129,14 @@ The key components we use are:
   tests with minitest.
   We're well aware that many people happily use RSpec, and RSpec can
   clearly do the job - but we have to pick one, and that's what we chose.
+- Webpacker + yarn.
+  As is conventional for Rails 5+, we use "webpacker" to manage
+  client-side JavaScript, and yarn as the JavaScript package manager.
+  This internally includes babel for processing JavaScript.
+  To install new JavaScript libraries, use yarn to install them
+  (the libraries will be added to the list of libraries in yarn.lock).
+  For more information, see
+  ["Adding Webpacker to a legacy Rails app by Robert Kaczmarek (2018)](https://prograils.com/posts/adding-webpacker-legacy-rails-app).
 
 We use a number of supporting Ruby gems.
 See the file "Gemfile" to see all the gem direct dependencies;

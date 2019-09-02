@@ -19,6 +19,76 @@
   - :who: David A. Wheeler
     :why: OSI-approved OSS license LGPL-2.0+, known compatible with MIT
     :when: 2016-06-07 17:30-0400
+- - :whitelist
+  - ISC
+  - :who: David A. Wheeler
+    :why: This is OSI-approved OSS license, permissive, known MIT compatible
+    :when: 2019-09-01 22:01-0400
+- - :whitelist
+  - CC0-1.0
+  - :who: David A. Wheeler
+    :why: CC0 is essentially public domain, compatible with everything
+    :when: 2019-09-01 22:01-0400
+- - :whitelist
+  - CC-BY-3.0
+  - :who: David A. Wheeler
+    :why: Permissive license
+    :when: 2019-09-01 22:01-0400
+- - :whitelist
+  - CC-BY-4.0
+  - :who: David A. Wheeler
+    :why: Permissive license
+    :when: 2019-09-01 22:01-0400
+- - :whitelist
+  - Unlicense
+  - :who: David A. Wheeler
+    :why: Permissive license
+    :when: 2019-09-01 22:01-0400
+- - :whitelist
+  - Mozilla Public License 2.0
+  - :who: David A. Wheeler
+    :why: Well-known OSS license
+    :when: 2019-09-01 22:01-0400
+- - :whitelist
+  - Simplified BSD
+  - :who: David A. Wheeler
+    :why: Permissive OSS license
+    :when: 2019-09-01 22:01-0400
+- - :whitelist
+  - "(MIT OR Apache-2.0)"
+  - :who: David A. Wheeler
+    :why: MIT is one of the options, and MIT is fine
+    :when: 2019-09-01 22:01-0400
+- - :whitelist
+  - "(WTFPL OR MIT)"
+  - :who: David A. Wheeler
+    :why: MIT is one of the options, and MIT is fine
+    :when: 2019-09-01 22:01-0400
+- - :whitelist
+  - "(BSD-2-Clause OR MIT OR Apache-2.0)"
+  - :who: David A. Wheeler
+    :why: MIT is one of the options, and MIT is fine
+    :when: 2019-09-01 22:01-0400
+- - :whitelist
+  - BSD-3-Clause OR MIT
+  - :who: David A. Wheeler
+    :why: MIT is one of the options, and MIT is fine
+    :when: 2019-09-01 22:01-0400
+- - :whitelist
+  - "(MIT AND BSD-3-Clause)"
+  - :who: David A. Wheeler
+    :why: Both are fine
+    :when: 2019-09-01 22:01-0400
+- - :whitelist
+  - "(BSD-3-Clause OR GPL-2.0)"
+  - :who: David A. Wheeler
+    :why: MIT is one of the options, and MIT is fine
+    :when: 2019-09-01 22:01-0400
+- - :whitelist
+  - "(MIT AND Zlib)"
+  - :who: David A. Wheeler
+    :why: Both are fine
+    :when: 2019-09-01 22:01-0400
 - - :approve
   - rake
   - &1
@@ -304,3 +374,110 @@
     :why: Apache 2.0 fine
     :versions: []
     :when: 2019-06-21 15:44:25.990437363 Z
+- - :license
+  - fsevents
+  - MIT
+  - :who: David A. Wheeler
+    :why: Looked at website, license is documented there
+    :versions: []
+    :when: 2019-09-02 02:20:00.210265947 Z
+- - :approve
+  - ansi-html
+  - :who: David A. Wheeler
+    :why: Apache 2.0 license fine
+    :versions: []
+    :when: 2019-09-02 02:23:59.692068043 Z
+- - :approve
+  - aws-sign2
+  - &10
+    :who: David A. Wheeler
+    :why: Apache 2.0 license fine
+    :versions: []
+    :when: 2019-09-02 02:24:33.898351871 Z
+- - :approve
+  - caseless
+  - *10
+- - :approve
+  - detect-libc
+  - :who: David A. Wheeler
+    :why: Apache 2.0 license fine
+    :versions: []
+    :when: 2019-09-02 02:25:14.005617233 Z
+- - :approve
+  - faye-websocket
+  - :who: David A. Wheeler
+    :why: Apache 2.0 license fine
+    :versions: []
+    :when: 2019-09-02 02:25:21.773091381 Z
+- - :approve
+  - forever-agent
+  - :who: David A. Wheeler
+    :why: Apache 2.0 license fine
+    :versions: []
+    :when: 2019-09-02 02:25:27.930077556 Z
+- - :approve
+  - oauth-sign
+  - :who: David A. Wheeler
+    :why: Apache 2.0 license fine
+    :versions: []
+    :when: 2019-09-02 02:25:39.059491312 Z
+- - :approve
+  - request
+  - :who: David A. Wheeler
+    :why: Apache 2.0 license fine
+    :versions: []
+    :when: 2019-09-02 02:25:43.785568960 Z
+- - :approve
+  - spdx-correct
+  - :who: David A. Wheeler
+    :why: Apache 2.0 license fine
+    :versions: []
+    :when: 2019-09-02 02:25:53.194473053 Z
+- - :approve
+  - true-case-path
+  - :who: David A. Wheeler
+    :why: Apache 2.0 license fine
+    :versions: []
+    :when: 2019-09-02 02:26:00.712627758 Z
+- - :approve
+  - tslib
+  - :who: David A. Wheeler
+    :why: Apache 2.0 license fine
+    :versions: []
+    :when: 2019-09-02 02:26:06.657948258 Z
+- - :approve
+  - tunnel-agent
+  - :who: David A. Wheeler
+    :why: Apache 2.0 license fine
+    :versions: []
+    :when: 2019-09-02 02:26:14.402036439 Z
+- - :approve
+  - validate-npm-package-license
+  - :who: David A. Wheeler
+    :why: Apache 2.0 license fine
+    :versions: []
+    :when: 2019-09-02 02:26:27.535264974 Z
+- - :approve
+  - "@xtuc/long"
+  - :who: David A. Wheeler
+    :why: Apache 2.0 license fine
+    :versions: []
+    :when: 2019-09-02 02:27:34.361457037 Z
+- - :approve
+  - async-foreach
+  - :who: David A. Wheeler
+    :why: Dual-licensed under MIT and GPL, which is fine for us
+    :versions: []
+    :when: 2019-09-02 02:30:20.393097928 Z
+- - :approve
+  - cyclist
+  - :who: David A. Wheeler
+    :why: Really just MIT license, see https://github.com/mafintosh/cyclist
+    :versions: []
+    :when: 2019-09-02 02:31:43.935148363 Z
+- - :approve
+  - json-schema
+  - :who: David A. Wheeler
+    :why: Really just MIT license, see https://github.com/justinrainbow/json-schema/blob/master/LICENSE
+    :versions: []
+    :when: 2019-09-02 02:32:29.789409443 Z

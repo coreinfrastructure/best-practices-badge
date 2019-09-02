@@ -1,6 +1,6 @@
 AllCops:
   EnabledByDefault: true
-  TargetRubyVersion: 2.4
+  TargetRubyVersion: 2.5
   DisplayCopNames: true
   DisplayStyleGuide: true
   Include:
@@ -16,6 +16,8 @@ AllCops:
     - 'db/schema.rb'
     - 'db/migrate/2015*.rb'
     - 'db/migrate/2016*.rb'
+    - 'bin/**'
+    - 'node_modules/**/*'
 Documentation:
   Enabled: false
 Lint/HandleExceptions:

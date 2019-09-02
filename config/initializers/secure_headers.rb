@@ -32,6 +32,10 @@ SecureHeaders::Configuration.default do |config|
     block_all_mixed_content: true, # see http://www.w3.org/TR/mixed-content/
     frame_ancestors: ["'none'"],
     form_action: ["'self'"], # This counters some XSS busters
+    font_src: ["'self'", 'data:'],
+    # Allow extra connections for Webpacker during development.
+    connect_src: ["'self'", 'https:', 'http://localhost:3035']
+    # TODO: ('ws://localhost:3035' if Rails.env.development?)]
   }
   config.cookies = {
     secure: true, # mark all cookies as Secure
@@ -56,3 +60,9 @@ end
 SecureHeaders::Configuration.override(:allow_github_form_action) do |config|
   config.csp[:form_action] += ['github.com']
 end
+
+# You need to allow webpack-dev-server host as allowed origin for connect-src.
+# If we ever used
+# config/initializers/content_security_policy.rb then add:
+# policy.connect_src :self, :https, "http://localhost:3035",
+# "ws://localhost:3035" if Rails.env.development?

@@ -46,6 +46,8 @@ Then point your web browser at "localhost:3000".
 
 The application is configured by various environment variables:
 
+* SYSTEM_ANNOUNCEMENT and SYSTEM_ANNOUNCEMENT_locale : Show these
+  system-wide announcements (e.g., to announce a soon-to-occur shutdown)
 * PUBLIC_HOSTNAME (default 'localhost')
 * BADGEAPP_MAX_REMINDERS (default 2): Number of email reminders to send
   to inactive projects when running "rake reminders".

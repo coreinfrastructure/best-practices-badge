@@ -13,6 +13,7 @@ preceded by the same statistics for the end of the month before that.
 <tr><th>Projects 25%+</th><td><%= @last_stat_in_prev_prev_month.percent_ge_25 %></td><td><%= @last_stat_in_prev_month.percent_ge_25 %>
 <tr><th>Projects 50%+</th><td><%= @last_stat_in_prev_prev_month.percent_ge_50 %></td><td><%= @last_stat_in_prev_month.percent_ge_50 %>
 <tr><th>Projects 75%+</th><td><%= @last_stat_in_prev_prev_month.percent_ge_75 %></td><td><%= @last_stat_in_prev_month.percent_ge_75 %>
+<tr><th>Projects 90%+</th><td><%= @last_stat_in_prev_prev_month.percent_ge_90 %></td><td><%= @last_stat_in_prev_month.percent_ge_90 %>
 <tr><th>Projects passing</th><td><%= @last_stat_in_prev_prev_month.percent_ge_100 %></td><td><%= @last_stat_in_prev_month.percent_ge_100 %>
 </table>
 <% end %>

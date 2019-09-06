@@ -52,8 +52,10 @@ jobs:
        name: Update Chromedriver
        command: bundle exec rake update_chromedriver
     - run:
-       name: Install webpacker
-       command: bundle exec rails webpacker:install
+       name: Install webpacker and precompile assets
+       command: >
+         bundle exec rails webpacker:install
+         RAILS_ENV=test bundle exec rails assets:precompile
     # Save dependency cache
     - save_cache:
         key: v3-dep-{{ checksum "Gemfile.lock" }}

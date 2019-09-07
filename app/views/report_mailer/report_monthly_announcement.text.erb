@@ -10,6 +10,7 @@ Total Projects:    <%= '%10d' % @last_stat_in_prev_prev_month.percent_ge_0 %>  <
 Projects 25%+:     <%= '%10d' % @last_stat_in_prev_prev_month.percent_ge_25 %>  <%= '%10d' % @last_stat_in_prev_month.percent_ge_25 %>
 Projects 50%+:     <%= '%10d' % @last_stat_in_prev_prev_month.percent_ge_50 %>  <%= '%10d' % @last_stat_in_prev_month.percent_ge_50 %>
 Projects 75%+:     <%= '%10d' % @last_stat_in_prev_prev_month.percent_ge_75 %>  <%= '%10d' % @last_stat_in_prev_month.percent_ge_75 %>
+Projects 90%+:     <%= '%10d' % @last_stat_in_prev_prev_month.percent_ge_90 %>  <%= '%10d' % @last_stat_in_prev_month.percent_ge_90 %>
 Projects passing:  <%= '%10d' % @last_stat_in_prev_prev_month.percent_ge_100 %>  <%= '%10d' % @last_stat_in_prev_month.percent_ge_100 %>
 <% end %>
 

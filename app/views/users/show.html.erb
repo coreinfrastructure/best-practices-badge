@@ -11,7 +11,7 @@
          <% if current_user && (@user == current_user || current_user.admin?) %>
            <%= link_to Icon[:'fa-edit'] + t('.edit_user'),
                  edit_user_path(@user),
-                 class: 'btn btn-primary', rel: 'nofollow' %>
+                 class: 'btn btn-primary', rel: 'nofollow ugc' %>
          <% end %>
        </h3>
      </section>
@@ -57,7 +57,7 @@
     | <%= link_to Icon[:'fa-times-circle'] + t('.delete_link_name'),
                   @user, method: :delete,
                   data: { confirm: t('.confirm_delete') },
-                  rel: 'nofollow' %>
+                  rel: 'nofollow ugc' %>
     | <a href="<%= user_path(@user, format: :json) %>"
        title="<%= t '.in_json_format' %>"><%= t '.json_link' %></a>
   <% end %>

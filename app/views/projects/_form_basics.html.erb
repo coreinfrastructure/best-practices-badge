@@ -34,7 +34,7 @@
             <span><%= f.label :homepage_url, t('projects.form_basics.homepage_url.description') %></span>
             <% if is_disabled %>
               <div class="discussion-markdown" id="project_homepage_url">
-                 <%= link_to_if project.contains_url?(project.homepage_url), project.homepage_url, project.homepage_url, rel: 'nofollow' %>
+                 <%= link_to_if project.contains_url?(project.homepage_url), project.homepage_url, project.homepage_url, rel: 'nofollow ugc' %>
               </div>
             <% else %>
               <%= f.text_field :homepage_url, skip_label: true, class: "form-control",
@@ -47,7 +47,7 @@
             <span><%= f.label :repo_url, t('projects.form_basics.repo_url.description') %></span>
             <% if is_disabled %>
               <div class="discussion-markdown" id="project_repo_url">
-                 <%= link_to_if project.contains_url?(project.repo_url), project.repo_url, project.repo_url, rel: 'nofollow' %>
+                 <%= link_to_if project.contains_url?(project.repo_url), project.repo_url, project.repo_url, rel: 'nofollow ugc' %>
               </div>
             <% else %>
               <%= f.text_field :repo_url, class:"form-control",

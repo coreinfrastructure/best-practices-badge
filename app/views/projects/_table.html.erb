@@ -32,7 +32,7 @@
           <%# Defend against bad data - link only if plausible URL. %>
           <% if project.homepage_url.presence &&
                 project.homepage_url.match(/\Ahttps?:\/\//) %>
-            <a rel='nofollow' href="<%= project.homepage_url %>"><%= word_breakdown(project.homepage_url) %></a>
+            <a rel='nofollow ugc' href="<%= project.homepage_url %>"><%= word_breakdown(project.homepage_url) %></a>
           <% else %>
             <%= project.homepage_url %>
           <% end %>
@@ -40,7 +40,7 @@
         </td>
         <td class='license'><%= project.license %></td>
         <td><%= link_to project.user_display_name, project.user,
-                        rel: 'nofollow' %></td>
+                        rel: 'nofollow ugc' %></td>
         <td><%= project.achieved_passing_at&.
                   to_formatted_s(:db) %></td>
         <td><span data-toggle="tooltip" data-placement="bottom" title="<%=

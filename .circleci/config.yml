@@ -14,7 +14,7 @@ jobs:
         PG_USER: ubuntu
         RAILS_ENV: test
         RACK_ENV: test
-    - image: circleci/postgres:9.6-ram
+    - image: circleci/postgres:11.5-ram
       environment:
         POSTGRES_USER: ubuntu
         POSTGRES_DB: circle_ruby_test

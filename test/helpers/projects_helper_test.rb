@@ -26,7 +26,7 @@ class ProjectsHelperTest < ActionView::TestCase
 
   test 'markdown - bare URL' do
     assert_equal(
-      '<p><a href="http://www.dwheeler.com" rel="nofollow">' \
+      '<p><a href="http://www.dwheeler.com" rel="nofollow ugc">' \
       "http://www.dwheeler.com</a></p>\n",
       markdown('http://www.dwheeler.com')
     )
@@ -34,7 +34,7 @@ class ProjectsHelperTest < ActionView::TestCase
 
   test 'markdown - angles around URL' do
     assert_equal(
-      '<p><a href="http://www.dwheeler.com" rel="nofollow">' \
+      '<p><a href="http://www.dwheeler.com" rel="nofollow ugc">' \
       "http://www.dwheeler.com</a></p>\n",
       markdown('<http://www.dwheeler.com>')
     )
@@ -42,7 +42,7 @@ class ProjectsHelperTest < ActionView::TestCase
 
   test 'markdown - hyperlinks are generated with nofollow' do
     assert_equal(
-      '<p><a href="http://www.dwheeler.com" rel="nofollow">' \
+      '<p><a href="http://www.dwheeler.com" rel="nofollow ugc">' \
       "Hello</a></p>\n",
       markdown('[Hello](http://www.dwheeler.com)')
     )
@@ -52,7 +52,7 @@ class ProjectsHelperTest < ActionView::TestCase
     # Allowing <a href="..."> would let people insert a link without nofollow,
     # so we don't allow the use of <a ...>.  People can insert a hyperlink,
     # but they have to use the markdown format [test](URL), and that format
-    # gives us an opportunity to forcibly insert rel="nofollow".
+    # gives us an opportunity to forcibly insert rel="nofollow ugc".
     # Negative test (security)
     assert_equal(
       "<p>Junk</p>\n",

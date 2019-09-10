@@ -1024,6 +1024,24 @@ checklink-norobots -b -e \
   https://github.com/coreinfrastructure/best-practices-badge | tee results
 ~~~~
 
+## Spam countering: Markdown, nofollow, and ogc
+
+Spammers may be tempted to create project entries that link to their
+websites to subversively expand their incoming link counts.
+
+To counter this, all hypertext links based on user-created data are
+marked with
+`rel="nofollow ugc"` ("do not follow, user-generated content").
+In the markdown text this enforced by not allowing users
+to use `<a ...>` as text; they can insert hypertext links, but they
+must use Markdown format to do it (which inserts the nofollow relation).
+Spammers can still create try to create projects entries
+with spammy link references, but this eliminates the incentive to do so.
+
+The `ugc` marking was announced in 2019.
+See:
+[Evolving “nofollow” - new ways to identify the nature of links (September 10, 2019](https://webmasters.googleblog.com/2019/09/evolving-nofollow-new-ways-to-identify.html).
+
 ## Accessing our analysis tools
 
 We have various analyzers.  Here are some hints of how to access them.

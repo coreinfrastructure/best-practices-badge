@@ -4,10 +4,10 @@
       # to query GitHub, and we don't want to make duplicate external requests
       @cached_can_edit = can_edit?
       if @cached_can_edit %>
-      <li><%= link_to Icon[:'fa-edit'] + t('.edit'), edit_project_path(@project, criteria_level: @criteria_level), rel: 'nofollow' %></li>
+      <li><%= link_to Icon[:'fa-edit'] + t('.edit'), edit_project_path(@project, criteria_level: @criteria_level), rel: 'nofollow ugc' %></li>
     <% end %>
     <% if can_control? %>
-      <li><%= link_to Icon[:'fa-times-circle'] + t('.delete'), project_path(@project) + '/delete_form', rel: 'nofollow' %></li>
+      <li><%= link_to Icon[:'fa-times-circle'] + t('.delete'), project_path(@project) + '/delete_form', rel: 'nofollow ugc' %></li>
     <% end %>
 <% end %>
 
@@ -22,7 +22,7 @@
 <div class="col-md-12">
 <strong><%= t '.owned_by' %></strong>
 <%= link_to @project.user_display_name, user_path(@project.user),
-            rel: 'nofollow' %>.<br>
+            rel: 'nofollow ugc' %>.<br>
 <%= t '.created_at_html', when: @project.created_at %>
 <%= t '.updated_at_html', when: @project.updated_at %>
 <% if ! @project.lost_passing_at.nil? %>
@@ -36,7 +36,7 @@
 <p>
 <%= link_to t('.back'), projects_path %>
 <% if @cached_can_edit %>
-  <%= link_to t('.edit'), edit_project_path(@project), rel: 'nofollow' %>
+  <%= link_to t('.edit'), edit_project_path(@project), rel: 'nofollow ugc' %>
 <% end %>
 <% if can_control? %>
   <%= link_to t('.delete'), { action: :destroy, id: @project.id }, method: :delete, data: { confirm: t('.confirm_delete', project_id: @project.id) } %>

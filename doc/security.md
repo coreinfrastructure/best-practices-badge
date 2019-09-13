@@ -1883,6 +1883,14 @@ secure=true (which is irrelevant because we always use HTTPS but it
 can't hurt), and SameSite=Lax (which counters CSRF attacks on
 web browsers that support it).
 
+We also use the Rails 5.2 default setting which embeds
+the expiry information in encrypted or signed cookies value to
+improve security.
+Embedding and checking expiration data
+makes it harder to exploit these cookies.
+See
+[expiry in signed or encrypted cookie is now embedded in the cookies values](https://edgeguides.rubyonrails.org/upgrading_ruby_on_rails.html#expiry-in-signed-or-encrypted-cookie-is-now-embedded-in-the-cookies-values).
+
 #### CSRF token hardening
 
 We use two additional CSRF token hardening techniques

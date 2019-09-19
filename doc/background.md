@@ -77,7 +77,7 @@ Some of these approaches may be useful for the badging system as well.
 
 Some guidelines include:
 
-*   [Karl Fogel&#8217;s book *Producing Open Source Software*](<http://producingoss.com/)
+*   [Karl Fogel&#8217;s book *Producing Open Source Software*](http://producingoss.com/)
 
 *   [Civic Commons&#8217; wiki page](http://wiki.civiccommons.org/Open_Source_Development_Guidelines/)
 

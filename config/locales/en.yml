@@ -1402,7 +1402,7 @@ en:
           <a href="https://www.seleniumhq.org/">Selenium</a>
           (web browser automation),
           <a href="https://junit.org">Junit</a> (JVM, Java),
-          <a href="https://cran.r-project.org/web/packages/runit/index.html">RUnit</a> (R),
+          <a href="https://CRAN.R-project.org/package=RUnit">RUnit</a> (R),
           <a href="https://cran.r-project.org/web/packages/testthat/index.html">testthat</a> (R).
       test_invocation:
         description: >-

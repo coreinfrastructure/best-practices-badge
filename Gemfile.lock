@@ -372,7 +372,7 @@ GEM
       sexp_processor (~> 4.6)
     ruby_parser (3.13.1)
       sexp_processor (~> 4.9)
-    rubyzip (1.2.3)
+    rubyzip (1.3.0)
     rugged (0.28.2)
     safe_yaml (1.0.5)
     sass (3.4.25)

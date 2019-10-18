@@ -41,7 +41,7 @@ zh-CN:
           unit: ''
       format:
         delimiter: ''
-        precision: '1'
+        precision: 1
         significant: false
         strip_insignificant_zeros: false
       storage_units:

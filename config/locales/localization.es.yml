@@ -41,7 +41,7 @@ es:
           unit: ''
       format:
         delimiter: ''
-        precision: '1'
+        precision: 1
         significant: true
         strip_insignificant_zeros: true
       storage_units:

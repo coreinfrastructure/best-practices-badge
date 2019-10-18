@@ -44,7 +44,7 @@ fr:
       rel="noopener">conditions d'utilisation</a>. </small>
     account: Compte
     choose_locale: Choisir la langue
-    toggle_navigation:
+    toggle_navigation: Choisir ou non la navigation repliable
   sessions:
     login_header: S'identifier
     login_with_github_html: >-
@@ -438,7 +438,10 @@ fr:
           OU Ruby) ». Ne <b>pas</b> inclure des guillemets simples
           ou doubles.
         placeholder: Licence FLOSS
-        title:
+        title: >-
+          Licence au format d'expression de licence SPDX, par
+          exemple, « MIT » ou « GPL-3.0 + », sans guillemets simples
+          ou doubles.
       additional_rights_changes:
         description: >-
           (Avancé) Quels autres utilisateurs ont les droits supplémentaires
@@ -2901,7 +2904,6 @@ fr:
       reddit: Reddit
       facebook: Facebook
       linkedin: LinkedIn
-      googleplus: Google+
       email: Email
       projects_earned_badge: 'Quelques possesseurs de badges :'
       hacker_news: Hacker News

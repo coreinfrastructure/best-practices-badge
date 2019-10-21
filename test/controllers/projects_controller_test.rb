@@ -583,7 +583,7 @@ class ProjectsControllerTest < ActionController::TestCase
     assert_redirected_to project_path(@project, locale: :en)
   end
 
-  test 'should fail to change tail of non-blank repo_url' do
+  test 'should succeed and fail to change tail of non-blank repo_url' do
     new_repo_url = @project_two.repo_url + '_new'
     log_in_as(@project_two.user)
     patch :update, params: {
@@ -592,10 +592,24 @@ class ProjectsControllerTest < ActionController::TestCase
       },
       locale: :en
     }
+    # Check for success
+    @project_two.reload
+    assert_equal @project_two.repo_url, new_repo_url
+
+    # Now let's do it again. *This* should fail, it's too soon.
+    second_repo_url = new_repo_url + '_second'
+    patch :update, params: {
+      id: @project_two, project: {
+        repo_url:  second_repo_url
+      },
+      locale: :en
+    }
+    # Ensure the second attempt failed.
     assert_not_empty flash
     assert_template :edit
     @project_two.reload
-    assert_not_equal @project_two.repo_url, new_repo_url
+    assert_not_equal @project_two.repo_url, second_repo_url
+    assert_equal @project_two.repo_url, new_repo_url
   end
 
   test 'should change https to http in non-blank repo_url' do

@@ -165,6 +165,7 @@ class ProjectsController < ApplicationController
   # PATCH/PUT /projects/1
   # PATCH/PUT /projects/1.json
   # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  # rubocop:disable Metrics/PerceivedComplexity
   def update
     if repo_url_change_allowed?
       old_badge_level = @project.badge_level
@@ -172,6 +173,8 @@ class ProjectsController < ApplicationController
         @project[key] = user_value
       end
       Chief.new(@project, client_factory).autofill
+
+      @project.repo_url_updated_at = Time.now.utc if @project.repo_url_changed?
 
       # Force cleanup of homepage_url so unintentional duplicates
       # are easier to find.
@@ -201,6 +204,7 @@ class ProjectsController < ApplicationController
     render :edit, status: :conflict
   end
   # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
+  # rubocop:enable Metrics/PerceivedComplexity
 
   # DELETE /projects/1
   # DELETE /projects/1.json
@@ -414,15 +418,53 @@ class ProjectsController < ApplicationController
     params.permit([:criteria_level])
   end
 
+  # Return an extracted URL with its scheme ('http:') & trailing '/' removed.
+  def extracted_url(url)
+    url.split('://', 2)[1].chomp('/')
+  end
+
+  # Return true iff the urls are "basically the same".
+  # That is, they're the same ignoring the scheme
+  # (this is true if the user switches between http and https)
+  # and ignoring any trailing '/'.
+  def basically_same(url1, url2)
+    # Blank urls don't make any sense. Consider them not the same.
+    return false if url1.blank?
+    return false if url2.blank?
+    extracted_url(url1) == extracted_url(url2)
+  end
+
+  REPO_URL_CHANGE_DELAY = 180 # Number of days before repo_url change allowed
+
+  # Return true iff the project can change its repo_url because the
+  # REPO_URL_CHANGE_DELAY has expired
+  def repo_url_delay_expired?
+    repo_url_updated_at = @project.repo_url_updated_at
+    return true if repo_url_updated_at.nil?
+    repo_url_updated_at < REPO_URL_CHANGE_DELAY.days.ago
+  end
+
   # Determine if there is a change in repo_url, and if there is,
   # if it's allowed.
+  # We are trying to counter subtle attacks where
+  # a project tries to claim the good reputation or effort of another project
+  # by constantly switching its repo_url to other projects and/or nonsense.
+  # The underlying problem is that names/identities are hard; the repo_url
+  # (when present) is the closest to an "identity" that we have for a project.
+  # We have to allow it to change sometimes (because it sometimes does), but
+  # it should be a rare "sticky" event.
+  # There are various special cases, e.g., you can always set the repo_url
+  # if it's nil, the setter is an admin, or if only the scheme is changed.
+  # But otherwise normal users can't change the repo_urls in less than
+  # REPO_URL_CHANGE_DELAY days.  Allowing users to change repo_urls, but only
+  # with large delays, reduces the administration effort required.
   def repo_url_change_allowed?
     return true unless @project.repo_url?
     return true if project_params[:repo_url].nil?
     return true if current_user.admin?
 
-    project_params[:repo_url].split('://', 2)[1] ==
-      @project.repo_url.split('://', 2)[1]
+    return true if basically_same(project_params[:repo_url], @project.repo_url)
+    repo_url_delay_expired?
   end
 
   def positive_integer?(value)

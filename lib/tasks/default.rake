@@ -587,6 +587,44 @@ task :create_project_insertion_command do
   puts 'Remote: heroku pg:psql --app production-bestpractices < project.sql'
 end
 
+# Change owner of PROJECT to USER. Both must be numbers. To use:
+# heroku run --app production-bestpractices rake change_owner -- PROJECT OWNER
+# You can run a SQL command to do this instead, but an error such as
+# forgetting the WHERE clause can cause a big mistake. The statement would be:
+# echo "UPDATE projects SET user_id = {OWNER_NUM} WHERE id = {PROJECT_NUM}" | \
+#  heroku pg:psql --app master-bestpractices
+
+desc 'Change owner of PROJECT. rake change_owner -- PROJECT_NUM NEW_OWNER_NUM'
+task change_owner: :environment do
+  # Project.update_all_badge_percentages(Criteria.keys)
+  ARGV.shift # Drop rake task name
+  ARGV.shift # Drop '--'
+  project_number = Integer(ARGV[0]) # Raise exceptions on non-integers
+  user_number = Integer(ARGV[1])
+  # Retrieve and print current project/owner
+  project = Project.find(project_number.to_i)
+  puts("Project      ##{project.id} #{project.name}")
+  old_owner_id = project.user_id
+  old_owner_name = User.find_by(id: old_owner_id)&.name
+  puts("Former owner ##{old_owner_id} #{old_owner_name}")
+  # Retrieve and print new owner info
+  new_owner_id = user_number.to_i
+  new_owner_record = User.find(new_owner_id)
+  new_owner_name = new_owner_record.name
+  puts("New owner    ##{new_owner_id} #{new_owner_name}")
+  # Cause change
+  if project.user_id == new_owner_id
+    puts('No change, nothing done')
+  else
+    project.user_id = new_owner_id
+    project.save!
+    puts("Revert with: rake change_owner -- #{project.id} #{old_owner_id}")
+  end
+  # Rake tries to run the arguments which is annoying.
+  # ARGV.shift; ARGV.shift doesn't work, so just flat-out exit(0).
+  exit(0)
+end
+
 # Use this if the badge rules change.  This will email those who
 # gain/lose a badge because of the changes.
 desc 'Run to recalculate all badge percentages for all projects'

@@ -2440,7 +2440,7 @@ en:
           (such as passwords and dynamic tokens) and private cryptographic
           keys in files that are separate from other information
           (such as configuration files, databases, and logs),
-          and permit users to update and replacement them without
+          and permit users to update and replace them without
           code recompilation. If the project never processes authentication
           credentials and private cryptographic keys, select "not
           applicable" (N/A).

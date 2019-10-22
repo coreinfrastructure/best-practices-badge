@@ -122,7 +122,7 @@ The following sections are organized following the assurance case figures:
   This is a merger of the second and third assurance case figures
   (implementation is shown in a separate figure because there is so much
   to it, but in the text we merge the contents of these two figures).
-* We then discuss securuity implemented by other life cycle processes,
+* We then discuss security implemented by other life cycle processes,
   broken into the main 12207 headings:
   agreement processes, organizational project-enabling processes, and
   technical management processes.
@@ -630,6 +630,23 @@ However, only an administrator with deployment platform access
 is authorized to do that, and few people have that privilege.
 The deployment platform infrastructure verifies authentication and
 authorization.
+
+There is an odd special case involving the repository URL `repo_url`.
+We are trying to counter subtle attacks where
+a project tries to claim the good reputation or effort of another project
+by constantly switching its `repo_url` to other projects and/or nonsense.
+The underlying problem is that names/identities are hard; the `repo_url`
+(when present) is the closest to an "identity" that we have for a project.
+We have to allow it to change sometimes (because it sometimes does), but
+it should be a rare "sticky" event.
+There are various special cases, e.g., you can always set the `repo_url`
+if it's nil, the setter is an admin, or if only the scheme is changed.
+But otherwise normal users can't change the `repo_urls` in less than
+`REPO_URL_CHANGE_DELAY` days (a constant set in the projects controller).
+Allowing users to change `repo_urls`, but only
+with large delays, reduces the administration effort required.
+By doing this, we help protect the integrity of the overall database
+from potentially-malicious authorized users.
 
 #### Modification to official application requires authorization via GitHub
 

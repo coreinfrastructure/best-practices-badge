@@ -453,8 +453,11 @@ en:
       more_non_whitespace: Must have at least 15 non-whitespace characters.
     edit:
       edit_status: Edit Project Badge Status
-      repo_url_limits: You may only change your repo_url from
-        http to https
+      repo_url_limits: >-
+        You may only change your repo_url if it is
+        (1) more than 180 days since it was last changed, or
+        (2) it is only a switch between http and https.
+        Please file an issue (with rationale) if you need to change it sooner.
       changed_since_html: >-
         Another user has made a change to that record since you
         accessed the edit form. <br>Please open a new <a href="%{edit_url}"

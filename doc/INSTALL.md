@@ -79,6 +79,17 @@ tools, e.g., at the command line:
 * <kbd>emerge install git</kbd> (Gentoo)
 * <kbd>brew install git</kbd> (MacOS)
 
+Also, install Chrome.
+It's not needed to *run* the software, but it's used for various headless tests
+so you need it to run some automated tests.
+The easy way to do this is to download it from
+<https://www.google.com/chrome>.
+If you don't install Chrome, and you try to run the tests, the test suite
+will internally try to run `rake update_chromedriver` and you will
+see odd error messages such as `ArgumentError: wrong first argument`,
+an error in `lib/tasks/default.rake`, errors from bundle, and a report
+that the error is from `Tasks: TOP => default => update_chromedriver`.
+
 ## Forking the repo
 
 You'll now need to fork the repo on GitHub.

@@ -528,11 +528,32 @@ The authorization callback URL in GitHub is:
 [1] <https://github.com/settings/applications/new>
 [2] <https://devcenter.heroku.com/articles/config-vars>
 
+## Changing the owner of a project entry
+
+We have a rake task to simplify changing the owner of a project.
+Given project number PROJECT and new owner user id OWNER,
+you can do this remotely with:
+
+~~~~
+heroku run --app production-bestpractices rake change_owner -- PROJECT OWNER
+~~~~
+
+You can also do this with a SQL command but an error in the SQL command
+(such as forgetting the WHERE clause) can cause a big problem.
+The rake task `change_owner` is more convenient, e.g., it prints
+the project name, prints old and new owner names, prevent some errors,
+and so on. Neverthess it is fundamentally the same as this SQL command:
+
+~~~~
+echo "UPDATE projects SET user_id = {OWNER_NUM} WHERE id = {PROJECT_NUM}" | \
+  heroku pg:psql --app production-bestpractices
+~~~~
+
 ## Database content viewing and editing
 
 In some cases you may need to view or edit the database contents directly.
 For example, we don't currently have code to set a user to have the
-'admin' role, or to change the ownership of a project,
+'admin' role,
 to backup the database, or restore the database.
 Instead, we simply interact with the database software, which
 already has the functions to do this.

@@ -1141,6 +1141,8 @@
     - Secure development knowledge: !!omap
       - implement_secure_design:
           category: MUST
+          na_allowed: true
+          na_justification_required: true
           met_justification_required: true
           rationale: >
             This was inspired by the

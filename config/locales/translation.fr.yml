@@ -1060,22 +1060,16 @@ fr:
           DOIVENT supporter HTTPS en utilisant TLS.
         details: >-
           Cela nécessite que l'URL de la page d'accueil du projet
-          et l'URL du dépôt sous contrôle de version commencent
-          par « https: » et non « http: ». Vous pouvez obtenir
+          et l'URL du référentiel de contrôle de version commencent
+          par « https: » et non par « http: ». Vous pouvez obtenir
           des certificats gratuits de <a href="https://letsencrypt.org/">Let's
-          Encrypt</a>. Les projets PEUVENT implémenter ce critère
-          en utilisant (par exemple) <a href="https://help.github.com/articles/securing-your-github-pages-site-with-https/">des
-          pages GitHub</a>, <a href="https://about.gitlab.com/2016/12/24/were-bringing-gitlab-pages-to-community-edition/">des
-          pages GitLab</a> ou <a href="https://sourceforge.net/blog/introducing-https-for-project-websites/">des
-          pages de projet SourceForge</a>. Si vous utilisez des
-          pages GitHub avec des domaines personnalisés, vous POUVEZ
-          utiliser un réseau de distribution de contenu (CDN)
-          comme proxy pour prendre en charge HTTPS, tel que décrit
-          dans <a href="https://blog.cloudflare.com/secure-and-fast-github-pages-with-cloudflare/">le
-          post de blog « Secure and fast GitHub Pages with CloudFlare
-          »</a>, pour satisfaire ce critère. Si vous autorisez
-          HTTP, nous vous invitons instamment à rediriger le trafic
-          HTTP vers HTTPS.
+          Encrypt</a>. Les projets PEUVENT mettre en œuvre ce
+          critère en utilisant (par exemple) des <a href="https://help.github.com/articles/securing-your-github-pages-site-with-https/">pages
+          GitHub, des </a> <a href="https://about.gitlab.com/2016/12/24/were-bringing-gitlab-pages-to-community-edition/">pages
+          GitLab</a> ou des <a href="https://sourceforge.net/blog/introducing-https-for-project-websites/">pages
+          de projet SourceForge</a>. Si vous prenez en charge
+          HTTP, nous vous invitons à rediriger le trafic HTTP
+          vers HTTPS.
       discussion:
         description: >-
           Le projet DOIT avoir un ou plusieurs mécanismes de discussion
@@ -1342,7 +1336,7 @@ fr:
           tests et environnements de tests sont disponibles, tels
           que <a href="https://www.seleniumhq.org/">Selenium</a>
           (automatisation de navigateur Web), <a href="https://junit.org">Junit</a>
-          (JVM, Java), <a href="https://cran.r-project.org/web/packages/runit/index.html">RUnit</a>
+          (JVM, Java), <a href="https://CRAN.R-project.org/package=RUnit">RUnit</a>
           (R), <a href="https://cran.r-project.org/web/packages/testthat/index.html">testthat</a>
           (R).
       test_invocation:

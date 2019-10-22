@@ -376,9 +376,9 @@ de:
         im Text unten, wenn man nicht weiß wie).
       lost_badge: Das Projekt hat ein Badge verloren.
       static_analysis_updated_html: >-
-        Wir haben unsere Anforderungen für das Kriterium <a href="#static_analysis">
-        static_analysis </a> aktualisiert. Bitte fügen Sie eine
-        Rechtfertigung für dieses Kriterium hinzu.
+        Wir haben unsere Anforderungen für das Kriterium static_analysis
+        aktualisiert. Bitte fügen Sie eine Rechtfertigung für
+        dieses Kriterium hinzu.
       edit_status: Bearbeiten des Projekt Badge Status
     form_basics:
       project_name:
@@ -1061,9 +1061,18 @@ de:
         description: >-
           Die Projekt-Seiten (Website, Repository und Download-URLs)
           MÜSSEN HTTPS mit TLS unterstützen.
-        details: |-
-          Dies setzt voraus, dass die Projekt-Homepage-URL und die URL des Versionskontroll-Repositories mit "https:", nicht "http:" beginnt. Sie können kostenlose Zertifikate von <a href="https://letsencrypt.org/"> Let's Encrypt </a> erhalten. Projekte KÖNNEN dieses Kriterium implementieren, indem Sie (z. B.) <a href="https://help.github.com/articles/securing-your-github-pages-site-with-https/"> GitHub-Pages </a> verwenden, <a href="https://about.gitlab.com/2016/12/24/were-bringing-gitlab-pages-to-community-edition/"> GitLab-Pages </a> oder <a href="https://sourceforge.net/blog/introducing-https-for-project-websites/"> SourceForge project pages</a>. Wenn Sie GitHub-Seiten mit benutzerdefinierten Domänen verwenden, können Sie ein Content Delivery Network (CDN) als Proxy zur Unterstützung von HTTPS verwenden, wie in <a href
-          ="https://blog.cloudflare.com/secure-and-fast-github-pages-with-cloudflare/"> Blogpost" Sichere und schnelle GitHub Pages mit CloudFlare "</a>, um dieses Kriterium zu erfüllen. Wenn Sie HTTP unterstützen, empfehlen wir Ihnen, den HTTP-Datenverkehr an HTTPS umzuleiten.
+        details: >-
+          Dies setzt voraus, dass die Projekt-Homepage-URL und
+          die URL des Versionskontroll-Repositories mit "https:",
+          nicht "http:" beginnt. Sie können kostenlose Zertifikate
+          von <a href="https://letsencrypt.org/"> Let's Encrypt
+          </a> erhalten. Projekte KÖNNEN dieses Kriterium implementieren,
+          indem Sie (z. B.) <a href="https://help.github.com/articles/securing-your-github-pages-site-with-https/">
+          GitHub-Pages </a> verwenden, <a href="https://about.gitlab.com/2016/12/24/were-bringing-gitlab-pages-to-community-edition/">
+          GitLab-Pages </a> oder <a href="https://sourceforge.net/blog/introducing-https-for-project-websites/">
+          SourceForge project pages</a>. Wenn Sie HTTP unterstützen,
+          empfehlen wir Ihnen, den HTTP-Datenverkehr an HTTPS
+          umzuleiten.
       discussion:
         description: >-
           Das Projekt MUSS einen oder mehrere Mechanismen zur

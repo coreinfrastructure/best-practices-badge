@@ -418,7 +418,7 @@ class ProjectsController < ApplicationController
     params.permit([:criteria_level])
   end
 
-  # Return an extracted URL with its scheme ('http:') & trailing '/' removed.
+  # Return an extracted URL without its scheme ('http:') & trailing '/'.
   def extracted_url(url)
     url.split('://', 2)[1].chomp('/')
   end
@@ -434,7 +434,10 @@ class ProjectsController < ApplicationController
     extracted_url(url1) == extracted_url(url2)
   end
 
-  REPO_URL_CHANGE_DELAY = 180 # Number of days before repo_url change allowed
+  # Number of days before a user may change repo_url. See below.
+  # NOTE: If you change this value, you may also need to change
+  # file config/locales/en.yml key repo_url_limits.
+  REPO_URL_CHANGE_DELAY = 180
 
   # Return true iff the project can change its repo_url because the
   # REPO_URL_CHANGE_DELAY has expired

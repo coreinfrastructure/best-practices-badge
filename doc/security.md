@@ -1412,6 +1412,15 @@ curl -H "X-Forwarded-For: 23.235.32.1,23.235.32.1" \
      https://master-bestpractices.herokuapp.com/
 ~~~~
 
+[Systems that use CDNs can be vulnerable to the Cache Poisoned Denial of Service (CPDoS) family of vulnerabilities](https://cpdos.org/).
+We do use a CDN (Fastly), but our brief research
+suggests that this site is not vulnerable to CPDoS.
+The resarchers of CPDoS posted what they found vulnerable, and their
+"Fastly" column has empty rows for "Heroku" and "Rails".
+Unfortunately they don't directly list Puma (our webserver),
+but Puma is the recommended webserver by Heroku for Rails and
+is the usual choice.
+
 The system implements a variety of server-side caches, in particular,
 it widely uses fragment caching.  This is primarily to improve performance,
 but it also helps with availability against a DDoS, because
@@ -1424,7 +1433,8 @@ However, this site doesn't have any particular political agenda,
 and taking it down is unlikely to provide monetary gain.
 Thus, this site doesn't seem as likely a target for a long-term DDoS
 attack, and there is not much else we can do to counter DDoS
-by an attacker with significant resources.
+by an attacker with significant resources without having
+significant resources ourselves.
 
 ### Memory-safe languages
 

@@ -35,12 +35,12 @@ task(:default).clear.enhance %w[
 # This is a shorter list; many checks are run by a separate "pronto" task.
 # Temporarily includes "railroader", we hope to move that to pronto.
 # Removed bundle_doctor due to CircleCI failures
+# Temporarily removed railroader due to vulnerable haml library
 # Temporarily removed fasterer
 task(:ci).clear.enhance %w[
   rbenv_rvm_setup
   bundle_audit
   markdownlint
-  railroader
   license_okay
   license_finder_report.html
   whitespace_check
@@ -70,8 +70,10 @@ end
 
 desc 'Run railroader'
 task :railroader do
+  # TEMPORARILY DISABLE - old haml is vulnerable
+  puts('WARNING!!: Railroader temporarily disabled due to haml gem issue')
   # Disable pager, so that "rake" can keep running without halting.
-  sh 'bundle exec railroader --quiet --no-pager'
+  # sh 'bundle exec railroader --quiet --no-pager'
 end
 
 desc 'Run bundle if needed'

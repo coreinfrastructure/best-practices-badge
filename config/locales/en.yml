@@ -1047,9 +1047,9 @@ en:
         details: >-
           FLOSS is software released in a way that meets the <a
           href="https://opensource.org/osd-annotated">Open Source
-          Definition</a> or <a href="http://www.gnu.org/philosophy/free-sw.en.html">Free
+          Definition</a> or <a href="https://www.gnu.org/philosophy/free-sw.en.html">Free
           Software Definition</a>. Examples of such licenses include
-          the <a href="http://creativecommons.org/publicdomain/zero/1.0/">CC0</a>,
+          the <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0</a>,
           <a href="https://opensource.org/licenses/MIT">MIT</a>,
           <a href="https://opensource.org/licenses/BSD-2-Clause">BSD
           2-clause</a>, <a href="https://opensource.org/licenses/BSD-3-Clause">BSD
@@ -1240,7 +1240,7 @@ en:
           use semantic versioning or date-based schemes like YYYYMMDD).
       version_semver:
         description: >-
-          It is SUGGESTED that the <a href="http://semver.org">Semantic
+          It is SUGGESTED that the <a href="https://semver.org">Semantic
           Versioning (SemVer) format</a> be used for releases.
         details: >-
           Other version numbering schemes, such as commit IDs
@@ -1493,7 +1493,7 @@ en:
           (See ‘details’ for the exact requirements.)
         details: >-
           This requires understanding the following design principles,
-          including the 8 principles from <a href="http://web.mit.edu/Saltzer/www/publications/protection/">Saltzer
+          including the 8 principles from <a href="https://web.mit.edu/Saltzer/www/publications/protection/">Saltzer
           and Schroeder</a>: <ul> <li>economy of mechanism (keep
           the design as simple and small as practical, e.g., by
           adopting sweeping simplifications) <li>fail-safe defaults
@@ -1548,7 +1548,7 @@ en:
           Examples (depending on the type of software) include
           SQL injection, OS injection, classic buffer overflow,
           cross-site scripting, missing authentication, and missing
-          authorization. See the <a href="http://cwe.mitre.org/top25/">CWE/SANS
+          authorization. See the <a href="https://cwe.mitre.org/top25/">CWE/SANS
           top 25</a> or <a href="https://www.owasp.org/index.php/Category:OWASP_Top_Ten_Project">OWASP
           Top 10</a> for commonly used lists.
       crypto_published:
@@ -1590,7 +1590,7 @@ en:
           group 2048, elliptic curve 224, and hash 224 (password
           hashing is not covered by this bitlength, more information
           on password hashing can be found in the <a href="#crypto_password_storage">crypto_password_storage</a>
-          criterion). See <a href="http://www.keylength.com">http://www.keylength.com</a>
+          criterion). See <a href="https://www.keylength.com">https://www.keylength.com</a>
           for a comparison of keylength recommendations from various
           organizations. The software MAY allow smaller keylengths
           in some configurations (ideally it would not, since
@@ -1758,13 +1758,13 @@ en:
           vulnerabilities), and some do a combination.
           Examples
           of such static code analysis tools include <a href="http://cppcheck.sourceforge.net/">cppcheck</a> (C, C++),
-          <a href="http://clang-analyzer.llvm.org/">clang static
+          <a href="https://clang-analyzer.llvm.org/">clang static
           analyzer</a> (C, C++),
           <a href="https://spotbugs.github.io/">SpotBugs</a> (Java),
           <a href="http://findbugs.sourceforge.net/">FindBugs</a> (Java)
           (including <a href="https://h3xstream.github.io/find-sec-bugs/">FindSecurityBugs</a>),
           <a href="https://pmd.github.io/">PMD</a> (Java),
-          <a href="http://brakemanscanner.org/">Brakeman</a> (Ruby on Rails),
+          <a href="https://brakemanscanner.org/">Brakeman</a> (Ruby on Rails),
           <a href="https://cran.r-project.org/web/packages/lintr/index.html">lintr</a> (R),
           <a href="https://cran.r-project.org/web/packages/goodpractice/index.html">goodpractice</a> (R),
           <a href="https://scan.coverity.com/">Coverity Quality
@@ -1776,8 +1776,8 @@ en:
           lists of tools can be found in places such as the <a
           href="https://en.wikipedia.org/wiki/List_of_tools_for_static_code_analysis">Wikipedia
           list of tools for static code analysis</a>, <a href="https://www.owasp.org/index.php/Static_Code_Analysis">OWASP
-          information on static code analysis</a>, <a href="http://samate.nist.gov/index.php/Source_Code_Security_Analyzers.html">NIST
-          list of source code security analyzers</a>, and <a href="http://www.dwheeler.com/essays/static-analysis-tools.html">Wheeler's
+          information on static code analysis</a>, <a href="https://samate.nist.gov/index.php/Source_Code_Security_Analyzers.html">NIST
+          list of source code security analyzers</a>, and <a href="https://www.dwheeler.com/essays/static-analysis-tools.html">Wheeler's
           list of static analysis tools</a>. The <a href="https://continuousassurance.org/">SWAMP</a>
           is a no-cost platform for assessing vulnerabilities
           in software using a variety of tools. If there are no
@@ -1823,7 +1823,7 @@ en:
           use a fuzzing tool (e.g., <a href="http://lcamtuf.coredump.cx/afl/">American
           Fuzzy Lop</a>) or a web application scanner (e.g., <a
           href="https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project">OWASP
-          ZAP</a> or <a href="http://w3af.org/">w3af</a>). In
+          ZAP</a> or <a href="https://w3af.org/">w3af</a>). In
           some cases the <a href="https://github.com/google/oss-fuzz#introduction">OSS-Fuzz</a>
           project may be willing to apply fuzz testing to your
           project. For purposes of this criterion the dynamic
@@ -1849,10 +1849,10 @@ en:
           Examples of mechanisms to detect memory safety problems
           include <a href="https://github.com/google/sanitizers/wiki/AddressSanitizer">Address
           Sanitizer (ASAN)</a> (available in GCC and LLVM), <a
-          href="http://clang.llvm.org/docs/MemorySanitizer.html">Memory
+          href="https://clang.llvm.org/docs/MemorySanitizer.html">Memory
           Sanitizer</a>, and <a href="http://valgrind.org/">valgrind</a>.
-          Other potentially-used tools include <a href="http://clang.llvm.org/docs/ThreadSanitizer.html">thread
-          sanitizer</a> and <a href="http://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html">undefined
+          Other potentially-used tools include <a href="https://clang.llvm.org/docs/ThreadSanitizer.html">thread
+          sanitizer</a> and <a href="https://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html">undefined
           behavior sanitizer</a>. Widespread assertions would
           also work.
       dynamic_analysis_enable_assertions:
@@ -1886,7 +1886,7 @@ en:
           developers of non-trivial amounts of project software
           assert that they are legally authorized to make these
           contributions. The most common and easily-implemented
-          approach for doing this is by using a <a href="http://developercertificate.org/">Developer
+          approach for doing this is by using a <a href="https://developercertificate.org/">Developer
           Certificate of Origin (DCO)</a>, where users add "signed-off-by"
           in their commits and the project links to the DCO website.
           However, this MAY be implemented as a Contributor License
@@ -1941,7 +1941,7 @@ en:
           only on behavior within the community/workplace of the
           project.  Example codes of conduct are the
           <a href="https://www.kernel.org/doc/html/latest/process/code-of-conduct.html">Linux kernel code of conduct</a>,
-          the <a href="http://contributor-covenant.org/">Contributor
+          the <a href="https://contributor-covenant.org/">Contributor
           Covenant Code of Conduct</a>,
           the <a href="https://www.debian.org/code_of_conduct">Debian Code of Conduct</a>,
           the <a href="https://www.ubuntu.com/about/about-ubuntu/conduct">Ubuntu Code of Conduct</a>,
@@ -2038,8 +2038,9 @@ en:
           that provides a convincing and valid argument that a
           specified set of critical claims regarding a system’s
           properties are adequately justified for a given application
-          in a given environment" (<a href="http://nvlpubs.nist.gov/nistpubs/ir/2009/ir7608.pdf">
-          "Software Assurance Using Structured Assurance Case
+          in a given environment" (<a
+          href="https://www.nist.gov/publications/software-assurance-using-structured-assurance-case-models">"Software
+          Assurance Using Structured Assurance Case
           Models", Thomas Rhodes et al, NIST Interagency Report
           7608</a>). Trust boundaries are boundaries where data
           or execution changes its level of trust, e.g., a server's
@@ -2089,7 +2090,7 @@ en:
           and use the project results where it is reasonable to
           do so.
         details: |-
-          For web applications, see the <a href="https://www.w3.org/TR/WCAG20/">Web Content Accessibility Guidelines (WCAG 2.0)</a> and its supporting document <a href="https://www.w3.org/TR/UNDERSTANDING-WCAG20/Overview.html">Understanding WCAG 2.0</a>; see also <a href="https://www.w3.org/standards/webdesign/accessibility">W3C accessibility information</a>. For GUI applications, consider using the environment-specific accessibility guidelines (such as <a href="https://developer.gnome.org/accessibility-devel-guide/stable/">Gnome</a>, <a href="https://accessibility.kde.org/">KDE</a>, <a href="http://docs.xfce.org/xfce/xfce4-settings/accessibility">XFCE</a>, <a href="https://developer.android.com/guide/topics/ui/accessibility/">Android</a>, <a href="https://developer.apple.com/accessibility/ios/">iOS</a>, <a href="http://www.apple.com/accessibility/osx/voiceover/">Mac</a>, and <a href="https://msdn.microsoft.com/en-us/windows/uwp/accessibility/accessibility-overview">Windows</a>). Some TUI applications (e.g. `ncurses` programs) can do certain things to make themselves more accessible (such as `alpine`'s `force-arrow-cursor` setting). Most command-line applications are fairly accessible as-is. This criterion is often N/A, e.g., for program libraries. Here are some examples of actions to take or issues to consider: <ul> <li>Provide text alternatives for any non-text content so
+          For web applications, see the <a href="https://www.w3.org/TR/WCAG20/">Web Content Accessibility Guidelines (WCAG 2.0)</a> and its supporting document <a href="https://www.w3.org/TR/UNDERSTANDING-WCAG20/Overview.html">Understanding WCAG 2.0</a>; see also <a href="https://www.w3.org/standards/webdesign/accessibility">W3C accessibility information</a>. For GUI applications, consider using the environment-specific accessibility guidelines (such as <a href="https://developer.gnome.org/accessibility-devel-guide/stable/">Gnome</a>, <a href="https://accessibility.kde.org/">KDE</a>, <a href="https://docs.xfce.org/xfce/xfce4-settings/accessibility">XFCE</a>, <a href="https://developer.android.com/guide/topics/ui/accessibility/">Android</a>, <a href="https://developer.apple.com/accessibility/ios/">iOS</a>, <a href="https://www.apple.com/accessibility/osx/voiceover/">Mac</a>, and <a href="https://msdn.microsoft.com/en-us/windows/uwp/accessibility/accessibility-overview">Windows</a>). Some TUI applications (e.g. `ncurses` programs) can do certain things to make themselves more accessible (such as `alpine`'s `force-arrow-cursor` setting). Most command-line applications are fairly accessible as-is. This criterion is often N/A, e.g., for program libraries. Here are some examples of actions to take or issues to consider: <ul> <li>Provide text alternatives for any non-text content so
             that it can be changed into other forms people need, such as
             large print, braille, speech, symbols or simpler language (
             <a href="https://www.w3.org/TR/UNDERSTANDING-WCAG20/text-equiv.html">WCAG 2.0 guideline 1.1</a>)
@@ -2319,11 +2320,14 @@ en:
           or verify them as unexploitable.
         details: >-
           This can be done using an origin analyzer / dependency
-          checking tool such as <a href="https://www.owasp.org/index.php/OWASP_Dependency_Check">OWASP's
-          Dependency-Check</a>, <a href="https://www.sonatype.com/nexus-auditor">Sonatype's
-          Nexus Auditor</a>, <a href="https://www.blackducksoftware.com/products/protex">Black
-          Duck's Protex</a>, <a href="http://www.protecode.com/">Synopsys'
-          Protecode</a>, and <a href="https://github.com/rubysec/bundler-audit">Bundler-audit
+          checking tool / software composition analysis tool such as <a
+          href="https://www.owasp.org/index.php/OWASP_Dependency_Check">OWASP's
+          Dependency-Check</a>,
+          <a href="https://www.sonatype.com/nexus-auditor">Sonatype's
+          Nexus Auditor</a>, <a
+          href="https://www.synopsys.com/software-integrity/security-testing/software-composition-analysis.html">Synopsys'
+          Black Duck Software Composition Analysis</a>,
+          and <a href="https://github.com/rubysec/bundler-audit">Bundler-audit
           (for Ruby)</a>. Some package managers include mechanisms
           to do this. It is acceptable if the components' vulnerability
           cannot be exploited, but this analysis is difficult
@@ -2350,7 +2354,7 @@ en:
           This is especially an issue for cloud-based systems;
           if the cloud provider updates their "standard" libaries
           but the program won't use them, then the updates don't
-          actually help. See, e.g., <a href="http://spot.livejournal.com/312320.html">"Chromium:
+          actually help. See, e.g., <a href="https://spot.livejournal.com/312320.html">"Chromium:
           Why it isn't in Fedora yet as a proper package" by Tom
           Callaway</a>.
       interfaces_current:
@@ -2469,7 +2473,7 @@ en:
           does not use TLS, select "not applicable" (N/A).
         details: >-
           Note that incorrect TLS certificate verification is
-          a common mistake. For more information, see <a href="http://crypto.stanford.edu/~dabo/pubs/abstracts/ssl-client-bugs.html">"The
+          a common mistake. For more information, see <a href="https://crypto.stanford.edu/~dabo/pubs/abstracts/ssl-client-bugs.html">"The
           Most Dangerous Code in the World: Validating SSL Certificates
           in Non-Browser Software" by Martin Georgiev et al.</a>
           and <a href="https://blogs.gnome.org/mcatanzaro/2016/03/12/do-you-trust-this-application/">"Do
@@ -2616,8 +2620,8 @@ en:
         details: >-
           This identification is typically done by marking selected
           issues in an issue tracker with one or more tags the
-          project uses for the purpose, e.g., <a href="http://up-for-grabs.net/#/">up-for-grabs</a>,
-          <a href="http://www.firsttimersonly.com/">first-timers-only</a>,
+          project uses for the purpose, e.g., <a href="https://up-for-grabs.net/#/">up-for-grabs</a>,
+          <a href="https://www.firsttimersonly.com/">first-timers-only</a>,
           "Small fix", microtask, or IdealFirstBug. These new
           tasks need not involve adding functionality; they can
           be improving documentation, adding test cases, or anything

@@ -1850,7 +1850,7 @@ en:
           include <a href="https://github.com/google/sanitizers/wiki/AddressSanitizer">Address
           Sanitizer (ASAN)</a> (available in GCC and LLVM), <a
           href="https://clang.llvm.org/docs/MemorySanitizer.html">Memory
-          Sanitizer</a>, and <a href="https://valgrind.org/">valgrind</a>.
+          Sanitizer</a>, and <a href="http://valgrind.org/">valgrind</a>.
           Other potentially-used tools include <a href="https://clang.llvm.org/docs/ThreadSanitizer.html">thread
           sanitizer</a> and <a href="https://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html">undefined
           behavior sanitizer</a>. Widespread assertions would
@@ -2038,8 +2038,9 @@ en:
           that provides a convincing and valid argument that a
           specified set of critical claims regarding a system’s
           properties are adequately justified for a given application
-          in a given environment" (<a href="https://nvlpubs.nist.gov/nistpubs/ir/2009/ir7608.pdf">
-          "Software Assurance Using Structured Assurance Case
+          in a given environment" (<a
+          href="https://www.nist.gov/publications/software-assurance-using-structured-assurance-case-models">"Software
+          Assurance Using Structured Assurance Case
           Models", Thomas Rhodes et al, NIST Interagency Report
           7608</a>). Trust boundaries are boundaries where data
           or execution changes its level of trust, e.g., a server's
@@ -2319,11 +2320,14 @@ en:
           or verify them as unexploitable.
         details: >-
           This can be done using an origin analyzer / dependency
-          checking tool such as <a href="https://www.owasp.org/index.php/OWASP_Dependency_Check">OWASP's
-          Dependency-Check</a>, <a href="https://www.sonatype.com/nexus-auditor">Sonatype's
-          Nexus Auditor</a>, <a href="https://www.blackducksoftware.com/products/protex">Black
-          Duck's Protex</a>, <a href="https://www.protecode.com/">Synopsys'
-          Protecode</a>, and <a href="https://github.com/rubysec/bundler-audit">Bundler-audit
+          checking tool / software composition analysis tool such as <a
+          href="https://www.owasp.org/index.php/OWASP_Dependency_Check">OWASP's
+          Dependency-Check</a>,
+          <a href="https://www.sonatype.com/nexus-auditor">Sonatype's
+          Nexus Auditor</a>, <a
+          href="https://www.synopsys.com/software-integrity/security-testing/software-composition-analysis.html">Synopsys'
+          Black Duck Software Composition Analysis</a>,
+          and <a href="https://github.com/rubysec/bundler-audit">Bundler-audit
           (for Ruby)</a>. Some package managers include mechanisms
           to do this. It is acceptable if the components' vulnerability
           cannot be exploited, but this analysis is difficult

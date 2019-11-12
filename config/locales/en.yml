@@ -1692,7 +1692,7 @@ en:
       vulnerabilities_fixed_60_days:
         description: >-
           There MUST be no unpatched vulnerabilities of medium
-          or high severity that have been publicly known for more
+          or higher severity that have been publicly known for more
           than 60 days.
         details: >-
           The vulnerability must be patched and released by the
@@ -1703,10 +1703,24 @@ en:
           <a href="https://nvd.nist.gov/">National
           Vulnerability Database</a>) or when the project has
           been informed and the information has been released
-          to the public (possibly by the project). A vulnerability
-          is medium to high severity if its
-          <a href="https://nvd.nist.gov/cvss.cfm">CVSS
-          2.0</a> base score is 4 or higher. <strong>Note</strong>:
+          to the public (possibly by the project).
+          A vulnerability is considered medium or higher severity if its <a
+          href="https://www.first.org/cvss/"
+          >Common Vulnerability Scoring System (CVSS)</a>
+          base qualitative score is medium or higher.
+          In CVSS versions 2.0 through 3.1, this is
+          equivalent to a CVSS score of 4.0 or higher.
+          Projects may use the CVSS score
+          as published in a widely-used vulnerability database (such as the
+          <a href="https://nvd.nist.gov">National Vulnerability Database</a>)
+          using the most-recent version of CVSS reported in that database.
+          Projects may instead calculate the severity
+          themselves using the latest version of
+          <a href="https://www.first.org/cvss/">CVSS</a> at the time of
+          the vulnerability disclosure,
+          if the calculation inputs are publicly revealed once
+          the vulnerability is publicly known.
+          <strong>Note</strong>:
           this means that users might be left vulnerable to all
           attackers worldwide for up to 60 days. This criterion
           is often much easier to meet than what Google recommends
@@ -1801,13 +1815,28 @@ en:
           the 'passing' level badge.
       static_analysis_fixed:
         description: >-
-          All medium and high severity exploitable vulnerabilities
+          All medium and higher severity exploitable vulnerabilities
           discovered with static code analysis MUST be fixed in
           a timely way after they are confirmed.
         details: >-
-          A vulnerability is medium to high severity if its <a
-          href="https://nvd.nist.gov/cvss.cfm">CVSS 2.0</a> is
-          4 or higher.
+          A vulnerability is considered medium or higher severity if its <a
+          href="https://www.first.org/cvss/"
+          >Common Vulnerability Scoring System (CVSS)</a>
+          base qualitative score is medium or higher.
+          In CVSS versions 2.0 through 3.1, this is
+          equivalent to a CVSS score of 4.0 or higher.
+          Projects may use the CVSS score
+          as published in a widely-used vulnerability database (such as the
+          <a href="https://nvd.nist.gov">National Vulnerability Database</a>)
+          using the most-recent version of CVSS reported in that database.
+          Projects may instead calculate the severity
+          themselves using the latest version of
+          <a href="https://www.first.org/cvss/">CVSS</a> at the time of
+          the vulnerability disclosure,
+          if the calculation inputs are publicly revealed once
+          the vulnerability is publicly known.
+          Note that criterion vulnerabilities_fixed_60_days requires that all
+          such vulnerabilities be fixed within 60 days of being made public.
       static_analysis_often:
         description: >-
           It is SUGGESTED that static source code analysis occur
@@ -1862,15 +1891,29 @@ en:
           dynamic analysis.
       dynamic_analysis_fixed:
         description: >-
-          All medium and high severity exploitable vulnerabilities
+          All medium and higher severity exploitable vulnerabilities
           discovered with dynamic code analysis MUST be fixed
           in a timely way after they are confirmed.
         details: >-
-          A vulnerability is medium to high severity if its <a
-          href="https://nvd.nist.gov/cvss.cfm">CVSS 2.0</a> base
-          score is 4. If you are not running dynamic code analysis
+          If you are not running dynamic code analysis
           and thus have not found any vulnerabilities in this
           way, choose "not applicable" (N/A).
+          A vulnerability is considered medium or higher severity if its <a
+          href="https://www.first.org/cvss/"
+          >Common Vulnerability Scoring System (CVSS)</a>
+          base qualitative score is medium or higher.
+          In CVSS versions 2.0 through 3.1, this is
+          equivalent to a CVSS score of 4.0 or higher.
+          Projects may use the CVSS score
+          as published in a widely-used vulnerability database (such as the
+          <a href="https://nvd.nist.gov">National Vulnerability Database</a>)
+          using the most-recent version of CVSS reported in that database.
+          Projects may instead calculate the severity
+          themselves using the latest version of
+          <a href="https://www.first.org/cvss/">CVSS</a> at the time of
+          the vulnerability disclosure,
+          if the calculation inputs are publicly revealed once
+          the vulnerability is publicly known.
     '1':
       achieve_passing:
         description: The project MUST achieve a passing level

@@ -95,7 +95,7 @@ GEM
       selenium-webdriver
     capybara-slow_finder_errors (0.1.4)
       capybara (~> 2.5)
-    chartkick (3.2.0)
+    chartkick (3.3.0)
     childprocess (0.9.0)
       ffi (~> 1.0, >= 1.0.11)
     code_analyzer (0.4.8)
@@ -451,7 +451,7 @@ DEPENDENCIES
   bundler-audit (= 0.6.1)
   capybara-selenium (= 0.0.6)
   capybara-slow_finder_errors (= 0.1.4)
-  chartkick (= 3.2.0)
+  chartkick (= 3.3.0)
   codecov (= 0.1.14)
   coffee-rails (= 4.2.2)
   database_cleaner (= 1.7.0)

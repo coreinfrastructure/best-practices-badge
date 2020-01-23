@@ -2636,19 +2636,17 @@ section on [reuse](#reuse).
 ### Auto-detect vulnerabilities
 
 We use multiple processes for automatically detecting when the components we
-use have publicly known vulnerabilities or are out-of-date.
+use have publicly known vulnerabilities.
 We specifically focus on detecting all components with any publicly known
 vulnerability, both in our direct and indirect dependencies.
-
-Bundle-audit uses the Gemfile* and National Vulnerability Database (NVD)
-data to report on libraries with publicly known vulnerabilities.
 
 We detect components with publicly known vulnerabilities
 using 2 different mechanisms: bundle-audit and GitHub.
 Each approach has its advantages, and using multiple mechanisms
 increases the likelihood that we will be alerted quickly.
-These both use the Gemfile* files and
-National Vulnerability Database (NVD) data:
+These both use the `Gemfile*` files and the
+National Vulnerability Database aka NVD (the NVD is
+a widely-used database of known vulnerabilities):
 
 * bundle-audit compares the entire set of gems (libraries),
   both direct and indirect dependencies, to a database
@@ -2665,8 +2663,15 @@ National Vulnerability Database (NVD) data:
   even if we are not currently modifying the system.
   This analyzes both Gemfile (direct) and Gemfile.lock
   (indirect) dependencies in Ruby.
+  GitHub also includes dependabot, a service that automatically
+  creates pull requests to fix vulnerable dependencies.
+  These automatically-generated pull requests go through our CI pipeline,
+  as would any pull request, so the pull requests go through many checks
+  (including our test suite). Presuming they pass, we can accept the
+  pull request, speeding our response to any vulnerabilities in components
+  we use.
   For more information, see the
-  [GitHub page About Security Alerts for Vulnerable Dependencies](https://help.github.com/articles/about-security-alerts-for-vulnerable-dependencies/).
+  [GitHub page About Security Alerts for Vulnerable Dependencies](https://help.github.com/en/github/managing-security-vulnerabilities/about-security-alerts-for-vulnerable-dependencies).
 
 At one time we also used Gemnasium, but the service we used
 closed in May 2018.  We have two other services, so that loss did not

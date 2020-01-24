@@ -68,12 +68,20 @@ task :rails_best_practices do
       '--features --spec --without-color'
 end
 
+desc 'Setup railroader if needed'
+task 'railroader/bin/railroader' do
+  # "gem install" doesn't honor Gemfile.lock, so use git clone + bundle install
+  sh 'mkdir -p railroader'
+  sh 'cd railroader; git clone --depth 1 https://github.com/david-a-wheeler/railroader.git ./ ; cp ../.ruby-version .; bundle install'
+end
+
 desc 'Run railroader'
-task :railroader do
-  # TEMPORARILY DISABLE - old haml is vulnerable
-  puts('WARNING!!: Railroader temporarily disabled due to haml gem issue')
+task railroader: %w[railroader/bin/railroader] do
   # Disable pager, so that "rake" can keep running without halting.
   # sh 'bundle exec railroader --quiet --no-pager'
+  # Workaround to run correct version of railroader & its dependencies.
+  # We have to set BUNDLE_GEMFILE so bundle works inside the rake task
+  sh 'cd railroader; echo "About to try"; BUNDLE_GEMFILE=$(pwd)/Gemfile bundle exec bin/railroader --quiet --no-pager $(dirname $(pwd))'
 end
 
 desc 'Run bundle if needed'

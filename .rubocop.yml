@@ -18,6 +18,7 @@ AllCops:
     - 'db/migrate/2016*.rb'
     - 'bin/**'
     - 'node_modules/**/*'
+    - 'railroader/**/*'
 Documentation:
   Enabled: false
 Lint/HandleExceptions:

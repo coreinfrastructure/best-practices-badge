@@ -77,11 +77,11 @@ class SessionsController < ApplicationController
   def local_login
     user = User.find_by provider: 'local',
                         email: params[:session][:email]
-    if user&.authenticate(params[:session][:password])
-      local_login_procedure(user)
-    else
+    if !user&.authenticate(params[:session][:password])
       flash.now[:danger] = t('sessions.invalid_combo')
       render 'new'
+    else
+      local_login_procedure(user)
     end
   end
 
@@ -94,13 +94,18 @@ class SessionsController < ApplicationController
     successful_login(user)
   end
 
+  # rubocop:disable Metrics/AbcSize
   def local_login_procedure(user)
-    if user.activated?
-      successful_login(user)
-      params[:session][:remember_me] == '1' ? remember(user) : forget(user)
-    else
+    if !user.activated?
       flash[:warning] = t('sessions.not_activated')
       redirect_to root_url
+    elsif !user.login_allowed_now
+      flash.now[:danger] = t('sessions.cannot_login_yet')
+      render 'new', status: :forbidden
+    else
+      successful_login(user)
+      params[:session][:remember_me] == '1' ? remember(user) : forget(user)
     end
   end
+  # rubocop:enable Metrics/AbcSize
 end

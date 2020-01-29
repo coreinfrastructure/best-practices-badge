@@ -89,13 +89,26 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
         user.activation_token, email: 'wrong', locale: :en
       )
       assert_not user_logged_in?
+      assert_not user.can_login_starting_at.present?
       # Valid activation token
       get edit_account_activation_path(
         user.activation_token, email: user.email, locale: :en
       )
       assert user.reload.activated?
       follow_redirect!
-      assert_template 'users/show'
+      assert_template 'sessions/new'
+      assert_not user_logged_in?
+      assert user.can_login_starting_at.present?
+      assert user.can_login_starting_at > Time.zone.now
+      # Try to log in as activated local user *before* cooloff time
+      log_in_as(user, password: 'a-g00d!Xpassword')
+      assert_template 'sessions/new'
+      assert_not user_logged_in?
+      assert user.can_login_starting_at > Time.zone.now
+      # Try to log in as activated local user *after* cooloff time
+      user.can_login_starting_at = Time.zone.now - 1.day.seconds
+      user.save!
+      log_in_as(user, password: 'a-g00d!Xpassword')
       assert user_logged_in?
     end
   end
@@ -124,8 +137,8 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
       get edit_account_activation_path(user.activation_token, email: user.email)
       assert user.reload.activated?
       follow_redirect!
-      assert_template 'users/show'
-      assert user_logged_in?
+      assert_template 'sessions/new'
+      assert_not user_logged_in?
     end
   end
 

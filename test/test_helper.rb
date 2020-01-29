@@ -51,9 +51,16 @@ end
 require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'
 
+# We must specially allow web calls by test drivers, e.g.,
+# GET https://chromedriver.storage.googleapis.com/LATEST_RELEASE_75.0.3770
+# See: https://github.com/titusfortner/webdrivers/issues/109
+driver_urls = [
+  %r{https://chromedriver.storage.googleapis.com/LATEST_RELEASE_[0-9.]+}
+]
+
 require 'webmock/minitest'
 # This would disable network connections; would interfere with vcr:
-WebMock.disable_net_connect!(allow_localhost: true)
+WebMock.disable_net_connect!(allow_localhost: true, allow: driver_urls)
 
 # For more info on vcr, see https://github.com/vcr/vcr
 # WARNING: Do *NOT* put the fixtures into test/fixtures (./fixtures is ok);
@@ -74,6 +81,8 @@ VCR.configure do |config|
   #   URI(r1.uri).query == URI(r2.uri).query
   # end
   # config.match_on [:skip_changers]
+  # Allow calls needed by test drivers
+  config.ignore_hosts(*driver_urls)
 end
 
 require 'minitest/rails/capybara'

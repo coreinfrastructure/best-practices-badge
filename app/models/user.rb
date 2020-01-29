@@ -160,6 +160,13 @@ class User < ApplicationRecord
     role == 'admin'
   end
 
+  # Return "true" if can_login_starting_at for this user is null or has passed.
+  # Return "false" otherwise (that is, if we are still cooling off)
+  def login_allowed_now
+    start_time = can_login_starting_at
+    start_time.blank? || Time.zone.now >= start_time
+  end
+
   # Returns a random token
   def self.new_token
     SecureRandom.urlsafe_base64

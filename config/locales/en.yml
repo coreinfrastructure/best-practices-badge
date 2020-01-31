@@ -397,10 +397,10 @@ en:
       tell_us: >
         Please tell us about your free/libre/open source software (FLOSS)
         project. This <b>MUST</b> be a FLOSS project; nothing else is permitted.
-        Do <b>NOT</b> add a site to try to improve a site's
-        search engine optimization (SEO); this spamming is
-        hurtful to real users and will not work anyway (because
-        all hyperlinks are marked as <tt>ugc</tt> and <tt>nofollow</tt>).
+        Do <b>NOT</b> add an unrelated site to try to improve a site's
+        search engine optimization (SEO). This spamming is forbidden because
+        it harms users, and it will not help SEO anyway (all hyperlinks
+        are marked with <tt>ugc</tt> and <tt>nofollow</tt>).
       may_select_html: >-
         You may select from one of your GitHub repos <em>OR</em>
         provide information about some other project.

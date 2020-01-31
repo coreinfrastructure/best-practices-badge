@@ -35,7 +35,6 @@ task(:default).clear.enhance %w[
 # This is a shorter list; many checks are run by a separate "pronto" task.
 # Temporarily includes "railroader", we hope to move that to pronto.
 # Removed bundle_doctor due to CircleCI failures
-# Temporarily removed railroader due to vulnerable haml library
 # Temporarily removed fasterer
 task(:ci).clear.enhance %w[
   rbenv_rvm_setup
@@ -46,6 +45,7 @@ task(:ci).clear.enhance %w[
   whitespace_check
   yaml_syntax_check
   report_code_statistics
+  railroader
 ]
 
 # Simple smoke test to avoid development environment misconfiguration

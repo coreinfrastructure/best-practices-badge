@@ -18,7 +18,7 @@ class AccountActivationsController < ApplicationController
       flash[:success] = t('account_activations.activated') + ' ' +
                         t(
                           'account_activations.delay',
-                          count: LOCAL_LOGIN_COOLOFF_TIME
+                          count: LOCAL_LOGIN_COOLOFF_TIME / 3600.0
                         )
       # We do *not* log in user. This reduces the number of paths that
       # automatically log in, and increases the likelihood

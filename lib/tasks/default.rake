@@ -65,15 +65,27 @@ end
 desc 'Run rails_best_practices with options'
 task :rails_best_practices do
   sh 'bundle exec rails_best_practices ' \
-      '--features --spec --without-color'
+      '--features --spec --without-color --exclude railroader/'
+end
+
+desc 'Setup railroader if needed'
+task 'railroader/bin/railroader' do
+  # "gem install" doesn't honor Gemfile.lock, so use git clone + bundle install
+  sh 'mkdir -p railroader'
+  sh 'cd railroader; ' \
+     'git clone --depth 1 ' \
+     'https://github.com/david-a-wheeler/railroader.git ./ ; ' \
+     'cp ../.ruby-version .; bundle install'
 end
 
 desc 'Run railroader'
-task :railroader do
-  # TEMPORARILY DISABLE - old haml is vulnerable
-  puts('WARNING!!: Railroader temporarily disabled due to haml gem issue')
+task railroader: %w[railroader/bin/railroader] do
   # Disable pager, so that "rake" can keep running without halting.
   # sh 'bundle exec railroader --quiet --no-pager'
+  # Workaround to run correct version of railroader & its dependencies.
+  # We have to set BUNDLE_GEMFILE so bundle works inside the rake task
+  sh 'cd railroader; BUNDLE_GEMFILE=$(pwd)/Gemfile ' \
+     'bundle exec bin/railroader --quiet --no-pager $(dirname $(pwd))'
 end
 
 desc 'Run bundle if needed'
@@ -197,9 +209,8 @@ desc 'Check YAML syntax (except project.yml, which is not straight YAML)'
 task :yaml_syntax_check do
   # Don't check "project.yml" - it's not a straight YAML file, but instead
   # it's processed by ERB (even though the filename doesn't admit it).
-  sh "find . -name '*.yml' ! -name 'projects.yml' " \
-     "! -path './vendor/*' -exec bundle exec yaml-lint {} + | " \
-     "grep -v '^Checking the content of' | grep -v 'Syntax OK'"
+  sh "find . -name '*.yml' ! -name 'projects.yml' ! -path './railroader/*' " \
+     "! -path './vendor/*' -exec bundle exec yaml-lint {} + \;"
 end
 
 # The following are invoked as needed.

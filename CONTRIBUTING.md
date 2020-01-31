@@ -973,5 +973,5 @@ git remote add upstream \
 
 If the version of Ruby has changed (in the Gemfile),
 use the 'Ruby itself can be updated' instructions.
-If gems have been added or their versions changed,
-run "bundle install" to install the new ones.
+If gems have been added or their versions changed, run
+"bundle install" to install the new ones.

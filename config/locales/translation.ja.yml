@@ -54,6 +54,11 @@ ja:
   account_activations:
     activated: アカウントが有効になりました！
     failed_activation: 無効なアクティベーション リンクです
+    delay:
+      zero:
+      one:
+      few:
+      other:
   password_resets:
     forgot_password: パスワードを忘れた方はこちら
     reset_password: パスワードをリセットしてください
@@ -89,6 +94,7 @@ ja:
     login_automatic_signup: >-
       GitHubでログインすると、必要に応じてサインアップが自動的に実行されます。サインアップすると、あなたの名前（GitHubに提供されたもの）とGitHubのニックネームが公開され、いつでもあなたの名前を変更することができます。あなたのメールアドレスはプライベートに保たれ、バッジ関連のやりとりにのみ使用されます。法的に要求されている場合を除き、第三者に提供することはありません。
     login_disabled: すべてのログインが一時的に無効になりました
+    cannot_login_yet:
   users:
     new:
       signup_header: サインアップ
@@ -227,6 +233,7 @@ ja:
       new_badge_or: または
       original_repos: "=>オリジナルのGitHubリポジトリ"
       fork_repos: "=>フォークされたGitHub リポジトリ"
+      tell_us:
     show:
       edit: 編集
       delete: 削除

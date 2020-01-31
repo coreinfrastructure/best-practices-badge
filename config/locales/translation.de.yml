@@ -56,6 +56,11 @@ de:
   account_activations:
     activated: Konto aktiviert!
     failed_activation: Ungültiger Aktivierungslink
+    delay:
+      zero:
+      one:
+      few:
+      other:
   password_resets:
     forgot_password: Passwort vergessen
     reset_password: Passwort zurücksetzen
@@ -105,6 +110,7 @@ de:
       Daten nicht an Dritte weitergeben, es sei denn, es ist gesetzlich
       vorgeschrieben.
     login_disabled: Alle Logins sind vorübergehend deaktiviert
+    cannot_login_yet:
   users:
     new:
       signup_header: Anmelden
@@ -310,6 +316,7 @@ de:
       new_badge_or: ODER
       original_repos: "=> Original GitHub Repos"
       fork_repos: "=> Verstreutes GitHub Repos"
+      tell_us:
     show:
       edit: Bearbeiten
       delete: Löschen

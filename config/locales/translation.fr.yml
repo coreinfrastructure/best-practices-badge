@@ -79,6 +79,7 @@ fr:
       tierces à moins qu'il s'agisse d'une obligation légale.
     login_disabled: Toutes les connexions sont temporairement
       désactivées
+    cannot_login_yet:
   users:
     new:
       signup_header: S'inscrire
@@ -308,6 +309,7 @@ fr:
       new_badge_or: OU
       original_repos: "=> Dépôts GitHub Originaux"
       fork_repos: "=> Dépôts GitHub Dupliqués"
+      tell_us:
     show:
       edit: Modifier
       delete: Supprimer
@@ -730,6 +732,11 @@ fr:
   account_activations:
     activated: Compte activé !
     failed_activation: Lien d'activation invalide
+    delay:
+      zero:
+      one:
+      few:
+      other:
   password_resets:
     forgot_password: Mot de passe oublié
     reset_password: Réinitialiser le mot de passe

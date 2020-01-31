@@ -99,7 +99,7 @@ class SessionsController < ApplicationController
     if !user.activated?
       flash[:warning] = t('sessions.not_activated')
       redirect_to root_url
-    elsif !user.login_allowed_now
+    elsif !user.login_allowed_now?
       flash.now[:danger] = t('sessions.cannot_login_yet')
       render 'new', status: :forbidden
     else

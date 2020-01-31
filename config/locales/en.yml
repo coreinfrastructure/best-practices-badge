@@ -46,7 +46,22 @@ en:
       target="_blank" rel="noopener">terms of use</a>. </small>
   admin_only: Admin only.
   account_activations:
-    activated: Account activated!
+    activated: >
+      Account activated!
+    # This is an example of text that can be internationalized for Russian.
+    # 0 => :zero. 1,21,31,41,...=> :one. 2-4,22-24,32-34,...=> :few. Else :other
+    # https://www.endpoint.com/blog/2018/04/12/rails-russian-localization
+    delay:
+      zero: You may log in now. There is no post-activation anti-spam delay.
+      one: >
+        As an anti-spam measure, you must wait one hour after activation
+        before you can log in.
+      few: >
+        As an anti-spam measure, you must wait %{count} hours after activation
+        before you can log in.
+      other: >
+        As an anti-spam measure, you must wait %{count} hours after activation
+        before you can log in.
     failed_activation: Invalid activation link
   password_resets:
     forgot_password: Forgot password
@@ -89,6 +104,10 @@ en:
       link.
     signed_out: Logged out!
     no_login_time: (No previous time recorded.)
+    cannot_login_yet: >
+      Sorry, you cannot log in yet.
+      As an anti-spam measure, there is a delay after activating
+      a local account before you can log in.
   static_pages:
     error_404:
       heading: "Error 404: Page Not Found"

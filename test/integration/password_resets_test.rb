@@ -86,9 +86,9 @@ class PasswordResetsTest < ActionDispatch::IntegrationTest
       },
       locale: :en
     }
-    assert user_logged_in?
+    assert_not user_logged_in?
     assert_not flash.empty?
-    assert_redirected_to user
+    assert_redirected_to login_url(locale: :en)
   end
 
   test 'expired token' do

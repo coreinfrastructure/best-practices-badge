@@ -130,6 +130,8 @@ The application is configured by various environment variables:
   web application firewall, but it's simple and counters some
   trivial attacks.  This should be coordinated with robots.txt so that
   robots won't be fooled into following a link to a banned page.
+* `LOCAL_LOGIN_COOLOFF_TIME` : Time (in seconds) after creating a local
+  account before login is permitted. This is an anti-spam measure.
 
 You can make cryptographically random values (such as keys)
 using "rails secret".  E.g., to create 64 random hexadecimal digits, use:

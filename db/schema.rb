@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_21_173151) do
+ActiveRecord::Schema.define(version: 2020_01_27_184707) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -403,6 +403,7 @@ ActiveRecord::Schema.define(version: 2019_10_21_173151) do
     t.string "encrypted_email_iv"
     t.string "encrypted_email_bidx"
     t.boolean "use_gravatar", default: false, null: false
+    t.datetime "can_login_starting_at"
     t.index ["encrypted_email_bidx"], name: "encrypted_email_local_unique_bidx", unique: true, where: "((provider)::text = 'local'::text)"
     t.index ["encrypted_email_bidx"], name: "index_users_on_encrypted_email_bidx"
     t.index ["last_login_at"], name: "index_users_on_last_login_at"

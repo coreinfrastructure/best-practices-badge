@@ -5,12 +5,23 @@
 # SPDX-License-Identifier: MIT
 
 class UserMailer < ApplicationMailer
+  # Time in seconds to intentionally delay activation message
+  # as a way to counter spammers.
+  ACTIVATION_MESSAGE_DELAY_TIME = (
+    ENV['ACTIVATION_MESSAGE_DELAY_TIME'] || 5 * 60
+  ).to_i
+
   def account_activation(user)
     @user = user
+    send_time = (Time.now.utc + ACTIVATION_MESSAGE_DELAY_TIME).to_i
+    # Instead of doing the delay ourselves, ask the mailer to do it for us.
+    # See: https://sendgrid.com/docs/for-developers/sending-email/
+    # scheduling-parameters
     I18n.with_locale(user.preferred_locale.to_sym) do
       mail(
         to: user.email,
-        subject: t('user_mailer.account_activation.subject').strip
+        subject: t('user_mailer.account_activation.subject').strip,
+        send_at: send_time
       )
     end
   end

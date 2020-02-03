@@ -12,9 +12,8 @@ class AccountActivationsController < ApplicationController
   def edit
     user = User.find_by(email: params[:email])
     if user && !user.activated? && user.authenticated?(:activation, params[:id])
-      user.activate
       user.can_login_starting_at = Time.zone.now + LOCAL_LOGIN_COOLOFF_TIME
-      user.save!
+      user.activate # This saves our result
       flash[:success] = t('account_activations.activated') + ' ' +
                         t(
                           'account_activations.delay',

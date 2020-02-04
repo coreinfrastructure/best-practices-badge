@@ -21,16 +21,15 @@ class UserMailer < ApplicationMailer
   # Compute and return the new X-SMTPAPI header value to cause that delay
   def delay_send_header
     send_time = (Time.now.utc + ACTIVATION_MESSAGE_DELAY_TIME).to_i
-    old = Rails.application.config.action_mailer.default_options
-    new_smtpapi = JSON.parse(old['X-SMTPAPI'])
-    new_smtpapi['Send-at'] = send_time
+    new_smtpapi = JSON.parse(NORMAL_X_SMTPAPI)
+    new_smtpapi['send_at'] = send_time
     new_smtpapi.to_s.freeze
   end
 
   def account_activation(user)
     @user = user
-    # Modify header to delay email transmission
-    headers['X-SMTPAPI'] = nil
+    # DO NOT CALL set_standard_headers. Instead,
+    # modify header to delay email transmission
     headers['X-SMTPAPI'] = delay_send_header
     I18n.with_locale(user.preferred_locale.to_sym) do
       mail(
@@ -42,6 +41,7 @@ class UserMailer < ApplicationMailer
 
   def password_reset(user)
     @user = user
+    set_standard_headers
     I18n.with_locale(user.preferred_locale.to_sym) do
       mail(
         to: user.email,
@@ -70,6 +70,7 @@ class UserMailer < ApplicationMailer
     # If email changed, send to *all* email addresses (that way, if user
     # didn't approve this, the user will at least *see* the email change).
     destination = find_destinations(user&.email, changes)
+    set_standard_headers
     I18n.with_locale(user.preferred_locale.to_sym) do
       mail(
         to: destination,
@@ -80,6 +81,7 @@ class UserMailer < ApplicationMailer
 
   def github_welcome(user)
     @user = user
+    set_standard_headers
     I18n.with_locale(user.preferred_locale.to_sym) do
       mail(
         to: user.email,
@@ -92,6 +94,7 @@ class UserMailer < ApplicationMailer
     @user = user
     @subject = subject
     @body = body
+    set_standard_headers
     I18n.with_locale(user.preferred_locale.to_sym) do
       mail(
         to: user.email,

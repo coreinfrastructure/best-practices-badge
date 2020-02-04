@@ -36,6 +36,7 @@ class ReportMailer < ApplicationMailer
     @new_badge_status = new_badge_status
     @project_info_url = project_url(@project, locale: nil)
     @report_destination = REPORT_EMAIL_DESTINATION
+    set_standard_headers
     I18n.with_locale(I18n.default_locale) do
       mail(
         to: @report_destination,
@@ -70,6 +71,7 @@ class ReportMailer < ApplicationMailer
     @email_destination = user.email
     @new_level = new_badge_level
     @old_level = old_badge_level
+    set_standard_headers
     I18n.with_locale(user.preferred_locale.to_sym) do
       mail(
         to: @email_destination,
@@ -97,6 +99,7 @@ class ReportMailer < ApplicationMailer
     @project_info_url =
       project_url(@project, locale: user.preferred_locale.to_sym)
     @email_destination = user.email
+    set_standard_headers
     I18n.with_locale(user.preferred_locale.to_sym) do
       mail(
         to: @email_destination,
@@ -114,6 +117,7 @@ class ReportMailer < ApplicationMailer
     return if projects.nil?
 
     @projects = projects
+    set_standard_headers
     I18n.with_locale(I18n.default_locale) do
       mail(
         to: @report_destination,
@@ -136,6 +140,7 @@ class ReportMailer < ApplicationMailer
     @month = month
     @last_stat_in_prev_month = last_stat_in_prev_month
     @last_stat_in_prev_prev_month = last_stat_in_prev_prev_month
+    set_standard_headers
     I18n.with_locale(I18n.default_locale) do
       mail(
         to: @report_destination,
@@ -158,6 +163,7 @@ class ReportMailer < ApplicationMailer
     @project_info_url =
       project_url(@project, locale: user.preferred_locale.to_sym)
     @email_destination = user.email
+    set_standard_headers
     I18n.with_locale(user.preferred_locale.to_sym) do
       mail(
         to: @email_destination,
@@ -174,6 +180,7 @@ class ReportMailer < ApplicationMailer
     @project = project
     @user = user
     @deletion_rationale = deletion_rationale
+    set_standard_headers
     I18n.with_locale(I18n.default_locale) do
       mail(
         to: @report_destination,

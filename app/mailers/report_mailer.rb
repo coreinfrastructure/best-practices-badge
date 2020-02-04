@@ -4,6 +4,12 @@
 # CII Best Practices badge contributors
 # SPDX-License-Identifier: MIT
 
+# This mailer is for reports from the badge system about projects,
+# individually or collectively.  This includes reports about
+# badge status changes, summary reports, reminders that a project
+# isn't done, etc.  This does not include email to a user
+# regarding that user's account; those are handled by UserMailer.
+
 # When sending emails we use I18n.with_locale do..end.
 # If the destination is user.email, use:
 # ... I18n.with_locale(user.preferred_locale.to_sym) do
@@ -23,13 +29,6 @@ class ReportMailer < ApplicationMailer
   include SessionsHelper
   REPORT_EMAIL_DESTINATION = 'cii-badge-log@lists.coreinfrastructure.org'
 
-  def set_headers
-    # Disable SendGrid's clicktracking, it creates ugly URLs.
-    # See: https://sendgrid.com/docs/API_Reference/SMTP_API/apps.html
-    headers['X-SMTPAPI'] =
-      '{ "filters" : { "clicktrack" : { "settings" : { "enable" : 0 } } } }'
-  end
-
   # Report to Linux Foundation that a project's status has changed.
   def project_status_change(project, old_badge_status, new_badge_status)
     @project = project
@@ -37,7 +36,6 @@ class ReportMailer < ApplicationMailer
     @new_badge_status = new_badge_status
     @project_info_url = project_url(@project, locale: nil)
     @report_destination = REPORT_EMAIL_DESTINATION
-    set_headers
     I18n.with_locale(I18n.default_locale) do
       mail(
         to: @report_destination,
@@ -72,7 +70,6 @@ class ReportMailer < ApplicationMailer
     @email_destination = user.email
     @new_level = new_badge_level
     @old_level = old_badge_level
-    set_headers
     I18n.with_locale(user.preferred_locale.to_sym) do
       mail(
         to: @email_destination,
@@ -100,7 +97,6 @@ class ReportMailer < ApplicationMailer
     @project_info_url =
       project_url(@project, locale: user.preferred_locale.to_sym)
     @email_destination = user.email
-    set_headers
     I18n.with_locale(user.preferred_locale.to_sym) do
       mail(
         to: @email_destination,
@@ -118,7 +114,6 @@ class ReportMailer < ApplicationMailer
     return if projects.nil?
 
     @projects = projects
-    set_headers
     I18n.with_locale(I18n.default_locale) do
       mail(
         to: @report_destination,
@@ -141,7 +136,6 @@ class ReportMailer < ApplicationMailer
     @month = month
     @last_stat_in_prev_month = last_stat_in_prev_month
     @last_stat_in_prev_prev_month = last_stat_in_prev_prev_month
-    set_headers
     I18n.with_locale(I18n.default_locale) do
       mail(
         to: @report_destination,
@@ -164,7 +158,6 @@ class ReportMailer < ApplicationMailer
     @project_info_url =
       project_url(@project, locale: user.preferred_locale.to_sym)
     @email_destination = user.email
-    set_headers
     I18n.with_locale(user.preferred_locale.to_sym) do
       mail(
         to: @email_destination,
@@ -181,7 +174,6 @@ class ReportMailer < ApplicationMailer
     @project = project
     @user = user
     @deletion_rationale = deletion_rationale
-    set_headers
     I18n.with_locale(I18n.default_locale) do
       mail(
         to: @report_destination,

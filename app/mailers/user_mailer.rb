@@ -4,6 +4,10 @@
 # CII Best Practices badge contributors
 # SPDX-License-Identifier: MIT
 
+# This mailer is used to email users about account-related information,
+# e.g., account activation, welcome, password reset, and updates of their
+# account. The special case "direct_message" is here too.
+
 class UserMailer < ApplicationMailer
   # Time in seconds to intentionally delay activation message
   # as a way to counter spammers.
@@ -11,17 +15,27 @@ class UserMailer < ApplicationMailer
     ENV['ACTIVATION_MESSAGE_DELAY_TIME'] || 5 * 60
   ).to_i
 
+  # Instead of doing the activation delay ourselves, ask the mailer to do it.
+  # See: https://sendgrid.com/docs/for-developers/sending-email/
+  # scheduling-parameters
+  # Compute and return the new X-SMTPAPI header value to cause that delay
+  def delay_send_header
+    send_time = (Time.now.utc + ACTIVATION_MESSAGE_DELAY_TIME).to_i
+    old = Rails.application.config.action_mailer.default_options
+    new_smtpapi = JSON.parse(old['X-SMTPAPI'])
+    new_smtpapi['Send-at'] = send_time
+    new_smtpapi.to_s.freeze
+  end
+
   def account_activation(user)
     @user = user
-    send_time = (Time.now.utc + ACTIVATION_MESSAGE_DELAY_TIME).to_i
-    # Instead of doing the delay ourselves, ask the mailer to do it for us.
-    # See: https://sendgrid.com/docs/for-developers/sending-email/
-    # scheduling-parameters
+    # Modify header to delay email transmission
+    headers['X-SMTPAPI'] = nil
+    headers['X-SMTPAPI'] = delay_send_header
     I18n.with_locale(user.preferred_locale.to_sym) do
       mail(
         to: user.email,
-        subject: t('user_mailer.account_activation.subject').strip,
-        Send_at: send_time
+        subject: t('user_mailer.account_activation.subject').strip
       )
     end
   end

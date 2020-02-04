@@ -300,8 +300,8 @@ en:
     redirect_existing: That user already exists. Did you mean
       to sign in?
     new_activation_link_created: >-
-      New activation link created. Please check your email to
-      activate your account.
+      New activation link created. Please check your email in a few minutes to
+      activate your account. (There is some intentional delay to counter spam.)
     please_log_in: Please log in.
   project_stats:
     index:

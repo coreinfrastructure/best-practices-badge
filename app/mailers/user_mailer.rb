@@ -21,7 +21,7 @@ class UserMailer < ApplicationMailer
       mail(
         to: user.email,
         subject: t('user_mailer.account_activation.subject').strip,
-        send_at: send_time
+        Send_at: send_time
       )
     end
   end

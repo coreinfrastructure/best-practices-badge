@@ -16,6 +16,15 @@ class UserMailerTest < ActionMailer::TestCase
     assert_equal ['badgeapp@localhost'], mail.from
     assert_match user.activation_token, mail.body.encoded
     assert_match CGI.escape(user.email), mail.body.encoded
+    # Ensure that email has settings to disable tracking and delay sending
+    refute_nil mail['X-SMTPAPI'].unparsed_value
+    extensions = JSON.parse(mail['X-SMTPAPI'].unparsed_value)
+    assert_includes extensions, 'send_at'
+    assert extensions['send_at'] > Time.now.utc.to_i
+    assert_includes extensions, 'filters'
+    disable = { 'settings' => { 'enable' => 0 } }
+    assert_equal disable, extensions['filters']['clicktrack']
+    assert_equal disable, extensions['filters']['opentrack']
   end
 
   test 'password_reset' do
@@ -32,6 +41,14 @@ class UserMailerTest < ActionMailer::TestCase
     # Ensure that the reset token is actually being passed:
     assert_match user.reset_token, mail.parts[0].body.to_s
     assert_match CGI.escape(user.email), mail.body.encoded
+    # Ensure that email has settings to disable tracking
+    refute_nil mail['X-SMTPAPI'].unparsed_value
+    extensions = JSON.parse(mail['X-SMTPAPI'].unparsed_value)
+    refute_includes extensions, 'send_at'
+    assert_includes extensions, 'filters'
+    disable = { 'settings' => { 'enable' => 0 } }
+    assert_equal disable, extensions['filters']['clicktrack']
+    assert_equal disable, extensions['filters']['opentrack']
   end
 
   test 'direct_message' do

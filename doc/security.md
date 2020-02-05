@@ -209,6 +209,7 @@ and logging / intrusion detection service.
 As a practical matter, related sites must (under various circumstances)
 receive some information about the user (at least that the user
 is trying to do something).
+This is true for all websites, so it's true for our site as well.
 In those cases we have selected partners we believe are trustworthy, and
 we have some kind of relationship with them.
 
@@ -230,15 +231,28 @@ learning about our users' activities (and thus maintaining user privacy):
   This also aids security; even if an attacker subverts some other site's
   JavaScript or font, that will not directly affect us because we do not embed
   references some other site's JavaScript or font in our web pages.
-  This is enforced by our CSP policy.
-* We do not serve ads and we do not currently plan to.
-  That said, if we did serve ads, we expect that we
+  Many sites don't do this and should probably consider it.
+  This policy is enforced by our CSP policy.
+* We do not serve ads and we plan to have no ads in the future.
+  That said, if we ever did serve ads, we expect that we
   would also serve them from our site, just like any other asset, to
   ensure that third parties did not receive unauthorized information.
 * We do not use any web analytics service that uses tracking codes or
   external assets.
   We log and store logs using only services we control or have a direct
   partnership with.
+* The email we send is privacy-respecting.
+  The email contents we send do not have img links (which might expose
+  when an email is read). In some cases we have hyperlinks
+  (e.g., to activate a local account), but those links go directly back
+  to our site for that given purpose, and do not reveal information to
+  anyone else.
+  We use SendGrid to send email, but we have specifically configured the
+  [SendGrid X-SMTPAPI header to disable all of its trackers we know of](https://sendgrid.com/docs/ui/account-and-settings/tracking/),
+  which are clicktrack, ganalytics, subscriptiontrack, and opentrack.
+  For example, we have never used ganalytics, but by expressly disabling it,
+  it will stay disabled even if SendGrid decided to enable it by default
+  in the future.
 * We do have links to social media sites (e.g., from the home page), but we
   do this in a privacy-respecting manner.
   It would be easy to use techniques like embedding images
@@ -1985,13 +1999,14 @@ time; this keeps us from looking like a spammer.
 #### Encrypted email addresses
 
 We encrypt email addresses within the database, and never
-send the decryption or index keys to the database.
+send the decryption or index keys to the database system.
 This provides protection of this data at rest, and also means that
 even if an attacker can view the data within the database, that attacker
 will not receive sensitive information.
 Email addresses are encrypted as described here, and almost all other
 data is considered public or at least not sensitive
-(Passwords are specially encrypted as described above).
+(the exception are passwords, which are
+specially encrypted as described above).
 
 A little context may be useful here.
 We work hard to comply with various privacy-related regulations,
@@ -2031,19 +2046,20 @@ We encrypt the email addresses using AES with 256-bit keys in
 GCM mode ('aes-256-gcm').  AES is a well-accepted widely-used
 encryption algorithm.  A 256-bit key is especially strong.
 The GCM mode is a widely-used strong encryption mode; it provides
-integrity ("authentication") mechanism.
+an integrity ("authentication") mechanism.
 Each separate encryption uses a separate long initialization vector (IV)
 created using a cryptographically-strong random number generator.
 
 We also hash the email addresses, so they can be indexed.
 Indexing is necessary so that we can quickly find matching email addresses
 (e.g., for local user login).
-We has them using the hashed key algorithm PBKDF2-HMAC-SHA256.
+We hash them using the hashed key algorithm PBKDF2-HMAC-SHA256.
 SHA-256 is a widely-used cryptographic hash algorithm (in the SHA-2 family),
 and unlike SHA-1 it is not broken.
-Using sha256 directly is vulnerable to a length extension attack,
-but that appears to be irrelevant in this case.
-In any case, we counter this problem by using HMAC and PBKDF2.
+Using sha256 directly would be vulnerable to a length extension attack.
+A length extension attack is probably irrelevant in this circumstance,
+but just in case, we counter that anyway.
+We counter the length extension problem by using HMAC and PBKDF2.
 HMAC is defined in RFC 2104, which is the algorithm
 H(K XOR opad, H(K XOR ipad, text)).
 This enables us to use a private key on the hash, counters length

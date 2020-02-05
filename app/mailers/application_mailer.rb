@@ -11,10 +11,26 @@ class ApplicationMailer < ActionMailer::Base
   default from: "badgeapp@#{ENV['PUBLIC_HOSTNAME'].presence || 'localhost'}"
   layout 'mailer'
 
-  # This X-SMTPAPI value disables SendGrid's clicktracking.
-  # See: https://sendgrid.com/docs/API_Reference/SMTP_API/apps.html
+  # Maximize privacy in the emails we send.
+  # This X-SMTPAPI value disables SendGrid's clicktracking, opentracking, etc.
+  # We expressly force these off to make *sure* they are off.
+  # Clicktracking creates enables external track on click and makes ugly URLs.
+  # Opentracking tracks email opens via an img reference.
+  # Both clicktracking and opentracking are enabled by default (!).
+  # See: https://sendgrid.com/docs/API_Reference/SMTP_API/apps.html and
+  # https://sendgrid.com/docs/for-developers/sending-email/smtp-filters/
+  # In almost all cases we send this as a constant string, so
+  # we'll store it that way.
   NORMAL_X_SMTPAPI =
-    '{ "filters" : { "clicktrack" : { "settings" : { "enable" : 0 } } } }'
+    '{ "filters" : { ' \
+       '"clicktrack" : { "settings" : { "enable" : 0 } }, ' \
+       '"ganalytics" : { "settings" : { "enable" : 0 } }, ' \
+       '"subscriptiontrack" : { "settings" : { "enable" : 0 } }, ' \
+       '"opentrack" : { "settings" : { "enable" : 0 } } ' \
+    '} }'
+
+  # Force fast failure on start if NORMAL_X_SMTPAPI is not valid JSON
+  JSON.parse(NORMAL_X_SMTPAPI)
 
   # All mailer actions should call this unless they have a special need.
   # This allows us to have different values; we cannot override

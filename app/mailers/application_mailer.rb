@@ -29,8 +29,8 @@ class ApplicationMailer < ActionMailer::Base
        '"opentrack" : { "settings" : { "enable" : 0 } } ' \
     '} }'
 
-  # Force fast failure on start if NORMAL_X_SMTPAPI is not valid JSON
-  JSON.parse(NORMAL_X_SMTPAPI)
+  # This forces fast failure on start if NORMAL_X_SMTPAPI is not valid JSON
+  NORMAL_X_SMTPAPI_JSON = JSON.parse(NORMAL_X_SMTPAPI).freeze
 
   # All mailer actions should call this unless they have a special need.
   # This allows us to have different values; we cannot override

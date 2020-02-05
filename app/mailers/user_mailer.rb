@@ -15,13 +15,13 @@ class UserMailer < ApplicationMailer
     ENV['ACTIVATION_MESSAGE_DELAY_TIME'] || 5 * 60
   ).to_i
 
+  # Compute and return the new X-SMTPAPI header value to cause a send delay.
   # Instead of doing the activation delay ourselves, ask the mailer to do it.
   # See: https://sendgrid.com/docs/for-developers/sending-email/
   # scheduling-parameters
-  # Compute and return the new X-SMTPAPI header value to cause that delay
-  def delay_send_header
+  def delay_send_header(normal_smtpapi_json)
     send_time = (Time.now.utc + ACTIVATION_MESSAGE_DELAY_TIME).to_i
-    new_smtpapi = JSON.parse(NORMAL_X_SMTPAPI)
+    new_smtpapi = normal_smtpapi_json.dup
     new_smtpapi['send_at'] = send_time
     new_smtpapi.to_json.to_s.freeze
   end
@@ -30,7 +30,7 @@ class UserMailer < ApplicationMailer
     @user = user
     # DO NOT CALL set_standard_headers. Instead,
     # modify header to delay email transmission
-    headers['X-SMTPAPI'] = delay_send_header
+    headers['X-SMTPAPI'] = delay_send_header(NORMAL_X_SMTPAPI_JSON)
     I18n.with_locale(user.preferred_locale.to_sym) do
       mail(
         to: user.email,

@@ -60,7 +60,7 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-    http_version:
+    http_version: 
   recorded_at: Sun, 25 Feb 2018 17:48:17 GMT
 - request:
     method: get
@@ -130,7 +130,7 @@ http_interactions:
     body:
       encoding: ASCII-8BIT
       string: '[{"name":"README.md","path":"README.md","sha":"a981213ae539d59457949e392a188d41a35c009b","size":21,"url":"https://api.github.com/repos/david-a-wheeler/test-badge-project/contents/README.md?ref=master","html_url":"https://github.com/david-a-wheeler/test-badge-project/blob/master/README.md","git_url":"https://api.github.com/repos/david-a-wheeler/test-badge-project/git/blobs/a981213ae539d59457949e392a188d41a35c009b","download_url":"https://raw.githubusercontent.com/david-a-wheeler/test-badge-project/master/README.md","type":"file","_links":{"self":"https://api.github.com/repos/david-a-wheeler/test-badge-project/contents/README.md?ref=master","git":"https://api.github.com/repos/david-a-wheeler/test-badge-project/git/blobs/a981213ae539d59457949e392a188d41a35c009b","html":"https://github.com/david-a-wheeler/test-badge-project/blob/master/README.md"}},{"name":"doc","path":"doc","sha":"cefcfbb2a10ca405295fe604836fbdcdd1eb50f4","size":0,"url":"https://api.github.com/repos/david-a-wheeler/test-badge-project/contents/doc?ref=master","html_url":"https://github.com/david-a-wheeler/test-badge-project/tree/master/doc","git_url":"https://api.github.com/repos/david-a-wheeler/test-badge-project/git/trees/cefcfbb2a10ca405295fe604836fbdcdd1eb50f4","download_url":null,"type":"dir","_links":{"self":"https://api.github.com/repos/david-a-wheeler/test-badge-project/contents/doc?ref=master","git":"https://api.github.com/repos/david-a-wheeler/test-badge-project/git/trees/cefcfbb2a10ca405295fe604836fbdcdd1eb50f4","html":"https://github.com/david-a-wheeler/test-badge-project/tree/master/doc"}}]'
-    http_version:
+    http_version: 
   recorded_at: Sun, 25 Feb 2018 17:48:17 GMT
 - request:
     method: get
@@ -200,7 +200,7 @@ http_interactions:
     body:
       encoding: ASCII-8BIT
       string: '[{"name":"somedoc.md","path":"doc/somedoc.md","sha":"9edec62594ff28249393febd3111da1cf8ccc6ff","size":21,"url":"https://api.github.com/repos/david-a-wheeler/test-badge-project/contents/doc/somedoc.md?ref=master","html_url":"https://github.com/david-a-wheeler/test-badge-project/blob/master/doc/somedoc.md","git_url":"https://api.github.com/repos/david-a-wheeler/test-badge-project/git/blobs/9edec62594ff28249393febd3111da1cf8ccc6ff","download_url":"https://raw.githubusercontent.com/david-a-wheeler/test-badge-project/master/doc/somedoc.md","type":"file","_links":{"self":"https://api.github.com/repos/david-a-wheeler/test-badge-project/contents/doc/somedoc.md?ref=master","git":"https://api.github.com/repos/david-a-wheeler/test-badge-project/git/blobs/9edec62594ff28249393febd3111da1cf8ccc6ff","html":"https://github.com/david-a-wheeler/test-badge-project/blob/master/doc/somedoc.md"}}]'
-    http_version:
+    http_version: 
   recorded_at: Sun, 25 Feb 2018 17:48:17 GMT
 - request:
     method: get
@@ -270,7 +270,7 @@ http_interactions:
     body:
       encoding: ASCII-8BIT
       string: '{"name":"somedoc.md","path":"doc/somedoc.md","sha":"9edec62594ff28249393febd3111da1cf8ccc6ff","size":21,"url":"https://api.github.com/repos/david-a-wheeler/test-badge-project/contents/doc/somedoc.md?ref=master","html_url":"https://github.com/david-a-wheeler/test-badge-project/blob/master/doc/somedoc.md","git_url":"https://api.github.com/repos/david-a-wheeler/test-badge-project/git/blobs/9edec62594ff28249393febd3111da1cf8ccc6ff","download_url":"https://raw.githubusercontent.com/david-a-wheeler/test-badge-project/master/doc/somedoc.md","type":"file","content":"IyBEb2N1bWVudGF0aW9uIEZpbGUK\n","encoding":"base64","_links":{"self":"https://api.github.com/repos/david-a-wheeler/test-badge-project/contents/doc/somedoc.md?ref=master","git":"https://api.github.com/repos/david-a-wheeler/test-badge-project/git/blobs/9edec62594ff28249393febd3111da1cf8ccc6ff","html":"https://github.com/david-a-wheeler/test-badge-project/blob/master/doc/somedoc.md"}}'
-    http_version:
+    http_version: 
   recorded_at: Sun, 25 Feb 2018 17:48:17 GMT
 - request:
     method: get
@@ -340,7 +340,7 @@ http_interactions:
     body:
       encoding: ASCII-8BIT
       string: '{"name":"somedoc.md","path":"doc/somedoc.md","sha":"9edec62594ff28249393febd3111da1cf8ccc6ff","size":21,"url":"https://api.github.com/repos/david-a-wheeler/test-badge-project/contents/doc/somedoc.md?ref=master","html_url":"https://github.com/david-a-wheeler/test-badge-project/blob/master/doc/somedoc.md","git_url":"https://api.github.com/repos/david-a-wheeler/test-badge-project/git/blobs/9edec62594ff28249393febd3111da1cf8ccc6ff","download_url":"https://raw.githubusercontent.com/david-a-wheeler/test-badge-project/master/doc/somedoc.md","type":"file","content":"IyBEb2N1bWVudGF0aW9uIEZpbGUK\n","encoding":"base64","_links":{"self":"https://api.github.com/repos/david-a-wheeler/test-badge-project/contents/doc/somedoc.md?ref=master","git":"https://api.github.com/repos/david-a-wheeler/test-badge-project/git/blobs/9edec62594ff28249393febd3111da1cf8ccc6ff","html":"https://github.com/david-a-wheeler/test-badge-project/blob/master/doc/somedoc.md"}}'
-    http_version:
+    http_version: 
   recorded_at: Sun, 25 Feb 2018 17:48:17 GMT
 - request:
     method: get
@@ -410,6 +410,369 @@ http_interactions:
     body:
       encoding: ASCII-8BIT
       string: '{"name":"somedoc.md","path":"doc/somedoc.md","sha":"9edec62594ff28249393febd3111da1cf8ccc6ff","size":21,"url":"https://api.github.com/repos/david-a-wheeler/test-badge-project/contents/doc/somedoc.md?ref=master","html_url":"https://github.com/david-a-wheeler/test-badge-project/blob/master/doc/somedoc.md","git_url":"https://api.github.com/repos/david-a-wheeler/test-badge-project/git/blobs/9edec62594ff28249393febd3111da1cf8ccc6ff","download_url":"https://raw.githubusercontent.com/david-a-wheeler/test-badge-project/master/doc/somedoc.md","type":"file","content":"IyBEb2N1bWVudGF0aW9uIEZpbGUK\n","encoding":"base64","_links":{"self":"https://api.github.com/repos/david-a-wheeler/test-badge-project/contents/doc/somedoc.md?ref=master","git":"https://api.github.com/repos/david-a-wheeler/test-badge-project/git/blobs/9edec62594ff28249393febd3111da1cf8ccc6ff","html":"https://github.com/david-a-wheeler/test-badge-project/blob/master/doc/somedoc.md"}}'
-    http_version:
+    http_version: 
   recorded_at: Sun, 25 Feb 2018 17:48:17 GMT
+- request:
+    method: get
+    uri: https://api.github.com/repos/david-a-wheeler/test-badge-project/contents//
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/vnd.github.v3+json
+      User-Agent:
+      - Octokit Ruby Gem 4.16.0
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic M2U5MDE5NGM3MGI1N2I3MTE4OGU6ZDJlM2YwMDI4MzhmNjExYTUxNGI4NGExNzI3YmY2ZTUwMGE2N2QyYg==
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 302
+      message: Found
+    headers:
+      Server:
+      - GitHub.com
+      Date:
+      - Tue, 11 Feb 2020 04:15:19 GMT
+      Content-Type:
+      - text/html;charset=utf-8
+      Content-Length:
+      - '0'
+      Status:
+      - 302 Found
+      X-Ratelimit-Limit:
+      - '5000'
+      X-Ratelimit-Remaining:
+      - '4993'
+      X-Ratelimit-Reset:
+      - '1581398118'
+      Location:
+      - https://api.github.com/repositories/74394497/contents/
+      Access-Control-Expose-Headers:
+      - ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining,
+        X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval,
+        X-GitHub-Media-Type
+      Access-Control-Allow-Origin:
+      - "*"
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      X-Frame-Options:
+      - deny
+      X-Content-Type-Options:
+      - nosniff
+      X-Xss-Protection:
+      - 1; mode=block
+      Referrer-Policy:
+      - origin-when-cross-origin, strict-origin-when-cross-origin
+      Content-Security-Policy:
+      - default-src 'none'
+      Vary:
+      - Accept-Encoding, Accept
+      X-Github-Request-Id:
+      - 1531:6E67:AA9EB:19F0BB:5E422A57
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+  recorded_at: Tue, 11 Feb 2020 04:15:12 GMT
+- request:
+    method: get
+    uri: https://api.github.com/repos/david-a-wheeler/test-badge-project/contents/doc
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/vnd.github.v3+json
+      User-Agent:
+      - Octokit Ruby Gem 4.16.0
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic M2U5MDE5NGM3MGI1N2I3MTE4OGU6ZDJlM2YwMDI4MzhmNjExYTUxNGI4NGExNzI3YmY2ZTUwMGE2N2QyYg==
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - GitHub.com
+      Date:
+      - Tue, 11 Feb 2020 04:15:19 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Status:
+      - 200 OK
+      X-Ratelimit-Limit:
+      - '5000'
+      X-Ratelimit-Remaining:
+      - '4992'
+      X-Ratelimit-Reset:
+      - '1581398118'
+      Cache-Control:
+      - public, max-age=60, s-maxage=60
+      Vary:
+      - Accept
+      - Accept-Encoding, Accept
+      Etag:
+      - W/"9aa962aed560f4d34cee988999c0fd24089d7624"
+      Last-Modified:
+      - Mon, 21 Nov 2016 19:04:48 GMT
+      X-Github-Media-Type:
+      - github.v3; format=json
+      Access-Control-Expose-Headers:
+      - ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining,
+        X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval,
+        X-GitHub-Media-Type
+      Access-Control-Allow-Origin:
+      - "*"
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      X-Frame-Options:
+      - deny
+      X-Content-Type-Options:
+      - nosniff
+      X-Xss-Protection:
+      - 1; mode=block
+      Referrer-Policy:
+      - origin-when-cross-origin, strict-origin-when-cross-origin
+      Content-Security-Policy:
+      - default-src 'none'
+      X-Github-Request-Id:
+      - E3C2:0C07:12C0CB:2703AC:5E422A57
+    body:
+      encoding: ASCII-8BIT
+      string: '[{"name":"somedoc.md","path":"doc/somedoc.md","sha":"9edec62594ff28249393febd3111da1cf8ccc6ff","size":21,"url":"https://api.github.com/repos/david-a-wheeler/test-badge-project/contents/doc/somedoc.md?ref=master","html_url":"https://github.com/david-a-wheeler/test-badge-project/blob/master/doc/somedoc.md","git_url":"https://api.github.com/repos/david-a-wheeler/test-badge-project/git/blobs/9edec62594ff28249393febd3111da1cf8ccc6ff","download_url":"https://raw.githubusercontent.com/david-a-wheeler/test-badge-project/master/doc/somedoc.md","type":"file","_links":{"self":"https://api.github.com/repos/david-a-wheeler/test-badge-project/contents/doc/somedoc.md?ref=master","git":"https://api.github.com/repos/david-a-wheeler/test-badge-project/git/blobs/9edec62594ff28249393febd3111da1cf8ccc6ff","html":"https://github.com/david-a-wheeler/test-badge-project/blob/master/doc/somedoc.md"}}]'
+    http_version: 
+  recorded_at: Tue, 11 Feb 2020 04:15:12 GMT
+- request:
+    method: get
+    uri: https://api.github.com/repos/david-a-wheeler/test-badge-project/contents/doc/somedoc.md
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/vnd.github.v3+json
+      User-Agent:
+      - Octokit Ruby Gem 4.16.0
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic M2U5MDE5NGM3MGI1N2I3MTE4OGU6ZDJlM2YwMDI4MzhmNjExYTUxNGI4NGExNzI3YmY2ZTUwMGE2N2QyYg==
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - GitHub.com
+      Date:
+      - Tue, 11 Feb 2020 04:15:19 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Status:
+      - 200 OK
+      X-Ratelimit-Limit:
+      - '5000'
+      X-Ratelimit-Remaining:
+      - '4991'
+      X-Ratelimit-Reset:
+      - '1581398118'
+      Cache-Control:
+      - public, max-age=60, s-maxage=60
+      Vary:
+      - Accept
+      - Accept-Encoding, Accept
+      Etag:
+      - W/"9edec62594ff28249393febd3111da1cf8ccc6ff"
+      Last-Modified:
+      - Mon, 23 Jan 2017 20:27:55 GMT
+      X-Github-Media-Type:
+      - github.v3; format=json
+      Access-Control-Expose-Headers:
+      - ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining,
+        X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval,
+        X-GitHub-Media-Type
+      Access-Control-Allow-Origin:
+      - "*"
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      X-Frame-Options:
+      - deny
+      X-Content-Type-Options:
+      - nosniff
+      X-Xss-Protection:
+      - 1; mode=block
+      Referrer-Policy:
+      - origin-when-cross-origin, strict-origin-when-cross-origin
+      Content-Security-Policy:
+      - default-src 'none'
+      X-Github-Request-Id:
+      - 6FFB:6A51:194E62:32E7F1:5E422A57
+    body:
+      encoding: ASCII-8BIT
+      string: '{"name":"somedoc.md","path":"doc/somedoc.md","sha":"9edec62594ff28249393febd3111da1cf8ccc6ff","size":21,"url":"https://api.github.com/repos/david-a-wheeler/test-badge-project/contents/doc/somedoc.md?ref=master","html_url":"https://github.com/david-a-wheeler/test-badge-project/blob/master/doc/somedoc.md","git_url":"https://api.github.com/repos/david-a-wheeler/test-badge-project/git/blobs/9edec62594ff28249393febd3111da1cf8ccc6ff","download_url":"https://raw.githubusercontent.com/david-a-wheeler/test-badge-project/master/doc/somedoc.md","type":"file","content":"IyBEb2N1bWVudGF0aW9uIEZpbGUK\n","encoding":"base64","_links":{"self":"https://api.github.com/repos/david-a-wheeler/test-badge-project/contents/doc/somedoc.md?ref=master","git":"https://api.github.com/repos/david-a-wheeler/test-badge-project/git/blobs/9edec62594ff28249393febd3111da1cf8ccc6ff","html":"https://github.com/david-a-wheeler/test-badge-project/blob/master/doc/somedoc.md"}}'
+    http_version: 
+  recorded_at: Tue, 11 Feb 2020 04:15:13 GMT
+- request:
+    method: get
+    uri: https://api.github.com/repos/david-a-wheeler/test-badge-project/contents/doc/somedoc.md
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/vnd.github.v3+json
+      User-Agent:
+      - Octokit Ruby Gem 4.16.0
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic M2U5MDE5NGM3MGI1N2I3MTE4OGU6ZDJlM2YwMDI4MzhmNjExYTUxNGI4NGExNzI3YmY2ZTUwMGE2N2QyYg==
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - GitHub.com
+      Date:
+      - Tue, 11 Feb 2020 04:15:20 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Status:
+      - 200 OK
+      X-Ratelimit-Limit:
+      - '5000'
+      X-Ratelimit-Remaining:
+      - '4990'
+      X-Ratelimit-Reset:
+      - '1581398118'
+      Cache-Control:
+      - public, max-age=60, s-maxage=60
+      Vary:
+      - Accept
+      - Accept-Encoding, Accept
+      Etag:
+      - W/"9edec62594ff28249393febd3111da1cf8ccc6ff"
+      Last-Modified:
+      - Mon, 23 Jan 2017 20:27:55 GMT
+      X-Github-Media-Type:
+      - github.v3; format=json
+      Access-Control-Expose-Headers:
+      - ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining,
+        X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval,
+        X-GitHub-Media-Type
+      Access-Control-Allow-Origin:
+      - "*"
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      X-Frame-Options:
+      - deny
+      X-Content-Type-Options:
+      - nosniff
+      X-Xss-Protection:
+      - 1; mode=block
+      Referrer-Policy:
+      - origin-when-cross-origin, strict-origin-when-cross-origin
+      Content-Security-Policy:
+      - default-src 'none'
+      X-Github-Request-Id:
+      - 3B4B:4E97:17937D:30D8EF:5E422A57
+    body:
+      encoding: ASCII-8BIT
+      string: '{"name":"somedoc.md","path":"doc/somedoc.md","sha":"9edec62594ff28249393febd3111da1cf8ccc6ff","size":21,"url":"https://api.github.com/repos/david-a-wheeler/test-badge-project/contents/doc/somedoc.md?ref=master","html_url":"https://github.com/david-a-wheeler/test-badge-project/blob/master/doc/somedoc.md","git_url":"https://api.github.com/repos/david-a-wheeler/test-badge-project/git/blobs/9edec62594ff28249393febd3111da1cf8ccc6ff","download_url":"https://raw.githubusercontent.com/david-a-wheeler/test-badge-project/master/doc/somedoc.md","type":"file","content":"IyBEb2N1bWVudGF0aW9uIEZpbGUK\n","encoding":"base64","_links":{"self":"https://api.github.com/repos/david-a-wheeler/test-badge-project/contents/doc/somedoc.md?ref=master","git":"https://api.github.com/repos/david-a-wheeler/test-badge-project/git/blobs/9edec62594ff28249393febd3111da1cf8ccc6ff","html":"https://github.com/david-a-wheeler/test-badge-project/blob/master/doc/somedoc.md"}}'
+    http_version: 
+  recorded_at: Tue, 11 Feb 2020 04:15:13 GMT
+- request:
+    method: get
+    uri: https://api.github.com/repos/david-a-wheeler/test-badge-project/contents/doc/somedoc.md
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/vnd.github.v3+json
+      User-Agent:
+      - Octokit Ruby Gem 4.16.0
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic M2U5MDE5NGM3MGI1N2I3MTE4OGU6ZDJlM2YwMDI4MzhmNjExYTUxNGI4NGExNzI3YmY2ZTUwMGE2N2QyYg==
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - GitHub.com
+      Date:
+      - Tue, 11 Feb 2020 04:15:20 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Status:
+      - 200 OK
+      X-Ratelimit-Limit:
+      - '5000'
+      X-Ratelimit-Remaining:
+      - '4989'
+      X-Ratelimit-Reset:
+      - '1581398119'
+      Cache-Control:
+      - public, max-age=60, s-maxage=60
+      Vary:
+      - Accept
+      - Accept-Encoding, Accept
+      Etag:
+      - W/"9edec62594ff28249393febd3111da1cf8ccc6ff"
+      Last-Modified:
+      - Mon, 23 Jan 2017 20:27:55 GMT
+      X-Github-Media-Type:
+      - github.v3; format=json
+      Access-Control-Expose-Headers:
+      - ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining,
+        X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval,
+        X-GitHub-Media-Type
+      Access-Control-Allow-Origin:
+      - "*"
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      X-Frame-Options:
+      - deny
+      X-Content-Type-Options:
+      - nosniff
+      X-Xss-Protection:
+      - 1; mode=block
+      Referrer-Policy:
+      - origin-when-cross-origin, strict-origin-when-cross-origin
+      Content-Security-Policy:
+      - default-src 'none'
+      X-Github-Request-Id:
+      - C208:3CB0:4B536:D20B5:5E422A58
+    body:
+      encoding: ASCII-8BIT
+      string: '{"name":"somedoc.md","path":"doc/somedoc.md","sha":"9edec62594ff28249393febd3111da1cf8ccc6ff","size":21,"url":"https://api.github.com/repos/david-a-wheeler/test-badge-project/contents/doc/somedoc.md?ref=master","html_url":"https://github.com/david-a-wheeler/test-badge-project/blob/master/doc/somedoc.md","git_url":"https://api.github.com/repos/david-a-wheeler/test-badge-project/git/blobs/9edec62594ff28249393febd3111da1cf8ccc6ff","download_url":"https://raw.githubusercontent.com/david-a-wheeler/test-badge-project/master/doc/somedoc.md","type":"file","content":"IyBEb2N1bWVudGF0aW9uIEZpbGUK\n","encoding":"base64","_links":{"self":"https://api.github.com/repos/david-a-wheeler/test-badge-project/contents/doc/somedoc.md?ref=master","git":"https://api.github.com/repos/david-a-wheeler/test-badge-project/git/blobs/9edec62594ff28249393febd3111da1cf8ccc6ff","html":"https://github.com/david-a-wheeler/test-badge-project/blob/master/doc/somedoc.md"}}'
+    http_version: 
+  recorded_at: Tue, 11 Feb 2020 04:15:13 GMT
 recorded_with: VCR 4.0.0

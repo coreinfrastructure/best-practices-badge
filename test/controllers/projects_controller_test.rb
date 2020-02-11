@@ -87,9 +87,7 @@ class ProjectsControllerTest < ActionController::TestCase
     log_in_as(@user)
     # We simplify this test by stubbing out the request to GitHub to
     # retrieve information about user repositories.
-    url = 'https://api.github.com/user/repos?client_id=' \
-          "#{ENV['TEST_GITHUB_KEY']}&client_secret=" \
-          "#{ENV['TEST_GITHUB_SECRET']}&per_page=50&sort=pushed"
+    url = 'https://api.github.com/user/repos?per_page=50&sort=pushed'
     stub_request(:get, url).to_return(status: 200, body: '', headers: {})
     assert_no_difference('Project.count') do
       post :create, params: { project: { name: @project.name } }

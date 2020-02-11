@@ -687,4 +687,354 @@ http_interactions:
       string: '{"Python":1173214,"C":1059857,"Shell":285361,"C++":44086,"CMake":33855,"C#":29834,"Dockerfile":26671,"HTML":2290,"Ruby":1359}'
     http_version: 
   recorded_at: Sun, 07 Apr 2019 00:35:34 GMT
+- request:
+    method: get
+    uri: https://api.github.com/repos/assimilation/assimilation-official
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/vnd.github.drax-preview+json
+      User-Agent:
+      - Octokit Ruby Gem 4.16.0
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic M2U5MDE5NGM3MGI1N2I3MTE4OGU6ZDJlM2YwMDI4MzhmNjExYTUxNGI4NGExNzI3YmY2ZTUwMGE2N2QyYg==
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - GitHub.com
+      Date:
+      - Tue, 11 Feb 2020 04:15:27 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Status:
+      - 200 OK
+      X-Ratelimit-Limit:
+      - '5000'
+      X-Ratelimit-Remaining:
+      - '4986'
+      X-Ratelimit-Reset:
+      - '1581398118'
+      Cache-Control:
+      - public, max-age=60, s-maxage=60
+      Vary:
+      - Accept
+      - Accept-Encoding, Accept
+      Etag:
+      - W/"3286e13a84be0d34635736fc1c0ae434"
+      Last-Modified:
+      - Tue, 21 Jan 2020 15:43:46 GMT
+      X-Github-Media-Type:
+      - github.v3; param=drax-preview; format=json
+      Access-Control-Expose-Headers:
+      - ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining,
+        X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval,
+        X-GitHub-Media-Type
+      Access-Control-Allow-Origin:
+      - "*"
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      X-Frame-Options:
+      - deny
+      X-Content-Type-Options:
+      - nosniff
+      X-Xss-Protection:
+      - 1; mode=block
+      Referrer-Policy:
+      - origin-when-cross-origin, strict-origin-when-cross-origin
+      Content-Security-Policy:
+      - default-src 'none'
+      X-Github-Request-Id:
+      - E20F:67F6:181A58:311746:5E422A5F
+    body:
+      encoding: ASCII-8BIT
+      string: '{"id":42373046,"node_id":"MDEwOlJlcG9zaXRvcnk0MjM3MzA0Ng==","name":"assimilation-official","full_name":"assimilation/assimilation-official","private":false,"owner":{"login":"assimilation","id":8259338,"node_id":"MDEyOk9yZ2FuaXphdGlvbjgyNTkzMzg=","avatar_url":"https://avatars1.githubusercontent.com/u/8259338?v=4","gravatar_id":"","url":"https://api.github.com/users/assimilation","html_url":"https://github.com/assimilation","followers_url":"https://api.github.com/users/assimilation/followers","following_url":"https://api.github.com/users/assimilation/following{/other_user}","gists_url":"https://api.github.com/users/assimilation/gists{/gist_id}","starred_url":"https://api.github.com/users/assimilation/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/assimilation/subscriptions","organizations_url":"https://api.github.com/users/assimilation/orgs","repos_url":"https://api.github.com/users/assimilation/repos","events_url":"https://api.github.com/users/assimilation/events{/privacy}","received_events_url":"https://api.github.com/users/assimilation/received_events","type":"Organization","site_admin":false},"html_url":"https://github.com/assimilation/assimilation-official","description":"This
+        is the official main repository for the Assimilation project","fork":false,"url":"https://api.github.com/repos/assimilation/assimilation-official","forks_url":"https://api.github.com/repos/assimilation/assimilation-official/forks","keys_url":"https://api.github.com/repos/assimilation/assimilation-official/keys{/key_id}","collaborators_url":"https://api.github.com/repos/assimilation/assimilation-official/collaborators{/collaborator}","teams_url":"https://api.github.com/repos/assimilation/assimilation-official/teams","hooks_url":"https://api.github.com/repos/assimilation/assimilation-official/hooks","issue_events_url":"https://api.github.com/repos/assimilation/assimilation-official/issues/events{/number}","events_url":"https://api.github.com/repos/assimilation/assimilation-official/events","assignees_url":"https://api.github.com/repos/assimilation/assimilation-official/assignees{/user}","branches_url":"https://api.github.com/repos/assimilation/assimilation-official/branches{/branch}","tags_url":"https://api.github.com/repos/assimilation/assimilation-official/tags","blobs_url":"https://api.github.com/repos/assimilation/assimilation-official/git/blobs{/sha}","git_tags_url":"https://api.github.com/repos/assimilation/assimilation-official/git/tags{/sha}","git_refs_url":"https://api.github.com/repos/assimilation/assimilation-official/git/refs{/sha}","trees_url":"https://api.github.com/repos/assimilation/assimilation-official/git/trees{/sha}","statuses_url":"https://api.github.com/repos/assimilation/assimilation-official/statuses/{sha}","languages_url":"https://api.github.com/repos/assimilation/assimilation-official/languages","stargazers_url":"https://api.github.com/repos/assimilation/assimilation-official/stargazers","contributors_url":"https://api.github.com/repos/assimilation/assimilation-official/contributors","subscribers_url":"https://api.github.com/repos/assimilation/assimilation-official/subscribers","subscription_url":"https://api.github.com/repos/assimilation/assimilation-official/subscription","commits_url":"https://api.github.com/repos/assimilation/assimilation-official/commits{/sha}","git_commits_url":"https://api.github.com/repos/assimilation/assimilation-official/git/commits{/sha}","comments_url":"https://api.github.com/repos/assimilation/assimilation-official/comments{/number}","issue_comment_url":"https://api.github.com/repos/assimilation/assimilation-official/issues/comments{/number}","contents_url":"https://api.github.com/repos/assimilation/assimilation-official/contents/{+path}","compare_url":"https://api.github.com/repos/assimilation/assimilation-official/compare/{base}...{head}","merges_url":"https://api.github.com/repos/assimilation/assimilation-official/merges","archive_url":"https://api.github.com/repos/assimilation/assimilation-official/{archive_format}{/ref}","downloads_url":"https://api.github.com/repos/assimilation/assimilation-official/downloads","issues_url":"https://api.github.com/repos/assimilation/assimilation-official/issues{/number}","pulls_url":"https://api.github.com/repos/assimilation/assimilation-official/pulls{/number}","milestones_url":"https://api.github.com/repos/assimilation/assimilation-official/milestones{/number}","notifications_url":"https://api.github.com/repos/assimilation/assimilation-official/notifications{?since,all,participating}","labels_url":"https://api.github.com/repos/assimilation/assimilation-official/labels{/name}","releases_url":"https://api.github.com/repos/assimilation/assimilation-official/releases{/id}","deployments_url":"https://api.github.com/repos/assimilation/assimilation-official/deployments","created_at":"2015-09-12T21:04:36Z","updated_at":"2020-01-21T15:43:46Z","pushed_at":"2020-01-21T15:43:43Z","git_url":"git://github.com/assimilation/assimilation-official.git","ssh_url":"git@github.com:assimilation/assimilation-official.git","clone_url":"https://github.com/assimilation/assimilation-official.git","svn_url":"https://github.com/assimilation/assimilation-official","homepage":"","size":28830,"stargazers_count":38,"watchers_count":38,"language":"Python","has_issues":true,"has_projects":true,"has_downloads":true,"has_wiki":true,"has_pages":false,"forks_count":10,"mirror_url":null,"archived":false,"disabled":false,"open_issues_count":7,"license":null,"forks":10,"open_issues":7,"watchers":38,"default_branch":"rel_2_dev","temp_clone_token":null,"organization":{"login":"assimilation","id":8259338,"node_id":"MDEyOk9yZ2FuaXphdGlvbjgyNTkzMzg=","avatar_url":"https://avatars1.githubusercontent.com/u/8259338?v=4","gravatar_id":"","url":"https://api.github.com/users/assimilation","html_url":"https://github.com/assimilation","followers_url":"https://api.github.com/users/assimilation/followers","following_url":"https://api.github.com/users/assimilation/following{/other_user}","gists_url":"https://api.github.com/users/assimilation/gists{/gist_id}","starred_url":"https://api.github.com/users/assimilation/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/assimilation/subscriptions","organizations_url":"https://api.github.com/users/assimilation/orgs","repos_url":"https://api.github.com/users/assimilation/repos","events_url":"https://api.github.com/users/assimilation/events{/privacy}","received_events_url":"https://api.github.com/users/assimilation/received_events","type":"Organization","site_admin":false},"network_count":10,"subscribers_count":7}'
+    http_version: 
+  recorded_at: Tue, 11 Feb 2020 04:15:21 GMT
+- request:
+    method: get
+    uri: https://api.github.com/repos/assimilation/assimilation-official/languages?per_page=100
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/vnd.github.v3+json
+      User-Agent:
+      - Octokit Ruby Gem 4.16.0
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic M2U5MDE5NGM3MGI1N2I3MTE4OGU6ZDJlM2YwMDI4MzhmNjExYTUxNGI4NGExNzI3YmY2ZTUwMGE2N2QyYg==
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - GitHub.com
+      Date:
+      - Tue, 11 Feb 2020 04:15:27 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Status:
+      - 200 OK
+      X-Ratelimit-Limit:
+      - '5000'
+      X-Ratelimit-Remaining:
+      - '4985'
+      X-Ratelimit-Reset:
+      - '1581398118'
+      Cache-Control:
+      - public, max-age=60, s-maxage=60
+      Vary:
+      - Accept
+      - Accept-Encoding, Accept
+      Etag:
+      - W/"b023cdca7dc3296b73750987fbe3a04e"
+      Last-Modified:
+      - Tue, 21 Jan 2020 15:43:46 GMT
+      X-Github-Media-Type:
+      - github.v3; format=json
+      Access-Control-Expose-Headers:
+      - ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining,
+        X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval,
+        X-GitHub-Media-Type
+      Access-Control-Allow-Origin:
+      - "*"
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      X-Frame-Options:
+      - deny
+      X-Content-Type-Options:
+      - nosniff
+      X-Xss-Protection:
+      - 1; mode=block
+      Referrer-Policy:
+      - origin-when-cross-origin, strict-origin-when-cross-origin
+      Content-Security-Policy:
+      - default-src 'none'
+      X-Github-Request-Id:
+      - BA72:5FBE:CB126:1D523C:5E422A5F
+    body:
+      encoding: ASCII-8BIT
+      string: '{"Python":1177009,"C":1059819,"Shell":477652,"Dockerfile":125093,"C#":59668,"C++":44086,"CMake":33899,"Meson":12358,"HTML":2290,"Ruby":1359}'
+    http_version: 
+  recorded_at: Tue, 11 Feb 2020 04:15:21 GMT
+- request:
+    method: get
+    uri: https://api.github.com/repos/assimilation/assimilation-official/contents//
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/vnd.github.v3+json
+      User-Agent:
+      - Octokit Ruby Gem 4.16.0
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic M2U5MDE5NGM3MGI1N2I3MTE4OGU6ZDJlM2YwMDI4MzhmNjExYTUxNGI4NGExNzI3YmY2ZTUwMGE2N2QyYg==
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 302
+      message: Found
+    headers:
+      Server:
+      - GitHub.com
+      Date:
+      - Tue, 11 Feb 2020 04:15:28 GMT
+      Content-Type:
+      - text/html;charset=utf-8
+      Content-Length:
+      - '0'
+      Status:
+      - 302 Found
+      X-Ratelimit-Limit:
+      - '5000'
+      X-Ratelimit-Remaining:
+      - '4984'
+      X-Ratelimit-Reset:
+      - '1581398119'
+      Location:
+      - https://api.github.com/repositories/42373046/contents/
+      Access-Control-Expose-Headers:
+      - ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining,
+        X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval,
+        X-GitHub-Media-Type
+      Access-Control-Allow-Origin:
+      - "*"
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      X-Frame-Options:
+      - deny
+      X-Content-Type-Options:
+      - nosniff
+      X-Xss-Protection:
+      - 1; mode=block
+      Referrer-Policy:
+      - origin-when-cross-origin, strict-origin-when-cross-origin
+      Content-Security-Policy:
+      - default-src 'none'
+      Vary:
+      - Accept-Encoding, Accept
+      X-Github-Request-Id:
+      - 2CD8:6A4F:14BF2A:2B47C4:5E422A5F
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+  recorded_at: Tue, 11 Feb 2020 04:15:21 GMT
+- request:
+    method: get
+    uri: https://api.github.com/repos/assimilation/assimilation-official/contents//
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/vnd.github.v3+json
+      User-Agent:
+      - Octokit Ruby Gem 4.16.0
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic M2U5MDE5NGM3MGI1N2I3MTE4OGU6ZDJlM2YwMDI4MzhmNjExYTUxNGI4NGExNzI3YmY2ZTUwMGE2N2QyYg==
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 302
+      message: Found
+    headers:
+      Server:
+      - GitHub.com
+      Date:
+      - Tue, 11 Feb 2020 04:15:28 GMT
+      Content-Type:
+      - text/html;charset=utf-8
+      Content-Length:
+      - '0'
+      Status:
+      - 302 Found
+      X-Ratelimit-Limit:
+      - '5000'
+      X-Ratelimit-Remaining:
+      - '4983'
+      X-Ratelimit-Reset:
+      - '1581398119'
+      Location:
+      - https://api.github.com/repositories/42373046/contents/
+      Access-Control-Expose-Headers:
+      - ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining,
+        X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval,
+        X-GitHub-Media-Type
+      Access-Control-Allow-Origin:
+      - "*"
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      X-Frame-Options:
+      - deny
+      X-Content-Type-Options:
+      - nosniff
+      X-Xss-Protection:
+      - 1; mode=block
+      Referrer-Policy:
+      - origin-when-cross-origin, strict-origin-when-cross-origin
+      Content-Security-Policy:
+      - default-src 'none'
+      Vary:
+      - Accept-Encoding, Accept
+      X-Github-Request-Id:
+      - 7627:34D7:17B677:2F5B7D:5E422A60
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+  recorded_at: Tue, 11 Feb 2020 04:15:21 GMT
+- request:
+    method: get
+    uri: https://api.github.com/repos/assimilation/assimilation-official/contents//
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/vnd.github.v3+json
+      User-Agent:
+      - Octokit Ruby Gem 4.16.0
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic M2U5MDE5NGM3MGI1N2I3MTE4OGU6ZDJlM2YwMDI4MzhmNjExYTUxNGI4NGExNzI3YmY2ZTUwMGE2N2QyYg==
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 302
+      message: Found
+    headers:
+      Server:
+      - GitHub.com
+      Date:
+      - Tue, 11 Feb 2020 04:15:28 GMT
+      Content-Type:
+      - text/html;charset=utf-8
+      Content-Length:
+      - '0'
+      Status:
+      - 302 Found
+      X-Ratelimit-Limit:
+      - '5000'
+      X-Ratelimit-Remaining:
+      - '4982'
+      X-Ratelimit-Reset:
+      - '1581398119'
+      Location:
+      - https://api.github.com/repositories/42373046/contents/
+      Access-Control-Expose-Headers:
+      - ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining,
+        X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval,
+        X-GitHub-Media-Type
+      Access-Control-Allow-Origin:
+      - "*"
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      X-Frame-Options:
+      - deny
+      X-Content-Type-Options:
+      - nosniff
+      X-Xss-Protection:
+      - 1; mode=block
+      Referrer-Policy:
+      - origin-when-cross-origin, strict-origin-when-cross-origin
+      Content-Security-Policy:
+      - default-src 'none'
+      Vary:
+      - Accept-Encoding, Accept
+      X-Github-Request-Id:
+      - AE12:11F8:17678F:2FA9F5:5E422A60
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+  recorded_at: Tue, 11 Feb 2020 04:15:21 GMT
 recorded_with: VCR 4.0.0

@@ -10,7 +10,7 @@ class ChiefTest < ActiveSupport::TestCase
   setup do
     @full_name = 'linuxfoundation/cii-best-practices-badge'
     @repo_name = 'best-practices-badge'
-    @description = 'Core Infrastructure Initiative Best Practices Badge'
+    @description = '🏆Core Infrastructure Initiative Best Practices Badge'
 
     @sample_project = Project.new
     @sample_project[:repo_url] = "https://github.com/#{@full_name}"
@@ -48,7 +48,7 @@ class ChiefTest < ActiveSupport::TestCase
                  '<https://github.com/coreinfrastructure/' \
                  'best-practices-badge/blob/master/Rakefile>.',
                  results[:build_justification]
-    assert_equal 'Ruby, JavaScript, Shell, Makefile',
+    assert_equal 'Ruby, JavaScript, Shell, Makefile, Dockerfile',
                  results[:implementation_languages]
   end
   # rubocop:enable Metrics/BlockLength

@@ -36,11 +36,10 @@ class GithubLoginTest < CapybaraFeatureTest
         assert page.has_content?('Test BadgeApp (not for production use)')
         click_on 'Authorize dankohn'
       end
-
-      assert_equal num + 1, ActionMailer::Base.deliveries.size
       assert has_content? 'Logged in!'
       # Regression test, make sure redirected correctly after login
       assert_equal new_project_path(locale: :en), current_path
+      assert_equal num + 1, ActionMailer::Base.deliveries.size
       assert find(
         "option[value='https://github.com/ciitest/test-repo']"
       )
@@ -67,25 +66,9 @@ class GithubLoginTest < CapybaraFeatureTest
       assert has_content? 'Logout'
       click_on 'Logout'
       assert_equal '/en', current_path
-
-      if ENV['GITHUB_PASSWORD'] # revoke OAuth authorization
-        visit 'https://github.com/settings/applications'
-        assert page.has_content?('Applications')
-        click_on 'Applications'
-        assert page.has_content?('Authorized OAuth Apps')
-        click_on 'Authorized OAuth Apps'
-        # Do it twice - sometimes it doesn't seem to work
-        assert page.has_content?('Authorized OAuth Apps')
-        click_on 'Authorized OAuth Apps'
-        assert page.has_content?('Test BadgeApp (not for production use)')
-        assert page.has_content?('Revoke')
-        click_on 'Revoke'
-        assert has_content? 'Are you sure you want to revoke authorization?'
-        click_on 'I understand, revoke access'
-        sleep 1
-        page.evaluate_script 'window.location.reload()'
-        assert has_content? 'No authorized applications'
-      end
+    end
+    if ENV['GITHUB_PASSWORD'] # revoke OAuth authorization
+      puts "Don't forget to revoke access to the test app on GitHub"
     end
   end
   # rubocop:enable Metrics/BlockLength

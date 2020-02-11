@@ -246,8 +246,8 @@ module ActiveSupport
 
       y = YAML.load_file(github_login_vcr_file)
               .with_indifferent_access
-      url = y[:http_interactions][1][:request][:uri]
-      Addressable::URI.parse(url).query_values['access_token']
+      query_string = y[:http_interactions][0][:response][:body][:string]
+      Rack::Utils.parse_nested_query(query_string)['access_token']
     end
 
     def key_with_nil_value(hash)

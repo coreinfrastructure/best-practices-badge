@@ -74,7 +74,21 @@ Note: the robots.txt testing won't pass while you're doing this, because
 some tests have to be run in different modes.  Just capture the data in
 a VCR cassette, and then re-run the tests with the captured data.
 
-After completing the VCR recording, `github_login_test.rb` revokes the authorization of the oauth app so that Github doesn't complain about committing a live token to the repo. To manually walk through the login process with Github OAuth authentication, you can run the rails server with
+After completing the VCR recording, `github_login_test.rb` revokes the
+authorization of the oauth app so that Github doesn't complain about
+committing a live token to the repo.  As an additional security step you
+should redact the token used in the vcr by opening `github_login.yml` and
+searching for `access_token`.  Once found you can redact it from all .yml
+files by running:
+
+~~~~sh
+cd test/vcr_cassettes
+sed -i 's/<ACCESS_TOKEN>/REDACTED/' *.yml
+cd ../..
+~~~~
+
+To manually walk through the login process with Github OAuth authentication,
+you can run the rails server with
 
 ```bash
 RAILS_ENV=test rails s -p 31337 -b 0.0.0.0

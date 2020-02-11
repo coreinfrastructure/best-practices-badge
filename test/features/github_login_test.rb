@@ -68,7 +68,13 @@ class GithubLoginTest < CapybaraFeatureTest
       assert_equal '/en', current_path
     end
     if ENV['GITHUB_PASSWORD'] # revoke OAuth authorization
-      puts "Don't forget to revoke access to the test app on GitHub"
+      # We used to automate this, but GitHub changes too often, and
+      # we don't do this often. So tell the user how to do it, since the
+      # user can figure out how to deal with UI changes better.
+      puts "\n\nDon't forget to REVOKE access to the test app on GitHub"
+      puts 'Log in to GitHub as ciitest. Then go to'
+      puts 'https://github.com/settings/applications.'
+      puts 'Revoke the app "Test BadgeApp (not for production use)".\n\n'
     end
   end
   # rubocop:enable Metrics/BlockLength

@@ -128,8 +128,8 @@ class ProjectsController < ApplicationController
   def create
     @project = current_user.projects.build(project_params)
     project_repo_url = clean_url(@project.repo_url)
-    if project_repo_url
-      @project.repo_url = project_repo_url
+    @project.repo_url = project_repo_url
+    if project_repo_url.present?
       if Project.exists?(repo_url: project_repo_url)
         flash[:info] = t('projects.new.project_already_exists')
         return redirect_to Project.find_by(repo_url: project_repo_url)

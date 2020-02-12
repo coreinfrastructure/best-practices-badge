@@ -11,6 +11,7 @@ class ProjectsControllerTest < ActionController::TestCase
   setup do
     @project = projects(:one)
     @project_two = projects(:two)
+    @project_no_repo = projects(:no_repo)
     @perfect_unjustified_project = projects(:perfect_unjustified)
     @perfect_passing_project = projects(:perfect_passing)
     @perfect_silver_project = projects(:perfect_silver)
@@ -77,6 +78,46 @@ class ProjectsControllerTest < ActionController::TestCase
           name: @project.name,
           repo_url: 'https://www.example.org/code',
           homepage_url: @project.homepage_url
+        },
+        locale: :en
+      }
+    end
+  end
+
+  test 'should create project with empty repo' do
+    log_in_as(@user)
+    stub_request(:get, 'https://api.github.com/user/repos')
+      .to_return(status: 200, body: '', headers: {})
+    assert_difference [
+      'Project.count', 'ActionMailer::Base.deliveries.size'
+    ] do
+      post :create, params: {
+        project: {
+          description: @project.description,
+          license: @project.license,
+          name: @project.name,
+          repo_url: '',
+          homepage_url: @project.homepage_url
+        },
+        locale: :en
+      }
+    end
+  end
+
+  test 'should fail to create project with duplicate repo' do
+    log_in_as(@user)
+    stub_request(:get, 'https://api.github.com/user/repos')
+      .to_return(status: 200, body: '', headers: {})
+    assert_no_difference [
+      'Project.count', 'ActionMailer::Base.deliveries.size'
+    ] do
+      post :create, params: {
+        project: {
+          description: 'Some other project',
+          license: @project.license,
+          name: @project.name,
+          repo_url: @project.repo_url,
+          homepage_url: @project_two.homepage_url
         },
         locale: :en
       }

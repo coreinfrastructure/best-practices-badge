@@ -33,6 +33,16 @@ two:
   badge_percentage_0: 0
   tiered_percentage: 0
 
+no_repo:
+  user: test_user
+  name: Another Ascent Vehicle (AAV)
+  description: Random system for rover
+  homepage_url: https://www.nasa.gov
+  license: MIT
+  repo_url: ''
+  badge_percentage_0: 0
+  tiered_percentage: 0
+
 # TODO: Generate list of status fields from central location.
 # No justifications means failing status.
 perfect_unjustified:

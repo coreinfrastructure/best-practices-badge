@@ -205,7 +205,7 @@ class ProjectTest < ActiveSupport::TestCase
   end
 
   test 'Project counts from fixtures are as expected' do
-    assert_equal 3, Project.in_progress.count
+    assert_equal 4, Project.in_progress.count
     assert_equal 3, Project.passing.count
   end
 

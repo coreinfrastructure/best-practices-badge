@@ -23,7 +23,7 @@ class ProjectListTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select(
       +'table>tbody>tr:first-child>td:nth-child(2)',
-      'Justified perfect passing project'
+      'Another Ascent Vehicle (AAV)'
     )
 
     get '/en/projects?sort=name&sort_direction=desc'

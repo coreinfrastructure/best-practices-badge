@@ -62,6 +62,20 @@
     </author>
   </entry>
   <entry>
+    <id>tag:www.example.com,2005:Project/941386161</id>
+    <published>2015-03-01T12:00:00Z</published>
+    <updated>2015-03-01T12:00:00Z</updated>
+    <link rel="alternate" type="text/html" href="http://www.example.com/en/projects/941386161"/>
+    <title>Another Ascent Vehicle (AAV)</title>
+    <content type="html">
+      <![CDATA[<p><strong>In Progress: 0%</strong> (Tiered 0%)</p><p><a href='https://www.nasa.gov'>https://www.nasa.gov</a></p><span lang="en"><p>Random system for rover</p>
+</span>]]>
+    </content>
+    <author>
+      <name>Test</name>
+    </author>
+  </entry>
+  <entry>
     <id>tag:www.example.com,2005:Project/968496471</id>
     <published>2015-03-01T12:00:00Z</published>
     <updated>2015-03-01T12:00:00Z</updated>

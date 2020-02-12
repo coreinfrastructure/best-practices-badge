@@ -17,13 +17,13 @@ class ProjectStatTest < ActiveSupport::TestCase
   # If you change files in test/fixtures/* you may need to change
   # the expected values.
   test 'project_stat matches expected values' do
-    assert_equal 6, @project_stat.percent_ge_0
+    assert_equal 7, @project_stat.percent_ge_0
     assert_equal 4, @project_stat.percent_ge_25
     assert_equal 4, @project_stat.percent_ge_50
     assert_equal 4, @project_stat.percent_ge_75
     assert_equal 3, @project_stat.percent_ge_90
     assert_equal 3, @project_stat.percent_ge_100
-    assert_equal 5, @project_stat.created_since_yesterday
+    assert_equal 6, @project_stat.created_since_yesterday
     assert_equal 0, @project_stat.updated_since_yesterday
     assert_equal '2015-03-01 12:00:00 UTC', @project_stat.created_at.to_s
     assert_equal '2015-03-01 12:00:00 UTC', @project_stat.updated_at.to_s

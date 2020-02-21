@@ -71,7 +71,7 @@ jobs:
         command: '[[ ! -s "$(git rev-parse --git-dir)/shallow" ]] || git fetch --unshallow'
     - run:
         name:  Run railroader static analysis check
-        command: rake railroader
+        command: bundle exec rake railroader
     - run:
         name:  Run test suite
         command: bundle exec rake test

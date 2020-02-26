@@ -7,6 +7,9 @@
 require 'test_helper'
 
 # rubocop:disable Metrics/ClassLength
+# TODO: ActionController::TestCase is obsolete. This should switch to using
+# ActionDispatch::IntegrationTest and then remove rails-controller-testing.
+# See: https://github.com/rails/rails/issues/22496
 class ProjectsControllerTest < ActionController::TestCase
   setup do
     @project = projects(:one)

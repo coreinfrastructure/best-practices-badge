@@ -67,7 +67,21 @@ class ProjectsController < ApplicationController
   end
 
   # GET /projects/1
-  def show; end
+  def show
+    # Fix malformed queries of form "/en/projects/188?criteria_level,2"
+    # These produce parsed.query_values of {"criteria_level,2"=>nil}
+    # They end up as weird special keys, so this is the easy way to detect them
+    # We fix these malformed queries to increase the chance that a user
+    # will find the intended data.
+    parsed = Addressable::URI.parse(request.original_url)
+    if parsed&.query_values&.include?('criteria_level,2')
+      redirect_to project_path(@project, criteria_level: 2), status: 301
+    elsif parsed&.query_values&.include?('criteria_level,1')
+      redirect_to project_path(@project, criteria_level: 1), status: 301
+    elsif parsed&.query_values&.include?('criteria_level,0')
+      redirect_to project_path(@project, criteria_level: 0), status: 301
+    end
+  end
 
   # GET /projects/1.json
   def show_json

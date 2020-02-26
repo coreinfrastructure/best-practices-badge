@@ -101,4 +101,31 @@ class ProjectGetTest < ActionDispatch::IntegrationTest
     # verify that caching varies depending on the Origin.
     assert_equal('Accept-Encoding, Origin', @response.headers['Vary'])
   end
+
+  test 'Redirect malformed query string criteria_level,2' do
+    get project_path(id: @project_one.id, locale: 'en') + '?criteria_level,2'
+    # Should redirect
+    assert_response 301
+    assert_redirected_to project_path(
+      id: @project_one.id, locale: 'en', criteria_level: 2
+    )
+  end
+
+  test 'Redirect malformed query string criteria_level,1' do
+    get project_path(id: @project_one.id, locale: 'de') + '?criteria_level,1'
+    # Should redirect
+    assert_response 301
+    assert_redirected_to project_path(
+      id: @project_one.id, locale: 'de', criteria_level: 1
+    )
+  end
+
+  test 'Redirect malformed query string criteria_level,0' do
+    get project_path(id: @project_one.id, locale: 'fr') + '?criteria_level,0'
+    # Should redirect
+    assert_response 301
+    assert_redirected_to project_path(
+      id: @project_one.id, locale: 'fr', criteria_level: 0
+    )
+  end
 end

@@ -87,6 +87,7 @@ end
 # we enable a few debug tools to help us find "production-only" bugs.
 group :fake_production, :development, :test do
   gem 'pry-byebug', '3.6.0'
+  gem 'tainted_love', '0.4.0'
 end
 
 group :development do

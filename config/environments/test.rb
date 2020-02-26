@@ -85,3 +85,10 @@ Rails.application.configure do
     # Bullet.slack = { webhook_url: 'http://some.slack.url', foo: 'bar' }
   end
 end
+
+# Enable Shopify's "TaintedLove" run-time checker. It's only version 0.4.0,
+# and that raises concerns in putting it into the production system.
+# But those problems are less serious in testing, so let's enable it here.
+TaintedLove.enable! do |config|
+  config.logger = Rails.logger
+end

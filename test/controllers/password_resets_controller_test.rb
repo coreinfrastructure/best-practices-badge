@@ -6,6 +6,9 @@
 
 require 'test_helper'
 
+# TODO: ActionController::TestCase is obsolete. This should switch to using
+# ActionDispatch::IntegrationTest and then remove rails-controller-testing.
+# See: https://github.com/rails/rails/issues/22496
 class PasswordResetsControllerTest < ActionController::TestCase
   def setup
     ActionMailer::Base.deliveries.clear

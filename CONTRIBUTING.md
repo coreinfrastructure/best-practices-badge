@@ -7,7 +7,7 @@ Feedback and contributions are very welcome!
 Here's help on how to make contributions, divided into the following sections:
 
 * general information,
-* vulnerability reporting,
+* [vulnerability reporting](#how_to_report_vulnerabilities),
 * documentation changes,
 * code changes,
 * how to check proposed changes before submitting them,
@@ -167,7 +167,7 @@ Since they are often not visible, they can cause silent problems
 and misleading unexpected changes.
 For example, some editors (e.g., Atom) quietly delete them by default.
 
-## Vulnerability reporting (security issues)
+## <span id="how_to_report_vulnerabilities">Vulnerability reporting (security issues)</a>
 
 If you find a significant vulnerability, or evidence of one,
 please send an email to the security contacts that you have such

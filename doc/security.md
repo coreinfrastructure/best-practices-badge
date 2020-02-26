@@ -15,7 +15,8 @@ easier to put them all in one document.
 
 Sadly, perfection is rare; we really want your help.
 If you find a vulnerability, please see
-[CONTRIBUTING.md](../CONTRIBUTING.md) for how to submit a vulnerability report.
+[CONTRIBUTING.md#how_to_report_vulnerabilities](../CONTRIBUTING.md#how_to_report_vulnerabilities)
+for how to submit a vulnerability report.
 For more technical information on the implementation, see
 [implementation.md](implementation.md).
 

@@ -39,7 +39,14 @@ create and close issues, accept proposed changes,
 and release versions of software, as well administrate the production system.
 This is enough to meet the "access_continuity" criterion.
 
+We currently don't have any security vulnerabilities that have been
+found externally by others. If someone *has* done so, and would like to
+be credited, we will gladly do so! If we've accidentally forgotten to give
+you credit, our apologies; please let us know so we can quickly fix that.
+We *want* people to report any vulnerabilities our system has, so that
+we can quickly fix them. Please see our information on
+[how_to_report_vulnerabilities](CONTRIBUTING.md#how_to_report_vulnerabilities).
+
 Karl Fogel not only provided us helpful inputs, but his book
 "Producing Open Secure Software" <http://producingoss.com/>
 was an important basis for identifying many project best practices - thank you!
-

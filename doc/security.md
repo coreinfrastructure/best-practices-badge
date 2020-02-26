@@ -2693,6 +2693,25 @@ At one time we also used Gemnasium, but the service we used
 closed in May 2018.  We have two other services, so that loss did not
 substantively impact us.
 
+This approach has a complicated false positive with `omniauth`
+which we've had to specially handle.
+Library `omniauth` has a publicly-known vulnerability CVE-2015-9284.
+We have chosen to counter vulnerability CVE-2015-9284 by installing a
+third-party countermeasure, `omniauth-rails_csrf_protection` and ensuring
+that our configuation counters the problem.
+This is the
+[recommended approach on the omniauth wiki](https://github.com/omniauth/omniauth/wiki/Resolving-CVE-2015-9284)
+given discussion on
+[pull request 809](https://github.com/omniauth/omniauth/pull/809).
+The omniauth developers have been reluctant to fix this within the
+component they develop because it's (1) a
+breaking (interface) change and (2) code available to fix it is Rails-specific,
+yet their library can be used in other situations.
+We reviewed the third-party countermeasure's code and it looks okay.
+See our commit `ccdd0e007ee7d6aa` for details.
+This is not ideal, but it's a real-world situation, and we believe
+this approach completely counters the vulnerability.
+
 ### Rapid update
 
 We also have a process for quickly responding to alerts

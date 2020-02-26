@@ -463,6 +463,9 @@ Protect private information, in particular passwords and email addresses.
 Avoid mechanisms that could be used for tracking where possible
 (we do need to verify people are logged in for some operations),
 and ensure that third parties can't use interactions for tracking.
+When sending an email to an existing account, use the original account
+email not the claimed email address sent now; for why, see
+[Hacking GitHub with Unicode's dotless 'i'](https://eng.getwisdom.io/hacking-github-with-unicode-dotless-i/).
 For more about security, see [security](doc/security.md).
 
 We want the software to have decent performance for typical users.

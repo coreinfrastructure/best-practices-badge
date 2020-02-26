@@ -537,6 +537,19 @@ raw passwords and unencrypted email addresses).
 These are considered additional hardening measures, and so are
 discussed further in the section on hardening.
 
+Password reset requests (for local users) trigger an email, but that
+email is sent to the address as provided by the original account;
+emails are *not* sent to whatever email address is provided by the
+reset requestor (who might be an attacker).
+These email addresses match in the sense of `find_by`, which is a
+case-insensitive match, but since it is sometimes possible for an attacker
+to create another email account that "matches" in a case-insensitive way
+to an existing account, we always use the known-correct email address.
+You can verify this by reviewing
+`app/controllers/password_resets_controller.rb`.
+This approach completely counters the attack described in
+[Hacking GitHub with Unicode's dotless 'i'](https://eng.getwisdom.io/hacking-github-with-unicode-dotless-i/).
+
 #### HTTPS
 
 HTTPS (specifically the TLS protocol)

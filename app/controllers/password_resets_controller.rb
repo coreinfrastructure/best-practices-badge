@@ -14,6 +14,12 @@ class PasswordResetsController < ApplicationController
   def create
     @user = User.find_by(email: params[:password_reset][:email])
     if @user
+      # Note: We send the password reset to the email address originally
+      # created by the *original* user, and *not* to the requester
+      # (who may be attacking the original user's account). This prevents
+      # attacks where the finding system is "overly generous" and matches
+      # the "wrong" email address (e.g., exploiting dotless i). See:
+      # https://eng.getwisdom.io/hacking-github-with-unicode-dotless-i/
       reset_password(@user)
     else
       flash.now[:danger] = t('password_resets.email_not_found')

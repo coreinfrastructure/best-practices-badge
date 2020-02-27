@@ -9,21 +9,21 @@ source 'https://rubygems.org'
 ruby File.open('.ruby-version', 'rb') { |f| f.read.chomp }
 
 gem 'attr_encrypted', '3.1.0' # Encrypt email addresses
-gem 'bcrypt', '3.1.12' # Security - for salted hashed interated passwords
+gem 'bcrypt', '3.1.13' # Security - for salted hashed interated passwords
 gem 'blind_index', '0.3.4' # Index encrypted email addresses
 gem 'bootstrap-sass', '3.4.1'
 gem 'bootstrap-social-rails', '4.12.0'
 gem 'bootstrap-will_paginate', '1.0.0'
 gem 'bootstrap_form', '2.7.0'
-gem 'chartkick', '3.3.0' # Chart project_stats
+gem 'chartkick', '3.3.1' # Chart project_stats
 gem 'coffee-rails', '4.2.2', require: false # CoffeeScript Javascript preproc
 gem 'fastly-rails', '0.8.0'
-gem 'font-awesome-rails', '4.7.0.4'
+gem 'font-awesome-rails', '4.7.0.5'
 gem 'http_accept_language', '2.1.1' # Determine user's preferred locale
 gem 'httparty', '0.16.4' # HTTP convenience. rake fix_use_gravatar
 gem 'imagesLoaded_rails', '4.1.0' # JavaScript - enable wait for image load
-gem 'jbuilder', '2.8.0' # Template mechanism for JSON format results
-gem 'jquery-rails', '4.3.3' # JavaScript jQuery library (for Rails)
+gem 'jbuilder', '2.10.0' # Template mechanism for JSON format results
+gem 'jquery-rails', '4.3.5' # JavaScript jQuery library (for Rails)
 gem 'jquery-ui-rails', '6.0.1' # JavaScript jQueryUI library (for Rails)
 gem 'lograge', '0.10.0' # Simplify logs
 gem 'mail', '2.7.1' # Ruby mail handler
@@ -55,18 +55,18 @@ gem 'redcarpet', '3.4.0' # Process markdown in form textareas (justifications)
 gem 'sass-rails', '5.0.7', require: false
 gem 'scout_apm', '2.4.21' # Monitor for memory leaks
 gem 'secure_headers', '6.3.0' # Add hardening measures to HTTP headers
-gem 'uglifier', '4.1.20', require: false # Minify JavaScript
+gem 'uglifier', '4.2.0', require: false # Minify JavaScript
 gem 'will-paginate-i18n', '0.1.15' # Provide will-paginate translations
-gem 'will_paginate', '3.1.6' # Paginate results (next/previous)
+gem 'will_paginate', '3.3.0' # Paginate results (next/previous)
 
 group :development, :test do
   gem 'awesome_print', '1.8.0' # Pretty print Ruby objects
   gem 'bullet', '5.9.0' # Avoid n+1 queries
   gem 'bundler-audit', '0.6.1'
-  gem 'database_cleaner', '1.7.0' # Cleans up database between tests
-  gem 'dotenv-rails', '2.6.0'
+  gem 'database_cleaner', '1.8.3' # Cleans up database between tests
+  gem 'dotenv-rails', '2.7.5'
   gem 'eslintrb', '2.1.0'
-  gem 'json', '2.1.0'
+  gem 'json', '2.3.0'
   gem 'license_finder', '5.6.2'
   gem 'mdl', '0.4.0'
   gem 'pronto', '0.10.0'
@@ -86,11 +86,11 @@ end
 # The "fake_production" environment is very much like production, however,
 # we enable a few debug tools to help us find "production-only" bugs.
 group :fake_production, :development, :test do
-  gem 'pry-byebug', '3.6.0'
+  gem 'pry-byebug', '3.8.0'
 end
 
 group :development do
-  gem 'bootsnap', '1.4.0' # Speed up boot via caches
+  gem 'bootsnap', '1.4.6' # Speed up boot via caches
   # gem 'fasterer', '0.3.2' # Provide speed recommendations - run 'fasterer'
   # Waiting for Ruby 2.4 support: https://github.com/seattlerb/ruby_parser/issues/239
   gem 'traceroute', '0.6.2' # Adds 'rake traceroute' command to check routes
@@ -100,16 +100,16 @@ end
 
 group :test do
   gem 'capybara-selenium', '0.0.6', require: false
-  gem 'capybara-slow_finder_errors', '0.1.4', require: false
-  gem 'codecov', '0.1.14', require: false
-  gem 'minitest-rails-capybara', '3.0.1', require: false
+  gem 'capybara-slow_finder_errors', '0.1.5', require: false
+  gem 'codecov', '0.1.16', require: false
+  gem 'minitest-rails-capybara', '3.0.2', require: false
   gem 'minitest-reporters', '1.3.6', require: false
   gem 'minitest-retry', '0.1.9', require: false # Avoid Capybara false positives
   gem 'rails-controller-testing', '1.0.4' # need to require this one
-  gem 'selenium-webdriver', '3.141.0', require: false
-  gem 'simplecov', '0.16.1', require: false
+  gem 'selenium-webdriver', '3.142.7', require: false
+  gem 'simplecov', '0.18.5', require: false
   gem 'webdrivers', '4.1.1', require: false
-  gem 'webmock', '3.6.2', require: false
+  gem 'webmock', '3.8.2', require: false
 end
 
 group :production do

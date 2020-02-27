@@ -67,6 +67,10 @@ group :development, :test do
   gem 'dotenv-rails', '2.7.5'
   gem 'eslintrb', '2.1.0'
   gem 'json', '2.3.0'
+  # Note: updating license_finder to 6.X requires changing all uses of the
+  # term "whitelist" to "permit". Also, the version of thor it requires
+  # requires bundler-audit >0.6.1 (which is expected but yet available at the
+  # time this text is being written).
   gem 'license_finder', '5.6.2'
   gem 'mdl', '0.4.0'
   gem 'pronto', '0.10.0'
@@ -108,7 +112,7 @@ group :test do
   gem 'rails-controller-testing', '1.0.4' # need to require this one
   gem 'selenium-webdriver', '3.142.7', require: false
   gem 'simplecov', '0.18.5', require: false
-  gem 'webdrivers', '4.1.1', require: false
+  gem 'webdrivers', '4.2.0', require: false
   gem 'webmock', '3.8.2', require: false
 end
 

@@ -25,7 +25,7 @@ gem 'imagesLoaded_rails', '4.1.0' # JavaScript - enable wait for image load
 gem 'jbuilder', '2.10.0' # Template mechanism for JSON format results
 gem 'jquery-rails', '4.3.5' # JavaScript jQuery library (for Rails)
 gem 'jquery-ui-rails', '6.0.1' # JavaScript jQueryUI library (for Rails)
-gem 'lograge', '0.10.0' # Simplify logs
+gem 'lograge', '0.11.2' # Simplify logs
 gem 'mail', '2.7.1' # Ruby mail handler
 gem 'octokit', '4.16.0' # GitHub's official Ruby API
 gem 'omniauth-github', '1.4.0' # Authentication to GitHub (get project info)

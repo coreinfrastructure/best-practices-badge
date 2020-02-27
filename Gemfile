@@ -51,7 +51,7 @@ gem 'rack-cors', '1.0.5' # Enable CORS so JavaScript clients can get JSON
 gem 'rack-headers_filter', '0.0.1' # Filter out "dangerous" headers
 gem 'rails', '5.2.2.1' # Our web framework
 gem 'rails-i18n', '5.1.3' # Localizations for Rails built-ins
-gem 'redcarpet', '3.4.0' # Process markdown in form textareas (justifications)
+gem 'redcarpet', '3.5.0' # Process markdown in form textareas (justifications)
 gem 'sass-rails', '5.0.7', require: false
 gem 'scout_apm', '2.4.21' # Monitor for memory leaks
 gem 'secure_headers', '6.3.0' # Add hardening measures to HTTP headers

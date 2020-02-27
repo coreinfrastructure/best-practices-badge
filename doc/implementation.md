@@ -1190,7 +1190,9 @@ presented to users is stored in "config/locales/en.yml".
 To send the English text to the translators for other languages, and
 copy those translations into the "config/locales" directory, run:
 
+~~~~sh
     rake translation:sync
+~~~~
 
 ## Cleaning up development environment storage space
 
@@ -1203,7 +1205,7 @@ If so, here are some steps you can take:
 The file log/test.log, in particular, gets huge if you
 routinely run tests locally.
 
-~~~~
+~~~~sh
     rm log/*.log
 ~~~~
 

@@ -71,7 +71,7 @@ group :development, :test do
   # requires bundler-audit >0.6.1 (which is expected but yet available at the
   # time this text is being written).
   gem 'license_finder', '5.6.2'
-  gem 'mdl', '0.4.0'
+  gem 'mdl', '0.9.0'
   gem 'pronto', '0.10.0'
   # TODO: Use pronto-railroader, once there is one.
   # gem 'pronto-brakeman', '0.9.1'

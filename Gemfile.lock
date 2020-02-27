@@ -219,7 +219,7 @@ GEM
       builder
       minitest (>= 5.0)
       ruby-progressbar
-    minitest-retry (0.1.9)
+    minitest-retry (0.2.0)
       minitest (>= 5.0)
     mixlib-cli (1.7.0)
     mixlib-config (2.2.18)
@@ -480,7 +480,7 @@ DEPENDENCIES
   mdl (= 0.4.0)
   minitest-rails-capybara (= 3.0.2)
   minitest-reporters (= 1.3.6)
-  minitest-retry (= 0.1.9)
+  minitest-retry (= 0.2.0)
   octokit (= 4.16.0)
   omniauth-github (= 1.4.0)
   omniauth-rails_csrf_protection!

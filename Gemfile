@@ -61,7 +61,7 @@ gem 'will_paginate', '3.3.0' # Paginate results (next/previous)
 
 group :development, :test do
   gem 'awesome_print', '1.8.0' # Pretty print Ruby objects
-  gem 'bullet', '5.9.0' # Avoid n+1 queries
+  gem 'bullet', '6.1.0' # Avoid n+1 queries
   gem 'bundler-audit', '0.6.1'
   gem 'database_cleaner', '1.8.3' # Cleans up database between tests
   gem 'dotenv-rails', '2.7.5'

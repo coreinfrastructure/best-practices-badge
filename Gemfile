@@ -45,7 +45,7 @@ gem 'paleta', '0.3.0' # Color manipulation, used for badges
 gem 'paper_trail', '9.0.1' # Record previous versions of project data
 gem 'pg', '1.2.2' # PostgreSQL database, used for data storage
 gem 'pg_search', '2.3.2' # PostgreSQL full-text search
-gem 'puma', '3.12.2' # Faster webserver; recommended by Heroku
+gem 'puma', '4.3.2' # Faster webserver; recommended by Heroku
 gem 'rack-attack', '5.4.2' # Implement rate limiting
 gem 'rack-cors', '1.0.5' # Enable CORS so JavaScript clients can get JSON
 gem 'rack-headers_filter', '0.0.1' # Filter out "dangerous" headers

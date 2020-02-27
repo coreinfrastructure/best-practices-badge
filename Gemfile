@@ -16,7 +16,6 @@ gem 'bootstrap-social-rails', '4.12.0'
 gem 'bootstrap-will_paginate', '1.0.0'
 gem 'bootstrap_form', '2.7.0'
 gem 'chartkick', '3.3.1' # Chart project_stats
-gem 'coffee-rails', '4.2.2', require: false # CoffeeScript Javascript preproc
 gem 'fastly-rails', '0.8.0'
 gem 'font-awesome-rails', '4.7.0.5'
 gem 'http_accept_language', '2.1.1' # Determine user's preferred locale
@@ -106,6 +105,13 @@ group :test do
   gem 'capybara-selenium', '0.0.6', require: false
   gem 'capybara-slow_finder_errors', '0.1.5', require: false
   gem 'codecov', '0.1.16', require: false
+  # Note: We should eventually remove minitest-rails-capybara, and
+  # switch completely over to using Rails System Tests instead. Statement:
+  # "minitest-rails-capybara support ends with minitest-rails 3.x.  If you
+  # want to use minitest-rails 5.1+ you should transition to system tests."
+  # https://github.com/blowmage/minitest-rails-capybara/issues/44
+  # https://blowmage.com/2019/06/18/minitest-rails-releases
+  # https://guides.rubyonrails.org/testing.html
   gem 'minitest-rails-capybara', '3.0.2', require: false
   gem 'minitest-reporters', '1.4.2', require: false
   gem 'minitest-retry', '0.2.0', require: false # Avoid Capybara false positives

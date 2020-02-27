@@ -47,7 +47,7 @@ gem 'pg', '1.2.2' # PostgreSQL database, used for data storage
 gem 'pg_search', '2.3.2' # PostgreSQL full-text search
 gem 'puma', '4.3.2' # Faster webserver; recommended by Heroku
 gem 'rack-attack', '5.4.2' # Implement rate limiting
-gem 'rack-cors', '1.0.5' # Enable CORS so JavaScript clients can get JSON
+gem 'rack-cors', '1.1.1' # Enable CORS so JavaScript clients can get JSON
 gem 'rack-headers_filter', '0.0.1' # Filter out "dangerous" headers
 gem 'rails', '5.2.2.1' # Our web framework
 gem 'rails-i18n', '5.1.3' # Localizations for Rails built-ins

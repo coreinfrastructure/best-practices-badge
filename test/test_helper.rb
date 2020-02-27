@@ -124,6 +124,20 @@ end
 driver = ENV['DRIVER'].try(:to_sym)
 Capybara.javascript_driver = driver.present? ? driver : :headless_chrome
 
+# By default newer versions of Capybara have the annoying habit of
+# sending this in the middle of a test:
+# > Capybara starting Puma...
+# > * Version 3.12.2 , codename: Llamas in Pajamas
+# > * Min threads: 0, max threads: 4
+# > * Listening on tcp://127.0.0.1:31337
+# This makes it hard to see the test status, so quiet it per:
+# Capybara.server = :puma, { Silent: true }
+# NOTE: This forces Capybara's server to be Puma; if the production server
+# is something else, you might want to change this. For more info, see:
+# https://github.com/rails/rails/issues/28109
+# https://github.com/rspec/rspec-rails/issues/1897
+Capybara.server = :puma, { Silent: true }
+
 module ActiveSupport
   class TestCase
     # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical

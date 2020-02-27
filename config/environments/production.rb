@@ -176,21 +176,25 @@ Rails.application.configure do
       end
     end
 
-  # As a failsafe, trigger an exception if the response just hangs for
+  # The timeout used by Rack::Timeout is not set here (any more);
+  # it is set via the environment variable RACK_TIMEOUT_SERVICE_TIMEOUT.
+  # For more on controlling timeout-related times, see:
+  # https://github.com/sharpstone/rack-timeout
+  #
+  # As a failsafe, we trigger an exception if the response just hangs for
   # too long.  We only do this in production, because it's not
   # supposed to happen in normal use - this is simply an automatic
   # recovery mechanism if things get stuck.  We don't do this in test or
   # development, because it interferes with their purposes.
-  # The "use" form is preferred, but it doesn't actually work when placed
-  # in this file, so we'll just set the timeout directly.
-  # Ignore exceptions - in fake_production this will fail.  That's good,
-  # because we do *not* want timeouts during a debug session.
+  # This call will fail in fake_production, so we ignore the exception.
   # rubocop:disable Lint/HandleExceptions
   begin
-    Rack::Timeout.service_timeout = 30 # seconds
+    # Unfortunately Rack::Timeout doesn't provide a lot of control over logging.
+    # What it provides (now) is described here:
+    # https://github.com/sharpstone/rack-timeout/blob/master/doc/logging.md
     # The timeout reports are really noisy, and don't seem to help debug
     # typical problems (if anything they get in the way).  Disable them.
-    Rack::Timeout.unregister_state_change_observer(:logger)
+    Rack::Timeout::Logger.disable
   rescue NameError
     # Do nothing if it's unavailable (this happens if we didn't load the gem)
   end

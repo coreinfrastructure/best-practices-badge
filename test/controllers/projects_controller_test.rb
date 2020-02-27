@@ -667,6 +667,10 @@ class ProjectsControllerTest < ActionController::TestCase
     @project_two.reload
     assert_not_equal @project_two.repo_url, old_repo_url
     assert_equal @project_two.repo_url, new_repo_url
+    # Check that PaperTrail properly recorded the old version
+    assert_equal 'update', @project_two.versions.last.event
+    assert_equal @project_two.user.id, @project_two.versions.last.whodunnit.to_i
+    assert_equal old_repo_url, @project_two.versions.last.reify.repo_url
   end
 
   test 'admin can change other users non-blank repo_url' do

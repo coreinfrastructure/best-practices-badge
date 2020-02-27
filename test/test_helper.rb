@@ -138,6 +138,20 @@ Capybara.javascript_driver = driver.present? ? driver : :headless_chrome
 # https://github.com/rspec/rspec-rails/issues/1897
 Capybara.server = :puma, { Silent: true }
 
+# NOTE: We *could* speed up test execution by disabling PaperTrail
+# except in cases where we check PaperTrail results. PaperTrail records all
+# project creation and change events (enabling you to see older versions),
+# so in some cases Papertrail slows tests slightly.  To do this, see:
+# https://github.com/paper-trail-gem/paper_trail
+# However, we have intentionally chosen to *not* do that.
+# Where reasonable we have tried to keep the test environment
+# the *same* as the production environment where it's reasonable to do so;
+# every difference can hide a problem from our tests.
+# The tests run fast enough as it is, and avoiding problems due to such
+# differences is more important. At the least, we're making sure that
+# PaperTrail doesn't cause a crash in the various tests, and that's worth
+# checking.
+
 module ActiveSupport
   class TestCase
     # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical

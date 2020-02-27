@@ -16,7 +16,7 @@ class Project < ApplicationRecord
   using StringRefinements
   using SymbolRefinements
 
-  include PgSearch # PostgreSQL-specific text search
+  include PgSearch::Model # PostgreSQL-specific text search
 
   # When did we add met_justification_required?
   STATIC_ANALYSIS_JUSTIFICATION_REQUIRED_DATE =

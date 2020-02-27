@@ -107,7 +107,7 @@ group :test do
   gem 'capybara-slow_finder_errors', '0.1.5', require: false
   gem 'codecov', '0.1.16', require: false
   gem 'minitest-rails-capybara', '3.0.2', require: false
-  gem 'minitest-reporters', '1.3.6', require: false
+  gem 'minitest-reporters', '1.4.2', require: false
   gem 'minitest-retry', '0.2.0', require: false # Avoid Capybara false positives
   gem 'rails-controller-testing', '1.0.4' # need to require this one
   gem 'selenium-webdriver', '3.142.7', require: false

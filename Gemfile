@@ -96,7 +96,7 @@ group :development do
   gem 'bootsnap', '1.4.6' # Speed up boot via caches
   # gem 'fasterer', '0.3.2' # Provide speed recommendations - run 'fasterer'
   # Waiting for Ruby 2.4 support: https://github.com/seattlerb/ruby_parser/issues/239
-  gem 'traceroute', '0.6.2' # Adds 'rake traceroute' command to check routes
+  gem 'traceroute', '0.8.0' # Adds 'rake traceroute' command to check routes
   gem 'translation', '1.20' # translation.io - translation service
   gem 'web-console', '3.7.0' # Debugging tool for Ruby on Rails apps
 end

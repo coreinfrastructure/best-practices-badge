@@ -374,7 +374,8 @@ GEM
     sawyer (0.8.2)
       addressable (>= 2.3.5)
       faraday (> 0.8, < 2.0)
-    scout_apm (2.4.21)
+    scout_apm (2.6.6)
+      parser
     secure_headers (6.3.0)
     selenium-webdriver (3.142.7)
       childprocess (>= 0.5, < 4.0)
@@ -500,7 +501,7 @@ DEPENDENCIES
   rubocop (= 0.52.1)
   ruby-graphviz (= 1.2.4)
   sass-rails (= 5.1.0)
-  scout_apm (= 2.4.21)
+  scout_apm (= 2.6.6)
   secure_headers (= 6.3.0)
   selenium-webdriver (= 3.142.7)
   simplecov (= 0.18.5)

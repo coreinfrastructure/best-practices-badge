@@ -6,41 +6,44 @@
 
 require 'test_helper'
 
-# TODO: ActionController::TestCase is obsolete. This should switch to using
-# ActionDispatch::IntegrationTest and then remove rails-controller-testing.
-# See: https://github.com/rails/rails/issues/22496
-class ProjectStatsControllerTest < ActionController::TestCase
+# rubocop:disable Metrics/ClassLength
+class ProjectStatsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @project_stat = project_stats(:one)
   end
 
   test 'should get index' do
-    get :index, params: { locale: :en }
+    get '/en/project_stats'
     assert_response :success
-    assert_not_nil assigns(:project_stats)
     assert @response.body.include?('All projects')
+    assert @response.body.include?(
+      '<h2>Projects with badge entry activity in last 30 days</h2>'
+    )
     # This isn't normally shown:
     refute @response.body.include?('Percentage of projects earning badges')
   end
 
   test 'should get index as admin' do
     log_in_as(users(:admin_user))
-    get :index, params: { locale: :en }
+    get '/en/project_stats'
     assert_response :success
-    assert_not_nil assigns(:project_stats)
     assert @response.body.include?('All projects')
+    assert @response.body.include?(
+      '<h2>Projects with badge entry activity in last 30 days</h2>'
+    )
     assert @response.body.include?('As an admin, you may also see')
   end
 
-  test 'should get less-common stats on request' do
-    get :index, params: { locale: :en, type: 'uncommon' }
+  test 'should get uncommon stats on request' do
+    get '/en/project_stats?type=uncommon'
+    assert @response.body.include?('Daily badge entry activity')
     assert @response.body.include?('Percentage of projects earning badges')
   end
 
   test 'should get index, CSV format' do
-    get :index, format: :csv, params: { locale: :en }
+    get '/en/project_stats.csv'
     assert_response :success
-    contents = CSV.parse(response.body, headers: true)
+    contents = CSV.parse(@response.body, headers: true)
     assert_equal 'id', contents.headers[0]
     assert_equal %w[
       id created_at percent_ge_0
@@ -58,15 +61,16 @@ class ProjectStatsControllerTest < ActionController::TestCase
     assert_equal '19', contents[1]['percent_ge_0']
   end
 
-  test 'should get new' do
-    assert_raises Object do
-      get :new
+  test 'should NOT be able to get new' do
+    assert_raises AbstractController::ActionNotFound do
+      get '/en/project_stats/new'
     end
   end
 
-  test 'should NOT create project_stat' do
+  test 'should NOT be able create project_stat' do
+    log_in_as(users(:admin_user))
     assert_raises AbstractController::ActionNotFound do
-      post :create, params: {
+      post '/en/project_stats', params: {
         project_stat: {
           percent_ge_0: @project_stat.percent_ge_0,
           percent_ge_25: @project_stat.percent_ge_25,
@@ -76,45 +80,46 @@ class ProjectStatsControllerTest < ActionController::TestCase
           percent_ge_100: @project_stat.percent_ge_100,
           created_since_yesterday: @project_stat.created_since_yesterday,
           updated_since_yesterday: @project_stat.updated_since_yesterday
-        },
-        locale: :en
+        }
       }
     end
   end
 
   test 'should show project_stat' do
-    get :show, params: { id: @project_stat, locale: :de }
+    get "/de/project_stats/#{@project_stat.id}"
     assert_response :success
   end
 
   test 'should NOT get edit' do
-    assert_raises Object do
-      get :edit, params: { id: @project_stat, locale: :de }
+    assert_raises AbstractController::ActionNotFound do
+      get "/de/project_stats/#{@project_stat.id}/edit"
     end
   end
 
   test 'should NOT update project_stat' do
+    log_in_as(users(:admin_user))
     assert_raises AbstractController::ActionNotFound do
-      patch :update, params: {
+      patch "/en/project_stats/#{@project_stat.id}", params: {
         id: @project_stat,
-        project_stat:
-              {
-                percent_ge_0: @project_stat.percent_ge_0,
-                percent_ge_25: @project_stat.percent_ge_25,
-                percent_ge_50: @project_stat.percent_ge_50,
-                percent_ge_75: @project_stat.percent_ge_75,
-                percent_ge_90: @project_stat.percent_ge_90,
-                percent_ge_100: @project_stat.percent_ge_100,
-                created_since_yesterday: @project_stat.created_since_yesterday,
-                updated_since_yesterday: @project_stat.updated_since_yesterday
-              }
+        project_stat: {
+          percent_ge_0: @project_stat.percent_ge_0,
+          percent_ge_25: @project_stat.percent_ge_25,
+          percent_ge_50: @project_stat.percent_ge_50,
+          percent_ge_75: @project_stat.percent_ge_75,
+          percent_ge_90: @project_stat.percent_ge_90,
+          percent_ge_100: @project_stat.percent_ge_100,
+          created_since_yesterday: @project_stat.created_since_yesterday,
+          updated_since_yesterday: @project_stat.updated_since_yesterday
+        }
       }
     end
   end
 
   test 'should NOT destroy project_stat' do
+    log_in_as(users(:admin_user))
     assert_raises AbstractController::ActionNotFound do
-      delete :destroy, params: { id: @project_stat, locale: :en }
+      delete "/en/project_stats/#{@project_stat.id}"
     end
   end
 end
+# rubocop:enable Metrics/ClassLength

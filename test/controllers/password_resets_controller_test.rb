@@ -91,7 +91,8 @@ class PasswordResetsControllerTest < ActionDispatch::IntegrationTest
     assert_not flash.empty?
     assert_not user_logged_in?
     assert_redirected_to login_url(locale: :en)
-    # TODO: Ensure that password actually set
+    # Ensure that password is actually set - reload record and check it!
+    assert @user.reload.authenticated?(:password, 'foo1234!')
   end
   # rubocop:enable Metrics/BlockLength
 

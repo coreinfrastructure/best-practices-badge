@@ -1453,4 +1453,68 @@ http_interactions:
         License","spdx_id":"MIT","url":"https://api.github.com/licenses/mit","node_id":"MDc6TGljZW5zZTEz"},"forks":0,"open_issues":0,"watchers":0,"default_branch":"master","permissions":{"admin":true,"push":true,"pull":true}}]'
     http_version: 
   recorded_at: Tue, 11 Feb 2020 18:39:29 GMT
-recorded_with: VCR 4.0.0
+- request:
+    method: get
+    uri: https://chromedriver.storage.googleapis.com/LATEST_RELEASE_75.0.3770
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - chromedriver.storage.googleapis.com
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      X-Guploader-Uploadid:
+      - AEnB2UpxMI8Sj0MQSJOZkfj8ktp4qKD7wZr2pL0xeuxmw5p6KLxA1OT0Ws2Au7SRr3lCHhCY8zgWmK7yN40sqTxdz8cz3oKaMg
+      Expires:
+      - Mon, 02 Mar 2020 02:27:19 GMT
+      Date:
+      - Mon, 02 Mar 2020 01:27:19 GMT
+      Cache-Control:
+      - public, max-age=3600
+      Last-Modified:
+      - Fri, 12 Jul 2019 18:06:29 GMT
+      Etag:
+      - '"e30ba48e1bad76a15b4b516bd2f501f5"'
+      X-Goog-Generation:
+      - '1562954789734819'
+      X-Goog-Metageneration:
+      - '1'
+      X-Goog-Stored-Content-Encoding:
+      - identity
+      X-Goog-Stored-Content-Length:
+      - '13'
+      Content-Type:
+      - text/plain
+      Content-Language:
+      - en
+      X-Goog-Hash:
+      - crc32c=Ot/Vpw==
+      - md5=4wukjhutdqFbS1Fr0vUB9Q==
+      X-Goog-Storage-Class:
+      - STANDARD
+      Accept-Ranges:
+      - bytes
+      Content-Length:
+      - '13'
+      Server:
+      - UploadServer
+      Alt-Svc:
+      - quic=":443"; ma=2592000; v="46,43",h3-Q050=":443"; ma=2592000,h3-Q049=":443";
+        ma=2592000,h3-Q048=":443"; ma=2592000,h3-Q046=":443"; ma=2592000,h3-Q043=":443";
+        ma=2592000
+    body:
+      encoding: UTF-8
+      string: 75.0.3770.140
+    http_version: 
+  recorded_at: Mon, 02 Mar 2020 01:27:19 GMT
+recorded_with: VCR 5.0.0

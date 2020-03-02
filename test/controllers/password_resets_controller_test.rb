@@ -60,6 +60,35 @@ class PasswordResetsControllerTest < ActionDispatch::IntegrationTest
     follow_redirect!
     assert_select(+'input[name=email][type=hidden][value=?]', user.email)
 
+    # No parameters - reject it. This could cause a nil dereference,
+    # due to attempting to dereference [:user][:password], and we want to
+    # ensure we don't try to do that.
+    # This should never happen in normal use, since we don't generate such
+    # URLs, so we just redirect to root_url.. test for that.
+    put "/en/password_resets/#{user.reset_token}"
+    assert_redirected_to root_url(locale: 'en')
+    follow_redirect!
+
+    # No "user" value - reject it. This could cause a nil dereference,
+    # due to attempting to dereference [:user][:password], and we want to
+    # ensure we don't try to do that.
+    put "/en/password_resets/#{user.reset_token}", params: {
+      email: user.email
+    }
+    assert @response.body.include?('Password Password can&#39;t be empty')
+
+    # A "user" value without a password - reject it.
+    # This could cause a nil dereference,
+    # due to attempting to dereference [:user][:password], and we want to
+    # ensure we don't try to do that.
+    put "/en/password_resets/#{user.reset_token}", params: {
+      email: user.email,
+      user: {
+        junk:              'junk'
+      }
+    }
+    assert @response.body.include?('Password can&#39;t be empty')
+
     # Unequal password & confirmation should be rejected
     put "/en/password_resets/#{user.reset_token}", params: {
       email: user.email,
@@ -70,7 +99,7 @@ class PasswordResetsControllerTest < ActionDispatch::IntegrationTest
     }
     assert_select 'div#error_explanation'
 
-    # Empty password should be rejected.
+    # Empty password - send it back
     patch "/en/password_resets/#{user.reset_token}", params: {
       email: user.email,
       user: {

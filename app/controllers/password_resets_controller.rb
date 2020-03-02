@@ -12,7 +12,7 @@ class PasswordResetsController < ApplicationController
   def new; end
 
   def create
-    @user = User.find_by(email: params[:password_reset][:email])
+    @user = User.find_by(email: nested_params(:password_reset, :email))
     if @user
       # Note: We send the password reset to the email address originally
       # created by the *original* user, and *not* to the requester
@@ -30,7 +30,8 @@ class PasswordResetsController < ApplicationController
   def edit; end
 
   def update
-    if params[:user][:password].empty?
+    new_password = nested_params(:user, :password)
+    if new_password.nil? || new_password == ''
       @user.errors.add(:password, t('password_resets.password_empty'))
       render 'edit'
     elsif @user.update_attributes(user_params)
@@ -77,5 +78,13 @@ class PasswordResetsController < ApplicationController
 
     flash[:danger] = t('password_resets.reset_expired')
     redirect_to new_password_reset_url
+  end
+
+  # Return params[outer][inner] but handle nil gracefully by returning nil.
+  # This makes it easier to avoid nil dereferences.
+  def nested_params(outer, inner)
+    return if params.nil? || !params.key?(outer)
+    return unless params[outer].key?(inner)
+    params[outer][inner]
   end
 end

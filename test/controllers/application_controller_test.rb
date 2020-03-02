@@ -7,10 +7,10 @@
 require 'test_helper'
 require 'ipaddr'
 
-# TODO: ActionController::TestCase is obsolete. This should switch to using
-# ActionDispatch::IntegrationTest and then remove rails-controller-testing.
-# See: https://github.com/rails/rails/issues/22496
-class ApplicationControllerTest < ActionController::TestCase
+class ApplicationControllerTest < ActionDispatch::IntegrationTest
+  # These are special tests for how the ApplicationController works,
+  # in particular for handling IP addresses.
+
   test 'fail_if_invalid_client_ip works correctly' do
     a = ApplicationController.new
     client_ip = '43.249.72.2'

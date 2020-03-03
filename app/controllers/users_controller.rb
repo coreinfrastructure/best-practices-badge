@@ -127,20 +127,23 @@ class UsersController < ApplicationController
   end
   # rubocop: enable Metrics/AbcSize, Metrics/MethodLength
 
-  # rubocop: disable Metrics/MethodLength
+  # rubocop: disable Metrics/MethodLength, Metrics/AbcSize
   def destroy
-    id_to_delete = params[:id]
+    id_to_delete = params[:id].to_i # quietly becomes 0 if not integer
+    # TODO: Should we show a more graceful output if id is not found?
     user_to_delete = User.find(id_to_delete) # Exception raised if not found
     # Nest transaction to be *certain* we include all in the transaction
     Project.transaction do
       User.transaction do
         if Project.exists?(user_id: id_to_delete)
           flash[:danger] = t('.cannot_delete_user_with_projects')
+          redirect_to user_path(id: id_to_delete)
         else
           # Use destroy! - raises exception on (unexpected) failure, and auto-
           # removes associated ApplicationRecords via the has_many association.
           # There may be ApplicationRecords on this user, because the user
           # cannot necessarily control the rights granted to him by others.
+          log_out if id_to_delete == current_user.id
           user_to_delete.destroy!
           flash[:success] = t('.user_deleted')
           redirect_to root_path
@@ -148,7 +151,7 @@ class UsersController < ApplicationController
       end
     end
   end
-  # rubocop: Metrics/MethodLength
+  # rubocop: enable Metrics/MethodLength, Metrics/AbcSize
 
   def redirect_existing
     if @user.activated
@@ -163,7 +166,7 @@ class UsersController < ApplicationController
   def send_activation
     @user.send_activation_email
     flash[:info] = t('users.new_activation_link_created')
-    redirect_to root_path
+    redirect_to root_path, status: 302
   end
 
   private
@@ -214,7 +217,9 @@ class UsersController < ApplicationController
   # Confirms that this user can edit; sets @user to the user to process
   def redir_unless_current_user_can_edit
     @user = User.find(params[:id])
-    redirect_to(root_path) unless current_user_can_edit(@user)
+    return if current_user_can_edit(@user)
+    flash[:danger] = t('users.edit.inadequate_privileges')
+    redirect_to(root_path)
   end
 
   def regenerate_activation_digest

@@ -153,6 +153,7 @@ Capybara.server = :puma, { Silent: true }
 # checking.
 
 module ActiveSupport
+  # rubocop: disable Metrics/ClassLength
   class TestCase
     # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical
     # order.
@@ -290,5 +291,19 @@ module ActiveSupport
       end
       ''
     end
+
+    # Re-implement assert_select - return true iff a CSS selection
+    # using *selector* contains exactly "contents".
+    # The problem is that assert_select fails oddly when running a global
+    # "rails test" (though it works fine if running "rails test FILENAME").
+    # To solve this, we re-implement assert_select so we have a working version.
+    def my_assert_select(selector, contents)
+      results = css_select(selector)
+      results.each do |selection|
+        return true if selection.content == contents
+      end
+      false
+    end
   end
+  # rubocop: enable Metrics/ClassLength
 end

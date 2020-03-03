@@ -276,6 +276,7 @@ en:
     edit:
       update_user_info: Update User Information
       save_changes: Save changes
+      inadequate_privileges: Sorry, you are not allowed to do that.
     update:
       profile_updated: Profile updated
     show:

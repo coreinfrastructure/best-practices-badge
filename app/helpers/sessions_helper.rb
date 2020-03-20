@@ -216,7 +216,8 @@ module SessionsHelper
   def session_expired
     return true unless session.key?(:time_last_used)
 
-    session[:time_last_used] < SESSION_TTL.ago.utc
+    last_used = session[:time_last_used]
+    last_used < SESSION_TTL.ago.utc
   end
 
   def validate_session_timestamp

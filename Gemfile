@@ -26,7 +26,7 @@ gem 'jquery-rails', '4.3.5' # JavaScript jQuery library (for Rails)
 gem 'jquery-ui-rails', '6.0.1' # JavaScript jQueryUI library (for Rails)
 gem 'lograge', '0.11.2' # Simplify logs
 gem 'mail', '2.7.1' # Ruby mail handler
-gem 'octokit', '4.16.0' # GitHub's official Ruby API
+gem 'octokit', '4.18.0' # GitHub's official Ruby API
 gem 'omniauth-github', '1.4.0' # Authentication to GitHub (get project info)
 #
 # Counter CVE-2015-9284 in omniauth.  Unfortunately, at the time of this
@@ -42,7 +42,7 @@ gem 'omniauth-rails_csrf_protection',
     ref: 'b33ff2e57f7c0530da76da6b4b358218f1e7f230'
 gem 'paleta', '0.3.0' # Color manipulation, used for badges
 gem 'paper_trail', '10.3.1' # Record previous versions of project data
-gem 'pg', '1.2.2' # PostgreSQL database, used for data storage
+gem 'pg', '1.2.3' # PostgreSQL database, used for data storage
 gem 'pg_search', '2.3.2' # PostgreSQL full-text search
 gem 'puma', '4.3.3' # Faster webserver; recommended by Heroku
 gem 'rack-attack', '6.2.2' # Implement rate limiting

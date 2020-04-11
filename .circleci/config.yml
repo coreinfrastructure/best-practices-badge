@@ -8,7 +8,7 @@ jobs:
       CIRCLE_ARTIFACTS: /tmp/circleci-artifacts
       CIRCLE_TEST_REPORTS: /tmp/circleci-test-results
     docker:
-    - image: jdossett/cii-bestpractices:2.6.3-stretch
+    - image: jdossett/cii-bestpractices:2.6.6-stretch
       environment:
         PG_HOST: localhost
         PG_USER: ubuntu
@@ -27,9 +27,9 @@ jobs:
     - restore_cache:
         keys:
         # Find a cache corresponding to this particular Gemfile.lock checksum
-        - v3-dep-{{ checksum "Gemfile.lock" }}
+        - v4-dep-{{ checksum "Gemfile.lock" }}
         # Find the most recently generated cache used
-        - v3-dep-
+        - v4-dep-
     - run:
         name: Update Rubygems
         command: sudo gem update --system --silent
@@ -53,7 +53,7 @@ jobs:
        command: bundle exec rake update_chromedriver
     # Save dependency cache
     - save_cache:
-        key: v3-dep-{{ checksum "Gemfile.lock" }}
+        key: v4-dep-{{ checksum "Gemfile.lock" }}
         paths:
           - vendor/bundle
           - ~/.bundle

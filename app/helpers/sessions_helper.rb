@@ -8,6 +8,9 @@
 module SessionsHelper
   SESSION_TTL = 48.hours # Automatically log off session if inactive this long
   PRODUCTION_HOSTNAME = 'bestpractices.coreinfrastructure.org'
+  GITHUB_PATTERN = %r{
+    \Ahttps://github.com/([A-Za-z0-9_.-]+)/([A-Za-z0-9_.-]+)/?\Z
+  }x
   require 'uri'
 
   # Remove the "locale=value", if any, from the url_query provided
@@ -116,20 +119,15 @@ module SessionsHelper
   # The only way we've found that works for us is to ask GitHub to list the
   # repos this user can control, and then return true if there's a match.
   # The "client" parameter exists to simplify (unit) testing.
-  def github_user_projects_include?(url, client = Octokit::Client)
+  def github_user_can_write?(url, client = Octokit::Client)
+    gh_path = get_github_path(url)
+    return false if gh_path.nil?
     github = client.new access_token: session[:user_token]
-    github.auto_paginate = false
-    page = 1
-    repo_list = github.repos # Read first page of list
-    loop do
-      return false if repo_list.blank?
-      return true if repo_url_in?(repo_list, url)
-      # We should be able to do this, but it doesn't work:
-      # return false if github.last_response.rels[:next].blank?
-      # repo_list = github.last_response.rels[:next].get.data
-      # So we'll retrieve by requesting page numbers instead.
-      page += 1
-      repo_list = github.repos(nil, page: page)
+    gh_user = github.user.login
+    begin
+      github.permission_level(gh_path, gh_user).permission.in?(%w[admin write])
+    rescue Octokit::Forbidden
+      false
     end
   end
 
@@ -179,10 +177,8 @@ module SessionsHelper
   # according to GitHub.  We try to avoid calling GitHub if it is
   # is obviously unnecessary.
   def can_current_user_edit_on_github?(url)
-    current_user.provider == 'github' &&
-      url.present? &&
-      url.starts_with?('https://github.com/') &&
-      github_user_projects_include?(url)
+    current_user.provider == 'github' && valid_github_url?(url) &&
+      github_user_can_write?(url)
   end
 
   def in_development?
@@ -233,6 +229,15 @@ module SessionsHelper
   end
 
   private
+
+  def valid_github_url?(url)
+    url.present? && url.match(GITHUB_PATTERN).present?
+  end
+
+  def get_github_path(url)
+    return unless url.present? && valid_github_url?(url)
+    url.match(GITHUB_PATTERN).captures.join('/')
+  end
 
   # Check if refering url is internal, if so, save it.
   def store_internal_referer

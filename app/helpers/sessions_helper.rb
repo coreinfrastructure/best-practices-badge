@@ -112,23 +112,34 @@ module SessionsHelper
   # says that if you retrieve:
   # GET /repos/:owner/:repo/collaborators/:username/permission
   # If "permission" is write or admin then that user can modify it.
-  # HOWEVER, to use that API you have to have a token that's the admin
-  # of the repo, otherwise you just get a "Bad credentials" message.
-  # So while that *looks* useful, it doesn't work for our situation.
+  # HOWEVER, the use of that API is not allowed with an OAuth token, only
+  # normal access token. So while that *looks* useful, it doesn't work for our
+  # situation.
   #
+  # As of 2020-04-16, retrieving a repo using GitHub repos API (using
+  # https://api.github.com/:owner/:repo) with a users OAuth token will include
+  # a field `permissions`.  We consider a user with `push` permissions an
+  # editor and check for that.
   # The only way we've found that works for us is to ask GitHub to list the
   # repos this user can control, and then return true if there's a match.
   # The "client" parameter exists to simplify (unit) testing.
-  def github_user_can_write?(url, client = Octokit::Client)
-    gh_path = get_github_path(url)
-    return false if gh_path.nil?
+  def github_user_can_push?(url, client = Octokit::Client)
+    github_path = get_github_path(url)
+    return false if github_path.nil?
     github = client.new access_token: session[:user_token]
-    gh_user = github.user.login
     begin
-      github.permission_level(gh_path, gh_user).permission.in?(%w[admin write])
-    rescue Octokit::Forbidden
+      github.repo(github_path).permissions.push
+    # If you suddenly get a lot of 503's most likely github has changed
+    # its API, make this a generic rescue
+    # Disable rubocop - Style/RescueStandardError if that is needed
+    rescue Octokit::NotFound
       false
     end
+  end
+
+  def current_user_is_github_owner?(url)
+    current_user.present? && current_user.provider == 'github' &&
+      session[:github_name] == get_github_owner(url)
   end
 
   # Retrieve list of all GitHub projects, used when displaying
@@ -142,9 +153,7 @@ module SessionsHelper
   # Logs out the current user.
   def log_out
     forget(current_user)
-    session.delete(:user_id)
-    session.delete(:session_id)
-    session.delete(:time_last_used)
+    reset_session
     @current_user = nil
   end
 
@@ -155,7 +164,6 @@ module SessionsHelper
     return false if current_user.nil?
     return true if current_user.admin?
     return true if current_user.id == @project.user_id
-
     false
   end
 
@@ -169,16 +177,16 @@ module SessionsHelper
       project_id: @project.id, user_id: current_user.id
     )
     return true if can_current_user_edit_on_github?(@project.repo_url)
-
     false
   end
 
-  # Returns true iff the current_user can *edit* the @project repo
+  # Returns true iff the current_user can push to the @project repo
   # according to GitHub.  We try to avoid calling GitHub if it is
   # is obviously unnecessary.
   def can_current_user_edit_on_github?(url)
-    current_user.provider == 'github' && valid_github_url?(url) &&
-      github_user_can_write?(url)
+    return false unless current_user.provider == 'github' &&
+      valid_github_url?(url)
+    current_user_is_github_owner?(url) || github_user_can_push?(url)
   end
 
   def in_development?
@@ -230,8 +238,9 @@ module SessionsHelper
 
   private
 
-  def valid_github_url?(url)
-    url.present? && url.match(GITHUB_PATTERN).present?
+  def get_github_owner(url)
+    return unless url.present? && valid_github_url?(url)
+    url.match(GITHUB_PATTERN).captures[0]
   end
 
   def get_github_path(url)
@@ -248,6 +257,10 @@ module SessionsHelper
     return if [login_url, signup_url].include? ref_url
 
     session[:forwarding_url] = ref_url
+  end
+
+  def valid_github_url?(url)
+    url.present? && url.match(GITHUB_PATTERN).present?
   end
 end
 # rubocop:enable Metrics/ModuleLength

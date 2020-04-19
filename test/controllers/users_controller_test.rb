@@ -294,11 +294,13 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert session.key?('user_id') # Current session has a user_id
     assert @other_user.id, session['user_id']
     assert session.key?('session_id') # Current session has a user_id
+    old_session_id = session['session_id']
     assert_difference('User.count', -1) do
       delete "/en/users/#{@other_user.id}"
     end
     refute session.key?('user_id')
-    refute session.key?('session_id')
+    # New session has been initiated
+    assert_not_equal old_session_id, session.key?('session_id')
     assert_redirected_to root_url
     get root_url
     my_assert_select '.alert-success', 'User deleted.'

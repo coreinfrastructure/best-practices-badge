@@ -99,11 +99,6 @@ module SessionsHelper
     cookies.delete(:remember_token)
   end
 
-  # Return true iff an html_url in array repo_list is url.
-  def repo_url_in?(repo_list, url)
-    repo_list.any? { |project| project[:html_url] == url }
-  end
-
   # Return true iff the current user can edit the given url.
   #
   # The GitHub API documentation here:
@@ -120,9 +115,6 @@ module SessionsHelper
   # https://api.github.com/:owner/:repo) with a users OAuth token will include
   # a field `permissions`.  We consider a user with `push` permissions an
   # editor and check for that.
-  # The only way we've found that works for us is to ask GitHub to list the
-  # repos this user can control, and then return true if there's a match.
-  # The "client" parameter exists to simplify (unit) testing.
   def github_user_can_push?(url, client = Octokit::Client)
     github_path = get_github_path(url)
     return false if github_path.nil?
@@ -185,7 +177,7 @@ module SessionsHelper
   # is obviously unnecessary.
   def can_current_user_edit_on_github?(url)
     return false unless current_user.provider == 'github' &&
-      valid_github_url?(url)
+                        valid_github_url?(url)
     current_user_is_github_owner?(url) || github_user_can_push?(url)
   end
 

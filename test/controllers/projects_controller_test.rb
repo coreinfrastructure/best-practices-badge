@@ -672,7 +672,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     log_in_as(@user2, password: 'password1')
     # Verify that we are actually logged in
     assert_equal @user2.id, session[:user_id]
-    new_repo_url = @project_two.repo_url + '_new'
+    new_repo_url = @project.repo_url + '_new'
     patch "/en/projects/#{@project_two.id}", params: {
       project: { repo_url:  new_repo_url }
     }
@@ -717,7 +717,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   test 'admin can change other users non-blank repo_url' do
     log_in_as(@admin)
     assert_not_equal @admin, @project.user
-    new_repo_url = @project_two.repo_url + '_new'
+    new_repo_url = @project.repo_url + '_new'
     patch "/en/projects/#{@project_two.id}", params: { # Invokes "update"
       project: { repo_url:  new_repo_url }
     }

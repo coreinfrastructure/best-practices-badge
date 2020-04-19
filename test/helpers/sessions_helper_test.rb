@@ -66,33 +66,35 @@ class SessionsHelperTest < ActionView::TestCase
                    'https://a.b/projects/1?criteria_level=2&locale=ja', :fr
                  )
   end
-
-  # Test stub for testing github_user_projects_include?
-  class StubOctokitError < StandardError
+  class StubOctokitPermissions
+    attr_reader :push
+    def initialize(admin, push, pull)
+      @admin = admin
+      @push = push
+      @pull = pull
+    end
   end
-  # rubocop: disable Metrics/MethodLength
+  class StubOctokitResult
+    attr_reader :permissions
+    def initialize(admin, push, pull)
+      @permissions = StubOctokitPermissions.new(admin, push, pull)
+    end
+  end
   class StubOctokitClient
     def initialize(**params); end
 
-    def auto_paginate=(value); end
-
-    def repos(_user = nil, **opts)
-      page = opts.fetch(:page, 1)
-      if page == 1
-        [
-          { id: 100, html_url: 'https://github.com/ciitest/junk' },
-          { id: 101, html_url: 'https://github.com/ciitest/foo' }
-        ]
-      elsif page == 2
-        [{ id: 105, html_url: 'https://github.com/ciitest/stuff' }]
-      elsif page == 3
-        []
+    def repo(path, **_opts)
+      if path == 'ciitest/asdf'
+        StubOctokitResult.new(true, true, true)
+      elsif path == 'ciitest2/asdf'
+        StubOctokitResult.new(false, true, true)
+      elsif path == 'ciitest3/asdf'
+        StubOctokitResult.new(false, false, true)
       else
-        raise StubOctokitError
+        raise Octokit::NotFound
       end
     end
   end
-  # rubocop: enable Metrics/MethodLength
 
   # Unit test 'github_user_projects_include?'.
   # Doing integration tests with "real" data is a little dangerous
@@ -100,14 +102,54 @@ class SessionsHelperTest < ActionView::TestCase
   # doesn't have that many, and we don't want to use real users for testing.
   # So we'll stub things out just enough to do a unit test.
   test 'unit test of github_user_projects_include?' do
-    assert github_user_projects_include?(
-      'https://github.com/ciitest/stuff',
-      StubOctokitClient
+    assert github_user_can_push?(
+      'https://github.com/ciitest/asdf', StubOctokitClient
     )
-    assert !github_user_projects_include?(
+    assert github_user_can_push?(
+      'https://github.com/ciitest2/asdf', StubOctokitClient
+    )
+    refute github_user_can_push?(
+      'https://github.com/ciitest3/asdf', StubOctokitClient
+    )
+    refute github_user_can_push?(
       'https://github.com/not-here/not-found',
       StubOctokitClient
     )
+  end
+
+  test 'unit test of get_gethub_owner' do
+    assert_equal 'ciitest',
+                 get_github_owner('https://github.com/ciitest/1234')
+    assert_equal 'asdf-123',
+                 get_github_owner('https://github.com/asdf-123/456')
+    assert_equal 'ciitest2',
+                 get_github_owner('https://github.com/ciitest2/1234')
+    assert_nil get_github_owner('http://githubs.com/asdf/1234')
+  end
+
+  test 'unit test of get_github_path' do
+    assert_equal 'ciitest/1234',
+                 get_github_path('https://github.com/ciitest/1234')
+    assert_equal 'asdf-123/456',
+                 get_github_path('https://github.com/asdf-123/456')
+    assert_equal 'ciitest2/1234',
+                 get_github_path('https://github.com/ciitest2/1234')
+    assert_nil get_github_path('http://githubs.com/asdf/1234')
+  end
+
+  test 'unit test of valid_github_url' do
+    assert valid_github_url? 'https://github.com/asdf/1234/'
+    assert valid_github_url? 'https://github.com/asdf-123_/1234as-/'
+    refute valid_github_url? 'https://github.com/asdf123_/1234%20as-/'
+    refute valid_github_url? 'https://github.com/asdf%20123_/1234as-/'
+    refute valid_github_url? 'https://github.com/asdf123_/1234 as-/'
+    refute valid_github_url? 'https://github.com/asdf 123_/1234as-/'
+    refute valid_github_url? 'https://github.com.more/asdf-123_/1234as-/'
+    refute valid_github_url? 'https://my.github.com/asdf-123_/1234as-/'
+    refute valid_github_url? 'http://github.com/asdf/1234/'
+    refute valid_github_url? 'https://github.com/asdf/1234-/s'
+    refute valid_github_url? 'https://github.com/asdf/1234/?'
+    refute valid_github_url? 'https://githubs.com/asdf/1234/'
   end
 end
 # rubocop: enable Metrics/BlockLength

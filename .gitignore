@@ -49,3 +49,8 @@ license_okay
 
 # Ignore railroader directory
 /railroader/
+
+# Ignore rake and byebug files
+.byebug_history
+.rake_tasks~
+

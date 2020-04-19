@@ -163,9 +163,9 @@ module ActiveSupport
 
     # Add more helper methods to be used by all tests here...
 
-    def configure_omniauth_mock
+    def configure_omniauth_mock(cassette = 'github_login')
       OmniAuth.config.test_mode = true
-      OmniAuth.config.add_mock(:github, omniauth_hash)
+      OmniAuth.config.add_mock(:github, omniauth_hash(cassette))
     end
 
     def contents(file_name)
@@ -256,21 +256,21 @@ module ActiveSupport
       defined?(post_via_redirect)
     end
 
-    def omniauth_hash
+    def omniauth_hash(cassette)
       {
         'provider' => 'github',
         'uid' => '12345',
-        'credentials' => { 'token' => vcr_oauth_token },
+        'credentials' => { 'token' => vcr_oauth_token(cassette) },
         'info' => {
           'name' => 'CII Test',
           'email' => 'test@example.com',
-          'nickname' => 'CIITheRobot'
+          'nickname' => 'ciitest'
         }
       }
     end
 
-    def vcr_oauth_token
-      github_login_vcr_file = 'test/vcr_cassettes/github_login.yml'
+    def vcr_oauth_token(cassette)
+      github_login_vcr_file = "test/vcr_cassettes/#{cassette}.yml"
       return Null unless File.exist?(github_login_vcr_file)
 
       y = YAML.load_file(github_login_vcr_file)

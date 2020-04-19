@@ -284,12 +284,12 @@
       <div class="center">
       <% if is_disabled %>
         <% if project.show_entry_license? %>
-          <%= t 'projects.show.cc_by_3plus_html', user: project.user_name %>
+          <%= t 'projects.show.cc_by_3plus_html', user: project.user_display_name %>
         <% else %>
           <!-- This is older data and the user didn't indicate anything,
                so the "terms of use" of CII apply, which said that unless
                otherwise noted it's released under CC-BY-3.0 only. -->
-          <%= t 'projects.show.cc_by_3only_html', user: project.user_name %>
+          <%= t 'projects.show.cc_by_3only_html', user: project.user_display_name %>
         <% end %>
       <% else %>
         <%= t 'projects.edit.submit_cc_by_3plus_html' %>

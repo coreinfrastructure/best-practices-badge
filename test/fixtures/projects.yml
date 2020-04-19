@@ -29,7 +29,7 @@ two:
   description: Operating system for Pathfinder rover
   homepage_url: https://www.nasa.gov
   license: MIT
-  repo_url: https://www.nasa.gov/mav
+  repo_url: https://github.com/ciitest/test-repo
   badge_percentage_0: 0
   tiered_percentage: 0
 
@@ -50,7 +50,7 @@ perfect_unjustified:
   name: Unjustified perfect project
   description: The perfect project
   homepage_url: https://www.example.org
-  repo_url: https://www.example.org/code2
+  repo_url: https://github.com/ciitest2/test-repo
   license: MIT
   badge_percentage_0: 86
   badge_percentage_1: 0
@@ -110,7 +110,7 @@ perfect:
   name: Justified perfect project
   description: The perfect project
   homepage_url: https://www.example.org
-  repo_url: https://www.example.org/code5
+  repo_url: https://github.com/ciitest2/test-repo-shared
   implementation_languages: JavaScript, Java, C++ # Handle multiple names
   license: MIT
   badge_percentage_0: 100

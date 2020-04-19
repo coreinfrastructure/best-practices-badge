@@ -90,6 +90,7 @@ class SessionsController < ApplicationController
     user = User.find_by(provider: auth['provider'], uid: auth['uid']) ||
            User.create_with_omniauth(auth)
     session[:user_token] = auth['credentials']['token']
+    session[:github_name] = auth['info']['nickname']
     user.name ||= user.nickname
     successful_login(user)
   end

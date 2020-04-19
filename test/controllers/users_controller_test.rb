@@ -300,7 +300,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     end
     refute session.key?('user_id')
     # New session has been initiated
-    assert_not_equal old_session_id, session.key?('session_id')
+    assert_not_equal old_session_id, session['session_id']
     assert_redirected_to root_url
     get root_url
     my_assert_select '.alert-success', 'User deleted.'

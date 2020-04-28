@@ -939,12 +939,40 @@ This is determined by the method `can_control?`.
 
 "Edit" rights mean you can edit the project entry. If you have
 control rights over a project you also have edit rights.
-In addition, fellow committers on GitHub for that project,
+In addition, fellow committers on GitHub for that project (if on GitHub),
 and users in the `additional_rights` table
 who have their `user_id` listed for that project, get edit rights
 for that project.
+
+If a GitHub user tries to edit a project on GitHub, and the user
+is not the badge owner, we permit edits in the following cases:
+
+1. The user is the repo owner. We can tell this because their login nickname
+   matches the user name of the repo owner on GitHub.
+2. GitHub reports that the user is allowed to edit the project.
+   We determine this (as of 2020-04-16) by using the GitHub repos API
+   https://api.github.com/:owner/:repo and checking the field "permissions".
+   We consider a user with `push` permissions an editor of the project,
+   and thus someone who can edit the badge entry.
+   This request only lists the permissions for that one repo, so this works
+   relatively quickly even if a GitHub user has many permissions.
+   (At one time we asked for a list of all user permissions, but that
+   times out if a user has many permissions, and we didn't really want
+   most of that data anyway.)
+   We trust GitHub to provide correct data if it provides this data,
+   but asking for this data causes delay (as we wait for this response)
+   and there's a small risk that GitHub might stop reporting this data
+   (it is not well-documented).  We've countered those concerns with other
+   steps. In particular, in most cases editors are either badge owners and/or
+   the repo owner, and we check that first. This is faster, and in most
+   cases editing will keep working even if GitHub stops reporting this
+   data. In addition, the `additional_rights` table can always provide
+   this functionality no matter what.
+
 The `additional_rights` table adds support for groups so that they can
-edit project entries when the project is not on GitHub.
+edit project entries in arbitrary cases
+(e.g., when the project is not on GitHub or a user
+is not on GitHub).
 This is determined by the method `can_edit?`.
 
 This means that
@@ -953,9 +981,6 @@ an administrator, by others who can prove that they
 can edit that GitHub repository (if it is on GitHub), and by those
 authorized to edit via the `additional_rights` table.
 Anyone can see the project entry results once they are saved.
-We do require, in the case of a GitHub project entry, that the
-entry creator be logged in via GitHub *and* be someone who can edit that
-project.
 
 We expressly include tests in our test suite
 of our authorization system
@@ -3018,6 +3043,9 @@ believe they are acceptable:
     However, recreating them would cost far more time, and since we can make
     mistakes too it's unlikely that the result would be better. Instead,
     as discussed above, we apply a variety of techniques to manage our risks.
+    For example, we check any direct dependency we might add before adding it,
+    we auto-detect vulnerabilities (that have become publicly known), and
+    have a process that supports rapid update.
 *   *DDoS.*
     We use a variety of techniques to reduce the impact of DDoS attacks.
     These include using a scaleable cloud service,

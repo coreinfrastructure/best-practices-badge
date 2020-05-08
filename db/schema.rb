@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_07_141751) do
+ActiveRecord::Schema.define(version: 2020_05_08_145537) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -367,6 +367,9 @@ ActiveRecord::Schema.define(version: 2020_05_07_141751) do
     t.datetime "lost_silver_at"
     t.datetime "achieved_gold_at"
     t.datetime "lost_gold_at"
+    t.datetime "first_achieved_passing_at"
+    t.datetime "first_achieved_silver_at"
+    t.datetime "first_achieved_gold_at"
     t.index ["achieved_gold_at"], name: "index_projects_on_achieved_gold_at"
     t.index ["achieved_passing_at"], name: "index_projects_on_achieved_passing_at"
     t.index ["achieved_silver_at"], name: "index_projects_on_achieved_silver_at"

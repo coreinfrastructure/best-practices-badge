@@ -317,12 +317,12 @@ class Project < ApplicationRecord
   # Update the badge percentage for a given level (expressed as a number;
   # 0=passing), and update relevant event datetime if needed.
   # It presumes the lower-level percentages (if relevant) are calculated.
-  def update_badge_percentage(level)
+  def update_badge_percentage(level, current_time)
     old_badge_percentage = self["badge_percentage_#{level}".to_sym]
     update_prereqs(level) unless level.to_i.zero?
     self["badge_percentage_#{level}".to_sym] =
       calculate_badge_percentage(level)
-    update_passing_times(level, old_badge_percentage)
+    update_passing_times(level, old_badge_percentage, current_time)
   end
 
   # Compute the 'tiered percentage' value 0..300. This gives partial credit,
@@ -343,8 +343,10 @@ class Project < ApplicationRecord
 
   # Update the badge percentages for all levels.
   def update_badge_percentages
+    # Create a single datetime value so that they are consistent
+    current_time = Time.now.utc
     Project::LEVEL_IDS.each do |level|
-      update_badge_percentage(level)
+      update_badge_percentage(level, current_time)
     end
     update_tiered_percentage # Update the 'tiered_percentage' number 0..300
   end
@@ -360,7 +362,7 @@ class Project < ApplicationRecord
   # We precalculate and store percentages in the database;
   # this speeds up many actions, but it means that a change in the rules
   # doesn't automatically change the precalculated values.
-  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+  # rubocop:disable Metrics/MethodLength
   def self.update_all_badge_percentages(levels)
     raise TypeError, 'levels must be an Array' unless levels.is_a?(Array)
 
@@ -370,20 +372,18 @@ class Project < ApplicationRecord
     Project.skip_callbacks = true
     Project.find_each do |project|
       project.with_lock do
-        need_to_save = false
+        # Create a single datetime value so that they are consistent
+        current_time = Time.now.utc
         levels.each do |level|
-          badge_percentage = "badge_percentage_#{level}".to_sym
-          old_badge_percentage = project[badge_percentage]
-          project.update_badge_percentage(level)
-          project.update_tiered_percentage
-          need_to_save ||= old_badge_percentage != project[badge_percentage]
+          project.update_badge_percentage(level, current_time)
         end
-        project.save!(touch: false) if need_to_save
+        project.update_tiered_percentage
+        project.save!(touch: false)
       end
     end
     Project.skip_callbacks = false
   end
-  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
+  # rubocop:enable Metrics/MethodLength
 
   # The following configuration options are trusted.  Set them to
   # reasonable numbers or accept the defaults.
@@ -574,8 +574,8 @@ class Project < ApplicationRecord
 
   # Update achieved_..._at & lost_..._at fields given level as number
   # rubocop:disable Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity
-  # rubocop:disable Metrics/AbcSize
-  def update_passing_times(level, old_badge_percentage)
+  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  def update_passing_times(level, old_badge_percentage, current_time)
     level_name = COMPLETED_BADGE_LEVELS[level.to_i] # E.g., 'passing'
     current_percentage = self["badge_percentage_#{level}".to_sym]
     # If something is wrong, don't modify anything!
@@ -583,12 +583,16 @@ class Project < ApplicationRecord
     current_percentage_i = current_percentage.to_i
     old_badge_percentage_i = old_badge_percentage.to_i
     if current_percentage_i >= 100 && old_badge_percentage_i < 100
-      self["achieved_#{level_name}_at".to_sym] = Time.now.utc
+      self["achieved_#{level_name}_at".to_sym] = current_time
+      first_achieved_field = "first_achieved_#{level_name}_at".to_sym
+      if self[first_achieved_field].blank? # First time? Set that too!
+        self[first_achieved_field] = current_time
+      end
     elsif current_percentage_i < 100 && old_badge_percentage_i >= 100
-      self["lost_#{level_name}_at".to_sym] = Time.now.utc
+      self["lost_#{level_name}_at".to_sym] = current_time
     end
   end
-  # rubocop:enable Metrics/AbcSize
+  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
   # rubocop:enable Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity
 
   # Given numeric level 1+, set the value of

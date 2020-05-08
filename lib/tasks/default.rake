@@ -17,7 +17,6 @@ task(:default).clear.enhance %w[
   rubocop
   markdownlint
   rails_best_practices
-  railroader
   license_okay
   license_finder_report.html
   whitespace_check
@@ -30,6 +29,8 @@ task(:default).clear.enhance %w[
 ]
 # Temporarily removed fasterer
 # Waiting for Ruby 2.4 support: https://github.com/seattlerb/ruby_parser/issues/239
+# Temporarily removed railroader because of local install problems;
+# it's still run by the CI for every pull request
 
 # Run Continuous Integration (CI) check processes.
 # This is a shorter list; many checks are run by a separate "pronto" task.
@@ -85,8 +86,8 @@ task railroader: %w[railroader/bin/railroader] do
   # sh 'bundle exec railroader --quiet --no-pager'
   # Workaround to run correct version of railroader & its dependencies.
   # We have to set BUNDLE_GEMFILE so bundle works inside the rake task
-  # sh 'cd railroader; BUNDLE_GEMFILE=$(pwd)/Gemfile ' \
-  #    'bundle exec bin/railroader --quiet --no-pager $(dirname $(pwd))'
+  sh 'cd railroader; BUNDLE_GEMFILE=$(pwd)/Gemfile ' \
+     'bundle exec bin/railroader --quiet --no-pager $(dirname $(pwd))'
 end
 
 desc 'Run bundle if needed'

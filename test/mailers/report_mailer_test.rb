@@ -30,9 +30,16 @@ class ReportMailerTest < ActionMailer::TestCase
     # This is a quick sanity test, not an in-depth test.
     # Use 'example.org' per RFC 2606
     ENV['REPORT_MONTHLY_EMAIL'] = 'mytest@example.org'
+    awesome_projects = [
+      [
+        projects(:perfect_passing), projects(:perfect_silver),
+        projects(:perfect)
+      ], [projects(:perfect_silver), projects(:perfect)],
+      [projects(:perfect)]
+    ]
     email = ReportMailer
             .report_monthly_announcement(
-              [@perfect_project], '2015-02',
+              awesome_projects, '2015-02',
               project_stats(:one), project_stats(:two)
             )
             .deliver_now

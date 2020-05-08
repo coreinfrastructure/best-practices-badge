@@ -55,10 +55,11 @@ class Criteria
       @criteria.each_value { |level_data| yield level_data }
     end
 
-    def each_key
-      instantiate if @criteria.blank?
-      @criteria.each_key { |level_key| yield level_key }
-    end
+    # No longer needed. Instead use "Project::LEVEL_IDS.each"
+    # def each_key
+    #   instantiate if @criteria.blank?
+    #   @criteria.each_key { |level_key| yield level_key }
+    # end
 
     # This returns an array of all levels where a particular criterion of
     # a given name is present.

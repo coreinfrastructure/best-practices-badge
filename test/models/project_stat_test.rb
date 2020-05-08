@@ -33,4 +33,30 @@ class ProjectStatTest < ActiveSupport::TestCase
   test 'count including fixtures' do
     assert_equal 3, ProjectStat.count
   end
+
+  test 'ProjectStat.percent_field_name() works correctly' do
+    assert_equal 'percent_ge_0', ProjectStat.percent_field_name(0, 0)
+    assert_equal 'percent_ge_90', ProjectStat.percent_field_name(0, 90)
+    assert_equal 'percent_1_ge_90', ProjectStat.percent_field_name(1, 90)
+    assert_equal 'percent_2_ge_100', ProjectStat.percent_field_name(2, 100)
+  end
+
+  test 'ProjectStat.percent_field_description() works correctly' do
+    assert_equal 'Total Projects', ProjectStat.percent_field_description(0, 0)
+    assert_equal 'Total Projects', ProjectStat.percent_field_description('0', 0)
+    assert_equal 'Passing Projects',
+                 ProjectStat.percent_field_description(0, 100)
+    assert_equal 'Passing Projects',
+                 ProjectStat.percent_field_description('0', 100)
+    assert_equal 'Silver Projects',
+                 ProjectStat.percent_field_description(1, 100)
+    assert_equal 'Gold Projects',
+                 ProjectStat.percent_field_description(2, 100)
+    assert_equal 'Passing Projects, 50%+ to Silver',
+                 ProjectStat.percent_field_description(1, 50)
+    assert_equal 'Silver Projects, 90%+ to Gold',
+                 ProjectStat.percent_field_description(2, 90)
+    assert_equal 'Silver Projects, 90%+ to Gold',
+                 ProjectStat.percent_field_description('2', 90)
+  end
 end

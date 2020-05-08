@@ -4,7 +4,15 @@
 # CII Best Practices badge contributors
 # SPDX-License-Identifier: MIT
 
+# rubocop:disable Metrics/ClassLength
 class ProjectStat < ApplicationRecord
+  # Percentage values that we record as statistics.
+  # We only record percentage "0" for level 0 (passing),
+  # because *all* projects meet at least percentage 0 by definition.
+  # Level 0, percentage 0 *is* stored - it's the total count of all projects.
+  # You can loop over these like this:
+  # # ProjectStat::STAT_VALUES.each do |percentage|
+  # # # next if !level.zero? && percentage.zero?
   STAT_VALUES = %w[0 25 50 75 90 100].freeze
 
   # Note: The constants below are for clarity.  Don't just change them,
@@ -23,7 +31,7 @@ class ProjectStat < ApplicationRecord
       # Count projects at different levels of completion
       STAT_VALUES.each do |completion|
         public_send "percent_ge_#{completion}=", Project.gteq(completion).count
-        next if completion.to_i.zero?
+        next if completion.to_i.zero? # Don't record percentage "0" > level 0
 
         public_send "percent_1_ge_#{completion}=",
                     Project.where(
@@ -128,4 +136,42 @@ class ProjectStat < ApplicationRecord
                .where('created_at <= ?', query_date.end_of_month)
                .reorder(:created_at).last
   end
+
+  # Return the name of the field for a given level 0..2
+  # and percentage (as an integer: 0, 25, 50, 75, 90, or 100).
+  # E.g., given level 1 and percentage 50, return "percent_1_ge_50".
+  # The methods for handling percentage levels in stats are in this
+  # class, because this is the class responsible for them.
+  def self.percent_field_name(level, percentage)
+    level = level.to_i # Force integer representation
+    if level.zero?
+      "percent_ge_#{percentage}"
+    else
+      "percent_#{level}_ge_#{percentage}"
+    end
+  end
+
+  # Return human-readable name of the field for a given level 0..2
+  # and percentage.
+  # They aren't internationalized, since they're used in
+  # system reports instead of user interaction.
+  # rubocop:disable Metrics/MethodLength
+  def self.percent_field_description(level, percentage)
+    return "Bad level #{level}" unless Project::LEVEL_IDS.include?(level.to_s)
+    level_i = level.to_i
+    percentage_i = percentage.to_i
+    if level_i.zero? && percentage_i.zero?
+      'Total Projects'
+    elsif percentage_i == 100
+      "#{I18n.t("projects.form_early.level.#{level}")} Projects"
+    elsif level_i.zero?
+      "In Progress Projects #{percentage}%+"
+    else
+      level_name = I18n.t("projects.form_early.level.#{level}")
+      prev_name = I18n.t("projects.form_early.level.#{level_i - 1}")
+      "#{prev_name} Projects, #{percentage}%+ to #{level_name}"
+    end
+  end
+  # rubocop:enable Metrics/MethodLength
 end
+# rubocop:enable Metrics/ClassLength

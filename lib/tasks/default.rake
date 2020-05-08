@@ -80,12 +80,13 @@ end
 
 desc 'Run railroader'
 task railroader: %w[railroader/bin/railroader] do
+  # TEMPORARY: DISABLE
   # Disable pager, so that "rake" can keep running without halting.
   # sh 'bundle exec railroader --quiet --no-pager'
   # Workaround to run correct version of railroader & its dependencies.
   # We have to set BUNDLE_GEMFILE so bundle works inside the rake task
-  sh 'cd railroader; BUNDLE_GEMFILE=$(pwd)/Gemfile ' \
-     'bundle exec bin/railroader --quiet --no-pager $(dirname $(pwd))'
+  # sh 'cd railroader; BUNDLE_GEMFILE=$(pwd)/Gemfile ' \
+  #    'bundle exec bin/railroader --quiet --no-pager $(dirname $(pwd))'
 end
 
 desc 'Run bundle if needed'

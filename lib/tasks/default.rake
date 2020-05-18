@@ -17,7 +17,6 @@ task(:default).clear.enhance %w[
   rubocop
   markdownlint
   rails_best_practices
-  railroader
   license_okay
   license_finder_report.html
   whitespace_check
@@ -30,6 +29,8 @@ task(:default).clear.enhance %w[
 ]
 # Temporarily removed fasterer
 # Waiting for Ruby 2.4 support: https://github.com/seattlerb/ruby_parser/issues/239
+# Temporarily removed railroader because of local install problems;
+# it's still run by the CI for every pull request
 
 # Run Continuous Integration (CI) check processes.
 # This is a shorter list; many checks are run by a separate "pronto" task.
@@ -80,6 +81,7 @@ end
 
 desc 'Run railroader'
 task railroader: %w[railroader/bin/railroader] do
+  # TEMPORARY: DISABLE
   # Disable pager, so that "rake" can keep running without halting.
   # sh 'bundle exec railroader --quiet --no-pager'
   # Workaround to run correct version of railroader & its dependencies.

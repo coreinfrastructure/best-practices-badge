@@ -1,22 +1,16 @@
-id,created_at,percent_ge_0,percent_ge_25,percent_ge_50,percent_ge_75,percent_ge_90,percent_ge_100,created_since_yesterday,updated_since_yesterday,updated_at,reminders_sent,reactivated_after_reminder,active_projects,active_in_progress,projects_edited,active_edited_projects,active_edited_in_progress
-<%# See: http://nithinbekal.com/posts/rails-csv-export/ %>
 <% require 'csv' -%>
+<%# See: http://nithinbekal.com/posts/rails-csv-export/ -%>
+<%=
+  # Generate headers. This presumes that ActiveRecord's "column_names"
+  # returns a list in the same order that "attributes.values" will.
+  # This code just generates whatever order is convenient, presuming that
+  # receivers will use the CSV heading name (not field position) if they care
+  # about which field they get.
+  # We could use @project_stats[0].attributes.keys, but that would fail
+  # if the database was empty.
+  columns = @project_stats.column_names
+  CSV.generate_line(columns)
+-%>
 <%- @project_stats.each do |stat| -%>
-<%= CSV.generate_line([
-      stat.id, stat.created_at,
-      stat.percent_ge_0, stat.percent_ge_25, stat.percent_ge_50,
-      stat.percent_ge_75, stat.percent_ge_90, stat.percent_ge_100,
-      stat.created_since_yesterday,stat.updated_since_yesterday,
-      stat.updated_at, stat.reminders_sent, stat.reactivated_after_reminder,
-      stat.active_projects, stat.active_in_progress,
-      stat.projects_edited, stat.active_edited_projects,
-      stat.active_edited_in_progress] +
-      (stat.percent_1_ge_25 ?
-      [
-        stat.percent_1_ge_25, stat.percent_1_ge_50,
-        stat.percent_1_ge_75, stat.percent_1_ge_90, stat.percent_1_ge_100,
-        stat.percent_2_ge_25, stat.percent_2_ge_50,
-        stat.percent_2_ge_75, stat.percent_2_ge_90, stat.percent_2_ge_100
-      ] : [])
- ) -%>
+<%=   CSV.generate_line(stat.attributes.values) -%>
 <%- end -%>

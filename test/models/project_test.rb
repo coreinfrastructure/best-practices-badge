@@ -176,6 +176,8 @@ class ProjectTest < ActiveSupport::TestCase
     assert_equal 'Unmet', @project_passing.achieve_silver_status
     assert_equal 'Met', @project_silver.achieve_passing_status
     assert_equal 'Unmet', @project_silver.achieve_silver_status
+    assert @project_silver.achieved_silver_at.blank?
+    assert @project_silver.first_achieved_silver_at.blank?
     Project.update_all_badge_percentages(Criteria.keys)
     assert_equal(
       'Unmet', Project.find(@unjustified_project.id).achieve_passing_status
@@ -186,8 +188,9 @@ class ProjectTest < ActiveSupport::TestCase
     assert_equal(
       'Unmet', Project.find(@project_passing.id).achieve_silver_status
     )
-    assert_equal 'Met', Project.find(@project_silver.id).achieve_passing_status
-    assert_equal 'Met', Project.find(@project_silver.id).achieve_silver_status
+    updated_project = Project.find(@project_silver.id)
+    assert_equal 'Met', updated_project.achieve_passing_status
+    assert_equal 'Met', updated_project.achieve_silver_status
   end
 
   test 'update_prereqs works correctly for level downgrades' do

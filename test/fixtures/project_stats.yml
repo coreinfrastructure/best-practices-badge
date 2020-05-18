@@ -9,6 +9,18 @@ one:
   percent_ge_75: 9
   percent_ge_90: 5
   percent_ge_100: 2
+  percent_1_ge_25: 2
+  percent_1_ge_50: 2
+  percent_1_ge_75: 2
+  percent_1_ge_90: 2
+  percent_1_ge_100: 2
+  percent_2_ge_25: 2
+  percent_2_ge_50: 1
+  percent_2_ge_75: 1
+  percent_2_ge_90: 1
+  percent_2_ge_100: 1
+  reminders_sent: 0
+  reactivated_after_reminder: 0
   created_since_yesterday: 2
   updated_since_yesterday: 1
 
@@ -20,5 +32,17 @@ two:
   percent_ge_75: 9
   percent_ge_90: 5
   percent_ge_100: 2
+  percent_1_ge_25: 2
+  percent_1_ge_50: 2
+  percent_1_ge_75: 2
+  percent_1_ge_90: 2
+  percent_1_ge_100: 2
+  percent_2_ge_25: 2
+  percent_2_ge_50: 1
+  percent_2_ge_75: 1
+  percent_2_ge_90: 1
+  percent_2_ge_100: 1
+  reminders_sent: 0
+  reactivated_after_reminder: 0
   created_since_yesterday: 4
   updated_since_yesterday: 0

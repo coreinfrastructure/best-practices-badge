@@ -40,26 +40,39 @@ class ProjectStatsControllerTest < ActionDispatch::IntegrationTest
     assert @response.body.include?('Percentage of projects earning badges')
   end
 
+  # rubocop:disable Metrics/BlockLength
   test 'should get index, CSV format' do
     get '/en/project_stats.csv'
     assert_response :success
     contents = CSV.parse(@response.body, headers: true)
     assert_equal 'id', contents.headers[0]
-    assert_equal %w[
-      id created_at percent_ge_0
-      percent_ge_25 percent_ge_50 percent_ge_75
-      percent_ge_90 percent_ge_100
-      created_since_yesterday updated_since_yesterday
-      updated_at reminders_sent
-      reactivated_after_reminder active_projects
-      active_in_progress projects_edited
+
+    expected_headers = %w[
+      id percent_ge_0 percent_ge_25 percent_ge_50
+      percent_ge_75 percent_ge_90 percent_ge_100
+      created_since_yesterday updated_since_yesterday created_at
+      updated_at reminders_sent reactivated_after_reminder
+      active_projects active_in_progress projects_edited
       active_edited_projects active_edited_in_progress
-    ], contents.headers
+      percent_1_ge_25 percent_1_ge_50 percent_1_ge_75
+      percent_1_ge_90 percent_1_ge_100 percent_2_ge_25
+      percent_2_ge_50 percent_2_ge_75 percent_2_ge_90
+      percent_2_ge_100 users github_users local_users
+      users_created_since_yesterday users_updated_since_yesterday
+      users_with_projects users_without_projects
+      users_with_multiple_projects users_with_passing_projects
+      users_with_silver_projects users_with_gold_projects
+      additional_rights_entries projects_with_additional_rights
+      users_with_additional_rights
+    ]
+    assert_equal expected_headers, contents.headers
+
     assert_equal 2, contents.size
     assert_equal '13', contents[0]['percent_ge_50']
     assert_equal '20', contents[0]['percent_ge_0']
     assert_equal '19', contents[1]['percent_ge_0']
   end
+  # rubocop:enable Metrics/BlockLength
 
   test 'should NOT be able to get new' do
     assert_raises AbstractController::ActionNotFound do

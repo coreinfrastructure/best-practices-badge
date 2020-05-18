@@ -32,7 +32,21 @@ class Project < ApplicationRecord
   MAX_TEXT_LENGTH = 8192 # Arbitrary maximum to reduce abuse
   MAX_SHORT_STRING_LENGTH = 254 # Arbitrary maximum to reduce abuse
 
+  # All badge level internal names *including* in_progress
+  # NOTE: If you add a new level, modify compute_tiered_percentage
   BADGE_LEVELS = %w[in_progress passing silver gold].freeze
+
+  # All badge level internal names that indicate *completion*,
+  # so COMPLETED_BADGE_LEVELS[0] is 'passing'.
+  # Note: This is the *internal* lowercase name, e.g., for field names.
+  # For *printed* names use t("projects.form_early.level.#{level}")
+  # Note that drop() does NOT mutate the original value.
+  COMPLETED_BADGE_LEVELS = BADGE_LEVELS.drop(1).freeze
+
+  # All badge levels as IDs. Useful for enumerating "all levels" as:
+  # Project::LEVEL_IDS.each do |level| ... end
+  LEVEL_ID_NUMBERS = 0..(COMPLETED_BADGE_LEVELS.length - 1)
+  LEVEL_IDS = LEVEL_ID_NUMBERS.map(&:to_s)
 
   PROJECT_OTHER_FIELDS = %i[
     name description homepage_url repo_url cpe implementation_languages
@@ -300,16 +314,19 @@ class Project < ApplicationRecord
     updated_at >= ENTRY_LICENSE_EXPLICIT_DATE
   end
 
-  # Update the badge percentage for a given level,
-  # and update relevant event datetime if needed.
-  def update_badge_percentage(level)
+  # Update the badge percentage for a given level (expressed as a number;
+  # 0=passing), and update relevant event datetime if needed.
+  # It presumes the lower-level percentages (if relevant) are calculated.
+  def update_badge_percentage(level, current_time)
     old_badge_percentage = self["badge_percentage_#{level}".to_sym]
-    update_prereqs(level) unless level == Criteria.keys[0]
+    update_prereqs(level) unless level.to_i.zero?
     self["badge_percentage_#{level}".to_sym] =
       calculate_badge_percentage(level)
-    update_passing_times(old_badge_percentage) if level == '0'
+    update_passing_times(level, old_badge_percentage, current_time)
   end
 
+  # Compute the 'tiered percentage' value 0..300. This gives partial credit,
+  # but only if you've completed a previous level.
   def compute_tiered_percentage
     if badge_percentage_0 < 100
       badge_percentage_0
@@ -326,10 +343,12 @@ class Project < ApplicationRecord
 
   # Update the badge percentages for all levels.
   def update_badge_percentages
-    Criteria.each_key do |level|
-      update_badge_percentage(level)
+    # Create a single datetime value so that they are consistent
+    current_time = Time.now.utc
+    Project::LEVEL_IDS.each do |level|
+      update_badge_percentage(level, current_time)
     end
-    update_tiered_percentage
+    update_tiered_percentage # Update the 'tiered_percentage' number 0..300
   end
 
   # Return owning user's name for purposes of display.
@@ -343,7 +362,7 @@ class Project < ApplicationRecord
   # We precalculate and store percentages in the database;
   # this speeds up many actions, but it means that a change in the rules
   # doesn't automatically change the precalculated values.
-  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+  # rubocop:disable Metrics/MethodLength
   def self.update_all_badge_percentages(levels)
     raise TypeError, 'levels must be an Array' unless levels.is_a?(Array)
 
@@ -353,20 +372,18 @@ class Project < ApplicationRecord
     Project.skip_callbacks = true
     Project.find_each do |project|
       project.with_lock do
-        need_to_save = false
+        # Create a single datetime value so that they are consistent
+        current_time = Time.now.utc
         levels.each do |level|
-          badge_percentage = "badge_percentage_#{level}".to_sym
-          old_badge_percentage = project[badge_percentage]
-          project.update_badge_percentage(level)
-          project.update_tiered_percentage
-          need_to_save ||= old_badge_percentage != project[badge_percentage]
+          project.update_badge_percentage(level, current_time)
         end
-        project.save!(touch: false) if need_to_save
+        project.update_tiered_percentage
+        project.save!(touch: false)
       end
     end
     Project.skip_callbacks = false
   end
-  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
+  # rubocop:enable Metrics/MethodLength
 
   # The following configuration options are trusted.  Set them to
   # reasonable numbers or accept the defaults.
@@ -458,15 +475,22 @@ class Project < ApplicationRecord
   # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
   # Return which projects should be announced as getting badges in the
-  # month target_month
-  def self.projects_first_passing_in(target_month)
+  # month target_month with level (as a number, 0=passing)
+  def self.projects_first_in(level, target_month)
+    name = COMPLETED_BADGE_LEVELS[level] # field name, e.g. 'passing'
+    # We could omit listing projects which have lost & regained their
+    # badge by adding this line:
+    # .where('lost_#{name}_at IS NULL')
+    # However, it seems reasonable to note projects that have lost their
+    # badge but have since regained it (especially since it could have
+    # happened within this month!). After all, we want to encourage
+    # projects that have lost their badge levels to regain them.
     Project
-      .select('id, name, achieved_passing_at')
-      .where('badge_percentage_0 = 100')
-      .where('achieved_passing_at >= ?', target_month.at_beginning_of_month)
-      .where('achieved_passing_at <= ?', target_month.at_end_of_month)
-      .where('lost_passing_at IS NULL')
-      .reorder('achieved_passing_at')
+      .select("id, name, achieved_#{name}_at")
+      .where("badge_percentage_#{level} >= 100")
+      .where("achieved_#{name}_at >= ?", target_month.at_beginning_of_month)
+      .where("achieved_#{name}_at <= ?", target_month.at_end_of_month)
+      .reorder("achieved_#{name}_at")
   end
 
   def self.recently_reminded
@@ -548,33 +572,50 @@ class Project < ApplicationRecord
     ((portion * 100.0) / total).round
   end
 
-  def update_passing_times(old_badge_percentage)
-    if badge_percentage_0 == 100 && old_badge_percentage < 100
-      self.achieved_passing_at = Time.now.utc
-    elsif badge_percentage_0 < 100 && old_badge_percentage == 100
-      self.lost_passing_at = Time.now.utc
+  # Update achieved_..._at & lost_..._at fields given level as number
+  # rubocop:disable Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity
+  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  def update_passing_times(level, old_badge_percentage, current_time)
+    level_name = COMPLETED_BADGE_LEVELS[level.to_i] # E.g., 'passing'
+    current_percentage = self["badge_percentage_#{level}".to_sym]
+    # If something is wrong, don't modify anything!
+    return if current_percentage.blank? || old_badge_percentage.blank?
+    current_percentage_i = current_percentage.to_i
+    old_badge_percentage_i = old_badge_percentage.to_i
+    if current_percentage_i >= 100 && old_badge_percentage_i < 100
+      self["achieved_#{level_name}_at".to_sym] = current_time
+      first_achieved_field = "first_achieved_#{level_name}_at".to_sym
+      if self[first_achieved_field].blank? # First time? Set that too!
+        self[first_achieved_field] = current_time
+      end
+    elsif current_percentage_i < 100 && old_badge_percentage_i >= 100
+      self["lost_#{level_name}_at".to_sym] = current_time
     end
   end
+  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
+  # rubocop:enable Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity
 
+  # Given numeric level 1+, set the value of
+  # achieve_{previous_level_name}_status to either Met or Unmet, based on
+  # the achievement of the *previous* level. This is a simple way to ensure
+  # that to pass level X when X > 0, you must meet the criteria of level X-1.
+  # We *only* set the field if it currently has a different value.
   # When filling in the prerequisites, we do not fill in the justification
   # for them. The justification is only there as it makes implementing this
   # portion of the code simpler.
-  # rubocop:disable Metrics/AbcSize
   def update_prereqs(level)
-    index = Criteria.keys.index(level)
-    return if index.zero?
+    level = level.to_i
+    return if level <= 0
+    # The following works because BADGE_LEVELS[1] is 'passing', etc:
+    achieved_previous_level = "achieve_#{BADGE_LEVELS[level]}_status".to_sym
 
-    if self["badge_percentage_#{Criteria.keys[index - 1]}".to_sym] >= 100
-      return if self["achieve_#{BADGE_LEVELS[index]}_status".to_sym] == 'Met'
-
-      status = 'Met'
+    if self["badge_percentage_#{level - 1}".to_sym] >= 100
+      return if self[achieved_previous_level] == 'Met'
+      self[achieved_previous_level] = 'Met'
     else
-      return if self["achieve_#{BADGE_LEVELS[index]}_status".to_sym] == 'Unmet'
-
-      status = 'Unmet'
+      return if self[achieved_previous_level] == 'Unmet'
+      self[achieved_previous_level] = 'Unmet'
     end
-    self["achieve_#{BADGE_LEVELS[index]}_status".to_sym] = status
   end
-  # rubocop:enable Metrics/AbcSize
 end
 # rubocop:enable Metrics/ClassLength

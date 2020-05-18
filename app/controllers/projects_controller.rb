@@ -34,7 +34,8 @@ class ProjectsController < ApplicationController
   # These are the only allowed values for "sort" (if a value is provided)
   ALLOWED_SORT =
     %w[
-      id name achieved_passing_at tiered_percentage
+      id name tiered_percentage
+      achieved_passing_at achieved_silver_at achieved_gold_at
       homepage_url repo_url updated_at user_id created_at
     ].freeze
 
@@ -308,17 +309,22 @@ class ProjectsController < ApplicationController
   # rubocop:disable Metrics/MethodLength
   def self.send_monthly_announcement
     consider_today = Time.zone.today
-    month = consider_today.prev_month.strftime('%Y-%m')
-    last_stat_in_prev_month =
-      ProjectStat.last_in_month(consider_today.prev_month)
+    prev_month = consider_today.prev_month
+    month_display = prev_month.strftime('%Y-%m')
+    last_stat_in_prev_month = ProjectStat.last_in_month(prev_month)
     last_stat_in_prev_prev_month =
-      ProjectStat.last_in_month(consider_today.prev_month.prev_month)
-    projects = Project.projects_first_passing_in(consider_today.prev_month)
+      ProjectStat.last_in_month(prev_month.prev_month)
+    projects = Array.new(Project::LEVEL_IDS.size)
+    Project::LEVEL_ID_NUMBERS.each do |level|
+      projects[level] = Project.projects_first_in(level, prev_month)
+    end
     ReportMailer.report_monthly_announcement(
-      projects, month, last_stat_in_prev_month, last_stat_in_prev_prev_month
+      projects, month_display, last_stat_in_prev_month,
+      last_stat_in_prev_prev_month
     )
                 .deliver_now
-    projects.map(&:id) # Return a list of project ids that were reminded.
+    # To simplify certain tests, return list of project ids newly passing
+    projects[0].map(&:id)
   end
   # rubocop:enable Metrics/MethodLength
   private_class_method :send_monthly_announcement

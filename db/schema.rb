@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_27_184707) do
+ActiveRecord::Schema.define(version: 2020_05_08_145537) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -363,14 +363,25 @@ ActiveRecord::Schema.define(version: 2020_01_27_184707) do
     t.text "achieve_silver_justification"
     t.integer "tiered_percentage"
     t.datetime "repo_url_updated_at"
+    t.datetime "achieved_silver_at"
+    t.datetime "lost_silver_at"
+    t.datetime "achieved_gold_at"
+    t.datetime "lost_gold_at"
+    t.datetime "first_achieved_passing_at"
+    t.datetime "first_achieved_silver_at"
+    t.datetime "first_achieved_gold_at"
+    t.index ["achieved_gold_at"], name: "index_projects_on_achieved_gold_at"
     t.index ["achieved_passing_at"], name: "index_projects_on_achieved_passing_at"
+    t.index ["achieved_silver_at"], name: "index_projects_on_achieved_silver_at"
     t.index ["badge_percentage_0"], name: "index_projects_on_badge_percentage_0"
     t.index ["badge_percentage_1"], name: "index_projects_on_badge_percentage_1"
     t.index ["badge_percentage_2"], name: "index_projects_on_badge_percentage_2"
     t.index ["created_at"], name: "index_projects_on_created_at"
     t.index ["homepage_url"], name: "index_projects_on_homepage_url"
     t.index ["last_reminder_at"], name: "index_projects_on_last_reminder_at"
+    t.index ["lost_gold_at"], name: "index_projects_on_lost_gold_at"
     t.index ["lost_passing_at"], name: "index_projects_on_lost_passing_at"
+    t.index ["lost_silver_at"], name: "index_projects_on_lost_silver_at"
     t.index ["name"], name: "index_projects_on_name"
     t.index ["repo_url"], name: "index_projects_on_repo_url"
     t.index ["repo_url"], name: "nonempty_repo_urls", unique: true, where: "((repo_url IS NOT NULL) AND ((repo_url)::text <> ''::text))"

@@ -131,13 +131,14 @@ class ReportMailer < ApplicationMailer
   # We currently only send these out in English, so it's not internationalized
   # (no point in asking the translators to do unnecessary work).
   def report_monthly_announcement(
-    projects, month, last_stat_in_prev_month, last_stat_in_prev_prev_month
+    projects, month_display,
+    last_stat_in_prev_month, last_stat_in_prev_prev_month
   )
     @report_destination = ENV['REPORT_MONTHLY_EMAIL']
     return if @report_destination.blank?
 
     @projects = projects
-    @month = month
+    @month_display = month_display
     @last_stat_in_prev_month = last_stat_in_prev_month
     @last_stat_in_prev_prev_month = last_stat_in_prev_prev_month
     set_standard_headers

@@ -1,6 +1,6 @@
 <p>
 This is an automated monthly status report of the best practices
-badge application covering the month <%= @month %>.
+badge application covering the month <%= @month_display %>.
 
 <% if @last_stat_in_prev_month && @last_stat_in_prev_prev_month %>
 <p>
@@ -8,30 +8,59 @@ Here are some selected statistics for most recent completed month,
 preceded by the same statistics for the end of the month before that.
 
 <table border="1">
-<tr><th>Ending dates</th><td><%= @last_stat_in_prev_prev_month.created_at.strftime('%Y-%m-%d') %></td><td><%= @last_stat_in_prev_month.created_at.strftime('%Y-%m-%d') %>
-<tr><th>Total Projects</th><td><%= @last_stat_in_prev_prev_month.percent_ge_0 %></td><td><%= @last_stat_in_prev_month.percent_ge_0 %>
-<tr><th>Projects 25%+</th><td><%= @last_stat_in_prev_prev_month.percent_ge_25 %></td><td><%= @last_stat_in_prev_month.percent_ge_25 %>
-<tr><th>Projects 50%+</th><td><%= @last_stat_in_prev_prev_month.percent_ge_50 %></td><td><%= @last_stat_in_prev_month.percent_ge_50 %>
-<tr><th>Projects 75%+</th><td><%= @last_stat_in_prev_prev_month.percent_ge_75 %></td><td><%= @last_stat_in_prev_month.percent_ge_75 %>
-<tr><th>Projects 90%+</th><td><%= @last_stat_in_prev_prev_month.percent_ge_90 %></td><td><%= @last_stat_in_prev_month.percent_ge_90 %>
-<tr><th>Projects passing</th><td><%= @last_stat_in_prev_prev_month.percent_ge_100 %></td><td><%= @last_stat_in_prev_month.percent_ge_100 %>
+<tr><th>Ending dates</th><td><%=
+  @last_stat_in_prev_prev_month.created_at.strftime('%Y-%m-%d')
+%></td><td><%=
+  @last_stat_in_prev_month.created_at.strftime('%Y-%m-%d')
+%></td></tr>
+<% Project::LEVEL_IDS.each do |level|
+     ProjectStat::STAT_VALUES.each do |percentage|
+        next if level.to_i != 0 && percentage.to_i.zero?
+%><tr><th><%= ProjectStat.percent_field_description(level, percentage)
+%></th><td><%=
+    @last_stat_in_prev_prev_month[
+      ProjectStat.percent_field_name(level, percentage)]
+%></td><td><%=
+    @last_stat_in_prev_month[
+      ProjectStat.percent_field_name(level, percentage)]
+%></td></tr>
+<%    end
+   end %>
 </table>
 <% end %>
 
-<% if @projects && !@projects.empty? %>
+<%
+new_achievements = false
+Project::LEVEL_ID_NUMBERS.each do |level|
+  if @projects[level] && !@projects[level].blank? %>
 <p>
-Here are the projects that first achieved
-a passing badge in <%= @month %>:
+Here are the projects that first achieved a
+<%= t("projects.form_early.level.#{level}") %> badge in <%= @month_display %>:
 
 <ol>
-<% @projects.each do |project| %>
+<%
+    @projects[level].each do |project|
+      new_achievements = true
+%>
 <li><a href="https://bestpractices.coreinfrastructure.org/projects/<%= project.id %>"><%= project.name %> at <%= project.achieved_passing_at %></a>
-<% end %>
+<%
+    end # each
+%>
 </ol>
 
+<%
+  end # if there are projects
+end # each level
+%>
+
+<%
+if new_achievements
+%>
 <p>
 We congratulate them all!
-<% end %>
+<%
+end
+%>
 
 <p>
 Do you know a project that doesn't have a badge yet?

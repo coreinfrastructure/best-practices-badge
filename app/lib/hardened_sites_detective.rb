@@ -7,12 +7,14 @@
 # Determine if project sites support HTTPS
 
 class HardenedSitesDetective < Detective
+  # Field name, must be in lowercase.
   XCTO = 'x-content-type-options'
 
   # The sole allowed value for the X-Content-Type-Options header.
   NOSNIFF = 'nosniff'
 
   # All of the security-hardening headers that need to be present to pass.
+  # Field names must be in lowercase here.
   CHECK =
     [
       'content-security-policy', XCTO, 'x-frame-options', 'x-xss-protection'
@@ -48,10 +50,18 @@ class HardenedSitesDetective < Detective
   end
 
   # Perform GET request, and return either an empty hash (if the GET is
-  # unsuccessful) or a hash of the response header keys and values.
+  # unsuccessful) or a hash of the HTTP response header keys and values.
+  # Note: in the returned hash all field names are ASCII *lowercase*, so that
+  # we can easily do case-insensitive matches (HTTP field names are
+  # case-insensitive, see RFC 2616 section 4.2).
   def get_headers(evidence, url)
     response = evidence.get(url)
-    response.nil? ? {} : response[:meta]
+    results = response.nil? ? {} : response[:meta]
+    # Return a version with keys in lowercase; we do *not* modify the original.
+    # We use ":ascii" so that Turkic locales don't cause oddities. That
+    # shouldn't matter anyway, since the user's locale is in I18n.locale,
+    # but it's safer to be defensive.
+    results.transform_keys { |k| k.to_s.downcase(:ascii) }
   end
 
   # Inspect the X-Content-Type-Options headers and make sure that they have the
@@ -68,6 +78,8 @@ class HardenedSitesDetective < Detective
   # Internal method that does the inspection work for the 'analyze' method.
   def check_urls(evidence, homepage_url, repo_url)
     @results = {}
+    # Only complain if we have *both* a homepage_url AND repo_url.
+    # When that isn't true other criteria will catch it first.
     if homepage_url.present? && repo_url.present?
       homepage_headers = get_headers(evidence, homepage_url)
       repo_headers = get_headers(evidence, repo_url)

@@ -916,7 +916,7 @@ de:
           oder Verbesserungsvorschläge), und wie man zur Softwareentwicklung
           beitragen kann.
         met_placeholder: >-
-          (Optional) Wo ist diese Information? Giben Sie eine oder mehrere
+          (Optional) Wo ist diese Information? Geben Sie eine oder mehrere
           URLs an.
       contribution:
         description: >-
@@ -1922,7 +1922,7 @@ de:
           Projekt ("hit by a bus") verschwinden müssen, bevor
           das Projekt aufgrund fehlender kompetenter Mitarbeiter
           stockt. Das <a href="https://github.com/mtov/truck-factor">
-          truck-factor-</a>Tool kann dies für Projekte auf GitHub
+          Truck-Factor</a>-Tool kann dies für Projekte auf GitHub
           schätzen. Weitere Informationen finden Sie unter <a
           href="https://www.researchgate.net/publication/272824568_assessing_the_bus_factor_of_git_repositories">
           Bewertung des Busfaktors von Git-Repositories </a> von

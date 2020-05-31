@@ -370,8 +370,8 @@ de:
         und kopieren Sie ihre Änderungen dorthin.
       successfully_updated: Das Projekt wurde erfolgreich aktualisiert.
       congrats_new: >-
-        GLÜCKWÜNSCHE zum Erwerb eines %{new_badge_level}-Abzeichens!
-        Wenn Sie es noch nicht erledigt haben, zeigen Sie bitte den Abzeichenstatus
+        GLÜCKWÜNSCHE zum Erwerb eines %{new_badge_level}-Badge!
+        Wenn Sie es noch nicht erledigt haben, zeigen Sie bitte den Badge-Status
         auf Ihrer Projektseite (siehe "Wie man das Siegel hinzufügt"
         im Text unten, wenn man nicht weiß wie).
       lost_badge: Das Projekt hat ein Badge verloren.

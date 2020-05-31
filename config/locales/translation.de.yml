@@ -769,7 +769,7 @@ de:
       und sein Eintrag seit einiger Zeit nicht mehr aktualisiert wurde.
       </p>
       <p>
-      Ihr Best-Practices-Ausweiseintrag befindet sich bei
+      Ihr Best-Practices-Eintrag befindet sich bei
       <a href="%{project_info_url}">%{project_info_url}</a>
       und wurde zuletzt am %{project_updated_at} aktualisiert.
       Er liegt derzeit bei %{project_badge_percentage_0}% (von 100%).

@@ -87,25 +87,25 @@ de:
       Cookie)
     login_custom: Melden Sie sich mit benutzerdefiniertem Konto
       an
-    no_custom: Noch kein Kundenkonto? Meld dich jetzt an!
-    already_logged_in: Du bist bereits angemeldet.
+    no_custom: Noch kein Kundenkonto? Melden Sie sich jetzt an!
+    already_logged_in: Sie sind bereits angemeldet.
     incorrect_login_info: Falsche Anmeldedaten
     invalid_combo: Ungültige E-Mail oder falsches Passwort
     signed_in: 'Eingeloggt! Letzter Login: %{last_login_at}'
     not_activated: >-
-      Das Konto ist noch nicht aktiviert. Überprüfe dein E-Mailpostfach und klicke auf den Bestätigungs-Link.
+      Das Konto ist noch nicht aktiviert. Überprüfen Sie Ihr E-Mailpostfach und klicken Sie auf den Bestätigungs-Link.
     signed_out: Abgemeldet!
     cookie_details_html: >-
       <a href="/de/cookies" target="_blank" rel="noopener"> <i>
       Erfahren Sie mehr über Cookies. </i> </a>
     no_login_time: "(Keine vorherige Zeit aufgezeichnet.)"
     login_automatic_signup: >-
-      Wenn du dich mit GitHub einloggst, wird automatisch bei Bedarf
-      eine Anmeldung durchgeführt. Wenn du dich anmeldest, werden
-      dein Name (wie bei GitHub gespeichert) und dein GitHub-Spitzname
-      öffentlich angezeigt und du kannst deinen Namen jederzeit
-      ändern. Deine E-Mail-Adresse wird privat gehalten und nur
-      für Badging-Angelegenheiten verwendet; wir werden deine
+      Wenn Sie sich mit GitHub einloggen, wird automatisch bei Bedarf
+      eine Anmeldung durchgeführt. Wenn Sie sich anmelden, werden
+      Ihr Name (wie bei GitHub gespeichert) und Ihr GitHub-Spitzname
+      öffentlich angezeigt und Sie können Ihren Namen jederzeit
+      ändern. Ihre E-Mail-Adresse wird privat gehalten und nur
+      für Badging-Angelegenheiten verwendet; wir werden Ihre
       Daten nicht an Dritte weitergeben, es sei denn, es ist gesetzlich
       vorgeschrieben.
     login_disabled: Alle Logins sind vorübergehend deaktiviert
@@ -158,7 +158,7 @@ de:
     redirect_existing: >-
       Dieser Benutzer existiert bereits. Wollten Sie sich anmelden?
     new_activation_link_created: >-
-      Neuer Aktivierungs-Link erstellt. Überprüfe dein E-Mailpostfach, um dein Konto zu aktivieren.
+      Neuer Aktivierungs-Link erstellt. Überprüfen Sie Ihr E-Mailpostfach, um Ihr Konto zu aktivieren.
     please_log_in: Bitte anmelden.
   project_stats:
     index:
@@ -279,7 +279,7 @@ de:
       may_select_html: >-
         Sie können eines Ihrer GitHub-Repositories <em>ODER</em>
         Informationen über ein anderes Projekt auswählen.
-      select_one_github: Wähle einer deiner GitHub-Repos
+      select_one_github: Wählen eines GitHub-Repos
       submit_github: GitHub-Repository einreichen
       url_of_homepage: >-
         Wie lautet die URL für die Projekt-Homepage (die URL für
@@ -867,7 +867,7 @@ de:
         unter Einstellungen>Sicherheit.
       subject: Willkommen beim Badge-Programm
     user_update:
-      before_text: Einige der Benutzerdaten für dein Konto wurden
+      before_text: Einige der Benutzerdaten für Ihr Konto wurden
         aktualisiert.
       username_changed: Benutzername geändert.
       email_changed: E-Mail-Adresse geändert.

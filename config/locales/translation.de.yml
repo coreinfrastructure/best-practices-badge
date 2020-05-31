@@ -422,7 +422,7 @@ de:
       cpe:
         description_html: >-
           Was ist der <a href="https://nvd.nist.gov/cpe.cfm">
-          Common-Platform-Enumeration-/CPE- </a>Name für das
+          Common-Platform-Enumeration-/CPE-</a>Name für das
           Projekt (wenn es einen gibt)?
         details_html: >-
           Das <a href="https://nvd.nist.gov/cpe.cfm">Common Platform
@@ -436,8 +436,7 @@ de:
           Unter welcher Lizenz/welchen Lizenzen ist das Projekt
           veröffentlicht?
         details_html: >-
-          Bitte verwenden Sie das <a href="https://spdx.org/licenses/">SPDX-
-          License-Expression-Format</a>; Beispiele sind "Apache-2.0",
+          Bitte verwenden Sie das <a href="https://spdx.org/licenses/">SPDX-License-Expression-Format</a>; Beispiele sind "Apache-2.0",
           "BSD-2-Clause", "BSD-3-Clause", "GPL-2.0+", "LGPL-3.0+",
           "MIT" und "(BSD-2-Clause OR Ruby)".
         placeholder: FLOSS-Lizenz

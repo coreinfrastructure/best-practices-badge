@@ -14,10 +14,12 @@ class HardenedSitesDetective < Detective
   NOSNIFF = 'nosniff'
 
   # All of the security-hardening headers that need to be present to pass.
+  # They're listed in the same order as the criteria text.
   # Field names must be in lowercase here.
   CHECK =
     [
-      'content-security-policy', XCTO, 'x-frame-options', 'x-xss-protection'
+      'content-security-policy', 'strict-transport-security',
+      XCTO, 'x-frame-options'
     ].freeze
   MET =
     {

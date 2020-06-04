@@ -102,6 +102,7 @@ zh-CN:
     edit:
       update_user_info: 更新用户信息
       save_changes: 保存更改
+      inadequate_privileges:
   project_stats:
     index:
       project_stats_header: 项目统计

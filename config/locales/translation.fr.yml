@@ -145,6 +145,7 @@ fr:
     edit:
       update_user_info: Mettre à jour les informations de l'utilisateur
       save_changes: Enregistrer les modifications
+      inadequate_privileges:
   project_stats:
     index:
       project_stats_header: Statistiques du projet

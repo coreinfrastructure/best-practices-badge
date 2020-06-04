@@ -113,6 +113,7 @@ ja:
     edit:
       update_user_info: ユーザー情報を更新します
       save_changes: 変更内容を保存します
+      inadequate_privileges:
     update:
       profile_updated: プロフィールが更新されました
     show:

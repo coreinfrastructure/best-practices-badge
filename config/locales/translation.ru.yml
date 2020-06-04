@@ -269,6 +269,7 @@ ru:
     edit:
       update_user_info: Обновление информации о пользователе
       save_changes: Сохранить изменения
+      inadequate_privileges:
     update:
       profile_updated: Профиль обновлен
     show:

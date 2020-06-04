@@ -195,6 +195,7 @@ es:
     edit:
       update_user_info:
       save_changes:
+      inadequate_privileges:
     update:
       profile_updated:
     show:

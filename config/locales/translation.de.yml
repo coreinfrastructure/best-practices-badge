@@ -132,6 +132,7 @@ de:
     edit:
       update_user_info: Benutzerinformationen aktualisieren
       save_changes: Änderungen speichern
+      inadequate_privileges:
     update:
       profile_updated: Profil aktualisiert
     show:

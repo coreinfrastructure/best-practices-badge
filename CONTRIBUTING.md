@@ -243,51 +243,56 @@ Instead, use <tt>&lt;br&nbsp;/&gt;</tt> (an HTML break).
 
 Please help us have *good* native language translations -
 we love to have them!
-Native langauge translations
+Native language translations
 help both developers and potential users understand the state
 of a software project, even if they speak a variety of different languages.
 
 Each translation is led by one or more trusted translators.
 If you want to be a trusted translator, you basically need to convince
 us that you're trustworthy and will maintain a *good* idiomatic translation.
-
-If you want to become a translator in a locale we don't already support,
-there are a few steps we have to take to add the locale.
-In particular, we need to know the locale code.
-If the language is not written left-to-right (e.g., Arabic and Hebrew),
-there are some additional steps we will need to take.
-
+If you are trustworhty we would love to have you!
 Trusted translators are given access to the
 [translation.io](https://translation.io/) service, which provides a
-simple web interface for translating every Engish phrase into the
+simple web interface for translating every English phrase into the
 language(s) the trusted translator manages.
-We periodically "sync" translation.io with the development version of the
-badge application
-(sync'ing loads the updated English text `config/locales/en.yml`
-to the translation.io site,
-and also copies the translations in translation.io
-into the badge application directory `config/locales/`).
-When this updated badge application is put into production, the
-updated translations are used.
-This makes it very easy for translators to translate text, but note that
-there are intermediate steps between the updating a translation
-and deployment to users.
 
 If you want to propose specific *changes* to a translation, and you are
 not a trusted translator, there are two main options:
 
-* The usual option is to open an issue and simply propose them as text.
+* The usual option is to open an issue and simply propose the text changes.
+  Make sure you tell us which locale you're referrring to!
 * You *can* propose changes as edits to the appropriate files in
   `config/locales`, but unlike most changes that will not work directly.
   One of the trusted translators will then need to hand-copy
   each change into the `translation.io` website
   (sync'ing does *not* copy translations from the badge application
   to the translation.io site; it only copies the other direction).
-  That still works as long as there aren't *too* many changes.
+  If we merely accepted translation changes to `config/locales`, the changes
+  would be overwritten the next time we sync'ed with translation.io,
+  and we don't want to lose good changes!
+  This approach works as long as there aren't *too* many changes.
 
-If we merely accepted translation changes to `config/locales`, the changes
-would be overwritten the next time we sync'ed with translation.io,
-and we don't want to lose good changes!
+Here's how we handle translations.
+We periodically "sync" translation.io with the development version of the
+badge application using the command `rake translation:sync`.
+Sync'ing loads the updated English text `config/locales/en.yml`
+to the translation.io website,
+and also copies the translations in the translation.io website
+into the badge application directory `config/locales/`.
+When this updated version of the badge application is later
+put into production, the updated translations are used.
+This makes it very easy for translators to translate text.
+Note that there are intermediate steps between the updating a translation
+and deployment to users, so there's a delay between editing the translation
+and seeing it deployed.
+
+If you want to become a trusted translator in a locale we don't already support,
+there are a few steps we have to take to add the locale.
+In particular, we need to know the locale code.
+If the language is not written left-to-right (e.g., Arabic and Hebrew),
+there are some additional steps we will need to take.
+And of course, you need to convince us that you'll produce trustworthy
+translations, because others are counting on you.
 
 ## Criteria changes
 

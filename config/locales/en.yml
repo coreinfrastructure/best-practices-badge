@@ -2799,14 +2799,15 @@ en:
           web), and download site (if separate) MUST include key
           hardening headers with nonpermissive values.
         details: >-
-          Note that GitHub is known to meet this. Sites such as
-          https://securityheaders.io/ can quickly check this.
-          The key hardening headers are: Content Security Policy
-          (CSP), HTTP Strict Transport Security (HSTS), X-Content-Type-Options
-          (as "nosniff"), X-Frame-Options, and X-XSS-Protection.
-          Static web sites with no ability to log in via the web pages
-          may omit the CSP and X-XSS-Protection HTTP hardening headers,
-          because in that situation those headers are less effective.
+          Note that GitHub and GitLab are known to meet this. Sites such as
+          https://securityheaders.com/ can quickly check this.
+          The key hardening headers are: Content Security Policy (CSP),
+          HTTP Strict Transport Security (HSTS), X-Content-Type-Options
+          (as "nosniff"), and X-Frame-Options.
+          Fully static web sites with no ability to log in via the web pages
+          could omit some hardening headers with less risk,
+          but there's no reliable way to detect such sites,
+          so we require these headers even if they are fully static sites.
       security_review:
         description: >-
           The project MUST have performed a security review within

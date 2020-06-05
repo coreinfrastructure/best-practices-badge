@@ -250,7 +250,7 @@ of a software project, even if they speak a variety of different languages.
 Each translation is led by one or more trusted translators.
 If you want to be a trusted translator, you basically need to convince
 us that you're trustworthy and will maintain a *good* idiomatic translation.
-If you are trustworhty we would love to have you!
+If you are trustworthy we would love to have you!
 Trusted translators are given access to the
 [translation.io](https://translation.io/) service, which provides a
 simple web interface for translating every English phrase into the

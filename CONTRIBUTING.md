@@ -265,7 +265,7 @@ not a trusted translator, there are two main options:
   `config/locales`, but unlike most changes that will not work directly.
   One of the trusted translators will then need to hand-copy
   each change into the `translation.io` website
-  (sync'ing does *not* copy translations from the badge application
+  (our workflow (see below) currently does *not* support copying from GitHub
   to the translation.io site; it only copies the other direction).
   If we merely accepted translation changes to `config/locales`, the changes
   would be overwritten the next time we sync'ed with translation.io,

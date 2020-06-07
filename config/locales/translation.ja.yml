@@ -350,7 +350,7 @@ ja:
           あなたの作業中データを保存するには、<strong>頻繁に「提出」</strong>してください（後で、あなたはいつでも戻ってきて、さらに編集作業を続けることができます）。
           <br> <br>ヘルプが必要な場合、質問がある場合、あるいは問題がある場合は、<em> <a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">電子メールを送信する</a></em>か<em>
           <a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
-          target="_ blank">問題を提起</a> </em>します。
+          target="_blank" rel="noopener">問題を提起</a> </em>します。
         badge_alt: プロジェクト %{id} のバッジ レベルは %{level} です
       level:
         0_html: これらは%{passing}レベルの基準です。%{silver}または%{gold}レベル基準を表示することもできます。

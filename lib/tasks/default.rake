@@ -422,6 +422,7 @@ def normalize_string(value)
        .gsub(/href = /, 'href=')
        .gsub(/class = /, 'class=')
        .gsub(/target = /, 'target=')
+       .gsub(/target="_ blank">/, 'target="_blank">')
        .gsub(/target="_blank" *>/, 'target="_blank" rel="noopener">')
        .gsub(%r{https: // }, 'https://')
 end

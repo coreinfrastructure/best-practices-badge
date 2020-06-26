@@ -1673,14 +1673,17 @@ en:
           of passwords for authentication of external users, the
           passwords MUST be stored as iterated hashes with a per-user
           salt by using a key stretching (iterated) algorithm
-          (e.g., Argon2id, Bcrypt, Scrypt or PBKDF2). See also
+          (e.g., Argon2id, Bcrypt, Scrypt, or PBKDF2). See also
           <a href="https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html">OWASP Password Storage Cheat Sheet</a>).
         details: >-
           This criterion applies only when the software is enforcing
-          authentication of users using passwords, such as server-side
+          authentication of users using passwords for external users
+          (aka inbound authentication),
+          such as server-side
           web applications. It does not apply in cases where the
           software stores passwords for authenticating into other
-          systems (e.g., the software implements a client for
+          systems (aka outbound authentication, e.g.,
+          the software implements a client for
           some other system), since at least parts of that software
           must have often access to the unhashed password.
       crypto_random:
@@ -2207,15 +2210,17 @@ en:
           URLs) store passwords for authentication of external
           users, the passwords MUST be stored as iterated hashes
           with a per-user salt by using a key stretching (iterated)
-          algorithm (e.g., Argon2id, Bcrypt, Scrypt or PBKDF2). If the project
+          algorithm (e.g., Argon2id, Bcrypt, Scrypt, or PBKDF2). If the project
           sites do not store passwords for this purpose, select
           "not applicable" (N/A).
         details: >-
           Note that the use of <a href="https://help.github.com/articles/github-security/">GitHub</a>
           meets this criterion. This criterion only applies to
           passwords used for authentication of external users
-          into the project sites. If the project sites must log
-          in to other sites, they may need to store authorization
+          into the project sites (aka inbound authentication).
+          If the project sites must log
+          in to other sites (aka outbound authentication),
+          they may need to store authorization
           tokens for that purpose differently (since storing a hash
           would be useless). This
           applies criterion crypto_password_storage to the project

@@ -1673,7 +1673,8 @@ en:
           of passwords for authentication of external users, the
           passwords MUST be stored as iterated hashes with a per-user
           salt by using a key stretching (iterated) algorithm
-          (e.g., PBKDF2, Bcrypt or Scrypt).
+          (e.g., Argon2id, Bcrypt, Scrypt or PBKDF2). See also
+          <a href="https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html">OWASP Password Storage Cheat Sheet</a>).
         details: >-
           This criterion applies only when the software is enforcing
           authentication of users using passwords, such as server-side
@@ -2206,7 +2207,7 @@ en:
           URLs) store passwords for authentication of external
           users, the passwords MUST be stored as iterated hashes
           with a per-user salt by using a key stretching (iterated)
-          algorithm (e.g., PBKDF2, Bcrypt or Scrypt). If the project
+          algorithm (e.g., Argon2id, Bcrypt, Scrypt or PBKDF2). If the project
           sites do not store passwords for this purpose, select
           "not applicable" (N/A).
         details: >-
@@ -2214,9 +2215,9 @@ en:
           meets this criterion. This criterion only applies to
           passwords used for authentication of external users
           into the project sites. If the project sites must log
-          in to other sites, they may need to store passwords
-          for that purpose differently (since using an algorithm
-          like Bcrypt would make those passwords useless). This
+          in to other sites, they may need to store authorization
+          tokens for that purpose differently (since storing a hash
+          would be useless). This
           applies criterion crypto_password_storage to the project
           sites, similar to sites_https.
       maintenance_or_update:

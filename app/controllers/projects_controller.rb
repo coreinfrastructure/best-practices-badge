@@ -202,6 +202,7 @@ class ProjectsController < ApplicationController
         update_additional_rights
         if @project.save
           successful_update(format, old_badge_level, @criteria_level)
+          purge_cdn_project
         else
           format.html { render :edit, criteria_level: @criteria_level }
           format.json do
@@ -230,7 +231,6 @@ class ProjectsController < ApplicationController
     ReportMailer.report_project_deleted(
       @project, current_user, params[:deletion_rationale]
     ).deliver_now
-    purge_cdn_project
     # @project.purge
     # @project.purge_all
     respond_to do |format|
@@ -241,6 +241,7 @@ class ProjectsController < ApplicationController
       end
       format.json { head :no_content }
     end
+    purge_cdn_project
   end
   # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
@@ -645,7 +646,6 @@ class ProjectsController < ApplicationController
   # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   # TODO: Break this into smaller pieces
   def successful_update(format, old_badge_level, criteria_level)
-    purge_cdn_project
     criteria_level = nil if criteria_level == '0'
     # @project.purge
     format.html do

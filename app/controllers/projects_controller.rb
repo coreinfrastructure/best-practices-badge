@@ -504,8 +504,8 @@ class ProjectsController < ApplicationController
     cdn_json_key = @project.record_key + '/json'
     # If we can't authenticate to the CDN, complain but don't crash.
     begin
-      FastlyRails.purge_by_key cdn_badge_key
       FastlyRails.purge_by_key cdn_json_key
+      FastlyRails.purge_by_key cdn_badge_key
     rescue StandardError => e
       Rails.logger.error "FAILED TO PURGE #{cdn_badge_key} , #{e.class}: #{e}"
     end

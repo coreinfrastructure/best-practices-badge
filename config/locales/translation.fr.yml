@@ -79,7 +79,10 @@ fr:
       tierces à moins qu'il s'agisse d'une obligation légale.
     login_disabled: Toutes les connexions sont temporairement
       désactivées
-    cannot_login_yet:
+    cannot_login_yet: >-
+      Désolé, vous ne pouvez pas encore vous connecter. À titre
+      de mesure anti-spam, il y a un délai après l'activation
+      d'un compte local avant de pouvoir vous connecter.
   users:
     new:
       signup_header: S'inscrire
@@ -140,12 +143,14 @@ fr:
       vous connecter ?
     new_activation_link_created: >-
       Nouveau lien d'activation créé. Veuillez vérifier votre
-      email pour activer votre compte.
+      email dans quelques minutes pour activer votre compte. (Il
+      y a un délai intentionnel pour lutter contre le spam.)
     please_log_in: Connectez-vous.
     edit:
       update_user_info: Mettre à jour les informations de l'utilisateur
       save_changes: Enregistrer les modifications
-      inadequate_privileges:
+      inadequate_privileges: Désolé, vous n'êtes pas autorisé
+        à faire cela.
   project_stats:
     index:
       project_stats_header: Statistiques du projet
@@ -310,7 +315,15 @@ fr:
       new_badge_or: OU
       original_repos: "=> Dépôts GitHub Originaux"
       fork_repos: "=> Dépôts GitHub Dupliqués"
-      tell_us:
+      tell_us: >-
+        Veuillez nous parler de votre projet de logiciel libre
+        / open source (FLOSS). Cela <b>DOIT</b> être un projet
+        FLOSS ; rien d'autre n'est permis. N'ajoutez <b>PAS</b>
+        de site sans relation pour essayer d'améliorer le référencement
+        d'un site vis-à-vis des moteurs de recherche (SEO). Ce
+        spam est interdit car il nuit aux utilisateurs et n'aidera
+        en rien le référencement (tous les hyperliens sont marqués
+        avec <tt>ugc</tt> et <tt>nofollow</tt>).
     show:
       edit: Modifier
       delete: Supprimer
@@ -356,8 +369,12 @@ fr:
         du projet n'est pas affectée.<br><br>
       save_and_continue: Sauvegarder (et continuer)
       submit_and_exit: Soumettre (et quitter)
-      repo_url_limits: Vous ne pouvez modifier votre repo_url
-        que de http à https
+      repo_url_limits: >-
+        Vous ne pouvez modifier votre repo_url que si (1) plus
+        de 180 jours se sont écoulés depuis sa dernière modification,
+        ou (2) il s'agit uniquement d'un changement entre http
+        et https. Veuillez ouvrir un rapport de problème (avec
+        justification) si vous devez le changer plus tôt.
       changed_since_html: >-
         Un autre utilisateur a apporté une modification à cet
         enregistrement depuis que vous avez accédé au formulaire
@@ -734,10 +751,18 @@ fr:
     activated: Compte activé !
     failed_activation: Lien d'activation invalide
     delay:
-      zero:
-      one:
-      few:
-      other:
+      zero: >-
+        Vous pouvez vous connecter maintenant. Il n'y a pas de
+        délai anti-spam post-activation.
+      one: >-
+        À titre de mesure anti-spam, vous devez attendre une heure
+        après l'activation avant de pouvoir vous connecter.
+      few: >-
+        À titre de mesure anti-spam, vous devez attendre %{count}
+        heures après l'activation avant de pouvoir vous connecter.
+      other: >-
+        À titre de mesure anti-spam, vous devez attendre %{count}
+        heures après l'activation avant de pouvoir vous connecter.
   password_resets:
     forgot_password: Mot de passe oublié
     reset_password: Réinitialiser le mot de passe
@@ -952,9 +977,9 @@ fr:
         details: >-
           FLOSS est un logiciel distribué d'une manière qui répond
           à la <a href="https://opensource.org/osd-annotated">Définition
-          de l'Open Source</a> ou à la <a href="http://www.gnu.org/philosophy/free-sw.fr.html">Définition
+          de l'Open Source</a> ou à la <a href="https://www.gnu.org/philosophy/free-sw.fr.html">Définition
           du Logiciel Libre</a>. Des exemples de ces licences
-          sont <a href="http://creativecommons.org/publicdomain/zero/1.0/">CC0</a>,
+          sont <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0</a>,
           <a href="https://opensource.org/licenses/MIT">MIT</a>,
           <a href="https://opensource.org/licenses/BSD-2-Clause">BSD
           2-clause</a>, <a href="https://opensource.org/licenses/BSD-3-Clause">BSD
@@ -1160,7 +1185,7 @@ fr:
           ou les systèmes basés sur la date comme YYYYMMDD).
       version_semver:
         description: >-
-          Il est PROPOSÉ que le <a href="http://semver.org">format
+          Il est PROPOSÉ que le <a href="https://semver.org">format
           de Versionage Sémantique (SemVer)</a> soit utilisé pour
           les numéros de versions.
         details: >-
@@ -1445,7 +1470,7 @@ fr:
           les « détails » pour les exigences exactes.)
         details: >-
           Cela nécessite de comprendre les principes de conception
-          suivants, y compris les 8 principes de <a href="http://web.mit.edu/Saltzer/www/publications/protection/">Saltzer
+          suivants, y compris les 8 principes de <a href="https://web.mit.edu/Saltzer/www/publications/protection/">Saltzer
           et Schroeder</a> : <ul> <li>économie de moyens (maintenez
           la conception aussi simple et petite que pratique, par
           exemple en adoptant des simplifications conséquentes)
@@ -1510,7 +1535,7 @@ fr:
           Des exemples (selon le type de logiciel) incluent l'injection
           SQL, l'injection OS, le débordement mémoire classique,
           le cross-site scripting, l'authentification manquante
-          et l'autorisation manquante. Voir <a href="http://cwe.mitre.org/top25/">CWE/SANS
+          et l'autorisation manquante. Voir <a href="https://cwe.mitre.org/top25/">CWE/SANS
           top 25</a> ou <a href="https://www.owasp.org/index.php/Category:OWASP_Top_Ten_Project">OWASP
           Top 10</a> pour les listes couramment utilisées.
       crypto_published:
@@ -1559,7 +1584,7 @@ fr:
           couvert par cette longueur de bit, plus d'informations
           sur le hachage de mot de passe peuvent être trouvées
           dans le critère <a href="#crypto_password_storage">crypto_password_storage</a>).
-          Voir <a href="http://www.keylength.com">http://www.keylength.com</a>
+          Voir <a href="https://www.keylength.com">https://www.keylength.com</a>
           pour une comparaison des recommandations sur les longueurs
           de clés de diverses organisations. Le logiciel PEUT
           permettre de plus petites longueurs de clés dans certaines
@@ -1674,26 +1699,40 @@ fr:
         details: Ces hachages peuvent être modifiés en transit.
       vulnerabilities_fixed_60_days:
         description: >-
-          Il NE DOIT PAS y avoir de vulnérabilités non corrigées
-          de gravité moyenne ou élevée connues publiquement depuis
-          plus de 60 jours.
+          Il ne DOIT pas y avoir de vulnérabilités non corrigées
+          de gravité moyenne ou supérieure connues publiquement
+          depuis plus de 60 jours.
         details: >-
           La vulnérabilité doit être corrigée et diffusée par
           le projet lui-même (les correctifs peuvent être développés
           ailleurs). Une vulnérabilité devient publique (à cet
-          effet) une fois qu'il a un CVE avec des informations
-          non payantes publiquement publiées (signalé, par exemple,
+          effet) une fois qu'elle a un CVE avec des informations
+          non payantes publiquement publiées (signalée, par exemple,
           dans la <a href="https://nvd.nist.gov/">Base de données
           Nationale des Vulnérabilités</a>) ou lorsque le projet
           a été informé et que l'information a été diffusée au
           public (éventuellement par le projet). Une vulnérabilité
-          est de gravité moyenne à élevée si son score de base
-          <a href="https://nvd.nist.gov/cvss.cfm">CVSS 2.0</a>
-          est 4 ou supérieur. <strong>Note</strong> : cela signifie
-          que les utilisateurs peuvent être laissés vulnérables
-          à tous les attaquants du monde entier jusqu'à 60 jours.
-          Ce critère est souvent beaucoup plus facile à atteindre
-          que ce que Google recommande dans son <a href="https://security.googleblog.com/2010/07/rebooting-responsible-disclosure-focus.html">Redémarrage
+          est considérée de gravité moyenne ou supérieure si son
+          score de base qualitatif du <a href="https://www.first.org/cvss/">Système
+          Commun d'Évaluation des Vulnérabilités (CVSS)</a> est
+          moyen ou supérieur. Dans les versions CVSS 2.0 à 3.1,
+          cela équivaut à un score CVSS de 4.0 ou supérieur. Les
+          projets peuvent utiliser le score CVSS publié dans une
+          base de données de vulnérabilité largement utilisée
+          (telle que la <a href="https://nvd.nist.gov">base de
+          données nationale des vulnérabilités</a>) en utilisant
+          la version la plus récente de CVSS rapportée dans cette
+          base de données. Les projets peuvent aussi calculer
+          eux-mêmes la gravité à l'aide de la dernière version
+          de <a href="https://www.first.org/cvss/">CVSS</a> au
+          moment de la divulgation de la vulnérabilité, si les
+          entrées de calcul sont révélées publiquement une fois
+          que la vulnérabilité est connue du public.<strong>Note</strong>
+          : cela signifie que les utilisateurs peuvent être laissés
+          vulnérables à tous les attaquants du monde entier jusqu'à
+          60 jours. Ce critère est souvent beaucoup plus facile
+          à atteindre que ce que Google recommande dans son <a
+          href="https://security.googleblog.com/2010/07/rebooting-responsible-disclosure-focus.html">Redémarrage
           de la divulgation responsable</a>, car Google recommande
           que la période de 60 jours commence lorsque le projet
           est notifié <em>même</em> si le rapport n'est pas public.
@@ -1750,12 +1789,12 @@ fr:
           encore proposent une combinaison de ces deux types d'outils.
           Des exemples de tels outils d'analyse statique de code
           incluent <a href="http://cppcheck.sourceforge.net/">cppcheck</a>
-          (C, C++), <a href="http://clang-analyzer.llvm.org/">clang
+          (C, C++), <a href="https://clang-analyzer.llvm.org/">clang
           static analyzer</a> (C, C++), <a href="https://spotbugs.github.io/">SpotBugs</a>
           (Java), <a href="http://findbugs.sourceforge.net/">FindBugs</a>
           (Java) (y compris <a href="https://h3xstream.github.io/find-sec-bugs/">FindSecurityBugs</a>),
           <a href="https://pmd.github.io/">PMD</a> (Java), <a
-          href="http://brakemanscanner.org/">Brakeman</a> (Ruby
+          href="https://brakemanscanner.org/">Brakeman</a> (Ruby
           on Rails), <a href="https://cran.r-project.org/web/packages/lintr/index.html">lintr</a>
           (R), <a href="https://cran.r-project.org/web/packages/goodpractice/index.html">goodpractice</a>
           (R), <a href="https://scan.coverity.com/">Coverity Quality
@@ -1766,9 +1805,9 @@ fr:
           endroits tels que <a href="https://en.wikipedia.org/wiki/List_of_tools_for_static_code_analysis">la
           liste Wikipedia d'outils pour l'analyse statique de
           code</a>, <a href="https://www.owasp.org/index.php/Static_Code_Analysis">l'information
-          OWASP sur l'analyse statique de code</a>, <a href="http://samate.nist.gov/index.php/Source_Code_Security_Analyzers.html">la
+          OWASP sur l'analyse statique de code</a>, <a href="https://samate.nist.gov/index.php/Source_Code_Security_Analyzers.html">la
           liste NIST des analyseurs de sécurité du code source</a>
-          et <a href="http://www.dwheeler.com/essays/static-analysis-tools.html">la
+          et <a href="https://www.dwheeler.com/essays/static-analysis-tools.html">la
           liste des outils d'analyse statique de Wheeler</a >.
           <a href="https://continuousassurance.org/">SWAMP</a>
           est une plate-forme gratuite pour évaluer les vulnérabilités
@@ -1798,13 +1837,29 @@ fr:
       static_analysis_fixed:
         description: >-
           Toutes les vulnérabilités exploitables de gravité moyenne
-          et élevée découvertes avec une analyse statique de code
+          ou plus découvertes avec une analyse statique de code
           DOIVENT être corrigées en temps approprié après leur
           confirmation.
         details: >-
-          Une vulnérabilité est de gravité moyenne à élevée si
-          son <a href="https://nvd.nist.gov/cvss.cfm">CVSS 2.0</a>
-          est 4 ou supérieur.
+          Une vulnérabilité est considérée comme étant de gravité
+          moyenne ou supérieure si son score qualitatif de base
+          du <a href="https://www.first.org/cvss/">Système Commun
+          d'Évaluation des Vulnérabilités (CVSS)</a> est moyen
+          ou supérieur. Dans les versions CVSS 2.0 à 3.1, cela
+          équivaut à un score CVSS de 4.0 ou supérieur. Les projets
+          peuvent utiliser le score CVSS publié dans une base
+          de données de vulnérabilité largement utilisée (telle
+          que la <a href="https://nvd.nist.gov">base de données
+          nationale des vulnérabilités</a>) en utilisant la version
+          la plus récente de CVSS rapportée dans cette base de
+          données. Les projets peuvent aussi calculer eux-mêmes
+          la gravité à l'aide de la dernière version de <a href="https://www.first.org/cvss/">CVSS</a>
+          au moment de la divulgation de la vulnérabilité, si
+          les entrées de calcul sont révélées publiquement une
+          fois que la vulnérabilité est connue du public. Remarquez
+          que le critère vulnerabilities_fixed_60_days nécessite
+          que de telles vulnérabilités soient corrigées dans les
+          60 jours de leur divulgation publique.
       static_analysis_often:
         description: >-
           Il est PROPOSÉ que l'analyse statique du code source
@@ -1821,7 +1876,7 @@ fr:
           <a href="http://lcamtuf.coredump.cx/afl/">American Fuzzy
           Lop</a>) ou un scanner d'application Web (par exemple,
           <a href="https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project">OWASP
-          ZAP</a> ou <a href="http://w3af.org/">w3af</a>). Dans
+          ZAP</a> ou <a href="https://w3af.org/">w3af</a>). Dans
           certains cas, le projet <a href="https://github.com/google/oss-fuzz#introduction">OSS-Fuzz</a>
           peut être prêt à appliquer des tests de fuzzing à votre
           projet. Aux fins de ce critère, l'outil d'analyse dynamique
@@ -1850,11 +1905,11 @@ fr:
           Des exemples de mécanismes pour détecter les problèmes
           de sécurité de la mémoire comprennent <a href="https://github.com/google/sanitizers/wiki/AddressSanitizer">Address
           Sanitizer (ASAN)</a> (disponible dans GCC et LLVM),
-          <a href="http://clang.llvm.org/docs/MemorySanitizer.html">Memory
+          <a href="https://clang.llvm.org/docs/MemorySanitizer.html">Memory
           Sanitizer</a> et <a href="http://valgrind.org/">valgrind</a>.
           D'autres outils potentiellement utilisés incluent <a
-          href="http://clang.llvm.org/docs/ThreadSanitizer.html">thread
-          sanitizer</a> et <a href="http://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html">undefined
+          href="https://clang.llvm.org/docs/ThreadSanitizer.html">thread
+          sanitizer</a> et <a href="https://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html">undefined
           behavior sanitizer</a>. La généralisation de l'utilisation
           des assertions fonctionnera également.
       dynamic_analysis_enable_assertions:
@@ -1865,15 +1920,29 @@ fr:
       dynamic_analysis_fixed:
         description: >-
           Toutes les vulnérabilités exploitables de gravité moyenne
-          et élevée découvertes avec une analyse de code dynamique
+          ou plus découvertes avec une analyse de code dynamique
           DOIVENT être corrigées en un temps approprié après leur
           confirmation.
         details: >-
-          Une vulnérabilité est de gravité moyenne à élevée si
-          son score de base <a href="https://nvd.nist.gov/cvss.cfm">CVSS
-          2.0</a> est 4. Si vous n'utilisez pas d'analyse de code
-          dynamique et donc n'avez trouvé aucune vulnérabilité
-          de cette façon, choisissez « non applicable » (N/A).
+          Si vous n'utilisez pas d'analyse de code dynamique et
+          n'avez donc trouvé aucune vulnérabilité de cette manière,
+          choisissez « non applicable » (N/A). Une vulnérabilité
+          est considérée comme étant de gravité moyenne ou supérieure
+          si son score qualitatif de base du <a href="https://www.first.org/cvss/">Système
+          Commun d'Évaluation des Vulnérabilités (CVSS)</a> est
+          moyen ou supérieur. Dans les versions CVSS 2.0 à 3.1,
+          cela équivaut à un score CVSS de 4.0 ou supérieur. Les
+          projets peuvent utiliser le score CVSS publié dans une
+          base de données de vulnérabilité largement utilisée
+          (telle que la <a href="https://nvd.nist.gov">base de
+          données nationale des vulnérabilités</a>) en utilisant
+          la version la plus récente de CVSS rapportée dans cette
+          base de données. Les projets peuvent aussi calculer
+          eux-mêmes la gravité à l'aide de la dernière version
+          de <a href="https://www.first.org/cvss/">CVSS</a> au
+          moment de la divulgation de la vulnérabilité, si les
+          entrées de calcul sont révélées publiquement une fois
+          que la vulnérabilité est connue du public.
     '1':
       contribution_requirements:
         description: >-
@@ -1888,7 +1957,7 @@ fr:
           logiciel du projet affirment qu'ils sont légalement
           autorisés à effectuer ces contributions. L'approche
           la plus commune et facilement mise en œuvre pour ce
-          faire est d'utiliser un <a href="http://developercertificate.org/">Certificat
+          faire est d'utiliser un <a href="https://developercertificate.org/">Certificat
           d'origine du développeur (DCO)</a>, où les utilisateurs
           ajoutent une information « sign-off-by » dans leurs
           commits et le projet pointe vers le site Web du DCO.
@@ -1950,7 +2019,7 @@ fr:
           sur le comportement au sein de la communauté / lieu
           de travail du projet. Des exemples de codes de conduite
           sont le <a href="https://www.kernel.org/doc/html/latest/process/code-of-conduct.html">code
-          de conduite</a> du noyau Linux, le <a href="http://contributor-covenant.org/">code
+          de conduite</a> du noyau Linux, le <a href="https://contributor-covenant.org/">code
           de conduite du pacte de contributeur</a>, le <a href="https://www.debian.org/code_of_conduct">code
           de conduite du projet Debian</a>, le <a href="https://www.ubuntu.com/about/about-ubuntu/conduct">code
           de conduite du projet Ubuntu</a>, le <a href="https://getfedora.org/code-of-conduct">code
@@ -2081,7 +2150,7 @@ fr:
           au projet et utiliser les résultats du projet où il
           est raisonnable de le faire.
         details: |-
-          Pour les applications Web, consultez les <a href="https://www.w3.org/TR/WCAG20/">Directives d'accessibilité des contenus Web (WCAG 2.0)</a> et son document à l'appui <a href="https://www.w3.org/TR/UNDERSTANDING-WCAG20/Overview.html">Comprendre WCAG 2.0</a> ; voir aussi <a href="https://www.w3.org/standards/webdesign/accessibility">les informations d'accessibilité du W3C</a>. Pour les applications IHM, envisagez d'utiliser les directives d'accessibilité spécifiques à l'environnement (telles que <a href="https://developer.gnome.org/accessibility-devel-guide/stable/">Gnome</a>, <a href="https://accessibility.kde.org/">KDE</a>, <a href="http://docs.xfce.org/xfce/xfce4-settings/accessibility">XFCE</a>, <a href="https://developer.android.com/guide/topics/ui/accessibility/">Android</a>, <a href="https://developer.apple.com/accessibility/ios/">IOS</a>, <a href="http://www.apple.com/accessibility/osx/voiceover/">Mac</a> et <a href="https://docs.microsoft.com/fr-fr/windows/uwp/accessibility/accessibility-overview">Windows</a>). Certaines applications IHM textuelles (par exemple, les programmes « ncurses ») peuvent faire certaines choses pour se rendre plus accessibles (par exemple, le paramètre « force-arrow-cursor » de « alpine »). La plupart des applications en ligne de commande sont assez accessibles telles quelles. Ce critère est souvent N/A, par exemple, pour les bibliothèques. Voici quelques exemples d'actions à prendre ou de questions à considérer : <ul> <li>Fournir des alternatives de texte pour tout contenu non textuel afin qu'il puisse être changé en d'autres formes dont les gens ont besoin, comme une plus grande taille, le braille, une sortie vocale, des symboles ou une langue plus simple (<a href="https://www.w3.org/TR/UNDERSTANDING-WCAG20/text-equiv.html">WCAG 2.0 directive 1.1</a>)
+          Pour les applications Web, consultez les <a href="https://www.w3.org/TR/WCAG20/">Directives d'accessibilité des contenus Web (WCAG 2.0)</a> et son document à l'appui <a href="https://www.w3.org/TR/UNDERSTANDING-WCAG20/Overview.html">Comprendre WCAG 2.0</a> ; voir aussi <a href="https://www.w3.org/standards/webdesign/accessibility">les informations d'accessibilité du W3C</a>. Pour les applications IHM, envisagez d'utiliser les directives d'accessibilité spécifiques à l'environnement (telles que <a href="https://developer.gnome.org/accessibility-devel-guide/stable/">Gnome</a>, <a href="https://accessibility.kde.org/">KDE</a>, <a href="https://docs.xfce.org/xfce/xfce4-settings/accessibility">XFCE</a>, <a href="https://developer.android.com/guide/topics/ui/accessibility/">Android</a>, <a href="https://developer.apple.com/accessibility/ios/">IOS</a>, <a href="https://www.apple.com/accessibility/osx/voiceover/">Mac</a> et <a href="https://docs.microsoft.com/fr-fr/windows/uwp/accessibility/accessibility-overview">Windows</a>). Certaines applications IHM textuelles (par exemple, les programmes « ncurses ») peuvent faire certaines choses pour se rendre plus accessibles (par exemple, le paramètre « force-arrow-cursor » de « alpine »). La plupart des applications en ligne de commande sont assez accessibles telles quelles. Ce critère est souvent N/A, par exemple, pour les bibliothèques. Voici quelques exemples d'actions à prendre ou de questions à considérer : <ul> <li>Fournir des alternatives de texte pour tout contenu non textuel afin qu'il puisse être changé en d'autres formes dont les gens ont besoin, comme une plus grande taille, le braille, une sortie vocale, des symboles ou une langue plus simple (<a href="https://www.w3.org/TR/UNDERSTANDING-WCAG20/text-equiv.html">WCAG 2.0 directive 1.1</a>)
           <li>La couleur n'est pas utilisée comme le seul moyen visuel de transmettre des informations, d'indiquer une action, de provoquer une réponse ou de distinguer un élément visuel. (<a href="https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast-without-color.html">WCAG 2.0 directive 1.4.1</a>)
           <li>La présentation visuelle du texte et des images du texte a un taux de contraste d'au moins 4,5:1, à l'exception du grand texte, du texte incident, et des logotypes (<a href="https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast-contrast.html">WCAG 2.0 directive 1.4.3</a>)
           <li>Rendez toutes les fonctionnalités disponibles à partir d'un clavier (WCAG directive 2.1) <li>Une IHM ou un projet basé sur le Web DEVRAIT tester avec au moins un lecteur d'écran sur la (les) plate-forme(s) cible(s) (par exemple NVDA, Jaws ou WindowEyes sur Windows ; VoiceOver sur Mac & iOS ; Orca sous Linux/BSD ; TalkBack sur Android). Les programmes IHM textuels PEUVENT travailler à réduire le retrait excessif pour éviter la lecture redondante par les lecteurs d'écran.</ul>
@@ -2323,12 +2392,13 @@ fr:
           et corriger les vulnérabilités exploitables ou les vérifier
           comme inexploitables.
         details: >-
-          Cela peut se faire à l'aide d'un outil d'analyse d'origine
-          ou de vérification de dépendance tel que <a href="https://www.owasp.org/index.php/OWASP_Dependency_Check">Dependency-Check
+          Cela peut se faire à l'aide d'un outil d'analyse d'origine,
+          de vérification de dépendance ou d'analyse de la composition
+          du logiciel tel que <a href="https://www.owasp.org/index.php/OWASP_Dependency_Check">Dependency-Check
           d'OWASP</a>, <a href="https://www.sonatype.com/nexus-auditor">Nexus
-          Auditeur de Sonartype</a>, <a href="https://www.blackducksoftware.com/products/protex">Protex
-          de Black Duck</a> , <a href="http://www.protecode.com/">Protecode
-          de Synopsys</a>, et <a href="https://github.com/rubysec/bundler-audit">Bundler-audit
+          Auditeur de Sonartype</a>, <a href="https://www.synopsys.com/software-integrity/security-testing/software-composition-analysis.html">Black
+          Duck Software Composition Analysis de Synopsys</a>,
+          et <a href="https://github.com/rubysec/bundler-audit">Bundler-audit
           (pour Ruby)</a>. Certains gestionnaires de paquets comprennent
           des mécanismes pour le faire. Il est acceptable que
           la vulnérabilité des composants ne puisse pas être exploitée,
@@ -2358,7 +2428,7 @@ fr:
           sur le cloud ; si le fournisseur du cloud met à jour
           ses librairies « standard » mais que le programme ne
           les utilise pas, les mises à jour ne vous aideront pas.
-          Voir, par exemple, <a href="http://spot.livejournal.com/312320.html">«
+          Voir, par exemple, <a href="https://spot.livejournal.com/312320.html">«
           Chromium : pourquoi il n'est pas encore un vrai paquet
           dans Fedora » par Tom Callaway</a>.
       interfaces_current:
@@ -2526,7 +2596,7 @@ fr:
         details: >-
           Notez que la vérification incorrecte du certificat TLS
           est une erreur courante. Pour plus d'informations, voir
-          <a href="http://crypto.stanford.edu/~dabo/pubs/abstracts/ssl-client-bugs.html">«
+          <a href="https://crypto.stanford.edu/~dabo/pubs/abstracts/ssl-client-bugs.html">«
           Le code le plus dangereux du monde : la validation des
           certificats SSL dans du logiciel qui ne vient pas d'un
           navigateur » de Martin Georgiev et al.</a> et <a href="https://blogs.gnome.org/mcatanzaro/2016/03/12/do-you-trust-this-application/">«
@@ -2606,7 +2676,7 @@ fr:
           lequel un ensemble spécifié de revendications critiques
           concernant les propriétés d'un système est adéquatement
           justifié pour une application donnée dans un environnement
-          donné » (<a href="http://nvlpubs.nist.gov/nistpubs/ir/2009/ir7608.pdf">«
+          donné » (<a href="https://www.nist.gov/publications/software-assurance-using-structured-assurance-case-models">«
           Software Assurance Using Structured Assurance Case Models
           », Thomas Rhodes et al, NIST Interagency Report 7608</a>).
           Les limites de confiance sont des limites où les données
@@ -2692,8 +2762,8 @@ fr:
           Cette identification se fait typiquement en marquant
           les problèmes sélectionnés dans un outil de suivi de
           problèmes avec une ou plusieurs étiquettes que le projet
-          utilise à cet effet, par exemple <a href="http://up-for-grabs.net/#/">up-for-grabs</a>,
-          <a href="http://www.firsttimersonly.com/">first-timers-only</a>,
+          utilise à cet effet, par exemple <a href="https://up-for-grabs.net/#/">up-for-grabs</a>,
+          <a href="https://www.firsttimersonly.com/">first-timers-only</a>,
           « Small fix », microtask ou IdealFirstBug. Ces nouvelles
           tâches n'ont pas besoin d'ajouter des fonctionnalités
           ; elles peuvent améliorer la documentation, ajouter
@@ -2814,16 +2884,18 @@ fr:
           DOIVENT inclure des en-têtes clés de durcissement avec
           des valeurs non admises.
         details: >-
-          Notez que GitHub est connu pour le faire. Des sites
-          tels que https://securityheaders.io/ peuvent le vérifier
-          rapidement. Les en-têtes clés de durcissement sont :
-          Content Security Policy (CSP), HTTP Strict Transport
+          Notez que GitHub et GitLab sont connus pour le faire.
+          Des sites tels que https://securityheaders.com/ peuvent
+          le vérifier rapidement. Les en-têtes clés de durcissement
+          sont : Content Security Policy (CSP), HTTP Strict Transport
           Security (HSTS), X-Content-Type-Options (comme « nosniff
-          »), X-Frame-Options et X-XSS-Protection. Les sites Web
-          statiques sans possibilité de se connecter à travers
-          les pages Web peuvent omettre les entêtes de durcissement
-          HTTP CSP et X-XSS-Protection, car ces entêtes sont moins
-          utiles dans ces situations.
+          ») et X-Frame-Options. Les sites Web complètement statiques
+          sans possibilité de se connecter à travers les pages
+          Web peuvent éventuellement omettre certains entêtes
+          de durcissement avec moins de risques, mais il n'existe
+          aucune manière fiable de détecter ces sites, donc nous
+          exigeons ces en-têtes mêmes pour les sites complètement
+          statiques.
       security_review:
         description: >-
           Le projet DOIT avoir effectué une évaluation de la sécurité

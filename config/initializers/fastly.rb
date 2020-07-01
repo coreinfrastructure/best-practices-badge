@@ -22,7 +22,10 @@ end
 
 FastlyRails.configure do |c|
   c.api_key = ENV['FASTLY_API_KEY'] # Fastly api key, required for it to work
-  c.max_age = 86_400 # time in seconds, optional, default 2592000 (30 days)
+  # c.max_age is time in seconds, optional, default 2592000 (30 days)
+  # Larger numbers provide better DDoS protection & reduce system load
+  # Smaller numbers reduce impact time from bad race condition during purge
+  c.max_age = 6 * 60 * 60 # 6 hours
   c.service_id = ENV['FASTLY_SERVICE_ID'] # The Fastly service, required
   c.purging_enabled = !Rails.env.development? && !Rails.env.test? &&
                       ENV['FASTLY_API_KEY']

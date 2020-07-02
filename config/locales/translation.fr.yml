@@ -1647,17 +1647,21 @@ fr:
           externes, les mots de passe DOIVENT être sauvegardés
           comme hachages itérés avec un salage par utilisateur
           en utilisant un algorithme d'étirement de clé (itéré)
-          (par exemple PBKDF2, Bcrypt ou Scrypt).
+          (par exemple Argon2id, Bcrypt, Scrypt, ou PBKDF2). Voir
+          également le <a href="https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html">pense-bête
+          sur le stockage des clés d'OWASP</a>).
         details: >-
           Ce critère s'applique uniquement lorsque le logiciel
           applique l'authentification des utilisateurs utilisant
-          des mots de passe, telles que des applications Web côté
-          serveur. Il ne s'applique pas dans les cas où le logiciel
-          sauvegarde des mots de passe pour l'authentification
-          dans d'autres systèmes (par exemple, le logiciel implémente
-          un client pour un autre système), car au moins certaines
-          parties de ce logiciel doivent avoir souvent accès au
-          mot de passe en clair.
+          des mots de passe pour les utilisateurs extérieurs (càd
+          l'authentification entrante), telles que des applications
+          Web côté serveur. Il ne s'applique pas dans les cas
+          où le logiciel sauvegarde des mots de passe pour l'authentification
+          dans d'autres systèmes (càd l'authentification sortante,
+          par exemple, le logiciel implémente un client pour un
+          autre système), car au moins certaines parties de ce
+          logiciel doivent avoir souvent accès au mot de passe
+          en clair.
       crypto_random:
         description: >-
           Les mécanismes de sécurité dans le logiciel produit
@@ -2186,20 +2190,21 @@ fr:
           d'utilisateurs externes, les mots de passe DOIVENT être
           entreposés comme hachages itérés avec salage par utilisateur
           en utilisant un algorithme d'étirement des clés (itéré)
-          (par exemple, PBKDF2, Bcrypt ou Scrypt). Si les sites
-          du projet n'entreposent pas de mots de passe à cette
-          fin, sélectionnez « non applicable » (N/A).
+          (par exemple, Argon2id, Bcrypt, Scrypt, ou PBKDF2).
+          Si les sites du projet n'entreposent pas de mots de
+          passe à cette fin, sélectionnez « non applicable » (N/A).
         details: >-
           Notez que l'utilisation de <a href="https://help.github.com/articles/github-security/">GitHub</a>
           répond à ce critère. Ce critère s'applique uniquement
           aux mots de passe utilisés pour l'authentification d'utilisateurs
-          externes sur les sites du projet. Si les sites du projet
-          doivent se connecter à d'autres sites, ils devront peut-être
-          entreposer différemment des mots de passe à cette fin
-          (puisque l'utilisation d'un algorithme comme Bcrypt
-          rendrait ces mots de passe inutilisables). Ceci applique
-          le critère crypto_password_storage aux sites du projet,
-          de manière similaire à sites_https.
+          externes sur les sites du projet (càd l'authentification
+          entrante). Si les sites du projet doivent se connecter
+          à d'autres sites (càd l'authentification sortante),
+          ils devront peut-être entreposer différemment des jetons
+          d'identification à cette fin (puisque conserver un code
+          de hachage serait inutile). Ceci applique le critère
+          crypto_password_storage aux sites du projet, de manière
+          similaire à sites_https.
       maintenance_or_update:
         description: >-
           Le projet DOIT maintenir les anciennes versions les

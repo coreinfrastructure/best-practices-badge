@@ -2724,13 +2724,11 @@ fr:
       copyright_per_file:
         description: >-
           Le projet DOIT inclure une déclaration de copyright
-          dans chaque fichier source, identifiant au moins une
-          année pertinente et un titulaire du droit d'auteur.
+          dans chaque fichier source, identifiant un titulaire du droit d'auteur.
         details: >-
           Cela PEUT être fait en incluant ce qui suit dans un
-          commentaire près du début de chaque fichier : « <tt>Copyright
-          [année où ce projet ou contenu a commencé] - [dernière
-          année de modification], [fondateur du projet] et les
+          commentaire près du début de chaque fichier : « <tt>Copyright 
+          [fondateur du projet] et les
           contributeurs de [nom du projet].</tt> »
       license_per_file:
         description: >-

@@ -2598,14 +2598,12 @@ de:
       copyright_per_file:
         description: >-
           Das Projekt MUSS eine Copyright-Erklärung in jeder Quelldatei
-          enthalten, die mindestens ein bestimmtes Jahr und den
+          enthalten und den
           Urheberrechtsinhaber identifiziert.
         details: >-
           Dies DARF getan werden, indem man Folgendes innerhalb
           eines Kommentars relativ am Anfangs jeder Datei einfügt:
-          "<tt> Copyright [Jahr, in dem dieses Projekt oder die
-          Arbeit begonnen hat] - [letztes Jahr, in dem es geändert
-          wurde], [Projekt Gründer] and the [Projektname] contributors.</tt>
+          "<tt> Copyright [Projekt Gründer] and the [Projektname] contributors.</tt>
           "
       license_per_file:
         description: >-

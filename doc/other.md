@@ -1358,14 +1358,13 @@ but we discussed possibly upgrading them.
 
 *   <a name="copyright_per_file"></a>
     The project MUST include a copyright statement in each source file,
-    identifying at least one relevant year and copyright holder.
+    identifying the copyright holder.
     <sup>[<a href="#copyright_per_file">copyright_per_file</a>]</sup>
 
     *Details*:
     This MAY be done by including the following inside a comment
     near the beginning of each file:
-    "<tt>Copyright [year this project or content started] -
-    [most recent year modified],
+    "<tt>Copyright
     [project founder] and the [project name] contributors.</tt>"
 
     *Rationale*: This isn't legally required in most jurisdictions, per the

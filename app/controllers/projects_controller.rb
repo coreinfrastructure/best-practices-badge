@@ -183,6 +183,8 @@ class ProjectsController < ApplicationController
   # rubocop:disable Metrics/PerceivedComplexity
   def update
     if repo_url_change_allowed?
+      # Send CDN purge early, to give it time to distribute purge request
+      purge_cdn_project
       old_badge_level = @project.badge_level
       project_params.each do |key, user_value| # mass assign
         @project[key] = user_value
@@ -202,6 +204,7 @@ class ProjectsController < ApplicationController
         update_additional_rights
         if @project.save
           successful_update(format, old_badge_level, @criteria_level)
+          # Also send CDN purge last, to increase likelihood of being purged
           purge_cdn_project
         else
           format.html { render :edit, criteria_level: @criteria_level }

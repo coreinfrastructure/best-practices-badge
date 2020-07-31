@@ -1397,7 +1397,7 @@ but we discussed possibly upgrading them.
     The project MUST include a license statement in each source file.
     This MAY be done by including the following inside a comment
     near the beginning of each file:
-    <a href="https://spdx.org/using-spdx#identifiers"><tt>SPDX-License-Identifier: [SPDX license expression for project]</tt></a>.
+    <a href="https://spdx.dev/ids/#how"><tt>SPDX-License-Identifier: [SPDX license expression for project]</tt></a>.
     <sup>[<a href="#license_per_file">license_per_file</a>]</sup>
 
     *Details*:

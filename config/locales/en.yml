@@ -2660,14 +2660,15 @@ en:
       copyright_per_file:
         description: >-
           The project MUST include a copyright statement in each
-          source file, identifying at least one relevant year
-          and copyright holder.
+          source file, identifying the copyright holder
+          (e.g., the [project name] contributors).
         details: >-
           This MAY be done by including the following inside a
           comment near the beginning of each file: "<tt>Copyright
-          [year this project or content started] - [most recent
-          year modified], [project founder] and the [project name]
-          contributors.</tt>"
+          the [project name] contributors.</tt>". See <a
+          href="https://www.linuxfoundation.org/blog/2020/01/copyright-notices-in-open-source-software-projects/"
+          >"Copyright Notices in Open Source Software Projects"
+          by Steve Winslow</a>.
       license_per_file:
         description: >-
           The project MUST include a license statement in each

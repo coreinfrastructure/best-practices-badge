@@ -1358,15 +1358,15 @@ but we discussed possibly upgrading them.
 
 *   <a name="copyright_per_file"></a>
     The project MUST include a copyright statement in each source file,
-    identifying at least one relevant year and copyright holder.
+    identifying the copyright holder (e.g., the [project name] contributors).
     <sup>[<a href="#copyright_per_file">copyright_per_file</a>]</sup>
 
     *Details*:
-    This MAY be done by including the following inside a comment
-    near the beginning of each file:
-    "<tt>Copyright [year this project or content started] -
-    [most recent year modified],
-    [project founder] and the [project name] contributors.</tt>"
+    This MAY be done by including the following inside a
+    comment near the beginning of each file: "<tt>Copyright
+    the [project name] contributors.</tt>". See
+    <a href="https://www.linuxfoundation.org/blog/2020/01/copyright-notices-in-open-source-software-projects/"
+    >"Copyright Notices in Open Source Software Projects" by Steve Winslow</a>.
 
     *Rationale*: This isn't legally required in most jurisdictions, per the
     Berne Convention.  For example, copyright notices have not been required

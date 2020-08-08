@@ -2723,23 +2723,24 @@ fr:
           ou au moins 20 pages de documentation.
       copyright_per_file:
         description: >-
-          Le projet DOIT inclure une déclaration de copyright
-          dans chaque fichier source, identifiant au moins une
-          année pertinente et un titulaire du droit d'auteur.
+          Le projet DOIT inclure une déclaration de droit d'auteur
+          dans chaque fichier source, identifiant le détenteur
+          du droit d'auteur (par exemple, les contributeurs de
+          [nom du projet]).
         details: >-
-          Cela PEUT être fait en incluant ce qui suit dans un
-          commentaire près du début de chaque fichier : « <tt>Copyright
-          [année où ce projet ou contenu a commencé] - [dernière
-          année de modification], [fondateur du projet] et les
-          contributeurs de [nom du projet].</tt> »
+          Cela PEUT être fait en incluant ce qui suit à l'intérieur
+          d'un commentaire au début de chaque fichier: « <tt>Copyright
+          les contributeurs de [nom du projet].</tt> ». Voir <a
+          href="https://www.linuxfoundation.org/blog/2020/01/copyright-notices-in-open-source-software-projects/">«
+          Avis de droits d'auteur dans les projets de logiciels
+          Open Source » par Steve Winslow</a>.
       license_per_file:
         description: >-
           Le projet DOIT inclure une déclaration de licence dans
           chaque fichier source. Cela PEUT être fait en incluant
-          ce qui suit dans un commentaire près du début de chaque
-          fichier : <a href="https://spdx.org/using-spdx#identifiers">
-          <tt>SPDX-License-Identifier : [expression d'une licence
-          SPDX pour le projet]</tt> </a>.
+          ce qui suit à l'intérieur d'un commentaire au début
+          de chaque fichier : <a href="https://spdx.dev/ids/#how"><tt>SPDX-License-Identifier
+          : [expression d'une licence SPDX pour le projet]</tt></a>.
         details: >-
           Cela PEUT également être fait en incluant une déclaration
           en langage naturel identifiant la licence. Le projet

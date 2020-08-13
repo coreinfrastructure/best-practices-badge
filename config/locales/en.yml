@@ -1546,10 +1546,10 @@ en:
           can help) <li>limited attack surface (the attack surface
           - the set of the different points where an attacker
           can try to enter or extract data - should be limited)
-          <li>input validation with acceptlists (inputs should
+          <li>input validation with allowlists (inputs should
           typically be checked to determine if they are valid
           before they are accepted; this validation should use
-          acceptlists (which only accept known-good values), not
+          allowlists (which only accept known-good values), not
           denylists (which attempt to list known-bad values)).
           </ul> A "primary developer" in a project is anyone who
           is familiar with the project's code base, is comfortable
@@ -2590,7 +2590,7 @@ en:
       input_validation:
         description: >-
           The project results MUST check all inputs from potentially
-          untrusted sources to ensure they are valid (an *acceptlist*),
+          untrusted sources to ensure they are valid (an *allowlist*),
           and reject invalid inputs, if there are any restrictions
           on the data at all.
         details: >-

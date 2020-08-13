@@ -142,7 +142,7 @@ Here is a summary of the silver criteria, with requirements in bold
 * **[Monitor external dependencies to detect/fix known vulnerabilities](doc/other.md#dependency_monitoring)**
 * **[Tests have 80%+ statement coverage](doc/other.md#test_statement_coverage80)**
 * **[Project releases for widespread use are cryptographically signed](doc/other.md#signed_releases)**
-* **[Check all inputs from potentially untrusted sources for validity (using an acceptlist)](doc/other.md#input_validation)**
+* **[Check all inputs from potentially untrusted sources for validity (using an allowlist)](doc/other.md#input_validation)**
 * *[Use hardening mechanisms](doc/other.md#hardening)*
 
 ### Gold

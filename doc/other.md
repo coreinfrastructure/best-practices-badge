@@ -1035,13 +1035,13 @@ Upgrade some "passing" level SHOULD and SUGGESTED:
 *   <a name="input_validation"></a>
     The project results MUST check
     all inputs from potentially untrusted sources to ensure
-    they are valid (a *whitelist*), and reject invalid inputs,
+    they are valid (an *acceptlist*), and reject invalid inputs,
     if there are any restrictions on the data at all.
     <sup>[<a href="#input_validation">input_validation</a>]</sup>
 
     *Details*:The project results MUST check
     all inputs from potentially untrusted sources to ensure
-    they are valid (a *whitelist*), and reject invalid inputs,
+    they are valid (an *acceptlist*), and reject invalid inputs,
     if there are any restrictions on the data at all.
 
 *   <a name="hardening"></a>Hardening mechanisms

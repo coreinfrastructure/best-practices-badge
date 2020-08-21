@@ -52,8 +52,8 @@ gem 'rails', '5.2.4.3' # Our web framework
 gem 'rails-i18n', '5.1.3' # Localizations for Rails built-ins
 gem 'redcarpet', '3.5.0' # Process markdown in form textareas (justifications)
 gem 'sass-rails', '5.1.0', require: false # For .scss files (CSS extension)
-gem 'scout_apm', '2.6.6' # Monitor for memory leaks
-gem 'secure_headers', '6.3.0' # Add hardening measures to HTTP headers
+gem 'scout_apm', '2.6.9' # Monitor for memory leaks
+gem 'secure_headers', '6.3.1' # Add hardening measures to HTTP headers
 gem 'uglifier', '4.2.0', require: false # Minify JavaScript
 gem 'will-paginate-i18n', '0.1.15' # Provide will-paginate translations
 gem 'will_paginate', '3.3.0' # Paginate results (next/previous)
@@ -65,7 +65,7 @@ group :development, :test do
   gem 'database_cleaner', '1.8.3' # Cleans up database between tests
   gem 'dotenv-rails', '2.7.5'
   gem 'eslintrb', '2.1.0'
-  gem 'json', '2.3.0'
+  gem 'json', '2.3.1'
   # Note: updating license_finder to 6.X requires changing all uses of the
   # term "whitelist" to "permit". Also, the version of thor it requires
   # requires bundler-audit >0.6.1 (which is expected but yet available at the

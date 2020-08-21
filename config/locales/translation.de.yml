@@ -40,7 +40,7 @@ de:
       Anmelden
     footer_text_html: >-
       <small><strong>Brauchen Sie Hilfe? Haben Sie eine Frage?
-      Sehen Sie ein Problem? Bitte <em> <a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;"senden
+      Sehen Sie ein Problem? Bitte <em> <a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">senden
       Sie eine E-Mail</a> </em> oder <em><a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
       target="_blank" rel="noopener"> reichen Sie ein Problem
       ein </a></em>.</strong> © 2015-2017 <a href="https://www.coreinfrastructure.org/"
@@ -51,7 +51,7 @@ de:
       target="_blank" rel="noopener"> Datenschutzrichtlinie</a>
       und <a href="https://www.linuxfoundation.org/terms" target="_blank"
       rel="noopener">Nutzungsbedingungen</a>.</small>
-    choose_locale: Wählen Sie lokale
+    choose_locale: Sprache auswählen
     toggle_navigation: Klappbare Navigation umschalten
   account_activations:
     activated: Konto aktiviert!
@@ -88,26 +88,26 @@ de:
     login_custom: Melden Sie sich mit benutzerdefiniertem Konto
       an
     no_custom: Noch kein Kundenkonto? Melden Sie sich jetzt an!
-    already_logged_in: Du bist bereits angemeldet.
+    already_logged_in: Sie sind bereits angemeldet.
     incorrect_login_info: Falsche Anmeldedaten
-    invalid_combo: Ungültige E-Mail oder Passwort kombination
+    invalid_combo: Ungültige E-Mail oder falsches Passwort
     signed_in: 'Eingeloggt! Letzter Login: %{last_login_at}'
     not_activated: >-
-      Das Konto ist noch nicht aktiviert. Überprüfe dein E-Mail
-      Postfach und klicke auf den Bestätigungs-Link.
+      Das Konto ist noch nicht aktiviert. Überprüfen Sie Ihr E-Mailpostfach
+      und klicken Sie auf den Bestätigungs-Link.
     signed_out: Abgemeldet!
     cookie_details_html: >-
       <a href="/de/cookies" target="_blank" rel="noopener"> <i>
       Erfahren Sie mehr über Cookies. </i> </a>
     no_login_time: "(Keine vorherige Zeit aufgezeichnet.)"
     login_automatic_signup: >-
-      Wenn du dich mit GitHub einloggst wird automatisch bei Bedarf
-      eine Anmeldung durchgeführt. Wenn du dich anmeldest, werden
-      dein Name (wie bei GitHub gespeichert) und dein GitHub Spitzname
-      öffentlich angezeigt und du kannst deinen Namen jederzeit
-      ändern. Deine E-Mail-Adresse wird privat gehalten und nur
-      für Badging Angelegenheiten verwendet; wir werden deine
-      Daten nicht an Dritte weitergeben, es sei denn, es ist gesetzlich
+      Wenn Sie sich mit GitHub einloggen, wird automatisch bei
+      Bedarf eine Anmeldung durchgeführt. Wenn Sie sich anmelden,
+      werden Ihr Name (wie bei GitHub gespeichert) und Ihr GitHub-Spitzname
+      öffentlich angezeigt und Sie können Ihren Namen jederzeit
+      ändern. Ihre E-Mail-Adresse wird privat gehalten und nur
+      für Badging-Angelegenheiten verwendet; wir werden Ihre Daten
+      nicht an Dritte weitergeben, es sei denn, es ist gesetzlich
       vorgeschrieben.
     login_disabled: Alle Logins sind vorübergehend deaktiviert
     cannot_login_yet:
@@ -116,7 +116,7 @@ de:
       signup_header: Anmelden
       intro_html: |-
         Wenn Sie sich nicht mit einem GitHub-Konto anmelden möchten, können Sie
-        Sie sich stattdessen hier anmelden (dies erstellt ein benutzerdefiniertes Konto mit
+        sich stattdessen hier anmelden (dies erstellt ein benutzerdefiniertes Konto mit
         Ihrer Emailadresse). <br> <br> Wenn Sie Ihren Aktivierungslink nicht erhalten haben,
         melden Sie sich bitte erneut an und wir senden Ihnen einen neuen Link.
       name: Name
@@ -137,18 +137,17 @@ de:
       profile_updated: Profil aktualisiert
     show:
       edit_user: Benutzer bearbeiten
-      other_projects_edit: 'Andere Projekte die per GitHub bearbeitet
+      other_projects_edit: 'Andere Projekte, die per GitHub bearbeitet
         werden können:'
       see_external: Benutzers externe Seite.
-      as_admin: 'Als admin können sie auch:'
+      as_admin: 'Als admin können Sie auch:'
       send_email_to: 'E-Mail senden an:'
       delete_link_name: Benutzerkonto löschen
-      confirm_delete: Bist du dir sicher ob du diesen Benutzer
-        löschen möchtest?
+      confirm_delete: Sind Sie sicher, dass Sie diesen Benutzer
+        löschen möchten?
       projects_owned: 'Eigene Projekte:'
       projects_additional_rights: 'Projekte mit zusätzlichen Rechten:'
-      is_admin: Dieser Benutzer ist ein Administrator für Badge
-        application.
+      is_admin: Dieser Benutzer ist ein Administrator für BadgeApp
       json_link: JSON
       in_json_format: Benutzerdaten im JSON-Format (ein Standardformat)
       local_account: Benutzerdefiniertes (lokales) Konto
@@ -159,40 +158,38 @@ de:
         Ein Benutzer, der Projekte besitzt, kann nicht gelöscht
         werden.
     redirect_existing: >-
-      Dieser Benutzer existiert bereits. Wolltest du dich anzumelden?
+      Dieser Benutzer existiert bereits. Wollten Sie sich anmelden?
     new_activation_link_created: >-
-      Neuer Aktivierungs-Link erstellt. Überprüfe dein E-Mail
-      Postfach um dein Konto zu aktivieren.
+      Neuer Aktivierungs-Link erstellt. Überprüfen Sie Ihr E-Mailpostfach,
+      um Ihr Konto zu aktivieren.
     please_log_in: Bitte anmelden.
   project_stats:
     index:
       project_stats_header: Projektstatistiken
       all_projects: Alle Projekte
       projects_nontrivial: Projekte mit nicht-trivialem Fortschritt
-      projects_activity_30: Projekte mit Badge Aktivitäten in
+      projects_activity_30: Projekte mit Badge-Aktivitäten in
         den letzten 30 Tagen
-      daily_activity: Tägliche Badge Aktivitäten
+      daily_activity: Tägliche Badge-Aktivitäten
       reminders: Erinnerungen
       active_projects: >-
         Aktive Projekte (erstellt/aktualisiert innerhalb von 30
         Tagen)
       active_in_progress: >-
-        Aktive in-progress Projekte (erstellt/aktualisiert innerhalb
+        Aktive in-progress-Projekte (erstellt/aktualisiert innerhalb
         von 30 Tagen)
       active_edited: >-
-        Aktive bearbeitete Projekte (aktualisiert innerhalb von
+        Aktive, bearbeitete Projekte (aktualisiert innerhalb von
         30 Tagen)
       active_edited_in_progress: >-
-        Aktive, bearbeitete, in-progress Projekte (aktualisiert
+        Aktive, bearbeitete in-progress-Projekte (aktualisiert
         innerhalb von 30 Tagen)
-      projects_created_since_yesterday: Projekte angelegt vor
-        Tag
+      projects_created_since_yesterday: Projekte angelegt seit
+        gestern
       projects_updated_since_yesterday: Projekte aktualisiert
-        seit
-      projects_created_average_7_days: Projekte vor mehr als 7
-        Tagen angelegt
-      projects_updated_average_7_days: Projekte vor mehr als 7
-        Tagen aktualisiert
+        seit gestern
+      projects_created_average_7_days: Projekte angelegt (7-Tage-Durchschnitt)
+      projects_updated_average_7_days: Projekte aktualisiert (7-Tage-Durchschnitt)
       reminders_sent_since_yesterday: Seit gestern gesendete Erinnerungen
       reactivated_projects: >-
         Reaktivierte Projekte innerhalb von 14 Tagen nach Erhalt
@@ -205,18 +202,18 @@ de:
       json_format: JSON-Format
       csv_format: Herunterladbares CSV-Format
       projects_created_updated_daily: >-
-        Der Datensatz "Projekte, die seit dem Tag zuvor erstellt
-        wurden" ist die Anzahl, wie viele Projekte innerhalb von
-        24 Stunden nach dem gegebenen Zeitpunkt erstellt wurden
-        (ohne Projekte, die auch in der gleichen 24 Stunden gelöscht
-        wurden). Ebenso, ist der Datensatz "Projekte, die seit
-        dem Tag zuvor aktualisiert wuden", die Anzahl an Projekten,
-        die innerhalb von 24 Stunden nach dem angegebenen Zeitpunkt
-        bearbeitet wurden (ohne Projekte, die im selben 24 Stunden
-        erstellt oder gelöscht wurden). Die 7-Tage-Durchschnittswerte
-        zeigen die entsprechenden Mittelwerte für 7 Tage. Sie
-        können Farben in der Legende auswählen, um die entsprechenden
-        Daten auszublenden und einzublenden.
+        Der Datensatz "Projekte angelegt seit gestern" ist die
+        Anzahl,  wie viele Projekte innerhalb von 24 Stunden nach
+        dem gegebenen Zeitpunkt erstellt wurden (ohne Projekte,
+        die auch in der gleichen 24 Stunden gelöscht wurden).
+        Ebenso ist der Datensatz "Projekte aktualisiert seit gestern",
+        die Anzahl an Projekten, die innerhalb von 24 Stunden
+        nach dem angegebenen Zeitpunkt bearbeitet wurden (ohne
+        Projekte, die in denselben 24 Stunden erstellt oder gelöscht
+        wurden). Die 7-Tage-Durchschnittswerte zeigen die entsprechenden
+        Mittelwerte für 7 Tage. Sie können Farben in der Legende
+        auswählen, um die entsprechenden Daten auszublenden und
+        einzublenden.
       projects_silver: Projektfortschritt in Richtung Silber
       projects_gold: Projektfortschritt in Richtung Gold
       projects_completed_silver_and_gold: Projekte, die Silber
@@ -224,7 +221,7 @@ de:
       percent_projects_earning_badges: Prozentsatz der Projekte,
         die Gütesiegel erhalten
       users: Benutzer
-      github_users: GitHub Benutzer
+      github_users: GitHub-Benutzer
       local_users: Benutzerdefiniere (lokale) Benutzer
       users_created_since_yesterday: Benutzer seit gestern erstellt
       users_updated_since_yesterday: Benutzer seit gestern aktualisiert
@@ -239,7 +236,7 @@ de:
     index:
       add_link: Hinzufügen
       add_new: Neues Projekt hinzufügen
-      badge_status: Badge Status
+      badge_status: Badge-Status
       exclude_passing: Schließe "passing" aus
       text_search: Textsuche
       name_or_description: Name oder Beschreibungstext
@@ -267,34 +264,34 @@ de:
       last_achieved: Zuletzt erreicht
       pachieved: Fortschritt %
       can_also_sort: >-
-        Das Feld "Fortschritt %" zeigt 300% für Gold, 200% für
-        Silber und 100% für Passing Badge und fügt den Fortschritt
-        nach dem am höchsten verdienten Badge hinzu. Du kannst
-        danach sortieren:
+        Das Feld "Fortschritt %" zeigt 300% für den Gold-, 200%
+        für den Silber- und 100% für den Passing-Badge und fügt
+        den Fortschritt nach dem am höchsten verdienten Badge
+        hinzu. Sie können danach sortieren:
       repository_url: Repository-URL
-      create_time: Erstelltzeitpunkt (für den Badge Eintrag)
-      update_time: Letzte Aktualisierung (für Badge Eintrag)
+      create_time: Erstellzeitpunkt (für den Badge-Eintrag)
+      update_time: Letzte Aktualisierung (für Badge-Eintrag)
       user_id: Benutzer ID
       paren_name_unknown: "(Name unbekannt)"
-      badge_level: Badge Level für das Projekt %{id} ist %{percent}%
+      badge_level: Badge-Level für das Projekt %{id} ist %{percent}%
       badge: Badge
     new:
       post_delay_warning: >-
         Es kann nach dem Einreichen eine erhebliche Verzögerung
         geben, da wir versuchen, automatisch die Informationen
         auszufüllen.
-      new_badge: Neues Badge
+      new_badge: Neuer Badge
       may_select_html: >-
-        Sie können eines Ihrer GitHub Repositories <em>ODER</em>
+        Sie können eines Ihrer GitHub-Repositories <em>ODER</em>
         Informationen über ein anderes Projekt auswählen.
-      select_one_github: Wähle einer deiner GitHub-Repos
-      submit_github: GitHub Repository einreichen
+      select_one_github: Wählen eines GitHub-Repos
+      submit_github: GitHub-Repository einreichen
       url_of_homepage: >-
         Wie lautet die URL für die Projekt-Homepage (die URL für
         das Projekt als Ganzes)? Start mit http(s):// (viele Zeichen
         sind nicht erlaubt, einschließlich "?")
       placeholder_of_homepage: >-
-        http(s)://... für Projekt-Homepage URL, verwende https://
+        http(s)://... für Projekt-Homepage-URL, verwende https://
         wenn möglich
       url_of_repo: >-
         Was ist die URL für das Versionskontroll-Repository (es
@@ -312,11 +309,11 @@ de:
       project_already_exists: Dieses Projekt existiert bereits!
       final_text_html: >-
         Hinweis - Wenn sich Ihre Repository-URL auf GitHub befindet,
-        kann jeder, der das Repository begehen kann, die Abzeicheninformationen
+        kann jeder, der im Repository comitten kann, die Abzeicheninformationen
         bearbeiten.
       new_badge_or: ODER
-      original_repos: "=> Original GitHub Repos"
-      fork_repos: "=> Verstreutes GitHub Repos"
+      original_repos: "=> Original GitHub-Repos"
+      fork_repos: "=> Geforkte GitHub-Repos"
       tell_us:
     show:
       edit: Bearbeiten
@@ -349,21 +346,20 @@ de:
         angemessene Hinweis auf den Urheber geben. Bitte geben
         Sie als Urheber %{user} und die CII Best Practices Badge
         Mitwirkenden an. <br> <br>
-      owned_by: 'Projekt Badge Eintrag im Besitz von:'
-      created_at_html: "<strong>Eintrag erstellt auf</strong>
-        %{when},"
-      updated_at_html: "<strong>zuletzt aktualisiert auf</strong>
+      owned_by: 'Projekt-Badge-Eintrag im Besitz von:'
+      created_at_html: "<strong>Eintrag erstellt: </strong> %{when},"
+      updated_at_html: "<strong>zuletzt aktualisiert: </strong>
         %{when}."
-      last_lost_html: Letztes verlorenes Badge auf %{when}.
-      last_achieved_html: Letztes erreichtes Badge auf %{when}.
+      last_lost_html: 'Letztes verlorenes Badge: %{when}.'
+      last_achieved_html: 'Letztes erreichtes Badge: %{when}.'
     edit:
       submit_cc_by_3plus_html: >-
         Indem Sie diese Daten über das Projekt eingeben, stimmen
         Sie einer Veröffentlichung unter mindestens <a href="https://creativecommons.org/licenses/by/3.0/us"
         target="_blank" rel="noopener">Creative Commons Attribution
         version 3.0 or later license (CC-BY-3.0+)</a> zu. Das
-        bedeutet, dass es Allen erlaubt ist die Daten zu teilen
-        und anzupassen, aber sie müssen einen angemessenen Erwähnung
+        bedeutet, dass es allen erlaubt ist die Daten zu teilen
+        und anzupassen, aber sie müssen eine angemessenen Erwähnung
         geben. Sie behalten das Urheberrecht (falls vorhanden)
         und die Projektlizenz bleibt davon unberührt.<br><br>
       save_and_continue: Speichern (und fortfahren)
@@ -378,23 +374,24 @@ de:
         und kopieren Sie ihre Änderungen dorthin.
       successfully_updated: Das Projekt wurde erfolgreich aktualisiert.
       congrats_new: >-
-        GLÜCKWÜNSCHE zum Erwerb eines %{new_badge_level} Abzeichens!
-        Wenn du noch nicht erledigt hast, zeig bitte deinen Abzeichenstatus
-        auf deiner Projektseite (siehe "Wie man das Siegel hinzufügt"
-        im Text unten, wenn man nicht weiß wie).
+        GLÜCKWÜNSCHE zum Erwerb eines %{new_badge_level}-Badge!
+        Wenn Sie es noch nicht erledigt haben, zeigen Sie bitte
+        den Badge-Status auf Ihrer Projektseite (siehe "Wie man
+        das Siegel hinzufügt" im Text unten, wenn man nicht weiß
+        wie).
       lost_badge: Das Projekt hat ein Badge verloren.
       static_analysis_updated_html: >-
         Wir haben unsere Anforderungen für das Kriterium static_analysis
         aktualisiert. Bitte fügen Sie eine Rechtfertigung für
         dieses Kriterium hinzu.
-      edit_status: Bearbeiten des Projekt Badge Status
+      edit_status: Bearbeiten des Projekt-Badge-Status
     form_basics:
       project_name:
         description: Was ist der von Menschen lesbare Name des
           Projekts?
         details: 'Hinweis: Andere Projekte können den selben Namen
           benutzen.'
-        placeholder: FLOSS Projektname
+        placeholder: FLOSS-Projektname
       description:
         description: Was ist eine Kurzbeschreibung des Projektes?
         details: >-
@@ -404,23 +401,23 @@ de:
         placeholder: Projektbeschreibung
       homepage_url:
         description: Wie lautet die URL für das Projekt (vollständig)?
-        placeholder: Projekt Website URL
+        placeholder: Projekt-Website-URL
       repo_url:
         description: >-
           Was ist die URL für das Versionskontroll-Repository
           (es kann mit der Projekt-URL identisch sein)?
-        placeholder: Projekt Repo URL
+        placeholder: Projekt-Repo-URL
       implementation_languages:
         description: >-
           Welche Programmiersprache wird verwendet, um das Projekt
           umzusetzen?
         details: >-
-          Wenn es mehr als eine Programmiersprache gibt, liste
-          sie als kommagetrennte Werte (Leerzeichen sind optional)
-          auf und sortiere sie von am häufigsten zum am wenigsten
+          Wenn es mehr als eine Programmiersprache gibt, listen
+          Sie sie als kommagetrennte Werte (Leerzeichen sind optional)
+          auf und sortieren Sie sie von am häufigsten zum am wenigsten
           verwendeten. Wenn es eine lange Liste gibt, bitte mindestens
           die ersten drei häufigsten auflisten. Wenn es keine
-          Programmiersprache gibt (z.B. ist dies nur ein Dokumentations-
+          Programmiersprache gibt (z. B. ist dies nur ein Dokumentations-
           oder Testprojekt), verwenden Sie das einzelne Zeichen
           "-". Bitte verwenden Sie eine herkömmliche Großschreibung
           für jede Sprache, z.B. "JavaScript".
@@ -429,13 +426,13 @@ de:
           Liste, sortiert nach Gebrauch
       cpe:
         description_html: >-
-          Was ist die <a href="https://nvd.nist.gov/cpe.cfm">
-          Common Platform Enumeration  (CPE) </a> Name für das
-          Projekt (wenn es einen gibt)?
+          Was ist der <a href="https://nvd.nist.gov/cpe.cfm">
+          Common-Platform-Enumeration-/CPE-</a>Name für das Projekt
+          (wenn es einen gibt)?
         details_html: >-
           Das <a href="https://nvd.nist.gov/cpe.cfm">Common Platform
           Enumeration (CPE)</a> ist ein strukturiertes Namensschema
-          für IT Systeme, Software und Pakete. Es wird in diversen
+          für IT-Systeme, Software und Pakete. Es wird in diversen
           Systemen und Datenbanken bei der Meldung von Schwachstellen
           verwendet.
         placeholder: "(Optional) CPE-Name"
@@ -444,23 +441,23 @@ de:
           Unter welcher Lizenz/welchen Lizenzen ist das Projekt
           veröffentlicht?
         details_html: >-
-          Bitte verwenden Sie das <a href="https://spdx.org/licenses/">SPDX
-          License Expression Format</a>; Beispiele sind "Apache-2.0",
-          "BSD-2-Clause", "BSD-3-Clause", "GPL-2.0+", "LGPL-3.0+",
-          "MIT" und "(BSD-2-Clause OR Ruby)".
-        placeholder: FLOSS Lizenz
+          Bitte verwenden Sie das <a href="https://spdx.org/licenses/">SPDX-License-Expression-Format</a>;
+          Beispiele sind "Apache-2.0", "BSD-2-Clause", "BSD-3-Clause",
+          "GPL-2.0+", "LGPL-3.0+", "MIT" und "(BSD-2-Clause OR
+          Ruby)".
+        placeholder: FLOSS-Lizenz
         title: >-
           Lizenz im SPDX-Lizenzausdruckformat, z.B. "MIT" oder
           "GPL-3.0+", ohne einfache oder doppelte Anführungszeichen
       additional_rights_changes:
         description: >-
           (Erweitert) Welche anderen Benutzer haben zusätzliche
-          Rechte zum Bearbeiten dieses Badge-Antrag? Derzeit:
+          Rechte zum Bearbeiten dieses Badge-Antrags? Derzeit:
           %{current_rights}
         details_html: >-
           Die meisten Projekte sollten dieses Feld ignorieren.
           Badge-Projekt-Einträge können immer vom Besitzer des
-          Badge-Antrag-Besitzers (Ersteller), von den BadgeApp-Administratoren
+          Badge-Antrags (Ersteller), von den BadgeApp-Administratoren
           und von allen Personen bearbeitet werden, die sich für
           das GitHub-Repository anmelden können (wenn es sich
           um GitHub handelt). Wenn Sie möchten, dass jemand anderes
@@ -490,7 +487,7 @@ de:
         description: >-
           Projekte, die den nachfolgenden Best Practices folgen,
           können sich freiwillig selbst zertifizieren und zeigen,
-          dass sie einen Core-Infrastruktur-Initiative (CII) Badge
+          dass sie einen Core-Infrastruktur-Initiative-/CII-Badge
           erhalten haben.
         details_html: >-
           Es gibt keine Auswahl an Praktiken, die garantieren
@@ -514,34 +511,34 @@ de:
           sein oder nicht (wir wollen sie zumindest berücksichtigt
           wissen). Wenn lediglich ein allgemeiner Kommentar angebeben
           werden soll, keine direkte Begründung, dann ist das
-          erlaubt wenn der Text mit "#" beginnt. Feedback ist
+          erlaubt, wenn der Text mit "#" beginnt. Feedback ist
           willkommen auf der<a href="https://github.com/coreinfrastructure/best-practices-badge">GitHub-Website
           als Issue oder Pull-Request</a>. Es gibt auch eine <a
           href="https://lists.coreinfrastructure.org/mailman/listinfo/cii-badges">E-Mail-Liste
-          für allgemeine Diskussionen</a><br /><br /> Wir stellen
+          für allgemeine Diskussionen</a><br /><br />. Wir stellen
           Ihnen gerne die Informationen in mehreren Sprachen zur
-          Verfügung, allerdings ist die Englische Version maßgeblich,
+          Verfügung, allerdings ist die englische Version maßgeblich,
           insbesondere wenn es Konflikte oder Inkonsistenzen zwischen
           den Übersetzungen gibt.
       got_badge:
         description_1: >-
           Wenn dies Ihr Projekt ist, zeigen Sie bitte Ihren Badge-Status
           auf Ihrer Projektseite! Der Badge-Status sieht so aus:
-        description_2: 'Hier ist, wie man es einbetten:'
+        description_2: 'So können Sie ihn einbetten:'
         details_html: >-
-          Sie können Ihren Badgestatus anzeigen, indem Sie folgendes
+          Sie können Ihren Badge-Status anzeigen, indem Sie Folgendes
           in Ihre Markdown-Datei einbetten:<br />%{markdown_embedding}<br
-          /> oder indem Sie folgendes in Ihr HTML einbetten: <br
+          /> oder indem Sie Folgendes in Ihr HTML einbetten: <br
           /> %{html_embedding} <br />
         editing_description_html: >-
           <strong>Bitte 'submit' oft </strong>, um Ihre Arbeit
           zu speichern (Sie können immer wieder zurückkehren und
           später bearbeiten). <br> <br> Wenn Sie Hilfe benötigen,
           eine Frage haben, oder ein Problem sehen, bitte <em><a
-          href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">Schicken
+          href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">schicken
           Sie uns eine E-Mail</a></em> oder <em><a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
           target="_blank" rel="noopener">erstellen Sie ein Issue</a>/em>.
-        badge_alt: Badgelevel für Projekt %{id} ist %{level}
+        badge_alt: Badge-Level für Projekt %{id} ist %{level}
       level:
         0_html: >-
           Dies sind die Kriterien das Level %{passing}. Sie können
@@ -568,22 +565,22 @@ de:
         description: Andere allgemeine Hinweise zum Projekt?
         placeholder: Zusätzliche Bemerkungen (in Markdown)
       some_not_crypto_html: >-
-        Beachte, dass einige Software keine kryptographischen
+        Beachten Sie, dass einige Software keine kryptographischen
         Mechanismen verwenden muss.
       dont_use_crypto: >-
         Drücken Sie hier, wenn die vom Projekt produzierte Software
         keine kryptographischen Mechanismen verwendet
       future_header_html: >-
         Dies sind die Kriterien, die wir in naher Zukunft hinzufügen
-        wollen, aber für sie <em> nicht </em> relevant sind. Diese
+        wollen, aber für Sie <em> nicht </em> relevant sind. Diese
         Gnadenfrist ermöglicht es, Projekte auf geänderte Kriterien
-        zu aktualisieren und ihr Abzeichen zu behalten, wie es
-        die besten Praktiken verbessern.
+        zu aktualisieren und ihr Abzeichen zu behalten, während
+        die Best Practices ausgebaut werden.
       in_javascript:
-        collapse_all_title: Alle Panels falten
-        collapse_all: Panel falten
-        expand_all_title: Alle Panels erweitern
-        expand_all: Panel erweitern
+        collapse_all_title: Alle Panels einklappen
+        collapse_all: Panel einklappen
+        expand_all_title: Alle Panels ausklappen
+        expand_all: Panel ausklappen
         show_details: Zeige Details
         hide_details: Details ausblenden
         show_all_details: Alle Details anzeigen
@@ -591,7 +588,7 @@ de:
         show_met_title: Betroffene zeigen &amp; N/A
         show_met_html: Betroffene ausblenden &amp; N/A
         hide_met_title: >-
-          Betroffene & N/A Kriterien ausblenden (verlasse unbetroffene
+          Betroffene & N/A-Kriterien ausblenden (verlasse unbetroffene
           und unbekannte)
         hide_met_html: Betroffene ausblenden &amp; N/A
         passing_alt: Genug für ein Badge!
@@ -601,24 +598,26 @@ de:
           Unbekannte erforderliche Informationen, nicht genug
           für ein Badge.
         met_url_placeholder: >-
-          (URL erforderlich) Bitte erläutere, wie dies erfüllt
+          (URL erforderlich) Bitte erläutern Sie, wie dies erfüllt
           ist, einschließlich 1 + Key URLs.
         met_justification_placeholder: >-
-          (Erforderlich) Bitte erläutere, wie dies erfüllt ist,
-          möglicherweise auch 1+ Key URLs.
+          (Erforderlich) Bitte erläutern Sie, wie dies erfüllt
+          ist, möglicherweise auch 1+ Key URLs.
         met_placeholder: >-
-          (Optional) Bitte erläutere, wie dies erfüllt ist, möglicherweise
-          auch 1+ Key URLs.
+          (Optional) Bitte erläutern Sie, wie dies erfüllt ist,
+          möglicherweise auch 1+ Key URLs.
         unmet_placeholder: >-
-          Bitte erkläre, warum es in Ordnung ist, dass dies nicht
-          erreicht ist, einschließlich 1 + Key URLs.
+          Bitte erklären Sie, warum es in Ordnung ist, dass dies
+          nicht erreicht ist, einschließlich 1 + Key URLs.
         na_justification_placeholder: >-
-          (Erforderlich) Bitte erläutere, warum dies nicht zutreffend
-          ist (N/A), möglicherweise einschließlich 1+ Key URLs.
+          (Erforderlich) Bitte erläutern Sie, warum dies nicht
+          zutreffend ist (N/A), möglicherweise einschließlich
+          1+ Key URLs.
         na_placeholder: >-
-          (Erforderlich) Bitte erläutere, warum dies nicht zutreffend
-          ist (N/A), möglicherweise einschließlich 1+ Key URLs.
-        unknown_placeholder: Bitte erkläre
+          (Erforderlich) Bitte erläutern Sie, warum dies nicht
+          zutreffend ist (N/A), möglicherweise einschließlich
+          1+ Key URLs.
+        unknown_placeholder: Bitte erklären Sie
       toggle_details_title: Toggle Details Text
       details: Details
       url_required: URL erforderlich
@@ -665,76 +664,78 @@ de:
         enthalten.
   report_mailer:
     new_project_heading: >-
-      Vielen Dank das du dein Projekt dem Best Practices Badging
-      Program hinzugefügt hast
+      Vielen Dank, dass Sie Ihr Projekt dem Best-Practices-Badging-Program
+      hinzugefügt haben
     new_project_part1: >-
-      Vielen Dank für das Hinzufügen Ihres Projektes zum Best
-      Practices Badging Programm. Für dieses Projekte haben wir
+      Vielen Dank für das Hinzufügen Ihres Projektes zum Best-
+      Practices-Badging-Programm. Für dieses Projekte haben wir
       aktuell den Namen:
     new_project_part2: |-
-      Bitte besuchen Sie Ihren Abzeicheneintrag
-      Um die Informationen zu vervollständigen und dein Abzeichen zu bekommen!
+      Bitte besuchen Sie Ihren Abzeicheneintrag,
+      um die Informationen zu vervollständigen und Ihr Abzeichen zu bekommen!
       Hier ist die URL für Ihren Abzeicheneintrag:
     new_project_part3_html: |-
       <p>
-      Wir ermutigen dich, weiter Fortschritt zu machen.
+      Wir ermutigen Sie, weiter Fortschritt zu machen.
       </p>
       <p>
-      Wenn du <em>nur</em> sehen willst was du verpasst,
-      besuche deinen Badge-Eintrag und
-      klicke auf den Button oben mit der Aufschrift "Verberge erfüllte oder N/A Kriterien".
+      Wenn Sie <em>nur</em> sehen wollen, was Sie verpassen,
+      besuchen Sie Ihren Badge-Eintrag und
+      klicken Sie auf den Button oben mit der Aufschrift "Verberge erfüllte oder N/A Kriterien".
       Wenn Sie Fragen haben oder Hilfe benötigen, wenden Sie sich bitte an
       <a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;</a>
-      oder erstelle ein Issue unter
+      oder erstellen Sie ein Issue unter
       <a href="https://github.com/coreinfrastructure/best-practices-badge/issues">https://github.com/coreinfrastructure/best-practices-badge/issues</a>
       (Klicken Sie auf "New Issue").
       </p>
       <p>
-      Wir werden dir niemals Werbung senden, und wir werden nur selten
+      Wir werden Ihnen niemals Werbung senden, und wir werden nur selten
       eine E-Mail senden.
-      Wir senden dir eine E-Mail zu wichtigen Badge-Anwendungsereignissen,
-      wenn du beispielsweise einen neuen Badge Projekt Eintrag erstellst,
-      wenn dein Projekt ein Badge erhält oder verliert,
-      oder wenn jemand ein Passwort für dein Benutzerkonto anfordert.
-      Wenn dein Projekt kein Badge hat und du dein Abzeichen für mindestens 30 Tage nicht aktualisiert, senden wir dir normalerweise eine Inaktivitätserinnerung circa alle 30-60 Tage.
-      Du kannst diese Inaktivitätserinnerungsnachrichten jederzeit deaktivieren;
-      Ändere dazu deinen Badge Projekt Eintrag
+      Wir senden Ihnen eine E-Mail zu wichtigen Badge-Anwendungsereignissen,
+      wenn Sie beispielsweise einen neuen Badge-Projekt-Eintrag erstellen,
+      wenn Ihr Projekt einen Badge erhält oder verliert,
+      oder wenn jemand ein Passwort für Ihr Benutzerkonto anfordert.
+      Wenn Ihr Projekt keinen Badge hat und Sie Ihr Abzeichen für mindestens 30 Tage nicht aktualisieren, senden wir Ihnen normalerweise eine Inaktivitätserinnerung circa alle 30-60 Tage.
+      Sie können diese Inaktivitätserinnerungsnachrichten jederzeit deaktivieren;
+      Änderen Sie dazu Ihren Badge-Projekt-Eintrag,
       <a href="%{project_info_url}#project_disabled_reminders">%{project_info_url}#project_disabled_reminders</a>
       um "Inaktivitätsanzeige deaktivieren" zu aktivieren.
-      Denke daran, den Projekteintrag <i> zu bearbeiten </i>, wenn du den Wert ändern möchten.
-      Wenn dein Projekt ein passing Badge erhalten hat oder
-      der Badge Projekt Eintrage innerhalb von 30 Tagen bearbeitet wurde,
+      Denken Sie daran, den Projekteintrag <i> zu bearbeiten </i>, wenn Sie den Wert ändern möchten.
+      Wenn Ihr Projekt einen passing-Badge erhalten hat oder
+      der Badge-Projekt-Eintrag innerhalb von 30 Tagen bearbeitet wurde,
       wird keine Inaktivitätserinnerung gesendet.
       </p>
       <p>
-      Vielen Dank für deine Zeit.
+      Vielen Dank für Ihre Zeit.
       </p>
-    new_project_part3_text: "Wir ermutigen dich, weiter Fortschritt
-      zu machen.\nWenn du nur sehen willst was du verpasst,\nbesuche
-      deinen Badge-Eintrag und\nklicke auf den Button oben mit
-      der Aufschrift \"Verberge erfüllte oder N/A Kriterien\".\nWenn
-      Sie Fragen haben oder Hilfe benötigen, wenden Sie sich bitte
-      an\ncii-badges-questions-owner@lists.coreinfrastructure.org\noder
-      erstelle ein Issue unter\nhttps://github.com/coreinfrastructure/best-practices-badge/issues\n(Klicken
-      Sie auf \"New Issue\").\nWir werden dir niemals Werbung
-      senden, und wir werden nur selten \neine E-Mail senden.\nWir
-      senden dir eine E-Mail zu wichtigen Badge-Anwendungsereignissen,\nwenn
-      du beispielsweise einen neuen Badge Projekt Eintrag erstellst,\nwenn
-      dein Projekt ein Badge erhält oder verliert,\noder wenn
-      jemand ein Passwort für dein Benutzerkonto anfordert.\nWenn
-      dein Projekt kein Badge hat und du dein Abzeichen für mindestens
-      30 Tage nicht aktualisiert, senden wir dir normalerweise
-      eine Inaktivitätserinnerung circa alle 30-60 Tage.\nDu kannst
-      diese Inaktivitätserinnerungsnachrichten jederzeit deaktivieren;\nÄndere
-      dazu deinen Badge Projekt Eintrag\n%{project_info_url}#project_disabled_reminders\num
-      \"Inaktivitätsanzeige deaktivieren\" zu aktivieren.\nDenke
-      daran, den Projekteintrag zu bearbeiten, wenn du den Wert
-      ändern möchten.\nWenn dein Projekt ein passing Badge erhalten
-      hat oder\nder Badge Projekt Eintrage innerhalb von 30 Tagen
-      bearbeitet wurde,\nwird keine Inaktivitätserinnerung gesendet.\n\nVielen
-      Dank für deine Zeit.\n"
-    in_markdown_add: 'Im Markdown kannst du dies hinzufügen:'
-    in_html_add: 'In HTML kannst du das hinzufügen:'
+    new_project_part3_text: |-
+      Wir ermutigen Sie, weiter Fortschritt zu machen.
+      Wenn Sie nur sehen wollen, was Sie verpassen,
+      besuchen Sie Ihren Badge-Eintrag und
+      klicken Sie auf den Button oben mit der Aufschrift "Verberge erfüllte oder N/A Kriterien".
+      Wenn Sie Fragen haben oder Hilfe benötigen, wenden Sie sich bitte an
+      cii-badges-questions-owner@lists.coreinfrastructure.org
+      oder erstellen Sie ein Issue unter
+      https://github.com/coreinfrastructure/best-practices-badge/issues
+      (Klicken Sie auf "New Issue").
+      Wir werden Ihnen niemals Werbung senden, und wir werden nur selten
+      eine E-Mail senden.
+      Wir senden Ihnen eine E-Mail zu wichtigen Badge-Anwendungsereignissen,
+      wenn Sie beispielsweise einen neuen Badge-Projekt-Eintrag erstellen,
+      wenn Ihr Projekt einen Badge erhält oder verliert,
+      oder wenn jemand ein Passwort für Ihr Benutzerkonto anfordert.
+      Wenn Ihr Projekt keinen Badge hat und Sie Ihr Abzeichen für mindestens 30 Tage nicht aktualisieren, senden wir Ihnen normalerweise eine Inaktivitätserinnerung circa alle 30-60 Tage.
+      Sie können diese Inaktivitätserinnerungsnachrichten jederzeit deaktivieren;
+      Änderen Sie dazu Ihren Badge-Projekt-Eintrag,
+      %{project_info_url}#project_disabled_reminders
+      um "Inaktivitätsanzeige deaktivieren" zu aktivieren.
+      Denken Sie daran, den Projekteintrag zu bearbeiten, wenn Sie den Wert ändern möchten.
+      Wenn Ihr Projekt ein passing-Badge erhalten hat oder
+      der Badge-Projekt-Eintrage innerhalb von 30 Tagen bearbeitet wurde,
+      wird keine Inaktivitätserinnerung gesendet.
+      Vielen Dank für Ihre Zeit.
+    in_markdown_add: 'Im Markdown können Sie dies hinzufügen:'
+    in_html_add: 'In HTML können Sie das hinzufügen:'
     ending: >-
       --- David A. Wheeler, CII Best Practices Badge Technical
       Lead
@@ -756,18 +757,18 @@ de:
       Aufgrund der von Ihnen bereitgestellten Informationen hat Ihr Projekt den CII Best Practices '%{new_level}' Badge verdient.
       Für weitere Informationen, siehe diese URL:
     gained_level_part2: |-
-      Bitte fügen Sie Ihr Badge zu Ihrem Projekt und/oder Repository-Website hinzu.
+      Bitte fügen Sie Ihren Badge zu Ihrem Projekt und/oder Repository-Website hinzu.
       Sie haben es sich verdient:
     gained_level_part3: |-
       Wir empfehlen Ihnen dringend, einen Rechtfertigungstext hinzuzufügen oder zu verbessern, einschließlich Hinzufügen von URLs, die auf weitere Informationen verweisen.
-      Wenn Sie Vorschläge haben, wie wir die Kriterien oder die Badge Web-Anwendung verbessern können, bitte erstellen Sie ein Issue unter:
+      Wenn Sie Vorschläge haben, wie wir die Kriterien oder die Badge-Web-Anwendung verbessern können, bitte erstellen Sie ein Issue unter:
       https://github.com/coreinfrastruktur/best-praktiken-badge/issues
-      Wenn Sie Änderungen in Ihrem Projekt vorgenommen haben, um das Badge zu bekommen, lassen Sie es uns bitte per email an cii-badges-questions@lists.coreinfrastructure.org wissen.
+      Wenn Sie Änderungen in Ihrem Projekt vorgenommen haben, um das Badge zu bekommen, lassen Sie es uns bitte per E-Mail an cii-badges-questions@lists.coreinfrastructure.org wissen.
       Eines unserer Ziele ist es, Projekte zu ermutigen, Verbesserungen vorzunehmen.
-      Wir haben einige dieser Berichte in das öffentliche Wiki gestellt. informieren Sie uns bitte wenn Sie nicht wollen, dass die Änderungen veröffentlicht werden https://github.com/coreinfrastruktur/best-praktiken-badge/wiki/Impacts
-      Danke und Herzlichen Glückwünsch.
+      Wir haben einige dieser Berichte in das öffentliche Wiki gestellt. Informieren Sie uns bitte, wenn Sie nicht wollen, dass die Änderungen veröffentlicht werden https://github.com/coreinfrastruktur/best-praktiken-badge/wiki/Impacts
+      Danke und nochmal herzlichen Glückwünsch.
     lost_level_message: |-
-      Es tut uns leid, aber dein Projekt hat nicht mehr das Abzeichen "%{old_level}"
+      Es tut uns Leid, aber Ihr Projekt hat nicht mehr das Abzeichen "%{old_level}"
       Und ist jetzt "%{new_level}".
       Bitte beachten Sie die folgende URL für weitere Informationen:
     reminder_body_html: |-
@@ -776,10 +777,10 @@ de:
       Dies ist eine automatische Erinnerung, dass Ihr Projekt
       "%{project_name}"
       derzeit kein "Best Practices"-Abzeichen hat
-      und sein Eintrag wurde seit einiger Zeit nicht mehr aktualisiert.
+      und sein Eintrag seit einiger Zeit nicht mehr aktualisiert wurde.
       </p>
       <p>
-      Ihr Best Practices-Ausweiseintrag befindet sich bei
+      Ihr Best-Practices-Badge-Eintrag befindet sich bei
       <a href="%{project_info_url}">%{project_info_url}</a>
       und wurde zuletzt am %{project_updated_at} aktualisiert.
       Er liegt derzeit bei %{project_badge_percentage_0}% (von 100%).
@@ -787,7 +788,7 @@ de:
       <p>
       Wir ermutigen Sie, weitere Fortschritte zu machen.
       Bitte besuchen Sie Ihren Eintrag unter
-      <a href="%{project_info_url}"> %{project_info_url} </a>
+      <a href="%{project_info_url}"> %{project_info_url} </a>,
       um die Informationen zu vervollständigen und Ihr Abzeichen zu erhalten!
       </p>
       <p>
@@ -798,13 +799,13 @@ de:
       <a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;</a>
       oder ein Problem melden wollen
       <a href="https://github.com/coreinfrastructure/best-practices-badge/issues"> https://github.com/coreinfrastructure/best-practices-badge/issues </a>
-      (Klicken Sie auf "Neue Angelegenheit").
+      (Klicken Sie auf "New Issue").
       </p>
       <p>
       Wir senden keine Erinnerungen, wenn Sie weiterhin Ihren Badge-Eintrag aktualisieren.
       und wir senden nur ungefähr alle 30-60 Tage Erinnerungen. Jedoch,
-      Wenn Sie diese Erinnerungsnachrichten deaktivieren möchten, bearbeiten Sie Ihren Eintrag unter
-      <a href="%{project_info_url}"> %{project_info_url} </a>
+      wenn Sie diese Erinnerungsnachrichten deaktivieren möchten, bearbeiten Sie Ihren Eintrag unter
+      <a href="%{project_info_url}"> %{project_info_url} </a>,
       um "Inaktivitätsanzeige deaktivieren" zu aktivieren.
       Wir hoffen, dass Sie stattdessen weiter daran arbeiten
       und schließlich das Abzeichen sich verdienen.
@@ -816,11 +817,11 @@ de:
       Dies ist eine automatische Erinnerung, dass Ihr Projekt
       "%{project_name}"
       derzeit kein "Best Practices" -Abzeichen hat
-      und sein Eintrag wurde seit einiger Zeit nicht mehr aktualisiert.
-      Ihr Best Practices Eintrag befindet sich bei
+      und sein Eintrag seit einiger Zeit nicht mehr aktualisiert wurde.
+      Ihr Best-Practices-Eintrag befindet sich bei
       %{project_info_url}
       und wurde zuletzt am %{project_updated_at} aktualisiert
-      Es ist derzeit bei %{project_badge_percentage_0}% (von 100%).
+      Er ist derzeit bei %{project_badge_percentage_0}% (von 100%).
       Wir ermutigen Sie, weitere Fortschritte zu machen.
       Bitte besuchen Sie Ihren Eintrag unter
       %{project_info_url}
@@ -835,7 +836,7 @@ de:
       (Klicken Sie auf "Neue Angelegenheit").
       Wir senden keine Erinnerungen, wenn Sie weiterhin Ihren Badge-Eintrag aktualisieren.
       und wir senden nur ungefähr alle 30-60 Tage Erinnerungen. Jedoch,
-      Wenn Sie diese Erinnerungsnachrichten deaktivieren möchten, bearbeiten Sie Ihren Eintrag unter
+      wenn Sie diese Erinnerungsnachrichten deaktivieren möchten, bearbeiten Sie Ihren Eintrag unter
       %{project_info_url}
       um "Inaktivitätsanzeige deaktivieren" zu aktivieren.
       Wir hoffen, dass Sie stattdessen weiter daran arbeiten
@@ -861,22 +862,22 @@ de:
         <h1>CII Best Practices Badging Programm</h1>
         <p> Hallo, </p>
         <p>
-        Vielen Dank für die Verbindung deines GitHub-Kontos und willkommen
-        Zum CII Best Practices Badging Programm!
+        Vielen Dank für die Verbindung Ihres GitHub-Kontos und willkommen
+        zum CII-Best-Practices-Badging-Programm!
         </p>
         <p>
-        Wenn Sie diese Aktion nicht eingeleitet haben, überprüfen Sie bitte Ihre GitHub
+        Wenn Sie diese Aktion nicht eingeleitet haben, überprüfen Sie bitte Ihr GitHub-
         Sicherheitsprotokoll unter Einstellungen&gt;Sicherheit.
         </p>
       before_text: |-
         Hallo,
-        Vielen Dank für die Verbindung deines GitHub-Kontos und willkommen bei der
-        CII Best Practices Badging Programm!
-        Wenn Sie diese Aktion nicht eingeleitet haben, überprüfen Sie bitte Ihre GitHub Sicherheitseinstellungen
-        Bei GitHub anmelden und unter Einstellungen>Sicherheit suchen.
-      subject: Willkommen beim Badge Programm
+        Vielen Dank für die Verbindung Ihres GitHub-Kontos und willkommen bei zum
+        CII-Best-Practices-Badging-Programm!
+        Wenn Sie diese Aktion nicht eingeleitet haben, überprüfen Sie bitte Ihre GitHub-Sicherheitseinstellungen
+        unter Einstellungen>Sicherheit.
+      subject: Willkommen beim Badge-Programm
     user_update:
-      before_text: Einige der Benutzerdaten für dein Konto wurden
+      before_text: Einige der Benutzerdaten für Ihr Konto wurden
         aktualisiert.
       username_changed: Benutzername geändert.
       email_changed: E-Mail-Adresse geändert.
@@ -887,25 +888,25 @@ de:
         gibt.
       subject: Benutzerdaten bearbeitet
     password_reset:
-      before_html: |
+      before_html: |-
         <h1>Passwort zurücksetzen</h1>
-        <p>Um dein Passwort zurückzusetzen, klicke auf den Link unten:</p>
-      before_text: 'Um dein Passwort zurückzusetzen, klicke auf
-        den Link:'
+        <p>Um Ihr Passwort zurückzusetzen, klicken Sie auf den Link unten:</p>
+      before_text: 'Um Ihr Passwort zurückzusetzen, klicken Sie
+        auf den Link:'
       after_html: |-
         <p> Dieser Link läuft in zwei Stunden ab. </p>
         <p>
-        Wenn Sie nicht aufgefordert haben, Ihr Passwort zurückzusetzen,
-        Bitte ignoriere diese E-Mail und
-        Ihr Passwort bleibt so wie es ist.
+        Wenn Sie nicht angefordert haben, Ihr Passwort zurückzusetzen,
+        bitte ignorieren Sie diese E-Mail und
+        Ihr Passwort bleibt so, wie es ist.
         </p>
       after_text: |-
         Dieser Link läuft in zwei Stunden ab.
-        Wenn Sie nicht angefordert haben Ihr Passwort zurückzusetzen,
+        Wenn Sie nicht angefordert haben, Ihr Passwort zurückzusetzen,
         ignorieren Sie diese E-Mail bitte und
-        Ihr Passwort bleibt so wie es ist.
+        Ihr Passwort bleibt so, wie es ist.
       subject: Passwort zurückgesetzt
-      reset_password: Passwort Zurücksetzen
+      reset_password: Passwort zurücksetzen
   criteria:
     '0':
       description_good:
@@ -913,8 +914,8 @@ de:
           Die Projekt-Website MUSS prägnant beschreiben, was die
           Software tut (welches Problem löst sie?).
         details: >-
-          Dies MUSS in der Sprache sein, die potenzielle Nutzer
-          verstehen können (z.B. möglichst wenig Fachbegriffe
+          Dies MUSS in einer Sprache sein, die potenzielle Nutzer
+          verstehen können (z. B. möglichst wenig Fachbegriffe
           verwenden).
         met_placeholder: >-
           (Optional) Wo befindet sich die Kurzbeschreibung? Gegebenenfalls
@@ -926,8 +927,8 @@ de:
           oder Verbesserungsvorschläge), und wie man zur Softwareentwicklung
           beitragen kann.
         met_placeholder: >-
-          (Optional) Wo ist diese Information? Gib eine oder mehrere
-          URLs an.
+          (Optional) Wo ist diese Information? Geben Sie eine
+          oder mehrere URLs an.
       contribution:
         description: >-
           Die Informationen darüber, wie jemand beitragen kann,
@@ -937,15 +938,15 @@ de:
           Wir nehmen an, dass <a href="https://guides.github.com/activities/contributing-to-open-source/">Projekte
           auf GitHub Issues und Pull-Requests</a> verwenden, sofern
           nichts anders angegeben ist. Diese Information kann
-          kurz sein, z.B., dass das Projekt Pull-Requests, einen
+          kurz sein, z. B., dass das Projekt Pull-Requests, einen
           Issue-Tracker oder eine Mailing-Liste verwendet (welche?)
         met_placeholder: "(URL gefordert) Was ist der Prozess?
           Welche URL erklärt ihn?"
       contribution_requirements:
         description: >-
           Die Informationen darüber, wie jemand beitragen können,
-          SOLLTEN die Anforderungen für akzeptable Beiträge (z.B.
-          einen Hinweis auf jeden erforderlichen Programmierstandard)
+          SOLLTEN die Anforderungen für akzeptable Beiträge (z.
+          B. einen Hinweis auf jeden erforderlichen Programmierstandard)
           enthalten.
         unmet_placeholder: >-
           Warum sind die Anforderungen so selbstverständlich,
@@ -955,7 +956,7 @@ de:
           Die vom Projekt entwickelte Software MUSS als FLOSS
           lizensiert veröffentlicht sein.
         details: >-
-          FLOSS Software erfüllt die <a href="https://opensource.org/osd-annotated">Open
+          FLOSS-Software erfüllt die <a href="https://opensource.org/osd-annotated">Open
           Source Definition</a> oder die <a href="http://www.gnu.org/philosoph/free-sw.en.html">Free
           Software Definition</a>. Beispiele für solche Lizenzen
           sind die <a href="http://creativecommons.org/publicdomain/zero/1.0/">
@@ -992,12 +993,12 @@ de:
           Das Projekt MUSS die Lizenz(en) seiner Erzeugnisse an
           einem üblichen Ort in ihrem Quell-Repository veröffentlichen.
         details: >-
-          Z.B. als eine Top-Level-Datei mit der Bezeichnung LICENSE
+          Z. B. als eine Top-Level-Datei mit der Bezeichnung LICENSE
           oder COPYING. Lizenzdateinamen DÜRFEN eine Erweiterung
           wie ".txt" oder ".md" haben. Beachten Sie, dass dieses
           Kriterium nur eine Voraussetzung für das Quell-Repository
           ist. Sie müssen die Lizenzdatei NICHT hinzufügen, wenn
-          Sie etwas aus dem Quellcode generieren (z.B. eine ausführbare
+          Sie etwas aus dem Quellcode generieren (z. B. eine ausführbare
           Datei, ein Paket oder einen Container). Wenn Sie beispielsweise
           ein R-Paket für das Comprehensive R Archive Network
           (CRAN) generieren, befolgen Sie die Standard-CRAN-Praxis:
@@ -1018,10 +1019,10 @@ de:
           die vom Projekt entwickelte Software liefern.
         details: >-
           Diese Dokumentation muss in irgendeinem Medium sein
-          (z.B. Text oder Video), das folgendes beinhaltet: wie
-          man die Software installiert, wie man sie started, wie
+          (z.B. Text oder Video), das Folgendes beinhaltet: wie
+          man die Software installiert, wie man sie startet, wie
           man sie benutzt (evtl. ein Tutorial mit Beispielen)
-          und wie man sie sicher benutzt (z.B. was zu tun und
+          und wie man sie sicher benutzt (z. B. was zu tun und
           zu lassen ist), wenn das ein passendes Einsatzgebiet
           für die Software ist. Die Sicherheitsdokumentation muss
           nicht lange sein. Das Projekt DARF Hypertext-Links zu
@@ -1097,7 +1098,7 @@ de:
           (wie IRC) sind akzeptabel, wenn sie diese Kriterien
           erfüllen; Stellen Sie sicher, dass es einen URL-adressierbaren
           Archivierungsmechanismus gibt. Proprietäres JavaScript
-          ist ungern gesehen aber erlaubt.
+          ist ungern gesehen, aber erlaubt.
       english:
         description: >-
           Das Projekt SOLLTE Dokumentationen in englischer Sprache
@@ -1130,7 +1131,7 @@ de:
           Um eine kollaborative Überprüfung zu ermöglichen, MUSS
           das Quell-Repository des Projekts Zwischenversionen
           für die Überprüfung zwischen Releases enthalten. Es
-          MUSS NICHT nur endgültige Veröffentlichungen enthalten.
+          DARF NICHT nur endgültige Veröffentlichungen enthalten.
         details: >-
           Projekte DÜRFEN sich entscheiden, bestimmte Zwischenversionen
           aus ihren öffentlichen Quell-Repositories auszulassen
@@ -1147,17 +1148,17 @@ de:
         details: >-
           Git ist nicht speziell gefordert und Projekte können
           andere zentralisierte Versionskontrollsoftware (wie
-          z.B. Subversion) mit Rechtfertigung verwenden.
+          z. B. Subversion) mit Rechtfertigung verwenden.
       version_unique:
         description: >-
           Die für Endbenutzer vorgesehenen Projektergebnisse MÜSSEN
           eine eindeutige Versionskennung für jede Freigabe haben.
         details: >-
           Dies DARF durch einer Vielzahl von Möglichkeiten, einschließlich
-          einer Commit-IDs (wie z. B. git commit id oder mercurial
-          changeset id) oder eine Versionsnummer, (einschließlich
-          Versionsnummern, die semantische oder datebasierte Systeme
-          wie YYYYMMDD verwenden) erfüllt werden.
+          einer Commit-IDs (wie z. B. gits Commit-ID oder mercurials
+          Changeset-ID) oder eine Versionsnummer, (einschließlich
+          Versionsnummern, die semantische oder datumsbasierte
+          Systeme wie YYYYMMDD verwenden) erfüllt werden.
       version_semver:
         description: >-
           Es wird erwartet, dass das Format <a href="http://semver.org">
@@ -1165,8 +1166,8 @@ de:
           verwendet wird.
         details: >-
           Andere Versionsnummerierungsschemata, wie z. B. Commit-IDs
-          (wie z. B. git commit id oder mercurial changeet id)
-          oder datebasierte Schemata wie YYYYMMDD, DÜRFEN als
+          (wie z. B. gits Commit-ID oder mercurials Changeset-ID)
+          oder datumsbasierte Schemata wie YYYYMMDD, DÜRFEN als
           Versionsnummern verwendet werden, da sie eindeutig sind.
           Einige Alternativen können zu Problemen führen, denn
           die Benutzer können nicht leicht feststellen, ob sie
@@ -1177,45 +1178,44 @@ de:
           ständig durch kontinuierliche Updates aktualisiert wird).
       version_tags:
         description: >-
-          Es wird erwartet, dass Projekte jede Freigabe innerhalb
+          Es wird erwartet, dass Projekte jedes Release innerhalb
           ihres Versionskontrollsystems identifizieren. Zum Beispiel
           wird erwartet, dass die Projekte, die git verwenden,
-          jede Freigabe mit git-Tags identifizieren.
+          jedes Release mit git-Tags identifizieren.
       release_notes:
         description: >-
           Das Projekt MUSS zu jedem Update Releasenotes enthalten,
           die eine lesbare Zusammenfassung der wichtigsten Änderungen
           der Version sind, damit Benutzer/innen sehen können,
           ob sie aktualisieren sollten und was die Auswirkungen
-          des Updades sind. Die Releasenotes MÜSSEN NICHT die
-          Rohausgabe eines Versionskontrollprotokolls sein (z.B.
-          die "git log" Befehlsergebnisse sind keine Release Notes).
+          des Updades sind. Die Releasenotes DÜRFEN NICHT die
+          Rohausgabe eines Versionskontrollprotokolls sein (z.
+          B. die "git log"-Befehlsergebnisse sind keine Releasenotes).
           Für Projekte, deren Ergebnisse nicht für die Wiederverwendung
-          an mehreren Standorten bestimmt sind (z.B. die Software
+          an mehreren Standorten bestimmt sind (z. B. die Software
           für eine einzelne Website oder Dienstleistung) und eine
           kontinuierliche Lieferung verwenden, können Sie "N/A"
           auswählen.
         details: >-
-          Die Release Notes DÜRFEN auf vielfältige Weise implementiert
+          Die Releasenotes DÜRFEN auf vielfältige Weise implementiert
           werden. Viele Projekte bieten sie in einer Datei namens
           "NEWS", "CHANGELOG" oder "ChangeLog", optional mit Erweiterungen
           wie ".txt", ".md" oder ".html" an. Historisch bedeutete
-          der Begriff "Change Log" ein Protokoll in dem <em>jede</em>
+          der Begriff "Change Log" ein Protokoll, in dem <em>jede</em>
           Änderung festgehalten wird, aber um diese Kriterien
           zu erfüllen, benötigt es eine menschlich lesbare Zusammenfassung.
-          Die Release Notes können stattdessen von Versionskontrollsystemmechanismen
+          Die Releasenotes können stattdessen von Versionskontrollsystemmechanismen
           wie dem <a href="https://github.com/blog/1547-release-your-software">GitHub
           Release Workflow</a> zur Verfügung gestellt werden.
       release_notes_vulns:
         description: >-
-          Die Release Notes MÜSSEN jede öffentlich bekannte Sicherheitslücke
-          mit einer CVE-Zuweisung oder ähnlichem kennzeichnen,
+          Die Releasenotes MÜSSEN jede öffentlich bekannte Sicherheitslücke
+          mit einer CVE-Zuweisung oder Ähnlichem kennzeichnen,
           die in jeder neuen Version behoben sein wird, es sei
           denn, Benutzer können nicht die Software selbst aktualisieren,
-          was normalerweise nicht der Fall ist. Wenn keine Release
-          Notes vorhanden sind oder keine öffentlich bekannten
-          Sicherheitslücken bekannt sind, wählen Sie "nicht anwendbar"
-          (N/A).
+          was normalerweise nicht der Fall ist. Wenn keine Releasenotes
+          vorhanden sind oder keine öffentlich bekannten Sicherheitslücken
+          bekannt sind, wählen Sie "nicht anwendbar" (N/A).
         details: >-
           Wenn Benutzer die Software normalerweise nicht selbst
           auf ihren Computern aktualisieren können, sondern stattdessen
@@ -1226,13 +1226,13 @@ de:
       report_process:
         description: >-
           Das Projekt muss einen Prozess für Benutzer enthalten,
-          um Fehlerberichte zu senden (z. B. mit einem Issue Tracker
+          um Fehlerberichte zu senden (z. B. mit einem Issue-Tracker
           oder eine Mailing-Liste).
       report_tracker:
         description: >-
-          Das Projekt SOLLTE einen Issue Tracker für die Nachverfolgung
+          Das Projekt SOLLTE einen Issue-Tracker für die Nachverfolgung
           einzelner Issues verwenden.
-        unmet_placeholder: Warum gibt es keinen Issue Tracker?
+        unmet_placeholder: Warum gibt es keinen Issue-Tracker?
       report_responses:
         description: >-
           Das Projekt MUSS eine Mehrheit der in den letzten 2-12
@@ -1294,7 +1294,7 @@ de:
         description: >-
           Falls die vom Projekt entwickelte Software vor Benutzung
           kompiliert werden muss, MUSS das Projekt ein funktionierendes
-          Buildsystem bereitstellen, das den Source Code automatisch
+          Buildsystem bereitstellen, das den Quellcode automatisch
           in Software übersetzt.
         details: >-
           Ein Build-System bestimmt, welche Aktionen durchgeführt
@@ -1313,7 +1313,7 @@ de:
           anwendbar" (N/A).
       build_common_tools:
         description: >-
-          Es ist EMPFHOLEN, dass gewöhnliche Werkzeuge zum Kompiliren
+          Es ist EMPFHOLEN, dass gewöhnliche Werkzeuge zum Kompilieren
           von Software benutzt wird.
         details: >-
           Beispielsweise, Maven, Ant, cmake, die Autotools, make,
@@ -1321,7 +1321,7 @@ de:
           (R).
       build_floss_tools:
         description: >-
-          Das Projekt SOLLTE allein mit FLOSS Werkzeugen gebaut
+          Das Projekt SOLLTE allein mit FLOSS-Werkzeugen gebaut
           werden können.
       test:
         description: >-
@@ -1360,7 +1360,7 @@ de:
           Test-Suite hinzugefügt werden.
         details: >-
           Solange Grundregeln vorhanden sind, selbst wenn durch
-          Mundpropaganda, sollten die Entwickler/innenTests für
+          Mundpropaganda, sollten die Entwickler/innen Tests für
           die automatisierte Test-Suite für große neue Funktionalität
           hinzufügen, wählen Sie "Met".
       tests_are_added:
@@ -1425,14 +1425,14 @@ de:
       know_secure_design:
         description: >-
           Das Projekt MUSS mindestens einen primären Entwickler
-          haben, der weiß wie man Sicherheitssoftware entwerfen
+          haben, der weiß, wie man sichere Software entwerfen
           kann. (Siehe "Details" für spezifische Anforderungen.)
         details: >-
           Dies erfordert das Verständnis der folgenden Designprinzipien,
           einschließlich der 8 Prinzipien von <a href="http://web.mit.edu/Saltzer/www/publications/protection/">Saltzer
           und Schroeder</a>: <ul> <li>Wirtschaftlichkeit des Mechanismus
           (halten Sie das Design so einfach und klein wie möglich,
-          z. B. durch umfassende Vereinfachungen)</li> <li>Fehlersichere
+          z. B. durch umfassende Vereinfachungen)</li> <li>fehlersichere
           Vorgaben (Zugriffsentscheidungen sollten standardmäßig
           verweigert werden und die Installation der Projekte
           sollte standardmäßig sicher sein)</li> <li>Vollständige
@@ -1441,12 +1441,12 @@ de:
           werden können)</li> <li>Offenes Design (Sicherheitsmechanismen
           sollten nicht von der Unkenntnis der Angreifer über
           das Designs abhängig gemacht werden, sondern stattdessen
-          auf leichter geschützte und geänderte Informationen
+          auf leichter schützbare und änderbare Informationen
           wie Schlüssel und Passwörter)</li> <li>Trennung von
           Privilegien (Idealerweise sollte der Zugriff auf wichtige
           Objekte von mehr als einer Bedingung abhängen, so dass
           die Beseitigung eines Schutzsystems keinen vollständigen
-          Zugriff ermöglicht. z.B., Multi-Faktor-Authentifizierung
+          Zugriff ermöglicht. z. B., Multi-Faktor-Authentifizierung
           wie die Erfordernis eines Passwortes und eines Hardware-Token
           ist stärker als die Single-Faktor-Authentifizierung)</li>
           <li>So wenige Privilegien wie möglich (Prozesse sollten
@@ -1456,14 +1456,14 @@ de:
           Benutzern gemeinsam verwendet werden und von allen Benutzern
           abhängig sind, z.B. Verzeichnisse für temporäre Dateien)</li>
           <li>Psychologische Akzeptanz (Die menschliche Schnittstelle
-          muss Benutzerfreundlichkeit entworfen werden - Design
-          für "geringes Erstaunen" kann dabei helfen)</li> <li>Begrenzte
+          muss benutzerfreundlich entworfen werden - Design für
+          "geringeste Überraschung" kann dabei helfen)</li> <li>Begrenzte
           Angriffsfläche (die Angriffsfläche - die Menge der verschiedenen
           Punkte, wo ein Angreifer versuchen kann, Daten einzugeben
           oder zu extrahieren - sollte begrenzt sein)</li> <li>Eingabevalidierung
           mit Positivliste (Eingaben sollten in der Regel überprüft
           werden, um festzustellen, ob sie gültig sind, bevor
-          sie akzeptiert werden; Diese Validierung sollte Postitivlisten
+          sie akzeptiert werden; diese Validierung sollte Postitivlisten
           verwenden (die nur bekannte gute Werte akzeptieren),
           nicht Negativlisten (die versuchen, bekannte schlechte
           Werte aufzulisten)).</li></ul> Ein "Primärer Entwickler"
@@ -1548,29 +1548,29 @@ de:
       crypto_working:
         description: >-
           Die Standard-Sicherheitsmechanismen innerhalb der vom
-          Projekt entwickelten Software MÜSSEN NICHT von defekten
+          Projekt entwickelten Software DÜRFEN NICHT von defekten
           kryptographischen Algorithmen abhängen (z.B. MD4, MD5,
           Single DES, RC4, Dual_EC_DRBG) oder Chiffre-Modi verwenden,
           die dem Kontext unangemessen sind, außer sie sind notwendig,
-          um kompatible Protokolle bereit zu stellen (wenn das
-          Protokoll in der neusten Version in der Zielumgebung
-          zum Einsatz kommt, die Zielumgebung solch in Protokoll
-          erfordert und das Zielsystem keine sicherere Alternative
-          anbietet). Die Dokumentation MUSS auf jegliche Sicherheitsrisiken
+          um kompatible Protokolle bereitzustellen (wenn das Protokoll
+          in der neusten Version in der Zielumgebung zum Einsatz
+          kommt, die Zielumgebung solch ein Protokoll erfordert
+          und das Zielsystem keine sicherere Alternative anbietet).
+          Die Dokumentation MUSS auf jegliche Sicherheitsrisiken
           hinweisen und bekannte Vorsichtsmaßnahmen beschreiben,
           sollten unsichere Protokolle unumgäglich sein.
         details: >-
           Der EZB-Modus ist fast nie angemessen, da er identische
           Blöcke innerhalb des Geheimtextes aufdeckt, wie der
           <a href="https://blog.filippo.io/the-ecb-penguin/">
-          ECB-Pinguin </a> zeigt. Der CTR Modus ist oft unangemessen,
+          ECB-Pinguin </a> zeigt. Der CTR-Modus ist oft unangemessen,
           da er keine Authentifizierung durchführt und Duplikate
           verursacht, wenn eine Eingabe wiederholt wird. In vielen
           Fällen ist es am besten, einen Block-Chiffre-Algorithmus-Modus
           zu wählen, der entworfen wurde, um Geheimhaltung und
           Authentifizierung zu kombinieren, z.B. Galois/ Counter
           Mode (GCM) und EAX. Projekte KÖNNTEN Benutzern erlauben,
-          defekte Mechanismen zu ermöglichen (z.B. während der
+          defekte Mechanismen zu ermöglichen (z. B. während der
           Einrichtung), falls nötig für Kompatibilität, aber dann
           wissen die Benutzer, dass sie es tun.
       crypto_weaknesses:
@@ -1586,7 +1586,7 @@ de:
       crypto_pfs:
         description: >-
           Die Sicherheitsmechanismen innerhalb der vom Projekt
-          entwickelten Software SOLLTEN ein perfektes Vorwärtsgeheimnis
+          entwickelten Software SOLLTEN Perfect Forward Secrecy
           für wichtige Vereinbarungsprotokolle implementieren,
           so dass ein Sitzungsschlüssel, der aus einer Reihe von
           Langzeitschlüsseln abgeleitet wird, nicht beeinträchtigt
@@ -1602,10 +1602,10 @@ de:
           gespeichert werden.
         details: >-
           Dieses Kriterium gilt nur, wenn die Software die Authentifizierung
-          von Benutzern mit Passwörtern erzwingt, wie z.B. bei
-          serverseitige Webanwendungen. Es gilt nicht in Fällen,
+          von Benutzern mit Passwörtern erzwingt, wie z. B. bei
+          serverseitigen Webanwendungen. Es gilt nicht in Fällen,
           in denen die Software Kennwörter für die Authentifizierung
-          in andere Systeme speichert (z.B. die Software implementiert
+          in andere Systeme speichert (z. B. die Software implementiert
           einen Client für ein anderes System), da zumindest Teile
           dieser Software oft Zugriff auf das Passwort im Klartext
           haben müssen.
@@ -1614,8 +1614,8 @@ de:
           Die Sicherheitsmechanismen innerhalb der vom Projekt
           entwickelten Software MÜSSEN alle kryptographischen
           Schlüssel und Nonces mit einem kryptographisch sicheren
-          Zufallszahlengenerator erzeugen und DARF NICHT mit Generatoren
-          arbeiten, die kryptographisch unsicher sind.
+          Zufallszahlengenerator erzeugen und DÜRFEN NICHT mit
+          Generatoren arbeiten, die kryptographisch unsicher sind.
         details: >-
           Ein kryptographisch sicherer Zufallszahlengenerator
           kann ein Hardware-Zufallszahlengenerator sein oder es
@@ -1623,10 +1623,10 @@ de:
           (CSPRNG) sein, der einen Algorithmus wie Hash_DRBG,
           HMAC_DRBG, CTR_DRBG, Yarrow oder Fortuna verwendet.
           Beispiele für Aufrufe von <em>sicheren</em> Zufallszahlengeneratoren
-          umfassen Java's java.security.SecureRandom und JavaScript's
+          umfassen Javas java.security.SecureRandom und JavaScripts
           window.crypto.getRandomValues. Beispiele für Anrufe
           von <em>unsicheren</em> Zufallszahlengeneratoren sind
-          Java's java.util.Random und JavaScript's Math.random.
+          Javas java.util.Random und JavaScripts Math.random.
       delivery_mitm:
         description: >-
           Das Projekt MUSS einen Auslieferungsmechanismus verwenden,
@@ -1642,21 +1642,22 @@ de:
           überprüfen.
       delivery_unsigned:
         description: >-
-          Ein kryptographischer Hash (z.B. sha1sum) MUSS NICHT
+          Ein kryptographischer Hash (z.B. sha1sum) DARF NICHT
           über http abgerufen und ohne Überprüfung einer kryptographischen
           Signatur verwendet werden.
-        details: Diese Hashes können im Transit verändert werden.
+        details: Diese Hashes könnten bei der Übermittlung verändert
+          werden.
       vulnerabilities_fixed_60_days:
         description: >-
           Es DARF KEINE ungepatchte Schwachstelle von mittlerer
-          oder höher Schwere enthalten sein, die seit mehr als
+          oder höherer Schwere enthalten sein, die seit mehr als
           60 Tagen öffentlich bekannt ist.
         details: >-
-          Die Sicherheitslücke, muss vom Projekt selbst gepatched
-          und freigegeben werden (Patches woanders entwickelt
+          Die Sicherheitslücke muss vom Projekt selbst gepatched
+          und freigegeben werden (Patches dürfen woanders entwickelt
           werden). Eine Sicherheitsücke wird (für diesen Zweck)
           öffentlich bekannt, sobald es einen CVE mit öffentlich
-          freigegebenen nicht bezahlten Informationen hat (veröffentlicht
+          freigegebenen, nicht bezahlten Informationen hat (veröffentlicht
           beispielsweise in der <a href="https://nvd.nist.gov/">National
           Vulnerability Database</a>) oder wenn das Projekt informiert
           und die Informationen der Öffentlichkeit zugänglich
@@ -1669,17 +1670,17 @@ de:
           empfiehlt in <a href="https://security.googleblog.com/2010/07/rebooting-responsible-disclosure-focus.html">Rebooting
           responsible disclosure</a>, weil Google empfiehlt, dass
           die 60-Tage-Periode beginnen, wenn das Projekt benachrichtigt
-          wird <em>selbst dann</em> wenn der Bericht nicht öffentlich
+          wird, <em>selbst dann</em>, wenn der Bericht nicht öffentlich
           ist.
       vulnerabilities_critical_fixed:
         description: >-
           Projekte SOLLTEN alle kritischen Schwachstellen schnell
-          nachdem sie gemeldet wurden beheben.
+          beheben, nachdem sie gemeldet wurden.
       no_leaked_credentials:
         description: >-
-          Die öffentlichen Repositories MÜSSEN NICHT gültige private
-          Zugriffsdaten enthalten (z.B. ein funktionierendes Passwort
-          oder einen privaten Schlüssel), die den öffentlichen
+          Die öffentlichen Repositorys DÜRFEN NICHT gültige private
+          Zugriffsdaten enthalten (z. B. ein funktionierendes
+          Passwort oder einen privaten Schlüssel), die den öffentlichen
           Zugriff einschränken sollen.
         details: >-
           Ein Projekt DARF "Beispiel"-Zugriffsdaten für Tests
@@ -1692,7 +1693,7 @@ de:
           MUSS vor der Veröffentlichung auf jede vorgeschlagene
           größere Produktionsversion der Software angewendet werden,
           wenn mindestens ein FLOSS-Tool dieses Kriterium in der
-          ausgewählten Sprache implementiert .
+          ausgewählten Sprache implementiert.
         details: >-
           Ein Tool zur statischen Codeanalyse untersucht den Softwarecode
           (als Quellcode, Zwischencode oder ausführbare Datei),
@@ -1718,20 +1719,20 @@ de:
           Liste der statischen Analyse-Tools</a>. Das <a href="https://continuousassurance.org/">SWAMP</a>
           ist eine kostenlose Plattform zur Bewertung von Schwachstellen
           in Software mit einer Vielzahl von Tools. Wenn für die
-          verwendete (n) Implementierungssprache (n) keine statischen
+          verwendete(n) Implementierungssprache(n) keine statischen
           FLOSS-Analysewerkzeuge verfügbar sind, wählen Sie "N/V".
         na_placeholder: >-
-          Warum kann das nicht erfüllt werden (z.B. es gibt keine
-          FLOSS Werkzeuge für diese Programmiersprache)?
+          Warum kann das nicht erfüllt werden (z. B. es gibt keine
+          FLOSS-Werkzeuge für diese Programmiersprache)?
         met_placeholder: Welche statischen Analysewerkzeuge werden
           verwendet?
       static_analysis_common_vulnerabilities:
         description: >-
           Es wird davon ausgegangen, dass mindestens eines der
           statischen Analysewerkzeuge, die für das statische Analysekriterium
-          verwendet wurde, inklusive der Regeln oder Ansätze,
-          um nach gemeinsamen Schwachstellen in der analysierten
-          Sprache oder Umgebung zu suchen.
+          verwendet wurde, Regeln oder Ansätze einschließt, um
+          nach häufigen Schwachstellen in der analysierten Sprache
+          oder Umgebung zu suchen.
         details: >-
           Statische Analysetools, die speziell dafür entwickelt
           wurden, nach Schwachstellen zu suchen, finden diese
@@ -1780,7 +1781,7 @@ de:
         description: >-
           Es ist EMPFHOLEN, dass die vom Projekt entwickelte Software,
           falls sie Software von einer Speicher-unsicheren Sprache
-          (z.B. C oder C ++) enthält, regelmäßig mindestens ein
+          (z. B. C oder C ++) enthält, regelmäßig mindestens ein
           dynamisches Werkzeug (z.B. ein Fuzzer oder ein Web-Anwendungs-Scanner)
           in Kombination mit einem Mechanismus zur Erkennung von
           Speichersicherheitsproblemen wie Puffer-Overwrites verwendet.
@@ -1800,7 +1801,7 @@ de:
       dynamic_analysis_enable_assertions:
         description: >-
           Es ist EMPFHOLEN, dass die vom Projekt entwickelte Software
-          viele run-time assertions einbindet, die während der
+          viele Laufzeit-Assertions einbindet, die während der
           dynamischen Analyse überprüft werden.
       dynamic_analysis_fixed:
         description: >-
@@ -1830,7 +1831,7 @@ de:
           ist die Verwendung eines <a href="http://developercertificate.org/">
           Developer Certificate of Origin (DCO) </a>, wo Benutzer
           "signed-off-by" in ihren Commits und die Projektlinks
-          zur DCO-Website hinzufügen. Allerdings, dies DARF als
+          zur DCO-Website hinzufügen. Allerdings DARF dies als
           Contributor License Agreement (CLA) oder als  ein anderer
           rechtlicher Mechanismus implementiert werden.
         details: >-
@@ -1910,19 +1911,19 @@ de:
       access_continuity:
         description: >-
           Das Projekt MUSS in der Lage sein, mit minimaler Unterbrechung
-          fortzufahren, wenn eine Person nicht in der Lage ist
-          oder getötet wird. Insbesondere MUSS das Projekt in
-          der Lage sein, Probleme zu lösen, vorgeschlagene Änderungen
-          zu akzeptieren und Versionen der Software freizugeben,
-          innerhalb einer Woche nach der Bestätigung, dass eine
-          Person nicht in der Lage ist oder getötet wurde. Dies
-          DARF sichergestellt werden, indem man jemandem anderes
-          notwendige Schlüssel, Passwörter und gesetzliche Rechte
-          gibt, um das Projekt fortzusetzen. Einzelpersonen, die
-          ein FLOSS-Projekt ausführen, DÜRFEN dies durch die Bereitstellung
-          von Schlüsseln in einer Lockbox und einer Willenserklärung
-          zur Bereitstellung von erforderlichen gesetzlichen Rechten
-          (z. B. für DNS-Namen).
+          fortzufahren, wenn eine beliebige Person nicht in der
+          Lage ist oder stirbt. Insbesondere MUSS das Projekt
+          in der Lage sein, Probleme zu lösen, vorgeschlagene
+          Änderungen zu akzeptieren und Versionen der Software
+          freizugeben, innerhalb einer Woche nach der Bestätigung,
+          dass eine Person nicht mehr in der Lage ist oder gestorben
+          ist. Dies DARF sichergestellt werden, indem man jemandem
+          anderes notwendige Schlüssel, Passwörter und gesetzliche
+          Rechte gibt, um das Projekt fortzusetzen. Einzelpersonen,
+          die ein FLOSS-Projekt ausführen, DÜRFEN dies durch die
+          Bereitstellung von Schlüsseln in einer Lockbox und einer
+          Willenserklärung zur Bereitstellung von erforderlichen
+          gesetzlichen Rechten (z. B. für DNS-Namen).
       bus_factor:
         description: Das Projekt SOLLTE einen Bus-Faktor von 2
           oder mehr haben.
@@ -1931,8 +1932,8 @@ de:
           Anzahl von Projektmitgliedern, die plötzlich aus einem
           Projekt ("hit by a bus") verschwinden müssen, bevor
           das Projekt aufgrund fehlender kompetenter Mitarbeiter
-          sich verzögert. Das <a href="https://github.com/mtov/truck-factor">
-          truck-factor </a> Tool kann dies für Projekte auf GitHub
+          stockt. Das <a href="https://github.com/mtov/truck-factor">
+          Truck-Factor</a>-Tool kann dies für Projekte auf GitHub
           schätzen. Weitere Informationen finden Sie unter <a
           href="https://www.researchgate.net/publication/272824568_assessing_the_bus_factor_of_git_repositories">
           Bewertung des Busfaktors von Git-Repositories </a> von
@@ -2063,7 +2064,7 @@ de:
           Die Projektsoftware SOLLTE internationalisiert werden,
           um eine einfachen Zugang für die Kultur, Region oder
           Sprache der Zielgruppe zu ermöglichen. Wenn die Internationalisierung
-          (i18n) nicht andzuwenden ist (z.B. die Software keine
+          (i18n) nicht andzuwenden ist (z. B. die Software keine
           für Endbenutzer beabsichtigte Texte erzeugt und keinen
           menschlich lesbaren Text sortiert), wählen Sie "nicht
           anwendbar" (N/A).
@@ -2154,7 +2155,7 @@ de:
         description: >-
           Das Projekt MUSS automatisch dafür sorgen, dass die
           ausgewählten Stilrichtlinien eingehalten werden, wenn
-          mindestens ein FLOSS tool vorhanden ist, welches das
+          mindestens ein FLOSS-Tool vorhanden ist, welches das
           in der gewählten Programmiersprache tun kann.
         details: >-
           Dies kann mit Hilfe von statischen Analysewerkzeugen
@@ -2188,12 +2189,12 @@ de:
         description: >-
           Das Build- und Installationssystem SOLLTE Debugging-Informationen
           beibehalten, wenn sie in den entsprechenden Flags angefordert
-          werden (z.B. "install -s" wird nicht verwendet). Wenn
-          kein Build- oder Installationssystem vorhanden ist (z.B.
-          typische JavaScript-Bibliotheken), wählen Sie "nicht
+          werden (z. B. "install -s" wird nicht verwendet). Wenn
+          kein Build- oder Installationssystem vorhanden ist (z.
+          B. typische JavaScript-Bibliotheken), wählen Sie "nicht
           anwendbar" (N / A).
         details: >-
-          Z.B., die Festlegung von CFLAGS (C) oder CXXFLAGS (C
+          Z. B., die Festlegung von CFLAGS (C) oder CXXFLAGS (C
           ++) sollte die relevanten Debugging-Informationen erstellen,
           wenn diese Sprachen verwendet werden, und sie sollten
           während der Installation nicht ignoriert werden. Debugging-Informationen
@@ -2229,8 +2230,8 @@ de:
           der Quellcode direkt verwendet wird, anstatt kompiliert
           zu werden), wählen Sie "nicht anwendbar" (N / A).
         details: >-
-          GCC- und Clang-Benutzer dürfen die Option -frandom-seed
-          nützlich finden; In manchen Fällen kann dies dadurch
+          GCC- und Clang-Benutzer finden die Option -frandom-seed
+          womöglich nützlich; In manchen Fällen kann dies dadurch
           gelöst werden, dass man eine Sortierreihenfolge erzwingt.
           Weitere Vorschläge finden Sie auf der <a href="https://reproducible-builds.org/">
           reproducible Build </a> Seite.
@@ -2290,11 +2291,11 @@ de:
         details: >-
           Dies kann mit einem Ursprungsanalysator / Abhängigkeitsüberprüfungswerkzeug
           wie <a href="https://www.owasp.org/index.php/OWASP_Dependency_Check">
-          OWASP's Dependency-Check</a>, <a href="https://www.sonatype.com/nexus-auditor">Sonatype's
+          OWASPs Dependency-Check</a>, <a href="https://www.sonatype.com/nexus-auditor">Sonatypes
           Nexus Auditor</a>, <a href="https://www.blackducksoftware.com/products/protex">
-          Black Duck's Protex</a>, <a href="http://www.protecode.com/">Synopsys
-          'Schutzcode</a> und <a href="https://github.com/rubysec/bundler-audit">Bundler-Audit
-          (Für Ruby) </a>. Einige Paketmanager beinhalten Mechanismen,
+          Black Ducks Protex</a>, <a href="http://www.protecode.com/">Synopsys'
+          Protecode</a> und <a href="https://github.com/rubysec/bundler-audit">Bundler-Audit
+          (für Ruby) </a>. Einige Paketmanager beinhalten Mechanismen,
           um dies zu tun. Es ist akzeptabel, wenn die Anfälligkeit
           der Komponenten nicht ausgenutzt werden kann, aber diese
           Analyse ist schwierig und es ist manchmal einfacher,
@@ -2319,7 +2320,7 @@ de:
           noch verwundbar lassen. Dies ist vor allem ein Problem
           für Cloud-basierte Systeme; Wenn der Cloud-Provider
           seine "Standard"-Bibliotheken aktualisiert, aber das
-          Programm sie nicht verwenden, dann helfen die Updates
+          Programm sie nicht verwendt, dann helfen die Updates
           nicht wirklich. Siehe z.B. <a href="http://spot.livejournal.com/312320.html">
           "Chromium: Why it isn't in Fedora yet as a proper package"
           von Tom Callaway </a>.
@@ -2348,7 +2349,7 @@ de:
           letzten sechs Monaten, gefixten Bugs.
       test_statement_coverage80:
         description: >-
-          Das Projekt MUSS FLOSS automatisierte Test-Suite(s)
+          Das Projekt MUSS automatisierte FLOSS-Test-Suite(s)
           haben, die mindestens 80% Aussage Berichterstattung
           haben, wenn es mindestens ein FLOSS-Tool gibt, das dieses
           Kriterium in der ausgewählten Sprache erfüllen kann.
@@ -2357,7 +2358,7 @@ de:
           zu beurteilen, einschließlich gcov/lcov, Blanket.js,
           Istanbul und JCov. Beachten Sie, dass das Erfüllen dieses
           Kriteriums keine Garantie dafür ist, dass die Test-Suite
-          gründlich ist, hingegen ist das Verfehlen dieses Kriterium,
+          gründlich ist, hingegen ist das Verfehlen dieses Kriteriums
           ein starker Indikator für eine schlechte Test-Suite.
       test_policy_mandated:
         description: >-
@@ -2402,17 +2403,16 @@ de:
           die Daten vorliegen.
         details: >-
           Beachten Sie, dass der Vergleich der Eingabe mit einer
-          Liste von "schlechten Formaten" (aka a *Blacklist*)
+          Liste von "schlechten Formaten" (aka einer *Blacklist*)
           normalerweise nicht ausreicht, weil Angreifer oft um
-          eine schwarze Liste herum arbeiten können. Insbesondere
-          werden Zahlen in interne Formate konvertiert und dann
-          überprüft, ob sie zwischen ihrem Minimum und Maximum
-          (inklusive) liegen und Textstrings werden überprüft,
-          um sicherzustellen, dass sie gültige Textmuster haben
-          (z.B. gültige UTF-8, Länge, Syntax, etc.). Einige Daten
-          müssen möglicherweise "irgendetwas" (z.B. ein Datei-Uploader)
-          sein, aber diese würden typischerweise selten der Fall
-          sein.
+          eine Blacklist herumarbeiten können. Insbesondere werden
+          Zahlen in interne Formate konvertiert und dann überprüft,
+          ob sie zwischen ihrem Minimum und Maximum (inklusive)
+          liegen und Textstrings werden überprüft, um sicherzustellen,
+          dass sie gültige Textmuster haben (z.B. gültige UTF-8,
+          Länge, Syntax, etc.). Einige Daten müssen möglicherweise
+          "irgendetwas" (z. B. ein Datei-Uploader) sein, aber
+          das ist typischerweise selten der Fall.
       hardening:
         description: >-
           Härtungsmechanismen SOLLTEN in der Software, die das
@@ -2423,9 +2423,9 @@ de:
           Content Security Policy (CSP), oder Compiler-Flags (z.B.
           -fstack-protector), um Angriffe zu mildern, oder Compiler-Flags,
           um undefiniertes Verhalten zu eliminieren. Für unsere
-          Zwecke wird das höchste Privileg nicht als Verhärtungsmechanismus
-          betrachtet (das kleinste Privileg ist wichtig, aber
-          getrennt).
+          Zwecke wird das Prinzip des kleinsten Privilegs nicht
+          als Verhärtungsmechanismus betrachtet (trotzdem ist
+          es wichtig, aber an anderer Stelle).
       crypto_weaknesses:
         description: >-
           Die Standard-Sicherheitsmechanismen innerhalb der Projektsoftware
@@ -2467,7 +2467,7 @@ de:
         description: >-
           Wenn die Software, die durch das Projekt produziert
           wird, TLS unterstützt oder verwendet, SOLLTE sie mindestens
-          TLS Version 1.2 verweden. Beachten Sie, dass der Vorgänger
+          TLS Version 1.2 verwenden. Beachten Sie, dass der Vorgänger
           von TLS SSL genannt wurde. Wenn die Software TLS nicht
           verwendet, wählen Sie "nicht anwendbar" (N/A).
       crypto_certificate_verification:
@@ -2507,8 +2507,8 @@ de:
           sind, wählen Sie "nicht anwendbar" (N/A).
         details: >-
           Die Projektergebnisse umfassen sowohl Quellcode als
-          auch alle erzeugten Ergebnisse, falls zutreffend (z.B.
-          ausführbare Dateien, Pakete und Container). Generierte
+          auch alle erzeugten Ergebnisse, falls zutreffend (z.
+          B. ausführbare Dateien, Pakete und Container). Generierte
           Ergebnisse können separat vom Quellcode signiert werden.
           Diese DÜRFEN als signierte git-Tags (mit kryptographischen
           digitalen Signaturen) implementiert werden. Projekte
@@ -2544,7 +2544,7 @@ de:
         description: >-
           Das Projekt MUSS einen "Assurance Case" bereithalten,
           der rechtfertigt, wie die Sicherheitsanforderungen erfüllt
-          werden. Der Assurance Case muss folgendes beinhalten:
+          werden. Der Assurance Case muss Folgendes beinhalten:
           eine Beschreibung des Bedrohungsmodells, eine eindeutige
           Identifizierung von Vertrauensgrenzen, eine Beschreibung
           wie sichere Designprinzipien angewendet wurden, und
@@ -2628,8 +2628,8 @@ de:
           den Lizenzinformationen vorausgeht.
       repo_distributed:
         description: >-
-          Das Source-Repository des Projekts MUSS eine gemeinsame
-          genutzte Versionskontrollsoftware (z. B. git oder mercurial)
+          Das Source-Repository des Projekts MUSS eine geläufige,
+          verteilte Versionskontrollsoftware (z. B. git oder mercurial)
           verwenden.
       small_tasks:
         description: >-
@@ -2638,7 +2638,7 @@ de:
           werden können.
         details: >-
           Diese Identifizierung erfolgt in der Regel durch die
-          Markierung ausgewählter Ausgaben in einem Issue Tracker
+          Markierung ausgewählter Ausgaben in einem Issue-Tracker
           mit einem oder mehreren Tags, die das Projekt für den
           Zweck verwendet, z.B. <a href="http://up-for-grabs.net/#/">
           up-for-Grabs </a>, <a href="http://www.firsttimersonly.com/">
@@ -2650,23 +2650,23 @@ de:
           den Mitwirkenden hilft mehr über das Projekt zu verstehen.
       require_2FA:
         description: >-
-          Das Projekt MUSS eine zwei Faktor-Authentifizierung
+          Das Projekt MUSS eine Zwei-Faktor-Authentifizierung
           (2FA) für Entwickler haben, um ein zentrales Repository
           zu wechseln oder auf sensible Daten zugreifen zu können
-          (z.B. private Schwachstellen-Berichte). Dieser 2FA-Mechanismus
+          (z. B. private Schwachstellen-Berichte). Dieser 2FA-Mechanismus
           DARF Mechanismen ohne kryptographische Mechanismen wie
           SMS verwenden, obwohl dies nicht empfohlen wird.
       secure_2FA:
         description: >-
           Die Zwei-Faktor-Authentifizierung des Projekts (2FA)
           SOLLTE Kryptographie-Mechanismen verwenden, um Identitätswechsel
-          zu verhindern. Short Message Service (SMS) basierte
-          2FA's allein erfüllen dieses Kriterium nicht, da sie
-          nicht verschlüsselt sind.
+          zu verhindern. Short-Message-Service-/SMS-basierte 2FAs
+          allein erfüllen dieses Kriterium nicht, da sie nicht
+          verschlüsselt sind.
         details: >-
           Ein 2FA-Mechanismus, der dieses Kriterium erfüllt, wäre
-          eine Time-Based One-Time Password (TOTP)-Anwendung,
-          die automatisch einen Authentifizierungscode generiert,
+          eine Time-Based-One-Time-Password-/TOTP-Anwendung, die
+          automatisch einen Authentifizierungscode generiert,
           der sich nach einer gewissen Zeit ändert. Beachten Sie,
           dass <a href="https://help.github.com/articles/configuring-two-factor-authentication-via-a-totp-mobile-app/">
           GitHub TOTP unterstützt</a>.
@@ -2691,7 +2691,7 @@ de:
         description: >-
           Das Projekt MUSS ein <a href="https://reproducible-builds.org/">
           reproducible Build </a> haben. Wenn kein Building erforderlich
-          ist (z.B. Skriptsprachen, in denen der Quellcode direkt
+          ist (z. B. Skriptsprachen, in denen der Quellcode direkt
           verwendet wird, anstatt kompiliert zu werden), wählen
           Sie "nicht anwendbar" (N/A).
         details: >-
@@ -2726,13 +2726,13 @@ de:
           integriert.
       test_statement_coverage90:
         description: >-
-          Das Projekt MUSS automatisierte FLOSS Test-Suite(n)
+          Das Projekt MUSS automatisierte FLOSS-Test-Suite(n)
           einsetzen, die mindestens 90% der Befehle abdecken,
           wenn es mindestens ein FLOSS-Tool gibt, das dieses Kriterium
           in der ausgewählten Programmiersprache messen kann.
       test_branch_coverage80:
         description: >-
-          Das Projekt MUSS automatisierte FLOSS Test-Suite(s)
+          Das Projekt MUSS automatisierte FLOSS-Test-Suite(s)
           mit mindestens 80% Zweig-Abdeckung haben, wenn es mindestens
           ein FLOSS-Tool gibt, das dieses Kriterium in der ausgewählten
           Sprache messen kann.
@@ -2801,7 +2801,7 @@ de:
   static_pages:
     home:
       badge_program: CII Best Practices Badge Programm
-      get_your_badge: Jetzt Badge Holen!
+      get_your_badge: Jetzt Badge holen!
       p1_html: >-
         Die <a href="https://www.linuxfoundation.org/">Linux Foundation
         (LF)</a> <a href="https://www.coreinfrastructure.org/">Core
@@ -2810,45 +2810,45 @@ de:
         Projekte zu zeigen, dass sie Best Practices folgen. Projekte
         können sich freiwillig und kostenlos selbst zertifizieren,
         indem sie diese Webapplikation benutzen, um zu zeigen,
-        wie Sie Best Practices umsetzen. Die CII Best Practices
+        wie Sie Best Practices umsetzen. Der CII-Best-Practices-
         Badge wurde von den vielen Badges, die Projekten auf GitHub
-        zur Verfügung stehen, inspiriert. Benutzer der Badge können
-        schnell erkennen welche FLOSS Projekte Best Practices
+        zur Verfügung stehen, inspiriert. Benutzer des Badges
+        können schnell erkennen, welche FLOSS-Projekte Best Practices
         umsetzen und folglich mit Wahrscheinlichkeit qualitative
         höherwertige und sicherere Software entwickeln.
       p2_html: >-
-        Weitere Informationen und Hintergründe zum CII Best Practices
-        Badge Programm, wie zum Beispiel die <a href='https://github.com/coreinfrastructure/best-practices-badge/blob/master/doc/criteria.md'>Kriterien</a>,
+        Weitere Informationen und Hintergründe zum CII-Best-Practices-
+        Badge-Programm, wie zum Beispiel die <a href='https://github.com/coreinfrastructure/best-practices-badge/blob/master/doc/criteria.md'>Kriterien</a>,
         sind <a href='https://github.com/coreinfrastructure/best-practices-badge'>auf
-        GitHub Verfügbar</a>. Ebenfalls verfügbar sind <a href="/de/project_stats">Projekt
-        Statistiken</a> und <a href="/de/criteria">Kriterien Statistiken</a>.
-        Unter <a href="/de/projects">Projekte</a> sind alle Projekte
-        gelisted, die an dem Badge Programm teilnehmen, und können
-        gefiltert werden (z.B.  <a href="/de/projects?gteq=100">welche
-        Projekte haben sich das Badge verdient</a>).  Ein <a href='/de/projects/1/0'>Beispiel
-        ist unser eigenes Badge</a>, wo wir uns selbst zertifiziert
+        GitHub verfügbar</a>. Ebenfalls verfügbar sind <a href="/de/project_stats">Projektstatistiken</a>
+        und <a href="/de/criteria">Kriterienstatistiken</a>. Unter
+        <a href="/de/projects">Projekte</a> sind alle Projekte
+        aufgelistet, die an dem Badge-Programm teilnehmen, und
+        können gefiltert werden (z.B.  <a href="/de/projects?gteq=100">welche
+        Projekte haben sich den Badge verdient</a>).  Ein <a href='/de/projects/1/0'>Beispiel
+        ist unser eigener Badge</a>, wo wir uns selbst zertifiziert
         haben.
       p3_html: >-
-        <em>Datenschutz und Rechtliche Hinweise</em>: Bitte siehe
-        unsere <a href="https://www.linuxfoundation.org/privacy">Datenschutz
+        <em>Datenschutz und Rechtliche Hinweise</em>: Bitte beachten
+        Sie unsere <a href="https://www.linuxfoundation.org/privacy">Datenschutz
         Richtlinie</a>, <a href="/cookies">Hinweise zu Cookies</a>
         und <a href="https://www.linuxfoundation.org/terms">Benutzungsbedingungen</a>.
-        Alle öffentlich zugänglichen nicht-Code Inhalte sind mindestens
+        Alle öffentlich zugänglichen Nicht-Code-Inhalte sind mindestens
         unter der  <a href="https://creativecommons.org/licenses/by/3.0/">Creative
         Commons Attribution License version 3.0 (CC-BY-3.0)</a>
-        lizensiert; neuere nicht-Code  Inhalte sind unter CC-BY
+        lizensiert; neuere Nicht-Code-Inhalte sind unter CC-BY
         Version 3.0 oder später (CC-BY-3.0+) lizensiert. Bitte
-        die CII Best Practices Badge Mitwirkenden als Urheber
+        die CII-Best-Practices-Badge-Mitwirkenden als Urheber
         angeben.
-      check_us_out: Schauen Sie sich die CII Best Practices Badge
-        Website an!
+      check_us_out: Schauen Sie sich die CII-Best-Practices-Badge-Website
+        an!
       share_header_html: "<p> Bitte teilen Sie dies: </p>"
       twitter: Twitter
       reddit: Reddit
       facebook: Facebook
       linkedin: LinkedIn
       email: E-Mail
-      projects_earned_badge: 'Einige Badge Besitzer:'
+      projects_earned_badge: 'Einige Badge-Besitzer:'
       hacker_news: Hacker News
     criteria:
       criteria: Kriterien
@@ -2899,7 +2899,7 @@ de:
         des HTTP-Protokolls, das das World Wide Web (WWW) implementiert
         und in <a href="https://tools.ietf.org/html/rfc6265">
         RFC 6265 </a> spezifiziert ist. </p> <p> Wenn Sie sich
-        anmelden, verwenden wir "Sitzungs" -Cookies von Erstanbietern.
+        anmelden, verwenden wir "Sitzungs"-Cookies von Erstanbietern.
         Sitzungscookies laufen per Definition ab, wenn Sie Ihren
         Browser verlassen oder sich abmelden. Wenn Sie "Angemeldet
         bleiben"  aktivieren, speichern wir auch Informationen
@@ -2939,8 +2939,8 @@ de:
     Basic project website content: Grundlegende Informationen
       auf der Projektwebseite
     Basics: Grundlagen
-    Bug-reporting process: Bug-Report Prozess
-    Change Control: Verbesserungs/Nacharbeits -Kontrolle
+    Bug-reporting process: Bug-Report-Prozess
+    Change Control: Verbesserungs-/Nacharbeits-Kontrolle
     Coding standards: Programmierstil
     Documentation: Dokumentation
     Dynamic code analysis: Dynamische Codeanalyse
@@ -2948,13 +2948,13 @@ de:
     Future: Zukunft
     future: zukünftige
     Installation system: Installationssystem
-    New functionality testing: Neue Funktionalitäts-Überprüfung
+    New functionality testing: Neue Funktionalitätsüberprüfung
     Other: Andere
     Other security issues: Andere Sicherheitsissues
     Previous versions: Vorherige Versionen
     Project oversight: Projektüberwachung
     Public version-controlled source repository: Öffentliches
-      Versionskontroll Source Repository
+      Versionskontroll-Source-Repository
     Publicly known vulnerabilities fixed: Öffentlich bekannte
       Schwachstellen wurden behoben
     Quality: Qualität
@@ -2962,8 +2962,8 @@ de:
     Reporting: Berichterstattung
     Secure development knowledge: Wissen über sichere Entwicklungspraktiken
     Secure release: Sicheres Release
-    Secured delivery against man-in-the-middle (MITM) attacks: >-
-      Gesicherte Zustellung gegen Man-in-the-Middle (MITM) Angriffe
+    Secured delivery against man-in-the-middle (MITM) attacks: Gesicherte
+      Zustellung gegen Man-in-the-Middle-/MITM-Angriffe
     Security: Sicherheit
     Static code analysis: Statische Codeanalyse
     Unique version numbering: Einzigartige Versionsnummerierung
@@ -2974,7 +2974,7 @@ de:
     Working build system: Produktivsystem
     Identification: Identifizierung
     Prerequisites: Voraussetzungen
-    FLOSS license: FLOSS Lizenz
+    FLOSS license: FLOSS-Lizenz
   last_entry: Letzter Übersetzungseintrag
   admin_only: Nur Administratoren.
   criterion_status:
@@ -2985,7 +2985,7 @@ de:
     need_home_page_or_url: Benötige mindestens eine Homepage oder
       eine Repository-URL
     form_contains:
-      one: Das Formular enthält 1 Fehler.
+      one: Das Formular enthält einen Fehler.
       other: Das Formular enthält %{count} Fehler.
       few: Das Formular enthält %{count} Fehler.
       many: Das Formular enthält %{count} Fehler.

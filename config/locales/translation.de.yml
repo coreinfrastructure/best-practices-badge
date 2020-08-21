@@ -40,15 +40,15 @@ de:
       Anmelden
     footer_text_html: >-
       <small><strong>Brauchen Sie Hilfe? Haben Sie eine Frage?
-      Sehen Sie ein Problem? Bitte <em> <a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">senden
-      Sie eine E-Mail</a> </em> oder <em><a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
-      target="_blank" rel="noopener"> reichen Sie ein Problem
-      ein </a></em>.</strong> © 2015-2017 <a href="https://www.coreinfrastructure.org/"
-      target="_blank" rel="noopener"> Core Infrastructure Initiative</a>,
+      Sehen Sie ein Problem? Bitte <em><a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">senden
+      Sie eine E-Mail</a></em> oder <em><a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
+      target="_blank" rel="noopener">reichen Sie ein Problem ein</a></em>.</strong>
+      © 2015-2017 <a href="https://www.coreinfrastructure.org/"
+      target="_blank" rel="noopener">Core Infrastructure Initiative</a>,
       ein <a href="https://www.linuxfoundation.org/" target="_blank"
       rel="noopener">Linux Foundation</a> Kollaboratives Projekt.
       Alle Rechte vorbehalten. Bitte beachten Sie unsere <a href="https://www.linuxfoundation.org/privacy"
-      target="_blank" rel="noopener"> Datenschutzrichtlinie</a>
+      target="_blank" rel="noopener">Datenschutzrichtlinie</a>
       und <a href="https://www.linuxfoundation.org/terms" target="_blank"
       rel="noopener">Nutzungsbedingungen</a>.</small>
     choose_locale: Sprache auswählen

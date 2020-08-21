@@ -1,90 +1,90 @@
 ---
-- - :whitelist
+- - :permit
   - MIT
   - :who: David A. Wheeler
     :why: This is OSI-approved OSS license, and the license of BadgeApp
     :when: 2015-12-17 15:37:53.518652272 Z
-- - :whitelist
+- - :permit
   - New BSD
   - :who: David A. Wheeler
     :why: OSI-approved OSS license BSD-3-Clause, known compatible with MIT
     :when: 2015-12-17 15:40:01.131233040 Z
-- - :whitelist
+- - :permit
   - 2-clause BSDL
   - :who: David A. Wheeler
     :why: OSI-approved OSS license BSD-2-Clause, known compatible with MIT
     :when: 2015-12-17 15:40:09.473789072 Z
-- - :whitelist
+- - :permit
   - LGPLv2+
   - :who: David A. Wheeler
     :why: OSI-approved OSS license LGPL-2.0+, known compatible with MIT
     :when: 2016-06-07 17:30-0400
-- - :whitelist
+- - :permit
   - ISC
   - :who: David A. Wheeler
     :why: This is OSI-approved OSS license, permissive, known MIT compatible
     :when: 2019-09-01 22:01-0400
-- - :whitelist
+- - :permit
   - CC0-1.0
   - :who: David A. Wheeler
     :why: CC0 is essentially public domain, compatible with everything
     :when: 2019-09-01 22:01-0400
-- - :whitelist
+- - :permit
   - CC-BY-3.0
   - :who: David A. Wheeler
     :why: Permissive license
     :when: 2019-09-01 22:01-0400
-- - :whitelist
+- - :permit
   - CC-BY-4.0
   - :who: David A. Wheeler
     :why: Permissive license
     :when: 2019-09-01 22:01-0400
-- - :whitelist
+- - :permit
   - Unlicense
   - :who: David A. Wheeler
     :why: Permissive license
     :when: 2019-09-01 22:01-0400
-- - :whitelist
+- - :permit
   - Mozilla Public License 2.0
   - :who: David A. Wheeler
     :why: Well-known OSS license
     :when: 2019-09-01 22:01-0400
-- - :whitelist
+- - :permit
   - Simplified BSD
   - :who: David A. Wheeler
     :why: Permissive OSS license
     :when: 2019-09-01 22:01-0400
-- - :whitelist
+- - :permit
   - "(MIT OR Apache-2.0)"
   - :who: David A. Wheeler
     :why: MIT is one of the options, and MIT is fine
     :when: 2019-09-01 22:01-0400
-- - :whitelist
+- - :permit
   - "(WTFPL OR MIT)"
   - :who: David A. Wheeler
     :why: MIT is one of the options, and MIT is fine
     :when: 2019-09-01 22:01-0400
-- - :whitelist
+- - :permit
   - "(BSD-2-Clause OR MIT OR Apache-2.0)"
   - :who: David A. Wheeler
     :why: MIT is one of the options, and MIT is fine
     :when: 2019-09-01 22:01-0400
-- - :whitelist
+- - :permit
   - BSD-3-Clause OR MIT
   - :who: David A. Wheeler
     :why: MIT is one of the options, and MIT is fine
     :when: 2019-09-01 22:01-0400
-- - :whitelist
+- - :permit
   - "(MIT AND BSD-3-Clause)"
   - :who: David A. Wheeler
     :why: Both are fine
     :when: 2019-09-01 22:01-0400
-- - :whitelist
+- - :permit
   - "(BSD-3-Clause OR GPL-2.0)"
   - :who: David A. Wheeler
     :why: MIT is one of the options, and MIT is fine
     :when: 2019-09-01 22:01-0400
-- - :whitelist
+- - :permit
   - "(MIT AND Zlib)"
   - :who: David A. Wheeler
     :why: Both are fine

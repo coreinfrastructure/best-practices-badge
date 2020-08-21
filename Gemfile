@@ -66,11 +66,7 @@ group :development, :test do
   gem 'dotenv-rails', '2.7.5'
   gem 'eslintrb', '2.1.0'
   gem 'json', '2.3.1'
-  # Note: updating license_finder to 6.X requires changing all uses of the
-  # term "whitelist" to "permit". Also, the version of thor it requires
-  # requires bundler-audit >0.6.1 (which is expected but yet available at the
-  # time this text is being written).
-  gem 'license_finder', '5.6.2'
+  gem 'license_finder', '6.0.0'
   gem 'mdl', '0.9.0'
   gem 'pronto', '0.10.0'
   # TODO: Use pronto-railroader, once there is one.

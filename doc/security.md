@@ -1244,7 +1244,8 @@ Here are the key security safeguards:
   the English source text.
 * After synchronization, and on every test run (including deployment to a tier),
   *every* text segment (including English) is checked, including to
-  ensure that *only* a whitelisted set of HTML tags and attributes (at most) are
+  ensure that *only* an allowlisted set of HTML tags
+  and attributes (at most) are
   included in every text.  The tests will fail, and the system will not be
   deployed, if any other tags or attributes are used.
   This set does not include dangerous tags such as &lt;script&gt;.
@@ -1383,32 +1384,32 @@ including all 8 principles from
   Many of the operations use numeric ids (e.g., which project), which are
   simply numbers (limiting the opportunity for attack because numbers are
   trivial to validate).
-* Input validation with whitelists
+* Input validation with allowlists
   (inputs should typically be checked to determine if they are valid
-  before they are accepted; this validation should use whitelists
+  before they are accepted; this validation should use allowlists
   (which only accept known-good values),
-  not blacklists (which attempt to list known-bad values)):
+  not denylists (which attempt to list known-bad values)):
   In data provided directly to the web application,
-  input validation is done with whitelists through controllers and models.
+  input validation is done with allowlists through controllers and models.
   Parameters are first checked in the controllers using the Ruby on Rails
-  "strong parameter" mechanism, which ensures that only a whitelisted set
+  "strong parameter" mechanism, which ensures that only an allowlisted set
   of parameters are accepted at all.
   Once the parameters are accepted, Ruby on Rails'
   [active record validations](http://guides.rubyonrails.org/active_record_validations.html)
   are used.
   All project parameters are checked by the model, in particular,
   status values (the key values used for badges) are checked against
-  a whitelist of values allowed for that criterion.
+  an allowlist of values allowed for that criterion.
   There are a number of freetext fields (name, license, and the
   justifications); since they are freetext these are the hardest
-  to whitelist.
+  to allowlist.
   That said, we even impose restrictions on freetext, in particular,
   they must be valid UTF-8, they must not include control characters
   (other than \\n and \\r), and they have maximum lengths.
   These checks by themselves cannot counter certain attacks;
   see the text on security in implementation for the discussion on
   how this application counters SQL injection, XSS, and CSRF attacks.
-  URLs are also limited by length and a whitelisted regex, which counters
+  URLs are also limited by length and an allowlisted regex, which counters
   some kinds of attacks.
   When project data (new or edited) is provided, all proposed status values
   are checked to ensure they are one of the legal criteria values for
@@ -1748,7 +1749,7 @@ as of 2015-12-14:
 4. *Redirection and Files.*
    The application uses relatively few redirects; those that do involve
    the "id", which only works if it can find the value corresponding to
-   the id first (which is a whitelist).
+   the id first (which is an allowlist).
    File uploads aren't directly supported; the application does
    temporarily load some files (as part of autofill), but those filenames
    and contents are not directly made available to any other user
@@ -1812,7 +1813,7 @@ as of 2015-12-14:
    private public data.  We don't consider the list of valid users
    private either, so again, manipulating 'id' cannot reveal anything private.
 7. *Injection.*
-   We use whitelists to validate project data entered into the system.
+   We use allowlists to validate project data entered into the system.
    When acquiring data from projects during autofill, we do only for the
    presence or absence of patterns; the data is not stored (other than caching)
    and the data is not used in command interpreters (such as SQL or shell).
@@ -2971,7 +2972,7 @@ Here are the top CIS controls:
    database system are managed by Heroku.
    We manage the application; its subcomponents are managed by
    package managers.
-   We do not use a whitelisting mechanism because it would be pointless;
+   We do not use an allowlisting mechanism because it would be pointless;
    at no time does the running system download software to run
    (not even JavaScript), and only administrators can install software on it.
 3. Secure Configurations for Hardware and Software on

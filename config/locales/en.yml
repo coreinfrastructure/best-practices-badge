@@ -1546,11 +1546,11 @@ en:
           can help) <li>limited attack surface (the attack surface
           - the set of the different points where an attacker
           can try to enter or extract data - should be limited)
-          <li>input validation with whitelists (inputs should
+          <li>input validation with allowlists (inputs should
           typically be checked to determine if they are valid
           before they are accepted; this validation should use
-          whitelists (which only accept known-good values), not
-          blacklists (which attempt to list known-bad values)).
+          allowlists (which only accept known-good values), not
+          denylists (which attempt to list known-bad values)).
           </ul> A "primary developer" in a project is anyone who
           is familiar with the project's code base, is comfortable
           making changes to it, and is acknowledged as such by
@@ -2590,13 +2590,13 @@ en:
       input_validation:
         description: >-
           The project results MUST check all inputs from potentially
-          untrusted sources to ensure they are valid (a *whitelist*),
+          untrusted sources to ensure they are valid (an *allowlist*),
           and reject invalid inputs, if there are any restrictions
           on the data at all.
         details: >-
           Note that comparing input against a list of "bad formats"
-          (aka a *blacklist*) is normally not enough, because
-          attackers can often  work around a blacklist. In particular,
+          (aka a *denylist*) is normally not enough, because
+          attackers can often work around a denylist. In particular,
           numbers are converted into internal formats and then
           checked if they are between their minimum and maximum
           (inclusive), and text strings are checked to ensure

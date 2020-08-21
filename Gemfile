@@ -63,7 +63,7 @@ group :development, :test do
   gem 'bullet', '6.1.0' # Avoid n+1 queries
   gem 'bundler-audit', '0.7.0.1'
   gem 'database_cleaner', '1.8.3' # Cleans up database between tests
-  gem 'dotenv-rails', '2.7.5'
+  gem 'dotenv-rails', '2.7.6'
   gem 'eslintrb', '2.1.0'
   gem 'json', '2.3.1'
   gem 'license_finder', '6.0.0'

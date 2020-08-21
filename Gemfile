@@ -19,7 +19,7 @@ gem 'chartkick', '3.4.0' # Chart project_stats
 gem 'fastly-rails', '0.8.0'
 gem 'font-awesome-rails', '4.7.0.5'
 gem 'http_accept_language', '2.1.1' # Determine user's preferred locale
-gem 'httparty', '0.18.0' # HTTP convenience. rake fix_use_gravatar
+gem 'httparty', '0.18.1' # HTTP convenience. rake fix_use_gravatar
 gem 'imagesLoaded_rails', '4.1.0' # JavaScript - enable wait for image load
 gem 'jbuilder', '2.10.0' # Template mechanism for JSON format results
 gem 'jquery-rails', '4.3.5' # JavaScript jQuery library (for Rails)

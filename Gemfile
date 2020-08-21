@@ -110,7 +110,7 @@ group :test do
   # https://guides.rubyonrails.org/testing.html
   gem 'minitest-rails-capybara', '3.0.2', require: false
   gem 'minitest-reporters', '1.4.2', require: false
-  gem 'minitest-retry', '0.2.0', require: false # Avoid Capybara false positives
+  gem 'minitest-retry', '0.2.1', require: false # Avoid Capybara false positives
   gem 'rails-controller-testing', '1.0.4' # for `assigns` and `assert_template`
   gem 'selenium-webdriver', '3.142.7', require: false
   gem 'simplecov', '0.18.5', require: false

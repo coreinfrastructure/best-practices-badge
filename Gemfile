@@ -114,7 +114,7 @@ group :test do
   # Note: Updating 'rails-controller-testing' to '1.0.5' causes failures
   gem 'rails-controller-testing', '1.0.4' # for `assigns` and `assert_template`
   gem 'selenium-webdriver', '3.142.7', require: false
-  gem 'simplecov', '0.18.5', require: false
+  gem 'simplecov', '0.19.0', require: false
   gem 'webdrivers', '4.4.1', require: false
   gem 'webmock', '3.8.3', require: false
 end

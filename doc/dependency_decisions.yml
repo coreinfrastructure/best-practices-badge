@@ -55,6 +55,31 @@
     :why: Permissive OSS license
     :when: 2019-09-01 22:01-0400
 - - :permit
+  - Apache 2.0
+  - :who: David A. Wheeler
+    :why: OSI-approved OSS license Apache 2.0, known compatible with MIT. Potential issues with GPL-2.0-only, but fine with GPL-2.0+ and GPL-3.0
+    :when: 2020-08-21 21:01:32 EDT
+- - :permit
+  - GPL-2.0-or-later
+  - :who: David A. Wheeler
+    :why: OSI-approved OSS license GPL-2.0-or-later, known compatible with MIT. Known to be fine with Apache 2.0.
+    :when: 2020-08-21 21:01:32 EDT
+- - :permit
+  - GPLv2+
+  - :who: David A. Wheeler
+    :why: OSI-approved OSS license GPL-2.0-or-later, known compatible with MIT. Known to be fine with Apache 2.0.
+    :when: 2020-08-21 21:01:32 EDT
+- - :permit
+  - GPL-3.0-only
+  - :who: David A. Wheeler
+    :why: OSI-approved OSS license GPL-3.0-only, known compatible with MIT. Known to be fine with Apache 2.0.
+    :when: 2020-08-21 21:01:32 EDT
+- - :permit
+  - GPL-3.0-or-later
+  - :who: David A. Wheeler
+    :why: OSI-approved OSS license GPL-3.0-or-later, known compatible with MIT. Known to be fine with Apache 2.0.
+    :when: 2020-08-21 21:01:32 EDT
+- - :permit
   - "(MIT OR Apache-2.0)"
   - :who: David A. Wheeler
     :why: MIT is one of the options, and MIT is fine

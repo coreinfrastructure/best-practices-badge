@@ -67,7 +67,7 @@ group :development, :test do
   gem 'eslintrb', '2.1.0'
   gem 'json', '2.3.1'
   gem 'license_finder', '6.0.0'
-  gem 'mdl', '0.9.0'
+  gem 'mdl', '0.10.0'
   gem 'pronto', '0.10.0'
   # TODO: Use pronto-railroader, once there is one.
   # gem 'pronto-brakeman', '0.9.1'

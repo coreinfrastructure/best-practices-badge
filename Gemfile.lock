@@ -101,11 +101,12 @@ GEM
     childprocess (3.0.0)
     code_analyzer (0.5.2)
       sexp_processor
-    codecov (0.1.16)
+    codecov (0.2.7)
+      colorize
       json
       simplecov
-      url
     coderay (1.1.3)
+    colorize (0.8.1)
     concurrent-ruby (1.1.7)
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
@@ -419,7 +420,6 @@ GEM
       execjs (>= 0.3.0, < 3)
     unicode-display_width (1.7.0)
     uniform_notifier (1.13.0)
-    url (0.3.2)
     vcr (5.0.0)
     web-console (3.7.0)
       actionview (>= 5.0)
@@ -463,7 +463,7 @@ DEPENDENCIES
   capybara-selenium (= 0.0.6)
   capybara-slow_finder_errors (= 0.1.5)
   chartkick (= 3.4.0)
-  codecov (= 0.1.16)
+  codecov (= 0.2.7)
   database_cleaner (= 1.8.5)
   dotenv-rails (= 2.7.6)
   eslintrb (= 2.1.0)

@@ -22,7 +22,7 @@ gem 'http_accept_language', '2.1.1' # Determine user's preferred locale
 gem 'httparty', '0.18.1' # HTTP convenience. rake fix_use_gravatar
 gem 'imagesLoaded_rails', '4.1.0' # JavaScript - enable wait for image load
 gem 'jbuilder', '2.10.0' # Template mechanism for JSON format results
-gem 'jquery-rails', '4.3.5' # JavaScript jQuery library (for Rails)
+gem 'jquery-rails', '4.4.0' # JavaScript jQuery library (for Rails)
 gem 'jquery-ui-rails', '6.0.1' # JavaScript jQueryUI library (for Rails)
 gem 'lograge', '0.11.2' # Simplify logs
 gem 'mail', '2.7.1' # Ruby mail handler

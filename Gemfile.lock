@@ -61,7 +61,7 @@ GEM
     autoprefixer-rails (9.8.6.2)
       execjs
     awesome_print (1.8.0)
-    bcrypt (3.1.13)
+    bcrypt (3.1.15)
     bindex (0.8.1)
     blind_index (0.3.4)
       activesupport (>= 4.2)
@@ -451,7 +451,7 @@ PLATFORMS
 DEPENDENCIES
   attr_encrypted (= 3.1.0)
   awesome_print (= 1.8.0)
-  bcrypt (= 3.1.13)
+  bcrypt (= 3.1.15)
   blind_index (= 0.3.4)
   bootsnap (= 1.4.8)
   bootstrap-sass (= 3.4.1)

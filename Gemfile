@@ -9,7 +9,7 @@ source 'https://rubygems.org'
 ruby File.open('.ruby-version', 'rb') { |f| f.read.chomp }
 
 gem 'attr_encrypted', '3.1.0' # Encrypt email addresses
-gem 'bcrypt', '3.1.13' # Security - for salted hashed interated passwords
+gem 'bcrypt', '3.1.15' # Security - for salted hashed interated passwords
 gem 'blind_index', '0.3.4' # Index encrypted email addresses
 gem 'bootstrap-sass', '3.4.1'
 gem 'bootstrap-social-rails', '4.12.0'

@@ -76,7 +76,7 @@ group :development, :test do
   gem 'pronto-rubocop', '0.10.0'
   # gem 'railroader', '4.3.8' # Security static analyzer. OSS fork of Brakeman
   gem 'rubocop', '0.52.1' # Style checker.  Changes can cause test failure
-  gem 'ruby-graphviz', '1.2.4' # This is used for bundle viz
+  gem 'ruby-graphviz', '1.2.5' # This is used for bundle viz
   gem 'spring', '2.1.0' # Preloads app so console, rake, and tests run faster
   gem 'vcr', '5.0.0' # Record network responses for later test reuse
   gem 'yaml-lint', '0.0.10' # Check YAML file syntax
@@ -92,7 +92,7 @@ group :development do
   gem 'bootsnap', '1.4.8' # Speed up boot via caches
   # gem 'fasterer', '0.3.2' # Provide speed recommendations - run 'fasterer'
   # Waiting for Ruby 2.4 support: https://github.com/seattlerb/ruby_parser/issues/239
-  gem 'traceroute', '0.8.0' # Adds 'rake traceroute' command to check routes
+  gem 'traceroute', '0.8.1' # Adds 'rake traceroute' command to check routes
   gem 'translation', '1.22' # translation.io - translation service
   gem 'web-console', '3.7.0' # Debugging tool for Ruby on Rails apps
 end

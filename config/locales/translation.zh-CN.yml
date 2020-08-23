@@ -1248,7 +1248,7 @@ zh-CN:
         <a href='https://github.com/coreinfrastructure/best-practices-badge/blob/master/doc/criteria.md'>标准</a>, 可以访问
         <a href='https://github.com/coreinfrastructure/best-practices-badge'>GitHub 项目</a>.
         <a href="/zh-CN/project_stats">项目统计数据</a> 和
-        <a href="/zh-CN/criteria">标准统计数据</a> 也同时提供。
+        <a href="/zh-CN/criteria_stats">标准统计数据</a> 也同时提供。
         <a href="/zh-CN/projects">项目页面</a> 展示所有参与的项目，
         并支持查询（例如，你可以看到
         <a href="/zh-CN/projects?gteq=100">已经获取通过徽章的项目</a>)。
@@ -1276,7 +1276,7 @@ zh-CN:
       email: 电子邮件
       projects_earned_badge: 一些徽章拥有者：
       hacker_news: Hacker News （黑客新闻）
-    criteria:
+    criteria_stats:
       criteria: 条款
       detailed_criteria_on_github: 详细的条款在GitHub网站。
       project_stats_html: 您可以在<a href="/project_stats">项目统计信息页面</a>查看有关项目的统计信息。

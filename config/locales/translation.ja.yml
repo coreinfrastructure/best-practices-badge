@@ -1408,7 +1408,7 @@ ja:
         バックグラウンドや<a href='https://github.com/coreinfrastructure/best-practices-badge/blob/master/doc/criteria.md'>基準</a>など、CII
         ベスト プラクティス バッジ プログラムの詳細については、<a href='https://github.com/coreinfrastructure/best-practices-badge'>
         GitHubで公開</a>されています。 <a href="/ja/project_stats">プロジェクトの統計情報</a>や<a
-        href="/ja/criteria">基準の統計情報</a>も確認できます。 <a href="/ja/projects">プロジェクト
+        href="/ja/criteria_stats">基準の統計情報</a>も確認できます。 <a href="/ja/projects">プロジェクト
         ページ</a>には、参加しているプロジェクトが表示され、クエリも使用できます (「<a href="/ja/projects?gteq=100">合格バッジを持つプロジェクトだけ表示する</a
         >」クエリなど)。また、<a href='/ja/projects/1'>その例 (当プロジェクトのバッジ取得サイト)</a>
         も見ることができます。
@@ -1429,7 +1429,7 @@ ja:
       email: 電子メール
       projects_earned_badge: バッジ獲得者(一部)：
       hacker_news: ハッカーニュース
-    criteria:
+    criteria_stats:
       criteria: 基準
       detailed_criteria_on_github: 詳細の基準はGitHubにあります。
       project_stats_html: >-

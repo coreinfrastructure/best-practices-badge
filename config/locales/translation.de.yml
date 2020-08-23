@@ -2821,7 +2821,7 @@ de:
         Badge-Programm, wie zum Beispiel die <a href='https://github.com/coreinfrastructure/best-practices-badge/blob/master/doc/criteria.md'>Kriterien</a>,
         sind <a href='https://github.com/coreinfrastructure/best-practices-badge'>auf
         GitHub verfügbar</a>. Ebenfalls verfügbar sind <a href="/de/project_stats">Projektstatistiken</a>
-        und <a href="/de/criteria">Kriterienstatistiken</a>. Unter
+        und <a href="/de/criteria_stats">Kriterienstatistiken</a>. Unter
         <a href="/de/projects">Projekte</a> sind alle Projekte
         aufgelistet, die an dem Badge-Programm teilnehmen, und
         können gefiltert werden (z.B.  <a href="/de/projects?gteq=100">welche
@@ -2850,7 +2850,7 @@ de:
       email: E-Mail
       projects_earned_badge: 'Einige Badge-Besitzer:'
       hacker_news: Hacker News
-    criteria:
+    criteria_stats:
       criteria: Kriterien
       detailed_criteria_on_github: Die detaillierten Kriterien
         sind auf GitHub.

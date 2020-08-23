@@ -2950,7 +2950,7 @@ fr:
         critères</a>, sont
         <a href='https://github.com/coreinfrastructure/cii-best-practices-badge'>disponibles sur GitHub</a>.
         <a href="/fr/project_stats">Les statistiques du projet</a> et
-        <a href="/fr/criteria">des statistiques sur les critères</a> sont
+        <a href="/fr/criteria_stats">des statistiques sur les critères</a> sont
         disponibles.  La <a href="/fr/projects">page des projets</a> liste les
         projets participants et permet des requêtes (par exemple, vous
         pouvez y voir
@@ -2987,7 +2987,7 @@ fr:
       email: Email
       projects_earned_badge: 'Quelques possesseurs de badges :'
       hacker_news: Hacker News
-    criteria:
+    criteria_stats:
       criteria: Critères
       detailed_criteria_on_github: Les critères détaillés sont
         disponibles sur GitHub.

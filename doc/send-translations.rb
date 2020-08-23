@@ -46,19 +46,19 @@ require 'English' # Use clearer global variable names like $CHILD_STATUS
 
 $REAL = false
 
-# $current_translations[lang][key] has segment info for the translation
+# $CURRENT_TRANSLATIONS[lang][key] has segment info for the translation
 # in language `lang` for key `key`
-$current_translations = {}
+$CURRENT_TRANSLATIONS = {}
 
 # Get API key - warn very early if we can't get it!
 $API_KEY = ENV['API_KEY']
 if $API_KEY.nil? || $API_KEY == ''
-  puts 'Error: Need API_KEY environment variable'
+  STDERR.puts 'Error: Need API_KEY environment variable'
   exit 1
 end
 
 # Load from translation.io the translations for language lang into
-# $current_translations[lang]
+# $CURRENT_TRANSLATIONS[lang]
 def load_language(lang)
   puts "Loading current translations for language #{lang}"
   system(
@@ -69,19 +69,19 @@ def load_language(lang)
   current_translations_file_contents = File.read(',full-list')
   current_translations_json = JSON.parse(current_translations_file_contents)
 
-  # Initialize hash in current_translations for this new language
-  $current_translations[lang] = {}
+  # Initialize hash in CURRENT_TRANSLATIONS for this new language
+  $CURRENT_TRANSLATIONS[lang] = {}
 
-  # Reorganize so that current_translations[lang][key] contains segment
+  # Reorganize so that $CURRENT_TRANSLATIONS[lang][key] contains segment
   # information that translations.io provides:
   # id, key, target_language, target, etc.
   current_translations_json['segments'].each do |segment|
     # Work around bug in Rubocop
     if segment['target_language'] != lang
-      puts "Error: Expected language #{lang} in segment #{segment}"
+      STDERR.puts "Error: Expected language #{lang} in segment #{segment}"
       exit 1
     end
-    $current_translations[lang][segment['key']] = segment
+    $CURRENT_TRANSLATIONS[lang][segment['key']] = segment
   end
 end
 
@@ -118,18 +118,18 @@ def process_data(lang, key, data)
       process_data(lang, subkey_fullname, subdata)
     end
   elsif data.is_a?(String)
-    if $current_translations[lang].key?(key)
-      this_current_translation = $current_translations[lang][key]['target']
+    if $CURRENT_TRANSLATIONS[lang].key?(key)
+      this_current_translation = $CURRENT_TRANSLATIONS[lang][key]['target']
                                  .rstrip
       new_translation = data.rstrip
       if this_current_translation != new_translation
-        id = $current_translations[lang][key]['id']
+        id = $CURRENT_TRANSLATIONS[lang][key]['id']
         # Translation has changed!
         puts " \"#{key}\": \"#{this_current_translation}\""
         puts "   => id: #{id}, \"#{new_translation}\""
         puts
         if !change_translation(id, new_translation)
-          puts "Failed to update #{key} - halting"
+          STDERR.puts "Failed to update #{key} - halting"
           exit 1
         end
       end
@@ -138,7 +138,7 @@ def process_data(lang, key, data)
     # Ignore nil values
   else
     # Crash, something went wrong
-    puts "Error: Unexpected class. Data value '#{data}' has type #{data.class}"
+    STDERR.puts "Error: Bad class. Value '#{data}' has type #{data.class}"
     exit 1
   end
 end
@@ -151,7 +151,7 @@ def process_file(filename)
   new_text_data = YAML.safe_load(new_text_file_contents)
   # Loop through all languages in filename (typically there's only 1)
   new_text_data.each do |lang, lang_values|
-    load_language(lang) unless $current_translations.key?(lang)
+    load_language(lang) unless $CURRENT_TRANSLATIONS.key?(lang)
     process_data(lang, '', lang_values)
   end
 end
@@ -162,7 +162,7 @@ ARGV.each do |arg|
     $REAL = true
     puts 'SAVING VALUES FOR REAL!'
   elsif arg.start_with?('-')
-    puts "Unknown option: #{arg}"
+    STDERR.puts "Unknown option: #{arg}"
     exit 1
   else
     process_file arg

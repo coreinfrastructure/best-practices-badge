@@ -73,7 +73,7 @@
           met_url_required: true
           autofill: >
             Look for a CONTRIBUTING{,.md,.txt,.html} file.
-    - OSS License: !!omap
+    - FLOSS license: !!omap
       - floss_license:
           category: MUST
           rationale: >

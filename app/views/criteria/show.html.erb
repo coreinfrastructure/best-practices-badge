@@ -1,5 +1,5 @@
 <% cache ['criteria_stats', locale, @criteria_level] do -%>
 <div class="jumbotron">
-<%= render partial: 'one_level', locals: {criteria_level: @criteria_level } %>
+<%= render 'one_level', {criteria_level: @criteria_level } %>
 </div>
 <% end # cache -%>

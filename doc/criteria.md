@@ -192,7 +192,7 @@ There is an implied criterion that we should mention here:
 <li><a name="contribution_requirements"></a>The information on how to contribute SHOULD include the requirements for acceptable contributions (e.g., a reference to any required coding standard). (URL required for "met".) <sup>[<a href="#contribution_requirements">contribution_requirements</a>]</sup></li>
 </ul>
 
-<b><i>OSS License</i></b>
+<b><i>FLOSS license</i></b>
 
 <ul>
 

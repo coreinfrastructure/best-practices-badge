@@ -12,7 +12,7 @@
 <%
          details_key = "criteria.#{criteria_level}.#{criterion_key}.details"
          if I18n.exists?(details_key) -%>
-  <br><i><%= t 'projects.form_early.misc.in_javascript.details' %>:</i>
+  <br><i><%= t 'projects.misc.details' %>:</i>
   <%= raw t(details_key) %>
 <%       end -%>
 <%       if (I18n.locale == :en) and criterion_data.key?('rationale') -%>

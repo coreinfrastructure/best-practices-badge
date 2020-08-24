@@ -1,0 +1,2 @@
+module CriteriaHelper
+end

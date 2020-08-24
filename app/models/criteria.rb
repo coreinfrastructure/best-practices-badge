@@ -174,7 +174,7 @@ class Criteria
   private
 
   # This method is used to grab text that is the same regardless of
-  # critera level. For example details of a criterion is almost always the
+  # criteria level. For example details of a criterion is almost always the
   # same across criteria levels.  This routine searches the current level
   # and all lower levels for a given text snippet until it is found.  If
   # it doesn't exist, nil is returned.

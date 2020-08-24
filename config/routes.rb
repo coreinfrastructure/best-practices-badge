@@ -90,6 +90,9 @@ Rails.application.routes.draw do
     resources :account_activations, only: [:edit]
     resources :password_resets,     only: %i[new create edit update]
 
+    get 'criteria/:criteria_level', to: 'criteria#show'
+    get 'criteria', to: 'criteria#index'
+
     get 'login' => 'sessions#new'
     post 'login' => 'sessions#create'
     get 'auth/:provider/callback' => 'sessions#create'

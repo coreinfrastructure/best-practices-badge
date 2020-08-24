@@ -1,18 +1,25 @@
 #!/usr/bin/ruby
 # frozen_string_literal: true
 
-# Copyright 2020-, the Linux Foundation and the
-# CII Best Practices badge contributors
-# SPDX-License-Identifier: MIT
-
-# Push all translations in LANG with different values to translation.io.
-# This could be generalized later if desired, but I'm currently trying
-# to solve a very specific problem.
-
-# You MUST set environment variable API_KEY for translation.io using:
+# Push all translations in the YAML file(s) listed on the command line to
+# translation.io that have different values. Unchanged values left unchanged.
+# We presume these are *key-based* translations, and that the YAML file's
+# topmost entry is the locale.
+# Usage:
+# send-translations [--real] YAML_FILE+
+# Example:
+# send-translations config/locales/translation.de.yml
+#
+# Omitting "--real" performs a test run without actually sending anything.
+#
+# You MUST first set the environment variable API_KEY for translation.io using:
 # export API_KEY='...'
 # To get API_KEY, sign in to translation.io, list projects, choose
 # dropdown (down arrow) to the right of the relevant, select "Settings".
+
+# Copyright 2020-, the Linux Foundation and the
+# CII Best Practices badge contributors
+# SPDX-License-Identifier: MIT
 
 # We ASSUME that the input YAML file is trusted.
 # We use safe_load on the YAML file to reduce security risks,
@@ -21,12 +28,10 @@
 # We also trust translation.io & assume it's not trying to attack us.
 
 # For more info on the translation.io API, see:
-# # https://translation.io/docs/api
+# - https://translation.io/docs/api
 
-# This is a short "quickie script" used rarely, and only by trusted people,
+# This script is used rarely, only by trusted people, and is short,
 # so we're not going to worry about many rubocop rules.
-# Since we don't intend to maintain it often (if at all), and it's short
-# overall, a little extra complexity is fine.
 # We also do things like use system() to run curl; if performance were
 # more important we could do other things.
 
@@ -39,62 +44,59 @@ require 'json'
 require 'yaml'
 require 'English' # Use clearer global variable names like $CHILD_STATUS
 
-LANG = 'de'
+$REAL = false
 
-puts "Starting to transmit translations in #{LANG}."
+# $CURRENT_TRANSLATIONS[lang][key] has segment info for the translation
+# in language `lang` for key `key`
+$CURRENT_TRANSLATIONS = {}
 
-# Load file with new translations for language LANG
-new_text_filename =
-  "#{Dir.home}/best-practices-badge/config/locales/translation.#{LANG}.yml"
-new_text_file_contents = File.read(new_text_filename)
-new_text_yaml = YAML.safe_load(new_text_file_contents)
-# new_text_yaml.dump()
-# puts new_text_yaml
-
-# Retrieve current translations for language LANG
-API_KEY = ENV['API_KEY']
-if API_KEY.nil? || API_KEY == ''
-  puts 'Need API_KEY environment variable'
+# Get API key - warn very early if we can't get it!
+$API_KEY = ENV['API_KEY']
+if $API_KEY.nil? || $API_KEY == ''
+  STDERR.puts 'Error: Need API_KEY environment variable'
   exit 1
 end
-system(
-  'curl -X GET ' \
-  "'https://translation.io/api/v1/segments.json?target_language=#{LANG}' " \
-  "-H 'x-api-key: #{API_KEY}' > ,full-list"
-)
-current_translations_file_contents = File.read(',full-list')
-current_translations_json = JSON.parse(current_translations_file_contents)
 
-# Reorganize so that current_translations[key] contains that segment
-# translations.io provides:
-# {"segments"=>[ ... list ... ]
-# where each one has id, key, target_language, target, etc.
-$current_translations = {}
-current_translations_json['segments'].each do |segment|
-  $current_translations[segment['key']] = segment
-  # Work around bug in Rubocop
-  # rubocop:disable Style/Next
-  if segment['target_language'] != LANG
-    puts 'Error: Wrong language in:'
-    puts segment.to_s
-    exit 1
+# Load from translation.io the translations for language lang into
+# $CURRENT_TRANSLATIONS[lang]
+def load_language(lang)
+  puts "Loading current translations for language #{lang}"
+  system(
+    'curl -X GET ' \
+    "'https://translation.io/api/v1/segments.json?target_language=#{lang}' " \
+    "-H 'x-api-key: #{$API_KEY}' > ,full-list"
+  )
+  current_translations_file_contents = File.read(',full-list')
+  current_translations_json = JSON.parse(current_translations_file_contents)
+
+  # Initialize hash in CURRENT_TRANSLATIONS for this new language
+  $CURRENT_TRANSLATIONS[lang] = {}
+
+  # Reorganize so that $CURRENT_TRANSLATIONS[lang][key] contains segment
+  # information that translations.io provides:
+  # id, key, target_language, target, etc.
+  current_translations_json['segments'].each do |segment|
+    # Work around bug in Rubocop
+    if segment['target_language'] != lang
+      STDERR.puts "Error: Expected language #{lang} in segment #{segment}"
+      exit 1
+    end
+    $CURRENT_TRANSLATIONS[lang][segment['key']] = segment
   end
-  # rubocop:enable Style/Next
 end
 
-# Use PATCH to change segment id's translation to new_value
-# Return error code (0 is success)
+# If real, use PATCH to change segment id's translation to new_value
+# Return true iff sucessful
 def change_translation(id, new_value)
   # puts("#{id} : #{new_value}")
-  # Add the following line to prevent ACTUAL changing of the translation:
-  # return true
+  return true unless $REAL
   new_value_json = { 'target' => new_value }.to_json
   # Note: This popen invocation does NOT go through the shell,
   # so we do not use shell escapes.
   IO.popen(
     [
       'curl', '-i',
-      '-H', "x-api-key: #{API_KEY}",
+      '-H', "x-api-key: #{$API_KEY}",
       '-H', 'content-type: application/json',
       '--request', 'PATCH',
       "https://translation.io/api/v1/segments/#{id}.json",
@@ -109,24 +111,25 @@ def change_translation(id, new_value)
 end
 
 # Handle data with full key value key
-def process_data(key, data)
+def process_data(lang, key, data)
   if data.is_a?(Hash)
     data.each do |subkey, subdata|
       subkey_fullname = key + (key == '' ? '' : '.') + subkey
-      process_data(subkey_fullname, subdata)
+      process_data(lang, subkey_fullname, subdata)
     end
   elsif data.is_a?(String)
-    if $current_translations.key?(key)
-      this_current_translation = $current_translations[key]['target'].rstrip
+    if $CURRENT_TRANSLATIONS[lang].key?(key)
+      this_current_translation = $CURRENT_TRANSLATIONS[lang][key]['target']
+                                 .rstrip
       new_translation = data.rstrip
       if this_current_translation != new_translation
-        id = $current_translations[key]['id']
+        id = $CURRENT_TRANSLATIONS[lang][key]['id']
         # Translation has changed!
         puts " \"#{key}\": \"#{this_current_translation}\""
         puts "   => id: #{id}, \"#{new_translation}\""
         puts
         if !change_translation(id, new_translation)
-          puts "Failed to update #{key} - halting"
+          STDERR.puts "Failed to update #{key} - halting"
           exit 1
         end
       end
@@ -135,15 +138,37 @@ def process_data(key, data)
     # Ignore nil values
   else
     # Crash, something went wrong
-    puts 'FAILURE!'
-    puts data
-    puts data.class.to_s
+    STDERR.puts "Error: Bad class. Value '#{data}' has type #{data.class}"
     exit 1
   end
 end
 
-process_data('', new_text_yaml[LANG])
-#
+def process_file(filename)
+  puts "Processing file #{filename}"
+  # Load file with new translations for language LANG
+  new_text_file_contents = File.read(filename)
+  # Convert to data set
+  new_text_data = YAML.safe_load(new_text_file_contents)
+  # Loop through all languages in filename (typically there's only 1)
+  new_text_data.each do |lang, lang_values|
+    load_language(lang) unless $CURRENT_TRANSLATIONS.key?(lang)
+    process_data(lang, '', lang_values)
+  end
+end
+
+# Process arguments
+ARGV.each do |arg|
+  if arg == '--real'
+    $REAL = true
+    puts 'SAVING VALUES FOR REAL!'
+  elsif arg.start_with?('-')
+    STDERR.puts "Unknown option: #{arg}"
+    exit 1
+  else
+    process_file arg
+  end
+end
+
 # rubocop:enable Style/GlobalVars
 # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity

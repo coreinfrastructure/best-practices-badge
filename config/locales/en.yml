@@ -135,7 +135,7 @@ en:
         including background and <a href='https://github.com/coreinfrastructure/best-practices-badge/blob/master/doc/criteria.md'>criteria</a>,
         is <a href='https://github.com/coreinfrastructure/best-practices-badge'>available
         on GitHub</a>. <a href="/en/project_stats">Project statistics</a>
-        and <a href="/en/criteria">criteria statistics</a> are available.
+        and <a href="/en/criteria_stats">criteria statistics</a> are available.
         The <a href="/en/projects">projects page</a> shows participating
         projects and supports queries (e.g., you can see <a href="/en/projects?gteq=100">projects
         that have a passing badge</a>). You can also see <a href='/en/projects/1/0'>an
@@ -218,7 +218,7 @@ en:
         <p>
         This text is intended to comply with UK and EU "Cookie laws".
         </p>
-    criteria:
+    criteria_stats:
       criteria: Criteria
       detailed_criteria_on_github: The detailed criteria are on
         GitHub.

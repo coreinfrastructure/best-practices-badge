@@ -119,7 +119,7 @@ es:
         sus antecedentes y <a href='https://github.com/coreinfrastructure/best-practices-badge/blob/master/doc/criteria.md'>criterios</a>
         aplicables se puede encontrar en <a href='https://github.com/coreinfrastructure/best-practices-badge'>GitHub</a>.
         <a href="/es/project_stats">Las estad&iacute;sticas del
-        proyecto</a> y las <a href="/es/criteria">estad&iacute;sticas
+        proyecto</a> y las <a href="/es/criteria_stats">estad&iacute;sticas
         de los criterios</a> tambi&eacute;n están disponibles.
         La <a href="/es/projects">página de proyectos</a> tiene
         una lista de los proyectos que est&aacute;n participando
@@ -161,7 +161,7 @@ es:
     cookies:
       cookies_header:
       cookies_info_html:
-    criteria:
+    criteria_stats:
       criteria:
       detailed_criteria_on_github:
       level:

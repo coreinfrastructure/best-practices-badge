@@ -92,26 +92,26 @@ class StaticPagesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should get criteria' do
-    get criteria_path(locale: :en)
+    get criteria_stats_path(locale: :en)
     assert_response :success
     assert_includes @response.body, 'included in the percentage calculations'
 
-    get criteria_path(locale: :fr)
+    get criteria_stats_path(locale: :fr)
     assert_response :success
     assert_includes @response.body, 'Vous pouvez voir des statistiques'
 
-    get criteria_path(locale: :'zh-CN')
+    get criteria_stats_path(locale: :'zh-CN')
     assert_response :success
     assert_includes @response.body, '条款'
   end
 
   test 'should redirect criteria with trailing slash' do
-    get '/en/criteria/'
-    assert_redirected_to '/en/criteria'
+    get '/en/criteria_stats/'
+    assert_redirected_to '/en/criteria_stats'
     follow_redirect!
     assert_response :success
     # Notice that the trailing slash is now gone
-    assert_equal '/en/criteria', @request.fullpath
+    assert_equal '/en/criteria_stats', @request.fullpath
     assert_includes @response.body, 'included in the percentage calculations'
   end
 

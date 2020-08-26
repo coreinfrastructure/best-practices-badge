@@ -62,7 +62,7 @@ Rails.application.routes.draw do
 
     get 'signup' => 'users#new'
     get 'home' => 'static_pages#home'
-    get 'criteria' => 'static_pages#criteria'
+    get 'criteria_stats' => 'static_pages#criteria_stats'
     get 'cookies' => 'static_pages#cookies'
 
     get 'feed' => 'projects#feed', defaults: { format: 'atom' }

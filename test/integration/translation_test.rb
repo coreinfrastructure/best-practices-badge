@@ -37,7 +37,7 @@ class TranslationTest < ActionDispatch::IntegrationTest
       get "/#{my_locale}/login"
       assert_response :success
 
-      get "/#{my_locale}/criteria"
+      get "/#{my_locale}/criteria_stats"
       assert_response :success
 
       # Skip testing /project_stats - it takes longer to generate and

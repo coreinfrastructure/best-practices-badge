@@ -147,7 +147,7 @@ ru:
         href='https://github.com/coreinfrastructure/best-practices-badge/blob/master/doc/criteria.md'>критериях</a>,
         можно найти на <a href='https://github.com/coreinfrastructure/best-practices-badge'>странице
         проекта на GitHub</a>. Имеются <a href="/ru/project_stats">проектная
-        статистика</a> и <a href="/ru/criteria">статистика по
+        статистика</a> и <a href="/ru/criteria_stats">статистика по
         критериям</a>. <a href="/ru/projects">Страница проектов</a>
         показывает участвующие проекты и позволяет делать запросы
         по базе проектов (например, вы можете найти <a href="/ru/projects?gteq=100">проекты
@@ -177,7 +177,7 @@ ru:
       email: Электронная почта
       projects_earned_badge: 'Некоторые проекты со значками:'
       hacker_news: Hacker News
-    criteria:
+    criteria_stats:
       criteria: Критерии
       detailed_criteria_on_github: Подробные критерии приведены
         на GitHub.

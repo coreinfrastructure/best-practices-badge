@@ -367,7 +367,7 @@ zh-CN:
         欢迎来到徽章计划！
         点击下面的链接激活帐户：
         </p>
-      before_text: |
+      before_text: |-
         您好！
         欢迎来到CII 最佳实践徽章计划！
         点击下面的链接激活帐户：
@@ -396,14 +396,14 @@ zh-CN:
         <h1>重设密码</h1>
         <p>要重设密码，请点击下面的链接：</p>
       before_text: 要重设密码，请点击下面的链接：
-      after_html: |
+      after_html: |-
         <p>此链接将在两个小时后过期。</p>
         <p>
         如果您没有要求重置密码，
         请忽略此电子邮件，
         您的密码将保持原样。
         </p>
-      after_text: |
+      after_text: |-
         此链接将在两个小时后过期。
         如果您没有要求重置密码，
         请忽略此电子邮件，
@@ -460,7 +460,7 @@ zh-CN:
       <p>
       感谢您的时间投入。
       </p>
-    new_project_part3_text: |
+    new_project_part3_text: |-
       我们鼓励持续性的进展。
       如果您想仅查看遗漏的信息，
       访问您的徽章项页面，
@@ -479,7 +479,7 @@ zh-CN:
     subject_new_project: 您已将项目添加到CII最佳实践徽章计划
     subject_reminder: 您的项目还没有“最佳实践”徽章
     subject_project_deleted: 名为%{project_name}的项目%{project_id}已被删除
-    gained_level_part1: |
+    gained_level_part1: |-
       恭喜！
       根据您提供的信息，
       您的项目获得了CII最佳实践“%{new_level}”徽章。
@@ -487,7 +487,7 @@ zh-CN:
     gained_level_part2: |-
       请将您的徽章添加到您的项目和/或代码仓库网站；
       这是您应得的：
-    gained_level_part3: |
+    gained_level_part3: |-
       我们强烈建议您添加或改进理由陈述，
       包括添加指向更多信息的URL。
       如果您有关于如何改进条款或徽章网络应用程序的建议，请提出问题：
@@ -1276,22 +1276,6 @@ zh-CN:
       email: 电子邮件
       projects_earned_badge: 一些徽章拥有者：
       hacker_news: Hacker News （黑客新闻）
-    criteria_stats:
-      criteria: 条款
-      detailed_criteria_on_github: 详细的条款在GitHub网站。
-      project_stats_html: 您可以在<a href="/project_stats">项目统计信息页面</a>查看有关项目的统计信息。
-      level: 等级
-      must: 必须
-      should: 应该
-      suggested: 建议
-      total_active: 总有效
-      allow_na: 允许N/A
-      require_url: 需要网址
-      details: 包括细节
-      future: 未来
-      new_this_level: 在这个级别的新的
-      met_justification_required: 需要满足理由
-      met_justification_or_url_required: 满足理由或需要URL
     cookies:
       cookies_header: 关于浏览器缓存
       cookies_info_html: >-
@@ -1309,6 +1293,22 @@ zh-CN:
       heading: 错误404：找不到页面
       no_such_page: 对不起，没有找到页面。
       please_home: 请转到主页。
+    criteria_stats:
+      criteria: 条款
+      detailed_criteria_on_github: 详细的条款在GitHub网站。
+      project_stats_html: 您可以在<a href="/project_stats">项目统计信息页面</a>查看有关项目的统计信息。
+      level: 等级
+      must: 必须
+      should: 应该
+      suggested: 建议
+      total_active: 总有效
+      allow_na: 允许N/A
+      require_url: 需要网址
+      details: 包括细节
+      future: 未来
+      new_this_level: 在这个级别的新的
+      met_justification_required: 需要满足理由
+      met_justification_or_url_required: 满足理由或需要URL
   headings:
     Accessibility and internationalization: 无障碍和国际化
     Analysis: 分析
@@ -1350,10 +1350,8 @@ zh-CN:
   last_entry: 最后翻译条目
   admin_only: 仅限管理员。
   criterion_status:
-    Met: |2-
-      完成
-    Unmet: |2-
-      不完整
+    Met: 完成
+    Unmet: 不完整
     NA: N/A
   error_messages:
     need_home_page_or_url: 至少需要一个主页或存储库URL

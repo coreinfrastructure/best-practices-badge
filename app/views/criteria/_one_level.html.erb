@@ -6,18 +6,26 @@
 <h4><%= t "headings.#{minor}" %></h4>
 <ul>
 <%     criteria.each do |criterion_key, criterion_data| -%>
-<li id="<%= criterion_key %>" id="<%= criteria_level %>.<%= criterion_key %>"
-><%= raw t("criteria.#{criteria_level}.#{criterion_key}.description") %>
-[<%= criterion_key %>]
+<li id='<%= criteria_level %>.<%= criterion_key %>'>
+<% if bare_key %>
+<span id='<%= criterion_key %>'></span>
+<% end %>
+<%= raw t("criteria.#{criteria_level}.#{criterion_key}.description") %>
+<sup>[<a href="#<%=
+  "#{criteria_level}.#{criterion_key}" %>"><%= criterion_key %></a>]</sup>
 <%
          details_key = "criteria.#{criteria_level}.#{criterion_key}.details"
          if I18n.exists?(details_key) -%>
-  <br><i><%= t 'projects.misc.details' %>:</i>
-  <%= raw t(details_key) %>
+  <dl>
+    <dt><i><%= t 'projects.misc.details' %>:</i></dt><dt> </dt>
+    <dd><%= raw t(details_key) %></dd>
+  </dl>
 <%       end -%>
 <%       if (I18n.locale == :en) and criterion_data.key?('rationale') -%>
-  <br><i>Rationale:</i>
-  <%= criterion_data['rationale'] %><br>
+  <dl>
+    <dt><i>Rationale:</i></dt><dt> </dt>
+    <dd><%= raw criterion_data['rationale'] %></dd>
+  </dl>
 <%       end -%>
 <%     end -%>
 </ul>

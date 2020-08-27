@@ -1028,6 +1028,10 @@ en:
       subject: Password reset
       reset_password: Reset password
   criteria:
+    introduction_header: FLOSS Best Practices Criteria
+    introduction:  >-
+      This is a set of best practices for Free/Libre and Open Source Software
+      (FLOSS) projects.
     '0':
       description_good:
         description: >-

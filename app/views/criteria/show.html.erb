@@ -1,5 +1,12 @@
 <% cache ['criteria_stats', locale, @criteria_level] do -%>
-<div class="jumbotron">
-<%= render 'one_level', {criteria_level: @criteria_level } %>
+<div class="row">
+<div class="col-xs-12">
+<h1><%= t('criteria.introduction_header') %></h1>
+<p>
+<%= raw t('criteria.introduction') %>
+</p>
+
+<%= render 'one_level', {criteria_level: @criteria_level, bare_key: true} %>
+</div>
 </div>
 <% end # cache -%>

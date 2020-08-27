@@ -2821,8 +2821,8 @@ de:
         Badge-Programm, wie zum Beispiel die <a href='https://github.com/coreinfrastructure/best-practices-badge/blob/master/doc/criteria.md'>Kriterien</a>,
         sind <a href='https://github.com/coreinfrastructure/best-practices-badge'>auf
         GitHub verfügbar</a>. Ebenfalls verfügbar sind <a href="/de/project_stats">Projektstatistiken</a>
-        und <a href="/de/criteria_stats">Kriterienstatistiken</a>. Unter
-        <a href="/de/projects">Projekte</a> sind alle Projekte
+        und <a href="/de/criteria_stats">Kriterienstatistiken</a>.
+        Unter <a href="/de/projects">Projekte</a> sind alle Projekte
         aufgelistet, die an dem Badge-Programm teilnehmen, und
         können gefiltert werden (z.B.  <a href="/de/projects?gteq=100">welche
         Projekte haben sich den Badge verdient</a>).  Ein <a href='/de/projects/1/0'>Beispiel
@@ -2850,38 +2850,6 @@ de:
       email: E-Mail
       projects_earned_badge: 'Einige Badge-Besitzer:'
       hacker_news: Hacker News
-    criteria_stats:
-      criteria: Kriterien
-      detailed_criteria_on_github: Die detaillierten Kriterien
-        sind auf GitHub.
-      project_stats_html: >-
-        Die "aktiven" Kriterien sind Kriterien, die in den Prozentberechnungen
-        enthalten sind (im Gegensatz zu "zukünftigen" Kriterien).
-        Die nächsten Spalten identifizieren die Anzahl aktiver
-        Kriterien in jeder Ebene, das sind MÜSSEN, SOLLTEN, EMPFOHLEN,
-        "N/A" als Antwort zulassen, eine Begründung erfordern
-        falls Antwort "erfüllt" ist, eine URL erfordern, eine
-        Begründung erfordern falls Antwort "erfüllt" ist. "Zukünfige"
-        Kriterien werden auf dem Formular angezeigt, und es wird
-        erwartet, dass sie in der Zukunft als aktive Kriterien
-        auf einer bestimmten Ebene hinzugefügt werden, aber nicht
-        in Abschlussberechnungen einbezogen werden. <br> <br>
-        Statistiken zu Projekten im Zeitverlauf können auf der
-        <a href="/project_stats"> Projektstatistikseite </a> angezeigt
-        werden.
-      level: Niveau
-      must: MUSS
-      should: SOLLTE
-      suggested: EMPFOHLEN
-      total_active: Insgesamt aktiv
-      allow_na: Erlauben N/A
-      require_url: URL erforderlich
-      details: Beinhaltet Details
-      future: Zukünftige
-      new_this_level: Neu auf diesem Level
-      met_justification_required: Kriterium erfüllen erforderlich
-      met_justification_or_url_required: Kriterium erfüllen oder
-        URL erforderlich
     cookies:
       cookies_header: Über Cookies
       cookies_info_html: >-
@@ -2931,6 +2899,38 @@ de:
       heading: 'Fehler 404: Seite nicht gefunden'
       no_such_page: Verzeihung, diese Seite existiert nicht.
       please_home: Bitte gehen Sie auf die Startseite.
+    criteria_stats:
+      criteria: Kriterien
+      detailed_criteria_on_github: Die detaillierten Kriterien
+        sind auf GitHub.
+      project_stats_html: >-
+        Die "aktiven" Kriterien sind Kriterien, die in den Prozentberechnungen
+        enthalten sind (im Gegensatz zu "zukünftigen" Kriterien).
+        Die nächsten Spalten identifizieren die Anzahl aktiver
+        Kriterien in jeder Ebene, das sind MÜSSEN, SOLLTEN, EMPFOHLEN,
+        "N/A" als Antwort zulassen, eine Begründung erfordern
+        falls Antwort "erfüllt" ist, eine URL erfordern, eine
+        Begründung erfordern falls Antwort "erfüllt" ist. "Zukünfige"
+        Kriterien werden auf dem Formular angezeigt, und es wird
+        erwartet, dass sie in der Zukunft als aktive Kriterien
+        auf einer bestimmten Ebene hinzugefügt werden, aber nicht
+        in Abschlussberechnungen einbezogen werden. <br> <br>
+        Statistiken zu Projekten im Zeitverlauf können auf der
+        <a href="/project_stats"> Projektstatistikseite </a> angezeigt
+        werden.
+      level: Niveau
+      must: MUSS
+      should: SOLLTE
+      suggested: EMPFOHLEN
+      total_active: Insgesamt aktiv
+      allow_na: Erlauben N/A
+      require_url: URL erforderlich
+      details: Beinhaltet Details
+      future: Zukünftige
+      new_this_level: Neu auf diesem Level
+      met_justification_required: Kriterium erfüllen erforderlich
+      met_justification_or_url_required: Kriterium erfüllen oder
+        URL erforderlich
   headings:
     Accessibility and internationalization: Zugänglichkeit und
       Internationalisierung

@@ -691,14 +691,14 @@ fr:
         Bienvenue dans le programme de badge !
         Cliquez sur le lien ci-dessous pour activer votre compte :
         </p>
-      before_text: |
+      before_text: |-
         Bonjour,
         Bienvenue dans le programme de badge des Meilleures Pratiques de la CII !
         Cliquez sur le lien ci-dessous pour activer votre compte :
       activate: Activer
       subject: Activation de compte
     github_welcome:
-      before_html: |
+      before_html: |-
         <h1>Programme de badge des Meilleures Pratiques de la CII</h1>
         <p>Bonjour,</p>
         <p>
@@ -709,7 +709,7 @@ fr:
         Si vous n'êtes pas à l'origine de cette action, vérifiez votre
         journal de sécurité GitHub sous Paramètres&gt;Sécurité.
         </p>
-      before_text: |
+      before_text: |-
         Bonjour,
         Merci d'avoir relié votre compte GitHub et bienvenue
         au programme de badge des Meilleures Pratiques de la CII !
@@ -717,19 +717,19 @@ fr:
         journal de sécurité GitHub sous Paramètres>Sécurité.
       subject: Bienvenue dans le programme de badge
     password_reset:
-      before_html: |
+      before_html: |-
         <h1>Réinitialisation du mot de passe</h1>
         <p>Pour réinitialiser votre mot de passe, cliquez sur le lien ci-dessous :</p>
       before_text: >-
         Pour réinitialiser votre mot de passe, cliquez sur le
         lien ci-dessous :
-      after_html: |
+      after_html: |-
         <p>Ce lien expirera d'ici deux heures.</p>
         <p>
         Si vous n'avez pas demandé à réinitialiser votre mot de passe,
         ignorez cet email et votre mot de passe restera identique.
         </p>
-      after_text: |
+      after_text: |-
         Ce lien expirera d'ici deux heures.
         Si vous n'avez pas demandé à réinitialiser votre mot de passe,
         ignorez cet email et votre mot de passe restera identique.
@@ -790,7 +790,7 @@ fr:
       Voici l'URL de votre soumission :
     new_project_part3_html: "<p>\nNous vous encourageons à continuer
       à progresser.\n</p>\n<p>\nSi vous voulez voir <em>seulement</em>
-      ce qui vous manque,\nvisitez votre soumission \npuis cliquez
+      ce qui vous manque,\nvisitez votre soumission\npuis cliquez
       sur le bouton près du haut étiqueté « Masquer atteints &
       N/A ».\nSi vous avez des questions ou avez besoin d'aide,
       contactez-nous à\n<a href=\"mailto:&#99;ii&#45;badges&#45;questions&#45.own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;\">&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;</a>
@@ -813,8 +813,8 @@ fr:
       souhaitez changer cette valeur. Si votre projet a gagné
       un badge, ou que son entrée de badge a été éditée dans les
       30 derniers jours, aucun rappel d'inactivité ne vous sera
-      envoyé.\n</p>\n<p>\nMerci pour vos efforts.\n</p>\n"
-    new_project_part3_text: |
+      envoyé.\n</p>\n<p>\nMerci pour vos efforts.\n</p>"
+    new_project_part3_text: |-
       Nous vous encourageons à continuer à progresser.
       Si vous voulez voir seulement ce qui vous manque, visitez votre soumission puis cliquez sur le bouton près du haut étiqueté « Masquer atteints & N/A ».
       Si vous avez des questions ou avez besoin d'aide, contactez-nous à
@@ -864,7 +864,7 @@ fr:
       entrée de badge n'a pas été mise à jour depuis un moment.\n</p>\n<p>\nVotre
       entrée de badge des meilleures pratiques est à\n<a href=\"%{project_info_url}\">%{project_info_url}</a>\net
       a été mis à jour pour la dernière fois le %{project_updated_at}.\nIl
-      est actuellement à %{project_badge_percentage_0}% (sur 100%).\n</p>\n\n<p>\nNous
+      est actuellement à %{project_badge_percentage_0}% (sur 100%).\n</p>\n<p>\nNous
       vous encourageons à continuer à progresser.\nVeuillez visiter
       votre entrée de badge à\n<a href=\"%{project_info_url}\">%{project_info_url}</a>\npour
       compléter l'information et obtenir votre badge !\n</p>\n\n<p>\nSi
@@ -893,7 +893,7 @@ fr:
       été mise à jour depuis un moment.\nVotre entrée de badge
       des meilleures pratiques est à\n%{project_info_url}\net
       a été mis à jour pour la dernière fois le %{project_updated_at}.\nIl
-      est actuellement à %{project_badge_percentage_0}% (sur 100%).\n\nNous
+      est actuellement à %{project_badge_percentage_0}% (sur 100%).\nNous
       vous encourageons à continuer à progresser.\nVeuillez visiter
       votre entrée de badge à\n%{project_info_url}\npour compléter
       l'information et obtenir votre badge !\n\nSi vous voulez
@@ -2987,26 +2987,6 @@ fr:
       email: Email
       projects_earned_badge: 'Quelques possesseurs de badges :'
       hacker_news: Hacker News
-    criteria_stats:
-      criteria: Critères
-      detailed_criteria_on_github: Les critères détaillés sont
-        disponibles sur GitHub.
-      project_stats_html: |-
-        Les critères « actifs » sont ceux qui sont inclus dans les calculs de pourcentages (contrairement aux critères « futurs »). Les colonnes suivantes identifient le nombre de critères actifs à chaque niveau qui DOIVENT, DEVRAIENT ou PEUVENT être respectés, qui autorisent « N/A » comme réponse, qui requièrent une URL, qui incluent des détails, ou qui sont nouveaux à ce niveau. Les critères « futurs » sont affichés sur le formulaire, et devraient être ajoutés comme critères actifs à un certain niveau dans le futur, mais ne sont pas inclus dans les calculs de complétion. <br><br>
-        Vous pouvez voir des statistiques sur les projets au cours du temps sur la <a href="/fr/project_stats">page des statistiques du projet</a>.
-      level: Niveau
-      must: DOIT
-      should: DEVRAIT
-      suggested: PROPOSÉ
-      total_active: Total actif
-      allow_na: Autoriser N/A
-      require_url: Exiger une URL
-      details: Comprend des détails
-      future: Futur
-      new_this_level: Nouveau à ce niveau
-      met_justification_required: Justification requise
-      met_justification_or_url_required: Justification ou URL
-        requise
     cookies:
       cookies_header: À propos des cookies
       cookies_info_html: >-
@@ -3060,6 +3040,26 @@ fr:
       heading: Erreur 404 - Page non trouvée
       no_such_page: Désolé, cette page n'existe pas.
       please_home: Allez s'il vous plaît à la page d'accueil.
+    criteria_stats:
+      criteria: Critères
+      detailed_criteria_on_github: Les critères détaillés sont
+        disponibles sur GitHub.
+      project_stats_html: |-
+        Les critères « actifs » sont ceux qui sont inclus dans les calculs de pourcentages (contrairement aux critères « futurs »). Les colonnes suivantes identifient le nombre de critères actifs à chaque niveau qui DOIVENT, DEVRAIENT ou PEUVENT être respectés, qui autorisent « N/A » comme réponse, qui requièrent une URL, qui incluent des détails, ou qui sont nouveaux à ce niveau. Les critères « futurs » sont affichés sur le formulaire, et devraient être ajoutés comme critères actifs à un certain niveau dans le futur, mais ne sont pas inclus dans les calculs de complétion. <br><br>
+        Vous pouvez voir des statistiques sur les projets au cours du temps sur la <a href="/fr/project_stats">page des statistiques du projet</a>.
+      level: Niveau
+      must: DOIT
+      should: DEVRAIT
+      suggested: PROPOSÉ
+      total_active: Total actif
+      allow_na: Autoriser N/A
+      require_url: Exiger une URL
+      details: Comprend des détails
+      future: Futur
+      new_this_level: Nouveau à ce niveau
+      met_justification_required: Justification requise
+      met_justification_or_url_required: Justification ou URL
+        requise
   headings:
     Accessibility and internationalization: Accessibilité et internationalisation
     Analysis: Analyse
@@ -3122,7 +3122,7 @@ fr:
       many: Le formulaire contient %{count} erreurs.
     not_an_email: " n'est pas un email"
     known_bad_password: " est un (mauvais) mot de passe bien connu"
-    valid_text: >2-
+    valid_text: |2-
        doit avoir un codage UTF-8 valide et aucun caractère de
       contrôle invalide
     url_message: |2-

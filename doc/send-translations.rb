@@ -50,11 +50,40 @@ $REAL = false
 # in language `lang` for key `key`
 $CURRENT_TRANSLATIONS = {}
 
+# SOURCE[key] has the original (source) info
+$SOURCE = {}
+
 # Get API key - warn very early if we can't get it!
 $API_KEY = ENV['API_KEY']
 if $API_KEY.nil? || $API_KEY == ''
   STDERR.puts 'Error: Need API_KEY environment variable'
   exit 1
+end
+
+# Set $SOURCE with single-level "x.y.z" keys
+def convert_source(key, data)
+  if data.is_a?(Hash)
+    data.each do |subkey, subdata|
+      subkey_fullname = key + (key == '' ? '' : '.') + subkey
+      convert_source(subkey_fullname, subdata)
+    end
+  elsif data.is_a?(String)
+    $SOURCE[key] = data
+  else
+    STDERR.puts "Source with unexpected type #{key} - halting"
+    exit 1
+  end
+end
+
+# Process the source file if it hasn't been already.
+# For now, we'll assume it's in English (en.yml) in the same directory.
+# We should add options to increase flexibility.
+def ensure_source_processed(translated_filename)
+  return unless $SOURCE.empty?
+  source_filename = File.dirname(translated_filename) + '/en.yml'
+  source_contents = File.read(source_filename)
+  original_source = YAML.safe_load(source_contents)
+  convert_source('', original_source['en'])
 end
 
 # Load from translation.io the translations for language lang into
@@ -110,6 +139,37 @@ def change_translation(id, new_value)
   end
 end
 
+# If real, use POST to segment id's translation to new_value
+# Return true iff sucessful
+def post_translation(key, lang, source, new_value)
+  return true unless $REAL
+  new_value_json = {
+    'target_language' => lang,
+    'type' => 'key',
+    'key' => key,
+    'source' => source,
+    'target' => new_value
+  }.to_json
+  # Note: This popen invocation does NOT go through the shell,
+  # so we do not use shell escapes.
+  # POST https://translation.io/api/v1/segments(.json)
+  IO.popen(
+    [
+      'curl', '-i',
+      '-H', "x-api-key: #{$API_KEY}",
+      '-H', 'content-type: application/json',
+      '--request', 'POST',
+      'https://translation.io/api/v1/segments.json',
+      '--data', new_value_json
+    ]
+  ) do |io|
+    curl_output = io.read
+    puts curl_output # Very useful for debugging!
+    io.close
+    $CHILD_STATUS.success? # Return whether or not we succeeded
+  end
+end
+
 # Handle data with full key value key
 def process_data(lang, key, data)
   if data.is_a?(Hash)
@@ -119,19 +179,39 @@ def process_data(lang, key, data)
     end
   elsif data.is_a?(String)
     if $CURRENT_TRANSLATIONS[lang].key?(key)
+      # Potential change to an existing translation
       this_current_translation = $CURRENT_TRANSLATIONS[lang][key]['target']
                                  .rstrip
       new_translation = data.rstrip
       if this_current_translation != new_translation
-        id = $CURRENT_TRANSLATIONS[lang][key]['id']
         # Translation has changed!
-        puts " \"#{key}\": \"#{this_current_translation}\""
-        puts "   => id: #{id}, \"#{new_translation}\""
+        id = $CURRENT_TRANSLATIONS[lang][key]['id']
+        puts "CHANGE TRANSLATION #{lang} KEY \"#{key}\""
+        puts " \"#{this_current_translation}\""
+        puts "=> id: #{id}"
+        puts " \"#{new_translation}\""
         puts
         if !change_translation(id, new_translation)
           STDERR.puts "Failed to update #{key} - halting"
           exit 1
         end
+      end
+    else
+      # Entirely NEW entry.
+      new_translation = data
+      if !$SOURCE.key?(key)
+        STDERR.puts "Source does not have key #{key}"
+        exit 1
+      end
+      source = $SOURCE[key]
+      puts "ADD TRANSLATION #{lang} KEY \"#{key}\":"
+      puts " \"#{source}\""
+      puts ' =>'
+      puts " \"#{new_translation}\""
+      puts
+      if !post_translation(key, lang, source, new_translation)
+        STDERR.puts "Failed to insert new translation for #{key} - halting"
+        exit 1
       end
     end
   elsif data.nil?
@@ -145,6 +225,7 @@ end
 
 def process_file(filename)
   puts "Processing file #{filename}"
+  ensure_source_processed(filename)
   # Load file with new translations for language LANG
   new_text_file_contents = File.read(filename)
   # Convert to data set

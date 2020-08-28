@@ -1,10 +1,9 @@
 <% cache ['criteria_stats', locale, @criteria_level] do -%>
 <div class="row">
 <div class="col-xs-12">
-<h1><%= t('criteria_overall.introduction_header') %></h1>
-<p>
-<%= raw t('criteria_overall.introduction') %>
-</p>
+<h1><%= t("criteria_overall.beginning_header_#{@criteria_level}") %></h1>
+<%= t("criteria_overall.beginning_#{@criteria_level}_html") %>
+<%= t("criteria_overall.common_introduction_html") %>
 
 <%= render 'one_level', {criteria_level: @criteria_level, bare_key: true} %>
 </div>

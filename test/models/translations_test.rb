@@ -19,9 +19,10 @@ class TranslationsTest < ActiveSupport::TestCase
   end
 
   # What tags & attributes are allowed?
-  ACCEPTABLE_TAGS = %w[h1 a strong em i b small tt ol ul li br p span].freeze
+  ACCEPTABLE_TAGS =
+    %w[h1 h2 h3 a strong em i b small tt ol ul li br p span].freeze
   # Class can cause trouble, but we need it for glyphicons, etc.
-  ACCEPTABLE_ATTRS = %w[href name class target rel].freeze
+  ACCEPTABLE_ATTRS = %w[href name class target rel id].freeze
 
   def sanitize_html(text)
     html_sanitizer = Rails::Html::WhiteListSanitizer.new

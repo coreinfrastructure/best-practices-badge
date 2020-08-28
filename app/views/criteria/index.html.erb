@@ -1,9 +1,9 @@
 <% cache locale do -%>
 <div class="row">
 <div class="col-xs-12">
-<h1><%= t('criteria_overall.introduction_header') %></h1>
-<p>
-<%= raw t("criteria_overall.introduction") %>
+<h1><%= t('criteria_overall.beginning_header_all') %></h1>
+<%= t("criteria_overall.beginning_all_html") %>
+<%= t("criteria_overall.common_introduction_html") %>
 
 <% Criteria.keys.each do |criteria_level| -%>
 <%=  render 'one_level', {criteria_level: criteria_level, bare_key: false} -%>

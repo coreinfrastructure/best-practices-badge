@@ -2842,10 +2842,213 @@ en:
           in the software it produces and check those assertions
           during dynamic analysis.
   criteria_overall:
-    introduction_header: FLOSS Best Practices Criteria
-    introduction:  >-
-      This is a set of best practices for Free/Libre and Open Source Software
-      (FLOSS) projects.
+    beginning_header_all: FLOSS Best Practices Criteria (All Levels)
+    beginning_header_0: FLOSS Best Practices Criteria (Passing Badge)
+    beginning_header_1: FLOSS Best Practices Criteria (Silver Badge)
+    beginning_header_2: FLOSS Best Practices Criteria (Gold Badge)
+    beginning_all_html:  >-
+      This is the set of best practices for Free/Libre and Open Source Software
+      (FLOSS) projects to achieve the passing, silver, and gold badges.
+    beginning_0_html:  >-
+      This is the set of best practices for Free/Libre and Open Source Software
+      (FLOSS) projects to achieve the passing badge.
+    beginning_1_html:  >-
+      This is the set of best practices for Free/Libre and Open Source Software
+      (FLOSS) projects to achieve the silver badge.
+    beginning_2_html:  >-
+      This is the set of best practices for Free/Libre and Open Source Software
+      (FLOSS) projects to achieve the gold badge.
+    common_introduction_html:  >-
+      <h2 id='introduction'>Introduction</h2>
+      <p>
+      There is no set of practices that can <i>guarantee</i> that software
+      will never have defects or vulnerabilities.
+      Even formal methods can fail if the
+      specifications or assumptions are wrong.
+      Nor is there any set of practices that can guarantee that a project will
+      sustain a healthy and well-functioning development community.</p>
+      <p>
+      However, following best practices can help improve the results
+      of projects.
+      For example, some practices enable multi-person review before release,
+      which can both help find otherwise hard-to-find technical vulnerabilities
+      and help build trust and a desire for repeated interaction among
+      developers from different organizations.</p>
+      <p>
+      This page presents a set of best practices
+      for Free/Libre and Open Source Software (FLOSS) projects.
+      Projects that follow these best practices
+      will be able to voluntarily self-certify and show that they've
+      achieved the relevant
+      Core Infrastructure Initiative (CII) Best Practices badge.
+      Projects can do this, at no cost,
+      by using a web application (BadgeApp)
+      to explain how they meet these practices and their detailed criteria.</p>
+      <p>
+      These best practices have been created to:</p>
+      <ol>
+      <li>encourage projects to follow best practices,</li>
+      <li>help new projects discover what those practices are, and</li>
+      <li>help users know which projects are following best practices
+      (so users can prefer such projects).</li>
+      </ol>
+      <p>
+      The idiom "best practices" means
+      "a procedure or set of procedures that is preferred or considered
+      standard within an organization, industry, etc."
+      (source:
+      <a href="http://www.dictionary.com/browse/best-practice"
+      rel="nofollow">Dictionary.com</a>).
+      These criteria are what we believe are
+      widely "preferred or considered standard"
+      in the wider FLOSS community.</p>
+      For more information on how these criteria were developed,
+      see the <a
+      href="https://github.com/coreinfrastructure/best-practices-badge"
+      >CII Best Practices badge GitHub site</a>.</p>
+      <p></p>
+      <h3 id='criteria_structure'>Criteria Structure</h3>
+      <p>
+      The best practices criteria are divided into three levels -
+      <ul>
+      <li><b>passing</b> focuses on best practices
+      that well-run FLOSS projects typically already follow.
+      Getting the passing badge is an achievement; at any one time
+      only about 10% of projects pursuing a badge achieve the passing level.
+      <li><b>silver</b> is a more stringent set of criteria than passing but is
+      expected to be achievable by small and single-organization projects.
+      <li><b>gold</b> is even more stringent than silver and includes
+      criteria that are not achievable by small or single-organization projects.
+      </ul>
+      <p>
+      Every criterion has a short name, shown below as superscripted
+      text inside square brackets.
+      There is one implied passing criterion - every project MUST have
+      a public website with a stable URL. This is required to create
+      a badge entry in the first place.
+      <p></p>
+      <h3 id='criteria_other_projects'>Relationship to Other Projects</h3>
+      <p>
+      The Linux Foundation also sponsors the
+      <a href="https://www.openchainproject.org/"
+      rel="nofollow">OpenChain Project</a>, which
+      identifies criteria for a "high quality Free
+      and Open Source Software (FOSS) compliance program."
+      OpenChain focuses on how organizations can best use FLOSS and contribute
+      back to FLOSS projects, while the CII Best Practices badge
+      focuses on the FLOSS projects themselves.
+      The CII Best Practices badge and OpenChain work together to help
+      improve FLOSS and how FLOSS is used.</p>
+      <p>
+      <h3 id='criteria_automation'>Criteria Automation</h3>
+      <p>
+      In some cases we automatically test and fill in information
+      if the project follows standard conventions and
+      is hosted on a site (e.g., GitHub) with decent API support.
+      We intend to improve this automation in the future;
+      improvements are welcome!</p>
+      <p></p>
+      <h3 id='criteria_changes'>Changes over time</h3>
+      <p>
+      We expect that these practices and their detailed criteria will
+      be updated over time.
+      We plan to add new criteria but mark them as "future" criteria, so that
+      projects can add that information and maintain their badge.</p>
+      <p>
+      Feedback is <em>very</em> welcome via the
+      <a href="https://github.com/coreinfrastructure/best-practices-badge"
+      >GitHub site as issues or pull requests</a>.
+      There is also a
+      <a href="https://lists.coreinfrastructure.org/mailman/listinfo/cii-badges"
+      rel="nofollow">mailing list for general discussion</a>.</p>
+      <p></p>
+      <h3 id='keywords'>Key words</h3>
+      <p>
+      The key words "MUST", "MUST NOT",
+      "SHOULD", "SHOULD NOT", and "MAY"
+      in this document are to be interpreted as described in
+      <a href="https://tools.ietf.org/html/rfc2119" rel="nofollow">RFC 2119</a>.
+      The additional term SUGGESTED is added.
+      In summary, these key words have the following meanings:</p>
+      <ul>
+      <li>The term MUST is an absolute requirement, and MUST NOT
+      is an absolute prohibition.</li>
+      <li>The term SHOULD indicates a criterion that is normally required,
+      but there may exist valid reasons in particular circumstances
+      to ignore it.
+      However, the full implications must be understood and carefully weighed
+      before choosing a different course.</li>
+      <li>The term SUGGESTED is used instead of SHOULD when the criterion must
+      be considered, but the valid reasons
+      to not do so are even more common than for SHOULD.</li>
+      <li>The term MAY provides one way something can be done, e.g.,
+      to make it clear that the described implementation is acceptable.</li>
+      </ul>
+      <p>
+      Often a criterion is stated as something that SHOULD be done, or is
+      SUGGESTED, because it may be difficult to implement or the costs
+      to do so may be high.</p>
+      <p></p>
+      <h3 id='criteria_achieving_badge'>Achieving a badge</h3>
+      <p>
+      To obtain a badge, all MUST and MUST NOT criteria must be met, all
+      SHOULD criteria must be met OR the justification for
+      not implementing the criterion must be documented, and
+      all SUGGESTED criteria have to be considered (it must be
+      rated as met or unmet, but in many cases justification is not required).
+      In some cases, especially in the higher levels,
+      justification and/or a URL may be required.</p>
+      <p>
+      A project must achieve the previous level to achieve the next level.
+      In some cases SHOULD criteria become MUST in higher level badges,
+      and some SUGGESTED criteria at lower levels become SHOULD or MUST
+      in higher level badges.</p>
+      <p>
+      The marking "(Future criterion)", if present,
+      marks criteria that are not currently
+      required, but may be required in the future.</p>
+      <p></p>
+      <h3 id='terminology'>Terminology</h3>
+      <p>
+      If you are not familiar with
+      software development or running a FLOSS project, materials such as
+      <a href="http://producingoss.com/"
+      rel="nofollow"><em>Producing Open Source Software</em>
+      by Karl Fogel</a> may be helpful to you.</p>
+      Here are a few key terms.
+      <p>
+      A <em>project</em> is an active entity that has
+      project member(s) and produces project result(s).
+      Its member(s) use project sites to coordinate and disseminate result(s).
+      A project does not need to be a formal legal entity.
+      Key terms relating to projects are:</p>
+      <ul>
+      <li>Project <em>members</em> are the
+      group of one or more people or companies who work together
+      to attempt to produce project results.
+      Some FLOSS projects may have different kinds of members, with different
+      roles, but that's outside our scope.</li>
+      <li>Project <em>results</em> are what the project members work together
+      to produce as their end goal. Normally this is software,
+      but project results may include other things as well.
+      Criteria that refer to "software produced by the project"
+      are referring to project results.</li>
+      <li>Project <em>sites</em>
+      are the sites dedicated to supporting the development
+      and dissemination of project results, and include
+      the project website, repository, and download sites where applicable
+      (see <a href="#sites_https">sites_https</a>).</li>
+      <li>The project <em>website</em>, aka project homepage, is the main page
+      on the world wide web (WWW) that a new user would typically visit to see
+      information about the project; it may be the same as the project's
+      repository site (this is often true on GitHub).</li>
+      <li>The project <em>repository</em> manages and stores the project results
+      and revision history of the project results.
+      This is also referred to as the project <em>source repository</em>,
+      because we only require managing and storing of the editable versions,
+      not of automatically generated results
+      (in many cases generated results are not stored in a repository).</li>
+      </ul>
   headings:
     Accessibility and internationalization: Accessibility and
       internationalization

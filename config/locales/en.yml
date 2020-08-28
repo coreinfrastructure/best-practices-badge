@@ -2909,23 +2909,19 @@ en:
       <p></p>
       <h3 id='criteria_structure'>Criteria Structure</h3>
       <p>
-      The best practices criteria are divided into three levels -
-      <ul>
-      <li><b>passing</b> focuses on best practices
+      The best practices criteria are divided into three levels:<ul>
+      <li><b>Passing</b> focuses on best practices
       that well-run FLOSS projects typically already follow.
       Getting the passing badge is an achievement; at any one time
       only about 10% of projects pursuing a badge achieve the passing level.
-      <li><b>silver</b> is a more stringent set of criteria than passing but is
+      <li><b>Silver</b> is a more stringent set of criteria than passing but is
       expected to be achievable by small and single-organization projects.
-      <li><b>gold</b> is even more stringent than silver and includes
+      <li><b>Gold</b> is even more stringent than silver and includes
       criteria that are not achievable by small or single-organization projects.
       </ul>
       <p>
       Every criterion has a short name, shown below as superscripted
       text inside square brackets.
-      There is one implied passing criterion - every project MUST have
-      a public website with a stable URL. This is required to create
-      a badge entry in the first place.
       <p></p>
       <h3 id='criteria_other_projects'>Relationship to Other Projects</h3>
       <p>
@@ -2992,21 +2988,35 @@ en:
       <h3 id='criteria_achieving_badge'>Achieving a badge</h3>
       <p>
       To obtain a badge, all MUST and MUST NOT criteria must be met, all
-      SHOULD criteria must be met OR the justification for
-      not implementing the criterion must be documented, and
+      SHOULD criteria must be either met OR unmet with justification, and
       all SUGGESTED criteria have to be considered (it must be
-      rated as met or unmet, but in many cases justification is not required).
+      rated as met or unmet, but justification is not required
+      unless noted otherwise).
+      An answer of N/A ("not applicable"), where allowed, is considered
+      the same as being met.
       In some cases, especially in the higher levels,
       justification and/or a URL may be required.</p>
+      <p>
+      Some criteria have special markings that influence this:<ul>
+      <li><b>{N/A allowed}</b> - "N/A" ("Not applicable") is allowed.
+      <li><b>{N/A justification}</b> - "N/A" ("Not applicable") is allowed
+      and requires justification.
+      <li><b>{Met justification}</b> - "Met" requires justification.
+      <li><b>{Met URL}</b> - "Met" requires justification with a URL.
+      <li><b>{Future}</b> - the answer to this criterion currently
+      has no effect, but it may be required in the future.
+      </ul>
       <p>
       A project must achieve the previous level to achieve the next level.
       In some cases SHOULD criteria become MUST in higher level badges,
       and some SUGGESTED criteria at lower levels become SHOULD or MUST
-      in higher level badges.</p>
+      in higher level badges. The higher levels also require more
+      justification, because we want others to understand <i>how</i>
+      the criteria are being met.</p>
       <p>
-      The marking "(Future criterion)", if present,
-      marks criteria that are not currently
-      required, but may be required in the future.</p>
+      There is one implied passing criterion - every project MUST have
+      a public website with a stable URL. This is required to create
+      a badge entry in the first place.</p>
       <p></p>
       <h3 id='terminology'>Terminology</h3>
       <p>
@@ -3049,6 +3059,11 @@ en:
       not of automatically generated results
       (in many cases generated results are not stored in a repository).</li>
       </ul>
+    future: "{Future}"
+    na_allowed: "{N/A allowed}"
+    na_justification_required: "{N/A justification}"
+    met_justification_required: "{Met justification}"
+    met_url_required: "{Met URL}"
   headings:
     Accessibility and internationalization: Accessibility and
       internationalization

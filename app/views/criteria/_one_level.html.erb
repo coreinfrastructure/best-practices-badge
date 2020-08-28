@@ -11,6 +11,35 @@
 <span id='<%= criterion_key %>'></span>
 <% end %>
 <%= raw t("criteria.#{criteria_level}.#{criterion_key}.description") %>
+
+<%# Add criterion markings. Different languages may mark these differently. %>
+<%=
+  if (criterion_data.key?('na_allowed') and
+      !criterion_data.key?('na_justification_required'))
+    t('criteria_overall.na_allowed')
+  end
+%>
+<%=
+  if criterion_data.key?('na_justification_required')
+    t('criteria_overall.na_justification_required')
+  end
+%>
+<%=
+  if (criterion_data.key?('met_justification_required') and
+      !criterion_data.key?('met_url_required'))
+    t('criteria_overall.met_justification_required')
+  end
+%>
+<%=
+  if criterion_data.key?('met_url_required')
+    t('criteria_overall.met_url_required')
+  end
+%>
+<%=
+  if criterion_data.key?('future')
+    t('criteria_overall.future')
+  end
+%>
 <sup>[<a href="#<%=
   "#{criteria_level}.#{criterion_key}" %>"><%= criterion_key %></a>]</sup>
 <%

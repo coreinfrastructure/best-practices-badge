@@ -3075,14 +3075,11 @@ en:
       <a href="http://producingoss.com/"
       rel="nofollow"><em>Producing Open Source Software</em>
       by Karl Fogel</a> may be helpful to you.</p>
-      Here are a few key terms.
-      <p>
-      A <em>project</em> is an active entity that has
+      <p>Here are a few key terms:</p><ul>
+      <li>A <em>project</em> is an active entity that has
       project member(s) and produces project result(s).
       Its member(s) use project sites to coordinate and disseminate result(s).
       A project does not need to be a formal legal entity.
-      Key terms relating to projects are:</p>
-      <ul>
       <li>Project <em>members</em> are the
       group of one or more people or companies who work together
       to attempt to produce project results.
@@ -3140,7 +3137,7 @@ en:
       vulnerabilities are reported to the project.
       <li>do <em>not</em> require fees to get a badge.
       <li>do <em>not</em> require that all criteeria be implemented at once;
-      mos projects implement them over time.
+      most projects implement them over time.
       </ul>
       <p>
       The passing level doees not include criteria that would be

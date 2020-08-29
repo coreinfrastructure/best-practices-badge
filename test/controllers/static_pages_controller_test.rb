@@ -115,6 +115,12 @@ class StaticPagesControllerTest < ActionDispatch::IntegrationTest
     assert_includes @response.body, 'included in the percentage calculations'
   end
 
+  test 'should get criteria discussion' do
+    get '/en/criteria_discussion'
+    assert_response :success
+    assert_includes @response.body, 'no set of practices'
+  end
+
   test 'Ban WordPress admin request' do
     get '/wp-admin'
     assert_response :forbidden

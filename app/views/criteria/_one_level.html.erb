@@ -1,0 +1,63 @@
+<h2><%= t "projects.form_early.level.#{criteria_level}" %></h2>
+
+<% FullCriteriaHash[criteria_level].each do |major, major_value| -%>
+<h3><%= t "headings.#{major}" %></b></h3>
+<%   major_value.each do |minor, criteria| -%>
+<h4><%= t "headings.#{minor}" %></h4>
+<ul>
+<%     criteria.each do |criterion_key, criterion_data| -%>
+<li id='<%= criteria_level %>.<%= criterion_key %>'>
+<% if bare_key %>
+<span id='<%= criterion_key %>'></span>
+<% end %>
+<%= raw t("criteria.#{criteria_level}.#{criterion_key}.description") %>
+
+<%# Add criterion markings. Different languages may mark these differently. %>
+<%=
+  if (criterion_data.key?('na_allowed') &&
+      !criterion_data.key?('na_justification_required'))
+    t('criteria_overall.na_allowed')
+  end
+%>
+<%=
+  if criterion_data.key?('na_justification_required')
+    t('criteria_overall.na_justification_required')
+  end
+%>
+<%=
+  if (criterion_data.key?('met_justification_required') &&
+      !criterion_data.key?('met_url_required'))
+    t('criteria_overall.met_justification_required')
+  end
+%>
+<%=
+  if criterion_data.key?('met_url_required')
+    t('criteria_overall.met_url_required')
+  end
+%>
+<%=
+  if criterion_data.key?('future')
+    t('criteria_overall.future')
+  end
+%>
+<sup>[<a href="#<%=
+  "#{criteria_level}.#{criterion_key}" %>"><%= criterion_key %></a>]</sup>
+<%
+         details_key = "criteria.#{criteria_level}.#{criterion_key}.details"
+         if details && I18n.exists?(details_key) -%>
+  <dl>
+    <dt><i><%= t 'projects.misc.details' %>:</i></dt><dt> </dt>
+    <dd><%= raw t(details_key) %></dd>
+  </dl>
+<%       end -%>
+<%       if (rationale && (I18n.locale == :en) &&
+             criterion_data.key?('rationale')) -%>
+  <dl>
+    <dt><i>Rationale:</i></dt><dt> </dt>
+    <dd><%= raw criterion_data['rationale'] %></dd>
+  </dl>
+<%       end -%>
+<%     end -%>
+</ul>
+<%   end -%>
+<% end -%>

@@ -61,8 +61,11 @@ Rails.application.routes.draw do
     get 'sessions/new'
 
     get 'signup' => 'users#new'
+
+    # Handle "static" pages (get-only pages)
     get 'home' => 'static_pages#home'
     get 'criteria_stats' => 'static_pages#criteria_stats'
+    get 'criteria_discussion' => 'static_pages#criteria_discussion'
     get 'cookies' => 'static_pages#cookies'
 
     get 'feed' => 'projects#feed', defaults: { format: 'atom' }
@@ -89,6 +92,9 @@ Rails.application.routes.draw do
     resources :users
     resources :account_activations, only: [:edit]
     resources :password_resets,     only: %i[new create edit update]
+
+    get 'criteria/:criteria_level', to: 'criteria#show'
+    get 'criteria', to: 'criteria#index'
 
     get 'login' => 'sessions#new'
     post 'login' => 'sessions#create'

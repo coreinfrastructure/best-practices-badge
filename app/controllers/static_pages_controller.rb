@@ -21,6 +21,8 @@ class StaticPagesController < ApplicationController
 
   def criteria_stats; end
 
+  def criteria_discussion; end
+
   # Send a 404 ("not found") page.  Inspired by:
   # http://rubyjunky.com/cleaning-up-rails-4-production-logging.html
   # This is intentionally short and does *NOT* use the standard layout,

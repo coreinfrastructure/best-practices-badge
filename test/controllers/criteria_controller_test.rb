@@ -10,7 +10,7 @@ class CriteriaControllerTest < ActionDispatch::IntegrationTest
   # test "the truth" do
   #   assert true
   # end
-  test 'Get entire criteria set in English' do
+  test 'Get criteria set in English' do
     get '/en/criteria'
     assert_response :success
     assert_includes @response.body, 'Basics'
@@ -21,6 +21,29 @@ class CriteriaControllerTest < ActionDispatch::IntegrationTest
     assert_includes @response.body, 'MUST achieve a silver level badge'
     assert_includes @response.body,
                     'MUST document its code review requirements'
+  end
+
+  test 'Get passing criteria set in English with details and rationale' do
+    get '/en/criteria/0?details=true&rationale=true'
+    assert_response :success
+    assert_includes @response.body, 'Basics'
+    assert_includes @response.body, 'Basic project website content'
+    assert_includes @response.body,
+                    'MUST succinctly describe what the software does'
+    assert_includes @response.body, 'Details:'
+    assert_includes @response.body, 'Rationale:'
+  end
+
+  test 'Get one criteria set, passing, in English' do
+    get '/en/criteria/0'
+    assert_response :success
+    assert_includes @response.body, 'Basic project website content'
+    assert_includes @response.body,
+                    'MUST succinctly describe what the software does'
+    assert_not_includes @response.body, 'Details:'
+    assert_not_includes @response.body, 'Rationale:'
+    assert_not_includes @response.body, 'MUST achieve a passing level badge'
+    assert_not_includes @response.body, 'MUST achieve a silver level badge'
   end
 
   test 'Get one criteria set, silver, in English' do

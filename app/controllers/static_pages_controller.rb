@@ -19,8 +19,7 @@ class StaticPagesController < ApplicationController
 
   def home; end
 
-  def criteria_stats
-  end
+  def criteria_stats; end
 
   def criteria_discussion; end
 

@@ -14,7 +14,7 @@
 
 <%# Add criterion markings. Different languages may mark these differently. %>
 <%=
-  if (criterion_data.key?('na_allowed') and
+  if (criterion_data.key?('na_allowed') &&
       !criterion_data.key?('na_justification_required'))
     t('criteria_overall.na_allowed')
   end
@@ -25,7 +25,7 @@
   end
 %>
 <%=
-  if (criterion_data.key?('met_justification_required') and
+  if (criterion_data.key?('met_justification_required') &&
       !criterion_data.key?('met_url_required'))
     t('criteria_overall.met_justification_required')
   end
@@ -44,13 +44,13 @@
   "#{criteria_level}.#{criterion_key}" %>"><%= criterion_key %></a>]</sup>
 <%
          details_key = "criteria.#{criteria_level}.#{criterion_key}.details"
-         if @details and I18n.exists?(details_key) -%>
+         if details && I18n.exists?(details_key) -%>
   <dl>
     <dt><i><%= t 'projects.misc.details' %>:</i></dt><dt> </dt>
     <dd><%= raw t(details_key) %></dd>
   </dl>
 <%       end -%>
-<%       if (@rationale and (I18n.locale == :en) and
+<%       if (rationale && (I18n.locale == :en) &&
              criterion_data.key?('rationale')) -%>
   <dl>
     <dt><i>Rationale:</i></dt><dt> </dt>

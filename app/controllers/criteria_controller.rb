@@ -23,8 +23,8 @@ class CriteriaController < ApplicationController
 
   # Set user-provided parameters (other than criteria_level)
   def set_params
-    @details = boolean_param(:details)
-    @rationale = boolean_param(:rationale)
+    @details = boolean_param(:details, false)
+    @rationale = boolean_param(:rationale, false)
   end
 
   # Convert user-provided parameter "name" into true/false.
@@ -32,7 +32,7 @@ class CriteriaController < ApplicationController
   def boolean_param(name, default_value = true)
     if params.key?(name)
       user_value = params[name]
-      user_value.casecmp?('true') or user_value == '1'
+      user_value.casecmp?('true') || user_value == '1'
     else
       default_value
     end

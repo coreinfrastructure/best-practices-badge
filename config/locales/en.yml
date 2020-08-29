@@ -2852,6 +2852,11 @@ en:
       (FLOSS) projects to achieve the
       Core Infrastructure Initiative (CII) Best Practices badges at the
       passing, silver, and gold badge levels.
+      You can show this list with
+      <a href="/en/criteria/?details=false&rationale=false">just the
+      criteria</a> or with
+      <a href="/en/criteria/?details=true&rationale=true">additional
+      information</a>.
       You may also view just the
       <a href="/en/criteria/0">passing</a>,
       <a href="/en/criteria/1">silver</a>, and
@@ -2861,7 +2866,13 @@ en:
       This is the set of best practices for Free/Libre and Open Source Software
       (FLOSS) projects to achieve the
       Core Infrastructure Initiative (CII) Best Practices passing badge.
-      The <a href="/en/criteria">full set of criteria</a> are also available.
+      You can show this list with
+      <a href="/en/criteria/0?details=false&rationale=false">just the
+      criteria</a> or with
+      <a href="/en/criteria/0?details=true&rationale=true">additional
+      information</a>.
+      The <a href="/en/criteria">full set of criteria for all badge levels</a>
+      are also available.
     beginning_1_html:  >-
       <p>
       This is the set of best practices for Free/Libre and Open Source Software

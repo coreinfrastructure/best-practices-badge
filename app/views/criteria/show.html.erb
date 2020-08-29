@@ -1,11 +1,16 @@
-<% cache ['criteria_stats', locale, @criteria_level] do -%>
+<% cache [locale, @criteria_level, @details, @rationale] do -%>
 <div class="row">
 <div class="col-xs-12">
 <h1><%= t("criteria_overall.beginning_header_#{@criteria_level}") %></h1>
 <%= t("criteria_overall.beginning_#{@criteria_level}_html") %>
 <%= t("criteria_overall.see_discussion_html") %>
 
-<%= render 'one_level', {criteria_level: @criteria_level, bare_key: true} %>
+<%= render 'one_level',
+            {
+              criteria_level: @criteria_level,
+              details: @details, rationale: @rationale,
+              bare_key: true # True for "show"
+            } -%>
 </div>
 </div>
 <% end # cache -%>

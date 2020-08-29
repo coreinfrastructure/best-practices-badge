@@ -44,13 +44,14 @@
   "#{criteria_level}.#{criterion_key}" %>"><%= criterion_key %></a>]</sup>
 <%
          details_key = "criteria.#{criteria_level}.#{criterion_key}.details"
-         if I18n.exists?(details_key) -%>
+         if @details and I18n.exists?(details_key) -%>
   <dl>
     <dt><i><%= t 'projects.misc.details' %>:</i></dt><dt> </dt>
     <dd><%= raw t(details_key) %></dd>
   </dl>
 <%       end -%>
-<%       if (I18n.locale == :en) and criterion_data.key?('rationale') -%>
+<%       if (@rationale and (I18n.locale == :en) and
+             criterion_data.key?('rationale')) -%>
   <dl>
     <dt><i>Rationale:</i></dt><dt> </dt>
     <dd><%= raw criterion_data['rationale'] %></dd>

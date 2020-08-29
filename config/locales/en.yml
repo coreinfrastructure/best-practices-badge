@@ -3014,11 +3014,15 @@ en:
       justification, because we want others to understand <i>how</i>
       the criteria are being met.</p>
       <p>
+      The (many) cryptographic criteria do not always apply, because some
+      software has no need to directly use cryptographic capabilities.
+      In those cases, answer N/A.
+      <p>
       There is one implied passing criterion - every project MUST have
       a public website with a stable URL. This is required to create
       a badge entry in the first place.</p>
       <p></p>
-      <h3 id='terminology'>Terminology</h3>
+      <h3 id='criteria_terminology'>Terminology</h3>
       <p>
       If you are not familiar with
       software development or running a FLOSS project, materials such as
@@ -3058,7 +3062,85 @@ en:
       because we only require managing and storing of the editable versions,
       not of automatically generated results
       (in many cases generated results are not stored in a repository).</li>
+      <li>A <em>project security mechanism</em> is a security mechanism provided
+      by the delivered project's software.
       </ul>
+      <p></p>
+      <h3 id='criteria_noncriteria'>Non-criteria</h3>
+      <p>
+      The criteria:<ul>
+      <li>do <em>not</em> require any specific technology, product, or service.
+      For example, they do <em>not</em> require git, GitHub, or GitLab.
+      The criteria <em>do</em> provide guidance and help for common cases,
+      since that information can help people understand and meet the criteria.
+      There is some special automation for projects using git or GitHub,
+      to help users in those common cases, but they are not <em>required</em>.
+      Thus, as new tools and capabilities become available,
+      projects can quickly switch to them.
+      As exceptions, the criteria do require a project web page and TLS.
+      <li>do <em>not</em> require or forbid any
+      particular programming language.
+      They do require that additional measures be taken for certain
+      <em>kinds</em> of programming languages, but that is different.
+      <li><em>never</em> require the use of proprietary software, proprietary
+      service, or a proprietary technology, since many <a
+      href="https://www.gnu.org/philosophy/free-sw.en.html"
+      rel="nofollow">free software</a> developers would reject such criteria.
+      Projects are <em>allowed</em> to use them and depend on them.
+      <li>do <em>not</em> require active development or
+      user discussion within a project.  Some highly mature projects
+      rarely change and thus may have little activity.  The criteria
+      <em>do</em>, however, require that the project be responsive if
+      vulnerabilities are reported to the project.
+      <li>do <em>not</em> require fees to get a badge.
+      <li>do <em>not</em> require that all criteeria be implemented at once;
+      mos projects implement them over time.
+      </ul>
+      <p>
+      The passing level doees not include criteria that would be
+      impractical for a single-person project, e.g., something that requires
+      a significant amount of money.
+      Many FLOSS projects are small, and we do not want to disenfranchise them.
+      <p></p>
+      <h3 id='criteria_id_project'>Identifying a project</h3>
+      <p>
+      Our application gives every project entry a unique id, but
+      that doesn't help people searching for the project.
+      For our purposes, the <em>real</em> name of a project is the
+      URL for its repository, and where that is not available, the
+      project "front page" URL.
+      We rate limit changes to the repo URL to prevent some nonsense.
+      Projects normally have a human-readable name,
+      but these names are not unique enough.
+      <p></p>
+      <h3 id='criteria_why'>Why have criteria?</h3>
+      <p>
+      The paper <a
+      href="http://www.researchinlearningtechnology.net/index.php/rlt/article/view/23563"
+      rel="nofollow">Open badges for education: what are the implications
+      at the intersection of open systems and badging?</a>
+      identifies three general reasons for badging systems (all are
+      valid for this):</p><ol>
+      <li>Badges as a motivator of behavior.  We hope that by identifying
+      best practices, we'll encourage projects to implement those
+      best practices if they do not do them already.</li>
+      <li>Badges as a pedagogical tool.  Some projects may not be aware
+      of some of the best practices applied by others,
+      or how they can be practically applied.
+      The badge will help them become aware of them
+      and ways to implement them.</li>
+      <li>Badges as a signifier or credential.
+      Potential users want to use projects that are applying best
+      practices to consistently produce good results; badges make it easy
+      for projects to signify that they are following best practices,
+      and make it easy for users to see which projects are doing so.</li>
+      </ol>
+      <p>
+      We have chosen to use self-certification, because this makes it
+      possible for a large number of projects (even small ones) to
+      participate.  There's a risk that projects may make false claims,
+      but we think the risk is small, and users can check
+      the claims for themselves.</p>
     future: "{Future}"
     na_allowed: "{N/A allowed}"
     na_justification_required: "{N/A justification}"

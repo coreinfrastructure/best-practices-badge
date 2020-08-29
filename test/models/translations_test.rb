@@ -20,7 +20,7 @@ class TranslationsTest < ActiveSupport::TestCase
 
   # What tags & attributes are allowed?
   ACCEPTABLE_TAGS =
-    %w[h1 h2 h3 a strong em i b small tt ol ul li br p span].freeze
+    %w[h1 h2 h3 a strong em i b small tt ol ul li br p span div].freeze
   # Class can cause trouble, but we need it for glyphicons, etc.
   ACCEPTABLE_ATTRS = %w[href name class target rel id].freeze
 
@@ -46,6 +46,7 @@ class TranslationsTest < ActiveSupport::TestCase
   # Is the HTML string acceptable?  It needs to NOT have common mistakes,
   # *and* have only the permitted HTML tags & attributes.
   # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   def acceptable_html_string(text)
     return true unless text.include?('<') # Can't be a problem, no '<'
 
@@ -72,9 +73,16 @@ class TranslationsTest < ActiveSupport::TestCase
     # same as when we simply "regularize" the text without sanitizing it.
     sanitized = sanitize_html(text)
     regularized = regularize_html(text)
+    if sanitized != regularized
+      puts 'Error, HTML has something not permitted. Regularized:'
+      puts regularized
+      puts 'Sanitized:'
+      puts sanitized
+    end
     sanitized == regularized
   end
   # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
   # Recursively check locale text, e.g., ensure it has acceptable HTML
   # We pass "from" so that if there's a problem we can report exactly

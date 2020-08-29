@@ -2847,19 +2847,45 @@ en:
     beginning_header_1: FLOSS Best Practices Criteria (Silver Badge)
     beginning_header_2: FLOSS Best Practices Criteria (Gold Badge)
     beginning_all_html:  >-
+      <p>
       This is the set of best practices for Free/Libre and Open Source Software
-      (FLOSS) projects to achieve the passing, silver, and gold badges.
+      (FLOSS) projects to achieve the
+      Core Infrastructure Initiative (CII) Best Practices badges at the
+      passing, silver, and gold badge levels.
+      You may also view just the
+      <a href="/en/criteria/0">passing</a>,
+      <a href="/en/criteria/1">silver</a>, and
+      <a href="/en/criteria/2">gold</a> criteria.
     beginning_0_html:  >-
+      <p>
       This is the set of best practices for Free/Libre and Open Source Software
-      (FLOSS) projects to achieve the passing badge.
+      (FLOSS) projects to achieve the
+      Core Infrastructure Initiative (CII) Best Practices passing badge.
+      The <a href="/en/criteria">full set of criteria</a> are also available.
     beginning_1_html:  >-
+      <p>
       This is the set of best practices for Free/Libre and Open Source Software
-      (FLOSS) projects to achieve the silver badge.
+      (FLOSS) projects to achieve the
+      Core Infrastructure Initiative (CII) Best Practices silver badge.
+      The <a href="/en/criteria">full set of criteria</a> are also available.
     beginning_2_html:  >-
+      <p>
       This is the set of best practices for Free/Libre and Open Source Software
-      (FLOSS) projects to achieve the gold badge.
-    common_introduction_html:  >-
-      <h2 id='introduction'>Introduction</h2>
+      (FLOSS) projects to achieve the
+      Core Infrastructure Initiative (CII) Best Practices gold badge.
+      The <a href="/en/criteria">full set of criteria</a> are also available.
+    see_discussion_html:
+      <p>
+      See <a href="/en/criteria_discussion">criteria discussion</a> for
+      more information about these criteria.
+    future: "{Future}"
+    na_allowed: "{N/A allowed}"
+    na_justification_required: "{N/A justification}"
+    met_justification_required: "{Met justification}"
+    met_url_required: "{Met URL}"
+  criteria_discussion:
+    content_html:  >-
+      <h1 id='criteria_discussion'>Criteria Discussion</h1>
       <p>
       There is no set of practices that can <i>guarantee</i> that software
       will never have defects or vulnerabilities.
@@ -2875,12 +2901,13 @@ en:
       and help build trust and a desire for repeated interaction among
       developers from different organizations.</p>
       <p>
-      This page presents a set of best practices
-      for Free/Libre and Open Source Software (FLOSS) projects.
+      This page discusses the set of best practices
+      for Free/Libre and Open Source Software (FLOSS) projects
+      developed for the
+      Core Infrastructure Initiative (CII) Best Practices badge.
       Projects that follow these best practices
       will be able to voluntarily self-certify and show that they've
-      achieved the relevant
-      Core Infrastructure Initiative (CII) Best Practices badge.
+      achieved the relevant badge.
       Projects can do this, at no cost,
       by using a web application (BadgeApp)
       to explain how they meet these practices and their detailed criteria.</p>
@@ -2902,12 +2929,15 @@ en:
       These criteria are what we believe are
       widely "preferred or considered standard"
       in the wider FLOSS community.</p>
+      <p>
       For more information on how these criteria were developed,
       see the <a
       href="https://github.com/coreinfrastructure/best-practices-badge"
       >CII Best Practices badge GitHub site</a>.</p>
+      <p>
+      You may also <a href="/en/criteria">see the full criteria</a>.</p>
       <p></p>
-      <h3 id='criteria_structure'>Criteria Structure</h3>
+      <h2 id='criteria_structure'>Criteria Structure</h2>
       <p>
       The best practices criteria are divided into three levels:<ul>
       <li><b>Passing</b> focuses on best practices
@@ -2923,7 +2953,7 @@ en:
       Every criterion has a short name, shown below as superscripted
       text inside square brackets.
       <p></p>
-      <h3 id='criteria_other_projects'>Relationship to Other Projects</h3>
+      <h2 id='criteria_other_projects'>Relationship to Other Projects</h2>
       <p>
       The Linux Foundation also sponsors the
       <a href="https://www.openchainproject.org/"
@@ -2936,15 +2966,20 @@ en:
       The CII Best Practices badge and OpenChain work together to help
       improve FLOSS and how FLOSS is used.</p>
       <p>
-      <h3 id='criteria_automation'>Criteria Automation</h3>
+      <h2 id='criteria_automation'>Criteria Automation</h2>
       <p>
       In some cases we automatically test and fill in information
       if the project follows standard conventions and
-      is hosted on a site (e.g., GitHub) with decent API support.
-      We intend to improve this automation in the future;
-      improvements are welcome!</p>
+      is hosted on a site (e.g., GitHub) with decent API support.</p>
+      <p>
+      We intend to improve this automation in the future.
+      Improvements to the automation are welcome!</p>
+      <p>However, we have intentionally prioritized on "what is important",
+      even if can't be affordably automated.
+      We love automated measurements, but not everything important is
+      automatable or can be automated affordably.</p>
       <p></p>
-      <h3 id='criteria_changes'>Changes over time</h3>
+      <h2 id='criteria_changes'>Changes over time</h2>
       <p>
       We expect that these practices and their detailed criteria will
       be updated over time.
@@ -2958,7 +2993,7 @@ en:
       <a href="https://lists.coreinfrastructure.org/mailman/listinfo/cii-badges"
       rel="nofollow">mailing list for general discussion</a>.</p>
       <p></p>
-      <h3 id='keywords'>Key words</h3>
+      <h2 id='keywords'>Key words</h2>
       <p>
       The key words "MUST", "MUST NOT",
       "SHOULD", "SHOULD NOT", and "MAY"
@@ -2985,7 +3020,7 @@ en:
       SUGGESTED, because it may be difficult to implement or the costs
       to do so may be high.</p>
       <p></p>
-      <h3 id='criteria_achieving_badge'>Achieving a badge</h3>
+      <h2 id='criteria_achieving_badge'>Achieving a badge</h2>
       <p>
       To obtain a badge, all MUST and MUST NOT criteria must be met, all
       SHOULD criteria must be either met OR unmet with justification, and
@@ -3022,7 +3057,7 @@ en:
       a public website with a stable URL. This is required to create
       a badge entry in the first place.</p>
       <p></p>
-      <h3 id='criteria_terminology'>Terminology</h3>
+      <h2 id='criteria_terminology'>Terminology</h2>
       <p>
       If you are not familiar with
       software development or running a FLOSS project, materials such as
@@ -3066,7 +3101,7 @@ en:
       by the delivered project's software.
       </ul>
       <p></p>
-      <h3 id='criteria_noncriteria'>Non-criteria</h3>
+      <h2 id='criteria_noncriteria'>Non-criteria</h2>
       <p>
       The criteria:<ul>
       <li>do <em>not</em> require any specific technology, product, or service.
@@ -3102,7 +3137,7 @@ en:
       a significant amount of money.
       Many FLOSS projects are small, and we do not want to disenfranchise them.
       <p></p>
-      <h3 id='criteria_id_project'>Identifying a project</h3>
+      <h2 id='criteria_id_project'>Identifying a project</h2>
       <p>
       Our application gives every project entry a unique id, but
       that doesn't help people searching for the project.
@@ -3113,7 +3148,7 @@ en:
       Projects normally have a human-readable name,
       but these names are not unique enough.
       <p></p>
-      <h3 id='criteria_why'>Why have criteria?</h3>
+      <h2 id='criteria_why'>Why have criteria?</h2>
       <p>
       The paper <a
       href="http://www.researchinlearningtechnology.net/index.php/rlt/article/view/23563"
@@ -3135,17 +3170,18 @@ en:
       for projects to signify that they are following best practices,
       and make it easy for users to see which projects are doing so.</li>
       </ol>
+      <h3 id="criteria_self_certification">Why self-certification?</h3>
       <p>
       We have chosen to use self-certification, because this makes it
       possible for a large number of projects (even small ones) to
-      participate.  There's a risk that projects may make false claims,
-      but we think the risk is small, and users can check
-      the claims for themselves.</p>
-    future: "{Future}"
-    na_allowed: "{N/A allowed}"
-    na_justification_required: "{N/A justification}"
-    met_justification_required: "{Met justification}"
-    met_url_required: "{Met URL}"
+      participate.  There are millions of FLOSS projects, and
+      paying third parties to independently evaluate each one does not scale.
+      There's a risk that projects may make false claims,
+      but we think the risk is small, users can check
+      the claims for themselves, and false claims can be overridden.
+      We also use automation to override false claims where we can be
+      confident in the results.
+      </p>
   headings:
     Accessibility and internationalization: Accessibility and
       internationalization

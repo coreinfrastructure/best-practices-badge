@@ -61,8 +61,11 @@ Rails.application.routes.draw do
     get 'sessions/new'
 
     get 'signup' => 'users#new'
+
+    # Handle "static" pages (get-only pages)
     get 'home' => 'static_pages#home'
     get 'criteria_stats' => 'static_pages#criteria_stats'
+    get 'criteria_discussion' => 'static_pages#criteria_discussion'
     get 'cookies' => 'static_pages#cookies'
 
     get 'feed' => 'projects#feed', defaults: { format: 'atom' }

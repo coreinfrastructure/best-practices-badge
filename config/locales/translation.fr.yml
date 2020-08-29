@@ -3128,3 +3128,20 @@ fr:
     url_message: |2-
        doit commencer par http: ou https: et utiliser un jeu de caractères
           limité
+  criteria_overall:
+    beginning_header_all:
+    beginning_header_0:
+    beginning_header_1:
+    beginning_header_2:
+    beginning_all_html:
+    beginning_0_html:
+    beginning_1_html:
+    beginning_2_html:
+    see_discussion_html:
+    future:
+    na_allowed:
+    na_justification_required:
+    met_justification_required:
+    met_url_required:
+  criteria_discussion:
+    content_html:

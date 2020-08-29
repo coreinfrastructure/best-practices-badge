@@ -2998,3 +2998,20 @@ de:
     url_message: >-
        Muss mit http: oder https: beginnen und verwende einen
       begrenzten Zeichensatz
+  criteria_overall:
+    beginning_header_all:
+    beginning_header_0:
+    beginning_header_1:
+    beginning_header_2:
+    beginning_all_html:
+    beginning_0_html:
+    beginning_1_html:
+    beginning_2_html:
+    see_discussion_html:
+    future:
+    na_allowed:
+    na_justification_required:
+    met_justification_required:
+    met_url_required:
+  criteria_discussion:
+    content_html:

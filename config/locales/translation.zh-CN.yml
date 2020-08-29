@@ -1364,3 +1364,20 @@ zh-CN:
     known_bad_password: " 是一个众所周知的（坏）密码"
     valid_text: " 必须是有效的UTF-8编码，没有无效的控制字符"
     url_message: " 必须以http:或https:开头，并使用有限的字符集"
+  criteria_overall:
+    beginning_header_all:
+    beginning_header_0:
+    beginning_header_1:
+    beginning_header_2:
+    beginning_all_html:
+    beginning_0_html:
+    beginning_1_html:
+    beginning_2_html:
+    see_discussion_html:
+    future:
+    na_allowed:
+    na_justification_required:
+    met_justification_required:
+    met_url_required:
+  criteria_discussion:
+    content_html:

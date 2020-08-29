@@ -1517,3 +1517,20 @@ ja:
     known_bad_password: " よく知られている（悪い）パスワードです"
     valid_text: " 有効なUTF-8エンコーディングと無効でない制御文字を持たなければなりません"
     url_message: " http：またはhttps：で始めて、制限付きの文字セットを使用する必要があります"
+  criteria_overall:
+    beginning_header_all:
+    beginning_header_0:
+    beginning_header_1:
+    beginning_header_2:
+    beginning_all_html:
+    beginning_0_html:
+    beginning_1_html:
+    beginning_2_html:
+    see_discussion_html:
+    future:
+    na_allowed:
+    na_justification_required:
+    met_justification_required:
+    met_url_required:
+  criteria_discussion:
+    content_html:

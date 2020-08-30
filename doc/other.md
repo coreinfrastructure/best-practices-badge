@@ -2,6 +2,24 @@
 
 <!-- SPDX-License-Identifier: (MIT OR CC-BY-3.0+) -->
 
+## See the website!
+
+We've recently moved the criteria information to the active website!
+
+There you can see the
+<a href="https://bestpractices.coreinfrastructure.org/criteria/0">passing
+criteria</a>,
+<a href="https://bestpractices.coreinfrastructure.org/criteria">all
+criteria</a>, and the
+<a href="https://bestpractices.coreinfrastructure.org/criteria_discussion"
+>criteria discussion</a>.
+
+This change makes it easier to see the real criteria in any language,
+as well as hide or reveal the details and rationale.
+
+For now, we've kept the old criteria text below, so you're not
+surprised by this change.
+
 ## Introduction
 
 This document describes the criteria for badges beyond the "passing" level

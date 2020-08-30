@@ -507,11 +507,13 @@ class Project < ApplicationRecord
   #   Criteria.active.all? { |criterion| enough? criterion }
   # end
 
+  WHAT_IS_ENOUGH = %i[criterion_passing criterion_barely].freeze
+
   # This method is mirrored in assets/project-form.js as isEnough
   # If you change this method, change isEnough accordingly.
   def enough?(criterion)
     result = get_criterion_result(criterion)
-    result == :criterion_passing || result == :criterion_barely
+    WHAT_IS_ENOUGH.include?(result)
   end
 
   # This method is mirrored in assets/project-form.js as getColor

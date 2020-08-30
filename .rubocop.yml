@@ -125,3 +125,5 @@ Rails/Presence:
   Enabled: false
 Naming/UncommunicativeMethodParamName:
   Enabled: false
+Style/IpAddresses:
+  Enabled: false

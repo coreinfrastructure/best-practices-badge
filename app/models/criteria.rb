@@ -181,7 +181,7 @@ class Criteria
   def get_text_if_exists(field)
     return unless field.in? LOCALE_ACCESSORS
 
-    Criteria.get_levels(name).reverse.each do |l|
+    Criteria.get_levels(name).reverse_each do |l|
       next if l.to_i > level.to_i
 
       t_key = "criteria.#{l}.#{name}.#{field}"

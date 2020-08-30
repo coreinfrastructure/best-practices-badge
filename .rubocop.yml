@@ -48,6 +48,7 @@ AllCops:
     - 'bin/**'
     - 'node_modules/**/*'
     - 'railroader/**/*'
+    - '.pryrc'
 Documentation:
   Enabled: false
 Lint/HandleExceptions:
@@ -126,4 +127,16 @@ Rails/Presence:
 Naming/UncommunicativeMethodParamName:
   Enabled: false
 Style/IpAddresses:
+  Enabled: false
+# Rubocop 0.59.0 doesn't notice same-line comments (whup!), so disable
+Bundler/GemComment:
+  Enabled: false
+# Re-enable and try these out later
+Performance/ChainArrayAllocation:
+  Enabled: false
+Layout/AlignHash:
+  Enabled: false
+Rails/SaveBang:
+  Enabled: false
+Rails/FindEach:
   Enabled: false

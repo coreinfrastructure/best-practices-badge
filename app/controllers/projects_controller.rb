@@ -52,7 +52,7 @@ class ProjectsController < ApplicationController
   ).freeze
 
   # Used to validate deletion rationale.
-  AT_LEAST_15_NON_WHITESPACE = /\A\s*(\S\s*){15}.*/
+  AT_LEAST_15_NON_WHITESPACE = /\A\s*(\S\s*){15}.*/.freeze
 
   # GET /projects
   # GET /projects.json
@@ -405,7 +405,7 @@ class ProjectsController < ApplicationController
   end
   # rubocop:enable Metrics/MethodLength
 
-  VALID_ADD_RIGHTS_CHANGES = /\A[+-](\d+(,\d+)*)+\z/
+  VALID_ADD_RIGHTS_CHANGES = /\A[+-](\d+(,\d+)*)+\z/.freeze
 
   # Examine proposed changes to additional rights - if okay, call
   # update_additional_rights_forced to do them.

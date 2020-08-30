@@ -11,7 +11,7 @@
 # See how all your routes lay out with "rake routes".
 
 Rails.application.routes.draw do
-  LEGAL_LOCALE = /(?:#{I18n.available_locales.join("|")})/
+  LEGAL_LOCALE = /(?:#{I18n.available_locales.join("|")})/.freeze
 
   # First, handle routing of special cases.
   # Warning: Routes that don't take a :locale value must include a
@@ -71,7 +71,7 @@ Rails.application.routes.draw do
     get 'feed' => 'projects#feed', defaults: { format: 'atom' }
     get 'reminders' => 'projects#reminders_summary'
 
-    VALID_CRITERIA_LEVEL = /[0-2]/
+    VALID_CRITERIA_LEVEL = /[0-2]/.freeze
     resources :projects do
       member do
         get 'delete_form' => 'projects#delete_form'

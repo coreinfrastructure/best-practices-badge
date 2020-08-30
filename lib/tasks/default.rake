@@ -759,6 +759,7 @@ else
   task :update_chromedriver do
     require 'webdrivers'
     # force-upgrade to the latest version of chromedriver
+    # Note: This is *NOT* Rails' "update" method, ignore Rails/SaveBang.
     Webdrivers::Chromedriver.update
   end
 end

@@ -45,7 +45,7 @@ class Project < ApplicationRecord
 
   # All badge levels as IDs. Useful for enumerating "all levels" as:
   # Project::LEVEL_IDS.each do |level| ... end
-  LEVEL_ID_NUMBERS = 0..(COMPLETED_BADGE_LEVELS.length - 1)
+  LEVEL_ID_NUMBERS = (0..(COMPLETED_BADGE_LEVELS.length - 1)).freeze
   LEVEL_IDS = LEVEL_ID_NUMBERS.map(&:to_s)
 
   PROJECT_OTHER_FIELDS = %i[
@@ -174,9 +174,9 @@ class Project < ApplicationRecord
   # <, >, &, ", brackets, and braces.  This handles language names like
   # JavaScript, C++, C#, D-, and PL/I.  A space is optional after a comma.
   # We have to allow embedded spaces, e.g., "Jupyter Notebook".
-  VALID_LANGUAGE_LIST = %r{\A(|-|
-                          ([A-Za-z0-9!\#$%'()*+.\/\:;=?@\[\]^~ -]+
-                            (,\ ?[A-Za-z0-9!\#$%'()*+.\/\:;=?@\[\]^~ -]+)*))\Z}x
+  VALID_LANGUAGE_LIST =
+    %r{\A(|-| ([A-Za-z0-9!\#$%'()*+.\/\:;=?@\[\]^~ -]+
+        (,\ ?[A-Za-z0-9!\#$%'()*+.\/\:;=?@\[\]^~ -]+)*))\Z}x.freeze
   validates :implementation_languages,
             length: { maximum: MAX_SHORT_STRING_LENGTH },
             format: {

@@ -75,7 +75,7 @@ group :development, :test do
   gem 'pronto-rails_best_practices', '0.10.0'
   gem 'pronto-rubocop', '0.10.0'
   # gem 'railroader', '4.3.8' # Security static analyzer. OSS fork of Brakeman
-  gem 'rubocop', '0.58.0' # Style checker.  Changes can cause test failure
+  gem 'rubocop', '0.61.1' # Style checker.  Changes can cause test failure
   gem 'ruby-graphviz', '1.2.5' # This is used for bundle viz
   gem 'spring', '2.1.0' # Preloads app so console, rake, and tests run faster
   gem 'vcr', '5.0.0' # Record network responses for later test reuse
@@ -123,3 +123,7 @@ group :production do
   gem 'rack-timeout', '0.6.0' # Timeout; https://github.com/heroku/rack-timeout
   gem 'rails_12factor', '0.0.3'
 end
+
+# Post-install message from autoprefixer-rails:
+# autoprefixer-rails was deprected. Migration guide:
+# https://github.com/ai/autoprefixer-rails/wiki/Deprecated

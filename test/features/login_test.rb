@@ -9,10 +9,10 @@ include ActionView::Helpers::TextHelper
 
 # rubocop:disable Metrics/ClassLength
 class LoginTest < CapybaraFeatureTest
-  CHECK = /result_symbol_check/
-  DASH = /result_symbol_dash/
-  QUESTION = /result_symbol_question/
-  X = /result_symbol_x/
+  CHECK = /result_symbol_check/.freeze
+  DASH = /result_symbol_dash/.freeze
+  QUESTION = /result_symbol_question/.freeze
+  X = /result_symbol_x/.freeze
 
   setup do
     FastlyRails.configure do |c|

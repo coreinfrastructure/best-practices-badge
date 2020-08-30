@@ -4,7 +4,6 @@
 # CII Best Practices badge contributors
 # SPDX-License-Identifier: MIT
 
-# rubocop:disable Rails/FindEach
 class Badge
   ACCEPTABLE_PERCENTAGES = (0..99).to_a.freeze
   ACCEPTABLE_LEVELS = %w[passing silver gold].freeze
@@ -121,4 +120,3 @@ class Badge
   end
   # rubocop:enable Metrics/AbcSize
 end
-# rubocop:enable Rails/FindEach

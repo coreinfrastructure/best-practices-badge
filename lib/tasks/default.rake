@@ -60,7 +60,7 @@ end
 
 desc 'Run Rubocop with options'
 task :rubocop do
-  sh 'bundle exec rubocop -D --format offenses --format progress'
+  sh 'bundle exec rubocop -D --format progress'
 end
 
 desc 'Run rails_best_practices with options'
@@ -177,7 +177,7 @@ task :load_self_json do
   require 'open-uri'
   require 'json'
   url = 'https://master.bestpractices.coreinfrastructure.org/projects/1.json'
-  contents = open(url).read
+  contents = URI.open(url).read
   pretty_contents = JSON.pretty_generate(JSON.parse(contents))
   File.write('doc/self.json', pretty_contents)
 end
@@ -726,6 +726,7 @@ task :mass_email do
   body = ENV['MASS_EMAIL_BODY']
   where_condition = ENV['MASS_EMAIL_WHERE'] || 'true'
   raise if !subject || !body
+
   User.where(where_condition).find_each do |u|
     UserMailer.direct_message(u, subject, body).deliver_now
     Rails.logger.info "Mass notification sent to user id #{u.id}"

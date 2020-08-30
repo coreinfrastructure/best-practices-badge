@@ -34,7 +34,7 @@ class PasswordResetsController < ApplicationController
     if new_password.nil? || new_password == ''
       @user.errors.add(:password, t('password_resets.password_empty'))
       render 'edit'
-    elsif @user.update_attributes(user_params)
+    elsif @user.update(user_params)
       flash[:success] = t('password_resets.password_reset')
       redirect_to login_path
     else
@@ -85,6 +85,7 @@ class PasswordResetsController < ApplicationController
   def nested_params(outer, inner)
     return if params.nil? || !params.key?(outer)
     return unless params[outer].key?(inner)
+
     params[outer][inner]
   end
 end

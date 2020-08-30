@@ -68,6 +68,7 @@ class ProjectsController < ApplicationController
   end
 
   # GET /projects/1
+  # rubocop:disable Metrics/MethodLength
   def show
     # Fix malformed queries of form "/en/projects/188?criteria_level,2"
     # These produce parsed.query_values of {"criteria_level,2"=>nil}
@@ -76,13 +77,17 @@ class ProjectsController < ApplicationController
     # will find the intended data.
     parsed = Addressable::URI.parse(request.original_url)
     if parsed&.query_values&.include?('criteria_level,2')
-      redirect_to project_path(@project, criteria_level: 2), status: 301
+      redirect_to project_path(@project, criteria_level: 2),
+                  status: :moved_permanently
     elsif parsed&.query_values&.include?('criteria_level,1')
-      redirect_to project_path(@project, criteria_level: 1), status: 301
+      redirect_to project_path(@project, criteria_level: 1),
+                  status: :moved_permanently
     elsif parsed&.query_values&.include?('criteria_level,0')
-      redirect_to project_path(@project, criteria_level: 0), status: 301
+      redirect_to project_path(@project, criteria_level: 0),
+                  status: :moved_permanently
     end
   end
+  # rubocop:enable Metrics/MethodLength
 
   # GET /projects/1.json
   def show_json
@@ -365,6 +370,7 @@ class ProjectsController < ApplicationController
     redirect_to root_path
   end
 
+  # rubocop:disable Metrics/AbcSize
   def require_adequate_deletion_rationale
     return true if current_user&.admin?
 
@@ -373,11 +379,12 @@ class ProjectsController < ApplicationController
     if deletion_rationale.length < 20
       flash[:danger] = t('projects.delete_form.too_short')
       redirect_to delete_form_project_path(@project)
-    elsif AT_LEAST_15_NON_WHITESPACE !~ deletion_rationale
+    elsif !AT_LEAST_15_NON_WHITESPACE.match?(deletion_rationale)
       flash[:danger] = t('projects.delete_form.more_non_whitespace')
       redirect_to delete_form_project_path(@project)
     end
   end
+  # rubocop:enable Metrics/AbcSize
 
   # Forceably set additional_rights on project "id" given string description
   # Presumes permissions are granted & valid syntax in new_additional_rights
@@ -455,6 +462,7 @@ class ProjectsController < ApplicationController
     # Blank urls don't make any sense. Consider them not the same.
     return false if url1.blank?
     return false if url2.blank?
+
     extracted_url(url1) == extracted_url(url2)
   end
 
@@ -468,6 +476,7 @@ class ProjectsController < ApplicationController
   def repo_url_delay_expired?
     repo_url_updated_at = @project.repo_url_updated_at
     return true if repo_url_updated_at.nil?
+
     repo_url_updated_at < REPO_URL_CHANGE_DELAY.days.ago
   end
 
@@ -491,6 +500,7 @@ class ProjectsController < ApplicationController
     return true if current_user.admin?
 
     return true if basically_same(project_params[:repo_url], @project.repo_url)
+
     repo_url_delay_expired?
   end
 

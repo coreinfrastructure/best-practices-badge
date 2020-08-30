@@ -41,6 +41,7 @@ class AddEncryptedEmailToUsers < ActiveRecord::Migration[5.1]
         User.reset_column_information # Ensure column info is current
         User.find_each do |user|
           next if user.unencrypted_email.blank? # skip if nothing to encrypt
+
           user.name = '-' unless user.name? # Won't save if blank
           user.email = user.unencrypted_email # encrypt & index the email
           user.save!

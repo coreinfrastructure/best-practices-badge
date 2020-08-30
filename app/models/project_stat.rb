@@ -158,6 +158,7 @@ class ProjectStat < ApplicationRecord
   # rubocop:disable Metrics/MethodLength
   def self.percent_field_description(level, percentage)
     return "Bad level #{level}" unless Project::LEVEL_IDS.include?(level.to_s)
+
     level_i = level.to_i
     percentage_i = percentage.to_i
     if level_i.zero? && percentage_i.zero?

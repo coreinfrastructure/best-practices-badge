@@ -134,6 +134,7 @@ module ProjectsHelper
   # rubocop:disable Metrics/MethodLength
   def tiered_percent_as_string(value)
     return if value.blank?
+
     partial = value % 100
     if value < 100
       I18n.t 'projects.index.in_progress_next', percent: partial

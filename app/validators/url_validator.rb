@@ -47,7 +47,7 @@ class UrlValidator < ActiveModel::EachValidator
 
   # Return true if URL matches URL_REGEX and its decoding is valid UTF-8.
   def url_acceptable?(value)
-    if value !~ URL_REGEX
+    if !URL_REGEX.match?(value)
       false
     else
       # The unescapes the *entire* URL, but that's okay because we've

@@ -386,4 +386,68 @@ http_interactions:
         License","spdx_id":"MIT","url":"https://api.github.com/licenses/mit","node_id":"MDc6TGljZW5zZTEz"},"forks":0,"open_issues":0,"watchers":0,"default_branch":"master","permissions":{"admin":false,"push":false,"pull":true},"temp_clone_token":"","network_count":0,"subscribers_count":1}'
     http_version: 
   recorded_at: Sat, 18 Apr 2020 19:01:40 GMT
+- request:
+    method: get
+    uri: https://chromedriver.storage.googleapis.com/LATEST_RELEASE_84.0.4147
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - chromedriver.storage.googleapis.com
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      X-Guploader-Uploadid:
+      - ABg5-UyvvaRYGlEV1_w6dDaXJthdrDE1tHJCD-Hd3gwBNSGtJPpOVoL4uf3WU1hUAH85f66eIiASPSo6_ZuH-8sJS_lI-Dl3ZQ
+      Expires:
+      - Sun, 30 Aug 2020 03:35:41 GMT
+      Date:
+      - Sun, 30 Aug 2020 02:35:41 GMT
+      Last-Modified:
+      - Thu, 28 May 2020 21:05:12 GMT
+      Etag:
+      - '"f90fc89bccbabdd8582026a34268cdaf"'
+      X-Goog-Generation:
+      - '1590699912883468'
+      X-Goog-Metageneration:
+      - '1'
+      X-Goog-Stored-Content-Encoding:
+      - identity
+      X-Goog-Stored-Content-Length:
+      - '12'
+      Content-Type:
+      - text/plain
+      X-Goog-Hash:
+      - crc32c=BKzR+w==
+      - md5=+Q/Im8y6vdhYICajQmjNrw==
+      X-Goog-Storage-Class:
+      - STANDARD
+      Accept-Ranges:
+      - bytes
+      Content-Length:
+      - '12'
+      Server:
+      - UploadServer
+      Cache-Control:
+      - public, max-age=3600
+      Age:
+      - '1489'
+      Alt-Svc:
+      - h3-29=":443"; ma=2592000,h3-27=":443"; ma=2592000,h3-T051=":443"; ma=2592000,h3-T050=":443";
+        ma=2592000,h3-Q050=":443"; ma=2592000,h3-Q046=":443"; ma=2592000,h3-Q043=":443";
+        ma=2592000,quic=":443"; ma=2592000; v="46,43"
+    body:
+      encoding: UTF-8
+      string: 84.0.4147.30
+    http_version: 
+  recorded_at: Sun, 30 Aug 2020 03:00:30 GMT
 recorded_with: VCR 5.0.0

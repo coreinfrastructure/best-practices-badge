@@ -39,7 +39,7 @@ class StaticPagesController < ApplicationController
     render(
       template: '/static_pages/error_404.html.erb',
       layout: false,
-      status: 404
+      status: :not_found
     )
   end
 
@@ -49,7 +49,7 @@ class StaticPagesController < ApplicationController
     render(
       template: '/static_pages/google_verifier.txt',
       layout: false,
-      status: 200
+      status: :ok
     )
   end
 

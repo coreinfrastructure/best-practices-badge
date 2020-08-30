@@ -80,6 +80,7 @@ end
 # We should add options to increase flexibility.
 def ensure_source_processed(translated_filename)
   return unless $SOURCE.empty?
+
   source_filename = File.dirname(translated_filename) + '/en.yml'
   source_contents = File.read(source_filename)
   original_source = YAML.safe_load(source_contents)
@@ -119,6 +120,7 @@ end
 def change_translation(id, new_value)
   # puts("#{id} : #{new_value}")
   return true unless $REAL
+
   new_value_json = { 'target' => new_value }.to_json
   # Note: This popen invocation does NOT go through the shell,
   # so we do not use shell escapes.
@@ -143,6 +145,7 @@ end
 # Return true iff sucessful
 def post_translation(key, lang, source, new_value)
   return true unless $REAL
+
   new_value_json = {
     'target_language' => lang,
     'type' => 'key',

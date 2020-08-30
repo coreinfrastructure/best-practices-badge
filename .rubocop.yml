@@ -72,7 +72,7 @@ Style/Send:
 Style/AsciiComments:
   Enabled: false
 #
-# The following are new cops in Rubocop 0.52 which have disabled because
+# The following are newer cops which have disabled because
 # we aren't ready for them right now. It's diffult to do things "all at once".
 # Instead, we'll get things running first (ignoring these cops), and
 # later try to slowly comply with them or reject them.
@@ -88,7 +88,11 @@ Rails/EnvironmentComparison:
   Enabled: false
 Lint/MissingCopEnableDirective:
   Enabled: false
+Lint/NumberConversion:
+  Enabled: false
 Layout/ClassStructure:
   Enabled: false
 Rails/Presence:
+  Enabled: false
+Naming/UncommunicativeMethodParamName:
   Enabled: false

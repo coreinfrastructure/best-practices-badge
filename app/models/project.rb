@@ -81,7 +81,6 @@ class Project < ApplicationRecord
   )
 
   scope :passing, -> { gteq(100) }
-  # rubocop:enable Lint/AmbiguousBlockAssociation
 
   scope :recently_updated, (
     lambda do
@@ -580,6 +579,7 @@ class Project < ApplicationRecord
     current_percentage = self["badge_percentage_#{level}".to_sym]
     # If something is wrong, don't modify anything!
     return if current_percentage.blank? || old_badge_percentage.blank?
+
     current_percentage_i = current_percentage.to_i
     old_badge_percentage_i = old_badge_percentage.to_i
     if current_percentage_i >= 100 && old_badge_percentage_i < 100
@@ -606,14 +606,17 @@ class Project < ApplicationRecord
   def update_prereqs(level)
     level = level.to_i
     return if level <= 0
+
     # The following works because BADGE_LEVELS[1] is 'passing', etc:
     achieved_previous_level = "achieve_#{BADGE_LEVELS[level]}_status".to_sym
 
     if self["badge_percentage_#{level - 1}".to_sym] >= 100
       return if self[achieved_previous_level] == 'Met'
+
       self[achieved_previous_level] = 'Met'
     else
       return if self[achieved_previous_level] == 'Unmet'
+
       self[achieved_previous_level] = 'Unmet'
     end
   end

@@ -125,7 +125,6 @@ class PasswordResetsControllerTest < ActionDispatch::IntegrationTest
   end
   # rubocop:enable Metrics/BlockLength
 
-  # rubocop:enable Metrics/BlockLength
   test 'expired token' do
     get '/en/password_resets/new'
     assert_response :success

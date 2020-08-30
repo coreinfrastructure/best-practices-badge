@@ -4,7 +4,7 @@
 # CII Best Practices badge contributors
 # SPDX-License-Identifier: MIT
 
-require File.expand_path('../production', __FILE__)
+require File.expand_path('production', __dir__)
 
 Rails.application.configure do
   config.force_ssl = false

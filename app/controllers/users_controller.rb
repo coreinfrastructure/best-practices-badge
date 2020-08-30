@@ -128,7 +128,7 @@ class UsersController < ApplicationController
 
   # rubocop: disable Metrics/MethodLength, Metrics/AbcSize
   def destroy
-    id_to_delete = params[:id].to_i # quietly becomes 0 if not integer
+    id_to_delete = Integer(params[:id], 10)
     # TODO: Should we show a more graceful output if id is not found?
     user_to_delete = User.find(id_to_delete) # Exception raised if not found
     # Nest transaction to be *certain* we include all in the transaction
@@ -165,7 +165,7 @@ class UsersController < ApplicationController
   def send_activation
     @user.send_activation_email
     flash[:info] = t('users.new_activation_link_created')
-    redirect_to root_path, status: 302
+    redirect_to root_path, status: :found
   end
 
   private
@@ -217,6 +217,7 @@ class UsersController < ApplicationController
   def redir_unless_current_user_can_edit
     @user = User.find(params[:id])
     return if current_user_can_edit(@user)
+
     flash[:danger] = t('users.edit.inadequate_privileges')
     redirect_to(root_path)
   end
@@ -231,6 +232,7 @@ class UsersController < ApplicationController
   # This significantly reduces memory allocations.
   def select_needed(dataset)
     return dataset unless request.format.symbol == :html
+
     dataset.select(ProjectsController::HTML_INDEX_FIELDS)
   end
 end

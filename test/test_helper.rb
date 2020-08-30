@@ -48,7 +48,7 @@ else
   Minitest::Reporters.use! Minitest::Reporters::DefaultReporter.new
 end
 
-require File.expand_path('../../config/environment', __FILE__)
+require File.expand_path('../config/environment', __dir__)
 require 'rails/test_help'
 
 # We must specially allow web calls by test drivers, e.g.,

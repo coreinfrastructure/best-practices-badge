@@ -195,7 +195,7 @@ class ProjectTest < ActiveSupport::TestCase
 
   test 'update_prereqs works correctly for level downgrades' do
     assert_equal 'Met', @project_silver.achieve_passing_status
-    @project_silver.update_attributes!(description_good_status: 'Unmet')
+    @project_silver.update!(description_good_status: 'Unmet')
     assert_equal(
       'Unmet', Project.find(@project_silver.id).achieve_passing_status
     )
@@ -249,7 +249,7 @@ class ProjectTest < ActiveSupport::TestCase
       'Project.find(projects(:one).id).badge_percentage_0',
       'Project.find(projects(:one).id).badge_percentage_1'
     ] do
-      project_one.update_attributes!(
+      project_one.update!(
         crypto_weaknesses_status: 'Met',
         crypto_weaknesses_justification: 'It is good'
       )
@@ -257,7 +257,7 @@ class ProjectTest < ActiveSupport::TestCase
     Project.skip_callbacks = false
     old_percentage0 = Project.find(projects(:one).id).badge_percentage_0
     old_percentage1 = Project.find(projects(:one).id).badge_percentage_1
-    project_one.update_attributes!(
+    project_one.update!(
       warnings_strict_status: 'Met',
       warnings_strict_justification: 'It is good'
     )

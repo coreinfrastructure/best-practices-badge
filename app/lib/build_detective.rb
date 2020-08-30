@@ -33,7 +33,6 @@ class BuildDetective < Detective
   def determine_results(status, name_pattern, result_description)
     found_files = files_named(name_pattern)
     if found_files.empty?
-      #
     else
       @results[status] =
         met_result result_description, found_files.first['html_url']

@@ -165,6 +165,7 @@ class User < ApplicationRecord
   # Always return "false" for an unactivated account.
   def login_allowed_now?
     return false unless activated?
+
     start_time = can_login_starting_at
     start_time.blank? || Time.zone.now >= start_time
   end
@@ -206,6 +207,7 @@ class User < ApplicationRecord
   # This will raise an exception if the old key doesn't work.
   def rekey(old_key)
     return if encrypted_email_iv.blank? || encrypted_email.blank?
+
     old_iv = Base64.decode64(encrypted_email_iv)
     # Get the old email address; this will raise an exception if the
     # given key is wrong.

@@ -57,6 +57,7 @@ module SessionsHelper
   # rubocop:disable Metrics/MethodLength
   def current_user
     return if Rails.application.config.deny_login
+
     # Extra parens used here to indicate safe assignment in condition
     if (user_id = session[:user_id])
       @current_user ||= User.find_by(id: user_id)
@@ -118,6 +119,7 @@ module SessionsHelper
   def github_user_can_push?(url, client = Octokit::Client)
     github_path = get_github_path(url)
     return false if github_path.nil?
+
     github = client.new access_token: session[:user_token]
     begin
       github.repo(github_path).permissions.push
@@ -156,6 +158,7 @@ module SessionsHelper
     return false if current_user.nil?
     return true if current_user.admin?
     return true if current_user.id == @project.user_id
+
     false
   end
 
@@ -169,6 +172,7 @@ module SessionsHelper
       project_id: @project.id, user_id: current_user.id
     )
     return true if can_current_user_edit_on_github?(@project.repo_url)
+
     false
   end
 
@@ -178,6 +182,7 @@ module SessionsHelper
   def can_current_user_edit_on_github?(url)
     return false unless current_user.provider == 'github' &&
                         valid_github_url?(url)
+
     current_user_is_github_owner?(url) || github_user_can_push?(url)
   end
 
@@ -232,11 +237,13 @@ module SessionsHelper
 
   def get_github_owner(url)
     return unless url.present? && valid_github_url?(url)
+
     url.match(GITHUB_PATTERN).captures[0]
   end
 
   def get_github_path(url)
     return unless url.present? && valid_github_url?(url)
+
     url.match(GITHUB_PATTERN).captures.join('/')
   end
 

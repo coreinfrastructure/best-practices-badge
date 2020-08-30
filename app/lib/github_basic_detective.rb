@@ -67,6 +67,7 @@ class GithubBasicDetective < Detective
   # where to cut things off.
   def language_cleanup(raw_language_data)
     return '' if raw_language_data.blank?
+
     full_list = raw_language_data.sort_by(&:last).reverse.map(&:first)
     shorter_list = full_list - EXCLUDE_IMPLEMENTATION_LANGUAGES
     shorter_list.join(', ')

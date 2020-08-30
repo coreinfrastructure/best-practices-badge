@@ -134,8 +134,8 @@ Style/IpAddresses:
 Bundler/GemComment:
   Enabled: false
 # Re-enable and try these out later
-Performance/ChainArrayAllocation:
-  Enabled: false
+# Performance/ChainArrayAllocation:
+#   Enabled: false
 Layout/AlignHash:
   Enabled: false
 Rails/SaveBang:

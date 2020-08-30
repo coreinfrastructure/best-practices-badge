@@ -1,3 +1,32 @@
+# Rubocop configuration
+#
+# Note: Rubocop continuously adds new cops. Sometimes applying them
+# is safely automated, but sometimes they aren't (or the safe automation
+# is only available in a later version of Rubocop).
+# Here are some options:
+# 1. Always implement new cops, even if they require lots of manual work.
+#    Trying to do this is extremely time-consuming and risky, because
+#    we already have a code base, and it's often not worth it.
+# 2. Freeze on one (old) version. But then we never get the improvements
+#    such as better cops and bug fixes.
+# 3. Update rubocop, use some of its automated fixes, fix some
+#    easy/important ones (especially if they are bugs or security weaknesses),
+#    and then disable the rest of the cops (e.g., Enable: false).
+#    We can then slowly later try to re-enable some of the newer cops.
+# We choose option 3. Later versions of rubocop may add automations,
+# so this can save time in both the short and long run.
+#
+# Rubocop has changed over time:
+# * the performance cops were extracted in rubocop-performance
+#   and were removed from the main gem in 0.68
+# * the Ruby on Rails cops were extracted in rubocop-rails and
+#   were removed from the main gem in 0.72
+#   Be *sure* to depend on rubocop-rails version *2.0* or later.
+# See:
+# https://docs.rubocop.org/rubocop/installation.html
+# https://metaredux.com/posts/2019/05/22/a-modular-rubocop.html
+# https://github.com/toshimaru/rubocop-rails/issues/31
+
 AllCops:
   EnabledByDefault: true
   TargetRubyVersion: 2.5

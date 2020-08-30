@@ -29,21 +29,21 @@ class StringRefinementsPositiveTest < ActiveSupport::TestCase
 
   test '#met?' do
     assert 'Met'.met?
-    refute 'foo'.met?
+    assert_not 'foo'.met?
   end
 
   test '#na?' do
     assert 'N/A'.na?
-    refute 'foo'.na?
+    assert_not 'foo'.na?
   end
 
   test '#unknown?' do
     assert '?'.unknown?
-    refute 'foo'.unknown?
+    assert_not 'foo'.unknown?
   end
 
   test '#unmet?' do
     assert 'Unmet'.unmet?
-    refute 'foo'.unmet?
+    assert_not 'foo'.unmet?
   end
 end

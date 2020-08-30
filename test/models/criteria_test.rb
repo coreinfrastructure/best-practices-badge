@@ -28,7 +28,7 @@ class CriteriaTest < ActiveSupport::TestCase
   test 'Criteria.active("0")' do
     active = Criteria.active('0').map(&:name)
     assert_includes active, :contribution
-    refute_includes active, :hardening
+    assert_not_includes active, :hardening
   end
 
   test 'Criteria#keys' do
@@ -45,11 +45,11 @@ class CriteriaTest < ActiveSupport::TestCase
 
   test '#details_present?' do
     assert Criteria['0'][:description_good].details_present?
-    refute Criteria['0'][:version_tags].details_present?
+    assert_not Criteria['0'][:version_tags].details_present?
   end
 
   test 'Ensure details can be pulled from a lower level' do
-    refute I18n.exists?('criteria.2.bus_factor.details')
+    assert_not I18n.exists?('criteria.2.bus_factor.details')
     assert Criteria['2'][:bus_factor].details_present?
   end
 

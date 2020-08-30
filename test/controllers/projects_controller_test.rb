@@ -42,23 +42,23 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     get '/en/projects'
     assert_response :success
     assert_includes @response.body, 'Badge status'
-    refute_includes @response.body, 'target=[^ >]+>'
+    assert_not_includes @response.body, 'target=[^ >]+>'
   end
 
   test 'new but not logged in' do
     get '/en/projects/new'
     assert_response :success
     assert_includes @response.body, 'Log in with '
-    refute_includes @response.body,
-                    'What is the URL for the project home page ' \
-                    '(the URL for the project as a whole)'
+    assert_not_includes @response.body,
+                        'What is the URL for the project home page ' \
+                        '(the URL for the project as a whole)'
   end
 
   test 'should get new' do
     log_in_as(@user)
     get '/en/projects/new'
     assert_response :success
-    refute_includes @response.body, 'Log in with '
+    assert_not_includes @response.body, 'Log in with '
     assert_includes @response.body,
                     'What is the URL for the project home page ' \
                     '(the URL for the project as a whole)'
@@ -157,7 +157,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert @response.body.include?(
       I18n.t('criteria.0.version_semver.description')
     )
-    refute_includes @response.body, 'target=[^ >]+>'
+    assert_not_includes @response.body, 'target=[^ >]+>'
   end
 
   test 'should show project with criteria_level=1' do
@@ -443,7 +443,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     get "/en/projects/#{@project.id}/edit"
     assert_includes @response.body, 'Edit Project Badge Status'
     assert_includes @response.body, new_name1
-    refute_includes @response.body, new_name2
+    assert_not_includes @response.body, new_name2
     patch "/en/projects/#{@project.id}", params: {
       project: new_project_data2
     }
@@ -454,7 +454,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     # Return to the user the *unsaved* values in the edit field, along with
     # the error message. That way, the user can store them separately
     # (say as a printout).
-    refute_includes @response.body, new_name1
+    assert_not_includes @response.body, new_name1
     assert_includes @response.body, new_name2
     # Now reload the actually-stored record to check on what's in the database.
     assert_difference '@project.lock_version' do

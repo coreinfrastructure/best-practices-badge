@@ -35,10 +35,12 @@ class ProjectTest < ActiveSupport::TestCase
     assert Project.new.contains_url? 'http://www.example.org'
     assert Project.new.contains_url? 'See also http://x.org.'
     assert Project.new.contains_url? 'See also <http://x.org>.'
-    refute Project.new.contains_url? 'mailto://mail@example.org'
-    refute Project.new.contains_url? 'abc'
-    refute Project.new.contains_url? 'See also http://x for more information.'
-    refute Project.new.contains_url? 'www.google.com'
+    assert_not Project.new.contains_url? 'mailto://mail@example.org'
+    assert_not Project.new.contains_url? 'abc'
+    assert_not(
+      Project.new.contains_url?('See also http://x for more information.')
+    )
+    assert_not Project.new.contains_url? 'www.google.com'
   end
 
   # rubocop:disable Metrics/BlockLength
@@ -49,10 +51,10 @@ class ProjectTest < ActiveSupport::TestCase
 
     # Here we just the regex directly, to make sure it's okay.
     assert 'https://kernel.org' =~ regex
-    refute 'https://' =~ regex
-    refute 'www.google.com' =~ regex
-    refute 'See also http://x.org for more information.' =~ regex
-    refute 'See also <http://x.org>.' =~ regex
+    assert_not 'https://' =~ regex
+    assert_not 'www.google.com' =~ regex
+    assert_not 'See also http://x.org for more information.' =~ regex
+    assert_not 'See also <http://x.org>.' =~ regex
 
     # Here we use the full validator.  We stub out the info necessary
     # to create a validator instance to test (we won't really use them).
@@ -60,15 +62,15 @@ class ProjectTest < ActiveSupport::TestCase
     assert validator.url_acceptable?(my_url)
     assert validator.url_acceptable?('https://kernel.org')
     assert validator.url_acceptable?('') # Empty allowed.
-    refute validator.url_acceptable?('https://')
-    refute validator.url_acceptable?('www.google.com')
-    refute validator.url_acceptable?('See also http://x.org for more.')
-    refute validator.url_acceptable?('See also <http://x.org>.')
+    assert_not validator.url_acceptable?('https://')
+    assert_not validator.url_acceptable?('www.google.com')
+    assert_not validator.url_acceptable?('See also http://x.org for more.')
+    assert_not validator.url_acceptable?('See also <http://x.org>.')
     assert validator.url_acceptable?('http://google.com')
     # We don't allow '?'
-    refute validator.url_acceptable?('http://google.com?hello')
+    assert_not validator.url_acceptable?('http://google.com?hello')
     # We do allow fragments, e.g., #
-    refute validator.url_acceptable?('http://google.com#hello')
+    assert_not validator.url_acceptable?('http://google.com#hello')
 
     # Accept U+0020 (space) and U+00E9 c3 a9 "LATIN SMALL LETTER E WITH ACUTE"
     assert validator.url_acceptable?('https://github.com/linuxfoundation/' \
@@ -85,14 +87,14 @@ class ProjectTest < ActiveSupport::TestCase
                                     '%e1%80%80')
     # Don't accept "c0 80", an overlong (2-byte) encoding of U+0000 (NUL).
     # Note that "modified UTF-8" does accept this.
-    refute validator.url_acceptable?('https://github.com/linuxfoundation/' \
+    assert_not validator.url_acceptable?('https://github.com/linuxfoundation/' \
                                     'cii-best-practices-badge%20%c0%80')
     # Don't accept non-UTF-8, even if the individual bytes are acceptable.
-    refute validator.url_acceptable?('https://github.com/linuxfoundation/' \
+    assert_not validator.url_acceptable?('https://github.com/linuxfoundation/' \
                                     'cii-best-practices-badge%eex')
-    refute validator.url_acceptable?('https://github.com/linuxfoundation/' \
+    assert_not validator.url_acceptable?('https://github.com/linuxfoundation/' \
                                     'cii-best-practices-badge%ee')
-    refute validator.url_acceptable?('https://github.com/linuxfoundation/' \
+    assert_not validator.url_acceptable?('https://github.com/linuxfoundation/' \
                                     'cii-best-practices-badge%ff%ff')
   end
   # rubocop:enable Metrics/BlockLength
@@ -100,12 +102,12 @@ class ProjectTest < ActiveSupport::TestCase
   test 'UTF-8 validator should refute non-UTF-8 encoding' do
     validator = TextValidator.new(attributes: %i[name description])
     # Don't accept non-UTF-8, even if the individual bytes are acceptable.
-    refute validator.text_acceptable?("The best practices badge\255")
-    refute validator.text_acceptable?("The best practices badge\xff\xff")
-    refute validator.text_acceptable?("The best practices badge\xee")
-    refute validator.text_acceptable?("The best practices badge\xe4")
+    assert_not validator.text_acceptable?("The best practices badge\255")
+    assert_not validator.text_acceptable?("The best practices badge\xff\xff")
+    assert_not validator.text_acceptable?("The best practices badge\xee")
+    assert_not validator.text_acceptable?("The best practices badge\xe4")
     # Don't accept an invalid control character
-    refute validator.text_acceptable?("The best practices badge\x0c")
+    assert_not validator.text_acceptable?("The best practices badge\x0c")
     assert validator.text_acceptable?('The best practices badge.')
   end
 
@@ -230,13 +232,13 @@ class ProjectTest < ActiveSupport::TestCase
       :justification_good?,
       'This is long enough.'
     )
-    assert !@unjustified_project.send(
+    assert_not @unjustified_project.send(
       :justification_good?,
       '// This is a comment.'
     )
-    assert !@unjustified_project.send(:justification_good?, 'bah.')
-    assert !@unjustified_project.send(:justification_good?, '')
-    assert !@unjustified_project.send(:justification_good?, nil)
+    assert_not @unjustified_project.send(:justification_good?, 'bah.')
+    assert_not @unjustified_project.send(:justification_good?, '')
+    assert_not @unjustified_project.send(:justification_good?, nil)
   end
 
   # rubocop:disable Metrics/BlockLength

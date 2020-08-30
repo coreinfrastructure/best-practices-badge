@@ -108,10 +108,10 @@ class SessionsHelperTest < ActionView::TestCase
     assert github_user_can_push?(
       'https://github.com/ciitest2/asdf', StubOctokitClient
     )
-    refute github_user_can_push?(
+    assert_not github_user_can_push?(
       'https://github.com/ciitest3/asdf', StubOctokitClient
     )
-    refute github_user_can_push?(
+    assert_not github_user_can_push?(
       'https://github.com/not-here/not-found',
       StubOctokitClient
     )
@@ -140,16 +140,16 @@ class SessionsHelperTest < ActionView::TestCase
   test 'unit test of valid_github_url' do
     assert valid_github_url? 'https://github.com/asdf/1234/'
     assert valid_github_url? 'https://github.com/asdf-123_/1234as-/'
-    refute valid_github_url? 'https://github.com/asdf123_/1234%20as-/'
-    refute valid_github_url? 'https://github.com/asdf%20123_/1234as-/'
-    refute valid_github_url? 'https://github.com/asdf123_/1234 as-/'
-    refute valid_github_url? 'https://github.com/asdf 123_/1234as-/'
-    refute valid_github_url? 'https://github.com.more/asdf-123_/1234as-/'
-    refute valid_github_url? 'https://my.github.com/asdf-123_/1234as-/'
-    refute valid_github_url? 'http://github.com/asdf/1234/'
-    refute valid_github_url? 'https://github.com/asdf/1234-/s'
-    refute valid_github_url? 'https://github.com/asdf/1234/?'
-    refute valid_github_url? 'https://githubs.com/asdf/1234/'
+    assert_not valid_github_url? 'https://github.com/asdf123_/1234%20as-/'
+    assert_not valid_github_url? 'https://github.com/asdf%20123_/1234as-/'
+    assert_not valid_github_url? 'https://github.com/asdf123_/1234 as-/'
+    assert_not valid_github_url? 'https://github.com/asdf 123_/1234as-/'
+    assert_not valid_github_url? 'https://github.com.more/asdf-123_/1234as-/'
+    assert_not valid_github_url? 'https://my.github.com/asdf-123_/1234as-/'
+    assert_not valid_github_url? 'http://github.com/asdf/1234/'
+    assert_not valid_github_url? 'https://github.com/asdf/1234-/s'
+    assert_not valid_github_url? 'https://github.com/asdf/1234/?'
+    assert_not valid_github_url? 'https://githubs.com/asdf/1234/'
   end
 end
 # rubocop: enable Metrics/BlockLength

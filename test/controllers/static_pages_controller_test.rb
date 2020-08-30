@@ -19,7 +19,7 @@ class StaticPagesControllerTest < ActionDispatch::IntegrationTest
     assert_includes @response.body, 'More information on the'
     assert_includes @response.body, 'target='
     # target=... better not end immediately, we need rel="noopener"
-    refute_includes @response.body, 'target=[^ >]+>'
+    assert_not_includes @response.body, 'target=[^ >]+>'
     # Check that our preload statements are present
     assert_select(
       'head link[rel="preload"][as="stylesheet"][type="text/css"]' \

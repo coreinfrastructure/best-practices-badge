@@ -54,7 +54,7 @@ class GithubLoginTest < CapybaraFeatureTest
       # Check a user cannot edit a Github project they CAN'T push to.
       click_on 'Projects'
       click_on 'Unjustified perfect project'
-      refute has_content? 'Edit'
+      assert_not has_content? 'Edit'
     end
     if ENV['GITHUB_PASSWORD'] # revoke OAuth authorization
       # We used to automate this, but GitHub changes too often, and

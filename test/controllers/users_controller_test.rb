@@ -35,9 +35,9 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     # Ensure the additional rights aren't shown when not there.
     get "/en/users/#{@other_user.id}"
     assert_response :success
-    refute_includes @response.body, project.name
-    refute_includes @response.body,
-                    I18n.t('users.show.projects_additional_rights')
+    assert_not_includes @response.body, project.name
+    assert_not_includes @response.body,
+                        I18n.t('users.show.projects_additional_rights')
 
     # Create additional rights during test, not as a fixture.
     # The fixture would require correct references to *other* fixture ids.
@@ -69,31 +69,31 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     log_in_as(@admin)
     get "/en/users/#{@user.id}"
     assert_response :success
-    refute_includes @response.body,
-                    I18n.t('users.show.is_admin')
+    assert_not_includes @response.body,
+                        I18n.t('users.show.is_admin')
   end
 
   test 'do NOT indicate admin is admin to non-admin' do
     log_in_as(@user, password: 'password1')
     get "/en/users/#{@user.id}"
     assert_response :success
-    refute_includes @response.body,
-                    I18n.t('users.show.is_admin')
+    assert_not_includes @response.body,
+                        I18n.t('users.show.is_admin')
   end
 
   test 'do NOT indicate admin is admin if not logged in' do
     # No log_in_as
     get "/en/users/#{@user.id}"
     assert_response :success
-    refute_includes @response.body,
-                    I18n.t('users.show.is_admin')
+    assert_not_includes @response.body,
+                        I18n.t('users.show.is_admin')
   end
 
   test 'should NOT show email address when not logged in' do
     get "/en/users/#{@user.id}"
     assert_response :success
-    refute_includes @response.body, '%40example.com'
-    refute_includes @response.body, '@example.com'
+    assert_not_includes @response.body, '%40example.com'
+    assert_not_includes @response.body, '@example.com'
     # We also want to make sure we don't cache this
     assert_equal 'noindex', @response.headers['X-Robots-Tag']
     assert_equal 'no-cache, no-store',
@@ -104,18 +104,18 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     get "/en/users/#{@user.id}.json"
     assert_response :success
     assert_equal '{', @response.body[0]
-    refute_includes @response.body, 'example.com' # Must NOT include email
+    assert_not_includes @response.body, 'example.com' # Must NOT include email
     json_response = JSON.parse(@response.body)
     assert_equal @user.id, json_response['id']
-    refute_includes json_response, 'email'
+    assert_not_includes json_response, 'email'
   end
 
   test 'should NOT show email address when logged in as another user' do
     log_in_as(@other_user)
     get "/en/users/#{@user.id}"
     assert_response :success
-    refute_includes @response.body, '%40example.com'
-    refute_includes @response.body, '@example.com'
+    assert_not_includes @response.body, '%40example.com'
+    assert_not_includes @response.body, '@example.com'
     assert_equal 'no-cache, no-store',
                  @response.headers['Cache-Control']
   end
@@ -124,12 +124,12 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     log_in_as(@other_user)
     get "/en/users/#{@user.id}.json"
     assert_response :success
-    refute_includes @response.body, 'example.com'
+    assert_not_includes @response.body, 'example.com'
     assert_equal 'no-cache, no-store',
                  @response.headers['Cache-Control']
     json_response = JSON.parse(@response.body)
     assert_equal @user.id, json_response['id']
-    refute_includes json_response, 'email'
+    assert_not_includes json_response, 'email'
   end
 
   # This is a change, due to the EU General Data Protection Regulation (GDPR)
@@ -186,7 +186,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_response 302
     assert_redirected_to root_url
     @new_user = User.find_by(email: 'nonsense@example.org')
-    refute_nil @new_user
+    assert_not_nil @new_user
     assert 'Not here', @new_user.name
   end
 
@@ -298,13 +298,13 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_difference('User.count', -1) do
       delete "/en/users/#{@other_user.id}"
     end
-    refute session.key?('user_id')
+    assert_not session.key?('user_id')
     # New session has been initiated
     assert_not_equal old_session_id, session['session_id']
     assert_redirected_to root_url
     get root_url
     my_assert_select '.alert-success', 'User deleted.'
-    refute session.key?('user_id')
+    assert_not session.key?('user_id')
     # TODO: The session key is restored here. It won't matter,
     # since it lacks a user_id, but it's weird. Should fix in the long term.
     # refute session.key?('session_id')

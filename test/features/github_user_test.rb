@@ -22,7 +22,7 @@ class GithubUserTest < CapybaraFeatureTest
     # Check a user can't edit a project they don't own on app or GitHub
     click_on 'Projects'
     click_on 'Pathfinder OS'
-    refute has_content? 'Edit'
+    assert_not has_content? 'Edit'
     # Check a user can edit a project they own on Github
     # We do this here because this should not require github interaction
     click_on 'Projects'

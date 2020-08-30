@@ -4,6 +4,7 @@ AllCops:
   DisplayCopNames: true
   DisplayStyleGuide: true
   Include:
+    - '**/*.rb'
     - '**/*.pryrc'
     - '**/*.rake'
     - '.env'
@@ -13,9 +14,8 @@ AllCops:
     - '**/Guardfile'
     - '**/Rakefile'
   Exclude:
-    - 'db/schema.rb'
-    - 'db/migrate/2015*.rb'
-    - 'db/migrate/2016*.rb'
+    - 'db/**'
+    - 'db/migrate/**'
     - 'bin/**'
     - 'node_modules/**/*'
     - 'railroader/**/*'

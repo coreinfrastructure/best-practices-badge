@@ -48,7 +48,7 @@ class RobotsNonproductionTest < CapybaraFeatureTest
   scenario 'robots.txt on nonproduction site' do
     visit '/robots.txt'
     assert has_content? 'User-Agent: *'
-    refute has_content? 'Allow: /'
+    assert_not has_content? 'Allow: /'
     assert has_content? 'Disallow: /'
   end
 end

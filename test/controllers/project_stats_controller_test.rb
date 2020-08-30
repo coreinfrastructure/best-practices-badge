@@ -20,7 +20,7 @@ class ProjectStatsControllerTest < ActionDispatch::IntegrationTest
       '<h2>Projects with badge entry activity in last 30 days</h2>'
     )
     # This isn't normally shown:
-    refute @response.body.include?('Percentage of projects earning badges')
+    assert_not @response.body.include?('Percentage of projects earning badges')
   end
 
   test 'should get index as admin' do

@@ -27,7 +27,8 @@
 # https://metaredux.com/posts/2019/05/22/a-modular-rubocop.html
 # https://github.com/toshimaru/rubocop-rails/issues/31
 
-# require: rubocop-performance
+require: rubocop-performance
+# require: rubocop-rails
 
 AllCops:
   EnabledByDefault: true
@@ -134,8 +135,8 @@ Style/IpAddresses:
 Bundler/GemComment:
   Enabled: false
 # Re-enable and try these out later
-# Performance/ChainArrayAllocation:
-#   Enabled: false
+Performance/ChainArrayAllocation:
+  Enabled: false
 Layout/AlignHash:
   Enabled: false
 Rails/SaveBang:

@@ -140,3 +140,5 @@ Rails/SaveBang:
   Enabled: false
 Rails/FindEach:
   Enabled: false
+Lint/UnneededCopDisableDirective:
+  Enabled: false

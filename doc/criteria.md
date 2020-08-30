@@ -15,8 +15,7 @@ There you can see the
 criteria</a>,
 <a href="https://bestpractices.coreinfrastructure.org/criteria">all
 criteria</a>, and the
-<a href="https://bestpractices.coreinfrastructure.org/criteria_discussion"
->criteria discussion</a>.
+<a href="https://bestpractices.coreinfrastructure.org/criteria_discussion">criteria discussion</a>.
 
 This change makes it easier to see the real criteria in any language,
 as well as hide or reveal the details and rationale.

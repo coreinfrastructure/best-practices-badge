@@ -1,6 +1,8 @@
 # Change Log
 
-All notable changes to this project will be documented in this file.
+This file documents some notable changes.
+However, because this software is primarily intended for a single site,
+we have not worked at keeping it up to date.
 
 This Change Log format is suggested by
 <https://github.com/olivierlacan/keep-a-changelog/blob/master/CHANGELOG.md>

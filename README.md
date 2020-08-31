@@ -31,8 +31,8 @@ There is also a
 [mailing list](https://lists.coreinfrastructure.org/mailman/listinfo/cii-badges)
 for general discussion.
 
-* Badging **[Criteria](./doc/criteria.md)** for the "passing" level
-* **[Other criteria for higher-level badges](./doc/other.md)**
+* Badging **[Criteria for the passing level](https://bestpractices.coreinfrastructure.org/criteria/0)**
+* **[Criteria for all badging levels](https://bestpractices.coreinfrastructure.org/criteria)**
 * Information on how to **[contribute](./CONTRIBUTING.md)**
   (including how to report vulnerabilities)
 * [Up-for-grabs](https://github.com/coreinfrastructure/best-practices-badge/labels/up-for-grabs)
@@ -53,8 +53,7 @@ for general discussion.
 
 ## Summary of Best Practices Criteria "passing" level
 
-This is a summary of the passing criteria, with requirements in bold
-(for details, see the [full list of criteria](doc/criteria.md)):
+This is a summary of the passing criteria, with requirements in bold:
 
 * **Have a [stable website](doc/criteria.md#homepage_url)**, which says:
   - **[what it does](doc/criteria.md#description_good)**

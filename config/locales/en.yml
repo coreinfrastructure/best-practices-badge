@@ -131,15 +131,16 @@ en:
         following best practices and as a result are more likely
         to produce higher-quality secure software.
       p2_html: >-
-        More information on the CII Best Practices Badging program,
-        including background and <a href='https://github.com/coreinfrastructure/best-practices-badge/blob/master/doc/criteria.md'>criteria</a>,
-        is <a href='https://github.com/coreinfrastructure/best-practices-badge'>available
+        You can easily see just the <a href="/en/criteria/0">criteria for the
+        passing badge</a>.
+        More information on the CII Best Practices Badging program is
+        <a href='https://github.com/coreinfrastructure/best-practices-badge'>available
         on GitHub</a>. <a href="/en/project_stats">Project statistics</a>
         and <a href="/en/criteria_stats">criteria statistics</a> are available.
         The <a href="/en/projects">projects page</a> shows participating
         projects and supports queries (e.g., you can see <a href="/en/projects?gteq=100">projects
         that have a passing badge</a>). You can also see <a href='/en/projects/1/0'>an
-        example (where we try to get our own badge)</a>.
+        example (where we try to earn our own badge)</a>.
       p3_html: >-
         <em>Privacy and legal issues</em>: Please see our <a href="https://www.linuxfoundation.org/privacy">privacy
         policy</a>,

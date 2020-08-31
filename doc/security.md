@@ -3140,8 +3140,8 @@ Project participation and interface:
 
 Criteria:
 
-* [criteria.md](criteria.md) - Criteria for "passing" badge
-* [other.md](other.md) - Criteria for other badges (silver and gold)
+* [Criteria for passing badge](https://bestpractices.coreinfrastructure.org/criteria/0)
+* [Criteria for all badge levels](https://bestpractices.coreinfrastructure.org/criteria)
 
 Development processes and security:
 

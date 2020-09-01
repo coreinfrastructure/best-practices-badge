@@ -2853,9 +2853,9 @@ en:
       Core Infrastructure Initiative (CII) Best Practices badges at the
       passing, silver, and gold badge levels.
       You can show this list with
-      <a href="/en/criteria/?details=false&rationale=false">just the
+      <a href="/en/criteria">just the
       criteria</a> or with
-      <a href="/en/criteria/?details=true&rationale=true">additional
+      <a href="/en/criteria?details=true&rationale=true">additional
       information</a>.
       You may also view just the
       <a href="/en/criteria/0">passing</a>,
@@ -2868,7 +2868,7 @@ en:
       (FLOSS) projects to achieve the
       Core Infrastructure Initiative (CII) Best Practices passing badge.
       You can show this list with
-      <a href="/en/criteria/0?details=false&rationale=false">just the
+      <a href="/en/criteria/0">just the
       criteria</a> or with
       <a href="/en/criteria/0?details=true&rationale=true">additional
       information</a>.
@@ -2880,7 +2880,7 @@ en:
       (FLOSS) projects to achieve the
       Core Infrastructure Initiative (CII) Best Practices silver badge.
       You can show this list with
-      <a href="/en/criteria/1?details=false&rationale=false">just the
+      <a href="/en/criteria/1">just the
       criteria</a> or with
       <a href="/en/criteria/1?details=true&rationale=true">additional
       information</a>.
@@ -2891,7 +2891,7 @@ en:
       (FLOSS) projects to achieve the
       Core Infrastructure Initiative (CII) Best Practices gold badge.
       You can show this list with
-      <a href="/en/criteria/2?details=false&rationale=false">just the
+      <a href="/en/criteria/2">just the
       criteria</a> or with
       <a href="/en/criteria/2?details=true&rationale=true">additional
       information</a>.

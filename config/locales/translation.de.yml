@@ -2901,8 +2901,6 @@ de:
       please_home: Bitte gehen Sie auf die Startseite.
     criteria_stats:
       criteria: Kriterien
-      detailed_criteria_on_github: Die detaillierten Kriterien
-        sind auf GitHub.
       project_stats_html: >-
         Die "aktiven" Kriterien sind Kriterien, die in den Prozentberechnungen
         enthalten sind (im Gegensatz zu "zukünftigen" Kriterien).
@@ -2931,6 +2929,7 @@ de:
       met_justification_required: Kriterium erfüllen erforderlich
       met_justification_or_url_required: Kriterium erfüllen oder
         URL erforderlich
+      see_actual_criteria:
   headings:
     Accessibility and internationalization: Zugänglichkeit und
       Internationalisierung

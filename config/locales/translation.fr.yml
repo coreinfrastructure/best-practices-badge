@@ -3036,8 +3036,6 @@ fr:
       please_home: Allez s'il vous plaît à la page d'accueil.
     criteria_stats:
       criteria: Critères
-      detailed_criteria_on_github: Les critères détaillés sont
-        disponibles sur GitHub.
       project_stats_html: |-
         Les critères « actifs » sont ceux qui sont inclus dans les calculs de pourcentages (contrairement aux critères « futurs »). Les colonnes suivantes identifient le nombre de critères actifs à chaque niveau qui DOIVENT, DEVRAIENT ou PEUVENT être respectés, qui autorisent « N/A » comme réponse, qui requièrent une URL, qui incluent des détails, ou qui sont nouveaux à ce niveau. Les critères « futurs » sont affichés sur le formulaire, et devraient être ajoutés comme critères actifs à un certain niveau dans le futur, mais ne sont pas inclus dans les calculs de complétion. <br><br>
         Vous pouvez voir des statistiques sur les projets au cours du temps sur la <a href="/fr/project_stats">page des statistiques du projet</a>.
@@ -3054,6 +3052,7 @@ fr:
       met_justification_required: Justification requise
       met_justification_or_url_required: Justification ou URL
         requise
+      see_actual_criteria:
   headings:
     Accessibility and internationalization: Accessibilité et internationalisation
     Analysis: Analyse

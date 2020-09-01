@@ -1295,7 +1295,6 @@ zh-CN:
       please_home: 请转到主页。
     criteria_stats:
       criteria: 条款
-      detailed_criteria_on_github: 详细的条款在GitHub网站。
       project_stats_html: 您可以在<a href="/project_stats">项目统计信息页面</a>查看有关项目的统计信息。
       level: 等级
       must: 必须
@@ -1309,6 +1308,7 @@ zh-CN:
       new_this_level: 在这个级别的新的
       met_justification_required: 需要满足理由
       met_justification_or_url_required: 满足理由或需要URL
+      see_actual_criteria:
   headings:
     Accessibility and internationalization: 无障碍和国际化
     Analysis: 分析

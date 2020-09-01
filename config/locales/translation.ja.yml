@@ -1447,7 +1447,6 @@ ja:
       please_home: ホームページに行ってください。
     criteria_stats:
       criteria: 基準
-      detailed_criteria_on_github: 詳細の基準はGitHubにあります。
       project_stats_html: >-
         プロジェクトに関する統計は、<a href="/project_stats">プロジェクトの統計情報ページ</a>で確認できます。
       level: レベル
@@ -1462,6 +1461,7 @@ ja:
       new_this_level: このレベルで新規
       met_justification_required: 満足している正当な理由が必要
       met_justification_or_url_required: 満足している正当な理由またはURLが必要
+      see_actual_criteria:
   headings:
     Accessibility and internationalization: アクセシビリティと国際化
     Analysis: 分析

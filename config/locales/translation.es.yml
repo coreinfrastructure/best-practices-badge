@@ -149,7 +149,6 @@ es:
       please_home:
     criteria_stats:
       criteria:
-      detailed_criteria_on_github:
       level:
       must:
       should:
@@ -163,6 +162,7 @@ es:
       new_this_level:
       future:
       project_stats_html:
+      see_actual_criteria:
   users:
     new:
       signup_header:

@@ -228,8 +228,6 @@ ru:
       please_home: Пожалуйста, перейдите на главную страницу.
     criteria_stats:
       criteria: Критерии
-      detailed_criteria_on_github: Подробные критерии приведены
-        на GitHub.
       project_stats_html: >-
         «Активные» критерии - это критерии, которые включены в
         расчеты процентов (в отличие от «будущих» критериев).
@@ -257,6 +255,7 @@ ru:
       met_justification_required: Требующих обоснование
       met_justification_or_url_required: Требущих обоснование
         или URL
+      see_actual_criteria:
   users:
     new:
       signup_header: Зарегистрироваться

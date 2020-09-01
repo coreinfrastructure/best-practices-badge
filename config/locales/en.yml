@@ -131,7 +131,7 @@ en:
         following best practices and as a result are more likely
         to produce higher-quality secure software.
       p2_html: >-
-        You can easily see just the <a href="/en/criteria/0">criteria for the
+        You can easily see the <a href="/en/criteria/0">criteria for the
         passing badge</a>.
         More information on the CII Best Practices Badging program is
         <a href='https://github.com/coreinfrastructure/best-practices-badge'>available
@@ -220,9 +220,8 @@ en:
         This text is intended to comply with UK and EU "Cookie laws".
         </p>
     criteria_stats:
-      criteria: Criteria
-      detailed_criteria_on_github: The detailed criteria are on
-        GitHub.
+      criteria: Criteria Statistics
+      see_actual_criteria: You may also see the actual criteria.
       level: Level
       must: MUST
       should: SHOULD

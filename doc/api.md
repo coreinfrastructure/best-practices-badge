@@ -4,7 +4,7 @@
 
 BadgeApp is a relatively simple web application, and its
 external application programming interface (API) is simple too.
-The BadgeApp API is a simple REST API that follows
+The BadgeApp API is a simple RESTful API that follows
 Ruby on Rails conventions.
 We *want* people to use our data; please do so!
 
@@ -18,7 +18,7 @@ and then various kinds of more specialized information.
 
 ## Quickstart
 
-Like any REST API, use an HTTP verb (like GET) on a resource.
+Like any RESTful API, use an HTTP verb (like GET) on a resource.
 
 For example, you can get the JSON data for project #1 from the
 real production site (<https://bestpractices.coreinfrastructure.org>)
@@ -74,8 +74,8 @@ might request.
 
 *   <tt>GET /(:locale/)projects/:id(/:level)(.:format)</tt>
 
-    Request data for project :id in :format (default html,
-    json also supported).
+    Request data for project :id in :format (default HTML,
+    JSON also supported).
     External interfaces should normally request format "json".
     If "level" is given (0, 1, or 2), that level is shown
     (level is ignored if json format is requested, because we just
@@ -91,12 +91,52 @@ might request.
     so feel free to using "img src" to embed them, since they
     will be returned especially rapidly.
 
+    For example, you can embed the badge status of project NNN
+    in an HTML document with:
+    `&lt;a href="https://bestpractices.coreinfrastructure.org/projects/NNN"&gt;&lt;img src="https://bestpractices.coreinfrastructure.org/projects/NNN/badge"&gt;&lt;/a&gt;`
+
+    You can do embed the badge status of project NNN in a markdown file with:
+    `[![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/NNN/badge)](https://bestpractices.coreinfrastructure.org/projects/NNN)`
+
 *   <tt>GET /(:locale/)projects(.:format)(?:query)</tt>
 
     Perform a query on the projects to return a list
     of the matching projects, up to the maximum number allowed in a page.
     The format is html by default; json and csv are also supported.
     See below for more about the query.
+
+*   `GET /en/projects(.:format)?as_badge=true&pq=https%3A%2F%2Fgithub.com%2FORG%2FPROJECT`
+
+    Perform a query for a project with a URL beginning with the given
+    pattern (as either the repository or home page URL) and redirect to the
+    *single* badge display given that query. This returns status 404
+    (not found) if there is no match, and status 409 (conflict) if there
+    is more than one match. JSON is supported, default return is SVG if found.
+    NOTE: there is no "/" after the word `projects`!
+
+    The `as_badge` option is intended to make it easy to create dashboards
+    (at a cost of some performance). If you only know the repository or
+    home page URL of a project, and want to display its badge, you can
+    use this.
+
+    There's a performance penalty for using this interface. This interface
+    requires making a query each time to the BadgeApp, which then redirects
+    the requestor to the actual badge URL (the latter goes through a CDN
+    and is thus much faster). Don't make it worse; use the conventional order
+    `as_badge=true` before `pq=`, and be sure to use URL encoding in pq
+    (otherwise it will do *another* redirect to fix up the unconventional
+    query). Similarly, consider using the '/en' (English) locale to avoid
+    a redirect for the locale.
+
+    We recommend individual projects use the id-based interface listed above
+    instead, since they already known their id. However, multi-project
+    dashboards may not know project ids, so this interface makes it easy
+    to get the relevant badge (if any).
+
+    Here are sample test pages:
+    <img src="http://localhost:3000/en/projects?as_badge=true&pq=https://github.com/coreinfrastructure/best-practices-badge">
+    <img src='http://localhost:3000/en/projects?as_badge=true&pq=https://JUNKJUNK'>
+    <img src='http://localhost:3000/en/projects?as_badge=true&pq=https://'>
 
 ## Tiered percentage in CII Best Practices Badge
 
@@ -192,8 +232,8 @@ software relatively small & focused.
 
 You can download the project data in JSON and CSV format using typical
 Rails REST conventions.
-Just add ".json" or ".csv" to the URL (or include an Accept statement,
-like "Accept: application/json", in the HTTP header).
+Just add ".json" or ".csv" to the URL (or include an Accept statement with
+the MIME type, such as "Accept: application/json", in the HTTP header).
 You can even do this on a search if we already support the search (e.g.,
 by name).  Similarly, you can download user data in JSON format using
 ".json" at the end of the URL.
@@ -255,7 +295,7 @@ worth considering.
 
 ## Full entry point list
 
-The REST interface supports the following interfaces, which is enough
+The RESTful interface supports the following interfaces, which is enough
 to programmatically create a new user, login and logout, create project
 data, edit it, and delete it (subject to the authorization rules).
 In particular, viewing with a web browser (which by default emits 'GET')

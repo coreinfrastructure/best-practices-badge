@@ -792,6 +792,30 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
       @response.body
   end
 
+  test 'as_badge works in simple case' do
+    expected_id = projects(:perfect).id
+    get '/en/projects?as_badge=true&' \
+        'pq=https%3A%2F%2Fgithub.com%2Fciitest2%2Ftest-repo-shared'
+    assert_redirected_to "/projects/#{expected_id}/badge"
+  end
+
+  test 'as_badge works in simple case returning JSON' do
+    expected_id = projects(:perfect).id
+    get '/en/projects.json?as_badge=true&' \
+        'pq=https%3A%2F%2Fgithub.com%2Fciitest2%2Ftest-repo-shared'
+    assert_redirected_to "/projects/#{expected_id}/badge.json"
+  end
+
+  test 'as_badge returns status 404 if not found' do
+    get '/en/projects?as_badge=true&pq=https%3A%2F%2FNO_SUCH_THING'
+    assert_response :not_found
+  end
+
+  test 'as_badge returns status 409 (conflict) if >1 match' do
+    get '/en/projects?as_badge=true&pq=https%3A%2F%2F'
+    assert_response :conflict
+  end
+
   test 'Check ids= projects index query' do
     # %2c is the comma
     get "/en/projects.json?ids=#{@project.id}%2c#{@project_two.id}"

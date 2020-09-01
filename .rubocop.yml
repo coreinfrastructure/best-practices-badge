@@ -156,3 +156,7 @@ Style/StderrPuts:
   Enabled: false
 Rails/HelperInstanceVariable:
   Enabled: false
+Style/MultilineWhenThen:
+  Enabled: false
+Style/ConstantVisibility:
+  Enabled: false

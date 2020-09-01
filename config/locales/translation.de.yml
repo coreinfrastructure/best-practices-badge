@@ -2999,19 +2999,51 @@ de:
        Muss mit http: oder https: beginnen und verwende einen
       begrenzten Zeichensatz
   criteria_overall:
-    beginning_header_all:
-    beginning_header_0:
-    beginning_header_1:
-    beginning_header_2:
-    beginning_all_html:
-    beginning_0_html:
-    beginning_1_html:
-    beginning_2_html:
-    see_discussion_html:
-    future:
-    na_allowed:
-    na_justification_required:
-    met_justification_required:
-    met_url_required:
+    beginning_header_all: FLOSS Best Practices Kriterien (Alle
+      Level)
+    beginning_header_0: FLOSS Best Practices Kriterien (Passing
+      Level)
+    beginning_header_1: FLOSS Best Practices Kriterien (Silber
+      Level)
+    beginning_header_2: FLOSS Best Practices Kriterien (Gold Level)
+    beginning_all_html: >-
+      <p>Dies sind die Best Practices für Free/Libre und Open
+      Source Software (FLOSS) Projekte, um die Best Practices
+      Badges der Core Infrastructure Initiative (CII) der Level
+      Passing, Silber und Gold zu erhalten. Sie können diese Liste
+      <a href="/de/criteria/?details=false&rationale=false">nur
+      mit den Kriterien</a> oder mit <a href="/de/criteria/?details=true&rationale=true">zusätzlichen
+      Informationen anschauen</a>. Sie können auch nur die Kriterien
+      für die Level <a href="/de/criteria/0">Passing</a>, <a href="/de/criteria/1">Silber</a>
+      und <a href="/de/criteria/2">Gold</a>, sowie <a href="/en/criteria_stats">Kriterien
+      Statistiken</a> anschauen.
+    beginning_0_html: >-
+      <p> Dies sind Best Practices für Free/Libre und Open Source
+      Software (FLOSS) Projekte, um den Core Infrastructure Initiative
+      (CII) Best Practices Badge Level "Passing" zu erreichen.
+      Sie können diese Liste <a href="/de/criteria/0?details=false&rationale=false">nur
+      mit den Kriterien</a> oder mit <a href="/de/criteria/0?details=true&rationale=true">zusätzlichen
+      Informationen anschauen</a>. Es sind auch die <a href="/de/criteria">Kriterien
+      für alle Badge Level</a> verfügbar.
+    beginning_1_html: >-
+      <p> Dies sind Best Practices für Free/Libre und Open Source
+      Software (FLOSS) Projekte, um den Core Infrastructure Initiative
+      (CII) Best Practices Badge Level "Silber" zu erreichen.
+      Es sind auch die <a href="/de/criteria">Kriterien für alle
+      Badge Level</a> verfügbar.
+    beginning_2_html: >-
+      <p> Dies sind Best Practices für Free/Libre und Open Source
+      Software (FLOSS) Projekte, um den Core Infrastructure Initiative
+      (CII) Best Practices Badge Level "Gold" zu erreichen. Es
+      sind auch die <a href="/de/criteria">Kriterien für alle
+      Badge Level</a> verfügbar.
+    see_discussion_html: >-
+      <p>Siehe die <a href="/de/criteria_discussion">Kriterien
+      Diskussion</a> für weitere Informationen zu diesen Kriterien.
+    future: "{Zukünftig}"
+    na_allowed: "{N/A erlaubt}"
+    na_justification_required: "{N/A Begründung}"
+    met_justification_required: "{Begründung erfüllt}"
+    met_url_required: "{URL erfüllt}"
   criteria_discussion:
     content_html:

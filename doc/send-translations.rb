@@ -99,6 +99,12 @@ def load_language(lang)
   current_translations_file_contents = File.read(',full-list')
   current_translations_json = JSON.parse(current_translations_file_contents)
 
+  if current_translations_json.key?('errors')
+    puts 'Error:'
+    puts current_translations_json['errors']
+    exit 1
+  end
+
   # Initialize hash in CURRENT_TRANSLATIONS for this new language
   $CURRENT_TRANSLATIONS[lang] = {}
 

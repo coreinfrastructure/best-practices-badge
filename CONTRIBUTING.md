@@ -34,10 +34,6 @@ The "doc/" directory has information you may find helpful, for example:
 -   [implementation.md](doc/implementation.md) provies implementation details
 -   [background.md](doc/background.md) provides background info on criteria
 
-You can see the entire set of "passing" criteria in the generated file
-[criteria.md](doc/criteria.md).
-The documentation for higher-level badge criteria is in
-[other.md](doc/other.md).
 If you want *change* the criteria, see below.
 
 The [INSTALL.md](doc/INSTALL.md) file explains how to install the program

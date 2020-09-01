@@ -2880,12 +2880,22 @@ en:
       This is the set of best practices for Free/Libre and Open Source Software
       (FLOSS) projects to achieve the
       Core Infrastructure Initiative (CII) Best Practices silver badge.
+      You can show this list with
+      <a href="/en/criteria/1?details=false&rationale=false">just the
+      criteria</a> or with
+      <a href="/en/criteria/1?details=true&rationale=true">additional
+      information</a>.
       The <a href="/en/criteria">full set of criteria</a> are also available.
     beginning_2_html:  >-
       <p>
       This is the set of best practices for Free/Libre and Open Source Software
       (FLOSS) projects to achieve the
       Core Infrastructure Initiative (CII) Best Practices gold badge.
+      You can show this list with
+      <a href="/en/criteria/2?details=false&rationale=false">just the
+      criteria</a> or with
+      <a href="/en/criteria/2?details=true&rationale=true">additional
+      information</a>.
       The <a href="/en/criteria">full set of criteria</a> are also available.
     see_discussion_html:
       <p>
@@ -2963,8 +2973,8 @@ en:
       criteria that are not achievable by small or single-organization projects.
       </ul>
       <p>
-      Every criterion has a short name, shown below as superscripted
-      text inside square brackets.
+      Every criterion has a short name, shown as superscripted
+      text inside square brackets after the criteria text.
       <p></p>
       <h2 id='criteria_other_projects'>Relationship to Other Projects</h2>
       <p>

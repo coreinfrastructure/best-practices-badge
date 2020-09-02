@@ -120,6 +120,17 @@ class Project < ApplicationRecord
     end
   )
 
+  # Search for exact match on URL
+  # (home page, repo, and maybe package URL someday)
+  # We have indexes on each of these columns, so this will be fast.
+  # We remove trailing space and slash to make it quietly "work as expected".
+  scope :url_search, (
+    lambda do |url|
+      clean_url = url.chomp(' ').chomp('/')
+      where('homepage_url = ? OR repo_url = ?', clean_url, clean_url)
+    end
+  )
+
   # Use PostgreSQL-specific text search mechanism
   # There are many options we aren't currently using; for more info, see:
   # https://github.com/Casecommons/pg_search

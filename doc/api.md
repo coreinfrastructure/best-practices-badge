@@ -105,10 +105,10 @@ might request.
     The format is html by default; json and csv are also supported.
     See below for more about the query.
 
-*   `GET /en/projects(.:format)?as=badge&pq=https%3A%2F%2Fgithub.com%2FORG%2FPROJECT`
+*   `GET /en/projects(.:format)?as=badge&url=https%3A%2F%2Fgithub.com%2FORG%2FPROJECT`
 
-    Perform a query for a project with a URL beginning with the given
-    pattern (as either the repository or home page URL) and redirect to the
+    Perform a query for a project with the given URL (this can be
+    either the repository URL or the home page URL) and redirect to the
     *single* badge display given that query. This returns status 404
     (not found) if there is no match, and status 409 (conflict) if there
     is more than one match. JSON is supported, default return is SVG if found.
@@ -123,27 +123,27 @@ might request.
     requires making a query each time to the BadgeApp, which then redirects
     the requestor to the actual badge URL (the latter goes through a CDN
     and is thus much faster). You can avoid making the performance penalty
-    worse if you follow these rules (if you don't, your users will ensure
-    additional unnecessary redirects to fix up the query):
-    - use the conventional order, `as=badge` before `pq=` (prefix query).
-    - Use URL encoding, especially in pq. For example, use %3A for ":"
+    worse if you follow these rules (if you don't, your users will endure
+    additional unnecessary redirects as the system tries to fix the query):
+    - use the conventional order, `as=badge` before `url=`
+    - Use URL encoding, especially in the url. For example, use %3A for ":"
       and %2F for "/". In many situations you *must* do this.
     - Use the English locale ('/en/'), since the locale isn't relevant
-      (to prevent the locale redirect).
+      (if you omit the locale there will be a locale redirect).
 
-    We recommend individual projects use the id-based interface listed above
-    instead, since they already known their id. However, multi-project
-    dashboards may not know project ids, so this interface makes it easy
-    to get the relevant badge (if any).
+    We recommend individual projects use the id-based interface listed above,
+    since they already known their id. However, multi-project dashboards
+    often do not know every project's id, so this interface makes it
+    easy to get the relevant badge (if any).
 
     Dashboards using this information that want a simple display
     of the CII Badge result may want to use combine hypertext
-    links and the "alt" tag like this, where URL is the URL to be used:
+    links and the "alt" tag like this, where `MY_URL` is the URL to be used:
     `<a href="https://bestpractices.coreinfrastructure.org/projects?`
-    `as=entry&pq=URL">`
+    `as=entry&url=MY_URL">`
     `<img src="https://bestpractices.coreinfrastructure.org/projects?`
-    `as=badge&pq=URL" alt="CII N/A"></a>`
-    The "alt" text is shown on failure, and the link helps both
+    `as=badge&url=MY_URL" alt="CII N/A"></a>`
+    The "alt" text is shown on failure, and the hyperlink helps both
     accessibility and anyone who wants to learn more about the badge.
     The link uses as=entry; this will show the specific project entry
     if there is exactly one, and otherwise will show the project list of
@@ -218,6 +218,13 @@ The following search parameters are supported:
 *   gteq: Integer, % greater than or equal of passing criteria
 *   lteq: Integer, % less than or equal of passing criteria.
     Can be combined with gteq
+*   url: Text - matches the home page URL or the repo URL exactly.
+    Be sure to use URL encoding (%3A for ":" and %2F for "/").
+    This is an 'equal to' match, so `url=http:%3A%2F%2Fq.com`
+    will retrieve `https://q.com` but not `https://q.com/repo7`.
+    See pq= if you want to search for a prefix.
+    A trailing space and trailing slash are ignored.  If we add support
+    for package URLs (purls), this would retrieve those matches as well.
 *   pq: Text, "prefix query" - matches against *prefix* of URL or name
 *   q: Text, "normal query" - match against parsed name, description, URL
     This is implemented by PostgreSQL, so you can use "&amp;" (and),
@@ -401,7 +408,7 @@ Users indicate their locale via the URL.
 We use one of the standard approaches, where the locale is the first
 part of the path.
 For example,
-<https://bestpractices.coreinfrastructure.org/fr/projects/>
+<https://bestpractices.coreinfrastructure.org/fr/projects>
 selects the locale "fr" (French) when displaying "/projects".
 This even works at the top page, e.g.,
 <https://bestpractices.coreinfrastructure.org/fr>.
@@ -418,12 +425,12 @@ to the best matching locale (as recommended by the accept-language
 value provided by the browser, with English as the last resort).
 The API has an important exception: if JSON format is requested, no
 locale redirection occurs (because JSON isn't locale-sensitive).
-The request for the badge image is also not redirectored
-(again, because it isn't locale-sensitive).
+The request for the badge image (with `/projects/NUMBER/badge`)
+is also not redirectored (again, because it isn't locale-sensitive).
 
 Locales are always exactly 2 lowercase letters, or 2 lowercase letters
 followed by an dash and then more alphanumerics.
-For example, "fr" is French, while "zh-cn" is Chinese (Simplified).
+For example, "fr" is French, while "zh-CN" is Chinese (Simplified).
 This convention lets you syntactically distinguish between
 locales and other possible meanings of a URL's prefix;
 non-locale pages never match the locale syntax.

@@ -122,21 +122,27 @@ might request.
     There's a performance penalty for using this interface. This interface
     requires making a query each time to the BadgeApp, which then redirects
     the requestor to the actual badge URL (the latter goes through a CDN
-    and is thus much faster). Don't make it worse; use the conventional order
-    `as_badge=true` before `pq=`, and be sure to use URL encoding in pq
-    (otherwise it will do *another* redirect to fix up the unconventional
-    query). Similarly, consider using the '/en' (English) locale to avoid
-    a redirect for the locale.
+    and is thus much faster). You can avoid making the performance penalty
+    worse if you follow these rules (if you don't, your users will ensure
+    additional unnecessary redirects to fix up the query):
+    - the conventional order `as_badge=true` before `pq=`.
+    - Use URL encoding, especially in pq. For example, use %3A for ":"
+       and %2F for "/".
+    - Use the English locale ('/en/'), since the locale isn't relevant.
 
     We recommend individual projects use the id-based interface listed above
     instead, since they already known their id. However, multi-project
     dashboards may not know project ids, so this interface makes it easy
     to get the relevant badge (if any).
 
-    Here are sample test pages:
-    <img src="http://localhost:3000/en/projects?as_badge=true&pq=https://github.com/coreinfrastructure/best-practices-badge">
-    <img src='http://localhost:3000/en/projects?as_badge=true&pq=https://JUNKJUNK'>
-    <img src='http://localhost:3000/en/projects?as_badge=true&pq=https://'>
+    Dashboards using this information that want a simple display
+    of the CII Badge result may want to use combine hypertext
+    links and the "alt" tag like this, where URL is the URL to be used:
+    `<a href="https://bestpractices.coreinfrastructure.org/projects?pq=URL">`
+    `<img src="https://bestpractices.coreinfrastructure.org/projects?as_badge=true&pq=URL"`
+    `alt="CII N/A"></a>`
+    The "alt" text is shown on failure, and the link helps both
+    accessibility and anyone who wants to learn more about the badge.
 
 ## Tiered percentage in CII Best Practices Badge
 

@@ -105,7 +105,7 @@ might request.
     The format is html by default; json and csv are also supported.
     See below for more about the query.
 
-*   `GET /en/projects(.:format)?as_badge=true&pq=https%3A%2F%2Fgithub.com%2FORG%2FPROJECT`
+*   `GET /en/projects(.:format)?as=badge&pq=https%3A%2F%2Fgithub.com%2FORG%2FPROJECT`
 
     Perform a query for a project with a URL beginning with the given
     pattern (as either the repository or home page URL) and redirect to the
@@ -114,10 +114,10 @@ might request.
     is more than one match. JSON is supported, default return is SVG if found.
     NOTE: there is no "/" after the word `projects`!
 
-    The `as_badge` option is intended to make it easy to create dashboards
+    The `as=badge` option is intended to make it easy to create dashboards
     (at a cost of some performance). If you only know the repository or
-    home page URL of a project, and want to display its badge, you can
-    use this.
+    home page URL of a project, and want to display its badge, this API
+    entry is designed for you.
 
     There's a performance penalty for using this interface. This interface
     requires making a query each time to the BadgeApp, which then redirects
@@ -125,10 +125,11 @@ might request.
     and is thus much faster). You can avoid making the performance penalty
     worse if you follow these rules (if you don't, your users will ensure
     additional unnecessary redirects to fix up the query):
-    - the conventional order `as_badge=true` before `pq=`.
+    - use the conventional order, `as=badge` before `pq=` (prefix query).
     - Use URL encoding, especially in pq. For example, use %3A for ":"
-       and %2F for "/".
-    - Use the English locale ('/en/'), since the locale isn't relevant.
+      and %2F for "/". In many situations you *must* do this.
+    - Use the English locale ('/en/'), since the locale isn't relevant
+      (to prevent the locale redirect).
 
     We recommend individual projects use the id-based interface listed above
     instead, since they already known their id. However, multi-project
@@ -138,11 +139,15 @@ might request.
     Dashboards using this information that want a simple display
     of the CII Badge result may want to use combine hypertext
     links and the "alt" tag like this, where URL is the URL to be used:
-    `<a href="https://bestpractices.coreinfrastructure.org/projects?pq=URL">`
-    `<img src="https://bestpractices.coreinfrastructure.org/projects?as_badge=true&pq=URL"`
-    `alt="CII N/A"></a>`
+    `<a href="https://bestpractices.coreinfrastructure.org/projects?`
+    `as=entry&pq=URL">`
+    `<img src="https://bestpractices.coreinfrastructure.org/projects?`
+    `as=badge&pq=URL" alt="CII N/A"></a>`
     The "alt" text is shown on failure, and the link helps both
     accessibility and anyone who wants to learn more about the badge.
+    The link uses as=entry; this will show the specific project entry
+    if there is exactly one, and otherwise will show the project list of
+    matches.
 
 ## Tiered percentage in CII Best Practices Badge
 
@@ -224,6 +229,16 @@ The following search parameters are supported:
     This search request system breaks URLs into parts, so you can't use "q" to
     search on a whole URL (use pq instead).
 *   page: Page to display (starting at 1)
+
+Once a project query completes, by default the result will be a paged
+list of projects in the requested format. The "as" parameter changes this:
+
+*   as=badge : Display the *single* badge for the resulting project.
+    If no project matches the criteria, status 404 (not found) is returned.
+    If multiple projects match the criteria, status 409 (conflict) is returned.
+*   as=entry : Display the project badge *entry* for the resulting project.
+    If no or multiple projects match, the normal project display
+    is shown instead.
 
 See app/controllers/project\_controllers.rb if you want to see the
 implementation's source code.

@@ -54,16 +54,27 @@ class ProjectsController < ApplicationController
   # Used to validate deletion rationale.
   AT_LEAST_15_NON_WHITESPACE = /\A\s*(\S\s*){15}.*/.freeze
 
+  # as= values, which redirect to alternative views
+  ALLOWED_AS = %w[badge entry].freeze
+
+  # "Normal case" index after projects are retrieved
+  def show_normal_index
+    select_data_subset
+    sort_projects
+    @projects
+  end
+
   # GET /projects
   # GET /projects.json
-  # rubocop:disable Metrics/MethodLength
+  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+  # rubocop:disable Metrics/PerceivedComplexity, Metrics/BlockNesting
   def index
     validated_url = set_valid_query_url
     if validated_url != request.original_url
       redirect_to validated_url
     else
       retrieve_projects
-      if params[:as_badge].present? # Redirect to its badge entry instead!
+      if params[:as] == 'badge' # Redirect to badge view
         # We redirect, instead of responding directly with the answer, because
         # then the requesting browser and CDN will handle repeat requests.
         # We only retrieve ids, because we don't need any other data.
@@ -71,14 +82,23 @@ class ProjectsController < ApplicationController
         # full list of matches, so we limit() ourselves to two responses.
         ids = @projects.limit(2).ids
         redir_to_badge(ids)
+      elsif params[:as] == 'entry' # Redirect to badge view
+        ids = @projects.limit(2).ids
+        if ids.size == 1
+          suffix = request&.format&.symbol == :json ? '.json' : ''
+          redirect_to "/#{locale}/projects/#{ids[0]}#{suffix}",
+                      status: :moved_permanently
+        else
+          # If there's not one entry, show the project index instead.
+          show_normal_index
+        end
       else
-        select_data_subset
-        sort_projects
-        @projects
+        show_normal_index
       end
     end
   end
-  # rubocop:enable Metrics/MethodLength
+  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
+  # rubocop:enable Metrics/PerceivedComplexity, Metrics/BlockNesting
 
   # Redirect to the *single* relevant badge entry, if there is one.
   # We take a *list* of ids, because if there's >1, it's not unique.
@@ -394,7 +414,7 @@ class ProjectsController < ApplicationController
     return %w[desc asc].include?(value) if key == 'sort_direction'
     return ALLOWED_STATUS.include?(value) if key == 'status'
     return integer_list?(value) if key == 'ids'
-    return value == 'true' if key == 'as_badge'
+    return ALLOWED_AS.include?(value) if key == 'as'
 
     false
   end

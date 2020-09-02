@@ -823,7 +823,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to "/en/projects/#{expected_id}"
   end
 
-  test 'as=entry quitely returns project list if >1 match' do
+  test 'as=entry quietly returns project list if >1 match' do
     get '/en/projects?as=entry&pq=https%3A%2F%2F'
     assert_response :success
     assert_includes @response.body, 'Projects'

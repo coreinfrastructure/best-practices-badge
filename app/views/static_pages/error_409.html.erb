@@ -2,10 +2,10 @@
 <!DOCTYPE html>
 <%# This is intentionally short and does *NOT* use the standard layout,
     to minimize CPU and bandwidth use during an attack.
-    An attacker may create a rediculous number of requests that lead to a 404.
+    An attacker may create a rediculous number of requests.
     By optimizing this for speed, we have a better chance of keeping
     up and can recover more quickly.  Instead of giving lots of info,
-    we simply explain that there is no page and give a link to the home page.
+    we report the error and give a link to the home page.
     We *do* use the locale, since we want humans to be able to
     understand this information if there's a human reader.
     We intentionally do *not* parrot back the bad URL. The user can

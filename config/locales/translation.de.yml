@@ -117,7 +117,7 @@ de:
       intro_html: |-
         Wenn Sie sich nicht mit einem GitHub-Konto anmelden möchten, können Sie
         sich stattdessen hier anmelden (dies erstellt ein benutzerdefiniertes Konto mit
-        Ihrer Emailadresse). <br> <br> Wenn Sie Ihren Aktivierungslink nicht erhalten haben,
+        Ihrer E-Mail-Adresse).<br><br> Wenn Sie Ihren Aktivierungslink nicht erhalten haben,
         melden Sie sich bitte erneut an und wir senden Ihnen einen neuen Link.
       name: Name
       email: E-Mail
@@ -160,8 +160,9 @@ de:
     redirect_existing: >-
       Dieser Benutzer existiert bereits. Wollten Sie sich anmelden?
     new_activation_link_created: >-
-      Neuer Aktivierungs-Link erstellt. Überprüfen Sie Ihr E-Mailpostfach,
-      um Ihr Konto zu aktivieren.
+      Neuer Aktivierungs-Link erstellt. Überprüfen Sie Ihr E-Mail-Postfach,
+      um Ihr Konto zu aktivieren. (Um Spam einzudämmen, kann es
+      einige Zeit dauern bis die E-Mail ankommt.)
     please_log_in: Bitte anmelden.
   project_stats:
     index:
@@ -894,12 +895,10 @@ de:
       before_text: 'Um Ihr Passwort zurückzusetzen, klicken Sie
         auf den Link:'
       after_html: |-
-        <p> Dieser Link läuft in zwei Stunden ab. </p>
-        <p>
-        Wenn Sie nicht angefordert haben, Ihr Passwort zurückzusetzen,
+        <p>Dieser Link läuft in zwei Stunden ab.</p>
+        <p>Wenn Sie nicht angefordert haben, Ihr Passwort zurückzusetzen,
         bitte ignorieren Sie diese E-Mail und
-        Ihr Passwort bleibt so, wie es ist.
-        </p>
+        Ihr Passwort bleibt so, wie es ist.</p>
       after_text: |-
         Dieser Link läuft in zwei Stunden ab.
         Wenn Sie nicht angefordert haben, Ihr Passwort zurückzusetzen,
@@ -1538,8 +1537,8 @@ de:
           group 2048, elliptic curve 224, and hash 224 (das Passworthashing
           ist nicht von dieser Bitlänge abgedeckt, weitere Informationen
           zum Passworthashing finden sich im <a href="#crypto_password_storage">
-          crypto_password_storage </a> Kriterium). Siehe <a href="http://www.keylength.com">
-          http://www.keylength.com </a> für einen Vergleich von
+          crypto_password_storage </a> Kriterium). Siehe <a href="https://www.keylength.com">
+          https://www.keylength.com </a> für einen Vergleich von
           Keylängen Empfehlungen von verschiedenen Organisationen.
           Die Software KANN kleinere Keylängen in einigen Konfigurationen
           erlauben (idealerweise nicht, da dies Downgrade-Angriffe
@@ -2817,8 +2816,8 @@ de:
         umsetzen und folglich mit Wahrscheinlichkeit qualitative
         höherwertige und sicherere Software entwickeln.
       p2_html: >-
-        Weitere Informationen und Hintergründe zum CII-Best-Practices-
-        Badge-Programm, wie zum Beispiel die <a href='https://github.com/coreinfrastructure/best-practices-badge/blob/master/doc/criteria.md'>Kriterien</a>,
+        Weitere Informationen und Hintergründe zum CII-Best-Practices-Badge-Programm,
+        wie zum Beispiel die <a href='/de/criteria/0'>Kriterien</a>,
         sind <a href='https://github.com/coreinfrastructure/best-practices-badge'>auf
         GitHub verfügbar</a>. Ebenfalls verfügbar sind <a href="/de/project_stats">Projektstatistiken</a>
         und <a href="/de/criteria_stats">Kriterienstatistiken</a>.
@@ -2900,7 +2899,7 @@ de:
       no_such_page: Verzeihung, diese Seite existiert nicht.
       please_home: Bitte gehen Sie auf die Startseite.
     criteria_stats:
-      criteria: Kriterien
+      criteria: Kriterienstatistiken
       project_stats_html: >-
         Die "aktiven" Kriterien sind Kriterien, die in den Prozentberechnungen
         enthalten sind (im Gegensatz zu "zukünftigen" Kriterien).

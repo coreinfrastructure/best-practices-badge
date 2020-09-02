@@ -3132,8 +3132,8 @@ fr:
       les projets de logiciels libres et open source (FLOSS) pour
       obtenir les badges des meilleures pratiques de la Core Infrastructure
       Initiative (CII) aux niveaux basique, argent et or. Vous
-      pouvez afficher cette liste avec <a href="/fr/criteria/?details=false&rationale=false">uniquement
-      les critères</a> ou avec <a href="/fr/criteria/?details=true&rationale=true">des
+      pouvez afficher cette liste avec <a href="/fr/criteria">uniquement
+      les critères</a> ou avec <a href="/fr/criteria?details=true&rationale=true">des
       informations supplémentaires</a>. Vous pouvez également
       afficher uniquement les critères du niveau <a href="/fr/criteria/0">basique</a>
       , <a href="/fr/criteria/1">argent</a> et <a href="/fr/criteria/2">or</a>,
@@ -3144,8 +3144,8 @@ fr:
       les projets de logiciels libres et open source (FLOSS) pour
       obtenir le badge des meilleures pratiques de la Core Infrastructure
       Initiative (CII) au niveau basique. Vous pouvez afficher
-      cette liste avec <a href="/fr/criteria/0?details=false&rationale=false">uniquement
-      les critères</a> ou avec <a href="/fr/criteria/0?details=true&rationale=true">des
+      cette liste avec <a href="/fr/criteria/0">uniquement les
+      critères</a> ou avec <a href="/fr/criteria/0?details=true&rationale=true">des
       informations supplémentaires</a>. <a href="/fr/criteria">L'ensemble
       complet des critères pour tous les niveaux de badge</a>
       est également disponible.
@@ -3154,8 +3154,8 @@ fr:
       les projets de logiciels libres et open source (FLOSS) pour
       obtenir le badge des meilleures pratiques de la Core Infrastructure
       Initiative (CII) au niveau argent. Vous pouvez afficher
-      cette liste avec <a href="/fr/criteria/1?details=false&rationale=false">uniquement
-      les critères</a> ou avec <a href="/fr/criteria/1?details=true&rationale=true">des
+      cette liste avec <a href="/fr/criteria/1">uniquement les
+      critères</a> ou avec <a href="/fr/criteria/1?details=true&rationale=true">des
       informations supplémentaires</a>. <a href="/fr/criteria">L'ensemble
       complet des critères pour tous les niveaux de badge</a>
       est également disponible.
@@ -3164,8 +3164,8 @@ fr:
       les projets de logiciels libres et open source (FLOSS) pour
       obtenir le badge des meilleures pratiques de la Core Infrastructure
       Initiative (CII) au niveau or. Vous pouvez afficher cette
-      liste avec <a href="/fr/criteria/2?details=false&rationale=false">uniquement
-      les critères</a> ou avec <a href="/fr/criteria/2?details=true&rationale=true">des
+      liste avec <a href="/fr/criteria/2">uniquement les critères</a>
+      ou avec <a href="/fr/criteria/2?details=true&rationale=true">des
       informations supplémentaires</a>. <a href="/fr/criteria">L'ensemble
       complet des critères pour tous les niveaux de badge</a>
       est également disponible.

@@ -2929,6 +2929,9 @@ de:
       met_justification_or_url_required: Kriterium erfüllen oder
         URL erforderlich
       see_actual_criteria:
+    error_409:
+      heading:
+      conflict:
   headings:
     Accessibility and internationalization: Zugänglichkeit und
       Internationalisierung

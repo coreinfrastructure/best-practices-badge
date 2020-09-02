@@ -163,6 +163,9 @@ es:
       future:
       project_stats_html:
       see_actual_criteria:
+    error_409:
+      heading:
+      conflict:
   users:
     new:
       signup_header:

@@ -256,6 +256,9 @@ ru:
       met_justification_or_url_required: Требущих обоснование
         или URL
       see_actual_criteria:
+    error_409:
+      heading:
+      conflict:
   users:
     new:
       signup_header: Зарегистрироваться

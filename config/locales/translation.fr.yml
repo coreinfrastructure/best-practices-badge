@@ -3050,6 +3050,9 @@ fr:
       met_justification_or_url_required: Justification ou URL
         requise
       see_actual_criteria:
+    error_409:
+      heading:
+      conflict:
   headings:
     Accessibility and internationalization: Accessibilité et internationalisation
     Analysis: Analyse

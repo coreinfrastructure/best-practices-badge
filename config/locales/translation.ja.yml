@@ -1462,6 +1462,9 @@ ja:
       met_justification_required: 満足している正当な理由が必要
       met_justification_or_url_required: 満足している正当な理由またはURLが必要
       see_actual_criteria:
+    error_409:
+      heading:
+      conflict:
   headings:
     Accessibility and internationalization: アクセシビリティと国際化
     Analysis: 分析

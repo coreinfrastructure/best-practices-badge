@@ -1309,6 +1309,9 @@ zh-CN:
       met_justification_required: 需要满足理由
       met_justification_or_url_required: 满足理由或需要URL
       see_actual_criteria:
+    error_409:
+      heading:
+      conflict:
   headings:
     Accessibility and internationalization: 无障碍和国际化
     Analysis: 分析

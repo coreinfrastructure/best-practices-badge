@@ -795,19 +795,33 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   test 'as=badge works in simple case (single result)' do
     expected_id = projects(:perfect).id
     get '/en/projects?as=badge&' \
-        'pq=https%3A%2F%2Fgithub.com%2Fciitest2%2Ftest-repo-shared'
+        'url=https%3A%2F%2Fgithub.com%2Fciitest2%2Ftest-repo-shared'
+    assert_redirected_to "/projects/#{expected_id}/badge"
+  end
+
+  test 'as=badge works with trailing space and slash' do
+    expected_id = projects(:perfect).id
+    get '/en/projects?as=badge&' \
+        'url=https%3A%2F%2Fgithub.com%2Fciitest2%2Ftest-repo-shared%2F%20'
     assert_redirected_to "/projects/#{expected_id}/badge"
   end
 
   test 'as=badge works in simple case returning JSON' do
     expected_id = projects(:perfect).id
     get '/en/projects.json?as=badge&' \
-        'pq=https%3A%2F%2Fgithub.com%2Fciitest2%2Ftest-repo-shared'
+        'url=https%3A%2F%2Fgithub.com%2Fciitest2%2Ftest-repo-shared'
     assert_redirected_to "/projects/#{expected_id}/badge.json"
   end
 
+  test 'as=badge redirects simple case when using pq=' do
+    expected_id = projects(:perfect).id
+    get '/en/projects?as=badge&' \
+        'pq=https%3A%2F%2Fgithub.com%2Fciitest2%2Ftest-repo-shared'
+    assert_redirected_to "/projects/#{expected_id}/badge"
+  end
+
   test 'as=badge returns status 404 if not found' do
-    get '/en/projects?as=badge&pq=https%3A%2F%2FNO_SUCH_THING'
+    get '/en/projects?as=badge&url=https%3A%2F%2FNO_SUCH_THING'
     assert_response :not_found
   end
 
@@ -819,7 +833,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   test 'as=entry works in simple case (single result)' do
     expected_id = projects(:perfect).id
     get '/en/projects?as=entry&' \
-        'pq=https%3A%2F%2Fgithub.com%2Fciitest2%2Ftest-repo-shared'
+        'url=https%3A%2F%2Fgithub.com%2Fciitest2%2Ftest-repo-shared'
     assert_redirected_to "/en/projects/#{expected_id}"
   end
 

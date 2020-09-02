@@ -45,7 +45,7 @@ class ProjectsController < ApplicationController
 
   TEXT_QUERIES = %i[pq q].freeze
 
-  OTHER_QUERIES = %i[sort sort_direction status ids].freeze
+  OTHER_QUERIES = %i[sort sort_direction status ids url].freeze
 
   ALLOWED_QUERY_PARAMS = (
     INTEGER_QUERIES + TEXT_QUERIES + OTHER_QUERIES
@@ -409,15 +409,18 @@ class ProjectsController < ApplicationController
     allowed_other_query?(key, value)
   end
 
+  # rubocop:disable Metrics/CyclomaticComplexity
   def allowed_other_query?(key, value)
     return ALLOWED_SORT.include?(value) if key == 'sort'
     return %w[desc asc].include?(value) if key == 'sort_direction'
     return ALLOWED_STATUS.include?(value) if key == 'status'
     return integer_list?(value) if key == 'ids'
     return ALLOWED_AS.include?(value) if key == 'as'
+    return true if key == 'url'
 
     false
   end
+  # rubocop:enable Metrics/CyclomaticComplexity
 
   # Returns true if current_user can edit, else redirect to a different URL
   def can_edit_else_redirect
@@ -651,6 +654,8 @@ class ProjectsController < ApplicationController
     @projects = @projects.lteq(params[:lteq]) if params[:lteq].present?
     # "Prefix query" - query against *prefix* of a URL or name
     @projects = @projects.text_search(params[:pq]) if params[:pq].present?
+    # "url query" - query for a URL match (home page or repo)
+    @projects = @projects.url_search(params[:url]) if params[:url].present?
     # "Normal query" - text search against URL, name, and description
     # This will NOT match full URLs, but will match partial URLs.
     @projects = @projects.search_for(params[:q]) if params[:q].present?

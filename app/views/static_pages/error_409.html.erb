@@ -1,0 +1,29 @@
+<% cache locale do -%>
+<!DOCTYPE html>
+<%# This is intentionally short and does *NOT* use the standard layout,
+    to minimize CPU and bandwidth use during an attack.
+    An attacker may create a rediculous number of requests.
+    By optimizing this for speed, we have a better chance of keeping
+    up and can recover more quickly.  Instead of giving lots of info,
+    we report the error and give a link to the home page.
+    We *do* use the locale, since we want humans to be able to
+    understand this information if there's a human reader.
+    We intentionally do *not* parrot back the bad URL. The user can
+    already see the URL (using the browser), and returning a known-bad URL
+    creates an opportunity for a XSS attack that we don't need to provide.
+    Users will never see this page during normal use. -%>
+<html>
+  <head>
+    <title><%= t 'static_pages.error_409.heading' %></title>
+  </head>
+  <body>
+    <h1><%= t 'static_pages.error_409.heading' %></h1>
+    <p>
+    <%= t 'static_pages.error_409.conflict' %>
+    </p>
+    <p>
+    <a href="/<%= locale %>"><%= t 'static_pages.error_404.please_home' %></a>
+    </p>
+  </body>
+</html>
+<% end # cache -%>

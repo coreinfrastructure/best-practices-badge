@@ -54,18 +54,80 @@ class ProjectsController < ApplicationController
   # Used to validate deletion rationale.
   AT_LEAST_15_NON_WHITESPACE = /\A\s*(\S\s*){15}.*/.freeze
 
+  # as= values, which redirect to alternative views
+  ALLOWED_AS = %w[badge entry].freeze
+
+  # "Normal case" index after projects are retrieved
+  def show_normal_index
+    select_data_subset
+    sort_projects
+    @projects
+  end
+
   # GET /projects
   # GET /projects.json
+  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+  # rubocop:disable Metrics/PerceivedComplexity, Metrics/BlockNesting
   def index
     validated_url = set_valid_query_url
     if validated_url != request.original_url
       redirect_to validated_url
     else
       retrieve_projects
-      sort_projects
-      @projects
+      if params[:as] == 'badge' # Redirect to badge view
+        # We redirect, instead of responding directly with the answer, because
+        # then the requesting browser and CDN will handle repeat requests.
+        # We only retrieve ids, because we don't need any other data.
+        # Also, we just need to know if the search is unique, not the
+        # full list of matches, so we limit() ourselves to two responses.
+        ids = @projects.limit(2).ids
+        redir_to_badge(ids)
+      elsif params[:as] == 'entry' # Redirect to badge view
+        ids = @projects.limit(2).ids
+        if ids.size == 1
+          suffix = request&.format&.symbol == :json ? '.json' : ''
+          redirect_to "/#{locale}/projects/#{ids[0]}#{suffix}",
+                      status: :moved_permanently
+        else
+          # If there's not one entry, show the project index instead.
+          show_normal_index
+        end
+      else
+        show_normal_index
+      end
     end
   end
+  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
+  # rubocop:enable Metrics/PerceivedComplexity, Metrics/BlockNesting
+
+  # Redirect to the *single* relevant badge entry, if there is one.
+  # We take a *list* of ids, because if there's >1, it's not unique.
+  # rubocop:disable Metrics/MethodLength
+  def redir_to_badge(id_list)
+    count = id_list.size
+    if count.zero?
+      render(
+        template: '/static_pages/error_404.html.erb',
+        layout: false, status: :not_found # 404
+      )
+    elsif count > 1 # There is no unique badge
+      render(
+        template: '/static_pages/error_409.html.erb',
+        layout: false, status: :conflict # 409
+      )
+    else
+      suffix = request&.format&.symbol == :json ? '.json' : ''
+      # In *theory* this hasn't "moved permanently", because someone *could*
+      # create a new matching badge entry *and* delete the old badge entry.
+      # They could also make a query ambiguous.
+      # But in practice, ids are as "permanent" as anything on the web gets.
+      # If we say it's moved permanently, then browsers & caches &
+      # search engines will do the right thing, so that's the status used.
+      redirect_to "/projects/#{id_list[0]}/badge#{suffix}",
+                  status: :moved_permanently
+    end
+  end
+  # rubocop:disable Metrics/MethodLength
 
   # GET /projects/1
   # rubocop:disable Metrics/MethodLength
@@ -352,6 +414,7 @@ class ProjectsController < ApplicationController
     return %w[desc asc].include?(value) if key == 'sort_direction'
     return ALLOWED_STATUS.include?(value) if key == 'status'
     return integer_list?(value) if key == 'ids'
+    return ALLOWED_AS.include?(value) if key == 'as'
 
     false
   end
@@ -574,6 +637,8 @@ class ProjectsController < ApplicationController
     'achieved_passing_at, projects.updated_at, badge_percentage_0, ' \
     'tiered_percentage'
 
+  # Retrieve project data using the various query parameters.
+  # The parameters determine what to select *and* fields to load
   # rubocop:disable Metrics/PerceivedComplexity
   # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
   # rubocop:disable Metrics/MethodLength
@@ -594,6 +659,13 @@ class ProjectsController < ApplicationController
         'id in (?)', params[:ids].split(',').map { |x| Integer(x) }
       )
     end
+    @projects
+  end
+
+  # Subset to only the rows and fields we need
+  def select_data_subset
+    # We want to know the *total* count, even if we're paging,
+    # so retrive this information separately
     @count = @projects.count
     # If we're supplying html (common case), select only needed fields
     format = request&.format&.symbol

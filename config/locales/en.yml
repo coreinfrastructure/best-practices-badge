@@ -113,6 +113,10 @@ en:
       heading: "Error 404: Page Not Found"
       no_such_page: Sorry, no such page exists.
       please_home: Please go to the home page.
+    error_409:
+      heading: "Error 409: Conflict"
+      conflict: >-
+        Sorry, multiple entries match the request, leading to a conflict.
     home:
       badge_program: CII Best Practices Badge Program
       get_your_badge: Get Your Badge Now!

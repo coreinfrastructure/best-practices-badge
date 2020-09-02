@@ -792,6 +792,43 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
       @response.body
   end
 
+  test 'as=badge works in simple case (single result)' do
+    expected_id = projects(:perfect).id
+    get '/en/projects?as=badge&' \
+        'pq=https%3A%2F%2Fgithub.com%2Fciitest2%2Ftest-repo-shared'
+    assert_redirected_to "/projects/#{expected_id}/badge"
+  end
+
+  test 'as=badge works in simple case returning JSON' do
+    expected_id = projects(:perfect).id
+    get '/en/projects.json?as=badge&' \
+        'pq=https%3A%2F%2Fgithub.com%2Fciitest2%2Ftest-repo-shared'
+    assert_redirected_to "/projects/#{expected_id}/badge.json"
+  end
+
+  test 'as=badge returns status 404 if not found' do
+    get '/en/projects?as=badge&pq=https%3A%2F%2FNO_SUCH_THING'
+    assert_response :not_found
+  end
+
+  test 'as=badge returns status 409 (conflict) if >1 match' do
+    get '/en/projects?as=badge&pq=https%3A%2F%2F'
+    assert_response :conflict
+  end
+
+  test 'as=entry works in simple case (single result)' do
+    expected_id = projects(:perfect).id
+    get '/en/projects?as=entry&' \
+        'pq=https%3A%2F%2Fgithub.com%2Fciitest2%2Ftest-repo-shared'
+    assert_redirected_to "/en/projects/#{expected_id}"
+  end
+
+  test 'as=entry quietly returns project list if >1 match' do
+    get '/en/projects?as=entry&pq=https%3A%2F%2F'
+    assert_response :success
+    assert_includes @response.body, 'Projects'
+  end
+
   test 'Check ids= projects index query' do
     # %2c is the comma
     get "/en/projects.json?ids=#{@project.id}%2c#{@project_two.id}"

@@ -784,3 +784,40 @@ task :slow_tests do
     Kernel.abort("Misordered #{command}") unless result == 'use Rack::Cors'
   end
 end
+
+# Search for a given user email address.
+desc 'Search for users with given email (for GDPR requests)'
+task search_email: :environment do
+  ARGV.shift # Drop rake task name
+  ARGV.shift if ARGV[0] == '--' # Skip garbage
+  search_email = ARGV[0]
+  puts "Searching for '#{search_email}'; matching ids and names are:"
+  results = User.where(email: search_email)
+                .select('id, name, encrypted_email, encrypted_email_iv')
+                .pluck(:id, :name)
+  puts results
+  puts 'End of results.'
+  exit(0) # Work around rake
+end
+
+# Search for a given user name.
+# Note: This is slow, because we don't have an index for this.
+# We instead must linerarly search the database.
+# However, we only get 1-5 requests/month, the queries are from a
+# trusted source, and speed isn't critical, so we haven't bothered.
+# We use a case-mapped search and LIKE, to greatly reduce the risk of
+# failing to find the user name.
+desc 'Search for users with given case-insensitive name (for GDPR requests)'
+task search_name: :environment do
+  ARGV.shift # Drop rake task name
+  ARGV.shift if ARGV[0] == '--' # Skip garbage
+  search_name = ARGV[0]
+  search_name_downcase = search_name.downcase
+  puts "Searching for '#{search_name}'; matching ids and names are:"
+  results = User.where('lower(name) LIKE ?', "%#{search_name_downcase}%")
+                .select('id, name, encrypted_email, encrypted_email_iv')
+                .pluck(:id, :name)
+  puts results
+  puts 'End of results.'
+  exit(0) # Work around rake
+end

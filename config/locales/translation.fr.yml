@@ -3049,10 +3049,13 @@ fr:
       met_justification_required: Justification requise
       met_justification_or_url_required: Justification ou URL
         requise
-      see_actual_criteria:
+      see_actual_criteria: Vous pouvez également voir les critères
+        réels.
     error_409:
-      heading:
-      conflict:
+      heading: 'Erreur 409 : conflit'
+      conflict: >-
+        Désolé, plusieurs entrées correspondent à la demande,
+        ce qui entraîne un conflit.
   headings:
     Accessibility and internationalization: Accessibilité et internationalisation
     Analysis: Analyse

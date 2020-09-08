@@ -1461,7 +1461,7 @@ ja:
       new_this_level: このレベルで新規
       met_justification_required: 満足している正当な理由が必要
       met_justification_or_url_required: 満足している正当な理由またはURLが必要
-      see_actual_criteria:
+      see_actual_criteria: 実際の基準はこちらで確認できます。
     error_409:
       heading:
       conflict:
@@ -1521,15 +1521,16 @@ ja:
     valid_text: " 有効なUTF-8エンコーディングと無効でない制御文字を持たなければなりません"
     url_message: " http：またはhttps：で始めて、制限付きの文字セットを使用する必要があります"
   criteria_overall:
-    beginning_header_all:
-    beginning_header_0:
-    beginning_header_1:
-    beginning_header_2:
+    beginning_header_all: FLOSSベストプラクティス基準（すべてのレベル）
+    beginning_header_0: FLOSSベストプラクティス基準（合格バッジ）
+    beginning_header_1: FLOSSベストプラクティス基準（シルバー バッジ）
+    beginning_header_2: FLOSSベストプラクティス基準（ゴールド バッジ）
     beginning_all_html:
     beginning_0_html:
     beginning_1_html:
     beginning_2_html:
-    see_discussion_html:
+    see_discussion_html: >-
+      <p>これらの基準の詳細については、 <a href="/en/criteria_discussion">基準の説明</a>を参照してください。
     future:
     na_allowed:
     na_justification_required:

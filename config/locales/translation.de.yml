@@ -57,10 +57,18 @@ de:
     activated: Konto aktiviert!
     failed_activation: Ungültiger Aktivierungslink
     delay:
-      zero:
-      one:
-      few:
-      other:
+      zero: >-
+        Sie können sich jetzt anmelden. Es gibt keine Anti-Spam-Verzögerung
+        nach der Aktivierung.
+      one: >-
+        Als Anti-Spam-Maßnahme müssen Sie nach der Aktivierung
+        eine Stunde warten, bevor Sie sich anmelden können.
+      few: >-
+        Als Anti-Spam-Maßnahme müssen Sie %{count} Stunden nach
+        der Aktivierung warten, bevor Sie sich anmelden können.
+      other: >-
+        Als Anti-Spam-Maßnahme müssen Sie %{count} Stunden nach
+        der Aktivierung warten, bevor Sie sich anmelden können.
   password_resets:
     forgot_password: Passwort vergessen
     reset_password: Passwort zurücksetzen
@@ -110,7 +118,10 @@ de:
       nicht an Dritte weitergeben, es sei denn, es ist gesetzlich
       vorgeschrieben.
     login_disabled: Alle Logins sind vorübergehend deaktiviert
-    cannot_login_yet:
+    cannot_login_yet: >-
+      Leider können Sie sich noch nicht anmelden. Als Anti-Spam-Maßnahme
+      müssen Sie  nach der Aktivierung einige Zeit warten, bevor
+      Sie sich anmelden können.
   users:
     new:
       signup_header: Anmelden
@@ -132,7 +143,8 @@ de:
     edit:
       update_user_info: Benutzerinformationen aktualisieren
       save_changes: Änderungen speichern
-      inadequate_privileges:
+      inadequate_privileges: Verzeihung, das dürfen Sie night
+        tun.
     update:
       profile_updated: Profil aktualisiert
     show:
@@ -315,7 +327,15 @@ de:
       new_badge_or: ODER
       original_repos: "=> Original GitHub-Repos"
       fork_repos: "=> Geforkte GitHub-Repos"
-      tell_us:
+      tell_us: >-
+        Bitte erzählen Sie uns von Ihrem Free/Libre/Open Source
+        Software (FLOSS) Projekt. Dies <b>muss</b> ein FLOSS-Projekt
+        sein; nichts anders ist erlaubt. <b>Fügen</b> Sie <b>KEINE</b>
+        unabhängige Website hinzu, um die Suchmaschinenoptimierung
+        (SEO) einer Website zu verbessern. Solcher Spam ist verboten,
+        da es den Benutzern schadet und SEO sowieso nicht hilft
+        (alle Hyperlinks sind mit <tt>ugc</tt> und <tt>nofollow
+        gekennzeichnet</tt>).
     show:
       edit: Bearbeiten
       delete: Löschen
@@ -715,7 +735,7 @@ de:
       besuchen Sie Ihren Badge-Eintrag und
       klicken Sie auf den Button oben mit der Aufschrift "Verberge erfüllte oder N/A Kriterien".
       Wenn Sie Fragen haben oder Hilfe benötigen, wenden Sie sich bitte an
-      cii-badges-questions-owner@lists.coreinfrastructure.org
+      cii-badges-questions@lists.coreinfrastructure.org
       oder erstellen Sie ein Issue unter
       https://github.com/coreinfrastructure/best-practices-badge/issues
       (Klicken Sie auf "New Issue").
@@ -726,10 +746,10 @@ de:
       wenn Ihr Projekt einen Badge erhält oder verliert,
       oder wenn jemand ein Passwort für Ihr Benutzerkonto anfordert.
       Wenn Ihr Projekt keinen Badge hat und Sie Ihr Abzeichen für mindestens 30 Tage nicht aktualisieren, senden wir Ihnen normalerweise eine Inaktivitätserinnerung circa alle 30-60 Tage.
-      Sie können diese Inaktivitätserinnerungsnachrichten jederzeit deaktivieren;
+      Sie können diese Inaktivitätserinnerungen jederzeit deaktivieren;
       Änderen Sie dazu Ihren Badge-Projekt-Eintrag,
       %{project_info_url}#project_disabled_reminders
-      um "Inaktivitätsanzeige deaktivieren" zu aktivieren.
+      um "Inaktivierungserinnerung deaktivieren" zu aktivieren.
       Denken Sie daran, den Projekteintrag zu bearbeiten, wenn Sie den Wert ändern möchten.
       Wenn Ihr Projekt ein passing-Badge erhalten hat oder
       der Badge-Projekt-Eintrage innerhalb von 30 Tagen bearbeitet wurde,
@@ -806,7 +826,7 @@ de:
       Wir senden keine Erinnerungen, wenn Sie weiterhin Ihren Badge-Eintrag aktualisieren.
       und wir senden nur ungefähr alle 30-60 Tage Erinnerungen. Jedoch,
       wenn Sie diese Erinnerungsnachrichten deaktivieren möchten, bearbeiten Sie Ihren Eintrag unter
-      <a href="%{project_info_url}"> %{project_info_url} </a>,
+      <a href="%{project_info_url}#project_disabled_reminders">%{project_info_url}#project_disabled_reminders</a>,
       um "Inaktivitätsanzeige deaktivieren" zu aktivieren.
       Wir hoffen, dass Sie stattdessen weiter daran arbeiten
       und schließlich das Abzeichen sich verdienen.
@@ -831,15 +851,15 @@ de:
       wählen Sie die Schaltfläche im oberen Bereich mit der Aufschrift "Alle Felder einblenden" und
       Wählen Sie dann die Schaltfläche oben mit der Aufschrift "Hide met or N/A criteria".
       Wenn Sie Fragen haben oder Hilfe benötigen, wenden Sie sich bitte an
-      cii-badges-questions-owner@lists.coreinfrastructure.org
+      cii-badges-questions@lists.coreinfrastructure.org
       oder ein Problem melden wollen bei
       https://github.com/coreinfrastructure/best-practices-badge/issues
       (Klicken Sie auf "Neue Angelegenheit").
       Wir senden keine Erinnerungen, wenn Sie weiterhin Ihren Badge-Eintrag aktualisieren.
       und wir senden nur ungefähr alle 30-60 Tage Erinnerungen. Jedoch,
       wenn Sie diese Erinnerungsnachrichten deaktivieren möchten, bearbeiten Sie Ihren Eintrag unter
-      %{project_info_url}
-      um "Inaktivitätsanzeige deaktivieren" zu aktivieren.
+      %{project_info_url}#project_disabled_reminders
+      um "Inaktivitätserinnerung deaktivieren" zu aktivieren.
       Wir hoffen, dass Sie stattdessen weiter daran arbeiten
       und schließlich das Abzeichen verdienen.
       Vielen Dank für Ihre Zeit.
@@ -1534,16 +1554,15 @@ de:
         details: >-
           Diese minimalen Bitlängen sind: symmetric key 112, factoring
           modulus 2048, discrete logarithm key 224, discrete logarithmic
-          group 2048, elliptic curve 224, and hash 224 (das Passworthashing
+          group 2048, elliptic curve 224, und hash 224 (das Passworthashing
           ist nicht von dieser Bitlänge abgedeckt, weitere Informationen
-          zum Passworthashing finden sich im <a href="#crypto_password_storage">
-          crypto_password_storage </a> Kriterium). Siehe <a href="https://www.keylength.com">
-          https://www.keylength.com </a> für einen Vergleich von
-          Keylängen Empfehlungen von verschiedenen Organisationen.
-          Die Software KANN kleinere Keylängen in einigen Konfigurationen
-          erlauben (idealerweise nicht, da dies Downgrade-Angriffe
-          erlaubt, aber kürzere Keylängen sind manchmal für die
-          Interoperabilität notwendig).
+          zum Passworthashing finden sich im <a href="#crypto_password_storage">crypto_password_storage</a>
+          Kriterium). Siehe <a href="https://www.keylength.com">https://www.keylength.com</a>
+          für einen Vergleich von Keylängen Empfehlungen von verschiedenen
+          Organisationen. Die Software KANN kleinere Keylängen
+          in einigen Konfigurationen erlauben (idealerweise nicht,
+          da dies Downgrade-Angriffe erlaubt, aber kürzere Keylängen
+          sind manchmal für die Interoperabilität notwendig).
       crypto_working:
         description: >-
           Die Standard-Sicherheitsmechanismen innerhalb der vom
@@ -2830,7 +2849,7 @@ de:
       p3_html: >-
         <em>Datenschutz und Rechtliche Hinweise</em>: Bitte beachten
         Sie unsere <a href="https://www.linuxfoundation.org/privacy">Datenschutz
-        Richtlinie</a>, <a href="/cookies">Hinweise zu Cookies</a>
+        Richtlinie</a>, <a href="/de/cookies">Hinweise zu Cookies</a>
         und <a href="https://www.linuxfoundation.org/terms">Benutzungsbedingungen</a>.
         Alle öffentlich zugänglichen Nicht-Code-Inhalte sind mindestens
         unter der  <a href="https://creativecommons.org/licenses/by/3.0/">Creative
@@ -2928,10 +2947,13 @@ de:
       met_justification_required: Kriterium erfüllen erforderlich
       met_justification_or_url_required: Kriterium erfüllen oder
         URL erforderlich
-      see_actual_criteria:
+      see_actual_criteria: Sie können auch die tatsächlichen Kriterien
+        einsehen.
     error_409:
-      heading:
-      conflict:
+      heading: 'Fehler 409: Konflikt'
+      conflict: >-
+        Leider stimmen mehrere Einträge mit der Anfrage überein,
+        was zu einem Konflikt führt.
   headings:
     Accessibility and internationalization: Zugänglichkeit und
       Internationalisierung
@@ -3012,8 +3034,8 @@ de:
       Source Software (FLOSS) Projekte, um die Best Practices
       Badges der Core Infrastructure Initiative (CII) der Level
       Passing, Silber und Gold zu erhalten. Sie können diese Liste
-      <a href="/de/criteria/?details=false&rationale=false">nur
-      mit den Kriterien</a> oder mit <a href="/de/criteria/?details=true&rationale=true">zusätzlichen
+      <a href="/de/criteria">nur mit den Kriterien</a> oder mit
+      <a href="/de/criteria?details=true&rationale=true">zusätzlichen
       Informationen anschauen</a>. Sie können auch nur die Kriterien
       für die Level <a href="/de/criteria/0">Passing</a>, <a href="/de/criteria/1">Silber</a>
       und <a href="/de/criteria/2">Gold</a>, sowie <a href="/en/criteria_stats">Kriterien
@@ -3022,22 +3044,26 @@ de:
       <p> Dies sind Best Practices für Free/Libre und Open Source
       Software (FLOSS) Projekte, um den Core Infrastructure Initiative
       (CII) Best Practices Badge Level "Passing" zu erreichen.
-      Sie können diese Liste <a href="/de/criteria/0?details=false&rationale=false">nur
-      mit den Kriterien</a> oder mit <a href="/de/criteria/0?details=true&rationale=true">zusätzlichen
+      Sie können diese Liste <a href="/de/criteria/0">nur mit
+      den Kriterien</a> oder mit <a href="/de/criteria/0?details=true&rationale=true">zusätzlichen
       Informationen anschauen</a>. Es sind auch die <a href="/de/criteria">Kriterien
       für alle Badge Level</a> verfügbar.
     beginning_1_html: >-
       <p> Dies sind Best Practices für Free/Libre und Open Source
       Software (FLOSS) Projekte, um den Core Infrastructure Initiative
       (CII) Best Practices Badge Level "Silber" zu erreichen.
-      Es sind auch die <a href="/de/criteria">Kriterien für alle
-      Badge Level</a> verfügbar.
+      Sie können diese Liste <a href="/de/criteria/1">nur mit
+      den Kriterien</a> oder mit <a href="/de/criteria/1?details=true&rationale=true">zusätzlichen
+      Informationen anschauen</a>. Es sind auch die <a href="/de/criteria">Kriterien
+      für alle Badge Level</a> verfügbar.
     beginning_2_html: >-
       <p> Dies sind Best Practices für Free/Libre und Open Source
       Software (FLOSS) Projekte, um den Core Infrastructure Initiative
-      (CII) Best Practices Badge Level "Gold" zu erreichen. Es
-      sind auch die <a href="/de/criteria">Kriterien für alle
-      Badge Level</a> verfügbar.
+      (CII) Best Practices Badge Level "Gold" zu erreichen. Sie
+      können diese Liste <a href="/de/criteria/2">nur mit den
+      Kriterien</a> oder mit <a href="/de/criteria/2?details=true&rationale=true">zusätzlichen
+      Informationen anschauen</a>. Es sind auch die <a href="/de/criteria">Kriterien
+      für alle Badge Level</a> verfügbar.
     see_discussion_html: >-
       <p>Siehe die <a href="/de/criteria_discussion">Kriterien
       Diskussion</a> für weitere Informationen zu diesen Kriterien.

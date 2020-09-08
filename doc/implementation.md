@@ -162,6 +162,17 @@ This was implemented with:
 heroku config:set --app production-bestpractices TZ=:/usr/share/zoneinfo/UTC
 ~~~~
 
+## Searching user names and emails (for GDPR Requests)
+
+We have a simple ability for system admins to search for user names
+and user emails, primarily to support GDPR Requests.
+Use as follows
+
+~~~~
+heroku run --app production-bestpractices rake search_name -- 'NAME'
+heroku run --app production-bestpractices rake search_email -- 'EMAIL'
+~~~~
+
 ## Security
 
 See the separate

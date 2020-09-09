@@ -93,12 +93,17 @@ might request.
 
     For example, you can embed the badge status of project NNN
     in an HTML document with:
-    `&lt;a href="https://bestpractices.coreinfrastructure.org/projects/NNN"&gt;&lt;img src="https://bestpractices.coreinfrastructure.org/projects/NNN/badge"&gt;&lt;/a&gt;`
+    
+    ```
+    <a href="https://bestpractices.coreinfrastructure.org/projects/NNN">
+      <img src="https://bestpractices.coreinfrastructure.org/projects/NNN/badge">
+    </a>
+    ```
 
-    You can do embed the badge status of project NNN in a markdown file with:
+    You can also embed the badge status of project NNN in a markdown file with:
     `[![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/NNN/badge)](https://bestpractices.coreinfrastructure.org/projects/NNN)`
 
-*   <tt>GET /(:locale/)projects(.:format)(?:query)</tt>
+*   `GET /(:locale/)projects(.:format)(?:query)`
 
     Perform a query on the projects to return a list
     of the matching projects, up to the maximum number allowed in a page.
@@ -125,7 +130,7 @@ might request.
     and is thus much faster). You can avoid making the performance penalty
     worse if you follow these rules (if you don't, your users will endure
     additional unnecessary redirects as the system tries to fix the query):
-    - use the conventional order, `as=badge` before `url=`
+    - Use the conventional order, `as=badge` before `url=`
     - Use URL encoding, especially in the url. For example, use %3A for ":"
       and %2F for "/". In many situations you *must* do this.
     - Use the English locale ('/en/'), since the locale isn't relevant
@@ -139,10 +144,13 @@ might request.
     Dashboards using this information that want a simple display
     of the CII Badge result may want to use combine hypertext
     links and the "alt" tag like this, where `MY_URL` is the URL to be used:
-    `<a href="https://bestpractices.coreinfrastructure.org/projects?`
-    `as=entry&url=MY_URL">`
-    `<img src="https://bestpractices.coreinfrastructure.org/projects?`
-    `as=badge&url=MY_URL" alt="CII N/A"></a>`
+    
+    ```
+    <a href="https://bestpractices.coreinfrastructure.org/projects?as=entry&url=MY_URL">
+      <img src="https://bestpractices.coreinfrastructure.org/projects?as=badge&url=MY_URL" alt="CII N/A">
+    </a>
+    ```
+    
     The "alt" text is shown on failure, and the hyperlink helps both
     accessibility and anyone who wants to learn more about the badge.
     The link uses as=entry; this will show the specific project entry
@@ -231,7 +239,7 @@ The following search parameters are supported:
     "|" (or), and "'text...*'" (prefix).
     Note that URLs cannot include spaces, and &amp;amp; has a special meaning,
     so you typically will need to use URL encoding in a query.
-    For example, /en/projects?q=R%20%26%20analysis
+    For example, `/en/projects?q=R%20%26%20analysis`
     is a search that requires both "R" and "analysis".
     This search request system breaks URLs into parts, so you can't use "q" to
     search on a whole URL (use pq instead).
@@ -247,8 +255,9 @@ list of projects in the requested format. The "as" parameter changes this:
     If no or multiple projects match, the normal project display
     is shown instead.
 
-See app/controllers/project\_controllers.rb if you want to see the
-implementation's source code.
+See
+[app/controllers/projects\_controller.rb](https://github.com/coreinfrastructure/best-practices-badge/blob/master/app/controllers/projects_controller.rb)
+if you want to see the implementation's source code.
 
 ## Downloading the database
 
@@ -425,7 +434,7 @@ to the best matching locale (as recommended by the accept-language
 value provided by the browser, with English as the last resort).
 The API has an important exception: if JSON format is requested, no
 locale redirection occurs (because JSON isn't locale-sensitive).
-The request for the badge image (with `/projects/NUMBER/badge`)
+The request for the badge image (with `/projects/NNN/badge`)
 is also not redirectored (again, because it isn't locale-sensitive).
 
 Locales are always exactly 2 lowercase letters, or 2 lowercase letters

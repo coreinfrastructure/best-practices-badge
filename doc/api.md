@@ -93,7 +93,7 @@ might request.
 
     For example, you can embed the badge status of project NNN
     in an HTML document with:
-    
+
     ```
     <a href="https://bestpractices.coreinfrastructure.org/projects/NNN">
       <img src="https://bestpractices.coreinfrastructure.org/projects/NNN/badge">
@@ -144,13 +144,13 @@ might request.
     Dashboards using this information that want a simple display
     of the CII Badge result may want to use combine hypertext
     links and the "alt" tag like this, where `MY_URL` is the URL to be used:
-    
+
     ```
     <a href="https://bestpractices.coreinfrastructure.org/projects?as=entry&url=MY_URL">
       <img src="https://bestpractices.coreinfrastructure.org/projects?as=badge&url=MY_URL" alt="CII N/A">
     </a>
     ```
-    
+
     The "alt" text is shown on failure, and the hyperlink helps both
     accessibility and anyone who wants to learn more about the badge.
     The link uses as=entry; this will show the specific project entry

@@ -33,9 +33,9 @@ class ApplicationController < ActionController::Base
   # counters cloud piercing.
   before_action :validate_client_ip_address
 
-  # Use the new security header, "feature policy", to disable things
+  # Use the new HTTP security header, "permissions policy", to disable things
   # we don't need.
-  before_action :add_feature_policy
+  before_action :add_http_permissions_policy
 
   # Record user_id, e.g., so it can be recorded in logs
   # https://github.com/roidrage/lograge/issues/23
@@ -168,10 +168,25 @@ class ApplicationController < ActionController::Base
     fail_if_invalid_client_ip(client_ip, Rails.configuration.valid_client_ips)
   end
 
-  # Use the new security header, "feature policy", to disable things
-  # we don't need. It's already supported by Chrome and Safari.  See:
+  # Use the new HTTP security header, "Permissions policy", to disable things
+  # we don't need. It was formerly named "feature policy" with a slightly
+  # different syntax. See:
+  # https://scotthelme.co.uk/goodbye-feature-policy-and-hello-permissions-policy
+  # https://httptoolkit.tech/blog/renaming-feature-policy-to-permissions-policy
   # https://scotthelme.co.uk/a-new-security-header-feature-policy/
-  def add_feature_policy
+  # Note that this *gives up* fullscreen & sync-xhr; if we need it later,
+  # change the policy.
+  # rubocop: disable Metrics/MethodLength
+  def add_http_permissions_policy
+    response.set_header(
+      'Permissions-Policy',
+      'fullscreen=(), geolocation=(), midi=(), ' \
+      'notifications=(), push=(), sync-xhr=(), microphone=(), ' \
+      'camera=(), magnetometer=(), gyroscope=(), speaker=(), ' \
+      'vibrate=(), payment=()'
+    )
+    # Include the older Feature-Policy header, for older browser versions.
+    # We can eventually drop this, but it doesn't hurt to include it for now.
     response.set_header(
       'Feature-Policy',
       "fullscreen 'none'; geolocation 'none'; midi 'none';" \
@@ -180,6 +195,7 @@ class ApplicationController < ActionController::Base
       "vibrate 'none'; payment 'none'"
     )
   end
+  # rubocop: enable Metrics/MethodLength
 
   include SessionsHelper
 end

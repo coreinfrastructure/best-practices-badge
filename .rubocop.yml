@@ -53,11 +53,12 @@ AllCops:
     - 'node_modules/**/*'
     - 'railroader/**/*'
     - '.pryrc'
-Documentation:
+Style/Documentation:
   Enabled: false
-Lint/HandleExceptions:
-  Exclude:
-    - 'bin/*'
+Lint/SuppressedException:
+  Enabled: false
+# Exclude:
+#   - 'bin/*'
 Style/RescueStandardError:
   Exclude:
     # When getting evidence from external sources there are
@@ -128,7 +129,7 @@ Layout/ClassStructure:
   Enabled: false
 Rails/Presence:
   Enabled: false
-Naming/UncommunicativeMethodParamName:
+Naming/MethodParameterName:
   Enabled: false
 Style/IpAddresses:
   Enabled: false
@@ -138,13 +139,13 @@ Bundler/GemComment:
 # Re-enable and try these out later
 Performance/ChainArrayAllocation:
   Enabled: false
-Layout/AlignHash:
+Layout/HashAlignment:
   Enabled: false
 Rails/SaveBang:
   Enabled: false
 Rails/FindEach:
   Enabled: false
-Lint/UnneededCopDisableDirective:
+Lint/RedundantCopDisableDirective:
   Enabled: false
 Layout/MultilineArrayLineBreaks:
   Enabled: false
@@ -159,4 +160,6 @@ Rails/HelperInstanceVariable:
 Style/MultilineWhenThen:
   Enabled: false
 Style/ConstantVisibility:
+  Enabled: false
+Style/RedundantReturn:
   Enabled: false

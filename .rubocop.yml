@@ -72,7 +72,7 @@ Metrics/AbcSize:
 Metrics/ClassLength:
   Exclude:
     - 'db/migrate/*'
-Metrics/LineLength:
+Layout/LineLength:
   Exclude:
     - 'db/migrate/*'
 Metrics/MethodLength:

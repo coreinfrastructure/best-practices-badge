@@ -53,6 +53,11 @@ AllCops:
     - 'node_modules/**/*'
     - 'railroader/**/*'
     - '.pryrc'
+
+# This will ALWAYS be disabled. We *want* to be able disable cops.
+Style/DisableCopsWithinSourceCodeDirective:
+  Enabled: false
+
 Style/Documentation:
   Enabled: false
 Lint/SuppressedException:

@@ -68,6 +68,7 @@ class SessionsHelperTest < ActionView::TestCase
   end
   class StubOctokitPermissions
     attr_reader :push
+
     def initialize(admin, push, pull)
       @admin = admin
       @push = push
@@ -76,6 +77,7 @@ class SessionsHelperTest < ActionView::TestCase
   end
   class StubOctokitResult
     attr_reader :permissions
+
     def initialize(admin, push, pull)
       @permissions = StubOctokitPermissions.new(admin, push, pull)
     end

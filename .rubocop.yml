@@ -79,7 +79,7 @@ Style/RescueStandardError:
     # an error getting evidence, we treat it as no evidence.
     - 'app/lib/evidence.rb'
 Metrics/AbcSize:
-  Max: 17
+  Max: 20
   Exclude:
     - 'db/migrate/*'
 Metrics/ClassLength:
@@ -205,4 +205,24 @@ Metrics/CyclomaticComplexity:
 Style/RedundantAssignment:
   Enabled: false
 Bundler/OrderedGems:
+  Enabled: false
+Layout/EmptyLineAfterMultilineCondition:
+  Enabled: false
+Style/StringConcatenation:
+  Enabled: false
+Style/ClassMethodsDefinitions:
+  Enabled: false
+Style/GlobalStdStream:
+  Enabled: false
+Lint/UselessMethodDefinition:
+  Enabled: false
+Style/OptionalBooleanParameter:
+  Enabled: false
+Metrics/PerceivedComplexity:
+  Enabled: false
+Style/SoleNestedConditional:
+  Enabled: false
+Lint/EmptyConditionalBody:
+  Enabled: false
+Style/ExplicitBlockArgument:
   Enabled: false

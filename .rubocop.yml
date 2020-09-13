@@ -177,3 +177,5 @@ Rails/FilePath:
   Enabled: false
 Rails/UnknownEnv:
   Enabled: false
+Performance/IoReadlines:
+  Enabled: false

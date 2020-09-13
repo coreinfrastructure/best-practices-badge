@@ -194,11 +194,15 @@ Lint/ConstantResolution:
   Enabled: false
 Style/RedundantRegexpEscape:
   Enabled: false
-# Style/CaseLikeIf:
-#   Enabled: false
-# Style/ExpandPathArguments:
-#   Enabled: false
+Style/CaseLikeIf:
+  Enabled: false
+Style/ExpandPathArguments:
+  Enabled: false
 Style/RedundantFetchBlock:
   Enabled: false
 Metrics/CyclomaticComplexity:
+  Enabled: false
+Style/RedundantAssignment:
+  Enabled: false
+Bundler/OrderedGems:
   Enabled: false

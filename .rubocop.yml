@@ -57,6 +57,11 @@ AllCops:
 # This will ALWAYS be disabled. We *want* to be able disable cops.
 Style/DisableCopsWithinSourceCodeDirective:
   Enabled: false
+# This is a terrible idea and will never happen. Sometimes there's
+# no need for a full Rails environment; we only want to bring in a
+# Rails environment when it's encessary.
+Rails/RakeEnvironment:
+  Enabled: false
 
 Style/Documentation:
   Enabled: false
@@ -167,4 +172,8 @@ Style/MultilineWhenThen:
 Style/ConstantVisibility:
   Enabled: false
 Style/RedundantReturn:
+  Enabled: false
+Rails/FilePath:
+  Enabled: false
+Rails/UnknownEnv:
   Enabled: false

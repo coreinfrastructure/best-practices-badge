@@ -226,3 +226,9 @@ Lint/EmptyConditionalBody:
   Enabled: false
 Style/ExplicitBlockArgument:
   Enabled: false
+Rails/DefaultScope:
+  Enabled: false
+Rails/WhereNot:
+  Enabled: false
+Rails/NegateInclude:
+  Enabled: false

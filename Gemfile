@@ -77,7 +77,7 @@ group :development, :test do
   # gem 'railroader', '4.3.8' # Security static analyzer. OSS fork of Brakeman
   gem 'rubocop', '0.83.0', require: false # Style checker
   gem 'rubocop-performance', '1.5.1', require: false # Performance cops
-  gem 'rubocop-rails', '2.0.0', require: false # Rails-specific cops
+  gem 'rubocop-rails', '2.2.0', require: false # Rails-specific cops
   gem 'ruby-graphviz', '1.2.5' # This is used for bundle viz
   gem 'spring', '2.1.0' # Preloads app so console, rake, and tests run faster
   gem 'vcr', '5.0.0' # Record network responses for later test reuse

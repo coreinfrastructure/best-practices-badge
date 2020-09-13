@@ -190,13 +190,15 @@ Style/IfUnlessModifier:
   Enabled: false
 Style/MultilineMethodSignature:
   Enabled: false
-# Lint/ConstantResolution:
-#   Enabled: false
+Lint/ConstantResolution:
+  Enabled: false
+Style/RedundantRegexpEscape:
+  Enabled: false
 # Style/CaseLikeIf:
-#   Enabled: false
-# Style/RedundantRegexpEscape:
 #   Enabled: false
 # Style/ExpandPathArguments:
 #   Enabled: false
-# Style/RedundantFetchBlock:
-#   Enabled: false
+Style/RedundantFetchBlock:
+  Enabled: false
+Metrics/CyclomaticComplexity:
+  Enabled: false

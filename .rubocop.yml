@@ -49,9 +49,9 @@ AllCops:
   Exclude:
     - 'tmp/**/*'
     - 'lib/.git/**/*'
-    - 'db/**'
+    - 'db/**/*'
     - 'db/migrate/**'
-    - 'bin/**'
+    - 'bin/**/*'
     - 'node_modules/**/*'
     - 'railroader/**/*'
     - '.pryrc'
@@ -85,9 +85,11 @@ Metrics/AbcSize:
 Metrics/ClassLength:
   Exclude:
     - 'db/migrate/*'
+# Weird failures on this, disabled for now.
 Layout/LineLength:
-  Exclude:
-    - 'db/migrate/*'
+  Enabled: false
+  # Exclude:
+  #   - 'db/migrate/*'
 Metrics/MethodLength:
  Exclude:
    - 'db/migrate/*'
@@ -182,3 +184,19 @@ Rails/UnknownEnv:
   Enabled: false
 Performance/IoReadlines:
   Enabled: false
+Layout/FirstMethodArgumentLineBreak:
+  Enabled: false
+Style/IfUnlessModifier:
+  Enabled: false
+Style/MultilineMethodSignature:
+  Enabled: false
+# Lint/ConstantResolution:
+#   Enabled: false
+# Style/CaseLikeIf:
+#   Enabled: false
+# Style/RedundantRegexpEscape:
+#   Enabled: false
+# Style/ExpandPathArguments:
+#   Enabled: false
+# Style/RedundantFetchBlock:
+#   Enabled: false

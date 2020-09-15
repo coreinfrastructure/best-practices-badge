@@ -79,7 +79,7 @@ group :development, :test do
   gem 'rubocop-performance', '1.8.0', require: false # Performance cops
   gem 'rubocop-rails', '2.8.0', require: false # Rails-specific cops
   gem 'ruby-graphviz', '1.2.5' # This is used for bundle viz
-  gem 'spring', '2.1.0' # Preloads app so console, rake, and tests run faster
+  gem 'spring', '2.1.1' # Preloads app so console, rake, and tests run faster
   gem 'vcr', '5.0.0' # Record network responses for later test reuse
   gem 'yaml-lint', '0.0.10' # Check YAML file syntax
 end

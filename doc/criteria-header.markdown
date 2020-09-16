@@ -20,6 +20,15 @@ criteria</a>, and the
 This change makes it easier to see the real criteria in any language,
 as well as hide or reveal the details and rationale.
 
+You can also add a "?" and some `&`-separated parameters:
+
+* `details=true` : Show criterion details (clarifications)
+* `rationale=true` : Show the criterion rationale
+  (why this criterion is included in the set of criteria).
+  This option only applies to the English locale.
+* `autofill=true` : Show ideas for how to automatically determine this.
+  This option only applies to the English locale.
+
 For now, we've kept the old criteria text below, so you're not
 surprised by this change.
 

@@ -21,6 +21,31 @@ class CriteriaControllerTest < ActionDispatch::IntegrationTest
     assert_includes @response.body, 'MUST achieve a silver level badge'
     assert_includes @response.body,
                     'MUST document its code review requirements'
+    assert_includes @response.body, 'Passing'
+    assert_includes @response.body, 'Silver'
+    assert_includes @response.body, 'Gold'
+    assert_not_includes @response.body, 'Details:'
+    assert_not_includes @response.body, 'Rationale:'
+    assert_not_includes @response.body, 'Autofill:'
+  end
+
+  test 'Get criteria set in English with extra information' do
+    get '/en/criteria?details=true&rationale=true&autofill=true'
+    assert_response :success
+    assert_includes @response.body, 'Basics'
+    assert_includes @response.body, 'Basic project website content'
+    assert_includes @response.body,
+                    'MUST succinctly describe what the software does'
+    assert_includes @response.body, 'MUST achieve a passing level badge'
+    assert_includes @response.body, 'MUST achieve a silver level badge'
+    assert_includes @response.body,
+                    'MUST document its code review requirements'
+    assert_includes @response.body, 'Passing'
+    assert_includes @response.body, 'Silver'
+    assert_includes @response.body, 'Gold'
+    assert_includes @response.body, 'Details:'
+    assert_includes @response.body, 'Rationale:'
+    assert_includes @response.body, 'Autofill:'
   end
 
   test 'Get passing criteria set in English with details and rationale' do
@@ -32,6 +57,19 @@ class CriteriaControllerTest < ActionDispatch::IntegrationTest
                     'MUST succinctly describe what the software does'
     assert_includes @response.body, 'Details:'
     assert_includes @response.body, 'Rationale:'
+    assert_not_includes @response.body, 'Autofill:'
+  end
+
+  test 'Get passing criteria set in English with details and autofill' do
+    get '/en/criteria/0?details=true&autofill=true'
+    assert_response :success
+    assert_includes @response.body, 'Basics'
+    assert_includes @response.body, 'Basic project website content'
+    assert_includes @response.body,
+                    'MUST succinctly describe what the software does'
+    assert_includes @response.body, 'Details:'
+    assert_not_includes @response.body, 'Rationale:'
+    assert_includes @response.body, 'Autofill:'
   end
 
   test 'Get one criteria set, passing, in English' do
@@ -42,6 +80,7 @@ class CriteriaControllerTest < ActionDispatch::IntegrationTest
                     'MUST succinctly describe what the software does'
     assert_not_includes @response.body, 'Details:'
     assert_not_includes @response.body, 'Rationale:'
+    assert_not_includes @response.body, 'Autofill:'
     assert_not_includes @response.body, 'MUST achieve a passing level badge'
     assert_not_includes @response.body, 'MUST achieve a silver level badge'
   end

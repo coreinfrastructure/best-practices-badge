@@ -57,6 +57,13 @@
     <dd><%= raw criterion_data['rationale'] %></dd>
   </dl>
 <%       end -%>
+<%       if (autofill && (I18n.locale == :en) &&
+             criterion_data.key?('autofill')) -%>
+  <dl>
+    <dt><i>Autofill:</i></dt><dt> </dt>
+    <dd><%= raw criterion_data['autofill'] %></dd>
+  </dl>
+<%       end -%>
 <%     end -%>
 </ul>
 <%   end -%>

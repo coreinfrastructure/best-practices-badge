@@ -1,4 +1,4 @@
-<% cache [locale, @criteria_level, @details, @rationale] do -%>
+<% cache [locale, @criteria_level, @details, @rationale, @autofill] do -%>
 <div class="row">
 <div class="col-xs-12">
 <h1><%= t("criteria_overall.beginning_header_#{@criteria_level}") %></h1>
@@ -9,6 +9,7 @@
             {
               criteria_level: @criteria_level,
               details: @details, rationale: @rationale,
+              autofill: @autofill,
               bare_key: true # True for "show"
             } -%>
 </div>

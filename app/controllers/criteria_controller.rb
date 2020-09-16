@@ -25,6 +25,7 @@ class CriteriaController < ApplicationController
   def set_params
     @details = boolean_param(:details, false)
     @rationale = boolean_param(:rationale, false)
+    @autofill = boolean_param(:autofill, false)
   end
 
   # Convert user-provided parameter "name" into true/false.

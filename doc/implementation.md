@@ -1287,6 +1287,27 @@ than desired.
 So there is no reason to panic over these messages, but it is
 worth trying to fix.
 
+## Reducing Rails memory use (`MALLOC_ARENA_MAX` and `jemalloc`)
+
+Rails is notorious for memory growth over time.
+Two ways to partly address this is to (1) set `MALLOC_ARENA_MAX` to 2
+or (2) use `jemalloc`.
+
+We partly compensate by setting `MALLOC_ARENA_MAX` to 2, as is
+recommended by Heroku.
+[See this Heroku discussion](https://devcenter.heroku.com/changelog-items/1683).
+Heroku doesn't directly support using `jemalloc`, so the `jemalloc`
+alternative would be more work.
+It's also somewhat dubious that `jemalloc` would be much better.
+
+Some discussions about this:
+
+* [Taming Rails Memory Bloat](https://www.mikeperham.com/2018/04/25/taming-rails-memory-bloat/)
+* [What causes Ruby Memory Bloat?](https://www.joyfulbikeshedding.com/blog/2019-03-14-what-causes-ruby-memory-bloat.html)
+* [The status of Ruby memory trimming](https://www.joyfulbikeshedding.com/blog/2019-03-29-the-status-of-ruby-memory-trimming-and-how-you-can-help-with-testing.html)
+* [Malloc doubles Ruby memory](https://www.speedshop.co/2017/12/04/malloc-doubles-ruby-memory.html)
+* [Benchmark of memory allocators](https://medium.com/@andresakata/benchmark-of-memory-allocators-on-a-multi-threaded-ruby-program-354ec4dc2e7e)
+
 ## See also
 
 Project participation and interface:

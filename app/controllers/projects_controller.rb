@@ -395,7 +395,7 @@ class ProjectsController < ApplicationController
     )
                 .deliver_now
     # To simplify certain tests, return list of project ids newly passing
-    projects[0].map(&:id)
+    projects[0].ids
   end
   # rubocop:enable Metrics/MethodLength
   private_class_method :send_monthly_announcement

@@ -10,15 +10,19 @@
 # first created -> highest priority.
 # See how all your routes lay out with "rake routes".
 
-Rails.application.routes.draw do
-  LEGAL_LOCALE = /(?:#{I18n.available_locales.join("|")})/.freeze
+# This regex defines all legal locale values:
+LEGAL_LOCALE = /(?:#{I18n.available_locales.join("|")})/.freeze
 
+# This regex is used to verify criteria levels in routes:
+VALID_CRITERIA_LEVEL = /[0-2]/.freeze
+
+Rails.application.routes.draw do
   # First, handle routing of special cases.
   # Warning: Routes that don't take a :locale value must include a
   # "skip_before_action :redir_missing_locale ..." in their controller.
 
   # The "robots.txt" file is always at the root of the
-  # document tree, and locale is irrelevant to it. Handle it specially.
+  # document tree and has no locale. Handle it specially.
   get '/robots.txt' => 'static_pages#robots',
       defaults: { format: 'text' }, as: :robots
 
@@ -71,7 +75,6 @@ Rails.application.routes.draw do
     get 'feed' => 'projects#feed', defaults: { format: 'atom' }
     get 'reminders' => 'projects#reminders_summary'
 
-    VALID_CRITERIA_LEVEL = /[0-2]/.freeze
     resources :projects do
       member do
         get 'delete_form' => 'projects#delete_form'

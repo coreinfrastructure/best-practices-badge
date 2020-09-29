@@ -197,13 +197,15 @@ file 'license_finder_report.html' =>
      '> license_finder_report.html'
 end
 
+# Don't do whitespace checks on these YAML files:
+YAML_WS_EXCEPTIONS ||= ':!test/vcr_cassettes/*.yml'
+
 desc 'Check for trailing whitespace in latest proposed (git) patch.'
 task :whitespace_check do
-  EXCEPTIONS = ':!test/vcr_cassettes/*.yml'
   if ENV['CI'] # CircleCI modifies database.yml
-    sh "git diff --check -- . ':!config/database.yml' #{EXCEPTIONS}"
+    sh "git diff --check -- . ':!config/database.yml' #{YAML_WS_EXCEPTIONS}"
   else
-    sh "git diff --check -- . #{EXCEPTIONS}"
+    sh "git diff --check -- . #{YAML_WS_EXCEPTIONS}"
   end
 end
 

@@ -7,36 +7,38 @@
 require 'test_helper'
 
 class ClientIpTest < ActiveSupport::TestCase
-  test 'ClientIP works correctly without X-Forwarded-For' do
-    class MockReq
-      def get_header(_x)
-        nil
-      end
-
-      def ip
-        '1.2.3.4'
-      end
+  # Mocked request with a fixed ip address
+  class MockReq1
+    def get_header(_x)
+      nil
     end
 
-    m = MockReq.new
+    def ip
+      '1.2.3.4'
+    end
+  end
+
+  test 'ClientIP works correctly without X-Forwarded-For' do
+    m = MockReq1.new
     result = ClientIp.acquire(m)
     assert '1.2.3.4', result
+  end
+
+  # Mocked request with a list as the header.
+  class MockReq2
+    def get_header(_x)
+      '1.1.1.1, 100.36.183.117, 157.52.82.3'
+    end
+
+    def ip
+      '1.2.3.4'
+    end
   end
 
   # In our production environment we must use SECOND from the end.
   # Change this test, and ClientIp, if your environment is different.
   test 'ClientIP works correctly with X-Forwarded-For, production env' do
-    class MockReq
-      def get_header(_x)
-        '1.1.1.1, 100.36.183.117, 157.52.82.3'
-      end
-
-      def ip
-        '1.2.3.4'
-      end
-    end
-
-    m = MockReq.new
+    m = MockReq2.new
     result = ClientIp.acquire(m)
     assert '100.36.183.117', result
   end

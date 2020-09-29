@@ -142,13 +142,14 @@ class UserTest < ActiveSupport::TestCase
     ActiveModel::SecurePassword.min_cost = true
   end
 
-  test 'Test user.email_if_decryptable when not decryptable' do
-    class StubUser < User
-      def email
-        raise OpenSSL::Cipher::CipherError
-      end
+  class StubUserEmail < User
+    def email
+      raise OpenSSL::Cipher::CipherError
     end
-    u = StubUser.new
+  end
+
+  test 'Test user.email_if_decryptable when not decryptable' do
+    u = StubUserEmail.new
     assert_equal 'CANNOT_DECRYPT', u.email_if_decryptable
   end
 end

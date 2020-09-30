@@ -16,6 +16,9 @@ a pointer to a sample analysis program,
 how to query, how to download the database,
 and then various kinds of more specialized information.
 
+All BadgeApp requests are rate-limited. At the time of this writing,
+if you keep requests at 1 request/second or less you'll be fine.
+
 ## Quickstart
 
 Like any RESTful API, use an HTTP verb (like GET) on a resource.

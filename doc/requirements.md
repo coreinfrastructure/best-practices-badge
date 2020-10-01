@@ -14,6 +14,8 @@ In a few cases we briefly note how we currently meet the requirements.
 
 In this document we'll use the term "open source software" (OSS),
 and treat Free/Libre and Open Source Software (FLOSS) as a synonym.
+A "badge entry" is the full set of badge data about a project; a
+"badge" is the small image showing the summarized status of a project.
 
 ## High-level requirements
 
@@ -21,19 +23,20 @@ The BadgeApp web application MUST:
 
 1. **Support basic login and editing functionality.**
    The application MUST
-   allow users to sign in/login using GitHub or an email account,
-   create project badge entries, edit those entries (if authorized),
-   and log out.
+   allow users to sign in (login) using GitHub or an email account.
+   The application MUST allow authenticated users (and only
+   authenticated users) to create project badge entries, edit those
+   badge entries (if authorized), and log out.
    The system MUST calculate and show a project's progress
    towards getting a badge, and MUST support multiple badge levels
    with their own criteria.
    When users edit a badge entry and have JavaScript enabled, the system MUST
    provide immediate feedback on how their changes are affecting progress
    towards getting a badge.
-   People MUST NOT be required to log in to see badge entries
-   in the normal case.
-   Admins MUST be able to edit or remove projects (e.g., to deal with
-   spam and false claims).
+   The application MUST allow anyone (authenticated or not) to
+   see current badge entries and badges.
+   Admins MUST be able to edit or remove arbitrary projects
+   (e.g., to deal with spam and false claims).
 2. **Meet its own criteria.**
    This implies that it MUST be open source software
    (OSS).  We release the source code
@@ -49,6 +52,7 @@ The BadgeApp web application MUST:
    Support users of relatively-modern widely used web browsers, including
    Chrome, Firefox, Safari, and Internet Explorer version 10 and up.
    We expect Internet Explorer pre-10 users will use a different browser.
+   We expect to drop support for Internet Explorer in the future.
 5. **NOT require JavaScript to be enabled.**
    JavaScript MUST NOT be required on the user web browser for basic
    functions, since some security-conscious people disable JavaScript.
@@ -63,7 +67,7 @@ The BadgeApp web application MUST:
    This implies that it MUST have a responsive design.
    We expect users will *edit* information primarily on larger screens,
    but they need to be *able* to edit on small screens.
-7. **NOT require use of a particular hosting environment or VCS.**
+7. **NOT require projects use a particular hosting environment or VCS.**
    Here "VCS" means "version control system" (such as git).
    In particular, the system MUST NOT require that
    projects or users use either GitHub or git.

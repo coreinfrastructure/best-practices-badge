@@ -53,6 +53,19 @@ class ChiefTest < ActiveSupport::TestCase
   end
   # rubocop:enable Metrics/BlockLength
 
+  # Create special exception that happens nowhere else.  That way if
+  # a *different* exception happens we don't accidentally pass the test.
+  class WeirdException1 < StandardError
+  end
+
+  # Mock a detective who always fails
+  class BadRepoFilesExamineDetective1 < RepoFilesExamineDetective
+    def analyze(_, _)
+      raise WeirdException1,
+            'Exception of BadRepoFilesExamineDetective', caller
+    end
+  end
+
   test 'Fatal exceptions in a Detective will not crash production system' do
     old_environment = ENV['RAILS_ENV']
     # TEMPORARILY make this a 'production' environment (it isn't really)
@@ -60,18 +73,7 @@ class ChiefTest < ActiveSupport::TestCase
 
     new_chief = Chief.new(@sample_project, Octokit::Client.new)
 
-    # Create special exception that happens nowhere else.  That way if
-    # a *different* exception happens we don't accidentally pass the test.
-    class WeirdException < StandardError
-    end
-    # Mock a detective who always fails
-    class BadRepoFilesExamineDetective < RepoFilesExamineDetective
-      def analyze(_, _)
-        raise WeirdException,
-              'Exception of BadRepoFilesExamineDetective', caller
-      end
-    end
-    detective = BadRepoFilesExamineDetective.new
+    detective = BadRepoFilesExamineDetective1.new
 
     VCR.use_cassette('github') do
       my_results = new_chief.propose_one_change(detective, {})
@@ -87,6 +89,19 @@ class ChiefTest < ActiveSupport::TestCase
       # with Lint/ParenthesesAsGroupedExpression.  So, do this instead.
       empty_hash = {}
       assert_equal empty_hash, my_results
+    end
+  end
+
+  # Create special exception that happens nowhere else.  That way if
+  # a *different* exception happens we don't accidentally pass the test.
+  class WeirdException2 < StandardError
+  end
+
+  # Mock a detective who always fails
+  class BadRepoFilesExamineDetective2 < RepoFilesExamineDetective
+    def analyze(_, _)
+      raise WeirdException2,
+            'Exception of BadRepoFilesExamineDetective2', caller
     end
   end
 
@@ -106,21 +121,10 @@ class ChiefTest < ActiveSupport::TestCase
 
     new_chief = Chief.new(@sample_project, Octokit::Client.new)
 
-    # Create special exception that happens nowhere else.  That way if
-    # a *different* exception happens we don't accidentally pass the test.
-    class WeirdException < StandardError
-    end
-    # Mock a detective who always fails
-    class BadRepoFilesExamineDetective < RepoFilesExamineDetective
-      def analyze(_, _)
-        raise WeirdException,
-              'Exception of BadRepoFilesExamineDetective', caller
-      end
-    end
-    detective = BadRepoFilesExamineDetective.new
+    detective = BadRepoFilesExamineDetective2.new
 
     VCR.use_cassette('github') do
-      assert_raises WeirdException do
+      assert_raises WeirdException2 do
         new_chief.propose_one_change(detective, {})
       end
     end

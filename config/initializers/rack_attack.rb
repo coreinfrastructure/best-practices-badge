@@ -69,7 +69,7 @@ class Rack::Attack
   # Path for a badge image. Note that this does NOT vary by locale.
   BADGE_REGEX_PATH = Regexp.compile('^/projects/[1-9][0-9]*/badge$')
 
-  # Throttle all requests other than badge images by IP (default 15/15sec)
+  # Throttle all requests other than badge images by IP (default 31/15sec)
   # Everything other than badge image requests should be made at a reasonable
   # rate slower than badge images, so enforce a slower rate.
   # We define a non-badge requests as anything either requesting JSON or
@@ -79,10 +79,12 @@ class Rack::Attack
   # requested much more often anyway (e.g., ~30 at time via /projects).
   # As noted above, this limit does NOT apply to static files (like images)
   # in production, as they are served separately.
+  # The default is chosen to allow someone to query a single /projects page
+  # of 30 projects along with JSON requests for data about every project.
   unless Rails.env.test?
     throttle(
       'nonbadge_req/ip',
-      limit: (ENV['NONBADGE_RATE_REQ_IP_LIMIT'] || '15').to_i,
+      limit: (ENV['NONBADGE_RATE_REQ_IP_LIMIT'] || '31').to_i,
       period: (ENV['NONBADGE_RATE_REQ_IP_PERIOD'] || '15').to_i
     ) do |req|
       if req.env['HTTP_ACCEPT']&.include?('application/json') ||

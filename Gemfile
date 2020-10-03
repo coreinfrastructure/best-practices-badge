@@ -8,6 +8,19 @@
 source 'https://rubygems.org'
 ruby File.open('.ruby-version', 'rb') { |f| f.read.chomp }
 
+# The action* gems are Rails portions. When you upgrade their versions, be
+# sure to upgrade them in sync, *including* railties.
+# Loading only what we use reduces memory use & attack surface.
+# gem 'actioncable' # Not used. Client/server comm channel.
+gem 'actionmailer', '5.2.4.4' # Rails. Send email.
+gem 'actionpack', '5.2.4.4' # Rails. MVC framework.
+gem 'actionview', '5.2.4.4' # Rails. View.
+gem 'activejob', '5.2.4.4' # Rails. Async jobs.
+gem 'activemodel', '5.2.4.4' # Rails. Model basics.
+gem 'activerecord', '5.2.4.4' # Rails. ORM and query system.
+# gem 'activestorage' # Not used. Attaches cloud files to ActiveRecord.
+gem 'activesupport', '5.2.4.4' # Rails. Underlying library.
+# gem 'activetext' # Not used. Text editor that fails to support markdown.
 gem 'attr_encrypted', '3.1.0' # Encrypt email addresses
 gem 'bcrypt', '3.1.15' # Security - for salted hashed interated passwords
 gem 'blind_index', '0.3.4' # Index encrypted email addresses
@@ -15,6 +28,7 @@ gem 'bootstrap-sass', '3.4.1'
 gem 'bootstrap-social-rails', '4.12.0'
 gem 'bootstrap-will_paginate', '1.0.0'
 gem 'bootstrap_form', '2.7.0'
+gem 'bundler' # Ensure it's available
 gem 'chartkick', '3.4.0' # Chart project_stats
 gem 'fastly-rails', '0.8.0'
 gem 'font-awesome-rails', '4.7.0.5'
@@ -48,12 +62,17 @@ gem 'puma', '4.3.6' # Faster webserver; recommended by Heroku
 gem 'rack-attack', '6.3.1' # Implement rate limiting
 gem 'rack-cors', '1.1.1' # Enable CORS so JavaScript clients can get JSON
 gem 'rack-headers_filter', '0.0.1' # Filter out "dangerous" headers
-gem 'rails', '5.2.4.4' # Our web framework
+# We no longer say: gem 'rails', '5.2.4.4' # Our web framework
+# but instead load only what we use (to reduce memory use and attack surface).
+# We load sprockets-rails, but its version number isn't kept in sync.
+# Note: Update the gem versions of action* and railties in sync.
+gem 'railties', '5.2.4.4' # Rails. Rails core, loads rest of Rails
 gem 'rails-i18n', '5.1.3' # Localizations for Rails built-ins
 gem 'redcarpet', '3.5.0' # Process markdown in form textareas (justifications)
 gem 'sass-rails', '5.1.0', require: false # For .scss files (CSS extension)
 gem 'scout_apm', '2.6.9' # Monitor for memory leaks
 gem 'secure_headers', '6.3.1' # Add hardening measures to HTTP headers
+gem 'sprockets-rails', '3.2.2' # Rails. Asset precompilation
 gem 'uglifier', '4.2.0', require: false # Minify JavaScript
 gem 'will-paginate-i18n', '0.1.15' # Provide will-paginate translations
 gem 'will_paginate', '3.3.0' # Paginate results (next/previous)
@@ -80,6 +99,7 @@ group :development, :test do
   gem 'rubocop-rails', '2.8.0', require: false # Rails-specific cops
   gem 'ruby-graphviz', '1.2.5' # This is used for bundle viz
   gem 'spring', '2.1.1' # Preloads app so console, rake, and tests run faster
+  # Do NOT upgrade to vcr 6.*, as that is not OSS:
   gem 'vcr', '5.0.0' # Record network responses for later test reuse
   gem 'yaml-lint', '0.0.10' # Check YAML file syntax
 end

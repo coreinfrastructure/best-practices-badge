@@ -84,6 +84,9 @@ Disallow: /*?*sort_direction=
 # This rule covers q=, pq=, lteq=, and gteq=:
 Disallow: /*?*q=
 #
+# Don't crawl JavaScript pagy pseudo-pages (real pages are fine to crawl)
+Disallow: *__pagy_page__
+#
 # Don't crawl "edit" pages. They require login, so attempting to crawl them
 # wastes everyone's time.  They should all end in "/edit", but
 # sometimes they end in "edit" instead - disallow them either way.

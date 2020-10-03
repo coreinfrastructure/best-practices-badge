@@ -669,15 +669,18 @@ class ProjectsController < ApplicationController
 
   # Subset to only the rows and fields we need
   def select_data_subset
-    # We want to know the *total* count, even if we're paging,
-    # so retrive this information separately
-    @count = @projects.count
     # If we're supplying html (common case), select only needed fields
     format = request&.format&.symbol
     if !format || format == :html
       @projects = @projects.select(HTML_INDEX_FIELDS)
     end
-    @projects = @projects.includes(:user).paginate(page: params[:page])
+    @pagy, @projects = pagy(@projects.includes(:user))
+    # We want to know the *total* count, even if we're paging.
+    # Pagy has to figure that out anyway, so instead of doing this:
+    # # @count = @projects.count
+    # we will extract it from pagy.
+    @count = @pagy.count
+    @pagy_locale = I18n.locale.to_s # Pagy requires a string version
   end
   # rubocop:enable Metrics/MethodLength
   # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity

@@ -5,4 +5,5 @@
 # SPDX-License-Identifier: MIT
 
 module ApplicationHelper
+  include Pagy::Frontend
 end

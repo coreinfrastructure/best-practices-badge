@@ -5,8 +5,10 @@
 BadgeApp is a relatively simple web application, and its
 external application programming interface (API) is simple too.
 The BadgeApp API is a simple RESTful API that follows
-Ruby on Rails conventions.
+Ruby on Rails REST conventions.
+
 We *want* people to use our data; please do so!
+However, please don't overwhelm us.
 
 This document provides a quickstart,
 legal information (the data is released under at least the
@@ -32,8 +34,19 @@ Note that you can ask for a particular result data format (where
 supported) by adding a period and its format (e.g., ".json", ".csv",
 and ".svg") to the URL before the parameters (if any).
 When using "." + format, the format name must be all lowercase.
-You can also request a data format by including an "Accept" statement
-in the requesting HTTP header.
+
+WARNING: Do *not* use the HTTP header "Accept" to select a format;
+doing that is *deprecated*. Instead, please use the URL itself to request
+the format (e.g., use a URL with ".json" if you want JSON format).
+We currently support using the HTTP header Accept (such as "Accept:
+application/json") to select a format in several cases.
+However, the problem is that this
+interferes with caching. Caches normally just use the URL to determine
+what to cache, and caches work much less well if they have to use other
+parameters to examine the cache. There are also various problems in practice.
+The "Accept" HTTP header is ignored in badge requests of the form
+`/projects/:id/badge(.:format)` , and we expect that to be eventually
+true for all other resources as well.
 
 A GET just retrieves information, and since most information is public,
 in most cases you don't need to log in for a GET.
@@ -43,7 +56,8 @@ Other operations, like POST or DELETE, require logging in first
 From here on we'll omit the scheme (https) and hostname, and
 we'll indicate variables by beginning their name with ":" (colon).
 So the URL above is an example of this pattern, which retrieves
-information about project :id in a given :format (HTML by default):
+information about project :id in a given :format (an empty format
+specifier returns HTML):
 
 ```
 GET /projects/:id(.:format)
@@ -74,8 +88,8 @@ might request.
 
 *   <tt>GET /(:locale/)projects/:id(/:level)(.:format)</tt>
 
-    Request data for project :id in :format (default HTML,
-    JSON also supported).
+    Request data for project :id in :format. An empty format suffix
+    returns HTML, and the ".json" format suffix returns JSON.
     External interfaces should normally request format "json".
     If "level" is given (0, 1, or 2), that level is shown
     (level is ignored if json format is requested, because we just
@@ -83,13 +97,18 @@ might request.
 
 *   <tt>GET /(:locale/)projects/:id/badge(.:format)</tt>
 
-    Request the badge display for project :id in :format (default SVG;
-    JSON is also supported).  If you just want to the badge status
-    of a project, retrieve this as JSON and look at badge_level.
-    The SVG badges are specially and rapidly served
-    by the Content Delivery Network (CDN) that we use,
-    so feel free to using "img src" to embed them, since they
-    will be returned especially rapidly.
+    Request the badge display for project :id in :format.  An empty format
+    suffix returns SVG, and the ".json" format suffix returns JSON.
+    If you just want to the badge status
+    of a project, retrieve this as JSON and look at the key badge_level.
+
+    WARNING! Do *not* use the "Accept:" HTTP header to select JSON format,
+    as that does not work; use the URL ".json" suffix instead for JSON!
+
+    The SVG and JSON badges are specially and rapidly served
+    by the Content Delivery Network (CDN) that we use.
+    For example, so feel free to using "img src" to embed the SVG
+    badges, since they will be returned especially rapidly.
 
     For example, you can embed the badge status of project NNN
     in an HTML document with:
@@ -107,7 +126,8 @@ might request.
 
     Perform a query on the projects to return a list
     of the matching projects, up to the maximum number allowed in a page.
-    The format is html by default; json and csv are also supported.
+    An empty format suffix returns HTML, the ".json" format suffix returns
+    JSON, and the ".csv" format suffix returns CSV format.
     See below for more about the query.
 
 *   `GET /en/projects(.:format)?as=badge&url=https%3A%2F%2Fgithub.com%2FORG%2FPROJECT`
@@ -116,21 +136,24 @@ might request.
     either the repository URL or the home page URL) and redirect to the
     *single* badge display given that query. This returns status 404
     (not found) if there is no match, and status 409 (conflict) if there
-    is more than one match. JSON is supported, default return is SVG if found.
+    is more than one match. The URL can be any URL (it doesn't need to be
+    GitHub, that is just an example to show how to do the URL encoding).
     NOTE: there is no "/" after the word `projects`!
 
     The `as=badge` option is intended to make it easy to create dashboards
     (at a cost of some performance). If you only know the repository or
     home page URL of a project, and want to display its badge, this API
     entry is designed for you.
+    An empty format suffix returns SVG, and the ".json" format suffix
+    returns JSON.
 
     There's a performance penalty for using this interface. This interface
-    requires making a query each time to the BadgeApp, which then redirects
+    makes a query each time to the BadgeApp, which then redirects
     the requestor to the actual badge URL (the latter goes through a CDN
     and is thus much faster). You can avoid making the performance penalty
     worse if you follow these rules (if you don't, your users will endure
     additional unnecessary redirects as the system tries to fix the query):
-    - Use the conventional order, `as=badge` before `url=`
+    - Use the conventional alphabetic order, `as=badge` before `url=`
     - Use URL encoding, especially in the url. For example, use %3A for ":"
       and %2F for "/". In many situations you *must* do this.
     - Use the English locale ('/en/'), since the locale isn't relevant
@@ -268,9 +291,7 @@ We can't anticipate all possible uses, and we're trying to keep the
 software relatively small & focused.
 
 You can download the project data in JSON and CSV format using typical
-Rails REST conventions.
-Just add ".json" or ".csv" to the URL (or include an Accept statement with
-the MIME type, such as "Accept: application/json", in the HTTP header).
+Rails REST conventions. Just add ".json" or ".csv" to the URL.
 You can even do this on a search if we already support the search (e.g.,
 by name).  Similarly, you can download user data in JSON format using
 ".json" at the end of the URL.

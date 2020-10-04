@@ -43,6 +43,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_includes @response.body, 'Badge status'
     assert_not_includes @response.body, 'target=[^ >]+>'
+    assert_equal 'Accept-Encoding, Origin', @response.headers['Vary']
   end
 
   test 'new but not logged in' do
@@ -158,6 +159,22 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
       I18n.t('criteria.0.version_semver.description')
     )
     assert_not_includes @response.body, 'target=[^ >]+>'
+    assert_equal 'Accept-Encoding, Origin', @response.headers['Vary']
+  end
+
+  # DEPRECATED CAPABILITY. We eventually want to require people to use
+  # "/en/projects/:id.json" if they want JSON. However, as long as this
+  # capability exists, we should test that it works. We also want to test
+  # that it has STOPPED working once we've removed that functionality.
+  # We have documented this deprecation in doc/api.md.
+  test 'should project JSON data if HTTP header Accept: application/json ' do
+    get "/en/projects/#{@project.id}",
+        headers: { 'Accept': 'application/json' }
+    assert_response :success
+    # The JSON looks like {...} and has "id", while the HTML does not.
+    assert_equal '{', response.body[0]
+    assert_equal '}', response.body[-1]
+    assert_includes response.body, '"id"'
   end
 
   test 'should show project with criteria_level=1' do
@@ -167,6 +184,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_select(+'a[href=?]', 'https://www.nasa.gov')
     assert_select(+'a[href=?]', 'https://www.nasa.gov/pathfinder')
     only_correct_criteria_selectable('1')
+    assert_equal 'Accept-Encoding, Origin', @response.headers['Vary']
   end
 
   test 'should show project with criteria_level=2' do
@@ -515,6 +533,10 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
         params: { format: 'svg' }
     assert_response :success
     assert_equal contents('badge-passing.svg'), @response.body
+    # Note: Since "Accept" is not included, people MUST use the ".json"
+    # suffix to requst the data in JSON format
+    # (and NOT use the HTTP Accept header).
+    assert_equal 'Accept-Encoding, Origin', @response.headers['Vary']
   end
 
   test 'A perfect silver project should have the silver badge' do
@@ -532,6 +554,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     json_data = JSON.parse(@response.body)
     assert_equal 'silver', json_data['badge_level']
     assert_equal @perfect_silver_project.id, json_data['id'].to_i
+    assert_equal 'Accept-Encoding, Origin', @response.headers['Vary']
   end
 
   test 'A perfect project should have the gold badge' do

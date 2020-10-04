@@ -93,8 +93,9 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
     origins '*'
     # "credentials" is false (not sent) by default.
 
-    # 'Vary' is does NOT include Origin - same result must always occur
-    # We must add these rules first so they have higher priority.
+    # 'Vary' does NOT include the Origin in undifferentiated resources.
+    # In these cases the same result must always occur.
+    # These undifferentiated rules must be first so they have higher priority.
     CORS_UNDIFFERENTIATED_RESOURCE_PATTERNS.each do |resource_pattern|
       resource resource_pattern, headers: :any, methods: CORS_ALLOWED_METHODS,
                vary: CORS_UNDIFFERENTIATED_VARY

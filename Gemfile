@@ -6,7 +6,10 @@
 # different version numbers in different environments).
 
 source 'https://rubygems.org'
-ruby File.open('.ruby-version', 'rb') { |f| f.read.chomp }
+
+# Use current ruby version (as stated in .ruby-version file)
+# https://stackoverflow.com/questions/32934651/is-it-a-bad-practice-to-list-ruby-version-in-both-gemfile-and-ruby-version-dotf
+ruby File.read('.ruby-version').strip
 
 gem 'attr_encrypted', '3.1.0' # Encrypt email addresses
 gem 'bcrypt', '3.1.15' # Security - for salted hashed interated passwords

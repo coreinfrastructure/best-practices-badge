@@ -117,6 +117,7 @@ jobs:
       - run:
           name: Deploy Master to Heroku
           command: |
+            heroku git:remote
             git push heroku $CIRCLE_SHA1:refs/heads/master
       - run:
           name: Migrate DB for Master

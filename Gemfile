@@ -13,7 +13,6 @@ gem 'bcrypt', '3.1.15' # Security - for salted hashed interated passwords
 gem 'blind_index', '0.3.4' # Index encrypted email addresses
 gem 'bootstrap-sass', '3.4.1'
 gem 'bootstrap-social-rails', '4.12.0'
-gem 'bootstrap-will_paginate', '1.0.0'
 gem 'bootstrap_form', '2.7.0'
 gem 'chartkick', '3.4.0' # Chart project_stats
 gem 'fastly-rails', '0.8.0'
@@ -40,6 +39,7 @@ gem 'omniauth-github', '1.4.0' # Authentication to GitHub (get project info)
 gem 'omniauth-rails_csrf_protection',
     git: 'https://github.com/cookpad/omniauth-rails_csrf_protection.git',
     ref: 'b33ff2e57f7c0530da76da6b4b358218f1e7f230'
+gem 'pagy', '3.8.3' # Paginate some views
 gem 'paleta', '0.3.0' # Color manipulation, used for badges
 gem 'paper_trail', '10.3.1' # Record previous versions of project data
 gem 'pg', '1.2.3' # PostgreSQL database, used for data storage
@@ -55,8 +55,6 @@ gem 'sass-rails', '5.1.0', require: false # For .scss files (CSS extension)
 gem 'scout_apm', '2.6.9' # Monitor for memory leaks
 gem 'secure_headers', '6.3.1' # Add hardening measures to HTTP headers
 gem 'uglifier', '4.2.0', require: false # Minify JavaScript
-gem 'will-paginate-i18n', '0.1.15' # Provide will-paginate translations
-gem 'will_paginate', '3.3.0' # Paginate results (next/previous)
 
 group :development, :test do
   gem 'awesome_print', '1.8.0' # Pretty print Ruby objects

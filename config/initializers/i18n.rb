@@ -22,7 +22,7 @@
 # user accounts in that locale. See: app/views/static_pages/robots.text.erb
 #
 # The order here is English (the source language in this case), followed
-# by the locales in English name order.  That's an arbitrary order.
+# by the locales in English name order. Pagy initialization requires en first.
 # This has the useful side-effect that Chinese is listed early, next to
 # a Romance language, so it will be *immediately* obvious to users when
 # they see the list that it is for locale selection.

@@ -21,17 +21,21 @@ class UsersController < ApplicationController
   end
 
   def index
-    @users = User.all.paginate(page: params[:page])
+    @pagy, @users = pagy(User.all)
+    @pagy_locale = I18n.locale.to_s # Pagy requires a string version
   end
 
   # rubocop: disable Metrics/MethodLength, Metrics/AbcSize
   def show
     @user = User.find(params[:id])
     respond_to :html, :json
+    # Paginate the list of user-owned projects.
     # Use "select_needed" to minimize the fields we extract
-    @projects = select_needed(@user.projects).paginate(page: params[:page])
-    # Don't bother paginating, we typically don't have that many and the
-    # interface would be confusing.
+    @pagy, @projects = pagy(select_needed(@user.projects))
+    @pagy_locale = I18n.locale.to_s # Pagy requires a string version
+
+    # Don't bother paginating the projects wtih additional rights,
+    # we practically never have that many and the interface would be confusing.
     @projects_additional_rights =
       select_needed(Project.includes(:user).joins(:additional_rights)
         .where('additional_rights.user_id = ?', @user.id))

@@ -107,16 +107,17 @@ jobs:
   deploy-master:
     docker:
       - image: buildpack-deps:bionic
+    environment:
+      HEROKU_APP: "master-bestpractices"
     steps:
       - checkout
       - run:
-          name: Deploy Master to Heroku
-          command: |
-            echo 'heroku.com ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAu8erSx6jh+8ztsfHwkNeFr/SZaSOcvoa8AyMpaerGIPZDB2TKNgNkMSYTLYGDK2ivsqXopo2W7dpQRBIVF80q9mNXy5tbt1WE04gbOBB26Wn2hF4bk3Tu+BNMFbvMjPbkVlC2hcFuQJdH4T2i/dtauyTpJbD/6ExHR9XYVhdhdMs0JsjP/Q5FNoWh2ff9YbZVpDQSTPvusUp4liLjPfa/i0t+2LpNCeWy8Y+V9gUlDWiyYwrfMVI0UwNCZZKHs1Unpc11/4HLitQRtvuk0Ot5qwwBxbmtvCDKZvj1aFBid71/mYdGRPYZMIxq1zgP1acePC1zfTG/lvuQ7d0Pe0kaw==' >> ~/.ssh/known_hosts
-            git push git@heroku.com:master-bestpractices.git $CIRCLE_SHA1:refs/heads/master
-      - run:
           name: Setup Heroku
           command: bash .circleci/setup-heroku.sh
+      - run:
+          name: Deploy Master to Heroku
+          command: |
+            git push heroku $CIRCLE_SHA1:refs/heads/master
       - run:
           name: Migrate DB for Master
           command: |

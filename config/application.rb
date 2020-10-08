@@ -6,6 +6,9 @@
 
 require_relative 'boot'
 
+# This loads all Rails libraries that are *present*. However,
+# note that our Gemfile only includes the Rails gems we actually use
+# (to reduce memory use and attack surface).
 require 'rails/all'
 
 # Require the gems listed in Gemfile, including any gems

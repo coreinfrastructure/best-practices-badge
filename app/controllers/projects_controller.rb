@@ -176,7 +176,7 @@ class ProjectsController < ApplicationController
     respond_to do |format|
       format.svg do
         set_surrogate_key_header @project.record_key + '/badge'
-        send_data Badge[value_for_badge],
+        send_data Badge[@project.badge_value],
                   type: 'image/svg+xml', disposition: 'inline'
       end
       format.json do
@@ -788,15 +788,6 @@ class ProjectsController < ApplicationController
     return url if url.nil?
 
     url.gsub(%r{\/+\z}, '')
-  end
-
-  # This needs to be modified each time you add a new badge level
-  # This method gives the percentage value to be passed to the Badge model
-  # when getting the svg badge for a project
-  def value_for_badge
-    return @project.badge_percentage_0 if @project.badge_level == 'in_progress'
-
-    @project.badge_level
   end
 end
 # rubocop:enable Metrics/ClassLength

@@ -4,11 +4,16 @@
 # CII Best Practices badge contributors
 # SPDX-License-Identifier: MIT
 
+require 'set'
+
 class Badge
   ACCEPTABLE_PERCENTAGES = (0..99).to_a.freeze
   ACCEPTABLE_LEVELS = %w[passing silver gold].freeze
 
-  ACCEPTABLE_INPUTS = (ACCEPTABLE_PERCENTAGES + ACCEPTABLE_LEVELS).freeze
+  # Make this a set so we can quickly determine if an input is "valid?"
+  ACCEPTABLE_INPUTS = (
+    ACCEPTABLE_PERCENTAGES + ACCEPTABLE_LEVELS
+  ).to_set.freeze
 
   WHITE_TEXT_SPECS = {
     color: 'fill="#000" ', shadow: 'fill="#fefefe" fill-opacity=".7"'
@@ -49,8 +54,10 @@ class Badge
     # Class methods
     include Enumerable
 
+    # Create Badge static values as we need them.
     def [](level)
-      valid? level
+      raise ArgumentError unless valid?(level)
+
       @badges ||= {}
       @badges[level] ||= new(level)
     end
@@ -71,13 +78,14 @@ class Badge
     end
 
     def valid?(level)
-      raise ArgumentError unless level.in? ACCEPTABLE_INPUTS
+      ACCEPTABLE_INPUTS.include?(level)
     end
   end
 
   # Instance methods
   def initialize(level)
-    self.class.valid? level
+    raise ArgumentError unless self.class.valid?(level)
+
     @svg = create_svg(level)
   end
 

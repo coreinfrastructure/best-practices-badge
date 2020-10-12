@@ -43,6 +43,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_includes @response.body, 'Badge status'
     assert_not_includes @response.body, 'target=[^ >]+>'
+    assert_equal 'Accept-Encoding, Origin', @response.headers['Vary']
   end
 
   test 'new but not logged in' do
@@ -158,6 +159,22 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
       I18n.t('criteria.0.version_semver.description')
     )
     assert_not_includes @response.body, 'target=[^ >]+>'
+    assert_equal 'Accept-Encoding, Origin', @response.headers['Vary']
+  end
+
+  # DEPRECATED CAPABILITY. We eventually want to require people to use
+  # "/en/projects/:id.json" if they want JSON. However, as long as this
+  # capability exists, we should test that it works. We also want to test
+  # that it has STOPPED working once we've removed that functionality.
+  # We have documented this deprecation in doc/api.md.
+  test 'should project JSON data if HTTP header Accept: application/json ' do
+    get "/en/projects/#{@project.id}",
+        headers: { 'Accept': 'application/json' }
+    assert_response :success
+    # The JSON looks like {...} and has "id", while the HTML does not.
+    assert_equal '{', response.body[0]
+    assert_equal '}', response.body[-1]
+    assert_includes response.body, '"id"'
   end
 
   test 'should show project with criteria_level=1' do
@@ -167,6 +184,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_select(+'a[href=?]', 'https://www.nasa.gov')
     assert_select(+'a[href=?]', 'https://www.nasa.gov/pathfinder')
     only_correct_criteria_selectable('1')
+    assert_equal 'Accept-Encoding, Origin', @response.headers['Vary']
   end
 
   test 'should show project with criteria_level=2' do
@@ -509,12 +527,57 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_equal new_name, @project.name
   end
 
+  test 'Cannot evade /badge match with /badge/..' do
+    get "/projects/#{@perfect_passing_project.id}/badge/..",
+        params: { format: 'svg' }
+    assert_response :not_found
+    assert_equal 'Accept-Encoding, Origin', @response.headers['Vary']
+    assert_nil @response.headers['Access-Control-Allow-Origin']
+  end
+
+  test 'Cannot evade /badge match with /projects/NUM/../badge' do
+    get "/projects/#{@perfect_passing_project.id}/../badge",
+        params: { format: 'svg' }
+    assert_response :not_found
+    assert_equal 'Accept-Encoding', @response.headers['Vary']
+    assert_nil @response.headers['Access-Control-Allow-Origin']
+  end
+
+  test 'CORS Cannot evade /badge match with /badge.json/..' do
+    get "/projects/#{@perfect_passing_project.id}/badge.json/..",
+        headers: { 'Origin': 'example.com' }
+    assert_response :not_found
+    assert_equal 'Accept-Encoding, Origin', @response.headers['Vary']
+    assert_equal '*', @response.headers['Access-Control-Allow-Origin']
+  end
+
+  test 'Cannot evade /badge match with /projects/NUM/../badge.json' do
+    get "/projects/#{@perfect_passing_project.id}/../badge.json",
+        headers: { 'Origin': 'example.com' }
+    assert_response :not_found
+    assert_equal 'Accept-Encoding', @response.headers['Vary']
+    assert_equal '*', @response.headers['Access-Control-Allow-Origin']
+  end
+
   test 'A perfect passing project should have the passing badge' do
     # NOTICE!! Badge URLs do *NOT* have a locale prefix
     get "/projects/#{@perfect_passing_project.id}/badge",
         params: { format: 'svg' }
     assert_response :success
     assert_equal contents('badge-passing.svg'), @response.body
+    # Note: Requestors MUST use the ".json"
+    # suffix to requst the data in JSON format
+    # (and NOT use the HTTP Accept header to try to select the output format).
+    # Therefore we don't need to include "Accept" as part of "Vary".
+    assert_equal 'Accept-Encoding', @response.headers['Vary']
+    # No origin stated, so shouldn't see one as a response.
+    assert_nil @response.headers['Access-Control-Allow-Origin']
+  end
+
+  test 'A perfect passing project requested with CORS' do
+    get "/en/projects/#{@project.id}/badge.json",
+        headers: { 'Origin': 'example.com' }
+    assert_equal 'Accept-Encoding, Origin', @response.headers['Vary']
   end
 
   test 'A perfect silver project should have the silver badge' do
@@ -532,6 +595,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     json_data = JSON.parse(@response.body)
     assert_equal 'silver', json_data['badge_level']
     assert_equal @perfect_silver_project.id, json_data['id'].to_i
+    assert_equal 'Accept-Encoding', @response.headers['Vary']
   end
 
   test 'A perfect project should have the gold badge' do

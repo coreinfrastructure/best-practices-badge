@@ -303,11 +303,14 @@ class Project < ApplicationRecord
 
   # Return the badge value: 0..99 (the percent) if in progress,
   # else it returns 'passing', 'silver', or 'gold'.
-  # This needs to be modified each time you add a new badge level
+  # This presumes that tiered_percentage has already been calculated.
   def badge_value
-    return badge_percentage_0 if badge_level == 'in_progress'
-
-    badge_level
+    if tiered_percentage < 100
+      tiered_percentage
+    else
+      # This is *integer* division, so it truncates.
+      BADGE_LEVELS[tiered_percentage / 100]
+    end
   end
 
   # Flash a message to update static_analysis if the user is updating

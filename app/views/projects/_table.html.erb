@@ -46,10 +46,11 @@
         <td><span data-toggle="tooltip" data-placement="bottom" title="<%=
                     tiered_percent_as_string(project.tiered_percentage)
              %>"><%= project.tiered_percentage %>%</span></td>
-        <td><%= link_to "<img src='/projects/#{project.id}/badge'
+        <td><!-- DO NOT USE /badge_static in README files! --><%=
+                link_to("<img src='/badge_static/#{ project.badge_value }'
                   alt='#{t('.badge_level', id: project.id,
                             percent: project.tiered_percentage)}'>".html_safe,
-                  project %></td>
+                  project) %></td>
       </tr>
     <% end %>
   </tbody>

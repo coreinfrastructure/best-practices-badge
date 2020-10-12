@@ -26,8 +26,8 @@ Rails.application.routes.draw do
   get '/robots.txt' => 'static_pages#robots',
       defaults: { format: 'text' }, as: :robots
 
-  # The /projects/NUMBER/badge image route needs speed and never depends
-  # on the locale. Perhaps most importantly, badge images need to have
+  # The /projects/NUMBER/badge image route needs speed and never uses a
+  # locale. Perhaps most importantly, badge images need to have
   # a single canonical name so that the CDN caches will work correctly.
   # If we use a single canonical name for a badge image, we can then
   # change or invalidate a single CDN cache to update a badge image.
@@ -36,6 +36,12 @@ Rails.application.routes.draw do
   # Therefore, instead of redirecting the badge image to a locale if
   # one is not listed, we do *NOT* support locale URLs in this case.
   get '/projects/:id/badge' => 'projects#badge',
+      defaults: { format: 'svg' }
+
+  # The /badge_static/:value route needs speed and never uses a locale.
+  # Beware: This route produces a result unconnected to a project's status.
+  # Do NOT use this route on a project's README.md page!
+  get '/badge_static/:value' => 'badge_static#show',
       defaults: { format: 'svg' }
 
   # Weird special case: for David A. Wheeler to get log issues from Google,

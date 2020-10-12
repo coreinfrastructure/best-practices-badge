@@ -301,6 +301,15 @@ class Project < ApplicationRecord
     }
   end
 
+  # Return the badge value: 0..99 (the percent) if in progress,
+  # else it returns 'passing', 'silver', or 'gold'.
+  # This needs to be modified each time you add a new badge level
+  def badge_value
+    return badge_percentage_0 if badge_level == 'in_progress'
+
+    badge_level
+  end
+
   # Flash a message to update static_analysis if the user is updating
   # for the first time since we added met_justification_required that
   # criterion

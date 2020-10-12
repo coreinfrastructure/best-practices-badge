@@ -107,6 +107,8 @@ jobs:
   deploy-master:
     docker:
       - image: buildpack-deps:bionic
+    environment:
+      HEROKU_APP: "master-bestpractices"
     steps:
       - checkout
       - run:

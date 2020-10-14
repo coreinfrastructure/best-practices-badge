@@ -153,7 +153,8 @@ class ProjectsController < ApplicationController
 
   # GET /projects/1.json
   def show_json
-    set_surrogate_key_header @project.record_key + '/json'
+    # Tell CDN the surrogate key so we can quickly erase it later
+    set_surrogate_key_header @project.record_key
   end
 
   # GET /projects/:id/delete_form(.:format)
@@ -174,8 +175,8 @@ class ProjectsController < ApplicationController
     # will eventually lead (correctly) to a failure report.
     @project = Project.select(BADGE_PROJECT_FIELDS).find(params[:id])
 
-    # Tell CDN the surrogate key so we can quickly erase them later
-    set_surrogate_key_header @project.record_key + '/badge'
+    # Tell CDN the surrogate key so we can quickly erase it later
+    set_surrogate_key_header @project.record_key
 
     respond_to do |format|
       format.svg do
@@ -581,14 +582,12 @@ class ProjectsController < ApplicationController
     !(value =~ /\A[1-9][0-9]{0,15}( *, *[1-9][0-9]{0,15}){0,20}\z/).nil?
   end
 
-  # Purge the badge from the CDN (if any)
+  # Purge data about this project from the CDN (if the CDN has any)
   def purge_cdn_project
-    cdn_badge_key = @project.record_key + '/badge'
-    cdn_json_key = @project.record_key + '/json'
+    cdn_badge_key = @project.record_key
     # If we can't authenticate to the CDN, complain but don't crash.
     begin
       FastlyRails.purge_by_key cdn_json_key
-      FastlyRails.purge_by_key cdn_badge_key
     rescue StandardError => e
       Rails.logger.error "FAILED TO PURGE #{cdn_badge_key} , #{e.class}: #{e}"
     end

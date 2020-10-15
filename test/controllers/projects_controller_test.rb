@@ -159,6 +159,17 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
       I18n.t('criteria.0.version_semver.description')
     )
     assert_not_includes @response.body, 'target=[^ >]+>'
+    assert_includes @response.body, "<img src='/badge_static/0'"
+    assert_equal 'Accept-Encoding, Origin', @response.headers['Vary']
+  end
+
+  test 'should show passing project' do
+    get "/en/projects/#{@perfect_passing_project.id}"
+    assert_response :success
+    assert_includes @response.body,
+                    'What is the human-readable name of the project'
+    assert_select(+'a[href=?]', 'https://www.example.org')
+    assert_includes @response.body, "<img src='/badge_static/passing'"
     assert_equal 'Accept-Encoding, Origin', @response.headers['Vary']
   end
 

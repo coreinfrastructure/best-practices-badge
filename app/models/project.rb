@@ -227,12 +227,13 @@ class Project < ApplicationRecord
     list.sort.to_s # Use list.sort.to_s[1..-2] to remove surrounding [ and ]
   end
 
-  # Return string representing badge level; assumes badge_percentage correct.
+  # Return string representing badge level; assumes tiered_percentage correct.
+  # This returns 'in_progress' if we aren't passing yet.
+  # See method badge_level if you want 'in_progress' for < 100.
+  # See method badge_value if you want the specific percentage for in_progress.
   def badge_level
-    BADGE_LEVELS.each_with_index do |level, index|
-      return level if index == Criteria.count
-      return level if self["badge_percentage_#{index}".to_sym] < 100
-    end
+    # This is *integer* division, so it truncates.
+    BADGE_LEVELS[tiered_percentage / 100]
   end
 
   def calculate_badge_percentage(level)
@@ -304,6 +305,7 @@ class Project < ApplicationRecord
   # Return the badge value: 0..99 (the percent) if in progress,
   # else it returns 'passing', 'silver', or 'gold'.
   # This presumes that tiered_percentage has already been calculated.
+  # See method badge_level if you want 'in_progress' for < 100.
   def badge_value
     if tiered_percentage < 100
       tiered_percentage

@@ -270,8 +270,10 @@ class ProjectsController < ApplicationController
       end
 
       respond_to do |format|
-        # Was project.update(project_params)
         update_additional_rights
+        # The project model's "save" method updates the various
+        # percentage values (via a `before_save`), so we can depend on them
+        # after saving.
         if @project.save
           successful_update(format, old_badge_level, @criteria_level)
           # Also send CDN purge last, to increase likelihood of being purged

@@ -31,8 +31,9 @@ jobs:
         run: |
           echo Add other actions to build,
           echo test, and deploy your project.
-       
+
+      # Run Brakeman. See https://github.com/devmasx/brakeman-linter-action
       - name: Brakeman linter
         uses: devmasx/brakeman-linter-action@v1.0.0
-        with:
-          token: '${{ secrets.GITHUB_TOKEN }}'
+        env:
+          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'

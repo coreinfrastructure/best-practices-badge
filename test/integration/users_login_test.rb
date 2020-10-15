@@ -76,6 +76,9 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
   test 'login with remembering' do
     log_in_as(@user, remember_me: '1')
     assert_not_nil cookies['remember_token']
+    # Make sure this cookie is encrypted!
+    assert_equal 22, cookies['remember_token'].length
+    assert_not_includes cookies['remember_token'], 'password'
   end
 
   test 'login without remembering' do

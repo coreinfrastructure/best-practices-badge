@@ -32,8 +32,8 @@
 <% if is_disabled %>
   <% next_level_prefix = project_path %>
   <%= t('projects.form_early.got_badge.description_1') %>
-  <!-- DO NOT USE /badge_static in README files! --><img src='/badge_static/<%=
-  project.badge_value %>'  width='<%=
+  <!-- DO NOT USE /badge_static in README files! --><img src='<%=
+  project.badge_src_url %>' width='<%=
   Badge::BADGE_SPECS[project.badge_level][:width]
   %>' height='20' alt="<%=
   t('projects.form_early.got_badge.badge_alt',

@@ -159,7 +159,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
       I18n.t('criteria.0.version_semver.description')
     )
     assert_not_includes @response.body, 'target=[^ >]+>'
-    assert_includes @response.body, "<img src='/badge_static/0'"
+    assert_includes @response.body, "<img src='/projects/#{@project.id}/badge"
     assert_equal 'Accept-Encoding, Origin', @response.headers['Vary']
   end
 
@@ -386,8 +386,11 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
       }
     }
     assert_redirected_to project_path(assigns(:project))
+    follow_redirect!
     @project.reload
     assert_equal @project.name, new_name
+    # Ensure that replied page uses the correct /badge_static badge image.
+    assert_includes @response.body, '/badge_static/5'
   end
 
   test 'should update project (using put)' do

@@ -47,7 +47,7 @@
                     tiered_percent_as_string(project.tiered_percentage)
              %>"><%= project.tiered_percentage %>%</span></td>
         <td><!-- DO NOT USE /badge_static in README files! --><%=
-                link_to("<img src='/badge_static/#{ project.badge_value }'
+                link_to("<img src='#{ project.badge_src_url }'
                   alt='#{t('.badge_level', id: project.id,
                             percent: project.tiered_percentage)}'>".html_safe,
                   project) %></td>

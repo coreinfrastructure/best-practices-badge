@@ -315,6 +315,25 @@ class Project < ApplicationRecord
     end
   end
 
+  # Return this project's image src URL for its badge image (SVG).
+  # * If the project entry has changed relatively recently,
+  # we give its /badge_static value.  That way, the user sees the
+  # correct result even if the CDN hasn't completed distributing the
+  # new value or a bad key prevents its update.
+  # * If the project entry has NOT changed relatively recently,
+  # we give the /projects/:id/badge value, so that humans who copy the
+  # values without reading directions are more likely to see the URL that
+  # we want them to use in READMEs. We also include a comment in the HTML
+  # view telling people to use the /projects/:id/badge URL, all to encourage
+  # humans to use the correct URL.
+  def badge_src_url
+    if updated_at > 24.hours.ago # Has this entry changed relatively recently?
+      "/badge_static/#{badge_value}"
+    else
+      "/projects/#{id}/badge"
+    end
+  end
+
   # Flash a message to update static_analysis if the user is updating
   # for the first time since we added met_justification_required that
   # criterion

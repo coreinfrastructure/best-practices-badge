@@ -85,6 +85,7 @@ jobs:
     # - run: bundle exec bundle audit check --update
     - run: bundle exec bundle audit check --update --ignore CVE-2015-9284
     - run: bundle exec rake whitespace_check
+    - run: bundle exec rake license_finder_report.html
     - run: script/report_code_statistics
     # Save test results
     - store_test_results:

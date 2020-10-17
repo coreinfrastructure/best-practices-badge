@@ -52,7 +52,7 @@
          user_email = @user.email_if_decryptable
     %>
       | <a href="mailto:<%= CGI::escape(user_email).html_safe %>"><%=
-        t('.send_email_to') + user_email.to_s %></a>
+        t('.send_email_to') %></a>
     <% end %>
     | <%= link_to Icon[:'fa-times-circle'] + t('.delete_link_name'),
                   @user, method: :delete,

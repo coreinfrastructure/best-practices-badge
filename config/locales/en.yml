@@ -294,7 +294,7 @@ en:
       local_account: Custom (local) account
       is_admin: This user is a badge application administrator.
       as_admin: 'as an admin, you may also:'
-      send_email_to: 'Send email to:'
+      send_email_to: 'Send email'
       delete_link_name: Delete user account
       confirm_delete: Are you sure you want to delete this user?
     destroy:

@@ -389,8 +389,9 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     follow_redirect!
     @project.reload
     assert_equal @project.name, new_name
-    # Ensure that replied page uses the correct /badge_static badge image.
-    assert_includes @response.body, '/badge_static/5'
+    # Ensure that replied page uses a /badge_static badge image.
+    # We omit the specific level, since that will change as automation changes.
+    assert_includes @response.body, '/badge_static/'
   end
 
   test 'should update project (using put)' do

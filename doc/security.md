@@ -151,6 +151,14 @@ We conclude with a short discussion of residual risks,
 describe the vulnerability report handling process, and make
 a final appeal to report to us if you find a vulnerability.
 
+In this assurance case we typically point to source code or tests as
+evidence, and not the results of the tests themselves. We do not
+ship to production unless tests pass, so there is usually no reason to
+see the test results unless a test fails.
+That said, the test results for the master branch
+are available if desired at:
+https://app.circleci.com/pipelines/github/coreinfrastructure/best-practices-badge?branch=master
+
 (Note to editors: to edit the figures above, edit the .odg file, then
 export to .png so that it can viewed on GitHub.)
 

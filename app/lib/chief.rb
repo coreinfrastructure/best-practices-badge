@@ -94,10 +94,11 @@ class Chief
   end
 
   def log_detective_failure(source, e, detective, proposal, data)
-    Rails.logger.error(
+    Rails.logger.error do
+      'ERROR:: ' \
       "In method #{source}, exception #{e} on #{detective.class.name}, " \
       "current_proposal= #{proposal}, current_data= #{data}"
-    )
+    end
   end
 
   # Invoke one "Detective", which will

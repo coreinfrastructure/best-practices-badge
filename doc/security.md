@@ -198,7 +198,10 @@ First, the basics.
 We work hard to comply with the
 EU General Data Protection Regulation (GDPR), which has many requirements
 related to privacy.
-We have a separate document that details how we comply with the GDPR.
+We have a separate document that details how we
+implement privacy in the CII Best Practices Badge site and comply with
+the GDPR:
+[Privacy in the CII Best Practices site, focusing on the GDPR](https://docs.google.com/document/d/1qarSkCJacjoMeu1k6p5JQXvPt-0xUqzKy3OW8zmGvpg).
 As discussed later, non-public data is kept confidential
 both at rest and in motion
 (in particular, email addresses are protected).
@@ -497,9 +500,15 @@ Here are the only ways that user email addresses can be revealed
 - The only *normal* way to display user email addresses is to invoke
   a view of a user or a list of users.  However, these invoke
   user views defined in `app/views/users/`, and all of these views only
-  display a user email address if the current user is the user being displayed
+  provide a user email address if the current user is the user
+  being displayed
   or the current user is an administrator.  This is true for views in both
   HTML and JSON formats.
+  In addition, while we directly display the email address when local users
+  are editing it (we must, so that users can change it), when user
+  records are shown (not edited) the email address is only available via
+  a hypertext link, and not directly displayed on the screen, to reduce
+  the risk of revealing an email address while using sharing a screen.
   The following automated tests verify that email addresses
   are not provided without authorization:
     - `should NOT show email address when not logged in`
@@ -2132,7 +2141,7 @@ debugging problems if you weren't expecting that.
 
 Note that `attr_encrypted` depends on the gem `encryptor`.
 Encryptor version 2.0.0 had a
-[major security bug when using AES-*-GCM algorithms](https://github.com/attr-encrypted/encryptor/pull/22).
+[major security bug when using AES-\*-GCM algorithms](https://github.com/attr-encrypted/encryptor/pull/22).
 We do not use that version, but instead use
 a newer version that does not have that vulnerability.
 Some old documentation recommends using

@@ -32,7 +32,12 @@
 <% if is_disabled %>
   <% next_level_prefix = project_path %>
   <%= t('projects.form_early.got_badge.description_1') %>
-  <img src='/projects/<%= project.id %>/badge'  width='<%= Badge::BADGE_SPECS[project.badge_level][:width] %>' height='20' alt="<%= t('projects.form_early.got_badge.badge_alt', id: project.id, level: project.badge_level) %>">
+  <!-- DO NOT USE /badge_static in README files! --><img src='<%=
+  project.badge_src_url %>' width='<%=
+  Badge::BADGE_SPECS[project.badge_level][:width]
+  %>' height='20' alt="<%=
+  t('projects.form_early.got_badge.badge_alt',
+    id: project.id, level: project.badge_level) %>">
   <%= t('projects.form_early.got_badge.description_2') %>
   <%= render(partial: "details", locals: {
          criterion: "got_badge",

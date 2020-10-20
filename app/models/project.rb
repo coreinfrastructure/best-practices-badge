@@ -227,12 +227,13 @@ class Project < ApplicationRecord
     list.sort.to_s # Use list.sort.to_s[1..-2] to remove surrounding [ and ]
   end
 
-  # Return string representing badge level; assumes badge_percentage correct.
+  # Return string representing badge level; assumes tiered_percentage correct.
+  # This returns 'in_progress' if we aren't passing yet.
+  # See method badge_level if you want 'in_progress' for < 100.
+  # See method badge_value if you want the specific percentage for in_progress.
   def badge_level
-    BADGE_LEVELS.each_with_index do |level, index|
-      return level if index == Criteria.count
-      return level if self["badge_percentage_#{index}".to_sym] < 100
-    end
+    # This is *integer* division, so it truncates.
+    BADGE_LEVELS[tiered_percentage / 100]
   end
 
   def calculate_badge_percentage(level)
@@ -303,11 +304,34 @@ class Project < ApplicationRecord
 
   # Return the badge value: 0..99 (the percent) if in progress,
   # else it returns 'passing', 'silver', or 'gold'.
-  # This needs to be modified each time you add a new badge level
+  # This presumes that tiered_percentage has already been calculated.
+  # See method badge_level if you want 'in_progress' for < 100.
   def badge_value
-    return badge_percentage_0 if badge_level == 'in_progress'
+    if tiered_percentage < 100
+      tiered_percentage
+    else
+      # This is *integer* division, so it truncates.
+      BADGE_LEVELS[tiered_percentage / 100]
+    end
+  end
 
-    badge_level
+  # Return this project's image src URL for its badge image (SVG).
+  # * If the project entry has changed relatively recently,
+  # we give its /badge_static value.  That way, the user sees the
+  # correct result even if the CDN hasn't completed distributing the
+  # new value or a bad key prevents its update.
+  # * If the project entry has NOT changed relatively recently,
+  # we give the /projects/:id/badge value, so that humans who copy the
+  # values without reading directions are more likely to see the URL that
+  # we want them to use in READMEs. We also include a comment in the HTML
+  # view telling people to use the /projects/:id/badge URL, all to encourage
+  # humans to use the correct URL.
+  def badge_src_url
+    if updated_at > 24.hours.ago # Has this entry changed relatively recently?
+      "/badge_static/#{badge_value}"
+    else
+      "/projects/#{id}/badge"
+    end
   end
 
   # Flash a message to update static_analysis if the user is updating

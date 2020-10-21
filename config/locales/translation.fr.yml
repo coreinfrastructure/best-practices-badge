@@ -115,7 +115,7 @@ fr:
         d''après GitHub :'
       as_admin: 'en tant qu''administrateur, vous pouvez également
         :'
-      send_email_to: 'Envoyer un email à :'
+      send_email_to: Envoyer un email
       delete_link_name: Supprimer le compte utilisateur
       confirm_delete: Êtes-vous sûr(e) de vouloir supprimer cet
         utilisateur ?

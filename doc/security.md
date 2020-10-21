@@ -464,6 +464,9 @@ The system does not have the unencrypted `remember_token` for any
 given user (only its bcrypted form), so the system cannot later reveal the
 `remember_token` to anyone else.
 
+In file `test/integration/users_login_test.rb` we verify that the
+password is not stored as cleartext in the user cookie.
+
 #### Email addresses
 
 Email addresses are only revealed to the owner of the email address and to
@@ -1572,7 +1575,8 @@ list the additional items added since 2013.
    repositories), instead, various Ruby APIs acquire and process it directly.
 2. Broken Authentication and Session Management.
    Sessions are created and destroyed through a common
-   Rails mechanism, including an encrypted and signed cookie session key.
+   Rails mechanism, including an encrypted and signed cookie authentication
+   value.
 3. Cross-Site Scripting (XSS).
    We use Rails' built-in XSS
    countermeasures, in particular, its "safe" HTML mechanisms such
@@ -1706,10 +1710,10 @@ We take a number of steps to counter misconfiguration.
 We have strived to enable secure defaults from the start.
 We use a number of [external online checkers](#online-checkers)
 to detect common HTTPS misconfiguration problems (see below).
-We use brakeman, which can detect
+We use Brakeman, which can detect
 some misconfigurations in Rails applications.
-Brakeman is invoked by the default 'rake' task,
-and our continuous integration task reruns brakeman.
+We invoke a static analysis tool (Brakeman) as part of
+our continuous integration pipeline.
 
 However, our primary mechanism for countering misconfigurations is by
 identifying and apply ing the most-relevant security guide available.
@@ -1824,7 +1828,7 @@ as of 2015-12-14:
    but this is not depended on).
    Ruby's regular expression (regex) language oddly interprets "^" and "$",
    which can lead to defects (you're supposed to use \A and \Z instead).
-   However, Ruby's format validator and the "brakeman" tool both detect
+   However, Ruby's format validator and the "Brakeman" tool both detect
    this common mistake with regexes, so this should be unlikely.
    Since the project data is public, manipulating the 'id' cannot reveal
    private public data.  We don't consider the list of valid users
@@ -2414,7 +2418,7 @@ and how it helps make the software more secure:
   This is one of many kinds of "static analysis" tools, that is, a tool
   that doesn't run the code (and thus is not limited to examining only the
   cases of specific inputs).
-  We use brakeman, a source code weakness analyzer that focuses
+  We use Brakeman, a source code weakness analyzer that focuses
   on finding security issues in Ruby on Rails applications.
   Note that this is separate from the automatic detection of
   third-party components with publicly-known vulnerabilities;

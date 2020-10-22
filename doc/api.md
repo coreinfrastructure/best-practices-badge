@@ -18,6 +18,11 @@ a pointer to a sample analysis program,
 how to query, how to download the database,
 and then various kinds of more specialized information.
 
+All BadgeApp requests are rate-limited. At the time of this writing,
+if you keep requests at 1 request/second or less for anything other than
+badge images you'll be fine. Badge image rates can be much higher
+(those are specially optimized).
+
 ## Quickstart
 
 Like any RESTful API, use an HTTP verb (like GET) on a resource.
@@ -179,6 +184,18 @@ might request.
     The link uses as=entry; this will show the specific project entry
     if there is exactly one, and otherwise will show the project list of
     matches.
+
+    All BadgeApp requests are rate-limited, and requests other than badge
+    images have smaller rate limits. So while you can embed this query when
+    describing a single project, you can't really have a page
+    full of these queries (such as the img src above using a /projects query).
+    If you want to show a large number of CII badges images all at once,
+    it's better to use the query interface to find its corresponding
+    numeric project id (e.g., at the server). Then just use the numeric
+    project id reference instead, e.g., generate this instead (where you
+    found NUMBER earlier):
+
+    <img src="https://bestpractices.coreinfrastructure.org/projects/NUMBER/badge" alt="CII N/A">
 
 ## Tiered percentage in CII Best Practices Badge
 

@@ -12,7 +12,7 @@
 # CII Best Practices badge contributors
 # SPDX-License-Identifier: MIT
 
-import os, sys, re, json, urllib
+import os, sys, re, json, time, urllib
 from urllib.request import urlopen
 
 # File for storing cached value
@@ -34,6 +34,7 @@ def retrieve_data():
             break
         retrieved_dataset += page_data
         page_number += 1
+        time.sleep(1) # Add delay to avoid hitting rate limits
     return retrieved_dataset
 
 # Load JSON data (from a file if possible, else it's retrieved and saved)

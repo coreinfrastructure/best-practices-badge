@@ -162,6 +162,148 @@ https://app.circleci.com/pipelines/github/coreinfrastructure/best-practices-badg
 (Note to editors: to edit the figures above, edit the .odg file, then
 export to .png so that it can viewed on GitHub.)
 
+## Structured Assurance Case Metamodel (SACM) Notation
+
+In 2020 some MITRE personnel reviewed this assurance case and had a number of
+recommendations. In addition to detailed comments, they
+had some high-level recommendations:
+
+1. Use subordinate claims instead of subordinate arguments.
+   Claims are simple true/false statements, so this change makes
+   the material easier to follow. We won't further discuss that here.
+2. Switch to the newer Object Management Group (OMG)
+   Structured Assurance Case Metamodel (SACM) graphical notation.
+
+This second point requires more explanation.
+
+The original BadgeApp assurance case used the
+[claims, argument, and evidence (CAE) notation](https://www.adelard.com/asce/choosing-asce/cae.html).
+CAE notation is wonderfully simple:
+Claims (including subclaims) are ovals,
+arguments are rounded rectangles, and evidence (references) are rectangles.
+In addition, when we started the SACM graphical notation did not exist.
+
+Historically the
+[Object Management Group (OMG) Structured Assurance Case Metamodel (SACM) specification](https://www.omg.org/spec/SACM/About-SACM/)
+specification has focused on defining a standard interchange
+format for assurance case data.
+[Mappings are available between other notations and the SACM data structures]](https://www.adelard.com/asce/choosing-asce/standardisation.html),
+We currently aren’t trying to exchange with
+other systems, and we don’t know of any mature OSS tools that directly
+support the SACM data format.
+By policy, any tools we *depend* on must be OSS, and when we modify the
+code or configuration we must be able to update the assurance case.
+So while we don't know of anything intrinsically wrong with SACM,
+historically the SACM specification wasn’t
+focused on a problem we’re trying to solve.
+
+However, version 2.2 of SACM added a new graphical notation.
+Claims (including subclaims) are rectangles, ArgumentReasoning (aka
+arguments) are open rectangles, and evidence are shadowed rectangles.
+In addition, it uses “big dots” on connections.
+
+After comparing the notations, we have found that the SACM
+graphical notation has many advantages over CAE:
+
+
+1. CAE Claim vs. SACM Claim. CAE uses ovals, while SACM uses
+   rectangles. SACM has a *BIG* win here: Rectangles use MUCH less
+   space, so complex diagrams are much easier to create & easier to
+   understand.
+2. CAE Argument vs. SACM ArgumentReasoning. CAE uses rounded
+   rectangles, while SACM uses a shape I’ll call an "open rectangle”.
+   CAE’s rounded rectangles are not very distinct from its evidence
+   rectangles, which is a minor negative for the CAE notation. SACM
+   initially presented some challenges when using our drawing tool
+   (LIbreOffice Draw), but I overcame them:
+  - SACM’s half-rectangle initially presented me with a problem:
+    that is *NOT* a built-in shape for the drawing tool I’m using
+    (LIbreOffice Draw). I suspect it’s not a built-in symbol in many
+    tools. I was able to work around this by creating a polygon (many
+    drawing tools support this, and this is a very easy polygon to
+    make). It took a little tweaking, but I managed to create a simple
+    polygon with embedded text. In the longer term, the SACM community
+    should work to get this easy icon into other drawing tools, to
+    simplify its use.
+  - SACM’s half-rectangle is VERY hard to visually distinguish
+    if both it & claims are filled with color. I use color fills
+    to help the eye notice type differences. My solution was simple:
+    color fill everything *except* the half-rectangle; this makes
+    them all visually distinct.
+3. CAE Evidence vs. SACM ArtifactReference.
+   In CAE this is a simple rectangle. In SACM this is a shadowed
+   rectangle with an arrow; the arrow is hard to add with simple
+   drawing tools, but the shadow is trivial to add with a “shadow”
+   property in LibreOffice (and many other drawing tools), and I
+   think just the shadow is adequate. The shadow adds slightly more
+   space (but MUCH less than ovals), and it takes a moment to draw
+   by hand, but I think that’s a reasonable trade-off to ensure
+   that they are visually distinct. In addition: I tend to record
+   evidence / ArtifactReferences in *only* text, not in the diagrams,
+   because diagrams are time-consuming to maintain. So making
+   *claims* simple to draw, and making evidence/ArtifactReferences
+   slightly more complex to draw, is exactly the right tradeoff.
+4. Visual distinctiveness. In *general* the CAE icons
+   for Claim/Argument/Evidence are not as visually distinct as
+   SACM’s Claim/ArgumentReasoning/ArtifactReference, especially
+   when they get shaped to the text contents. That’s an overall
+   advantage for the SACM graphical notation.
+5. SACM’s “bigdot”.
+   The bigdot, e.g., in AssertedInference, make the diagrams simpler
+   by making it easy to move an argument / ArgumentReasoning icon
+   away from the flow from supporting claims/evidence to a higher
+   claim. You could also informally do that with CAE, but it’s
+   clearly a part of SACM.
+
+In our SACM diagrams we've sometimes omitted the bigdot when there is a
+single connection from one element to antoher.
+This is not strictly compliant.
+One advantage of using “bigdot” even in these
+cases would be that it would make it much easier to add
+an ArgumentReasoning later.
+However, adding the bigdot in those cases is nontrivial
+extra work when using our basic drawing tools (because we must draw
+the bigdot, two connectors, and connect them all up,
+instead of using a simple direct connection).
+
+A "real" SACM tool would generate IDs.
+These might be "Gnumber" for a normal asserted claim (used as a goal),
+"Anumber" for a claim used as an assumption (an "assumed claim")
+"ACnumber" for an axiomatic claim,
+"Enumber" for ArtifactReference (used as evidence).
+We don't have such a tool, so currently we just use the
+labels directly.
+
+We don't have an easy way to display SACM's ArgumentPackage and related
+symbols. We just use a "scroll" icon in that case to indicate
+each diagram package.
+
+Nothing is perfect. One problem with SACM’s ArgumentReasoning symbol -
+a half-rectangle - is that while it’s easy to connect on the
+left/top/bottom, it’s somewhat unclear when trying to connect from
+its bare right-hand-side (because the lines are not visibly connected
+to another symbol).
+My thanks to Scott Ankrum for pointing this out!
+A simple solution, without changing anything, is to prefer to put
+this icon on the right-hand-side of what it connects to.
+I wish OMG had chosen another symbol
+that was still clearly distinct from the others, easy to hand-draw,
+already available in simple drawing tools, and did not take a lot
+of extra space. For example, they could have chosen an uneven
+pentagon (“pointer”) or callout symbol (with the little tail).
+But this is a nit.
+It's not even an usual problem; in data flow diagrams, the "data store"
+symbol is open on both the left and right edges
+(resulting in the same problem).
+The graphical notation still an improvement over
+common alternatives, & we try to use standard
+symbols when it’s reasonable to do so.
+
+In the rest of this document we will sometimes use the term "argument"
+for SACM’s ArgumentReasoning, and "evidence" for
+/ArtifactReference (including its ArtifactReference Citation),
+because these are simpler terms.
+
 ## Security Requirements
 
 We believe the basic security requirements have been identified and met,

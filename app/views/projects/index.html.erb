@@ -49,5 +49,5 @@
 <br>
 <br>
   <%= render 'table', projects: @projects, locale: locale %>
-  <%== pagy_bootstrap_nav(@pagy) %>
+  <%== pagy_bootstrap_nav(@pagy) if @pagy.pages > 1 %>
 </div>

@@ -82,7 +82,12 @@ require 'pagy/extras/bootstrap'
 
 # Overflow extra: Allow for easy handling of overflowing pages
 # See https://ddnexus.github.io/pagy/extras/overflow
-# require 'pagy/extras/overflow'
+
+# By default pagy raises an exception if the page# is too large, which
+# has a lot of overhead for a common circumstance. Instead,
+# just show an empty page if it's empty.
+
+require 'pagy/extras/overflow'
 # Pagy::VARS[:overflow] = :empty_page    # default  (other options: :last_page and :exception)
 
 # Metadata extra: Provides the pagination metadata to Javascript frameworks like Vue.js, react.js, etc.

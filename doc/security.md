@@ -219,7 +219,8 @@ Here is the subset of the SACM graphical notation that we use:
    and not supported by our drawing tool.
 6. *asCited Claim*.
    An asCited Claim is a claim expanded elsewhere, that is, a cross-reference.
-   Its text shows its containing package and claim id.
+   Its description text shows its containing package, followed by the
+   claim id in square brackets.
    This is represented as a bracketed rectangle.
 
 ![SACM notation summary](./sacm.png)

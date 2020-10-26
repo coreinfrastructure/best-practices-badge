@@ -209,7 +209,7 @@ Here is the subset of the SACM graphical notation that we use:
    But they have the same graphical representation, and
    we'll just call both relationships.
    They are shown as directed lines with a bigdot
-   and an arrow pointing to the claim(s) being justified.
+   and an arrowhead pointing to the claim(s) or relationship being justified.
    SACM relationships (AssertRelationships) can do more,
    but we do not use the other forms.
 5. *ArgumentPackage* aka *package*.
@@ -217,6 +217,7 @@ Here is the subset of the SACM graphical notation that we use:
    This lets us break the information into multiple pages.
    We show this as a scroll; the official SACM graphical symbol is complicated
    and not supported by our drawing tool.
+   It is equivalent to the GSN Module.
 6. *asCited Claim*.
    An asCited Claim is a claim expanded elsewhere, that is, a cross-reference.
    Its description text shows its containing package, followed by the

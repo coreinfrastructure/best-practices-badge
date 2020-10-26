@@ -186,8 +186,8 @@ Later in this document we'll discuss the advantages of SACM.
 Here is the subset of the SACM graphical notation that we use:
 
 1. *Claim*.
-   A claim is a statement that can be either true or false (not both),
-   and is represented as a rectangle,
+   A claim is a statement that can be either true or false (not both).
+   A claim is represented as a rectangle (we fill them with light blue 3),
    A claim that supports another claim is also called a subclaim.
    It is equivalent to the CAE Claim and GSN Goal.
 2. *ArtifactReference*, which is used for  *evidence*.
@@ -201,7 +201,8 @@ Here is the subset of the SACM graphical notation that we use:
 3. *ArgumentReasoning* aka *argument*.
    An argument explains why the supporting claims and evidence justify
    the claim.
-   It is represented as a half-open rectangle.
+   It is represented as a half-open rectangle
+   (we fill them with light magenta 4).
 4. *AssertedInference* and *AssertedEvidence*, aka kinds of *relationships*.
    SACM terminology is that an AssertedInference shows that a claim supports
    another claim, and an AssertedEvidence shows that an ArtifactReference
@@ -3242,6 +3243,8 @@ Historically we used
 CAE notation is wonderfully simple:
 Claims (including subclaims) are ovals,
 arguments are rounded rectangles, and evidence (references) are rectangles.
+The GSN alternative was too complex (it uses many more symbols) and confusing
+to non-experts (e.g., it uses terms like "Strategy" for an argument).
 In addition, when we started the SACM graphical notation did not exist
 (it was not released until 2020).
 
@@ -3253,7 +3256,7 @@ format for assurance case data.
 However, we currently aren’t trying to exchange with other systems.
 So while we didn't know of anything intrinsically wrong with SACM,
 historically the SACM specification wasn’t
-focused on solving a problem we’re trying to solve.
+focused on solving any problems we’re trying to solve.
 In addition, we don’t know of any mature OSS tools that directly
 support the SACM data format.
 By policy, any tools we *depend* on must be OSS, and when we modify the

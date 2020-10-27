@@ -225,7 +225,7 @@ Here is the subset of the SACM graphical notation that we use:
    claim id in square brackets.
    This is represented as a bracketed rectangle.
 
-![SACM notation summary](./sacm.png)
+![SACM notation summary](./sacm.svg)
 
 The text shows an ID and colon (in bold), followed by whitespace and
 its description.

@@ -36,6 +36,7 @@ The following figures summarize why we think this application
 is adequately secure (more detail is provided in the rest of this document):
 The figures are simply a summary; the text below provides the details.
 
+![Assurance case summary](./assurance-case-toplevel-sacm.svg)
 ![Assurance case summary](./assurance-case.png)
 ![Assurance case in lifecycle](./assurance-case-lifecycle.png)
 ![Assurance case in implementation](./assurance-case-implementation.png)

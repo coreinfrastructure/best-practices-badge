@@ -3359,6 +3359,11 @@ However, the paper
 suggests a simpler solution was intended: horizontally flip the
 rectangle open on one side.
 
+## Future work
+
+["Evaluating and Mitigating Software Supply Chain Security Risks" by Ellison et al, May 2020](https://resources.sei.cmu.edu/asset_files/TechnicalNote/2010_004_001_15176.pdf) has an assurance case focusing on
+supply chain security risks, as well as other information.
+We intend to review it for future ideas.
 
 ## Your help is welcome!
 
@@ -3367,6 +3372,8 @@ We welcome hardening in general, particularly pull requests
 that actually do the work of hardening.
 We thank many, including Reg Meeson, for reviewing and providing feedback
 on this assurance case.
+
+
 
 Please report potential vulnerabilities you find; see
 [CONTRIBUTING.md](../CONTRIBUTING.md) for how to submit a vulnerability report.

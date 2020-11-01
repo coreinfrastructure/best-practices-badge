@@ -169,8 +169,8 @@
       </g>
       <g class="com.sun.star.drawing.TextShape">
        <g id="id11">
-        <rect class="BoundingBox" stroke="none" fill="none" x="13507" y="2776" width="2209" height="1917"/>
-        <text class="TextShape"><tspan class="TextParagraph" font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400"><tspan class="TextPosition" x="13537" y="3350"><tspan fill="rgb(0,0,0)" stroke="none">Argument</tspan></tspan></tspan><tspan class="TextParagraph" font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400"><tspan class="TextPosition" x="13645" y="3905"><tspan fill="rgb(0,0,0)" stroke="none">Package</tspan></tspan></tspan><tspan class="TextParagraph" font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400"><tspan class="TextPosition" x="13507" y="4460"><tspan fill="rgb(0,0,0)" stroke="none">(package)</tspan></tspan></tspan></text>
+        <rect class="BoundingBox" stroke="none" fill="none" x="13608" y="2740" width="2209" height="1917"/>
+        <text class="TextShape"><tspan class="TextParagraph" font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400"><tspan class="TextPosition" x="13638" y="3314"><tspan fill="rgb(0,0,0)" stroke="none">Argument</tspan></tspan></tspan><tspan class="TextParagraph" font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400"><tspan class="TextPosition" x="13746" y="3869"><tspan fill="rgb(0,0,0)" stroke="none">Package</tspan></tspan></tspan><tspan class="TextParagraph" font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400"><tspan class="TextPosition" x="13608" y="4424"><tspan fill="rgb(0,0,0)" stroke="none">(package)</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.TextShape">
@@ -306,7 +306,7 @@
        <g id="id29">
         <rect class="BoundingBox" stroke="none" fill="none" x="11566" y="5252" width="749" height="898"/>
         <path fill="none" stroke="rgb(0,0,0)" d="M 11567,6148 L 12313,5253"/>
-        <text class="TextShape"><tspan class="TextParagraph" font-family="Liberation Sans, sans-serif" font-size="564px" font-weight="400"><tspan class="TextPosition" x="11771" y="5895"><tspan fill="rgb(0,0,0)" stroke="none">■</tspan></tspan></tspan></text>
+        <text class="TextShape"><tspan class="TextParagraph" font-family="Liberation Sans, sans-serif" font-size="635px" font-weight="400"><tspan class="TextPosition" x="11748" y="5921"><tspan fill="rgb(0,0,0)" stroke="none">■</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">

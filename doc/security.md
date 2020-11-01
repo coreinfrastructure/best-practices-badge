@@ -42,7 +42,9 @@ The figures are simply a summary; the text below provides the details.
 ![Assurance case in implementation](./assurance-case-implementation.png)
 ![Assurance case in other processes](./assurance-case-other-lifecycle.png)
 
-These figures are in Claims, Arguments and Evidence (CAE) notation,
+Some of these figures are in SACM notation.
+Other (older) ones are in
+Claims, Arguments and Evidence (CAE) notation,
 which is a simple notation often used for assurance cases.
 Ovals are claims or sub-claims, while rounded rectangles are the supporting
 arguments justifying the claims.

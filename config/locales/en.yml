@@ -1569,6 +1569,11 @@ en:
           accept commits on behalf of the project, or perform
           final releases of the project software. If there is
           only one developer, that individual is the primary developer.
+          Many books and courses are available to help you understand
+          how to develop more secure software and discuss design.
+          For example, the <a href="https://www.edx.org/professional-certificate/linuxfoundationx-secure-software-development-fundamentals">Secure
+          Software Development Fundamentals</a> course is a free set
+          of three courses that explain how to develop more secure software.
       know_common_errors:
         description: >-
           At least one of the project's primary developers MUST
@@ -1582,6 +1587,12 @@ en:
           authorization. See the <a href="https://cwe.mitre.org/top25/">CWE/SANS
           top 25</a> or <a href="https://www.owasp.org/index.php/Category:OWASP_Top_Ten_Project">OWASP
           Top 10</a> for commonly used lists.
+          Many books and courses are available to help you understand
+          how to develop more secure software and discuss common
+          implementation errors that lead to vulnerabilities.
+          For example, the <a href="https://www.edx.org/professional-certificate/linuxfoundationx-secure-software-development-fundamentals">Secure
+          Software Development Fundamentals</a> course is a free set
+          of three courses that explain how to develop more secure software.
       crypto_published:
         description: >-
           The software produced by the project MUST use, by default,

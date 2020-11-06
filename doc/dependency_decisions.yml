@@ -57,27 +57,32 @@
 - - :permit
   - Apache 2.0
   - :who: David A. Wheeler
-    :why: OSI-approved OSS license Apache 2.0, known compatible with MIT. Potential issues with GPL-2.0-only, but fine with GPL-2.0+ and GPL-3.0
+    :why: OSI-approved OSS license Apache 2.0, known compatible with MIT. Potential
+      issues with GPL-2.0-only, but fine with GPL-2.0+ and GPL-3.0
     :when: 2020-08-21 21:01:32 EDT
 - - :permit
   - GPL-2.0-or-later
   - :who: David A. Wheeler
-    :why: OSI-approved OSS license GPL-2.0-or-later, known compatible with MIT. Known to be fine with Apache 2.0.
+    :why: OSI-approved OSS license GPL-2.0-or-later, known compatible with MIT. Known
+      to be fine with Apache 2.0.
     :when: 2020-08-21 21:01:32 EDT
 - - :permit
   - GPLv2+
   - :who: David A. Wheeler
-    :why: OSI-approved OSS license GPL-2.0-or-later, known compatible with MIT. Known to be fine with Apache 2.0.
+    :why: OSI-approved OSS license GPL-2.0-or-later, known compatible with MIT. Known
+      to be fine with Apache 2.0.
     :when: 2020-08-21 21:01:32 EDT
 - - :permit
   - GPL-3.0-only
   - :who: David A. Wheeler
-    :why: OSI-approved OSS license GPL-3.0-only, known compatible with MIT. Known to be fine with Apache 2.0.
+    :why: OSI-approved OSS license GPL-3.0-only, known compatible with MIT. Known
+      to be fine with Apache 2.0.
     :when: 2020-08-21 21:01:32 EDT
 - - :permit
   - GPL-3.0-or-later
   - :who: David A. Wheeler
-    :why: OSI-approved OSS license GPL-3.0-or-later, known compatible with MIT. Known to be fine with Apache 2.0.
+    :why: OSI-approved OSS license GPL-3.0-or-later, known compatible with MIT. Known
+      to be fine with Apache 2.0.
     :when: 2020-08-21 21:01:32 EDT
 - - :permit
   - "(MIT OR Apache-2.0)"
@@ -241,21 +246,21 @@
   - :who: David A. Wheeler
     :why: 'ISC license. Known OSS license (basically 2-clause BSD). See https://github.com/copiousfreetime/launchy/blob/master/LICENSE
 
-'
+      '
     :when: 2015-12-17 17:09:18.274813788 Z
 - - :approve
   - curb
   - :who: David A. Wheeler
     :why: 'Actual license is Ruby license, known OSS license.  See <https://github.com/taf2/curb/blob/master/LICENSE>
 
-'
+      '
     :when: 2015-12-17 16:02:10.446729059 Z
 - - :approve
   - curb-fu
   - :who: David A. Wheeler
     :why: 'Actual license is Ruby license, known OSS license. See <http://www.rubydoc.info/gems/curb-fu/0.6.2>
 
-'
+      '
     :when: 2015-12-17 16:02:10.446729059 Z
 - - :approve
   - mixlib-cli
@@ -263,7 +268,7 @@
     :why: 'Apache 2.0 okay as long as GPL-2.0 only does not conflict, and no conflicts
       identified.
 
-'
+      '
     :when: 2015-12-17 17:13:57.316335083 Z
 - - :approve
   - addressable
@@ -271,7 +276,7 @@
     :why: 'Apache 2.0 okay as long as GPL-2.0 only does not conflict, and no conflicts
       identified.
 
-'
+      '
     :when: 2015-12-17 17:14:19.144833431 Z
 - - :approve
   - mixlib-config
@@ -279,7 +284,7 @@
     :why: 'Apache 2.0 okay as long as GPL-2.0 only does not conflict, and no conflicts
       identified.
 
-'
+      '
     :when: 2015-12-17 17:14:33.457195760 Z
 - - :approve
   - thread_safe
@@ -287,7 +292,7 @@
     :why: 'Apache 2.0 okay as long as GPL-2.0 only does not conflict, and no conflicts
       identified.
 
-'
+      '
     :when: 2015-12-17 17:14:44.331125510 Z
 - - :approve
   - secure_headers
@@ -506,3 +511,16 @@
     :why: Really just MIT license, see https://github.com/justinrainbow/json-schema/blob/master/LICENSE
     :versions: []
     :when: 2019-09-02 02:32:29.789409443 Z
+- - :approve
+  - ruby2_keywords
+  - :who: ''
+    :why: WHY
+    :versions: []
+    :when: 2020-11-06 14:45:41.934956613 Z
+- - :approve
+  - ruby2_keywords
+  - :who: David A. Wheeler
+    :why: Licensed under 2-Clause BSD license (an already approved license) as stated
+      in its README
+    :versions: []
+    :when: 2020-11-06 14:47:00.991793938 Z

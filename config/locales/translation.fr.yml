@@ -1516,7 +1516,13 @@ fr:
           (s'il y en a un), peuvent accepter des contributions
           au nom du projet, ou effectuer les distributions finales
           du logiciel du projet. S'il n'y a qu'un seul développeur,
-          cette personne est le développeur principal.
+          cette personne est le développeur principal. De nombreux
+          livres et cours sont disponibles pour vous aider à comprendre
+          comment développer des logiciels plus sûrs et pour discuter
+          de leur conception. Par exemple, le cours <a href="https://www.edx.org/professional-certificate/linuxfoundationx-secure-software-development-fundamentals">Bases
+          du développement logiciel sécurisé</a> est un ensemble
+          gratuit de trois cours qui expliquent comment développer
+          des logiciels plus sûrs.
       know_common_errors:
         description: >-
           Au moins l'un des principaux développeurs du projet
@@ -1530,7 +1536,15 @@ fr:
           le cross-site scripting, l'authentification manquante
           et l'autorisation manquante. Voir <a href="https://cwe.mitre.org/top25/">CWE/SANS
           top 25</a> ou <a href="https://www.owasp.org/index.php/Category:OWASP_Top_Ten_Project">OWASP
-          Top 10</a> pour les listes couramment utilisées.
+          Top 10</a> pour les listes couramment utilisées. De
+          nombreux livres et cours sont disponibles pour vous
+          aider à comprendre comment développer des logiciels
+          plus sûrs et discuter des erreurs courantes de mise
+          en œuvre qui conduisent à des vulnérabilités. Par exemple,
+          le cours <a href="https://www.edx.org/professional-certificate/linuxfoundationx-secure-software-development-fundamentals">Bases
+          du développement logiciel sécurisé</a> est un ensemble
+          gratuit de trois cours qui expliquent comment développer
+          des logiciels plus sûrs.
       crypto_published:
         description: >-
           Le logiciel produit par le projet DOIT utiliser, par

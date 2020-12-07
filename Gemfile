@@ -62,6 +62,7 @@ gem 'paper_trail', '10.3.1' # Record previous versions of project data
 gem 'pg', '1.2.3' # PostgreSQL database, used for data storage
 gem 'pg_search', '2.3.2' # PostgreSQL full-text search
 gem 'puma', '4.3.6' # Faster webserver; recommended by Heroku
+gem 'puma_worker_killer', '0.3.1' # Band-aid: Restart to limit memory use
 gem 'rack-attack', '6.3.1' # Implement rate limiting
 gem 'rack-cors', '1.1.1' # Enable CORS so JavaScript clients can get JSON
 gem 'rack-headers_filter', '0.0.1' # Filter out "dangerous" headers

@@ -63,7 +63,7 @@ zh-CN:
     no_login_time: "（没有先前记录的时间。）"
     login_automatic_signup: 如果需要，使用GitHub登录会自动执行注册。
     login_disabled: 所有登录暂时禁用
-    cannot_login_yet:
+    cannot_login_yet: 抱歉，您还不能登录。作为一种反垃圾邮件措施，激活本地帐户后会有一定的延迟才能登录。
   users:
     new:
       signup_header: 注册
@@ -102,7 +102,7 @@ zh-CN:
     edit:
       update_user_info: 更新用户信息
       save_changes: 保存更改
-      inadequate_privileges:
+      inadequate_privileges: 抱歉，您不能这样做。
   project_stats:
     index:
       project_stats_header: 项目统计
@@ -424,8 +424,8 @@ zh-CN:
     activated: 帐户已激活！
     failed_activation: 激活链接无效
     delay:
-      zero:
-      one:
+      zero: 您现在可以登录。激活后没有反垃圾邮件延迟。
+      one: 作为一种反垃圾邮件措施，您必须在激活后等待一小时才能登录。
       few:
       other:
   password_resets:
@@ -1308,10 +1308,10 @@ zh-CN:
       new_this_level: 在这个级别的新的
       met_justification_required: 需要满足理由
       met_justification_or_url_required: 满足理由或需要URL
-      see_actual_criteria:
+      see_actual_criteria: 您可能还会看到实际标准。
     error_409:
-      heading:
-      conflict:
+      heading: 错误409：冲突
+      conflict: 抱歉，多个条目与请求匹配，从而导致冲突。
   headings:
     Accessibility and internationalization: 无障碍和国际化
     Analysis: 分析

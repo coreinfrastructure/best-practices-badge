@@ -25,6 +25,7 @@ es:
     ru: Ruso / Русский (ru)
     zh-CN: Chino (Simplificado) / 简体中文 (zh-CN)
     es: Español (es)
+    sw:
   layouts:
     cii_best_practices: CII Best Practices
     projects: Proyectos

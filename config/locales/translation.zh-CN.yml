@@ -200,7 +200,9 @@ zh-CN:
       new_badge_or: 或
       original_repos: "=>原始GitHub仓库"
       fork_repos: "=> 分支GitHub仓库"
-      tell_us:
+      tell_us: >-
+        请告诉我们您的自由/自由/开源软件（FLOSS）项目。这<b>必须</b>是FLOSS项目；别无其他。请<b>不要</b>添加无关的网站，试图提高网站的搜索引擎优化（SEO）。禁止这种垃圾邮件发送是因为它危害用户，并且无论如何都不会帮助SEO（所有超链接都标记为<tt>ugc</tt>和<tt>nofollow</tt>
+        ）。
     show:
       edit: 编辑
       delete: 删除
@@ -426,8 +428,8 @@ zh-CN:
     delay:
       zero: 您现在可以登录。激活后没有反垃圾邮件延迟。
       one: 作为一种反垃圾邮件措施，您必须在激活后等待一小时才能登录。
-      few:
-      other:
+      few: 作为一种反垃圾邮件措施，您必须在激活后等待一小时才能登录。
+      other: 作为一种反垃圾邮件措施，您必须在激活后等待%{count}小时才能登录。
   password_resets:
     forgot_password: 忘记密码
     reset_password: 重设密码
@@ -582,7 +584,7 @@ zh-CN:
     ja: 日语 / 日本語 (ja)
     ru: 俄语 / Русский (ru)
     es: 西班牙语/西班牙文 / Español (es)
-    sw:
+    sw: 斯瓦希里语/斯瓦希里语（瑞士）
   criteria:
     '0':
       description_good:
@@ -1369,15 +1371,32 @@ zh-CN:
     valid_text: " 必须是有效的UTF-8编码，没有无效的控制字符"
     url_message: " 必须以http:或https:开头，并使用有限的字符集"
   criteria_overall:
-    beginning_header_all:
-    beginning_header_0:
-    beginning_header_1:
-    beginning_header_2:
-    beginning_all_html:
-    beginning_0_html:
-    beginning_1_html:
-    beginning_2_html:
-    see_discussion_html:
+    beginning_header_all: FLOSS 最佳实践标准（所有级别）
+    beginning_header_0: FLOSS 最佳实践标准（通过徽章）
+    beginning_header_1: FLOSS 最佳实践标准（白银徽章）
+    beginning_header_2: FLOSS 最佳实践标准（黄金徽章）
+    beginning_all_html: >-
+      <p>这是自由/自由和开源软件（FLOSS）项目的最佳实践集，以在通过，银色和金色徽章级别获得核心基础设施计划（CII）最佳实践徽章。您可以<a
+      href="/zh-CN/criteria">仅使用标准</a>或<a href="/zh-CN/criteria?details=true&rationale=true">其他信息</a>来显示此列表。您还可以仅查看<a
+      href="/zh-CN/criteria/0">通过</a>，<a href="/zh-CN/criteria/1">银</a>和<a
+      href="/zh-CN/criteria/2">金</a>标准，以及<a href="/zh-CN/criteria_stats">标准统计信息</a>。
+    beginning_0_html: >-
+      <p>这是自由/自由和开源软件（FLOSS）项目的最佳实践集，以在通过，银色和金色徽章级别获得核心基础设施计划（CII）最佳实践徽章。您可以<a
+      href="/zh-CN/criteria">仅使用标准</a>或<a href="/zh-CN/criteria?details=true&rationale=true">其他信息</a>来显示此列表。您还可以仅查看<a
+      href="/zh-CN/criteria/0">通过</a>，<a href="/zh-CN/criteria/1">银</a>和<a
+      href="/zh-CN/criteria/2">金</a>标准，以及<a href="/zh-CN/criteria_stats">全套标准</a>。
+    beginning_1_html: >-
+      <p>这是自由/自由和开源软件（FLOSS）项目的最佳实践集，以在通过，银色和金色徽章级别获得核心基础设施计划（CII）最佳实践徽章。您可以<a
+      href="/zh-CN/criteria">仅使用标准</a>或<a href="/zh-CN/criteria?details=true&rationale=true">其他信息</a>来显示此列表。您还可以仅查看<a
+      href="/zh-CN/criteria/0">通过</a>，<a href="/zh-CN/criteria/1">银</a>和<a
+      href="/zh-CN/criteria/2">金</a>标准，以及<a href="/zh-CN/criteria_stats">全套标准</a>。
+    beginning_2_html: >-
+      <p>这是自由/自由和开源软件（FLOSS）项目的最佳实践集，以在通过，银色和金色徽章级别获得核心基础设施计划（CII）最佳实践徽章。您可以<a
+      href="/zh-CN/criteria">仅使用标准</a>或<a href="/zh-CN/criteria?details=true&rationale=true">其他信息</a>来显示此列表。您还可以仅查看<a
+      href="/zh-CN/criteria/0">通过</a>，<a href="/zh-CN/criteria/1">银</a>和<a
+      href="/zh-CN/criteria/2">金</a>标准，以及<a href="/zh-CN/criteria_stats">全套标准</a>。
+    see_discussion_html: >-
+      <p>有关这些条件的更多信息，请参见<a href="/zh-CN/criteria_discussion">条件讨论</a>。
     future:
     na_allowed:
     na_justification_required:

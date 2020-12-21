@@ -33,7 +33,7 @@ I18n.available_locales = %i[en zh-CN es fr de ja ru sw].freeze
 # This *may* be the same as I18n.available_locales, but if a locale's
 # translation isn't ready we will remove it here.
 Rails.application.config.automatic_locales =
-  (I18n.available_locales.dup - [:es :sw]).freeze
+  (I18n.available_locales.dup - %i[es sw]).freeze
 
 # Automatic_locales must be a subset of I18n.available_locales - check it!
 raise InvalidLocale unless

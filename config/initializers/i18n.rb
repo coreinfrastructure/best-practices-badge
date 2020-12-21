@@ -18,29 +18,32 @@
 # :de, :"en-au-ocker", :"en-NZ", :"zh-TW", :"pt-BR", :nep, :uk, :ro, :da,
 # :hu, :cs]
 #
-# NOTICE: If you add a locale, also modify robots.txt to prevent crawling of
-# user accounts in that locale. See: app/views/static_pages/robots.text.erb
-#
 # The order here is English (the source language in this case), followed
 # by the locales in English name order. Pagy initialization requires en first.
 # This has the useful side-effect that Chinese is listed early, next to
-# a Romance language, so it will be *immediately* obvious to users when
-# they see the list that it is for locale selection.
+# a Romance language, so it will be *immediately* obvious to users
+# that this is the locale selection list.
 # We maintain this order elsewhere, to reduce the risk that
 # we'll accidentally omit a locale.  For example, see
 # config/initializers/translation.rb
 
-I18n.available_locales = %i[en zh-CN es fr de ja ru].freeze
+I18n.available_locales = %i[en zh-CN es fr de ja ru sw].freeze
 
 # Here are the locales we will *automatically* switch to.
 # This *may* be the same as I18n.available_locales, but if a locale's
 # translation isn't ready we will remove it here.
 Rails.application.config.automatic_locales =
-  (I18n.available_locales.dup - [:es]).freeze
+  (I18n.available_locales.dup - [:es :sw]).freeze
 
 # Automatic_locales must be a subset of I18n.available_locales - check it!
 raise InvalidLocale unless
   (Rails.application.config.automatic_locales - I18n.available_locales).empty?
+
+# The rest of the application uses those settings above automatically.
+# For example, robots.txt counters crawling in these locales.
+# To see how it does that, see:
+# app/views/static_pages/robots.text.erb
+#
 
 # If we don't have text, fall back to English.  That obviously isn't
 # ideal, but it's better to show *some* text to the user than leave it

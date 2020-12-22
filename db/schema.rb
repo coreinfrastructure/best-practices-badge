@@ -29,6 +29,7 @@ ActiveRecord::Schema.define(version: 2020_12_22_014804) do
 
   create_table "bad_passwords", id: false, force: :cascade do |t|
     t.string "forbidden"
+    t.index ["forbidden"], name: "index_bad_passwords_on_forbidden"
   end
 
   create_table "pg_search_documents", id: :serial, force: :cascade do |t|

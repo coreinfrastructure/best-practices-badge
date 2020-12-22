@@ -823,3 +823,16 @@ task search_name: :environment do
   puts 'End of results.'
   exit(0) # Work around rake
 end
+
+desc 'Update Database list of bad passwords from raw-bad-passwords-lowercase'
+task do
+  require 'zlib'
+  bad_password_array = []
+  Zlib::GzipReader.open('raw-bad-passwords-lowercase.txt.gz') do |gz|
+    gz.each_line do |line|
+      bad_password_array.push({ forbidden: line.chomp.downcase.freeze })
+    end
+  end
+  BadPassword.delete_all
+  BadPassword.create!(bad_password_array)
+end

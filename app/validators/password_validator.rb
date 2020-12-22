@@ -6,7 +6,7 @@
 
 class PasswordValidator < ActiveModel::EachValidator
   def validate_each(record, attribute, value)
-    return unless BadPasswordSet.include?(value.downcase)
+    return unless BadPassword.exists?(forbidden: value.downcase)
 
     record.errors.add attribute,
                       options[:message] ||

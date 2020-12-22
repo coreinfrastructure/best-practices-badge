@@ -4,19 +4,19 @@ sw:
   pagy:
 
     item_name:
-      one: "item"
-      other: "items"
+      one: "kifaa"
+      other: "vifaa"
 
     nav:
-      prev: "&lsaquo;&nbsp;Prev"
-      next: "Next&nbsp;&rsaquo;"
+      prev: "&lsaquo;&nbsp;Awali"
+      next: "Ifuatayo&nbsp;&rsaquo;"
       gap: "&hellip;"
 
     info:
-      no_items: "No %{item_name} found"
-      single_page: "Displaying <b>%{count}</b> %{item_name}"
-      multiple_pages: "Displaying %{item_name} <b>%{from}-%{to}</b> of <b>%{count}</b> in total"
+      no_items: "Hamna %{item_name} vilivyopatikana"
+      single_page: "Inaonyesha %{item_name} <b>%{count}</b>"
+      multiple_pages: "Inaonyesha %{item_name} <b>%{from}-%{to}</b> ya <b>%{count}</b> kwa jumla"
 
-    combo_nav_js: "Page %{page_input} of %{pages}"
+    combo_nav_js: "Kurasa %{page_input} ya %{pages}"
 
-    items_selector_js: "Show %{items_input} %{item_name} per page"
+    items_selector_js: "Onyesha %{items_input} %{item_name} kwa kila ukurasa"

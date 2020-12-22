@@ -8,7 +8,7 @@ jobs:
       CIRCLE_ARTIFACTS: /tmp/circleci-artifacts
       CIRCLE_TEST_REPORTS: /tmp/circleci-test-results
     docker:
-    - image: jdossett/cii-bestpractices:2.6.6-stretch
+    - image: drdavidawheeler/cii-bestpractices:2.6.6-stretch
       environment:
         PG_HOST: localhost
         PG_USER: ubuntu

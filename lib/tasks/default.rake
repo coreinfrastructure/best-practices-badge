@@ -825,6 +825,6 @@ task search_name: :environment do
 end
 
 desc 'Update Database list of bad passwords from raw-bad-passwords-lowercase'
-task do
+task :update_bad_password_db do
   BadPassword.force_load
 end

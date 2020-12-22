@@ -1170,6 +1170,41 @@ it update the database for use. Do this by running:
     heroku run --app APP rake update_bad_password_db
 ~~~~
 
+## Installing CircleCI / Heroku OpenSSH keys
+
+To push to Heroku, you need to prove you're authorized.
+See [keys](https://devcenter.heroku.com/articles/keys) for details.
+At the time of this writing Heroku only supports RSA keys.
+
+Basically, create an OpenSSH keypair:
+
+~~~~
+      ssh-keygen -t rsa -f "$HOME/.ssh/id_rsa_bp" \
+                 -C 'dwheeler@linuxfoundation.org'
+~~~~
+
+Per the Heroku instructions, add the public key here:
+
+~~~~
+    heroku keys:add "$HOME/.ssh/id_rsa_bp.pub"
+~~~~
+
+CircleCI needs to prove it's authorized, so we need to give it the
+private key (sigh). Go to this page:
+https://app.circleci.com/settings/project/github/coreinfrastructure/best-practices-badge/ssh
+
+Under "Additional SSH keys" (for keys to the builid VMs that you need to
+deploy to your machines), remove any heroku.com keys, add a new key
+with hostname "heroku.com", and provide the contents of the private key
+`$HOME/.ssh/id_rsa_bp`.
+
+Since these aren't used for any other purpose, it's safest to remove
+these keys from anywhere else:
+
+~~~~
+    rm "$HOME/.ssh/id_rsa_bp*"
+~~~~
+
 ## Project stats omission on 2017-02-28
 
 The production site maintains a number of daily statistics and can

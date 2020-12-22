@@ -56,7 +56,7 @@ gem 'omniauth-github', '1.4.0' # Authentication to GitHub (get project info)
 gem 'omniauth-rails_csrf_protection',
     git: 'https://github.com/cookpad/omniauth-rails_csrf_protection.git',
     ref: 'b33ff2e57f7c0530da76da6b4b358218f1e7f230'
-gem 'pagy', '3.8.3' # Paginate some views
+gem 'pagy', '3.10.0' # Paginate some views
 gem 'paleta', '0.3.0' # Color manipulation, used for badges
 gem 'paper_trail', '10.3.1' # Record previous versions of project data
 gem 'pg', '1.2.3' # PostgreSQL database, used for data storage

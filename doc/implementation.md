@@ -1159,6 +1159,17 @@ rm -f raw-bad-passwords-lowercase.txt.gz
 gzip --best raw-bad-passwords-lowercase.txt
 ~~~~
 
+At one time we loaded bad passwords into memory, but because of object
+overheads it consumed over 8MB of RAM *and* it fragments memory.
+The list is only consulted when a local password is being (re)set,
+so it made more sense to move the list to the database at runtime.
+Thus, after the updated bad-passwords file is sent, you need to have
+it update the database for use. Do this by running:
+
+~~~~sh
+    heroku run --app APP rake update_bad_password_db
+~~~~
+
 ## Project stats omission on 2017-02-28
 
 The production site maintains a number of daily statistics and can

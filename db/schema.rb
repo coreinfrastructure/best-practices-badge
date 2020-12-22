@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_08_145537) do
+ActiveRecord::Schema.define(version: 2020_12_22_014804) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -25,6 +25,10 @@ ActiveRecord::Schema.define(version: 2020_05_08_145537) do
     t.index ["project_id"], name: "index_additional_rights_on_project_id"
     t.index ["user_id", "project_id"], name: "index_additional_rights_on_user_id_and_project_id", unique: true
     t.index ["user_id"], name: "index_additional_rights_on_user_id"
+  end
+
+  create_table "bad_passwords", id: false, force: :cascade do |t|
+    t.string "forbidden"
   end
 
   create_table "pg_search_documents", id: :serial, force: :cascade do |t|

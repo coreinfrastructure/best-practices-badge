@@ -1,4 +1,6 @@
 version: 2
+orbs:
+  browser-tools: circleci/browser-tools@1.1
 jobs:
   build:
     working_directory: ~/coreinfrastructure/best-practices-badge
@@ -19,6 +21,9 @@ jobs:
         POSTGRES_USER: ubuntu
         POSTGRES_DB: circle_ruby_test
     steps:
+    - run:
+        name: Install browser tools
+        command: browser-tools/install-browser-tools
     - checkout
     # Prepare for artifact and test results
     - run: mkdir -p $CIRCLE_ARTIFACTS $CIRCLE_TEST_REPORTS

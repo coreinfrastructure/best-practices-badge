@@ -70,6 +70,7 @@ jobs:
         - v5-dep-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
         - v5-dep-{{ arch }}-{{ .Branch }}-
         - v5-dep-{{ arch }}-
+        # This was suggested, but it seems like a bad idea to me:
         # - v5-dep-
     # DEBUG: Show what we restored
     - run: find .bundle || true

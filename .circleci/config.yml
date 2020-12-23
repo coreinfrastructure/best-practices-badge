@@ -3,7 +3,7 @@ version: 2.1
 # orbs:
 #   browser-tools: circleci/browser-tools@1.1.1
 # When I try to later run "browser-tools/install-browser-tools" or similar,
-# CircleCI simply reports that the file doesn't exist (which is true).
+# CircleCI reports that the file doesn't exist (which is true).
 jobs:
   build:
     working_directory: ~/coreinfrastructure/best-practices-badge

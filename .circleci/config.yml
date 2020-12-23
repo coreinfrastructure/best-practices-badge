@@ -56,17 +56,22 @@ jobs:
           google-chrome --version
     # Prepare for artifact and test results
     - run: mkdir -p $CIRCLE_ARTIFACTS $CIRCLE_TEST_REPORTS
+    # Force cleanup to make deterministic.
+    # See https://circleci.com/docs/2.0/caching
+    - run bundle clean --force
     # Dependencies
     # Restore the dependency cache
     - restore_cache:
         keys:
-        # Find a cache corresponding to this particular Gemfile.lock checksum
-        - v4-dep-{{ checksum "Gemfile.lock" }}
         # Find the most recently generated cache used
-        - v4-dep-
+        # Find a cache corresponding to this particular Gemfile.lock checksum
+        - v4-dep-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
+        - v4-dep-{{ arch }}-{{ .Branch }}-
+        - v4-dep-{{ arch }}-
+        # - v4-dep-
     - run:
         name: Update Rubygems
-        command: sudo gem update --system --silent
+        command: sudo gem update --system --silent --no-document
         environment:
           REALLY_GEM_UPDATE_SYSTEM: 1
     - run:
@@ -88,11 +93,11 @@ jobs:
        command: bundle exec rake update_chromedriver
     # Save dependency cache
     - save_cache:
-        key: v4-dep-{{ checksum "Gemfile.lock" }}
+        key: v4-dep-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
         paths:
           - vendor/bundle
           - ~/.bundle
-          - ~/.rbenv
+          - ~/.rbenv/versions
     - run:
         name: Configure database
         command: |

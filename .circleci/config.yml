@@ -59,7 +59,7 @@ jobs:
     - restore_cache:
         keys:
         # Find a cache corresponding to this particular Gemfile.lock checksum
-        - v4-dep-{{ checksum "Gemfile.lock" }}
+        - v4-dep-{{ echo `checksum "Gemfile.lock")`+`cat .ruby-version` }}
         # Find the most recently generated cache used
         - v4-dep-
     - run:
@@ -77,18 +77,20 @@ jobs:
         command: bundle --version
     - run:
         name: Install Bundle
+        # Note: --path=vendor/bundle removed, we don't need it.
         command: >
-          bundle check --path=vendor/bundle ||
-          bundle install --path=vendor/bundle --jobs=4 --retry=3
+          bundle check ||
+          bundle install --jobs=4 --retry=3
     - run:
        name: Update Chromedriver
        command: bundle exec rake update_chromedriver
     # Save dependency cache
     - save_cache:
-        key: v4-dep-{{ checksum "Gemfile.lock" }}
+        key: v4-dep-{{ echo `checksum "Gemfile.lock")`+`cat .ruby-version` }}
         paths:
-          - vendor/bundle
+          # vendor/bundle removed
           - ~/.bundle
+          - {{ dirname "$(bundle info --path rake)" }}
     - run:
         name: Configure database
         command: |

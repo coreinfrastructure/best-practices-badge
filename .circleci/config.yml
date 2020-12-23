@@ -99,7 +99,7 @@ jobs:
     - run:
        name: Update Chromedriver
        command: bundle exec rake update_chromedriver
-    # DEBUG
+    # DEBUG - check
     - run: find ~/.rubygems || true
     - run: find ~/.bundle || true
     - run: find ~/.rbenv || true

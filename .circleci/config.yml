@@ -67,15 +67,16 @@ jobs:
         keys:
         # Find the most recently generated cache used
         # Find a cache corresponding to this particular Gemfile.lock checksum
-        - v5-dep-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
-        - v5-dep-{{ arch }}-{{ .Branch }}-
-        - v5-dep-{{ arch }}-
+        - v6-dep-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
+        - v6-dep-{{ arch }}-{{ .Branch }}-
+        - v6-dep-{{ arch }}-
         # This was suggested, but it seems like a bad idea to me:
-        # - v5-dep-
+        # - v6-dep-
     # DEBUG: Show what we restored
     - run: find .bundle || true
     - run: find ~/.rbenv || true
     - run: find vendor/bundle || true
+    - run: find .rubygems || true
     - run:
         name: Update Rubygems
         command: sudo gem update --system --silent --no-document
@@ -102,14 +103,16 @@ jobs:
     - run: find .bundle || true
     - run: find ~/.rbenv || true
     - run: find vendor/bundle || true
+    - run: find .rubygems || true
     - run: find ~ -name "*rack-timeout*" || true
     # Save dependency cache
     - save_cache:
-        key: v5-dep-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
+        key: v6-dep-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
         paths:
           - vendor/bundle
           - ~/.bundle
           - ~/.rbenv/versions
+          - ~/.rubygems
     - run:
         name: Configure database
         command: |

@@ -18,30 +18,44 @@ sw:
   feed_title:
   project_name_unknown:
   locale_name:
-    en:
-    es:
-    de:
-    fr:
-    ja:
-    ru:
-    sw:
-    zh-CN:
+    en: Kiingereza (en)
+    es: Kihispania / Español (es)
+    de: Kijerumani / Deutsch (de)
+    fr: Kifaransa / Français (fr)
+    ja: Kijapani / 日本語 (ja)
+    ru: Kirusi / Русский (ru)
+    sw: Swahili / Kiswahili (sw)
+    zh-CN: Kichina (Kilichorahisishwa) / 简体中文 (zh-CN)
   layouts:
-    cii_best_practices:
+    cii_best_practices: Mazoea Bora ya CII
     toggle_navigation:
-    projects:
-    users:
-    account:
-    profile:
-    settings:
-    choose_locale:
-    logout_html:
+    projects: Miradi
+    users: Watumiaji
+    account: Akaunti
+    profile: Maelezo mafupi
+    settings: Mipangilio
+    choose_locale: Chagua eneo
+    logout_html: <i class="fa fa-sign-out" aria-hidden="true"></i>
+      Ondoka
     signup_html:
-    login_html:
-    footer_text_html:
+    login_html: <i class="fa fa-sign-in" aria-hidden="true"></i>
+      Ingia
+    footer_text_html: >-
+      <small> <strong>Unahitaji msaada? Una swali? Unaona hitilafu?
+      Tafadhali <em><a href="mailto:&#99;ii&#45;badges&#45;questions&#64;lists&#46;coreinfrastructure&#46;or&#103;">tuma
+      barua pepe</a> </em>or <em><a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
+      target="_blank" rel="noopener">wasilisha suala</a></em>.</strong>
+      © 2015-2018 <a href="https://www.coreinfrastructure.org"
+      target="_blank" rel="noopener">Core Infrastructure Initiative</a>,
+      a <a href="https://www.linuxfoundation.org/" target="_blank"
+      rel="noopener">Linux Foundation</a> Mradi Shirikishi. Haki
+      Zote Zimehifadhiwa. Tafadhali angalia <a href="https://www.linuxfoundation.org/privacy"
+      target="_blank" rel="noopener">sera ya faragha</a> and <a
+      href="https://www.linuxfoundation.org/terms" target="_blank"
+      rel="noopener">masharti ya utumiaji</a>. </small>
   admin_only:
   account_activations:
-    activated:
+    activated: Akaunti imeamilishwa!
     delay:
       zero:
       one:
@@ -107,8 +121,34 @@ sw:
         miradi ipi ya FLOSS inayofuata mazoea bora na matokeo
         sanasana inaweza kutoa programu za kompyuta zilizo na
         usalamu wa hali ya juu.
-      p2_html:
-      p3_html:
+      p2_html: >-
+        Unaweza ona kwa urahisi <a href="/en/criteria/0">vigezo
+        vya nishani iliyohitimu</a>. Taarifa zaidi kuhusu programu
+        ya nishani ya Mazoea Bora ya CII <a href='https://github.com/coreinfrastructure/best-practices-badge'>inapatikana
+        katika GitHub</a>. <a href="/en/project_stats">Takwimu
+        ya mradi</a> na <a href="/en/criteria_stats">takwimu ya
+        vigezo</a> yapatikana. <a href="/en/projects">Kurasa ya
+        miradi</a> inaonyesha miradi inayoshiriki na uwezekano
+        wa kuelewa maswali (k.m., unaweza kuona <a href="/en/projects?gteq=100">miradi
+        iliyo na nishani ya kuhitimu</a>). Pia unaweza kuona <a
+        href='/en/projects/1/0'>kama mfano (mahali tunapojaribu
+        kupata nishani yetu wenyewe)</a>.
+      p3_html: >-
+        <em>Faragha na masuala ya kisheria</em>: Tafadhali angalia
+        <a href="https://www.linuxfoundation.org/privacy">sera
+        ya faragha</a>, <a href="/en/cookies">about cookies</a>,
+        na <a href="https://www.linuxfoundation.org/terms">masharti
+        ya utumiaji</a>. Misimbo ya kuweka nishani kwenye programu
+        yenyewe imetolewa kupitia leseni ya <a href="https://opensource.org/licenses/MIT">MIT</a>
+        (miradi zinayofuatia nishani zinapatikana kupitia leseni
+        zao husika). Yote inayopatikana-hadharani na siyo mambo
+        ya msimbo inayosimamiwa na programu ya kuwekeza nishani
+        imetolewa kupitia angalau <a href="https://creativecommons.org/licenses/by/3.0/">Creative
+        Commons Attribution License version 3.0 (CC-BY-3.0)</a>;
+        mambo mapya yasiyo msimbo imetolewa kupitia CC-BY toleo
+        3.0 au ya baadaye (CC-BY-3.0+). Kama inarejelea kwa pamoja
+        au imedokezwa vinginevyo, tafadhali tambua wachangiaji
+        wa nishani ya Mazoea Bora ya CII.
       share_header_html: "<p> Tafadhali shiriki hii: </p>"
       twitter: Twitter
       reddit: Reddit

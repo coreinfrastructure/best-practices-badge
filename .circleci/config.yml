@@ -72,8 +72,9 @@ jobs:
         - v4-dep-{{ arch }}-
         # - v4-dep-
     # DEBUG: Show what we restored
-    - run: find ~/.rbenv
-    - run: find .bundle
+    - run: find .bundle || true
+    - run: find ~/.rbenv || true
+    - run: find vendor/bundle || true
     - run:
         name: Update Rubygems
         command: sudo gem update --system --silent --no-document
@@ -96,6 +97,10 @@ jobs:
     - run:
        name: Update Chromedriver
        command: bundle exec rake update_chromedriver
+    # DEBUG
+    - run: find .bundle || true
+    - run: find ~/.rbenv || true
+    - run: find vendor/bundle || true
     # Save dependency cache
     - save_cache:
         key: v4-dep-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}

@@ -67,10 +67,10 @@ jobs:
         keys:
         # Find the most recently generated cache used
         # Find a cache corresponding to this particular Gemfile.lock checksum
-        - v4-dep-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
-        - v4-dep-{{ arch }}-{{ .Branch }}-
-        - v4-dep-{{ arch }}-
-        # - v4-dep-
+        - v5-dep-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
+        - v5-dep-{{ arch }}-{{ .Branch }}-
+        - v5-dep-{{ arch }}-
+        # - v5-dep-
     # DEBUG: Show what we restored
     - run: find .bundle || true
     - run: find ~/.rbenv || true
@@ -103,7 +103,7 @@ jobs:
     - run: find vendor/bundle || true
     # Save dependency cache
     - save_cache:
-        key: v4-dep-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
+        key: v5-dep-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
         paths:
           - vendor/bundle
           - ~/.bundle

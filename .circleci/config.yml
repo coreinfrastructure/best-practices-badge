@@ -58,7 +58,7 @@ jobs:
     - run: mkdir -p $CIRCLE_ARTIFACTS $CIRCLE_TEST_REPORTS
     # Force cleanup to make deterministic.
     # See https://circleci.com/docs/2.0/caching
-    - run bundle clean --force
+    - run: bundle clean --force
     # Dependencies
     # Restore the dependency cache
     - restore_cache:

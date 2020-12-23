@@ -48,14 +48,17 @@ gem 'omniauth-github', '1.4.0' # Authentication to GitHub (get project info)
 # Counter CVE-2015-9284 in omniauth.  Unfortunately, at the time of this
 # writing the omniauth folks STILL have not fixed it (!). There is a shim
 # by a third party that *does* fix it. I don't know the person who created
-# this shim, but I reviewed the code and it looks okay.  I could do this:
-# gem 'omniauth-rails_csrf_protection', '0.1.2' # Counter CVE-2015-9284
-# But to provide a stronger guarantee that what I reviewed is what will
-# be loaded, I'm specifying a specific hash reference.  That's no
-# guarantee, but it does make attacks harder to perform.
-gem 'omniauth-rails_csrf_protection',
-    git: 'https://github.com/cookpad/omniauth-rails_csrf_protection.git',
-    ref: 'b33ff2e57f7c0530da76da6b4b358218f1e7f230'
+# this shim, but I reviewed the code and it looks okay.
+# At one time I did this:
+# gem 'omniauth-rails_csrf_protection',
+#    git: 'https://github.com/cookpad/omniauth-rails_csrf_protection.git',
+#    ref: 'b33ff2e57f7c0530da76da6b4b358218f1e7f230'
+# to provide a stronger guarantee that what I reviewed is what will
+# be loaded, by specifying a specific hash reference.
+# However, using a git reference busts CI pipeline caching, slowing down
+# all testing, and over time we've become more comfortable that this is
+# the "standard way to resolve this issue".
+gem 'omniauth-rails_csrf_protection', '0.1.2' # Counter CVE-2015-9284
 gem 'pagy', '3.10.0' # Paginate some views
 gem 'paleta', '0.3.0' # Color manipulation, used for badges
 gem 'paper_trail', '10.3.1' # Record previous versions of project data

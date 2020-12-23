@@ -21,12 +21,12 @@ jobs:
         POSTGRES_USER: ubuntu
         POSTGRES_DB: circle_ruby_test
     steps:
+    - checkout
     - run: pwd
     - run: ls -l
     - run:
         name: Install browser tools
         command: browser-tools/install-browser-tools
-    - checkout
     # Prepare for artifact and test results
     - run: mkdir -p $CIRCLE_ARTIFACTS $CIRCLE_TEST_REPORTS
     # Dependencies

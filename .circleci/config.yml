@@ -1,4 +1,11 @@
-version: 2
+version: 2.1
+# This CircleCI orb doesn't seem to work, so I gave up:
+# orbs:
+#   browser-tools: circleci/browser-tools@1.1.1
+# When I try to later run "browser-tools/install-browser-tools" or similar,
+# CircleCI reports that the file doesn't exist (which is true).
+# It's not clear *why* the file doesn't exist. So we instead force-install
+# a browser for testing below.
 jobs:
   build:
     working_directory: ~/coreinfrastructure/best-practices-badge
@@ -8,7 +15,7 @@ jobs:
       CIRCLE_ARTIFACTS: /tmp/circleci-artifacts
       CIRCLE_TEST_REPORTS: /tmp/circleci-test-results
     docker:
-    - image: drdavidawheeler/cii-bestpractices:2.7.2-buster
+    - image: drdavidawheeler/cii-bestpractices:2.7.2-browsers
       environment:
         PG_HOST: localhost
         PG_USER: ubuntu
@@ -20,19 +27,56 @@ jobs:
         POSTGRES_DB: circle_ruby_test
     steps:
     - checkout
+    - run: pwd
+    - run: ls -l
+    # This should install the orb, but it doesn't work.
+    # - run:
+    #     name: Install browser tools
+    #     command: browser-tools/install-browser-tools
+    #
+    # We instead manually force installation of Chrome using a code
+    # snippet from the browser tools. See:
+    # https://github.com/CircleCI-Public/browser-tools-orb/blob/master/src/commands/install-chrome.yml#L131
+    - run:
+        name: Install Chrome
+        command: |
+          SUDO='sudo'
+          CHROME_VERSION='latest'
+          if [[ "$CHROME_VERSION" == "latest" ]]; then
+            CHROME_URL="https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
+          else
+            CHROME_URL="https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${CHROME_VERSION}-1_amd64.deb"
+          fi
+          curl --silent --show-error --location --fail --retry 3 \
+            --output google-chrome.deb $CHROME_URL
+          $SUDO apt-get update
+          # The pipe will install any dependencies missing
+          $SUDO dpkg -i google-chrome.deb || $SUDO apt-get -fy install
+          rm -rf google-chrome.deb
+          $SUDO sed -i 's|HERE/chrome"|HERE/chrome" --disable-setuid-sandbox --no-sandbox|g' "/opt/google/chrome/google-chrome"
+          which google-chrome
+          google-chrome --version
     # Prepare for artifact and test results
     - run: mkdir -p $CIRCLE_ARTIFACTS $CIRCLE_TEST_REPORTS
+    # Force cleanup to make deterministic.
+    # See https://circleci.com/docs/2.0/caching
+    # - run: bundle clean --force
     # Dependencies
     # Restore the dependency cache
     - restore_cache:
         keys:
-        # Find a cache corresponding to this particular Gemfile.lock checksum
-        - v4-dep-{{ checksum "Gemfile.lock" }}
         # Find the most recently generated cache used
-        - v4-dep-
+        # Find a cache corresponding to this particular Gemfile.lock checksum
+        - v7-dep-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
+        - v7-dep-{{ arch }}-{{ .Branch }}-
+        - v7-dep-{{ arch }}-
+        # This was suggested, but it seems like a bad idea to me:
+        # - v7-dep-
+    # This would show what we restored
+    # - run: find ~/.rubygems || true
     - run:
         name: Update Rubygems
-        command: sudo gem update --system --silent
+        command: sudo gem update --system --silent --no-document
         environment:
           REALLY_GEM_UPDATE_SYSTEM: 1
     - run:
@@ -45,18 +89,29 @@ jobs:
         command: bundle --version
     - run:
         name: Install Bundle
+        # Note: --path=vendor/bundle removed, we don't need it.
         command: >
-          bundle check --path=vendor/bundle ||
-          bundle install --path=vendor/bundle --jobs=4 --retry=3
+          bundle check ||
+          bundle install --jobs=4 --retry=3
     - run:
        name: Update Chromedriver
        command: bundle exec rake update_chromedriver
+    # Here's how we could show more:
+    # - run: find ~/.rubygems || true
+    # - run: find ~/.bundle || true
+    # - run: find ~/.rbenv || true
+    # - run: find vendor/bundle || true
+    # - run: find ~ -name "*rack-timeout*" || true
     # Save dependency cache
     - save_cache:
-        key: v4-dep-{{ checksum "Gemfile.lock" }}
+        key: v7-dep-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
         paths:
-          - vendor/bundle
+          - ~/.rubygems
           - ~/.bundle
+          # Not used in current config; we include these just in case they
+          # get used later:
+          - ~/.rbenv/versions
+          - vendor/bundle
     - run:
         name: Configure database
         command: |

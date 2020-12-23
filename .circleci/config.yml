@@ -21,6 +21,8 @@ jobs:
         POSTGRES_USER: ubuntu
         POSTGRES_DB: circle_ruby_test
     steps:
+    - run: pwd
+    - run: ls -l
     - run:
         name: Install browser tools
         command: browser-tools/install-browser-tools

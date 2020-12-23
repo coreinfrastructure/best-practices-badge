@@ -88,9 +88,9 @@ jobs:
     - save_cache:
         key: v4-dep-{{ echo `checksum "Gemfile.lock")`+`cat .ruby-version` }}
         paths:
-          # vendor/bundle removed
+          - vendor/bundle
           - ~/.bundle
-          - {{ dirname "$(bundle info --path rake)" }}
+          - ~/.rbenv
     - run:
         name: Configure database
         command: |

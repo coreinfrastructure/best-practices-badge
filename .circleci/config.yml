@@ -71,6 +71,10 @@ jobs:
         - v4-dep-{{ arch }}-{{ .Branch }}-
         - v4-dep-{{ arch }}-
         # - v4-dep-
+    # DEBUG: Show what we restored
+    - run: find vendor/bundle
+    - run: find .bundle
+    - run: find ~/.rbenv
     - run:
         name: Update Rubygems
         command: sudo gem update --system --silent --no-document

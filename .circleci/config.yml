@@ -67,16 +67,16 @@ jobs:
         keys:
         # Find the most recently generated cache used
         # Find a cache corresponding to this particular Gemfile.lock checksum
-        - v6-dep-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
-        - v6-dep-{{ arch }}-{{ .Branch }}-
-        - v6-dep-{{ arch }}-
+        - v7-dep-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
+        - v7-dep-{{ arch }}-{{ .Branch }}-
+        - v7-dep-{{ arch }}-
         # This was suggested, but it seems like a bad idea to me:
-        # - v6-dep-
+        # - v7-dep-
     # DEBUG: Show what we restored
-    - run: find .bundle || true
+    - run: find ~/.rubygems || true
+    - run: find ~/.bundle || true
     - run: find ~/.rbenv || true
     - run: find vendor/bundle || true
-    - run: find .rubygems || true
     - run:
         name: Update Rubygems
         command: sudo gem update --system --silent --no-document
@@ -100,19 +100,21 @@ jobs:
        name: Update Chromedriver
        command: bundle exec rake update_chromedriver
     # DEBUG
-    - run: find .bundle || true
+    - run: find ~/.rubygems || true
+    - run: find ~/.bundle || true
     - run: find ~/.rbenv || true
     - run: find vendor/bundle || true
-    - run: find .rubygems || true
     - run: find ~ -name "*rack-timeout*" || true
     # Save dependency cache
     - save_cache:
-        key: v6-dep-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
+        key: v7-dep-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
         paths:
-          - vendor/bundle
-          - ~/.bundle
-          - ~/.rbenv/versions
           - ~/.rubygems
+          - ~/.bundle
+          # Not used in current config; we include these just in case they
+          # get used later:
+          - ~/.rbenv/versions
+          - vendor/bundle
     - run:
         name: Configure database
         command: |

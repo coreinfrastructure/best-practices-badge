@@ -1,5 +1,5 @@
 version: 2.1
-# orbs don't seem to actually do anything, so I gave up:
+# This CircleCI orb doesn't seem to work, so I gave up:
 # orbs:
 #   browser-tools: circleci/browser-tools@1.1.1
 jobs:
@@ -30,7 +30,8 @@ jobs:
     #     name: Install browser tools
     #     command: browser-tools/install-browser-tools
     #
-    #
+    # We instead manually force installation of Chrome using a code
+    # snippet from the browser tools. See:
     # https://github.com/CircleCI-Public/browser-tools-orb/blob/master/src/commands/install-chrome.yml#L131
     - run:
         name: Install Chrome

@@ -18,14 +18,14 @@ sw:
   feed_title:
   project_name_unknown:
   locale_name:
-    en: Kiingereza (en)
-    es: Kihispania / Español (es)
-    de: Kijerumani / Deutsch (de)
-    fr: Kifaransa / Français (fr)
-    ja: Kijapani / 日本語 (ja)
-    ru: Kirusi / Русский (ru)
-    sw: Swahili / Kiswahili (sw)
-    zh-CN: Kichina (Kilichorahisishwa) / 简体中文 (zh-CN)
+    en: Kiingereza
+    es: Kihispania
+    de: Kijerumani
+    fr: Kifaransa
+    ja: Kijapani
+    ru: Kirusi
+    sw: Kiswahili
+    zh-CN: Kichina (Kilichorahisishwa)
   layouts:
     cii_best_practices: Mazoea Bora ya CII
     toggle_navigation:

@@ -18,13 +18,13 @@ ru:
   feed_title: Значок "Передовая практика CII" - обновленные проекты
   project_name_unknown: "(Название неизвестно)"
   locale_name:
-    en: Английский / English (en)
-    de: Немецкий / Deutsch (de)
-    fr: Французский / Français (fr)
-    ja: Японский / 日本語 (ja)
-    ru: Русский (ru)
-    zh-CN: Китайский (упрощенный) / 简体 中文 (zh-CN)
-    es: Испанский / Español (es)
+    en: Английский
+    de: Немецкий
+    fr: Французский
+    ja: Японский
+    ru: Русский
+    zh-CN: "Китайский (упрощенный)"
+    es: Испанский
     sw:
   layouts:
     cii_best_practices: Передовая практика CII

@@ -577,14 +577,14 @@ zh-CN:
       感谢您的时间。
   project_name_unknown: "(未知名称)"
   locale_name:
-    en: 英文 / English (en）
-    fr: 法语 / Français (fr)
-    zh-CN: 中文（简体）/简体中文（zh-CN）
-    de: 德文 / Deutsch (de)
-    ja: 日语 / 日本語 (ja)
-    ru: 俄语 / Русский (ru)
-    es: 西班牙语/西班牙文 / Español (es)
-    sw: 斯瓦希里语/斯瓦希里语（瑞士）
+    en: 英文
+    fr: 法语
+    zh-CN: 中文（简体）
+    de: 德文
+    ja: 日语
+    ru: 俄语
+    es: 西班牙语/西班牙文
+    sw: 斯瓦希里语
   criteria:
     '0':
       description_good:

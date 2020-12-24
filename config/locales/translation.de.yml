@@ -18,13 +18,13 @@ de:
   feed_title: CII Best Practices BadgeApp Aktualisierte Projekte
   project_name_unknown: "(Name unbekannt)"
   locale_name:
-    en: Englisch / English (en)
-    de: Deutsch (de)
-    fr: Französisch / Français (fr)
-    ja: Japanisch / 日本語 (ja)
-    zh-CN: Chinesisch (vereinfacht) / 简体 中 文 (zh-CN)
-    ru: Russisch / Русский (ru)
-    es: Spanisch / Español (es)
+    en: Englisch
+    de: Deutsch
+    fr: Französisch
+    ja: Japanisch
+    zh-CN: Chinesisch (vereinfacht)
+    ru: Russisch
+    es: Spanisch
     sw:
   layouts:
     cii_best_practices: CII Best Practices

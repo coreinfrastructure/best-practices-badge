@@ -53,7 +53,13 @@
                 <li><a href="<%=
                   # TODO: This doesn't include the anchor.
                   force_locale_url(request.original_url, loc)
-                  %>"><%= t("locale_name.#{loc}") %></a>
+                  %>"><%= t("locale_name.#{loc}") %>
+                  <%=
+                    if loc != I18n.locale
+                      '// ' + t("locale_name.#{loc}", locale: loc)
+                    end
+                  %>
+                  (<%= loc %>)</a>
                 </li>
               <% end %>
             </ul>

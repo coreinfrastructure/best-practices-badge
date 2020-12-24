@@ -392,12 +392,13 @@ task :fake_production do
   sh 'RAILS_ENV=fake_production rails server -p 4000'
 end
 
-def normalize_values(input)
+def normalize_values(input, locale)
+  # The destination locale is "locale".
   input.transform_values! do |value|
     if value.is_a?(Hash)
-      normalize_values value
+      normalize_values value, locale
     elsif value.is_a?(String)
-      normalize_string value
+      normalize_string value, locale
     elsif value.is_a?(NilClass)
       value
     else raise TypeError 'Not Hash, String or NilClass'
@@ -406,7 +407,7 @@ def normalize_values(input)
 end
 
 # rubocop:disable Metrics/MethodLength
-def normalize_string(value)
+def normalize_string(value, locale)
   # Remove trailing whitespace
   value.sub!(/\s+$/, '')
   return value unless value.include?('<')
@@ -427,6 +428,8 @@ def normalize_string(value)
        .gsub(/target="_ blank">/, 'target="_blank">')
        .gsub(/target="_blank" *>/, 'target="_blank" rel="noopener">')
        .gsub(%r{https: // }, 'https://')
+       .gsub(%r{href="/en/}, "href=\"/#{locale}/")
+       .gsub(%r{href='/en/}, "href=\'/#{locale}/")
 end
 # rubocop:enable Metrics/MethodLength
 
@@ -435,7 +438,9 @@ def normalize_yaml(path)
   # values and fixes some predictable errors automatically.
   require 'yaml'
   Dir[path].each do |filename|
-    normalized = normalize_values(YAML.load_file(filename))
+    # Compute locale from filename (it must be before the last period)
+    locale = filename.split('.')[-2]
+    normalized = normalize_values(YAML.load_file(filename), locale)
     IO.write(
       filename, normalized.to_yaml(line_width: 60).gsub(/\s+$/, '')
     )

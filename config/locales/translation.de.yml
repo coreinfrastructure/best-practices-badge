@@ -209,8 +209,8 @@ de:
         Reaktivierte Projekte innerhalb von 14 Tagen nach Erhalt
         der Erinnerung
       admin_html: >-
-        Als Administrator können Sie auch die <a href="/reminders">detaillierten
-        Informationen zu Erinnerungen</a> und <a href="/en/project_stats?type=uncommon">weniger
+        Als Administrator können Sie auch die <a href="/de/reminders">detaillierten
+        Informationen zu Erinnerungen</a> und <a href="/de/project_stats?type=uncommon">weniger
         oft genutzen Statistik Visualisierungen</a>. sehen.
       raw_data: 'Sie können auch die Rohdaten sehen:'
       json_format: JSON-Format
@@ -3039,7 +3039,7 @@ de:
       <a href="/de/criteria?details=true&rationale=true">zusätzlichen
       Informationen anschauen</a>. Sie können auch nur die Kriterien
       für die Level <a href="/de/criteria/0">Passing</a>, <a href="/de/criteria/1">Silber</a>
-      und <a href="/de/criteria/2">Gold</a>, sowie <a href="/en/criteria_stats">Kriterien
+      und <a href="/de/criteria/2">Gold</a>, sowie <a href="/de/criteria_stats">Kriterien
       Statistiken</a> anschauen.
     beginning_0_html: >-
       <p> Dies sind Best Practices für Free/Libre und Open Source

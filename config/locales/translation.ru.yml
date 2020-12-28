@@ -346,7 +346,7 @@ ru:
         после получения напоминания
       admin_html: >-
         Как администратор вы также можете увидеть <a href="/ru/reminders">подробности
-        о напоминаниях</a> и <a href="/en/project_stats?type=uncommon">
+        о напоминаниях</a> и <a href="/ru/project_stats?type=uncommon">
         реже используемые статистические графики</a>.
       raw_data: 'Вы также можете посмотреть на исходные данные:'
       json_format: формат JSON

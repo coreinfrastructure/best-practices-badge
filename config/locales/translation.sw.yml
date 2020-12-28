@@ -122,21 +122,21 @@ sw:
         sanasana inaweza kutoa programu za kompyuta zilizo na
         usalamu wa hali ya juu.
       p2_html: >-
-        Unaweza ona kwa urahisi <a href="/en/criteria/0">vigezo
+        Unaweza ona kwa urahisi <a href="/sw/criteria/0">vigezo
         vya nishani iliyohitimu</a>. Taarifa zaidi kuhusu programu
         ya nishani ya Mazoea Bora ya CII <a href='https://github.com/coreinfrastructure/best-practices-badge'>inapatikana
-        katika GitHub</a>. <a href="/en/project_stats">Takwimu
-        ya mradi</a> na <a href="/en/criteria_stats">takwimu ya
-        vigezo</a> yapatikana. <a href="/en/projects">Kurasa ya
+        katika GitHub</a>. <a href="/sw/project_stats">Takwimu
+        ya mradi</a> na <a href="/sw/criteria_stats">takwimu ya
+        vigezo</a> yapatikana. <a href="/sw/projects">Kurasa ya
         miradi</a> inaonyesha miradi inayoshiriki na uwezekano
-        wa kufanya miulizo (k.m., unaweza kuona <a href="/en/projects?gteq=100">miradi
+        wa kufanya miulizo (k.m., unaweza kuona <a href="/sw/projects?gteq=100">miradi
         iliyo na nishani ya kuhitimu</a>). Pia unaweza kuona <a
-        href='/en/projects/1/0'>kama mfano (mahali tunapojaribu
+        href='/sw/projects/1/0'>kama mfano (mahali tunapojaribu
         kupata nishani yetu wenyewe)</a>.
       p3_html: >-
         <em>Faragha na masuala ya kisheria</em>: Tafadhali angalia
         <a href="https://www.linuxfoundation.org/privacy">sera
-        ya faragha</a>, <a href="/en/cookies">about cookies</a>,
+        ya faragha</a>, <a href="/sw/cookies">about cookies</a>,
         na <a href="https://www.linuxfoundation.org/terms">masharti
         ya utumiaji</a>. Misimbo ya kuweka nishani kwenye programu
         yenyewe imetolewa kupitia leseni ya <a href="https://opensource.org/licenses/MIT">MIT</a>

@@ -18,13 +18,13 @@ es:
   feed_title:
   project_name_unknown:
   locale_name:
-    en: Inglés / English (en)
-    de: Alemán / Deutsch (de)
-    fr: Francés / Français (fr)
-    ja: Japonés / 日本語 (ja)
-    ru: Ruso / Русский (ru)
-    zh-CN: Chino (Simplificado) / 简体中文 (zh-CN)
-    es: Español (es)
+    en: Inglés
+    de: Alemán
+    fr: Francés
+    ja: Japonés
+    ru: Ruso
+    zh-CN: Chino (Simplificado)
+    es: Español
     sw:
   layouts:
     cii_best_practices: CII Best Practices

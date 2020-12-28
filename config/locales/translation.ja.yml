@@ -18,13 +18,13 @@ ja:
   feed_title: CIIベスト プラクティス バッジ更新プロジェクト
   project_name_unknown: "（名称不明）"
   locale_name:
-    en: 英語 / English (en)
-    de: ドイツ語 / Deutsch (de)
-    fr: フランス語 / Français (fr)
-    ja: 日本語 (ja)
-    zh-CN: 中国語 (簡体字) / 简体中文 (zh-CN)
-    ru: ロシア語 / Русский (ru)
-    es: スペイン語/スペイン語
+    en: 英語
+    de: ドイツ語
+    fr: フランス語
+    ja: 日本語
+    zh-CN: 中国語 (簡体字)
+    ru: ロシア語
+    es: スペイン語
     sw:
   layouts:
     cii_best_practices: CII ベスト プラクティス

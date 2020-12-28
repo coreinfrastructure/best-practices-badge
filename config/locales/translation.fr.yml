@@ -910,14 +910,14 @@ fr:
       obtenir le badge.\n\nMerci pour votre attention."
   project_name_unknown: "(Nom inconnu)"
   locale_name:
-    en: Anglais / English (en)
-    fr: Français (fr)
-    zh-CN: Chinois (simplifié) / 简体 中文 (zh-CN)
-    de: Allemand / Deutsch (de)
-    ja: Japonais / 日本語 (ja)
-    ru: Russe / Русский (ru)
-    es: Espagnol / Español (es)
-    sw: Swahili / Kiswahili (sw)
+    en: Anglais
+    fr: Français
+    zh-CN: Chinois (simplifié)
+    de: Allemand
+    ja: Japonais
+    ru: Russe
+    es: Espagnol
+    sw: Swahili
   criteria:
     '0':
       description_good:

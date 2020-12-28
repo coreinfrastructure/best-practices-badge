@@ -56,7 +56,7 @@
                   %>"><%= t("locale_name.#{loc}") %>
                   <%=
                     if loc != I18n.locale
-                      '// ' + t("locale_name.#{loc}", locale: loc)
+                      '/ ' + t("locale_name.#{loc}", locale: loc)
                     end
                   %>
                   (<%= loc %>)</a>

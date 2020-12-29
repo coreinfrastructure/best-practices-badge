@@ -1317,19 +1317,33 @@ en:
       release_notes_vulns:
         description: >-
           The release notes MUST identify every publicly known
-          vulnerability with a CVE assignment or similar
-          that is fixed in each new release,
-          unless users typically cannot practically update
-          the software themselves.
-          If there are no release notes or there have been
-          no publicly known vulnerabilities, choose "not applicable" (N/A).
+          run-time vulnerability fixed in this release that already had a CVE
+          assignment or similar when the release was created.
+          This criterion may be marked as not applicable (N/A)
+          if users typically cannot practically update the software
+          themselves (e.g., as is often true for kernel updates).
+          This criterion applies only to the project results,
+          not to its dependencies. If there are no release notes or there
+          have been no publicly known vulnerabilities, choose N/A.
         details: >-
-          If users typically cannot practically update the software
-          themselves on their computers,
-          but must instead depend on a middleman to perform
-          the upgrade (as is often the case for a kernel and low-level
-          software that is intertwined with a kernel), the project may
-          choose "not applicable" (N/A).
+          This criterion helps users determine if a given update will
+          fix a vulnerability that is publicly known, to help users make
+          an informed decision about updating. If users typically
+          cannot practically update the software themselves on their
+          computers, but must instead depend on one or more intermediaries
+          to perform the update (as is often the case for a kernel and
+          low-level software that is intertwined with a kernel), the project
+          may choose "not applicable" (N/A) instead, since this additional
+          information will not be helpful to those users.
+          Similarly, a project may choose N/A if all recipients only
+          run the latest version (e.g., it is the code for a single
+          website or internet service that is constantly updated via
+          continuous delivery).
+          This criterion only applies to the project results, not its
+          dependencies. Listing the vulnerabilities of all transitive
+          dependencies of a project becomes unwieldy as dependencies
+          increase and vary, and is unnecessary since tools that examine
+          and track dependencies can do this in a more scalable way.
       report_process:
         description: >-
           The project MUST provide a process for users to submit

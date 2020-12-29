@@ -1428,6 +1428,10 @@ en:
           The project MUST use at least one automated test suite
           that is publicly released as FLOSS (this test suite
           may be maintained as a separate FLOSS project).
+          The project MUST clearly show or document how to run the
+          test suite(s) (e.g., via a continuous integration (CI)
+          script or via documentation in files such as BUILD.md, README.md,
+          or CONTRIBUTING.md).
         details: >-
           The project MAY use multiple automated test suites (e.g.,
           one that runs quickly, vs. another that is more thorough

@@ -42,6 +42,11 @@ gem 'jquery-rails', '4.4.0' # JavaScript jQuery library (for Rails)
 gem 'jquery-ui-rails', '6.0.1' # JavaScript jQueryUI library (for Rails)
 gem 'lograge', '0.11.2' # Simplify logs
 gem 'mail', '2.7.1' # Ruby mail handler
+# TODO: Temporary to counter vulnerability.
+# FORCE use of a nokogiri release candidate or later, since it
+# fixes a security vulnerability.
+gem 'nokogiri', '1.11.0.rc4'
+#
 gem 'octokit', '4.18.0' # GitHub's official Ruby API
 gem 'omniauth-github', '1.4.0' # Authentication to GitHub (get project info)
 #

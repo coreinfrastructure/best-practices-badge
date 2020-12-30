@@ -1,0 +1,25 @@
+{
+  "ignored_warnings": [
+    {
+      "warning_type": "Cross Site Scripting",
+      "warning_code": 2,
+      "fingerprint": "d8484988264901f57e6da17da687e9e34fe69a513fbf89d99ef4a015cbf01ae3",
+      "check_name": "CrossSiteScripting",
+      "message": "Unescaped model attribute",
+      "file": "app/views/projects/_details.html.erb",
+      "line": 6,
+      "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "code": "Criteria[criteria_level][criterion.to_sym].details",
+      "render_path": [{"type":"controller","class":"ProjectsController","method":"render_status","line":47,"file":"app/helpers/projects_helper.rb"},{"type":"template","name":"projects/_status_chooser","line":74,"file":"app/views/projects/_status_chooser.html.erb"}],
+      "location": {
+        "type": "template",
+        "template": "projects/_details"
+      },
+      "user_input": null,
+      "confidence": "Medium",
+      "note": ""
+    }
+  ],
+  "updated": "2017-05-25 17:01:07 -0400",
+  "brakeman_version": "3.6.1"
+}

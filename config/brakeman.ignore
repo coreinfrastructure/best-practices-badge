@@ -1,25 +1,67 @@
 {
   "ignored_warnings": [
     {
-      "warning_type": "Cross Site Scripting",
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "13d7487a5ad5e5f080e5d86d77aa905e4f8acb955ed2743675fa4e21d7f0a80e",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/models/project.rb",
+      "line": 536,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "Project.select(\"id, name, achieved_#{[\"in_progress\", \"passing\", \"silver\", \"gold\"].drop(1)[level]}_at\").where(\"badge_percentage_#{level} >= 100\").where(\"achieved_#{[\"in_progress\", \"passing\", \"silver\", \"gold\"].drop(1)[level]}_at >= ?\", target_month.at_beginning_of_month).where(\"achieved_#{[\"in_progress\", \"passing\", \"silver\", \"gold\"].drop(1)[level]}_at <= ?\", target_month.at_end_of_month).reorder(\"achieved_#{[\"in_progress\", \"passing\", \"silver\", \"gold\"].drop(1)[level]}_at\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Project",
+        "method": "Project.projects_first_in"
+      },
+      "user_input": "[\"in_progress\", \"passing\", \"silver\", \"gold\"].drop(1)[level]",
+      "confidence": "Medium",
+      "note": "Name and level are trusted"
+    },
+    {
+      "warning_type": "Cross-Site Scripting",
       "warning_code": 2,
       "fingerprint": "d8484988264901f57e6da17da687e9e34fe69a513fbf89d99ef4a015cbf01ae3",
       "check_name": "CrossSiteScripting",
       "message": "Unescaped model attribute",
       "file": "app/views/projects/_details.html.erb",
       "line": 6,
-      "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "Criteria[criteria_level][criterion.to_sym].details",
-      "render_path": [{"type":"controller","class":"ProjectsController","method":"render_status","line":47,"file":"app/helpers/projects_helper.rb"},{"type":"template","name":"projects/_status_chooser","line":74,"file":"app/views/projects/_status_chooser.html.erb"}],
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "ProjectsController",
+          "method": "render_status",
+          "line": 60,
+          "file": "app/helpers/projects_helper.rb",
+          "rendered": {
+            "name": "projects/_status_chooser",
+            "file": "app/views/projects/_status_chooser.html.erb"
+          }
+        },
+        {
+          "type": "template",
+          "name": "projects/_status_chooser",
+          "line": 97,
+          "file": "app/views/projects/_status_chooser.html.erb",
+          "rendered": {
+            "name": "projects/_details",
+            "file": "app/views/projects/_details.html.erb"
+          }
+        }
+      ],
       "location": {
         "type": "template",
         "template": "projects/_details"
       },
       "user_input": null,
       "confidence": "Medium",
-      "note": ""
+      "note": "The details text is from a trusted source"
     }
   ],
-  "updated": "2017-05-25 17:01:07 -0400",
-  "brakeman_version": "3.6.1"
+  "updated": "2020-12-30 18:14:23 -0500",
+  "brakeman_version": "4.10.1"
 }

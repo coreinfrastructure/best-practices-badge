@@ -18,7 +18,6 @@ module Rack
       @app = app
     end
 
-    # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     def call(env)
       request = Rack::Request.new env
       if %r{^/(.*)/$}.match?(request.path_info)
@@ -28,15 +27,9 @@ module Rack
         [301, { 'Location' => url, 'Content-Type' => 'text/html' }, []]
       else
         # Nothing to do, continue chain.
-        # TODO: DEBUG: TEMPORARY:
-        Rails.logger.info { '@app:' }
-        Rails.logger.info { @app }
-        Rails.logger.info { 'env:' }
-        Rails.logger.info { env }
         @app.call env
       end
     end
-    # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
   end
 end
 

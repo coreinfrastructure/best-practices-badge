@@ -29,3 +29,6 @@ Pluralization is tricky in some languages (e.g., Russian). Rails specially handl
 ## More information
 
 For more technical information about translation, see <./implementation.md>.
+The list of translators is restricted (since it reveals email addresses); if you are authorized, you can log into translation.io or view the [information on translators page](https://docs.google.com/document/d/13XioAIW0g0tIRtBZCSIy7NnrAbC3K6R8JWC22H37vIc/edit).
+
+Note that users decide which locale to view via the URL page, e.g., /en/ for English or /fr/ for French. A URL without the locale prefix is redirected to the best matching locale based on the user's web browser settings; users can manually switch to another locale by changing the URL or selecting a drop-down list.

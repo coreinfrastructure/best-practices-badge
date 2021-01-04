@@ -749,8 +749,8 @@ en:
         the US or to a non-US-citizen, you may be legally required
         to take a few extra steps.
         Typically this just involves sending an email.
-        For more information, see the encryption section of
-        <a href="https://www.linuxfoundation.org/wp-content/uploads/2020/07/UnderstandingOpenSourceTechnologyandUSExportControls_Whitepaper_070220.pdf"
+        For more information, see the encryption section of <a
+        href="https://www.linuxfoundation.org/resources/publications/understanding-us-export-controls-with-os-projects/"
         ><i>Understanding Open Source Technology &amp;
         US Export Controls</i></a>.
       dont_use_crypto: >-

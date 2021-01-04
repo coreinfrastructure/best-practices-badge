@@ -15,14 +15,14 @@ ruby File.read('.ruby-version').strip
 # sure to upgrade them in sync, *including* railties.
 # Loading only what we use reduces memory use & attack surface.
 # gem 'actioncable' # Not used. Client/server comm channel.
-gem 'actionmailer', '5.2.4.4' # Rails. Send email.
-gem 'actionpack', '5.2.4.4' # Rails. MVC framework.
-gem 'actionview', '5.2.4.4' # Rails. View.
-gem 'activejob', '5.2.4.4' # Rails. Async jobs.
-gem 'activemodel', '5.2.4.4' # Rails. Model basics.
-gem 'activerecord', '5.2.4.4' # Rails. ORM and query system.
+gem 'actionmailer', '6.0.3.4' # Rails. Send email.
+gem 'actionpack', '6.0.3.4' # Rails. MVC framework.
+gem 'actionview', '6.0.3.4' # Rails. View.
+gem 'activejob', '6.0.3.4' # Rails. Async jobs.
+gem 'activemodel', '6.0.3.4' # Rails. Model basics.
+gem 'activerecord', '6.0.3.4' # Rails. ORM and query system.
 # gem 'activestorage' # Not used. Attaches cloud files to ActiveRecord.
-gem 'activesupport', '5.2.4.4' # Rails. Underlying library.
+gem 'activesupport', '6.0.3.4' # Rails. Underlying library.
 # gem 'activetext' # Not used. Text editor that fails to support markdown.
 gem 'attr_encrypted', '3.1.0' # Encrypt email addresses
 gem 'bcrypt', '3.1.15' # Security - for salted hashed interated passwords
@@ -74,12 +74,12 @@ gem 'puma_worker_killer', '0.3.1' # Band-aid: Restart to limit memory use
 gem 'rack-attack', '6.3.1' # Implement rate limiting
 gem 'rack-cors', '1.1.1' # Enable CORS so JavaScript clients can get JSON
 gem 'rack-headers_filter', '0.0.1' # Filter out "dangerous" headers
-# We no longer say: gem 'rails', '5.2.4.4' # Our web framework
+# We no longer say: gem 'rails', '6.0.3.4' # Our web framework
 # but instead load only what we use (to reduce memory use and attack surface).
 # We load sprockets-rails, but its version number isn't kept in sync.
 # Note: Update the gem versions of action* and railties in sync.
-gem 'railties', '5.2.4.4' # Rails. Rails core, loads rest of Rails
-gem 'rails-i18n', '5.1.3' # Localizations for Rails built-ins
+gem 'railties', '6.0.3.4' # Rails. Rails core, loads rest of Rails
+gem 'rails-i18n', '6.0.0' # Localizations for Rails built-ins
 gem 'redcarpet', '3.5.0' # Process markdown in form textareas (justifications)
 gem 'sass-rails', '5.1.0', require: false # For .scss files (CSS extension)
 gem 'scout_apm', '2.6.9' # Monitor for memory leaks

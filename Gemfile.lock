@@ -119,10 +119,6 @@ GEM
       multipart-post (>= 1.2, < 3)
       ruby2_keywords
     faraday-net_http (1.0.0)
-    fastly (1.15.0)
-    fastly-rails (0.8.0)
-      fastly (~> 1.6)
-      railties (> 2, < 6)
     ffi (1.14.2)
     font-awesome-rails (4.7.0.5)
       railties (>= 3.2, < 6.1)
@@ -484,7 +480,6 @@ DEPENDENCIES
   database_cleaner (= 1.8.5)
   dotenv-rails (= 2.7.6)
   eslintrb (= 2.1.0)
-  fastly-rails (= 0.8.0)
   font-awesome-rails (= 4.7.0.5)
   http_accept_language (= 2.1.1)
   httparty (= 0.18.1)

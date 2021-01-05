@@ -21,7 +21,7 @@
     font_path('fontawesome-webfont.woff2') %>" as="font"
     type="font/woff2" crossorigin>
   <link rel="preload" href="<%=
-    asset_path('cci-logo-header') %>" as="image" type="image/png">
+    image_path('cci-logo-header.png') %>" as="image" type="image/png">
   <%= auto_discovery_link_tag :atom,
                               { controller: 'projects', action: 'feed' },
                               { title: t('feed_title') } %>

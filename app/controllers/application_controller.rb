@@ -46,6 +46,37 @@ class ApplicationController < ActionController::Base
     payload[:uid] = current_user.id if logged_in?
   end
 
+  # Set the cache control headers
+  # More info:
+  # https://docs.fastly.com/en/guides/configuring-caching
+  # https://docs.fastly.com/en/guides/serving-stale-content
+  # Simlulates what this did: https://github.com/fastly/fastly-rails
+  # In particular:
+  # https://github.com/fastly/fastly-rails/blob/master/lib/fastly-rails/
+  # action_controller/cache_control_headers.rb
+  # rubocop:disable Naming/AccessorMethodName
+  def set_cache_control_headers
+    # Configure our CDN (Fastly) to cache data for a while, and
+    # serve old data if the system has an error for some reason.
+    # In deployment this heading is *only* used by the CDN, and is stripped
+    # so that it does *not* go to client browsers.
+    response.headers['Surrogate-Control'] =
+      'max_age=86400, stale-if-error=864000'
+    # Set the cache values for ordinary browsers (all *other* than the CDN).
+    # The "no-cache" term is a little misleading, it *is* cached, but
+    # the cache value must be verified (via the CDN) before its use.
+    response.headers['Cache-Control'] = 'public, no-cache'
+  end
+
+  # Set headers for a CDN surrogate key. See:
+  # https://github.com/fastly/fastly-rails
+  # The keys are normally created via methods in the model.
+  def set_surrogate_key_header(*surrogate_keys)
+    # request.session_options[:skip] = true  # No Set-Cookie
+    response.headers['Surrogate-Key'] = surrogate_keys.join(' ')
+  end
+  # rubocop:enable Naming/AccessorMethodName
+
   private
 
   # *Always* include the locale when generating a URL.

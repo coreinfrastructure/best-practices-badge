@@ -96,7 +96,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_not_includes @response.body, '@example.com'
     # We also want to make sure we don't cache this
     assert_equal 'noindex', @response.headers['X-Robots-Tag']
-    assert_equal 'no-cache, no-store',
+    assert_equal 'private, must-revalidate, no-store',
                  @response.headers['Cache-Control']
   end
 
@@ -116,7 +116,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_not_includes @response.body, '%40example.com'
     assert_not_includes @response.body, '@example.com'
-    assert_equal 'no-cache, no-store',
+    assert_equal 'private, must-revalidate, no-store',
                  @response.headers['Cache-Control']
   end
 
@@ -125,7 +125,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     get "/en/users/#{@user.id}.json"
     assert_response :success
     assert_not_includes @response.body, 'example.com'
-    assert_equal 'no-cache, no-store',
+    assert_equal 'private, must-revalidate, no-store',
                  @response.headers['Cache-Control']
     json_response = JSON.parse(@response.body)
     assert_equal @user.id, json_response['id']
@@ -144,7 +144,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     get "/en/users/#{@user.id}"
     assert_response :success
     assert_includes @response.body, 'mailto:melissa%40example.com'
-    assert_equal 'no-cache, no-store',
+    assert_equal 'private, must-revalidate, no-store',
                  @response.headers['Cache-Control']
   end
 
@@ -153,7 +153,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     get "/en/users/#{@user.id}"
     assert_response :success
     assert_includes @response.body, 'mailto:melissa%40example.com'
-    assert_equal 'no-cache, no-store',
+    assert_equal 'private, must-revalidate, no-store',
                  @response.headers['Cache-Control']
   end
 
@@ -164,7 +164,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     get "/en/users/#{@user.id}?format=json"
     assert_response :success
     assert_includes @response.body, 'melissa@example.com'
-    assert_equal 'no-cache, no-store',
+    assert_equal 'private, must-revalidate, no-store',
                  @response.headers['Cache-Control']
   end
 

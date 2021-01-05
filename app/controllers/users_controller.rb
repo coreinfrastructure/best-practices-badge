@@ -187,7 +187,7 @@ class UsersController < ApplicationController
     # The goal is to make it harder for adversaries to get leaked data.
     # We do this as HTTP headers, so it applies to anything (HTML, JSON, etc.)
     response.set_header('X-Robots-Tag', 'noindex')
-    response.set_header('Cache-Control', 'no-cache, no-store, must-revalidate')
+    response.set_header('Cache-Control', 'private, no-store, must-revalidate')
   end
 
   def user_params

@@ -587,14 +587,7 @@ class ProjectsController < ApplicationController
   # Purge data about this project from the CDN (if the CDN has any)
   def purge_cdn_project
     cdn_badge_key = @project.record_key
-    # If we can't authenticate to the CDN, complain but don't crash.
-    begin
-      FastlyRails.purge_by_key cdn_badge_key
-    rescue StandardError => e
-      Rails.logger.error do
-        "ERROR:: FAILED TO PURGE #{cdn_badge_key} , #{e.class}: #{e}"
-      end
-    end
+    FastlyRails.purge_by_key cdn_badge_key
   end
 
   # Maximum number of GitHub repos to retrieve when retrieving a list of

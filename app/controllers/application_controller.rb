@@ -9,6 +9,14 @@ require 'ipaddr'
 class ApplicationController < ActionController::Base
   include Pagy::Backend
 
+  # Record the original session value in "original_session".
+  # That way we tell if the session value has changed, and potentially
+  # omit it if it has not changed.
+  before_action :record_original_session
+  def record_original_session
+    @original_session = session.to_h
+  end
+
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
@@ -76,6 +84,16 @@ class ApplicationController < ActionController::Base
     response.headers['Surrogate-Key'] = surrogate_keys.join(' ')
   end
   # rubocop:enable Naming/AccessorMethodName
+
+  # Omit useless unchanged session cookie for performance & privacy
+  # *DO NOT* set error messages in the flash area after calling this method,
+  # because flashes are stored in the session.
+  # This is vaguely inspired by, but takes a different approach, to
+  # https://stackoverflow.com/questions/5435494/
+  # rails-3-disabling-session-cookies
+  def omit_unchanged_session_cookie
+    request.session_options[:skip] = true if session.to_h == @original_session
+  end
 
   private
 

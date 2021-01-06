@@ -73,10 +73,13 @@ class ProjectsController < ApplicationController
     if validated_url != request.original_url
       redirect_to validated_url
     else
-      # Omit useless empty session cookie for performance
-      request.session_options[:skip] = true if session.empty?
-
       retrieve_projects
+
+      # Omit useless unchanged session cookie for performance & privacy
+      # We *must not* set error messages in the flash area after this,
+      # because flashes are stored in the session.
+      omit_unchanged_session_cookie
+
       if params[:as] == 'badge' # Redirect to badge view
         # We redirect, instead of responding directly with the answer, because
         # then the requesting browser and CDN will handle repeat requests.
@@ -135,8 +138,10 @@ class ProjectsController < ApplicationController
   # GET /projects/1
   # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   def show
-    # Omit useless empty session cookie for performance
-    request.session_options[:skip] = true if session.empty?
+    # Omit useless unchanged session cookie for performance & privacy
+    # We *must not* set error messages in the flash area after this,
+    # because flashes are stored in the session.
+    omit_unchanged_session_cookie
 
     # Fix malformed queries of form "/en/projects/188?criteria_level,2"
     # These produce parsed.query_values of {"criteria_level,2"=>nil}

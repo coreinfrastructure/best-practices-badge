@@ -91,6 +91,11 @@ class ApplicationController < ActionController::Base
   # This is vaguely inspired by, but takes a different approach, to
   # https://stackoverflow.com/questions/5435494/
   # rails-3-disabling-session-cookies
+  # You can verify this directly by running commands such as:
+  # curl -svo ,out --max-redirs 10 http://localhost:3000/en
+  # and verifying the absence of the header Set-Cookie header,
+  # which would otherwise look like this:
+  # Set-Cookie: _BadgeApp_session=..data--data..; path=/; HttpOnly
   def omit_unchanged_session_cookie
     request.session_options[:skip] = true if session.to_h == @original_session
   end

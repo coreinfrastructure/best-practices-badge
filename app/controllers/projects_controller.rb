@@ -133,7 +133,7 @@ class ProjectsController < ApplicationController
   # rubocop:disable Metrics/MethodLength
 
   # GET /projects/1
-  # rubocop:disable Metrics/MethodLength
+  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   def show
     # Omit useless empty session cookie for performance
     request.session_options[:skip] = true if session.empty?
@@ -155,7 +155,7 @@ class ProjectsController < ApplicationController
                   status: :moved_permanently
     end
   end
-  # rubocop:enable Metrics/MethodLength
+  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
   # GET /projects/1.json
   def show_json

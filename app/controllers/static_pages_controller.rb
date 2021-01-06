@@ -17,7 +17,10 @@ class StaticPagesController < ApplicationController
   skip_before_action :redir_missing_locale,
                      only: %i[robots error_404 google_verifier]
 
-  def home; end
+  def home
+    # Omit useless empty session cookie for performance
+    request.session_options[:skip] = true if session.empty?
+  end
 
   def criteria_stats; end
 

@@ -428,7 +428,7 @@ zh-CN:
     delay:
       zero: 您现在可以登录。激活后没有反垃圾邮件延迟。
       one: 作为一种反垃圾邮件措施，您必须在激活后等待一小时才能登录。
-      few: 作为一种反垃圾邮件措施，您必须在激活后等待一小时才能登录。
+      few: 作为一种反垃圾邮件措施，您必须在激活后等待%{count}小时才能登录。
       other: 作为一种反垃圾邮件措施，您必须在激活后等待%{count}小时才能登录。
   password_resets:
     forgot_password: 忘记密码
@@ -724,7 +724,9 @@ zh-CN:
           构建系统确定重建软件（以及以什么顺序）需要执行哪些操作，然后执行这些步骤。例如，它可以调用编译器来编译源代码。如果从源代码创建可执行文件，则必须可以修改项目的源代码，然后通过这些修改生成更新的可执行文件。如果项目生成的软件取决于外部库，则构建系统<em>不必</em>构建那些外部库。如果在修改源代码之后不需要构建任何使用该软件的软件，请选择“不适用”（N/A）。
       build_common_tools:
         description: 建议使用通用工具来构建软件。
-        details: 例如，Maven，Ant，cmake，autotools，make或rake。
+        details: >-
+          例如，Maven，Ant，cmake，自动工具，make，rake（Ruby）或<a href="https://cran.r-project.org/web/packages/devtools/index.html">devtools</a>
+          （R）。
       build_floss_tools:
         description: 该项目应该仅使用FLOSS工具来构建。
       test:
@@ -1046,12 +1048,10 @@ zh-CN:
       dependency_monitoring:
         description: 项目必须监视或定期检查其外部依赖（包括便利副本）以检测已知的漏洞，并修复可利用的漏洞或将其验证为不可利用的漏洞。
         details: >-
-          这可以使用来源分析器/依赖关系检查工具来完成，例如<a href="https://www.owasp.org/index.php/OWASP_Dependency_Check">
-          OWASP的依赖关系检查</a>，<a href =“ https://www.sonatype.com/nexus-auditor">SonaType's
-          Nexus Auditor </a>，<a href="https://www.blackducksoftware.com/products/protex">
-          Black Duck's Protex</a> ，<a href="http://www.protecode.com/">
-          Synopsys的Protecode </a>和<a href="https://github.com/rubysec/bundler-audit">
-          Bundler-audit （适用于Ruby）</a>。一些包管理器也包括这类机制。如果组件的漏洞不能被利用，这是可以接受的，但这种分析是困难的，有时更新或修复该部件更容易。
+          这可以使用源分析器/依赖项检查工具/软件组成分析工具（例如<a href="https://www.owasp.org/index.php/OWASP_Dependency_Check">OWASP的Dependency-Check</a>
+          ， <a href="https://www.sonatype.com/nexus-auditor">Sonatype的Nexus
+          Auditor</a> ， <a href="https://www.synopsys.com/software-integrity/security-testing/software-composition-analysis.html">Synopsys的Black
+          Duck软件组成分析</a>和<a href="https://github.com/rubysec/bundler-audit">Bundler-audit（针对Ruby））来完成</a>。一些程序包管理器包括执行此操作的机制。如果无法利用组件的漏洞，这是可以接受的，但是这种分析是困难的，有时简单地更新或修复零件就更容易。
       updateable_reused_components:
         description: |-
           该项目必须满足下述情况之一：

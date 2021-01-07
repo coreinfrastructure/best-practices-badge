@@ -225,6 +225,7 @@ module SessionsHelper
     return unless logged_in? && session_expired
 
     reset_session
+    # Set "current_user" to invalid value (session hash is not empty)
     session[:current_user] = nil
     redirect_to login_path
   end

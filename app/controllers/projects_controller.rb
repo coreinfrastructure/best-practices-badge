@@ -74,6 +74,12 @@ class ProjectsController < ApplicationController
       redirect_to validated_url
     else
       retrieve_projects
+
+      # Omit useless unchanged session cookie for performance & privacy
+      # We *must not* set error messages in the flash area after this,
+      # because flashes are stored in the session.
+      omit_unchanged_session_cookie
+
       if params[:as] == 'badge' # Redirect to badge view
         # We redirect, instead of responding directly with the answer, because
         # then the requesting browser and CDN will handle repeat requests.
@@ -130,8 +136,13 @@ class ProjectsController < ApplicationController
   # rubocop:disable Metrics/MethodLength
 
   # GET /projects/1
-  # rubocop:disable Metrics/MethodLength
+  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   def show
+    # Omit useless unchanged session cookie for performance & privacy
+    # We *must not* set error messages in the flash area after this,
+    # because flashes are stored in the session.
+    omit_unchanged_session_cookie
+
     # Fix malformed queries of form "/en/projects/188?criteria_level,2"
     # These produce parsed.query_values of {"criteria_level,2"=>nil}
     # They end up as weird special keys, so this is the easy way to detect them
@@ -149,7 +160,7 @@ class ProjectsController < ApplicationController
                   status: :moved_permanently
     end
   end
-  # rubocop:enable Metrics/MethodLength
+  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
   # GET /projects/1.json
   def show_json
@@ -177,6 +188,9 @@ class ProjectsController < ApplicationController
 
     # Tell CDN the surrogate key so we can quickly erase it later
     set_surrogate_key_header @project.record_key
+
+    # Never send session cookie
+    request.session_options[:skip] = true
 
     respond_to do |format|
       format.svg do

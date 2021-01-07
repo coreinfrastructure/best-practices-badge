@@ -127,9 +127,10 @@ group :development do
   gem 'bootsnap', '1.4.8' # Speed up boot via caches
   # gem 'fasterer', '0.3.2' # Provide speed recommendations - run 'fasterer'
   # Waiting for Ruby 2.4 support: https://github.com/seattlerb/ruby_parser/issues/239
-  gem 'traceroute', '0.8.1' # Adds 'rake traceroute' command to check routes
+  # gem 'rails', '6.0.3.4' # Rails. Traceroute depends on it.
+  # gem 'traceroute', '0.8.1' # Adds 'rake traceroute' command to check routes
   gem 'translation', '1.22' # translation.io - translation service
-  gem 'web-console', '3.7.0' # Debugging tool for Ruby on Rails apps
+  # gem 'web-console', '3.7.0' # Debugging tool for Ruby on Rails apps
 end
 
 group :test do
@@ -146,11 +147,12 @@ group :test do
   gem 'minitest-rails-capybara', '3.0.2', require: false
   gem 'minitest-reporters', '1.4.2', require: false
   gem 'minitest-retry', '0.2.1', require: false # Avoid Capybara false positives
-  # Note: Updating 'rails-controller-testing' to '1.0.5' causes failures
-  gem 'rails-controller-testing', '1.0.4' # for `assigns` and `assert_template`
+  # Note: Updating 'rails-controller-testing' to '1.0.5' caused failures
+  # Hopefully those are resolved by Rails 6?
+  gem 'rails-controller-testing', '1.0.5' # for `assigns` and `assert_template`
   gem 'selenium-webdriver', '3.142.7', require: false
   gem 'simplecov', '0.19.0', require: false
-  gem 'webdrivers', '4.4.1', require: false
+  gem 'webdrivers', '4.4.2', require: false
   gem 'webmock', '3.9.4', require: false
 end
 

@@ -49,7 +49,7 @@ GEM
     ast (2.4.1)
     attr_encrypted (3.1.0)
       encryptor (~> 3.0.0)
-    autoprefixer-rails (10.1.0.0)
+    autoprefixer-rails (10.2.0.0)
       execjs
     awesome_print (1.8.0)
     bcrypt (3.1.15)
@@ -86,7 +86,7 @@ GEM
     capybara-slow_finder_errors (0.1.5)
       capybara (~> 3.0)
     chartkick (3.4.0)
-    chef-utils (16.8.14)
+    chef-utils (16.9.16)
     childprocess (3.0.0)
     code_analyzer (0.5.2)
       sexp_processor
@@ -189,7 +189,7 @@ GEM
     mimemagic (0.3.5)
     mini_mime (1.0.2)
     mini_portile2 (2.5.0)
-    minitest (5.14.2)
+    minitest (5.14.3)
     minitest-capybara (0.9.0)
       capybara
       minitest (~> 5.0)

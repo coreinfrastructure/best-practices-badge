@@ -32,7 +32,10 @@ gem 'bootstrap-social-rails', '4.12.0'
 gem 'bootstrap_form', '2.7.0'
 gem 'bundler' # Ensure it's available
 gem 'chartkick', '3.4.0' # Chart project_stats
-gem 'fastly-rails', '0.8.0'
+# We no longger use "fastly-rails"; it doesn't support Rails 6+.
+# They recommend switching to the "fastly" gem (aka "fastly-ruby"),
+# but fastly-ruby is not designed to support multi-threading, so we
+# call the Fastly API directly instead.
 gem 'font-awesome-rails', '4.7.0.5'
 gem 'http_accept_language', '2.1.1' # Determine user's preferred locale
 gem 'httparty', '0.18.1' # HTTP convenience. rake fix_use_gravatar

@@ -15,18 +15,19 @@ class LoginTest < CapybaraFeatureTest
   X = /result_symbol_x/.freeze
 
   setup do
-    FastlyRails.configure do |c|
-      c.purging_enabled = true
-    end
+    # FastlyRails is no longer in use.
+    # FastlyRails.configure do |c|
+    #   c.purging_enabled = true
+    # end
     @user = users(:test_user)
     @project = projects(:one)
   end
 
-  teardown do
-    FastlyRails.configure do |c|
-      c.purging_enabled = false
-    end
-  end
+  # teardown do
+  #   FastlyRails.configure do |c|
+  #     c.purging_enabled = false
+  #   end
+  # end
 
   # Test this with larger integration, to increase confidence that
   # we really do reject correct local usernames with wrong passwords

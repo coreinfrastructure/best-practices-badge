@@ -9,6 +9,14 @@ require 'ipaddr'
 class ApplicationController < ActionController::Base
   include Pagy::Backend
 
+  # Record the original session value in "original_session".
+  # That way we tell if the session value has changed, and potentially
+  # omit it if it has not changed.
+  before_action :record_original_session
+  def record_original_session
+    @original_session = session.to_h
+  end
+
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
@@ -44,6 +52,52 @@ class ApplicationController < ActionController::Base
   def append_info_to_payload(payload)
     super
     payload[:uid] = current_user.id if logged_in?
+  end
+
+  # Set the cache control headers
+  # More info:
+  # https://docs.fastly.com/en/guides/configuring-caching
+  # https://docs.fastly.com/en/guides/serving-stale-content
+  # Simlulates what this did: https://github.com/fastly/fastly-rails
+  # In particular:
+  # https://github.com/fastly/fastly-rails/blob/master/lib/fastly-rails/
+  # action_controller/cache_control_headers.rb
+  # rubocop:disable Naming/AccessorMethodName
+  def set_cache_control_headers
+    # Configure our CDN (Fastly) to cache data for a while, and
+    # serve old data if the system has an error for some reason.
+    # In deployment this heading is *only* used by the CDN, and is stripped
+    # so that it does *not* go to client browsers.
+    response.headers['Surrogate-Control'] =
+      'max_age=86400, stale-if-error=864000'
+    # Set the cache values for ordinary browsers (all *other* than the CDN).
+    # The "no-cache" term is a little misleading, it *is* cached, but
+    # the cache value must be verified (via the CDN) before its use.
+    response.headers['Cache-Control'] = 'public, no-cache'
+  end
+
+  # Set headers for a CDN surrogate key. See:
+  # https://github.com/fastly/fastly-rails
+  # The keys are normally created via methods in the model.
+  def set_surrogate_key_header(*surrogate_keys)
+    # request.session_options[:skip] = true  # No Set-Cookie
+    response.headers['Surrogate-Key'] = surrogate_keys.join(' ')
+  end
+  # rubocop:enable Naming/AccessorMethodName
+
+  # Omit useless unchanged session cookie for performance & privacy
+  # *DO NOT* set error messages in the flash area after calling this method,
+  # because flashes are stored in the session.
+  # This is vaguely inspired by, but takes a different approach, to
+  # https://stackoverflow.com/questions/5435494/
+  # rails-3-disabling-session-cookies
+  # You can verify this directly by running commands such as:
+  # curl -svo ,out --max-redirs 10 http://localhost:3000/en
+  # and verifying the absence of the header Set-Cookie header,
+  # which would otherwise look like this:
+  # Set-Cookie: _BadgeApp_session=..data--data..; path=/; HttpOnly
+  def omit_unchanged_session_cookie
+    request.session_options[:skip] = true if session.to_h == @original_session
   end
 
   private

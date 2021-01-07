@@ -85,7 +85,9 @@ class ApplicationController < ActionController::Base
   end
   # rubocop:enable Naming/AccessorMethodName
 
-  # Omit useless unchanged session cookie for performance & privacy
+  # Omit useless unchanged session cookie by not-logged-in users
+  # to improve performance & privacy.
+  # For example, setting a cookie disables some caches.
   # *DO NOT* set error messages in the flash area after calling this method,
   # because flashes are stored in the session.
   # This is vaguely inspired by, but takes a different approach, to
@@ -96,8 +98,17 @@ class ApplicationController < ActionController::Base
   # and verifying the absence of the header Set-Cookie header,
   # which would otherwise look like this:
   # Set-Cookie: _BadgeApp_session=..data--data..; path=/; HttpOnly
+  # We have to send the cookie for logged-in users, or the CSRF counter
+  # token might not be sent (it's set very late in the pipeline),
+  # with the result that logged-in users couldn't log out (via /logout).
+  # Don't call this routine from a session management function or a
+  # page that leads to database changes (an edit page); those set the CSRF
+  # counter token, so calling this routine will cause those actions to fail.
   def omit_unchanged_session_cookie
-    request.session_options[:skip] = true if session.to_h == @original_session
+    # Only take this action if not-logged-in and session cookie is unchanged
+    return unless !logged_in? && session.to_h == @original_session
+
+    request.session_options[:skip] = true
   end
 
   private

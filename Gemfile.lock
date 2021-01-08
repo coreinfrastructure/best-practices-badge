@@ -196,14 +196,6 @@ GEM
       rake
     minitest-metadata (0.6.0)
       minitest (>= 4.7, < 6.0)
-    minitest-rails (3.0.0)
-      minitest (~> 5.8)
-      railties (~> 5.0)
-    minitest-rails-capybara (3.0.2)
-      capybara (>= 2.7, <= 4)
-      minitest-capybara (~> 0.8)
-      minitest-metadata (~> 0.6)
-      minitest-rails (~> 3.0)
     minitest-reporters (1.4.2)
       ansi
       builder
@@ -450,6 +442,7 @@ GEM
     xpath (3.2.0)
       nokogiri (~> 1.8)
     yaml-lint (0.0.10)
+    zeitwerk (2.2.2)
 
 PLATFORMS
   ruby
@@ -539,6 +532,7 @@ DEPENDENCIES
   webdrivers (= 4.4.1)
   webmock (= 3.9.4)
   yaml-lint (= 0.0.10)
+  zeitwerk (=2.2.2)
 
 RUBY VERSION
    ruby 2.7.2p137

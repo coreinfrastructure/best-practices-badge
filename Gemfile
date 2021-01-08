@@ -144,7 +144,7 @@ group :test do
   # https://github.com/blowmage/minitest-rails-capybara/issues/44
   # https://blowmage.com/2019/06/18/minitest-rails-releases
   # https://guides.rubyonrails.org/testing.html
-  gem 'minitest-rails-capybara', '3.0.2', require: false
+  # gem 'minitest-rails-capybara', '3.0.2', require: false
   gem 'minitest-reporters', '1.4.2', require: false
   gem 'minitest-retry', '0.2.1', require: false # Avoid Capybara false positives
   # Note: Updating 'rails-controller-testing' to '1.0.5' caused failures

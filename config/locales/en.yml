@@ -1273,18 +1273,33 @@ en:
       version_semver:
         description: >-
           It is SUGGESTED that the <a href="https://semver.org">Semantic
-          Versioning (SemVer) format</a> be used for releases.
+          Versioning (SemVer)</a> or
+          <a href="https://calver.org/" >Calendar Versioning (CalVer)</a>
+          version numbering format be used for releases.
+          It is SUGGESTED that those who use CalVer
+          include a micro level value.
         details: >-
-          Other version numbering schemes, such as commit IDs
-          (such as git commit id or mercurial changeset id) or
-          date-based schemes like YYYYMMDD, MAY be used as version
-          numbers, since they are unique. Some alternatives can
-          cause problems, because users may not be able to easily
-          determine if they are up-to-date. SemVer may be less
-          helpful for identifying software releases if all recipients
-          only run the latest version (e.g., it is the code for
-          a single website or internet service that is constantly
-          updated via continuous delivery).
+          Projects should generally prefer whatever format is expected
+          by their users, e.g., because it is the normal format used by
+          their ecosystem. Many ecosystems prefer SemVer, and SemVer is
+          generally preferred for application programmer interfaces (APIs)
+          and software development kits (SDKs). CalVer tends to be used
+          by projects that are large, have an unusually large number of
+          independently-developed dependencies, have a constantly-changing
+          scope, or are time-sensitive. It is SUGGESTED that those who
+          use CalVer include a micro level value, because including
+          a micro level supports simultaneously-maintained branches
+          whenever that becomes necessary.
+          Other version numbering formats
+          may be used as version numbers, including git commit IDs or
+          mercurial changeset IDs, as long as they uniquely identify
+          versions. However, some alternatives (such as git commit IDs)
+          can cause problems as release identifiers, because users may
+          not be able to easily determine if they are up-to-date. The
+          version ID format may be unimportant for identifying software
+          releases if all recipients only run the latest version (e.g.,
+          it is the code for a single website or internet service that
+          is constantly updated via continuous delivery).
       version_tags:
         description: >-
           It is SUGGESTED that projects identify each release

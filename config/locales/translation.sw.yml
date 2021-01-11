@@ -683,6 +683,7 @@ sw:
         details:
       dynamic_analysis_enable_assertions:
         description:
+        details:
       dynamic_analysis_fixed:
         description:
         details:

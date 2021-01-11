@@ -1822,6 +1822,7 @@ de:
           Es ist EMPFHOLEN, dass die vom Projekt entwickelte Software
           viele Laufzeit-Assertions einbindet, die während der
           dynamischen Analyse überprüft werden.
+        details:
       dynamic_analysis_fixed:
         description: >-
           Alle mittel- und hochgradig ausnutzbaren Schwachstellen,

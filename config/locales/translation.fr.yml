@@ -1929,6 +1929,7 @@ fr:
           Il est PROPOSÉ que le logiciel produit par le projet
           comprenne de nombreuses assertions à l'exécution qui
           sont vérifiées lors d'une analyse dynamique.
+        details:
       dynamic_analysis_fixed:
         description: >-
           Toutes les vulnérabilités exploitables de gravité moyenne

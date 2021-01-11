@@ -990,6 +990,7 @@ ja:
       dynamic_analysis_enable_assertions:
         description: >-
           プロジェクトによって作成されたソフトウェアには、動的解析中にチェックされる多くの実行時アサーションが含まれていることが推奨されます。
+        details:
       dynamic_analysis_fixed:
         description: >-
           動的コード分析で発見されたすべての中程度および重大度の悪用可能な脆弱性は、確認された後、適時に修正されなければなりません。

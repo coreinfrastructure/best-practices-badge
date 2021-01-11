@@ -898,6 +898,7 @@ zh-CN:
           href ="http://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html">UndefinedBehaviorSanitizer</a>。广泛的断言也将起作用。
       dynamic_analysis_enable_assertions:
         description: 建议由项目生成的软件包括许多运行时断言，在动态分析期间检查。
+        details:
       dynamic_analysis_fixed:
         description: 通过动态代码分析发现的所有严重性为中，高的可利用漏洞必须在确认后及时修复。
         details: >-

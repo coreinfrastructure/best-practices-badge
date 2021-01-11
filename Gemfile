@@ -83,7 +83,7 @@ gem 'rack-headers_filter', '0.0.1' # Filter out "dangerous" headers
 # Note: Update the gem versions of action* and railties in sync.
 gem 'railties', '5.2.4.4' # Rails. Rails core, loads rest of Rails
 gem 'rails-i18n', '5.1.3' # Localizations for Rails built-ins
-gem 'redcarpet', '3.5.0' # Process markdown in form textareas (justifications)
+gem 'redcarpet', '3.5.1' # Process markdown in form textareas (justifications)
 gem 'sass-rails', '5.1.0', require: false # For .scss files (CSS extension)
 gem 'scout_apm', '2.6.9' # Monitor for memory leaks
 gem 'secure_headers', '6.3.1' # Add hardening measures to HTTP headers

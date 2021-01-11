@@ -1966,9 +1966,30 @@ en:
           also work.
       dynamic_analysis_enable_assertions:
         description: >-
-          It is SUGGESTED that the software produced by the project
-          include many run-time assertions that are checked during
-          dynamic analysis.
+          It is SUGGESTED that the project use a configuration for at least
+          some dynamic analysis (such as testing or fuzzing) which enables
+          many assertions. In many cases these assertions should <i>not</i> be
+          enabled in production builds.
+        details: >-
+          This criterion does <i>not</i> suggest enabling assertions
+          during production; that is entirely up to the project and its
+          users to decide. This criterion's focus is instead to improve
+          fault detection during dynamic analysis <i>before</i> deployment.
+          Enabling assertions in <i>production</i> use is <i>completely</i>
+          different from enabling assertions during dynamic analysis
+          (such as testing).
+          In some cases enabling assertions in production use is
+          extremely unwise (especially in high-integrity components).
+          There are many arguments against
+          enabling assertions in production, e.g., libraries should not
+          crash callers, their presence may cause rejection by app stores,
+          and/or activating an assertion in production may expose private
+          data such as private keys.
+          Beware that in many Linux distributions <tt>NDEBUG</tt>
+          is not defined, so C/C++ <t>assert()</tt> will by default be enabled
+          for production in those environments.
+          It may be important to use a different assertion mechanism
+          or defining <tt>NDEBUG</tt> for production in those environments.
       dynamic_analysis_fixed:
         description: >-
           All medium and higher severity exploitable vulnerabilities

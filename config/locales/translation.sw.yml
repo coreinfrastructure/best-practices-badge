@@ -8,7 +8,7 @@ sw:
       update: Sasaisha %{model}
       submit: Akibisha %{model}
   hello: Jambo walimwengu
-  submit:
+  submit: Wasilisha
   projects_count:
     zero:
     one:
@@ -53,15 +53,23 @@ sw:
       target="_blank" rel="noopener">sera ya faragha</a> and <a
       href="https://www.linuxfoundation.org/terms" target="_blank"
       rel="noopener">masharti ya utumiaji</a>. </small>
-  admin_only:
+  admin_only: Msimamizi pekee.
   account_activations:
     activated: Akaunti imeamilishwa!
     delay:
-      zero:
-      one:
-      few:
-      other:
-    failed_activation:
+      zero: >-
+        Unaweza kuingia sasa. Hakuna ucheleweshaji wa kupambana
+        na taka baada ya uanzishaji.
+      one: >-
+        Kwa minajili ya kupambana na barua taka, lazima usubiri
+        saa moja baada ya uanzishaji kabla ya kuingia.
+      few: >-
+        Kwa minajili ya kupambana na barua taka, lazima usubiri
+        masaa %{count} baada ya uanzishaji kabla ya kuingia.
+      other: >-
+        Kwa minajili ya kupambana na barua taka, lazima usubiri
+        masaa %{count} baada ya uanzishaji kabla ya kuingia.
+    failed_activation: Kiungo batili cha uanzishaji
   password_resets:
     forgot_password:
     reset_password:
@@ -178,42 +186,49 @@ sw:
       project_stats_html:
   users:
     new:
-      signup_header:
+      signup_header: Jisajili
       intro_github:
       intro_html:
-      name:
-      email:
-      preferred_locale:
-      password:
-      password_confirmation:
-      create_account:
+      name: Jina
+      email: Barua pepe
+      preferred_locale: Eneo linalopendelewa
+      password: Nywila
+      password_confirmation: Thibitisha Nywila
+      create_account: Unda akaunti yangu iliyogeuza kunifaa
     edit:
-      update_user_info:
-      save_changes:
-      inadequate_privileges:
+      update_user_info: Sasisha Maelezo ya Mtumiaji
+      save_changes: Hifadhi mabadiliko
+      inadequate_privileges: Samahani, huruhusiwi kufanya hivyo.
     update:
-      profile_updated:
+      profile_updated: Wasifu umesasishwa
     show:
-      edit_user:
-      projects_owned:
-      projects_additional_rights:
-      other_projects_edit:
-      json_link:
+      edit_user: Hariri mtumiaji
+      projects_owned: 'Miradi inayomilikiwa:'
+      projects_additional_rights: 'Miradi iliyo na haki za ziada:'
+      other_projects_edit: 'Miradi mingine inayoweza kuhaririwa
+        kulingana na GitHub:'
+      json_link: JSON
       in_json_format:
-      see_external:
-      local_account:
+      see_external: Ukurasa wa nje wa Mtumiaji.
+      local_account: Akaunti iliyogeuzwa kukufaa (ya ndani)
       is_admin:
-      as_admin:
-      send_email_to:
-      delete_link_name:
-      confirm_delete:
+      as_admin: 'kama msimamizi, unaweza pia:'
+      send_email_to: Tuma barua pepe
+      delete_link_name: Futa akaunti ya mtumiaji
+      confirm_delete: Je! Una uhakika unataka kufuta huyu mtumiaji?
     destroy:
-      cannot_delete_user_with_projects:
-      cannot_delete_self:
-      user_deleted:
-    redirect_existing:
-    new_activation_link_created:
-    please_log_in:
+      cannot_delete_user_with_projects: Haiwezi kufuta mtumiaji
+        ambaye anamiliki miradi.
+      cannot_delete_self: Haiwezi kujifuta.
+      user_deleted: Mtumiaji amefutwa.
+    redirect_existing: Mtumiaji huyo tayari yupo. Je! Ulimaanisha
+      kuingia?
+    new_activation_link_created: >-
+      Kiungo kipya cha uanzishaji kimeundwa. Tafadhali angalia
+      barua pepe yako baada ya dakika chache ili kuamsha akaunti
+      yako. (Kuna kucheleweshwa kwa kukusudia kukabiliana na barua
+      taka.)
+    please_log_in: Tafadhali ingia.
   project_stats:
     index:
       project_stats_header:
@@ -461,8 +476,8 @@ sw:
         Jambo,
         Karibu kwenye programu ya Nishani za Mazoea Bora ya CII!
         Chagua kiunganishi hapo chini kuamilisha akaunti yako:
-      activate:
-      subject:
+      activate: Amilisha
+      subject: Akaunti imeamilishwa!
     github_welcome:
       before_html: |-
         <h1>Programu ya Nishani za Mazoea Bora ya CII</h1>
@@ -479,21 +494,23 @@ sw:
         Kama hauku anzisha tendo hili, tafadhali kagua batli yako ya usalama kwa GitHub iliyomo ndani ya Mipangilio&gt;Usalama.
       subject:
     user_update:
-      before_text:
-      username_changed:
-      email_changed:
-      password_changed:
-      locale_changed:
-      current_state:
-      after_text:
-      subject:
+      before_text: Baadhi ya data ya mtumiaji ya akaunti yako
+        imesasishwa.
+      username_changed: Jina la mtumiaji limebadilishwa.
+      email_changed: Anwani ya barua pepe imebadilishwa.
+      password_changed: Nywila imebadilishwa.
+      locale_changed: Eneo limebadilishwa.
+      current_state: 'Kwa hali ya sasa, angalia:'
+      after_text: Tafadhali tujulishe ikiwa kuna tatizo.
+      subject: Data ya mtumiaji imebadilishwa
     password_reset:
       before_html:
-      before_text:
+      before_text: 'Ili uweke upya nywila yako bonyeza kiungo
+        hapo chini:'
       after_html:
       after_text:
-      subject:
-      reset_password:
+      subject: Nywila iwekwa upya
+      reset_password: Weka upywa nywila
   criteria:
     '0':
       description_good:
@@ -582,7 +599,10 @@ sw:
         description:
         details:
       build:
-        description:
+        description: >-
+          Ikiwa programu iliyotengenezwa na mradi inahitaji ujenzi
+          wa matumizi, mradi LAZIMA utoe mfumo wa kujenga ambao
+          unaweza kujenga programu kiotomatiki kutoka kwa chanzo-msimbo.
         details:
       build_common_tools:
         description:

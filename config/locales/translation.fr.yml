@@ -1929,7 +1929,30 @@ fr:
           Il est PROPOSÉ que le logiciel produit par le projet
           comprenne de nombreuses assertions à l'exécution qui
           sont vérifiées lors d'une analyse dynamique.
-        details:
+        details: >-
+          Ce critère ne suggère <i>pas</i> d'activer les assertions
+          en production ; c'est entièrement au projet et à ses
+          utilisateurs de le décider. L'objectif de ce critère
+          est plutôt d'améliorer la détection des défauts lors
+          de l'analyse dynamique <i>avant </i> le déploiement.
+          L'activation des assertions en <i>production</i> est
+          <i>complètement</i> différente de l'activation des assertions
+          pendant l'analyse dynamique (comme les tests). Dans
+          certains cas, il est extrêmement imprudent d'activer
+          les assertions en production (en particulier dans les
+          composants à haute intégrité). Il existe de nombreux
+          arguments contre l'activation des assertions en production,
+          par exemple, les bibliothèques ne devraient pas faire
+          échouer les appelants, leur présence peut provoquer
+          le rejet par les magasins d'applications et/ou l'activation
+          d'une assertion en production peut exposer des données
+          privées telles que des clés privées. Attention, dans
+          de nombreuses distributions Linux, <tt>NDEBUG</tt> n'est
+          pas défini, donc <t>assert()</tt> sera activé par défaut
+          en C/C++ pour la production dans ces environnements.
+          Il peut être important d'utiliser un mécanisme d'assertion
+          différent ou de définir <tt>NDEBUG</tt> pour la production
+          dans ces environnements.
       dynamic_analysis_fixed:
         description: >-
           Toutes les vulnérabilités exploitables de gravité moyenne

@@ -40,6 +40,43 @@ modify something.  One way is to change some shared configuration values to be
 Another is to change some methods to take parameters, so that
 you can provide different parameters during testing.
 
+## System Tests
+
+We are in the process of replacing all uses of the class
+CapybaraFeatureTest (subclass of Capybara::Rails::TestCase)
+with the standard Rails system tests, which use the
+class ApplicationSystemTestCase (subclass of ActionDispatch::SystemTestCase).
+
+Warning! By default "rails test" (and thus rake) do *NOT* run system tests.
+You must run system tests via "rails test:system". To run *both*
+system and non-system tests, say "rails test:system test" (in that order).
+This commit modifies our CI pipeline so that it runs BOTH
+system and non-system tests. So for most people this detail will be quietly
+handled correctly. Rails 6.1 adds "rails test:all", so when we get
+to Rails 6.1 it will be easier to ask for all (normal) tests.
+
+Rails system tests normally interact with an actual browser.
+In some cases they can be configured to use the `rack_test` backend and
+merely simulate a browser; that is faster, but it doesn't support
+JavaScript and the tests are not as realistic.
+So here we'll discuss the normal, interacting with an actual browser.
+
+For basic information on how to create syystem tests, see the
+[Rails guide on testing (system testing section)](https://guides.rubyonrails.org/testing.html#system-testing).
+
+Here's how a Rails system test normally works, as explained in
+[Rails 6 System Tests, From Top to Bottom](https://avdi.codes/rails-6-system-tests-from-top-to-bottom/)
+
+* "A MiniTest test case, augmented with...
+* Capybara testing helpers, which start and stop an instance of your app,
+  and provide an English-like DSL on top of...
+* The selenium-webdriver gem, which provides a Ruby API for using the...
+* ... WebDriver protocol in order to interact with...
+* A WebDriver tool such as chromedriver or geckodriver, which…
+* Is automatically downloaded by the webdrivers gem.
+ The WebDriver tool automates...
+* A browser, such as Chrome."
+
 ## Features
 
 Features that don't need JavaScript should default to the headless rack-test driver, which is fastest. Features that need JavaScript should set `Capybara.current_driver = Capybara.javascript_driver` as described in this [blog post](http://www.rubytutorial.io/how-to-test-an-autocomplete-with-rails/). To debug features in a browser, preface the test with the driver in an environment variable, like:

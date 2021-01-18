@@ -4,20 +4,20 @@
 # CII Best Practices badge contributors
 # SPDX-License-Identifier: MIT
 
-require 'capybara_feature_test'
+require 'application_system_test_case'
 
-class AccessHomeTest < CapybaraFeatureTest
+class AccessHomeTest < ApplicationSystemTestCase
   test 'sanity' do
     visit root_path(locale: :en)
     assert has_content? 'CII Best Practices Badge Program'
   end
 
-  scenario 'New Project link', js: true do
+  test 'New Project link', js: true do
     visit root_path(locale: :en)
     assert has_content? 'Get Your Badge Now!'
   end
 
-  scenario 'Header has links', js: true do
+  test 'Header has links', js: true do
     visit root_path(locale: :en)
     assert find_link('Projects').visible?
     assert find_link('Sign Up').visible?

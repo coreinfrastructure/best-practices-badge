@@ -12,12 +12,12 @@ class AccessHomeTest < ApplicationSystemTestCase
     assert has_content? 'CII Best Practices Badge Program'
   end
 
-  test 'New Project link', js: true do
+  test 'New Project link' do
     visit root_path(locale: :en)
     assert has_content? 'Get Your Badge Now!'
   end
 
-  test 'Header has links', js: true do
+  test 'Header has links' do
     visit root_path(locale: :en)
     assert find_link('Projects').visible?
     assert find_link('Sign Up').visible?

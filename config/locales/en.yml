@@ -1122,9 +1122,14 @@ en:
           The project MUST post the license(s) of its results
           in a standard location in their source repository.
         details: >-
-          E.g., as a top-level file named LICENSE or COPYING.
-          License filenames MAY be followed by an extension such
-          as ".txt" or ".md".
+          One convention is posting the license
+          as a top-level file named LICENSE or COPYING, which
+          MAY be followed by an extension such as ".txt" or ".md".
+          An alternative convention is to have a directory named LICENSES
+          containing license file(s); these files are typically named as their
+          SPDX license identifier followed by an appropriate file extension,
+          as described in the
+          <a href="https://reuse.software/spec/">REUSE Specification</a>.
           Note that this criterion is only a requirement
           on the source repository.
           You do NOT need to include the license file when generating
@@ -1140,7 +1145,7 @@ en:
           /usr/share/common-licenses, and exclude the license file from
           the created package
           (e.g., by deleting the file after calling dh_auto_install).
-          We do encourage including machine-readable
+          We encourage including machine-readable
           license information in generated formats where practical.
       documentation_basics:
         description: >-

@@ -125,8 +125,8 @@ jobs:
         name: Check for whitespace issues.
         command: '[[ ! -s "$(git rev-parse --git-dir)/shallow" ]] || git fetch --unshallow'
     - run:
-        name:  Run test suite
-        command: bundle exec rake test
+        name:  Run test suite (both system and non-system tests)
+        command: bundle exec rails test:system test
     - run:
         name:  Run pronto GitHub
         command: >

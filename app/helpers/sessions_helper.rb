@@ -186,8 +186,10 @@ module SessionsHelper
     current_user_is_github_owner?(url) || github_user_can_push?(url)
   end
 
-  def in_development?
-    hostname = ENV['PUBLIC_HOSTNAME']
+  # Returns true iff this is not the REAL final production system,
+  # including the master/main and staging systems.
+  # It only returns false if we are "truly in production"
+  def in_development?(hostname = ENV['PUBLIC_HOSTNAME'])
     return true if hostname.nil?
 
     hostname != PRODUCTION_HOSTNAME

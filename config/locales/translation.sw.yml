@@ -104,12 +104,14 @@ sw:
     cannot_login_yet:
   static_pages:
     error_404:
-      heading:
-      no_such_page:
-      please_home:
+      heading: 'Kosa 404: Ukurasa Haukupatikana'
+      no_such_page: Samahani, hakuna ukurasa kama huo.
+      please_home: Tafadhali nenda kwenye ukurasa wa kwanza.
     error_409:
-      heading:
-      conflict:
+      heading: 'Kosa 409: Mgogoro'
+      conflict: >-
+        Samahani, ingizo nyingi zinalingana na ombi, na kusababisha
+        mgogoro.
     home:
       badge_program: Programu ya Nishani za Mazoea Bora ya CII
       get_your_badge: Pata Nishani Yako Sasa!
@@ -170,15 +172,15 @@ sw:
       cookies_info_html:
     criteria_stats:
       criteria:
-      see_actual_criteria:
+      see_actual_criteria: Unaweza pia kuona vigezo halisi.
       level:
       must:
-      should:
-      suggested:
-      total_active:
+      should: INAPASWA
+      suggested: PENDEKEZA
+      total_active: Jumla ya yaliyo amilifu
       allow_na:
       met_justification_required:
-      require_url:
+      require_url: Inahitaji URL
       met_justification_or_url_required:
       details:
       new_this_level:
@@ -187,8 +189,20 @@ sw:
   users:
     new:
       signup_header: Jisajili
-      intro_github:
-      intro_html:
+      intro_github: >-
+        Ikiwa una akaunti ya GitHub, unaweza kuitumia kuingia
+        badala yake (kuingia mara ya kwanza kwa GitHub kutakusajili
+        kiatomati).
+      intro_html: >-
+        Ikiwa hautaki kuingia na akaunti ya GitHub, unaweza kujisajili
+        hapa badala yake (hii inaunda akaunti maalum kwa kutumia
+        anwani yako ya barua pepe). Ukijisajili, jina lako litaonyeshwa
+        hadharani, na unaweza kubadilisha jina lako wakati wowote.
+        Anwani yako ya barua pepe itahifadhiwa kwa faragha na
+        itatumika tu kwa minajili inayohusiana na nishani; hatutatoa
+        kwa watu wengine isipokuwa inapohitajika kisheria.<br><br>
+        Ikiwa haukupokea kiunga chako cha uanzishaji, tafadhali
+        jisajili tena na tutakutumia mpya.
       name: Jina
       email: Barua pepe
       preferred_locale: Eneo linalopendelewa
@@ -208,10 +222,13 @@ sw:
       other_projects_edit: 'Miradi mingine inayoweza kuhaririwa
         kulingana na GitHub:'
       json_link: JSON
-      in_json_format:
+      in_json_format: >-
+        Data ya mtumiaji katika muundo wa JSON (mfumo sanifu inayoweza
+        kusambazwa)
       see_external: Ukurasa wa nje wa Mtumiaji.
       local_account: Akaunti iliyogeuzwa kukufaa (ya ndani)
-      is_admin:
+      is_admin: Mtumiaji huyu ni msimamizi wa uwasilishaji wa
+        nishani.
       as_admin: 'kama msimamizi, unaweza pia:'
       send_email_to: Tuma barua pepe
       delete_link_name: Futa akaunti ya mtumiaji
@@ -492,7 +509,7 @@ sw:
         Jambo,
         Asante kwa kuunganisha akaunti yako ya GitHub na karibu kwenye Programu ya Nishani za Mazoea Bora ya CII!
         Kama hauku anzisha tendo hili, tafadhali kagua batli yako ya usalama kwa GitHub iliyomo ndani ya Mipangilio&gt;Usalama.
-      subject:
+      subject: Karibu kwenye Programu ya kuwekeza Nishani
     user_update:
       before_text: Baadhi ya data ya mtumiaji ya akaunti yako
         imesasishwa.
@@ -504,11 +521,21 @@ sw:
       after_text: Tafadhali tujulishe ikiwa kuna tatizo.
       subject: Data ya mtumiaji imebadilishwa
     password_reset:
-      before_html:
+      before_html: |-
+        <h1>Kuweka upya nywila</h1>
+        <p>Ili kuweka upya nywila yako bonyeza kiungo hapo chini:</p>
       before_text: 'Ili uweke upya nywila yako bonyeza kiungo
         hapo chini:'
-      after_html:
-      after_text:
+      after_html: |-
+        <p>Kiungo hiki kitaisha matumizi baada ya masaa mawili.</p>
+        <p>
+        Ikiwa haukuomba nywila yako kuwekwa upya, tafadhali puuza barua pepe hii na nywila yako itabaki vile ilivyo.
+        </p>
+      after_text: |-
+        Kiungo hiki kitaisha matumizi baada ya masaa mawili.
+        Ikiwa haukuomba nywila yako kuwekwa upya,
+        tafadhali puuza barua pepe hii na
+        nywila yako itabaki vile ilivyo.
       subject: Nywila iwekwa upya
       reset_password: Weka upywa nywila
   criteria:
@@ -856,9 +883,11 @@ sw:
       achieve_silver:
         description:
       bus_factor:
-        description:
+        description: Mradi LAZIMA uwe na "bus factor" ya 2 au
+          zaidi.
       contributors_unassociated:
-        description:
+        description: Mradi LAZIMA uwe na angalau wachangiaji wawili
+          wasiohusika.
         details:
       copyright_per_file:
         description:
@@ -877,7 +906,10 @@ sw:
         description:
         details:
       code_review_standards:
-        description:
+        description: >-
+          Mradi LAZIMA uandike mahitaji yake ya kukagua msimbo,
+          pamoja na jinsi ukaguzi wa nambari unafanywa, nini lazima
+          ichunguzwe, na nini kinachohitajika ili ikubalike.
         details:
       two_person_review:
         description:

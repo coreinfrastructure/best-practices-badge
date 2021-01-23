@@ -44,7 +44,7 @@ de:
       Sehen Sie ein Problem? Bitte <em><a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">senden
       Sie eine E-Mail</a></em> oder <em><a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
       target="_blank" rel="noopener">reichen Sie ein Problem ein</a></em>.</strong>
-      © 2015-2017 <a href="https://www.coreinfrastructure.org/"
+      © 2015-2018 <a href="https://www.coreinfrastructure.org/"
       target="_blank" rel="noopener">Core Infrastructure Initiative</a>,
       ein <a href="https://www.linuxfoundation.org/" target="_blank"
       rel="noopener">Linux Foundation</a> Kollaboratives Projekt.
@@ -154,7 +154,7 @@ de:
         werden können:'
       see_external: Benutzers externe Seite.
       as_admin: 'Als admin können Sie auch:'
-      send_email_to: 'E-Mail senden an:'
+      send_email_to: E-Mail senden
       delete_link_name: Benutzerkonto löschen
       confirm_delete: Sind Sie sicher, dass Sie diesen Benutzer
         löschen möchten?
@@ -297,7 +297,11 @@ de:
       new_badge: Neuer Badge
       may_select_html: >-
         Sie können eines Ihrer GitHub-Repositories <em>ODER</em>
-        Informationen über ein anderes Projekt auswählen.
+        Informationen über ein anderes Projekt auswählen. Wir
+        werden eine Erinnerungs-E-Mail senden falls Ihr Projekt
+        innerhalb von 30 Tagen das Passing Badge nicht erzielt
+        und keine Änderungen gemacht wurden (Sie können Erinnerungen
+        in den Einstellungen jederzeit deaktivieren).
       select_one_github: Wählen eines GitHub-Repos
       submit_github: GitHub-Repository einreichen
       url_of_homepage: >-
@@ -386,8 +390,12 @@ de:
         und die Projektlizenz bleibt davon unberührt.<br><br>
       save_and_continue: Speichern (und fortfahren)
       submit_and_exit: Senden (und beenden)
-      repo_url_limits: Sie können Ihre repo_url nur von http auf
-        https ändern
+      repo_url_limits: >-
+        Sie können Ihre repo_url nur ändern wenn (1) mehr als
+        180 seit der letzten Änderung vergangen sind oder, (2)
+        um von http auf https zu ändern. Bitte erstellen Sie ein
+        Issue (mit Begründung), falls Sie schon früher eine Änderung
+        machen müssen.
       changed_since_html: >-
         Ein anderer Benutzer hat eine Änderung an diesem Datensatz
         vorgenommen, seit Sie das Bearbeitungsformular geladen
@@ -466,7 +474,8 @@ de:
           Bitte verwenden Sie das <a href="https://spdx.org/licenses/">SPDX-License-Expression-Format</a>;
           Beispiele sind "Apache-2.0", "BSD-2-Clause", "BSD-3-Clause",
           "GPL-2.0+", "LGPL-3.0+", "MIT" und "(BSD-2-Clause OR
-          Ruby)".
+          Ruby)". Geben sie <b>nicht</b> die einfachen oder doppelten
+          Anführungszeichen mit an.
         placeholder: FLOSS-Lizenz
         title: >-
           Lizenz im SPDX-Lizenzausdruckformat, z.B. "MIT" oder
@@ -533,11 +542,11 @@ de:
           sein oder nicht (wir wollen sie zumindest berücksichtigt
           wissen). Wenn lediglich ein allgemeiner Kommentar angebeben
           werden soll, keine direkte Begründung, dann ist das
-          erlaubt, wenn der Text mit "#" beginnt. Feedback ist
-          willkommen auf der<a href="https://github.com/coreinfrastructure/best-practices-badge">GitHub-Website
+          erlaubt, wenn der Text mit "//" und einem Leerzeichen
+          beginnt. Feedback ist willkommen auf der<a href="https://github.com/coreinfrastructure/best-practices-badge">GitHub-Website
           als Issue oder Pull-Request</a>. Es gibt auch eine <a
           href="https://lists.coreinfrastructure.org/mailman/listinfo/cii-badges">E-Mail-Liste
-          für allgemeine Diskussionen</a><br /><br />. Wir stellen
+          für allgemeine Diskussionen</a>.<br /><br /> Wir stellen
           Ihnen gerne die Informationen in mehreren Sprachen zur
           Verfügung, allerdings ist die englische Version maßgeblich,
           insbesondere wenn es Konflikte oder Inkonsistenzen zwischen
@@ -588,7 +597,14 @@ de:
         placeholder: Zusätzliche Bemerkungen (in Markdown)
       some_not_crypto_html: >-
         Beachten Sie, dass einige Software keine kryptographischen
-        Mechanismen verwenden muss.
+        Mechanismen verwenden muss. Wenn Ihr Project Software
+        erstellt das (1) kryptographische funktionen einbindet,
+        aktiviert, oder ermöglicht und (2) aus den USA heraus
+        an nicht US-Bürger verteilt wird, dann könnten sie rechtlich
+        zu weiterne Schritten gezwungen sein. Meistens beinhaltet
+        dies lediglich das Senden einer E-Mail. Für mehr Informationen,
+        siehe den Abschnitt zu Encryption in <a href="https://www.linuxfoundation.org/resources/publications/understanding-us-export-controls-with-os-projects/"><i>Understanding
+        Open Source Technology &amp; US Export Controls</i></a>.
       dont_use_crypto: >-
         Drücken Sie hier, wenn die vom Projekt produzierte Software
         keine kryptographischen Mechanismen verwendet
@@ -977,9 +993,9 @@ de:
           lizensiert veröffentlicht sein.
         details: >-
           FLOSS-Software erfüllt die <a href="https://opensource.org/osd-annotated">Open
-          Source Definition</a> oder die <a href="http://www.gnu.org/philosoph/free-sw.en.html">Free
+          Source Definition</a> oder die <a href="https://www.gnu.org/philosoph/free-sw.en.html">Free
           Software Definition</a>. Beispiele für solche Lizenzen
-          sind die <a href="http://creativecommons.org/publicdomain/zero/1.0/">
+          sind die <a href="https://creativecommons.org/publicdomain/zero/1.0/">
           CC0 </a>, <a href="https://opensource.org/licenses/MIT">MIT</a>,
           <a href="https://opensource.org/licenses/BSD-2-Clause">BSD
           2-clause</a>, <a href="https://opensource.org/licenses/BSD-3-Clause">BSD
@@ -1013,12 +1029,19 @@ de:
           Das Projekt MUSS die Lizenz(en) seiner Erzeugnisse an
           einem üblichen Ort in ihrem Quell-Repository veröffentlichen.
         details: >-
-          Z. B. als eine Top-Level-Datei mit der Bezeichnung LICENSE
-          oder COPYING. Lizenzdateinamen DÜRFEN eine Erweiterung
-          wie ".txt" oder ".md" haben. Beachten Sie, dass dieses
-          Kriterium nur eine Voraussetzung für das Quell-Repository
-          ist. Sie müssen die Lizenzdatei NICHT hinzufügen, wenn
-          Sie etwas aus dem Quellcode generieren (z. B. eine ausführbare
+          Eine Konvention ist es die Lizenz als eine Top-Level-Datei
+          mit der Bezeichnung LICENSE oder COPYING zu veröffentlichen.
+          Lizenzdateinamen DÜRFEN eine Erweiterung wie ".txt"
+          oder ".md" haben. Eine alternative Konvention ist es
+          einen Ordern mit dem namen LICENSES zu erstellen und
+          dort alle Lizenz(en) abzuspeicehrn; diese dateien sind
+          typischerweise mit ihreren SPDX License Identifier benannt
+          und einer passendend Dateiendung; siehe Beschreibung
+          dieser Konvention in der <a href="https://reuse.software/spec/">REUSE
+          Specification</a>. Beachten Sie, dass dieses Kriterium
+          nur eine Voraussetzung für das Quell-Repository ist.
+          Sie müssen die Lizenzdatei NICHT hinzufügen, wenn Sie
+          etwas aus dem Quellcode generieren (z. B. eine ausführbare
           Datei, ein Paket oder einen Container). Wenn Sie beispielsweise
           ein R-Paket für das Comprehensive R Archive Network
           (CRAN) generieren, befolgen Sie die Standard-CRAN-Praxis:
@@ -1181,9 +1204,12 @@ de:
           Systeme wie YYYYMMDD verwenden) erfüllt werden.
       version_semver:
         description: >-
-          Es wird erwartet, dass das Format <a href="http://semver.org">
-          Semantic Versioning (SemVer) </a> für Veröffentlichungen
-          verwendet wird.
+          Es ist EMPFHOLEN, dass ein <a href="https://semver.org">Semantic
+          Versioning (SemVer)</a> oder <a href="https://calver.org/">Calendar
+          Versioning (CalVer)</a> Versionsnummerierungsformat
+          für Releases verwendet wird. Es ist EMPFHOLEN, dass
+          Anwender des CalVer Formates auch die Micro Ebene mit
+          angeben.
         details: >-
           Andere Versionsnummerierungsschemata, wie z. B. Commit-IDs
           (wie z. B. gits Commit-ID oder mercurials Changeset-ID)
@@ -1229,13 +1255,16 @@ de:
           Release Workflow</a> zur Verfügung gestellt werden.
       release_notes_vulns:
         description: >-
-          Die Releasenotes MÜSSEN jede öffentlich bekannte Sicherheitslücke
+          Die Releasenotes MÜSSEN jede öffentlich bekannte Laufzeit-Sicherheitslücke
           mit einer CVE-Zuweisung oder Ähnlichem kennzeichnen,
-          die in jeder neuen Version behoben sein wird, es sei
-          denn, Benutzer können nicht die Software selbst aktualisieren,
-          was normalerweise nicht der Fall ist. Wenn keine Releasenotes
-          vorhanden sind oder keine öffentlich bekannten Sicherheitslücken
-          bekannt sind, wählen Sie "nicht anwendbar" (N/A).
+          die in der aktuellen veröffentlichten Version behoben
+          sind. Dieses Kriterium darf als nicht anwendbar (N/A)
+          markiert werden, wenn Benutzer typischerweise nicht
+          selbst die Software  aktualisieren. Diese Kirterium
+          trifft nur auf die Projektergebnisse zu, nicht auf Abhängikeiten.
+          Wenn keine Releasenotes vorhanden sind oder keine öffentlich
+          bekannten Sicherheitslücken bekannt sind, wählen Sie
+          (N/A).
         details: >-
           Wenn Benutzer die Software normalerweise nicht selbst
           auf ihren Computern aktualisieren können, sondern stattdessen
@@ -1345,20 +1374,30 @@ de:
           werden können.
       test:
         description: >-
-          Das Projekt muss mindestens eine automatisierte Test-Suite
+          Das Projekt MUSS mindestens eine automatisierte Test-Suite
           verwenden, die öffentlich als FLOSS veröffentlicht wird
           (diese Test-Suite kann als separates FLOSS-Projekt gepflegt
-          werden).
+          werden). Das Project MUSS verständlich zeigen oder dokumentieren,
+          wie die Test-Suite ausgeführt wird (z. B. durch ein
+          Continuous Integration (CI) Script oder als Dokumentation
+          in Dateien, wie z. B. BUILD.md, README.md oder CONTRIBUTING.md).
         details: >-
           Das Projekt KANN mehrere automatisierte Test-Suiten
           benutzen (z. B. eine, die schnell läuft, eine andere,
           die gründlicher ist, aber spezielle Ausrüstung erfordert).
+          Es gibt viele Test-Frameworks und Systeme die Tests
+          unterstützten, einschließlich  <a href="https://www.seleniumhq.org/">Selenium</a>
+          (web browser automation), <a href="https://junit.org">Junit</a>
+          (JVM, Java), <a href="https://CRAN.R-project.org/package=RUnit">RUnit</a>
+          (R), <a href="https://cran.r-project.org/web/packages/testthat/index.html">testthat</a>
+          (R).
       test_invocation:
         description: >-
           Eine Test-Suite SOLLTE in einer üblichen Weise für diese
           Programmiersprache aufrufbar sein.
-        details: Zum Beispiel, "make check", "mvn test", oder
-          "rake test".
+        details: >-
+          Zum Beispiel, "make check", "mvn test", oder "rake test"
+          (Ruby).
       test_most:
         description: >-
           Es wird erwartet, dass die Test-Suite die meisten (oder
@@ -1449,16 +1488,16 @@ de:
           kann. (Siehe "Details" für spezifische Anforderungen.)
         details: >-
           Dies erfordert das Verständnis der folgenden Designprinzipien,
-          einschließlich der 8 Prinzipien von <a href="http://web.mit.edu/Saltzer/www/publications/protection/">Saltzer
+          einschließlich der 8 Prinzipien von <a href="https://web.mit.edu/Saltzer/www/publications/protection/">Saltzer
           und Schroeder</a>: <ul> <li>Wirtschaftlichkeit des Mechanismus
           (halten Sie das Design so einfach und klein wie möglich,
-          z. B. durch umfassende Vereinfachungen)</li> <li>fehlersichere
-          Vorgaben (Zugriffsentscheidungen sollten standardmäßig
+          z. B. durch umfassende Vereinfachungen)</li> <li>Fehlersichere
+          Voreinstellungen (Zugriffsentscheidungen sollten standardmäßig
           verweigert werden und die Installation der Projekte
           sollte standardmäßig sicher sein)</li> <li>Vollständige
           Vermittlung (jeder Zugang, der begrenzt werden kann,
-          muss auf Autorität überprüft werden und nicht umgangen
-          werden können)</li> <li>Offenes Design (Sicherheitsmechanismen
+          muss auf Berechtigungen überprüft werden und darf nicht
+          umgangen werden können)</li> <li>Offenes Design (Sicherheitsmechanismen
           sollten nicht von der Unkenntnis der Angreifer über
           das Designs abhängig gemacht werden, sondern stattdessen
           auf leichter schützbare und änderbare Informationen
@@ -1502,7 +1541,12 @@ de:
           zum Projekt entgegennehmen zu können, oder die endgültige
           Freigaben der Projektsoftware durchzuführen. Wenn es
           nur einen Entwickler gibt, ist diese Person der primäre
-          Entwickler.
+          Entwickler. Es gibt viele Bücher und Kurse die Wissen
+          vermitteln,wie sichere Software entwickelt und entworfen
+          werden kann. Zum Beispiel bietet der kostenlose Kurs
+          <a href="https://www.edx.org/professional-certificate/linuxfoundationx-secure-software-development-fundamentals">Secure
+          Software Development Fundamentals</a> drei Module an,
+          die erklären wie man sichere Software entwickelt.
       know_common_errors:
         description: >-
           Mindestens einer der primären Entwickler des Projekts
@@ -1514,9 +1558,14 @@ de:
           Beispiele (je nach Art der Software) beinhalten SQL-Injektion,
           OS-Injektion, klassischer Pufferüberlauf, Cross-Site-Scripting,
           fehlende Authentifizierung und fehlende Autorisierung.
-          Siehe die <a href="http://cwe.mitre.org/top25/">CWE/SANS
+          Siehe die <a href="https://cwe.mitre.org/top25/">CWE/SANS
           top 25</a> oder <a href="https://www.owasp.org/index.php/Category:OWASP_Top_Ten_Project">OWASP
-          Top 10</a> für häufig verwendete Listen.
+          Top 10</a> für häufig verwendete Listen. Es gibt viele
+          Bücher und Kurse die Wissen vermitteln,wie sichere Software
+          entwickelt und entworfen werden kann. Zum Beispiel bietet
+          der kostenlose Kurs <a href="https://www.edx.org/professional-certificate/linuxfoundationx-secure-software-development-fundamentals">Secure
+          Software Development Fundamentals</a> drei Module an,
+          die erklären wie man sichere Software entwickelt.
       crypto_published:
         description: >-
           Die vom Projekt entwickelte Software MUSS standardmäßig
@@ -1617,14 +1666,16 @@ de:
           die Authentifizierung von externen Benutzern speichert,
           MÜSSEN die Passwörter als iterierte Hashes mit einem
           per-User-Salt unter Verwendung eines Key-Stretching
-          (iterierten) Algorithmus (z.B. PBKDF2, Bcrypt oder Scrypt)
-          gespeichert werden.
+          (iterierten) Algorithmus (z.B. Argon2id, Bcrypt, Scrypt,
+          or PBKDF2). Siehe auch <a href="https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html">OWASP
+          Password Storage Cheat Sheet</a>).
         details: >-
           Dieses Kriterium gilt nur, wenn die Software die Authentifizierung
-          von Benutzern mit Passwörtern erzwingt, wie z. B. bei
-          serverseitigen Webanwendungen. Es gilt nicht in Fällen,
-          in denen die Software Kennwörter für die Authentifizierung
-          in andere Systeme speichert (z. B. die Software implementiert
+          von externan Benutzern mit Passwörtern erzwingt (inbound
+          authentication), wie z. B. bei serverseitigen Webanwendungen.
+          Es gilt nicht in Fällen, in denen die Software Kennwörter
+          für die Authentifizierung in andere Systeme speichert
+          (outbound authentication, z. B. die Software implementiert
           einen Client für ein anderes System), da zumindest Teile
           dieser Software oft Zugriff auf das Passwort im Klartext
           haben müssen.
@@ -1681,8 +1732,21 @@ de:
           Vulnerability Database</a>) oder wenn das Projekt informiert
           und die Informationen der Öffentlichkeit zugänglich
           gemacht wurden (evtl. durch das Projekt). Eine Sicherheitslücke
-          ist mittel- bis scherwiegend, wenn ihr <a href="https://nvd.nist.gov/cvss.cfm">CVSS
-          2.0</a> Basis-Score 4 oder höher ist. <strong>Hinweis</strong>:
+          ist hat einen mittlerem oder höheren Schweregrad, wenn
+          ihr <a href="https://www.first.org/cvss/">Common Vulnerability
+          Scoring System (CVSS)</a> Basis-<a href="https://www.first.org/cvss/"
+          >Score 4 oder höher ist. In CVSS Versionen 2.0 bis 3.1
+          entspricht dies einem CVSS score von 4.0 oder höher.
+          Projekte können einen CVSS Score der in einer viel verwendeten
+          Schwachstellendatenbank (wie z.B. <a href="https://nvd.nist.gov">National
+          Vulnerability Database</a>) verwenden, wenn der Score
+          entsprechend der aktuellsten CVSS Version in der Datenbank
+          gelistet ist. Projekte können stattdessen den Schweregrad
+          selbst berechnen, indem sie die neuste Version der <a
+          href="https://www.first.org/cvss/">CVSS</a> zum Zeitpunkt
+          der Schwachstellenmeldung verwendend, wenn die Eingaben
+          für die Berechnung veröffentlicht werden sobald die
+          Schwachstelle öffentlich bekannt gegeben wurde. <strong>Hinweis</strong>:
           Das bedeutet, dass Benutzer bis zu 60 Tage für alle
           Angreifer weltweit anfällig bleiben können. Dieses Kriterium
           ist oft viel einfacher zu treffen als das, was Google
@@ -1690,7 +1754,18 @@ de:
           responsible disclosure</a>, weil Google empfiehlt, dass
           die 60-Tage-Periode beginnen, wenn das Projekt benachrichtigt
           wird, <em>selbst dann</em>, wenn der Bericht nicht öffentlich
-          ist.
+          ist. Beachten Sie auch, dass dieses Badge-Kriterium,
+          wie andere Kriterien, auf einzelne Projekte zutrifft.
+          Manche Projekte sind teil einer größeren Organisation
+          oder eines größeren Projektes, möglicherweise als Teil
+          mehrer Lagen, und manche Projekte füttern ihre Ergebnisse
+          an andere Organisationen oder Projekte als teil einer
+          möglicherweisen komplexen Lieferkette. Daher fokussieren
+          wir uns auf die Antwortzeit einzelner Projekte. Wenn
+          ein Projekt einen Patch bereitgestellt hat können andere
+          entscheiden wie sie damit umgehen möchten (z. B. können
+          sie auf eine neue Version upgraden oder nur einzelne
+          Patches auswählen und einspielen).
       vulnerabilities_critical_fixed:
         description: >-
           Projekte SOLLTEN alle kritischen Schwachstellen schnell
@@ -1720,21 +1795,29 @@ de:
           Kriterium zählen Compilerwarnungen und "sichere" Sprachmodi
           nicht als statische Codeanalyse-Tools (diese vermeiden
           typischerweise eine tiefgreifende Analyse, da Geschwindigkeit
-          entscheidend ist). Beispiele für solche Tools zur statischen
-          Codeanalyse sind <a href="http://cppcheck.sourceforge.net/">cppcheck</a>,
-          <a href="http://clang-analyzer.llvm.org/">clang static
-          analyzer</a>, <a href="http://findbugs.sourceforge.net/">FindBugs</a>
-          (einschließlich <a href="https://h3xstream.github.io/find-sec-bugs/">FindSecurityBugs</a>),
-          <a href="https://pmd.github.io/">PMD</a>, <a href="http://brakemanscanner.org/">Brakeman</a>,
-          <a href="https://scan.coverity.com/">Coverity Quality
+          entscheidend ist). Manche statischen Codeanalyse-Tools
+          spezialisieren sich auf das Auffinden von generischen
+          Defekten, andere spezialisieren sich auf das Finden
+          von bestimmte Arten von Defekten (z.B. Schwachstellen)
+          und manche können beides. Beispiele für solche Tools
+          zur statischen Codeanalyse sind <a href="http://cppcheck.sourceforge.net/">cppcheck</a>
+          (C, C++), <a href="https://clang-analyzer.llvm.org/">clang
+          static analyzer</a> (C, C++), <a href="https://spotbugs.github.io/">SpotBugs</a>
+          (Java), <a href="http://findbugs.sourceforge.net/">FindBugs</a>
+          (Java) (including <a href="https://h3xstream.github.io/find-sec-bugs/">FindSecurityBugs</a>),
+          <a href="https://pmd.github.io/">PMD</a> (Java), <a
+          href="https://brakemanscanner.org/">Brakeman</a> (Ruby
+          on Rails), <a href="https://cran.r-project.org/web/packages/lintr/index.html">lintr</a>
+          (R), <a href="https://cran.r-project.org/web/packages/goodpractice/index.html">goodpractice</a>
+          (R), <a href="https://scan.coverity.com/">Coverity Quality
           Analyzer</a>, <a href="https://www.sonarqube.org/">SonarQube</a>,
-          <a href="https://www.codacy.com/">Codacy</a> und <a
-          href="https://saas.hpe.com/de-de/software/sca">HP Enterprise
-          Fortific Static-Code-Analyzer</a>. Mehr Tools finden
+          <a href="https://www.codacy.com/">Codacy</a>, und <a
+          href="https://saas.hpe.com/en-us/software/sca">HP Enterprise
+          Fortify Static Code Analyzer</a>.. Mehr Tools finden
           Sie beispielsweise in der <a href="https://en.wikipedia.org/wiki/List_of_tools_for_static_code_analysis">Wikipedia-Liste
           von Tools zur statischen Codeanalyse</a>, <a href="https://www.owasp.org/index.php/Static_Code_Analysis">OWASP
-          Informationen zur statischen Code-Analyse </a>, <a href="http://samate.nist.gov/index.php/Source_Code_Security_Analyzers.html">NIST-Liste
-          der Quellcode-Sicherheitsanalyse-Tools</a> und <a href="http://www.dwheeler.com/essays/static-analysis-tools.html">Wheelers
+          Informationen zur statischen Code-Analyse </a>, <a href="https://samate.nist.gov/index.php/Source_Code_Security_Analyzers.html">NIST-Liste
+          der Quellcode-Sicherheitsanalyse-Tools</a> und <a href="https://www.dwheeler.com/essays/static-analysis-tools.html">Wheelers
           Liste der statischen Analyse-Tools</a>. Das <a href="https://continuousassurance.org/">SWAMP</a>
           ist eine kostenlose Plattform zur Bewertung von Schwachstellen
           in Software mit einer Vielzahl von Tools. Wenn für die
@@ -1761,13 +1844,28 @@ de:
           -Level-Badge nicht.
       static_analysis_fixed:
         description: >-
-          Alle mittel- und hochgradig ausnutzbaren Schwachstellen,
+          Alle mittel- und höhergradig ausnutzbaren Schwachstellen,
           die mit statischer Codeanalyse entdeckt wurden, MÜSSEN
           nach der Entdeckung rechtzeitig behoben werden.
         details: >-
-          Eine Sicherheitsanfälligkeit ist mittel- bis hochgradig
-          schwerwiegend, wenn ihr <a href="https://nvd.nist.gov/cvss.cfm">
-          CVSS 2.0 </a>Wert 4 oder höher ist.
+          Eine Sicherheitslücke ist hat einen mittlerem oder höheren
+          Schweregrad, wenn ihr <a href="https://www.first.org/cvss/">Common
+          Vulnerability Scoring System (CVSS)</a> Basis-<a href="https://www.first.org/cvss/"
+          >Score 4 oder höher ist. In CVSS Versionen 2.0 bis 3.1
+          entspricht dies einem CVSS score von 4.0 oder höher.
+          Projekte können einen CVSS Score der in einer viel verwendeten
+          Schwachstellendatenbank (wie z.B. <a href="https://nvd.nist.gov">National
+          Vulnerability Database</a>) verwenden, wenn der Score
+          entsprechend der aktuellsten CVSS Version in der Datenbank
+          gelistet ist. Projekte können stattdessen den Schweregrad
+          selbst berechnen, indem sie die neuste Version der <a
+          href="https://www.first.org/cvss/">CVSS</a> zum Zeitpunkt
+          der Schwachstellenmeldung verwendend, wenn die Eingaben
+          für die Berechnung veröffentlicht werden sobald die
+          Schwachstelle öffentlich bekannt gegeben wurde. Beachten
+          Sie, dass das Kriterium vulnerabilities_fixed_60_days
+          verlangt, dass alle diese Schwachstellen innerhalb 60
+          Tagen nach Bekanntgabe gefixt werden.
       static_analysis_often:
         description: >-
           Es wird EMPFOHLEN, dass eine statische Quellcode-Analyse
@@ -1784,16 +1882,17 @@ de:
           href="http://lcamtuf.coredump.cx/afl/">American Fuzzy
           Lop</a>) oder einen Web Application Scanner (z.B. <a
           href="https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project">OWASP
-          ZAP</a> oder <a href="http://w3af.org/">w3af</a>). In
-          einigen Fällen ist das <a href="https://github.com/google/oss-fuzz#introduction">OSS-Fuzz</a>
+          ZAP</a> oder <a href="https://w3af.org/">w3af</a>).
+          In einigen Fällen ist das <a href="https://github.com/google/oss-fuzz#introduction">OSS-Fuzz</a>
           Projekt bereit, Fuzz-Tests auf Ihr Projekt anzuwenden.
           Für die Zwecke dieses Kriteriums muss das dynamische
           Analyse-Tool die Eingaben in irgendeiner Weise variieren,
           um nach verschiedenen Arten von Problemen zu suchen
           <em>oder</em> eine automatisierte Test-Suite mit mindestens
-          80% Abdeckung. Die <a href="https://de.wikipedia.org/wiki/Dynamic_program_analysis">Wikipedia-Seite
-          zur dynamischen Analysen</a> und die <a href="https://www.owasp.org/index.php/Fuzzing">OWASP
-          Seite auf Fuzzing</a> nennen einige dynamische Analyse-Tools.
+          80% Zweig-Abdeckung sein. Die <a href="https://en.wikipedia.org/wiki/Dynamic_program_analysis">Englische
+          Wikipedia-Seite zur dynamischen Analysen</a> und die
+          <a href="https://www.owasp.org/index.php/Fuzzing">OWASP
+          Seite über Fuzzing</a> nennen einige dynamische Analyse-Tools.
           Das Analyse-Tool(s) DARF für der Suche nach Sicherheitslücken
           eingesetzt werden, aber das ist nicht erforderlich.
       dynamic_analysis_unsafe:
@@ -1811,30 +1910,44 @@ de:
           Beispiele für Mechanismen zur Erkennung von Arbeitsspeicher
           Sicherheitsproblemen sind <a href="https://github.com/google/sanitizers/wiki/AddressSanitizer">Adresse
           Sanitizer (ASAN)</a> (verfügbar in GCC und LLVM), <a
-          href="http://clang.llvm.org/docs/MemorySanitizer.html">Memory
-          Sanitizer</a> und <a href="http://valgrind.org/">valgrind</a>.
-          Andere möglicherweise verwendete Werkzeuge sind <a href="http://clang.llvm.org/docs/ThreadSanitizer.html">Thread
-          Sanitizer</a> und <a href="http://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html">Undefined
+          href="https://clang.llvm.org/docs/MemorySanitizer.html">Memory
+          Sanitizer</a> und <a href="https://valgrind.org/">valgrind</a>.
+          Andere möglicherweise verwendete Werkzeuge sind <a href="https://clang.llvm.org/docs/ThreadSanitizer.html">Thread
+          Sanitizer</a> und <a href="https://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html">Undefined
           Behavior Sanitizer</a>. Weit verbreitete Assertions
           würden auch funktionieren.
       dynamic_analysis_enable_assertions:
         description: >-
-          Es ist EMPFHOLEN, dass die vom Projekt entwickelte Software
-          viele Laufzeit-Assertions einbindet, die während der
-          dynamischen Analyse überprüft werden.
+          Es ist EMPFHOLEN, dass das Projekt eine Konfigurations
+          benutzt, die zumindest etwas dynamischen Analyse nutzt
+          (wie z.B. testing oder fuzzing), welche Assertions erlauben.
+          In vielen Fällen sollten diese Assertions <i>nicht</i>
+          in Production Builds aktiviert sein.
         details:
       dynamic_analysis_fixed:
         description: >-
-          Alle mittel- und hochgradig ausnutzbaren Schwachstellen,
+          Alle mittel- und höhergradig ausnutzbaren Schwachstellen,
           die mit dynamischer Codeanalyse entdeckt werden, MÜSSEN
           zügig behoben werden, nachdem sie bestätigt wurden.
         details: >-
-          Eine Sicherheitslücke ist von mittlerem bis hohem Schweregrad,
-          wenn ihr <a href="https://nvd.nist.gov/cvss.cfm">CVSS
-          2.0</a> Basis-Score 4 ist. Wenn Sie keine dynamische
-          Codeanalyse ausführen und somit keine Schwachstellen
-          auf diese Weise finden, wählen Sie "nicht anwendbar"
-          (N/A).
+          Wenn Sie keine dynamische Codeanalyse ausführen und
+          somit keine Schwachstellen auf diese Weise finden, wählen
+          Sie "nicht anwendbar" (N/A). Eine Sicherheitslücke ist
+          hat einen mittlerem oder höheren Schweregrad, wenn ihr
+          <a href="https://www.first.org/cvss/">Common Vulnerability
+          Scoring System (CVSS)</a> Basis-<a href="https://www.first.org/cvss/"
+          >Score 4 oder höher ist. In CVSS Versionen 2.0 bis 3.1
+          entspricht dies einem CVSS score von 4.0 oder höher.
+          Projekte können einen CVSS Score der in einer viel verwendeten
+          Schwachstellendatenbank (wie z.B. <a href="https://nvd.nist.gov">National
+          Vulnerability Database</a>) verwenden, wenn der Score
+          entsprechend der aktuellsten CVSS Version in der Datenbank
+          gelistet ist. Projekte können stattdessen den Schweregrad
+          selbst berechnen, indem sie die neuste Version der <a
+          href="https://www.first.org/cvss/">CVSS</a> zum Zeitpunkt
+          der Schwachstellenmeldung verwendend, wenn die Eingaben
+          für die Berechnung veröffentlicht werden sobald die
+          Schwachstelle öffentlich bekannt gegeben wurde.
     '1':
       contribution_requirements:
         description: >-
@@ -1848,7 +1961,7 @@ de:
           wo alle Entwickler von nicht-trivialen Beiträgen versichern,
           dass sie rechtlich ermächtigt sind, diese Beiträge zu
           machen. Der häufigste und leicht umsetzbare Ansatz,
-          ist die Verwendung eines <a href="http://developercertificate.org/">
+          ist die Verwendung eines <a href="https://developercertificate.org/">
           Developer Certificate of Origin (DCO) </a>, wo Benutzer
           "signed-off-by" in ihren Commits und die Projektlinks
           zur DCO-Website hinzufügen. Allerdings DARF dies als
@@ -1905,18 +2018,17 @@ de:
           und das Projekt zu einem einladenderen Ort zu machen.
           Dies sollte sich nur auf das Verhalten innerhalb der
           Gemeinschaft/ am Arbeitsplatz des Projekts konzentrieren.
-          Beispielhafte Verhaltenskodizes sind der <a href="https://www.kernel.org/doc/html/latest/process/code-of-conflict.html">
-          Linux-Kernel-Konfliktcode </a>, der <a href="http://contributor-covenant.org/">
-          Contributor Covenant Code of Conduct </a>, der <a href="https://www.debian.org/code_of_conduct">
-          Debian-Verhaltenskodex </a>, der <a href="https://www.ubuntu.com/about/ubu-untu/conduct">
-          Ubuntu-Verhaltenskodex </a>, der <a href="https://getfedora.org/code-of-conduct">
-          Verhaltenskodex von Fedora </a>, der <a href="https://wiki.gnome.org/action/show/Foundation/CodeOfConduct">
-          GNOME-Verhaltenskodex </a > der <a href="https://www.kde.org/code-of-conduct/">
-          KDE Community Code of Conduct ">, der <a href="https://www.python.org/psf/codeofconduct/">
-          Verhaltenskodex der Python-Community </a>, <a href="https://www.ruby-lang.org/en/conduct/">
-          Die Richtlinie zur Einhaltung der Ruby-Community </a>,
-          und der <a href="https://www.rust-lang.org/en-US/conduct.html">
-          Verhaltenskodex von Rust </a>.
+          Beispielhafte Verhaltenskodizes sind der <a href="https://www.kernel.org/doc/html/latest/process/code-of-conduct.html">Linux
+          Kernel Code of Conduct</a>, der <a href="https://contributor-covenant.org/">Contributor
+          Covenant Code of Conduct</a>, der <a href="https://www.debian.org/code_of_conduct">Debian
+          Code of Conduct</a>, der <a href="https://www.ubuntu.com/about/about-ubuntu/conduct">Ubuntu
+          Code of Conduct</a>, der <a href="https://getfedora.org/code-of-conduct">Fedora
+          Code of Conduct</a>, der <a href="https://wiki.gnome.org/action/show/Foundation/CodeOfConduct">GNOME
+          Code Of Conduct</a>, der <a href="https://www.kde.org/code-of-conduct/">KDE
+          Community Code of Conduct</a>, der <a href="https://www.python.org/psf/codeofconduct/">Python
+          Community Code of Conduct</a>, die <a href="https://www.ruby-lang.org/en/conduct/">Ruby
+          Community Conduct Guideline</a> und der <a href="https://www.rust-lang.org/en-US/conduct.html">Rust
+          Code of Conduct</a>.
       roles_responsibilities:
         description: >-
           Das Projekt MUSS klar und deutlich die Rollen- auf Aufgabenverteilung
@@ -2046,10 +2158,10 @@ de:
           Sie die umweltbezogenen Barrierefreiheitsrichtlinien
           verwenden (z.B. <a href="https://developer.gnome.org/accessibility-devel-guide/stable/">Gnome</a>,
           <a href="https://accessibility.kde.org/">KDE</a>, <a
-          href="http://docs.xfce.org/xfce/xfce4-settings/accessibility">XFCE</a>,
+          href="https://docs.xfce.org/xfce/xfce4-settings/accessibility">XFCE</a>,
           <a href="https://developer.android.com/guide/topics/ui/accessibility/">Android</a>,
           <a href="https://developer.apple.com/accessibility/ios/">iOS
-          </a>, <a href="http://www.apple.com/accessibility/osx/voiceover/">Mac</a>
+          </a>, <a href="https://www.apple.com/accessibility/osx/voiceover/">Mac</a>
           und <a href="https://msdn.microsoft.com/en-us/windows/uwp/accessibility/accessibility-overview">Windows</a>).
           Einige TUI-Anwendungen (z.B. `ncurses`-Programme) können
           bestimmte Dinge ausführen, um sich selbst zugänglicher
@@ -2109,20 +2221,20 @@ de:
           Passwörter für die Authentifizierung von externen Benutzern
           speichern, müssen die Passwörter als iterierte Hashes
           mit einem per-User-Salt unter Verwendung eines Key-Stretching
-          (iterierten) Algorithmus (z.B. PBKDF2, Bcrypt oder Scrypt).
-          Wenn die Projektseiten hierfür keine Passwörter speichern,
-          wählen Sie "nicht anwendbar" (N/A) aus.
+          (iterierten) Algorithmus (z. B. Argon2id, Bcrypt, Scrypt,
+          or PBKDF2). Wenn die Projektseiten hierfür keine Passwörter
+          speichern, wählen Sie "nicht anwendbar" (N/A) aus.
         details: >-
-          Beachten Sie, dass die Verwendung von <a href="https://help.github.com/articles/github-security/">
-          GitHub </a> dieses Kriterium erfüllt. Dieses Kriterium
-          gilt nur für Passwörter, die für die Authentifizierung
-          von externen Benutzern in die Projektseiten verwendet
-          werden. Wenn sich die Projektseiten auf anderen Seiten
-          anmelden müssen, müssen sie eventuell Passwörter für
-          diesen Zweck anders speichern (da ein Algorithmus wie
-          Bcrypt diese Passwörter nutzlos machen würde). Dies
-          gilt für das Kriterium crypto_password_storage zu den
-          Projektseiten, ähnlich wie sites_https.
+          Beachten Sie, dass die Verwendung von <a href="https://help.github.com/articles/github-security/">GitHub</a>
+          dieses Kriterium erfüllt. Dieses Kriterium gilt nur
+          für Passwörter, die für die Authentifizierung von externen
+          Benutzern in die Projektseiten verwendet werden (inbound
+          authentication). Wenn sich die Projektseiten auf anderen
+          Seiten anmelden müssen (outbound authentication), müssen
+          sie eventuell Authorization-Tokens für diesen Zweck
+          anders speichern (da das Speichern eines Hashes nutzlos
+          wäre). Dies gilt für das Kriterium crypto_password_storage
+          zu den Projektseiten, ähnlich wie sites_https.
       maintenance_or_update:
         description: >-
           Das Projekt MUSS die am häufigsten verwendeten älteren
@@ -2189,7 +2301,9 @@ de:
           Code, wo sie auftreten, so dass diese Ausnahmen überprüft
           werden können und so dass Werkzeuge sie automatisch
           in der Zukunft bearbeiten können. Beispiele für solche
-          Werkzeuge sind ESLint (JavaScript) und Rubocop (Ruby).
+          Werkzeuge sind ESLint (JavaScript), Rubocop (Ruby) und
+          <a href="https://cran.r-project.org/web/packages/devtools/index.html">devtools
+          check</a> (R).
       build_standard_variables:
         description: >-
           Build-Systeme für native Binärdateien MÜSSEN die relevanten
@@ -2310,16 +2424,17 @@ de:
           zu verifizieren.
         details: >-
           Dies kann mit einem Ursprungsanalysator / Abhängigkeitsüberprüfungswerkzeug
-          wie <a href="https://www.owasp.org/index.php/OWASP_Dependency_Check">
+          / Softwarezusammensetzungsanalysator wie <a href="https://www.owasp.org/index.php/OWASP_Dependency_Check">
           OWASPs Dependency-Check</a>, <a href="https://www.sonatype.com/nexus-auditor">Sonatypes
-          Nexus Auditor</a>, <a href="https://www.blackducksoftware.com/products/protex">
-          Black Ducks Protex</a>, <a href="http://www.protecode.com/">Synopsys'
-          Protecode</a> und <a href="https://github.com/rubysec/bundler-audit">Bundler-Audit
-          (für Ruby) </a>. Einige Paketmanager beinhalten Mechanismen,
-          um dies zu tun. Es ist akzeptabel, wenn die Anfälligkeit
-          der Komponenten nicht ausgenutzt werden kann, aber diese
-          Analyse ist schwierig und es ist manchmal einfacher,
-          den Part einfach zu aktualisieren oder zu reparieren.
+          Nexus Auditor</a>, <a href="https://www.synopsys.com/software-integrity/security-testing/software-composition-analysis.html">Synopsys'
+          Black Duck Software Composition Analysis</a>, und <a
+          href="https://github.com/rubysec/bundler-audit">Bundler-Audit
+          (für Ruby) </a> erreicht werden. Einige Paketmanager
+          beinhalten Mechanismen, um dies zu tun. Es ist akzeptabel,
+          wenn die Anfälligkeit der Komponenten nicht ausgenutzt
+          werden kann, aber diese Analyse ist schwierig und es
+          ist manchmal einfacher, den Part einfach zu aktualisieren
+          oder zu reparieren.
       updateable_reused_components:
         description: |-
           Das Projekt MUSS entweder:
@@ -2341,7 +2456,7 @@ de:
           für Cloud-basierte Systeme; Wenn der Cloud-Provider
           seine "Standard"-Bibliotheken aktualisiert, aber das
           Programm sie nicht verwendt, dann helfen die Updates
-          nicht wirklich. Siehe z.B. <a href="http://spot.livejournal.com/312320.html">
+          nicht wirklich. Siehe z.B. <a href="https://spot.livejournal.com/312320.html">
           "Chromium: Why it isn't in Fedora yet as a proper package"
           von Tom Callaway </a>.
       interfaces_current:
@@ -2374,12 +2489,13 @@ de:
           haben, wenn es mindestens ein FLOSS-Tool gibt, das dieses
           Kriterium in der ausgewählten Sprache erfüllen kann.
         details: >-
-          Viele FLOSS-Tools stehen zur Verfügung, um die Testdichte
+          Viele FLOSS-Tools stehen zur Verfügung, um die Test-Coverage
           zu beurteilen, einschließlich gcov/lcov, Blanket.js,
-          Istanbul und JCov. Beachten Sie, dass das Erfüllen dieses
-          Kriteriums keine Garantie dafür ist, dass die Test-Suite
-          gründlich ist, hingegen ist das Verfehlen dieses Kriteriums
-          ein starker Indikator für eine schlechte Test-Suite.
+          Istanbul, JCov, und <a href="https://cran.r-project.org/web/packages/covr/index.html">covr</a>
+          (R). Beachten Sie, dass das Erfüllen dieses Kriteriums
+          keine Garantie dafür ist, dass die Test-Suite gründlich
+          ist, hingegen ist das Verfehlen dieses Kriteriums ein
+          starker Indikator für eine schlechte Test-Suite.
       test_policy_mandated:
         description: >-
           Das Projekt MUSS eine formale schriftliche Richtlinie
@@ -2418,14 +2534,14 @@ de:
         description: >-
           Die Projektergebnisse MÜSSEN alle Eingaben aus potenziell
           nicht vertrauenswürdigen Quellen überprüfen, um sicherzustellen,
-          dass sie gültig sind (eine *Whitelist*) und ungültige
+          dass sie gültig sind (eine *Allowliste*) und ungültige
           Eingaben ablehnen, wenn überhaupt Einschränkungen für
           die Daten vorliegen.
         details: >-
           Beachten Sie, dass der Vergleich der Eingabe mit einer
-          Liste von "schlechten Formaten" (aka einer *Blacklist*)
+          Liste von "schlechten Formaten" (aka einer *Denylist*)
           normalerweise nicht ausreicht, weil Angreifer oft um
-          eine Blacklist herumarbeiten können. Insbesondere werden
+          eine Denyliste herumarbeiten können. Insbesondere werden
           Zahlen in interne Formate konvertiert und dann überprüft,
           ob sie zwischen ihrem Minimum und Maximum (inklusive)
           liegen und Textstrings werden überprüft, um sicherzustellen,
@@ -2500,11 +2616,11 @@ de:
         details: >-
           Beachten Sie, dass eine falsche TLS-Zertifikatsüberprüfung
           ein häufiger Fehler ist. Weitere Informationen finden
-          Sie unter <a href="http://crypto.stanford.edu/~dabo/pubs/abstracts/ssl-client-bugs.html">
-          "The Most Dangerous Code in the World: Validating SSL
-          Certificates in Non-Browser Software" von Martin Georgiev
-          et al.</a> und <a href="https://blogs.gnome.org/mcatanzaro/2016/03/12/do-you-trust-this-application/">
-          "Do you trust this application?" von Michael Catanzaro</a>.
+          Sie unter <a href="https://crypto.stanford.edu/~dabo/pubs/abstracts/ssl-client-bugs.html">"The
+          Most Dangerous Code in the World: Validating SSL Certificates
+          in Non-Browser Software" von Martin Georgiev et al.</a>
+          und <a href="https://blogs.gnome.org/mcatanzaro/2016/03/12/do-you-trust-this-application/">"Do
+          you trust this application?" von Michael Catanzaro</a>.
       crypto_verification_private:
         description: >-
           Die Software, die vom Projekt produziert wird, MUSS,
@@ -2576,7 +2692,7 @@ de:
           dass ein bestimmter Satz kritischer Ansprüche bezüglich
           der Eigenschaften eines Systems für eine gegebene Anwendung
           in einer gegebenen Umgebung hinreichend erfüllt ist
-          (<a href="http://Nvlpubs.nist.gov/nistpubs/ir/2009/ir7608.pdf">"Software
+          (<a href="https://www.nist.gov/publications/software-assurance-using-structured-assurance-case-models">"Software
           Assurance Using Structured Assurance Case Models", Thomas
           Rhodes et al., NIST Interagency Report 7608 </a>). Vertrauensgrenzen
           sind Grenzen, in denen Daten oder Ausführung ihr Vertrauensniveau
@@ -2618,22 +2734,21 @@ de:
       copyright_per_file:
         description: >-
           Das Projekt MUSS eine Copyright-Erklärung in jeder Quelldatei
-          enthalten, die mindestens ein bestimmtes Jahr und den
-          Urheberrechtsinhaber identifiziert.
+          enthalten, die den Urheberrechtsinhaber identifiziert
+          (z. B. den [Projektnamen] oder die Contributors).
         details: >-
           Dies DARF getan werden, indem man Folgendes innerhalb
           eines Kommentars relativ am Anfangs jeder Datei einfügt:
-          "<tt> Copyright [Jahr, in dem dieses Projekt oder die
-          Arbeit begonnen hat] - [letztes Jahr, in dem es geändert
-          wurde], [Projekt Gründer] and the [Projektname] contributors.</tt>
-          "
+          <tt>Copyright the [project name] contributors.</tt>".
+          Siehe <a href="https://www.linuxfoundation.org/blog/2020/01/copyright-notices-in-open-source-software-projects/"
+          >"Copyright Notices in Open Source Software Projects"
+          by Steve Winslow</a>.
       license_per_file:
         description: >-
           Das Projekt MUSS eine Lizenzerklärung in jeder Quelldatei
-          enthalten. Dies DARF getan werden, indem man Folgendes
-          in einen Kommentar relativ am Anfangs jeder Datei einfügt:
-          <a href="https://spdx.org/using-spdx#identifiers"> <tt>SPDX-License-Identifier:
-          [SPDX-Lizenz Ausdruck für das Projekt]</tt> </a>.
+          enthalten. Dies DARF als Kommentar relativ am Anfangs
+          jeder Datei einfügt sein: <a href="https://spdx.dev/ids/#how"><tt>SPDX-License-Identifier:
+          [SPDX license expression for project]</tt></a>.
         details: >-
           Dies DARF auch durch die Einbeziehung einer Erklärung
           in natürlicher Sprache geschehen, die die Lizenz kennzeichnet.
@@ -2660,8 +2775,8 @@ de:
           Diese Identifizierung erfolgt in der Regel durch die
           Markierung ausgewählter Ausgaben in einem Issue-Tracker
           mit einem oder mehreren Tags, die das Projekt für den
-          Zweck verwendet, z.B. <a href="http://up-for-grabs.net/#/">
-          up-for-Grabs </a>, <a href="http://www.firsttimersonly.com/">
+          Zweck verwendet, z.B. <a href="https://up-for-grabs.net/#/">
+          up-for-Grabs </a>, <a href="https://www.firsttimersonly.com/">
           First-Timers-only </a>, "Small fix", Microtask oder
           IdealFirstBug. Diese neuen Aufgaben müssen nicht das
           Hinzufügen von Funktionalität beinhalten. Sie können
@@ -2781,12 +2896,18 @@ de:
           separat) MÜSSEN Key-Hardening-Headers mit nichtpermeablen
           Werten enthalten.
         details: >-
-          Beachten Sie, dass GitHub bekannt ist, dies zu erfüllen.
-          Websites wie https://securityheaders.io/ können dies
-          schnell überprüfen. Die wichtigsten Key-Hardening-Header
+          Beachten Sie, dass GitHub und GitLab bekannt bekannterweise
+          dies erfüllen. Websites wie https://securityheaders.io/
+          können dies schnell überprüfen. Die wichtigsten Key-Hardening-Header
           sind: Content Security Policy (CSP), HTTP Strict Transport
-          Security (HSTS), X-Content-Type-Options (als "nosniff"),
-          X-Frame-Options und X-XSS-Protection.
+          Security (HSTS), X-Content-Type-Options (as "nosniff"),
+          and X-Frame-Options. Komplett statische websiten die
+          keine Möglichkeit für das anmelden auf der webseite
+          erlauben können vermutlich mit geringer Gefahr einige
+          Hardening-Headers weglassen; es gibt jedoch keine verlässliche
+          Methode solche Seiten zu identifizieren und deshalb
+          erfordern wir diese Headers auch auf voll statischen
+          Webseiten.
       security_review:
         description: >-
           Das Projekt MUSS innerhalb der letzten 5 Jahre eine

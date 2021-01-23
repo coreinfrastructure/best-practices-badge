@@ -584,7 +584,17 @@ fr:
         placeholder: Commentaires additionnels (en syntaxe markdown)
       some_not_crypto_html: >-
         Notez que certains logiciels n'ont pas besoin d'utiliser
-        des mécanismes cryptographiques.
+        des mécanismes cryptographiques. Si votre projet produit
+        un logiciel qui (1) inclut ou active la fonctionnalité
+        de chiffrement, et (2) peut être publié des États-Unis
+        (US) vers l'extérieur des États-Unis ou vers un citoyen
+        autre qu'américain, vous pouvez être légalement obligé
+        à faire quelques étapes supplémentaires. En règle générale,
+        cela implique simplement l'envoi d'un email. Pour plus
+        d'informations, consultez la section sur le chiffrement
+        de <a href="https://www.linuxfoundation.org/resources/publications/understanding-us-export-controls-with-os-projects/"><i>Comprendre
+        la technologie Open Source et les contrôles à l'exportation
+        américains</i></a> .
       dont_use_crypto: >-
         Appuyez ici si le logiciel produit par le projet n'utilise
         pas de mécanismes cryptographiques
@@ -1005,10 +1015,15 @@ fr:
           Le projet DOIT afficher la ou les licences de ses résultats
           dans un emplacement standard dans leur dépôt source.
         details: >-
-          Par exemple, dans un fichier à la racine du dépôt appelé
-          LICENSE ou COPYING. Les noms de fichiers de licence
-          PEUVENT être suivis d'une extension telle que « .txt
-          » ou « .md ». Notez que ce critère est requis uniquement
+          Une convention est de publier la licence sous la forme
+          d'un fichier à la racine du dépôt appelé LICENSE ou
+          COPYING, qui PEUT être suivi d'une extension telle que
+          « .txt » ou « .md ». Une autre convention est d'avoir
+          un réportoire nommé LICENSES contenant le(s) fichier(s)
+          de licence ; ces fichiers sont généralement nommés comme
+          leur identifiant de licence SPDX suivi d'une extension
+          de fichier appropriée, comme décrit dans la <a href="https://reuse.software/spec/">Spécification
+          REUSE</a>. Notez que ce critère est requis uniquement
           pour le dépôt de sources. Vous n'avez PAS besoin d'inclure
           le fichier de licence lors de la génération d'un élément
           à partir du code source (tel qu'un exécutable, un paquet
@@ -1024,8 +1039,9 @@ fr:
           /usr/share/common-licenses, et exclure le fichier de
           licence du paquet créé (par exemple, en supprimant le
           fichier après avoir appelé dh_auto_install). Nous encourageons
-          l'inclusion d'informations de licence lisibles automatiquement
-          dans des formats générés lorsque cela est possible.
+          fortement l'inclusion d'informations de licence lisibles
+          automatiquement dans des formats générés lorsque cela
+          est possible.
       documentation_basics:
         description: >-
           Le projet DOIT fournir une documentation de base pour
@@ -1179,22 +1195,41 @@ fr:
           ou les systèmes basés sur la date comme YYYYMMDD).
       version_semver:
         description: >-
-          Il est PROPOSÉ que le <a href="https://semver.org">format
-          de Versionage Sémantique (SemVer)</a> soit utilisé pour
-          les numéros de versions.
+          Il est PROPOSÉ d'utiliser le format de numérotation
+          de version appelé <a href="https://semver.org">Versionage
+          Sémantique (SemVer)</a> ou <a href="https://calver.org/"
+          >Versionage Calendaire (CalVer)</a>. Il est PROPOSÉ
+          que ceux qui utilisent CalVer incluent une valeur de
+          niveau micro.
         details: >-
-          D'autres systèmes de numérotation de version, tels que
-          les identifiants de commit (tels que git commit id ou
-          mercurial changeset id) ou les systèmes basés sur la
-          date comme YYYYMMDD, PEUVENT être utilisés comme numéros
-          de version, car ils sont uniques. Certaines alternatives
-          peuvent causer des problèmes, car les utilisateurs peuvent
-          ne pas être en mesure de déterminer facilement s'ils
-          sont à jour. SemVer peut être moins utile pour identifier
-          les versions de logiciels si tous les destinataires
-          n'exécutent que la dernière version (par exemple, c'est
-          le code d'un seul site Web ou d'un service Internet
-          qui est constamment mis à jour via une livraison continue).
+          Les projets devraient généralement préférer le format
+          attendu par leurs utilisateurs, par exemple, parce que
+          c'est le format normal utilisé par leur écosystème.
+          De nombreux écosystèmes préfèrent SemVer, et SemVer
+          est généralement préféré pour les interfaces de programmation
+          d'applications (API) et les kits de développement logiciel
+          (SDK). CalVer a tendance à être utilisé par des projets
+          de grande envergure, ayant un nombre inhabituellement
+          élevé de dépendances développées indépendamment, ayant
+          une portée en constante évolution ou étant sensibles
+          au temps. Il est PROPOSÉ que ceux qui utilisent CalVer
+          incluent une valeur de niveau micro, car l'inclusion
+          d'un niveau micro prend en charge les branches maintenues
+          simultanément chaque fois que cela devient nécessaire.
+          D'autres formats de numérotation de version peuvent
+          être utilisés, y compris les ID de commit git ou les
+          ID de jeu de modifications mercurial, à condition qu'ils
+          identifient de manière unique les versions. Cependant,
+          certaines alternatives (telles que les ID de commit
+          git) peuvent poser des problèmes en tant qu'identificateurs
+          de version, car les utilisateurs peuvent ne pas être
+          en mesure de déterminer facilement s'ils sont à jour.
+          Le format de l'ID de version peut être sans importance
+          pour l'identification des versions logicielles si tous
+          les destinataires n'exécutent que la dernière version
+          (par exemple, il s'agit du code d'un site Web ou d'un
+          service Internet unique qui est constamment mis à jour
+          par livraison continue).
       version_tags:
         description: >-
           Il est PROPOSÉ que les projets identifient chaque version
@@ -1232,19 +1267,40 @@ fr:
       release_notes_vulns:
         description: >-
           Les notes de version DOIVENT identifier toutes les vulnérabilités
-          publiquement connues avec une affectation CVE ou similaire
-          qui est résolue dans chaque nouvelle version, sauf si
-          les utilisateurs ne peuvent pas en général mettre à
-          jour le logiciel eux-mêmes. S'il n'y a pas de notes
-          de version ou qu'il n'y a pas eu de vulnérabilité publiquement
-          connue, choisissez « non applicable » (N/A).
+          connues du public corrigées dans cette version qui avaient
+          déjà une affectation CVE ou similaire lors de la création
+          de la version. Ce critère peut être marqué comme non
+          applicable (N/A) si les utilisateurs ne peuvent pas
+          en général mettre à jour le logiciel eux-mêmes (par
+          exemple, comme c'est souvent le cas pour les mises à
+          jour du noyau). Ce critère s'applique uniquement aux
+          résultats du projet, pas à ses dépendances. S'il n'y
+          a pas de notes de version ou qu'il n'y a pas eu de vulnérabilité
+          publiquement connue, choisissez N/A.
         details: >-
-          Si les utilisateurs ne peuvent généralement pas mettre
+          Ce critère aide les utilisateurs à déterminer si une
+          mise à jour donnée corrigera une vulnérabilité connue
+          publiquement, pour aider les utilisateurs à prendre
+          une décision éclairée concernant la mise à jour. Si
+          les utilisateurs ne peuvent généralement pas mettre
           à jour le logiciel eux-mêmes sur leur ordinateur, mais
-          doivent plutôt dépendre d'un intermédiaire pour effectuer
-          la mise à niveau (comme c'est souvent le cas pour un
-          noyau et un logiciel de bas niveau associé à un noyau),
-          le projet peut choisir "non applicable" (N/A)
+          doivent à la place dépendre d'un ou plusieurs intermédiaires
+          pour effectuer la mise à niveau (comme c'est souvent
+          le cas pour un noyau et un logiciel de bas niveau associé
+          à un noyau), le projet peut choisir « non applicable
+          » (N/A) à la place, car ces informations supplémentaires
+          ne seront pas utiles à ces utilisateurs. De même, un
+          projet peut choisir N/A si tous les destinataires n'exécutent
+          que la dernière version (par exemple, il s'agit du code
+          d'un site Web ou d'un service Internet unique qui est
+          constamment mis à jour par livraison continue). Ce critère
+          s'applique uniquement aux résultats du projet, pas à
+          ses dépendances. Énumérer les vulnérabilités de toutes
+          les dépendances transitives d'un projet devient ingérable
+          à mesure que les dépendances augmentent et varient,
+          et n'est pas nécessaire car les outils qui examinent
+          et suivent les dépendances peuvent le faire de manière
+          plus évolutive.
       report_process:
         description: >-
           Le projet DOIT fournir un processus permettant aux utilisateurs
@@ -1354,7 +1410,11 @@ fr:
           Le projet DOIT utiliser au moins une suite de tests
           automatisée publiée publiquement comme FLOSS (cette
           suite de tests peut être maintenue sous la forme d'un
-          projet FLOSS distinct).
+          projet FLOSS distinct). Le projet DOIT clairement montrer
+          ou documenter comment exécuter la ou les suites de tests
+          (par exemple, via un script d'intégration continue (CI)
+          ou via la documentation dans des fichiers tels que BUILD.md,
+          README.md ou CONTRIBUTING.md).
         details: >-
           Le projet PEUT utiliser plusieurs suites de tests automatisées
           (par exemple, une qui s'exécute rapidement, par rapport
@@ -1926,9 +1986,11 @@ fr:
           des assertions fonctionnera également.
       dynamic_analysis_enable_assertions:
         description: >-
-          Il est PROPOSÉ que le logiciel produit par le projet
-          comprenne de nombreuses assertions à l'exécution qui
-          sont vérifiées lors d'une analyse dynamique.
+          Il est PROPOSÉ que le projet utilise une configuration
+          pour au moins une analyse dynamique (comme le test ou
+          le fuzzing) qui active de nombreuses assertions. Dans
+          de nombreux cas, ces assertions <i>ne</i> doivent <i>pas</i>
+          être activées dans les versions de production.
         details: >-
           Ce critère ne suggère <i>pas</i> d'activer les assertions
           en production ; c'est entièrement au projet et à ses

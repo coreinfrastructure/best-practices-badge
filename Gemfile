@@ -135,7 +135,7 @@ end
 group :test do
   gem 'capybara-selenium', '0.0.6', require: false
   gem 'capybara-slow_finder_errors', '0.1.5', require: false
-  gem 'codecov', '0.2.7', require: false
+  gem 'codecov', '0.3.0', require: false
   # Note: We should eventually remove minitest-rails-capybara, and
   # switch completely over to using Rails System Tests instead. Statement:
   # "minitest-rails-capybara support ends with minitest-rails 3.x.  If you

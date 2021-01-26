@@ -93,7 +93,7 @@ group :development, :test do
   gem 'database_cleaner', '1.8.5' # Cleans up database between tests
   gem 'dotenv-rails', '2.7.6'
   gem 'eslintrb', '2.1.0'
-  gem 'json', '2.3.1'
+  gem 'json', '2.5.1'
   gem 'license_finder', '6.0.0'
   gem 'mdl', '0.10.0'
   gem 'pronto', '0.10.0'

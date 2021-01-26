@@ -65,7 +65,7 @@ GEM
       railties (>= 3.1)
     bootstrap_form (2.7.0)
     builder (3.2.4)
-    bullet (6.1.0)
+    bullet (6.1.3)
       activesupport (>= 3.0.0)
       uniform_notifier (~> 1.11)
     bundler-audit (0.7.0.1)
@@ -469,7 +469,7 @@ DEPENDENCIES
   bootstrap-sass (= 3.4.1)
   bootstrap-social-rails (= 4.12.0)
   bootstrap_form (= 2.7.0)
-  bullet (= 6.1.0)
+  bullet (= 6.1.3)
   bundler
   bundler-audit (= 0.7.0.1)
   capybara-selenium (= 0.0.6)

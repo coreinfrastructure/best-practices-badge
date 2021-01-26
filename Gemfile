@@ -88,7 +88,7 @@ gem 'uglifier', '4.2.0', require: false # Minify JavaScript
 
 group :development, :test do
   gem 'awesome_print', '1.8.0' # Pretty print Ruby objects
-  gem 'bullet', '6.1.0' # Avoid n+1 queries
+  gem 'bullet', '6.1.3' # Avoid n+1 queries
   gem 'bundler-audit', '0.7.0.1'
   gem 'database_cleaner', '1.8.5' # Cleans up database between tests
   gem 'dotenv-rails', '2.7.6'

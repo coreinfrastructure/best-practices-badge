@@ -4,14 +4,14 @@
 # CII Best Practices badge contributors
 # SPDX-License-Identifier: MIT
 
-require 'capybara_feature_test'
+require 'application_system_test_case'
 
-class JavascriptTest < CapybaraFeatureTest
+class JavascriptTest < ApplicationSystemTestCase
   setup do
     @project_passing = projects(:perfect_passing)
   end
 
-  scenario 'Check show/hide Met on show for passing', js: true do
+  test 'Check show/hide Met on show for passing' do
     visit project_path(@project_passing, locale: :en)
     wait_for_jquery
     find('#toggle-expand-all-panels').click
@@ -29,7 +29,8 @@ class JavascriptTest < CapybaraFeatureTest
     refute_selector(:css, '#repo_public')
     refute_selector(:css, '#report_process')
   end
-  scenario 'Check show/hide Met works for silver', js: true do
+
+  test 'Check show/hide Met works for silver' do
     visit project_path(@project_passing, locale: :en, criterion_level: '1')
     wait_for_jquery
     find('#toggle-expand-all-panels').click

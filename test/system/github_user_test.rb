@@ -4,10 +4,10 @@
 # CII Best Practices badge contributors
 # SPDX-License-Identifier: MIT
 
-require 'capybara_feature_test'
+require 'application_system_test_case'
 
-class GithubUserTest < CapybaraFeatureTest
-  scenario 'GitHub user has correct edit rights', js: true do
+class GithubUserTest < ApplicationSystemTestCase
+  test 'GitHub user has correct edit rights' do
     # Clean up database here and restart DatabaseCleaner.
     # This solves a transient issue if test restarts without running
     # teardown meaning the database is dirty after restart.
@@ -34,8 +34,9 @@ class GithubUserTest < CapybaraFeatureTest
     click_on 'Logout'
     assert_equal '/en', current_path
   end
+
   # This is a regression test for problems seen by @yannickmoy in Issue #798
-  scenario 'Alternate locale has link to GitHub Login', js: true do
+  test 'Alternate locale has link to GitHub Login' do
     # Clean up database here and restart DatabaseCleaner.
     # This solves a transient issue if test restarts without running
     # teardown meaning the database is dirty after restart.

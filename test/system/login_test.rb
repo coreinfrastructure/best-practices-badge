@@ -4,11 +4,12 @@
 # CII Best Practices badge contributors
 # SPDX-License-Identifier: MIT
 
-require 'capybara_feature_test'
+require 'application_system_test_case'
+
 include ActionView::Helpers::TextHelper
 
 # rubocop:disable Metrics/ClassLength
-class LoginTest < CapybaraFeatureTest
+class LoginTest < ApplicationSystemTestCase
   CHECK = /result_symbol_check/.freeze
   DASH = /result_symbol_dash/.freeze
   QUESTION = /result_symbol_question/.freeze
@@ -31,7 +32,7 @@ class LoginTest < CapybaraFeatureTest
 
   # Test this with larger integration, to increase confidence that
   # we really do reject correct local usernames with wrong passwords
-  scenario 'Cannot login with local username and wrong password', js: false do
+  test 'Cannot login with local username and wrong password' do
     visit projects_path(locale: :en)
     click_on 'Login'
     fill_in 'Email', with: @user.email
@@ -43,7 +44,7 @@ class LoginTest < CapybaraFeatureTest
 
   # Test this with larger integration, to increase confidence that
   # we really do reject correct local usernames with blank passwords
-  scenario 'Cannot login with local username and blank password', js: false do
+  test 'Cannot login with local username and blank password' do
     visit projects_path(locale: :en)
     click_on 'Login'
     fill_in 'Email', with: @user.email
@@ -54,7 +55,7 @@ class LoginTest < CapybaraFeatureTest
   end
 
   # rubocop:disable Metrics/BlockLength
-  scenario 'Can login and edit using custom account', js: true do
+  test 'Can login and edit using custom account' do
     visit projects_path(locale: :en)
     click_on 'Login'
     fill_in 'Email', with: @user.email
@@ -126,7 +127,7 @@ class LoginTest < CapybaraFeatureTest
   end
   # rubocop:enable Metrics/BlockLength
 
-  scenario 'Can Login custom where GitHub account has same email', js: false do
+  test 'Can Login custom where GitHub account has same email' do
     # Make GitHub account have same email address as custom account
     @github_user = users(:github_user)
     @github_user.email = @user.email
@@ -143,7 +144,7 @@ class LoginTest < CapybaraFeatureTest
 
   # Test if we switch to user's preferred locale on login.
   # Here we test on a path that isn't the root.
-  scenario 'Can Login in fr locale to /projects', js: true do
+  test 'Can Login in fr locale to /projects' do
     fr_user = users(:fr_user)
     visit projects_path(locale: :en)
     click_on 'Login'
@@ -155,7 +156,7 @@ class LoginTest < CapybaraFeatureTest
   end
 
   # Test login from root path.
-  scenario 'Can Login in fr locale to top', js: true do
+  test 'Can Login in fr locale to top' do
     fr_user = users(:fr_user)
     visit root_path(locale: :en)
     click_on 'Login'
@@ -167,7 +168,7 @@ class LoginTest < CapybaraFeatureTest
   end
 
   # Test login from non-english locale
-  scenario 'Prelogin non-en locale saved on login', js: true do
+  test 'Prelogin non-en locale saved on login' do
     fr_user = users(:fr_user)
     visit '/fr'
     click_on "S'identifier"

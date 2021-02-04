@@ -85,7 +85,9 @@ VCR.configure do |config|
   config.ignore_hosts(*driver_urls)
 end
 
-require 'minitest/rails/capybara'
+# require 'minitest/rails/capybara'
+require 'capybara/rails'
+require 'capybara/minitest'
 
 Capybara.default_max_wait_time = 5
 Capybara.server_port = 31_337

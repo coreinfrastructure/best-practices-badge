@@ -898,7 +898,9 @@ zh-CN:
           href ="http://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html">UndefinedBehaviorSanitizer</a>。广泛的断言也将起作用。
       dynamic_analysis_enable_assertions:
         description: 建议由项目生成的软件包括许多运行时断言，在动态分析期间检查。
-        details:
+        details: >-
+          这个标准<i>并不</i>建议使生产过程中的断言;这完全取决于项目及其用户的决定。该标准的重点是<i>在</i>部署<i>之前的</i>动态分析过程中改善故障检测。在<i>生产</i>使用中启用断言与在动态分析（例如测试）期间启用断言<i>完全</i>不同。在某些情况下，在生产中使用断言是极其不明智的（尤其是在高完整性组件中）。存在许多反对在生产环境中启用断言的论点，例如，库不应使调用程序崩溃，它们的存在可能会导致应用商店拒绝，和/或在生产环境中激活断言可能会暴露诸如私钥之类的私有数据。请注意，在许多Linux发行版中都未定义<tt>NDEBUG</tt>
+          ，因此C / C ++<tt>缺省情况下，assert（）将在这些环境中启用生产。对于那些环境中的生产，使用不同的断言机制或定义<tt>NDEBUG</tt>可能很重要。
       dynamic_analysis_fixed:
         description: 通过动态代码分析发现的所有严重性为中，高的可利用漏洞必须在确认后及时修复。
         details: >-

@@ -85,61 +85,6 @@ VCR.configure do |config|
   config.ignore_hosts(*driver_urls)
 end
 
-# require 'minitest/rails/capybara'
-require 'capybara/rails'
-require 'capybara/minitest'
-
-Capybara.default_max_wait_time = 5
-Capybara.server_port = 31_337
-
-# Set up a test environment to run client-side JavaScript.
-# Setup Capybara -> selenium -> webdriver -> headless chrome/chromium. See:
-# https://robots.thoughtbot.com/headless-feature-specs-with-chrome
-
-require 'selenium/webdriver'
-require 'webdrivers'
-
-# Register "chrome" driver - use it via Selenium.
-Capybara.register_driver :chrome do |app|
-  Capybara::Selenium::Driver.new(app, browser: :chrome)
-end
-
-# Register "headless_chrome" driver - use it via Selenium.
-# The configuration approach documented here isn't actually headless:
-# https://robots.thoughtbot.com/headless-feature-specs-with-chrome
-# So we instead use the approach documented in:
-# https://github.com/teamcapybara/capybara/blob/master/spec/
-# selenium_spec_chrome.rb#L6
-Capybara.register_driver :headless_chrome do |app|
-  browser_options = Selenium::WebDriver::Chrome::Options.new
-  browser_options.binary = ENV.fetch('GOOGLE_CHROME_SHIM', nil) if ENV['CI']
-  browser_options.args << '--headless'
-  browser_options.args << '--disable-gpu' if Gem.win_platform?
-  driver = Capybara::Selenium::Driver.new(
-    app, browser: :chrome, options: browser_options
-  )
-  driver.browser.download_path = Capybara.save_path
-  driver
-end
-
-# Note that DRIVER only controls the Capybara javascript_driver.
-driver = ENV['DRIVER'].try(:to_sym)
-Capybara.javascript_driver = driver.present? ? driver : :headless_chrome
-
-# By default newer versions of Capybara have the annoying habit of
-# sending this in the middle of a test:
-# > Capybara starting Puma...
-# > * Version 3.12.2 , codename: Llamas in Pajamas
-# > * Min threads: 0, max threads: 4
-# > * Listening on tcp://127.0.0.1:31337
-# This makes it hard to see the test status, so quiet it per:
-# Capybara.server = :puma, { Silent: true }
-# NOTE: This forces Capybara's server to be Puma; if the production server
-# is something else, you might want to change this. For more info, see:
-# https://github.com/rails/rails/issues/28109
-# https://github.com/rspec/rspec-rails/issues/1897
-Capybara.server = :puma, { Silent: true }
-
 # NOTE: We *could* speed up test execution by disabling PaperTrail
 # except in cases where we check PaperTrail results. PaperTrail records all
 # project creation and change events (enabling you to see older versions),

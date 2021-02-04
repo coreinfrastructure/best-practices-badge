@@ -66,8 +66,6 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
   end
 end
 
-
-
 # The chromedriver occasionally calls out with its own API,
 # which isn't part of the system under test. This can occasionally
 # cause an error of this form:
@@ -81,8 +79,8 @@ require 'uri'
 
 # With activesupport gem
 driver_hosts =
-  Webdrivers::Common.subclasses.map do |driver|
-    URI(driver.base_url).host
+  Webdrivers::Common.subclasses.map do |this_driver|
+    URI(this_driver.base_url).host
   end
 
 VCR.configure { |config| config.ignore_hosts(*driver_hosts) }

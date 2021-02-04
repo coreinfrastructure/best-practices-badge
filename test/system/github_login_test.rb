@@ -4,11 +4,11 @@
 # CII Best Practices badge contributors
 # SPDX-License-Identifier: MIT
 
-require 'capybara_feature_test'
+require 'application_system_test_case'
 
-class GithubLoginTest < CapybaraFeatureTest
+class GithubLoginTest < ApplicationSystemTestCase
   # rubocop:disable Metrics/BlockLength
-  scenario 'Can sign up with GitHub', js: true do
+  test 'Can sign up with GitHub' do
     DatabaseCleaner.clean
     DatabaseCleaner.start
     configure_omniauth_mock unless ENV['GITHUB_PASSWORD']

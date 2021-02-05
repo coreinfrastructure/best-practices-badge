@@ -686,6 +686,9 @@ end
 
 Rake::Task['test:run'].enhance ['test:features']
 
+# Modify system so 'test' forces runnning of system tests
+task test: 'test:system'
+
 # This is the task to run every day, e.g., to record statistics
 # Configure your system (e.g., Heroku) to run this daily.  If you're using
 # Heroku, see: https://devcenter.heroku.com/articles/scheduler

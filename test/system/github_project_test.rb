@@ -4,11 +4,11 @@
 # CII Best Practices badge contributors
 # SPDX-License-Identifier: MIT
 
-require 'capybara_feature_test'
+require 'application_system_test_case'
 
-class GithubProjectTest < CapybaraFeatureTest
+class GithubProjectTest < ApplicationSystemTestCase
   # rubocop:disable Metrics/BlockLength
-  scenario 'Can Create new project via GitHub login', js: true do
+  test 'Can Create new project via GitHub login' do
     # Clean up database here and restart DatabaseCleaner.
     # This solves a transient issue if test restarts without running
     # teardown meaning the database is dirty after restart.

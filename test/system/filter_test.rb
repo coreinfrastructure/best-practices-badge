@@ -4,11 +4,11 @@
 # CII Best Practices badge contributors
 # SPDX-License-Identifier: MIT
 
-require 'capybara_feature_test'
+require 'application_system_test_case'
 
-class FilterTest < CapybaraFeatureTest
+class FilterTest < ApplicationSystemTestCase
   # rubocop:disable Metrics/BlockLength
-  scenario 'Can Filter Projects', js: true do
+  test 'Can Filter Projects' do
     visit '/en/projects'
     assert has_content? 'Add New Project'
     assert_equal 7, all('tbody tr').count

@@ -132,14 +132,6 @@ group :test do
   gem 'capybara-selenium', '0.0.6', require: false
   gem 'capybara-slow_finder_errors', '0.1.5', require: false
   gem 'codecov', '0.3.0', require: false
-  # Note: We should eventually remove minitest-rails-capybara, and
-  # switch completely over to using Rails System Tests instead. Statement:
-  # "minitest-rails-capybara support ends with minitest-rails 3.x.  If you
-  # want to use minitest-rails 5.1+ you should transition to system tests."
-  # https://github.com/blowmage/minitest-rails-capybara/issues/44
-  # https://blowmage.com/2019/06/18/minitest-rails-releases
-  # https://guides.rubyonrails.org/testing.html
-  gem 'minitest-rails-capybara', '3.0.2', require: false
   gem 'minitest-reporters', '1.4.3', require: false
   gem 'minitest-retry', '0.2.1', require: false # Avoid Capybara false positives
   # Note: Updating 'rails-controller-testing' to '1.0.5' causes failures

@@ -9,6 +9,11 @@ else
   echo "Failed to purge badge for project 1 from Fastly cache."
   exit 1
 fi
+
+# Give Fastly time to set up and use cache.
+# In theory this should not be necessary.
+sleep 2
+
 if curl -svo /dev/null "$site_name" 2>&1 | grep -i 'X-Cache: HIT' ; then
   echo "Fastly cache successfully restored."
 else

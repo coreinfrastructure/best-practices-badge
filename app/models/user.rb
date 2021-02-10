@@ -71,7 +71,7 @@ class User < ApplicationRecord
   # and works regardless of the underlying RDBMS.  The RDBMS-level index
   # check, however, is immune to races where supported (PostgreSQL does),
   # because the RDBMS is the final arbiter.
-  validates :email, uniqueness: { scope: :provider }, case_sensitive: false,
+  validates :email, uniqueness: { scope: :provider, case_sensitive: false },
                     if: ->(u) { u.provider == 'local' }
 
   # Validate passwords; this is obviously security-related.

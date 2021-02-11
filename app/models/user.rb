@@ -47,7 +47,7 @@ class User < ApplicationRecord
   # or:    User.where(email: "test@example.org", provider: "local")
   blind_index :email, key: [(
     ENV['EMAIL_BLIND_INDEX_KEY'] || '2' * DIGITS_OF_EMAIL_BLIND_INDEX_KEY
-  )].pack('H*'), expression: ->(v) { v.try(:downcase) }
+  )].pack('H*'), expression: ->(v) { v.try(:downcase) }, legacy: true
 
   scope :created_since, (
     lambda do |time|

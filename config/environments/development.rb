@@ -54,9 +54,6 @@ Rails.application.configure do
   # Raises helpful error messages.
   config.assets.raise_runtime_errors = true
 
-  # Raises error for missing translations
-  # config.action_view.raise_on_missing_translations = true
-
   config.after_initialize do
     # The 'bullet' gem watches application queries and notifies
     # when you should add eager loading (N+1 queries),

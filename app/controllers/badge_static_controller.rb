@@ -30,8 +30,8 @@ class BadgeStaticController < ApplicationController
     else
       # Value isn't valid, return a 404
       render(
-        template: '/static_pages/error_404.html.erb',
-        layout: false, status: :not_found # 404
+        template: 'static_pages/error_404',
+        formats: [:html], layout: false, status: :not_found # 404
       )
     end
   end

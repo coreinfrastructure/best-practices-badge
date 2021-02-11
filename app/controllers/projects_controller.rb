@@ -113,13 +113,13 @@ class ProjectsController < ApplicationController
     count = id_list.size
     if count.zero?
       render(
-        template: '/static_pages/error_404.html.erb',
-        layout: false, status: :not_found # 404
+        template: 'static_pages/error_404',
+        formats: [:html], layout: false, status: :not_found # 404
       )
     elsif count > 1 # There is no unique badge
       render(
-        template: '/static_pages/error_409.html.erb',
-        layout: false, status: :conflict # 409
+        template: 'static_pages/error_409',
+        formats: [:html], layout: false, status: :conflict # 409
       )
     else
       suffix = request&.format&.symbol == :json ? '.json' : ''

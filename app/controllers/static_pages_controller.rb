@@ -44,8 +44,8 @@ class StaticPagesController < ApplicationController
     # to escape attacker data to counter log forging:
     # logger.info 'Page not found'
     render(
-      template: '/static_pages/error_404.html.erb',
-      layout: false,
+      template: 'static_pages/error_404',
+      formats: [:html], layout: false,
       status: :not_found
     )
   end
@@ -54,7 +54,7 @@ class StaticPagesController < ApplicationController
   # we have to have a special file to let Google verify access.
   def google_verifier
     render(
-      template: '/static_pages/google_verifier.txt',
+      template: 'static_pages/google_verifier',
       layout: false,
       status: :ok
     )

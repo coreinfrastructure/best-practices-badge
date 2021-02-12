@@ -123,14 +123,15 @@ end
 group :development do
   gem 'bootsnap', '1.4.8' # Speed up boot via caches
   # gem 'fasterer', '0.3.2' # Provide speed recommendations - run 'fasterer'
-  # Waiting for Ruby 2.4 support: https://github.com/seattlerb/ruby_parser/issues/239
+  # Waiting for Ruby 2.4 support:
+  # https://github.com/seattlerb/ruby_parser/issues/239
   # gem 'traceroute', '0.8.1' # Adds 'rake traceroute' command to check routes
   # We bring in full rails in development in case we need it for debugging;
   # this also keeps some gems happy that don't realize that loading
   # only *parts* of Rails is fine:
   gem 'rails', '6.1.2.1' # Rails (our web framework)
   gem 'translation', '1.22' # translation.io - translation service
-  gem 'web-console', '3.7.0' # Debugging tool for Ruby on Rails apps
+  gem 'web-console', '4.1.0' # In-browser debugger; use <% console %> or console
 end
 
 group :test do

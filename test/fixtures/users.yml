@@ -5,24 +5,38 @@
 # on the general principle that we should vary test values;
 # they don't have any particular meaning.  Make sure they match the tests!
 #
-# WARNING: The encrypted_email_bidx *MUST* end in newline, because that
-# is the format created (and required) by the gem blind_index.
-# The encrypted_email also ends in newline, but that's just because the
+# Note: The encrypted_email ends in newline, but that's just because the
 # gem attr_encrypted does that (it's not actually required).
+# At one time the encrypted_email_bidx *MUST* end in newline, because that
+# is the format created (and required) by the gem blind_index, but that is
+# no longer true.
 #
-# We encrypt user email addresses. For test purposes, we used a fixed
+# User email addresses are encrypted in the database, so for proper
+# testing we must store them as encrypted data.
+# For test purposes, we used a fixed
 # encryption IV (don't do this with real data), and provide precomputed
-# values for "encrypted_email" and "encrypted_email_bidx".  There's
-# lot of infrastructure that has to work to compute these values, and they
-# take time to compute, so providing precomputed values makes sense.
-# To find values for new email addresses, run "rails console" and then:
+# values for "encrypted_email" and "email_bidx".
+# We *must* do this for email_bidx, at least, because the fixture code is
+# loaded and run as an ERB before its keys are fully set up.
+# That's okay; there's lot of infrastructure
+# that has to work correctly to compute these values,
+# and they take time to compute, so providing their fixtures as
+# known-correct precomputed values makes sense.
+# (It means that tests are more independent of the system under test, and
+# thus failures are more likely to help point out the actual problems.)
+#
+# To find values for new email addresses, run "rails console"
+# (make sure to *not* set 'EMAIL_ENCRYPTION_KEY' nor 'EMAIL_BLIND_INDEX_KEY')
+# and then do something like this:
+# email='test@example.org'
 # encrypted_email_iv: "G4fbeClWL3aFMY9I"
-# encrypted_email:
-#   User.encrypt_email('test@example.org',
-#                       iv: Base64.decode64('G4fbeClWL3aFMY9I'))
-# encrypted_email_bidx:
+# encrypted_email: # Find its value with:
+#   User.encrypt_email(email, iv: Base64.decode64('G4fbeClWL3aFMY9I'))
+# email_bidx: # Find its value with:
+#   User.generate_email_bidx(email)
+# Another (longer) way to compute email_bidx is to run:
 #   BlindIndex.generate_bidx("test@example.org", User.blind_indexes[:email])
-# An alternative approach is to create a stub user:
+# You can create a stub user and find its email_bidx this way:
 # x = User.new; x.email = 'test@example.org'; x.compute_email_bidx
 # This assumes that you're using the usual (default) test keys.
 #
@@ -32,29 +46,17 @@
 #      iv: Base64.decode64('G4fbeClWL3aFMY9I')).inspect)
 # puts('  encrypted_email_bidx: ' + BlindIndex.generate_bidx(
 #       current_email, User.blind_indexes[:email]).inspect)
-#
-# Here are some additional encryptions if you need them:
-# current_email = 'mark@example.org'
-# encrypted_email_iv: "G4fbeClWL3aFMY9I"
-# encrypted_email: "0LWldZP1iahMHmhaQwjU9g27hpaNo56iCfMNh+ZsERg=\n"
-# encrypted_email_bidx: "C/0XJyW8Xitx19MPv1j8B65iNOaykMLZnMZ/TctNp3U=\n"
-#
-# current_email = 'forgetful@example.org'
-# encrypted_email_iv: "G4fbeClWL3aFMY9I"
-# encrypted_email: "27ulebbkl7xNLmFHDArW/ZzHIFjaYveE2hxJl2Kxdk2/rm4xXw==\n"
-# encrypted_email_bidx: "0SHo5Lc+XTrcY6HvouDwAIvEdy+8odILw9DP3MGXMfM=\n"
-#
-# current_email = 'admin@example.org'
-# encrypted_email: "3LC6d73QlLFAA3RTCEnJ455qaUF28kYI7ZOGoIDUhkzm\n"
-# encrypted_email_iv: "G4fbeClWL3aFMY9I"
-# encrypted_email_bidx: "yspd41bZJvT9bn0MQXU2l2dnhpZTIKpf0u46w6+qf1U=\n"
 
 # current_email = 'test@example.org'
 test_user:
   name: Test
+  # This is our conventional IV value
   encrypted_email_iv: "G4fbeClWL3aFMY9I"
+  # encrypted_email: (%= User.encrypt_email('test@example.com',
+  #                      iv: Base64.decode64('G4fbeClWL3aFMY9I')).inspect %)
   encrypted_email: "ybGkapP1iahMHmhaQwjU9qTfGB7w/KCFTiUGkIVZZ08=\n"
-  encrypted_email_bidx: "hEghi+qNCA63qDAuTIq8jBWtOweoQ33EstwMnvM3/gk=\n"
+  # email_bidx: (%= User.generate_email_bidx('test@example.com').inspect %)
+  email_bidx: "vmUX8sb4/akruZRPDwQ7e2bZHiAcqxO2BS7u2vdg/Cs="
   password_digest: <%= User.digest('password') %>
   provider: local
   preferred_locale: en
@@ -62,11 +64,14 @@ test_user:
   activated_at: <%= Time.zone.now %>
 
 # current_email = 'melissa@example.com'
+# User.encrypt_email('melissa@example.com',
+#                     iv: Base64.decode64('G4fbeClWL3aFMY9I'))
 test_user_melissa:
   name: Melissa Lewis
   encrypted_email_iv: "G4fbeClWL3aFMY9I"
   encrypted_email: "0LG7d6DjkIlEFmVSHQvDv5qGImt+oNOl9LLibPvLAwHeWmo=\n"
-  encrypted_email_bidx: "ip6E/EM+EYkbzsRm6ZTprRg4PTsN/T5xY9E80U3Hlfo=\n"
+  # email_bidx: (%= User.generate_email_bidx('melissa@example.com').inspect %)
+  email_bidx: "gkyruOK5LMxyHFElzYO9YtdKJBrIJZnkDamwU6M1+Jc="
   password_digest: <%= User.digest('password1') %>
   provider: local
   preferred_locale: en
@@ -78,7 +83,8 @@ test_user_mark:
   name: Mark Watney
   encrypted_email_iv: "G4fbeClWL3aFMY9I"
   encrypted_email: "0LWldZP1iahMHmhaQwTJ/JxzMJME5stBTXCm7WcmYyg=\n"
-  encrypted_email_bidx: "aZpkg4oEr8KjacLrZINGN1JRGD1caIWoWUTM57KOePk=\n"
+  # email_bidx: (%= User.generate_email_bidx('mark@example.com').inspect %)
+  email_bidx: "PM4RbQebE5i3FU4Zm/+cNT6P0POakuR8Fz9QzP7L01U="
   password_digest: <%= User.digest('password') %>
   provider: local
   preferred_locale: en
@@ -90,7 +96,8 @@ test_user_not_active:
   name: Forgetful
   encrypted_email_iv: "G4fbeClWL3aFMY9I"
   encrypted_email: "27ulebbkl7xNLmFHDArW/ZzHLEXQQHbOqCyJ9yfVGoZn2ok7ew==\n"
-  encrypted_email_bidx: "nRtJqO5uutJ7Z/HcjLHM/jt3cA++pN1t85URKscQfsQ=\n"
+  # email_bidx: (%= User.generate_email_bidx('forgetful@example.com').inspect %)
+  email_bidx: "y5UiQko516f50w/YRAZAuW7FzzpWKmvg1Yzd44ry+JQ="
   password_digest: <%= User.digest('password') %>
   provider: local
   preferred_locale: en
@@ -101,7 +108,8 @@ test_user_cs:
   name: Case Sensitive
   encrypted_email_iv: "G4fbeClWL3aFMY9I"
   encrypted_email: "/rWke4D1n7pIGm1JCCfD6ZiEP0bY51bxymIp4AvOLZGyoX8ln1EALDc=\n"
-  encrypted_email_bidx: "+rRkCLpeIVcfwtPu+Jy6YyXtksI/w3frgdSu8J4kR2M=\n"
+  # email_bidx: (%= User.generate_email_bidx('CaseSensitive@example.org'.downcase).inspect %)
+  email_bidx: "I5hCRmgHRw0+XSK6TMfTRk/vhkbX+2cXUJzaiWTVqcs="
   password_digest: <%= User.digest('password') %>
   provider: local
   preferred_locale: en
@@ -113,7 +121,8 @@ admin_user:
   name: Admin
   encrypted_email_iv: "G4fbeClWL3aFMY9I"
   encrypted_email: "3LC6d73QlLFAA3RTCEnF/pQPuTWBDzfZWpDX1TJ+bsBO\n"
-  encrypted_email_bidx: "PH39U8dihphvLTlLEwJWXdy2OLz477WOn/DNsZaHqfE=\n"
+  # email_bidx: (%= User.generate_email_bidx('admin@example.com').inspect %)
+  email_bidx: "pdszbZsBfJRl+Fg0ZZ7/Mwguy64JlXvJ7TflzSEIawM="
   password_digest: <%= User.digest('password') %>
   provider: local
   preferred_locale: en
@@ -128,7 +137,8 @@ github_user:
   nickname: github-user
   encrypted_email_iv: "G4fbeClWL3aFMY9I"
   encrypted_email: "2r2jdqby3LxSC3Z/CB/H/ImFKgTeplS8IDY+qfw8Fi73KhLn8MYC\n"
-  encrypted_email_bidx: "Vyiu7EdbDXioCgMAVIWqLHyBH148S9JcSspSWq6nPN8=\n"
+  # email_bidx: (%= User.generate_email_bidx('github-user@example.com').inspect %)
+  email_bidx: "ZjENXwF1sT4lGPhlXJMGGojv/NgxQvRgis647Pgotwg="
   password_digest: <%= User.digest('password') %>
   provider: github
   preferred_locale: en
@@ -140,7 +150,8 @@ fr_user:
   name: French Test
   encrypted_email: "26b6arbjhYlEFmVSHQvDv5abKOzHp6ZN4HPtuqnxJkbq84I=\n"
   encrypted_email_iv: "G4fbeClWL3aFMY9I"
-  encrypted_email_bidx: "7e3Bzzf0T1HnQKICsDEqJGosonRFiZZNtN445wgNDYU=\n"
+  # email_bidx: (%= User.generate_email_bidx('fr-test@example.org').inspect %)
+  email_bidx: "iZlt4P3IjjuMUuajvkGqwatHglhDxoNCUsYMgebOEOQ="
   password_digest: <%= User.digest('password') %>
   provider: local
   preferred_locale: fr

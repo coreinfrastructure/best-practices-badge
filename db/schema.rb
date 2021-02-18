@@ -2,15 +2,15 @@
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
 #
-# This file is the source Rails uses to define your schema when running `rails
-# db:schema:load`. When creating a new database, `rails db:schema:load` tends to
+# This file is the source Rails uses to define your schema when running `bin/rails
+# db:schema:load`. When creating a new database, `bin/rails db:schema:load` tends to
 # be faster and is potentially less error prone than running all of your
 # migrations from scratch. Old migrations may fail to apply correctly if those
 # migrations use external dependencies or application code.
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_22_014804) do
+ActiveRecord::Schema.define(version: 2021_02_16_184638) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -417,11 +417,11 @@ ActiveRecord::Schema.define(version: 2020_12_22_014804) do
     t.datetime "last_login_at"
     t.string "encrypted_email"
     t.string "encrypted_email_iv"
-    t.string "encrypted_email_bidx"
+    t.string "email_bidx"
     t.boolean "use_gravatar", default: false, null: false
     t.datetime "can_login_starting_at"
-    t.index ["encrypted_email_bidx"], name: "encrypted_email_local_unique_bidx", unique: true, where: "((provider)::text = 'local'::text)"
-    t.index ["encrypted_email_bidx"], name: "index_users_on_encrypted_email_bidx"
+    t.index ["email_bidx"], name: "email_local_unique_bidx", unique: true, where: "((provider)::text = 'local'::text)"
+    t.index ["email_bidx"], name: "index_users_on_email_bidx"
     t.index ["last_login_at"], name: "index_users_on_last_login_at"
     t.index ["uid"], name: "index_users_on_uid"
   end

@@ -107,7 +107,7 @@ class UserTest < ActiveSupport::TestCase
     new_blind_index = BlindIndex.generate_bidx( # Recalc so test's less fragile
       email_address, User.blind_indexes[:email]
     )
-    assert new_blind_index, user1.encrypted_email_bidx
+    assert new_blind_index, user1.email_bidx
   end
 
   test 'associated projects should be destroyed' do
@@ -151,6 +151,31 @@ class UserTest < ActiveSupport::TestCase
   test 'Test user.email_if_decryptable when not decryptable' do
     u = StubUserEmail.new
     assert_equal 'CANNOT_DECRYPT', u.email_if_decryptable
+  end
+
+  test 'Data model encrypted email addresses and blind index keys work' do
+    # We precompute the user data fixtures, and it's possible we got it wrong.
+    # Walk through the data set to do sanity checks for each value.
+    User.find_each do |user|
+      # puts(user.name)
+      assert user.name.present?, "Empty name for #{user.id}"
+      assert user.encrypted_email.present?, "Email not present for #{user.name}"
+      assert(
+        user.encrypted_email_iv.present?,
+        "Email IV not present for #{user.name}"
+      )
+      # This will also fail if the email is not encrypted correctly:
+      assert user.email.present?, "Email not present for #{user.name}"
+      assert user.provider.present?, "Provider not present for #{user.name}"
+      assert(
+        (user.provider != 'local' || user.password_digest.present?),
+        "Local user has no password: #{user.name}, #{user.email}"
+      )
+      # An incorrect bidx could lead to confusing test results, so we
+      # *definitely* want the following check.
+      # Check that bidx was computed correctly:
+      assert_equal User.generate_email_bidx(user.email), user.email_bidx
+    end
   end
 end
 # rubocop:enable Metrics/ClassLength

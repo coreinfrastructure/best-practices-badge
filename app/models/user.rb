@@ -41,13 +41,14 @@ class User < ApplicationRecord
   attr_encrypted :email, algorithm: 'aes-256-gcm', key: [(
     ENV['EMAIL_ENCRYPTION_KEY'] || '1' * DIGITS_OF_EMAIL_ENCRYPTION_KEY
   )].pack('H*')
+
   # Email addresses are indexed as blind indexes of downcased email addresses,
   # so we can efficiently search for them while keeping them encrypted.
-  # Usage: User.where(email: "test@example.org")
-  # or:    User.where(email: "test@example.org", provider: "local")
+  # Usage: User.where(email: 'test@example.org')
+  # or:    User.where(email: 'test@example.org', provider: 'local')
   blind_index :email, key: [(
     ENV['EMAIL_BLIND_INDEX_KEY'] || '2' * DIGITS_OF_EMAIL_BLIND_INDEX_KEY
-  )].pack('H*'), expression: ->(v) { v.try(:downcase) }, legacy: true
+  )].pack('H*'), expression: ->(v) { v.try(:downcase) }
 
   scope :created_since, (
     lambda do |time|

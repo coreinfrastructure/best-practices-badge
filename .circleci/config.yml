@@ -180,9 +180,10 @@ jobs:
           command: |
             heroku run rake db:migrate --app master-bestpractices
           no_output_timeout: 400s
-      - run:
-          name: Test Fastly
-          command: script/fastly_test
+      # Not reliable enough:
+      # - run:
+          # name: Test Fastly
+          # command: script/fastly_test
   deploy-staging:
     docker:
       - image: buildpack-deps:bionic

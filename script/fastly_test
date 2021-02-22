@@ -3,6 +3,11 @@
 site_name=${1:-https://master.bestpractices.coreinfrastructure.org/projects/1/badge}
 echo "Purging Fastly cache of badge for ${site_name}"
 curl -X PURGE "$site_name" || exit 1
+echo
+
+# Give Fastly time to purge its cache.
+sleep 20
+
 if curl -svo /dev/null "$site_name" 2>&1 | grep -i 'X-Cache: MISS' ; then
   echo "Fastly cache of badge for project 1 successfully purged."
 else
@@ -10,9 +15,8 @@ else
   exit 1
 fi
 
-# Give Fastly time to set up and use cache.
-# In theory this should not be necessary.
-sleep 2
+# Give Fastly time to set up and use its cache.
+sleep 20
 
 if curl -svo /dev/null "$site_name" 2>&1 | grep -i 'X-Cache: HIT' ; then
   echo "Fastly cache successfully restored."

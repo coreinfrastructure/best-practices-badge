@@ -11,7 +11,6 @@ require 'json'
 task(:default).clear.enhance %w[
   rbenv_rvm_setup
   bundle
-  bundle_doctor
   bundle_audit
   generate_criteria_doc
   rubocop
@@ -95,6 +94,8 @@ task :bundle do
   sh 'bundle check || bundle install'
 end
 
+# Note: We've had some trouble with bundle doctor, so it might
+# not be run by default.
 desc 'Run bundle doctor - check for some Ruby gem configuration problems'
 task :bundle_doctor do
   sh 'bundle doctor'

@@ -15,18 +15,18 @@ ruby File.read('.ruby-version').strip
 # sure to upgrade them in sync, *including* railties.
 # Loading only what we use reduces memory use & attack surface.
 # gem 'actioncable' # Not used. Client/server comm channel.
-gem 'actionmailer', '6.0.3.4' # Rails. Send email.
-gem 'actionpack', '6.0.3.4' # Rails. MVC framework.
-gem 'actionview', '6.0.3.4' # Rails. View.
-gem 'activejob', '6.0.3.4' # Rails. Async jobs.
-gem 'activemodel', '6.0.3.4' # Rails. Model basics.
-gem 'activerecord', '6.0.3.4' # Rails. ORM and query system.
+gem 'actionmailer', '6.1.2.1' # Rails. Send email.
+gem 'actionpack', '6.1.2.1' # Rails. MVC framework.
+gem 'actionview', '6.1.2.1' # Rails. View.
+gem 'activejob', '6.1.2.1' # Rails. Async jobs.
+gem 'activemodel', '6.1.2.1' # Rails. Model basics.
+gem 'activerecord', '6.1.2.1' # Rails. ORM and query system.
 # gem 'activestorage' # Not used. Attaches cloud files to ActiveRecord.
-gem 'activesupport', '6.0.3.4' # Rails. Underlying library.
+gem 'activesupport', '6.1.2.1' # Rails. Underlying library.
 # gem 'activetext' # Not used. Text editor that fails to support markdown.
 gem 'attr_encrypted', '3.1.0' # Encrypt email addresses
 gem 'bcrypt', '3.1.16' # Security - for salted hashed interated passwords
-gem 'blind_index', '0.3.4' # Index encrypted email addresses
+gem 'blind_index', '2.2.0' # Index encrypted email addresses
 gem 'bootstrap-sass', '3.4.1'
 gem 'bootstrap-social-rails', '4.12.0'
 gem 'bootstrap_form', '2.7.0'
@@ -36,7 +36,7 @@ gem 'chartkick', '3.4.0' # Chart project_stats
 # They recommend switching to the "fastly" gem (aka "fastly-ruby"),
 # but fastly-ruby is not designed to support multi-threading, so we
 # call the Fastly API directly instead.
-gem 'font-awesome-rails', '4.7.0.5'
+gem 'font-awesome-rails', '4.7.0.7'
 gem 'http_accept_language', '2.1.1' # Determine user's preferred locale
 gem 'httparty', '0.18.1' # HTTP convenience. rake fix_use_gravatar
 gem 'imagesLoaded_rails', '4.1.0' # JavaScript - enable wait for image load
@@ -65,7 +65,7 @@ gem 'omniauth-github', '1.4.0' # Authentication to GitHub (get project info)
 gem 'omniauth-rails_csrf_protection', '0.1.2' # Counter CVE-2015-9284
 gem 'pagy', '3.10.0' # Paginate some views
 gem 'paleta', '0.3.0' # Color manipulation, used for badges
-gem 'paper_trail', '10.3.1' # Record previous versions of project data
+gem 'paper_trail', '11.1.0' # Record previous versions of project data
 gem 'pg', '1.2.3' # PostgreSQL database, used for data storage
 gem 'pg_search', '2.3.5' # PostgreSQL full-text search
 gem 'puma', '4.3.6' # Faster webserver; recommended by Heroku
@@ -73,11 +73,11 @@ gem 'puma_worker_killer', '0.3.1' # Band-aid: Restart to limit memory use
 gem 'rack-attack', '6.3.1' # Implement rate limiting
 gem 'rack-cors', '1.1.1' # Enable CORS so JavaScript clients can get JSON
 gem 'rack-headers_filter', '0.0.1' # Filter out "dangerous" headers
-# We no longer say: gem 'rails', '6.0.3.4' # Our web framework
+# We no longer say: gem 'rails', '6.1.2.1' # Our web framework
 # but instead load only what we use (to reduce memory use and attack surface).
 # We load sprockets-rails, but its version number isn't kept in sync.
 # Note: Update the gem versions of action* and railties in sync.
-gem 'railties', '6.0.3.4' # Rails. Rails core, loads rest of Rails
+gem 'railties', '6.1.2.1' # Rails. Rails core, loads rest of Rails
 gem 'rails-i18n', '6.0.0' # Localizations for Rails built-ins
 gem 'redcarpet', '3.5.1' # Process markdown in form textareas (justifications)
 gem 'sass-rails', '5.1.0', require: false # For .scss files (CSS extension)
@@ -96,12 +96,13 @@ group :development, :test do
   gem 'json', '2.5.1'
   gem 'license_finder', '6.0.0'
   gem 'mdl', '0.10.0'
-  gem 'pronto', '0.10.0'
+  # NOTE: If you update pronto you may need to update other pronto-* gems
+  gem 'pronto', '0.11.0'
   # TODO: Use pronto-railroader, once there is one.
   # gem 'pronto-brakeman', '0.9.1'
-  gem 'pronto-eslint', '0.10.0'
-  gem 'pronto-rails_best_practices', '0.10.0'
-  gem 'pronto-rubocop', '0.10.0'
+  gem 'pronto-eslint', '0.11.0'
+  gem 'pronto-rails_best_practices', '0.11.0'
+  gem 'pronto-rubocop', '0.11.0'
   # gem 'railroader', '4.3.8' # Security static analyzer. OSS fork of Brakeman
   gem 'rubocop', '0.91.1', require: false # Style checker
   gem 'rubocop-performance', '1.8.0', require: false # Performance cops
@@ -122,10 +123,15 @@ end
 group :development do
   gem 'bootsnap', '1.4.8' # Speed up boot via caches
   # gem 'fasterer', '0.3.2' # Provide speed recommendations - run 'fasterer'
-  # Waiting for Ruby 2.4 support: https://github.com/seattlerb/ruby_parser/issues/239
-  gem 'traceroute', '0.8.1' # Adds 'rake traceroute' command to check routes
+  # Waiting for Ruby 2.4 support:
+  # https://github.com/seattlerb/ruby_parser/issues/239
+  # gem 'traceroute', '0.8.1' # Adds 'rake traceroute' command to check routes
+  # We bring in full rails in development in case we need it for debugging;
+  # this also keeps some gems happy that don't realize that loading
+  # only *parts* of Rails is fine:
+  gem 'rails', '6.1.2.1' # Rails (our web framework)
   gem 'translation', '1.22' # translation.io - translation service
-  gem 'web-console', '3.7.0' # Debugging tool for Ruby on Rails apps
+  gem 'web-console', '4.1.0' # In-browser debugger; use <% console %> or console
 end
 
 group :test do

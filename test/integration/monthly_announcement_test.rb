@@ -17,14 +17,14 @@ class MonthlyAnnouncementTest < ActionDispatch::IntegrationTest
     # Test to see that we pick the right project(s).
     # Ensure the test db has its environment metadata set to test,
     # otherwise tasks farther down will fail.  New for Rails 5
-    Rake::Task['db:environment:set'].invoke
+    # Rake::Task['db:environment:set'].invoke
     # Normalize time in order to match fixture file
     travel_to Time.zone.parse('2015-03-01T12:00:00') do
       ActiveRecord::Schema.verbose = false
-      Rake::Task['db:schema:load'].reenable
-      Rake::Task['db:schema:load'].invoke
-      Rake::Task['db:fixtures:load'].reenable
-      Rake::Task['db:fixtures:load'].invoke
+      # Rake::Task['db:schema:load'].reenable
+      # Rake::Task['db:schema:load'].invoke
+      # Rake::Task['db:fixtures:load'].reenable
+      # Rake::Task['db:fixtures:load'].invoke
 
       results = ProjectsController.send :send_monthly_announcement
       results.each do |result|

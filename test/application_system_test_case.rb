@@ -65,22 +65,3 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
     option.add_argument('no-sandbox')
   end
 end
-
-# The chromedriver occasionally calls out with its own API,
-# which isn't part of the system under test. This can occasionally
-# cause an error of this form:
-# An HTTP request has been made that VCR does not know how to handle:
-# GET https://chromedriver.storage.googleapis.com/LATEST_RELEASE_87.0.4280
-# The following code resolves it, see:
-# https://github.com/titusfortner/webdrivers/wiki/Using-with-VCR-or-WebMock
-# https://github.com/titusfortner/webdrivers/issues/109
-
-require 'uri'
-
-# With activesupport gem
-driver_hosts =
-  Webdrivers::Common.subclasses.map do |this_driver|
-    URI(this_driver.base_url).host
-  end
-
-VCR.configure { |config| config.ignore_hosts(*driver_hosts) }

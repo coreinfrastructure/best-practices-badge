@@ -11,6 +11,7 @@ class SessionsController < ApplicationController
   # because we don't really want the locale.
   skip_before_action :redir_missing_locale, only: :create
 
+  # Show login screen ("new" shows the page for trying to create a session)
   def new
     if logged_in?
       flash[:success] = t('sessions.already_logged_in')
@@ -21,6 +22,7 @@ class SessionsController < ApplicationController
     end
   end
 
+  # Attempt to create a session. In other words, attempt to log in.
   # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   def create
     counter_fixation # Counter session fixation (but save forwarding url)
@@ -38,6 +40,7 @@ class SessionsController < ApplicationController
   end
   # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
+  # Log out
   def destroy
     log_out if logged_in?
     flash[:success] = t('sessions.signed_out')

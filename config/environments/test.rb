@@ -36,7 +36,7 @@ Rails.application.configure do
   config.action_dispatch.show_exceptions = false
 
   # Raise exceptions during test if a translation is missing
-  config.action_view.raise_on_missing_translations = true
+  config.i18n.raise_on_missing_translations = true
 
   # Disable request forgery protection in test environment.
   config.action_controller.allow_forgery_protection = false
@@ -53,9 +53,6 @@ Rails.application.configure do
 
   # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stderr
-
-  # Raises error for missing translations
-  config.action_view.raise_on_missing_translations = true
 
   # Enable Rack's built-in compression mechanism; this is important for people
   # with slow network connections.  Enable during tests to make test

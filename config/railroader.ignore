@@ -60,8 +60,28 @@
       "user_input": null,
       "confidence": "Medium",
       "note": "The details text is from a trusted source"
+    },
+    {
+      "warning_type": "HTTP Verb Confusion",
+      "warning_code": 118,
+      "fingerprint": "de0078f491aa5b179731e8ebabd9b1586c96210f5e12183e32eb93e6ca7a30f0",
+      "check_name": "VerbConfusion",
+      "message": "Potential HTTP verb confusion. `HEAD` is routed like `GET` but `request.get?` will return `false`",
+      "file": "app/helpers/sessions_helper.rb",
+      "line": 210,
+      "link": "https://brakemanscanner.org/docs/warning_types/http_verb_confusion/",
+      "code": "return unless request.get?",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "SessionsHelper",
+        "method": "store_location_and_locale"
+      },
+      "user_input": "request.get?",
+      "confidence": "Weak",
+      "note": ""
     }
   ],
-  "updated": "2020-12-30 18:14:23 -0500",
-  "brakeman_version": "4.10.1"
+  "updated": "2021-02-22 15:35:22 -0500",
+  "brakeman_version": "5.0.0"
 }

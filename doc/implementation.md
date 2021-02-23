@@ -398,10 +398,11 @@ we would not lose our completed translations).
 
 To add a new locale so translation can begin:
 
-* Modify file "config/initializers/translation.rb"
-  and edit the assignment of "config.target_locales" to add
-  the new locale.
-* Modify file "config/locales/en.yml" and look for "locale_name:";
+* Modify file `config/initializers/translation.rb`
+  and edit the assignment of `config.target_locales` to add
+  the new locale. Be sure to use `-` (dash) and not `_` (underscore)
+  if there's a territory, e.g., `zh-CN` and `pr-BR`.
+* Modify file "config/locales/en.yml" and look for `locale_name:`;
   add the new locale as a key. Its text should be
   "English name of language / Language's name for itself (LOCALE)".
 * Run "rake translation:sync".
@@ -422,19 +423,21 @@ translate those.  Once those are done, the front page would be
 To make it possible to *select* a new language (after non-trivial
 translation has gone on):
 
-* Modify the file "config/initializers/i18n.rb"
-  and edit the assignment of "I18n.available_locales" to add
+* Modify the file `config/initializers/i18n.rb`
+  and edit the assignment of `I18n.available_locales` to add
   the new locale.  The system will now permit users to request it.
-* Modify the robots.txt to prevent crawling of
-  user accounts in that locale. See: "app/views/static_pages/robots.text.erb".
 * Update app/assets/javascripts/criteria.js.erb
   to depend on the new locale's yml file, this allows the precompiler to be
   to be notified if the contents of criteria.js should have changed.
+  (note the hyphen vs. dash difference here).
   Simply add the following line to the top of criteria.js.erb:
 
 ~~~~
-depend_on NEW_LOCALE.yml
+    depend_on NEW_LOCALE.yml
 ~~~~
+
+Note that the robots.txt automatically prevents crawling of
+user accounts in every locale, per `app/views/static_pages/robots.text.erb`.
 
 ### Old approaches for handling locales directly (not used)
 

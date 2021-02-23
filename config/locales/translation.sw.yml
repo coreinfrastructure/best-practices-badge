@@ -26,6 +26,7 @@ sw:
     ru: Kirusi
     sw: Kiswahili
     zh-CN: Kichina (Kilichorahisishwa)
+    pt_BR:
   layouts:
     cii_best_practices: Mazoea Bora ya CII
     toggle_navigation:
@@ -548,12 +549,26 @@ sw:
         description:
         met_placeholder:
       contribution:
-        description:
-        details:
-        met_placeholder:
+        description: >-
+          Habari juu ya jinsi ya kuchangia LAZIMA ieleze mchakato
+          wa uchangiaji (kwa mfano, je! Maombi ya kuvuta yanatumika?)
+        details: >-
+          Tunafikiria kuwa <a href="https://guides.github.com/activities/contributing-to-open-source/">miradi
+          kwenye GitHub hutumia maswala na kuvuta maombi</a> isipokuwa
+          palipoonyeshwa vingine. Habari hii inaweza kuwa fupi,
+          kwa mfano, ikisema kuwa mradi hutumia maombi ya kuvuta,
+          msako wa suala, au machapisho kwenye orodha ya barua
+          (ipi?)
+        met_placeholder: >-
+          (URL inahitajika) Mchakato ni upi? Je! Ni URL gani inayoielezea?
       contribution_requirements:
-        description:
-        unmet_placeholder:
+        description: >-
+          Habari juu ya jinsi ya kuchangia INAPASWA kujumuisha
+          mahitaji ya michango inayokubalika (k.m., rejeleo la
+          kiwango chochote kinachohitajika cha usimbaji).
+        unmet_placeholder: >-
+          Kwa nini mahitaji ni dhahiri sana kama kwamba habari
+          hii haihitajiki?
       floss_license:
         description:
         details:
@@ -630,12 +645,31 @@ sw:
           Ikiwa programu iliyotengenezwa na mradi inahitaji ujenzi
           wa matumizi, mradi LAZIMA utoe mfumo wa kujenga ambao
           unaweza kujenga programu kiotomatiki kutoka kwa chanzo-msimbo.
-        details:
+        details: >-
+          Mfumo wa kujenga huamua ni hatua gani zinahitaji kutendeka
+          ili kujenga tena programu (na kwa mpangilio gani), na
+          kisha kutekeleza hatua hizo. Kwa mfano, inaweza kuomba
+          kikusanyaji kukusanya fumbo-chanzo. Ikiwa inayoweza
+          kutekelezwa imeundwa kutoka kwa fumbo-chanzo, lazima
+          iwezeshe marekebisho kwenye fumbo-chanzo ya mradi na
+          kisha itengeneze msasisho inayoweza kutekelezwa na marekebisho
+          hayo. Ikiwa programu iliyotolewa na mradi unategemea
+          maktaba ya nje, mfumo wa kujenga <em>haina</em> haja
+          ya kujenga maktaba hizo za nje. Ikiwa hakuna haja ya
+          kujenga chochote kutumia programu baada ya fumbo-chanzo
+          kubadilishwa, chagua "haitumiki" (N / A).
       build_common_tools:
-        description:
-        details:
+        description: >-
+          INAPENDEKEZWA kuwa zana za kawaida zitumike kujenga
+          programu.
+        details: >-
+          Kwa mfano, Maven, Ant, cmake, autotools, make, rake
+          (Ruby), au <a href="https://cran.r-project.org/web/packages/devtools/index.html">devtools</a>
+          (R).
       build_floss_tools:
-        description:
+        description: >-
+          Mradi UNAPASWA kujengwa kwa kutumia zana za FLOSS pekee
+          yake.
       test:
         description:
         details:
@@ -674,12 +708,27 @@ sw:
         description:
         details:
       crypto_call:
-        description:
+        description: >-
+          Ikiwa programu iliyotengenezwa na mradi ni programu
+          au maktaba, na kusudi lake la msingi sio kutekeleza
+          usimbuaji, basi INAPASWA tu kuita programu iliyoundwa
+          kihususa kutekeleza kazi za kielelezo; HAIPASWI kutekeleza-upya
+          shughuli hiyo.
       crypto_floss:
-        description:
-        details:
+        description: >-
+          Utendaji wote katika programu iliyotengenezwa na mradi
+          ambayo inategemea usimbuaji LAZIMA iweze kutekelezwa
+          kwa kutumia FLOSS.
+        details: >-
+          Tazama <a href="https://opensource.org/osr">Mahitaji
+          ya Viwango wazi ya Programu kupitia Open Source Initiative</a>.
       crypto_keylength:
-        description:
+        description: >-
+          Mifumo ya usalama ndani ya programu inayozalishwa na
+          mradi LAZIMA itumie kwa msingi keylengths ambazo angalau
+          zinakidhi mahitaji ya chini ya NIST kufikia mwaka wa
+          2030 (kama ilivyoelezwa mnamo 2012). LAZIMA iwe rahisi
+          kusanidi programu ili keylengths ndogo zimezimwa kabisa.
         details:
       crypto_working:
         description:

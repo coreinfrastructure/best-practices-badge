@@ -25,7 +25,8 @@ ja:
     zh-CN: 中国語 (簡体字)
     ru: ロシア語
     es: スペイン語
-    sw:
+    sw: スワヒリ語
+    pt_BR:
   layouts:
     cii_best_practices: CII ベスト プラクティス
     projects: プロジェクト
@@ -1468,8 +1469,8 @@ ja:
       met_justification_or_url_required: 満足している正当な理由またはURLが必要
       see_actual_criteria: 実際の基準はこちらで確認できます。
     error_409:
-      heading:
-      conflict:
+      heading: エラー409：競合
+      conflict: 申し訳ありませんが、複数のエントリがリクエストに一致し、競合が発生しています。
   headings:
     Accessibility and internationalization: アクセシビリティと国際化
     Analysis: 分析
@@ -1530,10 +1531,23 @@ ja:
     beginning_header_0: FLOSSベストプラクティス基準（合格バッジ）
     beginning_header_1: FLOSSベストプラクティス基準（シルバー バッジ）
     beginning_header_2: FLOSSベストプラクティス基準（ゴールド バッジ）
-    beginning_all_html:
-    beginning_0_html:
-    beginning_1_html:
-    beginning_2_html:
+    beginning_all_html: >-
+      <p>これは、合格、シルバー、およびゴールドバッジレベルでコアインフラストラクチャイニシアチブ（CII）ベストプラクティスバッジを達成するための、フリー/リブレおよびオープンソースソフトウェア（FLOSS）プロジェクトのベストプラクティスのセットです。このリストは、<a
+      href="/ja/criteria">基準のみ</a>または<a href="/ja/criteria?details=true&rationale=true">追加情報</a>とともに表示できます。
+      <a href="/ja/criteria/0">合格</a> 、 <a href="/ja/criteria/1">シルバー</a>
+      、 <a href="/ja/criteria/2">ゴールド</a>の基準だけでなく、 <a href="/ja/criteria_stats">基準の統計</a>も表示できます。
+    beginning_0_html: >-
+      <p>これは、コアインフラストラクチャイニシアチブ（CII）ベストプラクティスのシルバーバッジを達成するための、フリー/リブレおよびオープンソースソフトウェア（FLOSS）プロジェクトのベストプラクティスのセットです。このリストは、<a
+      href="/ja/criteria/0">基準のみ</a>または<a href="/ja/criteria/0?details=true&rationale=true">追加情報</a>とともに表示できます
+      。 <a href="/ja/criteria">条件の完全なセット</a>も利用できます。
+    beginning_1_html: >-
+      <p>これは、コアインフラストラクチャイニシアチブ（CII）ベストプラクティスのシルバーバッジを達成するための、フリー/リブレおよびオープンソースソフトウェア（FLOSS）プロジェクトのベストプラクティスのセットです。このリストは、<a
+      href="/ja/criteria/1">基準のみ</a>または<a href="/ja/criteria/1?details=true&rationale=true">追加情報</a>とともに表示できます
+      。 <a href="/ja/criteria">条件の完全なセット</a>も利用できます。
+    beginning_2_html: >-
+      <p>これは、コアインフラストラクチャイニシアチブ（CII）ベストプラクティスのシルバーバッジを達成するための、フリー/リブレおよびオープンソースソフトウェア（FLOSS）プロジェクトのベストプラクティスのセットです。このリストは、<a
+      href="/ja/criteria/2">基準のみ</a>または<a href="/ja/criteria/2?details=true&rationale=true">追加情報</a>とともに表示できます
+      。 <a href="/ja/criteria">条件の完全なセット</a>も利用できます。
     see_discussion_html: >-
       <p>これらの基準の詳細については、 <a href="/ja/criteria_discussion">基準の説明</a>を参照してください。
     future:

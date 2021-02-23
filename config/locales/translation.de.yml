@@ -26,6 +26,7 @@ de:
     ru: Russisch
     es: Spanisch
     sw:
+    pt_BR:
   layouts:
     cii_best_practices: CII Best Practices
     projects: Projekte
@@ -1266,12 +1267,27 @@ de:
           bekannten Sicherheitslücken bekannt sind, wählen Sie
           (N/A).
         details: >-
-          Wenn Benutzer die Software normalerweise nicht selbst
-          auf ihren Computern aktualisieren können, sondern stattdessen
-          auf eine/n Mittelsfrau/mann angewiesen sind, um das
-          Upgrade durchzuführen (wie es bei einem Kernel und einer
-          Low-Level-Software häufig der Fall ist), wählen Sie
-          "nicht anwendbar" (N/A).
+          Dieses Kiterium hilft Benutzer zu verstehen ob ein Update
+          eine bestimmte öffentlich bekannte Sicherheitslücke
+          schließt, und zu entscheiden ob das Update eingespielt
+          wird oder nicht. Wenn Benutzer die Software normalerweise
+          nicht selbst auf ihren Computern aktualisieren können,
+          sondern stattdessen auf eine/n Mittelsfrau/mann angewiesen
+          sind, um das Upgrade durchzuführen (wie es bei einem
+          Kernel und einer Low-Level-Software häufig der Fall
+          ist), wählen Sie stattdessen "nicht anwendbar" (N/A),
+          da diese zusätzliche Information für den Benutzer nicht
+          hilfreich ist. Ein Projekt kann auch N/A auswählen wenn
+          alle Empfänger nur die neuste Version benutzen (z. B.
+          wenn der Code für eine einzelne Webseite oder Internetdienst
+          ist der continuierlich mittels Contious Delivery geupdated
+          wird). Diese Kriterium betrifft nur die Projektergenbisse,
+          nicht seine Abhängigkeiten. Alle Sicherheitslücken für
+          alle Abhängigkeiten eines Projektes aufzulisten ist
+          unhandlich weil Abhängikeiten sich regelmäßig ändern
+          könen; außerdem ist es unnötig weil Tools die sich auf
+          die Analyse von Abhängikeiten spezialisieren das viel
+          skalierbarer hin bekommen.
       report_process:
         description: >-
           Das Projekt muss einen Prozess für Benutzer enthalten,

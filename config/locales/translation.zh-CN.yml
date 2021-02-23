@@ -585,6 +585,7 @@ zh-CN:
     ru: 俄语
     es: 西班牙文
     sw: 斯瓦希里语
+    pt_BR:
   criteria:
     '0':
       description_good:
@@ -627,7 +628,12 @@ zh-CN:
         details: OSI （开放源代码促进会）使用严格的审批流程来确定哪些许可证是开源软件（OSS）。
       license_location:
         description: 项目必须将其许可证在其源代码存储库中的标准位置发布。
-        details: 例如，作为名为LICENSE或COPYING的顶级文件。许可证文件名之后可以是扩展名，例如“.txt”或“.md”。
+        details: >-
+          一种约定是将许可证发布为名为LICENSE或COPYING的顶级文件，其后可以带有扩展名，例如“ .txt”或“
+          .md”。另一种约定是使用一个名为LICENSES的目录，其中包含许可证文件。这些文件通常被命名为其SPDX许可证标识符，后跟适当的文件扩展名，如<a
+          href="https://reuse.software/spec/">REUSE Specification中所述</a>。请注意，此标准只是源存储库上的要求。从源代码生成某些内容（例如可执行文件，程序包或容器）时，无需包括许可证文件。例如，在为综合R存档网络（CRAN）生成R软件包时，请遵循标准CRAN惯例：如果许可证是标准许可证，请使用标准简短许可证规范（以避免安装另一文本副本）并列出排除文件（例如.Rbuildignore）中的LICENSE文件。同样，在创建Debian软件包时，您可以在版权文件中放置一个指向/
+          usr / share / common-licenses中的许可证文本的链接，并从创建的软件包中排除许可证文件（例如，通过在调用dh_auto_install之后删除文件）
+          ）。我们鼓励在可行的情况下以生成的格式包含机器可读的许可证信息。
       documentation_basics:
         description: 项目必须为项目生成的软件提供基本文档。
         details: >-

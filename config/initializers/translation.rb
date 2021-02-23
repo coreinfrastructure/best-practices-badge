@@ -12,7 +12,7 @@ if Rails.env.development? || Rails.env.test?
   TranslationIO.configure do |config|
     config.api_key        = 'b6086a4661ba47d79ec771236e298211'
     config.source_locale  = 'en'
-    config.target_locales = %i[zh-CN es fr de ja ru sw]
+    config.target_locales = %i[zh-CN es fr de ja pt_BR ru sw]
 
     # Uncomment this if you don't want to use gettext
     config.disable_gettext = true

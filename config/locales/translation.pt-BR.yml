@@ -7,7 +7,7 @@ pt-BR:
       create: Criar %{model}
       update: Atualizar %{model}
       submit: Salvar %{model}
-  hello:
+  hello: Olá Mundo
   submit:
   projects_count:
     zero:
@@ -18,7 +18,7 @@ pt-BR:
   feed_title:
   project_name_unknown:
   locale_name:
-    en:
+    en: Inglês
     es:
     de:
     fr:

@@ -160,24 +160,31 @@ Pagy::VARS[:size] = [2, 4, 4, 2]
 
 # Load pagy locales for all the locales we use, preferring speed.
 # This presumes that 'en' is listed first in I18n.available_locales (true).
-# We have to specially handle locales not supported by Pagy.
+
 # Disable Rubocop warning; we need to chain "freeze" onto a multiline block,
 # and the style checker doesn't provide a mechanism to do that.
 # rubocop:disable Style/MethodCalledOnDoEndBlock
+
+# We have to specially handle locales not supported by Pagy. Here's how:
+# PAGY_LOCALES = I18n.available_locales.map do |lang|
+#   if lang == :sw # Specially handle locales not supported by Pagy
+#     {
+#       locale: lang.to_s,
+#       filepath: "config/locales/pagy-#{lang}.yml"
+#     }
+#   else
+#     { locale: lang.to_s }
+#   end
+# end.freeze
 PAGY_LOCALES = I18n.available_locales.map do |lang|
-  if lang == :sw # Specially handle locales not supported by Pagy
-    {
-      locale: lang.to_s,
-      filepath: "config/locales/pagy-#{lang}.yml"
-    }
-  else
-    { locale: lang.to_s }
-  end
+  { locale: lang.to_s }
 end.freeze
-Pagy::I18n.load(*PAGY_LOCALES)
 # rubocop:enable Style/MethodCalledOnDoEndBlock
 
-# I18n extra: uses the standard i18n gem which is ~18x slower using ~10x more memory
+Pagy::I18n.load(*PAGY_LOCALES)
+
+# I18n extra: uses the standard i18n gem which is ~18x slower
+# using ~10x more memory
 # than the default pagy internal i18n (see above)
 # See https://ddnexus.github.io/pagy/extras/i18n
 # require 'pagy/extras/i18n'

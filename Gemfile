@@ -145,7 +145,7 @@ group :test do
   gem 'selenium-webdriver', '3.142.7', require: false
   # We don't list "simplecov"; code depends on it & brings it in
   gem 'webdrivers', '4.5.0', require: false
-  gem 'webmock', '3.9.4', require: false
+  gem 'webmock', '3.11.3', require: false
 end
 
 group :production do

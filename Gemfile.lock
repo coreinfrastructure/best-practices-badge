@@ -442,7 +442,7 @@ GEM
       nokogiri (~> 1.6)
       rubyzip (>= 1.3.0)
       selenium-webdriver (>= 3.0, < 4.0)
-    webmock (3.9.4)
+    webmock (3.11.3)
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
@@ -539,7 +539,7 @@ DEPENDENCIES
   vcr (= 5.0.0)
   web-console (= 4.1.0)
   webdrivers (= 4.5.0)
-  webmock (= 3.9.4)
+  webmock (= 3.11.3)
   yaml-lint (= 0.0.10)
 
 RUBY VERSION

@@ -9,8 +9,6 @@ require 'application_system_test_case'
 class GithubLoginTest < ApplicationSystemTestCase
   # rubocop:disable Metrics/BlockLength
   test 'Can sign up with GitHub' do
-    DatabaseCleaner.clean
-    DatabaseCleaner.start
     configure_omniauth_mock unless ENV['GITHUB_PASSWORD']
 
     VCR.use_cassette('github_login', allow_playback_repeats: true) do

@@ -10,11 +10,11 @@ sw:
   hello: Jambo walimwengu
   submit: Wasilisha
   projects_count:
-    zero:
-    one:
-    few:
-    many:
-    other:
+    zero: Hamna Miradi
+    one: Mradi %{count}
+    few: Miradi %{count}
+    many: Miradi %{count}
+    other: Miradi %{count}
   feed_title:
   project_name_unknown:
   locale_name:
@@ -83,26 +83,41 @@ sw:
     reset_expired:
     update_password:
   sessions:
-    login_header:
-    login_with_github_html:
-    login_automatic_signup:
-    or:
-    email:
-    password:
-    forgot_password:
-    remember_me:
-    cookie_details_html:
-    login_custom:
-    no_custom:
-    already_logged_in:
-    login_disabled:
-    incorrect_login_info:
-    invalid_combo:
-    signed_in:
-    not_activated:
-    signed_out:
-    no_login_time:
-    cannot_login_yet:
+    login_header: Ingia
+    login_with_github_html: <span class="fa fa-github"></span>Ingia
+      kwa kutumia GitHub
+    login_automatic_signup: >-
+      Ingio inayotumia GitHub itajisajili kiatomati ikiwa ni lazima.
+      Ukijisajili, jina lako (kama lilivyopewa GitHub) na jina
+      la utani la GitHub litaonyeshwa hadharani, na unaweza kubadilisha
+      jina lako wakati wowote. Anwani yako ya barua pepe itahifadhiwa
+      kwa faragha na itatumika tu kwa shughuli zinazohusiana na
+      nishani; hatutatoa kwa wengineo isipokuwa inahitajika kisheria.
+    or: au
+    email: Barua pepe
+    password: Nywila
+    forgot_password: Kasahau nywila yako?
+    remember_me: Wacha nibaki nimeingia (kwa kutumia kidakuzi
+      cha kudumu)
+    cookie_details_html: >-
+      <a href="/sw/cookies" target="_blank" rel="noopener"><i>Jifunze
+      zaidi vidakuzi.</i></a>
+    login_custom: Ingia kwa kutumia akaunti inayokufaa
+    no_custom: Hamna akaunti ya kukufaa? Jiandikishe sasa!
+    already_logged_in: Umeingia tayari.
+    login_disabled: Ingio zote zimezimwa ka muda
+    incorrect_login_info: Habari ya kuingia si sahihi
+    invalid_combo: Mchanganyiko batili wa barua pepe / nywila
+    signed_in: 'Umeingia! Ingio la mwisho: %{last_login_at}'
+    not_activated: >-
+      Akaunti haijaamilishwa. Angalia barua pepe yako kupata kiunga
+      cha uanzishaji.
+    signed_out: Umetoka!
+    no_login_time: "(Hakuna wakati uliopita uliorekodiwa.)"
+    cannot_login_yet: >-
+      Samahani, bado huwezi kuingia. Kama hatua ya kupambana na
+      barua taka, kuna ucheleweshaji baada ya kufungua akaunti
+      ya ndani kabla ya kuingia.
   static_pages:
     error_404:
       heading: 'Kosa 404: Ukurasa Haukupatikana'
@@ -169,23 +184,24 @@ sw:
       email: Barua pepe
       projects_earned_badge: 'Baadhi ya wapokeaji wa nishani:'
     cookies:
-      cookies_header:
+      cookies_header: Kuhusu Vidakuzi
       cookies_info_html:
     criteria_stats:
-      criteria:
+      criteria: Takwimu za Vigezo
       see_actual_criteria: Unaweza pia kuona vigezo halisi.
-      level:
-      must:
+      level: Kiwango
+      must: LAZIMA
       should: INAPASWA
       suggested: PENDEKEZA
       total_active: Jumla ya yaliyo amilifu
-      allow_na:
-      met_justification_required:
+      allow_na: Ruhusu N/A
+      met_justification_required: Kukabiliana na sababu unahitajika
       require_url: Inahitaji URL
-      met_justification_or_url_required:
-      details:
-      new_this_level:
-      future:
+      met_justification_or_url_required: Kukabiliana na sababu
+        au URL unahitajika
+      details: Inajumuisha maelezo
+      new_this_level: Mpya katika kwango hiki
+      future: Usoni
       project_stats_html:
   users:
     new:
@@ -306,21 +322,21 @@ sw:
       name_or_description:
       search:
     table:
-      id:
-      name:
-      description:
-      website:
-      license:
-      owner:
-      last_achieved:
-      pachieved:
+      id: Kitambulisho
+      name: Jina
+      description: Maelezo
+      website: Tovuti
+      license: Leseni
+      owner: Mmiliki
+      last_achieved: Mpato wa mwisho ulikua
+      pachieved: Vipimo%
       badge:
       can_also_sort:
       repository_url:
       create_time:
       update_time:
-      user_id:
-      paren_name_unknown:
+      user_id: kitambulisho cha mtumiaji
+      paren_name_unknown: "(Jina Halijulikani)"
       badge_level:
     new:
       thanks_adding:
@@ -462,11 +478,17 @@ sw:
     delete:
       done:
   report_mailer:
-    subject_achieved_passing:
-    subject_no_longer_passing:
-    subject_new_project:
-    subject_reminder:
-    subject_project_deleted:
+    subject_achieved_passing: HONGERA kwa upato wa %{new_level}
+      ya nishani ya mazoea bora!
+    subject_no_longer_passing: Nishani yako ya mazoea bora kwa
+      sasa hauna %{old_level}
+    subject_new_project: >-
+      Umeongeza mradi kwenye Programu ya Nishani za Mazoea Bora
+      ya CII
+    subject_reminder: Mradi wako bado hauna nishani ya "mazoea
+      bora"
+    subject_project_deleted: Mradi %{project_id} uliopewa jina
+      %{project_name} ulifutwa
     new_project_heading:
     new_project_part1:
     new_project_part2:
@@ -705,8 +727,15 @@ sw:
         description:
         details:
       crypto_published:
-        description:
-        details:
+        description: >-
+          Programu iliyotengenezwa na mradi LAZIMA itumie, kwa
+          chaguo-msingi, tu itifaki za kriptografia na mifumbo
+          ambazo zimechapishwa hadharani na kukaguliwa na wataalam
+          (ikiwa itifaki za kriptografia na mafumbo imetumika).
+        details: >-
+          Vigezo hivi vya kriptografia mara mingi havitumiki kwa
+          sababu programu zingine hazina haja ya kutumia moja
+          kwa moja uwezo wa kriptografia.
       crypto_call:
         description: >-
           Ikiwa programu iliyotengenezwa na mradi ni programu
@@ -729,7 +758,19 @@ sw:
           zinakidhi mahitaji ya chini ya NIST kufikia mwaka wa
           2030 (kama ilivyoelezwa mnamo 2012). LAZIMA iwe rahisi
           kusanidi programu ili keylengths ndogo zimezimwa kabisa.
-        details:
+        details: >-
+          Vipimo hivi vya urefu wa charaza ni: symmetric key 112,
+          factoring modulus 2048, discrete logarithm key 224,
+          discrete logarithmic group 2048, elliptic curve 224,
+          na hash 224 (ufichuzi wa nywila haujashughulikiwa kwenye
+          urefu wa charaza hii, maelezo zaidi ya ufichuzi wa nywila
+          yanapatikana ndani ya kigezo cha <a href="#crypto_password_storage">crypto_password_storage</a>).
+          Ona <a href="https://www.keylength.com">https://www.keylength.com</a>
+          kwa mliganisho wa mapendekezo ya funguo-refu kutoka
+          mashirika mbali mbali. Programu YAWEZA kubali funguo-refu
+          ndogo katika usanidi (haifai kukubali, maana hii huwacha
+          mashambulizi ya kushusha, lakini funguo-refu fupi wakati
+          mwingine ina manufaa ya upatanifu).
       crypto_working:
         description:
         details:
@@ -737,12 +778,39 @@ sw:
         description:
         details:
       crypto_pfs:
-        description:
+        description: >-
+          Mifumo ya usalama ndani ya programu iliyotengenezwa
+          na mradi INAPASWA kutekeleza kwa ukamilifu usiri wa
+          umbele ya itifaki za makubaliano ya funguo ili funguo
+          la kipindi kilicho tokana na kikao cha vifungo muda-mrefu
+          haziwezi kuridhi mabaya ikiwa mojawapo ya vifunguo vya
+          muda-mrefu imeridhi mabaya katika usoni.
       crypto_password_storage:
-        description:
-        details:
+        description: >-
+          Ikiwa programu iliyotengenezwa na mradi imesababisha
+          uhifadhi wa nywila kwa minajili ya uthibitishaji ya
+          watumiaji wa kutoka nje, nywila LAZIMA zihifadhiwe kwa
+          mficho uliorudiarudia na chumvi kwa kila-mtumiaji kwa
+          kutumia kanuni ya upanuaji (rudiarudia) wa funguo (k.m.,
+          Argon2id, Bcrypt, Scrypt, or PBKDF2). Ona pia  <a href="https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html">Kurasadogo
+          ya Uhifadhi wa Nywila la OWASP</a>).
+        details: >-
+          Kigezo hili linatumika tu wakati programu linatekeleza
+          uthibitishaji wa watumiaji kutumia nywila kwa watumiaji
+          wa nje (ambayo pia ni uthibitishaji unaelekezwa ndani),
+          kama vile programu za tovuti zinazobakia seva). Haitumiki
+          katika visa ambavyo programu inahifadhi nywila ili kudhibitisha
+          ndani ya mifumo mingine (ambayo pia ni ithibitishaji
+          unaelekezwa nje, k.m., programu inatekeleza teja la
+          mfumo lingineyo), maana angalau sehemu za programu lazima
+          ziwe na njia ya kupata hiyo nywila isigalifichwa.
       crypto_random:
-        description:
+        description: >-
+          Mifumo ya usalama ndani ya programu iliyotengenezwa
+          na mradi LAZIMA itoe funguo zote za kriptologia na nonces
+          kwa kutumia kitengeneza cha nambari za bahati kuptia
+          kriptologia salama, na ISIWEZE kufanya hivo kutumia
+          vitengenezi zisizo salama kikriptologia.
         details:
       delivery_mitm:
         description:

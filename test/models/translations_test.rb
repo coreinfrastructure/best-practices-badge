@@ -109,4 +109,22 @@ class TranslationsTest < ActiveSupport::TestCase
       check_text(I18n.t('.', locale: loc), [loc])
     end
   end
+
+  test 'Valid and consistent locale names' do
+    # It's easy to insert a bad locale key, e.g., using "_" instead of "-".
+    # Do a sanity check of locale key values in the English translation and
+    # that they match I18n.available_locales.
+    _skip = I18n.t(:hello) # Force load of translations
+    en_hash = I18n.backend.send(:translations)[:en] # Load English text
+    en_locale_names = en_hash[:locale_name].keys
+    # Check if locale okay, e.g., "en" or "zh-CN".
+    en_locale_names.each do |loc|
+      assert_match(/\A[a-z]{2}(-[A-Z]{2})?\z/,
+                   loc.to_s, "Bad locale key name: #{loc}")
+      assert_includes I18n.available_locales, loc
+    end
+    I18n.available_locales do |loc|
+      assert_includes en_locale_names, loc
+    end
+  end
 end

@@ -3286,128 +3286,341 @@ fr:
     met_justification_required: "{Atteint justification}"
     met_url_required: "{Atteint URL}"
   criteria_discussion:
-    intro_p01_html: |-
+    intro_p01_html: >-
       <h1 id='criteria_discussion'>Discussion sur les critères</h1>
-    intro_p02_html: |-
-      <p> Il n’existe aucun ensemble de pratiques pouvant <i>garantir</i> que les logiciels ne présenteront jamais de défauts ou de vulnérabilités. Même les méthodes formelles peuvent échouer si les spécifications ou les hypothèses sont erronées. Il n’existe pas non plus d’ensemble de pratiques garantissant qu’un projet maintiendra une communauté de développement saine et qui fonctionne bien. </p>
+    intro_p02_html: >-
+      <p> Il n’existe aucun ensemble de pratiques pouvant <i>garantir</i>
+      que les logiciels ne présenteront jamais de défauts ou de
+      vulnérabilités. Même les méthodes formelles peuvent échouer
+      si les spécifications ou les hypothèses sont erronées. Il
+      n’existe pas non plus d’ensemble de pratiques garantissant
+      qu’un projet maintiendra une communauté de développement
+      saine et qui fonctionne bien. </p>
     intro_p03_html: |-
       <p> Cependant,
       suivre certaines meilleures pratiques peut aider à améliorer les résultats des projets. Par exemple, certaines pratiques permettent un examen par plusieurs personnes avant la publication, ce qui peut à la fois aider à trouver des vulnérabilités techniques autrement difficiles à trouver et à renforcer la confiance et le désir d'interactions répétées entre les développeurs de différentes organisations. </p>
-    intro_p04_html: |-
-      <p> Cette page présente l'ensemble des meilleures pratiques pour les projets de logiciels libres et open source (FLOSS) développé pour le badge des meilleures pratiques de la Core Infrastructure Initiative (CII). Les projets qui suivent ces meilleures pratiques pourront s'auto-certifier volontairement et montrer qu'ils ont obtenu le badge correspondant. Les projets peuvent le faire, sans frais, en utilisant une application Web (BadgeApp) pour expliquer comment ils respectent ces pratiques et leurs critères détaillés. </p>
-    intro_p05_html: |-
-      <p> Ces bonnes pratiques ont été créées pour : </p>
-    intro_p06_html: |-
-      <ol > <li> encourager les projets à suivre les meilleures pratiques, </li> <li> aider les nouveaux projets à découvrir quelles sont ces pratiques, et </li> <li> aider les utilisateurs à savoir quels projets suivent les meilleures pratiques (afin que les utilisateurs puissent choisir ces projets). </li> </ol>
+    intro_p04_html: >-
+      <p> Cette page présente l'ensemble des meilleures pratiques
+      pour les projets de logiciels libres et open source (FLOSS)
+      développé pour le badge des meilleures pratiques de la Core
+      Infrastructure Initiative (CII). Les projets qui suivent
+      ces meilleures pratiques pourront s'auto-certifier volontairement
+      et montrer qu'ils ont obtenu le badge correspondant. Les
+      projets peuvent le faire, sans frais, en utilisant une application
+      Web (BadgeApp) pour expliquer comment ils respectent ces
+      pratiques et leurs critères détaillés. </p>
+    intro_p05_html: "<p> Ces bonnes pratiques ont été créées pour
+      : </p>"
+    intro_p06_html: >-
+      <ol > <li> encourager les projets à suivre les meilleures
+      pratiques, </li> <li> aider les nouveaux projets à découvrir
+      quelles sont ces pratiques, et </li> <li> aider les utilisateurs
+      à savoir quels projets suivent les meilleures pratiques
+      (afin que les utilisateurs puissent choisir ces projets).
+      </li> </ol>
     intro_p07_html: |-
       <p> L'idiome « meilleures pratiques » signifie « une procédure ou un ensemble de procédures qui est préféré ou considéré comme standard au sein d'une organisation, d'un secteur, etc. » (source : <a href="http://www.dictionary.com/browse/best-practice" rel="nofollow">Dictionary.com</a>).
       Ces critères sont ce que nous pensons être largement « préféré ou considéré comme standard » dans la communauté FLOSS au sens large. </p>
-    intro_p08_html: |-
-      <p> Pour plus d'informations sur la manière dont ces critères ont été développés, consultez le <a href="https://github.com/coreinfrastructure/best-practices-badge">site GitHub du badge des meilleures pratiques CII</a>. </p> <p> Vous pouvez également <a href="/fr/criteria"> voir les critères complets</a>. </p>
-    structure_p01_html: |-
+    intro_p08_html: >-
+      <p> Pour plus d'informations sur la manière dont ces critères
+      ont été développés, consultez le <a href="https://github.com/coreinfrastructure/best-practices-badge">site
+      GitHub du badge des meilleures pratiques CII</a>. </p> <p>
+      Vous pouvez également <a href="/fr/criteria"> voir les critères
+      complets</a>. </p>
+    structure_p01_html: >-
       <p> </p> <h2 id='criteria_structure'>Structure des critères</h2>
-    structure_p02_html: |-
-      <p> Les critères de bonnes pratiques sont divisés en trois niveaux : <ul> <li> <b> Basique </b> se concentre sur les meilleures pratiques que les projets FLOSS bien gérés suivent généralement déjà. Obtenir le badge basique est une réussite ; à tout moment, seuls 10% environ des projets poursuivant un badge atteignent le niveau basique. <li> <b> Argent </b> est un ensemble de critères plus stricts que basique, mais devrait être réalisable par des projets de petite taille et mono-organisation. <li> <b> Or </b> est encore plus strict qu'argent et inclut des critères qui ne sont pas réalisables par des projets de petite taille ou d'une seule organisation. </ul>
-    structure_p03_html: |-
-      <p> Chaque critère a un nom court, indiqué sous forme de texte en exposant entre crochets après le texte du critère.
-    other_p01_html: |-
-      <p> </p> <h2 id='criteria_other_projects'>Relation avec d'autres projets</h2>
-    other_p02_html: |-
-      <p> La Fondation Linux parraine également le <a href="https://www.openchainproject.org/" rel = "nofollow">Projet OpenChain</a>, qui identifie les critères d'un « programme de conformité aux logiciels libres et open source (FLOSS) de haute qualité ». OpenChain se concentre sur la façon dont les organisations peuvent utiliser au mieux le FLOSS et contribuer en retour aux projets FLOSS, tandis que le badge des meilleures pratiques de la CII se concentre sur les projets FLOSS eux-mêmes. Le badge des meilleures pratiques de la CII et OpenChain travaillent ensemble pour aider à améliorer le FLOSS et la façon dont le FLOSS est utilisé.
-    automation_p01_html: |-
-      </p> <p> <h2 id = 'criteria_automation'>Automatisation des critères</h2>
-    automation_p02_html: |-
-      <p>Dans certains cas, nous testons et remplissons automatiquement les informations si le projet suit les conventions standard et est hébergé sur un site (par exemple, GitHub) avec un support API décent. </p>
-    automation_p03_html: |-
-      <p> Nous avons l'intention d'améliorer cette automatisation à l'avenir. Les améliorations apportées à l'automatisation sont les bienvenues ! </p>
-    automation_p04_html: |-
-      <p> Cependant, nous avons délibérément priorisé « ce qui est important », même s'il ne peut pas être automatisé en pratique. Nous aimons les mesures automatisées, mais tout ce qui est important n'est pas automatisable ou ne peut pas être automatisé en pratique. </p>
-    changes_p01_html: |-
-      <p> </p> <h2 id = 'criteria_changes'>Changements au fil du temps</h2>
-    changes_p02_html: |-
-      <p> Nous nous attendons à ce que ces  pratiques et leurs critères détaillés soient mis à jour au fil du temps. Nous prévoyons d'ajouter de nouveaux critères mais de les marquer comme critères « futurs », afin que les projets puissent ajouter ces informations et conserver leur badge. </p>
-    changes_p03_html: |-
-      <p> Les commentaires sont <em>très</em> bienvenus via le <a href="https://github.com/coreinfrastructure/best-practices-badge">site GitHub en tant que problèmes ou pull request</a>. Il existe également une <a href="https://lists.coreinfrastructure.org/mailman/listinfo/cii-badges" rel="nofollow">liste de diffusion pour une discussion générale</a>. </p>
-    keywords_p01_html: |-
-      <p> </p> <h2 id = 'keywords'>Mots clés</h2>
-    keywords_p02_html: |-
-      <p> Les mots clés « DOIT », « NE DOIT PAS », « DEVRAIT », « NE DEVRAIT PAS » et « PEUT » dans ce document sont à interpréter comme décrit dans la <a href="https://tools.ietf.org/html/rfc2119" rel="nofollow">RFC 2119</a>. Le terme supplémentaire PROPOSÉ est ajouté. En résumé, ces mots clés ont les significations suivantes : </p>
-    keywords_p03_html: |-
-      <ul> <li> Le terme DOIT est une exigence absolue, et NE DOIT PAS est une interdiction absolue. </li>
-    keywords_p04_html: |-
-      <li> Le terme DEVRAIT indique un critère normalement requis, mais il peut exister des raisons valables dans des circonstances particulières de l'ignorer. Cependant, toutes les implications doivent être comprises et soigneusement pesées avant de choisir un cours différent. </li>
-    keywords_p05_html: |-
-      <li> Le terme PROPOSÉ est utilisé à la place de DEVRAIT lorsque le critère doit être considéré, mais les raisons valables de ne pas le faire sont encore plus communes que pour DEVRAIT. </li>
-    keywords_p06_html: |-
-      <li> Le terme PEUT fournit une façon de faire quelque chose, par exemple, pour indiquer clairement que l'implémentation décrite est acceptable. </li> </ul>
-    keywords_p07_html: |-
-      <p>Souvent, un critère est énoncé comme quelque chose qui DEVRAIT être fait, ou est PROPOSÉ, car il peut être difficile à mettre en œuvre ou les coûts pour le faire peuvent être élevés. </p>
-    achieving_p01_html: |-
-      <p> </p> <h2 id = 'criteria_achieving_badge '>Obtenir un badge</h2>
-    achieving_p02_html: |-
-      <p> Pour obtenir un badge, tous les critères DOIT et NE DOIT PAS doivent être remplis, tous les critères DEVRAIT doivent être remplis OU non remplis avec justification, et tous les critères PROPOSÉ doivent être pris en compte (il doit être marqué comme satisfait ou non, mais aucune justification n'est requise, sauf indication contraire). Une réponse N/A (« non applicable »), lorsqu'elle est autorisée, est considérée comme satisfaite. Dans certains cas, en particulier aux niveaux supérieurs, une justification et / ou une URL peuvent être requises. </p>
-    achieving_p03_html: |-
-      <p> Certains critères ont des marquages ​​spéciaux qui influencent ceci : <ul> <li> <b> {N/A autorisé} </b> - « N/A » (« Non applicable ») est autorisé. <li> <b> {N/A justification} </b> - « N/A » (« Non applicable ») est autorisé et nécessite une justification. <li> <b> {Atteint justification} </b> - « Atteint » nécessite une justification. <li> <b> {Atteint URL} </b> - « Atteint » nécessite une justification avec une URL. <li> <b> {Futur} </b> - la réponse à ce critère n'a actuellement aucun effet, mais elle peut être requise à l'avenir. </ul>
-    achieving_p04_html: |-
-      <p> Un projet doit atteindre le niveau précédent pour atteindre le niveau suivant. Dans certains cas, les critères DEVRAIT deviennent DOIT dans les badges de niveau supérieur, et certains critères PROPOSÉ à des niveaux inférieurs deviennent DEVRAIT ou DOIT aux badges de niveau supérieur. Les niveaux supérieurs nécessitent également plus de justification, car nous voulons que d'autres puissent comprendre <i>comment</i> les critères sont remplis. </p>
-    achieving_p05_html: |-
-      <p> Les (nombreux) critères cryptographiques ne s'appliquent pas toujours, car certains logiciels n'ont pas besoin d'utiliser directement les capacités cryptographiques. Dans ces cas, répondez N/A.
-    achieving_p06_html: |-
-      <p> Il y a un critère de réussite implicite - chaque projet DOIT avoir un site Web public avec une URL stable. Cela est nécessaire pour créer une entrée de badge en premier lieu. </p>
-    terminology_p01_html: |-
-      <p> </p> <h2 id = 'criteria_terminology'>Terminologie</h2>
-    terminology_p02_html: |-
-      <p> Si vous n'êtes pas familier avec le développement de logiciels ou l'exécution d'un projet FLOSS, des ressources telles que <a href="http://producingoss.com/" rel="nofollow"> <em> Produire un logiciel Open Source </em> par Karl Fogel </a> peuvent vous être utiles. </p>
-    terminology_p03_html: |-
-      <p>Voici quelques termes clés: </p> <ul>
-    terminology_p04_html: |-
-      <li> Un <em> projet </em> est une entité active qui a des membres du projet et produit des résultats de projet. Ses membres utilisent les sites du projet pour coordonner et diffuser les résultats. Un projet n'a pas besoin d'être une entité juridique formelle. </li>
-    terminology_p05_html: |-
-      <li> Les <em>membres</em> du projet sont le groupe d'une ou plusieurs personnes ou entreprises qui travaillent ensemble pour tenter de produire des résultats de projet. Certains projets FLOSS peuvent avoir différents types de membres, avec des rôles différents, mais cela ne relève pas de notre portée. </li>
-    terminology_p06_html: |-
-      <li> Les <em>résultats</em> du projet sont ce que les membres du projet produisent ensemble comme objectif final de leur travail. Il s'agit normalement d'un logiciel, mais les résultats du projet peuvent également inclure d'autres éléments. Les critères qui font référence aux « logiciels produits par le projet » font référence aux résultats du projet. </li>
-    terminology_p07_html: |-
-      <li> Les <em> sites </em> du projet sont les sites dédiés au développement et à la diffusion des résultats du projet, et incluent le site Web du projet, les dépôts et sites de téléchargement, le cas échéant (voir <a href="#sites_https">sites_https</a>). </li>
-    terminology_p08_html: |-
-      <li> Le <em>site Web</em> du projet, également appelé page d'accueil du projet, est la page principale du World Wide Web (WWW) qu'un nouvel utilisateur visiterait généralement pour voir des informations sur le projet ; il peut être le même que le dépôt du projet (c'est souvent le cas sur GitHub). </li>
-    terminology_p09_html: |-
-      <li> Le <em> dépôt </em> du projet gère et stocke les résultats du projet et l'historique des révisions des résultats du projet. Ceci est également appelé le <em> dépôt source </em> du projet, car nous n'avons besoin que de la gestion et du stockage des versions modifiables et non des résultats générés automatiquement (dans de nombreux cas, les résultats générés ne sont pas stockés dans un dépôt). </li>
-    terminology_p10_html: |-
-      <li> Un <em> mécanisme de sécurité du projet </em> est un mécanisme de sécurité fourni par le logiciel du projet livré. </ul>
-    noncriteria_p01_html: |-
-      <p> </p> <h2 id = 'criteria_noncriteria'> Non-critères </h2>
-    noncriteria_p02_html: |-
-      <p> Les critères : <ul>
-    noncriteria_p03_html: |-
-      <li> ne nécessitent <em> aucune </em> technologie, produit ou service spécifique. Par exemple, ils n'ont <em> pas </em> besoin de git, GitHub ou GitLab. Les critères <em> fournissent </em> des conseils et une aide pour les cas courants, car ces informations peuvent aider les gens à comprendre et à répondre aux critères. Il existe une automatisation spéciale pour les projets utilisant git ou GitHub, pour aider les utilisateurs dans ces cas courants, mais ils ne sont pas <em> obligatoires</em>. Ainsi, à mesure que de nouveaux outils et capacités deviennent disponibles, les projets peuvent rapidement y basculer. À titre d'exception, les critères nécessitent une page Web de projet et TLS.
-    noncriteria_p04_html: |-
-      <li> n'exigent ou n'interdisent <em> pas </em> un langage de programmation particulier. Ils exigent que des mesures supplémentaires soient prises pour certains <em> types </em> de langages de programmation, mais c'est différent.
-    noncriteria_p05_html: |-
-      <li> n'exigent <em> jamais </em> l’utilisation d’un logiciel propriétaire, d’un service propriétaire ou d’une technologie propriétaire, car de nombreux développeurs de <a href="https://www.gnu.org/philosophy/free-sw.fr.html" rel="nofollow"> logiciels libres </a> rejetteraient ces critères. Les projets sont <em> autorisés </em> à les utiliser et à en dépendre.
-    noncriteria_p06_html: |-
-      <li> ne nécessitent <em> pas </em> de développement actif ou de discussion utilisateur au sein d'un projet. Certains projets très matures changent rarement et peuvent donc avoir peu d'activité. Les critères <em> exigent</em>, cependant, que le projet soit réactif si des vulnérabilités sont signalées au projet.
-    noncriteria_p07_html: |-
+    structure_p02_html: >-
+      <p> Les critères de bonnes pratiques sont divisés en trois
+      niveaux : <ul> <li> <b> Basique </b> se concentre sur les
+      meilleures pratiques que les projets FLOSS bien gérés suivent
+      généralement déjà. Obtenir le badge basique est une réussite
+      ; à tout moment, seuls 10% environ des projets poursuivant
+      un badge atteignent le niveau basique. <li> <b> Argent </b>
+      est un ensemble de critères plus stricts que basique, mais
+      devrait être réalisable par des projets de petite taille
+      et mono-organisation. <li> <b> Or </b> est encore plus strict
+      qu'argent et inclut des critères qui ne sont pas réalisables
+      par des projets de petite taille ou d'une seule organisation.
+      </ul>
+    structure_p03_html: >-
+      <p> Chaque critère a un nom court, indiqué sous forme de
+      texte en exposant entre crochets après le texte du critère.
+    other_p01_html: >-
+      <p> </p> <h2 id='criteria_other_projects'>Relation avec
+      d'autres projets</h2>
+    other_p02_html: >-
+      <p> La Fondation Linux parraine également le <a href="https://www.openchainproject.org/"
+      rel = "nofollow">Projet OpenChain</a>, qui identifie les
+      critères d'un « programme de conformité aux logiciels libres
+      et open source (FLOSS) de haute qualité ». OpenChain se
+      concentre sur la façon dont les organisations peuvent utiliser
+      au mieux le FLOSS et contribuer en retour aux projets FLOSS,
+      tandis que le badge des meilleures pratiques de la CII se
+      concentre sur les projets FLOSS eux-mêmes. Le badge des
+      meilleures pratiques de la CII et OpenChain travaillent
+      ensemble pour aider à améliorer le FLOSS et la façon dont
+      le FLOSS est utilisé.
+    automation_p01_html: >-
+      </p> <p> <h2 id = 'criteria_automation'>Automatisation des
+      critères</h2>
+    automation_p02_html: >-
+      <p>Dans certains cas, nous testons et remplissons automatiquement
+      les informations si le projet suit les conventions standard
+      et est hébergé sur un site (par exemple, GitHub) avec un
+      support API décent. </p>
+    automation_p03_html: >-
+      <p> Nous avons l'intention d'améliorer cette automatisation
+      à l'avenir. Les améliorations apportées à l'automatisation
+      sont les bienvenues ! </p>
+    automation_p04_html: >-
+      <p> Cependant, nous avons délibérément priorisé « ce qui
+      est important », même s'il ne peut pas être automatisé en
+      pratique. Nous aimons les mesures automatisées, mais tout
+      ce qui est important n'est pas automatisable ou ne peut
+      pas être automatisé en pratique. </p>
+    changes_p01_html: >-
+      <p> </p> <h2 id = 'criteria_changes'>Changements au fil
+      du temps</h2>
+    changes_p02_html: >-
+      <p> Nous nous attendons à ce que ces  pratiques et leurs
+      critères détaillés soient mis à jour au fil du temps. Nous
+      prévoyons d'ajouter de nouveaux critères mais de les marquer
+      comme critères « futurs », afin que les projets puissent
+      ajouter ces informations et conserver leur badge. </p>
+    changes_p03_html: >-
+      <p> Les commentaires sont <em>très</em> bienvenus via le
+      <a href="https://github.com/coreinfrastructure/best-practices-badge">site
+      GitHub en tant que problèmes ou pull request</a>. Il existe
+      également une <a href="https://lists.coreinfrastructure.org/mailman/listinfo/cii-badges"
+      rel="nofollow">liste de diffusion pour une discussion générale</a>.
+      </p>
+    keywords_p01_html: "<p> </p> <h2 id = 'keywords'>Mots clés</h2>"
+    keywords_p02_html: >-
+      <p> Les mots clés « DOIT », « NE DOIT PAS », « DEVRAIT »,
+      « NE DEVRAIT PAS » et « PEUT » dans ce document sont à interpréter
+      comme décrit dans la <a href="https://tools.ietf.org/html/rfc2119"
+      rel="nofollow">RFC 2119</a>. Le terme supplémentaire PROPOSÉ
+      est ajouté. En résumé, ces mots clés ont les significations
+      suivantes : </p>
+    keywords_p03_html: >-
+      <ul> <li> Le terme DOIT est une exigence absolue, et NE
+      DOIT PAS est une interdiction absolue. </li>
+    keywords_p04_html: >-
+      <li> Le terme DEVRAIT indique un critère normalement requis,
+      mais il peut exister des raisons valables dans des circonstances
+      particulières de l'ignorer. Cependant, toutes les implications
+      doivent être comprises et soigneusement pesées avant de
+      choisir un cours différent. </li>
+    keywords_p05_html: >-
+      <li> Le terme PROPOSÉ est utilisé à la place de DEVRAIT
+      lorsque le critère doit être considéré, mais les raisons
+      valables de ne pas le faire sont encore plus communes que
+      pour DEVRAIT. </li>
+    keywords_p06_html: >-
+      <li> Le terme PEUT fournit une façon de faire quelque chose,
+      par exemple, pour indiquer clairement que l'implémentation
+      décrite est acceptable. </li> </ul>
+    keywords_p07_html: >-
+      <p>Souvent, un critère est énoncé comme quelque chose qui
+      DEVRAIT être fait, ou est PROPOSÉ, car il peut être difficile
+      à mettre en œuvre ou les coûts pour le faire peuvent être
+      élevés. </p>
+    achieving_p01_html: >-
+      <p> </p> <h2 id = 'criteria_achieving_badge '>Obtenir un
+      badge</h2>
+    achieving_p02_html: >-
+      <p> Pour obtenir un badge, tous les critères DOIT et NE
+      DOIT PAS doivent être remplis, tous les critères DEVRAIT
+      doivent être remplis OU non remplis avec justification,
+      et tous les critères PROPOSÉ doivent être pris en compte
+      (il doit être marqué comme satisfait ou non, mais aucune
+      justification n'est requise, sauf indication contraire).
+      Une réponse N/A (« non applicable »), lorsqu'elle est autorisée,
+      est considérée comme satisfaite. Dans certains cas, en particulier
+      aux niveaux supérieurs, une justification et / ou une URL
+      peuvent être requises. </p>
+    achieving_p03_html: >-
+      <p> Certains critères ont des marquages ​​spéciaux qui influencent
+      ceci : <ul> <li> <b> {N/A autorisé} </b> - « N/A » (« Non
+      applicable ») est autorisé. <li> <b> {N/A justification}
+      </b> - « N/A » (« Non applicable ») est autorisé et nécessite
+      une justification. <li> <b> {Atteint justification} </b>
+      - « Atteint » nécessite une justification. <li> <b> {Atteint
+      URL} </b> - « Atteint » nécessite une justification avec
+      une URL. <li> <b> {Futur} </b> - la réponse à ce critère
+      n'a actuellement aucun effet, mais elle peut être requise
+      à l'avenir. </ul>
+    achieving_p04_html: >-
+      <p> Un projet doit atteindre le niveau précédent pour atteindre
+      le niveau suivant. Dans certains cas, les critères DEVRAIT
+      deviennent DOIT dans les badges de niveau supérieur, et
+      certains critères PROPOSÉ à des niveaux inférieurs deviennent
+      DEVRAIT ou DOIT aux badges de niveau supérieur. Les niveaux
+      supérieurs nécessitent également plus de justification,
+      car nous voulons que d'autres puissent comprendre <i>comment</i>
+      les critères sont remplis. </p>
+    achieving_p05_html: >-
+      <p> Les (nombreux) critères cryptographiques ne s'appliquent
+      pas toujours, car certains logiciels n'ont pas besoin d'utiliser
+      directement les capacités cryptographiques. Dans ces cas,
+      répondez N/A.
+    achieving_p06_html: >-
+      <p> Il y a un critère de réussite implicite - chaque projet
+      DOIT avoir un site Web public avec une URL stable. Cela
+      est nécessaire pour créer une entrée de badge en premier
+      lieu. </p>
+    terminology_p01_html: "<p> </p> <h2 id = 'criteria_terminology'>Terminologie</h2>"
+    terminology_p02_html: >-
+      <p> Si vous n'êtes pas familier avec le développement de
+      logiciels ou l'exécution d'un projet FLOSS, des ressources
+      telles que <a href="http://producingoss.com/" rel="nofollow">
+      <em> Produire un logiciel Open Source </em> par Karl Fogel
+      </a> peuvent vous être utiles. </p>
+    terminology_p03_html: "<p>Voici quelques termes clés: </p>
+      <ul>"
+    terminology_p04_html: >-
+      <li> Un <em> projet </em> est une entité active qui a des
+      membres du projet et produit des résultats de projet. Ses
+      membres utilisent les sites du projet pour coordonner et
+      diffuser les résultats. Un projet n'a pas besoin d'être
+      une entité juridique formelle. </li>
+    terminology_p05_html: >-
+      <li> Les <em>membres</em> du projet sont le groupe d'une
+      ou plusieurs personnes ou entreprises qui travaillent ensemble
+      pour tenter de produire des résultats de projet. Certains
+      projets FLOSS peuvent avoir différents types de membres,
+      avec des rôles différents, mais cela ne relève pas de notre
+      portée. </li>
+    terminology_p06_html: >-
+      <li> Les <em>résultats</em> du projet sont ce que les membres
+      du projet produisent ensemble comme objectif final de leur
+      travail. Il s'agit normalement d'un logiciel, mais les résultats
+      du projet peuvent également inclure d'autres éléments. Les
+      critères qui font référence aux « logiciels produits par
+      le projet » font référence aux résultats du projet. </li>
+    terminology_p07_html: >-
+      <li> Les <em> sites </em> du projet sont les sites dédiés
+      au développement et à la diffusion des résultats du projet,
+      et incluent le site Web du projet, les dépôts et sites de
+      téléchargement, le cas échéant (voir <a href="#sites_https">sites_https</a>).
+      </li>
+    terminology_p08_html: >-
+      <li> Le <em>site Web</em> du projet, également appelé page
+      d'accueil du projet, est la page principale du World Wide
+      Web (WWW) qu'un nouvel utilisateur visiterait généralement
+      pour voir des informations sur le projet ; il peut être
+      le même que le dépôt du projet (c'est souvent le cas sur
+      GitHub). </li>
+    terminology_p09_html: >-
+      <li> Le <em> dépôt </em> du projet gère et stocke les résultats
+      du projet et l'historique des révisions des résultats du
+      projet. Ceci est également appelé le <em> dépôt source </em>
+      du projet, car nous n'avons besoin que de la gestion et
+      du stockage des versions modifiables et non des résultats
+      générés automatiquement (dans de nombreux cas, les résultats
+      générés ne sont pas stockés dans un dépôt). </li>
+    terminology_p10_html: >-
+      <li> Un <em> mécanisme de sécurité du projet </em> est un
+      mécanisme de sécurité fourni par le logiciel du projet livré.
+      </ul>
+    noncriteria_p01_html: "<p> </p> <h2 id = 'criteria_noncriteria'>
+      Non-critères </h2>"
+    noncriteria_p02_html: "<p> Les critères : <ul>"
+    noncriteria_p03_html: >-
+      <li> ne nécessitent <em> aucune </em> technologie, produit
+      ou service spécifique. Par exemple, ils n'ont <em> pas </em>
+      besoin de git, GitHub ou GitLab. Les critères <em> fournissent
+      </em> des conseils et une aide pour les cas courants, car
+      ces informations peuvent aider les gens à comprendre et
+      à répondre aux critères. Il existe une automatisation spéciale
+      pour les projets utilisant git ou GitHub, pour aider les
+      utilisateurs dans ces cas courants, mais ils ne sont pas
+      <em> obligatoires</em>. Ainsi, à mesure que de nouveaux
+      outils et capacités deviennent disponibles, les projets
+      peuvent rapidement y basculer. À titre d'exception, les
+      critères nécessitent une page Web de projet et TLS.
+    noncriteria_p04_html: >-
+      <li> n'exigent ou n'interdisent <em> pas </em> un langage
+      de programmation particulier. Ils exigent que des mesures
+      supplémentaires soient prises pour certains <em> types </em>
+      de langages de programmation, mais c'est différent.
+    noncriteria_p05_html: >-
+      <li> n'exigent <em> jamais </em> l’utilisation d’un logiciel
+      propriétaire, d’un service propriétaire ou d’une technologie
+      propriétaire, car de nombreux développeurs de <a href="https://www.gnu.org/philosophy/free-sw.fr.html"
+      rel="nofollow"> logiciels libres </a> rejetteraient ces
+      critères. Les projets sont <em> autorisés </em> à les utiliser
+      et à en dépendre.
+    noncriteria_p06_html: >-
+      <li> ne nécessitent <em> pas </em> de développement actif
+      ou de discussion utilisateur au sein d'un projet. Certains
+      projets très matures changent rarement et peuvent donc avoir
+      peu d'activité. Les critères <em> exigent</em>, cependant,
+      que le projet soit réactif si des vulnérabilités sont signalées
+      au projet.
+    noncriteria_p07_html: >-
       <li> n’exigent <em> pas </em> de frais pour obtenir un badge.
-    noncriteria_p08_html: |-
-      <li> n'exigent <em> pas </em> que tous les critères soient mis en œuvre en même temps ; la plupart des projets les mettent en œuvre au fil du temps. </ul>
-    noncriteria_p09_html: |-
-      <p> Le niveau basique ne comprend pas de critères qui ne seraient pas pratiques pour un projet à une seule personne, par exemple, quelque chose qui nécessite une somme d'argent importante. De nombreux projets FLOSS sont petits et nous ne voulons pas les priver de leurs droits.
-    identify_p01_html: |-
-      <p> </p> <h2 id = 'criteria_id_project'> Identification d'un projet </h2>
-    identify_p02_html: |-
-      <p> Notre application attribue à chaque entrée de projet un identifiant unique, mais cela n'aide pas les personnes à rechercher le projet. Pour nos besoins, le nom <em> réel </em> d'un projet est l'URL de son dépôt, et là où ce n'est pas disponible, l'URL de la « page d'accueil » du projet. Nous limitons la fréquence des modifications apportées à l'URL du dépôt pour éviter certaines absurdités. Les projets ont normalement un nom lisible par les humains, mais ces noms ne sont pas assez uniques.
-    criteria_why_p01_html: |-
-      <p> </p> <h2 id = 'criteria_why'> Pourquoi avoir des critères ? </h2>
+    noncriteria_p08_html: >-
+      <li> n'exigent <em> pas </em> que tous les critères soient
+      mis en œuvre en même temps ; la plupart des projets les
+      mettent en œuvre au fil du temps. </ul>
+    noncriteria_p09_html: >-
+      <p> Le niveau basique ne comprend pas de critères qui ne
+      seraient pas pratiques pour un projet à une seule personne,
+      par exemple, quelque chose qui nécessite une somme d'argent
+      importante. De nombreux projets FLOSS sont petits et nous
+      ne voulons pas les priver de leurs droits.
+    identify_p01_html: >-
+      <p> </p> <h2 id = 'criteria_id_project'> Identification
+      d'un projet </h2>
+    identify_p02_html: >-
+      <p> Notre application attribue à chaque entrée de projet
+      un identifiant unique, mais cela n'aide pas les personnes
+      à rechercher le projet. Pour nos besoins, le nom <em> réel
+      </em> d'un projet est l'URL de son dépôt, et là où ce n'est
+      pas disponible, l'URL de la « page d'accueil » du projet.
+      Nous limitons la fréquence des modifications apportées à
+      l'URL du dépôt pour éviter certaines absurdités. Les projets
+      ont normalement un nom lisible par les humains, mais ces
+      noms ne sont pas assez uniques.
+    criteria_why_p01_html: >-
+      <p> </p> <h2 id = 'criteria_why'> Pourquoi avoir des critères
+      ? </h2>
     criteria_why_p02_html: |-
       <p> Le document <a href="http://www.researchinlearningtechnology.net/index.php/rlt/article/view/23563" rel="nofollow"> Badges ouverts pour l'éducation : quelles implications à l'intersection des systèmes ouverts et des badges ? </a> identifie trois raisons générales pour les systèmes de badges (tous sont valables ici) : </p>
       <ol>
-    criteria_why_p03_html: |-
-      <li> Les badges comme motivateurs de comportement. Nous espérons qu'en identifiant les meilleures pratiques, nous encouragerons les projets à mettre en œuvre ces meilleures pratiques s'ils ne les appliquent pas déjà. </li>
-    criteria_why_p04_html: |-
-      <li> Les badges comme outil pédagogique. Certains projets peuvent ne pas être conscients de certaines des meilleures pratiques appliquées par d'autres, ni de la manière dont elles peuvent être appliquées dans la pratique. Le badge les aidera à en prendre conscience et à les mettre en œuvre. </li>
-    criteria_why_p05_html: |-
-      <li> Les badges comme signifiant ou identifiant. Les utilisateurs potentiels veulent utiliser des projets qui appliquent les meilleures pratiques pour produire systématiquement de bons résultats ; les badges permettent aux projets de signifier facilement qu'ils respectent les meilleures pratiques et permettent aux utilisateurs de voir facilement quels projets le font. </li> </ol>
-    self_certification_p01_html: |-
-      <h3 id="criteria_self_certification"> Pourquoi l'auto-certification ? </h3>
-    self_certification_p02_html: |-
-      <p> Nous avons choisi d'utiliser l'autocertification, car cela permet à un grand nombre de projets (même petits) de participer. Il existe des millions de projets FLOSS et le fait de payer des tiers pour évaluer chacun d'eux de manière indépendante ne passe pas à l'échelle. Il y a un risque que les projets fassent de fausses déclarations, mais nous pensons que le risque est faible, les utilisateurs peuvent vérifier les allégations par eux-mêmes et les fausses déclarations peuvent être annulées. Nous utilisons également l'automatisation pour remplacer les fausses déclarations lorsque nous pouvons être sûrs des résultats. </p>
+    criteria_why_p03_html: >-
+      <li> Les badges comme motivateurs de comportement. Nous
+      espérons qu'en identifiant les meilleures pratiques, nous
+      encouragerons les projets à mettre en œuvre ces meilleures
+      pratiques s'ils ne les appliquent pas déjà. </li>
+    criteria_why_p04_html: >-
+      <li> Les badges comme outil pédagogique. Certains projets
+      peuvent ne pas être conscients de certaines des meilleures
+      pratiques appliquées par d'autres, ni de la manière dont
+      elles peuvent être appliquées dans la pratique. Le badge
+      les aidera à en prendre conscience et à les mettre en œuvre.
+      </li>
+    criteria_why_p05_html: >-
+      <li> Les badges comme signifiant ou identifiant. Les utilisateurs
+      potentiels veulent utiliser des projets qui appliquent les
+      meilleures pratiques pour produire systématiquement de bons
+      résultats ; les badges permettent aux projets de signifier
+      facilement qu'ils respectent les meilleures pratiques et
+      permettent aux utilisateurs de voir facilement quels projets
+      le font. </li> </ol>
+    self_certification_p01_html: >-
+      <h3 id="criteria_self_certification"> Pourquoi l'auto-certification
+      ? </h3>
+    self_certification_p02_html: >-
+      <p> Nous avons choisi d'utiliser l'autocertification, car
+      cela permet à un grand nombre de projets (même petits) de
+      participer. Il existe des millions de projets FLOSS et le
+      fait de payer des tiers pour évaluer chacun d'eux de manière
+      indépendante ne passe pas à l'échelle. Il y a un risque
+      que les projets fassent de fausses déclarations, mais nous
+      pensons que le risque est faible, les utilisateurs peuvent
+      vérifier les allégations par eux-mêmes et les fausses déclarations
+      peuvent être annulées. Nous utilisons également l'automatisation
+      pour remplacer les fausses déclarations lorsque nous pouvons
+      être sûrs des résultats. </p>

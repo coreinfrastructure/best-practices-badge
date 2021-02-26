@@ -831,8 +831,6 @@ pt-BR:
     na_justification_required:
     met_justification_required:
     met_url_required:
-  criteria_discussion:
-    content_html:
   headings:
     Accessibility and internationalization:
     Analysis:
@@ -887,3 +885,65 @@ pt-BR:
     valid_text:
     url_message:
   last_entry:
+  criteria_discussion:
+    intro_p01_html:
+    intro_p02_html:
+    intro_p03_html:
+    intro_p04_html:
+    intro_p05_html:
+    intro_p06_html:
+    intro_p07_html:
+    intro_p08_html:
+    structure_p01_html:
+    structure_p02_html:
+    structure_p03_html:
+    other_p01_html:
+    other_p02_html:
+    automation_p01_html:
+    automation_p02_html:
+    automation_p03_html:
+    automation_p04_html:
+    changes_p01_html:
+    changes_p02_html:
+    changes_p03_html:
+    keywords_p01_html:
+    keywords_p02_html:
+    keywords_p03_html:
+    keywords_p04_html:
+    keywords_p05_html:
+    keywords_p06_html:
+    keywords_p07_html:
+    achieving_p01_html:
+    achieving_p02_html:
+    achieving_p03_html:
+    achieving_p04_html:
+    achieving_p05_html:
+    achieving_p06_html:
+    terminology_p01_html:
+    terminology_p02_html:
+    terminology_p03_html:
+    terminology_p04_html:
+    terminology_p05_html:
+    terminology_p06_html:
+    terminology_p07_html:
+    terminology_p08_html:
+    terminology_p09_html:
+    terminology_p10_html:
+    noncriteria_p01_html:
+    noncriteria_p02_html:
+    noncriteria_p03_html:
+    noncriteria_p04_html:
+    noncriteria_p05_html:
+    noncriteria_p06_html:
+    noncriteria_p07_html:
+    noncriteria_p08_html:
+    noncriteria_p09_html:
+    identify_p01_html:
+    identify_p02_html:
+    criteria_why_p01_html:
+    criteria_why_p02_html:
+    criteria_why_p03_html:
+    criteria_why_p04_html:
+    criteria_why_p05_html:
+    self_certification_p01_html:
+    self_certification_p02_html:

@@ -2992,8 +2992,11 @@ en:
     met_justification_required: "{Met justification}"
     met_url_required: "{Met URL}"
   criteria_discussion:
-    content_html:  >-
+    # The old "content_html" has been split up to make it easier to translate.
+    # The keys are content-related so subsections will be easier to move.
+    intro_p01_html:  >-
       <h1 id='criteria_discussion'>Criteria Discussion</h1>
+    intro_p02_html:  >-
       <p>
       There is no set of practices that can <i>guarantee</i> that software
       will never have defects or vulnerabilities.
@@ -3001,6 +3004,7 @@ en:
       specifications or assumptions are wrong.
       Nor is there any set of practices that can guarantee that a project will
       sustain a healthy and well-functioning development community.</p>
+    intro_p03_html:  >-
       <p>
       However, following best practices can help improve the results
       of projects.
@@ -3008,6 +3012,7 @@ en:
       which can both help find otherwise hard-to-find technical vulnerabilities
       and help build trust and a desire for repeated interaction among
       developers from different organizations.</p>
+    intro_p04_html:  >-
       <p>
       This page discusses the set of best practices
       for Free/Libre and Open Source Software (FLOSS) projects
@@ -3019,14 +3024,17 @@ en:
       Projects can do this, at no cost,
       by using a web application (BadgeApp)
       to explain how they meet these practices and their detailed criteria.</p>
+    intro_p05_html:  >-
       <p>
       These best practices have been created to:</p>
+    intro_p06_html:  >-
       <ol>
       <li>encourage projects to follow best practices,</li>
       <li>help new projects discover what those practices are, and</li>
       <li>help users know which projects are following best practices
       (so users can prefer such projects).</li>
       </ol>
+    intro_p07_html:  >-
       <p>
       The idiom "best practices" means
       "a procedure or set of procedures that is preferred or considered
@@ -3037,6 +3045,7 @@ en:
       These criteria are what we believe are
       widely "preferred or considered standard"
       in the wider FLOSS community.</p>
+    intro_p08_html:  >-
       <p>
       For more information on how these criteria were developed,
       see the <a
@@ -3044,8 +3053,10 @@ en:
       >CII Best Practices badge GitHub site</a>.</p>
       <p>
       You may also <a href="/en/criteria">see the full criteria</a>.</p>
+    structure_p01_html:  >-
       <p></p>
       <h2 id='criteria_structure'>Criteria Structure</h2>
+    structure_p02_html:  >-
       <p>
       The best practices criteria are divided into three levels:<ul>
       <li><b>Passing</b> focuses on best practices
@@ -3057,11 +3068,14 @@ en:
       <li><b>Gold</b> is even more stringent than silver and includes
       criteria that are not achievable by small or single-organization projects.
       </ul>
+    structure_p03_html:  >-
       <p>
       Every criterion has a short name, shown as superscripted
       text inside square brackets after the criteria text.
+    other_p01_html:  >-
       <p></p>
       <h2 id='criteria_other_projects'>Relationship to Other Projects</h2>
+    other_p02_html:  >-
       <p>
       The Linux Foundation also sponsors the
       <a href="https://www.openchainproject.org/"
@@ -3073,26 +3087,33 @@ en:
       focuses on the FLOSS projects themselves.
       The CII Best Practices badge and OpenChain work together to help
       improve FLOSS and how FLOSS is used.</p>
-      <p>
+    automation_p01_html:  >-
+      <p></p>
       <h2 id='criteria_automation'>Criteria Automation</h2>
+    automation_p02_html:  >-
       <p>
       In some cases we automatically test and fill in information
       if the project follows standard conventions and
       is hosted on a site (e.g., GitHub) with decent API support.</p>
+    automation_p03_html:  >-
       <p>
       We intend to improve this automation in the future.
       Improvements to the automation are welcome!</p>
+    automation_p04_html:  >-
       <p>However, we have intentionally prioritized on "what is important",
       even if can't be affordably automated.
       We love automated measurements, but not everything important is
       automatable or can be automated affordably.</p>
+    changes_p01_html:  >-
       <p></p>
       <h2 id='criteria_changes'>Changes over time</h2>
+    changes_p02_html:  >-
       <p>
       We expect that these practices and their detailed criteria will
       be updated over time.
       We plan to add new criteria but mark them as "future" criteria, so that
       projects can add that information and maintain their badge.</p>
+    changes_p03_html:  >-
       <p>
       Feedback is <em>very</em> welcome via the
       <a href="https://github.com/coreinfrastructure/best-practices-badge"
@@ -3100,8 +3121,10 @@ en:
       There is also a
       <a href="https://lists.coreinfrastructure.org/mailman/listinfo/cii-badges"
       rel="nofollow">mailing list for general discussion</a>.</p>
+    keywords_p01_html:  >-
       <p></p>
       <h2 id='keywords'>Key words</h2>
+    keywords_p02_html:  >-
       <p>
       The key words "MUST", "MUST NOT",
       "SHOULD", "SHOULD NOT", and "MAY"
@@ -3109,26 +3132,33 @@ en:
       <a href="https://tools.ietf.org/html/rfc2119" rel="nofollow">RFC 2119</a>.
       The additional term SUGGESTED is added.
       In summary, these key words have the following meanings:</p>
+    keywords_p03_html:  >-
       <ul>
       <li>The term MUST is an absolute requirement, and MUST NOT
       is an absolute prohibition.</li>
+    keywords_p04_html:  >-
       <li>The term SHOULD indicates a criterion that is normally required,
       but there may exist valid reasons in particular circumstances
       to ignore it.
       However, the full implications must be understood and carefully weighed
       before choosing a different course.</li>
+    keywords_p05_html:  >-
       <li>The term SUGGESTED is used instead of SHOULD when the criterion must
       be considered, but the valid reasons
       to not do so are even more common than for SHOULD.</li>
+    keywords_p06_html:  >-
       <li>The term MAY provides one way something can be done, e.g.,
       to make it clear that the described implementation is acceptable.</li>
       </ul>
+    keywords_p07_html:  >-
       <p>
       Often a criterion is stated as something that SHOULD be done, or is
       SUGGESTED, because it may be difficult to implement or the costs
       to do so may be high.</p>
+    achieving_p01_html:  >-
       <p></p>
       <h2 id='criteria_achieving_badge'>Achieving a badge</h2>
+    achieving_p02_html:  >-
       <p>
       To obtain a badge, all MUST and MUST NOT criteria must be met, all
       SHOULD criteria must be either met OR unmet with justification, and
@@ -3139,6 +3169,7 @@ en:
       the same as being met.
       In some cases, especially in the higher levels,
       justification and/or a URL may be required.</p>
+    achieving_p03_html:  >-
       <p>
       Some criteria have special markings that influence this:<ul>
       <li><b>{N/A allowed}</b> - "N/A" ("Not applicable") is allowed.
@@ -3149,6 +3180,7 @@ en:
       <li><b>{Future}</b> - the answer to this criterion currently
       has no effect, but it may be required in the future.
       </ul>
+    achieving_p04_html:  >-
       <p>
       A project must achieve the previous level to achieve the next level.
       In some cases SHOULD criteria become MUST in higher level badges,
@@ -3156,59 +3188,74 @@ en:
       in higher level badges. The higher levels also require more
       justification, because we want others to understand <i>how</i>
       the criteria are being met.</p>
+    achieving_p05_html:  >-
       <p>
       The (many) cryptographic criteria do not always apply, because some
       software has no need to directly use cryptographic capabilities.
-      In those cases, answer N/A.
+      In those cases, answer N/A.</p>
+    achieving_p06_html:  >-
       <p>
       There is one implied passing criterion - every project MUST have
       a public website with a stable URL. This is required to create
       a badge entry in the first place.</p>
+    terminology_p01_html:  >-
       <p></p>
       <h2 id='criteria_terminology'>Terminology</h2>
+    terminology_p02_html:  >-
       <p>
       If you are not familiar with
       software development or running a FLOSS project, materials such as
       <a href="http://producingoss.com/"
       rel="nofollow"><em>Producing Open Source Software</em>
       by Karl Fogel</a> may be helpful to you.</p>
+    terminology_p03_html:  >-
       <p>Here are a few key terms:</p><ul>
+    terminology_p04_html:  >-
       <li>A <em>project</em> is an active entity that has
       project member(s) and produces project result(s).
       Its member(s) use project sites to coordinate and disseminate result(s).
-      A project does not need to be a formal legal entity.
+      A project does not need to be a formal legal entity.</li>
+    terminology_p05_html:  >-
       <li>Project <em>members</em> are the
       group of one or more people or companies who work together
       to attempt to produce project results.
       Some FLOSS projects may have different kinds of members, with different
       roles, but that's outside our scope.</li>
+    terminology_p06_html:  >-
       <li>Project <em>results</em> are what the project members work together
       to produce as their end goal. Normally this is software,
       but project results may include other things as well.
       Criteria that refer to "software produced by the project"
       are referring to project results.</li>
+    terminology_p07_html:  >-
       <li>Project <em>sites</em>
       are the sites dedicated to supporting the development
       and dissemination of project results, and include
       the project website, repository, and download sites where applicable
       (see <a href="#sites_https">sites_https</a>).</li>
+    terminology_p08_html:  >-
       <li>The project <em>website</em>, aka project homepage, is the main page
       on the world wide web (WWW) that a new user would typically visit to see
       information about the project; it may be the same as the project's
       repository site (this is often true on GitHub).</li>
+    terminology_p09_html:  >-
       <li>The project <em>repository</em> manages and stores the project results
       and revision history of the project results.
       This is also referred to as the project <em>source repository</em>,
       because we only require managing and storing of the editable versions,
       not of automatically generated results
       (in many cases generated results are not stored in a repository).</li>
+    terminology_p10_html:  >-
       <li>A <em>project security mechanism</em> is a security mechanism provided
       by the delivered project's software.
       </ul>
+    noncriteria_p01_html:  >-
       <p></p>
       <h2 id='criteria_noncriteria'>Non-criteria</h2>
+    noncriteria_p02_html:  >-
       <p>
       The criteria:<ul>
+    noncriteria_p03_html:  >-
       <li>do <em>not</em> require any specific technology, product, or service.
       For example, they do <em>not</em> require git, GitHub, or GitLab.
       The criteria <em>do</em> provide guidance and help for common cases,
@@ -3218,31 +3265,39 @@ en:
       Thus, as new tools and capabilities become available,
       projects can quickly switch to them.
       As exceptions, the criteria do require a project web page and TLS.
+    noncriteria_p04_html:  >-
       <li>do <em>not</em> require or forbid any
       particular programming language.
       They do require that additional measures be taken for certain
       <em>kinds</em> of programming languages, but that is different.
+    noncriteria_p05_html:  >-
       <li><em>never</em> require the use of proprietary software, proprietary
       service, or a proprietary technology, since many <a
       href="https://www.gnu.org/philosophy/free-sw.en.html"
       rel="nofollow">free software</a> developers would reject such criteria.
       Projects are <em>allowed</em> to use them and depend on them.
+    noncriteria_p06_html:  >-
       <li>do <em>not</em> require active development or
       user discussion within a project.  Some highly mature projects
       rarely change and thus may have little activity.  The criteria
       <em>do</em>, however, require that the project be responsive if
       vulnerabilities are reported to the project.
+    noncriteria_p07_html:  >-
       <li>do <em>not</em> require fees to get a badge.
+    noncriteria_p08_html:  >-
       <li>do <em>not</em> require that all criteeria be implemented at once;
       most projects implement them over time.
       </ul>
+    noncriteria_p09_html:  >-
       <p>
-      The passing level doees not include criteria that would be
+      The passing level does not include criteria that would be
       impractical for a single-person project, e.g., something that requires
       a significant amount of money.
       Many FLOSS projects are small, and we do not want to disenfranchise them.
+    identify_p01_html:  >-
       <p></p>
       <h2 id='criteria_id_project'>Identifying a project</h2>
+    identify_p02_html:  >-
       <p>
       Our application gives every project entry a unique id, but
       that doesn't help people searching for the project.
@@ -3253,7 +3308,9 @@ en:
       Projects normally have a human-readable name,
       but these names are not unique enough.
       <p></p>
+    criteria_why_p01_html:  >-
       <h2 id='criteria_why'>Why have criteria?</h2>
+    criteria_why_p02_html:  >-
       <p>
       The paper <a
       href="http://www.researchinlearningtechnology.net/index.php/rlt/article/view/23563"
@@ -3261,21 +3318,26 @@ en:
       at the intersection of open systems and badging?</a>
       identifies three general reasons for badging systems (all are
       valid for this):</p><ol>
+    criteria_why_p03_html:  >-
       <li>Badges as a motivator of behavior.  We hope that by identifying
       best practices, we'll encourage projects to implement those
       best practices if they do not do them already.</li>
+    criteria_why_p04_html:  >-
       <li>Badges as a pedagogical tool.  Some projects may not be aware
       of some of the best practices applied by others,
       or how they can be practically applied.
       The badge will help them become aware of them
       and ways to implement them.</li>
+    criteria_why_p05_html:  >-
       <li>Badges as a signifier or credential.
       Potential users want to use projects that are applying best
       practices to consistently produce good results; badges make it easy
       for projects to signify that they are following best practices,
       and make it easy for users to see which projects are doing so.</li>
       </ol>
+    self_certification_p01_html:  >-
       <h3 id="criteria_self_certification">Why self-certification?</h3>
+    self_certification_p02_html:  >-
       <p>
       We have chosen to use self-certification, because this makes it
       possible for a large number of projects (even small ones) to

@@ -944,8 +944,36 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'sanity test of reminders' do
+    # The test framework does not reliably reset the test values for the
+    # late_project (we don't know why). So in this test we manually force the
+    # correct test values so our test will work reliably.
+    # This makes the test reliable (I've re-run "rails test:all" 177 times after doing this),
+    # and doing this lets us remove the gem "database_cleaner" (which shouldn't be necessary).
+    # We generally want to minimize dependencies, so adding a few lines to set up a test
+    # is a good trade-off.
+
+    # Here are debug statements if you want to investigate this again:
+    # projects_to_remind = Project.projects_to_remind
+    # projects_to_remind_ids = projects_to_remind.map(&:id) # Return a list
+    # puts('')
+    # puts('Expect: project name=Pathfinder OS id=980190962 badge_percentage_0=0 '
+    #      'last_reminder_at= lost_passing_at= updated_at=2000-01-01 00:00:00 UTC')
+    # p = projects_to_remind.first
+    # p = Project.find_by(id: 980190962)
+    # puts("Sanity: project name=#{p.name} id=#{p.id} badge_percentage_0=#{p.badge_percentage_0} '
+    #      "last_reminder_at=#{p.last_reminder_at} lost_passing_at=#{p.lost_passing_at} "
+    #      "updated_at=#{p.updated_at}")
+    # byebug if projects_to_remind_ids.size == 0
+
+    # Manually force the correct test values so our test will work reliably.
+    late_project = Project.find_by(name: 'Pathfinder OS')
+    late_project.last_reminder_at = nil
+    late_project.lost_passing_at = nil
+    late_project.save!(touch: false)
+
     result = ProjectsController.send :send_reminders
     assert_equal 1, result.size
+    assert_equal late_project.id, result[0]
   end
 
   # This is a unit test of a private method in ProjectsController.

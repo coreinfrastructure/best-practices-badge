@@ -8,11 +8,6 @@ require 'application_system_test_case'
 
 class GithubUserTest < ApplicationSystemTestCase
   test 'GitHub user has correct edit rights' do
-    # Clean up database here and restart DatabaseCleaner.
-    # This solves a transient issue if test restarts without running
-    # teardown meaning the database is dirty after restart.
-    DatabaseCleaner.clean
-    DatabaseCleaner.start
     configure_omniauth_mock
 
     visit '/en'
@@ -37,11 +32,6 @@ class GithubUserTest < ApplicationSystemTestCase
 
   # This is a regression test for problems seen by @yannickmoy in Issue #798
   test 'Alternate locale has link to GitHub Login' do
-    # Clean up database here and restart DatabaseCleaner.
-    # This solves a transient issue if test restarts without running
-    # teardown meaning the database is dirty after restart.
-    DatabaseCleaner.clean
-    DatabaseCleaner.start
     configure_omniauth_mock
 
     visit '/fr/signup'

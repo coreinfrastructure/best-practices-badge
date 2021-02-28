@@ -113,7 +113,6 @@ GEM
     crack (0.4.5)
       rexml
     crass (1.0.6)
-    database_cleaner (1.8.5)
     docile (1.3.5)
     dotenv (2.7.6)
     dotenv-rails (2.7.6)
@@ -478,7 +477,6 @@ DEPENDENCIES
   capybara-slow_finder_errors (= 0.1.5)
   chartkick (= 3.4.2)
   codecov (= 0.4.3)
-  database_cleaner (= 1.8.5)
   dotenv-rails (= 2.7.6)
   eslintrb (= 2.1.0)
   font-awesome-rails (= 4.7.0.7)

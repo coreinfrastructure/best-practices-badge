@@ -9,11 +9,6 @@ require 'application_system_test_case'
 class GithubProjectTest < ApplicationSystemTestCase
   # rubocop:disable Metrics/BlockLength
   test 'Can Create new project via GitHub login' do
-    # Clean up database here and restart DatabaseCleaner.
-    # This solves a transient issue if test restarts without running
-    # teardown meaning the database is dirty after restart.
-    DatabaseCleaner.clean
-    DatabaseCleaner.start
     configure_omniauth_mock('github_project') unless ENV['GITHUB_PASSWORD']
 
     VCR.use_cassette('github_project', allow_playback_repeats: true) do

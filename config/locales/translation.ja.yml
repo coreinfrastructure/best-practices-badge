@@ -4,9 +4,9 @@ ja:
     select:
       prompt: 選択してください
     submit:
-      create: 登録する
-      update: 更新する
-      submit: 保存する
+      create: "%{model} 作成"
+      update: "%{model} 更新"
+      submit: "%{model} 保存"
   hello: Hello world
   submit: 送信
   projects_count:
@@ -77,18 +77,18 @@ ja:
     email: 電子メール
     password: パスワード
     forgot_password: パスワードを忘れた方はこちら。
-    remember_me: この情報を保存する
+    remember_me: ログイン状態を保つ（永続化クッキーを使用）
     login_custom: カスタム アカウントを使用してログインする
     no_custom: カスタム アカウントをお持ちでない方はサインアップしてください。
     already_logged_in: あなたは既にログインしています。
     incorrect_login_info: ログイン情報がまちがっています
     invalid_combo: 無効な電子メール・パスワードの組み合わせです
-    signed_in: サインインしました！
+    signed_in: サインインしました！最終ログイン：%{last_login_at}
     not_activated: アカウントが有効化されていません。電子メールでお伝えしたアクティベーション リンクを確認してください。
     signed_out: サインアウトしました！
     cookie_details_html: >-
-      <a href="/cookies" target="_blank" rel="noopener"> <i> Cookieの詳細をご確認ください</i>
-      </a>
+      <a href="/ja/cookies" target="_blank" rel="noopener"><i>
+      Cookieの詳細をご確認ください</i> </a>
     no_login_time: "（前の時間は記録されていません）"
     login_automatic_signup: >-
       GitHubでログインすると、必要に応じてサインアップが自動的に実行されます。サインアップすると、あなたの名前（GitHubに提供されたもの）とGitHubのニックネームが公開され、いつでもあなたの名前を変更することができます。あなたのメールアドレスはプライベートに保たれ、バッジ関連のやりとりにのみ使用されます。法的に要求されている場合を除き、第三者に提供することはありません。
@@ -98,13 +98,8 @@ ja:
   users:
     new:
       signup_header: サインアップ
-      intro_html: |-
-        GitHubアカウントでログインしたくない場合は、
-        ここからサインアップしてください（あなたのEメールアドレスを使ってカスタム アカウントを作成します)。
-        サインアップすると、あなたのお名前が公開されますが、お名前はいつでも変更できます。
-        あなたのEメールアドレスは公開されず、バッジ関連のやりとりに使用されるだけで、法的な必要性がない限り、サードバーティに提供されることはありません。
-        <br> <br>アクティベーション リンクが届かない場合は、
-        もう一度サインアップしてください。新しいものをお送りします。
+      intro_html: >-
+        GitHubアカウントでログインしたくない場合は、代わりにここでサインアップできます（これにより、メールアドレスを使用してカスタムアカウントが作成されます）。サインアップすると、名前が公開され、いつでも名前を変更できます。あなたのメールアドレスは非公開にされ、バッジ関連のやり取りにのみ使用されます。法的に義務付けられている場合を除き、第三者に提供することはありません。<br><br>アクティベーションリンクが届かない場合は、もう一度サインアップしてください。新しいリンクをお送りします。
       name: 名前
       email: 電子メール
       preferred_locale: 言語・地域
@@ -193,11 +188,11 @@ ja:
       name_or_description: 名前または説明文
       search: 検索
       all: すべて
-      passing_100: 合格（100％）
-      in_progress_variable: 進行中（%{percent}％以上）
-      silver_in_progress_variable: 合格、部分的なシルバー（%{percent}％+段階）
-      silver_200: シルバー（200％+段階）
-      gold_in_progress_variable: シルバー、部分的なゴールド（%{percent}％+段階）
+      passing_100: 少なくとも合格（100％+ tiered）
+      in_progress_variable: 進行中（%{percent}％+ tiered）
+      silver_in_progress_variable: 合格、部分的なシルバー（%{percent}％+ tiered）
+      silver_200: シルバー（200％+ tiered）
+      gold_in_progress_variable: シルバー、部分的なゴールド（%{percent}％+ tiered）
       gold_300: ゴールド（300％）
       in_progress_next: 進行中、合格に向けて%{percent}が完了しました
       passing_next: 進行中、シルバーに向けて%{percent}が完了しました
@@ -212,7 +207,7 @@ ja:
       last_achieved: 最終達成日時
       pachieved: 達成率
       can_also_sort: >-
-        「達成率％」フィールドには、ゴールドが300％、シルバーが200％、パスが100％と表示され、獲得した最も高レベルのバッジの後に進行状況が追加されます。次のようにソートすることもできます。
+        「達成率」フィールドには、ゴールドが300％、シルバーが200％、パスが100％と表示され、獲得した最も高レベルのバッジの後に進行状況が追加されます。次のようにソートすることもできます。
       repository_url: リポジトリのURL
       create_time: 作成日時 (バッジ エントリの)
       update_time: 最終更新日時（バッジ エントリの）
@@ -224,14 +219,17 @@ ja:
       post_delay_warning: 自動的に情報を入力しようとするため、送信後にかなりの遅れが生じることがあります。
       new_badge: 新しいバッジ
       may_select_html: >-
-        自分のGitHubリポジトリの一つから選択することもできますし、<em>または</em>他のプロジェクトの情報を提供することもできます。
+        GitHubリポジトリの1つを選択する、<em>または</em>他のプロジェクトの情報を提供することができます。プロジェクトが合格バッジを獲得しておらず、30日以上編集を行っていない場合は、リマインダー
+        メールが送信されます（必要に応じていつでもリマインダーを無効にできます）。
       select_one_github: GitHub リポジトリを選択してください
       submit_github: GitHubリポジトリを送信する
       url_of_homepage: >-
         プロジェクトのホームページ（プロジェクト全体のURL）のURLは何ですか？ http（s）：//で始まります（「？」を含め、多くの使用できない文字があります）。
-      placeholder_of_homepage: http（s）：// ...プロジェクトホームページのURL
+      placeholder_of_homepage: http(s)://... プロジェクトのホームページのURLには、できるだけ
+        https:// を使用してください
       url_of_repo: バージョン管理リポジトリのURLは何ですか（プロジェクトURLと同じでもかまいません）。
-      placeholder_of_repo: http（s）：// ...プロジェクトリポジトリのURL
+      placeholder_of_repo: http(s)://... プロジェクト リポジトリのURLには、できるだけ
+        https:// を使用してください
       submit_urls: URLを送信する
       sign_in_first: プロジェクトを追加するにはログインしてください！
       thanks_adding: プロジェクトを追加していただきありがとうございます！バッジを取得するには、残りの情報を入力してください。
@@ -250,17 +248,17 @@ ja:
       confirm_delete: あなたは、全プロジェクト%{project_id}を削除しようとしていますが、よろしいでしょうか？
       back: もどる
       cc_by_3plus_html: >-
-        プロジェクトに関するこのデータを送信することにより、少なくとも、<a href="https://creativecommons.org/licenses/by/3.0/us"
-        target="_blank" rel="noopener">クリエイティブ・コモンズ帰属バージョン3.0以降（CC-BY-3.0
-        +）</a>のライセンス条件によって公開することに同意したことになります。つまり、すべての人が自由にデータを共有し、修正することができますが、適切なクレディットを表示します。あなたが保有する著作権に影響はありません。プロジェクトライセンスにも影響はありません。<br>
-        <br>
+        このデータは、<a href="https://creativecommons.org/licenses/by/3.0/us"
+        target="_blank" rel="noopener">Creative Commons Attribution
+        version 3.0以降のライセンス（CC-BY-3.0 +）</a>のもとで利用できます。すべての人がデータを自由に共有および適応できますが、適切にクレジットを入れる必要があります。
+        %{user}とCIIベストプラクティス バッジ貢献者のクレジットを入れてください。<br><br>
       cc_by_3only_html: >-
-        本データは、<a href="https://creativecommons.org/licenses/by/3.0/us"
-        target="_blank" rel="noopener">クリエイティブコモンズ表示バージョン3.0ライセンス（CC-BY-3.0）</a>の下で利用可能となります。
-        <a href="https://www.coreinfrastructure.org/" target="_blank"
-        rel="noopener">コアインフラストラクチャ・イニシアティブ</a> <a href="https://www.linuxfoundation.org/terms"
-        target="_blank" rel="noopener">利用規約</a>をご覧ください。すべての人が自由にデータを共有し、修正することができますが、適切なクレディットを入れなければなりません。%{user}とCII
-        Best Practicesバッジ貢献者へのクレディットを表示願います。<br> <br>
+        本データは、<a href="https://www.coreinfrastructure.org/" target="_blank"
+        rel="noopener">Core Infrastructure Initiative</a> <a href="https://www.linuxfoundation.org/terms"
+        target="_blank" rel="noopener">利用規約</a>に従って、<a href="https://creativecommons.org/licenses/by/3.0/us"
+        target="_blank" rel="noopener">Creative Commons Attribution
+        version 3.0 ライセンス（CC-BY-3.0）</a>のもとで利用できます。すべての人が自由にデータを共有し、修正することができますが、適切にクレジットを入れなければなりません。%{user}とCII
+        ベストプラクティス バッジ貢献者のクレジットを入れてください。<br> <br>
       owned_by: プロジェクト バッジ登録の所有者：
       created_at_html: "<strong>エントリの作成日時</strong> %{when}、"
       updated_at_html: "<strong>最終更新日</strong> %{when}"
@@ -269,8 +267,8 @@ ja:
     edit:
       submit_cc_by_3plus_html: >-
         プロジェクトに関するこのデータを送信することにより、少なくとも、<a href="https://creativecommons.org/licenses/by/3.0/us"
-        target="_blank" rel="noopener">クリエイティブ・コモンズ帰属バージョン3.0以降（CC-BY-3.0
-        +）</a>のライセンス条件によって公開することに同意したことになります。つまり、すべての人が自由にデータを共有し、修正することができますが、適切なクレディットを表示します。あなたが保有する著作権に影響はありません。プロジェクトライセンスにも影響はありません。<br>
+        target="_blank" rel="noopener">Creative Commons Attribution
+        version 3.0以降（CC-BY-3.0 +）</a>のライセンス条件によって公開することに同意したことになります。つまり、すべての人が自由にデータを共有し、修正することができますが、適切なクレジットを入れる必要があります。あなたが保有する著作権に影響はありません。プロジェクトライセンスにも影響はありません。<br>
         <br>
       save_and_continue: 保存する（そして続行する）
       submit_and_exit: 送信（および終了）
@@ -320,31 +318,33 @@ ja:
         description_html: プロジェクトのライセンスはどのようなものですか？
         details_html: >-
           <a href="https://spdx.org/licenses/"> SPDXライセンスの表現形式</a>を使用してください。
-          例：「Apache-2.0」、「BSD-2-Clause」、「BSD-3-Clause」、「GPL-2.0
-          +」、「LGPL-3.0 +」、「MIT」、「(BSD-2-Clause OR Ruby)」
+          例：「Apache-2.0」、「BSD-2-Clause」、「BSD-3-Clause」、「GPL-2.0+」、「LGPL-3.0+」、「MIT」、「(BSD-2-Clause
+          OR Ruby)」。一重引用符または二重引用符を<b>含めない</b>でください。
         placeholder: FLOSSライセンス
         title: >-
           SPDXライセンス表現形式のライセンス（例： "MIT"または "GPL-3.0 +"、シングル引用符や二重引用符を付けない）
       additional_rights_changes:
-        description: "（詳細）このバッジエントリを編集する権限を持つユーザーは？現在：%{current_rights}"
+        description: |-
+          （詳細）このバッジエントリを編集する権限を持つユーザーは？
+          現在：%{current_rights}
         details_html: >-
-          ほとんどのプロジェクトはこのフィールドを無視できます。プロジェクトのバッジエントリは、バッジエントリのオーナー（作成者）、BadgeApp管理者、GitHubリポジトリにコミットできる人（GitHub上にある場合）によっていつでも編集できます。他の人がこのバッジエントリを編集できるようにする必要があり、あなたがこのプロジェクトのバッジ
-          エントリの編集権限をすでに持っている場合は、編集権限を持つ追加のユーザを追加することができます。 "+"と入力し、その後にカンマ区切りの整数ユーザーIDのリストを入力します。そうすることで、これらのユーザーも、このプロジェクト
-          エントリを編集できるようになります。あなたがバッジ エントリのオーナーまたはBadgeApp管理者である場合は、
-          "-"と入力した後にカンマで区切られた整数ユーザーIDのリストを入力すれば、このリストからユーザーを削除できます。複数のユーザーが同時に編集しようとすると、このアプリケーションはオプティミスティック
-          ロック機能を使用して古いデータを保存しないようにします。このフィールドは、このプロジェクト エントリのオーナーとBadgeApp管理者だけが変更できます。
+          ほとんどのプロジェクトはこのフィールドを無視するべきです。プロジェクトのバッジエントリは、バッジエントリのオーナー（作成者）、BadgeApp管理者、GitHubリポジトリにコミットできる人（GitHub上にある場合）によっていつでも編集できます。他の人がこのバッジエントリを編集できるようにする必要があり、あなたがこのプロジェクトのバッジ
+          エントリの編集権限をすでに持っている場合は、編集権限を持つ追加のユーザを追加することができます。"+"と入力し、その後にカンマ区切りの整数ユーザーIDのリストを入力します。そうすることで、これらのユーザーも、このプロジェクト
+          エントリを編集できるようになります。あなたがバッジ エントリのオーナーまたはBadgeApp管理者である場合は、"-"と入力した後にカンマで区切られた整数ユーザーIDのリストを入力すれば、このリストからユーザーを削除できます。通常、特定のバッジエントリを一度に編集するのは1人だけであると予想されます。複数のユーザーが同時に編集しようとすると、このアプリケーションはオプティミスティック
+          ロック機能を使用して古いデータを保存しないようにします。複数の編集者がいる場合は、バッジ エントリ データを段階的かつ頻繁に保存することをお勧めします（いずれにしてもこれは賢明な方法です）。
         placeholder:  "+"または"-"の後にコンマで区切られたユーザーIDのリストを入力して変更する
     form_early:
       badge_intro:
         description: >-
-          本サイトが提示する下記のベストプラクティスを実行するプロジェクトは、コアインフラストラクチャイニシアチブ（CII）バッジを達成したことを自主的に自己認証し、そのことを外部に示すことができます。
+          本サイトが提示する下記のベストプラクティスを実行するプロジェクトは、Core Infrastructure
+          Initiative (CII) バッジを達成したことを自主的に自己認証し、そのことを外部に示すことができます。
         details_html: >-
           ソフトウェアに欠陥や脆弱性がないことを保証する手立てはありません。形式論的な証明ができたとしても、仕様や前提が間違っていると誤動作の可能性があります。また、プロジェクトが健全で、かつ機能的な開発コミュニティであり続けることを保証する手立てもありません。しかし、ベストプラクティスの採用は、プロジェクトの成果の向上に寄与する可能性があります。たとえば、いくつものベストプラクティスがリリース前の複数人によるレビューを定めていますが、それによりレビュー以外では発見困難な技術的脆弱性を見つけるのを助け、同時に異なる企業の開発者間の信頼を築き、さらに交流を続けることに対する意欲を生んでいます。バッジを獲得するには、すべてのMUSTおよびMUST
-          NOT基準を満たさなければなりません。すべてのSHOULD基準も満たさなければなりませんが、正当な理由がある場合のみ満たさなくても構いません。<em>そして</em>すべてのSUGGESTED基準も満たさなければなりませんが、満たさないとしても、少なくとも考慮を払うことが望まれます。フィードバックは、<a
+          NOT基準を満たさなければなりません。すべてのSHOULD基準も満たさなければなりませんが、正当な理由がある場合は満たさなくても構いません。<em>そして</em>すべてのSUGGESTED基準も満たさなければなりませんが、満たさないとしても、少なくとも考慮することが望まれます。フィードバックは、<a
           href="https://github.com/coreinfrastructure/best-practices-badge">
           GitHubサイトのissueまたはpull request</a>として提示されれば歓迎します。また、<a
           href="https://lists.coreinfrastructure.org/mailman/listinfo/cii-badges">議論のためのメールリスト</a>も用意されています。<br
-          /> <br />私たちは、いくつかの言語で情報を提供していますが、翻訳版に矛盾や意味の不一致があった場合、英語版を正式な記述とします。
+          /> <br />私たちは多言語で情報を提供していますが、翻訳版に矛盾や意味の不一致がある場合は、英語版を正式な記述とします。
       got_badge:
         description_1: >-
           これがあなたのプロジェクトなら、あなたのプロジェクトページにあなたのバッジステータスを表示してください！バッジステータスは次のようになります。
@@ -354,7 +354,7 @@ ja:
           %{markdown_embedding} <br />あるいは、以下をHTMLに埋め込みます<br />
           %{html_embedding} <br />
         editing_description_html: >-
-          あなたの作業中データを保存するには、<strong>頻繁に「提出」</strong>してください（後で、あなたはいつでも戻ってきて、さらに編集作業を続けることができます）。
+          作業中のデータを保存するには、<strong>頻繁に「提出」</strong>してください（いつでも戻って編集作業を続けることができます）。
           <br> <br>ヘルプが必要な場合、質問がある場合、あるいは問題がある場合は、<em> <a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">電子メールを送信する</a></em>か<em>
           <a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
           target="_blank" rel="noopener">問題を提起</a> </em>します。
@@ -367,11 +367,17 @@ ja:
         '1': シルバー
         '2': ゴールド
     misc:
-      disabled_reminders: "（詳細）非アクティブリマインダを無効にします（このままにしておくことをお勧めします）"
+      disabled_reminders: >-
+        （詳細）非アクティビティ リマインダーを無効にします（このままにしておくことをお勧めします。リマインダーを送信するかどうかを変更するには、プロジェクトエントリーを編集する必要があります。）
       general_comments:
         description: プロジェクトに関するその他の一般的なコメント
         placeholder: 追加コメント（マークダウンで）
-      some_not_crypto_html: 一部のソフトウェアでは、暗号化メカニズムを使用する必要はありません。
+      some_not_crypto_html: >-
+        一部のソフトウェアは暗号化メカニズムを使用する必要がないことに注意してください。あなたのプロジェクトが作成するソフトウェアが、(1)
+        暗号化機能を含む、アクティブ化する、または有効化し、(2) 米国（US）から米国外または米国市民以外にリリースされる可能性がある場合は、法的に義務付けられた追加手順の実行を要求される可能性があります。通常、これにはメールの送信が含まれます。詳細については、
+        <a href="https://www.linuxfoundation.org/resources/publications/understanding-us-export-controls-with-os-projects/"
+        ><i>Understanding Open Source Technology &amp; US Export
+        Controls</a>（<a href="https://www.linuxfoundation.jp/publications/2020/07/understanding-open-source-technology-us-export-controls/">「オープンソース技術と米国の輸出管理について」</a>）の暗号化のセクションを参照してください。
       dont_use_crypto: プロジェクトで開発されるソフトウェアが暗号化メカニズムを使用していない場合は、ここをクリックしてください
       future_header_html: |-
         近い将来に追加予定のバッジ基準ですが、現在のところバッジに
@@ -414,8 +420,7 @@ ja:
       info_html: >-
         <b>警告</b>  -  %{project_name}のバッジエントリを<b>完全に削除</b>しようとしています。これは簡単に元に戻すことが<b>できない</b>ため、このバッジのエントリを削除<b>しない</b>ことをおすすめします。バッジ基準を一度に完了する必要はありません。ほとんどのプロジェクトでは、時間の経過とともに、達成していない基準を特定し、満たすことによってバッジを取得します。いくつかの基準が意味をなさないと思っている場合、いくつかの基準を満たす方法を理解できない、またはその他の質問がある場合は、お問い合わせください。（いくつかの基準は、満たされるべきであるか、単に提案されているだけのものであり、）バッジを取得するために、すべての基準が満たされている必要はありません。リマインダを電子メールで送信しないようにするには、単にプロジェクトエントリを編集し、電子メールリマインダーをオフにします。ただし、このバッジのエントリを<i>完全に削除</i>することを<i>確認</i>している場合は、永久に削除する理由を以下に説明してください。
       rationale_placeholder: >-
-        （必須）このプロジェクトバッジのエントリを永久に削除する理由、および該当する場合は代わりに削除してほしいことを説明してください（
-        空白文字以外で20文字以上および15文字以上）。
+        （必須）このプロジェクトバッジのエントリを永久に削除する理由を説明してください。また、代わりに私たちにしてほしいことがあれば記入してください。（20文字以上。空白文字以外で15文字以上）。
       delete_action: このプロジェクトバッジのエントリーを永久に削除してください！
       too_short: 少なくとも20文字以上必要です。
       more_non_whitespace: 少なくとも15文字の空白以外の文字が必要です。
@@ -434,17 +439,17 @@ ja:
       私たちはあなたが進歩し続けることをお勧めします。
       </p>
       <p>
-      失敗しているものを<em>のみ</em>見たい場合は、
-      バッジのエントリにアクセスし、
-      上部にある「合格またはN/A基準を隠す」ボタンをクリックします。
-      不明な点がある場合は、お問い合わせください。
+      不足しているもの<em>のみ</em>見たい場合は、
+      バッジ エントリにアクセスし、
+      上部にある「適合したものと該当しないものを非表示」というラベルの付いたボタンをクリックします。
+      ご不明な点がある場合、またはサポートが必要な場合は、以下までお問い合わせください。
       <a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;</a>
       または以下でissueを提出します
       <a href="https://github.com/coreinfrastructure/best-practices-badge/issues">https://github.com/coreinfrastructure/best-practices-badge/issues</a>
       （"new issue"をクリックしてください）。
       </p>
       <p>
-      私たちはあなたに広告を送ることは決してありません、また、電子メールを送ることはめったにありません。
+      私たちはあなたに広告を送ることは決してありません。また、電子メールを送ることもめったにありません。
       新しいプロジェクトバッジエントリを作成したとき、プロジェクトがバッジを取得または失ったとき、誰かがユーザーアカウントでパスワードのリセットを要求したときなど、重要なバッジアプリケーションイベントについてメールを送信します。
       プロジェクトにバッジがなく、バッジエントリを30日以上更新していない場合、通常は30〜60日ごとに非アクティブのリマインダーが送信されます。
       これらの非アクティブリマインダーメッセージはいつでも無効にできます。
@@ -457,15 +462,30 @@ ja:
       ご協力ありがとうございます。
       </p>
     new_project_part3_text: |-
-      私たちはあなたが進歩し続けることをお勧めします。
-      失敗しているものだけを見たい場合は、バッジの項目にアクセスしてください。
-      次に、「合格またはN/A基準を隠す」というラベルの付いた上部のボタンをクリックします。
-      ご不明な点がございましたら、お気軽にお問い合わせください。
-      cii-badges-questions-owner@lists.coreinfrastructure.org
-      または以下で課題を提出してください
+      進歩を続けることをお勧めします。
+      不足しているものだけを確認したい場合は、バッジエントリにアクセスして、
+      次に、上部にある「適合したものと該当しないものを非表示」というラベルの付いたボタンをクリックします。
+      ご不明な点がある場合、またはサポートが必要な場合は、以下までお問い合わせください
+      cii-badges-questions@lists.coreinfrastructure.org
+      または以下でissueを提出してください。
       https://github.com/coreinfrastructure/best-practices-badge/issues
-      （「新しい課題」をクリックしてください）。
-      時間を取ってくださいまして、ありがとうございます。
+      （"new issue" をクリックしてください。）
+      私たちはあなたに広告を送ることは決してありません。また、電子メールを送ることもめったにありません。
+      重要なバッジ申請イベントについてのメールはお送りします。
+      たとえば、新しいプロジェクトバッジエントリを作成するときや、
+      あなたのプロジェクトがバッジを取得したときや失ったとき、
+      または誰かがあなたのユーザーアカウントでパスワードのリセットを要求したときなどです。
+      バッジ エントリを更新し続ける場合、リマインダーは送信されません。
+      また、リマインダーは約30〜60日ごとに送信されます。なお、
+      これらのリマインダー メッセージを無効にする場合は、次のバッジ エントリを編集し、
+      %{project_info_url} #project_disabled_reminders
+      「非アクティブ リマインダーを無効にする（desable inactivity reminder）」をオンにします。
+      非アクティブのリマインダーを受け取るかどうかを変更する場合は、
+      プロジェクト エントリを表示するだけでなく、必ず編集してください。
+      プロジェクトが合格バッジを獲得した場合、または
+      バッジエントリが30日以内に編集された場合は、
+      非アクティブのリマインダーは送信されません。
+      ご協力ありがとうございます。
     in_markdown_add: マークダウンでは、これを追加することができます：
     in_html_add: HTMLでは、これを追加することができます：
     ending: "--- David A. Wheeler、CIIベスト プラクティス バッジ テクニカル リード"
@@ -475,7 +495,7 @@ ja:
     subject_reminder: あなたのプロジェクトはまだ「ベスト プラクティス」バッジを持っていません
     subject_project_deleted: "%{project_name}という名前のプロジェクト%{project_id}を削除されました"
     gained_level_part1: |-
-      おめでとう！
+      おめでとうございます！
       あなたが提供した情報によると、
       あなたのプロジェクトはCIIベスト プラクティス '%{new_level}'バッジを獲得しました。
       詳細については、次のURLを参照してください。
@@ -499,12 +519,12 @@ ja:
       申し訳ありませんが、あなたのプロジェクトは「%{old_level}」バッジを有しておらず、現在は「%{new_level}」を有しています。
       詳細については、次のURLを参照してください。
     reminder_body_html: |-
-      <h1>ベストプラクティス%{project_name}のバッジに関する自動通知</h1>
+      <h1>%{project_name} に関するベストプラクティス バッジ自動通知</h1>
       <p>
-      これは、あなたのプロジェクト
-      "%{project_name}"が、
-      現在、「ベストプラクティス」バッジを取得しておらず、
-      また、そのバッジエントリがしばらく更新されていないことへの自動通知です。
+      これは自動通知です。あなたのプロジェクト
+      "%{project_name}"
+      は、現在、「ベストプラクティス」バッジを取得しておらず、
+      また、そのバッジ エントリーがしばらく更新されていません。
       </p>
       <p>
       あなたのベストプラクティスのバッジエントリーは
@@ -522,66 +542,58 @@ ja:
       <p>
       欠落しているもの<em>のみ</em>を確認したい場合は、バッジのエントリーにアクセスし、
       上部の「すべてのパネルを展開」と表示されているボタンを選択し、
-      次に、「適合またはN/A基準を表示しない」というラベルの付いた上部のボタンを選択します。
+      次に、「適合したものと該当しないものを非表示」というラベルの付いた上部のボタンを選択します。
       ご不明な点がございましたら、以下にお気軽にお問い合わせください。
       <a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;</a>
-      または、以下で問題を提出してください
+      または、以下でissueを提出してください
       <a href="https://github.com/coreinfrastructure/best-practices-badge/issues"> https://github.com/coreinfrastructure/best-practices-badge/issues</a>
-      （「新しい問題」をクリックしてください）。
+      （"new issue"をクリックしてください）。
       </p>
       <p>
       バッジエントリーの更新を続行してもリマインダーは送信されませんが、
-      おおよそ30〜60日おきにリマインダーを送信します。しかしながら、
-      これらのリマインダメッセージを無効にする場合は、以下でバッジエントリを編集してください。
+      おおよそ30〜60日おきにリマインダーを送信します。なお、
+      これらのリマインダー メッセージを無効にする場合は、以下でバッジ エントリーを編集してください。
       <a href="%{project_info_url}#project_disabled_reminders">%{project_info_url}#project_disabled_reminders</a>
-      「非アクティブ通知を無効にする」をオンにします。
-      リマインダが無くても、あなたがそれに取り組み続け最終的にバッジを獲得することを願っています
+      「非アクティブ リマインダーを無効にする（desable inactivity reminder）」をオンにします。
+      非アクティブのリマインダーを受け取るかどうかを変更する場合は、
+      プロジェクト エントリを表示するだけでなく、必ず編集してください。
+      リマインダーを受け取らなくても、今後も継続的に活動に取り組み、
+      最終的にバッジを獲得してください。
       </p>
       <p>
       ご協力ありがとうございます。
       </p>
     reminder_body_text: |-
-      <h1>ベストプラクティス%{project_name}のバッジに関する自動通知</h1>
-      <p>
-      これは、あなたのプロジェクト
-      "%{project_name}"が、
-      現在、「ベストプラクティス」バッジを取得しておらず、
-      また、そのバッジエントリがしばらく更新されていないことへの自動通知です。
-      </p>
-      <p>
-      あなたのベストプラクティスのバッジエントリーは
-      <a href="%{project_info_url}">%{project_info_url}</a>
-      です。%{project_updated_at}に最後に更新されました。
-      現在、%{project_badge_percentage_0}％（100％のうち）です。
-      </p>
-      <p>
-      私たちはあなたが進歩し続けることをお勧めします。
-      バッジのエントリー
-      <a href="%{project_info_url}">%{project_info_url}</a>
-      にアクセスしてください。
-      情報を完成させてバッジを手に入れましょう！
-      </p>
-      <p>
-      欠落しているもの<em>のみ</em>を確認したい場合は、バッジのエントリーにアクセスし、
-      上部の「すべてのパネルを展開」と表示されているボタンを選択し、
-      次に、「適合またはN / A基準を表示しない」というラベルの付いた上部のボタンを選択します。
-      ご不明な点がございましたら、以下にお気軽にお問い合わせください。
-      <a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;</a>
-      または、以下で問題を提出してください
-      <a href="https://github.com/coreinfrastructure/best-practices-badge/issues"> https://github.com/coreinfrastructure/best-practices-badge/issues </a>
-      （「新しい問題」をクリックしてください）。
-      </p>
-      <p>
-      バッジエントリーの更新を続行してもリマインダーは送信されませんが、
-      おおよそ30〜60日おきにリマインダーを送信します。しかしながら、
-      これらのリマインダメッセージを無効にする場合は、以下でバッジエントリを編集してください。
-      <a href="%{project_info_url}">%{project_info_url}</a>
-      「非アクティブ通知を無効にする」をオンにします。
-      リマインダが無くても、あなたがそれに取り組み続け最終的にバッジを獲得することを願っています
-      </p>
-      <p>
-      お時間をありがとうございます。
-      </p>
+      これは自動化リマインダーです。あなたのプロジェクト
+      「%{project_name}」
+      には現在、「ベストプラクティス」バッジはありません。
+      また、バッジ エントリはしばらく更新されていません。
+      ベストプラクティスのバッジエントリは次の場所にあります
+      %{project_info_url}
+      最終更新日は%{project_updated_at}です。
+      現在、%{project_badge_percentage_0}％（100％中）です。
+      進歩を続けることをお勧めします。
+      次のバッジ エントリにアクセスしてください。
+      %{project_info_url}
+      情報を完成させてバッジを取得しましょう！
+      不足しているものだけを確認したい場合は、バッジ エントリにアクセスしてください。
+      「すべてのパネルを展開」というラベルの付いた上部近くのボタンを選択し、
+      次に、上部にある「適合したものと該当しないものを非表示」というラベルの付いたボタンを選択します。
+      ご不明な点がある場合、またはサポートが必要な場合は、以下までお問い合わせください。
+      cii-badges-questions@lists.coreinfrastructure.org
+      または、以下にissueを提出してください。
+      https://github.com/coreinfrastructure/best-practices-badge/issues
+      （"new issue" をクリックしてください。）
+      バッジ エントリを更新し続ける場合、リマインダーは送信されません。
+      また、リマインダーは約30〜60日ごとに送信されます。なお、
+      これらのリマインダー メッセージを無効にする場合は、次のバッジ エントリを編集し、
+      %{project_info_url} #project_disabled_reminders
+      「非アクティブ リマインダーを無効にする（desable inactivity reminder）」をオンにします。
+      非アクティブのリマインダーを受け取るかどうかを変更する場合は、
+      プロジェクト エントリを表示するだけでなく、必ず編集してください。
+      リマインダーを受け取らなくても、今後も継続的に活動に取り組み、
+      最終的にバッジを獲得してください。
+      ご協力ありがとうございます。
   user_mailer:
     account_activation:
       before_html: |-
@@ -663,9 +675,9 @@ ja:
         description: プロジェクトによって作成されたソフトウェアは、FLOSSとしてリリースされなければなりません。
         details: >-
           FLOSSは、<a href="https://opensource.org/osd-annotated">オープンソース定義</a>または<a
-          href="http://www.gnu.org/philosophy/free-sw.en.html">フリーソフトウェア定義</a>を満たす方法でリリースされたソフトウェアです。そのようなライセンスの例としては、<a
-          href="http://creativecommons.org/publicdomain/zero/1.0/">CC0</a>、<a
-          href="https://opensource.org/licenses/MIT" >MIT</a>、<a
+          href="https://www.gnu.org/philosophy/free-sw.en.html">フリーソフトウェア定義</a>を満たす方法でリリースされたソフトウェアです。そのようなライセンスの例としては、<a
+          href="https://creativecommons.org/publicdomain/zero/1.0/">CC0</a>、<a
+          href="https://opensource.org/licenses/MIT">MIT</a>、<a
           href="https://opensource.org/licenses/BSD-2-Clause">2項型BSD</a>、<a
           href="https://opensource.org/licenses/BSD-3-Clause">
           3項型BSD</a>、<a href="https://opensource.org/licenses/Apache-2.0">
@@ -710,8 +722,7 @@ ja:
           </a>（JavaScript）、<a href="https://esdoc.org/"> ESDoc
           </a>（JavaScript）、pydoc（Python）、<a href="https://cran.r-project.org/web/packages/devtools/index.html">devtools</a>
           (R)、<a href="https://cran.r-project.org/web/packages/pkgdown/index.html">pkgdown</a>
-          (R)、およびDoxygen（多数）のいずれかです。実装コードにコメントがあるだけでは、この基準を満たすには不十分です。すべてのソースコードを読むことなく情報を見るための簡単な方法が必要です。プロジェクトがソフトウェアを作成しない場合は、「該当なし」（N
-          / A）を選択します。
+          (R)、およびDoxygen（多数）のいずれかです。実装コードにコメントがあるだけでは、この基準を満たすには不十分です。すべてのソースコードを読むことなく情報を見るための簡単な方法が必要です。プロジェクトがソフトウェアを作成しない場合は、「該当なし」（N/A）を選択します。
       sites_https:
         description: >-
           プロジェクトサイト（ウェブサイト、リポジトリ、およびダウンロードURL）は、TLSを使用したHTTPSをサポートしなければなりません。
@@ -755,7 +766,7 @@ ja:
       version_semver:
         description: >-
           リリースには、<a href="https://semver.org">Semantic Versioning
-          (SemVer)</a>または<a href="https://calver.org/">Calendar
+          (SemVer)</a>または<a href="https://calver.org/" >Calendar
           Versioning (CalVer)</a>のバージョン番号形式を使用することが推奨されます。CalVerを使用する場合は、マイクロレベル値を含めることが推奨されます。
         details: >-
           プロジェクトは一般的に、エコシステムで使用されている通常のフォーマットなど、ユーザーが期待しているフォーマットを優先するべきです。多くのエコシステムではSemVerが好まれており、一般的にSemVerはアプリケーションプログラマインターフェース（API）やソフトウェア開発キット（SDK）に好まれています。CalVerは、規模が大きく、独自に開発した依存関係が異常に多いプロジェクトや、スコープが常に変化するプロジェクト、時間的な制約があるプロジェクトで使用される傾向があります。CalVerを使用する際には、マイクロレベルの値を含めることが推奨されます。マイクロレベルを含めることで、必要になった場合にはいつでも同時にメンテナンスされるブランチをサポートできるからです。git
@@ -820,7 +831,8 @@ ja:
       build_common_tools:
         description: ソフトウエアをビルドするために、一般的なツールを使用することをお勧めします。
         details: >-
-          例えば、Maven、Ant、cmake、autotools、make、rake（Ruby）、 <a href="https://cran.r-project.org/web/packages/devtools/index.html">devtools</a>
+          たとえば、Maven、Ant、cmake、autotools、make、rake (Ruby)、 <a
+          href="https://cran.r-project.org/web/packages/devtools/index.html">devtools</a>
           （R）などです。
       build_floss_tools:
         description: プロジェクトは、FLOSSツールだけを使用してビルドができるようにするべきです。
@@ -876,7 +888,9 @@ ja:
         details: >-
           一部の警告は、あるプロジェクトでは効果的に有効にすることはできません。必要なのは、プロジェクトが可能な限り警告フラグを有効にするように努力しており、エラーが早期に検出されるという証拠です。
       know_secure_design:
-        description: プロジェクトには、セキュアなソフトウェアを設計する方法を知っている少なくとも1人の主要開発者がいなければなりません。
+        description: >-
+          プロジェクトには、安全なソフトウェアを設計する方法を知っている少なくとも1人の主要な開発者が必要です。
+          （正確な要件については、「詳細」を参照してください。）
         details: >-
           これには、<a href="https://web.mit.edu/Saltzer/www/publications/protection/">Saltzer
           and Schroeder </a>の8つの原則を含む以下の設計原則を理解する必要があります。<ul>
@@ -893,10 +907,11 @@ ja:
         description: >-
           プロジェクトの主要開発者の少なくとも1人は、この種のソフトウェアの脆弱性につながる一般的な種類のエラーを知っていなければならず、それぞれを対策または緩和する少なくとも1つの方法を知っていなければなりません。
         details: >-
-          例としては、（ソフトウェアのタイプに依存しますが）SQLインジェクション、OSインジェクション、古典的なバッファ
-          オーバーフロー、クロスサイト スクリプティング、認証欠落、権限欠落などがあります。 <a href="http://cwe.mitre.org/top25/">
-          CWE / SANSトップ25 </a>または<a href="https://www.owasp.org/index.php/Category:OWASP_Top_Ten_Project">
-          OWASP Top 10 </a>を参照してください。
+          例（ソフトウェアの種類によって異なります）には、SQLインジェクション、OSインジェクション、従来のバッファオーバーフロー、クロスサイトスクリプティング、認証の欠落、承認の欠落などがあります。一般的に使用されるリストについては、
+          <a href="https://cwe.mitre.org/top25/">CWE / SANSトップ25</a>または<a
+          href="https://www.owasp.org/index.php/Category:OWASP_Top_Ten_Project">OWASPトップ10</a>を参照してください。より安全なソフトウェアを開発する方法を理解し、脆弱性につながる一般的な実装エラーについて説明するのに役立つ多くの書籍やコースが用意されています。たとえば、
+          <a href="https://www.edx.org/professional-certificate/linuxfoundationx-secure-software-development-fundamentals">Secure
+          Software Development Fundamentals</a>コースは、より安全なソフトウェアを開発する方法を説明する3つのコースの無料セットです。
       crypto_published:
         description: >-
           プロジェクトによって作成されたソフトウェアは、デフォルトで、一般に公開され、専門家によってレビューされている暗号プロトコルとアルゴリズムを使用しなければなりません。（暗号プロトコルとアルゴリズムが使用される場合）
@@ -920,12 +935,11 @@ ja:
           いくつかの構成ではより短い鍵長を許可するかもしれません（これはダウングレード攻撃を許すので、理想的には正しくありません。しかし、短い鍵長は、相互運用性のために時に必要となります）。
       crypto_working:
         description: >-
-          プロジェクトで作成したソフトウェア内のデフォルトのセキュリティ メカニズムは、破られた暗号アルゴリズム（たとえば、MD4、MD5、single
-          DES、RC4、Dual_EC_DRBGなど）に依存してはいけませんし、コンテキストに不適切な暗号モード(たとえば、ECBモードは、<a
-          href="https://blog.filippo.io/the-ecb-penguin/">ECB
-          penguin</a>で明らかにされているように暗号文の中に同じブロックが存在するので、ほとんどの場合不適切です。CTRモードは、入力状態が繰り返されると、認証を実行せず重複が起こすので多くの場合不適切です。)を使用してもいけません。
+          プロジェクトによって生成されたソフトウェア内のデフォルトのセキュリティメカニズムは、壊れた暗号化アルゴリズム（MD4、MD5、シングルDES、RC4、Dual_EC_DRBGなど）に依存したり、実装する必要がない限り、コンテキストに不適切な暗号化モードを使用したりしてはなりません。相互運用可能なプロトコル（実装されたプロトコルがネットワークエコシステムによって広くサポートされている標準の最新バージョンであり、そのエコシステムではそのようなアルゴリズムまたはモードの使用が必要であり、そのエコシステムはこれ以上安全な代替手段を提供しません）。これらの壊れたアルゴリズムまたはモードが相互運用可能なプロトコルに必要な場合、ドキュメントには、関連するセキュリティリスクと既知の緩和策を記載する必要があります。
         details: >-
-          多くの場合、Galois/Counter Mode (GCM)やEAXなど、秘密と認証を組み合わせて設計されたブロック暗号アルゴリズムを選択するのが最善です。プロジェクトは、互換性の必要から破られたメカニズムを有効にするかもしれませんが、ユーザーはそれをしていることを認識しています。
+          ECBモードは、 <a href="https://blog.filippo.io/the-ecb-penguin/">ECBペンギン</a>によって示されるように暗号文内の同一のブロックを明らかにするため、ほとんど適切ではありません。また、CTRモードは、認証を実行せず、入力状態が繰り返されると重複を引き起こすため、不適切なことがよくあります。多くの場合、Galois
+          / Counter Mode（GCM）やEAXなど、機密性と認証を組み合わせるように設計されたブロック暗号アルゴリズム
+          モードを選択するのが最善です。プロジェクトは、互換性のために必要な場合、ユーザーが壊れたメカニズムを有効にすることを許可する場合があります（構成中など）が、ユーザーはそれを実行していることを認識します。
       crypto_weaknesses:
         description: >-
           プロジェクトによって作成されたソフトウェア内のデフォルトのセキュリティ メカニズムは、既知の重大な脆弱性を持つ暗号アルゴリズムやモード（たとえば、SHA-1暗号ハッシュ
@@ -938,9 +952,11 @@ ja:
           プロジェクトによって作成されたソフトウェア内のセキュリティ メカニズムは、鍵合意プロトコルのための完全な順方向秘密を実装するべきなので、もし長期鍵が将来侵害された場合でも、長期鍵のセットから導出されるセッション鍵は侵害されません。
       crypto_password_storage:
         description: >-
-          プロジェクトによって生成されたソフトウェアが外部ユーザーの認証に使われるパスワードの保存をする場合、パスワードは、鍵ストレッチ（反復）アルゴリズム（PBKDF2、BcryptまたはScryptなど）を使い、ユーザーごとの塩（乱数）を用いて反復ハッシュとして保存しなければなりません。
+          プロジェクトによって作成されたソフトウェアが外部ユーザーの認証用のパスワードの保存を引き起こす場合、パスワードは、キーストレッチ（反復）アルゴリズム（Argon2id、Bcrypt、Scrypt、PBKDF2など）を使用して、ユーザーごとのソルトで反復ハッシュとして保存される必要があります。<a
+          href="https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html">OWASP
+          Password Storage Cheat Sheet</a>も参照してください）。
         details: >-
-          この基準は、サーバー側ウェブ アプリケーションなどのソフトウェアが、パスワードを使用してユーザー認証を行う場合のみに適用されます。ソフトウェアが他のシステムに認証のためのパスワードを保存するような場合（たとえばソフトウェアが他のシステムのクライアントを実現する場合）、少なくともそのソフトウェアの一部がハッシュされていないパスワードに頻繁にアクセスする必要があるため、この基準は適用されません。
+          この基準は、ソフトウェアがサーバー側Webアプリケーションなどの外部ユーザーのパスワードを使用してユーザーの認証（別名インバウンド認証）を実施している場合にのみ適用されます。ソフトウェアが他のシステムへの認証用のパスワードを保存している場合（別名、アウトバウンド認証、たとえば、ソフトウェアが他のシステムのクライアントを実装している場合）、そのソフトウェアの少なくとも一部がハッシュされていないパスワードにアクセスできる必要があるため、適用されません。
       crypto_random:
         description: >-
           プロジェクトによって作成されたソフトウェア内のセキュリティ メカニズムは、暗号学的にセキュアな乱数発生器を使用して、すべての暗号鍵とナンスを生成しなければなりません。暗号学的にセキュアでない発生器を使用してはいけません。
@@ -1013,7 +1029,7 @@ ja:
           Scoring System (CVSS)</a>の基本的な定性的なスコアが中程度以上であれば、脆弱性は中程度以上の深刻度とみなされます。CVSS
           のバージョン 2.0 から 3.1 では、これは CVSS のスコア 4.0 以上に相当します。プロジェクトは、広く利用されている脆弱性データベース（<a
           href="https://nvd.nist.gov">国家脆弱性データベース</a>など）で公開されているCVSSスコアを、そのデータベースで報告されている最新バージョンのCVSSを用いて使用することができます。また、脆弱性が公開された時点で計算入力が公開されている場合には、脆弱性が公開された時点での<a
-          href="https://www.first.org/cvss/">CVSS</a>の最新バージョンを用いて深刻度を計算することもできます。基準
+          href="https://www.first.org/cvss/" >CVSS</a>の最新バージョンを用いて深刻度を計算することもできます。基準
           vulnerabilities_fixed_60_days では、公開後 60 日以内にすべての脆弱性を修正することが要求されていることに注意してください。
       static_analysis_often:
         description: 静的ソースコード解析は、コミットごと、または少なくとも毎日実行することをお勧めします。
@@ -1023,7 +1039,7 @@ ja:
           動的解析ツールは、ソフトウェアを特定の入力で実行して検査します。たとえば、プロジェクトは、ファジングツール（<a
           href="http://lcamtuf.coredump.cx/afl/">アメリカンファジーロップ</a>など）やウェブ
           アプリケーション スキャナ（例：<a href="https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project">
-          OWASP ZAP </a>または<a href="http://w3af.org/"> w3af </a>）です。場合によっては、<a
+          OWASP ZAP </a>または<a href="https://w3af.org/"> w3af </a>）です。場合によっては、<a
           href="https://github.com/google/oss-fuzz#introduction">
           OSS-Fuzz </a>プロジェクトがプロジェクトにファズテストを適用する可能性があります。この基準のために、動的分析ツールは、様々な種類の問題を探すために何らかの方法で入力を変更するか<em>または</em>少なくとも80％のブランチ
           カバレッジを持つ自動テスト スイートである必要があります。 <a href="https://en.wikipedia.org/wiki/Dynamic_program_analysis">動的解析に関するWikipediaのページ</a>と<a
@@ -1034,13 +1050,13 @@ ja:
           アプリケーション スキャナ）を、バッファの上書きなどのメモリの安全性の問題を検出するメカニズムと一緒にいつも使用します。プロジェクトがメモリ安全でない言語で書かれたソフトウェアを作成しない場合は、「該当なし」（N/A）を選択します。
         details: >-
           メモリの安全性の問題を検出するメカニズムの例としては、<a href="https://github.com/google/sanitizers/wiki/AddressSanitizer">アドレスサニタイザー（ASAN）</a>（GCCおよびLLVMで利用可能）、<a
-          href="http://clang.llvm.org/docs/MemorySanitizer.html">
+          href="https://clang.llvm.org/docs/MemorySanitizer.html">
           Memory Sanitizer </a>、および<a href="http://valgrind.org/">
-          valgrind </a>が含まれます。他に使用される可能性のあるツールには、<a href="http://clang.llvm.org/docs/ThreadSanitizer.html">スレッドサニタイザ</a>と<a
-          href="http://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html">定義されていない動作サニタイザ</a>を参照してください。広範なアサーションも機能します。
+          valgrind </a>が含まれます。他に使用される可能性のあるツールには、<a href="https://clang.llvm.org/docs/ThreadSanitizer.html">スレッドサニタイザ</a>と<a
+          href="https://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html">定義されていない動作サニタイザ</a>を参照してください。広範なアサーションも機能します。
       dynamic_analysis_enable_assertions:
         description: >-
-          プロジェクトによって作成されたソフトウェアには、動的解析中にチェックされる多くの実行時アサーションが含まれていることが推奨されます。
+          プロジェクトでは、多くのアサーションを可能にする少なくとも一部の動的分析（テストやファジングなど）の構成を使用することをお勧めします。多くの場合、これらのアサーションは本番ビルドでは有効にし<i>ない</i>でください。
         details: >-
           この基準は、本番環境でアサーションを有効にすることを示唆するものでは<i>ありません</i>。それは完全にプロジェクトとそのユーザーが決定することです。この基準の焦点は、展開<i>前</i>の動的分析中の障害検出を改善することです。<i>プロダクション</i>環境でのアサーションの有効化は、動的分析（テストなど）中にアサーションを有効にすることとは<i>まったく</i>異なります。場合によっては、プロダクション環境でアサーションを有効にすることは非常に賢明ではありません（特に高整合性コンポーネントの場合）。プロダクション環境でアサーションを有効にすることには多くの議論があります。たとえば、ライブラリは呼び出し元をクラッシュさせてはなりません。ライブラリが存在するとアプリストアによる拒否が発生する可能性があります。また、プロダクション環境でアサーションをアクティブにすると、秘密鍵などの秘密データが公開される可能性があります。多くのLinuxディストリビューションでは<tt>NDEBUG</tt>が定義されていないため、これらのディストリビューションのプロダクション環境ではデフォルトで
           C/C++ <t>assert() が有効になります。これらの環境でのプロダクション環境では、別のアサーションメカニズムを使用するか、
@@ -1049,9 +1065,13 @@ ja:
         description: >-
           動的コード分析で発見されたすべての中程度および重大度の悪用可能な脆弱性は、確認された後、適時に修正されなければなりません。
         details: >-
-          <a href="https://nvd.nist.gov/cvss.cfm"> CVSS 2.0 </a>ベース
-          スコアが4の場合、脆弱性は中〜高程度です。動的コード分析を実行していないため、このように脆弱性を発見していない場合は、「該当なし」（N
-          / A）を選択します。
+          動的コード分析を実行しておらず、この方法で脆弱性が見つからない場合は、「該当なし」（N/A）を選択してください。
+          <a href="https://www.first.org/cvss/" >Common Vulnerability
+          Scoring System (CVSS)</a>の基本的な定性的スコアが中以上の場合、脆弱性は中程度以上の重大度と見なされます。
+          CVSSバージョン2.0から3.1では、これは4.0以上のCVSSスコアに相当します。プロジェクトは、広く使用されている脆弱性データベース（
+          <a href="https://nvd.nist.gov">National Vulnerability
+          Databaseなど</a>）で公開されているCVSSスコアを、そのデータベースで報告されている最新バージョンのCVSSを使用して使用できます。代わりに、脆弱性が公表された後に計算入力が公開された場合、プロジェクトは脆弱性の開示時に最新バージョンの<a
+          href="https://www.first.org/cvss/">CVSS</a>を使用して重大度を自ら計算することができます。
     '1':
       contribution_requirements:
         description: >-
@@ -1377,8 +1397,8 @@ ja:
           プロジェクトは、少なくとも1つの関連する年と著作権者を特定する著作権記述書を各ソースファイルに含まなければなりません（"[プロジェクト名]
           貢献者" のように ）。
         details: >-
-          これは、各ファイルの先頭近くに以下のコメントを含めることによって行うことができます： "<tt>Copyright[このプロジェクトまたはコンテンツの開始年]
-          -  [最近編集した年]、[プロジェクト創始者]と[プロジェクト名] 貢献者</tt> "。<a href="https://www.linuxfoundation.org/blog/2020/01/copyright-notices-in-open-source-software-projects/"
+          これは、各ファイルの先頭近くに以下のコメントを含めることによって行うことができます： "<tt>Copyright
+          the [project name] contributors.</tt>"。<a href="https://www.linuxfoundation.org/blog/2020/01/copyright-notices-in-open-source-software-projects/"
           >"Copyright Notices in Open Source Software Projects"
           by Steve Winslow</a>を参照してください。
       license_per_file:
@@ -1600,7 +1620,9 @@ ja:
       many: フォームは、%{count}エラーを含んでいます。
     not_an_email: " 電子メールではありません"
     known_bad_password: " よく知られている（悪い）パスワードです"
-    valid_text: " 有効なUTF-8エンコーディングと無効でない制御文字を持たなければなりません"
+    valid_text: |-
+       有効なUTF-8エンコーディングを持つ必要があり、無効な制御文字は必要ありません
+      文字
     url_message: " http：またはhttps：で始めて、制限付きの文字セットを使用する必要があります"
   criteria_overall:
     beginning_header_all: FLOSSベストプラクティス基準（すべてのレベル）
@@ -1627,14 +1649,14 @@ ja:
     see_discussion_html: >-
       <p>これらの基準の詳細については、 <a href="/ja/criteria_discussion">基準の説明</a>を参照してください。
     future: "{将来}"
-    na_allowed: "{N/A 許可}"
-    na_justification_required: "{N/A 正当な理由}"
-    met_justification_required: "{適合 正当な理由}"
-    met_url_required: "{適合 URL}"
+    na_allowed: "{N/A allowed}"
+    na_justification_required: "{N/A justification}"
+    met_justification_required: "{Met justification}"
+    met_url_required: "{Met URL}"
   criteria_discussion:
     intro_p01_html: "<h1 id='criteria_discussion'>基準の説明</h1>"
     intro_p02_html: >-
-      <p> ソフトウェアに欠陥や脆弱性がないことを保証できる一連のプラクティスはありません。正式な手法であっても、仕様や仮定が間違っていれば失敗する可能性があります。また、プロジェクトが健全で機能的な開発コミュニティを維持することを保証できる一連のプラクティスもありません。</p>
+      <p> ソフトウェアに欠陥や脆弱性がないことを<i>保証</i>できる一連のプラクティスはありません。正式な手法であっても、仕様や仮定が間違っていれば失敗する可能性があります。また、プロジェクトが健全で機能的な開発コミュニティを維持することを保証できる一連のプラクティスもありません。</p>
     intro_p03_html: >-
       <p> しかし、ベストプラクティスに従うことで、プロジェクトの成果を向上させることができます。たとえば、リリース前に複数人によるレビューを可能にするプラクティスもあります。これは、発見しにくい技術的な脆弱性を発見するのに役立ち、異なる組織の開発者の間で信頼を築き、繰り返しやりとりすることができます。</p>
     intro_p04_html: >-
@@ -1702,13 +1724,13 @@ ja:
     achieving_p02_html: >-
       <p>バッジを取得するには、すべてのMUSTおよびMUST NOTの基準については「満たしている必要があり」、すべてのSHOULDの基準については「満たしているか、正当な理由で満たしていない必要があり」、そしてすべてのSUGGESTEDの基準については、「考慮している必要がある（満たしているか満たしていないかを評価されるが、時に明記されていない限り正当な理由は必要ない）」となります。N/A（「該当しない」）の回答は、これが許可されている場合は、「満たしている」と同じと見なされます。場合によっては、特に上位レベルでは、正当化やURLが必要になることがあります。</p>
     achieving_p03_html: >-
-      <p> 一部の基準には、これに影響を与える特別なマークがあります。<ul> <li><b>{N/A 許可}</b>
+      <p> 一部の基準には、これに影響を与える特別なマークがあります。<ul> <li><b>{N/A allowed}</b>
       - "N/A" ("該当しない") が許可されている。<li><b>{N/A justification}</b>
-      - "N/A" ("該当しない") が許可されているが、正当な理由が必要。<li><b>{適合 正当な理由}</b>
-      - "適合" には正当な理由が必要。<li><b>{適合 URL}</b> - "適合" にはURLによる正当化が必要。<li><b>{将来}</b>
+      - "N/A" ("該当しない") が許可されているが、正当な理由が必要。<li><b>{Met justification}</b>
+      - "適合" には正当な理由が必要。<li><b>{Met URL}</b> - "適合" にはURLによる正当化が必要。<li><b>{Future}</b>
       - この基準への回答は現在は効果がないが、将来必要になる可能性がある。</ul>
     achieving_p04_html: >-
-      <p> プロジェクトは、次のレベルを達成するために前のレベルを達成する必要があります。場合によっては、SHOULD基準がより高いレベルのバッジではMUSTになり、低レベルのSUGGESTED基準がより高いレベルのバッジではSHOULDまたはMUSTになることもあります。また、基準がどのように満たされているかを他の人に理解してもらいたいため、高レベルのバッジにはより多くの正当性が求められます。</p>
+      <p> プロジェクトは、次のレベルを達成するために前のレベルを達成する必要があります。場合によっては、SHOULD基準がより高いレベルのバッジではMUSTになり、低レベルのSUGGESTED基準がより高いレベルのバッジではSHOULDまたはMUSTになることもあります。また、基準が<i>どのように</i>満たされているかを他の人に理解してもらいたいため、高レベルのバッジにはより多くの正当性が求められます。</p>
     achieving_p05_html: >-
       <p>一部のソフトウェアは暗号化機能を直接使用する必要がないため、（多くの）暗号化基準が常に適用されるとは限りません。そのような場合は、N/Aと答えてください。</p>
     achieving_p06_html: >-
@@ -1745,7 +1767,7 @@ ja:
     noncriteria_p04_html: >-
       <li>特定のプログラミング言語を要求したり禁止したり<em>しません</em>。特定の<em>種類</em>のプログラミング言語に対して追加の対策をとることを要求しますが、それは別のことです。
     noncriteria_p05_html: >-
-      <li>プロプライエタリなソフトウェア、プロプライエタリなサービス、プロプライエタリな技術の使用を決して要求しません。多くの<a
+      <li>プロプライエタリなソフトウェア、プロプライエタリなサービス、プロプライエタリな技術の使用を<em>決して</em>要求しません。多くの<a
       href="https://www.gnu.org/philosophy/free-sw.en.html" rel="nofollow">フリー
       ソフトウェア</a>開発者はそのような基準を拒否するからです。プロジェクトがそれらを使用し依存することは<em>許可されます</em>。
     noncriteria_p06_html: >-
@@ -1757,7 +1779,7 @@ ja:
       <p> 合格レベルのdoeeには、1人のプロジェクトには実用的ではない基準、たとえば、かなりの金額が必要な基準は含まれていません。多くのFLOSSプロジェクトは小規模であり、彼らの権利を奪うことは避けたいと考えています。
     identify_p01_html: "<p></p> <h2 id='criteria_id_project'>プロジェクトの特定</h2>"
     identify_p02_html: >-
-      <p> 私たちのアプリケーションはすべてのプロジェクトエントリに一意のIDを与えますが、それはプロジェクトを検索する人々を助けません。アプリケーションにとって、プロジェクトの<em>実</em>名はそのリポジトリのURLであり、それが利用できない場合は、プロジェクトの「フロントページ」のURLです。このURLへの変更をレート制限して、無意味な変更を防止しています。通常、プロジェクトには人間が読める名前が付いていますが、これらの名前は一意ではありません。
+      <p> 私たちのアプリケーションはすべてのプロジェクトエントリに一意のIDを与えますが、それはプロジェクトを検索する人々を助けません。アプリケーションにとって、プロジェクトの<em>実</em>名はそのリポジトリのURLであり、それが利用できない場合は、プロジェクトの「フロントページ」のURLです。このURLへの変更をレート制限して、無意味な変更を防止しています。通常、プロジェクトには人間が読める名前が付いていますが、これらの名前は一意ではありません。<p></p>
     criteria_why_p01_html: "<p></p> <h2 id='criteria_why'>なぜ基準があるのか?</h2>i"
     criteria_why_p02_html: >-
       <p>論文<a href="http://www.researchinlearningtechnology.net/index.php/rlt/article/view/23563"

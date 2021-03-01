@@ -585,7 +585,7 @@ zh-CN:
     ru: 俄语
     es: 西班牙文
     sw: 斯瓦希里语
-    pt-BR:
+    pt-BR: 巴西葡萄牙语
   criteria:
     '0':
       description_good:
@@ -1439,7 +1439,7 @@ zh-CN:
     keywords_p05_html:
     keywords_p06_html:
     keywords_p07_html:
-    achieving_p01_html:
+    achieving_p01_html: "<p></p><h2 id='criteria_achieving_badge'>获得徽章</h2>"
     achieving_p02_html:
     achieving_p03_html:
     achieving_p04_html:
@@ -1453,8 +1453,9 @@ zh-CN:
     terminology_p06_html:
     terminology_p07_html:
     terminology_p08_html:
-    terminology_p09_html:
-    terminology_p10_html:
+    terminology_p09_html: >-
+      <li>项目<em>仓库</em>管理和存储项目结果以及项目结果的修订历史记录。这也称为项目<em>源仓库</em>，因为我们仅需要管理和存储可编辑版本，而不是自动生成的结果（在许多情况下，生成的结果不存储在仓库中）。</li>
+    terminology_p10_html: "<li>A<em>项目安全机制</em>是交付的项目的软件提供的安全机制。</ul>"
     noncriteria_p01_html:
     noncriteria_p02_html:
     noncriteria_p03_html:

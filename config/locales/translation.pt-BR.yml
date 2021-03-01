@@ -7,7 +7,7 @@ pt-BR:
       create: Criar %{model}
       update: Atualizar %{model}
       submit: Salvar %{model}
-  hello: Olá Mundo
+  hello: Olá
   submit:
   projects_count:
     zero:
@@ -90,20 +90,61 @@ pt-BR:
       heading:
       conflict:
     home:
-      badge_program:
-      get_your_badge:
-      check_us_out:
-      p1_html:
-      p2_html:
-      p3_html:
-      share_header_html:
-      twitter:
-      reddit:
-      facebook:
-      linkedin:
-      hacker_news:
-      email:
-      projects_earned_badge:
+      badge_program: Programa de selos de melhores práticas
+      get_your_badge: Obtenha o seu selo agora!
+      check_us_out: Confira o site Selos de Melhores Práticas
+        CII!
+      p1_html: >-
+        O selo de melhores práticas da <a href="https://www.coreinfrastructure.org/">Core
+        Infrastructure Initiative (CII)</a> da <a href="https://www.linuxfoundation.org/">Linux
+        Foundation (LF)</a> é uma maneira de projetos de Software
+        Livre/Libre e de Código Aberto (FLOSS) mostrarem que seguem
+        as melhores práticas. Os projetos podem se auto certificar
+        voluntariamente, sem nenhum custo, usando este aplicativo
+        da web para explicar como eles seguem cada melhor prática.
+        O selo Melhores Práticas CII é inspirado nos diversos
+        selos disponíveis para projetos no GitHub. Os consumidores
+        do selo podem avaliar rapidamente quais projetos FLOSS
+        estão seguindo as melhores práticas e, como resultado,
+        são mais propensos a produzir software seguro de alta
+        qualidade.
+      p2_html: >-
+        Você pode ver facilmente os <a href="/pt-BR/criteria/0">critérios
+        para o selo de aprovação</a>. Mais informações sobre o
+        programa de selo de melhores práticas CII estão <a href='https://github.com/coreinfrastructure/best-practices-badge'>disponíveis
+        no GitHub</a>. <a href="/pt-BR/project_stats">Estatísticas
+        do projeto</a> e <a href="/pt-BR/criteria_stats">estatísticas
+        de critérios</a> estão disponíveis. A <a href="/pt-BR/projects">página
+        de projetos</a> mostra os projetos participantes e permite
+        consultas (por exemplo, você pode ver <a href="/pt-BR/projects?gteq=100">projetos
+        que possuem um selo de aprovação</a>). Você também pode
+        ver <a href='/pt-BR/projects/1/0'>um exemplo (onde tentamos
+        ganhar nosso próprio selo)</a>.
+      p3_html: >-
+        <em> Privacidade e questões legais </em>: consulte nossa
+        <a href="https://www.linuxfoundation.org/privacy">política
+        de privacidade</a>, <a href="/pt-BR/cookies">sobre cookies</a>
+        e <a href="https://www.linuxfoundation.org/terms">termos
+        de uso</a>. O código do aplicativo de selos em si é lançado
+        sob a licença <a href="https://opensource.org/licenses/MIT">MIT</a>
+        (projetos que buscam um selo estão sob suas respectivas
+        licenças). Todo conteúdo sem código-fonte publicamente
+        disponível e gerenciado pelo aplicativo de selo é lançado
+        pelo menos sob a <a href="https://creativecommons.org/licenses/by/3.0/">
+        Creative Commons Attribution License versão 3.0 (CC-BY
+        -3,0) </a>; conteúdo sem código-fonte mais recente é lançado
+        sob CC-BY versão 3.0 ou posterior (CC-BY-3.0 +). Se estiver
+        fazendo referência coletiva ou não especificado de outra
+        forma, por favor dê crédito aos contribuidores do selo
+        melhores práticas CII.
+      share_header_html: "<p> Por favor compartilhe isto: </p>"
+      twitter: Twitter
+      reddit: Reddit
+      facebook: Facebook
+      linkedin: LinkedIn
+      hacker_news: Notícias de hacker
+      email: E-mail
+      projects_earned_badge: 'Alguns ganhadores de selos:'
     cookies:
       cookies_header:
       cookies_info_html:
@@ -397,13 +438,13 @@ pt-BR:
     ending:
   user_mailer:
     account_activation:
-      before_html:
-      before_text:
+      before_html: Olá
+      before_text: Olá
       activate:
       subject:
     github_welcome:
-      before_html:
-      before_text:
+      before_html: Olá
+      before_text: Olá
       subject:
     user_update:
       before_text:

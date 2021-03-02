@@ -15,7 +15,13 @@ module ProjectStatsHelper
             unit: 'day',
             unitStepSize: 1,
             ticks: { minRotation: 20 },
-            time: { displayFormats: { 'day': 'YYYY-MM-DD' } }
+            time: {
+              # Use these ISO 8601 formats so we're language-neutral
+              displayFormats: {
+                'day': 'YYYY-MM-DD', 'month': 'YYYY-MM',
+                'second': 'HH:MM:ss'
+              }
+            }
           }
         ]
       }
